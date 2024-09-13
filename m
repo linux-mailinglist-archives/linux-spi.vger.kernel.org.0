@@ -1,84 +1,79 @@
-Return-Path: <linux-spi+bounces-4809-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4810-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69BA9787E8
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2024 20:30:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D830978829
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2024 20:51:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CDB5281352
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2024 18:30:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 81E46B21A15
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Sep 2024 18:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAD47B3FE;
-	Fri, 13 Sep 2024 18:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D0213C90B;
+	Fri, 13 Sep 2024 18:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILbKFi3x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JF1IBUHj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D865A2940B;
-	Fri, 13 Sep 2024 18:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69BF12F588;
+	Fri, 13 Sep 2024 18:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726252231; cv=none; b=D1PBulVMhxAvUvDgw2rRnFO6MInXb6T6VESfnFZTGW/sqEcdBzo2RCf0HI00n3U4NR66qOTF9+iK6I55TRKfAVRu+GQ/Jm3PmlHR6XMn/nUnR3ILNjadZMqFX+/vQjtfc9uB4SREYM1PDKDxNyCjZskrF9+oRIR3empJwduMT94=
+	t=1726253468; cv=none; b=r3asx8cf3oCnQ93u/VEE748MhMz624YPUHyB0B6S0BM/Mj+YNFJuuB2dDqJwnGIouGpP+V/yoeGxzxJ3jvKAKvjZd46aeZ/tzUfPPzZ+4RvXoaMiRRCedAfV01rsRcR7o1gnRYf2iJ5I9mjeb9h790PFjqaYx6AzHNY2X0dJh2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726252231; c=relaxed/simple;
-	bh=lC+yCqmaayxHFv+ELfhQ9BthPr0FYGzcmXF+orwqZNc=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=c8GlP5KrcAcbgGbX/F3K4WZtJJBrTN4IQhIHjmK4Ipo1OHCHdM1dJ6sUQEQUlSTM694VnpVX39tXRvAjX3pkcMwYlz/yUZEqTzgToYl8dsR+9FufCq4xf1gnEFLqnT/IDqgBe1B150J3Baak+fIzhY4bh/j9E0wjL9vnN5hmaco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILbKFi3x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82205C4CEC0;
-	Fri, 13 Sep 2024 18:30:30 +0000 (UTC)
+	s=arc-20240116; t=1726253468; c=relaxed/simple;
+	bh=eaX39mnY0tsI8w1bjjZrn/LIDJuAxjB4WUaMiOm5O9E=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=bopVgP5Ca6utYPGXdLnclsDgkoFJLUAElwQvbQk5nxI1vlRJyJcvbQSJO8Jw+teaUsIWRrh/yTHiUkyGZcJmvN7OpyFPaIbPoG/PXsqNwQSUM1bT7+BgKCGAuN93m3QapK+6WSojb9/1rv1B0iEcmMPbiCj5aF5mF4W4T+0KLjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JF1IBUHj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9543C4CECC;
+	Fri, 13 Sep 2024 18:51:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726252231;
-	bh=lC+yCqmaayxHFv+ELfhQ9BthPr0FYGzcmXF+orwqZNc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ILbKFi3xDCW2yd5b6yNLrOQ0twRXp0FowLAvxej147U8swOblKHVzV81Pm/21rCmU
-	 qAjDQGQ9QuYPBfajopMJTq1mLRw091KuIk5BZT5byCVhQFxRGVYqgXKyCKciTdEq5A
-	 z/MAkZ7DJKn8mXk/BWNeOkbpQCZoc8xAe9jcJ50JNLWhXkrouhIMJugbsS/PyYWpqh
-	 iXgsJFqtHw3Gl5Y54zznhm2BBVe03kGhY/XBBOahnRm0UMIse2XQ6FCeMjGz682Y34
-	 LpdR4kx86lHQsZm6+rYIewqj4MeJmiuyQTMoa7aMu+rjquqR0CVMCPrBUMkFtCvLGq
-	 UnUIX8JQhD9MA==
-Message-ID: <ba736f747a1d58f7043b187c2d1dd97d.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.11-rc7
-Date: Fri, 13 Sep 2024 19:30:19 +0100
+	s=k20201202; t=1726253468;
+	bh=eaX39mnY0tsI8w1bjjZrn/LIDJuAxjB4WUaMiOm5O9E=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=JF1IBUHjdqV4kmtl+uKKMwyHbh+XdlMNx9QWfilmydsNDK7Zv9/YgbWAZUMBQ9F3O
+	 MAkmZzSgvi5D0IednBIdte6jN/T3bNT37L/XAIFU6bON9V0877hGOiXk0+jW0YIryM
+	 6ws1qJpEgAU/KXCzslbGrjwY9EYzc+ZHoXgB5HvepoS/gGKEizLPiuVZ7SnfHHs6uO
+	 EXD+mh8Eli1XNQv8faoJe+mnOoI4142ztbEf5UJAjwg0cs4YnBVlCuUHgUxMFWseFv
+	 vkWRHKE82iVcVHDRacsGMA7vY/ENIWWfTiAyS4sPxYshX91YA5yFFqyF5IzIxLuWPK
+	 AvGLj6wEsclRw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 342B53806656;
+	Fri, 13 Sep 2024 18:51:11 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.11-rc7
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ba736f747a1d58f7043b187c2d1dd97d.broonie@kernel.org>
+References: <ba736f747a1d58f7043b187c2d1dd97d.broonie@kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ba736f747a1d58f7043b187c2d1dd97d.broonie@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc7
+X-PR-Tracked-Commit-Id: 2a8787c1cdc7be24fdd8953ecd1a8743a1006235
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e936e7d4a83b5ff6b7a685722f0ba348383af68c
+Message-Id: <172625346994.2331887.8726510909126125255.pr-tracker-bot@kernel.org>
+Date: Fri, 13 Sep 2024 18:51:09 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 
-The following changes since commit c9ca76e8239810ccb08825a7b847c39d367410a6:
+The pull request you sent on Fri, 13 Sep 2024 19:30:19 +0100:
 
-  MAINTAINERS: SPI: Add mailing list imx@lists.linux.dev for nxp spi drivers (2024-09-05 19:15:45 +0100)
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc7
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e936e7d4a83b5ff6b7a685722f0ba348383af68c
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.11-rc7
+Thank you!
 
-for you to fetch changes up to 2a8787c1cdc7be24fdd8953ecd1a8743a1006235:
-
-  spi: nxp-fspi: fix the KASAN report out-of-bounds bug (2024-09-11 22:25:44 +0100)
-
-----------------------------------------------------------------
-spi: Fixes for v6.11
-
-A few last minute fixes for v6.11, they're all individually unremarkable
-and only last minute due to when they came in.
-
-----------------------------------------------------------------
-Han Xu (1):
-      spi: nxp-fspi: fix the KASAN report out-of-bounds bug
-
-Jinjie Ruan (2):
-      spi: geni-qcom: Undo runtime PM changes at driver exit time
-      spi: geni-qcom: Fix incorrect free_irq() sequence
-
- drivers/spi/spi-geni-qcom.c | 17 ++++++++---------
- drivers/spi/spi-nxp-fspi.c  |  5 +++--
- 2 files changed, 11 insertions(+), 11 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
