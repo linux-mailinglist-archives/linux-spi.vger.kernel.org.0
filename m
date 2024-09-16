@@ -1,101 +1,101 @@
-Return-Path: <linux-spi+bounces-4836-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4837-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3411697A71D
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 20:01:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB7F297A722
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 20:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58F2B1C208F7
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 18:01:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9726F2821A6
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 18:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5277C15A864;
-	Mon, 16 Sep 2024 18:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07C415A865;
+	Mon, 16 Sep 2024 18:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ARE/4dBd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SsT0tXtm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA2615A865
-	for <linux-spi@vger.kernel.org>; Mon, 16 Sep 2024 18:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52731EEE9
+	for <linux-spi@vger.kernel.org>; Mon, 16 Sep 2024 18:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726509666; cv=fail; b=ZZAtSXJSMdcbmm5qILH1+Zb2f3OJ/LuINuV9PldpHjGWSIGoQTiZ2LAa7MWbLAVFXACCvj3zJlw1AWjF2oHfgZ6R9tS9GSsuOYl4pqO48AW5mSxyPNZehdVPMCAsJfQE/cLIhadESzXrX624I4lgwidLxJJ0U3Yx1BJFgXKrNRA=
+	t=1726509872; cv=fail; b=n/qlXdW8R+3Ps3dFv//6M1vul1Xn8PXweybOxUSEFOjNnMd4kBQc4kt4Gxo9MQcZoZ3gjyXGJwU7KU8XNvLMvepa7CRAch/osXnymjEMBUxuv6MnA/y/rcm1PnuA0V29wjBv/QZtYCmHhoPDhK/aPoT6TUZgRTJXWeXfLvUC+Sg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726509666; c=relaxed/simple;
-	bh=9U7ia+eQBxsLmzDmiJScwaH7E6d86QbPC4eqZLEvpkc=;
+	s=arc-20240116; t=1726509872; c=relaxed/simple;
+	bh=SL+falVaOEkqNOBkjdJh7D+mt7H4jKoZ6pI0qo7jXkA=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=e6uhEQbxX5fYSJOMz7oJpAwQLsm1hGJnFMLj5cY+jriNqbzKOAPxnsl/6eLcL4snjYErJr0k9U2jVWJ5ZOzS0Gc0gmetuMzwmEW0mWWGQ6DxaobCCWW1LbOu4OdipSJU8RC3LMnFq797YcaYF/cI0up+k8fsGvCzmnptRhZ+G8c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ARE/4dBd; arc=fail smtp.client-ip=198.175.65.16
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JpsApHcmUw3EDksi1iHwX+5cMbCtQQ/uFBwk+Vz6vxpPZXgFkUm2cLaYKacxkcM4UXUsB4tvA++yfDvfgeZmzzDcEzkMjpx9IreTqVd2fgQmrX+52Gf9rmeEn2C925kvGq4i3dbBMi1vBFzwx+67FkvkhH1xcEPjGL0X4rbNNJo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SsT0tXtm; arc=fail smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726509664; x=1758045664;
+  t=1726509871; x=1758045871;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=9U7ia+eQBxsLmzDmiJScwaH7E6d86QbPC4eqZLEvpkc=;
-  b=ARE/4dBdQi6jQ3GJZrYUUXf6LAXOWkIGIxtcnHrDOtplbDo5P2svzk/P
-   aGekY494Xs6Uk3TWSGVQMhR0FqTZ35SivkcmsXaF+fT6jKqUNpOrug2iA
-   P/A/vKmnJJYK1L2aXSfK03tqgBMZunymuCCs0ZZQ9oSlGTrNhVo9LCiTu
-   huoPTt1d/bmQcuKNUxJ3GqR949o3GmMNRPsX+11mzHhyCPq3HifE9CuRD
-   AzCl5wfx2CUY5xQIK90HVFyAuo4jYUn+wlNhZnK+I0GKlOAdU08crbrUy
-   rsbfa5bd/Xxr61+vuvRMqiE10J7Slp9Mpt/p74n1c+SMGdBlTeVHdNJVj
+  bh=SL+falVaOEkqNOBkjdJh7D+mt7H4jKoZ6pI0qo7jXkA=;
+  b=SsT0tXtm3WUiz//dy3bmPj16Q6Zee+v8M9+QEEzMTZK8B4Rh/n7Q77pD
+   /s9y9x4rPuXvGryg56FXImebnOe4hzzTvNI9/CWbsmVua0nUXnkDd7L7j
+   V/dJW3lO4KbwV4hfO5mduDgEuipR1WYDuiQLrwzgML5tK/GVBaS1xyhIf
+   cLx3JXRFu2qLuuOf4mdkeZhbLMFtNmKrGf5EmVcteCclvvopLhsq3tvll
+   LFIIX9Aya+OwMWsmcD/SEdE4ITDMrBZlaRgTNSr/YiZ6//Q+PmpGYnKu6
+   /TROTNsYjkKGgVemGo8g4ZOauKoQqqlGBSJPvPcHmut/JK6AhKcQfe8wV
    A==;
-X-CSE-ConnectionGUID: GAIdfcbJQ/ihTQ0EDE3o+A==
-X-CSE-MsgGUID: M7hBJgAuTnm2UcC8vRUTkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="25444063"
+X-CSE-ConnectionGUID: nYCvw5NzSrqtNH9KTguw1Q==
+X-CSE-MsgGUID: bVvFWQ9URJSsE1iG773P0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="25444834"
 X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="25444063"
+   d="scan'208";a="25444834"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 11:01:03 -0700
-X-CSE-ConnectionGUID: 8r8GJhgRTU6xM7z49mnlaA==
-X-CSE-MsgGUID: WH1/XgQWTpqilc7JrEI2vw==
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 11:04:31 -0700
+X-CSE-ConnectionGUID: KhBSEMwZT3SkaxBq+/VFxg==
+X-CSE-MsgGUID: O1J/2bfgQT+8jDVFhGxqAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="68565315"
+   d="scan'208";a="68566716"
 Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Sep 2024 11:01:01 -0700
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Sep 2024 11:04:23 -0700
 Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
  ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 16 Sep 2024 11:01:01 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ 15.1.2507.39; Mon, 16 Sep 2024 11:04:23 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
  ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 16 Sep 2024 11:01:00 -0700
+ 15.1.2507.39; Mon, 16 Sep 2024 11:04:22 -0700
 Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 16 Sep 2024 11:01:00 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ 15.1.2507.39 via Frontend Transport; Mon, 16 Sep 2024 11:04:22 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 16 Sep 2024 11:01:00 -0700
+ 15.1.2507.39; Mon, 16 Sep 2024 11:04:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y7V2YVcNLCIPk/M6Jfmg4+AGuAUiVa+rgemBKd52y31R+fG9XtTdotNVJWSmG0kEert8RNr6XklJwhOtzuNUAcsH7h+I/jcMTFgEwsspnQBMAk6qpJMi1rtkh1iaQuV+SPupImgjyXUqItlCTbmRfJaetOhOoOBcy5S+BIWc4m5HmRfpK3Y3mzXxfOZq8yu4qY6M7zY/cIaJeFzaLXogRhwCAE3yDOk2QnzEo4X8HJFeayHcAUEtoQ6dqG5vVfW8nq7wMR1jyxx6ZuX9jy9oRBbxzYrBcCscjJXLeoIXK5bkMLZf2MsdJv+8/wOpkBlIT+bnk8XKdkktwGNhgs5O2A==
+ b=pULlPLqhkWNgps7l9h5USeQL52YpJelWAefGdhH7ZhmTfapMt2b2REwB4V/1Or99l3Dz1fIVDPBLpmpnE5VSd4MREpIjkcNKsfFy00+j+kMt0U9mONUjSshMaI8/PdaRnS+XQYjtBHYWmHQJfGcSDgqg0NizSTgx9YBcX7zXn0K5xmiI1aq41hZtHqKDvh9QrIjhNTp9BOcMAkW3Etxit/6WeVbSG7Xho0oUyIr+ElOSL+uba7FquzCfUn2I4vYVDDfWNBOv51ki2gXdz3tb2b99fqrrgA/nU8uoqxbXQZ4zmKE6fSvwQKJBExw40jaet2VgoLsFFMAk7flWf+NE0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O8QXprfbP3Oib8B/1A4RLUQyTdyeFPZFTL2DZtF90Bs=;
- b=UI64TFaXwOuWSXhJVvGM9epBl10JMLurHn3MhuWz5+EgeyKVEXiXwYXV7UsZ91ikCnFHaQha7HK+cZvR1CI/17rA3IS1r5Ll9M0LW/fIPfixVfiYbe1lxpdf3IHpDml6iEkiXEKqpOKHYaHq+CUGBT0vJAAmKy6mUateB0Cdud+TrxWxfnpL8edv3qSfcA2J9hxpn83kAc8J0aINMpt2tZoE/GUCm90REVd08RroBz+iL4lSOHumYcbAUaCWLl7Yd9werxiz1ISm9wYqLamwsUW+eJylSRLQtpIu3Q+c5nSjjNygv+/9JL/dpLhTRoUT5tcNLyf6ZuVHdoUpw5CDiw==
+ bh=1VP3pQC5Mbc7JVbV3BUkAW4w96sPjVoASCLQFtEa46Q=;
+ b=G7TasSObzdSr1unOGOBDiZdzyIS6JbaSIwWF6dbtUjuTXjJzEXKqnvdt+wapzTihU3Q4KniGkKqQaJGA+5MCowUB1E9LSXbR6PutPpMFO7xD9FBHeWcWuyfvF0E2zk5YBHWCi4jg2xXJjn1ht1gSW3GUzkHu11TwuJzvkkLjlPi8oW5jfWu/NC2YSMaAV/awiIwEHyt0W1pGR6+O715YzssrmaKZk7DSutZf10gzAH9sgS6CxVtcstn5vXQPTpygNjlN5L/epNHA5IItQIgtUItrYPLUNxjHqoRaEsRqiyh5kdni0WqvLAlEO4NfH4cc00O9G87ftiEbYVFT0knGOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from BYAPR11MB2854.namprd11.prod.outlook.com (2603:10b6:a02:c9::12)
- by LV2PR11MB5973.namprd11.prod.outlook.com (2603:10b6:408:14e::14) with
+ by DS7PR11MB6063.namprd11.prod.outlook.com (2603:10b6:8:76::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.22; Mon, 16 Sep
- 2024 18:00:57 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Mon, 16 Sep
+ 2024 18:04:18 +0000
 Received: from BYAPR11MB2854.namprd11.prod.outlook.com
  ([fe80::8a98:4745:7147:ed42]) by BYAPR11MB2854.namprd11.prod.outlook.com
  ([fe80::8a98:4745:7147:ed42%5]) with mapi id 15.20.7962.022; Mon, 16 Sep 2024
- 18:00:56 +0000
-Date: Mon, 16 Sep 2024 14:00:50 -0400
+ 18:04:18 +0000
+Date: Mon, 16 Sep 2024 14:04:11 -0400
 From: Rodrigo Vivi <rodrigo.vivi@intel.com>
 To: Alexander Usyskin <alexander.usyskin@intel.com>
 CC: Mark Brown <broonie@kernel.org>, Lucas De Marchi
@@ -110,15 +110,15 @@ CC: Mark Brown <broonie@kernel.org>, Lucas De Marchi
 	<vitaly.lubart@intel.com>, <intel-xe@lists.freedesktop.org>,
 	<dri-devel@lists.freedesktop.org>, <linux-spi@vger.kernel.org>,
 	<intel-gfx@lists.freedesktop.org>
-Subject: Re: [PATCH v6 07/12] spi: intel-dg: wake card on operations
-Message-ID: <ZuhyUjDTiMeHSCKO@intel.com>
+Subject: Re: [PATCH v6 11/12] drm/xe/spi: add on-die spi device
+Message-ID: <ZuhzG7fUYj7AjIT1@intel.com>
 References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
- <20240916134928.3654054-8-alexander.usyskin@intel.com>
+ <20240916134928.3654054-12-alexander.usyskin@intel.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240916134928.3654054-8-alexander.usyskin@intel.com>
-X-ClientProxiedBy: MW4PR04CA0256.namprd04.prod.outlook.com
- (2603:10b6:303:88::21) To BYAPR11MB2854.namprd11.prod.outlook.com
+In-Reply-To: <20240916134928.3654054-12-alexander.usyskin@intel.com>
+X-ClientProxiedBy: MW4PR03CA0027.namprd03.prod.outlook.com
+ (2603:10b6:303:8f::32) To BYAPR11MB2854.namprd11.prod.outlook.com
  (2603:10b6:a02:c9::12)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -127,230 +127,333 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB2854:EE_|LV2PR11MB5973:EE_
-X-MS-Office365-Filtering-Correlation-Id: ebfe0df3-9304-430a-f5be-08dcd679835d
+X-MS-TrafficTypeDiagnostic: BYAPR11MB2854:EE_|DS7PR11MB6063:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04311d1a-9b19-4649-c6d4-08dcd679fb66
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?+nYtWOdJX+M3ZJbplBWG3u646gyRtkA6XClj23Aoy7MW+jzFu7oUpE9JBAAk?=
- =?us-ascii?Q?Stwxt3JPLB/ZELLCcUNaHygX4yze7FusLM8Ol421p7LdDyKnO6+F4NZfclKR?=
- =?us-ascii?Q?KpoSNGGmXwQivZzjTbhWv1aVs6BEetqUV/NSpk03J281M+YqEbVqjMuVKJZJ?=
- =?us-ascii?Q?En5ds/sClFloqA4XcLjhrwo/rQ8I5ufkE5T3TKibLKs2wb9ZmVNahryX6wvZ?=
- =?us-ascii?Q?E/ww4x2JGCOCuTodMdAnzZrFC4wAJxeLFCtTNh0dE0AMQrQRG7ifVc6u+DoY?=
- =?us-ascii?Q?Z0mK/Iqwxz5MhikXDPW+c+qpuw0yF/Djq0IxsYWD3+3pobXIhbqYAxUsot0T?=
- =?us-ascii?Q?89ytYepupXOw8aiqInqeywuqxmhgZw4mOaaR9bTG/1u+ebPO3Bg4fpjmA7YR?=
- =?us-ascii?Q?Duvt+1CPA+SoVrGeFQ9bGsb9Ri4/6EJEqdbkEmk2MQiufIvRhYy0D+/Xrten?=
- =?us-ascii?Q?WMUC8N2EXjXaCRetyyYRtW0+LQjmfj29IAO/dEuYl6dxUMraUmIDHnhGmE/j?=
- =?us-ascii?Q?YEqoorcOC4LZsKd01xIYxSCHLolpE+eWcjMuBfC5wWYPifCOhkOF6wE6s5XE?=
- =?us-ascii?Q?MPfGc3xBNxPVJPosRRfrFv0LfB09rwFkd/B7OxaJj9PIz4GvDPV13CQzskgN?=
- =?us-ascii?Q?f6xYy921zTwZS3VU1JI/yAjVeFC3O07XNKZFLPrcGDPxX5kQeDL9Bl0/T8vL?=
- =?us-ascii?Q?a2r3nOvJ7agnCobueeqFSQQkC6QYm/gIogshQlbRozgHurVQlebiSiVPbgor?=
- =?us-ascii?Q?Q/knpivPs6+eQAdGlpXbQ65DkguXJqCFAjxuLDvIEKk5miszZyZNH/Xbyq69?=
- =?us-ascii?Q?jtid94e2Mi/1ZaUE04W08vftPs6Z4uC0/HiW/hbrmIXAu75oDKrbH8bzdwIM?=
- =?us-ascii?Q?OOGuAFJ6S+O6HHyNYcQwVbLWkpMpZ2Fp19+BAXxzAGfiOAECqB3RNhSMIsvs?=
- =?us-ascii?Q?pPdMT/WqO2ggrmES2q89HGzRbuec955j+gGBoUAG1x26goHhcqxDu3WnK4bm?=
- =?us-ascii?Q?HQbe7Kd86dUybMd2MdjPwsO7P2ICRmXL94zlP0HzErUAZHjaC5A9Y1/GeftL?=
- =?us-ascii?Q?t/7SE2wiW12APbkhZupl16rdZw3ZWNc/QC1HaAhh6abIDvtg8b6BOs/1H3hS?=
- =?us-ascii?Q?d+HcPyp6cnU+dj42DNDT2ekO2h3WjyOMW/Uyf5/2Zg8n/ryQ4HUENuWpGj1v?=
- =?us-ascii?Q?hTUCE3Osz+7PAhIZ19DkNm1qmmemI6LKMe8fczwW6qTEZ5kLaykeiLKlwGK4?=
- =?us-ascii?Q?whU3KDrrMbVt09ebB1oI+QyY+6/Wt0OMeinA+MAju64wF2mmLFd0nZrl07He?=
- =?us-ascii?Q?YXn7J9kWABH9eQ4YcJNHAC6/79xq9y7Fj6hgmMQGsAtGfA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2854.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?W5/gGBdmBSW8/XZy1C9dvyJ77evYHdFq8A2OdrdyW1D5UKUP6jGHH9NUNX2Y?=
+ =?us-ascii?Q?DeCwaH4e/fmMjSvND2xT108hNIbNyu20QFAQ23uJ6fQxqsiBC2+hbT5ym9CN?=
+ =?us-ascii?Q?ocelI9ftDO4fO/Gu508H9/iH1qaBoGKFdc8mccL71OW9jGCEQJsgZ/c7Gmg9?=
+ =?us-ascii?Q?rbNjiYlz4FAsXO55VFwsUuIEaDEWqoiRmPId9LzWDVrpigrd4dOAzL/0cGLd?=
+ =?us-ascii?Q?cptrirBVCXH3vhyvbRQF06E1GI9Od24Zz5oCW87R/X79fOGvEWzyM1kKHjrv?=
+ =?us-ascii?Q?Vg+PK9nCnFNGKFk5pbfomwb66iqE+i5xfo+LFWT2Wl4DF4VoPx0zPpC9CJgF?=
+ =?us-ascii?Q?G2KyoCRLMIodOvzBNd7C0Ffb2PevlToVfGTHfbAEgs52eKbFMNovA2Yi29Qo?=
+ =?us-ascii?Q?47fJMM6Khnlj0h90TkTPy8P90wHlaKE5Etmi7KIYC78+K6n8Y/h+uV7b7hUG?=
+ =?us-ascii?Q?ZNbzmo4f91+egkq0NJqNEiNUQ3ssrV9gwlHIE6Ud874avXvwXr7xMeu+AxP4?=
+ =?us-ascii?Q?NfLPHh2Mt3ppMhoBLdE1bpQWtJXuRFXJlBtjT2RL1OIAH9r96HhkZEqNWhX9?=
+ =?us-ascii?Q?b+24PhLJrRGBH1mA5ifZdmcPrUOXVNoPQ752cqSUoIQRm9WPgn2Xg7gvAWpD?=
+ =?us-ascii?Q?Zv8vrkSe+ni71ixjigbTXXxGgM/t0xK/0/Yo1dJW7UgZEZXI7qioHkYR+Ogk?=
+ =?us-ascii?Q?sKTh8rCLQPrpIPrJEf+NqMj+BTFcGfOpJEGipBkV7K5eWDYMTBEiydcUEdpI?=
+ =?us-ascii?Q?y4+/l5vcC4Smlp5HHTacbb7EDiqX3dQyGKvb4rGnIkn3CIbUFuvh9f3xUPy2?=
+ =?us-ascii?Q?eBu/GqpMMcNfZbp0Njk4PToy+9gz07DDQhBPzTEmNnmUs8HzNkd7KrHtDv/F?=
+ =?us-ascii?Q?3BFhUhz9tLuO8LEAGOSGyym564IPokz+PpZvCxjUe87g1jtxbF4nHuHUmchw?=
+ =?us-ascii?Q?nRG0CjrQcLAtXgozVnVnPwulcHv+1zVUc9vwSw+0T4+C3kVJI3p3a+DpKyAk?=
+ =?us-ascii?Q?TLLZ+//aVUGg0P3EcX+HhhxXAbSOcW1daGM8DjjpqZIgoGLL942gdoxQjNmI?=
+ =?us-ascii?Q?eYtiSEs7yVCBn+2q5zFBwaYS2IxB9KazCVAEtGopexbHVkwmwUGUu45/d/47?=
+ =?us-ascii?Q?U2cSCOO3xHrwuGL4QiAomkSjj3mQ1nTFDgpq2SVpNJhI3yUkoLttjK0P7shO?=
+ =?us-ascii?Q?lvuDif4OJ6XVB3tGhhpKlCKaNBeNh+fQmO4Tm4b8sHBwV4T2gyRWvpt6lB6N?=
+ =?us-ascii?Q?vRsSfEsPBhSa6iJT6DeKj2bvflP1vA+QFnVunWCrgT+SZ75kg5KL+bgta+iu?=
+ =?us-ascii?Q?WV+8ZHwZNebxJz2mHXtBE9g9+cfNxgkfxEbvlFYIr96AJA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2854.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PYabREYLUiYKQ5bZAl5YyX9DJES2eQzr42NKjMjMz1DikIoToWh3OaSVgFjc?=
- =?us-ascii?Q?gVNwTc/c8Pt7poS59Xn/OSoVCDAxxv9xqmuaeQ/Y4cLIz7GAzyRF6s/BRVpQ?=
- =?us-ascii?Q?1DBhfc/RfgWT4xq54sy7ErQ4/gyI17BEpWx/bfjFpXPS5CxGNw8KdQYbHTpo?=
- =?us-ascii?Q?Qv3zxAQ7qQBqcZF7O0T7u2He2YPW9hFRv/h+r6rkdtqIdvYI4l0pelfkvS01?=
- =?us-ascii?Q?MA7RdRoLycgNw0SLmgiaharPOSt8s1AArnpuio3aXs2v0gmNB6/muTAjarwB?=
- =?us-ascii?Q?2GgpkMg8A4eXHKLo4dmBrz+rgzXVG6syRfZrTsnF50dFqyPlIJHURAaTZ1u4?=
- =?us-ascii?Q?OReO0DAoF3SO/oITlXfkcjenCT3b6Sj6Dy/ntIFEkPm/4a0HFwOeE1cRW+3L?=
- =?us-ascii?Q?Gr+XVQfFd1+K17OL4k9JkbjxUwifu4Q716XbTVYjQlseu/uPaaK4uXh+SmOT?=
- =?us-ascii?Q?mGGR4yc/kDzbih6ecYohqKj9i6CNbBURaA3KzhKsYwtyHfas9u5vvNPqI9TC?=
- =?us-ascii?Q?fLMftKPHtrFD4ujnHIUCMSRUKwNpXLoi2D8zKM651ZShNfZdNRoCKtP7qfm3?=
- =?us-ascii?Q?36WaIEPazVl2xHhSTOshKC8e4myQIl5rqoyf+luBl2EhizFDTMEXuTweDcE8?=
- =?us-ascii?Q?HhHN/A4XqPMCAWAXSHT5IfCDNdPnwRixlVtIiHsQRsF4ddq3O4RRMUfDbsK9?=
- =?us-ascii?Q?PYxaYx1Flh/nii2iDNj0lKMYpGrSIgCI5ZFJWJy7W5hWizvgsetR4ys3FxzD?=
- =?us-ascii?Q?TvFkQJIOQc1hsnkjxgNLy0EcTWH2eYljEGO8CIDJdUtZqM2K1XXZx0p0AOpU?=
- =?us-ascii?Q?GzF6C6so+77r68Ju+m6tQk7tEuLSMmrw4MwRfaoONcwfblwYebX4q4sRdzc+?=
- =?us-ascii?Q?iCvRsPKuCWa0+JjbZpopDUNIXvwUIvHuZEVlMYsMLHznE6lISiYpQ+RKD1IY?=
- =?us-ascii?Q?0f925q+GT7ig0y9X5rTvNFkX20+6K3edouqxfLIauN6w5LMK2p8UmuNJec3j?=
- =?us-ascii?Q?nF/Lgl6T8cYfb6cZVNlq1oRe566EocIWBnAiXJLqepu92kI2jKl8LOoaBIX+?=
- =?us-ascii?Q?nyNPyTJIue9EaN4CLayGbya7mnpY+mmbGoEkrDm+fNs8alU5eIJNsJK3XICT?=
- =?us-ascii?Q?I4Bmg3JE8EcS4Uyk71yWTIvKikm2+F84b8AQmLiDVBP9/jUzkUJzSb0UK89R?=
- =?us-ascii?Q?TKvhKqtR0dzYaXeyyx/P2LI+WVMY6bOU1AaTIUFvuN+uH4pVNiiyS4JweQUI?=
- =?us-ascii?Q?LCjaS/jvK6gxgT7Dvfl5mJnjdkZgEsRJYUmPbSEYHPXI3M+VYFbQqHqwwchY?=
- =?us-ascii?Q?lcO+IpZH/rrkwTKTx480P6Af4YJHdcU7G7dgo166BVp3fy+itGiLvZINAs4r?=
- =?us-ascii?Q?qQLfEtyiPl6wUaC2APFtRpCRD3oIci414brgQdJWSPSppr8pk0T+xmY9jCJL?=
- =?us-ascii?Q?iyuVdTSbIkMnivE9DDC4mT01yj5uV3BEJ9xNTLV+NhugL8Fh1ZrZQSJzMKpx?=
- =?us-ascii?Q?+1NxQTvHqq1JRhm0q5c3A+BwHDJ9bLCAbLRoxOnFqI0zyVUs8b4JAQA4UySd?=
- =?us-ascii?Q?HIl1xL/bsYT8g7Mo2sdk43VLrlvrXGHDgtBsKTaZXmn+dB8rlY+Q/kYidLmm?=
- =?us-ascii?Q?5w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebfe0df3-9304-430a-f5be-08dcd679835d
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?82BCblhinOYljtQ6y6dvNk199qZHfQb8fifeiTqYb4SjSnNC04YXHc95hRAL?=
+ =?us-ascii?Q?dI81d8ZKNxwf60H6N5ba0dSkms6wdM1oXG8k0Z5FXRHp8pJ7DpLPwld88MxE?=
+ =?us-ascii?Q?DGBs0LlTThdWo3MZCsgfV7o1oiL0LNB+IDqUL1L6+uQJPRPJ8S/7Z2mGMUaY?=
+ =?us-ascii?Q?NeJoG40lieq7zdmxKJ8rhbCv0Iz/AI8KNDoJHzb6V0Wo6fHpaZ7OOyOZRIIk?=
+ =?us-ascii?Q?RlOHrEm+baATaSYoraY9iLpHaNgR65o2vm/vmgCVnniJu2iL4YgUsyAFFS42?=
+ =?us-ascii?Q?Nj1QKcIeFpTTTVFS+lgIOi1Xsf0gi/z/tBoLCL3h99Mg6yuoQdcMCQ7LMcgx?=
+ =?us-ascii?Q?vXE7IgYuacC2aqxqK80nlcj7wr0Y8ZuzOujaZUTYDj33uIAz84YeakJxdoPZ?=
+ =?us-ascii?Q?nZDec+YdvByY89ZVHLd4d8mzLWteck68AC1QRjLQJRCS/5n8V8UH7lCw9vBZ?=
+ =?us-ascii?Q?5XukCEfLaOWaefsK3dFziUS1n/AFMM5w8be/2JmtEzfx45DuOY9R17k3/HeD?=
+ =?us-ascii?Q?OTdaGL8MTsy6n+rDCRIn43XflBsD3QZADx7zzVE7SqtR9p8Tkc9/lWiS0ifr?=
+ =?us-ascii?Q?X4UMIJxtVH1NI3VeJplX0eGnVh4rWwxzAUnJGmlLsrAGpXg6flkL87o5w/0O?=
+ =?us-ascii?Q?nDjZ/+EOuKRQf1u5bVKLwg4fWi4j+NP1JoxoZqTINZ/Xwkg1tairkQC/CDxn?=
+ =?us-ascii?Q?8b0hg3KYC5ktQPRhzER/CtuWKtAfmRPAT+HBoUJENE9mHUjXhWQgTTotVc37?=
+ =?us-ascii?Q?fzZ7xJPeg4uB19ZY2XeE9Tmor6CfrBOin7/098dHlG+AhqHXUGGOem7ENdPq?=
+ =?us-ascii?Q?jZCFtaRsdF8tNHIa0GK3WPHddlqV+8Nyu061jk+lr4bRe22PzjD4NYWYhbNe?=
+ =?us-ascii?Q?+UpA0w/2vzg6FERdV86lfFUZOpqUbYCOlW12TxC0ulEWyAlV7BIqjTB56IJ4?=
+ =?us-ascii?Q?Tu9h2tYVIWACVrycnQ5+ceq9bLmGTkayAnw/9xG2dUAXmoZNr6H8+tprSc7K?=
+ =?us-ascii?Q?dvU0rMfHq0CoWZ7Vo2Y9jnCrJpRa9Mt9CkXOj/Tfdra6zDitSxM/tcrvCrkJ?=
+ =?us-ascii?Q?hLSCvTGm/HyldT8MBJfuqSo3USzvnbomTSTTUkAgUM20GYxTb8f1hZ3jCwVZ?=
+ =?us-ascii?Q?/Z8+m11L9N84X7M1lUPOdpnGq7MA6vVELuqjtr+QeNQzntp2MkJ34jNQELyV?=
+ =?us-ascii?Q?TUXat4WlSPqPXRs9L9nM4fZM5LluJxerCrli7z7UZ3zcgCYGpsrJcaaKYXSz?=
+ =?us-ascii?Q?WnT+pMpqGrBJii2xjSDap0y8CC92kUXQH6FbWozw56o4yZWaIBm5MRr0olMO?=
+ =?us-ascii?Q?WDHIWArxdhQtHlpqsN97WeXGeSYeZJVBk8aT2h4GIh6VTzPuhvis8Q5XhZnY?=
+ =?us-ascii?Q?DfKqG+ppuUUb4R0Z8aR7sarfhRm0kuzRIt3F6/vGwLyWnAo/ybMxE0t/b1e3?=
+ =?us-ascii?Q?9jNDWUFYEcFWiCx7SN+INcSLqHw4aZ/1NyrVIXf40TCusOsVoDPwkoySKE0b?=
+ =?us-ascii?Q?Nf6sPHo+h4HqRXy1zZ8QkJflkS3eih20IKwTD0hsKvlptVf+iOXehy1gqY4G?=
+ =?us-ascii?Q?VotouWsoUWkYgDP/DUqiwgC2Y6gkM2hVsr6k2p5MOParlo0ODgumiEM2Ae5d?=
+ =?us-ascii?Q?9g=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04311d1a-9b19-4649-c6d4-08dcd679fb66
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2854.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2024 18:00:56.8316
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2024 18:04:18.0684
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R001q/kU0GXzYoeYjzfMgdj9c4cLtExd1GzODtPImhK7inhpVqfoMQ7xXSJwZ99AFvug0rioeM7Z9y2lJH9oWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR11MB5973
+X-MS-Exchange-CrossTenant-UserPrincipalName: jaOq9b+O46+7BLXTTY0GSGZ+fEZMJoXWQY/zcgDW0diocvHScDxwClyYeogIG0B3v0bgOeUpulMwtgGBJxqZrg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6063
 X-OriginatorOrg: intel.com
 
-On Mon, Sep 16, 2024 at 04:49:23PM +0300, Alexander Usyskin wrote:
-> Enable runtime PM in spi driver to notify graphics driver that
-> whole card should be kept awake while spi operations are
-> performed through this driver.
+On Mon, Sep 16, 2024 at 04:49:27PM +0300, Alexander Usyskin wrote:
+> Enable access to internal spi on DGFX with GSC/CSC devices
+> via a child device.
+> The spi child device is exposed via auxiliary bus.
 > 
-> CC: Lucas De Marchi <lucas.demarchi@intel.com>
 > Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 > ---
->  drivers/spi/spi-intel-dg.c | 44 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
+>  drivers/gpu/drm/xe/Makefile          |  1 +
+>  drivers/gpu/drm/xe/xe_device.c       |  3 +
+>  drivers/gpu/drm/xe/xe_device_types.h |  8 +++
+>  drivers/gpu/drm/xe/xe_pci.c          |  5 ++
+>  drivers/gpu/drm/xe/xe_spi.c          | 82 ++++++++++++++++++++++++++++
+>  drivers/gpu/drm/xe/xe_spi.h          | 15 +++++
+>  6 files changed, 114 insertions(+)
+>  create mode 100644 drivers/gpu/drm/xe/xe_spi.c
+>  create mode 100644 drivers/gpu/drm/xe/xe_spi.h
 > 
-> diff --git a/drivers/spi/spi-intel-dg.c b/drivers/spi/spi-intel-dg.c
-> index c76b0a70f8d8..a14fc3190520 100644
-> --- a/drivers/spi/spi-intel-dg.c
-> +++ b/drivers/spi/spi-intel-dg.c
-> @@ -12,11 +12,14 @@
->  #include <linux/module.h>
->  #include <linux/mtd/mtd.h>
->  #include <linux/mtd/partitions.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/string.h>
->  #include <linux/slab.h>
->  #include <linux/sizes.h>
->  #include <linux/types.h>
->  
-> +#define INTEL_DG_SPI_RPM_TIMEOUT 500
-> +
->  struct intel_dg_spi {
->  	struct kref refcnt;
->  	struct mtd_info mtd;
-> @@ -471,6 +474,12 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
->  	total_len = info->len;
->  	addr = info->addr;
->  
-> +	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-> +	if (ret < 0) {
-> +		dev_err(&mtd->dev, "rpm: get failed %d\n", ret);
-
-If I understood correctly,
-this is the device = &aux_dev->dev;
-which is the drm->pdev.dev
-?
-
-This is to ensure that the graphics driver is not going to runtime suspend,
-right?
-
-> +		return ret;
-> +	}
-> +
->  	mutex_lock(&spi->lock);
->  
->  	while (total_len > 0) {
-> @@ -512,6 +521,8 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
->  
->  out:
->  	mutex_unlock(&spi->lock);
-> +	pm_runtime_mark_last_busy(mtd->dev.parent);
-> +	pm_runtime_put_autosuspend(mtd->dev.parent);
->  	return ret;
->  }
->  
-> @@ -545,6 +556,12 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
->  	if (len > spi->regions[idx].size - from)
->  		len = spi->regions[idx].size - from;
->  
-> +	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-> +	if (ret < 0) {
-> +		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
-> +		return ret;
-> +	}
-> +
->  	mutex_lock(&spi->lock);
->  
->  	ret = spi_read(spi, region, from, len, buf);
-> @@ -557,6 +574,8 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
->  	*retlen = ret;
->  
->  	mutex_unlock(&spi->lock);
-> +	pm_runtime_mark_last_busy(mtd->dev.parent);
-> +	pm_runtime_put_autosuspend(mtd->dev.parent);
->  	return 0;
->  }
->  
-> @@ -590,6 +609,12 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
->  	if (len > spi->regions[idx].size - to)
->  		len = spi->regions[idx].size - to;
->  
-> +	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-> +	if (ret < 0) {
-> +		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
-> +		return ret;
-> +	}
-> +
->  	mutex_lock(&spi->lock);
->  
->  	ret = spi_write(spi, region, to, len, buf);
-> @@ -602,6 +627,8 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
->  	*retlen = ret;
->  
->  	mutex_unlock(&spi->lock);
-> +	pm_runtime_mark_last_busy(mtd->dev.parent);
-> +	pm_runtime_put_autosuspend(mtd->dev.parent);
->  	return 0;
->  }
->  
-> @@ -747,6 +774,17 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
->  		}
+> diff --git a/drivers/gpu/drm/xe/Makefile b/drivers/gpu/drm/xe/Makefile
+> index edfd812e0f41..90f995b04479 100644
+> --- a/drivers/gpu/drm/xe/Makefile
+> +++ b/drivers/gpu/drm/xe/Makefile
+> @@ -93,6 +93,7 @@ xe-y += xe_bb.o \
+>  	xe_ring_ops.o \
+>  	xe_sa.o \
+>  	xe_sched_job.o \
+> +	xe_spi.o \
+>  	xe_step.o \
+>  	xe_sync.o \
+>  	xe_tile.o \
+> diff --git a/drivers/gpu/drm/xe/xe_device.c b/drivers/gpu/drm/xe/xe_device.c
+> index 4d3c794f134c..25ca0b53c5c1 100644
+> --- a/drivers/gpu/drm/xe/xe_device.c
+> +++ b/drivers/gpu/drm/xe/xe_device.c
+> @@ -48,6 +48,7 @@
+>  #include "xe_pcode.h"
+>  #include "xe_pm.h"
+>  #include "xe_query.h"
+> +#include "xe_spi.h"
+>  #include "xe_sriov.h"
+>  #include "xe_tile.h"
+>  #include "xe_ttm_stolen_mgr.h"
+> @@ -734,6 +735,7 @@ int xe_device_probe(struct xe_device *xe)
+>  			goto err_fini_gt;
 >  	}
 >  
-> +	pm_runtime_enable(device);
+> +	xe_spi_init(xe);
+>  	xe_heci_gsc_init(xe);
+>  
+>  	err = xe_oa_init(xe);
+> @@ -802,6 +804,7 @@ void xe_device_remove(struct xe_device *xe)
+>  	xe_oa_fini(xe);
+>  
+>  	xe_heci_gsc_fini(xe);
+> +	xe_spi_fini(xe);
+>  
+>  	for_each_gt(gt, xe, id)
+>  		xe_gt_remove(gt);
+> diff --git a/drivers/gpu/drm/xe/xe_device_types.h b/drivers/gpu/drm/xe/xe_device_types.h
+> index c92df0a2423f..dfc0183cabe0 100644
+> --- a/drivers/gpu/drm/xe/xe_device_types.h
+> +++ b/drivers/gpu/drm/xe/xe_device_types.h
+> @@ -12,6 +12,8 @@
+>  #include <drm/drm_file.h>
+>  #include <drm/ttm/ttm_device.h>
+>  
+> +#include <linux/intel_dg_spi_aux.h>
 > +
-> +	pm_runtime_set_autosuspend_delay(device, INTEL_DG_SPI_RPM_TIMEOUT);
-> +	pm_runtime_use_autosuspend(device);
-
-If the above assumption is right, then I don't believe you
-should change the device settings in here.
-
-But if you tell me that this 'device' is the spi one, and not
-the graphics dgfx, then I believe this code would be missing
-the runtime pm suspend/resume functions.
-
+>  #include "xe_devcoredump_types.h"
+>  #include "xe_heci_gsc.h"
+>  #include "xe_lmtt_types.h"
+> @@ -44,6 +46,7 @@ struct xe_pat_ops;
+>  #define IS_DGFX(xe) ((xe)->info.is_dgfx)
+>  #define HAS_HECI_GSCFI(xe) ((xe)->info.has_heci_gscfi)
+>  #define HAS_HECI_CSCFI(xe) ((xe)->info.has_heci_cscfi)
+> +#define HAS_GSC_SPI(xe) ((xe)->info.has_gsc_spi)
+>  
+>  #define XE_VRAM_FLAGS_NEED64K		BIT(0)
+>  
+> @@ -331,6 +334,8 @@ struct xe_device {
+>  		u8 has_heci_gscfi:1;
+>  		/** @info.has_heci_cscfi: device has heci cscfi */
+>  		u8 has_heci_cscfi:1;
+> +		/** @info.has_gsc_spi: device has gsc spi */
+> +		u8 has_gsc_spi:1;
+>  		/** @info.skip_guc_pc: Skip GuC based PM feature init */
+>  		u8 skip_guc_pc:1;
+>  		/** @info.has_atomic_enable_pte_bit: Device has atomic enable PTE bit */
+> @@ -499,6 +504,9 @@ struct xe_device {
+>  	/** @heci_gsc: graphics security controller */
+>  	struct xe_heci_gsc heci_gsc;
+>  
+> +	/** @spi: discrete graphics spi */
+> +	struct intel_dg_spi_dev spi;
 > +
-> +	ret = pm_runtime_resume_and_get(device);
-> +	if (ret < 0) {
-> +		dev_err(device, "rpm: get failed %d\n", ret);
-> +		goto err_norpm;
+>  	/** @oa: oa observation subsystem */
+>  	struct xe_oa oa;
+>  
+> diff --git a/drivers/gpu/drm/xe/xe_pci.c b/drivers/gpu/drm/xe/xe_pci.c
+> index a1d08e20cd34..45be73ccf274 100644
+> --- a/drivers/gpu/drm/xe/xe_pci.c
+> +++ b/drivers/gpu/drm/xe/xe_pci.c
+> @@ -60,6 +60,7 @@ struct xe_device_desc {
+>  	u8 has_display:1;
+>  	u8 has_heci_gscfi:1;
+>  	u8 has_heci_cscfi:1;
+> +	u8 has_gsc_spi:1;
+>  	u8 has_llc:1;
+>  	u8 has_mmio_ext:1;
+>  	u8 has_sriov:1;
+> @@ -282,6 +283,7 @@ static const struct xe_device_desc dg1_desc = {
+>  	PLATFORM(DG1),
+>  	.has_display = true,
+>  	.has_heci_gscfi = 1,
+> +	.has_gsc_spi = 1,
+>  	.require_force_probe = true,
+>  };
+>  
+> @@ -293,6 +295,7 @@ static const u16 dg2_g12_ids[] = { XE_DG2_G12_IDS(NOP), 0 };
+>  	DGFX_FEATURES, \
+>  	PLATFORM(DG2), \
+>  	.has_heci_gscfi = 1, \
+> +	.has_gsc_spi = 1, \
+>  	.subplatforms = (const struct xe_subplatform_desc[]) { \
+>  		{ XE_SUBPLATFORM_DG2_G10, "G10", dg2_g10_ids }, \
+>  		{ XE_SUBPLATFORM_DG2_G11, "G11", dg2_g11_ids }, \
+> @@ -324,6 +327,7 @@ static const __maybe_unused struct xe_device_desc pvc_desc = {
+>  	PLATFORM(PVC),
+>  	.has_display = false,
+>  	.has_heci_gscfi = 1,
+> +	.has_gsc_spi = 1,
+>  	.require_force_probe = true,
+>  };
+>  
+> @@ -613,6 +617,7 @@ static int xe_info_init_early(struct xe_device *xe,
+>  	xe->info.is_dgfx = desc->is_dgfx;
+>  	xe->info.has_heci_gscfi = desc->has_heci_gscfi;
+>  	xe->info.has_heci_cscfi = desc->has_heci_cscfi;
+> +	xe->info.has_gsc_spi = desc->has_gsc_spi;
+>  	xe->info.has_llc = desc->has_llc;
+>  	xe->info.has_mmio_ext = desc->has_mmio_ext;
+>  	xe->info.has_sriov = desc->has_sriov;
+> diff --git a/drivers/gpu/drm/xe/xe_spi.c b/drivers/gpu/drm/xe/xe_spi.c
+> new file mode 100644
+> index 000000000000..37080b82e9ae
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_spi.c
+> @@ -0,0 +1,82 @@
+> +// SPDX-License-Identifier: MIT
+> +/*
+> + * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
+
+only 2024 on the new headers should be enough.
+
+> + */
+> +
+> +#include <linux/intel_dg_spi_aux.h>
+> +#include <linux/pci.h>
+> +#include "xe_device_types.h"
+> +#include "xe_spi.h"
+> +#include "xe_sriov.h"
+> +
+> +#define GEN12_GUNIT_SPI_BASE 0x00102040
+> +#define GEN12_GUNIT_SPI_SIZE 0x80
+> +#define HECI_FW_STATUS_2_SPI_ACCESS_MODE BIT(3)
+> +
+> +static const struct intel_dg_spi_region regions[INTEL_DG_SPI_REGIONS] = {
+> +	[0] = { .name = "DESCRIPTOR", },
+> +	[2] = { .name = "GSC", },
+> +	[11] = { .name = "OptionROM", },
+> +	[12] = { .name = "DAM", },
+> +};
+> +
+> +static void xe_spi_release_dev(struct device *dev)
+> +{
+> +}
+> +
+> +void xe_spi_init(struct xe_device *xe)
+> +{
+> +	struct intel_dg_spi_dev *spi = &xe->spi;
+> +	struct pci_dev *pdev = to_pci_dev(xe->drm.dev);
+> +	struct auxiliary_device *aux_dev = &spi->aux_dev;
+> +	int ret;
+> +
+> +	if (!HAS_GSC_SPI(xe))
+> +		return;
+> +
+> +	/* No access to internal SPI from VFs */
+> +	if (IS_SRIOV_VF(xe))
+> +		return;
+> +
+> +	spi->writeable_override = false;
+> +	spi->bar.parent = &pdev->resource[0];
+> +	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
+> +	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
+> +	spi->bar.flags = IORESOURCE_MEM;
+> +	spi->bar.desc = IORES_DESC_NONE;
+> +	spi->regions = regions;
+> +
+> +	aux_dev->name = "spi";
+> +	aux_dev->id = (pci_domain_nr(pdev->bus) << 16) |
+> +		       PCI_DEVID(pdev->bus->number, pdev->devfn);
+> +	aux_dev->dev.parent = &pdev->dev;
+> +	aux_dev->dev.release = xe_spi_release_dev;
+> +
+> +	ret = auxiliary_device_init(aux_dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "xe-spi aux init failed %d\n", ret);
+
+for both, this and i915 one. We have 'drm' pointer here,
+so we should prefer the drm_err
+
+> +		return;
 > +	}
 > +
->  	spi->base = devm_ioremap_resource(device, &ispi->bar);
->  	if (IS_ERR(spi->base)) {
->  		dev_err(device, "mmio not mapped\n");
-> @@ -769,9 +807,13 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
->  
->  	dev_set_drvdata(&aux_dev->dev, spi);
->  
-> +	pm_runtime_put(device);
->  	return 0;
->  
->  err:
-> +	pm_runtime_put(device);
-> +err_norpm:
-> +	pm_runtime_disable(device);
->  	kref_put(&spi->refcnt, intel_dg_spi_release);
->  	return ret;
->  }
-> @@ -783,6 +825,8 @@ static void intel_dg_spi_remove(struct auxiliary_device *aux_dev)
->  	if (!spi)
->  		return;
->  
-> +	pm_runtime_disable(&aux_dev->dev);
+> +	ret = auxiliary_device_add(aux_dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "xe-spi aux add failed %d\n", ret);
+> +		auxiliary_device_uninit(aux_dev);
+> +		return;
+> +	}
+> +}
 > +
->  	mtd_device_unregister(&spi->mtd);
->  
->  	dev_set_drvdata(&aux_dev->dev, NULL);
+> +void xe_spi_fini(struct xe_device *xe)
+> +{
+> +	struct intel_dg_spi_dev *spi = &xe->spi;
+> +
+> +	if (!HAS_GSC_SPI(xe))
+> +		return;
+> +
+> +	/* No access to internal SPI from VFs */
+> +	if (IS_SRIOV_VF(xe))
+> +		return;
+> +
+> +	auxiliary_device_delete(&spi->aux_dev);
+> +	auxiliary_device_uninit(&spi->aux_dev);
+> +}
+> diff --git a/drivers/gpu/drm/xe/xe_spi.h b/drivers/gpu/drm/xe/xe_spi.h
+> new file mode 100644
+> index 000000000000..aef79893a864
+> --- /dev/null
+> +++ b/drivers/gpu/drm/xe/xe_spi.h
+> @@ -0,0 +1,15 @@
+> +/* SPDX-License-Identifier: MIT */
+> +/*
+> + * Copyright(c) 2019-2024 Intel Corporation. All rights reserved.
+> + */
+> +
+> +#ifndef __XE_SPI_H__
+> +#define __XE_SPI_H__
+> +
+> +struct xe_device;
+> +
+> +void xe_spi_init(struct xe_device *xe);
+> +
+> +void xe_spi_fini(struct xe_device *xe);
+> +
+> +#endif /* __XE_SPI_H__ */
 > -- 
 > 2.34.1
 > 
