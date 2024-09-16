@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-4829-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4830-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C596F97A3A9
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 16:06:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F9D797A3B0
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 16:08:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 046271C210D6
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 14:06:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 397B828CE74
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Sep 2024 14:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF7D158DCC;
-	Mon, 16 Sep 2024 13:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1550194122;
+	Mon, 16 Sep 2024 13:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FBQ2WfF1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TGA68aDU"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC21158DC0
-	for <linux-spi@vger.kernel.org>; Mon, 16 Sep 2024 13:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CAA15ADB8
+	for <linux-spi@vger.kernel.org>; Mon, 16 Sep 2024 13:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726495084; cv=none; b=QzyUsp7saK2gTENgoCfB2mohLjn/loVQNHBhd/jvQP1ibWYRspvYQGT5l6M25FR7ezYiRTKTbqXLya5imkok/LEnMzWUsSdtFQQL6nbR7Q3jyU8aIT2eOf+codCg4yisuhn0s6xHAjHD++W4j56JQmdxbJi91DCCAeEkF62sTSY=
+	t=1726495139; cv=none; b=cd28PdKSKX70eZDGRjl2jcvY8kDY1UW9ZiVuuHilMxac20rIBb18VGsafDmslTljT1pO1+uiNhaJ5OXv/oTwdLpKlF3rwxbs4nZwA9Ip2Y/vfDc6UF3P0KMBE5wn8ES64FyWbGkhdY8TCQ/9C3PGrysxxWBFbtb/dobXptr84xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726495084; c=relaxed/simple;
-	bh=eUyFHGpLnm0GiFr6R45QRYKMqFyqBiOPWuSQdcI130g=;
+	s=arc-20240116; t=1726495139; c=relaxed/simple;
+	bh=B99SUdIMw00Q3to8mLhSTBkkBU3L+khmykvel5CmBuo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=B8FIjzgDOqDvkxMiMcYpnpNW04yfls7nUWHHYrx+19Lfz+o/mrQVZBz4JTjbz+2p4R5TiCh+LvP1XGnTxGDoY50D5EV1cyHWewsw/43CmBvpLkQi+0w7lOdpF5hN4im0povGUq/yvNYF1Jk490nCSmlQmnW8qc9szwNQ52nkrfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FBQ2WfF1; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=RPBLewwPfpY7lc1bKDdF4TeyJ6kYAA1iKjhSqX6wuJDKoMSoIWqUmSF9vN8LDciZKEG970bRg8pCGqHaz7/c4rtljVK22G/B/8dGwGN2LeRlgpwjNoFrVZVb6ruKNQP9k41yPKLR+FONJLWwCH8njcwlcg2pCdV+8F6xcHLVoCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TGA68aDU; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726495082; x=1758031082;
+  t=1726495138; x=1758031138;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eUyFHGpLnm0GiFr6R45QRYKMqFyqBiOPWuSQdcI130g=;
-  b=FBQ2WfF1Qz2v9ys0z/HFLmS/eVRRmd85G6m8N1CZbMrxpwmgCRpqgASU
-   +v8FzrZKXW2DD6NXloktd/ymUwjhDu8WvpjrHuADyescTamsoHxF88Kke
-   QY//CQdaSnZFjUQTd+/+SzW2Ovy5FUKI5He1gLtTyrNDKe8W1wE5IH2XT
-   sj526BBfj2A9HQVsi0pKmuGIINTMOAQ07/o7rpGWN/4KhV2mPMzXM/IKn
-   OfXtm5PWM1b/1b2dh7MHCLeZ5PbRJ3UA6YEGzo6AKr8OUKCG1+KxvRw2P
-   oOsgc1N+zf4Sv8eNsnsCq4fhTYEH7E6q+QBQFUOW//jiETgHs+nrpojNf
-   A==;
-X-CSE-ConnectionGUID: dVuNm8ftS16/0UbF/JaKVQ==
-X-CSE-MsgGUID: giWvAh6NTfOLbyp0lMWHoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="36666865"
+  bh=B99SUdIMw00Q3to8mLhSTBkkBU3L+khmykvel5CmBuo=;
+  b=TGA68aDU7pMAvXtJXeEHOo/4Bcr38vhA584cZYXMveQxgTWucLuNDsxY
+   LGvjCHeHNaFQae2s57K84DyU0IEOBx57SczL6hGnVz2rlWPO7eFp0Rj41
+   g9+mQTnMkPgplQsIH6wBF6KtvwvaPWNeOQRHpbt3W4e4HA7JIcUt9Jw0n
+   2WGwrLsjTpL0pbwQ5RqGjXO4TAMfde9v3bF9uR1VsaK18h/z+ppiq3ZUd
+   /rNEKpLzJYAyFxkCRfO+wjRwY87UooZPaXdn4S0qoBiSPOUqjKd7nPK4E
+   1J32JSWF50h8NMi7BwHE4vwIux+ICGCjk8r8Cwgfy4w2IvXzjDCBwOqfc
+   Q==;
+X-CSE-ConnectionGUID: n79PO7rIQF2EXiF8Ag8NFA==
+X-CSE-MsgGUID: xnrZ3pZ3SsaKffGxDpNCrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="36666881"
 X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="36666865"
+   d="scan'208";a="36666881"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 06:58:02 -0700
-X-CSE-ConnectionGUID: q7F9RPWMQp+GnsXAS4DLZQ==
-X-CSE-MsgGUID: WE17oruOQryIwiRDcEDN2Q==
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 06:58:07 -0700
+X-CSE-ConnectionGUID: TIuY0X+NRHC6FXDtEKznDA==
+X-CSE-MsgGUID: 3XEZIT1ISY2VQNEHoue6ng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,233,1719903600"; 
-   d="scan'208";a="68837396"
+   d="scan'208";a="68837429"
 Received: from sannilnx-dsk.jer.intel.com ([10.12.231.107])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 06:57:57 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 06:58:02 -0700
 From: Alexander Usyskin <alexander.usyskin@intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -79,9 +79,9 @@ Cc: Tomas Winkler <tomas.winkler@intel.com>,
 	dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org,
 	intel-gfx@lists.freedesktop.org
-Subject: [PATCH v6 07/12] spi: intel-dg: wake card on operations
-Date: Mon, 16 Sep 2024 16:49:23 +0300
-Message-Id: <20240916134928.3654054-8-alexander.usyskin@intel.com>
+Subject: [PATCH v6 08/12] drm/i915/spi: add spi device for discrete graphics
+Date: Mon, 16 Sep 2024 16:49:24 +0300
+Message-Id: <20240916134928.3654054-9-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240916134928.3654054-1-alexander.usyskin@intel.com>
 References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
@@ -93,142 +93,201 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable runtime PM in spi driver to notify graphics driver that
-whole card should be kept awake while spi operations are
-performed through this driver.
+From: Tomas Winkler <tomas.winkler@intel.com>
 
+Enable access to internal spi on DGFX devices via a child device.
+The spi child device is exposed via auxiliary bus.
+
+CC: Rodrigo Vivi <rodrigo.vivi@intel.com>
 CC: Lucas De Marchi <lucas.demarchi@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/spi/spi-intel-dg.c | 44 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/gpu/drm/i915/Makefile        |  4 ++
+ drivers/gpu/drm/i915/i915_driver.c   |  6 +++
+ drivers/gpu/drm/i915/i915_drv.h      |  4 ++
+ drivers/gpu/drm/i915/i915_reg.h      |  1 +
+ drivers/gpu/drm/i915/spi/intel_spi.c | 68 ++++++++++++++++++++++++++++
+ drivers/gpu/drm/i915/spi/intel_spi.h | 15 ++++++
+ 6 files changed, 98 insertions(+)
+ create mode 100644 drivers/gpu/drm/i915/spi/intel_spi.c
+ create mode 100644 drivers/gpu/drm/i915/spi/intel_spi.h
 
-diff --git a/drivers/spi/spi-intel-dg.c b/drivers/spi/spi-intel-dg.c
-index c76b0a70f8d8..a14fc3190520 100644
---- a/drivers/spi/spi-intel-dg.c
-+++ b/drivers/spi/spi-intel-dg.c
-@@ -12,11 +12,14 @@
- #include <linux/module.h>
- #include <linux/mtd/mtd.h>
- #include <linux/mtd/partitions.h>
-+#include <linux/pm_runtime.h>
- #include <linux/string.h>
- #include <linux/slab.h>
- #include <linux/sizes.h>
- #include <linux/types.h>
+diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+index c63fa2133ccb..02a9faf049a7 100644
+--- a/drivers/gpu/drm/i915/Makefile
++++ b/drivers/gpu/drm/i915/Makefile
+@@ -211,6 +211,10 @@ i915-y += \
+ i915-y += \
+ 	gt/intel_gsc.o
  
-+#define INTEL_DG_SPI_RPM_TIMEOUT 500
++# graphics spi device (DGFX) support
++i915-y += \
++	spi/intel_spi.o
 +
- struct intel_dg_spi {
- 	struct kref refcnt;
- 	struct mtd_info mtd;
-@@ -471,6 +474,12 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
- 	total_len = info->len;
- 	addr = info->addr;
+ # graphics hardware monitoring (HWMON) support
+ i915-$(CONFIG_HWMON) += \
+ 	i915_hwmon.o
+diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
+index fe905d65ddf7..80330571a2f5 100644
+--- a/drivers/gpu/drm/i915/i915_driver.c
++++ b/drivers/gpu/drm/i915/i915_driver.c
+@@ -80,6 +80,8 @@
+ #include "soc/intel_dram.h"
+ #include "soc/intel_gmch.h"
  
-+	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-+	if (ret < 0) {
-+		dev_err(&mtd->dev, "rpm: get failed %d\n", ret);
-+		return ret;
++#include "spi/intel_spi.h"
++
+ #include "i915_debugfs.h"
+ #include "i915_driver.h"
+ #include "i915_drm_client.h"
+@@ -620,6 +622,8 @@ static void i915_driver_register(struct drm_i915_private *dev_priv)
+ 	/* Depends on sysfs having been initialized */
+ 	i915_perf_register(dev_priv);
+ 
++	intel_spi_init(dev_priv);
++
+ 	for_each_gt(gt, dev_priv, i)
+ 		intel_gt_driver_register(gt);
+ 
+@@ -663,6 +667,8 @@ static void i915_driver_unregister(struct drm_i915_private *dev_priv)
+ 
+ 	i915_hwmon_unregister(dev_priv);
+ 
++	intel_spi_fini(dev_priv);
++
+ 	i915_perf_unregister(dev_priv);
+ 	i915_pmu_unregister(dev_priv);
+ 
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 39f6614a0a99..b9d4f9be5355 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -34,6 +34,8 @@
+ 
+ #include <linux/pm_qos.h>
+ 
++#include <linux/intel_dg_spi_aux.h>
++
+ #include <drm/ttm/ttm_device.h>
+ 
+ #include "display/intel_display_limits.h"
+@@ -315,6 +317,8 @@ struct drm_i915_private {
+ 
+ 	struct i915_perf perf;
+ 
++	struct intel_dg_spi_dev spi;
++
+ 	struct i915_hwmon *hwmon;
+ 
+ 	struct intel_gt *gt[I915_MAX_GT];
+diff --git a/drivers/gpu/drm/i915/i915_reg.h b/drivers/gpu/drm/i915/i915_reg.h
+index 41f4350a7c6c..af5d0497b95c 100644
+--- a/drivers/gpu/drm/i915/i915_reg.h
++++ b/drivers/gpu/drm/i915/i915_reg.h
+@@ -323,6 +323,7 @@
+ #define DG2_GSC_HECI2_BASE	0x00374000
+ #define MTL_GSC_HECI1_BASE	0x00116000
+ #define MTL_GSC_HECI2_BASE	0x00117000
++#define GEN12_GUNIT_SPI_BASE	0x00102040
+ 
+ #define HECI_H_CSR(base)	_MMIO((base) + 0x4)
+ #define   HECI_H_CSR_IE		REG_BIT(0)
+diff --git a/drivers/gpu/drm/i915/spi/intel_spi.c b/drivers/gpu/drm/i915/spi/intel_spi.c
+new file mode 100644
+index 000000000000..4b90e42b0f86
+--- /dev/null
++++ b/drivers/gpu/drm/i915/spi/intel_spi.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: MIT
++/*
++ * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
++ */
++
++#include <linux/intel_dg_spi_aux.h>
++#include <linux/irq.h>
++#include "i915_reg.h"
++#include "i915_drv.h"
++#include "spi/intel_spi.h"
++
++#define GEN12_GUNIT_SPI_SIZE 0x80
++
++static void i915_spi_release_dev(struct device *dev)
++{
++}
++
++void intel_spi_init(struct drm_i915_private *dev_priv)
++{
++	struct intel_dg_spi_dev *spi = &dev_priv->spi;
++	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
++	struct auxiliary_device *aux_dev = &spi->aux_dev;
++	int ret;
++
++	/* Only the DGFX devices have internal SPI */
++	if (!IS_DGFX(dev_priv))
++		return;
++
++	spi->bar.parent = &pdev->resource[0];
++	spi->bar.start = GEN12_GUNIT_SPI_BASE + pdev->resource[0].start;
++	spi->bar.end = spi->bar.start + GEN12_GUNIT_SPI_SIZE - 1;
++	spi->bar.flags = IORESOURCE_MEM;
++	spi->bar.desc = IORES_DESC_NONE;
++
++	aux_dev->name = "spi";
++	aux_dev->id = (pci_domain_nr(pdev->bus) << 16) |
++		       PCI_DEVID(pdev->bus->number, pdev->devfn);
++	aux_dev->dev.parent = &pdev->dev;
++	aux_dev->dev.release = i915_spi_release_dev;
++
++	ret = auxiliary_device_init(aux_dev);
++	if (ret) {
++		dev_err(&pdev->dev, "i915-spi aux init failed %d\n", ret);
++		return;
 +	}
 +
- 	mutex_lock(&spi->lock);
- 
- 	while (total_len > 0) {
-@@ -512,6 +521,8 @@ static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *info)
- 
- out:
- 	mutex_unlock(&spi->lock);
-+	pm_runtime_mark_last_busy(mtd->dev.parent);
-+	pm_runtime_put_autosuspend(mtd->dev.parent);
- 	return ret;
- }
- 
-@@ -545,6 +556,12 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
- 	if (len > spi->regions[idx].size - from)
- 		len = spi->regions[idx].size - from;
- 
-+	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-+	if (ret < 0) {
-+		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
-+		return ret;
++	ret = auxiliary_device_add(aux_dev);
++	if (ret) {
++		dev_err(&pdev->dev, "i915-spi aux add failed %d\n", ret);
++		auxiliary_device_uninit(aux_dev);
++		return;
 +	}
++}
 +
- 	mutex_lock(&spi->lock);
- 
- 	ret = spi_read(spi, region, from, len, buf);
-@@ -557,6 +574,8 @@ static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t len,
- 	*retlen = ret;
- 
- 	mutex_unlock(&spi->lock);
-+	pm_runtime_mark_last_busy(mtd->dev.parent);
-+	pm_runtime_put_autosuspend(mtd->dev.parent);
- 	return 0;
- }
- 
-@@ -590,6 +609,12 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
- 	if (len > spi->regions[idx].size - to)
- 		len = spi->regions[idx].size - to;
- 
-+	ret = pm_runtime_resume_and_get(mtd->dev.parent);
-+	if (ret < 0) {
-+		dev_err(&mtd->dev, "rpm: get failed %zd\n", ret);
-+		return ret;
-+	}
++void intel_spi_fini(struct drm_i915_private *dev_priv)
++{
++	struct intel_dg_spi_dev *spi = &dev_priv->spi;
++	struct pci_dev *pdev = to_pci_dev(dev_priv->drm.dev);
 +
- 	mutex_lock(&spi->lock);
- 
- 	ret = spi_write(spi, region, to, len, buf);
-@@ -602,6 +627,8 @@ static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t len,
- 	*retlen = ret;
- 
- 	mutex_unlock(&spi->lock);
-+	pm_runtime_mark_last_busy(mtd->dev.parent);
-+	pm_runtime_put_autosuspend(mtd->dev.parent);
- 	return 0;
- }
- 
-@@ -747,6 +774,17 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
- 		}
- 	}
- 
-+	pm_runtime_enable(device);
++	/* Only the DGFX devices have internal SPI */
++	if (!IS_DGFX(dev_priv))
++		return;
 +
-+	pm_runtime_set_autosuspend_delay(device, INTEL_DG_SPI_RPM_TIMEOUT);
-+	pm_runtime_use_autosuspend(device);
++	dev_dbg(&pdev->dev, "removing i915-spi cell\n");
 +
-+	ret = pm_runtime_resume_and_get(device);
-+	if (ret < 0) {
-+		dev_err(device, "rpm: get failed %d\n", ret);
-+		goto err_norpm;
-+	}
++	auxiliary_device_delete(&spi->aux_dev);
++	auxiliary_device_uninit(&spi->aux_dev);
++}
+diff --git a/drivers/gpu/drm/i915/spi/intel_spi.h b/drivers/gpu/drm/i915/spi/intel_spi.h
+new file mode 100644
+index 000000000000..ed4153401f5d
+--- /dev/null
++++ b/drivers/gpu/drm/i915/spi/intel_spi.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: MIT */
++/*
++ * Copyright(c) 2019-2024 Intel Corporation. All rights reserved.
++ */
 +
- 	spi->base = devm_ioremap_resource(device, &ispi->bar);
- 	if (IS_ERR(spi->base)) {
- 		dev_err(device, "mmio not mapped\n");
-@@ -769,9 +807,13 @@ static int intel_dg_spi_probe(struct auxiliary_device *aux_dev,
- 
- 	dev_set_drvdata(&aux_dev->dev, spi);
- 
-+	pm_runtime_put(device);
- 	return 0;
- 
- err:
-+	pm_runtime_put(device);
-+err_norpm:
-+	pm_runtime_disable(device);
- 	kref_put(&spi->refcnt, intel_dg_spi_release);
- 	return ret;
- }
-@@ -783,6 +825,8 @@ static void intel_dg_spi_remove(struct auxiliary_device *aux_dev)
- 	if (!spi)
- 		return;
- 
-+	pm_runtime_disable(&aux_dev->dev);
++#ifndef __INTEL_SPI_H__
++#define __INTEL_SPI_H__
 +
- 	mtd_device_unregister(&spi->mtd);
- 
- 	dev_set_drvdata(&aux_dev->dev, NULL);
++struct drm_i915_private;
++
++void intel_spi_init(struct drm_i915_private *i915);
++
++void intel_spi_fini(struct drm_i915_private *i915);
++
++#endif /* __INTEL_SPI_H__ */
 -- 
 2.34.1
 
