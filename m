@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-4857-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4858-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA1E97BD28
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2024 15:38:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AB1C97BD3E
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2024 15:45:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B19FD285041
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2024 13:38:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C8D81F23423
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Sep 2024 13:45:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9516118952B;
-	Wed, 18 Sep 2024 13:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A493E18B476;
+	Wed, 18 Sep 2024 13:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sr881fBs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDOpX9Cj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705C21EEFC
-	for <linux-spi@vger.kernel.org>; Wed, 18 Sep 2024 13:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1E118A95D
+	for <linux-spi@vger.kernel.org>; Wed, 18 Sep 2024 13:45:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726666729; cv=none; b=btxTQRoO1d5nginMr7zI+XRwQuMSfyEEJqmZeRVTXLa90haO7AxNxoHXSglvPAzT1XcXpXTL2t7RObExV3hHbRRJeSY9EBplS68ODaMUXNKIfO0hmS/77kf2COHrxm3eZADxBqd5iMAcP1nzPkl2MtmScXXww9DfAG0Zfs7LZ7I=
+	t=1726667114; cv=none; b=sID+YjjKCenLqz520/EkM1vfK1s1xCv8RArUQksZ5VtRx+FDX3ivWD+qW+GAakYHqdJfdbRqw50PT1ufw8t+uVme84y9J0RmCrhJ7NNEzKNPz0LVptxv6GtUO590AzKgaL+nz9FeINLbNu8O7qQaTkY7LoKAq6xdp8mE8NmCIf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726666729; c=relaxed/simple;
-	bh=yRPq43EYLk/2EzyDM6tG0c8iqpX450B91OXwoyOimAc=;
+	s=arc-20240116; t=1726667114; c=relaxed/simple;
+	bh=cL6lpSz/kdR6T4KeqPH7EEkrh+WFPe2uL9PykCNsqqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RHNs9TaqgRtnzHvjm1/H9X4NWvEizpj4cGXsVXOT2PYsQ7LBD2wLDD7/OF5kCV1QAZPax9EgxldwYBc9a25b1xfEAserlkKq7KIv3derY240tf7Tu1mkZe1EV9v42EDojfOKEkeOBVVPndseHoeN/uXVmVd2ROLTalC0P1pDti4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sr881fBs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49985C4CEC3;
-	Wed, 18 Sep 2024 13:38:46 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rbRZm0YmhMNRWJg3dQQujlEfAoYMQ2v7u05J3m174OgLx836UCnVffztSOk8orfnS5jiGxjRXGbi32KtlBBvK3w4S5fvO5X7fDJrZ6TMg8B5zRe/qB1nsldCOCMSUESFE7JAl9saFtP2wrqVvkxiTzat6p7Ii/ov95aLfpTcCYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDOpX9Cj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B95F5C4CEC2;
+	Wed, 18 Sep 2024 13:45:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726666729;
-	bh=yRPq43EYLk/2EzyDM6tG0c8iqpX450B91OXwoyOimAc=;
+	s=k20201202; t=1726667114;
+	bh=cL6lpSz/kdR6T4KeqPH7EEkrh+WFPe2uL9PykCNsqqY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Sr881fBs+dGrmaBALleXBYM+IUQ9mG5hugrO//ONmJXr4DUIShArn1NXHSbUP5AIn
-	 uQpfwbInbK3PvcGjrGts+InBaRSv+dsjJ3kOSStZKmRRyCPi4TGjCr1A8PgMSPWS27
-	 LgQ5D8hiKFSXj7s/1noF4MbJ1q67H/K5roJE0vw5Of2+1N4wBXgEhEaM+hKGXGFNwR
-	 kGbr25WPzBuXBsi+oYCVYUQzQtvvecFgHLPmPyeEgQCcDKRHNrCGnUPEgPIkRjdLD0
-	 AGj7Oe+7k5UCzUKAr1Elfep6IJsmMyyx3Wm+a5gIW0/FbqaTm8akh8ah+vGruMQvDw
-	 k30EeF6xvYdug==
-Date: Wed, 18 Sep 2024 15:38:43 +0200
+	b=hDOpX9CjSUgIJakr6qUKjN5axzMtd8hgKuof/Sdcp5Nycftg8xK/C7FXXdSYEJ6RY
+	 rF2arMHrM5eHns0mgfL4ag/MTKsKgc8bHXAPzT/bwILqhw7OWKPCSpqmhl5goy5eQD
+	 hT6dXCh+UzloN+FYe2OOvJ9dDuAWDqU7HUHjUpDQJTz656Vkk2127KpSVstIOuLy+4
+	 1od+pJwL/MAl+H3aQkoplS5sDz2Pr1NSVmwiqDCNyjehCVY2Ikd36bl9rg6wAlac/g
+	 l47uTubbe1Tb/5G9HJXfJYSR+HzceovEWL+4R47XpkaxIewKWeOnfEjv8qjahUGwb2
+	 PTufLyENcV4gw==
+Date: Wed, 18 Sep 2024 15:45:11 +0200
 From: Mark Brown <broonie@kernel.org>
 To: Alexander Usyskin <alexander.usyskin@intel.com>
 Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
@@ -59,10 +59,9 @@ Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
 	Vitaly Lubart <vitaly.lubart@intel.com>,
 	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
 	linux-spi@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v6 04/12] spi: intel-dg: spi register with mtd
-Message-ID: <ZurX4xcy7TK45Omq@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v6 00/12] spi: add driver for Intel discrete graphics
+Message-ID: <ZurZZ1pzmbWifjAD@finisterre.sirena.org.uk>
 References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
- <20240916134928.3654054-5-alexander.usyskin@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -70,62 +69,47 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BOpsQOSM3Yla4fmU"
+	protocol="application/pgp-signature"; boundary="Bs8sGvs52rAy0duI"
 Content-Disposition: inline
-In-Reply-To: <20240916134928.3654054-5-alexander.usyskin@intel.com>
+In-Reply-To: <20240916134928.3654054-1-alexander.usyskin@intel.com>
 X-Cookie: Editing is a rewording activity.
 
 
---BOpsQOSM3Yla4fmU
+--Bs8sGvs52rAy0duI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 16, 2024 at 04:49:20PM +0300, Alexander Usyskin wrote:
+On Mon, Sep 16, 2024 at 04:49:16PM +0300, Alexander Usyskin wrote:
+> Add driver for access to Intel discrete graphics card
+> internal SPI device.
+> Expose device on auxiliary bus by i915 and Xe drivers and
+> provide spi driver to register this device with MTD framework.
 
-> From: Tomas Winkler <tomas.winkler@intel.com>
->=20
-> Register the on-die spi device with the mtd subsystem.
-> Refcount spi object on _get and _put mtd callbacks.
+As far as I can tell this does not actually provide a SPI driver, there
+is no call to any SPI API that I've noticed here.  The SPI framework
+does have support for SPI controllers with specific flash support via
+spi_controller_mem_ops but this does not appear to use them.  Either it
+should do that or it should just be a MTD driver.
 
-This is a MTD driver, it should be in drivers/mtd.
+The series is also split up into too many patches with minimal
+explanation, making it hard to follow what's going on.  I would
+recommend making the first patch be a minimal functional driver and then
+building on top of that.
 
-> +static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info *i=
-nfo)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t l=
-en,
-> +			     size_t *retlen, u_char *buf)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t le=
-n,
-> +			      size_t *retlen, const u_char *buf)
-> +{
-> +	return 0;
-> +}
-
-If these functions can legitimately be empty they should be removed.
-
---BOpsQOSM3Yla4fmU
+--Bs8sGvs52rAy0duI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbq1+MACgkQJNaLcl1U
-h9Ayagf9GPGo4W57/efjC84ILvNOGI01XOT5VcydyCnDW7yLFbLVZx4itXNHOQdo
-FxDfbUojjK/z4006rT0QARLDtVZASgEy27GwNRwNvbVCFHghZbjx4YA8PWuj0dFx
-QuN1M0gGrzkXlDIjdKfv521VwYjzvcxjGFKjFJu3qP10UkhL57dS/0Do/Wpdxy0I
-lTPf0CiK9k4qKoLBRMnQQl3Zu31EtVI2fIHd9K+2ZAiWodDEW+RlO/v/ScCLd8jT
-otJ2YUe+jBVaUZrMVhZxazYCOGAhhGXIfY5HRe5KyKFaDaVBUvjKFtgREomKPh8y
-dyFiKCPztQSgFSPjfD8lr5D+5Usd9A==
-=lK/X
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbq2WYACgkQJNaLcl1U
+h9BCZgf/W29Rkg31k8d/BbDhUYZW8jjlXYf12ChmIOuQyLVOpr4YRUpMoFKl1KGz
+iu+tQ3AK35GqadvAzuEC3U4cyrM0bdthCUNFlH2I7zC5gMFFutdGumdF9D7EYke7
+ygehHFnVZ/bHZg+Nt7zCqPpJtlboc8Tf130goHxzBougrUA4+HCH0r00lPgnVwJP
+pOOAFgyYXEhvUKbZffE4jTorrTGcWGZm17TnTA6VtDL+KYBYls2ltLbB1pseRelB
+tmGZMqJmU7cyJY1tVl4Hh4wsnziLPCyi/JAzZnS5WwFWgq3si4ZV1V9mTXkq6MM/
+JqOpqfUJbVvxSSXkYUVoFFqqwjjcWQ==
+=JQuG
 -----END PGP SIGNATURE-----
 
---BOpsQOSM3Yla4fmU--
+--Bs8sGvs52rAy0duI--
 
