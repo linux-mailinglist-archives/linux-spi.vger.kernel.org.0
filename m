@@ -1,243 +1,173 @@
-Return-Path: <linux-spi+bounces-4874-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4875-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8817897C7A6
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2024 12:01:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6241397C7F9
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2024 12:32:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 480B72909C7
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2024 10:01:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77A0F1C22E6F
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Sep 2024 10:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A921193432;
-	Thu, 19 Sep 2024 10:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CADE17624D;
+	Thu, 19 Sep 2024 10:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LYqPVSFV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pqq8egoF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794EA1CABA
-	for <linux-spi@vger.kernel.org>; Thu, 19 Sep 2024 10:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726740073; cv=fail; b=YNBVnyy87HDhUJ38hfpGgnkc5YWBG0Ph1546NXBUV5k1DW5ILEz0LN8uaw6U0u8zez3B5AtcOa0UXlPrxLpAk1b30hjbRQ/ukYGQP5YK4hsBrvMegjLsEmLHZ3mo5XsStwynAaMCtqcSKmc/Vx2R0OKGYJQ4Z+x3KPWtkNN8OzE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726740073; c=relaxed/simple;
-	bh=lSPhl5YatTez3ppFxSj+3TVW5TNFpr3GsagomZS9Ltk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=rDR2qvrEq+dqiFNJHwHL9xRviUdFGkIBhCKX3L9sd9mzXrNUzyuj/IlOLJfAHNei1Yiflz44dKe3Ari7UmeIVTHNESO0ia0jYNsVDzL8uhS84j/4tV9PGkKJYPWXvoogWPF3PtxRamt8gSAHmyzezk5lhNk2KOtiR/GIDhEiL6U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LYqPVSFV; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726740071; x=1758276071;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=lSPhl5YatTez3ppFxSj+3TVW5TNFpr3GsagomZS9Ltk=;
-  b=LYqPVSFVljWV0teAQwnSs9i1YqVSFXNFdYTq3koKKxmA4XNy9NhkcN5A
-   rfZ/uZfS4LpprT+iGY57wWeQuew4p8FpBx2aWwr76ZDzEzH6zzqf1ZXOj
-   GqKSj4FMvnSMBHzlUYbG9oqs13CUjB6l/4TVBmPD8uXV1C0Nx0R4rop43
-   ibTq7tD0T5vq105JtKVo1wAPR86lUSNMBUZ7fPpob51DH3ZK4kmSduDmj
-   sLMVzncibRkKwsyLInIxwebISrkP/8rDZQatqfJZJ5M3tebJmB9zy0vHz
-   i17Etl8IAHM3Ms2Dt118NuuLO+UrdFcEeT8vceUkrkMJvlzjjmVHF7W6o
-   g==;
-X-CSE-ConnectionGUID: BDXPbwfgQC2hLZ5IULHU1w==
-X-CSE-MsgGUID: /Tr2k290TkuxYKjmLlya0w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="51103315"
-X-IronPort-AV: E=Sophos;i="6.10,241,1719903600"; 
-   d="scan'208";a="51103315"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 03:01:10 -0700
-X-CSE-ConnectionGUID: 53cyO1zxRC2Q+ROJUVFloA==
-X-CSE-MsgGUID: 3r6SN1uGSQCBM5EUR24L4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,241,1719903600"; 
-   d="scan'208";a="70350503"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 19 Sep 2024 03:01:11 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 19 Sep 2024 03:01:09 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 19 Sep 2024 03:01:09 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.42) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 19 Sep 2024 03:01:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dV7FTGrw6OU5lcgUyLGszy6g5IHs20j9i9mHIZfK45vjLwo2lBkV6pZBYSsp9GsFHESsuGcQ6P/Jc2AG8nGjgOixWAwAnB1DAD1KgC5LACsjKH8kUfml5flK5Hx+EgBwUw+pnRjdEhADQJKz5yYLZMcUFr4qxhjyytR6mI43CyJACkIuYIeExmn4bhB+NC8d0we6wz7s4LhSU+nuFY1iQV+egACF41Px911FMy+0N2nP9/hGjO9dmFxwMl92o6K7yC7aJ0fM0nUd08XyV1q25fiO8tsJ4Hglvs27IzwWpCVoLwY3yLa7f3afKvBpQahmqsgGrt6ldPsE81brT4uEcw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+0BnN4hD+VdMZsyzLpMm1dWSqI05T0wUCxPx4mamT4A=;
- b=jOrdZd8+cgBUaED0b+k3jI1Mc8PAtRAYq432ttf5+h0F0fhFPVvtDg4uJJFxd4KV/HzWvqKKRx9wC0ypA4QRGPof2rWU+TEobGP8cBrwJYj/LTVn7Xh6y000seNhzIWQE2R+Qsfbdh0tHuNZB28d/RM0tPyeyX2YlVsiEEh0dCupobRZgGDpscIG3mxoz20DUovv2CaD26pzfOoIHt8TsJOlH8/Jy574dozs2yOQKBZHMJktrLqPrPBpBOYUK6s2qsHgaXmBXQ7AxlOkTho02Ezhrwkc9yZGWDPbe9bL74HJ/6T0NyX6buE1HTKrkYXipgThEf2D5mRao3MvhdI44A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB7605.namprd11.prod.outlook.com (2603:10b6:510:277::5)
- by SA3PR11MB7535.namprd11.prod.outlook.com (2603:10b6:806:307::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Thu, 19 Sep
- 2024 10:01:07 +0000
-Received: from PH7PR11MB7605.namprd11.prod.outlook.com
- ([fe80::d720:25db:67bb:6f50]) by PH7PR11MB7605.namprd11.prod.outlook.com
- ([fe80::d720:25db:67bb:6f50%4]) with mapi id 15.20.7962.022; Thu, 19 Sep 2024
- 10:01:07 +0000
-From: "Winkler, Tomas" <tomas.winkler@intel.com>
-To: Mark Brown <broonie@kernel.org>, "Usyskin, Alexander"
-	<alexander.usyskin@intel.com>
-CC: "De Marchi, Lucas" <lucas.demarchi@intel.com>, Oded Gabbay
-	<ogabbay@kernel.org>, =?iso-8859-1?Q?Thomas_Hellstr=F6m?=
-	<thomas.hellstrom@linux.intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, "Vivi, Rodrigo"
-	<rodrigo.vivi@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, "Lubart,
- Vitaly" <vitaly.lubart@intel.com>, "intel-xe@lists.freedesktop.org"
-	<intel-xe@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
-	<dri-devel@lists.freedesktop.org>, "linux-spi@vger.kernel.org"
-	<linux-spi@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
-	<intel-gfx@lists.freedesktop.org>
-Subject: RE: [PATCH v6 04/12] spi: intel-dg: spi register with mtd
-Thread-Topic: [PATCH v6 04/12] spi: intel-dg: spi register with mtd
-Thread-Index: AQHbCEBsHBtR/xYtrEC+XDJy6l4vT7Jdj6eAgAFUH9A=
-Date: Thu, 19 Sep 2024 10:01:06 +0000
-Message-ID: <PH7PR11MB7605B60D43732A60C0A32D46E5632@PH7PR11MB7605.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DD23C0C
+	for <linux-spi@vger.kernel.org>; Thu, 19 Sep 2024 10:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726741934; cv=none; b=k1EBMjHX8PJflWxKBfKukycSnBW+GOqjgdUZ7hTn8voTS0Tea0Bu1HE0kgWUXSXV+wvjVf3slEO34bnE2gn4T0IHIm0eOQhpHqNrI4s7LboO+gKei/uXOEqkSGS90na8gZ0neRX3YEbCYBj6R7OSQCxln1eplwcEgNGfrJt0l3U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726741934; c=relaxed/simple;
+	bh=cINsdAeX2wd+6DjbdFlgUGNXrQOFd79goA4zmhQnrOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rLme7DCQsBW9ER01eqcCp2iNU4hcXSHcmVQpfsZFbzRqiZP02KdTZTbaVGzDWKkS6eahaOqUDpyHxt8RyofHoiwAYVEPn6/Mue5DojIQXDDzTqEbDc/OLKaBigC4L5rfyXegS1qsAExdY6weiW/m9hs9AglhaZ0w4m/fNuS3aso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pqq8egoF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E2C7C4CEC4;
+	Thu, 19 Sep 2024 10:32:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726741933;
+	bh=cINsdAeX2wd+6DjbdFlgUGNXrQOFd79goA4zmhQnrOw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pqq8egoF1RQYK5SHVWYhlDroTlTYH/lmdJD3F9G87xAIjbxYhIpGpxLkS2yxQKADy
+	 x+A5TNnylrAoFcyBdtjK37anpox9ipIxSy3ffYtRkXkXJ4zjMOAA8XuUVmotgfUagB
+	 pU9DvUXnVx2+fsoS2WEHgO0Y8Nnr1mvw8r8QPbaI66kPaHvQcu2SrfZI1gdpMeR9ji
+	 B/LfBO1VSvyhi3zK1kQ0bA6Vqi/pyECYtx3NSeTyzhhlNbdLuCX//YicF78ct1qPBx
+	 nju7q1YFfsjkqO6COCaPpbAXfcWiRoADWEwZ8c2uJQO4PiwX6UQEmuWC7DsBM2XRX1
+	 lqWR5jzAdYRFA==
+Date: Thu, 19 Sep 2024 12:32:10 +0200
+From: Mark Brown <broonie@kernel.org>
+To: "Winkler, Tomas" <tomas.winkler@intel.com>
+Cc: "Usyskin, Alexander" <alexander.usyskin@intel.com>,
+	"De Marchi, Lucas" <lucas.demarchi@intel.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	"Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	"Lubart, Vitaly" <vitaly.lubart@intel.com>,
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Subject: Re: [PATCH v6 01/12] spi: add driver for intel graphics on-die spi
+ device
+Message-ID: <Zuv9qsWJQhx7rbhJ@finisterre.sirena.org.uk>
 References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
- <20240916134928.3654054-5-alexander.usyskin@intel.com>
- <ZurX4xcy7TK45Omq@finisterre.sirena.org.uk>
-In-Reply-To: <ZurX4xcy7TK45Omq@finisterre.sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB7605:EE_|SA3PR11MB7535:EE_
-x-ms-office365-filtering-correlation-id: 663ed988-0ee8-419d-d9f9-08dcd891fad2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?lyodomO0zS9SauIA/8e24nj/yVDPRgMUORl2WHdMZLJJvFkvrtaym9Pp7N?=
- =?iso-8859-1?Q?xmrgpJ4T7QA2b39xk1U/MuvqYaIR2uX+pRAZXDL8K/2QrZDyrQsfp4RG8s?=
- =?iso-8859-1?Q?fOVLXuRWvSkok2sE3dwA4NRf5vSxP/M0+OKugmz2bKOPLUJKcafFQnNInv?=
- =?iso-8859-1?Q?ZydMOMtBg0kAps6RQbIUa/r6JnqfApFu8OaVi1E165CgEazR62MgiJf78t?=
- =?iso-8859-1?Q?W3YWgyBTQlYCsRZHKkeY3tQowk9IlU+GuMagYmMgaQ0DTe9ccF71NlLNgZ?=
- =?iso-8859-1?Q?plaS2jt0F6B4Bb8Vm/68lRRGSDpQFZO0H+Wzv8B6ais7wvYC6ghkzqgkfm?=
- =?iso-8859-1?Q?xYWuviA6TcvmPkaHcGqOSVoSUvdRsnh8Y2VMM5EH2p1mjJIIG9vq9TF0Vw?=
- =?iso-8859-1?Q?WzmDlkhJzh0CqvmhecBxW8kyZ4BdgMThodm89OKsJNS0oGbKJG2IX5cCOu?=
- =?iso-8859-1?Q?1N8KfXGg6a45taB2TEQpqKqU+9NAg8h1Op3TmqmkcIugEj+NiQYuhQaoH9?=
- =?iso-8859-1?Q?QNt2kk5kToYFZ0Ka8yC6BU6obBpnlqtPIDCjwKyIxX0AQ5aAgmmmJ1FYfD?=
- =?iso-8859-1?Q?BoWc0rnARDBGYfRAN4KU8rScIpluBr7Jp4QjWEqOjiijEwpjq1zhUyABq3?=
- =?iso-8859-1?Q?0yQkMWg2AA9ki0u2G2TXTR0HxpahOa0iYxo3g3OEDkPDEPnGigz9IhfctC?=
- =?iso-8859-1?Q?LbtDO4vHeJPQQD4FxsVOrkUXgfAigIlye0lNySEQ/nQLW04hWMcMLG+tqR?=
- =?iso-8859-1?Q?W9VQgSCS2GZKw4kyCwUerGyi9h9SS+IxWDhX7sxZpZ3O87eCcFOlxOv4F/?=
- =?iso-8859-1?Q?97n+dQnliTs9ybMPKdXwfFnl9mDOIpqog6Z1PKrR2g1WAMoT+fXBQAjrFg?=
- =?iso-8859-1?Q?vTby02pZk7YNSbMIAaTt3vjHLESuwBxf1oEo96l+SdY1v5B3UEguiqC3qh?=
- =?iso-8859-1?Q?O6whQsAAehjtNmrUK3tFJGISop915AmN4OyHB+Kn+bqLILq2AC6wQdTz4C?=
- =?iso-8859-1?Q?vOwUw3qSyd+3u1iUVwmhI4bvYoupSHaJQpD8YxAPZecXNm+allwYds1NwB?=
- =?iso-8859-1?Q?axGlWJRcIesCSCPJQ7P1vWqQQNW+WJxqFbiW3srRgnKGoE3CpLMiE3tpD8?=
- =?iso-8859-1?Q?J227G8/65awW5xm3KDyKW8G5iUENrsq/B0HawwSqlAJ4zPebqzZrcyC3NS?=
- =?iso-8859-1?Q?mrl1culKF80+nkM1GQlEele0d+LVTYjxxVZYvRw+m0aOLRNdBlj30VVEtV?=
- =?iso-8859-1?Q?JVUKjKQhlhqlRzLE+H/WpVhZn18NquSX7Cgs6F7PIV5vCvnSBqHMs7znOI?=
- =?iso-8859-1?Q?9F+tL9msWfV/UzGtvTAfXdnQr/Y+HuIiXW2ypBbpNTbIR0l7yeYuNBqCC9?=
- =?iso-8859-1?Q?MxThLi3ofYp2LWhXfGUfZwnl8XDc26KYvUT+i5Lpz6c+0kX+GC7qDCxdHR?=
- =?iso-8859-1?Q?6lMZXNO4jV+K3obTnNBOgzzwvlFXf9DAOoZQZA=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB7605.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?5Gt9pyOjhIfhVT+VLwALLFWZx7KQHWHqak0ALuEDQjVXTOuv5kK3rlPl1l?=
- =?iso-8859-1?Q?pWo+a2dgUEa1KatKHCNnVLlHwHGx3FNW8MzBWeNB9VYvjc0JvaStlPwvjB?=
- =?iso-8859-1?Q?yzhWyNt56BqukBgG/iEHdG9rKxvlKVU/6EPfO24BMuIeumjzt0kO1cHDmj?=
- =?iso-8859-1?Q?FiNqE/MV8+VV05CPRjGJOZrjJ/4sbvC+FEyiq6u5bq4IzD6o/qt7f8MsEG?=
- =?iso-8859-1?Q?XJ/3IPz2WAbNOPDeK07mCtWzXx671Humub760Q3iXnd5VpEWJut9Gwm0qL?=
- =?iso-8859-1?Q?ltsUaUyuIfMjO5nMD9p8eBt0bCjnZ3yGG2VJ1hJ46+NLAnygSU7Xz2GmWJ?=
- =?iso-8859-1?Q?5eY36QZNwv7PEzhOnalMB9Pgv0ip/fFRZS3d4xH3wy7XR1gWbQCzfv9UOc?=
- =?iso-8859-1?Q?2p9/wT4LQvrsHk7whWWsiRk/cpEDD6i1Brep1/wWBpVPjJMY7+PC434qXL?=
- =?iso-8859-1?Q?SRkxFUUSUoDPwZqHJvBqU8/7fGw9+bJP+a7XaFIXCKo4+/lWAwAIv2HIpl?=
- =?iso-8859-1?Q?2o9xlso6uYVgdR5WHHbW+f3jl1fOOmL79r/cr/jEO21dWnnP7DsIe4AW6G?=
- =?iso-8859-1?Q?XntYVZcWi9t6TvtsaQ25dIxEtoJ/lENERGzdga2mvVCWsh5MGEiULS19ck?=
- =?iso-8859-1?Q?7JgoGRNynZC2BuDtbJLZrY7xwf4lb6AH+eQ+ZTFVu3RHaXxkT8SfYRx80z?=
- =?iso-8859-1?Q?1fGHRFllrr0U1vHboGD/cvdIubRDkbGJUijGHCWWFHwtEU9YYE7OjthqAQ?=
- =?iso-8859-1?Q?5rcM8yRl8s62UOuS9dMhrDBJ8MN5Btgf+WA1RMDgJOqd4W+b5+ZC74oBoa?=
- =?iso-8859-1?Q?9eA6pJrdbsF+IlGZ+YNzkc+8ZkIaO2mO2/JRo1anO+7NFL0Ur6a7ICSDbg?=
- =?iso-8859-1?Q?gxL3SxqkyrYrYcXlpePpJLO5f1ufUvaaEfwxodY0oCQTuHfV7o0i3kJQ5K?=
- =?iso-8859-1?Q?lQUoPQXG8VppcF8CISGSNopKJFEKpffnNA3P5qbfEOJhKu6ZRCH1IH/7HM?=
- =?iso-8859-1?Q?XDBS6cwu5/YjTJ/sMlKeve5Rq5iVt3JvCv5+79kXih2OjVlp68g2KCHsMx?=
- =?iso-8859-1?Q?e1F9QVkGaxRHLv24DNAsBpskCHss1k9Vhut/oZJt+mNhvtpqo/L7ah3IXe?=
- =?iso-8859-1?Q?yK+hgIK52/L4TNL6xWZaGdmnCQSg7wSgG23RW2zYr1Di1DqQz7KhSPXKfK?=
- =?iso-8859-1?Q?t1mG6RlPPSe+X31+tfGd86VYRYmM7fl2CrSoCtmHiKnbn+r3XLkUIB0T4Z?=
- =?iso-8859-1?Q?AC+TWB+sAKPDyWcap1QnKTKKQ8ccSvvV79vzKFlxS+6He1L9nCXm0vMtQH?=
- =?iso-8859-1?Q?5ol+nV2sQQVMbd79N0X+Y9JTO7ds2Af8P4pNy7nTbfYRM8eTIkWsIhyR5E?=
- =?iso-8859-1?Q?Ku+FbdhuBGDWCvPGspMXeI5nZsHAsAOkOasku3rtKnAHSiz2XcJROF3wOp?=
- =?iso-8859-1?Q?dQih5mTxxDFdzE6jWjVjJ3sYplwpw1oRrOxY10Rjc5mXuK8q94t4+J7Bbm?=
- =?iso-8859-1?Q?YGuiOnkxsxuI5c+M43Iz+4w9JC4NTutVGIsAe6EQhJVMFWaJvKB3rH5kKl?=
- =?iso-8859-1?Q?JtyOCCoT3hWL2wWDAqciHLohlx9rBMCgBqKKptUeo1e589XSrJ+RgADjXO?=
- =?iso-8859-1?Q?XqYl7UPdk6oQSyn/6XIBBhHOtLe4+z2lBQ?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ <20240916134928.3654054-2-alexander.usyskin@intel.com>
+ <ZurWk_eXSQndgA4Y@finisterre.sirena.org.uk>
+ <PH7PR11MB76057D2326D436CA9749A113E5632@PH7PR11MB7605.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB7605.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 663ed988-0ee8-419d-d9f9-08dcd891fad2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2024 10:01:06.9319
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f/YST9inwNu4aIlkpZqHekqBE2HV5CftqQck3/8a3XsQFtnCV2dgrXn0R7e3WktajUsg0piLbvl/SGwK/kz22Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7535
-X-OriginatorOrg: intel.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CCJYsXcQoNaCVfNV"
+Content-Disposition: inline
+In-Reply-To: <PH7PR11MB76057D2326D436CA9749A113E5632@PH7PR11MB7605.namprd11.prod.outlook.com>
+X-Cookie: Editing is a rewording activity.
 
 
->=20
-> On Mon, Sep 16, 2024 at 04:49:20PM +0300, Alexander Usyskin wrote:
->=20
-> > From: Tomas Winkler <tomas.winkler@intel.com>
-> >
-> > Register the on-die spi device with the mtd subsystem.
-> > Refcount spi object on _get and _put mtd callbacks.
->=20
-> This is a MTD driver, it should be in drivers/mtd.
+--CCJYsXcQoNaCVfNV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Okay.
+On Thu, Sep 19, 2024 at 09:54:24AM +0000, Winkler, Tomas wrote:
+> > On Mon, Sep 16, 2024 at 04:49:17PM +0300, Alexander Usyskin wrote:
 
->=20
-> > +static int intel_dg_spi_erase(struct mtd_info *mtd, struct erase_info
-> > +*info) {
-> > +	return 0;
-> > +}
-> > +
-> > +static int intel_dg_spi_read(struct mtd_info *mtd, loff_t from, size_t=
- len,
-> > +			     size_t *retlen, u_char *buf)
-> > +{
-> > +	return 0;
-> > +}
-> > +
-> > +static int intel_dg_spi_write(struct mtd_info *mtd, loff_t to, size_t =
-len,
-> > +			      size_t *retlen, const u_char *buf) {
-> > +	return 0;
-> > +}
->=20
-> If these functions can legitimately be empty they should be removed.
+> > > @@ -0,0 +1,142 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +/*
+> > > + * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
+> > > + */
 
-Those are place holder so the code will compile and implemented in followin=
-g patches, this is compromise on not making too big changes.
-It use dot be acceptable compromise in past.
+> > Please make the entire comment a C++ one so things look more intentiona=
+l.
 
+> This is how it is required by Linux spdx checker,=20
 
+There is no incompatibility between SPDX and what I'm asking for...
+
+> > > +	size =3D sizeof(*spi) + sizeof(spi->regions[0]) * nregions;
+> > > +	spi =3D kzalloc(size, GFP_KERNEL);
+
+> > Use at least array_size().
+
+> Regions is not fixed size array, it will not work.
+
+Yes, that's the wrong helper - there is a relevent one though which I'm
+not remembering right now.
+
+> > > +	kref_init(&spi->refcnt);
+
+> > This refcount feels more complex than just freeing in the error and rel=
+ease
+> > paths, it's not a common pattern for drivers.
+
+> What are you suggesting
+
+Just do normal open coded allocations, the reference counting is just
+obscure.
+
+> > > +		if (ispi->regions[i].name) {
+> > > +			name_size =3D strlen(dev_name(&aux_dev->dev)) +
+> > > +				    strlen(ispi->regions[i].name) + 2; /* for
+> > point */
+> > > +			name =3D kzalloc(name_size, GFP_KERNEL);
+> > > +			if (!name)
+> > > +				continue;
+> > > +			snprintf(name, name_size, "%s.%s",
+> > > +				 dev_name(&aux_dev->dev), ispi-
+> > >regions[i].name);
+
+> > kasprintf().
+
+> As I understand kasprintf allocates memory, this is not required here.
+
+There is a kzalloc() in the above code block?
+
+> > > +static void intel_dg_spi_remove(struct auxiliary_device *aux_dev) {
+> > > +	struct intel_dg_spi *spi =3D dev_get_drvdata(&aux_dev->dev);
+
+> > > +	if (!spi)
+> > > +		return;
+
+> > > +	dev_set_drvdata(&aux_dev->dev, NULL);
+
+> > If the above is doing anything there's a problem...
+o
+> It makes sure the data is set to NULL.
+
+Which is needed because...?
+
+--CCJYsXcQoNaCVfNV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbr/acACgkQJNaLcl1U
+h9CSzAf+O39bfj0K/flXJcQwjtGkXRBJywptExVFO/BSw7eCd+E7ja3sS597/N0Q
+FLPOM5SwiX5dP9c8eWjwcuT1KK3vdNBv6A4VLSgcW+rgxbNGJ7Or+t7zBulmxaaL
+zIuaRf211Ta7ZBBRQgofXu9u4grYwwEQlPvgcSBOSCVMguN/ZsCHuWugdvW5tNZi
+Z3VMdGJjg4fdcaqNRI5Z5/Tw+apP60ikUrzX06rUTSd5wgV4Zr9W2e21JnvYSiZU
+TKwUFvmykNfTiIWuTmFpJoR0NpxsWBQMuHXbjjUmk4FcR4PjJBynyb5Mw2p+/ya7
+LRBAYCWm4rKjMhrkZFr9PeG5KTP5mQ==
+=JDWv
+-----END PGP SIGNATURE-----
+
+--CCJYsXcQoNaCVfNV--
 
