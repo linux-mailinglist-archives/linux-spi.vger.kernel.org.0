@@ -1,97 +1,99 @@
-Return-Path: <linux-spi+bounces-4897-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4898-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8511997D33C
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 11:02:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB4597D3D0
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 11:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49AB72819D7
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 09:02:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8424C1C21477
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 09:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4280126ADD;
-	Fri, 20 Sep 2024 09:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F86757EA;
+	Fri, 20 Sep 2024 09:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjgKWoc0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC73813A271;
-	Fri, 20 Sep 2024 09:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBF322066
+	for <linux-spi@vger.kernel.org>; Fri, 20 Sep 2024 09:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726822921; cv=none; b=g+oeln4Pc4SFLTkdCd+j05nLkmhd7EQ/fmyemhPyGawVsqXPsPt3leUYat82rZoo8sruNoOTjt4J6NUAg+bx8jv7v6XgyN1XD7RFgIBhfejFwL08J/KZ97YiDbqTHE0qUTgy72eHmwvJCpLGq19nys3rgHD4jq7ER1APWToea+U=
+	t=1726825256; cv=none; b=XSXyu4f+G/nHu6rqmna2RzWanL0MALTJrywHk7ofK11Yl6F4SpUWi+FQZJSuWrZUziihcjLPchuTG+KLHfjyAI3+MmFLEOamIiRe4ooggp8bkQtpcc7aEIBc3ls4HWtSkEi6xI5+Zym5Q3gzD2+/B2SOjBaoTWG/Nf85/6GDqJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726822921; c=relaxed/simple;
-	bh=+lEB/u9deBbDtkbi6H0U4vhLH9wn/oMD0/ZgHrtiYFs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sDR14ItGezj8k9+9CS3fLowEA+ZDYrEucczlro1AVh9T3JLtEnwlypZjZ8QKsz/YJ2XZYCbyxUqky3Rw55M1DwgKFuasDS+5rSYNs9whM63Tqg9gscJVxcyWeYc1x+5RenIn6g2pWwTutWRRNFAvNrsOlk9KnY82V9pxSaZjr6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4X95wt1j4czjM9B;
-	Fri, 20 Sep 2024 17:01:50 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9EF2C14010C;
-	Fri, 20 Sep 2024 17:01:49 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 20 Sep
- 2024 17:01:49 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <broonie@kernel.org>, <michal.simek@amd.com>,
-	<naga.sureshkumar.relli@xilinx.com>, <shubhrajyoti.datta@xilinx.com>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH] =?UTF-8?q?spi:=20zynqmp-gqspi:=20Undo=20runtime=20PM=20ch?= =?UTF-8?q?anges=20at=20driver=20exit=20time=E2=80=8B?=
-Date: Fri, 20 Sep 2024 17:11:35 +0800
-Message-ID: <20240920091135.2741574-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1726825256; c=relaxed/simple;
+	bh=WADNKRXzEQM2/TGHsCPwjNMv9XFwPydOLmFHTr33LmM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=lDKfbaiRllT803nhxU83SJpi3YRO246nvMhYhlyGXP/H6CQE5fA4ScE5BlqzAzef0bp9r9Y/MXLd4X99yEF3AZpt/MB2iTFAm0i1jcWQzSkxeRwLx5K6dVlU5XcAox2a3/GiHY6zyCpP9LOAbsNtJraEZ8eyoosBfpcqydoXbtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjgKWoc0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30933C4CEC3;
+	Fri, 20 Sep 2024 09:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726825255;
+	bh=WADNKRXzEQM2/TGHsCPwjNMv9XFwPydOLmFHTr33LmM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=IjgKWoc0nVrAykgcRrhwyqrNVEngZB8H5M6cAGAEH3+OeHfgqaodFkvqX5yojAKMW
+	 LxUsUgDz0FcSF4m6aQT+oDTm0/KdwiZck9wThBdVQJe0bR2Ce0MforFp7eUxOPs6oO
+	 4JtSStvXPxTxML9ff2uslTPet1oGXlON/2beskR+8JemiO3JR9mRjdpgVnUcMm6nY7
+	 5wn1KTileRVr6kQC2pU39QRMAjkUuYbKH6gX9aFRaTU+PK4J0+onWEt+ovV4ASNSco
+	 vRzs0D27UJKoW+jL7Bhg7UyOy3B1BVA2CT6GJr/ichFUi17KC0sBZ2jYDv7ULooa+0
+	 anLQy/y3l0Yyg==
+From: Mark Brown <broonie@kernel.org>
+To: Ray Liu <ray.liu@airoha.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Andy Shevchenko <andy@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Christian Marangi <ansuelsmth@gmail.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
+ upstream@airoha.com
+In-Reply-To: <20240919-airoha-spi-fixes-v2-0-cb0f0ed9920a@kernel.org>
+References: <20240919-airoha-spi-fixes-v2-0-cb0f0ed9920a@kernel.org>
+Subject: Re: (subset) [PATCH v2 0/2] spi: airoha: Fix errors reported by
+ mtd_test kernel modules
+Message-Id: <172682525279.1868433.7364571402602588778.b4-ty@kernel.org>
+Date: Fri, 20 Sep 2024 11:40:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-99b12
 
-It's important to undo pm_runtime_use_autosuspend() with
-pm_runtime_dont_use_autosuspend() at driver exit time.
+On Thu, 19 Sep 2024 18:57:15 +0200, Lorenzo Bianconi wrote:
+> Fix errors detected running mtd_test kernel test modules.
+> 
 
-So, call pm_runtime_dont_use_autosuspend() at driver exit time
-to fix it.
+Applied to
 
-Fixes: 9e3a000362ae ("spi: zynqmp: Add pm runtime support")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- drivers/spi/spi-zynqmp-gqspi.c | 2 ++
- 1 file changed, 2 insertions(+)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index fcd0ca996684..b9df39e06e7c 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -1351,6 +1351,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 
- clk_dis_all:
- 	pm_runtime_disable(&pdev->dev);
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	clk_disable_unprepare(xqspi->refclk);
-@@ -1379,6 +1380,7 @@ static void zynqmp_qspi_remove(struct platform_device *pdev)
- 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, 0x0);
- 
- 	pm_runtime_disable(&pdev->dev);
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
- 	clk_disable_unprepare(xqspi->refclk);
--- 
-2.34.1
+Thanks!
+
+[1/2] spi: airoha: remove read cache in airoha_snand_dirmap_read()
+      commit: fffca269e4f31c3633c6d810833ba1b184407915
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
