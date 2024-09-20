@@ -1,81 +1,102 @@
-Return-Path: <linux-spi+bounces-4899-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4900-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BBC897D3DF
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 11:50:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA0C397D4BC
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 13:21:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BD631C209C8
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 09:50:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01E99B239B7
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 11:21:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D96113A3F9;
-	Fri, 20 Sep 2024 09:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2042A1422BD;
+	Fri, 20 Sep 2024 11:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhNi17QM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTqxTJFz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7756984E18
-	for <linux-spi@vger.kernel.org>; Fri, 20 Sep 2024 09:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED31D45027;
+	Fri, 20 Sep 2024 11:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726825830; cv=none; b=XZyiAz4yyNLAGNeOTItt6SulpF95gKDtMmneOMvubQy8XnBKND1IlOH0be5KY6sh4mZf44nyg9ctI/zR21L79Y0aIaCeYM9MbcmbNcxypYWPcgsxnRjz4oOHAOUJqQg8kOcP6OCM7L2w06fZJQnu9GgkyPfQua9V+qlUtfeGg3g=
+	t=1726831256; cv=none; b=Zqt1uGjJa09CwNyGxsoXg+r9ka6zJrEbOafG1dnfLjZvEdKSxjyAR1clPaLbf0UZ/CkRaF57Z4bUG778mzQR1R+UXve0OnOD2zqGOpLKVGd32cRe6u92tpW4MSealwKovzrR1WrPfRbLZlui6UHu7F8Dou+L6p3F/QMQFIQVOGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726825830; c=relaxed/simple;
-	bh=3RdeWaAdHnxCR2EX3h3I32p4fBJ23YNp6j9FkBu8DU0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=S+Ms/xNwJivb669qaU4M2D36EzIfy1LnXFsrzaenFvLvnozXDyLKhEHVCa7uvn1cYQnwq9tYlbO/q3YhtEFX3wWT860BxWWJSoxYG2nR7R+6/M5HPdHIwFxhKgvXxyIaYdJZEserd5+qoS7Oboe+9HzhSSxbWKncuTIoCvO1qek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhNi17QM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03574C4CEC3;
-	Fri, 20 Sep 2024 09:50:29 +0000 (UTC)
+	s=arc-20240116; t=1726831256; c=relaxed/simple;
+	bh=AOm6CiYihAUPza1oEC3n4S6HAK1ZQbToAsiMUNAJ9v0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=DQmPlfc6D8aZ3QR8Syo61sp+Lr9GLo/XFpqMPDMuIGm+ykqNMbQj0EmHYLbtubGnVwyFKXFo1kPzjfIfnkbX0vmTBUnzF+phAJl/8UU1p+cgsmYKa0/Du23Od8ydIDj0RdOeqRTWF1Mm3VUxcTnv5A5oLnNjHdv9atOvD65Ua/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTqxTJFz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E39C4CEC3;
+	Fri, 20 Sep 2024 11:20:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726825830;
-	bh=3RdeWaAdHnxCR2EX3h3I32p4fBJ23YNp6j9FkBu8DU0=;
-	h=Subject:From:Date:To:From;
-	b=JhNi17QMtHJwm1wmwYAXVYqBJD61HGdLRBBnIRVCkyJS7hxwpi3H8RkFdoUNXfK2K
-	 7kkKGz5VDb0ppg/Yb+tGb92IOWwy04FNCHQZYHC1pCYLghKLiy6kVrST7iwmmpr99+
-	 jFdOOfobGplh+FBvLMNIAe773Gu1iA3mKtbPYqArBe96gzDO85WA09H973rLsOatZZ
-	 eKpqbo7VQrBaBhLLXLYxg8pZAfsb2TPOvgxrjJt93GW5a2WuXtpVeNIzCF36whS/FR
-	 J3HEbqtuut7mW7X38sepFDEVAL17c3cM8VB3ckhXIsIJejTL9ybSJ/WQJiiBSOlZHW
-	 daZqDMq79xb8w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF1AA3806644;
-	Fri, 20 Sep 2024 09:50:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1726831255;
+	bh=AOm6CiYihAUPza1oEC3n4S6HAK1ZQbToAsiMUNAJ9v0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=NTqxTJFzr0tX4MKGLnh2smz/O2hVmLyooLMZJg7/Ec79dsQ7Um+yJTW2oaLxybR9v
+	 mS1X/yv93l5OT0rWTAQjBfQsa67mZaXZLE6AKl6s7FNH1C/Qz54kcMwkkWRh/jNAe2
+	 gA99CnUSKatFoGW/5UQqijuqJyKc8r5cOyA1TMqfkEgdXgZ5zvvJj/sAjtQD6Ce2Jr
+	 0SUadizHI+6JxvBEJRyw2m+XTnx4cCt0KrvfRnOISWPqWKOsOQ+KYh/+meKfbVADjh
+	 dO+h+uZkkjOODp36lCngvVjBmpRzvfbfwd1RYeVLM1nYM312Vg3Jprc7B/7T2W+xII
+	 Lwzqf8/iUezIQ==
+From: Mark Brown <broonie@kernel.org>
+To: Alexander Dahl <ada@thorsis.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, linux-spi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20240918082744.379610-1-ada@thorsis.com>
+References: <20240918082744.379610-1-ada@thorsis.com>
+Subject: Re: (subset) [PATCH 0/2] spi: atmel-quadspi: Fix and add full CS
+ delay support
+Message-Id: <172683125380.1876737.2732107267327234575.b4-ty@kernel.org>
+Date: Fri, 20 Sep 2024 13:20:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172682583138.2160960.7817313680117634802.git-patchwork-summary@kernel.org>
-Date: Fri, 20 Sep 2024 09:50:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-99b12
 
-Hello:
+On Wed, 18 Sep 2024 10:27:42 +0200, Alexander Dahl wrote:
+> when testing on a SAM9X60 based board with an FPGA implementing a custom
+> SPI-MEM protocol, we found the need to fully control the delay settings
+> the atmel/microchip QSPI controller offers.
+> 
+> Greets
+> Alex
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: spi: airoha: Fix errors reported by mtd_test kernel modules
-  Submitter: Lorenzo Bianconi <lorenzo@kernel.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=891479
-  Lore link: https://lore.kernel.org/r/20240919-airoha-spi-fixes-v2-0-cb0f0ed9920a@kernel.org
-    Patches: [v2,1/2] spi: airoha: remove read cache in airoha_snand_dirmap_read()
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/2] spi: atmel-quadspi: Avoid overwriting delay register settings
+      commit: 329ca3eed4a9a161515a8714be6ba182321385c7
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
