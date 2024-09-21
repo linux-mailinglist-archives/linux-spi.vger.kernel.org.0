@@ -1,106 +1,295 @@
-Return-Path: <linux-spi+bounces-4904-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4905-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD6BE97D762
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 17:14:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6EA997DD51
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2024 15:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFEB21C2146A
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Sep 2024 15:14:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C333AB2194B
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Sep 2024 13:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C2722EEF;
-	Fri, 20 Sep 2024 15:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489F7155C88;
+	Sat, 21 Sep 2024 13:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTHOI55I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gBT1ZJ5B"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A931E521
-	for <linux-spi@vger.kernel.org>; Fri, 20 Sep 2024 15:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726845272; cv=none; b=CG/5P7hWhEOXTdLijfOGugxF3oka/Q5wZjqkPCfPssakCQ2Ix2dwt8cMahXvg/vJp8N2ybUnXyUi7tqWH8/Hpx+XdXI4jgyx8VMXQQ6hV4xDBhTN0fyz9MQ7zDh5dIggm91xbvMjp0NSo/pCRh/gNgJSAk8tCpyYbqfyy0rBOPo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726845272; c=relaxed/simple;
-	bh=Awf5vk9NUKwneLFtXrrN52fi/D72mFUt46kuOsqzRvk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NdqoeqpqHhgJiF+RTNHvTPIX0ZM1gvhWFnOVzm5Bvh5Xc5HQRzug1YI/AHnDRLj9hOd15s7CBTq4hlCA+/z9p11pGO+U3UomSxnXTHu51KwI+BFKta8B7MwOF4JPOF4RJnh+8AT1ln5BUcEfiXRgYqTcVOHb4j79nnB0eO5DYFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTHOI55I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C7BC4CEC3;
-	Fri, 20 Sep 2024 15:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726845272;
-	bh=Awf5vk9NUKwneLFtXrrN52fi/D72mFUt46kuOsqzRvk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gTHOI55IQ1aO4nFlgbsCVvU4XENI/zF/NxqiEFE0GIr7cLBGoXkndtaY+PXKhjYJ1
-	 6Mwp9Be5ujWJYQ1e8496uhT6i1S6dLMT0mSImQ7Wy6Ux/lc4O7DwIfh0sn5innVhzA
-	 tNK4HZV866JbCC/2qsWlYIvwbmdjmoEskYxNeEb2SnA1vsG1nA9lx8+VMesWvl5mUl
-	 PpldENDY+si3thd/v8HgHzwVoeeJ00azJ44EuK3cmSLDQNzEUo8IRP2CVTWgcSBvjI
-	 7Qig1+jGZdKn/eXpGgXbJtC5h0apFPzVU2cOzKJOMCpkB/P83xtyI3KT/3Gl401LtD
-	 qN71rNJ/dzlBw==
-Date: Fri, 20 Sep 2024 17:14:28 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Ralf Glaser <glaser@iotmaxx.de>
-Cc: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: Re: migration from kernel 5.18.8 to kernel 6.10.3 spidev driver not
- loaded when device definition in DTS overlay
-Message-ID: <Zu2RVC1vGUh_-KYb@finisterre.sirena.org.uk>
-References: <7bbd3bc198a84e25ba25e28a6989ba3cBEZP281MB3361E029FEE3756F30ACBA99A56C2@BEZP281MB3361.DEUP281.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914FF1547CF
+	for <linux-spi@vger.kernel.org>; Sat, 21 Sep 2024 13:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726923662; cv=fail; b=RzJPOBhemCbqRtz3pExORIZYONo4nr0ARSFLQAjF3BV6LMYE/h6yRNHoKMRY6sR0z7HD/QTwUMDuaLYwZMrVDiBFwvhTIM7a+rlZWORu3GkZk5ERQmj4h70SgMT/978h7SvePuFcoPzWz7Mtd2WSE422PPATH1zgGdiw4cL1Og0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726923662; c=relaxed/simple;
+	bh=J2c+LXU+72D7NmOwqUzJhB1/riCFQrcfGPG0+vhVD4w=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=UTyuhPcO8nqe70gBca3ubJvdOJpaiKGSCJfUGDGiRkkGHVAzo2fC1MpdxjgSEp0wXNZYF29nxoShlr6CCoh/oHbcnNKuHHsbxmDIPZ2vjLGs/MxZx2c466unwMlqaZLw3uwyVn5XJ0mYv0VrMoaBPwCpWbLHyHK8UamVsiOZme4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gBT1ZJ5B; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726923661; x=1758459661;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=J2c+LXU+72D7NmOwqUzJhB1/riCFQrcfGPG0+vhVD4w=;
+  b=gBT1ZJ5BgAMXNme3mHguKbOaFKJOgJc96Mc7b6PQWZHNKZh/dMf49HlJ
+   UDcyYcA/N7WJO0eq0pNjP/tUVJfjgDUjy64LJKF79euplz6FI9ZNdCID3
+   IOMedeotTK/4mv1VcmZi2DCPdkQFg1DBSCg75vZ1pb1mIGWMHRE0UPXxD
+   LpD9XWiosclVgCHz4YgS+8/i6EtiI8P+of3YmvEYLslNsIDmliR7WZvA/
+   uJ/X3vf52X3LBrC009fWL+SvSTIT6e0eIrDtBx/J+S/xLSxcDPwhijSg0
+   D43Fls6nlWza2LQV8ujis+8tBAs+t6E1ofuk+xPaQTUm5WkTJ+lvy+qcZ
+   w==;
+X-CSE-ConnectionGUID: nPlI1j7SQuyxACWe8ADGJA==
+X-CSE-MsgGUID: Muwld4CHQaSsfJrtEjQ3+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="13621137"
+X-IronPort-AV: E=Sophos;i="6.10,247,1719903600"; 
+   d="scan'208";a="13621137"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 06:01:00 -0700
+X-CSE-ConnectionGUID: eNBNVDvZQgSXgkMdIibwug==
+X-CSE-MsgGUID: D9bzuh27STao4Tfi3MKNqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,247,1719903600"; 
+   d="scan'208";a="75361388"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 21 Sep 2024 06:00:56 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Sat, 21 Sep 2024 06:00:55 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Sat, 21 Sep 2024 06:00:55 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Sat, 21 Sep 2024 06:00:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Euw09FCJ60+E0SExOoV50eOnqzXsI7hjuc4zN3VgGdlca4tn9Qs9oWpwiSSLVjcV8Fyiqy9S3Yz9iH6KXUbxkGj5CGgDb1FrBuNjR5AcuiyzFJVbGVVOxbP5P1F5d6ZVX2DxbSoZCql55PqvOrJiMH/Oh2mJ3n+lxcV45pvC+BGN8RZCMDnIEJXSw6c8jJOLgD7fix4fUpVIQfqlOeDJLuE6uUpuEdc1D4VMvzsqxY9zigOojaeWR7BS3Stlp6zLQ5MyKzslHQDCMv6wlwXIP7m4Eb+t1Qzzp111nyIk6C16+83tShhGaSrm2YYAvFGMv4jxbP8aigbNjDPsQgm1zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GA6L6OPYc3ie5YPrJbdI5NTwAZHD2CFvL2oFm72rgUc=;
+ b=g7so4vc4LRQSTTTPE9agffStNkOaPeWNXcx6lcgmYx3I8Wbn0fsTpY2ChA6waCM6PWYfsDKv5wU2f623DAITrVS6UGGlHj17V58U8xtt2g+N0uvb0GI1660O8PqUrRgf43gA2Yi6oveAhX++eJ9JCwVZ3CimXKI2J6faic2e6jJMBFEg3AcbOh2nhXS4vbTz1zwIEtAJc2h6BFnU4rt77+UCeabQKdE6i5dZdMsnXai0SRgl2ZWQ8ZTQADeggk2YqXLy/fpSUgIMbcsngn673N4ePozIU44lvFEXTywbTjAs4eTDixuguCK53LX2ow66UcxIxL53HQnmG+CV1nxwcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH7PR11MB7605.namprd11.prod.outlook.com (2603:10b6:510:277::5)
+ by DS0PR11MB8071.namprd11.prod.outlook.com (2603:10b6:8:12e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.23; Sat, 21 Sep
+ 2024 13:00:53 +0000
+Received: from PH7PR11MB7605.namprd11.prod.outlook.com
+ ([fe80::d720:25db:67bb:6f50]) by PH7PR11MB7605.namprd11.prod.outlook.com
+ ([fe80::d720:25db:67bb:6f50%4]) with mapi id 15.20.7982.018; Sat, 21 Sep 2024
+ 13:00:52 +0000
+From: "Winkler, Tomas" <tomas.winkler@intel.com>
+To: Mark Brown <broonie@kernel.org>
+CC: "Usyskin, Alexander" <alexander.usyskin@intel.com>, "De Marchi, Lucas"
+	<lucas.demarchi@intel.com>, Oded Gabbay <ogabbay@kernel.org>,
+	=?iso-8859-1?Q?Thomas_Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+	<mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+	<airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Jani Nikula
+	<jani.nikula@linux.intel.com>, Joonas Lahtinen
+	<joonas.lahtinen@linux.intel.com>, "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>, "Lubart, Vitaly"
+	<vitaly.lubart@intel.com>, "intel-xe@lists.freedesktop.org"
+	<intel-xe@lists.freedesktop.org>, "dri-devel@lists.freedesktop.org"
+	<dri-devel@lists.freedesktop.org>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>
+Subject: RE: [PATCH v6 01/12] spi: add driver for intel graphics on-die spi
+ device
+Thread-Topic: [PATCH v6 01/12] spi: add driver for intel graphics on-die spi
+ device
+Thread-Index: AQHbCEBkZ7X5wnyiXEe3qiGmampdoLJdjhaAgAFR0ECAAA32AIADOJHA
+Date: Sat, 21 Sep 2024 13:00:52 +0000
+Message-ID: <PH7PR11MB760505A11C7A41DAB0359184E56D2@PH7PR11MB7605.namprd11.prod.outlook.com>
+References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
+ <20240916134928.3654054-2-alexander.usyskin@intel.com>
+ <ZurWk_eXSQndgA4Y@finisterre.sirena.org.uk>
+ <PH7PR11MB76057D2326D436CA9749A113E5632@PH7PR11MB7605.namprd11.prod.outlook.com>
+ <Zuv9qsWJQhx7rbhJ@finisterre.sirena.org.uk>
+In-Reply-To: <Zuv9qsWJQhx7rbhJ@finisterre.sirena.org.uk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR11MB7605:EE_|DS0PR11MB8071:EE_
+x-ms-office365-filtering-correlation-id: 25f99d30-6159-462f-246b-08dcda3d6c92
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018;
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?QYMfMpnL3j9n6WUpEMhOmhYizdEPtYSLFHoEmoz2e2T3bHD+Lck096X/Nu?=
+ =?iso-8859-1?Q?78eFVE2N6HWZnklQ6f9AhxNwxjys8Blr/UtNOYbaLN2B/W8Tsnuf2tqh1i?=
+ =?iso-8859-1?Q?TZPEVoWqPd3XSmQqaeIm1gzlt68yqoAU7ZCmfydu9PBcIv48+Ks6L/lVWz?=
+ =?iso-8859-1?Q?SpdpuNsqteIR4qt29nz2MxuMEOCEfnJnfGIfikOgIv8NDlioQv7+Xjubw3?=
+ =?iso-8859-1?Q?fK2fYJy2kZUky7mRwtL2Xe1EcfY/spbw5p/QyqFRVU5LJuD+bEkAjo7ddK?=
+ =?iso-8859-1?Q?QCyjNo/OUgFuLiPbUFNMnju0dUa1c0N4+hEPzCO5NlPCFfXqiFqFqKhbYm?=
+ =?iso-8859-1?Q?yJALoIzy/02+zahbOPBl6l3VpzTmTHxJHVJaBu9DZymEPmsz7zxD17x4gN?=
+ =?iso-8859-1?Q?K7hLVXsFhd8lRoTwKfN8nEdiVKAKj7g8dekNNgs3dEgMQHmYZr9EWtSs7C?=
+ =?iso-8859-1?Q?JqaZ3sJtGpM8yGprlaj7GPNMRqigLo0eBOwnWRaaIlo9eHVNJzSrpuLqQ9?=
+ =?iso-8859-1?Q?+Gb02L159VaRfFIQP8sVNIKQXx4V1sQ83tmcqm4oOZEf3i7VY7wx/D8mqE?=
+ =?iso-8859-1?Q?+edAiiPgLb9+hpwsjUw7eQnK+3Gk4jUvATqS93IkWPOBleaPEj9yper/20?=
+ =?iso-8859-1?Q?8rPAwENVo3Kz61pT7u9/8uSq+h+8A3lrTVdywSMSCTw3qRLGhHSzRSApnG?=
+ =?iso-8859-1?Q?zyslf8ULsd2fO9VOOUM+CzI5iZFotevnEHqx0SJSCXxnGnFJ+CPBKCfvH0?=
+ =?iso-8859-1?Q?J1rXk4EVuGrSa7SRgSXCrZQjAnGGGeXuPWl6bkLhCX5Xu64WHGXTr7VfJR?=
+ =?iso-8859-1?Q?gb3asPagE5OaK7yZrPF2bQegCqxvXe5TDVf8w5Eg2reslAb5uUKG69uw8D?=
+ =?iso-8859-1?Q?jHf+4Stgd+JIR99DzuAzIiCUCExT9n6yWELxcDzqt81tE6+80u2lWvZztl?=
+ =?iso-8859-1?Q?hU754jYbjjbdphpWfCUE4LZpFekcGzWVOA8BWrHIaZRJVPyHM3MBYniG29?=
+ =?iso-8859-1?Q?b8gSxidGvhqN9rev1clAXON6TNz5HcRvASzhJaJqfp02AxdVRftawtMlBB?=
+ =?iso-8859-1?Q?yg61Z5D+58zl/EGnJR6kwilaHNhL6Dgt3mTMQIbBuHFZ4vWxDKdOZero+7?=
+ =?iso-8859-1?Q?WDUIuUgTUOpxQwQ63n8UjbNveMPR/p8wpFWtdYAgCNOYg9kMBYRoFutoOx?=
+ =?iso-8859-1?Q?iNTxHa8ookAkPbJjJB3WnYhsAVhzvGDAMP/sTBh1qjtXo1PUFKbD0/N4Sw?=
+ =?iso-8859-1?Q?xuCEng2uWiRp4hjYyfnrJNtEHHSl/u0XWoSYiK50KmVEmCDVpvL37DQcgX?=
+ =?iso-8859-1?Q?EnFPLPtcNebYn65EWE0fmfXWxEEmCWzSOj+cTtw5LjfwKDYceZDcPl5ERo?=
+ =?iso-8859-1?Q?Fr7o6b+wMLs51KsO1VBh+S0XB69OizJF1TDjPw557W1x0XGkV/8r4winyq?=
+ =?iso-8859-1?Q?A+Qjj/PpN/40jx3frnhQGd35nrdcjWCOO/Lgwg=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB7605.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?59m91GBI3I5qlY1eZ67zIaqpAot4tp+AHEyJvx1yJi+zz8sambJDGQXCOf?=
+ =?iso-8859-1?Q?dGOPOEjPIlQ0e3Ey6U+QE1zyjYkCScv+hTzgpv6q92sCInczyPCx36Uh67?=
+ =?iso-8859-1?Q?5Jm8lutdkVREjPTIOJekURuxww2XNHok7OlRYNz2eaag/lawaUsSDxPUI9?=
+ =?iso-8859-1?Q?DF+ah9YleIP6NcUi/oaXubHQuhw6ibR30Zzx5do+K/CZ4+l4Wkd3vjqwhf?=
+ =?iso-8859-1?Q?7z/cbrn3PnKASABJnLPNYe9HapGoVubaGb9ZBA6xqbBWDiI12km3xZ/8Iq?=
+ =?iso-8859-1?Q?aPiXlTm20vdSuxoKgAsj/7k6mquw6HIWExaX0vRi2Es5vrJQy9oqEYxwBS?=
+ =?iso-8859-1?Q?5hTK7osL+Myc4fvYWaC4Ru/CHNfkULqfqMQa7dR1+eMDkXsvb/2KLlJf+r?=
+ =?iso-8859-1?Q?ou/ZJmVFNKHjXw4CSIfno5tmaAJYgj4erqKIQR4eWFxAjwgQYvD3feotKQ?=
+ =?iso-8859-1?Q?FC7keMNZnLhsStv+UImxOE5NPrZ0xUexKd831t7wLormZPhI8+XN/WoOPc?=
+ =?iso-8859-1?Q?WFOz0R4r9HmQ1gdH3oefxfQwR0aYUY7iMezezqSJj1Tu6EKr6gFMD6UbZh?=
+ =?iso-8859-1?Q?gq0UnXjK3fuSJJwApImt/JbGhhXbzI1ib2WBKDT+gitMqMiFXKgVqBSteg?=
+ =?iso-8859-1?Q?/J5FUC++8ZvhSMboBEzKV8o0MOMgj3WShwjNLq8Rqf7Izzkn2q22pkNYhq?=
+ =?iso-8859-1?Q?d2xOIQI3G98vfb2HOpmfhmH7KNjcH+5yLdcRf3rWGQDXtz95so18fO2m7X?=
+ =?iso-8859-1?Q?g/DuZzu9epWmXdqjHA1i/91uqdlUAuVrWkg7weH/S7Jyrmx/SI3rGk77Sg?=
+ =?iso-8859-1?Q?qSirx3GZoSh7EWXODcy75qLU+sQmmz4xZsPl9AYMuqiWCrhIVxaNcL2QrF?=
+ =?iso-8859-1?Q?dg+PqGwVI0B8FTLa1sJnvUfJDqpkgKnkO5Txx9X/ljhPKmrYrPBGzkfd6P?=
+ =?iso-8859-1?Q?VAvlq6F4AfMxWtuE6AfwABFZi9BDXDoUyjWl8URpztV4A7VMB9Z/Mw7RP4?=
+ =?iso-8859-1?Q?BdNx3X7+2uQmI2iCRgqXf8oTro5vNclqVWccJb4/OUf98/CR+LG3zQLBsG?=
+ =?iso-8859-1?Q?XbubzFSJIDQn09Kd6z03MHV67sOT+ERel7CSUXR4xc28SnJkaZiooVJm1k?=
+ =?iso-8859-1?Q?O6Ug2eF8XDZmFrx1cL16IB4rHjRFpSupFX07x+EmIXGNGoomBNHdTsAL8I?=
+ =?iso-8859-1?Q?NdqsQ8Q3lG9EPgMhbVWBTYx5O3QSnIpnc3Quqo3wmUgCi0JJuRvHtaDmcb?=
+ =?iso-8859-1?Q?RSpqoNzVoY5UKhJgq/xIXUAFE/ioCpy4eUg9BcuRia5qYOh0vtS0i+YeOR?=
+ =?iso-8859-1?Q?bFHBkTFWyQfy2/j8AqCYoRmB7+WPKHwyq4qjicCrQ7Fde7TzE38Jsmkb0q?=
+ =?iso-8859-1?Q?xaH5BaQGvqhMWIzOOpgeE8VUwWJ/IAJTP1MCBN3kzKnpMNvvjLf/tQiCTw?=
+ =?iso-8859-1?Q?xMIfvuQi81L23yeoIGEy7VUQAWV9RMokp0qO18lSs+b7L92Y/do+Fhdae9?=
+ =?iso-8859-1?Q?OWDfBJ95ujQQf9q0/WWdVRi+yJTU/vDdPf9vrrGcH2qOxbcwjgaj/mfKeG?=
+ =?iso-8859-1?Q?qrG8W7Q6QEfiMfGUieqXhnEv4JO8Vc53QQDTTQg5b0P07vRfScbFnei1HH?=
+ =?iso-8859-1?Q?pSwIBnpWxHG1DXD9hG+W1UmejG8/qmJO8O?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KICOqffkINydSptA"
-Content-Disposition: inline
-In-Reply-To: <7bbd3bc198a84e25ba25e28a6989ba3cBEZP281MB3361E029FEE3756F30ACBA99A56C2@BEZP281MB3361.DEUP281.PROD.OUTLOOK.COM>
-X-Cookie: Editing is a rewording activity.
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB7605.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25f99d30-6159-462f-246b-08dcda3d6c92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Sep 2024 13:00:52.8676
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zEc0nGa0IK3tEqDrJAJzwRYETPjyOh4CsWKi6+WIkXsuBSXTYiZehOTVemQuuhvq5EPi4vOF/D0EqTFFeYyfmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8071
+X-OriginatorOrg: intel.com
 
 
---KICOqffkINydSptA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Sep 20, 2024 at 01:24:00PM +0000, Ralf Glaser wrote:
+>=20
+> On Thu, Sep 19, 2024 at 09:54:24AM +0000, Winkler, Tomas wrote:
+> > > On Mon, Sep 16, 2024 at 04:49:17PM +0300, Alexander Usyskin wrote:
+>=20
+> > > > @@ -0,0 +1,142 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > +/*
+> > > > + * Copyright(c) 2019-2024, Intel Corporation. All rights reserved.
+> > > > + */
+>=20
+> > > Please make the entire comment a C++ one so things look more
+> intentional.
+>=20
+> > This is how it is required by Linux spdx checker,
+>=20
+> There is no incompatibility between SPDX and what I'm asking for...
+>=20
+> > > > +	size =3D sizeof(*spi) + sizeof(spi->regions[0]) * nregions;
+> > > > +	spi =3D kzalloc(size, GFP_KERNEL);
+>=20
+> > > Use at least array_size().
+>=20
+> > Regions is not fixed size array, it will not work.
+>=20
+> Yes, that's the wrong helper - there is a relevent one though which I'm n=
+ot
+> remembering right now.
 
-> sorry if you received this mail twice, it was refused by the kernel mailing list and i was not sure if it got discarded completely.
 
-You turned off HTML for this one, but also turned off word wrapping...
+I don't think there is one, you can allocate arrays but this is not the cas=
+e here.=20
 
-> On 6.10.3 no /dev/spidev2.0 is created and /sys/bus/spi/drivers/spidev does not exist.
+>=20
+> > > > +	kref_init(&spi->refcnt);
+>=20
+> > > This refcount feels more complex than just freeing in the error and
+> > > release paths, it's not a common pattern for drivers.
+>=20
+> > What are you suggesting
+>=20
+> Just do normal open coded allocations, the reference counting is just
+> obscure.
 
-Well, if the spidev driver isn't there you'll need to fix that...  it
-might also be worth trying mainline here in case there are any fixes
-that stable didn't backport.  From a quick scan nothing is jumping out
-though.  As far as I can see that's the issue, the driver just didn't
-get loaded.
+The kref here is for reason so we don't need to hunt the close open, I fran=
+kly don't understand
+what is wrong with it,=20
 
-> If i however put the spidev definition in the main DTS file everything works as expected:
 
-I've no idea what, if any, special considerations there are around
-overlays or the specific mechanism you're using to load them on your
-system, you should talk to the DT people about that I guess?  I wouldn't
-have expected the use of an overlay to make any difference.
 
---KICOqffkINydSptA
-Content-Type: application/pgp-signature; name="signature.asc"
+> > > > +		if (ispi->regions[i].name) {
+> > > > +			name_size =3D strlen(dev_name(&aux_dev->dev)) +
+> > > > +				    strlen(ispi->regions[i].name) + 2; /* for
+> > > point */
+> > > > +			name =3D kzalloc(name_size, GFP_KERNEL);
+> > > > +			if (!name)
+> > > > +				continue;
+> > > > +			snprintf(name, name_size, "%s.%s",
+> > > > +				 dev_name(&aux_dev->dev), ispi-
+> > > >regions[i].name);
+>=20
+> > > kasprintf().
+>=20
+> > As I understand kasprintf allocates memory, this is not required here.
+>=20
+> There is a kzalloc() in the above code block?
+Sorry  you are right.=20
 
------BEGIN PGP SIGNATURE-----
+>=20
+> > > > +static void intel_dg_spi_remove(struct auxiliary_device *aux_dev) =
+{
+> > > > +	struct intel_dg_spi *spi =3D dev_get_drvdata(&aux_dev->dev);
+>=20
+> > > > +	if (!spi)
+> > > > +		return;
+>=20
+> > > > +	dev_set_drvdata(&aux_dev->dev, NULL);
+>=20
+> > > If the above is doing anything there's a problem...
+> o
+> > It makes sure the data is set to NULL.
+>=20
+> Which is needed because...?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbtkVIACgkQJNaLcl1U
-h9BG9gf/VVOVmrRhx/WJwFx83A3robRXefHfl1cN/y23ed1U6esUKiu5BKaejsgd
-a+Ws1axTwXzCR2ZAZzqVuyflSRspFWuG3rcAlkGUeamFpEgsB3ljFhmuGwKWS1TT
-k5C7QvA2m0sDM8a597GwH/tLdKi4WbBrmDJwDE6yzgtR6nWR3aBycCQyp7zjkBBX
-5UK0LAKH4U8iJjmMQBYysQCYLByqPKYWilrwAL/ChM2eEghA1aOKjxikk2BSxg2a
-GdQTlFrPTsGwp+p8+vjzUaxUA5U3xUUg1qF6Y7nSPT88Uls3djM53d52LEKdY9PV
-RXrhq45i7/L/+NhJs8urROhdLp6Srg==
-=Q+ir
------END PGP SIGNATURE-----
+This is a boilerplate part, the content is consequent patches.=20
 
---KICOqffkINydSptA--
 
