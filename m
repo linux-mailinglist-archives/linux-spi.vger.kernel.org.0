@@ -1,221 +1,157 @@
-Return-Path: <linux-spi+bounces-4932-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4933-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C600097EB86
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Sep 2024 14:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6103A97EBB3
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Sep 2024 14:49:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E58D1F218A3
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Sep 2024 12:33:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 113611F21AED
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Sep 2024 12:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D6F680043;
-	Mon, 23 Sep 2024 12:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1696197A7F;
+	Mon, 23 Sep 2024 12:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="o7z9l6kI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sst8rmym"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2069.outbound.protection.outlook.com [40.107.96.69])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958A51714DF;
-	Mon, 23 Sep 2024 12:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.69
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727094780; cv=fail; b=uxT0juARBgOTuAyQNzdSRTVsfIsq8TDyBEl7O58SIcdd+c5yPZqFDa0uT3PvN48P04IRvuPoGjGaKbBVkk1E4zmfUtFZXe6X+Qt0xpNtu5B0jIlprU2NcHuE3leSQvVMGQiz4RmrZpqpo0qii9FUNA2n3tEf9ir/4w+rHYBFnoY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727094780; c=relaxed/simple;
-	bh=wT5bZiKKoW3L/ffG7RX5UbbaU1c2Deb/nXGLHSKePVY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NgRsJDqoiuiCVpJfAK9/VRwcX0zxBEqSJmmmmP8pyQh49AV6RKKfQtINgY/9bX8wb8fhB7MD/9NpzUPMhVVrr9NarEFCTMdhOafbFFA9ft70ug2/WSda/W2zuD5RTgAViGcsUds0QELx30LKz06wpmUKSiCRUTb8Ro23Fgr3ykQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=o7z9l6kI; arc=fail smtp.client-ip=40.107.96.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ypZsqzgCUXZCpXHcWQxTxmFjypXKw3dQbuR+5VjuMQ7X8RDcvpaEvNA7hjF8GB4THbBCW2NRyy4Pi31RHJbFshOmAJu8wpcU99ZdJUfK5ltt40hkfkZSG5yYrfJaWzTPVKPnbYJuX2aZSnkGWVTDclSVgiwLHA+SYvfufqbyfp9AGWOI5SRDkZrF67llt1GF6wD3wqkNZ57qKI7BZanbmVKabR+Qns23vW3mXaNQrORg98yTe+5+2i9upFp6X3lZYUpVAQR8rAqttK45cBRntpYITtDiDdI5nk/B1m7kHWggEiXZ9TgEEOgaIz4mewg5yu81GegxKmk6eYKxqQkowg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ekd7HZB+CGDSsjupV/qJVcGpPDLen7CAMpIeKRBAJOE=;
- b=D2eRiMxWH8XiNrjHoUXYaut067hQjneH88zldtA7VlkGvw3hL6ibi7d6I4XOn3XCxpEk2tY96lllmUVr8kAUNfX61UF7w56zusnEXgH1vy249UYIWFJIFcdFUEIy+zfsFlDG3dQwNtiF7cQogQ45JAttQ978wFbS3QQ9Qb3rzLrO/U0MeKZvjBzwD3zOHk8Z+D0YNLJgvN+9txALNC3DZ1RaA4rbh8yD6PhMXSxMEkZbpqMg/Mm7HvnLOQxFfn5pWqsRhGNaHWX0Wpw8476+Au1HLA5n5lyw7a4Wdc9o3tKdZaZkRbD/kqAtIzUt9HjQ3obktaQcXrcOxiAm2EHZqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ekd7HZB+CGDSsjupV/qJVcGpPDLen7CAMpIeKRBAJOE=;
- b=o7z9l6kIpvarDsVkJoGRgzmS3r9wTP2rsLJdcgKqyV7ds1ggQThxJVmSnJMQZ4+qqKzfeduAtgESH5sXD5VoDi3cdU2b7GmP68U/Hl9cOVKrWPh/B5nM4/eqab1tttwQQbek+PgYeehkCznH7jQYbFv99OfmMZ2d/u6VfROeIc0=
-Received: from MW4PR03CA0140.namprd03.prod.outlook.com (2603:10b6:303:8c::25)
- by SA1PR12MB6893.namprd12.prod.outlook.com (2603:10b6:806:24c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Mon, 23 Sep
- 2024 12:32:51 +0000
-Received: from CO1PEPF000044F3.namprd05.prod.outlook.com
- (2603:10b6:303:8c:cafe::5d) by MW4PR03CA0140.outlook.office365.com
- (2603:10b6:303:8c::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.30 via Frontend
- Transport; Mon, 23 Sep 2024 12:32:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F3.mail.protection.outlook.com (10.167.241.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Mon, 23 Sep 2024 12:32:50 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 23 Sep
- 2024 07:32:48 -0500
-Received: from xhdakumarma40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 23 Sep 2024 07:32:44 -0500
-From: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>
-CC: <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <git@amd.com>, <amitrkcian2002@gmail.com>,
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH] dt-bindings: spi: xilinx: Add clocks & clock-names properties
-Date: Mon, 23 Sep 2024 18:02:42 +0530
-Message-ID: <20240923123242.2101562-1-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAE419755E
+	for <linux-spi@vger.kernel.org>; Mon, 23 Sep 2024 12:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727095774; cv=none; b=EMss5T2uunXQnVQ8G64nGKYWkBsInqlQwlnL061y7IYSSygvGQss7GuRPRqvdlCxRbKqSFjHIodZTw713GUxmeFRV85mIB8hxllmPgnWzrOtboAgRrIQ/4qsHKHdaj8jzaS5ULIkS/kMh0IXc0eTFDG7QAFOurZSyUT/V+/96jw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727095774; c=relaxed/simple;
+	bh=RN6cjzHoWo7KzeRWo61xbecp6Jcoh0ocYmVzmQxu00s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UtSHv3gQaCgmCT843DDyqm0tq6z0zQbfwaETkYUX1c5wvou5ju5D43yd+97IB9vZ8T6GLMyMcUwTNUlB7zgTfSKrzuA3INp+/zbt+BaMkfozQy6r9+RcOpT5Q8SapstVBSWb/ut3tCrJcs8+PK/qUoxa/D8EPsiJGsxf+tGl4ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sst8rmym; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 287D7C4CEC4;
+	Mon, 23 Sep 2024 12:49:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727095774;
+	bh=RN6cjzHoWo7KzeRWo61xbecp6Jcoh0ocYmVzmQxu00s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sst8rmym1KIpZMVpE922IY6DCc92c9SKEyh32z3FChhDrHzEjbGGx5ElG0aFTEoKO
+	 aWxoys4vBUlsffvSINxEFrvXvAKlReionrFgc77eCTtR5kF13ybMuo7ISnDKUblHUa
+	 YN8ZTvhQ+iySyZ8vd53HuK5YSKqMz/Ac2hHw1CDduijlWruv5UlEaXa1PtgQtkgnyn
+	 xiFwLzEUI39EZSdaCeVJzRnJ8C4UuFlDos15YCBbzHgt3u0o6S/1RsrmU9i32MrK/9
+	 AtT9PnO4qEhUk9K/SnB2vk0u33aX8TSv310RMdQ+IPxbjmJLQ98qDdTk0buLqGDzRp
+	 C9T9J3TTfcb3Q==
+Date: Mon, 23 Sep 2024 14:49:27 +0200
+From: Mark Brown <broonie@kernel.org>
+To: "Winkler, Tomas" <tomas.winkler@intel.com>
+Cc: "Usyskin, Alexander" <alexander.usyskin@intel.com>,
+	"De Marchi, Lucas" <lucas.demarchi@intel.com>,
+	Oded Gabbay <ogabbay@kernel.org>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	"Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	"Lubart, Vitaly" <vitaly.lubart@intel.com>,
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
+Subject: Re: [PATCH v6 01/12] spi: add driver for intel graphics on-die spi
+ device
+Message-ID: <ZvFj1zyzSYmbNwmH@finisterre.sirena.org.uk>
+References: <20240916134928.3654054-1-alexander.usyskin@intel.com>
+ <20240916134928.3654054-2-alexander.usyskin@intel.com>
+ <ZurWk_eXSQndgA4Y@finisterre.sirena.org.uk>
+ <PH7PR11MB76057D2326D436CA9749A113E5632@PH7PR11MB7605.namprd11.prod.outlook.com>
+ <Zuv9qsWJQhx7rbhJ@finisterre.sirena.org.uk>
+ <PH7PR11MB760505A11C7A41DAB0359184E56D2@PH7PR11MB7605.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: amit.kumar-mahapatra@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F3:EE_|SA1PR12MB6893:EE_
-X-MS-Office365-Filtering-Correlation-Id: c62ad539-2d5e-43f5-1567-08dcdbcbd691
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?LEImL5ZPRzhyAAV3Pdr9ZTs/ySzRDSodJMlHMkN3GUy+tLDSE5cOz+nvCD+0?=
- =?us-ascii?Q?KShJOg7TH7oMV/P/NtZJ4VHmcOikeBs18CGkHUMWcHSYBP1lfbFEehWQTAPm?=
- =?us-ascii?Q?hWmTZFqQdJrtydFoWuNTs3TytztRDnIDgxAUXs16Norkk/8pdvPVqMml3iel?=
- =?us-ascii?Q?vo7IH/Xh1eYotBzHyYRKTkBQodbYzji8z7OnkK2L5US2rz8oWmgV3sYq0GFS?=
- =?us-ascii?Q?3J+OfoaivSHSqLaSGh7RnnKnVl3xVk8gMM0uQ3Bhxgc6oQrfhayo4YWPsmMh?=
- =?us-ascii?Q?za/B/KyV652nduuFjFwu2VxQAB43Fag9R5BKDHcL01c0TX1KXsLBPFlhsVP9?=
- =?us-ascii?Q?dmuhfjhrrlVUyC1fJKzDzc+PTxJh9YpbwIzIZi4ECzisZ+1aKhObVzqLcJKj?=
- =?us-ascii?Q?1S79pWCNrthtlVNdsF5eDUos+elQ4eNHUMHdW1GBMQ2lAqjtohOplw03WV1+?=
- =?us-ascii?Q?EbyGveM8w3IaHy/DD/ac+ApNQVKZQrGec3ZI2LyiTUHAhhmicNTdKuwNcB/H?=
- =?us-ascii?Q?iTC2PsmJTOpMZmvLLcH4A71mUu6JF8HLccxyK8VCvsMrgFHcrOYq9hrgzBfz?=
- =?us-ascii?Q?PYwWK6R37ECP5aq1pzeNgk3I5vXm96jotu860MBo6EGZAp++Ntd5u/WZCQWu?=
- =?us-ascii?Q?VLFFsffWXA6T2t6eF2kBewFq0fZ/o0F7oV7DwZmbr9F0jayOpfY5haVJ711G?=
- =?us-ascii?Q?2NViSmih2DgC/INhdm8RE6Y+4h2xy9lnf0sQqa/hTS0noN56U8lOCgb4mYZA?=
- =?us-ascii?Q?yV+LzWifa1LfYcq9Pef94dMJfBl1416ydEH9w/nnDrMWyYmZ/oexVyEgTXCe?=
- =?us-ascii?Q?oHVRXHjqY9m0fHxmeNYvOsgWs98nL7KUA39IvKKNRNVInkbddknqKhMMajDf?=
- =?us-ascii?Q?Cdh2J6YL9ZyVQLFpS6mM2FHHs3v/vgEiXDNczk6Aedy+LNWZo1/+4w5W4BR+?=
- =?us-ascii?Q?D+Ns1QeKs4Z1JNtCNbmm6pBEpep7RBAYFICpo18o2InSH4CY65OXBdY/rw7O?=
- =?us-ascii?Q?7DwY1GNxCzoLrIcSlgoPKU5waWoor+rssbnKKbIltSygbllzbpybubR4hqHJ?=
- =?us-ascii?Q?CEHsqyBtlx9nyM/PB7F+QJTKl6nkhsIU4XtkPsndGYUCnhMO0Ez7DZ31KhzG?=
- =?us-ascii?Q?96+fHrs0qjwCXipza1O5rI2Ma1fR3eAHjgp9llrSnRtHbDbByr6DUeMD8RLK?=
- =?us-ascii?Q?ZKVtaTM/25VI4TfVM6EysSD6gZ9jpvdTMAKSyXStluhDQ6fWmh+n1bKiiKnF?=
- =?us-ascii?Q?KWJzi1eXTg2f5Ut9v5BSA/a9fzCXquCvrA9T/i5SdQTSzKK77rg19wB2QiMw?=
- =?us-ascii?Q?xFRMfJZ6I5iDTcbbr3Oa4U4t3sR1Vrf9K1J2BwQlVFPfgWLJf0i7FKDYLT90?=
- =?us-ascii?Q?hJ/JtwnHKA/SAR6ng/10p6b9RAU+AeCp+i7wJynJProzZr/GR1o5U28ESxbj?=
- =?us-ascii?Q?ACCu8/HdgiLYle67h8Lxc8AhNL2swY0l?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2024 12:32:50.2569
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c62ad539-2d5e-43f5-1567-08dcdbcbd691
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044F3.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6893
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6k/Yl5pMjIb7rFw2"
+Content-Disposition: inline
+In-Reply-To: <PH7PR11MB760505A11C7A41DAB0359184E56D2@PH7PR11MB7605.namprd11.prod.outlook.com>
+X-Cookie: Editing is a rewording activity.
 
-Include the 'clocks' and 'clock-names' properties in the AXI Quad-SPI
-bindings. When the AXI4-Lite interface is enabled, the core operates in
-legacy mode, maintaining backward compatibility with version 1.00, and
-uses 's_axi_aclk' and 'ext_spi_clk'. For the AXI interface, it uses
-'s_axi4_aclk' and 'ext_spi_clk'.
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
----
-BRANCH: for-next
----
- .../devicetree/bindings/spi/spi-xilinx.yaml   | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+--6k/Yl5pMjIb7rFw2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-index 4beb3af0416d..9dfec195ecd4 100644
---- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-@@ -12,6 +12,25 @@ maintainers:
- allOf:
-   - $ref: spi-controller.yaml#
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: xlnx,axi-quad-spi-1.00.a
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: s_axi_aclk
-+            - const: ext_spi_clk
-+
-+    else:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: s_axi4_aclk
-+            - const: ext_spi_clk
-+
- properties:
-   compatible:
-     enum:
-@@ -25,6 +44,12 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    maxItems: 2
-+
-   xlnx,num-ss-bits:
-     description: Number of chip selects used.
-     minimum: 1
-@@ -39,6 +64,8 @@ required:
-   - compatible
-   - reg
-   - interrupts
-+  - clocks
-+  - clock-names
- 
- unevaluatedProperties: false
- 
-@@ -49,6 +76,8 @@ examples:
-       interrupt-parent = <&intc>;
-       interrupts = <0 31 1>;
-       reg = <0x41e00000 0x10000>;
-+      clocks = <&clkc 72>, <&clkc 73>;
-+      clock-names = "s_axi4_aclk", "ext_spi_clk";
-       xlnx,num-ss-bits = <0x1>;
-       xlnx,num-transfer-bits = <32>;
-     };
--- 
-2.34.1
+On Sat, Sep 21, 2024 at 01:00:52PM +0000, Winkler, Tomas wrote:
+> > On Thu, Sep 19, 2024 at 09:54:24AM +0000, Winkler, Tomas wrote:
+> > > > On Mon, Sep 16, 2024 at 04:49:17PM +0300, Alexander Usyskin wrote:
 
+> > Just do normal open coded allocations, the reference counting is just
+> > obscure.
+
+> The kref here is for reason so we don't need to hunt the close open, I fr=
+ankly don't understand
+> what is wrong with it,=20
+
+It's locking/refcounting stuff that looks nothing like any other SPI
+controller driver.  Even if it works it's obviously fragile since the
+driver does surprising things which break assumptions that will be made
+by people not looking at this specific driver, and causes people to have
+to spend more effort figuring out what you're doing.  If there is any
+benefit to doing this then open coding it in one specific driver is
+clearly not the right place to do it.
+
+> > > > > +static void intel_dg_spi_remove(struct auxiliary_device *aux_dev=
+) {
+> > > > > +	struct intel_dg_spi *spi =3D dev_get_drvdata(&aux_dev->dev);
+
+> > > > > +	if (!spi)
+> > > > > +		return;
+
+> > > > > +	dev_set_drvdata(&aux_dev->dev, NULL);
+
+> > > > If the above is doing anything there's a problem...
+> > o
+> > > It makes sure the data is set to NULL.
+
+> > Which is needed because...?
+
+> This is a boilerplate part, the content is consequent patches.=20
+
+Which would come back to the issues created by the random splitting of
+the series were it not for the fact that if anything tries to look at
+the driver data of a removed device it's buggy, the reference is gone
+and the device may have been deallocated and it's certainly freed from
+the perspective of this user.  Notice how other drivers don't do this.
+The driver core will also overwrite the driver data of released
+devices...
+
+At a high level a lot of the issues with this series is that both in
+terms of how it's been sent and what it's doing there's a bunch of
+things that look nothing like how we normally handle things.  At best
+this means that problems are being solved at the wrong level, but it's
+hard to see that this is the case.
+
+--6k/Yl5pMjIb7rFw2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbxY9AACgkQJNaLcl1U
+h9BFsAf/ehMj/p+H4ADxV87IKVdY07z0di6q7euT4MTbH/WOB6XOKpN1Oj1FHsSB
+v1VhH+buYMk50UT6BKOTtL3naCweQGxZPGrbmwj8ny1ge1MGVMNyZDKuAIZciO+O
+M7fqs6fzTHSsxO97j7Rtw8FponO3u3rifubo1K2+zNiPfhqdJo2B+L5AcLkFbpyn
+ysP7QDcEC1Nljp5BwYr2iVPynGEHHU8ZI2Ql+F504yOcYLOAJZAm38FJogVct1x9
+z2kTT2na9/or4xAvarDW/4OnALdrV+Zrmq4wvQ5BqimyDz3UciBgIfxzyGxj7CUy
+1c5xIQ9lVIVLndjsAzj6oKcPNTBmqA==
+=OAaN
+-----END PGP SIGNATURE-----
+
+--6k/Yl5pMjIb7rFw2--
 
