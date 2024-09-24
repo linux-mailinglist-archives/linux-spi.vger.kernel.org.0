@@ -1,119 +1,125 @@
-Return-Path: <linux-spi+bounces-4946-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4947-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0543E9846E8
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 15:40:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF169847AC
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 16:29:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABBC11F23557
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 13:40:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBB5BB21DBD
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 14:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D36D145B00;
-	Tue, 24 Sep 2024 13:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3C91AAE20;
+	Tue, 24 Sep 2024 14:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="tHbXMtq9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MlFdBqfL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3241A3AA6;
-	Tue, 24 Sep 2024 13:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.203.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0D81AAE13
+	for <linux-spi@vger.kernel.org>; Tue, 24 Sep 2024 14:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727185224; cv=none; b=h20torfvMtPcWLJaGlv1/gFDR3E0jhKVH6jlNaBiGze4SbPuuEPItQ4M3PzAsFlH44xlTfteWWsHY/2SBOFHlzto1JvzBOJPEIInxSFUETelae2jb4jKlt2l4lCT0V2I5C2K0IXDKFQyoSww4o5f/9qAI3VVbgXKeSkyOT2z7S4=
+	t=1727188184; cv=none; b=K80vx5/qlxPPR5v5+LHr0/jWgZLPr+5nCSjrbbb4QKLx43r7pHBWSBmrGIvb7k8zg1WzP5Mk4P7C3wUFDAYFh3ngd0Wj/C8LD3BzNZTbROF50eU8gIiREHSI76WQivbnZOMXYXEzdqlHljZY5Z8lhT9spguv8MQFX0vtDZE79zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727185224; c=relaxed/simple;
-	bh=ut3JW1nD5GFSZqnAX5kOPVq6yHEIvRG6A59oqmHyGFc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r41Dv5+zKeAkwuC9S33qfPett1sr2Ps1XVGi8lfutKKziXoyhqi4muBtI5P2bF3eEE7faqe/epgxFGnp7UHy5o8F7fDdMSuDt4wKhEc6N6SZCah8nsYB+0gbY+CjLwAJevJhbDD+exraYkP4ryskEJHvuLVj9JzK+EMvAN3ORzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.com; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=tHbXMtq9; arc=none smtp.client-ip=188.40.203.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codethink.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codethink.co.uk; s=imap4-20230908; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=x8vVJjhSJf8ntKWMHQeF38IG4mIwV3gbUUfBMyXl/pI=; b=tHbXMtq9ZXYeL0mc3IEogvuEFI
-	M4oX9PTvyYhYU6vehYpoAMG5gCefE3LP/hUVcY66ac2gX7dSvmpO6UO0/iaK6ZZwCBYWNDz+DHzKp
-	poFEPArAYPnDCosgO86Urq0EZkNq1RphsIoZSh48flJJXNW4GARYUareKZxL5HGQZwa3/ymeD1QIK
-	GvAXpX4xJgw7w5YMLi2F/0o0WRvKyGp97Pvsv25TTmx7vqpvtWJLkor7lXTLC/kPDVLMV8Yu9wpxv
-	FBiZuTJiaOg2fQX4VioRQwdPfvtrliaLOBctDpCHu2OJevgsrqIiZSV5eF3/G3tCJUPgbrZWWKVG4
-	7s01OWJA==;
-Received: from [63.135.74.212] (helo=rainbowdash)
-	by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-	id 1st5ly-002wbh-PE; Tue, 24 Sep 2024 14:40:11 +0100
-Received: from ben by rainbowdash with local (Exim 4.98)
-	(envelope-from <ben@rainbowdash>)
-	id 1st5ly-00000000UFV-3uFk;
-	Tue, 24 Sep 2024 14:40:10 +0100
-From: Ben Dooks <ben.dooks@codethink.co.uk>
-To: linux-spi@vger.kernel.org
-Cc: linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [PATCH 2/2] spi: s3c64xx: update flush_fifo timeout code
-Date: Tue, 24 Sep 2024 14:40:09 +0100
-Message-Id: <20240924134009.116247-3-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.37.2.352.g3c44437643
-In-Reply-To: <20240924134009.116247-1-ben.dooks@codethink.co.uk>
-References: <20240924134009.116247-1-ben.dooks@codethink.co.uk>
+	s=arc-20240116; t=1727188184; c=relaxed/simple;
+	bh=FngZq51ki6qCptx3vUMPj1acgIGtnSKHuHPNES28BJw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gPOa3Mhy+Q0KvjwXIAPMMLkej9dW3U1+DAgQF8FdPP821RKzPK0IhI69YyQJ7c19FNIU4Vvro5DMY/iKucCnmv1UaWlm3InpoGoKA8wU2X+R299J4WLPNvgwxchNFZAAYRc/mfTcE5Tag7ld2XXZUFZpfIiUnuuLANT2Xo8LodY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MlFdBqfL; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53655b9bbcdso6626760e87.2
+        for <linux-spi@vger.kernel.org>; Tue, 24 Sep 2024 07:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727188181; x=1727792981; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f4cZlZAMjE0Ne1cxdgDT0MlDCgX/48/03XwVDrLKtwc=;
+        b=MlFdBqfLRXeILdMKeUFGE/O8MaqhrNmOjmgUwlL5luUrOzOst1O/oQ3ZMu65DgcMt2
+         2D1+nemtS0xsLtmzu/yRmFWOApL09KggFvsK1ZS8mSpuvHioswjcbP9516pccK8fpzm9
+         39JuTE9l4XatVybiasatkWeftvzaS2QjwKruRri2aBjNPAywkCwdnbEKhfyXt3zshwFY
+         F9dFwTDj4uFthNueThbKoHtyb6z6sPyK5SHG42PZMSDDG/BLj3frTe++Grk6vlw3EuL8
+         FCKlITs1tateGuR4/nb+xx25A0Da5zl1Wdnow90wHLs8kBmRPKo0fF1HWAiPq6QrYC+k
+         vMFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727188181; x=1727792981;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f4cZlZAMjE0Ne1cxdgDT0MlDCgX/48/03XwVDrLKtwc=;
+        b=T9iJdbE45Nu7H1xue0kBaeKaoUwVzGvxefaVW0jRVVKfH7sRyRQBDz/cblX27Xw9oh
+         LVF/dlVWaS/rRvkjc4dQSfLU/uZbzDURnttQugxzaITxE3sAvFKJQctlA2TGs/OAb8aY
+         h8Etm59+HFE+7NVLXbLkEHUPCpgbSVYT/xtr4UJcUya18yb2+F8U+k+1mmvrZJFioIon
+         dZLfdsBrc1vLiUUd+ST9DN526TqREfeyffW4q1sfl7aOWPGjvqjxZpsvvrq2xVaN2VrR
+         UajDF38om3VxbFayKuV5WWWlsS1jj+HVjpGoV5euJBJFg9b/JeRr2byaS/ThfOIptgq6
+         /Y/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWE/wbrrC3CNg24pAwRf7P+G0QAbqpMr1NPh4fH+LCMGn8OrJqUMEUEhQ/sdMZK61x51NCOnzNcTOs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywn+s/uAyhZ4/AhcURXv6eww3PLzBiHFxqrHvOM9KC+15NBHr3b
+	KPRzXrbydjVhh9GfxaPP73Y7PFTP2xIF7onbGwHlmOqTfEu5zsepRiw1CWZp63Xwu9pmxQw/imv
+	h
+X-Google-Smtp-Source: AGHT+IHqqbNSNbNJsHX8o3utWIHB/GoQ4Xc0CjtuLGIi0iI5bbvuRybVAXmwL11ncdRlK449c9p3oA==
+X-Received: by 2002:ac2:4e09:0:b0:532:fdba:e7bc with SMTP id 2adb3069b0e04-536ad3f168fmr7657143e87.57.1727188180585;
+        Tue, 24 Sep 2024 07:29:40 -0700 (PDT)
+Received: from [192.168.0.157] ([79.115.63.20])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93930cae67sm89840866b.121.2024.09.24.07.29.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 07:29:39 -0700 (PDT)
+Message-ID: <a87a159e-eff1-45c3-bf26-115d4ca5a9be@linaro.org>
+Date: Tue, 24 Sep 2024 15:29:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: srv_ts003@codethink.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 5/6] spi: mxic: Add support for swapping byte
+To: Mark Brown <broonie@kernel.org>, AlvinZhou <alvinzhou.tw@gmail.com>
+Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, pratyush@kernel.org, mwalle@kernel.org,
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+ chengminglin@mxic.com.tw, leoyu@mxic.com.tw,
+ AlvinZhou <alvinzhou@mxic.com.tw>, JaimeLiao <jaimeliao@mxic.com.tw>
+References: <20240718034614.484018-1-alvinzhou.tw@gmail.com>
+ <20240718034614.484018-6-alvinzhou.tw@gmail.com>
+ <ZvKktPc0luV9hItN@finisterre.sirena.org.uk>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <ZvKktPc0luV9hItN@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The code that checks for loops in the s3c6xx_flush_fifo() checks
-for loops being non-zero as a timeout, however the code /could/
-finish with loops being zero and the fifo being flushed...
+Hi, Mark,
 
-Also, it would be useful to know what is left in the fifo for this
-error case, so update the checks to see what is left, and then also
-print the number of entries.
+On 9/24/24 12:38 PM, Mark Brown wrote:
+> On Thu, Jul 18, 2024 at 11:46:13AM +0800, AlvinZhou wrote:
+>> From: AlvinZhou <alvinzhou@mxic.com.tw>
+>>
+>> Some SPI-NOR flash swap the bytes on a 16-bit boundary when
+>> configured in Octal DTR mode. It means data format D0 D1 D2 D3
+>> would be swapped to D1 D0 D3 D2. So that whether controller
+>> support swapping bytes should be checked before enable Octal
+>> DTR mode. Add swap byte support on a 16-bit boundary when
+>> configured in Octal DTR mode for Macronix xSPI host controller
+>> dirver.
+> 
+> driver
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
----
- drivers/spi/spi-s3c64xx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I can amend that.
 
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 6ab416a33966..7b244e1fd58a 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -247,8 +247,8 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
- 		val = readl(regs + S3C64XX_SPI_STATUS);
- 	} while (TX_FIFO_LVL(val, sdd) && --loops);
- 
--	if (loops == 0)
--		dev_warn(&sdd->pdev->dev, "Timed out flushing TX FIFO\n");
-+	if (TX_FIFO_LVL(val, sdd))
-+		dev_warn(&sdd->pdev->dev, "Timed out flushing TX FIFO (%d left)\n", TX_FIFO_LVL(val, sdd));
- 
- 	/* Flush RxFIFO*/
- 	loops = msecs_to_loops(1);
-@@ -260,8 +260,8 @@ static void s3c64xx_flush_fifo(struct s3c64xx_spi_driver_data *sdd)
- 			break;
- 	} while (--loops);
- 
--	if (loops == 0)
--		dev_warn(&sdd->pdev->dev, "Timed out flushing RX FIFO\n");
-+	if (RX_FIFO_LVL(val, sdd))
-+		dev_warn(&sdd->pdev->dev, "Timed out flushing RX FIFO (%d left)\n", RX_FIFO_LVL(val, sdd));
- 
- 	val = readl(regs + S3C64XX_SPI_CH_CFG);
- 	val &= ~S3C64XX_SPI_CH_SW_RST;
--- 
-2.37.2.352.g3c44437643
+> 
+> Acked-by: Mark Brown <broonie@kernel.org>
 
+I'm fine with the SPI bits as well. Shall I take the SPI/SPIMEM patches
+through mtd and provide you an immutable tag? I can do that after -rc1
+is out.
+
+Or you can take them directly through spi/, but I'll need an immutable tag.
+
+Thanks,
+ta
 
