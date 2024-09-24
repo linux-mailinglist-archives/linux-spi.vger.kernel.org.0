@@ -1,179 +1,131 @@
-Return-Path: <linux-spi+bounces-4951-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4952-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA0019849CA
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 18:37:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9BF984B5A
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 20:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F58E286A23
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 16:36:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDE481F2452B
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 18:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6572B1AB6F6;
-	Tue, 24 Sep 2024 16:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47BA91AB6F3;
+	Tue, 24 Sep 2024 18:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZKeNpem"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="pBEI3FVI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAF41AAE0D;
-	Tue, 24 Sep 2024 16:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1BF1B85F5;
+	Tue, 24 Sep 2024 18:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727195812; cv=none; b=PXf3vJFWpeRFgc+se91E8WMqrAwrBTxyTrzGfwD3dUuUn3UVvOMC0h4zPgFbJ2/8M0OnJBqPfW+9ayFQaP3lIKjGvzA4z78tUakep55PZCQumvV9EswMtDcLAMOFwcMJlhf77GGRLZzNBQ3gZXpXX1AtLrk+zG5r0d/RVlMHn/0=
+	t=1727204203; cv=none; b=S6+AW7xSLhEpiXRcntGCCwl0EzpvVXH8vncHwb92j7K53ku5oBv6Hjo7aYhThoBEvk8467WbKigDdrbtL5NG6FB2NDurHIqRCkPU2R7mqCBAQScKgrE9I1Yr66sqNu8YCWPcNwW1SmhE4DASn0dO7NdJG0jQelTv/PoB+8v0aIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727195812; c=relaxed/simple;
-	bh=5VvhCMZaeNsBAmWJBTCSPhE8m0YS7fNLFTIYRz8hII0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vCIjeVvkNMc9mW3i19gcQHSpmPRSqBAwzAfUHr83+YOiVzDxsHMA3HnyFu/mcaSdFj1JpQ9a82zG8XRB1Qb/oqC7GtbSxr+q3PugjeC0FwF/s45e7Sv4u1Q6XW+QHGMyG+rlDJRw05Al1TYbbgLhhkoYLGnHVfS2wBRu00ko2y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZKeNpem; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D7BC4CEC4;
-	Tue, 24 Sep 2024 16:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727195811;
-	bh=5VvhCMZaeNsBAmWJBTCSPhE8m0YS7fNLFTIYRz8hII0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BZKeNpemH38X1KDslf8fCc73trcmd1s7gfe4cWu9EtLSOMIAEvSFCtcn8mmMAvhUj
-	 g60Bl22v05/MRaNZOJnmM4lqbAk4FtU4t5Odeg1DsxjqUIVNXFtiudVoQr61635FkJ
-	 Fq/w+hE6/bhCo9vPnh1+aKLEOWOuvxNhFmcrPaGJQOVYa2bE/CjXvt/eVBJTggkW9e
-	 1FnPuWsUhiOE1rmdSCvu0alkUhBSks++HAOarNQXIlMbADtm4+aRWawhZ9EU6bkHcl
-	 Y/9YZ7z44o01GY6jhrn7QgjNo0cmScY7qnhNNA+c4O/VkYHbxC58noQF1Fhr3u2axb
-	 BfEUkdodOxFwA==
-Date: Tue, 24 Sep 2024 17:36:46 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, michal.simek@amd.com,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	git@amd.com, amitrkcian2002@gmail.com
-Subject: Re: [PATCH] dt-bindings: spi: xilinx: Add clocks & clock-names
- properties
-Message-ID: <20240924-impaired-starving-eef91b339f67@spud>
-References: <20240923123242.2101562-1-amit.kumar-mahapatra@amd.com>
+	s=arc-20240116; t=1727204203; c=relaxed/simple;
+	bh=IE/J+hvgo3ewlVUG0R49ywG4iE/URV1ZJt7ABD6Zxcw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=utqCiSG4AhKEN00/wAjiZyfNzuyxbcfkb+5BMqRUG7iohnaEj32oeIl8OK1L/yD+tduiDH5fWjW2FVkiPZ8qB7VC97cpbj00jBd/DqyefPOBXld7u7NqF+qQleCTWT/IqfU6X19BprPuTXnYsFDpcYiFNA/xmrQBLBgqbAdfzg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=pBEI3FVI; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1727204171; x=1727808971; i=markus.elfring@web.de;
+	bh=xtgGbVbvQUG8PMEUJblOJ8LFdHNg6Vwo3Ynbfh+i3qM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=pBEI3FVIc1IfThbHLTs5fZWx+EyfCYbnXCIwbI9TYt2HvYap1b+FDPajviduVN9+
+	 6f7kgepm0b7olCGuxGYWuXRUc1hr4yGUhxKx8WwOiZl0W1qC/dGq48HJ56Nq56HF9
+	 mZcM5CDCZnN6I4p7tFU74N6YWtkfJcRMJ1mnxUrJAhWmttFW7h18DDRN17CB/svi9
+	 jRifesdsIwyvCzLPP0Rn8oGvjZqp4F5fx13CaxmlRUrkCky1tXpw2+tpUJSnfgpjt
+	 mG4YfnwYWwNVzFH7XOCApgOAMJVEj4+DZYDnd/WxhuRdEBB2DsMPlhmlz5kRyvgnS
+	 VSWxFLU7IEdOpLrBiQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MMGuC-1scC3J0dRW-00Jte0; Tue, 24
+ Sep 2024 20:56:11 +0200
+Message-ID: <9e736d33-b07f-40a0-8fb6-8c3212593b77@web.de>
+Date: Tue, 24 Sep 2024 20:56:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TW6iJUl9SjJzFTPf"
-Content-Disposition: inline
-In-Reply-To: <20240923123242.2101562-1-amit.kumar-mahapatra@amd.com>
-
-
---TW6iJUl9SjJzFTPf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+To: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-spi@vger.kernel.org,
+ Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] spi: slave-mt27xx: Call clk_disable_unprepare() only once in
+ mtk_spi_slave_probe()
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:lAmuIvmJ2DJWOgYJ5Dc3Jikut72syDFBPNFRoqxnjuz6Ujva0lB
+ qiZZ+p9Wuxrm2ek3g7UBLIulwG6eCJEvYXPPIPxqBDMqtEXbDY94QGDrxQn5c5fjQoxxiGw
+ Lwp3TOi9wLEY3G+3wgwtUeguwD6xYEG2ZBC+UXUbdvG3Srwb83eC9k+/gP71gaZud1wtsX/
+ Hret41lADO+dIUB9dihyw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:P16q0sytqk8=;H2wCb/e128pNNd7DaC2wcQLJfUD
+ ldEzgMl/8BflG0oXh31sV/bNA9hFclbt87UQtMPh52YFdLDaBekekaGAXks9PhdDaxCl5Flpj
+ j1m+zimbcWy0Psdy7bKiK1p7ijljub/bkBaE6TKwMnhvt88rSVex80oCiBuqzdGE7KxK+G5/E
+ 1sY201r6hljICeXuqGB+PuhWTxr7kX9+db+i275D7364JnV5iNUoDTFdshgCaSOake7rJNw6q
+ Pd0S2JnVH/lk5BT5tCbJabKbOuBhIF5oOstzemrJQ6U1OPIkxStDzXCoIOr6dNz0KhnmKzXrn
+ /cvWgeGg41nDFIv/PlpNsQXf7XphXgqNZbT1v1EMI+7IO74FbNFZmGae2/APxzVIxtMGlIEcd
+ aFpL3lEqekkHpNVphjxjQnFYM2diBgb4vPxVkVQT2NvnM581eX4A9Szm/EtjXKh+9IjAwMMCN
+ 9ZHgtw2yT10XVILFSKdMnv9PoB0ESpp3qgaESI/Nlq0L8FcsYLuvYwOZ5d5m/d4qYY+sn8ZEh
+ /qdobvZZ7sirsFSoGqCW4t95Tu7bot7r02j65mKQlcrM5LhdlEN+/pu4+//5oQRj2Gpkc4dwm
+ 0xnw+oRGhFh9/P9UKCoDv8CvzO/RPTkBo53dZOtRKqZ7vwevZ7nBPwjqpFUshTbbxDVrrWU4j
+ HvQyUkG/IvjHNmPzj1EugMbJ3ZZglGk7omraGq9cWo+6IOV6t2aJzMC53s/UjkXO1+fv8fC1R
+ fEMGxCu0dOHyGqcVpWZFYLqm68SAgkCwNlfxzEdMjpu2kmlpkfXFHcc06JY8V9mmYQIh4yoh6
+ XQjnvY8mf2VL9iJiS0PgddWg==
 
-On Mon, Sep 23, 2024 at 06:02:42PM +0530, Amit Kumar Mahapatra wrote:
-> Include the 'clocks' and 'clock-names' properties in the AXI Quad-SPI
-> bindings. When the AXI4-Lite interface is enabled, the core operates in
-> legacy mode, maintaining backward compatibility with version 1.00, and
-> uses 's_axi_aclk' and 'ext_spi_clk'. For the AXI interface, it uses
-> 's_axi4_aclk' and 'ext_spi_clk'.
->=20
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> BRANCH: for-next
-> ---
->  .../devicetree/bindings/spi/spi-xilinx.yaml   | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Docu=
-mentation/devicetree/bindings/spi/spi-xilinx.yaml
-> index 4beb3af0416d..9dfec195ecd4 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
-> @@ -12,6 +12,25 @@ maintainers:
->  allOf:
->    - $ref: spi-controller.yaml#
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Tue, 24 Sep 2024 20:47:29 +0200
 
-Please move the allOf block down to the end of the binding, after the
-property definitions.
+A clk_disable_unprepare(mdata->spi_clk) call was immediately used
+after a return value check for a devm_spi_register_controller() call
+in this function implementation.
+Thus call such a function only once instead directly before the check.
 
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: xlnx,axi-quad-spi-1.00.a
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: s_axi_aclk
-> +            - const: ext_spi_clk
+This issue was transformed by using the Coccinelle software.
 
-These are all clocks, there should be no need to have "clk" in the
-names.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/spi/spi-slave-mt27xx.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> +
-> +    else:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: s_axi4_aclk
-> +            - const: ext_spi_clk
-> +
->  properties:
->    compatible:
->      enum:
-> @@ -25,6 +44,12 @@ properties:
->    interrupts:
->      maxItems: 1
-> =20
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    maxItems: 2
-> +
->    xlnx,num-ss-bits:
->      description: Number of chip selects used.
->      minimum: 1
-> @@ -39,6 +64,8 @@ required:
->    - compatible
->    - reg
->    - interrupts
-> +  - clocks
-> +  - clock-names
+diff --git a/drivers/spi/spi-slave-mt27xx.c b/drivers/spi/spi-slave-mt27xx=
+.c
+index 4a91b7bae3c6..40e1e7de0742 100644
+=2D-- a/drivers/spi/spi-slave-mt27xx.c
++++ b/drivers/spi/spi-slave-mt27xx.c
+@@ -455,15 +455,13 @@ static int mtk_spi_slave_probe(struct platform_devic=
+e *pdev)
+ 	pm_runtime_enable(&pdev->dev);
 
-New required properties are an ABI break, where is the driver patch
-that makes use of these clocks?
+ 	ret =3D devm_spi_register_controller(&pdev->dev, ctlr);
++	clk_disable_unprepare(mdata->spi_clk);
+ 	if (ret) {
+ 		dev_err(&pdev->dev,
+ 			"failed to register slave controller(%d)\n", ret);
+-		clk_disable_unprepare(mdata->spi_clk);
+ 		goto err_disable_runtime_pm;
+ 	}
 
-Cheers,
-Conor.
+-	clk_disable_unprepare(mdata->spi_clk);
+-
+ 	return 0;
 
-> =20
->  unevaluatedProperties: false
-> =20
-> @@ -49,6 +76,8 @@ examples:
->        interrupt-parent =3D <&intc>;
->        interrupts =3D <0 31 1>;
->        reg =3D <0x41e00000 0x10000>;
-> +      clocks =3D <&clkc 72>, <&clkc 73>;
-> +      clock-names =3D "s_axi4_aclk", "ext_spi_clk";
->        xlnx,num-ss-bits =3D <0x1>;
->        xlnx,num-transfer-bits =3D <32>;
->      };
-> --=20
-> 2.34.1
->=20
+ err_disable_runtime_pm:
+=2D-
+2.46.1
 
---TW6iJUl9SjJzFTPf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvLqngAKCRB4tDGHoIJi
-0jgQAP4qT9JElUko9VSDsRLLQWSll1SEQ7ZXTfbTFIke2mfMLQEAi65j4G/1poMs
-wXPxx+hlcO36bMcB6Ac4Pus+2JQInwY=
-=mVJ5
------END PGP SIGNATURE-----
-
---TW6iJUl9SjJzFTPf--
 
