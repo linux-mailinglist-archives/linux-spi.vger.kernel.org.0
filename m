@@ -1,121 +1,119 @@
-Return-Path: <linux-spi+bounces-4953-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4954-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E22A6984D43
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Sep 2024 00:03:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A72CD9852DD
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Sep 2024 08:22:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906321F24B09
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Sep 2024 22:03:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 508B91F2273B
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Sep 2024 06:22:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B413146A87;
-	Tue, 24 Sep 2024 22:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1AD154C0C;
+	Wed, 25 Sep 2024 06:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wzx1FiqG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="reD/XONV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34EF80043;
-	Tue, 24 Sep 2024 22:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3EFC14E2CD
+	for <linux-spi@vger.kernel.org>; Wed, 25 Sep 2024 06:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727215366; cv=none; b=cYwLgtdOrpuMsyPh5fZWyTASx2vzAf+MAacQ5aEHFP6h8K6uE39CSX3g28SNe1JcxzMUdm9UyzPRjsG7ImCHXmoP2fYtllJyclluERE+S5UObGYS+988USd+Fk11Qb+pfHR0Jhkxm+t52mJkLjw9g1u19BYREDjCvMnHIQvdKpY=
+	t=1727245363; cv=none; b=KEx7v0RYM/SL+PiwJT+jDOehZID5nxR9xiGvbz5iR9Cmrjm2ICa7LgM4beCUjRuQoibJJQ8yRKswte1cRoDKzS2aQxU4zhVoAMpaHp1RXWpjSNIKA6C/KU0GQSqbjZ1HU1UcO64sq5oMaHetUqwG7hK4NcPUjfXTbysTeEGLFDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727215366; c=relaxed/simple;
-	bh=OKPMiMo13DauZ+HyEOe8PQ959Vzxx6SWDp+ZboefMdE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STH2m7aSsN2SK4WVMBLUIB1TRQOTvAqbbLOqo5UOC4SpfFVNE5+pkma8CEuH34uLFgWlDaWAIBwHT3CS2nl3yBInzyaxQBzgbdtKOyuos6doTb3IsPU6C6IJTA/U+HqQEF5FoSS5A9xe6ooRsqNmw2xlL89jXuUfbhE0AkaPhjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wzx1FiqG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41970C4CEC4;
-	Tue, 24 Sep 2024 22:02:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727215366;
-	bh=OKPMiMo13DauZ+HyEOe8PQ959Vzxx6SWDp+ZboefMdE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wzx1FiqGp8Xys47L5CuJRp7ARn8JZqWwtzFUVG/ioCHOUCVJVwx4bJV9dDvv6cZTP
-	 BPtbs2XNuTqCDLMgoxR0/zHfLYDJrD1JsApTSgyLpW5/P4c1uhTbUA/VewMmIti6GT
-	 TBuAmWCkmuMjt2Q8N4rEySqKdbPFBmPDK8F9nZVSFB/8sQj67ZGrvTufLHlfB+/wZv
-	 sRWvhlyCGr5XmUFXVBG7hIQFMMJ2kll1vzhWUTAZWmzbXLF02xDiAz752Yml3tjdf7
-	 gIIcmiFGCrBugKAsxKUgL6ABbbjeX5nURqEooWFd2D6v36UG5UGe1FyaZC+FIt5hc0
-	 MEI9i3UY1zeYg==
-Date: Tue, 24 Sep 2024 17:02:45 -0500
-From: Rob Herring <robh@kernel.org>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: broonie@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	michal.simek@amd.com, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, git@amd.com, amitrkcian2002@gmail.com
-Subject: Re: [PATCH] dt-bindings: spi: zynqmp-qspi: Include two 'reg'
- properties only for the Zynq UltraScale QSPI
-Message-ID: <20240924220245.GA367088-robh@kernel.org>
-References: <20240923044543.2222-1-amit.kumar-mahapatra@amd.com>
+	s=arc-20240116; t=1727245363; c=relaxed/simple;
+	bh=IVhzGzAjVHafS0MM02RpmBp4pWCImbqC4zkBAGpgAPc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZPYJxtK7qXDvwwcibhmn/tYK0njq1h69iyD86paWxZx6fW9cmktk3K2E3pHGKjHht4fKzc5yWD40FHxD7eR6kTKyIP9/XSWyKsb3VHT5UOuEwMXiCth8vRQyViXBPsPuMk/gpjkFMF+tzSchmq+w5hmghy+/OkAttkb+iUXQZo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=reD/XONV; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-374c326c638so3529294f8f.2
+        for <linux-spi@vger.kernel.org>; Tue, 24 Sep 2024 23:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727245360; x=1727850160; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o/oS2ugpeUSW+6nwIvuuz9Sn1patnKM1K1PU0Uod2NY=;
+        b=reD/XONVK9Hj3Mi+mPdHnK4uB8BdM0NsM9BNoJEjTC3nlXSc5UgLynP6qXYK0e0edy
+         zA9u5AS7UbLTT5ViZ6/UrnsCvgh14+EehjeeUmvXznFmQY3Adcc7eLAM8qOdvuqzDPQz
+         1OO0aKcv020DbUDCZ2qHD4HeqH18FBRTxu+QIO02Zy1q5xu1mu/JonKRX8VKIo7CP51z
+         n4N9c0zcex7N5EUkxCYmwjhBMWqgZoWGOSOVDqy0v7GYuXSJH7gHcr8dhBPcnrk3qxrX
+         UxjhYucCjjDhQUleOJIdQMe58c9/PzBKA0ZBSuDQ0uNyoOH0jXSwmhJnOLyIvwA1gyhe
+         wp/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727245360; x=1727850160;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/oS2ugpeUSW+6nwIvuuz9Sn1patnKM1K1PU0Uod2NY=;
+        b=EDkftVe1uWABLGLNO1js6+pF4GKdjK/UIW827jCwviK6HDiikEoouqu6St8uLj2/s8
+         g7j+r+yf++rEiqyzoBxaD5VSbT4hniCRiFdUVec7APacn3rqCWxHqAdAzO/Qw2DHTd84
+         ZZARzDE17BA10cVwpteRHfllP3ALNia3YY+xt855l5a0JPnC51ley41z89iBm6n5wci/
+         0MmqKjSDgTSDUPcryeZX3O/m9QmBk4oeG/iJGA1xECHjppwoi6YUn5DfMex73AcBNK37
+         oiStz63MWBwcKTjRb1IUIMPtOSKQ+Fj8206SdGBC3vGyFRW3zjNuKPyKJwkacFWu+/9X
+         0mkg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4fT92p6FpvNEPDnjuP9gESoXPVh6Hw+Iy74RkNTW3pbXGvu5rjZXJYUG8aomHwH1KFQjGJwWSe6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCSw+Eo5NYxBU6bk+2qpuq7//gsc8vQS1kulDX+pRShiZp1Y48
+	KtO/sbuwEqYlQxxcMQS/f+BP4Ta4MhkG1gn5qUtels3+uMEeIul4LiGc6vVfMWk=
+X-Google-Smtp-Source: AGHT+IG3dYAVXO0Ep2i7vx0JuRGZS2wbqrxhkLOCav4gzYfGhkJtR3KQHMBdbfF5LZr1l8Ir4MTfmw==
+X-Received: by 2002:a05:6000:4388:b0:37c:c870:b454 with SMTP id ffacd0b85a97d-37cc870bc64mr149201f8f.49.1727245359901;
+        Tue, 24 Sep 2024 23:22:39 -0700 (PDT)
+Received: from [10.11.12.107] ([79.115.63.53])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cbc2d25absm3108089f8f.65.2024.09.24.23.22.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 23:22:39 -0700 (PDT)
+Message-ID: <b4dae4ba-c016-4384-8a20-5184cf113902@linaro.org>
+Date: Wed, 25 Sep 2024 07:22:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240923044543.2222-1-amit.kumar-mahapatra@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 5/6] spi: mxic: Add support for swapping byte
+To: Mark Brown <broonie@kernel.org>
+Cc: AlvinZhou <alvinzhou.tw@gmail.com>, linux-mtd@lists.infradead.org,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ pratyush@kernel.org, mwalle@kernel.org, miquel.raynal@bootlin.com,
+ richard@nod.at, vigneshr@ti.com, chengminglin@mxic.com.tw,
+ leoyu@mxic.com.tw, AlvinZhou <alvinzhou@mxic.com.tw>,
+ JaimeLiao <jaimeliao@mxic.com.tw>
+References: <20240718034614.484018-1-alvinzhou.tw@gmail.com>
+ <20240718034614.484018-6-alvinzhou.tw@gmail.com>
+ <ZvKktPc0luV9hItN@finisterre.sirena.org.uk>
+ <a87a159e-eff1-45c3-bf26-115d4ca5a9be@linaro.org>
+ <ZvLSLt95Hrd7JYj3@finisterre.sirena.org.uk>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <ZvLSLt95Hrd7JYj3@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 23, 2024 at 10:15:43AM +0530, Amit Kumar Mahapatra wrote:
-> Linear mode is only supported by the Zynq UltraScale QSPI controller,
-> so update the bindings to include two 'reg' properties only for the
-> Zynq UltraScale QSPI controller.
+
+
+On 9/24/24 3:52 PM, Mark Brown wrote:
+> On Tue, Sep 24, 2024 at 03:29:37PM +0100, Tudor Ambarus wrote:
+>> On 9/24/24 12:38 PM, Mark Brown wrote:
 > 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> BRANCH: for-next
-> ---
->  .../bindings/spi/spi-zynqmp-qspi.yaml          | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
+>>> Acked-by: Mark Brown <broonie@kernel.org>
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> index e5199b109dad..2f1fca137cd3 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> @@ -12,15 +12,27 @@ maintainers:
->  allOf:
->    - $ref: spi-controller.yaml#
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: xlnx,zynqmp-qspi-1.0
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 2
-
-Change this to 'minItems: 2'.
-
-> +
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +
->  properties:
->    compatible:
->      enum:
->        - xlnx,versal-qspi-1.0
->        - xlnx,zynqmp-qspi-1.0
->  
-> -  reg:
-> -    maxItems: 2
-
-Keep this and add 'minItems: 1'
-
-> -
->    interrupts:
->      maxItems: 1
->  
-> -- 
-> 2.34.1
+>> I'm fine with the SPI bits as well. Shall I take the SPI/SPIMEM patches
+>> through mtd and provide you an immutable tag? I can do that after -rc1
+>> is out.
 > 
+>> Or you can take them directly through spi/, but I'll need an immutable tag.
+> 
+> If you apply and send me a pull request with the tag that should be
+> good.
+
+okay, will do, after -rc1 is out.
+
+Cheers,
+ta
 
