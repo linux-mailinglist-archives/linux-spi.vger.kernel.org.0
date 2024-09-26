@@ -1,49 +1,49 @@
-Return-Path: <linux-spi+bounces-4983-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4984-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3389E986F00
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93150986F01
 	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 10:38:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63EAD1C237F7
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C42471C2265C
 	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 08:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B8A01A4E96;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9851A4F0C;
 	Thu, 26 Sep 2024 08:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="pDAK9tDt"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="FEmCfeSC"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4B8190686;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B751C18C34C;
 	Thu, 26 Sep 2024 08:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727339909; cv=none; b=S20JVl7wGLhj+MqjElLkAtyEeX9ZRFbM5sKSCKAydJF92yZsG07qEv/ed6CotwPLHmrV6ee3SJGztAtMCsR0q2NYOL12VoPvPTyDdZ43I7VTTABoDTzdMdgchKjeHk/RLv3Ks90vGsL24wkd9LNUmOCkpGrSlartQTp0/9BvfI8=
+	t=1727339909; cv=none; b=FHrr4ZE/jzY7GMqJpa9clRowRgXOULSRWI3liI1t3wHSSiGQY90Qzwx4THNQ7sezCH7l4NWUOFVFBgfpOW2HZB403Y2Nvan9I/SYljz/OTI09w2+Hd/sxiNWjtQPDwd84XzRHHUKF67VLF+G319QJHpCs8RgrpuR/jCQiJYiw4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727339909; c=relaxed/simple;
-	bh=/5JIb92U/8Q+ik42QkQF1T4L7j5WP71i/Q0yxVSuxPQ=;
+	bh=INOYgtdHb4P3ihx77pkVNKM3sJqYlxQ8pkazFJrL5/w=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ilFlE2cFPF3AKBilpyMVbNVZXFErFd1sIygHwZINgdyWoP94DUnyuz2QBCcFousl2CyNPWaTrpIhQvnIR4klpc3NkgCZaZRrcl9YXUqFIPNEBd3x6BzKjpYCrA6W8D/CKbNOOw9cML7BZYRJYaK6jmO2lMCihv6Jd4Jkn0q29TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=pDAK9tDt; arc=none smtp.client-ip=116.203.91.91
+	 MIME-Version; b=f0y4QjcG29/6vOrWQcWQI90JcXerETUbDBXAVF6iC1IZ+SxLFOIMnZhQy1QPmDj+PyLPqaPXRW25nBF3ip/XZHBzr+shsTRepBR1pPXXYHIyZ8BYonH4TDtksRD0QbTXiwUcjcxC06SW2MIJ/tRVXfypuxpINrnR6vezX/z39z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=FEmCfeSC; arc=none smtp.client-ip=116.203.91.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 From: Dragan Simic <dsimic@manjaro.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1727339905;
+	t=1727339906;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=L5klnkF4wtonDE46Lon77oxl2lTvUoZwDONtF/BOYTw=;
-	b=pDAK9tDtR9WtDecPc3W/VNrNtqCwWWrkrDJ12x6+2fVENUODvgXXjkuvzJAuqmsmd/LME6
-	kKgoecpybZSlqmXe+W5WrS5blD9cDzqSQV1IDtK2QCg21BeUPhc6HC8kPObjYe6J0XkShx
-	MY8Tqw0JApIXXzEkhT/BOcklgveK3qpwn1h47/6+g4lc32ILfeGd19q3UjZedsQh4DicQU
-	WOoU18Jhy1tsfDqrhlARCimM08GcwVNwzCpHh9k4lQUWVCNEtv7uIvb4Cw7IF0FkRIy7IB
-	BUhPFX1SWX7/XSkG1TrvwcyQt4ZoaW0UA3R55Fv1ogEkzknvy2384+7P0ZYzuQ==
+	bh=Vl6o00F5vcnezSkxhr2a1kCj0/F15fsYEAmFewTFJWk=;
+	b=FEmCfeSCYQKa24aRCe9Wn80zHbf3lmrairBcJwyLgmwEtoowPk6yvSOWg5N+V/dV3UlRo6
+	XZOLV+aBXBQxC8/LTdqt2Zwcj5M2vn5rgobfw4C2pKkwvkB4qP1m7lS4OzZ4slIemM0pIy
+	47jw1DHLwDKUbsqsV+j4L/JiHgWmBKmxQvD2pYvbdNhvZ9Yhs8iiK0GUHNtlx2QZJKWldY
+	oKlpYWMDYuY3pp2Z9q0//56aVM7KEo1MA5yMqD0k79OHBVJwxAjQkJc8cKgaEZwEybykpU
+	Pd8L6quiKpduC3LyeGYv8FEmGGTG7i0fvJeNaLSEivzqZosXZAyRPN2ypOSOqw==
 To: linux-spi@vger.kernel.org,
 	linux-rockchip@lists.infradead.org
 Cc: broonie@kernel.org,
@@ -51,9 +51,9 @@ Cc: broonie@kernel.org,
 	oss@helene.moe,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/5] spi: rockchip: Perform trivial code cleanups
-Date: Thu, 26 Sep 2024 10:38:12 +0200
-Message-Id: <663ec6bb472ab83bb5824a09d11b36ef20a43fc7.1727337732.git.dsimic@manjaro.org>
+Subject: [PATCH 2/5] spi: rockchip-sfc: Perform trivial code cleanups
+Date: Thu, 26 Sep 2024 10:38:13 +0200
+Message-Id: <251242bfc9c4fdc01d930f093022ce0c9481d58e.1727337732.git.dsimic@manjaro.org>
 In-Reply-To: <cover.1727337732.git.dsimic@manjaro.org>
 References: <cover.1727337732.git.dsimic@manjaro.org>
 Precedence: bulk
@@ -66,94 +66,48 @@ Content-Transfer-Encoding: 8bit
 Authentication-Results: ORIGINATING;
 	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Perform a few trivial code cleanups, to obey the reverse Christmas tree rule,
-to avoid unnecessary line wrapping by using the 100-column width better, to
-actually obey the 100-column width in one case, and to make the way a couple
-of wrapped function arguments are indented a bit more readable.
+Perform a couple of trivial code cleanups, to avoid unnecessary line wrapping
+by using the 100-column width a bit better, and to drop a stray empty line.
 
 No intended functional changes are introduced by these code cleanups.
 
 Signed-off-by: Dragan Simic <dsimic@manjaro.org>
 ---
- drivers/spi/spi-rockchip.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ drivers/spi/spi-rockchip-sfc.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index e1ecd96c7858..81f2a966c124 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -742,34 +742,32 @@ static int rockchip_spi_setup(struct spi_device *spi)
- 
- static int rockchip_spi_probe(struct platform_device *pdev)
- {
--	int ret;
--	struct rockchip_spi *rs;
-+	struct device_node *np = pdev->dev.of_node;
- 	struct spi_controller *ctlr;
-+	struct rockchip_spi *rs;
- 	struct resource *mem;
--	struct device_node *np = pdev->dev.of_node;
- 	u32 rsd_nsecs, num_cs;
- 	bool target_mode;
-+	int ret;
- 
- 	target_mode = of_property_read_bool(np, "spi-slave");
- 
- 	if (target_mode)
--		ctlr = spi_alloc_target(&pdev->dev,
--				sizeof(struct rockchip_spi));
-+		ctlr = spi_alloc_target(&pdev->dev, sizeof(struct rockchip_spi));
- 	else
--		ctlr = spi_alloc_host(&pdev->dev,
--				sizeof(struct rockchip_spi));
-+		ctlr = spi_alloc_host(&pdev->dev, sizeof(struct rockchip_spi));
- 
- 	if (!ctlr)
- 		return -ENOMEM;
- 
- 	platform_set_drvdata(pdev, ctlr);
- 
- 	rs = spi_controller_get_devdata(ctlr);
- 
- 	/* Get basic io resource and map it */
- 	rs->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &mem);
- 	if (IS_ERR(rs->regs)) {
--		ret =  PTR_ERR(rs->regs);
-+		ret = PTR_ERR(rs->regs);
- 		goto err_put_ctlr;
+diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
+index 0d7fadcd4ed3..505d5089bf03 100644
+--- a/drivers/spi/spi-rockchip-sfc.c
++++ b/drivers/spi/spi-rockchip-sfc.c
+@@ -591,19 +591,17 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(sfc->hclk);
  	}
  
-@@ -794,26 +792,25 @@ static int rockchip_spi_probe(struct platform_device *pdev)
- 		goto err_put_ctlr;
+-	sfc->use_dma = !of_property_read_bool(sfc->dev->of_node,
+-					      "rockchip,sfc-no-dma");
++	sfc->use_dma = !of_property_read_bool(sfc->dev->of_node, "rockchip,sfc-no-dma");
  
- 	ret = devm_request_threaded_irq(&pdev->dev, ret, rockchip_spi_isr, NULL,
--			IRQF_ONESHOT, dev_name(&pdev->dev), ctlr);
-+					IRQF_ONESHOT, dev_name(&pdev->dev), ctlr);
- 	if (ret)
- 		goto err_put_ctlr;
- 
- 	rs->dev = &pdev->dev;
- 	rs->freq = clk_get_rate(rs->spiclk);
- 
- 	if (!of_property_read_u32(pdev->dev.of_node, "rx-sample-delay-ns",
- 				  &rsd_nsecs)) {
- 		/* rx sample delay is expressed in parent clock cycles (max 3) */
--		u32 rsd = DIV_ROUND_CLOSEST(rsd_nsecs * (rs->freq >> 8),
--				1000000000 >> 8);
-+		u32 rsd = DIV_ROUND_CLOSEST(rsd_nsecs * (rs->freq >> 8), 1000000000 >> 8);
- 		if (!rsd) {
- 			dev_warn(rs->dev, "%u Hz are too slow to express %u ns delay\n",
--					rs->freq, rsd_nsecs);
-+				 rs->freq, rsd_nsecs);
- 		} else if (rsd > CR0_RSD_MAX) {
- 			rsd = CR0_RSD_MAX;
--			dev_warn(rs->dev, "%u Hz are too fast to express %u ns delay, clamping at %u ns\n",
--					rs->freq, rsd_nsecs,
--					CR0_RSD_MAX * 1000000000U / rs->freq);
-+			dev_warn(rs->dev,
-+				 "%u Hz are too fast to express %u ns delay, clamping at %u ns\n",
-+				 rs->freq, rsd_nsecs, CR0_RSD_MAX * 1000000000U / rs->freq);
+ 	if (sfc->use_dma) {
+ 		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+ 		if (ret) {
+ 			dev_warn(dev, "Unable to set dma mask\n");
+ 			return ret;
  		}
- 		rs->rsd = rsd;
+ 
+ 		sfc->buffer = dmam_alloc_coherent(dev, SFC_MAX_IOSIZE_VER3,
+-						  &sfc->dma_buffer,
+-						  GFP_KERNEL);
++						  &sfc->dma_buffer, GFP_KERNEL);
+ 		if (!sfc->buffer)
+ 			return -ENOMEM;
  	}
+@@ -629,7 +627,6 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
+ 			       0, pdev->name, sfc);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to request irq\n");
+-
+ 		goto err_irq;
+ 	}
+ 
 
