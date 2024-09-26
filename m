@@ -1,191 +1,164 @@
-Return-Path: <linux-spi+bounces-4979-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4980-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ACF2986B2E
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 05:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E2B986D7E
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 09:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B56D71F22B9C
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 03:07:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3475E1F246AD
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 07:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE5913B7BE;
-	Thu, 26 Sep 2024 03:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D47E8186298;
+	Thu, 26 Sep 2024 07:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mpUrEbyd"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="GtBFhMwl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAFC610B;
-	Thu, 26 Sep 2024 03:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF71185B55;
+	Thu, 26 Sep 2024 07:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727320063; cv=none; b=E6QnONTA3xX5pgZ3qLYLnlEMxBfwDSjfaVPVqizfG+cywfIx7vjBXOO6kCVnj1ItNr4bGhkS6bJpFWhD9MOSYW2y8kHkyaWRAfWHAB/Qqe+Gr1QL6/kU5cNCh4+th5V/uGWxBLl3NZkDJN/GPqQAFyFpx4J9Caye+AQcJLJX8wQ=
+	t=1727335529; cv=none; b=Alt7o2u8atNcroTO3dsCm6Hrbf45i3QFyuAAOsf5wK6D4iWQ/OaByST1vdyxkDcpZBo+WgYYaVFn5Tw2DatcJ/6XipJH05VPPREestZ5xlXvzF4+9anBFV/UuYwQpfm/2k/Raq3AE1TVf4Slk6ZBj28KhPFt2mSFT9xkBQeLP74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727320063; c=relaxed/simple;
-	bh=ALZuawAv6RfhRY6+vfLFnO27Tn6WraHoyicrJ8XdUYY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BvsdVlA0KQ2rzQZ9hbReEu6qPRgGFknF6GXYVvgVXRl1atswB7zDSAEx/XGNZ/oRS5U2GmwideJFqsY853GUpj3Dryl/XcLWbFvFZQ9Ram6cPj4CsRk6KTKLKT93I0V1/yCjYMDcjW09IDN8eYoeUgGSGhNuEtd2ymusZZiMfAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mpUrEbyd; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a90188ae58eso61104666b.1;
-        Wed, 25 Sep 2024 20:07:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727320059; x=1727924859; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SjHLO3lK/OQsJDE6OFm+7r5Bk5tao2ttjn7ToVjtLbE=;
-        b=mpUrEbydil0BbHIjknbZIei/rLF21sxIl6tS3je/Rs9UjfECutGm16qb7GD8otAGN3
-         PuR8McG7hkE5hvnV5U7q4Cn3dh2qvTj82ouOAZGYhqr/1BW21bKyMHY2uihXMNtmO8tp
-         SIQx0nzVCKo69j7XD+uEnPIaiMFk3GKskLycoU+5ldzyinE1cpushisYdZ+J0E3Z3cXm
-         dLDe30X67P/3sdyQISsw2+rg9g2Uav/f5sLRyatqGJ3wRPnVmKN2iD2RlXN2shwjOum1
-         MCr2cdZTRQ1Kh7FifpuQU5BYsRUW1yv9YnPMxwztirZsGkXs3D/OAZ0QfjJXpD6eZ0kj
-         s/QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727320059; x=1727924859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SjHLO3lK/OQsJDE6OFm+7r5Bk5tao2ttjn7ToVjtLbE=;
-        b=fb4YzwfqInqSEfUcDAvzNFUg6nhbq6PyTxfGtfGYlBeG1fqw5GqeNpe7/59pw0aCeE
-         p4i492iR9USKaOcoRkZhbkZywJQJE0wvTxHfLs3yEehAKU1vJCyLJA4c2JtVPO1nojYS
-         0JHidYTKqEUh6TX7avjXPq5RnHMX8dxOWlbYE4XCnwpwwY7jbtmNh7+QAzQFmHJg4BYr
-         b9CDPDf9GmxtJP+HX5xKv+aZLhAPhX0pExGJIpdje9aOz8PhZ4dMk1WrKaa3xiJwb7cj
-         RYVwYvESZR1P5y/j/zuwnMktUUaBhvaRDaedPUnJ/3TFNQXUvr+AIWHDdKSO05B50Lji
-         K88A==
-X-Forwarded-Encrypted: i=1; AJvYcCUaMX51afnWp0sZ0iDu7F4iNPQgwQyA3nLECxqoHo5yDmGNHV1Ic3wXpuYNrYrSNwrjcGYggi31T9YZ@vger.kernel.org, AJvYcCXJmDgQc+SUnIXKEHIsAdKrldV61wCR2Ay3FRplG5KlFmIq+VHicIhIoQSrNIQEMSXRLuRyXlnEHcOR4Js=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg3UpPFnt1DM3f44j01aiMuzAHvnelg230F7lV54vKWvDosadI
-	uCgvBQRSXqNZQj1iWZ6tpzH2MfJD5ATQgUDk42nptShf3CxPCAWr88M3K4nh7xHyCEprnUB1pWS
-	CnI2MC3xkOwyWUaN5A1AdaDUrdGM=
-X-Google-Smtp-Source: AGHT+IHQnslP5PPXpBtyd2X2lFAmGTpsIvv0uQ/zlGvwN5ExqoTvexqaymYpjsuH9T2eLl+rbj3GyIp5sEfE5Sm7rPE=
-X-Received: by 2002:a17:907:e6d8:b0:a77:cbe5:413f with SMTP id
- a640c23a62f3a-a93a03247a9mr349784066b.4.1727320059072; Wed, 25 Sep 2024
- 20:07:39 -0700 (PDT)
+	s=arc-20240116; t=1727335529; c=relaxed/simple;
+	bh=UTP4AJIcfkshPFU/SQC+v0Q+oZVwMHnZQaBpKvG9x1c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ntpvejw9qWxWj9mgDDG9uFfdkEGw2nLW7qSl9TP/aLBzNJxQq8zTJS96t+QsWq2c3ddF7StqiZffrFX7Zo57rQlQowv5j2+DDCn0ss+wA1TtlhMVaXA9nLK6t+6biy5ypk0xS4xLaBxju2lVGGTt8ojRtQSXrQKOJGFvzCcTUgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=GtBFhMwl; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D9EAD1483DC9;
+	Thu, 26 Sep 2024 09:25:15 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1727335518; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=HofPiSPRsOq8IMdn+s0YrB3BCnkaGyRPRUXAn53i/Sk=;
+	b=GtBFhMwlBlN39A/Znf/BuTGk1e6Lc8rdQgGtN2zCR+bozFDmd0NXgC8uc+1FbUVdyCq6rK
+	pm8Idy158AIcp/e4QlpcJ1vfVUM0rS0+INO9XOnoircEIB0xgqKnUOMb2SXclusDkSnEZm
+	+6KuL9XqItvicLwUSQSFVEFllTSqYIdVwypuwhHTp9ZveszKIrcT+OGw4G9MSpLg/hB3qq
+	h6F17n1V0xRTqKirT6TbAt0eVPx4b2+xMjrL77cpLrxp1Q0BLUXHWDCBrBNKai1cw5UCvm
+	Lhr8I/lxAO1vbGYzKInnYqP0n4qxE3FyU4k+gjr1LGVetnIE6dEzWjkv+8ltYA==
+Date: Thu, 26 Sep 2024 09:25:10 +0200
+From: Alexander Dahl <ada@thorsis.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:ARM/Microchip (AT91) SoC support" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] spi: atmel-quadspi: Avoid overwriting delay register
+ settings
+Message-ID: <20240926-macarena-wincing-7c4995487a29@thorsis.com>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:ARM/Microchip (AT91) SoC support" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>
+References: <20240918082744.379610-1-ada@thorsis.com>
+ <20240918082744.379610-2-ada@thorsis.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240718034614.484018-1-alvinzhou.tw@gmail.com>
- <20240718034614.484018-7-alvinzhou.tw@gmail.com> <97134efb-398d-4c21-a915-87a5b4f1b29a@linaro.org>
- <CAPhrvRR3U9=0DuG_FQ81ZJq+RLe6Bn9YO831Mx2n3NkeV3MCdA@mail.gmail.com>
- <368cd6fb-cab1-44ad-af46-651d9323bc19@linaro.org> <618e4514-791b-4a73-a1ba-45170a21e453@linaro.org>
- <79406f2b-8411-4059-b959-9e543944fb9c@linaro.org> <20240925115746.22cdd8fe@xps-13>
-In-Reply-To: <20240925115746.22cdd8fe@xps-13>
-From: Alvin Zhou <alvinzhou.tw@gmail.com>
-Date: Thu, 26 Sep 2024 11:06:41 +0800
-Message-ID: <CAPhrvRR2_j=KhFJHWyU48z998q0wkoZJYCBAUuv8ejp7xnkWiQ@mail.gmail.com>
-Subject: Re: [PATCH v9 6/6] mtd: spi-nor: add support for Macronix Octal flash
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, linux-mtd@lists.infradead.org, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, pratyush@kernel.org, 
-	mwalle@kernel.org, richard@nod.at, vigneshr@ti.com, broonie@kernel.org, 
-	chengminglin@mxic.com.tw, leoyu@mxic.com.tw, 
-	AlvinZhou <alvinzhou@mxic.com.tw>, JaimeLiao <jaimeliao@mxic.com.tw>, 
-	Bough Chen <haibo.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240918082744.379610-2-ada@thorsis.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Miquel,
+Hello everyone,
 
-Miquel Raynal <miquel.raynal@bootlin.com> =E6=96=BC 2024=E5=B9=B49=E6=9C=88=
-25=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:57=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Hi Alvin,
->
-> tudor.ambarus@linaro.org wrote on Tue, 24 Sep 2024 08:17:26 +0100:
->
-> > On 9/24/24 7:36 AM, Tudor Ambarus wrote:
-> > >
-> > >
-> > > On 9/24/24 7:26 AM, Tudor Ambarus wrote:
-> > >>
-> > >>
-> > >> On 9/24/24 4:25 AM, Alvin Zhou wrote:
-> > >>> Hi Tudor,
-> > >>>
-> > >>> Tudor Ambarus <tudor.ambarus@linaro.org> =E6=96=BC 2024=E5=B9=B49=
-=E6=9C=8823=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=882:54=E5=AF=AB=E9=
-=81=93=EF=BC=9A
-> > >>>>
-> > >>>> Hi, Alvin,
-> > >>>>
-> > >>>> I quickly skimmed over the previous 5 patches and they are looking=
- fine.
-> > >>>>
-> > >>>> I don't get this patch however.
-> > >>>>
-> > >>>> On 7/18/24 4:46 AM, AlvinZhou wrote:
-> > >>>>> From: AlvinZhou <alvinzhou@mxic.com.tw>
-> > >>>>>
-> > >>>>> Adding Manufacture ID 0xC2 in last of ID table because of
-> > >>>>> Octal Flash need manufacturer fixup for enabling/disabling
-> > >>>>> Octal DTR mode.
-> > >>>>>
-> > >>>>> Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
-> > >>>>> Signed-off-by: AlvinZhou <alvinzhou@mxic.com.tw>
-> > >>>>> ---
-> > >>>>>  drivers/mtd/spi-nor/macronix.c | 4 +++-
-> > >>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >>>>>
-> > >>>>> diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor=
-/macronix.c
-> > >>>>> index f039819a5252..1a8ccebdfe0e 100644
-> > >>>>> --- a/drivers/mtd/spi-nor/macronix.c
-> > >>>>> +++ b/drivers/mtd/spi-nor/macronix.c
-> > >>>>> @@ -200,7 +200,9 @@ static const struct flash_info macronix_nor_p=
-arts[] =3D {
-> > >>>>>               .name =3D "mx25l3255e",
-> > >>>>>               .size =3D SZ_4M,
-> > >>>>>               .no_sfdp_flags =3D SECT_4K,
-> > >>>>> -     }
-> > >>>>> +     },
-> > >>>>> +     /* Need the manufacturer fixups, Keep this last */
-> > >>>>> +     { .id =3D SNOR_ID(0xc2) }
-> > >>>>>  };
-> > >>>>>
-> > >>>>
-> > >>>> Could you please elaborate why you need just the manufacturer id h=
-ere? I
-> > >>>> would have expected to see a specific flash entry instead.
-> > >>>
-> > >>> Grateful to Michael for the valuable suggestion. This addition of t=
-he
-> > >>> Macronix manufacturer ID enables the fixup functions such as
-> > >>> macronix_nor_set_octal_dtr to be executed without the need to
-> > >>> create separate ID entries for each Octal DTR NOR Flash in the
-> > >>> flash_info.
-> > >>>
-> > >>
-> > >> Ah, nice. Okay then. I'm going to review the rest of the patches. Th=
-ey
-> > >> look promising ;).
-> > >
-> > > ah, but then you'll always have a matched ID, so you break the generi=
-c
-> > > flash probing for macronix. Is that correct?
-> >
-> > Answering myself: it's fine. Generic flash probe just fills a name,
-> > which we don't really care about.
->
-> I was also a bit surprised by the diff, would you mind filling a more
-> complete with details on the actual goal of this entry (having all
-> Macronix flashes to get the fixups, without creating separate ID
-> entries for each of the flashes)
+Am Wed, Sep 18, 2024 at 10:27:43AM +0200 schrieb Alexander Dahl:
+> Previously the MR and SCR registers were just set with the supposedly
+> required values, from cached register values (cached reg content
+> initialized to zero).
+> 
+> All parts fixed here did not consider the current register (cache)
+> content, which would make future support of cs_setup, cs_hold, and
+> cs_inactive impossible.
+> 
+> Setting SCBR in atmel_qspi_setup() erases a possible DLYBS setting from
+> atmel_qspi_set_cs_timing().  The DLYBS setting is applied by ORing over
+> the current setting, without resetting the bits first.  All writes to MR
+> did not consider possible settings of DLYCS and DLYBCT.
+> 
+> Signed-off-by: Alexander Dahl <ada@thorsis.com>
+> Fixes: f732646d0ccd ("spi: atmel-quadspi: Add support for configuring CS timing")
+> ---
+>  drivers/spi/atmel-quadspi.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+> index 5aaff3bee1b7..fcd57cf1f2cf 100644
+> --- a/drivers/spi/atmel-quadspi.c
+> +++ b/drivers/spi/atmel-quadspi.c
+> @@ -375,9 +375,9 @@ static int atmel_qspi_set_cfg(struct atmel_qspi *aq,
+>  	 * If the QSPI controller is set in regular SPI mode, set it in
+>  	 * Serial Memory Mode (SMM).
+>  	 */
+> -	if (aq->mr != QSPI_MR_SMM) {
+> -		atmel_qspi_write(QSPI_MR_SMM, aq, QSPI_MR);
+> -		aq->mr = QSPI_MR_SMM;
+> +	if (!(aq->mr & QSPI_MR_SMM)) {
+> +		aq->mr |= QSPI_MR_SMM;
+> +		atmel_qspi_write(aq->scr, aq, QSPI_MR);
 
-Thank you for the reminder, I will incorporate more detailed
-explanations.
+On a second glance, this looks wrong, value for Mode Register (MR) is
+written into Serial Clock Register (SCR), should be like this instead:
 
->
-> Thanks,
-> Miqu=C3=A8l
+    atmel_qspi_write(aq->mr, aq, QSPI_MR);
 
-Thanks,
-Alvin
+This is somewhat embarrassing, because the patch was already applied
+to master.  Should it be reverted, then I would send a v2 of the
+series?  Or should I send a quick fixup?
+
+Greets
+Alex
+
+>  	}
+>  
+>  	/* Clear pending interrupts */
+> @@ -501,7 +501,8 @@ static int atmel_qspi_setup(struct spi_device *spi)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	aq->scr = QSPI_SCR_SCBR(scbr);
+> +	aq->scr &= ~QSPI_SCR_SCBR_MASK;
+> +	aq->scr |= QSPI_SCR_SCBR(scbr);
+>  	atmel_qspi_write(aq->scr, aq, QSPI_SCR);
+>  
+>  	pm_runtime_mark_last_busy(ctrl->dev.parent);
+> @@ -534,6 +535,7 @@ static int atmel_qspi_set_cs_timing(struct spi_device *spi)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	aq->scr &= ~QSPI_SCR_DLYBS_MASK;
+>  	aq->scr |= QSPI_SCR_DLYBS(cs_setup);
+>  	atmel_qspi_write(aq->scr, aq, QSPI_SCR);
+>  
+> @@ -549,8 +551,8 @@ static void atmel_qspi_init(struct atmel_qspi *aq)
+>  	atmel_qspi_write(QSPI_CR_SWRST, aq, QSPI_CR);
+>  
+>  	/* Set the QSPI controller by default in Serial Memory Mode */
+> -	atmel_qspi_write(QSPI_MR_SMM, aq, QSPI_MR);
+> -	aq->mr = QSPI_MR_SMM;
+> +	aq->mr |= QSPI_MR_SMM;
+> +	atmel_qspi_write(aq->mr, aq, QSPI_MR);
+>  
+>  	/* Enable the QSPI controller */
+>  	atmel_qspi_write(QSPI_CR_QSPIEN, aq, QSPI_CR);
+> -- 
+> 2.39.5
+> 
+> 
 
