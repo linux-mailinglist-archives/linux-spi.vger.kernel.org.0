@@ -1,34 +1,34 @@
-Return-Path: <linux-spi+bounces-4984-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-4985-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93150986F01
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 10:38:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF3D2986F03
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 10:38:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C42471C2265C
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 08:38:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E9861F234D0
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Sep 2024 08:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9851A4F0C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1EDE1A7255;
 	Thu, 26 Sep 2024 08:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="FEmCfeSC"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="Fkqf9ZCd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B751C18C34C;
-	Thu, 26 Sep 2024 08:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0CE39AD6;
+	Thu, 26 Sep 2024 08:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727339909; cv=none; b=FHrr4ZE/jzY7GMqJpa9clRowRgXOULSRWI3liI1t3wHSSiGQY90Qzwx4THNQ7sezCH7l4NWUOFVFBgfpOW2HZB403Y2Nvan9I/SYljz/OTI09w2+Hd/sxiNWjtQPDwd84XzRHHUKF67VLF+G319QJHpCs8RgrpuR/jCQiJYiw4g=
+	t=1727339909; cv=none; b=YTTfeICgVEfB4EioI4MUDpJ+Z0cXklFeT/FIcOQ7o8noNfnlbu77RJBeEwQlVDpVLdDRauDh78xyTNtTQYU/zr4U9CothU7FTflEFk+GJOJCVvkhcxlyDWJmIgXfpVWZOsg4sGnA+PKgxxnKBkob/wX4l4vG2j4cNYEBQaTclLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727339909; c=relaxed/simple;
-	bh=INOYgtdHb4P3ihx77pkVNKM3sJqYlxQ8pkazFJrL5/w=;
+	bh=pzJ7mKNqQw5gkoS9FXyW9xaAO7Jfqin+RPHbMq/9LGk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f0y4QjcG29/6vOrWQcWQI90JcXerETUbDBXAVF6iC1IZ+SxLFOIMnZhQy1QPmDj+PyLPqaPXRW25nBF3ip/XZHBzr+shsTRepBR1pPXXYHIyZ8BYonH4TDtksRD0QbTXiwUcjcxC06SW2MIJ/tRVXfypuxpINrnR6vezX/z39z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=FEmCfeSC; arc=none smtp.client-ip=116.203.91.91
+	 MIME-Version; b=EjnvyhQgczAjr3AdQifpjklB+xKB66aXq+dfKVN4a6dWjaG4B5ikdthwY7H2jfwKr5koYonlZKUOLnKgoSdvfY2k13AKoIEOqzBkZtHahGXZcIJXbcgRCtLNQ+IqPA4bj/eyUA4BjQvX+B5O6Wa/3gxxtqaVHQJ0Z7DwFdo1A14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=Fkqf9ZCd; arc=none smtp.client-ip=116.203.91.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 From: Dragan Simic <dsimic@manjaro.org>
@@ -38,12 +38,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vl6o00F5vcnezSkxhr2a1kCj0/F15fsYEAmFewTFJWk=;
-	b=FEmCfeSCYQKa24aRCe9Wn80zHbf3lmrairBcJwyLgmwEtoowPk6yvSOWg5N+V/dV3UlRo6
-	XZOLV+aBXBQxC8/LTdqt2Zwcj5M2vn5rgobfw4C2pKkwvkB4qP1m7lS4OzZ4slIemM0pIy
-	47jw1DHLwDKUbsqsV+j4L/JiHgWmBKmxQvD2pYvbdNhvZ9Yhs8iiK0GUHNtlx2QZJKWldY
-	oKlpYWMDYuY3pp2Z9q0//56aVM7KEo1MA5yMqD0k79OHBVJwxAjQkJc8cKgaEZwEybykpU
-	Pd8L6quiKpduC3LyeGYv8FEmGGTG7i0fvJeNaLSEivzqZosXZAyRPN2ypOSOqw==
+	bh=7TZTm9G40QKJombFH2v6+fmEe7Da2EmVAJMyeMXsFnE=;
+	b=Fkqf9ZCdiec98LA9/HwKlLSiB0j8z4f0hddfGgtUwE9BYcI0+TtHuF7cOjYh8Bp+EYUZ/i
+	qsEKvJYxUS+1s7uB9p4LeI9sBbuc7ez2DFupsdAXS/fxhJFTMzF6yGv8YxHb/s1mI0ZEI0
+	TDa55UcVlONeE6issvBih62aBiltlBwW4mV6dW7tehrOgAuOJH/cnmZI9Yqr3Uxj9wnlQJ
+	7Abw3DGMf1iWgTpF61w7Be71XCHCMm+UuIW+24NZo/2ji0HX1NNI76dNcNCX4gM4MhEyXh
+	GKXRojS8xm0S5lm0ZxdfB2jPVNhira7SUlfExjWHU6xxSciUq1R4qO175Uewvg==
 To: linux-spi@vger.kernel.org,
 	linux-rockchip@lists.infradead.org
 Cc: broonie@kernel.org,
@@ -51,9 +51,9 @@ Cc: broonie@kernel.org,
 	oss@helene.moe,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] spi: rockchip-sfc: Perform trivial code cleanups
-Date: Thu, 26 Sep 2024 10:38:13 +0200
-Message-Id: <251242bfc9c4fdc01d930f093022ce0c9481d58e.1727337732.git.dsimic@manjaro.org>
+Subject: [PATCH 3/5] spi: rockchip: Don't check for failed get_fifo_len()
+Date: Thu, 26 Sep 2024 10:38:14 +0200
+Message-Id: <ce2e7f90e62b15adc2bed1f53122ad39c3a9b5ac.1727337732.git.dsimic@manjaro.org>
 In-Reply-To: <cover.1727337732.git.dsimic@manjaro.org>
 References: <cover.1727337732.git.dsimic@manjaro.org>
 Precedence: bulk
@@ -66,48 +66,29 @@ Content-Transfer-Encoding: 8bit
 Authentication-Results: ORIGINATING;
 	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Perform a couple of trivial code cleanups, to avoid unnecessary line wrapping
-by using the 100-column width a bit better, and to drop a stray empty line.
-
-No intended functional changes are introduced by these code cleanups.
+Since commit 13a96935e6f6 ("spi: rockchip: Support 64-location deep FIFOs"),
+function get_fifo_len() can no longer return zero, so delete the redundant
+check for zero in function rockchip_spi_probe().
 
 Signed-off-by: Dragan Simic <dsimic@manjaro.org>
 ---
- drivers/spi/spi-rockchip-sfc.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/spi/spi-rockchip.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index 0d7fadcd4ed3..505d5089bf03 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -591,19 +591,17 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 		return PTR_ERR(sfc->hclk);
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 81f2a966c124..28879fed03f8 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -816,11 +816,6 @@ static int rockchip_spi_probe(struct platform_device *pdev)
  	}
  
--	sfc->use_dma = !of_property_read_bool(sfc->dev->of_node,
--					      "rockchip,sfc-no-dma");
-+	sfc->use_dma = !of_property_read_bool(sfc->dev->of_node, "rockchip,sfc-no-dma");
+ 	rs->fifo_len = get_fifo_len(rs);
+-	if (!rs->fifo_len) {
+-		dev_err(&pdev->dev, "Failed to get fifo length\n");
+-		ret = -EINVAL;
+-		goto err_put_ctlr;
+-	}
  
- 	if (sfc->use_dma) {
- 		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 		if (ret) {
- 			dev_warn(dev, "Unable to set dma mask\n");
- 			return ret;
- 		}
- 
- 		sfc->buffer = dmam_alloc_coherent(dev, SFC_MAX_IOSIZE_VER3,
--						  &sfc->dma_buffer,
--						  GFP_KERNEL);
-+						  &sfc->dma_buffer, GFP_KERNEL);
- 		if (!sfc->buffer)
- 			return -ENOMEM;
- 	}
-@@ -629,7 +627,6 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 			       0, pdev->name, sfc);
- 	if (ret) {
- 		dev_err(dev, "Failed to request irq\n");
--
- 		goto err_irq;
- 	}
- 
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, ROCKCHIP_AUTOSUSPEND_TIMEOUT);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
 
