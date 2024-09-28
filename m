@@ -1,300 +1,249 @@
-Return-Path: <linux-spi+bounces-5021-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5022-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 808E1988DF8
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 08:17:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B406988E6C
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 10:19:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DFEC1F21F0E
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 06:17:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C885281E50
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 08:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2F1C1422D4;
-	Sat, 28 Sep 2024 06:16:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4042C19A297;
+	Sat, 28 Sep 2024 08:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m41TU5Kv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01on2099.outbound.protection.outlook.com [40.107.222.99])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6E9EEAA;
-	Sat, 28 Sep 2024 06:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.222.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727504214; cv=fail; b=amPXrG6WrzoOGSBGCmjXcgVzcVG/bMTuqYV0Pgi6ce646uqTAWdfFDhFRTEchtx/AKfQtr9h0rst+tYKHlpbUndYNUv/anXNe9JUZkmUDUyNSK74Zp7unDK55RBAx7wml7JSt0BgtoGM5BsgJ7DOLsilTCUwYWyCNYkFjWciiek=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727504214; c=relaxed/simple;
-	bh=e0KHZTXOMscB4JBf0hHdX3NuUEcsX5/13DznSCRMdrM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Mrian7I0Rvur21gUutVnlIgBZEugm6UYEb+0D2YHxgW6unX1MUfvQAGi4n3nnUFOMtb91aUbk36XYQGCd7LPZY/+4Idz3GWee7a/Kh7JPbvJByZZndU5hPq/g/Sc8QakivSavOyS0x2Asqjyu1yc+Mr83nxfc8FDTIgAY2ppvII=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.222.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g8+JtsBEzkUQL0Rna31Dd0SsigJj8yB9U576XUdOQ9jbTDh4vBySUyqV2/KJPsp346R2/xdV8UhNqRhYuGu1q8Fnd/fPIIU31h3OCujenwvvXgN3unYdnKAKNUNdOJff0CLyB2eMU6tSqH2O8AsdBUqKbQnwGpZoVdBxPtCQ1nparqg3Nq2eTqdav93NkveEl4rTij5RYmybuNbfNXeO6JBnYDK8DGHJLZ1F/Ks+E33lX9Csuc9Ua+/tNO5AGESZp8rB9238X1lwSOHhU11oqDk8fCfr+rlfa2vTQbiUwm8/1fKE9bo09qVk9gGCyzENtE+zljS4Qhkg3kCtbX7aKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e0KHZTXOMscB4JBf0hHdX3NuUEcsX5/13DznSCRMdrM=;
- b=rHAX1ZL62ks6THzOcCHa2KW3dXD2kozM+TGUKDDmsTgLaWMgKL3g9yI/WnkEljw5EjC21H5yyAhExTyKhv1td0BYkK2bVR9AgKauH+7miyvCLkYkxqtZPLECHH8ODdHzyV9KODmn8kl16gvpAsKZ0Kj6pIfOfl4+ZEmmYoktnOMVgw81rEnuHNcvkEym4cTuxn5pTXdECQ9jP1XzXkuZ/OIY4DZYGbTx6617q34/x442efj4WeLUwtpCxi+P48hfTUN5dvpBfce29+TIPJRbOVjSCfmyrdXK0nkHxWLVeRE90cEYsrnAz9KcSIJtIEOMoq62OstV888geWrYSVRsig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:204::8)
- by PN2P287MB0906.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:155::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.24; Sat, 28 Sep
- 2024 06:16:49 +0000
-Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
- ([fe80::1134:92d7:1f68:2fac]) by PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
- ([fe80::1134:92d7:1f68:2fac%5]) with mapi id 15.20.8005.024; Sat, 28 Sep 2024
- 06:16:49 +0000
-From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-To: Frank Li <Frank.li@nxp.com>
-CC: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"olteanv@gmail.com" <olteanv@gmail.com>, "broonie@kernel.org"
-	<broonie@kernel.org>, Han Xu <han.xu@nxp.com>, Shawn Guo
-	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
-	Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 3/4] spi: spi-imx: Fix casting warnings
-Thread-Topic: [PATCH 3/4] spi: spi-imx: Fix casting warnings
-Thread-Index: AQHbEOFqOkKSFeOShUeusB18TQXiGbJr2asAgADfT14=
-Date: Sat, 28 Sep 2024 06:16:49 +0000
-Message-ID:
- <PN0P287MB28435966E53B6BA943340A2AFF742@PN0P287MB2843.INDP287.PROD.OUTLOOK.COM>
-References: <20240927132944.19285-1-hardevsinh.palaniya@siliconsignals.io>
- <20240927132944.19285-3-hardevsinh.palaniya@siliconsignals.io>
- <Zvbi7g+xpI8fGth6@lizhi-Precision-Tower-5810>
-In-Reply-To: <Zvbi7g+xpI8fGth6@lizhi-Precision-Tower-5810>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PN0P287MB2843:EE_|PN2P287MB0906:EE_
-x-ms-office365-filtering-correlation-id: f540b582-f116-4ec2-7ddf-08dcdf85232c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?4ztV9EtR3uaSCiurQcpmJ8jLt0aO2j24YEPoFNvNeUqHy52ev5mD7r3fPd?=
- =?iso-8859-1?Q?P8dHeiL14LqV5uprsXYPYgyULKyde6yFo9PRa3C/kg1RioaPvVNuyrm3M+?=
- =?iso-8859-1?Q?l/TfR5+W2hCTfVXzCU4zHiyXUtijGlMqW5iACks3cf3YKFfwyqK9vMIYCf?=
- =?iso-8859-1?Q?3is3Kag6xzEYeKR8csapnuHEN2WcI0likDBJ6yx0lKC3so+xZmcQ3LmOGs?=
- =?iso-8859-1?Q?E655V0J+PwqTEO/oTImg47f4xjGtuAgFLvlFVnSRzPJHsVG1aJ6O6/RphA?=
- =?iso-8859-1?Q?JB7HCmo9n1uZA1v3cE6+2LXE0+lrs8Kz9164vBN6GQBRU4PXtC09OPyjNv?=
- =?iso-8859-1?Q?pJxXyUEsvxaaU97kmR2dxLQVeegCQvBlI+9BlFiosIZvWISd0AMndq7RX/?=
- =?iso-8859-1?Q?rHhpOfkI6FfZ8aB4AhtNwnJg7pbTu2abL+JjWTv+lM495iqQMIxA2O+U6G?=
- =?iso-8859-1?Q?Vi98ASA0JMPcLOAmcGZVdkUHNJ9lt2Hf6d9eFihYEVPuqONahsNYZXW/z6?=
- =?iso-8859-1?Q?CaRcYVpz0nRWrjcPKdrdTD8GfyV1c0zr5JR4dPIH8BRRStZOvKrXNG0aL8?=
- =?iso-8859-1?Q?EelTS2oCcJVtcNHV7S0VNrUUYU/AlU5ItISK7M7pgqr2NfBxGXiMZ69IE2?=
- =?iso-8859-1?Q?vLOdmyeWkOHdrBbJ7rmholyhsjhY9fKXhJK4dufix5c5lADgH3nKUPSvGA?=
- =?iso-8859-1?Q?peVm7EwLDlETHc5FAnxCgkZnwVgppSRtl6iQsq30VW5Fo9u2pp9tPQMdVH?=
- =?iso-8859-1?Q?W3BFivfvgTnNcTtQzGWvwbz8mqvt1qDBb7XbYw5wYdR3Jnqt6hCWmerh/d?=
- =?iso-8859-1?Q?mbMq93dLk2h8zw8JvuK9a4m9fX0JQkZ7isxsTir00kPJFfzr1FTrfkk70G?=
- =?iso-8859-1?Q?XVfjm+3sxqAxZzgeqTsZ5rtXEmke6Rwtu8bo5r6qwSbvB6E7cQfnwqwzeN?=
- =?iso-8859-1?Q?E3GyqzD6BlddYAozAQKVxGYyKD59+l19EUHwPYfjXUlpmPgNAQLlMqd6WL?=
- =?iso-8859-1?Q?uBiTJBynJpy+5zZkf0xqklAQAZk9+1RDE1rApYBpc153R+AOgB6O091Jeb?=
- =?iso-8859-1?Q?4tTFE8AvWYAyw4IpVnkcmOQiYLiZGoecyhNSgcGrRrjVkcIXMSlpzZqQwX?=
- =?iso-8859-1?Q?ABku2Vk+yk3zwZGBrG+s+ITfWxyiHkLWUPtwdbl1XlcjAEIrxCnWJOGavj?=
- =?iso-8859-1?Q?YrC8TB13ZCwb28+QY8FmFTVTKamfefX0GgpZ7CFFAkdvPTlEgrWYRhE5nI?=
- =?iso-8859-1?Q?dl9sVITHvD37eTBlafdYQpt0wHBzFynzMvHvLjwKg0kJA5QglqoGlgLQk/?=
- =?iso-8859-1?Q?cmZKtyOu31vxb8eMi7cQizvAZj2m5WPqF7gqtN1TOq8zs5LLJ+g/tMS5SX?=
- =?iso-8859-1?Q?a9N8bef18UucgkRWJTaecG9VV+jZWEdA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN0P287MB2843.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?DKFPu+oTAV5v/86AnlKxCRbkQzlHUKscTv2cePwEXMqRBPGITzN2PlFelr?=
- =?iso-8859-1?Q?CO9L5aUHWudkJZmFsfkM2RXHfB+8PzEfKV5y4xwEU4gaRuGw+kU/qgJo8T?=
- =?iso-8859-1?Q?n2JY8WBaLGuY5mjZNYg40uVv9YMH+Egd2oSHtm0g0w7NRVZifIvJj1SwzI?=
- =?iso-8859-1?Q?oAeioavQ9wgl7Z/aSTakaz8UzS/bELuPMGDcyT8rA7tAYixx3zOwfDNZCv?=
- =?iso-8859-1?Q?zynRR8euXCqI6fZI9uUMxW7fiPNvlKDyzHFM4np6Eb2WbzJ/2inHB8x6Y3?=
- =?iso-8859-1?Q?9KmeUq13O9t+A4jeQ0pG7C4J/3sFqnQtLZycsU4OHwznADn2N8RGBCYgXw?=
- =?iso-8859-1?Q?kbcFmP52OaV/D640HCkYj+H0vSqeUpWABTgWOdrnjCGWrV3pUgkEhm7o5U?=
- =?iso-8859-1?Q?wBLI9Qi/U69w2q3iaeASJGTUZfeL3xW6A+MxCl86G+fyCIICRa2y6gPGcj?=
- =?iso-8859-1?Q?lDEKMmio1TWQ3aEEjOOM9URkCepj4YMqzsSaqIsBtJPxU6VCxNMxSvQuSO?=
- =?iso-8859-1?Q?7GW0Dj0Q1zQMJ6qjmWHOBtm477XnirV8BhDNOzJLqz+dFLmlPp6oTbLsyp?=
- =?iso-8859-1?Q?K9SS8+OCHF2jS82uxCar631Uywivc+dx+Qv1G0TpOqMq8R8fiJXZkxOJiu?=
- =?iso-8859-1?Q?z+Lu4K5BgG0nFVpp6x0vxRQCI/IfiRwQqBVBoVkRK3Etio0d4JIWisQGhc?=
- =?iso-8859-1?Q?TnDAnvgcO9YwTt+eqd+rSVrZLhp27iyr6hJelX30TrRmBegaKuNsDmzNLC?=
- =?iso-8859-1?Q?RmulxezbTMNHXt7to0d6ko9jmu5E9g3Mzo1Ndging0PohPxT45wLRmjt4c?=
- =?iso-8859-1?Q?aDLiZdAXCYIUZl/PzdZ//gw8sQ4Cr2mQ+297ppmMMHnhxnG+iycFZAB4ZP?=
- =?iso-8859-1?Q?o3jtVVmJt3Oi7tRdnN6Dn9ZnckzNEroNhbdvwUUI2Mw+MezRcbWmm2Hm1X?=
- =?iso-8859-1?Q?Nw3KLWboxo/U6le+S/sdiPuvNhIMhMNzyqzZheF7ZCQmWp6LTN+UVlmvU0?=
- =?iso-8859-1?Q?rBu7xW0NgQDROMSYCC0+7BNuoajTVDOSD3E5VHcXyVGBKiKr8Udbhd3ySL?=
- =?iso-8859-1?Q?3vg0asBOZbTeFCUVkxMROI5ybIbq9Uf1oJa80Wj7Xov4/LpjQCiFrH0+0N?=
- =?iso-8859-1?Q?MAAQLc2mAPkzUfwUGYHIWA7vpOQL2CD2f+2EVU/YtuaIYK0Qifq0OZJHgl?=
- =?iso-8859-1?Q?hfs1kmIOs8NcjFRPGWV8d12MPA9DBxA2XcetXbjkXRJIdLyDgzCvWJttD6?=
- =?iso-8859-1?Q?RFCwmunbvjxSXnsSmToeBqaMPFfVZpp60BzgOfeJPoxOgMfSqec+aeLzbb?=
- =?iso-8859-1?Q?C0xHwXzMLgp/3XeM1hERVQn7D4Pl4Hti5lct9v3Z3N+peiXPewa564wtPD?=
- =?iso-8859-1?Q?X8f+nRbYvVXI+fe3WqG1DBMA4XN3/kTKyOFHaaI8tHsaVvVbcN2skKFtC+?=
- =?iso-8859-1?Q?ROcvdB8K/NUY6f4o1iZZ2hw3//ldi7XEaRQZUjwsMu9g1qwcwFMfgfJS9m?=
- =?iso-8859-1?Q?oD8iOBxUnD2duZ7uZl+x06LxJLZF1gTF89eWruh8zVx0CjbfaE88Q+YaBe?=
- =?iso-8859-1?Q?hWj8Ltu+7hIKddML6F//Cb2dNRQJLO1AAfrOg7AUf5BIg2VelYRjqgMKNV?=
- =?iso-8859-1?Q?yKQgBRX97tZvKiMtj+OGiAdQz/btr3RW0DvlnUuT7fgkO1MjKAwC7PSfCX?=
- =?iso-8859-1?Q?5u9IK8MTJHvCtVRfy3I=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F7815B13C;
+	Sat, 28 Sep 2024 08:19:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727511547; cv=none; b=INvAy8sS4kz5Vu1EeSfYz4AIzcp9CfK5TYI49GEX+mNeHwkcvgKLnqdrD6hjvMyIYHuQnAjIcKoM5qj8uZIZlmFdcbbd4gOtZEa2xOtVGpQ1yYZVqrCTKuLBb4A2hZzBOXqKWvoU0Rkr7Yk3pmQS22ShR2jQvKvIlu9/cN7dSZU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727511547; c=relaxed/simple;
+	bh=t95Q70yzSXRniYkGguehvKbeFe1PNoF1YMFWI2TbiNs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WKH6vEJ1EZtJwisWXS6OWpVZtUPTdwwxvM2wAq4NyjclaWR6kiW3+FPNMSYH+U49c8hhyho3rBaUhJ2+3KhdZ/XAU9bK0aKRoyNj/SGigecxqXiwshp4wc6SPDKOpSHuq3ny7Pl21vdStsQrm4mh9CphokIiA90vbBsdnLJKwQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m41TU5Kv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67814C4CEC3;
+	Sat, 28 Sep 2024 08:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727511546;
+	bh=t95Q70yzSXRniYkGguehvKbeFe1PNoF1YMFWI2TbiNs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m41TU5KvcV8AFVgBmJpblbhxbCmSJh3FPq4AACcVd9FXnSIa4V1awFedSKcuJe7Ki
+	 wi087SYdbAMXN6fV6cDwdHgxXD3vya/U/erhsJCLncXhnG7kSdC81CKJGvZfBabsfJ
+	 eyzUOn7ybqhuHO7zIRgwVxRdwn0UhC6Y8VhTZSXPnSHFlOKq97eV+ZsnXpX5jdyIBN
+	 ItbSROO0jMXFf9D/v9Nr6vCeuUwweKPDRWLmBIg1G8ZQGySSUvV8JiecHi6F1cc2AY
+	 aPdvdwQKbcPqttojEH0yyaAzkUGiVc80Huq5qNKRYyFo4HLFPkn6T1uf9nxvECnWWQ
+	 a2oP8DFtnivog==
+Message-ID: <03a1c7e7-c516-41ab-a668-7c6785ab1c4f@kernel.org>
+Date: Sat, 28 Sep 2024 10:19:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: f540b582-f116-4ec2-7ddf-08dcdf85232c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2024 06:16:49.3276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tYijzN7YWy1OYMTh0CHXDAgkf7p4p6XqVdv/bmDN6P6KeV0WNQGV0nWEs0kdrkU/803O0TNovNQqIA6zymjOXiCb/XI/6QKEhB/FJZLCzV8oldPuQXQDbX3BtjUut49A
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB0906
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] dt-bindings: spi: xilinx: Add clocks & clock-names
+ properties
+To: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
+ Conor Dooley <conor@kernel.org>
+Cc: "broonie@kernel.org" <broonie@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+ "Simek, Michal" <michal.simek@amd.com>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "git (AMD-Xilinx)" <git@amd.com>,
+ "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>
+References: <20240923123242.2101562-1-amit.kumar-mahapatra@amd.com>
+ <20240924-impaired-starving-eef91b339f67@spud>
+ <IA0PR12MB76998D7BC3429606508E6202DC692@IA0PR12MB7699.namprd12.prod.outlook.com>
+ <20240925-trapdoor-stunt-33516665fdc5@spud>
+ <IA0PR12MB76999B696A9BA0834644AC71DC6B2@IA0PR12MB7699.namprd12.prod.outlook.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <IA0PR12MB76999B696A9BA0834644AC71DC6B2@IA0PR12MB7699.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Frank,=0A=
-=0A=
-Thanks for suggestions=0A=
-=0A=
->>=A0 static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)=0A=
->>=A0 {=0A=
->> -=A0=A0=A0=A0 u32 val =3D be32_to_cpu(readl(spi_imx->base + MXC_CSPIRXDA=
-TA));=0A=
->> +=A0=A0=A0=A0 u32 val =3D readl(spi_imx->base + MXC_CSPIRXDATA);=0A=
->=0A=
->be32_to_cpu() is necessary in little endian system. You can't simple remov=
-e=0A=
->it. you can use ioread32be=A0here.=0A=
-=0A=
-I agree , i will update with ioread32be=0A=
-=0A=
->>=0A=
->>=A0=A0=A0=A0=A0=A0 if (spi_imx->rx_buf) {=0A=
->>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 int n_bytes =3D spi_imx->targe=
-t_burst % sizeof(val);=0A=
->> @@ -436,7 +436,7 @@ static void mx53_ecspi_tx_target(struct spi_imx_data=
- *spi_imx)=0A=
->>=A0=A0=A0=A0=A0=A0 if (spi_imx->tx_buf) {=0A=
->>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 memcpy(((u8 *)&val) + sizeof(v=
-al) - n_bytes,=0A=
->>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 spi_imx->=
-tx_buf, n_bytes);=0A=
->> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D cpu_to_be32(val);=0A=
->> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D (__force u32)cpu_to_be32(v=
-al);=0A=
->>=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 spi_imx->tx_buf +=3D n_bytes;=
-=0A=
->>=A0=A0=A0=A0=A0=A0 }=0A=
->=0A=
->Original code logic is strange, you'd better to remove cpu_to_be32 here.=
-=0A=
-=0A=
-I will remove=A0=0A=
-=0A=
->=0A=
->below writel change to iowrite32be().=0A=
-=0A=
-Sure=A0=0A=
-=0A=
->=0A=
->Frank=0A=
-=0A=
-Best Regards,=0A=
-Hardev=0A=
-=0A=
-=0A=
-________________________________________=0A=
-From:=A0Frank Li <Frank.li@nxp.com>=0A=
-Sent:=A0Friday, September 27, 2024 10:23 PM=0A=
-To:=A0Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>=0A=
-Cc:=A0linux-spi@vger.kernel.org <linux-spi@vger.kernel.org>; olteanv@gmail.=
-com <olteanv@gmail.com>; broonie@kernel.org <broonie@kernel.org>; Han Xu <h=
-an.xu@nxp.com>; Shawn Guo <shawnguo@kernel.org>; Sascha Hauer <s.hauer@peng=
-utronix.de>; Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam=
- <festevam@gmail.com>; Haibo Chen <haibo.chen@nxp.com>; Yogesh Gaur <yogesh=
-gaur.83@gmail.com>; imx@lists.linux.dev <imx@lists.linux.dev>; linux-kernel=
-@vger.kernel.org <linux-kernel@vger.kernel.org>; linux-arm-kernel@lists.inf=
-radead.org <linux-arm-kernel@lists.infradead.org>=0A=
-Subject:=A0Re: [PATCH 3/4] spi: spi-imx: Fix casting warnings=0A=
-=A0=0A=
-CAUTION: This email originated from outside the organization. Do not click =
-links or open attachments unless you recognize the sender and know the cont=
-ent is safe.=0A=
-=0A=
-On Fri, Sep 27, 2024 at 06:58:34PM +0530, Hardevsinh Palaniya wrote:=0A=
-> Sparse warnings:=0A=
->=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32=0A=
-> drivers/spi/spi-imx.c:439:21: warning: incorrect type in assignment (diff=
-erent base types)=0A=
-> drivers/spi/spi-imx.c:439:21:=A0=A0=A0 expected unsigned int [addressable=
-] [usertype] val=0A=
-> drivers/spi/spi-imx.c:439:21:=A0=A0=A0 got restricted __be32 [usertype]=
-=0A=
->=0A=
-> Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io=
->=0A=
-> ---=0A=
->=A0 drivers/spi/spi-imx.c | 4 ++--=0A=
->=A0 1 file changed, 2 insertions(+), 2 deletions(-)=0A=
->=0A=
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c=0A=
-> index 85bd1a82a34e..8d09d9c1c556 100644=0A=
-> --- a/drivers/spi/spi-imx.c=0A=
-> +++ b/drivers/spi/spi-imx.c=0A=
-> @@ -407,7 +407,7 @@ static void spi_imx_buf_tx_swap(struct spi_imx_data *=
-spi_imx)=0A=
->=0A=
->=A0 static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)=0A=
->=A0 {=0A=
-> -=A0=A0=A0=A0 u32 val =3D be32_to_cpu(readl(spi_imx->base + MXC_CSPIRXDAT=
-A));=0A=
-> +=A0=A0=A0=A0 u32 val =3D readl(spi_imx->base + MXC_CSPIRXDATA);=0A=
-=0A=
-be32_to_cpu() is necessary in little endian system. You can't simple remove=
-=0A=
-it. you can use ioread32be here.=0A=
-=0A=
->=0A=
->=A0=A0=A0=A0=A0=A0 if (spi_imx->rx_buf) {=0A=
->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 int n_bytes =3D spi_imx->target=
-_burst % sizeof(val);=0A=
-> @@ -436,7 +436,7 @@ static void mx53_ecspi_tx_target(struct spi_imx_data =
-*spi_imx)=0A=
->=A0=A0=A0=A0=A0=A0 if (spi_imx->tx_buf) {=0A=
->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 memcpy(((u8 *)&val) + sizeof(va=
-l) - n_bytes,=0A=
->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 spi_imx->t=
-x_buf, n_bytes);=0A=
-> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D cpu_to_be32(val);=0A=
-> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D (__force u32)cpu_to_be32(va=
-l);=0A=
->=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 spi_imx->tx_buf +=3D n_bytes;=
-=0A=
->=A0=A0=A0=A0=A0=A0 }=0A=
-=0A=
-Original code logic is strange, you'd better to remove cpu_to_be32 here.=0A=
-=0A=
-below writel change to iowrite32be().=0A=
-=0A=
-Frank=0A=
-=0A=
->=0A=
-> --=0A=
-> 2.43.0=0A=
->=
+On 27/09/2024 11:30, Mahapatra, Amit Kumar wrote:
+> Hello Conor,
+> 
+> 
+>>>> Subject: Re: [PATCH] dt-bindings: spi: xilinx: Add clocks &
+>>>> clock-names properties
+>>>>
+>>>> On Mon, Sep 23, 2024 at 06:02:42PM +0530, Amit Kumar Mahapatra wrote:
+>>>>> Include the 'clocks' and 'clock-names' properties in the AXI
+>>>>> Quad-SPI bindings. When the AXI4-Lite interface is enabled, the
+>>>>> core operates in legacy mode, maintaining backward compatibility
+>>>>> with version 1.00, and uses 's_axi_aclk' and 'ext_spi_clk'. For
+>>>>> the AXI interface, it uses 's_axi4_aclk' and 'ext_spi_clk'.
+>>>>>
+>>>>> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+>>>>> ---
+>>>>> BRANCH: for-next
+>>>>> ---
+>>>>>  .../devicetree/bindings/spi/spi-xilinx.yaml   | 29 +++++++++++++++++++
+>>>>>  1 file changed, 29 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+>>>>> b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+>>>>> index 4beb3af0416d..9dfec195ecd4 100644
+>>>>> --- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+>>>>> @@ -12,6 +12,25 @@ maintainers:
+>>>>>  allOf:
+>>>>>    - $ref: spi-controller.yaml#
+>>>>
+>>>> Please move the allOf block down to the end of the binding, after
+>>>> the property definitions.
+>>>
+>>> Sure, I'll take care of it in the next series
+>>>>
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            const: xlnx,axi-quad-spi-1.00.a
+>>>>> +    then:
+>>>>> +      properties:
+>>>>> +        clock-names:
+>>>>> +          items:
+>>>>> +            - const: s_axi_aclk
+>>>>> +            - const: ext_spi_clk
+>>>>
+>>>> These are all clocks, there should be no need to have "clk" in the names.
+>>>
+>>> These are the names exported by the IP and used by the DTG.
+>>
+>> So? This is a binding, not a verilog file.
+> 
+> Axi Quad SPI is an FPGA-based IP, and the clock names are derived from the 
+> IP signal names as specified in the IP documentation [1]. 
+> We chose these names to ensure alignment with the I/O signal names listed 
+> in Table 2-2 on page 19 of [1].
+> 
+> [1] chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.amd.com/content/dam/xilinx/support/documents/ip_documentation/axi_quad_spi/v3_2/pg153-axi-quad-spi.pdf
+
+So if hardware engineers call them "pink_pony_clk_aclk_really_clk" we
+should follow...
+
+ - bus or axi
+ - ext_spi or spi
+
+You have descriptions of each item to reference real signals. Conor's
+comment is valid - do no make it verilog file.
+
+> 
+>>
+>>>>> +
+>>>>> +    else:
+>>>>> +      properties:
+>>>>> +        clock-names:
+>>>>> +          items:
+>>>>> +            - const: s_axi4_aclk
+>>>>> +            - const: ext_spi_clk
+
+Nah, these are the same.
+
+>>>>> +
+>>>>>  properties:
+>>>>>    compatible:
+>>>>>      enum:
+>>>>> @@ -25,6 +44,12 @@ properties:
+>>>>>    interrupts:
+>>>>>      maxItems: 1
+>>>>>
+>>>>> +  clocks:
+>>>>> +    maxItems: 2
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    maxItems: 2
+>>>>> +
+>>>>>    xlnx,num-ss-bits:
+>>>>>      description: Number of chip selects used.
+>>>>>      minimum: 1
+>>>>> @@ -39,6 +64,8 @@ required:
+>>>>>    - compatible
+>>>>>    - reg
+>>>>>    - interrupts
+>>>>> +  - clocks
+>>>>> +  - clock-names
+>>>>
+>>>> New required properties are an ABI break, where is the driver patch
+>>>> that makes use of these clocks?
+>>>
+>>> Alright, I will remove these from the required properties to avoid
+>>> breaking the ABI. We're working on the driver patch and will send it
+>>> once it's ready.
+>>
+>> What changed to make the clocks needed now? It's possible that making them
+>> required is the correct thing to do, so breaking the ABI would be justified (provided
+>> the driver can still handle there being no clocks).
+> 
+> Axi Quad SPI is an FPGA-based IP that was previously tested on MicroBlaze 
+> soft-core systems, where the driver didn't need to enable the clock, as it 
+> would already be enabled before the PL is loaded. However, when used 
+> with ARM hard-core SoCs, the driver must explicitly enable the clocks, 
+
+
+Commit msg should explain this. Including ABI break impact.
+
+Best regards,
+Krzysztof
+
 
