@@ -1,49 +1,49 @@
-Return-Path: <linux-spi+bounces-5017-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5019-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C4F5988DC8
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 06:13:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8995988DCD
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 06:14:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B438F282D01
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 04:13:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BCE91F21289
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 04:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D0015C14E;
-	Sat, 28 Sep 2024 04:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB612199957;
+	Sat, 28 Sep 2024 04:13:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="y2WoFxeF"
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="dGdOAyY2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD71154454;
-	Sat, 28 Sep 2024 04:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1435165F04;
+	Sat, 28 Sep 2024 04:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727496789; cv=none; b=mgNM5rALO3vFHGkVIsv1aJAVL4sWwy96fTRl1HPWQaUJ8eYsj6YbEfyHLmfLpqdCuYnrhXqSQUODXi5zQ9UO/tGs3CnUXyuvd4+wbYu4pl8bztQO/Mr7Ol/dxqFemf6EB8Vnis1QiDiNuTL41jhFRkbrZXda8Tu6PjhNcB3hUzM=
+	t=1727496791; cv=none; b=ZtaEpCsZ+T0dtAEizY0hVr95g//aBLcQgo5UWQwqEVPrqIx7uCwxxr6JVOqGOUGUYUlGoWTMYHr4Q4f95IAHweFsuENFKCoG24sBuQyJURkQe24Vvcs7cRGkdX1TADOFVG+duJmDN907plODgRzolq7BoleEdB9JISUD7saKp+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727496789; c=relaxed/simple;
-	bh=T4b5SCDbPtpznM3ly/UqgYB98QDVOVTAORg7GBHsgrI=;
+	s=arc-20240116; t=1727496791; c=relaxed/simple;
+	bh=/0dqEeVI0kdnBedaeCOmkKYW/KlhzVR3w6RZjjLJeNI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZPTrS5Wc/3/H2RsExG1IrTonDEaMkNMbWRr4F7c8/LYpSH8PeYRSI3cooDFrkfBs1ZZ+mjyAKzkfPGYdidLs1GnQIVN/WBPt7mb9xCdX3+QGQLZRKjBrtAbq7BvcvnIBXasPCHcvd9FV2CfUdbpEIXKk09QIZORX4xpzhE/pSlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=y2WoFxeF; arc=none smtp.client-ip=116.203.91.91
+	 MIME-Version:Content-Type; b=gOT0fNUO9zecVSHIx+O3fcIZImgp7XMADofvtpkW4SXlcoqYnbmTKj2zVp8eBteEbjof9yJKonTB3oLiDKF1F8ZdZ8swGkuFUfLl4AcsIYQm7ML97NzTjtG+nRibLxzZjbC1BAjgMobo9aoBwhjx++/39waXDxzLYQofaSI8jTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=dGdOAyY2; arc=none smtp.client-ip=116.203.91.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 From: Dragan Simic <dsimic@manjaro.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1727496780;
+	t=1727496781;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rKsTa/7rhm4a+RlN32Byj4tfrxf7+of7JzY7hJesRZ4=;
-	b=y2WoFxeFfI2AKDIiPU6N0JB5zuc5QehUTZ35W2W1yLQNoFk7BdxJHHjy/ylXFRmZVttB4X
-	ZMCfcuC9tqWEg9nbfEoY6DHtRp5Ogbe3l8hteoNlQEhGmvXIpuwSvO5S+ybexoC0AwkFf6
-	I6aMHf4TX8kNHavMvxzIGLlPgnXi5z1twYr6xRDGnNBDwv27cRbUgJK9jxxoZMuRxOR1fu
-	l7tmbTxqoZ491jQRH+lEdmqG/4rKPIEsnFcT7+58fUssip0THFtN38ptRHWgBhdWW9NXpl
-	8F++KnEbrpMk0/uO5jGrIgYvNAhfDUQYV6myNXHG/YstnNPWNgiIYdmUMvPrVg==
+	bh=/j3wHuSvKpQWX/VU5AEDYXLGtmoTcj7Rhg34WD2kMcg=;
+	b=dGdOAyY2RpRJ/zO5zBPDSKb+SEjR9m2ong/UfCBAPqC3XoUki1n9i3k5oNsBnqVvNxLFJ6
+	57ju1SsECm5VXqR3TjmEqIRCZs2FOR0Fjo7u7E/QO4VcVUfaISg5a77WD73kFUMGkIJ996
+	xO+bGaU883XhiKl+t60UvIQQYvGBYWsGF8Axpg8URy9d4m7gtNP53SORnpQuCuqHVdFDQz
+	FUUgr9wSfjtukAq1vs/VIV5n1g9NE45GLf9FsPcWQ2BRMhPM4xIQXrwrCbN37krgFT49dB
+	q4RIe9D3/ecNUgJpEoDbgXzC3lWiDQf8H96OyvTzASWNj51I27gVwd6RiAk5SQ==
 To: linux-spi@vger.kernel.org,
 	linux-rockchip@lists.infradead.org
 Cc: broonie@kernel.org,
@@ -53,9 +53,9 @@ Cc: broonie@kernel.org,
 	oss@helene.moe,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] driver core: Add device probe log helper dev_warn_probe()
-Date: Sat, 28 Sep 2024 06:12:48 +0200
-Message-Id: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
+Subject: [PATCH v2 5/5] spi: rockchip: Use dev_{err,warn}_probe() in the probe path
+Date: Sat, 28 Sep 2024 06:12:49 +0200
+Message-Id: <b42b681563a75693f7d6bf0a36c8f8db6ba2cc1c.1727496560.git.dsimic@manjaro.org>
 In-Reply-To: <cover.1727496560.git.dsimic@manjaro.org>
 References: <cover.1727496560.git.dsimic@manjaro.org>
 Precedence: bulk
@@ -64,198 +64,91 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Authentication-Results: ORIGINATING;
 	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Some drivers can still provide their functionality to a certain extent even
-some of their resource acquisitions eventually fail.  In such cases, emitting
-errors isn't the desired action, but warnings should be emitted instead.
+Use function dev_err_probe() in the probe path instead of dev_err() where
+appropriate, to make the code a bit more uniform and compact.  Use the new
+function dev_warn_probe() to improve error handling for the TX and RX DMA
+channel requests, which are actually optional, and tweak the logged warnings
+a bit to additionally describe their optional nature.
 
-To solve this, introduce dev_warn_probe() as a new device probe log helper,
-which behaves identically as the already existing dev_err_probe(), while it
-produces warnings instead of errors.  The intended use is with the resources
-that are actually optional for a particular driver.
+Previously, deferred requests for the TX and RX DMA channels produced no
+debug messages, and the final error messages didn't include the error codes,
+which are all highly useful when debugging permanently failed DMA channel
+requests, such as when the required drivers aren't enabled.
 
-While there, copyedit the kerneldoc for dev_err_probe() a bit, to simplify
-its wording a bit, and reuse it as the kerneldoc for dev_warn_probe(), with
-the necessary wording adjustments, of course.
-
+Suggested-by: Hélene Vulquin <oss@helene.moe>
 Signed-off-by: Dragan Simic <dsimic@manjaro.org>
 ---
- drivers/base/core.c        | 110 ++++++++++++++++++++++++++++---------
- include/linux/dev_printk.h |   1 +
- 2 files changed, 84 insertions(+), 27 deletions(-)
+ drivers/spi/spi-rockchip.c | 28 +++++++++++++---------------
+ 1 file changed, 13 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 8c0733d3aad8..a4592b7ffa5d 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -4982,71 +4982,127 @@ define_dev_printk_level(_dev_info, KERN_INFO);
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 81f2a966c124..055cd6066466 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -773,15 +773,15 @@ static int rockchip_spi_probe(struct platform_device *pdev)
  
- #endif
+ 	rs->apb_pclk = devm_clk_get_enabled(&pdev->dev, "apb_pclk");
+ 	if (IS_ERR(rs->apb_pclk)) {
+-		dev_err(&pdev->dev, "Failed to get apb_pclk\n");
+-		ret = PTR_ERR(rs->apb_pclk);
++		ret = dev_err_probe(&pdev->dev, PTR_ERR(rs->apb_pclk),
++				    "Failed to get apb_pclk\n");
+ 		goto err_put_ctlr;
+ 	}
  
-+static int dev_probe_failed(const struct device *dev, int err, bool fatal,
-+			    const char *fmt, va_list args)
-+{
-+	struct va_format vaf;
-+
-+	vaf.fmt = fmt;
-+	vaf.va = &args;
-+
-+	switch (err) {
-+	case -EPROBE_DEFER:
-+		device_set_deferred_probe_reason(dev, &vaf);
-+		dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-+		break;
-+
-+	case -ENOMEM:
-+		/* Don't print anything on -ENOMEM, there's already enough output */
-+		break;
-+
-+	default:
-+		/* Log fatal final failures as errors, otherwise produce warnings */
-+		if (fatal)
-+			dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-+		else
-+			dev_warn(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-+		break;
-+	}
-+
-+	return err;
-+}
-+
- /**
-  * dev_err_probe - probe error check and log helper
-  * @dev: the pointer to the struct device
-  * @err: error value to test
-  * @fmt: printf-style format string
-  * @...: arguments as specified in the format string
-  *
-  * This helper implements common pattern present in probe functions for error
-  * checking: print debug or error message depending if the error value is
-  * -EPROBE_DEFER and propagate error upwards.
-  * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
-  * checked later by reading devices_deferred debugfs attribute.
-- * It replaces code sequence::
-+ * It replaces the following code sequence::
-  *
-  * 	if (err != -EPROBE_DEFER)
-  * 		dev_err(dev, ...);
-  * 	else
-  * 		dev_dbg(dev, ...);
-  * 	return err;
-  *
-  * with::
-  *
-  * 	return dev_err_probe(dev, err, ...);
-  *
-- * Using this helper in your probe function is totally fine even if @err is
-- * known to never be -EPROBE_DEFER.
-+ * Using this helper in your probe function is totally fine even if @err
-+ * is known to never be -EPROBE_DEFER.
-  * The benefit compared to a normal dev_err() is the standardized format
-- * of the error code, it being emitted symbolically (i.e. you get "EAGAIN"
-- * instead of "-35") and the fact that the error code is returned which allows
-- * more compact error paths.
-+ * of the error code, which is emitted symbolically (i.e. you get "EAGAIN"
-+ * instead of "-35"), and having the error code returned allows more
-+ * compact error paths.
-  *
-  * Returns @err.
-  */
- int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
- {
--	struct va_format vaf;
- 	va_list args;
+ 	rs->spiclk = devm_clk_get_enabled(&pdev->dev, "spiclk");
+ 	if (IS_ERR(rs->spiclk)) {
+-		dev_err(&pdev->dev, "Failed to get spi_pclk\n");
+-		ret = PTR_ERR(rs->spiclk);
++		ret = dev_err_probe(&pdev->dev, PTR_ERR(rs->spiclk),
++				    "Failed to get spi_pclk\n");
+ 		goto err_put_ctlr;
+ 	}
  
- 	va_start(args, fmt);
--	vaf.fmt = fmt;
--	vaf.va = &args;
+@@ -817,8 +817,7 @@ static int rockchip_spi_probe(struct platform_device *pdev)
  
--	switch (err) {
--	case -EPROBE_DEFER:
--		device_set_deferred_probe_reason(dev, &vaf);
--		dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
--		break;
-+	/* Use dev_err() for logging when err doesn't equal -EPROBE_DEFER */
-+	dev_probe_failed(dev, err, true, fmt, args);
+ 	rs->fifo_len = get_fifo_len(rs);
+ 	if (!rs->fifo_len) {
+-		dev_err(&pdev->dev, "Failed to get fifo length\n");
+-		ret = -EINVAL;
++		ret = dev_err_probe(&pdev->dev, -EINVAL, "Failed to get fifo length\n");
+ 		goto err_put_ctlr;
+ 	}
  
--	case -ENOMEM:
--		/*
--		 * We don't print anything on -ENOMEM, there is already enough
--		 * output.
--		 */
--		break;
-+	va_end(args);
-+}
-+EXPORT_SYMBOL_GPL(dev_err_probe);
+@@ -858,22 +857,21 @@ static int rockchip_spi_probe(struct platform_device *pdev)
  
--	default:
--		dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
--		break;
--	}
-+/**
-+ * dev_warn_probe - probe error check and log helper
-+ * @dev: the pointer to the struct device
-+ * @err: error value to test
-+ * @fmt: printf-style format string
-+ * @...: arguments as specified in the format string
-+ *
-+ * This helper implements common pattern present in probe functions for error
-+ * checking: print debug or warning message depending if the error value is
-+ * -EPROBE_DEFER and propagate error upwards.
-+ * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
-+ * checked later by reading devices_deferred debugfs attribute.
-+ * It replaces the following code sequence::
-+ *
-+ * 	if (err != -EPROBE_DEFER)
-+ * 		dev_warn(dev, ...);
-+ * 	else
-+ * 		dev_dbg(dev, ...);
-+ * 	return err;
-+ *
-+ * with::
-+ *
-+ * 	return dev_warn_probe(dev, err, ...);
-+ *
-+ * Using this helper in your probe function is totally fine even if @err
-+ * is known to never be -EPROBE_DEFER.
-+ * The benefit compared to a normal dev_warn() is the standardized format
-+ * of the error code, which is emitted symbolically (i.e. you get "EAGAIN"
-+ * instead of "-35"), and having the error code returned allows more
-+ * compact error paths.
-+ *
-+ * Returns @err.
-+ */
-+int dev_warn_probe(const struct device *dev, int err, const char *fmt, ...)
-+{
-+	va_list args;
+ 	ctlr->dma_tx = dma_request_chan(rs->dev, "tx");
+ 	if (IS_ERR(ctlr->dma_tx)) {
+-		/* Check tx to see if we need defer probing driver */
+-		if (PTR_ERR(ctlr->dma_tx) == -EPROBE_DEFER) {
+-			ret = -EPROBE_DEFER;
++		/* Check tx to see if we need to defer driver probing */
++		ret = dev_warn_probe(rs->dev, PTR_ERR(ctlr->dma_tx),
++				     "Failed to request optional TX DMA channel\n");
++		if (ret == -EPROBE_DEFER)
+ 			goto err_disable_pm_runtime;
+-		}
+-		dev_warn(rs->dev, "Failed to request TX DMA channel\n");
+ 		ctlr->dma_tx = NULL;
+ 	}
  
--	va_end(args);
-+	va_start(args, fmt);
+ 	ctlr->dma_rx = dma_request_chan(rs->dev, "rx");
+ 	if (IS_ERR(ctlr->dma_rx)) {
+-		if (PTR_ERR(ctlr->dma_rx) == -EPROBE_DEFER) {
+-			ret = -EPROBE_DEFER;
++		/* Check rx to see if we need to defer driver probing */
++		ret = dev_warn_probe(rs->dev, PTR_ERR(ctlr->dma_rx),
++				     "Failed to request optional RX DMA channel\n");
++		if (ret == -EPROBE_DEFER)
+ 			goto err_free_dma_tx;
+-		}
+-		dev_warn(rs->dev, "Failed to request RX DMA channel\n");
+ 		ctlr->dma_rx = NULL;
+ 	}
  
--	return err;
-+	/* Use dev_warn() for logging when err doesn't equal -EPROBE_DEFER */
-+	dev_probe_failed(dev, err, false, fmt, args);
-+
-+	va_end(args);
- }
--EXPORT_SYMBOL_GPL(dev_err_probe);
-+EXPORT_SYMBOL_GPL(dev_warn_probe);
- 
- static inline bool fwnode_is_primary(struct fwnode_handle *fwnode)
- {
-diff --git a/include/linux/dev_printk.h b/include/linux/dev_printk.h
-index ca32b5bb28eb..eb2094e43050 100644
---- a/include/linux/dev_printk.h
-+++ b/include/linux/dev_printk.h
-@@ -276,6 +276,7 @@ do {									\
- 			dev_driver_string(dev), dev_name(dev), ## arg)
- 
- __printf(3, 4) int dev_err_probe(const struct device *dev, int err, const char *fmt, ...);
-+__printf(3, 4) int dev_warn_probe(const struct device *dev, int err, const char *fmt, ...);
- 
- /* Simple helper for dev_err_probe() when ERR_PTR() is to be returned. */
- #define dev_err_ptr_probe(dev, ___err, fmt, ...) \
 
