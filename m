@@ -1,162 +1,249 @@
-Return-Path: <linux-spi+bounces-5026-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5027-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9790C9892A0
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 04:21:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE1AC989378
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 09:38:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDA151C22354
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 02:21:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4708C2832FD
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 07:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED4F717578;
-	Sun, 29 Sep 2024 02:21:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FFD84E18;
+	Sun, 29 Sep 2024 07:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tv9QM9CB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LEbv6UPB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED2014A91;
-	Sun, 29 Sep 2024 02:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13271F95A;
+	Sun, 29 Sep 2024 07:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727576473; cv=none; b=KIYt5z16hmuRe8qWd0bRg5uyLdmBwWPkYOkiHn2V+8RBpMN3DKvcQpOo9fITUtKeMawmys5J01p/jOnWcgOkB7FkD2c6RRxpKqDHqhpl5xVjtZnX8dHYmHgqWKdhhJf1HjRn+gc40X5DaLXCPn8RXgjiIgoYn4enNzkErwA4KjA=
+	t=1727595499; cv=none; b=ccfEjtcRQLlDondZsWQLJte9UMG/oB/QYUsA9h4Nrvs/7f++eiF9zbL0RzpK0pPKJnS94vSHUNKlNz04D41xw3s2ZSrcZcoiIOqqt76Z8Y5zp3RIFUonusZYTO7LoicVt3PJxk1amGlzTB5VQ4SgWdXINfKOrEGqphA70gbHky0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727576473; c=relaxed/simple;
-	bh=xSb9HBBKx6Kc+DXgPCklMJpn9wz9U4K4o0J0+cEpDS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q+MiEWNNsjYiisWveRii+ZNxWIczjgWKkUI3QDG4JtGO9JUftvsKWV0PjzqRQ0MfbTbU3U5HvG0r9x6YfK4gSz3mAh56nm/5ZXYEpdqsqQaGJB9JSvio3lTbFITUJw/c64gStaAGgmTeRYj+bYChvXR7k0xdKAUB7jia2mipoS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tv9QM9CB; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727576472; x=1759112472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xSb9HBBKx6Kc+DXgPCklMJpn9wz9U4K4o0J0+cEpDS4=;
-  b=Tv9QM9CBObbi94VEBQT0JWvvDIo2xX/epYCNDFQNCLGD35q9a/Hmzxej
-   kWOMtsMN9FAVbVaFbmmmWZzuz3tpC3ICX32ZVn6BRVgWh6NuQAexAAfur
-   hn/99M6/o3iuWYtIEFEcZ3rU/r4Be9oy7BQ0eRoIPsQqRmbktVbSSonxi
-   jQA0RL4ztzbiMg6JZQtZdS2iRYQlpXZpcwmDD793gDtDwiCeObWesK8eY
-   i71iyZI6oYqhLL4x2ilwsaX/CCfBH5xe3lrE4EqUKFJinWIR6lLBYHJRZ
-   fPVVvIZ+5tiwMjr9tZnehADpqIhCg1oPfJ8lPJQJ98g1ezeuHERBCF2Mk
-   g==;
-X-CSE-ConnectionGUID: fnivp4Y/Q+OVqEdxBu9mUQ==
-X-CSE-MsgGUID: WIzd0MaRQ2ul+QrKoe2czg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="14307809"
-X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="14307809"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 19:21:12 -0700
-X-CSE-ConnectionGUID: K8NP/KFTTzq87Al86HBMRg==
-X-CSE-MsgGUID: wyXz8uifTDuMZiZeLrFkYA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
-   d="scan'208";a="72499187"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Sep 2024 19:21:09 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sujYY-000Npf-23;
-	Sun, 29 Sep 2024 02:21:06 +0000
-Date: Sun, 29 Sep 2024 10:20:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dragan Simic <dsimic@manjaro.org>, linux-spi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org
-Cc: oe-kbuild-all@lists.linux.dev, broonie@kernel.org, heiko@sntech.de,
-	gregkh@linuxfoundation.org, rafael@kernel.org, oss@helene.moe,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] driver core: Add device probe log helper
- dev_warn_probe()
-Message-ID: <202409290910.55WdSCMH-lkp@intel.com>
-References: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
+	s=arc-20240116; t=1727595499; c=relaxed/simple;
+	bh=uZqm/vVvL62S3Ei5w3HeKSAwjQt1+NE5f4nmgTdVDDs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X9w2O1yHQqmTiUTJKOz2NmgaIQ7ub1HIvWoACbo2ES28ZxMpE4k/gnNXEe1jeXobAesuhGXMsagyc7Lv6CxTAekkPcv4JTiiWtVfnPSz8uEsY0g0JMz/LYVtG7zNmHNTGvRiQlwPzFmbD0Gy4pmHIhLFCOw3yJqOMUDjxpt5M80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LEbv6UPB; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2054feabfc3so32385505ad.1;
+        Sun, 29 Sep 2024 00:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727595497; x=1728200297; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bxg86KR6sOyXP7avilmE6FsFPoosRZPYDwPpN3nt2Uc=;
+        b=LEbv6UPBLVPzr1HT9FX/rAjAE24c5PnqpAQ8w+PY5h/Wbf+8etQuKfLPtn3a7FukYH
+         LHI8L0rfeggFNkfliZvGaFvzJc4NtFM47yAK9ahYNeCb0p9W1kBKu/77QNwGpsMwm39k
+         H+paBo896f4NM888YqDHK2rmWHREiTGsjMiwOsPm62F7dS9WhlzlgR33+riFlSO9hODy
+         Jd3nNx3UItys1cfYrgDhTWU9aBU7eK3MvXVHPIYcH4PTftJMKMGWR4YDhl07hdizjhLu
+         UObiQpOmfQX4bEep4C9JnFOnCQYJKXbHbO2ruqa0bA8e7WJxD7G0rWozNVLr+7apc6M+
+         udyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727595497; x=1728200297;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bxg86KR6sOyXP7avilmE6FsFPoosRZPYDwPpN3nt2Uc=;
+        b=akgnYGcYZliiw3Zf2nn9Wm6qwff7zn4G8HTwFKXmIHiOb+z9BNXMe7nDeIpYdcQaxk
+         7ySJahFJGSyFj1EWjOyiUXsAJ6xXos9er8CYX31mL3/lcpxYSHL7aMDkcADPvOqeIVQS
+         fOWx28TMQsJ6AOcfsrk/1DJ8CQJkJU4UmJ6e0gdMEctnlvj9NZBnR4mkM0aK/kcM/DCF
+         FksP22HhYgSklr1vclO1W7iep+D3MhqJ6iclp0GU/xNPyRkaAEmnolZ+NBDJUNrm/9V3
+         qZlJT5dDjbtrXbCeGbHZVn0BpbHG0zzQolIe8ZUTPpDJcnoQdJTHU1johcJQlGubOGv6
+         YX8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUXfep4AEVH0635wFouqz+FLsk1ktvHEDnXQr77RTPPXrnZ+/KWTPDivc2+JYvxle+RpG9KaVrYbVHn@vger.kernel.org, AJvYcCW8gGq/wpOOpty/sGfYpPk/JHNT4Dpqc5FFygE2u8HIhNqv7NoSTO1pX4npo0YfUBVwD0lJBS9If5j+@vger.kernel.org, AJvYcCWrmjGiZ/F/gUQTSCH45O3TYRFe+qyaNQXjfBzhXhMVjWVB5qtOmrpZpuz6mqHZ/dmJ5y/zlTQyL6MjZaUc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgQqtP4SxBCTk2TTuzxwi/r6kS8MbsSKyFyj3n31zhWzB/PeOl
+	HMjCObEP+lmtzqbTD6YsAPJMIVaGA3v3YyqfWB55gl/qaiXesWNr
+X-Google-Smtp-Source: AGHT+IHnOei7oW47GqQ4k3VZSvkF4bqNfH1Cv9JrR9elGwyRf8ai7bXn1hMNSk4j4aZ424fYn3rplg==
+X-Received: by 2002:a17:902:f691:b0:206:ae88:417f with SMTP id d9443c01a7336-20b367ca60bmr151796385ad.6.1727595496728;
+        Sun, 29 Sep 2024 00:38:16 -0700 (PDT)
+Received: from Emma ([2401:4900:1c97:3972:5054:ff:fe53:2787])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e577edsm35910455ad.263.2024.09.29.00.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Sep 2024 00:38:16 -0700 (PDT)
+Date: Sun, 29 Sep 2024 07:22:37 +0000
+From: Karan Sanghavi <karansanghvi98@gmail.com>
+To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	linux-kernel@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Anup <anupnewsmail@gmail.com>
+Subject: [PATCH] dt-bindings: spi: Add bcm2835-aux-spi.yaml file.
+Message-ID: <ZvkAPUoa96GHPnZE@Emma>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Dragan,
+Converted the brcm,bcm2835-aux-spi.txt file to
+its respective yaml file format.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+---
 
-[auto build test ERROR on rockchip/for-next]
-[also build test ERROR on broonie-spi/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240927]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+While running
+make CHECK_DTBS=y broadcom/bcm2711-rpi-4-b.dtb,
+I encountered an error related to the compatible property
+for brcm,bcm2835-aux-spi. To resolve this, I converted the
+text file to a YAML binding file and checked it with
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dragan-Simic/spi-rockchip-Perform-trivial-code-cleanups/20240928-121548
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
-patch link:    https://lore.kernel.org/r/2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic%40manjaro.org
-patch subject: [PATCH v2 4/5] driver core: Add device probe log helper dev_warn_probe()
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20240929/202409290910.55WdSCMH-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290910.55WdSCMH-lkp@intel.com/reproduce)
+make dt_binding_check DT_SCHEMA_FILES=brcm,bcm2835-aux-spi.yaml
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409290910.55WdSCMH-lkp@intel.com/
+and
 
-All errors (new ones prefixed by >>):
+make CHECK_DTBS=y broadcom/bcm2711-rpi-4-b.dtb
 
-   drivers/base/core.c: In function 'dev_probe_failed':
->> drivers/base/core.c:4988:16: error: assignment to '__va_list_tag (*)[1]' from incompatible pointer type '__va_list_tag **' [-Wincompatible-pointer-types]
-    4988 |         vaf.va = &args;
-         |                ^
-   drivers/base/core.c: In function 'dev_err_probe':
-   drivers/base/core.c:5055:1: warning: control reaches end of non-void function [-Wreturn-type]
-    5055 | }
-         | ^
-   drivers/base/core.c: In function 'dev_warn_probe':
-   drivers/base/core.c:5101:1: warning: control reaches end of non-void function [-Wreturn-type]
-    5101 | }
-         | ^
+and generates no error.
 
+However, I have a question regarding the cs-gpios property.
+The BCM2711 datasheet mentions that each Universal SPI
+Master has 3 independent chip selects. I’m wondering
+if this means these chip select (CS) pins are native,
+or if we still need to attach GPIOs to them.
+If GPIOs are required for these 3 CS pins,
+does that mean we also need to include them in the
+device tree schema? and also as arequired property in
+binding?
 
-vim +4988 drivers/base/core.c
+ .../bindings/spi/brcm,bcm2835-aux-spi.txt     | 38 -----------
+ .../bindings/spi/brcm,bcm2835-aux-spi.yaml    | 66 +++++++++++++++++++
+ 2 files changed, 66 insertions(+), 38 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
 
-  4981	
-  4982	static int dev_probe_failed(const struct device *dev, int err, bool fatal,
-  4983				    const char *fmt, va_list args)
-  4984	{
-  4985		struct va_format vaf;
-  4986	
-  4987		vaf.fmt = fmt;
-> 4988		vaf.va = &args;
-  4989	
-  4990		switch (err) {
-  4991		case -EPROBE_DEFER:
-  4992			device_set_deferred_probe_reason(dev, &vaf);
-  4993			dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  4994			break;
-  4995	
-  4996		case -ENOMEM:
-  4997			/* Don't print anything on -ENOMEM, there's already enough output */
-  4998			break;
-  4999	
-  5000		default:
-  5001			/* Log fatal final failures as errors, otherwise produce warnings */
-  5002			if (fatal)
-  5003				dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  5004			else
-  5005				dev_warn(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-  5006			break;
-  5007		}
-  5008	
-  5009		return err;
-  5010	}
-  5011	
-
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.txt b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.txt
+deleted file mode 100644
+index d7668f41b03b..000000000000
+--- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.txt
++++ /dev/null
+@@ -1,38 +0,0 @@
+-Broadcom BCM2835 auxiliary SPI1/2 controller
+-
+-The BCM2835 contains two forms of SPI master controller, one known simply as
+-SPI0, and the other known as the "Universal SPI Master"; part of the
+-auxiliary block. This binding applies to the SPI1/2 controller.
+-
+-Required properties:
+-- compatible: Should be "brcm,bcm2835-aux-spi".
+-- reg: Should contain register location and length for the spi block
+-- interrupts: Should contain shared interrupt of the aux block
+-- clocks: The clock feeding the SPI controller - needs to
+-	  point to the auxiliary clock driver of the bcm2835,
+-	  as this clock will enable the output gate for the specific
+-	  clock.
+-- cs-gpios: the cs-gpios (native cs is NOT supported)
+-	    see also spi-bus.txt
+-
+-Example:
+-
+-spi1@7e215080 {
+-	compatible = "brcm,bcm2835-aux-spi";
+-	reg = <0x7e215080 0x40>;
+-	interrupts = <1 29>;
+-	clocks = <&aux_clocks BCM2835_AUX_CLOCK_SPI1>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	cs-gpios = <&gpio 18>, <&gpio 17>, <&gpio 16>;
+-};
+-
+-spi2@7e2150c0 {
+-	compatible = "brcm,bcm2835-aux-spi";
+-	reg = <0x7e2150c0 0x40>;
+-	interrupts = <1 29>;
+-	clocks = <&aux_clocks BCM2835_AUX_CLOCK_SPI2>;
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	cs-gpios = <&gpio 43>, <&gpio 44>, <&gpio 45>;
+-};
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
+new file mode 100644
+index 000000000000..4c24cf2fe214
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/brcm,bcm2835-aux-spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom BCM2835 Auxiliary SPI1/2 Controller
++
++maintainers:
++  - Karan Sanghavi <karansanghvi98@gmail.com>
++
++description: |
++  The BCM2835 contains two forms of SPI master controller. One is known simply as
++  SPI0, and the other as the "Universal SPI Master," part of the auxiliary block.
++  This binding applies to the SPI1 and SPI2 auxiliary controllers.
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    enum:
++      - brcm,bcm2835-aux-spi
++    description: Broadcom BCM2835 Auxiliary SPI controller for SPI1 and SPI2.
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Reference to the auxiliary clock driver for the BCM2835.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/bcm2835-aux.h>
++    spi@7e215080 {
++        compatible = "brcm,bcm2835-aux-spi";
++        reg = <0x7e215080 0x40>;
++        interrupts = <1 29>;
++        clocks = <&aux_clocks BCM2835_AUX_CLOCK_SPI1>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
++
++  - |
++    #include <dt-bindings/clock/bcm2835-aux.h>
++    spi@7e2150c0 {
++        compatible = "brcm,bcm2835-aux-spi";
++        reg = <0x7e2150c0 0x40>;
++        interrupts = <1 29>;
++        clocks = <&aux_clocks BCM2835_AUX_CLOCK_SPI2>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
++
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
