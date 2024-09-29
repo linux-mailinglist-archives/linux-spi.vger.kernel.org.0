@@ -1,162 +1,174 @@
-Return-Path: <linux-spi+bounces-5023-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5024-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0547989147
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 22:12:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BE5F989281
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 03:40:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9628F285C4E
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Sep 2024 20:12:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5BB61F230FC
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Sep 2024 01:40:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D00315C139;
-	Sat, 28 Sep 2024 20:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F54C147;
+	Sun, 29 Sep 2024 01:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JI/efwwF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LGqrQhT1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0281718633;
-	Sat, 28 Sep 2024 20:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A8FC148;
+	Sun, 29 Sep 2024 01:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727554344; cv=none; b=I+iMDTT9N31cld64Jyt9BW4o9gq/Uf9Ek+4bGNO1LYCSMFJmYxs3DXupiQxV89G41WdaOHkfxwxGNGsPHIgB/Ig4isIPd9N+vJ+/lNCP27pXr6vRKrmiI3PgjKKkhM5Qn5Mz6vOmQ7DMwz8F/53USTyFoOmxNqFZ5wCNfG3Km4U=
+	t=1727574013; cv=none; b=T2nBjhB5awuCC/Dr1EyCcR1SYhlOVqcP0Z3e4uF7esgM8ijPKJqxFSXGnyTUxkt2wR16E04GvLSgIE4eC1lmJH6Xma5B4dbPJLgKdfMBJM0j/j1RPrb1tp8Dz7UWbeJ5KBbADe6XDm9zVS+B1a5LVqZBa3+UnfeLj3R01YIAQBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727554344; c=relaxed/simple;
-	bh=I26IhX4NPnUeeWPTVvJaD0+ucaQP/7Z8uFoi3S8v0Bk=;
+	s=arc-20240116; t=1727574013; c=relaxed/simple;
+	bh=r8YEm82IiDRZTCkCh879m0xJ5xKM7guPvEFt/0AzZZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DoavZZ6NjMOM2FQ6xAqJY2DB5kulrHB95ntVdJAGEFTUepMBvYMQL61Wy031ytZPm0WSpORdnDzXALn/z4cnBo9CleHwLzHS6xbUTc8Yor0WlR253dOOTEy+Hud2S+tbgZM0HVQa9TBfMTXP91fFtIFFLa+ocqlZFHx554/IjpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JI/efwwF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2EE4C4CEC3;
-	Sat, 28 Sep 2024 20:12:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727554343;
-	bh=I26IhX4NPnUeeWPTVvJaD0+ucaQP/7Z8uFoi3S8v0Bk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JI/efwwFtDmd+Nkm6Hsk/gt9t5XEcQqUqD6b0o9RIUI+KDDCIgO8mlFeVr8Jyyy9j
-	 5A0ZX0W7fAwebJwawO3dh13IX0OT/81s5+95Rj/ux3eS4cdNz3UixGYMloVSl32d5/
-	 ldHHuC+BLQm2X+9+Hho5fu5cEKRSyxsJGxt+OLHm8tG4L1ylu3UJTs5Bd0Nv5hwqEL
-	 p7EKwU2ON28oYc49PQI9ovO6XdjWtI3gYJc/qN/7DLSkJTkFaVEWOzbVw3IfclOmve
-	 F5pLNYURtBGOEfxu6fg3shNJroczcjQx+mkla31XkuDYkXlvV7GwMwm2SSKuXMHp6R
-	 EvTZ0wgbrpeLA==
-Date: Sat, 28 Sep 2024 21:12:18 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>,
-	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"Simek, Michal" <michal.simek@amd.com>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"git (AMD-Xilinx)" <git@amd.com>,
-	"amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>
-Subject: Re: [PATCH] dt-bindings: spi: xilinx: Add clocks & clock-names
- properties
-Message-ID: <20240928-postcard-lively-c0c9bbe74d04@spud>
-References: <20240923123242.2101562-1-amit.kumar-mahapatra@amd.com>
- <20240924-impaired-starving-eef91b339f67@spud>
- <IA0PR12MB76998D7BC3429606508E6202DC692@IA0PR12MB7699.namprd12.prod.outlook.com>
- <20240925-trapdoor-stunt-33516665fdc5@spud>
- <IA0PR12MB76999B696A9BA0834644AC71DC6B2@IA0PR12MB7699.namprd12.prod.outlook.com>
- <03a1c7e7-c516-41ab-a668-7c6785ab1c4f@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=a+Wp2qUnWFKwNijrhxJPM27hjLNQVkyVCjKbLcUhRZg633vu6hd25qSrddOQBSSEsTOud8mQIp6lHqUq/UqiGup63kNph/4uWmeKEbIISnBoP4mB7pxFml+Rj/6BxwJfKM2UWJOTrcREYM/NJURUXyFQtYIAZci1ZxdFL5BWsvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LGqrQhT1; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727574012; x=1759110012;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r8YEm82IiDRZTCkCh879m0xJ5xKM7guPvEFt/0AzZZk=;
+  b=LGqrQhT1AII8BOfxScwYakNkpJXaQ3dAmUXWcgfgDj0g9zLhYoiVZp6X
+   1B3RxOWRZbuSW5Gs6PVmo4munAz1Hf38ajVossjlboA/O5NVxQO9O+ken
+   y8EJPNEfhaU8yURgNxAIYG1KTSGFkXBxQgdBa1J1Qg5w/4P2atRkLleK3
+   UP7m/SdhlDw/zwagGyVFJ4d67/tbO2WTP5d7mR442M5PNFAG/Jz3rTMzD
+   S6IGrfjkYBrvg+U8k1qaaJK0ze8qKfUF2ypR/sy0LDvkvuhHSldW3XnOU
+   sqTHK6+B60SxR8uqh11lcVEqjtTBSC8o47D9EhlVaOZu0ToI0L+r603xf
+   w==;
+X-CSE-ConnectionGUID: 4mewzjOCRoK04q0jAhcKwQ==
+X-CSE-MsgGUID: +FThr1RyQ2mSUaXzUIvYFA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11209"; a="37267830"
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="37267830"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2024 18:40:11 -0700
+X-CSE-ConnectionGUID: lMzoxijmS/+sF1p2iiTmDA==
+X-CSE-MsgGUID: CcN8ldiURtmkZQOohAIF0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,162,1725346800"; 
+   d="scan'208";a="103702516"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 28 Sep 2024 18:40:08 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1suius-000Non-0T;
+	Sun, 29 Sep 2024 01:40:06 +0000
+Date: Sun, 29 Sep 2024 09:39:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dragan Simic <dsimic@manjaro.org>, linux-spi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, broonie@kernel.org, heiko@sntech.de,
+	gregkh@linuxfoundation.org, rafael@kernel.org, oss@helene.moe,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/5] driver core: Add device probe log helper
+ dev_warn_probe()
+Message-ID: <202409290956.jwLrcN1S-lkp@intel.com>
+References: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="1NX/bfG8PX15XlnI"
-Content-Disposition: inline
-In-Reply-To: <03a1c7e7-c516-41ab-a668-7c6785ab1c4f@kernel.org>
-
-
---1NX/bfG8PX15XlnI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic@manjaro.org>
 
-On Sat, Sep 28, 2024 at 10:19:01AM +0200, Krzysztof Kozlowski wrote:
-> On 27/09/2024 11:30, Mahapatra, Amit Kumar wrote:
-> > Hello Conor,
-> >=20
-> >=20
-> >>>> Subject: Re: [PATCH] dt-bindings: spi: xilinx: Add clocks &
-> >>>> clock-names properties
-> >>>>
-> >>>> On Mon, Sep 23, 2024 at 06:02:42PM +0530, Amit Kumar Mahapatra wrote:
-> >>>>> Include the 'clocks' and 'clock-names' properties in the AXI
-> >>>>> Quad-SPI bindings. When the AXI4-Lite interface is enabled, the
-> >>>>> core operates in legacy mode, maintaining backward compatibility
-> >>>>> with version 1.00, and uses 's_axi_aclk' and 'ext_spi_clk'. For
-> >>>>> the AXI interface, it uses 's_axi4_aclk' and 'ext_spi_clk'.
+Hi Dragan,
 
-> >>>>> +      properties:
-> >>>>> +        clock-names:
-> >>>>> +          items:
-> >>>>> +            - const: s_axi_aclk
-> >>>>> +            - const: ext_spi_clk
-> >>>>
-> >>>> These are all clocks, there should be no need to have "clk" in the n=
-ames.
-> >>>
-> >>> These are the names exported by the IP and used by the DTG.
-> >>
-> >> So? This is a binding, not a verilog file.
-> >=20
-> > Axi Quad SPI is an FPGA-based IP, and the clock names are derived from =
-the=20
-> > IP signal names as specified in the IP documentation [1].=20
-> > We chose these names to ensure alignment with the I/O signal names list=
-ed=20
-> > in Table 2-2 on page 19 of [1].
-> >=20
-> > [1] chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.amd=
-=2Ecom/content/dam/xilinx/support/documents/ip_documentation/axi_quad_spi/v=
-3_2/pg153-axi-quad-spi.pdf
->=20
-> So if hardware engineers call them "pink_pony_clk_aclk_really_clk" we
-> should follow...
->=20
->  - bus or axi
->  - ext_spi or spi
->=20
-> You have descriptions of each item to reference real signals. Conor's
-> comment is valid - do no make it verilog file.
->=20
-> >=20
-> >>
-> >>>>> +
-> >>>>> +    else:
-> >>>>> +      properties:
-> >>>>> +        clock-names:
-> >>>>> +          items:
-> >>>>> +            - const: s_axi4_aclk
-> >>>>> +            - const: ext_spi_clk
->=20
-> Nah, these are the same.
+kernel test robot noticed the following build warnings:
 
-They may be different, depending on whether or not the driver has to
-handle "axi4-lite" versus "axi" differently. That said, I find the
-commit message kinda odd in that it states that axi4-lite goes with
-the s_axi_aclk clock and axi goes with s_axi4_aclk. Seems backwards..
+[auto build test WARNING on rockchip/for-next]
+[also build test WARNING on broonie-spi/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240927]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---1NX/bfG8PX15XlnI
-Content-Type: application/pgp-signature; name="signature.asc"
+url:    https://github.com/intel-lab-lkp/linux/commits/Dragan-Simic/spi-rockchip-Perform-trivial-code-cleanups/20240928-121548
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/2fd9a60e0efe906dc7a203cd652c8d0b7f932470.1727496560.git.dsimic%40manjaro.org
+patch subject: [PATCH v2 4/5] driver core: Add device probe log helper dev_warn_probe()
+config: openrisc-allnoconfig (https://download.01.org/0day-ci/archive/20240929/202409290956.jwLrcN1S-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240929/202409290956.jwLrcN1S-lkp@intel.com/reproduce)
 
------BEGIN PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409290956.jwLrcN1S-lkp@intel.com/
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvhjIgAKCRB4tDGHoIJi
-0hFsAP9qhLfMvQnzh6cmsRecT9CTopCWp6KmwX/VcslN+ktYaAEAi5sAx2oVJBfy
-K00tigLYMqwYoZS6Oac4xOrzlxuOaAs=
-=lz2t
------END PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
---1NX/bfG8PX15XlnI--
+   drivers/base/core.c: In function 'dev_err_probe':
+>> drivers/base/core.c:5055:1: warning: control reaches end of non-void function [-Wreturn-type]
+    5055 | }
+         | ^
+   drivers/base/core.c: In function 'dev_warn_probe':
+   drivers/base/core.c:5101:1: warning: control reaches end of non-void function [-Wreturn-type]
+    5101 | }
+         | ^
+
+
+vim +5055 drivers/base/core.c
+
+  5011	
+  5012	/**
+  5013	 * dev_err_probe - probe error check and log helper
+  5014	 * @dev: the pointer to the struct device
+  5015	 * @err: error value to test
+  5016	 * @fmt: printf-style format string
+  5017	 * @...: arguments as specified in the format string
+  5018	 *
+  5019	 * This helper implements common pattern present in probe functions for error
+  5020	 * checking: print debug or error message depending if the error value is
+  5021	 * -EPROBE_DEFER and propagate error upwards.
+  5022	 * In case of -EPROBE_DEFER it sets also defer probe reason, which can be
+  5023	 * checked later by reading devices_deferred debugfs attribute.
+  5024	 * It replaces the following code sequence::
+  5025	 *
+  5026	 * 	if (err != -EPROBE_DEFER)
+  5027	 * 		dev_err(dev, ...);
+  5028	 * 	else
+  5029	 * 		dev_dbg(dev, ...);
+  5030	 * 	return err;
+  5031	 *
+  5032	 * with::
+  5033	 *
+  5034	 * 	return dev_err_probe(dev, err, ...);
+  5035	 *
+  5036	 * Using this helper in your probe function is totally fine even if @err
+  5037	 * is known to never be -EPROBE_DEFER.
+  5038	 * The benefit compared to a normal dev_err() is the standardized format
+  5039	 * of the error code, which is emitted symbolically (i.e. you get "EAGAIN"
+  5040	 * instead of "-35"), and having the error code returned allows more
+  5041	 * compact error paths.
+  5042	 *
+  5043	 * Returns @err.
+  5044	 */
+  5045	int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
+  5046	{
+  5047		va_list args;
+  5048	
+  5049		va_start(args, fmt);
+  5050	
+  5051		/* Use dev_err() for logging when err doesn't equal -EPROBE_DEFER */
+  5052		dev_probe_failed(dev, err, true, fmt, args);
+  5053	
+  5054		va_end(args);
+> 5055	}
+  5056	EXPORT_SYMBOL_GPL(dev_err_probe);
+  5057	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
