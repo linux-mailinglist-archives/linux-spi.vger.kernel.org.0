@@ -1,60 +1,54 @@
-Return-Path: <linux-spi+bounces-5062-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5063-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B11E698AF51
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 23:42:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7E9D98AF54
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 23:42:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A9DAB20C03
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 21:42:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 736DCB22A9A
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 21:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D707187FF6;
-	Mon, 30 Sep 2024 21:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90EF9188911;
+	Mon, 30 Sep 2024 21:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLub11w1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DFAcjuCo"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CAF18455C;
-	Mon, 30 Sep 2024 21:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D9AF188906
+	for <linux-spi@vger.kernel.org>; Mon, 30 Sep 2024 21:42:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727732527; cv=none; b=AW3W8OymJ5a+3/hrfzNlRZz9Vlp4e1cI2T9PPtW/jjo9GEX/qW1Q3SRVCS9qAI6Mqatn+HswtEZbULrec0D9UTugPuulXFtxLPMWwWtKcb3TpRao/XJkY+a1yJ3t5MM00HypOyNjDzXRraTsDqneSo8wGy8lEWNecMqlgfbOIOg=
+	t=1727732528; cv=none; b=l/MGNau7WMCwiKuloEoI9Faeuwu0NLbzvtKQzun/IsImXn3llS7Ua3pXeQFehL1qF6Pg+xnwXFiN0G0Ws1AEWh1oIJgQInjCD6xry5i4R+K6ODzLp02yYit3Sna1VKbxJSPPn+jMdJ0RB63nqSUEXXiuEhtG74lXFAK7O9H38SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727732527; c=relaxed/simple;
-	bh=McD0PPLjiwQhNMLldB9C6lK8T6YObT0WHb3qn6BQztw=;
+	s=arc-20240116; t=1727732528; c=relaxed/simple;
+	bh=zXtYpftF7+iAet5/mQ/2sstc4mZB6IdM6vS/4wHVTrk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sG0L9pOUMoiKsQIlCVwd3s7flg978uY9mQQBpGUipWt1YElQ5nZ/VY72v+fu0VB+TQ04fhBcc+149d7SmMdO2ruwm1OtiHT9iX1Cy58xAMNnu6RCpKiQZrDkWpqBNvoaTKDWJUJaNbY0pkNoo3Y5FrURei1CbRWihBxBk/Vbt7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLub11w1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5F5C4CEC7;
-	Mon, 30 Sep 2024 21:42:05 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Cav9dIs7tPNJe7ovPExTHKhoNLzORQt0U/ogNt0w78E0CZHYZhJLY4LP4usxG6u+4nmsTxkBPnHOKPjl9xoaed/JqZ5i8kChDXJ5PaVCGQFpogc8VThxfU52LrBSOJ7klGWtNWqDE6H2ATLhXmTftWnzoEILg49Enep2JXYhoOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DFAcjuCo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE31C4CECD;
+	Mon, 30 Sep 2024 21:42:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727732526;
-	bh=McD0PPLjiwQhNMLldB9C6lK8T6YObT0WHb3qn6BQztw=;
+	s=k20201202; t=1727732528;
+	bh=zXtYpftF7+iAet5/mQ/2sstc4mZB6IdM6vS/4wHVTrk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BLub11w1YJApgAOCcsuxt+wvn7pjKhEUo0lDZtXNOGx209M1pRP5Ru3jLIVNUkbG7
-	 UICIWUIL52R01MfweJKsFG2IjmFFeOm6j3i1vzh2PUekcGoD3IghZiYXbIPfBpXw9o
-	 8rFqKp5QibHIJsUu1NJoD4mYkUptuCg6U9DjPi7w5vmbkmr6pC1s/gJvRNPKe43TYj
-	 9ITBM2MXY1xhFJGQfZbna/Xv13JkL6QNBzGuYJE33ZJt1ix/UmEW+vFwspM8YcaxJC
-	 feikt7ZOzJTD8Yi25HaahXyYVtr6KZ6gWvxFDNa5fP4jJY4v7I62jVvNkkhTbdahd6
-	 /sqmHrZMGXX1g==
+	b=DFAcjuCoJSbpfJOfP9FJBn1OvYpsWwz0xaQaQeXfOLaubefXg3XsPSF+9t6wXOYXr
+	 ioO907K/ZF+/CRLlERhA0HDtSCPpm7VQ+Wy+xfKJ6+vfcIJUfcirPogb+B4ULNa6fc
+	 k7Wj/5iO6BkmMndKibmQrZVHwl4PzmdW7BDlDAKH/p8F1J+zU4lamB78mB2iN7rsz8
+	 cspVzzruJNFWUPyG5WD9DwqVUNnmQ1XxrAvSnDcNyByt0cMah1dM2K2SARrz2Tlwvx
+	 rzol8LxF/YHRPIp/bDWihMshtGp0vqWo5zoKEunHlH4XFJjX/c4BbCmFFOtjUE2FbS
+	 wXcKPtiMTPG9g==
 From: Mark Brown <broonie@kernel.org>
-To: linux-mediatek@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
- Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Leilk Liu <leilk.liu@mediatek.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Markus Elfring <Markus.Elfring@web.de>
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org
-In-Reply-To: <9e736d33-b07f-40a0-8fb6-8c3212593b77@web.de>
-References: <9e736d33-b07f-40a0-8fb6-8c3212593b77@web.de>
-Subject: Re: [PATCH] spi: slave-mt27xx: Call clk_disable_unprepare() only
- once in mtk_spi_slave_probe()
-Message-Id: <172773252496.2210210.475643542831503313.b4-ty@kernel.org>
-Date: Mon, 30 Sep 2024 22:42:04 +0100
+To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: linux-spi@vger.kernel.org
+In-Reply-To: <20240925113501.25208-2-u.kleine-koenig@baylibre.com>
+References: <20240925113501.25208-2-u.kleine-koenig@baylibre.com>
+Subject: Re: [PATCH] usb: Switch back to struct platform_driver::remove()
+Message-Id: <172773252710.2210210.16049963643059937141.b4-ty@kernel.org>
+Date: Mon, 30 Sep 2024 22:42:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,16 +56,18 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.15-dev-99b12
 
-On Tue, 24 Sep 2024 20:56:08 +0200, Markus Elfring wrote:
-> A clk_disable_unprepare(mdata->spi_clk) call was immediately used
-> after a return value check for a devm_spi_register_controller() call
-> in this function implementation.
-> Thus call such a function only once instead directly before the check.
+On Wed, 25 Sep 2024 13:35:00 +0200, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
 > 
-> This issue was transformed by using the Coccinelle software.
+> Convert all platform drivers below drivers/spi to use .remove(), with
+> the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
 > 
 > [...]
 
@@ -81,8 +77,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: slave-mt27xx: Call clk_disable_unprepare() only once in mtk_spi_slave_probe()
-      commit: 610442f85c12ff662e3dec50c53d92f7a8e5a783
+[1/1] usb: Switch back to struct platform_driver::remove()
+      commit: 494c3dc467768782f93f1433650c56b08feb54ea
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
