@@ -1,117 +1,243 @@
-Return-Path: <linux-spi+bounces-5043-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5044-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD1A9989ED9
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 11:56:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB6F398A38D
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 14:53:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E00D21C21A12
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 09:56:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB261C22E69
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 12:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A299F18E02A;
-	Mon, 30 Sep 2024 09:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4D418E352;
+	Mon, 30 Sep 2024 12:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="lXOB/Ep5"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="KhOGiAG9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2817218A6BC;
-	Mon, 30 Sep 2024 09:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8459218E05D
+	for <linux-spi@vger.kernel.org>; Mon, 30 Sep 2024 12:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727690148; cv=none; b=BxoGj6kImgUJkh8Bg83aoyqwhn7wGbsCHnN2czvyQDLS0906nLYM440QwNY4QMW66TXjY6E6n51cX9JQijJ+yOjsuC8Sl+drb/E41TN2Yw70Koe/plUlFCjZG9uNu+V8juEYFdoVBvTfk1q1Lis7MMj37KY3FHJu5v3zPBqqpDk=
+	t=1727700813; cv=none; b=ViSYZB3C/kGaLYIiayr0clRZ07bL8ofKbCi4U6JiEXll9IJv08I6XjUmNGssC7D9F/Uvr3lf8GNnQg7pbgZQWScmHIhOBJ7GpJSWBDHTK34Kh8/7+mmr+gHaLX/fK7zAwjobn0/120pqjtQxWUVESRZ+Y3O4vMlx+PMpXGXwe68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727690148; c=relaxed/simple;
-	bh=HIJw5zliYUVkGzj0EIZ2JL0qFEk3m0cp+8xSuU/025g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gYnxyqgYg61C6ECwCBgnICn6lvhrooBC3vI8NGM30+/dTTBVjvjHEm1dNa7EDxP7S9Cc+ALzpVwQUv5kInL1S+l5WBswmBGJT0mA+VlQF10t7JqdQ4mDWzcxsRZwzsCWxgMOrnVcE7NuWPbFzPgojndWYSDXJoBKL7XU+wQFBxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=lXOB/Ep5; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1727690148; x=1759226148;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HIJw5zliYUVkGzj0EIZ2JL0qFEk3m0cp+8xSuU/025g=;
-  b=lXOB/Ep5iUPIgI70CcV/JPVbkm53i5ZxNqQqjW4LrtQT0QZG8wds0sOX
-   e3448ltmlPmGtKvwsS58t+latB5HVuVFpwDkXnc+tM+ER0m4hERRFJXmV
-   Fo1KWDUEMcX58tnkqug7fsNRTjgmWUQfW7ykeMTxa1FJn/xrlfSLtYQtq
-   AuHJvnIuohbz5wMFGS2huDLa3mbyIToA1XGYSDNXt31E/XW+PiHvqfb36
-   hVKAbpW6A1iZ37P/JmWiLw2DwPN8CEiQzDYPKMXNJ9fI2meExOVoXGJR/
-   2CH5ThcJUmXmVcRtCFIiGibRBJkuq/sS5arr7p0KsTtJ9t4cVmUQYFosi
-   Q==;
-X-CSE-ConnectionGUID: VDfGPtv3TTmpuSmsWgS4Xg==
-X-CSE-MsgGUID: 2IWO0GoCT4mCcKJ5443kyg==
-X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="263420159"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Sep 2024 02:55:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 30 Sep 2024 02:55:07 -0700
-Received: from ph-emdalo.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Mon, 30 Sep 2024 02:55:05 -0700
-From: <pierre-henry.moussay@microchip.com>
-To: <Linux4Microchip@microchip.com>, Conor Dooley
-	<conor.dooley@microchip.com>, Daire McNamara <daire.mcnamara@microchip.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>
-CC: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>,
-	<linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [linux][PATCH v2 04/20] dt-bindings: spi: add PIC64GX SPI/QSPI compatibility to MPFS SPI/QSPI bindings
-Date: Mon, 30 Sep 2024 10:54:33 +0100
-Message-ID: <20240930095449.1813195-5-pierre-henry.moussay@microchip.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
-References: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
+	s=arc-20240116; t=1727700813; c=relaxed/simple;
+	bh=FI6P/Vz2G1P9FtQdIR02rYpG8hPx1kHCzzvah3QhfmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLcm2yz9HKi5Ytng1f2acZylc6ksHEMb+IqhPBlx6Tq/LI18qkdxVcizFPZRjwHTiFVAmneu4OWS3svUxSVQFmUnLZc7RFdvN+2tFmvgPcE3krRbGl9dmOj9ySiT2YJ6zJQ5f9n0wIO2//aotzsh0dIBmkCtVTpJ5Et7FK8z6iQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=KhOGiAG9; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-42cb2191107so34996775e9.1
+        for <linux-spi@vger.kernel.org>; Mon, 30 Sep 2024 05:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1727700808; x=1728305608; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h849igZr4Ixq8Z3CBdQvzfuVtVpkRBJfrNu7EAZT8oc=;
+        b=KhOGiAG9x7rt54sFgjlrYMWehkvltRzsi27TmeuM0bRCGH7OVRlOudlwCWY5Ihn7yL
+         61c/B8e2g7IkJL2XKGDEzIsx4CRMKwTXNi9tbu8F5CTgTe6R+pbXLToGPna2o+JcRVNP
+         W0OKCuwDk449W4kiOgH+9awyGrL8ljE5HG34CER+krRYLfV75ZmyqltoRdww7YxVUt9H
+         LJyUyRAWqwnOhNJsAdF8cAhYI6ZuO0c/Ff12x8PBAwjTOJ0LcrISB2j1AMNb8KwK6i5d
+         KdojA448eeZOOsQxPOt0ax2/NfCJAnmvksjj2gSFR/bGCYsjCNkU5fOmdmry77jIPouK
+         4x+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727700808; x=1728305608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h849igZr4Ixq8Z3CBdQvzfuVtVpkRBJfrNu7EAZT8oc=;
+        b=l7+1w+YeJ+wPZJUSMmI3deqtgQzGc7yP1eg+abNNyfDRR6E/sSn/hdFktbO97JlYEM
+         3mCJ8yzwgREcceRyansCmISfuUHjJlV0siHuJravGWBOqeugyq/rEOrl78Kl5y3Ixzrm
+         VwGOM4u0eacPqubehL7dez7byhDs5eYxmXZ8zEaPmu4lfZcpleX7L0MqYpiDn38+4kJb
+         FQzOEvdKIcW2OQGXc7dD3VUX/hgDj6ZSQM32X5YkjjU6YhSviL77xD18Vnyu1qB+d1R5
+         UN2Cr8qX2mgBCuDuHMJq5hA9ckfwVkvSvqBvony8lvaBmd5FTwZJwpXeFm9fnXwXyYh0
+         5DBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFSPwHNLUr+bUvX7YRBpE9AxVkBpZz2atDAU8luXFEloQNaTgyjPLbwj6lx8GupRtuTEYFJOnQmBQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaSXuAqvQbkJyIrnxrYR9CKBSWVeGzn3oNxKbM/n9fZUjjP860
+	9aK9khaOauTr+TayfkrFyHTsn5E95aAAUgc5eZ8ZIXw6jMoUrWH+LG7vES5bRVs=
+X-Google-Smtp-Source: AGHT+IGGEtHWxlpRHRB4xGyRHsYZF85KLKYWr8ofp+5/Ypf02UC8nfqWCvvKeV7hxj3tjVwUYi4U0Q==
+X-Received: by 2002:a05:600c:4f14:b0:42c:de2f:da27 with SMTP id 5b1f17b1804b1-42f5840e765mr93078445e9.2.1727700807785;
+        Mon, 30 Sep 2024 05:53:27 -0700 (PDT)
+Received: from dfj (host-79-54-25-3.retail.telecomitalia.it. [79.54.25.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd56e6547sm9076767f8f.58.2024.09.30.05.53.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Sep 2024 05:53:27 -0700 (PDT)
+Date: Mon, 30 Sep 2024 14:52:10 +0200
+From: Angelo Dureghello <adureghello@baylibre.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Lars-Peter Clausen <lars@metafoo.de>, 
+	Michael Hennerich <Michael.Hennerich@analog.com>, Nuno Sa <nuno.sa@analog.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Olivier Moysan <olivier.moysan@foss.st.com>, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, dlechner@baylibre.com, Mark Brown <broonie@kernel.org>, 
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 02/10] dt-bindings: iio: dac: axi-dac: add ad3552r axi
+ variant
+Message-ID: <sowmuxfsedwdshyothf7jc6mcrbzqbs2vzw7x4p3tg3iqnlnjt@5qa3kazkce46>
+References: <20240919-wip-bl-ad3552r-axi-v0-iio-testing-v3-0-a17b9b3d05d9@baylibre.com>
+ <20240919-wip-bl-ad3552r-axi-v0-iio-testing-v3-2-a17b9b3d05d9@baylibre.com>
+ <20240929114606.7500ba7e@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240929114606.7500ba7e@jic23-huawei>
 
-From: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
-
-PIC64GX SPI/QSPI are compatible with MPFS SPI/QSPI, just use
-fallback mechanism
-
-Signed-off-by: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
----
- .../devicetree/bindings/spi/microchip,mpfs-spi.yaml        | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-index ffa8d1b48f8b..62a568bdbfa0 100644
---- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-@@ -17,9 +17,14 @@ properties:
-   compatible:
-     oneOf:
-       - items:
--          - const: microchip,mpfs-qspi
-+          - enum:
-+              - microchip,mpfs-qspi
-+              - microchip,pic64gx-qspi
-           - const: microchip,coreqspi-rtl-v2
-       - const: microchip,coreqspi-rtl-v2 # FPGA QSPI
-+      - items:
-+          - const: microchip,pic64gx-spi
-+          - const: microchip,mpfs-spi
-       - const: microchip,mpfs-spi
+On 29.09.2024 11:46, Jonathan Cameron wrote:
+> On Thu, 19 Sep 2024 11:19:58 +0200
+> Angelo Dureghello <adureghello@baylibre.com> wrote:
+> 
+> > From: Angelo Dureghello <adureghello@baylibre.com>
+> > 
+> > Add a new compatible and related bindigns for the fpga-based
+> > "ad3552r" AXI IP core, a variant of the generic AXI DAC IP.
+> > 
+> > The AXI "ad3552r" IP is a very similar HDL (fpga) variant of the
+> > generic AXI "DAC" IP, intended to control ad3552r and similar chips,
+> > mainly to reach high speed transfer rates using an additional QSPI
+> 
+> I'd drop the word additional as I assume it is an 'either/or' situation
+> for the interfaces.
+> 
+> Do we have other devices using this same IP?  I.e. does it make
+> sense to provide a more generic compatible as a fallback for this one
+> so that other devices would work without the need for explicit support?
+> 
+>
+no, actually ad3552r-axi is only interfacing to ad3552r.
+I could eventually set adi,axi-dac-9.1.b as a fallback, since it
+is the "gneric" AXI implementation.
  
-   reg:
--- 
-2.30.2
+> I'd also ideally like a view point from Mark Brown as SPI maintainer
+> on how we should deal with this highly specialized spi controller.
+> Is he happy with us using an SPI like binding but not figuring out how
+> to fit this engine into the SPI subsystem.
+> 
+> Please +CC Mark and the spi list (done here) on future versions + provide
+> a clear description of what is going on for them.
+> 
 
+Ok.
+Actually i fixed the bindings for v4 setting axi-ad3552r as an
+spi-controller, and the target ad3552r as a spi-peripheral (child node).
+This axi-ad3552r is not only a pure spi-controller since providing
+some synchronization features not typical of a spi-controller. 
+
+> Maybe with the binding fixed as spi compliant, we can figure out the
+> if we eventually want to treat this as an SPI controller from the
+> kernel driver point of view even if we initially do something 'special'.
+>
+
+> Jonathan
+> 
+> 
+> > DDR interface.
+> > 
+> > The ad3552r device is defined as a child of the AXI DAC, that in
+> > this case is acting as an SPI controller.
+> > 
+> > Signed-off-by: Angelo Dureghello <adureghello@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/iio/dac/adi,axi-dac.yaml   | 40 ++++++++++++++++++++--
+> >  1 file changed, 37 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/iio/dac/adi,axi-dac.yaml b/Documentation/devicetree/bindings/iio/dac/adi,axi-dac.yaml
+> > index a55e9bfc66d7..6cf0c2cb84e7 100644
+> > --- a/Documentation/devicetree/bindings/iio/dac/adi,axi-dac.yaml
+> > +++ b/Documentation/devicetree/bindings/iio/dac/adi,axi-dac.yaml
+> > @@ -19,11 +19,13 @@ description: |
+> >    memory via DMA into the DAC.
+> >  
+> >    https://wiki.analog.com/resources/fpga/docs/axi_dac_ip
+> > +  https://analogdevicesinc.github.io/hdl/library/axi_ad3552r/index.html
+> >  
+> >  properties:
+> >    compatible:
+> >      enum:
+> >        - adi,axi-dac-9.1.b
+> > +      - adi,axi-ad3552r
+> >  
+> >    reg:
+> >      maxItems: 1
+> > @@ -41,22 +43,54 @@ properties:
+> >    '#io-backend-cells':
+> >      const: 0
+> >  
+> > +  '#address-cells':
+> > +    const: 1
+> > +
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> >  required:
+> >    - compatible
+> >    - dmas
+> >    - reg
+> >    - clocks
+> >  
+> > +patternProperties:
+> > +  "^.*@([0-9])$":
+> > +    type: object
+> > +    additionalProperties: true
+> > +    properties:
+> > +      io-backends:
+> > +        description: |
+> > +          AXI backend reference
+> > +    required:
+> > +      - io-backends
+> > +
+> >  additionalProperties: false
+> >  
+> >  examples:
+> >    - |
+> >      dac@44a00000 {
+> > -        compatible = "adi,axi-dac-9.1.b";
+> > -        reg = <0x44a00000 0x10000>;
+> > -        dmas = <&tx_dma 0>;
+> > +      compatible = "adi,axi-dac-9.1.b";
+> > +      reg = <0x44a00000 0x10000>;
+> > +      dmas = <&tx_dma 0>;
+> 
+> If it makes sense to reformat then separate patch
+> please as this is hard to read as a result of this
+> change.  Also, as pointed out, be consistent with spacing.
+> 
+> > +      dma-names = "tx";
+> > +      #io-backend-cells = <0>;
+> > +      clocks = <&axi_clk>;
+> > +    };
+> > +
+> > +  - |
+> > +    axi_dac: spi@44a70000 {
+> > +        compatible = "adi,axi-ad3552r";
+> > +        reg = <0x44a70000 0x1000>;
+> > +        dmas = <&dac_tx_dma 0>;
+> >          dma-names = "tx";
+> >          #io-backend-cells = <0>;
+> >          clocks = <&axi_clk>;
+> > +
+> > +        #address-cells = <1>;
+> > +        #size-cells = <0>;
+> > +
+> > +        /* DAC devices */
+> >      };
+> >  ...
+> > 
+> 
+
+-- 
+
+  o/ QW5nZWxvIER1cmVnaGVsbG8=
+   www.kernel-space.org
+    e: angelo at kernel-space.org
+      c: +39 388 8550663
+       
 
