@@ -1,51 +1,52 @@
-Return-Path: <linux-spi+bounces-5039-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5042-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8183B989E47
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 11:31:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33254989E4D
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 11:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD0451C21F6F
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 09:31:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD5382881AE
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 09:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256E518871E;
-	Mon, 30 Sep 2024 09:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDCE4188735;
+	Mon, 30 Sep 2024 09:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="mfdwHh6m"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="tb3jlyCd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EF378C9D;
-	Mon, 30 Sep 2024 09:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AE61885B4;
+	Mon, 30 Sep 2024 09:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727688682; cv=none; b=i/F54OIAfcJXU81D7dEnpwBW9J2Odv5TQy6V5Nc77hTwt461yrl1WYi0o+HGYoZacs+OLoJ7kURV+OewVLXoLk+5NOmZXDX8oB5gdrI/sfDoe0E0WqXmUwFoMEpOVn2f5vUJJ62HBwUD/s2XKcWHq8OjEB+zaMl3C8TH+H2CCHw=
+	t=1727688683; cv=none; b=UwvnQP1SxFbj+DGabNknMPTEHhb5Un+CzeGNHpV2QE6sJuflckRfGC1vMV3z+ltgUu17P2XjFXZs+YKav9dMh7kMtMEUT/Pzkf6Uz7+ghc6OioeSFPGfMtQE2r6myGV15+QD6DqYyKChlnTSDAbAs0Zt3A1b0YzCUqL8ONnpBZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727688682; c=relaxed/simple;
-	bh=7juPeHgMm/hkGGRs8wL8YRPemyw12fV8KWGYWB5f2uE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=R6cuPf8OJMzsOYNZvAxcY6bcjY3Wq5XIGwT2BQ4U/PBwcUnz+pNYpSme5Hp/mmgkGjteiLHiFuX7YdjVDQdpq+ITSz47gNgpZzdau5ZJMPxY9kerFLNXHV+vO6tDBry4hjKvhMAwA02RRK7pviAKiaZ04hYoru0yeOQrMVq6+vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=mfdwHh6m; arc=none smtp.client-ip=212.227.15.18
+	s=arc-20240116; t=1727688683; c=relaxed/simple;
+	bh=AlcPv6wM/rPK3vg1wItQUndTOFS+w/FSx2w8cGddILo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jf5PCNEDaXojlbDKyFIG60C6vmXTUeS72xNoLkVc6XDLDyTUEW9dB6wSnFWrlBKzG4gOVhrY547EFSsT2HlWoKFhpfz4sTtC8xXzKAoZpe90EUOo8qLf0rwLsNO6TT40efEzutyNG9erPt3gfP3tS8YiqAaWmauOkLtquy6AuLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=tb3jlyCd; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1727688659; x=1728293459; i=wahrenst@gmx.net;
-	bh=IZnHv/RgvzeYV3uzmA6kz/gXBAAORwLBuWyDnXCRNF0=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1727688660; x=1728293460; i=wahrenst@gmx.net;
+	bh=+X2Z1whVBmZ9pEvWhFlRrTu0QrAjM3Rhzrqj1t1T+q8=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=mfdwHh6mfZseMdBzY4Y9hsVBaIbQlMGlyng1wxhHjSpaUNsUPLA+lyscU3vK36eO
-	 68wZ/KlcL8bhaWC8ElKuSEQVFbI0UYYB9d3eVq4BdEa6eCmtpPuUNEIrK27TzbKTl
-	 N7KzOi0xN5iphDojDCIg/oAIvMexrbMh+CrdkbtwK2Yvx0dSNuCGkP3G103UTwaOL
-	 gu0sUcVHHdDotza0A6I76NnKctf9TpuaaFG+EDO8cTHXLvVzpJ19CQjQ0mx02iO4p
-	 lDlT0YK6+keDECGVprSnc+q8RaJ30ZJM2Wmrufno83rEpRa7ZyqcQQtlbXRyn+7Of
-	 /4IaPj/2X/j14g5owA==
+	b=tb3jlyCd87yYAEpScxETYGOSM2yGriatKyogQP0FW01x5A6iIt1ZRvy4rY3C9DAG
+	 0PyJ1gbrIICB5/reMnn46JAWyHuTSfXAXKeu1hyli3WvoM0iIFUWxfEXu7oEDlasZ
+	 AFS7X3nKBUrgBEkWi+rYBcj0huyjIEqDYMaAQ63uRzaVYQ5j05Ro8NoccATOeBp9p
+	 jxVTbTVXeVgBURp8RVhAYOuzal456DcNUnzPPyPcSwVyTh9yBDxdMYc71kddz4ipg
+	 4E8jT6VQArve5VS/K2rPfTsQntOWhpKk+4W8nSPIMd+OiRMS40vxTDbD30tkiPiRt
+	 qdhz9PJ3rDYlt3L6HQ==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MWASe-1sNYlt1fSM-00SoQI; Mon, 30
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N6siz-1rprum3YVD-013Flj; Mon, 30
  Sep 2024 11:30:59 +0200
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Mark Brown <broonie@kernel.org>,
@@ -58,10 +59,12 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	"imx @ lists . linux . dev" <imx@lists.linux.dev>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 0/3] spi: spi-fsl-lpspi: Some calculation improvements
-Date: Mon, 30 Sep 2024 11:30:53 +0200
-Message-Id: <20240930093056.93418-1-wahrenst@gmx.net>
+Subject: [PATCH 1/3] spi: spi-fsl-lpspi: Adjust type of scldiv
+Date: Mon, 30 Sep 2024 11:30:54 +0200
+Message-Id: <20240930093056.93418-2-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240930093056.93418-1-wahrenst@gmx.net>
+References: <20240930093056.93418-1-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -69,36 +72,69 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ctLek0nGFhy7LJsXbx9lkpiShaCF9HIsO+v5L4WJsV1XSn851+P
- dQ+AT6Jpz6k0nSSf0kB8KiUv0phYB6Aewsc6W7GqlY4xP0pbFfPRmjoLxUOYwP/Jw/tljdI
- jzaO3DVTDFk1KLSRWj0cgiYPeA0EzvCC6vscsbGu9Zrz3PetLpJ+QrU0DmbMS4lSheQZLXE
- ww9O/R8+63NWoFTBjBs2w==
+X-Provags-ID: V03:K1:XTojNywJficBHKynfwbKw30/3unuVt9CLczbbmmR3ph54NfvtJf
+ w+5dnQ9VXkzW1Y2h6DI71//BvPCeNNObNLwOjRkhz7F5Oq51KpJ6wkIdAwjdtU7FanePGR9
+ 8Qg6RQOdDTUYMHtdEmCte65yOyLtG+hdVx1NVKL1mQ/nFdOs9wLRb/X+FP7nuteI68OGWFT
+ q9bPY1XVPjlXNz9v+j2Hw==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zAN84iu1REs=;AEbWaILX4i9BzVoD7d5s68Y5QRn
- PjtulRTzZYycMqraxerC1MlIdfCr+zVQIQuU/xcFcJGtCaTTHQEbhiBgTbbH2a2U4ykB9xtxk
- JfoZ6/LYptuN6xBq208bUJkl/aPZ8rjycEhZfvDAesKGAOcnuheE/wNluAypkD+N4rGSkDIwh
- rTMFSGWq1cBUGfv3wpEX7XY6EoFRqbJFEJ9hwKFc6xpwCB90FkKzWr00np/bzsy3xZg7q4/yb
- 3hkyRQIpxHGbo8HN+tomb7TBBl7xTnn5VPr7r3nxQdSS49eMFoK7TMnG+NMJk6NWTyW4l4Bsz
- pCEt9xqaDiChAvMLPHes04lfwL6P0rsN8APIpo/aSEaUReenifqh9hRlzH6182x0XaxEHWD3O
- 2eUeaQjRuIzDWfLcx732uvF8rGzhXGrRFojJI+5LooBlncbudaF0kBycs2Fj2Oa7+BufSVvZV
- qf+SOwx+FHcXgPcwCKSSLjuPwg3A1t0PKRp/BRC6d2adJmvoPMwvzmm0FU9XH4+ioYmU9u2fF
- +2gCxFpUp6DOxy/DgeJ9qgXbnMtbpzzhI9NAXltYoitPFN20M8TZdoQmhzlw1o4bFjWEtRXXB
- LtQitTioX9hhreOtmVtTiScMLyQn3qjqhMC77bZZf/RUCw9AuR11U2T1wWtyYqGF7jCU/TJrU
- bS9e3GbhZBBY4Ch8ENnR6M93mUcCqsDrjhMZIH8qzxIksXWDIMD6gWM0HNhXLUhyD4VTw1GJn
- tESs3CkUHKOHAUbhu+53eGbS9nMT2BjgcoEhprN7MZi009Q0AgPA8JCI6IgHZHWLh7rqBbGhW
- uv5+euhtld0NOHaSJvgWw10A==
+UI-OutboundReport: notjunk:1;M01:P0:pe1o77MfILQ=;yCsSTCn15ubxI+rn0svoqKG7UkW
+ JPyazT1iKLP3TK/kRPvV6PpLN70T4KY8GFUKpfu7JduaYNcFp5YuCfFynevlo2gPnaEAg5yGS
+ eepeMF5pvTqxnrdCMBdYLUtP4fs6mgKKpt1E8rVCe1xrn+MN7SHj/ChjuXM+lg21AqyfXKGJx
+ wZkn9lVf/qQuKauk8EcU7qzddtufKa0d74mtzH4fqp7IRJcCMRaIMrNYay3VxtVOzUN9KoVE9
+ ld0BBjG6nqnEC505IjsKCer3Tc0RYig0jlQnqgT32pYS3MGDFzNIH92N3rgkINBd9362W3jPx
+ Au9nDQOBMSeJHfiTPBLbvC+aTily1Rru0fzyoTdBI/Qwhww4eEAYIiRslhfFifJbJ/c6ajaiK
+ sxsPOw2z3baG9zRnuXmIJLxSAvq/qQQHPZPPq/84ftfmT7B0KvaQ2s7+RTOX8PMAMD1yEcy9a
+ h7piqnBwS4fgovwd8F9hd9CcTD8EZlT2JUKL3qaxsTuGJc6MkxHpMsQHTlgveMwdtBIOYi7HU
+ J8L5tGpMW/l8UMrZtiFLiUVSRD6hjb03EuWMkZYyoIAu1jq0T2tHxILHLKLmwFeM7ySexjNgO
+ 4gFJxBNLeveT37b0qkZ01x+uNZIs34L1skFEfYSrbxH0rz8wsiPXf1y5ZZ7e5WUGebxaGSrbu
+ TIy5LtUmWi9Nki1WTobhFKaPrCJwzYrsz8FYm38I15U7Da0Zi1kEo1VFzleI1De1hT2Zzd3qm
+ trv2qVg60iUG1fpHJBHpXOue7CGg2wm7Msl3IoCW3mHs2IHqK3jIWMOYa5O9jdn3YazNYBX8r
+ oS1jykeuNRCQ941z2Ft+g8MQ==
 
-This series contains some improvements for spi-fsl-lpspi which are
-related to the calculations within fsl_lpspi_set_bitrate.
+The target value of scldiv is just a byte, but its calculation in
+fsl_lpspi_set_bitrate could be negative. So use an adequate type to store
+the result and avoid overflows. After that this needs range check
+adjustments, but this should make the code less opaque.
 
-Stefan Wahren (3):
-  spi: spi-fsl-lpspi: Adjust type of scldiv
-  spi: spi-fsl-lpspi: Fix specifiers in fsl_lpspi_set_bitrate
-  spi: spi-fsl-lpspi: support effective_speed_hz
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ drivers/spi/spi-fsl-lpspi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- drivers/spi/spi-fsl-lpspi.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 977e8b55c82b..196cc68f2057 100644
+=2D-- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -315,9 +315,10 @@ static void fsl_lpspi_set_watermark(struct fsl_lpspi_=
+data *fsl_lpspi)
+ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_data *fsl_lpspi)
+ {
+ 	struct lpspi_config config =3D fsl_lpspi->config;
+-	unsigned int perclk_rate, scldiv, div;
++	unsigned int perclk_rate, div;
+ 	u8 prescale_max;
+ 	u8 prescale;
++	int scldiv;
 
+ 	perclk_rate =3D clk_get_rate(fsl_lpspi->clk_per);
+ 	prescale_max =3D fsl_lpspi->devtype_data->prescale_max;
+@@ -338,13 +339,13 @@ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_da=
+ta *fsl_lpspi)
+
+ 	for (prescale =3D 0; prescale <=3D prescale_max; prescale++) {
+ 		scldiv =3D div / (1 << prescale) - 2;
+-		if (scldiv < 256) {
++		if (scldiv >=3D 0 && scldiv < 256) {
+ 			fsl_lpspi->config.prescale =3D prescale;
+ 			break;
+ 		}
+ 	}
+
+-	if (scldiv >=3D 256)
++	if (scldiv < 0 || scldiv >=3D 256)
+ 		return -EINVAL;
+
+ 	writel(scldiv | (scldiv << 8) | ((scldiv >> 1) << 16),
 =2D-
 2.34.1
 
