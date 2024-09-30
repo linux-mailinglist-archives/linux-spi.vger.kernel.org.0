@@ -1,110 +1,125 @@
-Return-Path: <linux-spi+bounces-5049-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5050-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F2398A66A
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 15:59:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48EFB98A7D2
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 16:54:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BD1C1F2484F
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 13:59:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 716571C23749
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Sep 2024 14:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF90194AE2;
-	Mon, 30 Sep 2024 13:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E12aNqjc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F031922E3;
+	Mon, 30 Sep 2024 14:53:01 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 247C71946AA;
-	Mon, 30 Sep 2024 13:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0CB191F7A;
+	Mon, 30 Sep 2024 14:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727704540; cv=none; b=h7sL1NWtdrGnbucwKj/aYcQEgW7j5tHWGGQ/zg3mySzzWtK0j803OrepPvZlGN6lGY4Ji9c+h+WWpVU6aXWtYLGFwh6i99UZks5+3mJXYzWLrMWBi41YDUknnHh/s3ail8Egrp6474JlCWVKVicy4MwWenIf1R5SxoLGIFEr500=
+	t=1727707981; cv=none; b=o6YwX9csH4+JH6AGnHxl08KTPYaLmmFbPmqFSwisMSMmQqCoq9czILs8UZiYVcCh7zqut0yZU8bp92FZT+IQ3FtNzaHadITV1v6fWmXhtY0Bnz2Rx54s06GbQIT0vMU2B7wnZMliNMgiEnNW3zGLk7RzDcGrdWWwLi4DJrKWQIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727704540; c=relaxed/simple;
-	bh=ptvZUoo0MgvQ1nTdeXK5Y63HZLuZe59ZXon7TP2l7Eo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dwtBRPzUfzDplApKAcjEm6Obt7j84tojH0elT5KmVo+Or10krAiiWcvxUklpso6KEdHeyvT3PquZBlJg1ryGhpJBFy+wxVlj4C6GHNvIb2+pstS1kuYhBru8Ks1ySbwElQStQ4uxWnFYEu3mJV1lupEbS5GR9PaEo5Q8P44rY7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E12aNqjc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B61C4CECE;
-	Mon, 30 Sep 2024 13:55:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727704540;
-	bh=ptvZUoo0MgvQ1nTdeXK5Y63HZLuZe59ZXon7TP2l7Eo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E12aNqjcGXGEqGtu70phFW23PXMtikHIp/VbHVu6wHFiiEbXVgs9SyWa2getrm9km
-	 uFbsr2lHuatpMybul5LblXdlPW+eN1NYvAt+Ab3jHKByzaRa2SjChPJ/Ux+e1+CgI0
-	 1Rm4TVZIX1Uc721vnfNs/UqI3PVavTgLrtTd9GVO7E/62jvAjng0MJK7TAh8kxhmLV
-	 pxplUZgozK7A4J3KBXQZEccM6iu1ULZfrTOEzmWHNH1ED8FiO3puc2ZllIlutiD+ga
-	 e4upgx13tvcPFTOEED8fBdeK4t73UBSzh08o5gowuusDm73irlPFu55VP3hlwwNTPy
-	 c5aJaNcdtKYVQ==
-Date: Mon, 30 Sep 2024 14:55:35 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: pierre-henry.moussay@microchip.com, Linux4Microchip@microchip.com,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [linux][PATCH v2 04/20] dt-bindings: spi: add PIC64GX SPI/QSPI
- compatibility to MPFS SPI/QSPI bindings
-Message-ID: <20240930-safeguard-shiftless-c10dc8fbd99b@spud>
-References: <20240930095449.1813195-1-pierre-henry.moussay@microchip.com>
- <20240930095449.1813195-5-pierre-henry.moussay@microchip.com>
- <1f54805f-f06d-4732-a124-270a36dbff4f@sirena.org.uk>
+	s=arc-20240116; t=1727707981; c=relaxed/simple;
+	bh=xEfx68TKEKbrunn51KUOWGeLB8H7zXoKtykWGpU75XU=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RQGmvM/MmQS9KEDrch+4vK6HGK/L5sTDY1igtIELtSdTQR8hKLQ3GQDVrhkXG6LKEsVQw0qloaG1TP71SHUfik4+AuFN1JXa/Ut3dM4y9d1qcqKyXG/WgqPds0Shl22JpRLrnneE78otyiG5ljrfyNhZj0kE+i7ZN8fLceQ2IeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XHP8f1q97z6D9rT;
+	Mon, 30 Sep 2024 22:48:50 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5A16F140B30;
+	Mon, 30 Sep 2024 22:52:56 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 30 Sep
+ 2024 16:52:55 +0200
+Date: Mon, 30 Sep 2024 15:52:54 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+CC: Angelo Dureghello <adureghello@baylibre.com>, Jonathan Cameron
+	<jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael Hennerich
+	<Michael.Hennerich@analog.com>, Nuno Sa <nuno.sa@analog.com>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Olivier Moysan <olivier.moysan@foss.st.com>,
+	<linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <dlechner@baylibre.com>, Mark Brown
+	<broonie@kernel.org>, <linux-spi@vger.kernel.org>
+Subject: Re: [PATCH v3 02/10] dt-bindings: iio: dac: axi-dac: add ad3552r
+ axi variant
+Message-ID: <20240930155254.00004b8e@Huawei.com>
+In-Reply-To: <6ce76f0a7c503cc800b4795e682f91c8bfc0bb7a.camel@gmail.com>
+References: <20240919-wip-bl-ad3552r-axi-v0-iio-testing-v3-0-a17b9b3d05d9@baylibre.com>
+	<20240919-wip-bl-ad3552r-axi-v0-iio-testing-v3-2-a17b9b3d05d9@baylibre.com>
+	<20240929114606.7500ba7e@jic23-huawei>
+	<sowmuxfsedwdshyothf7jc6mcrbzqbs2vzw7x4p3tg3iqnlnjt@5qa3kazkce46>
+	<6ce76f0a7c503cc800b4795e682f91c8bfc0bb7a.camel@gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="6OmhXQ4y09svNlZJ"
-Content-Disposition: inline
-In-Reply-To: <1f54805f-f06d-4732-a124-270a36dbff4f@sirena.org.uk>
-
-
---6OmhXQ4y09svNlZJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On Mon, Sep 30, 2024 at 02:52:42PM +0100, Mark Brown wrote:
-> On Mon, Sep 30, 2024 at 10:54:33AM +0100, pierre-henry.moussay@microchip.=
-com wrote:
-> > From: Pierre-Henry Moussay <pierre-henry.moussay@microchip.com>
-> >=20
-> > PIC64GX SPI/QSPI are compatible with MPFS SPI/QSPI, just use
-> > fallback mechanism
+On Mon, 30 Sep 2024 15:15:03 +0200
+Nuno S=E1 <noname.nuno@gmail.com> wrote:
+
+> On Mon, 2024-09-30 at 14:52 +0200, Angelo Dureghello wrote:
+> > On 29.09.2024 11:46, Jonathan Cameron wrote: =20
+> > > On Thu, 19 Sep 2024 11:19:58 +0200
+> > > Angelo Dureghello <adureghello@baylibre.com> wrote:
+> > >  =20
+> > > > From: Angelo Dureghello <adureghello@baylibre.com>
+> > > >=20
+> > > > Add a new compatible and related bindigns for the fpga-based
+> > > > "ad3552r" AXI IP core, a variant of the generic AXI DAC IP.
+> > > >=20
+> > > > The AXI "ad3552r" IP is a very similar HDL (fpga) variant of the
+> > > > generic AXI "DAC" IP, intended to control ad3552r and similar chips,
+> > > > mainly to reach high speed transfer rates using an additional QSPI =
+=20
+> > >=20
+> > > I'd drop the word additional as I assume it is an 'either/or' situati=
+on
+> > > for the interfaces.
+> > >=20
+> > > Do we have other devices using this same IP?=A0 I.e. does it make
+> > > sense to provide a more generic compatible as a fallback for this one
+> > > so that other devices would work without the need for explicit suppor=
+t?
+> > >=20
+> > >  =20
+> > no, actually ad3552r-axi is only interfacing to ad3552r.
+> > I could eventually set adi,axi-dac-9.1.b as a fallback, since it
+> > is the "gneric" AXI implementation. =20
 >=20
-> You've not copied me on the rest of the series so I don't know what's
-> going on with dependencies.  When sending a patch series it is important
-> to ensure that all the various maintainers understand what the
-> relationship between the patches as the expecation is that there will be
-> interdependencies.  Either copy everyone on the whole series or at least
-> copy them on the cover letter and explain what's going on.  If there are
-> no strong interdependencies then it's generally simplest to just send
-> the patches separately to avoid any possible confusion.
+> Yes but the generic IP does not have this spi bus implementation so the d=
+evice
+> would be unusable (unless I'm missing something)
+Falling back to the generic IP doesn't make sense as they aren't compatible.
 
-FWIW, you should be okay to take this, there's nothing that depends on
-this patch other than dts files and nothing that this patch depends on
-in turn.
+I'd more expect some future device support that happens to need the same
+sort of bus support might be able to use this FPGA IP.  Anyhow, it is fine
+to fallback to this specific compatible anyway, so lets go with this rather
+than trying for a generic name.
 
---6OmhXQ4y09svNlZJ
-Content-Type: application/pgp-signature; name="signature.asc"
+Jonathan
 
------BEGIN PGP SIGNATURE-----
+>=20
+> - Nuno S=E1
+>=20
+>=20
+>=20
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZvqt1wAKCRB4tDGHoIJi
-0kscAQCZswxskpBaL15Yd5hzVUiS9tA3udzdql+Afls0sLewlwEApcpfrwV2F7tu
-PyJvxazlLMCl2+a+nJ1o1mnanRGHmgA=
-=/i8D
------END PGP SIGNATURE-----
-
---6OmhXQ4y09svNlZJ--
 
