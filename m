@@ -1,99 +1,80 @@
-Return-Path: <linux-spi+bounces-5080-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5081-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E5898C4FC
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 20:02:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E979E98C57C
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 20:40:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F33DB233C4
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 18:02:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 922BC1F20EF3
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 18:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F471CBE9D;
-	Tue,  1 Oct 2024 18:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F3B1CB321;
+	Tue,  1 Oct 2024 18:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9MVeebM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmXIc0Ab"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F441CBE91;
-	Tue,  1 Oct 2024 18:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D84D1DFCB
+	for <linux-spi@vger.kernel.org>; Tue,  1 Oct 2024 18:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727805718; cv=none; b=aPwWcebYjsRU/WJ8fNC7Qi5D3fy5C38TKj5PFFRFNDaV38fDFDsCraPGXipX5JN6TaLfTls1WyLzFYjnNo0LtehIOeG2nzLBW3iZwe5ulLiaCYuXtbudMQSWEzlZX0tBAULhPh0Om2VS+o3VXBWnIFWiagtkEZ9vlF7ZB6lJ6MQ=
+	t=1727807999; cv=none; b=R0XrSeNrboMMvpvcE6GkOEysd/zDNcFiEW4+IPR2YwIn5SJJKJSijP777dLOtVAY+UsEivxVuhKl5BPA5qAOOVGn2rXK0QgUEmKIf4dXeZuZQsSKq0A2gTmqYkqdhQLoqX7LCkqK2J4TDOSihbYqyKZJ7+Uobk/ZF0UAQznqtGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727805718; c=relaxed/simple;
-	bh=yghPaw6VAi7oijCrepYhoJSPo2p/GUhXxRZwPu0/uHw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=awfdZwSwO0PHB8dtMZTPe5Bw/JFwPIY9/3uZR3a7aYsFFj+iKeKPxFqbOmWmAZQ+fkMGqXpKx5qbqJy1+8M7y5xQxEsDC1HDkQ8fNZBv+xERN6OycO51mqy+qoAyGfhLrSoSvz4QNxL6rDs1taagJQCcI5qliWJUYiwa/Q4Ad2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9MVeebM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8579CC4CEC6;
-	Tue,  1 Oct 2024 18:01:56 +0000 (UTC)
+	s=arc-20240116; t=1727807999; c=relaxed/simple;
+	bh=M8XuOi5lvG2usN5UaGkDw4ikqBtz76XEXHVEoaRcqAE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=nsj93tIliuxHFTasc5op18u49FmEltFQxIYIeXIz9E4N/p+01N7+Hb1DwE833oaR5PAD0mycPG6S/Dcw7pCkip+9PfXSdKR7xUoCwDs+cPKJ89G8ohBDGYNshh2DIcO0pyuKryUeQ6MkXzTHLCL8qrIkv8DNez/4Cjd7GYbl+Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmXIc0Ab; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 318AFC4CEC6;
+	Tue,  1 Oct 2024 18:39:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727805717;
-	bh=yghPaw6VAi7oijCrepYhoJSPo2p/GUhXxRZwPu0/uHw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=F9MVeebMJaJGXlkCINCVulrxTeqBntptfV/2p5Q363ABWIrneMGe/e5BhBNAexqi1
-	 OLTOrOdBkK/Ye77C/RVwPyvI1n8J46DWRcHS6wC76jmaz7EYY1D2hRaQyuG8WLVftR
-	 sBFGrCGNIVWs3KJdB3Ixzb1qt41FlFj93XR4o7s4nO1RZ4t2UCI7K17x/9a3s2MCzc
-	 EkuvHtKDJhpvBKgG7L742UMkOBT45ZwTiGif2uou9x+nAlS9rTH9d5Y8praqOs4cC/
-	 GetvWBzErSNW/lmqtCO/VepdpA9RcQ0fel6YqiDBlxXcazeB2pQx1QgM81dzgDgsyE
-	 yopb7cVfMIRIA==
-From: Mark Brown <broonie@kernel.org>
-To: Alexander Dahl <ada@thorsis.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240926090356.105789-1-ada@thorsis.com>
-References: <20240926090356.105789-1-ada@thorsis.com>
-Subject: Re: [PATCH] spi: atmel-quadspi: Fix wrong register value written
- to MR
-Message-Id: <172780571519.2303755.8160975391915590344.b4-ty@kernel.org>
-Date: Tue, 01 Oct 2024 19:01:55 +0100
+	s=k20201202; t=1727807999;
+	bh=M8XuOi5lvG2usN5UaGkDw4ikqBtz76XEXHVEoaRcqAE=;
+	h=Subject:From:Date:To:From;
+	b=bmXIc0AbvDZJVsVrRiNQy6sBlWrStE8lmy73E5vT57zGRyGgDdlPgledwI3J6jodt
+	 5i81oS7hIjSszwVakCiTearsPYMYmXIxFW3SyA+/I2Zxo4AGkvEQ+O2BDugFKzuhvk
+	 JN42A28fGFL7L4fOqfcdnl93kUiTrlwk0ZrOD5r8U/FXhmJOqsDAEyXtD9RtZdbrie
+	 YYtX03Sw23aBrJ4TpIbeOxvcXKxVmg51q691Ibum1LXwZvuLVCnSnj/RoAxW7YGDIW
+	 /wU7YLEl5yM+a599rIuzDOD42FVAxeCN+CZqTgZZOYTuBW7NJdblXz+Y2DlfcHFTw9
+	 tVq2F+DFjS/2A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 74DF4380DBF7;
+	Tue,  1 Oct 2024 18:40:03 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-99b12
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172780800206.474912.16576863756378004838.git-patchwork-summary@kernel.org>
+Date: Tue, 01 Oct 2024 18:40:02 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 26 Sep 2024 11:03:56 +0200, Alexander Dahl wrote:
-> aq->mr should go to MR, nothing else.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: atmel-quadspi: Fix wrong register value written to MR
+  Submitter: Alexander Dahl <ada@thorsis.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=893062
+  Lore link: https://lore.kernel.org/r/20240926090356.105789-1-ada@thorsis.com
 
-Thanks!
 
-[1/1] spi: atmel-quadspi: Fix wrong register value written to MR
-      commit: 162d9b5d2308c7e48efbc97d36babbf4d73b2c61
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
