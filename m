@@ -1,116 +1,122 @@
-Return-Path: <linux-spi+bounces-5072-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5073-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FDF698B215
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 04:30:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B167798B444
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 08:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D60E21F22301
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 02:30:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1D371C23000
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Oct 2024 06:26:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D406C848E;
-	Tue,  1 Oct 2024 02:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A223A1BBBC4;
+	Tue,  1 Oct 2024 06:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="qndyLruj"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="WBQKmLKl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B673B2CA2;
-	Tue,  1 Oct 2024 02:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C481BBBC3;
+	Tue,  1 Oct 2024 06:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727749828; cv=none; b=CSbAlMO79omWUK84QuYi2mmLlbMeO7fxwUhb0N/U4JHrIZ3D1AYqxGZzoMhxlsgGJfm/N08w9P9/7jBSr2qhi6PqURnkG73fJgE3WrP7otdFi65JAEm7cpbSICg4lyE2J4gyVYa6iDz1w0gevylZA08Ai5a2BVVg2YZM+uOdCYU=
+	t=1727763973; cv=none; b=pADG5vuEktoJVdo0qm17rn20mZGj3y8pIwFFEEq7640D8ah/NGjiMPpPpNIxi/KlD4Frq39G5ynVKDoqQZ/DYEvrrmpyUekHdfsgWcpE9/Up0se/HZ+5KtkXBkKOMdZKn+xz4KHCCPMnibiC6VJYgbb+k/dzb2ziL1qxglSvJf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727749828; c=relaxed/simple;
-	bh=pHtZdpH6E3OkWZne6jKOeKSBdeHF3dpFP2dAp2FNAdY=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=fip/8n2QZgPR0gojDEBpCLM9FzIspaW0iHeEX0yhA2L2b1aWq+Q7XO2XCBZ6dnAARST5lqq0Zu7NMIqE5H29QLsewl4Vm1YHuKVm5XWuUpBvS36azy9PfmuhJIzvsg+ljkcvTJZtksikz5XpSB8dyZ31lrxUkJHLPrjxdAcKurE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=qndyLruj; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1727763973; c=relaxed/simple;
+	bh=E0ev0h51rFlOdHoMRDQSbGFY+v+92QG76SGxE5gpRMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JgZnpbgQiuYzHcg/5iiO8RrUVO+kUIcYS8gK8NK5EDKfOLWNMK5abRX1iHIXU+84fsYIiE1C4DfaPBI/3ep9MS99FMAzrF5RWLkAdEP7/FyZ9Ov6O27cSxvjxdQJ4l/4/l5s/Lozam6um0HG/wzntWHUg6R5jBnqIvoni857HcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=WBQKmLKl; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D32D31486A58;
+	Tue,  1 Oct 2024 08:26:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1727763962; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=5Ci1UjobOhKebkG36SiLXY8QIHuytMlojuv090vfWSk=;
+	b=WBQKmLKlNFmhanFpU/bGcYOOg281C/6MVA5DobI5q7IUY1XrlZZGXMwbyE1aYfQ78LIo/+
+	pmm0DkK51uO4UDDO9Y56Vvob83ofTQBK1ccYd6avtBMc6MOYPQxwKx+6jxLot69o3HYOK5
+	iGn9dMej0blZPkyAxb2gTeRHxlvq3s7RrsJzlzw8I9jIXLKR15KOhThD6vveRgdS60kHRl
+	FC79Gt50SJUxPjrtSebflC3cSy5LagEMtLFENDfehWtQF9GZf9qjv97BqgWOk1EZFGc40K
+	MFKDzQVXhU72h7KsrDT8kaskJQiVgU4joXQl8tCXs5R0GKJqufHmlufoQ6SxKQ==
+Date: Tue, 1 Oct 2024 08:25:55 +0200
+From: Alexander Dahl <ada@thorsis.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:ARM/Microchip (AT91) SoC support" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH] spi: atmel-quadspi: Fix wrong register value written to
+ MR
+Message-ID: <20241001-portly-showpiece-7cbfa71b6480@thorsis.com>
+Mail-Followup-To: Mark Brown <broonie@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	"moderated list:ARM/Microchip (AT91) SoC support" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+References: <20240926090356.105789-1-ada@thorsis.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1727749817;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pvkn9unYKg5jrQqXLz3IKj4eW4g7FS1Yw0ALAhtHSGI=;
-	b=qndyLrujoJpXhrA3PsDJWmA2Mn5Jupk9HKInMqWbJFm7SNH2FUWsZbsKtwAdnm7X+gv9xN
-	irTXR+w+OXHKApotKB0mrNBM/KhtMxzuApUBe72+kJjTP77c/t+Zn339vsSkq0xYGCxWWx
-	x8PbXOuTw/JJ4h23ml5IQP4Jd8s3+LGKFDs32Exgsq/1DqHMUhsvntCoe84sZziW+5/y0f
-	KL+62oseiCSsWqkM8oijpjjt5OXyKjFBEB8nrf2diRU194PJbAz4eiV9/k7YIsL79tNed7
-	dXgzlVWrLE00DFt6Wq69Xp5Tam8neqR9Mz6WS8r/bV+nFV2GbAZQGiYkUbP4Tg==
-Date: Tue, 01 Oct 2024 04:30:17 +0200
-From: Dragan Simic <dsimic@manjaro.org>
-To: Diederik de Haas <didi.debian@cknow.org>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- linux-rockchip@lists.infradead.org, heiko@sntech.de, oss@helene.moe,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/5] Improve error handling in Rockchip SPI
- drivers
-In-Reply-To: <D4K14E2EOSC6.1VYBGSQKSIRW1@cknow.org>
-References: <cover.1727337732.git.dsimic@manjaro.org>
- <172774028424.2264837.4595727034314147956.b4-ty@kernel.org>
- <D4K14E2EOSC6.1VYBGSQKSIRW1@cknow.org>
-Message-ID: <c69fef216b1a2474bbab1a146ec63450@manjaro.org>
-X-Sender: dsimic@manjaro.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240926090356.105789-1-ada@thorsis.com>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Diederik and Mark,
+Hei hei,
 
-On 2024-10-01 02:05, Diederik de Haas wrote:
-> On Tue Oct 1, 2024 at 1:51 AM CEST, Mark Brown wrote:
->> On Thu, 26 Sep 2024 10:38:11 +0200, Dragan Simic wrote:
->> > This is a small series that improves error handling in the probe path
->> > of the Rockchip SPI drivers, by using dev_err_probe() properly in multiple
->> > places.  It also removes one unnecessary check of a function return value,
->> > and performs a bunch of small, rather trivial code cleanups, to make the
->> > code neater and a bit easier to read.
->> >
->> > Dragan Simic (5):
->> >   spi: rockchip: Perform trivial code cleanups
->> >   spi: rockchip-sfc: Perform trivial code cleanups
->> >   spi: rockchip: Don't check for failed get_fifo_len()
->> >   spi: rockchip: Use dev_err_probe() in the probe path
->> >   spi: rockchip-sfc: Use dev_err_probe() in the probe path
->> >
->> > [...]
->> 
->> Applied to
->> 
->>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
->> for-next
-
-Thanks for applying a subset of the patches!
-
->> [1/5] spi: rockchip: Perform trivial code cleanups
->>       commit: d87ec94e48dd2da27fbe948f2dc6c8fedc98fff4
->> [2/5] spi: rockchip-sfc: Perform trivial code cleanups
->>       commit: 6c510eac1528d8939bad8b6df72c7b23ffec8c25
->> [5/5] spi: rockchip-sfc: Use dev_err_probe() in the probe path
->>       commit: 1482c40b440fa58f956bc3e1ef3426e0cdbc09e0
+Am Thu, Sep 26, 2024 at 11:03:56AM +0200 schrieb Alexander Dahl:
+> aq->mr should go to MR, nothing else.
 > 
-> It looks like you applied some patches from v1 of this series while the
-> current version is v3.
-> 
-> https://lore.kernel.org/linux-rockchip/cover.1727601608.git.dsimic@manjaro.org/
+> Fixes: 329ca3eed4a9 ("spi: atmel-quadspi: Avoid overwriting delay register settings")
+> Signed-off-by: Alexander Dahl <ada@thorsis.com>
+> Link: https://lore.kernel.org/linux-spi/20240926-macarena-wincing-7c4995487a29@thorsis.com/T/#u
 
-Just checked this by hand, and the three patches that were applied
-are the same as the respective patches from the v3 of the series,
-albeit being picked from the v1 of the series.  It's just that the
-patch 5/5 from the v1 became patch 3/5 in the v3, which pushed the
-patches with no dependencies earlier within the series.
+I've seen the faulty patch 329ca3eed4a9 ("spi: atmel-quadspi: Avoid
+overwriting delay register settings") gone not only to master where it
+should be fixed before v6.12, but also to stable queue for 6.11,
+6.10, and 6.6 so this fixup should go there too, right?
+
+Greets
+Alex
+
+> ---
+> 
+> Notes:
+>     based on today's master
+> 
+>  drivers/spi/atmel-quadspi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+> index 4f288f07e38f..95cdfc28361e 100644
+> --- a/drivers/spi/atmel-quadspi.c
+> +++ b/drivers/spi/atmel-quadspi.c
+> @@ -377,7 +377,7 @@ static int atmel_qspi_set_cfg(struct atmel_qspi *aq,
+>  	 */
+>  	if (!(aq->mr & QSPI_MR_SMM)) {
+>  		aq->mr |= QSPI_MR_SMM;
+> -		atmel_qspi_write(aq->scr, aq, QSPI_MR);
+> +		atmel_qspi_write(aq->mr, aq, QSPI_MR);
+>  	}
+>  
+>  	/* Clear pending interrupts */
+> 
+> base-commit: 11a299a7933e03c83818b431e6a1c53ad387423d
+> -- 
+> 2.39.5
+> 
+> 
 
