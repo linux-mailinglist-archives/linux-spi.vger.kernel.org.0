@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-5082-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5083-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F7D98CA18
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 02:39:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3044998CA1B
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 02:39:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F95828689B
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 00:39:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 604D21C214D7
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 00:39:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813C315D1;
-	Wed,  2 Oct 2024 00:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE4E2114;
+	Wed,  2 Oct 2024 00:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V885n1mc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CzGsgvYZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC2A391;
-	Wed,  2 Oct 2024 00:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126E01FBA;
+	Wed,  2 Oct 2024 00:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727829540; cv=none; b=nFtd96Xa2Hm/fd+AxbPCmTw4DxyDM1lJ18UUOabtyz05hyCz0D6Y1IsNJdZmbAerKzX+y6UdpHZP1mfkpTaA9vJ4ZPH2h5IvWemmtW5/YzGjRXKp14pawniGEE66QhlHzwwMZPmhCmL1OENG4W/G05s6DTSFuBcCVT5bA62N8OY=
+	t=1727829541; cv=none; b=AferV39o+9Xc9Lrsn/upIOTBDei/acnWMUljRY0aHbgFrEXbg/rd6PqL7qkjevwdZ+Box7jxvVOQSju35OFTpu0PFlph8A44oKo6CNueg3okj5U3PiwXW9dXWdV3gxzFEYQLwI6FhJWq+3M26/4TicT1U8RLZfIU9RykkVX1C9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727829540; c=relaxed/simple;
-	bh=n244WwV63ADRuTUWmaRFdZXMoVsMzNrC8vWHzlymnmc=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lGSE4niJKV1mVXYJiKD0t4wja5A2PvrsuUhrLMRRr5siBriKZQdhI/RQQDIgYNbOe8dBXWvEIthCcji4aAZyd03uOQgTFKOchFavVPOfTeiSkY+yXDAS/3oUkyP5nOsMuGLUkX2InTDs+WvfdFVmn8JVXSUXDUhaUbxDtd60YIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V885n1mc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE589C4CEC6;
-	Wed,  2 Oct 2024 00:38:56 +0000 (UTC)
+	s=arc-20240116; t=1727829541; c=relaxed/simple;
+	bh=ybaVeV8JJYACSNev74TAhL/xyOhbNnHvUWwUmKf5R/c=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=dSKDq4rx5/V/QFfkz8NPcB5N0IwEGvNmgNTCLNFcj9iLGq2h2E7ypA9I0HuJwLy7GPWVezW4lkJmNJT857v1Cj0msqJC10zCp/wLqdrx1vvOJTD4RPeBXgi5O55mQHTR4/a6xpmgmEj/ogXC/oaCcAW108EYE+jAViFfWaJXiE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CzGsgvYZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFCBC4CECF;
+	Wed,  2 Oct 2024 00:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727829538;
-	bh=n244WwV63ADRuTUWmaRFdZXMoVsMzNrC8vWHzlymnmc=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=V885n1mcvuvIN1lsO+nle4gyXXpUx5j3b2XdsWJunFBBKfzdLFgPuNS/0I5aLcNlZ
-	 n0RoAtYpY0T5Hj5VxLEEhV/p2DZh1BKaWRyt0o+DJK2UoINS/Wrzy3zPT5g2ruW83H
-	 BxQ82hzTlCwSPN1Dnt30Dpfc8lU9N76oUzcYGMXAJQJSc2dXlJd2K0Kh9DFQsfQRMF
-	 O8sC18ChsLkw1CCzokHbMUE11kQwZdxjYWdGf7VejgbGn//WdaOFPYwrJXw83cpuxj
-	 pbt22K+kBUGsLRLQhJrI6iGH+T7zZWlpe47XSshj+FzP2vgIivf2Qofvo9DlVpNGxd
-	 HjmanGuyQtCsg==
+	s=k20201202; t=1727829540;
+	bh=ybaVeV8JJYACSNev74TAhL/xyOhbNnHvUWwUmKf5R/c=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=CzGsgvYZv8CDHY2i3ESOjhc0Tg+OfnEQVbpDGD+kaSOwr2iJ6qxd0oqoZdPZThaXA
+	 O0Vmh5zVHgjEVWM8pWoVJXkMpYMEWNFPkdZnqGjYNCYSwwW+loQGt/QbMtCi1XD9On
+	 J8TgiU3gwRdOJQz1dvKJ/pW5Ckt79B9D6L0xGDJmUzDFTGueOH1/dhGvQS5ICyWzVz
+	 x9Ttwrermh5WpO8v5F+esVQQOzw/Tq4Gj+ioJ5kRZJITskBiNt03Iaprn1EQfp5mxM
+	 zbkqY2AQ04FNDkLsvefNp8w73KBcRMRCyfKfPYThdxVlSLgqDTk24VDQdW66eNZTNr
+	 itXUHcwIzPBJA==
 From: Mark Brown <broonie@kernel.org>
-To: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
- festevam@gmail.com, shubhrajyoti.datta@xilinx.com, srinivas.goud@amd.com, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <20240923040015.3009329-1-ruanjinjie@huawei.com>
-References: <20240923040015.3009329-1-ruanjinjie@huawei.com>
-Subject: Re: [PATCH 0/3] spi: Fix pm_runtime_set_suspended() with runtime
- pm enabled
-Message-Id: <172782953505.2314893.17571389802894032721.b4-ty@kernel.org>
-Date: Wed, 02 Oct 2024 01:38:55 +0100
+To: linux-spi@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+In-Reply-To: <20240924134009.116247-2-ben.dooks@codethink.co.uk>
+References: <20240924134009.116247-1-ben.dooks@codethink.co.uk>
+ <20240924134009.116247-2-ben.dooks@codethink.co.uk>
+Subject: Re: (subset) [PATCH 1/2] spi: s3c64xx: fix timeout counters in
+ flush_fifo
+Message-Id: <172782953761.2314893.16208330510622172964.b4-ty@kernel.org>
+Date: Wed, 02 Oct 2024 01:38:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,17 +63,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-99b12
 
-On Mon, 23 Sep 2024 12:00:12 +0800, Jinjie Ruan wrote:
-> Fix pm_runtime_set_suspended() with runtime pm enabled, and fix the missing
-> check for spi-cadence.
+On Tue, 24 Sep 2024 14:40:08 +0100, Ben Dooks wrote:
+> In the s3c64xx_flush_fifo() code, the loops counter is post-decremented
+> in the do { } while(test && loops--) condition. This means the loops is
+> left at the unsigned equivalent of -1 if the loop times out. The test
+> after will never pass as if tests for loops == 0.
 > 
-> Jinjie Ruan (3):
->   spi: spi-imx: Fix pm_runtime_set_suspended() with runtime pm enabled
->   spi: spi-cadence: Fix pm_runtime_set_suspended() with runtime pm
->     enabled
->   spi: spi-cadence: Fix missing spi_controller_is_target() check
 > 
-> [...]
 
 Applied to
 
@@ -81,12 +77,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: spi-imx: Fix pm_runtime_set_suspended() with runtime pm enabled
-      commit: b6e05ba0844139dde138625906015c974c86aa93
-[2/3] spi: spi-cadence: Fix pm_runtime_set_suspended() with runtime pm enabled
-      commit: 67d4a70faa662df07451e83db1546d3ca0695e08
-[3/3] spi: spi-cadence: Fix missing spi_controller_is_target() check
-      commit: 3eae4a916fc0eb6f85b5d399e10335dbd24dd765
+[1/2] spi: s3c64xx: fix timeout counters in flush_fifo
+      commit: 68a16708d2503b6303d67abd43801e2ca40c208d
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
