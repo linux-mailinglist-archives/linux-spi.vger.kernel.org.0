@@ -1,90 +1,90 @@
-Return-Path: <linux-spi+bounces-5084-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5085-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D1A798CA1C
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 02:40:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE3FC98CCEB
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 08:07:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD2B9B21E63
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 00:40:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F95D2874CE
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Oct 2024 06:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B6A1103;
-	Wed,  2 Oct 2024 00:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF55C2260C;
+	Wed,  2 Oct 2024 06:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUY5lNHm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nOoTtVwX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FBDC391
-	for <linux-spi@vger.kernel.org>; Wed,  2 Oct 2024 00:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F1A28F4;
+	Wed,  2 Oct 2024 06:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727829629; cv=none; b=QAK8WxZZy/TsbHV3sPc2Bj6kCH4bClr8vyQExBSo7uTooCzyXt+TAnVMdmZ/BrZtuPJUfLFTVuPzPElEaiH4WwztYrjEsQfIcPvnfad+eUDMgb2XqlxwE4BHwe9RTRxBQJ7Um27MOaDR6vY9tpFVdrc7U0989d6WAojXr4D3wdI=
+	t=1727849256; cv=none; b=Fi8Sm3011HCmDbB43GPVrkeboRhu2px/inbAtY8nWJZ/ZOPaY7TXqfB/TwU1lH0qIg0rpCs9UUvTS4BPvf3ew8xDtx/Yza54KxP8GX5QjZfjNp8F+FHwGlITiP6yEgYKPp4DAZCVsX7tQJiTte4LnNXCU7+nroXQwgSsxvFUI8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727829629; c=relaxed/simple;
-	bh=g7r2ZW8d0bSK6hTlqvr4tHe4D4s48ThSKfFsCbcZWC0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ZhQNlqxGVcwfEEdPhWtt3sk3Ilw+OyhZ5wU9Zw0BLhJ/ks7N5G8zBZhSOISzo4GGQP/drwPvL+42AB4nme4AiX3XnRjezA8KeDyazJOIN0wjKnhbGXIXwS7ajQzCB1AvRiW4Uzv7URJg3q9e8qtE2PKkkvfyNQTo1Kc4ZmRon14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUY5lNHm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7045C4CEC6;
-	Wed,  2 Oct 2024 00:40:28 +0000 (UTC)
+	s=arc-20240116; t=1727849256; c=relaxed/simple;
+	bh=OKz73NO+N2ceXLSa0W/Bhq5vFk7XVDonKmi/1w2khug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UtZ4dG5tmKbNvEY33q3cxp/zvr+y5K67UMxzKKEWm4oWDKmll0vPsk3jpu9G42swbqEOu4vOKcYTUdcSBLDICCLp2jKMSXFsXIMAVMPSkpc7RTll0zr0XgMo4vU0zvBKLEmTGvw3ZE049rx3mdD/MpIldgRNGdPuhPjXusG73pQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nOoTtVwX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7324BC4CECE;
+	Wed,  2 Oct 2024 06:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727829628;
-	bh=g7r2ZW8d0bSK6hTlqvr4tHe4D4s48ThSKfFsCbcZWC0=;
-	h=Subject:From:Date:To:From;
-	b=jUY5lNHmsu80fDWk/bR2QGR1+7Nv2PJtl/ghz5wV4+Z7rSoIYwrQ2ihBUkrxA7c9T
-	 lLTYr6aZQAkuWBtaDK+jxbu3oO32s6v+3KmsjPZf7bZOlXYK9JOZ3xTzVJS64eW+4d
-	 lnTSOs1A/qjAAal4hRfc/vY2BIPszMUMA4k89/S8ceK5iu4351C1zxtT3egEl4g6jR
-	 aiV5t6gw+FoBQPm+2/9ordbMWhIZteWRCa0238X66ZhpYqmNzlQDFCyfE9sgKcQt1F
-	 5MyuVWMyulvnd2i1kVJEgLUzVG/HGIwvE7Qy3oSrGs3k4xxFhv6my4QuViCaF/IqFL
-	 AVzWEJW/JP18Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF0A2380DBF7;
-	Wed,  2 Oct 2024 00:40:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1727849256;
+	bh=OKz73NO+N2ceXLSa0W/Bhq5vFk7XVDonKmi/1w2khug=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nOoTtVwXejkQKRugYvq5SpxECGOHUfUgxbXJDO2D4iB4tshEtwAeM5qsgrQe0gywJ
+	 NIeI7dY/P9kGJ2jDSHMN/kWig0khPXJ4pTQTe7MHu0dLJZxWIBngU0aRzGiMxrIMP+
+	 Elc69ld/cEhFjJZ7rWf3ocxSm2T0fTSWFLye7vxFJU3mjvgW5Pltcy1E2j7C24Czj7
+	 6a/tSFcn4an9eoZGkj2V+o0+WOQ++EsQXfQxhjIelu6zpMWKcnBrXjZ8H7vREZHrcX
+	 QlpANri5bxaIQdLT1slG2BaDLxNWvAsUOKQuFNszRP2mHJRKJBrcYVUTTLTjZjjHeA
+	 7WBz7Pexj5OSg==
+Date: Wed, 2 Oct 2024 08:07:32 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>, 
+	linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: (subset) [PATCH 1/2] spi: s3c64xx: fix timeout counters in
+ flush_fifo
+Message-ID: <xbfyok2lvzxknt5aiaa4jgrkabl4eircidpnuktux7vetp6dek@cniaesdxaj4d>
+References: <20240924134009.116247-1-ben.dooks@codethink.co.uk>
+ <20240924134009.116247-2-ben.dooks@codethink.co.uk>
+ <172782953761.2314893.16208330510622172964.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <172782963149.678430.17417490511822093744.git-patchwork-summary@kernel.org>
-Date: Wed, 02 Oct 2024 00:40:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <172782953761.2314893.16208330510622172964.b4-ty@kernel.org>
 
-Hello:
+Hi Mark,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On Wed, Oct 02, 2024 at 01:38:57AM GMT, Mark Brown wrote:
+> On Tue, 24 Sep 2024 14:40:08 +0100, Ben Dooks wrote:
+> > In the s3c64xx_flush_fifo() code, the loops counter is post-decremented
+> > in the do { } while(test && loops--) condition. This means the loops is
+> > left at the unsigned equivalent of -1 if the loop times out. The test
+> > after will never pass as if tests for loops == 0.
+> > 
+> > 
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> 
+> Thanks!
+> 
+> [1/2] spi: s3c64xx: fix timeout counters in flush_fifo
+>       commit: 68a16708d2503b6303d67abd43801e2ca40c208d
 
-Series: spi: Fix pm_runtime_set_suspended() with runtime pm enabled
-  Submitter: Jinjie Ruan <ruanjinjie@huawei.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=891972
-  Lore link: https://lore.kernel.org/r/20240923040015.3009329-1-ruanjinjie@huawei.com
-    Patches: [1/3] spi: spi-imx: Fix pm_runtime_set_suspended() with runtime pm enabled
-             [2/3] spi: spi-cadence: Fix pm_runtime_set_suspended() with runtime pm enabled
-             [3/3] spi: spi-cadence: Fix missing spi_controller_is_target() check
+This still had some pending comments, besides I think it also
+needed the Fixes tag.
 
-Series: [1/2] spi: s3c64xx: fix timeout counters in flush_fifo
-  Submitter: Ben Dooks <ben.dooks@codethink.co.uk>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=892483
-  Lore link: https://lore.kernel.org/r/20240924134009.116247-2-ben.dooks@codethink.co.uk
-    Patches: [1/2] spi: s3c64xx: fix timeout counters in flush_fifo
-
-
-Total patches: 4
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Andi
 
