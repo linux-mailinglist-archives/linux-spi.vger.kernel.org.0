@@ -1,135 +1,114 @@
-Return-Path: <linux-spi+bounces-5103-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5104-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B0B699005F
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 11:59:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADEFA990354
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 14:54:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA39F1C21B41
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 09:59:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33467B21984
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 12:54:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C562D148827;
-	Fri,  4 Oct 2024 09:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LtKygXsG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA70155322;
+	Fri,  4 Oct 2024 12:54:24 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087DF1487DF
-	for <linux-spi@vger.kernel.org>; Fri,  4 Oct 2024 09:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD33129422;
+	Fri,  4 Oct 2024 12:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728035941; cv=none; b=j+VaXLJ9JsqdOy4tr3BMMl6NAFe8tYWogSzroPdgRXnjPz6QK6Ztnvi0spzIfKN+EH+Kv2TFNIMLos+YmEVs+CVH9mNpm3EO0ygULP+MRfe+/R4KGqCiV+SR2oNMLIa8hyPXBbApVIVEjH/hoMBfRbTqVHOCerwOaAJuS7B9oSM=
+	t=1728046464; cv=none; b=eXj7m43k1aHGwuFbJt/rWy1kTSFESq3z1UcdV8FN/hUzmsfdtfBGiGYv1VWIgwSJKx/w3iP+u/OKQY9akuuR5PTLZWfNOI1x4HwnLeK9qFPf/DElzsEgmGisNLm5L5jB9Glq9jDNpR7R+8XLGU5MI6IC+rsMMpOuJxkTvo/cmUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728035941; c=relaxed/simple;
-	bh=49uezkyLI8iM7VDQsurtd7Q2j7ljfzOnPmv1HLElVb0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lm7PFEPTBdaYNg5VBEY8DettoExticOBj/PIlIUKGWfcrH6qAvL7qy7mJSQA/fFyHi2BY0u184RkRtXwGzalQnyD/AdroBU0pnTppjUeLOxseG3Pa1EfFqnwWo659HLiCbwb03atr9VhF+yd/H1FgT/mBn4mF0VkkME4hgpMfP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LtKygXsG; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42ca6ba750eso11820045e9.0
-        for <linux-spi@vger.kernel.org>; Fri, 04 Oct 2024 02:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728035938; x=1728640738; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+9D8jNEMTVQMfsSMYA6l2aONN4ZAr4dXC3Yqk6ph8dI=;
-        b=LtKygXsGbwChpaUSE+TSl2fgnfK5rspuRSe+fpZL1SXRw1IgLqFIJ3ArT5vx5dIk0+
-         Al63eDPiwBDP4lqrjKV7w2i9vXKCpFzntg/p0q7Lg1TRIW/nnwfqUevvxp19cuXdX09G
-         ecNluz1zVnTBxqCKgpSpgO8+QfUHlMK1JiNTji7E/3bRm09XaqkcesmkDV5dhiy8L9A6
-         RLGS+lfg5hFPhHlFsRIt24x2oaQgx7mDIfyA3dnQckBnAoKwdyYpE9fxA3q4LzZZ+/Bt
-         RIwgR7awXapcSE/OhDAwfEJYNgydlH0xQlBQwFpddCRV2ezMk3XGmmC9/MGuGg2xBuJa
-         0Cxg==
+	s=arc-20240116; t=1728046464; c=relaxed/simple;
+	bh=AYYJxzyv/TpHRMqYnZn+yNkjlce/nGXyDC83ozB/2+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cK63GUtw0LIBPmxAsU40jDbFdLs1KUXKOen7ecyxsu1oSTi3s6lAd1QzXx1suDudonIimfrI+9aybUUvVXHnSOL4GXDUwhNvaqfkoZEOsyd8p5Z+CjyScBDxcE+Z+ykN1JoIRTgDGzFZwEY1tm73+NywIFhWElYL+spEUFBgsC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a93b2070e0cso235285066b.3;
+        Fri, 04 Oct 2024 05:54:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728035938; x=1728640738;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+9D8jNEMTVQMfsSMYA6l2aONN4ZAr4dXC3Yqk6ph8dI=;
-        b=MSoQ5NoQ+6Z8WTLAkHKw5cIgKJe/3/r1H1C0XdftwFNY45fdwGtBxo59qNOkETbWEY
-         9TQdMh/Sd5jV78njxK82w5ev53uvhJtxlaPTiOf2fcRcQGcPIH6dPiLO4opOUcFhBvWf
-         VbA3hJCWnMM/GB/ZX2o7tRk6d6xeOqqAxydrofdcl+yOPh460zbXmgZVoB+jEx9XgEVr
-         e25cuSURPcmrNs3OIJL/dAsTitJo8fSAWUeQTRnF1up0Q2yWuGKMUPefl2HhVdVjg8i9
-         /9pq5Mzk2PXfjSJVCjvn9OoGxhJZfEuzqej2z8DYPQeZk3bJp6tkdyAcPhTWCTM0d4I4
-         UWfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVYFZeRNg4Nz6mSO9AcAvVRhdyyoX6VQtPH8HKhNi8ETbp/gSZFgNvWTZFO4/KCDh3F3sjRofZsBY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmK+ZqhI0czm984EqLtDw8/306sGLRQiI9W4LhBxIAl1e7yf3C
-	jjribsJx0nZTOibVuBwiwAomC2nX5EgzRd19Gb7EqDMLL2PN30J02Ejs9IVLB4aHwGMCg/ickwG
-	B
-X-Google-Smtp-Source: AGHT+IFdSdIQpV9WBffhi5FeGlu8JU/86cb4ysbANQ/IIXys7W2HAz4tWStag33lEg4hOJ5EK9M/Qg==
-X-Received: by 2002:a05:600c:20c:b0:42c:b826:a26c with SMTP id 5b1f17b1804b1-42f7df1e5damr39358705e9.8.1728035938272;
-        Fri, 04 Oct 2024 02:58:58 -0700 (PDT)
-Received: from [192.168.0.157] ([82.76.204.61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f86b1d5fesm11573295e9.24.2024.10.04.02.58.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Oct 2024 02:58:57 -0700 (PDT)
-Message-ID: <890c1926-2778-41e3-bca6-d08a5a493708@linaro.org>
-Date: Fri, 4 Oct 2024 10:58:55 +0100
+        d=1e100.net; s=20230601; t=1728046461; x=1728651261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M8WDb0ILMLp3TSVi/xUWRtDcWXKpkXxh5dKuJYT4rVo=;
+        b=H6bJXyDPaS+XecotA/7p6d5IhKXDTZu+bOZ/an9OlKIBEhXPwvm4efezVMLPcth7Zv
+         p/6eRdFbWKiLbnypmfEzJWUJaV2V7pvvVssRHgCjrMaaq8j+fcc51ApcwpnKvQ15cooe
+         P5x6IoNUOwUxYRpUw4cq88L0CY+Hzjh1FVQTLZcnI1nqjZUfIjhkhuZpiBbbeCHee51l
+         3kDy7h+n0K/pgy8tfWcv6/z+fAN+UIx/P1lJ8XOFUPWqNHLhC01jwgDmWjSGhCCoQc0O
+         vH+1skK8SwmtvNM3ezu/bsnFhRXmpQ8Nd0zaaLG2b+oEUNKGIZrxxp/JQx1TmuVfSVIY
+         0BGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7miMyooDgs5XNigFLwR4QczNCCgN+bbJxCGa3QRfqOVY1KF6lE2BtdkV+J+N0RpuBbawVHPuG2Ayz@vger.kernel.org, AJvYcCWFn2eXjA6dUCNbQmYXCG6LzieVZMFI42eH4Zr3rRc7vmXFU8HrsoPFrFXuKx/R2Paoe42VFQC+BEB+65o=@vger.kernel.org, AJvYcCX9r8lL7Hv3hxFZiq/40rTBcf5c68QPMyv+vgcSsbpW3tTB4Ob+G8+NFP2vjMT2oOLfjFUHnCSe4IxqVNo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1CRoxYAj9PIrfO9WvLujmTFufe1nLku2FHLFMqpkNWNPupOHi
+	yzc2uXLq0EKMxJ7JyDsizew1BAxsueENyOb1DJJjbyRTWiH/ABkd
+X-Google-Smtp-Source: AGHT+IHPddgOhipGvQNn5hVJUpM0k4CMY0oO4dUHBdaDJkos2CoqPupmnPT1hXBwU/1MYxp7WC6qgw==
+X-Received: by 2002:a17:907:86a0:b0:a8d:3f6a:99ce with SMTP id a640c23a62f3a-a991c031444mr285956266b.49.1728046460594;
+        Fri, 04 Oct 2024 05:54:20 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-007.fbsv.net. [2a03:2880:30ff:7::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9910285a9bsm228197766b.14.2024.10.04.05.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2024 05:54:19 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: rmikey@meta.com,
+	linux-tegra@vger.kernel.org (open list:TEGRA QUAD SPI DRIVER),
+	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] spi: tegra210-quad: Avoid shift-out-of-bounds
+Date: Fri,  4 Oct 2024 05:53:59 -0700
+Message-ID: <20241004125400.1791089-1-leitao@debian.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 1/6] mtd: spi-nor: add Octal DTR support for Macronix
- flash
-To: Alvin Zhou <alvinzhou.tw@gmail.com>
-Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, pratyush@kernel.org, mwalle@kernel.org,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- broonie@kernel.org, chengminglin@mxic.com.tw, leoyu@mxic.com.tw,
- AlvinZhou <alvinzhou@mxic.com.tw>, JaimeLiao <jaimeliao@mxic.com.tw>
-References: <20240926141956.2386374-1-alvinzhou.tw@gmail.com>
- <20240926141956.2386374-2-alvinzhou.tw@gmail.com>
- <28ac1c39-5592-4e5c-8fce-53489e0135ee@linaro.org>
- <CAPhrvRQirexA9QJzBSqjfmPnbnF62-hzg-neQ-cZX2hnkP_Zwg@mail.gmail.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <CAPhrvRQirexA9QJzBSqjfmPnbnF62-hzg-neQ-cZX2hnkP_Zwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+A shift-out-of-bounds issue was identified by UBSAN in the
+tegra_qspi_fill_tx_fifo_from_client_txbuf() function.
 
+	 UBSAN: shift-out-of-bounds in drivers/spi/spi-tegra210-quad.c:345:27
+	 shift exponent 32 is too large for 32-bit type 'u32' (aka 'unsigned int')
+	 Call trace:
+	  tegra_qspi_start_cpu_based_transfer
 
-On 10/4/24 10:05 AM, Alvin Zhou wrote:
->>> +     /* Read flash ID to make sure the switch was successful. */
->>> +     ret = spi_nor_read_id(nor, 4, 4, buf, SNOR_PROTO_8_8_8_DTR);
->> can we use nor->addr_nbytes for the second argument? Please test and
->> confirm. No need to resend for this, just confirm and I can amend when
->> applying.
-> The following is the process of spi_nor_scan()
-> int spi_nor_scan(...)
-> {
-> ......
-> ret = spi_nor_init_params(nor);
-> ......
-> ret = spi_nor_setup(nor, hwcaps);
-> ......
-> }
-> First, within the spi_nor_parse_sfdp() function inside
-> spi_nor_init_params(): nor->params->addr_nbytes is set based on the
-> SFDP, while nor->addr_nbytes is not available. Therefore, the second
-> argument cannot use nor->addr_nbytes but can use
-> nor->params->addr_nbytes. Additionally, For Macronix Octal NOR Flash
+The problem arises when shifting the contents of tx_buf left by 8 times
+the value of i, which can exceed 4 and result in an exponent larger than
+32 bits.
 
+Resolve this by restrict the value of i to be less than 4, preventing
+the shift operation from overflowing.
 
-nor->addr_nbytes is set in spi_nor_setup().
-spi_nor_set_octal_dtr() is called after spi_nor_setup(), thus you can
-use nor->addr_nbytes.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Fixes: 921fc1838fb0 ("spi: tegra210-quad: Add support for Tegra210 QSPI controller")
+---
+ drivers/spi/spi-tegra210-quad.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> in Octal DDR mode, both the address and dummy cycles are fixed at 4
-> in READID, so setting the second and third argument to 4 is also valid.
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index afbd64a217eb..43f11b0e9e76 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -341,7 +341,7 @@ tegra_qspi_fill_tx_fifo_from_client_txbuf(struct tegra_qspi *tqspi, struct spi_t
+ 		for (count = 0; count < max_n_32bit; count++) {
+ 			u32 x = 0;
+ 
+-			for (i = 0; len && (i < bytes_per_word); i++, len--)
++			for (i = 0; len && (i < min(4, bytes_per_word)); i++, len--)
+ 				x |= (u32)(*tx_buf++) << (i * 8);
+ 			tegra_qspi_writel(tqspi, x, QSPI_TX_FIFO);
+ 		}
+-- 
+2.43.5
 
-but we don't want magic numbers or states that are not tracked, so use
-the parameters set
-
-> Moreover, nor->addr_nbytes is set within the spi_nor_setup() function.
-
-yep, use it then.
 
