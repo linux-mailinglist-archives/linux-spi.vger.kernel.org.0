@@ -1,135 +1,140 @@
-Return-Path: <linux-spi+bounces-5097-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5098-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A7F598FE2D
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 09:55:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E1498FEA7
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 10:09:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 067B228193F
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 07:55:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BAB21C232E1
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Oct 2024 08:09:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B8913AD26;
-	Fri,  4 Oct 2024 07:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD83B13D2BE;
+	Fri,  4 Oct 2024 08:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dq5ArJ/y"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="czBPWuCb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69162136E30
-	for <linux-spi@vger.kernel.org>; Fri,  4 Oct 2024 07:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DEB1386B3
+	for <linux-spi@vger.kernel.org>; Fri,  4 Oct 2024 08:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728028529; cv=none; b=hVcou4XdtZfafvapKnFCu4cPzPSF4wCX5uLg311vyIp2fJA8tkqgcXo1SU0D/1NAwxqrrEl0Km2QzbvAJPZKCBCKTO5jfdfwEQGKpNdztJG3pZUqG1b4XWE7dLeVVSDVKKriom5XVRRdPQn9U1PkOwFA9jRA080epi7PiERWbLo=
+	t=1728029339; cv=none; b=k8vbnTwz92CVlwBE3IOrp0e2FZVbXJreSY4f41Tn6CKFGkHTUHfnhUmsNSYZXNwzLiFQPhxnLQGIpLZ7DQ+RlkLCbKY1noCJ32UKtbUwhgUL1Xtd8MXiVU2drfQPDVE8Kew6YmkNZSB79pgkQyKP9gwcdDfyLjEG7nvd5domoLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728028529; c=relaxed/simple;
-	bh=Sla59omVs1a66Fa00iyOK7RF8EoxQRRdQcgewA171Wc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qdvAhPHBAIVYFV/ff7BaMNLRyFJdDJrlOTH/NN2Qmz6zT9pHZCpwZY4xs3YKtnsx1ajjEu/EIiRO6Nf1rxx2snVBWEGIL7UAgZXMcoRdmhwSFgk3xrJqhTMeIB2lq9D4HU2vMNBZcvdCUo/Sl4x+T6hHOMO5Tj65kdCTmGufwA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dq5ArJ/y; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1728029339; c=relaxed/simple;
+	bh=R+t3jUtz0cFUE2iiC1aaK+uppYUomP576AZCbtGubGw=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=h3W5OBizkjcZW/dti8WE17gq6RmOVJWhCxGHhBd+s56XYAuhZnvrHzvyA/fo7rEllNS3MVwxK7YF/ADhRd6/q8RiKEG9pNg1x2DwHzUHQMYHMzTeYXDJl0hB7RjRbF/DqmNMkNbmdCuAjVQ/Ga0WhtqxRZ67vbiINFfAoxEpkCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=czBPWuCb; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-37cd1ccaf71so1631880f8f.0
-        for <linux-spi@vger.kernel.org>; Fri, 04 Oct 2024 00:55:27 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8d3cde1103so237302866b.2
+        for <linux-spi@vger.kernel.org>; Fri, 04 Oct 2024 01:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728028525; x=1728633325; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1728029335; x=1728634135; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7FhNRrSnyZylgcaxxovBMlLXGqaYS04e7rZyoS3PuP0=;
-        b=dq5ArJ/y1/0JpDPhMbXQA/v7GQ+6nsYXABsLZ9S8PmcJXuUhlIf1czd17XrOmOUw8I
-         VBa9oggEVn9kpZWhV15fFJozRrrhnhSNrJrnEXkb1ZAqTVkkzv9KKOeJ1Sv9ZrJbTuIv
-         +IdGrni10fwSF1eJWdEinEz+rTBthuFOKAHSjmdy8MG78ZlM4XFNG0JWPlyRvVU3SE9+
-         OD3UMLcgthpZAufUFhJnP7ACom5wEv0WklcOtIG7hppfEAygXmyPbbAeWW7RYulTKLoq
-         DVi60zmto2ic8pbB9K4XV0+rlYTw0QVCEW9nKoqgMBrD+bnNq3Wx+ebH9ovr3ljNNabB
-         Q+rQ==
+        bh=4auiUipRSvioY5qlUieN0FCimA2FylPsygyRNrf3t9I=;
+        b=czBPWuCbZx5GFdrJDX/9xSe5FSbHs09OA7IekwuS4vyzfRt+8mo+KYT8ohTqM6uUsE
+         s/4TskM7k65RnvotLXnaEDUrXyIynBtr27FgpCiawtku/5LFIpjehtyXfTly2hWGsJ8f
+         I91LmFlXLXMlQAirEjLUeSFdvCD4oum+GbN3YxSMPu8fX7q4rkxB1xudq98A4zuRzvhf
+         MiE4LzIW4WNCixOWTVX4RAlHvBMacwQ3bSKvVgukXvmuPGtWCAHSj5mMw1m+ZdYD1iVA
+         HlTqAe5HhHwW8s0DdyjcI5ZzdjQP+3osdLgc/Wg1am6FzV2ThCjNu0pYes4t5+CFT2vR
+         k0pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728028525; x=1728633325;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7FhNRrSnyZylgcaxxovBMlLXGqaYS04e7rZyoS3PuP0=;
-        b=YpswWllyK4L/gOO4fCTzzkQ2ETBbdMBGn3fP4kxQNbuaOvyTmLDh71gEgM9WqpPern
-         vH1Q4eYMLM+glRVzy0HdCeG6otmLmRJ56//YwWpgpa0rA5jnAMSuaFdTeedj8vZn2VKV
-         a8KQCL9GuPlSuOelWe2bLwgtiEWkU/TjGTb2oSnUd1Dq80IePHjKU4otaF0BFmvSBt1a
-         Tp79wjgWdY6CXt9bgaBEY6fkk1G0OMfD8XH++6uR/CVyuNcorEzMbNoW0qSqlElYWb+t
-         n5O7MG7Nbf8QaOZv9gvTJYqass3ZYLvtHCKxbVU0EvCk563uyeN1XyU/Q0M0xYSrIvrb
-         67qg==
-X-Forwarded-Encrypted: i=1; AJvYcCVuJr4U+EWvzp9e8rxhxKK5IDQ/Yj1Fj8XSmpbZXbyb0Byy3YV8S+uyJ7Ya8RM1jKy61hc5gtoefpE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAXYxOnBzd/L9E2ufzhnnWEi7zsfTyTmPsK9wkdTWr9OzFZ0NR
-	YQ43c7Yodvj4gr4IhDJ0WjQdOC01eJegVmvnzHjER6tv/gpluYeTbicyulz3KrM=
-X-Google-Smtp-Source: AGHT+IG1JoUsqKBdDF7cCqFuGrOBJMWIqdelI3A/3zB9ug7YMTLNfUWq7WbX04o8yxlgPk/pm0MNqQ==
-X-Received: by 2002:adf:a45b:0:b0:374:c613:7c58 with SMTP id ffacd0b85a97d-37d04a7b2e6mr3435594f8f.29.1728028525557;
-        Fri, 04 Oct 2024 00:55:25 -0700 (PDT)
-Received: from 1.. ([82.76.204.61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f86b3951fsm9058045e9.41.2024.10.04.00.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 00:55:25 -0700 (PDT)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: linux-mtd@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pratyush@kernel.org,
-	mwalle@kernel.org,
-	miquel.raynal@bootlin.com,
-	richard@nod.at,
-	vigneshr@ti.com,
-	broonie@kernel.org,
-	AlvinZhou <alvinzhou.tw@gmail.com>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
-	chengminglin@mxic.com.tw,
-	leoyu@mxic.com.tw,
-	AlvinZhou <alvinzhou@mxic.com.tw>
-Subject: Re: [PATCH v10 0/6] Add octal DTR support for Macronix flash
-Date: Fri,  4 Oct 2024 10:55:19 +0300
-Message-Id: <172802837479.20734.613907045651385407.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240926141956.2386374-1-alvinzhou.tw@gmail.com>
-References: <20240926141956.2386374-1-alvinzhou.tw@gmail.com>
+        d=1e100.net; s=20230601; t=1728029335; x=1728634135;
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4auiUipRSvioY5qlUieN0FCimA2FylPsygyRNrf3t9I=;
+        b=cI+zPP2f3UYzwmRUcvFxJfG+B0x3W0TwN6etdxAhhcYL9LRyFhR7VfYKGbk06S2Gz4
+         OGg5I0Bg+o7Z/6wXrItTuLerc7dbkZfCyRTwOSa/iPFukIAzzMDdhGku+BpE5tgNXhaS
+         OD5t1B2HkAOd/17NpVr9vDbtMNkPB6g8ivdLgklGhmssPZU0xehyqJ2d9IDnsiWshK65
+         UYkAGHntgcrgS7MgJSEXNk56qWwz2pvRdmH8SQQCiXxUMuKO244giW/e9Xi60iAZZ5DU
+         9i0mTgwH2bVKELvj1AfK8tTN1E46ZG4uQxfDxuGi1mgx3f1o1mb9wmNDYC1sdGkqepbQ
+         1dAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpL9glm+NN5HBoRbZgXNT4a5xpDvYYIH/hcH5Oucm43XuMG4L3b2q+VDBCSEIclfkEaRj14thd12c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6LThk+eLAzECgm1j7oFsX0wmtUqoUNFT4yqrX0npUL/4nLiqB
+	wlX2uBiSO7gMN6UdOUycJJxYW9VUCrq5+8BB/BUf7wSKqNaRZvaBcj0sSR37enU=
+X-Google-Smtp-Source: AGHT+IFgl/nvfLhcNVun/syHAmXlZefx9G+73C15fAoSRXNCIuh634p0eFrgfM/y8L+b25rL7WLqkA==
+X-Received: by 2002:a17:907:9306:b0:a86:b64e:bc4d with SMTP id a640c23a62f3a-a991c033557mr210668066b.44.1728029335197;
+        Fri, 04 Oct 2024 01:08:55 -0700 (PDT)
+Received: from [10.11.12.174] ([82.76.204.61])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9910473a89sm193047166b.149.2024.10.04.01.08.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Oct 2024 01:08:54 -0700 (PDT)
+Message-ID: <5b2bcd4d-faae-40f6-908a-63f4dbb02adc@linaro.org>
+Date: Fri, 4 Oct 2024 11:08:51 +0300
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1278; i=tudor.ambarus@linaro.org; h=from:subject:message-id; bh=Sla59omVs1a66Fa00iyOK7RF8EoxQRRdQcgewA171Wc=; b=owEBbQGS/pANAwAKAUtVT0eljRTpAcsmYgBm/59kHY8UWiDNnVTb3qmjpzEIQup8tWBSV4mq1 JQgVpJ+1NaJATMEAAEKAB0WIQQdQirKzw7IbV4d/t9LVU9HpY0U6QUCZv+fZAAKCRBLVU9HpY0U 6dClB/9zpqjtj8auegJbo5/kDhhYg+kjoeTCDMsqktnl46imgtkM/ZfxHOUZo+EkonTBr8ahZ13 dwjxMT/EIg/Rplylb+HCXEiNAnPaeI8bvJmYjYH4GzK0K4qM2kOiRsRKUOE7dEEuaE3kA/ZfEbu BwQMQqbU40OifVNSPdeMjC5Qiq2Nl7nCClJeti3saULUKt49Cl+h+9r+D7MMt2mJMSE4bBFGY3V D9w92BNoy9NdvO4kF3POcTmCyZahASzwNsACLBREaJbz/5SksBFuVdLghM9pO4NM4dQpCn+CBGW GVazCPDVO81zDjcxdPgYefTat7UAMYMkjf1ctpHoZlXzB9pj
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=openpgp; fpr=280B06FD4CAAD2980C46DDDF4DB1B079AD29CF3D
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
+Cc: AlvinZhou <alvinzhou.tw@gmail.com>, Pratyush Yadav <pratyush@kernel.org>,
+ mwalle@kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+ richard@nod.at, "open list:SPI NOR SUBSYSTEM"
+ <linux-mtd@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>,
+ chengminglin@mxic.com.tw, leoyu@mxic.com.tw
+Subject: [GIT PULL] spi-mem/swap16 changes for v6.13
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 26 Sep 2024 22:19:50 +0800, AlvinZhou wrote:
-> Add method for Macronix Octal DTR Enable/Disable.
-> Merge Tudor's patch "Allow specifying the byte order in DTR mode"
-> 
-> v10:
-> * Further explanation on adding Macronix manufacturer ID in ID table.
-> * Correct some typos.
-> 
-> [...]
+Hi, Mark,
 
-Made the changes that I specified in replies. SFDP
-"Command Sequences to Change to Octal DDR (8D-8D-8D) Mode" can be parsed
-later on.
+I've made an immutable tag for the spi-mem swap16 changes. I let the
+0day bot run on them, I got no complains. Pull if you need them.
 
-Applied to git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git,
-spi-nor/next branch. Thanks!
+Thanks,
+ta
 
-[1/6] mtd: spi-nor: add Octal DTR support for Macronix flash
-      https://git.kernel.org/mtd/c/ccac858d2bdb
-[2/6] spi: spi-mem: Allow specifying the byte order in Octal DTR mode
-      https://git.kernel.org/mtd/c/030ace430afc
-[3/6] mtd: spi-nor: core: Allow specifying the byte order in Octal DTR mode
-      https://git.kernel.org/mtd/c/6a42bc97ccda
-[4/6] mtd: spi-nor: sfdp: Get the 8D-8D-8D byte order from BFPT
-      https://git.kernel.org/mtd/c/46b6256a68b4
-[5/6] spi: mxic: Add support for swapping byte
-      https://git.kernel.org/mtd/c/50cb86f21ec2
-[6/6] mtd: spi-nor: add support for Macronix Octal flash
-      https://git.kernel.org/mtd/c/afe1ea1344bb
+The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
 
-Cheers,
--- 
-Tudor Ambarus <tudor.ambarus@linaro.org>
+  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
+tags/mtd/spi-mem-swap16-for-6.13
+
+for you to fetch changes up to 50cb86f21ec2ede08d0ec0479fbd8697a8a25616:
+
+  spi: mxic: Add support for swapping byte (2024-10-02 09:44:57 +0300)
+
+----------------------------------------------------------------
+This allows specifying the byte order in Octal DTR mode.
+
+There are NOR flashes (Macronix) that swap the bytes on a 16-bit
+boundary when configured in Octal DTR mode. The byte order of
+16-bit words is swapped when read or written in Octal Double
+Transfer Rate (DTR) mode compared to Single Transfer Rate (STR)
+modes. If one writes D0 D1 D2 D3 bytes using 1-1-1 mode, and uses
+8D-8D-8D SPI mode for reading, it will read back D1 D0 D3 D2.
+Swapping the bytes may introduce some endianness problems. It can
+affect the boot sequence if the entire boot sequence is not handled
+in either 8D-8D-8D mode or 1-1-1 mode. Therefore, it is necessary
+to swap the bytes back to ensure the same byte order as in STR modes.
+Fortunately there are controllers that could swap the bytes back at
+runtime, addressing the flash's endianness requirements. Provide a
+way for the upper layers to specify the byte order in Octal DTR mode.
+
+----------------------------------------------------------------
+AlvinZhou (1):
+      spi: mxic: Add support for swapping byte
+
+Tudor Ambarus (1):
+      spi: spi-mem: Allow specifying the byte order in Octal DTR mode
+
+ drivers/spi/spi-mem.c       |  3 +++
+ drivers/spi/spi-mxic.c      | 17 +++++++++++++----
+ include/linux/spi/spi-mem.h |  8 +++++++-
+ 3 files changed, 23 insertions(+), 5 deletions(-)
 
