@@ -1,79 +1,105 @@
-Return-Path: <linux-spi+bounces-5110-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5111-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531D2991935
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Oct 2024 20:07:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D48F991DC9
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Oct 2024 12:27:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19EF6282F9B
-	for <lists+linux-spi@lfdr.de>; Sat,  5 Oct 2024 18:07:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17BC12827FE
+	for <lists+linux-spi@lfdr.de>; Sun,  6 Oct 2024 10:27:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A56C157A59;
-	Sat,  5 Oct 2024 18:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B65B5172BD5;
+	Sun,  6 Oct 2024 10:27:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oEGtZx/j"
+	dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b="RJalEN65"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mxout2.routing.net (mxout2.routing.net [134.0.28.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63FA156C71;
-	Sat,  5 Oct 2024 18:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02765172BA8;
+	Sun,  6 Oct 2024 10:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.0.28.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728151650; cv=none; b=RRbdwF7247MSUrd4oFvENJq7A9CjAAW0XSOdluZw5z2UWgVWVKpp10B5jVCLcbfOiW7IaIkkwn3SHfuNC2YqgRJ6LNW2NiYZnbISBA1eKrHgKs7ehrnPHkI+W9IQi/vSKz0ayfo57sWe0d41gmBDdnpTuygvcaPhNhnEmxoqY4U=
+	t=1728210468; cv=none; b=hfbpj46+SBk11Q7mqtLUwmTEGR7VPfn/PxC0BX24HPUjXVIkDvSwBEljrMreSxkO5u2/qGHPm6wyPkxahL/J48ka8CCpcg4pwIINuJEHfQT7p3FazHLWLjp3wPRsPCNV8qSZ/v/0cxEMrLeQqXSW78jvJRc9Rzezc4Ehdu+XYro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728151650; c=relaxed/simple;
-	bh=+QdQxhtw8UHU+jIuufrQ1qr3stMFCxbsjeCCh5n6iJg=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=JuxmmWGhot7REF6FQ7l/bXOPiGSdZJXeJl55ERt9clo54LM+6YqTCAjZVvWWPyv8WQt6sWfOrng09yEM6WAjYdY1essY90NkD0FEMV0Rh4q2F5kmzZ5IWZ4xKAqc1CO26h+ZR1tnoVPw9ZQYwfPi0TXtANQMJw0Q7wpK+96XOEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oEGtZx/j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7EA0C4CEC2;
-	Sat,  5 Oct 2024 18:07:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728151650;
-	bh=+QdQxhtw8UHU+jIuufrQ1qr3stMFCxbsjeCCh5n6iJg=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=oEGtZx/j7YOpHZ2dQDrggPRaErZmnHWECF0W8SrAwN/JQugVsZETfSiXNtOgzisuC
-	 Xo+bj8GhXVFTTbH1U4IT1ddryfpIwm8twqbdNAYcPKwL3JE8rcP0w6SijwPGe6Odem
-	 2PSfQU7yAYD5aIrNfpNnIg0kGKimop/xCJGuYQvTrARwDI0y3pPzVXDdYihaocEXhy
-	 rJYC0zafwWh2++G91OsgbjcCk5IzqLhToO5MTp3a/6s2TLpKhavQQB8uXhTKWcIFvk
-	 9uonjTHBoqK6Iz2uTMyGNJ295AVNlnOHTnaHxkp4F2KW7Bk8La+C0uyVKnAhgby/yr
-	 0gf6Q3+8Oisiw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADFF43806656;
-	Sat,  5 Oct 2024 18:07:35 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.12-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <bb073282a3cbc0a5349db87260957934.broonie@kernel.org>
-References: <bb073282a3cbc0a5349db87260957934.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <bb073282a3cbc0a5349db87260957934.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.12-rc1
-X-PR-Tracked-Commit-Id: 65fbec3121eb7a10a839784496357f5a833af69b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 60b9f47eb3b01f829a94f7fea81bc8d59ff93dc2
-Message-Id: <172815165420.3145223.17580166253904272399.pr-tracker-bot@kernel.org>
-Date: Sat, 05 Oct 2024 18:07:34 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1728210468; c=relaxed/simple;
+	bh=eQFpN46gknokSvXJCeeAKjHyK2HGsUQ4DriLMaIawxg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WxDVhtM5y8TBpgsSXqk/Id41IaycuxduDLsBVpllA/JEJ0Je+EK/BeAMcOBO9zc+mhCi8H7zOzqd8HPAdi50ovpH2mRq7Dfjxys638kBbu5bjY4fmEE08L4KdzEz04Hna3CFEGOqGOc1ZnmhkOBrCaOt0Rw8w+NG7yT1+0hP6mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de; spf=pass smtp.mailfrom=fw-web.de; dkim=pass (1024-bit key) header.d=mailerdienst.de header.i=@mailerdienst.de header.b=RJalEN65; arc=none smtp.client-ip=134.0.28.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fw-web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fw-web.de
+Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
+	by mxout2.routing.net (Postfix) with ESMTP id 0C2F65FAA5;
+	Sun,  6 Oct 2024 10:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+	s=20200217; t=1728210465;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0ZFTz9Uswka8q9Gcum+i2AIGps8wlGwvgIKYo93JZBg=;
+	b=RJalEN65+aEx8kvgpCDLrjaQWtGIQz4xyAlqf2XJ2JO0J3tBZWF2HQMIovPJKyG7gEQ+Yc
+	R2aaqnCKCv+10VpXUgfrF5nA9kSNLNUL0ECHe9cwfjvmKJdr9MyGH2wELA+3uKiYp8iqIL
+	TIdxc7yaHCXe6TrCGjnLf029t/Fdbgw=
+Received: from frank-u24.. (fttx-pool-217.61.153.101.bambit.de [217.61.153.101])
+	by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 084E5804DD;
+	Sun,  6 Oct 2024 10:27:43 +0000 (UTC)
+From: Frank Wunderlich <linux@fw-web.de>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Frank Wunderlich <frank-w@public-files.de>,
+	Leilk Liu <leilk.liu@mediatek.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	daniel@makrotopia.org,
+	john@phrozen.org,
+	eladwf@gmail.com,
+	ansuelsmth@gmail.com
+Subject: [PATCH v1] dt-bindings: spi: add compatibles for mt7988
+Date: Sun,  6 Oct 2024 12:27:39 +0200
+Message-ID: <20241006102740.17948-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: facdb081-b535-49ee-8242-ea660d354237
 
-The pull request you sent on Fri, 04 Oct 2024 22:58:22 +0100:
+From: Frank Wunderlich <frank-w@public-files.de>
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.12-rc1
+MT7988 has 2 different spi controllers. Add mediatek,ipm-spi-single
+and mediatek,ipm-spi-quad compatibles.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/60b9f47eb3b01f829a94f7fea81bc8d59ff93dc2
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+ Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+index e1f5bfa4433c..3c707e5de5fb 100644
+--- a/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
++++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mt65xx.yaml
+@@ -33,6 +33,8 @@ properties:
+           - const: mediatek,mt6765-spi
+       - items:
+           - enum:
++              - mediatek,ipm-spi-quad
++              - mediatek,ipm-spi-single
+               - mediatek,mt7981-spi-ipm
+               - mediatek,mt7986-spi-ipm
+               - mediatek,mt8188-spi-ipm
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.43.0
+
 
