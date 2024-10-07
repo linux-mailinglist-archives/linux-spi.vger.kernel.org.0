@@ -1,54 +1,54 @@
-Return-Path: <linux-spi+bounces-5118-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5119-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ECEE992506
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2024 08:40:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8496F99251B
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2024 08:53:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 133CC1F215BF
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2024 06:40:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACFDD1C20F2B
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Oct 2024 06:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B1A314C5BA;
-	Mon,  7 Oct 2024 06:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60AA158861;
+	Mon,  7 Oct 2024 06:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IquAIWYt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WcFsA7fy"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DF65733A;
-	Mon,  7 Oct 2024 06:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AFE800;
+	Mon,  7 Oct 2024 06:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728283220; cv=none; b=CiJhbkexHucFLuvKRyZsXPVkAp+EhHOd7I6fv5jMPQM1fbfcxYGVfxvVbvzQhyaB37jF5lrT2X7r980GYoE1F/PDKg77481taBEVYc8Oi9Gk9UUvqRXQYQYroHsOQcdNrvGUr+l3BeuWeK/Hbu1fU0kjidm6OtPdrMFIXnzrJ1M=
+	t=1728283977; cv=none; b=hI5lv6Y6lgBrOK7aq/RsDe20KI52hWve/lRXLYxek7LzmIHhmWfBHACHQ/qmSWKW74wa4ND6nlmDfpv+X3YHH2cD1VYkw1N58HM0PcXvB1QFolTJSukxtvlDrqFyYJYG1IVVqx/pHnVx+w8oPkZuJMMLRPYLRHJ05dfqgJVD4nE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728283220; c=relaxed/simple;
-	bh=DGQEeKF1AWzf06lGshAo7qMOkapLxdW+HCV2OBKPwgA=;
+	s=arc-20240116; t=1728283977; c=relaxed/simple;
+	bh=YE/fwUsofTUlM2zFpCR08q2JU6CrcP0FnVxAVwLIhFU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aFQizjUmN/26ZyXOhuPJLyPXyTuKDgeqEYeHP6wgcDfjTTyoBTYw73SxV7yUGrFWyUiQjj2CZDcc7a/oVcBfrHIfUkzCA76Q99IP6/YCI/GDW3juZZOmbJ2ybatkNHLmT96p9mjfm0QzRqbxYFzB1Z/2S3FX10o79b8wVMCSGl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IquAIWYt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BD3C4CEC6;
-	Mon,  7 Oct 2024 06:40:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NlT5bG3uA+/CztblIxLB8ck73rzoeEJXELYEJRwzT2y7qUqo4PvN05la0eAqmp8e82Ms0N2kKYhPmxekt/sNvSYCaQvuCDslYJ8c/5tcsgSVs5gF+KMpsVWAQTi7eYVFX6pgv8lV7mPbPIhNSRgGsf8aNIrcl2cj8m6sIUVwnqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WcFsA7fy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93F6DC4CEC6;
+	Mon,  7 Oct 2024 06:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728283219;
-	bh=DGQEeKF1AWzf06lGshAo7qMOkapLxdW+HCV2OBKPwgA=;
+	s=k20201202; t=1728283977;
+	bh=YE/fwUsofTUlM2zFpCR08q2JU6CrcP0FnVxAVwLIhFU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IquAIWYtKpLBipqP0kdMlwKbKYgXkHEkyP+LFmNnWvPXFq3xmkq31U7daWwPcoUa/
-	 iivpHGE0rMKjvu3/Fsux2nXvGU7FVJhkPIpmjxQgBEjb31J03JESWxVFM/Dr5Yc//W
-	 wwMWGPVg0adK1VcAKu+ETNTow3GKLpVdyVQK5DfNiE1uSOKXeNS9XoIdi9e2gEGNpT
-	 OoQsy89Edhz/0q2Ha7aHKyoMjLoZiQai6RIAgxYFovhVTg+9UWHImXKBt3tzAIRXld
-	 hPvncpdf/7yrUWog1KcEZ147C90gWYUZLgD8EjTiX3gcieC8b9baF0qwn3ypIIwgu+
-	 6lkHFIYSfaK0g==
-Date: Mon, 7 Oct 2024 08:40:16 +0200
+	b=WcFsA7fy9qBFJGUBFM/FMs/bdGvoFUnSFk0f9f1S6N+a2juIwwi4wdshTtb/ReBLI
+	 0Z+zV53gLCqz+cGgAIZ1LtcH6Y5oBraY9VsySO5+bWS51J+S+4Cf/jE+3Es+qeoGZz
+	 PPm6vj2Efqhy15Pe+In4HDXcDb7X3s43mMQwsfsQJZcEtXO6U5l5dGperiZy1qU3Il
+	 9ZXx7m5T+QRRrAe+Qnt6EfJqIzGJnYSyUueVkW9Npq3n+4vGlo6ctEU1tXjnI1Apma
+	 7nsbG8QYvgj1PAWUOfy4Vijus/OO3samys4VYeW+YYBOHX4OGS6QduUd8q3vbzOo2i
+	 aWz3IUlKvarGQ==
+Date: Mon, 7 Oct 2024 08:52:53 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
 	conor+dt@kernel.org, tsbogend@alpha.franken.de, linux-spi@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Subject: Re: [PATCH 1/3] dt-bindings: spi: Add realtek,rtl9300-snand
-Message-ID: <3tu6x2644lxvvbk74nv5qva7qupsvgxyxkwc5g5n7n4bh3mbwi@457wbps4kpns>
+Message-ID: <jqiu42r5gegl7vf3tghoudwdliafv3jsvdscmbxxjonqzjxe2f@ogzdgyifnbx7>
 References: <20241006233347.333586-1-chris.packham@alliedtelesis.co.nz>
  <20241006233347.333586-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
@@ -98,10 +98,6 @@ On Mon, Oct 07, 2024 at 12:33:45PM +1300, Chris Packham wrote:
 > +properties:
 > +  compatible:
 > +    items:
-
-Why 9300 cannot be alone? What does 9300 mean even? Wildcards and family
-models are not allowed in general.
-
 > +      - enum:
 > +          - realtek,rtl9301-snand
 > +          - realtek,rtl9302b-snand
@@ -112,6 +108,10 @@ models are not allowed in general.
 > +  reg:
 > +    items:
 > +      - description: SPI NAND controller registers address and size
+> +
+
+Also: why no clocks? Binding is supposed to be complete. If it cannot,
+you should explain it in the commit msg.
 
 Best regards,
 Krzysztof
