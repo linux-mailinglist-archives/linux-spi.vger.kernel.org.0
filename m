@@ -1,120 +1,107 @@
-Return-Path: <linux-spi+bounces-5145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32C86994462
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 11:34:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12DA899456B
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 12:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C493A2842DA
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 09:34:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABC751F2425D
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 10:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BC218B482;
-	Tue,  8 Oct 2024 09:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8E61CCB3E;
+	Tue,  8 Oct 2024 10:29:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VJVa9inC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwX6e7Lj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E119E158205
-	for <linux-spi@vger.kernel.org>; Tue,  8 Oct 2024 09:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B00F1CB308;
+	Tue,  8 Oct 2024 10:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728380085; cv=none; b=n317HdBBPe3iW5qKo4t78MnsaU47XVyh6KjCW71RXoW4LzTN/qw603oXKrKxgZz3zcvgoR2MA53LkVrWpx4oxKqkCnA1z0Vn99HbDoXjF1jd1RtaQWE9HT761A4ue7RlRFVjQVNVNFKXdz+zRyDkELcmF4JuJ7DoEfRsatuFFOE=
+	t=1728383373; cv=none; b=p+Kla33yRCeau29L8wkcCcrk2DYCf669wsIKM2i9/QfWiQhq0RKMq+dVFoKn4kh4t8SwNRjAk+xpDXmNbU8rCZLiWQkbsJ7UCNCgCK7ksrl2EVNGjqjDfPVeJ7c1YRc8lAJ+rUL7kUEwenlFGN4Vik501IPtZwt2awSn5lum1pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728380085; c=relaxed/simple;
-	bh=HWBIIpb0I0EYke4W3rFcSXL6PavJ5v8RK/W0/e8tJ1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IGQ2+roZCeBzrZU4Gkv/jC57wNQOlyulj7BytD3NPEiBepN3suwjmTILzyOluJsP8ep65aq08xpQYrD3iNSwUELC/4r+DMeD89+BORT05gAMDIpUw+yFL8EHWNJOHZZm6WteaV9+o7fLTzggFu0cy06wJgTDykoK/NWl07JX7n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VJVa9inC; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37ccd81de57so3592392f8f.0
-        for <linux-spi@vger.kernel.org>; Tue, 08 Oct 2024 02:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728380081; x=1728984881; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AkUrttCQ5fOL6PrH7JQH+jh3uBvnwDTVVw6+ImTwc5Y=;
-        b=VJVa9inCMkPUxJvC9P+47tLm28df6RSRHhgaRv9+ETdEGXmBsrjMavDl1D5e+JyBOb
-         NycOeAPsUaCJB8Urqwq+Ke1ArqVFmvbwbvtyb0Dpr31udoefZGuNp70U/bWjUgqsKW3M
-         Oe4WrYAOWUdphQI/h8zLlZlwMDBaceDkjby0JSb12opq05P5tabmTAzvFQI5xxx0WB8n
-         EtbSmMOBKjDUWeX8F9dShLxzBcxUzedOSa7M/DZ7H3kyC3L9w/w/wQRvnRE0QU03q6/a
-         MPKQ+kDMzGFGq+5H+BOhN4qOJSi4V5pfltdCa4KUn4b6caeWqLECB4ewL5/WBrIK17gM
-         3QxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728380081; x=1728984881;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AkUrttCQ5fOL6PrH7JQH+jh3uBvnwDTVVw6+ImTwc5Y=;
-        b=unayGDv2VjNNJTywpB2aQarvBo4HNaEVyYgXvQWlJq9hof7y8J18tL3T+qi6vPzXI9
-         VMNLZQt23WamC/sYq+3EiobixKMsnRNjQdhzqwaiO3dH8DzrZpvEn7r14WJEw1AdxUMT
-         FPdobqfeOP6Sfs1Lk4qTsh28rvLkdAzaFcUgJUddVp8aR4k3Im8l9EzHRWDkC8z0O9So
-         m85bd3CAB0w+IPq7XkrDq+byYN7EQizHGCs1js07jlZjh703SXebs2LWagOBPwZhH+l9
-         uhHL38eBdYY58jTCeXjiyH34+l0TY/QOm3OxqYE8GmSOiuj/0EpuvTVTdRUIGDPWu7Xa
-         ABLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqYdi5fQcEOLuIERVWhwzGETebtrbA/sfIU2aAzfLjqAgk6+9nLM+vaK5ngnMVyEp/sP0VvZb1JpM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwemLIjizM66GLJBxpjI6ORqt+T5dgBvdEYOS/Ana41xbliaAyw
-	geOUdAf81IepbBeTpwK2fVQGBvusYGQVcUmMZlv90I+iQMyGhv8idin5a9urf+k=
-X-Google-Smtp-Source: AGHT+IHEZnWRQz4AvycE7TbZa8Wd4RxN1heiXUIFm7/Zn/w1b4DSiaXxZ4pg1k8jYTnHuFOlEzBQTw==
-X-Received: by 2002:a05:6000:2a83:b0:37d:2e73:fbcb with SMTP id ffacd0b85a97d-37d2e73fd07mr1031436f8f.2.1728380081173;
-        Tue, 08 Oct 2024 02:34:41 -0700 (PDT)
-Received: from [192.168.0.157] ([82.76.204.61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89eda21esm103923195e9.46.2024.10.08.02.34.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Oct 2024 02:34:40 -0700 (PDT)
-Message-ID: <1c525e43-d71c-4c4a-a8ac-96627cd6ea7e@linaro.org>
-Date: Tue, 8 Oct 2024 10:34:39 +0100
+	s=arc-20240116; t=1728383373; c=relaxed/simple;
+	bh=r6uqx0gKzPJlQTnJfU80WZi/CjkKIp2ytA8teYg3T4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ln0S092mkda2ihgErE3r/+Dw1AYVSxU9rYkMJ4IZQjeYVtdumBAM3Rxj7jhvyRUj0pgJxSzO3mr8z6tQk0IJoab6a2V8ASBGQrKa7eadsAz2ZIOLqf9K38HEB0AXMmxgtaKXNCq2NrrDyt5EdKScCcQTCHl5lcuLrxwchDCTFTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwX6e7Lj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91C1C4CEC7;
+	Tue,  8 Oct 2024 10:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728383372;
+	bh=r6uqx0gKzPJlQTnJfU80WZi/CjkKIp2ytA8teYg3T4s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gwX6e7LjdGFMW4ZkZgiEBpTLMqqIOX+ATRyulL2aZFJDHiTuBoF4o4JvneLbRrW6S
+	 ur+UM8QSxwZXgdJeIKD0nTtiN9mXgz+z9if/L38DwR1Y08fjwMhHB/pN6jfRpY/3JR
+	 Yj/Wvb20obNLHveykP5AwmtYg2wQ4fhcPjfKwiihnJTr/UqBpm08yO3N4FM3UzVCzh
+	 HgRl0j7T9fLWvGST3nJ8bYjhmPHVUYMQj9oHfJ3qpIKT5EcwRCnMvualHgOd3nPGt7
+	 sbtzOgnQeP0rHfGBsINPGGh+gSdu6QaTl54XL4ZytkxT7DaPSnndgE598gmf2UCboW
+	 xBAqqpGGd/EsA==
+Date: Tue, 8 Oct 2024 11:29:28 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Mihai Sain <mihai.sain@microchip.com>, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: atmel-quadspi: Print the controller version and
+ used irq
+Message-ID: <ZwUJiAj_ZVztLvS5@finisterre.sirena.org.uk>
+References: <20241008083226.51163-1-mihai.sain@microchip.com>
+ <1c525e43-d71c-4c4a-a8ac-96627cd6ea7e@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: atmel-quadspi: Print the controller version and used
- irq
-To: Mihai Sain <mihai.sain@microchip.com>, broonie@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- claudiu.beznea@tuxon.dev, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20241008083226.51163-1-mihai.sain@microchip.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20241008083226.51163-1-mihai.sain@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/tCwxRMHdmQqa9TN"
+Content-Disposition: inline
+In-Reply-To: <1c525e43-d71c-4c4a-a8ac-96627cd6ea7e@linaro.org>
+X-Cookie: Editing is a rewording activity.
 
-Hi, Mihai,
 
-On 10/8/24 9:32 AM, Mihai Sain wrote:
-> Add support to print the controller version and used irq
-> similar to other at91 drivers (spi, twi, usart).
-> 
-> Signed-off-by: Mihai Sain <mihai.sain@microchip.com>
-> ---
->  drivers/spi/atmel-quadspi.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-> index 95cdfc28361e..757f07132585 100644
-> --- a/drivers/spi/atmel-quadspi.c
-> +++ b/drivers/spi/atmel-quadspi.c
-> @@ -687,6 +687,8 @@ static int atmel_qspi_probe(struct platform_device *pdev)
->  	pm_runtime_mark_last_busy(&pdev->dev);
->  	pm_runtime_put_autosuspend(&pdev->dev);
->  
-> +	dev_info(&pdev->dev, "AT91 QSPI Controller version %#x (irq %d)\n",
-> +		 atmel_qspi_read(aq, QSPI_VERSION), irq);
+--/tCwxRMHdmQqa9TN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This pollutes the console. Better to add a dev_dbg if you care.
-And irq number doesn't bring too much value as you can see it in dt,
-isn't it?
+On Tue, Oct 08, 2024 at 10:34:39AM +0100, Tudor Ambarus wrote:
+> On 10/8/24 9:32 AM, Mihai Sain wrote:
 
-Cheers,
-ta
+> > Add support to print the controller version and used irq
+> > similar to other at91 drivers (spi, twi, usart).
+
+> > +	dev_info(&pdev->dev, "AT91 QSPI Controller version %#x (irq %d)\n",
+> > +		 atmel_qspi_read(aq, QSPI_VERSION), irq);
+
+> This pollutes the console. Better to add a dev_dbg if you care.
+> And irq number doesn't bring too much value as you can see it in dt,
+> isn't it?
+
+The objective of bringing the various AT91 drivers into consistency does
+seem useful so if this isn't OK for this driver we should probably
+update the other drivers as well.  Ensuring that people can get at the
+IP version does feel useful, I guess it could also be a sysfs thing?
+
+--/tCwxRMHdmQqa9TN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcFCYUACgkQJNaLcl1U
+h9DDOAf/Y8OAs67WdyBhy6znpd9MnCRbd2ynn7x0IFVnQeaOcNPJFreZ5D81G9DO
+G2dEOU68qbHH7LCNDDUEcNre1C95gQpAFVWg7zVeLcRR7iXOSgYMjybkQp8A9jEM
+w8RucD9+/6SHS/y3mEflYgtRk8QnbA/1Gu0cVhM6606Y8sxXQKmiDEEEIXqoSzp6
+Oz9LVdlk1GYyGFflv7eTTvy1CVey8xOOVYQBpjohmXxzYUqhrNNw+ef7tUsHDued
+k7jyRfC7ndsYamet7RzQFrMVXvP1TJxcgYcAkv/CDdSB8LUyTpq7+vSc/zEVpbD7
+onHIdDe8ZvRplwY2vgOHjYDzW0gc6Q==
+=4Gul
+-----END PGP SIGNATURE-----
+
+--/tCwxRMHdmQqa9TN--
 
