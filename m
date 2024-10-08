@@ -1,41 +1,41 @@
-Return-Path: <linux-spi+bounces-5137-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5138-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51221993E84
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 07:57:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D0DC993E86
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 07:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 824191C2114E
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 05:57:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 100BB1F22C85
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 05:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67ED013C67A;
-	Tue,  8 Oct 2024 05:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D3B1442E3;
+	Tue,  8 Oct 2024 05:57:26 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01on2093.outbound.protection.outlook.com [40.107.222.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D098F13E41D;
-	Tue,  8 Oct 2024 05:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5901419A9;
+	Tue,  8 Oct 2024 05:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.222.93
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728367044; cv=fail; b=d8EZgTuYFJUj2IxIWb10+JkeuV14VYa7sqUnw7XVT56RbUxEFsRn+pbEpviSsOUXq9N7q6f/cgHNlxYqd9JOzDAxHiN5jNjxsssDpj7z/xtYLe4CFqwMJF2vswRqDj0pQitzINajZFEr62XLaCPJ/oPBoiSp+UzmnUObPmNgzG4=
+	t=1728367046; cv=fail; b=RFz3sWvhWxBg8iztuMGbfns4TCwkwRvN/9MPfnL3CNjFR2oJ8bDbmH9r4NODxwjoSyz+UAFI6I/aLZGwtpXE3vL8l6eeeIRU1YMQxX/BMGDtomC5hEUwm3F3eoag2WEABs8L+dPcoOa2p3dulDpv6O18Fe5wANcZ8PFasFE1ppU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728367044; c=relaxed/simple;
-	bh=4chnCKyzv2sEXSKHSTb4BCQorGpo5sKPLmYZg3Fy43g=;
+	s=arc-20240116; t=1728367046; c=relaxed/simple;
+	bh=X51J45QabFI71Uov091eIshZEfaN1dlg6Q54QCilZD0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RzVZXmFJNUTpllvbQgp+BmNOS/QsNTS2Rj2+Irh4HuDGs4g3QDhvqTYjZqofSe3NRDIE+MGNR2+bP1opfKuFs4h3AR8u8oTSZQn4jeBNhkYbMHvOGrlGY7RE2oy3oC98PVLeqUKlCdWtlnVu51UPPmb1fuxbVKOZzwEFS+FrEOo=
+	 Content-Type:MIME-Version; b=QWtn0CEBftZGtmtP4I4ut4mHQBQiN346TVHKmXM7D2itmL6dyz06TAHy4clsCWqSYSbI++v/pCuVXbVk5zcwsqm4PrVf9ZKmgTfEIlmazbVXKKV+ykw7eFpY5w0faxQOT2vcVuCYbozfzrtccE+NLPiNdDRmEoJf0qK1jsPT7tc=
 ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.222.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X0SPfis08AiouOucDpk98Sz9XZ1n+CaXtuQ9JeHPgQiiTh2Ns0VWaOuq/h3l8+n2lJ3a9XUPFQn4TiaWi908zXPBBg/qzcbeVjOfMPSyeNebuqGMjsiRK5nL0e7Vw2OEF1Ce/wLjnRKEqCxEHnJYhIX6rApnoQ8vk6PD2nkLVAg1CZSVBvptgI2PKx/iEbj6o89cOEjllBXTYnPEgbg54ZbLyVxEyyc5Uopacbd8KACBjWou67QP9AQWMwZsiTZVvyrXNDY1ClJiUXtpYd0HS/eaWdJPiQirao1ahEyMl83nfVRWLP3j7ikJWGZZAFtDR7buLkxH9TglR8KMVhIXKg==
+ b=gGiP9FcOBvQrzD6Oh6C1ZA3NXKEpktn5eLeUcntYpq5jctFJ6SzHrJ3RpXigDfr3UWTXqIa+B4rIS+DUms2n1wXUrD2z7F5i4LJGhJPD/tOPp452CFfx/WQ0v1VF7HpdSLSmYpPTegj32kuIFAMVohtdBIe7o65oUypFDobNMxjHiqrOTV34TK2p9BbMUR09N0sfHHpE/j52FNv82X5plvblq3OMP373P62i7leNQz1wrsKVXerVMkLTt2gCN0kIr4QD44qONqEbGaalpXwDOhWEm1cEe91dy72JzOGlgaw1GzMLls6HJcCwnPBR4IWdWjIq/Xot+bd7fk97pR6/4w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kHWe78rzSD6866GSL3KwDIyM6RpSgfXpWu8ZOMo9KfI=;
- b=OwO8a15c6NjYNBIH0x+Qab2IiC3gAt1WuHVRWYJ3bhPCFfK2t7dfCsbALDFVGi/pa9UL1tGT/hGiavQZJHrnRcuav8+q4Wend8GL2S9YjAKNwzsX5bkoN+SzkkWWUhNx8VtctZuAn1W4TNSqp04W3LMoxoVQrJNfKxKB7p4igHwISvCdKyzaCmA/rH1KwfW3TzUmo83D7KvLLTFkUiWYof2uK6F2gPmeF58JUKF6AxuXFFxhZ/lveti6B0Q0judHJdDFicoA95nOl9+N/2wHDSKwqmC/skSIfRnOQswoNp1m2sivlViIdgqeUXeL6Oh7swFSGx713y50v8c2G1leVQ==
+ bh=CKuRi71SLF418fDZMOlqher3E5JqtU3BAIZCWmKv/z8=;
+ b=fRtp9OHqpdkp/RhaIsH3puCDEHrLXlHD7aqyLDdufwxHPALigV+I1GcrNTa+7M23rtM7H0+GTXo0SqntD5Swz3pfrmRBD0XQmsmyFqrbUrgsBMKTGJEnqvyPg98VboQtLEg8WNR8cscdoNH2Y3FfvWemgYzOpkPi0WHyv44XMbrzmq1XiAgBfO2XHDRmYsH0NEyxHX4pFVnjM36bK9CrHHZMzbDVLNGYXWgci5YwZAaUhRdVXMBw6gvfk9wpaksBIrN5ORV4x/pW+crDrDlABebR3RTZETv9RrXY8iKDUlNfcZXT+1v0RNqXTcFZfVsN1HiE4VyBj5/sZBFCcrbc9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
  header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
@@ -45,11 +45,11 @@ Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:204::8)
  by PN2P287MB2160.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1c5::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Tue, 8 Oct
- 2024 05:57:19 +0000
+ 2024 05:57:22 +0000
 Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
  ([fe80::1134:92d7:1f68:2fac]) by PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
  ([fe80::1134:92d7:1f68:2fac%3]) with mapi id 15.20.8026.020; Tue, 8 Oct 2024
- 05:57:19 +0000
+ 05:57:22 +0000
 From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 To: olteanv@gmail.com,
 	broonie@kernel.org,
@@ -63,9 +63,9 @@ Cc: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
 	imx@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/2] spi: spi-fsl-dspi: Fix casting warnings
-Date: Tue,  8 Oct 2024 11:25:45 +0530
-Message-ID: <20241008055644.4900-2-hardevsinh.palaniya@siliconsignals.io>
+Subject: [PATCH v2 2/2] spi: spi-imx: Fix casting warnings
+Date: Tue,  8 Oct 2024 11:25:46 +0530
+Message-ID: <20241008055644.4900-3-hardevsinh.palaniya@siliconsignals.io>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
 References: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
@@ -82,137 +82,124 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PN0P287MB2843:EE_|PN2P287MB2160:EE_
-X-MS-Office365-Filtering-Correlation-Id: 451b03f5-ca67-42de-6068-08dce75e120c
+X-MS-Office365-Filtering-Correlation-Id: b35ded7d-835b-485e-2893-08dce75e1382
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|7416014|376014|52116014|1800799024|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8LC7g6yx1OMeF/ZzkFTgsqdoi4+2epRpra/lLuRnffNkrCmfyWWt8KHuWnlC?=
- =?us-ascii?Q?HNdz43zAV1y3xz+fMA6BAoT60tGISd+zbW3lYcv+RbdMDIgal2YGOfHqL6vk?=
- =?us-ascii?Q?NCmGXddv/pCau429jgc0JDQekfbQRutHbO8uYSU07N1FZLvRWAwPhwz3n7A+?=
- =?us-ascii?Q?VPMUMcc5cU9WqPEYRvr4a/mvK9OQ/HvGSTFPXlPQfaRIv6+XSE91rxc42rEB?=
- =?us-ascii?Q?5F1LgffDigPtRnhN6oZTeufWnP2T1KGLT4HB4Afc4kS4OwG0Gd85xU+NcWYe?=
- =?us-ascii?Q?FMcpMR3Hkz3m74Z0QppZB8KXqFRGq2KgjCOQxrDDc1zaTblKdozi8m7vDbYM?=
- =?us-ascii?Q?vrAHjdRFHIDjOjjoGmURbu5PS0FNBQKDsnxCCtisylmxCgyEGZxFjfY2+WYC?=
- =?us-ascii?Q?TOWHD9HYdrxJmVqwNV/zbPyOsXoEb+tdDFVIucedWcy7YirkTGIA5Hvh9Xjd?=
- =?us-ascii?Q?CCwjXh9DUeV+f36EdnOpncnF8/kY/br/0PseWs8pmrJDVtqxZGB290Hi1169?=
- =?us-ascii?Q?jB9lGcHFT3on9YuX/xlrMuKnGeZSFeXKakilkuDq3fO/udONspZVBTNM3bNu?=
- =?us-ascii?Q?DDVbWeYcy3f/ZeNHfW1puk/K8QcaqZM45jtVY1NCB5QonxYTBKyqqHurFb7+?=
- =?us-ascii?Q?A3XgC1eXUbw3V1R6YAvc10uih7uzaidKyuFoS6dbwkwwBYs9Yt+zfZ6IHr7E?=
- =?us-ascii?Q?2kq9nMr8MYxQT8YKC8vkGVt2bayx1jZJ+tnJXJLvWR6Oe1oQ55AE3e41mRy1?=
- =?us-ascii?Q?NniddI34hfyZWzZainMHqmZYf1wOZzNxSfwKrLB9HsUBjC7GjZis6rMSXe1u?=
- =?us-ascii?Q?GBdOBhUhmXWEmZqoVL1X9LOCXIEujlPnXJdrYyfZQiSEpgj29xZ3DpiYPC1W?=
- =?us-ascii?Q?MeAHjkk5yF9mcN/ulJqS2tGW++tSpZ1wg68hPWFJl6w4XARUWESYdOm9HMJk?=
- =?us-ascii?Q?JSFFIovIdO/w7CafbyW8iNK+E8zsDS4F4AFSaDmbb7ULwlK1Ygb9fuHKgppO?=
- =?us-ascii?Q?ZzFCSVCst8YJsor2iiMS6g1wEu6Rt3KyhHqWLO5z0S6l1YUe3pjcEnooz7Ob?=
- =?us-ascii?Q?80QftW0DNUwicEMNRCXlxCSEotVdQkcV1qnHefShNVprnZ1+4YNkXl8EVStP?=
- =?us-ascii?Q?f/1aU9TttdeZdEqRy8NAqWhlEAtHY2peckO5nwEajt8dgDCS9KeSxngjJAaE?=
- =?us-ascii?Q?xiqkBMYId8V/chE+Z123an8q1nDrkAFwsuNUSN+/+XVbcp17BBQ2dsktEQc2?=
- =?us-ascii?Q?tAjRTAOJmXOmgOQuxG1ULZnl3cdc+MrfNa8MYQ6aG2OxqAPv1swaUQwQfFXg?=
- =?us-ascii?Q?hIRMdTvu+EvX680PB78WwDGOM7dkmpxN0Xym/G9LTQT9rw=3D=3D?=
+	=?us-ascii?Q?LOJQ6cRZXn6Ku+td0pZYIdj7hyx5bzLeHLEKU8R2zGjS1NE4EzrsITiBjlNX?=
+ =?us-ascii?Q?ZRBzQPogzO62Dt4clmKhDh1ONIyt2Gd+t4hCcq3OeVWpJTbsE+Gzpi1WciV1?=
+ =?us-ascii?Q?8l72dShNL3gB1ZGC4S2rlSeFcopq4hcAgb5KMEfpX2nTnDMsJCRCXyfOQD3H?=
+ =?us-ascii?Q?SpnzJz60lDjVGtPbB5/pnzQnt3XmNCyoRdSrTQJZB+GcBcvRwA3+wjULcniH?=
+ =?us-ascii?Q?Simua5/itpIbCiui4d6mlvwk/vZlNHK464sDcNZmkD6s51Iskd4dMDYrcXMc?=
+ =?us-ascii?Q?ykBk5DEbH3EnTL/PhSCWpyyq5sWqhxPImRfVEU7II2r4vIWkqxPVCPbxTUte?=
+ =?us-ascii?Q?6ajEZe6100Z3TZEmP1H8flyqUcthafBdYxeU/EJgL8CwrnXnkTmaixT8hM6e?=
+ =?us-ascii?Q?Ih9lDGhDxsSaZzq3hxM6oH+bLAHy2XFSuRqjsvt+XKZHSTZtDNtDymaX1Ypr?=
+ =?us-ascii?Q?TG49u2/TZ7X38/hgqu+OeJtC68o+Y7eI8Q+Rre6CYvY0TmDLYXbU28+88zqP?=
+ =?us-ascii?Q?ycGrOkPcOobzRIyHt4+p7G0gG3yIzzqBnhT28O4vQDdsXO9GWPNrnZ3N/I4S?=
+ =?us-ascii?Q?hRbT2Qp+zXPnyUZqRAioT1K9fTlc81B/k7C+1MX0eTYuyqDxfPxDaGvxecym?=
+ =?us-ascii?Q?4XrrewNnE2uL/GyzjVUM+H7Ge2mxg9f2CbhRXPKezeYl75xqOzRzqTROBh5Q?=
+ =?us-ascii?Q?7yAV0yZ0G87EAxeFmbpT8mZlJJo1QKMVaiXPNjIyZZGE1Yrb5tuuwD1JxcN+?=
+ =?us-ascii?Q?j452OOsP46apN+vhZeJHbyq4xot7IYSyKo2RV0l53eMjB8WoXkZvQHhrLJiE?=
+ =?us-ascii?Q?NVh89WwtQJfwYPhAAQFFmtNlVJ0rcwXxWnOtGEmoIQS5yV0QUhufsOL+6CDQ?=
+ =?us-ascii?Q?a3cCDu7mS0k/pifZ6LMvoYxyBE56p6zPuR+r1PR5cFqD9JcrumdOUczjpJzg?=
+ =?us-ascii?Q?Z+13ByWFP7lmu1QGX56QXjbvdctGW2fL8aWNQSvZqqRVw9RLEBt86jAlJvI7?=
+ =?us-ascii?Q?+9qhdHXLJQzU6KzuL8sVgrG/jufUdlRMXpnlc10O6XpMsOO0bzXyLEKxOK/z?=
+ =?us-ascii?Q?1bLdCcKBN4zHAqakoEcsUvgoW5EjFU1Vf10Y8yvL3zPLSqevfRPDkmbTZByH?=
+ =?us-ascii?Q?IpC6hkNs2kwXsmk0XihWxLnCWqLjGJkZciN9O01x+VbqaV87rt8GYu385ip7?=
+ =?us-ascii?Q?EsCyCGFipGEDRb1tyX/MuPN3O4DS9pbHr8HuQdTOdXiDJvVl4OGT8A8uxrNS?=
+ =?us-ascii?Q?iJvCKaX1hzRAN0tgmSeX9LnQaC5Y3HJz8pZQHeLYhyGTM7NeCP8lY9xNyfVs?=
+ =?us-ascii?Q?kn/fyEr4GdSJyJ0iR56P3p1Pdzy31uQpf3Bo6OXc0AHnRQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN0P287MB2843.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?VQNFJ5WJS1Q01UteSEsBOrJwHJOAYtUCmgysqHUWVz9n7CSkuBP7EIaCzGPg?=
- =?us-ascii?Q?MpbbvRh9u/A8CmPAxkFMgvvDbyt4W8F5l9aIA9w3cRT+1IuY5NFKGcs2AoSA?=
- =?us-ascii?Q?hCdbdpRisjngbtTXtg028p1/hz3y7/vVWswufcxy5g8Xs2ahTZJJL2wBKnEy?=
- =?us-ascii?Q?NtGkt2qvZXJOxiTDLdoqe28eATT7eFb5DEuZ5Z/B+iWlgPJEhk5A4pbUj3gk?=
- =?us-ascii?Q?5HRjjATVLzYXT+G6E7f3CULilhH1Wrytt2B+xNNixkxk0u3w7N99bivppC9v?=
- =?us-ascii?Q?WkNyZ4/mNBN8O84qvA3PHCbPueQQ3FVfGttdBJyyBidz9iC18mkN2YQCmmDy?=
- =?us-ascii?Q?1f5HAFRzAO9Q+Qxh/M8exYRR+13yfx5Zd/qskMD7Yihkm9JqtMNiEA2rrJ0+?=
- =?us-ascii?Q?Mg5yLGdw5A1PcpLo7tG9mFQUqZBszunGLOv0JKYGGjwjPVxQzv87PGeE21Mq?=
- =?us-ascii?Q?SyLr69zAHuJMuorppYCJeXxjQ1DuB1DW9U3b9NEVYIM5sV8g7b1KqHSHNhmR?=
- =?us-ascii?Q?UoQjGXPAHX9b5AhlWI1b1zo3kbqzqhHYSrTTUzbeUYKaJESqO8XXbYS1bx8K?=
- =?us-ascii?Q?YIjMXYkxVaDleIyVxL8z6ij+HTEkJa2x4Ahv0JmZJS6hiOzaOU1ONrO47Pg/?=
- =?us-ascii?Q?XTLBIG/nPJNDYChlu1rU++5z+Oz+4qo1BHHbYTsAHYgmc1Wq+ZmwPXhfWNpp?=
- =?us-ascii?Q?ktRtgo0x6BekiYDnt0m41uH1C9s5p1Hx84Ne1XXaocqbI1S4iwO+x7YNfrCX?=
- =?us-ascii?Q?SsXQhLSK1T88lAzMemHvzxmH4jsTO4hdsJBVUN4KiYWQIw1VsOCAvB0AB0uc?=
- =?us-ascii?Q?KfT/Pet4cRwZZdO/R8FuKytuAIr5+FYl9RuAz+jiu2ZPntQTjsKIxY99iwK8?=
- =?us-ascii?Q?ki+kPLFRlrY1iGHd3j1H6eYp1/0glzt151pqoPNzAAm9rc9FtZyTe7qwkxGo?=
- =?us-ascii?Q?ZDMV7fVaXH71E/OCwlGGzr/cWR5NrEgXYsj4UZnGrTVQDlNpxwL9fROA+3Kn?=
- =?us-ascii?Q?3MJqggCATNoJe/w9YAjq8zjXE9l/7OGEnjjQzvbhPnfuc+c/aMxiJYxS2OnX?=
- =?us-ascii?Q?A7P+GT5UIiqfMiord4toZvnAF2hSiX8QkamXn/8d1G7BcAFCxuewhcQId/kx?=
- =?us-ascii?Q?Ilng1U/dGjn95AACYlNdwOBaNJwsS8lCk8wuCde8G7EPOzT9UvA9z3SEg7dr?=
- =?us-ascii?Q?FMV8Kp6yXXpCiXc+CIMUD8zPp7sSGARVRrFrfHDWmg9hv7Kb57AzSXJwbJIG?=
- =?us-ascii?Q?qTeGIAkXDykOjgK85zLG7vE23MpBkWwGSlb/GqhkFKbmIAY648wYcCjvOQsT?=
- =?us-ascii?Q?Oqk1BSbU1Ciwt0f02digUI+gAf/1jK/h4UhDgyLgBRzfA6/YrFgsCw0Z4cOQ?=
- =?us-ascii?Q?RnMSzXMUoN2OdxkFfEE8acgMFit1ntXs8X43wSkyQjQuL2YyGOrwoWcviUC9?=
- =?us-ascii?Q?f8ZHHOVASwLeWsItjzeagg0446SjOT5Sa8CMON5XBjbkO9yDjc9RLe5H2VVS?=
- =?us-ascii?Q?shyF4SPT378zJJILr/0qjd+VgzGWuDfBr9rD4L3boNj7IhGJk+eaoHCIVYoK?=
- =?us-ascii?Q?CN0gqerhPCrpUY3nWhsDgdW9RRscStyQhNoIimP0R0lse2dqRa2BUoIRLnjm?=
- =?us-ascii?Q?N4OdsYdbbObJ5tV6VR6MQDv5mbFmA2eCmLWfEzxye15t?=
+	=?us-ascii?Q?bO1GtZM4pAwbnyv90wp0A0wTheEGMHOMkj6Db1fx/ZkpoCi34x4G/UIS8wdM?=
+ =?us-ascii?Q?a8QDMNhlv1aaShIyANHtW06R4D4qtZ7Hxc1U8jrMLNPWxad0gr9v8NGnZeqd?=
+ =?us-ascii?Q?33chaJve3QEeojJ6FtgBMsyppExLDAXUaWRRoYkDC5qCl00FYsTTHULMaWrg?=
+ =?us-ascii?Q?2dJLVjJIBvQNe4CkwxbFjWcuIzB/AbkyR6nnK3bqzHpkqPEaVDciRXjFtZg4?=
+ =?us-ascii?Q?CiKjWVTA8vj80tUggkd2HSLk1xQpXbetIIp8xH27R5hI51TPItrtFKiozBte?=
+ =?us-ascii?Q?zII8VoQx+/U2svJ4DRDpqdpZztRP0qn30TBGpJV5N/cqajU+aGaAXOkq+DCP?=
+ =?us-ascii?Q?jwXn/RUc8A9/S5geT/v61qlvwpPMoRZMibFQKIxLDnJuTwPKg9GL269vwYcg?=
+ =?us-ascii?Q?8WuxROnz3xlQGAzyOn+NrejDfab0bsNEA2+tR58eMA2PI/GUmAiU6yJZ+sPr?=
+ =?us-ascii?Q?G0dYgv979oXxQCCxHikgXVS2mAUETNnCr8jXZzlMS6z9kqcAxExe5ahmVbxv?=
+ =?us-ascii?Q?c0/ZX3iNKyX/YC9/EMclHOvOufOS9eAPJJM/1sOcrzZN7QpuLJJJ0+hs6AgF?=
+ =?us-ascii?Q?H4IB9iDTyf+TBj7SxKM1sgoNTFNbOGPF+djJhu4cACI4Wf/Crs36zlVB542P?=
+ =?us-ascii?Q?YmZcQ2XNG6j8WkwEoBrsN5nSfQbXoboKBZrJhzJTHSW5c/H7u5K+Nz/z6bFS?=
+ =?us-ascii?Q?PRO7XCHqSS7KM1FOfSV8sp80pJlkkbHLojggGz4HY+zvHnAvgY7nNPSTNQMY?=
+ =?us-ascii?Q?6ucLvQ5RQTVrHleBmloXvqSKtigskrK/dyaYqZYniC/GrT7CWWTdNPvSr0Rv?=
+ =?us-ascii?Q?CATbY+R58wEU7lBupJzf+gNZxO16x9OmQuDZk+iJ7hWpt3kk1rRrkCw6MzwW?=
+ =?us-ascii?Q?bgf3yV75246g9lr0PAiIFru7xR1g183il0/uZxSimqXPm+DElE99vKgo51jA?=
+ =?us-ascii?Q?JGwirNA8KllwQi/gy1Dof6EypKifMjFZIyh6nwzuFZM7P9mZNQvmDqJjeeqP?=
+ =?us-ascii?Q?ow1oYYAEwGseG1Cq/9OUhEwEyMjnB+xI4exfhw50V2ntdkrQAHF3KY+GvJuV?=
+ =?us-ascii?Q?bPIbH19Iy47d6uw9tQiUTz3Mlw9S1r5x+qAdMY4m4zHYFAOXq5P5doyVbVH5?=
+ =?us-ascii?Q?nNflSgXZ2C2T0sbhXRfM1WRFgmOc3Fwgalw0Atez21YndFerpXyRALwf1Tw3?=
+ =?us-ascii?Q?eHz2Fijs/0KaMr98yi8fQ277kCkHUI0QXJkUAuCXnFbjbjq1KOS8ffw/Sir0?=
+ =?us-ascii?Q?Gj0DNnc5nYPrOQE6ED/67XtkvD6iP2Jry7mLLVDlNSGwxWv7swyaHL6uIypz?=
+ =?us-ascii?Q?pbG5gmxoEfYjvfi/v087wUO8uQHAZ3rIBQuGnfypUSISDlg8P/DHqAo+wLMU?=
+ =?us-ascii?Q?bnXam+1vwpU+Ht4xcrLXY3931jYt76hKTeyYUAar7gDcQn8MH5pzOta9Sp04?=
+ =?us-ascii?Q?rPCE8HzTFpTt0wgOd+RfFKqj6OAQdbYxjiUw8BH7Q3lldzkypOxeg+GoisMV?=
+ =?us-ascii?Q?4JvA7ZqESZp64yuWgTqmL+/XKpvdcO7E/6e6ueEtmnt4eYvydkqdzgxllEVd?=
+ =?us-ascii?Q?XIKpktabqscJRIxpF0zoiwEly4sMP4oixqNCHATNp2Tb9EB24Hz1rimJSh30?=
+ =?us-ascii?Q?PbfgGhjd2/COIJNu+FTNqc4JYwZ44450Dh9flnMm+s2e?=
 X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-Network-Message-Id: 451b03f5-ca67-42de-6068-08dce75e120c
+X-MS-Exchange-CrossTenant-Network-Message-Id: b35ded7d-835b-485e-2893-08dce75e1382
 X-MS-Exchange-CrossTenant-AuthSource: PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2024 05:57:19.6251
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2024 05:57:22.0728
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Jqa31avvNkGa6cv6FBeYZY41nJQG7qEF/wPf7QfsC67eufMbk6KH2BWA9NBEjaKXQ+Vx7TU8GcCapQsF+xEGxJIz5MzeH61BooZSNEGbYTU4zy9jma+/PUlnBOYjnR5j
+X-MS-Exchange-CrossTenant-UserPrincipalName: 30sng/ykHUZXf7Xks8gHnQYUTdjBsOMXCaFDh9txlPZtsZJKcDH04j+R6/vcyU1VmFrFFfkKD38xVpnPT2KZvEdIVjBX0YCW8d0mvN7gnkeH6dWXa769SjZQufo1yEy4
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB2160
 
 Sparse warnings:
 
-drivers/spi/spi-fsl-dspi.c:283:17: warning: incorrect type in assignment (different base types)
-drivers/spi/spi-fsl-dspi.c:283:17:    expected unsigned int [usertype]
-drivers/spi/spi-fsl-dspi.c:283:17:    got restricted __be32 [usertype]
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:289:28: warning: cast to restricted __be32
-drivers/spi/spi-fsl-dspi.c:295:17: warning: incorrect type in assignment (different base types)
-drivers/spi/spi-fsl-dspi.c:295:17:    expected unsigned int [usertype]
-drivers/spi/spi-fsl-dspi.c:295:17:    got restricted __be16 [usertype]
-drivers/spi/spi-fsl-dspi.c:301:28: warning: cast to restricted __be16
-drivers/spi/spi-fsl-dspi.c:301:28: warning: cast to restricted __be16
-drivers/spi/spi-fsl-dspi.c:301:28: warning: cast to restricted __be16
-drivers/spi/spi-fsl-dspi.c:301:28: warning: cast to restricted __be16
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:410:19: warning: cast to restricted __be32
+drivers/spi/spi-imx.c:439:21: warning: incorrect type in assignment (different base types)
+drivers/spi/spi-imx.c:439:21:    expected unsigned int [addressable] [usertype] val
+drivers/spi/spi-imx.c:439:21:    got restricted __be32 [usertype]
 
 Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 ---
- drivers/spi/spi-fsl-dspi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/spi/spi-imx.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 191de1917f83..e34588679514 100644
---- a/drivers/spi/spi-fsl-dspi.c
-+++ b/drivers/spi/spi-fsl-dspi.c
-@@ -280,25 +280,25 @@ static void dspi_native_dev_to_host(struct fsl_dspi *dspi, u32 rxdata)
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 4c31d36f3130..fefee771b042 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -407,7 +407,7 @@ static void spi_imx_buf_tx_swap(struct spi_imx_data *spi_imx)
  
- static void dspi_8on32_host_to_dev(struct fsl_dspi *dspi, u32 *txdata)
+ static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)
  {
--	*txdata = cpu_to_be32(*(u32 *)dspi->tx);
-+	*txdata = (__force u32)cpu_to_be32(*(u32 *)dspi->tx);
- 	dspi->tx += sizeof(u32);
+-	u32 val = be32_to_cpu(readl(spi_imx->base + MXC_CSPIRXDATA));
++	u32 val = ioread32be(spi_imx->base + MXC_CSPIRXDATA);
+ 
+ 	if (spi_imx->rx_buf) {
+ 		int n_bytes = spi_imx->target_burst % sizeof(val);
+@@ -436,13 +436,12 @@ static void mx53_ecspi_tx_target(struct spi_imx_data *spi_imx)
+ 	if (spi_imx->tx_buf) {
+ 		memcpy(((u8 *)&val) + sizeof(val) - n_bytes,
+ 		       spi_imx->tx_buf, n_bytes);
+-		val = cpu_to_be32(val);
+ 		spi_imx->tx_buf += n_bytes;
+ 	}
+ 
+ 	spi_imx->count -= n_bytes;
+ 
+-	writel(val, spi_imx->base + MXC_CSPITXDATA);
++	iowrite32be(val, spi_imx->base + MXC_CSPITXDATA);
  }
  
- static void dspi_8on32_dev_to_host(struct fsl_dspi *dspi, u32 rxdata)
- {
--	*(u32 *)dspi->rx = be32_to_cpu(rxdata);
-+	*(u32 *)dspi->rx = be32_to_cpu((__force __be32)rxdata);
- 	dspi->rx += sizeof(u32);
- }
- 
- static void dspi_8on16_host_to_dev(struct fsl_dspi *dspi, u32 *txdata)
- {
--	*txdata = cpu_to_be16(*(u16 *)dspi->tx);
-+	*txdata = (__force u32)cpu_to_be16(*(u16 *)dspi->tx);
- 	dspi->tx += sizeof(u16);
- }
- 
- static void dspi_8on16_dev_to_host(struct fsl_dspi *dspi, u32 rxdata)
- {
--	*(u16 *)dspi->rx = be16_to_cpu(rxdata);
-+	*(u16 *)dspi->rx = be16_to_cpu((__force __be16)rxdata);
- 	dspi->rx += sizeof(u16);
- }
- 
+ /* MX51 eCSPI */
 -- 
 2.43.0
 
