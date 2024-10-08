@@ -1,115 +1,179 @@
-Return-Path: <linux-spi+bounces-5159-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5160-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD74995759
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 21:03:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028F699588F
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 22:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35DEC2828B5
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 19:03:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA8F8284D60
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 20:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14480213EF4;
-	Tue,  8 Oct 2024 19:02:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B24321500F;
+	Tue,  8 Oct 2024 20:38:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="p3My5eQ1"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="18fWZBkO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8692A213ED8;
-	Tue,  8 Oct 2024 19:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0FD215022
+	for <linux-spi@vger.kernel.org>; Tue,  8 Oct 2024 20:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728414167; cv=none; b=nfCvq497GEMEFXbhRl8cCIkTM2s8taiP1GakT+KQLKk8VWZtzKPTgt6WkiYW0R/Cuh3z8OcXVOpaQodshfrg8GqfyK0i09kBmNCGrO6s+KT50x+CZlM728S7MUUVd4AW1YfyDv1J4+4xJ5jpk00rX+4/2IJ2NavVq0x1kD4kcYY=
+	t=1728419889; cv=none; b=k303gTBbOMoPwi3EXTqoZnVokRd0UlCsD1JPTIz1b8E5EZJc7ZB6xRuKGE0cKs4AX7aavXcvr1Tvkxem4Ho0t9XIE87FyXAiAwWcqAjXpCTH9d1EMVYk5j2MTaGNTAu8Ug+v7aI4rT5Are0uuQRS11x+Zz5JWclQyTyNnPEYRqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728414167; c=relaxed/simple;
-	bh=RzLX1r/HzJb4MV5AXwCJ6oB+wq9qt7eEfvDIe5ZoSKY=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=epsSwjEh1YK88WrIY7TZB/THh7xDWg3QWXJdLaOGbop5wRzzC3ZBlfgY93fo7v6sgf27Kw9e+rgL9N2xYCk/GYbma8An1OcI3E5yhwZi/jd//oyFctgcBMIYknhbeIDkF6IwJBmypavFvhsdVraP2gIfdJnpGm6e0VcRcprfDlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=p3My5eQ1; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1728419889; c=relaxed/simple;
+	bh=jBKc56vBxPYaOUWcC+VFZKlnp8sdizUoPysD1KL2n2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VbNgBqefGw8viJrN5LUBcVr7fjhz4yNXhhrsFkRXTee+E7YSAzDhjzlTLykIPShOOMsPw9l8tVjs8l711kVlnkCKCQLY+iK/8VLIjTkIWiJYyw3eAJQMidQOyXkW3sHw6qmGpjoiRFHWfnS4HfBY9kGopdl+ySa4FQjO5MtAlnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=18fWZBkO; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a83562f9be9so664688166b.0
+        for <linux-spi@vger.kernel.org>; Tue, 08 Oct 2024 13:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1728419885; x=1729024685; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jBKc56vBxPYaOUWcC+VFZKlnp8sdizUoPysD1KL2n2Y=;
+        b=18fWZBkO9cDHNP5XkQ39MRLClR2iDC1zySqkncD3SsZKu5Rgs7Dl8pH8lKJp2p962M
+         ZQCXVVOIGzjU5UY81OJcQw0kiLkVxi82epBgL4dI4RqabJSCfzsJV/w4rEU39jnWCoY7
+         yG6e+6Huic3MWrYC1oSE1/3jjgRJEPNAKN3ZTXu7yDRI5rDcTHA6JVJ03K88LUsNIndN
+         hxu1wyd0FmRvkB0XvGhYzl60f9BZXhmzkblJFg6rToFyXPRB5BLZ/aQ9AquxPwlKwAUC
+         26vZdSJyysWVJfHabIaR2zJD8Gkd7meZi0reyXepjlExZa64VCzKDkCcaGkjDZZZyvzq
+         ni5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728419885; x=1729024685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jBKc56vBxPYaOUWcC+VFZKlnp8sdizUoPysD1KL2n2Y=;
+        b=vBRf4K1hCJ7n6QEepNS2gmkKIK4iIDUYWmwmAx5uEwmSiexvX86Gw0bHJc9O19HCz9
+         E5MVspP+pOAqiBWgya857wK+RAxXj9UsM7x5t4JMa4JeWz2GuJN792gNfFeWs9ZEdCub
+         N9gZMcUwRgadPecGeK0Tz+z4k6mzwdeg/1oJlsw2y8rETG4obAnfmNAgZmD3fcvDRxsd
+         MHCOkOW9NMJEl9FpLtYaxPeElHnkgKplr3wW2GGOQHjrO6bo7w5lC1qivj5uqZSegEcD
+         1rQ0Zh3edXFRAPz3sfutH4MLoibSHVHJUIIq4MYPAO1VKN+ovur4gukJgWwuUs3s1W9o
+         Bfow==
+X-Forwarded-Encrypted: i=1; AJvYcCV3ZYqjH5/pSscPRnaGN+3Eo71Ii0rsFP0rog4TUsH09FIXDfWUSuw+6LeRdA40S1TSW+67fBgyU2M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQOQSpIIVh/8pxKxmorJgzJOFnwZMJBp0PaOF7tUdV7ttUJDyY
+	HboWl84lyPb/5J9q8KQGhoJgqlKA/clLHJERX4go6EPaP9qJFe6IQiyMGrUjAR8=
+X-Google-Smtp-Source: AGHT+IFQsuFQDnMORn6KRqls83kXMRALTmz1xji/Zv3nzyXsaV17OwyYMIY5gtZ7u9n9SjQRNHRlFg==
+X-Received: by 2002:a17:907:94d4:b0:a8d:250a:52b2 with SMTP id a640c23a62f3a-a998d114bbemr3268366b.6.1728419884897;
+        Tue, 08 Oct 2024 13:38:04 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:c420:a9b6:c5e1:5b65])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a996274deeesm196971266b.103.2024.10.08.13.38.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2024 13:38:04 -0700 (PDT)
+Date: Tue, 8 Oct 2024 22:38:02 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-gpio@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+	nouveau@lists.freedesktop.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org, 
+	linux-iio@vger.kernel.org, linux-input@vger.kernel.org, patches@opensource.cirrus.com, 
+	iommu@lists.linux.dev, imx@lists.linux.dev, linux-mediatek@lists.infradead.org, 
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, linux-staging@lists.linux.dev, 
+	linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, greybus-dev@lists.linaro.org, 
+	asahi@lists.linux.dev, rafael@kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH 00/51] treewide: Switch to __pm_runtime_put_autosuspend()
+Message-ID: <ttmnzgsdyng5vab63pvj7csrotbsmwnultjelvdotrvyg2snac@iv7afgect5f3>
+References: <20241004094101.113349-1-sakari.ailus@linux.intel.com>
+ <CAPDyKFp0N6UJhnHS164Tdf=xkWB0jzq65L9TdvYazeBQ-6WjeQ@mail.gmail.com>
+ <20241007184924.GH14766@pendragon.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1728414158;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ou+RnMev9fN370/zTQH8oJcFFqCmNNELD7WUwEdv1mY=;
-	b=p3My5eQ1j27ncSbGLhoBnsPkCGfACnKQRxJAKnhVb8JcUkqiI8P+meWMQi/bEhWJljx80G
-	5+xmPzljXDkj367vggIGDavAuVjO1wOEswiSU2g66qeFHRUDcdPtOh/8wvfJqeGhsjGN+r
-	gHiH1UQp9qwpQjbYyeVAJALKxPI4D44SIAHq7Al2+JbaZnIGnUIKCXBkRHt6Cz02zyU+x0
-	XuJhGQroYIpmVHMpdC7ExyXEuQgVDWqqgQwv6frVM8HRffX6NwlM6R84nhfH6l2RRSoKIJ
-	ie17E4YRlUIHhgL3QuPtWUtG6IVg+Ciweq6wwAt0/Tsij2miLb9GMhfsQkzbkA==
-Date: Tue, 08 Oct 2024 21:02:38 +0200
-From: Dragan Simic <dsimic@manjaro.org>
-To: linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc: broonie@kernel.org, heiko@sntech.de, gregkh@linuxfoundation.org,
- rafael@kernel.org, oss@helene.moe, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver core: Fix a typo in __dev_probe_failed() comments
-In-Reply-To: <cec37f5568afaef8fca2d35bb01c90556ccbb4f4.1728408464.git.dsimic@manjaro.org>
-References: <cec37f5568afaef8fca2d35bb01c90556ccbb4f4.1728408464.git.dsimic@manjaro.org>
-Message-ID: <76254295771cb4ea5644f2ce4a30f0d7@manjaro.org>
-X-Sender: dsimic@manjaro.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2ocqjla6tcmukjn3"
+Content-Disposition: inline
+In-Reply-To: <20241007184924.GH14766@pendragon.ideasonboard.com>
 
-On 2024-10-08 19:29, Dragan Simic wrote:
-> Fix a small typo in one of the variable names found in the comment 
-> block
-> inside the __dev_probe_failed() function.
-> 
-> Signed-off-by: Dragan Simic <dsimic@manjaro.org>
-> ---
-> 
-> Notes:
->     This is an incremental patch for the patch series [1] that's been 
-> already
->     merged, so it should be applied on top of the series.
-> 
->     [1] 
-> https://lore.kernel.org/linux-rockchip/cover.1727601608.git.dsimic@manjaro.org/T/#u
 
-Please disregard this patch, Mark will have both spotted typos [2]
-fixed by hand. [3]  Sorry for the noise.
+--2ocqjla6tcmukjn3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[2] 
-https://lore.kernel.org/linux-spi/e8cbbf877cc0e6838afd2d6de3b7bfa1@manjaro.org/
-[3] 
-https://lore.kernel.org/linux-spi/ZwVt9e44jc3CQaV1@finisterre.sirena.org.uk/
+Hello,
 
->  drivers/base/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 5f156a9a10a4..a84a7b952cfd 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -4989,7 +4989,7 @@ static void __dev_probe_failed(const struct
-> device *dev, int err, bool fatal,
->  	/*
->  	 * On x86_64 and possibly on other architectures, va_list is actually 
-> a
->  	 * size-1 array containing a structure.  As a result, function 
-> parameter
-> -	 * vargps decays from T[1] to T*, and &vargsp has type T** rather 
-> than
-> +	 * vargsp decays from T[1] to T*, and &vargsp has type T** rather 
-> than
->  	 * T(*)[1], which is expected by its assignment to vaf.va below.
->  	 *
->  	 * One standard way to solve this mess is by creating a copy in a 
-> local
+On Mon, Oct 07, 2024 at 09:49:24PM +0300, Laurent Pinchart wrote:
+> On Fri, Oct 04, 2024 at 04:38:36PM +0200, Ulf Hansson wrote:
+> > On Fri, 4 Oct 2024 at 11:41, Sakari Ailus <sakari.ailus@linux.intel.com=
+> wrote:
+> > >
+> > > Hello everyone,
+> > >
+> > > This set will switch the users of pm_runtime_put_autosuspend() to
+> > > __pm_runtime_put_autosuspend() while the former will soon be re-purpo=
+sed
+> > > to include a call to pm_runtime_mark_last_busy(). The two are almost
+> > > always used together, apart from bugs which are likely common. Going
+> > > forward, most new users should be using pm_runtime_put_autosuspend().
+> > >
+> > > Once this conversion is done and pm_runtime_put_autosuspend() re-purp=
+osed,
+> > > I'll post another set to merge the calls to __pm_runtime_put_autosusp=
+end()
+> > > and pm_runtime_mark_last_busy().
+> >=20
+> > That sounds like it could cause a lot of churns.
+> >=20
+> > Why not add a new helper function that does the
+> > pm_runtime_put_autosuspend() and the pm_runtime_mark_last_busy()
+> > things? Then we can start moving users over to this new interface,
+> > rather than having this intermediate step?
+>=20
+> I think the API would be nicer if we used the shortest and simplest
+> function names for the most common use cases. Following
+> pm_runtime_put_autosuspend() with pm_runtime_mark_last_busy() is that
+> most common use case. That's why I like Sakari's approach of repurposing
+> pm_runtime_put_autosuspend(), and introducing
+> __pm_runtime_put_autosuspend() for the odd cases where
+> pm_runtime_mark_last_busy() shouldn't be called.
+
+That's ok for me. However this patch series isn't the optimal path to
+there because most drivers (i.e. those that already today do
+pm_runtime_mark_last_busy() in combination with
+pm_runtime_put_autosuspend()) have to be patched twice.
+
+The saner route is: Only convert the drivers with a sole
+pm_runtime_put_autosuspend() (i.e. without pm_runtime_mark_last_busy())
+to __pm_runtime_put_autosuspend(). Then add the mark_last_busy() bits to
+pm_runtime_put_autosuspend() and then drop the explicit calls to
+pm_runtime_mark_last_busy() before pm_runtime_put_autosuspend().
+
+(Note this doesn't take into account Rafael's position that
+pm_runtime_put() might be the saner option. My argument applies for that
+conversion analogously.)
+
+Best regards
+Uwe
+
+--2ocqjla6tcmukjn3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmcFmCEACgkQj4D7WH0S
+/k6xnwf/QOZhbtT562rFFa3JIiBatDxTcqyEXoXClrP7jSyQFY/VFzq2S2jRHOFt
+wM6zQUX1bTUqDtC4HozJIbQDjLxd3qFgc5RoTRLV8VhRJbcq9cOo5Nf1h4KJ5Ip9
+nhpzoHwUHoEjEHj1f9UvEWfnFAVCSLFxgb14ZDHZyb2pQue3G5OYI2f2cJYT8YVB
+xQktDFp7rUu4xWDTzoIxNKvR1Ipy5fGxdf9R2/+IQhW64sWuDG2ZH6tAmfn6mEb8
+ecspbesJx+NMbZ06Zl7wqBvyj/DpQGgPaCnWUQ5cI0Of/kOzqxh4+65JK68CLLs0
+/Goin2zz55IZITGC5zHuAA07bW/c7Q==
+=7Wup
+-----END PGP SIGNATURE-----
+
+--2ocqjla6tcmukjn3--
 
