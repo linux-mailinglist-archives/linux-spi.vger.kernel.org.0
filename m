@@ -1,158 +1,174 @@
-Return-Path: <linux-spi+bounces-5135-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5136-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E026993D93
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 05:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 564CC993E83
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 07:57:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D050B1F24CB5
-	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 03:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 498381F22B80
+	for <lists+linux-spi@lfdr.de>; Tue,  8 Oct 2024 05:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E9A3FB1B;
-	Tue,  8 Oct 2024 03:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2it8aLk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DC02905;
+	Tue,  8 Oct 2024 05:57:20 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01on2113.outbound.protection.outlook.com [40.107.222.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2902F3EA6C;
-	Tue,  8 Oct 2024 03:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728358785; cv=none; b=qdeQB2lfKXXmd/2JpOr9aJ7A0hD7ofG8TdyBsEvIQ5DFiIraedmuuJRwpa+yGMCcxNQ3LlWcUUfuF+r5H3Zg3CHh3OZXg0/5OKmN5J45AdwvMVZ2mq8IbOr7gHNHlImADWgGlQc+9caNbDFMBK1YY0ykAGUvfXQJDaDZByNyWP8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728358785; c=relaxed/simple;
-	bh=ecE3ouQQyw3TmwVuM7oALCPm0mClhEa0ZQu77fP3nu0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A+hq3DA60Z7qZGMijSB28/rTphJpQ5mwP1MsP++dzxk7JoOcxaUNBT4A+7iSzHd4K0XSoVC6xxN8kRWaKBYlC1chHWMgKavLdWsperaGgGemLVXpQRdVsq4ZwHyC72sxTy0FV1kyk1ElUa92nDq7XxMglQd8OsNIYDtqYZ/XwhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2it8aLk; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c42e7adbddso7016667a12.2;
-        Mon, 07 Oct 2024 20:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728358782; x=1728963582; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p/PPjhQbwoqSXUMaC+vsNn6zKjcC3s3xpaP+vVQl7Rw=;
-        b=f2it8aLkQZEHbWPKhWDX2qslRObe5WDxvIMPfaTg4DKX45CZ/5R1+S1Eu/cj3UgLI+
-         vhRlUxAfS/iW4nJLvo7CQF9L31uH9l910yrpZnXt59ublC4v9f8G+fw/BmZxNsKO++MK
-         bqkua//1U2QbIUdFEWPICv2iL73LFfO9R+XcsTmu0tGLP0xgI021VeU72E4OyWV6hKyH
-         +bFjWYUooQF+gZBvZosumfRS8bYFyNJLIOHmgfTLWbzKq7FyWzd4RKgTiKHhSBYCNaEB
-         +lHEIq7GZmvYicw3PFqWaEQQgiJ+HciArJBwbB9qDP2IiiDu6zRCQFVGznUsb7jy+ljx
-         LT9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728358782; x=1728963582;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p/PPjhQbwoqSXUMaC+vsNn6zKjcC3s3xpaP+vVQl7Rw=;
-        b=vKBeyWM1ojHsViLHfy5EaG9uzYPGFzQTs3xae73dQTmLAqlzIBPTvuiBhWlDmu9SgQ
-         8y56dPRHHyiEMJ+vyr+JuIGOuPPawhSBwrHLegxX24OnuU83b84fa7i+U8JSvKWXZ9Ba
-         v3JNCFpoc14wXNwZDPAkmq978BBskQqc4wfwUvQwp0YA90FuXjzdh1Ce7Y1WVm0gMwKF
-         uui3DpK5QNEyKe6jiQwXSBOQIRGYIekBjPq5JMwSA4aSgxXPJxC5z99RDbJrRGpNPOEf
-         79/ohFyoZa+LRKK1kyvfQZ0Nxwai7WUpiLTDipXxxR7gP8gPzzWrervvRhLkcpZRuqc9
-         juog==
-X-Forwarded-Encrypted: i=1; AJvYcCX7WPpdVmQUVb/zKbibioLuXQaob5rsDelzjPMRPCWQDSsRNVcWrDJyuFjXjd79ERrieGhaiA+CF80x@vger.kernel.org, AJvYcCXKSGhx+4KWdN+HQHP7q6n/j6JBBmnk1KHDqXvPagEybdiogLznsy4KOoVg06ZqeWtkgZynv9P8XhR2jqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/EaMt385c3CgsNVXKl3PwG3g8bOYdG66NzmugtO21e28hieRG
-	jXxIAlxHqQP8JaaN2c1pNvQb39BZ53EvJQMHF2OEHKhPrJjZ2LQ8JHCoXMVVe0JpFU/tAVlOGic
-	Kh6M1okLOnNnto/Cx337eaScEaHg=
-X-Google-Smtp-Source: AGHT+IGpwqBAmBnDkvWHxGABLWSZkf6HafdAPt/3FROqNjBraqMwP5nOnM4cihhM7pjwt4x5auADwUPhiR/jnxbsjFs=
-X-Received: by 2002:a17:907:70d:b0:a77:c30c:341 with SMTP id
- a640c23a62f3a-a991bac3142mr1354878266b.0.1728358782135; Mon, 07 Oct 2024
- 20:39:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBC913C9CB;
+	Tue,  8 Oct 2024 05:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.222.113
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728367040; cv=fail; b=QdZXtfSVEbmJZHplO7GJmnHWtmR6dxtc39CETCUokvKwTp/rZcsroS2siTMam8RLxa3vYcACe/G5I4AVnA0fFlAZTpBtUyHVRfRzpY2f0kw02EZO3+onsyITlZmOLiLDpJicCdw10+mYrFgIBHkJQaWhQSnggwayFi83meQGLy4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728367040; c=relaxed/simple;
+	bh=i8w/Dyh9tVTikvPbJ19XBh2oTskZ5ZftrHT6kT6LYuc=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tDozzojklam453AJod1eMuqeY6sjoQ8FiKBV3gwf4UFkitk8lT4KRdCa3avOzVehRq/ZSaLbxto7XC+DWHo+EOFDh6JltiukpZgBAqmlo2OH4lJ8X26fcAzwWcPqFZWuNSOAYh3x48mHbxhq92KCLn9+87uYPuS0kPBvlvIKwZc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.222.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ElH1XcvwQFGj44oXAc3/5/sjzp78NcgMAgU6E8Tt74y8E2TTSkZ7K/LWuRyx+IZCMaO5pDQ+sc3RcdRduZIChYewwerEXnz30pICdQeQoh4CllNyW2h70Gc+xqXAdGBJa3g7MM7s0hLRRkxYgopzsaR/eioK4CPjPPu2IulHveK7WGU/Csz4YjFCB+L5CpGocrfgfKu5rSVfkcVIusrqBn917CYfhyLi2mTRhIN+PfzjxWRhycfCjsH3CHjjitvu/W7cjXo4EbgF2YXwumUZWya7D73SPbzftIIJtPCc377C0k3/dn14qXsC7SPD+3s4twfKWGrN2Up5F9yoBgMqOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DDHud8V6gfHmEaYjUFPqA5ILVZrwi3wVT53QEESuPJg=;
+ b=Z1irsGv9YcurLq7wnFriAygBC3j7Xz7G+Mc2/Mq5fYFcGl8gYy7N+MdA+FT+Z0Iyl5qOa40DTkHHTh0Tqy6cjlY5FMp/rQkMqm8xGyME8elstFGjp0VcJMCwOAVt7ANt6JHFv6dhRi/UcRbKG57CiBZAeibujpw0i5TQ1dw4K3adv65L0U1RBgWvMhwe29Fq2x18hyIbhL+kFKIksj8AtujQRIWNIhJfFo/QvZBWcw9rRsxpxMQzIBgF75JAXCAgJMGAz16+xKUJ/emNXysz238gDzfNgrM9VtMMAKtgN/uXALWk8yOV/2eUOe3J2cMgaX4YU8L2z7dJWglHEvZ/+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:204::8)
+ by PN2P287MB2160.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:1c5::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Tue, 8 Oct
+ 2024 05:57:14 +0000
+Received: from PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
+ ([fe80::1134:92d7:1f68:2fac]) by PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
+ ([fe80::1134:92d7:1f68:2fac%3]) with mapi id 15.20.8026.020; Tue, 8 Oct 2024
+ 05:57:14 +0000
+From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+To: olteanv@gmail.com,
+	broonie@kernel.org,
+	frank.li@nxp.com,
+	shawnguo@kernel.org
+Cc: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	linux-spi@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Fix Sparse warnings
+Date: Tue,  8 Oct 2024 11:25:44 +0530
+Message-ID: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PN3PR01CA0173.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::17) To PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c01:204::8)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240926141956.2386374-1-alvinzhou.tw@gmail.com>
- <20240926141956.2386374-7-alvinzhou.tw@gmail.com> <5e7e0aa4-74b0-4262-8e8b-de86be54f0bc@linaro.org>
-In-Reply-To: <5e7e0aa4-74b0-4262-8e8b-de86be54f0bc@linaro.org>
-From: Alvin Zhou <alvinzhou.tw@gmail.com>
-Date: Tue, 8 Oct 2024 11:38:27 +0800
-Message-ID: <CAPhrvRR6mkF1L2dBhsfwF7UmWG_0rHtf2Ry9+LiAt8xZbfsLZw@mail.gmail.com>
-Subject: Re: [PATCH v10 6/6] mtd: spi-nor: add support for Macronix Octal flash
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, pratyush@kernel.org, mwalle@kernel.org, 
-	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
-	broonie@kernel.org, chengminglin@mxic.com.tw, leoyu@mxic.com.tw, 
-	AlvinZhou <alvinzhou@mxic.com.tw>, JaimeLiao <jaimeliao@mxic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PN0P287MB2843:EE_|PN2P287MB2160:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf665030-0c95-4f25-26f9-08dce75e0f20
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|52116014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7F5Hhrozh9dEeQ7irQYZmcp5JgfX0p71a3AMYgbwq9Y3NppCLlwwySknOlf5?=
+ =?us-ascii?Q?EBR+e454meXyN87ZQv9ncOEQLGulZUz1/3WGA+Vvgd+tS7BKtoklodqWzXAy?=
+ =?us-ascii?Q?D0sPeEDt0ZE10YFSxdvPep6LdwgMd/M7lN7+HNrwmeyqZk/JT46FhlDnFLAj?=
+ =?us-ascii?Q?1uDCImoZgdyxJFZqc7qOofeB9J66u77yl4ged+CdsS1+x0ExIZH3O1ldGEzl?=
+ =?us-ascii?Q?ml2ajQ4BBzUecauVU518xdj5udXkeAbb5YczfyhgYPBSn5JHdGoSAHhhCA4u?=
+ =?us-ascii?Q?n4Ugjj3iOtkwu+kPWY13c9ofcd6fM9iZdoMIrAU5hvECMUZ0BW/Vpt+7vzAR?=
+ =?us-ascii?Q?MMCMOixR6ZaO4sowExP7pkfb6VmY6/kMNxrFDi9DcsFKBw3TiLR5FcEKXZ74?=
+ =?us-ascii?Q?SQQ4w3LkvAoUyzbNqvZTxuoHp8g/BJQ94xFFEYnycnBoLkqZCHwiEK+xnBa/?=
+ =?us-ascii?Q?N4iEEQBLcgmP7yDDybUBw+K1HQCfP6hTQCTxNFW9vs4+d2o3912uSj/Xz20R?=
+ =?us-ascii?Q?8woyMJ5/SKpTFYkztPlWuJmT930LTeoGXpVoTjTz156ZkEZ/YTI7mECvvtHx?=
+ =?us-ascii?Q?thSIB7XJ9IuvW8Jnoy5Cs8sNMIw9BKDuiP92xamunY5nnQUnYGCDSamA6O3Y?=
+ =?us-ascii?Q?PIlIbVUjhJdMKII90DseeGZvRXhq4zhW/sZTOMNlKLzzmcagtWlgonuxOZzY?=
+ =?us-ascii?Q?gi+2Vo2xlh7BDFGEi4ZMsIqadGfCOXUrHyaxn+AOPhv/4uPDx3HZaBlogRjT?=
+ =?us-ascii?Q?Yi91kknRNlMqqu6dtSncCtrHCQF39hjUh0yfLWJI01o+EMJroN04ESpGHnMG?=
+ =?us-ascii?Q?K2nE8grqgSgiN/RuWk93J7SQTDdN74JOejiJedobRn21hmHKwCw5pNT2QG0N?=
+ =?us-ascii?Q?f0JP06p4e5iJPptYMiJgvSY3lG3X+fPUbueqOPui4ec5N2GzybzeU2wLEJph?=
+ =?us-ascii?Q?82epUpyGkEahpDQhqNDyVnkY+ozByHi8E5+95+DaqTsI3Bi8h9EK/+US2j9h?=
+ =?us-ascii?Q?q50MyvEtyBd3TIiD7wN9NPWDGCyCLTX2ayJRI4uWSliuvV/lkLTHLdOsweSA?=
+ =?us-ascii?Q?ldun5loOfzI0Mn4wUyMzSPWSp6v9nL/3JiiQdnC3/hyOCXitclk0IPgRz4iV?=
+ =?us-ascii?Q?hSRkxCPQDpNUf2+VmrgGWTahLNcKZbQiKg25BsHi9bmfEStj9ZEh/yuj4Brc?=
+ =?us-ascii?Q?3E031H0OEI+bT6Yohy3INMtLZ/wc6HTJjhK1xojD4Ya1kYcRkhDnHYL1g9n8?=
+ =?us-ascii?Q?vskJIaXgIq8mN1kKKOXruplM2KdVUgPTGnbxUaJh0g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN0P287MB2843.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(52116014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/amdVZV0GpluQ87gCKz3PWA8wnB5KC2igUHcxWH6eqwRa3Xj/pLkp7EjaBlK?=
+ =?us-ascii?Q?bAUNIPryhsNq5Pwayi9slZ5Ib+5mMNAHfFXXzvNqnDTSPZPsW8K+93jwrpxI?=
+ =?us-ascii?Q?8hsdtnOoXorPMVtsBozLO+JHX9W11fJQPbdOO3H4EsUQ2WjnL7LyqLcn/hWg?=
+ =?us-ascii?Q?0dXZ8XsYexTSQ2iXFr0S8+TMCvKIf+ZxpKtnv3+hVurSIIZ0lrPo4slCeOYI?=
+ =?us-ascii?Q?dk68o85bZSF+fTDbrtiGqszL/K+X6B/DIAP5LQDxU1ORTL76Cqawim8JBz0i?=
+ =?us-ascii?Q?R2ucuJejHrbdzhNbYv2YPQPgqZBfRxjRam3EePbEbZUZAvTRu0VAlFNs/x3j?=
+ =?us-ascii?Q?E94FLR3069f1khrYLF6SyLYIdlzGwwwlV/7MD36jG9btASBTULob8prCe5WE?=
+ =?us-ascii?Q?Qhqu4hMWHEBoYAbj+PrjYVt9PQhUBEt7BUBF8TSP7AjdWq8on/9ZfI8VWUd7?=
+ =?us-ascii?Q?UjDh0DJznJHCFb/DCAJpZme5gG0+snAwjp/eKUs3rrOkbnjPa6Od6B4/zGwj?=
+ =?us-ascii?Q?u/jL5EQbCck/aAudxkO3Q3j55bvQExeHXBJrhRS4J7RtVGQ4RvNtZ8ZmNwnH?=
+ =?us-ascii?Q?2jaWLbDsI0Zfz44dY58w959xboDOp6wr4G7iCOtTHzSfmnIm11tkLoGQoEO+?=
+ =?us-ascii?Q?C0Pv1YjqIrDXSmJEEaP3ViEqtbOAX3rIbVdGKsZRzTXmc6SPEh+HIKraw/Py?=
+ =?us-ascii?Q?81U0n1/dFfpN+M+t9FaSMjFItxe8uKrmAHESM1Eeuhr+ztBVb4KYZZKpWvjD?=
+ =?us-ascii?Q?pnhLKzqe0KJRz5IV+n40pxOUEyeMRzKs0gdsC8m7aWDUlD16bEt3uDHC80yM?=
+ =?us-ascii?Q?SCSC2N0y00S9jUodkvIN5gEcZVNOk1F3aEAezEWjccTWsveT+c0gV3Mr5R79?=
+ =?us-ascii?Q?tcbaNnTSlo7u0coVtVp6Lf9Ml/Xq4oreym9DhAld15ZjTsDze/k3EQH4OSFC?=
+ =?us-ascii?Q?Wmz4XgEm7DY/r0UTZdt0fFkZ3+flrObubKPZYtGGlTzTKxYgX44l0pCd6Veo?=
+ =?us-ascii?Q?mAxOTQ5n5cXpLMCIl/D763SU8vGppTseJEyETOa5D+aGilGCx/0OaXJ9kA/q?=
+ =?us-ascii?Q?dxLNOEVZ4mq0CgRRTNnzPk22EXN/G8tg9RgXnkSIY2gUJKKUrnQ7OBG63Jqq?=
+ =?us-ascii?Q?qHyXGNrW91D9H6bAD3w0YkwleWKYp9JvBg3tf47h2zBMcTXn6pvKzxp50slK?=
+ =?us-ascii?Q?qBl3WjpBBALpNWAbKyxJfq8MwdFLk3qUUpGG9DSeYVQwI0PEXkgVQEU0iXeS?=
+ =?us-ascii?Q?9sMM/SWHEcYpuCJcjyqcgoFE4bTS36RP7hr344N/YVw4uoDXtWM1XpD3VJWR?=
+ =?us-ascii?Q?MIXtXWwnvBJFVAGXRCsbfUTMGeFHgcL0/e5GLePpq5XDE9XuS5QjRUmD7rkW?=
+ =?us-ascii?Q?0ajyqG982/SWszD0mfR1MulJnRVQTlaAE0Ssza69yPgj6nEFoQdAS62fLHdV?=
+ =?us-ascii?Q?zm6oZf4eTbSsqlpuHGd+By6LkcEzk6S59NQEJCQDhktP8TzMjtYdxbgPrpYQ?=
+ =?us-ascii?Q?aNwMd0vEAOi70t6VxRR1I3kog71z7v7nRypoOVWXGyI6qD05hrTNXDzPA3ET?=
+ =?us-ascii?Q?wOwzjMvdI3nC9jpe1PJcJ5aCWddq7BDl61CZQn6a4nZV/GoGU2WfRQjjFuHi?=
+ =?us-ascii?Q?0hqlhlmyCOp+bd2bTr9fyicsV76s3z9ucD0Tco8eMhVx?=
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf665030-0c95-4f25-26f9-08dce75e0f20
+X-MS-Exchange-CrossTenant-AuthSource: PN0P287MB2843.INDP287.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2024 05:57:14.8238
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mlK8uxHublLEgGC0kqfgEStZyjuMZig8BE0ywURuYNv1hZO0R1kTNjUK5TnOilVjV8RrJMV5Dqn01yU0PBJ96AysHjv1Uln3Y9oiLkjFoDS7JKOfePN6PfeUNaB2xjip
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2P287MB2160
 
-Hi Tudor,
+Change in v2:
 
-Tudor Ambarus <tudor.ambarus@linaro.org> =E6=96=BC 2024=E5=B9=B410=E6=9C=88=
-2=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=883:45=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
->
->
-> On 26.09.2024 17:19, AlvinZhou wrote:
-> > From: AlvinZhou <alvinzhou@mxic.com.tw>
-> >
-> > Adding manufacturer ID 0xC2 at the end of ID table
-> > to allow manufacturer fixup to be applied for any
-> > Macronix flashes instead of needing to list each
-> > flash ID in the ID table.
-> >
-> > Such as macronix_nor_set_octal_dtr function in the
-> > manufacturer fixup can be applied to any Macronix
-> > Octal Flashes without the need to add the specific
-> > ID in the ID table.
-> >
-> > Suggested-by: Michael Walle <mwalle@kernel.org>
-> > Signed-off-by: JaimeLiao <jaimeliao@mxic.com.tw>
-> > Signed-off-by: AlvinZhou <alvinzhou@mxic.com.tw>
-> > ---
-> >  drivers/mtd/spi-nor/macronix.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macro=
-nix.c
-> > index f039819a5252..1a8ccebdfe0e 100644
-> > --- a/drivers/mtd/spi-nor/macronix.c
-> > +++ b/drivers/mtd/spi-nor/macronix.c
-> > @@ -200,7 +200,9 @@ static const struct flash_info macronix_nor_parts[]=
- =3D {
-> >               .name =3D "mx25l3255e",
-> >               .size =3D SZ_4M,
-> >               .no_sfdp_flags =3D SECT_4K,
-> > -     }
-> > +     },
-> > +     /* Need the manufacturer fixups, Keep this last */
->
-> you have a capital letter in the middle of the sentence.
->
-> I'll replace the comment with:
->
-> /*
->
->  * This spares us of adding new flash entries for flashes that can be
->  * initialized solely based on the SFDP data, but still need the
->  * manufacturer hooks to set parameters that can't be discovered at SFDP
->  * parsing time.
->  */
->
-> Which brings me to why you really set this. I remember SFDP contains
-> tables with sequence of commands for enabling/disabling Octal DTR mode.
-> Would you please remember me, why you didn't use those SFDP tables and
-> implemented your own enable/disable methods?
+in patch 2/2:
+	- Use ioread32be instead of readl
+	- Use iowrite32be instead of writel
 
-While the SFDP does provide a sequence of commands to enable Octal
-DDR mode, following this sequence forces the I/O driver strength to 50 ohms=
-,
-which causes I/O driver strength to be weak and and leads to read/write
-issues, so we chose to use a fixup approach to enable/disable Octal DDR
-mode.
+Note: Drop 2 patches(patch 2/4 & 4/4) from the last version
+link to v1: https://lore.kernel.org/linux-spi/20240927132944.19285-1-hardevsinh.palaniya@siliconsignals.io/T/#t
 
-Thanks,
-Alvin
+Hardevsinh Palaniya (2):
+  spi: spi-fsl-dspi: Fix casting warnings
+  spi: spi-imx: Fix casting warnings
+
+ drivers/spi/spi-fsl-dspi.c | 8 ++++----
+ drivers/spi/spi-imx.c      | 5 ++---
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+-- 
+2.43.0
+
 
