@@ -1,58 +1,59 @@
-Return-Path: <linux-spi+bounces-5190-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5191-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED27B99849C
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 13:14:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66DD699849E
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 13:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 294201C20C15
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 11:14:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C692328252D
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 11:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D48C1C244A;
-	Thu, 10 Oct 2024 11:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835891C331C;
+	Thu, 10 Oct 2024 11:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgbwZCW0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8/9AZtn"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B1D1C2445;
-	Thu, 10 Oct 2024 11:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B931C3310;
+	Thu, 10 Oct 2024 11:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728558868; cv=none; b=OR07Ku2yLFtLxfVcWDyTQ5pjutdmXE2y4R5r0jTqwI4FYq+PMaaUvl8S/zzzVqb96qx+YTit5Tu37ZPR5RIe+C78Ke1pEnyxIY4DcnCSLgYAMSjAaFsTsSm+hEYRUuJ7euNYLEKapoNnl85Vs8g+N0/YU/y4PicWkymHpFIwiD8=
+	t=1728558872; cv=none; b=lrYaWBOK3VpMuxuhyiqsUpU1goTbjBBIweqtOIZ8BV8SF7wpDiM7eRkEfbNN747VZ68BzentCnuP0NHRDWMf8iAzkMx2YrfzpwK8ojpBJ1aQWUYwiCsWD28UBjvm0cpM0BZieuDHtepx5+9ruAJK6JlsGBARAXFdFYgeBKLRmCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728558868; c=relaxed/simple;
-	bh=IMikOpVZDTkWvRqqmyYXabw2eSCTdsTsi9nsFpVjkws=;
+	s=arc-20240116; t=1728558872; c=relaxed/simple;
+	bh=faasR6xzN3h6q9heHvMNzaWStXw8OeeUNOIeaDVDmnA=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SJ3Q3vhv1qlXKQ12rtVicO7u4NKWPCMdnQil7Ms3H3rIgvl7G3V5xw2xqov4aaMK5lfykfwySFdcNY9goD1ktvhdtG2ilTUXvTe89d9lBw7QpiUWd/8eDBIGpFiDu6vUHU49lfHzOe1OOokhQhSzqy/LPIAZv6BM0HY80bpdENg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgbwZCW0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7431C4CEC5;
-	Thu, 10 Oct 2024 11:14:25 +0000 (UTC)
+	 MIME-Version:Content-Type; b=ssUY6AxcMK+R4AYorcMBsOab50JWm95h3j5Y9tkdRC+9zq42qpPDGcUKg1wLkl9YE6bQAANXq+SuYhFNvMUfwLKKHsm3+V7s9hi2JqBwGCkUZK5JVSInJI3tlWV8GlVFRNSJlFfWO4nrYvdemQ0sGUnVAEbMt7Raj08SOsn9k3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8/9AZtn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85748C4CEC5;
+	Thu, 10 Oct 2024 11:14:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728558867;
-	bh=IMikOpVZDTkWvRqqmyYXabw2eSCTdsTsi9nsFpVjkws=;
+	s=k20201202; t=1728558871;
+	bh=faasR6xzN3h6q9heHvMNzaWStXw8OeeUNOIeaDVDmnA=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=JgbwZCW0Zh4VPbUeSqNg0rzD27utgz2Vml79tHAQvawnY/WmF2bFRAV740Tc96/Mm
-	 M7Uuw2AqqSf8eEyoP86Vooqg3lSndGFmhy24xE0iVg8N0P7E6AlZnF34XuUHJmZ1s/
-	 DLuxy8ZANEWQneFoTgLGZ05uWM7vt6teN3x8yqlvWlJU0DGew5goZnAkT639X+GcPE
-	 W7IY1gW7HUMCiKwcjlufGs5lJdPLmKLDEy+tYEtIvPPzSjk2S7IRzsUlayPSjebSW/
-	 83+jtjQUAwOZOiEcrv2ZUlQ0+5hIsd29GrBwtF5MhNx//dFpihYAZ4ZMzIbOHgrpYz
-	 Db5mKb21c2B6Q==
+	b=H8/9AZtnQcDTJFKDFeuufNmkW5gabUoy4BG2i7O43q90IwQz1EsqgPIzIuUudL3Cq
+	 Y7Ok/dCi+HCPLPaFzfSsnduNNX9Fs0CEBu5Hrne8rIiudAHFMjciPY1RPCebCau0G4
+	 fzXlmorIcIQ4kWe9o2MlptmVilY6j3805XFLnmnbTj3N4Yb/RRyFA7pDSA/VkAiC5h
+	 NyYu3MrRsoas3FzLKzcbNj4LLaY7nRfbM/QXAZwVLR6ov//JLkN/T/BmDK4BGfQb52
+	 mMopOajU05W6Wiy+kICiC6YmjKHJRv6ZTARe/gE3VVfc1m3AkpWQ/5NqUIvLy3pvqY
+	 IfCQzzpxZp2QA==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- Dragan Simic <dsimic@manjaro.org>
-Cc: heiko@sntech.de, gregkh@linuxfoundation.org, rafael@kernel.org, 
- oss@helene.moe, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1727601608.git.dsimic@manjaro.org>
-References: <cover.1727601608.git.dsimic@manjaro.org>
-Subject: Re: [PATCH v3 0/5] Add dev_warn_probe() and improve error handling
- in Rockchip SPI drivers
-Message-Id: <172855886556.3260167.12395956115467736144.b4-ty@kernel.org>
-Date: Thu, 10 Oct 2024 12:14:25 +0100
+To: olteanv@gmail.com, frank.li@nxp.com, shawnguo@kernel.org, 
+ Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org, 
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
+References: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
+Subject: Re: Fix Sparse warnings
+Message-Id: <172855886823.3260167.4815619322285709475.b4-ty@kernel.org>
+Date: Thu, 10 Oct 2024 12:14:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,14 +64,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-99b12
 
-On Sun, 29 Sep 2024 11:21:12 +0200, Dragan Simic wrote:
-> This is a small series that introduces dev_warn_probe() function, which
-> produces warnings on failed resource acquisitions, and improves error
-> handling in the probe paths of Rockchip SPI drivers, by using functions
-> dev_err_probe() and dev_warn_probe() properly in multiple places.
+On Tue, 08 Oct 2024 11:25:44 +0530, Hardevsinh Palaniya wrote:
+> Change in v2:
 > 
-> This series also performs a bunch of small, rather trivial code cleanups,
-> to make the code neater and a bit easier to read.
+> in patch 2/2:
+> 	- Use ioread32be instead of readl
+> 	- Use iowrite32be instead of writel
+> 
+> Note: Drop 2 patches(patch 2/4 & 4/4) from the last version
+> link to v1: https://lore.kernel.org/linux-spi/20240927132944.19285-1-hardevsinh.palaniya@siliconsignals.io/T/#t
 > 
 > [...]
 
@@ -80,16 +82,10 @@ Applied to
 
 Thanks!
 
-[1/5] spi: rockchip: Perform trivial code cleanups
-      commit: f7bc15211fc6946203dd7e57c123f1e387d7225b
-[2/5] spi: rockchip-sfc: Perform trivial code cleanups
-      commit: cb91287b3b6d42e66f948fbc304f771792c2852f
-[3/5] spi: rockchip-sfc: Use dev_err_probe() in the probe path
-      commit: 7d46b8d8d78338a2ad986eec0790ddb22fad23a8
-[4/5] driver core: Add device probe log helper dev_warn_probe()
-      commit: 36e69b160705b65bf136c2fb6a1194447eeb8478
-[5/5] spi: rockchip: Use dev_{err,warn}_probe() in the probe path
-      commit: e2fc05873905f2ee96b38a116ae86f45fe7d8e49
+[1/2] spi: spi-fsl-dspi: Fix casting warnings
+      commit: 66c1c4175bbdfcf1cb1411b1ea62e7e0b5571594
+[2/2] spi: spi-imx: Fix casting warnings
+      commit: f3a59ab98cfc18c7b2fb1d8164bedbb1569a7e76
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
