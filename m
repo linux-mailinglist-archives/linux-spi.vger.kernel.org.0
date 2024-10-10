@@ -1,59 +1,57 @@
-Return-Path: <linux-spi+bounces-5191-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5192-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66DD699849E
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 13:15:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 301769984A0
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 13:15:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C692328252D
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 11:15:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEB91282EF2
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 11:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835891C331C;
-	Thu, 10 Oct 2024 11:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523501C461D;
+	Thu, 10 Oct 2024 11:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H8/9AZtn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/Vb+UnX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B931C3310;
-	Thu, 10 Oct 2024 11:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B431C461A
+	for <linux-spi@vger.kernel.org>; Thu, 10 Oct 2024 11:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728558872; cv=none; b=lrYaWBOK3VpMuxuhyiqsUpU1goTbjBBIweqtOIZ8BV8SF7wpDiM7eRkEfbNN747VZ68BzentCnuP0NHRDWMf8iAzkMx2YrfzpwK8ojpBJ1aQWUYwiCsWD28UBjvm0cpM0BZieuDHtepx5+9ruAJK6JlsGBARAXFdFYgeBKLRmCg=
+	t=1728558873; cv=none; b=gGPbDGQcc63bc0mzXrTTiRCiKEQDKOsJXRGgRAx0Cpucr7dkrPqFvOGjNXqPhCp4YKQkWB02OZ0b36KRIW0qpx8JYBjVhn80mpSYYlBJ4EbhNbapfY9moLp5DTWCgERAIXxIWpdUVQn6v9jqQT6Rkd+3Ml48H2tmg8OtHMSKPxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728558872; c=relaxed/simple;
-	bh=faasR6xzN3h6q9heHvMNzaWStXw8OeeUNOIeaDVDmnA=;
+	s=arc-20240116; t=1728558873; c=relaxed/simple;
+	bh=iVPsbnXYr0IWEdum3ohIZ4GSaWHJnOkr23pu26/OT7s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ssUY6AxcMK+R4AYorcMBsOab50JWm95h3j5Y9tkdRC+9zq42qpPDGcUKg1wLkl9YE6bQAANXq+SuYhFNvMUfwLKKHsm3+V7s9hi2JqBwGCkUZK5JVSInJI3tlWV8GlVFRNSJlFfWO4nrYvdemQ0sGUnVAEbMt7Raj08SOsn9k3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H8/9AZtn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85748C4CEC5;
-	Thu, 10 Oct 2024 11:14:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=SG+crKjzlE1olVwX41nj5w1vUu+awjl/B52jvFvBb/nC1E5u/dhwHHXglRq6YTSB9CKLroT40ORa6CQwvRFGlXlHExGMkj8w/2XnJHGhw+EOdJ9U7F1uqW89iVrr2UTPxHOfnVMDKWRbGlwNyUcQ79AOq0nbLm4pOymdqZthXwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/Vb+UnX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D42AC4CECC;
+	Thu, 10 Oct 2024 11:14:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728558871;
-	bh=faasR6xzN3h6q9heHvMNzaWStXw8OeeUNOIeaDVDmnA=;
+	s=k20201202; t=1728558872;
+	bh=iVPsbnXYr0IWEdum3ohIZ4GSaWHJnOkr23pu26/OT7s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=H8/9AZtnQcDTJFKDFeuufNmkW5gabUoy4BG2i7O43q90IwQz1EsqgPIzIuUudL3Cq
-	 Y7Ok/dCi+HCPLPaFzfSsnduNNX9Fs0CEBu5Hrne8rIiudAHFMjciPY1RPCebCau0G4
-	 fzXlmorIcIQ4kWe9o2MlptmVilY6j3805XFLnmnbTj3N4Yb/RRyFA7pDSA/VkAiC5h
-	 NyYu3MrRsoas3FzLKzcbNj4LLaY7nRfbM/QXAZwVLR6ov//JLkN/T/BmDK4BGfQb52
-	 mMopOajU05W6Wiy+kICiC6YmjKHJRv6ZTARe/gE3VVfc1m3AkpWQ/5NqUIvLy3pvqY
-	 IfCQzzpxZp2QA==
+	b=B/Vb+UnXrh5PwsHrDg0UKBXk6n6nP15UWqvCJRQMheYfh7oHrBBLgm+iK+hve671B
+	 qn+4T+wqnUiabPbsFHCcdclS4sC4u0Xj/M7JiZpLecXC8lm+hYW9iXmGaTOh4HIeQR
+	 AmB/R2JeaFDSfmDxb2uB4bFMRmxMThpHJCyvSrZDRjQnlIhVOAqkOuBb5eA+hgr0Lk
+	 brGuilfXJBcObQmQDk9WKeKj0WU1US6E9KVwzHZWSYZSr70huiq3ltrtYgmTHcNU92
+	 U/8F0S788T5hK/6m0WWQvUvD+VgiXkrpcDoSTOiW33UqalvcnPBEq2GbZxn2Bj7xF7
+	 lX8KUtBNexn4g==
 From: Mark Brown <broonie@kernel.org>
-To: olteanv@gmail.com, frank.li@nxp.com, shawnguo@kernel.org, 
- Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org, 
- imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
-References: <20241008055644.4900-1-hardevsinh.palaniya@siliconsignals.io>
-Subject: Re: Fix Sparse warnings
-Message-Id: <172855886823.3260167.4815619322285709475.b4-ty@kernel.org>
-Date: Thu, 10 Oct 2024 12:14:28 +0100
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Alexander Usyskin <alexander.usyskin@intel.com>, 
+ Tomas Winkler <tomasw@gmail.com>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <20241009062244.2436793-1-mika.westerberg@linux.intel.com>
+References: <20241009062244.2436793-1-mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v2] spi: intel: Add protected and locked attributes
+Message-Id: <172855887125.3260167.2944535070302678929.b4-ty@kernel.org>
+Date: Thu, 10 Oct 2024 12:14:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,15 +62,16 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-99b12
 
-On Tue, 08 Oct 2024 11:25:44 +0530, Hardevsinh Palaniya wrote:
-> Change in v2:
+On Wed, 09 Oct 2024 09:22:44 +0300, Mika Westerberg wrote:
+> The manufacturing access to the PCH/SoC SPI device is traditionally
+> performed via userspace driver accessing registers via /dev/mem but due
+> to security concerns /dev/mem access is being much restricted, hence the
+> reason for utilizing dedicated Intel PCH/SoC SPI controller driver,
+> which is already implemented in the Linux kernel.
 > 
-> in patch 2/2:
-> 	- Use ioread32be instead of readl
-> 	- Use iowrite32be instead of writel
-> 
-> Note: Drop 2 patches(patch 2/4 & 4/4) from the last version
-> link to v1: https://lore.kernel.org/linux-spi/20240927132944.19285-1-hardevsinh.palaniya@siliconsignals.io/T/#t
+> Intel PCH/SoC SPI controller protects the flash storage via two
+> mechanisms one is the via region protection registers and second via
+> BIOS lock. The BIOS locks only the BIOS regions usually 0 and/or 6.
 > 
 > [...]
 
@@ -82,10 +81,8 @@ Applied to
 
 Thanks!
 
-[1/2] spi: spi-fsl-dspi: Fix casting warnings
-      commit: 66c1c4175bbdfcf1cb1411b1ea62e7e0b5571594
-[2/2] spi: spi-imx: Fix casting warnings
-      commit: f3a59ab98cfc18c7b2fb1d8164bedbb1569a7e76
+[1/1] spi: intel: Add protected and locked attributes
+      commit: b1258105f9ce5203f48a47fd2f2cec8c38c41841
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
