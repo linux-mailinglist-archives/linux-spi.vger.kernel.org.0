@@ -1,153 +1,121 @@
-Return-Path: <linux-spi+bounces-5201-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5202-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 867A3998F10
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 19:58:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8BF8999D63
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2024 09:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14E4A288506
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Oct 2024 17:58:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D9941F22760
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Oct 2024 07:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D44319D083;
-	Thu, 10 Oct 2024 17:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5855819C579;
+	Fri, 11 Oct 2024 07:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nr33LrPJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GgserkGp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1998019D064;
-	Thu, 10 Oct 2024 17:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B6E635;
+	Fri, 11 Oct 2024 07:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728583063; cv=none; b=XTEkuIv49ImHmQ3U0UQZDYYZMnspANVwdwoyB09UEBb6kiK+5oDv0Z1+n6D3wuzinGZMzUe8cCTTNkDfqwdNNbnBRtXKmOxLViEhtyMDs+PoCYe0Uo4OYN+NTsfYO2Lnc4dr7oNIIt0qpLvWfRs38rlfsI2osCpgUF/nCyDw7Hc=
+	t=1728630271; cv=none; b=EjkzCTrqOqCkYBPYdMsWMn7oZYpPNkNR7B4KnMZpGzo6bNi3VhUtUYnTjM7/eBEqgzmsm5fWWWzHBZxNwW2nbWPZ1qsjK3gfiYnwFYX/zXDC5k7JZeNV2totA/42/m7l4gvh9M/K0hD1oiP/zLsej8SBRiFKA8wzZBrrxp/e1zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728583063; c=relaxed/simple;
-	bh=LWqRgOJyjhmzC/oM31Wppo5HRgG6EO757vIU1WFMl3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qy8v7LWlPhx8flJbwpr5w8/gSrzJfnRfPHhVnU67k3zHcSpmMa3zDVrDt2iNAryYODapb3hYjReDfgUDUHtguVljRN882q9kr6ch91TYf+DeW/kFu7X86FlXmpfEkalVGZC/s4w1fcEqnUkU/606Ii8IWxfR4teKqqkK19J9GEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nr33LrPJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7A07C4CEC5;
-	Thu, 10 Oct 2024 17:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728583062;
-	bh=LWqRgOJyjhmzC/oM31Wppo5HRgG6EO757vIU1WFMl3Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nr33LrPJDjzXFmLgjgcyuwuiZux+fWPYa84/K3umfWTNtr/BiLgMyp2kv6SulKf6z
-	 QYD6yZSPOdF7RYJoz8lB30GY6bVipdTSOCbW+m8tUNhNEjBljJ6pub8XJFr32XC/UK
-	 uXWrrAyezHF+zyyoQZ1BQrfzmFXHi02Auz9LjBJf6YjRW7gGTlHkl6yW5n9ELjgxrI
-	 nfe0x+qIlw6QHxg0ddwLxjqgw6Y5Zpa215VbotvGueMPziER0V0tO0QIlB/zlqMzlJ
-	 CIvT4VI6xhnY31fdPqTHBkN0sw6m67c0K8/KlfVw6opktjcn5rtSiEWwzG9mFK1Q3V
-	 w/4duq3lVF7qg==
-Date: Thu, 10 Oct 2024 12:57:40 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com, esben@geanix.com,
-	conor+dt@kernel.org, manivannan.sadhasivam@linaro.org,
-	linux-kernel@vger.kernel.org, broonie@kernel.org,
-	nikita.shubin@maquefel.me, linux-mtd@lists.infradead.org,
-	vigneshr@ti.com, arnd@arndb.de, andersson@kernel.org,
-	linux-spi@vger.kernel.org, miquel.raynal@bootlin.com,
-	krzk+dt@kernel.org, konradybcio@kernel.org, richard@nod.at,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 1/8] spi: dt-bindings: Introduce qcom,spi-qpic-snand
-Message-ID: <172858304953.2090269.15996975253037715461.robh@kernel.org>
-References: <20241010070510.1504250-1-quic_mdalam@quicinc.com>
- <20241010070510.1504250-2-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1728630271; c=relaxed/simple;
+	bh=LfoFcf+O6LeARd8IYkAT+g2zx962h72pKSjDzjIInqM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=F2Eg9kQNmlgI9CNWZexoCM/MYsNm1I6gc/YD8791rswGWfy7snibVFQRJD4Wu+Og0XLwp0ribsIvDON/ZnGQZqCKEZltABUZgaUiS7ooToLhcDa90iwEhk9WFxkVkElILdC+rdkk2LtVEhr1QHaY3zrXZzO52l+hhowWQgaMiOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GgserkGp; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728630270; x=1760166270;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LfoFcf+O6LeARd8IYkAT+g2zx962h72pKSjDzjIInqM=;
+  b=GgserkGpp/lxy/uv2HX6r2qwbFnz6ookOJ27EFNeEu6QWnnhBHbUE0hh
+   lm1rKAsHes3rn+YU4mRycQsSzXSqD7rNAMtXDNGbVKTGmZpkS62pjP3NQ
+   0M5KgzBBApCwrkwYygQfS4vS7E1p7NjCyhicNb9wHa6/n6bdA+aSxqCnm
+   5dww2GQ5Wnp1E26RnkJhhgovYVBLWdtj3vOCXk+Fu2Wyqzu+taALjCY8W
+   /IT5J2nXsX8TwGhpurBWYypwOzUgRrn3Pw2vXJgXUkdwwqiI5aqGzTNVw
+   DlJcjaC/P4hr/0l3vxTz9vxS0FUgIkoAQ0o6iiMufgYi6RxKUWu/EP9kh
+   g==;
+X-CSE-ConnectionGUID: AG5eE0pLShGVsVlnO3DKCg==
+X-CSE-MsgGUID: 6SVqvxOsQY+YEfN5T9RKxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11221"; a="27913487"
+X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
+   d="scan'208";a="27913487"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 00:04:30 -0700
+X-CSE-ConnectionGUID: LWFPRkl8S7m7SS6+qBe0tQ==
+X-CSE-MsgGUID: XwZGjZFjSieeAibi16j8gQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,195,1725346800"; 
+   d="scan'208";a="76742993"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 00:04:27 -0700
+Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id CDF2411F855;
+	Fri, 11 Oct 2024 10:04:24 +0300 (EEST)
+Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
+	(envelope-from <sakari.ailus@linux.intel.com>)
+	id 1sz9hI-0000oa-2S;
+	Fri, 11 Oct 2024 10:04:24 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Wentong Wu <wentong.wu@intel.com>,
+	linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-gpio@vger.kernel.org
+Subject: [PATCH 1/1] MAINTAINERS: Add an entry for the LJCA drivers
+Date: Fri, 11 Oct 2024 10:04:14 +0300
+Message-Id: <20241011070414.3124-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241010070510.1504250-2-quic_mdalam@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
+Add a MAINTAINERS entry for the Intel La Jolla Cove Adapter (LJCA) set of
+drivers.
 
-On Thu, 10 Oct 2024 12:35:03 +0530, Md Sadre Alam wrote:
-> Document the QPIC-SPI-NAND flash controller present in the IPQ SoCs.
-> It can work both in serial and parallel mode and supports typical
-> SPI-NAND page cache operations.
-> 
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
-> 
-> Change in [v11]
-> 
-> * Dropped Reviewed-by tag
-> * Added Soc based compitable "qcom,ipq9574-snand"
-> 
-> Change in [v10]
-> 
-> * No change
-> 
-> Change in [v9]
-> 
-> * No change
-> 
-> Change in [v8]
-> 
-> * No change
-> 
-> Change in [v7]
-> 
-> * No change
-> 
-> Change in [v6]
-> 
-> * No change
-> 
-> Change in [v5]
-> 
-> * No change
-> 
-> Change in [v4]
-> 
-> * Fix spelling mistake in HW description
-> 
-> * Added commit message
-> 
-> * Removed '|' from description
-> 
-> * Removed minItems in clock
-> 
-> * Added blank line
-> 
-> * Removed co-developed by
-> 
-> Change in [v3]
-> 
-> * Updated commit message, removed "dt-bindings" from commit
->   message
-> 
-> * Updated compatible name as file name
-> 
-> * Added hardware description
-> 
-> * Documented clock-name
-> 
-> * Moved dma-names property to top
-> 
-> * Droped unused label "qpic_nand"
-> 
-> * Fixed indentation in example dt node
-> 
-> Change in [v2]
-> 
-> * Added initial support for dt-bindings
-> 
-> Change in [v1]
-> 
-> * This patch was not included in [v1]
-> 
->  .../bindings/spi/qcom,spi-qpic-snand.yaml     | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
-> 
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+It seems there never was one.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 251ae8a52066..ee5a5062729a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11601,6 +11601,16 @@ F:	drivers/crypto/intel/keembay/keembay-ocs-hcu-core.c
+ F:	drivers/crypto/intel/keembay/ocs-hcu.c
+ F:	drivers/crypto/intel/keembay/ocs-hcu.h
+ 
++INTEL LA JOLLA COVE ADAPTER (LJCA) USB I/O EXPANDER DRIVERS
++M:	Wentong Wu <wentong.wu@intel.com>
++M:	Sakari Ailus <sakari.ailus@linux.intel.com>
++S:	Maintained
++F:	drivers/gpio/gpio-ljca.c
++F:	drivers/i2c/busses/i2c-ljca.c
++F:	drivers/spi/spi-ljca.c
++F:	drivers/usb/misc/usb-ljca.c
++F:	include/linux/usb/ljca.h
++
+ INTEL MANAGEMENT ENGINE (mei)
+ M:	Tomas Winkler <tomas.winkler@intel.com>
+ L:	linux-kernel@vger.kernel.org
+-- 
+2.39.5
 
 
