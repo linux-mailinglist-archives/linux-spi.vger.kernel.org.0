@@ -1,75 +1,76 @@
-Return-Path: <linux-spi+bounces-5206-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5207-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AEC799B2B0
-	for <lists+linux-spi@lfdr.de>; Sat, 12 Oct 2024 11:54:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D433399B2B2
+	for <lists+linux-spi@lfdr.de>; Sat, 12 Oct 2024 11:55:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5649D283E61
-	for <lists+linux-spi@lfdr.de>; Sat, 12 Oct 2024 09:54:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30FF7B22FDA
+	for <lists+linux-spi@lfdr.de>; Sat, 12 Oct 2024 09:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE88153836;
-	Sat, 12 Oct 2024 09:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC30155325;
+	Sat, 12 Oct 2024 09:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gXu2z9sG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lOX3/CAk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5F614F9CF;
-	Sat, 12 Oct 2024 09:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEFB1547E7;
+	Sat, 12 Oct 2024 09:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728726867; cv=none; b=EFm452PAvxzSwxBstIIPwGjnthDPxYRczda//8QgPWkEHa4ojkcFXfVlZOa3tFcTV4vXTqqsTlKW+bKeo7U4xqA1spz+uVO16dbbgKtIdiaRGCkTR8D5UYlm6obfPsS09aDQLGkQ0RVj5G1VnZnUPhwWtiTuXv3YYjM10q+FTys=
+	t=1728726869; cv=none; b=eiou0dEo/efmOROcPWmGWxlJDfEPqmafD7QFDK/a+AlN+G4x+wU97cW7KhOdb3J3oudMp6fJozR2LPoj8K1YC+Y0sQlkWRJTub53CotBOva1uHh28gSKgDt0f1H45v7uBWeY+w57065gK4I0+DUQgEF3if2er9QRc97IPc2odU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728726867; c=relaxed/simple;
-	bh=fctVUFgjURSsjGlyDkemHSFEutnocSZ1gDP17Fsw6Yo=;
+	s=arc-20240116; t=1728726869; c=relaxed/simple;
+	bh=YcKm+sOPug8u9u63+P+tGGXBa1Xo8VYubGbrOh8hcGU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fNEh5bHU/s0XCrd8vww02XcXmtTSIyBmdoTj4bSnZSszPDG0HPT+H/eelZC7vNC8y3I04C80fIJTu3BjK1pBEVS5p4qbiL3XI7/SG3YVAzk/ql7LGmIkuPacbR1WJIyaQyUvL7OqWcE8PHs7hrWxP0Cx3ZfoDS8xUPz7nrbr9cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gXu2z9sG; arc=none smtp.client-ip=209.85.218.47
+	 In-Reply-To:To:Cc; b=jLU0uHOEZD7m+j35EeCRtrqQPcc0/5suAdM5ieSw+nWTTH303n3Yc2j6a01tlVpDpg2IKV9Sgu0+x0N3B6gMzDOkO0ZiNAubbWpLdfBX/KPvcyABVfB6P98LXQoZfJN7p5/7nq9sDk6W62Si082GxN/KSCkPBJNsdUMMhuzRYv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lOX3/CAk; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a99f3a5a44cso20498066b.3;
-        Sat, 12 Oct 2024 02:54:25 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5c40aea5c40so5324292a12.0;
+        Sat, 12 Oct 2024 02:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728726864; x=1729331664; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728726866; x=1729331666; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PIqunMSrCwkf+DyWUK239/3d0MJnoZNJjh6FmyYnDTM=;
-        b=gXu2z9sG5yoTPuK3/Sq0kvOnpdgf89pkCSTVl6M+8YDufYf7PDrUFFHkXDhicq3uB1
-         4yJbpabbYMrkKlR0cSx2Yq9R6lUgRJqnlzLaEjmgguWBqgNHSgbdxdT5VFce6cwV+Ywy
-         sqq4N0nJz84fdj3rhEdkwvH6KlYGmWNsfn75OUWNl/+XGDeh28P2FSlW6Zj05q9QB+F7
-         UKMOLk/x0ELLRh8/BbT01Bh4jpzNWA7tWSsZ4Gj0KQS8PBLo7g99clqwHAACUOyIbrhP
-         8MwR1CM6pTjMy7hlmesJ02qGbNiZfVRsT6GyvUesxQrydkllWZmNWVAYeVZIyJjFrODp
-         0C2w==
+        bh=Rn+arkCODA8DGO4i9/YKd4mdYzdhdyNcf7NV++kFN6w=;
+        b=lOX3/CAkJlnRq7zhbaTOU6Gl3D1nmaQ+OW0lbA7nJm8nZzI6jixTmzdNmhEk049LYi
+         y1WovBhHPqqye2qgrqoASdXS+1atNN0lkfVJst64NLglXyWU/RRaDk3SasPUF3RTglI5
+         MYw8IveOMBn8wounQX/fvKKCgsx+v8VZMaWuyIEDtmTi9Yo9C10QHQAJ0N/HdREdWEUD
+         MJRSo2G3W9zvN6zhu36CY0/WjoqT66Z6Mmfrx/ZqJd02JzViZn9l4DIDxfclQWv7U3eW
+         t8ZJdTFCBUHnen8mS6mCqnwQBwi+wxLxiJX2T102sVLFfFCuaUM12j5ItHIi3DrwZMui
+         psVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728726864; x=1729331664;
+        d=1e100.net; s=20230601; t=1728726866; x=1729331666;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PIqunMSrCwkf+DyWUK239/3d0MJnoZNJjh6FmyYnDTM=;
-        b=XQQqW1ghTYyoXC2FdjpIJixY+Ek4oCWe3ChqSzsSM+Pk2q79NRFk9D2hGegQG86wkv
-         5G8UoFMY/Ylxe6cwjTY7uTRW5i5/6h+pJtOPeilYsCJUW//VK1VuGh7u1xhJJfXR7evo
-         IqCRlcVxrJbjIytoVIiTsjYL+/tIjzd744P3OAGpeelTkR9SCPQMMLIN4RJNr5iEy9TE
-         AdjWidrhA2GY+Ar3UTLI0iqmLIa1qK9ZLfBKTYDox7VGMH1oc5Am9Hub3mlR8J9UWEnX
-         Eykc2d01WNI/m3pkBGBOVlpqvL9Juiy3ZBb+XEhIB3Ow7+rnYv44NW2RotqjSj6VeLje
-         SPMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGnpgZ+hy4TxGW3O8I/XKzdXnlz/bmvnqso/1TqumxZnRDKV3R/W7KCmC8A9+xdp5GzY8yS80VWr43qtA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9Zh9xpwF1DQlj1yo7XkVKP5WyoKU6Z28RhpQ1M/VuZP77voe6
-	juCQ3M467KulvTchoqM+BsNtr3yFe6Az5NDSnWmQ1FleLoG04sx/QvMi62XA2Gg=
-X-Google-Smtp-Source: AGHT+IHllUVcysEuC9LWDHgZzH7JRql+CETS/pVf3Ld/eGK6TRuDveJ53z+sNFDAHwksiBIKE3oDDA==
-X-Received: by 2002:a17:907:1b24:b0:a99:c9a4:a4d5 with SMTP id a640c23a62f3a-a99c9a4b7b6mr385576766b.29.1728726863775;
-        Sat, 12 Oct 2024 02:54:23 -0700 (PDT)
+        bh=Rn+arkCODA8DGO4i9/YKd4mdYzdhdyNcf7NV++kFN6w=;
+        b=UiM5VkDZs5rRotu8ZDwk55K++ifToJsEC95kVtVPchtOnZ9sMKBPXFoeIOrOHPbAvG
+         Ka2oreujSCnoFWILwhKEwCfdU4wED3cjiAiA8/H8QBgTGcsP+B6iYjhJAnpAVMIyY7gm
+         KQjRT2DtWda7QgvLMRcPrQIaVAYFLpUjhEv6GQglKAkIR0EaaI0Ziyo18Ex2A5F/zbOV
+         TTzCxhGrFleGx7Ih9lixX7CpPhzKcXurTPU9aMEeCUXSmdHBhB02xpcHsEr2zwFMWa54
+         rY6C6ON9vaPqcPR+QrbUfc4hbgfBJu7RQ0pfmHoU+vle/8e5X/eD/4gNZpSnLUIt0JpF
+         zcVA==
+X-Forwarded-Encrypted: i=1; AJvYcCU45F8yf0cOydopdnYGCTO1q531RZneOFKJH66q7DUtOQM5JJ340sOVHR5fRvOLVMjC2mti+43u5qwiqxs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7lsE5rGgjasPJxSgXBjwULONKoo+IlQYQpFU3HTGpamaWO5V5
+	1joISXf0H3TwhajYMkVuFotlPLZRzCSj6RlAzgyQppfOJrHmx5OD9B2k9ccpFV8=
+X-Google-Smtp-Source: AGHT+IEEIZy962sS0NqhiAH+/P2/pIf6YHJDUZ/5UnHVdtEXH3Fq9ewNxPFXkoswpQkUFlUKGQc8Ww==
+X-Received: by 2002:a05:6402:50d0:b0:5c8:a2b8:cab3 with SMTP id 4fb4d7f45d1cf-5c947417730mr4682541a12.4.1728726866227;
+        Sat, 12 Oct 2024 02:54:26 -0700 (PDT)
 Received: from localhost (dslb-002-200-173-220.002.200.pools.vodafone-ip.de. [2.200.173.220])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a80bfc5esm309314766b.142.2024.10.12.02.54.23
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c9370d2251sm2733449a12.12.2024.10.12.02.54.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Oct 2024 02:54:23 -0700 (PDT)
+        Sat, 12 Oct 2024 02:54:25 -0700 (PDT)
 From: Jonas Gorski <jonas.gorski@gmail.com>
-Date: Sat, 12 Oct 2024 11:53:36 +0200
-Subject: [PATCH 2/6] spi: keep track of number of chipselects in spi_device
+Date: Sat, 12 Oct 2024 11:53:37 +0200
+Subject: [PATCH 3/6] spi: do not initialize device chipselects to
+ SPI_INVALID_CS
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -78,7 +79,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241012-spi_multi_cs_cleanup-v1-2-dc491113880d@gmail.com>
+Message-Id: <20241012-spi_multi_cs_cleanup-v1-3-dc491113880d@gmail.com>
 References: <20241012-spi_multi_cs_cleanup-v1-0-dc491113880d@gmail.com>
 In-Reply-To: <20241012-spi_multi_cs_cleanup-v1-0-dc491113880d@gmail.com>
 To: Mark Brown <broonie@kernel.org>, 
@@ -86,144 +87,111 @@ To: Mark Brown <broonie@kernel.org>,
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Mailer: b4 0.14.2
 
-There are several places where we need to iterate over a device's
-chipselect. To be able to do it efficiently, store the number of
-chipselects in spi_device, like we do for controllers.
+Now that we know the number of valid chipselects, we don't need to
+initialize them to SPI_INVALID_CS to be able to know if they are valid,
+so we can drop both the initialization to SPI_INVALID_CS, as well as the
+check for it.
 
-Since we now use a device supplied value, add a check to make sure it
-isn't more than we can support.
+We cannot drop the define itself though, since it is still used for
+spi_controller::last_cs[]'s state.
 
 Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
- drivers/spi/spi.c       | 29 +++++++++++++++++++++--------
- include/linux/spi/spi.h |  4 +++-
- 2 files changed, 24 insertions(+), 9 deletions(-)
+ drivers/spi/spi.c | 25 +++----------------------
+ 1 file changed, 3 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ab38978e9c58517bb671d7bda017c8550cc82d58..15b2f4e02a685b2c778b27473289197ab08987d8 100644
+index 15b2f4e02a685b2c778b27473289197ab08987d8..495b391710d69a46beaa56c1a4332eb6677d2f45 100644
 --- a/drivers/spi/spi.c
 +++ b/drivers/spi/spi.c
-@@ -587,6 +587,7 @@ struct spi_device *spi_alloc_device(struct spi_controller *ctlr)
- 	spi->dev.bus = &spi_bus_type;
- 	spi->dev.release = spidev_release;
- 	spi->mode = ctlr->buswidth_override_bits;
-+	spi->num_chipselect = 1;
+@@ -624,11 +624,6 @@ static void spi_dev_set_name(struct spi_device *spi)
+  */
+ #define SPI_INVALID_CS		((s8)-1)
  
- 	device_initialize(&spi->dev);
- 	return spi;
-@@ -636,7 +637,7 @@ static inline int spi_dev_check_cs(struct device *dev,
- 	u8 idx_new;
- 
+-static inline bool is_valid_cs(s8 chip_select)
+-{
+-	return chip_select != SPI_INVALID_CS;
+-}
+-
+ static inline int spi_dev_check_cs(struct device *dev,
+ 				   struct spi_device *spi, u8 idx,
+ 				   struct spi_device *new_spi, u8 new_idx)
+@@ -639,7 +634,7 @@ static inline int spi_dev_check_cs(struct device *dev,
  	cs = spi_get_chipselect(spi, idx);
--	for (idx_new = new_idx; idx_new < SPI_CS_CNT_MAX; idx_new++) {
-+	for (idx_new = new_idx; idx_new < new_spi->num_chipselect; idx_new++) {
+ 	for (idx_new = new_idx; idx_new < new_spi->num_chipselect; idx_new++) {
  		cs_new = spi_get_chipselect(new_spi, idx_new);
- 		if (is_valid_cs(cs) && is_valid_cs(cs_new) && cs == cs_new) {
+-		if (is_valid_cs(cs) && is_valid_cs(cs_new) && cs == cs_new) {
++		if (cs == cs_new) {
  			dev_err(dev, "chipselect %u already in use\n", cs_new);
-@@ -653,7 +654,7 @@ static int spi_dev_check(struct device *dev, void *data)
- 	int status, idx;
- 
- 	if (spi->controller == new_spi->controller) {
--		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+		for (idx = 0; idx < spi->num_chipselect; idx++) {
- 			status = spi_dev_check_cs(dev, spi, idx, new_spi, 0);
- 			if (status)
- 				return status;
-@@ -675,7 +676,13 @@ static int __spi_add_device(struct spi_device *spi)
- 	int status, idx;
- 	u8 cs;
- 
--	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+	if (spi->num_chipselect > SPI_CS_CNT_MAX) {
-+		dev_err(dev, "num_cs %d > max %d\n", spi->num_chipselect,
-+			SPI_CS_CNT_MAX);
-+		return -EOVERFLOW;
-+	}
-+
-+	for (idx = 0; idx < spi->num_chipselect; idx++) {
+ 			return -EBUSY;
+ 		}
+@@ -685,7 +680,7 @@ static int __spi_add_device(struct spi_device *spi)
+ 	for (idx = 0; idx < spi->num_chipselect; idx++) {
  		/* Chipselects are numbered 0..max; validate. */
  		cs = spi_get_chipselect(spi, idx);
- 		if (is_valid_cs(cs) && cs >= ctlr->num_chipselect) {
-@@ -690,7 +697,7 @@ static int __spi_add_device(struct spi_device *spi)
- 	 * For example, spi->chip_select[0] != spi->chip_select[1] and so on.
- 	 */
- 	if (!spi_controller_is_target(ctlr)) {
--		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+		for (idx = 0; idx < spi->num_chipselect; idx++) {
- 			status = spi_dev_check_cs(dev, spi, idx, spi, idx + 1);
- 			if (status)
- 				return status;
-@@ -718,7 +725,7 @@ static int __spi_add_device(struct spi_device *spi)
- 	if (ctlr->cs_gpiods) {
- 		u8 cs;
+-		if (is_valid_cs(cs) && cs >= ctlr->num_chipselect) {
++		if (cs >= ctlr->num_chipselect) {
+ 			dev_err(dev, "cs%d >= max %d\n", spi_get_chipselect(spi, idx),
+ 				ctlr->num_chipselect);
+ 			return -EINVAL;
+@@ -727,8 +722,7 @@ static int __spi_add_device(struct spi_device *spi)
  
--		for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+		for (idx = 0; idx < spi->num_chipselect; idx++) {
+ 		for (idx = 0; idx < spi->num_chipselect; idx++) {
  			cs = spi_get_chipselect(spi, idx);
- 			if (is_valid_cs(cs))
- 				spi_set_csgpiod(spi, idx, ctlr->cs_gpiods[cs]);
-@@ -1025,7 +1032,7 @@ static void spi_res_release(struct spi_controller *ctlr, struct spi_message *mes
+-			if (is_valid_cs(cs))
+-				spi_set_csgpiod(spi, idx, ctlr->cs_gpiods[cs]);
++			spi_set_csgpiod(spi, idx, ctlr->cs_gpiods[cs]);
+ 		}
+ 	}
  
- /*-------------------------------------------------------------------------*/
- #define spi_for_each_valid_cs(spi, idx)				\
--	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++)		\
-+	for (idx = 0; idx < spi->num_chipselect; idx++)		\
- 		if (!(spi->cs_index_mask & BIT(idx))) {} else
+@@ -781,14 +775,6 @@ int spi_add_device(struct spi_device *spi)
+ }
+ EXPORT_SYMBOL_GPL(spi_add_device);
  
- static inline bool spi_is_last_cs(struct spi_device *spi)
-@@ -1083,8 +1090,12 @@ static void spi_set_cs(struct spi_device *spi, bool enable, bool force)
- 	trace_spi_set_cs(spi, activate);
- 
- 	spi->controller->last_cs_index_mask = spi->cs_index_mask;
+-static void spi_set_all_cs_unused(struct spi_device *spi)
+-{
+-	u8 idx;
+-
 -	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++)
--		spi->controller->last_cs[idx] = enable ? spi_get_chipselect(spi, 0) : SPI_INVALID_CS;
-+	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+		if (enable && idx < spi->num_chipselect)
-+			spi->controller->last_cs[idx] = spi_get_chipselect(spi, 0);
-+		else
-+			spi->controller->last_cs[idx] = SPI_INVALID_CS;
-+	}
- 	spi->controller->last_cs_mode_high = spi->mode & SPI_CS_HIGH;
+-		spi_set_chipselect(spi, idx, SPI_INVALID_CS);
+-}
+-
+ /**
+  * spi_new_device - instantiate one new SPI device
+  * @ctlr: Controller to which device is connected
+@@ -824,7 +810,6 @@ struct spi_device *spi_new_device(struct spi_controller *ctlr,
+ 	WARN_ON(strlen(chip->modalias) >= sizeof(proxy->modalias));
  
- 	if (spi->mode & SPI_CS_HIGH)
-@@ -2459,6 +2470,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 		dev_err(&ctlr->dev, "SPI controller doesn't support multi CS\n");
+ 	/* Use provided chip-select for proxy device */
+-	spi_set_all_cs_unused(proxy);
+ 	spi_set_chipselect(proxy, 0, chip->chip_select);
+ 
+ 	proxy->max_speed_hz = chip->max_speed_hz;
+@@ -2450,8 +2435,6 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
  		return -EINVAL;
  	}
-+
-+	spi->num_chipselect = rc;
- 	for (idx = 0; idx < rc; idx++)
- 		spi_set_chipselect(spi, idx, cs[idx]);
  
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index 8497f4747e24d4ecd85b74f49609ac1c82c73535..77511c7d40df7085644cecaae325c982fb306afa 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -136,6 +136,7 @@ extern void spi_transfer_cs_change_delay_exec(struct spi_message *msg,
-  *	The spi_transfer.speed_hz can override this for each transfer.
-  * @chip_select: Array of physical chipselect, spi->chipselect[i] gives
-  *	the corresponding physical CS for logical CS i.
-+ * @num_chipselect: Number of physical chipselects used.
-  * @mode: The spi mode defines how data is clocked out and in.
-  *	This may be changed by the device's driver.
-  *	The "active low" default for chipselect mode can be overridden
-@@ -186,6 +187,7 @@ struct spi_device {
- 	struct spi_controller	*controller;
- 	u32			max_speed_hz;
- 	u8			chip_select[SPI_CS_CNT_MAX];
-+	u8			num_chipselect;
- 	u8			bits_per_word;
- 	bool			rt;
- #define SPI_NO_TX		BIT(31)		/* No transmit wire */
-@@ -311,7 +313,7 @@ static inline bool spi_is_csgpiod(struct spi_device *spi)
- {
- 	u8 idx;
+-	spi_set_all_cs_unused(spi);
+-
+ 	/* Device address */
+ 	rc = of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,
+ 						 SPI_CS_CNT_MAX);
+@@ -2596,7 +2579,6 @@ struct spi_device *spi_new_ancillary_device(struct spi_device *spi,
+ 	strscpy(ancillary->modalias, "dummy", sizeof(ancillary->modalias));
  
--	for (idx = 0; idx < SPI_CS_CNT_MAX; idx++) {
-+	for (idx = 0; idx < spi->num_chipselect; idx++) {
- 		if (spi_get_csgpiod(spi, idx))
- 			return true;
+ 	/* Use provided chip-select for ancillary device */
+-	spi_set_all_cs_unused(ancillary);
+ 	spi_set_chipselect(ancillary, 0, chip_select);
+ 
+ 	/* Take over SPI mode/speed from SPI main device */
+@@ -2844,7 +2826,6 @@ struct spi_device *acpi_spi_device_alloc(struct spi_controller *ctlr,
+ 		return ERR_PTR(-ENOMEM);
  	}
+ 
+-	spi_set_all_cs_unused(spi);
+ 	spi_set_chipselect(spi, 0, lookup.chip_select);
+ 
+ 	ACPI_COMPANION_SET(&spi->dev, adev);
 
 -- 
 2.43.0
