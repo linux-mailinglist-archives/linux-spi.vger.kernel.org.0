@@ -1,123 +1,165 @@
-Return-Path: <linux-spi+bounces-5236-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5237-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0391799F28D
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 18:19:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC3A99F510
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 20:19:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 956AAB20F0E
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 16:19:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60F4C28485F
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 18:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33781714BE;
-	Tue, 15 Oct 2024 16:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC38A1FAEFD;
+	Tue, 15 Oct 2024 18:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="f3hqesS/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l69htUbo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25634158DD8;
-	Tue, 15 Oct 2024 16:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792438614E;
+	Tue, 15 Oct 2024 18:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729009173; cv=none; b=AfyebSCbzLwJ9k7foTVxnL0tFkidtJ93L+GUyO/JO0jQ12NVxzL1AtczIvZY28HNcKDkFkJ7OEae4fiuKP336dJ6MmbnFmcWvu3qn0a+8qnynl3mwHp8WtRtHxNL3fjAzf1XlMVdzx6jLdLRecygj/3KLoPtcA6ohne+Dc4+J2o=
+	t=1729016393; cv=none; b=GDLZJ+rxfiVFKH8gQqZKS+EEzVcQDTTSsCr4eqrobaUFALsHP6Buoc4WfvHg0qk00E3/kRAPXXcjcQrs1mQq8iht1gXRQjjlny2y1SWUPpk1NAJ/PEXJOpuY0lEFn+erh818cHwMOzeRJFQAo+phNZGiD9KAlAVYLEV3x2skzjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729009173; c=relaxed/simple;
-	bh=zmA/00I/rJT/tqnmzKp6XjapkqZfWbScm/Yeourf5vU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=C6mOgUTgvyvCC5SjvrzSQMg6gzNBPPNF60UNZXOnEkAlukb+kzwy5S+u/gKBhxxWwTnrn5XFI4+sUMYlJrWbb2bdN6ZHkg1MPoeJV37O74zEpPzIkEw3QX1egL9bg2pz2h7FG8uHDL2Lk145N58XsrCLbxLPJ/IU+yk/pl8WOKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=f3hqesS/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49F9qV3l027796;
-	Tue, 15 Oct 2024 16:18:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	r+FlGNemb68zVPoS1oWfgoA7NXvv0pIJi/EsE9mxPOI=; b=f3hqesS/1jiW0k2a
-	MCQ4x0nu7Fx7w15w7SBwqf8PnpvQWIUe+IqSsyTpCwVvyKZS0/nkwCDtJ0LsZz3J
-	KgLDgWP94jSZAqjlqHq30gw49hqhBKlpzvZb7z283emY5rOdZ7nAWVudU2P2h5Qh
-	7N0PP7qpFZ56N+3qwLPBfYamIN/Ru56Q1mg91h9J+RRMN3oNy7kKXk9C/PNKLKki
-	uUwB+VPdttT33x5REQ0Ek4J3Th8Il5aqbIAgZHI2jSH43KDXL1Jm8NU0GPPSTQOs
-	bmgUNB8hS4Gt6NQ2CV37ybqRPILVnbLd+t6+EskiuTtlSt52R0bVD3qZaP616j69
-	Dma9hA==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 427jd904tc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 16:18:47 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49FGIkRa005017
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 15 Oct 2024 16:18:46 GMT
-Received: from [10.216.57.188] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 15 Oct
- 2024 09:18:38 -0700
-Message-ID: <382e2d4d-3bf8-d88b-29c1-37c1446a0843@quicinc.com>
-Date: Tue, 15 Oct 2024 21:48:21 +0530
+	s=arc-20240116; t=1729016393; c=relaxed/simple;
+	bh=D0wqwwc+2l7FZ4G+CsRrETsoRPZFwY8lf/JTxvdcieM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Z18jfup6WhEgpUntKkrdJBYy+drb9F8pTHambumLEE6+YF4aLvHqCkj7O33Nnil+mn0+gM4PvgaURZAJkQpMuiKOnDjdBwPXOYxm3rQlIJXj9UWrwPQksFfrRWo+hqXNZgaXc1grMAaHApAmPy8620wKNvlIk2gSSv9LTJ3blac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l69htUbo; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7ea7e250c54so1660017a12.0;
+        Tue, 15 Oct 2024 11:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729016392; x=1729621192; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eUbBPBPP6n93y/ZkM4yEPNH409bvn+Ap0g0YwYGDBdk=;
+        b=l69htUboq2K2xB/eaCK+FYct2kA3WY9TJ1kSV/Zr5ljRtxnaRLFTbvd2xK5ZOPHtTy
+         Gg2txpns76Z/1/2+IywYoaL3S7WLV5Q/Pznsz52NO1L1SXV05OJO8WcsB5XmNRIU6jJ5
+         XilqhAmGdSjH6j4L5FESprrcFWocG7q5jm2RAK4K9uikkn7iXw3mTOE7gNK1j80WHNQX
+         Btk8PH0uxJGrzR/O81g5wiVgn7awq5g6VuzQrjXBEGjOkhfGNqocaRfoUA5D4/X6V6Cv
+         MbiyU75SUMRKp4gbZXnu6bKt3emDyzLZmSDEgXTxeVN8WdfGBMMNztLeDEdSC1AtdKkC
+         6loA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729016392; x=1729621192;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eUbBPBPP6n93y/ZkM4yEPNH409bvn+Ap0g0YwYGDBdk=;
+        b=n8Lc947na6d9dd0T46lfoc3l3mbGb6Y3JPiZMVVgN2HNLjjUFK/coFkKDwnaYORVqI
+         xXjr8KM7l0d3pIi/GteZMe88WKGAFAL4DdgO/h4ReWCoTK1+Amxe8gJ5L0Na3sOzb7BU
+         55fS20b4qHMBuWshO03nWz1QVSjdKW41unddJshqWxByDIgrHwjSbQkPxiz6p7q1P3WR
+         YnZAJWFaeUhmj/tPSlTCa5vbUiY7kQSX6TaxDeQmk+5bTj+YT0/1uWKKV8KmmJGtuXaG
+         5baf4Xj1+2Ipgg0Bwn0glhqQVb0c8BNEx3mfRwl0T7W+nbf0pCE+CwV8Y7enD85JLVkQ
+         hL6w==
+X-Forwarded-Encrypted: i=1; AJvYcCVEwZSmr8gJ3AohRQlRGXLwtFk3ZCC8Wb6uwrNm33DdaZby06kBtwrdo/PiiLVdAJBrf60wxzlDSgfw@vger.kernel.org, AJvYcCWIv0cO9DVNfGt3CXIcK375tf47XyzfIxcA+MLRVeY3rTwO57JpLGhwMdrZ/6jJjHDnXLhtoU9ePhDi@vger.kernel.org, AJvYcCXlp2qPaspHc2exvR74VzeoaQtepfT1nldV/tJmt4YQ986v0hlgMd4ozG+e7h1mnB6rgwcT7WL02yZoDVm8@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzrTMrBGKlEK13XjFcO+DeD/nwSP16/X0LUlVu1XHYGsUTmlTe
+	TSyTaDfzFzcMBMG40eKy+e/ziEADAw4toOhKMIXUYaMA8uiaCMU2
+X-Google-Smtp-Source: AGHT+IFdv1ov76co9XcCBPH2tecuWNespEChoX0P5WctzQjUBVF8lHaNyEpj/9RVXuJqyyrX6CpvGA==
+X-Received: by 2002:a05:6a20:d487:b0:1d9:553:8a2f with SMTP id adf61e73a8af0-1d905538b87mr1863568637.21.1729016391579;
+        Tue, 15 Oct 2024 11:19:51 -0700 (PDT)
+Received: from Emma ([2401:4900:1c97:c88d:5054:ff:fe53:2787])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e77508562sm1584543b3a.186.2024.10.15.11.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 11:19:48 -0700 (PDT)
+From: Karan Sanghavi <karansanghvi98@gmail.com>
+To: krzysztof.kozlowski@linaro.org
+Cc: bcm-kernel-feedback-list@broadcom.com,
+	broonie@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	florian.fainelli@broadcom.com,
+	karansanghvi98@gmail.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-rpi-kernel@lists.infradead.org,
+	linux-spi@vger.kernel.org,
+	rjui@broadcom.com,
+	robh+dt@kernel.org,
+	sbranden@broadcom.com,
+	skhan@linuxfoundation.org
+Subject: [PATCH v2] dt-bindings: spi: Convert bcm2835-aux-spi.txt to
+Date: Tue, 15 Oct 2024 18:09:07 +0000
+Message-ID: <20241015180906.8464-2-karansanghvi98@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <09826ffb-b7d1-4244-af0d-854f1f0339a1@linaro.org>
+References: <09826ffb-b7d1-4244-af0d-854f1f0339a1@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH v11 4/8] mtd: nand: Add qpic_common API file
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
-        kernel test robot
-	<lkp@intel.com>
-CC: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <manivannan.sadhasivam@linaro.org>, <arnd@arndb.de>,
-        <esben@geanix.com>, <nikita.shubin@maquefel.me>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <oe-kbuild-all@lists.linux.dev>,
-        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
-References: <20241010070510.1504250-5-quic_mdalam@quicinc.com>
- <202410130129.M8J7VJoG-lkp@intel.com> <20241015172955.7b0b6708@xps-13>
-Content-Language: en-US
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20241015172955.7b0b6708@xps-13>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8z6kBnp7XghZECOsLn3_bo8kKUAu8CXp
-X-Proofpoint-ORIG-GUID: 8z6kBnp7XghZECOsLn3_bo8kKUAu8CXp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0 bulkscore=0
- mlxscore=0 mlxlogscore=857 malwarescore=0 priorityscore=1501 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410150111
 
+Converted the brcm,bcm2835-aux-spi.txt file to
+its respective yaml file format.
 
+Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+---
+v1->v2 : Made the necessary changes in  the yaml file 
+suggested by Krzysztof Kozlowski
 
-On 10/15/2024 8:59 PM, Miquel Raynal wrote:
-> Hi,
-> 
-> lkp@intel.com wrote on Sun, 13 Oct 2024 01:57:12 +0800:
-> 
->> Hi Md,
->>
->> kernel test robot noticed the following build errors:
-> 
-> The below errors seem like basic Kconfig misconfiguration. To be clear,
-> I usually don't review series getting kernel test robot failures and I
-> am expecting that you will fix these errors and post an updated version.
-Sure Will fix this, and post next revision.
-> 
-> Thanks,
-> Miquèl
-> 
+v1:
+- https://lore.kernel.org/all/Zw1Oj1utiBJ9Sosg@Emma/
+
+ .../bindings/spi/brcm,bcm2835-aux-spi.yaml     | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
+index 4c24cf2fe214..f83f71ba78dc 100644
+--- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
+@@ -9,8 +9,7 @@ title: Broadcom BCM2835 Auxiliary SPI1/2 Controller
+ maintainers:
+   - Karan Sanghavi <karansanghvi98@gmail.com>
+ 
+-description: |
+-  The BCM2835 contains two forms of SPI master controller. One is known simply as
++description: The BCM2835 contains two forms of SPI master controller. One is known simply as
+   SPI0, and the other as the "Universal SPI Master," part of the auxiliary block.
+   This binding applies to the SPI1 and SPI2 auxiliary controllers.
+ 
+@@ -21,7 +20,6 @@ properties:
+   compatible:
+     enum:
+       - brcm,bcm2835-aux-spi
+-    description: Broadcom BCM2835 Auxiliary SPI controller for SPI1 and SPI2.
+ 
+   reg:
+     maxItems: 1
+@@ -30,8 +28,7 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    items:
+-      - description: Reference to the auxiliary clock driver for the BCM2835.
++    maxItems: 1
+ 
+ required:
+   - compatible
+@@ -53,14 +50,3 @@ examples:
+         #size-cells = <0>;
+     };
+ 
+-  - |
+-    #include <dt-bindings/clock/bcm2835-aux.h>
+-    spi@7e2150c0 {
+-        compatible = "brcm,bcm2835-aux-spi";
+-        reg = <0x7e2150c0 0x40>;
+-        interrupts = <1 29>;
+-        clocks = <&aux_clocks BCM2835_AUX_CLOCK_SPI2>;
+-        #address-cells = <1>;
+-        #size-cells = <0>;
+-    };
+-
+-- 
+2.43.0
+
 
