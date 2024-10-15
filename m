@@ -1,164 +1,122 @@
-Return-Path: <linux-spi+bounces-5238-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5242-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B627B99F810
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 22:25:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC3C99FBC5
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Oct 2024 00:55:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BB33287302
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 20:25:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95B311C23AFC
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Oct 2024 22:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789241F8184;
-	Tue, 15 Oct 2024 20:25:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D191D63D1;
+	Tue, 15 Oct 2024 22:54:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1TE9Wr0"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="XK0KZ6uv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499C11F585D;
-	Tue, 15 Oct 2024 20:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C201D63CD
+	for <linux-spi@vger.kernel.org>; Tue, 15 Oct 2024 22:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729023942; cv=none; b=HH8Aor5MpPizrPrgjw2c3OXGFX4InbYn0vtPhMgnLef8NUu0Ov47zQUzSAmXY7EHBtmluUTDyi58L3JGHtg08BYt9qRb1O7+UBedwFb0dts2wR82753BaAh+KM4l0wBzk3kPzJ9PDF5zWCilZVnK5/IdlaonjhRZqVhU8U3Y1HM=
+	t=1729032886; cv=none; b=TjcoY9vIh09yIpFzUEVWVuip5zap3xxeKUlesaDVt3xqwQFS20WJkLNkmCZW7AD0VK8IqEvgn9OygLS8O2dQroFdbSHfo5kktbIw6CipXL4sG8wF99Su7gi6s3pnRqlXscGOI70k2LEZr8OO6q8iLjCnXZUs5hVEwDfCtdTfl3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729023942; c=relaxed/simple;
-	bh=nsd/upD+9R74nEL0M6h/FKKkDQ+u0zpHjyKAGpKw3LE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=naf3AlM9pgAsbNzmh4YiurNB2RBMynrWfRlfbdVtnC+P+DTpv+nhZQAQ1p0lRYUwb6778HXO1NhiVjjC3p3GN9G3UH7aWHnw4naT3LnYFtHZQAjMgmirPPfAGpMsnqXG9m8RAPVWz9SVV64tJIVOBmjMN/pmsfVKD+I7FmSjhPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1TE9Wr0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE55C4CEC6;
-	Tue, 15 Oct 2024 20:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729023940;
-	bh=nsd/upD+9R74nEL0M6h/FKKkDQ+u0zpHjyKAGpKw3LE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k1TE9Wr0Ag+ZkEAhO8vxdlz9AwjITwCqdk7Lr2r12iD59JBz10Q8UlxCxuqdnBV01
-	 wSY/gsP/5OalZwTSBvnY6UrgBcTSOUxOZIxjXXAOzWImTzRcVRtU1IBFxqAxfJmDaC
-	 2M3BMuKtjPfIBTtk+JCALdiIWrBs3LGjgv3tVBk+VQZYxoRhvnpL+xRGva5VbFK4PT
-	 +j0yWkLErF3vAK0HzmM1HC8cCyYkRqAv4lHW7l+YFBxJEW2cvLiC5Zk/cQ7twIwizX
-	 JeSXhtqL6XDENfm0pyMvkfz4SJDlAbqtvyMsG/CP8dm9sUE2962FGuuwqji+leHywk
-	 5jvQppQg5XmGA==
-Date: Tue, 15 Oct 2024 21:25:35 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Karan Sanghavi <karansanghvi98@gmail.com>
-Cc: krzysztof.kozlowski@linaro.org, bcm-kernel-feedback-list@broadcom.com,
-	broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	florian.fainelli@broadcom.com, krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-rpi-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	rjui@broadcom.com, robh+dt@kernel.org, sbranden@broadcom.com,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v2] dt-bindings: spi: Convert bcm2835-aux-spi.txt to
-Message-ID: <20241015-proactive-backlog-b77c42eef79c@spud>
-References: <09826ffb-b7d1-4244-af0d-854f1f0339a1@linaro.org>
- <20241015180906.8464-2-karansanghvi98@gmail.com>
+	s=arc-20240116; t=1729032886; c=relaxed/simple;
+	bh=nMQRNViX6xJHcoQxaJF2VbYXBVB+6r++BfH93n/78n4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g60hH6vXeqeXePlk/TAeC6GYfoBMmmlv6dPPlwUOBQbx1yd5Aiv1lAQg9ncjHDd7hVMBk7lSgE5XSMF/Wqv7aRtPjPI41NmFhxZUgaYgCWXLFWzDzIZ4iy2eRScZpmFvOf8cfC6rBthIU+VOnjlKZTL0mxjF8lKq0Qa6PwAJVV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=XK0KZ6uv; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id EF1DF2C03E8;
+	Wed, 16 Oct 2024 11:54:40 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1729032880;
+	bh=2E1sJhOJl4dQGZR1QcnlyJlacaJ60TVeM1vYzwx+5Yo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XK0KZ6uvR+7ZYWA0PfoH1EYonEzg5raEHY+JVjLmq5szhx528nT5QLcexkYu4Ls2C
+	 kxT4w0b8yoYbib+ZsiAXCRdEcWNCjnZvrw4sEtj/lvcrbWx49WxWVJGjQSNm/1veMn
+	 DgEmly+xfG+H8joFogDwAu1RLeFPZte5Eew/1uPcQlLx217nm+XNP+JnzraQjVziwH
+	 om95TKynCMmp5Jy2L4JMy9L+OCKTV2LpcxkH8OdJ1Rarrbm/J3WftUeHhw50FMd5P0
+	 36Gs7PZr9XxDXVbIZYsPhylAUCeatWUtagnTEet778/PEhHJxflfJ7sKlJD6LS6mRY
+	 oo+pTWsYR3n6g==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B670ef2b00000>; Wed, 16 Oct 2024 11:54:40 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 9A6AF13ED7B;
+	Wed, 16 Oct 2024 11:54:40 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 948D02820D4; Wed, 16 Oct 2024 11:54:40 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: broonie@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	tsbogend@alpha.franken.de,
+	markus.stockhausen@gmx.de
+Cc: linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 0/3] Realtek SPI-NAND controller
+Date: Wed, 16 Oct 2024 11:54:31 +1300
+Message-ID: <20241015225434.3970360-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="FBBz714teq+aCQWZ"
-Content-Disposition: inline
-In-Reply-To: <20241015180906.8464-2-karansanghvi98@gmail.com>
-
-
---FBBz714teq+aCQWZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=670ef2b0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=DAUX931o1VcA:10 a=63fhtx2pClmO-oMQzGgA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Tue, Oct 15, 2024 at 06:09:07PM +0000, Karan Sanghavi wrote:
-> Converted the brcm,bcm2835-aux-spi.txt file to
-> its respective yaml file format.
->=20
-> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
-> ---
-> v1->v2 : Made the necessary changes in  the yaml file=20
-> suggested by Krzysztof Kozlowski
->=20
-> v1:
-> - https://lore.kernel.org/all/Zw1Oj1utiBJ9Sosg@Emma/
+This series adds support for the SPI-NAND flash controller on the RTL9300
+family of SoCs.
 
-I don't understand this patch. How is it converting a text file to
-json schema when all you're doing here is deleting stuff from an
-existing yaml file?
+There are 2 physical chip selects which are called SPI_MST_CS0 and SPI_MS=
+T_CS1
+in the datasheet. Via some pin-strapping these can be assigned to either =
+the
+SPI-NOR controller or the SPI-NAND controller. Which means you can end up=
+ with
+the following permutations
 
->=20
->  .../bindings/spi/brcm,bcm2835-aux-spi.yaml     | 18 ++----------------
->  1 file changed, 2 insertions(+), 16 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.y=
-aml b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
-> index 4c24cf2fe214..f83f71ba78dc 100644
-> --- a/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/brcm,bcm2835-aux-spi.yaml
-> @@ -9,8 +9,7 @@ title: Broadcom BCM2835 Auxiliary SPI1/2 Controller
->  maintainers:
->    - Karan Sanghavi <karansanghvi98@gmail.com>
-> =20
-> -description: |
-> -  The BCM2835 contains two forms of SPI master controller. One is known =
-simply as
-> +description: The BCM2835 contains two forms of SPI master controller. On=
-e is known simply as
->    SPI0, and the other as the "Universal SPI Master," part of the auxilia=
-ry block.
->    This binding applies to the SPI1 and SPI2 auxiliary controllers.
-> =20
-> @@ -21,7 +20,6 @@ properties:
->    compatible:
->      enum:
->        - brcm,bcm2835-aux-spi
-> -    description: Broadcom BCM2835 Auxiliary SPI controller for SPI1 and =
-SPI2.
-> =20
->    reg:
->      maxItems: 1
-> @@ -30,8 +28,7 @@ properties:
->      maxItems: 1
-> =20
->    clocks:
-> -    items:
-> -      - description: Reference to the auxiliary clock driver for the BCM=
-2835.
-> +    maxItems: 1
-> =20
->  required:
->    - compatible
-> @@ -53,14 +50,3 @@ examples:
->          #size-cells =3D <0>;
->      };
-> =20
-> -  - |
-> -    #include <dt-bindings/clock/bcm2835-aux.h>
-> -    spi@7e2150c0 {
-> -        compatible =3D "brcm,bcm2835-aux-spi";
-> -        reg =3D <0x7e2150c0 0x40>;
-> -        interrupts =3D <1 29>;
-> -        clocks =3D <&aux_clocks BCM2835_AUX_CLOCK_SPI2>;
-> -        #address-cells =3D <1>;
-> -        #size-cells =3D <0>;
-> -    };
-> -
-> --=20
-> 2.43.0
->=20
+  SPI-Flash
+  Boot Model SPI_MST_CS0 SPI_MST_CS1
+  ---------- ----------- -----------
+  NOR x1     NOR-CS0     X
+  NOR x2     NOR-CS0     NOR-CS1
+  NAND x1    NAND-CS0    X
+  NAND x2    NAND-CS0    NAND-CS1
+  NOR+NAND   NOR-CS0     NAND-CS0
 
---FBBz714teq+aCQWZ
-Content-Type: application/pgp-signature; name="signature.asc"
+Chris Packham (3):
+  dt-bindings: spi: Add realtek,rtl9301-snand
+  mips: dts: realtek: Add SPI NAND controller
+  spi: spi-mem: Add Realtek SPI-NAND controller
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/spi/realtek,rtl9301-snand.yaml   |  62 +++
+ MAINTAINERS                                   |   6 +
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  13 +
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-realtek-rtl-snand.c           | 405 ++++++++++++++++++
+ 6 files changed, 498 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/realtek,rtl9301=
+-snand.yaml
+ create mode 100644 drivers/spi/spi-realtek-rtl-snand.c
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZw7PvwAKCRB4tDGHoIJi
-0vaoAP9i8RiGMTdEG5XMDG3fcn0dODkCjLTFsR/WYBTGhLAT2QEAhnXEtD3vMery
-tLiiBJIWDvIldsUnJW7klOI1Ubde0g0=
-=db74
------END PGP SIGNATURE-----
+--=20
+2.47.0
 
---FBBz714teq+aCQWZ--
 
