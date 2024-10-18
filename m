@@ -1,113 +1,80 @@
-Return-Path: <linux-spi+bounces-5254-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5255-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D95C29A4539
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2024 19:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5EB69A454B
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2024 19:50:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F3552881CA
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2024 17:45:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A452E2898CF
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Oct 2024 17:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262D8204958;
-	Fri, 18 Oct 2024 17:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B6917B50E;
+	Fri, 18 Oct 2024 17:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpwYkfgU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Puxr3E/w"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50FC203710;
-	Fri, 18 Oct 2024 17:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D32E14900E
+	for <linux-spi@vger.kernel.org>; Fri, 18 Oct 2024 17:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729273452; cv=none; b=E+P/Ad0aYxNlsq2Qo5KvihxTpu75HdBzPjR/bs7q3tdPC/FFflI8ayd1sSD9gw85bfJlfj8D4VBsokiC1tIrf256HX5ZF5ga/DG3DeA2utKm6J3wiXeCNyR0De9Vbs9XYINEcrhXaAVKIWXZr5/CvuGz7cFzD8ER5FxdrXwVBzQ=
+	t=1729273826; cv=none; b=MQTLyo6IQiJV643tXUfK0vB+uX0RYy3M67Z+8axYCFpaz8kE3uDbC5pLbdS35byyhStLX/Q7c91R/J77wRlLfDF80SY3y3CjXrTsWjQiXuZ6/B2rx7VvyravkY/IA0zwQou5qLP1nhhuhF2drpHJ3DxUGoQztymqcJU0kEK8g+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729273452; c=relaxed/simple;
-	bh=BFKPAnzwdO1AH3rmZAFsqWn7POZbwr7tsMwaOi51JSY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=gxlmgtYgDCNZJVnxB7mSFbteZvemsRsfV93FLjLXXECXPj4ztFwIcH82fR0OYFHcP1f99IS0eZPpCBEyv2sVel96MgmVBHfuWl14S1RhHboAbbiEih5XfYHlIq4vABOy56Rry2np1/7iENrksBIbO4MGjnvAumxF5pWlQM35lHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpwYkfgU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA4F1C4CEC5;
-	Fri, 18 Oct 2024 17:44:08 +0000 (UTC)
+	s=arc-20240116; t=1729273826; c=relaxed/simple;
+	bh=FSbbryJCxdbBD2a8PZ0bVn2TnDxZOrriIkNPKnOG3yo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=QUwuhK7a04HGPiU6phYOYkXLUCE3w4IJJ4P/rluNmwLHp4UVn1cq9VLRaI06Dq3UbSa7eEdEwZk8g/oRlwLv0pnMaKiV9qUlITgyDOVpdPDbEIO8XqoIFOrg6p991Dw1JfxQWY8WtzphTEw8HyykjxRD7uLi/MUYo13paxMRwRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Puxr3E/w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 935ABC4CEC3;
+	Fri, 18 Oct 2024 17:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729273451;
-	bh=BFKPAnzwdO1AH3rmZAFsqWn7POZbwr7tsMwaOi51JSY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=CpwYkfgUxqIYbqSESyYfyUtUqAZonfDMS3clSiMOMT30z2AACSed2Hx8SrHQa/NbT
-	 jY4TD+OLpD1XsP5rb9+1IRi7EOanKh1TZbxcAyT1KjO6jej+nxf2A6tmM3NSpmDCZD
-	 VotleVAj9w9NAr9hmb5sMPqX5TX2FElu+VwQFBvCG8N7n/YExNu650n7mXIIymJ2OA
-	 h486EozrgFsX2wbd+TG7EuwQ3QwbfPIj8HK8KUu8Pemv24Lfgs4iNMgyjU+yLLDBZz
-	 R0MhKBQEElR5qJlsnxLenRxgm40cyodRwSI5OqwSZz0VVOhD6x1gWKT0v8tTA+wc98
-	 xF3SWhB5eEBeA==
-From: Mark Brown <broonie@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Karan Sanghavi <karansanghvi98@gmail.com>
-Cc: Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
- Anup <anupnewsmail@gmail.com>
-In-Reply-To: <ZxEm-H-PjlQyXeOH@Emma>
-References: <ZxEm-H-PjlQyXeOH@Emma>
-Subject: Re: [PATCH v4] spi: dt-bindings: brcm,bcm2835-aux-spi: Convert to
- dtschema
-Message-Id: <172927344849.163853.3041214371823345182.b4-ty@kernel.org>
-Date: Fri, 18 Oct 2024 18:44:08 +0100
+	s=k20201202; t=1729273825;
+	bh=FSbbryJCxdbBD2a8PZ0bVn2TnDxZOrriIkNPKnOG3yo=;
+	h=Subject:From:Date:To:From;
+	b=Puxr3E/w3fqmCfiO3WC8qyVft8ckV6+NAyvFldwnzXBdLTdQ/QIpWI4MUvtXbSUrz
+	 uiyPn2Ryqcoif3OAwp7XYUu7Tig/s8WyXtMjLyr0j/R5Pwwm7IMTB2TySUTXc/XraO
+	 thAzcQNt2qCiNtzRCLM620GZ+ZWDXrzLh40LAW6S87WylTGntLtxCzYEWKhFtxjDsr
+	 YVAbHH50cpKUU33oTFL1jf6ptcUAKZLqF9wxNRNULlFv+sZehxjzlwhANgOOWDeEYa
+	 m7WTUGLcB0jBUN9KFaX6QLppmzGl+0jeeMsrYT5TDnp9oXXEQ+7xEqmI+UwcmJKwvx
+	 cmZbfOZfeKfEA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 374603805CC0;
+	Fri, 18 Oct 2024 17:50:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-9b746
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172927383068.3189326.13794370903384938008.git-patchwork-summary@kernel.org>
+Date: Fri, 18 Oct 2024 17:50:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 17 Oct 2024 15:02:16 +0000, Karan Sanghavi wrote:
-> Convert bcm2835-aux-spi binding to Dt schema
-> 
-> Changes since v3:
->  - Updated the patch subject line
->  - Reformatted the description to fit within 80 characters
-> 
-> Changes since V2:
->  - Modified the Patch subject
->  - Removed unnecessary description and example
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [v4] spi: dt-bindings: brcm,bcm2835-aux-spi: Convert to dtschema
+  Submitter: Karan Sanghavi <karansanghvi98@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=900284
+  Lore link: https://lore.kernel.org/r/ZxEm-H-PjlQyXeOH@Emma
 
-Thanks!
 
-[1/1] spi: dt-bindings: brcm,bcm2835-aux-spi: Convert to dtschema
-      commit: 4de1cdb3c299bb98d70198c1fa20c71f0893835c
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
