@@ -1,72 +1,72 @@
-Return-Path: <linux-spi+bounces-5263-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5264-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2BD19A55C1
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 20:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 795559A55C6
+	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 20:22:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37B611F2144E
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 18:22:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CD9F1F2223E
+	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 18:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FF6198A17;
-	Sun, 20 Oct 2024 18:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058E1198E7A;
+	Sun, 20 Oct 2024 18:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f028NmKr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iWqgrOsw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6590E197A81;
-	Sun, 20 Oct 2024 18:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE371198A03;
+	Sun, 20 Oct 2024 18:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729448521; cv=none; b=ZwVTfz0Flc/w2EXbNYsJpPkNkd0Dj9jxkwq/0YYvXuwLYazCYtM2JwXlv0KlTqnjSdoD1v3gEUT6uXuilwBJwfNNMEjh220Jb8DfXEjuq5a4Aff1gBNRIiiHCcuwYoK0Dz66eoYX/k6l4ssoXOnZa9TZSAeSXzy4AENIZBurI4c=
+	t=1729448522; cv=none; b=H7U9OqW7ga1U4LfK5bd1Sa71vcpu6mytDr8uW1mTuARlvX8U+kE3f9ByfNRPJ3boDjRsjfZm1W6i+TsSZkwfuE7OQxh4vRa2Qu8Ctwd5JlYUFmKsfednpc98h4Yg89I5XtlPD1j+mwcAxXqwLLqnB+Igu9NTSrBpfUGHln8d4Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729448521; c=relaxed/simple;
-	bh=Owgw5vMmpv+QSuNxHW76hpQPPLHvuGsaZd0es3OPokE=;
+	s=arc-20240116; t=1729448522; c=relaxed/simple;
+	bh=DzDpSRyC88LkWgWqyUjnlZ0cKOBn/GRahM5cLjCtms8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KHyQa/2/8R6me8cmf+cQmDr+QWyNiMaf2i/W+f2qp4tGhB+6T55oIhw/S0/kHvugvm48RrowAzC5DpvU/K/ad1bUsUGj397Is1oM1PekW2krl0Lg95ebRXrVgs+0t0JDya/oaIvt69SMzo9e2QG6lv3AYOurkAT9MX+8N9lsI9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f028NmKr; arc=none smtp.client-ip=209.85.221.51
+	 MIME-Version; b=mrym1Gr2O84i/c9JyCJWIuzVBcYX5gEnP2MdkI9Go5ATj8CKVn53u9ffawYkWYo65XQz+LtvMWNbK0E4qZXKRl+L9easGIyWUBrwDnWH90dSrbQhPbZbB+utx5Cr7i3XLu5x94I9GIPaGx0hinAe28/bMMG/fQmTRungUAxeONA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iWqgrOsw; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37d41894a32so2391428f8f.1;
-        Sun, 20 Oct 2024 11:21:59 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43169902057so11865375e9.0;
+        Sun, 20 Oct 2024 11:22:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729448517; x=1730053317; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729448519; x=1730053319; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YB/d8ya+iA886QHQfDVagGNmaaeyxRfUU+uDgU8KNSI=;
-        b=f028NmKrYmmfIO4Z+6DnPlbQ9Vmu31G1CfXjXtNirt0+cYxrdiOOBUH7ct+vql0Cxd
-         uTkRFn23bXNsFdz3zcD/yGbPzH41ai91HSziPivc88EwRA32AW7ii1A3qKDzcHem50JZ
-         1vJiMJhDf0NNJE4VSIIZ6xBD7vKsoMRCFfgUGBsNO2NbGfzLCnDzR+R1YmCX/Qp4bqo/
-         ibmATFYLnsvvoE/NcE1RrYMe12m3tRCxoNRlnkX1Jtmo4VFoxbWYICDxUPMK58X9NOhT
-         a6cVhbbCWRiOHpLDXUGevuE9Dpahvsh7YhK8EAEHNdpEdTC6uVzENjUZmW3uLhnLwGAY
-         bHeg==
+        bh=YoFiO4t/E3af6lH/W9rynyhOwVr3dD1Sx9PXSKqMKFk=;
+        b=iWqgrOswau29lQ1rkcR1yInhY28A3ZaPkYItglqsBY1twV8KFSUZck8detSQRpIOi3
+         GeuDz4Ax4SVdbhCRJf8yc2zU4KiCUu+WP9Phl3gGrV33xrRsTdOKUw7zkV5ooltco69y
+         r1u+zXmdLz/RAzrwv+PJGzE+kY+8GGPqWF1amnoXUkn/Qvq5g+5DGt4IZHDgTkFEVVYg
+         ZIB2jzFIuTpviNGksJ1mPI0jyLPYRjtdA8KRgZcmuR2WK8eqLd3chLzYd+IHw/itH+Ji
+         VNqRvMZKGWUWNt9Ms/MBCcdPnYCLwsvz14lcA3k5XFQeeG9OjqlIOeXEvUSSvQmOLka5
+         0YiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729448517; x=1730053317;
+        d=1e100.net; s=20230601; t=1729448519; x=1730053319;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YB/d8ya+iA886QHQfDVagGNmaaeyxRfUU+uDgU8KNSI=;
-        b=Fv7NRMrk8s4tn4BQWIc/Odh/A4vWgqRtO7ldlTBsilimL3ZooVdYvPgCDqwbb/I8uj
-         uUYO6elUvfqJgo/3Vp1fYyVJJ9YHSdgo35o7Lt0xqopn0Sxi347PbGEG1fJt+XNeBIVI
-         8X9WjRvdK3QuG2SzJO8d5wky0ODa+b4a1AcvAFNDNrN92j+6LRiTVkAPFM6dS4Ass0dj
-         yuTT/L56af+MQ37GoMxNOlaWRrMAXhqFOokHufH9RGbQ66XR4oQymsU7CKOXzXumxKDu
-         YXxB3YBGOo2k/b+bPKcmw4vnYYAowWf5phikVixXCbJkJD7r+Nn8NWe2zAJVbNxRRu2V
-         yk0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUNtgvkBtdI7SG70+ICBFtsf6tFIAUeLXdXAKUWXVHLLjg4SVItzup2RzGv3bqwwp5RIAlwF7j8izTfvQmaP8NGcBg=@vger.kernel.org, AJvYcCW7YMwj2CykXJlNtMVRba6DppmtaYtbX4l8yyq/yOFG8IOPdcjmwA14+FWRbrKm5TWS77CVcs6dNhEV3KDM@vger.kernel.org, AJvYcCWQoupG3qkR3TeYQwDEZMJ8Jy9t47487EqZZmkgvByuahjOjLtCWaqD+4A1OPbaNJG2i3KQYo8Fv689@vger.kernel.org
-X-Gm-Message-State: AOJu0YweaLU3Bx41kjhTdNLBjFXw/6DEJmjjT5sAdNvH0/rf2b0KX1hD
-	kxs4YlUNo9i97HyO2jx6JOXSnRKGtvcpbF7V50GsWYUM5EZDwn9oEY8dflTi
-X-Google-Smtp-Source: AGHT+IGugZhfDYe/BbnZuzhu75x/LfLnNt9NNzUAVI8e+4gLSVOjfsqQBBgKKgOE12vwsXyIiSmRbA==
-X-Received: by 2002:a05:6000:183:b0:376:dbb5:10c2 with SMTP id ffacd0b85a97d-37ecf08650fmr5774026f8f.29.1729448517433;
-        Sun, 20 Oct 2024 11:21:57 -0700 (PDT)
+        bh=YoFiO4t/E3af6lH/W9rynyhOwVr3dD1Sx9PXSKqMKFk=;
+        b=ktbvLynD/Can5un6n81bDKBw7Lz62eAmxmjdaP3QlQDSwT6NvlIP8QYjP8rIlgkj6A
+         fSRrNZZkUP+KBB1mING+4T+95GOuTsJLqrH3bcZ3oOr/9mlVAXk2MwfrZj/bi9OEYtvV
+         DLo8zHfEC6qyug1gK88BBqtqITCpPtu3hdZME5vh8M/pHOf9VbaXsdMUmF57c9m16UJ5
+         EHKzjqSvX63EQn+3Jys8YY3GI3NAYOXbKGM7ZYEkM1FRGiZl0fet81KevPVoWe4Ca6UU
+         tmZB67lzoQofxroHlNV4kEKnBa3KnzQJD2cVNRUOlX9iWNmEbWzQTU0hUBEpHy0xP9ko
+         e/fA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+3Lat4LgtkjTN6UvK2hzFyNZlSwi2Es/6l2l2+/SiMxgCyzaM6fcOOkuAIi0DbhJ+fi87sjBo1zgRHC1F@vger.kernel.org, AJvYcCVpvwjhbKIId+Y1ubvBWr5+u8zH6rdnsT201AQ/dhxPkXbfxCTB+At0zjVy+zPHv5HMQwIqm/Ek4Pji@vger.kernel.org, AJvYcCW/4Zmr98zXAl7SksLERnv2eqMQgua82ABJGEeS1jxehwUsGwlGBYC0gaX9z4rXYzXSERbY1iDnxdXhLHoFjKvoxyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyln5nK5Ohlaq35WSxEgfEe4HoMfbQSobwznpW1TWw52kLCFwUy
+	2/YWVzDlmVwU+z9SJVs8ElFQVCXho2Hai3kQHvQXI+axhANYdK4D
+X-Google-Smtp-Source: AGHT+IFJZjum28xn+PrqK+hVAT4SnwtB3vmTyk2FAQRhj3mClh4nuh2fPDn5hGp1ZIBGOPE7tAGxtA==
+X-Received: by 2002:a05:600c:1d01:b0:42c:b63e:fe91 with SMTP id 5b1f17b1804b1-4316168f28cmr74795465e9.24.1729448519045;
+        Sun, 20 Oct 2024 11:21:59 -0700 (PDT)
 Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a48903sm2276459f8f.37.2024.10.20.11.21.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a48903sm2276459f8f.37.2024.10.20.11.21.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 11:21:57 -0700 (PDT)
+        Sun, 20 Oct 2024 11:21:58 -0700 (PDT)
 From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>,
 	Andi Shyti <andi.shyti@kernel.org>,
@@ -81,9 +81,9 @@ Cc: linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/6] arm64: dts: exynos: Add clock management unit nodes
-Date: Sun, 20 Oct 2024 21:21:18 +0300
-Message-ID: <20241020182121.377969-4-ivo.ivanov.ivanov1@gmail.com>
+Subject: [PATCH v1 4/6] arm64: dts: exynos8895: Add Multi Core Timer (MCT) node
+Date: Sun, 20 Oct 2024 21:21:19 +0300
+Message-ID: <20241020182121.377969-5-ivo.ivanov.ivanov1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
 References: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
@@ -95,157 +95,46 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add clock management unit nodes for:
-- cmu_top, which provides muxes, divs and gates for other CMUs
-- cmu_peris, which provides clocks for GIC and MCT
-- cmu_fsys0, which provides clocks for USBDRD30
-- cmu_fsys1, which provides clocks for MMC, UFS and PCIE
-- cmu_peric0, which provides clocks for UART_DBG, USI00 ~ USI03
-- cmu_peric1, which provides clocks for SPI_CAM0/1, UART_BT,
-USI04 ~ USI13
+MCT has one global timer and 8 CPU local timers. The global timer
+can generate 4 interrupts, and each local timer can generate an
+interrupt making 12 interrupts in total.
 
 Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
 ---
- arch/arm64/boot/dts/exynos/exynos8895.dtsi | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ arch/arm64/boot/dts/exynos/exynos8895.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/exynos8895.dtsi b/arch/arm64/boot/dts/exynos/exynos8895.dtsi
-index 223ebd482..802e135c4 100644
+index 802e135c4..c95e4713a 100644
 --- a/arch/arm64/boot/dts/exynos/exynos8895.dtsi
 +++ b/arch/arm64/boot/dts/exynos/exynos8895.dtsi
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2024, Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-  */
- 
-+#include <dt-bindings/clock/samsung,exynos8895.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
- / {
-@@ -159,6 +160,15 @@ chipid@10000000 {
- 			reg = <0x10000000 0x24>;
+@@ -169,6 +169,26 @@ cmu_peris: clock-controller@10010000 {
+ 			clock-names = "oscclk", "bus";
  		};
  
-+		cmu_peris: clock-controller@10010000 {
-+			compatible = "samsung,exynos8895-cmu-peris";
-+			reg = <0x10010000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIS_BUS>;
-+			clock-names = "oscclk", "bus";
++		timer@10040000 {
++			compatible = "samsung,exynos8895-mct",
++				     "samsung,exynos4210-mct";
++			reg = <0x10040000 0x800>;
++			clocks = <&oscclk>, <&cmu_peris CLK_GOUT_PERIS_MCT_PCLK>;
++			clock-names = "fin_pll", "mct";
++			interrupts = <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>;
 +		};
 +
  		gic: interrupt-controller@10201000 {
  			compatible = "arm,gic-400";
  			reg = <0x10201000 0x1000>,
-@@ -173,24 +183,93 @@ gic: interrupt-controller@10201000 {
- 			#size-cells = <1>;
- 		};
- 
-+		cmu_peric0: clock-controller@10400000 {
-+			compatible = "samsung,exynos8895-cmu-peric0";
-+			reg = <0x10400000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_UART_DBG>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_USI00>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_USI01>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_USI02>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_USI03>;
-+			clock-names = "oscclk", "bus", "uart_dbg", "usi00",
-+				      "usi01", "usi02", "usi03";
-+		};
-+
- 		pinctrl_peric0: pinctrl@104d0000 {
- 			compatible = "samsung,exynos8895-pinctrl";
- 			reg = <0x104d0000 0x1000>;
- 			interrupts = <GIC_SPI 386 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_peric1: clock-controller@10800000 {
-+			compatible = "samsung,exynos8895-cmu-peric1";
-+			reg = <0x10800000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_SPEEDY2>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_SPI_CAM0>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_SPI_CAM1>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_UART_BT>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI04>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI05>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI06>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI07>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI08>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI09>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI10>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI11>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI12>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC1_USI13>;
-+			clock-names = "oscclk", "bus", "speedy2", "cam0",
-+				      "cam1", "uart_bt", "usi04", "usi05",
-+				      "usi06", "usi07", "usi08", "usi09",
-+				      "usi10", "usi11", "usi12", "usi13";
-+		};
-+
- 		pinctrl_peric1: pinctrl@10980000 {
- 			compatible = "samsung,exynos8895-pinctrl";
- 			reg = <0x10980000 0x1000>;
- 			interrupts = <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_fsys0: clock-controller@11000000 {
-+			compatible = "samsung,exynos8895-cmu-fsys0";
-+			reg = <0x11000000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS0_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS0_DPGTC>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS0_MMC_EMBD>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS0_UFS_EMBD>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS0_USBDRD30>;
-+			clock-names = "oscclk", "bus",
-+				      "dpgtc", "mmc_embd",
-+				      "ufs_embd", "usbdrd30";
-+		};
-+
- 		pinctrl_fsys0: pinctrl@11050000 {
- 			compatible = "samsung,exynos8895-pinctrl";
- 			reg = <0x11050000 0x1000>;
- 			interrupts = <GIC_SPI 335 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_fsys1: clock-controller@11400000 {
-+			compatible = "samsung,exynos8895-cmu-fsys1";
-+			reg = <0x11400000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS1_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS1_MMC_CARD>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS1_PCIE>,
-+				 <&cmu_top CLK_DOUT_CMU_FSYS1_UFS_CARD>;
-+			clock-names = "oscclk", "bus", "mmc_card",
-+				      "pcie", "ufs_card";
-+		};
-+
- 		pinctrl_fsys1: pinctrl@11430000 {
- 			compatible = "samsung,exynos8895-pinctrl";
- 			reg = <0x11430000 0x1000>;
-@@ -213,6 +292,14 @@ pinctrl_busc: pinctrl@15a30000 {
- 			interrupts = <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		cmu_top: clock-controller@15a80000 {
-+			compatible = "samsung,exynos8895-cmu-top";
-+			reg = <0x15a80000 0x8000>;
-+			#clock-cells = <1>;
-+			clocks = <&oscclk>;
-+			clock-names = "oscclk";
-+		};
-+
- 		pmu_system_controller: system-controller@16480000 {
- 			compatible = "samsung,exynos8895-pmu",
- 				     "samsung,exynos7-pmu", "syscon";
 -- 
 2.43.0
 
