@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-5268-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5269-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270979A607B
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 11:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56D1A9A6088
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 11:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0BEA284711
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 09:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E516282B1B
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 09:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186D81E3DD3;
-	Mon, 21 Oct 2024 09:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DBC1E32D4;
+	Mon, 21 Oct 2024 09:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nk44N8Qg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asqRti+p"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2EF79CC;
-	Mon, 21 Oct 2024 09:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4641E32BF;
+	Mon, 21 Oct 2024 09:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729503922; cv=none; b=LYSrCP8mGQKCy0ZyIewU2jL8C/PMDINMrdevKKzuSEuUMrLMgQpk8MNb+jABNh8T72zaaAMwE3e94f7Ew/jz5IJ/c21xXDmnuvb8wfvga7h63A72NlGN2kAgqRlxwHlKS4vzyR0/FIuVT8sgUNPnnHDESNrE4o8ZAylgkpEPXz4=
+	t=1729503969; cv=none; b=vAScUXudVwJ7hD4yJKYqrt9mK/iJnUp4SIiFEX4JistO/p1I/LjQ0bBtf42wY0ImBnFLXWEInTVD1FszNI8s/oyXpSW/U8/LuqigeztHJ4lI/JAbeaBM8vqvgItm0tIg4U//jlSTBc5eqScD6zMfEZ0lgMYhOTIVnTO9AA6BZrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729503922; c=relaxed/simple;
-	bh=phRLmFMcDuwY5RezP7osvGR6f0yCVvfrTPl2Au6E7rY=;
+	s=arc-20240116; t=1729503969; c=relaxed/simple;
+	bh=Or7jA9WZ59i0sUSxjb7vT+4EdceiFQX8KEbzuE+z87Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hsf/v8PVSEZ1s0hOxm6GCVSzAF7qwuMsBWyw41GWUSZek80T0mnG5fTSgXJ9XxFkGyldCUqBYK9MKd1PlJWPWHvgxGK0yt5mlpkpKt2aAmTb69ZVVHO36f8rmcR5UNbug9H+JCk5WM2xTkXeyuoe7hed8bepiZdHdmEAgX5O4E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nk44N8Qg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2F89C4CEC7;
-	Mon, 21 Oct 2024 09:45:16 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=TvulneKJQvp76ZgntOc64hW1MDB3r1O+fsxKNtpdI0ovnD7UhIhqksDK9+5+dUHB/rhG0bWrR6/YfOJMY7jmp9J2mK2BTMwibkA7mE9BsxSzoDXAq5rlzP1oMFGBPmN6cJZi8R5GqSM1u12EzoOZyo9q9zrjehv0e0is8jwVDas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asqRti+p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A602C4CEC7;
+	Mon, 21 Oct 2024 09:46:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729503921;
-	bh=phRLmFMcDuwY5RezP7osvGR6f0yCVvfrTPl2Au6E7rY=;
+	s=k20201202; t=1729503968;
+	bh=Or7jA9WZ59i0sUSxjb7vT+4EdceiFQX8KEbzuE+z87Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Nk44N8Qgu6TNm/o+2q1WPoDJEF5Zllnpz7QBdGKsi//sf9Czst7SDst6lkCKClhZx
-	 KNgyXgWfRjg4B8bM0ulBoQNCKribaAoE4uVbq14ia9Jmy1MPTbnBSydfRZlYU63CO0
-	 xsaTWNAXkucClpL1mBSM1kXJsg4FL1DB3vaN7LQ7zXXgMlHuSzHc575iccvD33/U6r
-	 5xEqGeMyoNnemNjLr15KHeJD5qCS/HvXPnzxC7A9Qc1hwkVUAl4LMGgNhdcggWq0NZ
-	 XZ7XCvsvzgvIBrT3iukYx1PRRL6TadZKw5DILNEXYQgTXz9s24ynMS/wQYaYpTZs6b
-	 lbMHVDrD7Mt7g==
-Message-ID: <bf89e8ae-c53d-464d-b462-8b8b1b049c0d@kernel.org>
-Date: Mon, 21 Oct 2024 11:45:13 +0200
+	b=asqRti+p88JyXiGfpn7RKgiYw4+gHBAF93mSQ2jVzxWqlX/Pm6wI8BcsWlr/XEfce
+	 +0AVR2F0IQ8d8p4UaEqVJ7Wf6AFx1kerzjtpxAVfcfqIunlZVRHWHXhFOnl2jvO1Zn
+	 f6MxNk/aHM5/5N9/8BEd5J156ifYNuBgT1h1TmJAArseBPxaBxEbQDfQpHf/Wnj9Rf
+	 1ICIDWJMj6+BCTUansfAZPrTIImgyGESqk9N3znpBEJKTjLONyqdGGMP2kJ9YW/3fQ
+	 44yVmNN7q7u6+F5T7Cir4xSIsmeMELr9e/XX6aeQggUN4yT0M1QEZ88rb0/yo/tW38
+	 nb9RBnsRH2wpQ==
+Message-ID: <5e5d1e5d-e3cf-4fcb-9f9b-c1b01b5be9d8@kernel.org>
+Date: Mon, 21 Oct 2024 11:46:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/6] dt-bindings: timer: exynos4210-mct: Add
- samsung,exynos8895-mct compatible
+Subject: Re: [PATCH v1 2/6] spi: dt-bindings: samsung: Add a compatible for
+ samsung,exynos8895-spi
 To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
  Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
  Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
@@ -62,7 +62,7 @@ Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-kernel@vger.kernel.org
 References: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
- <20241020182121.377969-2-ivo.ivanov.ivanov1@gmail.com>
+ <20241020182121.377969-3-ivo.ivanov.ivanov1@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,21 +108,24 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241020182121.377969-2-ivo.ivanov.ivanov1@gmail.com>
+In-Reply-To: <20241020182121.377969-3-ivo.ivanov.ivanov1@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/10/2024 20:21, Ivaylo Ivanov wrote:
-> Just like most Samsung Exynos SoCs, Exynos8895 uses almost the same
-> Multi-Core Timer block with no functional differences.
+> According to the vendor kernel, the Exynos8895 SoC has an SPI
+> configuration that matches with the Exynos850 one.
 > 
-> Add dedicated samsung,exynos8895-mct compatible to the dt-schema for
-> representing the MCT timer of Exynos8895 SoC.
+> SPI FIFO depth is 64 bytes for all SPI blocks. All blocks have DIV_4
+> as the default internal clock divider, and an internal loopback mode
+> to run a loopback test.
+> 
+> Reuse the samsung,exynos850-spi compatible.
 > 
 > Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-> ---
 
-I assume this will go via timers/clocksource:
+I assume this will go via SPI:
+
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
