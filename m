@@ -1,150 +1,117 @@
-Return-Path: <linux-spi+bounces-5266-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5267-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F22289A55CF
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 20:23:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F1339A5C2C
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 09:14:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63285B24A1E
-	for <lists+linux-spi@lfdr.de>; Sun, 20 Oct 2024 18:23:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDD941F221C3
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 07:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525F11991D3;
-	Sun, 20 Oct 2024 18:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B511D0E3F;
+	Mon, 21 Oct 2024 07:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MK6xgAR7"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pHuDOKZU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE1D1990BB;
-	Sun, 20 Oct 2024 18:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168721940A2;
+	Mon, 21 Oct 2024 07:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729448526; cv=none; b=NZCBOhp+1aIq7QqLZR1kjWs58wPVEtpUSWjXyoD46PaKywTjtrgOTqwx11V5IZhjmOiQs0cz4lGADBins4PiNz7DTnku46/AB7nQYdXaGb31pG2YBkyaqVd5+jZuIdfCcNoLrCRwwXqAWUaTWrmbWlIDFhfQaLBX9XYIkYHY1Yo=
+	t=1729494872; cv=none; b=E+yrUNxZLwDSpFB7KRW9eN4SLb4UV76txvy6NVWioHpsi04nDSUb3LhUD2Z/aUriI5+2Vc5FcMq1pPb6++NyS3Fh1860XgRsf9FPYz8SGOUY2dKvp8RMGo36z97rOsCKjImiBWOZF+uIoraenE7VEc3b0V7NIofBjW0nNAL0eSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729448526; c=relaxed/simple;
-	bh=rQDFcUnzkJ9BFuSeY9oNM9lBI52DXuy7K8Perx9Jq3U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ibWMvHzRiT9xJoHOMjmwklqsrtwjGfGMkWuPkvpqqalD6EAEfFEnAzgj4eb14eetOdmRG16EoPyW79pccGg9GnGFFVg9nRC2/tz9Sfv+Ugx8xXgEripW9Ld3IFpLllaAt4nFkrGiBoWpJ1VJbgONZTWV+dxb9naVp66WJMDF4Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MK6xgAR7; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-431616c23b5so15196495e9.0;
-        Sun, 20 Oct 2024 11:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729448522; x=1730053322; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kv66YW5L6/jj49RpWN4ISuR3J2Fku5YT9aw2fCyxGkA=;
-        b=MK6xgAR7dSHCGp7Upy3h5O0u3+fw6JW7Tprtu4JpDhX3FRr9bAe8EDcpVqOmWx6TDC
-         K6e1dIbRwwhT8sbTze1LfERbh6SXe+thDBXW0H37vfeJx8nITLonxKmxUUOIzk5b7i2g
-         /jFXJ1tO4fOYCYOfqJQNPRI6zphR4Iw1QrcrHYkCC4OPs4x3B76i7kTk3l12T2nzZhNh
-         OLzuHlHQ7kZCGCcqWDlZ+Mztl1TJNjVJyq4nKquDOKg651NStccsBuaTdY5GprRmE7kP
-         S564BWdFj06wO3fwKJ/hyAYjDgM5kyxtUk38DqPaT2uwCBYLQVLnaN6fSjc9pdjEZtBV
-         EFOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729448522; x=1730053322;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kv66YW5L6/jj49RpWN4ISuR3J2Fku5YT9aw2fCyxGkA=;
-        b=Vb/iRRQc4MjJ7Clm+k2N1mFNWoLs+W33jbYb3IBttDWX+g2hCOqR2dUKFpxGFpUR62
-         i6FkAE88efISt7BZIDRSW6W+/HR95IU6JKdsMoYovBui9n0amOjYpR+8Fn8C1wI4qFZr
-         xxLrVMe5Dawa496xUFPe6g1CFauxiUZWTrZkUPs+JBgomP+OjzA78qD9LlH54m0Wvw5b
-         v4SG7DzEVdniEqlwDBMb9B/afYpFLI/hAdoQEwxXq7MWqAcKM6DZ7zVk5EsB6vJK7xZj
-         yP6vt238ToNjUXMVBwf+wCaAtnBv4bBbRtc+0IAI0GIUMD9eWIRIEuWU+0aZLevs9Ss9
-         Q9kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDypJqUJx5L5lcw22GEiWk51/smu8LA59Lqmki2x6zCZpA6W7ZeCUGhS095w2XUPEhJ8tuC7jLfnykLHc0@vger.kernel.org, AJvYcCV80OUWXHWoZeiE/NJRLae3/CnV4KJatm84TljNUMdWahAbYzoXfrIHzCHT/WHGW11C2gxcDP1eFnz5liCQdgdM30g=@vger.kernel.org, AJvYcCWHl+ZW+hnAuCaozO+1+OFEiwoDiXupB675kN5ZPQWynARmKrFRGGTIb/dHUXEFjts7PR1jmP8lWQXM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3/HAiqlRrtJEcLdVBv96zDzvwHS3ZWc47jIoqCmjNI7n3e93T
-	kS5ehlDAXHQnwueB4aMZeZg7m9O8SE1+qZm5nJ2u1GakcyW5tr+B
-X-Google-Smtp-Source: AGHT+IExxAQlZ8OeGLgSLSXLdOccWbsZ9T2b2+RHr9tBp5KTor7LS1jCccXn4K/1jhGb+EfWMbT1MA==
-X-Received: by 2002:a05:600c:4fd2:b0:431:15f1:421d with SMTP id 5b1f17b1804b1-43158760531mr87808305e9.16.1729448522343;
-        Sun, 20 Oct 2024 11:22:02 -0700 (PDT)
-Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a48903sm2276459f8f.37.2024.10.20.11.22.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 11:22:01 -0700 (PDT)
-From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 6/6] arm64: dts: exynos8895: Add spi_0/1 nodes
-Date: Sun, 20 Oct 2024 21:21:21 +0300
-Message-ID: <20241020182121.377969-7-ivo.ivanov.ivanov1@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
-References: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
+	s=arc-20240116; t=1729494872; c=relaxed/simple;
+	bh=+MdlbUTKWEtQqviIJ/ksqh2lJGVuwINgG4Sytyx9wH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=oH3d0rzTBATSC/ii+EWC5vHcu/s0xnhomSXTzMVjkz3pdE7Bs4xHJgcZGqOVGUqmqoG3sfPnoC9fdRrLfkzZdVgTw1vThmoqKUKEtbhxQgUbG/alvavMuyih50BHkNicOEh6fn5E3Me5pq6xCapVHuM9fXDHP3jD1eqn5eYWe9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pHuDOKZU; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49KNdnZD006185;
+	Mon, 21 Oct 2024 07:13:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	hBRCfPgu1vyB4VjNQILG00Eqs1DLwICYXQAWTx5WmFE=; b=pHuDOKZUR0it44Q/
+	nHr7IGkZ4rHwX4zxV3HIaEc2MN7USMIBZ5VEAFvfoUTLvuyuPDy0Y5t6Hy0FyZ/j
+	JdJFzRcUz/69DlVb+cWKTx+e6xnlSCyHAnXEZlzKXK8HNJNiV1TMhC7Soloj8Eem
+	Pnw48cmP67eUaILBIyZJrhMQCO3K7mr99Pn3xwA6zpzCXNA0wRX8OYKWOyM9z7+a
+	RPfHX+Wp02yx/2wmUP4mqxvM0jcc1N4g/n14Q6s/KkpP7UJZ1DC/GMdx1CuCdkVl
+	piDeZs2Sn6173WlG9wxGrQrvS5yaplRnELYMx3KebW9/jnQGMvESU/9he1wQERD2
+	YRHIfA==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6w1kftv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Oct 2024 07:13:52 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49L7DpjO027079
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 21 Oct 2024 07:13:51 GMT
+Received: from [10.151.37.94] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 21 Oct
+ 2024 00:13:45 -0700
+Message-ID: <78820059-a1fa-2402-1e7c-0a9445b4fe1f@quicinc.com>
+Date: Mon, 21 Oct 2024 12:43:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v11 8/8] arm64: dts: qcom: ipq9574: Disable eMMC node
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, <broonie@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <andersson@kernel.org>, <konradybcio@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <arnd@arndb.de>,
+        <esben@geanix.com>, <nikita.shubin@maquefel.me>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>
+CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+References: <20241010070510.1504250-1-quic_mdalam@quicinc.com>
+ <20241010070510.1504250-9-quic_mdalam@quicinc.com>
+ <0bde12c0-0c36-4d7c-9538-25d1b55d2fa9@oss.qualcomm.com>
+Content-Language: en-US
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <0bde12c0-0c36-4d7c-9538-25d1b55d2fa9@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lfY6icX4uid13RR-7aJTQUo6jJtK_pud
+X-Proofpoint-ORIG-GUID: lfY6icX4uid13RR-7aJTQUo6jJtK_pud
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
+ clxscore=1015 bulkscore=0 mlxlogscore=556 suspectscore=0 mlxscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410210050
 
-Add nodes for spi_0 (SPI_CAM0) and spi_1 (SPI_CAM1), which
-allows using them.
 
-Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
----
- arch/arm64/boot/dts/exynos/exynos8895.dtsi | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos8895.dtsi b/arch/arm64/boot/dts/exynos/exynos8895.dtsi
-index c57b7243d..d936c7bc9 100644
---- a/arch/arm64/boot/dts/exynos/exynos8895.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos8895.dtsi
-@@ -282,6 +282,36 @@ pinctrl_peric1: pinctrl@10980000 {
- 			interrupts = <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		spi_0: spi@109d0000 {
-+			compatible = "samsung,exynos8895-spi",
-+				     "samsung,exynos850-spi";
-+			reg = <0x109d0000 0x100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&cmu_peric1 CLK_GOUT_PERIC1_SPI_CAM0_PCLK>,
-+				 <&cmu_peric1 CLK_GOUT_PERIC1_SPI_CAM0_SPI_EXT_CLK>;
-+			clock-names = "spi", "spi_busclk0";
-+			interrupts = <GIC_SPI 435 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&spi0_bus>;
-+			pinctrl-names = "default";
-+			status = "disabled";
-+		};
-+
-+		spi_1: spi@109e0000 {
-+			compatible = "samsung,exynos8895-spi",
-+				     "samsung,exynos850-spi";
-+			reg = <0x109e0000 0x100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			clocks = <&cmu_peric1 CLK_GOUT_PERIC1_SPI_CAM1_PCLK>,
-+				 <&cmu_peric1 CLK_GOUT_PERIC1_SPI_CAM1_SPI_EXT_CLK>;
-+			clock-names = "spi", "spi_busclk0";
-+			interrupts = <GIC_SPI 436 IRQ_TYPE_LEVEL_HIGH>;
-+			pinctrl-0 = <&spi1_bus>;
-+			pinctrl-names = "default";
-+			status = "disabled";
-+		};
-+
- 		cmu_fsys0: clock-controller@11000000 {
- 			compatible = "samsung,exynos8895-cmu-fsys0";
- 			reg = <0x11000000 0x8000>;
--- 
-2.43.0
-
+On 10/19/2024 2:55 PM, Konrad Dybcio wrote:
+> On 10.10.2024 9:05 AM, Md Sadre Alam wrote:
+>> Disable eMMC node for rdp433, since rdp433
+>> default boot mode is norplusnand
+>>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> ---
+> 
+> If eMMC is absent on this board, remove the whole &sdhc_1{} section
+Ok, will remove in the next revision.
+> 
+> Konrad
 
