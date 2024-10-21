@@ -1,48 +1,52 @@
-Return-Path: <linux-spi+bounces-5269-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5270-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56D1A9A6088
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 11:46:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 762429A60DE
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 11:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E516282B1B
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 09:46:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 893431C21B26
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Oct 2024 09:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DBC1E32D4;
-	Mon, 21 Oct 2024 09:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55FC71E5734;
+	Mon, 21 Oct 2024 09:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asqRti+p"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="qyKy2Wwd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4641E32BF;
-	Mon, 21 Oct 2024 09:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053E11E5701;
+	Mon, 21 Oct 2024 09:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729503969; cv=none; b=vAScUXudVwJ7hD4yJKYqrt9mK/iJnUp4SIiFEX4JistO/p1I/LjQ0bBtf42wY0ImBnFLXWEInTVD1FszNI8s/oyXpSW/U8/LuqigeztHJ4lI/JAbeaBM8vqvgItm0tIg4U//jlSTBc5eqScD6zMfEZ0lgMYhOTIVnTO9AA6BZrE=
+	t=1729504696; cv=none; b=H29uN3098o3UbcD0GT43zMbxfm7GdripgJW24E000JOYJjj5EtKkclRUW9XmimjSezvxFlhAXi+sl92YPRmAfF743WImbHC9FvmrTbvnCcOCZk1jPkVGbiEE0NScFYu1imPloE6Q+1pw02EcAlRU6oZtYE6nBIfpPTNzr6YvXU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729503969; c=relaxed/simple;
-	bh=Or7jA9WZ59i0sUSxjb7vT+4EdceiFQX8KEbzuE+z87Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TvulneKJQvp76ZgntOc64hW1MDB3r1O+fsxKNtpdI0ovnD7UhIhqksDK9+5+dUHB/rhG0bWrR6/YfOJMY7jmp9J2mK2BTMwibkA7mE9BsxSzoDXAq5rlzP1oMFGBPmN6cJZi8R5GqSM1u12EzoOZyo9q9zrjehv0e0is8jwVDas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asqRti+p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A602C4CEC7;
-	Mon, 21 Oct 2024 09:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729503968;
-	bh=Or7jA9WZ59i0sUSxjb7vT+4EdceiFQX8KEbzuE+z87Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=asqRti+p88JyXiGfpn7RKgiYw4+gHBAF93mSQ2jVzxWqlX/Pm6wI8BcsWlr/XEfce
-	 +0AVR2F0IQ8d8p4UaEqVJ7Wf6AFx1kerzjtpxAVfcfqIunlZVRHWHXhFOnl2jvO1Zn
-	 f6MxNk/aHM5/5N9/8BEd5J156ifYNuBgT1h1TmJAArseBPxaBxEbQDfQpHf/Wnj9Rf
-	 1ICIDWJMj6+BCTUansfAZPrTIImgyGESqk9N3znpBEJKTjLONyqdGGMP2kJ9YW/3fQ
-	 44yVmNN7q7u6+F5T7Cir4xSIsmeMELr9e/XX6aeQggUN4yT0M1QEZ88rb0/yo/tW38
-	 nb9RBnsRH2wpQ==
-Message-ID: <5e5d1e5d-e3cf-4fcb-9f9b-c1b01b5be9d8@kernel.org>
-Date: Mon, 21 Oct 2024 11:46:00 +0200
+	s=arc-20240116; t=1729504696; c=relaxed/simple;
+	bh=uCULIxbcJywiOKYZjq43UhyRV8sFKz967+OUgHE/Iu4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GE+MmO3cnkzdinbrRmb5ACXmKnvsLoTWuXpvc0J7WwkEioNqT4dgQlLCQZRNoAmHSwA00rm64dgRDSu1VxfanxuA3NacIHz/e9zS41pPAIC6R3aWXeBp56gcvihjHNcyKXurZlNAi0flRRqmGV5deSKllVIBB/bvFC/5OuFl1MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=qyKy2Wwd; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:Reply-To:Subject:From:MIME-Version:Date:
+	Message-ID:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
+	Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+	In-Reply-To:References; bh=mDveBoDYf4fN13vKMrP/EXZV3Nj+OeRfq74BWOg3v4w=;
+	t=1729504694; x=1729936694; b=qyKy2Wwd9aQhqHsXwIu2FxrycJ+LCB7e/ouozBUWN5rs/CJ
+	Lc+EYLSVqrYpih74WumIgkeLY5hP2Ji7iDyy0A5BtmuG9JcnzBES5pXPIqZJ4gFi8R/59R2UFyQLT
+	kr+1AZg5zgRsXaIU16UF6x5Mxjqsq9YbCvz41I5RKTI6hu9KwqPlbu0Go2pnYccIpQAIJbd0yih2F
+	MuZjezR/cPRzqDuobGTW5FdAQbCDUjWY7K1dMNFjvqAJkU80WT+qNbuxCG+LJ8rO8eXflfQHoh0bn
+	HqkAwaj4fPTnmzZjT4jxtyImfjqHkbf9a3eUeE1QESKIM9/PkLR/2qr6aiBVWt9w==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1t2pAx-0001lx-3g; Mon, 21 Oct 2024 11:58:11 +0200
+Message-ID: <43b6b750-3f7d-437f-a62e-ab2dba06827a@leemhuis.info>
+Date: Mon, 21 Oct 2024 11:58:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,85 +54,164 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/6] spi: dt-bindings: samsung: Add a compatible for
- samsung,exynos8895-spi
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20241020182121.377969-1-ivo.ivanov.ivanov1@gmail.com>
- <20241020182121.377969-3-ivo.ivanov.ivanov1@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241020182121.377969-3-ivo.ivanov.ivanov1@gmail.com>
+From: "Linux regression tracking (Thorsten Leemhuis)"
+ <regressions@leemhuis.info>
+Subject: Re: [REGRESSION] spi: cadence-quadspi: STIG mode results in timeouts
+ for Micron MT25QL01 flash
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+To: Dhruva Gole <d-gole@ti.com>
+Cc: Yoshitaka Ikeda <ikeda@nskint.co.jp>, Mark Brown <broonie@kernel.org>,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-team@pengutronix.de, Stefan Kerkmann <s.kerkmann@pengutronix.de>,
+ regressions@lists.linux.dev, Mark Brown <broonie@kernel.org>
+References: <c2cdfba1-afcc-4a77-8890-7da49c4b73c2@pengutronix.de>
+Content-Language: en-US, de-DE
+In-Reply-To: <c2cdfba1-afcc-4a77-8890-7da49c4b73c2@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1729504694;9b2e926e;
+X-HE-SMSGID: 1t2pAx-0001lx-3g
 
-On 20/10/2024 20:21, Ivaylo Ivanov wrote:
-> According to the vendor kernel, the Exynos8895 SoC has an SPI
-> configuration that matches with the Exynos850 one.
+On 14.10.24 14:43, Stefan Kerkmann wrote:
 > 
-> SPI FIFO depth is 64 bytes for all SPI blocks. All blocks have DIV_4
-> as the default internal clock divider, and an internal loopback mode
-> to run a loopback test.
+> I have run into the same regression when probing a Micron MT25QL01 SPI-NOR flash
+> on a Intel CycloneV platform (socfpga) as Yoshitaka Ikeda[1]. The regression
+> manifests in read timeouts. Bisecting the issue tracked it down to commit
+> "d403fb6e76bf8 spi: cadence-quadspi: use STIG mode for small reads".
+
+Adding Dhruva Gole (author) and Mark Brown (committer) to the list of
+recipients.
+
+> Reverting
+> the commit resolves the issue on v6.12-rc3. There are no custom patches applied,
+> except for the debugging output mentioned in the linked thread.
+
+The culprit afaics was merged for v6.3-rc1. Makes me wonder: would
+reverting this now even an option to fix this in mainline, or would this
+just lead to a regression for someone else?
+
+Ciao, Thorsten
+
+> The good case is as follows:
 > 
-> Reuse the samsung,exynos850-spi compatible.
+> ```
+> [    1.063171] **********spi_mem_op dump**************
+> [    1.063183] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    1.068093] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x9F
+> [    1.073837] data: nbytes:0x6 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.079823] ***************************************
+> [    1.086068] **********spi_mem_op dump**************
+> [    1.090931] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x0
+> [    1.095815] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.101543] data: nbytes:0x10 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.107547] ***************************************
+> [    1.113835] **********spi_mem_op dump**************
+> [    1.118695] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x10
+> [    1.123573] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.129395] data: nbytes:0x8 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.135392] ***************************************
+> [    1.141592] **********spi_mem_op dump**************
+> [    1.146471] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x0
+> [    1.151335] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.157072] data: nbytes:0x88 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.163058] ***************************************
+> [    1.169341] **********spi_mem_op dump**************
+> [    1.174219] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x30
+> [    1.179082] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.184904] data: nbytes:0x40 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.190890] ***************************************
+> [    1.197183] **********spi_mem_op dump**************
+> [    1.202045] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x80
+> [    1.206925] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.212740] data: nbytes:0x8 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.218736] ***************************************
+> [    1.224916] **********spi_mem_op dump**************
+> [    1.229776] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    1.234649] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x6
+> [    1.240376] data: nbytes:0x0 , buswidth 0x0, dtr 0x0, data dir 0x0
+> [    1.246283] ***************************************
+> [    1.252443] **********spi_mem_op dump**************
+> [    1.257314] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    1.262176] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0xB7
+> [    1.267917] data: nbytes:0x0 , buswidth 0x0, dtr 0x0, data dir 0x0
+> [    1.273914] ***************************************
+> [    1.280074] **********spi_mem_op dump**************
+> [    1.284946] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    1.289809] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x4
+> [    1.295544] data: nbytes:0x0 , buswidth 0x0, dtr 0x0, data dir 0x0
+> [    1.301444] ***************************************
+> [    1.307694] 5 fixed-partitions partitions found on MTD device ff705000.spi.0
+> [    1.319593] Creating 5 MTD partitions on "ff705000.spi.0":
+> [    1.325080] 0x000000000000-0x000000040000 : "preloader"
+> [    1.331825] 0x000000040000-0x0000000c0000 : "bootloader"
+> [    1.338645] 0x0000000c0000-0x0000000e0000 : "barebox-environment"
+> [    1.346299] 0x0000000e0000-0x000000110000 : "state-storage"
+> [    1.353319] 0x000000110000-0x000008000000 : "ubi"
+> ```
 > 
-> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+> With the STIG short read optimization enabled, the read timeouts occur:
+> 
+> ```
+> [    0.931469] **********spi_mem_op dump**************
+> [    0.931482] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    0.936398] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x9F
+> [    0.942129] data: nbytes:0x6 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    0.948132] ***************************************
+> [    0.954369] **********spi_mem_op dump**************
+> [    0.959233] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x0
+> [    0.964117] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    0.969845] data: nbytes:0x10 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    0.975844] ***************************************
+> [    1.482104] cadence-qspi ff705000.spi: Flash command execution timed out.
+> [    1.493754] **********spi_mem_op dump**************
+> [    1.493759] addr: nbytes:0x3 , buswidth 0x1, dtr 0x0, val 0x10
+> [    1.498623] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x5A
+> [    1.504451] data: nbytes:0x8 , buswidth 0x1, dtr 0x0, data dir 0x1
+> [    1.510438] ***************************************
+> [    1.516611] spi-nor spi0.0: operation failed with -110
+> [    2.026639] cadence-qspi ff705000.spi: Flash command execution timed out.
+> [    2.033430] **********spi_mem_op dump**************
+> [    2.033437] addr: nbytes:0x0 , buswidth 0x0, dtr 0x0, val 0x0
+> [    2.038300] cmd: nbytes:0x1 , buswidth 0x1, dtr 0x0, opcode 0x6
+> [    2.044041] data: nbytes:0x0 , buswidth 0x0, dtr 0x0, data dir 0x0
+> [    2.049942] ***************************************
+> [    2.056112] spi-nor spi0.0: operation failed with -110
+> [    2.066110] spi-nor spi0.0: probe with driver spi-nor failed with error -110
+> ```
+> 
+> The DT node for the flash is as follows:
+> 
+> ```
+> &qspi {
+> 	status = "okay";
+> 
+> 	flash0: flash@0 {
+> 		#address-cells = <1>;
+> 		#size-cells = <1>;
+> 		/* Micron MT25QL01 */
+> 		compatible = "n25q00", "jedec,spi-nor";
+> 		reg = <0>;	/* chip select */
+> 		spi-max-frequency = <100000000>;
+> 		m25p,fast-read;
+> 		cdns,page-size = <256>;
+> 		cdns,block-size = <16>;   /* 2^16, 64KB */
+> 		cdns,read-delay = <4>;    /* delay value in read data capture register */
+> 		cdns,tshsl-ns = <50>;
+> 		cdns,tsd2d-ns = <50>;
+> 		cdns,tchsh-ns = <4>;
+> 		cdns,tslch-ns = <4>;
+> 	};
+> };
+> ```
+> 
+> Regards,
+> Stefan Kerkmann
+> 
+> [1]:
+> https://lore.kernel.org/lkml/OSZPR01MB70048CE259A3D63C4179199A8B659@OSZPR01MB7004.jpnprd01.prod.outlook.com/#t
+> 
+> #regzbot introduced: d403fb6e76bf854ef0f7d84e797e51b9494788e0
+> 
 
-I assume this will go via SPI:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+#regzbot poke
 
