@@ -1,75 +1,75 @@
-Return-Path: <linux-spi+bounces-5336-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5337-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7AED9AD606
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 23:00:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6BF9AD60C
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 23:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D73A11C21477
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 21:00:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C9E2281CCB
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 21:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5071FF7BD;
-	Wed, 23 Oct 2024 20:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98008200102;
+	Wed, 23 Oct 2024 20:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="1zHdq8Qa"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="hvptctuZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44331FF7AB
-	for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 20:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BA6200106
+	for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 20:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729717176; cv=none; b=WvKwpJImqnaDPqQDy/mgC4RRni9oPLOg8SD7YhUmlhocG0KqAYzNFNOaQ0DwMPqxnINsmRg75nL+mNuWKsb5wFhPP9zJ1X7gUpPl5UFRPYILBHTtJYu7wjo1BOa4fUCMuH1PswD90IU+Lnl7FkiqmTdUWGA7soLq7RSCeLUAEp0=
+	t=1729717180; cv=none; b=Kz05P4iikWIdtzQrFKllSdSCgU+TiP14KQmca1gs78Eq3s4Oy0eLnqUwF2ZqI60oDzbCaX6Sp1LjpbZ3W9MXb+RTaTnka88e+x0gSqERjSOA7yLXlDI6Q9k1lk4xBzlMOJRLAPAQLBr6iZEI988GUGo5o3lD4nWuk84CRnED65g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729717176; c=relaxed/simple;
-	bh=6LuqxODFa87GHKbqZm4iCQa79o+y+ZqqHBFoFKpHwas=;
+	s=arc-20240116; t=1729717180; c=relaxed/simple;
+	bh=9Uoi/lsx5lDzmesX/dTqmB11w7iIVMU2MC+rAN+Xo0o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LMKYx/r9fC/iqDCWhhYCa3pPj5P5pMayedfe7RLnZck0oepIyAOMlHLBJUoy8pCnCW1wNcXVsL2Yf+Tq9z7dq4vM6cuSHt7bQOhmTpmpUuWFBUM5AzN8fs8XMSp51WskQrY6VPPRvk+HV02ayrMmn0Vi1j471IMqWL83rX4lhas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=1zHdq8Qa; arc=none smtp.client-ip=209.85.161.44
+	 In-Reply-To:To:Cc; b=lrTNNDoSMSkegKKUoRwIWNZPyhDqHKGNNMWni6mX9EENNMHWpKTcLGSS0zAMTG/GzUjKPcJKNpbLuG05LbH9gsB8ttLK4CqxNzOGlZFW6XE/PlV4dxDsQcqDfc2qG9O2sjC+XHqyDd746db6whbLHdPp5vTkmY27YuFcKt0BkY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=hvptctuZ; arc=none smtp.client-ip=209.85.161.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5ebc0992560so134782eaf.0
-        for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 13:59:34 -0700 (PDT)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5eba976beecso597406eaf.0
+        for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 13:59:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729717174; x=1730321974; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729717177; x=1730321977; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+7eZRQmN+d1Xl5AiVFjBojgvbjgVdZFYfr/t0WGin1o=;
-        b=1zHdq8Qad+iSEdtjTR/1OoiREQdoyujRSmpjrdX123UwpzNtIHd1bMObDJAZoO8SkV
-         vmkhKhwsrYXS+ePVhghtMRdZzNtGzzCyWncpn139qwTZcYNNEOsqA+3xZT0H1mJtQgo8
-         Vli20+gpdzI/Q09oAudNHMTYCJ2KEF9vE2y1NmNJt7IPNWajnFhtWDe76SnwrSYGSRqP
-         QZlOUxfpCWKw30wRGGIboTT0PfhR5IX9I4dxVBC+eud/l3Bsi7DsuXXQox2hMJG8PuJu
-         kqGNyNhLnOrN6dFnlkypLrodKP+3HAvm4s4ZineXQBNE7vqJDoNUUWF+Qd8BnZWfdcH1
-         7Qjw==
+        bh=MJpBAkzSSYPV4RvQhjaw2/1DFd2kkl7hVgMR3+qjlgE=;
+        b=hvptctuZQ5a5qjfBFSAo2mQX4Dubo1Q1glMKG2CfM3Y6QPqO8RZulJVrHr1fvWu7aj
+         oqWvuydKGganITgmZoH+ssSdHVvszZ6xGtCQpAZ0P+tpoe/LlwvtR3zufBE6aat3GPAO
+         vHoD3hCzUYLx1CfnlYZQKmKafxyFQC3ZfMiGQUkFVcWKxZZhGlfC5AP69LTa+bK0x3A4
+         HiyMmkZf/GDBWWnwAt33PvLKY0KaZ9ZF3K4U6WGU3Gqwzrh3jb2D4+ijjZuRL/nVNLtB
+         ux77Pc2/7OS5VT9v6/WdY8j+Wno/8MJ2D+kicx8WkJts4iJQAf3EzsStXR4ErjqmVcot
+         1UkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729717174; x=1730321974;
+        d=1e100.net; s=20230601; t=1729717177; x=1730321977;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+7eZRQmN+d1Xl5AiVFjBojgvbjgVdZFYfr/t0WGin1o=;
-        b=KYuZniVJfiD6S6go4uvcNH/8cxFV5x/8irGndDfJUwshza5QG/vkbTmUGgZZEwhXir
-         gH8aPc2zJfsykT5OWPBJuSNSy2b1LAuN6z5XBl2f8+9jYwyo6ILtpRWB+OJC4Y2iHgqO
-         PkhjYYVleEgqKYCjpoFyKInj7p2VLUULsXpDT1rByoI43xDgyzDKIdkeobt7v4WKwA6j
-         9lz+/c7ay5nIUVgxAS/rJ7n+2M1Wbph/zAFlgQG+UmsSxd9ovj6XWw1Pb9En+c84dzkw
-         BMxddXdZnfB5gUrjEgtsq3z1HodHFsGOtX+Ggd/7BG4GdLS0eRHsd2Lvw/zCYrmrraLg
-         W4RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUS2Nal+XOtR0+Xlwcwxgv/AEn35swUhhMpw/hb4E7InHfqf6QMp8BsJDRqcS7iLA3CEFcqIdul7xA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGVqm4l7NwjzlNWEH4ymXXS+nYBZiuLD0E8AgD3mPvdTzH/ODC
-	iS7YhlAUJQepYFi7fd7qp6O8Zc/MztueGc2tGRfDUaNNJG67ZpVsHRsmobRp2U0=
-X-Google-Smtp-Source: AGHT+IGrGeUFNoZ4nfpg0y/vsYc+3tkphmXVxQMQc7RfHzm/YAo//LBkLU7KTfCeOuufF1v+fn0hcg==
-X-Received: by 2002:a05:6820:1688:b0:5eb:827b:9bbf with SMTP id 006d021491bc7-5ebee9726famr2547696eaf.7.1729717173815;
-        Wed, 23 Oct 2024 13:59:33 -0700 (PDT)
+        bh=MJpBAkzSSYPV4RvQhjaw2/1DFd2kkl7hVgMR3+qjlgE=;
+        b=AAfDYotLxqXK/jHntv/KetGKajZW4EmwxgDVhW66dlTst3vItDEHKHwnukwmlr4NfR
+         7usXCW9+CFyJ7g9KWU9YmUFehGEr38ietojpV7y4GR6eqJzwsIJcNqwXvhX9Y5vl6mIZ
+         +x8ExgdQfS3wxLAj/lNRudhB0V2g8zfnbkD71J/WHJPNsG5q0ZavKRsh11U706ccPuWX
+         51ytxcb1SQVov/Dcm6gvSish4axqBh2xMJFeHNw4saFE36BZeIGX356hwGJcscRClD+Y
+         DCVgYnxwxWTVgzHkp4cO3iOWVekjahfClqxM6k+WEXjsUmjLd+QqgOK3oGIb+cgdmi4G
+         OjRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWziy3LrLYgoH+iKXOyTRN5VC9WGWFTu060uMyYcvIO4w17wEztgjagUl0+G8bU5K8Qf4s9cCMVqkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjEp1lyFlbpOS/Sh4Rpv0sDB7yWjaDeZ1KabI0O9UPhfNW5LgO
+	QpGg0JoXt1rIJAmcEhMPKph7frHnxPCnt2+w0IxyIyJzOEfYY8Lh7V9pXXKSKVA=
+X-Google-Smtp-Source: AGHT+IHhgz4z/pNzeGgfxd28esWvpBib5iH9I1o0u1Snz5WDz9JUClIdWIVkcf1KuO2G++R03tqq+Q==
+X-Received: by 2002:a05:6820:608:b0:5eb:c72e:e29f with SMTP id 006d021491bc7-5ebee0753aemr2275209eaf.1.1729717176874;
+        Wed, 23 Oct 2024 13:59:36 -0700 (PDT)
 Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5ec02c2c157sm52730eaf.44.2024.10.23.13.59.30
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5ec02c2c157sm52730eaf.44.2024.10.23.13.59.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 13:59:32 -0700 (PDT)
+        Wed, 23 Oct 2024 13:59:35 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
-Date: Wed, 23 Oct 2024 15:59:13 -0500
-Subject: [PATCH RFC v4 06/15] spi: offload-trigger: add PWM trigger driver
+Date: Wed, 23 Oct 2024 15:59:14 -0500
+Subject: [PATCH RFC v4 07/15] spi: add offload TX/RX streaming APIs
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -78,7 +78,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241023-dlech-mainline-spi-engine-offload-2-v4-6-f8125b99f5a1@baylibre.com>
+Message-Id: <20241023-dlech-mainline-spi-engine-offload-2-v4-7-f8125b99f5a1@baylibre.com>
 References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
 In-Reply-To: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
 To: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
@@ -94,225 +94,244 @@ Cc: Michael Hennerich <Michael.Hennerich@analog.com>,
  David Lechner <dlechner@baylibre.com>
 X-Mailer: b4 0.14.1
 
-Add a new driver for a generic PWM trigger for SPI offloads.
+Most configuration of SPI offloads is handled opaquely using the offload
+pointer that is passed to the various offload functions. However, there
+are some offload features that need to be controlled on a per transfer
+basis.
+
+This patch adds a flag field to struct spi_transfer to allow specifying
+such features. The first feature to be added is the ability to stream
+data to/from a hardware sink/source rather than using a tx or rx buffer.
+Additional flags can be added in the future as needed.
+
+A flags field is also added to the offload struct for providers to
+indicate which flags are supported. This allows for generic checking of
+offload capabilities during __spi_validate() so that each offload
+provider doesn't have to implement their own validation.
+
+As a first users of this streaming capability, getter functions are
+added to get a DMA channel that is directly connected to the offload.
+Peripheral drivers will use this to get a DMA channel and configure it
+to suit their needs.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
 
-v4 changes: new patch in v4
----
- drivers/spi/Kconfig                   |  12 +++
- drivers/spi/Makefile                  |   3 +
- drivers/spi/spi-offload-trigger-pwm.c | 169 ++++++++++++++++++++++++++++++++++
- 3 files changed, 184 insertions(+)
+v4 changes:
+* DMA API's now automatically release DMA channels instead of leaving
+  it up to the caller.
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index d65074b85f62..50d04fa317b7 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -1286,4 +1286,16 @@ endif # SPI_SLAVE
- config SPI_DYNAMIC
- 	def_bool ACPI || OF_DYNAMIC || SPI_SLAVE
+v3 changes:
+* Added spi_offload_{tx,rx}_stream_get_dma_chan() functions.
+
+v2 changes:
+* This is also split out from "spi: add core support for controllers with
+  offload capabilities".
+* In the previous version, we were using (void *)-1 as a sentinel value
+  that could be assigned, e.g. to rx_buf. But this was naive since there
+  is core code that would try to dereference this pointer. So instead,
+  we've added a new flags field to the spi_transfer structure for this
+  sort of thing. This also has the advantage of being able to be used in
+  the future for other arbitrary features.
+---
+ drivers/spi/spi-offload.c       | 76 +++++++++++++++++++++++++++++++++++++++++
+ drivers/spi/spi.c               | 10 ++++++
+ include/linux/spi/spi-offload.h | 24 +++++++++++++
+ include/linux/spi/spi.h         |  3 ++
+ 4 files changed, 113 insertions(+)
+
+diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
+index 2a1f9587f27a..dd4cb3c2e985 100644
+--- a/drivers/spi/spi-offload.c
++++ b/drivers/spi/spi-offload.c
+@@ -8,6 +8,7 @@
  
-+if SPI_OFFLOAD
+ #include <linux/cleanup.h>
+ #include <linux/device.h>
++#include <linux/dmaengine.h>
+ #include <linux/export.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
+@@ -282,6 +283,81 @@ void spi_offload_trigger_disable(struct spi_offload *offload,
+ }
+ EXPORT_SYMBOL_GPL(spi_offload_trigger_disable);
+ 
++static void spi_offload_release_dma_chan(void *chan)
++{
++	dma_release_channel(chan);
++}
 +
-+comment "SPI Offload triggers"
-+
-+config SPI_OFFLOAD_TRIGGER_PWM
-+	tristate "SPI offload trigger using PWM"
-+	depends on PWM
-+	help
-+	  Generic SPI offload trigger implemented using PWM output.
-+
-+endif # SPI_OFFLOAD
-+
- endif # SPI
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 6a470eb475a2..3a76b9c61486 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -161,3 +161,6 @@ obj-$(CONFIG_SPI_AMD)			+= spi-amd.o
- # SPI slave protocol handlers
- obj-$(CONFIG_SPI_SLAVE_TIME)		+= spi-slave-time.o
- obj-$(CONFIG_SPI_SLAVE_SYSTEM_CONTROL)	+= spi-slave-system-control.o
-+
-+# SPI offload triggers
-+obj-$(CONFIG_SPI_OFFLOAD_TRIGGER_PWM)	+= spi-offload-trigger-pwm.o
-diff --git a/drivers/spi/spi-offload-trigger-pwm.c b/drivers/spi/spi-offload-trigger-pwm.c
-new file mode 100644
-index 000000000000..ffb0bf75cace
---- /dev/null
-+++ b/drivers/spi/spi-offload-trigger-pwm.c
-@@ -0,0 +1,169 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 Analog Devices Inc.
-+ * Copyright (C) 2024 BayLibre, SAS
++/**
++ * spi_offload_tx_stream_request_dma_chan_info - Get the DMA channel info for the TX stream
++ * @spi: SPI device
++ * @id: Function ID if SPI device uses more than one offload or NULL.
 + *
-+ * Generic PWM trigger for SPI offload.
++ * This is the DMA channel that will provide data to transfers that use the
++ * %SPI_OFFLOAD_XFER_TX_STREAM offload flag.
++ *
++ * The caller is responsible for calling spi_offload_free_dma_chan_info() on the
++ * returned pointer.
++ *
++ * Return: Pointer to DMA channel info, or negative error code
 + */
-+
-+#include <linux/platform_device.h>
-+#include <linux/pwm.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/spi/spi-offload.h>
-+#include <linux/types.h>
-+
-+struct spi_offload_trigger_pwm_state {
-+	struct device *dev;
-+	struct pwm_device *pwm;
-+};
-+
-+static bool spi_offload_trigger_pwm_match(void *priv,
-+					  enum spi_offload_trigger_type type,
-+					  u64 *args, u32 nargs)
++struct dma_chan
++*devm_spi_offload_tx_stream_request_dma_chan(struct device *dev,
++					     struct spi_offload *offload)
 +{
-+	if (nargs)
-+		return false;
-+
-+	return type == SPI_OFFLOAD_TRIGGER_PERIODIC;
-+}
-+
-+static int spi_offload_trigger_pwm_validate(void *priv,
-+					    struct spi_offload_trigger_config *config)
-+{
-+	struct spi_offload_trigger_pwm_state *st = priv;
-+	struct spi_offload_trigger_periodic *periodic = &config->periodic;
-+	struct pwm_waveform wf = { };
++	struct dma_chan *chan;
 +	int ret;
 +
-+	if (config->type != SPI_OFFLOAD_TRIGGER_PERIODIC)
-+		return -EINVAL;
++	if (!offload->ops || !offload->ops->tx_stream_request_dma_chan)
++		return ERR_PTR(-EOPNOTSUPP);
 +
-+	if (!periodic->frequency_hz)
-+		return -EINVAL;
++	chan = offload->ops->tx_stream_request_dma_chan(offload);
++	if (IS_ERR(chan))
++		return chan;
 +
-+	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
-+	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
-+	wf.duty_length_ns = wf.period_length_ns / 2;
-+
-+	ret = pwm_round_waveform_might_sleep(st->pwm, &wf);
-+	if (ret < 0)
-+		return ret;
-+
-+	periodic->frequency_hz = DIV_ROUND_UP_ULL(NSEC_PER_SEC, wf.period_length_ns);
-+
-+	return 0;
-+}
-+
-+static int spi_offload_trigger_pwm_enable(void *priv,
-+					  struct spi_offload_trigger_config *config)
-+{
-+	struct spi_offload_trigger_pwm_state *st = priv;
-+	struct spi_offload_trigger_periodic *periodic = &config->periodic;
-+	struct pwm_waveform wf = { };
-+
-+	if (config->type != SPI_OFFLOAD_TRIGGER_PERIODIC)
-+		return -EINVAL;
-+
-+	if (!periodic->frequency_hz)
-+		return -EINVAL;
-+
-+	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
-+	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
-+	wf.duty_length_ns = wf.period_length_ns / 2;
-+
-+	return pwm_set_waveform_might_sleep(st->pwm, &wf, false);
-+}
-+
-+static void spi_offload_trigger_pwm_disable(void *priv)
-+{
-+	struct spi_offload_trigger_pwm_state *st = priv;
-+	struct pwm_waveform wf;
-+	int ret;
-+
-+	ret = pwm_get_waveform_might_sleep(st->pwm, &wf);
-+	if (ret < 0) {
-+		dev_err(st->dev, "failed to get waveform: %d\n", ret);
-+		return;
-+	}
-+
-+	wf.duty_length_ns = 0;
-+
-+	ret = pwm_set_waveform_might_sleep(st->pwm, &wf, false);
-+	if (ret < 0)
-+		dev_err(st->dev, "failed to disable PWM: %d\n", ret);
-+}
-+
-+static const struct spi_offload_trigger_ops spi_offload_trigger_pwm_ops = {
-+	.match = spi_offload_trigger_pwm_match,
-+	.validate = spi_offload_trigger_pwm_validate,
-+	.enable = spi_offload_trigger_pwm_enable,
-+	.disable = spi_offload_trigger_pwm_disable,
-+};
-+
-+static void spi_offload_trigger_pwm_release(void *data)
-+{
-+	pwm_disable(data);
-+}
-+
-+static int spi_offload_trigger_pwm_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct spi_offload_trigger_info info = {
-+		.name = "trigger",
-+		.id = 0,
-+		.parent = dev,
-+		.fwnode = dev_fwnode(dev),
-+		.ops = &spi_offload_trigger_pwm_ops,
-+	};
-+	struct spi_offload_trigger_pwm_state *st;
-+	struct spi_offload_trigger *trigger;
-+	struct pwm_state state;
-+	int ret;
-+
-+	st = devm_kzalloc(&pdev->dev, sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	st->dev = dev;
-+
-+	st->pwm = devm_pwm_get(&pdev->dev, NULL);
-+	if (IS_ERR(st->pwm))
-+		return dev_err_probe(dev, PTR_ERR(st->pwm), "failed to get PWM\n");
-+
-+	/* init with duty_cycle = 0, output enabled to ensure trigger off */
-+	pwm_init_state(st->pwm, &state);
-+	state.enabled = true;
-+
-+	ret = pwm_apply_might_sleep(st->pwm, &state);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to apply PWM state\n");
-+
-+	ret = devm_add_action_or_reset(dev, spi_offload_trigger_pwm_release, st->pwm);
++	ret = devm_add_action_or_reset(dev, spi_offload_release_dma_chan, chan);
 +	if (ret)
-+		return ret;
++		return ERR_PTR(ret);
 +
-+	trigger = devm_spi_offload_trigger_alloc(dev, &info);
-+	if (IS_ERR(trigger))
-+		return dev_err_probe(dev, PTR_ERR(trigger), "failed to allocate trigger\n");
-+
-+	return devm_spi_offload_trigger_register(dev, trigger, st);
++	return chan;
 +}
++EXPORT_SYMBOL_GPL(devm_spi_offload_tx_stream_request_dma_chan);
 +
-+static const struct of_device_id spi_offload_trigger_pwm_of_match_table[] = {
-+	{ .compatible = "trigger-pwm" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, spi_offload_trigger_pwm_of_match_table);
++/**
++ * spi_offload_rx_stream_request_dma_chan_info - Get the DMA channel info for the RX stream
++ * @spi: SPI device
++ * @id: Function ID if SPI device uses more than one offload or NULL.
++ *
++ * This is the DMA channel that will receive data from transfers that use the
++ * %SPI_OFFLOAD_XFER_RX_STREAM offload flag.
++ *
++ * The caller is responsible for calling spi_offload_free_dma_chan_info() on the
++ * returned pointer.
++ *
++ * Return: Pointer to DMA channel info, or negative error code
++ */
++struct dma_chan
++*devm_spi_offload_rx_stream_request_dma_chan(struct device *dev,
++					     struct spi_offload *offload)
++{
++	struct dma_chan *chan;
++	int ret;
 +
-+static struct platform_driver spi_offload_trigger_pwm_driver = {
-+	.driver = {
-+		.name = "trigger-pwm",
-+		.of_match_table = spi_offload_trigger_pwm_of_match_table,
-+	},
-+	.probe = spi_offload_trigger_pwm_probe,
-+};
-+module_platform_driver(spi_offload_trigger_pwm_driver);
++	if (!offload->ops || !offload->ops->rx_stream_request_dma_chan)
++		return ERR_PTR(-EOPNOTSUPP);
 +
-+MODULE_AUTHOR("David Lechner <dlechner@baylibre.com>");
-+MODULE_DESCRIPTION("Generic PWM trigger");
-+MODULE_LICENSE("GPL");
++	chan = offload->ops->rx_stream_request_dma_chan(offload);
++	if (IS_ERR(chan))
++		return chan;
++
++	ret = devm_add_action_or_reset(dev, spi_offload_release_dma_chan, chan);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return chan;
++}
++EXPORT_SYMBOL_GPL(devm_spi_offload_rx_stream_request_dma_chan);
++
+ /* Triggers providers */
+ 
+ static void spi_offload_trigger_dev_release(struct device *dev)
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 7c5e76b15421..cb6184c0ae03 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -31,6 +31,7 @@
+ #include <linux/ptp_clock_kernel.h>
+ #include <linux/sched/rt.h>
+ #include <linux/slab.h>
++#include <linux/spi/spi-offload.h>
+ #include <linux/spi/spi.h>
+ #include <linux/spi/spi-mem.h>
+ #include <uapi/linux/sched/types.h>
+@@ -4159,6 +4160,15 @@ static int __spi_validate(struct spi_device *spi, struct spi_message *message)
+ 
+ 		if (_spi_xfer_word_delay_update(xfer, spi))
+ 			return -EINVAL;
++
++		/* make sure controller supports required offload features */
++		if (xfer->offload_flags) {
++			if (!message->offload)
++				return -EINVAL;
++
++			if (xfer->offload_flags & ~message->offload->xfer_flags)
++				return -EINVAL;
++		}
+ 	}
+ 
+ 	message->status = -EINPROGRESS;
+diff --git a/include/linux/spi/spi-offload.h b/include/linux/spi/spi-offload.h
+index 561cc1fb6f35..5d0e29b25977 100644
+--- a/include/linux/spi/spi-offload.h
++++ b/include/linux/spi/spi-offload.h
+@@ -25,6 +25,11 @@ struct device;
+ struct fwnode_handle;
+ struct spi_device;
+ 
++/* This is write xfer but TX uses external data stream rather than tx_buf. */
++#define SPI_OFFLOAD_XFER_TX_STREAM	BIT(0)
++/* This is read xfer but RX uses external data stream rather than rx_buf. */
++#define SPI_OFFLOAD_XFER_RX_STREAM	BIT(1)
++
+ /* Offload can be triggered by external hardware event. */
+ #define SPI_OFFLOAD_CAP_TRIGGER			BIT(0)
+ /* Offload can record and then play back TX data when triggered. */
+@@ -56,6 +61,8 @@ struct spi_offload {
+ 	void *priv;
+ 	/** @ops: callbacks for offload support */
+ 	const struct spi_offload_ops *ops;
++	/** @xfer_flags: %SPI_OFFLOAD_XFER_* flags supported by provider */
++	u32 xfer_flags;
+ };
+ 
+ enum spi_offload_trigger_type {
+@@ -91,6 +98,18 @@ struct spi_offload_ops {
+ 	 * given offload instance.
+ 	 */
+ 	void (*trigger_disable)(struct spi_offload *offload);
++	/**
++	 * @tx_stream_request_dma_chan: Optional callback for controllers that
++	 * have an offload where the TX data stream is connected directly to a
++	 * DMA channel.
++	 */
++	struct dma_chan *(*tx_stream_request_dma_chan)(struct spi_offload *offload);
++	/**
++	 * @rx_stream_request_dma_chan: Optional callback for controllers that
++	 * have an offload where the RX data stream is connected directly to a
++	 * DMA channel.
++	 */
++	struct dma_chan *(*rx_stream_request_dma_chan)(struct spi_offload *offload);
+ };
+ 
+ struct spi_offload *devm_spi_offload_alloc(struct device *dev,
+@@ -111,6 +130,11 @@ int spi_offload_trigger_enable(struct spi_offload *offload,
+ void spi_offload_trigger_disable(struct spi_offload *offload,
+ 				 struct spi_offload_trigger *trigger);
+ 
++struct dma_chan *devm_spi_offload_tx_stream_request_dma_chan(struct device *dev,
++							     struct spi_offload *offload);
++struct dma_chan *devm_spi_offload_rx_stream_request_dma_chan(struct device *dev,
++							     struct spi_offload *offload);
++
+ /* Trigger providers */
+ 
+ struct spi_offload_trigger;
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index c230d6a209ee..fbb8b2d0b5ea 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -1092,6 +1092,9 @@ struct spi_transfer {
+ 
+ 	u32		effective_speed_hz;
+ 
++	/* Use %SPI_OFFLOAD_XFER_* from spi-offload.h */
++	unsigned int	offload_flags;
++
+ 	unsigned int	ptp_sts_word_pre;
+ 	unsigned int	ptp_sts_word_post;
+ 
 
 -- 
 2.43.0
