@@ -1,125 +1,150 @@
-Return-Path: <linux-spi+bounces-5296-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5297-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BC1A9ABEC2
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 08:31:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16969AC058
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 09:33:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11455B23131
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 06:31:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B0F5285320
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 07:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5666B145324;
-	Wed, 23 Oct 2024 06:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C44155327;
+	Wed, 23 Oct 2024 07:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="iGpQUzuf"
+	dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b="SvSqZDdq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
+Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B37D147C9B;
-	Wed, 23 Oct 2024 06:31:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707CC154BEC;
+	Wed, 23 Oct 2024 07:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.100.248.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729665081; cv=none; b=LczFSz+m5YKnMfQwkYxoqXoVK8Ng9Z8ihKKEcWvH5J0RdaUsswY/VWuOAhVLVmAO6CY4vxlWn2v4So+Tvo5KbecFeAmeHq0d/gBsMxzcr40+8NlGXl/MSQ79hbDiko0w/pEReG5EQHb+K8KzuABC+UB8lCtJeKrvwaQOczhdt5Y=
+	t=1729668790; cv=none; b=myYjNxo6ZwvDoLSBVIKFz9/LTLpi/665O5AldBLMM+rVsMQ67XxUbwv2/3JFcbm3CPZx0DuX8DkHtyT4ElU285gSemaJEQCcSqLptKZfXirdl7DucEKvRmx0nHn2X3K3ETuph+RX3+npPTe373iJNR2e4QpH6GkJIz3iC7ixJaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729665081; c=relaxed/simple;
-	bh=ngQUyspk0u5tmnuw4tF5HJKltqCiL9AJbZfUWTdGVNU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RQ40471UqO23SaKBOUM0sRk29Jstb8BS1dwUpBxea15K2fBOFDX3KjZ3B+ovkCTHwa71vy5NJjL37sXGiVH2AMvZhwBXnHFpMaeJZHZXKe+kYKDJlXWp+tCbzaEs306aRAkJoynKVkh7ZGqVw+p1GfSPj8qdYjLCSqJY/yNqdlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=iGpQUzuf; arc=none smtp.client-ip=18.194.254.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1729665067;
-	bh=ngQUyspk0u5tmnuw4tF5HJKltqCiL9AJbZfUWTdGVNU=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=iGpQUzufGKagQD2p8OJ9+o1rv05GO3s0irkkzl+B/jVQzK62CKg8qVz67X69ysnlY
-	 guTCSgPYkdN689aKc9jSkAv2q1YkVkLU9aW1hyxIu8y95ubUmp7oLbbBrYPzSuQtxk
-	 b6AP1aH471/Gf/Mf0lCx04AOx9Z8n7u1eTbhDMCE=
-X-QQ-mid: bizesmtp85t1729665063t7rgkpzf
-X-QQ-Originating-IP: /Pu5B/BFVMh1l61DmVeOAJ9BOb/PIqdl2onMEJbSJ3s=
-Received: from localhost.localdomain ( [113.57.152.160])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 23 Oct 2024 14:30:59 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5490330265754036757
-From: WangYuli <wangyuli@uniontech.com>
-To: gregkh@linuxfoundation.org
-Cc: patches@lists.linux.dev,
-	nikita@trvn.ru,
-	ink@jurassic.park.msu.ru,
-	shc_work@mail.ru,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linux-alpha@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	fancer.lancer@gmail.com,
-	linux-hwmon@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	xeb@mail.ru,
-	netdev@vger.kernel.org,
-	s.shtylyov@omp.ru,
-	linux-ide@vger.kernel.org,
-	serjk@netup.ru,
-	aospan@netup.ru,
-	linux-media@vger.kernel.org,
-	ddrokosov@sberdevices.ru,
-	linux-iio@vger.kernel.org,
-	v.georgiev@metrotek.ru,
-	linux-mips@vger.kernel.org,
-	ntb@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	dushistov@mail.ru,
-	manivannan.sadhasivam@linaro.org,
-	conor.dooley@microchip.com,
-	linux-fpga@vger.kernel.org,
-	tsbogend@alpha.franken.de,
-	hoan@os.amperecomputing.com,
-	geert@linux-m68k.org,
-	wsa+renesas@sang-engineering.com
-Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various compliance requirements.
-Date: Wed, 23 Oct 2024 14:30:58 +0800
-Message-ID: <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <2024101835-tiptop-blip-09ed@gregkh>
-References: <2024101835-tiptop-blip-09ed@gregkh>
+	s=arc-20240116; t=1729668790; c=relaxed/simple;
+	bh=xEo0swbVCdrGjVdei/ZvZa4U5Cg1mfinNBvemiRZC+8=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=Wdl4/A3S1BPrftLGY3W44hPwg3meYg/fQAtQkoUX5/baLV58koXx87wOwXZniApTP+vbVo206zKGSA1d7K4+7vB9WUvKqlIgX8NqbhfFcmOUUUuafJTZo1KYq398PnbOeHoZtyASl9hgdnQ1mziT9yHIy4ymCpfU0PBQ/Ul6Zsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io; spf=pass smtp.mailfrom=aosc.io; dkim=pass (1024-bit key) header.d=aosc.io header.i=@aosc.io header.b=SvSqZDdq; arc=none smtp.client-ip=159.100.248.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=aosc.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aosc.io
+Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.100])
+	by relay5.mymailcheap.com (Postfix) with ESMTPS id 4DC6A26761;
+	Wed, 23 Oct 2024 07:33:01 +0000 (UTC)
+Received: from nf2.mymailcheap.com (nf2.mymailcheap.com [54.39.180.165])
+	by relay1.mymailcheap.com (Postfix) with ESMTPS id 4B4033E9D6;
+	Wed, 23 Oct 2024 07:32:53 +0000 (UTC)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	by nf2.mymailcheap.com (Postfix) with ESMTPSA id F1FA140071;
+	Wed, 23 Oct 2024 07:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+	t=1729668771; bh=xEo0swbVCdrGjVdei/ZvZa4U5Cg1mfinNBvemiRZC+8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SvSqZDdqa/ICtW2R15erWVPbVyfE4hGMXwFYFIIFJULUy5Gsz/e9Obz0kKMRpZuuP
+	 qWt7ccWb2aX9Jr1l6fU1NnihUmbwmhhq3BEauxQRazcsa4UFnWWMyVWO4yVj3b5/HO
+	 +QksPHbpOl9qNeYXOjk0WVaL2Xvcd3NvmI8bkKZM=
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail20.mymailcheap.com (Postfix) with ESMTPSA id 457BE407D9;
+	Wed, 23 Oct 2024 07:32:51 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Wed, 23 Oct 2024 15:32:50 +0800
+From: Mingcong Bai <jeffbai@aosc.io>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: gregkh@linuxfoundation.org, patches@lists.linux.dev, nikita@trvn.ru,
+ ink@jurassic.park.msu.ru, shc_work@mail.ru, richard.henderson@linaro.org,
+ mattst88@gmail.com, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, fancer.lancer@gmail.com,
+ linux-hwmon@vger.kernel.org, dmaengine@vger.kernel.org, xeb@mail.ru,
+ netdev@vger.kernel.org, s.shtylyov@omp.ru, linux-ide@vger.kernel.org,
+ serjk@netup.ru, aospan@netup.ru, linux-media@vger.kernel.org,
+ ddrokosov@sberdevices.ru, linux-iio@vger.kernel.org, v.georgiev@metrotek.ru,
+ linux-mips@vger.kernel.org, ntb@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, dushistov@mail.ru,
+ manivannan.sadhasivam@linaro.org, conor.dooley@microchip.com,
+ linux-fpga@vger.kernel.org, tsbogend@alpha.franken.de,
+ hoan@os.amperecomputing.com, geert@linux-m68k.org,
+ wsa+renesas@sang-engineering.com
+Subject: Re: [PATCH] MAINTAINERS: Remove some entries due to various
+ compliance requirements.
+In-Reply-To: <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
+References: <2024101835-tiptop-blip-09ed@gregkh>
+ <A74519B4332040FA+20241023063058.223139-1-wangyuli@uniontech.com>
+Message-ID: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+X-Sender: jeffbai@aosc.io
+Organization: Anthon Open Source Community
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: OHTF91J1Rz8hHcmuwSpKjbBoUoZhpUSlBvuksK5sCSl/z3VoTP0vAl4N
-	1dHAHra4Np4fyto/bbVt43UDCsn7NLXDUNh5iYXeLoYQcbbFzWbVIpoYTE03C/1h8t/1u8L
-	8ERmK8MW0sKaMNx53w/v1rLlOXn9oUWkJCjZuNsTG/xNBbyDiysuK5BuLHeqFWj+K7HrFqk
-	ggbdJdw25YtQWLksEVyF606liPNxa6P1Lvmazhi6gX+6qgfLFgjgYffSrRUEfsMuAdcgWtK
-	OxgOGAFs9tgh9n9ASJcpo0ENdeIcAe7eLJ5UJ7Bo3u4hZtufOciW93dwXJ/2niv15dipoem
-	kRNVXXM8LExASYYw4xKGuoXH2S5UnciM8O0nenV/B/6hliIdy3uMoe7bGS1ajI5Lc0YFVaH
-	A057WWcwbq9S4gQ46FsyYanFmUDBFlmR2VIM3Cq8N6KGcTlNGFGtsleWKwQgxDy7Jvc/xZV
-	UW91jouYjEWZSoa9z7XtEb+cNy4Q7mhzLngPNCDK9gfCwtXcZFI/2KdtZ7mQVX2OqHl8BqZ
-	3bMrZxbNUCMtOK0JLpZuU9v2Sj9bh9B0ifVCcgE37rBzLtb3VKq7RlkEj5ek75uAxuBj/7V
-	tAG90ubNemZBRBBQAH7UwP4QOR3C1W1NqFBkln6nIVsnjmBpcld+FvWzx/IHJ4SNnl+sVVN
-	Rac1Dtq15CvUBsfah11nxPqvr76OLEkglxzL8RVMpQgfETr4JA52AIcMaIBvsqMhElYJTlG
-	wc2keO+nPHrdGopZDfryVS1Es03SH5LDbn6w00/SVe2gp0wM1Grq30QPlNCps1KMCyjnFJG
-	fEYEVc7N8nwue960aKpP4EeJe8xaKiYSIBKrCd8l5gLtgt5XIo10LO+33un1X65I+v5BOJv
-	37AGKl6wBtX9r6/Xj2DGSbDPIsWGy6kUlmNXgwvg0q4ZSTrZqkZlBHqoGC5HcthTHqMZV/1
-	bfu/PJjY6SmjHvQvBdngCuM7+
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+X-Rspamd-Server: nf2.mymailcheap.com
+X-Rspamd-Queue-Id: F1FA140071
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [1.40 / 10.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MIME_GOOD(-0.10)[text/plain];
+	ASN(0.00)[asn:16276, ipnet:51.83.0.0/16, country:FR];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_ONE(0.00)[1];
+	RCPT_COUNT_TWELVE(0.00)[36];
+	TAGGED_RCPT(0.00)[renesas];
+	MID_RHS_MATCH_FROM(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,mail.ru];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,lists.linux.dev,trvn.ru,jurassic.park.msu.ru,mail.ru,linaro.org,gmail.com,vger.kernel.org,lists.infradead.org,omp.ru,netup.ru,sberdevices.ru,metrotek.ru,microchip.com,alpha.franken.de,os.amperecomputing.com,linux-m68k.org,sang-engineering.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MISSING_XM_UA(0.00)[]
 
-Although this commit has been merged, it's still important to know the specific reason (or even an example) that triggered this change for everyone here, right?
+Greetings all,
 
-And those maintainers who have been removed should be notified.
+在 2024-10-23 14:30，WangYuli 写道：
+> Although this commit has been merged, it's still important to know the 
+> specific reason (or even an example) that triggered this change for 
+> everyone here, right?
+> 
+> And those maintainers who have been removed should be notified.
 
-It should be CC'd everyone who might need to be aware of this change, including the removed maintainers, other maintainers on the subsystem, and the subsystem's mailing list.
+Seconded.
 
-To ensure transparency.
+> It should be CC'd everyone who might need to be aware of this change, 
+> including the removed maintainers, other maintainers on the subsystem, 
+> and the subsystem's mailing list.
+> 
+> To ensure transparency.
+
+This patch is one such instance where we find ourselves questioning the 
+legitimacy and indeed, the feasibility, of an international, open, and 
+open source project. Vagueness breeds distrust.
+
+It's not difficult to deduce what the "various compliance requirements" 
+are and I'm sure Greg is aware of this. The Linux Foundation, if 
+interested in continuing their governance role over the Linux kernel, 
+should be ready to explain themselves over this decision. Greg and 
+Linus, I'm not sure if I'm ready to believe that this is supposed to be 
+a political show - but if this is the case, please leave the ground for 
+the Foundation - they should be the one responsible and receiving the 
+scrutiny (or insult, as I'm sure many - myself included - find this 
+patch insulting).
+
+So I repeat - call the decision-makers out and ask for their 
+explanation.
+
+Best Regards,
+Mingcong Bai
 
