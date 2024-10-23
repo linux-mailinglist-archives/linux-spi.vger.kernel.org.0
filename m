@@ -1,128 +1,103 @@
-Return-Path: <linux-spi+bounces-5322-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5323-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E494B9AD323
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 19:46:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 133759AD397
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 20:07:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10AC91C21D89
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 17:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8B2E282C7A
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Oct 2024 18:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635E31D0DD5;
-	Wed, 23 Oct 2024 17:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94AC11C6F6C;
+	Wed, 23 Oct 2024 18:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PfNRqMVd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UiouI9v9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A291D0499
-	for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 17:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C8145FEB;
+	Wed, 23 Oct 2024 18:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729705568; cv=none; b=IkMc09g0zu7NYGLAseSpiJ/zm+kV1exjm+XEeHga/eLH8vJkC0D7HunG1QqvdtpX9H4kLAN1Qm1iVnUr9qre7WoessTM2MjrEYDpIbm+zFIB8qhmjlkndUjHmNDcdXHrSKIOwrL2OnTaGCFOoTnwpjkEAnTiHuRSIEHsfFzpwRs=
+	t=1729706822; cv=none; b=YwnqpPbg5aDuWSPv06UBbaODFhL4m+CPTPSCH95IWuHv4t6HSAdNAgC0nx8YTZO9CmfiAgwOTd2jB626J3b9xR/TRed9EtBYIYFo4SuixHft+5XGtPcxMGklLbhIJSuj5SVyh6nmB14oqTQAGhzlIbX2w+iMyrgZxYatIZXp3V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729705568; c=relaxed/simple;
-	bh=HhCRM8LXsD648EezB/Ag71ruZTVUBPWIrjPd9FGl4yA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NRMOzhwOFKD4/TMeoF/voli6sFin84D8btIlGyHQ4JBDzdXRoE048reSJQZhXWKaajipaA+VAwSexo32if62OOEeyIU80XcFvKGVKtCCUtxxq6oro92TequHJhLC1GgcRb2tPAwKc4SJ/cti49D86rNwHkQgi92yw94H0TuA0jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PfNRqMVd; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a9a628b68a7so932106666b.2
-        for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 10:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1729705564; x=1730310364; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FLwni55Q0o3LkpPoGPWHU+nZClL0F1PcEd+W91uMukA=;
-        b=PfNRqMVdmHs1fU+LK8FFyPDvmOvLnYzZ2a46Zh6rulUgi2z7zoX7LspJvHR2aT8rAV
-         WNvChqPrimTnEzqOWz3OebW+0acLVmqfqwZMu9z9heLbB7uZXox+VZRCUxbVAJ+4Vwn2
-         fxMdAr+VP1DH3MzbvvvIKxCOvS82QFFjkGhaQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729705564; x=1730310364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FLwni55Q0o3LkpPoGPWHU+nZClL0F1PcEd+W91uMukA=;
-        b=CbaXj7FmY3K1f+YuNb/MQe/NMbrM5pvLKpz37XTgl8HHKYp/1+uBfs4Q1Y0tSFmXCf
-         OywpxtlDRMl2XN0RvWFxzfmh7+IiUR/4SpzEiwIJC0dWzO2sv+qE0n9Ghmry+20Jt0PV
-         CgLzxse1/MKKNk3gMO7ctSTACdToFdZ/BbERAT7rfFo3gUnHoiCregCiLc1sR3+WasaK
-         RcFmkirp4M1/csUuVLB2h+1YxoBKPrZ8IKQowKgoK2AqmbUX/Gti1eqWDCBF8/Qb8EZ9
-         Ql4kQmulWHopTAQKUdG0B8cR2KNKXZ/XSMLDrX3xY2Jo8wwa213NuMEGauGPH6WxQr2w
-         X64A==
-X-Forwarded-Encrypted: i=1; AJvYcCVZh1xQl+lTvc6CdoknKdk6ttgxJXQfJDt27tHSgPnDx/1PcuGAs06IU+wO0PmX0jyRxDaYpQlz+xI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcGDgG64nwpFi6A5Az1zeOE3V3jtdK0DqvIKE+Rpu7Q0x3+wJH
-	Zb9T5f61lGIz+S15AiisT1Rmr73yf93ntP+s5nXshI6vtsUhsfyf/5bq1quCHJz72l2iriaCB0L
-	NmY4=
-X-Google-Smtp-Source: AGHT+IHa/88iA13Jgq+UxybJ7y12F99lWKu143Om2mabNgp/TbJ+Gmy46olZxmqKoQPWWWOz55DuQA==
-X-Received: by 2002:a17:906:4fc7:b0:a9a:835b:fc77 with SMTP id a640c23a62f3a-a9abf84edd8mr318135166b.8.1729705564421;
-        Wed, 23 Oct 2024 10:46:04 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a912d6355sm507413566b.37.2024.10.23.10.46.04
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Oct 2024 10:46:04 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a9a3dc089d8so979439766b.3
-        for <linux-spi@vger.kernel.org>; Wed, 23 Oct 2024 10:46:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXxEyX4WbxC+L1w07/N5mpQMfSbPzcHGDazuQpYxBFN+vs1zf4nOg2BGFe/KLcs1obKninaLPJrxTI=@vger.kernel.org
-X-Received: by 2002:a17:907:94c3:b0:a9a:8042:bbb8 with SMTP id
- a640c23a62f3a-a9abf94d4b2mr369489566b.47.1729705563762; Wed, 23 Oct 2024
- 10:46:03 -0700 (PDT)
+	s=arc-20240116; t=1729706822; c=relaxed/simple;
+	bh=t0OsmiICNt3PxXJRiW8VMEDf2/PnwsW9vsZr+jws/Zo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cx66CzR01Y1HbJrhLtH9qPuUZRln/7XmPhmXblBc/W1W3LMaqqUOz/zrYZd9+kN7I4YntUrRYhMqjxEr0NtZ6nrIRfNSf254oj4iHs/cu5Ax7EoC4SL8iSzdNhsCXG/dwoQVf70CrD+y9Ms0nSPhpHchWieHdAcvRzUSK/rm4Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UiouI9v9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A779EC4CEC7;
+	Wed, 23 Oct 2024 18:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729706821;
+	bh=t0OsmiICNt3PxXJRiW8VMEDf2/PnwsW9vsZr+jws/Zo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UiouI9v9Pvi7W3bkD7Tqo9cyQz2D/bzL+ktiWg5kPpIOSpwmlHT7eStKkc4XNgAnS
+	 LGrygm57mfWwm8wIVO4Qh192OagWGxpd3+kPh6BGTpwZhTs87KddblZ21BGpz/boS5
+	 nmpUZ+6vnnNRTWFeMbRgqO3UZRikChuFGb6oo6LHIi2ZBMmlgDTObd5SRarUlYYVuN
+	 PAelEwrHQnOcKEX2YL191HJDSgtvqYm+8r6KkMXG0p1sk953CUIPGJSMvr1vBzjCNp
+	 g4x+EwlQa7QKOCM3XaYYpg6sTrN3a8XieKCBVaxhuzx9TKn1XTYVQTBEi6JFYpg1Jw
+	 wEac8LYvCTfqQ==
+Date: Wed, 23 Oct 2024 19:06:57 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Fabio Estevam <festevam@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org, shawnguo@kernel.org,
+	linux-arm-kernel@lists.infradead.org, lukma@denx.de,
+	Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH 1/3] dt-bindings: misc: lwn,bk4-spi: Add binding
+Message-ID: <20241023-dares-december-d15da85e5799@spud>
+References: <20241023120015.1049008-1-festevam@gmail.com>
+ <20241023-irritate-veal-0423be9e4c45@spud>
+ <94889e08-07b3-473c-9f52-bdeb5d1fd822@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io> <20241023080935.2945-2-kexybiscuit@aosc.io>
- <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
-In-Reply-To: <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 23 Oct 2024 10:45:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-Message-ID: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "MAINTAINERS: Remove some entries due to various
- compliance requirements."
-To: Tor Vic <torvic9@mailbox.org>
-Cc: Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io, gregkh@linuxfoundation.org, 
-	wangyuli@uniontech.com, aospan@netup.ru, conor.dooley@microchip.com, 
-	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org, dushistov@mail.ru, 
-	fancer.lancer@gmail.com, geert@linux-m68k.org, hoan@os.amperecomputing.com, 
-	ink@jurassic.park.msu.ru, linux-alpha@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-ide@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org, 
-	manivannan.sadhasivam@linaro.org, mattst88@gmail.com, netdev@vger.kernel.org, 
-	nikita@trvn.ru, ntb@lists.linux.dev, patches@lists.linux.dev, 
-	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru, 
-	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, 
-	wsa+renesas@sang-engineering.com, xeb@mail.ru
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="j7TgCwvpalwdyGNy"
+Content-Disposition: inline
+In-Reply-To: <94889e08-07b3-473c-9f52-bdeb5d1fd822@sirena.org.uk>
 
-Ok, lots of Russian trolls out and about.
 
-It's entirely clear why the change was done, it's not getting
-reverted, and using multiple random anonymous accounts to try to
-"grass root" it by Russian troll factories isn't going to change
-anything.
+--j7TgCwvpalwdyGNy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And FYI for the actual innocent bystanders who aren't troll farm
-accounts - the "various compliance requirements" are not just a US
-thing.
+On Wed, Oct 23, 2024 at 06:33:07PM +0100, Mark Brown wrote:
+> On Wed, Oct 23, 2024 at 05:37:29PM +0100, Conor Dooley wrote:
+> > On Wed, Oct 23, 2024 at 09:00:13AM -0300, Fabio Estevam wrote:
+>=20
+> > > +  fsl,spi-cs-sck-delay: true
+>=20
+> > > +  fsl,spi-sck-cs-delay: true
+>=20
+> > Why does this have fsl properties? I figure they're taken from the dts,
+> > but spidev doesn't use them, right?
+>=20
+> These are controlling signal timing and implemented by the SPI
+> controller rather than the device - they're the timing the device
+> requires.
 
-If you haven't heard of Russian sanctions yet, you should try to read
-the news some day.  And by "news", I don't mean Russian
-state-sponsored spam.
+I see, thanks.
 
-As to sending me a revert patch - please use whatever mush you call
-brains. I'm Finnish. Did you think I'd be *supporting* Russian
-aggression? Apparently it's not just lack of real news, it's lack of
-history knowledge too.
+--j7TgCwvpalwdyGNy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                      Linus
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZxk7QQAKCRB4tDGHoIJi
+0h0EAQD1+zRw8ot+iuFqLVv2zcnuAUM8wlHyYJ6GMSQncEgR0gD9HByTJCTh64tQ
+YBm+SGM4Hx7Rpsv9M4RsHAlsAgT8VQg=
+=iPz7
+-----END PGP SIGNATURE-----
+
+--j7TgCwvpalwdyGNy--
 
