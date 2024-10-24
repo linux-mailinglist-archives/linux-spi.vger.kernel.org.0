@@ -1,322 +1,430 @@
-Return-Path: <linux-spi+bounces-5363-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5365-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 047169AE688
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 15:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8262A9AE730
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 16:04:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2653F1C22D53
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 13:33:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A41011C208E9
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 14:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29FCC1F76DB;
-	Thu, 24 Oct 2024 13:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lD8d0D6J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C58521E2031;
+	Thu, 24 Oct 2024 14:04:36 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tlmp.cc (unknown [148.135.104.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5623F1BBBEB;
-	Thu, 24 Oct 2024 13:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D65231D5ACC;
+	Thu, 24 Oct 2024 14:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.135.104.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729776442; cv=none; b=ReGCdo8LozE9iJVWzwCe7IsmPIyyxgsN8X1xMP7I8cE/jwIdoPbtCo6T2fEJ83hOUSJ25nuaTqn1wre4vWS0zXXpGSUhi8OFYcsS34MaU2dKRD59h8mg/8H1dwziQvj09P7YlaqsFW/rjC420iLUulIkzGPQXjv7do7YyfLBHXQ=
+	t=1729778676; cv=none; b=YMGLx6zS2BlEzZQilTDeieUWZjqbWn4xRmnoNQUEyUJux69ytu1SZvbMjcfNfk3LIVu8eiB4N2RFg2xBIrAaF1cDotowdwNSg8Wg+fzVMZHJjYriGeSRABXqT4mvt9/MAnR375Dd4XWr8dsJB3w8RHevYaRwqrAuJY0DE3YKTOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729776442; c=relaxed/simple;
-	bh=YqJofZ36BW/TRJuXv7SdP08LIVcE0smc5fN4el3bLKs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QQNoOChkSxiEKYAe/e5g25Vx7hb6Z3csdy6VY3sjgdOlZkI2IymMC1YGmPrIkQgHkDdyLTllwBXbZ9JJTSJs6vc6/KWuY/JZz4YfaZRISmo75zM2mU0Wjlg5yDOM89jEkjkfMomAgH3sQY6hMoJa21vb1SxNp1z7Z/i8CmW6aJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lD8d0D6J; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-37d6ff1cbe1so628503f8f.3;
-        Thu, 24 Oct 2024 06:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729776438; x=1730381238; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lh/Aemo/gwLUT93xOhFMFPtYx/PANCkObOqWYsHf0oU=;
-        b=lD8d0D6JzKgS6avhOD2Y8kCIaAWZwBC4r58OCH7ZXsmKtPlnZwWQW51D35axwB2ezm
-         G3lzBk+obpvKKkrb8+RfYvHXjhgtuD+A1a+Km0PZjgVMia3skSU35+vk9jyPL8qyA7fx
-         Cp6M5ZR3K8clBokpMEbtB0Uri0PN68m6GKRz1a/37gGFPCoNwLmxuAktcv4yTJRe5S/W
-         01ljBeE0UqkbqOsW3WiaXpa+bG4ucyKyXD+uwyOcMwNOkmS+BIP1/YUYSLDWrdTKUdGK
-         c8kDxAG/S2dBDX75V8peiCeO/lX5Q610fBUUhMc9Wk3l9C9dXopoYTZepuZiZsfkQ2SG
-         kiqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729776438; x=1730381238;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lh/Aemo/gwLUT93xOhFMFPtYx/PANCkObOqWYsHf0oU=;
-        b=QDaO1UHncYcmlkn89F0FWonzV6A72R+CVMc98kCeniBSVtLNMTY/A+8lw5sVfDORVR
-         TDpw4FahKIhbmggOipquanE06U/Z9UqtGmXDWiT+/L7n96dR9gwR8RKgMn7gURmWtlbv
-         WHbvfF/mb7n926AfRVl2SwK+uo2LhPv1b3N4rt4qPNe+SQlcvy/NbczETUjSimzxJ4Oz
-         aehpoL8THnLNbOg7P1Qce9DvX18R/U98wVs+P7uc6+yMBs1Q5tg74UON5xotwnZiI9gw
-         Bild6HTR19HuWOWfdT5j5V9BJGyOOfJQ9E0WtdK+SnOSbr1P42LicgFzyB6F1LkOQ7GF
-         3ZCg==
-X-Forwarded-Encrypted: i=1; AJvYcCU8msp3eoYJ8BP7vFe1eKv5tvVZ29j2DuJxddNM/XG5CTusxHQbIrJff8RDKCGLWIHNQgAR0ctAkaU0@vger.kernel.org, AJvYcCVE1Y/u9F7sxwHlyb5u4sFj7tADxCQ1syW31WnZF+Dp+1/0Qowg1vSOPC8IlVF13KgpX9WuRTzr9LgP@vger.kernel.org, AJvYcCVaQxmXqnY35rStocCRKvGXxSnBANU3qkRgcNx2Qh3A7Vaks46d5w+jZxfP2Mn47nUPGkzjSip6dDUu/FNK@vger.kernel.org, AJvYcCX+E5TzQ3WDto6RWgbF2PYix4t/8Vdh4fUq39uEHVifyQdBHj3gQBNYTv3r1VmOSxmAjyGvUjxTaNS2@vger.kernel.org, AJvYcCXwE0b3wpMfAD2UuCasTgdvpXg38MIchddg4oDGtwgJXm7NioBJEQ8akrDqKtVahSaYGRuicRhVZ5QB@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8kkk6VoHqJ+v4+sjbB8NjzO2z+JDC3Map1xg6AZFuHjgHiLmU
-	wGbMCS58wGtvrH9SdlbYXs05i7sPv0nRCX59i2Wjbj0p5ytvDn8l
-X-Google-Smtp-Source: AGHT+IF9o4FDi/qZPAdyapVJFH/1h0r+fDXv1zwkewBYzgCtc4WAQVTBFq7r/5rH6N5woWxjtXTKvA==
-X-Received: by 2002:adf:e54b:0:b0:37d:4d80:34ae with SMTP id ffacd0b85a97d-37efcf00d4amr4051647f8f.4.1729776437276;
-        Thu, 24 Oct 2024 06:27:17 -0700 (PDT)
-Received: from ?IPv6:2001:a61:34c9:ea01:14b4:7ed9:5135:9381? ([2001:a61:34c9:ea01:14b4:7ed9:5135:9381])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43186bd6a52sm47556215e9.8.2024.10.24.06.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 06:27:17 -0700 (PDT)
-Message-ID: <ba3eed090e29deda797b0dea8162949c82743ccf.camel@gmail.com>
-Subject: Re: [PATCH RFC v4 02/15] spi: add basic support for SPI offloading
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
- Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen
-	 <lars@metafoo.de>, David Jander <david@protonic.nl>, Martin Sperl
-	 <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-Date: Thu, 24 Oct 2024 15:27:15 +0200
-In-Reply-To: <20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
-References: 
-	<20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
-	 <20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1729778676; c=relaxed/simple;
+	bh=DuN4mUXGpKtjsfh4IPC3NEefzqbLB4j+vXm91RftpnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bzADEtmqSv7xV7M7eXqdWaMZxx34u9xaHzDxF7ghl8GRg4ZuLOIyJxjoV45fqn5ERbywAT0oRUFo/TeSmIKiQ4+cjEePsiOqrNE9106lepFuY2/fsi3tAmgDn+s9/+n4NY+d36nhGRondbAdn0LdxOa1S63cICAAe79MoK3b9+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru; spf=fail smtp.mailfrom=kremlin.ru; arc=none smtp.client-ip=148.135.104.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kremlin.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kremlin.ru
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 72B125E5D8;
+	Thu, 24 Oct 2024 10:04:19 -0400 (EDT)
+From: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
+To: torvalds@linux-foundation.org
+Cc: aospan@netup.ru,
+	conor.dooley@microchip.com,
+	ddrokosov@sberdevices.ru,
+	dmaengine@vger.kernel.org,
+	dushistov@mail.ru,
+	fancer.lancer@gmail.com,
+	geert@linux-m68k.org,
+	gregkh@linuxfoundation.org,
+	hoan@os.amperecomputing.com,
+	ink@jurassic.park.msu.ru,
+	jeffbai@aosc.io,
+	kexybiscuit@aosc.io,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com,
+	netdev@vger.kernel.org,
+	nikita@trvn.ru,
+	ntb@lists.linux.dev,
+	patches@lists.linux.dev,
+	richard.henderson@linaro.org,
+	s.shtylyov@omp.ru,
+	serjk@netup.ru,
+	shc_work@mail.ru,
+	torvic9@mailbox.org,
+	tsbogend@alpha.franken.de,
+	v.georgiev@metrotek.ru,
+	wangyuli@uniontech.com,
+	wsa+renesas@sang-engineering.com,
+	xeb@mail.ru,
+	LKML <linux-kernel@vger.kernel.org>,
+	Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
+Subject: [PATCH 1/2] MAINTAINERS: Remove Huawei due to compilance requirements.
+Date: Thu, 24 Oct 2024 22:03:52 +0800
+Message-ID: <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
+References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+ <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, 2024-10-23 at 15:59 -0500, David Lechner wrote:
-> Add the basic infrastructure to support SPI offload providers and
-> consumers.
->=20
-> SPI offloading is a feature that allows the SPI controller to perform
-> transfers without any CPU intervention. This is useful, e.g. for
-> high-speed data acquisition.
->=20
-> SPI controllers with offload support need to implement the get_offload
-> callback and can use the devm_spi_offload_alloc() to allocate offload
-> instances.
->=20
-> SPI peripheral drivers will call devm_spi_offload_get() to get a
-> reference to the matching offload instance. This offload instance can
-> then be attached to a SPI message to request offloading that message.
->=20
-> It is expected that SPI controllers with offload support will check for
-> the offload instance in the SPI message in the optimize_message()
-> callback and handle it accordingly.
->=20
-> CONFIG_SPI_OFFLOAD is intended to be a select-only option. Both
-> consumer and provider drivers should `select SPI_OFFLOAD` in their
-> Kconfig to ensure that the SPI core is built with offload support.
->=20
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
+Huawei Corp was added to the US Entity List[1] on 08/20/2020.
 
-Hi David,
+The Entity List is a trade restriction list published by the United
+States Department of Commerce's Bureau of Industry and Security (BIS),
+consisting of certain foreign persons, entities, or governments.
+It is published as Supplement 4 of Part 744 of the Code
+of Federal Regulations. [2]
 
-Just one minor comment...
+[1]: https://www.federalregister.gov/documents/2020/08/20/2020-18213/
+addition-of-huawei-non-us-affiliates-to-the-entity-list-the-removal-of
+-temporary-general-license-and
+[2]: https://en.wikipedia.org/wiki/Entity_List
 
->=20
-> v4 changes:
-> * SPI offload functions moved to a separate file instead of spi.c
-> =C2=A0 (spi.c is already too long).
-> * struct spi_offload and devm_spi_offload_get() are back, similar to
-> =C2=A0 but improved over v1. This avoids having to pass the function ID
-> =C2=A0 string to every function call and re-lookup the offload instance.
-> * offload message prepare/unprepare functions are removed. Instead the
-> =C2=A0 existing optimize/unoptimize functions should be used. Setting
-> =C2=A0 spi_message::offload pointer is used as a flag to differentiate
-> =C2=A0 between an offloaded message and a regular message.
->=20
-> v3 changes:
-> * Minor changes to doc comments.
-> * Changed to use phandle array for spi-offloads.
-> * Changed id to string to make use of spi-offload-names.
->=20
-> v2 changes:
-> * This is a rework of "spi: add core support for controllers with offload
-> =C2=A0 capabilities" from v1.
-> * The spi_offload_get() function that Nuno didn't like is gone. Instead,
-> =C2=A0 there is now a mapping callback that uses the new generic devicetr=
-ee
-> =C2=A0 binding to request resources automatically when a SPI device is pr=
-obed.
-> * The spi_offload_enable/disable() functions for dealing with hardware
-> =C2=A0 triggers are deferred to a separate patch.
-> * This leaves adding spi_offload_prepare/unprepare() which have been
-> =C2=A0 reworked to be a bit more robust.
-> ---
-> =C2=A0drivers/spi/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 3 ++
-> =C2=A0drivers/spi/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> =C2=A0drivers/spi/spi-offload.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 104=
- ++++++++++++++++++++++++++++++++++++++++
-> =C2=A0include/linux/spi/spi-offload.h |=C2=A0 64 ++++++++++++++++++++++++=
-+
-> =C2=A0include/linux/spi/spi.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 16 +++++++
-> =C2=A05 files changed, 188 insertions(+)
->=20
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 823797217404..d65074b85f62 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -55,6 +55,9 @@ config SPI_MEM
-> =C2=A0	=C2=A0 This extension is meant to simplify interaction with SPI me=
-mories
-> =C2=A0	=C2=A0 by providing a high-level interface to send memory-like com=
-mands.
-> =C2=A0
-> +config SPI_OFFLOAD
-> +	bool
-> +
-> =C2=A0comment "SPI Master Controller Drivers"
-> =C2=A0
-> =C2=A0config SPI_AIROHA_SNFI
-> diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-> index a9b1bc259b68..6a470eb475a2 100644
-> --- a/drivers/spi/Makefile
-> +++ b/drivers/spi/Makefile
-> @@ -10,6 +10,7 @@ ccflags-$(CONFIG_SPI_DEBUG) :=3D -DDEBUG
-> =C2=A0obj-$(CONFIG_SPI_MASTER)		+=3D spi.o
-> =C2=A0obj-$(CONFIG_SPI_MEM)			+=3D spi-mem.o
-> =C2=A0obj-$(CONFIG_SPI_MUX)			+=3D spi-mux.o
-> +obj-$(CONFIG_SPI_OFFLOAD)		+=3D spi-offload.o
-> =C2=A0obj-$(CONFIG_SPI_SPIDEV)		+=3D spidev.o
-> =C2=A0obj-$(CONFIG_SPI_LOOPBACK_TEST)		+=3D spi-loopback-test.o
-> =C2=A0
-> diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
-> new file mode 100644
-> index 000000000000..c344cbf50bdb
-> --- /dev/null
-> +++ b/drivers/spi/spi-offload.c
-> @@ -0,0 +1,104 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2024 Analog Devices Inc.
-> + * Copyright (C) 2024 BayLibre, SAS
-> + */
-> +
-> +#define DEFAULT_SYMBOL_NAMESPACE SPI_OFFLOAD
+Signed-off-by: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>
+---
+ MAINTAINERS | 46 ----------------------------------------------
+ 1 file changed, 46 deletions(-)
 
-Cool, was not aware of this :)
-> +
-> +#include <linux/cleanup.h>
-> +#include <linux/device.h>
-> +#include <linux/export.h>
-> +#include <linux/mutex.h>
-> +#include <linux/property.h>
-> +#include <linux/spi/spi-offload.h>
-> +#include <linux/spi/spi.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * devm_spi_offload_alloc() - Allocate offload instances
-> + * @dev: Device for devm purposes
-> + * @num_offloads: Number of offloads to allocate
-> + * @priv_size: Size of private data to allocate for each offload
-> + *
-> + * Offload providers should use this to allocate offload instances.
-> + *
-> + * Return: Pointer to array of offloads or error on failure.
-> + */
-> +struct spi_offload *devm_spi_offload_alloc(struct device *dev,
-> +					=C2=A0=C2=A0 size_t num_offloads,
-> +					=C2=A0=C2=A0 size_t priv_size)
-> +{
-> +	struct spi_offload *offloads;
-> +	void *privs;
-> +	size_t i;
-> +
-> +	offloads =3D devm_kcalloc(dev, num_offloads, sizeof(*offloads) + priv_s=
-ize,
-> +				GFP_KERNEL);
-> +	if (!offloads)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	privs =3D (void *)(offloads + num_offloads);
-> +
-> +	for (i =3D 0; i < num_offloads; i++) {
-> +		struct spi_offload *offload =3D offloads + i;
-> +		void *priv =3D privs + i * priv_size;
-> +
-> +		offload->provider_dev =3D dev;
-> +		offload->priv =3D priv;
-> +	}
-> +
-> +	return offloads;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_spi_offload_alloc);
-> +
-> +static void spi_offload_put(void *data)
-> +{
-> +	struct spi_offload *offload =3D data;
-> +
-> +	offload->spi =3D NULL;
-> +	put_device(offload->provider_dev);
-> +}
-> +
-> +/**
-> + * devm_spi_offload_get() - Get an offload instance
-> + * @dev: Device for devm purposes
-> + * @spi: SPI device to use for the transfers
-> + * @config: Offload configuration
-> + *
-> + * Peripheral drivers call this function to get an offload instance that=
- meets
-> + * the requirements specified in @config. If no suitable offload instanc=
-e is
-> + * available, -ENODEV is returned.
-> + *
-> + * Return: Offload instance or error on failure.
-> + */
-> +struct spi_offload *devm_spi_offload_get(struct device *dev,
-> +					 struct spi_device *spi,
-> +					 const struct spi_offload_config *config)
-> +{
-> +	struct spi_offload *offload;
-> +	int ret;
-> +
-> +	if (!spi || !config)
-> +		return ERR_PTR(-EINVAL);
-> +
-> +	if (!spi->controller->get_offload)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	offload =3D spi->controller->get_offload(spi, config);
-> +	if (IS_ERR(offload))
-> +		return offload;
-> +
-> +	if (offload->spi)
-> +		return ERR_PTR(-EBUSY);
-> +
-> +	offload->spi =3D spi;
-> +	get_device(offload->provider_dev);
-
-Isn't this redundant? From what I can tell, we're assuming that the spi con=
-troller
-(of the spi device) is the offload provider. Therefore, getting an extra re=
-ference
-for it does not really seems necessary. The device cannot go away without u=
-nder the
-spi_device feet. If that could happen, then we would also need to take care=
- about
-callback access and things like that. Going this way, it would also be argu=
-able to
-have a try_module_get().
-
-- Nuno S=C3=A1
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e9659a5a7fb3..725a72e17a4a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -322,7 +322,6 @@ F:	tools/power/acpi/
+ 
+ ACPI FOR ARM64 (ACPI/arm64)
+ M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+-M:	Hanjun Guo <guohanjun@huawei.com>
+ M:	Sudeep Holla <sudeep.holla@arm.com>
+ L:	linux-acpi@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+@@ -3873,7 +3872,6 @@ F:	Documentation/filesystems/befs.rst
+ F:	fs/befs/
+ 
+ BFQ I/O SCHEDULER
+-M:	Yu Kuai <yukuai3@huawei.com>
+ L:	linux-block@vger.kernel.org
+ S:	Odd Fixes
+ F:	Documentation/block/bfq-iosched.rst
+@@ -4038,7 +4036,6 @@ BPF JIT for ARM64
+ M:	Daniel Borkmann <daniel@iogearbox.net>
+ M:	Alexei Starovoitov <ast@kernel.org>
+ M:	Puranjay Mohan <puranjay@kernel.org>
+-R:	Xu Kuohai <xukuohai@huaweicloud.com>
+ L:	bpf@vger.kernel.org
+ S:	Supported
+ F:	arch/arm64/net/
+@@ -4082,7 +4079,6 @@ X:	arch/riscv/net/bpf_jit_comp64.c
+ 
+ BPF JIT for RISC-V (64-bit)
+ M:	Björn Töpel <bjorn@kernel.org>
+-R:	Pu Lehui <pulehui@huawei.com>
+ R:	Puranjay Mohan <puranjay@kernel.org>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
+@@ -5697,7 +5693,6 @@ F:	include/linux/compiler_attributes.h
+ 
+ COMPUTE EXPRESS LINK (CXL)
+ M:	Davidlohr Bueso <dave@stgolabs.net>
+-M:	Jonathan Cameron <jonathan.cameron@huawei.com>
+ M:	Dave Jiang <dave.jiang@intel.com>
+ M:	Alison Schofield <alison.schofield@intel.com>
+ M:	Vishal Verma <vishal.l.verma@intel.com>
+@@ -5712,7 +5707,6 @@ F:	include/uapi/linux/cxl_mem.h
+ F:	tools/testing/cxl/
+ 
+ COMPUTE EXPRESS LINK PMU (CPMU)
+-M:	Jonathan Cameron <jonathan.cameron@huawei.com>
+ L:	linux-cxl@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/admin-guide/perf/cxl.rst
+@@ -8525,7 +8519,6 @@ F:	include/uapi/linux/ext4.h
+ 
+ Extended Verification Module (EVM)
+ M:	Mimi Zohar <zohar@linux.ibm.com>
+-M:	Roberto Sassu <roberto.sassu@huawei.com>
+ L:	linux-integrity@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
+@@ -10189,21 +10182,17 @@ F:	net/dsa/tag_hellcreek.c
+ 
+ HISILICON DMA DRIVER
+ M:	Zhou Wang <wangzhou1@hisilicon.com>
+-M:	Jie Hai <haijie1@huawei.com>
+ L:	dmaengine@vger.kernel.org
+ S:	Maintained
+ F:	drivers/dma/hisi_dma.c
+ 
+ HISILICON GPIO DRIVER
+-M:	Jay Fang <f.fangjian@huawei.com>
+ L:	linux-gpio@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/gpio/hisilicon,ascend910-gpio.yaml
+ F:	drivers/gpio/gpio-hisi.c
+ 
+ HISILICON HIGH PERFORMANCE RSA ENGINE DRIVER (HPRE)
+-M:	Zhiqi Song <songzhiqi1@huawei.com>
+-M:	Longfang Liu <liulongfang@huawei.com>
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/debugfs-hisi-hpre
+@@ -10212,7 +10201,6 @@ F:	drivers/crypto/hisilicon/hpre/hpre_crypto.c
+ F:	drivers/crypto/hisilicon/hpre/hpre_main.c
+ 
+ HISILICON HNS3 PMU DRIVER
+-M:	Jijie Shao <shaojijie@huawei.com>
+ S:	Supported
+ F:	Documentation/admin-guide/perf/hns3-pmu.rst
+ F:	drivers/perf/hisilicon/hns3_pmu.c
+@@ -10226,31 +10214,24 @@ F:	Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+ F:	drivers/i2c/busses/i2c-hisi.c
+ 
+ HISILICON KUNPENG SOC HCCS DRIVER
+-M:	Huisong Li <lihuisong@huawei.com>
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
+ F:	drivers/soc/hisilicon/kunpeng_hccs.c
+ F:	drivers/soc/hisilicon/kunpeng_hccs.h
+ 
+ HISILICON LPC BUS DRIVER
+-M:	Jay Fang <f.fangjian@huawei.com>
+ S:	Maintained
+ W:	http://www.hisilicon.com
+ F:	Documentation/devicetree/bindings/arm/hisilicon/low-pin-count.yaml
+ F:	drivers/bus/hisi_lpc.c
+ 
+ HISILICON NETWORK SUBSYSTEM 3 DRIVER (HNS3)
+-M:	Jian Shen <shenjian15@huawei.com>
+-M:	Salil Mehta <salil.mehta@huawei.com>
+-M:	Jijie Shao <shaojijie@huawei.com>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ W:	http://www.hisilicon.com
+ F:	drivers/net/ethernet/hisilicon/hns3/
+ 
+ HISILICON NETWORK SUBSYSTEM DRIVER
+-M:	Jian Shen <shenjian15@huawei.com>
+-M:	Salil Mehta <salil.mehta@huawei.com>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+ W:	http://www.hisilicon.com
+@@ -10259,7 +10240,6 @@ F:	drivers/net/ethernet/hisilicon/
+ 
+ HISILICON PMU DRIVER
+ M:	Yicong Yang <yangyicong@hisilicon.com>
+-M:	Jonathan Cameron <jonathan.cameron@huawei.com>
+ S:	Supported
+ W:	http://www.hisilicon.com
+ F:	Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+@@ -10268,7 +10248,6 @@ F:	drivers/perf/hisilicon
+ 
+ HISILICON PTT DRIVER
+ M:	Yicong Yang <yangyicong@hisilicon.com>
+-M:	Jonathan Cameron <jonathan.cameron@huawei.com>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/sysfs-bus-event_source-devices-hisi_ptt
+@@ -10279,7 +10258,6 @@ F:	tools/perf/util/hisi-ptt*
+ F:	tools/perf/util/hisi-ptt-decoder/*
+ 
+ HISILICON QM DRIVER
+-M:	Weili Qian <qianweili@huawei.com>
+ M:	Zhou Wang <wangzhou1@hisilicon.com>
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+@@ -10290,7 +10268,6 @@ F:	drivers/crypto/hisilicon/sgl.c
+ F:	include/linux/hisi_acc_qm.h
+ 
+ HISILICON ROCE DRIVER
+-M:	Chengchang Tang <tangchengchang@huawei.com>
+ M:	Junxian Huang <huangjunxian6@hisilicon.com>
+ L:	linux-rdma@vger.kernel.org
+ S:	Maintained
+@@ -10298,14 +10275,12 @@ F:	Documentation/devicetree/bindings/infiniband/hisilicon-hns-roce.txt
+ F:	drivers/infiniband/hw/hns/
+ 
+ HISILICON SAS Controller
+-M:	Yihang Li <liyihang9@huawei.com>
+ S:	Supported
+ W:	http://www.hisilicon.com
+ F:	Documentation/devicetree/bindings/scsi/hisilicon-sas.txt
+ F:	drivers/scsi/hisi_sas/
+ 
+ HISILICON SECURITY ENGINE V2 DRIVER (SEC2)
+-M:	Longfang Liu <liulongfang@huawei.com>
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/ABI/testing/debugfs-hisi-sec
+@@ -10315,39 +10290,33 @@ F:	drivers/crypto/hisilicon/sec2/sec_crypto.h
+ F:	drivers/crypto/hisilicon/sec2/sec_main.c
+ 
+ HISILICON SPI Controller DRIVER FOR KUNPENG SOCS
+-M:	Jay Fang <f.fangjian@huawei.com>
+ L:	linux-spi@vger.kernel.org
+ S:	Maintained
+ W:	http://www.hisilicon.com
+ F:	drivers/spi/spi-hisi-kunpeng.c
+ 
+ HISILICON SPMI CONTROLLER DRIVER FOR HIKEY 970
+-M:	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/spmi/hisilicon,hisi-spmi-controller.yaml
+ F:	drivers/spmi/hisi-spmi-controller.c
+ 
+ HISILICON SPMI PMIC DRIVER FOR HIKEY 6421v600
+-M:	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/mfd/hisilicon,hi6421-spmi-pmic.yaml
+ F:	drivers/mfd/hi6421-spmi-pmic.c
+ 
+ HISILICON TRUE RANDOM NUMBER GENERATOR V2 SUPPORT
+-M:	Weili Qian <qianweili@huawei.com>
+ S:	Maintained
+ F:	drivers/crypto/hisilicon/trng/trng.c
+ 
+ HISILICON V3XX SPI NOR FLASH Controller Driver
+-M:	Jay Fang <f.fangjian@huawei.com>
+ S:	Maintained
+ W:	http://www.hisilicon.com
+ F:	drivers/spi/spi-hisi-sfc-v3xx.c
+ 
+ HISILICON ZIP Controller DRIVER
+-M:	Yang Shen <shenyang39@huawei.com>
+ M:	Zhou Wang <wangzhou1@hisilicon.com>
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+@@ -10477,8 +10446,6 @@ HUAWEI ETHERNET DRIVER
+ M:	Cai Huoqing <cai.huoqing@linux.dev>
+ L:	netdev@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/networking/device_drivers/ethernet/huawei/hinic.rst
+-F:	drivers/net/ethernet/huawei/hinic/
+ 
+ HUGETLB SUBSYSTEM
+ M:	Muchun Song <muchun.song@linux.dev>
+@@ -10504,7 +10471,6 @@ T:	git git://linuxtv.org/media_tree.git
+ F:	drivers/media/platform/st/sti/hva
+ 
+ HWPOISON MEMORY FAILURE HANDLING
+-M:	Miaohe Lin <linmiaohe@huawei.com>
+ R:	Naoya Horiguchi <nao.horiguchi@gmail.com>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+@@ -11243,7 +11209,6 @@ F:	drivers/crypto/inside-secure/
+ 
+ INTEGRITY MEASUREMENT ARCHITECTURE (IMA)
+ M:	Mimi Zohar <zohar@linux.ibm.com>
+-M:	Roberto Sassu <roberto.sassu@huawei.com>
+ M:	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+ R:	Eric Snowberg <eric.snowberg@oracle.com>
+ L:	linux-integrity@vger.kernel.org
+@@ -12447,7 +12412,6 @@ M:	Marc Zyngier <maz@kernel.org>
+ M:	Oliver Upton <oliver.upton@linux.dev>
+ R:	Joey Gouly <joey.gouly@arm.com>
+ R:	Suzuki K Poulose <suzuki.poulose@arm.com>
+-R:	Zenghui Yu <yuzenghui@huawei.com>
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ L:	kvmarm@lists.linux.dev
+ S:	Maintained
+@@ -20497,7 +20461,6 @@ F:	drivers/iio/chemical/ens160.h
+ 
+ SCSI LIBSAS SUBSYSTEM
+ R:	John Garry <john.g.garry@oracle.com>
+-R:	Jason Yan <yanaijie@huawei.com>
+ L:	linux-scsi@vger.kernel.org
+ S:	Supported
+ F:	Documentation/scsi/libsas.rst
+@@ -21303,7 +21266,6 @@ F:	include/linux/property.h
+ 
+ SOFTWARE RAID (Multiple Disks) SUPPORT
+ M:	Song Liu <song@kernel.org>
+-R:	Yu Kuai <yukuai3@huawei.com>
+ L:	linux-raid@vger.kernel.org
+ S:	Supported
+ Q:	https://patchwork.kernel.org/project/linux-raid/list/
+@@ -23549,7 +23511,6 @@ F:	include/uapi/misc/uacce/
+ 
+ UBI FILE SYSTEM (UBIFS)
+ M:	Richard Weinberger <richard@nod.at>
+-R:	Zhihao Cheng <chengzhihao1@huawei.com>
+ L:	linux-mtd@lists.infradead.org
+ S:	Supported
+ W:	http://www.linux-mtd.infradead.org/doc/ubifs.html
+@@ -23699,7 +23660,6 @@ F:	drivers/ufs/host/ufs-renesas.c
+ 
+ UNSORTED BLOCK IMAGES (UBI)
+ M:	Richard Weinberger <richard@nod.at>
+-R:	Zhihao Cheng <chengzhihao1@huawei.com>
+ L:	linux-mtd@lists.infradead.org
+ S:	Supported
+ W:	http://www.linux-mtd.infradead.org/
+@@ -23803,7 +23763,6 @@ S:	Maintained
+ F:	drivers/usb/roles/intel-xhci-usb-role-switch.c
+ 
+ USB IP DRIVER FOR HISILICON KIRIN 960
+-M:	Yu Chen <chenyu56@huawei.com>
+ M:	Binghui Wang <wangbinghui@hisilicon.com>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+@@ -24183,8 +24142,6 @@ S:	Orphan
+ F:	drivers/vfio/fsl-mc/
+ 
+ VFIO HISILICON PCI DRIVER
+-M:	Longfang Liu <liulongfang@huawei.com>
+-M:	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+ L:	kvm@vger.kernel.org
+ S:	Maintained
+ F:	drivers/vfio/pci/hisilicon/
+@@ -24213,7 +24170,6 @@ F:	drivers/vfio/pci/nvgrace-gpu/
+ VFIO PCI DEVICE SPECIFIC DRIVERS
+ R:	Jason Gunthorpe <jgg@nvidia.com>
+ R:	Yishai Hadas <yishaih@nvidia.com>
+-R:	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+ R:	Kevin Tian <kevin.tian@intel.com>
+ L:	kvm@vger.kernel.org
+ S:	Maintained
+@@ -24395,7 +24351,6 @@ F:	tools/virtio/
+ F:	tools/testing/selftests/drivers/net/virtio_net/
+ 
+ VIRTIO CRYPTO DRIVER
+-M:	Gonglei <arei.gonglei@huawei.com>
+ L:	virtualization@lists.linux.dev
+ L:	linux-crypto@vger.kernel.org
+ S:	Maintained
+@@ -25481,7 +25436,6 @@ F:	drivers/input/misc/yealink.*
+ 
+ Z3FOLD COMPRESSED PAGE ALLOCATOR
+ M:	Vitaly Wool <vitaly.wool@konsulko.com>
+-R:	Miaohe Lin <linmiaohe@huawei.com>
+ L:	linux-mm@kvack.org
+ S:	Maintained
+ F:	mm/z3fold.c
+-- 
+2.47.0
 
 
