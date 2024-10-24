@@ -1,153 +1,197 @@
-Return-Path: <linux-spi+bounces-5371-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5372-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7CA89AE950
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 16:50:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 833AC9AE975
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 16:56:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 202D1B25D8F
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 14:50:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 428D4285EAA
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 14:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BCD1D63D8;
-	Thu, 24 Oct 2024 14:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B9C78614E;
+	Thu, 24 Oct 2024 14:56:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="E2iK3IST";
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="E2iK3IST"
+	dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b="EsURE6AW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4171C145B0B;
-	Thu, 24 Oct 2024 14:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5271547C6
+	for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2024 14:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729781427; cv=none; b=tNMGSpWMDCvkv4FpT7uK5q0jj3a1Y/eacKXZgew+dZQIIdPni019SZDEc+I43UQcn1TGD/zw39rjORiXFB2QRclN0ZJEgwH4Yg5IZk1E3sVS0SVHlGiSWCUg+rGFYLuy7IbybTG1k0zmgnzki2UA66gyRh0YxeTHo6JbsbK7afs=
+	t=1729781789; cv=none; b=lbvAXIZK7cZqiTp+xNT4jSg8VnAq7hidpzyuRkFvvjzMxqHawG/EM+nvlTcm3f2BOMxkyYXEvX1vOVq3irnQWkWUC5xx+LBFyjhl/K9BdQZ5XhmgKll+Swn1ZwI+yXStcRlpqa3HnDnQ2w5KAX9h/2Zu/aMKgOx9+n+X20aLL/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729781427; c=relaxed/simple;
-	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ifuPnS3iGDZHgkd7Lxzi4yRiJs+xyQ1OnxLqdlJDquXv8kQD6uSGJ9Z36oT+KiQigycelzso6JOyp+PKnRsnqJc+zhEYAUXv8VEpYj+PMsET0CrSkbu5IVHIdmEmKaCFkI6Zr6Oksl8erZX8tVr9kEC/nR7Uj6j1PSQzVSeJ3t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=E2iK3IST; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=E2iK3IST; arc=none smtp.client-ip=96.44.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1729781424;
-	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=E2iK3ISTp30X2+aGDqLS5ovzA+ZxuPF+Qs1/qm/BZZE5Y8Z7cYne9E6BkM/JjFKW5
-	 KNcQGDDjwV8ftEehohuSqC2Zfc/yjYs3MfiDr7hQvVDwC2ObzLDyFNHL1Zs2snoNMc
-	 9TxtlJXCErz4t/Zjx2NkCSxIy/O4N5ISUZrncBWo=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 367181285D4E;
-	Thu, 24 Oct 2024 10:50:24 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id GttnYe0zhjtf; Thu, 24 Oct 2024 10:50:24 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1729781424;
-	bh=mbwn8u7Yo3t7bDM95MTrZ4UZzGeDlEInOig7frVVxu4=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=E2iK3ISTp30X2+aGDqLS5ovzA+ZxuPF+Qs1/qm/BZZE5Y8Z7cYne9E6BkM/JjFKW5
-	 KNcQGDDjwV8ftEehohuSqC2Zfc/yjYs3MfiDr7hQvVDwC2ObzLDyFNHL1Zs2snoNMc
-	 9TxtlJXCErz4t/Zjx2NkCSxIy/O4N5ISUZrncBWo=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
-	(Client did not present a certificate)
-	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 430D21281CC7;
-	Thu, 24 Oct 2024 10:50:20 -0400 (EDT)
-Message-ID: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
-Subject: Re: linux: Goodbye from a Linux community volunteer
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>, 
- Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
- ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Kory Maincent
- <kory.maincent@bootlin.com>, Cai Huoqing <cai.huoqing@linux.dev>, 
- dmaengine@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- linux-spi@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
- linux-ide@vger.kernel.org, Paul Burton <paulburton@kernel.org>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>,  linux-mips@vger.kernel.org, Bjorn
- Helgaas <bhelgaas@google.com>, Manivannan Sadhasivam
- <manivannan.sadhasivam@linaro.org>, Yoshihiro Shimoda
- <yoshihiro.shimoda.uh@renesas.com>,  linux-pci@vger.kernel.org, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>, Russell King
- <linux@armlinux.org.uk>, Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
- <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>, 
- netdev@vger.kernel.org, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>, 
- linux-edac@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,  linux-serial@vger.kernel.org
-Cc: Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>, 
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Alexander Shiyan
- <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,  Sergey Shtylyov
- <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Sergio Paracuellos
- <sergio.paracuellos@gmail.com>,  Nikita Shubin <nikita.shubin@maquefel.me>,
- linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 24 Oct 2024 10:50:19 -0400
-In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-References: 
-	<2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+	s=arc-20240116; t=1729781789; c=relaxed/simple;
+	bh=xe6fJuOFxKZ9Wa/QzwskMTCxSacyQ1znwVDAZjjTK9M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=rInxa1nJKveaM+PcLlva5cf25PVnaQrl69hyENbbE6Zv9VESBgFZ/ZawsWvQPTVx2pSw+CHpYP17674iy7Ko6NMFVqsP++PZvfL98JJcgFGz/q9TDVpWbunCjObv1X3v8pqtqMx0Uy2/RLq9ej6GYGLS0iaIgu+wAo6XOKR6Nu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com; spf=pass smtp.mailfrom=mvista.com; dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b=EsURE6AW; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mvista.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2e2b9480617so803793a91.1
+        for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2024 07:56:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mvista.com; s=google; t=1729781787; x=1730386587; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uYXk1kuEikUpEll+uuEl+9utwWcdJCC+qvGvGbrx1Tg=;
+        b=EsURE6AWisggLJNgThmN0ojompRNDzcOR6Quo7IQIafseM6jJt8DCpAKXjAktELrnu
+         kJWttzfyDLYon2il3ZxmmShlgYI77dEBnqq++jFlhMRBRJi+2cy7MHaAnzS2odhr8QC+
+         PmssULqwVk4w3MI2ixZKyHD86pcGyOgBB/VMc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729781787; x=1730386587;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uYXk1kuEikUpEll+uuEl+9utwWcdJCC+qvGvGbrx1Tg=;
+        b=v89Nu0eYOZ5847djHQiUBYzUZDoaqVgTGEb9xg0p8oaaZEsTBSjyOveKq0uiuesWYj
+         7w32t/SqV0b+V8VUIfWtf2GxxEVeT0hpC4fwiv7MsE9FADFiTeGMWTRo7pJjMNDZ7xnc
+         VrAhBnUg8FU6TF8lRniRM27rJLeE2wXUtd6eCw7br4RA382rA6gs3DEpVgE1Fpe8/JeA
+         LgfEEwq6ARldJxv2ivOaDxNHMqaO+uSiBREfHdZjtxpLBLQ0tcN0ndx+Et+k0yhu9hqq
+         JjHbQrl2kdbQsfAwUpSe2CMRjNsZRZo35FeJN1F/p9er+3N/jl5vFrHy7beVkMxs8nVc
+         pWtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUyuQX2nm44sOAzDoR5Fq/lNFJcDWSgWZkjXWWyXfAXcrMWPpVJ3OiqgVHuEVqxVjo0ltFWSPoz53Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxQOJo6Os1fJAVmHZLycrq8sepfDCIUWh8IdbNYoVKVX/8P0GN
+	yUPPuWT04tpq2dh4MTRIZz0vgui+G2XmLxQg9UzG/8zgV10B2i/r2b3ggufRP2c=
+X-Google-Smtp-Source: AGHT+IGyrmr2pGpvcgio+yG/5Ty2pp8bce/MB34CIYn/1HII/5Ci59h5wA402DReYRaucCGjKjFlZA==
+X-Received: by 2002:a17:90a:e2ca:b0:2dd:6969:2096 with SMTP id 98e67ed59e1d1-2e76b70c545mr6503466a91.38.1729781786854;
+        Thu, 24 Oct 2024 07:56:26 -0700 (PDT)
+Received: from jupiter.mvista.com ([182.74.28.237])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5df41f7f2sm3888729a91.0.2024.10.24.07.56.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Oct 2024 07:56:26 -0700 (PDT)
+From: Hardik Gohil <hgohil@mvista.com>
+To: stable@vger.kernel.org
+Cc: broonie@kernel.org,
+	linux-spi@vger.kernel.org,
+	u.kleine-koenig@pengutronix.de,
+	Hardik Gohil <hgohil@mvista.com>
+Subject: [PATCH] spi: Fix deadlock when adding SPI controllers on SPI buses
+Date: Thu, 24 Oct 2024 20:26:11 +0530
+Message-Id: <1729781771-14089-1-git-send-email-hgohil@mvista.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2024-10-24 at 07:27 +0300, Serge Semin wrote:
-> Hello Linux-kernel community,
-> 
-> I am sure you have already heard the news caused by the recent Greg'
-> commit 6e90b675cf942e ("MAINTAINERS: Remove some entries due to
-> various compliance requirements."). As you may have noticed the
-> change concerned some of the Ru-related developers removal from the
-> list of the official kernel maintainers, including me.
-> 
-> The community members rightly noted that the _quite_ short commit log
-> contained very vague terms with no explicit change justification. No
-> matter how hard I tried to get more details about the reason, alas
-> the senior maintainer I was discussing the matter with haven't given
-> an explanation to what compliance requirements that was.
+From: Mark Brown <broonie@kernel.org>
 
-Please accept all of our apologies for the way this was handled.  A
-summary of the legal advice the kernel is operating under is
+[ Upstream commit 6098475d4cb48d821bdf453c61118c56e26294f0 ]
 
-   If your company is on the U.S. OFAC SDN lists, subject to an OFAC
-   sanctions program, or owned/controlled by a company on the list, our
-   ability to collaborate with you will be subject to restrictions, and
-   you cannot be in the MAINTAINERS file.
+Currently we have a global spi_add_lock which we take when adding new
+devices so that we can check that we're not trying to reuse a chip
+select that's already controlled.  This means that if the SPI device is
+itself a SPI controller and triggers the instantiation of further SPI
+devices we trigger a deadlock as we try to register and instantiate
+those devices while in the process of doing so for the parent controller
+and hence already holding the global spi_add_lock.  Since we only care
+about concurrency within a single SPI bus move the lock to be per
+controller, avoiding the deadlock.
 
-Anyone who wishes to can query the list here:
+This can be easily triggered in the case of spi-mux.
 
-https://sanctionssearch.ofac.treas.gov/
+Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Hardik Gohil <hgohil@mvista.com>
+---
+This fix was not backported to v5.4 and 5.10
 
-In your specific case, the problem is your employer is on that list. 
-If there's been a mistake and your employer isn't on the list, that's
-the documentation Greg is looking for.
+Along with this fix please also apply this fix on top of this
 
-I would also like to thank you for all your past contributions and if
-you (or anyone else) would like an entry in the credit file, I'm happy
-to shepherd it for you if you send me what you'd like.
+spi: fix use-after-free of the add_lock mutex
+commit 6c53b45c71b4920b5e62f0ea8079a1da382b9434 upstream.
 
-Again, we're really sorry it's come to this, but all of the Linux
-infrastructure and a lot of its maintainers are in the US and we can't
-ignore the requirements of US law.  We are hoping that this action
-alone will be sufficient to satisfy the US Treasury department in
-charge of sanctions and we won't also have to remove any existing
-patches.
+Commit 6098475d4cb4 ("spi: Fix deadlock when adding SPI controllers on
+SPI buses") introduced a per-controller mutex. But mutex_unlock() of
+said lock is called after the controller is already freed:
 
-Regards,
+ drivers/spi/spi.c       | 15 +++++----------
+ include/linux/spi/spi.h |  3 +++
+ 2 files changed, 8 insertions(+), 10 deletions(-)
 
-James Bottomley
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 0f9410e..58f1947 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -472,12 +472,6 @@ static LIST_HEAD(spi_controller_list);
+  */
+ static DEFINE_MUTEX(board_lock);
+ 
+-/*
+- * Prevents addition of devices with same chip select and
+- * addition of devices below an unregistering controller.
+- */
+-static DEFINE_MUTEX(spi_add_lock);
+-
+ /**
+  * spi_alloc_device - Allocate a new SPI device
+  * @ctlr: Controller to which device is connected
+@@ -580,7 +574,7 @@ int spi_add_device(struct spi_device *spi)
+ 	 * chipselect **BEFORE** we call setup(), else we'll trash
+ 	 * its configuration.  Lock against concurrent add() calls.
+ 	 */
+-	mutex_lock(&spi_add_lock);
++	mutex_lock(&ctlr->add_lock);
+ 
+ 	status = bus_for_each_dev(&spi_bus_type, NULL, spi, spi_dev_check);
+ 	if (status) {
+@@ -624,7 +618,7 @@ int spi_add_device(struct spi_device *spi)
+ 	}
+ 
+ done:
+-	mutex_unlock(&spi_add_lock);
++	mutex_unlock(&ctlr->add_lock);
+ 	return status;
+ }
+ EXPORT_SYMBOL_GPL(spi_add_device);
+@@ -2512,6 +2506,7 @@ int spi_register_controller(struct spi_controller *ctlr)
+ 	spin_lock_init(&ctlr->bus_lock_spinlock);
+ 	mutex_init(&ctlr->bus_lock_mutex);
+ 	mutex_init(&ctlr->io_mutex);
++	mutex_init(&ctlr->add_lock);
+ 	ctlr->bus_lock_flag = 0;
+ 	init_completion(&ctlr->xfer_completion);
+ 	if (!ctlr->max_dma_len)
+@@ -2657,7 +2652,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 
+ 	/* Prevent addition of new devices, unregister existing ones */
+ 	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+-		mutex_lock(&spi_add_lock);
++		mutex_lock(&ctlr->add_lock);
+ 
+ 	device_for_each_child(&ctlr->dev, NULL, __unregister);
+ 
+@@ -2688,7 +2683,7 @@ void spi_unregister_controller(struct spi_controller *ctlr)
+ 	mutex_unlock(&board_lock);
+ 
+ 	if (IS_ENABLED(CONFIG_SPI_DYNAMIC))
+-		mutex_unlock(&spi_add_lock);
++		mutex_unlock(&ctlr->add_lock);
+ }
+ EXPORT_SYMBOL_GPL(spi_unregister_controller);
+ 
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index ca39b33..1b9cb90 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -483,6 +483,9 @@ struct spi_controller {
+ 	/* I/O mutex */
+ 	struct mutex		io_mutex;
+ 
++	/* Used to avoid adding the same CS twice */
++	struct mutex		add_lock;
++
+ 	/* lock and mutex for SPI bus locking */
+ 	spinlock_t		bus_lock_spinlock;
+ 	struct mutex		bus_lock_mutex;
+-- 
+2.7.4
 
 
