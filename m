@@ -1,169 +1,190 @@
-Return-Path: <linux-spi+bounces-5353-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5356-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86CC99ADE30
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 09:52:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF7D29AE1E5
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 12:01:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 856C21C2092E
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 07:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B2E21F249E5
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 10:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B99719CD16;
-	Thu, 24 Oct 2024 07:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V5WsgHWn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF2C01C07D2;
+	Thu, 24 Oct 2024 10:01:26 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DA2171E6E;
-	Thu, 24 Oct 2024 07:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C151ABEB1;
+	Thu, 24 Oct 2024 10:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729756331; cv=none; b=fZMLFPtlIiXM0v2IPE/6OBju90Dj2oD+H6LYjW4n0tsY7Hi2YCO8Hmclq2GKDDcBPlFQEyJEV2fv1iskEol3EVDpGPO71WxyP1+Usq1weIT4/8jd8GujrYDF1kqjxgthQxJTQ48w0+QkSDo9DhqJd80Q/atpIWUbcdV2J3KhDIk=
+	t=1729764086; cv=none; b=c3deY2buR/TSUyOa2t+z9mU9JLLPZIMrq1XN1xyYuedlJyjIVi72doWTLbvpHmLdr7yr7qeUwuLtnN5whFMafUrDGjoucrug+3uWFVkGhwRT099uMV7vYrYM7N29guP3Qvd9btpnrzFm19SeH9vRtdF/Q2nUW9+95M7KURrDULU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729756331; c=relaxed/simple;
-	bh=pn1YGm5bTJvzIAVJSwFls+B3zLaFehop00/DygkHELg=;
+	s=arc-20240116; t=1729764086; c=relaxed/simple;
+	bh=iY1/51zaPHjVqosPGel6QiZiJ04KavIR7kHi6cy2EJM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qdfk6hRZv9JMbSUxyJUnmShi9K8ZjkW5heJuBqvid6Ze5e3VsC40AYhNyx6JPSVab8pNSk/JlHgI/DnL8tI7qO8+3GrB4HZFpXOXtyi/Kq2Q4P9A7x484y/2IS6TcJZ77+QQ02LBQtSKU+mCIBPeoNZbNhb/zBTUqCUtkYbE/z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V5WsgHWn; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5cb79c648c9so51826a12.3;
-        Thu, 24 Oct 2024 00:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729756327; x=1730361127; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dfJuRq/b6qwtgMPyTFyvJlc2k8o4i9OgvL9elbu5Hpc=;
-        b=V5WsgHWnEqWyH4TIDrwVx7/vtLL2HSarMKtiePLg1M87QGSN5UDR0IwMcbATh7IkcO
-         QSMhRz3qpTpnC0qxTcV5Z+uv0PbDskBjxhd1/2uIAszBTFE/us0jwwAgnpFaigHe5nMt
-         dJ08xSF2KKTqlkj5GWsWo/NZM1mjcd4+sLQWdL+J57YilJbxwoDCbh3X69G2eigKer5/
-         aY9cuaL40GCty3Nwjq9MMVlDIDT8rd7kZ3UV/x7jBQHBqmLamirffXIa7jRFj8gy3VEw
-         Tim4KKS7R4Vn56S3zVhShhOgyUxVWCjeo5f+kIZ6Au9sPtVDX6X8JIUZVAv4FONEzi5Q
-         Dv9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729756327; x=1730361127;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dfJuRq/b6qwtgMPyTFyvJlc2k8o4i9OgvL9elbu5Hpc=;
-        b=nFUws34I24ER1jNFb7J2crgFQxudxKLYxj1ho3ip7zmDdtBAEnkTB/FkjlhQ0cSXSx
-         W4cvRUjPlBoAW1pK2xQ2U4VKh2jMgWH/WMpzBHekI7GrreHTnfqkFqXGSAQjU1etO5Mo
-         J0saiyMaBo/h95qIrOL/hSwPq/j7XN5Ed+dl2Pyuo8w/lUrwboCC7nwdq+LZEG1UYPr8
-         4P/HqM8/zgw1oaLqgSahrU/lXlfHnu56j6lfqOUIh0WDEr3e6/+iGTQ2387L2eKX/pm0
-         vkuJfdNn1eRUts2uQub81bMH8zo26Ru4dygIGa0BQGIB3LXxElKvNiXxMCKE3+dGOorC
-         ni7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXK7OgcT0ym0UQWxMcDj2dNsYdt6BhDeq4Yr4QpTvFRY7UGaimsJvccB+MC3YlcDn334W0QZQsxC3RongU=@vger.kernel.org, AJvYcCXuhjGX3ojXhgQ2GvVYWF0vMGOIIkeuJSw/The0sEjCQAYtH4dVArS12oYgOIVixzH7ABBBbaJfB0DC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxA05z3KKXo6NnXh2SB9t9kHuH9KrVdeJDOfahH9A3sn6QU/INj
-	k1EtE0EV+bSgGtHWfRMRgE2ZZj9UpydlInKhpcdPBJp6Xfa2+QBvHDhtjZOe
-X-Google-Smtp-Source: AGHT+IHZkWypryMqz4bOsre9+5N72ivCGvCDfFrtcuQw5at0TLFywfrbAHOiAweigPae4YmGuyaAwg==
-X-Received: by 2002:a17:907:7d88:b0:a99:d6e1:6056 with SMTP id a640c23a62f3a-a9abf927d9emr232957066b.10.1729756326879;
-        Thu, 24 Oct 2024 00:52:06 -0700 (PDT)
-Received: from skbuf ([188.25.134.29])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a912d62efsm575009666b.44.2024.10.24.00.52.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 00:52:06 -0700 (PDT)
-Date: Thu, 24 Oct 2024 10:52:03 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	William Zhang <william.zhang@broadcom.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	=?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-	Dhruva Gole <d-gole@ti.com>,
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	"open list:FREESCALE DSPI DRIVER" <linux-spi@vger.kernel.org>,
-	"open list:FREESCALE DSPI DRIVER" <imx@lists.linux.dev>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] spi: spi-fsl-dspi: Fix crash when not using GPIO
- chip select
-Message-ID: <20241024075203.ifih3rxwyzl7dn4s@skbuf>
-References: <20241023203032.1388491-1-Frank.Li@nxp.com>
- <20241023203032.1388491-1-Frank.Li@nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jTaKuz3oDPCtoPxNuNPdqYHLrKrAOfCXTX5JrKe1cc7lkXNuYKlwJzdamKZalD3Yh6gDIkF4qOYzX7XDoUuJ913lQ0/1JtNZdZXjNNDMC/sJ2AAohunhP9moollVU0cThI3Vsx1khdA+v5bFKpbt6k/CWOJYB421niKwoeW2v+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.ru; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 3854C72C8F5;
+	Thu, 24 Oct 2024 12:53:39 +0300 (MSK)
+Received: by imap.altlinux.org (Postfix, from userid 705)
+	id 336F236D070D; Thu, 24 Oct 2024 12:53:39 +0300 (MSK)
+Date: Thu, 24 Oct 2024 12:53:39 +0300
+From: Michael Shigorin <mike@altlinux.ru>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Tor Vic <torvic9@mailbox.org>, Kexy Biscuit <kexybiscuit@aosc.io>,
+	jeffbai@aosc.io, gregkh@linuxfoundation.org, wangyuli@uniontech.com,
+	aospan@netup.ru, conor.dooley@microchip.com,
+	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org,
+	dushistov@mail.ru, fancer.lancer@gmail.com, geert@linux-m68k.org,
+	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
+	ntb@lists.linux.dev, patches@lists.linux.dev,
+	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
+	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
+	wsa+renesas@sang-engineering.com, xeb@mail.ru
+Subject: what about CoC? (was: [PATCH] Revert "MAINTAINERS: Remove some
+ entries due to various compliance requirements.")
+Message-ID: <20241024095339.GA32487@imap.altlinux.org>
+References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <20241023080935.2945-2-kexybiscuit@aosc.io>
+ <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
+ <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <20241023203032.1388491-1-Frank.Li@nxp.com>
- <20241023203032.1388491-1-Frank.Li@nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-Hi Frank,
+как хорошо, что по-русски можно писать то, что думаешь
 
-On Wed, Oct 23, 2024 at 04:30:32PM -0400, Frank Li wrote:
-> Add check for the return value of spi_get_csgpiod() to avoid passing a NULL
-> pointer to gpiod_direction_output(), preventing a crash when GPIO chip
-> select is not used.
-> 
-> Fix below crash:
-> [    4.251960] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> [    4.260762] Mem abort info:
-> [    4.263556]   ESR = 0x0000000096000004
-> [    4.267308]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    4.272624]   SET = 0, FnV = 0
-> [    4.275681]   EA = 0, S1PTW = 0
-> [    4.278822]   FSC = 0x04: level 0 translation fault
-> [    4.283704] Data abort info:
-> [    4.286583]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> [    4.292074]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> [    4.297130]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [    4.302445] [0000000000000000] user address but active_mm is swapper
-> [    4.308805] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [    4.315072] Modules linked in:
-> [    4.318124] CPU: 2 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-rc4-next-20241023-00008-ga20ec42c5fc1 #359
-> [    4.328130] Hardware name: LS1046A QDS Board (DT)
-> [    4.332832] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    4.339794] pc : gpiod_direction_output+0x34/0x5c
-> [    4.344505] lr : gpiod_direction_output+0x18/0x5c
-> [    4.349208] sp : ffff80008003b8f0
-> [    4.352517] x29: ffff80008003b8f0 x28: 0000000000000000 x27: ffffc96bcc7e9068
-> [    4.359659] x26: ffffc96bcc6e00b0 x25: ffffc96bcc598398 x24: ffff447400132810
-> [    4.366800] x23: 0000000000000000 x22: 0000000011e1a300 x21: 0000000000020002
-> [    4.373940] x20: 0000000000000000 x19: 0000000000000000 x18: ffffffffffffffff
-> [    4.381081] x17: ffff44740016e600 x16: 0000000500000003 x15: 0000000000000007
-> [    4.388221] x14: 0000000000989680 x13: 0000000000020000 x12: 000000000000001e
-> [    4.395362] x11: 0044b82fa09b5a53 x10: 0000000000000019 x9 : 0000000000000008
-> [    4.402502] x8 : 0000000000000002 x7 : 0000000000000007 x6 : 0000000000000000
-> [    4.409641] x5 : 0000000000000200 x4 : 0000000002000000 x3 : 0000000000000000
-> [    4.416781] x2 : 0000000000022202 x1 : 0000000000000000 x0 : 0000000000000000
-> [    4.423921] Call trace:
-> [    4.426362]  gpiod_direction_output+0x34/0x5c (P)
-> [    4.431067]  gpiod_direction_output+0x18/0x5c (L)
-> [    4.435771]  dspi_setup+0x220/0x334
-> 
-> Fixes: 9e264f3f85a5 ("spi: Replace all spi->chip_select and spi->cs_gpiod references with function call")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
 
-Sadly I do not reproduce this NULL pointer dereference. I also know from
-hearsay that the GPIO consumer API is more or less NULL-tolerant. Could
-you "make drivers/gpio/gpiolib.lst" and see what's at offsets 0x18 and
-0x34 into gpiod_direction_output()? The first thing in that function is
-the VALIDATE_DESC() macro, which does:
+On Wed, Oct 23, 2024 at 10:45:47AM -0700, Linus Torvalds wrote:
+> It's entirely clear why the change was done
 
-static int validate_desc(const struct gpio_desc *desc, const char *func)
-{
-	if (!desc)
-		return 0;
+Might seem so to you, but apparently not to those wondering.
 
-	if (IS_ERR(desc)) {
-		pr_warn("%s: invalid GPIO (errorpointer)\n", func);
-		return PTR_ERR(desc);
-	}
+> And FYI for the actual innocent bystanders who aren't troll
+> farm accounts - the "various compliance requirements" are not
+> just a US thing.
 
-	return 1;
-}
+US is just another victim of those trotzkist slugs --
+you can ask your father, he must know better *why*
+those have been expelled even by their own ilk
+a century ago here in Russia.
 
-#define VALIDATE_DESC(desc) do { \
-	int __valid = validate_desc(desc, __func__); \
-	if (__valid <= 0) \
-		return __valid; \
-	} while (0)
+> If you haven't heard of Russian sanctions yet, you should try
+> to read the news some day.  And by "news", I don't mean Russian
+> state-sponsored spam.
+
+Linus, those "news" have cost your family a child already,
+and Elon has paid a similar tax.  You have been limited in
+your right to tell what you think right here in linux-kernel@
+(unless you speak hate against *all* of the Russians, yeah).
+
+You've agreed that black is white and vice versa.  It is not.
+
+> As to sending me a revert patch - please use whatever mush
+> you call brains.
+
+It's not about the patch but rather about the attitude;
+Documentation/process/code-of-conduct-interpretation.rst:
+
+"regardless of ... ethnicity, ... nationality, ... race"
+"Focusing on what is best for the community"
+
+"Examples of unacceptable behavior ... insulting/derogatory
+comments ... Public or private harassment"
+
+Get back to single-standard integrity for yor own's sake.
+
+> I'm Finnish. Did you think I'd be *supporting* Russian
+> aggression?
+
+Have you heard of casus belli?  Do you think these were one?
+
+http://nypost.com/2022/02/21/russia-kills-5-ukrainian-saboteurs-allegedly-trying-to-breach-border/
+http://reuters.com/world/europe/russias-fsb-says-shell-ukrainian-territory-destroys-russian-border-guard-post-2022-02-21/
+
+That's February 21, 2022.  If I yelled all over the place
+about "Finnish invasion" after Russian IFVs have rovered
+Finland *first* for no good reason, would I be right?
+
+Feel free to ask, I actually grew up in Kiev and e.g.
+this bug fix was done there as well:
+
+http://bugzilla.kernel.org/show_bug.cgi?id=15658
+http://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=c9e2fbd909c20b165b2b9ffb59f8b674cf0a55b0
+
+Please do revert it too then.
+
+Drop Linux network stack while at that, that "roomful
+of Russian mathematicians" is now declared untermensch.
+
+> Apparently it's not just lack of real news,
+> it's lack of history knowledge too.
+
+On your side, Linus.
+On your side.
+
+Hope you're still Finnish, not a Finnish nazi
+(swap "Russians" with "Jews" in your email and
+re-read it; it's my homegrown "nazi test" --
+if this change suddenly makes a text "nazist",
+it was).
+
+It is the US that has pushed Finland towards NATO,
+basically to follow the grim destiny that the former
+Ukraine currently harvests, and that was prepared
+for Georgia (that evades it), Moldavia (that rishes
+full speed towards destruction), Poland, the three
+Baltic states, and now your homeland.
+
+There is no regulation that can force your own heart.
+Listen to it.  Not to emotions, but to the deep truth
+that never cries aloud.
+
+You bow to the jerks who are *afraid* of opposition,
+because there is no truth in their father.
+
+Remember those who yelled "Assad must go"?
+How many of them are still around?
+Those siding with them perish with them.
+
+
+PS: last time I've seen RMS in Moscow, he declared
+his support "to the Moscow protesters"; I've asked him
+whether he knows that the initial issue was that the
+dead people were identified en masse as those "voting"
+for "democratic" candidates in 2019 elections, and he
+stared at me and answered, "nonsense".  I've emailed
+him after BLM affairs to ask if what he sees makes
+sense but never seen a reply this time -- and dead
+voters turned out to be not a purely export-only
+"technology" a bit later (pretty cosmopolitan).
+
+
+Господи, спаси и сохрани раба Твоего заблуждшего
+Линуса и ближних его во веки веков; аминь!
+
+-- 
+Michael Shigorin
+(whose first book on programming was
+Hyvonen and Seppanen's one on LISP)
+http://t.me/anna_news
 
