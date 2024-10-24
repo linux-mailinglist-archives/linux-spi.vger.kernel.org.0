@@ -1,156 +1,144 @@
-Return-Path: <linux-spi+bounces-5368-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5370-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBEA39AE849
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 16:22:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEABB9AE94B
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 16:49:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BB5B1C22188
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 14:22:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE82FB25661
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Oct 2024 14:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745491D5AD1;
-	Thu, 24 Oct 2024 14:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 906961E378A;
+	Thu, 24 Oct 2024 14:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OO8ojSh9"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="yvW2F9zO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AB81E1C33;
-	Thu, 24 Oct 2024 14:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604531E2009
+	for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2024 14:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779136; cv=none; b=SV31HwW/x3YVdzaZQQaM/Mlbam+k/TyTR68/FqLMbH9ntaNJMkUAbDtG+nnXI3hUC3Vf4Sash7zrBIaBzW2+6CF6KCiEoQ5rlAEygl5pYkvkaB27MRC8HVsjpSkdRh8t6h+4pH0d1XrlmS6BUTU76NaNcDmC9Qgh/pZbVfTgztA=
+	t=1729781392; cv=none; b=DZlbInAAAnnoSfXq7sdg2wLeBhDuyFD3S1dVFWwrTBbLJaskLF2U22jwvtNILtvu/0jqG4M2PR29S/96URwYOKOgfmMxn1OIC60y3ANsjMPQoWuA4C5pCxayTNnWWrAFteCIcIa2Etbb3HHKUGXlCLQZ6aj96so7rScbUnobuxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779136; c=relaxed/simple;
-	bh=Nj1ebmcv/mm+UDNIZ/dfe2bFowbODDJCifUQEhsRIc0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bWUMIsTZ0T0CZn267tXThIYOK5hVEQ0XYpak3aF7w4Lfx/xu6Sp2CFSQV3WRW8tDeSOfumJiRg7w50bEG7Ae//gLtVRQWppSORd31nX8+983bZ9JDhSvmbFObDYy5OCRoBOjcAzU6tTfZ80HcK/dqekl1UvOWE+vzzrP3fWM3hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OO8ojSh9; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a93c1cc74fdso124221566b.3;
-        Thu, 24 Oct 2024 07:12:13 -0700 (PDT)
+	s=arc-20240116; t=1729781392; c=relaxed/simple;
+	bh=gVUPvv/FnmRY7foM5Tyh9ireuXWq1boSSJ5EWGM8bO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lAmPnm1ycFN4DDIdX72PmeA7Xix4NDeG/zrHGVX0KBwfg+SsLmSsdvrPI4xBY5pBr7Ht5Y9nQ4nVBSkb+kTMOQJuR9nU/aTCkZLOJp4AcYYGxQcxrgpyPdSM5uudxld/8w03w9jKcdrB9zsNminBl+Oe2eXXhQGnWd5FHdPlqTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=yvW2F9zO; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-71809fe188cso635870a34.0
+        for <linux-spi@vger.kernel.org>; Thu, 24 Oct 2024 07:49:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729779132; x=1730383932; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Nj1ebmcv/mm+UDNIZ/dfe2bFowbODDJCifUQEhsRIc0=;
-        b=OO8ojSh9WDsj0rSgpByfnZd8pchVCJixVmCqBD7Nuq/IafPo//zv4YvTA/jlmifCb6
-         F+sVpCVvOAz5iHnEPZw4xhzQO0+Ck8MlVUTwhNKnDr3ADCw/8KDNtac1+qngjzLVZWMf
-         M/QOHhBiWqgmRyaKwpM8rvTQcEP3f6urnJlFIHVDx2yRXoouMxZAr1C5PbpQD9SxHQih
-         4ryQY/MAY/y9HTia1nzCqLKRG7p+7MgQZ08sl/zG7mbPMaBGd7UH7XLAX0BCPV/yiCIs
-         8t8VwXenp1F3vVOqXjFZMOmLvs4wuvgcLZfG6aZhCIX357yj8vSFdoFofVxQz2y5Rh23
-         cYdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729779132; x=1730383932;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729781389; x=1730386189; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nj1ebmcv/mm+UDNIZ/dfe2bFowbODDJCifUQEhsRIc0=;
-        b=M1hfSyAFg+CcONEC7HzZUIxreW4aC2yiL67qybvvtItkeOHr76k4S2JEtIyvkI7m91
-         E5p0ZMq4LvTg1sStrCI3+/918mnE/BrMebXilZV6/eQKfk5bJpmpYl61PPfXPJRFTarE
-         xEYfGr9RjpDodZ2SWzx/V2Y7eudQPVsNHy2Wy4AiA67VaWrYDAGzpG3FF+jWLicc1ZTp
-         nUDRi1u6DPHxun+Pn2p9t1Jx7V7xB8S7cJSHH6FZJpKZkWyIZRz1TrDM5bnXiW8MHsim
-         hhwjJp812s3KKsz0JSsBBbwB7ZOQ7M9cDrb8zOD6N02o3tVcZl3lqDdExohs9Oewbekj
-         Zy8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVdtsi0NSvF5w9GLMocYLbK9+SBiCHsUPBQa2Y8TbnSUb90ApqjIi5sEhK6cjzctLlkeG/sNWK4QOds@vger.kernel.org, AJvYcCVjEPYBHTLeivO1s0jYtIDnkNmT3fG0gxXaDDuGGHE5q4WPtX6N0aIocPmCIjbeX1bgFza0oyD6vA+8@vger.kernel.org, AJvYcCWPqg0b22MDkQkSNYwcKwn80m0crJYIhGNtIzfye7mZbCGEUI9baRnme6t0GJCr5kvjdExp1knRpn3A@vger.kernel.org, AJvYcCXNyyHoN8M7BUuCFcpkpUZo5tSBRPjM+4NxswhUMDlWdCmu9oFp6g0EA70Dm1UHXvFX67Njt8Nesh5O@vger.kernel.org, AJvYcCXjF2z3wqXa5U6vPgAZ1suTuXjX0hU5E9UURxKB8krZWFiuFLQRqJeaaloI2saz+OYddMyoLiKcX1ndL53W@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhVBYtTEkX8wmGP/rcQ0JTqI+mDefSnoOtZcsb7UAkn8y0GvNV
-	ElvPGegIS9TwzFipYJ6+5+UMk0z3Jf478IXE29S/P2FyGoQKl5Sy
-X-Google-Smtp-Source: AGHT+IHpDlN3uiwFaGU+NjrmHJnbgiUpiTHuzfNHuRoy7uR9tWOnbsFsdxmjuDvqcRRC+hYZGgSCDw==
-X-Received: by 2002:a17:906:7309:b0:a9a:55de:11f4 with SMTP id a640c23a62f3a-a9abf96d176mr580734466b.54.1729779132047;
-        Thu, 24 Oct 2024 07:12:12 -0700 (PDT)
-Received: from ?IPv6:2001:a61:34c9:ea01:14b4:7ed9:5135:9381? ([2001:a61:34c9:ea01:14b4:7ed9:5135:9381])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a9159a214sm627093766b.213.2024.10.24.07.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 07:12:11 -0700 (PDT)
-Message-ID: <72afe00622075f77b410e9537cca0a7ac5a4cba3.camel@gmail.com>
-Subject: Re: [PATCH RFC v4 00/15] spi: axi-spi-engine: add offload support
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
- Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen
-	 <lars@metafoo.de>, David Jander <david@protonic.nl>, Martin Sperl
-	 <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-Date: Thu, 24 Oct 2024 16:12:11 +0200
-In-Reply-To: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
-References: 
-	<20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+        bh=v94UAHAt0z/GlIRWzSb/aqpgf9U8SvwT3lelP7L/T8M=;
+        b=yvW2F9zOr9Sf1sqnEkbgC6EXZYUktEdcgHjquzA3w5nctGrXXS0YQQlvpTagDF70fE
+         u1IIvlJ4/CF0wns8G2I6AXN4b0+3DjGS4dpi7mvqZCC0SMee11i3rw67CS7WZFxbQ9Mf
+         csHS54c0thr3Pu821cyVYf9sDbUhwqz/q2v3BO/c9fcntGxAyJdqTNhbvYN3LGjIVfI4
+         buUXWu10WB3BgOtaIzMZCKjy7q68IEDt7I4zCQSCCvQP0k6uvp8utPAUP88H2D9xuiFQ
+         MURyC7IA3tRb+znUcPR90uXzIu3pCgry+mZrihIxWntVpqLmXHcLIg8QMsCg7RFXO29m
+         N3nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729781389; x=1730386189;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v94UAHAt0z/GlIRWzSb/aqpgf9U8SvwT3lelP7L/T8M=;
+        b=hOES0xPfSA7iwSe+SSy7vwXrsM7oeeLKGQr3+qhJLi0DdQQTo5a7FAMizCbOmNXz9a
+         k9xsYazOzG1hpO8c3PThOPKS8iF/tWOnwHqatFxDE/3LoJ2i0c5FcYgOuHLEpJDfHF0J
+         KSh1Nro6wesjKeHytuDv9TlQmcWTKlFqtGxl9fbLIHTfofrLxY/g6YlZKbJPlPnUNwz5
+         jkZyvYlg2DvZqcJeSV2a6ahmSeij/3AU4YcaIJkgXA+/fXQFJAixtOP3QAexlCLPM46/
+         y5OBShYIckFCWaN3bIUlgLfRr8E1ITgFHVrRJOrwyx/Ps2U1XBvelXDN7ba+e8JO+Us3
+         4vVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2C/sSigzhijMdpHS0ptQ0Vt4uX61R4WLyDvQo8yt/dSWRQ0bSlR06mCIVxR7bOHmmNy859NB3ExA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM+mu71gJgrBHPf+boSuUK4PdfAMHYpQVTe6XBhGO5BkczdVAl
+	nSykzjDmewfiOIL6QULTEyY8gkGRCD57JRTOQTR7Gjs490fKh18Cd4psUq165i8=
+X-Google-Smtp-Source: AGHT+IFSOJa5tZQDfiyvifYRt2spOoqw/LKgbaZOjiDrgieDP9qwmB+SmfLhxczWOx70km6r217TWg==
+X-Received: by 2002:a05:6830:2113:b0:718:8eb:531a with SMTP id 46e09a7af769-7184b29606dmr6867406a34.4.1729781389223;
+        Thu, 24 Oct 2024 07:49:49 -0700 (PDT)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7182ec025cdsm2152200a34.68.2024.10.24.07.49.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Oct 2024 07:49:47 -0700 (PDT)
+Message-ID: <7782352b-b8b3-4f2c-8a6a-b92dab8cb1b6@baylibre.com>
+Date: Thu, 24 Oct 2024 09:49:46 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v4 02/15] spi: add basic support for SPI offloading
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: Michael Hennerich <Michael.Hennerich@analog.com>,
+ Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
+ Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
+ <20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
+ <ba3eed090e29deda797b0dea8162949c82743ccf.camel@gmail.com>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <ba3eed090e29deda797b0dea8162949c82743ccf.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi David,
+On 10/24/24 8:27 AM, Nuno Sá wrote:
+> On Wed, 2024-10-23 at 15:59 -0500, David Lechner wrote:
+>> Add the basic infrastructure to support SPI offload providers and
+>> consumers.
+>>
 
-On Wed, 2024-10-23 at 15:59 -0500, David Lechner wrote:
-> In this revision, I ended up changing quite a bit more that I was
-> expecting.
->=20
-> In the DT bindings, I ended up dropping the #spi-offload-cells and
-> spi-offload properties. A couple of reasons for this:
->=20
-> 1. Several people commented that it is odd to have a separate provider/
-> =C2=A0=C2=A0 consumer binding for something that already has a parent/chi=
-ld
-> =C2=A0=C2=A0 relationship (both on this series and in another unrelated s=
-eries
-> =C2=A0=C2=A0 with io-backends). For now, the only SPI offload provider is=
- the AXI
-> =C2=A0=C2=A0 SPI Engine, which is a SPI controller.
-> 2. In a discussion unrelated to this series, but related to the idea
-> =C2=A0=C2=A0 of SPI offloads [1], it became apparent that the proposed us=
-e for
-> =C2=A0=C2=A0 the cells to select triggers and tx/rx streams doesn't actua=
-lly
-> =C2=A0=C2=A0 work for that case.
-> 3. In offline review, it was suggested that assigning specific offloads
-> =C2=A0=C2=A0 to specific peripherals may be too restrictive, e.g. if ther=
-e are
-> =C2=A0=C2=A0 controllers that have pools of identical offloads. This idea=
- of
-> =C2=A0=C2=A0 pools of generic offloads has also come up in previous discu=
-ssions
-> =C2=A0=C2=A0 on the mailing list.
->=20
-> [1]:
-> https://lore.kernel.org/linux-iio/e5310b63-9dc4-43af-9fbe-0cc3b604ab8b@ba=
-ylibre.com/
->=20
-> So the idea is that if we do end up needing to use DT to assign certain
-> resources (triggers, DMA channels, etc.) to specific peripherals, we
-> would make a mapping attribute in the controller node rather than using
-> phandle cells. But we don't need this yet, so it isn't present in The
-> current patches.
->=20
-> And if we ever end up with a SPI offload provider that is not a SPI
-> controller, we can bring back the #spi-offload-cells and
-> spi-offload properties.
+...
 
-Well I do like we kind of gave a step back and are more focused in supporti=
-ng what we
-have and know at the moment. And I think (for what I saw so far) things are=
- being
-implemented in fairly flexible manner. So yeah, as far as I'm concerned, I =
-liked what
-I saw so far. Hopefully everyone can agree on this so we drop the RFC :)
+>> +struct spi_offload *devm_spi_offload_get(struct device *dev,
+>> +					 struct spi_device *spi,
+>> +					 const struct spi_offload_config *config)
+>> +{
+>> +	struct spi_offload *offload;
+>> +	int ret;
+>> +
+>> +	if (!spi || !config)
+>> +		return ERR_PTR(-EINVAL);
+>> +
+>> +	if (!spi->controller->get_offload)
+>> +		return ERR_PTR(-ENODEV);
+>> +
+>> +	offload = spi->controller->get_offload(spi, config);
+>> +	if (IS_ERR(offload))
+>> +		return offload;
+>> +
+>> +	if (offload->spi)
+>> +		return ERR_PTR(-EBUSY);
+>> +
+>> +	offload->spi = spi;
+>> +	get_device(offload->provider_dev);
+> 
+> Isn't this redundant? From what I can tell, we're assuming that the spi controller
+> (of the spi device) is the offload provider. Therefore, getting an extra reference
+> for it does not really seems necessary. The device cannot go away without under the
+> spi_device feet. If that could happen, then we would also need to take care about
+> callback access and things like that. Going this way, it would also be arguable to
+> have a try_module_get().
+> 
+> - Nuno Sá
+> 
+> 
 
-I'll try to look at the remaining patches tomorrow...
-
-- Nuno S=C3=A1
-
-
+Yes, you are right that we don't really need to take a reference to the device.
+This was left over from when I made an implementation that assumed the offload
+provider could be anything, not just a SPI controller.
 
