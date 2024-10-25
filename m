@@ -1,48 +1,50 @@
-Return-Path: <linux-spi+bounces-5468-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5469-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B8A9B097A
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 18:15:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F579B097B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 18:15:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94C30284483
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 16:15:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94D571C22EC9
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 16:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFA21D14FC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B40B13212A;
 	Fri, 25 Oct 2024 16:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="E8qFeGtu"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="S4NjRkZJ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025331FB88B
-	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 16:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A981118BC33
+	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 16:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729872908; cv=none; b=hN2qO9FXxTX+fRL3rKZ+YUu30kPpIkQ8w54QoKkT1xgJDSsx3c3cFWpQvoL7ERuprSLUbneEBbTCuanto1I0h2ViDpJw8zzRUZX+e67pX5XS2v9u9qD9+1dnrS/uqrBvb1IiKJ9gTgEPU3qZ3yP+E6VTK58gn/6S3iNwSwfUKv0=
+	t=1729872909; cv=none; b=YFTEz7hK0ngn2m7aKBVPRk3lu+4rky1g9ta/PXPj+8GcYm7i5nFv/eUu/SlTuBIjzf7mGZ6Em6HrlGtfhhT6aaxJDCiSas2RmlNk6lBAjTaJOxZccOu25HcQIE2HwOWnK8ybsLt28Xxe73poyLquy59OliPKcBSgtPNkB/YSbm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729872908; c=relaxed/simple;
-	bh=H42rK0lz4mVQzry0EAMBBAoDPCHaWbY1WKWWtbYOWow=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N9aM8UV7kHwt2EV4tdBK9AiOT9YDhuIC5CZOqQDFLEzbDWUeIUPizsRT8kl4Rz6LAhNIWcbvPZhJuiGDNOerrngTmI3zEoYdyttWf831G4dyPO37cUryuZkT/2Jt6XdI/L9MXf49oX+7vxhP6iqYS6ufHnk5RwLLQYHCZUzT8Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=E8qFeGtu; arc=none smtp.client-ip=217.70.183.196
+	s=arc-20240116; t=1729872909; c=relaxed/simple;
+	bh=UHxQeabx6W+4ehmErb/kCPeF6wFYajb230df1C9IBYE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MwIpZnRXOBGY//a/qMEq2XICLbgy/B+/hQs7PigQbaTqAKepZHN0TbVPK76E0Rk+8EHETvIWdjbvlKPXy+a8oqfZth6HreF7aTugCXu/DEJjrODetyWrgMmvDbpADrmCa16hcf6ORrHj2VH6y4C055S3FbXLuQhmI2kcPROYPcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=S4NjRkZJ; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D2839E0004;
-	Fri, 25 Oct 2024 16:15:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2A096E0006;
+	Fri, 25 Oct 2024 16:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729872904;
+	t=1729872905;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/X3AgxqIhjMfS5rto4yq5EfvdDpAoHLw7VDDc2xoiJQ=;
-	b=E8qFeGtuRS2zWi/3K6VnsIH7nlWU0UiBdbLRN31umPxMjy7mLE2nz0ulstBTkFyYJH+X12
-	yoLM/QgFRIMLJZB/QzifpMO6u1pypLF6jgMDkqlBiGVHfm75wWy6VSgL1SrneyNtwtI2ia
-	VTRMvXgUeldqESFWv2mqkVBGYKf8DSrVBgt454tTh3mDd+hHBOnlMJyp34DB5JltKmfvMd
-	Q3QiY2XpkvGBVuwadZr0eosD9TJfexNiWOUPtivclLYI9KBLJlu5tbqh6RtO/HCJ4SBY1r
-	4ARxAD6fDJQd3ISpi4fgn5/+spxiJSun/ECSQ0kLpgq17/aeAsFl1cGjlYXwww==
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=24zgJ1SOwtcpnsboCjjPZCjULnvdSoTsG66ZvB9nNQI=;
+	b=S4NjRkZJhfB7j3euDlq+6t4XbXNr9GiPFPjpTuFEFNXcAFXuqz3kl9AlB5Ryd1do6jgWGD
+	/V1567W1jZU8IbffTaAiCYtA4uLVEW8VIynra270j9XmmYc9EYIj7cZEoc4rH5AqP8vqyB
+	t2a8z6of9UTlt0MJDHTjZHIWa9pRR/8us9jWUKUVD5gxpXcgNv5V55d4BLzSAslI1ExGc9
+	nux6teBIf+Ff0JqMvrs0Gfi4cLLmKJBcJ2iKqzqVmRBOP3JYPd2+eM6QEgRPAwxczfw6Dt
+	AW2dhZ2vJJYtbibGCBVe7QScEf9dDh1WSjeMdiSyp8RARqL8vcNHl/chC9E1Qg==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
@@ -65,109 +67,175 @@ Cc: Mark Brown <broonie@kernel.org>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Michal Simek <michal.simek@amd.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 00/24] spi-nand/spi-mem DTR support
-Date: Fri, 25 Oct 2024 18:14:37 +0200
-Message-ID: <20241025161501.485684-1-miquel.raynal@bootlin.com>
+Subject: [PATCH 01/24] spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
+Date: Fri, 25 Oct 2024 18:14:38 +0200
+Message-ID: <20241025161501.485684-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241025161501.485684-1-miquel.raynal@bootlin.com>
+References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hello Mark, hello MTD folks,
+In the spi subsystem, the bus frequency is derived as follows:
+- the controller may expose a minimum and maximum operating frequency
+- the hardware description, through the spi peripheral properties,
+  advise what is the maximum acceptable frequency from a device/wiring
+  point of view.
+Transfers must be observed at a frequency which fits both (so in
+practice, the lowest maximum).
 
-Here is a (big) series supposed to bring DTR support in SPI-NAND.
+Actually, this second point mixes two information and already takes the
+lowest frequency among:
+- what the spi device is capable of (what is written in the component
+  datasheet)
+- what the wiring allows (electromagnetic sensibility, crossovers,
+  terminations, antenna effect, etc).
 
-I could have split this into two but I eventually preferred showing the
-big picture. Once v1 will be over, I can make it two. However when we'll
-discuss merging, we'll have to share an immutable tag among the two
-subsystems.
+This logic works until spi devices are no longer capable of sustaining
+their highest frequency regardless of the operation. Spi memories are
+typically subject to such variation. Some devices are capable of
+spitting their internally stored data (essentially in read mode) at a
+very fast rate, typically up to 166MHz on Winbond SPI-NAND chips, using
+"fast" commands. However, some of the low-end operations, such as
+regular page read-from-cache commands, are more limited and can only be
+executed at 54MHz at most. This is currently a problem in the SPI-NAND
+subsystem. Another situation, even if not yet supported, will be with
+DTR commands, when the data is latched on both edges of the clock. The
+same chips as mentioned previously are in this case limited to
+80MHz. Yet another example might be continuous reads, which, under
+certain circumstances, can also run at most at 104 or 120MHz.
 
-Here is the logic:
-* patches 1 & 2 add support for spi-mem operations with a specific
-  frequency limitation. This is not only related to DTR support, because
-  as you can see I could use this to support basic features in the
-  Winbond driver.
-* patches 3-16 are going through all the easy controller drivers, where
-  effectively supporting these per-operation limitation was easy to
-  do. In practice, I believe all controllers can, but software is
-  sometimes the limiting factor. All controllers without spi-mem support
-  will gracefully handle the request (provided that they already care
-  about the maximum speed of course), and all the updated controllers in
-  this series will also handle the situation correctly. For the others,
-  it's an opt-in parameter, so they will simply refuse the operation
-  during the checks_op/supports_op() phase.
-* patches 17-19 make use of this new possibility to fix Winbond support
-* patches 20-24 are actually adding DTR support in SPI-NAND, and making
-  this feature useful with Winbond chips.
+As a matter of fact, the "one frequency per chip" policy is outdated and
+more fine grain configuration is needed: we need to allow per-operation
+frequency limitations. So far, all datasheets I encountered advertise a
+maximum default frequency, which need to be lowered for certain specific
+operations. So based on the current infrastructure, we can still expect
+firmware (device trees in general) to continued advertising the same
+maximum speed which is a mix between the PCB limitations and the chip
+maximum capability, and expect per-operation lower frequencies when this
+is relevant.
 
-Thanks,
-Miquèl
+Add a `struct spi_mem_op` member to carry this information. Not
+providing this field explicitly from upper layers means that there is no
+further constraint and the default spi device maximum speed will be
+carried instead. The SPI_MEM_OP() macro is also expanded with an
+optional frequency argument, because virtually all operations can be
+subject to such a limitation, and this will allow for a smooth and
+discrete transition.
 
-Miquel Raynal (24):
-  spi: spi-mem: Extend spi-mem operations with a per-operation maximum
-    frequency
-  spi: spi-mem: Add a new controller capability
-  spi: amd: Support per spi-mem operation frequency switches
-  spi: amlogic-spifc-a1: Support per spi-mem operation frequency
-    switches
-  spi: cadence-qspi: Support per spi-mem operation frequency switches
-  spi: dw: Support per spi-mem operation frequency switches
-  spi: fsl-qspi: Support per spi-mem operation frequency switches
-  spi: microchip-core-qspi: Support per spi-mem operation frequency
-    switches
-  spi: mt65xx: Support per spi-mem operation frequency switches
-  spi: mxic: Support per spi-mem operation frequency switches
-  spi: nxp-fspi: Support per spi-mem operation frequency switches
-  spi: rockchip-sfc: Support per spi-mem operation frequency switches
-  spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
-  spi: spi-ti-qspi: Support per spi-mem operation frequency switches
-  spi: zynq-qspi: Support per spi-mem operation frequency switches
-  spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
-  mtd: spinand: Create distinct fast and slow read from cache variants
-  mtd: spinand: Add an optional frequency to read from cache macros
-  mtd: spinand: winbond: Fix the *JW chip definitions
-  spi: spi-mem: Reorder SPI_MEM_OP_CMD internals
-  spi: spi-mem: Create macros for DTR operation
-  mtd: spinand: Add support for read DTR operations
-  mtd: spinand: winbond: Add comment about naming
-  mtd: spinand: winbond: Add support for DTR operations
+For controller drivers which do not implement the spi-mem interface, the
+per-transfer speed is also set acordingly to a lower (than the maximum
+default) speed, or 0, to comply with the current API.
 
- drivers/mtd/nand/spi/alliancememory.c |  4 +-
- drivers/mtd/nand/spi/ato.c            |  4 +-
- drivers/mtd/nand/spi/esmt.c           |  4 +-
- drivers/mtd/nand/spi/foresee.c        |  4 +-
- drivers/mtd/nand/spi/gigadevice.c     | 16 ++++----
- drivers/mtd/nand/spi/macronix.c       |  4 +-
- drivers/mtd/nand/spi/micron.c         |  8 ++--
- drivers/mtd/nand/spi/paragon.c        |  4 +-
- drivers/mtd/nand/spi/toshiba.c        |  4 +-
- drivers/mtd/nand/spi/winbond.c        | 27 +++++++++++--
- drivers/mtd/nand/spi/xtx.c            |  4 +-
- drivers/spi/spi-amd.c                 | 10 ++++-
- drivers/spi/spi-amlogic-spifc-a1.c    |  7 +++-
- drivers/spi/spi-cadence-quadspi.c     |  3 +-
- drivers/spi/spi-dw-core.c             | 10 ++++-
- drivers/spi/spi-fsl-qspi.c            | 12 ++++--
- drivers/spi/spi-mem.c                 | 13 +++++++
- drivers/spi/spi-microchip-core-qspi.c | 26 +++++++++++--
- drivers/spi/spi-mt65xx.c              |  7 +++-
- drivers/spi/spi-mxic.c                |  3 +-
- drivers/spi/spi-nxp-fspi.c            | 12 ++++--
- drivers/spi/spi-rockchip-sfc.c        | 11 ++++--
- drivers/spi/spi-sn-f-ospi.c           |  8 +++-
- drivers/spi/spi-ti-qspi.c             |  7 +++-
- drivers/spi/spi-zynq-qspi.c           | 13 +++++--
- drivers/spi/spi-zynqmp-gqspi.c        | 13 +++++--
- include/linux/mtd/spinand.h           | 56 +++++++++++++++++++++++++--
- include/linux/spi/spi-mem.h           | 56 ++++++++++++++++++++++++++-
- 28 files changed, 282 insertions(+), 68 deletions(-)
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/spi/spi-mem.c       |  8 ++++++++
+ include/linux/spi/spi-mem.h | 11 ++++++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 17b8baf749e6..ab650ae953bb 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -356,6 +356,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	unsigned int tmpbufsize, xferpos = 0, totalxferlen = 0;
+ 	struct spi_controller *ctlr = mem->spi->controller;
++	unsigned int xfer_speed = op->max_freq;
+ 	struct spi_transfer xfers[4] = { };
+ 	struct spi_message msg;
+ 	u8 *tmpbuf;
+@@ -368,6 +369,9 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	if (!spi_mem_internal_supports_op(mem, op))
+ 		return -EOPNOTSUPP;
+ 
++	if (!op->max_freq || op->max_freq > mem->spi->max_speed_hz)
++		((struct spi_mem_op *)op)->max_freq = mem->spi->max_speed_hz;
++
+ 	if (ctlr->mem_ops && ctlr->mem_ops->exec_op && !spi_get_csgpiod(mem->spi, 0)) {
+ 		ret = spi_mem_access_start(mem);
+ 		if (ret)
+@@ -407,6 +411,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	xfers[xferpos].tx_buf = tmpbuf;
+ 	xfers[xferpos].len = op->cmd.nbytes;
+ 	xfers[xferpos].tx_nbits = op->cmd.buswidth;
++	xfers[xferpos].speed_hz = xfer_speed;
+ 	spi_message_add_tail(&xfers[xferpos], &msg);
+ 	xferpos++;
+ 	totalxferlen++;
+@@ -421,6 +426,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 		xfers[xferpos].tx_buf = tmpbuf + 1;
+ 		xfers[xferpos].len = op->addr.nbytes;
+ 		xfers[xferpos].tx_nbits = op->addr.buswidth;
++		xfers[xferpos].speed_hz = xfer_speed;
+ 		spi_message_add_tail(&xfers[xferpos], &msg);
+ 		xferpos++;
+ 		totalxferlen += op->addr.nbytes;
+@@ -432,6 +438,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 		xfers[xferpos].len = op->dummy.nbytes;
+ 		xfers[xferpos].tx_nbits = op->dummy.buswidth;
+ 		xfers[xferpos].dummy_data = 1;
++		xfers[xferpos].speed_hz = xfer_speed;
+ 		spi_message_add_tail(&xfers[xferpos], &msg);
+ 		xferpos++;
+ 		totalxferlen += op->dummy.nbytes;
+@@ -447,6 +454,7 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 		}
+ 
+ 		xfers[xferpos].len = op->data.nbytes;
++		xfers[xferpos].speed_hz = xfer_speed;
+ 		spi_message_add_tail(&xfers[xferpos], &msg);
+ 		xferpos++;
+ 		totalxferlen += op->data.nbytes;
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index f866d5c8ed32..8963f236911b 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -68,6 +68,9 @@ enum spi_mem_data_dir {
+ 	SPI_MEM_DATA_OUT,
+ };
+ 
++#define SPI_MEM_OP_MAX_FREQ(__freq)				\
++	.max_freq = __freq
++
+ /**
+  * struct spi_mem_op - describes a SPI memory operation
+  * @cmd.nbytes: number of opcode bytes (only 1 or 2 are valid). The opcode is
+@@ -95,6 +98,9 @@ enum spi_mem_data_dir {
+  *		 operation does not involve transferring data
+  * @data.buf.in: input buffer (must be DMA-able)
+  * @data.buf.out: output buffer (must be DMA-able)
++ * @max_freq: frequency limitation wrt this operation. 0 means there is no
++ *	      specific constraint and the highest achievable frequency can be
++ *	      attempted).
+  */
+ struct spi_mem_op {
+ 	struct {
+@@ -132,14 +138,17 @@ struct spi_mem_op {
+ 			const void *out;
+ 		} buf;
+ 	} data;
++
++	unsigned int max_freq;
+ };
+ 
+-#define SPI_MEM_OP(__cmd, __addr, __dummy, __data)		\
++#define SPI_MEM_OP(__cmd, __addr, __dummy, __data, ...)		\
+ 	{							\
+ 		.cmd = __cmd,					\
+ 		.addr = __addr,					\
+ 		.dummy = __dummy,				\
+ 		.data = __data,					\
++		__VA_ARGS__					\
+ 	}
+ 
+ /**
 -- 
 2.43.0
 
