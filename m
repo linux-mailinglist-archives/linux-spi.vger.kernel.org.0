@@ -1,50 +1,50 @@
-Return-Path: <linux-spi+bounces-5488-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5490-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CA289B0994
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 18:16:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D72879B0992
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 18:16:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEA42B21ADE
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 16:15:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1514D1C23177
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 16:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2D4154C08;
-	Fri, 25 Oct 2024 16:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1AE29B0;
+	Fri, 25 Oct 2024 16:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ow1aZTTq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SuRw2M4Z"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21ED4188588
-	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 16:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58215143C4C
+	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 16:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729872930; cv=none; b=X+bHO8BIIKF7bt40ANDlGd4uzcQJOd2NFJRGVq+4kHLfVcyJKC1K5l9/bfwUZjM8WyYaE9iQrBjznO6N4YQ+0fk/k8rOk/RfWJXRDL7w6bOEmGoBPFILamb9OYAvY+Ot7ZL7dpZr9XuSbGHppXDwHMKW7Ug2pBD0HMPIdB2SxPk=
+	t=1729872931; cv=none; b=l6MRBvjjyUu10hz2zrcwbw9TNv+2njfUq4tMUPc9cXpBELCQgnl2GYeunH1Iacqdc464MdtGG02VN+M63eAYbBiVuxpxXcvmo+xzpHgxMrsuShF55AfcMpz4pSCXURJ4SDL3bFn+16jcxb6v7VqpsEAziTLTv1Rql8yGshlKAhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729872930; c=relaxed/simple;
-	bh=oVJCG/hHi6oZVqUbh6DN2nobFwTr4s/fTM66bLNxlU8=;
+	s=arc-20240116; t=1729872931; c=relaxed/simple;
+	bh=mpltTuSxSDCIhfOPK6nBempJfLAhDL3HIzo2Uvn6Gds=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uP0z9q8/rkBA5C5Ipn8Tb6WeRD7Sg5sZMlAQ3rU77XV9IS6gi/MCql5bIhg/kNhAdmAh3d4LvPMpnjwOcYufVrWp2kj2sXwktzuyCaGGJlOLULwluQyl4BvhCoEk0aYVBZ1iD8DcN6EZo+yt/2k/PtT78QcsbC3aabzrTl6XFVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ow1aZTTq; arc=none smtp.client-ip=217.70.183.196
+	 MIME-Version; b=K9qnW30vNjOMvbea4svCcU7vH19/JZZ4cDHDDJOFjf8G/tMEZ6WtNp38W9WAGuEbhvWjvQE2u6OjMe7E4DBe3+hmpBeODzrNC5bIIyPD9AvSXChsxoDKSTaFiDEkIafmjMpp7J2dxeTx30ekU3LrX9nnCsB4rRNMXskI+gI1QUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SuRw2M4Z; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D8360E0006;
-	Fri, 25 Oct 2024 16:15:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EFD56E0008;
+	Fri, 25 Oct 2024 16:15:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729872926;
+	t=1729872928;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TnJW+HtAJmLd3pYu1pAxAfjvDVGDfQqGvsxgR8a3u5A=;
-	b=Ow1aZTTqR5JoLQXYRgDRTOlatlI+hWfAjiflxMlwDKSKDiJYfj2nKKQus/aRKP7IQ529cZ
-	wTUcYYzp5I6d0N/CQFXItbD9AyXDUbKD1f/2l16/+R+9+PeXXypElv+LrHEjvgBa0rJke8
-	M0OYaYIFSNsRB8BfZ4UGdJYnApSc1rU4W1gQ/0godMzhyzSSu1XSBfvm9D2y07iU9O2gUl
-	kZPwKK0Db/xC2eUogV/aS87drKU/MoMS1108S7rbCjXHwZK0E3ucHMk4Znckn+2F2povTy
-	htG3JFyegwPDlXDnrxJe8dQSVmuV615r7pCD4mwABUBO1MchURVenklwjZ2y9w==
+	bh=+87MeLV5Zm+h4xqBNuD+c6DVTYgplGlJ7RUCLjoe6DY=;
+	b=SuRw2M4Zkhf78exMrJt8mD2dwLyhOnNVYqCxH2GaFlEgAxmdVu5uoFaJdYy1XLLTYUfZTM
+	LQj/PPjuqUbH7IXvRQ+rPIENzT+yYwSJdRvE6K1s4gFbPYPGEohl653qge7+Tyo/nJeMRX
+	qo0MGd1ePROaEPh7dnNSHH1BgRzrkpFaDXn2IxLCInM+lOCn+RxAJDWeoOiA6JKQeaJsQ0
+	jQiyuhL1KGweKynND6HnyqJe1mo7jlkq71DY5QN1HNF8jTTyF3o6jrIU/28H7XUe/BNosT
+	5/Tp79SsJaNsjXIFyyrGU8gbcdkhPUXe3ni4PbW1/7LWg6wYWhw1n+26ePYO4g==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
@@ -67,9 +67,9 @@ Cc: Mark Brown <broonie@kernel.org>,
 	Heiko Stuebner <heiko@sntech.de>,
 	Michal Simek <michal.simek@amd.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 21/24] spi: spi-mem: Create macros for DTR operation
-Date: Fri, 25 Oct 2024 18:14:58 +0200
-Message-ID: <20241025161501.485684-22-miquel.raynal@bootlin.com>
+Subject: [PATCH 22/24] mtd: spinand: Add support for read DTR operations
+Date: Fri, 25 Oct 2024 18:14:59 +0200
+Message-ID: <20241025161501.485684-23-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241025161501.485684-1-miquel.raynal@bootlin.com>
 References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
@@ -82,101 +82,96 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-We do have macros for defining command, address, dummy and data
-cycles. We also have a .dtr flag that implies sampling the bus on both
-edges, but there are currently no macros enabling it. We might make use
-of such macros, so let's create:
-- SPI_MEM_DTR_OP_CMD
-- SPI_MEM_DTR_OP_ADDR
-- SPI_MEM_DTR_OP_DUMMY
-- SPI_MEM_DTR_OP_DATA_OUT
-- SPI_MEM_DTR_OP_DATA_OUT
+Advanced SPI-NAND chips are capable of reading data much faster by
+leveraging DTR support. This support extends to dual and quad
+configurations.
+
+Create macros defining all possible read from cache DTR variants:
+- SPINAND_PAGE_READ_FROM_CACHE_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_X2_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_X4_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_DUALIO_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- include/linux/spi/spi-mem.h | 41 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ include/linux/mtd/spinand.h | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index 318ea7b193cc..d332ac5ce971 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -20,6 +20,14 @@
- 		.buswidth = __buswidth,				\
- 	}
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 6064029c5e05..72e9af266494 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -87,6 +87,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 1))
  
-+#define SPI_MEM_DTR_OP_CMD(__opcode, __buswidth)		\
-+	{							\
-+		.nbytes = 1,					\
-+		.opcode = __opcode,				\
-+		.buswidth = __buswidth,				\
-+		.dtr = true,					\
-+	}
++#define SPINAND_PAGE_READ_FROM_CACHE_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x0d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 1),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
- #define SPI_MEM_OP_ADDR(__nbytes, __val, __buswidth)		\
- 	{							\
- 		.nbytes = __nbytes,				\
-@@ -27,6 +35,14 @@
- 		.buswidth = __buswidth,				\
- 	}
+ #define SPINAND_PAGE_READ_FROM_CACHE_X2_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x3b, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 1),				\
+@@ -99,6 +106,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 2))
  
-+#define SPI_MEM_DTR_OP_ADDR(__nbytes, __val, __buswidth)	\
-+	{							\
-+		.nbytes = __nbytes,				\
-+		.val = __val,					\
-+		.buswidth = __buswidth,				\
-+		.dtr = true,					\
-+	}
++#define SPINAND_PAGE_READ_FROM_CACHE_X2_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x3d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 2),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
- #define SPI_MEM_OP_NO_ADDR	{ }
+ #define SPINAND_PAGE_READ_FROM_CACHE_X4_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x6b, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 1),				\
+@@ -111,6 +125,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 4))
  
- #define SPI_MEM_OP_DUMMY(__nbytes, __buswidth)			\
-@@ -35,6 +51,13 @@
- 		.buswidth = __buswidth,				\
- 	}
- 
-+#define SPI_MEM_DTR_OP_DUMMY(__nbytes, __buswidth)		\
-+	{							\
-+		.nbytes = __nbytes,				\
-+		.buswidth = __buswidth,				\
-+		.dtr = true,					\
-+	}
++#define SPINAND_PAGE_READ_FROM_CACHE_X4_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x6d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 4),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
- #define SPI_MEM_OP_NO_DUMMY	{ }
+ #define SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0xbb, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 2),				\
+@@ -123,6 +144,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 2),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 2))
  
- #define SPI_MEM_OP_DATA_IN(__nbytes, __buf, __buswidth)		\
-@@ -45,6 +68,15 @@
- 		.buswidth = __buswidth,				\
- 	}
- 
-+#define SPI_MEM_DTR_OP_DATA_IN(__nbytes, __buf, __buswidth)	\
-+	{							\
-+		.dir = SPI_MEM_DATA_IN,				\
-+		.nbytes = __nbytes,				\
-+		.buf.in = __buf,				\
-+		.buswidth = __buswidth,				\
-+		.dtr = true,					\
-+	}
++#define SPINAND_PAGE_READ_FROM_CACHE_DUALIO_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0xbd, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 2),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 2),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 2),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
- #define SPI_MEM_OP_DATA_OUT(__nbytes, __buf, __buswidth)	\
- 	{							\
- 		.dir = SPI_MEM_DATA_OUT,			\
-@@ -53,6 +85,15 @@
- 		.buswidth = __buswidth,				\
- 	}
+ #define SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0xeb, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 4),				\
+@@ -135,6 +163,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 4),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 4))
  
-+#define SPI_MEM_DTR_OP_DATA_OUT(__nbytes, __buf, __buswidth)	\
-+	{							\
-+		.dir = SPI_MEM_DATA_OUT,			\
-+		.nbytes = __nbytes,				\
-+		.buf.out = __buf,				\
-+		.buswidth = __buswidth,				\
-+		.dtr = true,					\
-+	}
++#define SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0xed, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 4),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 4),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 4),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
- #define SPI_MEM_OP_NO_DATA	{ }
- 
- /**
+ #define SPINAND_PROG_EXEC_OP(addr)					\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x10, 1),				\
+ 		   SPI_MEM_OP_ADDR(3, addr, 1),				\
 -- 
 2.43.0
 
