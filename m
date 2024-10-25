@@ -1,83 +1,82 @@
-Return-Path: <linux-spi+bounces-5465-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5466-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BD1B9B07FA
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 17:23:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C76C09B093A
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 18:09:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1059A283FE9
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 15:23:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53CF41F2279B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 16:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A57520F3F5;
-	Fri, 25 Oct 2024 15:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0243175D46;
+	Fri, 25 Oct 2024 16:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="QnvAp3tY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AIsa5Qyv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBAF216200
-	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 15:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F2C16FF44;
+	Fri, 25 Oct 2024 16:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729869504; cv=none; b=fRMH2PAyyjZBqQu7q7S2u4rWLbxmDT2Fa8T61pM2PoWvFnxHKmi8H/JdYn1dI3dGrDIvyEj77F6aXe0aNXVKXIfgumk4DLeI7C+T5mq6voQoeuW90Jx/zJxHmWk+kQCQFIp1YfJS8wJ1ezLtWjBig77aE28JgA/fMDTlAngc4/Q=
+	t=1729872559; cv=none; b=V/LawBlcSzd60EBSupA4KgVOSOTOjrZW6px94980y39nWbGl5RC/G2XFgV+E/TFKYdObh5/A1D8xPhJ1px+skDtQ0XiaZt9K6635TynMfugXfF/TfjOGYUaVeXUNuXwDuPzQn3PFKj5OGBxsiCmYL+6++nq9zlHdkMPj0rJyIvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729869504; c=relaxed/simple;
-	bh=Cp9FSnTlH6bdvVMpEKMvRbQ5i2H60iAjX87XIB2uWE0=;
+	s=arc-20240116; t=1729872559; c=relaxed/simple;
+	bh=bg7ld2Rvq1YDUxAKGt3jeDUJXtPakerYwHO9+3j/ZH8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aMtgBvP6mGM7EBcLydiECSR/s+VvaSdFTrEV3zXm1YB8/XrbDLKWTRRPDsAbllHJrn/FJrsh6aLdqIWML6dgIabyfqDC3q2WxxOXK7347CBRT7CqhYNB3QeGxctZvWUu9+Bmy0RToAqV+eJT+Eg6pBwGN7lPCpIE4lPYPjowG6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=QnvAp3tY; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
-Received: from cwcc.thunk.org (pool-173-48-115-113.bstnma.fios.verizon.net [173.48.115.113])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 49PFI2wH026442
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 25 Oct 2024 11:18:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1729869484; bh=+3/YlMW+NiPuVTOTB6zPtTx6MGg/Ovh8Uq4NZbG/uyg=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=QnvAp3tYpFsuWp5t6MYLl3aEfmGEHnXsYn3xojrYaP7hfyadCIz6ul249CuoovpUA
-	 Q/ZRiCbCtkKpoJEewwmK2oksxGgkoj3gUKwI7DC4VLXKsTjZXxCNiFBKejH61UoH+w
-	 yXYNJeGvoLFpeWlnvQmGzEgkqKKOo75fOmihQOlVnvaN5Hmky+GtPAnVjY7KvA0sIa
-	 SF7vmZc+rwxBiLglrVldK+znmbyAG3zk3UsAId0ihgwylnx0dNRsY+PBDDgF8UZ3u1
-	 N73wPFu6LL8zbXNfiMp33II4/Lo2dHic7WcScSjWD9siXkJD7Cag6J82MmmeHDnDly
-	 NMT9//KY/BIxw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 28BF715C0329; Fri, 25 Oct 2024 11:18:02 -0400 (EDT)
-Date: Fri, 25 Oct 2024 11:18:02 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc: Hantong Chen <cxwdyx620@gmail.com>, james.bottomley@hansenpartnership.com,
-        ajhalaney@gmail.com, allenbh@gmail.com, andrew@lunn.ch,
-        andriy.shevchenko@linux.intel.com, andy@kernel.org, arnd@arndb.de,
-        bhelgaas@google.com, bp@alien8.de, broonie@kernel.org,
-        cai.huoqing@linux.dev, dave.jiang@intel.com, davem@davemloft.net,
-        dlemoal@kernel.org, dmaengine@vger.kernel.org, dushistov@mail.ru,
-        fancer.lancer@gmail.com, geert@linux-m68k.org,
-        gregkh@linuxfoundation.org, ink@jurassic.park.msu.ru, jdmason@kudzu.us,
-        jiaxun.yang@flygoat.com, keguang.zhang@gmail.com,
-        kory.maincent@bootlin.com, krzk@kernel.org, kuba@kernel.org,
-        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux@armlinux.org.uk, linux@roeck-us.net,
-        manivannan.sadhasivam@linaro.org, netdev@vger.kernel.org,
-        nikita.shubin@maquefel.me, nikita@trvn.ru, ntb@lists.linux.dev,
-        olteanv@gmail.com, pabeni@redhat.com, paulburton@kernel.org,
-        robh@kernel.org, s.shtylyov@omp.ru, sergio.paracuellos@gmail.com,
-        shc_work@mail.ru, siyanteng@loongson.cn, tsbogend@alpha.franken.de,
-        xeb@mail.ru, yoshihiro.shimoda.uh@renesas.com, phoronix@phoronix.com
-Subject: Re: linux: Goodbye from a Linux community volunteer
-Message-ID: <20241025151802.GC3307207@mit.edu>
-References: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
- <20241024165650.174-1-cxwdyx620@gmail.com>
- <20241024173504.GN3204734@mit.edu>
- <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZ6D67pxCKGf+D9gg2bHN6k47R0LCpW+QhuXZAIS1fBcUvB0ORemU6crYwjAIlrpgfbEnmOvwFwTkR262356SUYl4Fj35FpWop7JLOUjBYwM+vkmk9pIRTzKJWeXDzRS9PXddAgocigqIMTO70YQhn0CeMVmD9Ab8rdAvfESyj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AIsa5Qyv; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1729872558; x=1761408558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bg7ld2Rvq1YDUxAKGt3jeDUJXtPakerYwHO9+3j/ZH8=;
+  b=AIsa5QyvA5FU0obTz52OOE07k81Cj3gvBUFFjqXbLhP4g1Y8tJIlQ7Np
+   52rvrFkgWM6OJYWM7bKOyctQlNyqpfIU8iGZqClNIEMieJswwWVcdZcLX
+   tq62ZZEeJHDKXhFQ+c4sX/fEaus8qvd89ErW1KXOhSTHqWYCAivpQd07U
+   a46Rhocs+kl2C0lIaM0uGawFwRH6B7QE7Z0R6RTH30h0FgPfRDE4pYlXn
+   trS873vtU5IOe6QOUfBEnEXkK4lLyouAnHeVZj8E7VPUh4id/TBHhRxGq
+   9RfuEGRGfuvo+fuYSEY/aw/ZwLQncwgMPSmJtZJoBjyNVuDS5x37QuGEr
+   Q==;
+X-CSE-ConnectionGUID: LZjdXDshQU6wzH8fcDkULg==
+X-CSE-MsgGUID: L82BmWEiQHOxY6L3nDsC7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29323456"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29323456"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 09:09:17 -0700
+X-CSE-ConnectionGUID: yb5LgQFzSZ6QPHlWDkuyHw==
+X-CSE-MsgGUID: ZS7B1GaAQr+cJ7qU9CNZ0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
+   d="scan'208";a="85541252"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Oct 2024 09:09:12 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t4MsA-000YS2-0q;
+	Fri, 25 Oct 2024 16:09:10 +0000
+Date: Sat, 26 Oct 2024 00:08:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>, broonie@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org,
+	miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+	manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
+Cc: oe-kbuild-all@lists.linux.dev, quic_srichara@quicinc.com,
+	quic_varada@quicinc.com, quic_mdalam@quicinc.com
+Subject: Re: [PATCH v12 6/8] spi: spi-qpic: add driver for QCOM SPI NAND
+ flash Interface
+Message-ID: <202410252355.ZofaMeku-lkp@intel.com>
+References: <20241021115620.1616617-7-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -86,31 +85,123 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
+In-Reply-To: <20241021115620.1616617-7-quic_mdalam@quicinc.com>
 
-On Fri, Oct 25, 2024 at 03:35:37PM +0200, Enrico Weigelt, metux IT consult wrote:
-> 
-> Okay, great. I'm fully on your side: let's sanction all countries that
-> like to wage wars of aggressions against other countries and kick out
-> all maintainers from there.
+Hi Md,
 
-Sanctions are imposed by Governments --- for example, the US,
-European, Japan, Switzerland, Norway, etc.  Not Linux developers, nor
-Russian troll farms, nor Russia's useful idiots on the internet.  It's
-not up to anyone on this mail thread.
+kernel test robot noticed the following build warnings:
 
-I see from your country code in your signature that you apparently
-live in Germany.  Please note that if you violate Germany's laws and
-regulations, whether it's by supplying bomb-making technical
-assistance to a terrorist group, or lending technical assistance to
-sanctioned entities directly or indirectly controlled by the Russian
-Military-Intelligence, you could be subject to civil or criminal
-penalties.  And that's not up to me; it's up to your elected leaders
-and Germany's judicial system.
+[auto build test WARNING on mtd/nand/next]
+[also build test WARNING on broonie-spi/for-next robh/for-next linus/master v6.12-rc4 next-20241025]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If you don't like this, I cordially invite you to exercise your
-democratic rights and make your opinions known to your fellow citizens
-and to your elected politicians.
+url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/spi-dt-bindings-Introduce-qcom-spi-qpic-snand/20241021-200849
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+patch link:    https://lore.kernel.org/r/20241021115620.1616617-7-quic_mdalam%40quicinc.com
+patch subject: [PATCH v12 6/8] spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
+config: sparc64-randconfig-r073-20241023 (https://download.01.org/0day-ci/archive/20241025/202410252355.ZofaMeku-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 14.1.0
 
-      	      		       	       - Ted
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202410252355.ZofaMeku-lkp@intel.com/
+
+smatch warnings:
+drivers/spi/spi-qpic-snand.c:1260 qcom_spi_write_page() warn: unsigned 'cmd' is never less than zero.
+drivers/spi/spi-qpic-snand.c:1279 qcom_spi_send_cmdaddr() warn: unsigned 'cmd' is never less than zero.
+
+vim +/cmd +1260 drivers/spi/spi-qpic-snand.c
+
+  1252	
+  1253	static int qcom_spi_write_page(struct qcom_nand_controller *snandc,
+  1254				       const struct spi_mem_op *op)
+  1255	{
+  1256		struct qpic_snand_op s_op = {};
+  1257		u32 cmd;
+  1258	
+  1259		cmd = qcom_spi_cmd_mapping(snandc, op->cmd.opcode);
+> 1260		if (cmd < 0)
+  1261			return cmd;
+  1262	
+  1263		s_op.cmd_reg = cmd;
+  1264	
+  1265		if (op->cmd.opcode == SPINAND_PROGRAM_LOAD)
+  1266			snandc->qspi->data_buf = (u8 *)op->data.buf.out;
+  1267	
+  1268		return 0;
+  1269	}
+  1270	
+  1271	static int qcom_spi_send_cmdaddr(struct qcom_nand_controller *snandc,
+  1272					 const struct spi_mem_op *op)
+  1273	{
+  1274		struct qpic_snand_op s_op = {};
+  1275		u32 cmd;
+  1276		int ret, opcode;
+  1277	
+  1278		cmd = qcom_spi_cmd_mapping(snandc, op->cmd.opcode);
+> 1279		if (cmd < 0)
+  1280			return cmd;
+  1281	
+  1282		s_op.cmd_reg = cmd;
+  1283		s_op.addr1_reg = op->addr.val;
+  1284		s_op.addr2_reg = 0;
+  1285	
+  1286		opcode = op->cmd.opcode;
+  1287	
+  1288		switch (opcode) {
+  1289		case SPINAND_WRITE_EN:
+  1290			return 0;
+  1291		case SPINAND_PROGRAM_EXECUTE:
+  1292			s_op.addr1_reg = op->addr.val << 16;
+  1293			s_op.addr2_reg = op->addr.val >> 16 & 0xff;
+  1294			snandc->qspi->addr1 = cpu_to_le32(s_op.addr1_reg);
+  1295			snandc->qspi->addr2 = cpu_to_le32(s_op.addr2_reg);
+  1296			snandc->qspi->cmd = cpu_to_le32(cmd);
+  1297			return qcom_spi_program_execute(snandc, op);
+  1298		case SPINAND_READ:
+  1299			s_op.addr1_reg = (op->addr.val << 16);
+  1300			s_op.addr2_reg = op->addr.val >> 16 & 0xff;
+  1301			snandc->qspi->addr1 = cpu_to_le32(s_op.addr1_reg);
+  1302			snandc->qspi->addr2 = cpu_to_le32(s_op.addr2_reg);
+  1303			snandc->qspi->cmd = cpu_to_le32(cmd);
+  1304			return 0;
+  1305		case SPINAND_ERASE:
+  1306			s_op.addr2_reg = (op->addr.val >> 16) & 0xffff;
+  1307			s_op.addr1_reg = op->addr.val;
+  1308			snandc->qspi->addr1 = cpu_to_le32(s_op.addr1_reg << 16);
+  1309			snandc->qspi->addr2 = cpu_to_le32(s_op.addr2_reg);
+  1310			snandc->qspi->cmd = cpu_to_le32(cmd);
+  1311			qcom_spi_block_erase(snandc);
+  1312			return 0;
+  1313		default:
+  1314			break;
+  1315		}
+  1316	
+  1317		snandc->buf_count = 0;
+  1318		snandc->buf_start = 0;
+  1319		qcom_clear_read_regs(snandc);
+  1320		qcom_clear_bam_transaction(snandc);
+  1321	
+  1322		snandc->regs->cmd = cpu_to_le32(s_op.cmd_reg);
+  1323		snandc->regs->exec = cpu_to_le32(1);
+  1324		snandc->regs->addr0 = cpu_to_le32(s_op.addr1_reg);
+  1325		snandc->regs->addr1 = cpu_to_le32(s_op.addr2_reg);
+  1326	
+  1327		qcom_write_reg_dma(snandc, &snandc->regs->cmd, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
+  1328		qcom_write_reg_dma(snandc, &snandc->regs->exec, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+  1329	
+  1330		ret = qcom_submit_descs(snandc);
+  1331		if (ret)
+  1332			dev_err(snandc->dev, "failure in submitting cmd descriptor\n");
+  1333	
+  1334		return ret;
+  1335	}
+  1336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
