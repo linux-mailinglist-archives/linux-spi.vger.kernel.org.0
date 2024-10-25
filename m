@@ -1,240 +1,116 @@
-Return-Path: <linux-spi+bounces-5464-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5465-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA3669B03FA
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 15:25:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BD1B9B07FA
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 17:23:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01ACDB22992
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 13:25:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1059A283FE9
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 15:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FD21FB892;
-	Fri, 25 Oct 2024 13:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A57520F3F5;
+	Fri, 25 Oct 2024 15:18:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O/ORAz4F"
+	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="QnvAp3tY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770CA70830;
-	Fri, 25 Oct 2024 13:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBAF216200
+	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 15:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729862703; cv=none; b=ZhPqJ42kIUMdU76p/BCBrp/VoCrBilpVblZcTAB4rPuX0STbPRImZ2OHDZVMz/OWbc4fNGxudb5hZJa8iOuOCo80Bz+CjIcR6EHy0Mczz9eDAMdt2UG1Uvezj9kHY/kN6vpShPDMjI10Dxlw7my9KtBRqXHGUxf5omZb5koGPf8=
+	t=1729869504; cv=none; b=fRMH2PAyyjZBqQu7q7S2u4rWLbxmDT2Fa8T61pM2PoWvFnxHKmi8H/JdYn1dI3dGrDIvyEj77F6aXe0aNXVKXIfgumk4DLeI7C+T5mq6voQoeuW90Jx/zJxHmWk+kQCQFIp1YfJS8wJ1ezLtWjBig77aE28JgA/fMDTlAngc4/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729862703; c=relaxed/simple;
-	bh=gQI8AnluPQVjf5h9lbIkR64rIZxE+qdCSb0pvD97Q9c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=s8mmlK9K/jPCeL5HjA/Xsq6s9dY2LyJmjNf3xfZMatwqo0ukyintLcUxz+Yx7TDKFs6U4cQEDs7TZt6ChbDoLWs45ktomGEWV0YFXp1+eynGzBr3taTjRy9aIeCQxUBUOfC8z/3JmoEr08baiLFdqJYxU/61xCtmNUU1pQREEsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O/ORAz4F; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43152b79d25so18856215e9.1;
-        Fri, 25 Oct 2024 06:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729862700; x=1730467500; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6QG7Ws+6+SNR9ioREvh/7ICHjVTNzGhU7yaZq8M3HQ4=;
-        b=O/ORAz4FnSJLjL3QUDEqLPryBDlOwuYrGdgpcnIBqihcYlOWcZPLGqTl6t12x6iB7d
-         k/rvfJobgqeEHz3/1euOzjRT7jdcF8NQPxdp4tEb9YgzyQQtnhU1UPXpzXKec8Qv1Xzi
-         EK5WZQI+6ZAOQuLkQiYnq+UFJNciYs/F5K5XE0XIktCVcnZk0zWInGUwJeuoyMDpHq1+
-         4K1a9IiWQT3/FxsHSTANotkZBqjxcQVBalVVY6vgcVccdto0qPDdzQLu1NpssWueggOd
-         DYgC2axNWeDaPmvwDiN/4cyhyjf973w4fCeGxexpJbHyzSlL0QDwn2pZe+GRn0UtU6Ul
-         BQrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729862700; x=1730467500;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6QG7Ws+6+SNR9ioREvh/7ICHjVTNzGhU7yaZq8M3HQ4=;
-        b=bzs8OxEx11H3Aoibsj5vK6eKdgpbNp2S1thxHwqc1Phu6VJTMHlljsvLxZu2OnmyEA
-         nPWdDtGcmRkQA4EoQemKM8ac+W3/vZRd6/c4oBdQtyjpXQLbM4hQrrlp9bPCB0L5RpmP
-         SAy0viGXjB5SYOUAx7pngV5UH8MX2T+oW82Wu2FeHvuJPVt1/u7nVsLyO+epMK+3UgZG
-         q+weJirLnbvZFAwQVfgolZTDsTkHj4floO9aGXheqJMuzn1/IU6rzGMY9qZSRqxxhml0
-         maJD7eGHx07ohT611aZN5RQitKBTWqJ5TRh1PlM3egpcbyUmqgLRhD1Oki2OgZBCD7wd
-         9PJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUdpCoIHLvY6dyKAY0WhrGZsaljMyhk3AxYGwen6Q+/GWKpghHcNW3McDitDIKvom9SVlh9eXzKmux7C71k@vger.kernel.org, AJvYcCUqtj4cgD7PONt4k63eb7qV9YuHtQUPHfi3CzjQIUzgL7kG/5OKxHXfkoZTOdDnUjrhB3GKC2jbzLxn@vger.kernel.org, AJvYcCVRtG4EZeA5GuENCT4JKRREqv5RNbxCnly2cAtRsLtHL8kVdZSCuWy47R4YAOSv5LzOfX6rL+YqKdYJ@vger.kernel.org, AJvYcCWfaz29KHUngZjynUKbnDK3zp5zPMVe5lahCDt53wJfAejcW03aSvUkM1RBy/cgkYi2gfl/Nr11ujGu@vger.kernel.org, AJvYcCXcQ7wX6pAnx43dt4Q8QjI6OqxJ/5EuHZ7Ax3IlZskwnDtQFtZViHW8J8NfemIM6zOl+3JkntQyE7iu@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh4v2kfXQMKzQrfZPn1LDiD0G1gHa40evQy65IMSBKq4hI4umW
-	Y0Z4vRb4pbTavgrDcg9tLMOjSAS7WGuHMRJjsVyNE7eYJtpISCgb
-X-Google-Smtp-Source: AGHT+IF1i/8pAlv114ybh4HJ+3sr/T3dg6DbQ/nVTN+F6FLTDerxqpIrM0OKiBQlHItNSqGIpLa1ig==
-X-Received: by 2002:a05:600c:35cd:b0:430:52ec:1e41 with SMTP id 5b1f17b1804b1-4318415c0acmr96593995e9.17.1729862699565;
-        Fri, 25 Oct 2024 06:24:59 -0700 (PDT)
-Received: from nsa.fritz.box ([2001:a61:34c9:ea01:14b4:7ed9:5135:9381])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431935a4c0esm17805085e9.27.2024.10.25.06.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2024 06:24:59 -0700 (PDT)
-Message-ID: <1f4156e8c6c4da09fc5d72661d1e002ae6ee4f31.camel@gmail.com>
-Subject: Re: [PATCH RFC v4 11/15] iio: buffer-dmaengine: add
- devm_iio_dmaengine_buffer_setup_ext2()
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
- Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen
-	 <lars@metafoo.de>, David Jander <david@protonic.nl>, Martin Sperl
-	 <kernel@martin.sperl.org>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-Date: Fri, 25 Oct 2024 15:24:58 +0200
-In-Reply-To: <20241023-dlech-mainline-spi-engine-offload-2-v4-11-f8125b99f5a1@baylibre.com>
-References: 
-	<20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
-	 <20241023-dlech-mainline-spi-engine-offload-2-v4-11-f8125b99f5a1@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1729869504; c=relaxed/simple;
+	bh=Cp9FSnTlH6bdvVMpEKMvRbQ5i2H60iAjX87XIB2uWE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aMtgBvP6mGM7EBcLydiECSR/s+VvaSdFTrEV3zXm1YB8/XrbDLKWTRRPDsAbllHJrn/FJrsh6aLdqIWML6dgIabyfqDC3q2WxxOXK7347CBRT7CqhYNB3QeGxctZvWUu9+Bmy0RToAqV+eJT+Eg6pBwGN7lPCpIE4lPYPjowG6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=QnvAp3tY; arc=none smtp.client-ip=18.9.28.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+Received: from cwcc.thunk.org (pool-173-48-115-113.bstnma.fios.verizon.net [173.48.115.113])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 49PFI2wH026442
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Oct 2024 11:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1729869484; bh=+3/YlMW+NiPuVTOTB6zPtTx6MGg/Ovh8Uq4NZbG/uyg=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=QnvAp3tYpFsuWp5t6MYLl3aEfmGEHnXsYn3xojrYaP7hfyadCIz6ul249CuoovpUA
+	 Q/ZRiCbCtkKpoJEewwmK2oksxGgkoj3gUKwI7DC4VLXKsTjZXxCNiFBKejH61UoH+w
+	 yXYNJeGvoLFpeWlnvQmGzEgkqKKOo75fOmihQOlVnvaN5Hmky+GtPAnVjY7KvA0sIa
+	 SF7vmZc+rwxBiLglrVldK+znmbyAG3zk3UsAId0ihgwylnx0dNRsY+PBDDgF8UZ3u1
+	 N73wPFu6LL8zbXNfiMp33II4/Lo2dHic7WcScSjWD9siXkJD7Cag6J82MmmeHDnDly
+	 NMT9//KY/BIxw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id 28BF715C0329; Fri, 25 Oct 2024 11:18:02 -0400 (EDT)
+Date: Fri, 25 Oct 2024 11:18:02 -0400
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: "Enrico Weigelt, metux IT consult" <info@metux.net>
+Cc: Hantong Chen <cxwdyx620@gmail.com>, james.bottomley@hansenpartnership.com,
+        ajhalaney@gmail.com, allenbh@gmail.com, andrew@lunn.ch,
+        andriy.shevchenko@linux.intel.com, andy@kernel.org, arnd@arndb.de,
+        bhelgaas@google.com, bp@alien8.de, broonie@kernel.org,
+        cai.huoqing@linux.dev, dave.jiang@intel.com, davem@davemloft.net,
+        dlemoal@kernel.org, dmaengine@vger.kernel.org, dushistov@mail.ru,
+        fancer.lancer@gmail.com, geert@linux-m68k.org,
+        gregkh@linuxfoundation.org, ink@jurassic.park.msu.ru, jdmason@kudzu.us,
+        jiaxun.yang@flygoat.com, keguang.zhang@gmail.com,
+        kory.maincent@bootlin.com, krzk@kernel.org, kuba@kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux@armlinux.org.uk, linux@roeck-us.net,
+        manivannan.sadhasivam@linaro.org, netdev@vger.kernel.org,
+        nikita.shubin@maquefel.me, nikita@trvn.ru, ntb@lists.linux.dev,
+        olteanv@gmail.com, pabeni@redhat.com, paulburton@kernel.org,
+        robh@kernel.org, s.shtylyov@omp.ru, sergio.paracuellos@gmail.com,
+        shc_work@mail.ru, siyanteng@loongson.cn, tsbogend@alpha.franken.de,
+        xeb@mail.ru, yoshihiro.shimoda.uh@renesas.com, phoronix@phoronix.com
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Message-ID: <20241025151802.GC3307207@mit.edu>
+References: <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+ <20241024165650.174-1-cxwdyx620@gmail.com>
+ <20241024173504.GN3204734@mit.edu>
+ <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc264780-0c16-4209-8736-ada156994eaa@metux.net>
 
-I still need to look better at this but I do have one though already :)
+On Fri, Oct 25, 2024 at 03:35:37PM +0200, Enrico Weigelt, metux IT consult wrote:
+> 
+> Okay, great. I'm fully on your side: let's sanction all countries that
+> like to wage wars of aggressions against other countries and kick out
+> all maintainers from there.
 
-On Wed, 2024-10-23 at 15:59 -0500, David Lechner wrote:
-> Add a new devm_iio_dmaengine_buffer_setup_ext2() function to handle
-> cases where the DMA channel is managed by the caller rather than being
-> requested and released by the iio_dmaengine module.
->=20
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
->=20
-> v4 changes:
-> * This replaces "iio: buffer-dmaengine: generalize requesting DMA channel=
-"
-> ---
-> =C2=A0drivers/iio/buffer/industrialio-buffer-dmaengine.c | 107 ++++++++++=
-+++++------
-> =C2=A0include/linux/iio/buffer-dmaengine.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 5 +
-> =C2=A02 files changed, 81 insertions(+), 31 deletions(-)
->=20
-> diff --git a/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-> b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-> index 054af21dfa65..602cb2e147a6 100644
-> --- a/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-> +++ b/drivers/iio/buffer/industrialio-buffer-dmaengine.c
-> @@ -33,6 +33,7 @@ struct dmaengine_buffer {
-> =C2=A0	struct iio_dma_buffer_queue queue;
-> =C2=A0
-> =C2=A0	struct dma_chan *chan;
-> +	bool owns_chan;
-> =C2=A0	struct list_head active;
-> =C2=A0
-> =C2=A0	size_t align;
-> @@ -216,28 +217,23 @@ static const struct iio_dev_attr
-> *iio_dmaengine_buffer_attrs[] =3D {
-> =C2=A0 * Once done using the buffer iio_dmaengine_buffer_free() should be=
- used to
-> =C2=A0 * release it.
-> =C2=A0 */
-> -static struct iio_buffer *iio_dmaengine_buffer_alloc(struct device *dev,
-> -	const char *channel)
-> +static struct iio_buffer *iio_dmaengine_buffer_alloc(struct dma_chan *ch=
-an,
-> +						=C2=A0=C2=A0=C2=A0=C2=A0 bool owns_chan)
-> =C2=A0{
-> =C2=A0	struct dmaengine_buffer *dmaengine_buffer;
-> =C2=A0	unsigned int width, src_width, dest_width;
-> =C2=A0	struct dma_slave_caps caps;
-> -	struct dma_chan *chan;
-> =C2=A0	int ret;
-> =C2=A0
-> =C2=A0	dmaengine_buffer =3D kzalloc(sizeof(*dmaengine_buffer), GFP_KERNEL=
-);
-> -	if (!dmaengine_buffer)
-> -		return ERR_PTR(-ENOMEM);
-> -
-> -	chan =3D dma_request_chan(dev, channel);
-> -	if (IS_ERR(chan)) {
-> -		ret =3D PTR_ERR(chan);
-> -		goto err_free;
-> +	if (!dmaengine_buffer) {
-> +		ret =3D -ENOMEM;
-> +		goto err_release;
-> =C2=A0	}
-> =C2=A0
-> =C2=A0	ret =3D dma_get_slave_caps(chan, &caps);
-> =C2=A0	if (ret < 0)
-> -		goto err_release;
-> +		goto err_free;
-> =C2=A0
-> =C2=A0	/* Needs to be aligned to the maximum of the minimums */
-> =C2=A0	if (caps.src_addr_widths)
-> @@ -252,6 +248,7 @@ static struct iio_buffer *iio_dmaengine_buffer_alloc(=
-struct
-> device *dev,
-> =C2=A0
-> =C2=A0	INIT_LIST_HEAD(&dmaengine_buffer->active);
-> =C2=A0	dmaengine_buffer->chan =3D chan;
-> +	dmaengine_buffer->owns_chan =3D owns_chan;
-> =C2=A0	dmaengine_buffer->align =3D width;
-> =C2=A0	dmaengine_buffer->max_size =3D dma_get_max_seg_size(chan->device->=
-dev);
-> =C2=A0
-> @@ -263,10 +260,12 @@ static struct iio_buffer *iio_dmaengine_buffer_allo=
-c(struct
-> device *dev,
-> =C2=A0
-> =C2=A0	return &dmaengine_buffer->queue.buffer;
-> =C2=A0
-> -err_release:
-> -	dma_release_channel(chan);
-> =C2=A0err_free:
-> =C2=A0	kfree(dmaengine_buffer);
-> +err_release:
-> +	if (owns_chan)
-> +		dma_release_channel(chan);
-> +
-> =C2=A0	return ERR_PTR(ret);
-> =C2=A0}
-> =C2=A0
-> @@ -282,12 +281,38 @@ void iio_dmaengine_buffer_free(struct iio_buffer *b=
-uffer)
-> =C2=A0		iio_buffer_to_dmaengine_buffer(buffer);
-> =C2=A0
-> =C2=A0	iio_dma_buffer_exit(&dmaengine_buffer->queue);
-> -	dma_release_channel(dmaengine_buffer->chan);
-> -
-> =C2=A0	iio_buffer_put(buffer);
-> +
-> +	if (dmaengine_buffer->owns_chan)
-> +		dma_release_channel(dmaengine_buffer->chan);
+Sanctions are imposed by Governments --- for example, the US,
+European, Japan, Switzerland, Norway, etc.  Not Linux developers, nor
+Russian troll farms, nor Russia's useful idiots on the internet.  It's
+not up to anyone on this mail thread.
 
-Not sure if I agree much with this owns_chan flag. The way I see it, we sho=
-uld always
-handover the lifetime of the DMA channel to the IIO DMA framework. Note tha=
-t even the
-device you pass in for both requesting the channel of the spi_offload  and =
-for
-setting up the DMA buffer is the same (and i suspect it will always be) so =
-I would
-not go with the trouble. And with this assumption we could simplify a bit m=
-ore the
-spi implementation.
+I see from your country code in your signature that you apparently
+live in Germany.  Please note that if you violate Germany's laws and
+regulations, whether it's by supplying bomb-making technical
+assistance to a terrorist group, or lending technical assistance to
+sanctioned entities directly or indirectly controlled by the Russian
+Military-Intelligence, you could be subject to civil or criminal
+penalties.  And that's not up to me; it's up to your elected leaders
+and Germany's judicial system.
 
-And not even related but I even suspect the current implementation could be
-problematic. Basically I'm suspecting that the lifetime of the DMA channel =
-should be
-attached to the lifetime of the iio_buffer. IOW, we should only release the=
- channel
-in iio_dmaengine_buffer_release() - in which case the current implementatio=
-n with the
-spi_offload would also be buggy.
+If you don't like this, I cordially invite you to exercise your
+democratic rights and make your opinions known to your fellow citizens
+and to your elected politicians.
 
-But bah, the second point is completely theoretical and likely very hard to=
- reproduce
-in real life (if reproducible at all - for now it's only something I suspec=
-t)
-
-- Nuno S=C3=A1=20
-
-
+      	      		       	       - Ted
 
