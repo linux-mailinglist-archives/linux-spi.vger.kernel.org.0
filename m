@@ -1,141 +1,80 @@
-Return-Path: <linux-spi+bounces-5453-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5454-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A0C9B017C
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 13:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA0519B01B3
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 13:51:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A3C9B218DD
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 11:40:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 335BAB2293B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Oct 2024 11:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A531FDF8B;
-	Fri, 25 Oct 2024 11:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6EBA2010FA;
+	Fri, 25 Oct 2024 11:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sl3O2XqW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G64e1iLa"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DEA1C9B62;
-	Fri, 25 Oct 2024 11:40:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B112022DA
+	for <linux-spi@vger.kernel.org>; Fri, 25 Oct 2024 11:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729856421; cv=none; b=GpR4I7v83z/JwwSAN4iAIGVDPKdpEd+/hv7yDxBJhLom2XCO7Cu6Ub+XEX3p1z4zP7IJUfXUG81qSydzGezDTVItrAoPZkml/sL3XE0DM8fuptTlnewWYGiFtX3ljdrOXKnmieY8NGENPeSaR03vU0XOot72tauWzZPpjq2lT0k=
+	t=1729857025; cv=none; b=fdnVfpSybWB5tq5Nc4EwFE/dxzgETVZYCRp2gt4PTkFtIG5n7A0Y542+FlH2hhdv9+Cx2YOxVuzTH8uDhCpnnDADtFLIshNnXIyOqLvcOXbUXQXggLESPddLf8g8zuujjPWDidqgjTeKctepHzkqaYUL5kUWuGvlN4VUs5yc2YI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729856421; c=relaxed/simple;
-	bh=ofSPYgFrnu8JAd+kBqIWgAgIW4Xr/a4YZqs3eSHQFog=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TsAXkIxb0tmXC8YZ2pgyjRQr5L2zSH+aZUQ+VauOchR7znaavNwXL5XYQQkdLBrn4Y70HU1nsha86ZEw9SwZayeCKxWiD7C7FGHWN2umuLu/r/vO2T94H8CezEh93iuIqHOuRq2VqgwxGv7ovnRosAYXycsPD6MJt1dgO9C1su0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sl3O2XqW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDEAC4CEC3;
-	Fri, 25 Oct 2024 11:40:18 +0000 (UTC)
+	s=arc-20240116; t=1729857025; c=relaxed/simple;
+	bh=kMzqEJHWFyuy4Vg4EZDAzDHXx5Mkcl67oBLlnOUvRNg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=cI20dd0Fgzv9b54WUD4FyIG7kN4koK/LYxUGcFntQMFo3U6LHqQEdeb9DDgpSVl69aRm5PoB+oOM5LEHOye+Dg0fl44EyU6HOAbc7SL/FxDEXuQ9PjAlPUa/hPI0p7CDvgB9lkbQPYjIQApJn8aFH0MgTzB+9NDkOGy9BEMPJsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G64e1iLa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54802C4CEC3;
+	Fri, 25 Oct 2024 11:50:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729856420;
-	bh=ofSPYgFrnu8JAd+kBqIWgAgIW4Xr/a4YZqs3eSHQFog=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Sl3O2XqWZDBw8pmzVtZwnlZBqE8CmJK8JRlxrWtudGBdlvwZ2sKJdvVQ2aKboogSe
-	 yzL8RDCiLjk4k07dUK2ntF7ERHNQs6v7JH9pHtSJTFErM5c8MjEF3Q5JCHO11aK8kV
-	 wFS4Gwl6gGiYYQHLhMjofLamNC8b7GmI0lOA+sCPIwGescFrXHx+ve206nboo60rHU
-	 BNtG2cCOsU+4OnMj1mVRlPIPVGLqmPlpT6fyLyNzG+WY+E+UHat7sMtHMZcMuPqaMi
-	 TETDLEGyZJz6B/HWqeXcr+E6yOiE5PUtNF3VFkIgKHy+v+1TaicWSqH41kLT/xEt7T
-	 sTWGRMmbuWXQw==
-From: Mark Brown <broonie@kernel.org>
-To: Vladimir Oltean <olteanv@gmail.com>, 
- William Zhang <william.zhang@broadcom.com>, 
- Heiko Stuebner <heiko@sntech.de>, 
- =?utf-8?q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>, 
- Dhruva Gole <d-gole@ti.com>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
-Cc: imx@lists.linux.dev
-In-Reply-To: <20241023203032.1388491-1-Frank.Li@nxp.com>
-References: <20241023203032.1388491-1-Frank.Li@nxp.com>
-Subject: Re: [PATCH 1/1] spi: spi-fsl-dspi: Fix crash when not using GPIO
- chip select
-Message-Id: <172985641837.7496.8327028410387327926.b4-ty@kernel.org>
-Date: Fri, 25 Oct 2024 12:40:18 +0100
+	s=k20201202; t=1729857025;
+	bh=kMzqEJHWFyuy4Vg4EZDAzDHXx5Mkcl67oBLlnOUvRNg=;
+	h=Subject:From:Date:To:From;
+	b=G64e1iLaJ9bZXOH+0mPSEpBJtY7Lv0Rlb3N1iVcXJ68YNFLWKq8oVdgB9zvMzBnP1
+	 v0FGmZiTouMOlZ4UM/OVoDnY7rGvYPBM0oldBpZ8JmN2wLn6Py/dQ8vXXS8q+7n93r
+	 FRsByxiiq2A2BQVP86M4kJIHH+ODvJZ8pk+2rLJshWD8O+nQK/5JwT0f/a+FPsA2je
+	 AVarOzXOq0T9atQ8QKRwXB4jcMQeI15omh99HgkOxchdEJX5AX8p5ccFxCk25minvS
+	 hcTY7EBSHLD2BMNOg+xT0VosXT139m5Sli59t2am+s2aQy/0o0JvBhrI74Fx/d6dQA
+	 7ZyveiFfZVcSA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3AA183809A8A;
+	Fri, 25 Oct 2024 11:50:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-9b746
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <172985703178.2880373.5493044825073354541.git-patchwork-summary@kernel.org>
+Date: Fri, 25 Oct 2024 11:50:31 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 23 Oct 2024 16:30:32 -0400, Frank Li wrote:
-> Add check for the return value of spi_get_csgpiod() to avoid passing a NULL
-> pointer to gpiod_direction_output(), preventing a crash when GPIO chip
-> select is not used.
-> 
-> Fix below crash:
-> [    4.251960] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-> [    4.260762] Mem abort info:
-> [    4.263556]   ESR = 0x0000000096000004
-> [    4.267308]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [    4.272624]   SET = 0, FnV = 0
-> [    4.275681]   EA = 0, S1PTW = 0
-> [    4.278822]   FSC = 0x04: level 0 translation fault
-> [    4.283704] Data abort info:
-> [    4.286583]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> [    4.292074]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> [    4.297130]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [    4.302445] [0000000000000000] user address but active_mm is swapper
-> [    4.308805] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [    4.315072] Modules linked in:
-> [    4.318124] CPU: 2 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.0-rc4-next-20241023-00008-ga20ec42c5fc1 #359
-> [    4.328130] Hardware name: LS1046A QDS Board (DT)
-> [    4.332832] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    4.339794] pc : gpiod_direction_output+0x34/0x5c
-> [    4.344505] lr : gpiod_direction_output+0x18/0x5c
-> [    4.349208] sp : ffff80008003b8f0
-> [    4.352517] x29: ffff80008003b8f0 x28: 0000000000000000 x27: ffffc96bcc7e9068
-> [    4.359659] x26: ffffc96bcc6e00b0 x25: ffffc96bcc598398 x24: ffff447400132810
-> [    4.366800] x23: 0000000000000000 x22: 0000000011e1a300 x21: 0000000000020002
-> [    4.373940] x20: 0000000000000000 x19: 0000000000000000 x18: ffffffffffffffff
-> [    4.381081] x17: ffff44740016e600 x16: 0000000500000003 x15: 0000000000000007
-> [    4.388221] x14: 0000000000989680 x13: 0000000000020000 x12: 000000000000001e
-> [    4.395362] x11: 0044b82fa09b5a53 x10: 0000000000000019 x9 : 0000000000000008
-> [    4.402502] x8 : 0000000000000002 x7 : 0000000000000007 x6 : 0000000000000000
-> [    4.409641] x5 : 0000000000000200 x4 : 0000000002000000 x3 : 0000000000000000
-> [    4.416781] x2 : 0000000000022202 x1 : 0000000000000000 x0 : 0000000000000000
-> [    4.423921] Call trace:
-> [    4.426362]  gpiod_direction_output+0x34/0x5c (P)
-> [    4.431067]  gpiod_direction_output+0x18/0x5c (L)
-> [    4.435771]  dspi_setup+0x220/0x334
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [1/1] spi: spi-fsl-dspi: Fix crash when not using GPIO chip select
+  Submitter: Frank Li <Frank.Li@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=902400
+  Lore link: https://lore.kernel.org/r/20241023203032.1388491-1-Frank.Li@nxp.com
 
-Thanks!
 
-[1/1] spi: spi-fsl-dspi: Fix crash when not using GPIO chip select
-      commit: 25f00a13dccf8e45441265768de46c8bf58e08f6
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
