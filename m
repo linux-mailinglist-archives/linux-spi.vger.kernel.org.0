@@ -1,124 +1,179 @@
-Return-Path: <linux-spi+bounces-5506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E269B1791
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Oct 2024 13:46:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16189B18EF
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Oct 2024 17:06:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F422D1F228BB
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Oct 2024 11:46:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D003B212DE
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Oct 2024 15:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96351D47B4;
-	Sat, 26 Oct 2024 11:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A578F20326;
+	Sat, 26 Oct 2024 15:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H3k2UMFa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ol1vw3xI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DEB2AF05
-	for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 11:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6901B125A9;
+	Sat, 26 Oct 2024 15:06:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729943152; cv=none; b=tiqNIZAcUJO1cxoU7ha+7GfsZWfoL5HMiQnLT2j1mtTC7H467RFqurh/wmcsPysao2MW/V81aWA6rKAzvUWu1Gze6iptTgheqpWvR3ybAQX2V0irQ26r2P/XOn13QEe8fUbWpcnZU18/B7b+GA8WXGKdMXpukQ+l8kZiwy9a4tQ=
+	t=1729955180; cv=none; b=JckEwg9LkJwrVbYd6p4/5/4UeJtVeqIkimt0iu104Rj92kXAU1E3pNbXYtGEUuON43h+TfG11EYxK2hnsq8u7u31K8RwTDqmYD0J+ZCORaXRrbdiuSQeUHOh+8GSheO6CX1GvDMwlfBvHmmpoKO3Lv4aUo+mBjDirBvWy8TVdpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729943152; c=relaxed/simple;
-	bh=A6nMVW9hN67nOqMRudXXRcAOa94JIuRJn8Q0NML6a+0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i6a+EDPjMg9k0arRklrID9vb+TXIfjkJTg86ZCc0I7mPYV4/oyDvHJbIyBrERiaQ34wTbp0d10Vec6f0qlVp7A6qGbgW2OY91rrIZ8oKATJiDzMZIPfre71KYTGQVn08k5U1l5HTB0PKUOE2X7S2CvZgANdczf5DTl/22eU+VkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H3k2UMFa; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49QApcaL003379
-	for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 11:45:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	wA68l2lf8wyRrI4R0eE4ltYNmKHxDtsxldAExe2fGzY=; b=H3k2UMFairNLtfHM
-	v9W60fAGmcec5NDWUBbQWauBq6grJNNxWuCTckmZO8d78fjZS9N4T1vy29ZCtCNf
-	SqOWU0sdnN2g51KRbGko3BvTlxrYvRsPls1sJeLNOxwQz2yWIAvvLOAsbJLakULQ
-	cPPrnoj0xwLH7yZr8vRzlT5EQLGqkuHqMzLaxjRjsWU7BRnstoI8c/+fBavW9D/5
-	uT95n7F4s3367AHG/iRDVjhjxJGTZ0XS/uSiIFcwJsmltNolhbq6LbmRFNtNAypB
-	5nx0IAd5Ig1Cc89C82TdGA6U3X+gVGzkn1zEljjhHKTkgr4mB1MLEa1/lGpGN2Lz
-	LBjJwg==
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42grn4rube-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 11:45:48 +0000 (GMT)
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6cbf2a4afcfso5059286d6.2
-        for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 04:45:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729943147; x=1730547947;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wA68l2lf8wyRrI4R0eE4ltYNmKHxDtsxldAExe2fGzY=;
-        b=X3vyBUwxTQNBTz3qa3gYm0iqNSX8Qr6pnxDG/tatYh8b8eGHk+nqKFCwocEj/ARVFN
-         I4pbqpwa8L9aY9QxxDiU4c1Z2CecDF9H+jkNW+2geb3iWRf9hBZopr/F0hEVoaZVvxTQ
-         95IND++Vno9z/Y3eyvlymeNMy+7ZXTaeYadjTTytdEzFTRya6fVGGZ3wio6Y3Ghn2pBf
-         guo2iupAeItSInVu5rol7RvzQLeJGL4jIt5UYyZCi5OlYEfSC15hzkntCGyuVwtW+Xkw
-         KVx29PYBlENQgPpvmuW6FmuJ1jrH8+qX73yUWV7RO+n4YzVCWgZREkO1BGd6zlUCQNyp
-         xeXg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHl9IqVpFmSXatSfrDCClGyA+aHsyenF69poeCDWy4sYuMOJCj7Y+SyMopV/aH9qU+MmgRbPUTKKI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWqzOo+DaP/GiblQUh5KkzoM4fo0DgIbPuZ4m4s4SRdJacWdlh
-	kNNC9Erdn5WiHgGtUxqQ/2ylfYG9B34/2DUDUjwlsmpM6hqyCFKnDvKteP7rbZ1y8+5bBB0sR1r
-	tMD61uHQDHZOXZOTu17hXYeWFKsRmbsu+OuPbs+grFdJQOFLvIJ0BFup5XGk=
-X-Received: by 2002:ad4:5cc1:0:b0:6cb:4e9f:7370 with SMTP id 6a1803df08f44-6d185862964mr16327896d6.12.1729943147555;
-        Sat, 26 Oct 2024 04:45:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEWADU17TJTVGXKCcyZaOhFfjzC7J4Ij3YUYX4KBl8kpdlvloYKNu7sa1t17L6IFUTcv7yxJw==
-X-Received: by 2002:ad4:5cc1:0:b0:6cb:4e9f:7370 with SMTP id 6a1803df08f44-6d185862964mr16327626d6.12.1729943147166;
-        Sat, 26 Oct 2024 04:45:47 -0700 (PDT)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9b30c7b5ccsm167348266b.152.2024.10.26.04.45.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Oct 2024 04:45:46 -0700 (PDT)
-Message-ID: <b153229c-3cac-48cc-8f85-7eb9bb0ff79f@oss.qualcomm.com>
-Date: Sat, 26 Oct 2024 13:45:42 +0200
+	s=arc-20240116; t=1729955180; c=relaxed/simple;
+	bh=AjFU2n0mS+GoL062AAzmBcSlZNEuG+C9Nk0pMIZQcUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=r9525ru4hBQzC2IIkMMWrGspZL0z0g0CQLmAY61P9yyhHPO7aB8OsixOqiuWgWF4NPefY9xhfVeywtaVZoO8qeOMoWC3/udq0Sryy1oW9AcCLlRhcEvj2H0ZIMBthn3NbPybn1OpdDPM6hYmJL2QFLyFFEwSfyHYKmOKIyu1ohQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ol1vw3xI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C6A6C4CEC6;
+	Sat, 26 Oct 2024 15:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729955179;
+	bh=AjFU2n0mS+GoL062AAzmBcSlZNEuG+C9Nk0pMIZQcUY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ol1vw3xIRHJfwiLPHH9C3+12qYx0Eo8/LKiNWfPufsB83cRBMf7XeNmpdZrV4IMp7
+	 G424Bu6R4aqB7aK43uGM9yfY++f3rMIT/Y8fqPLd+aeIcUwI6jGItc9LCvN1xe/lI6
+	 Reu7C8UXeatj0SAx1Z+MWs5pQDxyP0e+hr3FMP7fH+Ajdlyq6bjC0F2DMy0WdooJ7O
+	 egIPC10pL2GdKmW98Xxq8CAwCrt76DCU8Mdn41DeqiiUkTeEKr812fwe28OUOIcykK
+	 73/PBjAO5XOr8Rr3VFCxNHWWf8Bj40yPt32uGZmkdmJIAkxB63KikLgxJKo2DiGtgC
+	 TB2tc2WXSsMsg==
+Date: Sat, 26 Oct 2024 16:05:21 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
+ Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+Subject: Re: [PATCH RFC v4 02/15] spi: add basic support for SPI offloading
+Message-ID: <20241026160521.52205cb0@jic23-huawei>
+In-Reply-To: <20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
+References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
+	<20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 3/8] mtd: rawnand: qcom: Add qcom prefix to common api
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, broonie@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        andersson@kernel.org, konradybcio@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org
-Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
-References: <20241021115620.1616617-1-quic_mdalam@quicinc.com>
- <20241021115620.1616617-4-quic_mdalam@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241021115620.1616617-4-quic_mdalam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: XdS4HzhqQX-BzyUjIgAg1IdPv94viDkO
-X-Proofpoint-ORIG-GUID: XdS4HzhqQX-BzyUjIgAg1IdPv94viDkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=625
- malwarescore=0 clxscore=1015 bulkscore=0 suspectscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410260099
 
-On 21.10.2024 1:56 PM, Md Sadre Alam wrote:
-> Add qcom prefix to all the api which will be commonly
-> used by spi nand driver and raw nand driver.
+On Wed, 23 Oct 2024 15:59:09 -0500
+David Lechner <dlechner@baylibre.com> wrote:
+
+> Add the basic infrastructure to support SPI offload providers and
+> consumers.
 > 
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
+> SPI offloading is a feature that allows the SPI controller to perform
+> transfers without any CPU intervention. This is useful, e.g. for
+> high-speed data acquisition.
+> 
+> SPI controllers with offload support need to implement the get_offload
+> callback and can use the devm_spi_offload_alloc() to allocate offload
+> instances.
+> 
+> SPI peripheral drivers will call devm_spi_offload_get() to get a
+> reference to the matching offload instance. This offload instance can
+> then be attached to a SPI message to request offloading that message.
+> 
+> It is expected that SPI controllers with offload support will check for
+> the offload instance in the SPI message in the optimize_message()
+> callback and handle it accordingly.
+> 
+> CONFIG_SPI_OFFLOAD is intended to be a select-only option. Both
+> consumer and provider drivers should `select SPI_OFFLOAD` in their
+> Kconfig to ensure that the SPI core is built with offload support.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+A few minor additions to what has already been raised.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Jonathan
 
-Konrad
+> diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
+> new file mode 100644
+> index 000000000000..c344cbf50bdb
+> --- /dev/null
+> +++ b/drivers/spi/spi-offload.c
+> @@ -0,0 +1,104 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2024 Analog Devices Inc.
+> + * Copyright (C) 2024 BayLibre, SAS
+> + */
+> +
+> +#define DEFAULT_SYMBOL_NAMESPACE SPI_OFFLOAD
+> +
+> +#include <linux/cleanup.h>
+> +#include <linux/device.h>
+> +#include <linux/export.h>
+> +#include <linux/mutex.h>
+> +#include <linux/property.h>
+?  If it is needed for later patch bring it in then.
+
+
+> +#include <linux/spi/spi-offload.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/types.h>
+>
+> +
+> +/**
+> + * devm_spi_offload_get() - Get an offload instance
+> + * @dev: Device for devm purposes
+> + * @spi: SPI device to use for the transfers
+> + * @config: Offload configuration
+> + *
+> + * Peripheral drivers call this function to get an offload instance that meets
+> + * the requirements specified in @config. If no suitable offload instance is
+> + * available, -ENODEV is returned.
+> + *
+> + * Return: Offload instance or error on failure.
+> + */
+> +struct spi_offload *devm_spi_offload_get(struct device *dev,
+> +					 struct spi_device *spi,
+> +					 const struct spi_offload_config *config)
+> +{
+> +	struct spi_offload *offload;
+> +	int ret;
+> +
+> +	if (!spi || !config)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (!spi->controller->get_offload)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	offload = spi->controller->get_offload(spi, config);
+
+Why let this return an offload that is already in use?
+Maybe make that a problem for the spi controller
+Seems odd to pass it spi then set it later.
+
+I.e. have this return ERR_PTR(-EBUSY);
+
+
+> +	if (IS_ERR(offload))
+> +		return offload;
+> +
+> +	if (offload->spi)
+> +		return ERR_PTR(-EBUSY);
+> +
+> +	offload->spi = spi;
+> +	get_device(offload->provider_dev);
+> +
+> +	ret = devm_add_action_or_reset(dev, spi_offload_put, offload);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return offload;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_spi_offload_get);
 
