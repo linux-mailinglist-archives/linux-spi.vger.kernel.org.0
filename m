@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-5515-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5516-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A39459B1B73
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Oct 2024 02:06:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45E899B1B7D
+	for <lists+linux-spi@lfdr.de>; Sun, 27 Oct 2024 02:20:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638F01F21AEC
-	for <lists+linux-spi@lfdr.de>; Sun, 27 Oct 2024 00:06:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8F0E1F21B98
+	for <lists+linux-spi@lfdr.de>; Sun, 27 Oct 2024 00:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74085A2D;
-	Sun, 27 Oct 2024 00:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43CF05684;
+	Sun, 27 Oct 2024 00:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LgHAYP1i"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="kMPQ7/4v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06318370
-	for <linux-spi@vger.kernel.org>; Sun, 27 Oct 2024 00:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2A9195
+	for <linux-spi@vger.kernel.org>; Sun, 27 Oct 2024 00:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729987550; cv=none; b=bWoK74bE7cKJZnQUAG8ezTkaUcG1P+64X811XyIudD2YbO+8BbTQoXhFnAsvDZwXZgJFC5yTrGe+RB5bajeue25p2641pnl7yEjU1m1vnzKICpCZdATld22nEYHJzQI7/IsjF8qoNs5XwM6WX5vQMyLXoHMyQrO9pTjgevVPVgA=
+	t=1729988432; cv=none; b=fBJpS0wMpwQpVrbqu9viilyMmOsEo4qmuXK3SD83uG1xrAh/231bUtCS9A3NQ+ZKkL8SRl39HDriu/C85FLP/Ku3DsHiEFdZ4P5qR8LF7M/nXXSKdw6bZ9vlATxT5H24kcJMlu5byh+pqppyZMQFhMFR0Nl24fk6CZT0Q2qPqnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729987550; c=relaxed/simple;
-	bh=rhNqL6LpWEWixs6iOXUkMmfhp2PA67MLc6HniPmlhP0=;
+	s=arc-20240116; t=1729988432; c=relaxed/simple;
+	bh=2m7qUxHWEfN8Q+t3kuiUvZE7GGoJLejjm+XHtfVBQVo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k97U4i+/gRBu+Q8kQRpLKar3vwhfaDtzFGcxID9T0Yv1GI8KuhHgLF2/GHEwsKGsUx3kANvFs9IDDY0HH7HYberLv7MGZ/8O46yQIrYuiZjsl2vm+pC5LxkLx7OIaS9H0MoY4gB52aL0fJc5iD89vX2QVzHvM/E46/uPqnmJ/H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=LgHAYP1i; arc=none smtp.client-ip=209.85.210.42
+	 In-Reply-To:Content-Type; b=sXk8Lk8OV3kfPd8itz1XoVG3Dd1lYlksa+ttn04av/kbWgjZ9pQ7C0J8O828YraNXPhJRfsZu3zMFyY0SnNUeT3XFH8X1IWbRJYSRQ3HjqAzahpg8lw4LrQYZm47dVm85rnWIjCiZqzZmVY0fi3FFf90Y1RBHwaVCHRHKo25Akw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=kMPQ7/4v; arc=none smtp.client-ip=209.85.167.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-71808e95ae2so1725019a34.0
-        for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 17:05:46 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3e5f9712991so1697675b6e.2
+        for <linux-spi@vger.kernel.org>; Sat, 26 Oct 2024 17:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729987546; x=1730592346; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1729988428; x=1730593228; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBo+UfmYoZrzMsNQGjuBCfg8tOJuRj5Gpe5nBXU7kng=;
-        b=LgHAYP1iX/+TLP10vWgNzWpuo7XrxPAfODUgLn8QiLBWRqZfQyoV40qa7ooAe3+baG
-         Ra9KDIMDJ90CPPDE2YCSULSucFiqjkk0owOm2C+1JIMIqZhvT1eqMKwS6Y7MFWmnaKeS
-         diSKGzjV0gS8hjGsJB79V41YfE+FuS4Y2AW6536RuC2LeCf7Pbpi8m+iu6bdML8JImmm
-         bZ0CqRgbcg1xiD3EasV8txklgseT+1SROiq13ckFza+U7iy2eAf5/s4uQXf+XZ4vUloL
-         ZfPPX+q30izU9pfC9IiRf/9sphUXIyx25IiTbuhQUDb/0rprxBOGjcRcWWrZk/xI3M7w
-         I9QA==
+        bh=gC/B3ePh173CzPyAaHugirfX1pGB4UZuGgWIDFmLpTo=;
+        b=kMPQ7/4vkKP2irw4SPMbkIyqHURlf3C3aG0fN5AlDTuopVf15rTDA0AZzsBrwzjA+S
+         cuDBybYckuBogPpHjUbbDuxIO5Ex5wBWl8hNso4dnz9I1pl9Kyo0TYi/cORnB1+d54x6
+         9El/fbsvddlCwgP5v6RIVPWxAK57nWI3NZZGZq+VryETQORzVs65El9Ze8INNedf9oCc
+         dOfnRv6O93rtaxUZAn2njALZyeadUSUhSp/Q4Px56cGLUq20B9no7YGf6G1vApxv/WLL
+         HN2W/al/mr350xgLB6g0SF2RgqbMzcPKhgZuBHzAAFlJgSdtmn9ZkTVE2JusrQUuLn96
+         OHOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729987546; x=1730592346;
+        d=1e100.net; s=20230601; t=1729988428; x=1730593228;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBo+UfmYoZrzMsNQGjuBCfg8tOJuRj5Gpe5nBXU7kng=;
-        b=Vt+h5IY1JtF9exc7xExqZ/UcPZ784lxj3TIFLr2p4NNzN75u/riXXtg0POa6hwEr66
-         NxyPWd4nc5mvN2Y6Zs0ydn9NMMq26K08WnmquJD//UQUbDd0VPCSZYuy2kcw7nnVm85j
-         w/4zM7t3jVi465+sJLCFito5LDCyiSfLeVDmRrZBKvYZnNBSRCinwOCW5x2RxhVcKjft
-         wzKvEqDBz1mhpv3IdQth1zIA/6GXGtOG9PTRy6verROoFH7kEQAy35hID+MESRyphckQ
-         ZPV90QbvnzeCJk59Irff1b3IWaanXgfACAuZkCCzVRkbhPkRnb0ioljdMjvkcIV0jrpF
-         npsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNnwn0/uKEidOEku87UqVUcdaAxaHGK0Mo/OJleNvMLa5DW1p1gzoawY+/LxtvBXikWxl0L/uww+0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkC9w8sWd3xUNL3WS20bblk1fJLPZcLRxR6Gd5v3kG43+R/8hj
-	yWs0/ICPyPbSFHn48c2ucujMQF6q2cQNF7yI/VjuTX+UFfMkF78pzoGoCcSoWPU=
-X-Google-Smtp-Source: AGHT+IE+GC6LCWLQIl3WueQx+pYDMQMzcrUWE5ZDJ+B32lO2dzBpdBsOVz7+Dh/SfJSmobYphyJ0eQ==
-X-Received: by 2002:a05:6830:6381:b0:718:823:cca8 with SMTP id 46e09a7af769-71858896259mr5651688a34.2.1729987546093;
-        Sat, 26 Oct 2024 17:05:46 -0700 (PDT)
+        bh=gC/B3ePh173CzPyAaHugirfX1pGB4UZuGgWIDFmLpTo=;
+        b=rvn+c6OjE/iDFsrBhZSKsRwAQplkkKy2pfV3/TNFkKVlL0U6A/kYh/XG+XDpl07DYV
+         cOOzYrbAYXmIvZwS9xdgjOfSNeOJink2kfaagZh2QuB2hfQ523T5VVdNmb7KtjC5RS7z
+         dZxbHUOXfdAG6I2btXWwfXJxvm6Lf21j4+e5pur0TRnK2pwdRSMjAjxy/L/tMu/bz7Yv
+         OS17lLWlpKZlf7o97XiPtoAdYQFiYRLwfU7JTpjTHiwhGvZJ0RxpmiccBF5U9H7fl0kU
+         riU3TK8C2RRwVQwpdBNLxthe2PMj4Ajq5xdg5SJTJonmWnbqVV7f8f/ph786JomHp2zk
+         q1OQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8oZo0cJsBZ2p4rN1nFi3YDO1wSot9AF39r6PSmzth6PdyL5MQnh/Nro6gLUGX2DkY8UH7wlcBvg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztiMSttEkXl0FysURjkRC7sUdlldI0tq+X7f2Kpvx//EI88nsu
+	fvV4XhAQ2a6j0HCWnh6ehnaWaWI4hFnEXC+DnQIFDf20ywgonwVAM3G1AFGEVoU=
+X-Google-Smtp-Source: AGHT+IG68kaonmbkL5dJ3DQuXHXhIQkLnDUW/ccB5u22eusFKceb3+B9YIC2/XLBHEhZz5NOUlJRMg==
+X-Received: by 2002:a05:6808:3384:b0:3e6:b46:4f76 with SMTP id 5614622812f47-3e63823e06cmr2500343b6e.1.1729988427879;
+        Sat, 26 Oct 2024 17:20:27 -0700 (PDT)
 Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71861506f3bsm933938a34.11.2024.10.26.17.05.44
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e6325b8623sm915906b6e.49.2024.10.26.17.20.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Oct 2024 17:05:44 -0700 (PDT)
-Message-ID: <7700b27a-9ffc-474e-8390-a69428fe7607@baylibre.com>
-Date: Sat, 26 Oct 2024 19:05:44 -0500
+        Sat, 26 Oct 2024 17:20:26 -0700 (PDT)
+Message-ID: <9669117f-667e-4a2b-b815-c49bf0731eec@baylibre.com>
+Date: Sat, 26 Oct 2024 19:20:24 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,8 +76,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v4 15/15] iio: adc: ad4695: Add support for SPI
- offload
+Subject: Re: [PATCH RFC v4 05/15] spi: dt-bindings: add PWM SPI offload
+ trigger
 To: Jonathan Cameron <jic23@kernel.org>
 Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -89,48 +89,97 @@ Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
 References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
- <20241023-dlech-mainline-spi-engine-offload-2-v4-15-f8125b99f5a1@baylibre.com>
- <20241026170038.4b629cff@jic23-huawei>
+ <20241023-dlech-mainline-spi-engine-offload-2-v4-5-f8125b99f5a1@baylibre.com>
+ <20241026161837.30a56ae1@jic23-huawei>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20241026170038.4b629cff@jic23-huawei>
+In-Reply-To: <20241026161837.30a56ae1@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/26/24 11:00 AM, Jonathan Cameron wrote:
-> On Wed, 23 Oct 2024 15:59:22 -0500
+On 10/26/24 10:18 AM, Jonathan Cameron wrote:
+> On Wed, 23 Oct 2024 15:59:12 -0500
 > David Lechner <dlechner@baylibre.com> wrote:
 > 
-
-...
-
->>  static int ad4695_write_raw(struct iio_dev *indio_dev,
->>  			    struct iio_chan_spec const *chan,
->>  			    int val, int val2, long mask)
->> @@ -779,6 +992,17 @@ static int ad4695_write_raw(struct iio_dev *indio_dev,
->>  			default:
->>  				return -EINVAL;
->>  			}
->> +		case IIO_CHAN_INFO_SAMP_FREQ: {
->> +			struct pwm_state state;
->> +
->> +			if (val <= 0)
->> +				return -EINVAL;
->> +
->> +			guard(mutex)(&st->cnv_pwm_lock);
->> +			pwm_get_state(st->cnv_pwm, &state);
+>> Add a new binding for using a PWM signal as a trigger for SPI offloads.
 > 
-> What limits this to rates the ADC can cope with?
+> I don't have a better suggestion for this, but it does smell rather like
+> other bridge binding (iio-hwmon for example) where we have had push back on
+> representing something that doesn't really exist but is just a way to
+> tie two bits of hardware together. Those kind of exist because we snuck
+> them in a long time back when no one was paying attention.
+> 
+> So this one may need more explanation and justification and I'd definitely
+> like some DT maintainer review on this at a fairly early stage!
+> (might have happened in earlier reviews but it has been a while so I've
+> forgotten if it did)
+> 
+> Jonathan
+> 
+We could probably make it work like the leds version of this
+binding where the trigger-sources property can have phandles
+to anything, not just a dedicated class of device. It just
+gets messy to implement because every subsystem needs to have
+core code modified to be able to handle using a device or
+one channel/gpio/etc. of a device as a trigger instead of
+whatever it normally is.
+
+> 
+>>
+>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>> ---
+>>
+>> v4 changes: new patch in v4
+>> ---
+>>  .../devicetree/bindings/spi/trigger-pwm.yaml       | 39 ++++++++++++++++++++++
+>>  1 file changed, 39 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/trigger-pwm.yaml b/Documentation/devicetree/bindings/spi/trigger-pwm.yaml
+>> new file mode 100644
+>> index 000000000000..987638aa4732
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/trigger-pwm.yaml
+>> @@ -0,0 +1,39 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/trigger-pwm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Generic SPI offload trigger using PWM
+>> +
+>> +description: Remaps a PWM channel as a trigger source.
+>> +
+>> +maintainers:
+>> +  - David Lechner <dlechner@baylibre.com>
+>> +
+>> +$ref: /schemas/spi/trigger-source.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: trigger-pwm
+>> +
+>> +  '#trigger-source-cells':
+>> +    const: 0
+>> +
+>> +  pwms:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - '#trigger-source-cells'
+>> +  - pwms
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    trigger {
+>> +        compatible = "trigger-pwm";
+>> +        #trigger-source-cells = <0>;
+>> +        pwms = <&pwm 0 1000000 0>;
+>> +    };
+>>
 > 
 
-Nothing at the moment. The "obvious" thing to do would
-be to limit this to the max rate from the datasheet.
-
-But that feels a little too strict to me since maybe the
-PWM can't get exactly the max rate, but can get the max
-rate + 1% or so. It seems like we should allow that too.
-It's not like the ADC is going to not work if we go a
-few Hz over the datasheet rating.
-
-Maybe limit it to max + 10% or something like that?
 
