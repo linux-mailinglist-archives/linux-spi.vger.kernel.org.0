@@ -1,168 +1,111 @@
-Return-Path: <linux-spi+bounces-5526-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5527-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 063799B36C8
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2024 17:39:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C5709B3C7F
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2024 22:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DFC71C21E6C
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2024 16:39:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DEB4B21A92
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Oct 2024 21:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F253E1DEFF5;
-	Mon, 28 Oct 2024 16:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0C21E04AC;
+	Mon, 28 Oct 2024 21:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqUpI8Qt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135591DE2BF;
-	Mon, 28 Oct 2024 16:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4885318FC75
+	for <linux-spi@vger.kernel.org>; Mon, 28 Oct 2024 21:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730133555; cv=none; b=hWLWW3eiU0fHAkT4USi8bUkcbV+oAsYAQ8P4jiB1DIdSRC3pQueo6KU7y7ZmiLc6q2RqhwfRJrEYmLe5GLSQFucGBCgu4Ksixd6qY9BQp42WnZIDTwjri9s6RO14hQmZkZ64fCDOMtFF/+HS9ccEJaPItJTZwYRfSP3FNXGXpDo=
+	t=1730149817; cv=none; b=ZWu/I6QT9dOukKQnYbAHBwggK4ithrah77XV7HAMNUNIlzz/3D/iMtL21dtnv7KEOQHg2fOQNM+zyENQXmis6JuZBQxoE+nYUtKm29ql5QCHwhTv3DLa0bj5wx+qqKP9lJpvPAue8Q3thXXCKAd32EKpUaw45ajETRE/aMY9Ttw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730133555; c=relaxed/simple;
-	bh=jeqOaqJuFOoxOEWYmX6WO8I6UoLf98HeNqbukHCZ4qU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RUx52C7YG4+a/7JS9ISfIlhgn2l3mQPK9w/plvbQXEwFJAEtx7sBXcU/PAsZxkshe95yAyIveK5wEAwg1SBKHNMmnHESCIpf2AnzRfvKqfpM5ga84TuWqMlL8R/FOcmriYPSbZnffIM9zw+tidbfuTS4HLrbiSlVEQg8KGO+NKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Xcf9T3pWzz6LDXM;
-	Tue, 29 Oct 2024 00:34:21 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id E8BE91404FC;
-	Tue, 29 Oct 2024 00:39:09 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 28 Oct
- 2024 17:39:09 +0100
-Date: Mon, 28 Oct 2024 16:39:07 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: David Lechner <dlechner@baylibre.com>
-CC: Jonathan Cameron <jic23@kernel.org>, Mark Brown <broonie@kernel.org>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Nuno =?ISO-8859-1?Q?S=E1?=
-	<nuno.sa@analog.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
-	<ukleinek@kernel.org>, Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-iio@vger.kernel.org>, <linux-pwm@vger.kernel.org>
-Subject: Re: [PATCH RFC v4 15/15] iio: adc: ad4695: Add support for SPI
- offload
-Message-ID: <20241028163907.00007e12@Huawei.com>
-In-Reply-To: <2679570d-6255-467b-8312-117e553a52b4@baylibre.com>
-References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
-	<20241023-dlech-mainline-spi-engine-offload-2-v4-15-f8125b99f5a1@baylibre.com>
-	<20241026170038.4b629cff@jic23-huawei>
-	<5a090847-ee53-41be-ad28-b7604cf9020a@baylibre.com>
-	<20241027091244.2fe3c0ad@jic23-huawei>
-	<2679570d-6255-467b-8312-117e553a52b4@baylibre.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1730149817; c=relaxed/simple;
+	bh=TenOVswCi2FxBf8paViD4gSc4Q9nfnp+Lxzukvx5Ggw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C5Lja4fqFWQkirRqODqV9yeDQijGR5vQ2cTtG29V3cDLMWWj9n21A2GHkv1I+Eomh3aLTPjnatwpNX88xI/qUpqXaBW7CPJDpC0Xrq7buDHoHbQ6B+kt2n3yxUX464uFO+6GjYS3ZfuJ22ljdCXv99Hhs1Xw+pkwtmtouHuUVj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqUpI8Qt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6580C4CEC3;
+	Mon, 28 Oct 2024 21:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730149816;
+	bh=TenOVswCi2FxBf8paViD4gSc4Q9nfnp+Lxzukvx5Ggw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KqUpI8Qt6dNFEsk8pUrus/16RKinKgX8UenlTxoGniCL+sPc8e4N2L6N7gnV0mYtB
+	 WQAf/sa8+35/QyS3FPoFzIrhg4aMToWUYdShwyxU9fITfvoSsFyZv+WzEBv0SJu9Vx
+	 0foLaYTM1fsXJyL0JhD8IzNW0TAnRhf5kBVtvyKGYmO1TRChsOdC7Kwap4VO2CkQRv
+	 Tj1YRyEuyp9UWhvdJGZVim+rmPNlhru91IyahluHfcK5Kr/kTmmVvZ/S3Xg4VOezlt
+	 d8/A8PUyU8rNTQGqk36SaFfwRuWlufY6bzO/L/kkVspPLdrDHAQr2y4+WGiyRb623F
+	 f01CsxLYBLbpA==
+Date: Mon, 28 Oct 2024 21:10:10 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+	linux-spi@vger.kernel.org, Steam Lin <stlin2@winbond.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH 02/24] spi: spi-mem: Add a new controller capability
+Message-ID: <ddad474f-826f-40e4-ba7f-410a088813b6@sirena.org.uk>
+References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
+ <20241025161501.485684-3-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3rVIVdUbm9/vkM7Q"
+Content-Disposition: inline
+In-Reply-To: <20241025161501.485684-3-miquel.raynal@bootlin.com>
+X-Cookie: Remember the... the... uhh.....
 
-On Sun, 27 Oct 2024 14:52:17 -0500
-David Lechner <dlechner@baylibre.com> wrote:
 
-> On 10/27/24 4:12 AM, Jonathan Cameron wrote:
-> > On Sat, 26 Oct 2024 19:01:53 -0500
-> > David Lechner <dlechner@baylibre.com> wrote:
-> >   
-> >> On 10/26/24 11:00 AM, Jonathan Cameron wrote:  
-> >>> On Wed, 23 Oct 2024 15:59:22 -0500
-> >>> David Lechner <dlechner@baylibre.com> wrote:
-> >>>     
-> 
-> ...
-> 
-> >>>     
-> >>>>  static int ad4695_probe(struct spi_device *spi)
-> >>>>  {
-> >>>>  	struct device *dev = &spi->dev;
-> >>>>  	struct ad4695_state *st;
-> >>>>  	struct iio_dev *indio_dev;
-> >>>> -	struct gpio_desc *cnv_gpio;
-> >>>>  	bool use_internal_ldo_supply;
-> >>>>  	bool use_internal_ref_buffer;
-> >>>>  	int ret;
-> >>>>  
-> >>>> -	cnv_gpio = devm_gpiod_get_optional(dev, "cnv", GPIOD_OUT_LOW);
-> >>>> -	if (IS_ERR(cnv_gpio))
-> >>>> -		return dev_err_probe(dev, PTR_ERR(cnv_gpio),
-> >>>> -				     "Failed to get CNV GPIO\n");
-> >>>> -
-> >>>> -	/* Driver currently requires CNV pin to be connected to SPI CS */
-> >>>> -	if (cnv_gpio)
-> >>>> -		return dev_err_probe(dev, -ENODEV,
-> >>>> -				     "CNV GPIO is not supported\n");
-> >>>> -
-> >>>>  	indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
-> >>>>  	if (!indio_dev)
-> >>>>  		return -ENOMEM;
-> >>>> @@ -1002,8 +1374,13 @@ static int ad4695_probe(struct spi_device *spi)
-> >>>>  		return -EINVAL;
-> >>>>  
-> >>>>  	/* Registers cannot be read at the max allowable speed */
-> >>>> +	st->spi_max_speed_hz = spi->max_speed_hz;
-> >>>>  	spi->max_speed_hz = AD4695_REG_ACCESS_SCLK_HZ;
-> >>>>  
-> >>>> +	ret = devm_add_action_or_reset(dev, ad4695_restore_spi_max_speed_hz, st);    
-> >>>
-> >>> Why do you need to put it back in devm? What happens after this but without
-> >>> a driver restart that uses that faster rate?
-> >>>     
-> >> I should have added a comment here as this was a weird bug to trace.
-> >>
-> >> The core SPI framework sets the initial value of spi->max_speed_hz
-> >> to the minimum of the controller max rate and the max rate specified
-> >> by the devicetree.
-> >>
-> >> The SPI device lives beyond this driver, so if we bind the driver
-> >> and set spi->max_speed_hz to something other than what the SPI core
-> >> set it, then the next time we bind the driver, we don't get the
-> >> the max rate from the SPI core, but rather we changed it to when
-> >> the driver unbound.
-> >>
-> >> So on the second bind, the max rate would be the slow register
-> >> read rate instead of the actual max allowable rate.
-> >>
-> >> So we need to reset spi->max_speed_hz to what it was originally
-> >> on driver unbind so that everything works as expected on the
-> >> next bind.
-> >>
-> >> (Or we call this a SPI core bug and fix it there instead).  
-> > Definitely a question to ask.  Directly accessing spi_max_speed_hz may
-> > be the fundamental issue as I don't think the driver is generally
-> > expected to touch that in a dynamic fashion.  Should we be instead setting it
-> > per transfer for the ones that need it controlled?
-> > 
-> > Jonathan
-> >   
-> 
-> The problem is that we are using regmap and that doesn't have
-> a way to specify the max frequency for register reads that is
-> different from other uses of the SPI bus (i.e. reading sample
-> data). So we could fix it in the generic SPI regmap (not exactly
-> trivial) or we could write our own regmap read/write callbacks
-> in this driver that properly sets the per-transfer max speed.
+--3rVIVdUbm9/vkM7Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Custom read / write callbacks seems the best approach at first
-glance, given this is pretty rare thing to do. 
+On Fri, Oct 25, 2024 at 06:14:39PM +0200, Miquel Raynal wrote:
+> There are spi devices with multiple frequency limitations depending on
+> the invoked command. We probably do not want to afford running at the
+> lowest supported frequency all the time, so if we want to get the most
+> of our hardware, we need to allow per-operation frequency limitations.
 
-> 
-> 
+This all makes sense to me.  I'll leave it a little bit to see if anyone
+(especially people working with the individual devices) has any thoughts
+and assuming no issues apply the SPI bits on a branch.  Does that sound
+sensible?
 
+--3rVIVdUbm9/vkM7Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcf/bEACgkQJNaLcl1U
+h9BjVwf/XF7IMIoYSYn6DyESYxB0+bQLaPzmZ5+0vRkDO0pKcu6VsAbWB3vPfM6c
+SP1r9lk+hMsUleHIwVSmIUlnfti75RN9I9u/jB/wkGHxhQncExs/H2NvVe/qsoc6
+QV73NmGJkk9xeTYPxW4i/m9sGOQAwWhj3DvRMZc4y5gFj3OJxVERC/u3VZfHwPJD
+h/msp9wd2D7hDvbq2c6xdlMXaHx3cvtL0kRomSmGge7HiS52d2h4YB2mQjCm2ioc
+4zrQLL5XWjmb4EBNvT9HvRCQ6htwC/4m0T22j2bV6YLScTMKizZB1rTb55skxQTT
+VOlL2ZsbU3KLKMbBDACU0kefGf/cuA==
+=LbX2
+-----END PGP SIGNATURE-----
+
+--3rVIVdUbm9/vkM7Q--
 
