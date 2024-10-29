@@ -1,281 +1,195 @@
-Return-Path: <linux-spi+bounces-5534-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5535-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C379B4A65
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 14:00:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA4F29B4E03
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 16:31:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7127A284473
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 13:00:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B0241F21B9F
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 15:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC0DE567;
-	Tue, 29 Oct 2024 13:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748F8194A66;
+	Tue, 29 Oct 2024 15:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="FnSjRBho"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="z6cIzhPE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49DDD20606A;
-	Tue, 29 Oct 2024 13:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC602BAF9
+	for <linux-spi@vger.kernel.org>; Tue, 29 Oct 2024 15:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730206819; cv=none; b=BujRCHemSQ8HRpPjnrgkQOxfqY50VGTiTh2A1WqR7loP4iOPqX6K/PlWd+IHfh/PkYJN36QWO6yAvTslRpcFy3ol+UNJNP0KLXAK0cF3Ir79+U8Ue8mKsbb3LLDZYBQfUrmTftN+PNonTVByehKE8ISZYr9qfcqcn+ipNxqUmjw=
+	t=1730215853; cv=none; b=ZAfd182//djOe+1wucOFmcpEazbra3GjZfmgoG7o3Z8Ih5seZvuYUKak1788TIbL74oiGeGtfSgOl5ATNK5yFQnUUgFvaPBEvaMlMhZpuVz3iAxfzsj5dw7AISg62V7azJMAp8UtM4d2pVajxXFQinfcqvUZi9IkWAn1f54VPkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730206819; c=relaxed/simple;
-	bh=qo248CgBS1tnumaycZ4qKStoReKnTQht5963gMX/YBI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e8D61O0JFMNhUO7bYclInrOX9TSM5n0CYiDM9eLQAa3IGkUbvL9XALxaE+f7j8inlT8v7XxetpQZnH940RscTTeHJZQsk2+mev09Zq1TjFc+vH/20qNhQn5ixwaw2D2LmF8nWmGerOn+hc+yMgUfGVuUu0PpqhQzXqPMN7ZyZ2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=FnSjRBho; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 0ADC2A09F1;
-	Tue, 29 Oct 2024 14:00:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=WgY432aLhx2lOqFgoq9u
-	CcBSfszhH81w0TpnR0b3JZE=; b=FnSjRBhoWEfczvd6I8RFtVpzB6Md9cMObODc
-	ZRRg6d1CAwAcauUtPqRxEWPbo2aMa/e+4DVzzsRYzVZIdM/sZORoj7Tp09BH+xOK
-	vJgrKeeDpjowO02V6tBzY18fGPlxx5dfKZtnADkyRxJVbYdgAaZ4FOnlXwrRJaTl
-	7JYy02XA2bKct4aUeAbezam4Bo6TxF/Gi/YlwgEFL6kUtKZhpr5TfgAoBMeWlbwj
-	mD5Bh9uBTItxi66vybZRRQ4BMEkKSWPLI4K26cyQHaEh6b93auQqBfm/7DS393WL
-	fj4fYF5JVoeXz3/WYpcYPOGf0MnVtE5kVod0yYaNM5ISf6OokHSKD2a44nept+uX
-	ANH7vX9arnvNIBDKitTXenUktlFuGk2ocddFM/90lJoBrt2d5Sif7PLMRX8QuhF6
-	8LtmbHhN6ULZ3XLHZJC2cqIX6G7JH8lzuEG0Gawh1BcQyy0OOsAwmb45utuqf2fg
-	o4BtKSGNY54cbS7isYzoBdfqRxeiveDo0kyAl5bxZrL6tGY4Ttnuv7fn7OCZ6kro
-	J8ESDF4XICojneHS8Rik6JdQ10ST8aMHgPq/Iah/TXfb94MPu3/I03WdxaTjrBik
-	9UUx5vkQpYAgqNZt8LFm5NZaZaZMUeyf3Q4jonvF9/y6pBG+1hvDJTOxiMr6tutW
-	fQzXP1o=
-From: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
-To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Tudor
- Ambarus" <tudor.ambarus@linaro.org>, Varshini Rajendran
-	<varshini.rajendran@microchip.com>, Mark Brown <broonie@kernel.org>, "Nicolas
- Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: [PATCH] spi: atmel-quadspi: Create `atmel_qspi_ops` to support newer SoC families
-Date: Tue, 29 Oct 2024 13:58:44 +0100
-Message-ID: <20241029125843.2384307-1-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ece81819-3a00-4eef-b241-1adc82629ed4@linaro.org>
-References:
+	s=arc-20240116; t=1730215853; c=relaxed/simple;
+	bh=C2Bf/CpiazCRHi+JMjkoraHCMogNvMrpX8KWNoU7cSs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g1jDVxRSKaVRWXDNMgAzlPURrc8RzlPArUdkIJWJ2+qk02QIjRiDwwHFgjjMXsTOB8PUZ7qQz0Y6Dnbv03w++zjijgy3GKQx7hMrw7FIGfvTBHyM0cmTXvM5fW9WWfZBEpVsOeyNMpRQ5zks2kKi5vCFKKB6wwcLn2ORXplMXHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=z6cIzhPE; arc=none smtp.client-ip=209.85.160.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28896d9d9deso2626001fac.2
+        for <linux-spi@vger.kernel.org>; Tue, 29 Oct 2024 08:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730215849; x=1730820649; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n6oLt4cwqIvtLgDoKzl4RIUjXVN/+Dx6j96wTlFjHfs=;
+        b=z6cIzhPEa1IGJh40CFi+FEMWamYrZIx08dC+vmYjtQCDOxvW364Gclqd78i3pcDygY
+         XrJGjkkYmldK/lyBICRa0H8sSFN2kihL8XYLFJm7qte+ktQQldASeI39x93WHJ55EP2z
+         0InmLEndWN6PjlmGFTImRaDr9PYRIsP9doGC/gQY6uqschjpZl6m652tdNgvG5q67Zjc
+         pqNXnCvtIEwibGgpAPtu44nHhaigJfiUMO7pp8OKTfhSrw2fEztFj+hLsfnai6gnZvz8
+         VTqqsN94QhMtfsTDfiDemVi8Ot1L8XFgpwhg4ro7rOdfdrk64tWThk79aEBxDe8cb703
+         24kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730215849; x=1730820649;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n6oLt4cwqIvtLgDoKzl4RIUjXVN/+Dx6j96wTlFjHfs=;
+        b=GGs90qvRkdm6kwQYYn6y+N0zS12N3aP0i0HUvnS5VMrPfpwjN/pUAznWDRhFu+S8Nu
+         gniU5hjEmT3L4tZRYebgUg3FfRL+7Ks7tz1MfkMieL3BIX5py2HPzL3+t3raedDWHQxR
+         Httjveoax0jrv0YbA1O3vzaM8/pdrTtp4SwGBGGCpQLf3wtr1nyj5fWb/qQ/gVtGBExq
+         r8lUGbgpu2TiGzHiYEzUsWgHFhUK0tZd22Ls8ITE/a5Jzs4DJ/XhQfAhWdn8X5k7Mmep
+         4x9ZsFBmRbrLWXSZ+hl0K+CsQEH7jdi+RMsE52iuypjt8oRHk/qM2novypS7uZO7vOvO
+         aE7A==
+X-Forwarded-Encrypted: i=1; AJvYcCV+3f5b9W7m7TFtpWaFKTMvxdi7sMqw9YDN7LNuiScTHWbxGFy23lKuww5PHt/0+ZopzQ9B+/8UKRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy7IQsLPwXsrEasVc2cm4Bhzkib/AQlWrBPy8c7RxZqwtSnT22
+	BUIUXL9eIzLx+6q7qSdPYXSgvFYiTXV4i8oYUt7L/OLK5I2h2nRfi6pHrJqqdD0=
+X-Google-Smtp-Source: AGHT+IE2SkDygBFnyOcXc/xSl2iBsuYxGCBH6q3GOhnV+kWltCIyrT3d5jLZv9ddzix44MMFYznHAA==
+X-Received: by 2002:a05:6871:69f:b0:288:34aa:20a3 with SMTP id 586e51a60fabf-294649be62amr49618fac.45.1730215847206;
+        Tue, 29 Oct 2024 08:30:47 -0700 (PDT)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-290360f4540sm2856004fac.31.2024.10.29.08.30.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Oct 2024 08:30:45 -0700 (PDT)
+Message-ID: <82edfbb9-5e65-4292-b15b-d5cde7b53e42@baylibre.com>
+Date: Tue, 29 Oct 2024 10:30:43 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v4 01/15] pwm: core: export pwm_get_state_hw()
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Guillaume Stols <gstols@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Michael Hennerich <Michael.Hennerich@analog.com>,
+ Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
+ Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
+ <20241023-dlech-mainline-spi-engine-offload-2-v4-1-f8125b99f5a1@baylibre.com>
+ <mavlxxjza7ud7ylgoewz6fz3chtuwljvcjjf6o3kcv555iolwa@wdnrsiow5u5w>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <mavlxxjza7ud7ylgoewz6fz3chtuwljvcjjf6o3kcv555iolwa@wdnrsiow5u5w>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1730206804;VERSION=7978;MC=582406864;ID=190610;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94855667463
 
-Refactor the code to introduce an ops struct, to prepare for merging
-support for later SoCs, such as SAMA7G5. This code was based on the
-vendor's kernel (linux4microchip). Cc'ing original contributors.
+On 10/29/24 3:05 AM, Uwe Kleine-König wrote:
+> Hello David,
+> 
+> On Wed, Oct 23, 2024 at 03:59:08PM -0500, David Lechner wrote:
+>> Export the pwm_get_state_hw() function. This is useful in cases where
+>> we want to know what the hardware is actually doing, rather than what
+>> what we requested it should do.
+>>
+>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>> ---
+>>
+>> v4 changes: new patch in v4
+>>
+>> And FYI for Uwe and Jonathan, there are a couple of other series
+>> introducing PWM conversion triggers that could make use of this
+>> so that the sampling_frequency attribute can return the actual rate
+>> rather than the requested rate.
+>>
+>> Already applied:
+>> https://lore.kernel.org/linux-iio/20241015-ad7606_add_iio_backend_support-v5-4-654faf1ae08c@baylibre.com/
+>>
+>> Under review:
+>> https://lore.kernel.org/linux-iio/aea7f92b-3d12-4ced-b1c8-90bcf1d992d3@baylibre.com/T/#m1377d5acd7e996acd1f59038bdd09f0742d3ac35
+>> ---
+>>  drivers/pwm/core.c  | 55 +++++++++++++++++++++++++++++++++++++----------------
+>>  include/linux/pwm.h |  1 +
+>>  2 files changed, 40 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+>> index 634be56e204b..a214d0165d09 100644
+>> --- a/drivers/pwm/core.c
+>> +++ b/drivers/pwm/core.c
+>> @@ -718,7 +718,7 @@ int pwm_apply_atomic(struct pwm_device *pwm, const struct pwm_state *state)
+>>  }
+>>  EXPORT_SYMBOL_GPL(pwm_apply_atomic);
+>>  
+>> -static int pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
+>> +static int __pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
+>>  {
+>>  	struct pwm_chip *chip = pwm->chip;
+>>  	const struct pwm_ops *ops = chip->ops;
+>> @@ -730,29 +730,50 @@ static int pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
+>>  
+>>  		BUG_ON(WFHWSIZE < ops->sizeof_wfhw);
+>>  
+>> -		scoped_guard(pwmchip, chip) {
+>> -
+>> -			ret = __pwm_read_waveform(chip, pwm, &wfhw);
+>> -			if (ret)
+>> -				return ret;
+>> +		ret = __pwm_read_waveform(chip, pwm, &wfhw);
+>> +		if (ret)
+>> +			return ret;
+>>  
+>> -			ret = __pwm_round_waveform_fromhw(chip, pwm, &wfhw, &wf);
+>> -			if (ret)
+>> -				return ret;
+>> -		}
+>> +		ret = __pwm_round_waveform_fromhw(chip, pwm, &wfhw, &wf);
+>> +		if (ret)
+>> +			return ret;
+>>  
+>>  		pwm_wf2state(&wf, state);
+>>  
+>>  	} else if (ops->get_state) {
+>> -		scoped_guard(pwmchip, chip)
+>> -			ret = ops->get_state(chip, pwm, state);
+>> -
+>> +		ret = ops->get_state(chip, pwm, state);
+>>  		trace_pwm_get(pwm, state, ret);
+>>  	}
+>>  
+>>  	return ret;
+>>  }
+> 
+> I don't understand why you introduce __pwm_get_state_hw() (a variant of
+> pwm_get_state_hw() that expects the caller to hold the chip lock) when the
+> single caller (apart from plain pwm_get_state_hw()) could just continue
+> to use pwm_get_state_hw().
 
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Varshini Rajendran <varshini.rajendran@microchip.com>
+Hmm... it seems like I thought there was a good reason for it at the
+time, but looking at it again, I agree with your assessment.
 
-Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 111 +++++++++++++++++++++++++-----------
- 1 file changed, 77 insertions(+), 34 deletions(-)
+> 
+> In principle I'm open to such a patch and wonder if there is already a
+> merge plan for this series. If you send a simpler patch soon with the
+> same objective, I'll make sure it goes into v6.13-rc1 in the assumption
+> that it's to late for the whole series to go in then. Or do you still
+> target 6.13-rc1 for the spi bits? Then it would probably better to let
+> this patch go in with the rest via the spi tree.
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index 95cdfc28361e..20c4bb9d1dbe 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -138,11 +138,15 @@
- #define QSPI_WPSR_WPVSRC_MASK           GENMASK(15, 8)
- #define QSPI_WPSR_WPVSRC(src)           (((src) << 8) & QSPI_WPSR_WPVSRC)
- 
-+#define ATMEL_QSPI_TIMEOUT		1000	/* ms */
-+
- struct atmel_qspi_caps {
- 	bool has_qspick;
- 	bool has_ricr;
- };
- 
-+struct atmel_qspi_ops;
-+
- struct atmel_qspi {
- 	void __iomem		*regs;
- 	void __iomem		*mem;
-@@ -150,13 +154,22 @@ struct atmel_qspi {
- 	struct clk		*qspick;
- 	struct platform_device	*pdev;
- 	const struct atmel_qspi_caps *caps;
-+	const struct atmel_qspi_ops *ops;
- 	resource_size_t		mmap_size;
- 	u32			pending;
-+	u32			irq_mask;
- 	u32			mr;
- 	u32			scr;
- 	struct completion	cmd_completion;
- };
- 
-+struct atmel_qspi_ops {
-+	int (*set_cfg)(struct atmel_qspi *aq, const struct spi_mem_op *op,
-+		       u32 *offset);
-+	int (*transfer)(struct spi_mem *mem, const struct spi_mem_op *op,
-+			u32 offset);
-+};
-+
- struct atmel_qspi_mode {
- 	u8 cmd_buswidth;
- 	u8 addr_buswidth;
-@@ -404,10 +417,60 @@ static int atmel_qspi_set_cfg(struct atmel_qspi *aq,
- 	return 0;
- }
- 
-+static int atmel_qspi_wait_for_completion(struct atmel_qspi *aq, u32 irq_mask)
-+{
-+	int err = 0;
-+	u32 sr;
-+
-+	/* Poll INSTRuction End status */
-+	sr = atmel_qspi_read(aq, QSPI_SR);
-+	if ((sr & irq_mask) == irq_mask)
-+		return 0;
-+
-+	/* Wait for INSTRuction End interrupt */
-+	reinit_completion(&aq->cmd_completion);
-+	aq->pending = sr & irq_mask;
-+	aq->irq_mask = irq_mask;
-+	atmel_qspi_write(irq_mask, aq, QSPI_IER);
-+	if (!wait_for_completion_timeout(&aq->cmd_completion,
-+					 msecs_to_jiffies(ATMEL_QSPI_TIMEOUT)))
-+		err = -ETIMEDOUT;
-+	atmel_qspi_write(irq_mask, aq, QSPI_IDR);
-+
-+	return err;
-+}
-+
-+static int atmel_qspi_transfer(struct spi_mem *mem,
-+			       const struct spi_mem_op *op, u32 offset)
-+{
-+	struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->master);
-+
-+	/* Skip to the final steps if there is no data */
-+	if (!op->data.nbytes)
-+		return atmel_qspi_wait_for_completion(aq,
-+						      QSPI_SR_CMD_COMPLETED);
-+
-+	/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
-+	(void)atmel_qspi_read(aq, QSPI_IFR);
-+
-+	/* Send/Receive data */
-+	if (op->data.dir == SPI_MEM_DATA_IN)
-+		memcpy_fromio(op->data.buf.in, aq->mem + offset,
-+			      op->data.nbytes);
-+	else
-+		memcpy_toio(aq->mem + offset, op->data.buf.out,
-+			    op->data.nbytes);
-+
-+	/* Release the chip-select */
-+	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
-+
-+	return atmel_qspi_wait_for_completion(aq, QSPI_SR_CMD_COMPLETED);
-+}
-+
- static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- {
- 	struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->controller);
--	u32 sr, offset;
-+	u32 offset;
- 	int err;
- 
- 	/*
-@@ -416,46 +479,20 @@ static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	 * when the flash memories overrun the controller's memory space.
- 	 */
- 	if (op->addr.val + op->data.nbytes > aq->mmap_size)
--		return -ENOTSUPP;
-+		return -EOPNOTSUPP;
-+
-+	if (op->addr.nbytes > 4)
-+		return -EOPNOTSUPP;
- 
- 	err = pm_runtime_resume_and_get(&aq->pdev->dev);
- 	if (err < 0)
- 		return err;
- 
--	err = atmel_qspi_set_cfg(aq, op, &offset);
-+	err = aq->ops->set_cfg(aq, op, &offset);
- 	if (err)
- 		goto pm_runtime_put;
- 
--	/* Skip to the final steps if there is no data */
--	if (op->data.nbytes) {
--		/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
--		(void)atmel_qspi_read(aq, QSPI_IFR);
--
--		/* Send/Receive data */
--		if (op->data.dir == SPI_MEM_DATA_IN)
--			memcpy_fromio(op->data.buf.in, aq->mem + offset,
--				      op->data.nbytes);
--		else
--			memcpy_toio(aq->mem + offset, op->data.buf.out,
--				    op->data.nbytes);
--
--		/* Release the chip-select */
--		atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
--	}
--
--	/* Poll INSTRuction End status */
--	sr = atmel_qspi_read(aq, QSPI_SR);
--	if ((sr & QSPI_SR_CMD_COMPLETED) == QSPI_SR_CMD_COMPLETED)
--		goto pm_runtime_put;
--
--	/* Wait for INSTRuction End interrupt */
--	reinit_completion(&aq->cmd_completion);
--	aq->pending = sr & QSPI_SR_CMD_COMPLETED;
--	atmel_qspi_write(QSPI_SR_CMD_COMPLETED, aq, QSPI_IER);
--	if (!wait_for_completion_timeout(&aq->cmd_completion,
--					 msecs_to_jiffies(1000)))
--		err = -ETIMEDOUT;
--	atmel_qspi_write(QSPI_SR_CMD_COMPLETED, aq, QSPI_IDR);
-+	err = aq->ops->transfer(mem, op, offset);
- 
- pm_runtime_put:
- 	pm_runtime_mark_last_busy(&aq->pdev->dev);
-@@ -571,12 +608,17 @@ static irqreturn_t atmel_qspi_interrupt(int irq, void *dev_id)
- 		return IRQ_NONE;
- 
- 	aq->pending |= pending;
--	if ((aq->pending & QSPI_SR_CMD_COMPLETED) == QSPI_SR_CMD_COMPLETED)
-+	if ((aq->pending & aq->irq_mask) == aq->irq_mask)
- 		complete(&aq->cmd_completion);
- 
- 	return IRQ_HANDLED;
- }
- 
-+static const struct atmel_qspi_ops atmel_qspi_ops = {
-+	.set_cfg = atmel_qspi_set_cfg,
-+	.transfer = atmel_qspi_transfer,
-+};
-+
- static int atmel_qspi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctrl;
-@@ -601,6 +643,7 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 
- 	init_completion(&aq->cmd_completion);
- 	aq->pdev = pdev;
-+	aq->ops = &atmel_qspi_ops;
- 
- 	/* Map the registers */
- 	aq->regs = devm_platform_ioremap_resource_byname(pdev, "qspi_base");
--- 
-2.34.1
-
+The SPI offload stuff is not likely to be merged soon. But there is
+ad7606 + AXI ADC support from Guillaume that was just merged that
+could make use of this. So I can send this as a stand-alone patch
+so that it can be made available for that too.
 
 
