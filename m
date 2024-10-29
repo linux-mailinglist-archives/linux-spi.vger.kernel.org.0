@@ -1,195 +1,172 @@
-Return-Path: <linux-spi+bounces-5535-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5536-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4F29B4E03
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 16:31:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09BB69B54C7
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 22:13:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B0241F21B9F
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 15:31:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC32A2846CB
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Oct 2024 21:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748F8194A66;
-	Tue, 29 Oct 2024 15:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F94207A22;
+	Tue, 29 Oct 2024 21:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="z6cIzhPE"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="2cFtcmxs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC602BAF9
-	for <linux-spi@vger.kernel.org>; Tue, 29 Oct 2024 15:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038CC198E99
+	for <linux-spi@vger.kernel.org>; Tue, 29 Oct 2024 21:13:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730215853; cv=none; b=ZAfd182//djOe+1wucOFmcpEazbra3GjZfmgoG7o3Z8Ih5seZvuYUKak1788TIbL74oiGeGtfSgOl5ATNK5yFQnUUgFvaPBEvaMlMhZpuVz3iAxfzsj5dw7AISg62V7azJMAp8UtM4d2pVajxXFQinfcqvUZi9IkWAn1f54VPkI=
+	t=1730236432; cv=none; b=rSS8F84pkZFpN2vpoL4dBOXzfY3UNU2Ezj4sg1y2G913hd6N6HsFC5Rkq+V0fK4Nuf5piY3WbYptoezJLfgr0p3ho/WTUH2LucGtD/VUNvPdAdJtu890Bpgkt2asEFWvGuQMxWgd9Vp8nqVbN9XMJU64zCfEk/W1XviMjmHUgN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730215853; c=relaxed/simple;
-	bh=C2Bf/CpiazCRHi+JMjkoraHCMogNvMrpX8KWNoU7cSs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g1jDVxRSKaVRWXDNMgAzlPURrc8RzlPArUdkIJWJ2+qk02QIjRiDwwHFgjjMXsTOB8PUZ7qQz0Y6Dnbv03w++zjijgy3GKQx7hMrw7FIGfvTBHyM0cmTXvM5fW9WWfZBEpVsOeyNMpRQ5zks2kKi5vCFKKB6wwcLn2ORXplMXHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=z6cIzhPE; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-28896d9d9deso2626001fac.2
-        for <linux-spi@vger.kernel.org>; Tue, 29 Oct 2024 08:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730215849; x=1730820649; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n6oLt4cwqIvtLgDoKzl4RIUjXVN/+Dx6j96wTlFjHfs=;
-        b=z6cIzhPEa1IGJh40CFi+FEMWamYrZIx08dC+vmYjtQCDOxvW364Gclqd78i3pcDygY
-         XrJGjkkYmldK/lyBICRa0H8sSFN2kihL8XYLFJm7qte+ktQQldASeI39x93WHJ55EP2z
-         0InmLEndWN6PjlmGFTImRaDr9PYRIsP9doGC/gQY6uqschjpZl6m652tdNgvG5q67Zjc
-         pqNXnCvtIEwibGgpAPtu44nHhaigJfiUMO7pp8OKTfhSrw2fEztFj+hLsfnai6gnZvz8
-         VTqqsN94QhMtfsTDfiDemVi8Ot1L8XFgpwhg4ro7rOdfdrk64tWThk79aEBxDe8cb703
-         24kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730215849; x=1730820649;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n6oLt4cwqIvtLgDoKzl4RIUjXVN/+Dx6j96wTlFjHfs=;
-        b=GGs90qvRkdm6kwQYYn6y+N0zS12N3aP0i0HUvnS5VMrPfpwjN/pUAznWDRhFu+S8Nu
-         gniU5hjEmT3L4tZRYebgUg3FfRL+7Ks7tz1MfkMieL3BIX5py2HPzL3+t3raedDWHQxR
-         Httjveoax0jrv0YbA1O3vzaM8/pdrTtp4SwGBGGCpQLf3wtr1nyj5fWb/qQ/gVtGBExq
-         r8lUGbgpu2TiGzHiYEzUsWgHFhUK0tZd22Ls8ITE/a5Jzs4DJ/XhQfAhWdn8X5k7Mmep
-         4x9ZsFBmRbrLWXSZ+hl0K+CsQEH7jdi+RMsE52iuypjt8oRHk/qM2novypS7uZO7vOvO
-         aE7A==
-X-Forwarded-Encrypted: i=1; AJvYcCV+3f5b9W7m7TFtpWaFKTMvxdi7sMqw9YDN7LNuiScTHWbxGFy23lKuww5PHt/0+ZopzQ9B+/8UKRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy7IQsLPwXsrEasVc2cm4Bhzkib/AQlWrBPy8c7RxZqwtSnT22
-	BUIUXL9eIzLx+6q7qSdPYXSgvFYiTXV4i8oYUt7L/OLK5I2h2nRfi6pHrJqqdD0=
-X-Google-Smtp-Source: AGHT+IE2SkDygBFnyOcXc/xSl2iBsuYxGCBH6q3GOhnV+kWltCIyrT3d5jLZv9ddzix44MMFYznHAA==
-X-Received: by 2002:a05:6871:69f:b0:288:34aa:20a3 with SMTP id 586e51a60fabf-294649be62amr49618fac.45.1730215847206;
-        Tue, 29 Oct 2024 08:30:47 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-290360f4540sm2856004fac.31.2024.10.29.08.30.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Oct 2024 08:30:45 -0700 (PDT)
-Message-ID: <82edfbb9-5e65-4292-b15b-d5cde7b53e42@baylibre.com>
-Date: Tue, 29 Oct 2024 10:30:43 -0500
+	s=arc-20240116; t=1730236432; c=relaxed/simple;
+	bh=uo/toYeCSKCj5aGUF+L/LlnhwQQw9+cmfQ4mmMv8Q1I=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=j5X3TEmjz58FK1Kr2o7ArChi/w8OX2ibN9N+9j8A8Wvq18MSkFwB70kLpyKh1WFsEGxDfLHGeZspGHIT/nExHT65fUGGLIf4unDM0lqPszAAW05D4WTVvAj7RimRdfvaPqii1dCyOxn2sikd44Om2DjvPA2HB6NgKXy4Jw7l7WY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=2cFtcmxs; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 862932C0117;
+	Wed, 30 Oct 2024 10:13:45 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1730236425;
+	bh=uo/toYeCSKCj5aGUF+L/LlnhwQQw9+cmfQ4mmMv8Q1I=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=2cFtcmxsG32Pmo7RUg3YMhwhCdv57h/SY+1qDwrgj6rFYfopLCKSst3P0Jp/Jxvkl
+	 lqJ44aNYAph/lCy5f6mYmYxxMEIHiDuJOnLcHO2b1OmjS1uLo5/ETcOlUvYRacTJxl
+	 sVLhLKh5XnUtFFIAVjIiGyv7bfxLeA+NyCJFKuqPJl4MbE4Fa9wQH2HumzxsW0kTlf
+	 J5IhrZakAC9UZdl8oxy3sWr9qs1C+SWNJzgvWLThXYSszBkH9ye1wL2qlKuWwI16Kv
+	 B+E8spDI0DJIZsWvVA6Mmi+NnYGHiva4oFaan14E5Ou4X5yYLD4LsCr2F4U/tqLMQV
+	 K0FAEPgVxHHYw==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B672150090000>; Wed, 30 Oct 2024 10:13:45 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 4397013ED6B;
+	Wed, 30 Oct 2024 10:13:45 +1300 (NZDT)
+Message-ID: <94ffb58b-3242-4ab4-b09a-686116ced781@alliedtelesis.co.nz>
+Date: Wed, 30 Oct 2024 10:13:45 +1300
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v4 01/15] pwm: core: export pwm_get_state_hw()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Guillaume Stols <gstols@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
- <20241023-dlech-mainline-spi-engine-offload-2-v4-1-f8125b99f5a1@baylibre.com>
- <mavlxxjza7ud7ylgoewz6fz3chtuwljvcjjf6o3kcv555iolwa@wdnrsiow5u5w>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: ubifs_recover_master_node: failed to recover master node
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "broonie@kernel.org" <broonie@kernel.org>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <826c4456-461c-424b-88de-a36e77fd7475@alliedtelesis.co.nz>
 Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <mavlxxjza7ud7ylgoewz6fz3chtuwljvcjjf6o3kcv555iolwa@wdnrsiow5u5w>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <826c4456-461c-424b-88de-a36e77fd7475@alliedtelesis.co.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=ca1xrWDM c=1 sm=1 tr=0 ts=67215009 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8 a=ZsQRNL2YhwNOoF4Hqy8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On 10/29/24 3:05 AM, Uwe Kleine-König wrote:
-> Hello David,
-> 
-> On Wed, Oct 23, 2024 at 03:59:08PM -0500, David Lechner wrote:
->> Export the pwm_get_state_hw() function. This is useful in cases where
->> we want to know what the hardware is actually doing, rather than what
->> what we requested it should do.
->>
->> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> ---
->>
->> v4 changes: new patch in v4
->>
->> And FYI for Uwe and Jonathan, there are a couple of other series
->> introducing PWM conversion triggers that could make use of this
->> so that the sampling_frequency attribute can return the actual rate
->> rather than the requested rate.
->>
->> Already applied:
->> https://lore.kernel.org/linux-iio/20241015-ad7606_add_iio_backend_support-v5-4-654faf1ae08c@baylibre.com/
->>
->> Under review:
->> https://lore.kernel.org/linux-iio/aea7f92b-3d12-4ced-b1c8-90bcf1d992d3@baylibre.com/T/#m1377d5acd7e996acd1f59038bdd09f0742d3ac35
->> ---
->>  drivers/pwm/core.c  | 55 +++++++++++++++++++++++++++++++++++++----------------
->>  include/linux/pwm.h |  1 +
->>  2 files changed, 40 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
->> index 634be56e204b..a214d0165d09 100644
->> --- a/drivers/pwm/core.c
->> +++ b/drivers/pwm/core.c
->> @@ -718,7 +718,7 @@ int pwm_apply_atomic(struct pwm_device *pwm, const struct pwm_state *state)
->>  }
->>  EXPORT_SYMBOL_GPL(pwm_apply_atomic);
->>  
->> -static int pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
->> +static int __pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
->>  {
->>  	struct pwm_chip *chip = pwm->chip;
->>  	const struct pwm_ops *ops = chip->ops;
->> @@ -730,29 +730,50 @@ static int pwm_get_state_hw(struct pwm_device *pwm, struct pwm_state *state)
->>  
->>  		BUG_ON(WFHWSIZE < ops->sizeof_wfhw);
->>  
->> -		scoped_guard(pwmchip, chip) {
->> -
->> -			ret = __pwm_read_waveform(chip, pwm, &wfhw);
->> -			if (ret)
->> -				return ret;
->> +		ret = __pwm_read_waveform(chip, pwm, &wfhw);
->> +		if (ret)
->> +			return ret;
->>  
->> -			ret = __pwm_round_waveform_fromhw(chip, pwm, &wfhw, &wf);
->> -			if (ret)
->> -				return ret;
->> -		}
->> +		ret = __pwm_round_waveform_fromhw(chip, pwm, &wfhw, &wf);
->> +		if (ret)
->> +			return ret;
->>  
->>  		pwm_wf2state(&wf, state);
->>  
->>  	} else if (ops->get_state) {
->> -		scoped_guard(pwmchip, chip)
->> -			ret = ops->get_state(chip, pwm, state);
->> -
->> +		ret = ops->get_state(chip, pwm, state);
->>  		trace_pwm_get(pwm, state, ret);
->>  	}
->>  
->>  	return ret;
->>  }
-> 
-> I don't understand why you introduce __pwm_get_state_hw() (a variant of
-> pwm_get_state_hw() that expects the caller to hold the chip lock) when the
-> single caller (apart from plain pwm_get_state_hw()) could just continue
-> to use pwm_get_state_hw().
 
-Hmm... it seems like I thought there was a good reason for it at the
-time, but looking at it again, I agree with your assessment.
+On 29/10/24 13:38, Chris Packham wrote:
+> (resend as plaintext)
+>
+> Hi,
+>
+> I recently added support for the SPI-NAND controller on the RTL9302C=20
+> SoC[1]. I did most of the work against Linux 6.11 and it's working=20
+> fine there. I recently rebased against the tip of Linus's tree=20
+> (6.12-rc5) and found I was getting ubifs errors when mounting:
+>
+> [=C2=A0=C2=A0=C2=A0 1.255191] spi-nand spi1.0: Macronix SPI NAND was fo=
+und.
+> [=C2=A0=C2=A0=C2=A0 1.261283] spi-nand spi1.0: 256 MiB, block size: 128=
+ KiB, page=20
+> size: 2048, OOB size: 64
+> [=C2=A0=C2=A0=C2=A0 1.271134] 2 fixed-partitions partitions found on MT=
+D device spi1.0
+> [=C2=A0=C2=A0=C2=A0 1.278247] Creating 2 MTD partitions on "spi1.0":
+> [=C2=A0=C2=A0=C2=A0 1.283631] 0x000000000000-0x00000f000000 : "user"
+> [=C2=A0=C2=A0 20.481108] 0x00000f000000-0x000010000000 : "Reserved"
+> [=C2=A0=C2=A0 72.240347] ubi0: scanning is finished
+> [=C2=A0=C2=A0 72.270577] ubi0: attached mtd3 (name "user", size 240 MiB=
+)
+> [=C2=A0=C2=A0 72.276815] ubi0: PEB size: 131072 bytes (128 KiB), LEB si=
+ze:=20
+> 126976 bytes
+> [=C2=A0=C2=A0 72.284537] ubi0: min./max. I/O unit sizes: 2048/2048, sub=
+-page=20
+> size 2048
+> [=C2=A0=C2=A0 72.292132] ubi0: VID header offset: 2048 (aligned 2048), =
+data=20
+> offset: 4096
+> [=C2=A0=C2=A0 72.299885] ubi0: good PEBs: 1920, bad PEBs: 0, corrupted =
+PEBs: 0
+> [=C2=A0=C2=A0 72.306689] ubi0: user volume: 1, internal volumes: 1, max=
+. volumes=20
+> count: 128
+> [=C2=A0=C2=A0 72.314747] ubi0: max/mean erase counter: 1/0, WL threshol=
+d: 4096,=20
+> image sequence number: 252642230
+> [=C2=A0=C2=A0 72.324850] ubi0: available PEBs: 0, total reserved PEBs: =
+1920,=20
+> PEBs reserved for bad PEB handling: 40
+> [=C2=A0=C2=A0 72.370123] ubi0: background thread "ubi_bgt0d" started, P=
+ID 141
+> [=C2=A0=C2=A0 72.470740] UBIFS (ubi0:0): Mounting in unauthenticated mo=
+de
+> [=C2=A0=C2=A0 72.490246] UBIFS (ubi0:0): background thread "ubifs_bgt0_=
+0"=20
+> started, PID 144
+> [=C2=A0=C2=A0 72.528272] UBIFS error (ubi0:0 pid 143):=20
+> ubifs_recover_master_node: failed to recover master node
+> [=C2=A0=C2=A0 72.550122] UBIFS (ubi0:0): background thread "ubifs_bgt0_=
+0" stops
+> [=C2=A0=C2=A0 72.710720] UBIFS (ubi0:0): Mounting in unauthenticated mo=
+de
+> [=C2=A0=C2=A0 72.717447] UBIFS (ubi0:0): background thread "ubifs_bgt0_=
+0"=20
+> started, PID 149
+> [=C2=A0=C2=A0 72.777602] UBIFS error (ubi0:0 pid 148):=20
+> ubifs_recover_master_node: failed to recover master node
+> [=C2=A0=C2=A0 72.787792] UBIFS (ubi0:0): background thread "ubifs_bgt0_=
+0" stops
+>
+> Full dmesg output is at[2]
+>
+> git bisect lead me to commit 11813857864f ("mtd: spi-nand: macronix:=20
+> Continuous read support"). Reverting the blamed commit from 6.12-rc5=20
+> seems to avoid the problem. The flash chip on my board is a=20
+> MX30LF2G28AD-TI. I'm not sure if there is a problem with 11813857864f=20
+> or with my spi-mem driver that is exposed after support for continuous=20
+> read is enabled.
+>
+A bit of an update. The ubifs failure is from the is_empty() check in=20
+get_master_node(). It looks like portions of the LEB are 0 instead of=20
+0xff. I've also found if I avoid use the non-DMA path in my driver I=20
+don't have such a problem. I think there is at least one problem in my=20
+driver because I don't handle DMAing more than 0xffff bytes.
 
-> 
-> In principle I'm open to such a patch and wonder if there is already a
-> merge plan for this series. If you send a simpler patch soon with the
-> same objective, I'll make sure it goes into v6.13-rc1 in the assumption
-> that it's to late for the whole series to go in then. Or do you still
-> target 6.13-rc1 for the spi bits? Then it would probably better to let
-> this patch go in with the rest via the spi tree.
 
-The SPI offload stuff is not likely to be merged soon. But there is
-ad7606 + AXI ADC support from Guillaume that was just merged that
-could make use of this. So I can send this as a stand-alone patch
-so that it can be made available for that too.
-
+> Thanks,
+> Chris
+>
+> --=20
+>
+> [1] -=20
+> https://lore.kernel.org/all/20241015225434.3970360-1-chris.packham@alli=
+edtelesis.co.nz/
+> [2] -=20
+> https://gist.github.com/cpackham-atlnz/66a0843362e8f8eb2c4f5c7ed01c5efe
+>
 
