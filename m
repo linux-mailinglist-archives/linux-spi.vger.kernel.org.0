@@ -1,187 +1,109 @@
-Return-Path: <linux-spi+bounces-5554-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5556-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EB8B9B62F4
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 13:22:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B1A49B632D
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 13:38:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 094F82820EE
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 12:22:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 124831F215CF
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 12:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C671EF92C;
-	Wed, 30 Oct 2024 12:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13E81E570B;
+	Wed, 30 Oct 2024 12:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LkGONrG6"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="rkhoYq2w"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2861EF0AE;
-	Wed, 30 Oct 2024 12:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B011E4928;
+	Wed, 30 Oct 2024 12:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730290838; cv=none; b=ucG01XGGsNIyDHRp1HeM2gYRxzBgiiGsmp9GmfYWFV6qLk56Q9J0qnyRqWTkupx86EeXkgHrQJL2kLUUf/ApxKeoR9raucucLe9PkTxSe8NiYDlPaKj1qh7sRuroo1LNiJc3iLmnufkUaNOB4i1EtdUL5lsl3eGSrYHrK0GWHu0=
+	t=1730291881; cv=none; b=ldRQc8/DVhS2z1hCdh0cTn85pDgI593WNiZSKKMz9FeTxOfgZbRvk7QupWI5aPtrcXIQMp2v+CabcbyhYdDtQWEMEuOb1H3LLsrkNzRyklKeNzQb/4kDKlUvJA6aIZiR8fXgPTGvuJWBydaMtbCVrIhNksBU+5T2CqfIZ41kqT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730290838; c=relaxed/simple;
-	bh=esnZ/WUMhCBQXUMRbAGWMLNa7kL8sal0QQHDsx1Izx4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EpvQ7ZahNNtkQVMiWeOk6Nn0/nmPAjQpcb5fjkjTWCbrYBFHBAsAVAcso8U4NA0D97dcUP9jdSNwdcNEpbTMSYLVvtoNWRVzBpLUaGBOFSQMmNJ7NXiPL/FQBYcIT8nUpssF99wdjgvcljb7jsAkr/FaQDp3PKkqgW6X6Uafujc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LkGONrG6; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49UCH968019847;
-	Wed, 30 Oct 2024 12:20:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	IuB0eUQbkbzpEAymP4QNA7JJ5H04aMJuPqmc51iNaR0=; b=LkGONrG66CIkMlXt
-	lssRhWARJoZ9KYAXYVCqijIDTf5r1mg4hUn6Al8dkMMzkPhm/h3RyOnYmFrjn4ok
-	wzNR7+vePfnZyoUUHFSVo9rh+vcINbB98hVgT77oYbgVOTzG83RRh9UgJ1VS/XPI
-	MigcoWyG8g4gNG+93MqIQAq1Lx3Mji615zdBQKM0MPwzVDu6DdYiS3lOUG1GaBRA
-	9vNJqdbjzVf6bUh2Las/Pn6ZmAZeBZTSRISY2UWnHEwXMeh2xAhdIU8kAPt9aAOM
-	GMpcsDQ/DuuPPmX4jQuLc5eFTEHNJSZgPdLe5tG7kUqvMut+wFfNljSEmo4V6ICx
-	98vytw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42kmp0g098-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Oct 2024 12:20:27 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49UCKQ2w015344
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Oct 2024 12:20:26 GMT
-Received: from hu-mdalam-blr.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 30 Oct 2024 05:20:21 -0700
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>,
-        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>
-CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_mdalam@quicinc.com>
-Subject: [PATCH v13 8/8] arm64: dts: qcom: ipq9574: Remove eMMC node
-Date: Wed, 30 Oct 2024 17:49:19 +0530
-Message-ID: <20241030121919.865716-9-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241030121919.865716-1-quic_mdalam@quicinc.com>
-References: <20241030121919.865716-1-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1730291881; c=relaxed/simple;
+	bh=1cxDQrDX+MgLwWrT/qj9xtMoo3zBblGDpJ6YsnHfvtg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=obi+UwEQzxyk7gWo4WaxH3DWj/VnVUp91nIkicqxCt/Ju/W/Kviw5L6Oc5wip2Sg/SukygkktGEhf4YZSCdGMi8PZrgXaUwUhtOL9F1GC/+ZiWF3Nwc0VR+8DsTmzkVlTBT4jKu7SqC8RdSGvfDfIV7xPzo2wLMLhzFKAwp+OZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=rkhoYq2w; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 48E56A079B;
+	Wed, 30 Oct 2024 13:37:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=8Tt0KmwBKy/brL1yb3XR
+	sgRfkqeOXAgFzAXAMIUDuIo=; b=rkhoYq2wiq4yOyIxugIPnDQW7aGSusB4MJ0a
+	xclfnc9qmJznHvVOCoGxDo0tnsBUN+tzP0LSdPu7pxb3MZYONMDalqyW5xp1U8zT
+	PBvbDSEMtsNKzQFxN7BwuXVo7w8fKYJOQ18DLQB1I8g0ilSBw6WdBx2e6pXkAdiB
+	HhzVhFEFY6zIhcCpJfWAgEwQgsOQMKaevpBOdPtY0tRsHG6yqiA7q/QCa6cuuCzG
+	P8xxL1GQprsVm9EKum/mygh3rmVOn/n4JPcsZ7ZyuQ7y/4RA59JIzWeKQmiWcoE5
+	01z3zhRWo29sTOiJAY5O8o3Rx0ZMgSGLiLCrB2TJdustAYMQLk0OHzDItwIEdFs2
+	lnwglRaSDgd2QR9XMLy2n1Tnid9G5JKV15DBg3OgNh3YTooChMhtGasuZIVJOIyw
+	ntxUW0povSR6nAriqFgfLDGxn2fYioVdsyUiw/5eXjBlrtmqZ+E0umteQkMiwzbx
+	tG0jCj7/nmTjzb6LvIq4nBrZqT9CEsqfwpvd1N/NLnkwtNXEblJzo0kf7o3LpKfX
+	tWGbUtIb2jqKCMf3C7yCK72Li/sKb++2Mkf9qfp91Q6WgntSk6LWDkLIrIyCQ3mt
+	Zn4N/UF2CsOvBTVliC4jHP2x1RQoJemF5Wp8y8qgzeodwaGZDgNofyTeOlYEyEEp
+	VL48g0U=
+Message-ID: <2b310b54-c215-40fa-b6d4-81faf75a8c9e@prolan.hu>
+Date: Wed, 30 Oct 2024 13:37:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: R0ZnfBVhFRSpJuKJKFpd_1eh7D_schIY
-X-Proofpoint-ORIG-GUID: R0ZnfBVhFRSpJuKJKFpd_1eh7D_schIY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 malwarescore=0 impostorscore=0 mlxscore=0 suspectscore=0
- adultscore=0 clxscore=1015 phishscore=0 spamscore=0 mlxlogscore=986
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2410300096
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: atmel-quadspi: Create `atmel_qspi_ops` to support
+ newer SoC families
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC: Varshini Rajendran <varshini.rajendran@microchip.com>, Mark Brown
+	<broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>
+References: <20241030084445.2438750-1-csokas.bence@prolan.hu>
+ <7cc95e52-7509-44eb-8e30-d518283e7d87@linaro.org>
+Content-Language: en-US
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <7cc95e52-7509-44eb-8e30-d518283e7d87@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94855667761
 
-Remove eMMC node for rdp433, since rdp433
-default boot mode is norplusnand
+Hi,
 
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
+On 2024. 10. 30. 12:09, Tudor Ambarus wrote:
+> I think it's fine to split sama7g5 addition in smaller steps. But please
+> add the sama7g5 support in the same patch set, otherwise this patch
+> doesn't make sense on its own.
 
-Change in [v13]
+Well, actually, we're using SAMA5D2. My goal was just to somewhat 
+harmonize upstream with the vendor kernel so that we may contribute 
+other patches that we have made on top of the latter, or in the future, 
+take patches from upstream and apply it to our vendor kernel-based tree. 
+This patch was only meant to lay the groundworks for future SAMA7G5 
+support. I can of course send the "other half" of the original patch if 
+needed, but I wouldn't want it to hold up this refactor.
 
-* No change
+> Also, if you think you significantly changed the code of authors, I
+> think it's fine to overwrite the authorship. Otherwise, try to keep the
+> authorship and specify your contributions above your S-o-b tag.
 
-Change in [v12]
+I don't know if it counts as "significantly changed", I split out parts 
+of a patch that were relevant for our device, and made small adjustments 
+to make it correctly apply to master. I didn't find a descriptive enough 
+tag for this, so I just went with Cc:, but if so desired, I could change 
+it to a S-o-b, Co-authored-by, Suggested-by etc.
 
-* Updated commit header and commit message
-
-* Removed sdhci node from rdp433.dts file
- 
-Change in [v11]
-
-* No change
-
-Change in [v10]
-
-* No change
-
-Change in [v9]
-
-* No change
-
-Change in [v8]
-
-* No change
-
-Change in [v7]
-
-* No Change
-
-Change in [v6]
-
-* Updated commit message
-
-Change in [v5]
-
-* No Change
-
-Change in [v4]
-
-* No change
-
-Change in [v3]
-
-* Removed co-developed by 
-
-Change in [v2]
-
-* Posted as initial eMMC disable patch
-
-Change in [v1]
-
-* This patch was not included in v1
-
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 12 ------------
- 1 file changed, 12 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 1bb8d96c9a82..7b5e417f9b8d 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -15,18 +15,6 @@ / {
- 	compatible = "qcom,ipq9574-ap-al02-c7", "qcom,ipq9574";
- };
- 
--&sdhc_1 {
--	pinctrl-0 = <&sdc_default_state>;
--	pinctrl-names = "default";
--	mmc-ddr-1_8v;
--	mmc-hs200-1_8v;
--	mmc-hs400-1_8v;
--	mmc-hs400-enhanced-strobe;
--	max-frequency = <384000000>;
--	bus-width = <8>;
--	status = "okay";
--};
--
- &tlmm {
- 	sdc_default_state: sdc-default-state {
- 		clk-pins {
--- 
-2.34.1
+Bence
 
 
