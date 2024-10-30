@@ -1,157 +1,117 @@
-Return-Path: <linux-spi+bounces-5538-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5539-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8182F9B5906
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 02:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A6899B599F
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 02:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C6EB1F23AA3
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 01:20:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16AE91F23EB8
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 01:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C120213774B;
-	Wed, 30 Oct 2024 01:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7EB919259B;
+	Wed, 30 Oct 2024 01:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CCzLcApt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R311AVpD"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4DD42A8B;
-	Wed, 30 Oct 2024 01:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210E813B29F;
+	Wed, 30 Oct 2024 01:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730251246; cv=none; b=UpSKQHlIp0PWB1qxRQGDsw2cyn6AWuNMAcTRSEjEnkm5+J2LxvkwmKmV91E7CdmdM5H6yN+UZPa8Yqauf1FsBwhlQPkrXTveZShnrT7kPLZEhtREwBNIEewGQwv1HKVMrSOnNJM3VAMLH+D+JZzeu3VX16nw7bK0Xod4jfIlTao=
+	t=1730253011; cv=none; b=XgB5MJ2Yaip2W4C1sEVuxO3pIhEcvqo4YapV/Hg/maJhbV9LXIe3YPVE2E5ntVG7iCuZloU/yOxlxPeIMBoUZY8xWIVt9AW50hdug/l/ckhp9BEzlsiXu5I0FjhWPbNgSqPXjCnEszValP4VnzVUyBwoIsch3Id3QLa50zxRaJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730251246; c=relaxed/simple;
-	bh=wZDiMAaOhKiJUYkYEtwy19sskMyJZD0MGmAeOQbFpJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=geYCLm0BPp6tyMsvmLrPzIhIx9wHIgtFZBuwou1KrS8jrTd2of7eO5epkSe+r6ORPX0325kJUNUhFRCfMSzHBvFs44mCmHCcN1Ivo/r33gbyJKBmY9B15ZSBXup7R9Po0PMJaTZpa4Syu8VeMVNOwQLp81DFwKVPceGPV8q8umg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CCzLcApt; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730251244; x=1761787244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wZDiMAaOhKiJUYkYEtwy19sskMyJZD0MGmAeOQbFpJU=;
-  b=CCzLcAptPu5YC1R+K8L1Bu30P0SJ9zIIanzeF930EH59gXRLVkzNUfAV
-   Dk2cMiE/Y7KPlHwONBweXKsm/YMFDtJN+vHyNofp6et/sDhzAmKkP5KYn
-   AdNMUOpc4NFOZem6Pyr9mRwVIY5PKxzuKsgeia/BeeGWKKOMDg7EtXV4J
-   tSK+rB6IgMBFWppZw53vW2kThGAv4GboL+3IgnLfG7I8D4sbyfnTZHvvj
-   pEVVnrPETBETKyKgkZ9XUtsNkXlXvhNBD3m+urxFgr4aQWqF6Jl91MbEN
-   DqPV0+fR38NU4uuVEQbzl7DgmpJgdlVWHiPmv/BazsgLse8rXM9Zijqf3
-   Q==;
-X-CSE-ConnectionGUID: QOXhr11qR3qJmnNbq8y/lA==
-X-CSE-MsgGUID: +Sx9e+K5TkqDM6MzdwjTpg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="32776934"
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="32776934"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 18:20:42 -0700
-X-CSE-ConnectionGUID: 7w0w8aZDTJqMuAYRh5XFng==
-X-CSE-MsgGUID: XTZgTvcVS7SeqeGzux2ZdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="82062035"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Oct 2024 18:20:39 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5xO0-000eMm-33;
-	Wed, 30 Oct 2024 01:20:36 +0000
-Date: Wed, 30 Oct 2024 09:20:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>,
-	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	=?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Varshini Rajendran <varshini.rajendran@microchip.com>,
-	Mark Brown <broonie@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: Re: [PATCH] spi: atmel-quadspi: Create `atmel_qspi_ops` to support
- newer SoC families
-Message-ID: <202410300915.VPL8EQQu-lkp@intel.com>
-References: <20241029125843.2384307-1-csokas.bence@prolan.hu>
+	s=arc-20240116; t=1730253011; c=relaxed/simple;
+	bh=y6+bM0zEOiH5MPMkoFS9BwHieAQZ9fNfXnP4ex+lu34=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M8m10SkqFqkZvApdlxUdBWGJN3s1XxIB3Rl3tqJxqz2aqMh2wKrMVZpIEP9NvYhduc/YPFCmL5i45w2lHEiW34BU+sQaGD8eS2EjjUw4wHqrWVOEDKGKSMVzelxKnd/s+ERLtPlndLBU1Rq+f5VkNs4f0DLYtIc8eXZsOhkDYa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R311AVpD; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b545a75b-868b-4238-94c9-d647b4da27e2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1730253006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5fASV8AOO8/1SMF1wEDZo6V3RiSsMj7qVwz3D1JJ4NY=;
+	b=R311AVpD6h39kuoBfQMZcou/TW+9M7Ha6QZbtAoMphNYN9MH0oXmGkIAvOKWCM9ZOrcPEF
+	Gjpnl216h1Ku7/fV2KC4gZvBBmk93nr+2pKh6BY8jFhAuGTUWBDpHQruAvfuy8/XQ9eypr
+	pGzGw+jnfvbeLMUijB0Y0hpPbqejZRQ=
+Date: Wed, 30 Oct 2024 09:49:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029125843.2384307-1-csokas.bence@prolan.hu>
+Subject: Re: linux: Goodbye from a Linux community volunteer
+To: Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
+ Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
+ ntb@lists.linux.dev, Andy Shevchenko <andy@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Kory Maincent <kory.maincent@bootlin.com>,
+ Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
+ Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+ Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
+ Paul Burton <paulburton@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Arnd Bergmann <arnd@arndb.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+ Vladimir Oltean <olteanv@gmail.com>, Keguang Zhang
+ <keguang.zhang@gmail.com>, Yanteng Si <siyanteng@loongson.cn>,
+ netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-hwmon@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+ linux-edac@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-serial@vger.kernel.org
+Cc: Andrew Halaney <ajhalaney@gmail.com>, Nikita Travkin <nikita@trvn.ru>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+ Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
+ Sergey Shtylyov <s.shtylyov@omp.ru>, Evgeniy Dushistov <dushistov@mail.ru>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Nikita Shubin <nikita.shubin@maquefel.me>,
+ linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yanteng Si <si.yanteng@linux.dev>
+In-Reply-To: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Bence,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on broonie-spi/for-next]
-[also build test ERROR on soc/for-next linus/master v6.12-rc5 next-20241029]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cs-k-s-Bence/spi-atmel-quadspi-Create-atmel_qspi_ops-to-support-newer-SoC-families/20241029-210231
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20241029125843.2384307-1-csokas.bence%40prolan.hu
-patch subject: [PATCH] spi: atmel-quadspi: Create `atmel_qspi_ops` to support newer SoC families
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20241030/202410300915.VPL8EQQu-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410300915.VPL8EQQu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410300915.VPL8EQQu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/spi/atmel-quadspi.c: In function 'atmel_qspi_transfer':
->> drivers/spi/atmel-quadspi.c:446:68: error: 'struct spi_device' has no member named 'master'
-     446 |         struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->master);
-         |                                                                    ^~
 
 
-vim +446 drivers/spi/atmel-quadspi.c
 
-   442	
-   443	static int atmel_qspi_transfer(struct spi_mem *mem,
-   444				       const struct spi_mem_op *op, u32 offset)
-   445	{
- > 446		struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->master);
-   447	
-   448		/* Skip to the final steps if there is no data */
-   449		if (!op->data.nbytes)
-   450			return atmel_qspi_wait_for_completion(aq,
-   451							      QSPI_SR_CMD_COMPLETED);
-   452	
-   453		/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
-   454		(void)atmel_qspi_read(aq, QSPI_IFR);
-   455	
-   456		/* Send/Receive data */
-   457		if (op->data.dir == SPI_MEM_DATA_IN)
-   458			memcpy_fromio(op->data.buf.in, aq->mem + offset,
-   459				      op->data.nbytes);
-   460		else
-   461			memcpy_toio(aq->mem + offset, op->data.buf.out,
-   462				    op->data.nbytes);
-   463	
-   464		/* Release the chip-select */
-   465		atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
-   466	
-   467		return atmel_qspi_wait_for_completion(aq, QSPI_SR_CMD_COMPLETED);
-   468	}
-   469	
+在 2024/10/24 12:27, Serge Semin 写道:
+> Yoshihiro, Keguang, Yanteng, Kory, Cai and everybody I was lucky to meet in the
+> kernel mailing lists, but forgot to mention here. Thank you for the time spent
+> for our cooperative work on making the Linux kernel better. It was a pleasure to
+> meet you here.
+I am also deeply delighted to meet you here. In the process of 
+collaborating with you,
+I have gained a lot and am really full of gratitude.
+>
+> Hope we'll meet someday in more pleasant circumstances and drink a
+> couple or more beers together. But now it's time to say good bye.
+Let's spend more of our spare time on enjoying life.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yanteng
+>
+> Best Regards,
+> -Serge(y)
+>
+
 
