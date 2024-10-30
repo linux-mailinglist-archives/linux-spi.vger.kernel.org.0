@@ -1,56 +1,74 @@
-Return-Path: <linux-spi+bounces-5557-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5558-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016759B6353
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 13:49:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69D4B9B635A
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 13:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78BDC1F21090
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 12:49:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 210261F210AA
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 12:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52A71E909E;
-	Wed, 30 Oct 2024 12:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EB81E47AC;
+	Wed, 30 Oct 2024 12:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b="UxbVmpXW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nQ2F/0B6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8B51E9066;
-	Wed, 30 Oct 2024 12:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B2B1E9077
+	for <linux-spi@vger.kernel.org>; Wed, 30 Oct 2024 12:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292587; cv=none; b=tTBqZdEbrR6j1L0WV7aTvrbcOhp/wn9myBG0TKQ41+VmI7zMf/vLPnnQ3SObAXUxNib8+KZSeq2WwNNb5gaW0B3EWrIXWMvnIWgYe87vsFdynU1jQkUGlhHc8rhruVblYSNNLDzGL6HN/LiSTcBAu0DPFBBKeHW1gEjswYBiS5o=
+	t=1730292595; cv=none; b=Z/T7Lw+Y6VN0dN+/6/5J3069U+KGaUHkIk0R7clPLTWl8MHkYdKyCZpoRoqEZjveRg7wdtkXRn8Xi+xA5Ngo0hfTJOIyA+fwPYCrFmwjcHQWuW9/E/y6i+2mJmZPFWejx9EQ4EfMa3ErDz2zxvPYGgWkCsUqC2xsqLzT+D2ek1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292587; c=relaxed/simple;
-	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
+	s=arc-20240116; t=1730292595; c=relaxed/simple;
+	bh=Xskowo2JrKgiuEf/ASq0/MvwNY+jLhWDLYQZVeMyCY8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OwPtEP3D/a3ACyOXZS2HVEF7dK4/AyQzb7VLQfdEEomhe6oS+Wz9o41KmnN58L7qj/wMkMw8u5ZvVbt358Yhv9Zw6qkgwitjzfxDke2GpKYJhYWjgfsw/BeqqrEz3yQsIn5ofkeUQig1lHEeQsLzi6uuc1Xt8nVL0jQS790QoDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=metux@gmx.de header.b=UxbVmpXW; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1730292502; x=1730897302; i=metux@gmx.de;
-	bh=+YCnTpHf4kgqcsvGPEJmRwKHA8R5k5OeoiGplCCzf7Q=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=UxbVmpXWvyWFMdu+GATuiw1ytz1oNpvm5GNdgPbapjupaP25dsmWNYV/SdmkFCpE
-	 VX+3bwgCyi7J1vZWt8hxBFNjCqYXAs/90EF5MTi5XI4T3wPAud49gsLSmSGWAgCFH
-	 L/MlMEdcnBrC3Z6I/Y0EX4qgIzoVFOZM2ueUS8NENLEQofE14R0wXa31OvlhCEm1F
-	 9lgOEB79j/9vjsYX9KbXu2T/UCUxO61Yl+VZqyc98kF/0soDrfczquDVKjoNkb+Qg
-	 C3a2MT2iG3Shr2kXGTjhv+n6z7zTnhYsIVyC7TaB+61rRJr4ZYE9Z0EHkdrRrpF0j
-	 0MTyH7Gn6TRMn1XJ3Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.178] ([95.114.207.188]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MUXpK-1tExqH3yV6-00WDT5; Wed, 30
- Oct 2024 13:48:22 +0100
-Message-ID: <d769ffcf-95e6-4db9-8f80-fe8a7dae0441@gmx.de>
-Date: Wed, 30 Oct 2024 13:48:45 +0100
+	 In-Reply-To:Content-Type; b=kFSigcsv0FRgOZTB/ZagbcewTmDk907T40R0cBwmve9i/3hqjCDXtkwnEwv2T5uFmPeoldQ8xjE54R4x9aifVxoLi3YGVui0iHQVDAPNQMGBYGSFM+RTtnDUpbB+u7pWJlTRepqpKbOr8yoI+oUde4xx6hBjhd/WT4cf74ckVr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nQ2F/0B6; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d4c1b1455so4185753f8f.3
+        for <linux-spi@vger.kernel.org>; Wed, 30 Oct 2024 05:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730292591; x=1730897391; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UyVmo4JQBKeEzxnePKos+ThEBHZ99otuDsHDx5ry1v4=;
+        b=nQ2F/0B6ISiM5oai4+JYTHAInrdqo42RiIk0hEGiooKvHpX2d5wJZBrTypzwsCqAr9
+         CyIBGEmKs/7MpCNwgYjq5YXE+WzyXD4aEUQm48Dn2mopjqrWEHEgVMu7kM0KGZnHXxcQ
+         q6guiK4gz6mfINoNvDh9I/0CbQiGIuB9FWPgWrCoXhjMh8iKtJvPJ1KwCCSmJ4YB0T/4
+         K36T2jhfjY7qKV8pMTvTQ/KGG3HVIX3Evza5PQVkU2DwysajfPObUkB0YUJMOo8XfdW0
+         hH4uI5QocdkPB282q77cw7LJspsvxtO0BvpJj2TATet64wqROGZd/lKvragoS5lljgFG
+         a8bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730292591; x=1730897391;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UyVmo4JQBKeEzxnePKos+ThEBHZ99otuDsHDx5ry1v4=;
+        b=q+LvHYGqKsdwJrcG1vQc+FbF4e4BQlKcy+SgT8YeQx2g64cP1nq56CiyvoZ+ZLGj46
+         3WiKJM+FUzqw/tTJ4JucVy83Nzvbe6JGDlvvjuVyxM1EX2cQ2dB4Nb68bELL00KtiCoU
+         xcTU5nKwaWgSOJMNOcgOLL1xVuJyCyFWPHQq9Zd3jwtC9lUvq0CFzjsrg6S1Whp5aEdk
+         Ag4iE8oIx5Lcox4rDIciz93obXoyXoZAumcOPah8t03E2ipD7pmR2EknKGOjVnu7a/Pq
+         yYB1p40Enihmrj9JQwRyAHYNKHvSiSGsds26kmxJGM0C76y7R/CRQiLWN1LrtGlfo7yn
+         MxhA==
+X-Forwarded-Encrypted: i=1; AJvYcCXx0IfpQ5S+iYtyIRiZ+2NICEFVZ3BSI88bgMX+iWEp7lgdc8fpFt2paBiC52zTffkUqkDFeJuV8/0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymjiGJzap5b25sClL66DJ8BFWfqW3qCESe9FRyP+Eh1Zom6DS7
+	YHOoTGVxz7+a1n2A9jeS8tEX7frzYufElZIJmM9jOBE2gz9ONWdVmfei3ckrpE4=
+X-Google-Smtp-Source: AGHT+IENv7pio/IJPFsHAGkR/WlrAiR0sRTKsv+efTJpMs8r1AenabTe5ZXSkASO6Q+2w1i9twimHg==
+X-Received: by 2002:adf:a45d:0:b0:37e:d2ba:6f11 with SMTP id ffacd0b85a97d-381b70effc4mr2397016f8f.47.1730292591257;
+        Wed, 30 Oct 2024 05:49:51 -0700 (PDT)
+Received: from [192.168.0.157] ([79.115.63.43])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b70bc1sm15427544f8f.70.2024.10.30.05.49.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Oct 2024 05:49:50 -0700 (PDT)
+Message-ID: <2634dc58-84fc-429e-9e78-1b8a6a757483@linaro.org>
+Date: Wed, 30 Oct 2024 12:49:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,71 +76,69 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: lore.kernel.org getting senile ? [WAS: [PATCH 1/2] MAINTAINERS:
- Remove Huawei due to compilance requirements.
-To: Vladimir Vladimirovich Putin <vladimir_putin_rus@kremlin.ru>,
- torvalds@linux-foundation.org
-Cc: aospan@netup.ru, conor.dooley@microchip.com, ddrokosov@sberdevices.ru,
- dmaengine@vger.kernel.org, dushistov@mail.ru, fancer.lancer@gmail.com,
- geert@linux-m68k.org, gregkh@linuxfoundation.org,
- hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru, jeffbai@aosc.io,
- kexybiscuit@aosc.io, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-fpga@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-spi@vger.kernel.org,
- manivannan.sadhasivam@linaro.org, mattst88@gmail.com,
- netdev@vger.kernel.org, nikita@trvn.ru, ntb@lists.linux.dev,
- patches@lists.linux.dev, richard.henderson@linaro.org, s.shtylyov@omp.ru,
- serjk@netup.ru, shc_work@mail.ru, torvic9@mailbox.org,
- tsbogend@alpha.franken.de, v.georgiev@metrotek.ru, wangyuli@uniontech.com,
- wsa+renesas@sang-engineering.com, xeb@mail.ru,
- LKML <linux-kernel@vger.kernel.org>, phoronix@phoronix.com,
- redaktion@golem.de
-References: <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
- <20241024140353.384881-1-vladimir_putin_rus@kremlin.ru>
- <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
-Content-Language: tl
-From: metux <metux@gmx.de>
-In-Reply-To: <20241024140353.384881-2-vladimir_putin_rus@kremlin.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1/p4ha3marvAu2CXeYNmBSD+weQhVbztKCP0nISPKnffRdbsPI3
- zPctzMmHLcQZTqlh2zjZzgis1SjXx91Sovsuto7k7PtiaIGSg5OcFzLBWgRcu14kWBAZy2V
- 6iBOO6GAd+WQX6yFBtItp11ISEXll6ojoO2a1WoqxVo2LnaaL9WPMNYPLxG752dUTxTITZF
- LcInJHKfb0M4bP+h7xstA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:4vaZnIPP94U=;1c9up5UAbh4Ag/QzXUXNQvA2l0p
- 44Ceg39Q9FQgjnuFRb4ctiEQZ6+ThY3ohI4R7ghaxJvwW9GLmQklj8ELuO6HJZM3haO1kBQuj
- lPf9DjnCWUfcGZ6Ecr8v4m+aEFlTj6r1/zlhPs8EVJwnS4Pe706PuXTBJpkg5WIn7GxOQO2JW
- XajGhvRcjBrJhZNk7taO4FNBbp5dLDGkB6UepQiBXV68RMT6oTpFOwswwn3/eBeat+lHalNB/
- gw+WciTtplBXIMbtRlqxaAJboJIHQLy0eXfzWRe/U26hY4FalvSL6RW63w2giJVSyCEe63Xf2
- pnU7T294h4NAY+Lk1Uh+0usTGhMn+kqSHhbyz6XuQ9SUym/02iNMzOAUQU4B9rMEU5q6ZVIUd
- 0PZ3f2zoM/AhE/8kfql73M86UBv0ANHdx6CqwXixMw8ZaIdo+GaFI0OcAUT9fQKIyYZczFTBp
- AGABaZ971CQOkfqz9ZNcYAdXDG9laz6+7WLmruYJKXEeAyGdx7twTMJrs8FULcTe1ZOzQm3ZB
- DT9XeRboVEyBNz53wj4/qAD1UsQODVRq/XAMxGruSGXdp9S8U1GLjLvbeblVDHTp4i143RIfc
- UOHfXVzYXn7bC0uCHBJq1Wwe+j/PPMUEteRmxPqlOJxW/zJnk/+MhQ+nsjD3nQeqM4mO62C+8
- cGyUVjqqCH9JFck+CUdFeZs+muR6CcuaNof+jRlxFMXiRxLHv+44RU3hyg04PrdKE21G5zjmC
- EK9fu4IcYIpfrqOOb5TemzZQb0+1b1bsoLkyszrXyxOXZlQryGt702z9+snDKhQG4NhdmMGOd
- ZwypTOh+SvzsGp5g+0qej1rGVGE9aJPkSwI0X0drGzsuc=
-
-On 24.10.24 16:03, Vladimir Vladimirovich Putin wrote:
-> Huawei Corp was added to the US Entity List[1] on 08/20/2020.
->
-> The Entity List is a trade restriction list published by the United
-> States Department of Commerce's Bureau of Industry and Security (BIS),
-> consisting of certain foreign persons, entities, or governments.
-> It is published as Supplement 4 of Part 744 of the Code
-> of Federal Regulations. [2]
-
-Interesting to see that this message got removed from lore.kernel.org.
-
-Google still has it in it's index, and marc.info still has the whole threa=
-d.
-
-The internet doesn't forget.
+Subject: Re: [PATCH v2] spi: atmel-quadspi: Create `atmel_qspi_ops` to support
+ newer SoC families
+To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>,
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Cc: Varshini Rajendran <varshini.rajendran@microchip.com>,
+ Mark Brown <broonie@kernel.org>, Nicolas Ferre
+ <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+References: <20241030084445.2438750-1-csokas.bence@prolan.hu>
+ <7cc95e52-7509-44eb-8e30-d518283e7d87@linaro.org>
+ <2b310b54-c215-40fa-b6d4-81faf75a8c9e@prolan.hu>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <2b310b54-c215-40fa-b6d4-81faf75a8c9e@prolan.hu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-=2D-mtx
+
+On 10/30/24 12:37 PM, Csókás Bence wrote:
+> Hi,
+
+Hi!
+
+> 
+> On 2024. 10. 30. 12:09, Tudor Ambarus wrote:
+>> I think it's fine to split sama7g5 addition in smaller steps. But please
+>> add the sama7g5 support in the same patch set, otherwise this patch
+>> doesn't make sense on its own.
+> 
+> Well, actually, we're using SAMA5D2. My goal was just to somewhat
+> harmonize upstream with the vendor kernel so that we may contribute
+> other patches that we have made on top of the latter, or in the future,
+> take patches from upstream and apply it to our vendor kernel-based tree.
+> This patch was only meant to lay the groundworks for future SAMA7G5
+> support. I can of course send the "other half" of the original patch if
+> needed, but I wouldn't want it to hold up this refactor.
+
+Do you have a sama7g5 at hand? If not and unable to test it, it's
+probably better to not touch that code, unless you get support from
+someone to do the testing for you.
+
+I still think that this patch on its own doesn't make sense without the
+sama7g5 addition because nothing guarantees that sama7g5 will be added
+on top of this. But I won't stand against your patch. Maybe others from
+Cc find it fine.
+
+> 
+>> Also, if you think you significantly changed the code of authors, I
+>> think it's fine to overwrite the authorship. Otherwise, try to keep the
+>> authorship and specify your contributions above your S-o-b tag.
+> 
+> I don't know if it counts as "significantly changed", I split out parts
+> of a patch that were relevant for our device, and made small adjustments
+> to make it correctly apply to master. I didn't find a descriptive enough
+> tag for this, so I just went with Cc:, but if so desired, I could change
+> it to a S-o-b, Co-authored-by, Suggested-by etc.
+> 
+I think it's fine if you keep your authorship for this refactoring
+patch, I was thinking more of the bulk of the sama7g5 changes.
+
+Cheers and good luck!
+ta
 
