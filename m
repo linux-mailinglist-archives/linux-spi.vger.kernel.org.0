@@ -1,216 +1,282 @@
-Return-Path: <linux-spi+bounces-5540-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5541-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 763729B5BE8
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 07:44:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97DA29B5E1A
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 09:45:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A062B1C20B65
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 06:44:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 261391F2252E
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Oct 2024 08:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D74D1D1309;
-	Wed, 30 Oct 2024 06:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E66B190486;
+	Wed, 30 Oct 2024 08:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IDDg2PS8"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="hKbnog0k"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2761D0E27;
-	Wed, 30 Oct 2024 06:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BBE149C64;
+	Wed, 30 Oct 2024 08:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730270645; cv=none; b=QVMnzMCMhb+ilX4jp516V0EU3gHPxjWPY7bK9XzcmTEZrorBuvbbx5VpW1leIFr4DaX7LHtP6N4wIkYkAjCiJJzc30BIa49OH/dBuprcPUzSUpBJDeGMZhqxslwN2rnQ2ISMCx3MzwFvJaiRpSot8BDGYmjgwcPt5auYEsCfMuY=
+	t=1730277926; cv=none; b=br+0jSo7NVkiuAtt5pkxP5FtbBKqmNkTCXhHdoKGJzjROTn/DwJBZs/ODlN4UR2+rDUCZM0At3ajBqTX4mSoUEQH6iqTq05R1/8sOgd0I5DTcpxwOmVgSF0oO1XTP4w8omtMjY3OMhzvJ3zdbGpdqOFRfcPo1JSl7SpfE2QGy9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730270645; c=relaxed/simple;
-	bh=0T+E7OV6n+a0eK67ylsHRGryyoU3pd01WCTFw4Kmrz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Udc7o4HAoNZuEWe8g8aDp4UK/SNtI88NUybipFvV2djH3ah3lrsehdheuodmuPzekPR9647jQoHDMlABAb3fDdHdq30j51kS9xn/+Rv0WlIY7y9JiYVDioan/T9PBtZIFrwp2eXeUAvKdR9DAso953d1x0111fuRe8y1M0UxEsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IDDg2PS8; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730270640; x=1761806640;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0T+E7OV6n+a0eK67ylsHRGryyoU3pd01WCTFw4Kmrz4=;
-  b=IDDg2PS8ZoOavwk/M89fmIwqqESvRrzTCiLcB78CIm2vWTybyO3Bao49
-   0+hcCPi5CRfMqIvynrJW1XbGrKcJkSBwaZSvJa68XYJNWiZxAbXTQsRct
-   RLhcBNG3GxQsFOyJuWR1RBoQ4M03tQsHwmvhSj+OnNM2b1rW6BufzL5XC
-   iMRwjPT3Gjz5QMxRizQyN540F+m+yFo00P7by2ABO9XDi5PlnSysV4MR+
-   242od0LQ94Agnm+XXWHIaLErzb4bRpPOQcorEFrhmeUpk89x7cIf5Bk8f
-   vMfP2wEG9NlPjRILyFCPUqRlQzyMRqSjpa085sK4HmDs3ldpxrkAiV3Yl
-   g==;
-X-CSE-ConnectionGUID: gw1idrFPSdKdSP5jgtyXyw==
-X-CSE-MsgGUID: ClZNH7i/REueB+emmvGfmQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="40532736"
-X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
-   d="scan'208";a="40532736"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 23:43:59 -0700
-X-CSE-ConnectionGUID: Z1UfAt+GTX+2holsnhEt0Q==
-X-CSE-MsgGUID: lyQQ4C04RD6jJ07K55ldXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
-   d="scan'208";a="82298268"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 29 Oct 2024 23:43:57 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t62Qs-000eb2-1u;
-	Wed, 30 Oct 2024 06:43:54 +0000
-Date: Wed, 30 Oct 2024 14:42:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, broonie@kernel.org,
-	miquel.raynal@bootlin.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH] spi: spi-mem: rtl-snand: Correctly handle DMA transfers
-Message-ID: <202410301452.7koB3V8S-lkp@intel.com>
-References: <20241029215159.1975844-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1730277926; c=relaxed/simple;
+	bh=DjrKVkjupKb3hhQGkeCeNIG5gSTj6ohY3jj7zadFT4A=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RBHBqFOH6+ARRVMaBFiX+CllYpJEjzrywZRiAxkL/uEhlN0D8CIaP8RQKCWceBMG2rOH9lxPFY66ElJR5dpSn5CZnlUnSWgMQS9z6l5himojhk573yMlLlp2fnXpAnD9N66k2q+gmpVtiIIj3g/N6o7a0O5F/RgFBZZ95lkc9mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=hKbnog0k; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id BD22FA11B6;
+	Wed, 30 Oct 2024 09:45:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=pCTs7xE1RNDjOAhXIwJf35Ye4AhjEVbQRROagoMzs9M=; b=
+	hKbnog0k6h+HIXxGMurg+nml0X6WXIn5lG2XxzpBOxmO9phmczQsE0Ls7CoIkhCF
+	h4tf10MLv1VQSp/STabqL6oOywt/sdbVRp3nu2cU6drXIq8rHBUlFz+QAUokHp9j
+	vWLzsLP00CqjMFhCIv9DqQU6xapuFhYyfXCXOFbcTU5gFNAt5JpnPzkNsgpU9y3E
+	yzzBR8TP2O2VjmErg4EMsx3n6AuLfIZfYbsNEVItEqXUdF5+yiHL1k3fhS8+n7Oq
+	TQLZBb/xNULYZK8g3ohtmsv8aBjFZrPbrMfssnKUCk1733DDURhQzYlj284ulbbo
+	RfVB5kxbkpQykVu5jsLPsW0k3iE0xWZ3EeSHjqaJkoALEugCRbszR+MANLCn8ejk
+	ToFwZ5v03vbNPc8lOdxcGYjvIqUDUfjG/xDbAgH1HKpnEiwiO8amJBthOR9UuArg
+	uC+4R2Ym9Y+anBkywKz1Jd/Y/pJJicL11y6i7c6Nsxt8DkV0MuE+9X4Ps0D4uSyu
+	eE1CL3lH3DHcBetJO1c/IxFz0DcXaV7ApzvxjDpFW8J49uxQ0XF4hfggGGawtMgk
+	OTYm51/Bqmo59x2NXBhoMyiuBkT5mB0xNftFUghNNHQaSxfwqm+6nUIpNRFFxMMv
+	/JNmrSHtg5shKP7Kwp80DeD1F+BguUJGBV3sDksZLjo=
+From: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>
+To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Tudor
+ Ambarus" <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Mark Brown <broonie@kernel.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: [PATCH v2] spi: atmel-quadspi: Create `atmel_qspi_ops` to support newer SoC families
+Date: Wed, 30 Oct 2024 09:44:46 +0100
+Message-ID: <20241030084445.2438750-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241029215159.1975844-1-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1730277917;VERSION=7979;MC=2867805427;ID=197345;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94855667763
 
-Hi Chris,
+Refactor the code to introduce an ops struct, to prepare for merging
+support for later SoCs, such as SAMA7G5. This code was based on the
+vendor's kernel (linux4microchip). Cc'ing original contributors.
 
-kernel test robot noticed the following build warnings:
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Varshini Rajendran <varshini.rajendran@microchip.com>
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on next-20241029]
-[cannot apply to linus/master v6.12-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
+---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/spi-spi-mem-rtl-snand-Correctly-handle-DMA-transfers/20241030-055313
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20241029215159.1975844-1-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH] spi: spi-mem: rtl-snand: Correctly handle DMA transfers
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20241030/202410301452.7koB3V8S-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241030/202410301452.7koB3V8S-lkp@intel.com/reproduce)
+Notes:
+    Changes in v2:
+    * Remove obsolete SPI naming
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410301452.7koB3V8S-lkp@intel.com/
+ drivers/spi/atmel-quadspi.c | 111 +++++++++++++++++++++++++-----------
+ 1 file changed, 77 insertions(+), 34 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-realtek-rtl-snand.c: In function 'rtl_snand_dma_xfer':
->> drivers/spi/spi-realtek-rtl-snand.c:252:21: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     252 |                 buf = op->data.buf.out;
-         |                     ^
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [m]:
-   - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
-
-
-vim +/const +252 drivers/spi/spi-realtek-rtl-snand.c
-
-   231	
-   232	static int rtl_snand_dma_xfer(struct rtl_snand *snand, int cs, const struct spi_mem_op *op)
-   233	{
-   234		unsigned int pos, nbytes;
-   235		int ret;
-   236		dma_addr_t buf_dma;
-   237		enum dma_data_direction dir;
-   238		u32 trig, len, maxlen;
-   239		void *buf;
-   240	
-   241		ret = rtl_snand_xfer_head(snand, cs, op);
-   242		if (ret)
-   243			goto out_deselect;
-   244	
-   245		if (op->data.dir == SPI_MEM_DATA_IN) {
-   246			maxlen = 2080;
-   247			buf = op->data.buf.in;
-   248			dir = DMA_FROM_DEVICE;
-   249			trig = 0;
-   250		} else if (op->data.dir == SPI_MEM_DATA_OUT) {
-   251			maxlen = 520;
- > 252			buf = op->data.buf.out;
-   253			dir = DMA_TO_DEVICE;
-   254			trig = 1;
-   255		} else {
-   256			ret = -EOPNOTSUPP;
-   257			goto out_deselect;
-   258		}
-   259	
-   260		buf_dma = dma_map_single(snand->dev, buf, op->data.nbytes, dir);
-   261		ret = dma_mapping_error(snand->dev, buf_dma);
-   262		if (ret)
-   263			goto out_deselect;
-   264	
-   265		ret = regmap_write(snand->regmap, SNAFDIR, SNAFDIR_DMA_IP);
-   266		if (ret)
-   267			goto out_unmap;
-   268	
-   269		ret = regmap_update_bits(snand->regmap, SNAFCFR, SNAFCFR_DMA_IE, SNAFCFR_DMA_IE);
-   270		if (ret)
-   271			goto out_unmap;
-   272	
-   273		pos = 0;
-   274		len = op->data.nbytes;
-   275	
-   276		while (pos < len) {
-   277			nbytes = len - pos;
-   278			if (nbytes > maxlen)
-   279				nbytes = maxlen;
-   280	
-   281			reinit_completion(&snand->comp);
-   282	
-   283			ret = regmap_write(snand->regmap, SNAFDRSAR, buf_dma + pos);
-   284			if (ret)
-   285				goto out_disable_int;
-   286	
-   287			pos += nbytes;
-   288	
-   289			ret = regmap_write(snand->regmap, SNAFDLR,
-   290					CMR_WID(op->data.buswidth) | nbytes);
-   291			if (ret)
-   292				goto out_disable_int;
-   293	
-   294			ret = regmap_write(snand->regmap, SNAFDTR, trig);
-   295			if (ret)
-   296				goto out_disable_int;
-   297	
-   298			if (!wait_for_completion_timeout(&snand->comp, usecs_to_jiffies(20000)))
-   299				ret = -ETIMEDOUT;
-   300	
-   301			if (ret)
-   302				goto out_disable_int;
-   303		}
-   304	
-   305	out_disable_int:
-   306		regmap_update_bits(snand->regmap, SNAFCFR, SNAFCFR_DMA_IE, 0);
-   307	out_unmap:
-   308		dma_unmap_single(snand->dev, buf_dma, op->data.nbytes, dir);
-   309	out_deselect:
-   310		rtl_snand_xfer_tail(snand, cs);
-   311	
-   312		if (ret)
-   313			dev_err(snand->dev, "transfer failed %d\n", ret);
-   314	
-   315		return ret;
-   316	}
-   317	
-
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index 95cdfc28361e..1d256ab3f7f2 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -138,11 +138,15 @@
+ #define QSPI_WPSR_WPVSRC_MASK           GENMASK(15, 8)
+ #define QSPI_WPSR_WPVSRC(src)           (((src) << 8) & QSPI_WPSR_WPVSRC)
+ 
++#define ATMEL_QSPI_TIMEOUT		1000	/* ms */
++
+ struct atmel_qspi_caps {
+ 	bool has_qspick;
+ 	bool has_ricr;
+ };
+ 
++struct atmel_qspi_ops;
++
+ struct atmel_qspi {
+ 	void __iomem		*regs;
+ 	void __iomem		*mem;
+@@ -150,13 +154,22 @@ struct atmel_qspi {
+ 	struct clk		*qspick;
+ 	struct platform_device	*pdev;
+ 	const struct atmel_qspi_caps *caps;
++	const struct atmel_qspi_ops *ops;
+ 	resource_size_t		mmap_size;
+ 	u32			pending;
++	u32			irq_mask;
+ 	u32			mr;
+ 	u32			scr;
+ 	struct completion	cmd_completion;
+ };
+ 
++struct atmel_qspi_ops {
++	int (*set_cfg)(struct atmel_qspi *aq, const struct spi_mem_op *op,
++		       u32 *offset);
++	int (*transfer)(struct spi_mem *mem, const struct spi_mem_op *op,
++			u32 offset);
++};
++
+ struct atmel_qspi_mode {
+ 	u8 cmd_buswidth;
+ 	u8 addr_buswidth;
+@@ -404,10 +417,60 @@ static int atmel_qspi_set_cfg(struct atmel_qspi *aq,
+ 	return 0;
+ }
+ 
++static int atmel_qspi_wait_for_completion(struct atmel_qspi *aq, u32 irq_mask)
++{
++	int err = 0;
++	u32 sr;
++
++	/* Poll INSTRuction End status */
++	sr = atmel_qspi_read(aq, QSPI_SR);
++	if ((sr & irq_mask) == irq_mask)
++		return 0;
++
++	/* Wait for INSTRuction End interrupt */
++	reinit_completion(&aq->cmd_completion);
++	aq->pending = sr & irq_mask;
++	aq->irq_mask = irq_mask;
++	atmel_qspi_write(irq_mask, aq, QSPI_IER);
++	if (!wait_for_completion_timeout(&aq->cmd_completion,
++					 msecs_to_jiffies(ATMEL_QSPI_TIMEOUT)))
++		err = -ETIMEDOUT;
++	atmel_qspi_write(irq_mask, aq, QSPI_IDR);
++
++	return err;
++}
++
++static int atmel_qspi_transfer(struct spi_mem *mem,
++			       const struct spi_mem_op *op, u32 offset)
++{
++	struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->controller);
++
++	/* Skip to the final steps if there is no data */
++	if (!op->data.nbytes)
++		return atmel_qspi_wait_for_completion(aq,
++						      QSPI_SR_CMD_COMPLETED);
++
++	/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
++	(void)atmel_qspi_read(aq, QSPI_IFR);
++
++	/* Send/Receive data */
++	if (op->data.dir == SPI_MEM_DATA_IN)
++		memcpy_fromio(op->data.buf.in, aq->mem + offset,
++			      op->data.nbytes);
++	else
++		memcpy_toio(aq->mem + offset, op->data.buf.out,
++			    op->data.nbytes);
++
++	/* Release the chip-select */
++	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
++
++	return atmel_qspi_wait_for_completion(aq, QSPI_SR_CMD_COMPLETED);
++}
++
+ static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	struct atmel_qspi *aq = spi_controller_get_devdata(mem->spi->controller);
+-	u32 sr, offset;
++	u32 offset;
+ 	int err;
+ 
+ 	/*
+@@ -416,46 +479,20 @@ static int atmel_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	 * when the flash memories overrun the controller's memory space.
+ 	 */
+ 	if (op->addr.val + op->data.nbytes > aq->mmap_size)
+-		return -ENOTSUPP;
++		return -EOPNOTSUPP;
++
++	if (op->addr.nbytes > 4)
++		return -EOPNOTSUPP;
+ 
+ 	err = pm_runtime_resume_and_get(&aq->pdev->dev);
+ 	if (err < 0)
+ 		return err;
+ 
+-	err = atmel_qspi_set_cfg(aq, op, &offset);
++	err = aq->ops->set_cfg(aq, op, &offset);
+ 	if (err)
+ 		goto pm_runtime_put;
+ 
+-	/* Skip to the final steps if there is no data */
+-	if (op->data.nbytes) {
+-		/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
+-		(void)atmel_qspi_read(aq, QSPI_IFR);
+-
+-		/* Send/Receive data */
+-		if (op->data.dir == SPI_MEM_DATA_IN)
+-			memcpy_fromio(op->data.buf.in, aq->mem + offset,
+-				      op->data.nbytes);
+-		else
+-			memcpy_toio(aq->mem + offset, op->data.buf.out,
+-				    op->data.nbytes);
+-
+-		/* Release the chip-select */
+-		atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
+-	}
+-
+-	/* Poll INSTRuction End status */
+-	sr = atmel_qspi_read(aq, QSPI_SR);
+-	if ((sr & QSPI_SR_CMD_COMPLETED) == QSPI_SR_CMD_COMPLETED)
+-		goto pm_runtime_put;
+-
+-	/* Wait for INSTRuction End interrupt */
+-	reinit_completion(&aq->cmd_completion);
+-	aq->pending = sr & QSPI_SR_CMD_COMPLETED;
+-	atmel_qspi_write(QSPI_SR_CMD_COMPLETED, aq, QSPI_IER);
+-	if (!wait_for_completion_timeout(&aq->cmd_completion,
+-					 msecs_to_jiffies(1000)))
+-		err = -ETIMEDOUT;
+-	atmel_qspi_write(QSPI_SR_CMD_COMPLETED, aq, QSPI_IDR);
++	err = aq->ops->transfer(mem, op, offset);
+ 
+ pm_runtime_put:
+ 	pm_runtime_mark_last_busy(&aq->pdev->dev);
+@@ -571,12 +608,17 @@ static irqreturn_t atmel_qspi_interrupt(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	aq->pending |= pending;
+-	if ((aq->pending & QSPI_SR_CMD_COMPLETED) == QSPI_SR_CMD_COMPLETED)
++	if ((aq->pending & aq->irq_mask) == aq->irq_mask)
+ 		complete(&aq->cmd_completion);
+ 
+ 	return IRQ_HANDLED;
+ }
+ 
++static const struct atmel_qspi_ops atmel_qspi_ops = {
++	.set_cfg = atmel_qspi_set_cfg,
++	.transfer = atmel_qspi_transfer,
++};
++
+ static int atmel_qspi_probe(struct platform_device *pdev)
+ {
+ 	struct spi_controller *ctrl;
+@@ -601,6 +643,7 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 
+ 	init_completion(&aq->cmd_completion);
+ 	aq->pdev = pdev;
++	aq->ops = &atmel_qspi_ops;
+ 
+ 	/* Map the registers */
+ 	aq->regs = devm_platform_ioremap_resource_byname(pdev, "qspi_base");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
+
 
