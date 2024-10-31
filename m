@@ -1,106 +1,123 @@
-Return-Path: <linux-spi+bounces-5574-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5575-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96D5D9B8094
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 17:49:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDD1E9B8266
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 19:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B186B21391
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 16:49:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 343A91C2141D
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 18:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE741465A5;
-	Thu, 31 Oct 2024 16:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431FA1C8FBA;
+	Thu, 31 Oct 2024 18:16:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="QCHPpQIy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoWxXegU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267531B5ED6
-	for <linux-spi@vger.kernel.org>; Thu, 31 Oct 2024 16:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B07B1BD501;
+	Thu, 31 Oct 2024 18:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730393376; cv=none; b=OLpFjQH3rKfg256Hu68jy+K/GeCTc0uOuqhASvRtQMLrDn0owD7UQ0TUP9RdHgwacG/vH+7JdX93Ueadh1SYOaIXseRzUlSGdtFqre/zh3yiOuPbiMjWXqIX2YbUNEeyCCyDHIbywM6f8B/vayvQPK/Y4CuUFAZ5aybsMnIHd9k=
+	t=1730398576; cv=none; b=QLxR3YE2C+DVV/YRps68yWcpRsP4Uh/TZsAjWgrn0jjFgnQr3/60bUiaoyR64Wwjq4bWJZnjsfsRuZ0EIoluYQTO56NGmel3TWY4EUKVcUqwBXfgq9XDRJ6Gb5ds7d75FPaXDh0OnAZUKDFkyav4i4FQsD4I6Z2cpZqbYtVtcN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730393376; c=relaxed/simple;
-	bh=OSxiy8GRUoekUaEMakOMkmdOVD+6rbE34rWZ/k4TEXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ujrwBAfBgQ7hkf9a0Bf2PFh0CxNN4LkRhKK9t30Z5s7rjn7QKAvp3X5nGD/aUOxPIjozQGOPEGPjPt2fMYivXhJXAs6MNX1X8hDkEEF+9i5XRa3zU4X4ivoN/Hk/sC9GmSQ+SzYu17W/zjBDXpdvSACRwmunRtJHKUX8Ofsnh20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=QCHPpQIy; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-71808e95ae2so853308a34.0
-        for <linux-spi@vger.kernel.org>; Thu, 31 Oct 2024 09:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1730393372; x=1730998172; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jbNCcry4Jdp8tstQ1PAiP/N0eIT0cFTfzUZLaR5kyBs=;
-        b=QCHPpQIyC8tEAKpSXXHWe0wsjPeuDgcQapL2xIwMgMghdSiViE7RNa7/KWplzJLJa4
-         T+eAud0sxVUDXOcrkoM+L2XDbUj8hvX8yfQ+GSShvGYwZvw1kWLUG15m8jsHh2k4BvTc
-         p46vPnVZtMe0hO3s4SP8RFsQ8nRPsqFBwsytsuTfpVXmgESKLI8IsJOGml7N1SeQc3JX
-         nJA6NLnmNMXugz+MY8U+Dcwg3N5EjZTaLqfP+wsrXZ60RZrY+QgJEJrQaRNJohcnGSQi
-         9c5rPYXnZaNYnWea5E7AkNkA55lXIjYTJPgYRaEpKH/nwWmaC1a6rkHaq7FwI+QnNCYy
-         5OvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730393372; x=1730998172;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbNCcry4Jdp8tstQ1PAiP/N0eIT0cFTfzUZLaR5kyBs=;
-        b=Thu/TRPFhnZVQ3GenXbfKH4LVYnf8AUEEIfnH6u97dyRaTQmIWJIKSeMpRDtsQEhkO
-         nAuYSbg/mxR5IJKcKSCTg5JdCiZMFCar7/AFi4n4nnxyRUXNfhK1+3F7xl6LfACXrAOe
-         uSnagB1O/hYsLT0TpSOibSQuwwQD72AdjMpO+w1gqVbc00KxDLJAL4H2bFHBhqTUqo58
-         8lH6VxQscMqF7yRtJ/b3YuQF/sD4wWRW2mb8zys3PZpNHN5eb8tO4HlLSkcJLXvWB8f8
-         hu6I7sU2CuYpkWYmojawuUDUjnqeZCzfb7IATq67TUQTId2eTpZzXjw0a/bzPWFc4/jX
-         BB0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXCRKR7hgZzKl9NpoTMQv7ToTQ+IXoP9aKk3vO78vTcKI2cVSQRlTiFybh73yvPJjyCuprL+BoBHlg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzdzq/E1qQT7Cg7C12LQZkHfcC321tQ5C2UzTEzedsA8byaSAcL
-	6OO7dAuac4Qgk1qdojvwTDOKlvcJSByxAOL658OuINnhgY7nFpeuYABng5dv48g=
-X-Google-Smtp-Source: AGHT+IHbMtP+GNTrAp9Uf6Tmc5WK/ipNQKCVa0uX5AlX1qngcY2aNNmgvqKRDiyduTxjJWRwHOLcwg==
-X-Received: by 2002:a05:6870:30a:b0:288:db96:5a23 with SMTP id 586e51a60fabf-2949d1ebeabmr456408fac.20.1730393372260;
-        Thu, 31 Oct 2024 09:49:32 -0700 (PDT)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-29487772015sm600040fac.51.2024.10.31.09.49.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Oct 2024 09:49:31 -0700 (PDT)
-Message-ID: <00b6f820-5a87-4e05-b079-281074be669c@baylibre.com>
-Date: Thu, 31 Oct 2024 11:49:29 -0500
+	s=arc-20240116; t=1730398576; c=relaxed/simple;
+	bh=a0XxDbtJwqAkMvK39cpkd2F8PdsdCUxiE0cP0WUw1vU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufXx/FycyUDnMDBy2du0iptFGm6bRAtPQmIYUugAwZ62Zlt9iykk/cqjQGc3VQOLGDlKATL0f7XG2QW0rvsu3rbICfU039rOnWarVsv7hGeu3SrunmWIUHChBKqfg+uqQCDN0GqqSLooz+hsqCKLDMtrmzqU50yCTqhqLLudJhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DoWxXegU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55DC0C4CEC3;
+	Thu, 31 Oct 2024 18:16:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730398575;
+	bh=a0XxDbtJwqAkMvK39cpkd2F8PdsdCUxiE0cP0WUw1vU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DoWxXegU1p/t/x19dGfnMq/kDCEoZeI9+y0FMrYykBQOyJIc9q/ohxuRbJYxhkylK
+	 YagvMlX50thLX3ltS0k6ualhU7oWE50jZ4G/ea/tlT/xyzW8Loxa47A0rRz7OTMwEd
+	 a9sFbDnTTU4FpQitrOsQQ6hr1Zka3loLzTLacGmKY3/J65vw/fG0prF4zxEOMxTiAM
+	 G0kSLdi1EiD/b/TN1+4znIJwOEYm1De2UOIRTyhk+6SbAS+8hti0pXrftJFF6XwOgc
+	 LW3Q8iZzCgJtbW/JxTrgr+weCC6b43XZwjG15xrN/Sx576n0cAmcZTNlz71DvVJqFx
+	 20cxF+emjs4fA==
+Date: Thu, 31 Oct 2024 18:16:10 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH RFC v4 05/15] spi: dt-bindings: add PWM SPI offload
+ trigger
+Message-ID: <20241031-croon-boss-3b30ff9e9333@spud>
+References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
+ <20241023-dlech-mainline-spi-engine-offload-2-v4-5-f8125b99f5a1@baylibre.com>
+ <20241026161837.30a56ae1@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: axi-spi-engine: Emit trace events for spi transfers
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Mark Brown <broonie@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-trace-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20241031111646.747692-2-u.kleine-koenig@baylibre.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20241031111646.747692-2-u.kleine-koenig@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="uFDjMC94MKRrYJ2w"
+Content-Disposition: inline
+In-Reply-To: <20241026161837.30a56ae1@jic23-huawei>
 
-On 10/31/24 6:16 AM, Uwe Kleine-König wrote:
-> As this spi host controller driver implements the
-> .transfer_one_message() callback, it has to care about these traces
-> it-self. With the transfers being compiled it's difficult to determine
-> where handling of one transfer ends and the next begins, so just
-> generate the start events in batch before the hardware fifo is fed and
-> the end events when their completion triggered.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
-> ---
-Reviewed-by: David Lechner <dlechner@baylibre.com>
 
+--uFDjMC94MKRrYJ2w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Oct 26, 2024 at 04:18:37PM +0100, Jonathan Cameron wrote:
+> On Wed, 23 Oct 2024 15:59:12 -0500
+> David Lechner <dlechner@baylibre.com> wrote:
+>=20
+> > Add a new binding for using a PWM signal as a trigger for SPI offloads.
+>=20
+> I don't have a better suggestion for this, but it does smell rather like
+> other bridge binding (iio-hwmon for example) where we have had push back =
+on
+> representing something that doesn't really exist but is just a way to
+> tie two bits of hardware together. Those kind of exist because we snuck
+> them in a long time back when no one was paying attention.
+
+I dunno. iio-hwmon to me is a particularly strange one, because it is
+the exact same device being used in different subsystems. Like that
+voltage monitoring device with 10000 compatibles that I CCed you and
+Peter on the other day feels like it should really in your subsytem. A
+"hwmon" isn't a class of device at all.
+
+This however, I think is more like pwm-clock (or clk-pwm, they both
+exist and are opposites) where the node is used to change the type of
+device rather than the subsystem using it.
+
+> So this one may need more explanation and justification and I'd definitely
+> like some DT maintainer review on this at a fairly early stage!
+
+Ye, /shrug. Maybe the others have dissenting opinions. I'd like to hear
+=66rom them, but I don't personally have a problem with this.
+
+--uFDjMC94MKRrYJ2w
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyPJagAKCRB4tDGHoIJi
+0typAQCEmnsI5mzHHvq89+khhenHZThZa1J9UsxH41LEsVWFPAD/WefyfVnQD3JS
+OyCiDnA+Y6CorQ7SLLilyBtOMN4XGgc=
+=UiW6
+-----END PGP SIGNATURE-----
+
+--uFDjMC94MKRrYJ2w--
 
