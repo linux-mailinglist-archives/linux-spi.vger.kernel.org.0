@@ -1,123 +1,101 @@
-Return-Path: <linux-spi+bounces-5575-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5576-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDD1E9B8266
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 19:16:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DBA9B82EB
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 19:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 343A91C2141D
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 18:16:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48C971C21AFD
+	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 18:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431FA1C8FBA;
-	Thu, 31 Oct 2024 18:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD571C9EA1;
+	Thu, 31 Oct 2024 18:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DoWxXegU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tVSb6xOZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B07B1BD501;
-	Thu, 31 Oct 2024 18:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2449513A865;
+	Thu, 31 Oct 2024 18:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730398576; cv=none; b=QLxR3YE2C+DVV/YRps68yWcpRsP4Uh/TZsAjWgrn0jjFgnQr3/60bUiaoyR64Wwjq4bWJZnjsfsRuZ0EIoluYQTO56NGmel3TWY4EUKVcUqwBXfgq9XDRJ6Gb5ds7d75FPaXDh0OnAZUKDFkyav4i4FQsD4I6Z2cpZqbYtVtcN4=
+	t=1730401014; cv=none; b=oDAcp802hPLbcEslGK0yXDW/B9i1tX4n34H69MmHfGUWmPuhPjo9SsRi6AWIIXyQa2P2NUmD50VpA+yAoeDI+18AM96PrIZOac71OzyB1pbkaT25tB1aEhr6VG3NXydoVLryfHcGl86ETw0RxIA3E84BsNWT+ndNKV+wiAUxsdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730398576; c=relaxed/simple;
-	bh=a0XxDbtJwqAkMvK39cpkd2F8PdsdCUxiE0cP0WUw1vU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufXx/FycyUDnMDBy2du0iptFGm6bRAtPQmIYUugAwZ62Zlt9iykk/cqjQGc3VQOLGDlKATL0f7XG2QW0rvsu3rbICfU039rOnWarVsv7hGeu3SrunmWIUHChBKqfg+uqQCDN0GqqSLooz+hsqCKLDMtrmzqU50yCTqhqLLudJhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DoWxXegU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55DC0C4CEC3;
-	Thu, 31 Oct 2024 18:16:12 +0000 (UTC)
+	s=arc-20240116; t=1730401014; c=relaxed/simple;
+	bh=vpa+AfaQ2UYbWDWP+bn9pYmpp+731Or4NVOZhwUaLUo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=dADDL/MqGvmBUK8MYWKIyO0yplCKTHKQWh/oR2ppFSQPZjLAvqoaljw8eeAgYBkB52oK0xFaFun4AODT5RY8NH7We+a8MHT/ehyxJ5TzNVecL7Uh2lPfmoxDYdaX4o9jimZvIa2nK/Kmpubl1CeNSBKOIN5sisb7rnvBqBdNYKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tVSb6xOZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0648C4CEC3;
+	Thu, 31 Oct 2024 18:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730398575;
-	bh=a0XxDbtJwqAkMvK39cpkd2F8PdsdCUxiE0cP0WUw1vU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DoWxXegU1p/t/x19dGfnMq/kDCEoZeI9+y0FMrYykBQOyJIc9q/ohxuRbJYxhkylK
-	 YagvMlX50thLX3ltS0k6ualhU7oWE50jZ4G/ea/tlT/xyzW8Loxa47A0rRz7OTMwEd
-	 a9sFbDnTTU4FpQitrOsQQ6hr1Zka3loLzTLacGmKY3/J65vw/fG0prF4zxEOMxTiAM
-	 G0kSLdi1EiD/b/TN1+4znIJwOEYm1De2UOIRTyhk+6SbAS+8hti0pXrftJFF6XwOgc
-	 LW3Q8iZzCgJtbW/JxTrgr+weCC6b43XZwjG15xrN/Sx576n0cAmcZTNlz71DvVJqFx
-	 20cxF+emjs4fA==
-Date: Thu, 31 Oct 2024 18:16:10 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-Subject: Re: [PATCH RFC v4 05/15] spi: dt-bindings: add PWM SPI offload
- trigger
-Message-ID: <20241031-croon-boss-3b30ff9e9333@spud>
-References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
- <20241023-dlech-mainline-spi-engine-offload-2-v4-5-f8125b99f5a1@baylibre.com>
- <20241026161837.30a56ae1@jic23-huawei>
+	s=k20201202; t=1730401013;
+	bh=vpa+AfaQ2UYbWDWP+bn9pYmpp+731Or4NVOZhwUaLUo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=tVSb6xOZYzm75G0dZac5PNQECoEUP1HyCbljiC6sbqjV5HxNPl1HtN2e1KP8cebnW
+	 Uo/ZuDpdrts6dinRsK+FoeVsvusjgKhLBhnEQ1ggi8ApB/gZpUFB599bI/F5Zr9cid
+	 YhG9e3HsAs1oHJ4NP8Go+viS0y+Qd4XbTLTzgpvK7ZB14BGkF3FziAEhKe+buLZQoN
+	 23PCHCd4QsjCLn9mArVeoeDDAVWdEWf+zSkRzqEym3mYTDpZduHPW+F/L4kez7flpS
+	 YpcU1l746fi2mkrS+udzLSfJ9tm+T7nJ+dUabm7kLre6GBYfcvbmhusYW1eAsCMpr7
+	 TJVJ1L8rBNdYw==
+From: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, 
+ Stanislav Jakubek <stano.jakubek@gmail.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <ZyH2P3FlneLtGxXo@standask-GA-A55M-S2HP>
+References: <ZyH2P3FlneLtGxXo@standask-GA-A55M-S2HP>
+Subject: Re: [PATCH] dt-bindings: spi: sprd,sc9860-spi: convert to YAML
+Message-Id: <173040101151.938392.8456134374988290865.b4-ty@kernel.org>
+Date: Thu, 31 Oct 2024 18:56:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uFDjMC94MKRrYJ2w"
-Content-Disposition: inline
-In-Reply-To: <20241026161837.30a56ae1@jic23-huawei>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-9b746
 
+On Wed, 30 Oct 2024 10:02:55 +0100, Stanislav Jakubek wrote:
+> Convert the Spreadtrum SC9860 SPI controller bindings to DT schema.
+> Adjust filename to match compatible.
+> 
+> 
 
---uFDjMC94MKRrYJ2w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Sat, Oct 26, 2024 at 04:18:37PM +0100, Jonathan Cameron wrote:
-> On Wed, 23 Oct 2024 15:59:12 -0500
-> David Lechner <dlechner@baylibre.com> wrote:
->=20
-> > Add a new binding for using a PWM signal as a trigger for SPI offloads.
->=20
-> I don't have a better suggestion for this, but it does smell rather like
-> other bridge binding (iio-hwmon for example) where we have had push back =
-on
-> representing something that doesn't really exist but is just a way to
-> tie two bits of hardware together. Those kind of exist because we snuck
-> them in a long time back when no one was paying attention.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-I dunno. iio-hwmon to me is a particularly strange one, because it is
-the exact same device being used in different subsystems. Like that
-voltage monitoring device with 10000 compatibles that I CCed you and
-Peter on the other day feels like it should really in your subsytem. A
-"hwmon" isn't a class of device at all.
+Thanks!
 
-This however, I think is more like pwm-clock (or clk-pwm, they both
-exist and are opposites) where the node is used to change the type of
-device rather than the subsystem using it.
+[1/1] dt-bindings: spi: sprd,sc9860-spi: convert to YAML
+      commit: 8a9c132389bbd162336fcbe6725692455151bd7e
 
-> So this one may need more explanation and justification and I'd definitely
-> like some DT maintainer review on this at a fairly early stage!
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Ye, /shrug. Maybe the others have dissenting opinions. I'd like to hear
-=66rom them, but I don't personally have a problem with this.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---uFDjMC94MKRrYJ2w
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZyPJagAKCRB4tDGHoIJi
-0typAQCEmnsI5mzHHvq89+khhenHZThZa1J9UsxH41LEsVWFPAD/WefyfVnQD3JS
-OyCiDnA+Y6CorQ7SLLilyBtOMN4XGgc=
-=UiW6
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---uFDjMC94MKRrYJ2w--
 
