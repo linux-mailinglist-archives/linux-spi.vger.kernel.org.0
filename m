@@ -1,72 +1,119 @@
-Return-Path: <linux-spi+bounces-5595-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5596-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D3A39B9916
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 20:56:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C0F9B994C
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 21:17:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6CEDB21250
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 19:56:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526E81C20DA5
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 20:17:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 043C51D0BA4;
-	Fri,  1 Nov 2024 19:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1579519D089;
+	Fri,  1 Nov 2024 20:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKJbz81T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRRjd1uz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43EC1CEE94
-	for <linux-spi@vger.kernel.org>; Fri,  1 Nov 2024 19:56:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E575E14D2A3
+	for <linux-spi@vger.kernel.org>; Fri,  1 Nov 2024 20:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730490985; cv=none; b=P9HXGKt0dX3+fufu5g0OdDFnIuLTzQ3PLOQmghOfnEd1lnJyq1FHdcqcqVrKvLGABI43vRAodZuaAOcRYFzzdGTfOnlGWZCFQA3tQPW9srVi+tWMORi0VATmagfi/azY5fMyQuQlB0cchtijD4jjZpb0Sncarj0ACBgn4jVpevc=
+	t=1730492261; cv=none; b=KyW+oYLeG825KcByrN8VJIvVqPHKSTHoudZf+6UrhbvpODgrJmoKmJuVI+srhgQc5MHCOotP+tPwOTe0joZ23jmUeqzsiYf1sKM960zeq13EyIoyKqbIaErj5PCGzO5Ifh6kB+VbzmdKq3dt640TzpY8843c0qfd8M1//0WzH5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730490985; c=relaxed/simple;
-	bh=1PnB+1E0irbMmC5DnqA7PkiJkPBG98x2+MFR/ZXxu6U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=h1XdAWkYYlLw2GCaPQgP7QbPOWUUBi8bZ2xP4ZZlf9oyBtXRuVcpxwZWmGFiQ20SS1NXr/go+fpryAuVKZ/g2GBmDrOgNxT1J2dWKdRKIpWJHFJ4MuGY7S9RQ7tmDi+ASMrm24SBVRr2eDMa5f9+4O/EQrsJhEY6YzSceQcbicE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKJbz81T; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3516C4CECD;
-	Fri,  1 Nov 2024 19:56:25 +0000 (UTC)
+	s=arc-20240116; t=1730492261; c=relaxed/simple;
+	bh=DTMvimcaPJL7Uwv0Ncbed8oxLceIdgnzJxEcOPQzz0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VCrcIN7LHBbdgjv9WZ88TfihnLKBdVj85i4LM0PyBY63FhoXshRNFa786QNymxujc9S8mheBxwATGjvZh/8RlA7+/h+8BMKMEMA6lukcottDaTTAKB0S6GMwHBUT+vB5Kw6a1EUnS2iDLCWa73rgKQp67YmC3wkR6Z2RWJ3jfmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRRjd1uz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92945C4CECD;
+	Fri,  1 Nov 2024 20:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730490985;
-	bh=1PnB+1E0irbMmC5DnqA7PkiJkPBG98x2+MFR/ZXxu6U=;
-	h=Subject:From:Date:To:From;
-	b=jKJbz81TFV34Mqsl1H1B/ZhZ0UaNE5+6f2g4z0bS3r/t4D6eFUh2nOXc57xf8M6ZE
-	 Y0gpFPSDycfOo+lsEx3/gtK9jtk11nehJJr2TF6cHJaji+4UGzhjkzThLEZD6fWXh8
-	 vMamc9mBRxmgpqsqaxDauR0lxR6hoQ4Ab0A3UK4uDeDhRLm7wf3QzmlCA7d08vDmik
-	 0RKcbtB27x6+DErM2K9zN/PNN4tdb5dK2+BklgfxKaKqvmj7x5LbOyWgMIAPrbSBEj
-	 /+IoNrid04Cx8g3rOte2gpDDx5xNqlap/Dm7tX0aulCrLFu7lLIs77UIctXKPvIfSn
-	 khnrqtszZev2w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB1193AB8A94;
-	Fri,  1 Nov 2024 19:56:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1730492260;
+	bh=DTMvimcaPJL7Uwv0Ncbed8oxLceIdgnzJxEcOPQzz0w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VRRjd1uzGdPH97UxA6QIE+UJHRmfNiWeTTusFWRUe2d5S3AmmxBHBb6co14uEdnlm
+	 N154o7MAvQnlrTy6tHLLb8Lfmx317jFmWMasep24lVQNwcuvTTmE8TYgCyjjkfgquW
+	 85Yt6kVHu0aNFn0GMU7xVPUu4/MCNqO/WCs5szyO7490cike3H+xUOT3+lims6lg96
+	 ltpbmp4+Ub/eGb9lurv6pLiRkwV0tNlEit7F4nmSXJau/JFLLp30SQZTdoOBeT7VtG
+	 8rzGcdGWT1Tm60RKy7AwQ6orEpDeT9BNBU+ACxI68m/CCiiGI1alVCsszxMRHeRBos
+	 mZFvE26Jn0rTA==
+Date: Fri, 1 Nov 2024 20:17:33 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+	linux-spi@vger.kernel.org, Steam Lin <stlin2@winbond.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH 02/24] spi: spi-mem: Add a new controller capability
+Message-ID: <586cf617-37ee-4859-a11b-67654d650380@sirena.org.uk>
+References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
+ <20241025161501.485684-3-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173049099365.2831285.15581324622379686055.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 01 Nov 2024 19:56:33 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v3] Apple SPI controller driver (2024-11-01T19:26:12)
-  Superseding: [v2] Apple SPI controller driver (2024-11-01T14:25:04):
-    [v2,1/3] dt-bindings: spi: apple,spi: Add binding for Apple SPI controllers
-    [v2,2/3] spi: apple: Add driver for Apple SPI controller
-    [v2,3/3] MAINTAINERS: Add apple-spi driver & binding files
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="R9v6F9gj3D0509P0"
+Content-Disposition: inline
+In-Reply-To: <20241025161501.485684-3-miquel.raynal@bootlin.com>
+X-Cookie: We read to say that we have read.
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--R9v6F9gj3D0509P0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Fri, Oct 25, 2024 at 06:14:39PM +0200, Miquel Raynal wrote:
+> There are spi devices with multiple frequency limitations depending on
+> the invoked command. We probably do not want to afford running at the
+> lowest supported frequency all the time, so if we want to get the most
+> of our hardware, we need to allow per-operation frequency limitations.
+
+After applying this patch (I bisected the series) my Avenger96 board
+started failing to probe the SPI NOR flash it has:
+
+[    3.567876] spi-nor spi0.0: probe with driver spi-nor failed with error -95
+
+Full job:
+
+   https://lava.sirena.org.uk/scheduler/job/925156
+
+I didn't spot anything with the code on a recheck but it's late on a
+Friday so I've not looked too hard.  My other boards are all fine though
+there's limited coverage.
+
+--R9v6F9gj3D0509P0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmclN1wACgkQJNaLcl1U
+h9Aqzwf+M4nDW7XRYbgeIzByr8yYSw9oapqWDeYjRlCHLC6wQgZ9h9kWLKw6xZ4V
+Hxn/c9mAKJtjFZLynYIKtjtYskph0CgtVHuWDx6UfAbMOiHFjfoXLJISNNBpjzV1
+VpZFT4bohJBqMbFvd4ph8Id+XUF6QgiKOIKEp8YPJxCOm7t+dHHNJ69K09acWItg
+q+eK2fh53Fi1j/IG0lT5hitbLzM4MJsCGi7an+kdCgRqL11c/LFqTrD0oueGN5m2
+EHULNgHt5J/5gBPTILkkTDhN6V1/ykmXI5UIYTkgYfTwpqzbGf1XmUf8wnqHpkl9
+phi4fN1+Sq4ya+p6nLrGBC5Ke8GGQA==
+=cWfe
+-----END PGP SIGNATURE-----
+
+--R9v6F9gj3D0509P0--
 
