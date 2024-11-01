@@ -1,80 +1,107 @@
-Return-Path: <linux-spi+bounces-5577-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5578-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCE0A9B8316
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 20:10:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F9B19B91BB
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 14:17:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 925BA1F22C15
-	for <lists+linux-spi@lfdr.de>; Thu, 31 Oct 2024 19:10:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EA06B23647
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 13:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C4919D089;
-	Thu, 31 Oct 2024 19:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7302F4503C;
+	Fri,  1 Nov 2024 13:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FH506s7a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d7oUxQUk"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBF813C8FF
-	for <linux-spi@vger.kernel.org>; Thu, 31 Oct 2024 19:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484324B5AE;
+	Fri,  1 Nov 2024 13:16:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730401824; cv=none; b=mbnBqiIHocsGkvpHFxKmjASropQCY+U1lF2t9Tc1OEyAQw04J2Xc88ibAFZz5G3PQ+GL4LVJn7t4HcQRcLT45JUx2xPBi2hGLEbtTOQy5V14wlVuuxVrEYrFmLh2+HnAcOtdvYDLN+0auL23ITpGhrn1/QhklkD7EyP+725K8mA=
+	t=1730466961; cv=none; b=FHlUY3wrg05my0g7QyTG8YgImahARwd91OneEoFzRvXEIrW0sZ8PLutrWW29JRYcutFeZvZ7FSYfb6zSo2qtDqv2XndorWBf1+pVMFELB9wIAnw0TPASOxnDEn6Pbbs6krC3YEj4Tx8Y5QSk7zKmPrZtRDkX/EjVn3OUgEYXegw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730401824; c=relaxed/simple;
-	bh=6PkBJQMpp22sKgWJBfsUkdubFDQrytl2Fmb2wPbE1Ik=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Nd455kAB8WmpVWHOzqx0MLlDI+EY/457wn5KQjCYBHLSryaqMRi7x6U1DzxWbV9Wr4NmSpzsAukbCyBNgN51IzmkNEj6pxrx53f2mJRQGuRLB6uSKnYYofBQTeWHj889hwYHCTAz4AHGnyGuUtV2ETj5+UHaE2bKEbWUr+rIA6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FH506s7a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD1FC4CEC3;
-	Thu, 31 Oct 2024 19:10:23 +0000 (UTC)
+	s=arc-20240116; t=1730466961; c=relaxed/simple;
+	bh=83dBsd5FNSBx9l+cQnxVLMQfc9PYaoBVeH8Qpu6dCL8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Iw34YqRGR5Qx6qPjml+xZwYtkXTZOtktV7bOjJO8Ox3xYk70JYqGOMypQZ6ykCijE280n7y4HL6VbWX8n92ZbGtSor1F6dSrUu02DIiqIz2VgOi0nBFDi8Oa4W36c0KENmwMqi0+AtqyxEMWijV+O7Vaswi0qiAktWP8e7SxPFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d7oUxQUk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E619C4CED4;
+	Fri,  1 Nov 2024 13:15:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730401823;
-	bh=6PkBJQMpp22sKgWJBfsUkdubFDQrytl2Fmb2wPbE1Ik=;
-	h=Subject:From:Date:To:From;
-	b=FH506s7aAP0UYP/xfpNy+Gln8Q6cQ8R3Gzhs1cGNjxaGWRdROuS/SIrVR8qfI6VyB
-	 r99ws01W6wljYfoEqDXL/KAsMzp83T2BPrJALvQ4Tl7fF6nWI/5Cak4L5QIBusfy6a
-	 mavSqakBMnHDfCtZM0mHd/391ErZDc9RcDSwOPwhg+FcEJikd5YcBb+DUcY8dt5urb
-	 KaDUyuXObOP7jeSaZFLfaUF+BzNZUbf0I1HytA2DEh+KyQo0S4Udr/+3bp67QbUBs+
-	 y9/pui6gDj8oprVYBvkg+z3o3UkTnJYAl5/q6hZR5Gt4nMKev1HC105cZ7jYEJMLXW
-	 9RG2JsmwqYjDQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7632F380AC0A;
-	Thu, 31 Oct 2024 19:10:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1730466960;
+	bh=83dBsd5FNSBx9l+cQnxVLMQfc9PYaoBVeH8Qpu6dCL8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=d7oUxQUk5BPrQwdKOn6vN/oJPox2Hjvzcf0tSFhmWCSiLsY6b5vAXxj5FkdhZnqzk
+	 RYTCwtbyFP+bBSIbmfCA7d+iQcRKlX3TfxqsBu+ckU0BTKqqjsanskZdzCxcgGOzfH
+	 1zpaKidNM+4+LCkesGBEvSUOpwSYmV+RvXPC69J5vcKYdM+D0nkjxqIh1X5CXAoLgK
+	 knFFxcUJP5W/w+MibhJCXf82yNNWgEDxP+yFFuhQY9UjR45kmVeWHHpBbGZBLTaCeT
+	 NRN7gdIJziMu4oXa77f/d0uNy+7omO3mRWOwtT0ZgZU3Pkymk/ZVwnZRhm5pjsamAc
+	 sSi0L0UwVflTA==
+From: Mark Brown <broonie@kernel.org>
+To: Michael Hennerich <michael.hennerich@analog.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: David Lechner <dlechner@baylibre.com>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ linux-trace-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20241031111646.747692-2-u.kleine-koenig@baylibre.com>
+References: <20241031111646.747692-2-u.kleine-koenig@baylibre.com>
+Subject: Re: [PATCH] spi: axi-spi-engine: Emit trace events for spi
+ transfers
+Message-Id: <173046695891.38603.7730462625881979641.b4-ty@kernel.org>
+Date: Fri, 01 Nov 2024 13:15:58 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173040183088.2061780.9124859005299028066.git-patchwork-summary@kernel.org>
-Date: Thu, 31 Oct 2024 19:10:30 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-Mailer: b4 0.15-dev-9b746
 
-Hello:
+On Thu, 31 Oct 2024 12:16:45 +0100, Uwe Kleine-König wrote:
+> As this spi host controller driver implements the
+> .transfer_one_message() callback, it has to care about these traces
+> it-self. With the transfers being compiled it's difficult to determine
+> where handling of one transfer ends and the next begins, so just
+> generate the start events in batch before the hardware fifo is fed and
+> the end events when their completion triggered.
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: dt-bindings: spi: sprd,sc9860-spi: convert to YAML
-  Submitter: Stanislav Jakubek <stano.jakubek@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=904559
-  Lore link: https://lore.kernel.org/r/ZyH2P3FlneLtGxXo@standask-GA-A55M-S2HP
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/1] spi: axi-spi-engine: Emit trace events for spi transfers
+      commit: e36eba413b8e841e9e36e93188d82674ec7c79d1
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
