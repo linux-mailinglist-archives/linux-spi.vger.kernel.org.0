@@ -1,107 +1,178 @@
-Return-Path: <linux-spi+bounces-5584-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5585-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED07B9B94A4
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 16:43:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E9F09B94D0
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 17:00:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A8341C20F5A
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 15:43:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E198C28310A
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 16:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A0F1C7B82;
-	Fri,  1 Nov 2024 15:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D16F19CCFA;
+	Fri,  1 Nov 2024 16:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iGqhRb8j"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="iPUnZ8bs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from msa.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B92BE1C32E2;
-	Fri,  1 Nov 2024 15:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C926B1DA53;
+	Fri,  1 Nov 2024 16:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730475795; cv=none; b=WZUlpne7MGLVSP6iZv/VzU7pnfQaqz/dW1gTUIPbrfGJsbGeyk9qmOeIIdJ0c1Uc2rIkqmQrJn23ohNqAvHG58aZgiiTCT6f/eOebRXuROdiVjVvLT4HWutxxkbsXzQPHBLq6U5vZMnRKI7ifQpN50a5LiFSLSY99EiZT+ycxs4=
+	t=1730476845; cv=none; b=uimo72vJj8DNmXhAPWJW7MBb9EXBZvoMOSrvftyFqr8KH/Rw7B1HXsveul5fAJhAY78H+LSW8xk/bD5reZ7uv7d+m19BD2b2ASGiZwynHPIhortzBSPDYmrjGqw14uj1iCt/apFlpnIi1LJMy8Gb+9vOKKmIUq8HFuIjsmKXDOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730475795; c=relaxed/simple;
-	bh=irRgyaZNL3QbES2BKZpFC5HFrUeyLhBKBuQONdo5KOg=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=LQNobOLssH7m631CKogdOxBIGv3aee01TfYKK5pXqZjxPzuuXcqrQoJBzk8SonfRmxrt4GsXiF2la6BN4H+OVLt+JBn36JChwMNXLOvJcLbhNnuV3Kbv+fR/MbBfEHCgzYZvCaP2vCYUBPC09dtYeFfqW5QdoFTQXE+2Cw1prek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iGqhRb8j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 277FEC4CECD;
-	Fri,  1 Nov 2024 15:43:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730475795;
-	bh=irRgyaZNL3QbES2BKZpFC5HFrUeyLhBKBuQONdo5KOg=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=iGqhRb8jR4HXevjHc8GpzO5tk/iTgRBDJAhlmEszyFfNIfToCBXDMMpnPyx1YyG0G
-	 UyT/L0bngIoQ19hvlGOS7ZBCE5FjRpbj0CfRO9K8+s2VyWd6qo4wJRZOGMgPEy0YvI
-	 yTewADkihAH/QKVdQj2cTVDXG0FVQBpJqxwiPgIKRrhi0AD/LJeHHodQSnPvqtc4Gt
-	 TCmm7BTfa9hJX3s5aZez/Hrh/9tbYXjLxrYtnKp3raOryFi12UlC0cjBAOhlTvI6hC
-	 y/f19yAtUUem5jGZOqULHJMjj1vTJx81NUJh9Jzm95puOEwFeCib9t7BgSnFjhPhbd
-	 1JvhK64JRtEmg==
-Date: Fri, 01 Nov 2024 10:43:13 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1730476845; c=relaxed/simple;
+	bh=tgUcafWIcyw/Xw6WtWftC4IV18qq2lbN+XPC1DDYwpA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rACojyvNkRbdc8RPgiqaAs845DY+pGNpXBx4XKMuo2epZNYGBgNz1wOCKHw2srzinCoHps93+SJO5iFb3gQBCs1r74zyJ3DlTl3exWiCPaigCu27Af6H6wn9PR8FIUhuLfitxVy9ayBttlAVA3pvvDdoanRoakUXZbA2YSbTyCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=iPUnZ8bs; arc=none smtp.client-ip=193.252.22.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id 6u3ZtHqXNH3SU6u3ZtLSD5; Fri, 01 Nov 2024 16:59:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1730476768;
+	bh=OPHPOhW9HUBF4EAgD2hHEl89Ml4qq1QzyjIJ4lZA8VU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=iPUnZ8bsHVrouKOtqJuIaZT9mlO0HzGTPoMPj1s2yuM7ms6mOg1moCSuWZku7Ndwd
+	 jVvaMAENZvOrBkCGLorHATLAAPE6NlDfdntZ/qDdho1yOfACdoBrRqASevzKgLALSM
+	 BwHgW4OJGsJTjXJhY9j/3yFgXkQy2JwkIa5/YVqIy6++dEH7a/qKYfrrjuPoVl5cXj
+	 j4BXOjPqvwWLbR1y81ZcWdy9Uac4kiVk6xFgVLeEmzzp7W1aJAWjSi5alIw/pc53tW
+	 m4RJNOq5bexSI9JFbWxfbVKaIa40QZ76aXuFzifXUTnSDZI95RWCdQmZ+N3+ol/neF
+	 kxZXn8wK1zuEA==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Fri, 01 Nov 2024 16:59:28 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <9bf24861-f792-4315-9492-e71f7d9c457f@wanadoo.fr>
+Date: Fri, 1 Nov 2024 16:59:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: asahi@lists.linux.dev, Hector Martin <marcan@marcan.st>, 
- Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Mark Brown <broonie@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-In-Reply-To: <20241101-asahi-spi-v2-1-763a8a84d834@jannau.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] spi: apple: Add driver for Apple SPI controller
+To: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Janne Grunau <j@jannau.net>,
+ Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
 References: <20241101-asahi-spi-v2-0-763a8a84d834@jannau.net>
- <20241101-asahi-spi-v2-1-763a8a84d834@jannau.net>
-Message-Id: <173047579349.3488175.222264580667894425.robh@kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: apple,spi: Add binding for
- Apple SPI controllers
+ <20241101-asahi-spi-v2-2-763a8a84d834@jannau.net>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20241101-asahi-spi-v2-2-763a8a84d834@jannau.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-
-On Fri, 01 Nov 2024 15:25:03 +0100, Janne Grunau wrote:
-> From: Hector Martin <marcan@marcan.st>
+Le 01/11/2024 à 15:25, Janne Grunau via B4 Relay a écrit :
+> From: Hector Martin <marcan-WKacp4m3WJJeoWH0uzbU5w@public.gmane.org>
 > 
-> The Apple SPI controller is present in SoCs such as the M1 (t8103) and
-> M1 Pro/Max (t600x). This controller uses one IRQ and one clock, and
-> doesn't need any special properties, so the binding is trivial.
+> This SPI controller is present in Apple SoCs such as the M1 (t8103) and
+> M1 Pro/Max (t600x). It is a relatively straightforward design with two
+> 16-entry FIFOs, arbitrary transfer sizes (up to 2**32 - 1) and fully
+> configurable word size up to 32 bits. It supports one hardware CS line
+> which can also be driven via the pinctrl/GPIO driver instead, if
+> desired. TX and RX can be independently enabled.
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
+> There are a surprising number of knobs for tweaking details of the
+> transfer, most of which we do not use right now. Hardware CS control
+> is available, but we haven't found a way to make it stay low across
+> multiple logical transfers, so we just use software CS control for now.
+> 
+> There is also a shared DMA offload coprocessor that can be used to handle
+> larger transfers without requiring an IRQ every 8-16 words, but that
+> feature depends on a bunch of scaffolding that isn't ready to be
+> upstreamed yet, so leave it for later.
+> 
+> The hardware shares some register bit definitions with spi-s3c24xx which
+> suggests it has a shared legacy with Samsung SoCs, but it is too
+> different to warrant sharing a driver.
+> 
+> Signed-off-by: Hector Martin <marcan-WKacp4m3WJJeoWH0uzbU5w@public.gmane.org>
 > Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
->  .../devicetree/bindings/spi/apple,spi.yaml         | 62 ++++++++++++++++++++++
->  1 file changed, 62 insertions(+)
-> 
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Hi,
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/spi/apple,spi.yaml:10:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
+a few nitpicks, if they make sense to you or in case of v3.
 
-dtschema/dtc warnings/errors:
 
-doc reference errors (make refcheckdocs):
+> +static int apple_spi_probe(struct platform_device *pdev)
+> +{
+> +	struct apple_spi *spi;
+> +	int ret, irq;
+> +	struct spi_controller *ctlr;
+> +
+> +	ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(struct apple_spi));
+> +	if (!ctlr)
+> +		return dev_err_probe(&pdev->dev, -ENOMEM, "out of memory\n");
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241101-asahi-spi-v2-1-763a8a84d834@jannau.net
+Usually, no message is needed, because kmalloc like functions are 
+already verbose.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> +
+> +	spi = spi_controller_get_devdata(ctlr);
+> +	init_completion(&spi->done);
+> +	platform_set_drvdata(pdev, ctlr);
+> +
+> +	spi->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(spi->regs))
+> +		return PTR_ERR(spi->regs);
+> +
+> +	spi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+> +	if (IS_ERR(spi->clk))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(spi->clk),
+> +				     "Unable to find or enable bus clock\n");
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	ret = devm_request_irq(&pdev->dev, irq, apple_spi_irq, 0,
+> +			       dev_name(&pdev->dev), spi);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret, "Unable to bind to interrupt\n");
+> +
+> +	ctlr->dev.of_node = pdev->dev.of_node;
+> +	ctlr->bus_num = pdev->id;
+> +	ctlr->num_chipselect = 1;
+> +	ctlr->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
+> +	ctlr->bits_per_word_mask = SPI_BPW_RANGE_MASK(1, 32);
+> +	ctlr->flags = 0;
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Nitpick: not needed, the memory if already zeroed.
 
-pip3 install dtschema --upgrade
+> +	ctlr->prepare_message = apple_spi_prepare_message;
+> +	ctlr->set_cs = apple_spi_set_cs;
+> +	ctlr->transfer_one = apple_spi_transfer_one;
+> +	ctlr->auto_runtime_pm = true;
+> +
+> +	pm_runtime_set_active(&pdev->dev);
+> +	devm_pm_runtime_enable(&pdev->dev);
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+There could be an error handling, or if intentional, maybe a (void) or a 
+comment to show the intent.
 
+> +
+> +	apple_spi_init(spi);
+> +
+> +	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "devm_spi_register_controller failed\n");
+> +
+> +	return 0;
+> +}
+
+...
+
+CJ
 
