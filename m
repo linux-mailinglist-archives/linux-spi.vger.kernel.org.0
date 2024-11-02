@@ -1,119 +1,115 @@
-Return-Path: <linux-spi+bounces-5596-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5597-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C0F9B994C
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 21:17:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43F539B9C5A
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 03:37:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526E81C20DA5
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Nov 2024 20:17:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC63328265A
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 02:37:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1579519D089;
-	Fri,  1 Nov 2024 20:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B1C130AC8;
+	Sat,  2 Nov 2024 02:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRRjd1uz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eMT2VHK5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E575E14D2A3
-	for <linux-spi@vger.kernel.org>; Fri,  1 Nov 2024 20:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF9D9479;
+	Sat,  2 Nov 2024 02:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730492261; cv=none; b=KyW+oYLeG825KcByrN8VJIvVqPHKSTHoudZf+6UrhbvpODgrJmoKmJuVI+srhgQc5MHCOotP+tPwOTe0joZ23jmUeqzsiYf1sKM960zeq13EyIoyKqbIaErj5PCGzO5Ifh6kB+VbzmdKq3dt640TzpY8843c0qfd8M1//0WzH5A=
+	t=1730515021; cv=none; b=dzKHKLHODAc4d7VLDRSkg9NypjUnjTMHcpKPX0g+pmaafMeNu2N4RltUlnk//afpzAMk8/1BY2i19sbP8D95wieShGb2+Jk6VBUIcCaNIy8fER64/wQ1eIKj1UP1NwlBv/bkSwGJ1oWVwExpMPrmMnP+2LF9Vaxfla2RP3BOcAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730492261; c=relaxed/simple;
-	bh=DTMvimcaPJL7Uwv0Ncbed8oxLceIdgnzJxEcOPQzz0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VCrcIN7LHBbdgjv9WZ88TfihnLKBdVj85i4LM0PyBY63FhoXshRNFa786QNymxujc9S8mheBxwATGjvZh/8RlA7+/h+8BMKMEMA6lukcottDaTTAKB0S6GMwHBUT+vB5Kw6a1EUnS2iDLCWa73rgKQp67YmC3wkR6Z2RWJ3jfmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRRjd1uz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92945C4CECD;
-	Fri,  1 Nov 2024 20:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730492260;
-	bh=DTMvimcaPJL7Uwv0Ncbed8oxLceIdgnzJxEcOPQzz0w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VRRjd1uzGdPH97UxA6QIE+UJHRmfNiWeTTusFWRUe2d5S3AmmxBHBb6co14uEdnlm
-	 N154o7MAvQnlrTy6tHLLb8Lfmx317jFmWMasep24lVQNwcuvTTmE8TYgCyjjkfgquW
-	 85Yt6kVHu0aNFn0GMU7xVPUu4/MCNqO/WCs5szyO7490cike3H+xUOT3+lims6lg96
-	 ltpbmp4+Ub/eGb9lurv6pLiRkwV0tNlEit7F4nmSXJau/JFLLp30SQZTdoOBeT7VtG
-	 8rzGcdGWT1Tm60RKy7AwQ6orEpDeT9BNBU+ACxI68m/CCiiGI1alVCsszxMRHeRBos
-	 mZFvE26Jn0rTA==
-Date: Fri, 1 Nov 2024 20:17:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
-	linux-spi@vger.kernel.org, Steam Lin <stlin2@winbond.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH 02/24] spi: spi-mem: Add a new controller capability
-Message-ID: <586cf617-37ee-4859-a11b-67654d650380@sirena.org.uk>
-References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
- <20241025161501.485684-3-miquel.raynal@bootlin.com>
+	s=arc-20240116; t=1730515021; c=relaxed/simple;
+	bh=HAm2uFR/BmaPeA/QPdAV5p1sBdlEXjYIAwxP1zNZREE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X+bwJWzvv6cnTjCKrz940pYiFiDnCuXTw6jQGYaIXylLEehg1xbWTHZ59VAEYZhj7DoaQ96sBFzlcuREHJoxpgBWySkVXXbPrbAIDtsnli+/7/zLzdr7F3JfY6OBgZ6JT1NvFjBBl18IdinF5EvRLAasjA1BABN3ztl91qrBtF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eMT2VHK5; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71e8235f0b6so2255775b3a.3;
+        Fri, 01 Nov 2024 19:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730515020; x=1731119820; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=52ooFznqeRMYHCyQ/j8hVCDyBghXj5ug7pBFSOFL7Wc=;
+        b=eMT2VHK52yGGtEpzpMoH/bz4UIbB7JAgCDSUS2zPhpjumyX94CFbASW9WzHLLTbxV2
+         H4uDv8nv26DCq2Vbg+lV3/6j92VFGdlkQJv710bWhgQjrSQnrOddFR2EAZUSGg///3cH
+         FTgz/3fIy8pL9XEGPd+wldU8zaeMKPTUD6WpLZcmMbXfEZrsUnv8ZHu7qLhpsjuXUFG8
+         mjQ6ZQ/Kxha366KhCFdhDg6kDxxw5CMZ0xEdLfEYq8pFYaBD0ueMJCYT0RuhExEyBIAP
+         OgWeInZC/MNK6hj1ICf15qaMZ8AnGaQXoU7V6Mr6dKGnvLJ/gkV5Lkub2KiGBLvUqnb/
+         WtmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730515020; x=1731119820;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=52ooFznqeRMYHCyQ/j8hVCDyBghXj5ug7pBFSOFL7Wc=;
+        b=qVUF8i289iIidR6x+eYXIVMmFiMV7v+ZXnZVQqLTtR1mgRNIWbqdWfC/IBQdoobIPm
+         5KIaQ4dlfNueXLTHzcqPrfvHo1hECAj3g1E8Ad1mn+/I9a52JpGN4v++98PRzTwKXbyg
+         1II4U2K/jXbKm/RmZBFsJxfMYbaxeQQtDc6QPqwHbjwuJOIMCBRKQ9GpnQS6NyHtQ2ar
+         6JGsyZ9XiugnMBqKeadMYjgQiHMAn5egoc1Sw4dtzA8opeU9uruKCbq+UB5gRMr+IuSX
+         llkAvpotSIDV3J5jhrYe0u3FBCCt3Lzaaa+vdpKYCTj/OQVohfoVtqo2FQymO7vGarLi
+         R5Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUipQVO4Ko2wS99nOrne/nHrVpQkxYsWuFLNFHSHjTEzprsPkBtnP91995Glh/dAf8tVe74jvAu3J39ZgCk@vger.kernel.org, AJvYcCUt3960TWka4jOc47Ps6Y1iajBcMCGmtvIjj/FIAzc2jpmE33S77N2bmsw8eK5iUrsig7nCU7kpC2mA@vger.kernel.org, AJvYcCWKqP8k27kVdlGgBdI3Xe80MG9A28sRegjwgkGXmWujKO/2orwf2jDLlgnTzeVEE54i1D1PhVK2zAq7@vger.kernel.org
+X-Gm-Message-State: AOJu0YyShzvC05PrgvqMPpjZpIkL2bhp/hCcbWLtTfv7bRyYbyMXeCxd
+	aAWtTz6GAWI7IF8qqpQaoTDgMeW6bv/24pNzqp0MCiMsiipK9cTJ
+X-Google-Smtp-Source: AGHT+IGQ9zfRcHvemJpUmA2q1CaZU/zY095T+aeF4SHQo9LbXPUf1m6TDA8Q4+PugPH5HaynDPT5mA==
+X-Received: by 2002:a05:6a21:710a:b0:1d9:a1c:7086 with SMTP id adf61e73a8af0-1db91ec3ed9mr13201042637.44.1730515019885;
+        Fri, 01 Nov 2024 19:36:59 -0700 (PDT)
+Received: from [192.168.0.122] ([59.188.211.160])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1ba19asm3338528b3a.21.2024.11.01.19.36.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2024 19:36:59 -0700 (PDT)
+Message-ID: <46b31874-9fe2-4534-9777-816765a265b1@gmail.com>
+Date: Sat, 2 Nov 2024 10:36:56 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="R9v6F9gj3D0509P0"
-Content-Disposition: inline
-In-Reply-To: <20241025161501.485684-3-miquel.raynal@bootlin.com>
-X-Cookie: We read to say that we have read.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] dt-bindings: spi: apple,spi: Add binding for Apple
+ SPI controllers
+Content-Language: en-MW
+To: j@jannau.net, Hector Martin <marcan@marcan.st>,
+ Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net>
+ <20241101-asahi-spi-v3-1-3b411c5fb8e5@jannau.net>
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20241101-asahi-spi-v3-1-3b411c5fb8e5@jannau.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---R9v6F9gj3D0509P0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Oct 25, 2024 at 06:14:39PM +0200, Miquel Raynal wrote:
-> There are spi devices with multiple frequency limitations depending on
-> the invoked command. We probably do not want to afford running at the
-> lowest supported frequency all the time, so if we want to get the most
-> of our hardware, we need to allow per-operation frequency limitations.
+On 2/11/2024 03:26, Janne Grunau via B4 Relay wrote:
 
-After applying this patch (I bisected the series) my Avenger96 board
-started failing to probe the SPI NOR flash it has:
+[...]
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-spi
+> +          - apple,t8112-spi
+> +          - apple,t6000-spi
+> +      - const: apple,spi
+Apple A7-A11 SoCs seems to use a Samsung SPI block, so apple,spi is too
+generic. Fallback to something like apple,t8103-spi instead.
 
-[    3.567876] spi-nor spi0.0: probe with driver spi-nor failed with error -95
+[...]
 
-Full job:
-
-   https://lava.sirena.org.uk/scheduler/job/925156
-
-I didn't spot anything with the code on a recheck but it's late on a
-Friday so I've not looked too hard.  My other boards are all fine though
-there's limited coverage.
-
---R9v6F9gj3D0509P0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmclN1wACgkQJNaLcl1U
-h9Aqzwf+M4nDW7XRYbgeIzByr8yYSw9oapqWDeYjRlCHLC6wQgZ9h9kWLKw6xZ4V
-Hxn/c9mAKJtjFZLynYIKtjtYskph0CgtVHuWDx6UfAbMOiHFjfoXLJISNNBpjzV1
-VpZFT4bohJBqMbFvd4ph8Id+XUF6QgiKOIKEp8YPJxCOm7t+dHHNJ69K09acWItg
-q+eK2fh53Fi1j/IG0lT5hitbLzM4MJsCGi7an+kdCgRqL11c/LFqTrD0oueGN5m2
-EHULNgHt5J/5gBPTILkkTDhN6V1/ykmXI5UIYTkgYfTwpqzbGf1XmUf8wnqHpkl9
-phi4fN1+Sq4ya+p6nLrGBC5Ke8GGQA==
-=cWfe
------END PGP SIGNATURE-----
-
---R9v6F9gj3D0509P0--
+Nick Chan
 
