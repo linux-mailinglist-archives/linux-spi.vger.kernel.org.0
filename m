@@ -1,98 +1,138 @@
-Return-Path: <linux-spi+bounces-5600-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5601-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586479BA033
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 14:12:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C569BA057
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 14:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB1BE1F21826
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 13:12:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A3AC281D6B
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Nov 2024 13:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B04EB189F5E;
-	Sat,  2 Nov 2024 13:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22841CAAC;
+	Sat,  2 Nov 2024 13:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUHv4s6e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kru/qg6H"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71477EAC6;
-	Sat,  2 Nov 2024 13:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64043156CA;
+	Sat,  2 Nov 2024 13:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730553115; cv=none; b=pKdq7fubn5W7cE/sWGizDqb6pcJNFk5rUuRYNQ/1HD143ylW9aMKY8WVK+CrSBKP6hXxa/8AE0NH+tew0x8drcaXHi3mY/fN+JZwVV0/OZ4ZgDSN7wfQQLkh4VEgsguUpgRHvZRs0EHAuUxCBZsJVK8ZjG3kJ+xgeirTFMD3PDM=
+	t=1730553311; cv=none; b=ocMQ5trng53Hrf0rKK5MB42pt3At0MUkN/Nfbc/G9pV7Fw98TxC/EYrs8PlFidp7dLr7pFhlQJmjkEnLw9b5DNnhP4ZFcLA/qWHwCK8lPYiSkEbUPLMAW4iMLuNC5/LbKpU3QYuoH+JXXNIShDdx2NlzD9YjMnyXv2zViX7VKMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730553115; c=relaxed/simple;
-	bh=eGFck0cKd1Wy64d/Ev/jSEbK3IIKOXA4fI7Uzfoz+9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LTYn+6LSl4k6SEORWlP/IFJwdh0n/dv6j6Y7FeEzxHT1FHo2g3UXGDmGjGm5ggwbfCv0vQ/m9BJFbu9a0+Jh6Bs9lBJBeQ0a6nSGOajk9SIfEJ9rHM8TyErNa0f/nyltnuzuMm2lGGObB5V0H75fsf95bddfD38dwxVOZJRha1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUHv4s6e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21A2C4CEC3;
-	Sat,  2 Nov 2024 13:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730553115;
-	bh=eGFck0cKd1Wy64d/Ev/jSEbK3IIKOXA4fI7Uzfoz+9k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nUHv4s6eRD6BBzQHjsh+cFIyMNUx1BNkT6PJb+Vs/t6ALkfudA5Wz7c0N9VjIqXvE
-	 nwOIv10w8osITYi4ymFr3BrogeMuR3Ekn+PVgFwp/7WwdtYV0wctd+0vWlEHWX9Jgt
-	 GtNTStE8UN/7qVZZq9QE0hDg/d/QAyjzR0ccjazeCmeRd0QanNktUhWN6pzQ+Qp8ET
-	 0WPwx9TwPKdiXKesmS8jSlfheWbruBuKz9jSMA9ZKp+jk9LSQLIH9B4DZStMRLxkNB
-	 AwvsEGTXK4Qccaa9MEPrbx11qUKk2x/EV+y+08s+nkgAIgismXVnCzbUEJa00tvtTy
-	 NI8Eimmavnz1A==
-Date: Sat, 2 Nov 2024 14:11:51 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Apple SPI controller driver
-Message-ID: <vzulq4ewdbrk7qdurtypxpaoe4jsswddfprtdbudoxipf6d3ya@4gnbmr722pig>
-References: <20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net>
+	s=arc-20240116; t=1730553311; c=relaxed/simple;
+	bh=fWFWaJrtT873uGrZbfXFWcjGiIbzel0zDqI7deZ84Bk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fKqLevXTGOa4BECgAqHz1py6zM2XUxJZwxst1XpPW6AoQTXN7SbQVwvQaSXawUmn+gKtKrjYF4JkZreixH2DZyy+D3vVXeMr7/zwUNhINoVJKBDE2wmFA2RqIerfEAPH/OjA5DkV9fJG2wcc/xFNKV7m/5uFuxevv/BcIO5HTrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kru/qg6H; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20cdb889222so28071155ad.3;
+        Sat, 02 Nov 2024 06:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730553310; x=1731158110; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YqIV8fJvUTPe1XkFfFuu3lKfRKNmYvmwJe3hWNSUszg=;
+        b=Kru/qg6HWM5IEdh6/nZFQ2Wyw3K9iESEFDvZb3s8+L4BTzX1NyUtud+IBMxV8Y7Xeq
+         ZZZdD+5vJ83rgidLycuM5Bziw5fbVCjixAXYMYHQuNXx0nKXOSL/thMbwD4evABwY5s4
+         jFHlUH/C7JbIXJwlpKnDG6ihSTkhEutsRhvS+WKTIBaWhJE3PnrrkYJulRQHIRVQdTm6
+         idd04Zg7db4u96DkKcpW3NB5oYrxy1LMzS8apcdwlZVpwkfJ/Mr6CIFvvCR38BFi2G9q
+         3P0TVuRDcggvIqbc6bazdJm/mn93Na+BPUH7CmZWCM/oM58nBXiwtIH3k4r+z9rjzdsP
+         UBsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730553310; x=1731158110;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqIV8fJvUTPe1XkFfFuu3lKfRKNmYvmwJe3hWNSUszg=;
+        b=ZLQtFnl+Mw97INbR+ngVeTe+YkVJd+VIJPfDKN53IHFPW7hGlC+1p8LAWrfgoF4zpd
+         Vl8kvDWppoE9SrshbWyGDS18S0z6ZxcDKkvsh5TqInvbrDXGi7F5jEfGpC2FZC4Zxmsv
+         fzhjaWW53ZGpkj0OoLQCj4lM3m9kwehco+GBCg7iRPYn0h2xdifIbNHbo40eusRI6lAY
+         jLTPrY+PxOWtGFe2/xneJ6iSHN+uhm6VrKQtAVrsj23SZm8aQGULdx9z+8W7MMhXemgR
+         QxtUFOhGrtclmLuu07XxtrNyiMT3PL93U2a+UdEq9161pR80crL99B560GpGJERQhT3+
+         9idQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfMN0Yz98TWWMr9hfIpNuvPaqjlE0+jT/VY7ILzrK3oYPq1sgOKOL2iHXsxRUK9b/nGX2bmEXQRx4U@vger.kernel.org, AJvYcCVYfIu8+LgAfgAG3rfvnjNSQMLZMHqIFlJYd8YKmplKISYZRe7yIsY0rnB2bY1SBcMX3F4zldhsF38eTYls@vger.kernel.org, AJvYcCXVDTlXcV4Rnjl/PwUJh2A4OSkVL2FWdceRcD0KS9lo+o+pNxG1CSJBoz9AASzU78kg69fGcYshJbjo@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS/ioBzz3700fNpyURt35JNT8PUwnN79QWshODYZXSuyyo1LvR
+	//sJttg8HDN2gu11PzuDQpcdg26enQEWiXTMpCPYjUf/orj8NvJ9zmrihx1Q
+X-Google-Smtp-Source: AGHT+IEjZyMhv52i+FdmXziel3S6uh0T/4JCB2ptezWEGIl82CVPxNSuviQk+FJATDrk0E2JnpSDUw==
+X-Received: by 2002:a17:902:d4cd:b0:20c:dc32:b5d0 with SMTP id d9443c01a7336-21103ca87e7mr141827475ad.58.1730553309583;
+        Sat, 02 Nov 2024 06:15:09 -0700 (PDT)
+Received: from [192.168.0.122] ([59.188.211.160])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21105706886sm33500465ad.68.2024.11.02.06.15.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Nov 2024 06:15:09 -0700 (PDT)
+Message-ID: <6fb61676-2744-4735-ab00-2a523e03ea96@gmail.com>
+Date: Sat, 2 Nov 2024 21:15:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] dt-bindings: spi: apple,spi: Add binding for Apple
+ SPI controllers
+Content-Language: en-MW
+To: Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc: j@jannau.net, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+ broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net>
+ <20241101-asahi-spi-v3-1-3b411c5fb8e5@jannau.net>
+ <46b31874-9fe2-4534-9777-816765a265b1@gmail.com>
+ <87wmhm3u7v.fsf@bloch.sibelius.xs4all.nl>
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <87wmhm3u7v.fsf@bloch.sibelius.xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 01, 2024 at 08:26:11PM +0100, Janne Grunau wrote:
-> Hi all,
-> 
-> This updated series address the review comments from the original
-> submission in 2021 [1]. It adds a new SPI controller driver for Apple
-> SoCs and is based on spi-sifive. It has been tested with the generic
-> jedec,spi-nor support and with a downstream driver for an Apple specific
-> HID over SPI transport.
-> 
-> As usual, I'm splitting off the MAINTAINERS and DT binding changes.
-> We would rather merge the MAINTAINERS change through the Asahi-SoC
-> tree to avoid merge conflicts as things trickle upstream, since
-> we have other submissions touching that section of the file.
-> 
-> The DT binding change can go via the SPI tree or via ours, but it's
-> easier if we merge it, as then we can make the DT changes to
-> instantiate it without worrying about DT validation failures depending
-> on merge order.
-> 
-> This is mostly Hector's work with a few minor changes to address review
-> comments from me.
-> 
-> [1] https://lore.kernel.org/linux-spi/20211212034726.26306-1-marcan@marcan.st/
-> 
-> v2:
-> - removed '#address-cells' and '#size-cells' from the bindings and added
->   Rob's Rb:
 
-Where?
 
-Best regards,
-Krzysztof
+On 2/11/2024 16:39, Mark Kettenis wrote:
+>> Date: Sat, 2 Nov 2024 10:36:56 +0800
+>> Content-Language: en-MW
+>>
+>> On 2/11/2024 03:26, Janne Grunau via B4 Relay wrote:
+>>
+>> [...]
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - apple,t8103-spi
+>>> +          - apple,t8112-spi
+>>> +          - apple,t6000-spi
+>>> +      - const: apple,spi
+>> Apple A7-A11 SoCs seems to use a Samsung SPI block, so apple,spi is too
+>> generic. Fallback to something like apple,t8103-spi instead.
+> 
+> Well, if that is a Samsung SPI block it probably should have a
+> "generic" compatible that starts with "samsung,".  The M1/M2
+> controllers have a different SPI block (presumably) designed by Apple
+> themselves.  So I think it is (still) appropriate that that one is
+> "apple,spi".
+I just looked into the SPI on A7-A11 SoC in more detail instead of just
+going off the ADT compatible. It seems a very big chunk of the registers
+offsets and bits seems to be the same as the ones in M1. So, feel free to
+ignore my comment above.
 
+Acked-by: Nick Chan <towinchenmi@gmail.com>
+
+> 
+> Also, (upstream) U-Boot already uses the "apple,spi" compatible.  So
+> changing it for purity sake just causes pain.
+Well, if upstream U-Boot is using it, then I agree that "apple,spi"
+should continue to be used.
+
+> 
+
+Nick Chan
 
