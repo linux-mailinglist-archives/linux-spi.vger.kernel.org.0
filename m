@@ -1,206 +1,170 @@
-Return-Path: <linux-spi+bounces-5620-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5621-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E46B9BC74C
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2024 08:50:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 782AB9BC7AE
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2024 09:08:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E223D282B2E
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2024 07:50:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31C0B1F227BC
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Nov 2024 08:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F266C1FE105;
-	Tue,  5 Nov 2024 07:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10EC61FF025;
+	Tue,  5 Nov 2024 08:08:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="T9gosV/O";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TmIgENc4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GeR9jp0D"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7791F282F1;
-	Tue,  5 Nov 2024 07:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0DB1C57B2;
+	Tue,  5 Nov 2024 08:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730793016; cv=none; b=jr32Xl13+LyyaZ0u0+5XAWYtq/4RAH8NH4fHr8Tz72YACxsTagpH1u92DtjINEIXed0yyS2UnX5jBt8FCrzpzWDb+bkXPabtrVuisbrEjGMbz9n8Hn7biBSu6rRMqAwhEanWnkSt7WZSQ3wBxTLP2ZhNrZV3/G2596t5ir35yFk=
+	t=1730794124; cv=none; b=OaSF2cQPNRhwXYA5IoCtu/D0mgY/roxv56GYkmIVZr4kqcBOi6cfv6uxVrEVRpqSn5P+tnZrpFOHcj00t0x+pDgbw45NUG+DZbfpWUiGLlQOvloGdLQaCwoIUyUrRA9CA6EnLKAojzeQ4kNJiojuFxIDyX4Q425i3Bp3oX5ZFtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730793016; c=relaxed/simple;
-	bh=qAOB4Tys5t6tpZB/veCWrbZMv0vMqWXPzqNzaCQOZ+k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oN7GT/ZYCpwv0iabg9J+IdeYeYiLr8SI31rcyjDN59GkDKcYdcSZyI6bHxml5tjhIgJUxfRXfJV9kYklV80WaaH+W7cVyVtGTKWoUKHLCjRa08NAGW/C6J4qh4GPuNGd+ICJ+dP9rekjy+7JEimTNRmfveJ1TjzRvTet8xgKcOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=T9gosV/O; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TmIgENc4; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id A86B21380601;
-	Tue,  5 Nov 2024 02:50:13 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Tue, 05 Nov 2024 02:50:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1730793013;
-	 x=1730879413; bh=D6OCx3NzmrJdDDip+0qK9zMAnmCzPOYRXUxgWn1goh8=; b=
-	T9gosV/O6KKn+nbmM0uE04aOhEHtzDt9NRv8YLMqJubADrKNYMP+wz8IVqKxQbvp
-	/QZ94IbSeRF+2urkUBecDpSCqED4mKB3cDkBr4wjFGHJm71r1PocxpWsCHf/kLXo
-	nuctPwor1kwoTdOnxmex61J4IPl2LrjjGUS7ZUZ9SfvrknKeR5jpSSLcnbqLi3tO
-	SLkgiK4L/J0FR8/BgapBz/PF0aXeYvFeDkjt1vw7rJIv4mLUrbkE3/HSEiUfbr2P
-	SGA2G34XN9oljawyTaX8XPl8AFXKVpMUeVSN1hoDNfpBagSgcrV1sbW++WHIput3
-	fEEi7z6XiWMwCl/sc0cQOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1730793013; x=
-	1730879413; bh=D6OCx3NzmrJdDDip+0qK9zMAnmCzPOYRXUxgWn1goh8=; b=T
-	mIgENc4DC3vg8e58XWWAlPPC+Q7U8v+QD+8CkhsocjVLSpaYLyScnXsaJvL/UpC4
-	L95Ypm2lS0Z2oouUPuqaDqyzqPuDLGR2z3NZ3pKEufaxwTJHtN8ECMQDfeL/RDd3
-	pGJStNFqyClN3XXPusEMqlFK0G5lhVio+pbqdEknxlGTY3izaYuzVn97rGkXu7jV
-	R+iV3jmz0/eG3SmWKj9eq4C+Z8+X5vRJPbLdNUgmL9lLWbNsUrumr9vrvpdcYB21
-	K7rZ+DsFlk3B8gxBUW4NcN2uiFbRMN66bdaPtJCDDmGYt2pROLffs2sJTmN9NLLy
-	Sd7MZZF3WDTFlipO8Wy7A==
-X-ME-Sender: <xms:Nc4pZ-3ECSKEE8XxIjWFt8cD9jqV6Wg5RtiOLlu7NLclo59Z7EuWfw>
-    <xme:Nc4pZxHjh50Tm9SE-eom3h44vf4JnHnQ0x0s2brwdU9iyZuQpGBELCMEFb8Sz159G
-    cZi99rawlcp05-xq8I>
-X-ME-Received: <xmr:Nc4pZ25M6TGHJzJasOsDM7YAoDrwhxU0M-8h8VHOVAawJrZX1qzzOTYvE8BHdf21tesvrSN6TzaVLkU5lEAwcNEcfD8J8uIn1Nk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdeljedguddufecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddt
-    jeenucfhrhhomheplfgrnhhnvgcuifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqe
-    enucggtffrrghtthgvrhhnpeevfeekuedutedtvdffvefhvedvkefhgfevheefhfffheef
-    tefgteffuefgveefhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjsehjrghnnhgruhdrnhgvthdpnhgspghrtghpthhtohepudegpdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopegthhhrihhsthhophhhvgdrjhgrihhllhgvth
-    esfigrnhgrughoohdrfhhrpdhrtghpthhtohepuggvvhhnuhhllhdojhdrjhgrnhhnrghu
-    rdhnvghtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshgrhhhisehlihhsthhsrd
-    hlihhnuhigrdguvghvpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehl
-    ihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpih
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvges
-    vhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlh
-    esvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrtggrnhesmhgrrhgt
-    rghnrdhsthdprhgtphhtthhopehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:Nc4pZ_3KS_ljVMmTlx3iWxMco4k3hhmRZ_NyMqBy1Z2cCLZBwK9Jvw>
-    <xmx:Nc4pZxGAJAFf6jqQo0MNohbbYF1WA22ckV8ur5ZbkxNT4uHdz9yn3w>
-    <xmx:Nc4pZ49pLJaX10Rw7OTYV2qav_Wltpptfqkle33erLrAdYpE0OtDrQ>
-    <xmx:Nc4pZ2n9MJzEklKJt5lkLPbGFqoFAcmtM4EWss9TldUKHy23GcdRHA>
-    <xmx:Nc4pZ-dm3BU-dKHsi2K66keV3bFCqxzPVu6XA7UvxuqJoD0cGTlScUMZ>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Nov 2024 02:50:12 -0500 (EST)
-Date: Tue, 5 Nov 2024 08:50:12 +0100
-From: Janne Grunau <j@jannau.net>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v3 2/3] spi: apple: Add driver for Apple SPI controller
-Message-ID: <20241105075012.GC923511@robin.jannau.net>
-References: <20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net>
- <20241101-asahi-spi-v3-2-3b411c5fb8e5@jannau.net>
- <ff82c5bf-c757-4496-83ac-c3b257ef476c@wanadoo.fr>
+	s=arc-20240116; t=1730794124; c=relaxed/simple;
+	bh=dVybQkWmSxoyj1MofMAfodogbPNIcs6eTPaaE0ShWnY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hI9ug16a8Ds+gkzN+sewIQhOaNU0SCdlf75DYFUJJu2HIIvDAWIl1hNmMULGXHcJaWYtaTXmABe93GeANfpYYowxcQAHOmwYS/5WCgxR5Q1U3e/nXfi2GYEjc7NZp+HnobIB3FxFywtiLwru5u/E7egMmTMFk1g924zdmnfi4Fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GeR9jp0D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5994FC4CED3;
+	Tue,  5 Nov 2024 08:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730794124;
+	bh=dVybQkWmSxoyj1MofMAfodogbPNIcs6eTPaaE0ShWnY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=GeR9jp0DvXAik3U57DiJEkoWf6UurPcas8la40H39wzxvMSwrstClx0I4YIO7Aew2
+	 nx8ZYnWInFFnHhQELxRB8vQ4SqM2NBJ8RGocQEhrqVJDlVF1yqSJm/BCDB8fQb5YHk
+	 /A3Om1fQLCM08HTh3jMH9F36tA87+S/H4zfQKLmVJQ5TLZiKHKYxAxThf1CmHClu4M
+	 HSsYmABU4w7rCPtSrcEfj/UgJwAuoQYqjVJ9R1G8c8dJURr9cflHNV+Lp2aMv8QcR+
+	 8fyt7i3UYYm3JBaJnxAPArkaUf+OkO/oWOxRfxs3n6VN4K4loVVzX4w7eePQqO1LtC
+	 rdgwjH0UrtuRw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46FA9D12664;
+	Tue,  5 Nov 2024 08:08:44 +0000 (UTC)
+From: Janne Grunau via B4 Relay <devnull+j.jannau.net@kernel.org>
+Subject: [PATCH v4 0/3] Apple SPI controller driver
+Date: Tue, 05 Nov 2024 09:08:28 +0100
+Message-Id: <20241105-asahi-spi-v4-0-d9734f089fc9@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ff82c5bf-c757-4496-83ac-c3b257ef476c@wanadoo.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHzSKWcC/3WMOw7CMBAFrxJtjZF/wYaKeyCKTbIhS2EiO1igK
+ HfHSQUF5Ty9mRkSRaYEp2qGSJkTP0IBu6ugHTDcSHBXGLTUVnqlBCYcWKSRRe+dlQ26o+sclP8
+ YqefX1rpcCw+cpkd8b+ms13WrKCW/K1kLKdzBoEdvO2/s+Y4h4HMfaII1k81f1RTVNGVu677xV
+ P+oy7J8AP4MY8XeAAAA
+X-Change-ID: 20240811-asahi-spi-f8740ba797d7
+To: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Janne Grunau <j@jannau.net>, 
+ Nick Chan <towinchenmi@gmail.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3311; i=j@jannau.net;
+ s=yk2024; h=from:subject:message-id;
+ bh=dVybQkWmSxoyj1MofMAfodogbPNIcs6eTPaaE0ShWnY=;
+ b=owGbwMvMwCW2UNrmdq9+ahrjabUkhnTNS10XevU7NxYuDXF4oD1r3aXWQzJfnvfrV3A4PHJg+
+ Wt5kmNHRykLgxgXg6yYIkuS9ssOhtU1ijG1D8Jg5rAygQxh4OIUgIm838nIsGpS31nzvbOvrSxo
+ z+2fcMReKujW881Py+wbF82XuvBP4THDH56D2bWr5joo7ps+8dDuBI7i7wxO8y0Xnnqz9Kjbbga
+ fLE4A
+X-Developer-Key: i=j@jannau.net; a=openpgp;
+ fpr=8B336A6BE4E5695E89B8532B81E806F586338419
+X-Endpoint-Received: by B4 Relay for j@jannau.net/yk2024 with auth_id=264
+X-Original-From: Janne Grunau <j@jannau.net>
+Reply-To: j@jannau.net
 
-On Mon, Nov 04, 2024 at 08:16:25PM +0100, Christophe JAILLET wrote:
-> Le 01/11/2024 à 20:26, Janne Grunau via B4 Relay a écrit :
-> > From: Hector Martin <marcan-WKacp4m3WJJeoWH0uzbU5w@public.gmane.org>
-> > 
-> > This SPI controller is present in Apple SoCs such as the M1 (t8103) and
-> > M1 Pro/Max (t600x). It is a relatively straightforward design with two
-> > 16-entry FIFOs, arbitrary transfer sizes (up to 2**32 - 1) and fully
-> > configurable word size up to 32 bits. It supports one hardware CS line
-> > which can also be driven via the pinctrl/GPIO driver instead, if
-> > desired. TX and RX can be independently enabled.
-> > 
-> > There are a surprising number of knobs for tweaking details of the
-> > transfer, most of which we do not use right now. Hardware CS control
-> > is available, but we haven't found a way to make it stay low across
-> > multiple logical transfers, so we just use software CS control for now.
-> > 
-> > There is also a shared DMA offload coprocessor that can be used to handle
-> > larger transfers without requiring an IRQ every 8-16 words, but that
-> > feature depends on a bunch of scaffolding that isn't ready to be
-> > upstreamed yet, so leave it for later.
-> > 
-> > The hardware shares some register bit definitions with spi-s3c24xx which
-> > suggests it has a shared legacy with Samsung SoCs, but it is too
-> > different to warrant sharing a driver.
-> > 
-> > Signed-off-by: Hector Martin <marcan-WKacp4m3WJJeoWH0uzbU5w@public.gmane.org>
-> > Signed-off-by: Janne Grunau <j@jannau.net>
-> > ---
-> 
-> Hi,
-> 
-> > diff --git a/drivers/spi/spi-apple.c b/drivers/spi/spi-apple.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..1a3f61501db56d0d7689cc3d6f987bf636130cdb
-> > --- /dev/null
-> > +++ b/drivers/spi/spi-apple.c
-> > @@ -0,0 +1,531 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +//
-> > +// Apple SoC SPI device driver
-> > +//
-> > +// Copyright The Asahi Linux Contributors
-> > +//
-> > +// Based on spi-sifive.c, Copyright 2018 SiFive, Inc.
-> > +
-> > +#include <linux/bitfield.h>
-> > +#include <linux/bits.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/module.h>
-> 
-> Move a few lines below to keep alphabetical order?
+Hi all,
 
-done
+This updated series address the review comments from the original
+submission in 2021 [1]. It adds a new SPI controller driver for Apple
+SoCs and is based on spi-sifive. It has been tested with the generic
+jedec,spi-nor support and with a downstream driver for an Apple specific
+HID over SPI transport.
 
-> > +#include <linux/interrupt.h>
-> > +#include <linux/io.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
-> > +#include <linux/spi/spi.h>
-> 
-> ...
-> 
-> > +static int apple_spi_probe(struct platform_device *pdev)
-> > +{
-> > +	struct apple_spi *spi;
-> > +	int ret, irq;
-> > +	struct spi_controller *ctlr;
-> > +
-> > +	ctlr = devm_spi_alloc_master(&pdev->dev, sizeof(struct apple_spi));
-> > +	if (!ctlr)
-> > +		return -ENOMEM;
-> > +
-> > +	spi = spi_controller_get_devdata(ctlr);
-> > +	init_completion(&spi->done);
-> > +	platform_set_drvdata(pdev, ctlr);
-> 
-> Is it needed?
-> There is no platform_get_drvdata()
+As usual, I'm splitting off the MAINTAINERS and DT binding changes.
+We would rather merge the MAINTAINERS change through the Asahi-SoC
+tree to avoid merge conflicts as things trickle upstream, since
+we have other submissions touching that section of the file.
 
-no, it is not used anymore. It's a leftover from v1 which used
-platform_get_drvdata() in apple_spi_remove() which is gone now.
+The DT binding change can go via the SPI tree or via ours, but it's
+easier if we merge it, as then we can make the DT changes to
+instantiate it without worrying about DT validation failures depending
+on merge order.
 
-thanks, I'll send a v4 shortly
-Janne
+This is mostly Hector's work with a few minor changes to address review
+comments from me.
+
+[1] https://lore.kernel.org/linux-spi/20211212034726.26306-1-marcan@marcan.st/
+
+v2:
+- removed '#address-cells' and '#size-cells' from the bindings and added
+  Rob's Rb:
+- fixed (new) checkpatch warnings
+- added t8112 (M2) SoC
+- shorted long and complex source code lines
+- switch to devm_clk_prepare_enable() and devm_pm_runtime_enable()
+- switch to dev_err_probe() in probe function
+- removed "pdev->dev.dma_mask = NULL;"
+- got rid of apple_spi_remove()
+
+Signed-off-by: Janne Grunau <j@jannau.net>
+---
+Changes in v4:
+- removed the label from example in the bindings
+- really added Rob's Rb: for the bindings added Reviewed/Acked-by: for v3
+- alphabetically sorted #includes
+- removed leftover platform_set_drvdata
+- Link to v3: https://lore.kernel.org/r/20241101-asahi-spi-v3-0-3b411c5fb8e5@jannau.net
+
+Changes in v3:
+- fixed bindings_check warning
+- converted top file comment to C++ style comments
+- dropped verbose dev_err_probe after failed devm_* function
+- stopped setting field in zero initialized struct to 0
+- added error handling for devm_pm_runtime_enable()
+- Link to v2: https://lore.kernel.org/r/20241101-asahi-spi-v2-0-763a8a84d834@jannau.net
+
+Changes in v2:
+- removed '#address-cells' and '#size-cells' from the bindings and added
+  Rob's Rb:
+- fixed (new) checkpatch warnings
+- added t8112 (M2) SoC
+- shorted long and complex source code lines
+- switch to devm_clk_prepare_enable() and devm_pm_runtime_enable()
+- switch to dev_err_probe() in probe function
+- removed "pdev->dev.dma_mask = NULL;"
+- got rid of apple_spi_remove()
+- Link to v1: https://lore.kernel.org/linux-spi/20211212034726.26306-1-marcan@marcan.st/
+
+---
+Hector Martin (3):
+      dt-bindings: spi: apple,spi: Add binding for Apple SPI controllers
+      spi: apple: Add driver for Apple SPI controller
+      MAINTAINERS: Add apple-spi driver & binding files
+
+ .../devicetree/bindings/spi/apple,spi.yaml         |  62 +++
+ MAINTAINERS                                        |   2 +
+ drivers/spi/Kconfig                                |  11 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-apple.c                            | 530 +++++++++++++++++++++
+ 5 files changed, 606 insertions(+)
+---
+base-commit: 98f7e32f20d28ec452afb208f9cffc08448a2652
+change-id: 20240811-asahi-spi-f8740ba797d7
+
+Best regards,
+-- 
+Janne Grunau <j@jannau.net>
+
+
 
