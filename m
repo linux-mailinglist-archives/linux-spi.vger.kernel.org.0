@@ -1,129 +1,98 @@
-Return-Path: <linux-spi+bounces-5648-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5649-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093309C0CA9
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Nov 2024 18:15:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 559269C0DFD
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Nov 2024 19:42:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AC6F1C23F63
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Nov 2024 17:15:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C5131F21A54
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Nov 2024 18:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779232161FA;
-	Thu,  7 Nov 2024 17:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9F2192D8C;
+	Thu,  7 Nov 2024 18:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hKTWxS50"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OWEPLDKW"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518A6216443
-	for <linux-spi@vger.kernel.org>; Thu,  7 Nov 2024 17:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32B118F2C3;
+	Thu,  7 Nov 2024 18:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730999711; cv=none; b=NtSP6oej/8r7hCUAajqURPGCPYEttjxBHYAjyB6YLGW5dx03CtnHRwNMLnjGd4RmnH3TdPMj7EaGnpDAEMNB810WsFJQr0PUHnFw/Vf4dwB+jV3ASRXhFVaEWSfEcjpOpOImpm5dpgkKvHFJa93ixNYrULJKPMT5gp59KEKIXGI=
+	t=1731004961; cv=none; b=AUfDp7mMsvD33Arh6OCQplWRMIQdAaxC+/jDEdZn1a/eOgPt0vPcgLHFjbPdNr9fO5YaCHuPTF4NkEY6Je9hfgJ7e1kZrNAUUXpS3VKTHWPotPOEJKYI4wudmygrmiOoTmCUZjS6jsy3RawTxjEYEtS4Tt3MwSkzuHnQi80kUGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730999711; c=relaxed/simple;
-	bh=paankYmJQRECpd98G1Q22WUKvs4Rk7C3en/qFTL5HTQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UdBCVbgUNTlIc2MdnQ6B5Ju55/zPFXwM2d/E0QQpmTOK7zluYOYcDSy+b0yx+e4eNZ1AoMCK85zbtaY88rA5FVwhocSgW6VKOKXtDAfqexHfUyZj8KfFoWNDji2GFZK2UPRzk/esEdkb/zQaR7DfqydVavvqtVJY3/b+IX2Bu6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hKTWxS50; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0E5C4CECC;
-	Thu,  7 Nov 2024 17:15:06 +0000 (UTC)
+	s=arc-20240116; t=1731004961; c=relaxed/simple;
+	bh=AU6KM+4jQgRXOaINh8QzR6G9PXRof4Va4Nn84vc645g=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=RZ8vvnfyE1Dj7BaFpPUaOJpFvmmQPRHm+7neXTeo8kgFiAdo7ixS1x/e8WtP/jpGjGY9zf0IzPy2L2Y30kNBnTzI0lHU0HdNKTTyYpgvJjMHm8UhFiTtOxxPgKW64LoRMwmq/v/hW4X/V36bGNb2jQC4pYKVgA2Ap4a/r0/AtzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OWEPLDKW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760BFC4CECC;
+	Thu,  7 Nov 2024 18:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730999710;
-	bh=paankYmJQRECpd98G1Q22WUKvs4Rk7C3en/qFTL5HTQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hKTWxS50PRtubCn66KXYYV/EqQuwSQCBXvQGToBnx7lAaVTps6KiAZoEKvMsXa06h
-	 sj/gSJvCNtMSVTzm84g3Th1DQlg43FxI+kZoRxdrRNYdirD9BmoS6jsiHhwNLtr12m
-	 +s5G6xfgqVsLfT1dWSEST7JI0kPp5ZD/8E7c+tCggKE6w5Z9NQYX61pZS7Zms8IeE/
-	 inpKeo4QEz0/0/Uae98vrtS6VDOgZrkTuybIwrA1gywfra+RMDMD1OAqd6BLDVV+Rt
-	 WRbP0oQKD1yvSsn/FrlZqD4sF4PZGkHlMUSt0+7nRZjC3gLWCt5JB91C9X6l2+LZhp
-	 Y4XlEr+nBtZmA==
-Date: Thu, 7 Nov 2024 17:15:03 +0000
+	s=k20201202; t=1731004961;
+	bh=AU6KM+4jQgRXOaINh8QzR6G9PXRof4Va4Nn84vc645g=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=OWEPLDKWB+KY3UdA/QlhUixH60oBwcg9PlYo7wH223Te3ORqw2H7BlnqUzRKP2Sr1
+	 FGK+agrT1xFGh0MhOOkL+fo6EW97jCWYk5cDc3MjTGN1W4kzVmCZXtI5yQGJPAhIDA
+	 ldbqfXJHVZTtPUbCoOE4OaBZXSnZTnJiZpRB7NC9WGFzyfTs2M5L9Q8CHD4sxDZ9ys
+	 q5Q2ykJ7ADddmJFQIRdhi8dI0RL7oWdSKfnXPc4/3TY0ak4vkssVG1/jOHU1RbM2Ke
+	 DkXbMeyDYR2eZ58qqg7SF9X2YPd6ghMuAXs4Pz7EWOZuo1ocsZWCKhmMEBPAdWSKJJ
+	 fDkj8ks434EXw==
 From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
-	linux-spi@vger.kernel.org, Steam Lin <stlin2@winbond.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH 02/24] spi: spi-mem: Add a new controller capability
-Message-ID: <f0ea6706-17a2-4500-b426-a53c836c52b8@sirena.org.uk>
-References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
- <20241025161501.485684-3-miquel.raynal@bootlin.com>
- <586cf617-37ee-4859-a11b-67654d650380@sirena.org.uk>
- <871pznqqdb.fsf@bootlin.com>
+To: Jonas Rebmann <jre@pengutronix.de>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de
+In-Reply-To: <20241107-spidev-test-word-delay-v1-1-d4bba5569e39@pengutronix.de>
+References: <20241107-spidev-test-word-delay-v1-1-d4bba5569e39@pengutronix.de>
+Subject: Re: [PATCH] spi: spidev_test: add support for word delay
+Message-Id: <173100496020.241412.394021907254195608.b4-ty@kernel.org>
+Date: Thu, 07 Nov 2024 18:42:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7aoKoHXbg0c1jiz1"
-Content-Disposition: inline
-In-Reply-To: <871pznqqdb.fsf@bootlin.com>
-X-Cookie: Professional driver on closed track.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-9b746
 
+On Thu, 07 Nov 2024 16:07:31 +0100, Jonas Rebmann wrote:
+> Support setting the word delay using the -w/--word-delay command line
+> parameter. Note that spidev exposes word delay only as an u8, allowing
+> for a maximum of 255us of delay to be inserted.
+> 
+> 
 
---7aoKoHXbg0c1jiz1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Thu, Nov 07, 2024 at 11:40:00AM +0100, Miquel Raynal wrote:
-> On 01/11/2024 at 20:17:33 GMT, Mark Brown <broonie@kernel.org> wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > After applying this patch (I bisected the series) my Avenger96 board
-> > started failing to probe the SPI NOR flash it has:
+Thanks!
 
-> > [    3.567876] spi-nor spi0.0: probe with driver spi-nor failed with
-> > error -95
+[1/1] spi: spidev_test: add support for word delay
+      commit: 3ec83a377a995559c18880ff780a6873df9cc5d3
 
-> Would you mind testing the series with this change on top and tell me if
-> that fixes it?
->=20
-> --- a/drivers/spi/spi-mem.c
-> +++ b/drivers/spi/spi-mem.c
-> @@ -184,7 +184,7 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
->                         return false;
->         }
-> =20
-> -       if (op->max_freq < mem->spi->max_speed_hz) {
-> +       if (op->max_freq && op->max_freq < mem->spi->max_speed_hz) {
->                 if (!spi_mem_controller_is_capable(ctlr, per_op_freq))
->                         return false;
->         }
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Yes, that seems to have been the issue.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---7aoKoHXbg0c1jiz1
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcs9ZYACgkQJNaLcl1U
-h9BanQf/VDGt8OfnUN5O2fdVfWMjqxwt0/k1sp3cjo1HWRquSXtdw3SsV6v7VfsO
-GPl8v9atScopqUOlC7xpbUfb2pEELvQ7koNlysmugdJl1QLz12Zkh1rjkOwQ0QSD
-bnLy0a44MA3r/zrmxK8LrJAwQ+jX84IFa75zCkkpcntxcQDAUZH8L6eZs3jukt/v
-4U56AxHpNvYEXkF1AxBPxG+ahQXE3l5tvUO3nxq2JkeemWkcuCZymqHQmxuiPoor
-rKW6fy8u+/OPCPWqtQ3OXZpGI/HEbcSJ+lQRsUy/wR36boLvyF4QJrlfp5LoML9w
-VmtV6urSLkDPc3kW8dtrMgv8w+1vVw==
-=/8dT
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---7aoKoHXbg0c1jiz1--
 
