@@ -1,122 +1,118 @@
-Return-Path: <linux-spi+bounces-5655-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5656-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836739C1885
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2024 09:55:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C679C1D75
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2024 13:59:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4874A282B88
-	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2024 08:55:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E3DAB20F04
+	for <lists+linux-spi@lfdr.de>; Fri,  8 Nov 2024 12:59:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3DB61DEFDD;
-	Fri,  8 Nov 2024 08:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFBD01E47DD;
+	Fri,  8 Nov 2024 12:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cePuNSJf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IOgNYNiB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB01C47F69
-	for <linux-spi@vger.kernel.org>; Fri,  8 Nov 2024 08:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7BC1D0F5C
+	for <linux-spi@vger.kernel.org>; Fri,  8 Nov 2024 12:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731056120; cv=none; b=R18zs4yigOcPD41JtHTZreNGXQBEts/wd+zp9SNOcVxNEYDp48sEd/iacgbYI2+xp4FClsv/LZ2iOYhew/RL0ZBkYwDrGKCtNTWXvjxVEHouyOYbQhSz53I+81mPthnT3CTdihs5TANy0WRbpzkBn0chrjJ5Sw/AGYWmNcb+rpA=
+	t=1731070749; cv=none; b=eo9abV4FA54f/O81gCqWPt+PVaUWM7VFCBpewW17hHKuzm72+qnDq8w+bQ/cUblT03iUudx4BTCVVlCKHRADqLrfuL/TU7GLztamTJ/hF1q8qgrt3+EpqaZh+5wDr8Zy/PoJ/HHNOT5IIKybHrIGQMLn+tRctVKrbvSttA7wFBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731056120; c=relaxed/simple;
-	bh=lHdkzvbZ7E9+EFlXU9czvVHKs0TgqwrAtOFankLSLmM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IPO2afg2xkTbSCsnzD5U4SLTo9DjybsjlJhq2BgupEF78W8vx1KjmP270+dDBpjs06HgFgIophEo5aHj/EGQ8jy3ui7xZ+NagE/ZKmdZ4NInheeu24/9RR5XnnB1mmUwbdL3zk+HFGKoJyHg17pGjU2RXZyuZzRGGNlt06R2H4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cePuNSJf; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D52D60005;
-	Fri,  8 Nov 2024 08:55:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731056112;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X94KPNwmhHzAdqRW/pWfSff8gFIpYD5QqakcI48JnXw=;
-	b=cePuNSJfAYXZRpL2j7/G2hPHIgEBeR2zp+wKJC/hvotjgcPvat5CeJbluC0ERZH0bIRcN7
-	ABvPW1oTC43WcVo6j2X+yom5/pm3oKb5bdjYL7rwfGrj6VcpfT+kRnqxEka9mdRUzrjlCf
-	eI0Dj1zVRBkUouYVVp6d8TVNMM1ZDSiSsZ3NB4imPD0lcUKk4RYBK3GXnYiwrkkRQVTxB8
-	sSTufNgiVjhYW3N4OhKTXunv5lAQ/PBgpOHDlRZMI7+kp0FupeM/LjNTKWwqxRfneyTwiQ
-	rXdb4z5raHfKMp6e05rf6T8e7aFMulHbmN/PSXpfYnbiUin6njaonx/ICu6FBA==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
- <vigneshr@ti.com>,  Tudor Ambarus <tudor.ambarus@linaro.org>,  Pratyush
- Yadav <pratyush@kernel.org>,  Michael Walle <michael@walle.cc>,
-  linux-mtd@lists.infradead.org,  linux-spi@vger.kernel.org,  Steam Lin
- <stlin2@winbond.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-  Sanjay R Mehta <sanju.mehta@amd.com>,  Han Xu <han.xu@nxp.com>,  Conor
- Dooley <conor.dooley@microchip.com>,  Daire McNamara
- <daire.mcnamara@microchip.com>,  Matthias Brugger
- <matthias.bgg@gmail.com>,  AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>,  Haibo Chen
- <haibo.chen@nxp.com>,  Yogesh Gaur <yogeshgaur.83@gmail.com>,  Heiko
- Stuebner <heiko@sntech.de>,  Michal Simek <michal.simek@amd.com>
+	s=arc-20240116; t=1731070749; c=relaxed/simple;
+	bh=6kWrOSprHBdWpMGWOkcTlPWCrFTmXU5zNwwK77wqz1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F3JgKjICQtMdqX7dx35WPjx/uzxW39YigxO0KTZL5eM3zI8QNsweH9NlsmGTmex2BAHvCYuZX5BerU/Lz42KIthbghHkgDq5n/BOKlGDgb4KSMPWk33shm4ESlaI3mzQqcqujzwTW/tJbGGROPPpavLInDj0jzuXffgthVcaXNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IOgNYNiB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B67EC4CECD;
+	Fri,  8 Nov 2024 12:59:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731070749;
+	bh=6kWrOSprHBdWpMGWOkcTlPWCrFTmXU5zNwwK77wqz1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IOgNYNiBd3cqRb2XUKK4/2xgXjrSk2/EMXQyo8Xc6hea76iVOyQDsFuc2owXAvjey
+	 beCaHqPjnce7ltswYhiPqDj5j6/9mmD6bcoTQ8pnqz6Pws+QpbeAt81dtJpNaYIiUH
+	 lDzswaMIvWtUqh1t9tnloulT4d8xQm6JdM1LTNsZCW7jSP9eL79s7Kr2xYSm1SG/FE
+	 pNIN5NFoeDa+ga5vrhHRzRX1rM8yZfliR1vkHQ1Ty41SN8H+LB/6WvQ5nYdIpUqz7p
+	 8Vdp+vDWhSdxFrrTuSg8+AHzneGnAR+Za29QLI/8+UoRk/VOBB9Ebzjd026v1cQvgU
+	 ibZChmgf8LYVw==
+Date: Fri, 8 Nov 2024 12:59:02 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+	linux-spi@vger.kernel.org, Steam Lin <stlin2@winbond.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Michal Simek <michal.simek@amd.com>
 Subject: Re: [PATCH 02/24] spi: spi-mem: Add a new controller capability
-In-Reply-To: <f0ea6706-17a2-4500-b426-a53c836c52b8@sirena.org.uk> (Mark
-	Brown's message of "Thu, 7 Nov 2024 17:15:03 +0000")
+Message-ID: <fa56bccd-b044-4fb1-be9d-dc143978ad3e@sirena.org.uk>
 References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
-	<20241025161501.485684-3-miquel.raynal@bootlin.com>
-	<586cf617-37ee-4859-a11b-67654d650380@sirena.org.uk>
-	<871pznqqdb.fsf@bootlin.com>
-	<f0ea6706-17a2-4500-b426-a53c836c52b8@sirena.org.uk>
-User-Agent: mu4e 1.12.1; emacs 29.4
-Date: Fri, 08 Nov 2024 09:55:07 +0100
-Message-ID: <87ttciayvo.fsf@bootlin.com>
+ <20241025161501.485684-3-miquel.raynal@bootlin.com>
+ <586cf617-37ee-4859-a11b-67654d650380@sirena.org.uk>
+ <871pznqqdb.fsf@bootlin.com>
+ <f0ea6706-17a2-4500-b426-a53c836c52b8@sirena.org.uk>
+ <87ttciayvo.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nqiNPQ2PFHMUpvNQ"
+Content-Disposition: inline
+In-Reply-To: <87ttciayvo.fsf@bootlin.com>
+X-Cookie: Do not overtax your powers.
 
-On 07/11/2024 at 17:15:03 GMT, Mark Brown <broonie@kernel.org> wrote:
 
-> On Thu, Nov 07, 2024 at 11:40:00AM +0100, Miquel Raynal wrote:
->> On 01/11/2024 at 20:17:33 GMT, Mark Brown <broonie@kernel.org> wrote:
->
->> > After applying this patch (I bisected the series) my Avenger96 board
->> > started failing to probe the SPI NOR flash it has:
->
->> > [    3.567876] spi-nor spi0.0: probe with driver spi-nor failed with
->> > error -95
->
->> Would you mind testing the series with this change on top and tell me if
->> that fixes it?
->>=20
->> --- a/drivers/spi/spi-mem.c
->> +++ b/drivers/spi/spi-mem.c
->> @@ -184,7 +184,7 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
->>                         return false;
->>         }
->>=20=20
->> -       if (op->max_freq < mem->spi->max_speed_hz) {
->> +       if (op->max_freq && op->max_freq < mem->spi->max_speed_hz) {
->>                 if (!spi_mem_controller_is_capable(ctlr, per_op_freq))
->>                         return false;
->>         }
->
-> Yes, that seems to have been the issue.
+--nqiNPQ2PFHMUpvNQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Great, thanks for testing. I'll soon send a v2, but I guess that's too
-late for this merge window.
+On Fri, Nov 08, 2024 at 09:55:07AM +0100, Miquel Raynal wrote:
+> On 07/11/2024 at 17:15:03 GMT, Mark Brown <broonie@kernel.org> wrote:
 
-Regarding how to apply, I believe I'll have more spi-nand patches on top
-of that in the next cycle, so either I apply them with your Ack and
-share an immutable tag, or you apply it and give me one. Either ways
-works fine for me. It's more work to create the branch/tag so I can
-handle it (once we settle on the content ofc).
+> > Yes, that seems to have been the issue.
 
-Cheers,
-Miqu=C3=A8l
+> Great, thanks for testing. I'll soon send a v2, but I guess that's too
+> late for this merge window.
+
+It should be fine at least for the core bits, the driver bits it might
+be better to hold off for the next release but the core changes
+shouldn't actually do anything until the drivers start enabling them so
+they ought to be relatively safe.  That'd also make merging easier as
+there'd be no cross tree issues.
+
+--nqiNPQ2PFHMUpvNQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcuCxUACgkQJNaLcl1U
+h9B4BQf/Y1K5ro5h+ed1EKxy1lpiWJ0TdiTK5iTOY6Kn8SpCmo3uaxRGzHlQkMk6
+qNORE5be8GDO1Ovf5fVc1SnSTvD3IFV5lV2vxf96B6vADYo4OSmT9Z/zbwOiRsK2
+ppracs+cE5EOiaj9L4nB7dYoN6kW0jxUCDGOWFP7xqQPwiEdsA8xbsGdHCSXRsQO
+zURKPBj+BmGtq09S0u/01OKSO1X3aG5442ihzWReJm4CUWa+5j/KMendRv0UiRT2
+VbUb7Dk+d0a04WinHleeh+Ik2R+chrrPK37Y5S7EZ/x2CLpF2V4kjJnS0lVWHQGw
+I39ThnLWL22J8oNAfLJqRuaT1xaOIA==
+=HuAN
+-----END PGP SIGNATURE-----
+
+--nqiNPQ2PFHMUpvNQ--
 
