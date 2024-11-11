@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-5665-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5666-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E73329C3FB4
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 14:42:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82989C3FD7
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 14:50:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A652428297A
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 13:42:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FBDE1F21081
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 13:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 142DB14D70E;
-	Mon, 11 Nov 2024 13:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC8D19CC3F;
+	Mon, 11 Nov 2024 13:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NSIjxrPw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f06MUedw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3B21865E0
-	for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 13:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8FC19D091
+	for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 13:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731332558; cv=none; b=l9Lx4PTbGyyMBenTGt3wIoS2LKQbKHnK75+kh8x5aXp3ThTApZAWd5PdP/2divDuDiJoURdTKCHtjm4yoInww8Vk/T43OcErc0/hDdvTdgNtLjr4dT+rPjBgIYZzLtaCYsA2mT2CTEQWCycaZm/MlwhBdXfv/nUmgwtJU0ty0es=
+	t=1731333047; cv=none; b=sPy7FsEbkIyCHkS5Zcgq/Qb2hKFj+T3hdQzS+L4Y5yvaxiQCg9f1cJVRELCVfof+vFsN44qtFOpuUwlvd0nWsoPwShC/x2J3FQn54IekfmhlcxtIb9wcf0Lnk2nbiS3LTbq4KIm4BjoTmMI3zwWBLD0jx1yKdyNNLmfcYoBpQN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731332558; c=relaxed/simple;
-	bh=Y3zflVzs4zmU12WLOrosHNsReIIhJZ12xrnPAPnQMdU=;
+	s=arc-20240116; t=1731333047; c=relaxed/simple;
+	bh=jJey9kSQDbGhyspkUDtpA8KOvRsbyXh4d6J2CCOxink=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QFcXxZmk+98NTTA9e5vsVC4haMu2YXUxuI49UfIS/uTnlupG2lV7tLpWiP/UpCfEy3RcvXgYhRtOUrtd7mL9NGNtaW/ZXjrsMX2hBBoibDLKPt2EdgDgViPvvUcpdKUeYwIZid1OEKCIplxSx2dODno1qAzUw7GCqbXHf6bRDPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NSIjxrPw; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:Content-Type; b=qhSRcPBqUHoi6OfIuBMrAbfvq9HwSo4uyua8c7/Wgj3QMMRRyi5M+du8mmDTfzObvqXbKuZEAALKai+1WLmprnRS87Eg+lgGfL1DZdP+TBSi1Za1/JsqH5zIZhNCle7SCkorA6BButBnrLRLliRmyZibb9xoa/dO/X/WxOcjL94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f06MUedw; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4314c4cb752so39667005e9.2
-        for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 05:42:35 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9a0ef5179dso779847766b.1
+        for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 05:50:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731332554; x=1731937354; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731333044; x=1731937844; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zFFB4p9gtjjqP0ylPmDfODC3qKl0n8dAQXHFfxJE1Lk=;
-        b=NSIjxrPwvhCTTxmAThkRYhW3u7iytP9GmzX8gBpRzTNLXppTk4fjMqgmFtLXP68CZ6
-         WYGYNdM+5BVj8b0VtkehLzSMs54BgW2I6ZX9s9NhWbaFawH/xT+JnljGZe8QraYks8ok
-         av3g+qdN7Ntlj/ceae4gWyvjbOYeCuORhiDJUvt9AmoiTGBCRj+qf+jgY1btrdbdkXhK
-         +4eOlQ3SvRmIk1Yw/wUCoIkVsuiKhlmIec2qtkQkoRU/qb78mSCy37sg/nhTO0tikeTH
-         sKcPI65N5r02SJT0JiQZJQ+1MpsIgKn8z9px61AVfr464Cg8TP/jUOQatSsvkU1VTt/o
-         M+3Q==
+        bh=SpaD1h+qgSUegWPIErtuApILd4uPZKqBeb/+8dSEdD4=;
+        b=f06MUedwhHQE2SxEszkVsV5oHjQVojfbB2VP5Y1/fN0LFbyb68ehZpwClR0yoJBAjt
+         mN5WW+TobjjrwGAuXRwTufUbonp/98tw/ZVxP0dEbNlpa6wLFOLamlT0ys2enuheE6M3
+         fK2msgfNDxxrEsENzJROHA/mTBytINrfXdRAV/C1xQFJyEx6LKQ+QD2TFyE+AhiRrGyN
+         kXT+Dil9utzcj+U+1OjdgPb5EVLGP6xLkrxzN48wToABd5sThIscQV96urtvTSac0JUs
+         oPuVdvIHjx3LFLl/VAms0e2c9gtAczoUw/4Mtjgy7/yJ5OrEhJ4KUixPMfc6LZWnuJcs
+         eomw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731332554; x=1731937354;
+        d=1e100.net; s=20230601; t=1731333044; x=1731937844;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zFFB4p9gtjjqP0ylPmDfODC3qKl0n8dAQXHFfxJE1Lk=;
-        b=o3V91NReI+8BiPS/Eu2XcnUgWhqsnPORLi4y2LaWrMhuaysgSBpXM7xJTOlxf/iczk
-         AdstmT4FNmWxNON3t9+EMyHr7Sl89mk3vwgRP/dxg3Q7sQtEYoSOAkbX0hvZJBN6vdp5
-         i1bxfv2+r4BjWzRDtwKbk0vbFJBx5uKdkO/CjwNHdjK4B+FSHpjFRyaFAfG2Q/3K1LIn
-         6re0igEdJ8TT1l5Hceh3yF0q+/3pHY/sxQihDEdmJ98t1xa1CjukeuZqArbPXwTvdmzr
-         zRwHifbSlnEhN3ziqiInnIRmYTNV4ssVzr7svORtZadGRGh1ul0rUrRB2hcPK5aU/onM
-         FGmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUgSFmw1U2dhiIxmjpZci+FgNE9ypHrO75kH1htTwYWjUOX/dtOf6L0E9dFW6DOhvjkKXI5rEboGR4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8WOG1oJfsidq4eSI0wIhZwjn1a4HACK9lhMDixS0nM2rqCC4O
-	iAsm6r7inBUP1NXoxZJLs6btEpFUWGoMrhLivs5GW9LzvoZtnLVfOfPseOPPRSQ=
-X-Google-Smtp-Source: AGHT+IHFp5IW76ae0+ug0Yg3riirx+YgM0J4mYik8o2ZcaxazUwINUADaWThHKkUZHiOHvo7i0nQ4Q==
-X-Received: by 2002:a05:600c:3b82:b0:42c:de34:34c1 with SMTP id 5b1f17b1804b1-432b74fdaa1mr101737845e9.2.1731332554429;
-        Mon, 11 Nov 2024 05:42:34 -0800 (PST)
+        bh=SpaD1h+qgSUegWPIErtuApILd4uPZKqBeb/+8dSEdD4=;
+        b=p9H2GgdO8pnbU5Vy29gYa5rR1yNtTdHrDPkZpWKh571+9cPdwsm9mDkKfyzthgF0+O
+         tQ6+bViBqffTCW6TjuNdpYgLk0wNYjDMjuwVAGs/7fqjx9LbqZ/8sHcCv3tNR82aqwLp
+         sNv1fHb/u94Q+Iuh3SsRfZOJr16SeP9YG6Mzk5hPQsfBu8tai4cH6DRxlHa5k49BrAZS
+         /dzz3pT2I37CMegK0vDAyROc+7m32G/QyN6OGCi0a3FvrikLmwqlcFlhJlifdcfkFx2V
+         0E3MXS6z1m+qF++SwZCn/hFKPkGUg6AQF1Ncdaa3d/Y/d88sgPMsvO+ylF33YF65hniZ
+         YY/g==
+X-Forwarded-Encrypted: i=1; AJvYcCXLf0MPIRk10x6bj6u3b6da3wejMA5x3JM58gPrlOlkg85bOKjB0EDaF3A7e7PKKRpNcosJghx2l+0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2IfH3aay/j8LOVUIrl8TenCTUkMXHxCtphgHxoot3VFHkN0Gk
+	1xKbqUrygHgUtVG1zXRaOObcrP3F5LVa++R/ruelvKbKXTxIix/MWHVL/MV+muM=
+X-Google-Smtp-Source: AGHT+IFag61yfodkZmr5TS3cmwy+FvF75Uec4Yswjg4hxvXQDmRP7g7+z1T2wq5sRQC78AQ1tGkGKw==
+X-Received: by 2002:a17:907:7205:b0:a99:60c8:f2c4 with SMTP id a640c23a62f3a-a9eeff0d8d4mr1261372366b.15.1731333043626;
+        Mon, 11 Nov 2024 05:50:43 -0800 (PST)
 Received: from [192.168.0.157] ([79.115.63.225])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05c1a13sm175792135e9.29.2024.11.11.05.42.32
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0ad2f76sm591418266b.89.2024.11.11.05.50.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Nov 2024 05:42:33 -0800 (PST)
-Message-ID: <9e942bdd-6ade-40a7-ae4a-104ed288a09f@linaro.org>
-Date: Mon, 11 Nov 2024 13:42:31 +0000
+        Mon, 11 Nov 2024 05:50:43 -0800 (PST)
+Message-ID: <48c1512e-91f4-42f2-a935-b5b8b1506d0a@linaro.org>
+Date: Mon, 11 Nov 2024 13:50:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,8 +76,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/24] spi: amlogic-spifc-a1: Support per spi-mem
- operation frequency switches
+Subject: Re: [PATCH 05/24] spi: cadence-qspi: Support per spi-mem operation
+ frequency switches
 To: Miquel Raynal <miquel.raynal@bootlin.com>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
  Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>,
@@ -93,10 +93,10 @@ Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
  Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
  Heiko Stuebner <heiko@sntech.de>, Michal Simek <michal.simek@amd.com>
 References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
- <20241025161501.485684-5-miquel.raynal@bootlin.com>
+ <20241025161501.485684-6-miquel.raynal@bootlin.com>
 Content-Language: en-US
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20241025161501.485684-5-miquel.raynal@bootlin.com>
+In-Reply-To: <20241025161501.485684-6-miquel.raynal@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -114,29 +114,6 @@ On 10/25/24 5:14 PM, Miquel Raynal wrote:
 > core.
 > 
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/spi/spi-amlogic-spifc-a1.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-amlogic-spifc-a1.c b/drivers/spi/spi-amlogic-spifc-a1.c
-> index fadf6667cd51..18c9aa2cbc29 100644
-> --- a/drivers/spi/spi-amlogic-spifc-a1.c
-> +++ b/drivers/spi/spi-amlogic-spifc-a1.c
-> @@ -259,7 +259,7 @@ static int amlogic_spifc_a1_exec_op(struct spi_mem *mem,
->  	size_t data_size = op->data.nbytes;
->  	int ret;
->  
-> -	ret = amlogic_spifc_a1_set_freq(spifc, mem->spi->max_speed_hz);
-> +	ret = amlogic_spifc_a1_set_freq(spifc, op->max_freq);
->  	if (ret)
->  		return ret;
->  
-> @@ -320,6 +320,10 @@ static const struct spi_controller_mem_ops amlogic_spifc_a1_mem_ops = {
->  	.adjust_op_size = amlogic_spifc_a1_adjust_op_size,
->  };
 
-I see the driver sets ctrl->min_speed_hz = SPIFC_A1_MIN_HZ;
-
-Do you want to introduce a struct spi_controller_mem_ops.supports_op and
-check that the spimem op freq is not below the controller's minimum freq?
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
