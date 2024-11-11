@@ -1,74 +1,74 @@
-Return-Path: <linux-spi+bounces-5676-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5677-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 172029C4126
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 15:41:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE469C4355
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 18:14:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 509F41C20F4B
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 14:41:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A080F2824EF
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Nov 2024 17:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2919519F10A;
-	Mon, 11 Nov 2024 14:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18D271A9B33;
+	Mon, 11 Nov 2024 17:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G/hhQHvq"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="vP/sPaGN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5073015A84E
-	for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 14:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD8D1A76DD
+	for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 17:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731336065; cv=none; b=AwnqaafhduKOOINZMQorNRAVh/5RbG/OrV3DLbJW1Sfs6t/yzNJCYt7Qxnrw6zTWcA80YgysfjMk+JD5KfgZbYChl0SgRliEjI5Ydt79zn436LqYU2OtWUv7xtCfecpPBEJUQIC+KBdvfcb74pWJvAJRHVBsaxg/dUc7sJzo+LA=
+	t=1731345248; cv=none; b=qM9M/5bFPI3+y7VGMoOdaMR+/dwnnLfeMEoMiUKBdF9vd0QCxSxb3gmt/6949cGY5sD6F2U2pVBNH4hFk1AvDyLMMcv7wujkOEAChFvvqaC1DmLygy0y0+cGerUNKqKvgZJoXXgi10X56WO1dtVLQDn5I1s+vm5CbvzgvMwWOFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731336065; c=relaxed/simple;
-	bh=gvU2O1sSz1VkPoidEfTxFGdFxo/TK6/eh4HqoW06Q1k=;
+	s=arc-20240116; t=1731345248; c=relaxed/simple;
+	bh=3Q6uao6+hgf+7cigQULGQb1eC8zzAjVmlImprrPNtzA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jZumRy7unLfoktsU1uktVSqmJMuqbrAyUHqUpNGnLnclC/iQMnLrjcvqinGmjF7OI4qBmysQxM1ktZpYSGDlULZX9GDNXkCYsEGmwU9zYCNxWSj5Fukc+pDIbcpwDb2YBeRe4kThlNTPMtm8X/RmXrLvj+gfl0w9BROM+6m+vrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G/hhQHvq; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a99ebb390a5so1040527966b.1
-        for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 06:41:02 -0800 (PST)
+	 In-Reply-To:Content-Type; b=W9+NB5NPe4vZlX+k4ayUiLLLsoW4LjWXdOS+BpeyQ+bzB/l8psYGFM0skxx9YP5j+mXD88RxexuTCiO71Z90jBA3rCH1wvpHL214h3/+uKwVTh9hxS0PZp1xyM8lQD/zIcMSNRVEnWcQhhytkijQzQvsTN5N6aUUx6MGnqjGQqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=vP/sPaGN; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5ebc0c05e25so2293171eaf.3
+        for <linux-spi@vger.kernel.org>; Mon, 11 Nov 2024 09:14:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731336061; x=1731940861; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1731345245; x=1731950045; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sBaJwCIVHki56Jj+IDVKoZSEhH2XbB/0VEF5wM/pZg8=;
-        b=G/hhQHvqHC5+9YVjTOA52t67EAS93SGSXCF/dfzkmpLtipXIKGfmyZoMqNp+v2tjAu
-         NHbjhUW6VVvcIBjY1DO52LvRN2RI24y+ycpw2MMNkzRHVe1v3GZhGRieTd27r/Ny7ywC
-         n4D/lv0rfo3TPWbamj/74O4HYjNXdQGo5cagmCgiBN9XZuo/T0cw/znV6WXVOkwYUrlV
-         GfOvv2QWxnsXalfZ30uqSoGSMrUrDjESx9Ih2/UfAhoHGlBffxwvgxBv5BsjJZOri9rM
-         Xq+n5MVfW1Rz4czF5YZ6AJzsaNcP5giLRTgz/wc9XXvc4BdiEUVET0JnxQUmm59Ej+u5
-         BDlQ==
+        bh=xHhQX9dLBXKUZ4ddho1L9OkyErwYL/K98ij6HZC9tXE=;
+        b=vP/sPaGNvx7/JZ2s6B8A3tuoVFOk/HmiRoDniCZKagcUlX9iJR0+hb+aamlmx37RJM
+         SGW9214YoxjwmpqcMY/+ILdA22HOoJXJR9R/odOWP+qAdLv1kx4Rza8TgdzPX+gcnuDY
+         /Zi+zF1AUi0hbNurxi1Oe5sSqc+y6t42l4uaoaYsEggtNCN4xMHHSujI69GsimI0YFD/
+         RZCAnV1LZ4na/f543PWameCQAdjofAlMQU1IYlAf2per7vnyg6EQyj49LfI/YZnIY2ai
+         YkxorNwTaslEz8f4S1RvTWxM9tk//XvDDzepqXsCLBH34H0iR3EAmNl6Pve8xxhe+KWD
+         a7dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731336061; x=1731940861;
+        d=1e100.net; s=20230601; t=1731345245; x=1731950045;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sBaJwCIVHki56Jj+IDVKoZSEhH2XbB/0VEF5wM/pZg8=;
-        b=hW2l3MjoZ1DeWRjmMMfIdSaTdmwoPoqm/HFJojbwXPL48xxB8MtGZ7jun5VuyuIG5E
-         My+SUsoDAIa8QBaze/yISR+es1KZpi+X9984f0Tad3RL7wOpIEtm2AFi4pVfZk9H4u1w
-         i29jc2zB+zyQ1tAhd3BjZ7Annhyp6ltGAo2bj6z+i0LvLmRWA9d2sYKGXAOL6UR6dlhf
-         OUErei29JwsINP0F3pPrTkQI4ri9xbssxGAP4fJP7y2K+0pLmMr3gMI7rEm0ZxAnLWzr
-         xbuvHnMPMy6Z2IXV/+dtCON+JSf8nHC7j28HeM7OlLG53whWsCFcpGJiuOvXY/C93HHk
-         OHHw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/jj28OFY+zpTU+H5HIiEPtyhnZ6nuvZeEHZdPsk3lvgMH5/gBOo/85cosxbL8Yw2VO+VH48yXATk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNvm8UVez3b6rjI8wIr16PpdBr60BmPPM//yP/j79h8mLhXMSo
-	EFXOLTeB/pO7mpmP8FVrdLxX70KZAeuZ+b8eIEzXEdbyKdzYnBwiZ/lT173+8Oo=
-X-Google-Smtp-Source: AGHT+IERR516a4JtGNjcPgZ6V5U2luo4u3jxHu/GNHpqpdnYAcnjwD7hi7RJrs07N2gkwQYHmYO93w==
-X-Received: by 2002:a17:907:3ea1:b0:a9a:ca:4436 with SMTP id a640c23a62f3a-a9eec9bf48emr1269661866b.13.1731336061502;
-        Mon, 11 Nov 2024 06:41:01 -0800 (PST)
-Received: from [192.168.0.157] ([79.115.63.225])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a176a6sm599070066b.16.2024.11.11.06.40.59
+        bh=xHhQX9dLBXKUZ4ddho1L9OkyErwYL/K98ij6HZC9tXE=;
+        b=tdbM4dU8VQPUUh9MseOeh3xQo6ZceFRtLQ0I6RzUHmjZ9M524lFNHOmzSA6twr8QXO
+         sMMGqRH5N0wopFrfkmzR36l8dK05/pMe0qAr+IYZIO3zwsqcN36j1MzpaaG9DTBu3ioc
+         jXQg8urhNZSm1uzJcLenfeu0KYmsIj7zC1NApD0xV42Hf7o+E+kUOqniqV3yDMHp/uMj
+         EBwXe1QlqSzLNCc/2ZhZ77so270QtmJ2965blAOxNpzZrmGhELDBHpyAQ3cYwRgILCrw
+         cGtlfAa8pX3bPxgSCtXNmye6Rzyqe3nXCBSoieREWxiWI/TxSM5/hPisWtx+7cJKuOab
+         fFkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXBPRdDHvVw5WUEY+eXtIkkBfdaB9KeLjvnamKjRTEc6GEJEbMlRDieW5L4x0EYj5jvjixwgiVePcI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZXjsDoxsspmdYG7BN8GTG/53h4Bbleo1r7Ei3cYLQ8WuOr8+4
+	7Y1S5hm+hnIRa4fJTACPtbKYUgQXy2mQ/vEKM40K9GxBejr25l5Rt2AeydAfdEw=
+X-Google-Smtp-Source: AGHT+IF3GCiZjWfr7xWBoGgZ81GYnxm9pAH/iF3fOY2T/R1DiZIJojhpwe+oKLoYI62MFyjsBFrMIQ==
+X-Received: by 2002:a05:6820:1f08:b0:5e1:e748:7ad with SMTP id 006d021491bc7-5ee57c77c36mr8888000eaf.7.1731345244850;
+        Mon, 11 Nov 2024 09:14:04 -0800 (PST)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5ee496afdd5sm1993171eaf.31.2024.11.11.09.14.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Nov 2024 06:41:00 -0800 (PST)
-Message-ID: <6029a01f-dc4d-4a35-ad21-fd17e3fed9fc@linaro.org>
-Date: Mon, 11 Nov 2024 14:40:59 +0000
+        Mon, 11 Nov 2024 09:14:03 -0800 (PST)
+Message-ID: <66b3e462-bb17-4806-b991-8f0eb33b1233@baylibre.com>
+Date: Mon, 11 Nov 2024 11:14:01 -0600
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -76,66 +76,76 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 24/24] mtd: spinand: winbond: Add support for DTR
- operations
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Pratyush Yadav <pratyush@kernel.org>, Michael Walle <michael@walle.cc>,
- linux-mtd@lists.infradead.org
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Steam Lin <stlin2@winbond.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
- Conor Dooley <conor.dooley@microchip.com>,
- Daire McNamara <daire.mcnamara@microchip.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
- Heiko Stuebner <heiko@sntech.de>, Michal Simek <michal.simek@amd.com>
-References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
- <20241025161501.485684-25-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH RFC v4 02/15] spi: add basic support for SPI offloading
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
+ Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20241023-dlech-mainline-spi-engine-offload-2-v4-0-f8125b99f5a1@baylibre.com>
+ <20241023-dlech-mainline-spi-engine-offload-2-v4-2-f8125b99f5a1@baylibre.com>
+ <20241026160521.52205cb0@jic23-huawei>
 Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20241025161501.485684-25-miquel.raynal@bootlin.com>
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20241026160521.52205cb0@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-
-
-On 10/25/24 5:15 PM, Miquel Raynal wrote:
-> W25N01JW and W25N02JW support many DTR read modes in single, dual and
-> quad configurations.
+On 10/26/24 10:05 AM, Jonathan Cameron wrote:
+> On Wed, 23 Oct 2024 15:59:09 -0500
+> David Lechner <dlechner@baylibre.com> wrote:
 > 
-> DTR modes however cannot be used at 166MHz, as the bus frequency in
-> this case must be lowered to 80MHz.
 
-ha, what's the benefit then? Aren't we better of with non dtr modes
-then? 80 MHz * 2 < 166 MHz?
+...
+
+>> +struct spi_offload *devm_spi_offload_get(struct device *dev,
+>> +					 struct spi_device *spi,
+>> +					 const struct spi_offload_config *config)
+>> +{
+>> +	struct spi_offload *offload;
+>> +	int ret;
+>> +
+>> +	if (!spi || !config)
+>> +		return ERR_PTR(-EINVAL);
+>> +
+>> +	if (!spi->controller->get_offload)
+>> +		return ERR_PTR(-ENODEV);
+>> +
+>> +	offload = spi->controller->get_offload(spi, config);
+> 
+> Why let this return an offload that is already in use?
+> Maybe make that a problem for the spi controller
+> Seems odd to pass it spi then set it later.
+> 
+> I.e. have this return ERR_PTR(-EBUSY);
+
+I would expect that to effectively be handled by the
+if (IS_ERR(offload)) below. Only the controller can
+know which offloads are already in use, so the callback
+should return the appropriate -EBUSY in that case.
 
 > 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/mtd/nand/spi/winbond.c | 5 +++++
->  1 file changed, 5 insertions(+)
 > 
-> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
-> index 9e2562805d23..77897a52b149 100644
-> --- a/drivers/mtd/nand/spi/winbond.c
-> +++ b/drivers/mtd/nand/spi/winbond.c
-> @@ -24,10 +24,15 @@
->   */
->  
->  static SPINAND_OP_VARIANTS(read_cache_dtr_variants,
-> +		SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP(0, 8, NULL, 0, 80 * HZ_PER_MHZ),
-> +		SPINAND_PAGE_READ_FROM_CACHE_X4_DTR_OP(0, 2, NULL, 0, 80 * HZ_PER_MHZ),
->  		SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0),
->  		SPINAND_PAGE_READ_FROM_CACHE_X4_OP(0, 1, NULL, 0),
-> +		SPINAND_PAGE_READ_FROM_CACHE_DUALIO_DTR_OP(0, 4, NULL, 0, 80 * HZ_PER_MHZ),
-> +		SPINAND_PAGE_READ_FROM_CACHE_X2_DTR_OP(0, 2, NULL, 0, 80 * HZ_PER_MHZ),
->  		SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(0, 1, NULL, 0),
->  		SPINAND_PAGE_READ_FROM_CACHE_X2_OP(0, 1, NULL, 0),
-> +		SPINAND_PAGE_READ_FROM_CACHE_DTR_OP(0, 2, NULL, 0, 80 * HZ_PER_MHZ),
->  		SPINAND_PAGE_READ_FROM_CACHE_FAST_OP(0, 1, NULL, 0),
->  		SPINAND_PAGE_READ_FROM_CACHE_OP(0, 1, NULL, 0, 54 * HZ_PER_MHZ));
->  
+>> +	if (IS_ERR(offload))
+>> +		return offload;
+>> +
+>> +	if (offload->spi)
+>> +		return ERR_PTR(-EBUSY);
+>> +
+>> +	offload->spi = spi;
+>> +	get_device(offload->provider_dev);
+>> +
+>> +	ret = devm_add_action_or_reset(dev, spi_offload_put, offload);
+>> +	if (ret)
+>> +		return ERR_PTR(ret);
+>> +
+>> +	return offload;
+>> +}
+>> +EXPORT_SYMBOL_GPL(devm_spi_offload_get);
+
 
