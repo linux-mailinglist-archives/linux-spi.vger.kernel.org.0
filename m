@@ -1,156 +1,382 @@
-Return-Path: <linux-spi+bounces-5685-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5686-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C9BB9C5289
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2024 10:58:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 443D59C5772
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2024 13:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D74FB27335
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2024 09:33:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03E7F284AE6
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Nov 2024 12:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25571207A14;
-	Tue, 12 Nov 2024 09:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5721CD212;
+	Tue, 12 Nov 2024 12:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FgmbyWwQ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="F0oOMgpt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0B320D4E7
-	for <linux-spi@vger.kernel.org>; Tue, 12 Nov 2024 09:32:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0CE23099A;
+	Tue, 12 Nov 2024 12:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731403981; cv=none; b=R15izVRY+5NyF2tjTS9JFxi5O6v2xont2hDeNsPzqYNg0SyvhW3KD4lDl8LUWwe68jXPc09qbpml9ssNoSNBTXVaTl4JQVXrlIBx+RhUtcB7ppiznh8acc0nZN4fPZvWXd7tnscBRqBXEcG+6kj5jP9IadMwRAW3R4SxjddFexM=
+	t=1731413745; cv=none; b=A2RM7LGmofmhzpStBuvtGUtYQMZ/oCfY/6Yu+cSAe8nMusYupUaTDdfockKOhKwJmF2IKZa0SlnN2pqPuCy6fcTdmy2/lTjZGD00wCWJSzMwJ9pt9vr5JswDQcNYL7MquBlSi3hM6NQ5+LaGGAZCRntnBLl6QMwM6cmKcfDpHfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731403981; c=relaxed/simple;
-	bh=6ulFNlyNv465CkSpnCJx0vrLZRT7gA32WIk91lhQkA8=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=WD64zw+FjZeAPPJNAPmDZ/H2WAGb3tUkb3/kyVOC8Ego0HL/CgqZkUX1SNmjb0of/eFdmh9UkPINfgySewXQZlSMaOOnvF79h5ouUiHmN51WMLClxdckapLQcFzI8hPFHoaReK+6REfZwksCJqA4q6LQ7v+J3Lk3GqQPmP+Sm0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FgmbyWwQ; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-539f72c913aso9362909e87.1
-        for <linux-spi@vger.kernel.org>; Tue, 12 Nov 2024 01:32:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731403977; x=1732008777; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:cc:to:content-language:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/dhi4LfKU3ipkwc8NywPImwQqvqvfcH47W144waGwl8=;
-        b=FgmbyWwQ9o65CKBp0ZzNrzfWKPF0uXnjG8bGZ0UeoWC9JkxBiN7QSm4ty/7Y5JizKy
-         9CsUhEvK6S+zrE4q/vBWl7NPTe2ZAjtMb/ce7/zCsTZVIaeLpPg3O+XLkjXcv+DrVKBm
-         UbdnGyeXv3VEUGYAkkwILBSu3dkVLd5mrv1TBmhriqoPSIO7KBdvS+EPBDM5EXm05J19
-         ozxCxKO1AY87By82RbPvcUvijEmVf00QfuHiowakqYzGdjIeGHhY1mdkkyXBaLH8xorR
-         U3EEmPS1BOrKg+Pp1l1O4OJfz4+29c+17bOMmJ2SKOCaczfe8Rk7E+egq87th0f1Epsm
-         mR/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731403977; x=1732008777;
-        h=content-transfer-encoding:subject:cc:to:content-language:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/dhi4LfKU3ipkwc8NywPImwQqvqvfcH47W144waGwl8=;
-        b=Kj0BcFcs7e9PPE3/+Eg0AQy7ZRtpjpMxDuGjEMERJjYBjpoHHn64zICv0cCKONcpie
-         5mU1/UGOirKpfQAoIQR7x/Kpjq3oTncjoE/IH2Y7LQF8RTrSiB0YGKUECkDbj0jSZGbd
-         6Hkc3K5cUKPd1BCiItR9PlCl9sSnh8JM4542ovl7tUDoQWB6riazfvFBmUT/PxvTaFtG
-         psbCDbpvMfu57aoUTYeD2lILyjeoVQqIjcc9FKJcvLaj421OhLHSAx1rMb/gS7a50V9E
-         nAZG3FKQvTtIng/JHr6rV6UgkPc/ypJEsjQFbgYU7SU0Tz/weIV4n8iwVTqJ4BDK8yIp
-         zC3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUj4Hd6KyRc0OfVrFm7zg5dhxVp2YUDY7K/CTJ/I6DgTbYhNi+kkDndM1LDM8j/TINvx/nu3rG6zt0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZofjO5QL8OZ0xMnRDb1n5TXzudZXsVUW7IB9wV4VwMkYz3wDw
-	QKhA8iRPru290V8C/aHwEf7iUf7Yp1eZQuN2neBHbaxODPP1U/SRV2Y5QOAaRLk=
-X-Google-Smtp-Source: AGHT+IHRp2bDx3H/YnbEHx56PZp7Niz36cAYZ3sBhFurqZsEqELAEZ5g9IxMMtCuhlrB2T4yeezGcA==
-X-Received: by 2002:a05:6512:1045:b0:530:ad7d:8957 with SMTP id 2adb3069b0e04-53d862f7e1amr7186226e87.49.1731403977169;
-        Tue, 12 Nov 2024 01:32:57 -0800 (PST)
-Received: from [192.168.0.62] ([79.115.63.225])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381ed97e62csm14825855f8f.37.2024.11.12.01.32.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 01:32:56 -0800 (PST)
-Message-ID: <2d182f21-9766-4c05-8b97-786af69666a0@linaro.org>
-Date: Tue, 12 Nov 2024 11:32:54 +0200
+	s=arc-20240116; t=1731413745; c=relaxed/simple;
+	bh=y8wYpJKQPppWOwG+stODco0nODyFQc2893XETWW0e0o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dHve5DzuTPi4n63aYnFkHMZg+Cd0gLHHMn31eG/XL1EnVRIcmrXOEYhju7t98grbgLFR/T93GEML4IghSASqRovTsNYAL5uVexeE1imhdQzc/H1nzQNgzF3M/mE6PD3OF2ipP18QvC0Gh8n3Tyfq+onzo8MsoBpefhkEe390JxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=F0oOMgpt; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AC6Ac7t004261;
+	Tue, 12 Nov 2024 12:15:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/1upKaL3B/gyY1s3YNSg8f5Kv6R8Vl0kZB3qVnOQmTQ=; b=F0oOMgptnI79JcQp
+	qwLKaddGlBRY5kwvo6B1vSzHOUTs1lj9Sd62IPPf3xeyOrKK2z1ztQ0n/VizgIC5
+	p1olyqTTII1wXd29n64Poqyx2aneResAgsSdUGJgemKZsn8y68aUzc6z3wdCAWfb
+	DI55cm8tA7yd+JKp3kxLdeEkRMlk93FgimsyO65VL8UodQXrs+aaaoB6bNsrk1KJ
+	eRHewjlqAs6oKZt/br7qT960gCBnZNXTw/Aw8oqo2vUZsvRNifszy5hHbtFn0+Gm
+	dw01A+jbB2qf85T+IjpKgBUI2Wh8XoIoyL/CETFCjCW0nPFCqqxYpk9M+ybdpFZW
+	Zaci3A==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42v1h6gvgr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 12:15:26 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ACCFPoK002281
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 12:15:25 GMT
+Received: from [10.152.197.144] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 12 Nov
+ 2024 04:15:19 -0800
+Message-ID: <374ea155-0970-38bd-470f-cc440ca0bab5@quicinc.com>
+Date: Tue, 12 Nov 2024 17:45:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v13 2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
 Content-Language: en-US
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>
-Cc: Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>,
- "open list:SPI NOR SUBSYSTEM" <linux-mtd@lists.infradead.org>,
- Mark Brown <broonie@kernel.org>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>
-Subject: [GIT PULL] mtd: spi-nor: changes for v6.13
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+CC: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
+        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+References: <20241030121919.865716-1-quic_mdalam@quicinc.com>
+ <20241030121919.865716-3-quic_mdalam@quicinc.com>
+ <871pzh397j.fsf@bootlin.com>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <871pzh397j.fsf@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: FFG0lJqQ5KR-9Tjw0S2SFNIdQrY4v1A7
+X-Proofpoint-GUID: FFG0lJqQ5KR-9Tjw0S2SFNIdQrY4v1A7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411120099
 
-Hi,
-
-SPI NOR v6.13 PR includes the mtd/spi-mem-swap16-for-6.13 tag that
-contains a patch for SPI MEM and one for the SPI MXIC controller. I got
-Mark's approval on queuing them.
-
-Thanks,
-ta
 
 
-The following changes since commit 9852d85ec9d492ebef56dc5f229416c925758edc:
-
-  Linux 6.12-rc1 (2024-09-29 15:06:19 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
-tags/spi-nor/for-6.13
-
-for you to fetch changes up to 98d1fb94ce75f39febd456d6d3cbbe58b6678795:
-
-  mtd: spi-nor: core: replace dummy buswidth from addr to data
-(2024-11-12 10:31:17 +0200)
-
-----------------------------------------------------------------
-SPI NOR introduces byte swap support for 8D-8D-8D mode and a user for
-it: macronix. SPI NOR flashes may swap the bytes on a 16-bit boundary
-when configured in Octal DTR mode. For such cases the byte order is
-propagated through SPI MEM to the SPI controllers so that the controllers
-swap the bytes back at runtime. This avoids breaking the boot sequence
-because of the endianness problems that appear when the bootloaders use
-1-1-1 and the kernel uses 8D-8D-8D with byte swap support. Along with the
-SPI MEM byte swap support we queue a patch for the SPI MXIC controller
-that swaps the bytes back at runtime.
-
-----------------------------------------------------------------
-AlvinZhou (3):
-      spi: mxic: Add support for swapping byte
-      mtd: spi-nor: add Octal DTR support for Macronix flash
-      mtd: spi-nor: add support for Macronix Octal flash
-
-Cheng Ming Lin (1):
-      mtd: spi-nor: core: replace dummy buswidth from addr to data
-
-Takahiro Kuwano (1):
-      mtd: spi-nor: spansion: Use nor->addr_nbytes in octal DTR mode in
-RD_ANY_REG_OP
-
-Tudor Ambarus (4):
-      spi: spi-mem: Allow specifying the byte order in Octal DTR mode
-      mtd: spi-nor: core: Allow specifying the byte order in Octal DTR mode
-      mtd: spi-nor: sfdp: Get the 8D-8D-8D byte order from BFPT
-      mtd: spi-nor: winbond: add "w/ and w/o SFDP" comment
-
- drivers/mtd/spi-nor/core.c     |  5 +++-
- drivers/mtd/spi-nor/core.h     |  1 +
- drivers/mtd/spi-nor/macronix.c | 99
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- drivers/mtd/spi-nor/sfdp.c     |  4 +++
- drivers/mtd/spi-nor/sfdp.h     |  1 +
- drivers/mtd/spi-nor/spansion.c |  1 +
- drivers/mtd/spi-nor/winbond.c  |  1 +
- drivers/spi/spi-mem.c          |  3 ++
- drivers/spi/spi-mxic.c         | 17 ++++++++---
- include/linux/spi/spi-mem.h    |  8 +++++-
- 10 files changed, 133 insertions(+), 7 deletions(-)
+On 11/12/2024 12:00 AM, Miquel Raynal wrote:
+> On 30/10/2024 at 17:49:13 +0530, Md Sadre Alam <quic_mdalam@quicinc.com> wrote:
+> 
+>> cleanup qcom_nandc driver as below
+> 
+> Perform a global cleanup of the Qualcomm NAND controller driver with the
+> following improvements:
+Ok
+>>
+>> - Remove register value indirection api
+> 
+> API
+Ok
+> 
+>>
+>> - Remove set_reg() api
+> 
+> API
+Ok
+> 
+>>
+>> - Convert read_loc_first & read_loc_last macro to function
+> 
+> functions
+Ok
+> 
+>>
+>> - Renamed multiple variables
+> 
+> Rename
+Ok
+> 
+> ...
+> 
+>> @@ -549,17 +535,17 @@ struct qcom_nand_host {
+>>    * among different NAND controllers.
+>>    * @ecc_modes - ecc mode for NAND
+>>    * @dev_cmd_reg_start - NAND_DEV_CMD_* registers starting offset
+>> - * @is_bam - whether NAND controller is using BAM
+>> - * @is_qpic - whether NAND CTRL is part of qpic IP
+>> - * @qpic_v2 - flag to indicate QPIC IP version 2
+>> + * @supports_bam - whether NAND controller is using BAM
+> 
+> Use the plain letters BAM acronym at least here
+Ok
+> 
+>> + * @nandc_part_of_qpic - whether NAND controller is part of qpic IP
+>> + * @qpic_version2 - flag to indicate QPIC IP version 2
+>>    * @use_codeword_fixup - whether NAND has different layout for boot partitions
+>>    */
+>>   struct qcom_nandc_props {
+>>   	u32 ecc_modes;
+>>   	u32 dev_cmd_reg_start;
+>> -	bool is_bam;
+>> -	bool is_qpic;
+>> -	bool qpic_v2;
+>> +	bool supports_bam;
+>> +	bool nandc_part_of_qpic;
+>> +	bool qpic_version2;
+>>   	bool use_codeword_fixup;
+>>   };
+>>   
+>> @@ -613,19 +599,11 @@ static void clear_bam_transaction(struct qcom_nand_controller *nandc)
+>>   {
+>>   	struct bam_transaction *bam_txn = nandc->bam_txn;
+>>   
+>> -	if (!nandc->props->is_bam)
+>> +	if (!nandc->props->supports_bam)
+>>   		return;
+>>   
+>> -	bam_txn->bam_ce_pos = 0;
+>> -	bam_txn->bam_ce_start = 0;
+>> -	bam_txn->cmd_sgl_pos = 0;
+>> -	bam_txn->cmd_sgl_start = 0;
+>> -	bam_txn->tx_sgl_pos = 0;
+>> -	bam_txn->tx_sgl_start = 0;
+>> -	bam_txn->rx_sgl_pos = 0;
+>> -	bam_txn->rx_sgl_start = 0;
+>> +	memset(&bam_txn->bam_ce_pos, 0, sizeof(u32) * 8);
+>>   	bam_txn->last_data_desc = NULL;
+>> -	bam_txn->wait_second_completion = false;
+>>   
+>>   	sg_init_table(bam_txn->cmd_sgl, nandc->max_cwperpage *
+>>   		      QPIC_PER_CW_CMD_SGL);
+>> @@ -640,17 +618,7 @@ static void qpic_bam_dma_done(void *data)
+>>   {
+>>   	struct bam_transaction *bam_txn = data;
+>>   
+>> -	/*
+>> -	 * In case of data transfer with NAND, 2 callbacks will be generated.
+>> -	 * One for command channel and another one for data channel.
+>> -	 * If current transaction has data descriptors
+>> -	 * (i.e. wait_second_completion is true), then set this to false
+>> -	 * and wait for second DMA descriptor completion.
+>> -	 */
+>> -	if (bam_txn->wait_second_completion)
+>> -		bam_txn->wait_second_completion = false;
+>> -	else
+>> -		complete(&bam_txn->txn_done);
+>> +	complete(&bam_txn->txn_done);
+>>   }
+>>   
+>>   static inline struct qcom_nand_host *to_qcom_nand_host(struct nand_chip *chip)
+>> @@ -676,10 +644,9 @@ static inline void nandc_write(struct qcom_nand_controller *nandc, int offset,
+>>   	iowrite32(val, nandc->base + offset);
+>>   }
+>>   
+>> -static inline void nandc_read_buffer_sync(struct qcom_nand_controller *nandc,
+>> -					  bool is_cpu)
+>> +static inline void nandc_dev_to_mem(struct qcom_nand_controller *nandc, bool is_cpu)
+> 
+> No static inline in C code, you can also remove it.
+Ok
+> 
+>>   {
+>> -	if (!nandc->props->is_bam)
+>> +	if (!nandc->props->supports_bam)
+>>   		return;
+>>   
+>>   	if (is_cpu)
+>> @@ -694,93 +661,90 @@ static inline void nandc_read_buffer_sync(struct qcom_nand_controller *nandc,
+>>   					   DMA_FROM_DEVICE);
+>>   }
+> 
+> ...
+> 
+>> +/* Helper to check the code word, whether it is last cw or not */
+> 
+> Helper to check whether this is the last CW or not
+Ok
+> 
+> 
+>> +static bool qcom_nandc_is_last_cw(struct nand_ecc_ctrl *ecc, int cw)
+>> +{
+>> +	return cw == (ecc->steps - 1);
+>>   }
+>>   
+>> -static void nandc_set_reg(struct nand_chip *chip, int offset,
+>> -			  u32 val)
+>> +/**
+>> + * nandc_set_read_loc_first() - to set read location first register
+>> + * @chip:		NAND Private Flash Chip Data
+>> + * @reg_base:		location register base
+>> + * @cw_offset:		code word offset
+>> + * @read_size:		code word read length
+>> + * @is_last_read_loc:	is this the last read location
+>> + *
+>> + * This function will set location register value
+>> + */
+> 
+> ...
+> 
+>>   	if (host->use_ecc) {
+>> -		cfg0 = (host->cfg0 & ~(7U << CW_PER_PAGE)) |
+>> -				(num_cw - 1) << CW_PER_PAGE;
+>> +		cfg0 = cpu_to_le32((host->cfg0 & ~(7U << CW_PER_PAGE)) |
+>> +				(num_cw - 1) << CW_PER_PAGE);
+>>   
+>> -		cfg1 = host->cfg1;
+>> -		ecc_bch_cfg = host->ecc_bch_cfg;
+>> +		cfg1 = cpu_to_le32(host->cfg1);
+>> +		ecc_bch_cfg = cpu_to_le32(host->ecc_bch_cfg);
+>>   	} else {
+>> -		cfg0 = (host->cfg0_raw & ~(7U << CW_PER_PAGE)) |
+>> -				(num_cw - 1) << CW_PER_PAGE;
+>> +		cfg0 = cpu_to_le32((host->cfg0_raw & ~(7U << CW_PER_PAGE)) |
+>> +				(num_cw - 1) << CW_PER_PAGE);
+>>   
+>> -		cfg1 = host->cfg1_raw;
+>> -		ecc_bch_cfg = 1 << ECC_CFG_ECC_DISABLE;
+>> +		cfg1 = cpu_to_le32(host->cfg1_raw);
+>> +		ecc_bch_cfg = cpu_to_le32(1 << ECC_CFG_ECC_DISABLE);
+>>   	}
+>>   
+>> -	nandc_set_reg(chip, NAND_FLASH_CMD, cmd);
+>> -	nandc_set_reg(chip, NAND_DEV0_CFG0, cfg0);
+>> -	nandc_set_reg(chip, NAND_DEV0_CFG1, cfg1);
+>> -	nandc_set_reg(chip, NAND_DEV0_ECC_CFG, ecc_bch_cfg);
+>> -	if (!nandc->props->qpic_v2)
+>> -		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, host->ecc_buf_cfg);
+>> -	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
+>> -	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
+>> -	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+>> +	nandc->regs->cmd = cmd;
+>> +	nandc->regs->cfg0 = cfg0;
+>> +	nandc->regs->cfg1 = cfg1;
+>> +	nandc->regs->ecc_bch_cfg = ecc_bch_cfg;
+>> +
+>> +	if (!nandc->props->qpic_version2)
+>> +		nandc->regs->ecc_buf_cfg = cpu_to_le32(host->ecc_buf_cfg);
+>> +
+>> +	nandc->regs->clrflashstatus = cpu_to_le32(host->clrflashstatus);
+>> +	nandc->regs->clrreadstatus = cpu_to_le32(host->clrreadstatus);
+>> +	nandc->regs->exec = cpu_to_le32(1);
+>>   
+>>   	if (read)
+>>   		nandc_set_read_loc(chip, cw, 0, 0, host->use_ecc ?
+>> @@ -1121,7 +1088,7 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
+>>   	if (first == NAND_DEV_CMD_VLD || first == NAND_DEV_CMD1)
+>>   		first = dev_cmd_reg_addr(nandc, first);
+>>   
+>> -	if (nandc->props->is_bam)
+>> +	if (nandc->props->supports_bam)
+>>   		return prep_bam_dma_desc_cmd(nandc, true, first, vaddr,
+>>   					     num_regs, flags);
+>>   
+>> @@ -1136,25 +1103,16 @@ static int read_reg_dma(struct qcom_nand_controller *nandc, int first,
+>>    * write_reg_dma:	prepares a descriptor to write a given number of
+>>    *			contiguous registers
+>>    *
+>> + * @vaddr:		contnigeous memory from where register value
+>> will
+> 
+> Please run a spell checker on your commits.
+Ok
+> 
+>> + *			be written
+>>    * @first:		offset of the first register in the contiguous block
+>>    * @num_regs:		number of registers to write
+>>    * @flags:		flags to control DMA descriptor preparation
+>>    */
+>> -static int write_reg_dma(struct qcom_nand_controller *nandc, int first,
+>> -			 int num_regs, unsigned int flags)
+>> +static int write_reg_dma(struct qcom_nand_controller *nandc, __le32 *vaddr,
+>> +			 int first, int num_regs, unsigned int flags)
+>>   {
+>>   	bool flow_control = false;
+>> -	struct nandc_regs *regs = nandc->regs;
+>> -	void *vaddr;
+>> -
+>> -	vaddr = offset_to_nandc_reg(regs, first);
+>> -
+>> -	if (first == NAND_ERASED_CW_DETECT_CFG) {
+>> -		if (flags & NAND_ERASED_CW_SET)
+>> -			vaddr = &regs->erased_cw_detect_cfg_set;
+>> -		else
+>> -			vaddr = &regs->erased_cw_detect_cfg_clr;
+>> -	}
+>>   
+>>   	if (first == NAND_EXEC_CMD)
+>>   		flags |= NAND_BAM_NWD;
+>> @@ -1165,7 +1123,7 @@ static int write_reg_dma(struct qcom_nand_controller *nandc, int first,
+>>   	if (first == NAND_DEV_CMD_VLD_RESTORE || first == NAND_DEV_CMD_VLD)
+>>   		first = dev_cmd_reg_addr(nandc, NAND_DEV_CMD_VLD);
+>>   
+>> -	if (nandc->props->is_bam)
+>> +	if (nandc->props->supports_bam)
+>>   		return prep_bam_dma_desc_cmd(nandc, false, first, vaddr,
+>>   					     num_regs, flags);
+>>   
+> 
+> ...
+> 
+>> @@ -2872,38 +2823,38 @@ static int qcom_param_page_type_exec(struct nand_chip *chip,  const struct nand_
+>>   	clear_read_regs(nandc);
+>>   	clear_bam_transaction(nandc);
+>>   
+>> -	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+>> -
+>> -	nandc_set_reg(chip, NAND_ADDR0, 0);
+>> -	nandc_set_reg(chip, NAND_ADDR1, 0);
+>> -	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
+>> -					| 512 << UD_SIZE_BYTES
+>> -					| 5 << NUM_ADDR_CYCLES
+>> -					| 0 << SPARE_SIZE_BYTES);
+>> -	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
+>> -					| 0 << CS_ACTIVE_BSY
+>> -					| 17 << BAD_BLOCK_BYTE_NUM
+>> -					| 1 << BAD_BLOCK_IN_SPARE_AREA
+>> -					| 2 << WR_RD_BSY_GAP
+>> -					| 0 << WIDE_FLASH
+>> -					| 1 << DEV0_CFG1_ECC_DISABLE);
+> 
+> Please fix the coding style. The '|' should be at the end of the line.
+Ok
+Thanks for the review. Will fix all the comments in next revision.
+> 
+> Thanks,
+> Miquèl
 
