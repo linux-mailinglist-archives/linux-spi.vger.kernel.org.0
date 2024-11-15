@@ -1,199 +1,133 @@
-Return-Path: <linux-spi+bounces-5702-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5703-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D52B9C9375
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2024 21:51:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15E3F9CDFC6
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2024 14:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0B72B26551
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Nov 2024 20:51:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D03C9283923
+	for <lists+linux-spi@lfdr.de>; Fri, 15 Nov 2024 13:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453141AA785;
-	Thu, 14 Nov 2024 20:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857891BE226;
+	Fri, 15 Nov 2024 13:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lm2O/Ybe"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="PFvfaJ3x"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370C01ABED9;
-	Thu, 14 Nov 2024 20:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739EB1B85EC;
+	Fri, 15 Nov 2024 13:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731617458; cv=none; b=E6dq2SWStJrb5Lhd/F7yWHvg0h41bpqTfejxOHWR70fgkh0y7hsNWuSnjudl4skbyusf1rI2NZXbqd+ieow00kCMcgot+vJc++wcqEADWUoLPQnPMSE8S/cXxgoQQtXG6CRaufPjCFFtOm0yZqjH8gTccQ+BLsSvWb7ette2KMU=
+	t=1731676993; cv=none; b=e5Vi0UmvC74Zc8hE1G1FdaDy7piICLpmHSctWgL8O62oXUJPGn61dRjivHiSAzbYJRPFlpaaeS56BOVBkqU/do1PoRtSoCbHQ8IcYbXM87ralK6f6cT2Y9Nu7pT0cm8XQqVnS2/MLfCznJTSnV1r60tKxV7d3fFc3MhEf2hCDLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731617458; c=relaxed/simple;
-	bh=FaMr7tIRWXDZ6ad3xtZlphSFUCsG4u9u+xXqtA7b6kQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QAgrN6dHSLfW5V9MVKpqEGAudrOP8BWhG+Vv8PCZvvImJ33RnJkBqfNd5ljw9v9iXmnfDcs9Hdlsz7Qqg6m8nXgfDu/YosuRpdQhMdC/gua4KzIuHU99eCQR9BQyh91F/B2sLrApGv3nqD05WooyIy/cFIF6HnPjTra83UYnmVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lm2O/Ybe; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731617456; x=1763153456;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FaMr7tIRWXDZ6ad3xtZlphSFUCsG4u9u+xXqtA7b6kQ=;
-  b=Lm2O/YbeB3tzhPM7AQjXorc9icEumM4ByorhSRk7W024/fFP8VzPJ8NP
-   xTRJxGoYfslYRrs7G6h3TYRFpRs1YSk4z5KK4r86rXMl60cgSGR8kO2LB
-   SzTdTdIFq2W+UsC27SagYNatHyFzMUnwIMJBy+WyYQFXEyq+V4BWBK1nO
-   QUUBEgkDJMioFaFeWGHy/MqzbaEpcC2Y6dRU3zU/CsttPVzEie5QSDquY
-   BWnye3bl6E9LGB8SDZBGD6i0VpmdaPWGRAvBvnRmBo92Djq8tLFCge8gI
-   vayruRyw+zfosjCFRUwiTshQVI0dPf47niX5WO7OvZp64VtF6b4zQ5eo/
-   Q==;
-X-CSE-ConnectionGUID: Jc/b5speRUCaPOZfgHtcvA==
-X-CSE-MsgGUID: pzwlX8lnTcGOoMbiKkxspg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11256"; a="42981041"
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="42981041"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 12:50:55 -0800
-X-CSE-ConnectionGUID: 1DMG7JpXQAa95Fox4xXQUg==
-X-CSE-MsgGUID: DWR2Ow4ZQDe6dEMKqKk43A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,154,1728975600"; 
-   d="scan'208";a="92402975"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 14 Nov 2024 12:50:54 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C8BA6380; Thu, 14 Nov 2024 22:50:52 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 1/1] spi: sc18is602: Switch to generic firmware properties and drop of_match_ptr()
-Date: Thu, 14 Nov 2024 22:50:51 +0200
-Message-ID: <20241114205051.3747458-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1731676993; c=relaxed/simple;
+	bh=aXmW/SlFuMTBx0uvUSkbp6nYdFZtT3GvPmQoFTxirQg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=to8O+AatVIu4rKtTbdX+McyCjGNcCcF+llWx9JPZqlW2fuQet0A2ITAytDWTquUW58gGueXgJzUbPQnI0KD37X7mKpvQ5UBrqS+xHo7qgJ0ebgG3GFGKym19rH+VVhiE2SHyfE91qlghQYXWjUyvUcC90I6Sg9ZMK1FDX2jCfEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=PFvfaJ3x; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id A63A9A03F3;
+	Fri, 15 Nov 2024 14:23:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:content-transfer-encoding:content-type:content-type:date:from
+	:from:in-reply-to:message-id:mime-version:references:reply-to
+	:subject:subject:to:to; s=mail; bh=t7g3cSkvm0PW3SmedMT5JjoODC5Qn
+	0jSLN8FBVFZMrc=; b=PFvfaJ3xeTl6gtIjREgawA/1osfrZCQzzu6svm3jRurrp
+	fwjOC+fWaTEmfeTKdVclPoqCPVufqzunplLFZ4QiOx8IcgMHpY0IBVnGkWHs1IcP
+	yWoQlZOno4gyYnQDE8epR1eLCjd7bk2DTu1QT4pYk0IqFBuWua5kxgyU+UpaHQq3
+	XdspBRA9GWnACidej7QHU6DaMLDWLsmi9CMPN4AX3EPNY4dnnLdmgxcNrMnlcBSZ
+	767l3vjFFtU2rkkM1ts7d7vJxzzPeCfPmObI7Z3kwfjgta/rMI/TxK77G2HBHEGJ
+	06tzFbkF9Z342iSRqe5RsSoZkdeuzOQIw+Shtf2uGIkaRybarLertzJncph+Tisb
+	lGvV1ZcL+cAo52Pj32xePQR1tkaSQZtPPYIMJMzj71De/LYh6TVveEikCy+rNsJj
+	sn/1kM7YfmK4r1YMXMCyXiDz+s7lUSMy11Gq05o8A1lnxKqqH9izS5PtSf+EzXvl
+	Ms6+FaVz+yiZA5qAnFZxytF82ozZNXc9Xvh0WXImhlW/84ClrkGfofOnDm/IpAls
+	xk4idtz+FFTchHwTCibhcYyW29glXBWh2t7+PvD/2e3XiUwwmTPRsNXYl9paXpkb
+	vkd+EDgBdtHVnSUtWkTy9FFQCTGgia1xnZ49jtIamnd6VtD6RUSB21LGisa4XY=
+Message-ID: <32a5c58c-f318-4c02-ae76-421b9cca0875@prolan.hu>
+Date: Fri, 15 Nov 2024 14:23:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: atmel-quadspi: Create `atmel_qspi_ops` to support
+ newer SoC families
+To: <Hari.PrasathGE@microchip.com>, <tudor.ambarus@linaro.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <Varshini.Rajendran@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <broonie@kernel.org>,
+	<claudiu.beznea@tuxon.dev>, <Nicolas.Ferre@microchip.com>,
+	<Patrice.Vilchez@microchip.com>, <Cristian.Birsan@microchip.com>
+References: <20241030084445.2438750-1-csokas.bence@prolan.hu>
+ <7cc95e52-7509-44eb-8e30-d518283e7d87@linaro.org>
+ <2b310b54-c215-40fa-b6d4-81faf75a8c9e@prolan.hu>
+ <20241104-vanilla-operating-de19b033f0a8@thorsis.com>
+ <ad585127-9e3c-414a-84c2-c4ea3e6d3c7d@prolan.hu>
+ <78f38031-1723-4474-9bea-1c23918a75f6@microchip.com>
+Content-Language: en-US
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <78f38031-1723-4474-9bea-1c23918a75f6@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94855617C6B
 
-This enables using the driver with other firmware types such as ACPI
-via PRP0001.
+Hi,
 
-Also part of a general attempt to move drivers over to generic properties
-to avoid opportunities for cut and paste.
+On 2024. 11. 05. 8:47, Hari.PrasathGE@microchip.com wrote:
+> Hello Bence,
+> 
+> On 11/4/24 6:26 PM, Csókás Bence wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+>> the content is safe
+>>
+>> Hi!
+>>
+>> On 2024. 11. 04. 13:48, Alexander Dahl wrote:
+>>> It would actually be better if vendor would bring their stuff
+>>> upstream, so there's no need for a vendor kernel.  Did you talk to
+>>> Microchip about their upstreaming efforts?  What was the answer?
+>>>
+>>> Greets
+>>> Alex
+>>
+>> Agreed. Though in this case, the original patch *was* submitted by
+>> Microchip (by Tudor, originally) for upstream inclusion, but it was not
+>> merged. Hence this forward-port.
+>> Link:
+>> https://lore.kernel.org/linux-spi/20211214133404.121739-1-tudor.ambarus@microchip.com/
+> 
+> 
+> Thanks for your patch. We are planning to revive this work at the
+> earliest. While I don't have specific timeline for this, we at Microchip
+> are fully aware of this gap and doing everything we could to keep the
+> delta between the upstream kernel and vendor kernel as minimal as possible.
+> 
+> We will discuss internally and provide you the feedback. Thanks again
+> for your efforts.
+> 
+> Regards,
+> Hari
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-sc18is602.c | 34 ++++++++++++----------------------
- 1 file changed, 12 insertions(+), 22 deletions(-)
+Did you reach a conclusion internally regarding whether to support this 
+patch? Since then, I opened a ticket with Microchip, but haven't got a 
+response yet. I have also been in face-to-face contact with some of the 
+engineers from the Rousset office, and they have expressed their 
+support, and even the possibility of lending us a SAMA7G5 to test with. 
+So really, all I'm waiting for is this patch to be merged, and then I 
+can submit the SAMA7G5 parts, at worst as an RFC, if we don't get the 
+real hardware in time.
 
-diff --git a/drivers/spi/spi-sc18is602.c b/drivers/spi/spi-sc18is602.c
-index eecf9ea95ae3..1627aa66c965 100644
---- a/drivers/spi/spi-sc18is602.c
-+++ b/drivers/spi/spi-sc18is602.c
-@@ -7,13 +7,15 @@
- 
- #include <linux/kernel.h>
- #include <linux/err.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/spi/spi.h>
- #include <linux/i2c.h>
- #include <linux/delay.h>
- #include <linux/pm_runtime.h>
--#include <linux/of.h>
- #include <linux/platform_data/sc18is602.h>
-+#include <linux/property.h>
-+
- #include <linux/gpio/consumer.h>
- 
- enum chips { sc18is602, sc18is602b, sc18is603 };
-@@ -236,9 +238,7 @@ static int sc18is602_setup(struct spi_device *spi)
- 
- static int sc18is602_probe(struct i2c_client *client)
- {
--	const struct i2c_device_id *id = i2c_client_get_device_id(client);
- 	struct device *dev = &client->dev;
--	struct device_node *np = dev->of_node;
- 	struct sc18is602_platform_data *pdata = dev_get_platdata(dev);
- 	struct sc18is602 *hw;
- 	struct spi_controller *host;
-@@ -251,8 +251,9 @@ static int sc18is602_probe(struct i2c_client *client)
- 	if (!host)
- 		return -ENOMEM;
- 
-+	device_set_node(&host->dev, dev_fwnode(dev));
-+
- 	hw = spi_controller_get_devdata(host);
--	i2c_set_clientdata(client, hw);
- 
- 	/* assert reset and then release */
- 	hw->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_HIGH);
-@@ -265,11 +266,7 @@ static int sc18is602_probe(struct i2c_client *client)
- 	hw->dev = dev;
- 	hw->ctrl = 0xff;
- 
--	if (client->dev.of_node)
--		hw->id = (uintptr_t)of_device_get_match_data(&client->dev);
--	else
--		hw->id = id->driver_data;
--
-+	hw->id = (uintptr_t)i2c_get_match_data(client);
- 	switch (hw->id) {
- 	case sc18is602:
- 	case sc18is602b:
-@@ -278,28 +275,21 @@ static int sc18is602_probe(struct i2c_client *client)
- 		break;
- 	case sc18is603:
- 		host->num_chipselect = 2;
--		if (pdata) {
-+		if (pdata)
- 			hw->freq = pdata->clock_frequency;
--		} else {
--			const __be32 *val;
--			int len;
--
--			val = of_get_property(np, "clock-frequency", &len);
--			if (val && len >= sizeof(__be32))
--				hw->freq = be32_to_cpup(val);
--		}
-+		else
-+			device_property_read_u32(dev, "clock-frequency", &hw->freq);
- 		if (!hw->freq)
- 			hw->freq = SC18IS602_CLOCK;
- 		break;
- 	}
--	host->bus_num = np ? -1 : client->adapter->nr;
-+	host->bus_num = dev_fwnode(dev) ? -1 : client->adapter->nr;
- 	host->mode_bits = SPI_CPHA | SPI_CPOL | SPI_LSB_FIRST;
- 	host->bits_per_word_mask = SPI_BPW_MASK(8);
- 	host->setup = sc18is602_setup;
- 	host->transfer_one_message = sc18is602_transfer_one;
- 	host->max_transfer_size = sc18is602_max_transfer_size;
- 	host->max_message_size = sc18is602_max_transfer_size;
--	host->dev.of_node = np;
- 	host->min_speed_hz = hw->freq / 128;
- 	host->max_speed_hz = hw->freq / 4;
- 
-@@ -314,7 +304,7 @@ static const struct i2c_device_id sc18is602_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, sc18is602_id);
- 
--static const struct of_device_id sc18is602_of_match[] __maybe_unused = {
-+static const struct of_device_id sc18is602_of_match[] = {
- 	{
- 		.compatible = "nxp,sc18is602",
- 		.data = (void *)sc18is602
-@@ -334,7 +324,7 @@ MODULE_DEVICE_TABLE(of, sc18is602_of_match);
- static struct i2c_driver sc18is602_driver = {
- 	.driver = {
- 		.name = "sc18is602",
--		.of_match_table = of_match_ptr(sc18is602_of_match),
-+		.of_match_table = sc18is602_of_match,
- 	},
- 	.probe = sc18is602_probe,
- 	.id_table = sc18is602_id,
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+Bence
 
 
