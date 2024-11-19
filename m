@@ -1,75 +1,55 @@
-Return-Path: <linux-spi+bounces-5752-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5754-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F859D2C04
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Nov 2024 18:03:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20F449D2E49
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Nov 2024 19:47:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1851F2482E
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Nov 2024 17:03:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5518283A9D
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Nov 2024 18:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C7E1D0F4F;
-	Tue, 19 Nov 2024 17:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0C315574E;
+	Tue, 19 Nov 2024 18:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RCoQKTFR"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="G8R6rIHK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EC41D0DE7
-	for <linux-spi@vger.kernel.org>; Tue, 19 Nov 2024 17:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18078528E;
+	Tue, 19 Nov 2024 18:47:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732035775; cv=none; b=uJDfTOXgwR660bL7JyDylWTFz7UuR6Fkm5CNJE738WxCG516QX3ox1MpplnqN7pzRO2aEZfR5AbXZaggYraqKe9R8hjCROuYXY+k6PWzHsVdKK7y9Qq0BFagxNxDJ9ot2ZRuKdPYB/4DXr74XhT8NlNKvw/4bur1WA+lxgb6W6o=
+	t=1732042029; cv=none; b=ZX396lYOqkDzmy0TnKbKZ5vXTlBjteTOBkX2gmcuAjqS8GeaSeicn90yxjH43poSLjoIIA2pv/udbQLyM04G4FEKytMlZ0Olt0qrTZclSGpCXEKX4eijcK+04GewBnovT97dtITvt9OYWMDSk9neBI3GJgugL6Yt9hYCVYCRyqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732035775; c=relaxed/simple;
-	bh=h70w9vQazV5qNPLex4P1Yuwr7tbO2ict2Rq3hLHOPwo=;
+	s=arc-20240116; t=1732042029; c=relaxed/simple;
+	bh=JaWytgbPiisX8pvxdqweWT07VNH9/o+4cgnjKLsBIxc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L7fKzXnl41jjjF6Tt5dhb9GlDPR+x6f97m87Ljw/zhWDLa0mpKa/uW90uglcMFzj4/S/UeMcCPMdyjhTkOh7U88d71lDc1FNlnwoLZKRMcYIIpt05igsSlotIEM3VXhqoHN35/+HYkKWEDDtfvNeFCGn+QWeeCDj7puKmgaj5UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RCoQKTFR; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-71811707775so1765967a34.3
-        for <linux-spi@vger.kernel.org>; Tue, 19 Nov 2024 09:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1732035771; x=1732640571; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wpSTIfTynaQ3ZBm9L5nQI/0DHuXfSVhBbTYYsw/NWVk=;
-        b=RCoQKTFRkDyKzIugpZCX7EGVZNv3hoqWiWRp5uKbLXcvBTCDA9gRft/hzNjogYjsId
-         eW4GWUY0wchbNvvSCPt3tPVMU+2O0cn8AsJu4RQIfIuoJvvLNCQLMIwi9Rl4LMDbNdV9
-         MBofdd5jK/ACBTUkdRE7uupcNvZQolY+TX8O8TefYT8f+2iJ8S3UPw3SkFglIReAtPB7
-         F9jN4VtfgLrNyLxViLTaFhaKWnTNv5stxZhpg8XqAx5LxOa9xdRAhRpfOVLC59drzETH
-         PVa+R+hTq/Nmg4DEl9UC8CPvA/xEbdqwDA0qm7CUTU+rDpmDjC1kC8vu4DtE35bqjtO2
-         9oVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732035771; x=1732640571;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wpSTIfTynaQ3ZBm9L5nQI/0DHuXfSVhBbTYYsw/NWVk=;
-        b=sM1ly9tlpW8ToJOFpqVXmCx0U2imUXEXdipqmxLwKr3xgtzOOQsi4AKyvrfQYbEgVy
-         bovheCBQ6/J4qLb0o0lsRK8DXPkAjMzyAHZ5pt6omZIZxjFwNaUcgz4+YsWOCZEYv9JY
-         xRoUisYthOl9BvFAMBTDSHBBclhvoppWa3pYI7h0DumGxxZuYAKk32vDkMlyYazy4eBH
-         4tu6rq8xysBmzqb2eBhFRvOnkP8dHrVdKy68wztdq3pzpqVyT+gk7Nd7hLjE1Xre2+7k
-         Xcilq0uNCkerKxrHYw0H5f4XMaBACuMwJa0uKISdLXvCffY+66P7ZK/qL4nXoZxeyHja
-         YKaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUvPRqe3bO/sar5k14ENhrz3Vde9PtSJvgoJsYOeF3VkPjGlZ00KCA/zS7snWq+iik1GC3t5nQBWHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytMJzbEoWuvfNP8jiOr41u7aS0imiNnT8lgVuxxhajfybYuuca
-	VnuBHTIG1L8Lvjv+n4H7sC6719VIyKwtbQz8EldgLfOrxxnKHqNMddFhJ48JWAOACxoFiEOYz44
-	9
-X-Google-Smtp-Source: AGHT+IHBUbfDxf+BtmKDo3ex3QVTqeeoMBwE054v2Ptp4qL6Pugo7JcmWBAOaAA3GsD1txkLu4IiLA==
-X-Received: by 2002:a05:6830:6281:b0:718:9f3e:6bcb with SMTP id 46e09a7af769-71a77931870mr15140177a34.10.1732035771323;
-        Tue, 19 Nov 2024 09:02:51 -0800 (PST)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71a782133f4sm3475168a34.66.2024.11.19.09.02.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Nov 2024 09:02:50 -0800 (PST)
-Message-ID: <f0e35a14-f870-400f-b26a-ce6f212484ca@baylibre.com>
-Date: Tue, 19 Nov 2024 11:02:50 -0600
+	 In-Reply-To:Content-Type; b=ZAlTnP3dJDhjTmvVW9G8PyoBZi4CeBSbFRRiCo7NPrhEbAQS2O9aRGvRD3wPc2GJuCu3S63p9D7NEWNtRtCA+KN1P6QZNgJwA+3nXHzbnZDGZc5ZYxXp0RXIAEcm/skDjFl0DaKpw+2ZEzCit53+8VD/7kyEpsqulnPlMDxOr4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=G8R6rIHK; arc=none smtp.client-ip=80.12.242.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id DTFWt5CAGmK41DTFWt0cNu; Tue, 19 Nov 2024 19:46:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1732042017;
+	bh=UBYWGpjQPLsx4MqQVn9RTX35vK2sjzBZKj9YylR+AGg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=G8R6rIHKsbms6vIV7zgAO/inZ9vm1EVYuy2Z5rB/ETZDH5P5yO+qLWDlYU/Oq8t/7
+	 bJb5nMYG9PzrGTEey3AtYoPae7m161jXr9WiJKHPhGzBvdBpdZE7eOJXlsO3m0YFIU
+	 FbxiR7efvdVCKbH27twFI+0UrZ1wiCcYvqAq7plh/NpRsaNj4zZy8SH9/gYcUTdYUQ
+	 24GvLPk7HwBNRHF5ldMUli4HVKGbHDMWxvxysppZZ+MiCgUXUw6rpOv+RYt3C9QphJ
+	 rUSIzFy1lali9z0U3swn6NwN6XSfMZ1Np6c8X4R4KqGXDxPr0TF1OVOGvajvlj2wk/
+	 D/l6hOGSmSErA==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 19 Nov 2024 19:46:57 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <4e351cd7-cc34-4fb2-bce4-1612e46e285b@wanadoo.fr>
+Date: Tue, 19 Nov 2024 19:46:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,129 +57,355 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/16] spi: dt-bindings: axi-spi-engine: add SPI
- offload properties
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20241115-dlech-mainline-spi-engine-offload-2-v5-0-bea815bd5ea5@baylibre.com>
- <20241115-dlech-mainline-spi-engine-offload-2-v5-7-bea815bd5ea5@baylibre.com>
- <20241119165646.GA1798301-robh@kernel.org>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20241119165646.GA1798301-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 15/15] clk: at91: sama7d65: add sama7d65 pmc driver
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+ mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de
+Cc: dharma.b@microchip.com, mihai.sain@microchip.com,
+ romain.sioen@microchip.com, varshini.rajendran@microchip.com,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <cover.1732030972.git.Ryan.Wanner@microchip.com>
+ <0b7af2a91d4d58cfd4909d338f1879e14f61f77f.1732030972.git.Ryan.Wanner@microchip.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <0b7af2a91d4d58cfd4909d338f1879e14f61f77f.1732030972.git.Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 11/19/24 10:56 AM, Rob Herring wrote:
-> On Fri, Nov 15, 2024 at 02:18:46PM -0600, David Lechner wrote:
->> The AXI SPI Engine has support for hardware offloading capabilities.
->> This includes a connection to a DMA controller for streaming RX data
->> and a trigger input for starting execution of the SPI message programmed
->> in the offload.
->>
->> Each SPI Engine may have up to 1 offload. The spec actually says that
->> it could support up to 32, so we are using an index number in the
->> dma-names (e.g. offload0-rx) to allow for this possibility in the
->> future.
->>
->> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> ---
->>
->> v5 changes:
->> * Also document offload0-tx DMA names since the hardware can support
->>   that now.
->> * Limit the number of offloads to 1 for now since it would require
->>   significant hardware changes to actually support more than that.
->>
->> v4 changes:
->> * Dropped #spi-offload-cells property.
->> * Changed subject line.
->>
->> v3 changes:
->> * Added #spi-offload-cells property.
->> * Added properties for triggers and RX data stream connected to DMA.
->>
->> v2 changes:
->> * This is basically a new patch. It partially replaces "dt-bindings:
->>   iio: offload: add binding for PWM/DMA triggered buffer".
->> * The controller no longer has an offloads object node and the
->>   spi-offloads property is now a standard SPI peripheral property.
->> ---
->>  .../bindings/spi/adi,axi-spi-engine.yaml           | 24 ++++++++++++++++++++++
->>  1 file changed, 24 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
->> index d48faa42d025..d703b47eb498 100644
->> --- a/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
->> +++ b/Documentation/devicetree/bindings/spi/adi,axi-spi-engine.yaml
->> @@ -41,6 +41,26 @@ properties:
->>        - const: s_axi_aclk
->>        - const: spi_clk
->>  
->> +  trigger-sources:
->> +    description:
->> +      An array of trigger source phandles for offload instances. The index in
->> +      the array corresponds to the offload instance number.
+Le 19/11/2024 à 17:40, Ryan.Wanner@microchip.com a écrit :
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> How can you have an index when you only allow 1 entry (other than 0 of 
-> course)?
+> Add clock support for SAMA7D65 SoC.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
 
-Same reason as below, but we can drop that part of the description for now.
+Hi,
 
-> 
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> 
-> With my other comments implemented, this should be dropped.
-> 
->> +    maxItems: 1
->> +
->> +  dmas:
->> +    description:
->> +      DMA channels connected to the input or output stream interface of an
->> +      offload instance.
->> +    minItems: 1
->> +    maxItems: 2
->> +
->> +  dma-names:
->> +    items:
->> +      pattern: "^offload0-[tr]x$"
-> 
-> Do you expect an offload1 or something?
+> +enum pll_ids {
+> +	PLL_ID_CPU,
+> +	PLL_ID_SYS,
+> +	PLL_ID_DDR,
+> +	PLL_ID_GPU,
+> +	PLL_ID_BAUD,
+> +	PLL_ID_AUDIO,
+> +	PLL_ID_ETH,
+> +	PLL_ID_LVDS,
+> +	PLL_ID_USB,
+> +	PLL_ID_MAX,
 
-Yes, I tried to make this clear in the commit message. The hardware
-is designed to have up to 32 offload instances, but in practice
-there can only be 1 for now. So I included the 0 here to make it
-future-proof in case that changes in the future.
+Maybe the last comma could be removed to show that nothing is expected 
+after it?
 
-> 
->> +    minItems: 1
->> +    maxItems: 2
->> +
->>  required:
->>    - compatible
->>    - reg
->> @@ -59,6 +79,10 @@ examples:
->>          clocks = <&clkc 15>, <&clkc 15>;
->>          clock-names = "s_axi_aclk", "spi_clk";
->>  
->> +        trigger-sources = <&trigger_clock>;
->> +        dmas = <&dma 0>;
->> +        dma-names = "offload0-rx";
->> +
->>          #address-cells = <1>;
->>          #size-cells = <0>;
->>  
->>
->> -- 
->> 2.43.0
->>
+> +};
+> +
+> +/*
+> + * PLL component identifier
+> + * @PLL_COMPID_FRAC: Fractional PLL component identifier
+> + * @PLL_COMPID_DIV0: 1st PLL divider component identifier
+> + * @PLL_COMPID_DIV1: 2nd PLL divider component identifier
+> + */
+> +enum pll_component_id {
+> +	PLL_COMPID_FRAC,
+> +	PLL_COMPID_DIV0,
+> +	PLL_COMPID_DIV1,
+> +	PLL_COMPID_MAX,
+
+Maybe the last comma could be removed to show that nothing is expected 
+after it?
+
+> +};
+...
+
+> +static void __init sama7d65_pmc_setup(struct device_node *np)
+> +{
+> +	const char *main_xtal_name = "main_xtal";
+> +	struct pmc_data *sama7d65_pmc;
+> +	const char *parent_names[11];
+> +	void **alloc_mem = NULL;
+> +	int alloc_mem_size = 0;
+> +	struct regmap *regmap;
+> +	struct clk_hw *hw, *main_rc_hw, *main_osc_hw, *main_xtal_hw;
+> +	struct clk_hw *td_slck_hw, *md_slck_hw;
+> +	static struct clk_parent_data parent_data;
+> +	struct clk_hw *parent_hws[10];
+> +	bool bypass;
+> +	int i, j;
+> +
+> +	td_slck_hw = __clk_get_hw(of_clk_get_by_name(np, "td_slck"));
+> +	md_slck_hw = __clk_get_hw(of_clk_get_by_name(np, "md_slck"));
+> +	main_xtal_hw = __clk_get_hw(of_clk_get_by_name(np, main_xtal_name));
+> +
+> +	if (!td_slck_hw || !md_slck_hw || !main_xtal_hw)
+> +		return;
+> +
+> +	regmap = device_node_to_regmap(np);
+> +	if (IS_ERR(regmap))
+> +		return;
+> +
+> +	sama7d65_pmc = pmc_data_allocate(PMC_INDEX_MAX,
+> +					 nck(sama7d65_systemck),
+> +					 nck(sama7d65_periphck),
+> +					 nck(sama7d65_gck), 8);
+> +	if (!sama7d65_pmc)
+> +		return;
+> +
+> +	alloc_mem = kmalloc(sizeof(void *) *
+> +			    (ARRAY_SIZE(sama7d65_mckx) + ARRAY_SIZE(sama7d65_gck)),
+> +			    GFP_KERNEL);
+> +	if (!alloc_mem)
+> +		goto err_free;
+> +
+> +	main_rc_hw = at91_clk_register_main_rc_osc(regmap, "main_rc_osc", 12000000,
+> +						   50000000);
+> +	if (IS_ERR(main_rc_hw))
+> +		goto err_free;
+> +
+> +	bypass = of_property_read_bool(np, "atmel,osc-bypass");
+> +
+> +	parent_data.name = main_xtal_name;
+> +	parent_data.fw_name = main_xtal_name;
+> +	main_osc_hw = at91_clk_register_main_osc(regmap, "main_osc", NULL,
+> +						 &parent_data, bypass);
+> +	if (IS_ERR(main_osc_hw))
+> +		goto err_free;
+> +
+> +	parent_hws[0] = main_rc_hw;
+> +	parent_hws[1] = main_osc_hw;
+> +	hw = at91_clk_register_sam9x5_main(regmap, "mainck", NULL, parent_hws, 2);
+> +	if (IS_ERR(hw))
+> +		goto err_free;
+> +
+> +	sama7d65_pmc->chws[PMC_MAIN] = hw;
+> +
+> +	for (i = 0; i < PLL_ID_MAX; i++) {
+> +		for (j = 0; j < PLL_COMPID_MAX; j++) {
+> +			struct clk_hw *parent_hw;
+> +
+> +			if (!sama7d65_plls[i][j].n)
+> +				continue;
+> +
+> +			switch (sama7d65_plls[i][j].t) {
+> +			case PLL_TYPE_FRAC:
+> +				switch (sama7d65_plls[i][j].p) {
+> +				case SAMA7D65_PLL_PARENT_MAINCK:
+> +					parent_hw = sama7d65_pmc->chws[PMC_MAIN];
+> +					break;
+> +				case SAMA7D65_PLL_PARENT_MAIN_XTAL:
+> +					parent_hw = main_xtal_hw;
+> +					break;
+> +				default:
+> +					/* Should not happen. */
+> +					parent_hw = NULL;
+> +					break;
+> +				}
+> +
+> +				hw = sam9x60_clk_register_frac_pll(regmap,
+> +					&pmc_pll_lock, sama7d65_plls[i][j].n,
+> +					NULL, parent_hw, i,
+> +					sama7d65_plls[i][j].c,
+> +					sama7d65_plls[i][j].l,
+> +					sama7d65_plls[i][j].f);
+> +				break;
+> +
+> +			case PLL_TYPE_DIV:
+> +				hw = sam9x60_clk_register_div_pll(regmap,
+> +					&pmc_pll_lock, sama7d65_plls[i][j].n,
+> +					NULL, sama7d65_plls[i][0].hw, i,
+> +					sama7d65_plls[i][j].c,
+> +					sama7d65_plls[i][j].l,
+> +					sama7d65_plls[i][j].f,
+> +					sama7d65_plls[i][j].safe_div);
+> +				break;
+> +
+> +			default:
+> +				continue;
+> +			}
+> +
+> +			if (IS_ERR(hw))
+> +				goto err_free;
+> +
+> +			sama7d65_plls[i][j].hw = hw;
+> +			if (sama7d65_plls[i][j].eid)
+> +				sama7d65_pmc->chws[sama7d65_plls[i][j].eid] = hw;
+> +		}
+> +	}
+> +
+> +	hw = at91_clk_register_master_div(regmap, "mck0", NULL,
+> +					  sama7d65_plls[PLL_ID_CPU][1].hw,
+> +					  &mck0_layout, &mck0_characteristics,
+> +					  &pmc_mck0_lock, CLK_GET_RATE_NOCACHE, 5);
+> +	if (IS_ERR(hw))
+> +		goto err_free;
+> +
+> +	sama7d65_pmc->chws[PMC_MCK] = hw;
+> +	sama7d65_mckx[PCK_PARENT_HW_MCK0].hw = hw;
+> +
+> +	parent_hws[0] = md_slck_hw;
+> +	parent_hws[1] = td_slck_hw;
+> +	parent_hws[2] = sama7d65_pmc->chws[PMC_MAIN];
+> +	for (i = PCK_PARENT_HW_MCK1; i < ARRAY_SIZE(sama7d65_mckx); i++) {
+> +		u8 num_parents = 3 + sama7d65_mckx[i].ep_count;
+> +		struct clk_hw *tmp_parent_hws[8];
+> +		u32 *mux_table;
+> +
+> +		mux_table = kmalloc_array(num_parents, sizeof(*mux_table),
+> +					  GFP_KERNEL);
+> +		if (!mux_table)
+> +			goto err_free;
+> +
+> +		PMC_INIT_TABLE(mux_table, 3);
+> +		PMC_FILL_TABLE(&mux_table[3], sama7d65_mckx[i].ep_mux_table,
+> +			       sama7d65_mckx[i].ep_count);
+> +		for (j = 0; j < sama7d65_mckx[i].ep_count; j++) {
+> +			u8 pll_id = sama7d65_mckx[i].ep[j].pll_id;
+> +			u8 pll_compid = sama7d65_mckx[i].ep[j].pll_compid;
+> +
+> +			tmp_parent_hws[j] = sama7d65_plls[pll_id][pll_compid].hw;
+> +		}
+> +		PMC_FILL_TABLE(&parent_hws[3], tmp_parent_hws,
+> +			       sama7d65_mckx[i].ep_count);
+> +
+> +		hw = at91_clk_sama7g5_register_master(regmap, sama7d65_mckx[i].n,
+> +						      num_parents, NULL, parent_hws,
+> +						      mux_table, &pmc_mckX_lock,
+> +						      sama7d65_mckx[i].id,
+> +						      sama7d65_mckx[i].c,
+> +						      sama7d65_mckx[i].ep_chg_id);
+> +		if (IS_ERR(hw))
+
+Missing kfree(mux_table);
+(or move "alloc_mem[alloc_mem_size++] = mux_table;" before this test to 
+have in done by the error handling path)
+
+> +			goto err_free;
+> +
+> +		alloc_mem[alloc_mem_size++] = mux_table;
+> +
+> +		sama7d65_mckx[i].hw = hw;
+> +		if (sama7d65_mckx[i].eid)
+> +			sama7d65_pmc->chws[sama7d65_mckx[i].eid] = hw;
+> +	}
+> +
+> +	parent_names[0] = "syspll_divpmcck";
+> +	parent_names[1] = "usbpll_divpmcck";
+> +	parent_names[2] = "main_osc";
+> +	hw = sam9x60_clk_register_usb(regmap, "usbck", parent_names, 3);
+> +	if (IS_ERR(hw))
+> +		goto err_free;
+> +
+> +	parent_hws[0] = md_slck_hw;
+> +	parent_hws[1] = td_slck_hw;
+> +	parent_hws[2] = sama7d65_pmc->chws[PMC_MAIN];
+> +	parent_hws[3] = sama7d65_plls[PLL_ID_SYS][PLL_COMPID_DIV0].hw;
+> +	parent_hws[4] = sama7d65_plls[PLL_ID_DDR][PLL_COMPID_DIV0].hw;
+> +	parent_hws[5] = sama7d65_plls[PLL_ID_GPU][PLL_COMPID_DIV0].hw;
+> +	parent_hws[6] = sama7d65_plls[PLL_ID_BAUD][PLL_COMPID_DIV0].hw;
+> +	parent_hws[7] = sama7d65_plls[PLL_ID_AUDIO][PLL_COMPID_DIV0].hw;
+> +	parent_hws[8] = sama7d65_plls[PLL_ID_ETH][PLL_COMPID_DIV0].hw;
+> +
+> +	for (i = 0; i < 8; i++) {
+> +		char name[6];
+> +
+> +		snprintf(name, sizeof(name), "prog%d", i);
+> +
+> +		hw = at91_clk_register_programmable(regmap, name, NULL, parent_hws,
+> +						    9, i,
+> +						    &programmable_layout,
+> +						    sama7d65_prog_mux_table);
+> +		if (IS_ERR(hw))
+> +			goto err_free;
+> +
+> +		sama7d65_pmc->pchws[i] = hw;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sama7d65_systemck); i++) {
+> +		hw = at91_clk_register_system(regmap, sama7d65_systemck[i].n,
+> +					      sama7d65_systemck[i].p, NULL,
+> +					      sama7d65_systemck[i].id, 0);
+> +		if (IS_ERR(hw))
+> +			goto err_free;
+> +
+> +		sama7d65_pmc->shws[sama7d65_systemck[i].id] = hw;
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sama7d65_periphck); i++) {
+> +		hw = at91_clk_register_sam9x5_peripheral(regmap, &pmc_pcr_lock,
+> +							 &sama7d65_pcr_layout,
+> +							 sama7d65_periphck[i].n,
+> +							 NULL,
+> +							 sama7d65_mckx[sama7d65_periphck[i].p].hw,
+> +							 sama7d65_periphck[i].id,
+> +							 &sama7d65_periphck[i].r,
+> +							 sama7d65_periphck[i].chgp ? 0 :
+> +							 INT_MIN, 0);
+> +		if (IS_ERR(hw))
+> +			goto err_free;
+> +
+> +		sama7d65_pmc->phws[sama7d65_periphck[i].id] = hw;
+> +	}
+> +
+> +	parent_hws[0] = md_slck_hw;
+> +	parent_hws[1] = td_slck_hw;
+> +	parent_hws[2] = sama7d65_pmc->chws[PMC_MAIN];
+> +	parent_hws[3] = sama7d65_pmc->chws[PMC_MCK1];
+> +	for (i = 0; i < ARRAY_SIZE(sama7d65_gck); i++) {
+> +		u8 num_parents = 4 + sama7d65_gck[i].pp_count;
+> +		struct clk_hw *tmp_parent_hws[8];
+> +		u32 *mux_table;
+> +
+> +		mux_table = kmalloc_array(num_parents, sizeof(*mux_table),
+> +					  GFP_KERNEL);
+> +		if (!mux_table)
+> +			goto err_free;
+> +
+> +		PMC_INIT_TABLE(mux_table, 4);
+> +		PMC_FILL_TABLE(&mux_table[4], sama7d65_gck[i].pp_mux_table,
+> +			       sama7d65_gck[i].pp_count);
+> +		for (j = 0; j < sama7d65_gck[i].pp_count; j++) {
+> +			u8 pll_id = sama7d65_gck[i].pp[j].pll_id;
+> +			u8 pll_compid = sama7d65_gck[i].pp[j].pll_compid;
+> +
+> +			tmp_parent_hws[j] = sama7d65_plls[pll_id][pll_compid].hw;
+> +		}
+> +		PMC_FILL_TABLE(&parent_hws[4], tmp_parent_hws,
+> +			       sama7d65_gck[i].pp_count);
+> +
+> +		hw = at91_clk_register_generated(regmap, &pmc_pcr_lock,
+> +						 &sama7d65_pcr_layout,
+> +						 sama7d65_gck[i].n, NULL,
+> +						 parent_hws, mux_table,
+> +						 num_parents,
+> +						 sama7d65_gck[i].id,
+> +						 &sama7d65_gck[i].r,
+> +						 sama7d65_gck[i].pp_chg_id);
+> +		if (IS_ERR(hw))
+> +			goto err_free;
+> +
+> +		sama7d65_pmc->ghws[sama7d65_gck[i].id] = hw;
+> +		alloc_mem[alloc_mem_size++] = mux_table;
+> +	}
+> +
+> +	of_clk_add_hw_provider(np, of_clk_hw_pmc_get, sama7d65_pmc);
+> +	kfree(alloc_mem);
+> +
+> +	return;
+> +
+> +err_free:
+> +	if (alloc_mem) {
+> +		for (i = 0; i < alloc_mem_size; i++)
+> +			kfree(alloc_mem[i]);
+> +		kfree(alloc_mem);
+> +	}
+> +
+> +	kfree(sama7d65_pmc);
+> +}
+> +
+> +/* Some clks are used for a clocksource */
+> +CLK_OF_DECLARE(sama7d65_pmc, "microchip,sama7d65-pmc", sama7d65_pmc_setup);
 
 
