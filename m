@@ -1,98 +1,84 @@
-Return-Path: <linux-spi+bounces-5763-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5764-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109379D363C
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 10:01:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 894B69D364E
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 10:03:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B35EB237F0
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 09:01:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37EA21F22A48
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 09:03:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B39318732C;
-	Wed, 20 Nov 2024 09:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYmZIND2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF45189B8F;
+	Wed, 20 Nov 2024 09:02:58 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63166171092;
-	Wed, 20 Nov 2024 09:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D301586DB;
+	Wed, 20 Nov 2024 09:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732093306; cv=none; b=FOdHHqv4Hhk+O0NWxxNkrefcuJY+yHyldsqNXO+fRXri1jHMJynLHDPi3eO8Bbj5Lwb59H5KTTuHWU3HdS8pbLz4GYgqpYMOaGLBsZDSzNzuLxVTpkCMETE0Vjoeddzf4d7/6fBPuXngWQQqx2fCQCY/ItWkj/5j/3l+gXdI4EA=
+	t=1732093378; cv=none; b=UCQt8WIrp7DenC1+kK9UP/R8rYtgPHzZ2JXVF41vwHWlJ5kYmCNJcsLKjWYHj6js+5uSxOAywBENfAULXVTGjy+6FNnyg+0oze19VkzjYQ4gTWCdWb8175dPa81Bk7pKh/jxmrvl1IN7yIPcz8F0/sBUs/NNHbijAoyMUp/mIBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732093306; c=relaxed/simple;
-	bh=vQmb3ozX2WozvazAM/jZQXfMfq96gf5MaCAgcdpd67I=;
+	s=arc-20240116; t=1732093378; c=relaxed/simple;
+	bh=dQuf6/yyA3NgGkcae5ZJw5+p5TYlDDaDSEx2Pobd1Ns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jOX6iJOpYsrqgnHiuKxREVbdfFj3ZU5T4FAz3HVMrvmGfSZWyPbWMHoW99QNwwtnd2MyIa3bqvH+hmbf7u0qVaWvwDOn/1Qc2ArXsHLhpDEW373DWUdRBH8lSarckEp+l5jJKlWGWV9/3oIMcCmXGVtEMvE36eCi1SrfBVjbl8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYmZIND2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2056EC4CECD;
-	Wed, 20 Nov 2024 09:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732093306;
-	bh=vQmb3ozX2WozvazAM/jZQXfMfq96gf5MaCAgcdpd67I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bYmZIND2yOy1iFWp44uBlwJOLVf2cM+qLsT5Knw64J0vnTm1tdn4jUbjLVg5PpuEH
-	 Z+xFcQk6f0GW5SkJD8wGG2Bs6wOqKjfmKc1yIe6ksRpt+0k7NGZsTe/1zBDhcw+/G5
-	 q4ihjk/S58QajLWEEsCakj+NzPMWMk//UIdmaWAghRS3oqEbIPAxfAWzqW1qjkKcGR
-	 pPqou6gVBDdbJ0l5V8r39OY66vzyKVS+Bi/txfDim9GHMllrmc0zN39j/jFDSh8usX
-	 WV2uLixBcLVFgrN16s+U/hZnmEHpgjbzYrQCIretzIJTVI7c7renQf2RYltj5K72lZ
-	 NeF8f5Z5ohiKw==
-Date: Wed, 20 Nov 2024 10:01:42 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
-	mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de, dharma.b@microchip.com, 
-	mihai.sain@microchip.com, romain.sioen@microchip.com, varshini.rajendran@microchip.com, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 09/15] dt-bindings: clock: at91: Allow MCKs to be
- exported and referenced in DT
-Message-ID: <cxcurxzeiygafcmrieqvsmt6f6svplzya2qxtltgnbj3t7s3av@xdpnuf5eohlu>
-References: <cover.1732030972.git.Ryan.Wanner@microchip.com>
- <726533dbd5663e95b768bd19d2d544a197e5781d.1732030972.git.Ryan.Wanner@microchip.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iaLjkOH10PHO8U6/KY8o+eGN027QjqU1V2Y5CuaBaT8M1NWvo2171EYBNIil9P/CoPH0UKZC9y1yTZpQGKjjqmeGczXfykvVvcEVO/c0fjqzkSuWmluxBo3yACV4irmoxUTti0D+yFJbDY3ECMM1NeO4rzaa2i/TsiyLkc9jY4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tDgbU-00069z-00; Wed, 20 Nov 2024 10:02:28 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id EFA44C0110; Wed, 20 Nov 2024 10:02:16 +0100 (CET)
+Date: Wed, 20 Nov 2024 10:02:16 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: "broonie@kernel.org" <broonie@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] mips: dts: realtek: Add SPI NAND controller
+Message-ID: <Zz2lmMdaz6MFjrm6@alpha.franken.de>
+References: <20241015225434.3970360-1-chris.packham@alliedtelesis.co.nz>
+ <20241015225434.3970360-3-chris.packham@alliedtelesis.co.nz>
+ <3c6f90bc-2223-447d-9094-81011a2815b0@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <726533dbd5663e95b768bd19d2d544a197e5781d.1732030972.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <3c6f90bc-2223-447d-9094-81011a2815b0@alliedtelesis.co.nz>
 
-On Tue, Nov 19, 2024 at 09:40:15AM -0700, Ryan.Wanner@microchip.com wrote:
-> From: Varshini Rajendran <varshini.rajendran@microchip.com>
+On Wed, Nov 20, 2024 at 02:41:15AM +0000, Chris Packham wrote:
+> Hi Thomas,
 > 
-> Export MCK3 and MCK5 to be accessed and referenced in DT to assign to
-> the clocks property for sama7d65 SoC.
+> On 16/10/24 11:54, Chris Packham wrote:
+> > Add the SPI-NAND controller on the RTL9300 family of devices. This
+> > supports serial/dual/quad data width and DMA for read/program
+> > operations.
+> >
+> > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  include/dt-bindings/clock/at91.h | 4 ++++
->  1 file changed, 4 insertions(+)
+> Has this one fallen through the cracks?
 > 
-> diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-> index 6ede88c3992d..e37f1b9cdabf 100644
-> --- a/include/dt-bindings/clock/at91.h
-> +++ b/include/dt-bindings/clock/at91.h
-> @@ -42,6 +42,10 @@
->  #define PMC_PLLADIV2		(PMC_MAIN + 11)
->  #define PMC_LVDSPLL		(PMC_MAIN + 12)
->  
-> +/* SAMA7D65 */
-> +#define PMC_MCK3               (PMC_MAIN + 13)
-> +#define PMC_MCK5               (PMC_MAIN + 14)
+> I see you picked up a couple of my other changes for 6.13 but this seems 
+> to be missing from mips/linux.
 
-This goes with the clock binding.
+hmm, I thought I saw some unresolved problems with the other patches...
+But if this is all good, I'll add it to my second pull request.
 
-Best regards,
-Krzysztof
+Thomas.
 
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
