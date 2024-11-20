@@ -1,249 +1,173 @@
-Return-Path: <linux-spi+bounces-5786-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5787-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFAD69D3A58
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 13:12:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8D1D9D3FA6
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 17:04:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550A91F23277
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 12:12:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79DBF283F03
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 16:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2201AA1D3;
-	Wed, 20 Nov 2024 12:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB8351A7259;
+	Wed, 20 Nov 2024 16:02:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xRKi7l5C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzZq/XnK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A581AA1DE;
-	Wed, 20 Nov 2024 12:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732104648; cv=fail; b=ZaRZbGAddmiyDTgtCakTb0XMm7TRJInxwfM93bCBsLpS5lN64YAE5Y7Cph6R66U82DM1B9cJK+02gqM7FUJfZMP9T0qSrWYGcrhlEGhH3Kj2mN0ftoNAAbV8JTxdtgvFT221WJaMYzBoqZug7pUpXG+OIHCU4j/2qEEAadPWqzM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732104648; c=relaxed/simple;
-	bh=9U2Vkj1GpajCtUz+Si0+mXuF7R7Kz6H4SIsgYagXV/I=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OcFGdLXJMqhhlzgiuxD7wgXFndKDBdMFuD7oktQJE2J6hwbVKvdumVx6f4Py9NBH2ZPSi1WKu1jrDDDroPzAHK3oLjVrfAWhFZ2PYsw+3DjOLC1iOi12eqyyqNu/RhSZOc3I/0ogod5+pKRfrEqZ3wu9JmcFpl03xvEdk/DbobQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xRKi7l5C; arc=fail smtp.client-ip=40.107.94.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H5bSjncpCaQdihcyytQUFrWblyqH+P/m4IQ1egHzmrDy5nlbf4cMC+Cjn3qvPaoWUX571Ovco3tyktxuv2Mp5yFmd8r1bE0FxTfmgs99ozAnRNjXLAY+x20pzV/HKzeiQT3OPi90RVCZBNFipxfytUCTDUMCBI7cbo01AJ/mVZTkDmvDr6MIs63Jf7iV8vtmiz+48XewFN7a+tMD5xUgyQ7S05txCD3mbTqEuN9HNeedRnmg55QnGTfVjJbIAQzCRSpSIihBG/rSzr37h+CRUZad0mEGvmfa92dPRQSLpeKFRj+g4T2pK+Xnz9y7pzUhdPa95GUjt39x+Zvsn7WaHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NqgKUJVuo769CX/pxCJfVX59x8jYHinECEaEyoW5Eko=;
- b=qjqWMYEUWHJDSo65WZUWhmmX0PANL94DcR+UlzZMUTruQkCIPpz2sk+vbe0U0L7e7EQ85lz1+tUro22z3FYF6FXNhTUxmvWUER1abla96MLes1xqCVkMMBaIsPpGsHzS5NxwnJNZUEVCK8v7AQoe7+K4MVJi+pScWQtquAA8v+jqsXEQA1zZxL6gE87Pd1Wp601BL7quSAsXC86rJ/IpkXLy3O2W2zV0KiDj2PHjNWY/a+st0axqjG0sJD7v9T8k3Kqhq/tJoh7vSFIrJeqDfxWu2vICrJZ9p+jJMIYBp63ibyzt0M+80DJYGs8uGGhrA+0TnH4XVxu8AwAV2kDGYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.12) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NqgKUJVuo769CX/pxCJfVX59x8jYHinECEaEyoW5Eko=;
- b=xRKi7l5CPpO4oy4VdVpn/0IzzwoukmuqAXWfylc9Yv1TFoYhzlalaN+GV6cEAv+hpTFAxycdqSq9H3g6wcsZDfb7vaIRnP9sIAdv1MZMxc9Gv+gEWVYc2EkJuLpbl8Ets897QYJHpgOLHHCLZSr06v47CYziyflFzlFsE3+cgDk=
-Received: from SN7PR04CA0104.namprd04.prod.outlook.com (2603:10b6:806:122::19)
- by MW6PR12MB8705.namprd12.prod.outlook.com (2603:10b6:303:24c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.23; Wed, 20 Nov
- 2024 12:10:43 +0000
-Received: from SN1PEPF0002636D.namprd02.prod.outlook.com
- (2603:10b6:806:122:cafe::41) by SN7PR04CA0104.outlook.office365.com
- (2603:10b6:806:122::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.24 via Frontend
- Transport; Wed, 20 Nov 2024 12:10:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.12)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.12 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.12; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.12) by
- SN1PEPF0002636D.mail.protection.outlook.com (10.167.241.138) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8182.16 via Frontend Transport; Wed, 20 Nov 2024 12:10:42 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 20 Nov
- 2024 06:10:35 -0600
-Received: from xhdakumarma40u.xilinx.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39
- via Frontend Transport; Wed, 20 Nov 2024 06:10:32 -0600
-From: Srikanth Boyapally <srikanth.boyapally@amd.com>
-To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <vaishnav.a@ti.com>
-CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <git@amd.com>, <srinivas.goud@amd.com>,
-	<radhey.shyam.pandey@amd.com>, <srikanthboyapally2016@gmail.com>,
-	<srikanth.boyapally@amd.com>, <sai.krishna.potthuri@amd.com>
-Subject: [PATCH 3/3] spi: cadence-quadspi: Support for device reset via OSPI controller
-Date: Wed, 20 Nov 2024 17:39:51 +0530
-Message-ID: <20241120120951.56327-4-srikanth.boyapally@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20241120120951.56327-1-srikanth.boyapally@amd.com>
-References: <20241120120951.56327-1-srikanth.boyapally@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66BF19F424;
+	Wed, 20 Nov 2024 16:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732118573; cv=none; b=rlUk+3+qHtKNJ38RFPw9QInGLwkui3nIgSoFT4xECuxybcwkvfe6RujL6tW6MfsG/XUEg3fVLL/NKTZKXz8BSxGncsnbmu7rmS9VxsImdC4RyvuNcDBhTK7zwxTKUOVtcmuu5uj6RBvt2Q1kJupCTi9kFAdTH8+YjyuGHsC60yQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732118573; c=relaxed/simple;
+	bh=JgLWOHmUTemObVeIGpwUPte2754GI41s/ZUZDvGmHiY=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=LSrW18yIB0eVDdFFC2rdYZ5gpA8oszwnwxKVtHwi7Mx1wC+Qewx5x/JPtA8MoKVwBFX3EA1KNFZfMKDfgaFBxvuJBSPjvM4Ng2e5CZYNSkuu1WvhUkGb0byl28+LpOTC9TkIEcP+01bzgYXGUWskC+yQiNTIttjgFBbbDnSgsh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzZq/XnK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B5AC4CED3;
+	Wed, 20 Nov 2024 16:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732118573;
+	bh=JgLWOHmUTemObVeIGpwUPte2754GI41s/ZUZDvGmHiY=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=EzZq/XnKvOEpmQceuz8jMQBGH5pVIq3kKZdMG4KalP4y7FTZI/yJN3F4PK5Vng818
+	 3iMYCfcfl3WqQ9+5Ws3rnE5efRknAkNqdUPFVq6HQIen8Z8phCIQPdEIQDzt+wl65i
+	 GxnPr47skISDZjmpBVuLTLnTdMNlGA+SAJ7BLYWD9LpKsXqjh7KvS28/M9rOEM1KDI
+	 zTfV/gsu/REEUuH1Pz5E7uVIxsCH+JkrhbI9WC/LQC+AtaW1cy+MjcTJohYRHm2Mke
+	 zHgrEJabJJLC1gyC+gdckFMVWiojkOzhc8/A7k0oP5MuS4SZSpyAZnIm5vq/WZLYA0
+	 MFbVcbyjxh4kA==
+Date: Wed, 20 Nov 2024 10:02:52 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: srikanth.boyapally@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636D:EE_|MW6PR12MB8705:EE_
-X-MS-Office365-Filtering-Correlation-Id: 83dd6e20-fa53-4c06-0d3e-08dd095c5b4c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?U72UXeN8zF6k4E0MW4GV1KjHZtU+9T4196AYV4JG7MT0dAo7Asplu51t5UNI?=
- =?us-ascii?Q?dVN9+KAKbqsLt9KZZbkK9511RgUOhHYt0AWaciX5qlSBdXxSCsdbVo9tZi/9?=
- =?us-ascii?Q?oi4ftPYoqf2nxjUqn9Gm6w/b0MHsRoXQoQZYuDsgsiaT5qrZ5v3ALhcKBI/j?=
- =?us-ascii?Q?b7axSisVKVvMJfAoB6WHTi1U1xtHopn3WYgxENWd+wR2csR5H4uXYx7GyuJ4?=
- =?us-ascii?Q?Jp0l56TSDEqbNaIlGIVmb/SpXJXPZHus1XE1JAzP1uOcMboX1yusozHRomBA?=
- =?us-ascii?Q?OSPNRZodLtxKd8ucqEKYwqIB/GyzjwMcOb5qQkThXNakPZABrEUoTYLY84N/?=
- =?us-ascii?Q?s4AR38zynt+0Lh7qjcoqV8Ct5TgvrHf0ecp8tY+MASIgyhcDmMLAUlUEtLqR?=
- =?us-ascii?Q?gvoxk5bIB1ZQSXAvUFRUfY6yS2wdSIsYm0OXRC/ognr5jR+u7CQISesguSUX?=
- =?us-ascii?Q?qT5crahFvnYp8qMcZbt0xCJ+D0AMld3iKPsNhEUFDMKG46YclC0kL8tfgG/8?=
- =?us-ascii?Q?f4IR4p5R8OZGl1u1CUD6hEPyQ3UTtvcTzhA6MpJpYe9+gftJmKurSfO1WIhq?=
- =?us-ascii?Q?y3qznP4Q8YlG9ROGF8YQ+RxVU41cZlmv+/9XIXEy2YWfc1SEGEn2A16x5y1m?=
- =?us-ascii?Q?S9vgWgvUJP+nZHJgsPXLs2/Ew8qzLcagOhMJlIe637US/mE9pxotbMnAqlgq?=
- =?us-ascii?Q?DVGE3CSytzB5u8MRD/i5XHWxcbzu2SZzMOyJiKPwLL/kxWthaWy7Uz9e02Cy?=
- =?us-ascii?Q?+xqmOoKfPjvl6r5CWLM4idfT1juEG/g2l5QVBK1gYBTYPo3xD0sJ4UXi/lev?=
- =?us-ascii?Q?/+Bgj1VyYLuHC+tXfGugoXAXxHfoID0mR+Kpyk3KqAT1Ym+f+ZkW2HcjKofc?=
- =?us-ascii?Q?v88ZWjR4jSz2rITcUAt0pB2UhmFXBcgiW5tr3ukilYRGA+toFoTAyV880W5X?=
- =?us-ascii?Q?xQmeQ6gRk4ljS+MBCNrhvsJYSpWuG+ti1bTrvB1k9H5jQHlZXAb3/fsekuDg?=
- =?us-ascii?Q?ZY/RicyhuvhW+2l+VLoV4ccFcOZnBonU+F2vKkSEajKj3YdN1ZAIptu19y6i?=
- =?us-ascii?Q?B50R8AUpQNTf3+m9ZnKpGRWJrwIoMlwpa1N1kmgahyQK1J2cTsMCcpi0TrGO?=
- =?us-ascii?Q?I0Q7LiEruUylxLptajAwLOvn5w/pztqQkpTL+271xBhPahQoK7OEt5MYvZJS?=
- =?us-ascii?Q?sknQSm8DebI2Hyf4Fxy5NSiB5fgrtaN2bA4yqNy7T0BcJ+Iu7HJl9JSBICrG?=
- =?us-ascii?Q?7G+NyBenpKgRmuTVHz4vsGkn/vHWiD3yFDwdc4xNEQhwDV6J3i+JJt2f56+M?=
- =?us-ascii?Q?f6VVHw62u8HXuaqSNRoTrUJfkGcb7P8M1NOOI+xTva4lsDzfQI2ieRdE/Qtm?=
- =?us-ascii?Q?DMJyyJ7kxjaoeykD2Yd5ilZbc60T5G/j/8Mn4ssZWnD7Oo+1zA=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2024 12:10:42.8892
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 83dd6e20-fa53-4c06-0d3e-08dd095c5b4c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.12];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002636D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8705
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: sboyd@kernel.org, linux-serial@vger.kernel.org, krzk+dt@kernel.org, 
+ linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, conor+dt@kernel.org, romain.sioen@microchip.com, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org, 
+ alexandre.belloni@bootlin.com, arnd@arndb.de, nicolas.ferre@microchip.com, 
+ mihai.sain@microchip.com, mturquette@baylibre.com, claudiu.beznea@tuxon.dev, 
+ dharma.b@microchip.com, varshini.rajendran@microchip.com
+To: Ryan.Wanner@microchip.com
+In-Reply-To: <cover.1732030972.git.Ryan.Wanner@microchip.com>
+References: <cover.1732030972.git.Ryan.Wanner@microchip.com>
+Message-Id: <173211841742.1124520.7475940959733704423.robh@kernel.org>
+Subject: Re: [PATCH 00/15] Add support for SAMA7D65
 
-Add support for flash device reset via ospi controller, instead of
-using GPIO, as ospi IP has device reset feature on Versal Gen2 platform.
 
-Signed-off-by: Srikanth Boyapally <srikanth.boyapally@amd.com>
----
- drivers/spi/spi-cadence-quadspi.c | 40 ++++++++++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
+On Tue, 19 Nov 2024 09:40:06 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> This series adds support for the SAMA7D65 SoC.
+> 
+> There have been patches in this series that have been tagged as
+> Reviewed-by or Acked-by, I will link these threads below.
+> 
+> 1) https://lore.kernel.org/lkml/20240829-sama7d65-core-dt-v1-1-e5d882886f59@microchip.com/
+> 2) https://lore.kernel.org/lkml/20240829-sama7d65-sck-v1-1-3e7b19e3cbf9@microchip.com/
+> 3) https://lore.kernel.org/lkml/20240829-sama7d65-next-v1-1-53d4e50b550d@microchip.com/
+> 4) https://lore.kernel.org/lkml/1da0abbb-94e5-42fd-a2d2-71d5d7d253fb@microchip.com/
+> 
+> The clock system patches have been sent before and are added to this set
+> to follow the correct practice of submitting patches. I will list that
+> thread below.
+> 
+> 1) https://lore.kernel.org/linux-arm-kernel/d970e158-db74-4ffe-9fb4-57026ac0a947@tuxon.dev/
+> 
+> Dharma Balasubiramani (7):
+>   dt-bindings: mfd: atmel,sama5d2-flexcom: add
+>     microchip,sama7d65-flexcom
+>   dt-bindings: atmel-sysreg: add sama7d65 RAM and PIT
+>   dt-bindings: mmc: atmel,sama5d2-sdhci: add microchip,sama7d65-sdhci
+>   dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+>   dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+>   dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
+>   dt-bindings: clock: Add SAMA7D65 PMC compatible string
+> 
+> Romain Sioen (2):
+>   dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
+>   ARM: dts: microchip: add support for sama7d65_curiosity board
+> 
+> Ryan Wanner (5):
+>   ARM: configs: at91: sama7: add new SoC config
+>   ARM: dts: microchip: add sama7d65 SoC DT
+>   clk: at91: clk-master: increase maximum number of clocks
+>   clk: at91: clk-sam9x60-pll: increase maximum amount of plls
+>   clk: at91: sama7d65: add sama7d65 pmc driver
+> 
+> Varshini Rajendran (1):
+>   dt-bindings: clock: at91: Allow MCKs to be exported and referenced in
+>     DT
+> 
+>  .../devicetree/bindings/arm/atmel-at91.yaml   |    7 +
+>  .../devicetree/bindings/arm/atmel-sysregs.txt |   14 +-
+>  .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
+>  .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    1 +
+>  .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |    9 +-
+>  .../bindings/mmc/atmel,sama5d2-sdhci.yaml     |    1 +
+>  .../pinctrl/atmel,at91-pio4-pinctrl.txt       |    1 +
+>  .../bindings/serial/atmel,at91-usart.yaml     |    1 +
+>  arch/arm/boot/dts/microchip/Makefile          |    3 +
+>  .../dts/microchip/at91-sama7d65_curiosity.dts |   89 ++
+>  .../arm/boot/dts/microchip/sama7d65-pinfunc.h |  947 ++++++++++++
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi     |  155 ++
+>  arch/arm/configs/multi_v7_defconfig           |    1 +
+>  arch/arm/configs/sama7_defconfig              |    1 +
+>  arch/arm/mach-at91/Kconfig                    |   12 +
+>  drivers/clk/at91/Makefile                     |    1 +
+>  drivers/clk/at91/clk-master.c                 |    2 +-
+>  drivers/clk/at91/clk-sam9x60-pll.c            |    2 +-
+>  drivers/clk/at91/pmc.c                        |    1 +
+>  drivers/clk/at91/sama7d65.c                   | 1373 +++++++++++++++++
+>  include/dt-bindings/clock/at91.h              |    4 +
+>  21 files changed, 2614 insertions(+), 13 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+>  create mode 100644 arch/arm/boot/dts/microchip/sama7d65-pinfunc.h
+>  create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
+>  create mode 100644 drivers/clk/at91/sama7d65.c
+> 
+> --
+> 2.43.0
+> 
+> 
+> 
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index fb75400518e0..82df3d0683d6 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -44,6 +44,7 @@ static_assert(CQSPI_MAX_CHIPSELECT <= SPI_CS_CNT_MAX);
- #define CQSPI_NEEDS_APB_AHB_HAZARD_WAR	BIT(5)
- #define CQSPI_RD_NO_IRQ			BIT(6)
- #define CQSPI_DMA_SET_MASK		BIT(7)
-+#define CQSPI_SUPPORT_DEVICE_RESET	BIT(8)
- 
- /* Capabilities */
- #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -110,7 +111,7 @@ struct cqspi_st {
- 
- struct cqspi_driver_platdata {
- 	u32 hwcaps_mask;
--	u8 quirks;
-+	u16 quirks;
- 	int (*indirect_read_dma)(struct cqspi_flash_pdata *f_pdata,
- 				 u_char *rxbuf, loff_t from_addr, size_t n_rx);
- 	u32 (*get_dma_status)(struct cqspi_st *cqspi);
-@@ -145,6 +146,8 @@ struct cqspi_driver_platdata {
- #define CQSPI_REG_CONFIG_IDLE_LSB		31
- #define CQSPI_REG_CONFIG_CHIPSELECT_MASK	0xF
- #define CQSPI_REG_CONFIG_BAUD_MASK		0xF
-+#define CQSPI_REG_CONFIG_RESET_PIN_FLD_MASK    BIT(5)
-+#define CQSPI_REG_CONFIG_RESET_CFG_FLD_MASK    BIT(6)
- 
- #define CQSPI_REG_RD_INSTR			0x04
- #define CQSPI_REG_RD_INSTR_OPCODE_LSB		0
-@@ -831,6 +834,25 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 	return ret;
- }
- 
-+static void cqspi_device_reset(struct cqspi_st *cqspi)
-+{
-+	u32 reg;
-+
-+	reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
-+	reg |= CQSPI_REG_CONFIG_RESET_CFG_FLD_MASK;
-+	writel(reg, cqspi->iobase + CQSPI_REG_CONFIG);
-+	/*
-+	 * NOTE: Delay timing implementation is derived from
-+	 * spi_nor_hw_reset()
-+	 */
-+	writel(reg & ~CQSPI_REG_CONFIG_RESET_PIN_FLD_MASK, cqspi->iobase + CQSPI_REG_CONFIG);
-+	usleep_range(1, 5);
-+	writel(reg | CQSPI_REG_CONFIG_RESET_PIN_FLD_MASK, cqspi->iobase + CQSPI_REG_CONFIG);
-+	usleep_range(100, 150);
-+	writel(reg & ~CQSPI_REG_CONFIG_RESET_PIN_FLD_MASK, cqspi->iobase + CQSPI_REG_CONFIG);
-+	usleep_range(1000, 1200);
-+}
-+
- static void cqspi_controller_enable(struct cqspi_st *cqspi, bool enable)
- {
- 	void __iomem *reg_base = cqspi->iobase;
-@@ -1912,6 +1934,9 @@ static int cqspi_probe(struct platform_device *pdev)
- 
- 	host->num_chipselect = cqspi->num_chipselect;
- 
-+	if (ddata->quirks & CQSPI_SUPPORT_DEVICE_RESET)
-+		cqspi_device_reset(cqspi);
-+
- 	if (cqspi->use_direct_mode) {
- 		ret = cqspi_request_mmap_dma(cqspi);
- 		if (ret == -EPROBE_DEFER)
-@@ -2054,6 +2079,15 @@ static const struct cqspi_driver_platdata versal_ospi = {
- 	.get_dma_status = cqspi_get_versal_dma_status,
- };
- 
-+static const struct cqspi_driver_platdata versal2_ospi = {
-+	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
-+	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA
-+			| CQSPI_DMA_SET_MASK
-+			| CQSPI_SUPPORT_DEVICE_RESET,
-+	.indirect_read_dma = cqspi_versal_indirect_read_dma,
-+	.get_dma_status = cqspi_get_versal_dma_status,
-+};
-+
- static const struct cqspi_driver_platdata jh7110_qspi = {
- 	.quirks = CQSPI_DISABLE_DAC_MODE,
- 	.jh7110_clk_init = cqspi_jh7110_clk_init,
-@@ -2106,6 +2140,10 @@ static const struct of_device_id cqspi_dt_ids[] = {
- 		.compatible = "mobileye,eyeq5-ospi",
- 		.data = &mobileye_eyeq5_ospi,
- 	},
-+	{
-+		.compatible = "amd,versal2-ospi",
-+		.data = &versal2_ospi,
-+	},
- 	{ /* end of table */ }
- };
- 
--- 
-2.34.1
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y microchip/at91-sama7d65_curiosity.dtb' for cover.1732030972.git.Ryan.Wanner@microchip.com:
+
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/pinctrl@e0014000: failed to match any schema with compatible: ['microchip,sama7d65-pinctrl']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+
+
+
+
 
 
