@@ -1,79 +1,94 @@
-Return-Path: <linux-spi+bounces-5791-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5792-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DD59D4324
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 21:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE9E79D4B3F
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Nov 2024 12:05:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F28A28417E
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Nov 2024 20:35:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE1972844E9
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Nov 2024 11:05:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C61D51BDAA5;
-	Wed, 20 Nov 2024 20:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128981CFED1;
+	Thu, 21 Nov 2024 11:05:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bB9kagzD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCxTFDkj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981551714A3;
-	Wed, 20 Nov 2024 20:35:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF30715C120;
+	Thu, 21 Nov 2024 11:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732134928; cv=none; b=OX+JW5u/BZTdx4SgZj8WV/PG+IB80Faz7T8hpjgUeKHDeZKePVcK/blUhuuo71oHzNh/W7xzjCCRV+UlAY5eQLLGff9pvEE9lrjd6UV7frz3Qz0Hyppiyx3iIsvsr4WeKv2iP3od6gPUdF4pVyFv/EItjkIRCn3spfO+iCv5vxU=
+	t=1732187108; cv=none; b=nHj3EIGSQhorulMz49DiPV2ofB7DrWjZ2W6XPBSdrTazgFknJDQPp7VkOweBZjrl0FQ/UxOmSdStQiCqBKzcVD2liCdKTZJyMObJz9I3mWet6ml7gOuypf/7vXrCvl2tBKR4Sps89YjXz+fXiLlJzkcfJqpt8ioVIzYeZNjl1SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732134928; c=relaxed/simple;
-	bh=+67F6ZWhC0Ht+9ryl6ONWfxgAqSI8WQAiqqMf6nVcQ8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=do7UQ4uJQ5COLTJFT+GRuyq69DCgLz02/NG7sTMpYcx/ukVolUxW5ERBQWrrbYIckL3nQEJNJDGz3BV3RCyfih70Olm2gPBnuyouiWdE38kwuoo+PXCXAFbHbEe7qujP+W5q8ZMh08yOgyvft+tjVO0NPR4I8/aYmJ2tTYMrZdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bB9kagzD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B69C4CECD;
-	Wed, 20 Nov 2024 20:35:28 +0000 (UTC)
+	s=arc-20240116; t=1732187108; c=relaxed/simple;
+	bh=k5dVXDOTAihj9tWNR6WmNQRgIaOTe3OJFFKzKxUcEsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a5CC2JtmC9gTUQB8rDRR1WebpKkjbK+gr+8jlL5vP8ClEGTZWM5eKNI4p/F/bLn3obM9K6GpGAm8oZ4D/6T+7etJWMRrUCgcNE8gYqJfDtRMeVO0rviHqxR2+a2Yj7y6vb1RAbvIaJ9mDW6T0r/0Y3PN7ZFxI+UQsXiznJHZq9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCxTFDkj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AB5C4CECC;
+	Thu, 21 Nov 2024 11:05:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732134928;
-	bh=+67F6ZWhC0Ht+9ryl6ONWfxgAqSI8WQAiqqMf6nVcQ8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=bB9kagzDNAvxv3ajtdgiSh21Un5O/8siseNvkTPVn6+W8cDi6+AEGTI9b0C9Icynw
-	 2t4gPXIwhc+pYbKtaoACImUHD7kEYhvFkUNt92E8uEnCpy90d+4rmtIUkkX+Mh4PbC
-	 2DfKqc6eNHnBCr8ahUDJJjaOhutQWshCcXJIR0wOrKsM0LN1XBcd+F57+OEuZsc/wI
-	 waCZxSTtamEMrUsoX3Hq8b2Zz/MTQYqt9TDctdn1IMDtfZZ5GXH8DmcjqV4TamcMMl
-	 Mt4qofMMCXNxkyzoXX2ByvyEnGuMe8o7UuWyQ4xHixpPYfQEOgv3XJ2s90w+CBqKoE
-	 51smnRWjsm6sw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70ED53809A80;
-	Wed, 20 Nov 2024 20:35:41 +0000 (UTC)
+	s=k20201202; t=1732187107;
+	bh=k5dVXDOTAihj9tWNR6WmNQRgIaOTe3OJFFKzKxUcEsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JCxTFDkjIPdI9BGvplqQrovUeZY1/9bjSd9nJVyTa6Qd+xU94hnXO6r+Qjcbs3Ffe
+	 lL6IjRq4aRwnyur20E8Lmjywjm/qqWhnpSD6IbdZzv1dgw0yYvgb0IBxkiUFB4z3hS
+	 46EbCQEWoWpMysnNxzzoVFlS8xjzzNLWXXkJiWraZZrKwFmai9fEe5iA6kwsBzRN2u
+	 /+b1c5NjqXQZTc+DOUblphZScPdjV3U5XNeLX67JoD3nvPJuwmFMuv4K3rssDUlbWO
+	 MgVuxet2FC71xH9bQk9+qedpQ7J9XG7CTEDp7U9XK8GU9zTR5TLyJdC6GLw+TPT1oY
+	 Oz5jrNWcJIqvw==
+Date: Thu, 21 Nov 2024 11:05:03 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [GIT PULL] SPI updates for v6.13
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <1c6bb542f52ef9a8428a0f35dc21dfc7.broonie@kernel.org>
+Message-ID: <708a1007-d7bd-4daa-96c6-4d4a8e12edae@sirena.org.uk>
 References: <1c6bb542f52ef9a8428a0f35dc21dfc7.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1c6bb542f52ef9a8428a0f35dc21dfc7.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.13
-X-PR-Tracked-Commit-Id: 26470a2e87a6fc40750f4bfe962519e9ae9a9e72
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f2ef39727a229ddd127e3538b58f4f5bdc5eeea6
-Message-Id: <173213493998.1342014.10733494759571621836.pr-tracker-bot@kernel.org>
-Date: Wed, 20 Nov 2024 20:35:39 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+ <CAHk-=wg9TZSLX0Dtbh5_oQK7temAjQCScVFnEY86NYSAO83pQQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jzdlADKYbvbbUjJJ"
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg9TZSLX0Dtbh5_oQK7temAjQCScVFnEY86NYSAO83pQQ@mail.gmail.com>
+X-Cookie: Fortune favors the lucky.
 
-The pull request you sent on Mon, 18 Nov 2024 13:33:05 +0000:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.13
+--jzdlADKYbvbbUjJJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f2ef39727a229ddd127e3538b58f4f5bdc5eeea6
+On Wed, Nov 20, 2024 at 12:24:29PM -0800, Linus Torvalds wrote:
+> On Mon, 18 Nov 2024 at 05:33, Mark Brown <broonie@kernel.org> wrote:
 
-Thank you!
+> > The Rockchip cleanups
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> Ooh. Cliffhanger. Continued in the next PR?
+
+Ongoing work, clearly!  Oops.
+
+--jzdlADKYbvbbUjJJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmc/E98ACgkQJNaLcl1U
+h9CwWwf+NxCbsmoHOYHmudmgGkjBNFo0Dwsu/wxHyeeo/4i4D5DLkfqtdXTamYu8
+Bnw8+aP9EVlBjuhhD5ROL+xCG6am39Y6c0ziyNIgDs+ZiFKMHLhDUlatDnyYEifI
+cBxSv6BTPb+UA7NyDq/bwmAtIs5UfOFJtnMnFKpBvl/N+Zu67+2jRN2OQ2fwc2QP
+ym/DTvlUlQylGlFW+n8lY8xd2V/cQpX4DGCQ8+cM4Lae7eu7SUzEpAFgYxbYIWgN
+ve1UIXyAMIJe+tu2+f53nB/qlRIYdhGOiEVXp8myDgJw9FtDqXzCwUd0AWDxQfr/
+HKLLIp5kuE+ShyNXbPw6HVxYfcMEXg==
+=DGr+
+-----END PGP SIGNATURE-----
+
+--jzdlADKYbvbbUjJJ--
 
