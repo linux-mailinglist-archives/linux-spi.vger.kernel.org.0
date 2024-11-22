@@ -1,114 +1,108 @@
-Return-Path: <linux-spi+bounces-5801-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5802-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C6A09D604F
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2024 15:33:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 684799D60DD
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2024 15:52:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87670B232E6
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2024 14:33:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D55A280D1D
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Nov 2024 14:52:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5917580C;
-	Fri, 22 Nov 2024 14:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C062AF04;
+	Fri, 22 Nov 2024 14:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="EOA1thI+"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="XvSO/s0E"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E287080E;
-	Fri, 22 Nov 2024 14:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758DC481C4
+	for <linux-spi@vger.kernel.org>; Fri, 22 Nov 2024 14:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732285988; cv=none; b=Q9zTEFytYaEz1wtiKm8kbFpv0ed+a0grIDW7kkgCER0PNySkPdGKGilIgHMEJMW4MaEocU6SfL+9CGUmYsyxLfzRN8UskbFXMM6hR3xbcP66z6hgwVHZHlIYyZKjUi5/0QR8xJL+JtE+q0ytDhttJS5235DFg9QsA70+w0+ls/8=
+	t=1732287152; cv=none; b=oA6MAy9my/WlH9aoxGCRsPR0ctsgP6tfH1y1g6O3+ntkvv9srylPhmSZ+zm3CahhvDAiSqT4oxAgsdLb6Vt0+K8QBDi4QfIGJYfM+dZZw7UO8ynVGT+UJ5fwD/xVROR8IkFPLBy9LjrBubcMak+C6WJpELvDa677VobtZPp1S+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732285988; c=relaxed/simple;
-	bh=0WjofnI+16r29wcpK2ZZb5qFASadH9xswLnIaUm7gbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OTarFsJT1yFEnF31gWmwep+Aq8CmzD1iOXlJR8SLZw/itmjVieLnzIslPOcGdTcgW8zyNe0hRST1kvnigw9p2fzvEXSRp5VlFrnIm8I0dnbuQRMcJOI19I0wtOPFASSLOohW96ltIrPRlRaE0VzL4XCCXKjH8UD2u9qxXedu/dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=EOA1thI+; arc=none smtp.client-ip=217.92.40.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3A82F1483473;
-	Fri, 22 Nov 2024 15:25:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
-	t=1732285556;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ol/8URh2FBPj8F5l8LvLrhCsPIrfEw/h/Cx/SKJh1iY=;
-	b=EOA1thI+YywyhD5Gc55IqLdgcCKKbxGqZZj+jb0dI9j/OcuZiq3mB15Y6w7pUOyr/1FNlT
-	RQ1iCXHuqzYZoiZW6TSoJnZ+Igdj78Gl/5H2hQegRM4SEeGJ2tqJaxbTsfJpS4XXrp5jHT
-	AD9/e/GTTn9npk/iCtHCnIpbcOILTH4eqDb9a8+afFZCzEesWZdPw+VmweixTH2IpgXA6n
-	jw363d4z1sm7z91MARmC1W4Vo+GQylJzS1XR99KHidV3Kp2M1E9+qCiubbqAW8IZtzjMgS
-	DbHNs9xo8Ek9zqAbn2hdugLPdhV6TihSbADEaLuK/ReRUd17mYWwSiL9HHj/wQ==
-Date: Fri, 22 Nov 2024 15:25:47 +0100
-From: Alexander Dahl <ada@thorsis.com>
-To: =?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: Re: [PATCH] spi: atmel-quadspi: Fix register name in verbose logging
- function
-Message-ID: <20241122-zips-module-d0e6c6a1e69b@thorsis.com>
-Mail-Followup-To: =?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-References: <20241122141302.2599636-1-csokas.bence@prolan.hu>
+	s=arc-20240116; t=1732287152; c=relaxed/simple;
+	bh=H4ZH4hse3qfhm3J5KjDY1bc57PZTgGnGOXIlR6oGR3g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j6Zt0YnJ38COZrXfql1yiTcmNfXzWGrWvCMeCSUzb3CqNXPSBBfAHWusQRdPA3LppFYID46JxHtdLiO1azKZv3DIDCdBG1e9uQrIVh1i2KIDVwYE+BeP0p4ZqOMzDoA6bvrm/Z+XqRlz0Jtjvqlxq6QZtauior/uPc0llZyZGxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=XvSO/s0E; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43159c9f617so17965435e9.2
+        for <linux-spi@vger.kernel.org>; Fri, 22 Nov 2024 06:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1732287148; x=1732891948; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H4ZH4hse3qfhm3J5KjDY1bc57PZTgGnGOXIlR6oGR3g=;
+        b=XvSO/s0EPlECsMWkGQ016IS5liDiLHjDijux0bhHXPlmYfoT48u70KTid1ylKav4fD
+         ZTeV9ycSog/w8X3wsx/DVPVL+f7/FDzGZXopb5GCt1AdB/CTDvNYhpnwTWcNnc8V97QH
+         cEhwWoaBCs6OZ0/SRFM1wvuEXxTux+tqlArjN+Fpfw3Z3q1RCBMXrexGlW8eIrCT7juN
+         8O4Ae7fV0Re6BMaVoTPQZl/Hc6U5Hl37W0D0lEK5kDvjQkxOsq4qOdkASUpnE+2ZactS
+         jWpSNfZbL8QfnPhg7EXVYF/cqlAFcDcJjL+wt9jm9taXMtw9+Tb8zZ9jt9gVC5immPQp
+         XXZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732287148; x=1732891948;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H4ZH4hse3qfhm3J5KjDY1bc57PZTgGnGOXIlR6oGR3g=;
+        b=JZi/c5PTNoOG0rK3lFpx8zd0zwaVVav62jCrlhWnnQWnJSnGc3+Sq/1sPQEw492QBl
+         hUbdPcWqp8lKj8tE1M6bsk2DR323YAu61s3JxBexIyZUnG+mfgXRPjY9I1/P4ox7mGj/
+         V9txhs1lGdfJv4qIC2J2nRqriJ8627JX/yoq/qqJJ4UNUPxKc60DPZ5pMT62zEzQjytc
+         acIYGwsw5sLUBNX71lliym3xIyMfWpRXuDcbVmUqOSV0Cbw23SXiWSjZTvTxrLhIKdPx
+         +IoOh2uK28W1SaBC55XUkZEe7cS0ex8LmIUFIlEdL4wNBkm5B3UZUkrlOnnc4RuC9g4/
+         rsGw==
+X-Forwarded-Encrypted: i=1; AJvYcCX/EqhOxlxMnifxW7uFPU7YQ2nBcY9D9gj5O7LCfSlA7hIZ0qdKNi0e4ANh3KKZtviWrwGoShHr7kM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjSSrI2cE3ehfAU4C3z45CROJIUDbJKZGodgRrTP7p/UqCdOoh
+	5jEr6ZnQAoFm6ZOu6+qVKTd20MFh0EKDeeCJJLcDdzMuxgmXsBFkenIwwVkUOxk=
+X-Gm-Gg: ASbGncurqk1o5i6TlG6v8WCmN+dqBmqQuaQ+Vq7O0JPMKT2pmy43c9LCfCR8cbiVAmS
+	ZTkuR2FkZx+7a6hYmy9wSocWbBFz9D+b5sLN7beHz8JXKeqWp7K7mk8Z/uOHuNYcW8CflyakF1a
+	XL2f/h4+g60eH7uDtA/QrVUvgOv2BNF3DxgliKzHHex+TObaHvZ3ZTFcOhLeqSmYLSlztryXjYr
+	zKOEX+eJUmVze0LoA1OnOt2ygM+NhlQOf2Zls52f1wPu3+v8j8+cEEENw==
+X-Google-Smtp-Source: AGHT+IHsjxLFgEV15mKQiBicElXEUDVmwQhGml7xxTkNfAnsEvktBECCBV9Of39mNkEwnuKWhKEvsw==
+X-Received: by 2002:a05:600c:34d2:b0:431:4f29:4a98 with SMTP id 5b1f17b1804b1-433ce4c2319mr24740675e9.20.1732287148506;
+        Fri, 22 Nov 2024 06:52:28 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.28])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432f642f15esm117534725e9.0.2024.11.22.06.52.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Nov 2024 06:52:27 -0800 (PST)
+Message-ID: <a326f5ab-f36a-4210-83ff-0f2ae9fa830d@tuxon.dev>
+Date: Fri, 22 Nov 2024 16:52:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: atmel-quadspi: Fix register name in verbose logging
+ function
+Content-Language: en-US
+To: =?UTF-8?B?Q3PDs2vDoXMsIEJlbmNl?= <csokas.bence@prolan.hu>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20241122141302.2599636-1-csokas.bence@prolan.hu>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 In-Reply-To: <20241122141302.2599636-1-csokas.bence@prolan.hu>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello,
 
-Am Fri, Nov 22, 2024 at 03:13:02PM +0100 schrieb Csókás, Bence:
+
+On 22.11.2024 16:13, CsÃ³kÃ¡s, Bence wrote:
 > `atmel_qspi_reg_name()` is used for pretty-printing register offsets
 > for verbose logging of register accesses. However, due to a typo
 > (likely a copy-paste error), QSPI_RD's offset prnts as "MR", the
+
+s/prnts/prints ?
+
 > name of the previous register. Fix this typo.
-> 
-> Fixes: c528ecfbef04 ("spi: atmel-quadspi: Add verbose debug facilities to monitor register accesses")
-> Signed-off-by: Csókás, Bence <csokas.bence@prolan.hu>
-> ---
->  drivers/spi/atmel-quadspi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-> index 91108ddfaef2..316bce577081 100644
-> --- a/drivers/spi/atmel-quadspi.c
-> +++ b/drivers/spi/atmel-quadspi.c
-> @@ -183,7 +183,7 @@ static const char *atmel_qspi_reg_name(u32 offset, char *tmp, size_t sz)
->  	case QSPI_MR:
->  		return "MR";
->  	case QSPI_RD:
-> -		return "MR";
-> +		return "RD";
->  	case QSPI_TD:
->  		return "TD";
->  	case QSPI_SR:
-
-Reviewed-by: Alexander Dahl <ada@thorsis.com>
-
-Greets
-Alex
-
 
