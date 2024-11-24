@@ -1,169 +1,123 @@
-Return-Path: <linux-spi+bounces-5805-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5806-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 640749D6A8C
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Nov 2024 18:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 873659D6F5D
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 14:08:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C35FFB20E6B
-	for <lists+linux-spi@lfdr.de>; Sat, 23 Nov 2024 17:24:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8BB6B2D044
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 13:05:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D31381AA;
-	Sat, 23 Nov 2024 17:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6203A1CEEB6;
+	Sun, 24 Nov 2024 12:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ef/wO4pI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAxe+wED"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FF1195
-	for <linux-spi@vger.kernel.org>; Sat, 23 Nov 2024 17:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F8B199FB0;
+	Sun, 24 Nov 2024 12:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732382678; cv=none; b=R3PnXvaQqvQkd/tHhy8/MgCdVDeWaMz9PBrih9s9TZYYLQmNgDltp8Ky1qAKAhg+zv1KgJi3wojHCLHyUrutMGe2m9DoGcQFKFK5Uo5Zgwk8VmG7Plj0/voC4OdcWtEGCpUAr1pjyRXNXbkthsZBhf/BYoVKjOxfvthEf+HY9Ko=
+	t=1732452563; cv=none; b=RFzfsMmBDSrYgxDHa9+dL+fxDznizIc/XfN67DhSksLnwEcbxhJoxI4Bq1hzqq0bODPit48oLoMbrFFk4JYKSR+LbATFHVuxKMOnnxNw/yDsjurM/EdqsIjalI30BdUdKQBOdUUsMR4dVEBhzQA6RI7K2QTHU2Wq8ipf3vOciic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732382678; c=relaxed/simple;
-	bh=tqaTQlcCqfd2wwPDQLnIKAoyRhA02BScDg6ibwoGNH8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S5XOlr7dmfaD7fGezuZ7dWaP9SJitf2tfiY65nYkbSPvbiuY5F3khu03WT0QwcZWEiv7J2Kv19nJcpaMnRaOHn7hkwhDb030rO9AY8ZR/BeyX8DCD5gbej5N2lB+zK+DbWQInZzowOW2maQg6pLc4O2732EVgCudsTYSxmLsrmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ef/wO4pI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732382674;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zdFpdxTJOMYafjd4i3ic71NZeez232I3QNvfFR4LGrM=;
-	b=ef/wO4pIH5lY/6p6Ns+9R5VgjaFdrQfekAFhLEA4bJkXppGf0+YzgEtdcDfCv1HOiTkZSz
-	K3m2knmHkMFg2ACeF3okZwx5DsinpLOngubAt3Dh5n2DnKjP8nBNcwPaSWyNsnFKa2zWVj
-	Bym9vEGnbLmRVDlQ9atF7OwH6inwQAU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-122-RdnXudAgNg6SP0T4oaPT5Q-1; Sat, 23 Nov 2024 12:24:32 -0500
-X-MC-Unique: RdnXudAgNg6SP0T4oaPT5Q-1
-X-Mimecast-MFC-AGG-ID: RdnXudAgNg6SP0T4oaPT5Q
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5cfdc574679so1881442a12.0
-        for <linux-spi@vger.kernel.org>; Sat, 23 Nov 2024 09:24:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732382671; x=1732987471;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdFpdxTJOMYafjd4i3ic71NZeez232I3QNvfFR4LGrM=;
-        b=Y+yDEVicjH9O5P37rSRkrBm/INfEbm1pUZHkU3+VBhCjv/N61XQ2d8P1uHHSUERLEm
-         eaW3s4fWKnZxPREn5zt9XLmOjNgG6EFqtYWpVQPry00r8GouK2sJJy42sjngEdBWmhAk
-         iT7r3lv9YhZ1XWBZb97EARqqNUDiad1D9KVUun6xMbfqdYiT+FUk5bPkevqW2ffNYEiw
-         Wn+eblaPS4oUF2mUX49vXKUfrGx113ftHiZHVKTwbr0qk5eZ1zyZxlHenfAfewy5J02Y
-         G7cujQN1jUAUkbWVOGRVXMVMc776m9WtinRp99+LVneVkbpFnsfnBCqAuoxuOFWyRS8S
-         JK4g==
-X-Gm-Message-State: AOJu0YzureaZxS1gJjQIxpRco7W7gXUrYbdU280sSkZ7gyTx9oblRaVR
-	EZ11qCnGFNT16JstgN/pUsBKfPm1SkqNA75VWbLTINqDrU490pc3gDp/fAtSfvHWlUsRQVNMSrN
-	uq1oKMizWKLKSrKjDdlQMiB0i4+kYsIMTO/Qf8YVCa2DdUjhYpJNph+RLmQ==
-X-Gm-Gg: ASbGncsA1VXYKeAIUR/43bMCPXUhNdf9m01JQObQZIXOfTHubyxFnU+nNyZZDAFISTS
-	soQhPjixZ3auPfF33T4w9XjPltn9CyusuZhwAM0b7p9sriJxIaC/BkuAKcHqqcE+3fD6lggKsP/
-	yguLUftMO5LstqarBmdRP0WnzE0uJCBf3fagpapl7x66nplohjboVX/AxHU/Jk/Jlhn7/UuVaSv
-	/VLDnnVOKsQy5/5c8VrtX2MH6ir+S6v9d37bKDMjBaP4MOK4ubKKBlK1cp4sOgAxApRbMIBjYNn
-	K5r4mxfqfV2KbosDmfYJvdWCyR+XBtKk2xYIpBmvnSMd3EMgdKzQUS2ZMlZlCXUya/0xVDdLrtF
-	vKetQk1tPbxIFBg45j8SUlCjI
-X-Received: by 2002:a05:6402:1ec9:b0:5cf:d1b5:1bd5 with SMTP id 4fb4d7f45d1cf-5d0206254d2mr6296664a12.16.1732382671700;
-        Sat, 23 Nov 2024 09:24:31 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH+NaSYop87b2aUy2KrAkpl4dpZ7GjArlMy3YMPrKOaGSOi1HOE0KwGe4W4bXdtH9eEtg9D7g==
-X-Received: by 2002:a05:6402:1ec9:b0:5cf:d1b5:1bd5 with SMTP id 4fb4d7f45d1cf-5d0206254d2mr6296658a12.16.1732382671355;
-        Sat, 23 Nov 2024 09:24:31 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d01d8603dfsm2226369a12.26.2024.11.23.09.24.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Nov 2024 09:24:30 -0800 (PST)
-Message-ID: <3709a469-7730-45d6-bbba-ecd87c2ca2c1@redhat.com>
-Date: Sat, 23 Nov 2024 18:24:28 +0100
+	s=arc-20240116; t=1732452563; c=relaxed/simple;
+	bh=r9UHBgJlSBenZzEj8ZbrIVDOfkVGTV/88zxZVPmAKaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ixshR+zKWuJSJnBxAS2lnQbyhDkrNvCYtC3XANsGVES2LDYp8fx132XyFX6Hg9sf+V9GOKF78MXJFQOET2I1uzEQ8xuMgzXhd1RRtg2dT4AQeitm0pfs3JuGiXJxnZ5en1pmiXU2lybG99Zppd0bTWyUwSSA/41o3f+OQGUlxOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAxe+wED; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEFB2C4CED1;
+	Sun, 24 Nov 2024 12:49:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732452562;
+	bh=r9UHBgJlSBenZzEj8ZbrIVDOfkVGTV/88zxZVPmAKaA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JAxe+wEDLRGgkjcaAYL/Fk94TC/PLpn36+MX9nI2/0OHyamEbjba/+Y2Feq73Pm7a
+	 0AJdIbedLlUS37KKPSEBdq2h9DBHGcjzM/yUwRo/rJLb19aoHZYpcw72+VJH8wHAu6
+	 bkOxIaRBf6rUoNaNxIv8M+IISpdWR7vgAjLmVW0MTYcfw0/8QREwrzgNyHVjR3U5Ww
+	 2j6yjPHrfYIUXGMUxmgk5mUiu4GV1bKTq1UozFXY5jaHOkanuZn3zAU9XaszUL+gkw
+	 +snlmrqOdTYTkv4PJuw1stAaWMC3CNY7NlcdyPZVJfi0h2TBQb6wwk5nwtnnbk0kQK
+	 bB4ab9viJSrOg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Stefan Wahren <wahrenst@gmx.net>,
+	Frank Li <Frank.Li@nxp.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org,
+	imx@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.12 02/23] spi: spi-fsl-lpspi: Adjust type of scldiv
+Date: Sun, 24 Nov 2024 07:48:13 -0500
+Message-ID: <20241124124919.3338752-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241124124919.3338752-1-sashal@kernel.org>
+References: <20241124124919.3338752-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: Fix acpi deferred irq probe
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20241122094224.226773-1-stanislaw.gruszka@linux.intel.com>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241122094224.226773-1-stanislaw.gruszka@linux.intel.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: lXGpACtqMfdJHA7oMF8Xd8vo-ORnhnP9YkYtAOlWkI8_1732382672
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.1
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Stefan Wahren <wahrenst@gmx.net>
 
-On 22-Nov-24 10:42 AM, Stanislaw Gruszka wrote:
-> When probing spi device take care of deferred probe of ACPI irq gpio
-> similar like for OF/DT case.
-> 
-> From practical standpoint this fixes issue with vsc-tp driver on
-> Dell XP 9340 laptop, which try to request interrupt with spi->irq
-> equal to -EPROBE_DEFER and fail to probe with the following error:
-> 
-> vsc-tp spi-INTC10D0:00: probe with driver vsc-tp failed with error -22
-> 
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Fixes: 33ada67da352 ("ACPI / spi: attach GPIO IRQ from ACPI description to SPI device")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+[ Upstream commit fa8ecda9876ac1e7b29257aa82af1fd0695496e2 ]
 
-Thanks, patch looks good to me:
+The target value of scldiv is just a byte, but its calculation in
+fsl_lpspi_set_bitrate could be negative. So use an adequate type to store
+the result and avoid overflows. After that this needs range check
+adjustments, but this should make the code less opaque.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Link: https://patch.msgid.link/20240930093056.93418-2-wahrenst@gmx.net
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-fsl-lpspi.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/spi/spi.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index c1dad30a4528..0f3e6e2c2474 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -424,6 +424,16 @@ static int spi_probe(struct device *dev)
->  			spi->irq = 0;
->  	}
->  
-> +	if (has_acpi_companion(dev) && spi->irq < 0) {
-> +		struct acpi_device *adev = to_acpi_device_node(dev->fwnode);
-> +
-> +		spi->irq = acpi_dev_gpio_irq_get(adev, 0);
-> +		if (spi->irq == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
-> +		if (spi->irq < 0)
-> +			spi->irq = 0;
-> +	}
-> +
->  	ret = dev_pm_domain_attach(dev, true);
->  	if (ret)
->  		return ret;
-> @@ -2869,9 +2879,6 @@ static acpi_status acpi_register_spi_device(struct spi_controller *ctlr,
->  	acpi_set_modalias(adev, acpi_device_hid(adev), spi->modalias,
->  			  sizeof(spi->modalias));
->  
-> -	if (spi->irq < 0)
-> -		spi->irq = acpi_dev_gpio_irq_get(adev, 0);
-> -
->  	acpi_device_set_enumerated(adev);
->  
->  	adev->power.flags.ignore_parent = true;
+diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+index 977e8b55c82b7..196cc68f2057b 100644
+--- a/drivers/spi/spi-fsl-lpspi.c
++++ b/drivers/spi/spi-fsl-lpspi.c
+@@ -315,9 +315,10 @@ static void fsl_lpspi_set_watermark(struct fsl_lpspi_data *fsl_lpspi)
+ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_data *fsl_lpspi)
+ {
+ 	struct lpspi_config config = fsl_lpspi->config;
+-	unsigned int perclk_rate, scldiv, div;
++	unsigned int perclk_rate, div;
+ 	u8 prescale_max;
+ 	u8 prescale;
++	int scldiv;
+ 
+ 	perclk_rate = clk_get_rate(fsl_lpspi->clk_per);
+ 	prescale_max = fsl_lpspi->devtype_data->prescale_max;
+@@ -338,13 +339,13 @@ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_data *fsl_lpspi)
+ 
+ 	for (prescale = 0; prescale <= prescale_max; prescale++) {
+ 		scldiv = div / (1 << prescale) - 2;
+-		if (scldiv < 256) {
++		if (scldiv >= 0 && scldiv < 256) {
+ 			fsl_lpspi->config.prescale = prescale;
+ 			break;
+ 		}
+ 	}
+ 
+-	if (scldiv >= 256)
++	if (scldiv < 0 || scldiv >= 256)
+ 		return -EINVAL;
+ 
+ 	writel(scldiv | (scldiv << 8) | ((scldiv >> 1) << 16),
+-- 
+2.43.0
 
 
