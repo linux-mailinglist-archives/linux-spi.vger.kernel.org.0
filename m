@@ -1,46 +1,45 @@
-Return-Path: <linux-spi+bounces-5807-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5808-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC9E19D6F79
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 14:11:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 790AA9D70B8
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 14:38:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BAF2160F05
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 13:10:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C262BB2A3C7
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 13:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660561AAE02;
-	Sun, 24 Nov 2024 12:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9461DF260;
+	Sun, 24 Nov 2024 12:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dk/rQ0oe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C57r+DHJ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E501AA78B;
-	Sun, 24 Nov 2024 12:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548271AC43A;
+	Sun, 24 Nov 2024 12:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732452688; cv=none; b=a/b24xXzS7tsVx4ttCZqte7wmnfncjV9rdZLaqxmqZVQhq/CHKS3QPeQnkNfJ6X99D7kJA23qLDnqilf0LL4/vUgRbymmbDrLBj177ed0wv03W1sbFMvK45aWZDtZmSIDantAqiEcV+XSp5jGeQw0+tFx75z1i6o9C2ePdhgfZw=
+	t=1732452794; cv=none; b=gCN0Z5zvcrVj+rQwBx9hjdlUmW9Lw3PgHi4nzY37594Q4Gq+ukEPn2TPgoDMjt1w5oA3u2pMmPmvpLh+SYck6SdA7Jv1t9beByKnclw1mpU6EANyg3/VTeA9cbCWwdHuHzC1c/kMcVsSVe9Xfe2P5Cf0EvfiZFIZCCl8Kz1dL7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732452688; c=relaxed/simple;
-	bh=r9UHBgJlSBenZzEj8ZbrIVDOfkVGTV/88zxZVPmAKaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=As4qVsRnjQHbs+ecDh+3UkZA0G3gdJ26nnainSupEb78sASYVbvuvrnDROoBxO0ghGViIK/DDyAz7HeLqGzDMhb1BOy9TdNGWG2flZfFPf2r5/srZDubH4G4pzprkL2zng+NW7SQKxNoLwmCUJyCWQGiNCUeAiRav4n3/RdxacI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dk/rQ0oe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3017DC4CED1;
-	Sun, 24 Nov 2024 12:51:27 +0000 (UTC)
+	s=arc-20240116; t=1732452794; c=relaxed/simple;
+	bh=zm4sYBlw+dcRQe2cg9YcRTsb3nX+GEQvk/csuVhxMlk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p5tYciP7kTSPpM3McTiShvm29BxO2D2ewWvBHGIlKd0hd9rPW45spLuFwhcW+EZQkV7EcLXJP0JQDtECc8zculCDYMk6YoVITT/LoiDlB9KRBJVseavGE1yeD/5gl+uBcR4z5VsEbicetyCRQF/UGQxkMIMBiLCH65EcN12GvTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C57r+DHJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454FCC4CECC;
+	Sun, 24 Nov 2024 12:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732452688;
-	bh=r9UHBgJlSBenZzEj8ZbrIVDOfkVGTV/88zxZVPmAKaA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dk/rQ0oeFXe6brT2jZgDSWp4x8OyNe25uU/cBOxfUnyl+14VUYymcT4WwyiwGuL5/
-	 kcNcMoKKo6upIA0+XL8Og5gOSPwwDaAHbjcDl78ZLtbLWrBwwV5aD6yMHxDHmX4ZPE
-	 1aeAF15/L8ACqG6o06VNXyE9iTzNrMbi7WhvoDiYgHtgBJhqyWw9mvfHLnv+25Xw19
-	 sc36iVEnT/by/NNg/fkVxkQIl+KogQEFdBAQlQmYjiZKlywzIr7L0LMa1MvoMKjdSE
-	 l7QmduCybZSP9Xe8EuffOawClWhZrfqHbV24HMtUAvN9u0JCZj3mh70Z/Y+54JNlb0
-	 gKflQRvq+EWeg==
+	s=k20201202; t=1732452794;
+	bh=zm4sYBlw+dcRQe2cg9YcRTsb3nX+GEQvk/csuVhxMlk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=C57r+DHJ0Btc+J6FbVxDI9EegYX8FR/0UEfWY/6RjQQTNng73GJvg3CBDz6NpCTbM
+	 feeUfj9bCTeKbK76U6IlpapMGW4L2HjVCZCQH8tAJVAFKmzHdkNgJcg156RIOedwEk
+	 NFRJ1rZVwGXY96p61Keu9o43J4A8OQlW1+MmaFaHtXImlBXCDAsQKcd74GK9WxwJ6r
+	 Yb0niP+v/DnHkw5aLocaCVAhDxMTslDJwB+Gkr0PakclSPz1U6TWGUZODqUBfHNqCR
+	 mh452h1I5vLI4a2UY/sWhJbCwu3oRtSiJJNwJ/9aqmmalgK9KUE6raP9AC0IXhoSBm
+	 gPLKWQy3jaFzQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,12 +49,10 @@ Cc: Stefan Wahren <wahrenst@gmx.net>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-spi@vger.kernel.org,
 	imx@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.11 02/20] spi: spi-fsl-lpspi: Adjust type of scldiv
-Date: Sun, 24 Nov 2024 07:50:32 -0500
-Message-ID: <20241124125124.3339648-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 01/16] spi: spi-fsl-lpspi: Adjust type of scldiv
+Date: Sun, 24 Nov 2024 07:52:19 -0500
+Message-ID: <20241124125311.3340223-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241124125124.3339648-1-sashal@kernel.org>
-References: <20241124125124.3339648-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,7 +61,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.10
+X-stable-base: Linux 6.6.63
 Content-Transfer-Encoding: 8bit
 
 From: Stefan Wahren <wahrenst@gmx.net>
@@ -86,7 +83,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 977e8b55c82b7..196cc68f2057b 100644
+index 13313f07839b6..84881983d5d9f 100644
 --- a/drivers/spi/spi-fsl-lpspi.c
 +++ b/drivers/spi/spi-fsl-lpspi.c
 @@ -315,9 +315,10 @@ static void fsl_lpspi_set_watermark(struct fsl_lpspi_data *fsl_lpspi)
