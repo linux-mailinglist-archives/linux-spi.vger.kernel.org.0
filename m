@@ -1,224 +1,119 @@
-Return-Path: <linux-spi+bounces-5826-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5827-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7E569D7723
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 19:09:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2866C9D77E2
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 20:24:06 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A363B162AC2
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 19:24:02 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C44002C697;
+	Sun, 24 Nov 2024 19:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i9VQWURe"
+X-Original-To: linux-spi@vger.kernel.org
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 785B1283B0D
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Nov 2024 18:09:27 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7724C13BC0C;
-	Sun, 24 Nov 2024 18:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="lHz+KnxC"
-X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27D313774D
-	for <linux-spi@vger.kernel.org>; Sun, 24 Nov 2024 18:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EE22F26
+	for <linux-spi@vger.kernel.org>; Sun, 24 Nov 2024 19:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732471761; cv=none; b=UdD7g6j2YdV2UM6Torrl4TH/PAeEMdF59EwF8lR3hMVk9xWfA1fO6LrpKX05F0kKFjgVty1God13T9STMEVqI1A7LaVBfUp0QM4J+v2HgQGxjeubloCYt6AWjv3ZmWOESvPFaE8QGi3VL5EuMsOJpYf+E3zwtOqIEGAGCvEdjgY=
+	t=1732476241; cv=none; b=SdYqmcsQEVkTeYWjyQnFFrT28mdtX1IgFTtT+zkaM4dzAO6Zcrx3xHRxhZTtHZ1kdEllUVb+bUrF/kxGb4Nkt26YR9ZvBPVgMQK954RW/J7ohEAj2jkpaY0dleQDTOat++Gv6EYJYHOXQqS76++ETy1rMUSjjDvO3QHohkZDGcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732471761; c=relaxed/simple;
-	bh=OS2YgouWnleLhGzWzcMbkZozpJy4/ZIX9Yembq3gx0A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LP6Pw+MbfwcJUmsds57PCGLorxJk4UiX5f3CmZIWlCh61/IA4SlF2Vu+mQTAMg2bty7f7AAXV/PVmIyJPJ/+F2Yyou4W/KxCLdiem7IhhKozgIEeoBENtrWtC6EaBhhSHobyi7/pEDkw1zr/fK1HyIcYkzr8ioZRSh8hbWdKwEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=lHz+KnxC; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2969dc28d9eso2314485fac.0
-        for <linux-spi@vger.kernel.org>; Sun, 24 Nov 2024 10:09:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1732471757; x=1733076557; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GbrpPqHdrj9PFgk+4Wq1DD8Ou4SpdLfhgD5wtbRIbGA=;
-        b=lHz+KnxCxkeY/oHGKG3C5qzy7VCRCzBQ5BcizR9kBcbhq6gcTPHxcndobGevoazNnw
-         bMhr7RKRSJtfWtdtrcdSl9vyjGZ+EuYWpN2bIThzyYz6h67vDkR3IrjF95r2D/m1SkiV
-         974pk2Gi9UTDRVF0yTVMEFCulgl/k+0t0kbdd8JzE853lXIT/O2F3x411n1Q6y4VEcMc
-         TQ4h4nuIBMvRT96a4bPyH1JMrSXl+OE3up8ge8WlBIfKPjdJAgVDG7Q7W4kPW4NkQZ41
-         sw7FYFf/VB8UagQhLoBSqQiAQpzPsFL10ldW8jxTGurEdIfgL4ClRLQsyAuzhe4V+W/6
-         tjxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732471757; x=1733076557;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbrpPqHdrj9PFgk+4Wq1DD8Ou4SpdLfhgD5wtbRIbGA=;
-        b=R+8HHoKeIkLlTHOl+jiYy/v65Krs7b/Ia0+hi5xgCpbaUdyAqkqBEdcE+bjLWz4Urk
-         MrYOcJHscLm3DsYsF7GG7+qRYXi21c7B9NfHUVHMxIYdxJcbjdBfFvJtDeZgDJfZUJ0M
-         7iSXfSUHk01XP9ePeqOeTv4jfaWJkXOzsFPz+dIX35VG3q/izz0EE31nWJZ7Dc4EG4i+
-         OM/Uy9jiRTo2iiKdNf5kniG3sQRQqFEAg4vMCvPgX/r5UDiMLAaxb8U7LZCuvhI5OvcE
-         RLj77faoQ2lY86+KJEILwjGBdl8k45cXqZAaU6ikyMmkcXvXp7/BhcrQQ1J1QaMx4gWb
-         oBPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeYHrpRyVhtN5bO73CHL+LhSpsdujMAsW4EOvOS7MiFCnCvAHI+BAc+5DpZdUz+lWXyNb7mBx/x1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ3JkwzcUkwaZM71iaZpmCL09551jHprChLp2GsxnBg5vK4wiF
-	KHyfsm6QyfdCBPtTe4StOlE8oCqjtPbT9pztVHfrfTnrbrAaAdwC+om9cbEARSA=
-X-Gm-Gg: ASbGncvrOjNkUPdVDbMRN6IxN40yuMIN/dJ8F+LeLHw48QpehkZczuS7+e3NM3v8+QI
-	cpcwY3MfaPw0rZlEluyexaZy0DyD1tWRmScuTjo+gs0Lyz+VAQrSTAYro8rj1n91a68JltMQh0h
-	Ryf4Xzp2AjQS3sgWOzxySP5No69mcKWA92PCKCpt64dej+mZ0J7f7LEz86f7JDk1an/pfXg/ypF
-	FoL62Yr9WYZqkSZ5YdvCBgap5tLPYWD2uawNdTf2JIhpoeK7WnYNGumNR5bKtnc3Vze6WbGvfHm
-	2tTjds29dF8=
-X-Google-Smtp-Source: AGHT+IEzwEPi/bhzze+PgZn55mPBNYsjbszsxETt/PoHs+MoO7oND02el0mzU2DxDgU9xqYWs68w2w==
-X-Received: by 2002:a05:6870:b01e:b0:296:73f2:b568 with SMTP id 586e51a60fabf-29720c25d7dmr8103617fac.19.1732471756869;
-        Sun, 24 Nov 2024 10:09:16 -0800 (PST)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2971d882c61sm2348195fac.46.2024.11.24.10.09.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Nov 2024 10:09:15 -0800 (PST)
-Message-ID: <97eecef3-78f8-4cce-b23d-b86957719bd4@baylibre.com>
-Date: Sun, 24 Nov 2024 12:09:13 -0600
+	s=arc-20240116; t=1732476241; c=relaxed/simple;
+	bh=4rFIagEkoVuNkqiUw5e0hxhMq0Sf4h7q6b9KIiYRqWE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=SY4eXa1qrT43/H7veQ2lqlIRi8oQX5VLyALFYp5ie7A9rjuSH84/+KtAEXCGEI3eCJ6hmhVpGSeSTKw2f45rfucnbbsRKLd+Lu1eyhN6Gv1IOpj4ydtCvxODp9KekffgcDBXByShzUOVgtreRdv0rvZTMk1iy73ND26FRJKpKX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=i9VQWURe; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D078E1BF204;
+	Sun, 24 Nov 2024 19:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732476231;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4rFIagEkoVuNkqiUw5e0hxhMq0Sf4h7q6b9KIiYRqWE=;
+	b=i9VQWUReqVVmzViaUwmcMZkAlTUPX/9cqZV/mN1SH6BDwbK4NYNXlo4bqum8vLfS+Ku7W5
+	IUeBXRee6Zng8keL9BXy2GEmkgWO6AKxQZR1TKxQP+DLn4AtuhMjijUOpwuBBVdWPSDmuh
+	+5MXblu/Juy6VBp90holBzn0Q+t00AJIZJtcVhPmZiCBMTKPRlZeeqjHyOz+iQ1JqamS+J
+	dxpjzPa9lwOzfWNOZIOTlXsA4Tm0O9JxFZbCiGP/CV98nTW7rhErm87mUlP62zDDRQiQd4
+	wBWcfrQc+5nv/+BbmqcHs18edCXT/vALSQrtCm02+6+nFdRFbcdJjSPfIj5yyg==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 16/16] doc: iio: ad4695: add SPI offload support
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20241115-dlech-mainline-spi-engine-offload-2-v5-0-bea815bd5ea5@baylibre.com>
- <20241115-dlech-mainline-spi-engine-offload-2-v5-16-bea815bd5ea5@baylibre.com>
- <20241124173819.224b5940@jic23-huawei>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20241124173819.224b5940@jic23-huawei>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Sun, 24 Nov 2024 20:23:50 +0100
+Message-Id: <D5UNKGVDHH2G.308OGWQSNXP21@bootlin.com>
+To: "Stanislaw Gruszka" <stanislaw.gruszka@linux.intel.com>, "Mark Brown"
+ <broonie@kernel.org>
+Cc: <linux-spi@vger.kernel.org>, "Sakari Ailus"
+ <sakari.ailus@linux.intel.com>, "Hans de Goede" <hdegoede@redhat.com>
+Subject: Re: [PATCH] spi: Fix acpi deferred irq probe
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241122094224.226773-1-stanislaw.gruszka@linux.intel.com>
+In-Reply-To: <20241122094224.226773-1-stanislaw.gruszka@linux.intel.com>
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 11/24/24 11:38 AM, Jonathan Cameron wrote:
-> On Fri, 15 Nov 2024 14:18:55 -0600
-> David Lechner <dlechner@baylibre.com> wrote:
-> 
->> Document SPI offload support for the ad4695 driver.
->>
->> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> ---
->>
->> v5 changes: new patch in v5
->> ---
->>  Documentation/iio/ad4695.rst | 68 ++++++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 68 insertions(+)
->>
->> diff --git a/Documentation/iio/ad4695.rst b/Documentation/iio/ad4695.rst
->> index 9ec8bf466c15..8009a0c272bc 100644
->> --- a/Documentation/iio/ad4695.rst
->> +++ b/Documentation/iio/ad4695.rst
->> @@ -47,6 +47,36 @@ In this mode, CNV and CS are tied together and there is a single SDO line.
->>  To use this mode, in the device tree, omit the ``cnv-gpios`` and
->>  ``spi-rx-bus-width`` properties.
->>  
->> +SPI offload wiring
->> +^^^^^^^^^^^^^^^^^^
->> +
->> +When used with a SPI offload, the supported wiring configuration is:
->> +
->> +.. code-block::
->> +
->> +    +-------------+         +-------------+
->> +    |    GP0/BUSY |-------->| TRIGGER     |
->> +    |          CS |<--------| CS          |
->> +    |             |         |             |
->> +    |     ADC     |         |     SPI     |
->> +    |             |         |             |
->> +    |         SDI |<--------| SDO         |
->> +    |         SDO |-------->| SDI         |
->> +    |        SCLK |<--------| SCLK        |
->> +    |             |         |             |
->> +    |             |         +-------------+
->> +    |         CNV |<-----+--| PWM         |
->> +    |             |      +--| GPIO        |
->> +    +-------------+         +-------------+
->> +
->> +In this case, both the ``cnv-gpios`` and  ``pwms`` properties are required.
->> +The ``#trigger-source-cells = <2>`` property is also required to connect back
->> +to the SPI offload. The SPI offload will have ``trigger-sources`` property
->> +with cells to indicate the busy signal and which GPx pin is used, e.g
->> +``<&ad4695 AD4695_TRIGGER_EVENT_BUSY AD4695_TRIGGER_PIN_GP0>``.
->> +
->> +.. seealso:: `SPI offload support`_
->> +
->>  Channel configuration
->>  ---------------------
->>  
->> @@ -158,6 +188,27 @@ Unimplemented features
->>  - GPIO support
->>  - CRC support
->>  
->> +SPI offload support
->> +===================
->> +
->> +To be able to achieve the maximum sample rate, the driver can be used with the
->> +`AXI SPI Engine`_ to provide SPI offload support.
->> +
->> +.. _AXI SPI Engine: http://analogdevicesinc.github.io/hdl/projects/ad469x_fmc/index.html
->> +
->> +.. seealso:: `SPI offload wiring`_
->> +
->> +When SPI offload is being used, some attributes will be different.
->> +
->> +* ``trigger`` directory is removed.
->> +* ``in_voltage0_sampling_frequency`` attributes are added for setting the sample
->> +  rate.
->> +* ``in_voltage0_sampling_frequency_available`` attributes are added for querying
->> +  the max sample rate.
->> +* ``timestamp`` channel is removed.
->> +* Buffer data format may be different compared to when offload is not used,
->> +  e.g. the ``in_voltage0_type`` attribute.
->> +
->>  Device buffers
->>  ==============
->>  
->> @@ -165,3 +216,20 @@ This driver supports hardware triggered buffers. This uses the "advanced
->>  sequencer" feature of the chip to trigger a burst of conversions.
->>  
->>  Also see :doc:`iio_devbuf` for more general information.
->> +
->> +Effective sample rate for buffered reads
->> +----------------------------------------
->> +
->> +When SPI offload is not used, the sample rate is determined by the trigger that
->> +is manually configured in userspace. All enabled channels will be read in a
->> +burst when the trigger is received.
->> +
->> +When SPI offload is used, the sample rate is configured per channel. All
->> +all channels will have the same rate, so only one ``sampling_frequency``
-> Double all.
->> +attribute needs to be set. Since this rate determines the delay between each
->> +individual conversion, the effective sample rate for each sample is actually
->> +the sum of the periods of each enabled channel in a buffered read. In other
->> +words, it is the value of the ``sampling_frequency`` attribute divided by the
->> +number of enabled channels. So if 4 channels are enabled, with the
->> +``sampling_frequency`` attributes set to 1 MHz, the effective sample rate is
->> +250 kHz.
-> If you are exposing that as a single sampling_frequency I think we should be
-> adjusting the frequency so it represents the same thing in both modes.
+Hello,
 
-There are separate sampling frequency attributes per channel. I wrote
-"attributes" to try to indicate this. But I was lazy and abbreviated the
-attribute names. So I can fix that.
+owning a Dell XPS 9320 and struggling to make the freshly merged IPU6
+support to work on it, I was about to send a call for help on the media ML,
+when I eventually spotted your observations on Redhat's bugzilla ([0]), and
+this corresponding patch.
 
-> 
-> So divide by the number of channels (conversely run faster if more channels
-> enabled).
-> 
-> Jonathan
->>
-> 
+On Fri Nov 22, 2024 at 10:42 AM CET, Stanislaw Gruszka wrote:
+> When probing spi device take care of deferred probe of ACPI irq gpio
+> similar like for OF/DT case.
+>
+> From practical standpoint this fixes issue with vsc-tp driver on
+> Dell XP 9340 laptop, which try to request interrupt with spi->irq
+> equal to -EPROBE_DEFER and fail to probe with the following error:
+>
+> vsc-tp spi-INTC10D0:00: probe with driver vsc-tp failed with error -22
+>
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Fixes: 33ada67da352 ("ACPI / spi: attach GPIO IRQ from ACPI description t=
+o SPI device")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
+[...]
+
+I systematically observe this issue (probe failure with -22) on each boot,
+and reached the same intermediate conclusion (IRQ failing to register, and
+spi->irq value being -EPROBE_DEFER).
+I can confirm that this patch makes the vsc-tp -22 error disappear on my
+machine, and that I have now /sys/devices/platform/intel_vsc.
+
+Unfortunately, I now encounter a new issue preventing the camera to work
+(ipu6 still fails with -EPROBE_DEFER, I now have
+ipu_bridge_get_ivsc_csi_dev failing while searching for child device
+intel_vsc-92335fcf-3203-4472-af93-7b4453ac29da). I am not familiar enough
+neither with ACPI nor the exact pipeline involved to explain this yet, but
+if you can affirm that is is unrelated to your change, feel free to take
+my:
+
+Tested-by: Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com> # Dell XPS9320,=
+ ov01a10
+
+Thanks,
+
+[0] https://bugzilla.redhat.com/show_bug.cgi?id=3D2324683#c11
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
