@@ -1,103 +1,80 @@
-Return-Path: <linux-spi+bounces-5833-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5834-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52BCB9D87A7
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 15:19:08 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B085F9D87C8
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 15:22:16 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D55E168B12
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 14:18:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76328286455
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 14:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E90D1B3944;
-	Mon, 25 Nov 2024 14:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC701B0F04;
+	Mon, 25 Nov 2024 14:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YqNN12an"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQZk68ad"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CAF1B3943;
-	Mon, 25 Nov 2024 14:12:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E7C1F16B
+	for <linux-spi@vger.kernel.org>; Mon, 25 Nov 2024 14:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732543957; cv=none; b=bXJ97V4/F3Pednfb2TzzUT9m1t4k4G3Ektok7lnJsHkNmXTCpuWPWYHePUOq9x+Ms09HTz4IwvTVmU5HkFPI78RKVoyFc2gathZQEsfHUGjqpsa7hoYzkfvbav1Z8v1CMX2+LmsFzwSgnbXpk6kK2UeHZDZFSvKvIHXkL1m9E1A=
+	t=1732544417; cv=none; b=rmdgmpaX8fL1h6M2Y8myKzRyW+MrCEpNiLHBjVWs5ofjgDY9hxzafDdlWcyx9bM6cz7H7jVDhqB9gU+gJlNMBvQHs/eGldvx9ZOLBZFy1RmvCee1o5Yx0ZLsqJ6NjFpW5mnDqJRmOb8NhpBIN+sQ0DGNoPoH4KvaLa+h1XHsu5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732543957; c=relaxed/simple;
-	bh=7GrKwdo+Ze02RMQOa0MhC0RENsxkBytNYFyBKpaDBzw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sn/AA+fX9u9uEks1QeqTDaJtHL2zAhmuqwsdeGgBOvGZd9qQ2SlxmJV+TrLNhPZI/pkaL8+cnPNVS3+N0vy6fzrJ7FuHEs5Qnmzv3mFtmeIBJV/qDpCQsuYXlaYi4P2/tYBeg4cA4k67I3wQCwrAibBqp+Z7PgD/H38XHJIi9xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YqNN12an; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370F8C4CECE;
-	Mon, 25 Nov 2024 14:12:36 +0000 (UTC)
+	s=arc-20240116; t=1732544417; c=relaxed/simple;
+	bh=uwCFkQS3nv5Rg35JA0fIBMKmNxCB7z+qZ5RT0xztnv4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=oHt1kr9/V21BcYmqEJwjWTms5VuxaFbGrEEuPViuyCGOMKffuyAA0rKJCK1liIh3y5I4IbKp1d3sRb2clL9LUs/v2bXkYx/W7DgIQJKpF2tjiTYqGrgaz8dTJ0DtW15boyYHO2z4+ckwRubCkG3Q9yDpvSXSSXZQgw+BglUHjXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQZk68ad; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0271C4CECE;
+	Mon, 25 Nov 2024 14:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732543957;
-	bh=7GrKwdo+Ze02RMQOa0MhC0RENsxkBytNYFyBKpaDBzw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=YqNN12anDTPC/J9xLvoC8O2JGI/txSR+lJGBk6Z8ijAnbaFajvSShjObNisz6U+pZ
-	 pX+xn5ApwfQql496eArXVDVlFSnu8Z2LBa52RwR1dBgF2IzIxCrETR9HYZy1yQZeec
-	 wbLQyab3nqsPTVO667W3HC0a3pOlFIyl0E6RJU84vyqYICqTOztq1FRjzUO8Tvz/6Z
-	 YL/y5LDbBxhmbAEU1clHwm+g2zi70YZH+ENE8J/YnOqrvu67+ZvRxKMQB2nz+MFXO5
-	 1NDFX+qhN4QbConZYck+ubB+fgOBC7UopooUB1QoUvH8DIN3v5wswEye4P6QN5olJN
-	 jUR0thFQ9RrbQ==
-From: Mark Brown <broonie@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, linux-spi@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Cs=C3=B3k=C3=A1s=2C_Bence?= <csokas.bence@prolan.hu>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20241122141302.2599636-1-csokas.bence@prolan.hu>
-References: <20241122141302.2599636-1-csokas.bence@prolan.hu>
-Subject: Re: [PATCH] spi: atmel-quadspi: Fix register name in verbose
- logging function
-Message-Id: <173254395595.42978.234561624552571601.b4-ty@kernel.org>
-Date: Mon, 25 Nov 2024 14:12:35 +0000
+	s=k20201202; t=1732544417;
+	bh=uwCFkQS3nv5Rg35JA0fIBMKmNxCB7z+qZ5RT0xztnv4=;
+	h=Subject:From:Date:To:From;
+	b=IQZk68adxKWm66fBMWm5/wkarftGGCTMPIk5n/a9cc3D29CXMBxBVfI4pImd1E9s0
+	 3NtBnI8RcurP1UK+e972UY7cK7TmHO8jnQbP1MMWJjUHSw8nOI+5xX99umVR2H5zqp
+	 vnOHccIpXM8hi/gOBy8UC05Puk26u+D+T766PQ33ZnBx6mCo+UzDnAQuLhR5quV+aN
+	 s4sIvyb0azcg8SRSwUugf4PkhN1dK8tcMyHGdJJ6V1JUGwRNailO1YmbWe7eJ+U5AZ
+	 f5NGjLQdcDz+sWk6z2hpeKMo1AoU3UgjViz38RkxkzSTrNQMSXOeTdU8avfvyDZ0YB
+	 GpgKpXRFIeulA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B4F543809A00;
+	Mon, 25 Nov 2024 14:20:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-9b746
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173254442928.3919473.14678501242646492538.git-patchwork-summary@kernel.org>
+Date: Mon, 25 Nov 2024 14:20:29 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 22 Nov 2024 15:13:02 +0100, Csókás, Bence wrote:
-> `atmel_qspi_reg_name()` is used for pretty-printing register offsets
-> for verbose logging of register accesses. However, due to a typo
-> (likely a copy-paste error), QSPI_RD's offset prnts as "MR", the
-> name of the previous register. Fix this typo.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: atmel-quadspi: Fix register name in verbose logging function
+  Submitter: Csókás, Bence <csokas.bence@prolan.hu>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=911804
+  Lore link: https://lore.kernel.org/r/20241122141302.2599636-1-csokas.bence@prolan.hu
 
-Thanks!
 
-[1/1] spi: atmel-quadspi: Fix register name in verbose logging function
-      commit: 1c6f3eb4f394d8bb14b2b677151c347a0db088eb
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
