@@ -1,80 +1,142 @@
-Return-Path: <linux-spi+bounces-5838-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5839-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB439D8B77
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 18:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BC9C9D8E16
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 22:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC6D9B28CA2
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 17:40:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EDB5B29CAE
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 21:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70F514D43D;
-	Mon, 25 Nov 2024 17:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F553191478;
+	Mon, 25 Nov 2024 21:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltYKAe9m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oSjwt2+Z"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FFA1B4F2B
-	for <linux-spi@vger.kernel.org>; Mon, 25 Nov 2024 17:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A858188010;
+	Mon, 25 Nov 2024 21:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732556419; cv=none; b=gb2T9irOeflJ60c31o0ybsMuNdURXbtJ0OCf3U1oxhAmZhcuQk+BxwhpIbqSs3qSbphTx5gMBmFy0jrGwgpP3fTchypMPpTMhLYDQkG7Z+xS7vVapiilyF7pLJHV5ZYNA9aZbLwiJS3P//WdEqOBz/kMBV4QEVsw1xy09ehFX0M=
+	t=1732570205; cv=none; b=Q5CLMeU9ZCrgiIyny2ZhiA1OmCRKShCRmSlauOneBAi4rEhvMFyTupQUQQF/uIObmR2igXQ/De7qMOQSgy4Uhu6wcrlXNxxf8dhpEmT+yUA/0Zq1WnhlV3OCA/1jFCIv6nZFx0rJxnjlnOfASAHIslk/kNdsH1MNSjm44eK3MTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732556419; c=relaxed/simple;
-	bh=G98sI1hHBvvf1SOuTsnXXxFlyMQztIppeqswspF2koE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=WaJttRDsGDf948R59snROcH2VCOiLkZqNG8LtzRbxsF9tcW7b23FhIpQq+zB4YWOSdB/cBFZhPLdnBx/tNzad6/JCirLdoTA8e0f0HfKC6JYeAsjxWWz2xuDsKQL6wfMpFXc4VggsOvRpAaO680iAVwcHgyQFA6XrxVTbPTlGpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltYKAe9m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06676C4CECE;
-	Mon, 25 Nov 2024 17:40:16 +0000 (UTC)
+	s=arc-20240116; t=1732570205; c=relaxed/simple;
+	bh=ccHnVZ69+9d59Nu5DADSW7/w79ZvzuCfeu6NFvAXE/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HCL8jRpPr2+7IGqLMbZMq9zvp4CtECceZ/uCtv1qNdwchNR1HolF2GdeV/KAgFdqTV42GXhbWKX50EuSHCrHf87y1URTK+NQsTXsWKf+mfCHuiB80hUfX1LtySrqVvbeLqY+c0N6V2ATq+7cP9wfYYcy0Cqb6l9j9HLnmRHf2Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oSjwt2+Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A667AC4CECE;
+	Mon, 25 Nov 2024 21:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732556417;
-	bh=G98sI1hHBvvf1SOuTsnXXxFlyMQztIppeqswspF2koE=;
-	h=Subject:From:Date:To:From;
-	b=ltYKAe9m9Ms1stLAQxytaHhGmV0U1fbVAWJu7snl2m3mSRpLzF1VwBvjjscdjE6/+
-	 2cq8PbzfwKFFycvFd1frwJgy51nPa30NX4cz+65LUVB+NHV/2kMOyICfuAbO1dJ6FF
-	 I42txw0yIhkkomZNyYTXoFoD0+lY7T2BuA73KOR9gIpiQoM/mhfbQIPa2ol0clhYWN
-	 xrSCvnf6mcqew0y8uVlFG9IEx3DIA3PRWFjl89FjN7wZqzg3/97Rdf5Y7N4U0iBONo
-	 9LSr5D+0wpssQWPSXzf9LIr0152VYgNwn8n2lgHACMshw5kojcqEnaYvGPeeV308ax
-	 iQveFT7YhG8LQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B94263809A00;
-	Mon, 25 Nov 2024 17:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1732570204;
+	bh=ccHnVZ69+9d59Nu5DADSW7/w79ZvzuCfeu6NFvAXE/s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oSjwt2+ZOZ6O1jAZJI0LTdhB8bPA0PY6hApxfzOQarKjkY9AA4vmW+vfq/RfFe/qJ
+	 COvPy/Ho5Q9/hNsKHSh5+GtvpgGdg+iT8ayXuihLmIoTQ/gMn9gFvPCyg8BHwcGWuG
+	 Veh51KCIrmOYRss8J8PspxI/NLco+18JMKgvUEEFxlVhixjOlwL/Hi+I5MKibOKwNo
+	 EjJIuBbfmvt3eLEE7v5wYcDHHXmSRnA7fraJwbJ4qgllVXoTi6mP6pyKG+O++iIyyL
+	 j4hXUvmuJ9dNEAj8b1torJDZdxy4IwLQ4obcb5/xjL53SDO+CQwXKVzh+ePk7OOLmH
+	 lek7+t3ptIyeQ==
+Date: Mon, 25 Nov 2024 21:29:55 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
+ Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v5 01/16] spi: add basic support for SPI offloading
+Message-ID: <20241125212955.6d5748b5@jic23-huawei>
+In-Reply-To: <22bc45a0-9d14-480a-bcce-bae394166967@baylibre.com>
+References: <20241115-dlech-mainline-spi-engine-offload-2-v5-0-bea815bd5ea5@baylibre.com>
+	<20241115-dlech-mainline-spi-engine-offload-2-v5-1-bea815bd5ea5@baylibre.com>
+	<20241124163241.4699161f@jic23-huawei>
+	<22bc45a0-9d14-480a-bcce-bae394166967@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173255642925.3980917.3690781881381608468.git-patchwork-summary@kernel.org>
-Date: Mon, 25 Nov 2024 17:40:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Sun, 24 Nov 2024 12:01:23 -0600
+David Lechner <dlechner@baylibre.com> wrote:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+> On 11/24/24 10:32 AM, Jonathan Cameron wrote:
+> > On Fri, 15 Nov 2024 14:18:40 -0600
+> > David Lechner <dlechner@baylibre.com> wrote:
+> >   
+> >> Add the basic infrastructure to support SPI offload providers and
+> >> consumers.
+> >>  
+> 
+> ...
+> 
+> >> +	resource = kzalloc(sizeof(*resource), GFP_KERNEL);
+> >> +	if (!resource)
+> >> +		return ERR_PTR(-ENOMEM);
+> >> +
+> >> +	resource->controller = spi->controller;
+> >> +	resource->offload = spi->controller->get_offload(spi, config);
+> >> +	ret = PTR_ERR_OR_ZERO(resource->offload);
+> >> +	if (ret) {  
+> > Why not simply
+> > 	if (IS_ERR(resource->offload) {
+> > 		kfree(resource);
+> > 		return resource->offload;
+> > 	}  
+> >> +		kfree(resource);
+> >> +		return ERR_PTR(ret);
+> >> +	}  
+> 
+> Hmm... maybe somewhere along the way ret was being checked again
+> after this, but doesn't to be the case anymore.
+> 
+> >> +
+> >> +	ret = devm_add_action_or_reset(dev, spi_offload_put, resource);
+> >> +	if (ret)
+> >> +		return ERR_PTR(ret);
+> >> +
+> >> +	return resource->offload;
+> >> +}
+> >> +EXPORT_SYMBOL_GPL(devm_spi_offload_get);  
+> >   
+> >> diff --git a/include/linux/spi/spi-offload.h b/include/linux/spi/spi-offload.h
+> >> new file mode 100644
+> >> index 000000000000..81b115fc89bf
+> >> --- /dev/null
+> >> +++ b/include/linux/spi/spi-offload.h  
+> >   
+> >> +
+> >> +MODULE_IMPORT_NS(SPI_OFFLOAD);  
+> > 
+> > This is rarely done in headers. (only pwm.h does it I think)
+> > I'd push it down into code that uses this.  
+> 
+> Yes, it was Uwe that suggested that I put it in the header. :-)
+> 
+> Are there any unwanted side effects of having it in the header?
+Reviewer surprise?
+:)
 
-Patch: spi: Fix acpi deferred irq probe
-  Submitter: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=911737
-  Lore link: https://lore.kernel.org/r/20241122094224.226773-1-stanislaw.gruszka@linux.intel.com
+Up to Mark as he gets to enjoy this code for ever.
 
-
-Total patches: 1
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> 
+> > 
+> > It might be worth splitting the header into a spi-offload-provider.h
+> > and spi-offload-consumer.h with a common spi-offload-types.h included
+> > by both.
+> >   
 
 
