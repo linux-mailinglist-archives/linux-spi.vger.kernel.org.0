@@ -1,114 +1,193 @@
-Return-Path: <linux-spi+bounces-5829-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5830-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF319D85D9
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 14:05:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CAAE9D8577
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 13:34:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A752DB28688
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 11:39:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BD4B284D33
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Nov 2024 12:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBCA9191F7E;
-	Mon, 25 Nov 2024 11:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2864118F2FD;
+	Mon, 25 Nov 2024 12:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m85SvOCY"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IPDpoNOB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE69185949
-	for <linux-spi@vger.kernel.org>; Mon, 25 Nov 2024 11:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C43C18AFC
+	for <linux-spi@vger.kernel.org>; Mon, 25 Nov 2024 12:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732534746; cv=none; b=ITpkCrBhq5dwvzusRdwtSlhQe/1hqmSUtB1gq5uegawNw1cWKInIt9pgdlgSucon8MchQd63tnm0eb/Vsj9VWBdLAA2RGJ18p59eOxKf4/U9CbNOx1wkXzCbAFRvJMkpsgG97c/nIRkSNTMgl932Rz+1NpaXQvRAchvI+ZIJsOI=
+	t=1732538076; cv=none; b=hPPYV0GcTAggvOJooaZ5flt+xDb9mm2us6ElR49kLnTBrxxPT3AWDcpS9OBX5kDwPwDGDJoQyUsYe1adqqa5ivjmSgoWNIocLrGnVV9tnBxmjTnazyQ1lntKwB0uAmTdnYQd8YU/tMZ9WsDZTX9rVWrNXV/0DXF/mCB6rFmscl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732534746; c=relaxed/simple;
-	bh=zVq1Xjn96VpYQiXEYLW3yS7kNqqzVELbO4IpQNcvagE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ef/ZwU2ptbpMxVxpMla1oqxJPcONW6IRRF2Lf3G62i1f7b8vdumub5k9HcUexS7q6neGPTfNGSN91Nc2eE1me13IF0lPvYoZbihxhdhMjKYEXmPfnOZf1AuCzj5fLAlUIbRsOCVju1dKhOps4F8Uf0MT3rMTXnuNkHZJqNAKjXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m85SvOCY; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2f7657f9f62so45910221fa.3
-        for <linux-spi@vger.kernel.org>; Mon, 25 Nov 2024 03:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732534743; x=1733139543; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zVq1Xjn96VpYQiXEYLW3yS7kNqqzVELbO4IpQNcvagE=;
-        b=m85SvOCYeiWurq/CjzSdIkS3tZG7q/ZXmHtfJg4fJkX6/7Yf2GwT7LAq9YptzEu6CY
-         YyzrUY/27EAoseJCQdkE9WdIUe069JESwDcFqq9i+T+e0u7UhSKGpMDZPdYzusEx3FWr
-         1jsdJdcllbjU1OF6s+PAa+WG2yO82RlPjOsm9ff9cWWhHr4lXUUyVM3hLF61hs8eCBky
-         W5/iOpQf1AP4LWEnuWTobx70MZtwEkzNTZKiWrhxlymvEYl3HKQxtlsLQX5hqpbd6O0h
-         b1yUl35sWRe1QaQwuFy7CirnL9PUAGqX017Ao4dZpYdmSSQS26eZ0V1NKBYp7/UsNkHr
-         ArSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732534743; x=1733139543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zVq1Xjn96VpYQiXEYLW3yS7kNqqzVELbO4IpQNcvagE=;
-        b=q/nA0WqA0svgx/YfVnv5t0XzLzMBhWLdQmlD1pkphyzLGa952Ax+pMXGlSbyC0Zs9d
-         cOlVIJ2mR1t5CoPg0WqtFR+CwVgqBlfez6Uj+YrNjm3UW35oi7qSGfcJzx8Tz7GJeoxr
-         dScPqhVsaPhi9Bmb9VZnht2SGR9Pjo0KVgcTKZToBo0z+uzZW3NAyUqK2nclPSIV+aHH
-         rtRXR5pUTRY2DAJVqxtvaI3t5O3iiTHu5+QYC7RNOwiJqPe0/cCSbnVNgxQCEOWHSZsf
-         7Y7NK9PUEitC4cPLjPnYfT7iKckB0fotMz0kEt7kPZYNoxc0Tj8xIJJ1IW0fdvwFJ/Dv
-         MzjA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTZHq2iVqdyMJ5+MNCTJsxZMFPV6o3dBFlTxAXwA288SYnVBx9OpcNaAVhfMm4OJuZ0tyFBdPBd9I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0jtx6aRBJHU/5tT7bEs0O41dd3Tc8T0wXlvsAEWeaJq35jM5F
-	VGyvaStCG+6Xngl8f+lx8bDWah9y37R4+X3Z06wIGSsD1z5N4FnmpDkjWaFK//1+V03qPMqRFWz
-	XXaaTrv1zt21w6j/9Z9rZeJ9D8cSpyqKl
-X-Gm-Gg: ASbGnctU3s0mVBT3Xqnu4LX7T2of1Ewo9QUhSpMzha+F37R2mamXFtZN5Xzho9cIU6O
-	+zgudRBl4zR4IymqUhk1mWhyDOjkY1E1cln/bkbn7nT4przpELWJYYp8LvC+xMyo=
-X-Google-Smtp-Source: AGHT+IGdrwuYUNl3+JWDDdcN1z+AOqHL+NUl6PN1fNn4S4NF+AQc2bH1cVYg7V3LIE7XMcSeHwbw9Q0I+9GCDlNq3LQ=
-X-Received: by 2002:a05:6512:250d:b0:53d:de72:f78f with SMTP id
- 2adb3069b0e04-53dde72f85bmr2283436e87.14.1732534743097; Mon, 25 Nov 2024
- 03:39:03 -0800 (PST)
+	s=arc-20240116; t=1732538076; c=relaxed/simple;
+	bh=Rymrxz0XTIumy1ez/aFLqqqxGYYmGWWpppNL7GZ9yak=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
+	 References:In-Reply-To; b=gliFJZW2LCaiX0DIvFtdYnTPz8O8mR6/cmZ0e6GcLzdpVhTesJtPucDoWaJyayVar+XLy7cG6tfre/aqGwMDqi04JyTpd+ndcnHxOloo1iHhe9VEqlz9323wJ6zz/mqD8qdj2SWVlocqU+92z8AcoBdcTNcJmsQUlHmiJbX6WGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IPDpoNOB; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A5DD02000E;
+	Mon, 25 Nov 2024 12:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732538064;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yrxfxzIyqEMHgJTqwlVefdO82E3yvSdGhJEhPaO2hKE=;
+	b=IPDpoNOBVQglzH2OEjWK5YnZhojck87yHXBn6spcmOQmK74Mcp9C50Q8fvKjaZPmLrn6Fo
+	OKRa6jv5RwLggX/OrsfNUayqL3o9F4lHX/oh/NaRpEq/gMh53Us2K6CH7xT6oQGYS8WK3Z
+	qoOKWDJQX+Ia+N9c+ZEfMtdmk9+SUGv799aQw9hdy5mJLvKkHfUPliqaaHNUa9BKYAJO5C
+	/aA8KV4HjjBpMcMMJ+BDPY1R2j/VT323dY7F2NaVdjezEWkUNjJigLLuyQBfoukIovNTds
+	LpX/y0TYfDgEoI8K1O5QictZTQdfL5RewHGTfQ/F9RMOmXTPGdNdDvT9+o+YPA==
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 25 Nov 2024 13:34:23 +0100
+Message-Id: <D5V9HIKF2P4H.33JQG23AJP4K8@bootlin.com>
+Cc: <linux-spi@vger.kernel.org>, "Sakari Ailus"
+ <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH] spi: Fix acpi deferred irq probe
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Hans de Goede" <hdegoede@redhat.com>, "Stanislaw Gruszka"
+ <stanislaw.gruszka@linux.intel.com>, "Mark Brown" <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <CAOMZO5A5MxbKCnaoRo-ax+doTcEbu+S-bGoxcmYrA=eO5ExT4g@mail.gmail.com>
- <20221219200857.fckuqovt3xt5r352@umbrella> <CAOMZO5CyeHW_bNB+ow2=dxWA-6bg2Rm-vY3Wx4LGvu=bJ+fagw@mail.gmail.com>
-In-Reply-To: <CAOMZO5CyeHW_bNB+ow2=dxWA-6bg2Rm-vY3Wx4LGvu=bJ+fagw@mail.gmail.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 25 Nov 2024 08:38:51 -0300
-Message-ID: <CAOMZO5CJ_XbXRQCMDdb6V4HC2DTvc71SzZXv2E_HjMoawaYurg@mail.gmail.com>
-Subject: Re: DMA support for FlexSPI driver
-To: Han Xu <han.xu@nxp.com>
-Cc: Bough Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, 
-	Michael Walle <michael@walle.cc>, linux-spi <linux-spi@vger.kernel.org>, 
-	Adam Ford <aford173@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241122094224.226773-1-stanislaw.gruszka@linux.intel.com>
+ <D5UNKGVDHH2G.308OGWQSNXP21@bootlin.com>
+ <3ee5e7bb-2f54-4051-b36b-5e2d4be7cd42@redhat.com>
+In-Reply-To: <3ee5e7bb-2f54-4051-b36b-5e2d4be7cd42@redhat.com>
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hi Han Xu,
+Hi Hans, thanks a lot for the the help !
 
-I am resurrecting this old thread.
-
-On Wed, Jan 11, 2023 at 11:27=E2=80=AFAM Fabio Estevam <festevam@gmail.com>=
- wrote:
+On Mon Nov 25, 2024 at 11:05 AM CET, Hans de Goede wrote:
+> Hi Alexis,
 >
-> Hi Han Xu,
->
-> On Mon, Dec 19, 2022 at 5:09 PM Han Xu <han.xu@nxp.com> wrote:
->
-> > We are working on that, both flexspi driver and sdma driver need to be =
-updated,
-> > and will upstream all once done.
->
-> Do you have some patches you share with us so we could try flexspi DMA
-> operation on i.MX8MM?
+> On 24-Nov-24 8:23 PM, Alexis Lothor=C3=A9 wrote:
+> > Hello,
+[...]
 
-I still don't see FlexSPI DMA support on the spi-nxp-fspi.c driver in
-the upstream kernel and also in the NXP vendor kernel.
+> > I systematically observe this issue (probe failure with -22) on each bo=
+ot,
+> > and reached the same intermediate conclusion (IRQ failing to register, =
+and
+> > spi->irq value being -EPROBE_DEFER).
+> > I can confirm that this patch makes the vsc-tp -22 error disappear on m=
+y
+> > machine, and that I have now /sys/devices/platform/intel_vsc.
+> >=20
+> > Unfortunately, I now encounter a new issue preventing the camera to wor=
+k
+> > (ipu6 still fails with -EPROBE_DEFER, I now have
+> > ipu_bridge_get_ivsc_csi_dev failing while searching for child device
+> > intel_vsc-92335fcf-3203-4472-af93-7b4453ac29da).
+>
+> This sounds like you may not have the actual MEI driver enabled or
+> that it is not binding.
 
-Is this something that is still in the plans?
+You were right, it looks like I have been missing CONFIG_INTEL_MEI_VSC. My
+config is comming from the archlinux kernel, there may be a miss here.
 
-Thanks
+> Do you have both CONFIG_INTEL_MEI_VSC_HW and CONFIG_INTEL_MEI_VSC enabled=
+?
+
+So now with this change, I still have no success with ipu loading, because
+of new errors on vsc-tp, but those errors have actually changed:
+
+$ dmesg|grep vsc
+[    8.594501] vsc-tp spi-INTC1094:00: wait rom failed ret: -110
+[    8.594506] intel_vsc intel_vsc: hw_reset failed ret =3D -110
+[    9.138269] vsc-tp spi-INTC1094:00: wait rom failed ret: -110
+[    9.138287] intel_vsc intel_vsc: hw_reset failed ret =3D -110
+[    9.678712] vsc-tp spi-INTC1094:00: wait rom failed ret: -110
+[    9.678729] intel_vsc intel_vsc: hw_reset failed ret =3D -110
+[    9.678750] intel_vsc intel_vsc: reset: reached maximal consecutive rese=
+ts: disabling the device
+[    9.678755] intel_vsc intel_vsc: reset failed ret =3D -19
+[    9.678758] intel_vsc intel_vsc: link layer initialization failed.
+[    9.678761] intel_vsc intel_vsc: error -ENODEV: init hw failed
+
+I have seen some mentions of this -110 error in the many redhat bugzilla
+issues you have been helping with, I'll check more thoroughly if some hints
+and/or patches have emerged from there.
+
+For the record, I am doing my tests with the current Archlinux kernel
+(6.12.1-arch1), with those 3 patches on top:
+
+"mei: vsc: Do not re-enable interrupt from vsc_tp_reset()"
+"media: intel/ipu6: do not handle interrupts when device is disabled"
+"spi: Fix acpi deferred irq probe"
+
+> And do you get a driver symlink under /sys/devices/platform/intel_vsc
+> indicating that a driver has bound to it ?
+
+With the updated config: no, but I guess the dmesg output above explains it=
+.
+
+> If not any related messages in dmesg ?
+>
+> If yes what is the output of:
+>
+> ls /sys/bus/mei/devices
+
+With the updated config:
+0000:00:16.0-082ee5a7-7c25-470a-9643-0c06f0466ea1 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-082ee5a7-7c25-470a-9643-0c06f0466ea1
+0000:00:16.0-309dcde8-ccb1-4062-8f78-600115a34327 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-309dcde8-ccb1-4062-8f78-600115a34327
+0000:00:16.0-3c4852d6-d47b-4f46-b05e-b5edc1aa440e -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-3c4852d6-d47b-4f46-b05e-b5edc1aa440e
+0000:00:16.0-42b3ce2f-bd9f-485a-96ae-26406230b1ff -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-42b3ce2f-bd9f-485a-96ae-26406230b1ff
+0000:00:16.0-4fcc395c-a9e5-4647-bc68-47bad7cc6bd3 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-4fcc395c-a9e5-4647-bc68-47bad7cc6bd3
+0000:00:16.0-55213584-9a29-4916-badf-0fb7ed682aeb -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-55213584-9a29-4916-badf-0fb7ed682aeb
+0000:00:16.0-5565a099-7fe2-45c1-a22b-d7e9dfea9a2e -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-5565a099-7fe2-45c1-a22b-d7e9dfea9a2e
+0000:00:16.0-6861ec7b-d07a-4673-856c-7f22b4d55769 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-6861ec7b-d07a-4673-856c-7f22b4d55769
+0000:00:16.0-8c2f4425-77d6-4755-aca3-891fdbc66a58 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-8c2f4425-77d6-4755-aca3-891fdbc66a58
+0000:00:16.0-8e6a6715-9abc-4043-88ef-9e39c6f63e0f -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-8e6a6715-9abc-4043-88ef-9e39c6f63e0f
+0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04
+0000:00:16.0-cea154ea-8ff5-4f94-9290-0bb7355a34db -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-cea154ea-8ff5-4f94-9290-0bb7355a34db
+0000:00:16.0-dba4d603-d7ed-4931-8823-17ad585705d5 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-dba4d603-d7ed-4931-8823-17ad585705d5
+0000:00:16.0-dd17041c-09ea-4b17-a271-5b989867ec65 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-dd17041c-09ea-4b17-a271-5b989867ec65
+0000:00:16.0-fbf6fcf1-96cf-4e2e-a6a6-1bab8cbe36b1 -> ../../../devices/pci00=
+00:00/0000:00:16.0/0000:00:16.0-fbf6fcf1-96cf-4e2e-a6a6-1bab8cbe36b1
+>
+> and of:
+>
+> ls -l /sys/bus/mei/devices/*/driver
+
+No driver bound to any MEI device
+
+Sorry for the thread hijack, that's totally fine for me to continue the
+discussions elsewhere if relevant.
+
+Thanks,
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
