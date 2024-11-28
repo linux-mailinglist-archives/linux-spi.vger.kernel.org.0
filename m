@@ -1,107 +1,122 @@
-Return-Path: <linux-spi+bounces-5853-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5854-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 588959DB3E6
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2024 09:38:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67EA69DB8CB
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2024 14:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD861B210F5
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2024 08:38:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5E1EB225AB
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Nov 2024 13:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8B1214B96E;
-	Thu, 28 Nov 2024 08:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06171A0732;
+	Thu, 28 Nov 2024 13:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AlPQkGFQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B691531D2;
-	Thu, 28 Nov 2024 08:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4296F1A29A;
+	Thu, 28 Nov 2024 13:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732783115; cv=none; b=K5Y1H/X5c6POYIYcJhbOsem68vGn9zUWHdDxwk9vDV/U2Yl6wUUD5zhyxIM0+1NLNscb+Wh1vMwNbeIIpWxkH+A9sSbo2Zmw/xUTIK7Y+H/X6QNzLQWsmv3oAefBQzNpw4RdLofxFF5WudBYo/exkaFBogqqzvb/9TjW2oxTmik=
+	t=1732800856; cv=none; b=SE59JJ8UjIeA4vQxEKbjBZBpDlz+PDgtlGz7YOAo8+QONreViny/b2V7lmJUjk3RV7/dJiffiD9U5F3VItg9wYxNCJ7efQQQfigWBhdPuXrVfrWN3Thpnrje02ZsTXrkH7kPh0rjyGiZYRPvTzyeMUe+6uolqRMC2VqnJ+2QH8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732783115; c=relaxed/simple;
-	bh=PwygZ8xo/uom8hgwVTtJN5pxQqPEFNedvWHgkIpqUls=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hSyT2kVGmGt4yMf0+F1iqv3x8ifh97OGM67BeK8o2+VNQIextRxfp+++dWcJ4B31naI2NGckGjnjDtf5cxzY1GDyzgpwWJk4wnpt7/IkOjon+lgr933PvxakstmVVoPe0KcBKhQ5Nq/eDxRAqp5Ob0Jys113zEKnPVK3aJ4xx2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 208830a6ad6411efa216b1d71e6e1362-20241128
-X-CTIC-Tags:
-	HR_CC_AS_FROM, HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN
-	HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS
-	DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:76ada111-3939-43ff-8cb2-48de6f12cf32,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:15
-X-CID-INFO: VERSION:1.1.38,REQID:76ada111-3939-43ff-8cb2-48de6f12cf32,IP:0,URL
-	:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:15
-X-CID-META: VersionHash:82c5f88,CLOUDID:f36c0c66f0dfdb948bea5b9adc1895d9,BulkI
-	D:241128163824DH1BYHU8,BulkQuantity:0,Recheck:0,SF:17|19|66|102,TC:nil,Con
-	tent:0,EDM:5,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: 208830a6ad6411efa216b1d71e6e1362-20241128
-X-User: xiaopei01@kylinos.cn
-Received: from xiaopei-pc.. [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <xiaopei01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 580643859; Thu, 28 Nov 2024 16:38:22 +0800
-From: Pei Xiao <xiaopei01@kylinos.cn>
-To: broonie@kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Pei Xiao <xiaopei01@kylinos.cn>
-Subject: [PATCH] spi: mpc52xx: Add cancel_work_sync before module remove
-Date: Thu, 28 Nov 2024 16:38:17 +0800
-Message-Id: <1f16f8ae0e50ca9adb1dc849bf2ac65a40c9ceb9.1732783000.git.xiaopei01@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1732800856; c=relaxed/simple;
+	bh=ZvTd00fnco11E4EWIweRrAc8AjwbJP784CxZOEfdGJY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Jlb/YpY7aKWtN+xoYQkFKXrfeF0LpB03Cv9b1XKxta+wGOMt/HG/FVCwoTkuE07prR0pTahS+IPZpeYW/dInAs3toHi9QwqZi2G4yZrIWb5tEHcGcDnuFH8/mTtDmt/KgbCjfiFPu7zMWtE76BsIJcXR2y9K9OkaSMRqQlw/V4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=AlPQkGFQ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AS8hX4c012287;
+	Thu, 28 Nov 2024 13:34:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=ujC9rX20xzmXBX7Z0EPm7uXpVSxDFoT6gE0DgYc0xSE=; b=Al
+	PQkGFQNLp4vGIG/gy80xRoqoDpofWWKVF2RTM3iYsLbQiMm7PNQz5BaxKzMcTzwG
+	9DvamylZ6BygZqUF+JA1LUlY0WW6HdZz7Xc92aDLoSBV40zr1H6ggUuqDmcb4egz
+	x15r7j9YbL/vH7mXpAqbzBXIzUxXhq9kacayilzw3hrl7haq54pSl63ywjfk9xy4
+	j5J8pD1fPRlcDiT3CvKwxNW+uqD2GXVNta2PkiPln69KK4w2sm4fDwfjf60jT+Qj
+	scgkHDl1F6AOJYCmNbT042auQpepcD+IS7RqlhlvC8afXWmHk0C67t7W+mnpNzCy
+	CFR3PYFMrdvZF7TAHXJA==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4366xy2t54-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 13:34:11 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ASDYAKL030161
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 13:34:10 GMT
+Received: from hu-jseerapu-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 28 Nov 2024 05:34:08 -0800
+From: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
+To: Vinod Koul <vkoul@kernel.org>, Mark Brown <broonie@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <quic_msavaliy@quicinc.com>, <quic_vtanuku@quicinc.com>
+Subject: [PATCH v2 0/2] Add GPI immediate DMA support for SPI 
+Date: Thu, 28 Nov 2024 19:03:49 +0530
+Message-ID: <20241128133351.24593-1-quic_jseerapu@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8FYvQU7At5hPqwUGVP5MqXtwdjrFTKa-
+X-Proofpoint-ORIG-GUID: 8FYvQU7At5hPqwUGVP5MqXtwdjrFTKa-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 suspectscore=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 phishscore=0 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2411280106
 
-If we remove the module which will call mpc52xx_spi_remove
-it will free 'ms' through spi_unregister_controller.
-while the work ms->work will be used. The sequence of operations
-that may lead to a UAF bug.
+The DMA TRE(Transfer ring element) buffer contains the DMA
+buffer address. Accessing data from this address can cause
+significant delays in SPI transfers, which can be mitigated to
+some extent by utilizing immediate DMA support.
 
-Fix it by ensuring that the work is canceled before proceeding with
-the cleanup in mpc52xx_spi_remove.
+QCOM GPI DMA hardware supports an immediate DMA feature for data
+up to 8 bytes, storing the data directly in the DMA TRE buffer
+instead of the DMA buffer address. This enhancement enables faster
+SPI data transfers.
 
-Fixes: ca632f556697 ("spi: reorganize drivers")
-Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
----
- drivers/spi/spi-mpc52xx.c | 1 +
- 1 file changed, 1 insertion(+)
+This optimization reduces the average transfer time from 25 us to
+16 us for a single SPI transfer of 8 bytes length, with a clock
+frequency of 50 MHz.
 
-diff --git a/drivers/spi/spi-mpc52xx.c b/drivers/spi/spi-mpc52xx.c
-index 036bfb7bf189..6d4dde15ac54 100644
---- a/drivers/spi/spi-mpc52xx.c
-+++ b/drivers/spi/spi-mpc52xx.c
-@@ -520,6 +520,7 @@ static void mpc52xx_spi_remove(struct platform_device *op)
- 	struct mpc52xx_spi *ms = spi_controller_get_devdata(host);
- 	int i;
- 
-+	cancel_work_sync(&ms->work);
- 	free_irq(ms->irq0, ms);
- 	free_irq(ms->irq1, ms);
- 
+v1 -> v2:
+   - Separated the patches to dmaengine and spi subsystems
+   - Removed the type conversions used in gpi_create_spi_tre of gpi.c.
+   - Removed the changes which are not required for this feature from
+     qcom-gpi-dma.h file. 
+
+Jyothi Kumar Seerapu (2):
+  dmaengine: qcom: gpi: Add GPI immediate DMA support
+  spi: spi-geni-qcom: Add immediate DMA support
+
+ drivers/dma/qcom/gpi.c           | 32 +++++++++++++++++++++++++++-----
+ drivers/spi/spi-geni-qcom.c      |  7 +++++++
+ include/linux/dma/qcom-gpi-dma.h |  6 ++++++
+ 3 files changed, 40 insertions(+), 5 deletions(-)
+
+
+base-commit: ceab669fdf7b7510b4e4997b33d6f66e433a96db
 -- 
-2.34.1
+2.17.1
 
 
