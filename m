@@ -1,55 +1,58 @@
-Return-Path: <linux-spi+bounces-5878-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5880-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E74C29E0908
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 17:51:08 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB00B9E0939
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 17:59:55 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC606282300
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:51:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75A96165654
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236741D934C;
-	Mon,  2 Dec 2024 16:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399D51D95AA;
+	Mon,  2 Dec 2024 16:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QrYJk03x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSPWq743"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3951D9320;
-	Mon,  2 Dec 2024 16:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111DD1D959E;
+	Mon,  2 Dec 2024 16:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733158265; cv=none; b=fJAN6NHT5D6sJJeJg8qcbjYNmoG7XndLOuImpzg+WJM0l7PPozy8kJd3hk2Aa/60q/j9we1axKvcUV/gqes7Leo7+gUMH4FnjX4K12KgFWCKVlqEQ91JLCZ7mtOdTpMq6u7hftVEieUthSaZFwLcZekJeyRVnYYlHKi8uTmQnz8=
+	t=1733158273; cv=none; b=kxGpQXNjEW6xVwei/HCdpEFoQ5OmikMKLa6E+tPqfTDKSUcqQu/F0V3qII+spNxXkVFlS9WkKbvSOsgFzOsB9v7FJQWfVQ3cEoPOU8fyIcOnRNJj810FSJD0ZL76nuv/KuGyplw66mQXFaG4vqaNeu71BBcWcH1ca6+HRN+WWq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733158265; c=relaxed/simple;
-	bh=QKJkgD+6MJkJNvfAvqe3m9p1Tobg8vhFPDwp90WmMSI=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Q3wxia61C7SqAqNikHD3vbA/cm5NTvwRaTYiUfDtEgufEKzIrnYbhP6EAlc6CZITY+sOYuz101TDwjMgGOde5nmLlErOKbVkSodj2iLbwQmyC2UkLKJyvYWj80sSpGwJZbVTWig0HRCop2nuDVpoXr9f7+h5qfb1J0cYdBOGL6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QrYJk03x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A414DC4CED1;
-	Mon,  2 Dec 2024 16:51:03 +0000 (UTC)
+	s=arc-20240116; t=1733158273; c=relaxed/simple;
+	bh=ZdAQdXXjCYljteTFBRHsVw/rpxpZmdzMc5aDBqCIVy4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=N6+xrhMKbUx88J7FeY7g/DO543GrFU1DUjc9G9RUtANl6HltETZGg/CJNrk5BQ6xrXqOqHJ3dkvhUD35Adj/XoWHELeDFQ70gBy6ahm9phXWxcMyDB8upAUoDt36shARBSwp6bzN1/PG+1Nz35iNmuO5+AWh6oEy+A194llQRaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSPWq743; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CCDC4CED6;
+	Mon,  2 Dec 2024 16:51:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733158264;
-	bh=QKJkgD+6MJkJNvfAvqe3m9p1Tobg8vhFPDwp90WmMSI=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=QrYJk03xrx9E8lndYRR0dlMYZ5oE9cjloxzF9jOjuinQDagu6Ih6Blv1Rcg649XtX
-	 BEL7caMGzo7MMpMGo/tWWvwJ5NHuKoeTUIo2LUxA95gYWA3URdci/WvjhUO6YtARPs
-	 1AIper14TUkSD/v/kaU4ejMbZKag0SWiUbKeL+bh5amPhhF5QFE4/YjR07rmVt/D7K
-	 O7p24KzAF0AP7qo5H4I5t4HM54h0A9/FiF2vSik3lgMZG6/xTErzjkhG3o2Nsi7rpT
-	 DZ0Ddnzz7t0toikSM5M8fmH6Lw7hEtkFV24XpDlQmNhm14O24owoNymHShEE9sIOms
-	 ZkC9gDMlTEG5g==
+	s=k20201202; t=1733158272;
+	bh=ZdAQdXXjCYljteTFBRHsVw/rpxpZmdzMc5aDBqCIVy4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=iSPWq743CIYZAfEvP/0i+dSExVhNx/pKe3BLTKkZnq3y/0UZ77r7x0LTj+kgtS7AR
+	 A1TjutON18aDwgk8Bt3aBPP13pwhirJDhK2wXkAWoyfkA8nBqev6K824bYl6YSm0wD
+	 KYe+90UjI6hP4o7JrCVXKE0ciu0xWPLIEl1+rvz2Bs3T0rYacZrvYHsxcEvOEDIPqS
+	 KP1GOM2kzMsD/oZacBAaaiikbsaPezHv2LkjfnenxqyQczcoUfMhezH8hcqzvK/ieK
+	 /afc03wEG5xP+oJNb8TU3bhqI2GkTTLV0FgF1fhgzZSMkklV5R+Hj4k8iLSbrb1YtG
+	 AFGisWHbX9mWA==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20241114205051.3747458-1-andriy.shevchenko@linux.intel.com>
-References: <20241114205051.3747458-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: sc18is602: Switch to generic firmware
- properties and drop of_match_ptr()
-Message-Id: <173315826335.126887.7469821187723092456.b4-ty@kernel.org>
-Date: Mon, 02 Dec 2024 16:51:03 +0000
+To: robh@kernel.org, Fabio Estevam <festevam@gmail.com>
+Cc: krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
+ linux-spi@vger.kernel.org, shawnguo@kernel.org, 
+ linux-arm-kernel@lists.infradead.org, lukma@denx.de, 
+ Fabio Estevam <festevam@denx.de>
+In-Reply-To: <20241023120015.1049008-1-festevam@gmail.com>
+References: <20241023120015.1049008-1-festevam@gmail.com>
+Subject: Re: (subset) [PATCH 1/3] dt-bindings: misc: lwn,bk4-spi: Add
+ binding
+Message-Id: <173315826769.126887.7195905602758530196.b4-ty@kernel.org>
+Date: Mon, 02 Dec 2024 16:51:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,13 +63,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-9b746
 
-On Thu, 14 Nov 2024 22:50:51 +0200, Andy Shevchenko wrote:
-> This enables using the driver with other firmware types such as ACPI
-> via PRP0001.
+On Wed, 23 Oct 2024 09:00:13 -0300, Fabio Estevam wrote:
+> Add a lwn,bk4-spi.yaml binding for Liebherr's BK4 external SPI controller.
 > 
-> Also part of a general attempt to move drivers over to generic properties
-> to avoid opportunities for cut and paste.
+> Currently, the compatible string used for this device is "lwn,bk4",
+> which is the same as the board compatible string documented at fsl.yaml.
 > 
+> This causes several dt-schema warnings:
 > 
 > [...]
 
@@ -76,8 +79,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: sc18is602: Switch to generic firmware properties and drop of_match_ptr()
-      commit: 2c55f67c3a71cf57665294a02f258625c1da9385
+[1/3] dt-bindings: misc: lwn,bk4-spi: Add binding
+      commit: 36e7886075262429158aec6f258e6a5a92f025b1
+[2/3] spi: spidev: Add an entry for lwn,bk4-spi
+      commit: 096c34ddf5835f02f5260719cd8a16fcf5e5e56f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
