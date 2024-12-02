@@ -1,106 +1,95 @@
-Return-Path: <linux-spi+bounces-5880-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5881-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB00B9E0939
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 17:59:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75A96165654
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:51:46 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399D51D95AA;
-	Mon,  2 Dec 2024 16:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSPWq743"
-X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 298AD9E092D
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 17:57:31 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111DD1D959E;
-	Mon,  2 Dec 2024 16:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F9728226F
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:57:29 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751051D9A79;
+	Mon,  2 Dec 2024 16:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VSkN8ZkJ"
+X-Original-To: linux-spi@vger.kernel.org
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F1213C8E8;
+	Mon,  2 Dec 2024 16:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733158273; cv=none; b=kxGpQXNjEW6xVwei/HCdpEFoQ5OmikMKLa6E+tPqfTDKSUcqQu/F0V3qII+spNxXkVFlS9WkKbvSOsgFzOsB9v7FJQWfVQ3cEoPOU8fyIcOnRNJj810FSJD0ZL76nuv/KuGyplw66mQXFaG4vqaNeu71BBcWcH1ca6+HRN+WWq0=
+	t=1733158641; cv=none; b=SgeO8kb8s0G3k3QtGinnApxfl0UJ69k2lvm+wsA7+hKau2QDWWYHiHptYy8iEN7djLZzS8yXRcgXAEWC9C3MN4Pqai0keBr4HG/PGj3ki09Yw4hsPcp8S1dF4AXksl0jGvuDsBshDhYH9yI9TuVRdMHGkMjMcwCc08n42Lry+/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733158273; c=relaxed/simple;
-	bh=ZdAQdXXjCYljteTFBRHsVw/rpxpZmdzMc5aDBqCIVy4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=N6+xrhMKbUx88J7FeY7g/DO543GrFU1DUjc9G9RUtANl6HltETZGg/CJNrk5BQ6xrXqOqHJ3dkvhUD35Adj/XoWHELeDFQ70gBy6ahm9phXWxcMyDB8upAUoDt36shARBSwp6bzN1/PG+1Nz35iNmuO5+AWh6oEy+A194llQRaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSPWq743; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CCDC4CED6;
-	Mon,  2 Dec 2024 16:51:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733158272;
-	bh=ZdAQdXXjCYljteTFBRHsVw/rpxpZmdzMc5aDBqCIVy4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=iSPWq743CIYZAfEvP/0i+dSExVhNx/pKe3BLTKkZnq3y/0UZ77r7x0LTj+kgtS7AR
-	 A1TjutON18aDwgk8Bt3aBPP13pwhirJDhK2wXkAWoyfkA8nBqev6K824bYl6YSm0wD
-	 KYe+90UjI6hP4o7JrCVXKE0ciu0xWPLIEl1+rvz2Bs3T0rYacZrvYHsxcEvOEDIPqS
-	 KP1GOM2kzMsD/oZacBAaaiikbsaPezHv2LkjfnenxqyQczcoUfMhezH8hcqzvK/ieK
-	 /afc03wEG5xP+oJNb8TU3bhqI2GkTTLV0FgF1fhgzZSMkklV5R+Hj4k8iLSbrb1YtG
-	 AFGisWHbX9mWA==
-From: Mark Brown <broonie@kernel.org>
-To: robh@kernel.org, Fabio Estevam <festevam@gmail.com>
-Cc: krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org, 
- linux-spi@vger.kernel.org, shawnguo@kernel.org, 
- linux-arm-kernel@lists.infradead.org, lukma@denx.de, 
- Fabio Estevam <festevam@denx.de>
-In-Reply-To: <20241023120015.1049008-1-festevam@gmail.com>
-References: <20241023120015.1049008-1-festevam@gmail.com>
-Subject: Re: (subset) [PATCH 1/3] dt-bindings: misc: lwn,bk4-spi: Add
- binding
-Message-Id: <173315826769.126887.7195905602758530196.b4-ty@kernel.org>
-Date: Mon, 02 Dec 2024 16:51:07 +0000
+	s=arc-20240116; t=1733158641; c=relaxed/simple;
+	bh=uJsWqmIq1oa/qJRElqzZus4/s+VgdKlbkG9mgDS7sNE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SKHkHff16EvDT3fMtWcaota6uaNiNeKz0gsPUU6CO0GuB6gsMnSo9DxGuC4Al6uagzBnsTZ8f97vK+hifR2TZRjd4IBPNm4WcLvex+NVcMT1QdvtyICMmLa9OQfVtQVaG0mXdXoNnzSVsGlVuSre3fuwEmUPs09mKPNCw+F8CH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VSkN8ZkJ; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 18B1A1BF206;
+	Mon,  2 Dec 2024 16:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1733158630;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rwJhyHk0KFMT+SspT26kxCXdvr9xbBBJKrLs3UwpEic=;
+	b=VSkN8ZkJeUeTRw2LmDazBUhNapQ6k5z70UoeTPWZRwkhVI3EDrH3qvNDYylCHOwxXU+44g
+	JkDY8NAL7vKRRrcXxul0ZWkGjVJ+mePFdRPQeXa7YU443Pcd2ev9PkJ+wPuJ46ko83NYSG
+	ltHDoK7cIkCRsBIdF3JJRpqV/Z/Of5qQG2rn22z7fZvXwrRdY9mVwy2sZ9mA/WaKJHZR/Z
+	vep6asofT2F50lOkz1I/yPjE3/eYBGwrUAkx0FC4hnlRO00WPFO89Besjz/bJfIjtFPlnI
+	9AD+bLY0RrGVDRDQObNyFXhxOepoG90Smm25dLB67JH7SXinixFfbhFtz/jzWw==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: <broonie@kernel.org>,  <robh@kernel.org>,  <krzk+dt@kernel.org>,
+  <conor+dt@kernel.org>,  <andersson@kernel.org>,
+  <konradybcio@kernel.org>,  <richard@nod.at>,  <vigneshr@ti.com>,
+  <manivannan.sadhasivam@linaro.org>,  <linux-arm-msm@vger.kernel.org>,
+  <linux-spi@vger.kernel.org>,  <devicetree@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <linux-mtd@lists.infradead.org>,
+  <quic_srichara@quicinc.com>,  <quic_varada@quicinc.com>
+Subject: Re: [PATCH v14 0/8] Add QPIC SPI NAND driver
+In-Reply-To: <20241120091507.1404368-1-quic_mdalam@quicinc.com> (Md Sadre
+	Alam's message of "Wed, 20 Nov 2024 14:44:58 +0530")
+References: <20241120091507.1404368-1-quic_mdalam@quicinc.com>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Mon, 02 Dec 2024 17:57:09 +0100
+Message-ID: <87mshe58gq.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-9b746
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Wed, 23 Oct 2024 09:00:13 -0300, Fabio Estevam wrote:
-> Add a lwn,bk4-spi.yaml binding for Liebherr's BK4 external SPI controller.
-> 
-> Currently, the compatible string used for this device is "lwn,bk4",
-> which is the same as the board compatible string documented at fsl.yaml.
-> 
-> This causes several dt-schema warnings:
-> 
-> [...]
+Hi Marc,
 
-Applied to
+On 20/11/2024 at 14:44:58 +0530, Md Sadre Alam <quic_mdalam@quicinc.com> wr=
+ote:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+> v14:
+>  * Updated commit message
+>  * Fix spelling mistake
+>  * Remove "inline" from multiple APIs from qcom_nandc.c file
+>  * Move '|' in qcom_param_page_type_exec() APIs at the end of line
 
-Thanks!
+I guess it is now time to move on, I can apply patches 2-5 and share an
+immutable tag. However, due to the frequent inconsistencies observed
+during the lifetime of this patchset, we might be slightly more
+conservative than usual and split the patches over two kernel
+releases. I fear there might be annoying fixes on the mtd side needed
+because of some side effects. Without these, the spi tree might have
+broken qcom support for several weeks. What do you think?
 
-[1/3] dt-bindings: misc: lwn,bk4-spi: Add binding
-      commit: 36e7886075262429158aec6f258e6a5a92f025b1
-[2/3] spi: spidev: Add an entry for lwn,bk4-spi
-      commit: 096c34ddf5835f02f5260719cd8a16fcf5e5e56f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Cheers,
+Miqu=C3=A8l
 
