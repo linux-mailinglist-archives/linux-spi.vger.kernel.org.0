@@ -1,127 +1,101 @@
-Return-Path: <linux-spi+bounces-5877-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5878-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CC139E06F0
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E74C29E0908
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 17:51:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D745F282021
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 15:25:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC606282300
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Dec 2024 16:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B632B209691;
-	Mon,  2 Dec 2024 15:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236741D934C;
+	Mon,  2 Dec 2024 16:51:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k5Lk6NCL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QrYJk03x"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45AF209680
-	for <linux-spi@vger.kernel.org>; Mon,  2 Dec 2024 15:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3951D9320;
+	Mon,  2 Dec 2024 16:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733153049; cv=none; b=TYIimwooyTB5uVVCKurBIi26T+J0y+RnTHZaiZLs9vb4BgRwUaQaN+BxeljpziTvdmMPR55eO5d+Fb2ZurlXntySo7J4LO0E3O6x/+GbwY59tahVSC78lisOFBE1iSuYOMOifzxEv5cEuxBv9il2INjVoxZzmqe5AMB1p/iK+Fs=
+	t=1733158265; cv=none; b=fJAN6NHT5D6sJJeJg8qcbjYNmoG7XndLOuImpzg+WJM0l7PPozy8kJd3hk2Aa/60q/j9we1axKvcUV/gqes7Leo7+gUMH4FnjX4K12KgFWCKVlqEQ91JLCZ7mtOdTpMq6u7hftVEieUthSaZFwLcZekJeyRVnYYlHKi8uTmQnz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733153049; c=relaxed/simple;
-	bh=+Xl8s91uz6z0166yhunqPMLThqhGtXNxm6DGP1hGyaY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kxOQ11jfRxdh4j+afitkYkW9ItOD/eMNOZr4v4QxXXbbwwk5AERJopoNgSj/el7t8N0501jHdMrDEvBdk/S5yFnlsagHxU+8WyzrVgSZp7L6vwsvAJ1uafbdGAticlR764Vg5YWYdkUDOCvn3rwpGpSqbFweY+nv4VPdj30xh4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k5Lk6NCL; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6eeba477fcaso39220167b3.0
-        for <linux-spi@vger.kernel.org>; Mon, 02 Dec 2024 07:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733153047; x=1733757847; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XMx9usLc+8H+1O3Ux5r/Qz56sk5GB2iRle+hBCjO6+0=;
-        b=k5Lk6NCL/Q9S2n2SD7XUQy3GgjWsjcXzD2V/+giR9rhAUrOGGCsMQ/r8/8dAPLYGsW
-         ulCSdELHI1aTBluKfiDycsvm82o8sgvRyGtiXYSAGP0/WxrT27xmDDDgbwE+M/CCvKEd
-         0uh4t60+ULG1Ks4uJ4LNZYFklbSa+BPzal9TSB/GfYKX+XXRNKkYMor2pa3wur1kOHlS
-         FwhQtAJpO5o9tSZUZtX+ynvGl4TSVftm5BgyNchSRDtjBsudY0vkHF6+9NmXWz9zclq8
-         x8WgYa44Bx7oS49t0Opu8E+xUy/9ma+sg7UrILv5kSFdznhmNNCq9kHIJbfa2juCgfhX
-         oyJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733153047; x=1733757847;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XMx9usLc+8H+1O3Ux5r/Qz56sk5GB2iRle+hBCjO6+0=;
-        b=ZW0Qv6pYYd3QJI175Q3DeuMnukvVPshpUI8bXuSXSBwa1mnAK6E0/5BIgmsLaIgMb4
-         6vJn8tLH02qQ/MRcN2o95NLSkZE9G+tYtgYEOiOrpcRt1qjgA3pdi96DXDswtjDj6Crt
-         iojISTpMdLoYoxSee8BrupA9FifDgw1dCplYtLt+JH3/PgCoyCu4sXfcsZpsen+4AtrI
-         DSv7oBz0jjgAMktek405u2ff9zrR8/u7GEvIx39iENglyB60kK3mmjO6Td3L9GyNpU7M
-         k1onrSzb0ltEhpCPVLHrvbUDsI/8ECDxM8GfSX/Zp8G3rVrg3b8608WyCZj+PZaruqUp
-         dKhw==
-X-Forwarded-Encrypted: i=1; AJvYcCXOHpCd/sjRvSCIuVzzmBZvitITxxV79gK0BHCwzZv5FPav5lyZiwTpkn5PTbVaB/boFAi3qzhxq0o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxxJkNkUqFyt2tLih00TyHryUhEyfUyQSeJtXectS+Bw9cMZLR
-	d9UsPvw5EB3xM3kVTn4s5cJKS7lnndjXZ3iavVliNWLFX4/InW+rK6uDPjM3J0U/cSs0rimjDkC
-	2b81FPRA7nDUj7pjGI9pGlOKlcKx3HyRjh7TckQ==
-X-Gm-Gg: ASbGncv82dnix8YnHYi19jX8I0TvuSA6fYtsiECEjksFj6t/+EI5lSdjwbWxs8g3lBB
-	0tfr7aBiSzyrxtPy6vNCrq9GnYXAw25VU
-X-Google-Smtp-Source: AGHT+IEGJdd9IwF7sSUzoqqAWgtWCRY1a0UMhBwb88ErQOHU8BaxnCWHnPMW9+ru+41yFpFYGuJqHhtoLonEK76JtT0=
-X-Received: by 2002:a05:6902:1895:b0:e30:c614:5c3a with SMTP id
- 3f1490d57ef6-e395b869b78mr21357729276.3.1733153046692; Mon, 02 Dec 2024
- 07:24:06 -0800 (PST)
+	s=arc-20240116; t=1733158265; c=relaxed/simple;
+	bh=QKJkgD+6MJkJNvfAvqe3m9p1Tobg8vhFPDwp90WmMSI=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Q3wxia61C7SqAqNikHD3vbA/cm5NTvwRaTYiUfDtEgufEKzIrnYbhP6EAlc6CZITY+sOYuz101TDwjMgGOde5nmLlErOKbVkSodj2iLbwQmyC2UkLKJyvYWj80sSpGwJZbVTWig0HRCop2nuDVpoXr9f7+h5qfb1J0cYdBOGL6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QrYJk03x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A414DC4CED1;
+	Mon,  2 Dec 2024 16:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733158264;
+	bh=QKJkgD+6MJkJNvfAvqe3m9p1Tobg8vhFPDwp90WmMSI=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=QrYJk03xrx9E8lndYRR0dlMYZ5oE9cjloxzF9jOjuinQDagu6Ih6Blv1Rcg649XtX
+	 BEL7caMGzo7MMpMGo/tWWvwJ5NHuKoeTUIo2LUxA95gYWA3URdci/WvjhUO6YtARPs
+	 1AIper14TUkSD/v/kaU4ejMbZKag0SWiUbKeL+bh5amPhhF5QFE4/YjR07rmVt/D7K
+	 O7p24KzAF0AP7qo5H4I5t4HM54h0A9/FiF2vSik3lgMZG6/xTErzjkhG3o2Nsi7rpT
+	 DZ0Ddnzz7t0toikSM5M8fmH6Lw7hEtkFV24XpDlQmNhm14O24owoNymHShEE9sIOms
+	 ZkC9gDMlTEG5g==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20241114205051.3747458-1-andriy.shevchenko@linux.intel.com>
+References: <20241114205051.3747458-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: sc18is602: Switch to generic firmware
+ properties and drop of_match_ptr()
+Message-Id: <173315826335.126887.7469821187723092456.b4-ty@kernel.org>
+Date: Mon, 02 Dec 2024 16:51:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1732030972.git.Ryan.Wanner@microchip.com> <e9e9e4cf0753422706bdc44fe7d20ca3a686ce7a.1732030972.git.Ryan.Wanner@microchip.com>
-In-Reply-To: <e9e9e4cf0753422706bdc44fe7d20ca3a686ce7a.1732030972.git.Ryan.Wanner@microchip.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 2 Dec 2024 16:23:30 +0100
-Message-ID: <CAPDyKFpN-2kowdi_eCtbW1WEdc5OKh7tj60GfbPPBR0Hbpyj5Q@mail.gmail.com>
-Subject: Re: [PATCH 04/15] dt-bindings: mmc: atmel,sama5d2-sdhci: add microchip,sama7d65-sdhci
-To: Ryan.Wanner@microchip.com
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org, 
-	arnd@arndb.de, dharma.b@microchip.com, mihai.sain@microchip.com, 
-	romain.sioen@microchip.com, varshini.rajendran@microchip.com, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-9b746
 
-On Tue, 19 Nov 2024 at 17:42, <Ryan.Wanner@microchip.com> wrote:
->
-> From: Dharma Balasubiramani <dharma.b@microchip.com>
->
-> Add mmc binding documentation for SAMA7D65.
->
-> Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+On Thu, 14 Nov 2024 22:50:51 +0200, Andy Shevchenko wrote:
+> This enables using the driver with other firmware types such as ACPI
+> via PRP0001.
+> 
+> Also part of a general attempt to move drivers over to generic properties
+> to avoid opportunities for cut and paste.
+> 
+> 
+> [...]
 
-Applied for next, thanks!
+Applied to
 
-Kind regards
-Uffe
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-> ---
->  Documentation/devicetree/bindings/mmc/atmel,sama5d2-sdhci.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/atmel,sama5d2-sdhci.yaml b/Documentation/devicetree/bindings/mmc/atmel,sama5d2-sdhci.yaml
-> index 8c8ade88e8fe..ba75623b7778 100644
-> --- a/Documentation/devicetree/bindings/mmc/atmel,sama5d2-sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/atmel,sama5d2-sdhci.yaml
-> @@ -22,6 +22,7 @@ properties:
->        - items:
->            - enum:
->                - microchip,sam9x7-sdhci
-> +              - microchip,sama7d65-sdhci
->                - microchip,sama7g5-sdhci
->            - const: microchip,sam9x60-sdhci
->
-> --
-> 2.43.0
->
->
+[1/1] spi: sc18is602: Switch to generic firmware properties and drop of_match_ptr()
+      commit: 2c55f67c3a71cf57665294a02f258625c1da9385
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
