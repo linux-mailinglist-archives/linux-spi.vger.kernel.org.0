@@ -1,109 +1,128 @@
-Return-Path: <linux-spi+bounces-5892-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5893-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A46429E3525
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 09:24:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C054D9E3B3F
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 14:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2179B372A8
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 08:05:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44B87285414
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 13:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF27190485;
-	Wed,  4 Dec 2024 08:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B81351B85FD;
+	Wed,  4 Dec 2024 13:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KIZjFoY9"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="S7s1XsDe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D426190662
-	for <linux-spi@vger.kernel.org>; Wed,  4 Dec 2024 08:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FE91714B3;
+	Wed,  4 Dec 2024 13:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733299334; cv=none; b=TeWCFozocwKMDJ9F+CD27ryYbLps5B2pflgyaheOb17NpCQ3lX0oWDoRx0aIuwBYF/sfn22FSl1eneZa2zR9XEzOs2fqUOoWacnO1CsPOdRP9ak+lUmmW0/0YkIpQ9h7uSOnI47/uCCHdtbwUgoAfzInA2WL03FLGSL4UFzWYz0=
+	t=1733318866; cv=none; b=gfdUpwcgGXz+sXDYzyWzK99Rqna5sZl86VVGdMZuKaw4Djjf5Lqn6nBs5a/+o7KB2PJ1+YdwpNbelbJv6JDqocdTO9NFxvpHFelX//svTaPW2g+tqdggIbO2BLh9w7rIJrtnlfs6XEPS21+TEmpxAB8WWXEhwwR2aUOQ6J80X+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733299334; c=relaxed/simple;
-	bh=dUK6xy7siYMT5YffM3X1lg5y+TLmLgWLylgHSgZVyj4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OMR86mMso7Z/9oxii3kIYd9W2TvU4OBmvhhFO0d+Nn1M9gy4ym4++rn8zWbzM3ufzzvGSaqWe85iUJUMClbjeGNj4CH50lyzT7x4cKp0ycXo8/aLWLMxLZFCJ5KC9f6C0FGs0CEGBjfuRo40fGQkU9/m9dkcqJ20D4YvncWibKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KIZjFoY9; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733299332; x=1764835332;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dUK6xy7siYMT5YffM3X1lg5y+TLmLgWLylgHSgZVyj4=;
-  b=KIZjFoY91lM3+NmNTWJSD6Ln+LVVG5QGsOEdnujHHE9vvDcuQ2m4YcjC
-   AZcltruDu8WX9DYH7slrdBGqX6aMLyRYhxbh5hQTVyiH0/SC9tt2eN2W/
-   rxOTRbcW1sK+vda1bZrSry2tNpknWkHeSponce8gCP/BoRyRL65Yq5Osw
-   yiiVZJBBIw6l422wsMaTCQDx3iDNGAFubhgQOuM4DmLPNuLohtPpYxmxu
-   xe80Kn6BQWGyCenWCt5QZ338lM2iW3Gxn5GOxcw08a8u1bKmd9NM6i0Un
-   wvwFPV8c7gxP/n2eRsRmanRZumKZ6956avwgv2NfwmciJYdLicdUGtftn
-   A==;
-X-CSE-ConnectionGUID: cYUwo/AeQbWvMA3RNMHSRA==
-X-CSE-MsgGUID: g7fAetpsRJ2FvcXGD7bD2w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="58952728"
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="58952728"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 00:02:11 -0800
-X-CSE-ConnectionGUID: EjUJDVqSS8ChKSGs9AUFTA==
-X-CSE-MsgGUID: 1XbZRRp0RPOyoml/L9Kp8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="94521381"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa008.jf.intel.com with ESMTP; 04 Dec 2024 00:02:10 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id B877027C; Wed, 04 Dec 2024 10:02:08 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Aapo Vienamo <aapo.vienamo@iki.fi>,
-	linux-spi@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] spi: intel: Add Panther Lake SPI controller support
-Date: Wed,  4 Dec 2024 10:02:08 +0200
-Message-ID: <20241204080208.1036537-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1733318866; c=relaxed/simple;
+	bh=sE23B4ttHCwF11SMH/4cQGZLTPJosFh75fu9WJI1yRg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U/RDRAqzKcDCu9ytrIxqNazmBj46Z+ttFrdQ5QEflQ4ViK6s9HVTj5OSe1k1ZSNOJ+5huPd8puNKauLnYGjHB3MXMXvsZ3a/g4ywALadQOlaZUX4tFcTrla9P8gM3e3gns7c7r0ElCfFkmtYrKLdrI9UHZKI/VwbtJ1nHtPAmdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=S7s1XsDe; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1733318845; x=1733923645; i=wahrenst@gmx.net;
+	bh=sE23B4ttHCwF11SMH/4cQGZLTPJosFh75fu9WJI1yRg=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=S7s1XsDeA9AwZId04CoS+4zfCsuHwmpDQUsxAEFF+CDyauoaxLwu3cyFeku+btkr
+	 nSUwCnHHXO7kOaQxZqfEL0eT3n3ySX0uS7lpgW+e6N4P1sGwGVA9rzMgvLbqZWBbR
+	 siw4DqIAsVB5qy4xfq8G99px0uxrdV3aiQCKV3VnJJFtpt1E8LOb/UjyMyhlD6QbP
+	 HY5F4+tJgrNtnh3PDdELp2dnUDH598gGnz7qgKDzgLWJL2blRc98DXLlspw6zJiKm
+	 qEErLTZcD9+sv7iHO5L1cKUp8DQfV6sGfsF8XcfsCt/Pw+YtgcpBbfARobUKc46CI
+	 tJ4rmERt7OR8onrPiA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.106] ([37.4.251.153]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M2O6Y-1tMfxb0lHq-0036dg; Wed, 04
+ Dec 2024 14:27:25 +0100
+Message-ID: <5ab9b62a-6577-4a3f-9dfe-c7362bf725db@gmx.net>
+Date: Wed, 4 Dec 2024 14:27:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] spi-mxs: Fix chipselect glitch
+To: Fabio Estevam <festevam@gmail.com>, Ralf Schlatterbeck <rsc@runtux.com>
+Cc: Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ NXP Linux Team <linux-imx@nxp.com>, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20240202115330.wxkbfmvd76sy3a6a@runtux.com>
+ <20240213170657.puwlx5pjl3odcs2k@runtux.com>
+ <CAOMZO5CD7+E_BBH+oQ8HUdBeRFZxWW7s2uJgS5eaQAW_Fe4CNg@mail.gmail.com>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <CAOMZO5CD7+E_BBH+oQ8HUdBeRFZxWW7s2uJgS5eaQAW_Fe4CNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:G4xJvxn9JxBbFBtOCBgaPWVT/H5beKdM/r033wNOSnEfcHMS4uR
+ kP50qLZwHr/eS++qjjefOovIiAMdSxwRdW7R39dQQcAclLnAEK2A6AXIpxWvfSG5tWJIM45
+ 5DsoOZSUoAnGuog2Klzv8mDYPC3LoLesgHuf52WG+9XY9ajGvQrFT1FRq6gAZLz3bD+33Rl
+ 4Gut2eCbMwAdMEbJBZdZg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:n7ckTBxpn3Y=;meKGvBZSvoTceDyMUxt1Uwb/XKi
+ EfnkEIwv36g25zdscY73nH7gKor1Xdd++wVXwrrbJphgiQHkTLB/dpViCk7rL0WKgegZHl3n3
+ buOUlrbi9zY+oyTKNpma7+PR4OcO8DCO25qpReW3vRqIECTU9JmpAlYSliAu78WI0o/mcCMRK
+ z4bKQdS7cXHc8maddHaiGfvGCCKePGEv9XP2fmjLBAiJCjFJUlezo8IrA32lvXP03UzkyNc3S
+ 0bsvVGgCuWVNXEQXtDHn9mB+2s5sD+pcE0q9UPc2xxz7ZO5X1M5MQ/4PklFynXj90+Tg7KB8c
+ YkCQHWJX7nE2ryUxdmD1+X4xcJ4YJJoldXRdX/jPn08Fv957uyB5Ie9PDpYHyVFF+hN9Iil2u
+ +lrcXgbHUYMAyq+iz1bslZDvQORL29LurfiB0i1q6ZnsUF490H0Fp/WRPc4QaDlCf8QqsLlaG
+ UQzNBzpx3IEezahZpBgcYNyRGrlKrIb7mH+1GIIOGMO4DCqIHG1b0X0u+r4PZ+AkpzA+FtzLm
+ DW4wpF5BQ8UEuUoJMCDjXXza3EDXtjZFeES1EJoxv4IVNSThMn+amekm7KS5SbJetUdznGYUk
+ egl/M0Jmu57HNU7l5DCKZumFTTCWF9at/IRYiXtF70KXc9+mMDf3qf46J1fhks7W+ypBqoYtr
+ lscVVFEvdhPc1D44LLVsogWrUcHg16GSLT0wig8f9CB2hbeM8h8ADuuWS4Q/4dUtVczRqx640
+ KoiGL6+WG8CJkpyXrUoUfGwrTlIXqYpe4uT5oj82UE9Hq1uu75YaPjiLnSBuujAUCdx9SHqjo
+ Fb92h43dQo1fpsMk7HzHLuVUHD/ZbwU+3qBRh2JZuKKTuIj+WUZ7E5v6Dpkwf5mt5S0FC7SiT
+ e3Ep8IyPJOoOYQnzu5OxRB+d2xwr+P/2J6Swdizslf8KW0RTPptvaMIa4QvsP9co2hyRSgpFQ
+ 8wN+kBLhHm1dvKd9TQLNVxTEXFk0um5APrLQQ7NUpo1mPkhyCDHTGYf9WiiqHiHTJjhY+D7rN
+ ihehpC8JfNMM7413lT+32ZeU07xNbqCU7TzCnJE3i54Jb0MECcLdT9+AER2Kjtx+hdZTnFYff
+ 3dV+7L6DCkIEW/jcOdFDtD4wDRjn3q
 
-From: Aapo Vienamo <aapo.vienamo@iki.fi>
+Hi,
 
-The Panther Lake SPI controllers are compatible with the Cannon Lake
-controllers. Add support for following SPI controller device IDs:
- - H-series: 0xe323
- - P-series: 0xe423
- - U-series: 0xe423
+Am 13.02.24 um 18:22 schrieb Fabio Estevam:
+> Hi Ralf,
+>
+> On Tue, Feb 13, 2024 at 2:07=E2=80=AFPM Ralf Schlatterbeck <rsc@runtux.c=
+om> wrote:
+>> On Fri, Feb 02, 2024 at 12:53:30PM +0100, Ralf Schlatterbeck wrote:
+>>> There was a change in the mxs-dma engine that uses a new custom flag.
+>>> The change was not applied to the mxs spi driver.
+>>> This results in chipselect being deasserted too early.
+>>> This fixes the chipselect problem by using the new flag in the mxs-spi
+>>> driver.
+>>>
+>>> Fixes: ceeeb99cd821 ("dmaengine: mxs: rename custom flag")
+>>> Signed-off-by: Ralf Schlatterbeck <rsc@runtux.com>
+>>> ---
+>>> For oscilloscope screenshots and a verbose explanation see my blog pos=
+t
+>>> at https://blog.runtux.com/posts/2024/02/01/
+> I suggest putting the link to your detailed explanation into the
+> commit log as this is useful information.
+>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+I noticed that this patch hasn't applied to stable yet.
 
-Signed-off-by: Aapo Vienamo <aapo.vienamo@iki.fi>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/spi/spi-intel-pci.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index c3b54928143d..4d9ffec900bb 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -86,6 +86,8 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0xa823), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0xe323), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0xe423), (unsigned long)&cnl_info },
- 	{ },
- };
- MODULE_DEVICE_TABLE(pci, intel_spi_pci_ids);
--- 
-2.45.2
-
+Are there reason for not doing this or is it just because the patch
+missed the Cc: stable@vger.kernel.org ?
 
