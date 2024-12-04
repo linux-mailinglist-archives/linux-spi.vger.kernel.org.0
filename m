@@ -1,100 +1,80 @@
-Return-Path: <linux-spi+bounces-5909-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5910-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C86C99E3F8A
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 17:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A329E3FAD
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 17:30:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 837B628195F
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 16:25:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5B9C282350
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 16:30:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF0B20C462;
-	Wed,  4 Dec 2024 16:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0095C23BB;
+	Wed,  4 Dec 2024 16:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QoQHSMtd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwd2JMGI"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04E319993D;
-	Wed,  4 Dec 2024 16:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B9420CCDA
+	for <linux-spi@vger.kernel.org>; Wed,  4 Dec 2024 16:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733329520; cv=none; b=FfpfGpIKAqUXR62kmPIw1HYkFT5XcEIrmE8f+6ntLV9yaWxAR1jz5TjO+Lqsy+OwuzLB1UUDLB6RWySx8g/vL8DdhoVGRTysbkV9WM2DWoYXnebfxwJf00Ya7TbERwvodfY8TusXXnsIkliG5BhrTwTcBLXFRDLoDHBLV9gQENY=
+	t=1733329816; cv=none; b=mZO1Wwh3nPtbxcxedr5prNCaBunCj+65v5TDJlhGlzBuvAO5YibZ7MeRfr4yXJf6sHEqPi6GNjCAYRPN1aVOoW7ZPj2XSBMtM6o7FH0QJca7hemgN4slkH3ktczCgtE3UCql+4NEvp+BlBywn8U3dul6gNTtpPzptGXusf+T8WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733329520; c=relaxed/simple;
-	bh=Nc+FOIpt7TbIStp6l8xTivwnrh0gB0h1NmUqHHiH7nA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Gtryd7prF5L8DgWOKOHt9g6wlK+zTKRNZntMA3dnJ768RBGi7HKj25BZF+RAj/B1hJSNF6VZOIDqo6qs9VPF5vfJIkqYNlnv4XykMhVJqsmuy4DTMaBm+EyAeU3wS2Dyql0HTpvwK2Gj41bRHfmss1NBtDcWVDVwn3IjWHExbjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QoQHSMtd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25188C4CECD;
-	Wed,  4 Dec 2024 16:25:18 +0000 (UTC)
+	s=arc-20240116; t=1733329816; c=relaxed/simple;
+	bh=nxGKPgFbQNzar4hM0st7abtkWWyDOw8/f9/C5DR7nmM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=BQNWFfjXD20jXPp68YrvQycN3pyVyd6IgB/+4DI7fnC7HL9uV1nncTe8pywSXbiSa5SBQNqT3q5oUrLARnpY5kpOXZ6ZKuafXJxN51npn225SNptPT2VxeWIn/FyWqQOBBxjnsSqfeE9bpPwQS+5x99edMvFDd/iCuDfP3sKXVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwd2JMGI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E089C4CED1;
+	Wed,  4 Dec 2024 16:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733329520;
-	bh=Nc+FOIpt7TbIStp6l8xTivwnrh0gB0h1NmUqHHiH7nA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=QoQHSMtd4xRonXrPYqRL5VXJnmIHOEMFLAjKen/RG11dUzDEesTySsjhWqTTjzqnZ
-	 MAKhvpaB9jZCECSo4t7d+Y0PvsofWNp6HV0LXi31HY1e8g7pAJ6V3F9GU/eCOmyEud
-	 DbLP/nBZh5Z07dtyGnM0xXKHJg9nwgzYxsPmnjLR+VYyG6TpI3w1WWaXb5FzgV5Cwc
-	 5lTFhVNFjQQ7JgihP759ATsJEtYFrBCj4AY4a7/ZGuwuhq+MQx1t01UDlmcqFDBWvs
-	 I6VQBGeeEeiGYCM01I+7vKkhjdk/kh+D/o6wU9l8QfxMikyQgcGyjMKY7KVBJIEfJ0
-	 ObcI5NywDCjEQ==
-From: Mark Brown <broonie@kernel.org>
-To: Jon Lin <jon.lin@rock-chips.com>
-Cc: linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
- heiko@sntech.de, linux-arm-kernel@lists.infradead.org, 
- linux-spi@vger.kernel.org
-In-Reply-To: <20241203013513.2628810-1-jon.lin@rock-chips.com>
-References: <20241203013513.2628810-1-jon.lin@rock-chips.com>
-Subject: Re: [PATCH] spi: rockchip-sfc: Optimize the judgment mechanism
- completed by the controller
-Message-Id: <173332951887.13421.11537303801053149682.b4-ty@kernel.org>
-Date: Wed, 04 Dec 2024 16:25:18 +0000
+	s=k20201202; t=1733329816;
+	bh=nxGKPgFbQNzar4hM0st7abtkWWyDOw8/f9/C5DR7nmM=;
+	h=Subject:From:Date:To:From;
+	b=uwd2JMGI2W/5bJd36JeXurdD33wmlRfPZgxRpg+O0xaxd8paTXgUXPIwB/v2l8knL
+	 1J2FtpZXqfqbtemVXoCdyPV3lYLU4FHLVkonSw3Sd/MVm8S1c/izNT0wpITHMIM0fa
+	 xXYyPhBL6yuQr90AWJPNqdb7Uk7WYWeZdZiA1goCUCACegMgSdl1PaCGansfAuQd+b
+	 qxmrA9hESObRCwIuJR3s91XZ3sXhwp02T0iX6VgNu/TKCukb+dbqor2N7D7vllkTZW
+	 cBAamC3t316atURLISuC1JGAXtr0Yrh/hz3jgHj3mQdrq0zBzh2qyYtPrDP7Q8T3Q8
+	 knKGact0XXIhw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFFEF3806658;
+	Wed,  4 Dec 2024 16:30:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-9b746
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173332983044.1253401.859067792588647664.git-patchwork-summary@kernel.org>
+Date: Wed, 04 Dec 2024 16:30:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 03 Dec 2024 09:35:13 +0800, Jon Lin wrote:
-> There is very little data left in fifo, and the controller will
-> complete the transmission in a short period of time, so
-> use readl_poll_timeout() for busy wait 10us to accelerate response.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: rockchip-sfc: Optimize the judgment mechanism completed by the controller
+  Submitter: Jon Lin <jon.lin@rock-chips.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=913957
+  Lore link: https://lore.kernel.org/r/20241203013513.2628810-1-jon.lin@rock-chips.com
 
-Thanks!
 
-[1/1] spi: rockchip-sfc: Optimize the judgment mechanism completed by the controller
-      commit: 577f1cf76ceedb5fbdc9aca4f712b21864ac15ee
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
