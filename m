@@ -1,71 +1,73 @@
-Return-Path: <linux-spi+bounces-5891-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5892-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BECEF9E3395
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 07:36:38 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A7EA1647EA
-	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 06:36:35 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C402D187FF4;
-	Wed,  4 Dec 2024 06:36:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cs89oZcu"
-X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A46429E3525
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 09:24:41 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E8C18755C;
-	Wed,  4 Dec 2024 06:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2179B372A8
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Dec 2024 08:05:33 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF27190485;
+	Wed,  4 Dec 2024 08:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KIZjFoY9"
+X-Original-To: linux-spi@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D426190662
+	for <linux-spi@vger.kernel.org>; Wed,  4 Dec 2024 08:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733294194; cv=none; b=g300pRjsx2v3hDyCcClNdMCcaAlEt9KXuSpOJTIXXUFbZXaFpkOBFBEsTq5I3sIYQRHzB+QAb/QYJYeGQ2t+9jcJKuhgIF4ZqjcgvoEzgAY5Zk3syw0+qol0U/FSnqciWnNRxIS7GQNpro9UhFMHsW4gBn/4uaMWaYaUuImzppU=
+	t=1733299334; cv=none; b=TeWCFozocwKMDJ9F+CD27ryYbLps5B2pflgyaheOb17NpCQ3lX0oWDoRx0aIuwBYF/sfn22FSl1eneZa2zR9XEzOs2fqUOoWacnO1CsPOdRP9ak+lUmmW0/0YkIpQ9h7uSOnI47/uCCHdtbwUgoAfzInA2WL03FLGSL4UFzWYz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733294194; c=relaxed/simple;
-	bh=hBC1ogtaYzDAWZVOP6FDDScazg25qr8En+rrAKuWOms=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=uBRvGbq1Q67cNfqyd4MqLj3ix1AfSI/5KNPgq1PsqZ5MfCYvVUw5jJxHAA4vEA+BxcAaI1fZTLpxOrPE7/ahbWtMo8aQwGnX3A5ljN2rfFw+M1ufx24IILerY8FZY8LgLcdl5pMv83u1ECnG4q9vEb4BjaoyLPgCKgOw2mF8C8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cs89oZcu; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733299334; c=relaxed/simple;
+	bh=dUK6xy7siYMT5YffM3X1lg5y+TLmLgWLylgHSgZVyj4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OMR86mMso7Z/9oxii3kIYd9W2TvU4OBmvhhFO0d+Nn1M9gy4ym4++rn8zWbzM3ufzzvGSaqWe85iUJUMClbjeGNj4CH50lyzT7x4cKp0ycXo8/aLWLMxLZFCJ5KC9f6C0FGs0CEGBjfuRo40fGQkU9/m9dkcqJ20D4YvncWibKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KIZjFoY9; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733294193; x=1764830193;
-  h=from:to:subject:date:message-id:mime-version:
+  t=1733299332; x=1764835332;
+  h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=hBC1ogtaYzDAWZVOP6FDDScazg25qr8En+rrAKuWOms=;
-  b=cs89oZcujKyTa2dPLX5/HLAjnMRtA0SN17IVLQ11378oserOTiiO0mf2
-   vlXtT2VtgsyhlgaeO6GaLpBcEhaqxbHKPedrYU6xxYth1LMnTRf8StevL
-   YTNL0HnwNvFXKDHXe0UdFF39yxbyXQjZAeayeDkXneyFETKYYmxnNJtRJ
-   Fiye3OV84xRDUlj4BhReEh9tj7OPJR42+8mVANqP+pGHcI+Kuncvf0BJE
-   lmHsfCJx53jNxLHw4vPK09co5lRTJ+F63yjc2PezT5IhFD8Ws+0A3i2Yb
-   oQwBIzqQcexvp5GjgKifMtXhkB4sK/+8/hgtM8kpOeUk0Uk5uIxoGurEZ
-   g==;
-X-CSE-ConnectionGUID: PeTYC4AlTqqQIDwn3ca0Pg==
-X-CSE-MsgGUID: OOzuKFtfQxqdLIq31zUdkg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="33674898"
+  bh=dUK6xy7siYMT5YffM3X1lg5y+TLmLgWLylgHSgZVyj4=;
+  b=KIZjFoY91lM3+NmNTWJSD6Ln+LVVG5QGsOEdnujHHE9vvDcuQ2m4YcjC
+   AZcltruDu8WX9DYH7slrdBGqX6aMLyRYhxbh5hQTVyiH0/SC9tt2eN2W/
+   rxOTRbcW1sK+vda1bZrSry2tNpknWkHeSponce8gCP/BoRyRL65Yq5Osw
+   yiiVZJBBIw6l422wsMaTCQDx3iDNGAFubhgQOuM4DmLPNuLohtPpYxmxu
+   xe80Kn6BQWGyCenWCt5QZ338lM2iW3Gxn5GOxcw08a8u1bKmd9NM6i0Un
+   wvwFPV8c7gxP/n2eRsRmanRZumKZ6956avwgv2NfwmciJYdLicdUGtftn
+   A==;
+X-CSE-ConnectionGUID: cYUwo/AeQbWvMA3RNMHSRA==
+X-CSE-MsgGUID: g7fAetpsRJ2FvcXGD7bD2w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="58952728"
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="33674898"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 22:36:32 -0800
-X-CSE-ConnectionGUID: MyNRSBhKQXeeUpObCmz7XA==
-X-CSE-MsgGUID: 1CezbX9vT0qeUXLnxYkAHQ==
+   d="scan'208";a="58952728"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 00:02:11 -0800
+X-CSE-ConnectionGUID: EjUJDVqSS8ChKSGs9AUFTA==
+X-CSE-MsgGUID: 1XbZRRp0RPOyoml/L9Kp8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="93516043"
-Received: from pg15swiplab1181.png.altera.com ([10.244.232.167])
-  by orviesa010.jf.intel.com with ESMTP; 03 Dec 2024 22:36:31 -0800
-From: niravkumar.l.rabara@intel.com
-To: Mark Brown <broonie@kernel.org>,
-	niravkumar.l.rabara@intel.com,
+   d="scan'208";a="94521381"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 04 Dec 2024 00:02:10 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id B877027C; Wed, 04 Dec 2024 10:02:08 +0200 (EET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Aapo Vienamo <aapo.vienamo@iki.fi>,
 	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: spi-cadence-qspi: Disable STIG mode for Altera SoCFPGA.
-Date: Wed,  4 Dec 2024 14:33:38 +0800
-Message-Id: <20241204063338.296959-1-niravkumar.l.rabara@intel.com>
-X-Mailer: git-send-email 2.25.1
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH] spi: intel: Add Panther Lake SPI controller support
+Date: Wed,  4 Dec 2024 10:02:08 +0200
+Message-ID: <20241204080208.1036537-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -74,68 +76,34 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+From: Aapo Vienamo <aapo.vienamo@iki.fi>
 
-STIG mode is enabled by default for less than 8 bytes data read/write.
-STIG mode doesn't work with Altera SocFPGA platform due hardware
-limitation.
-Add a quirks to disable STIG mode for Altera SoCFPGA platform.
+The Panther Lake SPI controllers are compatible with the Cannon Lake
+controllers. Add support for following SPI controller device IDs:
+ - H-series: 0xe323
+ - P-series: 0xe423
+ - U-series: 0xe423
 
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Signed-off-by: Aapo Vienamo <aapo.vienamo@iki.fi>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/spi/spi-intel-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 0b45b7b2b3ab..a031ecb358e0 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -43,6 +43,7 @@ static_assert(CQSPI_MAX_CHIPSELECT <= SPI_CS_CNT_MAX);
- #define CQSPI_SLOW_SRAM		BIT(4)
- #define CQSPI_NEEDS_APB_AHB_HAZARD_WAR	BIT(5)
- #define CQSPI_RD_NO_IRQ			BIT(6)
-+#define CQSPI_DISABLE_STIG_MODE		BIT(7)
- 
- /* Capabilities */
- #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -103,6 +104,7 @@ struct cqspi_st {
- 	bool			apb_ahb_hazard;
- 
- 	bool			is_jh7110; /* Flag for StarFive JH7110 SoC */
-+	bool			disable_stig_mode;
- 
- 	const struct cqspi_driver_platdata *ddata;
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index c3b54928143d..4d9ffec900bb 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -86,6 +86,8 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0xa324), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa3a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0xa823), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0xe323), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0xe423), (unsigned long)&cnl_info },
+ 	{ },
  };
-@@ -1416,7 +1418,8 @@ static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
- 	 * reads, prefer STIG mode for such small reads.
- 	 */
- 		if (!op->addr.nbytes ||
--		    op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
-+		    (op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX &&
-+		     !cqspi->disable_stig_mode))
- 			return cqspi_command_read(f_pdata, op);
- 
- 		return cqspi_read(f_pdata, op);
-@@ -1880,6 +1883,8 @@ static int cqspi_probe(struct platform_device *pdev)
- 			if (ret)
- 				goto probe_reset_failed;
- 		}
-+		if (ddata->quirks & CQSPI_DISABLE_STIG_MODE)
-+			cqspi->disable_stig_mode = true;
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
- 					    "xlnx,versal-ospi-1.0")) {
-@@ -2043,7 +2048,8 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
- static const struct cqspi_driver_platdata socfpga_qspi = {
- 	.quirks = CQSPI_DISABLE_DAC_MODE
- 			| CQSPI_NO_SUPPORT_WR_COMPLETION
--			| CQSPI_SLOW_SRAM,
-+			| CQSPI_SLOW_SRAM
-+			| CQSPI_DISABLE_STIG_MODE,
- };
- 
- static const struct cqspi_driver_platdata versal_ospi = {
+ MODULE_DEVICE_TABLE(pci, intel_spi_pci_ids);
 -- 
-2.25.1
+2.45.2
 
 
