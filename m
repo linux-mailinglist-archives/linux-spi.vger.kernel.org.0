@@ -1,156 +1,121 @@
-Return-Path: <linux-spi+bounces-5918-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5919-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685619E4BCC
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Dec 2024 02:24:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 199E39E4DEC
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Dec 2024 08:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2441928199A
-	for <lists+linux-spi@lfdr.de>; Thu,  5 Dec 2024 01:24:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C988D28225E
+	for <lists+linux-spi@lfdr.de>; Thu,  5 Dec 2024 07:05:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A6814A4D4;
-	Thu,  5 Dec 2024 01:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A3119D8B2;
+	Thu,  5 Dec 2024 07:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YFmHgBTn"
+	dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b="SrjA26UE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AA584E0A;
-	Thu,  5 Dec 2024 01:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE3019340F
+	for <linux-spi@vger.kernel.org>; Thu,  5 Dec 2024 07:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733361852; cv=none; b=Dv14q3VuSQrY+WTTD51D3K7YuIxSROSwpPhQalcD407FiHRvf7M2YdlepIhDmAlCTqygAANtABedwR5ojI8tvOy9UTCC2uiutJgo16ziQ9Yi728Z3dAuQUO4jQdBbc2rc/z1b5fi1m4XxiHuGXfBW8dhC0WOu0xVQ51DNHBbYlQ=
+	t=1733382299; cv=none; b=qkPHnl2dz+eQ3enrEkb6652ehL/I5hEftuv9RjaHL9xss3FZgimtQlrVGBX2HQvsyOyPO3WAzzbW38Lz0uQKA0GHXDMuZldLGzbKkO15EW/lKfk8OXdnG3kQnvSuTq2KQgP5CujC463kULy6jfSbO8DtJytf4dZfkkFUYeO8hU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733361852; c=relaxed/simple;
-	bh=vXMAX9oMuT/ZpTbfNgZ3t32jSx6wr3ZGizmW3Wqmktg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B45qYakJwEqKCUbUmJqTOHXvelEnvPAX/NO5h9AjumWAtHnOmfwzOdn5z9zF1e3JsoGZ9ZeLJeht7WPZt0K7napDKL1LoHIps0O/woutUGloZvTO1t/6v0xpPKXWWITbyPGLL3IAVCWBoItp6TmwuvqL84k9oIkrsj3hn9oslyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YFmHgBTn; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733361851; x=1764897851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vXMAX9oMuT/ZpTbfNgZ3t32jSx6wr3ZGizmW3Wqmktg=;
-  b=YFmHgBTndUz7FYIKsAjf731pbzLN1Z2p/1KR6klmfww009zsalzygCoh
-   bpyVa2ibVZo2VrIAqb3vi13IM7eULqu1Fns80eeiIez3g1/yixx3FpQEs
-   acDoJSYCh3ZdXBgKyZOxs8nYb3smWQx8MalzepQj18UK4YsoCulQQP6ON
-   YMqsQU5atc+H3cMOtKKY7AteRpb4//FQCHlZM/EFkf8SAsVGbQmZ2ytk/
-   C6qdf9h8vPnRdYpp5qRSqXc3tSoEeAQFr5TUQd54dZDeMDoM8EtKkZAJn
-   7X+W9eYZjUlN9afOZ/8Lnu0q7QJB6am6izOMJ8mfcONMAAMm2zdEV7eTG
-   A==;
-X-CSE-ConnectionGUID: +6JAY/tOSI+F3v7myNhoGA==
-X-CSE-MsgGUID: Nd1lci/CSNW93+Mad4YyHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="59061270"
-X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="59061270"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 17:24:11 -0800
-X-CSE-ConnectionGUID: yEnKRKbeSGeTdB0cPbgXxQ==
-X-CSE-MsgGUID: gdqRvoNBQ7OoGZn2WA8IBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,209,1728975600"; 
-   d="scan'208";a="94125496"
-Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 04 Dec 2024 17:24:05 -0800
-Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJ0b5-0003eD-0K;
-	Thu, 05 Dec 2024 01:24:03 +0000
-Date: Thu, 5 Dec 2024 09:23:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
-	andersson@kernel.org, konradybcio@kernel.org,
-	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, =quic_msavaliy@quicinc.com,
-	quic_anupkulk@quicinc.com,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE
- Firmware via Linux subsystem
-Message-ID: <202412050806.0jxlVq68-lkp@intel.com>
-References: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+	s=arc-20240116; t=1733382299; c=relaxed/simple;
+	bh=m/f97ERBBpFa/UpLrOvmJtyOnLOGKKbi6oDbmxStgPk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DYE8/0expMetXw/YrF4BI3HNJQ/gazc0vYWJKguxs4gTx3szn93d7Fs42sSKKLTk9+CxNplazNwVqyOctJKgYPv3HtjHB7Ws6FiBbcr+k5Hv6BlQIFOelGqZDEQmWRw1qgMgU3ejkE1S12loVQbyhV2DdVFBglxT4eUIbUg1Ugg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com; spf=pass smtp.mailfrom=mvista.com; dkim=pass (1024-bit key) header.d=mvista.com header.i=@mvista.com header.b=SrjA26UE; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mvista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mvista.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-215a7e487bfso4516435ad.2
+        for <linux-spi@vger.kernel.org>; Wed, 04 Dec 2024 23:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mvista.com; s=google; t=1733382296; x=1733987096; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7j/UgtFrcoMY8m73es7ngDsr08IcsBqItBi0rKEaWA=;
+        b=SrjA26UEEzN7JGlWw5gmzRji3XMcGWY334DY3YgW39po/YevXPFBXDJtoJAT/aJmXd
+         wycS1COlCD7nGA0zBBMw6yEWlOAiHSGnlyVkfTGIVFsqjYhlsc1avPE7CblAyV6UEbIw
+         AjlW2TR5V+7V8/fC4F+EHip9DNjMxHS09I2Go=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733382296; x=1733987096;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7j/UgtFrcoMY8m73es7ngDsr08IcsBqItBi0rKEaWA=;
+        b=Q8BMkz51sN2YvuL6+/8K/jKZHl+6oRcbGDoKM8mBHaxugA5fHAb1ViF51MukU0Ul0o
+         m/Ak2QvkHd0pYa2iNxlt8/KB1qKYLeewzvpcF0/ZsT9LLCU7GDB8GERF//D8CGx2U/cR
+         yWWBc9JEXCenzirGKa+HiyJQ0iCD23HRj2h95Vp5MiT6W3LTpbuJRXiHm35Y5bFB8ZzN
+         nPtvnQWuTIwCu8j9C8zqP/X0RT5Wb9FkTON5CMmyXC8j5G3/Vc24zIHSfL4JdSmMQ9oL
+         a8i0snNDzZK2s1xWUQOFGecDeAFiBMKz5oL5bD9fSevZRJGxcScJCbi07opyFo+YjpSe
+         UzWA==
+X-Gm-Message-State: AOJu0YwvDVU2ZIvHpoRUrk1TVND/eLCQpelmIwrCUdAssi6CNihOHR4u
+	MQsAULIInvGONgpM9kEbI7yZdgjUHYU90WZJOVdxbmFqNVzJ2kcfK9qVtrNhHaM=
+X-Gm-Gg: ASbGncsg5tuhjJsN1ZQlsxCQGriUIw4dacxJGP0bNDZ/3u0Qfc5DdPdPj64zzvyatvG
+	2b21MEk0qUn+dlu9EM/cqvZpd3ixXUupZRFDwW3xpsflW0rm1D3mh8xKpEhmsFQ3XP+FRWla8JQ
+	lBXvrR4aSpAs06+7p7yt6Jm0EyKj7al1l2+h/98VFs1+tp8DISp2gNz/Keno9BHDooIfHg0kmzi
+	oQapdfTjiplXuqdhLWnYHOnVOmHa6NVLc0MIed17jE3NZCd31RKoAOXlH8ZMA==
+X-Google-Smtp-Source: AGHT+IHKQ2i58trsh6LYFt/mJ/5n7Fwldry0srZBO/tlpGmiCU2xAa7w9UmZh3pU7B5cm7H3BIQ8pA==
+X-Received: by 2002:a17:903:41c8:b0:215:f0c6:4dc2 with SMTP id d9443c01a7336-215f0c650cemr42892755ad.34.1733382296304;
+        Wed, 04 Dec 2024 23:04:56 -0800 (PST)
+Received: from MVIN00023.mvista.com ([182.74.28.237])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8f27189sm6099975ad.237.2024.12.04.23.04.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2024 23:04:55 -0800 (PST)
+From: psiddaiah@mvista.com
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	cminyard@mvista.com,
+	Purushothama Siddaiah <psiddaiah@mvista.com>
+Subject: [PATCH] spi: omap2-mcspi: Fix the IS_ERR() bug for devm_clk_get_optional_enabled()
+Date: Thu,  5 Dec 2024 12:34:26 +0530
+Message-ID: <20241205070426.1861048-1-psiddaiah@mvista.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241204150326.1470749-5-quic_vdadhani@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Viken,
+From: Purushothama Siddaiah <psiddaiah@mvista.com>
 
-kernel test robot noticed the following build warnings:
+The devm_clk_get_optional_enabled() function returns error
+pointers(PTR_ERR()). So use IS_ERR() to check it.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.13-rc1 next-20241204]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Verified on K3-J7200 EVM board, without clock node mentioned
+in the device tree.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-i2c-qcom-i2c-geni-Document-DT-properties-for-QUP-firmware-loading/20241204-230736
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20241204150326.1470749-5-quic_vdadhani%40quicinc.com
-patch subject: [PATCH v1 4/7] soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux subsystem
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20241205/202412050806.0jxlVq68-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241205/202412050806.0jxlVq68-lkp@intel.com/reproduce)
+Signed-off-by: Purushothama Siddaiah <psiddaiah@mvista.com>
+Reviewed-by: Corey Minyard <cminyard@mvista.com>
+---
+ drivers/spi/spi-omap2-mcspi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412050806.0jxlVq68-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/soc/qcom/qcom-geni-se.c:19:
->> include/linux/soc/qcom/qup-fw-load.h:148:9: warning: "out_be32" redefined
-     148 | #define out_be32(a, v) writel_relaxed(v, a)
-         |         ^~~~~~~~
-   In file included from arch/m68k/include/asm/io_mm.h:25,
-                    from arch/m68k/include/asm/io.h:8,
-                    from include/linux/scatterlist.h:9,
-                    from include/linux/dma-mapping.h:8,
-                    from drivers/soc/qcom/qcom-geni-se.c:11:
-   arch/m68k/include/asm/raw_io.h:32:9: note: this is the location of the previous definition
-      32 | #define out_be32(addr,l) (void)((*(__force volatile u32 *) (unsigned long)(addr)) = (l))
-         |         ^~~~~~~~
->> include/linux/soc/qcom/qup-fw-load.h:149:9: warning: "in_be32" redefined
-     149 | #define in_be32(a) readl_relaxed(a)
-         |         ^~~~~~~
-   arch/m68k/include/asm/raw_io.h:23:9: note: this is the location of the previous definition
-      23 | #define in_be32(addr) \
-         |         ^~~~~~~
-   drivers/soc/qcom/qcom-geni-se.c: In function 'read_elf':
-   drivers/soc/qcom/qcom-geni-se.c:975:23: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     975 |                 *phdr = &phdrs[i];
-         |                       ^
-   drivers/soc/qcom/qcom-geni-se.c: At top level:
-   drivers/soc/qcom/qcom-geni-se.c:1268:5: warning: no previous prototype for 'qup_fw_load' [-Wmissing-prototypes]
-    1268 | int qup_fw_load(struct qup_se_rsc *rsc)
-         |     ^~~~~~~~~~~
-
-
-vim +/out_be32 +148 include/linux/soc/qcom/qup-fw-load.h
-
-   147	
- > 148	#define out_be32(a, v) writel_relaxed(v, a)
- > 149	#define in_be32(a) readl_relaxed(a)
-   150	
-
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index e2400a067a95..add6247d3481 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -1561,10 +1561,10 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	mcspi->ref_clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
+-	if (mcspi->ref_clk)
+-		mcspi->ref_clk_hz = clk_get_rate(mcspi->ref_clk);
+-	else
++	if (IS_ERR(mcspi->ref_clk))
+ 		mcspi->ref_clk_hz = OMAP2_MCSPI_MAX_FREQ;
++	else
++		mcspi->ref_clk_hz = clk_get_rate(mcspi->ref_clk);
+ 	ctlr->max_speed_hz = mcspi->ref_clk_hz;
+ 	ctlr->min_speed_hz = mcspi->ref_clk_hz >> 15;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
 
