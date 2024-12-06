@@ -1,34 +1,34 @@
-Return-Path: <linux-spi+bounces-5929-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5930-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6CB9E796E
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 21:01:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9E609E796C
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 21:01:32 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B34A0162EB9
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 20:01:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 662A32847D9
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 20:01:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBD3204563;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B40B20457D;
 	Fri,  6 Dec 2024 20:01:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="xshPHlfX"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ssq+rfV1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BDF41C54BA;
-	Fri,  6 Dec 2024 20:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D7A81D95B3;
+	Fri,  6 Dec 2024 20:01:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733515277; cv=none; b=Nr3FNbB4wwGK1TUNUXBLX+R3HkmmhwdNPKDZ3TzbKCYGSpyMffvDalEEqg56reKg46PLiHaT3ZpJgCT8sept7aIlBpbHjpRYFd5XPJhV7xto7/aS4fERWDzMlH0btcsNTovkUZCfn9JjZnxjLInrvYEtzS7tySaZt4BKGxkhvIg=
+	t=1733515277; cv=none; b=psnmaCRIKAH79N8+BfQQPwyLtLLqd5hpFgq/6W5vTCZcn4Fvnvne7W7c7hB4R9IPc3HFn65fy3FDDNcmbzMyxZvaGj3FPdwF6wgas2V29Z2GFuH1y+kIgfEdB7fXa616tvHHXaMnE3aSdTKkTSJh2R7In2GVcnU4ceSQLcRjnss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733515277; c=relaxed/simple;
-	bh=h8r9pGDF0wzJx+5ny3vfVXThrQSJXbj8ubP2ksqTc+8=;
+	bh=VAdJol7PmMF7V4YKfhk/ENIziIKjhdmKECb1lLmge6A=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mMW2otWAb74J8393pttDagygvlOVtEfZuDRwaJBzkiUioP/2Y9bifLqWPKJ1GSAWThjY9sujt+VHTnKe5uoMEG/oK35EQJbbe8Jp2Yz5pNUPB3Y2uPxM1l0PPKw2sGt85r1vQhTdtZYYgz+pYpla4weVksfuRgsP6iozb96Gmpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=xshPHlfX; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=mAPpqtRNKlEzlYaOJyRXGulfmBNJJKX44uKyiz2KtEGPy/y+CLcTmSG8bH9XWNCSBicA9domHVxVao4QI4TKNMg+OAS05vHds+/SWU8RD5bqckIgK3lViZTY3HhAxSZWfsw/+oo5iEiG1ejMGZGGnLFGzWxTLHK0tVDe0x6lWRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ssq+rfV1; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,18 +36,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1733515275; x=1765051275;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=h8r9pGDF0wzJx+5ny3vfVXThrQSJXbj8ubP2ksqTc+8=;
-  b=xshPHlfXdHMvkp0eglaSAnMIu3YBpy2GlHqaKRTHeedI088n5f364IBi
-   HwH/lXW9mAQplAxJ7DBGzuCkBcOCsmuHkjca+oopLI+n5xyWSR0zer9RW
-   +67tK/uWvBwtSjZslHHiLo1gseioXeKWiW1l6Ba377Xmt2G6MtN0R9akt
-   GDw+sGZF0AV2WR0/cN7LW3952ljK0g6Ir05abyBc4/oJNvPeHdhzsPRnh
-   zHsW5/SzeN77pwlwNBq6KuObDlrdlvK1jwKwYf5V8+6jd24BuZlOtP15v
-   cnaCD3azFqvOljDOUKQANsp8gKC+ParJs4bbxl9lV31Rql2FuvsjQuP4M
+  bh=VAdJol7PmMF7V4YKfhk/ENIziIKjhdmKECb1lLmge6A=;
+  b=ssq+rfV1O3G4BWKY2Cl/oR7l+fMz0/4tmQNQyXX4aNBuj8gmewts9S31
+   lBpbrC4edQK+hpjrZpGl50k8Z3e+Kb4zeaz2HEQu1pEIBrY/oEh23+Pwf
+   PW3MNh36vLjNOWp7PXracj38cONfq6EN23721P3tpI+zpj9LAam6OJ9m+
+   imfw0C5Z8eyOWaOQoJ3bChEJJtlt11/J5UqZZer6990ex6Ww0nfdgzF8m
+   5V5UDpCn1flsUVxwKVXcwTUPChwbcg5cbnkyGYpKEzHtXn9rTLGIKrEig
+   AlcMfM2MktOCBxkQI/pTQQsJr/1WmX2MPrIrJGcMKYCfNlxY1KmjenPXE
    w==;
 X-CSE-ConnectionGUID: 9plLhrxgQXuYZUyQ8wJyMg==
-X-CSE-MsgGUID: GKdtANrPRu6SvYOGXwuSGg==
+X-CSE-MsgGUID: BQgkJaanTKeNcSzhvblKqw==
 X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="34926406"
+   d="scan'208";a="34926407"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2024 13:01:12 -0700
@@ -68,10 +68,10 @@ CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
 	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
 	<linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-	<linux-serial@vger.kernel.org>
-Subject: [PATCH v3 05/13] dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
-Date: Fri, 6 Dec 2024 12:59:50 -0700
-Message-ID: <b41307089b72fd92f8e2d314e4750194df9c888a.1733505542.git.Ryan.Wanner@microchip.com>
+	<linux-serial@vger.kernel.org>, Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 06/13] dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
+Date: Fri, 6 Dec 2024 12:59:51 -0700
+Message-ID: <b7a8a22a571f6fc2be56a25f26757f37fa8d2bb3.1733505542.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1733505542.git.Ryan.Wanner@microchip.com>
 References: <cover.1733505542.git.Ryan.Wanner@microchip.com>
@@ -86,26 +86,27 @@ Content-Type: text/plain
 
 From: Dharma Balasubiramani <dharma.b@microchip.com>
 
-Add pinctrl bindings for microchip sama7d65 SoC.
+Add bindings for SAMA7D65's slow clock controller.
 
 Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- .../devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt      | 1 +
+ .../devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml         | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-index 774c3c269c40..a7d7d2eaf10f 100644
---- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-+++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-@@ -6,6 +6,7 @@ configure it.
- Required properties:
- - compatible:
- 	"atmel,sama5d2-pinctrl"
-+	"microchip,sama7d65-pinctrl"
- 	"microchip,sama7g5-pinctrl"
- - reg: base address and length of the PIO controller.
- - interrupts: interrupt outputs from the controller, one for each bank.
+diff --git a/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml b/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
+index c2283cd07f05..d4cf8ae2961e 100644
+--- a/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
++++ b/Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
+@@ -20,6 +20,7 @@ properties:
+       - items:
+           - enum:
+               - microchip,sam9x7-sckc
++              - microchip,sama7d65-sckc
+               - microchip,sama7g5-sckc
+           - const: microchip,sam9x60-sckc
+ 
 -- 
 2.43.0
 
