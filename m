@@ -1,136 +1,132 @@
-Return-Path: <linux-spi+bounces-5945-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5946-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C529E7B61
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 23:05:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E07CA9E7DBA
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Dec 2024 02:29:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 455841887C36
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Dec 2024 22:04:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B69E316D0D5
+	for <lists+linux-spi@lfdr.de>; Sat,  7 Dec 2024 01:29:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0766322C6F4;
-	Fri,  6 Dec 2024 22:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516EF4C7C;
+	Sat,  7 Dec 2024 01:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BPMacl72"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BL8xitGn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271861B87D6
-	for <linux-spi@vger.kernel.org>; Fri,  6 Dec 2024 22:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF151BF24;
+	Sat,  7 Dec 2024 01:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733522684; cv=none; b=I1dO07zktGr/gzK+Yyc3vhw6SbIz5JPcWyMZJ1yOytZa/CFIPe3oishoQXevTIXVvEXEk4M1HeMm8SE4kcXDaPldK4dDRmh9Th+sCEpUBOgTq8HRa8410XhchMQVr85Za0/6SqiAneaGMbJS9BJR5slS1dvvNOC6+4mlyBMxFe0=
+	t=1733534983; cv=none; b=QQuhxVwxrw/O23/m7NOnqGcjxmmND5XxW/sA/i9GyUdHyu9SU3fWdvYMNtwwkq6OSSR6bjNYR+AoZhlyPln5DgHqTmWxjpyi6PFpMNIPNwi92ltTi3Mffc7XWuqB3pnjtK1zNmFK1yZ2PI9S5qLvfuNulpE/UjMPRsSDHsBjELA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733522684; c=relaxed/simple;
-	bh=X6L57zD2DnepAMNNeErTtgxtV19S6C3yjS3la8x/PBE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ohJGn3fk1B7Kn7uOkAIlS3v+tyxwTVRuScj4+zB3OWMGyKwEWOQ6DEqEbPIFRvPL1gMTIIlQXIqJW0poZQnOYeCndZdBVibAtgi9+0grp8IRiXMokpELXD/Bcm3/B0oBa8mYhDEY4OUxBiShnyGyEEYyqneWasYSmxFFQHYe8E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BPMacl72; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5f1d2487b95so1008622eaf.0
-        for <linux-spi@vger.kernel.org>; Fri, 06 Dec 2024 14:04:41 -0800 (PST)
+	s=arc-20240116; t=1733534983; c=relaxed/simple;
+	bh=pf2BxcyY1+GxOIa+dmB0408E08YUlmbwGhO92jMegAE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=YuT0yj9e/4BzhR02tgpqCpDunqRUFFFohKoH3cIgGhRDHOh35osaXshB2+0rSpLN8rq3LkCoMYdY69AY/XPqtlM1AzCBBIX5BPCRzKGLytVJ0OQm4edvmsOIHtn9j8NqzpVQxU8EDAnLZ/WfS5wLy1j/u5GxBdXLftgFJqp+JVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BL8xitGn; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4668f208f10so25561261cf.3;
+        Fri, 06 Dec 2024 17:29:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733522681; x=1734127481; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HhPTP3mLUFs0b4KyXIJG/kRypJVEZYMjZF4cvng/bMM=;
-        b=BPMacl722pwDymm9O9Vu+JAltLaWUA/24yH2B0J8Ke4iRUXlCFDe++Mh5x0eOk+41j
-         cbABQB7sts9Xa01bV9KobBkYblFxTC/rrTfJHANXRTeGNrNpB6AEeFw0FcLSc8tbmay1
-         PwW+U+nnh3BcV/+kDZvVF5tCpCGeTLUjAo6LaaHhxrvie78Wz+fRAP4prlsmPhWigSXn
-         O8JtoWBHsEAIvQSrITPr4Yd2Bm1t4Taskr9ZSh+Ao56PTw1vlexwtZeNiBsgBDFUIS6l
-         95ybsKm+MCdkE4DsOnqeJ7Wjz1GfVFaYSX9Vmx3+dA9RDOehm4XpZT5aU9n3n/9YPnrY
-         aA/Q==
+        d=gmail.com; s=20230601; t=1733534980; x=1734139780; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RH3o/9bbeFcVlZkIN5EOi+1jWB15nl+IjEgrvkeWavI=;
+        b=BL8xitGn8Qloe5gE+758fCwzJEhftsqQqJihsNRr3LgYokjiJZsZF+BmGrRZ5+znAI
+         Gw5De5f4GCq4iaUooA9dhxXfjHwauK5lI3gbAuouuKgV0/bqxj12vY5zbyMosAFII2ux
+         +/OmSohmPK7LoE7YWFY214XOJml0xpaqRAYR+4jbiVcUrW+9AQq3oWR5XHLTHLuDjFRJ
+         3utCMMfexuegc6G9Osf0W5UOIusH7KPDgldw7ZtEd8+XuOI+4tOc42+7eBiPl92qDwQo
+         tezggn+PhwVYjcpUdKkbHz/ff1klD8VVYwaQ7hh8Q3B7d9mlV0zSaLfi/vEOEXnCdCXx
+         r22Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733522681; x=1734127481;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HhPTP3mLUFs0b4KyXIJG/kRypJVEZYMjZF4cvng/bMM=;
-        b=QaLtZjQlVgH0nY8ZHCF/9920+IIuBc+qomE6kJCPAQOpqRQ+9Plk/Ff8DnwmtQ0XzP
-         M+s1yrUDCFZAuCkBfhXV5hv4X78+IVKgacNLG3XzMXTZ3WmHZC6JcMWN0yFRHrmtYXBa
-         F75Zv4MWL0bAIp68MsveBth+e7VM7D7+L2FPOBsn9Qnc2QnZzraBj9QbuSsWBMHbRHpr
-         qNMamMKiKvwSg3nctGo/rmjg9BQaq2WO3rVYK8wVD/05bqI9zDd/gzdxBtCR3KyoAFnm
-         00jCoBySH2k8bXNZ5JgKmwBFsQIIr6+tg8GlJdBPUwOp97VM10moYT4qRddI7J9XFxrS
-         icwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXLpJOn0Gmlm7IW7Lq6iE6q2Lc+NU2JdbLrC+7q1+pNyh3T/aIat5V6g/kSS5xTRBbv5qdXQsk1JuU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ1Lh595QnOv4Kekp1TXV/0lNhfcjXG/wwJjQkHzFnVghdq3su
-	/Uj2/I4QAnCCr/GDsye80HvrSTu3q2maZ6KKmBgF4Ic2adBmFWmNALf58qXF1so=
-X-Gm-Gg: ASbGncsH2c/jo3mK6om9CzWxTEOSxjc2baaJzQhCkMZDibE0bB7yUcgW+2OnXag225M
-	WnxZuSp+DvR8PeBGeeZ0FooHThW/F33c//bKkT4KazuIXszCU5CLZ/G1nbSNPr0soIXfwizV4+w
-	rWksBtfWgRGJoj7r4bdgavXvlo66RsS6wtEa4Bqm4FZsWWn6/fkBHeOWWFry5iqnqiUkIKiUzk5
-	FLh6mUoS1ojtJG0e4PkCwH+zdTC6ZvwglALxrWkFSH224okw9zKtMxtYxzfN9Uefw/38HKUZNxE
-	ivQ7IZGUTKI=
-X-Google-Smtp-Source: AGHT+IGJenaygINw2DLeDO+NUkwlrl8ROmHjE7GyUlhBOpNZ+bTO/GkfxRTtD0gXZ5q8Gu+9iig8XQ==
-X-Received: by 2002:a4a:ec43:0:b0:5f2:37de:5817 with SMTP id 006d021491bc7-5f2870761d0mr2872491eaf.3.1733522681294;
-        Fri, 06 Dec 2024 14:04:41 -0800 (PST)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71dc4a236cfsm935156a34.67.2024.12.06.14.04.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2024 14:04:40 -0800 (PST)
-Message-ID: <21d2e190-4cb9-4090-9dfd-2bb250ba186e@baylibre.com>
-Date: Fri, 6 Dec 2024 16:04:40 -0600
+        d=1e100.net; s=20230601; t=1733534980; x=1734139780;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RH3o/9bbeFcVlZkIN5EOi+1jWB15nl+IjEgrvkeWavI=;
+        b=DLl2791Hntwi+4FUzUNm3nK7Kc+1EX1BxB3nWFsgXK8e2GLJTI8uM18xeaSi1CA0SY
+         ZlRTXMBeaqH5MB9VC4qS1PvHVtjQ5LvhLzDGU4hkMY7KVwNTpxuPkCvF9a2lcDEMH88o
+         qH/x+mdtky4ZcNLZpOTolslUCl1rDb5H8eEGLfBrF8wgXKoN5MfCM5HJjFxFRBidHXTe
+         R9tWaipqL+zOSqt6cNiWcuxYumA5MIBsPvHT/Mbdjb0oHaEJERmPVr21HQnYZ++hE0oR
+         VQi/rLux1g4tHpeUmuDnJmjl6pzX7aFSaDLDy1MUTb9EfFXVL6LHa8WFBlfj3/JrF95L
+         M6Qw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXJk9VolorGR79fnPYhqVXOiMdqUqmNx2anyBldf/dWGkD7tNoTWMSzFjNxOkk88diLTyDBcEz1O+CxQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysqIG+PLbUJ5C5vwwuoSGeHqgORTK+AUFkERvC6JVPHisabQYQ
+	4+3zUV9U9ttO3UQdznQsLSED1s1zrQTengtXCsMuc0cNfs3g7kHE
+X-Gm-Gg: ASbGncsXNAiCz2rptaU55S4Zdcla1JcIVVP8yNVv1WfEFuI18ADr53QR7/dyRdiFn4d
+	VlaCYuTMtRBYa+AESn1OgYk5eW2MGSEdwWwBCbskwa+bj1HE/58TIL2NXkKGxjaKDHnXTmYCcJh
+	G17+JNMX07/La/DEygRKwoO51i57T3wTxab0Y2LrGWUzgEnZHfL+PXLtBakRHkYhALKLUpzhmjx
+	bT1+6uF6d6cd3Eoff0rZSuVyg+SXgSlwExpQEZ8Eap6noUoRSrwt5uwUiRpaQ==
+X-Google-Smtp-Source: AGHT+IHryNFp2D/1XDHNwPuVlv5N6khcikGDnn64EfjaaFrKAlmCc89G8uNfZpWRrcmN/09WPQHi+w==
+X-Received: by 2002:a05:622a:22a9:b0:466:ac03:a714 with SMTP id d75a77b69052e-46734db8b01mr93986971cf.36.1733534980510;
+        Fri, 06 Dec 2024 17:29:40 -0800 (PST)
+Received: from localhost.localdomain ([128.10.127.250])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467296cb98csm27101141cf.30.2024.12.06.17.29.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 17:29:39 -0800 (PST)
+From: Mingwei Zheng <zmw12306@gmail.com>
+To: broonie@kernel.org,
+	michal.simek@amd.com,
+	linus.walleij@linaro.org
+Cc: linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Mingwei Zheng <zmw12306@gmail.com>,
+	Jiasheng Jiang <jiashengjiangcool@gmail.com>
+Subject: [PATCH] spi: zynq-qspi: Add check for clk_enable()
+Date: Fri,  6 Dec 2024 20:32:58 -0500
+Message-Id: <20241207013258.3615645-1-zmw12306@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 10/16] iio: buffer-dmaengine: add
- devm_iio_dmaengine_buffer_setup_ext2()
-From: David Lechner <dlechner@baylibre.com>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>, David Jander <david@protonic.nl>,
- Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20241115-dlech-mainline-spi-engine-offload-2-v5-0-bea815bd5ea5@baylibre.com>
- <20241115-dlech-mainline-spi-engine-offload-2-v5-10-bea815bd5ea5@baylibre.com>
- <20241124171609.50c6c3a8@jic23-huawei>
- <08ccc3fd-a53c-4d0e-8659-92204d2c27a8@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <08ccc3fd-a53c-4d0e-8659-92204d2c27a8@baylibre.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/6/24 3:36 PM, David Lechner wrote:
-> On 11/24/24 11:16 AM, Jonathan Cameron wrote:
->> On Fri, 15 Nov 2024 14:18:49 -0600
->> David Lechner <dlechner@baylibre.com> wrote:
->>
->>> Add a new devm_iio_dmaengine_buffer_setup_ext2() function to handle
->>> cases where the DMA channel is managed by the caller rather than being
->>> requested and released by the iio_dmaengine module.
->>>
->>> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> Fresh read and I'm wondering if the lifetimes in here can be managed
->> more simply either by pushing the DMA channel get down, or dragging
->> the release up.   Basically I'd like to see them at the same level
->> of nesting in the code.  If it ends up being necessary to duplicate
->> more code that is fine if it makes this easier to reason about.
->>
-> 
-> One option could be instead of introducing a 2nd function, change
+Add check for the return value of clk_enable() to catch the potential
+error.
 
-Oops. The new function is devm_ so would still need a 2nd function
-but changing iio_dmaengine_buffer_setup_ext() to have basically
-the same signature would still avoid the asymmetry.
+Fixes: c618a90dcaf3 ("spi: zynq-qspi: Drop GPIO header")
+Signed-off-by: Mingwei Zheng <zmw12306@gmail.com>
+Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+---
+ drivers/spi/spi-zynq-qspi.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-> the existing iio_dmaengine_buffer_setup_ext() to use the signature
-> of the proposed devm_iio_dmaengine_buffer_setup_ext2(). There are
-> only two users of these functions. So we could move the dma chan
-> request/release out to the drivers for those.
-> 
-> Otherwise, we can't completely get rid of the owns_chan bit.
-> 
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index dee9c339a35e..ae8a955bb6f1 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -379,12 +379,18 @@ static int zynq_qspi_setup_op(struct spi_device *spi)
+ {
+ 	struct spi_controller *ctlr = spi->controller;
+ 	struct zynq_qspi *qspi = spi_controller_get_devdata(ctlr);
++	int ret;
+ 
+ 	if (ctlr->busy)
+ 		return -EBUSY;
+ 
+-	clk_enable(qspi->refclk);
+-	clk_enable(qspi->pclk);
++	ret = clk_enable(qspi->refclk);
++	if (ret)
++		return ret;
++
++	ret = clk_enable(qspi->pclk);
++	if (ret)
++		return ret;
+ 	zynq_qspi_write(qspi, ZYNQ_QSPI_ENABLE_OFFSET,
+ 			ZYNQ_QSPI_ENABLE_ENABLE_MASK);
+ 
+-- 
+2.34.1
+
 
