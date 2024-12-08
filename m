@@ -1,78 +1,78 @@
-Return-Path: <linux-spi+bounces-5961-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5962-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 291379E8681
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 17:33:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62A419E8686
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 17:34:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87510163CD1
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 16:33:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DC29163BA9
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 16:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAEAE17277F;
-	Sun,  8 Dec 2024 16:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A9C31714BE;
+	Sun,  8 Dec 2024 16:34:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cPog8pRH"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Qp1/DbZZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E5516F265
-	for <linux-spi@vger.kernel.org>; Sun,  8 Dec 2024 16:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B982E16F858
+	for <linux-spi@vger.kernel.org>; Sun,  8 Dec 2024 16:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733675621; cv=none; b=ojVPbf67THhoypH2Um1p6//bohAxf4Avkt9qE761J+sBAvDug20ePbJfOanm54PgbWWzqH64Jeea91QFjM3Rp5N+A6cg7R2GnQnJaSjDM5GtR4R1s43kJnivkZyJ4QsEuBrOB2hn6HJK2y3qkHMxg0kmoCWxLhwRoazVGvlF96o=
+	t=1733675665; cv=none; b=U2PkH7/98WsEdC+clAHxe/AyczNFEW9SxC8+KJb4A3gl48+wu2C10+8UOrk8ZtOFk12gzZ7VZWKEvyGAgJuVPfi7r49KX3uGNH3r7md2HfqSE/My8znUqYjbd4zsQlYeMb5638VDYG9zG0wdhvvYSuuj4oPtEtIZDFQFAEbRIc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733675621; c=relaxed/simple;
-	bh=/35qo1NSaXfj274xmXlQdRGosPADR6c0eJgSNOG7OjY=;
+	s=arc-20240116; t=1733675665; c=relaxed/simple;
+	bh=sfwHUbpW8XDdoQtwvphDU/WFW5sPN+tjwHvMRp8wfok=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgeu+Qc+1MVo70EL4WQm3zFHbxZPRGXQKpgHKbq0dmvgvGG+wNhBv4iqxTWHB0iWZurN3+ygZaxz4jaojHFHUT7gQfWL2DvyatmEUP5nNEMFlfkGUnoMus1c8SOxXr4qULPYoHdoA3Wj1D1xNxe0ntL0YfWfcGKmz9WY5WDMPe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cPog8pRH; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:Content-Type; b=RGjJqsgNpUKdwSmDHh/CsHoxPhB3FumHWgLTPYi5qEU7cl8LrtASygucC1RY2NQUxeH6MAbtKVvmFAOufYMrUHd840Y6MmRqctToSaHjgoHhfENaS7fgvke2KXYg0ixQvK7a5Taib4CXaAM1wno9i3rOJ8tKV8SQC2gx6fRqX44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Qp1/DbZZ; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa66ead88b3so142369566b.0
-        for <linux-spi@vger.kernel.org>; Sun, 08 Dec 2024 08:33:38 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a9a0ec0a94fso468952966b.1
+        for <linux-spi@vger.kernel.org>; Sun, 08 Dec 2024 08:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1733675617; x=1734280417; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1733675662; x=1734280462; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pAZgKK7Ob7dVD/6GRHg29F0t0wRjMiOSNr01J0LKftk=;
-        b=cPog8pRHKdk/okPkIRve2/Z9TqHy/oP114O8aBGG/kgUGYAE8asM9POL/3cEmVGaF0
-         4vlINOjfpBaA1uuQPyfq9va3Yrx659D+R6aQvXT91LkfdtCU1c3kN3+VkCAyT4YAAq1n
-         BITjI4hTOx+pLsPZaeGg5Szkc/ZuOwLnb5ZuKeP6fOZ0KheqI4w2EV6hJnOy6TXkdaz9
-         sfPrh7ENqzhadDvR2i5Behk+dh6H0IEBqviSUMtSh0+RRjtJdhiP6JO1XDaFy1AhzA/S
-         2KGvNsXXtzcyW8mjNiynTjWK7hlIxNdwMsQLHagGVTPDzocYYhVmVBHwuW60FaKncFr9
-         NASA==
+        bh=1iT4NSRVpd0erHt+8HYNhpTfhW4lFJNhq1fa73nwHoQ=;
+        b=Qp1/DbZZx2NGqg7d8a+PsUD+4gr75eDQYBm/GAQqKy3W44kbIF5ZRsXDdpQwfWmapi
+         J0j62l4c/cEZijGgoxTW1jXxIoxpBn1NKr1TSH9KAb1ynmMB1pU7j+U0kalioAX1lFA/
+         xngEgTOiSVlQ/yByDnSqrEbZTmCNYyLilDculHjIVpDcPpaoOUTt7iGnUgknRI9jtyR+
+         R0gqqBTY3927/kyVyRY1+H5lD2tMWJGVxsvtegnjeCWoQEQIsdEImYlKRF02seft2PcQ
+         tM7US9+v1TPP/arR/+lxFpV7qxttnolxheb3JOpXPEQgNAT1Rtb+4Ut7l+2MCYCPJOWx
+         qyDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733675617; x=1734280417;
+        d=1e100.net; s=20230601; t=1733675662; x=1734280462;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pAZgKK7Ob7dVD/6GRHg29F0t0wRjMiOSNr01J0LKftk=;
-        b=OPyzqwGiGMCNT+3FMRRZbcNDKldiWS6DqPrSeKyVkK2k6AlpXcvIUWkh+YCqR6CRKG
-         3lgNSUeqQR4sxiUogvLQ4G30yoB6aXhuAzpreCRPrsnZWyKYf/dq3cQoC9Ll6M3UVJXQ
-         Hfg4aKnjfo6H303suXWTUudvQmTazmBt+h0tvY0HbfQ/ob6e2k8Mm/821+rfAT9T/iKc
-         GM96xkI+nKGpRt44yGepToMyAi4PmRKcLNDASuSKpxbuyATQsagtQJPNdkMFURxhJdFL
-         qBpQdMSTdULqXAUg0l89ypOXtubtv38jflqc72aC4U+36Za93FKl3zho+VGZkl2ka2ln
-         o7sg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ6TpPkQEyY4TN58B/zhTUM2h12ugVy65e8uIh0DmS9A347nDj6g/nYkK1XjT0IrgmlD2xX/3Jdis=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+qBSdg8aNJ2rHr4GBqG+AG8KgGBfK0ICNii1ZvAyEtrb44Pyx
-	kfpKihB1dADfv1eSSnhnczqPfmkG6YC14zRnchDpHo43p4WZmtzVkGA1NVoC0Zc=
-X-Gm-Gg: ASbGnctowd/AMLpuMYgDwSqyIEXOA0TbWKjgI3tA3f287rnD7n83i7k5DMYKpW5sOW9
-	6STLjI1f9bXSAHECmyrwnKIGpeOTG4yieCxv9HPOLd/Th4mbkmqN6vfdQdxwD5DZCI2zz3eM2SJ
-	B8PyJLUoRxs3SuilWDOBRH0QgUq5zfJk8wfhqORGxS4n4m/+vLgaW5NuQaXS9w0rKiH0Ewbt6tm
-	cPzK0g5fYHBIz6slnwt1R3wSqADoC2iZkogEfkjp0DTTd2XBdUgx6zl2qY=
-X-Google-Smtp-Source: AGHT+IEG5BzdBKSU5T5ma5GlgSE9+K05duEqvgjt64DfRU1QPy3ISe7GWbOxCcAy7BgfRsflElX9gA==
-X-Received: by 2002:a17:906:32d0:b0:aa6:7027:7b01 with SMTP id a640c23a62f3a-aa670277bf0mr300268066b.20.1733675616848;
-        Sun, 08 Dec 2024 08:33:36 -0800 (PST)
+        bh=1iT4NSRVpd0erHt+8HYNhpTfhW4lFJNhq1fa73nwHoQ=;
+        b=kC2KKkmBbyfOOX1SpEaZ7ZRmSAFmxQ5Rpv5XJqQeoRSBBhsYFom19WFyVOMjv24yO8
+         GtmvxcRpnbcSWIV0yzuAyfEdFs5iIXUl1S9eGdBBs2FeL3sxHnu0a437GfOFzEHTRykq
+         64Y1LL8kf5qBKrzNAmgm3A+LR/pxlaMSVBaWLc0UAWKs7R6ug/RuWcJ9o2MG3RbLemz2
+         XKxKY0wuRFFzm7TAJ7oPtUIAsVeJky7fx76ybE6gbFjzA+id7OeMR80NTib3SjRqQJPS
+         FfnfM41OrfpBf6Duw09R1KIbTTsPDuWVNnz2Sd58cdrXe0hhfDTX6jA2QxICqNCq+NcY
+         jVkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKJYnsk6CySJ9M+kVPQkkEge90gCcCwFFK4yBOUZpfXtKeeK/piKe8LgyA/DSr3ACg2L6yo4w+yHU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmHbj9dvANDF7SNdj211d5nvvglTUPiE+WeIVWBy22GDeQBSOl
+	qoN2Qxr8MsAZTTtwEMpxLCFI9e1AsQhsbPVwocZo2jH5ZLRaGG/KF/nnN1mnACA=
+X-Gm-Gg: ASbGncuQLCgm3Ok7t7aui06b26urOjeBKjVODPgUuIWA5TH5RMPt6q4OxGID66HJ/dw
+	5I0apvkeuLvUu9Tcq7+iOAk7jD+u5oQ3B3Lavo03NdGuOC6kJwKH4Ctx++1aycG0wUbalpcr1i/
+	d1oPqCZEFQJvv26QK620E2qoZ8PwyziXFkcCrZ9Vy8G6mrgD557GNALq23XlvdAkAVyyJdM0Pu6
+	kba289d+ltpFp7qzp8oas5VF43i2uX6s7pr0Rw0wzKtJWJNtBBLJMIIrZs=
+X-Google-Smtp-Source: AGHT+IHiWExZ8bPK4wGroZLlYPeAABfeeYHqCY2Pc7mcSXStanDyIam/ppcbW7eqPB4JrD4ws75z6g==
+X-Received: by 2002:a17:906:314e:b0:aa6:57aa:1fe9 with SMTP id a640c23a62f3a-aa657aa2b65mr521603366b.51.1733675662072;
+        Sun, 08 Dec 2024 08:34:22 -0800 (PST)
 Received: from [192.168.50.4] ([82.78.167.161])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa67a4f8dc2sm113804466b.179.2024.12.08.08.33.34
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa67a4f8dc2sm113804466b.179.2024.12.08.08.34.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Dec 2024 08:33:36 -0800 (PST)
-Message-ID: <6ea8fa5a-78e4-46d3-8e20-c2a723bb7e86@tuxon.dev>
-Date: Sun, 8 Dec 2024 18:33:34 +0200
+        Sun, 08 Dec 2024 08:34:21 -0800 (PST)
+Message-ID: <30d2d8af-836c-440a-8b39-4131e8c85540@tuxon.dev>
+Date: Sun, 8 Dec 2024 18:34:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -80,7 +80,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 12/13] ARM: configs: at91: sama7: add new SoC config
+Subject: Re: [PATCH v3 13/13] ARM: at91: add new SoC sama7d65
 Content-Language: en-US
 To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, nicolas.ferre@microchip.com,
@@ -93,9 +93,9 @@ Cc: dharma.b@microchip.com, mihai.sain@microchip.com,
  linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
  linux-serial@vger.kernel.org
 References: <cover.1733505542.git.Ryan.Wanner@microchip.com>
- <e5a1311100a4f05fdc44107e124129d2d93df2e0.1733505542.git.Ryan.Wanner@microchip.com>
+ <465960c9240553753e96a7f4ff3f48879ade7558.1733505542.git.Ryan.Wanner@microchip.com>
 From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <e5a1311100a4f05fdc44107e124129d2d93df2e0.1733505542.git.Ryan.Wanner@microchip.com>
+In-Reply-To: <465960c9240553753e96a7f4ff3f48879ade7558.1733505542.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -104,10 +104,38 @@ Content-Transfer-Encoding: 7bit
 On 06.12.2024 21:59, Ryan.Wanner@microchip.com wrote:
 > From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Add sama7d65 to the sama7_defconfig.
+> Add new SoC from at91 family: sama7d65
 > 
 > Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  arch/arm/mach-at91/Kconfig | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
+> index 344f5305f69a..2c7179b1baa0 100644
+> --- a/arch/arm/mach-at91/Kconfig
+> +++ b/arch/arm/mach-at91/Kconfig
+> @@ -58,6 +58,15 @@ config SOC_SAMA5D4
+>  	help
+>  	  Select this if you are using one of Microchip's SAMA5D4 family SoC.
+>  
+> +config SOC_SAMA7D65
+> +        bool "SAMA7D65 family"
+> +        depends on ARCH_MULTI_V7
+> +        select HAVE_AT91_GENERATED_CLK
+> +        select HAVE_AT91_SAM9X60_PLL
+> +        select SOC_SAMA7
+> +        help
+> +         Select this if you are using one of Microchip's SAMA7D65 family SoC.
+> +
 
+Spaces ^
+
+Other than this:
 Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+
+
+>  config SOC_SAMA7G5
+>  	bool "SAMA7G5 family"
+>  	depends on ARCH_MULTI_V7
 
