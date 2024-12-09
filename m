@@ -1,123 +1,123 @@
-Return-Path: <linux-spi+bounces-5967-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5969-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C04709E8793
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 20:56:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6006D9E8A8E
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2024 05:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E86A281452
-	for <lists+linux-spi@lfdr.de>; Sun,  8 Dec 2024 19:56:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1779F280E5E
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Dec 2024 04:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE1341917D9;
-	Sun,  8 Dec 2024 19:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8398192B94;
+	Mon,  9 Dec 2024 04:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i3eKrgVx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HIjBKCFm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0D91547C5;
-	Sun,  8 Dec 2024 19:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2345218A6B2;
+	Mon,  9 Dec 2024 04:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733687802; cv=none; b=rgORbN5m8aFLKBNr34uTUMsp7+KX/MRhtCUkJKDsZaunsKKafOP/qg53O28mM7rfUJLYiLydZ4ecj/IdNtmdlQckGNVDehkhZ1UG9cT0aA7skmnv/j2fm5oiy3jDo89QwLnVNkSXqDAn8udwvnuwe3EXtlBKoLTUmfmqkpvj7JY=
+	t=1733720207; cv=none; b=TBS3KJ7qClsXMjH65wS/OWiOF5bw1jTlhnALLe+NiGFhV5H21J+LNnaFvaXsB10pN8vub5jgSRBSL2V1z58cazL/YaDw0QUzZGy5JXg4CgkL5YqG+76PhrHJlXzvzrAKOw7VaI/pHMdWYF6gizfZ7V89lvVMPtUWJXqSJwnRN9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733687802; c=relaxed/simple;
-	bh=UVYOMh1kZEgr2A915NBnpaJaxt1QLu79qEQ2ILCqlXQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DZr7r0IP/jvhqeskFllN8iYcijQE8sTaovTdGo3qdxL27GIayKv6nfxXuKCzHGW4D9R18ExPW8edaOZ6JdP99vVrzTH4TCrAmZ1ju2Tm8zdFgyC1SfExIV13VoOCGcMXR1yXkjclam3cKzcmGQt0SumdMTMlnckzWcZl0btEA+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i3eKrgVx; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1733720207; c=relaxed/simple;
+	bh=smdcXM4XVtdVmpcZSTAjc1CdeXynkh1TZG7WKdPEg8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UGdJmsAwfxDWpPUPaf6IKS3Z/yXGDeBrFWApwygalThxv4qKQQPIJLt01caxt3oaoCuGVYXuQkDHgtgXB7mckbNSrQULYHWGjaygezx0D5JpPsb+RPd++YzlPDozA/+fnxx+5DciINzETVCo4C2cIGTZizSlj2FWOww+E+OZr8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HIjBKCFm; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733687800; x=1765223800;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UVYOMh1kZEgr2A915NBnpaJaxt1QLu79qEQ2ILCqlXQ=;
-  b=i3eKrgVxtd4/+wcDJtMoX3mWc/pKg8/oqLo2DcanX85Fqsc0/ud3A8jM
-   MBDKxVD0MZ5n+XaqGAbILyFKzpYHY6Dv99CItMcw3MKQIGQxOl+/SsFtm
-   UC/9BcpsC7QczWb6ETzGLEdraCcJU4eK4GGNwa9DGiso9q7aP2HE6aW0V
-   5pNC1hBZaDJX/BHqVKQkgfq7E9jVqWCYDypbsA6MfNCrA4HuLyptj4Wup
-   fbtRNywKsyP8/uhYXyppe5COMqa/ko3rbXq0ulk9hokO6f+zEDFTyPoJP
-   hdasBsOB3/fOkNw6OFC8jxfg/z0MPj96+AJrYjw/WG5WG+sr00fsVTFUO
-   g==;
-X-CSE-ConnectionGUID: 7btlaIPxTjWE21ic8UdlrQ==
-X-CSE-MsgGUID: 06cwOHSIRfqSIh8Y/1tWvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="44663067"
-X-IronPort-AV: E=Sophos;i="6.12,217,1728975600"; 
-   d="scan'208";a="44663067"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 11:56:39 -0800
-X-CSE-ConnectionGUID: ReM3beMNQvOyNsFn5OMHKg==
-X-CSE-MsgGUID: AmLt/O4WRnyNrpO/G1EgiQ==
+  t=1733720206; x=1765256206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=smdcXM4XVtdVmpcZSTAjc1CdeXynkh1TZG7WKdPEg8s=;
+  b=HIjBKCFmx9lym2ZFWJR+RpWSKsEfSVrJwfWtZiSFVdkFsASyqcLwuFS0
+   Moo0PgkMnczaElODSeF+CSM68bepf7Oxan8dJRxIimp98OPSjspb2vlvx
+   RXSHk0mfcsIg7RZGOGk7Gs8ill+xdfxJX77VQKEDVzVq8uB4ujdiNjL4R
+   M9B3TozSD4fTIfuahHUxGj1kpNa4nGPRSC7hU/nTmkF7AxIoI1YL7C//v
+   k29YqJZofo+iImup9NrU7WJJIRPStwLPlizhjQeexqpsCBGqBBaSeob5W
+   XCBpSW8ycwoBlvyFcoB7ijY6UqGRKVv4kLsYDxrIc1N62C/blANjAKP1w
+   A==;
+X-CSE-ConnectionGUID: E5aDLAJEQ7eLFsJcBUGgaw==
+X-CSE-MsgGUID: q9UHex9bRsyyNEliKMqjsQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="56484906"
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="56484906"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:56:46 -0800
+X-CSE-ConnectionGUID: xqrC+jWTR8WGbuYoi0Oumw==
+X-CSE-MsgGUID: Qobg1aSASgK3QKz6Ym49nA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,217,1728975600"; 
-   d="scan'208";a="132274258"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 08 Dec 2024 11:56:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 11380426; Sun, 08 Dec 2024 21:56:37 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] spi: Deduplicate deferred probe checks in spi_probe()
-Date: Sun,  8 Dec 2024 18:03:17 +0200
-Message-ID: <20241208195635.1271656-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20241208195635.1271656-1-andriy.shevchenko@linux.intel.com>
-References: <20241208195635.1271656-1-andriy.shevchenko@linux.intel.com>
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="100015159"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 08 Dec 2024 20:56:41 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKVp0-0003wb-0u;
+	Mon, 09 Dec 2024 04:56:38 +0000
+Date: Mon, 9 Dec 2024 12:55:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de
+Cc: oe-kbuild-all@lists.linux.dev, dharma.b@microchip.com,
+	mihai.sain@microchip.com, romain.sioen@microchip.com,
+	varshini.rajendran@microchip.com, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v3 11/13] ARM: dts: microchip: add support for
+ sama7d65_curiosity board
+Message-ID: <202412090708.BNX0mUZi-lkp@intel.com>
+References: <e47d8c8cdaec834ce080ef8c34b9976228223c8f.1733505542.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e47d8c8cdaec834ce080ef8c34b9976228223c8f.1733505542.git.Ryan.Wanner@microchip.com>
 
-Deduplicate deferred probe checks in spi_probe() and enable
-the error message for ACPI case as well.
+Hi,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 88f785b9e6ec..e0f79773be70 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -417,19 +417,14 @@ static int spi_probe(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	if (is_of_node(fwnode)) {
-+	if (is_of_node(fwnode))
- 		spi->irq = of_irq_get(dev->of_node, 0);
--		if (spi->irq == -EPROBE_DEFER)
--			return dev_err_probe(dev, -EPROBE_DEFER, "Failed to get irq\n");
--		if (spi->irq < 0)
--			spi->irq = 0;
--	} else if (is_acpi_device_node(fwnode) && spi->irq < 0) {
-+	else if (is_acpi_device_node(fwnode) && spi->irq < 0)
- 		spi->irq = acpi_dev_gpio_irq_get(to_acpi_device_node(fwnode), 0);
--		if (spi->irq == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		if (spi->irq < 0)
--			spi->irq = 0;
--	}
-+	if (spi->irq == -EPROBE_DEFER)
-+		return dev_err_probe(dev, spi->irq, "Failed to get irq\n");
-+	if (spi->irq < 0)
-+		spi->irq = 0;
- 
- 	ret = dev_pm_domain_attach(dev, true);
- 	if (ret)
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on robh/for-next soc/for-next linus/master v6.13-rc1 next-20241206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Wanner-microchip-com/dt-bindings-ARM-at91-Document-Microchip-SAMA7D65-Curiosity/20241207-040527
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/e47d8c8cdaec834ce080ef8c34b9976228223c8f.1733505542.git.Ryan.Wanner%40microchip.com
+patch subject: [PATCH v3 11/13] ARM: dts: microchip: add support for sama7d65_curiosity board
+config: arm-randconfig-051-20241207 (https://download.01.org/0day-ci/archive/20241209/202412090708.BNX0mUZi-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
+dtschema version: 2024.12.dev3+g93ee800
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241209/202412090708.BNX0mUZi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412090708.BNX0mUZi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts:50.1-6 Label or path pioA not found
+   FATAL ERROR: Syntax error parsing input tree
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
