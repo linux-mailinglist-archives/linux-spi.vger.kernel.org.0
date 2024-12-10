@@ -1,56 +1,56 @@
-Return-Path: <linux-spi+bounces-5992-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5993-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D841C9EB192
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:03:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E489EB196
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3F13188D2C4
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:02:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF58C16BA26
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861131BC07E;
-	Tue, 10 Dec 2024 13:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016381BBBFE;
+	Tue, 10 Dec 2024 13:00:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cZHyQRb0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9T4xDGu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4C61B85D1;
-	Tue, 10 Dec 2024 13:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6B41BD007;
+	Tue, 10 Dec 2024 13:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733835657; cv=none; b=G3HZj+KPyMaxIhdRAAG64LF+L1Mw46RM1f181s1pR4T1CNz98murJONjFbNaBRXj6D/WwVRSOxUU05L3L7GgvAReQHQtCMfs/QguFhPZpCVXv2IoeLlmbbCYCb4B7FFhaWvi1nVaq4mThfUaqTLHRXOnPOQBWF5DUHd4mzkmBT4=
+	t=1733835658; cv=none; b=gpyP+cwbVkEOvmp0aFisb3atbYKayAN3OLjYiqkwfDZjjaHcbXe9fpJ82BQgeKIPQFrOlf3dwkHyuNOUjcF+7Dtuol9X+u5DRnng6kEyo3bgQXNNJrnTdrjgadAXdDjOK3cl5bI9LYatmDdewwcurlTSV3J4r2dOLFuYfJGzLe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733835657; c=relaxed/simple;
-	bh=zEwmhiXWSNdbVox4v1ywGDTEkwYo+ZA+AQNMZDvtC0U=;
+	s=arc-20240116; t=1733835658; c=relaxed/simple;
+	bh=PscAXMBIQetj/AnKbhFQ+vclBqKg8Pff7HND8t1S3b4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GOhDLq3yx62Skz64Avy5UAyHcq9p6IwRbqCFaV+LwKEzY3LyNBmPh50JV74iWQeMap5OGD+wH1uC8PK0XdXZuLM8VFHMkgB5aCMJWvquWLL36l0NgQYz6ah7yCBVx7YHVlL4CnZbhU+BY9RN4eb6obO+nxTyjfqyRtyeR2zTpn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cZHyQRb0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982D1C4CEDE;
-	Tue, 10 Dec 2024 13:00:55 +0000 (UTC)
+	 MIME-Version:Content-Type; b=noDWpkhp51fWviLlC565+U38ichEd3tEU7N8jiocLfYH2FI4blwQmXnYlTNAopTYy/Gxyph0/Qhm32PXcGzFGTMIXy7zXdwnwVnHFv3oHir06On0bjyGeI/Ls+tjxJ/fV65ncZwc7ogXr67rUKeHr44F6QHmnFAIHyUxcUdKMPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9T4xDGu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBAEC4CEDF;
+	Tue, 10 Dec 2024 13:00:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733835656;
-	bh=zEwmhiXWSNdbVox4v1ywGDTEkwYo+ZA+AQNMZDvtC0U=;
+	s=k20201202; t=1733835658;
+	bh=PscAXMBIQetj/AnKbhFQ+vclBqKg8Pff7HND8t1S3b4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=cZHyQRb09aVdckaqkajo4eVvvzHyNC8KLVkdZP6Yf6i4/uPqc7gFZGQ8MCOo7O2E/
-	 XSaNPzGv8jbL8bfjO6sZuNk65bMm4nqT/3u90zls+2YoVwfujB1EuyToPt09NU6ZHF
-	 JR0gAAp2xG2EF4+JI+W2TsEObUJjuioGJ1tI2WaD1nWBP6OXjgU1ON/KiyeDcibd8J
-	 /uOwC/lHNPX2J4RbKcQVp7DJrj0piWQ6OVXqrZj7nrbvPHNaeglnHhMCBYbiGbEzrD
-	 4R1NkJsJ0z5+R321AlES+nFWpAhpfzBlzvHU949s8THLJNUj2m2vyV8NJ5T4jPZftd
-	 qN4vUGUNWbwBw==
+	b=O9T4xDGuixTk6epsbO2omxilM0DXSGdDmcLNfTaTgUJOlcarSeotya7Mu7KXDmNOL
+	 yGXeB7TZRigpnsng+gtu9ZLhL4oiMYaRe0cwKN0o4ptDWx+MWaUp+3+2vRW3dBEvq7
+	 YtGSmxcXYdFueQ9j6FIPk31RrUzX4qfMsAkCyzXto1FwKxyqdTlgu9Tvte3GRYCBGR
+	 ur0sFkyl0cs+fam8qpUYR0r7y3n0+cCBgxQgTAKyYvVZA4uhwvmRWzVf/EvPs36u7G
+	 a/7kOakzdBzh6QUjAIO5FHyGR9d2IIa2r8MIz67YsiZMR9xyfHiIu4XWaWmzfij1Rx
+	 r+HhN+Hu1ExCA==
 From: Mark Brown <broonie@kernel.org>
 To: michal.simek@amd.com, linus.walleij@linaro.org, 
  Mingwei Zheng <zmw12306@gmail.com>
 Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-kernel@vger.kernel.org, Jiasheng Jiang <jiashengjiangcool@gmail.com>
-In-Reply-To: <20241207013258.3615645-1-zmw12306@gmail.com>
-References: <20241207013258.3615645-1-zmw12306@gmail.com>
-Subject: Re: [PATCH] spi: zynq-qspi: Add check for clk_enable()
-Message-Id: <173383565535.34030.14188162384074341857.b4-ty@kernel.org>
-Date: Tue, 10 Dec 2024 13:00:55 +0000
+In-Reply-To: <20241207015206.3689364-1-zmw12306@gmail.com>
+References: <20241207015206.3689364-1-zmw12306@gmail.com>
+Subject: Re: [PATCH v2] spi: zynq-qspi: Add check for clk_enable()
+Message-Id: <173383565712.34030.16922746389125728063.b4-ty@kernel.org>
+Date: Tue, 10 Dec 2024 13:00:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,7 +61,7 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-9b746
 
-On Fri, 06 Dec 2024 20:32:58 -0500, Mingwei Zheng wrote:
+On Fri, 06 Dec 2024 20:52:06 -0500, Mingwei Zheng wrote:
 > Add check for the return value of clk_enable() to catch the potential
 > error.
 > 
