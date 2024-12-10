@@ -1,55 +1,60 @@
-Return-Path: <linux-spi+bounces-5988-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5989-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5894A9EB186
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:02:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4479EB187
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:02:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89BBD288B94
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:02:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71FEC2812F6
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7311E1AA1D8;
-	Tue, 10 Dec 2024 13:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0991B6525;
+	Tue, 10 Dec 2024 13:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9SKrsHE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kF8HjOEO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8C51AA1D0;
-	Tue, 10 Dec 2024 13:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47691B4F0D;
+	Tue, 10 Dec 2024 13:00:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733835649; cv=none; b=YLsYP/qZ6PYNNfEqHhakxFMeJNZudRErMYpuLK55sPtzgsU92JdXX0LXNtrKPbL4c8DLtFFcdovKFPt+Q5ZaCMuDvnKej/HEU14SVnmjqD/aMzzEjVxEX9byQeH0EqmiSYra0/S3+myKXNO/wHA7DhiQ260psSyiHyh+r/bcvD8=
+	t=1733835651; cv=none; b=Ig/Q1COv5DmXq31OpIrDdywOeXeNLwMM2WTR99v8NBZlkL+nVAletixNvu5W7+9ssAFPTD3CFtR9e3OZw/pJndMDFWuJQhuqlhT3qvISyUZypVofqDPr4w5XUUQnQOsqGtX3FTHq0OhjT0YliuHJNfHCIA52ZEYF+6PD9kJLE+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733835649; c=relaxed/simple;
-	bh=It95SmPzI/uYFCjtze9WMOUpDuiAQUXv/qlPmJM0ve8=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=XeEg1eLxuBNA7EdEFiw0avaB3SLhCtFh8s4O0dUwXzvJyxirn7LiuyrSLd1m70VpumyzNnqZHocLYFi+lmnYCpMa1ukfF22W+zQoGRjF2koeCLyLng5+shBYY9+37w+XVMohwGHj4l9LrIEYuG+WGRDPiLN1+LrWLgkEOEjDBs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9SKrsHE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A25C4CED6;
-	Tue, 10 Dec 2024 13:00:48 +0000 (UTC)
+	s=arc-20240116; t=1733835651; c=relaxed/simple;
+	bh=jaThpRIjcCNZ0lQjQ42i7rnft7gfMtJKkGlTrJdutek=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=drqLL37M31rCYxAXunEqu2o9Z050f2v8p7suPg2OoRN5Ue/9ox+MioqDNnqQFmQ9twY0ZnC5X4qdvNtZ41WW7ZYczSsrRr03c5umCwRH5bK+VkQW9BD+OOazWTvUaIiMIArTZdw44hNsLScilr9/TUfPp1QleYYrtxOhK9QbqIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kF8HjOEO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63526C4CEDF;
+	Tue, 10 Dec 2024 13:00:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733835648;
-	bh=It95SmPzI/uYFCjtze9WMOUpDuiAQUXv/qlPmJM0ve8=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=R9SKrsHE+ljnN1+7oc+xCpVBCJmBl+jl0GuhyhWQxdz63bukx3CEvjlQUJ+IIyLNN
-	 DXqy9SSiL0ExmnqpugBKOppHMeSDW/IjhSsC5qj7PcAz7m/4NJ91WIXxIu4iwhQj+h
-	 lUSk1WsYKq32FUtR9WfG+6Tos+lJ37d2wdJ5F7zgJpEF4VQWF9ODyelHfe7Hje1sJS
-	 qQfmqqbL4G4l+ztD1huFBAqSgXybb8hhnOdahXKzq1YHhBxTWWAB1N0naH+SqYH3/h
-	 NcssqUasHExtd1gaBvZPTJs+nYYmvM5IoPB4heXh3lwN6Fo5UBDanuUG2gmll4ux0a
-	 wH/tEoctQW6mg==
+	s=k20201202; t=1733835651;
+	bh=jaThpRIjcCNZ0lQjQ42i7rnft7gfMtJKkGlTrJdutek=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=kF8HjOEOVQLLfosqKYy2yxSmojOUK9dE5AA0qn5ypsIUCqMuvvubvy0hKGiYQ8Xor
+	 6795C5de8kjVFtlMwiiO0yvBtylBAJx9uLg2QTrUhj5LBT5gc8YXjxO05YOmVhg8W+
+	 0qJh03WHF00pbCa0+Watf5W+S8lygjvV2SzdapZuYoYrn+0OOjY1V3FxUylPh8QjU0
+	 tQ9Jme+ujIAPmykTpGt7yA/94UwUvxyAPnO5Ouf8L27JwQK3ismNTAfGbIb5IlDVlR
+	 n239MCpWHdhRAvcEwbC2K+wkt+X/bK8qXG3Qxvsbgm9FBdOXG0wlyWlvBl9AnIxSYy
+	 Fj80hDpsJ6ALQ==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- niravkumar.l.rabara@intel.com
-In-Reply-To: <20241204063338.296959-1-niravkumar.l.rabara@intel.com>
-References: <20241204063338.296959-1-niravkumar.l.rabara@intel.com>
-Subject: Re: [PATCH] spi: spi-cadence-qspi: Disable STIG mode for Altera
- SoCFPGA.
-Message-Id: <173383564799.34030.1706263961375450973.b4-ty@kernel.org>
-Date: Tue, 10 Dec 2024 13:00:47 +0000
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, 
+ =?utf-8?q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>, 
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+ linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <4052aa2f9a9ea342fa6af83fa991b55ce5d5819e.1732051814.git.christophe.jaillet@wanadoo.fr>
+References: <4052aa2f9a9ea342fa6af83fa991b55ce5d5819e.1732051814.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: aspeed: Fix an error handling path in
+ aspeed_spi_[read|write]_user()
+Message-Id: <173383564913.34030.1229101307217258864.b4-ty@kernel.org>
+Date: Tue, 10 Dec 2024 13:00:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,11 +65,10 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-9b746
 
-On Wed, 04 Dec 2024 14:33:38 +0800, niravkumar.l.rabara@intel.com wrote:
-> STIG mode is enabled by default for less than 8 bytes data read/write.
-> STIG mode doesn't work with Altera SocFPGA platform due hardware
-> limitation.
-> Add a quirks to disable STIG mode for Altera SoCFPGA platform.
+On Tue, 19 Nov 2024 22:30:29 +0100, Christophe JAILLET wrote:
+> A aspeed_spi_start_user() is not balanced by a corresponding
+> aspeed_spi_stop_user().
+> Add the missing call.
 > 
 > 
 
@@ -74,8 +78,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-cadence-qspi: Disable STIG mode for Altera SoCFPGA.
-      commit: 25fb0e77b90e290a1ca30900d54c6a495eea65e2
+[1/1] spi: aspeed: Fix an error handling path in aspeed_spi_[read|write]_user()
+      commit: c84dda3751e945a67d71cbe3af4474aad24a5794
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
