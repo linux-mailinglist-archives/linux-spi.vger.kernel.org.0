@@ -1,98 +1,98 @@
-Return-Path: <linux-spi+bounces-5993-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-5994-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E489EB196
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 865799EB1AC
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 14:10:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF58C16BA26
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:02:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5991B16681A
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Dec 2024 13:10:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016381BBBFE;
-	Tue, 10 Dec 2024 13:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBED81A7046;
+	Tue, 10 Dec 2024 13:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9T4xDGu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FLumOamS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE6B41BD007;
-	Tue, 10 Dec 2024 13:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A2378F44
+	for <linux-spi@vger.kernel.org>; Tue, 10 Dec 2024 13:10:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733835658; cv=none; b=gpyP+cwbVkEOvmp0aFisb3atbYKayAN3OLjYiqkwfDZjjaHcbXe9fpJ82BQgeKIPQFrOlf3dwkHyuNOUjcF+7Dtuol9X+u5DRnng6kEyo3bgQXNNJrnTdrjgadAXdDjOK3cl5bI9LYatmDdewwcurlTSV3J4r2dOLFuYfJGzLe8=
+	t=1733836212; cv=none; b=pqped9v99YT7K1+uAAaSeLpH8Ib7lrB/wGmqMwFaXJqjj81Yq8qaGSEygJmWKqA3TrrO7cHzwVdc7MWh+ugQuDlMsqchTF9/bO+gFvALhp4k4VPa+qUr5DOskQPcOGatxLJw+477KVngyyA/BFYX4UKmXmS4T7KlxwwYUe58nLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733835658; c=relaxed/simple;
-	bh=PscAXMBIQetj/AnKbhFQ+vclBqKg8Pff7HND8t1S3b4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=noDWpkhp51fWviLlC565+U38ichEd3tEU7N8jiocLfYH2FI4blwQmXnYlTNAopTYy/Gxyph0/Qhm32PXcGzFGTMIXy7zXdwnwVnHFv3oHir06On0bjyGeI/Ls+tjxJ/fV65ncZwc7ogXr67rUKeHr44F6QHmnFAIHyUxcUdKMPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9T4xDGu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EBAEC4CEDF;
-	Tue, 10 Dec 2024 13:00:57 +0000 (UTC)
+	s=arc-20240116; t=1733836212; c=relaxed/simple;
+	bh=ZpEZwisYTdSbfWrJ6Flk8WcjaOXsyaH2IF5X97R6ef0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=OBS1jreUceaiuko/d4veBtaotUkw/F9Dmz7zc2Lhhb09hHxLRfkyM1bKM8zt3Jtrff9U6h3QmqFJXXWEH0oAyXFmOsd2Mp4aH0uKbKkeoP0xEtCDCcuJk37vlr/TFt+jTGIwvIORFRjc436IH+eBatK4aFJvvie51B9NS9t/QvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FLumOamS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6E0C4CEDF;
+	Tue, 10 Dec 2024 13:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733835658;
-	bh=PscAXMBIQetj/AnKbhFQ+vclBqKg8Pff7HND8t1S3b4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=O9T4xDGuixTk6epsbO2omxilM0DXSGdDmcLNfTaTgUJOlcarSeotya7Mu7KXDmNOL
-	 yGXeB7TZRigpnsng+gtu9ZLhL4oiMYaRe0cwKN0o4ptDWx+MWaUp+3+2vRW3dBEvq7
-	 YtGSmxcXYdFueQ9j6FIPk31RrUzX4qfMsAkCyzXto1FwKxyqdTlgu9Tvte3GRYCBGR
-	 ur0sFkyl0cs+fam8qpUYR0r7y3n0+cCBgxQgTAKyYvVZA4uhwvmRWzVf/EvPs36u7G
-	 a/7kOakzdBzh6QUjAIO5FHyGR9d2IIa2r8MIz67YsiZMR9xyfHiIu4XWaWmzfij1Rx
-	 r+HhN+Hu1ExCA==
-From: Mark Brown <broonie@kernel.org>
-To: michal.simek@amd.com, linus.walleij@linaro.org, 
- Mingwei Zheng <zmw12306@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Jiasheng Jiang <jiashengjiangcool@gmail.com>
-In-Reply-To: <20241207015206.3689364-1-zmw12306@gmail.com>
-References: <20241207015206.3689364-1-zmw12306@gmail.com>
-Subject: Re: [PATCH v2] spi: zynq-qspi: Add check for clk_enable()
-Message-Id: <173383565712.34030.16922746389125728063.b4-ty@kernel.org>
-Date: Tue, 10 Dec 2024 13:00:57 +0000
+	s=k20201202; t=1733836212;
+	bh=ZpEZwisYTdSbfWrJ6Flk8WcjaOXsyaH2IF5X97R6ef0=;
+	h=Subject:From:Date:To:From;
+	b=FLumOamSR6kVYeM8MDeE8FBqI00o2ZtBjj1v5BUW06INmfd9mh2Cb4YQ8ZDvwlo1b
+	 Z7Rpd0SQld0/9xg6eH5tTGjfYcC/xwJGw+Mt9lb1ZY0HYr6bN6lW6VjFiI3NqYLggc
+	 FiOpcxF5PDFpp3F0PonwtO8aWugH2iSO5/giwpFOdNs59ui9DljBgXdysN3b8u+HXc
+	 TzD74rzwqRks+iztyXEHnxob1IlamNnX923XaUscGIwJ5x9Ekpli9vuMt/7ghI+7rO
+	 tFi5Yh8dBN+BFRUZGu1LBFdN/vgku8jUA7GAbZUZ6TEG65aM41/TJVZFfacCV3Zl8Q
+	 3qf4sRtJBIfng==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFF6F380A95E;
+	Tue, 10 Dec 2024 13:10:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-9b746
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173383622764.803719.3331359822493441171.git-patchwork-summary@kernel.org>
+Date: Tue, 10 Dec 2024 13:10:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 06 Dec 2024 20:52:06 -0500, Mingwei Zheng wrote:
-> Add check for the return value of clk_enable() to catch the potential
-> error.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-cadence-qspi: Disable STIG mode for Altera SoCFPGA.
+  Submitter: Rabara, Niravkumar L <niravkumar.l.rabara@intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=914427
+  Lore link: https://lore.kernel.org/r/20241204063338.296959-1-niravkumar.l.rabara@intel.com
 
-Thanks!
+Patch: [v2] spi: zynq-qspi: Add check for clk_enable()
+  Submitter: Mingwei Zheng <zmw12306@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=915569
+  Lore link: https://lore.kernel.org/r/20241207015206.3689364-1-zmw12306@gmail.com
 
-[1/1] spi: zynq-qspi: Add check for clk_enable()
-      commit: 8332e667099712e05ec87ba2058af394b51ebdc9
+Patch: spi: rockchip: Fix PM runtime count on no-op cs
+  Submitter: Christian Loehle <christian.loehle@arm.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=915485
+  Lore link: https://lore.kernel.org/r/1f2b3af4-2b7a-4ac8-ab95-c80120ebf44c@arm.com
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: spi: aspeed: Fix an error handling path in aspeed_spi_[read|write]_user()
+  Submitter: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=911089
+  Lore link: https://lore.kernel.org/r/4052aa2f9a9ea342fa6af83fa991b55ce5d5819e.1732051814.git.christophe.jaillet@wanadoo.fr
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Total patches: 4
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Mark
 
 
