@@ -1,105 +1,109 @@
-Return-Path: <linux-spi+bounces-6014-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6016-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50EB49ED4A8
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 19:23:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5473E9ED543
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 19:57:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDF09168E51
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 18:23:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC085188B2E3
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 18:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4E5201266;
-	Wed, 11 Dec 2024 18:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3745020A5FD;
+	Wed, 11 Dec 2024 18:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufJq4F0c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gHnVvbS1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E46724632E;
-	Wed, 11 Dec 2024 18:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B62446BD;
+	Wed, 11 Dec 2024 18:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733941402; cv=none; b=teqFXkeoDq1TT3p8OanyKxNpdZ1WllGqfnxhCdW6O6S8ow0DCGDEi3cfmN1uALDanDXnNmOmihtTQTYW/PpORdbMfxP26oSr1yZjizSKBMMu16lsNo0jJKPS/gtZSXcN/ahY+8l13hG7QszhpiO3/n1iB59pNL2exVhSmG8QOOE=
+	t=1733943106; cv=none; b=tOQ0YTdnGQeYppCFrKhESKh9oMcTOki8tSVWgOvMSw+WeXe4rkyxt3ij/0VKflIvIiq8n5Xjm0K9z/Oa4wQ8KGjDtRkkK884ax5gG06lXHUgQjI5L/1ji4dObDC5CflU/yjJnz224sGXW/6CMX7vYRXVwQAXKBpaisd7VUYe9ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733941402; c=relaxed/simple;
-	bh=w2M+TjlpNPYsNFuhmIFntzAXEa02IOyc1xKcuHjzAQI=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=gNOtueOKxcZabaEjyBT76LeYImQFb9wXYTWghOIkhTibbPJ0aexQ15SWSs3cJnZRZQ7L6sEQ30Xo4EPmwlZGzFTiu0x913/f+rKscGoOKG7N5mIPppWNH4r1gDbn24SqBolRTvlKsyqPBD1scpSAS808dMOeM7GrFCBa/F6E1YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufJq4F0c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FA8C4CED2;
-	Wed, 11 Dec 2024 18:23:21 +0000 (UTC)
+	s=arc-20240116; t=1733943106; c=relaxed/simple;
+	bh=yLHfV8ngkXxhgtHKKyFXreDxZ0ZXQvQnWW97XSfdb98=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UpUmhP7YikiC6bwB+0knrhAFcbMCLdmP0faVN47rN5+SbcXBH/gzdf3GTvMxMvQr/Up/A1lLEOGgKX1Qj811off0nmo0tUBkhawJWQ4mQJu4++DDcPJhyn2+OnHNvqIDYNE7k0wV6UiI0GbSY0zPywceWQ/UrAIPDyr9KLQpnFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gHnVvbS1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F6AC4CEDD;
+	Wed, 11 Dec 2024 18:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733941401;
-	bh=w2M+TjlpNPYsNFuhmIFntzAXEa02IOyc1xKcuHjzAQI=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=ufJq4F0cTQtxm6pWkP2NE4Y5SAsClVAuUMrj0US9cUPtgX2KVjAdv57p7IwBPTceX
-	 lygWrh2Nwh0cWUYItsm77f340NIT/XNJY9rEETqtlr9TS9Q33WKPTxqnQ+5rgqRk/c
-	 GIz6hRJSBj/JrlcjsSI5ZNvab8YDEcaiNKJSZDFOejZUNZBNpjoOB9OH9LeXZLQAi+
-	 Gifvh0OP4+YYHUVUcY30rrrM7VVvxfJYTkvmXzarUg/JEMb0zy0/7v6M2F83OSmwo7
-	 SBE2N5ijixKGcn3azwEld8EgBo1CZUs+m0LtIaqEraFj1gQ2SwXGq13Ts8Jv4PLD0f
-	 kqlqJ2Wbv7yaQ==
-Date: Wed, 11 Dec 2024 12:23:19 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1733943105;
+	bh=yLHfV8ngkXxhgtHKKyFXreDxZ0ZXQvQnWW97XSfdb98=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gHnVvbS1XB97kpLzTk+1XMagYUCyxC2XQKdqIPD+YRSyVJeKVVovhWljEs/pmWnCO
+	 7ec/udzdaQpn6H1UDUosbAZ2tP+6uQBXYiQuKmfv1OPlFXChovIEW3GTFX9sWlLdQh
+	 wJ13+Drw8prnjqFCT/WJ3+EA/TyBsTKGlURKa0U+KsRQEpbkobvB/PRtzcoiYSpCA2
+	 FTXc53PgXH4czAxu1NE52q73hJdHmA+qgnTZRBMQ5EN0ewh2ewgL2Hfm1cUYjH+Vl2
+	 HGTym8lptC0FAz6Xya+wNx+QPgjHT6erIUkT5V0JRDagNSXBREVe2/OOMCAZ/x/JQ3
+	 SwEKSfBsIr13Q==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Purushothama Siddaiah <psiddaiah@mvista.com>,
+	Corey Minyard <cminyard@mvista.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 31/36] spi: omap2-mcspi: Fix the IS_ERR() bug for devm_clk_get_optional_enabled()
+Date: Wed, 11 Dec 2024 13:49:47 -0500
+Message-ID: <20241211185028.3841047-31-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241211185028.3841047-1-sashal@kernel.org>
+References: <20241211185028.3841047-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-spi@vger.kernel.org, krzk+dt@kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- javierm@redhat.com, conor+dt@kernel.org, broonie@kernel.org
-To: Iker Pedrosa <ikerpedrosam@gmail.com>
-In-Reply-To: <20241211165054.254164-1-ikerpedrosam@gmail.com>
-References: <20241211165054.254164-1-ikerpedrosam@gmail.com>
-Message-Id: <173394139968.3514802.10365052671543587756.robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: devicetree: explain how to get CS
- active-high
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.4
+Content-Transfer-Encoding: 8bit
 
+From: Purushothama Siddaiah <psiddaiah@mvista.com>
 
-On Wed, 11 Dec 2024 17:50:50 +0100, Iker Pedrosa wrote:
-> The current documentation does not clearly explain how to invert the SPI
-> CS signal to make it active-high. This makes it very difficult to
-> understand.
-> 
-> This patch adds a simple explanation on how to set the CS line in
-> active-high and adds an example to make it easier for users who need
-> that setup for their SPI peripherals.
-> 
-> Link: https://forums.raspberrypi.com/viewtopic.php?t=378222
-> Signed-off-by: Iker Pedrosa <ikerpedrosam@gmail.com>
-> ---
->  .../bindings/spi/spi-controller.yaml          | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
+[ Upstream commit 4c6ac5446d060f0bf435ccc8bc3aa7b7b5f718ad ]
 
-My bot found errors running 'make dt_binding_check' on your patch:
+The devm_clk_get_optional_enabled() function returns error
+pointers(PTR_ERR()). So use IS_ERR() to check it.
 
-yamllint warnings/errors:
+Verified on K3-J7200 EVM board, without clock node mentioned
+in the device tree.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/spi/spi-controller.example.dtb: /example-1/spi@20204000/display@0: failed to match any schema with compatible: ['sitronix,st7920']
+Signed-off-by: Purushothama Siddaiah <psiddaiah@mvista.com>
+Reviewed-by: Corey Minyard <cminyard@mvista.com>
+Link: https://patch.msgid.link/20241205070426.1861048-1-psiddaiah@mvista.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-omap2-mcspi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241211165054.254164-1-ikerpedrosam@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
+index 2c043817c66a8..4a2f84c4d22e5 100644
+--- a/drivers/spi/spi-omap2-mcspi.c
++++ b/drivers/spi/spi-omap2-mcspi.c
+@@ -1561,10 +1561,10 @@ static int omap2_mcspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	mcspi->ref_clk = devm_clk_get_optional_enabled(&pdev->dev, NULL);
+-	if (mcspi->ref_clk)
+-		mcspi->ref_clk_hz = clk_get_rate(mcspi->ref_clk);
+-	else
++	if (IS_ERR(mcspi->ref_clk))
+ 		mcspi->ref_clk_hz = OMAP2_MCSPI_MAX_FREQ;
++	else
++		mcspi->ref_clk_hz = clk_get_rate(mcspi->ref_clk);
+ 	ctlr->max_speed_hz = mcspi->ref_clk_hz;
+ 	ctlr->min_speed_hz = mcspi->ref_clk_hz >> 15;
+ 
+-- 
+2.43.0
 
 
