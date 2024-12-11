@@ -1,217 +1,111 @@
-Return-Path: <linux-spi+bounces-6006-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6007-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 173F49ECEF0
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 15:46:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D14D9ECFAB
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 16:26:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13A3B284F1A
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 14:46:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B87AA2859AE
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Dec 2024 15:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FFC570804;
-	Wed, 11 Dec 2024 14:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A1F1D5ACE;
+	Wed, 11 Dec 2024 15:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="BLKgsUF/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from s1.jo-so.de (s1.jo-so.de [37.221.195.157])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EEC24635E;
-	Wed, 11 Dec 2024 14:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.221.195.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF41B1B6D0D;
+	Wed, 11 Dec 2024 15:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733928384; cv=none; b=ot8/qXguAx7gqm1BHd1ZsA8fsR6hzDY7UDnocDkd0TGmceJUiAy7NZtENBh/0FR6i/TQYVEbV8C0cTzP28dDa2n3FsEn/+LpyeZHNaCRXJzLHZ8OStVPQaEtM4LycSnlBtG8fsFOuZ1BiqL9gtqDE4YVPgs7Mi5jErgasEi4qXs=
+	t=1733930748; cv=none; b=o1/9BwqB5V8+TiHvE4Q97tPVZBpakBY6lMws2kxmznEZjl5roqnN2J5da6tDFiNuxFuKOoc4Ynij0dEOWS0e8xN12HLdhhacJz9pKSRYxFtt0o9lf9X26n+CJx2JUDfDTr5bg/kpk0m0Fk0u3veT+LD8aamyO6tkRIU7WL3rmfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733928384; c=relaxed/simple;
-	bh=4432CzuyDb6GCvPf5YdoDyqv6F9aCZqCiwvjkQV3948=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TQ7c3aZaricSVQMvoon20WP8UWjelgD1yEqmwGJG2xlLUgp2nBQfdYRdLa0Injaq4GBvK8ntBf7IxSsoZ4X3beut02HQNG7c4EBKABRTVQsg55l4Ub3dFYk3K2A6sOm6dzda4iTSiWJrCTDI4IsnG2pPzo3ffqk0h9LnDYxa+y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de; spf=pass smtp.mailfrom=jo-so.de; arc=none smtp.client-ip=37.221.195.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jo-so.de
-Received: from mail-relay (helo=jo-so.de)
-	by s1.jo-so.de with local-bsmtp (Exim 4.96)
-	(envelope-from <joerg@jo-so.de>)
-	id 1tLNyf-001umu-2P;
-	Wed, 11 Dec 2024 15:46:13 +0100
-Received: from joerg by zenbook.jo-so.de with local (Exim 4.98)
-	(envelope-from <joerg@jo-so.de>)
-	id 1tLNyf-00000000e7P-0cFt;
-	Wed, 11 Dec 2024 15:46:13 +0100
-Date: Wed, 11 Dec 2024 15:46:13 +0100
-From: =?utf-8?B?SsO2cmc=?= Sommer <joerg@jo-so.de>
-To: Christian Eggers <ceggers@arri.de>, linux-spi@vger.kernel.org
-Cc: Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org
-Subject: Re: KSZ8795 not detected at start to boot from NFS
-Message-ID: <sqsslcr7fsgqi7fvjpy5xnarhlm76atvatczkzwpn37e7gnsu6@tuy7an7t4gdg>
-OpenPGP: id=7D2C9A23D1AEA375; url=https://jo-so.de/pgp-key.txt;
- preference=signencrypt
-References: <ojegz5rmcjavsi7rnpkhunyu2mgikibugaffvj24vomvan3jqx@5v6fyz32wqoz>
- <5708326.ZASKD2KPVS@n9w6sw14>
- <cxe42bethnzs7f46xxyvj6ok6ve7itssdxyh2vuftnfws4aa3z@2o4njdkw3r5i>
- <2675613.fDdHjke4Dd@n9w6sw14>
+	s=arc-20240116; t=1733930748; c=relaxed/simple;
+	bh=PX0Dak1GrNxWpNhFmQrRSn4HhzzLwAXXKZWfOHdy07c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=iFv5hypgRZEP7wuudBnp5bVU69M0DYy2uIk7s4VI4k/6krJDdTQzNZiwfpDVQuNOlz5rfcbSm8/AViVCw0m2+lQlFtqrxflVVk5BVEFXwJG42UbSfgbpGR/njWrAp6RCb6hAHJYY+BdSPaQWrDV0wioXhuguTSfVZSRK/H6Ekms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=BLKgsUF/; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1733930746; x=1765466746;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PX0Dak1GrNxWpNhFmQrRSn4HhzzLwAXXKZWfOHdy07c=;
+  b=BLKgsUF/wbMyTGyowKR6w+3rieVTd8ha3flvuryhF1JiDRHuGWWi77pB
+   lxRa/o25IEnIlFcR9cylPVAYPCfJFd+69HMnFaNxIx4beiuXGJf5e7y2P
+   jjIZHif8PIqoGpu2AsC/bDw58eAOkRgGOiFna0G59EkXpyIutwGxL8nb9
+   mhZQAiGpC/MyJCj+KuROP2V6ohJqW+xB961Pd3I6qajaXR5mb1WsadoEB
+   Jmnz4zIbQnIB852ljMk8Z9HX8m8GR+ZQ0VYg6MRCXYFm3cBHCrQyvxumq
+   aw6+qAnFmvJxu/BwukHLRgRSOvBXRypu83MPnkW97ykF8iRcg+bQZOOSW
+   g==;
+X-CSE-ConnectionGUID: qgV54QVtS8C7rcxkisT06g==
+X-CSE-MsgGUID: PyP866H5QiSc3zjJIIYzAA==
+X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
+   d="scan'208";a="35876300"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Dec 2024 08:25:44 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 11 Dec 2024 08:25:31 -0700
+Received: from [10.10.179.162] (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Wed, 11 Dec 2024 08:25:31 -0700
+Message-ID: <fb11338b-986f-4a9a-a0dd-e8f4e63941aa@microchip.com>
+Date: Wed, 11 Dec 2024 08:25:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="rtocwkfoomwx67gv"
-Content-Disposition: inline
-In-Reply-To: <2675613.fDdHjke4Dd@n9w6sw14>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/13] dt-bindings: clock: Add SAMA7D65 PMC compatible
+ string
+To: Rob Herring <robh@kernel.org>
+CC: <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<arnd@arndb.de>, <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
+	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>
+References: <cover.1733505542.git.Ryan.Wanner@microchip.com>
+ <5252a28531deaee67af1edd8e72d45ca57783464.1733505542.git.Ryan.Wanner@microchip.com>
+ <20241210164638.GA3770349-robh@kernel.org>
+From: Ryan Wanner <ryan.wanner@microchip.com>
+Content-Language: en-US
+In-Reply-To: <20241210164638.GA3770349-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-
---rtocwkfoomwx67gv
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: KSZ8795 not detected at start to boot from NFS
-MIME-Version: 1.0
-
-Hi Christian, hi SPI people,
-
-we are debating the SPI mode setting for the microchip ksz8795 and ksz9477
-and possibly others. Since the commit
-8c4599f49841dd663402ec52325dc2233add1d32 the SPI mode gets fixed to mode=C2=
-=A03
-in the code. But at least my ksz8795 works also with mode=C2=A00 and shows =
-better
-initialization behaviour with mode=C2=A00.
-
-The big question is: can both chips work with both modes? Should this
-setting stay in code or moved to the device tree?
-
-https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Data-Sheet-DS0000=
-2419D.pdf
-https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocum=
-ents/DataSheets/KSZ8795CLX-Data-Sheet-DS00002112.pdf
-
-Christian Eggers schrieb am Mi 11. Dez, 14:04 (+0100):
-> On Wednesday, 11 December 2024, 13:23:38 CET, J=C3=B6rg Sommer wrote:
-> > Christian Eggers schrieb am Mi 11. Dez, 11:18 (+0100):
->=20
-> > I think for 8795 these are optional. At me, it works with 0 and 3.
-> Hmm, I understood that setting SPI mode to 3 (by my patch) is the
-> root of your problem? If you revert my patch and set spi-cpol + spi-cpha
-> in you device tree, the result should be more or less the same.
-
-Yes, that's right. When I set spi-cpol + spi-cpha in the DT (or with your
-patch) I get the message =E2=80=9Cksz8795-switch spi0.1: invalid family id:=
- 0=E2=80=9D.
-Without it, I don't get this message and the switch works fine.
-
-> If you think that your problem is related to the reset timing,
-
-Not really. My impression is more that =E2=80=9Cthe first read after mode s=
-witch
-always fails.=E2=80=9D
-
-=46rom my other mail:
-
-[    1.712545] ksz8795-switch spi0.1: Switching SPI mode from 0 to spi-cpha=
-,spi-cpol
-[    1.851109] ksz8795-switch spi0.1: invalid family id: 0
-
-a gap of 140ms.
-
-With two reads immediately after the spi_setup:
-
-[    1.569835] ksz8795-switch spi0.1: Switching SPI mode from 0 to spi-cpha=
-,spi-cpol
-[    1.570641] ksz8795-switch spi0.1: ksz8795_spi_probe:84: ksz_read16(REG_=
-CHIP_ID0, 0) =3D 0
-[    1.571420] ksz8795-switch spi0.1: ksz8795_spi_probe:90: ksz_read16(REG_=
-CHIP_ID0, 34705) =3D 0
-[    1.701375] ksz8795-switch spi0.1: Switching SPI mode from 3 to spi-cpha=
-,spi-cpol
-[    1.702191] ksz8795-switch spi0.1: ksz8795_spi_probe:84: ksz_read16(REG_=
-CHIP_ID0, 34705) =3D 0
-[    1.702928] ksz8795-switch spi0.1: ksz8795_spi_probe:90: ksz_read16(REG_=
-CHIP_ID0, 34705) =3D 0
-
-Maybe the chip needs this read to detect the SPI mode. And if this first
-read is the chip detection the initialization fails.
-
-> > > On Thursday, 19 November 2020 07:48:01 -0600, Rob Hering wrote:
-> > > > On Wed, Nov 18, 2020 at 09:30:02PM +0100, Christian Eggers wrote:
-> > > ...
-> > > > > +        ksz9477: switch@0 {
-> > > > > +            compatible =3D "microchip,ksz9477";
-> > > > > +            reg =3D <0>;
-> > > > > +            reset-gpios =3D <&gpio5 0 GPIO_ACTIVE_LOW>;
-> > > > > +
-> > > > > +            spi-max-frequency =3D <44000000>;
-> > > > > +            spi-cpha;
-> > > > > +            spi-cpol;
-> > > >=20
-> > > > Are these 2 optional or required? Being optional is rare as most
-> > > > devices support 1 mode, but not unheard of. In general, you shouldn=
-'t
-> > > > need them as the driver should know how to configure the mode if th=
-e h/w
-> > > > is fixed.
-> > > ...
-> > >=20
-> > > It seems that I considered the h/w as "fixed". The pre-existing devic=
-e tree
-> > > bindings and the diagrams on page 53 suggested that SPI mode 3 is the=
- only
-> > > valid option. Particularly the idle state of the "SCL" signal is high=
- here:
-> > >=20
-> > > https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Data-Sheet-=
-DS00002419D.pdf
-> > >=20
-> > > But the text description on page 52 says something different:
-> > > > SCL is expected to stay low when SPI operation is idle.=20
-> > >=20
-> > > Especially the timing diagrams on page 206 look more like SPI mode 0.
-> > >=20
-> > > So it is possible that my patch was wrong (due to inconsistent descri=
-ption
-> > > on the data sheet / pre existing device tree binding). As I already m=
-entioned,
-> > > I did this only due to the DT conversion, I actually don't use SPI on=
- such
-> > > devices myself.
-> > >=20
-> > > N.B. Which KSZ device do you actually use (I didn't find this in you =
-previous
-> > > mails)?
-> >=20
-> > I'm using KSZ8795.
->=20
-> I should better read the subject line ...
->=20
-> Summary:
-> - The timing diagrams of KSZ8795CLX and KSZ9563 implies that SPI mode 0 i=
-s correct
-> - The functional descriptions in the datasheets look more like SPI mode 3=
-, but this
->   is not authoritative.
-> - Maybe that the KSZ devices can work with both modes.
-
-Or maybe not all ksz8 behave the same? Should we revert the behaviour and
-leave it up to the device tree to decide?
-
-
-J=C3=B6rg
-
---=20
-Prof. in der Mathematikvorlesung zu einem vergessenen =CF=86 in der
-Gleichung: =E2=80=9EKlein=E2=80=90=CF=86 macht auch Mist.=E2=80=9C
-
---rtocwkfoomwx67gv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABEIAB0WIQS1pYxd0T/67YejVyF9LJoj0a6jdQUCZ1mlswAKCRB9LJoj0a6j
-dbD1AP9Wq46TEqExVUJnS1+2ZP6WTDTbj0Vieya7xYaFUd7llgEApGgcuJ0i41K9
-zlKzN9/JfyuIs6D6KNI0W9SO4S+lTsg=
-=Y+Hv
------END PGP SIGNATURE-----
-
---rtocwkfoomwx67gv--
+On 12/10/24 09:46, Rob Herring wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On Fri, Dec 06, 2024 at 12:59:52PM -0700, Ryan.Wanner@microchip.com wrote:
+>> From: Dharma Balasubiramani <dharma.b@microchip.com>
+>>
+>> Add the `microchip,sama7d65-pmc` compatible string to the existing binding,
+>> since the SAMA7D65 PMC shares the same properties and clock requirements
+>> as the SAMA7G5.
+>>
+>> Export MCK3 and MCK5 to be accessed and referenced in DT to assign to
+>> the clocks property for sama7d65 SoC.
+>>
+>> Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+>> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Missing Conor's ack.
+I removed the ack because I have changed the original patch that was
+acked. Should the ack not have been removed even though the original
+patch as been changed?
 
