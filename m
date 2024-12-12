@@ -1,300 +1,142 @@
-Return-Path: <linux-spi+bounces-6041-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6042-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4679EE2CC
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2024 10:24:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FF949EE46D
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2024 11:45:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90E31161A32
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2024 09:24:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19252163D79
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Dec 2024 10:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772AA210198;
-	Thu, 12 Dec 2024 09:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3BB1EC4F9;
+	Thu, 12 Dec 2024 10:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WS62WFVr"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="JV553TnA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7684220E337;
-	Thu, 12 Dec 2024 09:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11EA813C9DE;
+	Thu, 12 Dec 2024 10:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733995341; cv=none; b=cphLg4gxX3B/i6icY8eNy0KpENjMQ/cJt2j5JJ08dB1dNuFdrM8MHF8pFcHt2wxkAx7yasUOd5YnBrLqMOJRhgGWBUsqxlaI6c/8tp59XZj3ltTDFDDwAVq28lQrOAvIO96GEqLwjBb9HqKjuMy9eSSfxZ0KiC3kzwxRYhtvLCE=
+	t=1734000348; cv=none; b=WZKeFlPqV6C/SSkI/Pc8mx00Ix761uW/NTD401dBBQqxfHG70Y5MwpoLao/OJx0QxQKHLXpT7zrRQVMmIUyf9+o23B9ucvLpQs0W/KCdLNfyGjjsJEhrbslxTzNXmFa9kt1dPDOJTJ0cibfPJOBLe6nZlnwC4xW/eMK3Hz1f/pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733995341; c=relaxed/simple;
-	bh=1I5xkOfcK/G28pEQISMHkgkC3GLNjLYii3hf5M0pLxE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GhByJfP5wBuBcbzlWckDGFxaWb7Bp4En9jlx+xnWZPCa2JaEJsIc03fBoJy2j80bBwgvLeTV7RBinUzSPkaJ0ZKPUT4g4iwWP0bjKgytuAdapyum3JupUcp6WG0blCKJ3sIPEEYmcB7vecYhrEwG5IWurQZ6+bHZQ/9H5Ragm18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WS62WFVr; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 920f2606b86a11ef99858b75a2457dd9-20241212
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=tGykcbTcw3d7ewUJ0l3TKsRLZtS5QyewppIPS1U+Om8=;
-	b=WS62WFVrp77EVvB9ufbchuuPGjh9c0yK9g/gdlkj4Gw0C+fQGU3j/tyc1naF8M1ttcZXqcrJHaN9b4vs4PaMOaVvHK+pEiTdqj6cm6hxYGnnBwyy9u9Z5SkdnUUN9j6DakGJCrSY0qSLx83OtALvAErWaXY+BNGYEr6CFOp6W6w=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.45,REQID:28d77f41-f6a6-41f5-ba80-15e537227a74,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:6493067,CLOUDID:9a796828-d2eb-4de2-b5c9-495d1bc17256,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 920f2606b86a11ef99858b75a2457dd9-20241212
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <cloud.zhang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 981262921; Thu, 12 Dec 2024 17:22:12 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 12 Dec 2024 17:22:09 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 12 Dec 2024 17:22:08 +0800
-From: mtk22730 <Cloud.Zhang@mediatek.com>
-To: Mark Brown <broonie@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Cloud Zhang
-	<cloud.zhang@mediatek.com>
-Subject: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of nor controller
-Date: Thu, 12 Dec 2024 17:20:12 +0800
-Message-ID: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1734000348; c=relaxed/simple;
+	bh=+ef2vJvZuxSB7+uMzNNKVDg37cZ41z++pT9n0DAt504=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gon+d1cdb8vLFpvjapu9V7htln+AJxXKew5AJAGvwEGNZDPTCSVsLwEa3EV9ZvSeF0HKfalBTZio9cG4v1HABAFQaJ9e1+4+cOFx5tP10g1dDozqz0OaP7StStKi/L0crwV/e5F8gFFGp7twTA/PyFKCLayzDdDc8XqzDAcXI3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=JV553TnA; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BC4iuLg014964;
+	Thu, 12 Dec 2024 04:45:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PODMain02222019; bh=qC5tIgRwbkOKhKAkIN
+	p1XaVm8vYjMMo/AtWExSA8MIA=; b=JV553TnAvmsspxVrBHjmvS0ayWBd7cUAdw
+	7QAxN26E5Nak8EJNREcSbkGPG6oD2tIe7ZlY9WtFfAhM0Do2vGjeHyR3FwKLHy0O
+	u7g0EeRCDEYHrPDf4J2S4+hWrRCF3LcuwvFUjE6T185rP8j6TPNV1gqE/k4Kqs72
+	GyyAZ1+XbSv283e4gh6dRKPq8OVmCZNOyJp9i3CiFoNYhjgAC7D/o2+g+eqjWklu
+	/Z0t3wvDvUHes4YaO7KH8ubRF5LtU2gREXgAQKYlatOE/RvSudl39fTzQzuO99AK
+	pUIX6PC+oyIkNcOT+jY4YN5Fdp+c3FehrvUsDKcHINuhschI4fog==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 43cmn26g0e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Dec 2024 04:45:29 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.13; Thu, 12 Dec
+ 2024 10:45:27 +0000
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.13 via Frontend Transport; Thu, 12 Dec 2024 10:45:27 +0000
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id 6427D822548;
+	Thu, 12 Dec 2024 10:45:27 +0000 (UTC)
+Date: Thu, 12 Dec 2024 10:45:26 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC: <broonie@kernel.org>, <linus.walleij@linaro.org>, <brgl@bgdev.pl>,
+        <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 1/3] gpio: swnode: Add ability to specify native chip
+ selects for SPI
+Message-ID: <Z1q+xndn217uF2rr@opensource.cirrus.com>
+References: <20240326141108.1079993-1-ckeepax@opensource.cirrus.com>
+ <20240326141108.1079993-2-ckeepax@opensource.cirrus.com>
+ <Z1jZliSoXziuLt1u@google.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10-2.015300-8.000000
-X-TMASE-MatchedRID: PZMqI2AhqDQdWKRD1iYss+EbUg4xvs+wCt59Uh3p/NUKogmGusPLb8UR
-	fpp2J0YycRMU/6zQP6hcWPWm98SUsWdvGUEuKvScnIGynr5ObIaKbuU19+RNrmq//5Ao1w8uVon
-	uiLTPfifG3TRnfVX2PIAy6p60ZV62SwOSQ/fMiOrdB/CxWTRRu4PtEWvP7F7FglK3TQvBrzHUdN
-	vHZnc+lOkykW6dVMoLp7xo3bUdR0zawYtKJNIJl4y1Ms3iZ9oVEBHFAzc5ZQlDW0Cl2o4sC7Y3k
-	0MIk05nhJVRlkc0uv5GBXoeyrLHXVBo425nomviD2TeXwRpghw5Asr9kfiuVp6oP1a0mRIj
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10-2.015300-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	9A918C98F4CB6051F0074717FB9392B18B5A07F715E3C802758DA1FA72F647DF2000:8
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Z1jZliSoXziuLt1u@google.com>
+X-Proofpoint-GUID: 616hYGeOH9wbeezuHTz5xjXWInlFsFbf
+X-Proofpoint-ORIG-GUID: 616hYGeOH9wbeezuHTz5xjXWInlFsFbf
+X-Proofpoint-Spam-Reason: safe
 
-From: Cloud Zhang <cloud.zhang@mediatek.com>
+On Tue, Dec 10, 2024 at 04:15:18PM -0800, Dmitry Torokhov wrote:
+> On Tue, Mar 26, 2024 at 02:11:06PM +0000, Charles Keepax wrote:
+> > SPI devices can specify a cs-gpios property to enumerate their
+> > chip selects. Under device tree, a zero entry in this property can
+> > be used to specify that a particular chip select is using the SPI
+> > controllers native chip select, for example:
+> > 
+> >         cs-gpios = <&gpio1 0 0>, <0>;
+> > 
+> > Here the second chip select is native. However, when using swnodes
+> > there is currently no way to specify a native chip select. The
+> > proposal here is to register a swnode_gpio_undefined software node,
+> > that can be specified to allow the indication of a native chip
+> > select. For example:
+> > 
+> > static const struct software_node_ref_args device_cs_refs[] = {
+> > 	{
+> > 		.node  = &device_gpiochip_swnode,
+> > 		.nargs = 2,
+> > 		.args  = { 0, GPIO_ACTIVE_LOW },
+> > 	},
+> > 	{
+> > 		.node  = &swnode_gpio_undefined,
+> > 		.nargs = 0,
+> > 	},
+> > };
+> 
+> I am sorry, I am very late to the party, but wouldn't it all work by
+> simply setting ".node" to NULL? As far as I can see we have in
+> software_node_get_reference_args():
+> 
+> 	...
+> 
+> 	if (index * sizeof(*ref) >= prop->length)
+> 		return -ENOENT;
+> 
+> 	ref_array = prop->pointer;
+> 	ref = &ref_array[index];
+> 
+> 	refnode = software_node_fwnode(ref->node);
+> 	if (!refnode)
+> 		return -ENOENT;
+> 
+> if ref->node is NULL then software_node_fwnode(ref->node) will return
+> NULL and we'll get -ENOENT which will bubble up to
+> gpiod_get_index_optional() in SPI core.
+> 
 
-The clock used by different platforms is not same. So it is
-necessary to modify the clock architecture to be adaptable to more
-platforms.
+I did definitely try that at the time, and there was definitely
+some issue with that approach. I think it might have related to
+something around how the GPIO stuff structures things. Alas, it
+is long enough ago that the details are escaping me, if I manage
+to find a spare minute I will try to refresh my memory and report
+back.
 
-Signed-off-by: Cloud Zhang <cloud.zhang@mediatek.com>
----
- drivers/spi/spi-mtk-nor.c | 118 ++++++++++++++++++++++----------------
- 1 file changed, 68 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index 85ab5ce96c4d..d466a8d3f062 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -99,6 +99,8 @@
- 
- #define CLK_TO_US(sp, clkcnt)		DIV_ROUND_UP(clkcnt, sp->spi_freq / 1000000)
- 
-+#define MAX_CLOCK_CNT		6
-+
- struct mtk_nor_caps {
- 	u8 dma_bits;
- 
-@@ -110,16 +112,19 @@ struct mtk_nor_caps {
- 	u8 extra_dummy_bit;
- };
- 
-+struct clk_info {
-+	struct clk *clki;
-+	const char *name;
-+};
-+
- struct mtk_nor {
- 	struct spi_controller *ctlr;
- 	struct device *dev;
- 	void __iomem *base;
- 	u8 *buffer;
- 	dma_addr_t buffer_dma;
--	struct clk *spi_clk;
--	struct clk *ctlr_clk;
--	struct clk *axi_clk;
--	struct clk *axi_s_clk;
-+	struct clk_info clocks[MAX_CLOCK_CNT];
-+	u8 clock_cnt;
- 	unsigned int spi_freq;
- 	bool wbuf_en;
- 	bool has_irq;
-@@ -703,42 +708,74 @@ static int mtk_nor_transfer_one_message(struct spi_controller *host,
- 
- static void mtk_nor_disable_clk(struct mtk_nor *sp)
- {
--	clk_disable_unprepare(sp->spi_clk);
--	clk_disable_unprepare(sp->ctlr_clk);
--	clk_disable_unprepare(sp->axi_clk);
--	clk_disable_unprepare(sp->axi_s_clk);
-+	u8 i;
-+
-+	for (i = 0; i < sp->clock_cnt; i++)
-+		clk_disable_unprepare(sp->clocks[i].clki);
- }
- 
- static int mtk_nor_enable_clk(struct mtk_nor *sp)
- {
- 	int ret;
-+	u8 i, j;
- 
--	ret = clk_prepare_enable(sp->spi_clk);
--	if (ret)
--		return ret;
-+	for (i = 0; i < sp->clock_cnt; i++) {
-+		ret = clk_prepare_enable(sp->clocks[i].clki);
-+		if (ret) {
-+			for (j = 0; j < i; j++)
-+				clk_disable_unprepare(sp->clocks[j].clki);
- 
--	ret = clk_prepare_enable(sp->ctlr_clk);
--	if (ret) {
--		clk_disable_unprepare(sp->spi_clk);
--		return ret;
-+			return ret;
-+		}
-+
-+		if (strcmp(sp->clocks[i].name, "spi"))
-+			sp->spi_freq = clk_get_rate(sp->clocks[i].clki);
- 	}
- 
--	ret = clk_prepare_enable(sp->axi_clk);
--	if (ret) {
--		clk_disable_unprepare(sp->spi_clk);
--		clk_disable_unprepare(sp->ctlr_clk);
--		return ret;
-+	return 0;
-+}
-+
-+static int mtk_nor_parse_clk(struct device *dev, struct mtk_nor *sp)
-+{
-+	struct device_node *np = dev->of_node;
-+	int ret;
-+	const char *name;
-+	u8 cnt, i;
-+
-+	cnt = of_property_count_strings(np, "clock-names");
-+	if (!cnt || (cnt == -EINVAL)) {
-+		dev_err(dev, "Unable to find clocks\n");
-+		ret = -EINVAL;
-+		goto out;
-+	} else if (cnt < 0) {
-+		dev_err(dev, "Count clock strings failed, err %d\n", cnt);
-+		ret = cnt;
-+		goto out;
-+	} else if (cnt > MAX_CLOCK_CNT) {
-+		ret = -EINVAL;
-+		goto out;
- 	}
- 
--	ret = clk_prepare_enable(sp->axi_s_clk);
--	if (ret) {
--		clk_disable_unprepare(sp->spi_clk);
--		clk_disable_unprepare(sp->ctlr_clk);
--		clk_disable_unprepare(sp->axi_clk);
--		return ret;
-+	sp->clock_cnt = cnt;
-+
-+	for (i = 0; i < cnt; i++) {
-+		ret = of_property_read_string_index(np, "clock-names", i,
-+				       &name);
-+		if (ret) {
-+			dev_err(dev, "failed to get clock string\n");
-+			return ret;
-+		}
-+
-+		sp->clocks[i].name = name;
-+		sp->clocks[i].clki = devm_clk_get(dev, sp->clocks[i].name);
-+		if (IS_ERR(sp->clocks[i].clki)) {
-+			dev_err(dev, "get clock %s fail\n", sp->clocks[i].name);
-+			return PTR_ERR(sp->clocks[i].clki);
-+		}
- 	}
- 
--	return 0;
-+out:
-+	return ret;
- }
- 
- static void mtk_nor_init(struct mtk_nor *sp)
-@@ -813,29 +850,12 @@ static int mtk_nor_probe(struct platform_device *pdev)
- 	struct mtk_nor *sp;
- 	struct mtk_nor_caps *caps;
- 	void __iomem *base;
--	struct clk *spi_clk, *ctlr_clk, *axi_clk, *axi_s_clk;
- 	int ret, irq;
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
- 
--	spi_clk = devm_clk_get(&pdev->dev, "spi");
--	if (IS_ERR(spi_clk))
--		return PTR_ERR(spi_clk);
--
--	ctlr_clk = devm_clk_get(&pdev->dev, "sf");
--	if (IS_ERR(ctlr_clk))
--		return PTR_ERR(ctlr_clk);
--
--	axi_clk = devm_clk_get_optional(&pdev->dev, "axi");
--	if (IS_ERR(axi_clk))
--		return PTR_ERR(axi_clk);
--
--	axi_s_clk = devm_clk_get_optional(&pdev->dev, "axi_s");
--	if (IS_ERR(axi_s_clk))
--		return PTR_ERR(axi_s_clk);
--
- 	caps = (struct mtk_nor_caps *)of_device_get_match_data(&pdev->dev);
- 
- 	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(caps->dma_bits));
-@@ -868,10 +888,6 @@ static int mtk_nor_probe(struct platform_device *pdev)
- 	sp->wbuf_en = false;
- 	sp->ctlr = ctlr;
- 	sp->dev = &pdev->dev;
--	sp->spi_clk = spi_clk;
--	sp->ctlr_clk = ctlr_clk;
--	sp->axi_clk = axi_clk;
--	sp->axi_s_clk = axi_s_clk;
- 	sp->caps = caps;
- 	sp->high_dma = caps->dma_bits > 32;
- 	sp->buffer = dmam_alloc_coherent(&pdev->dev,
-@@ -885,11 +901,13 @@ static int mtk_nor_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
- 
--	ret = mtk_nor_enable_clk(sp);
-+	ret = mtk_nor_parse_clk(sp->dev, sp);
- 	if (ret < 0)
- 		return ret;
- 
--	sp->spi_freq = clk_get_rate(sp->spi_clk);
-+	ret = mtk_nor_enable_clk(sp);
-+	if (ret < 0)
-+		return ret;
- 
- 	mtk_nor_init(sp);
- 
--- 
-2.46.0
-
+Thanks,
+Charles
 
