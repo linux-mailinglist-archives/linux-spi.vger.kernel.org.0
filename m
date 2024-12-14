@@ -1,79 +1,163 @@
-Return-Path: <linux-spi+bounces-6055-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6056-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 805169F1BED
-	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 02:36:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9035D9F1F46
+	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 15:25:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB221188E66A
-	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 01:36:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1EBE11888EF6
+	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 14:25:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EC518622;
-	Sat, 14 Dec 2024 01:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2295C1925B9;
+	Sat, 14 Dec 2024 14:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Upc0acJ1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQMdx3QM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867FE38F82;
-	Sat, 14 Dec 2024 01:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D27169397;
+	Sat, 14 Dec 2024 14:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734140132; cv=none; b=NgLCUYjkLMdP05JJPp9SAonrJxtThVgbYC8lNP0puDTJdy60VGms5Ava2WXBAkfMMITjjFXp+//w4PAQNnUsu+4RGhZmzjFvHQFSDCQ/9bO/KS48sQ9YiXKmv7ZV2iUeP1eASvhjGgftoA6paePqZBJ9c7iKLNgWlpjiFi2ZqKE=
+	t=1734186325; cv=none; b=SxGOdTvmAJvGSkIKKdSx8MHOfqHyDTlTbgt9i5FncT2SkTGLEbQ1JZ0HTLTolsdtD/RWr+o5JpI3NdMLBIFyqIiCZ9tNud2nE+c9xhEH3VGF8w/Cb/mfp9UDvwbEeckNKj6F1ipZibfMDhpWM2NcSQlcfEXNldkyShw5QW+G5ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734140132; c=relaxed/simple;
-	bh=L1Snu1CLsrgEQZasr6nXP4ccEHPAM0I7nccMCV/I6hY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HV+XxCl6Wcx/oelYRBpALaS1Ry2EXVk4X1M3nXzeT3vl9zww9SHFLU+RQ4n5WvdP767Vb8IQIWgzRU8rgSn6LjXT+nfTeisZ8G/tKt6gJWEKRA58uFMHEKrUsC0NwJE17z+ckgb9iW3n/urR8ZxCFat9RHzvLHnHnCZCQ/IfSmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Upc0acJ1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69CEFC4AF09;
-	Sat, 14 Dec 2024 01:35:32 +0000 (UTC)
+	s=arc-20240116; t=1734186325; c=relaxed/simple;
+	bh=uo7FIWAio2B7yGgy0lABEYgsS8AiZPqc79yXVquOkrw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YuG4HM4HDXRJ2sG4c+RfBG+FSzWRYCm40L8N98naJXYbdA7PL1gzjkZlKGaqlxr7KoRsgLGCz4tEHn5fJcCbdH+HbMWCbJjeRD+KHXGbyUpBkrqG1b6xOx3Cd3aYz8HRrjdpJxWO/yChl6vCX8L42ZHxCBHwjguO9aNIhFSb2hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQMdx3QM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535BCC4CED1;
+	Sat, 14 Dec 2024 14:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734140132;
-	bh=L1Snu1CLsrgEQZasr6nXP4ccEHPAM0I7nccMCV/I6hY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Upc0acJ1KpQ41+3KpciuzCqStg/vT3+5bd7uVGiXtGNum7dmu2eX00NQGb0JTnOpg
-	 +5NpLdcvMHr1IV54gXtDWgaWEfHtOECajHy2sc/IbGSUL7G7F3pupUIUiR6La8LYIp
-	 kE4wK6GfHfTxY65NO9awJsXe4hRlWHqK3rwOT1cLMelXIwUn6rmttCCTBPptBoKaHs
-	 /x8/7OsnsCS4wsJzfHRb8AT16zXUh/N6XkWnK0nZzkNN0b6hqZ6jbhPD/YVraAWq/Z
-	 OEWDFSd8ybhDVrfoH90d0tjeXJeJTXdX41NNykbwC1E7nSNuaNkIo3hd7+Pwc0fT3V
-	 WL6xxA/hDr3/w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BB8380A959;
-	Sat, 14 Dec 2024 01:35:50 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.13-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <18812498d4f4eb6d0565c8e97f428d8e.broonie@kernel.org>
-References: <18812498d4f4eb6d0565c8e97f428d8e.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <18812498d4f4eb6d0565c8e97f428d8e.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.13-rc2
-X-PR-Tracked-Commit-Id: 25fb0e77b90e290a1ca30900d54c6a495eea65e2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f86135613a2552b1e6c0875726f45b34b0ddd5a6
-Message-Id: <173414014893.3218065.11674056341849557761.pr-tracker-bot@kernel.org>
-Date: Sat, 14 Dec 2024 01:35:48 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1734186324;
+	bh=uo7FIWAio2B7yGgy0lABEYgsS8AiZPqc79yXVquOkrw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YQMdx3QMi51nA0Rl1qxkPQMUUHSS697Pm3psyQXjjmxMKhxz2p5cUllCAOYjRo/uK
+	 hqOvL59M3JnBgEnw7JjFCnBwyKlvHcN74qaEG60ObQN52nHJF/xKWJfB1bLvvGCsRz
+	 q9C7FY921zBAhREk+mfcMbKR8+hLSDg8Hxkqm7gmc7+YjcJGqlU0NIZ6/xHOIAqfrW
+	 IDztn4HHHVnH9og37duLJghYDbgWNBQWYfw+vl39kKn2chQWAkiPyXfgxXgeApSSOG
+	 zl3wycQQVZy4fjvIDTcAeHPPHARDGYH4W7A/n6eH9q43iqh+42fGK1l96XRaOtiLU5
+	 I6kYreyn9XYcg==
+Date: Sat, 14 Dec 2024 14:25:11 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
+ Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v6 03/17] dt-bindings: trigger-source: add generic PWM
+ trigger source
+Message-ID: <20241214142511.2dcdb5be@jic23-huawei>
+In-Reply-To: <20241211-dlech-mainline-spi-engine-offload-2-v6-3-88ee574d5d03@baylibre.com>
+References: <20241211-dlech-mainline-spi-engine-offload-2-v6-0-88ee574d5d03@baylibre.com>
+	<20241211-dlech-mainline-spi-engine-offload-2-v6-3-88ee574d5d03@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-The pull request you sent on Sat, 14 Dec 2024 00:48:02 +0000:
+On Wed, 11 Dec 2024 14:54:40 -0600
+David Lechner <dlechner@baylibre.com> wrote:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.13-rc2
+> Add a new binding for using a PWM signal as a trigger source.
+> 
+> The idea here is similar to e.g. "pwm-clock" to allow a trigger source
+> consumer to use a PWM provider as a trigger source.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+LGTM. But obviously this is really one for the dt-binding maintainers to look
+at. With that in mind.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f86135613a2552b1e6c0875726f45b34b0ddd5a6
+> ---
+> 
+> v6 changes:
+> * Moved file from bindings/spi/ to bindings/trigger-source/
+> * Updated description to not mention SPI
+> * Dropped $ref: /schemas/spi/trigger-source.yaml#
+> * Swapped order in name to be consistent with "pwm-clock"
+> 
+> v5 changes:
+> * Add MAINTAINERS entry
+> 
+> v4 changes: new patch in v4
+> ---
+>  .../bindings/trigger-source/pwm-trigger.yaml       | 37 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 +++
+>  2 files changed, 42 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml b/Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1eac20031dc3cf921aafb8aa37f4e4eca1075835
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
+> @@ -0,0 +1,37 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/trigger-source/pwm-trigger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic trigger source using PWM
+> +
+> +description: Remaps a PWM channel as a trigger source.
+> +
+> +maintainers:
+> +  - David Lechner <dlechner@baylibre.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: pwm-trigger
+> +
+> +  '#trigger-source-cells':
+> +    const: 0
+> +
+> +  pwms:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#trigger-source-cells'
+> +  - pwms
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    trigger {
+> +        compatible = "pwm-trigger";
+> +        #trigger-source-cells = <0>;
+> +        pwms = <&pwm 0 1000000 0>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9284a257607a740ab7f6fd960c2bcdc34ead7586..b2aa6f37743e48353c60e5973ea8126590c7f6d5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -23879,6 +23879,11 @@ W:	https://github.com/srcres258/linux-doc
+>  T:	git git://github.com/srcres258/linux-doc.git doc-zh-tw
+>  F:	Documentation/translations/zh_TW/
+>  
+> +TRIGGER SOURCE - PWM
+> +M:	David Lechner <dlechner@baylibre.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
+> +
+>  TRUSTED SECURITY MODULE (TSM) ATTESTATION REPORTS
+>  M:	Dan Williams <dan.j.williams@intel.com>
+>  L:	linux-coco@lists.linux.dev
+> 
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
 
