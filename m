@@ -1,179 +1,160 @@
-Return-Path: <linux-spi+bounces-6063-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6064-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25EC29F2003
-	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 18:12:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FE2C9F2D8F
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2024 10:58:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CC46166893
-	for <lists+linux-spi@lfdr.de>; Sat, 14 Dec 2024 17:12:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75ADE1887D5D
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Dec 2024 09:58:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26727B3E1;
-	Sat, 14 Dec 2024 17:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3678B202C26;
+	Mon, 16 Dec 2024 09:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZ1SezrG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jr/r6CgQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A012940D;
-	Sat, 14 Dec 2024 17:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6225E1B21AD;
+	Mon, 16 Dec 2024 09:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734196331; cv=none; b=eSvGinOveWDInYQn3bPXDUpFTj9iQDgzO5Piz2OE/INdtgmtMwaoGVYOQm4H6LuYxl5iqJemH7QGTDYlqlBF5vuQbfddXNIvhTHO63VPecbTAgy/kG+nSD7asYMkvnZqB3jSq/ysd3feVRZ7k326P2xpn8h1U1kNYKoFyYyPNjc=
+	t=1734343118; cv=none; b=bygEAjDCih/7cJMz6cLJNGiTQqSnTKjsIg9nZg8+os6UU+NPzm2iAXSHs2H73EtBJhuW3OyQq76IPzZwdNoJHJs8RDGejFSDJnFdRr4HV4gFWg/cA/52Un3rJ7NnX4F0HzHgvhL6DGnZRMcGKP+5F+HeG3295hQwyLWf9eJxNzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734196331; c=relaxed/simple;
-	bh=OX/8JikVy9D7wArDSU50MyIeKFbcedP/Ztft4uhLWcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TWoKIda/K6TPmJLPwmPkr75UP8B5nzTH626rTQ2ev2Ms4GPdyNS6UkkGSTaDAYIbO10twlDjWsEOLcoTqOBXlfHn/YMulAMB3RTVDDm0WdUDzNcDeFFk+/k0QObmRG7xcgE4QNOObcSGiUMvpqvX9utx27X5VUgxIc7EnR8s5hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZ1SezrG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2BF4C4CED1;
-	Sat, 14 Dec 2024 17:12:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734196331;
-	bh=OX/8JikVy9D7wArDSU50MyIeKFbcedP/Ztft4uhLWcg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=kZ1SezrGdosbitshG6XfFnPYhiXE1XHyslryKnszw0ix11nEwWV4rBqy3C/EyxBWg
-	 xXgutVxu4+XypzKZaLoCgvIczf+zP8naHEjyMKJqiH/6SBRgSIIrUqkTe184b9pW3a
-	 Ro6CS958Z23WBoPj61AMuWCTFPq9FPQhXigGzLWYYIU52paPOyCIEGtImdcncnNv/g
-	 gk1G1WsbqQ0sVgSHJXKFKJ9VolOzR59EEI3Sb8d+BjLzD+vJ4q3R2cWqpZqUmBKLsS
-	 PJqaVl44RpAQUhETP2geovwclZwuQmti/mPUt86pisFqhpQd0cNW1rECJ/bB/ktaVU
-	 8eMltqBWClS6g==
-Date: Sat, 14 Dec 2024 17:12:01 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
- Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, Axel Haslam <ahaslam@baylibre.com>
-Subject: Re: [PATCH v6 17/17] iio: dac: ad5791: Add offload support
-Message-ID: <20241214171201.35b166d5@jic23-huawei>
-In-Reply-To: <20241211-dlech-mainline-spi-engine-offload-2-v6-17-88ee574d5d03@baylibre.com>
-References: <20241211-dlech-mainline-spi-engine-offload-2-v6-0-88ee574d5d03@baylibre.com>
-	<20241211-dlech-mainline-spi-engine-offload-2-v6-17-88ee574d5d03@baylibre.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1734343118; c=relaxed/simple;
+	bh=myFBHZeecaUEN+7YXzD9HPEtAFFygM0cCcgut9FY0n8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TvNZVG94VULwxfNt2njJLC6vNGrLeck76TdN9eUBBWT3nH7owofDH/d6s4BpQYx7X8gFdilOqCJeJG+B4Zkirdr9n24ExMsA4aanXZUjPTkqSoD6Rfxo7kh8pxGx1OXDIIaJG02Fqas+ZYNws7FUxp0LIzuT7afGkK9kcugvq4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jr/r6CgQ; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43625c4a50dso26044855e9.0;
+        Mon, 16 Dec 2024 01:58:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734343114; x=1734947914; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+imjwObLYrCtT9iVdWaRvQYsePwzOfwbts/TF+6Qi9w=;
+        b=jr/r6CgQMbFgZyuxin+Qy2ktcox7eYGQ8W8hAxLNwEctjPIAsfh6QdTdHHocyDU8K6
+         BCuZHAuGWuJEJaZ6PeKcVTxRSZTmjISrOQgpk97MKpzt9TkZW1MUHY88xKRKkV8jXe9p
+         85fqQcRnUkyaBGOpagWRrz8nmK+HcomjMkRanKJQ7n4tnWiieuXi4hcOfb0OTKEGDYy0
+         BPl4+SF0peQs7YQVTmpLUyRGvuXWglLRSzubUdYszbGyms/bkNscNaMV5q+Hu2qflXiV
+         jDujWH+fIgGy0jxVOq96ldGlKocowu8/+yRlNthr2hhpfjSRN5Ie56dTs2lqUXeo8UV8
+         cBwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734343114; x=1734947914;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+imjwObLYrCtT9iVdWaRvQYsePwzOfwbts/TF+6Qi9w=;
+        b=bl1QVg32AwAvAxmdvuTRsQFTljJbQVpAjSAOrEfOPvqwOlbnW8MbKTiUep5Cuwkc9o
+         Oot6a/O/gpmbdZwAJ6ucttCLoAUFAaoqICizynFST/fk04xHgXRoovE1btT9hxoVk4J3
+         yPI9+/TjGxt615zIs8OWghEZi8aCu0wAiptV17zqeDAhbOOAxHzm3Ox3g0+bgYI//r6K
+         bFdGxgAAkv0cns0vThGvQMkoEGIQHGC6IMKTPI9u1iA0tzhxrR8+P2xTdTEftFsdTIao
+         QYMEurdEWpgLUqHL2uljdXofdQjf6EGkoCY9a8nCW3CLBBTeO5By64cu8uRXwhm0VxNE
+         +QpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUisyg9/OAvOe9GDW/7MutRbJE8dD+k8Lcjd95SkajKgUuwLxQefRjH5hgu75JbykZlGQKEXOlRbSdC@vger.kernel.org, AJvYcCXCnV+ZT8aXn/tlFcdoSH7FAvAh4imS5wuKcuPMUpu7bUCgfhZgKlTRIV9nkTACTNST5ivq+M136yS9@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4a34oZ+HWChfDi8E36/4PsL+Nt4dwwGkB2VD86994iB25q44X
+	3CVeZFAarPLvRj086+hogfNs3/rl2uxYvgtqBCxTyNSuV66IKuw1oS1q7w==
+X-Gm-Gg: ASbGnctrWBjUiGbtYwgbyhIvqZ6BZvsCX/kHf19X33W+zh9KywqhdGpU2osNxYSqXlZ
+	ds1IYT7r7DZzXZWOP+7oFS5kPqxmj5Vsu96V86/3UCy0y6BVfAwAVldQx5m/nRO4B8RsmpO2IRw
+	JbEeaJwMIasRCdlq9T+1yPjOhIipRmaDKTXcbz6H+gNQskLeExpB93sjmr50NhG5sZtTV5NXsOY
+	wmHXhm2PDxRWgwinoAvvGVvahgB0Mbju2f6OvZvPenWyempRdwYtSZ+8ohtULRzXw/7
+X-Google-Smtp-Source: AGHT+IEiKmLJT8nHF70IuN7ZJKTVZRAS/TEMF/OuFIoXqDiykq8/XYMzATE9z85pCcZG6+R/XYTw7Q==
+X-Received: by 2002:a05:6000:2a6:b0:385:fb34:d59f with SMTP id ffacd0b85a97d-38880af1508mr9279153f8f.11.1734343114291;
+        Mon, 16 Dec 2024 01:58:34 -0800 (PST)
+Received: from fedora.redhat.com ([67.218.245.240])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c801ac68sm7628564f8f.51.2024.12.16.01.58.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2024 01:58:33 -0800 (PST)
+From: Iker Pedrosa <ikerpedrosam@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: Iker Pedrosa <ikerpedrosam@gmail.com>,
+	broonie@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	javierm@redhat.com
+Subject: [PATCH v3] spi: dt-bindings: Document CS active-high
+Date: Mon, 16 Dec 2024 10:57:33 +0100
+Message-ID: <20241216095739.27320-1-ikerpedrosam@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 11 Dec 2024 14:54:54 -0600
-David Lechner <dlechner@baylibre.com> wrote:
+The current documentation does not clearly explain how to invert the SPI
+CS signal to make it active-high. This makes it very difficult to
+understand.
 
-> From: Axel Haslam <ahaslam@baylibre.com>
-> 
-> Add SPI offload support to stream TX buffers using DMA.
-> This allows loading samples to the DAC with a rate of 1 MSPS.
-> 
-> Signed-off-by: Axel Haslam <ahaslam@baylibre.com>
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
-> 
-> v6 changes: new patch in v6
+This patch adds a simple explanation on how to set the CS line in
+active-high and adds an example to make it easier for users who need
+that setup for their SPI peripherals.
 
-Nice.   A few formatting micro comments inline.
+Link: https://forums.raspberrypi.com/viewtopic.php?t=378222
+Signed-off-by: Iker Pedrosa <ikerpedrosam@gmail.com>
+---
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Changes in v3:
+- Use subject line reflecting the style of the subsystem (Mark Brown)
+- Change compatible display to an existing one and adapt SPI MAX frequency (Rob
+  Herring)
 
-For merging this ultimately I'm kind of assuming Mark Brown (or I) will
-spin an immutable branch with the SPI parts and then I'll pull that into the
-IIO tree and apply patch 8 onwards on top.
+Changes in v2:
+- Include header for GPIO_ACTIVE_HIGH (Rob Herring)
 
-Before that point we need DT folk and Mark to be happy of course.
+ .../bindings/spi/spi-controller.yaml          | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Thanks,
-
-Jonathan
-
-
-> @@ -299,6 +336,24 @@ static const struct ad5791_chip_info _name##_chip_info = {		\
->  			},						\
->  			.ext_info = ad5791_ext_info,			\
->  	},								\
-> +	.channel_offload = {						\
-> +			.type = IIO_VOLTAGE,				\
-
-Reduce indent by 1 tab for these.
-
-> +			.output = 1,					\
-> +			.indexed = 1,					\
-> +			.address = AD5791_ADDR_DAC0,			\
-> +			.channel = 0,					\
-> +			.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),	\
-> +			.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE) |	\
-> +				BIT(IIO_CHAN_INFO_OFFSET),		\
-> +			.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_SAMP_FREQ),\
-> +			.scan_type = {					\
-> +				.sign = 'u',				\
-> +				.realbits = (bits),			\
-> +				.storagebits = 32,			\
-> +				.shift = (_shift),			\
-> +			},						\
-> +			.ext_info = ad5791_ext_info,			\
-> +	},								\
->  }
->  
->  AD5791_DEFINE_CHIP_INFO(ad5760, 16, 4, ad5780_get_lin_comp);
-> @@ -322,16 +377,95 @@ static int ad5791_write_raw(struct iio_dev *indio_dev,
->  
->  		return ad5791_spi_write(st, chan->address, val);
->  
-> +	case IIO_CHAN_INFO_SAMP_FREQ:
-> +		if (val < 0 || val2 < 0)
-
-Given you ignore val2, is val2 != 0 more appropriate?
-
-> +			return -EINVAL;
-> +		return ad5791_set_sample_freq(st, val);
->  	default:
->  		return -EINVAL;
->  	}
->  }
-
->  static int ad5791_probe(struct spi_device *spi)
->  {
->  	const struct ad5791_platform_data *pdata = dev_get_platdata(&spi->dev);
-> @@ -416,6 +550,21 @@ static int ad5791_probe(struct spi_device *spi)
->  	indio_dev->channels = &st->chip_info->channel;
->  	indio_dev->num_channels = 1;
->  	indio_dev->name = st->chip_info->name;
-> +
-> +	st->offload = devm_spi_offload_get(&spi->dev, spi, &ad5791_offload_config);
-> +	ret = PTR_ERR_OR_ZERO(st->offload);
-> +	if (ret && ret != -ENODEV)
-> +		return dev_err_probe(&spi->dev, ret, "failed to get offload\n");
-> +
-> +	if (ret != -ENODEV) {
-> +		indio_dev->channels = &st->chip_info->channel_offload;
-> +		indio_dev->setup_ops = &ad5791_buffer_setup_ops;
-> +		ret =  ad5791_offload_setup(indio_dev);
-
-bonus space after =
-
-> +		if (ret)
-> +			return dev_err_probe(&spi->dev, ret,
-> +					     "fail to setup offload\n");
-> +	}
-> +
->  	return devm_iio_device_register(&spi->dev, indio_dev);
->  }
->  
-> @@ -452,3 +601,4 @@ module_spi_driver(ad5791_driver);
->  MODULE_AUTHOR("Michael Hennerich <michael.hennerich@analog.com>");
->  MODULE_DESCRIPTION("Analog Devices AD5760/AD5780/AD5781/AD5790/AD5791 DAC");
->  MODULE_LICENSE("GPL v2");
-> +MODULE_IMPORT_NS("IIO_DMAENGINE_BUFFER");
-> 
+diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+index 093150c0cb87..82d051f7bd6e 100644
+--- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+@@ -69,6 +69,11 @@ properties:
+          Should be generally avoided and be replaced by
+          spi-cs-high + ACTIVE_HIGH.
+ 
++      The simplest way to obtain an active-high CS signal is to configure the
++      controller's cs-gpio property with the ACTIVE_HIGH flag and set the
++      peripheral's spi-cs-high property. See example below for a better
++      understanding.
++
+   fifo-depth:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description:
+@@ -189,3 +194,23 @@ examples:
+             stacked-memories = /bits/ 64 <0x10000000 0x10000000>;
+         };
+     };
++
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    spi@20204000 {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        compatible = "brcm,bcm2835-spi";
++        reg = <0x7e204000 0x1000>;
++        interrupts = <2 22>;
++        clocks = <&clk_spi>;
++        cs-gpios = <&gpio 8 GPIO_ACTIVE_HIGH>;
++
++        display@0 {
++            compatible = "lg,lg4573";
++            spi-max-frequency = <1000000>;
++            reg = <0>;
++            spi-cs-high;
++        };
++    };
+-- 
+2.47.1
 
 
