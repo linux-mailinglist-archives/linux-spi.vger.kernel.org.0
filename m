@@ -1,80 +1,111 @@
-Return-Path: <linux-spi+bounces-6091-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6092-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90CFA9F555E
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 19:02:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 470C09F562A
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 19:29:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E12D176B71
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 17:57:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECC687A3DC7
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 18:28:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AB521F7563;
-	Tue, 17 Dec 2024 17:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AF31F8AC5;
+	Tue, 17 Dec 2024 18:27:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bkStJBVW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d94QNl2G"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0D5142E77
-	for <linux-spi@vger.kernel.org>; Tue, 17 Dec 2024 17:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA1B1EE02E;
+	Tue, 17 Dec 2024 18:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734457812; cv=none; b=PPhvPV7LURIiD539t6SWESkoux4ACvNOIr5Zho8/DToOjkmRmJfMiLp1dLjMX/pbeD46ob+0afjvWHb0I3X4khlwCPoBtX0dL6d18zLsU4U59AkMx0X75mqgvdnWb+3yZIcBAiPNM3qiMXV9uTBRdCtc7S4Lzz+oa8RUks+wCLo=
+	t=1734460066; cv=none; b=uctuATebiCXa1Qs4kie94/v6vw/m3sif712CTzMdBwiFmEqB5LnjfmR0GQtBSwf02B1PwjPxY2W49Khnc7bjGivJ1yNN+eF+SX9AhQeKshMym1IxSkaCWdZpui3BtNr0kRQ37TTCh61rb1c792Edrwo8ZxUq6cf+wbzN6RTgqJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734457812; c=relaxed/simple;
-	bh=fRoFJ+LismY7jY72rfKf+59SifH2SD7dr2t4Fpyy8BM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=OzqHioc2EzJchQieluoKjSWmqAG1hNVIcuhdIhpH1RK/BSId6GJcfguUpG0yVcs0Gd51UxL5iIPzdjysC3XXkKOGL5mhrbfFVqOYbVdlGIdVhAo+15Y+rdGYrd1uAcDiMAxsNhiNEyI67ut7D/mdRwEzlgko7qPedZMVYwqy60M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bkStJBVW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B54EC4CED3;
-	Tue, 17 Dec 2024 17:50:12 +0000 (UTC)
+	s=arc-20240116; t=1734460066; c=relaxed/simple;
+	bh=UYa+EF3kXhd1zp5dnzEwlfquwsdv11U4gxiAcD7Xv5c=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=jVDaIZLQQrkqYNxb897lO5dkEJocXpH/ucgy+TkaTA5XjMDj2e56SwjVdsMRAHsGczb+y2bSIKb13vC9s3rb6PhuB3oki6E/M028WJivX5POQ27psw1XKMxDS95h5yi1bDa+ccQBGF4x8Y4GglL4fUKGD6zBKw1yWfdH2n8roLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d94QNl2G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0529AC4CED7;
+	Tue, 17 Dec 2024 18:27:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734457812;
-	bh=fRoFJ+LismY7jY72rfKf+59SifH2SD7dr2t4Fpyy8BM=;
-	h=Subject:From:Date:To:From;
-	b=bkStJBVWdeuOb8xT1rHepHUZ1c/COsR3Y4CAgA7rDUcesbVTRc9UzfdP+d4ClGMKI
-	 sxL2Gg/dPUqY3E8uCDGNr571qiGMfhHrPeugfYrr5i3npZKYDgk7CwpwbDtOGqasV6
-	 6yl/MY07OwxgNyHCA9PFjV5Cj1rgm+tu5aaouscjFj72cqXJJJSx7zkKC8qbFK+W4I
-	 /GL1SntMWQk5ODAGUEFK5suz0h1SGaLsgqVxG7gKkhzLDxmbMCh3MVTtBubp4ZBGMg
-	 W0Z6l3+wiH9idV31SxzWlyCTiFqQh3umZarO4a/QTMNDexvAhzyuXpMSc6B/dYrLtv
-	 XPCxEt4GSbBrg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1F113806656;
-	Tue, 17 Dec 2024 17:50:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1734460066;
+	bh=UYa+EF3kXhd1zp5dnzEwlfquwsdv11U4gxiAcD7Xv5c=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=d94QNl2GcfWCNjdQoJ2jKMxFSXRfrHRO2SPU7Cn7uzYt0mlGNSK4UQm80xdljgI8r
+	 S35e5Nsj3Ybm6UqeOxblQqd8ADbBoPBuj6lxKArbVDXxHfrdzXN7wtiwp/i0wBzww4
+	 2atnF94FQfQ2WQLrgXUA3RSZuAAkx+HdFDKUX4s0OgbCpmGKh3zNv2C5HFBsfzlzSg
+	 iHx7lYkpkeg1b9qj2NfbxoT2JXKUoj914dHyd2OttVRCBz7tBfdV0MHbKXR4LSJKRx
+	 3aTv9grpkCL2UGc7d7kIbdXFpp8usv090NmIrmnTk/7P7dY4ZL+6idrXOnAC1mhW6Q
+	 v2AUzq7xJOY7w==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Cs=C3=B3k=C3=A1s=2C_Bence?= <csokas.bence@prolan.hu>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20241128174316.3209354-1-csokas.bence@prolan.hu>
+References: <20241128174316.3209354-1-csokas.bence@prolan.hu>
+Subject: Re: [PATCH v3 0/2] spi: atmel-quadspi: Refactor to allow
+ supporting SAMA7G5 O/QSPI
+Message-Id: <173446006475.142278.5557207366372183006.b4-ty@kernel.org>
+Date: Tue, 17 Dec 2024 18:27:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173445782917.985689.9209039641812195047.git-patchwork-summary@kernel.org>
-Date: Tue, 17 Dec 2024 17:50:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-Mailer: b4 0.15-dev-9b746
 
-Hello:
+On Thu, 28 Nov 2024 18:43:13 +0100, Csókás, Bence wrote:
+> This is based on Tudor Ambarus' submission from 2021, and my refactor
+> of said sumbission from roughly a month ago.
+> Link: https://lore.kernel.org/linux-spi/20211214133404.121739-1-tudor.ambarus@microchip.com/
+> Link: https://lore.kernel.org/linux-spi/20241030084445.2438750-1-csokas.bence@prolan.hu/
+> 
+> This time, I submit both my refactor and the diff between it and the
+> original submission, rebased on top of Linus' master, namely:
+> commit 7d4050728c83 ("Merge tag 'vfs-6.13-rc1.fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs")
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: [v3] spi: dt-bindings: Document CS active-high
-  Submitter: Iker Pedrosa <ikerpedrosam@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=918149
-  Lore link: https://lore.kernel.org/r/20241216095739.27320-1-ikerpedrosam@gmail.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/2] spi: atmel-quadspi: Create `atmel_qspi_ops` to support newer SoC families
+      commit: c0a0203cf57963792d59b3e4317a1d07b73df42a
+[2/2] spi: atmel-quadspi: Add support for sama7g5 QSPI
+      commit: 5af42209a4d23adc9a09e59e586d1b47fef3cc86
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
