@@ -1,97 +1,91 @@
-Return-Path: <linux-spi+bounces-6085-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6086-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B4F99F4F60
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 16:25:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A16E9F4F80
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 16:32:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67BBF168B24
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 15:24:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3BC91882CE2
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 15:32:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB7D91F7564;
-	Tue, 17 Dec 2024 15:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0AE1F7075;
+	Tue, 17 Dec 2024 15:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rJMpVIRp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rws32A+O"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3564174A;
-	Tue, 17 Dec 2024 15:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A3F1F4E34;
+	Tue, 17 Dec 2024 15:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734449015; cv=none; b=kNyNQisM5rfdHR67OYCyn5YzPzBwjrMPBkg0QVXFsfKEbeldG7ld5UEMGmjSAJxgcvtdaLSLqNqorUVim8oskh5otj9kX0TAvHVFpADqvdQOvlRj9kCwMcmHQFLjpP38mWQKry4NWSOSHlAy2NNAF88MXbuBCoWhi+d8MtVGYas=
+	t=1734449549; cv=none; b=GdBgRM/f/T7CZ+ehXII6cZ1+6RutG1+aqaEegzW7KyNYhNzG8FUsAfyYAoJARyELvNwZybcOq4fpp8wZGV7k2hbTQ/UTlp8LQQDD2UPBMoQCTIUwHVgpQlHyA7nRT2FrP7ruwiGP2idKaEGQDQ3BUJuMFFkjTmlZ6xMJpItUdIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734449015; c=relaxed/simple;
-	bh=SQM3pWI2fvHAG1Oru52325VVqEwN5LXRnhmqFH7vCfU=;
+	s=arc-20240116; t=1734449549; c=relaxed/simple;
+	bh=af4QqSgGILbUAg8428/Qr6a223QfoUxIl2tLwgkLpY0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KWq9FmArKkHDJYi2Zwc20XmZ5hubbM/I/MMlFxeejgBYoz1m/gYdA6arYQMeVOZhpeaPwYPN0x8NNDdjUtFavCVflCay5nQ+NG9Qxpv/ERueJvLtrY8qghotR1Vjh5O+BGvZ2ujeLYTMgd5AKd/vDgqHOQbs0tn8N21ZW/8aMZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rJMpVIRp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7F31C4CED3;
-	Tue, 17 Dec 2024 15:23:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QZ0j09oULzckuyEgY10uH2neQRMjGiBDQI+nJK3MBNvBBfb/mdmC+havjn4FF5eLi88xhnj3nSNwc5IEv09NopeRf5pdu5IVLNG56+C2pUsxtalybkEs/mAZor54kuGWZEaS0MdalQiJEIzS+eO/u6AFRQk1Wd9WOjNd0jlJwRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rws32A+O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B7E4C4CED3;
+	Tue, 17 Dec 2024 15:32:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734449015;
-	bh=SQM3pWI2fvHAG1Oru52325VVqEwN5LXRnhmqFH7vCfU=;
+	s=k20201202; t=1734449547;
+	bh=af4QqSgGILbUAg8428/Qr6a223QfoUxIl2tLwgkLpY0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rJMpVIRp+pFyUWESTz+5Qipovcww7eaHihkWBbjXzE1BBmc0dOtsKyXSp1d6D+3J+
-	 yvTGRDHYQMoJi9esXzFANIUNxKt2CV2x6HN236W1Gm7oX3PapV/7Xn5Ci54tK9XTZG
-	 ivGa6xztcEmEash9mOtCtSe9LHIBz7JGTUvrSJZjKNqglBR0yNj+kHJqXzoH08w/PA
-	 ivC89WOOp+0bPwdLawQaHC2Aj/c8DPKo+bKudlj1Pn4hkM5wUjsjQJzZdaD/pG/Esx
-	 I7WVp0OyKs6Plx6gga3PVzzVEawc1XYe566sa97rJOBjdrFAvxEIOjCD8BWVJ+luka
-	 dq9aUAHO5Psrg==
-Date: Tue, 17 Dec 2024 15:23:30 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Ma Ke <make_ruc2021@163.com>
-Cc: aaro.koskinen@nokia.com, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] spi: fix reference leak in spi_register_controller()
-Message-ID: <a8de1fd5-7eaf-46f8-804a-8b241a3e6448@sirena.org.uk>
-References: <20241217073133.2908052-1-make_ruc2021@163.com>
+	b=rws32A+OLTQQ0rqwZ3tg5Y7mD8EN6ajq7r2isH2tpPHV21AvK8ObylIfn4pRFPG9+
+	 KCQS5xa6v2bR/JB57oMR+3DvofDhfuwZAQXdmFNIiaf/xMMaYlFAZ+FtXMz2bIJS++
+	 7Ov+b6y00YiJVtxDt89Zg8UmaYsxqB/0VtX3lUR1jiXlN4Tc7krhITjTIgJPW9pYt9
+	 s47yTRssIotXXVdgREsxQsewjKj6Lxc3Z25TIpy9mC3oP4mjQ7gEj/TiDuM1rct5E7
+	 htxML8bJDvP3ap2deC7PsHvKTDw6AT/b/Rsk4p79wUR6rEXiYPhdQVQ4ho7wyMlo1d
+	 PApEZEiyEv9ww==
+Date: Tue, 17 Dec 2024 09:32:25 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Iker Pedrosa <ikerpedrosam@gmail.com>
+Cc: javierm@redhat.com, krzk+dt@kernel.org, linux-spi@vger.kernel.org,
+	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
+	broonie@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3] spi: dt-bindings: Document CS active-high
+Message-ID: <173444954482.1831986.10950873767411380900.robh@kernel.org>
+References: <20241216095739.27320-1-ikerpedrosam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jhA3jEBVEeVKRUv2"
-Content-Disposition: inline
-In-Reply-To: <20241217073133.2908052-1-make_ruc2021@163.com>
-X-Cookie: The sum of the Universe is zero.
-
-
---jhA3jEBVEeVKRUv2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241216095739.27320-1-ikerpedrosam@gmail.com>
 
-On Tue, Dec 17, 2024 at 03:31:33PM +0800, Ma Ke wrote:
-> Once device_add() failed, we should call put_device() to decrement
-> reference count for cleanup. Or it could cause memory leak.
->=20
-> Found by code review.
 
-This isn't clear to me, spi_register_controller() is analogous to
-device_add() and __spi_alloc_controller() is analogous to (and wraps)
-device_initialize() so I'd expect the _put() to be done by the caller
-calling spi_controller_put() either directly or more usually via devm.
+On Mon, 16 Dec 2024 10:57:33 +0100, Iker Pedrosa wrote:
+> The current documentation does not clearly explain how to invert the SPI
+> CS signal to make it active-high. This makes it very difficult to
+> understand.
+> 
+> This patch adds a simple explanation on how to set the CS line in
+> active-high and adds an example to make it easier for users who need
+> that setup for their SPI peripherals.
+> 
+> Link: https://forums.raspberrypi.com/viewtopic.php?t=378222
+> Signed-off-by: Iker Pedrosa <ikerpedrosam@gmail.com>
+> ---
+> 
+> Changes in v3:
+> - Use subject line reflecting the style of the subsystem (Mark Brown)
+> - Change compatible display to an existing one and adapt SPI MAX frequency (Rob
+>   Herring)
+> 
+> Changes in v2:
+> - Include header for GPIO_ACTIVE_HIGH (Rob Herring)
+> 
+>  .../bindings/spi/spi-controller.yaml          | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
 
---jhA3jEBVEeVKRUv2
-Content-Type: application/pgp-signature; name="signature.asc"
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmdhl3EACgkQJNaLcl1U
-h9D7cAgAhqB7KUEudxUgOs9vV137sCySYAo27XuUHkRqCVxSFiQoN+OcMT4vojPV
-rC7HB1rUMIDRLeTqHbpFWNiFjMebSC0X7dpT5JXGVr1ehGDZ19dkI1jiQjCG3FWd
-YMFU4wIRGq+WLqdUFoxhI0TGTdyzmTu3zkx7DNzr0Z2RnLiRujM9U7EHHRxCuRcN
-IceiBSu33zf7BefltQiuGCfOAe5JPnB6lxgOEQoIhuqaMsx2LhS93fM1m/zFTxx3
-Co3SB6QWe8rORsu3M8JsO5u1NzIwTgwt4CzSpxv6eEfPGGAPwCvPSVB9p8A3m8v0
-gNXP+aDJJUtVdw9pTPx9zMEA3VEv4A==
-=dgEN
------END PGP SIGNATURE-----
-
---jhA3jEBVEeVKRUv2--
 
