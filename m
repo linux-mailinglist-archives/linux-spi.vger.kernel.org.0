@@ -1,80 +1,103 @@
-Return-Path: <linux-spi+bounces-6081-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6082-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 558249F4C7F
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 14:38:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B599F4DD9
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 15:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E6B118930DC
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 13:31:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E801D16F7B2
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 14:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CD81F3D2C;
-	Tue, 17 Dec 2024 13:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625841F7597;
+	Tue, 17 Dec 2024 14:32:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJLeUBj/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhGyRurg"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABF61F37C3
-	for <linux-spi@vger.kernel.org>; Tue, 17 Dec 2024 13:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8A51F758D;
+	Tue, 17 Dec 2024 14:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734442259; cv=none; b=r10Uj3qmOR5iQtfRUIXxpb+rqynALAasnxJJu2diSgtZeXxbW+qqJl74oDsyQG/u69JexQOycvBsXw4Ugusu6hDq2B5p4ONE5VqpuBacEX3qXa2LOwjjjsbJEFpg1DRXFNOMiktNUQP0FWu78yWcqgJ7jwyoSpUL1MTfAom/ynA=
+	t=1734445950; cv=none; b=ONHY9sf0T6fead7mI/8OpVDXf/3s8RN+cfHp3kHrmsSJIXhHqNKrvnqIJeqJsdYuwkTHmX+C2m+npExylgROVGSQadduwFPoKqaUbHNX/VjhGr1GcBKHhtMuH/vBtMtNDk9s5C1kNgx/ddc5KGDMNjVxI2NZCTd+heB6IG9eMYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734442259; c=relaxed/simple;
-	bh=03UCX1acxK+DxquyL2BZyzUvNhxi5xSdSIJh3nDm2xI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ubhmmldtLIQXpVItDfkGT8zm77O02rdJiRkHxXNWczVl+tHgtAL1nJbL9jQ36FrN5/xNIR4PpRPn1IjcJJ7RES/T+vTEZ4XTsyehm1pO/OCH05Pddnsp1bFuseSZqR6e+SQnnqbiBOeS3Ffdfs2L2aSUj6ve+Qg1weFC0p45Dug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJLeUBj/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8E0C4CED3;
-	Tue, 17 Dec 2024 13:30:58 +0000 (UTC)
+	s=arc-20240116; t=1734445950; c=relaxed/simple;
+	bh=VFIC1QIxQDmgiC47kHhQBRFZAruUXZmOHT0RGt/bQqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NDadQ42XqrRYdrlLJJqI47HuW2BHY21TpkgydcTFL4J1QE9HmuYDsI21bo777MJToz5fWrUpVtzL2ir4jdzhsK1RBuodTUS02wm5mtsZma/KhopDdMLP/kidNBbNAg/iOHXoeJVz4teIqvZxWoZr1HNoIC+RMESdpKde5zSjVa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhGyRurg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B3AC4CED3;
+	Tue, 17 Dec 2024 14:32:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734442258;
-	bh=03UCX1acxK+DxquyL2BZyzUvNhxi5xSdSIJh3nDm2xI=;
-	h=Subject:From:Date:To:From;
-	b=hJLeUBj/D5TSK+/9MNFdSo9EN7fj8qQDQGuUA8j1JIjqpOWcTHy6zNoI8TK++7aol
-	 cWnvGPcSzOtSA+nwQ9OE7dJcYJ9iSzgEbDYwynJedgnbmcK2ojBmuUccA162rIc0rw
-	 ygxSX/c02uZifrVWcpBFy2cB13HoGlIv7uiTxcWNfe5K1nw72jmg6ilLBO+hV1g7PC
-	 mz+q3xCIPgkw1CukPoLyLnvCusTbbU3p8AhT6J2iJDS+OeN+d3lpf/cwzm2dH3wGao
-	 WJXteHpEgwCBJTo1ncH5xUiPKIkwcAvqF1ewcYixpNZA4Tt1UeyhAVtpBu+dkwuOd+
-	 Mtq/z9IQTQvrg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 003633806656;
-	Tue, 17 Dec 2024 13:31:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1734445949;
+	bh=VFIC1QIxQDmgiC47kHhQBRFZAruUXZmOHT0RGt/bQqY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LhGyRurgxnpaEGzw4ipvApLgF0FKjbqiVV8zz1ZdeEKEFxIkebIdXcawJlln+/QkT
+	 Hfjt8QNX0u7Yk9wmPt/pamZ4RCXm4mlF5LkQtbAAUWVQO+3f17HCQkau98i98wQvpy
+	 GNgotBHS8aGetR6JGXZT/3jIAvl+vJRdlcwb2EL24wVgbhxLNHp7r6MZ50xUgNVy9W
+	 hGFpozkEx+ot78jQRSt+5KmFNAuNAqjN+xDidPYHwpJRZLE7RUqbg4TcY8rHH5NrV5
+	 bjWaUB0zjY5GhhX4QXcjyBK8SI0lfICuSkwINfqTJP4rWmWLp8gDrQ1R/1ldHuqIU5
+	 Cs+0LFQaxJPqQ==
+Date: Tue, 17 Dec 2024 08:32:28 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: linux-spi@vger.kernel.org,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Martin Sperl <kernel@martin.sperl.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	devicetree@vger.kernel.org, linux-pwm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>, linux-iio@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v6 03/17] dt-bindings: trigger-source: add generic PWM
+ trigger source
+Message-ID: <173444594747.1627418.10497892119447871858.robh@kernel.org>
+References: <20241211-dlech-mainline-spi-engine-offload-2-v6-0-88ee574d5d03@baylibre.com>
+ <20241211-dlech-mainline-spi-engine-offload-2-v6-3-88ee574d5d03@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173444227560.897448.5832278051340583017.git-patchwork-summary@kernel.org>
-Date: Tue, 17 Dec 2024 13:31:15 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Hello:
-
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Patch: spi: rockchip-sfc: Support pm ops
-  Submitter: Jon Lin <jon.lin@rock-chips.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=915686
-  Lore link: https://lore.kernel.org/r/20241208130311.1324024-1-jon.lin@rock-chips.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211-dlech-mainline-spi-engine-offload-2-v6-3-88ee574d5d03@baylibre.com>
 
 
-Total patches: 1
+On Wed, 11 Dec 2024 14:54:40 -0600, David Lechner wrote:
+> Add a new binding for using a PWM signal as a trigger source.
+> 
+> The idea here is similar to e.g. "pwm-clock" to allow a trigger source
+> consumer to use a PWM provider as a trigger source.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+> 
+> v6 changes:
+> * Moved file from bindings/spi/ to bindings/trigger-source/
+> * Updated description to not mention SPI
+> * Dropped $ref: /schemas/spi/trigger-source.yaml#
+> * Swapped order in name to be consistent with "pwm-clock"
+> 
+> v5 changes:
+> * Add MAINTAINERS entry
+> 
+> v4 changes: new patch in v4
+> ---
+>  .../bindings/trigger-source/pwm-trigger.yaml       | 37 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  5 +++
+>  2 files changed, 42 insertions(+)
+> 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
