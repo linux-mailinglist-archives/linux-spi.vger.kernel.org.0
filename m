@@ -1,159 +1,101 @@
-Return-Path: <linux-spi+bounces-6077-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6079-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA909F4AB7
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 13:11:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C469F4ACC
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 13:17:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EF2116228B
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 12:11:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5FF6188A234
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Dec 2024 12:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B21B1F1318;
-	Tue, 17 Dec 2024 12:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3734B1E3DF7;
+	Tue, 17 Dec 2024 12:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVaaqhuj"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="q5cBwaQa"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7348B1F03DF;
-	Tue, 17 Dec 2024 12:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7D31F12F9;
+	Tue, 17 Dec 2024 12:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734437491; cv=none; b=AyOCCAFi0cs+MsmaQfDUpg1LQIvEvNZi8yIdh5TuRMzIs25RRc4sYQBcrFsZ6w6SLpVEN8kest9vro5YTNDMaQh7OSgV8P/yj+ES2d+QFXcSkOipLKNLH01ZeMz6oI80MihhekpgGl6qenN8+UI73xedU+7ey9SuaLUbK70a1UU=
+	t=1734437834; cv=none; b=HRRUpkLg0Xf/3YC6/XZzhXJVR0RW3gsxETBhZhDn277B1fBbi3F2wUgdkbsqYsGW01op9NgGb/XUrY1tHAquAxoTJB7wtY/w4Vjcc8ot6OEQSvIqAaZuciHDULr24KzsFNHnzvwsrgA9lLCbiQxTyws5Geerr8YZ+DBZsjCsoCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734437491; c=relaxed/simple;
-	bh=92hiuZoDJVVqkg6GS6ptwsHQDbEARb7eXo/A7Bik7VY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Cenl0JhG63kNaVqBYFpknbhGqhs7av7JongZFJLmS7nHOYrA3x/Ks7n1HeKtCRHpEMWHRHpIp5GWebFTooaXdHabZaZfmI/t7c+pJKBqq5UPhiNLZr+DCHK+ccSU5a0AWpbi6w6ZlVb2RaEZnK4kB46GnxjrgEZvEa4mDTo2bec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nVaaqhuj; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d3ea065b79so265049a12.3;
-        Tue, 17 Dec 2024 04:11:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734437487; x=1735042287; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rss0gcMEDxi1uFXZhs0hLyP66dPbA4O8zghIZurhz9U=;
-        b=nVaaqhujmB572ehC86byoDYNTsTwfNujvtUCR6MQzITVJl84a7nkk3vw7DlsI2vGjb
-         xfjxw8EDs0vPBlxTs8N9LTbM2w/lSL+f/WJO9NTCvR/HY6XPssCr0Emi9f3D3eYPzxjQ
-         XydQ2rrc6Rh8JHjcIKczeREpY2RiRKQcJYXofvOp1/Usb6uJZDRi5It2DIr5+WOun48E
-         SEATQlmdJplZRmIotx2546jlWLNB2S2/fJV+UMItkIrtXhIiNwwBR1yBVa5kUR67aNKo
-         tj6PmswUSWftmT9s7p/rt85Aev2aZ8fhySLXZpe9w1GgllwPAOnluJ/L6DUatr0W1l3D
-         cL8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734437487; x=1735042287;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rss0gcMEDxi1uFXZhs0hLyP66dPbA4O8zghIZurhz9U=;
-        b=dCWcs/5yiZm+TozMHaMNyGYP3eduNQKDZb0usYwzND6gCe4+6zNOcjllqqkEweq9JI
-         enWL1wEjmUYtXblcbcDoBBUUCALBQknPCexWyhnP8JvxyIm84747w2fnByhmK+YFv8dQ
-         6pGE98/GYU7iPOJdM8fxZLkHGqA5jMXVVCoYh1d3vfFPsNoV/Fgc0TrFbvXfihzl21lJ
-         rtsgqQ5lux9YEA69I6J/rAsiMLoT6ws9GEq3mEwGrnCKQxqpJdZVUN3C5javEDyM31ws
-         j0ArAz7hILc9b1v6artoSJUb0mxBu0Ob2fcmC+kW3mTnWx7cRI9wTkfWnglpYMsul4JU
-         BYhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5Jq/Ap1/v2UE1cBD9ZFPqV3XTtQDGGk2RU8G5x1BHCSExpJ1YPII2YZ7bwT68GGXqhWnvNzfE7wtL@vger.kernel.org, AJvYcCWLCLE2+8pvCQjn5l7uCa9zLRATCotarlHEj81WsgS56RMYAhLx3Fzj5D8drTo3gTHgE07ICEGUTtYh@vger.kernel.org, AJvYcCWseJZ/Vz96VP2X2C9NKNn4AU1ZV13ZFnDyGo1iWTm8DWAqfQNdoC9LfrRkDNrYlAlzYkGHypAinkVvvcg0@vger.kernel.org, AJvYcCXMYofRTuqPaLIT9tga4WBi+TIEmshjlTP5tK0gMbTCcyF+RQmUO35P2mag9memP/1G/7E39PZkbwlY@vger.kernel.org, AJvYcCXMghi3Rm8pK0K6RDBKpJxBfl40vGV/dpXV+pLDOKius0H9vrrpeoRBm4g+H8HyvLN0AvxgRIpeJAKi@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyWwRYsbbv8idk3CmQrHjUP2hM28SIXw+qXIRVlEE3N/LDAIAO
-	A2FfSGk1hZwfcnLOIxRoet44XwAzUqTkvrvf0SpmySYviIMkcJ5/
-X-Gm-Gg: ASbGncs99RUUmGG9IssuBByKG5KG4PVsgXZUQGvuN+hsWKwa97FLXSO2je+Dx5vpM1K
-	za58Imj1+0aNgGTSSIKIWIjy8dMruJb+XGFRQIgIDdmx1vP57edrV8Q849A1c3UJREx9xvHW4UX
-	CyiY79q9cR0l3oNZK4SHqXllPyjntJnkl3xfxxxB32bUXDPOT6p95lbDXlkNSRaZmND5zlhpthZ
-	NcwiCOC34N4jZuBkMX4w7URMJpCUsVydrVuVYJbaSZGHevT6++MlWbksAFqyUd76fRp5OTS4Lcw
-	B65KNsNPfvO5+zkWtaxjK0FA6imPEOEc6jC23004LMQithD6SbAfooG1p4vo2hWIdshEgUH82by
-	U8Y7DWr89J2Y6hQ==
-X-Google-Smtp-Source: AGHT+IFkpZz/013bL7nBOw87XIZBCdkZbOacL9nal3qYFLpyP8kvn9P2VuvSyXQK2N2n2g9Cy3qrmA==
-X-Received: by 2002:a17:906:7304:b0:aa6:94c0:f755 with SMTP id a640c23a62f3a-aab778c1eaemr1752086566b.1.1734437486483;
-        Tue, 17 Dec 2024 04:11:26 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef10:f100:a045:a7a7:11d0:8676? (p200300f6ef10f100a045a7a711d08676.dip0.t-ipconnect.de. [2003:f6:ef10:f100:a045:a7a7:11d0:8676])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96359fdfsm439453166b.93.2024.12.17.04.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 04:11:26 -0800 (PST)
-Message-ID: <f5ff7ac7016a10824062caf3cd2eccce05e3dc82.camel@gmail.com>
-Subject: Re: [PATCH v6 16/17] iio: dac: ad5791: sort include directives
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
- Jonathan Cameron
-	 <jic23@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Nuno
- =?ISO-8859-1?Q?S=E1?=
-	 <nuno.sa@analog.com>
-Cc: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, Michael
- Hennerich <Michael.Hennerich@analog.com>, Lars-Peter Clausen
- <lars@metafoo.de>, David Jander	 <david@protonic.nl>, Martin Sperl
- <kernel@martin.sperl.org>, 	linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, 	linux-pwm@vger.kernel.org
-Date: Tue, 17 Dec 2024 13:15:57 +0100
-In-Reply-To: <20241211-dlech-mainline-spi-engine-offload-2-v6-16-88ee574d5d03@baylibre.com>
-References: 
-	<20241211-dlech-mainline-spi-engine-offload-2-v6-0-88ee574d5d03@baylibre.com>
-	 <20241211-dlech-mainline-spi-engine-offload-2-v6-16-88ee574d5d03@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1734437834; c=relaxed/simple;
+	bh=lPr6mApvCQCt0YsoDhRq3ec2KVOt6Lq+9dUBWYQFu9s=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=HFEtxno/w1J0R7vQXz+BRPIaM8ISUhdJzEdZW28XkgdYWSfngcwPHmFC8mtqsg+d4IVE14yoXrKQtrcLmupnWk4rTmfvc53Ot3BNQ4Ckj3VziFVRwjLVYcVVxezfQgNbp/JpWyVSSGvfbmvRzEkbJNkoRGJzms/OnvATjVjLrFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=q5cBwaQa; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1734437809; x=1735042609; i=markus.elfring@web.de;
+	bh=lPr6mApvCQCt0YsoDhRq3ec2KVOt6Lq+9dUBWYQFu9s=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=q5cBwaQaQ2bZFGKO96TAMjxOoTxpDgfXrqk0ba5YR4fKMhoPyZrVUNTkBhhQAx0P
+	 +dtCQJ7XMXoEhhXEbmbX2shJCMBhEU9XbToH9JVF1UpDeV0f9vc7ZI77tgjGzdyKi
+	 fVtxejDSJvzNmT95kjyo9ykH8owVIZMF1/ttIEW7dw4EY8rdZTATbffydNX4ExgKX
+	 LiFpgNusMcjVsqVyYPeNG0zpcsfTRvjZpEEXeZsWFFuQS85I36q56G/uMZTNsMd8S
+	 FJdBb6aeHjj73P+X1CLdG1ngfVc5SDymJQ/NxiAp2/6c94TuSKTj49+B3m376Qupq
+	 hiPcGTMr3Mdl6W5xOw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.70.74]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N45xt-1tW53o23Wb-017vYe; Tue, 17
+ Dec 2024 13:16:49 +0100
+Message-ID: <e29d221e-4ecc-41a8-9cfa-268c45ec9bdb@web.de>
+Date: Tue, 17 Dec 2024 13:16:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: make_ruc2021@163.com, linux-spi@vger.kernel.org,
+ Aaro Koskinen <aaro.koskinen@nokia.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20241217073133.2908052-1-make_ruc2021@163.com>
+Subject: Re: [PATCH] spi: fix reference leak in spi_register_controller()
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20241217073133.2908052-1-make_ruc2021@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:ycL0XUfgJpMpTCGLhvPnKqwIE8vBxtHj6gT2EQvAy/BHFUzoAyT
+ GDTzZLEmQMWC28T7Jg9P+ZAKAXisatRATDVH0owu2mCgDVEAoyiRXzeCfYUoXmNNLs14Z8o
+ MjuHF58AeK/bbF3Dj7JDgK8pf1Nn1tUeH68dsPaAzieRDDxNwyDaF+HMhIdpgwEp7gNUYag
+ Vjbike+6wCC2DV8pE+sqQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:FgCNtYCRux8=;/sN863JG74A1GiBb5PGXzaLKRYb
+ E4gieAf8lsxBCZtkryBIiUFvuFexkEHM3OPgnY+gltHm7heMMDeGRe64/Rqps+VbPXP3eVUON
+ NoFFTJaJ1dZvIyG9vlO8rE/foRLFunKEq0Fogf4Fw4bMj7Z/TpUeqb4KBr9eIt/Z+JNCxrGaO
+ V+1nQE3m+o6HbPoKDHI4UkP21mA8diLbFhWKHeqMw1HZZvF9v+gh+psdoF+jJx5yJPtQZqEGj
+ ySWhnK1b/jqy4mm7qs6H4MIy04iXgFXTWNwB0SRjsgz8rAmDVXqTQgmW2Y+tcchmeS1L2H3s4
+ +w5Z4Ca8um6rpetcOHpSCVqaVBYohctaQlAgwtypFnF+mY0faBi+KuORZPi8DjsOAZiq3RA5Q
+ dcPhIBfgBsHZQy1XFL8bC3VmFcQ1dgJ4LPFUXR6wDvNbzKBgqbYoj1sBxDX7so3hIQcXENvxI
+ tR08Mc0ERWDFK+rBPlHCwRfYNqax4SPvxq4WBxCH2KYUbmK1Bg7CbQzSVhtTJcoTxCL5Ya64V
+ nZdqMmhQ9wKuSfK28MqNaSWmc70bvYUJiVYaWXCLs96QnA5lGsqs81J/ehIn2n+DyNkbK2kj5
+ vhu2QPMhXXYVdey0ir0Gz7D2HaMp3ztTRtQ23D5/IL2kHxvOvNBs4CgrpcJfxRKP1jCmC5hwK
+ xUIw9RLSWtrqULKZD5xMAqgO+z3CToEreghJRs9axetTTj61+KSzPWGQ0EtgbDatq03W7fGle
+ 5w59Fzdm/HJdEiY96Hw6JSfPQDG5Z+iUlhcB+34AtAUVYLVTQc+1q4OZ/Us++zg/zln9L+Zav
+ DPbbZUpTGwmdxSHVIKRtXq0kJd9u9wxtYLzut96S+Vkf0s92EGyQ4EW0ank1q0hsjA/XlYCNv
+ m22N+e91ecsZn/zTQwikdCNxcrSVeD1R0lc9emkwuMkom75LWw15JS4EvXXORI4ZtkUCSKSjj
+ KatzTV/fSa2iy3WG9RIBxLAbxU2pclIfQvcqR2q8wLDKnN43V9ZNb2oFgz19+rcNYkjae1Y4/
+ nMzz+a1lVmkWbfTn8fV3xqU9/sl5ifESlKCp1Bep9cEbhjLuj6TL0voJxGusfg2OREb0mRdzV
+ xGWYj7Tzg=
 
-On Wed, 2024-12-11 at 14:54 -0600, David Lechner wrote:
-> Sort includes alphabetically before we add more in a later patch.
->=20
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
+> Once device_add() failed, we should call put_device() to decrement
+> reference count for cleanup. Or it could cause memory leak.
 
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+Is there a need to integrate the added function call better into
+a goto chain?
 
->=20
-> v6 changes: new patch in v6
-> ---
-> =C2=A0drivers/iio/dac/ad5791.c | 16 ++++++++--------
-> =C2=A01 file changed, 8 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/iio/dac/ad5791.c b/drivers/iio/dac/ad5791.c
-> index
-> 57374f78f6b885e1d4f2fb452ac0563b85fc222e..24462cb020e19e8e2c6faa13109ac04=
-7cf42
-> 3c37 100644
-> --- a/drivers/iio/dac/ad5791.c
-> +++ b/drivers/iio/dac/ad5791.c
-> @@ -6,21 +6,21 @@
-> =C2=A0 * Copyright 2011 Analog Devices Inc.
-> =C2=A0 */
-> =C2=A0
-> -#include <linux/interrupt.h>
-> -#include <linux/fs.h>
-> -#include <linux/device.h>
-> +#include <linux/bitops.h>
-> =C2=A0#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/fs.h>
-> +#include <linux/interrupt.h>
-> =C2=A0#include <linux/kernel.h>
-> -#include <linux/spi/spi.h>
-> +#include <linux/module.h>
-> +#include <linux/regulator/consumer.h>
-> =C2=A0#include <linux/slab.h>
-> +#include <linux/spi/spi.h>
-> =C2=A0#include <linux/sysfs.h>
-> -#include <linux/regulator/consumer.h>
-> -#include <linux/module.h>
-> -#include <linux/bitops.h>
-> =C2=A0
-> +#include <linux/iio/dac/ad5791.h>
-> =C2=A0#include <linux/iio/iio.h>
-> =C2=A0#include <linux/iio/sysfs.h>
-> -#include <linux/iio/dac/ad5791.h>
-> =C2=A0
-> =C2=A0#define AD5791_DAC_MASK			GENMASK(19, 0)
-> =C2=A0
->=20
-
+Regards,
+Markus
 
