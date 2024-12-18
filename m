@@ -1,78 +1,78 @@
-Return-Path: <linux-spi+bounces-6096-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6097-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 327DA9F5FF5
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 09:10:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FEDE9F5FF9
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 09:14:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 784A7188C9F8
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 08:10:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1F647A28F4
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 08:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B15535FEED;
-	Wed, 18 Dec 2024 08:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57836158A09;
+	Wed, 18 Dec 2024 08:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BRQU1olq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FiO17yND"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB56DDBB
-	for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 08:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC13156225
+	for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 08:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734509430; cv=none; b=rxLFNa0khakwNYoKk9YMjR5xWI27vVuegc2Iucq1ty+Xn2LZYNwQ+87p547zkXh5hlE9vvxNVSa4S912RgLMMywt9aHxq7snXRgPEJzHyj8tX0XhEs7t0QlisKHfQyV6lXMjh792La9S2qD0caTuNKAsvGfyPvBokyAZY4+x8eQ=
+	t=1734509683; cv=none; b=QDOa7EIJhKwfeThob+G8J6yMbHXOSNa23oz+0rcehL2s3vE1AR4qB/KFCqotR53Zr0EfuA0J3pfmcIYGCPhHchTQOkZBvhnfWVGfSn/8v6cntUaPcy3dL5j2r/FX1PZL04fcTzXmC7FdUvuqBuAlbUH8KFyb6h0xTxO9X4Ky+18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734509430; c=relaxed/simple;
-	bh=3qYdbxzs4l8PkyLR3HR05KmhCYaxsRKTptcHhYhR4R4=;
+	s=arc-20240116; t=1734509683; c=relaxed/simple;
+	bh=yzFtCKnTQ601A3f16AYTs8uZ5JScAxJvGB1+vxjME4U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kcRSaLeuurf1c2yFYusOFShXwiHaaspmF8aMXIrL0Bdu1X7UHKw5+1h9P/CAJpdT9IW7mSrdatF4LSDvaHk5W6jgo0kko2mENUcVQBMhqZ1gvFdxcKF4ZvSmRvH+uVHisQeNUNpXAHfKW8EWHmThPI7k6Jel22M6A1UgQ3/spME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BRQU1olq; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=MPKYSyaQ/du61MndWroLsPZR39F9KGreRT52dVD8tUCSBxW39YOs6hgZE5HYzuuajOehXMF3X0539rB0JbyQgTmrFgkzV59G4WZnzF4RRe3x2qMmBmh08LavjK6vHnim9k/zcdHyYw8N0/XTHDJjK/jLjm0sCHl7aQuJ2C+hUAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FiO17yND; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43621d27adeso42748725e9.2
-        for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 00:10:28 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso7628302a12.0
+        for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 00:14:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734509427; x=1735114227; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1734509680; x=1735114480; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ReRS6j5G98M0X/vFFlnySn5FW2QTeseYmxkguIVGI1c=;
-        b=BRQU1olq7iV0fsB0ju5bh081b26+sihAwnFbdagnmU7L3jzblZiRgbymeKNv9marXR
-         xW+lLM44FTkjXT7XGEqObXswdRneAajQxBzNKHJ5I+b3qOzhhJ0A/eQSpG/FAIoYyvqn
-         CxLao0neMmqGmKzaJWHLuI9jByn89HU+XvJbYkvTrQgnqINkY0dIPqV8ZO4AQ+xSAj1k
-         6Y9tZztp1DDyp8E4Sw0io9C+YZe8C14I8Sja3B0H3SB83mMaxbS79KH3VqVpAw7aRR+y
-         R4zOjN0fwSP1rZiWfJUM8hxl9M4RRkKg3JMqALoMkAgirpVvV2ZIdhnQ76/rAX5+k2Fz
-         E/FA==
+        bh=aLshIda1SzJ3vEMtXnstyNooyVa33Af0YFLEb1I/GJY=;
+        b=FiO17yNDNzD/+NDrtK5dj29S+ucPZlfD/rwYItM+CrXJBs/DZxQY+XwGvtukUPSgMH
+         LZR/2cmPpeV1oeLSI191YTfjpxfS0CiG5vL0LSk38weeTPz4j+serSv+dGY5yLEmsQCD
+         Y37c6VDysQjr6+Xxqut4kEuM3Gfza45GMuX72axyhZThYwoMR3oC6qElsOHCv6dqrRT6
+         t4GOK5oN5ALqSkV1VB8G3TBu1d5Q7pvhud8O8r62fdlyZsrrJvpehjEOekhTjct0rnG4
+         q3VL4JgxmJDppbTWgs9t95/K4c/+F1RUUpQGaJoRNqJnkMqXVKCmnT4gg62P8C5UpK3l
+         9Y8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734509427; x=1735114227;
+        d=1e100.net; s=20230601; t=1734509680; x=1735114480;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ReRS6j5G98M0X/vFFlnySn5FW2QTeseYmxkguIVGI1c=;
-        b=gvMsORFW7hnos2n/9sSkAjO/AxFvqDRp7gy1l0zzi7Mk+qrZ1dvimMN7X1ygb98Cmk
-         lYwoDDNiLcvAuUQTIRiy1CLhu5NLA7cr1ltKaPqdSqOPoAb0o8jYk1a7pVIBGvUCOreF
-         rpW6C4xnHfC/Wb6OkrWOE7hF8YXyZKa39WPzSSHnNrVdQ2rGWMEmbcgItqu4Z1QCZyq1
-         0FrUJCEGkgG6vhtYLBTdwMjG9yYufMW/EmDOkCKfg4SO6abD7AXkqqmnxJFQtgU8tTJA
-         2xTVMSqTtbBVSK3FxfU7G+mDAqcAHa1kCzFRd849J/BT2LVAyBmdlLWHsw0/aFnb37S4
-         4x/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXnyGXqGkNAj7lnpfUfyDAHOesxZd4Vg86vDFcwjoXf9cJ9mQgSt3O8aTVJpm1vQuuJk6VPFFj6T9I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB/cbREbt/cilC4ktLtRsXj/mesYbmLpNNyFLZJtwoTpWqGH33
-	8rNifTjyC8O2cWkMaLhvp5A7KfgN6Bbfx/ADW0OyjmbUV4kgjwAXL4JY2d4RK+I=
-X-Gm-Gg: ASbGncucI6kXLLurYRPh5/llWI/O4uSQsA2VgBz2525KWbtyzKJPIzqNEuIhaecURpk
-	idzChs+rz+3JR42cryLLOxaY7z58xCGczROMNtEZJHzOTLm+6adc0CL+eWNGlt2/dQf60i3Veap
-	H2dXMqUD6+U/71d7jxEPYGmLV6KosLEge/VNTj6ofWWg0uDL6rW5QeAh7Ih+3dIEEW+4JfDeT6n
-	LYcL3K6Gv9P9MYDNZvqgmtTYt/tuvEpyJKqg19VW7Z5syWv+ceqMqtFcLyIT2gp
-X-Google-Smtp-Source: AGHT+IHW84IFMyteDGhzkZH0GrN3c/a3NXNaK9vu1e0nBtdfhB4NZmQJ8kHa4BkJv6X+V3GmJqPNWA==
-X-Received: by 2002:a05:600c:1390:b0:436:346a:fa9b with SMTP id 5b1f17b1804b1-436553f35e7mr11377415e9.20.1734509427176;
-        Wed, 18 Dec 2024 00:10:27 -0800 (PST)
+        bh=aLshIda1SzJ3vEMtXnstyNooyVa33Af0YFLEb1I/GJY=;
+        b=lZ38qQ9hsZIcTwx6qfXjMe8+6tYMOcWuTq0kZyaavFTjMR0dhpyv4NSW3A+dd+/hXt
+         /oVO3C3ejEiIINjb9ug7gf6UquJHsw0bBufl8gn1Q11UPpiYuZm1XLxAFL4cCMm1Hh6L
+         CB1lGvlshB1uhwdtN7q8wmnMOwg0i22ecD1Fu6Z6kdpSbtmI3pXX3FwxI67LgDiL/cKn
+         ptZpqrnrdW+JgZU38IcK+1xErrnVhwfCgXSxk/5/770asoODwa+986Epw5GAgyVX1NoE
+         08WpOfZ4cNjRfmDJNyVhIfvqWTiylRhn7xxXiSyl/pPXzSjGRbvlU9/MQo1oCL9jtlcU
+         nvSg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1IW/1TWz3sCiSF0byUxW76O5IhC5QBHtfufNgf98OC3KLgENNkme2PmEHOyT//Djthhd+Mu0a56o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZZMuOdL6IngzcIfkRxpYJuL1SiVF4j/bThljiaGr8jpZnIHDQ
+	KQYrCbVZoS0ChUHcz9DkZWkGpjPU7G3XyaaYBvtZiNXUSjjZU7/ei7JFJSpdI0w=
+X-Gm-Gg: ASbGncsKIpOxndDLXRBoBmIZYtx3n8nL80co7aOjmDd7ClHSAj8OuXJadNkelj6X+4V
+	0XwBVbPM5yDd2JwtQy+o9n4IL2tkSx9jVQ4bJxXd0Yfu1XPa4Rh2oeCtA/jTHks8yCtEWS7PCQy
+	LGzLx6k4h+/xrvvH+tt4xw/U/Y1+LrltvD4r7TPZOaJtnxkJDIV1O7vxOoMvyHYEDOXSl18kRKJ
+	hbVKxBVdin8UBcYSzih58rZb5/iCXuQC0XQoBiIakXs1LfqC0RPYFPy/mYDQNtD
+X-Google-Smtp-Source: AGHT+IHhxI1Zr2mYA29SpEH95vNXNub6qcj7eCX6FH7pRb6bOEwBLTqGGOoN5lOsuLYigCMF4VpDpQ==
+X-Received: by 2002:a05:6402:3814:b0:5d3:ff93:f5f9 with SMTP id 4fb4d7f45d1cf-5d7ee3b6194mr4832155a12.20.1734509679654;
+        Wed, 18 Dec 2024 00:14:39 -0800 (PST)
 Received: from [192.168.0.14] ([188.26.61.92])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b3b1e8sm12181355e9.30.2024.12.18.00.10.25
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab960071edsm535623766b.27.2024.12.18.00.14.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Dec 2024 00:10:26 -0800 (PST)
-Message-ID: <a31de602-9af1-4576-872c-6fbe1a622a30@linaro.org>
-Date: Wed, 18 Dec 2024 08:10:24 +0000
+        Wed, 18 Dec 2024 00:14:39 -0800 (PST)
+Message-ID: <e2fcc787-8fb3-4023-af76-c0db3f4b40d6@linaro.org>
+Date: Wed, 18 Dec 2024 08:14:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -80,7 +80,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 22/24] mtd: spinand: Add support for read DTR operations
+Subject: Re: [PATCH 23/24] mtd: spinand: winbond: Add comment about naming
 To: Miquel Raynal <miquel.raynal@bootlin.com>
 Cc: Richard Weinberger <richard@nod.at>, Vignesh Raghavendra
  <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>,
@@ -96,30 +96,59 @@ Cc: Richard Weinberger <richard@nod.at>, Vignesh Raghavendra
  Haibo Chen <haibo.chen@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
  Heiko Stuebner <heiko@sntech.de>, Michal Simek <michal.simek@amd.com>
 References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
- <20241025161501.485684-23-miquel.raynal@bootlin.com>
- <589d95d3-9153-475b-86f7-886ec41cd4f4@linaro.org>
- <87ed2blr8y.fsf@bootlin.com>
+ <20241025161501.485684-24-miquel.raynal@bootlin.com>
+ <71d0cf83-6866-46be-b76f-291a8a6a1346@linaro.org>
+ <87wmg3kbxa.fsf@bootlin.com>
 Content-Language: en-US
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <87ed2blr8y.fsf@bootlin.com>
+In-Reply-To: <87wmg3kbxa.fsf@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 12/13/24 12:08 PM, Miquel Raynal wrote:
-> Hi Tudor,
+On 12/13/24 12:25 PM, Miquel Raynal wrote:
+> On 11/11/2024 at 14:38:53 GMT, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
 > 
-> On 11/11/2024 at 14:35:23 GMT, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
-> 
->> On 10/25/24 5:14 PM, Miquel Raynal wrote:
->>> +	SPI_MEM_OP(SPI_MEM_OP_CMD(0x0d, 1),	
+>> On 10/25/24 5:15 PM, Miquel Raynal wrote:
+>>> Make the link between the core macros and the datasheet.
+>>>
+>>> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+>>> ---
+>>>  drivers/mtd/nand/spi/winbond.c | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
+>>> index 686e872fe0ff..9e2562805d23 100644
+>>> --- a/drivers/mtd/nand/spi/winbond.c
+>>> +++ b/drivers/mtd/nand/spi/winbond.c
+>>> @@ -18,6 +18,11 @@
+>>>  
+>>>  #define W25N04KV_STATUS_ECC_5_8_BITFLIPS	(3 << 4)
+>>>  
+>>> +/*
+>>> + * "X2" in the core is equivalent to "dual output" in the datasheets,
+>>> + * "X4" in the core is equivalent to "quad output" in the datasheets.
+>>> + */
 >>
->> do we want some names to these hex values?
+>> doesn't help great for an outsider like me. Is quad referring to cmd,
+>> addr or data? Or maybe of all? I need to read the code anyway.
 > 
-> I honestly don't think we do because it would be totally redundant with
-> the macro name, ie.
+> I also don't like these terms. IIRC "output" is referring to the data cycles,
+> otherwise it means address (dummy) and data cycles.
+> 
+> In single, dual or quad mode the naming is unclear but "okay". But octal
+> DDR modes can require the opcode to be sent in octal mode as well, which
+> is new. If we support that, I'll take care of using a more
+> understandable naming for all macros like Xy-Xy-Xy, X being the
+> buswidth, y being S (sdr) or D (ddr) and the three members being
 
-I agree. Thanks,
-ta
+8d-8d-8d is common and covered by few standards, yes.
+
+> Command-Address-Data. I might even be tempted to include dummy cycles as
+> well, because it is important to be clear if eg. in octal mode "1" means
+> "1 cycle" or "8 cycles".
+I find the info about dummy cycles useful. I wonder if such terminology
+is already specified in a standard. If not, maybe we can put the dummy
+cycles after the mode, in parenthesis? I would refrain custom terminology.
 
