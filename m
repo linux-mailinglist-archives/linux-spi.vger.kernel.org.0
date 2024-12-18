@@ -1,115 +1,112 @@
-Return-Path: <linux-spi+bounces-6116-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6115-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9AB9F6EDB
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 21:24:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F759F6DD6
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 20:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6572618896D6
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 20:24:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8350E168A8B
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 19:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09161FC0EB;
-	Wed, 18 Dec 2024 20:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="XKpvBvIh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478DB1FAC40;
+	Wed, 18 Dec 2024 19:11:14 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m12817.netease.com (mail-m12817.netease.com [103.209.128.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 894F01448F2;
-	Wed, 18 Dec 2024 20:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.209.128.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0094B1FBEAA
+	for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 19:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734553433; cv=none; b=hASTvaTJBKXg2Tvs1MkdoDgKxkxP0BSZ4zp24nEpCT6DgXxO6hGJis+51OgYVRdmh29f+9GuHzzzPKzJghFSPR44QG3vSrycNjyJ4mKqO8ewcE9JHorhkKApvd03iFg55CBapzue3cc8T+Po9YkZXpOMuMahgFC/Lyata+yNskQ=
+	t=1734549074; cv=none; b=Wq30b/zdbXkM/cyh28ewe7rwa0GLgl1cDmEKuM8omvoqR8SKHhktAnUFsMTrkScNpGrqsJemQyY6rKPmFx7qX28nOQLttAEMU66mwBgu1czt8lX3Dxyye0P7gCRCALF0abFvc5eiJ4dnqBYk+tQSPU/NSb0bwcOqhGj6Sx8FiLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734553433; c=relaxed/simple;
-	bh=lObA13yr4r71LMXlU9RucKIDJZmCI5D4zjGy9A3yP3o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fksfI4YEzXvyGgaXvGimNTJhR2E6CgnvadZBosqnHXPlHYbykChaA69jfNjoLwJuFuZtgZFKaZemCgvj+xPn0c/S0JsBoPyJpamjYYlRLrFy1Jkdso0OerKX+D6xUuk8fFOIAYmoS2LXraiN31LNdKNM1/btM58zrKoPcKrIjZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=XKpvBvIh; arc=none smtp.client-ip=103.209.128.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from rockchip.. (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 62079658;
-	Wed, 18 Dec 2024 23:47:43 +0800 (GMT+08:00)
-From: Jon Lin <jon.lin@rock-chips.com>
-To: broonie@kernel.org
-Cc: linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	heiko@sntech.de,
-	jon.lin@rock-chips.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: rockchip-sfc: Fix error in remove progress
-Date: Wed, 18 Dec 2024 23:47:41 +0800
-Message-Id: <20241218154741.901591-1-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1734549074; c=relaxed/simple;
+	bh=o8WmGY4A48l9tahSU4Wv0C45hmWVp4/CZf13nXfIEMo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y544ZHaK7N785sIkhXXQ11ALMdONba4iwFMOSp6hBy14ip5CyE30JjW/zQH7xTAPUolVPql6EdTxc3ccEQr+WJ9CzcLs68pBcgv0jp4w4VpdgBf8mx3ul64Xdv/r1CcT3jZvRniRZWReqodrQtRTgSrmqYeuMcEXIMF4SlbyyI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6d8adbda583so222566d6.0
+        for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 11:11:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734549070; x=1735153870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2tMeJYQga0hhnHEwekycDFOydstP9TVFTuQ8Wwc6BFo=;
+        b=rJ3hfVfu4idiAFrS8VXPnGA9/aKhm8uMlCfZDB8No9C5IjSyIWJR9G9eGv78BvaY8l
+         I92MzlG7Rth+BzWeWBHvR6dxXBNPn1BqVtqaB2/llaBKZD7XN33ov92k6sVoYErpy14a
+         hB928BLhCYx1XqlBE9uuOFvvxOPMM4gbpFVkyhr7KIiz73Lx68/afYmRavOGstmq6+Ip
+         wGRBjNbHcmS8S+Dv45eP1UnT3u7VDVLiXKiwNFlNKw0pizWT99yjjvxAneo+BQxVC3cu
+         vIdzmona8ls9tl2wkVVWWyzoqSV5jid4jF5CRiKj1sIqnX10u47a0LhMp7AM1F/3FO7+
+         UlTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEWOnNASj7H9r2hImbcSKK93i5fZ/tC01/0A8HaBwCkRZ9fRnMB6sSflKU/1FUidlVnDWp2NlX9To=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3kIg7d816Ou9z8ito+HK2qXXr44VfzIuaMkGd6rOJUoQFbIpY
+	tJjo4ZVL4LWAqYPrZgtmbQVPT4Y5iSY/AH6lYx/ONwVeAFJWz8r8CWhl9t9B
+X-Gm-Gg: ASbGnctpcR/jT/Od3z+D+Z08otKSrHwETzrLV0+EjxfLl5dWQLdACM7yXYuEId2/4NG
+	29lOfor07R0i0rKnFivJRbwXCUKqNmEtLfyNnjzyjo9qOO5xywz16heRSxnLwfqu6WlI3Rs8zTY
+	GkULcniKRdOf39ERYsWtyedMqO7VSF3TwRcCC+oQtnhwetJ85yBAjNIJGXXfIWWwZOZ70DSNEl6
+	Wowb/uTlSldqvGXKH0egaw4DdmFgqpcywlwdrZ3JTCnB+92HMKlglnsnLqhDPO0yJedZCnaJmsG
+	eQnloDsQLPeASUeNV4vQAmA=
+X-Google-Smtp-Source: AGHT+IG21PLFB/5rZYjoct/mR0DIc81pTmK9Jp78BDxrFRgYZJ63/42c62FR//9OeIEQSjLtIrkZ1A==
+X-Received: by 2002:ad4:5d41:0:b0:6d4:1ea3:981d with SMTP id 6a1803df08f44-6dd14c9d169mr13232496d6.43.1734549069922;
+        Wed, 18 Dec 2024 11:11:09 -0800 (PST)
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dccd26c8cbsm52981916d6.54.2024.12.18.11.11.09
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Dec 2024 11:11:09 -0800 (PST)
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7b6ed9ed5b9so773080885a.2
+        for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 11:11:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUndvHX8CYyYbx0kWBwT0G1VvDJvDQyy8/TnnouBHPctd7M1aUhRKb77X60ZmJlHCzjcDO0krF2sgw=@vger.kernel.org
+X-Received: by 2002:a05:620a:2607:b0:7b6:6a3b:53af with SMTP id
+ af79cd13be357-7b9aa8d5070mr95716985a.14.1734549069081; Wed, 18 Dec 2024
+ 11:11:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUIZGVZMGB5JGUsaSxpIHU5WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a93da741f7209d9kunm62079658
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OAw6Aww5NTITCBAQHyxJKzFN
-	CQIaCxJVSlVKTEhPTkhNQ01PT09MVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-	QVlOQ1VJSVVMVUpKT1lXWQgBWUFKT09KNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=XKpvBvIh0GfihsjPdKvwG9EvIk7S7fckssglKXt5f1EhMppvwFaMQ8p5v9LUY63ysK5KmZCkI92fdGSJ3p+MQ45FGI2DJakha8Rri7jTvZuCAewPG4bmzdJhSNXN7sA1F4QVKDXBpee6yL9C+bdxPcHfGcv9kjX9xzhrSQuWGkg=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=OU+G1H8f52f2/x0TSjJIsIY+TxkbETn6gOAbnCRhzbM=;
-	h=date:mime-version:subject:message-id:from;
+References: <20241217114226.1223724-2-u.kleine-koenig@baylibre.com>
+ <CAMuHMdVzyq6L+9iNhtSdGpAJOKyu2vkzvveHXt0in9xUhD6mLQ@mail.gmail.com>
+ <tk6wlbylk7aqfd3sys2jitpnbdz4xomdg2yr7hsppxyptgbek5@3vtvajq7krun> <CAMuHMdU0FjXBgFLUxxvQeODPsU8xf+LAdQCg4xpAn_omJeA9WQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdU0FjXBgFLUxxvQeODPsU8xf+LAdQCg4xpAn_omJeA9WQ@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 18 Dec 2024 20:10:57 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUEXFFXt1EkGafv+-arG4x4hFQMGO6E14O7zguyGT0kmQ@mail.gmail.com>
+Message-ID: <CAMuHMdUEXFFXt1EkGafv+-arG4x4hFQMGO6E14O7zguyGT0kmQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and spidev_dt_ids[]
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix error in remove progress:
-	[   43.026148] Call trace:
-	[   43.026370]  klist_next+0x1c/0x1d4
-	[   43.026671]  device_for_each_child+0x48/0xac
-	[   43.027049]  spi_unregister_controller+0x30/0x130
-	[   43.027469]  rockchip_sfc_remove+0x48/0x80 [spi_rockchip_sfc]
+On Wed, Dec 18, 2024 at 8:02=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+> Further improvements could be:
+>   - Generate spidev_spi_ids[] from spidev_dt_ids[] at runtime
+>     during module_init() (consumes cycles :-(,
+>   - Teach the subsystem matching code to strip the vendor prefix,
+>     to get rid of spidev_spi_ids[].
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+Oops, and modutils, as the tables are used by userspace :-(
 
- drivers/spi/spi-rockchip-sfc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index 9146b56713b6..ca4f20283d23 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -184,6 +184,7 @@ struct rockchip_sfc {
- 	bool use_dma;
- 	u32 max_iosize;
- 	u16 version;
-+	struct spi_controller *host;
- };
- 
- static int rockchip_sfc_reset(struct rockchip_sfc *sfc)
-@@ -603,6 +604,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 
- 	sfc = spi_controller_get_devdata(host);
- 	sfc->dev = dev;
-+	sfc->host = host;
- 
- 	sfc->regbase = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(sfc->regbase))
-@@ -708,8 +710,8 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 
- static void rockchip_sfc_remove(struct platform_device *pdev)
- {
--	struct spi_controller *host = platform_get_drvdata(pdev);
- 	struct rockchip_sfc *sfc = platform_get_drvdata(pdev);
-+	struct spi_controller *host = sfc->host;
- 
- 	spi_unregister_controller(host);
- 
--- 
-2.34.1
+                        Geert
 
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
