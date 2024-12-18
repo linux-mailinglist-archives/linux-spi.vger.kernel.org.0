@@ -1,212 +1,102 @@
-Return-Path: <linux-spi+bounces-6110-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6111-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E1749F6C31
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 18:18:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2A4B9F6CF2
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 19:14:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF34C16D2E7
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 17:18:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35828169AAE
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Dec 2024 18:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97691AA1DC;
-	Wed, 18 Dec 2024 17:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8900F1FA82E;
+	Wed, 18 Dec 2024 18:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="JcpQ5VQi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFigwBAq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3CF1F2C4C
-	for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 17:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ED4314883C;
+	Wed, 18 Dec 2024 18:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734542277; cv=none; b=YNoyqpcVIyflE7zqpI1zGCG7ENDA/5xanC96mMU46Op4RbIelWsrAB4XZ3hy041TQC12sboPs7DyzS7pk9CZG1QxRbh06tonAOknsrp2nSbFT2kOiZ09/7GHBj5TMxsAfnYYUfroa8je2By8L23fe0iKTacetBLWpxm9Uvyf02I=
+	t=1734545660; cv=none; b=a30v/TESUChFe62V2c90F5NNVO4WcdSemJhQmFd1SYX7P9K5HGp6a2iKgdUUWGC9oL/MaxzaNCbQRuDV0lNTuKR3UvwoSWZpIIPml9Uukzmre5AcSNmGfLZyjRp3aL/Esnaw91qfW49yvD7jzoxEnnXTAep5SjPVbdz3o9PaShA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734542277; c=relaxed/simple;
-	bh=LLDHA2sudG5Mqc1YtHbssFSopYuM+9/meoa8scHfRr0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lPLCwKDqHHrj9dclkVx740qAXejFo1L0H3KNrj3brxKpR/i6gpMFyGvM06IYz54TXt70bhIj5xDCfwpT887oYuOQgMF9PD0WibcUCYcZ+J58WKpBAtv1p0v/OdC9ZUWcR6Fcj4xjbF2tS730wCFrkMiL3KSBXE4WOezXw8XWT1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=JcpQ5VQi; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aa543c4db92so76561366b.0
-        for <linux-spi@vger.kernel.org>; Wed, 18 Dec 2024 09:17:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1734542272; x=1735147072; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=49VD6LmHaGZZbbgit/Mj40zCjnRwikGLSqGKLTApTQQ=;
-        b=JcpQ5VQivbI2FBK2vvw4/rYINJJIC4fRdViLMAwODjUWfHr9Kb01Qfg8oJ4CmmRm6O
-         b6SMyOVhdIq+cPFMP9EGWqOUduKgUFL+zr/v/sbEOpQWpe9fLlqZBSf7yfw8ci7g8FLT
-         R8EkfwZQamwWvZPANNOudHZ+m/bQwcWc2jdSAE0tRiuJWSjxjfY73XdTS6Pv4isbyY2H
-         eIGNL4mlQKPRTof6ozz4DWiLXEBWIglVjeTCLUGWs4ODdrUNGdJF+2PaDz3jnGI8aM9c
-         l3z5a1xzXyF/JXSKQlAuQcSKDLyDBp6BMqfceedfVheKGiuc7K1lJ+Ae25vsOhZ2Fheu
-         ASMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734542272; x=1735147072;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=49VD6LmHaGZZbbgit/Mj40zCjnRwikGLSqGKLTApTQQ=;
-        b=cmZHeL+NqXJBnVWQsH8fgjJVL9kCr2+DNQHBc6mflL7Z9/rOWw5Uexf3xAibIsPBfC
-         dKpjJfnihHQ8WMUnX5oVU/Ir1+55WLAq1nL+htSwwsSOyyw9pbxG8DQdgD04UOCYl4gw
-         gyoWS76KPbCA5zR7wg1QstC6oN1UYIagX6U3GVZyWUNHeNdouKEF+OiNWT9YViaptJYr
-         Ecd1u0SH6oJ+/Kg2b96m3BDgkWToyFKI2vTdppWdN9aOmHAESCir+gDYUH2vpNm8cxp3
-         R1vzaWoaaYjmdFDIKoIBzPggIyqgLYy1uYN8ndL2KTwze/peJ6VMyOjM9sRsiclMmsLG
-         b7cg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpch4FECHh/nLYfZ5tUCidZarBwQYjCWn5X+W1H0h3c1TBXoMWKd0Gvw99zgfXwDNPRKgz+RrJmj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykdlA55D+yNdniER4rFdGqBg65Azrl56FUoS8X8iJ1iYA5h4v2
-	A9ys4dw6KqJ75hKiHYhwLCL4joxiLIh6zzORAFJLWuj5Vrdk8wVWewTJgYNJKKU=
-X-Gm-Gg: ASbGncst9lY46K8a0uw6jTalnnw7mACt3u0Yhbr7Hh5mYNubu/osJrwTBa8oz6GQ1V+
-	PuPpa7JVnCA/MlEaW36aF/BYCGdNvfc54PjGRIkSZ8NtINicxmEK8AAUFbg15uDwduXx9gXlVXT
-	iXXuVFZqSZr2ryBX6hCHE5Wc3Qkrzk78e/l+8hgyAuR+A5vZXufHwxmp957wrKbi+m8VU1VsLyH
-	WwQ6DF2v3jRx0Mnj2+OKGw304fPzbqeiXvYbyoCsqjOKSG3W9uOcaiEf4mqGc688dj/WBZWlaPz
-	h6ctO8jV3Eb5eFIG0y1KaJh1YHhQ2AsABvJySY6+uBuqyw==
-X-Google-Smtp-Source: AGHT+IFw5p1aErzl1NNsSFSkOXAQoPvgB2MkuAsQ9/1uCZS/hhNdHQT7c+kzBm4n4NSZ5tyPIsMy3Q==
-X-Received: by 2002:a17:906:310c:b0:aa6:668b:2733 with SMTP id a640c23a62f3a-aac07954ca7mr17960466b.33.1734542272368;
-        Wed, 18 Dec 2024 09:17:52 -0800 (PST)
-Received: from localhost (p200300f65f10dd00ac8b2892888467c6.dip0.t-ipconnect.de. [2003:f6:5f10:dd00:ac8b:2892:8884:67c6])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aabfa6a2e3bsm76715366b.26.2024.12.18.09.17.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 09:17:51 -0800 (PST)
-Date: Wed, 18 Dec 2024 18:17:50 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and
- spidev_dt_ids[]
-Message-ID: <tk6wlbylk7aqfd3sys2jitpnbdz4xomdg2yr7hsppxyptgbek5@3vtvajq7krun>
-References: <20241217114226.1223724-2-u.kleine-koenig@baylibre.com>
- <CAMuHMdVzyq6L+9iNhtSdGpAJOKyu2vkzvveHXt0in9xUhD6mLQ@mail.gmail.com>
+	s=arc-20240116; t=1734545660; c=relaxed/simple;
+	bh=oLjRNaXefOfbuwuGz/n65DpsF3Fb5uurQPkAN2a0Nrk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ulaQwB/H1CZTK0iumTe1ykeTo1s8xht8mtDLFt5Iiu85QM1iqJdem0vQm8qZ5BGCxDeYT3ELHdif0HwTWTZPc9cbAz4rJ+l4uzuiIPHH9d1pXGKZh5luKfSwvx50RSrnN13KN8wZxmRs8U5hMpSmOVoJDKU30p1FFYArt+yc7PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFigwBAq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA0E8C4CECD;
+	Wed, 18 Dec 2024 18:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734545656;
+	bh=oLjRNaXefOfbuwuGz/n65DpsF3Fb5uurQPkAN2a0Nrk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=RFigwBAqLIxWG023Fhlwq7Ot86RHEKJKM/tCBsnaPO8XAoVjv8DwFdHgh6r7sp6/M
+	 UR7+jQXvsJkAYEid+oVGhFVpyC14xJ4Nul2q8O2dK8FJLAsXnjMLF2bA0SPvDqnhJI
+	 QC+1onguhqBRBQya7dfZ1JFcA8pv4ONJIRnMZ8n/yLN8E5GhgPvciBRsU68HlYkcEl
+	 G453VSFamRisQhgQNrERr78dTxyCml61ZNM17lk7k3pp4kdkDTWRriWdsIm8hu5dPw
+	 46Io3XhpdV+7kXa0fPCHs4X7mc/HoYquyOTwdcBaN3N/wsyV6CJ2gqd3rjBP8nLO6F
+	 mGpQqV2aM//4g==
+From: Mark Brown <broonie@kernel.org>
+To: Jon Lin <jon.lin@rock-chips.com>
+Cc: linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ heiko@sntech.de, linux-arm-kernel@lists.infradead.org, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <20241218154741.901591-1-jon.lin@rock-chips.com>
+References: <20241218154741.901591-1-jon.lin@rock-chips.com>
+Subject: Re: [PATCH] spi: rockchip-sfc: Fix error in remove progress
+Message-Id: <173454565468.177553.7095093662126161024.b4-ty@kernel.org>
+Date: Wed, 18 Dec 2024 18:14:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zespltodbb3kayz4"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVzyq6L+9iNhtSdGpAJOKyu2vkzvveHXt0in9xUhD6mLQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-9b746
 
+On Wed, 18 Dec 2024 23:47:41 +0800, Jon Lin wrote:
+> Fix error in remove progress:
+> 	[   43.026148] Call trace:
+> 	[   43.026370]  klist_next+0x1c/0x1d4
+> 	[   43.026671]  device_for_each_child+0x48/0xac
+> 	[   43.027049]  spi_unregister_controller+0x30/0x130
+> 	[   43.027469]  rockchip_sfc_remove+0x48/0x80 [spi_rockchip_sfc]
+> 
+> [...]
 
---zespltodbb3kayz4
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and
- spidev_dt_ids[]
-MIME-Version: 1.0
+Applied to
 
-On Wed, Dec 18, 2024 at 11:32:16AM +0100, Geert Uytterhoeven wrote:
-> Hi Uwe,
->=20
-> On Tue, Dec 17, 2024 at 12:42=E2=80=AFPM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@baylibre.com> wrote:
-> > There is a 1:1 correspondance between the list of spi device-ids and the
-> > devicetree compatibles. The latter is ordered alphabetically by vendor
-> > and device. To simplify keeping the two lists in sync, mention the
-> > vendor in a comment for the spi device-ids and order alphabetically,
-> > too.
-> >
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
->=20
-> Thanks for your patch!
->=20
-> > --- a/drivers/spi/spidev.c
-> > +++ b/drivers/spi/spidev.c
-> > @@ -698,20 +698,24 @@ static const struct class spidev_class =3D {
-> >         .name =3D "spidev",
-> >  };
-> >
-> > +/*
-> > + * The spi device ids are expected to match the device names of the
-> > + * spidev_dt_ids array below. Both arrays are kept in the same orderin=
-g.
-> > + */
-> >  static const struct spi_device_id spidev_spi_ids[] =3D {
-> > -       { .name =3D "bh2228fv" },
-> > -       { .name =3D "dh2228fv" },
-> > -       { .name =3D "jg10309-01" },
-> > -       { .name =3D "ltc2488" },
-> > -       { .name =3D "sx1301" },
-> > -       { .name =3D "bk4" },
-> > -       { .name =3D "bk4-spi" },
-> > -       { .name =3D "dhcom-board" },
-> > -       { .name =3D "m53cpld" },
-> > -       { .name =3D "spi-petra" },
-> > -       { .name =3D "spi-authenta" },
-> > -       { .name =3D "em3581" },
-> > -       { .name =3D "si3210" },
-> > +       { .name =3D /* cisco */ "spi-petra" },
->=20
-> Pity we can't use
->=20
->      { .name =3D strchr("cisco,spi-petra", ',') + 1 },
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-My suggestion is nice enough IMHO.
+Thanks!
 
-> else we could do some macros on top to keep the tables in sync...
+[1/1] spi: rockchip-sfc: Fix error in remove progress
+      commit: 7f9a1eed1ad8b274ed9163a02cef891a90427237
 
-I thought about that already before sending this patch. The best one I
-came up with is:
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-static const struct spi_device_id spidev_spi_ids[] =3D {
-#define DEVICE(vendor, devname) { .name =3D devname },
-#include "spidevices.c"
-#undef DEVICE
-	{}
-};
-MODULE_DEVICE_TABLE(spi, spidev_spi_ids);
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-static const struct of_device_id spidev_dt_ids[] =3D {
-#define DEVICE(vendor, devname) { .compatible =3D vendor "," devname, .data=
- =3D &spidev_of_check },
-#include "spidevices.c"
-#undef DEVICE
-        {}
-};
-MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-where spidevices.c looks as follows:
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-	DEVICE("cisco", "spi-petra")
-	DEVICE("dh", "dhcom-board")
-	DEVICE("elgin", "jg10309-01")
-	DEVICE("lineartechnology", "ltc2488")
-	DEVICE("lwn", "bk4")
-	DEVICE("menlo", "m53cpld")
-	DEVICE("micron", "spi-authenta")
-	DEVICE("rohm", "bh2228fv")
-	DEVICE("rohm", "dh2228fv")
-	DEVICE("semtech", "sx1301")
-	DEVICE("silabs", "em3581")
-	DEVICE("silabs", "si3210")
+Thanks,
+Mark
 
-I didn't like that enough to propose it.
-
-Also I didn't test, but I think this could work.
-
-Best regards
-Uwe
-
---zespltodbb3kayz4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdjA7sACgkQj4D7WH0S
-/k6QpQf/W9PqvkqBbzXt2mZGuj+ugE5oabaLqhV1OgFan3mkYfoj0YlwRc3J6Vpn
-8+LORotSdo2aFpF1ZRHXnqt0ClSJnm5WRzsufwEz+h4o/Rh9we1PD05Z1Qed74A4
-rb6HiGSFxymcl3AjshULuECuopygwEpajiVM46ViJkIG84HFkkf7onf3eVR2ZCa/
-4/kWSEtgqIOsARllhMCcPrpT5sWQn+bHMJBcR8mNI10tBl9S15TeKJgtp8apsDH/
-ozPqrprUy6xEqyGhkmeyAaotuIYN4doYEbtwy3koH+sXROPSXTEyhL4dU3EDtuit
-owOm4TomLdKt4G7eMLqgiIsBVOZ8mw==
-=ZSp4
------END PGP SIGNATURE-----
-
---zespltodbb3kayz4--
 
