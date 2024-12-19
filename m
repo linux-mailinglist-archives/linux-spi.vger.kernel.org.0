@@ -1,192 +1,140 @@
-Return-Path: <linux-spi+bounces-6117-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6118-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 077B59F71DE
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 02:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70A489F76A3
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 09:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E151F188FD70
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 01:41:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DC0F1883F41
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 08:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD664500E;
-	Thu, 19 Dec 2024 01:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC84C2185AD;
+	Thu, 19 Dec 2024 08:02:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="ArX75noz"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TJNRhKeP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m32110.qiye.163.com (mail-m32110.qiye.163.com [220.197.32.110])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB0CF9CB;
-	Thu, 19 Dec 2024 01:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0005321858F
+	for <linux-spi@vger.kernel.org>; Thu, 19 Dec 2024 08:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734572496; cv=none; b=FoehFV2odceOodWc5eCeg3znD9hxN3G0oCginq3Kq3d6+NHPxyrRQYyqSadhdVw4e8oVl8ON8neeboGKduOzNY77joxmXtIe/sR1uXApyW8OCbmYoGeIESaCkyIrDvvwx63zKbCGXMC6ZrNSejlYQaStjdyCSYYAAsbbd+DjoMg=
+	t=1734595355; cv=none; b=Kf19SCRmxJfxLmiI1HztnK+MHCfCaLCdnWbmo3cAAFVuQbuaQ8V9laTU5CtoStp0uj/M1J6clFJEbAf194l+IbdgolqWYR0UO1XAEFIf0VjlyEJK+IgT4LTp1FGTjH06dnRB0UWA9QNpXDM2waDBld+KY37dB6SZDQsoIHeYo38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734572496; c=relaxed/simple;
-	bh=zj46V8+AlT/le+zcLhTXsZiFaoastz+/lmZ3kCeqd/w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rdvvCtGnBfnNqN6cCKoP4E7i7VpE5d8Q0EiA6awr7A4IbZyjfm/GHpUkq9bEYcWyW3d48vftAzfovXwyLTMLMfET/UXEFjmYrFNyHVX/3bNjDZ2HXcdINh+67TzuqSS3bEs1B55TaHzEoEUgSPdfxJsQj5j56NYnxvnqjUuaEOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=ArX75noz; arc=none smtp.client-ip=220.197.32.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from rockchip.. (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 62689e96;
-	Thu, 19 Dec 2024 09:05:59 +0800 (GMT+08:00)
-From: Jon Lin <jon.lin@rock-chips.com>
-To: broonie@kernel.org
-Cc: linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	heiko@sntech.de,
-	jon.lin@rock-chips.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: rockchip-sfc: Using normal memory for dma
-Date: Thu, 19 Dec 2024 09:05:57 +0800
-Message-Id: <20241219010557.333327-1-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1734595355; c=relaxed/simple;
+	bh=aiwLkYq+DscnftUiJFmweOP5DVdX7e9GqJStU8U3NNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AYVSdc4ZnG+JHEdF78ZVb9wpHbuvEoHpRHNkruvzdRS01gz7W4DFW4cG+R0NLp8QJ2lWsg9I0YjnqgZsfzYZGCxUVb8zPfOSEpObUMVcy2fWCtkm6dbVlUDur4n+7POYYGiyhRUysTVRKNa8a/G4t7VRNM9uSAOaCWXhGLy28gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TJNRhKeP; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aab6fa3e20eso77781066b.2
+        for <linux-spi@vger.kernel.org>; Thu, 19 Dec 2024 00:02:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1734595350; x=1735200150; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WjUJ+MgYS+D2Xi48xGpIDu3m6rTpWdtuQ0fvl1xZJvs=;
+        b=TJNRhKePK7HuwPeaxRWFcTWfVWmg88DjEY33NSOp2EElODS4jO0VLfEi1Iq+f79jF1
+         zXl13JdqLcEPfsmMRUzHhNGShe0ELanmbihzjo4QNKmBCQPXhGyoax39Or8BcqIWw7rg
+         Syrqrbkf7Cg99Qh9Ln8iGso5b7CSLk+FgI2DqDQYLZmBbDGL1A0+RwMi9tLdATMsT/07
+         yrJ4dpyYneDVDmYVbaWGqXxG3ILQfc/g4hnRerTii0mApymwxqMWcjLwI7zBpQsWigEO
+         7/9m3D8UEb4SCISbKIdRo0nUxGFFyww/QN+CA5ui7eTAMIG0Bzdps03TxBAgoXe3RIT+
+         YOqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734595350; x=1735200150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WjUJ+MgYS+D2Xi48xGpIDu3m6rTpWdtuQ0fvl1xZJvs=;
+        b=h2NVT5ATq6ryFlNlOIZObVndD4bEVZyAlMyqLe2Jvm91pE5gHdCSJLuXnIIgeVfHKX
+         7tbC84RwELLVuQBE4qrG6nKTw2UzLs3Uwn2A5vRh7RVJO7t0pctQa6RsP1Agd298Chwo
+         OMIfWiti6zfTp3j3vgpSysJAfYEPBHyAu9wttitCAhBbmTJ7fLXfQ4I3wY12x+7O+B3E
+         wIBtRH27mlU9Z0TDQh65u20T+wmXC5IKaCLpq+283CGku84TJvT/RjYOvNrYu57OJ7OI
+         rAbdK0VxbF/MeFwvCXadb6FpqxtGHaS/9U3a/dzJ5I+xUl+G1jXzmuOVJ/MV1/bylRPo
+         qWmw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCa1iWi2kupF9TBFR0xQsZEOITEiITJwON+8GyQB2qEVmJDCLa9/5RACDjWHGPfTgB8eALOAqowsY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSCfUqHxOnxnIu5mBSGmy6gqMBOAuuuV8D2Y/fJBGxirONc8Y0
+	T+h1Ws97F8C0hLoNw+BEmRym/xvQJOrDwuluFK5Yl4F1Ly8unIpFP+tD/ZUElYI=
+X-Gm-Gg: ASbGncv/AJpEeq91A7rtXtnuT1bpLGbK/dmmj+eAwo2W06bQ10UpjDhxJBYY7E5EGX1
+	+86xYNJ2TNANuQOdPbNF+eI74hfeuQz0Lk5MHEYnZubAWsDOMUA8VI95y3oxH9IS6Bf49znVp4q
+	Eu8tOuTC7X2oO2su+BprrqT0XH/kXKSWoyh3lHzwgDWqDsZTPd9Qy6iPGHczLc+/Yb0Rc6h4NLn
+	WjZRXi/a8gNZtt01SBGric08EvdfDhP4paRxJma0AENp8wAkFHOrNM1ThoJqA==
+X-Google-Smtp-Source: AGHT+IFymixMAnkWaX4fV/aHcmRiFHDGFHrEcU4QbpNBo+9WLjyyAuyOz3fKyaLCYItmz3NSHlLhHw==
+X-Received: by 2002:a17:907:7842:b0:aa6:7f99:81aa with SMTP id a640c23a62f3a-aabf46fb0ddmr464097066b.6.1734595349930;
+        Thu, 19 Dec 2024 00:02:29 -0800 (PST)
+Received: from localhost ([2a02:8071:b783:6940:36f3:9aff:fec2:7e46])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0f0159f1sm36823766b.154.2024.12.19.00.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 00:02:29 -0800 (PST)
+Date: Thu, 19 Dec 2024 09:02:27 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and
+ spidev_dt_ids[]
+Message-ID: <o74qqp36r3mgdk7muqtc3zqp7dkqqixfutirf2eeniatckoxw3@pjgfaokp5rvv>
+References: <20241217114226.1223724-2-u.kleine-koenig@baylibre.com>
+ <CAMuHMdVzyq6L+9iNhtSdGpAJOKyu2vkzvveHXt0in9xUhD6mLQ@mail.gmail.com>
+ <tk6wlbylk7aqfd3sys2jitpnbdz4xomdg2yr7hsppxyptgbek5@3vtvajq7krun>
+ <CAMuHMdU0FjXBgFLUxxvQeODPsU8xf+LAdQCg4xpAn_omJeA9WQ@mail.gmail.com>
+ <CAMuHMdUEXFFXt1EkGafv+-arG4x4hFQMGO6E14O7zguyGT0kmQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ08YGVYZHUgdSx0YSB8fTBlWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a93dc733a5309d9kunm62689e96
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Kyo6ORw4DzIXDBc#Ijg8CioY
-	NyxPCQFVSlVKTEhPTkxLSE1LTkpOVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-	QVlOQ1VJSVVMVUpKT1lXWQgBWUFIQklPNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=ArX75nozRt5ddukmT6M0gsKqaaaB8H4Ibjvrsb6mEpLtcJQmI9/pulkmT3xAK4vXcLUZGwOyXq2W9s+s3GaC8SGOaEew7nDDFpR2f+lBL9haHufywCZSDKRVQgiScjVGljNZBTD+aZtTRDV8LH82+Md7PWXN0YV3Syp5lZZ5c+M=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=9WLo9P0p6Y1Vr7K+3r8P1YMOWdk5vWT9KA5P3lqs1TQ=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iae6gilcnvvocmsg"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUEXFFXt1EkGafv+-arG4x4hFQMGO6E14O7zguyGT0kmQ@mail.gmail.com>
 
-Nornal memory CPU copy with cache invalidate is more efficient
-than uncache memory copy.
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+--iae6gilcnvvocmsg
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and
+ spidev_dt_ids[]
+MIME-Version: 1.0
 
- drivers/spi/spi-rockchip-sfc.c | 47 ++++++++++++++++++----------------
- 1 file changed, 25 insertions(+), 22 deletions(-)
+Hello Geert,
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index ca4f20283d23..36509bcccc27 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -156,10 +156,9 @@
- 
- #define SFC_MAX_CHIPSELECT_NUM		2
- 
--/* The SFC can transfer max 16KB - 1 at one time
-- * we set it to 15.5KB here for alignment.
-- */
- #define SFC_MAX_IOSIZE_VER3		(512 * 31)
-+/* Although up to 4GB, 64KB is enough with less mem reserved */
-+#define SFC_MAX_IOSIZE_VER4		(0x10000U)
- 
- /* DMA is only enabled for large data transmission */
- #define SFC_DMA_TRANS_THRETHOLD		(0x40)
-@@ -457,8 +456,10 @@ static int rockchip_sfc_xfer_data_dma(struct rockchip_sfc *sfc,
- 
- 	dev_dbg(sfc->dev, "sfc xfer_dma len=%x\n", len);
- 
--	if (op->data.dir == SPI_MEM_DATA_OUT)
-+	if (op->data.dir == SPI_MEM_DATA_OUT) {
- 		memcpy(sfc->buffer, op->data.buf.out, len);
-+		dma_sync_single_for_device(sfc->dev, sfc->dma_buffer, len, DMA_TO_DEVICE);
-+	}
- 
- 	ret = rockchip_sfc_fifo_transfer_dma(sfc, sfc->dma_buffer, len);
- 	if (!wait_for_completion_timeout(&sfc->cp, msecs_to_jiffies(2000))) {
-@@ -466,8 +467,11 @@ static int rockchip_sfc_xfer_data_dma(struct rockchip_sfc *sfc,
- 		ret = -ETIMEDOUT;
- 	}
- 	rockchip_sfc_irq_mask(sfc, SFC_IMR_DMA);
--	if (op->data.dir == SPI_MEM_DATA_IN)
-+
-+	if (op->data.dir == SPI_MEM_DATA_IN) {
-+		dma_sync_single_for_cpu(sfc->dev, sfc->dma_buffer, len, DMA_FROM_DEVICE);
- 		memcpy(op->data.buf.in, sfc->buffer, len);
-+	}
- 
- 	return ret;
- }
-@@ -633,19 +637,6 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 
- 	sfc->use_dma = !of_property_read_bool(sfc->dev->of_node, "rockchip,sfc-no-dma");
- 
--	if (sfc->use_dma) {
--		ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
--		if (ret) {
--			dev_warn(dev, "Unable to set dma mask\n");
--			return ret;
--		}
--
--		sfc->buffer = dmam_alloc_coherent(dev, SFC_MAX_IOSIZE_VER3,
--						  &sfc->dma_buffer, GFP_KERNEL);
--		if (!sfc->buffer)
--			return -ENOMEM;
--	}
--
- 	ret = clk_prepare_enable(sfc->hclk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Failed to enable ahb clk\n");
-@@ -676,8 +667,8 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_irq;
- 
--	sfc->max_iosize = rockchip_sfc_get_max_iosize(sfc);
- 	sfc->version = rockchip_sfc_get_version(sfc);
-+	sfc->max_iosize = rockchip_sfc_get_max_iosize(sfc);
- 
- 	pm_runtime_set_autosuspend_delay(dev, ROCKCHIP_AUTOSUSPEND_DELAY);
- 	pm_runtime_use_autosuspend(dev);
-@@ -685,16 +676,27 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_noresume(dev);
- 
-+	if (sfc->use_dma) {
-+		sfc->buffer = (u8 *)__get_free_pages(GFP_KERNEL | GFP_DMA32,
-+						     get_order(sfc->max_iosize));
-+		if (!sfc->buffer) {
-+			ret = -ENOMEM;
-+			goto err_dma;
-+		}
-+		sfc->dma_buffer = virt_to_phys(sfc->buffer);
-+	}
-+
- 	ret = devm_spi_register_controller(dev, host);
- 	if (ret)
--		goto err_pm_runtime_free;
-+		goto err_register;
- 
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
- 
- 	return 0;
--
--err_pm_runtime_free:
-+err_register:
-+	free_pages((unsigned long)sfc->buffer, get_order(sfc->max_iosize));
-+err_dma:
- 	pm_runtime_get_sync(dev);
- 	pm_runtime_put_noidle(dev);
- 	pm_runtime_disable(dev);
-@@ -714,6 +716,7 @@ static void rockchip_sfc_remove(struct platform_device *pdev)
- 	struct spi_controller *host = sfc->host;
- 
- 	spi_unregister_controller(host);
-+	free_pages((unsigned long)sfc->buffer, get_order(sfc->max_iosize));
- 
- 	clk_disable_unprepare(sfc->clk);
- 	clk_disable_unprepare(sfc->hclk);
--- 
-2.34.1
+On Wed, Dec 18, 2024 at 08:10:57PM +0100, Geert Uytterhoeven wrote:
+> On Wed, Dec 18, 2024 at 8:02=E2=80=AFPM Geert Uytterhoeven <geert@linux-m=
+68k.org> wrote:
+> > Further improvements could be:
+> >   - Generate spidev_spi_ids[] from spidev_dt_ids[] at runtime
+> >     during module_init() (consumes cycles :-(,
+> >   - Teach the subsystem matching code to strip the vendor prefix,
+> >     to get rid of spidev_spi_ids[].
+>=20
+> Oops, and modutils, as the tables are used by userspace :-(
 
+Then how about a build-time check comparing spi and of module info?
+
+Best regards
+Uwe
+
+--iae6gilcnvvocmsg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdj0xEACgkQj4D7WH0S
+/k6hvggAn3PAeIFwyYl9riUPLS9NWpF9sOnVDeR0Ea0n68f2ausEOB0dT3pwkOAB
+78b6+1g63aWHLwWg+ApMzpHBjjJ3g4b4Gb943pwJltFLlp+8HeC3d5C4dO7RlLrJ
+ronMmdgAjWxbYdwUN0DKNIZw0r08fHFlWvsGGlZxGjPD1g3EyINP76a1/KZtuptP
+OVHTCtpYp8ATJUIG6oBRD9WZLzFA3cq9iG1yduU6h3EvbE2dWSd0FpPEj/Mti9gU
+K5LuVJJirJzw4yFEqtISZ30XQYLnHeEidv61FFU6Bg82CLBrlxtz/Or4aSd/vJG9
+4055gUvxn3RBIbBsVjKOhKTDR4Uo8A==
+=q96t
+-----END PGP SIGNATURE-----
+
+--iae6gilcnvvocmsg--
 
