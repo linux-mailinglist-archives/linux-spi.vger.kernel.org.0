@@ -1,109 +1,163 @@
-Return-Path: <linux-spi+bounces-6120-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6121-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC56F9F780F
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 10:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 571139F7819
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 10:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CB20163BCA
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 09:11:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC67616388D
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 09:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1911A221455;
-	Thu, 19 Dec 2024 09:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 511C81FC7D1;
+	Thu, 19 Dec 2024 09:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="jmQoZNUT"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="MTW2wNz6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447DF149DF4;
-	Thu, 19 Dec 2024 09:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E410149DF4;
+	Thu, 19 Dec 2024 09:13:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734599404; cv=none; b=Ecb5K0lPf2US8upY65CcpdLmTc16m9vyO1lJQVSV7N3RkDQHjrngxEII4fSfpdIRJHogtYrwqF1j9J5eQNK1544cmqBQiqXlzI7+7Uvbhz7/L9Y/CeEHk43Qge6DCmYCgX31TBU9G6kPQBpSwbuSJCWFD6Ct7EylwwIbJkm8rV8=
+	t=1734599604; cv=none; b=jAritqBfaZhNRqx7EIhhLZAWd4Ci6x/96JksOXDnDUZL6uAALwi09Yk4FO9hiAnrSXs3L2i50pyxw1vzjD4LclZcfKc/gFCYHgB4KnzV3fS1Zr5/SUEdV/jNL1JOiY5w2pymULgDbPGxQeEctzswtob55BdhXeV0t4gouyrsNLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734599404; c=relaxed/simple;
-	bh=VC2FpbnZYj1Ez2mpdU/ToRdPgEr6S+ZWKRU/D3CFgF0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=b1e5iyzjNCnJ86T0AIsIRe/AM9dXqDIiPoI58/5OnKcIabUJN/LeY5GI5tLDghmUWRg0CT5MhiSUhtbP8Rqxl+d+j5MQApEvpkszvCWjk1kZmbcf7PWoBBmub9fqakmQkp7BrWjGyindPA3KgEESdtDxaVL4O/m0xgR4U/kfXFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=jmQoZNUT; arc=none smtp.client-ip=193.68.50.107
+	s=arc-20240116; t=1734599604; c=relaxed/simple;
+	bh=8zfdEN3SAB0Gin1IcElM/7tKk4MKMmoB7CSP4hR3nSs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CJyx2cryizn/kL5wDCBizc+fD2S+vlK4ZybSwFkV/g+kgfl5bxTb50miV7eqBXp4VODtVn3UPvDYvqnwsFEReyFK2/e0EXS5oBXBzS2j1QEb9gkdIk9hGJYZ5XSG4D5p80uvCLPTrn5RdGSM+8NWW7Hle0hAdBzGQw/n67ggml4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=MTW2wNz6; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 36265A05FF;
-	Thu, 19 Dec 2024 10:09:52 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 693B6A05FF;
+	Thu, 19 Dec 2024 10:13:19 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=uXdk9iXBjbSglfglNMlC
-	e1O5qHEJC/mlI8TGpLrLN0o=; b=jmQoZNUTN1K0TmOO9Vccf83zEYA1Ylaf0Zkk
-	xSkEtKMlPmVnhVLCCfJCo47AhxrA3tjdD2f6RBfZ+iJV0vMpDvQBzdLkl6j4tgbT
-	wA3vwh5Tq69Ays6SEs2zaqXhj3jir00nj7qNA2qZlygbRZUNuWFiUUPgJf9dsRpU
-	sEIJf9uGe9urF7KqyDdW47cz3CLaP5cbZOB6to7k+mcrCE0QEOXCNIjWxpmtjHKY
-	YPqhTwGiPIKPt6u/Rh4UGRO19qKCtoLttE1I69P4wGbGKWb9+0zEpNK57E0VsTAf
-	2IxapyW18AeQam1NHt/IeT3nGwGK2I8GPA9mQ/hExnHCjJHV8UYvgB7DnQccx9fl
-	dwhgXVSg2fTXPkMF0oW46M4MJdpR4tllW+NvCq5jeqWisDaeWN3AgIvkHwyb2nBf
-	c9z4pIDntf7SO/Dxu90Af2YfIfu1eXmFO2P/nODpejUAvXzOF18aTv29DvTv6JJC
-	niafqNOp/81D65EehWmjcb8eBZ1rR7oH27WkSgiR1dMH0RdAMxxboKTrdgfRP5wk
-	pca7IeDSoooYd8jkKzWKqmJSfrsJ0T86cVEytXYNytEpROtez39GE84Oo5TejgIl
-	ns4kZlITv1HYPzqbo0+4/m4L+9QpBxFvcWKgs3ZYfXJhsanstNvBzhn4YGYWoLWv
-	TQ66iAA=
-Message-ID: <72874aa6-22c7-40a6-83bb-1ace0f3aec73@prolan.hu>
-Date: Thu, 19 Dec 2024 10:09:50 +0100
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=5abpmkdhvoktjNo7a/8WbqUM+Q8aTNBqmncfVpe5Hps=; b=
+	MTW2wNz6OWESiDtM3Vcp8sW/4FxM8jq9O8zmtGjet/C2MdMWEePNIR2e0k7csXo+
+	7mxYvXlRVyYToDF9u+xSRvqZVYSQ7cl1PAkNbnqzTLCWhacNUmXtIzOnrObMkh74
+	5Qxp5YHaATsWCfZxDyTolhrjXIlNE4+J8sf0pd70cG0ifSFrwpNWHFtnZvw7pr6T
+	qh8E7UxNJ7wSYqH673rg77zOW4ozf7PvZ+AArB0ip/MPDFrHg4MQZ0DcRVkIlZUO
+	NPtcdn4XotnKIiSnPRAeVtigII95NnGFiEEIIG4KUrI/ZiFVVGIYUOFUaURlUNNK
+	dHripjsIZkNKUjM85KumOABRmcfOCjveCsHKzNbtxcGGo+7NoOiXf+psHzGmJpeq
+	3zPffggc8FntnVZPfgQJHr31CzLMDVtBXwhivFLmZL8Ea02bs7LDm33ovBks6Ewr
+	uEE2hjhugJcNRxmNxRvIYHGVLwHdiOAEgWDsjSUDvGm8K/2cEOkywBCYRsSPjXL2
+	mQsNgvSLphmCDillEUVmbXP86F0gwPV7xj72wbtaAvmhWMSX96WSMg854cdphgJA
+	WpNvMnE4LZSifroKLc0XbmGhYLrzHAZyHCQ5alE9eIdreNavgWOvU8pwkgAg9Y2i
+	svaAtvfcZ3Ivf/1t6yjlF/sr5CoGzTJIN4Sk1+RFJeY=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: Mark Brown <broonie@kernel.org>, Piotr Bugalski
+	<bugalski.piotr@gmail.com>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>,
+	<Hari.PrasathGE@microchip.com>, <Mahesh.Abotula@microchip.com>,
+	<Marco.Cardellini@microchip.com>, <stable@vger.kernel.org>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: [PATCH v2] spi: atmel-qspi: Memory barriers after memory-mapped I/O
+Date: Thu, 19 Dec 2024 10:12:58 +0100
+Message-ID: <20241219091258.395187-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: atmel-qspi: Memory barriers after memory-mapped I/O
-To: Mark Brown <broonie@kernel.org>
-CC: Piotr Bugalski <bugalski.piotr@gmail.com>, <linux-spi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<Hari.PrasathGE@microchip.com>, <Mahesh.Abotula@microchip.com>,
-	<Marco.Cardellini@microchip.com>, <stable@vger.kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-References: <20241218165850.378909-1-csokas.bence@prolan.hu>
- <b1661e3f-cc62-489b-a4f8-9964ccf65fae@sirena.org.uk>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <b1661e3f-cc62-489b-a4f8-9964ccf65fae@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1734599598;VERSION=7982;MC=3340319855;ID=93496;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
 X-EsetId: 37303A2980D948556D706B
 
-Right. I originally planned on splitting it into a cover letter and then 
-the patch, but I guess everything can just go into the msg. Dropping the ---
+The QSPI peripheral control and status registers are
+accessible via the SoC's APB bus, whereas MMIO transactions'
+data travels on the AHB bus.
 
-Bence
+Microchip documentation and even sample code from Atmel
+emphasises the need for a memory barrier before the first
+MMIO transaction to the AHB-connected QSPI, and before the
+last write to its registers via APB. This is achieved by
+the following lines in `atmel_qspi_transfer()`:
 
-On 2024. 12. 18. 18:01, Mark Brown wrote:
-> On Wed, Dec 18, 2024 at 05:58:49PM +0100, Bence Csókás wrote:
-> 
->> However, the current documentation makes no mention to
->> synchronization requirements in the other direction, i.e.
->> after the last data written via AHB, and before the first
->> register access on APB.
->>
->> ---
->>
->> Fixes: d5433def3153 ("mtd: spi-nor: atmel-quadspi: Add spi-mem support to atmel-quadspi")
->> Cc: Hari.PrasathGE@microchip.com
->> Cc: Mahesh.Abotula@microchip.com
->> Cc: Marco.Cardellini@microchip.com
->> Cc: <stable@vger.kernel.org> # c0a0203cf579: ("spi: atmel-quadspi: Create `atmel_qspi_ops`"...)
->> Cc: <stable@vger.kernel.org> # 6.x.y
->> Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
->> ---
-> 
-> Your signoffs and whatnot need to go before the --- so they don't get
-> cut off by tools, any any ancilliary stuff should go after.
+	/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
+	(void)atmel_qspi_read(aq, QSPI_IFR);
+
+However, the current documentation makes no mention to
+synchronization requirements in the other direction, i.e.
+after the last data written via AHB, and before the first
+register access on APB.
+
+In our case, we were facing an issue where the QSPI peripheral
+would cease to send any new CSR (nCS Rise) interrupts,
+leading to a timeout in `atmel_qspi_wait_for_completion()`
+and ultimately this panic in higher levels:
+
+	ubi0 error: ubi_io_write: error -110 while writing 63108 bytes
+ to PEB 491:128, written 63104 bytes
+
+After months of extensive research of the codebase, fiddling
+around the debugger with kgdb, and back-and-forth with
+Microchip, we came to the conclusion that the issue is
+probably that the peripheral is still busy receiving on AHB
+when the LASTXFER bit is written to its Control Register
+on APB, therefore this write gets lost, and the peripheral
+still thinks there is more data to come in the MMIO transfer.
+This was first formulated when we noticed that doubling the
+write() of QSPI_CR_LASTXFER seemed to solve the problem.
+
+Ultimately, the solution is to introduce memory barriers
+after the AHB-mapped MMIO transfers, to ensure ordering.
+
+Fixes: d5433def3153 ("mtd: spi-nor: atmel-quadspi: Add spi-mem support to atmel-quadspi")
+Cc: Hari.PrasathGE@microchip.com
+Cc: Mahesh.Abotula@microchip.com
+Cc: Marco.Cardellini@microchip.com
+Cc: <stable@vger.kernel.org> # c0a0203cf579: ("spi: atmel-quadspi: Create `atmel_qspi_ops`"...)
+Cc: <stable@vger.kernel.org> # 6.x.y
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+
+Notes:
+    Changes in v2:
+    * dropping --- from commit msg
+
+ drivers/spi/atmel-quadspi.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index 73cf0c3f1477..96fc1c56a221 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -625,13 +625,20 @@ static int atmel_qspi_transfer(struct spi_mem *mem,
+ 	(void)atmel_qspi_read(aq, QSPI_IFR);
+ 
+ 	/* Send/Receive data */
+-	if (op->data.dir == SPI_MEM_DATA_IN)
++	if (op->data.dir == SPI_MEM_DATA_IN) {
+ 		memcpy_fromio(op->data.buf.in, aq->mem + offset,
+ 			      op->data.nbytes);
+-	else
++
++		/* Synchronize AHB and APB accesses again */
++		rmb();
++	} else {
+ 		memcpy_toio(aq->mem + offset, op->data.buf.out,
+ 			    op->data.nbytes);
+ 
++		/* Synchronize AHB and APB accesses again */
++		wmb();
++	}
++
+ 	/* Release the chip-select */
+ 	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
+ 
+-- 
+2.34.1
+
 
 
