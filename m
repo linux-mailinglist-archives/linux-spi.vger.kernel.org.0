@@ -1,123 +1,109 @@
-Return-Path: <linux-spi+bounces-6119-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6120-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02ABD9F76A8
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 09:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC56F9F780F
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 10:11:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5880D161076
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 08:04:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CB20163BCA
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Dec 2024 09:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79CA1B4233;
-	Thu, 19 Dec 2024 08:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1911A221455;
+	Thu, 19 Dec 2024 09:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="jmQoZNUT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EC43BB54
-	for <linux-spi@vger.kernel.org>; Thu, 19 Dec 2024 08:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447DF149DF4;
+	Thu, 19 Dec 2024 09:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734595444; cv=none; b=cP1bi/GwaTMdbbdJHFUPniYQdadyxLjkxzpOe+s7XyKIE/TyNeMrKGUy0iQMkSE7jikqKbaS2M+5ZIlHN18BxnxHyUhLErfaQUSUjzKp1WRXrOr0BTXFFI1JVT1wdOlNwQLY9ktnxfwSidLGmtprHnieTCnsrhAxVr68Uu7Km3c=
+	t=1734599404; cv=none; b=Ecb5K0lPf2US8upY65CcpdLmTc16m9vyO1lJQVSV7N3RkDQHjrngxEII4fSfpdIRJHogtYrwqF1j9J5eQNK1544cmqBQiqXlzI7+7Uvbhz7/L9Y/CeEHk43Qge6DCmYCgX31TBU9G6kPQBpSwbuSJCWFD6Ct7EylwwIbJkm8rV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734595444; c=relaxed/simple;
-	bh=8OzpZQasZhYdkXNpZrJ/pLd7dwlGmc0GKzXGquO0GMw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LknZ0dB+O5p8GNNfP2xK9ci8gskMxLpcuiz6i2FxBUAiDlpWpXL11LT2ogMDUFQHZ+Zgw5F8c6iBNhCerSUGrKMWYbbzYZxwgHCg8/AJwz6Cb8On7n/bb7utQEiDlqIudrhx2r1cZC3kHCjjoAPOeazPWQVVTtHZHw5zmk7Q+y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5187f6f7bcaso171064e0c.3
-        for <linux-spi@vger.kernel.org>; Thu, 19 Dec 2024 00:04:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734595441; x=1735200241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BkBMHtPIDLOISKRZDfY+2tE3dIQXAFPIRw1KtEpx7U4=;
-        b=AKV19o/b4x1KVDkq0T8OYrUlXqrKGtbV8A3WiblMD+F2VJDKUVPPP99kjQaHt4dap/
-         x70GJw7nwYVmr6ussq+KPq6Q+crk2vOma9m4tz1PTppLqcSgKclabSbsDl+l4QHNXFn4
-         sZYwr4h1ymfGKZODMQZ+oqM+3bKHE7aO+eEACg2p/OS5nsBjU8DjPZhRTLCoK9+8S1yr
-         JRDN3uBOfIebb18w6UpxNHjtTvlUOWQoKUlL3xj+vGCYoBILRFWjb16wB1ZIAnAJCEad
-         DAaG12cl5eq0jIfJguk2FwH8kITjH58cuvrIzebN8qfYteiKpZ8lgqzsikUT3lL6laDc
-         P3gw==
-X-Forwarded-Encrypted: i=1; AJvYcCXowdYXFW8YKF0Ad8qMuqXPfu2VsZnIkAtieC3uF8tR97Wz1POZ5B6qLmAbmQj08pfkA+KEn0vgEi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznnQcJdT5/vmFBW4Z+xfkMWJ1EJ1h+DoO+8y27n6AjC0L6YEgP
-	3Df5dFR+qE2CIbytaRS+hyIspQ0G3SjqprcJ0Ie8L3HmYCXc1IppZpXFkpOF
-X-Gm-Gg: ASbGncsrz/X4rtFrq4xvDi7ItvylMzUlittPx+6mOfpjtPld4INtdXOBPho0EW2wvKy
-	AgoNV0ghQ6hAE8fp5rPLF+zvsqHNefNBmINRdya+iVQW9bq2vxVI9bhTf19TdgjZKuJ9YzOfqQp
-	fvPGwyolaciOgTuEhiH8cF7Gam2QepYUW9096TGuXaBwBuunvmzh28eQOXokjQfRVE71PZfRVt0
-	eJ4nHQsMfmTOcOKZbfAoOFnil5/v9SqMjlwL1DI5/HsFtZw8ImlOd1OjNSXazIn36YBsiD2YdNY
-	ZgzxNcuDnkRK6bTJ7cQ=
-X-Google-Smtp-Source: AGHT+IGVkV5brda3Lfh2YDYCB9XfMMwgL3k9jJnbAgRuZheP/J+owcke6OkZt7zpz2jsVuuQ1zTQxw==
-X-Received: by 2002:a05:6122:201b:b0:517:4fca:86e2 with SMTP id 71dfb90a1353d-51a36ddf0c0mr4689859e0c.10.1734595440905;
-        Thu, 19 Dec 2024 00:04:00 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51b68b7d627sm74279e0c.3.2024.12.19.00.04.00
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2024 00:04:00 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-85c559ed230so103488241.0
-        for <linux-spi@vger.kernel.org>; Thu, 19 Dec 2024 00:04:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXfp84VGJ1CMXFMTkVAPolONKLWyacoFoBZS9ZMxn5tjoEvHLF/KsTIjd77Y2Ko6yFlNEWG0Kw6if0=@vger.kernel.org
-X-Received: by 2002:a05:6122:2225:b0:518:9dca:f0fb with SMTP id
- 71dfb90a1353d-51a36ddf95cmr6119983e0c.11.1734595440388; Thu, 19 Dec 2024
- 00:04:00 -0800 (PST)
+	s=arc-20240116; t=1734599404; c=relaxed/simple;
+	bh=VC2FpbnZYj1Ez2mpdU/ToRdPgEr6S+ZWKRU/D3CFgF0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=b1e5iyzjNCnJ86T0AIsIRe/AM9dXqDIiPoI58/5OnKcIabUJN/LeY5GI5tLDghmUWRg0CT5MhiSUhtbP8Rqxl+d+j5MQApEvpkszvCWjk1kZmbcf7PWoBBmub9fqakmQkp7BrWjGyindPA3KgEESdtDxaVL4O/m0xgR4U/kfXFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=jmQoZNUT; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 36265A05FF;
+	Thu, 19 Dec 2024 10:09:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=uXdk9iXBjbSglfglNMlC
+	e1O5qHEJC/mlI8TGpLrLN0o=; b=jmQoZNUTN1K0TmOO9Vccf83zEYA1Ylaf0Zkk
+	xSkEtKMlPmVnhVLCCfJCo47AhxrA3tjdD2f6RBfZ+iJV0vMpDvQBzdLkl6j4tgbT
+	wA3vwh5Tq69Ays6SEs2zaqXhj3jir00nj7qNA2qZlygbRZUNuWFiUUPgJf9dsRpU
+	sEIJf9uGe9urF7KqyDdW47cz3CLaP5cbZOB6to7k+mcrCE0QEOXCNIjWxpmtjHKY
+	YPqhTwGiPIKPt6u/Rh4UGRO19qKCtoLttE1I69P4wGbGKWb9+0zEpNK57E0VsTAf
+	2IxapyW18AeQam1NHt/IeT3nGwGK2I8GPA9mQ/hExnHCjJHV8UYvgB7DnQccx9fl
+	dwhgXVSg2fTXPkMF0oW46M4MJdpR4tllW+NvCq5jeqWisDaeWN3AgIvkHwyb2nBf
+	c9z4pIDntf7SO/Dxu90Af2YfIfu1eXmFO2P/nODpejUAvXzOF18aTv29DvTv6JJC
+	niafqNOp/81D65EehWmjcb8eBZ1rR7oH27WkSgiR1dMH0RdAMxxboKTrdgfRP5wk
+	pca7IeDSoooYd8jkKzWKqmJSfrsJ0T86cVEytXYNytEpROtez39GE84Oo5TejgIl
+	ns4kZlITv1HYPzqbo0+4/m4L+9QpBxFvcWKgs3ZYfXJhsanstNvBzhn4YGYWoLWv
+	TQ66iAA=
+Message-ID: <72874aa6-22c7-40a6-83bb-1ace0f3aec73@prolan.hu>
+Date: Thu, 19 Dec 2024 10:09:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241217114226.1223724-2-u.kleine-koenig@baylibre.com>
- <CAMuHMdVzyq6L+9iNhtSdGpAJOKyu2vkzvveHXt0in9xUhD6mLQ@mail.gmail.com>
- <tk6wlbylk7aqfd3sys2jitpnbdz4xomdg2yr7hsppxyptgbek5@3vtvajq7krun>
- <CAMuHMdU0FjXBgFLUxxvQeODPsU8xf+LAdQCg4xpAn_omJeA9WQ@mail.gmail.com>
- <CAMuHMdUEXFFXt1EkGafv+-arG4x4hFQMGO6E14O7zguyGT0kmQ@mail.gmail.com> <o74qqp36r3mgdk7muqtc3zqp7dkqqixfutirf2eeniatckoxw3@pjgfaokp5rvv>
-In-Reply-To: <o74qqp36r3mgdk7muqtc3zqp7dkqqixfutirf2eeniatckoxw3@pjgfaokp5rvv>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 19 Dec 2024 09:03:48 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXMLzACD5mcCtAG=oE70SLGMquFrVpBROaLvnJjz2YdUA@mail.gmail.com>
-Message-ID: <CAMuHMdXMLzACD5mcCtAG=oE70SLGMquFrVpBROaLvnJjz2YdUA@mail.gmail.com>
-Subject: Re: [PATCH] spi: spidev: Align ordering of spidev_spi_ids[] and spidev_dt_ids[]
-To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: atmel-qspi: Memory barriers after memory-mapped I/O
+To: Mark Brown <broonie@kernel.org>
+CC: Piotr Bugalski <bugalski.piotr@gmail.com>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<Hari.PrasathGE@microchip.com>, <Mahesh.Abotula@microchip.com>,
+	<Marco.Cardellini@microchip.com>, <stable@vger.kernel.org>, Nicolas Ferre
+	<nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+References: <20241218165850.378909-1-csokas.bence@prolan.hu>
+ <b1661e3f-cc62-489b-a4f8-9964ccf65fae@sirena.org.uk>
+Content-Language: en-US
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <b1661e3f-cc62-489b-a4f8-9964ccf65fae@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D948556D706B
 
-Hi Uwe,
+Right. I originally planned on splitting it into a cover letter and then 
+the patch, but I guess everything can just go into the msg. Dropping the ---
 
-On Thu, Dec 19, 2024 at 9:02=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@baylibre.com> wrote:
-> On Wed, Dec 18, 2024 at 08:10:57PM +0100, Geert Uytterhoeven wrote:
-> > On Wed, Dec 18, 2024 at 8:02=E2=80=AFPM Geert Uytterhoeven <geert@linux=
--m68k.org> wrote:
-> > > Further improvements could be:
-> > >   - Generate spidev_spi_ids[] from spidev_dt_ids[] at runtime
-> > >     during module_init() (consumes cycles :-(,
-> > >   - Teach the subsystem matching code to strip the vendor prefix,
-> > >     to get rid of spidev_spi_ids[].
-> >
-> > Oops, and modutils, as the tables are used by userspace :-(
->
-> Then how about a build-time check comparing spi and of module info?
+Bence
 
-That's a good and non-disruptive idea, also for i2c!
+On 2024. 12. 18. 18:01, Mark Brown wrote:
+> On Wed, Dec 18, 2024 at 05:58:49PM +0100, Bence Csókás wrote:
+> 
+>> However, the current documentation makes no mention to
+>> synchronization requirements in the other direction, i.e.
+>> after the last data written via AHB, and before the first
+>> register access on APB.
+>>
+>> ---
+>>
+>> Fixes: d5433def3153 ("mtd: spi-nor: atmel-quadspi: Add spi-mem support to atmel-quadspi")
+>> Cc: Hari.PrasathGE@microchip.com
+>> Cc: Mahesh.Abotula@microchip.com
+>> Cc: Marco.Cardellini@microchip.com
+>> Cc: <stable@vger.kernel.org> # c0a0203cf579: ("spi: atmel-quadspi: Create `atmel_qspi_ops`"...)
+>> Cc: <stable@vger.kernel.org> # 6.x.y
+>> Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+>> ---
+> 
+> Your signoffs and whatnot need to go before the --- so they don't get
+> cut off by tools, any any ancilliary stuff should go after.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
