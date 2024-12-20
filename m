@@ -1,81 +1,49 @@
-Return-Path: <linux-spi+bounces-6145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258949F9BB1
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 22:15:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 012719F9C7D
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 22:56:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AE231898493
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 21:14:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60CEA163507
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 21:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B36B22B8CF;
-	Fri, 20 Dec 2024 21:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68087223E7D;
+	Fri, 20 Dec 2024 21:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Z5n7P9K/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VBllFPBX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED464229125;
-	Fri, 20 Dec 2024 21:09:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439E0157A48
+	for <linux-spi@vger.kernel.org>; Fri, 20 Dec 2024 21:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734728970; cv=none; b=du0Tz4YD6ha7UTvd9+QDFh+oylfhYhyCxU9pbV+ke+5n2xVwM9UHHDnBwPo2izbp+qngibRwvP82Y4EZ8sOzAm3QIzLtd6m6KtI3t8l5FalbYd7Yn/fumflb9FKURB/xU3Md1JZc6AQcp215L2vK3qDsmumUIgiozcmtWzDdV0c=
+	t=1734731783; cv=none; b=lyXPfmBSmaC0iI1RgYSixcU8g19M9v0mcUkxSdMfYXZ5C3aAfHGzDugrQ0ZnYK0r3uhakRJuM432+hA8Y93odubZ02R2JGu2Yutwm7relxbZqalmgID6TC9xDIMi0a6Q0w2YsSyaxVaAQSHR1UP91roYdVtBBoVSd40rEnisjdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734728970; c=relaxed/simple;
-	bh=/Sc5e5S6Ark7/RKpxpSHi1yxsShKypU8cVy4XdHazvk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i9oZbZkMcBCKICdcPOZMnnlzKdI/alQ4j4DOUAoMsidrymWUK2PcWCPHPU1myiloyZCsKiZ7qg0RKTUtOEaJKXKMKug8g4cTvfe/E+FIZe+1a8dangRWvLDj1eSHTqkM0eEzq6ccCHIIFLm39tVY1ltUmzVBXygd2XNaIEsF9J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Z5n7P9K/; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1734728970; x=1766264970;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/Sc5e5S6Ark7/RKpxpSHi1yxsShKypU8cVy4XdHazvk=;
-  b=Z5n7P9K/K7OXo9kSHCVUk/ZH8F9Wp8aVOOtLvk2Yp/xViJfLQotbFnU2
-   y19A5pZJWP6vxNwLCCqDieSbfC6qpb311YqUHsQFppG/qOZ0UbvllKPc4
-   ZGm1Nw8dEl5HXDhvJaCl/kD4Kg8+gj9ZaQ7TQHt+edyOZsglsvHxQ0bFo
-   L/fgAGofH07hTFPlrLmPdlqI4JzCqfE6L9Q3F4yZscw3X3RiSIhuWoxwL
-   V8IiyaeToAgksEs1BOb+N7HlFbiPU/DlCULfmrbCV8Oteg05454zlwGIu
-   iNuHDoO2UnyqABDJsS9s6mWDrrJrxsYUkUxxxkztIj8wE6mNeUxmuJ+JB
-   w==;
-X-CSE-ConnectionGUID: USBJ4PpbRGWL74rt+H8wuw==
-X-CSE-MsgGUID: 6PnJBJnNSu+Dl0QxuQ4+Ag==
-X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="35811489"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:09:26 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 20 Dec 2024 14:08:44 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 20 Dec 2024 14:08:44 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-	<arnd@arndb.de>
-CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
-	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, Ryan Wanner
-	<Ryan.Wanner@microchip.com>
-Subject: [PATCH v4 13/13] ARM: at91: add new SoC sama7d65
-Date: Fri, 20 Dec 2024 14:07:14 -0700
-Message-ID: <aafa6115adc52d30bc83206f8fab5964d4dd7fb7.1734723585.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1734723585.git.Ryan.Wanner@microchip.com>
-References: <cover.1734723585.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1734731783; c=relaxed/simple;
+	bh=mcDVclNKItvKFrm0OS/CIE6vHsjMWd5nDyWCeqsau2g=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gAG/DtbLh91TT/kiFZQi9zgUtdk7SM75O19GWa+FZcTdZ7AeJ+txNrFGIhSCFp5rudGMmS1pCOPZ+Hdpjy8O65hiRz1CNkstbwXB/7Yu/jPEkoPlojacrdnxr5VeDGMvcF66LonC3TljCejUOu6GzqMVgphr6hjUJYXe2YhGbE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VBllFPBX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49FBC4CECD;
+	Fri, 20 Dec 2024 21:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734731782;
+	bh=mcDVclNKItvKFrm0OS/CIE6vHsjMWd5nDyWCeqsau2g=;
+	h=Subject:From:Date:To:From;
+	b=VBllFPBX2SYieRzc/iS0ipEux4MsQV+NaN/WcRvJR7pR8kfiYUJLdElZLo3RR3qwf
+	 WhPr+oa163ToVSlxI1Whj7s5WpWj3MNO5RoLZ2VcYl+CWetHI9C3COQwEgfsm7NJyS
+	 0lqf0A+nde+B+69/3WaNzwQPhMcMPaIFYdKN3ieia60OsYfZCoAIffWdROZnKXfUqz
+	 1YQu/6tMK3g2C67Kkc1wco1BgFdEOAGNqJO/3v7UAGt0Usi2bLO9+zDTuYGyUezxJn
+	 kOsBct84IPd7frVKtvA5v7pKwvU+4+sOPdIDNf72mmdGU8nR1RYBLphlfOFts3c8rk
+	 o7OOq0l3NLMfg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B2EE53806656;
+	Fri, 20 Dec 2024 21:56:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,41 +51,32 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173473180021.3032131.10804435342606060395.git-patchwork-housekeeping@kernel.org>
+Date: Fri, 20 Dec 2024 21:56:40 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+Latest series: [v4] Add support for SAMA7D65 (2024-12-20T21:07:01)
+  Superseding: [v3] Add support for SAMA7D65 (2024-12-06T19:59:49):
+    [v3,01/13] dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
+    [v3,02/13] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
+    [v3,03/13] dt-bindings: atmel-sysreg: add sama7d65 RAM and PIT
+    [v3,04/13] dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+    [v3,05/13] dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+    [v3,06/13] dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
+    [v3,07/13] dt-bindings: clock: Add SAMA7D65 PMC compatible string
+    [v3,08/13] clk: at91: sama7d65: add sama7d65 pmc driver
+    [v3,09/13] ARM: dts: microchip: add sama7d65 SoC DT
+    [v3,10/13] ARM: dts: at91: Add sama7d65 pinmux
+    [v3,11/13] ARM: dts: microchip: add support for sama7d65_curiosity board
+    [v3,12/13] ARM: configs: at91: sama7: add new SoC config
+    [v3,13/13] ARM: at91: add new SoC sama7d65
 
-Add new SoC from at91 family: sama7d65
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
----
- arch/arm/mach-at91/Kconfig | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
-index 344f5305f69a..04bd91c72521 100644
---- a/arch/arm/mach-at91/Kconfig
-+++ b/arch/arm/mach-at91/Kconfig
-@@ -58,6 +58,17 @@ config SOC_SAMA5D4
- 	help
- 	  Select this if you are using one of Microchip's SAMA5D4 family SoC.
- 
-+config SOC_SAMA7D65
-+	bool "SAMA7D65 family"
-+	depends on ARCH_MULTI_V7
-+	select HAVE_AT91_GENERATED_CLK
-+	select HAVE_AT91_SAM9X60_PLL
-+	select HAVE_AT91_USB_CLK
-+	select HAVE_AT91_UTMI
-+	select SOC_SAMA7
-+	help
-+	  Select this if you are using one of Microchip's SAMA7D65 family SoC.
-+
- config SOC_SAMA7G5
- 	bool "SAMA7G5 family"
- 	depends on ARCH_MULTI_V7
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
