@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-6133-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6134-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AAD79F9B60
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 22:09:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55BAA9F9B68
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 22:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F771897A29
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 21:09:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A69E01897A57
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 21:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F338225A2E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CC6226194;
 	Fri, 20 Dec 2024 21:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Pya7Eu/P"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="v36SLeZp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9E221CA09;
-	Fri, 20 Dec 2024 21:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1C422144B;
+	Fri, 20 Dec 2024 21:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734728951; cv=none; b=W7YTsUgHpv7yfftQ5iPl0bptgnw6H6G7FB87iGuujgC7hG2gfop6KEsuzULfv8+aNjYcsPOyAvt+3cxqVSUwAGVCSWXPOXvN181yqjK6zIn/l+0HaJ+KTv6uOUMFKXHhFdgeqmK7Dznin8SXfBCZH9Xi82+3lte0Iy9h0OTigVg=
+	t=1734728951; cv=none; b=KMBowfniyzddSSO9L7eHO3NwG4qN8bD2LXPU+qffm8ta32n9xTlHnQkiLBS/wOwExx8RIM76l7u6bstEn9RpbMJUgk/riFJCiVqUIHNEwKOkxwyFcqz8cXuWP/elD49Bze0aHaI1zM8xzLNfITc45OYUz/0Bra9STZKiL6tnJ+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734728951; c=relaxed/simple;
-	bh=VUT45XGlDSMQNHusgz0mY/5e3jHIdDXBnlb8O2girPc=;
+	bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pH0e0nIO/g+e3xGAb9obpowtBzXuu7KHWc1BcJ6BwWWlG0aSODCtxOgAffrFTGwHParcNslYmgjfkwVHCOjq0/5fMjaIpP8IYuRdnMYefSVMtwmVhfrLeuRh2m3L/IZOoqGswSPnIx+kBdg05C/DfxP5aOVUah6jiFC5OKdFL2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Pya7Eu/P; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=IeZgpQuOTev8Snq7H8GxvYnzCcCZCHzCGfM0u5XFqCQXJzihTwFoq3nKtxoGF8QaKjHWU7+qOzZytqYKILkEIdky/3Zch18HClOQTqDfGQwml99P7pWbX1MoY53ovWtlg80+e8bhKaXQyqWJjqZ/8MGCgc8bJzsl8P1tE9Th4pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=v36SLeZp; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1734728949; x=1766264949;
+  t=1734728950; x=1766264950;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VUT45XGlDSMQNHusgz0mY/5e3jHIdDXBnlb8O2girPc=;
-  b=Pya7Eu/P5Z4IoURxvR18BXJtgpkHRN4YoyCqZbKqOHjtlKkHZzdOKJtC
-   m7lDkengLfs0buTumfQQ8f74fajbu9KcUEXXVxQ2bKZ8aGmDsecuYESWJ
-   bITdxZ/CFl9qDznjRVKZsRyDpJTlr/Gqqcm9K0nwRwFQZj62qkpioUUow
-   78jNQecLiCTx/T82/ePez3p14vutg0M6DbpMv9Z2nFoh6D+v/UyMMmqvc
-   ikoMwpDzqqAFv4p1isMx126CAQpvfeqD6tOgPJ507Flg9qACcggYXjR4M
-   s7NFCuDz//S19HpcFQ/KU96pWjiaQTkGleYaq8wRTrYh8SR7DxQOl0TFI
+  bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
+  b=v36SLeZprt0xQOgfopknyRTq+/PFJT47etFCLreDuioHUMV3d50V2Mjw
+   2w7twwsjDUm5uuDi3aNqx6dT6Quecot1FO687fvTf9ujZznuVeHMA2sM7
+   jF2nIL2scILF1HsKICFQgITCbeI+ZJFEwfh8ApPeMqjIRLRIrwmNE6YV9
+   rU0IAohqwnfvQaUax9DivW905wQ2SI3G9B5jRR+JgXUBCuSowiQnX2KYC
+   LibRLAJcj5CHMmEi2+9FKFPg4L03bFUfpReqWFSjm41OSfxYHPwV7Vuck
+   2wlN6H/K5xL2q8GnyFr17tIeF19y2zN0t2X4shLw9E6S/wbeeagJZhlMd
    g==;
 X-CSE-ConnectionGUID: 6Xn2bQedQHqhtDmL7ky2MQ==
-X-CSE-MsgGUID: 3ZhaM57qSmG0+JvYfvcRiA==
+X-CSE-MsgGUID: sCW+yjseQTiWN2nJedTZWg==
 X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
-   d="scan'208";a="203274639"
+   d="scan'208";a="203274640"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 20 Dec 2024 14:09:07 -0700
@@ -68,11 +68,11 @@ CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
 	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
 	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, Conor Dooley
-	<conor.dooley@microchip.com>
-Subject: [PATCH v4 01/13] dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
-Date: Fri, 20 Dec 2024 14:07:02 -0700
-Message-ID: <70d429086fd8e858d79ca2824ad8cc4a09e3fe5d.1734723585.git.Ryan.Wanner@microchip.com>
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, "Krzysztof
+ Kozlowski" <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 02/13] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
+Date: Fri, 20 Dec 2024 14:07:03 -0700
+Message-ID: <3586d64e42b569c881a53a4ce06f09a9139c6b10.1734723585.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1734723585.git.Ryan.Wanner@microchip.com>
 References: <cover.1734723585.git.Ryan.Wanner@microchip.com>
@@ -85,38 +85,40 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-From: Romain Sioen <romain.sioen@microchip.com>
+From: Dharma Balasubiramani <dharma.b@microchip.com>
 
-Document device tree binding of the Microchip SAMA7D65 Curiosity board.
+Add flexcom binding documentation for sama7d65.
 
-Signed-off-by: Romain Sioen <romain.sioen@microchip.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Consolidated entries into one enum to match proper coding style.
+
 Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/arm/atmel-at91.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml   | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-index 7160ec80ac1b..0ec29366e6c2 100644
---- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-+++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
-@@ -180,6 +180,13 @@ properties:
-           - const: atmel,sama5d4
-           - const: atmel,sama5
- 
-+      - description: Microchip SAMA7D65 Curiosity Board
-+        items:
-+          - const: microchip,sama7d65-curiosity
-+          - const: microchip,sama7d65
-+          - const: microchip,sama7d6
-+          - const: microchip,sama7
-+
+diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+index 0dc6a40b63f4..c7d6cf96796c 100644
+--- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
++++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
+@@ -19,12 +19,11 @@ properties:
+     oneOf:
+       - const: atmel,sama5d2-flexcom
        - items:
-           - const: microchip,sama7g5ek # SAMA7G5 Evaluation Kit
-           - const: microchip,sama7g5
+-          - const: microchip,sam9x7-flexcom
++          - enum:
++              - microchip,sam9x7-flexcom
++              - microchip,sama7d65-flexcom
++              - microchip,sama7g5-flexcom
+           - const: atmel,sama5d2-flexcom
+-      - items:
+-          - const: microchip,sama7g5-flexcom
+-          - const: atmel,sama5d2-flexcom
+-
+ 
+   reg:
+     maxItems: 1
 -- 
 2.43.0
 
