@@ -1,137 +1,232 @@
-Return-Path: <linux-spi+bounces-6129-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6130-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 721789F97A0
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 18:16:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B20BE9F9995
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 19:33:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1526616A5BB
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 17:16:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D547189A1BB
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Dec 2024 18:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E00922576B;
-	Fri, 20 Dec 2024 17:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8589D21C17B;
+	Fri, 20 Dec 2024 18:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MnPHBReE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TE2sNz4d"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229C62253EE;
-	Fri, 20 Dec 2024 17:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D27921D011;
+	Fri, 20 Dec 2024 18:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734714730; cv=none; b=CmZve7Oc3FvfmI9dlijCzJ7rnPvF4YCIUq0TP6YgwnFOJdyEX1lttCzO43T+O2dPHqDAxUObhYtrZiScXiUmCXH+la60HQDAmKt6Uo2UPg1EFpTLTFjJsTMX3htjsbNMb4fwzB6xhAodm25+S/LVyAucE/jyQXSG7PYTWcVD0P0=
+	t=1734719224; cv=none; b=Iy1YXosaY1BsyzzIvMDi7o3h/1AE+XZ6Ov9nWCoUN2BwGVrivj4upFnDrR9UuValHv3Jl/0RU4UdFZnoPHX7Gp3DSKgXsboiajYVnB8BV7LAiIRQX8aEUZgoZu29fy8EavbVJ2xVbPdbHj9+rAM6eydHD8H3XPqgfFfK7pz0Ubw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734714730; c=relaxed/simple;
-	bh=3J3Z20U6LCUOXoS4iDJwHTr2ftQBWJ1941sXp4gcxJk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AdWw7yYuHA+NVb4bJTa+gLQgRxMHagLvQz1htjbFD6XXNIZANmU8M4dWzhBuAr094vOPn7AbEJkH6YRUGdx6xqtJhm4FIlkakDpOjAu8a4qiYTUT0aU3KLGT4SloSlBI6b5CuawPB1x6cafbKFYD/G5ybJFmVQ9rjAk+sHWysKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MnPHBReE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09230C4CECD;
-	Fri, 20 Dec 2024 17:12:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734714729;
-	bh=3J3Z20U6LCUOXoS4iDJwHTr2ftQBWJ1941sXp4gcxJk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MnPHBReExvHuirJIb9g3JIuZuJZeP/fn8hLNYv2fx6RlOT0Foj7SoYoIiuRFt/0Od
-	 FWh5d3uoVu8W68/vQfBm1L18FCneo7sT5O2XiPRRVzLCCVoPI+Nu9efmQ3senOe6X6
-	 zvpvg981OGN0OlFkGbuh26kkqytQX1Uc/qUj2LSMx04e4YiOlzYHakkGtlZ2SAgnAb
-	 zX6UQXOo5v4dwo3f+rTIi1NvkXZ77BwkN9iMlLXjWmi7tnTKgXcnl+zMMmARkeUPKs
-	 AOdZnB/KjKyG8xVGO4x8yxovzYNFUUJLYj82bM3zrp2BKfEc7ahG5vQsVNskeD+rdf
-	 cczziEwiY2/8Q==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>,
-	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 15/29] spi: spi-cadence-qspi: Disable STIG mode for Altera SoCFPGA.
-Date: Fri, 20 Dec 2024 12:11:16 -0500
-Message-Id: <20241220171130.511389-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241220171130.511389-1-sashal@kernel.org>
-References: <20241220171130.511389-1-sashal@kernel.org>
+	s=arc-20240116; t=1734719224; c=relaxed/simple;
+	bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rca6LB7MoN9XMmCmY7jokHjpyTvVnarlzRL6JuREC5dOqkUHrOLd4/+TLJpF+DAC89grjBI9/i+LSVZ5AZc/FegdaRtsad12j22q+1ZDBkfPqxecBrtosAJa3v96pak9JyibGLLGNACwJc9M124P26l7oSOzj0IPLdzH61n5Wyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TE2sNz4d; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734719222; x=1766255222;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lVeG2+LVxzEoZ+Rnc836huFlQp02+Oj9SvSRKpveDbo=;
+  b=TE2sNz4d8fsH7yf7xfr6MZ/YBbi8/DMQFbhYQx3YKhOFunLubhIYfd9q
+   jUhuzZH4VIU8ZE6aMosYRk2oqlF2aXpnWNgV5hFaZzRqG9FEZ/ajM929P
+   7OMEmI26tTwESOi17pzhYmt0wwy9hAzwNh9/M74vNGsHEhgxni4cHJzbb
+   6eY3ypHgHpObWHJZsaDgN8S45s/EAdmEzQ4h5V686YNIBQ/cO+UAlhE0f
+   /mdhzjOG4IIrboZHemXJTdOLwkTkkKxU1DaZFageLLDSBYNgiC4cuygsG
+   4EfdYhz+swT2W+0fxMP5771L0dkOrRlp6wbMwnPmc2DJwj8kFVW5+aglV
+   A==;
+X-CSE-ConnectionGUID: aOG1QyxARVewGR6zYlIMKg==
+X-CSE-MsgGUID: Xs0wiNz+QNKZBXmtK/c8pg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11292"; a="45882395"
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="45882395"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 10:27:02 -0800
+X-CSE-ConnectionGUID: K4pW+d6OTAmFjJn+m7+PFQ==
+X-CSE-MsgGUID: lM36vNWZR1qKyNPD2rstbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,251,1728975600"; 
+   d="scan'208";a="98354381"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 20 Dec 2024 10:26:59 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOhiC-0001Wd-3B;
+	Fri, 20 Dec 2024 18:26:56 +0000
+Date: Sat, 21 Dec 2024 02:26:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: mtk22730 <Cloud.Zhang@mediatek.com>, Mark Brown <broonie@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Cloud Zhang <cloud.zhang@mediatek.com>
+Subject: Re: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of
+ nor controller
+Message-ID: <202412210247.Brq06CHb-lkp@intel.com>
+References: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.6
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241212092206.14071-1-Cloud.Zhang@mediatek.com>
 
-From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+Hi mtk22730,
 
-[ Upstream commit 25fb0e77b90e290a1ca30900d54c6a495eea65e2 ]
+kernel test robot noticed the following build warnings:
 
-STIG mode is enabled by default for less than 8 bytes data read/write.
-STIG mode doesn't work with Altera SocFPGA platform due hardware
-limitation.
-Add a quirks to disable STIG mode for Altera SoCFPGA platform.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.13-rc3 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
-Link: https://patch.msgid.link/20241204063338.296959-1-niravkumar.l.rabara@intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/spi/spi-cadence-quadspi.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/mtk22730/spi-spi-mtk-nor-Modify-the-clock-architecture-of-nor-controller/20241212-172704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20241212092206.14071-1-Cloud.Zhang%40mediatek.com
+patch subject: [PATCH] [v1] spi: spi-mtk-nor: Modify the clock architecture of nor controller
+config: um-randconfig-002-20241220 (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241221/202412210247.Brq06CHb-lkp@intel.com/reproduce)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 1755ca026f08..73b1edd0531b 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -43,6 +43,7 @@ static_assert(CQSPI_MAX_CHIPSELECT <= SPI_CS_CNT_MAX);
- #define CQSPI_SLOW_SRAM		BIT(4)
- #define CQSPI_NEEDS_APB_AHB_HAZARD_WAR	BIT(5)
- #define CQSPI_RD_NO_IRQ			BIT(6)
-+#define CQSPI_DISABLE_STIG_MODE		BIT(7)
- 
- /* Capabilities */
- #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -103,6 +104,7 @@ struct cqspi_st {
- 	bool			apb_ahb_hazard;
- 
- 	bool			is_jh7110; /* Flag for StarFive JH7110 SoC */
-+	bool			disable_stig_mode;
- 
- 	const struct cqspi_driver_platdata *ddata;
- };
-@@ -1416,7 +1418,8 @@ static int cqspi_mem_process(struct spi_mem *mem, const struct spi_mem_op *op)
- 	 * reads, prefer STIG mode for such small reads.
- 	 */
- 		if (!op->addr.nbytes ||
--		    op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX)
-+		    (op->data.nbytes <= CQSPI_STIG_DATA_LEN_MAX &&
-+		     !cqspi->disable_stig_mode))
- 			return cqspi_command_read(f_pdata, op);
- 
- 		return cqspi_read(f_pdata, op);
-@@ -1880,6 +1883,8 @@ static int cqspi_probe(struct platform_device *pdev)
- 			if (ret)
- 				goto probe_reset_failed;
- 		}
-+		if (ddata->quirks & CQSPI_DISABLE_STIG_MODE)
-+			cqspi->disable_stig_mode = true;
- 
- 		if (of_device_is_compatible(pdev->dev.of_node,
- 					    "xlnx,versal-ospi-1.0")) {
-@@ -2043,7 +2048,8 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
- static const struct cqspi_driver_platdata socfpga_qspi = {
- 	.quirks = CQSPI_DISABLE_DAC_MODE
- 			| CQSPI_NO_SUPPORT_WR_COMPLETION
--			| CQSPI_SLOW_SRAM,
-+			| CQSPI_SLOW_SRAM
-+			| CQSPI_DISABLE_STIG_MODE,
- };
- 
- static const struct cqspi_driver_platdata versal_ospi = {
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412210247.Brq06CHb-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:549:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     549 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:567:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     567 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/spi/spi-mtk-nor.c:10:
+   In file included from include/linux/dma-mapping.h:8:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:601:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     601 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:616:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     616 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:631:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     631 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:724:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     724 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:737:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     737 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:750:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     750 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:764:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     764 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:778:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     778 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:792:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     792 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/spi/spi-mtk-nor.c:746:19: warning: result of comparison of constant -22 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
+     746 |         if (!cnt || (cnt == -EINVAL)) {
+         |                      ~~~ ^  ~~~~~~~
+   14 warnings generated.
+
+
+vim +746 drivers/spi/spi-mtk-nor.c
+
+   737	
+   738	static int mtk_nor_parse_clk(struct device *dev, struct mtk_nor *sp)
+   739	{
+   740		struct device_node *np = dev->of_node;
+   741		int ret;
+   742		const char *name;
+   743		u8 cnt, i;
+   744	
+   745		cnt = of_property_count_strings(np, "clock-names");
+ > 746		if (!cnt || (cnt == -EINVAL)) {
+   747			dev_err(dev, "Unable to find clocks\n");
+   748			ret = -EINVAL;
+   749			goto out;
+   750		} else if (cnt < 0) {
+   751			dev_err(dev, "Count clock strings failed, err %d\n", cnt);
+   752			ret = cnt;
+   753			goto out;
+   754		} else if (cnt > MAX_CLOCK_CNT) {
+   755			ret = -EINVAL;
+   756			goto out;
+   757		}
+   758	
+   759		sp->clock_cnt = cnt;
+   760	
+   761		for (i = 0; i < cnt; i++) {
+   762			ret = of_property_read_string_index(np, "clock-names", i,
+   763					       &name);
+   764			if (ret) {
+   765				dev_err(dev, "failed to get clock string\n");
+   766				return ret;
+   767			}
+   768	
+   769			sp->clocks[i].name = name;
+   770			sp->clocks[i].clki = devm_clk_get(dev, sp->clocks[i].name);
+   771			if (IS_ERR(sp->clocks[i].clki)) {
+   772				dev_err(dev, "get clock %s fail\n", sp->clocks[i].name);
+   773				return PTR_ERR(sp->clocks[i].clki);
+   774			}
+   775		}
+   776	
+   777	out:
+   778		return ret;
+   779	}
+   780	
+
 -- 
-2.39.5
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
