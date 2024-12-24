@@ -1,142 +1,180 @@
-Return-Path: <linux-spi+bounces-6155-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6156-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F9E69FBB54
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 10:38:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13BA39FBBB1
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 10:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D8D018844F3
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 09:38:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7C241888036
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 09:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18E3EC0;
-	Tue, 24 Dec 2024 09:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FDD31C3BFD;
+	Tue, 24 Dec 2024 09:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hU6IkXoa"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="B4O+M/Zw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from mail-m32123.qiye.163.com (mail-m32123.qiye.163.com [220.197.32.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E445191F7E
-	for <linux-spi@vger.kernel.org>; Tue, 24 Dec 2024 09:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D241B3926;
+	Tue, 24 Dec 2024 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735033086; cv=none; b=I10uZ38wZX8HeJ7cYlaucVOqdN/HeCEjJY/rCgOoC49WAe03Uc4a7YFy4zaIquxzh+8939xN5YU7BfuO53Rgf8uPNkgVtrQAjktLxjVnOQYPpWLoZMcNHAQyxYRIBjfYUNgaWvDgQVHijn5/VvfrSlYZLRiPVomPKqTcR1QvHck=
+	t=1735033777; cv=none; b=CUhpAF/zrPS5rmhXRysRd4mDjC8LDRs99XvSb8CnQbqdbP/zVN6sVaU78ZdIX7yE7/AtAFSxAeI4W1FKVlyCLCrbeDIHtkMSTKrE+Eyjd1Sv5Rsh0buymwP5QqkjjbVMR6aTTaQ0Dc1Qv/4NmjjakIn7NuqYbEXaeng7kYBG2CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735033086; c=relaxed/simple;
-	bh=gBPPOxtHffFdeWaNXscLfKp/7O7VkfykoygWXPPAjsg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UmvlkWdpGy/57blDijecw4JQbboGtBVG5quUZikHwKa6j5XHWVN3IRipcr1adYYHP3niyPbVKLljs/UHcNDub2kApGd/1HxCDDT4GKrYU8ksVwuso2QCKT+NvVExnGXuW0w07+yxpzvmF9abjDxhNQlPve11qLyabPNB7Hnpj5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hU6IkXoa; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 82280C0007;
-	Tue, 24 Dec 2024 09:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735033082;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gBPPOxtHffFdeWaNXscLfKp/7O7VkfykoygWXPPAjsg=;
-	b=hU6IkXoaqfaaCeRa5aRTsich4mHwfabEBJ7s0XQFIKyaaLODFmp9F8pGEfdVOijjhHsSNF
-	HBuPIaKEgcumcS23+bZ+pq3O0ETBZIRn0lSB8GrnzIn7d1S9mFmS3zPrxggFW4QfkDQXJ+
-	nlK5Zn+IWyst59ZwvqtSCB7CwsxBFbe39NpLbDp5L//EfDUunAAuPayw3Z9EPk3CBR+lOQ
-	wXRrYB36+++R/OQgKMzkVdVosOhlKq2WuWfz5iUHuqckvvH1lUZqoApbJCEscqhJR2OXok
-	lBwBhbcWPeMxlOOQDkm+ZYX4ReJW54KtdCpjxSMGGVEt1akUVXIxQxRwGH8sLg==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
- <vigneshr@ti.com>,  Pratyush Yadav <pratyush@kernel.org>,  Michael Walle
- <michael@walle.cc>,  linux-mtd@lists.infradead.org,  Mark Brown
- <broonie@kernel.org>,  linux-spi@vger.kernel.org,  Steam Lin
- <stlin2@winbond.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-  Sanjay R Mehta <sanju.mehta@amd.com>,  Han Xu <han.xu@nxp.com>,  Conor
- Dooley <conor.dooley@microchip.com>,  Daire McNamara
- <daire.mcnamara@microchip.com>,  Matthias Brugger
- <matthias.bgg@gmail.com>,  AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>,  Haibo Chen
- <haibo.chen@nxp.com>,  Yogesh Gaur <yogeshgaur.83@gmail.com>,  Heiko
- Stuebner <heiko@sntech.de>,  Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH 24/24] mtd: spinand: winbond: Add support for DTR
- operations
-In-Reply-To: <87o712uunf.fsf@bootlin.com> (Miquel Raynal's message of "Mon, 23
-	Dec 2024 19:22:12 +0100")
-References: <20241025161501.485684-1-miquel.raynal@bootlin.com>
-	<20241025161501.485684-25-miquel.raynal@bootlin.com>
-	<6029a01f-dc4d-4a35-ad21-fd17e3fed9fc@linaro.org>
-	<87o712uunf.fsf@bootlin.com>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Tue, 24 Dec 2024 10:38:00 +0100
-Message-ID: <87ttato1zb.fsf@bootlin.com>
+	s=arc-20240116; t=1735033777; c=relaxed/simple;
+	bh=FyoNrvG944raOlEcqGIAFdzTG2vSx7b14uZG3/FwDOs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i+47Ithy00snwT4bOIIazkWcKuIPZWnCYXtAwkKuCar0gE0ar8bzyXgnD8z8e9ZUfKd3+j/DmHrRFZOU7oqdVy0mO8sMVBaPwMTuVB6l1L5S7udNzoXHUw4Lu6dNQEEYyBeZXtZ9kKrmNGHE2g23Puou4U4BfklnA1yAZN0Q4VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=B4O+M/Zw; arc=none smtp.client-ip=220.197.32.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4ed7;
+	Tue, 24 Dec 2024 17:49:21 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Simon Xue <xxm@rock-chips.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Mark Brown <broonie@kernel.org>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Johan Jonker <jbx6244@gmail.com>,
+	David Airlie <airlied@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-i2c@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	FUKAUMI Naoki <naoki@radxa.com>,
+	linux-pwm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Andy Yan <andyshrk@163.com>,
+	linux-serial@vger.kernel.org,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH v2 00/17] rockchip: Add rk3562 support
+Date: Tue, 24 Dec 2024 17:49:03 +0800
+Message-Id: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1OGFZCHUlLSB0dSx5OTE9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpKQk
+	1VSktLVUpCWQY+
+X-HM-Tid: 0a93f8122e8303afkunm6aad4ed7
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PxA6ODo6AjIJHEoJS1EdLD8s
+	DxEKCU5VSlVKTEhOS0hITE1PQ0xDVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJTUJDNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=B4O+M/Zw24LyURNcEw+WhDYJK29iAHTi0p4dShi0/NhEClO4QvsLlaGzwjfu6wmFcSn5fN5xHurXqhfa05Z/V+HFtpARvcipLUAtfEvn/JVqKw3D5bl5WacGOSbQ9WTLN3PzdpWIg/Xxm3+foqpbqwx3bhj89Wvq4UKSq85Zlys=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=oAXD/EvvyZpJMisxlK2FCVt8jBq9aehKbViTNvrjWK8=;
+	h=date:mime-version:subject:message-id:from;
 
-Hello Tudor,
 
-On 23/12/2024 at 19:22:12 +01, Miquel Raynal <miquel.raynal@bootlin.com> wr=
-ote:
+This patch set adds rk3562 SoC and its evb support.
 
-> Hello Tudor,
->
-> On 11/11/2024 at 14:40:59 GMT, Tudor Ambarus <tudor.ambarus@linaro.org> w=
-rote:
->
->> On 10/25/24 5:15 PM, Miquel Raynal wrote:
->>> W25N01JW and W25N02JW support many DTR read modes in single, dual and
->>> quad configurations.
->>>=20
->>> DTR modes however cannot be used at 166MHz, as the bus frequency in
->>> this case must be lowered to 80MHz.
->>
->> ha, what's the benefit then? Aren't we better of with non dtr modes
->> then? 80 MHz * 2 < 166 MHz?
->
-> This is actually a good question, and you are right DDR in this case
-> does not bring better throughputs, it can even make it a little bit
-> slower. I think however we should expect some gains at the PCB design
-> step, which may be way simpler as routing 8 166MHz lines might
-> apparently be challenging. It is common to have PCB limitations on the
-> frequency, so enabling DDR can be a great way to keep signal integrity
-> while definitely improving the performances. However, you're right, I
-> should probably move these definitions lower in the table to make sure
-> we run at 166MHz if that's possible.
+Split out patches belong to different subsystem.
 
-Actually this is probably not a good solution. This stable is parsed
-once from top to bottom. The elements order decide whether we'll use a
-variant or another, not by deciding which one is the fastest, but by
-taking the first one that fits. But with DTR operations it no longer
-works so well. If I list items like that:
+Test with GMAC, USB, PCIe, EMMC, SD Card.
 
-SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP(0, 8, NULL, 0, 80 * HZ_PER_MHZ),
-SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0 /* 166 MHz */),
+This patch set is base on the patche set for rk3576 evb1 support.
 
-It is likely that I will not run at the fastest possible throughput, ie
-about 160MHz instead of 166MHz. But if I do the reverse:
+Changes in v2:
+- Update in sort order
+- remove grf in cru
+- Update some properties order
 
-SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(0, 2, NULL, 0 /* 166 MHz */),
-SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP(0, 8, NULL, 0, 80 * HZ_PER_MHZ),
+Finley Xiao (2):
+  arm64: dts: rockchip: add core dtsi for RK3562 Soc
+  arm64: dts: rockchip: Add RK3562 evb2 devicetree
 
-I will only run at the fastest throughput if the PCB lines are so well
-designed that they can support 166MHz. If they only support 150MHz (or
-anything lower) it would have been better to pick the DTR op.
+Kever Yang (15):
+  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+  dt-bindings: mmc: Add support for rk3562 eMMC
+  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+  dt-bindings: power: rockchip: Add bindings for rk3562
+  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+  dt-bindings: watchdog: Add rk3562 compatible
+  dt-bindings: spi: Add rockchip,rk3562-spi compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+  dt-bindings: usb: dwc3: add compatible for rk3562
+  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+  dt-bindings: rockchip: pmu: Add rk3562 compatible
+  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+  dt-bindings: arm: rockchip: Add rk3562 evb2 board
+  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
 
-My conclusion is: the current logic needs to be improved, so I'm
-drafting a slightly more complex variant picker which will evaluate the
-theoretical length of an op based on the speed, parallel lines, DTR
-capability, etc. This way the order in this table will no longer matter.
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
+ .../power/rockchip,power-controller.yaml      |    1 +
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/usb/rockchip,dwc3.yaml           |    3 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
+ .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
+ 19 files changed, 4340 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
 
-I will soon respin a series because I've enhanced a lot of things
-inside.
+-- 
+2.25.1
 
-Cheers,
-Miqu=C3=A8l
 
