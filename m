@@ -1,54 +1,53 @@
-Return-Path: <linux-spi+bounces-6183-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6184-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 365649FC0D5
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 18:12:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D50F9FC0D7
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 18:12:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D0E91884C82
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 17:12:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFDE3165747
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 17:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10D42147FE;
-	Tue, 24 Dec 2024 17:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4B3213249;
+	Tue, 24 Dec 2024 17:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TLomLwdj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NWeSscwS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7D52147F4;
-	Tue, 24 Dec 2024 17:08:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB3D214802;
+	Tue, 24 Dec 2024 17:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735060092; cv=none; b=eesDc4x0DkKMhMoFNortvJDqhDLew0TsIvnNrDq7/qx0/UA3qPjfTdURSP7Ht/66JWXyziVnrT3nOZKCXRmusiamtKAXZTa/xmoMYG/TU/IFKNMFNV31VahtGg+ZIYDVzu3JJreFcSbXKqrpYCq8TjZqLTvxI+5ceyOMRtktssg=
+	t=1735060097; cv=none; b=XGojmOhlTHN9dqAFBEFQwh1xmmYb3HMZPkshVw10Y5tGroNYY6w/Key/qXJGt9H/tpt1v2kp3O+4Je4qduYmtJJ+L1C1jowqJg7f2T/D++Gn4JR5Hm2uRnAwfMEeypgsAdIeJTUmIdVP7TIX/t9+JhyfPjy8vgcaJJpUttMqmaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735060092; c=relaxed/simple;
-	bh=zDuRi0uQYZKfOBuNI9TeDbTp7nYlSXO3R3OBwnwTdWY=;
+	s=arc-20240116; t=1735060097; c=relaxed/simple;
+	bh=j4AKtYSzOkVjesOSf2tgjmxxDODr9KfZiJk8qYoR/HE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DJuBuAX+uOH97z7DkYQ4G1QnOUyFlGhRlYKdPU5tLNr7G39+u5bbTYLtXrL7Rv0kVdBsODAaBQiTL8pTji/8HAqB4QjOMr+nQtmpm+hmGA+uICnv16gPJEv7082jiO6KxQ/MCyNC1Bi5RGO8qflfimriYdGPOM9WSSnVP8IPp7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TLomLwdj; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=nHZLCRnPBTzXlUBQfa/7BSfmMAbiGUHYsVvAl+yaZWIuH7oRv4o+EARlUbmDQKuV97Hlk4izhQXinfACR8icfmxeSMbyDp4AWwOI5hMwPO4KFh0PpEqPLb86mjyRkf16ObUPJlEmlgJ+DKZu+zbkrBh1wdnoqvllvdRLlcxtWCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NWeSscwS; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FBA240005;
-	Tue, 24 Dec 2024 17:08:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 990F240004;
+	Tue, 24 Dec 2024 17:08:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735060089;
+	t=1735060094;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sEcOYXJrONKHwBqG/6O0ih6T2LYP/HBXQ4mMGLoulzI=;
-	b=TLomLwdjOWdFo+9NPFZ7aGrSt7rUkXNrIfD2TTJ3JP1r4ILA4u2VMWLk8Qap7c1ELdZMQ2
-	rMJ2dvQEhXQJlORPG/e1DFs6jOrplEcHJUIGjDG7D3EohYYReibZBUoXCsQkCn+erq9tLd
-	3WO6r8MskQ5y3DT82uHth9QUdSlyHm6LxgE/5wf11566NgyOmeXUhjTcF2gGj/e2SR7sQZ
-	v7DT0pMEQ/Qe+gn7lyQ/FYxRLp3yPW0dypm5PaSRDh1tdXt5dOCqHDKLhNXhha34QnPKTw
-	oYb+4EEZzpiAY7+Q1o6i8y+cX5N5DSjsJ7qwigMklp0U4622u6/J7aHuqeavBg==
+	bh=eSDAGRiX5uW2hASEynfGv8MA56J5pas3+2b3+3jgoTI=;
+	b=NWeSscwSHEiYDed758p0Sz7XLYoEmgcCUuMG2FxPUiP+UjMSiZa4CUEYTHJ81jbA99oCbK
+	pU6KGwB8IU0mhnIAF9uLp46iZ/AyGA/1u4sS0VhvK0B0WTgbseJ86J5S0WU0gugJXlRmxV
+	2Tix99EFRBVeDdcTNWk1bQrBF/Xj4JgoxMn2P/B1x9W+0leLiRjfSq1Zag7rwcSMoCbgV/
+	mprDs8N1a8v2MubogrOEhBzP1HPe8Dd3yaM6IBYd1DpifyEJhUpoxaS0Jt7MqYuJskjY+X
+	IIpVOJrU1O/YsOFzilsjoxVjbs3/Ff0lwoEPD3Gl+LPluVfhNH/HOVV5WLW5/Q==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Tue, 24 Dec 2024 18:06:08 +0100
-Subject: [PATCH v2 23/27] mtd: spinand: Enhance the logic when picking a
- variant
+Date: Tue, 24 Dec 2024 18:06:09 +0100
+Subject: [PATCH v2 24/27] mtd: spinand: Add support for read DTR operations
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +56,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241224-winbond-6-11-rc1-quad-support-v2-23-ad218dbc406f@bootlin.com>
+Message-Id: <20241224-winbond-6-11-rc1-quad-support-v2-24-ad218dbc406f@bootlin.com>
 References: <20241224-winbond-6-11-rc1-quad-support-v2-0-ad218dbc406f@bootlin.com>
 In-Reply-To: <20241224-winbond-6-11-rc1-quad-support-v2-0-ad218dbc406f@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Sanjay R Mehta <sanju.mehta@amd.com>, 
@@ -90,77 +89,96 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.15-dev
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Currently the best variant picked in the first one in the list provided
-in the manufacturer driver. This worked well while all operations where
-performed at the same speed, but with the introduction of DTR transfers
-and per operation maximum frequencies, this no longer works correctly.
+Advanced SPI-NAND chips are capable of reading data much faster by
+leveraging DTR support. This support extends to dual and quad
+configurations.
 
-Let's continue iterating over all the alternatives, even if we find a
-match, keeping a reference over the theoretically fastest
-operation. Only at the end we can tell which variant is the best.
-
-This logic happening only once at boot, the extra computing needed
-compared to the previous version is acceptable wrt. the expected
-improvements.
+Create macros defining all possible read from cache DTR variants:
+- SPINAND_PAGE_READ_FROM_CACHE_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_X2_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_X4_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_DUALIO_DTR_OP
+- SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/core.c | 13 ++++++++++---
- include/linux/spi/spi-mem.h |  2 +-
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ include/linux/mtd/spinand.h | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 94f33c8be031ac60208e22e4e3fa0d90cfae093c..a2a8cfd1752139e3227fa4a39ab0e25bbeec53f8 100644
---- a/drivers/mtd/nand/spi/core.c
-+++ b/drivers/mtd/nand/spi/core.c
-@@ -1198,10 +1198,13 @@ spinand_select_op_variant(struct spinand_device *spinand,
- 			  const struct spinand_op_variants *variants)
- {
- 	struct nand_device *nand = spinand_to_nand(spinand);
-+	const struct spi_mem_op *best_variant = NULL;
-+	u64 best_op_duration_ns = ULLONG_MAX;
- 	unsigned int i;
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 1948e654b8aacb3d4b774a00939e8e8198f53da7..eeabf4a17c578405550fcc1ed1653f9ef09b5ff6 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -87,6 +87,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 1))
  
- 	for (i = 0; i < variants->nops; i++) {
- 		struct spi_mem_op op = variants->ops[i];
-+		u64 op_duration_ns = 0;
- 		unsigned int nbytes;
- 		int ret;
- 
-@@ -1220,13 +1223,17 @@ spinand_select_op_variant(struct spinand_device *spinand,
- 				break;
- 
- 			nbytes -= op.data.nbytes;
++#define SPINAND_PAGE_READ_FROM_CACHE_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x0d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 1),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
 +
-+			op_duration_ns += spi_mem_calc_op_duration(&op);
- 		}
+ #define SPINAND_PAGE_READ_FROM_CACHE_X2_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x3b, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 1),				\
+@@ -99,6 +106,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 2))
  
--		if (!nbytes)
--			return &variants->ops[i];
-+		if (!nbytes && op_duration_ns < best_op_duration_ns) {
-+			best_op_duration_ns = op_duration_ns;
-+			best_variant = &variants->ops[i];
-+		}
- 	}
++#define SPINAND_PAGE_READ_FROM_CACHE_X2_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x3d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 2),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
++
+ #define SPINAND_PAGE_READ_FROM_CACHE_X4_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x6b, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 1),				\
+@@ -111,6 +125,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 1),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 4))
  
--	return NULL;
-+	return best_variant;
- }
++#define SPINAND_PAGE_READ_FROM_CACHE_X4_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0x6d, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 1),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 1),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 4),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
++
+ #define SPINAND_PAGE_READ_FROM_CACHE_DUALIO_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0xbb, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 2),				\
+@@ -123,6 +144,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 2),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 2))
  
- /**
-diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
-index 82390712794c5a4dcef1319c19d74b77b6e1e724..c4830dfaff3db5549c45bb7a9c4bf5110fa2e338 100644
---- a/include/linux/spi/spi-mem.h
-+++ b/include/linux/spi/spi-mem.h
-@@ -424,7 +424,7 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
++#define SPINAND_PAGE_READ_FROM_CACHE_DUALIO_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0xbd, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 2),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 2),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 2),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
++
+ #define SPINAND_PAGE_READ_FROM_CACHE_QUADIO_OP(addr, ndummy, buf, len)	\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0xeb, 1),				\
+ 		   SPI_MEM_OP_ADDR(2, addr, 4),				\
+@@ -135,6 +163,13 @@
+ 		   SPI_MEM_OP_DUMMY(ndummy, 4),				\
+ 		   SPI_MEM_OP_DATA_IN(len, buf, 4))
  
- int spi_mem_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op);
- void spi_mem_adjust_op_freq(struct spi_mem *mem, struct spi_mem_op *op);
--u64 spi_mem_calc_op_duration(struct spi_mem *mem, struct spi_mem_op *op);
-+u64 spi_mem_calc_op_duration(struct spi_mem_op *op);
- 
- bool spi_mem_supports_op(struct spi_mem *mem,
- 			 const struct spi_mem_op *op);
++#define SPINAND_PAGE_READ_FROM_CACHE_QUADIO_DTR_OP(addr, ndummy, buf, len, freq) \
++	SPI_MEM_OP(SPI_MEM_OP_CMD(0xed, 1),				\
++		   SPI_MEM_DTR_OP_ADDR(2, addr, 4),			\
++		   SPI_MEM_DTR_OP_DUMMY(ndummy, 4),			\
++		   SPI_MEM_DTR_OP_DATA_IN(len, buf, 4),			\
++		   SPI_MEM_OP_MAX_FREQ(freq))
++
+ #define SPINAND_PROG_EXEC_OP(addr)					\
+ 	SPI_MEM_OP(SPI_MEM_OP_CMD(0x10, 1),				\
+ 		   SPI_MEM_OP_ADDR(3, addr, 1),				\
 
 -- 
 2.47.0
