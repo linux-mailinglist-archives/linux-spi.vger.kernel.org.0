@@ -1,107 +1,119 @@
-Return-Path: <linux-spi+bounces-6158-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6159-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D5BA9FBFBF
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 16:43:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 232FC9FC01E
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 17:21:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75E101885237
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 15:43:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7D0A163BDA
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 16:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA7C1D6DCC;
-	Tue, 24 Dec 2024 15:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A09241D90B9;
+	Tue, 24 Dec 2024 16:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OrEn7nQg"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YeLVitDi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071981BC3C;
-	Tue, 24 Dec 2024 15:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B787C1D79BE;
+	Tue, 24 Dec 2024 16:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735055014; cv=none; b=uKB8fRygyfOQsXRhbRdeOLTKhKXFjGGUqVGepNeh+JmMUcEfdga9QK/CTkJBwrtptRaxXDXeqKv6OCvOQKYzA9T5UDpJarIdAosGRIA21N91zTCKrwDlaXTEAhdBWuJ6Zr6b3ztCB1gbgZIJyiX/ztThR4xjpGkNgX4NIkj8Be8=
+	t=1735057307; cv=none; b=o65/6DgV3EF/jQUaS4CQ0q9EjIEv4g0yX0Fk4ReC8KO3mlBYMaoayUoylicM31c1SUzy7qbMLfNiom6rhfOpo49IcskVkTRq+QA5Pm7lR9asdZnnhrqcIvUqfjX/pBFvP+C3GgdfjWUyxhDfdAEQqZxdngJdWjnJ6b1TH+j+S5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735055014; c=relaxed/simple;
-	bh=brtdJK4WKkKlESa9dLmKrsWKvafiFE2osEZSwV9IkvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Uv8nhJzc/CHE6w21lOISYBWMHDHB/AoyT0p3mf912G4YlqXEhnMQ2iDADZMvF+/XdUx9a8m55X/mVK//RNWyoRgWRNFkJQjLRlIwGgfrF0J56HmKPIpVDsDr4DocVXVU5NotBpnDd59zD5tHSpwIk2PTb+uHbGMFADRV9/gFenQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OrEn7nQg; arc=none smtp.client-ip=217.70.183.198
+	s=arc-20240116; t=1735057307; c=relaxed/simple;
+	bh=OpKW4Kf7nUPYr3aFtwfJuNa5sWRMoWD6UkpnZqMmuQs=;
+	h=From:To:Cc:Cc:Subject:CC:Date:Message-ID:MIME-Version:
+	 Content-Type; b=g+v7rJPvdp9EQat1qHgzzqc2KTrPEH6GhK8cZKfCX4wyh2F096v84oCAWXmYvE9lbOmf7qygAcbV0GcXoUe4EVpWR+taUqm01I8bzIt57XGbMfQl7FaNHgZO6PC7LIXQry8J0okSdZg5wajxBAGMRjT2TtCKeJQ6lvgbb56sf3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=fail (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YeLVitDi reason="signature verification failed"; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2142C0006;
-	Tue, 24 Dec 2024 15:43:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 603FC1C0005;
+	Tue, 24 Dec 2024 16:21:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735055009;
+	t=1735057302;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F3+hSGSHlH4/HIta8u7/GmGd5FBLxZS+Wb7ky8FWtyA=;
-	b=OrEn7nQgApH+CtWryuRC0bwTkZtS7shbgt785gNv6ZkgfXEEYOoNDwvsXOUW0O/VsaSfAZ
-	lHvqD1/SJPs6MUNhixLLi3U9PFLyobotPW10cWUSzWRj01jOqZGEy3xJuNPrj/R4R9y00V
-	ifHkpIPl3+2hqH3aKo/kQblWM1CGddEx+dOh6OuWau568uicZc4fDlIAIkZ/eAQhjk738b
-	QDsb//lZsRkUpL9TC8q2cyHJab1rc+4zkQVrWtnRF+cTsLue/QTQm3Bgw6bzFfjZ1M1+ov
-	23s9ufGXw53gP3vtBbOxReoHj00yMtlkKSMCndJYNmBEatJYjAFD/xSL3DBWVw==
+	 to:to:cc:cc:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zacWYTH1KKoAoSFNbKaYi6ygHa5kvZSUGVZqJCenvWo=;
+	b=YeLVitDiOw+2k4LyVJT5auwYUu2BPDNrFJ8oxYl8K7xRraob/t2nxU3JnRZF92VWClAKYB
+	i+Jp06nbTsBRD4o0j7xqfJjpnAF2ZL7lDbDisVFpv1cnksqwvCRnvFS2fSRn7VJ86SmtDP
+	DGZ/UT5CfgBvleFczcleM9kvUe89JOxOeOvEU4f0hi/Gp8OT66mSvrbF+oJnjr2B4u5ehC
+	seR4hkGwH7aYa7tlGPss9RXhnbU0Idtg1XxHBscnYr+2EVdKFu0baTEeIddwxyhfshGXt0
+	YxixKWYVIouM0wUBrZBQMzgHsXPqwhRdcr9OybO0VLimU0UldWaVWFj6Z28nhw==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: broonie@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	andersson@kernel.org,
-	konradybcio@kernel.org,
-	richard@nod.at,
-	vigneshr@ti.com,
-	manivannan.sadhasivam@linaro.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mtd@lists.infradead.org,
-	Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	quic_srichara@quicinc.com,
-	quic_varada@quicinc.com
-Subject: Re: [PATCH v14 0/8] Add QPIC SPI NAND driver
-Date: Tue, 24 Dec 2024 16:43:21 +0100
-Message-ID: <173505491734.10614.11394326797380035834.b4-ty@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241120091507.1404368-1-quic_mdalam@quicinc.com>
-References: <20241120091507.1404368-1-quic_mdalam@quicinc.com>
+To: <broonie@kernel.org>, Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: <andersson@kernel.org>, <konradybcio@kernel.org>,
+ <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+ <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+ <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-mtd@lists.infradead.org>
+Cc: Richard Weinberger <richard@nod.at>, Tudor Ambarus
+ <Tudor.Ambarus@linaro.org>, Vignesh Raghavendra <vigneshr@ti.com>, Frieder
+ Schrempf <frieder.schrempf@kontron.de>, Michael Walle <michael@walle.cc>,
+ Pratyush Yadav <pratyush@kernel.org>, linux-mtd@lists.infradead.org
+Subject: [GIT PULL] mtd: topic branch for spi with Qcom changes
+User-Agent: mu4e 1.12.7; emacs 29.4
+CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
+        <quic_mdalam@quicinc.com>
+Date: Tue, 24 Dec 2024 17:20:38 +0100
+Message-ID: <87jzbp9hnt.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Wed, 20 Nov 2024 14:44:58 +0530, Md Sadre Alam wrote:
-> v14:
->  * Updated commit message
->  * Fix spelling mistake
->  * Remove "inline" from multiple APIs from qcom_nandc.c file
->  * Move '|' in qcom_param_page_type_exec() APIs at the end of line
-> 
-> [...]
+Hello Mark,
 
-Applied to mtd/6.13-rc1/qcom-reorg-for-spi-6.14, thanks!
+I'm merging the Qcom series, in case you need a topic branch to apply
+the spi bits (binding and driver), here it is.
 
-[2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
-      commit: 8c52932da5e6756fa66f52f0720da283fba13aa6
-[3/8] mtd: rawnand: qcom: Add qcom prefix to common api
-      commit: 1d479f5b345e0c3650fec4dddeef9fc6fab30c8b
-[4/8] mtd: nand: Add qpic_common API file
-      commit: fdf3ee5c6e5278dab4f60b998b47ed2d510bf80f
-[5/8] mtd: rawnand: qcom: use FIELD_PREP and GENMASK
-      commit: 0c08080fd71cd5dd59643104b39d3c89d793ab3c
+Merry Christmas,
+Miqu=C3=A8l
 
-Patche(s) will be available within hours on linux-mtd.
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-Kind regards,
-Miquèl
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git tags/mtd/qcom=
+-reorg-for-spi-6.14
+
+for you to fetch changes up to 0c08080fd71cd5dd59643104b39d3c89d793ab3c:
+
+  mtd: rawnand: qcom: use FIELD_PREP and GENMASK (2024-12-24 16:22:02 +0100)
+
+----------------------------------------------------------------
+Topic branch with preparation changes from Qcom in order to apply on top
+the spi bits adding the Qcom SPI-NAND controller driver re-using a lot
+of code that has been shared.
+
+With this goal in mind, the raw NAND controller driver has been cleaned
+up and reorganized, and only the relevant structures/helpers which have
+nothing raw NAND specific should now be exported.
+
+----------------------------------------------------------------
+Md Sadre Alam (4):
+      mtd: rawnand: qcom: cleanup qcom_nandc driver
+      mtd: rawnand: qcom: Add qcom prefix to common api
+      mtd: nand: Add qpic_common API file
+      mtd: rawnand: qcom: use FIELD_PREP and GENMASK
+
+ drivers/mtd/nand/Makefile            |    2 +-
+ drivers/mtd/nand/qpic_common.c       |  759 ++++++++++++++++++
+ drivers/mtd/nand/raw/qcom_nandc.c    | 1769 ++++++++----------------------=
+------------
+ include/linux/mtd/nand-qpic-common.h |  475 ++++++++++++
+ 4 files changed, 1561 insertions(+), 1444 deletions(-)
+ create mode 100644 drivers/mtd/nand/qpic_common.c
+ create mode 100644 include/linux/mtd/nand-qpic-common.h
 
