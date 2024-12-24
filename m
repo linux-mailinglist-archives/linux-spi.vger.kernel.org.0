@@ -1,101 +1,107 @@
-Return-Path: <linux-spi+bounces-6157-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6158-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E719FBBD9
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 11:05:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5BA9FBFBF
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 16:43:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826AF16C44F
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 09:56:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75E101885237
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 15:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CFD1B4123;
-	Tue, 24 Dec 2024 09:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA7C1D6DCC;
+	Tue, 24 Dec 2024 15:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="aIC4AIcW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OrEn7nQg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m3277.qiye.163.com (mail-m3277.qiye.163.com [220.197.32.77])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA56017C220;
-	Tue, 24 Dec 2024 09:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071981BC3C;
+	Tue, 24 Dec 2024 15:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735034094; cv=none; b=QIEb83L4tVBtMeIf1DbkNQZ2/w7gFSPnGtKnUoUcbVEPIs1/4fip6DfKqLPDAGnS85LDmFczMd3JPcC5El+n2z7PU+ABiT2OoEa2EgTJXyBZxUA4JYZQl4XPmWJ591OL7OSwPm90PjdcDfhBPTfaYdboyd2jampDeimDkiqisoM=
+	t=1735055014; cv=none; b=uKB8fRygyfOQsXRhbRdeOLTKhKXFjGGUqVGepNeh+JmMUcEfdga9QK/CTkJBwrtptRaxXDXeqKv6OCvOQKYzA9T5UDpJarIdAosGRIA21N91zTCKrwDlaXTEAhdBWuJ6Zr6b3ztCB1gbgZIJyiX/ztThR4xjpGkNgX4NIkj8Be8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735034094; c=relaxed/simple;
-	bh=NegVq0gVVmJ4TG/f+ZAU4nDfTp6uIPSBqRmjVKo0FmE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VY1msJdrNlsa0zHR9EDCAAwSUuQPKnMN4u4nElDmXn0yE1bu0FJd2A9pg2I8ApyCON4YGyHMS9fjw1AFQL5CNOM6MlQ2XvLQ6ErQhPjutl9/KWYMn1R3VdYm+hKF3BL/zeGpPNNsjhoyNN2TKzjTIC6GMBX6y9djDRpKKEU6Gbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=aIC4AIcW; arc=none smtp.client-ip=220.197.32.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4f1b;
-	Tue, 24 Dec 2024 17:49:35 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Kever Yang <kever.yang@rock-chips.com>,
-	devicetree@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	s=arc-20240116; t=1735055014; c=relaxed/simple;
+	bh=brtdJK4WKkKlESa9dLmKrsWKvafiFE2osEZSwV9IkvI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uv8nhJzc/CHE6w21lOISYBWMHDHB/AoyT0p3mf912G4YlqXEhnMQ2iDADZMvF+/XdUx9a8m55X/mVK//RNWyoRgWRNFkJQjLRlIwGgfrF0J56HmKPIpVDsDr4DocVXVU5NotBpnDd59zD5tHSpwIk2PTb+uHbGMFADRV9/gFenQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OrEn7nQg; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F2142C0006;
+	Tue, 24 Dec 2024 15:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1735055009;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F3+hSGSHlH4/HIta8u7/GmGd5FBLxZS+Wb7ky8FWtyA=;
+	b=OrEn7nQgApH+CtWryuRC0bwTkZtS7shbgt785gNv6ZkgfXEEYOoNDwvsXOUW0O/VsaSfAZ
+	lHvqD1/SJPs6MUNhixLLi3U9PFLyobotPW10cWUSzWRj01jOqZGEy3xJuNPrj/R4R9y00V
+	ifHkpIPl3+2hqH3aKo/kQblWM1CGddEx+dOh6OuWau568uicZc4fDlIAIkZ/eAQhjk738b
+	QDsb//lZsRkUpL9TC8q2cyHJab1rc+4zkQVrWtnRF+cTsLue/QTQm3Bgw6bzFfjZ1M1+ov
+	23s9ufGXw53gP3vtBbOxReoHj00yMtlkKSMCndJYNmBEatJYjAFD/xSL3DBWVw==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: broonie@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	andersson@kernel.org,
+	konradybcio@kernel.org,
+	richard@nod.at,
+	vigneshr@ti.com,
+	manivannan.sadhasivam@linaro.org,
+	linux-arm-msm@vger.kernel.org,
 	linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 08/17] dt-bindings: spi: Add rockchip,rk3562-spi compatible
-Date: Tue, 24 Dec 2024 17:49:11 +0800
-Message-Id: <20241224094920.3821861-9-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241224094920.3821861-1-kever.yang@rock-chips.com>
-References: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	quic_srichara@quicinc.com,
+	quic_varada@quicinc.com
+Subject: Re: [PATCH v14 0/8] Add QPIC SPI NAND driver
+Date: Tue, 24 Dec 2024 16:43:21 +0100
+Message-ID: <173505491734.10614.11394326797380035834.b4-ty@bootlin.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241120091507.1404368-1-quic_mdalam@quicinc.com>
+References: <20241120091507.1404368-1-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ0JDTlYaT0pJTE9LSkkdQ0NWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
-	5VSktLVUpCS0tZBg++
-X-HM-Tid: 0a93f812647d03afkunm6aad4f1b
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MS46Nxw5DjITPkodS1EvLCo1
-	NQMaCw9VSlVKTEhOS0hITExNT01KVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFDT0o3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=aIC4AIcWKqKoT7LNOzi3cjWVG65DmdskHtqwrE28ZQDWJltkEJs9GEM8YYIm/lHy6ezEtwUeZSGqS9x8XL/4bkC4F6pYHknE00uMA3alZaocRHp07Iqg93Yf5VPrlx4Fwe20YQkfz6soDVs5O5K7ryO9OYSnuv4IrLrqGF2AiO0=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=IOM1U89s1aYg720JAUn/jQO6iCYKE+w0kQFvGel09Ys=;
-	h=date:mime-version:subject:message-id:from;
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-Add rockchip,rk3562-spi compatible for rk3562.
+On Wed, 20 Nov 2024 14:44:58 +0530, Md Sadre Alam wrote:
+> v14:
+>  * Updated commit message
+>  * Fix spelling mistake
+>  * Remove "inline" from multiple APIs from qcom_nandc.c file
+>  * Move '|' in qcom_param_page_type_exec() APIs at the end of line
+> 
+> [...]
 
-Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
----
+Applied to mtd/6.13-rc1/qcom-reorg-for-spi-6.14, thanks!
 
-Changes in v2: None
+[2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
+      commit: 8c52932da5e6756fa66f52f0720da283fba13aa6
+[3/8] mtd: rawnand: qcom: Add qcom prefix to common api
+      commit: 1d479f5b345e0c3650fec4dddeef9fc6fab30c8b
+[4/8] mtd: nand: Add qpic_common API file
+      commit: fdf3ee5c6e5278dab4f60b998b47ed2d510bf80f
+[5/8] mtd: rawnand: qcom: use FIELD_PREP and GENMASK
+      commit: 0c08080fd71cd5dd59643104b39d3c89d793ab3c
 
- Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Patche(s) will be available within hours on linux-mtd.
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-index 46d9d6ee0923..104f5ffdd04e 100644
---- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
-@@ -34,6 +34,7 @@ properties:
-               - rockchip,rk3328-spi
-               - rockchip,rk3368-spi
-               - rockchip,rk3399-spi
-+              - rockchip,rk3562-spi
-               - rockchip,rk3568-spi
-               - rockchip,rk3576-spi
-               - rockchip,rk3588-spi
--- 
-2.25.1
-
+Kind regards,
+Miquèl
 
