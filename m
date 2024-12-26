@@ -1,93 +1,107 @@
-Return-Path: <linux-spi+bounces-6188-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6189-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF0799FC11F
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 18:57:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 565FD9FC71F
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Dec 2024 02:04:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D0391884228
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Dec 2024 17:57:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCDA01881C08
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Dec 2024 01:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3239B1C3C15;
-	Tue, 24 Dec 2024 17:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED742F5B;
+	Thu, 26 Dec 2024 01:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvGTxDBY"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Wyeka9DB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0516D1D90B1
-	for <linux-spi@vger.kernel.org>; Tue, 24 Dec 2024 17:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D11CD27E;
+	Thu, 26 Dec 2024 01:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735063017; cv=none; b=tgsCzEplenXsgVojMAdFFnHQWkKfT55wr66/bPU8SEKwxoabnXNScCFFXuhV9HEnW7e3w+sA+eQxpvLBV4pOHYFs+XB9+rWdzy3Y04GUYUnkhpf7AabqszA5kdBDAhRVNg/Jo8c5Xjf1pYibq5mc4fv77tzEEE6od98CRmErMrA=
+	t=1735175035; cv=none; b=sp9K4d9ovt1oObJgl1grLATA8zIqvWO1R4NjSEs16PI1ilDFSyLIb8eXmKuMEWuwxO/p03cDJ+CJDvCmSdQtL4FLzyWdWbLuIbuATmk5FZ/k9blyZ4y88lMdpLjPulLu+ZK40/plPEshog2rlbc3jW4kUEuYpB8lxaYvpUlr82I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735063017; c=relaxed/simple;
-	bh=HR2iYEAtc2UGmkhWGDsnVXP8g8/A3vxj1X1EPzCCrb4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=it5KuDTmKoIH41A/EJfZ7DK1AI82yrSE5V1lSefStTGzuwwSkysAJ30k67ifRsaVtXS3qYxGMpP6J5P0841fnkHnBF05joSxlNT9jIr4+PrFDWyUhyvsCV9fKlFMi5F0O8nyM/FCpR2oowGIB2wYFuhoI5HFobZeDvSd6zs2Qug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvGTxDBY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77DD5C4CED0;
-	Tue, 24 Dec 2024 17:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735063016;
-	bh=HR2iYEAtc2UGmkhWGDsnVXP8g8/A3vxj1X1EPzCCrb4=;
-	h=Subject:From:Date:To:From;
-	b=LvGTxDBYZzbPt0lOA/aOPMulGFyjSYOTDpTzbyC8XoJE0gfIpppKugKZ/TnwaiGdS
-	 mn6qXRy8Oj/bJyUBMW8YZRo9ILawNJAuE6SXgPm8+PB4oD50IWWh/7D03LJgydJN1X
-	 U41lWAr1xFs3RljIeItjcLUDGLMh2bRSoIaeaWANNbBiBJYV1NZlvmMY3gYKbm8NrJ
-	 zIT0TDUlnHLovAsU2HnqgqojYjbgCOSVziQ2GSXPdTTpSsqC/zKW31d+4M0F8rl4xP
-	 vH61XawFEz8ojBHnPDTqJA2nS1yM/UeyZiHgCEUBGCeCjQ08wVI4d8BpHN0oO0WBPZ
-	 EAvBIEIc4BQUA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 38C6B380A955;
-	Tue, 24 Dec 2024 17:57:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1735175035; c=relaxed/simple;
+	bh=cerY22D4eVntKAQUS8DBw77VgTnork+Orm9lzfUABQU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DF9Mhn96KdPKLu9/t+mZMxA5qJheR5G8uGuziG74cqHlVF3eloucalH6pvefzV+R7EA3T6n6Mi1BoOaQcn58g0RzZuACxsRSfUVKRYFJRB1O5AcIoCCb9WIYdH02s2Y4QbV/G2Af6oXP/lO3VxiqPaiP+HQyWjxb9Ye42+BVD50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Wyeka9DB; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=XfW+FErZ5uemWJ+QBpgvCgdf7t8nzwinnsolNQHp+n0=; b=Wyeka9DBsSFrg6HICJYAVqRxiY
+	my9eB04uh52BOT/tBX1j5WJuQxSZIa/GzRzb+5Ynui7I6BsJdFiVqDCN9JOCIGWuykZzPsDQVyD8F
+	gtaCbDRDL92CeKRLdGFMSRQ1UGo36D8dn9TlFH0bYef1/rmtiMyB9lsieoXHKOjPoyJvKuo7Lbxa9
+	KbfCaJEeGp7XlxX7cWRBbcCIbv9I15oKiDqPCITa5zWlO6uVKc+D48e34tjVZCJIoDUaJ6ONvuCM0
+	ITse8dipe3ZKshaKLc0Pp9BA4Yqex9rCGBj4C1bRuAOV4Gh0n+HBab7uzAvMbcwK52wVUVfXywAlx
+	OWVI4RGQ==;
+Received: from i53875a54.versanet.de ([83.135.90.84] helo=phil.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tQcI1-0004ql-OB; Thu, 26 Dec 2024 02:03:49 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: linux-rockchip@lists.infradead.org,
+ Kever Yang <kever.yang@rock-chips.com>, devicetree@vger.kernel.org,
+ Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Subject:
+ Re: [PATCH v2 08/17] dt-bindings: spi: Add rockchip,rk3562-spi compatible
+Date: Thu, 26 Dec 2024 02:03:48 +0100
+Message-ID: <4045324.kQq0lBPeGt@phil>
+In-Reply-To: <20241224094920.3821861-9-kever.yang@rock-chips.com>
+References:
+ <20241224094920.3821861-1-kever.yang@rock-chips.com>
+ <20241224094920.3821861-9-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <173506303464.4166193.11435080380906387068.git-patchwork-housekeeping@kernel.org>
-Date: Tue, 24 Dec 2024 17:57:14 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Latest series: [v2] spi-nand/spi-mem DTR support (2024-12-24T17:05:45)
-  Superseding: [v1] spi-nand/spi-mem DTR support (2024-10-25T16:14:37):
-    [01/24] spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
-    [02/24] spi: spi-mem: Add a new controller capability
-    [03/24] spi: amd: Support per spi-mem operation frequency switches
-    [04/24] spi: amlogic-spifc-a1: Support per spi-mem operation frequency switches
-    [05/24] spi: cadence-qspi: Support per spi-mem operation frequency switches
-    [06/24] spi: dw: Support per spi-mem operation frequency switches
-    [07/24] spi: fsl-qspi: Support per spi-mem operation frequency switches
-    [08/24] spi: microchip-core-qspi: Support per spi-mem operation frequency switches
-    [09/24] spi: mt65xx: Support per spi-mem operation frequency switches
-    [10/24] spi: mxic: Support per spi-mem operation frequency switches
-    [11/24] spi: nxp-fspi: Support per spi-mem operation frequency switches
-    [12/24] spi: rockchip-sfc: Support per spi-mem operation frequency switches
-    [13/24] spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
-    [14/24] spi: spi-ti-qspi: Support per spi-mem operation frequency switches
-    [15/24] spi: zynq-qspi: Support per spi-mem operation frequency switches
-    [16/24] spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
-    [17/24] mtd: spinand: Create distinct fast and slow read from cache variants
-    [18/24] mtd: spinand: Add an optional frequency to read from cache macros
-    [19/24] mtd: spinand: winbond: Fix the *JW chip definitions
-    [20/24] spi: spi-mem: Reorder SPI_MEM_OP_CMD internals
-    [21/24] spi: spi-mem: Create macros for DTR operation
-    [22/24] mtd: spinand: Add support for read DTR operations
-    [23/24] mtd: spinand: winbond: Add comment about naming
-    [24/24] mtd: spinand: winbond: Add support for DTR operations
+Am Dienstag, 24. Dezember 2024, 10:49:11 CET schrieb Kever Yang:
+> Add rockchip,rk3562-spi compatible for rk3562.
+> 
+> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+> ---
+> 
+> Changes in v2: None
+> 
+>  Documentation/devicetree/bindings/spi/spi-rockchip.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> index 46d9d6ee0923..104f5ffdd04e 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-rockchip.yaml
+> @@ -34,6 +34,7 @@ properties:
+>                - rockchip,rk3328-spi
+>                - rockchip,rk3368-spi
+>                - rockchip,rk3399-spi
+> +              - rockchip,rk3562-spi
+>                - rockchip,rk3568-spi
+>                - rockchip,rk3576-spi
+>                - rockchip,rk3588-spi
+> 
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
