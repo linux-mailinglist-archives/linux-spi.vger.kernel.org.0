@@ -1,80 +1,80 @@
-Return-Path: <linux-spi+bounces-6197-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6198-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 992B79FDCC8
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Dec 2024 00:34:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507159FDCCF
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Dec 2024 00:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26D35161CB9
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Dec 2024 23:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D6623A1385
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Dec 2024 23:34:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B67C19D090;
-	Sat, 28 Dec 2024 23:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344E119E804;
+	Sat, 28 Dec 2024 23:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IXakVNvi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zj4C9qLR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB9419ABAB;
-	Sat, 28 Dec 2024 23:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3222A19CC08;
+	Sat, 28 Dec 2024 23:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735428781; cv=none; b=jdpigNwPZxhbcrN5FXvdcScjkkNgOk4eKqxqYWlEg/caus4Vo9F2Opsa4a66/I7ryuINaN/GrQNx2FsUd7gEnMY3Ihay4EvvW604mUFd0Gnbyf5QcueGMVMj3KFS4HnDtnpDpdk/QP+BsOa1QWeMOgaui8xZLzzQE7FC4GajFZk=
+	t=1735428783; cv=none; b=hrgllqeDPE0bLJZlPrOI5pL/sG1g+tVXP8BFJyaMuz1N3e1Cuh8vnAF7RQ4/MjWyljDvLpVylr48SHMe7GsFkK2SbM3UVQVjWqdR7QEJr847FnVH0EaMCYihe+ot3+YziaE3l7IRS1fZpZ0hQjVob8TXZN7EtpbvowcWNBc/BlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735428781; c=relaxed/simple;
-	bh=puiG5xEDdJCtQ8qmQzW/cyD8qGWndW0XH0vnx7xw1nQ=;
+	s=arc-20240116; t=1735428783; c=relaxed/simple;
+	bh=Xy7AdPQ3XNeeLhZR/TYDcrnRFX91WkBoxIfX4qqZmFU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=blCUz35mab/BfhVt7KNQucdBbmsgN2F2OlaR8EMzCySQoDSTjtdWpc4iRSrUDDigSUgadVjRvSrQKoFAifhNeaI+53yCZTaX+m1ORPsEvfWdbmGV7k0H1QUZU9OzVICxOiV/srkeL7IfvPGF891iE0I7P+iZa+M2FKeXUALfXmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IXakVNvi; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:To:Cc; b=Tw3jh1RjUWZFIQ5khoE+zdk0j30TYHmbqa/mXxaTX/mV7XnwsRTNBnRCKhzxzVHzLHPw3CP7sEwjHs+COMRAiX9oUuYazh2ivBIipqWKkXuSWe5bFlu1B0UAMIpNLjwXdqu2i7m06gTb4t0QCuYRRP259pkTRhPI1U8xJlRMc44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zj4C9qLR; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4361b0ec57aso82351385e9.0;
-        Sat, 28 Dec 2024 15:32:59 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-436202dd7f6so93264835e9.0;
+        Sat, 28 Dec 2024 15:33:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735428778; x=1736033578; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1735428779; x=1736033579; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DfubF/yufWY092c2cPTjDejWqTWBBJxWn/OStLH2dG0=;
-        b=IXakVNviFcgiBsuX+vS7TeyEw6xXFx+ppP/0sx23IbgX0DqnM7zT1NOiQcbE9GX84B
-         EfCp7FNdWVK3reW0wuMlan/+OMk+o4cxaOEmywm6eB160acR3mkuhxC4sN6Wm184c/F6
-         zQ+9CygjMj8DOuvZ8JRC2jRuNHRikLk3FlSOISp5bwMsDnEVYxlcZDikyk81bQG7igfo
-         sFvleq8tAiBJRk4a6ElS0QTALPjVoANo//lw7wJggrc0icg8C3sm5E/D8T/B+qQqcHya
-         Of6IMh6clT2kJfyVSET8ppcdzVdtz2lIP/Ld7BSzuz2AM8vQCWdPsoZ5OxKJKNY4RJTa
-         0+pQ==
+        bh=NOT7K8Ya5QmS9KbZEm2dNA6PzTUyykxaRlEoFqze/Wo=;
+        b=Zj4C9qLRZkTauyAzggzOqoO0rxQQ85v6XR6BvssL45u/Uz0r8+jo/VZvMeplkZyXhW
+         01jnKNt3MLWg5OoLA+COOA3ifjy21pTwferdRTYMdMe2DcKdtTKaS5XNC/lLzkE4WOf6
+         Id9hW+k9vZzPnjJLp9M3eh91WcdIZ6XrsS8AygEktd5OIwq2fQvVIbh719txTWUN8Q7S
+         Pb9W/rZEjUmbsS8aQPR/MSawh3r/CG9OuDUBP5luu7SxlfElnTqWc6YOLtPr4pV20Y07
+         tHyZ3zj/kbQx4/o/sf7dEtPfonex2/zl8APWjlTkWgcg0uqi/w4XiZX7zSGJLzlSlyYL
+         nzqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735428778; x=1736033578;
+        d=1e100.net; s=20230601; t=1735428779; x=1736033579;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DfubF/yufWY092c2cPTjDejWqTWBBJxWn/OStLH2dG0=;
-        b=bCL2lI6wRkhTR/0PM6vLmHFdc9sbQ0rcxTroL7C95ebNX6vVKUlrTRkbTc5cCshXHn
-         XbGM651nm4U7zZJuxuFHbla6zfAH/IqK+dpKHtv0ExSe130S/7crxH7oWbW93V2RMXOs
-         qMo4Qc/2YZwroIIy6WtIlX4X1vMLVsmEkAGC7Bl+Cs6tyFNjrkGfeXLWa8ccoIoE505n
-         fU51+CuFLrCMaDU4u9aCN8z1Uc8+1heyaLzwA1C9eDgOThW8BEmQa+ryugc2l0B6MskB
-         EtdVqaabPtD34XYcl7Pq/+4tiTZIeGLsK4OlBh4isPOnCeISXsorfAbkzJvRyunJZ6A/
-         OS2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUmHvpX3ufmqD3BWcQlm3oRTqZ4TCfiiqH5/4iKPj3x2YSxCyS14lR7QhpLcex7qjbuQUFAMf5TOCkN@vger.kernel.org, AJvYcCV0kf+Xy5phGLJjEcCLHFaOt1+ghG8aFmCP+En6I9iwuZfvZhuRcXf317fVfbTnNCkTnWiQ6415JaAqIQQ9@vger.kernel.org, AJvYcCW4oModkrX+U9XoXZD4QNZoENIVLkdF2xaCAzbITIDVT1KzfeVadRXCpCdn/tNNqwU3ZngK+Pu3uo4K@vger.kernel.org, AJvYcCX0v0ol+4g/KdqJrX4x8iZgScU4G1kBePFG60W53sTo6b/p0//+kJsQmGe1e3Qo9JgmpISEEvKelzuH@vger.kernel.org, AJvYcCX5Dt4r30YXZy7pfP0BuOmnq+O65tmV5YO9muylX7U9Bq4THhmGZdodibCNXFGGk6w93BJWO+qh@vger.kernel.org, AJvYcCXWMN6BkvnAz7tpFktD39pPoNzXkE7RPcE4fC4n8mtDFBQFLi1c1cSK28DL0iYCdH9ov1Qu1J4bKTc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysvOterIebQz4F5q5sYwkl0g09X15Q2pYqXYc6z/qdzUJuXkI+
-	nj7PmKEVqQ4cvZXOXbvfxhESYLN4REM/5h6tbAjoQrYCGhor28NYgnXOLw==
-X-Gm-Gg: ASbGncvI4gF33yzzoa7c0cEDupQ5GiCmynRYqhYhsuAv7QllGqTQwRSuNkgqCkmvgE0
-	p/kmqrm3YkR40LnxSTrKhgfE9SNsFBSXi/PIYFbq0w8eH6neoxIMN4qfO+FACfZHhtQDryMFyvk
-	4UkAzD7c2OLXv/2TQ5267VCvib6KHwABL56fAxoApT2Qzfj/mnR2AwvC43ZopLvlJMnZ+pjXyMU
-	cbB3xCUpy/nGLttHw8qzjw7qjFz2jwnYaVrNlNp+PYMZeBMIvew0bLqow==
-X-Google-Smtp-Source: AGHT+IF2ClbgecNehGE5fWNtec9ewXlro34blBIKLgyQx5qEfdd7BFdxq3aJXVLuA8KbNB+TQ/BMPg==
-X-Received: by 2002:a05:600c:1c9f:b0:435:32e:8270 with SMTP id 5b1f17b1804b1-43668642f9dmr262491285e9.14.1735428778151;
-        Sat, 28 Dec 2024 15:32:58 -0800 (PST)
+        bh=NOT7K8Ya5QmS9KbZEm2dNA6PzTUyykxaRlEoFqze/Wo=;
+        b=GvRDxmXuEoqhs8IDEmFQTY+qRPMPN8TOubytchxjczya+vKOb4ZZaFpmBroMje5aOi
+         25ZTM89RUmfU/bgDG4W3cHGRxEDI6SDRz+Yhvd12UVK7iF77s1rdrxlGhDS+TpfetBjJ
+         Zm1sFqB8yIgLhE5YFp+irLLbIEahhg4Nf2AHt/jWX+ZZl/3AN/Bph1afgrqWhlIYYwjl
+         ts5NRLvyY37id0Ii7fbqpUxeoBIEM7HmP6HulPy5sHWOREENWN9RnG8ZLBWeojCYAxMv
+         TY01b1u8r2XNgIA0QpLYXRiPyn5Tq4cATP8uzE7AV+/wNgheY5VW5RdOEUn6Rhk9QcEc
+         +khw==
+X-Forwarded-Encrypted: i=1; AJvYcCUP7I6CMuetwNtPSwRxiOJxFsiBosraeC+O0Vu59UZxQqs3oEg+4NAgwMsGHKtLY6I+oGGi456N1uc+@vger.kernel.org, AJvYcCUTXCulyQtaiEZK6eHZHAjOh1z7tfIj4SjImLzkRugEltMBegc/Gzvq7fnSYl5Rpij3oJLeihy4245lOx8U@vger.kernel.org, AJvYcCUTsiET1EIdSwBdxv2Iyr6CQn0gVyVcQkjsptRbEovu+yAy8xTpg1ojxA+KNH1kKgKEoLdcn2fou/Cs@vger.kernel.org, AJvYcCWMz1hExuTkrDKW1a9JUiIlbOS86vQ5NL3MV0WKRSuJsMtWbmstN6exOSD/8Bwk9cfuR6P/A+lhWUW/@vger.kernel.org, AJvYcCXkgR63ATtnaBpGjNIepOLw9HUUmxN1kehqEl1uaAJjk77kON76YuYhdLZd1FvvQblolL1rWPYuM18=@vger.kernel.org, AJvYcCXmBd2AbMddzYHmGw7bxY00Pz+Bw3fU8G0enm36XuukRUhGmme7VrtJPqT0PTWTTFItjYISiv8Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqpWZVIZqc8uArVtkHI5hT8gKX2EiPPOKT213plQiqUknAWeig
+	gUC+YrbyGsFmWU5i/UWZualKYvChDmchGqWBSpLJ5Qp61DfLF+u1
+X-Gm-Gg: ASbGnctpEgwarxeDU1ysMRbboK/QQZQPimEIR6mNoKNEMIpx92HVYduDHCa52+oE11Q
+	gtCwDR7KZIUpytnERTrfHxdd7aqldhwb/1Xf3KLjI6CQHfybQxweExK2kzSt4KI3DriQ0dsyV4x
+	iwCxcq1iwA1kd94ryfiwxkjA7LHstiHO/FXEwaJP9PovxrPXzCxJrriHll8aD4YShIDNOVCnFyk
+	t4Hw8Gk7ZVuInuZWLDMYehxl57fPcHN11rmvb+BTaL9/f+7ycB6xUboCg==
+X-Google-Smtp-Source: AGHT+IEDx7wvGkLVUnT9AMtJHUHuNgRawRAtN+qgnC0Cj3E/aztBEivykLbd/wn9yN327aAFyzdA4Q==
+X-Received: by 2002:a05:6000:1542:b0:385:fc70:7f6 with SMTP id ffacd0b85a97d-38a221e1f67mr24709765f8f.7.1735428779386;
+        Sat, 28 Dec 2024 15:32:59 -0800 (PST)
 Received: from localhost ([2a01:e0a:d9a:4c20:d6da:7147:f20e:31de])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436612008b1sm307077615e9.15.2024.12.28.15.32.57
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8a6ca5sm26538490f8f.86.2024.12.28.15.32.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Dec 2024 15:32:57 -0800 (PST)
+        Sat, 28 Dec 2024 15:32:59 -0800 (PST)
 From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Date: Sun, 29 Dec 2024 00:32:43 +0100
-Subject: [PATCH 4/6] ahci: st: Switch from CONFIG_PM_SLEEP guards to
- pm_sleep_ptr()
+Date: Sun, 29 Dec 2024 00:32:44 +0100
+Subject: [PATCH 5/6] net: stmmac: sti: Switch from CONFIG_PM_SLEEP guards
+ to pm_sleep_ptr()
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,7 +83,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241229-update_pm_macro-v1-4-c7d4c4856336@gmail.com>
+Message-Id: <20241229-update_pm_macro-v1-5-c7d4c4856336@gmail.com>
 References: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
 In-Reply-To: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
 To: Patrice Chotard <patrice.chotard@foss.st.com>, 
@@ -106,20 +106,20 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
  netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
  linux-spi@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1549; i=rgallaispou@gmail.com;
- h=from:subject:message-id; bh=puiG5xEDdJCtQ8qmQzW/cyD8qGWndW0XH0vnx7xw1nQ=;
- b=owEBbQKS/ZANAwAIAechimjUEsK1AcsmYgBncIqkWao0M4f63BMEsxa8BRIQnaXQWygL0phkf
- tdecngcH0aJAjMEAAEIAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCZ3CKpAAKCRDnIYpo1BLC
- tQJWD/9qfpDmwRN6zrCJNqZMU53EqDWlK+stpQdz2PxOgWM3IiMDfRC+jyRnvxeiWM9DBojy3CM
- eVzk/pzBMVdce6RrqEdBvSXEOhqvQtC1rwivdehnng1VXuGW7/WzqQ16lvPoYhaOeOSnH7v4S/Y
- 5OJd33Yy8upYHZK+CHEDoRw7Y1JJcLzOGrgX4WjCVSnnCwzlncx6xZwhUkwtvI1FO18X5Jhgjh1
- yX6RZxXVxYc+3wdbKn6W9rDZZlfws37B0DfFdap3GBWMTfkNCgs+DGNgoEuYhZcMQxmwx66wb2o
- 0BwEpi5PF9IGK6bHuLEEX2cr4gV9784GayGuaSythX1VMWzo4yVE6o9ETY0gdEdQUx5oxA+R5iZ
- QkPazXjn8VJIjnJgxjrVaVcCjDt/PomoWdeLWNdPtcslOtcTqTWVA3PxK3YuF/r4p+9hHbaizB2
- gnOwVzHIaLIKng0moZCBSHKUejWzwgkT/D692Qnwo1jzezsRFXBAHYBXxYC47FPUqrrNVLZ1IGW
- LSc+5kqpqWoJbf/J6FUi77wzfUAa7wwVSAr/kgt0ep2DMsyTxaWYy8N5KKmBIYr4eXWmdCr5IUv
- 4HsYTrNo1Tx7bDH04sfmhHiXxDpwdR5kjuWexjioIGfPKVsju98eeYPPJy1R6MG0pnsXFTTm3AW
- 1UCYQhk+nmIQ2hQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1773; i=rgallaispou@gmail.com;
+ h=from:subject:message-id; bh=Xy7AdPQ3XNeeLhZR/TYDcrnRFX91WkBoxIfX4qqZmFU=;
+ b=owEBbQKS/ZANAwAIAechimjUEsK1AcsmYgBncIqkdCM7I2+fjKtHyJmXuIMRiTT3ConPrpraf
+ j4VH3GYg+CJAjMEAAEIAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCZ3CKpAAKCRDnIYpo1BLC
+ tWOLD/9mLv8T49Aj92DxuFqK+5R3cczwAA+SNhe7B2SwXvfVYYd3E77Y+/6R7e61V78SrnbI8gz
+ uaBNqyvNBthY5MeF0I+NbwVeOCkA2B23GaLT+QSAAgc/lpqQ7wFVR3ISSUhZfAT5dU4co5VkvHM
+ xnEYsquomiIFCIsoOVZw7fvrHUaCfpBwiyPXjs+jaTzfcq++bCknVVo0bsn9SrV9v6OIEzL4CxJ
+ 2Gec/Ah9nHgtAISBD8U11Ay92zy0/x8J2tmMEkLxjOFcmqZmJyYB0X1eyMts89qT1Xz+qxVwJ4b
+ eGSEySEwcjMA401vbYtcTwgiaRaERA8MMXj2OjAznA2N2n1aswBx2ElmwHm1wBW2FXPfVapYd9u
+ cKDauqd2bZioY7er4gOxCHnT7cvL+mGopN2wMggQ7N2mnGfAnVhUwo1BvvKnALB6XZUt4riUWco
+ td11vz8xganX4BAkgJUrdabbCavIB95y7cYJOMpKAnQGDHRALdO3K/R9opffcvMi6xvmOl/amaJ
+ z/7BF43VuNbdS0NTjhHxD5V9G5FlkeT31KscpPYrGl4XpRe4HaazkrXfMZr0DbWSBESGgi8Rj7V
+ +MXQFC/biruMtBy8YzlG9rLxu1xkClx8ECgKGVnRJBpUo0oBdpjoD8/QjoS35kjJWNjGSlKyI9T
+ uq80NJHRbLeVYQg==
 X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
  fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
 
@@ -130,41 +130,43 @@ use of #ifdef based kernel configuration guards.
 Link: https://lore.kernel.org/all/20240716180010.126987-1-rgallaispou@gmail.com
 Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 ---
- drivers/ata/ahci_st.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/ata/ahci_st.c b/drivers/ata/ahci_st.c
-index 6b9b4a1dfa15bb6f395cc742f25251376b869a21..4336c8a6e20871fe25b61d6e2043fa15902b3559 100644
---- a/drivers/ata/ahci_st.c
-+++ b/drivers/ata/ahci_st.c
-@@ -176,7 +176,6 @@ static int st_ahci_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+index eabc4da9e1a985101643908d2efdb0b4acaa9d60..de9b6dfef15b3d0a503a3b55b3e9a42ee68c6141 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-sti.c
+@@ -313,7 +313,6 @@ static void sti_dwmac_remove(struct platform_device *pdev)
+ 	clk_disable_unprepare(dwmac->clk);
  }
  
 -#ifdef CONFIG_PM_SLEEP
- static int st_ahci_suspend(struct device *dev)
+ static int sti_dwmac_suspend(struct device *dev)
  {
- 	struct ata_host *host = dev_get_drvdata(dev);
-@@ -221,9 +220,8 @@ static int st_ahci_resume(struct device *dev)
+ 	struct sti_dwmac *dwmac = get_stmmac_bsp_priv(dev);
+@@ -333,10 +332,9 @@ static int sti_dwmac_resume(struct device *dev)
  
- 	return ahci_platform_resume_host(dev);
+ 	return stmmac_resume(dev);
  }
--#endif
+-#endif /* CONFIG_PM_SLEEP */
  
--static SIMPLE_DEV_PM_OPS(st_ahci_pm_ops, st_ahci_suspend, st_ahci_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(st_ahci_pm_ops, st_ahci_suspend, st_ahci_resume);
+-static SIMPLE_DEV_PM_OPS(sti_dwmac_pm_ops, sti_dwmac_suspend,
+-					   sti_dwmac_resume);
++static DEFINE_SIMPLE_DEV_PM_OPS(sti_dwmac_pm_ops, sti_dwmac_suspend,
++						  sti_dwmac_resume);
  
- static const struct of_device_id st_ahci_match[] = {
- 	{ .compatible = "st,ahci", },
-@@ -234,7 +232,7 @@ MODULE_DEVICE_TABLE(of, st_ahci_match);
- static struct platform_driver st_ahci_driver = {
+ static const struct sti_dwmac_of_data stih4xx_dwmac_data = {
+ 	.fix_retime_src = stih4xx_fix_retime_src,
+@@ -353,7 +351,7 @@ static struct platform_driver sti_dwmac_driver = {
+ 	.remove = sti_dwmac_remove,
  	.driver = {
- 		.name = DRV_NAME,
--		.pm = &st_ahci_pm_ops,
-+		.pm = pm_sleep_ptr(&st_ahci_pm_ops),
- 		.of_match_table = st_ahci_match,
+ 		.name           = "sti-dwmac",
+-		.pm		= &sti_dwmac_pm_ops,
++		.pm		= pm_sleep_ptr(&sti_dwmac_pm_ops),
+ 		.of_match_table = sti_dwmac_match,
  	},
- 	.probe = st_ahci_probe,
+ };
 
 -- 
 2.47.1
