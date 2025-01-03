@@ -1,77 +1,77 @@
-Return-Path: <linux-spi+bounces-6215-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6216-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA5F1A00A6C
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 15:21:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D35A010DA
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 00:17:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0B3167A1A92
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 14:21:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36BE3160932
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 23:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033E51EE7BA;
-	Fri,  3 Jan 2025 14:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414E11C5F0C;
+	Fri,  3 Jan 2025 23:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1dUAXoE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EgaI2doN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 259CD1494B2;
-	Fri,  3 Jan 2025 14:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF331C303E;
+	Fri,  3 Jan 2025 23:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735914080; cv=none; b=jcyAWvsWevNSTDszq2kme/af1dc0ArUP4v9ID8BtdBKZJBFQEYKtm5vhjzzAAoMi+ef99NOyoKM1FvxvbZ9He8YL6masOQ6Acbx8LPBbck/dzZvPlnNdcdLgH6+ZDq6RegyOi+ZuMw3ADM5nM73H5pVVyyMJ8OhtwtDlWg/Q6NI=
+	t=1735946195; cv=none; b=HsFJlRFWReKlSfTaFRlwu4SCA19Z+oHFLc7BvvKOFW4afjg0D6ST5Bg5Snom5nKm/uMglbv/4MVQwbbP6Oe3Qs2y2tG2mvfYx6DWWbWY77LbuASc1bnjI8k4R5xV+PTDIG5gRg8DDjMPzFIR5YnETQrxRYjgAz9Hpfj+tdrxR/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735914080; c=relaxed/simple;
-	bh=igo/6RKKyK4xSvQvcWaYGVJvzrfS+W1CgvkNAoUvoN0=;
+	s=arc-20240116; t=1735946195; c=relaxed/simple;
+	bh=owrUnM+nIWZ95VR7cDcnMg419HxPMKLa94ZI5r6SWjM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dOByzHn/YEy/uOHtbwkgwZMDFe4cSJ0szlbuwsz/c80YSGnCD1OzF//2HSU04O4HgxW5JDpVUQ7viwrbJcNqkQVKRbMv/WObn6zNiX+XgbmmEmVj27KR5H7La0CZMB6UfcM/659Acm1uVYzj3mtHpqsYMuZsSjpHM4ahmthPZOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h1dUAXoE; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=tbnG/BXTRpoE9yuCO3a/jhQo6dwuSCYNlZXXokd6jpglNRQXnOUFQJk8+Jg7cdIzTxfxM6WqPShajLyn1SxWVS+Yj2/x7WNxMlmvyjDeI4xsinOBeMwMyovxmReJBDOO5S5XW2RSGwglsfiuViKQ48WC4K4T7Hgppeek3n4lAEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EgaI2doN; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735914079; x=1767450079;
+  t=1735946191; x=1767482191;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=igo/6RKKyK4xSvQvcWaYGVJvzrfS+W1CgvkNAoUvoN0=;
-  b=h1dUAXoEbP/Pz9Ocig7Gpj6FRcERYQwOcTsPTzhHPUq0HYswrak5zhbL
-   PssLlGysbLpC+d41mBYqCAoyAEZU6ENkt9tiA2MkJozZfwzn/HjNOWwdL
-   eQhmkA3hW5ujAfjKqyfgm3FgFreMKduhlISOoDBYFmtfcWAm9f932mH0O
-   flJsr1TqzlcZlztlwp87lbxjp/zHZoKbn+UEbRhWzUwlRCzWuSD+bgQkN
-   SCKoxwsynA7xtaoPGtjy0LwZYFRR3FOFC5qQtP2BFNElLIT+LZQgFtnoE
-   VkhDJpRHgAqc7KC74yIdCH19Qe9UV7WlSGSa575+fKF0+2JNESNM9bOi6
-   A==;
-X-CSE-ConnectionGUID: B+T7CzMmRkCrz6UU76tApA==
-X-CSE-MsgGUID: 6N+ypFcZQB+WfOUJyQY2pA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11304"; a="35464654"
-X-IronPort-AV: E=Sophos;i="6.12,286,1728975600"; 
-   d="scan'208";a="35464654"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2025 06:21:19 -0800
-X-CSE-ConnectionGUID: Nx8hPZkCRXOi3ycrdlEl1A==
-X-CSE-MsgGUID: /I3MWaUQTuOtl7R1uaV/qA==
+  bh=owrUnM+nIWZ95VR7cDcnMg419HxPMKLa94ZI5r6SWjM=;
+  b=EgaI2doNe2emw5jvAKZmAooo68jnf3Bd4OzsjNPy3DhUmnDDzU1WrAii
+   vTnEkkD9A8Dd3uDgqZLUDnx4aWX0WhVkjT02k+SgfRHbIUaxI5sy9Cpr2
+   mdq/xVKafE+Dj2Jbjw6fCDWuU0bw5+OZCC8QIliWwK9PoAr2A8BBa5oha
+   UIzqP5vNcWRdHTtQbjhh0Q8wvAf6REhpt1JDmjwv6bD6C5tqnMnRbjYja
+   whiS/UJQHlW/1GGRJr8gk9j14LrSWFZJLApV8lbQt4Bk8Nf6/slHoL9Z5
+   Bu4RSfC4ZQAXItfEti0Ys5SqtL+fOh8imsmIURO06hb/LxjsCzYipAsKC
+   g==;
+X-CSE-ConnectionGUID: qXdqLWn7TCOEVP0EjNzMtQ==
+X-CSE-MsgGUID: NCecEOEnT8m7b99jIosMiA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11304"; a="39876206"
+X-IronPort-AV: E=Sophos;i="6.12,287,1728975600"; 
+   d="scan'208";a="39876206"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2025 15:16:31 -0800
+X-CSE-ConnectionGUID: UF9PNUgwTMCxWUKJY2zcXQ==
+X-CSE-MsgGUID: 6C1kIxuYRjGomNAizh72eQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="102676135"
+X-IronPort-AV: E=Sophos;i="6.12,287,1728975600"; 
+   d="scan'208";a="132748428"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 03 Jan 2025 06:21:16 -0800
+  by orviesa002.jf.intel.com with ESMTP; 03 Jan 2025 15:16:27 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tTiY5-0009pL-13;
-	Fri, 03 Jan 2025 14:21:13 +0000
-Date: Fri, 3 Jan 2025 22:21:09 +0800
+	id 1tTqu1-000AQx-1y;
+	Fri, 03 Jan 2025 23:16:25 +0000
+Date: Sat, 4 Jan 2025 07:16:02 +0800
 From: kernel test robot <lkp@intel.com>
 To: Vishwaroop A <va@nvidia.com>, thierry.reding@gmail.com,
 	jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
 	broonie@kernel.org, linux-spi@vger.kernel.org,
 	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
 	kyarlagadda@nvidia.com, smangipudi@nvidia.com
-Cc: oe-kbuild-all@lists.linux.dev, va@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, va@nvidia.com
 Subject: Re: [PATCH V1 6/6] spi: tegra210-quad: Introduce native DMA support
-Message-ID: <202501032202.m6t4wlQB-lkp@intel.com>
+Message-ID: <202501040605.Ndat3QJw-lkp@intel.com>
 References: <20250103060407.1064107-7-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -97,21 +97,28 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Vishwaroop-A/arm64-tegra-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 patch link:    https://lore.kernel.org/r/20250103060407.1064107-7-va%40nvidia.com
 patch subject: [PATCH V1 6/6] spi: tegra210-quad: Introduce native DMA support
-config: sparc-randconfig-002-20250103 (https://download.01.org/0day-ci/archive/20250103/202501032202.m6t4wlQB-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250103/202501032202.m6t4wlQB-lkp@intel.com/reproduce)
+config: arm-randconfig-001-20250104 (https://download.01.org/0day-ci/archive/20250104/202501040605.Ndat3QJw-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250104/202501040605.Ndat3QJw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501032202.m6t4wlQB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501040605.Ndat3QJw-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/spi/spi-tegra210-quad.c: In function 'tegra_qspi_start_dma_based_transfer':
->> drivers/spi/spi-tegra210-quad.c:721:64: warning: right shift count >= width of type [-Wshift-count-overflow]
+   In file included from drivers/spi/spi-tegra210-quad.c:8:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/spi/spi-tegra210-quad.c:721:43: warning: shift count >= width of type [-Wshift-count-overflow]
      721 |                         tegra_qspi_writel(tqspi, ((rx_dma_phys >> 32) & 0xff),
-         |                                                                ^~
+         |                                                                ^  ~~
+   2 warnings generated.
 
 
 vim +721 drivers/spi/spi-tegra210-quad.c
