@@ -1,43 +1,43 @@
-Return-Path: <linux-spi+bounces-6210-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6211-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D02D5A00404
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 07:05:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01D4DA00407
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 07:05:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DABF91883E1B
-	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 06:05:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C34E0163036
+	for <lists+linux-spi@lfdr.de>; Fri,  3 Jan 2025 06:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809CA1B4247;
-	Fri,  3 Jan 2025 06:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6581B4138;
+	Fri,  3 Jan 2025 06:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ajeNiJ7f"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="L+clIyrb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2070.outbound.protection.outlook.com [40.107.212.70])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2066.outbound.protection.outlook.com [40.107.93.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09A813B2A4;
-	Fri,  3 Jan 2025 06:04:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141FF1B4124;
+	Fri,  3 Jan 2025 06:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735884289; cv=fail; b=M1ruiVLg0PtgOCEh7YtJXZ4jIZ5jauzka/R00FMt92sgi8eet3/e5yFG4MmvUFwZJO0s24o7nhqzUe84zyn4HJyRPoL1FoZGW+YS5iTu4h++Zi544Ezu1aAe/aW/15zSawvI+9niO3xaEjHqPf/76DYlp/30egzKft8++jfBGq0=
+	t=1735884290; cv=fail; b=SaHREp6AH9ERY4DBxZ0aJhGqv+LMLKYRL+3TK/RUZAyahwTeDI9BI56tvzIB9vAwt+fcDaQ2qHZLwUSNjjebOJCpdzStLhBmIHqZzKh/KFT3DMCVZpK/slxDnhzcHkZIJxqmbvJdab5ga88iHZkw3ae7FMbO+4pvYLJDk8ya6gg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735884289; c=relaxed/simple;
-	bh=4kaJY8q9FAhBZcx/7L5l123mY5sYYEKau5kVSxHaRR8=;
+	s=arc-20240116; t=1735884290; c=relaxed/simple;
+	bh=KOH9o5FYZ3j/lwFhcwvmtGP1MCMkiLSCap3GZOxnc5g=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jXW19NVljRNzdH7VDg6644N63RvOKs5cl1eclKlRkulF+Ktz+I00rVtguOhmx+2EGI/uRQgXACx4KwnUd0ZzIAEuN9/V5RvC98sE7/X0joa8HJqHcJGL1JJYSo1ziH8+Eb9h/poNwVppgGQHBlsOVaEEkxVwWlxt75Iwx6uPBHM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ajeNiJ7f; arc=fail smtp.client-ip=40.107.212.70
+	 MIME-Version:Content-Type; b=dZS1YzfqZ0U2/XesYbkTC+Rnj53Vxn1bZsoh/Zrkw5dgE+kr+y3wriNb3O5SJqtlQ6X8K8MqcPHcGLybg1v45Rx9fdubJuFux9CGeMuuh/1q6ziRlFF+dMXA5i6PFrOPanv0ckd0kREvsXPNFtTrkI4sDKZtoQyao2prKuEA4aw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=L+clIyrb; arc=fail smtp.client-ip=40.107.93.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Pi/BwosY2+g5GJuzHPXyW3WYsB2ECzyZSDAjjUpsiF1+qVV2cuSMUbnOzNOjOMeNrnB456Uf+HDYXoWxz4MRAjAcC01852v9wA0TjpKd+gwQj+W0QfjEmCm03ZldeXR/VasSmAPwKvRgxJA++jfepOik85kkrIwIPxS+R5HfAoHK3mvBL+h/S7XK38xZTcPI6+Jv8C+tcmtirWeg8B/vzT5iwtrBGJr4JhReSJhZUC58j0smD0v3TL2oeWfqGeZD+zXeeD0NDntHkS0QIegpnFLkiuhVcnH7nGPphJloFO8Q31upOt9RRCP6OszQYlp9uC9Y1mWiKw7oJupb3NHadQ==
+ b=M9garhJXdz7taDCQZLq45nOQS43M57liYZjQU47zLiEJ3RHI3oCDvAg7dYakWbt/K7LqeDP/zgnRSbRcESZyx571OckQL886SoqPkel3A9fZWwa7n3gzGI3UnKvxZ74gBhgaHV6LlWHs51ckT5oDOgrbqY4yIGOE3c+nlVhojCaaLQhbjsb0L2zX8e0iHN6h+8hkcmxinblaVxjU/g5pk79dB9XTk88lNmQIIkWQdJRP+WxtCF3ULK3RIAUQRySXNecavZqjp7BunqlF9igDd9JTkrgM42WXhZj0+lTI1M5EgKQTdqAZJ7EJYxa/f/IenMmX5PeocjLYE/Kqoh0pIw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d6UpUd9yyKwF5dVgltUuKkugUuKM24a5sAlTMF8TBE0=;
- b=sTlnDgQ6QWA9U3hkkC3IgMtprUfNS8MeD3Z3cucEGQJGWFlGAhRZvmeKYUJ0cPvnv+/NkSSLOzEtiCXLkVww21hpAm36lmq2PyGmFpFleidnR/Wqa0dvdjAkG/+HsHR1W56UztMd8sjbs8f7fjPdDJGLUMzPa0u1IYStu+QFLnGiXMiVKwAM1v0ZR6BWps8/GZt+aVhClD/A7qh4v3VjnoVH2RPpXGXKxTfI0GGB3I9m9eCyTDm7IC9hVhYbEN8b1tP2vaOkCJC5MTlUMKNbo13+Qj4QubWuqpzEosuxObOpppxjzQ75iex/95KCqhpfVubVVROEWotnRSIk3RZviA==
+ bh=EB51yNRAkrPt03eMcukh6xKxNS9Q17pKsiplGGNdpvc=;
+ b=NA6/9A5Uam/FQ3niBp35jBzxw8bhSqUu8EMSv9AtXC4CvKqNGrTii+VPGYzrzBk2cIV5Qff/FqcJy0j/LszDVN+vUIaB/2KPLAD/QNdHYPwJ//rQqtN7Vawd17OCi+Pf1gn3jdG7OCLIL0Kz9YjUbnYJUnXKHNlo/OFOTg5hvAmLYxKp3fyJ9/NKnpaeZP2ysALWKxvOE1/HpF4GDcKqzcDj2nwbeFrKZPnspNmoDTV0Cesyo+xiszwJDrZI5tnzNeYYCB2isUJPK9inpq8JvpRWY9MJvP2EjHcxYg1IddWQb5wCx/uL47exSrjCoHHBFckkYwDPTS5TH4P+Vs8bvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d6UpUd9yyKwF5dVgltUuKkugUuKM24a5sAlTMF8TBE0=;
- b=ajeNiJ7fFOYYFo9Q5BcTsNR/+TCKhfVFM52uCtEdN/gRPePuJik3pDQpfbkXMXIYcvFotiBcc87BVY8YwVrVKphWYsIpi8Tzxfr8W3hOz4Gc0hJz/eVB4igfM3+GspnJ92OZeKtIUAojz0zIUwkirL7GYFEzEbfkti9CmHKzXhmUPHMO77iAbnRHEhbqEAk++772gH0sp4vPICI5IEq+bvfm3mgq8w5SwY4TWYe85V151uZJxBzk840cl99uVHvpmNYuiXYaaUwF8XxwbQFVL428CkN9IEA31VO9LgAojgP6Wv90dDwFU1NAHQlzvr9zcQF75U2JEArlY7Bbon1NPQ==
-Received: from SN7PR18CA0010.namprd18.prod.outlook.com (2603:10b6:806:f3::9)
- by BL3PR12MB6402.namprd12.prod.outlook.com (2603:10b6:208:3b2::17) with
+ bh=EB51yNRAkrPt03eMcukh6xKxNS9Q17pKsiplGGNdpvc=;
+ b=L+clIyrburfslp0YM2lw4jWX6KFdqHtPHxHWVDmT8rMfUwRTFTRglfUISBVehtcms1eJMiDwY9Dn9Fb1/emNi7WZvlLXTteM8C95wLKTLelYosKgePHTJ7un76cRgkP8JZkQbfh8Otgnwmum0uVSlqZGu4Rm0ElpXACPTw4n2wqt7KwGT3I0Z+jQbOvN2V9P+Zfyc060GcoCZ4ROTxH5Ph8upfFsGvPpQUwLthZKaxHzZv3V2DzHjJ6xSku5RZB3G2qubXKJwtWeT2522wsAti6+wF47Ge6UKCZx9mjQHLN1b6PSKmmShkXXPw1mFNlpa1uR8pC8uF6ZAsiP0HEoiQ==
+Received: from SA9PR13CA0019.namprd13.prod.outlook.com (2603:10b6:806:21::24)
+ by DM4PR12MB5937.namprd12.prod.outlook.com (2603:10b6:8:68::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.14; Fri, 3 Jan
- 2025 06:04:37 +0000
-Received: from SN1PEPF0002636C.namprd02.prod.outlook.com
- (2603:10b6:806:f3:cafe::5e) by SN7PR18CA0010.outlook.office365.com
- (2603:10b6:806:f3::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8314.14 via Frontend Transport; Fri,
- 3 Jan 2025 06:04:36 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8314.12; Fri, 3 Jan
+ 2025 06:04:42 +0000
+Received: from SN1PEPF0002636D.namprd02.prod.outlook.com
+ (2603:10b6:806:21:cafe::da) by SA9PR13CA0019.outlook.office365.com
+ (2603:10b6:806:21::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8293.14 via Frontend Transport; Fri,
+ 3 Jan 2025 06:04:41 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,20 +64,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SN1PEPF0002636C.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SN1PEPF0002636D.mail.protection.outlook.com (10.167.241.138) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8314.11 via Frontend Transport; Fri, 3 Jan 2025 06:04:36 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ 15.20.8314.11 via Frontend Transport; Fri, 3 Jan 2025 06:04:41 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 2 Jan 2025
- 22:04:28 -0800
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ 22:04:35 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 2 Jan 2025
- 22:04:27 -0800
+ 22:04:34 -0800
 Received: from build-va-bionic-20241022.nvidia.com (10.127.8.12) by
  mail.nvidia.com (10.129.68.6) with Microsoft SMTP Server id 15.2.1544.4 via
- Frontend Transport; Thu, 2 Jan 2025 22:04:24 -0800
+ Frontend Transport; Thu, 2 Jan 2025 22:04:31 -0800
 From: Vishwaroop A <va@nvidia.com>
 To: <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
 	<skomatineni@nvidia.com>, <ldewangan@nvidia.com>, <broonie@kernel.org>,
@@ -85,9 +85,9 @@ To: <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
 	<linux-kernel@vger.kernel.org>, <kyarlagadda@nvidia.com>,
 	<smangipudi@nvidia.com>
 CC: <va@nvidia.com>
-Subject: [PATCH V1 2/6] spi: tegra210-quad: Update dummy sequence configuration
-Date: Fri, 3 Jan 2025 06:04:03 +0000
-Message-ID: <20250103060407.1064107-3-va@nvidia.com>
+Subject: [PATCH V1 3/6] spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
+Date: Fri, 3 Jan 2025 06:04:04 +0000
+Message-ID: <20250103060407.1064107-4-va@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20250103060407.1064107-1-va@nvidia.com>
 References: <20250103060407.1064107-1-va@nvidia.com>
@@ -101,135 +101,125 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: AnonymousSubmission
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636C:EE_|BL3PR12MB6402:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74809e57-8ac4-4806-1576-08dd2bbc8091
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636D:EE_|DM4PR12MB5937:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20a0e492-0892-47b5-ce4d-08dd2bbc83ac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|921020;
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Tx8jC+ZumRFkmcBTfqctk1Sfii3jSl4n4pusxiYIEvsqxfPYQvOcMDq/f/Te?=
- =?us-ascii?Q?9xhJtajP/1HHqZcuwSczY6UjAzT1l94uz8P4P86zoyjrLaVlrldGG+5hHSJs?=
- =?us-ascii?Q?Tk9M17NFZlzKEBRmjYMK49fbBXHzucSSK5gVxpxQgmAlyWXPSROakt8iyqmv?=
- =?us-ascii?Q?BnYdHW1j2I8gDXYlC7VY4JHMoWrXNeNN1NjaqRlaFkVbU+iiRDNf+Yp1j1f/?=
- =?us-ascii?Q?bz856CX9FZ+AluTz7fC7oXg7S2qD8gqgtZiEjFG5LhsqqEsOYTn9+YDtgNXO?=
- =?us-ascii?Q?6QGL1PdoMK3DsR70ph0biIkJZXZ8xkUtNhYweu52WnNqSRlgBAhFTYlklPeF?=
- =?us-ascii?Q?0XA07mGVq6+nlDyhRYmP8a3y696B24RMbunAjIRtku/FK8GgPjoXNZO110q6?=
- =?us-ascii?Q?mlA8Y2fbtJQWu3Ox+j3pmtQ2Pm4sK6nPYRQwZgS+jgBzevM2kxJoMAbMW82Y?=
- =?us-ascii?Q?VeSP4csiVMOafVZPuuMYQYsgLe18Ywx2wrFnhxQquTXzWDPasc+ZyvziaW+5?=
- =?us-ascii?Q?7dPUDepQBfIUFxKPxEljOCKG1d1cg8kLoGXooEBUEVlfpIj6lJyoXODRtPsS?=
- =?us-ascii?Q?+g3EbSYEgxM65/B4kwEkhFJrDUdDeE8YQN4L5vLM4/nbzgLQ87ie1DhKUAo5?=
- =?us-ascii?Q?eRTqzg06I+p31URHmzpAWF5meoxc8YDKlAu+TLSFDpQri50rOPAQD0KpAV8g?=
- =?us-ascii?Q?RgaTj4PbMtVtfYYFtIlnV/L8cpHtW2lIYzHv8JooMe213/QG1/tlBjJEJaEj?=
- =?us-ascii?Q?gJ6aC/hsIAaW/U4A0AFBTKhotxFAklC4jTW4y5d1wEo/Z+e5IKNuDyTxnVjT?=
- =?us-ascii?Q?AuQPuUNq24Mja7qT46kYBQdkNkU1JSwURMf8LgmxDw/QNqWWCdFsYGAdx+xm?=
- =?us-ascii?Q?cmFa7jdZPs5slYhKvF3E4rHef6Whk/Re9/6DCWHwfbuSEQzectDwGO5gsx70?=
- =?us-ascii?Q?vwMMv2UK9/IT3zKND0cbWBDCRCVGoo+i6DXCBmG01OssJnJe6CFJQkojjqBG?=
- =?us-ascii?Q?Vhzr2HBYpcljjoh6XxqzCKPumByhANyo2w8I17HKIYUt12HUlYI0tSr5aHH1?=
- =?us-ascii?Q?12rOgqAqfeGCRjbYVPRWzPhpmO1xWq8udEiJQo1lR02yALUwO2t18HBeob+p?=
- =?us-ascii?Q?FQMRtDrTl3t4cyXDk3ZUL8M9CMy/lVljUbm1JasvXZzYlL5xukR7UA8FADU4?=
- =?us-ascii?Q?Td/6yUTk8+wbVEVpsisj+c5fpiD9+ZrzQmGZFWQx9mWc6wi9zvHyiY1xJclu?=
- =?us-ascii?Q?EAjJdKNUyOer9UAptYrQKutAQ2gGi0wgQFS9ANdFrohDrkg7p4ka1SZpM4ch?=
- =?us-ascii?Q?6s2e80pkUfDd39Dd9OzioGtTwKmhFGYUlKZ6Q89VYJ1WhdB9U2QxZeVDDOGL?=
- =?us-ascii?Q?EjRFoY2DlYdPBKWG7EA7gUJ1CUt/EAzGWVGfZrFEd8fqvZX20foQWA5Rrp5r?=
- =?us-ascii?Q?pFQtius38sBCzrxgw25k/jxwyMh/ZX7gBzIf/fdM3O11aGd2RMmrh07CFG6c?=
- =?us-ascii?Q?mlx5SoywKmUuiUQ=3D?=
+	=?us-ascii?Q?bcOcTbwh220Ku3JmUsjyJgHZVlpsHSPQ0PjLuvbc9U1AwD+GxgA+hM1mzbSO?=
+ =?us-ascii?Q?uaccTiEK0xiNtSY9Vqi2MBWfFpo36+NogN1CTHeF7QflBI6cMsdQvG/8FRwA?=
+ =?us-ascii?Q?niBiCM1s88VZY94j5UOBqS+Ocp8eW83gsXEhK8gFqJSW9rQSsH6V1pJKbE0w?=
+ =?us-ascii?Q?Mi6IAle+bqOCSaKA5i9PR9x+B1TBAfE3FloKjYhTEbA/XMWJfuPZA9VD0Q9f?=
+ =?us-ascii?Q?JxVdL1wtsWLK37TFGowFgKU1BltITq4L6l1lzdqd/y9fIKtQnGYdpapDIAnl?=
+ =?us-ascii?Q?dPl1iWXzRxAjd5hGK7U8QLxrV1frDL+S39ZallD+GV4gusj8XgNvNVo2KmQ7?=
+ =?us-ascii?Q?OOIpALkck7NrvlbhoFNa3FN9k2UF2rTX//Rx4P3vfTWx8oKhz+xNGaMoB4Js?=
+ =?us-ascii?Q?3APV1lP2Qdu25SxrYpOMfqvkU2XrnqESq83U5brpt6j7vb9CeFTTqWxZTG5W?=
+ =?us-ascii?Q?Gf+sC4LpEFGA2sfXxLKIQt1olUl50eI/jruY33O8h0Rhr4fJv9+pcniMXJSN?=
+ =?us-ascii?Q?Me1yocBm9BsiuhzMDnHemjeHmF6U76bbk1C+f8p6vCd72mPTf9bOYfKaLgEw?=
+ =?us-ascii?Q?pR/uAAmtt64QMUBnRp4WYW67bSwp+0MF1mo62GMIqTfduumxMpoSSfR0+FGt?=
+ =?us-ascii?Q?RHIcOurWHPVyh9/AB8dWVzP1V+XjWn4+KVpoY/tTAyZdINq26xWDL6s0RZN8?=
+ =?us-ascii?Q?aXQbaH2oiHaPI681HsliE8zaEzH0STGpdKSSUW4QrpgFrkrDVFtglZd6XShv?=
+ =?us-ascii?Q?3d53UfB4ErNGyqV+sgp6U+nfqQKZQ1GRFkEuar5IAFzjt5km99AjDJe3uWzS?=
+ =?us-ascii?Q?kSz5eM72ZdP2FhuT0mPqTlS65vbGc3T3qtTfIFVQ/d2Gd2s+0RKzMNlxSSeG?=
+ =?us-ascii?Q?0+R7ZGhYDoaGDUJJlORdxMsYf8lAvEXpVnOOTXbjFC7TAV/sF5GH7UXl7wgx?=
+ =?us-ascii?Q?g+PNkeNCVQ1Ii3YUwloRKiudKZEydr572NMKP21WUitbk1Uo1iB3Chql6XUF?=
+ =?us-ascii?Q?+ajhjDjkqXJiz0uIzoWzwrY/+/YshVxCqyLQFYqg37E+jvfmGWHE2YUOp92L?=
+ =?us-ascii?Q?bmmMi0JlQG/tjiss/EzAleiD9JvftqgcGYEU19ErAMeHZyQJPevwAoBLi9dF?=
+ =?us-ascii?Q?9XbXxfukMMtiJIkur49JBAmFiIrktB+XcnmwxklaGjGXeuDFXIkRVxaTJhJw?=
+ =?us-ascii?Q?4x5jxTaWktAMHeWKbWu2nXV7+V4H0P0oe4uCtT/f6oIRa5fzij/E3LPgndF5?=
+ =?us-ascii?Q?/PS1VJt/81gsojkv3Y2c3lRWaKzda/6WXbr9wMvvKsoelBJL7vbL1HCN5vQI?=
+ =?us-ascii?Q?IlaPkPQbLLDRAvjUq9DKXXWCtihC38wC/mwOGWmADMFHGbxNvWDf1zQJeMx+?=
+ =?us-ascii?Q?zGb/aHi2nIFGnQTxCGdr9uLVdJWpgC9KdBDBEL87GPXotrjM5XcVMXA5vsf6?=
+ =?us-ascii?Q?/U6HxROeftmo3klx7JZ82Fa5KllRlWFkYBOxGCjz0Ouv8uFlESS7K5I9wgMN?=
+ =?us-ascii?Q?Z4lZHPNMmMxId2k=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(921020);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013)(921020);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2025 06:04:36.6066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2025 06:04:41.8214
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74809e57-8ac4-4806-1576-08dd2bbc8091
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20a0e492-0892-47b5-ce4d-08dd2bbc83ac
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002636C.namprd02.prod.outlook.com
+	SN1PEPF0002636D.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6402
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5937
 
-Adding support for the dummy sequence configuration. The dummy sequence
-introduces a delay between the command and the data phases of a
-transfer. This delay, measured in clock cycles, allows the slave
-device to prepare for data transmission, ensuring data integrity and
-proper synchronization.
+This patch corrects the QSPI_COMMAND_X1_X2_X4 and QSPI_ADDRESS_X1_X2_X4
+macros to properly encode the bus width for x1, x2, and x4 transfers.
+Although these macros were previously incorrect, they were not being
+used in the driver, so no functionality was affected.
 
-Change-Id: I4dc347a247830452754f83e88aa95a7d231722cd
+The patch updates tegra_qspi_cmd_config() and tegra_qspi_addr_config()
+function calls to use the actual bus width from the transfer, instead of
+hardcoding it to 0 (which implied x1 mode). This change enables proper
+support for x1, x2, and x4 data transfers by correctly configuring the
+interface width for commands and addresses.
+
+These modifications improve the QSPI driver's flexibility and prepare it
+for future use cases that may require different bus widths for commands
+and addresses.
+
+Fixes: 1b8342cc4a38 ("spi: tegra210-quad: combined sequence mode")
+
+Change-Id: Ic650c919535a99aa02f52c25e2a200d1b301381e
 Signed-off-by: Vishwaroop A <va@nvidia.com>
 ---
- drivers/spi/spi-tegra210-quad.c | 31 ++++++++++++++++++++++++++-----
- 1 file changed, 26 insertions(+), 5 deletions(-)
+ drivers/spi/spi-tegra210-quad.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 08e49a876894..02478e8efc8f 100644
+index 02478e8efc8f..43d6587fad09 100644
 --- a/drivers/spi/spi-tegra210-quad.c
 +++ b/drivers/spi/spi-tegra210-quad.c
-@@ -22,6 +22,7 @@
- #include <linux/spi/spi.h>
- #include <linux/acpi.h>
- #include <linux/property.h>
-+#include <linux/sizes.h>
+@@ -135,7 +135,7 @@
+ #define QSPI_COMMAND_VALUE_SET(X)		(((x) & 0xFF) << 0)
  
- #define QSPI_COMMAND1				0x000
- #define QSPI_BIT_LENGTH(x)			(((x) & 0x1f) << 0)
-@@ -156,10 +157,14 @@
- #define DATA_DIR_RX				BIT(1)
+ #define QSPI_CMB_SEQ_CMD_CFG			0x1a0
+-#define QSPI_COMMAND_X1_X2_X4(x)		(((x) & 0x3) << 13)
++#define QSPI_COMMAND_X1_X2_X4(x)		((((x) >> 1) & 0x3) << 13)
+ #define QSPI_COMMAND_X1_X2_X4_MASK		(0x03 << 13)
+ #define QSPI_COMMAND_SDR_DDR			BIT(12)
+ #define QSPI_COMMAND_SIZE_SET(x)		(((x) & 0xFF) << 0)
+@@ -148,7 +148,7 @@
+ #define QSPI_ADDRESS_VALUE_SET(X)		(((x) & 0xFFFF) << 0)
  
- #define QSPI_DMA_TIMEOUT			(msecs_to_jiffies(1000))
--#define DEFAULT_QSPI_DMA_BUF_LEN		(64 * 1024)
--#define CMD_TRANSFER				0
--#define ADDR_TRANSFER				1
--#define DATA_TRANSFER				2
-+#define DEFAULT_QSPI_DMA_BUF_LEN		SZ_64K
-+
-+enum tegra_qspi_transfer_type {
-+	CMD_TRANSFER   = 0,
-+	ADDR_TRANSFER  = 1,
-+	DUMMY_TRANSFER = 2,
-+	DATA_TRANSFER  = 3
-+};
+ #define QSPI_CMB_SEQ_ADDR_CFG			0x1ac
+-#define QSPI_ADDRESS_X1_X2_X4(x)		(((x) & 0x3) << 13)
++#define QSPI_ADDRESS_X1_X2_X4(x)		((((x) >> 1) & 0x3) << 13)
+ #define QSPI_ADDRESS_X1_X2_X4_MASK		(0x03 << 13)
+ #define QSPI_ADDRESS_SDR_DDR			BIT(12)
+ #define QSPI_ADDRESS_SIZE_SET(x)		(((x) & 0xFF) << 0)
+@@ -1041,10 +1041,6 @@ static u32 tegra_qspi_addr_config(bool is_ddr, u8 bus_width, u8 len)
+ {
+ 	u32 addr_config = 0;
  
- struct tegra_qspi_soc_data {
- 	bool has_dma;
-@@ -1089,6 +1094,13 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
+-	/* Extract Address configuration and value */
+-	is_ddr = 0; //Only SDR mode supported
+-	bus_width = 0; //X1 mode
+-
+ 	if (is_ddr)
+ 		addr_config |= QSPI_ADDRESS_SDR_DDR;
+ 	else
+@@ -1084,13 +1080,13 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
+ 		switch (transfer_phase) {
+ 		case CMD_TRANSFER:
+ 			/* X1 SDR mode */
+-			cmd_config = tegra_qspi_cmd_config(false, 0,
++			cmd_config = tegra_qspi_cmd_config(false, xfer->tx_nbits,
+ 							   xfer->len);
+ 			cmd_value = *((const u8 *)(xfer->tx_buf));
+ 			break;
+ 		case ADDR_TRANSFER:
+ 			/* X1 SDR mode */
+-			addr_config = tegra_qspi_addr_config(false, 0,
++			addr_config = tegra_qspi_addr_config(false, xfer->tx_nbits,
  							     xfer->len);
  			address_value = *((const u32 *)(xfer->tx_buf));
  			break;
-+		case DUMMY_TRANSFER:
-+			if (xfer->dummy_data) {
-+				tqspi->dummy_cycles = xfer->len * 8 / xfer->tx_nbits;
-+				break;
-+			}
-+			transfer_phase++;
-+			fallthrough;
- 		case DATA_TRANSFER:
- 			/* Program Command, Address value in register */
- 			tegra_qspi_writel(tqspi, cmd_value, QSPI_CMB_SEQ_CMD);
-@@ -1300,7 +1312,9 @@ static bool tegra_qspi_validate_cmb_seq(struct tegra_qspi *tqspi,
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
- 		transfer_count++;
- 	}
--	if (!tqspi->soc_data->cmb_xfer_capable || transfer_count != 3)
-+	if (!tqspi->soc_data->cmb_xfer_capable)
-+		return false;
-+	if (transfer_count > 4 || transfer_count < 3)
- 		return false;
- 	xfer = list_first_entry(&msg->transfers, typeof(*xfer),
- 				transfer_list);
-@@ -1310,6 +1324,13 @@ static bool tegra_qspi_validate_cmb_seq(struct tegra_qspi *tqspi,
- 	if (xfer->len > 4 || xfer->len < 3)
- 		return false;
- 	xfer = list_next_entry(xfer, transfer_list);
-+	if (transfer_count == 4) {
-+		if (xfer->dummy_data != 1)
-+			return false;
-+		if ((xfer->len * 8 / xfer->tx_nbits) > QSPI_DUMMY_CYCLES_MAX)
-+			return false;
-+		xfer = list_next_entry(xfer, transfer_list);
-+	}
- 	if (!tqspi->soc_data->has_dma && xfer->len > (QSPI_FIFO_DEPTH << 2))
- 		return false;
- 
 -- 
 2.17.1
 
