@@ -1,76 +1,76 @@
-Return-Path: <linux-spi+bounces-6218-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6219-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C35A016D9
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 21:54:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 602F4A016DD
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 21:55:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DAA03A3F6A
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 20:54:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 775D2162B62
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 20:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9FB1D61A7;
-	Sat,  4 Jan 2025 20:54:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDD41D79A9;
+	Sat,  4 Jan 2025 20:54:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IpKWDkAi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OqBLnas0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832B81D5CE3
-	for <linux-spi@vger.kernel.org>; Sat,  4 Jan 2025 20:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2041D63D5
+	for <linux-spi@vger.kernel.org>; Sat,  4 Jan 2025 20:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736024087; cv=none; b=G7uQx4Y0VqmsTw9FHzBz9i98YDevriDsAGWN1lX0L139PID+8n5pS4Ipeqv5f4rRy9aGUPpD9UNQcRFFRYNF40gM61orrlSDfesRZG3v2VUdQLoR6A4GtwA/3Nhm0h17+fTashRpIEhkjRQkP203oq2LZxZrxGt6+iAw3qvueDA=
+	t=1736024090; cv=none; b=I0lSELTrbLWRzecJsrF9vknU9SJ4eEqbW/7IEWC2aYQwWlcQyL+ZoJIrGi50KlxIBX7CdqSmixtoCFoKt7pjy9aYXsrdbELH28ART9wD6QbJV4h7v/h4W73eizP9lnQnp1cM0XJeS5MgPA4VDG5T+mTgWo+QnyXS220E/tSpDD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736024087; c=relaxed/simple;
-	bh=0pluUhxj+qHekDTaDHHUWfvMX4R8WWXSMErhdppVD4I=;
+	s=arc-20240116; t=1736024090; c=relaxed/simple;
+	bh=OVi515b6fvB1D8FMPWpdYGP+XIs4Du8HE+mgPE8IwMA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u4zZsCkpilS16rVb3jko4gEiyTcu6zFBIWjcSgzOkR3WFTy2BeyA4lsftkfXBLLrjv4VFxPUxysTEyQ9KJ9waPqdDcRrIbXte1QtS5vQg/GQh+xOoGSEVPj0l1gpbp43fkbujrjGSSZUHQGPH8c7p+NPIU87GKqZt+lB47bJ7p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IpKWDkAi; arc=none smtp.client-ip=209.85.218.45
+	 MIME-Version; b=QASe1hjH/6C+hBtJHYAcFP7UOdp71wimdOf/XnVVIiSkHEe0DRhAXqC+/EYpxqfOxaZdyQ3NJs7XpriSmAadBsD/lQHa7u05CPLkRXTaBnvdH4+cu+Rl8LwbZUi+nVARQjuFlyPnAuTC093aEcabdi7FqoVi5bIPDRAcn+Li9Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OqBLnas0; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-aa680fafb3eso164448266b.3
-        for <linux-spi@vger.kernel.org>; Sat, 04 Jan 2025 12:54:45 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d3ea2a5a9fso1976585a12.2
+        for <linux-spi@vger.kernel.org>; Sat, 04 Jan 2025 12:54:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736024084; x=1736628884; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1736024086; x=1736628886; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XLKX/DDFIRPvx5t6DaUjc92tk+3Aa7daTr762N5Ifkc=;
-        b=IpKWDkAiY/Ttys+LjWLoxLoHZDs+pi3cu980+RD7Xi7kdylySfQRse2ik28rGbBCut
-         wcIgmbbWU4pPHlHpYtGwTOBfgpgUo927OxMNebTOEJJYm0/JCBICliRZiRylZawj4c+k
-         TYQ9Z8pTgn23p/mhZAip2AyGuPOSO5n6qWiD05YVgCyuX9/Cnu7JBxy31Gc9GoLSO7ez
-         QyfLeJKYv2h3GnrWFHmav/NWnl8SP3zCipd5KTPwLU7NaX9vQeYRWcyoJ4HrL4GeuyUJ
-         bMDbRyjnFzVNEqL16q1Dn1Bh4z98C/9mHvrFhwgcgZTIan+r9j0jq7pXsVrnkhVSpyiT
-         fUqg==
+        bh=/5tKgeyFg00MgtfGaAYBuFBjwqBNpORNVJY5iBPqbW0=;
+        b=OqBLnas0b3u2iphRWe03NbjI9mEC+QoYFvHc7vHsBTCAdTqXB09dyuMPCIS8LbA0/j
+         0MOEz5wCDpMW+v6WZ6XLrrgzkUkC1BKicdJIChrjeDRv2Em+iEtSAzfyIG+BbTBDE6hk
+         fzfEvzyelEUH3Z2Ypa9v3zbQYTFBe+ZBJCPuhldNbksJdpFqrZRChtgu1m61RVC+sJ2Y
+         1DOxw9V9xxpKchaynbwuBVdJUlnED9WJtewEzwis3lo5GlIhWO1cCflU51ecb8ng70Bk
+         iod3rOndeUw1e/Kx2WffdCIsK+fZstD5VIkhepAokhf1B3nBDBBlt1JWgOc29uEPvykc
+         JTtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736024084; x=1736628884;
+        d=1e100.net; s=20230601; t=1736024086; x=1736628886;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XLKX/DDFIRPvx5t6DaUjc92tk+3Aa7daTr762N5Ifkc=;
-        b=WBo42p4tDv+kz3qRTAzQeEHPr1/FDUr4ZiOaKieCh5eNZlDy6AtzkAT/L5UvnuHBbr
-         ibGLTulyTMUw4PZSR9i02MzFHVNVHSbW3kvpBA/N150bIqfMV0K3c/r1eXsFYHjOpFSd
-         a4S9desT1o/qEF5UtmBMJnkFLEs1WRgPpZONOT7e3gk5D+rJsv/C1eLRccDiURXFIo9r
-         oP5e5J/dZoePcojzXYtD5EvcQFiAO8X7bemOlewmipplBhxbUt0eFGH+jeqfvwCUCb7G
-         RFyuiGS+JfN+KUGFnoFfo4bdkCu8GbbeOg3XsGFknDLBHPHITUwUPzBQa3ivYvjb6UnQ
-         5/+g==
-X-Forwarded-Encrypted: i=1; AJvYcCWISB+sJ4qX2ND8md9SdsZ6uOuY7QpX/ckEB/NjUSBjzKbkiEKTt4aPzwK9O3bcsRzKRlVo5R7wpPc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxPCEDD1HahTKiT700yz6vGrDa2vj2SQ19qwK1qKpNmszVRXZ0
-	zrW8hhUKUmhKASKjM8oFQLBZbYyoLLfiT5Z+sfFgSWN0LCwWO1DXeu1DSkbRzPE=
-X-Gm-Gg: ASbGncsRmKfLoaPCsAHTRGMe805Mtf1vwL2fmMdb4ybvCr5UJFLRTYrYCeO218fT6y8
-	yRJ/Fxa7oLILAVZm+tK+JdwYD+G8CUaZkiMesOAf/f7+XkfW9V+1X7fJ1ll1zTOBAih+sIhxEuJ
-	d7RdoG6o2Q5IJbDWsXPoXT6CHf0px/pA+S7huBhLsPXrPtuO1Z9RBBZfxjkD3p7ctrJbOZX8rmE
-	sS3nIhDCCwexJnGGPdpiO8zWNEFf4dK7WE17RTiAvkpNLJKrmZDaBYpmzk5j/sGhrXSwec=
-X-Google-Smtp-Source: AGHT+IFmkhn29wqYEMmrNGScq5CXWT6m6SapSyW0XiDfeMVUzsZXK4EWiuoixIVsOEwexnWV5pkkww==
-X-Received: by 2002:a17:907:6d1f:b0:aa5:a60:ad6a with SMTP id a640c23a62f3a-aac2d4472c8mr1834711266b.8.1736024083242;
-        Sat, 04 Jan 2025 12:54:43 -0800 (PST)
+        bh=/5tKgeyFg00MgtfGaAYBuFBjwqBNpORNVJY5iBPqbW0=;
+        b=lpNJt+wl4klYaqNY6U/JkCTQfSnw3rz3ru54jmwUENELXfGdZiUcaLXdhSQDBD/f1+
+         irKQwgV8cv1LXY8ry2zdrRutsRaUd/0aVv/OfvCfc24WbG9xiVVZsE4qbHbwT/U3AZf1
+         IqBYGjD4jVd3eRoe+Bw2DmvbUf4vLeJd/iFiDS8FXcvviMvXbd5/+axcxmT0oZgWu7i0
+         mIRV7EOOiwAuPemMV6Ekg8YqOGTdK3NKwI6R7Y7g4u/s7mluWFC03JOCuxEamaLTC33m
+         urejRJ9yO20d32qprBf9mvarUiRNzebbHZRp1+K5MzJstDaAzj+DjOQOxvdFZCaACFVo
+         OiBw==
+X-Forwarded-Encrypted: i=1; AJvYcCWDhsf5v7fRGu5ssSi7CWMhZzf4MYZl7s6TZT1eAcuy5JjM1QrJJpKuRyiMlzZhJqKKMLwG8FPlR/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9eE2lgt1twk5fdTo0EjTcwJ/Y86yh9qczimtE8mY/I0WbUWJJ
+	ic6vF5dBaUUr4q47hlyf7GySKkjgKTqfsvr2GP9FYLDVsM8E9R+8hp3XwyG3kmY=
+X-Gm-Gg: ASbGncuqOJQGcZQCn6MNNv2eQjrKwazsxBUWUPGarN3rqIZU+lezii5/BVHcY3GuE6f
+	iFcYPYQW5BjL2BDZT77k+NaKe7S5RmsidM6rPdNExu1FgtP0I9viLWMHpGWURkzKNVMLSIRgTc9
+	EYUVLRNAB3o0QU1OGrJ9Viow/V/QIfoMAsIfRETBx01/rI0ozhRj9J5n1etQK+ZaZrAq5CfTjYq
+	qebT7HxnXiyhvqKDstuQcGFvcC1h5xoHDKtISDP46V81KUorTUZTIpwy0N3ODnuvfSqgaU=
+X-Google-Smtp-Source: AGHT+IFYBTBJPclwUSGwCj06Or/uq4VGv6lfISakgOmL+cPEXrHfIpLkbx2RfKlkxwiJ7dN0dGBBQQ==
+X-Received: by 2002:a05:6402:2349:b0:5d0:214b:96b4 with SMTP id 4fb4d7f45d1cf-5d81dd5a17dmr16470255a12.1.1736024086537;
+        Sat, 04 Jan 2025 12:54:46 -0800 (PST)
 Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aaf4a841749sm839666666b.137.2025.01.04.12.54.41
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aaf4a841749sm839666666b.137.2025.01.04.12.54.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jan 2025 12:54:42 -0800 (PST)
+        Sat, 04 Jan 2025 12:54:45 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Mark Brown <broonie@kernel.org>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -84,9 +84,9 @@ To: Mark Brown <broonie@kernel.org>,
 	linux-sound@vger.kernel.org,
 	patches@opensource.cirrus.com
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/4] spi: atmel-quadspi: Fix printed error code during DMA setup
-Date: Sat,  4 Jan 2025 21:54:35 +0100
-Message-ID: <20250104205437.184782-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/4] spi: cs42l43: Make handling missing spk-id GPIOs explicit
+Date: Sat,  4 Jan 2025 21:54:36 +0100
+Message-ID: <20250104205437.184782-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
 References: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
@@ -98,49 +98,34 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On dma_request_chan() failure driver NULL-ifies the 'rx_chan' and
-immediately uses it as PTR_ERR() so dev_err_probe() prints incorrect
-error code.  Rework the code so proper error code will be printed and
-NULL-ifying of 'rx_chan' will happen in common error handling block
-(failure of DMA setup is not fatal for the driver and further code
-depends on 'rx_chan' being non-NULL for DMA operations).
+gpiod_get_array_optional() for spk-id GPIOs can return NULL, if they are
+missing, so do not pass the value to PTR_ERR but instead explicitly
+treat NULL as acceptable condition.  The old code was correct, but
+misleading because PTR_ERR usually is used on errors.
 
 Reported by Smatch:
-  drivers/spi/atmel-quadspi.c:1287 atmel_qspi_dma_init() warn: passing zero to 'PTR_ERR'
+  drivers/spi/spi-cs42l43.c:241 cs42l43_get_speaker_id_gpios() warn: passing zero to 'PTR_ERR'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/atmel-quadspi.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/spi/spi-cs42l43.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index d135cca4e454..057bc20a74ce 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -1283,9 +1283,9 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
+index ceefc253c549..90180662c4c2 100644
+--- a/drivers/spi/spi-cs42l43.c
++++ b/drivers/spi/spi-cs42l43.c
+@@ -237,7 +237,9 @@ static int cs42l43_get_speaker_id_gpios(struct cs42l43_spi *priv, int *result)
+ 	int i, ret;
  
- 	aq->rx_chan = dma_request_chan(&aq->pdev->dev, "rx");
- 	if (IS_ERR(aq->rx_chan)) {
--		aq->rx_chan = NULL;
--		return dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
--				     "RX DMA channel is not available\n");
-+		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
-+				    "RX DMA channel is not available\n");
-+		goto null_rx_chan;
- 	}
+ 	descs = gpiod_get_array_optional(priv->dev, "spk-id", GPIOD_IN);
+-	if (IS_ERR_OR_NULL(descs))
++	if (!descs)
++		return 0;
++	else if (IS_ERR_OR_NULL(descs))
+ 		return PTR_ERR(descs);
  
- 	aq->tx_chan = dma_request_chan(&aq->pdev->dev, "tx");
-@@ -1306,8 +1306,9 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
- 
- release_rx_chan:
- 	dma_release_channel(aq->rx_chan);
--	aq->rx_chan = NULL;
- 	aq->tx_chan = NULL;
-+null_rx_chan:
-+	aq->rx_chan = NULL;
- 	return ret;
- }
- 
+ 	spkid = 0;
 -- 
 2.43.0
 
