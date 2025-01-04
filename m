@@ -1,74 +1,76 @@
-Return-Path: <linux-spi+bounces-6217-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6218-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37AE4A016D7
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 21:54:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C35A016D9
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 21:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD67A3A34C6
-	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 20:54:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DAA03A3F6A
+	for <lists+linux-spi@lfdr.de>; Sat,  4 Jan 2025 20:54:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9697E1D5CFE;
-	Sat,  4 Jan 2025 20:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9FB1D61A7;
+	Sat,  4 Jan 2025 20:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f+CxS3Fs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IpKWDkAi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809B81D5CD4
-	for <linux-spi@vger.kernel.org>; Sat,  4 Jan 2025 20:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832B81D5CE3
+	for <linux-spi@vger.kernel.org>; Sat,  4 Jan 2025 20:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736024086; cv=none; b=cd+hx7S1Y1Gd/J2/G5Bd9EmRZZ4LDHdt+MiABx7zwBHSo88WKY4UHXsSLoPt1cY2HAj7czD0FyaitflQQiPOjVaNdqoOyFFwJag77qYsYQTViKWUVGy6xHcv/IyV1+QfX945GAQX9T16DJpyrp+QTfmVUXmjuv8cdes2Abmk4KI=
+	t=1736024087; cv=none; b=G7uQx4Y0VqmsTw9FHzBz9i98YDevriDsAGWN1lX0L139PID+8n5pS4Ipeqv5f4rRy9aGUPpD9UNQcRFFRYNF40gM61orrlSDfesRZG3v2VUdQLoR6A4GtwA/3Nhm0h17+fTashRpIEhkjRQkP203oq2LZxZrxGt6+iAw3qvueDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736024086; c=relaxed/simple;
-	bh=fYNFkZ4E49jBh8K15pvFiL/fAUn0j4KNd1uS/SNnNLc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n5lDOwISIy9ycZ5/oGR90AoM1Z5++kxt/YVagSYVmFmzXe0lJQUp7288J35F2TbVRrf0z1pIdF8bDYVnSx4BgX77W3L/Hsyw/rzneOMFMfMGU58lCgwBtdcO5zcDo4ylnPiQAfk7/3n4+AjGiiJHjMPi8vfLUhXB8PQtxChsEto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f+CxS3Fs; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1736024087; c=relaxed/simple;
+	bh=0pluUhxj+qHekDTaDHHUWfvMX4R8WWXSMErhdppVD4I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u4zZsCkpilS16rVb3jko4gEiyTcu6zFBIWjcSgzOkR3WFTy2BeyA4lsftkfXBLLrjv4VFxPUxysTEyQ9KJ9waPqdDcRrIbXte1QtS5vQg/GQh+xOoGSEVPj0l1gpbp43fkbujrjGSSZUHQGPH8c7p+NPIU87GKqZt+lB47bJ7p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IpKWDkAi; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5d0bf4ec53fso2740073a12.0
-        for <linux-spi@vger.kernel.org>; Sat, 04 Jan 2025 12:54:43 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-aa680fafb3eso164448266b.3
+        for <linux-spi@vger.kernel.org>; Sat, 04 Jan 2025 12:54:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736024082; x=1736628882; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BMnEf52UfAT7r8nhxUJ27WGRgof8roegZaPYvjI6+Zo=;
-        b=f+CxS3FstA746ECg9npg4+CiwW5WlafE12tuQam5CYW0TdFKRhBfbQLd8RD6s4gfl7
-         Nd7h7dVqIncK8pygkk/z7eVV19BlwVZAYZ0AcIDG6cfdB8qHlKcbxZ2nv9Har/TPgH+F
-         26hBP4L7bh6Vk808mIEjhII5fsKHUxyFu/caELwVAfhBqLDD/3dAg7SxajJPNK2rkqtK
-         EUq6/cUh7VSgd/Pr9hkomoNjgwWoqPVAKmtyGvGtvnOEVvMO5Ncgp0EmbtFZB9nw7fGw
-         cFCIZAyFWkL52JELQ+AvST7f3twucq45I5lqKiDI3P+W5Epz5l7KFf3zPqX7Myj/tLyf
-         +oZQ==
+        d=linaro.org; s=google; t=1736024084; x=1736628884; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XLKX/DDFIRPvx5t6DaUjc92tk+3Aa7daTr762N5Ifkc=;
+        b=IpKWDkAiY/Ttys+LjWLoxLoHZDs+pi3cu980+RD7Xi7kdylySfQRse2ik28rGbBCut
+         wcIgmbbWU4pPHlHpYtGwTOBfgpgUo927OxMNebTOEJJYm0/JCBICliRZiRylZawj4c+k
+         TYQ9Z8pTgn23p/mhZAip2AyGuPOSO5n6qWiD05YVgCyuX9/Cnu7JBxy31Gc9GoLSO7ez
+         QyfLeJKYv2h3GnrWFHmav/NWnl8SP3zCipd5KTPwLU7NaX9vQeYRWcyoJ4HrL4GeuyUJ
+         bMDbRyjnFzVNEqL16q1Dn1Bh4z98C/9mHvrFhwgcgZTIan+r9j0jq7pXsVrnkhVSpyiT
+         fUqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736024082; x=1736628882;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BMnEf52UfAT7r8nhxUJ27WGRgof8roegZaPYvjI6+Zo=;
-        b=FVuf9hj2Rg0V+CIEMLCDhlp7PWeknFA7Z3eVZabg9U9QWYh1EZA0Dh4hltzqydQ2rR
-         9n5XAjbkyc7ns18sJ9KO2K98UTAJiOmS+iscGwAKuamXtdNpkiMADpwgRQtJbhWvstce
-         krM/EMcHjgXJJ9Xhi2LX9Wlk0EO/15J7eke9tLCYCCiM2a1PqTPPkLMBvFoDO4qohRQy
-         rREp3By5slVImT6kcTA8Ph8dRF55QzxBMS6KimBD2HEUv3lX272uLn8O3lY8CBk4S5Ga
-         n8l22IUnhjYp/2qSm4TCvTlURIKJj7XohKzv+5RMeANV4134X0n3ab49nWDdBHQoX30b
-         zMqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEWY9vvePmQ/CDGeVQHAVVxtRY+sWXE+7dsGNxfBU7K32jxYdaJmVJb2nnSUr2vO47haoCQCRotug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxxKCL8IzllOrM5agFu2hBCYkpaSyC/Wxld868m/ocrdcfXa6K
-	hEbwCYzvz/AkcG6MF7PCxxdqIcamPWNJz4+opsGBWbqDPhb8G4ehx2qEelw6/bg=
-X-Gm-Gg: ASbGnctaQqNUgtcphR4qjeeVd/r5pHArS8xqtyTUzn+yvJYTSipADggsMu+UCYlaHj1
-	o974+UZCuwi27X8q7wEfp8miurlg7b9kqbWjlYyp1INSZ3G5+DkrkIvhaMrk1oGxTnTDkIggRaH
-	KU/hSS6MVJ584fKf2v/DNxwbXqDgSMJ528tauyAOrBc0C+XWvhavajDexS2mWgiMGK8ydjNwpPg
-	FYZfUvw4x6pmeb4AQiz2LeAeXJmqwzX+aw1wb0kgXg/SlEK9vCNv1KdkdXi2WVjFLfV41k=
-X-Google-Smtp-Source: AGHT+IFLOaiX+zI3DneKZWxfhc5l0F3vw+qCGBukNa5K0q1p/ZxNgoJYKPDQaaRdI+EszfqyaVTwdg==
-X-Received: by 2002:a05:6402:2801:b0:5d3:e79b:3b4f with SMTP id 4fb4d7f45d1cf-5d81de1695bmr17922824a12.8.1736024081142;
-        Sat, 04 Jan 2025 12:54:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736024084; x=1736628884;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XLKX/DDFIRPvx5t6DaUjc92tk+3Aa7daTr762N5Ifkc=;
+        b=WBo42p4tDv+kz3qRTAzQeEHPr1/FDUr4ZiOaKieCh5eNZlDy6AtzkAT/L5UvnuHBbr
+         ibGLTulyTMUw4PZSR9i02MzFHVNVHSbW3kvpBA/N150bIqfMV0K3c/r1eXsFYHjOpFSd
+         a4S9desT1o/qEF5UtmBMJnkFLEs1WRgPpZONOT7e3gk5D+rJsv/C1eLRccDiURXFIo9r
+         oP5e5J/dZoePcojzXYtD5EvcQFiAO8X7bemOlewmipplBhxbUt0eFGH+jeqfvwCUCb7G
+         RFyuiGS+JfN+KUGFnoFfo4bdkCu8GbbeOg3XsGFknDLBHPHITUwUPzBQa3ivYvjb6UnQ
+         5/+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWISB+sJ4qX2ND8md9SdsZ6uOuY7QpX/ckEB/NjUSBjzKbkiEKTt4aPzwK9O3bcsRzKRlVo5R7wpPc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxPCEDD1HahTKiT700yz6vGrDa2vj2SQ19qwK1qKpNmszVRXZ0
+	zrW8hhUKUmhKASKjM8oFQLBZbYyoLLfiT5Z+sfFgSWN0LCwWO1DXeu1DSkbRzPE=
+X-Gm-Gg: ASbGncsRmKfLoaPCsAHTRGMe805Mtf1vwL2fmMdb4ybvCr5UJFLRTYrYCeO218fT6y8
+	yRJ/Fxa7oLILAVZm+tK+JdwYD+G8CUaZkiMesOAf/f7+XkfW9V+1X7fJ1ll1zTOBAih+sIhxEuJ
+	d7RdoG6o2Q5IJbDWsXPoXT6CHf0px/pA+S7huBhLsPXrPtuO1Z9RBBZfxjkD3p7ctrJbOZX8rmE
+	sS3nIhDCCwexJnGGPdpiO8zWNEFf4dK7WE17RTiAvkpNLJKrmZDaBYpmzk5j/sGhrXSwec=
+X-Google-Smtp-Source: AGHT+IFmkhn29wqYEMmrNGScq5CXWT6m6SapSyW0XiDfeMVUzsZXK4EWiuoixIVsOEwexnWV5pkkww==
+X-Received: by 2002:a17:907:6d1f:b0:aa5:a60:ad6a with SMTP id a640c23a62f3a-aac2d4472c8mr1834711266b.8.1736024083242;
+        Sat, 04 Jan 2025 12:54:43 -0800 (PST)
 Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aaf4a841749sm839666666b.137.2025.01.04.12.54.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aaf4a841749sm839666666b.137.2025.01.04.12.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jan 2025 12:54:40 -0800 (PST)
+        Sat, 04 Jan 2025 12:54:42 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Mark Brown <broonie@kernel.org>,
 	Nicolas Ferre <nicolas.ferre@microchip.com>,
@@ -82,10 +84,12 @@ To: Mark Brown <broonie@kernel.org>,
 	linux-sound@vger.kernel.org,
 	patches@opensource.cirrus.com
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 1/4] spi: atmel-quadspi: Fix struct atmel_qspi_pcal kerneldoc
-Date: Sat,  4 Jan 2025 21:54:34 +0100
-Message-ID: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/4] spi: atmel-quadspi: Fix printed error code during DMA setup
+Date: Sat,  4 Jan 2025 21:54:35 +0100
+Message-ID: <20250104205437.184782-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
+References: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -94,30 +98,49 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct the typo in parameter name for 'struct atmel_qspi_pcal'
-kerneldoc and W=1 warnings:
+On dma_request_chan() failure driver NULL-ifies the 'rx_chan' and
+immediately uses it as PTR_ERR() so dev_err_probe() prints incorrect
+error code.  Rework the code so proper error code will be printed and
+NULL-ifying of 'rx_chan' will happen in common error handling block
+(failure of DMA setup is not fatal for the driver and further code
+depends on 'rx_chan' being non-NULL for DMA operations).
 
-  drivers/spi/atmel-quadspi.c:244: warning: Function parameter or struct member 'pclk_div' not described in 'atmel_qspi_pcal'
-  drivers/spi/atmel-quadspi.c:244: warning: Excess struct member 'pclkdiv' description in 'atmel_qspi_pcal'
+Reported by Smatch:
+  drivers/spi/atmel-quadspi.c:1287 atmel_qspi_dma_init() warn: passing zero to 'PTR_ERR'
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/spi/atmel-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/atmel-quadspi.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index f46da363574f..d135cca4e454 100644
+index d135cca4e454..057bc20a74ce 100644
 --- a/drivers/spi/atmel-quadspi.c
 +++ b/drivers/spi/atmel-quadspi.c
-@@ -235,7 +235,7 @@
- /**
-  * struct atmel_qspi_pcal - Pad Calibration Clock Division
-  * @pclk_rate: peripheral clock rate.
-- * @pclkdiv: calibration clock division. The clock applied to the calibration
-+ * @pclk_div: calibration clock division. The clock applied to the calibration
-  *           cell is divided by pclkdiv + 1.
-  */
- struct atmel_qspi_pcal {
+@@ -1283,9 +1283,9 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 
+ 	aq->rx_chan = dma_request_chan(&aq->pdev->dev, "rx");
+ 	if (IS_ERR(aq->rx_chan)) {
+-		aq->rx_chan = NULL;
+-		return dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
+-				     "RX DMA channel is not available\n");
++		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
++				    "RX DMA channel is not available\n");
++		goto null_rx_chan;
+ 	}
+ 
+ 	aq->tx_chan = dma_request_chan(&aq->pdev->dev, "tx");
+@@ -1306,8 +1306,9 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 
+ release_rx_chan:
+ 	dma_release_channel(aq->rx_chan);
+-	aq->rx_chan = NULL;
+ 	aq->tx_chan = NULL;
++null_rx_chan:
++	aq->rx_chan = NULL;
+ 	return ret;
+ }
+ 
 -- 
 2.43.0
 
