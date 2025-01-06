@@ -1,140 +1,139 @@
-Return-Path: <linux-spi+bounces-6222-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6223-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08A3DA01ABC
-	for <lists+linux-spi@lfdr.de>; Sun,  5 Jan 2025 18:09:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08C1AA0219A
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 10:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50C373A2326
-	for <lists+linux-spi@lfdr.de>; Sun,  5 Jan 2025 17:08:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED14B1636F0
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 09:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542D614831D;
-	Sun,  5 Jan 2025 17:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Y6xJ4W9Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44591D63F7;
+	Mon,  6 Jan 2025 09:19:19 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3595336D;
-	Sun,  5 Jan 2025 17:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AB52AD16;
+	Mon,  6 Jan 2025 09:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736096930; cv=none; b=oq8T42uuPEOJACcuOGkt4IFpvH+i6Rko7KGh9lP3FS4sqfRBjb2Sx7Kh0wHsm9/yCSYj1y2AwXuROWD0K6px96Nr6cILKtixHJ//eBPBz4DZIPCgxdPXf9qM/zUmHsk2bVneWWqzNhJUh468aYgip5TtLuaYIlFXkhgtN5goFLA=
+	t=1736155159; cv=none; b=b/IXMxKcixWkhOSglj3tbX7wz4jjRL2X7pUPz+If5NB6pHtSx4h809pJvxjrUR6bsCcDynXXDbY4p01CwnUU6gZ/SbhHzcVAqBSE1gIyXvSPnwP4s2xtL8XkrSEVPS1vty0bapoFtjYhPh+FCbgVHmNMSuZnTAo8fji/JAIXgkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736096930; c=relaxed/simple;
-	bh=b0yXdcl0FQhRZaXYWfu7p7+U1eeapTWa74uhZ7KKUts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UdUMshoerKh18ZBBDsP8YgAkWA6u9pmFmT5wrhTIMBiXhQfREm5SGa/rXWtzJY3XkdJekwc1rmSE9kCMTt9G3RmdpIr3Jyxtzuqq9mY9fFmGBRPDvhk2GMKX0dssTJQ9VB0Co+xbBuRHjhqna5Pn2f9bnnf21rv4iFbs/wJc/nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Y6xJ4W9Z; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=HGE42t/8NMJxHFUNmxXVqxt8ki1wLwBn/OH6YlViYJA=; b=Y6
-	xJ4W9ZQodTJ7DVSV0KYGQjUBAokfLaihrBo1ehZDqN6s9nJduIpl5iA309a5l5WUsio8CvAz9QtJQ
-	bFZvNjkv/j7G0hqlqtN2Ztd1zBjMeQaKbta0CbKGLnfsNs9+9sN2dKoWG4ygti8vIKUI38V7pxUE2
-	SaYzk3aOo7nCdbQ=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tUU7C-001cpQ-Qe; Sun, 05 Jan 2025 18:08:38 +0100
-Date: Sun, 5 Jan 2025 18:08:38 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: =?iso-8859-1?Q?J=F6rg?= Sommer <joerg@jo-so.de>
-Cc: Christian Eggers <ceggers@arri.de>, Jakub Kicinski <kuba@kernel.org>,
-	Tristram Ha <tristram.ha@microchip.com>,
-	Pieter Van Trappen <pieter.van.trappen@cern.ch>,
-	Woojung Huh <Woojung.Huh@microchip.com>, netdev@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: KSZ8795 not detected at start to boot from NFS
-Message-ID: <f26f526c-cb43-4170-8dd4-b7cf6c0d1d5d@lunn.ch>
-References: <ojegz5rmcjavsi7rnpkhunyu2mgikibugaffvj24vomvan3jqx@5v6fyz32wqoz>
- <5708326.ZASKD2KPVS@n9w6sw14>
- <cxe42bethnzs7f46xxyvj6ok6ve7itssdxyh2vuftnfws4aa3z@2o4njdkw3r5i>
- <2675613.fDdHjke4Dd@n9w6sw14>
- <sqsslcr7fsgqi7fvjpy5xnarhlm76atvatczkzwpn37e7gnsu6@tuy7an7t4gdg>
- <cnmv4ahgyblej7aoknhhb3xyvb67j7t24tug7uoxxtl5s4pjy3@wd3copbtdiec>
+	s=arc-20240116; t=1736155159; c=relaxed/simple;
+	bh=yRVUAg1DrN0y4lvUMOrvhW4mYygOT/KcWCFZRF2WlHM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z9Xwa4mk/69sB426JfPC/lY731w6dci0yWMTJpFz6RmWAvhNSMJCDXiRXOa3KTUD9Rtcs6C1XpPXT84CkHdr81HRMU3fJegCPTrh/N7AqxCdQs+EfGnfxDiwBtKsigonMgFRyn5Bu6RvQ7sN7Hdf5DOeYpRuA7KBFOEGxy+Bzsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-51873bc7377so4543519e0c.1;
+        Mon, 06 Jan 2025 01:19:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736155155; x=1736759955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KVXc151fQNRFK88fM3HyMdxUvdmGpP1g1R2JxE6iXAY=;
+        b=YmaE1okOVpXNk9+ksYIfdvUWrAs3RP9vXqJHrBiXeLIglt4QfVvmh0KuFu5oIL0Psx
+         o1CuDgY/dauWCs4Cq7Q/y18+XSYJ8CWgyaOd50O3ItjeUqHJJuD9AW7Pdp6pZWpVvqAs
+         TYhBnOlBwODIUl47aZE+zNNrEdpy0azJ8vvrVhX3wul6KdYzOEPTRqqWMIC5lmxSMruS
+         gUBAqkAYgfw1ZmNWN3UCxQqd6+gfLYaOmU91Mxl4idiLSEmT6VDLTFXqYc0QnOsJqQmh
+         zxUgkZeLTn6T/9bj5Z0fad7DOzvwpSRlU3zim9wAGHPcyzRFQ/ChaaLDlxBGOanJP4Qd
+         pO4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVPHPfuxQTMwPCLtbYgyLETRXCGj7ip+/VSx88Ul769M4+krRCku7BMwvfUszC7+8n2yOJt8FiMK+HaL8p/@vger.kernel.org, AJvYcCWQwhueIxf60nNFuRAQk4NHx3iodBmU94jPdl0kWSSFgUMPgMUFFPdEogE4DFX59N39tQBsbfQpJjP0@vger.kernel.org, AJvYcCWSCYC4L3nZjgShqL6kOpioXBXboOY3+7Rp65V8U7c6dA68LBD3trIR0R+6DMpz8q+b51RMjT3ARzRo@vger.kernel.org, AJvYcCXsaWxfoBtYJLdQKZr43u99vQRZw7grkYRwKIAtaDxeuMKUUA5cgtBbNl4yJAHHUVh5sR1VTNi9/ISOnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDdeiGVs9qAeXmrFBry1f/AGFzuKHvUP1XGrVp15qBP3Jlu3wn
+	IVkOuqbTxOwrMWjJ1gHu+7uGvOZhkIzRBPVk8lE561sxgYjnyeY/12u7yQ4C
+X-Gm-Gg: ASbGnctVg+FTuKsuRKfp9jQ9Gt0ZWOikKTSRvoC/dAYZp/JjxSDz8HLwrTXA1Iq1GQV
+	2lWL67weDLBMDKRjyk7qwL5LUsMsfnk2B6yBQVzEcdXh6Q4VSIl1LE8Neqs0Eg60b1Zy+z8CHh5
+	GUQnNB+c5HKAFqIBMVi0ZBRf14EAtAP+4LrKM0RoayZCf8pgz01ABYNKYOIdj4qmojBT3e9iClJ
+	SuEPlK/1XTUOwucRAeSnnSs666Ynf/Pxi4CJeI9YH8hw1i7jGRR6b9Lau13idfq5YIhWpLPRQ8q
+	J4ecOMgMFxNekFXWTV2FSUU=
+X-Google-Smtp-Source: AGHT+IEnMdNmhdLYzog6kLzSdr+7qiHNvSMa3PP0lJZXHmoWuqZdclVdR9mF8qg8lrqC2WsAxiPD8w==
+X-Received: by 2002:a05:6122:3221:b0:50c:4707:df0 with SMTP id 71dfb90a1353d-51b75c5f0a1mr46222760e0c.5.1736155155171;
+        Mon, 06 Jan 2025 01:19:15 -0800 (PST)
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51b68d08e89sm4152286e0c.45.2025.01.06.01.19.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jan 2025 01:19:14 -0800 (PST)
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-51640f7bbd3so4339473e0c.2;
+        Mon, 06 Jan 2025 01:19:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVSmlkdUqJOXEvpgAkJP70i/wbPzVsHfIyIpv2P60PiYsqizCrZ7tVvDetkOBcZnfWw7ZjkGY6bjRXVdQ==@vger.kernel.org, AJvYcCWAzuYDkY/agDl5IDWNLiSO4JldWcHHsi30Ba6A8kVgVrz57y67hYYyRYJq66oyRa6K01JO6nWp+CCj@vger.kernel.org, AJvYcCWWw6t6JnKgaj+A1xz/QmhUTPk3xEnN3BAzmql0fGcWhcjGbAbmPQ7VgY/d91tXiDuJPFBqS9W/5Grl@vger.kernel.org, AJvYcCXTEh2zJmkgo7/zf8U2oY5fGGs5qq9bnZECjMa2vo8TfgS7qgyK7oJcv8PNwuQwSpORETAy9/9FOkTmyL4P@vger.kernel.org
+X-Received: by 2002:a05:6122:6607:b0:516:c0b:8bfe with SMTP id
+ 71dfb90a1353d-51b75c308a7mr41264352e0c.1.1736155154383; Mon, 06 Jan 2025
+ 01:19:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cnmv4ahgyblej7aoknhhb3xyvb67j7t24tug7uoxxtl5s4pjy3@wd3copbtdiec>
+References: <20241224-gpio74-v2-0-bbcf14183191@posteo.net> <173593634037.257292.1488097273042214180.b4-ty@linaro.org>
+In-Reply-To: <173593634037.257292.1488097273042214180.b4-ty@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 6 Jan 2025 10:19:01 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUqvTrSsiGuJ=VvNqsQm4eQs9rNTU8VBg+FzHJZxRnXow@mail.gmail.com>
+X-Gm-Features: AbW1kvYJYJux_P1lxS0_XQpYU66qxTJSQHmd1VNX0q6Sc7EExx-pANvxkROX0fM
+Message-ID: <CAMuHMdUqvTrSsiGuJ=VvNqsQm4eQs9rNTU8VBg+FzHJZxRnXow@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] gpio: 74HC595 / 74x164 shift register improvements
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Maxime Ripard <mripard@kernel.org>, =?UTF-8?B?Si4gTmV1c2Now6RmZXI=?= <j.ne@posteo.net>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-gpio@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, linux-spi <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 05, 2025 at 05:33:38PM +0100, Jörg Sommer wrote:
-> Hi everyone,
-> 
-> I've added you to the list of recipients, because you where somehow involved
-> in changes of the KSZ-SPI switch code.
-> 
-> We are debating the SPI mode setting for the microchip ksz8795 and ksz9477
-> and possibly others. Since the commit
-> 8c4599f49841dd663402ec52325dc2233add1d32 the SPI mode gets fixed to mode 3
-> in the code. But at least my ksz8795 works also with mode 0 and shows better
-> initialization behaviour with mode 0.
-> 
-> The big question is: can both (or all ksz) chips work with both modes?
-> Should this setting stay in code or moved to the device tree?
-> 
-> The specs are here, but I found no evidence about the supported/recommended
-> SPI modes:
-> 
-> https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Data-Sheet-DS00002419D.pdf
+Hi Bartosz,
 
-Don't trust what i say, i'm not an SPI expert, but i can use grep.
+CC spi
 
-https://www.kernel.org/doc/Documentation/spi/spi-summary says:
+On Fri, Jan 3, 2025 at 9:33=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> On Tue, 24 Dec 2024 09:02:09 +0100, J. Neusch=C3=A4fer wrote:
+> > This patchset adds a compatible string for another part, and clarifies
+> > the role of the latch clock pin on 74x164-compatible shift registers.
+>
+> Applied, thanks!
+>
+> [1/3] dt-bindings: gpio: fairchild,74hc595: Add On Semi MC74HC595A compat
+>       commit: 0ba6cec7acbb666d28998780683deb83a3e677e3
+> [2/3] gpio: 74x164: Add On Semi MC74HC595A compat
+>       commit: b1468db9d865deb5271c9a20d05201b1c0636895
 
+Do we really need to document and add driver support for all variants?
+I can easily come up with a list of tens or perhaps even hundreds
+of xx74yy595z parts that are all compatible, as far as software is
+concerned.  As SPI was invented by Motorola, the original part is
+probably named MC74595 or MC74LS595 (yes, ON Semiconductor bought the
+logic division of Motorola).
 
-I'm confused.  What are these four SPI "clock modes"?
------------------------------------------------------
-It's easy to be confused here, and the vendor documentation you'll
-find isn't necessarily helpful.  The four modes combine two mode bits:
+Perhaps we need a separate vendor prefix for the 74xx-series[1]?
+The xx-prefix and z-suffix don't matter; the yy-infix for semiconductor
+technology rarely matters (there are a few exceptions, though, mostly
+pinout, which doesn't matter for software).
 
- - CPOL indicates the initial clock polarity.  CPOL=0 means the
-   clock starts low, so the first (leading) edge is rising, and
-   the second (trailing) edge is falling.  CPOL=1 means the clock
-   starts high, so the first (leading) edge is falling.
+Thanks!
 
- - CPHA indicates the clock phase used to sample data; CPHA=0 says
-   sample on the leading edge, CPHA=1 means the trailing edge.
+[1] https://en.wikipedia.org/wiki/List_of_7400-series_integrated_circuits
 
-   Since the signal needs to stablize before it's sampled, CPHA=0
-   implies that its data is written half a clock before the first
-   clock edge.  The chipselect may have made it become available.
+Gr{oetje,eeting}s,
 
-Chip specs won't always say "uses SPI mode X" in as many words,
-but their timing diagrams will make the CPOL and CPHA modes clear.
+                        Geert
 
-In the SPI mode number, CPOL is the high order bit and CPHA is the
-low order bit.  So when a chip's timing diagram shows the clock
-starting low (CPOL=0) and data stabilized for sampling during the
-trailing clock edge (CPHA=1), that's SPI mode 1.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-And in the datasheet it says:
-
-  SCL is expected to stay low when SPI operation is idle.
-  
-  Input data on SDI is latched on the rising edge of serial clock
-  SCL. Output data on SDO is clocked on the falling edge of SCL.
-
-My interpretation of this is that the initial clock priority is low,
-so CPOL=0. The rising edge will be the leading edge, so CPHA=0. So
-that makes the mode = 0.
-
-Can you hard code this in the driver? I guess that depends on if you
-want to support a PCB that puts in a line driver which adds a NOT gate
-to the clock?  Does that ever happen? I don't know. The real SPI
-experts should answer that.
-
-	Andrew
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
