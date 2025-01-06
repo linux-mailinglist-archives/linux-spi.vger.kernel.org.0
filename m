@@ -1,65 +1,63 @@
-Return-Path: <linux-spi+bounces-6233-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6234-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09292A02C73
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 16:54:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E6A3A02D38
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 17:02:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 792251887992
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 15:54:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 780937A083B
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 16:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5CCA13C3D6;
-	Mon,  6 Jan 2025 15:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10F0F2AF06;
+	Mon,  6 Jan 2025 16:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="IkK8LumY"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="YJKu8mY5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909C9155352;
-	Mon,  6 Jan 2025 15:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71F7282F5;
+	Mon,  6 Jan 2025 16:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736178850; cv=none; b=V39+ZF7mDppm86WtYAlD1DWlWpkCaOW3kM9hblenPrent5ryOtm+e6Zkk3WedFYSB2qL4v/cOjl9Z0jgF7VCebGW6lpyJz68emS887yvl5dLGGPAgf00pTEebWvcUfgWMWVS21syP+MnlqDOdghyPg6YTPv2CquGFC+kRwb61HI=
+	t=1736179359; cv=none; b=hX+avE+IcDoulY/UYHc3jHSMfb9GGd3ErNhoXosJuEShdhQtI6Tz3I7wjO1eK2u8+07pXGFwRrO+SPs1YuVaEgsTsKMCvxDCCwM6Dr2HnbiUFqKnvEznMumwkSdF8LuXkpa4SVO+R3fOyZRS/C5NJf7TVV4KqusOb/eL58PTrcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736178850; c=relaxed/simple;
-	bh=6WaJWwIcdDpS4dogVu9o1AB9CekvLCEUlOnOFjlyCFc=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Alavsk1d54kMgNn9jYVrIuAEZ2T4c3Njm33DhzAZDVItP/QR8SSTBC0UeauNbF/qq92xnWyKUisfsJnnn/EMaBng7IC19WuM6En+EsRf+0pAdSpq2ofMgnywjaSTVLOd1gx0FcahXVGVStCCxqWHrW+WiBgLZxvMg1zih1XPVnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=IkK8LumY; arc=none smtp.client-ip=193.68.50.107
+	s=arc-20240116; t=1736179359; c=relaxed/simple;
+	bh=Dx1Rs7t3i37b34UPDMFTd8PmCXN7S1lavyWqJ6XMHwg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OkfTAjFEIF7/lHhW2TlU80JnYAUuQ5rCm4heDy1YhvU1xWmoS1nuKT5XewVC+6rNq8WoeXuYz0G+m5tvLJcwyC4CMZG73MvTv6c+1E/0//TArNn8C2OBzyjiYQYVf4PP4e3L3x9EOH9jfUi0snhg5+EhsRSYdHx1jWjPMq+dzgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=YJKu8mY5; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id D8CB8A087A;
-	Mon,  6 Jan 2025 16:48:20 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id CF80EA0F58;
+	Mon,  6 Jan 2025 17:02:34 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:from:from:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=mail; bh=U3rxMNi65rLW9FILTb0vIx/aX0FXP8OpMsz35GckwCU=; b=
-	IkK8LumYhpB3qM2PAqqurobgZE9TK1/wZXygRhNDUE0OJNhqHHLZlsZzoAQtG2Rp
-	19OiMwCHpIOQBMXGJtnyKLkBYT2IkFOMFlDm6kMKBx4Zpz3lr9j/mxryPT6ieuwE
-	zVJG6K9l426O/3E/2J2bEEgltorz88LA0QHuzq+x0wjXV9yjyq42E01Lg7CDQfxk
-	h7mP3ZhFfA+fnGYVnWp0XqZCyw1+EPTD2ySwgleoJlxRjRYe2yWswfwUZ9dMtzHz
-	gkD4lhqrHWRh+hyPjin4tBlk4dOUwzk5zicjfBrmfLuKweVOr+ZC1T/Kt02YQD3q
-	hpjmPqlSk8yvRVTZI4O4JLW3fqXf2WdK3amce3mP/haObNctpK1WdABhpvbImqLh
-	Vf2qR7V9i/2ZDHQfKRvZnihbTwFXuae+6QukR9WGkMdQLuysYJKtoypzWzNLwueA
-	jgzfvTAI8GsUC3OFPF9DmgIDRkWTnslMU7FmMN6oykDPMSepDPTjuLvGhScAZmjp
-	CcAODVbLmun3a8pEXaUg0lxn6bGntTFRS0flJSt6J9cXEWNUPXdUypmb8pRgt5eU
-	ECMzpfaVNHmieXMdryZfL5oMscEa5dO43R7B+47Apq956ZApjBsFe1WamPRgt5Lh
-	b8s9XGIFTf9b+o2lH3fnjU0LBp0d9vtTHXS+B/A2mp4=
+	:to; s=mail; bh=IDylzkpcXQemmYGkj+LuUTlUnvPEmFKvHAQHgm5c9sY=; b=
+	YJKu8mY5cLcSJq3YHF+Rg4ipJnoTAly9lz/2r1VphjU/aHrUFJVddan7I5exO20p
+	v9rGbp7V5p/AodOutV5mPyk3Ae/Emd/Av9el7QvthC99LKdJpzR0GcVe/i4cDdsY
+	Juh8kYdvYrcxPsUSa4QUHVTcZJFOsF+anqFqwK3+hzzkUCpm6JpqyMZKB5MFG4C0
+	7b7L+J9fd3odSlFutu3nxGeMJE0GKquzegekp4nYULkWXo0lJLqA2X5st+oB6wev
+	bUEM2t8hG7ircIJi7ZbD+lJYIhkc21LgGLcTSq5hOjuIwbyVgp3M3sHkGZ2c+1pW
+	g/eAQCKs0XS1HEUoxpkh9FTV4UqiDdoh+BVBvT8Y+H35jXOCfmWyn1mwEpMOn3jy
+	fLmBWMLXQCOl+cLqGXx6jrHKUA7wjrUbm5WDraRmIg3SiKroufE852nOuz4xAg5l
+	eU0bJjZkZPtOv3ymYm0EsbENFsCGSjQeVq+VXx3vHuXelSvDw4YNs+l5sjv52c4J
+	N3xuMynWPhWslXyV/O9/4GsJDBPt9OXD2W+bMG+LzCQvlxWMcz0l2RiU2R3Wn5f6
+	Gj/svlsH1nu8S79clDr7anh72uTV659kNgxc2k+iKUhVxPN2asR/VnNGUxQXJzzz
+	thD7tHz475e2Kl1grfsqQmuFDTb+ConiNE7cl8qlwJM=
 From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: Mark Brown <broonie@kernel.org>, Piotr Bugalski
-	<bugalski.piotr@gmail.com>, <linux-spi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>,
-	<Hari.PrasathGE@microchip.com>, <Mahesh.Abotula@microchip.com>,
-	<Marco.Cardellini@microchip.com>, <stable@vger.kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: [PATCH resubmit v2] spi: atmel-qspi: Memory barriers after memory-mapped I/O
-Date: Mon, 6 Jan 2025 16:48:06 +0100
-Message-ID: <20250106154806.1959266-1-csokas.bence@prolan.hu>
+To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>
+Subject: [PATCH resubmit] spi: atmel-quadspi: Use devm_ clock management
+Date: Mon, 6 Jan 2025 16:54:16 +0100
+Message-ID: <20250106155416.1959803-1-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -69,94 +67,137 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1736178500;VERSION=7982;MC=3895028276;ID=224790;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1736179354;VERSION=7982;MC=3965097876;ID=214303;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94852657067
+X-EsetId: 37303A29ACD94852657067
 
-The QSPI peripheral control and status registers are
-accessible via the SoC's APB bus, whereas MMIO transactions'
-data travels on the AHB bus.
+Clean up error handling by using the new devm_
+clock handling functions. This should make it
+easier to add new code, as we can eliminate the
+"goto ladder" in probe().
 
-Microchip documentation and even sample code from Atmel
-emphasises the need for a memory barrier before the first
-MMIO transaction to the AHB-connected QSPI, and before the
-last write to its registers via APB. This is achieved by
-the following lines in `atmel_qspi_transfer()`:
-
-	/* Dummy read of QSPI_IFR to synchronize APB and AHB accesses */
-	(void)atmel_qspi_read(aq, QSPI_IFR);
-
-However, the current documentation makes no mention to
-synchronization requirements in the other direction, i.e.
-after the last data written via AHB, and before the first
-register access on APB.
-
-In our case, we were facing an issue where the QSPI peripheral
-would cease to send any new CSR (nCS Rise) interrupts,
-leading to a timeout in `atmel_qspi_wait_for_completion()`
-and ultimately this panic in higher levels:
-
-	ubi0 error: ubi_io_write: error -110 while writing 63108 bytes
- to PEB 491:128, written 63104 bytes
-
-After months of extensive research of the codebase, fiddling
-around the debugger with kgdb, and back-and-forth with
-Microchip, we came to the conclusion that the issue is
-probably that the peripheral is still busy receiving on AHB
-when the LASTXFER bit is written to its Control Register
-on APB, therefore this write gets lost, and the peripheral
-still thinks there is more data to come in the MMIO transfer.
-This was first formulated when we noticed that doubling the
-write() of QSPI_CR_LASTXFER seemed to solve the problem.
-
-Ultimately, the solution is to introduce memory barriers
-after the AHB-mapped MMIO transfers, to ensure ordering.
-
-Fixes: d5433def3153 ("mtd: spi-nor: atmel-quadspi: Add spi-mem support to atmel-quadspi")
-Cc: Hari.PrasathGE@microchip.com
-Cc: Mahesh.Abotula@microchip.com
-Cc: Marco.Cardellini@microchip.com
-Cc: <stable@vger.kernel.org> # c0a0203cf579: ("spi: atmel-quadspi: Create `atmel_qspi_ops`"...)
-Cc: <stable@vger.kernel.org> # 6.x.y
 Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
 ---
 
 Notes:
-    Changes in v2:
-    * dropping --- from commit msg
-    
-    Resubmit: rebased on current spi-next
+    Resubmit: rebased to current spi-next
 
- drivers/spi/atmel-quadspi.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/spi/atmel-quadspi.c | 42 ++++++++++---------------------------
+ 1 file changed, 11 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index f46da363574f..8fdc9d27a95e 100644
+index f46da363574f..93604ffb7106 100644
 --- a/drivers/spi/atmel-quadspi.c
 +++ b/drivers/spi/atmel-quadspi.c
-@@ -661,13 +661,20 @@ static int atmel_qspi_transfer(struct spi_mem *mem,
- 	(void)atmel_qspi_read(aq, QSPI_IFR);
+@@ -1386,50 +1386,37 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 	aq->mmap_phys_base = (dma_addr_t)res->start;
  
- 	/* Send/Receive data */
--	if (op->data.dir == SPI_MEM_DATA_IN)
-+	if (op->data.dir == SPI_MEM_DATA_IN) {
- 		memcpy_fromio(op->data.buf.in, aq->mem + offset,
- 			      op->data.nbytes);
--	else
-+
-+		/* Synchronize AHB and APB accesses again */
-+		rmb();
-+	} else {
- 		memcpy_toio(aq->mem + offset, op->data.buf.out,
- 			    op->data.nbytes);
+ 	/* Get the peripheral clock */
+-	aq->pclk = devm_clk_get(&pdev->dev, "pclk");
++	aq->pclk = devm_clk_get_enabled(&pdev->dev, "pclk");
+ 	if (IS_ERR(aq->pclk))
+-		aq->pclk = devm_clk_get(&pdev->dev, NULL);
++		aq->pclk = devm_clk_get_enabled(&pdev->dev, NULL);
  
-+		/* Synchronize AHB and APB accesses again */
-+		wmb();
+ 	if (IS_ERR(aq->pclk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(aq->pclk),
+ 				     "missing peripheral clock\n");
+ 
+-	/* Enable the peripheral clock */
+-	err = clk_prepare_enable(aq->pclk);
+-	if (err)
+-		return dev_err_probe(&pdev->dev, err,
+-				     "failed to enable the peripheral clock\n");
+-
+ 	if (aq->caps->has_qspick) {
+ 		/* Get the QSPI system clock */
+-		aq->qspick = devm_clk_get(&pdev->dev, "qspick");
++		aq->qspick = devm_clk_get_enabled(&pdev->dev, "qspick");
+ 		if (IS_ERR(aq->qspick)) {
+ 			dev_err(&pdev->dev, "missing system clock\n");
+ 			err = PTR_ERR(aq->qspick);
+-			goto disable_pclk;
++			return err;
+ 		}
+ 
+-		/* Enable the QSPI system clock */
+-		err = clk_prepare_enable(aq->qspick);
+-		if (err) {
+-			dev_err(&pdev->dev,
+-				"failed to enable the QSPI system clock\n");
+-			goto disable_pclk;
+-		}
+ 	} else if (aq->caps->has_gclk) {
+ 		/* Get the QSPI generic clock */
+ 		aq->gclk = devm_clk_get(&pdev->dev, "gclk");
+ 		if (IS_ERR(aq->gclk)) {
+ 			dev_err(&pdev->dev, "missing Generic clock\n");
+ 			err = PTR_ERR(aq->gclk);
+-			goto disable_pclk;
++			return err;
+ 		}
+ 	}
+ 
+ 	if (aq->caps->has_dma) {
+ 		err = atmel_qspi_dma_init(ctrl);
+ 		if (err == -EPROBE_DEFER)
+-			goto disable_qspick;
++			return err;
+ 	}
+ 
+ 	/* Request the IRQ */
+@@ -1469,10 +1456,6 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ dma_release:
+ 	if (aq->caps->has_dma)
+ 		atmel_qspi_dma_release(aq);
+-disable_qspick:
+-	clk_disable_unprepare(aq->qspick);
+-disable_pclk:
+-	clk_disable_unprepare(aq->pclk);
+ 
+ 	return err;
+ }
+@@ -1511,7 +1494,6 @@ static int atmel_qspi_sama7g5_suspend(struct atmel_qspi *aq)
+ 	if (ret)
+ 		return ret;
+ 
+-	clk_disable_unprepare(aq->pclk);
+ 	return 0;
+ }
+ 
+@@ -1536,8 +1518,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
+ 		}
+ 
+ 		atmel_qspi_write(QSPI_CR_QSPIDIS, aq, QSPI_CR);
+-		clk_disable(aq->qspick);
+-		clk_disable(aq->pclk);
+ 	} else {
+ 		/*
+ 		 * atmel_qspi_runtime_{suspend,resume} just disable and enable
+@@ -1547,9 +1527,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
+ 		dev_warn(&pdev->dev, "Failed to resume device on remove\n");
+ 	}
+ 
+-	clk_unprepare(aq->qspick);
+-	clk_unprepare(aq->pclk);
+-
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
+@@ -1565,8 +1542,11 @@ static int __maybe_unused atmel_qspi_suspend(struct device *dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (aq->caps->has_gclk)
+-		return atmel_qspi_sama7g5_suspend(aq);
++	if (aq->caps->has_gclk) {
++		ret = atmel_qspi_sama7g5_suspend(aq);
++		clk_disable_unprepare(aq->pclk);
++		return ret;
 +	}
-+
- 	/* Release the chip-select */
- 	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
+ 
+ 	atmel_qspi_write(QSPI_CR_QSPIDIS, aq, QSPI_CR);
  
 -- 
 2.34.1
