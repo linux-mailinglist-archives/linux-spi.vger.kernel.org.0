@@ -1,61 +1,57 @@
-Return-Path: <linux-spi+bounces-6227-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6228-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA732A0259B
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 13:35:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3D7EA02618
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 14:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAF181616F2
-	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 12:35:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48A783A2A09
+	for <lists+linux-spi@lfdr.de>; Mon,  6 Jan 2025 13:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FCD0158DD8;
-	Mon,  6 Jan 2025 12:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDEC1DC9BC;
+	Mon,  6 Jan 2025 13:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qzhuI2hK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOEv7qR8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D321C184F;
-	Mon,  6 Jan 2025 12:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7101227726;
+	Mon,  6 Jan 2025 13:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736166949; cv=none; b=m2XJ8fXwFQfQ07U5Kl+KsseSNrLOQFL/Yw26EvpUW7xZ+10DiO5I79Zs+tMopu5ELvqFLcieoAna3l6jHoZEXKyRLCvutMCF4UlpVXSmqexoCh5LaxqeJNCXs7KhmYf9ZmEUSIUbYLXYyCFvT59pVwGrF1EOwQ704WJh0zuYydE=
+	t=1736168663; cv=none; b=en5t2b/Iu5ajNvfRVlgCFwvtZKnaQgneElrWxzhEhTNdzW5g81tG2jQPLWUnuFKmcvzjMRtKisWvqgJ1suz0PmKUDRGaNU3Fh7qEOr/3tPxWeFRVnteirVhI+cF9DI2nw3uabYWjise0zFjvsRz2EBWCB4aTh2QwW0pF+f9n6jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736166949; c=relaxed/simple;
-	bh=e6r4bgfMSt6jfSpc0BV4h8ov7eRV/zr34+P2Iggsre4=;
+	s=arc-20240116; t=1736168663; c=relaxed/simple;
+	bh=7aq44VGDkBCQNqvBHv+dpF0hplN9cWjxpayf1j0Safo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cwGqlQXPPZ35LjE/eOGMqCKL4vCIIPLcnvNDCUueIZ7waH/J3vCURXKl2yuE7+2aHhewRMbNaIZrNXdCoQLiW6wUUq9yDXpm2/tBQHw6fZPhGo0PKExPEVVCPZkYz9obnStOGsc+bllhV6ueiViDmmBVbN4U+WH2F9PHCo1QKMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qzhuI2hK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4869AC4CED2;
-	Mon,  6 Jan 2025 12:35:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LdeiNXem/IKb7WNJOU3s8z+Xgu607fgudwRNh8MBAtI7y2mmPYitX5BemONFdbcIFKnW/OHdxsXKSnGC33hnz09TELyGhMLRz/whgEC/Gk/iOVQk/ix86s1i8FX17x/hH90BtucL4QzkL2nRTg2rq+hb5TBLnxQot/J0Dbmpp98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOEv7qR8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AAE7C4CED2;
+	Mon,  6 Jan 2025 13:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736166949;
-	bh=e6r4bgfMSt6jfSpc0BV4h8ov7eRV/zr34+P2Iggsre4=;
+	s=k20201202; t=1736168663;
+	bh=7aq44VGDkBCQNqvBHv+dpF0hplN9cWjxpayf1j0Safo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qzhuI2hKZv4kqRyUpVrnaZWJRr5NdjAstnvc3Ab8/4dpEo8ELGFns3C81vjUpyirM
-	 NEqR8KrN9Rhk+fRfR1o4oiEEPeWVM5kPeKeTriQpKrsy2L8ghxA58d8IafP2sd4CKa
-	 5c13RB73AEXXE5vUrWQDCH/0dcIqU1TMzpjfpJOkDWmBEsOdidPlX3ZkXRI9AN/OpQ
-	 Q7LKSybFr7aBwZtNEEfJI4yKNHYKuNw9hSulSB8PoMnB4/9+rDPfypnNJrIZfFzUuR
-	 plOXVstRIV2mS2wlJay1dL1lGWHTQ5WL/+133D1uhhBsgFdouj1OCNx52m//+Vst60
-	 MtxQQ8ZfBKbpw==
-Date: Mon, 6 Jan 2025 12:35:44 +0000
+	b=jOEv7qR8uGZusH6hLthd86fl5A0EzdYxMhSWIW6ZjJBVNRzwD85+9iIH1CfdCj7D0
+	 v9iOY/a1csYDiRF7dm4M7kEbNaoZ1N262ER+GDPd2ryDvOkRMUg5uMGNzEXWjahBvU
+	 k8+9XOs+asMnbRdWg1LQb4SLSg2G/8y6JpLHxzGKQnhAURidJkqDScG6E6240vHW4M
+	 xsWLH/ccrmOIACkuGGZctEgiT205o8j2YBGj10tMXJo6uz+REv/tpd9XKkc7arMd+r
+	 7pjXEs3PrrQWr3rzzqrXiF99LqReRu0Ics8BWpOc42/buXC9b7Zt69TNjca1hUTZcn
+	 nihcH437wmi5w==
+Date: Mon, 6 Jan 2025 13:04:18 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com
-Subject: Re: [PATCH 1/4] spi: atmel-quadspi: Fix struct atmel_qspi_pcal
- kerneldoc
-Message-ID: <d5c8ebdc-942a-4bb1-80e9-6eb78fb4601c@sirena.org.uk>
-References: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
+To: Vishwaroop A <va@nvidia.com>
+Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, skomatineni@nvidia.com,
+	ldewangan@nvidia.com, linux-spi@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kyarlagadda@nvidia.com, smangipudi@nvidia.com
+Subject: Re: [PATCH V1 6/6] spi: tegra210-quad: Introduce native DMA support
+Message-ID: <5c374b9b-3963-406d-bc60-a3ef2de01772@sirena.org.uk>
+References: <20250103060407.1064107-1-va@nvidia.com>
+ <20250103060407.1064107-7-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,39 +59,37 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tt8UwXY8YAkoC5VF"
+	protocol="application/pgp-signature"; boundary="oo7BGKmutRFo5nuK"
 Content-Disposition: inline
-In-Reply-To: <20250104205437.184782-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250103060407.1064107-7-va@nvidia.com>
 X-Cookie: Do not pick the flowers.
 
 
---tt8UwXY8YAkoC5VF
+--oo7BGKmutRFo5nuK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Sat, Jan 04, 2025 at 09:54:34PM +0100, Krzysztof Kozlowski wrote:
-> Correct the typo in parameter name for 'struct atmel_qspi_pcal'
-> kerneldoc and W=1 warnings:
+On Fri, Jan 03, 2025 at 06:04:07AM +0000, Vishwaroop A wrote:
 
-As mentioned in submitting-patches.rst when submitting a patch series
-you should supply a cover letter for that patch series which describes
-the overall content of the series.  This helps people understand what
-they are looking at and how things fit together.
+> Change-Id: Icf3ef4767947cef67821c092ecd9ea6bccb2a4e4
 
---tt8UwXY8YAkoC5VF
+Please don't include internal only things like change IDs in upstream
+submissions.
+
+--oo7BGKmutRFo5nuK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd7zh8ACgkQJNaLcl1U
-h9Avpwf/VmDQFYkimEztMucINFgvQmgRU4GtcluUB7aCNYIqxtIWpEd4wbxd7TOs
-C9tJkZxCIwnRPQ7++omH9um9XYuwj3z+uHSpnd5PzY9rTrQCggnwvVua9Yuxb1+p
-lnVaml6kjoKfLGjtSSAgmFq4qZ1Sye1SEjbgS8AHtFRwg74OEf9vI2ckiPbryAsD
-6zwe9px/GoZWWjhRsmgnmFl4ETAkZ3E6lEQ+odG4oUMl8mn39mbz0efxlAbhmM3+
-jSgghfYLdRcOyafdshmVdZyteaolzYKKPJaUPr5p3i9Q5D0Vq9tClQ/MLSCX9ymY
-Cn9EhGZ9VWnwTh5fHOY3n7z4kpMGcw==
-=EKsI
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd71NEACgkQJNaLcl1U
+h9A70Af/csKipaIUiuHJ0DPPWAlredvZI077owOEtD+aHfilRog7JjsAf2gP8VjA
++4Vla2CR6vwD9hrNCT4c0d7So4n81mHCRZeobvXTznkc0LQzqggIay/EtyPBQbgx
+yTdR70ywCJYQf+e4NVfoR3GE10C+ExSwtkfs+jB0qtl5kcTBEsQ/HsVOfvIo9ZCf
+yojopa336VzFX+53asOjMmRN+e/5e6mpg1CCREzYhKtJuAJfZx3TiScELIp1CRAO
+Mm5nWw1n4k2YEeFYw1ZdhQ7ZaFH7ah+UXDHlaeIkqJuVX87ZeNpUzb7o9HASyxYw
+c/BAZUaN9EqH10T9Nj9eHUFpuVIEeg==
+=kYOY
 -----END PGP SIGNATURE-----
 
---tt8UwXY8YAkoC5VF--
+--oo7BGKmutRFo5nuK--
 
