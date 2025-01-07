@@ -1,201 +1,197 @@
-Return-Path: <linux-spi+bounces-6253-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6254-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ED33A04C18
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 23:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12768A04CAC
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 23:54:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201543A547A
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 22:14:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 696603A4424
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 22:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E361D5AAC;
-	Tue,  7 Jan 2025 22:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448711DFD9C;
+	Tue,  7 Jan 2025 22:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tbKyO1Q4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from s1.jo-so.de (s1.jo-so.de [37.221.195.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B35519F101;
-	Tue,  7 Jan 2025 22:14:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.221.195.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB1986330;
+	Tue,  7 Jan 2025 22:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736288089; cv=none; b=DXPPAI9vEcHg2Nh5KR7WBMUwRiXd5L+ig1b1OvQ6tMhp9X2DdXFiVRVthrjZdw/7YJkAlqnPAPy6rfOticPglHTmVZTFAJntyd8+3g4l/+wJz7famj8/jLB5623WPN/4oeA0bF1j4UiMQcXNXQo5H/itFnQBgX8MTvZLrurx5JU=
+	t=1736290473; cv=none; b=t7GcfOymDd8eXm8CenzXHW5jAjTMXiUEEEGVjX/FCaLqogOYO6ZCRGhX4opUMGX8cxNWt2vNNQ8L1GPFxERYgCIhfjBM+j1WxPfHIDrjwOi/jE2SYeqxZGHIFMZzvHLAxCi4+GVogBQSzJzmJM6c9g7o/MWreTamYTVCn2t4L0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736288089; c=relaxed/simple;
-	bh=kY/GwtXCvIGdX7JcRch8/sUfqVuHTA4hV8dR3yYxHc8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jK2TjYn3IvW6fJ6bOwPBZ66J6KpNt0stzhhH14DrcXKqDWmVUdx7LkjyZ60dx+IEDHGi49xFsDp9TUiEnpfYL3CZ8fqJm5AfPOG7c1xYr3DI5v5zPtBuQC/rS7qbU/8ESjI/WOSngYNqVuen4NqvU+1KKThkUKulJrY6cpqKLzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de; spf=pass smtp.mailfrom=jo-so.de; arc=none smtp.client-ip=37.221.195.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jo-so.de
-Received: from mail-relay (helo=jo-so.de)
-	by s1.jo-so.de with local-bsmtp (Exim 4.96)
-	(envelope-from <joerg@jo-so.de>)
-	id 1tVHqG-00BG8Y-1P;
-	Tue, 07 Jan 2025 23:14:28 +0100
-Received: from joerg by zenbook.jo-so.de with local (Exim 4.98)
-	(envelope-from <joerg@jo-so.de>)
-	id 1tVHqF-00000000a7H-37Vx;
-	Tue, 07 Jan 2025 23:14:27 +0100
-Date: Tue, 7 Jan 2025 23:14:27 +0100
-From: =?utf-8?B?SsO2cmc=?= Sommer <joerg@jo-so.de>
-To: Pieter Van Trappen <pieter.van.trappen@cern.ch>
-Cc: Christian Eggers <ceggers@arri.de>, Jakub Kicinski <kuba@kernel.org>, 
-	Tristram Ha <tristram.ha@microchip.com>, Woojung Huh <Woojung.Huh@microchip.com>, netdev@vger.kernel.org, 
-	linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: KSZ8795 not detected at start to boot from NFS
-Message-ID: <3z5dtqwwxhx6ogtztlsdwvlbxmt5ujbj7pme2delou7mqsnsll@esfwyr2glzyn>
-OpenPGP: id=7D2C9A23D1AEA375; url=https://jo-so.de/pgp-key.txt;
- preference=signencrypt
-References: <ojegz5rmcjavsi7rnpkhunyu2mgikibugaffvj24vomvan3jqx@5v6fyz32wqoz>
- <5708326.ZASKD2KPVS@n9w6sw14>
- <cxe42bethnzs7f46xxyvj6ok6ve7itssdxyh2vuftnfws4aa3z@2o4njdkw3r5i>
- <2675613.fDdHjke4Dd@n9w6sw14>
- <sqsslcr7fsgqi7fvjpy5xnarhlm76atvatczkzwpn37e7gnsu6@tuy7an7t4gdg>
- <cnmv4ahgyblej7aoknhhb3xyvb67j7t24tug7uoxxtl5s4pjy3@wd3copbtdiec>
- <f26f526c-cb43-4170-8dd4-b7cf6c0d1d5d@lunn.ch>
- <3e7264a5-aea7-44f1-8a37-2b8cf48b710c@cern.ch>
+	s=arc-20240116; t=1736290473; c=relaxed/simple;
+	bh=O9TJbmQGiBS3wg5CEtqr6UcvZN/r2lDkUlDh/A83J7o=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=lkwYaFWhZGSSHVzX446iD4GTs0w96pWpCZWsxuTVkGZtP13H1bzdAIkxuMtOqVPrshPrejZpZi5hFx0ENzz6BnCB0DfxzKGSggQ8zcKD7n+CROekxGtCh3nrvU+p+ClxlQn+8D0CCBiVWFJTxWT05pNo66WBvSEyLS8StxrxkK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tbKyO1Q4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D78DC4CED6;
+	Tue,  7 Jan 2025 22:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736290472;
+	bh=O9TJbmQGiBS3wg5CEtqr6UcvZN/r2lDkUlDh/A83J7o=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=tbKyO1Q4VjERyhut+hU/vQIG+F7w69M3Vy6s9YBLMnD+LqHjuhmQedWM/wnD6PByi
+	 LNZpwHWbRs468sWPfU8ffysRsKa8+zR0VikgXG4yS/LhRB2h6OjX4lKq7AFdLY7hVh
+	 39oas5HW1nkTZa5EKBRDAztXXu9WUarhIoFYmVBVFpOuqDeb9gpZCdK+e4972sSnze
+	 NrYdVputvAgP4M/t5seLAR79ujHFWj5lgm2WFLex4HqJ2pG914plcnYx3+1YoRHqoB
+	 fi4EAwybIl7102DOFK/Xb6e9iSKpPJYbhp3IQKLvsMEWY1kU1FQooOZGlD+VwbHrvR
+	 0WLqcioHhz/Kg==
+Date: Tue, 07 Jan 2025 16:54:31 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="sn7fv2gcor7y3z6p"
-Content-Disposition: inline
-In-Reply-To: <3e7264a5-aea7-44f1-8a37-2b8cf48b710c@cern.ch>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-clk@vger.kernel.org, dharma.b@microchip.com, 
+ alexandre.belloni@bootlin.com, nicolas.ferre@microchip.com, 
+ mturquette@baylibre.com, linux-serial@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org, 
+ devicetree@vger.kernel.org, conor+dt@kernel.org, mihai.sain@microchip.com, 
+ linux-kernel@vger.kernel.org, krzk+dt@kernel.org, 
+ varshini.rajendran@microchip.com, claudiu.beznea@tuxon.dev, 
+ romain.sioen@microchip.com, linux-spi@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, arnd@arndb.de, sboyd@kernel.org
+To: Ryan.Wanner@microchip.com
+In-Reply-To: <20250107160850.120537-1-Ryan.Wanner@microchip.com>
+References: <20250107160850.120537-1-Ryan.Wanner@microchip.com>
+Message-Id: <173629037004.1994496.1652835527993929123.robh@kernel.org>
+Subject: Re: [PATCH v5 0/5] Add support for SAMA7D65
 
 
---sn7fv2gcor7y3z6p
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: KSZ8795 not detected at start to boot from NFS
-MIME-Version: 1.0
-
-Pieter Van Trappen schrieb am Mo 06. Jan, 14:38 (+0100):
-> On 05/01/2025 18:08, Andrew Lunn wrote:
-> > On Sun, Jan 05, 2025 at 05:33:38PM +0100, J=C3=B6rg Sommer wrote:
-> > > Hi everyone,
-> > >=20
-> > > I've added you to the list of recipients, because you where somehow i=
-nvolved
-> > > in changes of the KSZ-SPI switch code.
-> > >=20
-> > > We are debating the SPI mode setting for the microchip ksz8795 and ks=
-z9477
-> > > and possibly others. Since the commit
-> > > 8c4599f49841dd663402ec52325dc2233add1d32 the SPI mode gets fixed to m=
-ode=C2=A03
-> > > in the code. But at least my ksz8795 works also with mode=C2=A00 and =
-shows better
-> > > initialization behaviour with mode=C2=A00.
-> > >=20
-> > > The big question is: can both (or all ksz) chips work with both modes?
-> > > Should this setting stay in code or moved to the device tree?
-> > >=20
-> > > The specs are here, but I found no evidence about the supported/recom=
-mended
-> > > SPI modes:
-> > >=20
-> > > https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Data-Sheet-=
-DS00002419D.pdf
->=20
-> From this KSZ9563 datasheet it is quite clear from Figure 6-9 that it
-> requires mode 0, for KSZ8794 (which I have and can test) Figure 7-8 [1] a=
-lso
-> indicates mode 0. Note however that older KSZ8794 datasheets (revision
-> DS00002134A from 2016, can upload if needed) rather indicate a mode 3, wh=
-ich
-> is a hint to me that indeed both modes were once supported. Appendix A fr=
-om
-> [1] states that in 2021 the SPI Timing images and parameters have been
-> updated. No further information there but your experience and the datashe=
-et
-> update seem to indicate mode 0 has better support.
-
-The ksz8795 spec [2] says on page=C2=A053, table=C2=A04-3, register=C2=A011=
-, bit=C2=A00 =E2=80=9CTrigger
-on the rising edge of SPI clock (for higher speed SPI)=E2=80=9D. The rising=
- edge
-should mean SPI mode 0. So mode 0 should be recommended for higher speed.
-
-[2] https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductD=
-ocuments/DataSheets/KSZ8795CLX-Data-Sheet-DS00002112.pdf
-
-> My SPI peripheral (and KSZ8 driver) is configured for mode 3 I see but the
-> frequency is set to 10 MHz while the max is 50 MHz. From experience with
-> other SPI devices I know that with higher frequencies the timing paramete=
-rs
-> (setup and hold times, mode) become more important, what frequency do you
-> have configured J=C3=B6rg? I'm asking because I don't experience the issu=
-e you
-> have.
->=20
-> [1]
-> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDoc=
-uments/DataSheets/KSZ8794CNX-Data-Sheet-DS00002134.pdf
-
-I am using 25MHz which is the maximum for the ksz8795; see [2] page 11,
-table 2-1, pin 67; page 27, sec "3.5.1.1 SPI Client Serial Bus
-Configuration"
-
-I've tried 10MHz with the code in place that switches to SPI mode=C2=A03, b=
-ut I
-still get:
-
-[    2.078732] ksz8795-switch spi0.1: invalid family id: 0
-[    2.078808] ksz8795-switch: probe of spi0.1 failed with error -22
-
-I think the main problem is that the chip needs a read access to
-detect/adjust itself to the new mode. If this is the read for the chip id,
-this fails.
-
-
-I'm in favour of removing the code, and leave it up to the devicetree to
-make the decision. Maybe add a note to micrel-ks8995.txt that spi-cpha and
-spi-cpol are possible.
-
-diff --git drivers/net/dsa/microchip/ksz_spi.c drivers/net/dsa/microchip/ks=
-z_spi.c
-index 108a958dc356..046f2a7d1e08 100644
---- drivers/net/dsa/microchip/ksz_spi.c
-+++ drivers/net/dsa/microchip/ksz_spi.c
-@@ -85,12 +85,6 @@ static int ksz_spi_probe(struct spi_device *spi)
-        if (spi->dev.platform_data)
-                dev->pdata =3D spi->dev.platform_data;
-=20
--       /* setup spi */
--       spi->mode =3D SPI_MODE_3;
--       ret =3D spi_setup(spi);
--       if (ret)
--               return ret;
--
-        dev->irq =3D spi->irq;
-=20
-        ret =3D ksz_switch_register(dev);
+On Tue, 07 Jan 2025 09:07:22 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> This series adds support for the SAMA7D65 SoC.
+> 
+> V2 of this series [1].
+> V3 of this series [2].
+> V4 of this series [4].
+> 
+> For the pinctrl and pit64 timers those will have DTB warnings due to
+> those bindings not being in the .yaml format.
+> 
+> Changes v1->v2:
+> - V1 set was sent incorrectly as multiple seprate patches v2 took all
+>   those patches and put them in 1 thread.
+> 
+> Changes v2->v3:
+> - Correct the patch order to follow correct practice.
+> - Correct flexcom dt-binding commit messge to reflect the changes in the
+>   coding style.
+> - Add missing SoB tags to patches.
+> - Moved export clocks to DT patch to be included with the clock binding
+>   patch.
+> - Separate Kconfig changes and defconfig changes into different patches
+>   and removed unused Kconfig params.
+> - Correct confusing SoB and Co-developed chain.
+> - Removed unsued nodes in DTSI file and sorted includes
+>   alphanumerically.
+> - Fix incorrect dts formatting.
+> - Separate dts and pinmux changes into two patches.
+> - Combine PLL and MCK changes into core clock driver patch.
+> - Correct formatting in main clock driver.
+> - MMC dt-binding changes are applied for next so have been removed from
+>   the set [3].
+> 
+> Changes v3->v4:
+> - Collect all tags from maintainers.
+> - Correct compile error on 11/13 and correct location of vendor specific
+>   properties.
+> - Add USB and UTMI selections to 12/13 to prevent compile errors due to
+>   functions in the clock driver that use the USB clock system.
+> - Add "microchip,sama7g5-pinctrl" compatible string as a fall back in
+>   9/13.
+> - Add missing kfree() to 8/13 to correctly handle error case.
+> - Replace bad spacing with correct tab formatting on 7/13.
+> 
+> Changes from v4->v5:
+> - Remove patches that have been applied [5].
+> - Update pinctrl dt-binding to use fallback formatting.
+> 
+> Note:
+> - For the SDHCI DTB error that patch has been removed do to it being
+> applied see [3].
+> - There are DTB errors on microchip,sama7d65-pit64b and
+>   microchip,sama7d65-pinctrl, this is due to those bindings being .txt
+>   files.
+> 
+> 1) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#m9691b4d58b62f36f6cbac1d06883c985766c2c0d
+> 2) https://lore.kernel.org/linux-arm-kernel/cover.1733505542.git.Ryan.Wanner@microchip.com/T/#m3b52978236907198f727424e69ef21c8898e95c8
+> 3) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#mccf6521c07e74e1c7dc61b09ae0ebdbbdde73a28
+> 4) https://lore.kernel.org/linux-arm-kernel/70d429086fd8e858d79ca2824ad8cc4a09e3fe5d.1734723585.git.Ryan.Wanner@microchip.com/T/#m918b8db23c8d30981263846a02dafc085e17de14
+> 5) https://lore.kernel.org/linux-arm-kernel/70d429086fd8e858d79ca2824ad8cc4a09e3fe5d.1734723585.git.Ryan.Wanner@microchip.com/T/#m69b8f11536e3b0ca3d69d125d0670c90412d4317
+> 
+> 
+> 
+> Dharma Balasubiramani (2):
+>   dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+>   dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+> 
+> Romain Sioen (2):
+>   dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
+>   ARM: dts: microchip: add support for sama7d65_curiosity board
+> 
+> Ryan Wanner (1):
+>   ARM: dts: microchip: add sama7d65 SoC DT
+> 
+>  .../devicetree/bindings/arm/atmel-at91.yaml   |   7 +
+>  .../pinctrl/atmel,at91-pio4-pinctrl.txt       |   3 +-
+>  .../bindings/serial/atmel,at91-usart.yaml     |   1 +
+>  arch/arm/boot/dts/microchip/Makefile          |   3 +
+>  .../dts/microchip/at91-sama7d65_curiosity.dts |  89 +++++++++++
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi     | 145 ++++++++++++++++++
+>  6 files changed, 247 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+>  create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
+> 
+> --
+> 2.43.0
+> 
+> 
+> 
 
 
-Regards, J=C3=B6rg
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
---=20
-=C2=BBDas ist wie mit allen L=C3=B6schfunktionen im Internet: Du kannst Dir=
- nur
-sichern seien, dass es auf Deinem Rechner verschwunden ist. An alle
-anderen ist es eine Bitte.=C2=AB
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
---sn7fv2gcor7y3z6p
-Content-Type: application/pgp-signature; name="signature.asc"
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
------BEGIN PGP SIGNATURE-----
+  pip3 install dtschema --upgrade
 
-iHUEABEIAB0WIQS1pYxd0T/67YejVyF9LJoj0a6jdQUCZ32nQgAKCRB9LJoj0a6j
-dSdxAQChanvpJFQQHFlGkNRAieh+PRfPyxtRijCHOA4kD9d4+AD+LYImVUAPohd+
-YRK+rtwwc0VqYG0rIs88O42NyZz65PE=
-=VdUe
------END PGP SIGNATURE-----
 
---sn7fv2gcor7y3z6p--
+New warnings running 'make CHECK_DTBS=y microchip/at91-sama7d65_curiosity.dtb' for 20250107160850.120537-1-Ryan.Wanner@microchip.com:
+
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/pinctrl@e0014000: failed to match any schema with compatible: ['microchip,sama7d65-pinctrl', 'microchip,sama7g5-pinctrl']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/pinctrl@e0014000: failed to match any schema with compatible: ['microchip,sama7d65-pinctrl', 'microchip,sama7g5-pinctrl']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1800000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/timer@e1804000: failed to match any schema with compatible: ['microchip,sama7d65-pit64b', 'microchip,sam9x60-pit64b']
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: flexcom@e2020000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['microchip,sama7d65-flexcom', 'atmel,sama5d2-flexcom'] is too long
+	'atmel,sama5d2-flexcom' was expected
+	'microchip,sam9x7-flexcom' was expected
+	'microchip,sama7g5-flexcom' was expected
+	from schema $id: http://devicetree.org/schemas/mfd/atmel,sama5d2-flexcom.yaml#
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/flexcom@e2020000: failed to match any schema with compatible: ['microchip,sama7d65-flexcom', 'atmel,sama5d2-flexcom']
+
+
+
+
+
 
