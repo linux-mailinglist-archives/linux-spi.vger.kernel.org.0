@@ -1,99 +1,201 @@
-Return-Path: <linux-spi+bounces-6251-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6253-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23BBA04BBC
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 22:32:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ED33A04C18
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 23:14:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82F0618886A8
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 21:32:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201543A547A
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 22:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D4D51F9EB8;
-	Tue,  7 Jan 2025 21:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Q1SPhU6t"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E361D5AAC;
+	Tue,  7 Jan 2025 22:14:49 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m127210.xmail.ntesmail.com (mail-m127210.xmail.ntesmail.com [115.236.127.210])
+Received: from s1.jo-so.de (s1.jo-so.de [37.221.195.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0361F8911;
-	Tue,  7 Jan 2025 21:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B35519F101;
+	Tue,  7 Jan 2025 22:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.221.195.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736285452; cv=none; b=exY5cogK2fMmGwQx79ahjv216M6R7LQF+XUBD/qmXxRGzupkqBmQ1U9QAddIqyEQcri50iKOrTGbDJHdvVI94/Hd2QcGOwckMZVuFAVECbsEGzZq+Is3LXAIHObUqpWAsuE8e3HVcIvCBAa2wQ2MOCPB91wmoJdsBML3gAzd3zs=
+	t=1736288089; cv=none; b=DXPPAI9vEcHg2Nh5KR7WBMUwRiXd5L+ig1b1OvQ6tMhp9X2DdXFiVRVthrjZdw/7YJkAlqnPAPy6rfOticPglHTmVZTFAJntyd8+3g4l/+wJz7famj8/jLB5623WPN/4oeA0bF1j4UiMQcXNXQo5H/itFnQBgX8MTvZLrurx5JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736285452; c=relaxed/simple;
-	bh=nH/1wRDyA7KeH/VKNyivsjsQ/njq/lgzXcYYLGgrsRc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Leo70oRRqAKT2uM/KqXGe1gQ6w1huxGU8cYlRNPK+8OO8EulATC4367bTLPu4UzXLmdX/ImZeQ6qayCLGlG//v/HQhGo4p0MC9z3D6AQvosz0OYAIrl+m9jIhW6YXzi5nLXZlsApKASRZYqtwHGO8htxHgiNtwI6I/6QQzPz+1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Q1SPhU6t; arc=none smtp.client-ip=115.236.127.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from rockchip.. (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 801e0ade;
-	Tue, 7 Jan 2025 23:48:00 +0800 (GMT+08:00)
-From: Jon Lin <jon.lin@rock-chips.com>
-To: broonie@kernel.org
-Cc: linux-rockchip@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	heiko@sntech.de,
-	jon.lin@rock-chips.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH 2/2] spi: rockchip-sfc: Add rockchip,fspi compatible
-Date: Tue,  7 Jan 2025 23:47:55 +0800
-Message-Id: <20250107154755.2037197-2-jon.lin@rock-chips.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250107154755.2037197-1-jon.lin@rock-chips.com>
-References: <20250107154755.2037197-1-jon.lin@rock-chips.com>
+	s=arc-20240116; t=1736288089; c=relaxed/simple;
+	bh=kY/GwtXCvIGdX7JcRch8/sUfqVuHTA4hV8dR3yYxHc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jK2TjYn3IvW6fJ6bOwPBZ66J6KpNt0stzhhH14DrcXKqDWmVUdx7LkjyZ60dx+IEDHGi49xFsDp9TUiEnpfYL3CZ8fqJm5AfPOG7c1xYr3DI5v5zPtBuQC/rS7qbU/8ESjI/WOSngYNqVuen4NqvU+1KKThkUKulJrY6cpqKLzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de; spf=pass smtp.mailfrom=jo-so.de; arc=none smtp.client-ip=37.221.195.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jo-so.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jo-so.de
+Received: from mail-relay (helo=jo-so.de)
+	by s1.jo-so.de with local-bsmtp (Exim 4.96)
+	(envelope-from <joerg@jo-so.de>)
+	id 1tVHqG-00BG8Y-1P;
+	Tue, 07 Jan 2025 23:14:28 +0100
+Received: from joerg by zenbook.jo-so.de with local (Exim 4.98)
+	(envelope-from <joerg@jo-so.de>)
+	id 1tVHqF-00000000a7H-37Vx;
+	Tue, 07 Jan 2025 23:14:27 +0100
+Date: Tue, 7 Jan 2025 23:14:27 +0100
+From: =?utf-8?B?SsO2cmc=?= Sommer <joerg@jo-so.de>
+To: Pieter Van Trappen <pieter.van.trappen@cern.ch>
+Cc: Christian Eggers <ceggers@arri.de>, Jakub Kicinski <kuba@kernel.org>, 
+	Tristram Ha <tristram.ha@microchip.com>, Woojung Huh <Woojung.Huh@microchip.com>, netdev@vger.kernel.org, 
+	linux-spi@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
+Subject: Re: KSZ8795 not detected at start to boot from NFS
+Message-ID: <3z5dtqwwxhx6ogtztlsdwvlbxmt5ujbj7pme2delou7mqsnsll@esfwyr2glzyn>
+OpenPGP: id=7D2C9A23D1AEA375; url=https://jo-so.de/pgp-key.txt;
+ preference=signencrypt
+References: <ojegz5rmcjavsi7rnpkhunyu2mgikibugaffvj24vomvan3jqx@5v6fyz32wqoz>
+ <5708326.ZASKD2KPVS@n9w6sw14>
+ <cxe42bethnzs7f46xxyvj6ok6ve7itssdxyh2vuftnfws4aa3z@2o4njdkw3r5i>
+ <2675613.fDdHjke4Dd@n9w6sw14>
+ <sqsslcr7fsgqi7fvjpy5xnarhlm76atvatczkzwpn37e7gnsu6@tuy7an7t4gdg>
+ <cnmv4ahgyblej7aoknhhb3xyvb67j7t24tug7uoxxtl5s4pjy3@wd3copbtdiec>
+ <f26f526c-cb43-4170-8dd4-b7cf6c0d1d5d@lunn.ch>
+ <3e7264a5-aea7-44f1-8a37-2b8cf48b710c@cern.ch>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk5LS1ZJTR9LHhoeSh4dGkxWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a944173916109d9kunm801e0ade
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OQw6LAw6DjITHxEUKSpMKAwz
-	KzFPCh1VSlVKTEhNSU1PQ0NKSExMVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-	QVlOQ1VJSVVMVUpKT1lXWQgBWUFDS083Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=Q1SPhU6twQ0nlv+ONHZXIjROcWiO8EYPGXr0HcXOR4Y5jXa5x3mny0tkRHyAlgi6XYY7IdOachcnCVczX6fhx3mVsC5oqg9RKhoo9xLAaxcgiBxN/WdiTPQiEGp4e+ot6+IX0vbsWOdZNtd4e7b9Z9s5BDAX6/DMdaqyCodsMH4=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=XJLawlfMWnWq2XaeHw3MAcM0toNaZ6iL2XtcMfjanUw=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="sn7fv2gcor7y3z6p"
+Content-Disposition: inline
+In-Reply-To: <3e7264a5-aea7-44f1-8a37-2b8cf48b710c@cern.ch>
 
-FSPI is an SFC upgrade IP, support new feature like XIP. But RK AP
-SOC FSPI early version integration implementation is the same as SFC.
 
-Add rockchip,fspi compatible to match with RK technical reference
-manual.
+--sn7fv2gcor7y3z6p
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: KSZ8795 not detected at start to boot from NFS
+MIME-Version: 1.0
 
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
----
+Pieter Van Trappen schrieb am Mo 06. Jan, 14:38 (+0100):
+> On 05/01/2025 18:08, Andrew Lunn wrote:
+> > On Sun, Jan 05, 2025 at 05:33:38PM +0100, J=C3=B6rg Sommer wrote:
+> > > Hi everyone,
+> > >=20
+> > > I've added you to the list of recipients, because you where somehow i=
+nvolved
+> > > in changes of the KSZ-SPI switch code.
+> > >=20
+> > > We are debating the SPI mode setting for the microchip ksz8795 and ks=
+z9477
+> > > and possibly others. Since the commit
+> > > 8c4599f49841dd663402ec52325dc2233add1d32 the SPI mode gets fixed to m=
+ode=C2=A03
+> > > in the code. But at least my ksz8795 works also with mode=C2=A00 and =
+shows better
+> > > initialization behaviour with mode=C2=A00.
+> > >=20
+> > > The big question is: can both (or all ksz) chips work with both modes?
+> > > Should this setting stay in code or moved to the device tree?
+> > >=20
+> > > The specs are here, but I found no evidence about the supported/recom=
+mended
+> > > SPI modes:
+> > >=20
+> > > https://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Data-Sheet-=
+DS00002419D.pdf
+>=20
+> From this KSZ9563 datasheet it is quite clear from Figure 6-9 that it
+> requires mode 0, for KSZ8794 (which I have and can test) Figure 7-8 [1] a=
+lso
+> indicates mode 0. Note however that older KSZ8794 datasheets (revision
+> DS00002134A from 2016, can upload if needed) rather indicate a mode 3, wh=
+ich
+> is a hint to me that indeed both modes were once supported. Appendix A fr=
+om
+> [1] states that in 2021 the SPI Timing images and parameters have been
+> updated. No further information there but your experience and the datashe=
+et
+> update seem to indicate mode 0 has better support.
 
- drivers/spi/spi-rockchip-sfc.c | 1 +
- 1 file changed, 1 insertion(+)
+The ksz8795 spec [2] says on page=C2=A053, table=C2=A04-3, register=C2=A011=
+, bit=C2=A00 =E2=80=9CTrigger
+on the rising edge of SPI clock (for higher speed SPI)=E2=80=9D. The rising=
+ edge
+should mean SPI mode 0. So mode 0 should be recommended for higher speed.
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index 59de351499a0..88fbde27925e 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -808,6 +808,7 @@ static const struct dev_pm_ops rockchip_sfc_pm_ops = {
- };
- 
- static const struct of_device_id rockchip_sfc_dt_ids[] = {
-+	{ .compatible = "rockchip,fspi"},
- 	{ .compatible = "rockchip,sfc"},
- 	{ /* sentinel */ }
- };
--- 
-2.34.1
+[2] https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductD=
+ocuments/DataSheets/KSZ8795CLX-Data-Sheet-DS00002112.pdf
 
+> My SPI peripheral (and KSZ8 driver) is configured for mode 3 I see but the
+> frequency is set to 10 MHz while the max is 50 MHz. From experience with
+> other SPI devices I know that with higher frequencies the timing paramete=
+rs
+> (setup and hold times, mode) become more important, what frequency do you
+> have configured J=C3=B6rg? I'm asking because I don't experience the issu=
+e you
+> have.
+>=20
+> [1]
+> https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDoc=
+uments/DataSheets/KSZ8794CNX-Data-Sheet-DS00002134.pdf
+
+I am using 25MHz which is the maximum for the ksz8795; see [2] page 11,
+table 2-1, pin 67; page 27, sec "3.5.1.1 SPI Client Serial Bus
+Configuration"
+
+I've tried 10MHz with the code in place that switches to SPI mode=C2=A03, b=
+ut I
+still get:
+
+[    2.078732] ksz8795-switch spi0.1: invalid family id: 0
+[    2.078808] ksz8795-switch: probe of spi0.1 failed with error -22
+
+I think the main problem is that the chip needs a read access to
+detect/adjust itself to the new mode. If this is the read for the chip id,
+this fails.
+
+
+I'm in favour of removing the code, and leave it up to the devicetree to
+make the decision. Maybe add a note to micrel-ks8995.txt that spi-cpha and
+spi-cpol are possible.
+
+diff --git drivers/net/dsa/microchip/ksz_spi.c drivers/net/dsa/microchip/ks=
+z_spi.c
+index 108a958dc356..046f2a7d1e08 100644
+--- drivers/net/dsa/microchip/ksz_spi.c
++++ drivers/net/dsa/microchip/ksz_spi.c
+@@ -85,12 +85,6 @@ static int ksz_spi_probe(struct spi_device *spi)
+        if (spi->dev.platform_data)
+                dev->pdata =3D spi->dev.platform_data;
+=20
+-       /* setup spi */
+-       spi->mode =3D SPI_MODE_3;
+-       ret =3D spi_setup(spi);
+-       if (ret)
+-               return ret;
+-
+        dev->irq =3D spi->irq;
+=20
+        ret =3D ksz_switch_register(dev);
+
+
+Regards, J=C3=B6rg
+
+--=20
+=C2=BBDas ist wie mit allen L=C3=B6schfunktionen im Internet: Du kannst Dir=
+ nur
+sichern seien, dass es auf Deinem Rechner verschwunden ist. An alle
+anderen ist es eine Bitte.=C2=AB
+
+--sn7fv2gcor7y3z6p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABEIAB0WIQS1pYxd0T/67YejVyF9LJoj0a6jdQUCZ32nQgAKCRB9LJoj0a6j
+dSdxAQChanvpJFQQHFlGkNRAieh+PRfPyxtRijCHOA4kD9d4+AD+LYImVUAPohd+
+YRK+rtwwc0VqYG0rIs88O42NyZz65PE=
+=VdUe
+-----END PGP SIGNATURE-----
+
+--sn7fv2gcor7y3z6p--
 
