@@ -1,79 +1,79 @@
-Return-Path: <linux-spi+bounces-6237-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6238-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8B6A0340B
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 01:31:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7A3AA03DA1
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 12:27:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44DCA162EC9
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 00:31:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 250F6165DC3
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Jan 2025 11:27:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E86226AEC;
-	Tue,  7 Jan 2025 00:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927BD1EE036;
+	Tue,  7 Jan 2025 11:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IA2d4256"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QF0olLCY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A45628691;
-	Tue,  7 Jan 2025 00:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE981EBFEB
+	for <linux-spi@vger.kernel.org>; Tue,  7 Jan 2025 11:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736209870; cv=none; b=L/+sPmhUCX1hsTMX384OQBc/y6LMHIlHcBqODGcMTQ8IocufQjWhs4elYaNW6A0QGz3W7Y3nTWeloKk0ecvTAznJrgA5wr3focoaUU483LE3Zd9Jz4vF1AYeWB0lmAYSQvQn50er+ZchRflkU3i8dZs9Sus/1SU+jEvj3WQsrks=
+	t=1736249123; cv=none; b=ZYCX1ozvoG08dx1R3WjAHz8pvcvXONIP2yS6Dr35LTO2GlA6qv22oQ9UgAIczCMzQD7ZwT2nSfLyOGt7bjuChifQFisetzNXg9biPbt84xLYBwZmkROJxTGd5RZOKAlR1l7tDCRwqbg6waTK+xiMSVLC2PZUzyzyjTyIUjDhKuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736209870; c=relaxed/simple;
-	bh=SHfW5fyQnsmaHFVn7BkPlpsP4nzQ8xdy+QhdGX+cakw=;
+	s=arc-20240116; t=1736249123; c=relaxed/simple;
+	bh=OfOEkScPJn2s6J2v3K85ULAVMG3MWr1RZT8sX5h4CTk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oGXZ+BTy658WrqRPjA1/Lpvv8F873AvG5YtwzNptrsM9cAjVUE9dBXM+fZIMPnBF4oN6RL8gctf5V4z01w3r4RFUfTLgARDEsuziGFj/etsy6FfAKvJL+BIQPdkWK4ScY28bpKf6vLMU1BkSgnicPxmDp37bBfD/1byFmrTB8XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IA2d4256; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-385e0e224cbso7446964f8f.2;
-        Mon, 06 Jan 2025 16:31:07 -0800 (PST)
+	 In-Reply-To:Content-Type; b=FADD3OgSE77XPx0XLEIFzh9On6tqWZ1qwfKgjjO3Fq3rPiSDO0c8wxcpxdQIPukKceP2rK6le9elwrltbbCkkDOzQc+SG1q7IeiUplVLvD3jQTEzHHibYSP2I1V4250Pl9bWY7fx+/g/AeQrARRBGU7+Y3xdAMyVqyNVfOBWHcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QF0olLCY; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5d3e8f64d5dso27743956a12.3
+        for <linux-spi@vger.kernel.org>; Tue, 07 Jan 2025 03:25:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736209866; x=1736814666; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1736249119; x=1736853919; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=13VUHaFiuc4bXuLa2863YA1rYhMMosunQcKMEn7ZyfQ=;
-        b=IA2d4256Q0C5c4t6vKeIT9I9qu5t5L+LTkqtfKX1W7z9/Akl247tflxb2FE3e1Ech/
-         dkgIYonDN/UU+hdAItMuoUturYvaFf9SZhN1jr/uVAMRGX4covbbNcdvWq4UGq5//9Xa
-         Hjje2X4LXf0hNktDf+5f/5jK1GQzMqlfm43Zy7aWjAivwgdwXwv4K8wmnIPO7B+S3qxt
-         +EFbHfBpNJv4F0FBm9z8+qpJeW6Od7ZXNfEVrybqN9Oux+SV2CQEccVC4LMTuMt5hy5L
-         vnyewjKwceUattdjYRDFxPkMP0aciYRawoesXTE+vo+jeqtVy1JwADD0Df7sxKJaya/J
-         PrOw==
+        bh=7sn2BG5sdvDbcSzNStcu70GGFUnOPYuQtJHvkvNK9yg=;
+        b=QF0olLCYJJt+m6wTpwxV4PhaqOhVWSEn21fKNorrOjE+hY2f5z2+2EdVi3IfvuS9kI
+         LhvBq1fOaO+I1DuDdwBe/52d0twX9+2Sfn474wtfi15z5FHRT57HSALEJsKSP6VL8rP5
+         fkqdLimbA9yNHle0sJ35aLWWxoN5VVXsYyOooCnOQ2OErq8Q6xPPI9KEyjwgJ2Q9Z0jv
+         28oYf4vmcG6BqCuRDEnVE2ItlJ/Osul6bgyKPQvevSPgipd1+nEvNPWLtShE+sLQ34s2
+         iHchcQzp/GC/PP2+gBSy3iM9FU1sPiFST5OfcGnc3pQ/TEu/1KBE0SDWCc6B5UsV1fM/
+         0T1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736209866; x=1736814666;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1736249119; x=1736853919;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=13VUHaFiuc4bXuLa2863YA1rYhMMosunQcKMEn7ZyfQ=;
-        b=V6OcDIvFR35l2oaGRf86+jDZayIGX8ZUXOjsCGlAtpLHH6tqqQwNvS8jmMfcjAt/x6
-         2tXsMxX0R6WAKsSEr6XB78EgcgtdG4drQssNtw8+I/PRmWHt6F0Mer8rfZagvysYy06B
-         0jn82Y/WYb+HP8WoASncRD1ewlL4gMFWnvF07bsQ0u5Cyb1ABWkRNv3zwLeih014CCNQ
-         KagKVVIq1tr3xlRHomO333yaWNAD72/1/u0kMyKRR5v2YWYlIMp0wVtUaNhKxMzvEzOC
-         KkFNBrT1u7a2Adeb+ertUNGUmYTVy8xWnkUrgsL9rFU7eoMzPkroSHfAy3JSAQwtbUUG
-         FGZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU2cJNvSyX8VrA6LKxH8mtVD0Fg/uyW3ECzFgEMW24XZUN9XRDWpfAKQ8m5PsoAUlatywRpzdLRuQI=@vger.kernel.org, AJvYcCUXPbKrQ69wBE+N+sbbn4r9NRlr907CNQxoxZJGNHBaOO2qUu3HRPh/UEuxNjr7CWZWw2oHEIYm@vger.kernel.org, AJvYcCUXuHks+LHijPNesFPLJ8SIl4xk5YW4QOW++C0EkdTP5E5DYU4KP0zZFDwH69fa7g9krsxlIDHzTnXE@vger.kernel.org, AJvYcCW5RD5jHtIBqLVJ0lcQhRYvLov5CINNHnZvQD+HpSeUN7y0suyI+6l+tq9i/a9C74otPjQl4+lDTNJk@vger.kernel.org, AJvYcCWYYLsIaLXwKQ385NJKdRxcQRu4cRNcLdGUjkhY2oMd5AWGvDI098LzCEYOR+HlJ3TPIHArJ1TKs+tkbjXX@vger.kernel.org, AJvYcCWcdkTqyWkR3IH89b8LRfFwC6vWtQB91CTTMuV3A6YvD2sLROMSbumsWEOYYlxa6X3wrDQ1iLccEV1Q@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmkBNr8SaNA2NTl/jw+Da9rrcbk/zYI///NXSr+fVj4d42p7HP
-	hWze6BBinOLUK2IZjwwBdT1ajPvQmsw28QVM0S0pgpZgx2ZAbFnE
-X-Gm-Gg: ASbGncsn6HkZU/Uxwr/8ldpy9KN0P8htE0uQ7Kbqo7B1RQQwFIQLC4QdxeDRyThSZRM
-	/YAav/Auo584jNaVNaFI8BqVEqpigu186nddZ1ruX7qKLDdt2imxy6r/5eZe5zhr4JNuiXGs2t6
-	fJHWU5wbGJkQ/Q4NWVSpghzK2i7hvbYVdEQRQkk/EKxQP+PHmYru54Vs2IG5ATEstHkN0JZRzQK
-	Y+aCnK/8YV0eUvHqvmdL5YojDoY5/akDDt7AQG6lyntgQEtK27lqyLIPFq534RQ9iozzOViYXoK
-	WxMFNoMZZe5lKz5qODzkQZbedQ==
-X-Google-Smtp-Source: AGHT+IEjONcU9x6JlzHrNOCRfapdijI2K0K3jjBIXQvsC6vlMArfJXHA/sc0RSHKNgKkvauw85ENXQ==
-X-Received: by 2002:a5d:6da1:0:b0:386:4a0c:fe17 with SMTP id ffacd0b85a97d-38a2220039fmr49166964f8f.27.1736209865801;
-        Mon, 06 Jan 2025 16:31:05 -0800 (PST)
-Received: from ?IPV6:2001:861:3385:e20:6384:4cf:52c5:3194? ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8471dcsm49320901f8f.48.2025.01.06.16.31.04
+        bh=7sn2BG5sdvDbcSzNStcu70GGFUnOPYuQtJHvkvNK9yg=;
+        b=vcTTrxVEXLO6/+aduFid9TCH7b2Qx71WTYbChD4AvoTNQJ/d4ksS16Xr7yx1Jsf8+B
+         IPadDk60kgbXwSCA6H3DQoOZ8CMl/8muFm6q7bu2IbWWjgFWJ4AGJ44I9wxNTjl7nMQI
+         JaYJjMjttyT9HvIhbleE+JX7GzsLKDT92Pq8jzYYE3f0xXeZ3v1YhaQr6AvYv3LIEKQp
+         u6fxCu4N888coBkY3JT/tNDn/TFQen00cyFXHJtv2C5TP0Hx7fHSWCIJCGkfIPnt2Nqd
+         6e0EUe0GY1E7NlkeKyyvDR5euxPmUjX9no+vdxT1bVWnUfO4a1FWGntjqBrw5BRxQ3S1
+         ZAAg==
+X-Forwarded-Encrypted: i=1; AJvYcCVypApMlZ6xgT0zTDNWEFspSxXVe/3R7Ye5p6OwhnUYzxFKaszxdco0aUSQAebYP173dcqO8iB7lA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyhuo/1GXjjFs6EtDlrKhpWt3j1SasTnHlYihZsyZGPc+XxpLPe
+	DNoZSNrH2vosRa0li7oUyUfX8FSnt4Jswx5wTzBa8RkRGxI5ne7NqwUjVcUKOhs=
+X-Gm-Gg: ASbGncvZE8uyzP6JQwzs78/eaQOoyLsRNqQjZBGkwCp2y4qorfos/dK7A94OoB9D4fu
+	4TW+Qq5RSNGYdDx7DYM4uWXCnEP1OMlwFMXfKap82+88o4D4NCfTwyYwcPtNqa/U/vpCB3gtI1n
+	fnTdhfzPxvNlXV3m51YQZ6p6dvHQZik1aW59Bm9SMHLOqCQxPJy98pWK9hd3xrQ/afUEQZY2hGI
+	l8Fvx+kd6JXpat3s1ZjXPkE+LV+xp94cpXKoTnZTSv2UNmsw1wla+0Unm8eQtttTdTyCXxGivNW
+	jDPBEhPbCdfsk74Ckj4sVXTNT2yNZsvN+Sitzoo=
+X-Google-Smtp-Source: AGHT+IGh9M3EnIPRVcMQNI989EcvZxMCNMXogDiQ3BV0jMzT1VyZYyESdCgc7jwCzo0D83CZJZ/lXg==
+X-Received: by 2002:a17:907:9722:b0:aa6:6fa5:65b3 with SMTP id a640c23a62f3a-aac3352c204mr5521668866b.47.1736249119218;
+        Tue, 07 Jan 2025 03:25:19 -0800 (PST)
+Received: from ?IPV6:2a02:8109:888d:ff00:ca7f:54ff:fe52:4519? ([2a02:8109:888d:ff00:ca7f:54ff:fe52:4519])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e895502sm2397516066b.63.2025.01.07.03.25.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 16:31:05 -0800 (PST)
-Message-ID: <810af0b9-aa21-4f11-9708-92c870615cc8@gmail.com>
-Date: Tue, 7 Jan 2025 01:31:02 +0100
+        Tue, 07 Jan 2025 03:25:18 -0800 (PST)
+Message-ID: <66fb0c6d-472c-4131-bd25-83266cf497e4@linaro.org>
+Date: Tue, 7 Jan 2025 12:25:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,58 +81,92 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-To: Mark Brown <broonie@kernel.org>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Adrian Hunter <adrian.hunter@intel.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
- netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+Subject: Re: [PATCH v1 0/7] Add support to load QUP SE firmware from
+Content-Language: en-US
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+ andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
+ dianders@chromium.org, agross@kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
  linux-spi@vger.kernel.org
-References: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
- <eec9caa0-0029-4774-842e-af1d1290ad97@sirena.org.uk>
-Content-Language: en-US, fr
-From: =?UTF-8?Q?Rapha=C3=ABl_Gallais-Pou?= <rgallaispou@gmail.com>
-In-Reply-To: <eec9caa0-0029-4774-842e-af1d1290ad97@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Cc: =quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
+From: Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi Viken,
 
+On 04/12/2024 16:03, Viken Dadhaniya wrote:
+> In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+> hardware has traditionally been managed by TrustZone (TZ). This setup
+> handled Serial Engines(SE) assignments and access control permissions,
+> ensuring a high level of security but limiting flexibility and
+> accessibility.
+>  
+> This limitation poses a significant challenge for developers who need more
+> flexibility to enable any protocol on any of the SEs within the QUP
+> hardware.
+>  
+> To address this, we are introducing a change that opens the firmware
+> loading mechanism to the Linux environment. This enhancement increases
+> flexibility and allows for more streamlined and efficient management. We
+> can now handle SE assignments and access control permissions directly
+> within Linux, eliminating the dependency on TZ.
+>  
+> We propose an alternative method for firmware loading and SE
+> ownership/transfer mode configuration based on device tree configuration.
+> This method does not rely on other execution environments, making it
+> accessible to all developers.
+>  
+> For SEs used prior to the kernel, their firmware will be loaded by the
+> respective image drivers (e.g., Debug UART, Secure or trusted SE).
+> Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
+> will not be loaded by Linux driver but TZ only. At the kernel level, only
+> the SE protocol driver should load the respective protocol firmware.
 
-Le 06/01/2025 à 14:08, Mark Brown a écrit :
-> On Sun, Dec 29, 2024 at 12:32:39AM +0100, Raphael Gallais-Pou wrote:
->> Prevent the use of macros, and rely instead on kernel configuration for
->> power management.
->>
->> This series makes the same change over six different drivers:
->> usb-st-dwc3, sdhci-st, st-spi-fsm, ahci_st, sti-dwmac, spi-st.
+I gave this series a spin on the RB3 Gen 2 with U-Boot.
+
+After fixing the compilation errors, it seems like there is a consistent
+hard crash (the board freezes and resets) at some point during i2c
+controller init with this series.
+
+I noticed a similar issue with this same logic implemented in U-Boot.
+
+Could you clarify which xfer mode is appropriate for the i2c controllers
+on the RB3 Gen 2 and maybe give this a try yourself, or let me know what
+other info you'd need to debug this.
+
+Thanks and kind regards,
 > 
-> Is there any actual interaction between these changes?  In general you
-> shouldn't combine patches for multiple subsystems into a single series
-> unless there's some dependency or other interaction since it just
-> complicates management of the patches.
+> Viken Dadhaniya (7):
+>   dt-bindings: i2c: qcom,i2c-geni: Document DT properties for QUP
+>     firmware loading
+>   spi: dt-bindings: Document DT properties for QUP firmware loading
+>   dt-bindings: serial: Document DT properties for QUP firmware loading
+>   soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux
+>     subsystem
+>   i2c: qcom-geni: Load i2c qup Firmware from linux side
+>   spi: geni-qcom: Load spi qup Firmware from linux side
+>   serial: qcom-geni: Load UART qup Firmware from linux side
+> 
+>  .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |  11 +
+>  .../serial/qcom,serial-geni-qcom.yaml         |  12 +
+>  .../bindings/spi/qcom,spi-geni-qcom.yaml      |  11 +
+>  drivers/i2c/busses/i2c-qcom-geni.c            |  11 +-
+>  drivers/soc/qcom/qcom-geni-se.c               | 445 ++++++++++++++++++
+>  drivers/spi/spi-geni-qcom.c                   |   7 +-
+>  drivers/tty/serial/qcom_geni_serial.c         |   7 +-
+>  include/linux/soc/qcom/geni-se.h              |  17 +
+>  include/linux/soc/qcom/qup-fw-load.h          | 179 +++++++
+>  9 files changed, 692 insertions(+), 8 deletions(-)
+>  create mode 100644 include/linux/soc/qcom/qup-fw-load.h
+> 
 
-Hi,
+-- 
+// Caleb (they/them)
 
-No, there isn't apart from the fact that those are stm32 drivers. As 
-Miquel also stated a few days ago, is was wrong for me to sent all of 
-this in a whole serie. I will just resend them separately as a v2, 
-taking into account Miquel's review[1] and the kernel robot.
-
-Regards,
-Raphaël
-
-
-[1] https://lore.kernel.org/lkml/877c7ha77n.fsf@bootlin.com/
 
