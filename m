@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-6256-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6257-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E56CCA0541C
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 08:04:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48F2EA0542A
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 08:04:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F7033A2F1F
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 07:03:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27451883533
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 07:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B18FB1ACDE7;
-	Wed,  8 Jan 2025 07:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4674A1AB6E2;
+	Wed,  8 Jan 2025 07:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGOlyeaT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gu/SpvYx"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B851AC88A;
-	Wed,  8 Jan 2025 07:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8F01AAA29;
+	Wed,  8 Jan 2025 07:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736319762; cv=none; b=f7/AFWtZVO+8CR0UZztLMHY1ywmSzd6TQ7zzbbovoVBuZ19xAXWOnpSLoy905F7hiSoCzjTBDGkzyZJUhuI6Aa7LPFsRW5bGpfPHedOtt0Cn/9wHL6lFOA02h7yTJO9R16Z8ITR+wtDD8PmQFYJUkixO19182QHlZl2INZSbO+Y=
+	t=1736319814; cv=none; b=NOdZq/DCaZV5koxodwxG5mjX6yJuI0DgzblUj75UTj3lESg/48QFRF0oJzSLqd7o9HP20BzFZqdWXqY1rLDDD7FsSwL0MLMefNaZJeBJg0QpTHgNYi2d0zqxYulaKBfK3aTwBVq7kMLeZFSUMGFjSuGnotQre9TILhTo3gAKQqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736319762; c=relaxed/simple;
-	bh=Ai8e77Ic+pFDnN9zazzZAW8QIcSb2HHaIy7n4c8Wfg8=;
+	s=arc-20240116; t=1736319814; c=relaxed/simple;
+	bh=SvIK420w+PZ2NiVdG1ir7vz8pGZ7XKbU9DcUEGGjBZc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RY8mfwTN4Rz6Ixdmj06ubwWmC5LT3yPiu99pW4LiAhEY3PRtVw9yQ19bAOo4qBp3qI6cs50YPDBEepiuheike17/t1g1cyDk8HlA8EWxxvm46lKjCzSLN/O6QS5RrRGQm6ozphumH7CRUAhtU9jNIRUnLodZc3OSSj0om/IaZYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGOlyeaT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19ADC4CEE4;
-	Wed,  8 Jan 2025 07:02:39 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=UoxwVY+oCDmN9L27ootqcz4drhIWgML63QInIkCdGEe42MzG1D3kDOm4FQvNvsscClTvnAfqfF5sZTF7ZhSNtB4ZO4UO3UqHhkLL7SsUkdGd9lCm5MvRL4jME3kGxVj/gQMTmDdHYyhQhujiSwrzJ3uj30zLTv2GL9vy7LgLgi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gu/SpvYx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E91AC4CEE0;
+	Wed,  8 Jan 2025 07:03:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736319762;
-	bh=Ai8e77Ic+pFDnN9zazzZAW8QIcSb2HHaIy7n4c8Wfg8=;
+	s=k20201202; t=1736319813;
+	bh=SvIK420w+PZ2NiVdG1ir7vz8pGZ7XKbU9DcUEGGjBZc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TGOlyeaT+KS3rkhvUJpL6/ynxnquOkfCWI3SPlcDEa4qH6ipwCoru4DpMDkDN7/zT
-	 GU7uSaV42zGfFdIQz32DiVNrTDzDI/np3x3YIbM/asHtAbNAiP4KtvUUyVxva4MgWV
-	 apNMfL+Qy/roY9GV39pQRWx2zUBSomOo1WUo96os51LPGo9k8bl49lbolTdiF1ym22
-	 4AohVu83VRBf9VLahbQxVohUeXwCfGnRLgUo1v4Ymgu2EsZM6+cpDrVZXoaG3UaWS5
-	 Lfqw74iZ/QxnMNfBCqCpuzrmmwrWhMihR80SfbWoVOdczXBSy1m7xjDlsoaVdnT7ch
-	 2D5Q40VzNr3LQ==
-Message-ID: <c5e61809-ab0f-48f5-9e3c-f5e3e7788237@kernel.org>
-Date: Wed, 8 Jan 2025 08:02:37 +0100
+	b=Gu/SpvYx2PuVqAJpFMIuihbR8u3bhfU3lq/RFg7Jv+wL4kR6cR4PvDipPriMA7eHa
+	 2mq92zoj+r4fiM4QcDfqUB/DNN1B803gLuz/R124kgDf1Ki+Mna/cv2M+0OZd80Ui4
+	 2uj39Zq0UABw0I8cKRR631Z2LNiyVDawUkIkoFLI+t5weLvvu+6rb/G6O5s6AUmRdg
+	 793aFIo/6glIXAnN3xvo4p4yBajwLwpK3wamO1GPkGYSD4oSdGCEaSnWDgWkEyGfDt
+	 OTTxlutHl9qCwDP4RvkKHD0YNOn5fRoyHrC6suDh0ysKQlWEqMZYJiCK9Me/sgofmW
+	 ubz30TEQAbZBg==
+Message-ID: <1ef2ece5-f4ed-46ca-9bf5-75f898565a62@kernel.org>
+Date: Wed, 8 Jan 2025 08:03:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,13 +50,13 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: spi: rockchip-sfc: Add rockchip,fspi
- compatible
+Subject: Re: [PATCH 2/2] spi: rockchip-sfc: Add rockchip,fspi compatible
 To: Jon Lin <jon.lin@rock-chips.com>, broonie@kernel.org
 Cc: linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
  heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
  linux-spi@vger.kernel.org
 References: <20250107154755.2037197-1-jon.lin@rock-chips.com>
+ <20250107154755.2037197-2-jon.lin@rock-chips.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -102,56 +102,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250107154755.2037197-1-jon.lin@rock-chips.com>
+In-Reply-To: <20250107154755.2037197-2-jon.lin@rock-chips.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/01/2025 16:47, Jon Lin wrote:
-> FSPI is an SFC upgrade IP that adds functions such as XIP.
 > 
-> Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-> ---
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
-
-> 
->  Documentation/devicetree/bindings/spi/rockchip-sfc.yaml | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
-> index ac1503de0478..4d64155d03f8 100644
-> --- a/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
-> +++ b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
-> @@ -15,11 +15,15 @@ allOf:
+> diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
+> index 59de351499a0..88fbde27925e 100644
+> --- a/drivers/spi/spi-rockchip-sfc.c
+> +++ b/drivers/spi/spi-rockchip-sfc.c
+> @@ -808,6 +808,7 @@ static const struct dev_pm_ops rockchip_sfc_pm_ops = {
+>  };
 >  
->  properties:
->    compatible:
-> -    const: rockchip,sfc
-> +    enum:
-> +      - rockchip,fspi
-
-Don't grow generic patterns like that. Only SoC specific compatibles.
-
-> +      - rockchip,sfc
-
+>  static const struct of_device_id rockchip_sfc_dt_ids[] = {
+> +	{ .compatible = "rockchip,fspi"},
+>  	{ .compatible = "rockchip,sfc"},
+I don't understand why you are adding generic compatible which is not
+even used. Use proper SoC specific compatibles and fallbacks when
+applicable (see writing bindings document).
 
 Best regards,
 Krzysztof
