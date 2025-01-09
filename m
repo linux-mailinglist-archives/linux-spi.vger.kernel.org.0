@@ -1,55 +1,61 @@
-Return-Path: <linux-spi+bounces-6268-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6269-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4EEEA077EE
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 14:43:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D94AA077F6
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 14:44:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73F6D188AE77
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 13:43:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D2116549D
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 13:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31580219A8F;
-	Thu,  9 Jan 2025 13:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79CA2219E99;
+	Thu,  9 Jan 2025 13:40:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jeZMDyg7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u/qMnFYj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E07219A74;
-	Thu,  9 Jan 2025 13:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4302921A436;
+	Thu,  9 Jan 2025 13:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736430040; cv=none; b=WHdmPmjSSuZyb/nMM850DJ1kkdR50e8pkWOMAA3Nso6WEogLSLCCiClJRn25Pq2sIT1Ccoiq2O61LapR+P244kD3VXPObZpe1acjkSWrJSh9iQIuauNXiw0fsHTDVsrRGcYpjngWKyaZguxtV8nIOJqgnnhUCMCmoBCswOYdJZQ=
+	t=1736430043; cv=none; b=on+mtxVFVqQV++X8imOyc6HbgHOqdti0s4C+G8wtpZXZ4M7B/cq+qJZ60oeSB3TcMYo21dJJcetd01jqf3f6TJE/dARLRilXSGY3c859K2892MPzv9KHJgnsV8PryuB8iD3UqKVtsfpdKJbwqQ9JhsZ9ZOxSi0fZImHDgMNCcYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736430040; c=relaxed/simple;
-	bh=8QXQuS3ZxeiaLM1ayescKH0xKuOZEihfBJNtlXKWO0E=;
+	s=arc-20240116; t=1736430043; c=relaxed/simple;
+	bh=XDV4VXdhkew3tGRqYcWfVlginLmoZkPgCgaDE/rnU5w=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=mjs1fRTx5Ls18cCMbo2KgTvwu32rx2QYInIYnOKDAa9qhla5LrK8Y5coqKH5bDwzguCWOJzp/lZjfPHoeeyDLPXwfZmVxb9Y4mcg7SVl9oq52e11UAhBe+l2PL2qg7kIBggLQo2D8Yp4msVK/hVkp10WTQTvnqybyvHLG9OndL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jeZMDyg7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE310C4CED2;
-	Thu,  9 Jan 2025 13:40:38 +0000 (UTC)
+	 MIME-Version:Content-Type; b=XiW/I+EadpPgqLXrP/2oPdBcxkDIEFSnEifQ8xptBZT7/eEA7N++mq7jz/MX+qIf4C4kO/FwifnZjmOi4TLJjT7DTVA9BRE3YUfmG5xWpJMZH+y3VeEqijyAUp0IJaAjiT74TlgVIG/516Z5+oHRhqQlIONK8QrwwS2NMZBkqB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u/qMnFYj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D28C4CED3;
+	Thu,  9 Jan 2025 13:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736430039;
-	bh=8QXQuS3ZxeiaLM1ayescKH0xKuOZEihfBJNtlXKWO0E=;
+	s=k20201202; t=1736430041;
+	bh=XDV4VXdhkew3tGRqYcWfVlginLmoZkPgCgaDE/rnU5w=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jeZMDyg7iYijJrgWNjuiS07kcUghLzq+Pfm8rKwdJZfjNgH4+Fvdo2u6/sCAx9gYt
-	 XoRQTe6i2pmhY7SSDO3s9N9EuzttjPQrQfbkfdMrpUNCzDJ6pp0DjozrC0eeZlN3ds
-	 dN/9f4dKX/0wyOVfVbArGuzDMoy9Flx5EnkZ5mrVxHooww5U4y/nfLPPmpM0AhQtbP
-	 eeRQCoDvsla4kYn1mhzgf661MHpcjOCpz7i8jnBLVeuIaztxsEWcZgabFNqGDW9Nv0
-	 UKZ4g3fpJbQtPO3QuYHk1+MAvr+O6roFMYnPAGXTN+U9flykKzddlFsvYZ9mSNTLbM
-	 ePMrerHh9bz/A==
+	b=u/qMnFYjyj970GmqfqYIQfOHNDPD0jm0bzoDwu5n/pSrfokluFy0HPnR2opaq28rW
+	 rh5piGP1hR/m08QeCeTHMh3QGsw7GFbFVAOpK3r2gPkJn0gB/B7azDFMFORQ0f7LIe
+	 OKdZElpTc2ZpRjQCyjx0kKJMV8OQmHXup0X1UpTKjBwvnDorKhGzflMQ8C3bHtAv7p
+	 b6Bq3P0+YsubwfpU+Y/FMVFGS2mCUN2IAUE0sfhdFFXhm/BsHO5F5H30qLD8kDq/ug
+	 s9KYyWjMTX55w47KMhw26SUH7CnMHswkd6z/qG+ZIhvCZjm7OIxXxbMzzOrEVhz1Xn
+	 t5TqLl12fk5Xw==
 From: Mark Brown <broonie@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-spi@vger.kernel.org
-In-Reply-To: <8a37a960ff084dfdb9233849c00714e9317ae6a5.1736405336.git.christophe.leroy@csgroup.eu>
-References: <8a37a960ff084dfdb9233849c00714e9317ae6a5.1736405336.git.christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH] spi: fsl-spi: Remove display of virtual address
-Message-Id: <173643003851.53058.4009453720979125010.b4-ty@kernel.org>
-Date: Thu, 09 Jan 2025 13:40:38 +0000
+To: linux-spi@vger.kernel.org, Alexander Dahl <ada@thorsis.com>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250109094843.36014-1-ada@thorsis.com>
+References: <20250109094843.36014-1-ada@thorsis.com>
+Subject: Re: [PATCH] spi: atmel-quadspi: Update to current device naming
+ terminology
+Message-Id: <173643003976.53058.4013563877112652106.b4-ty@kernel.org>
+Date: Thu, 09 Jan 2025 13:40:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,13 +66,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-1b0d6
 
-On Thu, 09 Jan 2025 07:51:45 +0100, Christophe Leroy wrote:
-> The following appears in kernel log at boot:
-> 
-> 	fsl_spi b01004c0.spi: at 0x(ptrval) (irq = 51), QE mode
-> 
-> This is useless, so remove the display of that virtual address and
-> display the MMIO address instead, just like serial core does.
+On Thu, 09 Jan 2025 10:48:43 +0100, Alexander Dahl wrote:
+> For v6.9 the spi subsystem changed the terminology to host and target
+> devices, see commit 99769a52464d ("spi: Update the "master/slave"
+> terminology in documentation") for reference.  Support for SAMA7G5 was
+> forward ported recently from an old vendor branch before that
+> terminology change, so naming for the new struct member is adapted to
+> follow the current scheme.
 > 
 > [...]
 
@@ -76,8 +82,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: fsl-spi: Remove display of virtual address
-      commit: 636ee5781d259258dc9425a5552be1ffa458633c
+[1/1] spi: atmel-quadspi: Update to current device naming terminology
+      commit: 5e56618e1593a9eb9d72dc9433ac7a02a6c48c8f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
