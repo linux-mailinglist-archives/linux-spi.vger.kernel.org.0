@@ -1,41 +1,78 @@
-Return-Path: <linux-spi+bounces-6261-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6262-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A8A0A07027
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 09:35:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3812A070CE
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 10:06:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D74DC3A7E44
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 08:35:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8E06166E23
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 09:06:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53E0215048;
-	Thu,  9 Jan 2025 08:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30190214A6D;
+	Thu,  9 Jan 2025 09:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="E/hDMvN/"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="d663mxfc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m118218.qiye.163.com (mail-m118218.qiye.163.com [115.236.118.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8168E1FDA;
-	Thu,  9 Jan 2025 08:35:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.118.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54715214A70
+	for <linux-spi@vger.kernel.org>; Thu,  9 Jan 2025 09:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736411706; cv=none; b=NtkEyDuMxaA8+A7X9/ECSicwFHm8w7GrZ6Wl2ciVtT4lcomEe6FsbNeUNGUwcQXi54gEkWlIUCJ9X2ReVMZqbJxOrdeDAg+BqIitpHQ9iSKiezSYa8zB5WWUjlEh+BYFa1BzySfUaNW6gwLkA/Sneibr96XIsVCN3+S/4HaycEc=
+	t=1736413559; cv=none; b=PG/p6IEmDBK1ADNj98OZ5irzNEM+60qHOdm52vBfDwqkf3G/c3GyMKKBFupPNx5I+hgHU8yo3vCvTd2WQN+1GLroH35Q806Ufd6eraqXacroQgBuagSYUzstu0ImCrKqKf8pONHQ1Z4VPp4UZ3B5FztRdisGGJrQEeOdPI4nqzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736411706; c=relaxed/simple;
-	bh=NqzLcPlpqhkfndWgeMeGNURYs9eGLiDvXTR+G5cTBuo=;
+	s=arc-20240116; t=1736413559; c=relaxed/simple;
+	bh=3X9WiEijehcHGThScJDj/M5PlbJqcfjClnaDwKWQmsA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ul4piWtz3M8yVtIYiA2OCPxELXH6lgX0XP671BizLtBV96NIFmYZBzk3sd7+/DPJ/9k++h0+QmXfDw2vrp0NbLSGYLMLRsReGJXO5RutzgOM4D2ep7hxBu7eWx2odo+9AFVtTJ7dmM6PVSHA64X1JPuWS7Re72RgL6kvAs8VZuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=E/hDMvN/; arc=none smtp.client-ip=115.236.118.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [192.168.2.32] (unknown [125.77.104.109])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 83580805;
-	Thu, 9 Jan 2025 16:29:44 +0800 (GMT+08:00)
-Message-ID: <1a8ce846-bae7-4087-ba7c-2cc5be541be9@rock-chips.com>
-Date: Thu, 9 Jan 2025 16:29:44 +0800
+	 In-Reply-To:Content-Type; b=iGpPv2bQBSrWGinAqs7ZMXk9y2Y3wCh8R71V87NJ6+G9fdnO4AzCp/P4GlJ1TWQTbS4cRAAYYlYJo0dn1DhgOePrQhPfXOKFjynxd/uS6hx1qnpHeVMfL15SD+AxI+fJ6JZN+SQVNcoyW0ynVyCzOdt6OBDgzItQOG80JAsaZyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=d663mxfc; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38633b5dbcfso641026f8f.2
+        for <linux-spi@vger.kernel.org>; Thu, 09 Jan 2025 01:05:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1736413554; x=1737018354; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bDgsyxy69lo5qTeUNcbMx7T4A8G8zgkMPtLrACBsnec=;
+        b=d663mxfcDZepod7Sp/vrtf0R6bT9PIBH9XQHPH9HFY9Vtbe7c1tCuTFv6kVuNwHCz/
+         kgH8+P8VGFQXydNm3h3yV7zQlnoL5bmVmzRoNLILD1s84tvW/FgltCAFrqGb93L/utGu
+         YLDdCaQ4zErgcu6YoLwoBatXGkOup7EkqtEAGyU7kSdg26jpTsZw9qqjHJ2ha4Omk1FI
+         ZRPb3FGjAUUc43N9zu4tc9pDvXtGjRL8mAbKGzBQiFfcVB+RHJhSiuHfhxQTXeH4MeOe
+         S8fMXGzdZkF3YILsC+xx2U0p4emYoOX6ydnihfB3pPR9k6lkukFOflCq/YiRF/7B3ziC
+         kzEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736413554; x=1737018354;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDgsyxy69lo5qTeUNcbMx7T4A8G8zgkMPtLrACBsnec=;
+        b=Xggt8CHWrZXmfHshf1siS4WHegCSj8kA/pP9JRGWLG8gMkTBWoB8M29Zxw7CQgWLZi
+         sAgYXKdUkRMu8LZpdGngNFGBjoKrFwJ4ytVay9zMs9VNn65UNbN0IOgPurz+PgthY2jF
+         pfgwf993NHdxAG8+4H/JwjSVHwF4iIZXQN3WLZLDJ1XU+PogfjCY9hnXKqfMqANeD6o6
+         iU6RXc4XuQmHSTh1X3o+GyJ/eNJp2tHaxw2z6Ab6phAeRaeqL5g6r4vRSEY4WDkFAX/5
+         5r9JKVm4/mRZ4E4qKxZwOYemgTwZat1v/I4B4UyT+Gq9RkQz5Fei0qb1E7jCV8C38oVI
+         VU0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXtQnGU9tByZt3fGwKOIctRzlLKVoYSq0arPtPxUoeKn8DhZIeLofUK4UhEZ1+U48NvNe4a3NR4LI4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1M6Y2mCD3OHndHwEgXrPREheX1qfLoQoSoQLNEYUIHYRI8UhH
+	Ox7eVQUyxQowmvY/rkaAmUnSM59Mn21whzUx59uem4oE2BQBnJfHEUtKzNDxYKM=
+X-Gm-Gg: ASbGncuY8sZyR8quCtjCM87rqHQ/UNhUbIeMLb5TBUOUq3lOGJsm/UxPSl/HP3niJme
+	bS55cX9AYTmHbjyuzU8Rna1RKSKrI2ThXq8SRMIXKci/Z2IgtOLW5CQymBn7FqliDtrSs/Pymjq
+	BHLuhbaFi2TGL4SJgY7kIw/C4ovFNgHOcd+xKp0J5PwtmgecJ452LC4PuTF4Xhp1pxsLmQgPe79
+	lSVsoEQLiL/sU2eM+CTKazn0LCw9DveZw4oSbeSuUSkZgYCOWSt3NMarONstC2O2w==
+X-Google-Smtp-Source: AGHT+IGn6+tUL2qjc6KeWfUfYK5t5bwajgtXVGt6+T5gckzV+WpKCAwBT1XMgXno9e6d1ltcd1lNOw==
+X-Received: by 2002:a05:6000:188e:b0:388:c61d:43e4 with SMTP id ffacd0b85a97d-38a8733e1d1mr5799766f8f.45.1736413554441;
+        Thu, 09 Jan 2025 01:05:54 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.102])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e3834a6sm1214285f8f.28.2025.01.09.01.05.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 01:05:53 -0800 (PST)
+Message-ID: <c58c3935-d9bd-4091-bb7c-d1bdc2485832@tuxon.dev>
+Date: Thu, 9 Jan 2025 11:05:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -43,62 +80,110 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] spi: rockchip-sfc: Add rockchip,fspi compatible
-To: Krzysztof Kozlowski <krzk@kernel.org>, broonie@kernel.org
-Cc: linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- heiko@sntech.de, linux-arm-kernel@lists.infradead.org,
- linux-spi@vger.kernel.org
-References: <20250107154755.2037197-1-jon.lin@rock-chips.com>
- <20250107154755.2037197-2-jon.lin@rock-chips.com>
- <1ef2ece5-f4ed-46ca-9bf5-75f898565a62@kernel.org>
-From: Jon Lin <jon.lin@rock-chips.com>
-In-Reply-To: <1ef2ece5-f4ed-46ca-9bf5-75f898565a62@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v5 4/5] ARM: dts: microchip: add sama7d65 SoC DT
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, mturquette@baylibre.com, sboyd@kernel.org,
+ arnd@arndb.de
+Cc: dharma.b@microchip.com, mihai.sain@microchip.com,
+ romain.sioen@microchip.com, varshini.rajendran@microchip.com,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20250107160850.120537-1-Ryan.Wanner@microchip.com>
+ <20250107160850.120537-5-Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <20250107160850.120537-5-Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGhkaVk8fQx8dT05CSEpJGVYVFAkWGhdVEwETFh
-	oSFyQUDg9ZV1kYEgtZQVlKSU5VTExVSktPVUpLQllXWRYaDxIVHRRZQVlPS0hVSktJT09PSFVKS0
-	tVSkJLS1kG
-X-HM-Tid: 0a944a2f0c2109d9kunm83580805
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ODo6Ajo4CzISFwsBCBcRAjJL
-	FxlPFD5VSlVKTEhNT0pKSENOQk9KVTMWGhIXVREUFVUXEhU7CRQYEFYYExILCFUYFBZFWVdZEgtZ
-	QVlKSU5VTExVSktPVUpLQllXWQgBWUFKSktCNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=E/hDMvN/uXfDVXVtLxHo1yiWP5wjgZs/7u4vsuJhgy4ioXLgcRGjAz6ZAv9ux34uZXrvKsU/jiZF1i6TrzQfyF0mQIJ79pk+4HjZROAxrsn+n1H6Fc7JepyYkxB9mgzZHO7sGCPVQ0kcDu93CBDUWL4fmG4oDqY0NJ6owKg5dms=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=qdKQdu0yqkEFNpHjhxt/s1/3Z7lTuPUmfZCAiVLRWwE=;
-	h=date:mime-version:subject:message-id:from;
 
-On 2025/1/8 15:03, Krzysztof Kozlowski wrote:
-> On 07/01/2025 16:47, Jon Lin wrote:
->>
->> diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
->> index 59de351499a0..88fbde27925e 100644
->> --- a/drivers/spi/spi-rockchip-sfc.c
->> +++ b/drivers/spi/spi-rockchip-sfc.c
->> @@ -808,6 +808,7 @@ static const struct dev_pm_ops rockchip_sfc_pm_ops = {
->>   };
->>   
->>   static const struct of_device_id rockchip_sfc_dt_ids[] = {
->> +	{ .compatible = "rockchip,fspi"},
->>   	{ .compatible = "rockchip,sfc"},
-> I don't understand why you are adding generic compatible which is not
-> even used. Use proper SoC specific compatibles and fallbacks when
-> applicable (see writing bindings document).
+Hi, Ryan,
+
+On 07.01.2025 18:07, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-
-Thanks for the reminder. These two submissions are indeed redundant 
-submissions at present and are not recommended to be merged.
-
-It is indeed necessary to add submissions like rockchip,rkxxxxx-fspi 
-when there are specific SOC requirements, and attach the associated priv 
-data.
-
-The merging of this submission is suspended.
-
-> Best regards,
-> Krzysztof
+> Add Device Tree for sama7d65 SoC.
 > 
+> Co-developed-by: Dharma Balasubiramani <dharma.b@microchip.com>
+> Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+> Co-developed-by: Romain Sioen <romain.sioen@microchip.com>
+> Signed-off-by: Romain Sioen <romain.sioen@microchip.com>
+> Co-developed-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+> ---
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi | 145 ++++++++++++++++++++++
+>  1 file changed, 145 insertions(+)
+>  create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
 > 
+> diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> new file mode 100644
+> index 000000000000..03e1adfdcd34
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
+> @@ -0,0 +1,145 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + *  sama7d65.dtsi - Device Tree Include file for SAMA7D65 SoC
+> + *
+> + *  Copyright (C) 2024 Microchip Technology, Inc. and its subsidiaries
 
+I presume the , in "Microchip Technology, Inc." it a typo. I already
+removed it while applied this. Just please let me know if all good with it.
+
+> + *
+> + *  Author: Ryan Wanner <Ryan.Wanner@microchip.com>
+> + *
+> + */
+> +
+> +#include <dt-bindings/clock/at91.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +#include <dt-bindings/mfd/at91-usart.h>
+> +
+> +/ {
+> +	model = "Microchip SAMA7D65 family SoC";
+> +	compatible = "microchip,sama7d65";
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +	interrupt-parent = <&gic>;
+> +
+> +	cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu0: cpu@0 {
+> +			compatible = "arm,cortex-a7";
+> +			reg = <0x0>;
+> +			device_type = "cpu";
+> +			clocks = <&pmc PMC_TYPE_CORE PMC_CPUPLL>;
+> +			clock-names = "cpu";
+> +		};
+> +	};
+> +
+> +	clocks {
+> +		main_xtal: clock-mainxtal {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +		};
+> +
+> +		 slow_xtal: clock-slowxtal {
+
+There is an extra space in front of slow_xtal. I removed it while applying.
+
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +		};
+> +
+
+There is an empty line here. I removed it while applying.
+
+Everything else look good to me.
+
+Thank you,
+Claudiu
 
