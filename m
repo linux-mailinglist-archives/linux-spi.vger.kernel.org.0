@@ -1,155 +1,97 @@
-Return-Path: <linux-spi+bounces-6259-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6260-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE333A05B05
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 13:08:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CD7A06EF1
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 08:20:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BAFB87A1E2F
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Jan 2025 12:08:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F9D11888E3C
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Jan 2025 07:20:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9BF1F8F19;
-	Wed,  8 Jan 2025 12:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="S7d8Cst0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1362201039;
+	Thu,  9 Jan 2025 07:20:05 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D51F1F758A
-	for <linux-spi@vger.kernel.org>; Wed,  8 Jan 2025 12:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78DF37160;
+	Thu,  9 Jan 2025 07:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736338132; cv=none; b=b9g1SVjptUovQKgbVbim85lkclQHdHB2lfr0RyWQMpCptbPrg+Rwg2Lq+VXPGU6ZuBMxidydKiUKAJYUqLYg3+mErELKnFDrfW9taqRdWUTNxS/sEpz1GkCkv8wzZHX+SePEB22oRJ8PtMY+7uZ7V/Mw7uKozmDIj/GLb22l3bM=
+	t=1736407205; cv=none; b=pD9TNkpvh2IAOYQ1DV+qegQM5mMI4+hyCHw2lcDpbYwpQAN6TRb+Ece0Zejze/CyTo4YlCBQVMeNzabHonRpE9WdApSpLYyH60ccyU0g9XEKg0YLokl1et+dPQUwO0u5PqMXsJnY9uGKwshmxxeQyFc//4EZBvir7PgHAm5au6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736338132; c=relaxed/simple;
-	bh=Q1GTUTmKjX8jfhiEVy0rIQ1l7Rafq0ylK8yASgB6NQw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U+Hh1giCL9S6sUsA6Kzno0KkKH7xMwt6AOZoiSsha1qjUyiORuYzO9wPuyEPRrbHbezfXDTrWSVs/MbBwyUOuX+bdbTMQTkYjqRrLnecwXV4P9ZNLp2fY3VgYSSis+kQOM83nkTJOcNz5evUpJutXp+90wepGJSVAcCHEz5ajvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=S7d8Cst0; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5401bd6cdb4so16538064e87.2
-        for <linux-spi@vger.kernel.org>; Wed, 08 Jan 2025 04:08:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736338129; x=1736942929; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WHYq9u3fK0PbCc5B7zHvSgROeh3nh7BEAUFJXMqDAtE=;
-        b=S7d8Cst0yPy3WaaIMzeRk+2dPoNgZlcinadmx3b/h3xpKcAuaj8ykoFIiux6b18iwW
-         t4YrljB6n4dqj5E0muBuRtEw1NZip+OIitAGdZ2rRfAuYiav+Jtd5WNw4cx8QWr//iwS
-         kTPZgK/WzWBaQChGrPPC35QLilbpMjTBJqGek0MLBT8rlLoDX26CyVz0x+jgxIgb+ImJ
-         ZSyQ2KwmZOiE4QttFrW0XYgRKi6yEP09knLZzoCsDYuEn6jcw2LKb1JgDK5CWVKutUh6
-         6R0R8TZRlfaEZsGryUwXHN3OJAAg8iollbyH3WkLJbr7GJOtc2XpcTa6OTAT57Nm8PBc
-         8N0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736338129; x=1736942929;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WHYq9u3fK0PbCc5B7zHvSgROeh3nh7BEAUFJXMqDAtE=;
-        b=Z7W+4hEnud/PNqTI62Mzjyv/sIirFyAxmi2oKlK4FS20h2omjynssSy2r/OflVUgjg
-         r6eOHsthfW1PR9Bwz8slawsiGVr0jq10Oup7rWdgQ1ycaRgxLhrpBedXRdA6dojys8Tm
-         OTEU+qis829IXNdvlTK3yTlv0SLCq8pxCxCUOcNJwfNI5pJEXAxBxgviZrBXYODLiCIz
-         +M1K7RqmLBCA7hD1GfvQEWv0gEdjEP/7V6rJm8/nI+fKthW3FYD6pUydzNEYv9CFWNum
-         Mf+kQp4zr4hiJhxmwbNmxYVhYuqPclUGx8PmMveXXqZphevNBZVInC4xfQjfHC68qQLe
-         4zGg==
-X-Forwarded-Encrypted: i=1; AJvYcCX4Wellnw8ZAouRjE2as4GVVWXBRQom1jLrus3RrxFRh0q7UvtDq1EIuKmNHI912ME+iuUM9mA/rVw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGY3Dh3WwfYdCnJzXP6li8UCmdkaCp5PTRu+MS+eBrqA1fR6ny
-	72vXSjfYTZ5aNedgy6GPdyFI4FMvI46/35AHiq/zl/U/gtQ9sPQHYXbACbPHYkQKnFQtAY4y/AQ
-	d+myaW3bcPk10mjhPZhi6bq6quwo35x3rC1VrPA==
-X-Gm-Gg: ASbGncvogXlVN8/uxJ7U+Q9owM5ywmtcuoIg8txLEFKNOevY8jDNSmVR64jb72I8NP8
-	MK9xrW96mscclA5TDocZyU5mXQybHGA5XBbqocQXqtAZBqmt+4Siz2RZ9fudDJx51FhN29w==
-X-Google-Smtp-Source: AGHT+IFa3R2ndq55NhKWU1ao89iSflN8dGnIqgIJvNfkd7iWWkr+SCY7vOTKmYqjO3DLDzwPCXA/s7eaAZV3KmJo5mQ=
-X-Received: by 2002:a05:6512:138c:b0:540:2188:763c with SMTP id
- 2adb3069b0e04-542845b0b55mr753264e87.37.1736338128530; Wed, 08 Jan 2025
- 04:08:48 -0800 (PST)
+	s=arc-20240116; t=1736407205; c=relaxed/simple;
+	bh=XZ+TmCmIoTk93QwY0Hm3NJ2mY6ezenPMduW2uK/ZBAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UTwhPZcH2vXhtzZfwrJ28gbAjFwgcuC7jH2eOHG4oHaDy4e3SKaJZbLo/TkAKtvhwJNMwknMkD0GZD8JUb4l+0VmFyUzoURK+skvU+V/VwVeNCtMrAEgKNOwRvljJrvbRNRyBWiDXsl1RA0EroQ/n3fkmE/cN71lsLWo2J5HDjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4YTFnw6LVJz9sRs;
+	Thu,  9 Jan 2025 07:52:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 2h3jIhsljL5N; Thu,  9 Jan 2025 07:52:04 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4YTFnm5G9Pz9sSq;
+	Thu,  9 Jan 2025 07:51:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id A34EA8B783;
+	Thu,  9 Jan 2025 07:51:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id M-S0U1JqzR4O; Thu,  9 Jan 2025 07:51:56 +0100 (CET)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4F7EA8B768;
+	Thu,  9 Jan 2025 07:51:56 +0100 (CET)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Mark Brown <broonie@kernel.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: fsl-spi: Remove display of virtual address
+Date: Thu,  9 Jan 2025 07:51:45 +0100
+Message-ID: <8a37a960ff084dfdb9233849c00714e9317ae6a5.1736405336.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241224-gpio74-v2-0-bbcf14183191@posteo.net> <173593634037.257292.1488097273042214180.b4-ty@linaro.org>
- <CAMuHMdUqvTrSsiGuJ=VvNqsQm4eQs9rNTU8VBg+FzHJZxRnXow@mail.gmail.com>
- <CAMRc=McAm3A1movK-8q67UbKuPb8FQzVwD_me7Q6x-gei2PA_A@mail.gmail.com> <192e97dd-698a-4434-bd32-c1181ec85ba3@prolan.hu>
-In-Reply-To: <192e97dd-698a-4434-bd32-c1181ec85ba3@prolan.hu>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 8 Jan 2025 13:08:37 +0100
-X-Gm-Features: AbW1kvZnk6_fgKN1eHWtfPj2SS6UYja6sVBaHC9BI-DUFwEoYlH6fNeZYLCvfd8
-Message-ID: <CAMRc=MewCR=W=_0RKFZR0gW2mvkMD-pKBWpXCeqOY4j8CXBSXw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] gpio: 74HC595 / 74x164 shift register improvements
-To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>, 
-	=?UTF-8?B?Si4gTmV1c2Now6RmZXI=?= <j.ne@posteo.net>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Maxime Ripard <mripard@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
-	linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736405504; l=917; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=XZ+TmCmIoTk93QwY0Hm3NJ2mY6ezenPMduW2uK/ZBAc=; b=YusKL3SFI3figWCbegHgaqV7ZBjGdUqRWCKXEvhTmrtQCognm2r22fC3dzoqhSUdfjN6Rz10C HmjjixNnzgzAmAqT6no73LmwOyv4G/NT+Fu0KH1PLgrlV5JxYvQrEFx
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 8, 2025 at 11:26=E2=80=AFAM Cs=C3=B3k=C3=A1s Bence <csokas.benc=
-e@prolan.hu> wrote:
->
-> Hi all,
->
-> On 2025. 01. 06. 21:16, Bartosz Golaszewski wrote:
-> > On Mon, Jan 6, 2025 at 10:19=E2=80=AFAM Geert Uytterhoeven <geert@linux=
--m68k.org> wrote:
-> >> Do we really need to document and add driver support for all variants?
-> >> I can easily come up with a list of tens or perhaps even hundreds
-> >> of xx74yy595z parts that are all compatible, as far as software is
-> >> concerned.  As SPI was invented by Motorola, the original part is
-> >> probably named MC74595 or MC74LS595 (yes, ON Semiconductor bought the
-> >> logic division of Motorola).
->
-> I second this, no point of having a new compatible which is a guaranteed
-> 1:1 equivalent of an already existing one. Especially true if the only
-> change was that a different company bought the IP. By the same logic, I
-> could start to sumbit patches to change all `fsl,` compatible-s to
-> `nxp,`; `atmel,`, `maxim,`, `smsc,` etc. to `microchip,`; `ralink,` to
-> `mediatek,` and so on. There would be no end.
->
-> >> Perhaps we need a separate vendor prefix for the 74xx-series[1]?
->
-> I don't think that is the case. Rather, we should document that the
-> existing binding/compatible should be used for all such simple cases (it
-> is called _compatible_ for a reason, after all, and not
-> `exact-part-number`).
->
-> >> The xx-prefix and z-suffix don't matter; the yy-infix for semiconducto=
-r
-> >> technology rarely matters (there are a few exceptions, though, mostly
-> >> pinout, which doesn't matter for software).
-> >>
-> >
-> > I missed the fact that Rob actually responded to patch 1/3 with a
-> > similar suggestion (fallback, instead of a full compatible).
-> >
-> > I can drop this series from my queue if it needs more rework.
->
-> I think you can keep 3/3 (the one commenting the use of `latch` as CS).
-> The rest can be replaced by another commit commenting on what it means
-> to be `fairchild,74hc595`:
->
+The following appears in kernel log at boot:
 
-J. Neusch=C3=A4fer: do you want to send a follow-up for this?
+	fsl_spi b01004c0.spi: at 0x(ptrval) (irq = 51), QE mode
 
-Bart
+This is useless, so remove the display of that virtual address and
+display the MMIO address instead, just like serial core does.
 
-> * tri-state output
-> * 8-bit output
-> * OE pin (or latch or whatever it happens to be called in their chosen
-> manufacturer's datasheet)
-> * SRCLR does not seem to be used by the driver, so we can probably skip
-> that...
->
-> And telling people NOT to add a new compatible if their part satisfies
-> these.
->
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 856a4a9def66..2f2082652a1a 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -618,7 +618,7 @@ static struct spi_controller *fsl_spi_probe(struct device *dev,
+ 	if (ret < 0)
+ 		goto err_probe;
+ 
+-	dev_info(dev, "at 0x%p (irq = %d), %s mode\n", reg_base,
++	dev_info(dev, "at MMIO %pa (irq = %d), %s mode\n", &mem->start,
+ 		 mpc8xxx_spi->irq, mpc8xxx_spi_strmode(mpc8xxx_spi->flags));
+ 
+ 	return host;
+-- 
+2.47.0
+
 
