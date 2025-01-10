@@ -1,54 +1,54 @@
-Return-Path: <linux-spi+bounces-6288-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6289-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A5E4A0940B
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:46:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F9BA09409
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:46:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C6A57A4888
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 14:46:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AD18165B97
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 14:46:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A99A212B0F;
-	Fri, 10 Jan 2025 14:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D366212B25;
+	Fri, 10 Jan 2025 14:45:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ep+W3Rww"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gQIfRcfG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C803211A37;
-	Fri, 10 Jan 2025 14:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064CF21147F;
+	Fri, 10 Jan 2025 14:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736520335; cv=none; b=N2UddCEvr7gN2qT3A45yl5lBbxdbZtt6Ms2McLJ13s6chyW7+1rnGTYllbH9kjNsIMNdjLZBsEh31cH0kxCO0/9UkPsD2JLahNE4nollZIMIykiGQL19Q9dtQk9+dzt/GU8JYkQg8WCVJdtkpSVjBRkQrlzCCyhFeUZWQrjK2eY=
+	t=1736520337; cv=none; b=XGdsPMwtUjFDflnq+DJq6KysUbtwh2rgYe4zpXksdQ/Ep8Gz0aF8G1L0d1Y2+6mF/dcrgW64t/OAxokHrshD7dXcvBouEfH7sj0ricvz1aSN69c9rCtNJF4WeYtdnf24Vc/yQmLP98fb7bwVtNgJzFXwlJDTq1YuK9bed/wxV4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736520335; c=relaxed/simple;
-	bh=WP9b+GF1ixy7lkxjZGVHbpaMqTS4WeKnMZ68YGxlhCE=;
+	s=arc-20240116; t=1736520337; c=relaxed/simple;
+	bh=eFgMyOfxkl02m78OhThqpNpwuFeCqsIrRLmrBn7fZ74=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VsujrXgANMUHsQz2tQJsU61SBCPHF7TdWDRoJOk7WqqGNz1AuPHGuOislsALABi2ksxB1TZmg/hJLxWkpaQwf9gSnGI5RzpQLQg1UxZGWiDEkZ6fGQG7GVsvw5yw/eURfVyclhuc0E3TZz+qpatPAliVKqISaD01PWe7W4yzs6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ep+W3Rww; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:To:Cc; b=Mg+2aqEv4LainVxvUTi9Ay3qzgkDmJpJkuBUKj5LWA9sUkXPKaayUTmil2Nem6+qOokxQl3r88hCn2709z+/kKE3xqSyrDgc4L9LwwajZEVnockkk1nPwSK2pmggSCaNaMeD5j6ccA+YNx+XBL72LYRh2z2Tew7IM0pW0c2XbXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gQIfRcfG; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1317AFF807;
-	Fri, 10 Jan 2025 14:45:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DF20FFF817;
+	Fri, 10 Jan 2025 14:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736520331;
+	t=1736520333;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=BZ7N9DxFJs+ypWx4tpIWo4afnbo0gO3jjiMo2DbsJnA=;
-	b=Ep+W3RwwhmDUkoOO8gMAhVAvq+JxfEHNNEhlItnkm6ggFf2cddQXzxap3MgR9mXKCDscmq
-	m/wfrLsZs+FKMbbg3tKL/2WRy+/PqYCmxdj31+BFkJ6U5x977eYrMYR4dWMjtIP/3LrZOr
-	+9YwOhVFPYowtfyY29H0gM+j+73hpW4Om/PtB2G7ZEY2XAWCJZ8fN34jETT6A7RWvtNVug
-	+95UyUbdJXRSJsOX/bPjB6A+lRpnt8Hsb4V24g0Id8tv5VrIKh/LnBd4/KNLdRLwc3FzxP
-	0132EdjtSokHP0suQe2WqJ8kvsWTOT3s3qDIdFB6l5xjeBP3BxhjdUWbwB3+gg==
+	bh=JrcFdkL7v8hevVCz++URbVmucpyX6fBOW8nqTnbI9/s=;
+	b=gQIfRcfGmYYAoyUyZ0m3FuxYEZ2Vhp0yGExEna36qZIVu0OMGDf3EYZj0i1/xdhyZUUBMS
+	VGzcm/2MGkihSOmL+wjLfusd6OmVosbXg7TDvLO/D9+1XtbRlvunCI/OZtiAIsQegjQClm
+	fR+2U8uPTsx7DZykr/2TkVTTt5jx0gM2zt3h73KX0TIP7GfigvYGWczUp9QQw/cooYoXit
+	k+0rbpdIhC53zQLF78O68haof3hDkEE9O29a+Ox7cOCzRRmEObX4dNH3SpTWt+rLQWd9QA
+	7W1kK52WnoQalg1NZh0Npkq4yuQWlphw9tpc/D51Qkb6ndqHS2QKZ4zPZIeOLA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 10 Jan 2025 15:45:09 +0100
-Subject: [PATCH v3 07/27] spi: dw: Support per spi-mem operation frequency
- switches
+Date: Fri, 10 Jan 2025 15:45:10 +0100
+Subject: [PATCH v3 08/27] spi: fsl-qspi: Support per spi-mem operation
+ frequency switches
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250110-winbond-6-11-rc1-quad-support-v3-7-7ab4bd56cf6e@bootlin.com>
+Message-Id: <20250110-winbond-6-11-rc1-quad-support-v3-8-7ab4bd56cf6e@bootlin.com>
 References: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
 In-Reply-To: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Sanjay R Mehta <sanju.mehta@amd.com>, 
@@ -100,47 +100,57 @@ device value will be given anyway.
 The per-operation frequency capability is thus advertised to the spi-mem
 core.
 
+Cc: Han Xu <han.xu@nxp.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-dw-core.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/spi/spi-fsl-qspi.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-index 431788dd848cea1d854affe0d1fb971f680824a1..3d49b1dbaed4d491c0df659c061582e71f2c514d 100644
---- a/drivers/spi/spi-dw-core.c
-+++ b/drivers/spi/spi-dw-core.c
-@@ -677,7 +677,7 @@ static int dw_spi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	 * operation. Transmit-only mode is suitable for the rest of them.
- 	 */
- 	cfg.dfs = 8;
--	cfg.freq = clamp(mem->spi->max_speed_hz, 0U, dws->max_mem_freq);
-+	cfg.freq = clamp(op->max_freq, 0U, dws->max_mem_freq);
- 	if (op->data.dir == SPI_MEM_DATA_IN) {
- 		cfg.tmode = DW_SPI_CTRLR0_TMOD_EPROMREAD;
- 		cfg.ndf = op->data.nbytes;
-@@ -894,6 +894,10 @@ static void dw_spi_hw_init(struct device *dev, struct dw_spi *dws)
- 		dw_writel(dws, DW_SPI_CS_OVERRIDE, 0xF);
+diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+index 9ec53bf0dda8ead27bc7a11a9bb09a08efe2ea05..355e6a39fb41896f460e2474a90b8f0b42068ff3 100644
+--- a/drivers/spi/spi-fsl-qspi.c
++++ b/drivers/spi/spi-fsl-qspi.c
+@@ -522,9 +522,10 @@ static void fsl_qspi_invalidate(struct fsl_qspi *q)
+ 	qspi_writel(q, reg, q->iobase + QUADSPI_MCR);
  }
  
-+static const struct spi_controller_mem_caps dw_spi_mem_caps = {
+-static void fsl_qspi_select_mem(struct fsl_qspi *q, struct spi_device *spi)
++static void fsl_qspi_select_mem(struct fsl_qspi *q, struct spi_device *spi,
++				const struct spi_mem_op *op)
+ {
+-	unsigned long rate = spi->max_speed_hz;
++	unsigned long rate = op->max_freq;
+ 	int ret;
+ 
+ 	if (q->selected == spi_get_chipselect(spi, 0))
+@@ -652,7 +653,7 @@ static int fsl_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	fsl_qspi_readl_poll_tout(q, base + QUADSPI_SR, (QUADSPI_SR_IP_ACC_MASK |
+ 				 QUADSPI_SR_AHB_ACC_MASK), 10, 1000);
+ 
+-	fsl_qspi_select_mem(q, mem->spi);
++	fsl_qspi_select_mem(q, mem->spi, op);
+ 
+ 	if (needs_amba_base_offset(q))
+ 		addr_offset = q->memmap_phy;
+@@ -839,6 +840,10 @@ static const struct spi_controller_mem_ops fsl_qspi_mem_ops = {
+ 	.get_name = fsl_qspi_get_name,
+ };
+ 
++static const struct spi_controller_mem_caps fsl_qspi_mem_caps = {
 +	.per_op_freq = true,
 +};
 +
- int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
+ static int fsl_qspi_probe(struct platform_device *pdev)
  {
- 	struct spi_controller *host;
-@@ -941,8 +945,10 @@ int dw_spi_add_host(struct device *dev, struct dw_spi *dws)
- 		host->set_cs = dw_spi_set_cs;
- 	host->transfer_one = dw_spi_transfer_one;
- 	host->handle_err = dw_spi_handle_err;
--	if (dws->mem_ops.exec_op)
-+	if (dws->mem_ops.exec_op) {
- 		host->mem_ops = &dws->mem_ops;
-+		host->mem_caps = &dw_spi_mem_caps;
-+	}
- 	host->max_speed_hz = dws->max_freq;
- 	host->flags = SPI_CONTROLLER_GPIO_SS;
- 	host->auto_runtime_pm = true;
+ 	struct spi_controller *ctlr;
+@@ -923,6 +928,7 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+ 	ctlr->bus_num = -1;
+ 	ctlr->num_chipselect = 4;
+ 	ctlr->mem_ops = &fsl_qspi_mem_ops;
++	ctlr->mem_caps = &fsl_qspi_mem_caps;
+ 
+ 	fsl_qspi_default_setup(q);
+ 
 
 -- 
 2.47.0
