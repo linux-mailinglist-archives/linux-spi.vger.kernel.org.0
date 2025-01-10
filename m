@@ -1,186 +1,177 @@
-Return-Path: <linux-spi+bounces-6274-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6275-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25139A088A4
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 07:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 795C2A08970
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 08:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2FC5168CF4
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 06:56:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79FDF168C96
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 07:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E39206F2D;
-	Fri, 10 Jan 2025 06:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F17205E32;
+	Fri, 10 Jan 2025 07:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="liutDd3P"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="hCtfg57d"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11B92066D4;
-	Fri, 10 Jan 2025 06:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210482905;
+	Fri, 10 Jan 2025 07:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736492194; cv=none; b=P+EyskO+7odLPrfOf7cdGBUbCXmYlmwctnEpZKsUKTtQKtBxKO0zyPRmZO+f79tk0zg8FjsndjnpGBql8/iT0G2L3sxVquChrFaB0wroSXOU+VWZx1Y3VOY+MX8Mr5r+J0LFgHPV4IK5Jxr7MNLA4po/tqw9kHe8PBmVAB+umbs=
+	t=1736495803; cv=none; b=bZcgefUnu6NudIB0M3dl11VxRSgPMcwVxRI+uLPhPlshm8+RnGbsLUGKFnjS3eQ5hcObR46XjsbIncNxaboB2jppLCbTBpc6JZSKPszOyi7AxR2wW+wEVebRODVgLdiIkQgDeE+onZ2SaPMgDP2X84bOBV1dJ1v3hnGhMu4RSwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736492194; c=relaxed/simple;
-	bh=y1iLq6uFyAoWsUCQXZ1Fh3RHmgz/QPhSg+d0SKTY0m4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=QW4TqTm3DdFfdmF90aKGl6e81yLkNUa6VZQq1Rs/unmtlmTMyO3s9d58OMnD7+T/xaW8ZlHm9BAfh0fassU0Cm/KXRO+Jr+2cqD0iaHFCEzF3QAG+ntvXDQnhXJjYc09zvIeh5iwR3KYqopBnBXEgIUGhJYIYlffMJgX+cP2+Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=liutDd3P; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50A3vbKO016268;
-	Fri, 10 Jan 2025 06:56:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	uqyHJVcLV0oHsBGN4ljVWxNiqdKoRDx6AXgDASkumaA=; b=liutDd3PzyLFpjRf
-	cYSBXwWvsix0ieyDaXRX0e6+2o+Q9ld7wcdj1DMLjvQLumo72i6d2b3ZvbxOfQI4
-	sn29HOF+zNCYXblZo44eCkTrqZ7tc+dOH/Ldv3ArchSXx1PFNuW/kvkFuCAqjNIi
-	AEvI5KDT6tRdpuy2Bbcy0Bio9R5NgTkPky02HS8DmiCyPmvk+S7IKaVtpO2tAtAi
-	RrbDEKXDJDjduQIv3ZOFQDXNvM6Gl81PR7mhxUrcKccWTp5EEXaQ9X3fIYPequ8u
-	dgmtbIXn9GdHozI69KqFyLP9yIsVx0TGEVg0ocxwnpLLBW7FXDjlEl5g7I4BvaJz
-	SVFFZQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 442v3rgbrm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jan 2025 06:56:28 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50A6uR9v019457
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 10 Jan 2025 06:56:27 GMT
-Received: from [10.216.39.150] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 9 Jan 2025
- 22:56:19 -0800
-Message-ID: <17138798-b72b-4e78-8fad-419e1a63fa5b@quicinc.com>
-Date: Fri, 10 Jan 2025 12:26:16 +0530
+	s=arc-20240116; t=1736495803; c=relaxed/simple;
+	bh=EAaulJ2Ldtk+tbgYL8kFf/W30nz2IOiufWllhRV2E0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pasCHYuWSOvwRNQt6sBHUHMit6cVLACKjLW7oXcmZIGpqmjvLAgavVpBOFiTfo6IU98MW4RoDENumty42Jw88tYOUsTfRepitD9PA8LIFji/XtVbACLRXz4e6WnjikB3BICw3zQyK1MHpxE+2NVp5C9hi9xb4fGeqn8CMco/lhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=hCtfg57d; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AA47F1484594;
+	Fri, 10 Jan 2025 08:56:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1736495797;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Coy02//KS7MYK7jX90haXrVAAKw75veVepRFuvAw9mQ=;
+	b=hCtfg57dLN+Tf8kjrLOlVV72y4rYNehARxRiXWkcOPcGRI4HFu/z7OyCg/BbOFCmrQ7aqW
+	mW7I8eGfSWo7iwHoghbswWkUX+eZZ6Z24j1WG/zr4ETu5VDjgM/Vtwtt21790wS4t41Wo6
+	BlSicHzLRm/rCzkhmrMWLpWBwfOltaQC+LYu8/iOH67JOztV6ZFxta9yFuVxSNtNAFKsgp
+	55u6bt+Wm1MTofTcFMZeCW0XO8x10QX4dWoq+utfbDY4jR1CoQWWh668Y4rJQHGLcShByf
+	LKoD+zUcraIQ0xD7rmKoKyPxgxKLmsYN8wC3+wRDDk5MGV9135zNZq1Byjl1dg==
+Date: Fri, 10 Jan 2025 08:56:29 +0100
+From: Alexander Dahl <ada@thorsis.com>
+To: =?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Tudor Ambarus <tudor.ambarus@microchip.com>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>,
+	Mark Brown <broonie@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v3 2/2] spi: atmel-quadspi: Add support for sama7g5 QSPI
+Message-ID: <20250110-paycheck-irregular-bcddab1276c7@thorsis.com>
+Mail-Followup-To: =?iso-8859-1?B?Q3Pza+FzLA==?= Bence <csokas.bence@prolan.hu>,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Tudor Ambarus <tudor.ambarus@microchip.com>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>,
+	Mark Brown <broonie@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+References: <20241128174316.3209354-1-csokas.bence@prolan.hu>
+ <20241128174316.3209354-3-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/7] Add support to load QUP SE firmware from
-To: Caleb Connolly <caleb.connolly@linaro.org>,
-        Viken Dadhaniya
-	<quic_vdadhani@quicinc.com>, <andi.shyti@kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <broonie@kernel.or>, <andersson@kernel.org>, <konradybcio@kernel.org>,
-        <johan+linaro@kernel.org>, <dianders@chromium.org>,
-        <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-CC: <=quic_msavaliy@quicinc.com>, <quic_anupkulk@quicinc.com>
-References: <20241204150326.1470749-1-quic_vdadhani@quicinc.com>
- <66fb0c6d-472c-4131-bd25-83266cf497e4@linaro.org>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <66fb0c6d-472c-4131-bd25-83266cf497e4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PhOnlJmPZlTu82dC93IHwQ_4FUIrtZ-W
-X-Proofpoint-ORIG-GUID: PhOnlJmPZlTu82dC93IHwQ_4FUIrtZ-W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- clxscore=1011 mlxscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501100055
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241128174316.3209354-3-csokas.bence@prolan.hu>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thanks Caleb for your testing and sharing results. Since Viken is on 
-leave, i am following on this.
+Hello,
 
-On 1/7/2025 4:55 PM, Caleb Connolly wrote:
-> Hi Viken,
-> 
-> On 04/12/2024 16:03, Viken Dadhaniya wrote:
->> In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
->> hardware has traditionally been managed by TrustZone (TZ). This setup
->> handled Serial Engines(SE) assignments and access control permissions,
->> ensuring a high level of security but limiting flexibility and
->> accessibility.
->>   
->> This limitation poses a significant challenge for developers who need more
->> flexibility to enable any protocol on any of the SEs within the QUP
->> hardware.
->>   
->> To address this, we are introducing a change that opens the firmware
->> loading mechanism to the Linux environment. This enhancement increases
->> flexibility and allows for more streamlined and efficient management. We
->> can now handle SE assignments and access control permissions directly
->> within Linux, eliminating the dependency on TZ.
->>   
->> We propose an alternative method for firmware loading and SE
->> ownership/transfer mode configuration based on device tree configuration.
->> This method does not rely on other execution environments, making it
->> accessible to all developers.
->>   
->> For SEs used prior to the kernel, their firmware will be loaded by the
->> respective image drivers (e.g., Debug UART, Secure or trusted SE).
->> Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
->> will not be loaded by Linux driver but TZ only. At the kernel level, only
->> the SE protocol driver should load the respective protocol firmware.
-> 
-> I gave this series a spin on the RB3 Gen 2 with U-Boot.
-> 
-Is it possible to try on RB8 board ? Because that's where this support 
-is enabled. It also needs respective TZ configuration to allow FW 
-loading from Linux.
+found another suspicious area regarding pm_runtime in
+atmel_qspi_probe(), see below (irrelevant stuff dropped this time) …
 
-
-> After fixing the compilation errors, it seems like there is a consistent
-> hard crash (the board freezes and resets) at some point during i2c
-> controller init with this series.
-> 
-Can you please share exact repro steps ? We can try locally and check 
-what's wrong and also review in future how we make it working for U-boot 
-combination.
-> I noticed a similar issue with this same logic implemented in U-Boot.
-> 
-> Could you clarify which xfer mode is appropriate for the i2c controllers
-> on the RB3 Gen 2 and maybe give this a try yourself, or let me know what
-> other info you'd need to debug this.
-> 
-Yes, please share the procedure , we will try internally.
-is there any DTSI change done as part of your testing ?
-> Thanks and kind regards,
->>
->> Viken Dadhaniya (7):
->>    dt-bindings: i2c: qcom,i2c-geni: Document DT properties for QUP
->>      firmware loading
->>    spi: dt-bindings: Document DT properties for QUP firmware loading
->>    dt-bindings: serial: Document DT properties for QUP firmware loading
->>    soc: qcom: geni-se:: Add support to load QUP SE Firmware via Linux
->>      subsystem
->>    i2c: qcom-geni: Load i2c qup Firmware from linux side
->>    spi: geni-qcom: Load spi qup Firmware from linux side
->>    serial: qcom-geni: Load UART qup Firmware from linux side
->>
->>   .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |  11 +
->>   .../serial/qcom,serial-geni-qcom.yaml         |  12 +
->>   .../bindings/spi/qcom,spi-geni-qcom.yaml      |  11 +
->>   drivers/i2c/busses/i2c-qcom-geni.c            |  11 +-
->>   drivers/soc/qcom/qcom-geni-se.c               | 445 ++++++++++++++++++
->>   drivers/spi/spi-geni-qcom.c                   |   7 +-
->>   drivers/tty/serial/qcom_geni_serial.c         |   7 +-
->>   include/linux/soc/qcom/geni-se.h              |  17 +
->>   include/linux/soc/qcom/qup-fw-load.h          | 179 +++++++
->>   9 files changed, 692 insertions(+), 8 deletions(-)
->>   create mode 100644 include/linux/soc/qcom/qup-fw-load.h
->>
+Am Thu, Nov 28, 2024 at 06:43:15PM +0100 schrieb Csókás, Bence:
+> From: Tudor Ambarus <tudor.ambarus@microchip.com>
 > 
 
+[…]
+
+> @@ -726,18 +1411,32 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+>  				"failed to enable the QSPI system clock\n");
+>  			goto disable_pclk;
+>  		}
+> +	} else if (aq->caps->has_gclk) {
+> +		/* Get the QSPI generic clock */
+> +		aq->gclk = devm_clk_get(&pdev->dev, "gclk");
+> +		if (IS_ERR(aq->gclk)) {
+> +			dev_err(&pdev->dev, "missing Generic clock\n");
+> +			err = PTR_ERR(aq->gclk);
+> +			goto disable_pclk;
+> +		}
+> +	}
+> +
+> +	if (aq->caps->has_dma) {
+> +		err = atmel_qspi_dma_init(ctrl);
+> +		if (err == -EPROBE_DEFER)
+> +			goto disable_qspick;
+>  	}
+>  
+>  	/* Request the IRQ */
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (irq < 0) {
+>  		err = irq;
+> -		goto disable_qspick;
+> +		goto dma_release;
+>  	}
+>  	err = devm_request_irq(&pdev->dev, irq, atmel_qspi_interrupt,
+>  			       0, dev_name(&pdev->dev), aq);
+>  	if (err)
+> -		goto disable_qspick;
+> +		goto dma_release;
+>  
+>  	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
+>  	pm_runtime_use_autosuspend(&pdev->dev);
+> @@ -745,7 +1444,9 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+>  	pm_runtime_enable(&pdev->dev);
+>  	pm_runtime_get_noresume(&pdev->dev);
+>  
+> -	atmel_qspi_init(aq);
+> +	err = atmel_qspi_init(aq);
+> +	if (err)
+> +		goto dma_release;
+
+This error handling leads to unbalanced pm_runtime right?  The block
+below rolls back pm_runtime before jumping to 'dma_release', this here
+does not.
+
+>  	err = spi_register_controller(ctrl);
+>  	if (err) {
+> @@ -753,13 +1454,16 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+>  		pm_runtime_disable(&pdev->dev);
+>  		pm_runtime_set_suspended(&pdev->dev);
+>  		pm_runtime_dont_use_autosuspend(&pdev->dev);
+> -		goto disable_qspick;
+> +		goto dma_release;
+>  	}
+
+This hunk got it right?
+
+>  	pm_runtime_mark_last_busy(&pdev->dev);
+>  	pm_runtime_put_autosuspend(&pdev->dev);
+>  
+>  	return 0;
+>  
+> +dma_release:
+> +	if (aq->caps->has_dma)
+> +		atmel_qspi_dma_release(aq);
+>  disable_qspick:
+>  	clk_disable_unprepare(aq->qspick);
+>  disable_pclk:
+> @@ -768,6 +1472,44 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+>  	return err;
+>  }
+
+I think this is another issue of forwarding porting.  The pm_runtime
+stuff was added in mainline after the original patch was forked of,
+and not entirely considered when porting?
+
+Greets
+Alex
 
