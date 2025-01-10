@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-6294-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6295-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88BDAA09414
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:47:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F267A09417
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:47:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDC06162F55
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 14:47:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26908188D857
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 14:47:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D088212F95;
-	Fri, 10 Jan 2025 14:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6266E213235;
+	Fri, 10 Jan 2025 14:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AkbPtjem"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XZUdHskM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E377212F93;
-	Fri, 10 Jan 2025 14:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46699212FAC;
+	Fri, 10 Jan 2025 14:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736520346; cv=none; b=gN+FsS5F9uG+cmtSZJ4kxF+K5zPLJzlH5LmQqTHnZGJPQQtzAZ3zdtr8rvwQ547LRfG8sG+9V1HqfXA1foAa56UsrM44qfK60zgetsAlp2tYC1UyYj1qSurX9uI1eynWonRh5iayrXBHK04rFB3f5I5YgdhTT/kc5YNgbt1kqaA=
+	t=1736520348; cv=none; b=sF8RQwlIK/PxuG7YxjNcnGFqQZfcjisAQme5bW2wkFDV5zFFgN+iP9QV8j6pgTft4gwAcj/T4YamcFxDGxTwjZptxxviupne3GecUllp1JaJBpRkM0ps0cCOB1sSN356B8WSwO48SZgA5sRNfAZjjE26VZ1JRcUFD7CQTelPtFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736520346; c=relaxed/simple;
-	bh=MNRDH89ZYKVuwkMKRXorlhqbPyg4neeuxaTuBODU+/Q=;
+	s=arc-20240116; t=1736520348; c=relaxed/simple;
+	bh=XZ0ZaPTRPzFxELbFLOwlFUQG7DJ3X6bdERSY1wJBs5c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=boHsZj609fvhvzejNSQhPTOPJ0gNbugwqTz/LNkZ04xya/VVo4gD6jng6TLSYMHvtTnr6gEbHJCQhqLxEOgoWDMAZPgTSZLvhqaj2NxRUTh0b6VY1TtEJM6KYjLWLvgcvx9gopLT2pyYOBaHFHnss8f0dBkbc2sA69BnrLtVYa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=AkbPtjem; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:To:Cc; b=mVey1ZxpF7wQ8k3ynOnNotAqK+GcaVahAJ7qA/Sj0iFci3igSKRtaFWjYSeXgFpu/V6QmB8qWSjFKPJtAuxxXMhTw1usw0iE3u1VDud7cdy+r6HdFrr5SKcC47t5MG7N1G4D+oOlpYTQLwGvmZiEg61K9L7siEBC3+j8/PTAY70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XZUdHskM; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B95AFF810;
-	Fri, 10 Jan 2025 14:45:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DF7E5FF811;
+	Fri, 10 Jan 2025 14:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736520342;
+	t=1736520344;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=lEtesl+ZX1jKYhDEYl+ivyiJHI5wxENJqdJo8H/qVyg=;
-	b=AkbPtjemgG9FqkgaJjGa7C36NW/gvGEGOzho02DMPBK5j+7nW502+8z88v+WAS2eOxAaTW
-	jdd3fWrMtdBZRiaxFSFPkK5hhbaP8601o/yp8LIzTaCn+jWEXCY4B8rpfBs3w4TeizkUrp
-	/c8OzoVQIw7OI3/2ScJfim+8fsfxnZJDtdtsMs+cfzm+/316SnJ92sJ6gGsfdnkcydBXAG
-	/plgKoiGdFPETi8haezUpgiK8UVF1bIY34tC0wHJqUa9ohbe3rmM/ktTbXf+aRSynONBcz
-	7O4qHF218EFZ2GR1d8YNBk2ecn164hsNQ+y4u2mp+yWtZVr7XTMJOLjrqGqzUw==
+	bh=XOM20MlWPFKmxw5KkK0hLotjF6wgAi7LSWkedeOSHRU=;
+	b=XZUdHskMqNiQqXzrkdfH82Jzihs03ga1WVHdtuAMzHaJHIyH0x+htnYHwTUNh7VV5z5CPp
+	Vm9jG1CczoVXrpTPykNsXITlsPiCuLvR8m/tIu5qeNIEbCof/pGZNKmFR8Tkmf/iLbYZC4
+	sLy6KJO0MdcASmcLIMmdlf8AZgngPSOeBWb3pn2YxbL6x09YEepMyinYAC/+TSw59YO/Bc
+	eHxgxGsh7KhLKgySJT9zYHR8juNwytx/1362fJT76ReAIfnJ560kIctiDEH69gm+ZP7CcC
+	ZOu7QA1T/zYwgkeGe/JDECMaKPLIdhxZ18yU78/HgG4vOZQJNoE7q9sOBTmvWA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 10 Jan 2025 15:45:15 +0100
-Subject: [PATCH v3 13/27] spi: rockchip-sfc: Support per spi-mem operation
+Date: Fri, 10 Jan 2025 15:45:16 +0100
+Subject: [PATCH v3 14/27] spi: spi-sn-f-ospi: Support per spi-mem operation
  frequency switches
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250110-winbond-6-11-rc1-quad-support-v3-13-7ab4bd56cf6e@bootlin.com>
+Message-Id: <20250110-winbond-6-11-rc1-quad-support-v3-14-7ab4bd56cf6e@bootlin.com>
 References: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
 In-Reply-To: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Sanjay R Mehta <sanju.mehta@amd.com>, 
@@ -100,52 +100,51 @@ device value will be given anyway.
 The per-operation frequency capability is thus advertised to the spi-mem
 core.
 
-Cc: Han Xu <han.xu@nxp.com>
-Cc: Haibo Chen <haibo.chen@nxp.com>
-Cc: Yogesh Gaur <yogeshgaur.83@gmail.com>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-rockchip-sfc.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/spi/spi-sn-f-ospi.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-rockchip-sfc.c b/drivers/spi/spi-rockchip-sfc.c
-index 69d0f21755684a8a01724c29eb97123044dcf6ae..a8163fbc18923f8a96114785e46623476cf97d04 100644
---- a/drivers/spi/spi-rockchip-sfc.c
-+++ b/drivers/spi/spi-rockchip-sfc.c
-@@ -491,11 +491,11 @@ static int rockchip_sfc_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op
- 	u32 len = op->data.nbytes;
+diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
+index adac645732fedfe6e33a5a0979ba43d5d203bfce..6ad4b729897e3909a5e22b33aa47b812219a6ee5 100644
+--- a/drivers/spi/spi-sn-f-ospi.c
++++ b/drivers/spi/spi-sn-f-ospi.c
+@@ -335,7 +335,6 @@ static void f_ospi_config_indir_protocol(struct f_ospi *ospi,
+ static int f_ospi_indir_prepare_op(struct f_ospi *ospi, struct spi_mem *mem,
+ 				   const struct spi_mem_op *op)
+ {
+-	struct spi_device *spi = mem->spi;
+ 	u32 irq_stat_en;
  	int ret;
  
--	if (unlikely(mem->spi->max_speed_hz != sfc->frequency)) {
--		ret = clk_set_rate(sfc->clk, mem->spi->max_speed_hz);
-+	if (unlikely(op->max_freq != sfc->frequency)) {
-+		ret = clk_set_rate(sfc->clk, op->max_freq);
- 		if (ret)
- 			return ret;
--		sfc->frequency = mem->spi->max_speed_hz;
-+		sfc->frequency = op->max_freq;
- 		dev_dbg(sfc->dev, "set_freq=%dHz real_freq=%ldHz\n",
- 			sfc->frequency, clk_get_rate(sfc->clk));
- 	}
-@@ -535,6 +535,10 @@ static const struct spi_controller_mem_ops rockchip_sfc_mem_ops = {
- 	.adjust_op_size = rockchip_sfc_adjust_op_size,
+@@ -343,7 +342,7 @@ static int f_ospi_indir_prepare_op(struct f_ospi *ospi, struct spi_mem *mem,
+ 	if (ret)
+ 		return ret;
+ 
+-	f_ospi_config_clk(ospi, spi->max_speed_hz);
++	f_ospi_config_clk(ospi, op->max_freq);
+ 
+ 	f_ospi_config_indir_protocol(ospi, mem, op);
+ 
+@@ -577,6 +576,10 @@ static const struct spi_controller_mem_ops f_ospi_mem_ops = {
+ 	.exec_op = f_ospi_exec_op,
  };
  
-+static const struct spi_controller_mem_caps rockchip_sfc_mem_caps = {
++static const struct spi_controller_mem_caps f_ospi_mem_caps = {
 +	.per_op_freq = true,
 +};
 +
- static irqreturn_t rockchip_sfc_irq_handler(int irq, void *dev_id)
+ static int f_ospi_init(struct f_ospi *ospi)
  {
- 	struct rockchip_sfc *sfc = dev_id;
-@@ -567,6 +571,7 @@ static int rockchip_sfc_probe(struct platform_device *pdev)
- 
- 	host->flags = SPI_CONTROLLER_HALF_DUPLEX;
- 	host->mem_ops = &rockchip_sfc_mem_ops;
-+	host->mem_caps = &rockchip_sfc_mem_caps;
- 	host->dev.of_node = pdev->dev.of_node;
- 	host->mode_bits = SPI_TX_QUAD | SPI_TX_DUAL | SPI_RX_QUAD | SPI_RX_DUAL;
- 	host->max_speed_hz = SFC_MAX_SPEED;
+ 	int ret;
+@@ -614,6 +617,7 @@ static int f_ospi_probe(struct platform_device *pdev)
+ 		| SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL
+ 		| SPI_MODE_0 | SPI_MODE_1 | SPI_LSB_FIRST;
+ 	ctlr->mem_ops = &f_ospi_mem_ops;
++	ctlr->mem_caps = &f_ospi_mem_caps;
+ 	ctlr->bus_num = -1;
+ 	of_property_read_u32(dev->of_node, "num-cs", &num_cs);
+ 	if (num_cs > OSPI_NUM_CS) {
 
 -- 
 2.47.0
