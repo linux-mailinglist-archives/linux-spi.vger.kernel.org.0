@@ -1,117 +1,169 @@
-Return-Path: <linux-spi+bounces-6311-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6312-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C6B8A094A9
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 16:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 071AAA095A1
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 16:29:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52637188E23E
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:07:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF589188EF69
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 15:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3384E211267;
-	Fri, 10 Jan 2025 15:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E46A212B35;
+	Fri, 10 Jan 2025 15:26:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bM3aHv2e"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="dY687/Ty"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BECB20B80C;
-	Fri, 10 Jan 2025 15:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E27212B28;
+	Fri, 10 Jan 2025 15:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736521613; cv=none; b=RPSdrPqfCdC3WQrIvpraBhN/hFZRcPh0nKXxTfJMbCTpB6T17i9aMiclSWBV8pZ15H6B6EzBwkXlyP+PwrolP9gEg9/1YJC0Czp+6OOakffmS1hzp/nzgyE0IQatgkjc28/yV3Tufb6fuJ9T/pwEbKEUC6VMh2Ty+9pUFZvzitc=
+	t=1736522775; cv=none; b=UtabbpJNan7BBrc7f4KqZMyXZ+VboKljwFXkDx+s1ilfofneyX8CEJrxMvox6Nd3MQtlxstACsEOi0r5W3AzliafKoMrpT4AshH3FKDMPpMSVbn6oY2pgweItqLKvVIfTK6HZzdEWkqCb0rPG9VLuFl6pqHCaB6rOPioAh6i/2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736521613; c=relaxed/simple;
-	bh=66rT7osaJyXS243M+lc02gUGMAFMP/Ik3/pzorJoKa0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=nRVzQQH592DBxGmm6t2cIdj8MAjqdGH/TwkfrGl2tI1gLGAMX5a4WW2rpMBo2rNcBjSnpFjg+5A55mbx1AKis1QorrRze9fJ0vp0IkYWw4markbsqoN4vC70ERPK5JLjGLCM/lHUoFxvHIR3bslKd4ChXOCQnQN83g2x+4nEEVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bM3aHv2e; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4CD1D1BF205;
-	Fri, 10 Jan 2025 15:06:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736521608;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q8hqtpx7uSmFFCBt4R+XArsWuILvupPoqhgNSuXM+dY=;
-	b=bM3aHv2eZDPIEogkHXuaz90KY+89c/SS6D88M5Wwse/oE9y22gsGc/f1A8uC8lhyczxePx
-	Rb00zNoRl/Jqt4Rnx2w8AcwTkm4UgnSaR/HS4gHDeSMDpQTBSITwMoxgl5bMwlfDR7/2Ex
-	4678QsL8tSDo270hZROIzDvS4dvPmSaDeww2Q2qXcyFoH/YdmcJiq6OWaXl/7F2wYSL727
-	yhpchOJrpNEM7J52JVcWYn19Jz67QyEwTI9gquIRwE3+7wGP8GWRfXVZ+CnsGH511T/Ug0
-	dK1IpVJOGgF/Nc85wZftpbWnToLYHGKcXdNY97F3DTjah4672ArjZoy9pk9bKQ==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Sanjay R Mehta <sanju.mehta@amd.com>,  Han Xu <han.xu@nxp.com>,  Conor
- Dooley <conor.dooley@microchip.com>,  Daire McNamara
- <daire.mcnamara@microchip.com>,  Matthias Brugger
- <matthias.bgg@gmail.com>,  AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>,  Haibo Chen
- <haibo.chen@nxp.com>,  Yogesh Gaur <yogeshgaur.83@gmail.com>,  Heiko
- Stuebner <heiko@sntech.de>,  Michal Simek <michal.simek@amd.com>,  Richard
- Weinberger <richard@nod.at>,  Vignesh Raghavendra <vigneshr@ti.com>,
-  Jacky Huang <ychuang3@nuvoton.com>,  Shan-Chun Hung <schung@nuvoton.com>,
-  Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,  =?utf-8?Q?C=C3=A9dric?= Le
- Goater
- <clg@kaod.org>,  Joel Stanley <joel@jms.id.au>,  Andrew Jeffery
- <andrew@codeconstruct.com.au>,  Avi Fishman <avifishman70@gmail.com>,
-  Tomer Maimon <tmaimon77@gmail.com>,  Tali Perry <tali.perry1@gmail.com>,
-  Patrick Venture <venture@google.com>,  Nancy Yuen <yuenn@google.com>,
-  Benjamin Fair <benjaminfair@google.com>,  Maxime Coquelin
- <mcoquelin.stm32@gmail.com>,  Alexandre Torgue
- <alexandre.torgue@foss.st.com>,  Raju Rangoju <Raju.Rangoju@amd.com>,
-  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Steam Lin
- <stlin2@winbond.com>,  linux-spi@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  imx@lists.linux.dev,
-  linux-riscv@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
-  linux-mediatek@lists.infradead.org,  linux-rockchip@lists.infradead.org,
-  linux-mtd@lists.infradead.org,  linux-aspeed@lists.ozlabs.org,
-  openbmc@lists.ozlabs.org,  linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2 20/27] spi: spi-mem: Estimate the time taken by
- operations
-In-Reply-To: <c9043531-c733-4153-a814-79aab387883e@sirena.org.uk> (Mark
-	Brown's message of "Fri, 10 Jan 2025 14:52:29 +0000")
-References: <20241224-winbond-6-11-rc1-quad-support-v2-0-ad218dbc406f@bootlin.com>
-	<20241224-winbond-6-11-rc1-quad-support-v2-20-ad218dbc406f@bootlin.com>
-	<ca317e2c-cd09-4884-b9eb-9cf23ae88078@sirena.org.uk>
-	<87tta6ag5b.fsf@bootlin.com>
-	<c9043531-c733-4153-a814-79aab387883e@sirena.org.uk>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Fri, 10 Jan 2025 16:06:42 +0100
-Message-ID: <87y0zi908t.fsf@bootlin.com>
+	s=arc-20240116; t=1736522775; c=relaxed/simple;
+	bh=TzosbwHEdnIy/bEAra2YOoleYUa+ANh4p0cWMT0d+EE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bb1LFS3O296gkaSC3ul0v4YT7fc0jCF2xOtChvlzIQxpFDdH4Tz03usy63GvcYGyMUjcFty9tkbaaDQi175fgoyy4QIy626qmSElam/vNpZfvNduEIWzTCWwiZL9BoYAZF0U1sos/yLUSMOX5dovKaiE5GO4PcpRvOWVz4MFxsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=dY687/Ty; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1736522772; x=1768058772;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TzosbwHEdnIy/bEAra2YOoleYUa+ANh4p0cWMT0d+EE=;
+  b=dY687/Tya6nXuk/ZIGvos4i70qElBLnGNtPTrzMOksPDGjJsUXCn9/zn
+   vDt6t4eSgpRzPu7+Hfw+Qj8Z4YncW1bHcBar1RRl0Ct4FS127oZc34Nwn
+   /D5h085ECP3HsTS04nhxEcTWw8LJhrg2pB5MJaKTq09OOVCDHS9YOuBga
+   BgePB9rr30FsLu0SRvLRpJcq6264P5zJ4Hl7wf3H31XoLq6LRt4CdqEhy
+   H9vJSC1X4y1tjuOgfU823AO3vRpK3Kj5lZfj2WjVEi8eicfE627DMHEMr
+   MQJ0XD/CXqBe1hbIRU1CaVXxQcesMbJqcYgPtSkSA9uYEFVnUWpt0WHOQ
+   g==;
+X-CSE-ConnectionGUID: 5GPtyWRDTC6ZDj4SFqiVRA==
+X-CSE-MsgGUID: Q023PzxzSBSbN5Hp498PUg==
+X-IronPort-AV: E=Sophos;i="6.12,303,1728975600"; 
+   d="scan'208";a="203886120"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Jan 2025 08:26:05 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 10 Jan 2025 08:25:52 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Fri, 10 Jan 2025 08:25:52 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<arnd@arndb.de>
+CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
+	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, Ryan Wanner
+	<Ryan.Wanner@microchip.com>
+Subject: [PATCH v6 0/3] Add support for SAMA7D65
+Date: Fri, 10 Jan 2025 08:25:39 -0700
+Message-ID: <cover.1736522006.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 10/01/2025 at 14:52:29 GMT, Mark Brown <broonie@kernel.org> wrote:
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-> On Fri, Jan 10, 2025 at 03:37:52PM +0100, Miquel Raynal wrote:
->> On 10/01/2025 at 12:42:47 GMT, Mark Brown <broonie@kernel.org> wrote:
->
->> > This breaks the build:
->
->> > /build/stage/linux/drivers/spi/spi-mem.c:580:5: error: conflicting typ=
-es for =E2=80=98spi_mem_calc_op_duration=E2=80=99; have =E2=80=98u64(struct=
- spi_mem_op *)=E2=80=99 {aka =E2=80=98long long unsigned int(struct spi_mem=
-_op *)=E2=80=99}
->> >   580 | u64 spi_mem_calc_op_duration(struct spi_mem_op *op)
->
->> Crap, that's a fixup that landed in the wrong commit (mtd: spinand:
->> Enhance the logic when picking a variant). I'll fix it.
->
-> Please only resend that patch - the rest builds and tests fine in my CI,
-> I'm just checking a merge fixup.
+This series adds support for the SAMA7D65 SoC.
 
-Ah, oops, didn't see this in time and rushed v3.
+V2 of this series [1].
+V3 of this series [2].
+V4 of this series [4].
+V5 of this series [6].
+
+For the pinctrl and pit64 timers those will have DTB warnings due to
+those bindings not being in the .yaml format.
+
+Changes v1->v2:
+- V1 set was sent incorrectly as multiple seprate patches v2 took all
+  those patches and put them in 1 thread.
+
+Changes v2->v3:
+- Correct the patch order to follow correct practice.
+- Correct flexcom dt-binding commit messge to reflect the changes in the
+  coding style.
+- Add missing SoB tags to patches.
+- Moved export clocks to DT patch to be included with the clock binding
+  patch.
+- Separate Kconfig changes and defconfig changes into different patches
+  and removed unused Kconfig params.
+- Correct confusing SoB and Co-developed chain.
+- Removed unsued nodes in DTSI file and sorted includes
+  alphanumerically.
+- Fix incorrect dts formatting.
+- Separate dts and pinmux changes into two patches.
+- Combine PLL and MCK changes into core clock driver patch.
+- Correct formatting in main clock driver.
+- MMC dt-binding changes are applied for next so have been removed from
+  the set [3].
+
+Changes v3->v4:
+- Collect all tags from maintainers.
+- Correct compile error on 11/13 and correct location of vendor specific
+  properties.
+- Add USB and UTMI selections to 12/13 to prevent compile errors due to
+  functions in the clock driver that use the USB clock system.
+- Add "microchip,sama7g5-pinctrl" compatible string as a fall back in
+  9/13.
+- Add missing kfree() to 8/13 to correctly handle error case.
+- Replace bad spacing with correct tab formatting on 7/13.
+
+Changes from v4->v5:
+- Remove patches that have been applied [5].
+- Update pinctrl dt-binding to use fallback formatting.
+
+Changes from v5->v6:
+- Remove patches that have been applied [6].
+- Correct incorrect spacing formatting on pinctrl dt-binding.
+- Reintroduce flexcom to the thread since it was removed due to an error
+  in collecting applied patches.
+
+Note:
+- For the SDHCI DTB error that patch has been removed do to it being
+applied see [3].
+- There are DTB errors on microchip,sama7d65-pit64b and
+  microchip,sama7d65-pinctrl, this is due to those bindings being .txt
+  files.
+
+1) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#m9691b4d58b62f36f6cbac1d06883c985766c2c0d
+2) https://lore.kernel.org/linux-arm-kernel/cover.1733505542.git.Ryan.Wanner@microchip.com/T/#m3b52978236907198f727424e69ef21c8898e95c8
+3) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#mccf6521c07e74e1c7dc61b09ae0ebdbbdde73a28
+4) https://lore.kernel.org/linux-arm-kernel/70d429086fd8e858d79ca2824ad8cc4a09e3fe5d.1734723585.git.Ryan.Wanner@microchip.com/T/#m918b8db23c8d30981263846a02dafc085e17de14
+5) https://lore.kernel.org/linux-arm-kernel/70d429086fd8e858d79ca2824ad8cc4a09e3fe5d.1734723585.git.Ryan.Wanner@microchip.com/T/#m69b8f11536e3b0ca3d69d125d0670c90412d4317
+6) https://lore.kernel.org/linux-arm-kernel/20250107160850.120537-1-Ryan.Wanner@microchip.com/T/#m54eaea3dc49c687865e3db33e286eeb29edd7cf0
+
+Dharma Balasubiramani (3):
+  dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+  dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+  dt-bindings: mfd: atmel,sama5d2-flexcom: add
+    microchip,sama7d65-flexcom
+
+ .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml   | 9 ++++-----
+ .../bindings/pinctrl/atmel,at91-pio4-pinctrl.txt         | 1 +
+ .../devicetree/bindings/serial/atmel,at91-usart.yaml     | 1 +
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+-- 
+2.43.0
+
 
