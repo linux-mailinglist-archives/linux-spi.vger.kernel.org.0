@@ -1,153 +1,134 @@
-Return-Path: <linux-spi+bounces-6323-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6324-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A978A0A494
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 17:09:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80508A0A567
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 19:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A85D169E12
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 16:09:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E046A1886EA9
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 18:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873B5149C69;
-	Sat, 11 Jan 2025 16:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E931B78F3;
+	Sat, 11 Jan 2025 18:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MwZuO9Hi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D+gkYpdw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D33EC0
-	for <linux-spi@vger.kernel.org>; Sat, 11 Jan 2025 16:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41201B652C
+	for <linux-spi@vger.kernel.org>; Sat, 11 Jan 2025 18:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736611777; cv=none; b=OZBqrTj9Tqv1uwgNi8CXuwN+Apj5Wce5XUcpxX0HAeUcIr5YzvfsOgozKAqVH6pjpCjaq9BCgU8hknjhUiyZhhUvIdKGe6BK9pNqP0LIxTa144OH93/QHABnOGTYmieheAheGYkHPe345vbraHNmX1zIbjKzfJA1KAXHVa9jT4Q=
+	t=1736621645; cv=none; b=Y+l2Iom2Rz6j3L5N/phj+DjbC7VhiGl4Y6Dox8JNilvb2MmPUeQYL4uVnOYxb0IGSXFaieO0FwgeqftNHFu8vglYWG5sp6NA+e1ObwsMfgvfS8O49PQst4OlEn1V6OHx+EiEQnha/EyctVvfUyP1sBT9DAGU+29Aubs6GydQzv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736611777; c=relaxed/simple;
-	bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ENS+NWpKjUpTeTR0r+p42wRm2w6iqqBybgqJjAgQA6AJor5rYy5L7g8RykzfmeWwoJZsvuV1RYxRRWhqCAYinSAaaQZqUS7YZ34kHNXtXuYNF3DhQE+Dt/vTwDzebh+u2591C4jKDy8YifsrNbPMXRqDnMUb07LJk0F24vXSvcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MwZuO9Hi; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736611776; x=1768147776;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
-  b=MwZuO9HiiMMo4JtLCvCEpElt3ai1LBcoSIsWaYR4BFT04Rvr/LW4+nwI
-   h0Wke3FHbulvvhnADLJycVyzembhHhCkesG3eh2IvALt3h+BuMYYGkSwL
-   N/2qL2QJ1+oi6nJP+6+YN6guf0EstnuVkRPoUFiWpqoUAcOqFLI2j54QT
-   4iz7fcoj6QBuYePKfwHmBknsZATwQZZq7NMvHaOlfVolY62bjXabsg2NI
-   euFvL1oUnXUMxe5vTEtDFyt/ZeEgRxCfumZimWaFtSjwr2dCmid/XsN9D
-   NVj3/vY020Kad9Hz1LUKaW8sxbuGmnQHtHQKDQd9Eo+ldiSssozJ0oZWA
-   g==;
-X-CSE-ConnectionGUID: W9QjvGyETXyHx3f5WTS9Fw==
-X-CSE-MsgGUID: LQqzRM3KQseo3tQuZdnBVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="47550630"
-X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="47550630"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 08:09:35 -0800
-X-CSE-ConnectionGUID: fjaPA+9sQ4S8NJMwvbh0zg==
-X-CSE-MsgGUID: JRDKHizWTimPSGxTu/gzng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
-   d="scan'208";a="103817800"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 08:09:34 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tWe3H-000Kvd-2m;
-	Sat, 11 Jan 2025 16:09:31 +0000
-Date: Sun, 12 Jan 2025 00:08:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [broonie-spi:for-next 4/22] drivers/spi/spi-amd.c:695:9: warning:
- variable 'ret' is uninitialized when used here
-Message-ID: <202501112315.ugYQ7Ce7-lkp@intel.com>
+	s=arc-20240116; t=1736621645; c=relaxed/simple;
+	bh=PYmz5fxKkNfylhSI/cK6XfE/gmxMt6aXY09Jad1QRd4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FeMWJhc8Xx4I0uSHrMinzmd7ZNXG65V684JnftBzRzn9Ir6Omf5jsBm9+xBdS0NBTbAWkrRPhfKQ767bkmaZWcftjrQ9aicUZBGwUiC2Vi42466yx7RdZSfcOey/vG/jOQW2dpkyNS2tzBCwvvyjyj44vlEovoxEVgyftB2jybw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D+gkYpdw; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38625aa01b3so323616f8f.3
+        for <linux-spi@vger.kernel.org>; Sat, 11 Jan 2025 10:54:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736621642; x=1737226442; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=k6+fOZKLjoF0hzDiYL7ecBMAbWjrcspBBjGm/Rk8kwY=;
+        b=D+gkYpdwV1jkWSKJX2++B+VY3IKFc3JBSsoJDNRDTJL0awOO+/FQKHnu837sWzitXu
+         d76bxvZ3SU+Rh5SWW6K+G56EY1fh+hEKyCrIklgAC5ENHh9LRtD7c4pRnftzqKfLq2kK
+         iqSvrhhRe1ptdnXdNXaR65CtgxqhThCVxSBFlAQpFYL0m3nQ5qUppO9sNpttXRAX5cP1
+         zZ5C/QB5pOKSI4EhKMgM2T9XFJSrub3NakFal/2pzFCQBWANB+xtZ5QHaxHvMSUV5c3f
+         8OtkjMSuEnNWlGUDLZ1R9rZEH8Aj7wmfp5n74HDK1dLyYFBWWGUN+YIDx4BUnMHHmfeH
+         CKSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736621642; x=1737226442;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k6+fOZKLjoF0hzDiYL7ecBMAbWjrcspBBjGm/Rk8kwY=;
+        b=RAa0YXUEKl830qnZQYhvnqvkkDKAM5fRCoEAVAZXYkUXY6cBgTSniPnHVBkGCrPEBM
+         alXucNJ1nfaoiUXDv6fTAdI0skRuvovnURi7RNa50DoAYFRms1yeqo6kI3gWkp5OKa8V
+         0DlMn3JY/byK0GGIlmOslK17hMzMu0RgAp1fa40AidVoYdmBzhyw9BFcHnfnt+z0s+zd
+         IFjpw2nizrc5VLIn2R367J15WKS4s8tuEVOBvSxc+DRHuY9Dl21qMRjuR83fJ9Sflr5G
+         pu9iNhdhC8vxeH2vabFvJxFmGp5HPD3hGGQmBNgthVxCHMGPTbJ1JPj2qWI4A51PPqJq
+         rQ1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWJHQ/ysVzwkjHOvte1/1aIIXtq6MQgEk2OiU0bq/ugR3zJatNwj/uXu4K30x8BkD+MI0J2CdXR470=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIkOy85jgO7l7RXUN3NLFaW3ngrrSYpgGRTB+mdaDKx3Galb1L
+	nHPLWuMDRQZKEj0mkxk6U8WBMgpErEwEof3fl6X4LkFkxsdLt226vWfoTvKgOdQ=
+X-Gm-Gg: ASbGncum/h4OiQFx9AxzRljG0xfsjWrfw/kC99DjY37bTx1GVdSw/0CELxfeOmOUoHD
+	3CqtMKFxtAYghjVrtiDIl2ucJ2FTbVvKAy7Xsiz9pkjGf3VQzh1RA+TNKHWKZczXscv0XxmIWjZ
+	tRVBkE8dRdt4GgntTSat8YJwJp8WJoo/T4jlQ9ceFtj6763c1iKAXFo+6as9gYBXUe0lyhlJzBU
+	FjabGirtqaAEoEiy54BYuu6iS4fuYejIViAKS8bWyZ0XPlWU2XUWWY4Vju1EYbCAdHeX1c=
+X-Google-Smtp-Source: AGHT+IFSjPn3386+DCzwPtt8hHPamdmrOOxPaiL49mdJQBNGzm7TkqG+2qVNsmj5SqY9yc+4axlBbQ==
+X-Received: by 2002:a05:6000:4718:b0:385:fa20:6583 with SMTP id ffacd0b85a97d-38a872d2e0fmr5190402f8f.2.1736621642257;
+        Sat, 11 Jan 2025 10:54:02 -0800 (PST)
+Received: from krzk-bin.. ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c1b05sm7779572f8f.88.2025.01.11.10.54.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Jan 2025 10:54:01 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] spi: ti-qspi: Use syscon_regmap_lookup_by_phandle_args
+Date: Sat, 11 Jan 2025 19:54:00 +0100
+Message-ID: <20250111185400.183760-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-head:   fd85b6b7bc53409d0be82763419bdcdaa48f2c91
-commit: e6204f39fe3a7b4538815a2d778b601bd543649e [4/22] spi: amd: Drop redundant check
-config: i386-randconfig-005-20250111 (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/reproduce)
+Use syscon_regmap_lookup_by_phandle_args() which is a wrapper over
+syscon_regmap_lookup_by_phandle() combined with getting the syscon
+argument.  Except simpler code this annotates within one line that given
+phandle has arguments, so grepping for code would be easier.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501112315.ugYQ7Ce7-lkp@intel.com/
+There is also no real benefit in printing errors on missing syscon
+argument, because this is done just too late: runtime check on
+static/build-time data.  Dtschema and Devicetree bindings offer the
+static/build-time check for this already.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/spi/spi-ti-qspi.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
->> drivers/spi/spi-amd.c:695:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     695 |         return ret;
-         |                ^~~
-   drivers/spi/spi-amd.c:673:9: note: initialize the variable 'ret' to silence this warning
-     673 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
-
-
-vim +/ret +695 drivers/spi/spi-amd.c
-
-9674f1694e644a Raju Rangoju  2024-09-25  668  
-6defadbe6cbc3a Raju Rangoju  2024-02-29  669  static int amd_spi_exec_mem_op(struct spi_mem *mem,
-6defadbe6cbc3a Raju Rangoju  2024-02-29  670  			       const struct spi_mem_op *op)
-6defadbe6cbc3a Raju Rangoju  2024-02-29  671  {
-6defadbe6cbc3a Raju Rangoju  2024-02-29  672  	struct amd_spi *amd_spi;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  673  	int ret;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  674  
-6defadbe6cbc3a Raju Rangoju  2024-02-29  675  	amd_spi = spi_controller_get_devdata(mem->spi->controller);
-6defadbe6cbc3a Raju Rangoju  2024-02-29  676  
-e6204f39fe3a7b Miquel Raynal 2024-12-24  677  	amd_set_spi_freq(amd_spi, op->max_freq);
-6defadbe6cbc3a Raju Rangoju  2024-02-29  678  
-9674f1694e644a Raju Rangoju  2024-09-25  679  	if (amd_spi->version == AMD_SPI_V2)
-9674f1694e644a Raju Rangoju  2024-09-25  680  		amd_set_spi_addr_mode(amd_spi, op);
-9674f1694e644a Raju Rangoju  2024-09-25  681  
-6defadbe6cbc3a Raju Rangoju  2024-02-29  682  	switch (op->data.dir) {
-6defadbe6cbc3a Raju Rangoju  2024-02-29  683  	case SPI_MEM_DATA_IN:
-6defadbe6cbc3a Raju Rangoju  2024-02-29  684  		amd_spi_mem_data_in(amd_spi, op);
-6defadbe6cbc3a Raju Rangoju  2024-02-29  685  		break;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  686  	case SPI_MEM_DATA_OUT:
-6defadbe6cbc3a Raju Rangoju  2024-02-29  687  		fallthrough;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  688  	case SPI_MEM_NO_DATA:
-6defadbe6cbc3a Raju Rangoju  2024-02-29  689  		amd_spi_mem_data_out(amd_spi, op);
-6defadbe6cbc3a Raju Rangoju  2024-02-29  690  		break;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  691  	default:
-6defadbe6cbc3a Raju Rangoju  2024-02-29  692  		ret = -EOPNOTSUPP;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  693  	}
-6defadbe6cbc3a Raju Rangoju  2024-02-29  694  
-6defadbe6cbc3a Raju Rangoju  2024-02-29 @695  	return ret;
-6defadbe6cbc3a Raju Rangoju  2024-02-29  696  }
-6defadbe6cbc3a Raju Rangoju  2024-02-29  697  
-
-:::::: The code at line 695 was first introduced by commit
-:::::: 6defadbe6cbc3a87dc39c119a6748d19bfba0544 spi: spi_amd: Add support for SPI MEM framework
-
-:::::: TO: Raju Rangoju <Raju.Rangoju@amd.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index 9122350402b5..64b56296b693 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -826,20 +826,12 @@ static int ti_qspi_probe(struct platform_device *pdev)
+ 
+ 	if (of_property_present(np, "syscon-chipselects")) {
+ 		qspi->ctrl_base =
+-		syscon_regmap_lookup_by_phandle(np,
+-						"syscon-chipselects");
++			syscon_regmap_lookup_by_phandle_args(np, "syscon-chipselects",
++							     1, &qspi->ctrl_reg);
+ 		if (IS_ERR(qspi->ctrl_base)) {
+ 			ret = PTR_ERR(qspi->ctrl_base);
+ 			goto free_host;
+ 		}
+-		ret = of_property_read_u32_index(np,
+-						 "syscon-chipselects",
+-						 1, &qspi->ctrl_reg);
+-		if (ret) {
+-			dev_err(&pdev->dev,
+-				"couldn't get ctrl_mod reg index\n");
+-			goto free_host;
+-		}
+ 	}
+ 
+ 	qspi->fclk = devm_clk_get(&pdev->dev, "fck");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
