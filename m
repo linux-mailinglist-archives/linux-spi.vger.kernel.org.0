@@ -1,197 +1,153 @@
-Return-Path: <linux-spi+bounces-6322-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6323-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5742DA09953
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 19:28:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A978A0A494
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 17:09:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F00207A34EA
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Jan 2025 18:28:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A85D169E12
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Jan 2025 16:09:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D562135C8;
-	Fri, 10 Jan 2025 18:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 873B5149C69;
+	Sat, 11 Jan 2025 16:09:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osZYI5oI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MwZuO9Hi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EDA20ADC9;
-	Fri, 10 Jan 2025 18:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D33EC0
+	for <linux-spi@vger.kernel.org>; Sat, 11 Jan 2025 16:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736533727; cv=none; b=U/3Jex7GoKndK9vBUQLPtusTI8kKHHaQ41/WpmniLPnm9/wbV7IfKb7r93RjKVkwmn7gskNTvlUZMb2YX+ZhG1Zsn6BKMW1SzSHJbzAkN3eyT98qgoCaMWKCY3PIj2JvSVmKZcGjZczdDf1yMi4+9APIvrohr7GQ7biOpq6hFfE=
+	t=1736611777; cv=none; b=OZBqrTj9Tqv1uwgNi8CXuwN+Apj5Wce5XUcpxX0HAeUcIr5YzvfsOgozKAqVH6pjpCjaq9BCgU8hknjhUiyZhhUvIdKGe6BK9pNqP0LIxTa144OH93/QHABnOGTYmieheAheGYkHPe345vbraHNmX1zIbjKzfJA1KAXHVa9jT4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736533727; c=relaxed/simple;
-	bh=TYFMjwc9ILvsgk5FB1BS5YUEXb8oE3r6UYK7GHBXgNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lHl2ZEdcHOZudawOsZyfjQYCK0aBdkhOkGL5ONrWxI9OLGfhX+Y5mAUfc3u8bs+KnroOU5kd//NStOXURM1hmkDUdfVcqDYeclmWe2p/oHXZexUw63GbxV/vEI1H7I9mpLpdLblwwsHpNoxH8F8z9bADrnZ5T3dwG/by9Tlqq5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=osZYI5oI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DDCCC4CED6;
-	Fri, 10 Jan 2025 18:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736533727;
-	bh=TYFMjwc9ILvsgk5FB1BS5YUEXb8oE3r6UYK7GHBXgNM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=osZYI5oI6hiesP0M2Esd1STQqJmI7el5YkceNLFM8+HrQ/N2LQ8QTOTxZQFbuU/TY
-	 mb3OAUD+pNkKWyCcseCgaHiJSt4FishYXpULU2ninbOFjEnRJlcapsxfg3DZz8i4Of
-	 tkdk7LEhgpT8osyxWzN5JpmIqOOXS6W6OC/juy2NlF2K7KWPPLlY3bjx7AMzPrpV6Y
-	 2GhR+hvM7dBbWgY8OjfvS3qbehrIbT0IfxOUrmtMh599zDqoGF/GCwPQaOlME3sXY8
-	 YtjnwrhhcHqQnehnF7ZjP0xVIPNfEVa6U4oSmg8nIzGiD72G2oEddP9wLtHkAoyqIx
-	 cYQrRwOTXmSDg==
-Date: Fri, 10 Jan 2025 18:28:36 +0000
-From: Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1736611777; c=relaxed/simple;
+	bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ENS+NWpKjUpTeTR0r+p42wRm2w6iqqBybgqJjAgQA6AJor5rYy5L7g8RykzfmeWwoJZsvuV1RYxRRWhqCAYinSAaaQZqUS7YZ34kHNXtXuYNF3DhQE+Dt/vTwDzebh+u2591C4jKDy8YifsrNbPMXRqDnMUb07LJk0F24vXSvcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MwZuO9Hi; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736611776; x=1768147776;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NtquL0H1tlaj8sg6C9RoGCOsvvzWQ2j8p8kSloTeyRw=;
+  b=MwZuO9HiiMMo4JtLCvCEpElt3ai1LBcoSIsWaYR4BFT04Rvr/LW4+nwI
+   h0Wke3FHbulvvhnADLJycVyzembhHhCkesG3eh2IvALt3h+BuMYYGkSwL
+   N/2qL2QJ1+oi6nJP+6+YN6guf0EstnuVkRPoUFiWpqoUAcOqFLI2j54QT
+   4iz7fcoj6QBuYePKfwHmBknsZATwQZZq7NMvHaOlfVolY62bjXabsg2NI
+   euFvL1oUnXUMxe5vTEtDFyt/ZeEgRxCfumZimWaFtSjwr2dCmid/XsN9D
+   NVj3/vY020Kad9Hz1LUKaW8sxbuGmnQHtHQKDQd9Eo+ldiSssozJ0oZWA
+   g==;
+X-CSE-ConnectionGUID: W9QjvGyETXyHx3f5WTS9Fw==
+X-CSE-MsgGUID: LQqzRM3KQseo3tQuZdnBVw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11312"; a="47550630"
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="47550630"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2025 08:09:35 -0800
+X-CSE-ConnectionGUID: fjaPA+9sQ4S8NJMwvbh0zg==
+X-CSE-MsgGUID: JRDKHizWTimPSGxTu/gzng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,307,1728975600"; 
+   d="scan'208";a="103817800"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 11 Jan 2025 08:09:34 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tWe3H-000Kvd-2m;
+	Sat, 11 Jan 2025 16:09:31 +0000
+Date: Sun, 12 Jan 2025 00:08:52 +0800
+From: kernel test robot <lkp@intel.com>
 To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Sanjay R Mehta <sanju.mehta@amd.com>, Han Xu <han.xu@nxp.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Michal Simek <michal.simek@amd.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-	=?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Avi Fishman <avifishman70@gmail.com>,
-	Tomer Maimon <tmaimon77@gmail.com>,
-	Tali Perry <tali.perry1@gmail.com>,
-	Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-	Benjamin Fair <benjaminfair@google.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Raju Rangoju <Raju.Rangoju@amd.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Steam Lin <stlin2@winbond.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	stable+noautosel@kernel.org
-Subject: Re: [PATCH v3 00/27] spi-nand/spi-mem DTR support
-Message-ID: <b40af2ab-8b0a-4099-a636-13ed2a5151ea@sirena.org.uk>
-References: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-spi:for-next 4/22] drivers/spi/spi-amd.c:695:9: warning:
+ variable 'ret' is uninitialized when used here
+Message-ID: <202501112315.ugYQ7Ce7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aYdj4KKHQJTEiuns"
-Content-Disposition: inline
-In-Reply-To: <20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com>
-X-Cookie: RELATIVES!!
-
-
---aYdj4KKHQJTEiuns
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 10, 2025 at 03:45:02PM +0100, Miquel Raynal wrote:
-> Hello Mark, hello MTD folks,
->=20
-> Here is a (big) series supposed to bring DTR support in SPI-NAND.
->=20
-> I could have split this into two but I eventually preferred showing the
-> big picture. Once v1 will be over, I can make it two. However when we'll
-> discuss merging, we'll have to share an immutable tag among the two
-> subsystems.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+head:   fd85b6b7bc53409d0be82763419bdcdaa48f2c91
+commit: e6204f39fe3a7b4538815a2d778b601bd543649e [4/22] spi: amd: Drop redundant check
+config: i386-randconfig-005-20250111 (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250111/202501112315.ugYQ7Ce7-lkp@intel.com/reproduce)
 
-The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501112315.ugYQ7Ce7-lkp@intel.com/
 
-  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
+All warnings (new ones prefixed by >>):
 
-are available in the Git repository at:
+>> drivers/spi/spi-amd.c:695:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     695 |         return ret;
+         |                ^~~
+   drivers/spi/spi-amd.c:673:9: note: initialize the variable 'ret' to silence this warning
+     673 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-=
-nand-dtr
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m] && HAS_IOPORT [=y]
 
-for you to fetch changes up to 226d6cb3cb799aae46d0dd19a521133997d9db11:
 
-  spi: spi-mem: Estimate the time taken by operations (2025-01-10 15:20:04 =
-+0000)
+vim +/ret +695 drivers/spi/spi-amd.c
 
-----------------------------------------------------------------
-spi: Add spi-nand DTR support
+9674f1694e644a Raju Rangoju  2024-09-25  668  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  669  static int amd_spi_exec_mem_op(struct spi_mem *mem,
+6defadbe6cbc3a Raju Rangoju  2024-02-29  670  			       const struct spi_mem_op *op)
+6defadbe6cbc3a Raju Rangoju  2024-02-29  671  {
+6defadbe6cbc3a Raju Rangoju  2024-02-29  672  	struct amd_spi *amd_spi;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  673  	int ret;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  674  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  675  	amd_spi = spi_controller_get_devdata(mem->spi->controller);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  676  
+e6204f39fe3a7b Miquel Raynal 2024-12-24  677  	amd_set_spi_freq(amd_spi, op->max_freq);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  678  
+9674f1694e644a Raju Rangoju  2024-09-25  679  	if (amd_spi->version == AMD_SPI_V2)
+9674f1694e644a Raju Rangoju  2024-09-25  680  		amd_set_spi_addr_mode(amd_spi, op);
+9674f1694e644a Raju Rangoju  2024-09-25  681  
+6defadbe6cbc3a Raju Rangoju  2024-02-29  682  	switch (op->data.dir) {
+6defadbe6cbc3a Raju Rangoju  2024-02-29  683  	case SPI_MEM_DATA_IN:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  684  		amd_spi_mem_data_in(amd_spi, op);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  685  		break;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  686  	case SPI_MEM_DATA_OUT:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  687  		fallthrough;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  688  	case SPI_MEM_NO_DATA:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  689  		amd_spi_mem_data_out(amd_spi, op);
+6defadbe6cbc3a Raju Rangoju  2024-02-29  690  		break;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  691  	default:
+6defadbe6cbc3a Raju Rangoju  2024-02-29  692  		ret = -EOPNOTSUPP;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  693  	}
+6defadbe6cbc3a Raju Rangoju  2024-02-29  694  
+6defadbe6cbc3a Raju Rangoju  2024-02-29 @695  	return ret;
+6defadbe6cbc3a Raju Rangoju  2024-02-29  696  }
+6defadbe6cbc3a Raju Rangoju  2024-02-29  697  
 
-This series adds support for DTR in the SPI subsystem's NAND support,
-allowing it to be used by the MTD framework.
+:::::: The code at line 695 was first introduced by commit
+:::::: 6defadbe6cbc3a87dc39c119a6748d19bfba0544 spi: spi_amd: Add support for SPI MEM framework
 
-----------------------------------------------------------------
-Miquel Raynal (20):
-      spi: spi-mem: Extend spi-mem operations with a per-operation maximum =
-frequency
-      spi: spi-mem: Add a new controller capability
-      spi: amd: Support per spi-mem operation frequency switches
-      spi: amd: Drop redundant check
-      spi: amlogic-spifc-a1: Support per spi-mem operation frequency switch=
-es
-      spi: cadence-qspi: Support per spi-mem operation frequency switches
-      spi: dw: Support per spi-mem operation frequency switches
-      spi: fsl-qspi: Support per spi-mem operation frequency switches
-      spi: microchip-core-qspi: Support per spi-mem operation frequency swi=
-tches
-      spi: mt65xx: Support per spi-mem operation frequency switches
-      spi: mxic: Support per spi-mem operation frequency switches
-      spi: nxp-fspi: Support per spi-mem operation frequency switches
-      spi: rockchip-sfc: Support per spi-mem operation frequency switches
-      spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
-      spi: spi-ti-qspi: Support per spi-mem operation frequency switches
-      spi: zynq-qspi: Support per spi-mem operation frequency switches
-      spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
-      spi: spi-mem: Reorder spi-mem macro assignments
-      spi: spi-mem: Create macros for DTR operation
-      spi: spi-mem: Estimate the time taken by operations
+:::::: TO: Raju Rangoju <Raju.Rangoju@amd.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
- drivers/mtd/nand/spi/core.c           |  2 ++
- drivers/spi/spi-amd.c                 | 21 ++++++------
- drivers/spi/spi-amlogic-spifc-a1.c    |  7 +++-
- drivers/spi/spi-cadence-quadspi.c     |  3 +-
- drivers/spi/spi-dw-core.c             | 10 ++++--
- drivers/spi/spi-fsl-qspi.c            | 12 +++++--
- drivers/spi/spi-mem.c                 | 64 +++++++++++++++++++++++++++++++=
-++++
- drivers/spi/spi-microchip-core-qspi.c | 26 +++++++++++---
- drivers/spi/spi-mt65xx.c              |  7 +++-
- drivers/spi/spi-mxic.c                |  3 +-
- drivers/spi/spi-nxp-fspi.c            | 12 +++++--
- drivers/spi/spi-rockchip-sfc.c        | 11 ++++--
- drivers/spi/spi-sn-f-ospi.c           |  8 +++--
- drivers/spi/spi-ti-qspi.c             |  7 +++-
- drivers/spi/spi-zynq-qspi.c           | 13 +++++--
- drivers/spi/spi-zynqmp-gqspi.c        | 13 ++++---
- include/linux/spi/spi-mem.h           | 56 +++++++++++++++++++++++++++++-
- 17 files changed, 235 insertions(+), 40 deletions(-)
-
---aYdj4KKHQJTEiuns
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeBZtMACgkQJNaLcl1U
-h9C2zQgAgu3h0M+rMbhCSl4Ax1wuwWzdK82xuQKhEOqQKPe4KB4vTzh1sfMWcvDX
-8SFJrtxYI819QKXozGjqkxGXmY25Bk5rPF08p4qZ3pGBRfKalLOrfNgc36Duv4g5
-W3ClxWr1pkFaw8XfEqrYoYqNT9lA1LzW7Ddqu0IxmHQDW66BfVxU4pHVlQsntB3H
-qaWW/ZntqizjTUbrIfbDuvoNwCmRCZByjvjAMgDX3q0K1DTqbPL+UNoRUNs6lBek
-PBRAiB+Mc0gd6XVtsVTnhimLpsP9Y5BVdXCEd0V3Z+gj+n/FRB1qEvp4WnSndtZ8
-Fm9HJmek861NtHjuBt7awHizmBwvkQ==
-=1HVr
------END PGP SIGNATURE-----
-
---aYdj4KKHQJTEiuns--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
