@@ -1,168 +1,117 @@
-Return-Path: <linux-spi+bounces-6352-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6353-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC03BA10A88
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 16:18:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41B51A10D3E
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 18:14:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 547F57A17E2
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 15:18:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55B901621C1
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 17:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED3B154BFF;
-	Tue, 14 Jan 2025 15:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0811D54E2;
+	Tue, 14 Jan 2025 17:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qu/9pFaj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gonFpl1k"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33014A4CC;
-	Tue, 14 Jan 2025 15:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6201D5154;
+	Tue, 14 Jan 2025 17:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736867884; cv=none; b=iDmCsC5pGhsW/YxF88plxBNdl+NqexCKwQmpPMz65lkWzvFGbdpAc3tYlKV+d3vUQ03vSVk+KCwYw8NEMdbXuVtHY2HrHG3ORQbfuKbAkWczVwht2eydyIWVIFclVZAEI+dprE0umPPd4C3bd/h75AtOS8q3S4cdayJPbGvloqw=
+	t=1736874837; cv=none; b=FdoWOvKX3NRioSR0xAiGbJg+zZ/RFZDEVV2/bD1aYEWSgGC7IQI19Gtc7Ur7y2/y6ZSMI26jj/YgkUyGPdiP3FqCuBFENrNbyC/AhDSOaAgdrnRJLuJu7zoxeFroG1Nuta1AZLFBXbkt7YrifIIIjujG5fRpYe6xExlMb1l3UfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736867884; c=relaxed/simple;
-	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qOUPPQ7RDHbHH+/Ev3JKtgqshprbxfsKsDorDgTUvQ7qN5U7bF5RWL9wsC4rYsOPWyVUIxEVrRzT5QbIWzOG4WM3RITgJz4a4/t9pCfssjD+xaYoO9LclWRYuVe3BwyjzaeE1aNe39PcpAYUeH81EbrA2WO24hD+iw8HkiXcyvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qu/9pFaj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E57A0C4CEDD;
-	Tue, 14 Jan 2025 15:18:01 +0000 (UTC)
+	s=arc-20240116; t=1736874837; c=relaxed/simple;
+	bh=+cPongiPTXfYF42ILAuhGmrFbcuJWkTa3K4+cXN5O1Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cN5+EGLFZTx13CiyXxoZ2gTu2hfJUJuIgBn5++vHJk0solxpN9HsDOJRJXoQplhzcW6Sk76dv0Y0c05pRupCtRNzMVFzLXgLwBP1L5Fw5W7lqJyWCGWEM3mNMJsD03a3yuq/6cH0y6h3EVeNUrf3uEoCdJtMeFRY3xezZqUrAwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gonFpl1k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1053FC4CEDD;
+	Tue, 14 Jan 2025 17:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736867883;
-	bh=dV7A7VJAGHTtWu/S7xXcA8BcPXYKQZhkeq6pa2Goexo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qu/9pFajRI6OFPR54X4zaadjDYvXKGcbBr2W4xsyhguKlnfoKTEmPNdwyaBr1UTQ/
-	 BtH4x/U02Z7Epjan3mU/bHnJuWVacAFguzj0zJSwUsyKKJuY5aCbVmue1P11XFZHlq
-	 fneGg5/K5f1ggjMgGxadtKdQoMP5EvqfNW7mghGMh1GHjFsKhpLEBQaU0BoSY9WWTo
-	 Kx0edjfHEIel0E8oqTP12sOx2vjs41z7nkJCu4jaXh+Xw2VdEP0NBtnRvqoyowxmWr
-	 9uqwaCWzedp1RFXZFCgpVs+quvcpcUJ5VMcNPSx+G63H21mmluXVOF0JbOi2UPmd6s
-	 YGuCHLm2kLNpw==
-Date: Tue, 14 Jan 2025 15:17:59 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Raju Rangoju <Raju.Rangoju@amd.com>,
-	Nathan Chancellor <nathan@kernel.org>, linux-spi@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
-Message-ID: <a20383dd-57cc-4c0d-8bab-09a9260f2378@sirena.org.uk>
-References: <20250111-spi-amd-fix-uninitialized-ret-v1-1-c66ab9f6a23d@kernel.org>
- <173678670956.71125.2320310623665812760.b4-ty@kernel.org>
- <87h661u2z9.fsf@bootlin.com>
+	s=k20201202; t=1736874836;
+	bh=+cPongiPTXfYF42ILAuhGmrFbcuJWkTa3K4+cXN5O1Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gonFpl1kdx+aThw1x31zHGRxllAoIkG+ONJ+m/IW2Rjgb2AuitvfDkZ/+LXLEJLYS
+	 CGhu4+kt+Uqe4U+Zl06fYObMJL3C/gUmTwYIivcm+nGkn1+Ptlit1LtXmpPzVbh0W0
+	 pjHNAhUINgyHzn5TsHTQxflGHuRjtXgYeDlZ+tFV5X3036WpvXQZT9e6Y2QGNP9jcB
+	 xTOGc1ntQAH0FtlmqdOEjUQDJGeCt7GG5QaYfzAE+AqMEebTuVCOBMFStlO9dt/9Q7
+	 anqM/lIdtf4pCPUNPV/oZi2IxWLy0fbUF+sWxzFeYd+TlzBm4QXWcUKWkSh/BCMTKf
+	 4y8BP6vHyyFDg==
+From: Conor Dooley <conor@kernel.org>
+To: linux-spi@vger.kernel.org
+Cc: conor@kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	stable@vger.kernel.org,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: microchip-core: prevent RX overflows when transmit size > FIFO size
+Date: Tue, 14 Jan 2025 17:13:49 +0000
+Message-ID: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2iPXVcBfzc1mAQZJ"
-Content-Disposition: inline
-In-Reply-To: <87h661u2z9.fsf@bootlin.com>
-X-Cookie: Sauron is alive in Argentina!
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2024; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=zOeZgEc8f7sCpwLYHd+UXUO6lO4YDxO0JUopvPbfNLw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDOlts/2sn27c7rF6dq3FDIMZKpNDZGzWHQqaU6WW413A5 lz1fxV7RykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACZy5zvDP73Uhzs9iwIT7ugu 87Cov3dKM6I3iHumIct2k8a9Lle7HjL8T3fVuxL0n7uwZMJ6ba0o6YBvd1a/Xlb0Mu9u9tXTh2Q zeAE=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
 
+From: Conor Dooley <conor.dooley@microchip.com>
 
---2iPXVcBfzc1mAQZJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
+overflows will be generated and receive data will be corrupted and
+warnings will be produced. For example, here's an error generated by a
+transfer of 36 bytes:
 
-On Tue, Jan 14, 2025 at 11:03:22AM +0100, Miquel Raynal wrote:
-> On 13/01/2025 at 16:45:09 GMT, Mark Brown <broonie@kernel.org> wrote:
+  spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen: 0
 
-> > Applied to
+I am not entirely sure how this happens, as rxlen being 4 means that 32
+of 36 bytes have been read from the RX FIFO so there should be
+sufficient room for 4 more bytes but timing is likely a factor as simply
+adding a delay in the transmit path is enough to avoid the overflows.
 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+CC: stable@vger.kernel.org
+Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Been sitting on this one for a bit, original reporter claims the problem
+isn't fixed, but it fixed the issue on my setup so I am sending the patch
+as it's an improvement on the status quo at the very least.
 
-> > Thanks!
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Mark Brown <broonie@kernel.org>
+CC: linux-spi@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+---
+ drivers/spi/spi-microchip-core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> I'm wondering whether it's relevant to pull the branch you shared
-> as-is. Do you plan on pushing this patch of top of it? Or shall I wait
-> -rc1 for the SPI NAND part?
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index 5b6af55855ef..3582fe8d3fc4 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -221,6 +221,13 @@ static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi)
+ 	while ((i < fifo_max) && !(mchp_corespi_read(spi, REG_STATUS) & STATUS_TXFIFO_FULL)) {
+ 		u32 word;
+ 
++		/*
++		 * If the transfer is larger than FIFO_DEPTH, spin until space
++		 * is made in the RX FIFO to avoid losing data to RX overflows
++		 */
++		while (mchp_corespi_read(spi, REG_STATUS) & STATUS_RXFIFO_FULL)
++			;
++
+ 		if (spi->n_bytes == 4)
+ 			word = spi->tx_buf ? *((u32 *)spi->tx_buf) : 0xaa;
+ 		else if (spi->n_bytes == 2)
+-- 
+2.45.2
 
-Well, it's not a branch but rather a tag which complicates matters a
-bit.  I could cherry pick the patch over and make a new tag I guess?  Or
-you could just not do allmodconfig builds with clang?
-
-The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
-
-  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-mem-dtr-2
-
-for you to fetch changes up to e896c04890aeff2292364c19632fc15d890d436c:
-
-  spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op() (2025-01-14 15:07:11 +0000)
-
-----------------------------------------------------------------
-spi: Support DTR in spi-mem
-
-Changes to support DTR with spi-mem.
-
-----------------------------------------------------------------
-Miquel Raynal (20):
-      spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
-      spi: spi-mem: Add a new controller capability
-      spi: amd: Support per spi-mem operation frequency switches
-      spi: amd: Drop redundant check
-      spi: amlogic-spifc-a1: Support per spi-mem operation frequency switches
-      spi: cadence-qspi: Support per spi-mem operation frequency switches
-      spi: dw: Support per spi-mem operation frequency switches
-      spi: fsl-qspi: Support per spi-mem operation frequency switches
-      spi: microchip-core-qspi: Support per spi-mem operation frequency switches
-      spi: mt65xx: Support per spi-mem operation frequency switches
-      spi: mxic: Support per spi-mem operation frequency switches
-      spi: nxp-fspi: Support per spi-mem operation frequency switches
-      spi: rockchip-sfc: Support per spi-mem operation frequency switches
-      spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
-      spi: spi-ti-qspi: Support per spi-mem operation frequency switches
-      spi: zynq-qspi: Support per spi-mem operation frequency switches
-      spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
-      spi: spi-mem: Reorder spi-mem macro assignments
-      spi: spi-mem: Create macros for DTR operation
-      spi: spi-mem: Estimate the time taken by operations
-
-Nathan Chancellor (1):
-      spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
-
- drivers/mtd/nand/spi/core.c           |  2 ++
- drivers/spi/spi-amd.c                 | 26 +++++++-------
- drivers/spi/spi-amlogic-spifc-a1.c    |  7 +++-
- drivers/spi/spi-cadence-quadspi.c     |  3 +-
- drivers/spi/spi-dw-core.c             | 10 ++++--
- drivers/spi/spi-fsl-qspi.c            | 12 +++++--
- drivers/spi/spi-mem.c                 | 64 +++++++++++++++++++++++++++++++++++
- drivers/spi/spi-microchip-core-qspi.c | 26 +++++++++++---
- drivers/spi/spi-mt65xx.c              |  7 +++-
- drivers/spi/spi-mxic.c                |  3 +-
- drivers/spi/spi-nxp-fspi.c            | 12 +++++--
- drivers/spi/spi-rockchip-sfc.c        | 11 ++++--
- drivers/spi/spi-sn-f-ospi.c           |  8 +++--
- drivers/spi/spi-ti-qspi.c             |  7 +++-
- drivers/spi/spi-zynq-qspi.c           | 13 +++++--
- drivers/spi/spi-zynqmp-gqspi.c        | 13 ++++---
- include/linux/spi/spi-mem.h           | 56 +++++++++++++++++++++++++++++-
- 17 files changed, 237 insertions(+), 43 deletions(-)
-
---2iPXVcBfzc1mAQZJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeGgCYACgkQJNaLcl1U
-h9C5Dgf/RQhmGbs3CM6H/hRKhwFsGtKWssBC2kOLN+PiUG1tXi0R4xXhhCG1YZ+I
-mmbh18x03b5AkS7mgA7/Hv3cBlWU20+9Lbum30vy3m/6tv65PbMRKhJP7Wp8fVZ4
-peAWt9t/DOgczBGOKn1hOmdK0DKl5Ud53TcrLs8Euo21rg0fwPYzTomir2KOCSSw
-eR3zY6WsfdKAvS+jx0sbRJc3QoI92Lt5vOilGl4nTf2YG7aXt4kYryWg9srWJ3bp
-dID0aBfHHIxncNmQFigJhaxoG70pMR35LG3ZeN4FTwzyEVyg1/nP4yGYDG5MFyfA
-FLHg1nVdJ8hdV+MnnPPsYH4aGXTdCQ==
-=4HD+
------END PGP SIGNATURE-----
-
---2iPXVcBfzc1mAQZJ--
 
