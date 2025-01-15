@@ -1,137 +1,199 @@
-Return-Path: <linux-spi+bounces-6357-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6358-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74A52A11156
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 20:44:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81B54A12809
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 17:03:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E2E23A3699
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Jan 2025 19:44:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D726164179
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 16:03:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2541F207DE0;
-	Tue, 14 Jan 2025 19:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82A115622E;
+	Wed, 15 Jan 2025 16:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQX4r/MG"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="edZQ9IAh"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88BD20767A;
-	Tue, 14 Jan 2025 19:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8329315539A;
+	Wed, 15 Jan 2025 16:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736883871; cv=none; b=e1OXZaKNnHzGRZW7H7em/45xRKNUol0wHUm90htY09NDj0SRTdSX99jlZ9rzGuWwWBm3Vzg1OjRfBlZiWZWbA+K/bjzfT+u3ro4YiTTVI0r4jqfEaYG7biF1hvrPcynUiRFPSsoKJLP9Tgp9jwDb1Y3WrADQ5EufjUzYhQAVhB8=
+	t=1736956978; cv=none; b=jy5KCtrOPJtlYYyyD6EuioURjNb5lBmKgyI6kQV+tLvv2i17Vge1ximythOEd6euLAmPh4PWh7HhIONvX2Fd0rDP4uoBqAu+VXMNfd5brxGs1Zppvp1Fwktqrc46lmtErjnylKBehhERNPSTENeU5iNDWFkY8w96lA6uqkB9gCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736883871; c=relaxed/simple;
-	bh=QNhJNcQvlfjgdhjEkkoHb79mlnawyevNw4Pmp2t2UCQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ujYVikuxg0n84uIvWfBCm6Jpc5punpZWOfcwhxWxZDrkw1F6GqDQD3nyUoLg+FBEQE+EqgCM3v+UBk3P77gdNSzc7yvPFVnurLJjUg6LgBEu76OcbeM05hpnqdYgielL+dLQwUYSmQZGri+kHNWS6SK5AA8F/pDwZHfLcwXMkIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQX4r/MG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21014C4CEDD;
-	Tue, 14 Jan 2025 19:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736883870;
-	bh=QNhJNcQvlfjgdhjEkkoHb79mlnawyevNw4Pmp2t2UCQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tQX4r/MGQRt0j0vma95QWsnLJoYTy7h9PGouJqLNvc49tJEAHsCAngIJZEEZNwg8V
-	 FI0CWLcuX4nGz/OonBnvDYyHyGx2aZpE9Xm24sKWd5n2OcgxDZ2+vDIk/fTkj0s95t
-	 s6fzBIMsK1OJL/8bpMUZjdlqjuVBVI+9PD8uSMQanNrcGfVQLeMl5QGmzg41atE77G
-	 kw6RMI7mvOBL+TqC1HO8Z0iG5XP1cu6g1aaoN8DNcjTwbdA8W1/bBHcMZlsfWvy1Yy
-	 u5J7BZEDQfpwZoqG8guP/tXteaogV1q+sLDIhSKHydsSsm8A+bm7b5DBveB3xAYjyt
-	 7a+FSDt+PmyLQ==
-Date: Tue, 14 Jan 2025 19:44:26 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-spi@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-	stable@vger.kernel.org,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: microchip-core: prevent RX overflows when transmit
- size > FIFO size
-Message-ID: <33b35815-3575-490a-92de-4d1c2228257e@sirena.org.uk>
-References: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
+	s=arc-20240116; t=1736956978; c=relaxed/simple;
+	bh=8nH00K0F8hPYVSrUztWzL6dhLAEbSlSNn4G4HIuxWHg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TsLzN9I7pVodnhyVOqP5B0vE3suXqemEqTWtBgbUvc3vHQGXe+hAoiDU3Frw7TMb5fobqrIg0Ap28gJFOvWUgXTkjAMD3o7pjeBsbvDclSepgVDO40snXU8kptoqTyksaYdSUjRX7mndB4m02bcc9twM8XMwSI6YOt/xWklvlB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=edZQ9IAh; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 26D09A0955;
+	Wed, 15 Jan 2025 17:02:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=1cpdHJxpiKdoCJBJhkUL
+	0M4SqzQhG4ymd2U7r+mGgSU=; b=edZQ9IAhPDOS3UkLhGpv/S4GZ65IsKanX2Fh
+	U/l+weMXuV4dRCoiyL5GaM9y/a7ZZl8/DOEkVT/sld+4O13tVzLqppepWx+MiDDV
+	5dJV+JPRDDEL9BKCRSLYVtl7c2+kVzw49ti2c3k7kUN3cG57XcduKclUFeJ7SJi3
+	KabjLMQ8xDgaGP/9tj9x5SY8dRUrhZltrrIGpBGtrOVmq+32N4MqxXoMZei8AIn6
+	DjDse6qGvGTKirMQVnpPGklZ9ESUj7jk1u3iKETVb8KJu+95IhheDG4XBX2zn2Nj
+	EbgNBUU7doWlPMD9x85S2BfQCPnY/uf9ZefYMkKbZNDm3Y1lc84ugR29/b0pw/B4
+	pJZiGMtz6YIgHjtWLa8wawkEQNxvxhiv2j/9c2IFqVEicbdnzysv0TG/WAQwUK2y
+	H3Mo16uIFjo8yZ1dCYowfG4Ff1B+WnoNsARLWIqWHVtK3dPQ4zF6uY09hYfZRI7+
+	OeJM2rA/nNqM4VhQ3c2r4CBzWWbeLFzz6lejrra1wOEWeAb71lO7SbV8WQ2ZDBm3
+	xc3SVaEXf7vKMwwfIt3uu7sp/6lI83zqwZaNKtNwh3D6M8w2ore3V7Eea14U2au+
+	FYAX33X+wLVQw0BHrE6wdZxarCgzseWl/8y8n8uTQOSDZgU/8jQw3A85djffh3Gx
+	P7JXb5Y=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>
+Subject: [PATCH 3/4] spi: atmel-quadspi: Use `devm_dma_request_chan()`
+Date: Wed, 15 Jan 2025 17:02:40 +0100
+Message-ID: <20250115160244.1102881-3-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.0
+In-Reply-To: <20250115160244.1102881-1-csokas.bence@prolan.hu>
+References: <20250115160244.1102881-1-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="x78JH1Kc4sb87YXt"
-Content-Disposition: inline
-In-Reply-To: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
-X-Cookie: Sauron is alive in Argentina!
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1736956968;VERSION=7983;MC=1121942183;ID=287149;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD94852647067
+
+Leave releasing of DMA channels up to the devm
+facilities. This way we can eliminate the rest
+of the "goto ladder".
+
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+ drivers/spi/atmel-quadspi.c | 44 ++++++++++---------------------------
+ 1 file changed, 11 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index abdc49d9d940..b1fb4426c78d 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -1288,18 +1288,20 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
+ 	int ret;
+ 
+-	aq->rx_chan = dma_request_chan(&aq->pdev->dev, "rx");
++	aq->rx_chan = devm_dma_request_chan(&aq->pdev->dev, "rx");
+ 	if (IS_ERR(aq->rx_chan)) {
+ 		aq->rx_chan = NULL;
+ 		return dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
+ 				     "RX DMA channel is not available\n");
+ 	}
+ 
+-	aq->tx_chan = dma_request_chan(&aq->pdev->dev, "tx");
++	aq->tx_chan = devm_dma_request_chan(&aq->pdev->dev, "tx");
+ 	if (IS_ERR(aq->tx_chan)) {
+ 		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->tx_chan),
+ 				    "TX DMA channel is not available\n");
+-		goto release_rx_chan;
++		aq->rx_chan = NULL;
++		aq->tx_chan = NULL;
++		return ret;
+ 	}
+ 
+ 	ctrl->dma_rx = aq->rx_chan;
+@@ -1310,20 +1312,6 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 		 dma_chan_name(aq->tx_chan), dma_chan_name(aq->rx_chan));
+ 
+ 	return 0;
+-
+-release_rx_chan:
+-	dma_release_channel(aq->rx_chan);
+-	aq->rx_chan = NULL;
+-	aq->tx_chan = NULL;
+-	return ret;
+-}
+-
+-static void atmel_qspi_dma_release(struct atmel_qspi *aq)
+-{
+-	if (aq->rx_chan)
+-		dma_release_channel(aq->rx_chan);
+-	if (aq->tx_chan)
+-		dma_release_channel(aq->tx_chan);
+ }
+ 
+ static const struct atmel_qspi_ops atmel_qspi_ops = {
+@@ -1428,14 +1416,13 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 
+ 	/* Request the IRQ */
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		err = irq;
+-		goto dma_release;
+-	}
++	if (irq < 0)
++		return irq;
++
+ 	err = devm_request_irq(&pdev->dev, irq, atmel_qspi_interrupt,
+ 			       0, dev_name(&pdev->dev), aq);
+ 	if (err)
+-		goto dma_release;
++		return err;
+ 
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+@@ -1445,7 +1432,7 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 
+ 	err = atmel_qspi_init(aq);
+ 	if (err)
+-		goto dma_release;
++		return err;
+ 
+ 	err = spi_register_controller(ctrl);
+ 	if (err) {
+@@ -1453,18 +1440,12 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 		pm_runtime_disable(&pdev->dev);
+ 		pm_runtime_set_suspended(&pdev->dev);
+ 		pm_runtime_dont_use_autosuspend(&pdev->dev);
+-		goto dma_release;
++		return err;
+ 	}
+ 	pm_runtime_mark_last_busy(&pdev->dev);
+ 	pm_runtime_put_autosuspend(&pdev->dev);
+ 
+ 	return 0;
+-
+-dma_release:
+-	if (aq->caps->has_dma)
+-		atmel_qspi_dma_release(aq);
+-
+-	return err;
+ }
+ 
+ static int atmel_qspi_sama7g5_suspend(struct atmel_qspi *aq)
+@@ -1514,9 +1495,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
+ 
+ 	ret = pm_runtime_get_sync(&pdev->dev);
+ 	if (ret >= 0) {
+-		if (aq->caps->has_dma)
+-			atmel_qspi_dma_release(aq);
+-
+ 		if (aq->caps->has_gclk) {
+ 			ret = atmel_qspi_sama7g5_suspend(aq);
+ 			if (ret)
+-- 
+2.48.0
 
 
---x78JH1Kc4sb87YXt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jan 14, 2025 at 05:13:49PM +0000, Conor Dooley wrote:
-
-> When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
-> overflows will be generated and receive data will be corrupted and
-> warnings will be produced. For example, here's an error generated by a
-> transfer of 36 bytes:
-
->   spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen: 0
-
-> I am not entirely sure how this happens, as rxlen being 4 means that 32
-> of 36 bytes have been read from the RX FIFO so there should be
-> sufficient room for 4 more bytes but timing is likely a factor as simply
-> adding a delay in the transmit path is enough to avoid the overflows.
-
-The reads from the FIFO happen prior to the check for overflow in the
-interrupt handler so if we overflow then take the interrupt we will read
-the full 32 byte FIFO before it sees that there was an overflow.
-
-> @@ -221,6 +221,13 @@ static inline void mchp_corespi_write_fifo(struct mc=
-hp_corespi *spi)
->  	while ((i < fifo_max) && !(mchp_corespi_read(spi, REG_STATUS) & STATUS_=
-TXFIFO_FULL)) {
->  		u32 word;
-> =20
-> +		/*
-> +		 * If the transfer is larger than FIFO_DEPTH, spin until space
-> +		 * is made in the RX FIFO to avoid losing data to RX overflows
-> +		 */
-> +		while (mchp_corespi_read(spi, REG_STATUS) & STATUS_RXFIFO_FULL)
-> +			;
-> +
-
-So, this is the transmit side but we're polling the RX FIFO and not
-doing anything to clear it?  I see that the FIFO reads are driven from
-interrupt context.  If I had to guess I'd say that there's latency in
-the interrupt being delivered (possibly to a different CPU) and when the
-transfer is being driven by the TX side it's stuffing data into the TX
-FIFO faster than interrupts are being delivered (the TX side just seems
-to busy wait on there being space in the FIFO which can't be good for
-slower speeds...) so the TX and RX sides of the transfer get out of sync.
-
-Given that AFAICT the controller has to RX all the time I suspect you
-want to move the RX processing out of interrupt context into the main
-_transfer_one() function and busy wait for that too, or push the TX side
-into the interrupt handler (which at first glance looks simpler).
-Either way the two directions will be driven from the same place and so
-not get out of sync.
-
---x78JH1Kc4sb87YXt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeGvpkACgkQJNaLcl1U
-h9B7hQf/UIVH5UNFPT2b35lXAFt6B4oUtXc0b6v9C0YQKfHaCZ5VjDt0y98xeb7/
-0+/+R2H4nJ3+0QMKwg98rJsA+GBQKyaUz+hAxI0O/uAigphZauge7WgiV2DnZmOv
-5uzDDkuKDVLyKZGuHObBvXkht6Oc1pObFzjkyCf4kiFLiMLUNA6CohKNZAH8CaIc
-OyyhD9y0o/YmArlNvkLOJGNll5BuLavTKDWqJyiHb6IQtSYZfk/MzZNFjYKu8QA3
-kaMNzUbO42hyRO11Rli3VBAkOzb+yBnDIuI4tpM+JuMZ5W4lOF0lrZql/rVp1wrv
-kAaF10f0JVTEqm+IADzPUiV/47kdiA==
-=HVpn
------END PGP SIGNATURE-----
-
---x78JH1Kc4sb87YXt--
 
