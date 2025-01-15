@@ -1,139 +1,166 @@
-Return-Path: <linux-spi+bounces-6359-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6360-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28F44A1280C
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 17:03:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6EBBA12ACD
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 19:23:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC1E5167F00
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 16:03:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB05D1664A7
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Jan 2025 18:23:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86016165F18;
-	Wed, 15 Jan 2025 16:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C99BE1D63F0;
+	Wed, 15 Jan 2025 18:22:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="iJxIkM7H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="curbvbP3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F3C136E37;
-	Wed, 15 Jan 2025 16:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E8024A7D5;
+	Wed, 15 Jan 2025 18:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736956979; cv=none; b=Fbe8Dgdt83mFqLGzYwjVmpejp8c4PeQoJ1I9OOukcBWtLiNipQ5+7W4jWpOBybbmpOOAdl55j3LFERIJ+x57WwbD2F0eb7tkHa9dTXExeSRYBshuHp96jIQvmymPBDUBtyyZ4OKOSZwfI3rKM7bB7FRwnNst4CUaZgtX8sg3PrM=
+	t=1736965379; cv=none; b=LixHIPEtYFNC57nJ4YqJXt39wQnsxhQuIBS9sjBp27uMmDyXX7zOcygBAPknt6rze0UcNhvyPzrA+o2l/HOj8UIt4KfUuKQRFn4eb6Xr2iVFkUhpj6AF7vJCdz4JdrS0JKR9NUszWStKEjukxfHUGiGWR3sIiUgw9hC6GYRIRyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736956979; c=relaxed/simple;
-	bh=JVtA38B9D2X67jIXePyuJQfXQd5uGhLubJJp1CfHH78=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dgTBfLyA1O1GPMcW7yWFMT5+zzcd12mbnGawCADW7PEfTtVBx8dcp3DdQo3lkfkgrFSiYSodCifV9V6YrwN6y6f037MoSkRKVVJzVvZJQj3hr58sAodKqDkk4z3bNh4Wi4rcOh8mLXZNJryRalzIfhJinsuX3xeu00n5sa1onQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=iJxIkM7H; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id D7E9FA099A;
-	Wed, 15 Jan 2025 17:02:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=VtKelQz/78A8bo8Vg0Jk
-	YpThHcAAeYRmgdNPVPZFl4g=; b=iJxIkM7HY0Tv8C0GXViAA/y5NpP4ovq3qhom
-	YPdXfZbhsQIaIBngULnL2S0ZtmTVWl9ETazZhmOKbSNlV74ZvhcfK+liDNBh0V58
-	KbXJZndvj8wv1NaW6pZpdgQBQEmoY6UWxANrpMFMk+u9/wn/UHnsiyboEmuL2Rhr
-	1/nvTbRd1YUT7id87nerGAhui88rJVOhnTJ1IqmfddgotpfJtnom8ZjDOriq5R09
-	RDL4Dc1ezQg2yQYPoOyWZ1rPJ6IPA7KLy9Slv1wjeDxvQPdIwuVNZ8+Ak+X6lYFE
-	RDdlpMKnHI0VFgXE2AAaghcARwfp/XVKejf/l5rv+l6M3XLkrDUiMt93pxSHzHuG
-	fmBS874EBAaw/CnMcE1fiN7i8a7/kUSlhtg4cbb33ftITg3khLQidf+0KMlzD85I
-	V5j9eABen5hdXpliVtcrVqgain3exWnvXgLjoNjUj7ry4cNompGmYoZfjiKPQtYr
-	EZiYNrjhHP56T8Ma/ceIB4y7B4U6UJLgMnlPp68SZUzF8mvz/Yr5FQUo3dS9Id6h
-	N3jXCFiN0HMc4SgXCPXsPxUBPy/i0fZ+bk0Q3HUwDEtYzteYxeDuVMEpiUWvZ4uU
-	nC6ocTv+ETgYiaWoOxn3Qn4Kms3eLDsMgrMgT3IdiSYB3eC2/VNPzdIQi/jClzxY
-	5oCVR04=
-From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
-	Varshini Rajendran <varshini.rajendran@microchip.com>,
-	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Alexander Dahl <ada@thorsis.com>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: [PATCH 4/4] spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
-Date: Wed, 15 Jan 2025 17:02:41 +0100
-Message-ID: <20250115160244.1102881-4-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.48.0
-In-Reply-To: <20250115160244.1102881-1-csokas.bence@prolan.hu>
-References: <20250115160244.1102881-1-csokas.bence@prolan.hu>
+	s=arc-20240116; t=1736965379; c=relaxed/simple;
+	bh=+D4fVNgXMgXNYg+FYqmlIW+aVPKuibad+XU5z8DGPo8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oWul4yLfpnmK6dTvuMOcmI/8dVAFknjJPO09yrNxrQwxKgUz+TyB4G5dJJVKn9BHlq+zWNOembQVbw7XenL1IKPfRHVoaqyBCu6J7JEENOMheS3GsHgA4nbq5QzS9F3WzHEjSejce42nR0sNNzJujjguyiUz4NFui1ijgo7Wlqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=curbvbP3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6B6C4CEE3;
+	Wed, 15 Jan 2025 18:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736965379;
+	bh=+D4fVNgXMgXNYg+FYqmlIW+aVPKuibad+XU5z8DGPo8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=curbvbP3CDSi5KpGt4sbhmZPg2t+v6pmdOs56ERfjoFizv99qDFhWio0h+fdmeV/M
+	 Gud1a1Afpau4ErsmOBGVkvMYG22L50suzZVOKzJ9HAoijML8snzZim+nn37af9VFpb
+	 ASRHaOge6+xOfokmJK5kL3IZ5yzcQ7usPXTSlVd+/efx/NPUC+4MpCkV/2n4TMF8Pc
+	 8CocP2ZOqbCocEjiCL8yJYQlRJmdty9VCGKRB7ixI0ShYRkhadS1ulzVT+GJV772Xm
+	 F2QnoFyIYBN3nmeDa9R3KcmnccKrY/9kg2IEj0ZQ0a9URKw0n24ccbEP1Ex9psO/aP
+	 Xd1xJLN7JSppQ==
+Date: Wed, 15 Jan 2025 18:22:55 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+	stable@vger.kernel.org,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: microchip-core: prevent RX overflows when transmit
+ size > FIFO size
+Message-ID: <20250115-resubmit-glove-ca6ce06c9d4f@spud>
+References: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
+ <33b35815-3575-490a-92de-4d1c2228257e@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1736956969;VERSION=7983;MC=3460317179;ID=287150;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29ACD94852647067
-
-Fix unbalanced PM in error path of `atmel_qspi_probe()`
-by using `devm_pm_runtime_*()` functions.
-
-Reported-by: Alexander Dahl <ada@thorsis.com>
-Closes: https://lore.kernel.org/linux-spi/20250110-paycheck-irregular-bcddab1276c7@thorsis.com/
-Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index b1fb4426c78d..f2164685d3d5 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -1426,22 +1426,18 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
- 	pm_runtime_use_autosuspend(&pdev->dev);
--	pm_runtime_set_active(&pdev->dev);
--	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_noresume(&pdev->dev);
-+	devm_pm_runtime_set_active(&pdev->dev);
-+	devm_pm_runtime_enable(&pdev->dev);
-+	devm_pm_runtime_get_noresume(&pdev->dev);
- 
- 	err = atmel_qspi_init(aq);
- 	if (err)
- 		return err;
- 
- 	err = spi_register_controller(ctrl);
--	if (err) {
--		pm_runtime_put_noidle(&pdev->dev);
--		pm_runtime_disable(&pdev->dev);
--		pm_runtime_set_suspended(&pdev->dev);
--		pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	if (err)
- 		return err;
--	}
-+
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
-@@ -1511,10 +1507,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
- 		 */
- 		dev_warn(&pdev->dev, "Failed to resume device on remove\n");
- 	}
--
--	pm_runtime_disable(&pdev->dev);
--	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	pm_runtime_put_noidle(&pdev->dev);
- }
- 
- static int __maybe_unused atmel_qspi_suspend(struct device *dev)
--- 
-2.48.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="Z5NkYWbRBvvFFc3z"
+Content-Disposition: inline
+In-Reply-To: <33b35815-3575-490a-92de-4d1c2228257e@sirena.org.uk>
 
 
+--Z5NkYWbRBvvFFc3z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 14, 2025 at 07:44:26PM +0000, Mark Brown wrote:
+> On Tue, Jan 14, 2025 at 05:13:49PM +0000, Conor Dooley wrote:
+>=20
+> > When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
+> > overflows will be generated and receive data will be corrupted and
+> > warnings will be produced. For example, here's an error generated by a
+> > transfer of 36 bytes:
+>=20
+> >   spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen=
+: 0
+>=20
+> > I am not entirely sure how this happens, as rxlen being 4 means that 32
+> > of 36 bytes have been read from the RX FIFO so there should be
+> > sufficient room for 4 more bytes but timing is likely a factor as simply
+> > adding a delay in the transmit path is enough to avoid the overflows.
+>=20
+> The reads from the FIFO happen prior to the check for overflow in the
+> interrupt handler so if we overflow then take the interrupt we will read
+> the full 32 byte FIFO before it sees that there was an overflow.
+>=20
+> > @@ -221,6 +221,13 @@ static inline void mchp_corespi_write_fifo(struct =
+mchp_corespi *spi)
+> >  	while ((i < fifo_max) && !(mchp_corespi_read(spi, REG_STATUS) & STATU=
+S_TXFIFO_FULL)) {
+> >  		u32 word;
+> > =20
+> > +		/*
+> > +		 * If the transfer is larger than FIFO_DEPTH, spin until space
+> > +		 * is made in the RX FIFO to avoid losing data to RX overflows
+> > +		 */
+> > +		while (mchp_corespi_read(spi, REG_STATUS) & STATUS_RXFIFO_FULL)
+> > +			;
+> > +
+>=20
+> So, this is the transmit side but we're polling the RX FIFO and not
+> doing anything to clear it?  I see that the FIFO reads are driven from
+> interrupt context.  If I had to guess I'd say that there's latency in
+> the interrupt being delivered (possibly to a different CPU) and when the
+> transfer is being driven by the TX side it's stuffing data into the TX
+> FIFO faster than interrupts are being delivered (the TX side just seems
+> to busy wait on there being space in the FIFO which can't be good for
+> slower speeds...) so the TX and RX sides of the transfer get out of sync.
+>=20
+> Given that AFAICT the controller has to RX all the time I suspect you
+> want to move the RX processing out of interrupt context into the main
+> _transfer_one() function and busy wait for that too, or push the TX side
+> into the interrupt handler (which at first glance looks simpler).
+> Either way the two directions will be driven from the same place and so
+> not get out of sync.
+
+Hmm, at first glance it is indeed simpler, but it may be a bit of a
+poor compromise. There used to be calls to
+mchp_corespi_write_fifo() in the interrupt handler, but I removed them
+in the ?summer? because messages were being sent out of order. IIRC what
+happens is that the tx fifo can be emptied by the controller hardware
+before the whole message has been written into it, thereby generating
+the interrupts and triggering a parallel call to mchp_corespi_write_fifo().
+
+To avoid that, the first byte could be sent by transfer_one(), and then
+everything else handled by the current implementation of
+mchp_corespi_write_fifo(), but I think that would cause "actual" RX
+overflows, without cutting down to sending (FIFO_MAX - 1) bytes per call
+or ensuring that the rx fifo is read before the tx one. Given the timing
+issues there seem to be around the rx ready/tx done interrupts and the
+rx/tx fifo status bits being set/cleared, I don't want to play games
+there. That means cutting down to something well under FIFO_MAX (which
+is 32 bytes), probably to something like 1/2/4 bytes depending on
+transfer size since that can be done in a single write on the bus and
+will allow the same code to be used in transfer_one() and in the
+interrupt handler.
+
+Moving it out of the interrupt handler entirely probably makes the code
+a lot easier to reason about, so I think I'd actually rather do that.
+That said, I don't think I would want that change going into fixes as it's
+a pretty intrusive change, although given where we are in the cycle it
+ain't as much of a problem since I'd not be sending it until after 6.13
+is released anyway.
+
+Cheers,
+Conor.
+
+--Z5NkYWbRBvvFFc3z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ4f8/wAKCRB4tDGHoIJi
+0sxSAP9Sacu1Z0IeulFVDuWALhs+Q8UBxLnHHq7v86EDxrv0LQEApdIWGaIiq32O
+yMwbARDUox2mcfPSB8Ah4ivZxIQaHwY=
+=Id6j
+-----END PGP SIGNATURE-----
+
+--Z5NkYWbRBvvFFc3z--
 
