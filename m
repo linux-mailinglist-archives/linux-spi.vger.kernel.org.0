@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-6387-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6386-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE20A1457A
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 00:22:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7E03A14577
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 00:22:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C4B41683AD
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 23:22:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B1E01631E2
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 23:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFF8244F9F;
-	Thu, 16 Jan 2025 23:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95BF232438;
+	Thu, 16 Jan 2025 23:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tcPnw3UZ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FC8PcUCx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 332CF2442D0
-	for <linux-spi@vger.kernel.org>; Thu, 16 Jan 2025 23:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB2E241A0B
+	for <linux-spi@vger.kernel.org>; Thu, 16 Jan 2025 23:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737069705; cv=none; b=RBjJw4HHeJ/0buhohrEfIgmQcIyH6ZmCMTEsP/21xw/qqfsZ/e8e7sSd4icglGMTz2sfOxcUyvSYF3jzbmmYYEyCdwSLUxiDLsd+bTU+RkakARntZV+gKH52UCZu2c8d7PpGPPAO6dCrm9B44+1EUS1GcovOHGimHPQ3WbtRtKc=
+	t=1737069703; cv=none; b=HlMRRZ+Y93S5xtocQf5h39Z570+2FjtnOBG12CTYsTS8/U5ZmeDgqwzHLqUOwfGi0v6gUD94yugVHRUPs3MeFv9S7eIxOeC1SISrvTciUVZceRfI/U5h3yHwQsswgYWNl2Sf/9EE9FLj1p3p+PKvz8nwk/At9I4O9rdTFtHwQko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737069705; c=relaxed/simple;
-	bh=H/cFoJO8k1ct30ihhvF4ET0+AF+lsfzgR0c326wEI3A=;
+	s=arc-20240116; t=1737069703; c=relaxed/simple;
+	bh=t+jiC9zkX1Xh/vs8ZAOS/bTNB7s03aofjGiFfqcq76Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Oo1Lke4OJ/eajg3xJAqoelNbg70abUQAykoexTa9Bfxs4dW5FuwjLZoV8BwaqzQMrxRGihESpCJDXSMdUjUwiLLCxdN7y+/RaW5gy/+rYwG1OZX81mGyuv8NOLXjJLcOS27X+c29JkL6JlUkGX4qNgC8jEGki7SCKALi96wzWcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tcPnw3UZ; arc=none smtp.client-ip=95.215.58.186
+	 MIME-Version; b=S+DKfBkUyR6EAxGgw24cU2pUgqreVr+uBq1FjY/Bf/Kf2OKdTygie35pe+I4lVWQherQTHvp+TUIlKOlamhEE57W/c+fABhpywLVIdXh5PrFv5qdkqUrzDgAMDsbkIAHTd9gP/POFlVa18d5+VNWD12otN+8VuttqQ6gqVoP6Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FC8PcUCx; arc=none smtp.client-ip=95.215.58.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737069698;
+	t=1737069700;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WWociCl4bVfAjOOY4p6sldW8VifVxjxPHAFfPT85y74=;
-	b=tcPnw3UZ2J0b92pJLokBFDODxVsw+0vMfWPLiEUFE/LQfXGgrs6i2KG+8BMGu944i4IN+o
-	mKC1M9buWhD5qpqjnHr3cpn7qWHk30w+dDUDcqt+HLBrA957RXEg52OLynMam0eA6SS8Xt
-	mOz4colEOoTkvmPXElTMNtUXrAzz7t8=
+	bh=iHGW05zMsRoR73u/6yei3oxj4qrZbmDsPW4oXB+eZkU=;
+	b=FC8PcUCx4FLk+kJ5dUK5PmZ4kNCi7FHBtSOZdcTd1NI9Cv+mzt3FYqh/GEDIQAJplr2LTH
+	+CB0MonTZo3qbrYkTjhmYQ+MJi4fEyQvvGxfpkgZDbrZGPv7+x6WldnxUDrN/3AQR2rY+B
+	g9rKRJZXgpZvbq+Te/7nPRvzt3Y89cM=
 From: Sean Anderson <sean.anderson@linux.dev>
 To: Mark Brown <broonie@kernel.org>,
 	Michal Simek <michal.simek@amd.com>,
@@ -52,9 +52,9 @@ Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
 	linux-kernel@vger.kernel.org,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH 5/7] spi: zynqmp-gqspi: Split the bus
-Date: Thu, 16 Jan 2025 18:21:15 -0500
-Message-Id: <20250116232118.2694169-6-sean.anderson@linux.dev>
+Subject: [PATCH 6/7] spi: zynqmp-gqspi: Support GPIO chip selects
+Date: Thu, 16 Jan 2025 18:21:16 -0500
+Message-Id: <20250116232118.2694169-7-sean.anderson@linux.dev>
 In-Reply-To: <20250116232118.2694169-1-sean.anderson@linux.dev>
 References: <20250116232118.2694169-1-sean.anderson@linux.dev>
 Precedence: bulk
@@ -66,282 +66,137 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This device supports two separate SPI busses: "lower" (SPI0) and "upper"
-(SPI1). Each SPI bus has separate clock and data lines, as well as a
-hardware-controlled chip select. The busses may be driven independently,
-with only one bus active at a time, or in concert, with both busses
-active. If both busses are driven at once, data may either be duplicated
-on each bus or striped (bitwise) across both busses.
-
-The current driver does not model this situation. It exposes one bus,
-where CS 0 uses the lower bus and the lower chip select, and CS 1 uses
-the upper bus and the upper chip select. It is not possible to use the
-upper chip select with the lower bus (or vice versa). GPIO chip selects
-are unsupported, and there would be no way to specify which bus to use
-if they were.
-
-To conserve pins, designers may wish to place multiple devices on a
-single SPI bus. Add support for this by splitting the "merged" bus into
-an upper and lower bus. Each bus uses a separate devicetree node and has
-a single native chipselect 0. If "lower" and "upper" nodes are absent
-from the devicetree, we register the merged bus instead, which maintains
-the current behavior.
+GPIO chipselects use the traditional SPU API instead of the SPIMEM API.
+Implement it with transfer_one and set_cs (for non-GPIO chipselects). At
+the moment we only support half-duplex transfers, which is good enough
+to access SPI flashes.
 
 Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 ---
 
- drivers/spi/spi-zynqmp-gqspi.c | 155 ++++++++++++++++++++++++++-------
- 1 file changed, 125 insertions(+), 30 deletions(-)
+ drivers/spi/spi-zynqmp-gqspi.c | 83 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
 diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index d78e114e17e0..9823d710c4d6 100644
+index 9823d710c4d6..efd01e06b77a 100644
 --- a/drivers/spi/spi-zynqmp-gqspi.c
 +++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -167,6 +167,10 @@ struct qspi_platform_data {
- 
- /**
-  * struct zynqmp_qspi - Defines qspi driver instance
-+ * @lower		Pointer to "lower" SPI bus
-+ * @upper		Pointer to "upper" SPI bus
-+ * @merged		Pointer to legacy SPI bus which is a combination of
-+ * 			@lower and @upper
-  * @ctlr:		Pointer to the spi controller information
-  * @regs:		Virtual address of the QSPI controller registers
-  * @refclk:		Pointer to the peripheral clock
-@@ -191,7 +195,7 @@ struct qspi_platform_data {
-  * @has_tapdelay:	Used for tapdelay register available in qspi
-  */
- struct zynqmp_qspi {
--	struct spi_controller *ctlr;
-+	struct spi_controller *lower, *upper, *merged;
- 	void __iomem *regs;
- 	struct clk *refclk;
- 	struct clk *pclk;
-@@ -467,20 +471,33 @@ static void zynqmp_qspi_copy_read_data(struct zynqmp_qspi *xqspi,
-  */
- static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
- {
--	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(qspi->controller);
-+	struct spi_controller *ctlr = qspi->controller;
-+	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
- 	ulong timeout;
- 	u32 genfifoentry = 0, statusreg;
- 
- 	genfifoentry |= GQSPI_GENFIFO_MODE_SPI;
- 
- 	if (!is_high) {
--		if (!spi_get_chipselect(qspi, 0)) {
--			xqspi->genfifobus = GQSPI_GENFIFO_BUS_LOWER;
--			xqspi->genfifocs = GQSPI_GENFIFO_CS_LOWER;
-+		bool upper;
-+
-+		if (ctlr == xqspi->lower) {
-+			upper = false;
-+		} else if (ctlr == xqspi->upper) {
-+			upper = true;
- 		} else {
-+			WARN_ON_ONCE(ctlr != xqspi->merged);
-+			upper = spi_get_chipselect(qspi, 0);
-+		}
-+
-+		if (upper) {
- 			xqspi->genfifobus = GQSPI_GENFIFO_BUS_UPPER;
- 			xqspi->genfifocs = GQSPI_GENFIFO_CS_UPPER;
-+		} else {
-+			xqspi->genfifobus = GQSPI_GENFIFO_BUS_LOWER;
-+			xqspi->genfifocs = GQSPI_GENFIFO_CS_LOWER;
- 		}
-+
- 		genfifoentry |= xqspi->genfifobus;
- 		genfifoentry |= xqspi->genfifocs;
- 		genfifoentry |= GQSPI_GENFIFO_CS_SETUP;
-@@ -962,12 +979,28 @@ static int zynqmp_qspi_read_op(struct zynqmp_qspi *xqspi, u8 rx_nbits,
- static int __maybe_unused zynqmp_qspi_suspend(struct device *dev)
- {
- 	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
--	struct spi_controller *ctlr = xqspi->ctlr;
- 	int ret;
- 
--	ret = spi_controller_suspend(ctlr);
--	if (ret)
--		return ret;
-+	if (xqspi->merged) {
-+		ret = spi_controller_suspend(xqspi->merged);
-+		if (ret)
-+			return ret;
-+	} else {
-+		if (xqspi->lower) {
-+			ret = spi_controller_suspend(xqspi->lower);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (xqspi->upper) {
-+			ret = spi_controller_suspend(xqspi->upper);
-+			if (ret) {
-+				if (xqspi->lower)
-+					spi_controller_resume(xqspi->lower);
-+				return ret;
-+			}
-+		}
-+	}
- 
- 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, 0x0);
- 
-@@ -986,13 +1019,18 @@ static int __maybe_unused zynqmp_qspi_suspend(struct device *dev)
- static int __maybe_unused zynqmp_qspi_resume(struct device *dev)
- {
- 	struct zynqmp_qspi *xqspi = dev_get_drvdata(dev);
--	struct spi_controller *ctlr = xqspi->ctlr;
-+	int ret = 0;
- 
- 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, GQSPI_EN_MASK);
- 
--	spi_controller_resume(ctlr);
-+	if (xqspi->merged)
-+		ret = spi_controller_resume(xqspi->merged);
-+	if (xqspi->lower)
-+		ret = spi_controller_resume(xqspi->lower) ?: ret;
-+	if (xqspi->upper)
-+		ret = spi_controller_resume(xqspi->upper) ?: ret;
- 
--	return 0;
-+	return ret;
+@@ -528,6 +528,15 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
+ 		dev_err(xqspi->dev, "Chip select timed out\n");
  }
  
++static void zynqmp_qspi_set_cs(struct spi_device *qspi, bool is_high)
++{
++	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(qspi->controller);
++
++	mutex_lock(&xqspi->op_lock);
++	zynqmp_qspi_chipselect(qspi, is_high);
++	mutex_unlock(&xqspi->op_lock);
++}
++
  /**
-@@ -1253,6 +1291,41 @@ static const struct spi_controller_mem_ops zynqmp_qspi_mem_ops = {
- 	.exec_op = zynqmp_qspi_exec_op,
- };
+  * zynqmp_qspi_selectspimode - Selects SPI mode - x1 or x2 or x4.
+  * @xqspi:	xqspi is a pointer to the GQSPI instance
+@@ -1271,6 +1280,75 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 	return err;
+ }
  
-+static void zynqmp_qspi_release_node(void *of_node)
++static int zynqmp_qspi_transfer_one(struct spi_controller *ctlr,
++				    struct spi_device *spi,
++				    struct spi_transfer *transfer)
 +{
-+	of_node_put(of_node);
-+}
++	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
++	unsigned long timeout;
++	u32 genfifoentry;
++	u32 mask = 0;
++	int ret;
 +
-+static struct spi_controller *
-+zynqmp_qspi_alloc_split(struct zynqmp_qspi *xqspi, const char *name)
-+{
-+	struct spi_controller *ctlr;
-+	struct device_node *np;
-+	u32 num_cs;
-+	int err;
++	dev_dbg(xqspi->dev, "xfer %u/%u %u\n", transfer->tx_nbits,
++		transfer->rx_nbits, transfer->len);
 +
-+	np = of_get_child_by_name(xqspi->dev->of_node, name);
-+	if (!np)
-+		return NULL;
++	if (transfer->tx_nbits && transfer->rx_nbits)
++		return -EOPNOTSUPP;
 +
-+	err = devm_add_action_or_reset(xqspi->dev, zynqmp_qspi_release_node,
-+				       np);
-+	if (err)
-+		return ERR_PTR(err);
-+
-+	ctlr = devm_spi_alloc_host(xqspi->dev, 0);
-+	if (!ctlr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ctlr->dev.of_node = np;
-+	if (of_property_read_u32(np, "num-cs", &num_cs))
-+		ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
-+	else
-+		ctlr->num_chipselect = num_cs;
-+
-+	return ctlr;
-+}
-+
- static int zynqmp_qspi_register_ctlr(struct zynqmp_qspi *xqspi,
- 				     struct spi_controller *ctlr)
- {
-@@ -1261,6 +1334,7 @@ static int zynqmp_qspi_register_ctlr(struct zynqmp_qspi *xqspi,
- 	if (!ctlr)
- 		return 0;
- 
-+	spi_controller_set_devdata(ctlr, xqspi);
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
- 		SPI_TX_DUAL | SPI_TX_QUAD;
- 	ctlr->max_speed_hz = xqspi->speed_hz;
-@@ -1287,22 +1361,47 @@ static int zynqmp_qspi_register_ctlr(struct zynqmp_qspi *xqspi,
- static int zynqmp_qspi_probe(struct platform_device *pdev)
- {
- 	int ret = 0;
--	struct spi_controller *ctlr;
- 	struct zynqmp_qspi *xqspi;
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = dev->of_node;
--	u32 num_cs;
- 	const struct qspi_platform_data *p_data;
- 
--	ctlr = devm_spi_alloc_host(&pdev->dev, sizeof(*xqspi));
--	if (!ctlr)
-+	xqspi = devm_kzalloc(dev, sizeof(*xqspi), GFP_KERNEL);
-+	if (!xqspi)
- 		return -ENOMEM;
- 
--	xqspi = spi_controller_get_devdata(ctlr);
- 	xqspi->dev = dev;
--	xqspi->ctlr = ctlr;
- 	platform_set_drvdata(pdev, xqspi);
- 
-+	xqspi->lower = zynqmp_qspi_alloc_split(xqspi, "spi-lower");
-+	if (IS_ERR(xqspi->lower))
-+		return PTR_ERR(xqspi->lower);
-+
-+	xqspi->upper = zynqmp_qspi_alloc_split(xqspi, "spi-upper");
-+	if (IS_ERR(xqspi->upper))
-+		return PTR_ERR(xqspi->upper);
-+
-+	if (!xqspi->lower && !xqspi->upper) {
-+		struct spi_controller *ctlr = devm_spi_alloc_host(dev, 0);
-+		u32 num_cs;
-+
-+		if (!ctlr)
-+			return -ENOMEM;
-+
-+		ret = of_property_read_u32(dev->of_node, "num-cs", &num_cs);
-+		if (ret < 0) {
-+			ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
-+		} else if (num_cs > GQSPI_MAX_NUM_CS) {
-+			dev_err(dev, "only %d chip selects are available\n",
-+				GQSPI_MAX_NUM_CS);
-+			return -EINVAL;
++	guard(mutex)(&xqspi->op_lock);
++	zynqmp_qspi_config_op(xqspi, transfer->speed_hz, spi->mode);
++	if (spi_get_csgpiod(spi, 0)) {
++		if (ctlr == xqspi->lower) {
++			xqspi->genfifobus = GQSPI_GENFIFO_BUS_LOWER;
 +		} else {
-+			ctlr->num_chipselect = num_cs;
++			WARN_ON_ONCE(ctlr != xqspi->upper);
++			xqspi->genfifobus = GQSPI_GENFIFO_BUS_UPPER;
 +		}
++		xqspi->genfifocs = 0;
++	}
++	genfifoentry = xqspi->genfifocs | xqspi->genfifobus;
 +
-+		ctlr->dev.of_node = dev->of_node;
-+		xqspi->merged = ctlr;
++	reinit_completion(&xqspi->data_completion);
++	if (transfer->tx_nbits) {
++		xqspi->txbuf = transfer->tx_buf;
++		xqspi->rxbuf = NULL;
++		xqspi->bytes_to_transfer = transfer->len;
++		xqspi->bytes_to_receive = 0;
++		zynqmp_qspi_write_op(xqspi, transfer->tx_nbits, genfifoentry);
++		mask = GQSPI_IER_TXEMPTY_MASK | GQSPI_IER_GENFIFOEMPTY_MASK |
++		       GQSPI_IER_TXNOT_FULL_MASK;
++		timeout = zynqmp_qspi_timeout(xqspi, transfer->tx_nbits,
++					      transfer->len);
++	} else {
++		xqspi->txbuf = NULL;
++		xqspi->rxbuf = transfer->rx_buf;
++		xqspi->bytes_to_transfer = 0;
++		xqspi->bytes_to_receive = transfer->len;
++		ret = zynqmp_qspi_read_op(xqspi, transfer->rx_nbits,
++					  genfifoentry);
++		if (ret)
++			return ret;
++
++		if (xqspi->mode != GQSPI_MODE_DMA)
++			mask = GQSPI_IER_GENFIFOEMPTY_MASK |
++			       GQSPI_IER_RXNEMPTY_MASK | GQSPI_IER_RXEMPTY_MASK;
++		timeout = zynqmp_qspi_timeout(xqspi, transfer->rx_nbits,
++					      transfer->len);
 +	}
 +
- 	p_data = of_device_get_match_data(&pdev->dev);
- 	if (p_data && (p_data->quirks & QSPI_QUIRK_HAS_TAPDELAY))
- 		xqspi->has_tapdelay = true;
-@@ -1375,19 +1474,15 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto clk_dis_all;
- 
--	ret = of_property_read_u32(np, "num-cs", &num_cs);
--	if (ret < 0) {
--		ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
--	} else if (num_cs > GQSPI_MAX_NUM_CS) {
--		ret = -EINVAL;
--		dev_err(&pdev->dev, "only %d chip selects are available\n",
--			GQSPI_MAX_NUM_CS);
-+	ret = zynqmp_qspi_register_ctlr(xqspi, xqspi->lower);
-+	if (ret)
- 		goto clk_dis_all;
--	} else {
--		ctlr->num_chipselect = num_cs;
--	}
- 
--	ret = zynqmp_qspi_register_ctlr(xqspi, ctlr);
-+	ret = zynqmp_qspi_register_ctlr(xqspi, xqspi->upper);
-+	if (ret)
-+		goto clk_dis_all;
++	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
++			   zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
++			   GQSPI_CFG_START_GEN_FIFO_MASK);
++	if (mask)
++		zynqmp_gqspi_write(xqspi, GQSPI_IER_OFST, mask);
++	else
++		zynqmp_gqspi_write(xqspi, GQSPI_QSPIDMA_DST_I_EN_OFST,
++				   GQSPI_QSPIDMA_DST_I_EN_DONE_MASK);
 +
-+	ret = zynqmp_qspi_register_ctlr(xqspi, xqspi->merged);
- 	if (ret)
- 		goto clk_dis_all;
++	return zynqmp_qspi_wait(xqspi, timeout);
++}
++
+ static const struct dev_pm_ops zynqmp_qspi_dev_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(zynqmp_runtime_suspend,
+ 			   zynqmp_runtime_resume, NULL)
+@@ -1318,6 +1396,7 @@ zynqmp_qspi_alloc_split(struct zynqmp_qspi *xqspi, const char *name)
+ 		return ERR_PTR(-ENOMEM);
  
+ 	ctlr->dev.of_node = np;
++	ctlr->max_native_cs = 1;
+ 	if (of_property_read_u32(np, "num-cs", &num_cs))
+ 		ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
+ 	else
+@@ -1337,11 +1416,15 @@ static int zynqmp_qspi_register_ctlr(struct zynqmp_qspi *xqspi,
+ 	spi_controller_set_devdata(ctlr, xqspi);
+ 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_DUAL | SPI_RX_QUAD |
+ 		SPI_TX_DUAL | SPI_TX_QUAD;
++	ctlr->flags = SPI_CONTROLLER_HALF_DUPLEX;
+ 	ctlr->max_speed_hz = xqspi->speed_hz;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctlr->mem_ops = &zynqmp_qspi_mem_ops;
+ 	ctlr->setup = zynqmp_qspi_setup_op;
++	ctlr->set_cs = zynqmp_qspi_set_cs;
++	ctlr->transfer_one = zynqmp_qspi_transfer_one;
+ 	ctlr->auto_runtime_pm = true;
++	ctlr->use_gpio_descriptors = true;
+ 
+ 	ret = devm_spi_register_controller(xqspi->dev, ctlr);
+ 	if (ret)
 -- 
 2.35.1.1320.gc452695387.dirty
 
