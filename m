@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-6377-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6378-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D6B8A144DD
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 23:55:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66FD1A144DF
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 23:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96AB37A10D0
-	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 22:55:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1F90188A2CE
+	for <lists+linux-spi@lfdr.de>; Thu, 16 Jan 2025 22:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E707236EA5;
-	Thu, 16 Jan 2025 22:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A26241A02;
+	Thu, 16 Jan 2025 22:55:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HqSjS39s"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SlvTl+QM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEC31DDC3A
-	for <linux-spi@vger.kernel.org>; Thu, 16 Jan 2025 22:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FAE236A79;
+	Thu, 16 Jan 2025 22:55:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737068142; cv=none; b=iQQ0/SvdaZFdag04yUdDyqgGK0Zxl+nR409H84/ZE+5ZP0soMcF4sx5/LY/Y13ygJtgydFAXKjareKlhRNEREudAT0gr1l43Hwp1V5UCyLyI944uUDCJxYHP5RLFuVKWlnpEhi5sM8/bs+ovxz43wly7jVxWxyTh9L6cnIAvxus=
+	t=1737068143; cv=none; b=uIMiKcA0IQc6/2Ma1UiOpj78AaZLfrqQxbnoEXvliltHjqbfUerN8kHul4SJgyKRVokDZdH20XKdlCDyehVeGz5GtEIamd5c6RURyguOj9/K+aK4SLDrInElVX8FIgc4gjBTi7yESkLgbzTPTEV8At49B3gepjafpbZTKFY29L4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737068142; c=relaxed/simple;
-	bh=eY/eaELoWrsvth7t7ZoGKiHeId+2n5EaWWrJKJ1e0gg=;
+	s=arc-20240116; t=1737068143; c=relaxed/simple;
+	bh=KIT1n1bX3eDng3r+qwid11vHDsNx3quVnbQL3jXaPqk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Y8Mpfw2wCLvUOk/En1LMLETJQ57bkXpaZCv37UUHvu3OdseU9O0kvgmrfoUUsEE5VCAwtY7PpK17S8aqbyn1ZOU3wRRQ8RXgNK5QI5II4NIpNzdn1V16tRJ1S+dzekpkK5OWB+Gzbx99tllEIV4znnAzztSLBhcvBYWjhNd4HD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HqSjS39s; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=AMEBkMeOzbvfNyzhBJSho++M9k+scopgXNwhKE8XDhXuYNnKiU5LNqbYMRlkze1gG0JiK6f0p5S3+d5mg+LvfWQ+C+VT2KkQG+gZVfV//Fhti8Zi7XFlHTT4rS0zeGMoj76d42AOIIZ+1yNMwpcfztm5YyyrY1MkCWh1IP8/fsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SlvTl+QM; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737068138;
+	t=1737068140;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vgnMG6pJBvdU2HUT93EP8LTpJb1730xDsO9aVBeLZE0=;
-	b=HqSjS39sCx1/8b+P1gWd98wQX8dz5L7tEUVtHzPgZxCKdACiIywurRdbHDCUANiI67fMHq
-	NWZXZI6UwmOW0/sByqg57FkK4umUM06xUhjCUna30sdmiXct32oAvCftbYnl8Xy0uygIru
-	6IYiVj282sCb7U25m/QVyM+zRL9kzAY=
+	bh=sgUvBMBWULyeQIjVoTQGL6xz3yswwmfd8gZCRxzSVkk=;
+	b=SlvTl+QMSw+AfBh7e1XBZA4UxJHyUmFO8w2J1UXKRGYXgzqh7DxdSvpIefbU2o0HgWxnVH
+	zSDfhzQLfQ9E3Dg3v4Bn2cAIb6mIYUkuhoy6n1CzGv2IeDbMoPnFx4myOKalEVB8jHNYUx
+	hd1VnehJRgf3YYy92tJ94N6OxYXbXB4=
 From: Sean Anderson <sean.anderson@linux.dev>
 To: Mark Brown <broonie@kernel.org>,
 	Michal Simek <michal.simek@amd.com>,
@@ -52,9 +52,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH 2/5] spi: zynqmp-gqspi: Reset device in probe
-Date: Thu, 16 Jan 2025 17:55:18 -0500
-Message-Id: <20250116225521.2688224-3-sean.anderson@linux.dev>
+Subject: [PATCH 3/5] spi: zynqmp-gqspi: Abort operations on timeout
+Date: Thu, 16 Jan 2025 17:55:19 -0500
+Message-Id: <20250116225521.2688224-4-sean.anderson@linux.dev>
 In-Reply-To: <20250116225521.2688224-1-sean.anderson@linux.dev>
 References: <20250116225521.2688224-1-sean.anderson@linux.dev>
 Precedence: bulk
@@ -66,95 +66,81 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Ensure we get a clean slate (without any bootloader settings) by
-resetting the device before we initialize it.
+When an operation times out, we leave the device (and driver) in an
+inconsistent state. This generally results in all subsequent operations
+timing out. Attempt to address this by resetting/reinitializing the
+device when we have a timeout. This tends to be fairly robust.
 
 Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 ---
 
- drivers/spi/spi-zynqmp-gqspi.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ drivers/spi/spi-zynqmp-gqspi.c | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index 549a6e0c9654..7d138f45b692 100644
+index 7d138f45b692..cf47466ec982 100644
 --- a/drivers/spi/spi-zynqmp-gqspi.c
 +++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -17,6 +17,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
-+#include <linux/reset.h>
- #include <linux/spi/spi.h>
- #include <linux/spinlock.h>
- #include <linux/workqueue.h>
-@@ -171,6 +172,7 @@ struct qspi_platform_data {
-  * @regs:		Virtual address of the QSPI controller registers
-  * @refclk:		Pointer to the peripheral clock
-  * @pclk:		Pointer to the APB clock
-+ * @reset:		Pointer to reset controller
-  * @irq:		IRQ number
-  * @dev:		Pointer to struct device
-  * @txbuf:		Pointer to the TX buffer
-@@ -193,6 +195,7 @@ struct zynqmp_qspi {
- 	void __iomem *regs;
- 	struct clk *refclk;
- 	struct clk *pclk;
-+	struct reset_control *reset;
- 	int irq;
- 	struct device *dev;
- 	const void *txbuf;
-@@ -351,10 +354,17 @@ static void zynqmp_qspi_set_tapdelay(struct zynqmp_qspi *xqspi, u32 baudrateval)
-  *	- Set clock polarity and
-  *	- Enable the QSPI controller
-  */
--static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
-+static int zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- {
- 	u32 config_reg, baud_rate_val = 0;
- 	ulong clk_rate;
-+	int ret;
-+
-+	ret = reset_control_reset(xqspi->reset);
-+	if (ret) {
-+		dev_err(xqspi->dev, "Unable to reset: %pe\n", &ret);
-+		return ret;
-+	}
- 
- 	/* Select the GQSPI mode */
- 	zynqmp_gqspi_write(xqspi, GQSPI_SEL_OFST, GQSPI_SEL_MASK);
-@@ -436,6 +446,8 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- 
- 	/* Enable the GQSPI */
- 	zynqmp_gqspi_write(xqspi, GQSPI_EN_OFST, GQSPI_EN_MASK);
-+
-+	return 0;
+@@ -1057,6 +1057,21 @@ static unsigned long zynqmp_qspi_timeout(struct zynqmp_qspi *xqspi, u8 bits,
+ 	return msecs_to_jiffies(timeout + 100);
  }
  
- /**
-@@ -1259,6 +1271,12 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	if (IS_ERR(xqspi->regs))
- 		return PTR_ERR(xqspi->regs);
- 
-+	xqspi->reset =
-+		devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(xqspi->reset))
-+		return dev_err_probe(dev, PTR_ERR(xqspi->reset),
-+				     "could not get reset\n");
 +
- 	xqspi->pclk = devm_clk_get(&pdev->dev, "pclk");
- 	if (IS_ERR(xqspi->pclk))
- 		return dev_err_probe(dev, PTR_ERR(xqspi->pclk),
-@@ -1300,7 +1318,9 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
- 	xqspi->speed_hz = ctlr->max_speed_hz;
- 
- 	/* QSPI controller initializations */
--	zynqmp_qspi_init_hw(xqspi);
-+	ret = zynqmp_qspi_init_hw(xqspi);
++static int zynqmp_qspi_wait(struct zynqmp_qspi *xqspi, unsigned long timeout)
++{
++	int ret;
++
++	ret = wait_for_completion_timeout(&xqspi->data_completion, timeout);
 +	if (ret)
-+		goto clk_dis_all;
++		return 0;
++	dev_err(xqspi->dev, "Operation timed out\n");
++
++	/* Attempt to recover as best we can */
++	zynqmp_qspi_init_hw(xqspi);
++	return -ETIMEDOUT;
++}
++
+ /**
+  * zynqmp_qspi_exec_op() - Initiates the QSPI transfer
+  * @mem: The SPI memory
+@@ -1104,11 +1119,9 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 				   GQSPI_IER_TXNOT_FULL_MASK);
+ 		timeout = zynqmp_qspi_timeout(xqspi, op->cmd.buswidth,
+ 					      op->cmd.nbytes);
+-		if (!wait_for_completion_timeout(&xqspi->data_completion,
+-						 timeout)) {
+-			err = -ETIMEDOUT;
++		err = zynqmp_qspi_wait(xqspi, timeout);
++		if (err)
+ 			goto return_err;
+-		}
+ 	}
  
- 	xqspi->irq = platform_get_irq(pdev, 0);
- 	if (xqspi->irq < 0) {
+ 	if (op->addr.nbytes) {
+@@ -1133,11 +1146,9 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 				   GQSPI_IER_TXNOT_FULL_MASK);
+ 		timeout = zynqmp_qspi_timeout(xqspi, op->addr.buswidth,
+ 					      op->addr.nbytes);
+-		if (!wait_for_completion_timeout(&xqspi->data_completion,
+-						 timeout)) {
+-			err = -ETIMEDOUT;
++		err = zynqmp_qspi_wait(xqspi, timeout);
++		if (err)
+ 			goto return_err;
+-		}
+ 	}
+ 
+ 	if (op->dummy.nbytes) {
+@@ -1204,8 +1215,7 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 		}
+ 		timeout = zynqmp_qspi_timeout(xqspi, op->data.buswidth,
+ 					      op->data.nbytes);
+-		if (!wait_for_completion_timeout(&xqspi->data_completion, timeout))
+-			err = -ETIMEDOUT;
++		err = zynqmp_qspi_wait(xqspi, timeout);
+ 	}
+ 
+ return_err:
 -- 
 2.35.1.1320.gc452695387.dirty
 
