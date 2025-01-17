@@ -1,108 +1,93 @@
-Return-Path: <linux-spi+bounces-6407-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6408-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5158A15660
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 19:18:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 003DDA156A1
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 19:31:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 572F1188C233
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 18:18:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E100169416
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Jan 2025 18:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C735C1A0728;
-	Fri, 17 Jan 2025 18:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F8E1A23A1;
+	Fri, 17 Jan 2025 18:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdUL0ShK"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Hn9vJXLK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4BA185B72;
-	Fri, 17 Jan 2025 18:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D3126BEE;
+	Fri, 17 Jan 2025 18:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737137901; cv=none; b=oTffIcndv0mIz7CudQ6KY9U7IQCcMCrqU/aTo/hm973KBuJTgeyTNEccoo1tkJDusGefLRTnQO1/OKrIpG15yZskup1u4dUGsOF1sNEnvGW/g2aEwoFS8K3Ht6lLazkw5BnnY8QEsZqUkpCptTRngD7Nm0ZCW/4G1RJcraDIykY=
+	t=1737138676; cv=none; b=W0Upor6ZOhr773N9syn0OcBNzZ5fMKYoSYm/q1qX8lXX0OqmpmSJuAqdpMGs0HS8yrBiVQtBcV2JMFCggeGzAX0VxEv6i6sfE7VCjBLSkrfDQqx8EAfi+dov3aSYbVp5HWovv2xWvo5ucSbsgx/CRr1lLZN/JkccxDvBKvJqlE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737137901; c=relaxed/simple;
-	bh=IkDrbW9Xz/Rj76jRBnX2g1l/gxWSPyrI6vR3EVGn+zQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oB9aKb0znhPzjYI/XhRAqiEExoQoVFlNvzUNeXwd7HRtp/qU0WmnwNObZnCNPZQ++DaFITDcanlSXmYObnmNOmk1sQIK4zJ5HioD5XiRCsX54zUfwSoWPtTt7w2n2PNwhevmoAvf26UrVoPAH/18gCN2OETB60m4mQIJUaqTd4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdUL0ShK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32ABC4CEDD;
-	Fri, 17 Jan 2025 18:18:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737137901;
-	bh=IkDrbW9Xz/Rj76jRBnX2g1l/gxWSPyrI6vR3EVGn+zQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MdUL0ShKBeuRvdhL09obg5RFon7+j8JxfEBcRWSe+irS3EKpG0dWeNt+aPw+Dp7wv
-	 KA21YGkEzYeyukvt8hU9UyvZdtyXPdW/b1x/0iPWDGv+6auVaKiSYMGKcxWqs7VKY3
-	 tk/yv5JGPpQvKFHSehMLIp+615PLcbkk4QeMuVFCdSZc19TgODXgyB2CxMLfKrHZ1h
-	 Ww8Wuw9G+gS5+ZSLUwcCCvZ1nFdrG/j9InybcWU/6sNLCA5ruyVbgQSLaXTNYXfjqF
-	 AfFBOJdh961MYvF8l0Rn40FQ2AoUgtNqJd/mU3TooKYsSfCptWfBHOyyRHm4pyrVzZ
-	 2yYPQr6ciVJPg==
-Date: Fri, 17 Jan 2025 18:18:14 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Angelo Dureghello <adureghello@baylibre.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v7 14/17] iio: adc: ad4695: Add support for SPI offload
-Message-ID: <6458a3e4-594a-44bc-9593-94d115013c1d@sirena.org.uk>
-References: <20250113-dlech-mainline-spi-engine-offload-2-v7-0-e0860c81caae@baylibre.com>
- <20250113-dlech-mainline-spi-engine-offload-2-v7-14-e0860c81caae@baylibre.com>
- <ls32gl5a7nsihmmpfabxhm6ilg7idyxdhyrhbkay6e2fiokoah@o5ujfxlsq3s3>
- <67dc52c4-5252-40c3-b89e-8e46e3c2df27@baylibre.com>
+	s=arc-20240116; t=1737138676; c=relaxed/simple;
+	bh=CSqLovKCg0Wp1phThnzXec23DT+S5xG7EY7Nsy00BIs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=obJV/XNOcIpprENJY3LeBxZrEFd3fKRTD9pmUVnb/hZUnmKt3dqVMOo0xpFZWFbZYMsDH88ui0dO9IW1WfrPKG6gS1CWwP2On9emuqf7k8ExmrrVYhzb6EXf4ox0+ZT5sHCaoiHYUpWAOq3Qi+fLjvUBLvxl4pOsgrAXrZ+87NE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Hn9vJXLK; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92D541C0003;
+	Fri, 17 Jan 2025 18:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1737138672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CSqLovKCg0Wp1phThnzXec23DT+S5xG7EY7Nsy00BIs=;
+	b=Hn9vJXLKu6LkTpChEDUUJjznRi+VKRwggVK+xEG6/3a6jAaPNwHMBByHy0vukBguPDTpuS
+	tiPp/WJx0B+u0JM/N7+IhMS0BuZJ8nW/n/lpJt66rwMOpPOTPmmHfo5LU3RTFUXuCL4icw
+	FXSMt+OodONG38+gnkMU6yuWJ3ejY5Mo0QA/J7fOjJ4nhd+DoAUAM73Or0vQ7UmoPcFRyD
+	vzgnmysVphXHSIUIBy8xgbCqkh4NsnIQjItSeJZGXbgOK2Cty64dc8iz2eIOlsicBcijNr
+	DsXb1DiA+zMj+kGYU243/dMgVWrf1Fae8pmVGTBkigK97ai3QyGCGkxx69aCKA==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Sean Anderson <sean.anderson@linux.dev>,  Michal Simek
+ <michal.simek@amd.com>,  linux-spi@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  Jinjie Ruan <ruanjinjie@huawei.com>,
+  linux-arm-kernel@lists.infradead.org,  Amit Kumar Mahapatra
+ <amit.kumar-mahapatra@amd.com>,  Conor Dooley <conor+dt@kernel.org>,
+  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Rob Herring <robh@kernel.org>,
+  devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/5] spi: zynqmp-gqspi: Improve error recovery by resetting
+In-Reply-To: <5942e111-24ba-4d1b-bd4f-6b81dcc6c5dc@sirena.org.uk> (Mark
+	Brown's message of "Fri, 17 Jan 2025 13:21:58 +0000")
+References: <20250116225521.2688224-1-sean.anderson@linux.dev>
+	<5942e111-24ba-4d1b-bd4f-6b81dcc6c5dc@sirena.org.uk>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Fri, 17 Jan 2025 19:31:08 +0100
+Message-ID: <87h65xi977.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="0t/j82dteYeqOTeG"
-Content-Disposition: inline
-In-Reply-To: <67dc52c4-5252-40c3-b89e-8e46e3c2df27@baylibre.com>
-X-Cookie: Q:	Are we not men?
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
+On 17/01/2025 at 13:21:58 GMT, Mark Brown <broonie@kernel.org> wrote:
 
---0t/j82dteYeqOTeG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Thu, Jan 16, 2025 at 05:55:16PM -0500, Sean Anderson wrote:
+>> This series adds support for resetting the QSPI controller if we have a
+>> timeout. I find this greatly improves the stability of the device, which
+>> would tend to break after any timeout.
+>
+> If you're hitting a timeout that tends to indicate there's already a
+> serious stability problem...
 
-On Fri, Jan 17, 2025 at 11:09:03AM -0600, David Lechner wrote:
+Yes, unless the timeout is reached for "good reasons", ie. you request
+substantial amounts of data (typically from a memory device) and the
+timeout is too short compared to the theoretical time spent in the
+transfer. A loaded machine can also increase the number of false
+positives I guess.
 
-> Indeed, thanks! Hopefully we won't need a v8 and Jonathan can fix while
-> applying. :-)
-
-FWIW I need to do another proper pass through but from a quick scan and
-my review of previous versions unless anyone else raises something my
-plan is to apply the SPI bits at -rc1.
-
---0t/j82dteYeqOTeG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeKnuUACgkQJNaLcl1U
-h9CY/gf/U/y5XETmsc/euck9OFgyb09Z+PAf44fGbTLf8T0ZqU71zkvv1jDwGolH
-yQFKL0xZ+cGjIpCgPq1KE2K9tbiQrJzm4FoYBcvF34oNQ0XUL4aXhYf/LrDX82Df
-vMEGG8+zg1EhJianijXsJmANEcCd0s2yAeJ7AyXanIvYd0b660tVKJiprbH7cjAe
-Hfvy19d1ztyWwhmfC3dC4oCBD4mx7/UY9vCFVIRs0qiL05szjWycenV3jRtDIpbJ
-/gMMeS+xwezQTvMPBXyzOpDZhHaJjousulYKS3wARPrZNT/keY/h2fVOTWPFBDId
-IkMuJoXK5Cxi3rubqugFlOvPzmP5Nw==
-=VwEQ
------END PGP SIGNATURE-----
-
---0t/j82dteYeqOTeG--
+Cheers,
+Miqu=C3=A8l
 
