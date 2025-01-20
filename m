@@ -1,121 +1,215 @@
-Return-Path: <linux-spi+bounces-6412-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6413-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A94EA16DBB
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2025 14:50:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC76A16EFB
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2025 16:05:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 357EF7A2B08
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2025 13:49:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A78EF1882902
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Jan 2025 15:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0701E25E5;
-	Mon, 20 Jan 2025 13:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E871E47C2;
+	Mon, 20 Jan 2025 15:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZlqwG6us"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tiJsoOSf"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE291B85DB;
-	Mon, 20 Jan 2025 13:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1431E0DCD;
+	Mon, 20 Jan 2025 15:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737380999; cv=none; b=oZC/rctrjjQn5heNN+Sl7jXhQo5x7+XzLTe7gxIdORbfKgWKYdQUA7qRoRGYxMfjDonAdj+SSR1CYTkPFCP65wpjiKnXlu802Kd2B9/at7L8Ofb/N3U2N7VSSskPoXhLidMxiApaGE9OMqRU4ICOzC7qWSZ77FIMzM3DffhudJI=
+	t=1737385514; cv=none; b=mVBM8GTD9aRvbLx4LRXQQtkO6OzDfO6AKv/0mjJLFjIETRB3kko5Usn+TQVreHIxMweQfJIXcahFvffybQRISqjzq6MhW1A44HOsgEbkNhwcZSMvNBGQS5C/QPO1VVyclWwP60dmS45mnpgjigs/GcHp5PqgBuQnk49FkzVPTkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737380999; c=relaxed/simple;
-	bh=ekPT5VREXyTo7IvgpNJfGqCy+Q9+hG3P3Q6HvU7wtDM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eNhJ7TBJxh7oinMu2s0OP1qMl398OgpAGLssmh1Pgmd4CfZgkYbjSbNM+wcSeHpjXsc4sJT0MlrHNGFz6qnVol469qN4K0HJCS/v2FkKS4EGwt3evpiriSCv9HFPU2/zA5sBZoxek3IgGjwsBUaADKHclvK/pajjYJdIu+Yjxdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZlqwG6us; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3E79C4CEE3;
-	Mon, 20 Jan 2025 13:49:56 +0000 (UTC)
+	s=arc-20240116; t=1737385514; c=relaxed/simple;
+	bh=IZrfizjMEfCQdp3FTleo5fupr69beOZm1SyhP/gS+r4=;
+	h=Message-ID:From:To:Cc:Subject:Date; b=Qd6XCYUkw/N1Is8H7sC7tdqOT8Gu+5KMqGq+Bv0nUWTOITh1l/rQxX7CD2nzm96jCBnA7kNq/HjvJlfG4ml0KBapoxx8HH0hH7m+GUXHh7gyXvT3QpDu55DX35wrLpg7Chbg0LaLtX8r1pPvplHY3Te4H9NLv1UsROT2urRG+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tiJsoOSf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF25C4CEDD;
+	Mon, 20 Jan 2025 15:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737380999;
-	bh=ekPT5VREXyTo7IvgpNJfGqCy+Q9+hG3P3Q6HvU7wtDM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZlqwG6usKeVgktDjvMgMWW+p+paYghSd0qaE9dR8dp6y15JyrWZREpXw9RPWUdfLu
-	 v+F+RQBQqUs88VHw47QMppmQvVfFIAHpMg2brKZEPJnvDkaM0++DoUjCSQITb0PwXi
-	 CQD2T5FAROtQO3+vFNBlGt1zq+AMe8Cd7m3+zDfRvOB93d7wpOaKefl4dVAallBDZ6
-	 i5jDpkCVGySyethrRbxI/BmEyvFzF08eMKkDI6LWz7UiLipq57OCMUIjz/dIlrJJsf
-	 W5FKcUa3g8zPX/43Fr2TKeCbBKLYxJyh4C6DXU6t/qwWmLTDKjXpsS0iSoGYdtxiWL
-	 gdUJ09dogpfpA==
-Date: Mon, 20 Jan 2025 13:49:53 +0000
+	s=k20201202; t=1737385514;
+	bh=IZrfizjMEfCQdp3FTleo5fupr69beOZm1SyhP/gS+r4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tiJsoOSfg1XgDGZSaskDM0w4C2j5jxilJr7r7Mg+xGPQ+81yE7RGAY+tIhiX9pjez
+	 7vKo/OqgEL6g9rcF7Z/rmbWN2Zm47niChrVvdb+v6m459bUYgtCcUnql7nIfAteP8Z
+	 iBur+jrTFzON6fR+SFh8j6MtO/CV5YlVNOkLfgOF16/y8g13QglpQIF9THn5GC4oBQ
+	 pMbb9Oidp8Sxvy0Iy8iNbRrf74ivJbYiT4aoU5BGhWmuR4CrOK3Tpu+fwIiJs4JJqH
+	 xG7AGM+ifEyR3vAkLV5L6weIBzLrR+jvDVqaR0DoOLCxvHYp33qFQqR58vp1XY8eJc
+	 Phlv/131xnZpw==
+Message-ID: <4c1f6ab0a30b9258969f7e1d4fbb46f7.broonie@kernel.org>
 From: Mark Brown <broonie@kernel.org>
-To: Sean Anderson <sean.anderson@linux.dev>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
-	Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 0/5] spi: zynqmp-gqspi: Improve error recovery by
- resetting
-Message-ID: <c1a3f172-700e-4079-a501-b3f3f08b41aa@sirena.org.uk>
-References: <20250116225521.2688224-1-sean.anderson@linux.dev>
- <5942e111-24ba-4d1b-bd4f-6b81dcc6c5dc@sirena.org.uk>
- <87h65xi977.fsf@bootlin.com>
- <1026d44b-0907-4835-bc95-32f9bbcf4831@sirena.org.uk>
- <8c9e6a12-e64f-4658-94e8-77469f393a0e@linux.dev>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI updates for v6.14
+Date: Mon, 20 Jan 2025 15:05:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9dv0D5YciXBsjgUa"
-Content-Disposition: inline
-In-Reply-To: <8c9e6a12-e64f-4658-94e8-77469f393a0e@linux.dev>
-X-Cookie: No lifeguard on duty.
 
+The following changes since commit 9d89551994a430b50c4fffcb1e617a057fa76e20:
 
---9dv0D5YciXBsjgUa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.13-rc6 (2025-01-05 14:13:40 -0800)
 
-On Fri, Jan 17, 2025 at 04:46:23PM -0500, Sean Anderson wrote:
-> On 1/17/25 13:41, Mark Brown wrote:
-> > On Fri, Jan 17, 2025 at 07:31:08PM +0100, Miquel Raynal wrote:
+are available in the Git repository at:
 
-> >> Yes, unless the timeout is reached for "good reasons", ie. you request
-> >> substantial amounts of data (typically from a memory device) and the
-> >> timeout is too short compared to the theoretical time spent in the
-> >> transfer. A loaded machine can also increase the number of false
-> >> positives I guess.
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.14
 
-> > I'd argue that all of those are bad reasons, I'd only expect us to time
-> > out when there's a bug - choosing too low a timeout or doing things in a
-> > way that generates timeouts under load is a problem.
+for you to fetch changes up to 78b435c9044a9ec321da29d299c70cb14b059682:
 
-> There's no transmit DMA for this device. So if you are under high load
-> and make a long transfer, it's possible to time out. I don't know if
-> it's possible to fix that very easily. The timeout calculation assumes
-> that data is being transferred at the SPI bus rate.
+  spi: pxa2xx: Introduce __lpss_ssp_update_priv() helper (2025-01-16 17:04:31 +0000)
 
-In that case I wouldn't expect the timeout to apply to the whole
-operation, or I'd expect a timeout applied waiting for something
-interrupt driven to not to be fired unless we stop making forward
-progress. =20
+----------------------------------------------------------------
+spi: Updates for v6.14
 
---9dv0D5YciXBsjgUa
-Content-Type: application/pgp-signature; name="signature.asc"
+This is a fairly quiet release for the most part, though we do have one
+really nice improvement in the spi-mem framework which will improve
+performance for flash devices especially when built on by changes in the
+MTD subsystem which are also due to be sent this merge window.  There's
+also been some substantial work on some of the drivers, highlights
+include:
 
------BEGIN PGP SIGNATURE-----
+ - Support for per-operation bus frequency in the spi-mem framework,
+   meaning speeds are no longer limited by the slowest operation.
+ - ACPI support and improved power management for Rockchip SFC
+   controllers.
+ - Support for Atmel SAM7G5 QuadSPI and KEBA SPI controllers.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeOVIEACgkQJNaLcl1U
-h9BBuQf/YxmGXFN3bvsT+wvdAmzRP3BLKBHbrKm6SRHibYXb0uzIv0CnmhwcxPeI
-gRPuv9X5KJUEeWBnK/uErCuisfmGB68sIo7lvvCKrwhMaXZmqfFt79QACig5QQDz
-JASKZt13yublMzZQPAxrn9q09gB43Tqt+rJMntTijfL8f6Tk0fTT8m2FFSJRAGaJ
-bfdLIgUWLDKyWDRCoJCP52A8XTf5wTJH8DV8iS+sW349p7tnfTrVNVk+jUnDz6OR
-oEUMqc3Bk2JXGLMETvnwI6pVeVS6EIsmXLcgOjNAMbBHeg2HmESlViwi9aCO7bk7
-ErHBsB+skFh4mx4GnntI2Zvoyg/tsg==
-=dRmQ
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Alexander Dahl (1):
+      spi: atmel-quadspi: Update to current device naming terminology
 
---9dv0D5YciXBsjgUa--
+Andy Shevchenko (4):
+      spi: sc18is602: Switch to generic firmware properties and drop of_match_ptr()
+      spi: Unify firmware node type checks
+      spi: Deduplicate deferred probe checks in spi_probe()
+      spi: pxa2xx: Introduce __lpss_ssp_update_priv() helper
+
+Bence Csókás (3):
+      spi: atmel-quadspi: Factor out switching to Serial Memory Mode to function
+      spi: atmel-qspi: Memory barriers after memory-mapped I/O
+      spi: atmel-quadspi: Use devm_ clock management
+
+Christophe Leroy (1):
+      spi: fsl-spi: Remove display of virtual address
+
+Csókás, Bence (1):
+      spi: atmel-quadspi: Create `atmel_qspi_ops` to support newer SoC families
+
+Fabio Estevam (2):
+      dt-bindings: misc: lwn,bk4-spi: Add binding
+      spi: spidev: Add an entry for lwn,bk4-spi
+
+Gerhard Engleder (1):
+      spi: spi-kspi2: Add KEBA SPI controller support
+
+Iker Pedrosa (1):
+      spi: dt-bindings: Document CS active-high
+
+Jon Lin (5):
+      spi: rockchip-sfc: Support ACPI
+      spi: rockchip-sfc: Optimize the judgment mechanism completed by the controller
+      spi: rockchip-sfc: Support pm ops
+      spi: rockchip-sfc: Using normal memory for dma
+      spi: rockchip-sfc: Support sclk_x2 version
+
+Krzysztof Kozlowski (1):
+      spi: ti-qspi: Use syscon_regmap_lookup_by_phandle_args
+
+Mark Brown (9):
+      spi: cadence-quadspi: Add support for device reset
+      spi: Merge up v6.12-rc2
+      spi: Merge up fixes
+      spi: Unify and simplify fwnode related checks
+      spi: atmel-quadspi: Refactor to allow supporting
+      spi: Merge up v6.13-rc6
+      spi-nand/spi-mem DTR support
+      spi: Add spi_mem_calc_op_duration() helper
+      spi-nand/spi-mem DTR support
+
+Mingwei Zheng (1):
+      spi: zynq-qspi: Add check for clk_enable()
+
+Miquel Raynal (20):
+      spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
+      spi: spi-mem: Add a new controller capability
+      spi: amd: Support per spi-mem operation frequency switches
+      spi: amd: Drop redundant check
+      spi: amlogic-spifc-a1: Support per spi-mem operation frequency switches
+      spi: cadence-qspi: Support per spi-mem operation frequency switches
+      spi: dw: Support per spi-mem operation frequency switches
+      spi: fsl-qspi: Support per spi-mem operation frequency switches
+      spi: microchip-core-qspi: Support per spi-mem operation frequency switches
+      spi: mt65xx: Support per spi-mem operation frequency switches
+      spi: mxic: Support per spi-mem operation frequency switches
+      spi: nxp-fspi: Support per spi-mem operation frequency switches
+      spi: rockchip-sfc: Support per spi-mem operation frequency switches
+      spi: spi-sn-f-ospi: Support per spi-mem operation frequency switches
+      spi: spi-ti-qspi: Support per spi-mem operation frequency switches
+      spi: zynq-qspi: Support per spi-mem operation frequency switches
+      spi: zynqmp-gqspi: Support per spi-mem operation frequency switches
+      spi: spi-mem: Reorder spi-mem macro assignments
+      spi: spi-mem: Create macros for DTR operation
+      spi: spi-mem: Estimate the time taken by operations
+
+Nathan Chancellor (1):
+      spi: amd: Fix -Wuninitialized in amd_spi_exec_mem_op()
+
+Santhosh Kumar K (1):
+      spi: cadence-quadspi: Enable SPI_TX_QUAD
+
+Srikanth Boyapally (3):
+      spi: cadence-quadspi: Use quirks to set dma_set_mask instead of compatible string for 64-bit DMA support
+      spi: cadence-quadspi: Support for device reset via OSPI controller
+      spi: dt-bindings: cdns,qspi-nor: Add compatible string to support OSPI controller on Versal Gen2 platform
+
+Stefan Wahren (1):
+      spi: mxs: support effective_speed_hz
+
+Tudor Ambarus (1):
+      spi: atmel-quadspi: Add support for sama7g5 QSPI
+
+Uwe Kleine-König (1):
+      spi: spidev: Align ordering of spidev_spi_ids[] and spidev_dt_ids[]
+
+ .../devicetree/bindings/misc/lwn,bk4-spi.yaml      |  54 ++
+ Documentation/devicetree/bindings/misc/lwn-bk4.txt |  26 -
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |   1 +
+ .../devicetree/bindings/spi/spi-controller.yaml    |  25 +
+ drivers/mtd/nand/spi/core.c                        |   2 +
+ drivers/spi/Kconfig                                |  12 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/atmel-quadspi.c                        | 987 +++++++++++++++++++--
+ drivers/spi/spi-amd.c                              |  26 +-
+ drivers/spi/spi-amlogic-spifc-a1.c                 |   7 +-
+ drivers/spi/spi-cadence-quadspi.c                  |  57 +-
+ drivers/spi/spi-dw-core.c                          |  10 +-
+ drivers/spi/spi-fsl-qspi.c                         |  12 +-
+ drivers/spi/spi-fsl-spi.c                          |   2 +-
+ drivers/spi/spi-kspi2.c                            | 431 +++++++++
+ drivers/spi/spi-mem.c                              |  64 ++
+ drivers/spi/spi-microchip-core-qspi.c              |  26 +-
+ drivers/spi/spi-mt65xx.c                           |   7 +-
+ drivers/spi/spi-mxic.c                             |   3 +-
+ drivers/spi/spi-mxs.c                              |   2 +
+ drivers/spi/spi-nxp-fspi.c                         |  12 +-
+ drivers/spi/spi-pxa2xx.c                           |  88 +-
+ drivers/spi/spi-rockchip-sfc.c                     | 233 ++++-
+ drivers/spi/spi-sc18is602.c                        |  34 +-
+ drivers/spi/spi-sn-f-ospi.c                        |   8 +-
+ drivers/spi/spi-ti-qspi.c                          |  19 +-
+ drivers/spi/spi-zynq-qspi.c                        |  26 +-
+ drivers/spi/spi-zynqmp-gqspi.c                     |  13 +-
+ drivers/spi/spi.c                                  |  41 +-
+ drivers/spi/spidev.c                               |  30 +-
+ include/linux/spi/spi-mem.h                        |  56 +-
+ 31 files changed, 1998 insertions(+), 317 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/misc/lwn,bk4-spi.yaml
+ delete mode 100644 Documentation/devicetree/bindings/misc/lwn-bk4.txt
+ create mode 100644 drivers/spi/spi-kspi2.c
 
