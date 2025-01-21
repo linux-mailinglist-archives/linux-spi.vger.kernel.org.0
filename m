@@ -1,102 +1,107 @@
-Return-Path: <linux-spi+bounces-6420-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6421-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9A14A181D8
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 17:17:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3AD9A1824A
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 17:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D7C51881FAB
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 16:17:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E76167DD9
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 16:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BA51F4298;
-	Tue, 21 Jan 2025 16:17:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7871F0E55;
+	Tue, 21 Jan 2025 16:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iCT1BKHx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BF0W4vLB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D8A5028C
-	for <linux-spi@vger.kernel.org>; Tue, 21 Jan 2025 16:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E19A13BC0C
+	for <linux-spi@vger.kernel.org>; Tue, 21 Jan 2025 16:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737476236; cv=none; b=Nk2H4lX8mW+eth8/sLPxd5Ii0WjCeisenp8Vx8aAT96Oy/JjY6pG7GTzA560qJLJSrsMjKCLQvzu/EsCg7ve5RRllZ5EY3V4rOnd3oYFJxpVHYHPAgaPSdSOKWhaRecr6oLPnMzq3xjy1NQ7M0Nsv6JghWbMoBMosGqY+LHjm9c=
+	t=1737478287; cv=none; b=l2hXSIKErjcFcRvme9VtqAbE2XuyM6TZcozwtmY6ox1aaJvc+o2NZfyj/gXaHyZ8HByWEaWTYkpB8SHjJDQOnX/5SfTrjwkvNr7b2EKqe5/Vzpr96zjcQ+Fw036xfhbR/hxneUItDvBEB0xT4HAcThkLEyDlt8Ten96F16QgaNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737476236; c=relaxed/simple;
-	bh=Dghs9siubkgtkaZ3i0SC7IvTxG8AoPnGvWCxTUvupNE=;
+	s=arc-20240116; t=1737478287; c=relaxed/simple;
+	bh=0kqvsuGInuXJkXCmuCX04lAcWyzOGssMeO6D6xEQy+E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ouWi4AmFtSd56ob7Iqlyuc0NfRDOKPQA2z78RH9LomT1MQO8qE8hNNvGB2JEf13eSwyQ6sUfQjFo9GUMiDtUtiRnsqvCux2VLbnz+o32FMULoIXK/R9+YMM4sdC7YX4sRRHUIsmORHATD4cXU4fdTduL4sVDfbGXdy5Aod8SyXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iCT1BKHx; arc=none smtp.client-ip=91.218.175.179
+	 In-Reply-To:Content-Type; b=Y+Ub8Q+LSoYzjlOYuN14QnwuYYagRRP7IvsXJ/A2D/5qs/QpuQIXsBDy+qN0J7qx5VYmUQmEEZoMxBuWWemKSMpZt9Nn3DLqfuLbTFRcjhE4UJuSFvMbeTcsla87eCGR0pnsJbooUEeyUWWH/YRzWI4L6N9DkEJzni+dgEo1hsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BF0W4vLB; arc=none smtp.client-ip=95.215.58.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <0ee72316-11e1-4930-8c49-92db8d148b8a@linux.dev>
+Message-ID: <39ad89bf-880e-4ae9-bbdb-4d388dd14a7d@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737476226;
+	t=1737478283;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Pohg729KqjlON/Y3qVQcQ7ga5GWM9jcQEdryp7KPBOQ=;
-	b=iCT1BKHxy6GTT5TGP9OPEs5MRsWamD58cdpjuWiozNK06H7Xhzzt6y+XTjQCUiKS2AQ5sI
-	sJTZA4n/kv8Q4XFqDqdQK1BdSl+x8ND896elX4zKQGhQxhbTJ4l+j4xvEAiLKm9KFXOhkT
-	WFwYDIsCzpvhLGkMqSqqh2ItH2plyB0=
-Date: Tue, 21 Jan 2025 11:17:03 -0500
+	bh=DrH1RqYlZPnCONVlyYdJjbHopCl+UukhIId4ykP7g4I=;
+	b=BF0W4vLBBIhkOrkCGaWLvh1V9EBK5k05jB3Q5mlXWZUPzl7dB780k3OMzrc6xPWJnhYBAG
+	hoTFfqwOgkhlX6rAjDM9FXJCLYK6iNfCkptx52WTh07TvNxurSEqJ5t9unx2zbAPpz3H06
+	Za1T6Scpqg2MiECbO3yTeJY6jxTY3kk=
+Date: Tue, 21 Jan 2025 11:51:18 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/7] spi: zynqmp-gqspi: Split the bus
+Subject: Re: [PATCH 0/5] spi: zynqmp-gqspi: Improve error recovery by
+ resetting
 To: Mark Brown <broonie@kernel.org>
-Cc: "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
- "Simek, Michal" <michal.simek@amd.com>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- Jinjie Ruan <ruanjinjie@huawei.com>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- "amitrkcian2002@gmail.com" <amitrkcian2002@gmail.com>,
- "git (AMD-Xilinx)" <git@amd.com>
-References: <20250116232118.2694169-1-sean.anderson@linux.dev>
- <20250116232118.2694169-6-sean.anderson@linux.dev>
- <DM4PR12MB76932590B9A6BB1CC17AD67FDCE62@DM4PR12MB7693.namprd12.prod.outlook.com>
- <1f7cb52d-31a4-458c-9b81-b46bf56fd8a8@linux.dev>
- <f1310bb6-48ef-4bdf-a359-f34b0d849a4d@sirena.org.uk>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+ Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>,
+ linux-arm-kernel@lists.infradead.org,
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org
+References: <20250116225521.2688224-1-sean.anderson@linux.dev>
+ <5942e111-24ba-4d1b-bd4f-6b81dcc6c5dc@sirena.org.uk>
+ <87h65xi977.fsf@bootlin.com>
+ <1026d44b-0907-4835-bc95-32f9bbcf4831@sirena.org.uk>
+ <8c9e6a12-e64f-4658-94e8-77469f393a0e@linux.dev>
+ <c1a3f172-700e-4079-a501-b3f3f08b41aa@sirena.org.uk>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <f1310bb6-48ef-4bdf-a359-f34b0d849a4d@sirena.org.uk>
+In-Reply-To: <c1a3f172-700e-4079-a501-b3f3f08b41aa@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 1/21/25 11:01, Mark Brown wrote:
-> On Tue, Jan 21, 2025 at 10:53:53AM -0500, Sean Anderson wrote:
->> On 1/21/25 08:19, Mahapatra, Amit Kumar wrote:
+On 1/20/25 08:49, Mark Brown wrote:
+> On Fri, Jan 17, 2025 at 04:46:23PM -0500, Sean Anderson wrote:
+>> On 1/17/25 13:41, Mark Brown wrote:
+>> > On Fri, Jan 17, 2025 at 07:31:08PM +0100, Miquel Raynal wrote:
 > 
->> > IMHO, restricting users to fixed names is not ideal. A better approach would be to 
->> > introduce a Device Tree (DT) property for the bus number and select the bus 
->> > accordingly.
+>> >> Yes, unless the timeout is reached for "good reasons", ie. you request
+>> >> substantial amounts of data (typically from a memory device) and the
+>> >> timeout is too short compared to the theoretical time spent in the
+>> >> transfer. A loaded machine can also increase the number of false
+>> >> positives I guess.
 > 
->> Why? It's not an artificial restriction; it reflects the hardware. And this is how
->> SPI busses are typically represented. If you have two SPI busses, there should be
->> two devicetree nodes.
+>> > I'd argue that all of those are bad reasons, I'd only expect us to time
+>> > out when there's a bug - choosing too low a timeout or doing things in a
+>> > way that generates timeouts under load is a problem.
 > 
-> Perhaps the thing is more that the buses are named instead of numbered?
+>> There's no transmit DMA for this device. So if you are under high load
+>> and make a long transfer, it's possible to time out. I don't know if
+>> it's possible to fix that very easily. The timeout calculation assumes
+>> that data is being transferred at the SPI bus rate.
+> 
+> In that case I wouldn't expect the timeout to apply to the whole
+> operation, or I'd expect a timeout applied waiting for something
+> interrupt driven to not to be fired unless we stop making forward
+> progress.  
 
-Well, we could number them, but it's not like they have different
-addresses in memory. They use all the same registers except for a bit in
-the genfifo. So it doesn't make sense to do address translation (e.g.
-with reg/ranges).
-
-As for the names, these are the names used by the documentation, as well
-as the exising driver. There are some references to SPI0/SPI1, but there
-are more to upper/lower. If you want to bikeshed spi-0/spi-1 instead of
-spi-lower/spi-upper, be my guest.
+I don't know if there are any helpers we can use for this. To implement
+this we'd need something like schedule_timeout() but where the interrupt
+handler calls mod_timer() whenever it does work.
 
 --Sean
 
