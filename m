@@ -1,180 +1,142 @@
-Return-Path: <linux-spi+bounces-6422-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6425-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A4A0A188C9
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 01:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A742A1937B
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 15:13:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F099163811
-	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 00:16:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8071B1692CD
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 14:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDFF4409;
-	Wed, 22 Jan 2025 00:16:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C7D213E83;
+	Wed, 22 Jan 2025 14:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="HJ3GxGFg"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="w8sjwGJd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D854A18
-	for <linux-spi@vger.kernel.org>; Wed, 22 Jan 2025 00:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772C5212F82;
+	Wed, 22 Jan 2025 14:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737504998; cv=none; b=LIu/1OmptP5x+0Ew9PxQzORQ8llgiWiOYlmAc4JQcHm2m8AjnszMatw8h3dzgPZ3j5AOtxYwDam0CqgnQvzg6GevsPMA8Pf+Hta79mT+6cSxdVwV+bJQ/gREVkZk8pgvpfPufrTNEbQN1y3+NICPGQb0WRBvD0ABAcAJOYxgMbY=
+	t=1737555213; cv=none; b=rm4fmHhWDoxJY4MfFpLXE0D7U7FbNAZZKwWiyGj3x+/rSe6O+b0NvdDBWTzeDISMcEbieHY8fZBvxBVa7nGton2wuYA+1WrKgj8zhcWzDc3WkzAwJPVXDY65EhBm+z+MXBwFdGBDyDouQFymjW9TO0wc1dySW5+NOCrNKBZeblM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737504998; c=relaxed/simple;
-	bh=uM1KsvQ1MYDHCJxMmAEieb4nYTSx7G7GmRY4HGe+/2g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JimUD8UOU4fgWoITGn67YcYr1EC+Z9qlSZ3UTvyd0JCGNkpe/NRf7XO6Jg0xSJwWfnWcxaBrguFEcMBULQdbN659atbdlQqS2ANmqP1OGBX0tQJFQyt2Nqp8qBqnRxQqQajRE1lOx+As29ONAtp90a1e5oFCD61Rg75MqfAEzys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=HJ3GxGFg; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3eb9bbcc936so3778838b6e.0
-        for <linux-spi@vger.kernel.org>; Tue, 21 Jan 2025 16:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737504994; x=1738109794; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SQVDg8zwmBbcXYl6zUtnOQaEMDJDakZCCSAsHxpjPDA=;
-        b=HJ3GxGFgN3xBd6zHT0IsXugvd2BSK2Upjsk8ZNTDIzg1+vO4oiKKq98ONbRSU0aOiR
-         1YSw0hCzBu1HI63/aTCvsvqQe17rmf8qGuDu384S/1K1W+g1Gz/O1wy6Os87zbB/GT/W
-         i8s3tAov9oVRobGeWjMOCkcejm1SUZrnpnKNnCmnk2lrFaKmdGqtPSwYp67j57dMG407
-         g2SwviBAh7fXmUsT+BdIK/HJ5cBQQAhH+So2GB6O+4FrCs3IBxKLwpcJuZ7efxI/WXpI
-         7ahobg1T5B3vi8sBMi9JXq2I8DVOyHwJqvjmPu/TkmJtgzvBdfDihXj6Ijx9k4xPV6OL
-         /TfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737504994; x=1738109794;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SQVDg8zwmBbcXYl6zUtnOQaEMDJDakZCCSAsHxpjPDA=;
-        b=Aa9SRfE45yrBqfiLxb+NPRUnbVn+nNDcvwYeZjpvHtsMOD7nwGia7RMdyJEOXaDf/a
-         BjicVSD8eacJIjQC553BzvOnoxmV8FyyISCKo5Wb4iSv2uLjrP+e4UOGm8R2gX7HfOqQ
-         NpxitSkX7bWqr5L3UsTz65b/U000IDnjQ3GpYMe0oYeWjWYokp0Nd+E4DulJ+O+OOrjj
-         a0fp1cKDeRWWDuKZ9OzVERv+dzQDMzEw3+Y8Xh9m6A5qUm4WOyYnxHhatb1CUe+22h8L
-         s/p+ZkRf/zuxHvq6GQf0Cckoq7VUMIMvL4/FFFT9vM4H8fHWBjqRoZwxZ9yg8NroCfKI
-         pBig==
-X-Forwarded-Encrypted: i=1; AJvYcCXN+S73Wb29UPhO9vzBiflBSI/Q9gbNa73V8gItnRqTy++vFUv/hv7xkDuuUgRkX2S3alNooFjeLNM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPHdE9ILbzIDLRrI8S40f9wAzm28sPtwMKMspknMQt0vhKH7ot
-	KK9I4VfyCYFerodTeUjNWhGVLeOojtILfMeivucPjXfWlEgJsL76doQogc6CV5c=
-X-Gm-Gg: ASbGncvJjTFUF725rJ567NMpcxZ9EJsByJk2UdPe+I9YIv6fu6hqkZCKrN4OdZPygJV
-	rQdUHIsNbkk8ai5A+mBcv9Gqy/fqxWFvNI1OIw9puIZ6GIUUhteRTg6qP9RxNNxw/iLeNauDZcn
-	HNj2TYGoaAQaEjdZWIESZ6t59aBvn8qm43dc3zovbmJUjdCPAPl06EatkF67u8ZCzPewxrt3MEg
-	pI1b1DX2A9uMJM6BDk5+OUqWOMwv8gG63P4zFVAPRrmWcVdLfP/D0ySqKR/34LkPiYdhMhDaPHM
-	vc1F7JdvOiSklmvET9pdd1F88awzJ5c=
-X-Google-Smtp-Source: AGHT+IFUzXtAIp3HDw6cXZF7Eh349UV04myuUv9p02O2+mdfioB7429VrhWHruPNNSQlkcbzikUpXw==
-X-Received: by 2002:a05:6808:3c97:b0:3e6:f6a:de5c with SMTP id 5614622812f47-3f19fdd1253mr12737286b6e.27.1737504994385;
-        Tue, 21 Jan 2025 16:16:34 -0800 (PST)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f19da6eab9sm3330497b6e.17.2025.01.21.16.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jan 2025 16:16:32 -0800 (PST)
-Message-ID: <9f40295b-484a-48e8-b053-ff8550e589d7@baylibre.com>
-Date: Tue, 21 Jan 2025 18:16:32 -0600
+	s=arc-20240116; t=1737555213; c=relaxed/simple;
+	bh=lHKgZsOf6PFslK2JfvOp6ZOw5VlIvpqfGeJ93srDMrE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Azu9fn1HyBwADInz/xfUA3gKsQ1nDDKMVF3hoSsqpTtAbaYBlW2dYL/sR3Y1QsC9zrTNLKhcX2+kUGIHW1xN3sXaTukrAd0zjIGH0l3dV5mhuJV0VrtGQoCU1nB++5xkyHHt6tSEiSe8QhMoxuYq6JDs/NIcXqeI1af0e0/xukg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=w8sjwGJd; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50MDhAn9016844;
+	Wed, 22 Jan 2025 15:12:56 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=1fDFIpBF/8CgzX8vaDBMUm
+	hFzM5jK4Mt4RtibyILt9o=; b=w8sjwGJdkz0t9yIV2EVIuBqYH/l6IhQT4VD1sq
+	BtW0njOtzSPgblfkW6IA+RifuGZp0nTppzvGklxFRBphggMeZpnHmyMJpc5B/mdb
+	Xls5fBKWO3VorPYF4ZgvnAAjA4VLoH0dma0b1m5q1eVE7TZ5ik5EAPx/JPakVg8V
+	Uz9Cy56cTEKKiBSJ3RoZhJTYdFPGLRrJS+li5/VpyvGmtFXWoQgvL6a/O39Q7bBr
+	iDsWIv1rmrYzUPSgODf5Mj92yGd0k2Z+XkwiesS/m9HRGX6P8Z87OrbwJipMsga8
+	dRuFsSu6poOkeR1dBV3eVJy8wpaMxGj8EMpX4ZbJX2HQBi+A==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44aw9x17t7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 22 Jan 2025 15:12:56 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 80C844002D;
+	Wed, 22 Jan 2025 15:11:39 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6A1FB2943AB;
+	Wed, 22 Jan 2025 15:10:39 +0100 (CET)
+Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Wed, 22 Jan
+ 2025 15:10:39 +0100
+From: <patrice.chotard@foss.st.com>
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre
+ Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <christophe.kerello@foss.st.com>, <patrice.chotard@foss.st.com>
+Subject: [PATCH 0/9] Add STM32MP25 SPI NOR support
+Date: Wed, 22 Jan 2025 15:10:28 +0100
+Message-ID: <20250122141037.953934-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] dt-bindings: spi: zynqmp-qspi: Split the bus
-To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
- linux-arm-kernel@lists.infradead.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- linux-kernel@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org,
- "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
- Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>
-References: <20250116232118.2694169-1-sean.anderson@linux.dev>
- <20250116232118.2694169-2-sean.anderson@linux.dev>
-From: David Lechner <dlechner@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <20250116232118.2694169-2-sean.anderson@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE2.st.com (10.75.90.13) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-22_06,2025-01-22_02,2024-11-22_01
 
-On 1/16/25 5:21 PM, Sean Anderson wrote:
-> This device supports two separate SPI busses: 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-...
+This series adds SPI NOR support for STM32MP25 SoCs from STMicroelectronics,
+for that it adds support for:
+  - Octo Memory Manager driver.
+  - Octo SPI driver.
+  - yaml schema for Octo Memory Manager and Octo SPI drivers.
 
-> @@ -84,5 +94,32 @@ examples:
->          resets = <&zynqmp_reset ZYNQMP_RESET_QSPI>;
->          reg = <0x0 0xff0f0000 0x0 0x1000>,
->                <0x0 0xc0000000 0x0 0x8000000>;
-> +
-> +        spi-lower {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          num-cs = <2>;
-> +          cs-gpios = <0>, <&gpio 5>;
-> +
-> +          flash@0 {
-> +            reg = <0>;
-> +            compatible = "jedec,spi-nor";
-> +          };
-> +
-> +          flash@1 {
-> +            reg = <1>;
-> +            compatible = "jedec,spi-nor";
-> +          };
-> +        };
-> +
-> +        spi-upper {
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          flash@0 {
-> +            reg = <0>;
-> +            compatible = "jedec,spi-nor";
-> +          };
-> +        };
->        };
->      };
+The device tree files adds Octo Memory Manager and associated Octo SPI instances
+in stm32mp251.dtsi and adds SPI NOR support in stm32mp257f-ev1 board.
 
-In the IIO subsystem, we've been recently working on several "advanced" ADCs
-that could use a SPI controller like this. These ADCs have multiple input
-channels that perform conversions in parallel and the data for each channel
-needs to be read back on a separate serial line (MISO) at the same time. Another
-similar case is to have two separate chips, but they share a conversion trigger
-and essentially operate as a single composite device rather than two distinct
-devices [1]. This would be similar to some ADCs that are daisy-chained where we
-consider all of the chips in the chain as a single composite device, but they
-would be in parallel rather than chained.
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-[1]: https://lore.kernel.org/linux-iio/e5e8eba7-2455-488b-a36f-e246844e11fd@baylibre.com/
+Patrice Chotard (9):
+  dt-bindings: spi: Add STM32 OSPI controller
+  spi: stm32: Add OSPI driver
+  dt-bindings: misc: Add STM32 Octo Memory Manager controller
+  misc: Add STM32 Octo Memory Manager driver
+  arm64: dts: st: Add OMM node on stm32mp251
+  arm64: dts: st: Add ospi port1 pinctrl entries in
+    stm32mp25-pinctrl.dtsi
+  arm64: dts: st: Add SPI NOR flash support on stm32mp257f-ev1 board
+  arm64: defconfig: Enable STM32 Octo Memory Manager driver
+  arm64: defconfig: Enable STM32 OctoSPI driver
 
-For those use cases though, as mentioned above, we only have a single device
-that would be connected to both buses. So for such a SPI controller with
-multiple buses, I was envisioning that instead of adding child nodes for each
-of the child buses, that we would do something like add a spi-buses property
-to the spi peripheral bindings where you could specify one or more buses that
-a device was connected to.
+ .../bindings/misc/st,stm32-omm.yaml           |  194 +++
+ .../bindings/spi/st,stm32-ospi.yaml           |  109 ++
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   51 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |   48 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   33 +
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/misc/Kconfig                          |   17 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/stm32_omm.c                      |  510 ++++++++
+ drivers/spi/Kconfig                           |   10 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-stm32-ospi.c                  | 1064 +++++++++++++++++
+ 12 files changed, 2040 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/misc/st,stm32-omm.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/st,stm32-ospi.yaml
+ create mode 100644 drivers/misc/stm32_omm.c
+ create mode 100644 drivers/spi/spi-stm32-ospi.c
 
-e.g. a device connected to the lower bus would be spi-buses = <0>; one connected
-to the upper bus would be spi-buses = <1>; and a device connected to both would
-be spi-buses = <0>, <1>;.  This would also work for SPI controllers that have
-4 or 8 busses.
+-- 
+2.25.1
 
-SPI controllers like these have a striping feature that allows to control both
-buses at the same to either mirror the same data on both buses at the same
-time when writing, e.g. for configuration or to read and write two different
-bytes at the same time. A peripheral driver for device that was connected to
-both buses could make use of this feature to craft a single SPI message with
-transfers containing (new) parameters that specify which bus to use (one or
-both) and, in the case of using both buses, to mirror or stripe the data.
-
-Could we make a single device connected to both buses like this work using
-the proposed spi-lower and spi-upper or should we consider a different binding
-like the one I suggested?
- 
 
