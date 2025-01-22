@@ -1,107 +1,180 @@
-Return-Path: <linux-spi+bounces-6421-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6422-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3AD9A1824A
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 17:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A4A0A188C9
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 01:16:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3E76167DD9
-	for <lists+linux-spi@lfdr.de>; Tue, 21 Jan 2025 16:51:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F099163811
+	for <lists+linux-spi@lfdr.de>; Wed, 22 Jan 2025 00:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7871F0E55;
-	Tue, 21 Jan 2025 16:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDFF4409;
+	Wed, 22 Jan 2025 00:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BF0W4vLB"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="HJ3GxGFg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E19A13BC0C
-	for <linux-spi@vger.kernel.org>; Tue, 21 Jan 2025 16:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D854A18
+	for <linux-spi@vger.kernel.org>; Wed, 22 Jan 2025 00:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737478287; cv=none; b=l2hXSIKErjcFcRvme9VtqAbE2XuyM6TZcozwtmY6ox1aaJvc+o2NZfyj/gXaHyZ8HByWEaWTYkpB8SHjJDQOnX/5SfTrjwkvNr7b2EKqe5/Vzpr96zjcQ+Fw036xfhbR/hxneUItDvBEB0xT4HAcThkLEyDlt8Ten96F16QgaNs=
+	t=1737504998; cv=none; b=LIu/1OmptP5x+0Ew9PxQzORQ8llgiWiOYlmAc4JQcHm2m8AjnszMatw8h3dzgPZ3j5AOtxYwDam0CqgnQvzg6GevsPMA8Pf+Hta79mT+6cSxdVwV+bJQ/gREVkZk8pgvpfPufrTNEbQN1y3+NICPGQb0WRBvD0ABAcAJOYxgMbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737478287; c=relaxed/simple;
-	bh=0kqvsuGInuXJkXCmuCX04lAcWyzOGssMeO6D6xEQy+E=;
+	s=arc-20240116; t=1737504998; c=relaxed/simple;
+	bh=uM1KsvQ1MYDHCJxMmAEieb4nYTSx7G7GmRY4HGe+/2g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+Ub8Q+LSoYzjlOYuN14QnwuYYagRRP7IvsXJ/A2D/5qs/QpuQIXsBDy+qN0J7qx5VYmUQmEEZoMxBuWWemKSMpZt9Nn3DLqfuLbTFRcjhE4UJuSFvMbeTcsla87eCGR0pnsJbooUEeyUWWH/YRzWI4L6N9DkEJzni+dgEo1hsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BF0W4vLB; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <39ad89bf-880e-4ae9-bbdb-4d388dd14a7d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737478283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DrH1RqYlZPnCONVlyYdJjbHopCl+UukhIId4ykP7g4I=;
-	b=BF0W4vLBBIhkOrkCGaWLvh1V9EBK5k05jB3Q5mlXWZUPzl7dB780k3OMzrc6xPWJnhYBAG
-	hoTFfqwOgkhlX6rAjDM9FXJCLYK6iNfCkptx52WTh07TvNxurSEqJ5t9unx2zbAPpz3H06
-	Za1T6Scpqg2MiECbO3yTeJY6jxTY3kk=
-Date: Tue, 21 Jan 2025 11:51:18 -0500
+	 In-Reply-To:Content-Type; b=JimUD8UOU4fgWoITGn67YcYr1EC+Z9qlSZ3UTvyd0JCGNkpe/NRf7XO6Jg0xSJwWfnWcxaBrguFEcMBULQdbN659atbdlQqS2ANmqP1OGBX0tQJFQyt2Nqp8qBqnRxQqQajRE1lOx+As29ONAtp90a1e5oFCD61Rg75MqfAEzys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=HJ3GxGFg; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3eb9bbcc936so3778838b6e.0
+        for <linux-spi@vger.kernel.org>; Tue, 21 Jan 2025 16:16:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737504994; x=1738109794; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SQVDg8zwmBbcXYl6zUtnOQaEMDJDakZCCSAsHxpjPDA=;
+        b=HJ3GxGFgN3xBd6zHT0IsXugvd2BSK2Upjsk8ZNTDIzg1+vO4oiKKq98ONbRSU0aOiR
+         1YSw0hCzBu1HI63/aTCvsvqQe17rmf8qGuDu384S/1K1W+g1Gz/O1wy6Os87zbB/GT/W
+         i8s3tAov9oVRobGeWjMOCkcejm1SUZrnpnKNnCmnk2lrFaKmdGqtPSwYp67j57dMG407
+         g2SwviBAh7fXmUsT+BdIK/HJ5cBQQAhH+So2GB6O+4FrCs3IBxKLwpcJuZ7efxI/WXpI
+         7ahobg1T5B3vi8sBMi9JXq2I8DVOyHwJqvjmPu/TkmJtgzvBdfDihXj6Ijx9k4xPV6OL
+         /TfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737504994; x=1738109794;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQVDg8zwmBbcXYl6zUtnOQaEMDJDakZCCSAsHxpjPDA=;
+        b=Aa9SRfE45yrBqfiLxb+NPRUnbVn+nNDcvwYeZjpvHtsMOD7nwGia7RMdyJEOXaDf/a
+         BjicVSD8eacJIjQC553BzvOnoxmV8FyyISCKo5Wb4iSv2uLjrP+e4UOGm8R2gX7HfOqQ
+         NpxitSkX7bWqr5L3UsTz65b/U000IDnjQ3GpYMe0oYeWjWYokp0Nd+E4DulJ+O+OOrjj
+         a0fp1cKDeRWWDuKZ9OzVERv+dzQDMzEw3+Y8Xh9m6A5qUm4WOyYnxHhatb1CUe+22h8L
+         s/p+ZkRf/zuxHvq6GQf0Cckoq7VUMIMvL4/FFFT9vM4H8fHWBjqRoZwxZ9yg8NroCfKI
+         pBig==
+X-Forwarded-Encrypted: i=1; AJvYcCXN+S73Wb29UPhO9vzBiflBSI/Q9gbNa73V8gItnRqTy++vFUv/hv7xkDuuUgRkX2S3alNooFjeLNM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPHdE9ILbzIDLRrI8S40f9wAzm28sPtwMKMspknMQt0vhKH7ot
+	KK9I4VfyCYFerodTeUjNWhGVLeOojtILfMeivucPjXfWlEgJsL76doQogc6CV5c=
+X-Gm-Gg: ASbGncvJjTFUF725rJ567NMpcxZ9EJsByJk2UdPe+I9YIv6fu6hqkZCKrN4OdZPygJV
+	rQdUHIsNbkk8ai5A+mBcv9Gqy/fqxWFvNI1OIw9puIZ6GIUUhteRTg6qP9RxNNxw/iLeNauDZcn
+	HNj2TYGoaAQaEjdZWIESZ6t59aBvn8qm43dc3zovbmJUjdCPAPl06EatkF67u8ZCzPewxrt3MEg
+	pI1b1DX2A9uMJM6BDk5+OUqWOMwv8gG63P4zFVAPRrmWcVdLfP/D0ySqKR/34LkPiYdhMhDaPHM
+	vc1F7JdvOiSklmvET9pdd1F88awzJ5c=
+X-Google-Smtp-Source: AGHT+IFUzXtAIp3HDw6cXZF7Eh349UV04myuUv9p02O2+mdfioB7429VrhWHruPNNSQlkcbzikUpXw==
+X-Received: by 2002:a05:6808:3c97:b0:3e6:f6a:de5c with SMTP id 5614622812f47-3f19fdd1253mr12737286b6e.27.1737504994385;
+        Tue, 21 Jan 2025 16:16:34 -0800 (PST)
+Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f19da6eab9sm3330497b6e.17.2025.01.21.16.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jan 2025 16:16:32 -0800 (PST)
+Message-ID: <9f40295b-484a-48e8-b053-ff8550e589d7@baylibre.com>
+Date: Tue, 21 Jan 2025 18:16:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/5] spi: zynqmp-gqspi: Improve error recovery by
- resetting
-To: Mark Brown <broonie@kernel.org>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/7] dt-bindings: spi: zynqmp-qspi: Split the bus
+To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
  linux-arm-kernel@lists.infradead.org,
  Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ linux-kernel@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
  Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
  <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org
-References: <20250116225521.2688224-1-sean.anderson@linux.dev>
- <5942e111-24ba-4d1b-bd4f-6b81dcc6c5dc@sirena.org.uk>
- <87h65xi977.fsf@bootlin.com>
- <1026d44b-0907-4835-bc95-32f9bbcf4831@sirena.org.uk>
- <8c9e6a12-e64f-4658-94e8-77469f393a0e@linux.dev>
- <c1a3f172-700e-4079-a501-b3f3f08b41aa@sirena.org.uk>
+ devicetree@vger.kernel.org,
+ "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>
+References: <20250116232118.2694169-1-sean.anderson@linux.dev>
+ <20250116232118.2694169-2-sean.anderson@linux.dev>
+From: David Lechner <dlechner@baylibre.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <c1a3f172-700e-4079-a501-b3f3f08b41aa@sirena.org.uk>
+In-Reply-To: <20250116232118.2694169-2-sean.anderson@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 1/20/25 08:49, Mark Brown wrote:
-> On Fri, Jan 17, 2025 at 04:46:23PM -0500, Sean Anderson wrote:
->> On 1/17/25 13:41, Mark Brown wrote:
->> > On Fri, Jan 17, 2025 at 07:31:08PM +0100, Miquel Raynal wrote:
-> 
->> >> Yes, unless the timeout is reached for "good reasons", ie. you request
->> >> substantial amounts of data (typically from a memory device) and the
->> >> timeout is too short compared to the theoretical time spent in the
->> >> transfer. A loaded machine can also increase the number of false
->> >> positives I guess.
-> 
->> > I'd argue that all of those are bad reasons, I'd only expect us to time
->> > out when there's a bug - choosing too low a timeout or doing things in a
->> > way that generates timeouts under load is a problem.
-> 
->> There's no transmit DMA for this device. So if you are under high load
->> and make a long transfer, it's possible to time out. I don't know if
->> it's possible to fix that very easily. The timeout calculation assumes
->> that data is being transferred at the SPI bus rate.
-> 
-> In that case I wouldn't expect the timeout to apply to the whole
-> operation, or I'd expect a timeout applied waiting for something
-> interrupt driven to not to be fired unless we stop making forward
-> progress.  
+On 1/16/25 5:21 PM, Sean Anderson wrote:
+> This device supports two separate SPI busses: 
 
-I don't know if there are any helpers we can use for this. To implement
-this we'd need something like schedule_timeout() but where the interrupt
-handler calls mod_timer() whenever it does work.
+...
 
---Sean
+> @@ -84,5 +94,32 @@ examples:
+>          resets = <&zynqmp_reset ZYNQMP_RESET_QSPI>;
+>          reg = <0x0 0xff0f0000 0x0 0x1000>,
+>                <0x0 0xc0000000 0x0 0x8000000>;
+> +
+> +        spi-lower {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +          num-cs = <2>;
+> +          cs-gpios = <0>, <&gpio 5>;
+> +
+> +          flash@0 {
+> +            reg = <0>;
+> +            compatible = "jedec,spi-nor";
+> +          };
+> +
+> +          flash@1 {
+> +            reg = <1>;
+> +            compatible = "jedec,spi-nor";
+> +          };
+> +        };
+> +
+> +        spi-upper {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          flash@0 {
+> +            reg = <0>;
+> +            compatible = "jedec,spi-nor";
+> +          };
+> +        };
+>        };
+>      };
+
+In the IIO subsystem, we've been recently working on several "advanced" ADCs
+that could use a SPI controller like this. These ADCs have multiple input
+channels that perform conversions in parallel and the data for each channel
+needs to be read back on a separate serial line (MISO) at the same time. Another
+similar case is to have two separate chips, but they share a conversion trigger
+and essentially operate as a single composite device rather than two distinct
+devices [1]. This would be similar to some ADCs that are daisy-chained where we
+consider all of the chips in the chain as a single composite device, but they
+would be in parallel rather than chained.
+
+[1]: https://lore.kernel.org/linux-iio/e5e8eba7-2455-488b-a36f-e246844e11fd@baylibre.com/
+
+For those use cases though, as mentioned above, we only have a single device
+that would be connected to both buses. So for such a SPI controller with
+multiple buses, I was envisioning that instead of adding child nodes for each
+of the child buses, that we would do something like add a spi-buses property
+to the spi peripheral bindings where you could specify one or more buses that
+a device was connected to.
+
+e.g. a device connected to the lower bus would be spi-buses = <0>; one connected
+to the upper bus would be spi-buses = <1>; and a device connected to both would
+be spi-buses = <0>, <1>;.  This would also work for SPI controllers that have
+4 or 8 busses.
+
+SPI controllers like these have a striping feature that allows to control both
+buses at the same to either mirror the same data on both buses at the same
+time when writing, e.g. for configuration or to read and write two different
+bytes at the same time. A peripheral driver for device that was connected to
+both buses could make use of this feature to craft a single SPI message with
+transfers containing (new) parameters that specify which bus to use (one or
+both) and, in the case of using both buses, to mirror or stripe the data.
+
+Could we make a single device connected to both buses like this work using
+the proposed spi-lower and spi-upper or should we consider a different binding
+like the one I suggested?
+ 
 
