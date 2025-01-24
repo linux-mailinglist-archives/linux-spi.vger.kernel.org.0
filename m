@@ -1,129 +1,109 @@
-Return-Path: <linux-spi+bounces-6444-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6445-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4395FA1ACF4
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2025 23:57:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F86DA1B1FF
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 09:56:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03B4E3A9739
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Jan 2025 22:57:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAC3E16D8C3
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 08:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2147F1D47BB;
-	Thu, 23 Jan 2025 22:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394111F7907;
+	Fri, 24 Jan 2025 08:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UWMHVbsV"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="I2wpu0CY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CF61D416E
-	for <linux-spi@vger.kernel.org>; Thu, 23 Jan 2025 22:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C0C1DB134;
+	Fri, 24 Jan 2025 08:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737673070; cv=none; b=qCRxSz9HxlVLjmv2YdrLhYYadTt2wUQmZ4KgAWTnopSPrvrX5QRWtvi8sHeTla2x6eiWJSDDzPnM1unv2IN9Qe97+n8YveYWXBB4offU6nVuGO8RZp9t5alvGPQlL+Co2iJCMNtkZKO/Sn78eK9PyPbHQ8dWpAEUnRtDWTB6bIM=
+	t=1737708975; cv=none; b=TBHycdPLn2k0KCdqSGTj97MHM8rB7tz5GAoSw2c2CmRNjtvpE2gMkCnKKZn4Im8VV6lWfBzKMmlS148Cm0ihhUsM+q6l+dMWGXh2qdiPw0n21r0tgbAFOoHJdLv3E+LZL3lktQfVbHen+uOsCEDLcga3ZvJvdMjPkEV0wTXYC/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737673070; c=relaxed/simple;
-	bh=htMDIByq1woBNL7OFpqdOd+0bwBsWd8J2ZgzIBXW89w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V1ID/CK7qksV01gOKdBxa9Udgq69Mw4EeZEb1A7Hj+FGTeJOFyBBxV8n22SAjRHJ+w0Iriqkprac9k54tkwiWPRl3TJAlHLA9x9QZOiuiKLIEDsVK4gFL+dylic8ewP/I+fHUVSVYjDf1WpWMJIiycY3XAJuA5PEDsWEzZDmzz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UWMHVbsV; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <34e84bd2-381b-4f3e-99e1-92f7a878ed15@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737673066;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q5vETblkns4myv0L36tnPYvQDxGkuxSXvQ+u+++b6uc=;
-	b=UWMHVbsVeOqCg1tbtZ5magJB5bC76eSbbvBnvaJ0k5mWY3C/RUdQPQcisluKOJMIWkuiru
-	QgzUcrPMpwhCrCi1seyFemiz6RO+s43G4LiZS0elucLnEDAu1i8WqdtYaW22T5ucw+KTGU
-	bAF8FjTxdUqOh6VtYsckqRjXlUI104w=
-Date: Thu, 23 Jan 2025 17:57:41 -0500
+	s=arc-20240116; t=1737708975; c=relaxed/simple;
+	bh=Hqlynt3aXaASMjV6IHpr6I7vkH/wXBNRmEpnJSwFjOo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UeKlgMjTyX0B8F1p+JS1+7/JoQq3Sd0tcZGPXkED3DNY7gMAGZHQOUExttqxKJNxno7WVOdyPjkJwYNK2/qq8Oh57ez2r+ld3V4fBE/nlh4qXL2lfWtDA+Ezmdk+qtkL0ERYfZ19X6y5b+WCRgJ3fm9mWWGxb1RHagL2PI6FYFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=I2wpu0CY; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 77A16A09FF;
+	Fri, 24 Jan 2025 09:56:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=2pmYbnPeKyxt+7NbOVL6/kIIAp9oX3TCI0RQTsRH730=; b=
+	I2wpu0CYQR3CbV7x/T8QxbdvunrCx/t0jUpMRxMYpyId8G1pMhUNmdxEX83rMcNT
+	pOmVn95QyZYXyo2TL12E5CBBTmuzCI4utQ6vYMyPvWinrw3cm/qcFJ8Dve7ncTbk
+	tE3RBCH/UbX1PG0Dy+HrfOUpLWdDfHUj+mz6Rvy5CqovsI5+EstokJIeMPk4AxZB
+	MC/706/lLvOIotm6HCExFUfSvsZNlv/u4uvP0LNcOHwUfwEHdAWLaFhl8FV80f1n
+	f1tuG4uJFPua4e8ZNvIl8O/9z02dE2R9Ir6eX+fz0HhxSK2Jo/5ujwxPMfjZO54S
+	HYPRFgp0O/+N0+fHM2cSTNtaNMRFZylvKBRnh9i9cQlcdHvu5WSlYMJfOzBYG5Uc
+	QFtKtaIJiZQockkYKNCogeMiAwc1ZI4r8LmfJwbSQ/tXvq3jnkz5aqCoG+pVEHcD
+	vy6Epopg1/SE3QTEQjCKbdAYEjviyliCGoB3oy7nK/hicCr0hm1eSCNhe3v4tn9r
+	1NNyj6t6dE7cZsVVcqNuyZ3UyN5UFjEZp6EFI/F8cGokMbgiY7xtwERhz6XNxYei
+	Lag+JNCYz2nlwDNx81wLR0zyqOCj3kgg6oS0JaTfWovgkmz4Z4Dg3EA1fTZcqSiO
+	5iQsfTe3+NOx9o1oDeoFH28XFX7l02ShVkcUgTh9AU8=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To:
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v2 0/4] Add more devm_ functions to simplify probe path in drivers/spi/atmel-quadspi.c
+Date: Fri, 24 Jan 2025 09:52:16 +0100
+Message-ID: <20250124085221.766303-4-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/5] dt-bindings: spi: zynqmp-qspi: Add reset
-To: Rob Herring <robh@kernel.org>
-Cc: Michal Simek <michal.simek@amd.com>, Mark Brown <broonie@kernel.org>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>, Conor Dooley
- <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- devicetree@vger.kernel.org
-References: <20250116225521.2688224-1-sean.anderson@linux.dev>
- <20250116225521.2688224-2-sean.anderson@linux.dev>
- <8a0d8789-7a0d-42b7-9aff-e867c14db3c9@amd.com>
- <b8e63009-13fb-493f-adf6-4d30adbe9b1b@linux.dev>
- <20250123224520.GA456390-robh@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <20250123224520.GA456390-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1737708961;VERSION=7984;MC=4288689662;ID=70488;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD94852677063
 
-On 1/23/25 17:45, Rob Herring wrote:
-> On Fri, Jan 17, 2025 at 11:12:15AM -0500, Sean Anderson wrote:
->> On 1/17/25 02:14, Michal Simek wrote:
->> > 
->> > 
->> > On 1/16/25 23:55, Sean Anderson wrote:
->> >> Add a reset to help recover from cancelled operations.
->> >>
->> >> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
->> >> ---
->> >>
->> >>   Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 6 ++++++
->> >>   1 file changed, 6 insertions(+)
->> >>
->> >> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> index 04d4d3b4916d..901e15fcce2d 100644
->> >> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> @@ -36,12 +36,16 @@ properties:
->> >>     power-domains:
->> >>       maxItems: 1
->> >>   +  resets:
->> >> +    maxItems: 1
->> >> +
->> >>   required:
->> >>     - compatible
->> >>     - reg
->> >>     - interrupts
->> >>     - clock-names
->> >>     - clocks
->> >> +  - resets
->> > 
->> > In 2/5 you are calling devm_reset_control_get_optional_exclusive() that's why I expect reset is not really required property.
->> 
->> It's optional for the driver for backwards compatibility. But for the
->> devicetree we make it mandatory since it should be included in all new
->> devicetrees.
-> 
-> Generally, we discourage new required properties as that's an ABI 
-> change. The exception is really when optional was a mistake. That's 
-> arguably the case here if the h/w always has a reset.
+The probe function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. To alleivate this - and similar problems in
+the future - an effort was made to migrate as many functions as possible,
+to their devm_ managed counterparts. The few functions, which did not yet
+have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
+and 4 then use these APIs to simplify and fix the probe() function.
 
-This device has a reset on ZynqMP and Versal.
+Change in v2: rebased onto Linus' master, which is:
+commit bc8198dc7ebc ("Merge tag 'sched_ext-for-6.14' of
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext")
 
-The driver still considers this property optional, so it's not an ABI break.
-But I made it required in the schema to help out the folks at AMD when they
-get around to upstreaming the Versal devicetree :)
+Bence Csókás (4):
+  dma: Add devm_dma_request_chan()
+  pm: runtime: Add new devm functions
+  spi: atmel-quadspi: Use `devm_dma_request_chan()`
+  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
 
-> Unfortunately, there's not a way to distinguish 'required' from 
-> 'required for new users'.
+ drivers/base/power/runtime.c | 36 +++++++++++++++++++++
+ drivers/dma/dmaengine.c      | 30 +++++++++++++++++
+ drivers/spi/atmel-quadspi.c  | 62 ++++++++++--------------------------
+ include/linux/dmaengine.h    |  7 ++++
+ include/linux/pm_runtime.h   |  4 +++
+ 5 files changed, 93 insertions(+), 46 deletions(-)
 
-I will add a note to the commit message about this situation.
+-- 
+2.48.1
 
---Sean
 
 
