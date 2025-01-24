@@ -1,181 +1,108 @@
-Return-Path: <linux-spi+bounces-6466-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6467-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BCFFA1B5A7
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 13:22:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D164BA1B6DD
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 14:35:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96F623AB373
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 12:22:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE91F188C915
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Jan 2025 13:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96AE8219A8D;
-	Fri, 24 Jan 2025 12:22:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCEE438DC8;
+	Fri, 24 Jan 2025 13:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kBiFRCYN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTJp66Nb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D090221B19F;
-	Fri, 24 Jan 2025 12:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9863935947;
+	Fri, 24 Jan 2025 13:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737721362; cv=none; b=bLRMp+opkjm66xCDAPhEMw2vLXEiVBAawMSd8TbBJInv/mWbPBGk1L2b956c/IHNucabHblAOuTltGEQQftLtS1OzSFFSmZ9cTOgkMBLafDRi1oD9+Dt/X8qepLqL+fH7olRzQHDJ+buzRhw6ox09qntpSoXvorKH72q1labZvQ=
+	t=1737725723; cv=none; b=UCf5qc3so8uEXM4vVy6f9NgPFEaUg4tH1JppHyjJwbwEd+dmkrkmr0KncoJ0+oF4ATwi7ovfN42RvF8L4dSrhLEv12K5xWAQaUVV7orWWZvDvN2DgUaTNoZ4+dJ1U0+oDegPhkFM8NOF+qtLqVHOUG90KfYM/3KQ/S1O+SyYdHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737721362; c=relaxed/simple;
-	bh=3070F8k4oMWQWeOnpNtigrjl5rR5EysvkU4DqoFDD3M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=m0EkHXgL0hNHajiCU5ct17k9Xp8mdZxQMjU2tBsV5wZUFMpB+LcwlChjXQH8bdfGWvVZ+gV1Rs7uQs6ezx2KGLr2Yke2hj6AjfmtMKhcRemOgOuJNbEVAPJkf+q2yS2KRgbow1/AHnrPsPLDicb12Q1/D/59XYIcEgG23l/TYzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kBiFRCYN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OBrbji008568;
-	Fri, 24 Jan 2025 12:22:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	mF0lG9JJJ/RmBA+CiPEn9CWgwPAiC83uRRhPGJMn/is=; b=kBiFRCYNuKVS7Yg7
-	5V5Iqg9weLeA32R0baeqpyrue0oK5cgvgBFBDgo7ffmQucsXN+Yz09+qDLl4wBda
-	LJ3GimSwRRDsqavDKZQiXts31VTOEzsROR7G8Q1DeAAdDptTpRVnSynsp3yA6+qA
-	tfWH68Qx6u6hyBzkjn4VauQST/M5eBVAy4p/bQkXITbF/wJEpdJ9HLWVHcbIoBe8
-	isx1iLXzRalSNaprZw2iYNaEhJ+CG7czOpSw2IJ8TetPmUx13aSqUbVjkBAREDA+
-	ElCd52DQWlt95wOPQbT5WpcXLsKDfg3oz0AtIILXbsJ3avYrsDKWOjZbP/4n7YuE
-	v867kw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44cacr82au-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jan 2025 12:22:35 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50OCMYpO012957
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jan 2025 12:22:34 GMT
-Received: from [10.216.19.102] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 24 Jan
- 2025 04:22:28 -0800
-Message-ID: <da7b9678-76cc-4e45-89e9-4e8d9c9a2005@quicinc.com>
-Date: Fri, 24 Jan 2025 17:52:24 +0530
+	s=arc-20240116; t=1737725723; c=relaxed/simple;
+	bh=TFsv3UfKcQEUe4LWmZy8joE4lsGXNnzFnSR4/jdYIys=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k9qhGKc1udjEbopnLJCCa8E0Xi8dU21en7g7xlrx4a5gxrU9X9N5t3FPTLm2HA83lbIvJN9ktQtm9TKDc1JHGvkVhHAqWzWrcumNrtb9rsInoXN9oBPaR4eVTqEWBnC+FoDxYCkgf+Mojzdv770spXlWHPOeh476DruuR3pHmso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTJp66Nb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59869C4CEE0;
+	Fri, 24 Jan 2025 13:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737725723;
+	bh=TFsv3UfKcQEUe4LWmZy8joE4lsGXNnzFnSR4/jdYIys=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VTJp66NbwqsqB1XJ7zHZLaZXKg9oppm5xJfJAH4QCuyr/X87rCiPyEoc3lb6+nZ+r
+	 1CDAZ2ivTmLGmmmcx3mRqcI4wUs9JyVOiisZxS1thOMPu4n0IoD24apM+fbtDkfeIL
+	 SFDFdQhdal2g4MZosJX69gh7BYs83RF27p1Ki9U7O8hQLMqwYA2kQneUAJjpfGenNe
+	 0SFV7/m5GtN1rKeMU6o6cgsecWpufiYP+KuqKUIQ/yWJLot6shH4INjcxZy2Kaz4YU
+	 79VTQe1LJ7tVXkCJyH6IpTkjuL3R+W6FgWfcB1/Ibh08iPQeLDzFjPmbSq06V0J4Y6
+	 WZhBhAbB/5HYA==
+Date: Fri, 24 Jan 2025 13:35:17 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Sean Anderson <sean.anderson@linux.dev>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
+	Jinjie Ruan <ruanjinjie@huawei.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH 1/7] dt-bindings: spi: zynqmp-qspi: Split the bus
+Message-ID: <ecac5293-ae70-4575-b706-58f877bacc92@sirena.org.uk>
+References: <20250116232118.2694169-1-sean.anderson@linux.dev>
+ <20250116232118.2694169-2-sean.anderson@linux.dev>
+ <9f40295b-484a-48e8-b053-ff8550e589d7@baylibre.com>
+ <46a7eba6-a705-4543-b967-e83ccc89e7d4@linux.dev>
+ <6afc379a-2f9f-4462-ae30-ef6945a83236@baylibre.com>
+ <2784cc3b-0b8f-4116-b34d-0de4ff56cf92@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/8] dt-bindings: i2c: qcom,i2c-geni: Add support for
- selecting data transfer mode
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <broonie@kernel.or>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <johan+linaro@kernel.org>,
-        <dianders@chromium.org>, <agross@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <quic_msavaliy@quicinc.com>, <quic_anupkulk@quicinc.com>
-References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
- <20250124105309.295769-3-quic_vdadhani@quicinc.com>
- <r4zfoaub3dwkirdbsolbl56xxa7ax5eusb2256c7ezlyl2s3vh@hit4g5cpzijw>
-Content-Language: en-US
-From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-In-Reply-To: <r4zfoaub3dwkirdbsolbl56xxa7ax5eusb2256c7ezlyl2s3vh@hit4g5cpzijw>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 97DMXRCQ8BgMIphNNQ6Lb3ZJdMOGO9vB
-X-Proofpoint-ORIG-GUID: 97DMXRCQ8BgMIphNNQ6Lb3ZJdMOGO9vB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-24_05,2025-01-23_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- impostorscore=0 phishscore=0 mlxscore=0 malwarescore=0 clxscore=1015
- bulkscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501240090
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Pkerz/Ef+rgcHpyv"
+Content-Disposition: inline
+In-Reply-To: <2784cc3b-0b8f-4116-b34d-0de4ff56cf92@linux.dev>
+X-Cookie: Earth is a beta site.
 
 
+--Pkerz/Ef+rgcHpyv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 1/24/2025 4:48 PM, Dmitry Baryshkov wrote:
-> On Fri, Jan 24, 2025 at 04:23:03PM +0530, Viken Dadhaniya wrote:
->> Data transfer mode is fixed by TrustZone (TZ), which currently restricts
->> developers from modifying the transfer mode from the APPS side.
->>
->> Document the 'qcom,xfer-mode' properties to select the data transfer mode,
->> either GPI DMA (Generic Packet Interface) or non-GPI mode (PIO/CPU DMA).
->>
->> I2C controller can operate in one of two modes based on the
->> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
-> 
-> Is it possible to load the firmware after it being loaded by TZ? Is it
-> possible to change the mode at runtime too?
+On Thu, Jan 23, 2025 at 05:37:16PM -0500, Sean Anderson wrote:
 
-No, firmware can be loaded either from the TZ side or APPS side.
+> Your patches LGTM. I will use them for v2. Mark do you have any comments on this
+> approach?
 
-In non-GPI mode, the transfer mode will change runtime between PIO and 
-CPU DMA based on the data length.
+It looks fine.
 
-We need to update the device tree property(qcom,xfer-mode) to change the 
-mode between non-GPI and GPI.
+--Pkerz/Ef+rgcHpyv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
->>
->> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> ---
->>
->> v1 -> v2:
->>
->> - Drop 'qcom,load-firmware' property and add 'firmware-name' property in
->>    qup common driver.
->> - Update commit log.
->>
->> v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-2-quic_vdadhani@quicinc.com/
->> ---
->> ---
->>   .../devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml        | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> index 9f66a3bb1f80..68e4bf0c84d1 100644
->> --- a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> +++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
->> @@ -66,6 +66,12 @@ properties:
->>     required-opps:
->>       maxItems: 1
->>   
->> +  qcom,xfer-mode:
->> +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) mode and 3 for GPI DMA mode.
->> +      The default mode is FIFO.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [1, 3]
->> +
->>   required:
->>     - compatible
->>     - interrupts
->> @@ -142,5 +148,6 @@ examples:
->>           interconnect-names = "qup-core", "qup-config", "qup-memory";
->>           power-domains = <&rpmhpd SC7180_CX>;
->>           required-opps = <&rpmhpd_opp_low_svs>;
->> +        qcom,xfer-mode = <1>;
-> 
-> What does <1> mean? Please provide corresponding defines.
+-----BEGIN PGP SIGNATURE-----
 
-Do we need to add a string instead of a number, like 
-include/dt-bindings/dma/qcom-gpi.h?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeTlxQACgkQJNaLcl1U
+h9A/1wf+LwQC6JmRuJILYtffqfOtSDabDTmR6snmnjAjefCBKxfO/hAcNc2Q7Pex
+z5hBWE5wI8Jospu0Z7tLTxnMTss99sjFPY8eVjqmNNxTqaT9hi6XbA7v6ZyRCRcs
+In3EdL438Uqrs9m79GE4fqgSzniu+eKpo1gUnLDLP7cl2FgKs0VHPuaZzYFZ+PUj
+X056bLr6i0jiwp5nMGKfWIG2CPtu3DkqtNNhlJNfmDwhe5hCEHGu/eimVFcxFXw5
+W81T1KHx52bmeUWbhnDLaAsP99WaCgwt4VarQxGBRIF1wEvTxKvig3Vvd+7rMV9E
+ZY/0pvaRX8141lF0IY4P9VBE1AddWw==
+=3e6Y
+-----END PGP SIGNATURE-----
 
-> 
->>       };
->>   ...
->> -- 
->> 2.34.1
->>
-> 
+--Pkerz/Ef+rgcHpyv--
 
