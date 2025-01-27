@@ -1,294 +1,124 @@
-Return-Path: <linux-spi+bounces-6503-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6504-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67317A1D272
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 09:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FF1A1D3C3
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 10:44:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E9B51886CD0
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 08:37:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8E191886656
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 09:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20501FC0E9;
-	Mon, 27 Jan 2025 08:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92861FBEBC;
+	Mon, 27 Jan 2025 09:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIv8GsOT"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="McwYYo+Q"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6818C11;
-	Mon, 27 Jan 2025 08:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FF21FCFE6;
+	Mon, 27 Jan 2025 09:44:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737967056; cv=none; b=p3EEQB0uMpvaeeOPgCYt1TBoci4+PCyjmOQXymtELE1zBKyf945ZirGA9Aiz7Lg777GRDnNWbplG3riWMXhIVaiCWGql+t/vmKMWEWfUVAVOTlAkpiBp9fvuj8W//gJWTCimSAoJPQl6ahJO1DNiocr5/DpLdpNmCBQPOxpAsIE=
+	t=1737971072; cv=none; b=T2mI5FXrm5EyOgboNsRvkGx8N2kjrucUtU19RlzGSyxfI8YWx3owOd/OUBRVldhoJQZzF/AA4RFR9kTDtg2QiqlVJuouDO3rZtcCO9ZsraLLOq2f5s/Z04KyiTLWIyxT7FuW47LKhW7Iif5W39vsif2h4ISObDDEnZbVcrG2BFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737967056; c=relaxed/simple;
-	bh=lO9NymPFr6bhwMFfAllVvVLeDbAVw1xGh+GP1heN7js=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U3qheuOiNiqQWsiejrrguJv9UV2QrBHlwbiE3pJR3jA/vDYXC8N03ZJGQ+6Wf6fwylbFBvLVSs23PP6UlhV530MLa0QLexdGWT2IVIbjIUAf0HkVprv+Y2ZnjuL2mo0rLXhcqY9/btS3+zTcOT+tkC2iR6oP1TRI8CtgXJDppgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIv8GsOT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B5CC4CED2;
-	Mon, 27 Jan 2025 08:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737967055;
-	bh=lO9NymPFr6bhwMFfAllVvVLeDbAVw1xGh+GP1heN7js=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qIv8GsOTxD0MNBdcccL2gsR2GrsPOH7kYiWCdaqYHMQJl06quxNk06u372au5ecHh
-	 2Km7poxUCviWvnWyWTOZ2XsGaIdWVQ95eEQxqPt76q/lEMFBkasYlNeYPXT0k1/s5u
-	 mw2TCXDM4aOChO8w9BDR2JG1aT6fNADge7Ss9cZJlS5a3vzIg1SFxeuKR3unpvtQKp
-	 5EUGDJ/a2/K6EDh3hGmn5JXR7YdC39zqGsMjrUUUGw34bynf+MWBTNE9KVb2eth6CY
-	 DslXsJIm1PuK3EsUVpPhPjXU33U6TD2oYXqG8X2GLTSv/NG2/ufxjvVXHEYaaJzxMw
-	 Y5cb5He53K49Q==
-Date: Mon, 27 Jan 2025 09:37:32 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	Lee Jones <lee@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH RFC 9/9] dt-bindings: nand: Convert fsl,elbc bindings to
- YAML
-Message-ID: <20250127-cuddly-dalmatian-of-saturation-5f1ae2@krzk-bin>
-References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <20250126-ppcyaml-v1-9-50649f51c3dd@posteo.net>
+	s=arc-20240116; t=1737971072; c=relaxed/simple;
+	bh=V9RrFP+3gTTm+KxqHBwZgywSy19eJBFAur4WRQbNyUc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=deKfPzm6ubdQA8Z/iPlloh6hl2Q6OsZrEZrZ25zKXeRK4ICWrpCF2a8zu1UU3Ksypk5K8fZA3W4qXKLepe9PGmq+QV6hafuMJgT9iGHd4jBFMT8o4RtHO6Fn2fYDqP9qm8B6up0SNmSgzKmOVmgYbpkrbpcy8oP1XOEi40ikCxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=McwYYo+Q; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id A90C8A047B;
+	Mon, 27 Jan 2025 10:44:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=JKOPXeX6sbg57Oy8s17k
+	2ZQyCZqfoLnDjsHi21Xikr0=; b=McwYYo+QddYExT8iA+HlNAvkIIjjvupac1m1
+	1lzb1hUixnG4FW6CUuIVZMnvPziv0MrS5TRofzvB3EHYNAmqCEPgcLpJVkngdTZH
+	KUXcuLtnKCKkei1turpmiUipTKI2dDUdipF9zuIsfu3l0qrUaifkUja1OvS39vZT
+	QFOMUr2HBx82MKWL8R58aQtXIBa5i3uJ1VR8x1LDYWg1mN2vQYw8/yDgwfi6RjbM
+	2oO6ShRygpBZiXFiV2DpA8eS6Wx5CArBibm1EbcO/pERdnbF2WkqfLk9mir27XxB
+	H2aNA1JHI3hcHevDymkjGKnyuOfjGsNYMQXRM2o+5Dm5kOG1SS/mHaFujsvWqIPK
+	ZZRyeEs6ToFTv4vvXNJX/Ztf+iOl5lp688AhJeFUTueDtUygU3aCWsZdUCo7Sqz9
+	ERVqJmIa6W127jJVxRu+N4+dX3iUoGyfI1qV5yPLfLlZNhqEIBKUdG95yi6Dz+6I
+	wmnC1cWBay+RTl1haZpkRuGJqF8K2+f9KjdJ7ExY4A01f0wV6w6Fv5mJkSWFWC/G
+	o3286I702pjXnvhV+0FCh6OcobsHsWgrJWmKTskZWc9aFmtgNARz61SAn4l63+Y9
+	aOM8Xjb+LYNjbSFta0/AmbIMxbap2vLcXZwBE/qtSaXYgo6qlaemOmsZABosB/Ef
+	R5Dcf6A=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
+	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Varshini
+ Rajendran" <varshini.rajendran@microchip.com>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Durai Manickam KR
+	<durai.manickamkr@microchip.com>, Alexander Dahl <ada@thorsis.com>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>
+Subject: [PATCH resubmit] spi: atmel-quadspi: remove references to runtime PM on error path
+Date: Mon, 27 Jan 2025 10:42:58 +0100
+Message-ID: <20250127094258.841684-2-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250114172329.1013770-2-csokas.bence@prolan.hu>
+References: <20250114172329.1013770-2-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250126-ppcyaml-v1-9-50649f51c3dd@posteo.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1737971059;VERSION=7984;MC=3820151323;ID=88924;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD9485267726B
 
-On Sun, Jan 26, 2025 at 07:59:04PM +0100, J. Neusch=C3=A4fer wrote:
-> Convert the Freescale localbus controller bindings from text form to
-> YAML. The list of compatible strings reflects current usage.
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-simple-bus and 20 other compatibles you used were not present in the
-original binding. Does above "list of compatible strings" mean you just
-added them?
+There is no need to call runtime PM put APIs on error path of
+`atmel_qspi_sama7g5_transfer()` as the caller (`atmel_qspi_exec_op()`)
+of it will take care of this if needed.
 
->=20
-> Changes compared to the txt version:
->  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
->    appears in this example and nowhere else
->  - added a new example with NAND flash
->=20
-> Remaining issues:
->  - The localbus is not really a simple-bus: Unit addresses are not simply
->    addresses on a memory bus. Instead, they have a format: The first cell
->    is a chip select number, the remaining one or two cells are bus
->    addresses.
->=20
-> Signed-off-by: J. Neusch=C3=A4fer <j.ne@posteo.net>
-> ---
->  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml |  61 +++++++++
->  .../bindings/powerpc/fsl/fsl,elbc-gpcm-uio.yaml    |  55 ++++++++
+Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+Reported-by: Alexander Dahl <ada@thorsis.com>
+Closes: https://lore.kernel.org/linux-spi/20250109-carat-festivity-5f088e1add3c@thorsis.com/
+[ csokas.bence: Rebase and clarify msg, fix/add tags ]
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
 
-Please split the conversion from adding new bindings. For example above
-file and its compatible fsl,elbc-gpcm-uio was not documented in original
-TXT.
+Notes:
+    Rebased onto current spi-next:
+    commit ff9e24437b18 ("Merge remote-tracking branch 'spi/for-6.13' into spi-linus")
 
-=2E..
+ drivers/spi/atmel-quadspi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> diff --git a/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml =
-b/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..6bbceb82c77826499abe85879=
-e9189b18d396eea
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml
-> @@ -0,0 +1,150 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/powerpc/fsl/fsl,elbc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale Enhanced Local Bus Controller
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index abdc49d9d940..e2235d71c822 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -930,11 +930,8 @@ static int atmel_qspi_sama7g5_transfer(struct spi_mem *mem,
+ 
+ 	/* Release the chip-select. */
+ 	ret = atmel_qspi_reg_sync(aq);
+-	if (ret) {
+-		pm_runtime_mark_last_busy(&aq->pdev->dev);
+-		pm_runtime_put_autosuspend(&aq->pdev->dev);
++	if (ret)
+ 		return ret;
+-	}
+ 	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
+ 
+ 	return atmel_qspi_wait_for_completion(aq, QSPI_SR_CSRA);
+-- 
+2.48.1
 
-What sort of bus is it? Memory bus? Then place it with others, see
-memory directory.
-
-> +
-> +maintainers:
-> +  - J. Neusch=C3=A4fer <j.ne@posteo.net>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^localbus@[0-9a-f]+$"
-> +
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - fsl,mpc8313-elbc
-> +              - fsl,mpc8315-elbc
-> +              - fsl,mpc8377-elbc
-> +              - fsl,mpc8378-elbc
-> +              - fsl,mpc8379-elbc
-> +              - fsl,mpc8536-elbc
-> +              - fsl,mpc8569-elbc
-> +              - fsl,mpc8572-elbc
-> +              - fsl,p1020-elbc
-> +              - fsl,p1021-elbc
-> +              - fsl,p1023-elbc
-> +              - fsl,p2020-elbc
-> +              - fsl,p2041-elbc
-> +              - fsl,p3041-elbc
-> +              - fsl,p4080-elbc
-> +              - fsl,p5020-elbc
-> +              - fsl,p5040-elbc
-> +          - const: fsl,elbc
-> +          - const: simple-bus
-> +
-> +      - items:
-> +          - const: fsl,mpc8272-localbus
-> +          - const: fsl,pq2-localbus
-> +
-> +      - items:
-> +          - enum:
-> +              - fsl,mpc8247-localbus
-> +              - fsl,mpc8248-localbus
-> +              - fsl,mpc8360-localbus
-> +          - const: fsl,pq2pro-localbus
-> +          - const: simple-bus
-> +
-> +      - items:
-> +          - enum:
-> +              - fsl,mpc8540-localbus
-> +              - fsl,mpc8544-lbc
-> +              - fsl,mpc8544-localbus
-> +              - fsl,mpc8548-lbc
-> +              - fsl,mpc8548-localbus
-> +              - fsl,mpc8560-localbus
-> +              - fsl,mpc8568-localbus
-> +          - const: fsl,pq3-localbus
-> +          - const: simple-bus
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    enum: [2, 3]
-> +    description: |
-> +      The first cell is the chipselect number, and the remaining cells a=
-re the
-> +      offset into the chipselect.
-> +
-> +  "#size-cells":
-> +    enum: [1, 2]
-> +    description: |
-> +      Either one or two, depending on how large each chipselect can be.
-> +
-> +  ranges:
-> +    description: |
-> +      Each range corresponds to a single chipselect, and covers the enti=
-re
-> +      access window as configured.
-> +
-> +patternProperties:
-> +  "^.*@.*$":
-> +    type: object
-
-And probably you need=20
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    localbus@f0010100 {
-> +        compatible =3D "fsl,mpc8272-localbus",
-> +                     "fsl,pq2-localbus";
-> +        #address-cells =3D <2>;
-> +        #size-cells =3D <1>;
-> +        reg =3D <0xf0010100 0x40>;
-
-compatible, then reg - see DTS coding style.
-
-> +
-> +        ranges =3D <0x0 0x0 0xfe000000 0x02000000
-> +                  0x1 0x0 0xf4500000 0x00008000
-> +                  0x2 0x0 0xfd810000 0x00010000>;
-> +
-> +        flash@0,0 {
-> +            compatible =3D "jedec-flash";
-> +            reg =3D <0x0 0x0 0x2000000>;
-
-Well, here it is correct
-
-> +            bank-width =3D <4>;
-> +            device-width =3D <1>;
-> +        };
-> +
-> +        simple-periph@2,0 {
-> +            compatible =3D "fsl,elbc-gpcm-uio";
-> +            reg =3D <0x2 0x0 0x10000>;
-> +            elbc-gpcm-br =3D <0xfd810800>;
-> +            elbc-gpcm-or =3D <0xffff09f7>;
-> +        };
-> +    };
-> +
-> +  - |
-> +    localbus@e0005000 {
-
-compatible, reg
-
-> +        #address-cells =3D <2>;
-> +        #size-cells =3D <1>;
-> +        compatible =3D "fsl,mpc8315-elbc", "fsl,elbc", "simple-bus";
-> +        reg =3D <0xe0005000 0x1000>;
-> +        interrupts =3D <77 0x8>;
-> +        interrupt-parent =3D <&ipic>;
-> +
-> +        ranges =3D <0x0 0x0 0xfe000000 0x00800000
-> +                  0x1 0x0 0xe0600000 0x00002000
-> +                  0x2 0x0 0xf0000000 0x00020000
-> +                  0x3 0x0 0xfa000000 0x00008000>;
-> +
-> +        flash@0,0 {
-
-compatible, reg
-
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <1>;
-> +            compatible =3D "cfi-flash";
-> +            reg =3D <0x0 0x0 0x800000>;
-> +            bank-width =3D <2>;
-> +            device-width =3D <1>;
-> +        };
-> +
-> +        nand@1,0 {
-
-compatible, reg
-
-> +            #address-cells =3D <1>;
-> +            #size-cells =3D <1>;
-> +            compatible =3D "fsl,mpc8315-fcm-nand",
-> +                         "fsl,elbc-fcm-nand";
-> +            reg =3D <0x1 0x0 0x2000>;
-> +        };
-
-Best regards,
-Krzysztof
 
 
