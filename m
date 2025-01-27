@@ -1,256 +1,165 @@
-Return-Path: <linux-spi+bounces-6497-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6498-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7143A1D099
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 06:09:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37DA6A1D0B6
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 06:40:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA04C1887A97
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 05:09:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 712E27A2E60
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 05:40:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3435155CBD;
-	Mon, 27 Jan 2025 05:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3923D1FBEBC;
+	Mon, 27 Jan 2025 05:40:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCXssLii"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V86gR8Sn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D02282EE;
-	Mon, 27 Jan 2025 05:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E6725A638;
+	Mon, 27 Jan 2025 05:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737954543; cv=none; b=dg0meGMIPcPobJdikZjSfxBC+lsZnqt38pDga2AkWnKSLed8XmvkYDpa2UUomAFrE1SzEM7SYwguCUZcC0jpXLja5NlCX+OKEO2/iW964zj6rJClbdJhaA9cULXf5G5jRm20VqA0rqN3EGnwiZ0B0n1R4b7oJKR8rHUx3/2/E1M=
+	t=1737956445; cv=none; b=OjxHaBNSoiEwqQD6rMD+IEO8+MIqqbluGl/5Zx9m0xk3Ljrm9wC87AmtSPeWudY6dnCBRKIXqFugxsva7gcL9JjIcE84mltRwGP+n3vZYfl9L0f20hco6qpGtMqZtdm8aibgWbiYK/B8XhznsJHf428Fl+8e5ahZw+zRob0Lfbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737954543; c=relaxed/simple;
-	bh=SRnaJ7NOhy1yqtMSuRpVYvCRnbZCyG9ICmKcrEhZu1c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8H8YSQ9Cf4EauD0WoVJvNy0eW6ZMCUZFi5/CXrDHQ+4oaG4sHSxL2uP/nCw+37WSmdjKiC3OpPPdYGSsdnLuZLqyeXL1pXhiUlPIJYq82BLhcX04UldmRmOycSV1Yp+lr/Gz8rMdSVo/GnJmxXzsRidEZAT+mvH7kQbVvJMGEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCXssLii; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EBCC4CED2;
-	Mon, 27 Jan 2025 05:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737954543;
-	bh=SRnaJ7NOhy1yqtMSuRpVYvCRnbZCyG9ICmKcrEhZu1c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dCXssLii/zSRuNLuQUKKGyPENsQBo8Sn5CnYY3O3FxYVAjvruFGyZ57EqKUguv/ra
-	 S1h9azhs45cKCSaEPcpsFRa1xKUdQaiOE1O3mn5BZdEeVFQfTlDF7bD3TDraPrBc+3
-	 nPr1oEW2dfuaWfsgk5bejmSntOo7SnDsTmo+1COoCYTPp06T7kKbcFbJdDA8zzvyNe
-	 x/H0vNeh34Ov9EMHHnfnz+3OUzplGfUJFvMSQcKI5nvKJbwxbMBt6ha/ffzx8jCdb9
-	 hCqZ+eanBhx2pBGe+B8aQ+DqKIv74Gk+cWfnDnM6BJFAzTM3tPgAH3xzHh4Ww7eGxN
-	 yKnd77AdR7MFA==
-Date: Sun, 26 Jan 2025 23:09:01 -0600
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 8/9] dt-bindings: spi: Convert Freescale SPI bindings to
- YAML
-Message-ID: <20250127050901.GB3127337-robh@kernel.org>
-References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <20250126-ppcyaml-v1-8-50649f51c3dd@posteo.net>
+	s=arc-20240116; t=1737956445; c=relaxed/simple;
+	bh=UVoxVBRRkEf6al2Feuha/ctYDq9a+/ugd5XVwlqeGww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HyJitnAjMcykAq7e6yVvqeDhFJpEGuZsHlZm7KZYEM9wQzw193adbiGzM5bpw46cgX7SvJEqp2iqXcFN/DeN3UNDLIUT16Rgt+028aP1jsLIRnMecTuHouD9AAGAW0s8z9DnBrZGkJYZPxw7Pl4El8mqcnKDljqFEweFQfvvT/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V86gR8Sn; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50R174C9025528;
+	Mon, 27 Jan 2025 05:40:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	0tru79ZpQyPOHviE3ZFZeMsHTNfXYnnaWdfLU3a0/vs=; b=V86gR8SnOmRA5RcF
+	PZ0rjwcL2E2OKVvLWW1OelR1nOsyMV/hbN6gju0+Wpzx/oDiB0ELQthJPrzrl3wB
+	xR7A7UZ0zrFrK4T7q+Es3AHqkl5WIVLxsrBMxSHR16v2/02bMuG8FT1APV75Vemb
+	yEjk+vE3mDH2q8iWlUD+wRTshq6l95kVGHA5+1Wkl0ydvXZfSJxb3v/i3v+KByax
+	2TATzQQoB8T2/ncnUarht589RWA3WZKP4VwazSDRhaCbw0AFnrHdPjiW/n4I0UJJ
+	Ux0ccihpUnPniew5blnMJJEItiPcVZ5w50yOgj76JXmSFpZJfny/W4xe2zz0xunT
+	Sdsp4Q==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44cs1ptv28-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Jan 2025 05:40:36 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50R5eYYS029607
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 27 Jan 2025 05:40:34 GMT
+Received: from [10.216.31.13] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 26 Jan
+ 2025 21:40:28 -0800
+Message-ID: <d3447c17-e035-4021-a199-9ff2f4715e1e@quicinc.com>
+Date: Mon, 27 Jan 2025 11:10:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250126-ppcyaml-v1-8-50649f51c3dd@posteo.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 6/8] i2c: qcom-geni: Load i2c qup Firmware from linux
+ side
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <broonie@kernel.or>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <johan+linaro@kernel.org>,
+        <dianders@chromium.org>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <quic_msavaliy@quicinc.com>, <quic_anupkulk@quicinc.com>
+References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
+ <20250124105309.295769-7-quic_vdadhani@quicinc.com>
+ <d3tydp3m7pehhiphupwybjlol5v2u3sabqotqximxmnswjlczb@jmdzpbrcrgou>
+ <08545d45-bfe6-45e4-b7be-503c318315af@quicinc.com>
+ <CAA8EJprSZx9Bx7EXA_RpwZdhieOLtrTARqXSuo-gO9sVMdK5Qg@mail.gmail.com>
+Content-Language: en-US
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+In-Reply-To: <CAA8EJprSZx9Bx7EXA_RpwZdhieOLtrTARqXSuo-gO9sVMdK5Qg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: g7Y7vdvRJbv63W2SHWkQQcIEBj_piKfb
+X-Proofpoint-ORIG-GUID: g7Y7vdvRJbv63W2SHWkQQcIEBj_piKfb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-27_02,2025-01-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 adultscore=0 bulkscore=0 clxscore=1015 spamscore=0
+ malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2501270043
 
-On Sun, Jan 26, 2025 at 07:59:03PM +0100, J. Neuschäfer wrote:
-> fsl-spi.txt contains the bindings for the fsl,spi and fsl,espi
-> contollers. Convert them to YAML.
+
+
+On 1/24/2025 9:25 PM, Dmitry Baryshkov wrote:
+> On Fri, 24 Jan 2025 at 17:24, Viken Dadhaniya <quic_vdadhani@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 1/24/2025 8:34 PM, Dmitry Baryshkov wrote:
+>>> On Fri, Jan 24, 2025 at 04:23:07PM +0530, Viken Dadhaniya wrote:
+>>>> Add provision to load firmware of Serial engine for I2C protocol from
+>>>> Linux Execution Environment on running on APPS processor.
+>>>>
+>>>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+>>>> ---
+>>>>    drivers/i2c/busses/i2c-qcom-geni.c | 7 +++++--
+>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-qcom-geni.c
+>>>> index 7bbd478171e0..9ad3b8c9a224 100644
+>>>> --- a/drivers/i2c/busses/i2c-qcom-geni.c
+>>>> +++ b/drivers/i2c/busses/i2c-qcom-geni.c
+>>>> @@ -872,8 +872,11 @@ static int geni_i2c_probe(struct platform_device *pdev)
+>>>>       }
+>>>>       proto = geni_se_read_proto(&gi2c->se);
+>>>>       if (proto != GENI_SE_I2C) {
+>>>> -            ret = dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
+>>>> -            goto err_resources;
+>>>> +            ret = geni_load_se_firmware(&gi2c->se, GENI_SE_I2C);
+>>>
+>>> Hmm, so if the SE has been configured to e.g. SPI by the TZ, can we
+>>> switch it to the I2C?
+>>
+>> No, in the current design, TZ will not load the SE firmware.
 > 
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> ---
->  .../devicetree/bindings/spi/fsl,espi.yaml          | 56 +++++++++++++++++
->  Documentation/devicetree/bindings/spi/fsl,spi.yaml | 71 ++++++++++++++++++++++
->  Documentation/devicetree/bindings/spi/fsl-spi.txt  | 62 -------------------
->  3 files changed, 127 insertions(+), 62 deletions(-)
+> But that's what your patch is doing: if the protocol is not I2C, try
+> switching to I2C.
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/fsl,espi.yaml b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..350275760210c5763af0c7b1e1522ccbfb97eec7
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/fsl,espi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale eSPI (Enhanced Serial Peripheral Interface) controller
-> +
-> +maintainers:
-> +  - J. Neuschäfer <j.ne@posteo.net>
-> +
-> +properties:
-> +  compatible:
-> +    const: fsl,mpc8536-espi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts: true
+> Instead it should be 'if unconfigured, try loading I2C'.
 
-How many?
+Sure, I will update it in the next patch.
 
-> +
-> +  fsl,espi-num-chipselects:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: The number of the chipselect signals.
-
-Constraints?
-
-> +
-> +  fsl,csbef:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Chip select assertion time in bits before frame starts
-
-Constraints?
-
-> +
-> +  fsl,csaft:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Chip select negation time in bits after frame ends
-
-Constraints?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - fsl,espi-num-chipselects
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi@110000 {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        compatible = "fsl,mpc8536-espi";
-> +        reg = <0x110000 0x1000>;
-> +        interrupts = <53 0x2>;
-> +        interrupt-parent = <&mpic>;
-> +        fsl,espi-num-chipselects = <4>;
-> +        fsl,csbef = <1>;
-> +        fsl,csaft = <1>;
-> +    };
-> diff --git a/Documentation/devicetree/bindings/spi/fsl,spi.yaml b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..8efa971b5954a93665cb624345774f2966bb5648
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
-> @@ -0,0 +1,71 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/fsl,spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale SPI (Serial Peripheral Interface) controller
-> +
-> +maintainers:
-> +  - J. Neuschäfer <j.ne@posteo.net>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,spi
-> +      - aeroflexgaisler,spictrl
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  cell-index:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      QE SPI subblock index.
-> +      0: QE subblock SPI1
-> +      1: QE subblock SPI2
-> +
-> +  mode:
-> +    description: SPI operation mode
-> +    enum:
-> +      - cpu
-> +      - cpu-qe
-> +
-> +  interrupts: true
-> +
-> +  clock-frequency:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-
-Don't need a type.
-
-> +    description: input clock frequency to non FSL_SOC cores
-> +
-> +  cs-gpios: true
-> +
-> +  fsl,spisel_boot:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description:
-> +      For the MPC8306 and MPC8309, specifies that the SPISEL_BOOT signal is used
-> +      as chip select for a slave device. Use reg = <number of gpios> in the
-> +      corresponding child node, i.e. 0 if the cs-gpios property is not present.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - mode
-> +  - interrupts
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    spi@4c0 {
-> +        cell-index = <0>;
-> +        compatible = "fsl,spi";
-> +        reg = <0x4c0 0x40>;
-> +        interrupts = <82 0>;
-> +        interrupt-parent = <&intc>;
-> +        mode = "cpu";
-> +        cs-gpios = <&gpio 18 1          // device reg=<0>
-> +                    &gpio 19 1>;        // device reg=<1>
-> +    };
+> 
+>>
+>>>
+>>>> +            if (ret) {
+>>>> +                    dev_err(gi2c->se.dev, "i2c firmware load failed ret: %d\n", ret);
+>>>> +                    goto err_resources;
+>>>> +            }
+>>>>       }
+>>>>
+>>>>       if (desc && desc->no_dma_support)
+>>>> --
+>>>> 2.34.1
+>>>>
+>>>
+> 
+> 
+> 
 
