@@ -1,145 +1,92 @@
-Return-Path: <linux-spi+bounces-6507-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6508-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D249A1D6AD
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 14:26:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BED4A1D84A
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 15:27:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A6B31886B52
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 13:26:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B422161991
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 14:27:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5042D1FFC5D;
-	Mon, 27 Jan 2025 13:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C98DDDC;
+	Mon, 27 Jan 2025 14:27:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QSGUOvEZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N/MxKlNW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDFA1FF7B4;
-	Mon, 27 Jan 2025 13:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5502AD31
+	for <linux-spi@vger.kernel.org>; Mon, 27 Jan 2025 14:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737984332; cv=none; b=odp24p0j+3utK+dhrDZp54Fqr5Vng5pVzNhMZP+6uWvNhaM5NdV3jnReXtHuLUHJ9+p6rObv2tN+KeceJ6ciDNuxculzSKgTCu3dOcTJhiFY4oV+ZkCrZ4Fo+Q3u7JVQz7ZaYMsyzG5qXlOrxlbJbWiuFkVQ7s7emVdSVz3ikUY=
+	t=1737988034; cv=none; b=ZQd2n/JiKmXoM7nj58HoB2jb5Db7cjeWIeudzOr6eHNX1AYK6OkpYkaULm3moNlYmFUc/TjueB/fdH4KpZk3kIYRymLIPjuM+R3pMTYAStykgyiwAlT7JLBXepmEqd4J6n/GnwTyi7f3o/+sYti+QqYwc43HH02HJzTYY23dG8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737984332; c=relaxed/simple;
-	bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
+	s=arc-20240116; t=1737988034; c=relaxed/simple;
+	bh=v86r3EIlz1+h3GOoj/7Oe+SvuDCoWXauHahA8PSsQ9s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aEfhAR3RlQYiSsb42lAOvxkw+nUntoz6q6DHAY0pQYX9yAkuDsIcFi/ef/RPnfCGfMo6aaLv5F7HtRLQF2WK23ejmtY2BNY7EEaLm0JP2UncX78LDNu5Z20MP1wE0lxRljio5NohTrvoN6ZN1daJdMi5M+IsFEMnMgznBw9oovI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QSGUOvEZ; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737984330; x=1769520330;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
-  b=QSGUOvEZzlCLg52m+Lkyf/+kcHVE68FvAFk33+V3UhwIx/K/THbEuyid
-   qJ438VnvterjDhGelKR5fP6BxrrxRkqifOI54cau6t1t8osjTRna9hBxM
-   No2vFYIs3XvcsO1WP4e5Biv+WmJTB68gdx3/u0mrAfgwMTVAD015W4iZ3
-   /IS6Kq3c9DS8MxtJuSPO9pAimIX5JPT9iSW8d4LmXW3YyQJxw6TCZ90TZ
-   /GjxSPzYFVZHfh4LDTMcdRhtiKIjHF1pelA8u+BGatnQUd04z2t7ouweY
-   lN5ljcLdmzwZ6ey8werqdArXQ+hfBfCOql1cBQHnUxfs2OPHqKl0LQjSz
-   w==;
-X-CSE-ConnectionGUID: WXPLNx9wSDWvyiA2ZoPUwA==
-X-CSE-MsgGUID: Ov3TekHxTxuVTp8Y/oIV5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="42105354"
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="42105354"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:22 -0800
-X-CSE-ConnectionGUID: oOw//HyuRH2sXbDiVD3/cA==
-X-CSE-MsgGUID: F7vXYkyrSx2N1gt4t3xT9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="131730368"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:02 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1tcP6l-00000005jpm-3fIe;
-	Mon, 27 Jan 2025 15:24:55 +0200
-Date: Mon, 27 Jan 2025 15:24:55 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Tero Kristo <kristo@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	John Allen <john.allen@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Markuss Broks <markuss.broks@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-	Alex Elder <elder@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Jacky Huang <ychuang3@nuvoton.com>, Helge Deller <deller@gmx.de>,
-	Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-fpga@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	iommu@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 00/34] address all -Wunused-const warnings
-Message-ID: <Z5eJJ199QwL0HVJT@smile.fi.intel.com>
-References: <20240403080702.3509288-1-arnd@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9fiXucu01GCAY8ezuPqf2JzPrLkKRe0k3PMO0v0E5m2loD0Z8leQoN4LrvE31Tx2DKlADEJPeRk1V0UbPCnU9EdK/+ll53vbnNjTQ4fVV9lxGMVxdSpXGQKzVVDtuGdPICvkwdUCJ/DcuIkkOiP3OAPcFODyp662bpX4ySrlfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N/MxKlNW; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5401d3ea5a1so4227808e87.3
+        for <linux-spi@vger.kernel.org>; Mon, 27 Jan 2025 06:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737988031; x=1738592831; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tzvLpRdV8RsEmkfgVe41djDQCfra04Tf73tKiUg1ifQ=;
+        b=N/MxKlNWmnaK3MPmZ+WC4ILOhFU3ZNQbxT1HssjhXgIYj0GI1fe8N9HnWvpDdKXJcp
+         RQyqjR0RQvjOGLiTGjLD4kfH3cAtXAtKDLaLuwan26G2rP3WIAlXU1haB+QgRPbmGJNq
+         sDMNjmi5B26TBfPHRtd95cpthOVsGKBdhLYeWQrYtXLLj7Bndw/RG4ISs2YV2PBTR7uy
+         H4OrS9uOQ74sELt5al6DjbXzxu0s+jE/kQUC46w2ZXubIOIlT30aShhTXVDWRiMczVE2
+         fLldxi74oQgDIA/+0o16jqCHQKCOP64tVFz6Qv0iJFlome98BlIIyIEqJQkJWh31NFEK
+         IOtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737988031; x=1738592831;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tzvLpRdV8RsEmkfgVe41djDQCfra04Tf73tKiUg1ifQ=;
+        b=AmNE5niJWZEHlLXRcoQ0A3P65kfw5ImF7hDdkVmp959t5/TVQkXyn+0PypO8sRKQlV
+         HY1WhXAmho0Cz2pH0nbrvn97XmKxmep7iUwztw2pSIsGY1/BJBiio7Ta/S0q0TtPwwq0
+         vFInmrYwwceMFl9ABT1DTV1Xg+XcBhf+Z3catm9U5c126zsHs4Ne40P3wmZIzcmtHChr
+         Ho3Ymufu6ED0kEKg8KScf73vG2Zl5U2+XrnErYrQ+oNS/KdpfGNOKHVkwX8fhWKCroUA
+         +O9wwUkRTWW90wYuCrz0quP19CFm3P1wHpGaClkeW217eSlAI3p6liFoHCLV8qum8k4q
+         QBpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUL5LKf9IrMSmi9lO4O7QnjTzoogoT51DkwZK2mM47A4P5qbCSrKT42KHhlWlfCQB+g7+J/Lo3YJUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrWwxmK7YnM9W2lT9E7c9f+CiOwBzXno2TQYb8rW16dq0vbtQY
+	PK3AglaJN+54QFhuUz36n3HQ9ya+yGnYQFTRv1vCCsrv14q7mS4epMA8BTxvG5I=
+X-Gm-Gg: ASbGncvQ3KUL/ij+IsM5w9i/2Wykj4m7nS1y9UQL4ibps0NfGQr6r3p6enPrJbpz8IZ
+	0u8aWq0s8KINbVYbnpIsAziDgx6ucybvITU03Nx/g/7Vuzb0qYInF1/Bvy2Gw+jU68EOFIJeTfO
+	X+RUEZoIM3dpvIOowNce6R0Ox9fn939oFwFykiKjRNou6gayxrwDdt0YtaHSrUF/Q6ri+yfd/pp
+	EXLUAo5O9Gmm6lY3MDXpxuiaLolWDE18CsiVH3wI/BcM39FwWcPLQBPFzok5qVeTwxbrQQkqnuC
+	Cu8DVuhXyxd7KYJaBjflmMzZ9BtokVtJFVVd2VgbU2CfGeqUBENYRpm2+lY8
+X-Google-Smtp-Source: AGHT+IE7G8wjtK979b4O6Nuj0hnM9/BLca8MZ6bqkJGxgYjf9X4Ezr5Qy4KlAM4toJWld4WHK+gA0Q==
+X-Received: by 2002:a05:6512:b24:b0:540:2a92:7daa with SMTP id 2adb3069b0e04-5439c282032mr13583417e87.42.1737988030790;
+        Mon, 27 Jan 2025 06:27:10 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543c8368362sm1297614e87.124.2025.01.27.06.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 06:27:09 -0800 (PST)
+Date: Mon, 27 Jan 2025 16:27:07 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or, andersson@kernel.org, 
+	konradybcio@kernel.org, johan+linaro@kernel.org, dianders@chromium.org, 
+	agross@kernel.org, linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-spi@vger.kernel.org, quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+Subject: Re: [PATCH v2 4/8] dt-bindings: serial: Add support for selecting
+ data transfer mode
+Message-ID: <dudqd2y42wy6iq2k73aphd5ol4mtq7z4c54zhd27rl745rrw5x@p3oummf2jke7>
+References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
+ <20250124105309.295769-5-quic_vdadhani@quicinc.com>
+ <10060d39-87a4-4565-a2a6-80c93ac2266a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -148,48 +95,60 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <10060d39-87a4-4565-a2a6-80c93ac2266a@kernel.org>
 
-On Wed, Apr 03, 2024 at 10:06:18AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Jan 27, 2025 at 08:02:12AM +0100, Krzysztof Kozlowski wrote:
+> On 24/01/2025 11:53, Viken Dadhaniya wrote:
+> > Data transfer mode is fixed by TrustZone (TZ), which currently restricts
+> > developers from modifying the transfer mode from the APPS side.
+> > 
+> > Document the 'qcom,xfer-mode' properties to select the data transfer mode,
+> > either GPI DMA (Generic Packet Interface) or non-GPI mode (PIO/CPU DMA).
+> > 
+> > UART controller can operate in one of two modes based on the
+> > 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+> > 
+> > Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> > Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> > Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> > ---
+> > 
+> > v1 -> v2:
+> > 
+> > - Drop 'qcom,load-firmware' property and add 'firmware-name' property in
+> >   qup common driver.
+> > - Update commit log.
+> > 
+> > v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-4-quic_vdadhani@quicinc.com/
+> > ---
+> > ---
+> >  .../devicetree/bindings/serial/qcom,serial-geni-qcom.yaml | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> > index dd33794b3534..383773b32e47 100644
+> > --- a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+> > @@ -56,6 +56,13 @@ properties:
+> >    reg:
+> >      maxItems: 1
+> >  
+> > +  qcom,xfer-mode:
+> > +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) mode and 3 for GPI DMA mode.
+> > +      The default mode is FIFO.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [1, 3]
+> > +
+> > +
 > 
-> Compilers traditionally warn for unused 'static' variables, but not
-> if they are constant. The reason here is a custom for C++ programmers
-> to define named constants as 'static const' variables in header files
-> instead of using macros or enums.
-> 
-> In W=1 builds, we get warnings only static const variables in C
-> files, but not in headers, which is a good compromise, but this still
-> produces warning output in at least 30 files. These warnings are
-> almost all harmless, but also trivial to fix, and there is no
-> good reason to warn only about the non-const variables being unused.
-> 
-> I've gone through all the files that I found using randconfig and
-> allmodconfig builds and created patches to avoid these warnings,
-> with the goal of retaining a clean build once the option is enabled
-> by default.
-> 
-> Unfortunately, there is one fairly large patch ("drivers: remove
-> incorrect of_match_ptr/ACPI_PTR annotations") that touches
-> 34 individual drivers that all need the same one-line change.
-> If necessary, I can split it up by driver or by subsystem,
-> but at least for reviewing I would keep it as one piece for
-> the moment.
-> 
-> Please merge the individual patches through subsystem trees.
-> I expect that some of these will have to go through multiple
-> revisions before they are picked up, so anything that gets
-> applied early saves me from resending.
+> Just one blank line, but anyway, this property should not be in three
+> places. Do you really expect that each of serial engines within one
+> GeniQUP will be configured differently by TZ?
 
-Arnd, can you refresh this one? It seems some misses still...
-I have got 3+ 0-day reports against one of the mux drivers.
-
-https://lore.kernel.org/all/?q=adg792a.c
+Yes, each SE is configured separately and it's quite frequent when
+different SEs have different DMA configuration.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+With best wishes
+Dmitry
 
