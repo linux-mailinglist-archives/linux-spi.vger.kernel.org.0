@@ -1,296 +1,294 @@
-Return-Path: <linux-spi+bounces-6502-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6503-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7617A1D12D
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 08:06:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67317A1D272
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 09:37:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41563A3DB0
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 07:06:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E9B51886CD0
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 08:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0552E1FBEBB;
-	Mon, 27 Jan 2025 07:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20501FC0E9;
+	Mon, 27 Jan 2025 08:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvKSiHlK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIv8GsOT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA9A15A86B;
-	Mon, 27 Jan 2025 07:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6818C11;
+	Mon, 27 Jan 2025 08:37:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737961591; cv=none; b=Mz5kwJl4QTRnkJYoU0dW6sWGjBPYJEDzrDrA8fHqrn8Cs3HfPyMax9aTUZ5nQNB8uhpJ6AQLdhtOpjdfnyvYdbT8VO0S8up6VsTwcw3bWLIf78UWvDhTGlVqwU70ySmpyrou8kDVZP4LWi3ogQt/60kC9jeLshvXQUrCCuTEpjE=
+	t=1737967056; cv=none; b=p3EEQB0uMpvaeeOPgCYt1TBoci4+PCyjmOQXymtELE1zBKyf945ZirGA9Aiz7Lg777GRDnNWbplG3riWMXhIVaiCWGql+t/vmKMWEWfUVAVOTlAkpiBp9fvuj8W//gJWTCimSAoJPQl6ahJO1DNiocr5/DpLdpNmCBQPOxpAsIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737961591; c=relaxed/simple;
-	bh=1LCm8cd6mCgY5b/HBOzJAWvgVNcD5Ayq5tQncBGCQCU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YjdfwdxdjcLh/FLG5lMQ/EoFmvFmLRIgofoN/V5Qft+PhCYNa/sTJ1DWmzyXUjCFf58paKGkgAvlSQL7ihEqAOBAYuyzAf6LhkAMyUua1SUIEW21CcH+EYFPF9ZmKvElg3tlpWFpCWvUwfiHO6tZLpV67smnkylyMEu6Wp2CTc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvKSiHlK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C570C4CED2;
-	Mon, 27 Jan 2025 07:06:24 +0000 (UTC)
+	s=arc-20240116; t=1737967056; c=relaxed/simple;
+	bh=lO9NymPFr6bhwMFfAllVvVLeDbAVw1xGh+GP1heN7js=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U3qheuOiNiqQWsiejrrguJv9UV2QrBHlwbiE3pJR3jA/vDYXC8N03ZJGQ+6Wf6fwylbFBvLVSs23PP6UlhV530MLa0QLexdGWT2IVIbjIUAf0HkVprv+Y2ZnjuL2mo0rLXhcqY9/btS3+zTcOT+tkC2iR6oP1TRI8CtgXJDppgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIv8GsOT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B5CC4CED2;
+	Mon, 27 Jan 2025 08:37:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737961591;
-	bh=1LCm8cd6mCgY5b/HBOzJAWvgVNcD5Ayq5tQncBGCQCU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LvKSiHlKJz7ZBfs3uagJN3R70q7hnMhDKOgPyQiZa0UScOKAZALuV3p2peM398lyV
-	 jFV5YR9y+tcsXvOd38AfM4AwHRvf+iK3y/oLYaSXj56qnBGTZfl9jRpPORgjLA126g
-	 4llStabesR2RGZ0TCfdeJMvZ9527WSQpKu3lZ33APA+H7SYqkgIukdCi/XASFkY4oF
-	 18vvo9f0KDN43gOIrgdKSt0nGlOvVnL/DWvqiw2L1xYrr6eqOeQXeUF6Mk6DuHlgVw
-	 4MxlJqGnAq07+kh8i5ML70vuJhDwjJI67JKw5VEwRxBGCcICCAKE1oos0GB9uoqluO
-	 aHYqLHtuB22ag==
-Message-ID: <af27ae90-99d7-497f-b8f5-b8ca0b039753@kernel.org>
-Date: Mon, 27 Jan 2025 08:06:21 +0100
+	s=k20201202; t=1737967055;
+	bh=lO9NymPFr6bhwMFfAllVvVLeDbAVw1xGh+GP1heN7js=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qIv8GsOTxD0MNBdcccL2gsR2GrsPOH7kYiWCdaqYHMQJl06quxNk06u372au5ecHh
+	 2Km7poxUCviWvnWyWTOZ2XsGaIdWVQ95eEQxqPt76q/lEMFBkasYlNeYPXT0k1/s5u
+	 mw2TCXDM4aOChO8w9BDR2JG1aT6fNADge7Ss9cZJlS5a3vzIg1SFxeuKR3unpvtQKp
+	 5EUGDJ/a2/K6EDh3hGmn5JXR7YdC39zqGsMjrUUUGw34bynf+MWBTNE9KVb2eth6CY
+	 DslXsJIm1PuK3EsUVpPhPjXU33U6TD2oYXqG8X2GLTSv/NG2/ufxjvVXHEYaaJzxMw
+	 Y5cb5He53K49Q==
+Date: Mon, 27 Jan 2025 09:37:32 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	Scott Wood <oss@buserror.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	Lee Jones <lee@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: Re: [PATCH RFC 9/9] dt-bindings: nand: Convert fsl,elbc bindings to
+ YAML
+Message-ID: <20250127-cuddly-dalmatian-of-saturation-5f1ae2@krzk-bin>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-9-50649f51c3dd@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] soc: qcom: geni-se: Add support to load QUP SE
- Firmware via Linux subsystem
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
- andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
- dianders@chromium.org, agross@kernel.org, linux-arm-msm@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org
-Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
-References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
- <20250124105309.295769-6-quic_vdadhani@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250124105309.295769-6-quic_vdadhani@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250126-ppcyaml-v1-9-50649f51c3dd@posteo.net>
 
-On 24/01/2025 11:53, Viken Dadhaniya wrote:
->  /* Common SE registers */
-> @@ -891,6 +896,445 @@ int geni_icc_disable(struct geni_se *se)
->  }
->  EXPORT_SYMBOL_GPL(geni_icc_disable);
->  
-> +/**
-> + * elf_phdr_valid: Function to validate elf header.
-> + * @phdr: A pointer to a elf header.
-> + *
-> + * This function validates elf header by comparing fields
+On Sun, Jan 26, 2025 at 07:59:04PM +0100, J. Neusch=C3=A4fer wrote:
+> Convert the Freescale localbus controller bindings from text form to
+> YAML. The list of compatible strings reflects current usage.
 
-Drop "This function" and use imperative. It's redundant and you keep
-using it everywherre here
+simple-bus and 20 other compatibles you used were not present in the
+original binding. Does above "list of compatible strings" mean you just
+added them?
 
+>=20
+> Changes compared to the txt version:
+>  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
+>    appears in this example and nowhere else
+>  - added a new example with NAND flash
+>=20
+> Remaining issues:
+>  - The localbus is not really a simple-bus: Unit addresses are not simply
+>    addresses on a memory bus. Instead, they have a format: The first cell
+>    is a chip select number, the remaining one or two cells are bus
+>    addresses.
+>=20
+> Signed-off-by: J. Neusch=C3=A4fer <j.ne@posteo.net>
+> ---
+>  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml |  61 +++++++++
+>  .../bindings/powerpc/fsl/fsl,elbc-gpcm-uio.yaml    |  55 ++++++++
 
-...
+Please split the conversion from adding new bindings. For example above
+file and its compatible fsl,elbc-gpcm-uio was not documented in original
+TXT.
 
-> +static int qup_fw_load(struct qup_se_rsc *rsc, const char *fw_name)
-> +{
-> +	int ret;
-> +	const struct firmware *fw;
-> +	struct device *dev = rsc->se->dev;
-> +
-> +	ret = request_firmware(&fw, fw_name, dev);
-> +	if (ret) {
-> +		dev_err(dev, "request_firmware failed for %d: %d\n", rsc->protocol, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = (rsc->protocol != GENI_SE_NONE) ? geni_load_se_fw(rsc, fw) : -EINVAL;
+=2E..
 
-Drop ternary operator. Not easy to read.
-
-> +
-> +	release_firmware(fw);
-> +
-> +	return ret;
-> +}
-
-> +
-> +/**
-> + * geni_load_se_firmware: Function to initiate firmware loading.
-> + * @se: Serial engine details.
-> + * @protocol: protocol from spi, i2c or uart for which firmware to
-> + * be loaded
-> + *
-> + * This function is called from the probe function of protocol driver.
-> + * if dtsi properties are configured to load QUP firmware and firmware
-> + * is already not loaded, it will start firmware loading. if dtsi
-> + * properties are not defined,it will skip loading firmware assuming
-> + * it is already loaded by TZ.
-> + *
-> + * return: Return 0 if no error, else return error value.
-> + */
-> +int geni_load_se_firmware(struct geni_se *se,
-> +			  enum geni_se_protocol_type protocol)
-> +{
-> +	struct qup_se_rsc rsc;
-> +	const char *fw_name;
-> +	int ret;
-> +
-> +	ret = device_property_read_string(se->wrapper->dev, "firmware-name", &fw_name);
-> +	if (ret)
-> +		return  -EINVAL;
-> +
-> +	rsc.se = se;
-> +	rsc.protocol = protocol;
-> +
-> +	/* Set default xfer mode to FIFO*/
-> +	rsc.mode = GENI_SE_FIFO;
-> +	of_property_read_u32(se->dev->of_node, "qcom,xfer-mode", &rsc.mode);
-> +	switch (rsc.mode) {
-> +	case GENI_SE_FIFO:
-> +	case GENI_SE_DMA:
-
-How value of 2 is acceptable? Your bindings said it is not.
-
-
-> +	case GENI_GPI_DMA:
-> +		break;
-> +	default:
-> +		dev_err(se->dev, "Invalid xfer mode specified: %d\n", rsc.mode);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ret = qup_fw_load(&rsc, fw_name);
-> +	if (ret) {
-> +		dev_err(se->dev,  "Firmware Loading failed for proto: %s Error: %d\n",
-> +			protocol_name[rsc.protocol], ret);
-
-Aren't you printing same error multiple times?
-
-> +		return ret;
-> +	}
-> +
-> +	dev_dbg(se->dev, "Firmware load for %s protocol is Success for xfer mode %d\n",
-> +		protocol_name[rsc.protocol], rsc.mode);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(geni_load_se_firmware);
-> +
->  static int geni_se_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> diff --git a/include/linux/soc/qcom/geni-se.h b/include/linux/soc/qcom/geni-se.h
-> index 2996a3c28ef3..289fa6675d2b 100644
-> --- a/include/linux/soc/qcom/geni-se.h
-> +++ b/include/linux/soc/qcom/geni-se.h
-> @@ -1,6 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
->   */
->  
->  #ifndef _LINUX_QCOM_GENI_SE
-> @@ -72,6 +73,19 @@ struct geni_se {
->  	struct geni_icc_path icc_paths[3];
->  };
->  
-> +/**
-> + * struct qup_se_rsc - Structure containing se details protocol and xfer mode
-> + *
-> + * @mode: transfer mode se fifo, dma or gsi.
-> + * @protocol: Protocol spi or i2c or serial.
-> + * @se: Pointer to the concerned serial engine.
-> + */
-> +struct qup_se_rsc {
-> +	struct geni_se *se;
-> +	enum geni_se_xfer_mode mode;
-> +	enum geni_se_protocol_type protocol;
-> +};
-> +
->  /* Common SE registers */
->  #define GENI_FORCE_DEFAULT_REG		0x20
->  #define GENI_OUTPUT_CTRL		0x24
-> @@ -531,5 +545,8 @@ void geni_icc_set_tag(struct geni_se *se, u32 tag);
->  int geni_icc_enable(struct geni_se *se);
->  
->  int geni_icc_disable(struct geni_se *se);
-> +
-> +int geni_load_se_firmware(struct geni_se *se,
-> +			  enum geni_se_protocol_type protocol);
->  #endif
->  #endif
-> diff --git a/include/linux/soc/qcom/qup-fw-load.h b/include/linux/soc/qcom/qup-fw-load.h
+> diff --git a/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml =
+b/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml
 > new file mode 100644
-> index 000000000000..b9b58e81f5cb
+> index 0000000000000000000000000000000000000000..6bbceb82c77826499abe85879=
+e9189b18d396eea
 > --- /dev/null
-> +++ b/include/linux/soc/qcom/qup-fw-load.h
-> @@ -0,0 +1,179 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +#ifndef _LINUX_QCOM_QUP_FW_LOAD
-> +#define _LINUX_QCOM_QUP_FW_LOAD
+> +++ b/Documentation/devicetree/bindings/powerpc/fsl/fsl,elbc.yaml
+> @@ -0,0 +1,150 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/powerpc/fsl/fsl,elbc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/device.h>
-> +#include <linux/elf.h>
-> +#include <linux/firmware.h>
-> +#include <linux/kernel.h>
-> +
-> +/*Magic numbers*/
-> +#define MAGIC_NUM_SE			0x57464553
-> +
-> +/* Common SE registers*/
-> +#define GENI_INIT_CFG_REVISION		0x0
-> +#define GENI_S_INIT_CFG_REVISION	0x4
-> +#define GENI_FORCE_DEFAULT_REG		0x20
-> +#define GENI_CGC_CTRL			0x28
-> +#define GENI_CFG_REG0			0x100
-> +
-> +#define	QUPV3_SE_HW_PARAM_1		0xE28
+> +title: Freescale Enhanced Local Bus Controller
 
-Drop indentation after 'define'
+What sort of bus is it? Memory bus? Then place it with others, see
+memory directory.
 
+> +
+> +maintainers:
+> +  - J. Neusch=C3=A4fer <j.ne@posteo.net>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^localbus@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - fsl,mpc8313-elbc
+> +              - fsl,mpc8315-elbc
+> +              - fsl,mpc8377-elbc
+> +              - fsl,mpc8378-elbc
+> +              - fsl,mpc8379-elbc
+> +              - fsl,mpc8536-elbc
+> +              - fsl,mpc8569-elbc
+> +              - fsl,mpc8572-elbc
+> +              - fsl,p1020-elbc
+> +              - fsl,p1021-elbc
+> +              - fsl,p1023-elbc
+> +              - fsl,p2020-elbc
+> +              - fsl,p2041-elbc
+> +              - fsl,p3041-elbc
+> +              - fsl,p4080-elbc
+> +              - fsl,p5020-elbc
+> +              - fsl,p5040-elbc
+> +          - const: fsl,elbc
+> +          - const: simple-bus
+> +
+> +      - items:
+> +          - const: fsl,mpc8272-localbus
+> +          - const: fsl,pq2-localbus
+> +
+> +      - items:
+> +          - enum:
+> +              - fsl,mpc8247-localbus
+> +              - fsl,mpc8248-localbus
+> +              - fsl,mpc8360-localbus
+> +          - const: fsl,pq2pro-localbus
+> +          - const: simple-bus
+> +
+> +      - items:
+> +          - enum:
+> +              - fsl,mpc8540-localbus
+> +              - fsl,mpc8544-lbc
+> +              - fsl,mpc8544-localbus
+> +              - fsl,mpc8548-lbc
+> +              - fsl,mpc8548-localbus
+> +              - fsl,mpc8560-localbus
+> +              - fsl,mpc8568-localbus
+> +          - const: fsl,pq3-localbus
+> +          - const: simple-bus
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    enum: [2, 3]
+> +    description: |
+> +      The first cell is the chipselect number, and the remaining cells a=
+re the
+> +      offset into the chipselect.
+> +
+> +  "#size-cells":
+> +    enum: [1, 2]
+> +    description: |
+> +      Either one or two, depending on how large each chipselect can be.
+> +
+> +  ranges:
+> +    description: |
+> +      Each range corresponds to a single chipselect, and covers the enti=
+re
+> +      access window as configured.
+> +
+> +patternProperties:
+> +  "^.*@.*$":
+> +    type: object
+
+And probably you need=20
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    localbus@f0010100 {
+> +        compatible =3D "fsl,mpc8272-localbus",
+> +                     "fsl,pq2-localbus";
+> +        #address-cells =3D <2>;
+> +        #size-cells =3D <1>;
+> +        reg =3D <0xf0010100 0x40>;
+
+compatible, then reg - see DTS coding style.
+
+> +
+> +        ranges =3D <0x0 0x0 0xfe000000 0x02000000
+> +                  0x1 0x0 0xf4500000 0x00008000
+> +                  0x2 0x0 0xfd810000 0x00010000>;
+> +
+> +        flash@0,0 {
+> +            compatible =3D "jedec-flash";
+> +            reg =3D <0x0 0x0 0x2000000>;
+
+Well, here it is correct
+
+> +            bank-width =3D <4>;
+> +            device-width =3D <1>;
+> +        };
+> +
+> +        simple-periph@2,0 {
+> +            compatible =3D "fsl,elbc-gpcm-uio";
+> +            reg =3D <0x2 0x0 0x10000>;
+> +            elbc-gpcm-br =3D <0xfd810800>;
+> +            elbc-gpcm-or =3D <0xffff09f7>;
+> +        };
+> +    };
+> +
+> +  - |
+> +    localbus@e0005000 {
+
+compatible, reg
+
+> +        #address-cells =3D <2>;
+> +        #size-cells =3D <1>;
+> +        compatible =3D "fsl,mpc8315-elbc", "fsl,elbc", "simple-bus";
+> +        reg =3D <0xe0005000 0x1000>;
+> +        interrupts =3D <77 0x8>;
+> +        interrupt-parent =3D <&ipic>;
+> +
+> +        ranges =3D <0x0 0x0 0xfe000000 0x00800000
+> +                  0x1 0x0 0xe0600000 0x00002000
+> +                  0x2 0x0 0xf0000000 0x00020000
+> +                  0x3 0x0 0xfa000000 0x00008000>;
+> +
+> +        flash@0,0 {
+
+compatible, reg
+
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <1>;
+> +            compatible =3D "cfi-flash";
+> +            reg =3D <0x0 0x0 0x800000>;
+> +            bank-width =3D <2>;
+> +            device-width =3D <1>;
+> +        };
+> +
+> +        nand@1,0 {
+
+compatible, reg
+
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <1>;
+> +            compatible =3D "fsl,mpc8315-fcm-nand",
+> +                         "fsl,elbc-fcm-nand";
+> +            reg =3D <0x1 0x0 0x2000>;
+> +        };
 
 Best regards,
 Krzysztof
+
 
