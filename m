@@ -1,255 +1,169 @@
-Return-Path: <linux-spi+bounces-6527-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6528-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C60A21071
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 19:08:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56DEAA210BF
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 19:22:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A553F188A636
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 18:06:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 892A13A3500
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 18:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161A41E32D5;
-	Tue, 28 Jan 2025 18:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C105F1DEFE1;
+	Tue, 28 Jan 2025 18:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMuWqg4R"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rbsRgRXs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7EF1DE88C;
-	Tue, 28 Jan 2025 18:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A411B040E;
+	Tue, 28 Jan 2025 18:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738087355; cv=none; b=hRwUWQfJ7YE5s2S+JH9TXyNUeMlcidZiexojy3JIWcC5fq3LNh3RQ5KCLiFyCLY3PKfHDrP3vSVrLfynChCRU3F9ZrwWyD5fIGlMw8DBb7iEAJW/bgXrB05qvaq+/PjcNROpNdSNcRmnp5E98NUlMAoTIdlffFTthobP+nXUKNE=
+	t=1738088519; cv=none; b=fjXo6ARyHRjpEv5+fwPpoIil7BgOxxmnmi0LnvisazEsrfGTosFyYc69ksQjA5y7V0hCKLNw9n7v1r16ngAb/5vX+1RagV6l+FO0HS3aBw4bWN2TWpLaxtJpiEWwiQf7OGTnWO8aLRvw6LYcXkJUB2U5gUdxfphQKMzTzlDup5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738087355; c=relaxed/simple;
-	bh=17sm+X5zyYge664zgijjG3INLik8MXrleSdffgx7+sM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EshAgZitaJLeuoQDZBlgLNeNg00Fkxh3PPuZztpS9UnkjUPyzGgnxn9p1b5p48Pc18RyJHzn53ubOzm0jFuVYfDvAZpLKay6LsLnHaCyZFwci+gIiTp/hJcpBsFy1IxvB92wdTszvKezkBx2iZSIib4eoR2q/0I2x6BRiIGBRwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMuWqg4R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B1C5C4CED3;
-	Tue, 28 Jan 2025 18:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738087353;
-	bh=17sm+X5zyYge664zgijjG3INLik8MXrleSdffgx7+sM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XMuWqg4RYnrqYMaIA/ZcIhJErUloNcadylvAlyJ4i9jsnhEmcRFaEO2o7xl8Ja3iy
-	 tBWkCZAQ5y5NziPO2hZOgxCC3JFFI/rJxezpT8UBtHs3SIVOszdw4j6Sa7qhAa7qn/
-	 WiYbmsI7ax4600FToUWN2gu2ivn4HCCaenBf2WxpCFKyUr437gEGFDggU65b6vkxgd
-	 LK4Xy3n2XBXGHn2gbCBBvyMU+WFdhFU4j09xNsRVjagaGFRX92Nk8jQywRUleI6Skk
-	 L/wXxLWnMaElYz1nZoTyWrAaUPRu9tMWIyIYrzcQHeFu+hwDWquzTQmYp/FyRyZ09e
-	 nbXueTytgVkCA==
-Date: Tue, 28 Jan 2025 18:02:27 +0000
-From: Conor Dooley <conor@kernel.org>
-To: patrice.chotard@foss.st.com
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	christophe.kerello@foss.st.com
-Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add STM32 OSPI controller
-Message-ID: <20250128-panama-manly-a753d91c297c@spud>
-References: <20250128081731.2284457-1-patrice.chotard@foss.st.com>
- <20250128081731.2284457-2-patrice.chotard@foss.st.com>
+	s=arc-20240116; t=1738088519; c=relaxed/simple;
+	bh=sHSV1VeTK4GqSPaEADJvEkDZCJZ38hJL0yKDoC4Uqao=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ONYJFT5ZwSxKjIxoakPd2yH0nFIxQW3+nAnM+XCto6/hjkt+8C9GT12r/2BI89dik1hb8Hny0dQSEO++h0V/oGWpz5rNQSd15V2KqDoKVdo50XdnNqrwQqCFFzMBNNU94RCh04HIPD1mqZU8aOgz3Fy8kR+YeGGDPHdj+a3Js/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rbsRgRXs; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from eahariha-devbox.internal.cloudapp.net (unknown [40.91.112.99])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 5C2E02037175;
+	Tue, 28 Jan 2025 10:21:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5C2E02037175
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1738088517;
+	bh=DWnZxqt2SesB4Fck6kqsaU204yIBxTyh+Yo+gWHnxew=;
+	h=From:Subject:Date:To:Cc:From;
+	b=rbsRgRXsDhgQ49qwzz8O9F+b3CIaPu+u/u5bFNXstLiqFfaEZgC1iIU54pEJ4SCC9
+	 qXRUrwxGkFwK11MEhKH4r7I0e/4uhHl3G7yCK3E3A4G+YwxkrF4Z/N40iZHmQckLfV
+	 +mfJ829accGVQ64/iuqsqnpCIMIptrmhiAA8pmnE=
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH 00/16] Converge on using secs_to_jiffies() part two
+Date: Tue, 28 Jan 2025 18:21:45 +0000
+Message-Id: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="xfUYpCROzbnYgVkv"
-Content-Disposition: inline
-In-Reply-To: <20250128081731.2284457-2-patrice.chotard@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADogmWcC/x2NMQrDMAwAvxI0VxAbE0O/UjoYV2qUwQ6SSQshf
+ 6/oeDfcnWCkQgb36QSlQ0x6cwi3Cepa2ptQXs4Q55hCDBlrbwepe6NqODpuwuwF3IsOHJ+OnNI
+ ccikLLxm8syuxfP+Px/O6fgSSOflzAAAA
+X-Change-ID: 20241217-converge-secs-to-jiffies-part-two-f44017aa6f67
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+ Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
+ James Smart <james.smart@broadcom.com>, 
+ Dick Kennedy <dick.kennedy@broadcom.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+ David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
+ Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+ "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+ Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+ Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+ Selvin Xavier <selvin.xavier@broadcom.com>, 
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
+ Easwar Hariharan <eahariha@linux.microsoft.com>
+X-Mailer: b4 0.14.2
 
+This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+either use the multiply pattern of either of:
+- msecs_to_jiffies(N*1000) or
+- msecs_to_jiffies(N*MSEC_PER_SEC)
 
---xfUYpCROzbnYgVkv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+where N is a constant or an expression, to avoid the multiplication.
 
-On Tue, Jan 28, 2025 at 09:17:23AM +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
->=20
-> Add device tree bindings for the STM32 OSPI controller.
->=20
-> Main features of the Octo-SPI controller :
->   - support sNOR / sNAND / HyperRAM=E2=84=A2 and HyperFlash=E2=84=A2 devi=
-ces.
->   - Three functional modes: indirect, automatic-status polling,
->     memory-mapped.
->   - Up to 4 Gbytes of external memory can be addressed in indirect
->     mode (per physical port and per CS), and up to 256 Mbytes in
->     memory-mapped mode (combined for both physical ports and per CS).
->   - Single-, dual-, quad-, and octal-SPI communication.
->   - Dual-quad communication.
->   - Single data rate (SDR) and double transfer rate (DTR).
->   - Maximum target frequency is 133 MHz for SDR and 133 MHz for DTR.
->   - Data strobe support.
->   - DMA channel for indirect mode.
->   - Double CS mapping that allows two external flash devices to be
->     addressed with a single OCTOSPI controller mapped on a single
->     OCTOSPI port.
->=20
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  .../bindings/spi/st,stm32mp25-ospi.yaml       | 102 ++++++++++++++++++
->  1 file changed, 102 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/st,stm32mp25-os=
-pi.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml=
- b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-> new file mode 100644
-> index 000000000000..f1d539444673
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-> @@ -0,0 +1,102 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/st,stm32mp25-ospi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics STM32 Octal Serial Peripheral Interface (OSPI)
-> +
-> +maintainers:
-> +  - Patrice Chotard <patrice.chotard@foss.st.com>
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32mp25-ospi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  memory-region:
-> +    maxItems: 1
+The conversion is made with Coccinelle with the secs_to_jiffies() script
+in scripts/coccinelle/misc. Attention is paid to what the best change
+can be rather than restricting to what the tool provides.
 
-Whatever about not having descriptions for clocks or reg when there's
-only one, I think a memory region should be explained.
+Andrew has kindly agreed to take the series through mm.git modulo the
+patches maintainers want to pick through their own trees.
 
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    items:
-> +      - description: phandle to OSPI block reset
-> +      - description: phandle to delay block reset
-> +
-> +  dmas:
-> +    maxItems: 2
-> +
-> +  dma-names:
-> +    items:
-> +      - const: tx
-> +      - const: rx
-> +
-> +  st,syscfg-dlyb:
-> +    description: phandle to syscon block
-> +      Use to set the OSPI delay block within syscon to
-> +      tune the phase of the RX sampling clock (or DQS) in order
-> +      to sample the data in their valid window and to
-> +      tune the phase of the TX launch clock in order to meet setup
-> +      and hold constraints of TX signals versus the memory clock.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+This series is based on next-20250128
 
-Why do you need a phandle here? I assume looking up by compatible ain't
-possible because you have multiple controllers on the SoC? Also, I don't
-think your copy-paste "phandle to" stuff here is accurate:
-      st,syscfg-dlyb =3D <&syscfg 0x1000>;
-There's an offset here that you don't mention in your description.
+Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
-> +    items:
-> +      maxItems: 1
-> +
-> +  access-controllers:
-> +    description: phandle to the rifsc device to check access right
-> +      and in some cases, an additional phandle to the rcc device for
-> +      secure clock control
+* https://lore.kernel.org/all/20241210-converge-secs-to-jiffies-v3-0-ddfefd7e9f2a@linux.microsoft.com/
 
-This should be described using items rather than a free-form list.
+---
+Easwar Hariharan (16):
+      coccinelle: misc: secs_to_jiffies: Patch expressions too
+      scsi: lpfc: convert timeouts to secs_to_jiffies()
+      accel/habanalabs: convert timeouts to secs_to_jiffies()
+      ALSA: ac97: convert timeouts to secs_to_jiffies()
+      btrfs: convert timeouts to secs_to_jiffies()
+      rbd: convert timeouts to secs_to_jiffies()
+      libceph: convert timeouts to secs_to_jiffies()
+      libata: zpodd: convert timeouts to secs_to_jiffies()
+      xfs: convert timeouts to secs_to_jiffies()
+      power: supply: da9030: convert timeouts to secs_to_jiffies()
+      nvme: convert timeouts to secs_to_jiffies()
+      spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
+      spi: spi-imx: convert timeouts to secs_to_jiffies()
+      platform/x86/amd/pmf: convert timeouts to secs_to_jiffies()
+      platform/x86: thinkpad_acpi: convert timeouts to secs_to_jiffies()
+      RDMA/bnxt_re: convert timeouts to secs_to_jiffies()
 
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - interrupts
-> +  - st,syscfg-dlyb
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/st,stm32mp25-rcc.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/reset/st,stm32mp25-rcc.h>
-> +    spi@40430000 {
+ .../accel/habanalabs/common/command_submission.c   |  2 +-
+ drivers/accel/habanalabs/common/debugfs.c          |  2 +-
+ drivers/accel/habanalabs/common/device.c           |  2 +-
+ drivers/accel/habanalabs/common/habanalabs_drv.c   |  2 +-
+ drivers/ata/libata-zpodd.c                         |  3 +--
+ drivers/block/rbd.c                                |  6 +++---
+ drivers/infiniband/hw/bnxt_re/qplib_rcfw.c         |  2 +-
+ drivers/nvme/host/core.c                           |  6 ++----
+ drivers/platform/x86/amd/pmf/acpi.c                |  3 ++-
+ drivers/platform/x86/thinkpad_acpi.c               |  2 +-
+ drivers/power/supply/da9030_battery.c              |  3 +--
+ drivers/scsi/lpfc/lpfc_init.c                      |  4 ++--
+ drivers/scsi/lpfc/lpfc_scsi.c                      | 12 +++++------
+ drivers/scsi/lpfc/lpfc_sli.c                       | 24 ++++++++--------------
+ drivers/scsi/lpfc/lpfc_vport.c                     |  2 +-
+ drivers/spi/spi-fsl-lpspi.c                        |  2 +-
+ drivers/spi/spi-imx.c                              |  2 +-
+ fs/btrfs/disk-io.c                                 |  6 +++---
+ fs/xfs/xfs_icache.c                                |  2 +-
+ fs/xfs/xfs_sysfs.c                                 |  7 +++----
+ net/ceph/ceph_common.c                             | 10 ++++-----
+ net/ceph/osd_client.c                              |  3 +--
+ scripts/coccinelle/misc/secs_to_jiffies.cocci      | 22 ++++++++++++++------
+ sound/pci/ac97/ac97_codec.c                        |  3 +--
+ 24 files changed, 63 insertions(+), 69 deletions(-)
+---
+base-commit: 9a87ce288fe30f268b3a598422fe76af9bb2c2d2
+change-id: 20241217-converge-secs-to-jiffies-part-two-f44017aa6f67
 
-nit: you missing a blank line here.
+Best regards,
+-- 
+Easwar Hariharan <eahariha@linux.microsoft.com>
 
-> +      compatible =3D "st,stm32mp25-ospi";
-> +      reg =3D <0x40430000 0x400>;
-> +      memory-region =3D <&mm_ospi1>;
-> +      interrupts =3D <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
-> +      dmas =3D <&hpdma 2 0x62 0x00003121 0x0>,
-> +             <&hpdma 2 0x42 0x00003112 0x0>;
-> +      dma-names =3D "tx", "rx";
-> +      clocks =3D <&scmi_clk CK_SCMI_OSPI1>;
-> +      resets =3D <&scmi_reset RST_SCMI_OSPI1>, <&scmi_reset RST_SCMI_OSP=
-I1DLL>;
-> +      access-controllers =3D <&rifsc 74>;
-> +      power-domains =3D <&CLUSTER_PD>;
-> +      st,syscfg-dlyb =3D <&syscfg 0x1000>;
-> +
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      flash@0 {
-> +        compatible =3D "jedec,spi-nor";
-> +        reg =3D <0>;
-> +        spi-rx-bus-width =3D <4>;
-> +        spi-max-frequency =3D <108000000>;
-> +      };
-> +    };
-> --=20
-> 2.25.1
->=20
-
---xfUYpCROzbnYgVkv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ5kbswAKCRB4tDGHoIJi
-0lcIAQDU7HTXvB+po6yvcl9praNiHvh+3GS9lcFqfp1k7eAIrwD/Vghbo+R30BML
-AU87FB9nIF3rIe0J6yZGyW+mcijJaws=
-=Sliy
------END PGP SIGNATURE-----
-
---xfUYpCROzbnYgVkv--
 
