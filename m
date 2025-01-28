@@ -1,136 +1,151 @@
-Return-Path: <linux-spi+bounces-6512-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6517-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7397A1DBC1
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 19:01:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C90EDA205F8
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 09:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 152831882FC5
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Jan 2025 18:01:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33491166E1D
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Jan 2025 08:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890B517C21B;
-	Mon, 27 Jan 2025 18:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6971DF277;
+	Tue, 28 Jan 2025 08:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vMhuLTt9"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="PcIIKz1M"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838F117B505
-	for <linux-spi@vger.kernel.org>; Mon, 27 Jan 2025 18:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79511DED6B;
+	Tue, 28 Jan 2025 08:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738000837; cv=none; b=Ne4mIW9W4x1zCFS6o5NY58mRy0cPZJwkoHTdOWyiD9MB7yN1huDpRa89HK2E/uxpjRMmD0UFan8dBhPSmR8O460Gk1K1a8IoBxJivAwAjGuB994fHNH26f+mRyxX6Lch3VRY0F7TNzd/k10xNnSlHroERc8erlzKbVUHj+wITbo=
+	t=1738052530; cv=none; b=MC7cVKjUPrH0h/G7GtnYDVOO750D1C0abxeWmBr/7QX2N6NWkRVR/lXdS8oCd8/mJE43bgKSikYpjoIWoeGOb20LtUKuXV92PbEVXHFszSOin7m0EmgdeYpm///oAakG/VKDNgz+Mm+Td6SH3Ok1zQKX9O/1/h2XZ6cQJZo50vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738000837; c=relaxed/simple;
-	bh=/xFRDq/2vwCvymGSfdoLId8wVkRDEO8hZUJkiCT0Yg4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PiphrerRM4uKMEVG6FfkL2yBNdmm9S3U9fq7qq2sYAzvRgrGfNWp5N7k4R8x5/08v73gPI40oZ1cDaOEa/+38VdbwKCo2VkqDn8CSrOCOMIvmw3sXqhqbr9UucBYNqmKdzoSjQBYLWecSzWSN/g3/p2l4fqtO0D8drs51ROPEf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vMhuLTt9; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <50370a62-2e5e-45de-888f-ef3d1bfbb482@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738000818;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w8Ru8ILQt5YFwEkLQVtu+jlM11XhzHTarqvoBjmEMYo=;
-	b=vMhuLTt9/XtylOqFAAaifb88drjAdXo0hXinvRFeza0t+LZYsthkZP9Gb987JhA+1/3api
-	N+YiH+hc9iA6eLVCqENqySAKqYDLQq6lTvoE8ewlD//CoW5xnrJIEy/3eMcU5dDeQQ/DEz
-	cbHLRoq6oM+7OWLqg2B1EfwpNuF+UBA=
-Date: Mon, 27 Jan 2025 13:00:14 -0500
+	s=arc-20240116; t=1738052530; c=relaxed/simple;
+	bh=R6ZrV2+ix9Qbr5QwmTRyMyNyCHO15WQNIC3YEg+HfqA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KTzsKTuP6e7IXy7Hls/cymTYSMM4odvvXzKZd6xNWdwJMQdABmcRV+vwvmFIDO7kgJu6nE3nz0NM9O6Y+tuJa8oalhwoD6SXsGQRM8vMGNcx5kCetzu0pcJCuCJ8+CrfTFrw9cCj0LEEM3suA8xzlcah74DVRtcDBo3Ljph4igg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=PcIIKz1M; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50S21A1k013949;
+	Tue, 28 Jan 2025 09:21:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=nxroecgL3dI/8WPwNij68I
+	nsn/aM9+LI7YXe9cBnpHI=; b=PcIIKz1MonbRt8+KnMWzWp7tmAWGelDXkOoNe7
+	rW7KhxB1KRcPxiRcEd/B6ptOXhjFHiidhBZ9KfFlejgQe7jxXW93GfgZQOEac3ji
+	ljg9NK4x642RXBVyc3q1ndkuzCV9ZffRKKhry4qretfKjfP1BYUNWjxKbs7ivns1
+	hIZsh/DOkoO1SQOgP+Decu5Nk3p9UXEURvcro0orSCWz/61Csr/WyDYk4xfG+3TU
+	LaXxgeL9UzLOoIFwwvnUAmeTUF60F0RmjVz/6asJjd4y47NHsADkSP3clplYreTR
+	Ju4fawsfDOh5cyBk+zV7LTramCmw64bMm3kczOBI8wVzEjRA==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44embfs6pp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Jan 2025 09:21:28 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 2220E40052;
+	Tue, 28 Jan 2025 09:20:05 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 623B229BCDB;
+	Tue, 28 Jan 2025 09:17:42 +0100 (CET)
+Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 28 Jan
+ 2025 09:17:42 +0100
+From: <patrice.chotard@foss.st.com>
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre
+ Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <christophe.kerello@foss.st.com>, <patrice.chotard@foss.st.com>
+Subject: [PATCH v2 0/9] Add STM32MP25 SPI NOR support
+Date: Tue, 28 Jan 2025 09:17:22 +0100
+Message-ID: <20250128081731.2284457-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/5] dt-bindings: spi: zynqmp-qspi: Add reset
-To: Rob Herring <robh@kernel.org>
-Cc: Michal Simek <michal.simek@amd.com>, Mark Brown <broonie@kernel.org>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>, Conor Dooley
- <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- devicetree@vger.kernel.org
-References: <20250116225521.2688224-1-sean.anderson@linux.dev>
- <20250116225521.2688224-2-sean.anderson@linux.dev>
- <8a0d8789-7a0d-42b7-9aff-e867c14db3c9@amd.com>
- <b8e63009-13fb-493f-adf6-4d30adbe9b1b@linux.dev>
- <20250123224520.GA456390-robh@kernel.org>
- <34e84bd2-381b-4f3e-99e1-92f7a878ed15@linux.dev>
- <20250127175752.GA511180-robh@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <20250127175752.GA511180-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-28_02,2025-01-27_01,2024-11-22_01
 
-On 1/27/25 12:57, Rob Herring wrote:
-> On Thu, Jan 23, 2025 at 05:57:41PM -0500, Sean Anderson wrote:
->> On 1/23/25 17:45, Rob Herring wrote:
->> > On Fri, Jan 17, 2025 at 11:12:15AM -0500, Sean Anderson wrote:
->> >> On 1/17/25 02:14, Michal Simek wrote:
->> >> > 
->> >> > 
->> >> > On 1/16/25 23:55, Sean Anderson wrote:
->> >> >> Add a reset to help recover from cancelled operations.
->> >> >>
->> >> >> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
->> >> >> ---
->> >> >>
->> >> >>   Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml | 6 ++++++
->> >> >>   1 file changed, 6 insertions(+)
->> >> >>
->> >> >> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> >> index 04d4d3b4916d..901e15fcce2d 100644
->> >> >> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> >> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->> >> >> @@ -36,12 +36,16 @@ properties:
->> >> >>     power-domains:
->> >> >>       maxItems: 1
->> >> >>   +  resets:
->> >> >> +    maxItems: 1
->> >> >> +
->> >> >>   required:
->> >> >>     - compatible
->> >> >>     - reg
->> >> >>     - interrupts
->> >> >>     - clock-names
->> >> >>     - clocks
->> >> >> +  - resets
->> >> > 
->> >> > In 2/5 you are calling devm_reset_control_get_optional_exclusive() that's why I expect reset is not really required property.
->> >> 
->> >> It's optional for the driver for backwards compatibility. But for the
->> >> devicetree we make it mandatory since it should be included in all new
->> >> devicetrees.
->> > 
->> > Generally, we discourage new required properties as that's an ABI 
->> > change. The exception is really when optional was a mistake. That's 
->> > arguably the case here if the h/w always has a reset.
->> 
->> This device has a reset on ZynqMP and Versal.
->> 
->> The driver still considers this property optional, so it's not an ABI break.
->> But I made it required in the schema to help out the folks at AMD when they
->> get around to upstreaming the Versal devicetree :)
-> 
-> Not 'the driver', but 'a driver'. You can't say what *all* drivers do. 
-> If I write a new driver and read the schema, then I can say 'resets is 
-> required so I'll make it required in my new driver'. But then my new 
-> driver doesn't work with an older DT that didn't have resets which was 
-> valid at the time.
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-OK, I'll add a description to this effect. The humans can read that, and
-the machines won't care.
+This series adds SPI NOR support for STM32MP25 SoCs from STMicroelectronics,
+for that it adds support for:
+  - Octo Memory Manager driver.
+  - Octo SPI driver.
+  - yaml schema for Octo Memory Manager and Octo SPI drivers.
 
---Sean
+The device tree files adds Octo Memory Manager and associated Octo SPI instances
+in stm32mp251.dtsi and adds SPI NOR support in stm32mp257f-ev1 board.
+
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+
+Changes in v2:
+  - Move STM32 Octo Memory Manager controller driver and bindings from
+    misc to memory-controllers.
+  - Update STM32 OSPI controller bindings.
+  - Update STM32 Octo Memory Manager controller bindings.
+  - Update STM32 Octo Memory Manager driver to match bindings update.
+  - Update DT to match bindings update.
+
+Patrice Chotard (9):
+  dt-bindings: spi: Add STM32 OSPI controller
+  spi: stm32: Add OSPI driver
+  dt-bindings: memory-controllers: Add STM32 Octo Memory Manager
+    controller
+  memory: Add STM32 Octo Memory Manager driver
+  arm64: dts: st: Add OMM node on stm32mp251
+  arm64: dts: st: Add ospi port1 pinctrl entries in
+    stm32mp25-pinctrl.dtsi
+  arm64: dts: st: Add SPI NOR flash support on stm32mp257f-ev1 board
+  arm64: defconfig: Enable STM32 Octo Memory Manager driver
+  arm64: defconfig: Enable STM32 OctoSPI driver
+
+ .../memory-controllers/st,stm32-omm.yaml      |  190 +++
+ .../bindings/spi/st,stm32mp25-ospi.yaml       |  102 ++
+ arch/arm64/boot/dts/st/stm32mp25-pinctrl.dtsi |   51 +
+ arch/arm64/boot/dts/st/stm32mp251.dtsi        |   48 +
+ arch/arm64/boot/dts/st/stm32mp257f-ev1.dts    |   32 +
+ arch/arm64/configs/defconfig                  |    2 +
+ drivers/memory/Kconfig                        |   17 +
+ drivers/memory/Makefile                       |    1 +
+ drivers/memory/stm32_omm.c                    |  509 ++++++++
+ drivers/spi/Kconfig                           |   10 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-stm32-ospi.c                  | 1064 +++++++++++++++++
+ 12 files changed, 2027 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/st,stm32-omm.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
+ create mode 100644 drivers/memory/stm32_omm.c
+ create mode 100644 drivers/spi/spi-stm32-ospi.c
+
+-- 
+2.25.1
+
 
