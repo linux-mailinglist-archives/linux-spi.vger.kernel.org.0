@@ -1,93 +1,150 @@
-Return-Path: <linux-spi+bounces-6570-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6571-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D213A221CC
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 17:30:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 088C8A22291
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 18:12:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D3653A5BEC
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 16:30:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28EA518846E6
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 17:12:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2C51DF998;
-	Wed, 29 Jan 2025 16:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B561DFE01;
+	Wed, 29 Jan 2025 17:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQ3nZdMz"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="KF5CYJEM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9153E1DF977;
-	Wed, 29 Jan 2025 16:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7A01FC8;
+	Wed, 29 Jan 2025 17:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738168217; cv=none; b=ogVXPAZCLdunK2oC8UytoSSMc3mgpGSX1dX1LuDBPTWI/qhfpEvGjWDfN4hIr910VRisHYfAHyl/r/aIusOwpELBktA3/itC1S64U7G3wWnktOnW8d2t726I2EV9Ksw6LWUF5qsGfzE+Le1NzrQHLq/f/syyme1NmA9JK5WuSAU=
+	t=1738170744; cv=none; b=mEZWOGTAyj7lLdqfjQsyNwYsvBWFVGuuadLWvd7pqMtQeR8z1b/a41++2w6N4P3gfK7wyJgbWPMcO6d1Ote31LobFFLgmHBKsjZmeAPjxsSM/xPZj3ZUxeoaQdhvx+OK5/QDTb+ndqOxhO6ZvN5GwcSijcSwbJZOj8HA90STGKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738168217; c=relaxed/simple;
-	bh=XBKV226QwIzNLBsc6JzzKYsqk+ccH95LIx4MTJCSsI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/oZZkD6JKvow9/j4ckFoGmCt5aLuwF5RkYSWkBkEBTFUPoTv9gv8me/D+iBDVVl5zdrL7234jonA4izfcO3QMZiiVmUWk2tLsKnOvy8ffZSRp0w/Tt0VXsAEgxpswdbb6KYzSqJFAFUIgdxHYKvdamzaLS+eGF/ezsnSAgZ2EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQ3nZdMz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A47DC4CED1;
-	Wed, 29 Jan 2025 16:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738168217;
-	bh=XBKV226QwIzNLBsc6JzzKYsqk+ccH95LIx4MTJCSsI4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TQ3nZdMzNZutFhtpawCD5v4BCdySXwYZPjqtdY/M8q6rVZCNQwIMDFgqISz5y7t0i
-	 0fbGFizkHXDEYqp49R5ZcMxZvUzaDLqDsM/b5ye5dZ2SCJ/KvIGoMV11RlYjcLJnpE
-	 ENq+UKdgrQ9VO/si7J/2KoJdSZdzaFyuT5aI6HJKcbhxJbioFd23CJxMRE7T7xTXI9
-	 drYC43Bzr2M6mTQ4oggSFqLHHDVPvHrgo4tiSIRF/x3tWEV9hMHXDw4sY7MCxmhB3C
-	 P8u/pVUdjty9Tk44DIfpeHVp9VVQXzjB6IZheBs1Bs4w9+px+Zw7rs46738hhsWNHi
-	 TKtrt7Suno1BQ==
-Date: Wed, 29 Jan 2025 16:30:13 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: linux-spi@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-	stable@vger.kernel.org,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: microchip-core: prevent RX overflows when transmit
- size > FIFO size
-Message-ID: <20250129-automaker-relative-0594f50e8fc9@spud>
-References: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
- <3e8c08fb-ec3a-4d00-a3e9-43c299dcf942@quicinc.com>
+	s=arc-20240116; t=1738170744; c=relaxed/simple;
+	bh=oKInIs80fHAFlAQ60VYFUV3zyOcN3MDJrxPHxOZnX7U=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eS6yPgc/lKnZxjbSO/d8pm9Qhs5dGvoSts7VM5CZH6YUfE5f99nt9zPpe3ORI1xdr6XhJ7MNh15/1jmNi5nfuNqiTSHpkEAeBFhSfH5CH7xXZNSRrA1rCSeTj8rReBHSYFCV7egQJdx/2Ce2b8PfgwF3HTVp10T4CmCSmbEniP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=KF5CYJEM; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.65.130.94] (unknown [20.236.10.163])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B361C203F2DF;
+	Wed, 29 Jan 2025 09:12:15 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B361C203F2DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1738170737;
+	bh=dNRZE1wRPI3+cVzpq2MiJyQrXak+KjxySL05qBZwi3I=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=KF5CYJEMAg7wD96ahKvWhkAFA05d2EUsKiRjXm+SrhlcieyjVvtYaExuKNZLJq+g2
+	 aBFGl/Q/OmH+pg7BhR5kfVvugzt2v4vFfmJ8RuG1opp/VMgS23ja3qFHYzfub/yGXl
+	 hPpNsGrrOx1WOoNEIOcsOUJA+IETCxANclm3bUSY=
+Message-ID: <fae29f46-2971-4cab-a54a-f1780abbadda@linux.microsoft.com>
+Date: Wed, 29 Jan 2025 09:12:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="uufWA+lOZb6bSUfD"
-Content-Disposition: inline
-In-Reply-To: <3e8c08fb-ec3a-4d00-a3e9-43c299dcf942@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Cc: eahariha@linux.microsoft.com, Andrew Morton <akpm@linux-foundation.org>,
+ Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>,
+ Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>,
+ James Smart <james.smart@broadcom.com>,
+ Dick Kennedy <dick.kennedy@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>,
+ Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>,
+ "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+ Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>,
+ Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+ Selvin Xavier <selvin.xavier@broadcom.com>,
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>,
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 14/16] platform/x86/amd/pmf: convert timeouts to
+ secs_to_jiffies()
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+ <20250128-converge-secs-to-jiffies-part-two-v1-14-9a6ecf0b2308@linux.microsoft.com>
+ <e8207616-6079-be0d-d482-6577616a4cc7@linux.intel.com>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <e8207616-6079-be0d-d482-6577616a4cc7@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 1/29/2025 5:12 AM, Ilpo Järvinen wrote:
+> On Tue, 28 Jan 2025, Easwar Hariharan wrote:
+> 
+>> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+>> secs_to_jiffies().  As the value here is a multiple of 1000, use
+>> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
+>>
+>> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
+>> the following Coccinelle rules:
+>>
+>> @depends on patch@
+>> expression E;
+>> @@
+>>
+>> -msecs_to_jiffies
+>> +secs_to_jiffies
+>> (E
+>> - * \( 1000 \| MSEC_PER_SEC \)
+>> )
+>>
+>> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+>> ---
+>>  drivers/platform/x86/amd/pmf/acpi.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/platform/x86/amd/pmf/acpi.c b/drivers/platform/x86/amd/pmf/acpi.c
+>> index dd5780a1d06e1dc979fcff5bafd6729bc4937eab..6b7effe80b78b7389b320ee65fa5d2373f782a2f 100644
+>> --- a/drivers/platform/x86/amd/pmf/acpi.c
+>> +++ b/drivers/platform/x86/amd/pmf/acpi.c
+>> @@ -220,7 +220,8 @@ static void apmf_sbios_heartbeat_notify(struct work_struct *work)
+>>  	if (!info)
+>>  		return;
+>>  
+>> -	schedule_delayed_work(&dev->heart_beat, msecs_to_jiffies(dev->hb_interval * 1000));
+>> +	schedule_delayed_work(&dev->heart_beat,
+>> +			      secs_to_jiffies(dev->hb_interval));
+>>  	kfree(info);
+>>  }
+> 
+> Hi,
+> 
+> So you made the line shorter but still added the newline char for some 
+> reason even if the original didn't have one?? Please don't enforce 80 
+> chars limit with patches like this.
+> 
 
---uufWA+lOZb6bSUfD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sorry about that, I can fix that in v2.
 
-On Wed, Jan 29, 2025 at 06:57:34PM +0530, Mukesh Kumar Savaliya wrote:
-> On 1/14/2025 10:43 PM, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> Not sure why this "From:" is coming here, should be not coming.
+Thanks for the review!
 
-It is there because the sending address was not the author address. It's
-fairly normal and required to set the correct address in git were Mark
-to apply the patch.
-
---uufWA+lOZb6bSUfD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ5pXlQAKCRB4tDGHoIJi
-0kO2AQDPvPubF8tAoclgHVE2P98E9m5ZF7SpU00IK6eIAUAOBgD8CuFnNik1104E
-0i0bAtyRYN6ND3X84j0guTEEUFfmPAs=
-=gWPT
------END PGP SIGNATURE-----
-
---uufWA+lOZb6bSUfD--
+- Easwar (he/him)
 
