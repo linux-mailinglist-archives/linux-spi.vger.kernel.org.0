@@ -1,160 +1,155 @@
-Return-Path: <linux-spi+bounces-6566-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6567-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 783D9A21DA0
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 14:13:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6437A21DDA
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 14:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCC1F1888525
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 13:13:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7D147A1E3B
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 13:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D8247F4A;
-	Wed, 29 Jan 2025 13:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F3ED481CD;
+	Wed, 29 Jan 2025 13:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SxBm5goJ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Sbv7ZFm7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2E82CA9;
-	Wed, 29 Jan 2025 13:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DBCB661;
+	Wed, 29 Jan 2025 13:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738156389; cv=none; b=PyFzC6kJ0jFowwD0nfgvsJ7ZZYxmaOnstxAaMY7iyEboxMcQuTEAv9FOOTgaL3DqsiTonJ4J77pZa1hEjrBVvFJUfnpWJTjXWdqYRGALTgduEE5c85PDYxd/CoFojB03+0NNsqD97xzar5ptK2/oIZbc+QhIXqQEOXwsEBMOdmE=
+	t=1738157265; cv=none; b=YzoQai8J6TZ2tk1H//H8TPdrbu1Q9N6hSb7NBOHhlYPA6PzoJaHMbN0bTZEPQidz/IUO5qnBh81VL55NAXfZyA4mrZPfS/auiLdwTQbzMuWRHosWK4roqfFA7w8iPBN8FlLY8nKs8X12kL1o76OG2NBKzj1r3fhgbojct0AxMDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738156389; c=relaxed/simple;
-	bh=uWLMAkjiPxmd0IZ1cdFsHKZZFguDfleylm6v197BRzQ=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ARMhNx1n9bES05kDWAepJ5y3q8rZYyi8p/4J8ZHrvQvT0EdpWvQfAQH1xqZo/87qDwRYT59eiSHTwVf7gcz2QxCNsu5Z7DxUThGsGNhsbMgLX+mswDSCUesSq1KyMaBY1fxIWD4dnZ7o/k0De5FAp3xhlzu4Ob1ycJU+VBKCveY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SxBm5goJ; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738156388; x=1769692388;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=uWLMAkjiPxmd0IZ1cdFsHKZZFguDfleylm6v197BRzQ=;
-  b=SxBm5goJ+drv5/j21Nr5L4bB4AiKSLqdl2lYsm1T+xntrZBkeN0w8M1G
-   F4+NyhAgrsl+fxFpq7CVKVv5bZ5TG8R2r9ALR7mZHn8ifAxDjViTWF9n2
-   Qfeq1wtGoBTmk2U4tQ7WMchq3EE+X/8v1H0sOUbLglOQs+gH1LZTe1tFI
-   rw9aLIelfb6Pk4CJOaoZdF+4IhUiy0K/KB7NE5qfaBpzkCHW714QRBeEk
-   Q+7U1kkK2AckCQsce2i90njW9G8nEXxHkKqoPxYUtVpVSotop9EE/u155
-   b1Aa+BuhHplKP3brftgSYN4fRO8fdv0S49WLNBP0cF4ag6En7yfknR6NS
-   A==;
-X-CSE-ConnectionGUID: Xq1YKzuARa+e19SIixMJMQ==
-X-CSE-MsgGUID: baOTcUmERJ+Zx4XQgK+dTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="56203313"
-X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
-   d="scan'208";a="56203313"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 05:13:06 -0800
-X-CSE-ConnectionGUID: VQdEsMXqR8qBKjmeEKbOAw==
-X-CSE-MsgGUID: O+KtZNkvRJq7JgLfGnW4VQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113646751"
-Received: from ettammin-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 05:12:52 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 29 Jan 2025 15:12:49 +0200 (EET)
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-cc: Andrew Morton <akpm@linux-foundation.org>, 
-    Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
-    Julia Lawall <Julia.Lawall@inria.fr>, 
-    Nicolas Palix <nicolas.palix@imag.fr>, 
-    James Smart <james.smart@broadcom.com>, 
-    Dick Kennedy <dick.kennedy@broadcom.com>, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    "Martin K. Petersen" <martin.petersen@oracle.com>, 
-    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-    Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
-    David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
-    Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
-    Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
-    Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
-    "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-    Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-    Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
-    Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-    Sascha Hauer <s.hauer@pengutronix.de>, 
-    Pengutronix Kernel Team <kernel@pengutronix.de>, 
-    Fabio Estevam <festevam@gmail.com>, 
-    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
-    Selvin Xavier <selvin.xavier@broadcom.com>, 
-    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-    cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>, 
-    linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-    linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-    ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
-    linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
-    linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
-    linux-spi@vger.kernel.org, imx@lists.linux.dev, 
-    linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-    ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 14/16] platform/x86/amd/pmf: convert timeouts to
- secs_to_jiffies()
-In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-14-9a6ecf0b2308@linux.microsoft.com>
-Message-ID: <e8207616-6079-be0d-d482-6577616a4cc7@linux.intel.com>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com> <20250128-converge-secs-to-jiffies-part-two-v1-14-9a6ecf0b2308@linux.microsoft.com>
+	s=arc-20240116; t=1738157265; c=relaxed/simple;
+	bh=YAw90nP5pcCtcTNaoC+a9ncjf/xabU+Ci+duExlPmTg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=aH+0PliU0i2yyUMfJo9JftT8wPRENY6JvvvI7zZk+cHFDi4ffOG54++UBVm15PKlXYOvqyW7Y9LYDKQ7k/gDoqMM/dFjnjwsVoGwt8Ca/MgGowO8tQmqR/scAUvCvzZMX1LMM79ceqOT4Fj2hYNdIgBD+uMsuuIdYndbPQLoEbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Sbv7ZFm7; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50T6Puf9008447;
+	Wed, 29 Jan 2025 13:27:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Jycu/BkhEj+iNFaJ39eTq4ky8+iSVcfgm7DSoR9muPA=; b=Sbv7ZFm72zZtL3xD
+	lN2ubFcM5pDKuRS30vAIfRTKIe2xKTG2JmZPGENupJOYafoWDJhqWVOZ1aooRL3H
+	CSedmgdN2eyATKMv2ERTUcqC5EnikW2TLXaUi+1ACzPGwpL8dUevDrcj7pbQqpTr
+	Gl2IzHTILKBegpr8dDaaylPAqeSrU0wOsN0eDk0fWkUUlaS17sgFihoUQaTQ5gvu
+	joH/PIsOHWU121kwqcs0mHr1xhp0UGZi/7IxlsbdfNJNFf/v/nxRy3KCC7MQAoSn
+	ahsLG4mrZhriIsMfM8yUj3zndsT3kxZpY6h4MmSyrjqK7ioYWUSSM4CAw8XbOiw+
+	P+VC4Q==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ff1q0pmn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jan 2025 13:27:40 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50TDRd6e011500
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Jan 2025 13:27:39 GMT
+Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 29 Jan
+ 2025 05:27:37 -0800
+Message-ID: <3e8c08fb-ec3a-4d00-a3e9-43c299dcf942@quicinc.com>
+Date: Wed, 29 Jan 2025 18:57:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: microchip-core: prevent RX overflows when transmit
+ size > FIFO size
+To: Conor Dooley <conor@kernel.org>, <linux-spi@vger.kernel.org>
+CC: Conor Dooley <conor.dooley@microchip.com>, <stable@vger.kernel.org>,
+        Daire
+ McNamara <daire.mcnamara@microchip.com>,
+        Mark Brown <broonie@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
+Content-Language: en-US
+From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+In-Reply-To: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jpVjl9zEq5diqYx5SiPsRL4J3sdsJwOW
+X-Proofpoint-ORIG-GUID: jpVjl9zEq5diqYx5SiPsRL4J3sdsJwOW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-29_02,2025-01-29_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=417
+ impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1011 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501290109
 
-On Tue, 28 Jan 2025, Easwar Hariharan wrote:
 
-> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
-> secs_to_jiffies().  As the value here is a multiple of 1000, use
-> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
+
+On 1/14/2025 10:43 PM, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+Not sure why this "From:" is coming here, should be not coming.
 > 
-> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
-> the following Coccinelle rules:
+> When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
+> overflows will be generated and receive data will be corrupted and
+> warnings will be produced. For example, here's an error generated by a
+> transfer of 36 bytes:
 > 
-> @depends on patch@
-> expression E;
-> @@
+why warning on RX generated when TZ size is > 32 bytes ?
+Also you should be taking 32 bytes in a one go and then send remaining 4 
+bytes. I am thinking if your TX is faster than the RX receiving ?
+>    spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen: 0
 > 
-> -msecs_to_jiffies
-> +secs_to_jiffies
-> (E
-> - * \( 1000 \| MSEC_PER_SEC \)
-> )
+> I am not entirely sure how this happens, as rxlen being 4 means that 32
+> of 36 bytes have been read from the RX FIFO so there should be
+> sufficient room for 4 more bytes but timing is likely a factor as simply
+> adding a delay in the transmit path is enough to avoid the overflows.
+I suggest to try to chunk in 32 bytes size.
 > 
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> CC: stable@vger.kernel.org
+> Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  drivers/platform/x86/amd/pmf/acpi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Been sitting on this one for a bit, original reporter claims the problem
+> isn't fixed, but it fixed the issue on my setup so I am sending the patch
+> as it's an improvement on the status quo at the very least.
 > 
-> diff --git a/drivers/platform/x86/amd/pmf/acpi.c b/drivers/platform/x86/amd/pmf/acpi.c
-> index dd5780a1d06e1dc979fcff5bafd6729bc4937eab..6b7effe80b78b7389b320ee65fa5d2373f782a2f 100644
-> --- a/drivers/platform/x86/amd/pmf/acpi.c
-> +++ b/drivers/platform/x86/amd/pmf/acpi.c
-> @@ -220,7 +220,8 @@ static void apmf_sbios_heartbeat_notify(struct work_struct *work)
->  	if (!info)
->  		return;
->  
-> -	schedule_delayed_work(&dev->heart_beat, msecs_to_jiffies(dev->hb_interval * 1000));
-> +	schedule_delayed_work(&dev->heart_beat,
-> +			      secs_to_jiffies(dev->hb_interval));
->  	kfree(info);
->  }
-
-Hi,
-
-So you made the line shorter but still added the newline char for some 
-reason even if the original didn't have one?? Please don't enforce 80 
-chars limit with patches like this.
-
--- 
- i.
+> CC: Conor Dooley <conor.dooley@microchip.com>
+> CC: Daire McNamara <daire.mcnamara@microchip.com>
+> CC: Mark Brown <broonie@kernel.org>
+> CC: linux-spi@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> ---
+>   drivers/spi/spi-microchip-core.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+> index 5b6af55855ef..3582fe8d3fc4 100644
+> --- a/drivers/spi/spi-microchip-core.c
+> +++ b/drivers/spi/spi-microchip-core.c
+> @@ -221,6 +221,13 @@ static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi)
+>   	while ((i < fifo_max) && !(mchp_corespi_read(spi, REG_STATUS) & STATUS_TXFIFO_FULL)) {
+>   		u32 word;
+>   
+> +		/*
+> +		 * If the transfer is larger than FIFO_DEPTH, spin until space
+> +		 * is made in the RX FIFO to avoid losing data to RX overflows
+> +		 */
+what if you transfer first 32 bytes and then remaining ?
+> +		while (mchp_corespi_read(spi, REG_STATUS) & STATUS_RXFIFO_FULL)
+> +			;
+> +
+>   		if (spi->n_bytes == 4)
+>   			word = spi->tx_buf ? *((u32 *)spi->tx_buf) : 0xaa;
+>   		else if (spi->n_bytes == 2)
 
 
