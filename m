@@ -1,107 +1,147 @@
-Return-Path: <linux-spi+bounces-6577-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6578-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADD01A224A0
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 20:41:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D23BA22575
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 22:04:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A174163697
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 19:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92D8A3A155A
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 21:03:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8FC1E25F1;
-	Wed, 29 Jan 2025 19:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB4C1E22EF;
+	Wed, 29 Jan 2025 21:03:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="wyaQ/Y5T"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="mY3mAkZd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB8B158A09
-	for <linux-spi@vger.kernel.org>; Wed, 29 Jan 2025 19:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18A0C194AD1;
+	Wed, 29 Jan 2025 21:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738179669; cv=none; b=UnBZ+D2YaWCAZr4htprsWnU0DU8JAIHbT4CvhUJjI/EvQoTNxPpuEj01oXpM6Nj//NU6TWvEwglpC7qRNP6DinXs+CcmwOFni31HsoMOZyCGTcQo6MaNeKnRAtOaef44/II0gzurDsRujmBDXQhLE+Qbc1Bgf3D2gi3xmV3zyyE=
+	t=1738184639; cv=none; b=iqXScunONgiNMwtPXJWqFWoxCswuc+i9MaH4v1tStpQ7FRKjUmm0Pxm8+U0+ppKCy923BhxnqT2at2r8BTKxdEqTp1bnp79htTRKvMKxG0f5Pd9/3HGUdm1M4D+RSYuAe8SpA+q2ieCPeLbAelkrvCXgTjFnHvlwdParb8RwLIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738179669; c=relaxed/simple;
-	bh=WPHOU8yglDc5m1rcbglfNtUxfDHLfFAagkVskIC9XJ4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bd3sBZlj7Sp4fmPjxnX6H9eFiBYk0EwGE1AlKkjUHOFvwKt5U3wkgzh0UFWXoEX28cQTgPb3tyIo1dVxRw18/eFxL9+kn0regUyHlmGFxGTLW8+di01X/CqYiM5EP7zjB+9gmZ9tqiq1pZBHe9UlYCwhR/9+s2bBmIIBkzn7mko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=wyaQ/Y5T; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 527A82C00BE;
-	Thu, 30 Jan 2025 08:40:59 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1738179659;
-	bh=WPHOU8yglDc5m1rcbglfNtUxfDHLfFAagkVskIC9XJ4=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=wyaQ/Y5TN1tbDfWVUhFy6Uyb6RSRwlcPOeakGHBApF/sb6da6D4qL1LVSIMy+MKAB
-	 Kg27ATsOKZ8/YM7LO50DeaPHeqbIslUcQP5Rm9r5ck5QIHm3kHeMNsfYLrz1bdnZed
-	 bfgBvKQUySM6PGlV8zSmTaGkmUmROmptc2QSNIeLG65e5asxm8pipPIVlqhbbiODU0
-	 nLDd/VZXdiiKJhEhin7T5hdvDZTcOupWtpcCtjVlq7sF32+HTTarn5cqmBNnPfDmSm
-	 ByVZZ3LApH2clsBhU3Vb85cXQs3fY1/nMpS0PWaSMa+eb6LMA7R+r/BDQQfvk33LmE
-	 tQPqgWQgkbENg==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B679a844b0001>; Thu, 30 Jan 2025 08:40:59 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Thu, 30 Jan 2025 08:40:59 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Thu, 30 Jan 2025 08:40:59 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC: Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 1/1] spi: realtek-rtl-snand: Drop unneeded assignment
- for cache_type
-Thread-Topic: [PATCH v1 1/1] spi: realtek-rtl-snand: Drop unneeded assignment
- for cache_type
-Thread-Index: AQHbcmKZy8mgBkUbsEGLIVd1i3gJ2rMtTLwA
-Date: Wed, 29 Jan 2025 19:40:58 +0000
-Message-ID: <7a69fb7c-6c33-4df9-b3c2-3e3db74760d2@alliedtelesis.co.nz>
-References: <20250129152925.1804071-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250129152925.1804071-1-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0C655A72DF3B574184FE3413A4B6C4A0@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1738184639; c=relaxed/simple;
+	bh=EsYz53Al9cDMt+LJZ12iOWeqRoB03Is/uiVHJBAKxPs=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=BZc+/O8yiOc62L9cJbuootJUxhPyNTgFd8JuyYdOU0kXvBEsPhylS2xqlxrwkK+4po+Mc276fW+Vqjl7EnjgIY/ItpdPJZFNsUU2m9K5C10fK1KQikJ+HXLZ4hN8MQvKkQi8IK0gTmoD6Q+LOesDIcZ7a9qHN4OqiLw6/mhH/Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=mY3mAkZd; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.65.161.47] (unknown [20.236.11.29])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 4FFDA2109A5E;
+	Wed, 29 Jan 2025 13:03:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4FFDA2109A5E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1738184637;
+	bh=O+JFGGFluQhzEspwlwz6aXkZ7QKW4DjxL6knEN3myoo=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=mY3mAkZdBwX5JW6v0rHOcPwixnNpeCwrI5i6lioeivoGl5PeSwTfMHOmjED6AV41/
+	 5wIYfQa9MecJKhXc6T7//bDDoOB4BG1MPO3Miu2pGAWJwBcdsKKFOS1hzy+NN34ovy
+	 jA6uxIox2R9YzB3PKnfuI/uqwUCqDlg2DifBsbMw=
+Message-ID: <dd0358b1-7c8a-4c9e-88c5-2e1db69a3a35@linux.microsoft.com>
+Date: Wed, 29 Jan 2025 13:03:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=679a844b a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=VdSt8ZQiCzkA:10 a=QyXUC8HyAAAA:8 a=905iD-1ZrK5Q2AgLhDsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+User-Agent: Mozilla Thunderbird
+Cc: Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay
+ <ogabbay@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>,
+ Nicolas Palix <nicolas.palix@imag.fr>, James Smart
+ <james.smart@broadcom.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, Xiubo Li <xiubli@redhat.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+ Carlos Maiolino <cem@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Keith Busch <kbusch@kernel.org>,
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+ Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+ Selvin Xavier <selvin.xavier@broadcom.com>,
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ eahariha@linux.microsoft.com, cocci@inria.fr, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 06/16] rbd: convert timeouts to secs_to_jiffies()
+To: Andrew Morton <akpm@linux-foundation.org>,
+ Ilya Dryomov <idryomov@gmail.com>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>,
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org
+References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+ <20250128-converge-secs-to-jiffies-part-two-v1-6-9a6ecf0b2308@linux.microsoft.com>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-6-9a6ecf0b2308@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SGkgQW5keSwNCg0KT24gMzAvMDEvMjAyNSAwNDoyOSwgQW5keSBTaGV2Y2hlbmtvIHdyb3RlOg0K
-PiBSRUdDQUNIRV9OT05FIGlzIHRoZSBkZWZhdWx0IHR5cGUgb2YgdGhlIGNhY2hlIHdoZW4gbm90
-IHByb3ZpZGVkLg0KPiBEcm9wIHVubmVlZGVkIGV4cGxpY2l0IGFzc2lnbm1lbnQgdG8gaXQuDQo+
-DQo+IE5vdGUsIGl0J3MgZGVmaW5lZCB0byAwLCBhbmQgaWYgZXZlciBiZSByZWRlZmluZWQsIGl0
-IHdpbGwgYnJlYWsNCj4gbGl0ZXJhbGx5IGEgbG90IG9mIHRoZSBkcml2ZXJzLCBzbyBpdCB2ZXJ5
-IHVubGlrZWx5IHRvIGhhcHBlbi4NCj4NCj4gU2lnbmVkLW9mZi1ieTogQW5keSBTaGV2Y2hlbmtv
-IDxhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb20+DQoNClJldmlld2VkLWJ5OiBDaHJp
-cyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQoNCj4gLS0tDQo+
-ICAgZHJpdmVycy9zcGkvc3BpLXJlYWx0ZWstcnRsLXNuYW5kLmMgfCAxIC0NCj4gICAxIGZpbGUg
-Y2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zcGkvc3Bp
-LXJlYWx0ZWstcnRsLXNuYW5kLmMgYi9kcml2ZXJzL3NwaS9zcGktcmVhbHRlay1ydGwtc25hbmQu
-Yw0KPiBpbmRleCBjZDA0ODQwNDExNDcuLjc0MWNmMmFmM2U5MSAxMDA2NDQNCj4gLS0tIGEvZHJp
-dmVycy9zcGkvc3BpLXJlYWx0ZWstcnRsLXNuYW5kLmMNCj4gKysrIGIvZHJpdmVycy9zcGkvc3Bp
-LXJlYWx0ZWstcnRsLXNuYW5kLmMNCj4gQEAgLTM2NCw3ICszNjQsNiBAQCBzdGF0aWMgaW50IHJ0
-bF9zbmFuZF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgIAkJLnJlZ19i
-aXRzCT0gMzIsDQo+ICAgCQkudmFsX2JpdHMJPSAzMiwNCj4gICAJCS5yZWdfc3RyaWRlCT0gNCwN
-Cj4gLQkJLmNhY2hlX3R5cGUJPSBSRUdDQUNIRV9OT05FLA0KPiAgIAl9Ow0KPiAgIAlpbnQgaXJx
-LCByZXQ7DQo+ICAg
+On 1/28/2025 10:21 AM, Easwar Hariharan wrote:
+> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> secs_to_jiffies().  As the value here is a multiple of 1000, use
+> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
+> 
+> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
+> the following Coccinelle rules:
+> 
+> @depends on patch@
+> expression E;
+> @@
+> 
+> -msecs_to_jiffies
+> +secs_to_jiffies
+> (E
+> - * \( 1000 \| MSEC_PER_SEC \)
+> )
+> 
+> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> ---
+>  drivers/block/rbd.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+
+<snip>
+
+> @@ -6283,9 +6283,9 @@ static int rbd_parse_param(struct fs_parameter *param,
+>  		break;
+>  	case Opt_lock_timeout:
+>  		/* 0 is "wait forever" (i.e. infinite timeout) */
+> -		if (result.uint_32 > INT_MAX / 1000)
+> +		if (result.uint_32 > INT_MAX)
+>  			goto out_of_range;
+> -		opt->lock_timeout = msecs_to_jiffies(result.uint_32 * 1000);
+> +		opt->lock_timeout = secs_to_jiffies(result.uint_32);
+>  		break;
+>  	case Opt_pool_ns:
+>  		kfree(pctx->spec->pool_ns);
+> 
+
+Hi Ilya, Dongsheng, Jens, others,
+
+Could you please review this hunk and confirm the correct range check
+here? I figure this is here because of the multiplier to
+msecs_to_jiffies() and therefore unneeded after the conversion. If so, I
+noticed patch 07 has similar range checks that I neglected to fix and
+can do in a v2.
+
+Thanks,
+Easwar (he/him)
 
