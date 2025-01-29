@@ -1,106 +1,177 @@
-Return-Path: <linux-spi+bounces-6568-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6569-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3E4A22051
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 16:29:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6BCFA220AF
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 16:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 620F71881E47
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 15:29:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49CDE1637A9
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Jan 2025 15:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F1A1DD0C7;
-	Wed, 29 Jan 2025 15:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA6A1DF739;
+	Wed, 29 Jan 2025 15:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dOe4iBIc"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="rlpkpigg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4057315B102;
-	Wed, 29 Jan 2025 15:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A9A1DE4EB
+	for <linux-spi@vger.kernel.org>; Wed, 29 Jan 2025 15:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738164570; cv=none; b=YsRFPzmo2TesQbl1Y9xgOmd5/gcGOZvatyxACYCyj4S3RLYAOrrw/TPeu0VavlBLOQUVZg8euf94hDZiVtVuqarvZp6TIBbsf+qIbdl+5VwOlnTI/sHi5nkECcFSY0q2SB1AGTtibacHfBbgZVpqL8SkCTV+MMV0HHyztygOJXg=
+	t=1738165335; cv=none; b=FxdJdMmIPwYzza77Sc5yIVFLO7e6jpVyzmoCWVZwmpSgnploebd9mmhFAtor55Y0dEX8Fj++WAmYWNyBPUGGiQMOKejkaJs25CKOgFFlw/YFz6wQAp3ITnw1zXDADk106dPSdVF6wg5/rUUYkxPX5Qj95DCg3tCAfFRC//W8Hd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738164570; c=relaxed/simple;
-	bh=tahrGUmgDtGa4nBvClGplFM3TQ4RKaORu/R0GFfHaAQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bKdTSrwI6qjfy2YOM6WZESqa9Sjru7r7ZhA+0RBEJdrI6t598+ht1qvSRf/TVGSytTfIH+7WHEjGP7NeZbgLbksmreeF+QmMuHIfY8+fs7uzeSmxUqFsfRkCgWQJ9ADgaYGwpLxxj9IjE2eX9YWEAocZTiT8x83XDkXkSTk6Pi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dOe4iBIc; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738164569; x=1769700569;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tahrGUmgDtGa4nBvClGplFM3TQ4RKaORu/R0GFfHaAQ=;
-  b=dOe4iBIcO2LJL2PpdzcxxMx0eBZG16/1Nr6/Q4JRWKFUVYW7Xv8ILMhH
-   0Vc4gjcY2+H/sjf0ebyiXezbQOjlS51NmA81gHyBo0bCxIHeiECpiTFQ4
-   WbidoGM7hhfdu6OImZI97DRK8dIBV7bcjCWqQuieMArBqaAMBLJ9luwmS
-   +ztVdTqDFSliBeUjHrYzcawqSvh59JJh248nZoqc55OUGvGuXuiax2SAX
-   u6eZIc+/R6VEu01eABYmC6r7cSZi5cv2TAUNA1i6avnfZN4krz8U51Ted
-   AlE+Pi2V41eEGVQsLU3cuwqthb7rJgEhgHa5ByVDszCGnosUNzQ+HWCCr
-   Q==;
-X-CSE-ConnectionGUID: MjoNWlWDShy3ini3IocuRw==
-X-CSE-MsgGUID: UdkRJ/4HRiWhf8ZumuuLcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11330"; a="37880260"
-X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
-   d="scan'208";a="37880260"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 07:29:29 -0800
-X-CSE-ConnectionGUID: 1PVgaFsITW6CwErNdzbuqg==
-X-CSE-MsgGUID: jojpA8rVRoejbA6HYe0sAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="146260483"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jan 2025 07:29:27 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E1FDBF1C; Wed, 29 Jan 2025 17:29:25 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] spi: realtek-rtl-snand: Drop unneeded assignment for cache_type
-Date: Wed, 29 Jan 2025 17:29:25 +0200
-Message-ID: <20250129152925.1804071-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1738165335; c=relaxed/simple;
+	bh=fHuIzrO2wct7VL46Pzm/QKC1E0zvkFPkq1uaLyfrAgM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kGMLqWWe4WF1k1lYlw6s+g5jWs2cH6NWSY8yHV9lcdnxFfZnh7lVZdAQVqweKWTysEEsZxTdT+AC63w+xu6BDmtpOi28+HBvaF5F+4cfQArAXn4xz4lfW6MuHMRqKqADwZ//Lx6Z0EaOoLFz59OV/n6w841RVjIC5IXW46R8Uos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=rlpkpigg; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id A12CF240027
+	for <linux-spi@vger.kernel.org>; Wed, 29 Jan 2025 16:42:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1738165326; bh=fHuIzrO2wct7VL46Pzm/QKC1E0zvkFPkq1uaLyfrAgM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=rlpkpigg6EUUVDiz1EbkwOjWiYjmdkDcVsxj/Ai7aXCRLX7jud0bjcfEmEwLN8TnJ
+	 57a1Tiinb0jjGR09AX0hi4stAQaD8cqqe7u+rYXYFlaUn/p3HcC88sOAGYTk/Ii9OB
+	 vyD3bINuDPZZ1vf8KZPKx+2PuLgHk1Ib4fCcjNfDn7MpJEqhtXuGhYb9pcU0PtN68Y
+	 Ucq76watDSz5EKsNcWDRaO77DJ7udHihO5cX26smuVsVcWdeCbbhtcjoCCSD32xnv4
+	 yc9s8bYo6rvI9Sm6ZRhIyuei2X3a6m2FGM1dMOJsm4XI6hdLJys2btIv4x92LD1Ulg
+	 OGvZ1CQi/OYxA==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Yjmc71lNXz9rxB;
+	Wed, 29 Jan 2025 16:41:59 +0100 (CET)
+Date: Wed, 29 Jan 2025 15:41:58 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 3/9] dt-bindings: crypto: Convert fsl,sec-2.0 binding to
+ YAML
+Message-ID: <Z5pMRk8WEZZK9TEL@probook>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-3-50649f51c3dd@posteo.net>
+ <20250127044128.GB3106458-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250127044128.GB3106458-robh@kernel.org>
 
-REGCACHE_NONE is the default type of the cache when not provided.
-Drop unneeded explicit assignment to it.
+On Sun, Jan 26, 2025 at 10:41:28PM -0600, Rob Herring wrote:
+> On Sun, Jan 26, 2025 at 07:58:58PM +0100, J. Neuschäfer wrote:
+> > Convert the Freescale security engine (crypto accelerator) binding from
+> > text form to YAML. The list of compatible strings reflects what was
+> > previously described in prose; not all combinations occur in existing
+> > devicetrees.
+> > 
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> >  .../devicetree/bindings/crypto/fsl,sec2.0.yaml     | 139 +++++++++++++++++++++
+> >  .../devicetree/bindings/crypto/fsl-sec2.txt        |  65 ----------
+> >  2 files changed, 139 insertions(+), 65 deletions(-)
+[...]
+> > +properties:
+> > +  compatible:
+> > +    description: |
+> 
+> Don't need '|'. I imagine there are more in the series, but will let you 
+> find the rest.
 
-Note, it's defined to 0, and if ever be redefined, it will break
-literally a lot of the drivers, so it very unlikely to happen.
+Yes
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-realtek-rtl-snand.c | 1 -
- 1 file changed, 1 deletion(-)
+> > +  fsl,num-channels:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: An integer representing the number of channels available.
+> 
+> minimum: 1
+> maximum: ?
 
-diff --git a/drivers/spi/spi-realtek-rtl-snand.c b/drivers/spi/spi-realtek-rtl-snand.c
-index cd0484041147..741cf2af3e91 100644
---- a/drivers/spi/spi-realtek-rtl-snand.c
-+++ b/drivers/spi/spi-realtek-rtl-snand.c
-@@ -364,7 +364,6 @@ static int rtl_snand_probe(struct platform_device *pdev)
- 		.reg_bits	= 32,
- 		.val_bits	= 32,
- 		.reg_stride	= 4,
--		.cache_type	= REGCACHE_NONE,
- 	};
- 	int irq, ret;
- 
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+According to existing usage (and a cursory study of datasheets),
+possible values are 1 or 4.
 
+> 
+> > +
+> > +  fsl,channel-fifo-len:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      An integer representing the number of descriptor pointers each channel
+> > +      fetch fifo can hold.
+> 
+> Constraints?
+
+Current usage shows a typical value of 24, although I wasn't able to
+find any information in the datasheets. I'll add plausible limits.
+
+> 
+> > +
+> > +  fsl,exec-units-mask:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      The bitmask representing what execution units (EUs) are available.
+> > +      EU information should be encoded following the SEC's Descriptor Header
+> > +      Dword EU_SEL0 field documentation, i.e. as follows:
+> > +
+> > +        bit 0  = reserved - should be 0
+> > +        bit 1  = set if SEC has the ARC4 EU (AFEU)
+> > +        bit 2  = set if SEC has the DES/3DES EU (DEU)
+> > +        bit 3  = set if SEC has the message digest EU (MDEU/MDEU-A)
+> > +        bit 4  = set if SEC has the random number generator EU (RNG)
+> > +        bit 5  = set if SEC has the public key EU (PKEU)
+> > +        bit 6  = set if SEC has the AES EU (AESU)
+> > +        bit 7  = set if SEC has the Kasumi EU (KEU)
+> > +        bit 8  = set if SEC has the CRC EU (CRCU)
+> > +        bit 11 = set if SEC has the message digest EU extended alg set (MDEU-B)
+> > +
+> > +      remaining bits are reserved for future SEC EUs.
+> 
+> So:
+> 
+> maximum: 0xfff
+
+Will add.
+
+
+Thank you for your reviews.
+
+Best regards,
+J. Neuschäfer
 
