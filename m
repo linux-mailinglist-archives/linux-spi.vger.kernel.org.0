@@ -1,65 +1,65 @@
-Return-Path: <linux-spi+bounces-6583-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6584-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC80A229EA
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Jan 2025 09:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 183AAA229F0
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Jan 2025 09:58:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D36F3A2962
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Jan 2025 08:56:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 186873A263E
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Jan 2025 08:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C90CE1B3950;
-	Thu, 30 Jan 2025 08:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821EF1B392A;
+	Thu, 30 Jan 2025 08:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="neJk4e8F"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Y+DyFbpE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28EB1459F7;
-	Thu, 30 Jan 2025 08:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6AC374CB;
+	Thu, 30 Jan 2025 08:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738227420; cv=none; b=R2WVtGLxUFPoW0gQHnlOpIPWO2gv2R2tSMWQaWA0t3+Tb6k8kDP3hVa+3zCAdmMP8LMUfzQ9IrvkGAa7mkS/KsqrbFo/zw2a1BJmjKjVCkStBULGBWlFLLNnTDM7QoyWN5V7a9CvpB5gCcMKru/yIBkNdBI2l6Gdp2lvyPXLDmk=
+	t=1738227512; cv=none; b=Lkm1D7qjlaGCjNBhIFN5/rXYNwfGl8BMe2+UmKyCAl9RhuHLXBIrrQwM+KpN23aCv8u7zDu3b56b4SwW+zLmJmv/wbEtD4FH9L+cvwSKCrAyAiTebH2WH05WbudfnuoX22JszE+CmdqAGIf8z3Hg7rjhWr5nhh0Z+tjCeJptDag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738227420; c=relaxed/simple;
-	bh=M9roGvymV6bq03xrzax4BNoeWMtIDfHpmWenQYdxemw=;
+	s=arc-20240116; t=1738227512; c=relaxed/simple;
+	bh=hOOMYIP8DARAq2ocHWO0iuHeti8oklCLy+QHpJ9s/iw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=siEaLOWIubpJ/yJLUhESs6iFjpu6x2Bv5sd8qNSOiYvgoEzZ6Y/2EIAfi0TPPdJCkt2tnBIyT5eXyNxsMZgN0rvxlRM0llsy16jJbCkFsxZQqb+Vdh42u0GIazL6sL1+WM7fW8e8RlYqmjb4ki3BVnvLs1aTpjPaOZQPIGvyyGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=neJk4e8F; arc=none smtp.client-ip=91.207.212.93
+	 In-Reply-To:Content-Type; b=IT/n6b2Oh7ljApzuMd5GTrXQc5vA9/YHiyZuyK/UdSj2ozD1zQdpWhSJKJYg+KTO94uB3pa3aZYprxQPUV5B6VMJz0T58IJDzAOfGENTGBVwjeExjecqbDfSQmXT7pPgHu3qTywzc8qF3q9ETatrnzSbO0SqoUDWpcsnW66WKuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Y+DyFbpE; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
 Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50U6QBVh019628;
-	Thu, 30 Jan 2025 09:56:25 +0100
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50U6Q0Y6018023;
+	Thu, 30 Jan 2025 09:58:09 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	EzcyMoLNvtKxLHNHjczcsoR+W7/fDhlAI5vFIoUcVSo=; b=neJk4e8FK6tYF+Ad
-	nZVB/yh2Q9xUNrnMqDr28yaYonhcm2KYV5ISdfmAPhrU5gUgXXC+mkyKX8EvL5p0
-	VjoBCwUOMAZ/ADTEU4HQ8h0kjcoQIc20QMXQC8UHCDWS0ke+BwJPJIWIjJJqjVb0
-	hLLeQHAjwXdSO6aM5VBtdtMzleOR+xEe3E5lFYmTvvd/HaBawDQVoPpogg1jAE9d
-	CHOxGdkj1ez2zHWpaP9ZYadaswP6UOoewFMxiEb6RdPV/HTWXsgq04ZxG2z53a9G
-	NkWLMN1hiGpE5HZO9BGasSqec8BEozdO/YRrSSkvnaptqRyOjiIQ7vXQUsl6OsGZ
-	YZSByQ==
+	pVHdPHZta182pa00CYYtJOzM1kMJtrB33zkyMPcHloY=; b=Y+DyFbpE7xKRstU1
+	GV36Maqi+BgyjILcGzcMzVi3eYPOiU52JGmciFtAO9ktuipMEIkh6Ih5EXixAtFu
+	UD5lc9+XvALvTxT9iugUoXpi6hMdBXeNrEze47unC42NZ0lzAtGkSZfvX6o6bunz
+	BuuOyYqgnv7agXA2XdNCXdptBrGJJsYZbAp9VGpRLK34fDMDPFKvtvihvQS4/QQT
+	nuwTcZ/TFVssjycjXXN5I2izNP1ljKOuVBwB1lVwgyI9yQq6Xgqr4NwFajllkVAv
+	80lUrGl98dPDruqQlo+6O6SO3wUR+UdCAQjfsbcZYheQitUTQg1HPLrs3gIva9Wm
+	eT/Yaw==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44f26x6w4a-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44f26x6wca-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 09:56:25 +0100 (CET)
+	Thu, 30 Jan 2025 09:58:09 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 9EE874002D;
-	Thu, 30 Jan 2025 09:54:02 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 675A540044;
+	Thu, 30 Jan 2025 09:56:49 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BEB2C27EEB1;
-	Thu, 30 Jan 2025 09:51:29 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F12E72D5869;
+	Thu, 30 Jan 2025 09:55:47 +0100 (CET)
 Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
  (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 30 Jan
- 2025 09:51:28 +0100
-Message-ID: <98f9bdfa-5107-412a-8b9b-41f8135954fc@foss.st.com>
-Date: Thu, 30 Jan 2025 09:51:28 +0100
+ 2025 09:55:47 +0100
+Message-ID: <4ea55395-e4e2-425e-9711-3c99f30a9fa9@foss.st.com>
+Date: Thu, 30 Jan 2025 09:55:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -67,34 +67,30 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add STM32 OSPI controller
-To: Conor Dooley <conor@kernel.org>
-CC: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
+Subject: Re: [PATCH v2 2/9] spi: stm32: Add OSPI driver
+To: Mark Brown <broonie@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Alexandre
- Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, <linux-spi@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <christophe.kerello@foss.st.com>
 References: <20250128081731.2284457-1-patrice.chotard@foss.st.com>
- <20250128081731.2284457-2-patrice.chotard@foss.st.com>
- <20250128-panama-manly-a753d91c297c@spud>
- <e3d01bce-a7d4-4690-8a2f-3bbb1ee5ccb7@foss.st.com>
- <20250129-feminize-spotlight-2cee53f8b463@spud>
+ <20250128081731.2284457-3-patrice.chotard@foss.st.com>
+ <ec35dbd3-5730-4cc8-8025-d349740d1ba5@sirena.org.uk>
 Content-Language: en-US
 From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20250129-feminize-spotlight-2cee53f8b463@spud>
+In-Reply-To: <ec35dbd3-5730-4cc8-8025-d349740d1ba5@sirena.org.uk>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
@@ -105,116 +101,55 @@ X-Proofpoint-Virus-Version: vendor=baseguard
 
 
 
-On 1/29/25 18:53, Conor Dooley wrote:
-> On Wed, Jan 29, 2025 at 06:40:23PM +0100, Patrice CHOTARD wrote:
->> On 1/28/25 19:02, Conor Dooley wrote:
->>> On Tue, Jan 28, 2025 at 09:17:23AM +0100, patrice.chotard@foss.st.com wrote:
->>>> +  memory-region:
->>>> +    maxItems: 1
->>>
->>> Whatever about not having descriptions for clocks or reg when there's
->>> only one, I think a memory region should be explained.
->>
->> ok i will add :
->>
->>     description: |
+On 1/28/25 13:37, Mark Brown wrote:
+> On Tue, Jan 28, 2025 at 09:17:24AM +0100, patrice.chotard@foss.st.com wrote:
 > 
-> The | isn't needed here.
-ok
+>> +static int stm32_ospi_tx_poll(struct stm32_ospi *ospi, u8 *buf, u32 len, bool read)
+>> +{
+> 
+>> +	if (read)
+>> +		tx_fifo = stm32_ospi_read_fifo;
+>> +	else
+>> +		tx_fifo = stm32_ospi_write_fifo;
+> 
+>> +		tx_fifo(buf++, regs_base + OSPI_DR);
+> 
+> It feels like the _tx_poll and tx_fifo naming is a landmine waiting to
+> surprise people in the future.  The code sharing makes sense but the
+> naming is just looking to cause surprises, especially with it just being
+> a bool selecting read or write.
+
+Agree, i will replace "tx_fifo" to a more neutral name as "fifo" for example
 
 > 
->>       Memory region to be used for memory-map read access.
+>> +static int stm32_ospi_tx(struct stm32_ospi *ospi, const struct spi_mem_op *op)
+>> +{
 > 
-> I don't think that's a good explanation, sorry. Why's a memory-region
-> required for read access?
+>> +       return stm32_ospi_tx_poll(ospi, buf, op->data.nbytes,
+>> +                                op->data.dir == SPI_MEM_DATA_IN);
+> 
+> Though the one caller is also using _tx only naming, it's a bit more
+> tied in with the op sending though.
 
-The OCTOSPI interface support 3 functional modes: 
-  _ indirect
-  _ automatic polling status
-  _ memory-mapped
+I will replace stm32_ospi_tx_poll() by stm32_ospi_poll()
 
-256MB are reserved in the CPU memory map for the 2 OCTOSPI instance.
-This area is used when OCTOSPI1 and/or OCTOSPI2 operate in memory-mapped
-mode. In this mode, read access are performed from the memory device using
-the direct mapping.
+> 
+>> +	ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD |
+>> +			  SPI_TX_DUAL | SPI_TX_QUAD |
+>> +			  SPI_TX_OCTAL | SPI_RX_OCTAL;
+>> +	ctrl->setup = stm32_ospi_setup;
+>> +	ctrl->bus_num = -1;
+>> +	ctrl->mem_ops = &stm32_ospi_mem_ops;
+>> +	ctrl->use_gpio_descriptors = true;
+>> +	ctrl->transfer_one_message = stm32_ospi_transfer_one_message;
+>> +	ctrl->num_chipselect = STM32_OSPI_MAX_NORCHIP;
+>> +	ctrl->dev.of_node = dev->of_node;
+> 
+> It looks like the controller only does half duplex as well so it should
+> set SPI_CONTROLLER_HALF_DUPLEX.
+
+Right, i will add it.
 
 Thanks
 Patrice
-
-> 
->>>> +
->>>> +  clocks:
->>>> +    maxItems: 1
->>>> +
->>>> +  interrupts:
->>>> +    maxItems: 1
->>>> +
->>>> +  resets:
->>>> +    items:
->>>> +      - description: phandle to OSPI block reset
->>>> +      - description: phandle to delay block reset
->>>> +
->>>> +  dmas:
->>>> +    maxItems: 2
->>>> +
->>>> +  dma-names:
->>>> +    items:
->>>> +      - const: tx
->>>> +      - const: rx
->>>> +
->>>> +  st,syscfg-dlyb:
->>>> +    description: phandle to syscon block
->>>> +      Use to set the OSPI delay block within syscon to
->>>> +      tune the phase of the RX sampling clock (or DQS) in order
->>>> +      to sample the data in their valid window and to
->>>> +      tune the phase of the TX launch clock in order to meet setup
->>>> +      and hold constraints of TX signals versus the memory clock.
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>
->>> Why do you need a phandle here? I assume looking up by compatible ain't
->>> possible because you have multiple controllers on the SoC? Also, I don't
->>
->> Yes, we got 2 OCTOSPI controller, each of them have a dedicated delay block
->>  syscfg register.
-> 
-> :+1: 
-> 
->>> think your copy-paste "phandle to" stuff here is accurate:
->>>       st,syscfg-dlyb = <&syscfg 0x1000>;
->>> There's an offset here that you don't mention in your description.
->>
->> I will add it as following:
->>
->>   st,syscfg-dlyb:
->>     description:
->>       Use to set the OSPI delay block within syscon to
->>       tune the phase of the RX sampling clock (or DQS) in order
->>       to sample the data in their valid window and to
->>       tune the phase of the TX launch clock in order to meet setup
->>       and hold constraints of TX signals versus the memory clock.
->>     $ref: /schemas/types.yaml#/definitions/phandle-array
->>     items:
->>       - description: phandle to syscfg
->>       - description: register offset within syscfg
-> 
-> :+1:
-> 
->>>> +  access-controllers:
->>>> +    description: phandle to the rifsc device to check access right
->>>> +      and in some cases, an additional phandle to the rcc device for
->>>> +      secure clock control
->>>
->>> This should be described using items rather than a free-form list.
->>
->>   access-controllers:
->>     description: phandle to the rifsc device to check access right
->>       and in some cases, an additional phandle to the rcc device for
->>       secure clock control
->>     items:
->>       - description: phandle to bus controller or to clock controller
->>       - description: access controller specifier
->>      minItems: 1
->>      maxItems: 2
-> 
-> These updates look fine to me.
 
