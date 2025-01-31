@@ -1,58 +1,57 @@
-Return-Path: <linux-spi+bounces-6595-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6596-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E870CA23D40
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Jan 2025 12:40:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A59EA23DA4
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Jan 2025 13:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 346DB3A9BD5
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Jan 2025 11:40:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86265168618
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Jan 2025 12:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE2610E0;
-	Fri, 31 Jan 2025 11:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014D01C07F5;
+	Fri, 31 Jan 2025 12:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="Yz9CI78/"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="ZH/QrR6C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3C31C1AC7
-	for <linux-spi@vger.kernel.org>; Fri, 31 Jan 2025 11:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C350B1BD038
+	for <linux-spi@vger.kernel.org>; Fri, 31 Jan 2025 12:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738323593; cv=none; b=u2mVvdVX3mSUKdMdBMSLe3sEOp486NnWkcPwtpTctRUuuACkcahxzh80jZ0eeD3r8XVChaTPzOnoQ9xf6PJV+qEh+Ytwz2OIvT0RCyneqhJXAYtxmzVrywqeRBlAr7JHu5HVd1FCpYPbXqcbf1b41UBK2FHwP9PU5D8OCd3t218=
+	t=1738326195; cv=none; b=asq240jwmIxaSQaPDTsQvpy5KiZEDsHFnJE9qluQ4VHkVhBb4cGlt1Lzfq1jSU0/tvCgvharyMvD8zCcl7G2E4vE7vtrBhdNXIxlguTN5AGsztsLyBlW0Zsx6gztvqTkhPrG/0swUPpOC0/QNg6YyRgD6/u7YlibF2MOkM2yl3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738323593; c=relaxed/simple;
-	bh=476EBTGgcI5xdYOaJ6LQa3tfmwSruyF9mYzvA+HovWU=;
+	s=arc-20240116; t=1738326195; c=relaxed/simple;
+	bh=2qfaRTO5iG5mOYJ+RvO6+d2r0hfl5IUM+PXTysg9LQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=giPyo5j8bMbSdBOcrshKZ9BxPqGJpRwEa12rzcKL4YbXVs3+f5p/n+RKPPo2Rq7v4taK4tJ54x+S1ZkM9dXgsWq42YkYGp8GZQYRyULQa6++cYmgdpdOYzT0sxo2G4StchkaQH5X2vt6dO9O08Z9zB/WL3LRESoscifnqnhV7Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=Yz9CI78/; arc=none smtp.client-ip=185.67.36.66
+	 Content-Type:Content-Disposition:In-Reply-To; b=s7mt9ypLZ/w9ktEArCxEgQP7UrJVj0tB+OZ/l/0YweZmi/ndlnr8Jmumd+MJMA84GUXomk9by39ojih4oDYYcgU/iurBSe1sJwtE+U8kowj3rDpC0cNcB7oGv6gCIiDuJhmq0Sf8i7qRBCX2NdqHg/8uuBlp+YPvv+WCjSnSKDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=ZH/QrR6C; arc=none smtp.client-ip=185.67.36.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 1E85C240104
-	for <linux-spi@vger.kernel.org>; Fri, 31 Jan 2025 12:33:45 +0100 (CET)
+	by mout01.posteo.de (Postfix) with ESMTPS id 3A8EC240028
+	for <linux-spi@vger.kernel.org>; Fri, 31 Jan 2025 13:23:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738323226; bh=476EBTGgcI5xdYOaJ6LQa3tfmwSruyF9mYzvA+HovWU=;
+	t=1738326192; bh=2qfaRTO5iG5mOYJ+RvO6+d2r0hfl5IUM+PXTysg9LQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
 	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=Yz9CI78/fovWb2L5arMhqzICRpUn5PDCJglnqxot979BF/cz24B57yuu4aqG+WEsA
-	 SwkGWcjgcrBU0WNZOH5ITMaS93rkXZ5MKtflImxIJt3OEmQhmszJJZmMatbXyhZ4bj
-	 9eN6uGxkTzbO3lC3ZbMVIteudpPKS6+AdjcAQogx5QcbvxPI4VmDx8o1g4HJVTxM3n
-	 wFVcW3I0tdDAt9EwDVnVPV8xr9ykgPT5lxzvCP/k4JSgJgzI22+ncddHWp5ZTvMMz0
-	 Xps9MsPE2HzxePqW35oCBQWUWRgqSQV/OvOk7usYRAPfrme2gy7aX9OnJUFBT91Osg
-	 whcxqOR2a8c7w==
+	b=ZH/QrR6CDzrfRyOcDdDH1yAPCkywXurHgOK68RDcFhhdhoq8xD44Fh+6uUGh+dwWw
+	 UBOzkZwnU3ddtLRTeU9gq3Ro9Pye5t/VIvS47EuiR6p52UR5Egh3g+CwT4bretriRL
+	 9P1/U02bGR2CHxLzixwpkWxHjV7Zcn5ENGNT8IMCsYNGV7EkvrLpD208SD1pV3iCbJ
+	 YJpiFVWgIAxaRW3ZJfEeJKJ2G+bPdrPU3tXn5FZ2drudvcOkXIkQH7TlekHEnIB4sg
+	 LdJzUnEBnSD/51ERodPs5mvutRoWmEeP0pN0ROgbkERvi/mrMIgITeGplhnDse7Plf
+	 4sz+RCqcxm1yg==
 Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Ykv0g42F0z9rxF;
-	Fri, 31 Jan 2025 12:33:39 +0100 (CET)
-Date: Fri, 31 Jan 2025 11:33:39 +0000
+	by submission (posteo.de) with ESMTPSA id 4Ykw5h1ywDz6typ;
+	Fri, 31 Jan 2025 13:23:03 +0100 (CET)
+Date: Fri, 31 Jan 2025 12:23:03 +0000
 From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Frank Li <Frank.li@nxp.com>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Scott Wood <oss@buserror.net>,
+To: Damien Le Moal <dlemoal@kernel.org>
+Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, Scott Wood <oss@buserror.net>,
 	Madhavan Srinivasan <maddy@linux.ibm.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
@@ -60,7 +59,6 @@ Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
 	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
 	Niklas Cassel <cassel@kernel.org>,
 	Herbert Xu <herbert@gondor.apana.org.au>,
 	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
@@ -79,11 +77,11 @@ Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
 	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
 	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
 	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 0/9] YAML conversion of several Freescale/PowerPC DT
- bindings
-Message-ID: <Z5y1E6TUclqzV2Rp@probook>
+Subject: Re: [PATCH 2/9] dt-bindings: ata: Convert fsl,pq-sata binding to YAML
+Message-ID: <Z5zAp3X7U0oftneH@probook>
 References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <Z5qr1VkKSlyBE/E4@lizhi-Precision-Tower-5810>
+ <20250126-ppcyaml-v1-2-50649f51c3dd@posteo.net>
+ <a9df1ae6-8779-4dc0-8f03-eda939c0e533@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -93,25 +91,63 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z5qr1VkKSlyBE/E4@lizhi-Precision-Tower-5810>
+In-Reply-To: <a9df1ae6-8779-4dc0-8f03-eda939c0e533@kernel.org>
 
-On Wed, Jan 29, 2025 at 05:29:41PM -0500, Frank Li wrote:
-> On Sun, Jan 26, 2025 at 07:58:55PM +0100, J. Neuschäfer wrote:
-> > This is a spin-off of the series titled
-> > "powerpc: MPC83xx cleanup and LANCOM NWAPP2 board".
-> >
-> > During the development of that series, it became clear that many
-> > devicetree bindings for Freescale MPC8xxx platforms are still in the old
-> > plain-text format, or don't exist at all, and in any case don't mention
-> > all valid compatible strings.
-> >
+On Mon, Jan 27, 2025 at 08:22:55AM +0900, Damien Le Moal wrote:
+> On 1/27/25 03:58, J. Neuschäfer via B4 Relay wrote:
+> > From: "J. Neuschäfer" <j.ne@posteo.net>
+> > 
+> > Convert the Freescale PowerQUICC SATA controller binding from text form
+> > to YAML. The list of compatible strings reflects current usage.
+> > 
 > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> >  .../devicetree/bindings/ata/fsl,pq-sata.yaml       | 59 ++++++++++++++++++++++
+[...]
+> > +description: |
+> > +  SATA nodes are defined to describe on-chip Serial ATA controllers.
+> > +  Each SATA port should have its own node.
 > 
-> Please cc imx@lists.linux.dev next time
-> 
-> Frank
+> Very unclear. The SATA nodes define ports or controllers ? Normally, a single
+> controller can have multiple ports, so the distinction is important.
 
-Will do.
+I'll change it to "Each SATA controller ...", see below.
+
+
+> > +  cell-index:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [1, 2, 3, 4]
+> > +    description: |
+> > +      1 for controller @ 0x18000
+> > +      2 for controller @ 0x19000
+> > +      3 for controller @ 0x1a000
+> > +      4 for controller @ 0x1b000
+> 
+> Are you sure these are different controllers ? Are they not different ports of
+> the same controller ? Given that the previous text description define this as
+> "controller index", I suspect these are the port offsets and you SATA nodes
+> define ports, and not controllers.
+
+They have no shared registers, and each instance has the same register
+set (at a different base address).
+
+The MPC8315E reference manual (for example) documents them as:
+
+	SATA 1 Controller—Block Base Address 0x1_8000
+	SATA 2 Controller—Block Base Address 0x1_9000
+
+(table A.24 Serial ATA (SATA) Controller)
+
+Section 15.2 Command Operation implies that each SATA controller
+supports a single port:
+
+	The SATA controller maintains a queue consisting of up to 16
+	commands. These commands can be distributed to a single attached
+	device or, if the system contains a port multiplier, over each
+	of the attached devices.
+
+So, in conclusion, I'm fairly sure "controller" is the right description.
+
 
 Best regards,
 J. Neuschäfer
