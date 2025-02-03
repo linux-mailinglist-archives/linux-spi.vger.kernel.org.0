@@ -1,55 +1,65 @@
-Return-Path: <linux-spi+bounces-6601-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6602-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B358FA252F0
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 08:23:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22C38A25388
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 09:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1140A3A44A3
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 07:23:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07D991648BE
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 08:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E501E7C07;
-	Mon,  3 Feb 2025 07:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCC71FBE9B;
+	Mon,  3 Feb 2025 08:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="tPjM0uN4"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="VIP/53qZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8E31D95A9;
-	Mon,  3 Feb 2025 07:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08D31FBCBA;
+	Mon,  3 Feb 2025 08:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738567395; cv=none; b=MvQ7fvaIQuH/AnrO2OJqPohyoK6KYGrpcwiv3Jb5cd+NChAJsxyo2FMqr7lHc75bKngRmFopRS/jqfmUDG0E1BP5oKhwJuZfCOCknIZL3pHFR8B2el0R/YITw+akonKuA+0VJzFZvfvVWxjhiFyhU9z0IGoSJhk+ip9/Y6Q28qU=
+	t=1738569916; cv=none; b=EivyAMuj8vA4Q2C/ud2jA35mKW12PR3ZLf40WFp62hnVJRHbd50G27pgKDcVXCJfVjeXUUR9NtNKz5fhWwW2xiZIB8On2S+udHzNzlydXuXu7GrcJz1N3GPJLKLFF2QDHeFNfz5y4EQQZScnL6GBcpVpBsKvAzqF7QClcjIxp1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738567395; c=relaxed/simple;
-	bh=pL2jDbwM2tnoDPxkIcout16iJtvsCV65sn/2QOSZBsY=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ua6r/yBjKdafsset+0V1csFIUecxXaCFLbNR3twTR1JbRXRHtifd+HjbfUQ9/dlO82O8WQOi8SzAqnCO3YMADfpzKIpq8xdNa0JNCxzexm9xXNJq0L8KlHeelrXqtcClg4QMrMuWWDmSnbtomqHSBJhoLgFpxMxOoEwFvulvZw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=tPjM0uN4; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1738567338; x=1739172138; i=markus.elfring@web.de;
-	bh=pL2jDbwM2tnoDPxkIcout16iJtvsCV65sn/2QOSZBsY=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:From:Subject:To:
-	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=tPjM0uN4I/GdAFp31++PG26z4Vto4PmHwwKCB+iJ4HIbRwu5joJXwvRpwBps1Vk5
-	 BsR+TBN1/gKQUNN6ZGncM+nvFp4kAyRHyxYGr6ANswR2VhX+Sk5BqHpIiTEwtoqV7
-	 CYW45ezkvs7otl2YrqdQlFPAZudQCI5wDpQYRd/iR3EILMUFNGcUyJSc7iDH9JyOD
-	 FbUpses7uVefH5D3IUULvsEYhibYuqoSt+k+uleYwhAQhNpVKuTLS08qGiRMwzU3I
-	 whTVatnsqGvJVTwBvBpdjC7mCZHIZcsSw0Qqlo/EOLaII4kL6LfqeSBy35+o25YKu
-	 kUv/J7OgQXFBoRqg1w==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.70.29]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MjgX3-1szyFN23FD-00mF3n; Mon, 03
- Feb 2025 08:22:18 +0100
-Message-ID: <875fe1a2-64b4-43f9-8b6c-60e416a37248@web.de>
-Date: Mon, 3 Feb 2025 08:22:12 +0100
+	s=arc-20240116; t=1738569916; c=relaxed/simple;
+	bh=vVtdkUjzTpAveHWJ8dPzZG7iYZ9wg4ehOvHWQcUQqTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Xhx3lqghfowYVBm64zlFJy+xlJyA3To0x7IwQctRBx9JIUy3u3eSiQuvBfrNzTu+CxczFUfmamMVrnLRyEmMxD9BGmOxoJg+BPKJ2TmQyt74MPazrY2Etx1Asy4t7tEaPVRlqd/0ZTP2Li/wKLc5x2gbEh4j/C7uEdOYaO7EoPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=VIP/53qZ; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5136Kr6r016972;
+	Mon, 3 Feb 2025 08:31:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	RuCAHbevHJ5uWp3A9K/KqPfMZXRayoGge+NC8B4v7wk=; b=VIP/53qZNTOLw+0l
+	tvMdXlD10Zs0SnR9DPAsIXWkJLssNDO8BWrZrDeH6C4Gi34ezgWAME5c+OWMq8aD
+	Y6vUH+0KgvNa5ZaL/Im4l8AcuNpsV5YlEhH97n89jjC4QtvrSPCVNs4qeWvkHpZs
+	seluT/lbxMSZWqgus/oTnPOO1oq6Sg4Gpb8SASKiEjpSws9oRzlpZMZV40e/KTUr
+	KeISb83TC+7sdv23Wq2HYQPUmN2m0OMXykxF5gryc4s49jUoawHVNmMyH7DrgNQl
+	PkxQ4/ouzPqeUe/WrJ0bXVXGZLFafp8U66MNgDLPGcQMdWsvGeoLNbbLNMMtId+v
+	25irOQ==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44hdmrvr9s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Feb 2025 08:31:12 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 9AEAD40051;
+	Mon,  3 Feb 2025 08:29:51 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B7C9E28E495;
+	Mon,  3 Feb 2025 08:29:42 +0100 (CET)
+Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 3 Feb
+ 2025 08:29:41 +0100
+Message-ID: <62f719a0-357f-406a-92e1-3e8ab4ef9600@foss.st.com>
+Date: Mon, 3 Feb 2025 08:29:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,100 +67,120 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: Re: [01/16] coccinelle: misc: secs_to_jiffies: Patch expressions too
-To: Easwar Hariharan <eahariha@linux.microsoft.com>, cocci@inria.fr
-Cc: kernel-janitors@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-nvme@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org,
- ceph-devel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
- imx@lists.linux.dev, kernel@pengutronix.de,
- linux-arm-kernel@lists.infradead.org,
- Andrew Morton <akpm@linux-foundation.org>, Carlos Maiolino <cem@kernel.org>,
- Chris Mason <clm@fb.com>, Christoph Hellwig <hch@lst.de>,
- Damien Le Moal <dlemoal@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>,
- David Sterba <dsterba@suse.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
- Dongsheng Yang <dongsheng.yang@easystack.cn>,
- Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
- Hans de Goede <hdegoede@redhat.com>,
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
- James Bottomley <James.Bottomley@HansenPartnership.com>,
- James Smart <james.smart@broadcom.com>, Jaroslav Kysela <perex@perex.cz>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
- Josef Bacik <josef@toxicpanda.com>, Julia Lawall <Julia.Lawall@inria.fr>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Ilya Dryomov <idryomov@gmail.com>,
- Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
- Keith Busch <kbusch@kernel.org>, Leon Romanovsky <leon@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nicolas Palix <nicolas.palix@imag.fr>, Niklas Cassel <cassel@kernel.org>,
- Oded Gabbay <ogabbay@kernel.org>, Ricardo Ribalda <ribalda@google.com>,
- Sagi Grimberg <sagi@grimberg.me>, Sascha Hauer <s.hauer@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>,
- Selvin Xavier <selvin.xavier@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Takashi Iwai <tiwai@suse.com>,
- Victor Gambier <victor.gambier@inria.fr>, Xiubo Li <xiubli@redhat.com>,
- Yaron Avizrat <yaron.avizrat@intel.com>,
- Ricardo Ribalda <ribalda@chromium.org>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-1-9a6ecf0b2308@linux.microsoft.com>
- <e06cb7f5-7aa3-464c-a8a1-2c7b9b6a29eb@web.de>
- <632be2db-78d2-4249-92f0-3f60e0373172@linux.microsoft.com>
-Content-Language: en-GB
-In-Reply-To: <632be2db-78d2-4249-92f0-3f60e0373172@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:unmzcva3DfFDe8J5T/SEse13ECLrm00SFr+jMbswdVLKuVhkuYO
- KrTlmHqHj2q9ogvXNY+OT9rpa/y77P4OKcbhTRE4HQfNnHl3vyWWfzK02lPKs/doF/0oo/N
- zaSBPOg0Tas1K5KCmS6LhNSs0R2vs1xLG29Gypkmwc3S031NZBDDMgkSSAGcQ2a7o9N0Sjo
- 97PGMtERfjxkxxcBQ4+cg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ttbGuD59yWE=;aR8uoScoWimrSRCmRkUV4SeMiC4
- W79hOF4H0lhnQHYtzx3m5sNeqoeEjllyRz8YO7qpX8lmmz5+tS5bf6f8vLVqYn9Kaf48xHqma
- GMO3bXWom5xZ+oVyIxDcLJs8p7PgYEA5ypLybnd2/T+GawWIBGs+YXCKBHx9HvPqPogF+ZWbt
- K+TyhUDO5bQsBtbetxS3RKRmFHZaezGpeiwamE4tJBcayt8rdci1cnRAVxZjRrnyUeMDPgD6w
- WKKXvMYQI9xNIms2eXtV9M1bxbS+lhSfb6gN7tJf2LwY4iDuINHUwQnKRfA26lORiGW/UmxpA
- VDJglYJvc0HJJqymSDraa9W3b84J+5STNVqd3FDiOGXm1u1Lg5SvWgA1viCB3U/T6eNlmBKxu
- cW3HuColf7JWTbOCtYKQMticsxdqTUl6/icidZDIKeZA/6BTvCAJ5yo10i++PE5kYqE0mQ1ho
- 4NVa2X6CB+FFnhhsQwwWTKFynfvg6dK/P1RIrFw78t5WsC8zz4qm64j7mnJS57vOm+HlNeNlJ
- dATJc1VHQDMoj9hjzdFzfzgZw9h5kyLYh8oVruDNFJ/+FH75gEuWoZlsU8KTOZQFV7EoxkSYe
- EVfenvSMPnmSzjQa+vNyzYbKtqQOPF88CdXdnAAym8guV56rCHkNBsyBuIPwADo10ZAjBpNzA
- OBRBkYWMqMkvqRqoLGiggpeqewsL9YdiEBa4oesyjAGQIw7IJ8/0snpG+f+cuMaO7kmaB6nHE
- nOpJS6Z9qzdfoJVXgs+47u+CzVBhVhWLqb0XCPk9jzzEHfYLkrIHTUIhakYc7nZUEAyJDC73r
- /hzw3PToNCTxBrUrwiTLOAoOxpa5fcHyJWusNq5FrbAxgole7higv+1sBb8NprFHptypkZ+Cw
- iq1xF2BAP1xbwfSfH760NHJ4EMEjOMI/iDzAJwPxQkxSlaDBQ4Gbv5ujQYBd3YMxgiuIGsl/w
- MdFuwIfMQU5oEMCItKFmMAIf7k7pEPQrOuKnG6AZ/LH/H2vUdfQfPyq8wJxV64EFZr9eSy6wJ
- Oy+t8DI1kdV301z/zAZQ8OpU2xnB8IxTLqrcbF63n+gYPUELXtWaXOoIbr5o0TxUA7XsBRCAL
- PYOoStHMrzPoz4tMq6bqU3gJQfZq4+hT0/1xGvJHF3EYYHdBGWrL7T8ngj9APgUClmkiUid9u
- qhcbZXpp66SsJcS9vzL/rjOnWJmMD3M+Ha1/NMDr7Hx2giHnnM35m2TcteG0N0JcefSzkj9ds
- f+5nMopNsnV7A3egbviqSJLT+UcbhaOvEXNf4avchAw4jPQ3zsTkczrYbZ8buav0UwNGXIMsG
- NwU97T/pGW1qLPWQZzQJs0EPaXBDrr4upn8u/GPLFGYGs6cf+BXQ4GT4mOQgByfpkCi
-
-> As it stands, I'll fix up the current rules in v2 following your
-> suggestion to keep the multiplication in each line to allow Coccinelle
-> to use the commutativity properties and find more instances.
-
-Corresponding software development challenges can eventually be clarified =
-further.
+Subject: Re: [PATCH v2 4/9] memory: Add STM32 Octo Memory Manager driver
+To: Philipp Zabel <p.zabel@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann
+	<arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon
+	<will@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <christophe.kerello@foss.st.com>
+References: <20250128081731.2284457-1-patrice.chotard@foss.st.com>
+ <20250128081731.2284457-5-patrice.chotard@foss.st.com>
+ <3d6cfb082ef8ee0fc66c885a84f64ae0a851234b.camel@pengutronix.de>
+Content-Language: en-US
+From: Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <3d6cfb082ef8ee0fc66c885a84f64ae0a851234b.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_03,2025-01-31_02,2024-11-22_01
 
 
-> I'll refrain from implementing the report mode until current instances
-> have been fixed because of the issue we have already seen[1] with CI
-> builds being broken. I would not want to break a strict CI build that is
-> looking for coccicheck REPORT to return 0 results.
 
-You got into the mood to test support for an information in the software d=
-ocumentation.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/dev-tools/coccinelle.rst?h=3Dv6.13#n92
-=E2=80=9C=E2=80=A6
-Note that not all semantic patches implement all modes.
-=E2=80=A6=E2=80=9D
+On 1/28/25 10:17, Philipp Zabel wrote:
+> On Di, 2025-01-28 at 09:17 +0100, patrice.chotard@foss.st.com wrote:
+>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> Octo Memory Manager driver (OMM) manages:
+>>   - the muxing between 2 OSPI busses and 2 output ports.
+>>     There are 4 possible muxing configurations:
+>>       - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
+>>         output is on port 2
+>>       - OSPI1 and OSPI2 are multiplexed over the same output port 1
+>>       - swapped mode (no multiplexing), OSPI1 output is on port 2,
+>>         OSPI2 output is on port 1
+>>       - OSPI1 and OSPI2 are multiplexed over the same output port 2
+>>   - the split of the memory area shared between the 2 OSPI instances.
+>>   - chip select selection override.
+>>   - the time between 2 transactions in multiplexed mode.
+>>   - check firewall access.
+>>
+>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
+>> ---
+>>  drivers/memory/Kconfig     |  17 ++
+>>  drivers/memory/Makefile    |   1 +
+>>  drivers/memory/stm32_omm.c | 509 +++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 527 insertions(+)
+>>  create mode 100644 drivers/memory/stm32_omm.c
+>>
+> [...]
+>> diff --git a/drivers/memory/stm32_omm.c b/drivers/memory/stm32_omm.c
+>> new file mode 100644
+>> index 000000000000..6f20fe0183ec
+>> --- /dev/null
+>> +++ b/drivers/memory/stm32_omm.c
+>> @@ -0,0 +1,509 @@
+> [...]
+>> +static int stm32_omm_configure(struct device *dev)
+>> +{
+>> +	struct stm32_omm *omm = dev_get_drvdata(dev);
+>> +	struct reset_control *rstc;
+>> +	unsigned long clk_rate, clk_rate_max = 0;
+>> +	int ret;
+>> +	u8 i;
+>> +	u32 mux = 0;
+>> +	u32 cssel_ovr = 0;
+>> +	u32 req2ack = 0;
+>> +
+>> +	omm->clk = devm_clk_get(dev, NULL);
+>> +	if (IS_ERR(omm->clk)) {
+>> +		dev_err(dev, "Failed to get OMM clock (%ld)\n",
+>> +			PTR_ERR(omm->clk));
+>> +
+>> +		return PTR_ERR(omm->clk);
+>> +	}
+>> +
+>> +	ret = pm_runtime_resume_and_get(dev);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	/* parse children's clock */
+>> +	for (i = 0; i < omm->nb_child; i++) {
+>> +		clk_rate = clk_get_rate(omm->child[i].clk);
+>> +		if (!clk_rate) {
+>> +			dev_err(dev, "Invalid clock rate\n");
+>> +			goto err_clk_disable;
+>> +		}
+>> +
+>> +		if (clk_rate > clk_rate_max)
+>> +			clk_rate_max = clk_rate;
+>> +	}
+>> +
+>> +	rstc = devm_reset_control_get_optional(dev, NULL);
+> 
+> Please use devm_reset_control_get_optional_exclusive() directly.
 
-Regards,
-Markus
+ok
+
+Thanks
+Patrice
+
+> 
+> regards
+> Philipp
 
