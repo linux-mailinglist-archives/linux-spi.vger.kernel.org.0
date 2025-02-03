@@ -1,102 +1,113 @@
-Return-Path: <linux-spi+bounces-6607-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6608-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C49D1A25BFA
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 15:13:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3DB0A25E05
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 16:10:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 684633A483E
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 14:12:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5FF83B4563
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 14:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A25205E08;
-	Mon,  3 Feb 2025 14:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E15C112E7F;
+	Mon,  3 Feb 2025 14:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzTnoVxA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1URV35M"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491202010F5;
-	Mon,  3 Feb 2025 14:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD139FC0E
+	for <linux-spi@vger.kernel.org>; Mon,  3 Feb 2025 14:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738591936; cv=none; b=dxcTu9SZeTliY28Sk16ThA75QPov6H4vUArC/E3mv8cG4CwBBNgmXKZZQuMRIhAxFq676ktIjDpDwL3Ksvka/lUPAGoQEvH5KPpBzMwG9HxlA0E9iTMUeKUbd4WRWrO05blKfWGnlnh+WlE4omJi2U/mpJRSviKN6I7EV63yMBk=
+	t=1738594522; cv=none; b=XfC0TdQw6uuBFwcIXDtMaC1MB2CZwBi14ofVWfpQiHkqojgFr9zsm8xUFoz2qK5IjSceKkmBmjwhBpRtQ5NCvPjqTHmNtzngsBDqJn+lzg/5Tj7Ea0+gZZQTUlKyT7z58lc8zKB4wdhXa++Cl+/ylT/+mOn/LOhEoTpe2EfiUMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738591936; c=relaxed/simple;
-	bh=mGVANJKWibnpcCXC3IcHRYT9WXJQXf6udtwu3dq0dJQ=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GV3gFEbOjqIecfjcLg4EME8V43ZNhj3V5YRrWWX5m1BXmj2XTc4iR7mn1Tg9AKtZdQqKHKWhuhMAOuEd8mYEjM0nszMeJWAJRj0cfWmMklLmkJp9NwOUEEUdfyIFf9e35U4ZOrL2s82afjV2wZz3Alh3aCIeq+8bXHp4sNyP75w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mzTnoVxA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B79C4CED2;
-	Mon,  3 Feb 2025 14:12:13 +0000 (UTC)
+	s=arc-20240116; t=1738594522; c=relaxed/simple;
+	bh=4NBE/QhhePvMFBZcY3bupmf6eU2IDYbef0CWTJ4iMn4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ZTrKUVR9Boh9LHjryldWkqbiTPILhcu+0vRKgN8S2aIsGcHKdsCRALzMfpmadKKhCOLkuwsGiP++RKVEG8tEHCFVNr6R5yQLPp7AaUHvRJGeodD9yHoPjHbmpHVZ8k33bUcLXjIlpx3OkFb5JB6YUS8U9uE3Wrjp5JE393sdeC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1URV35M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3229AC4CED2;
+	Mon,  3 Feb 2025 14:55:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738591934;
-	bh=mGVANJKWibnpcCXC3IcHRYT9WXJQXf6udtwu3dq0dJQ=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=mzTnoVxAstvGz7/ClpvqeYiz/Srrh6+fBtfXRScFP6ZmAzat01U1SBvTX9l1Ifj9O
-	 DDZzCLQ0f2bvjnXki3Xj7SFGbqhSSSfOCVAOqevy+g/em/wfnFS1ZQuGnX9q0cw8Hn
-	 gmaTIIAbfSFCR0ZjxL1F6xhwDltqVUJCr+hSB5FCd97Dtm/pY+eg3OvmuzwKRUS/Hz
-	 B6ACDEZFBSAEyTLKoAnAiokzBm9G9+XpFcCKK38cS1wBy6t4PKminEKw7Md14BesF6
-	 iqW2IpoA2py9/gyKTazwZi481QKrXDIjq0OqsPXnN8MMtuviJ+5e0eH4xrBTGx6/kt
-	 NaFf+7CNBXfjw==
-From: Mark Brown <broonie@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250129152925.1804071-1-andriy.shevchenko@linux.intel.com>
-References: <20250129152925.1804071-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: realtek-rtl-snand: Drop unneeded
- assignment for cache_type
-Message-Id: <173859193360.165692.11079984707923289559.b4-ty@kernel.org>
-Date: Mon, 03 Feb 2025 14:12:13 +0000
+	s=k20201202; t=1738594522;
+	bh=4NBE/QhhePvMFBZcY3bupmf6eU2IDYbef0CWTJ4iMn4=;
+	h=Subject:From:Date:To:From;
+	b=F1URV35MoPRvPyHDZWNERHvk9r5XId3qmTmLffc7axvM5eG4hakKjaoon+I7QPwR4
+	 dyiKwXldU13k7MmnnGO6wuZvJeLKn2TLIQ4xQ5HunjaxgaG3/IxK+Nf3ZgkBBpjMjc
+	 xBNgg9LnjBDlxhsOs7a/H82ZH5V+9HT2mdtv9djq0zHfWuGppZvQ5Wx803/4cHSGOl
+	 AQ2zjMnyNj6ohMbVNNiPmsJMTpORHajJKapSYUBCaayehCXnhKxp+rH/baRAH83cqJ
+	 bFq3wmy8iB6IPKJ/WAm/bOP29YWAfMGfZ49SnXSHP0k0yL+QyZAvE4x243XSum6gW8
+	 bgTfyob96tfUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7100D380AA67;
+	Mon,  3 Feb 2025 14:55:50 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173859454892.3265457.14067115420163399664.git-patchwork-summary@kernel.org>
+Date: Mon, 03 Feb 2025 14:55:48 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 29 Jan 2025 17:29:25 +0200, Andy Shevchenko wrote:
-> REGCACHE_NONE is the default type of the cache when not provided.
-> Drop unneeded explicit assignment to it.
-> 
-> Note, it's defined to 0, and if ever be redefined, it will break
-> literally a lot of the drivers, so it very unlikely to happen.
-> 
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi-nand/spi-mem DTR support
+  Submitter: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=924284
+  Lore link: https://lore.kernel.org/r/20250110-winbond-6-11-rc1-quad-support-v3-0-7ab4bd56cf6e@bootlin.com
+    Patches: [v3,01/27] spi: spi-mem: Extend spi-mem operations with a per-operation maximum frequency
+             [v3,21/27] mtd: spinand: Create distinct fast and slow read from cache variants
+             [v3,22/27] mtd: spinand: Add an optional frequency to read from cache macros
+             [v3,23/27] mtd: spinand: Enhance the logic when picking a variant
+             [v3,24/27] mtd: spinand: Add support for read DTR operations
+             [v3,25/27] mtd: spinand: winbond: Update the *JW chip definitions
+             [v3,26/27] mtd: spinand: winbond: Add comment about naming
+             [v3,27/27] mtd: spinand: winbond: Add support for DTR operations
 
-Thanks!
+Series: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+  Submitter: Raphael Gallais-Pou <rgallaispou@gmail.com>
+  Committer: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=921258
+  Lore link: https://lore.kernel.org/r/20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com
+    Patches: [1/6] usb: dwc3: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+             [3/6] mtd: st_spi_fsm: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+             [4/6] ahci: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+             [5/6] net: stmmac: sti: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
 
-[1/1] spi: realtek-rtl-snand: Drop unneeded assignment for cache_type
-      commit: c1ac98492d1584d31f335d233a5cd7a4d4116e5a
+Patch: [v1,1/1] spi: realtek-rtl-snand: Drop unneeded assignment for cache_type
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=929099
+  Lore link: https://lore.kernel.org/r/20250129152925.1804071-1-andriy.shevchenko@linux.intel.com
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Series: Add QPIC SPI NAND driver
+  Submitter: Md Sadre Alam <quic_mdalam@quicinc.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=911204
+  Lore link: https://lore.kernel.org/r/20241120091507.1404368-1-quic_mdalam@quicinc.com
+    Patches: [v14,1/8] spi: dt-bindings: Introduce qcom,spi-qpic-snand
+             [v14,2/8] mtd: rawnand: qcom: cleanup qcom_nandc driver
+             [v14,3/8] mtd: rawnand: qcom: Add qcom prefix to common api
+             [v14,4/8] mtd: nand: Add qpic_common API file
+             [v14,5/8] mtd: rawnand: qcom: use FIELD_PREP and GENMASK
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Total patches: 18
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Mark
 
 
