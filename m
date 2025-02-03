@@ -1,107 +1,116 @@
-Return-Path: <linux-spi+bounces-6609-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6610-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D652A25E52
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 16:18:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D9FCA25F58
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 16:57:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6844E1881BC6
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 15:15:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AE39164B88
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Feb 2025 15:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB2120AF6B;
-	Mon,  3 Feb 2025 15:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547A820A5C2;
+	Mon,  3 Feb 2025 15:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="ZkOGUhdE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4nNDT13"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04D820AF65;
-	Mon,  3 Feb 2025 15:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A551209F5C;
+	Mon,  3 Feb 2025 15:57:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738595601; cv=none; b=pz2okNsV+kP7MMlkL005qhmNSk+plBk6bpRTL768JW+fhkIpGjF050KPq6emRqAsHh0YAn9c00taKAIonU07cXXCYqTslH8UHRnLW+flJ44DVh5/jYjGP9iP1XzzkamwpcMb4wpZzMiMmbXfMR7MZ1HdMmFQolNoaVANJUHHdi0=
+	t=1738598263; cv=none; b=qaoVOZ13J04BuwF31s5xAicZl15tH8LS7Qwud2TfaVmUwana7fVGCrk/l0qsOqVvRsr+w4qgBNxKXyi9tqyLuzSJw0OrSkjCK69rTiwf+IdCLf2ksTfAM26iVKqpYNQPgypS4PYP0VQiop+20QQcqd94Mqr4E6cW1LE8z+vYYDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738595601; c=relaxed/simple;
-	bh=S4iSdPY0u2qGzgIj6sz+1VT7L8s6eD4vS+xdZJk5T1Q=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JPdQKUXGE+9mIR/PK27Jq/7EP4AoMUnEGMeHexBe32EcEmBbsFkaOKjynAoFlDTFWYHx/+0EV65a9KuosPNAKS6oEjR7ee4iJvKNQV2O3h0mt3HIM7YK3zlxTnUHDTT7wK07FoIT03eMHui1tLokBkd2DmVKtSeos2GdyjOvlKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=ZkOGUhdE; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id E560EA0E4F;
-	Mon,  3 Feb 2025 16:13:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=mail; bh=KsW8X9WKTUVjkLOMVLun4STQMn5HssaiU+p3WX0jzQw=; b=
-	ZkOGUhdEZdk7nZcdBpWIynCii/QLezGnYiubpZmIP1nbEsFPV/VrJIVF5IaJTpqo
-	gEgut8MklY1FQc38+jyXZMvY8iSMwvUu8b3dmlTU2nwZm9MQZ9SawibxDHCgXCFu
-	hz9epWJh5YtWkNHRY3uaUToFhOuyZ6dSRUWuBId4uqIfXqATAU3lxbV2xTEnzFk9
-	Q/8T3i4DVAFSfUrNQkheHUOu0Sf2Y7jvh+IpzuQb74CCMYCjHemWFctTXarz+f75
-	2t3Nmx1hAHSRNua1pk71sr7Fy7dM6YxjkgwbWGt7WSeBLo02Cjyzc8lqhhlGN9CD
-	Y+c+qbXBEQCs5h71oaXWm0qk0jd4KZqRVX/zqm20d8fOhwi9y21mR4G86V9sifxH
-	Yw/8tVr4gXcdrlXSn4KQN/Jd3s+P5BoAljXMkUuutV+Vdn5kGPk+cJPLvRwRrEAB
-	GXZ0kTJqgCfbAbzF7/I2DZfpYuu6+cP4ZHXDQCDtqoYFref5apShFiMGy2XvPUyx
-	bjWxjJ3r0FnMfzqHGTsdGvjK9Ql+e12nGZrBPNn3FjTKWzkzeSs6bLOKi44jwT7A
-	244J1GsxeZ//J+g+WT4qgGfuokPC+/hyJ08GdthvOUzBe+lpP/cPbDJ5AJaTfA5Z
-	3kqVPMLb0rYebPocaKcZaKetv4LYylaj2Q0PqdsThBE=
-From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: Mark Brown <broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Varshini Rajendran <varshini.rajendran@microchip.com>,
-	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: kernel test robot <lkp@intel.com>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: [PATCH for-6.14] spi: atmel-quadspi: Fix warning in doc-comment
-Date: Mon, 3 Feb 2025 16:12:49 +0100
-Message-ID: <20250203151249.79876-2-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1738598263; c=relaxed/simple;
+	bh=5fDGmhub7kgFaJWNzLMa64HxzMW4rz3YnPY6BA2o8bQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=GnvK8I2AUHZ9WZGTo7/p69DdpfRHor7IHdiqDikCKOhXAuJBoxFf4dWYHwOHMcf904sijXOZmFTQ0rHGPFDCMC5NmacU07qOngTdvKwT+isQ9EeOHPsbZM1RZl/FsonaW4rxoMYdNEtmcedcxA4gWK9854ba024bcUdv3QaG3T0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4nNDT13; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB52C4CED2;
+	Mon,  3 Feb 2025 15:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738598263;
+	bh=5fDGmhub7kgFaJWNzLMa64HxzMW4rz3YnPY6BA2o8bQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=J4nNDT13iycal9wwQ8iR0xlMm3uIg4mgGyb93cOd/oz3CjidGfKUiHyJBrAFMYVXA
+	 7zihPZisRRVdWoi+dSgWbi/NlIN4fKvp0mE+XFn1qIzAr1AmbO1BAZK0hj5sD19TE3
+	 T8CaDMiunBCrqeEMgG+sI05lO2KNWZjT1CntiiINZB8tR2LrODMgSUv59PGsqZdHp3
+	 duRbkLRHwl0BQ5GMpVEAwmFK4ci2kTlSYo3ZvY1EXIRCTR02/TZl0i39ICX4w3E4gy
+	 AXquFzG6Oh0Gl/ekMHYNJKawXYBYQd2OfOO/qRRLC7Q4iFL3BGYvNxLso1YK1f0EXU
+	 TblOtIlmA398g==
+From: Mark Brown <broonie@kernel.org>
+To: Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org, 
+ Sean Anderson <sean.anderson@linux.dev>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <20250116224130.2684544-1-sean.anderson@linux.dev>
+References: <20250116224130.2684544-1-sean.anderson@linux.dev>
+Subject: Re: [PATCH 0/5] spi: zynqmp-gqspi: Clean up the driver a bit
+Message-Id: <173859826117.375082.6233589403904038828.b4-ty@kernel.org>
+Date: Mon, 03 Feb 2025 15:57:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738595593;VERSION=7984;MC=1580607873;ID=182239;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94852667064
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-The doc-comment for `struct atmel_qspi_pcal` had a typo in one of the
-struct members' name, causing a warning with the `W=1` option.
+On Thu, 16 Jan 2025 17:41:25 -0500, Sean Anderson wrote:
+> Here are a few mostly independent cleanups I came up with while writing
+> some other patches. Feel free to apply them in piecemeal if you like.
+> 
+> 
+> Sean Anderson (5):
+>   spi: zynqmp-gqspi: Reformat long line
+>   spi: zynqmp-gqspi: Add some more debug prints
+>   spi: zynqmp-gqspi: Add helpers for enabling/disabling DMA
+>   spi: zynqmp-gqspi: Clean up fillgenfifo
+>   spi: zynqmp-gqspi: Always acknowledge interrupts
+> 
+> [...]
 
-Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202501311707.Ltj0qXse-lkp@intel.com/
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applied to
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index abdc49d9d940..d8c9be64d006 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -235,8 +235,8 @@
- /**
-  * struct atmel_qspi_pcal - Pad Calibration Clock Division
-  * @pclk_rate: peripheral clock rate.
-- * @pclkdiv: calibration clock division. The clock applied to the calibration
-- *           cell is divided by pclkdiv + 1.
-+ * @pclk_div: calibration clock division. The clock applied to the calibration
-+ *           cell is divided by pclk_div + 1.
-  */
- struct atmel_qspi_pcal {
- 	u32 pclk_rate;
--- 
-2.48.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/5] spi: zynqmp-gqspi: Reformat long line
+      commit: d61009bd578ee7381a3cce5c506190ecb8f9d6e8
+[2/5] spi: zynqmp-gqspi: Add some more debug prints
+      commit: ba54629287f58b22c1d37f80f1875373e4b51ea6
+[3/5] spi: zynqmp-gqspi: Add helpers for enabling/disabling DMA
+      commit: d2ead60d853189f8e5ec6b301fac1e60e0b4b47d
+[4/5] spi: zynqmp-gqspi: Clean up fillgenfifo
+      commit: 9b32c86e40da792544c53076f5ec43f115e56687
+[5/5] spi: zynqmp-gqspi: Always acknowledge interrupts
+      commit: 89785306453ce6d949e783f6936821a0b7649ee2
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
