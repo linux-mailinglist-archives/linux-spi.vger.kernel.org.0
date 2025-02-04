@@ -1,139 +1,104 @@
-Return-Path: <linux-spi+bounces-6619-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6620-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8AEFA2799D
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2025 19:19:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB50A27AE2
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2025 20:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BE2E3A3209
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2025 18:19:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EF0F1886AD5
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Feb 2025 19:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E932217671;
-	Tue,  4 Feb 2025 18:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B20F217675;
+	Tue,  4 Feb 2025 19:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="QLuSB3Cp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hd3ZTPAO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20CF78F4A
-	for <linux-spi@vger.kernel.org>; Tue,  4 Feb 2025 18:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1013A153828;
+	Tue,  4 Feb 2025 19:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738693163; cv=none; b=gLVQeFIbDnNP3k9Xbtiu6ET4TPCKxS2GNN0A/ZXQwsi/C4SyFAGJ/PXCGkG5I52+27M7hiTxZ1J7Yw0SnEU0vlBBR1pbM9EbXXsAuoEDD/wrmDuxqR+HridYxmblSDfrBuYj5HpVM7kjGhF0Un+tkUMmzHdEffYxIcWYq2TPlxI=
+	t=1738696146; cv=none; b=Iw36y7ekem+qNtEld1V53iRUsti1WKwCVhOCii2pqGXU6rvBaCYNvLovrHKz9HaXYQIEpl6uVMPSgmHmSjXrnMWEnVreJ1YfDKIXrB4/nrSaD3Pi+W3adXNL9zYWLc1DbJ2GRLOw7nE8KnbYrWmTJZtR/IQndFKUsDePetBKY4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738693163; c=relaxed/simple;
-	bh=TCqqBaH/6DxhhY4LxUIZxLWTUzfo7FZ0g9lCT/VEHVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHGvy2eJyhku6T9Cq0vRAzt8tt+CRs7bFdR3BihOxmheEFBQ6ukJRjdteRS2bdfNsTzPK+Hy6C+VQ2ar8cVaDrV1CI/ZUKJQQ+5uUT6i4qx5FMtO1bPaNtgS45tyO0dQppJbsW94i+C9JQlCIAK/wAcHoTqCKSzcgga5Sd6xjw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=QLuSB3Cp; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 447BF240103
-	for <linux-spi@vger.kernel.org>; Tue,  4 Feb 2025 19:19:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738693152; bh=TCqqBaH/6DxhhY4LxUIZxLWTUzfo7FZ0g9lCT/VEHVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=QLuSB3Cp5wmxvy0AcnxYAbea4vAVqLHQ2qWlm36gLR16yyS9Z6v9YRiCvyp4j4gn5
-	 LgZDTviocjTkkrBZfKjqIX7HKrKmbEgZd5usiMBwfyowuAzH7n9ya5rw+1WcRG1Oim
-	 61l/YRbLQ/MuqjUeCkWoQ1kkGDN+vaSKCCpYDwnidKomCYAjqhFy+gkv+aXN4VknA6
-	 SHTFc7qSWaWjKRuglfENNnh6zyhAw0zuaTMO+sMLjEjkDm5sMj/UWLXt8eIducymRH
-	 jcDEMinpzWrqCDL2LTwSNhNU1eiDWLfNxb9bwY4wxFJwO7H3iV26supD7Xr4Uco5Zq
-	 7tomMw0Ep2Izg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4YnWpc4lyZz6tw4;
-	Tue,  4 Feb 2025 19:19:03 +0100 (CET)
-Date: Tue,  4 Feb 2025 18:19:03 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Rob Herring <robh@kernel.org>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 5/9] dt-bindings: dma: Convert fsl,elo*-dma bindings to
- YAML
-Message-ID: <Z6JaFxfwC0tAB4uQ@probook>
-References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <20250126-ppcyaml-v1-5-50649f51c3dd@posteo.net>
- <20250127044735.GD3106458-robh@kernel.org>
- <Z5zYGdZU-IXwIuR6@probook>
- <CAL_JsqJAX1QbXvG16NV2g6DGece6KiG_V-uyKQQLA618Oq9miw@mail.gmail.com>
+	s=arc-20240116; t=1738696146; c=relaxed/simple;
+	bh=vyhzsUhbRShvmlxemX/ptJCNlQzbChV8Cy/qY5fzQF4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FqQ5kFdVw9MiLnbLJK0ndlK1g5aF/CAMe+8CyTDmS7w2H54Pa7w5Pv5AZut9y4dM9n233FUFQPg0Hn3HXOuUQQddTVZ7JTmdMRzA3UgTCsOgivMl5jrHWm9GAq2Jn1o3WnD/8DBHsxwta0N1RIYfOaVgc1VUbKj/3gzAKQ5sLMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hd3ZTPAO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B69BC4CEDF;
+	Tue,  4 Feb 2025 19:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738696145;
+	bh=vyhzsUhbRShvmlxemX/ptJCNlQzbChV8Cy/qY5fzQF4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hd3ZTPAO9YQB+tg/Wvq9rTN226/g8CF/W33+Y8nWQxjZoqK/Z4YgrFDO4oNy0eVQJ
+	 sgGpP4xL2KYq+MzRqmvs9d/vdXigkuQ1Q/VzeHxPoat1GYMsYQ1JQsGlfkRNYo5ct/
+	 EKJHb0rvdt9FpKd/x6JXIHg7mc3LwwOJWz54jJ+plDFcraJavQhQm1VzNkIWfWchY8
+	 KOWJDKt1jNMWarcntMj9mRmCXo+q4YNh8NkkcMtlvdLWsDF/ONXQnBXnKkb42sOh7g
+	 Hf0lBGmiefQJa/WxqaI9oltd7utdPJSvOLsBgrcrexwlknKkp+yCyfGnVV5RBrI5UH
+	 Rtf399hn86Ejg==
+From: Mark Brown <broonie@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+Cc: kernel test robot <lkp@intel.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <20250203151249.79876-2-csokas.bence@prolan.hu>
+References: <20250203151249.79876-2-csokas.bence@prolan.hu>
+Subject: Re: [PATCH for-6.14] spi: atmel-quadspi: Fix warning in
+ doc-comment
+Message-Id: <173869614334.92129.12671529319133640728.b4-ty@kernel.org>
+Date: Tue, 04 Feb 2025 19:09:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqJAX1QbXvG16NV2g6DGece6KiG_V-uyKQQLA618Oq9miw@mail.gmail.com>
+X-Mailer: b4 0.15-dev-1b0d6
 
-On Fri, Jan 31, 2025 at 04:16:07PM -0600, Rob Herring wrote:
-> On Fri, Jan 31, 2025 at 8:03 AM J. Neuschäfer <j.ne@posteo.net> wrote:
-> >
-> > On Sun, Jan 26, 2025 at 10:47:35PM -0600, Rob Herring wrote:
-> > > On Sun, Jan 26, 2025 at 07:59:00PM +0100, J. Neuschäfer wrote:
-> > > > The devicetree bindings for Freescale DMA engines have so far existed as
-> > > > a text file. This patch converts them to YAML, and specifies all the
-> > > > compatible strings currently in use in arch/powerpc/boot/dts.
-> > > >
-> > > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > > > ---
-> > > >  .../devicetree/bindings/dma/fsl,elo-dma.yaml       | 129 +++++++++++++
-> > > >  .../devicetree/bindings/dma/fsl,elo3-dma.yaml      | 105 +++++++++++
-> > > >  .../devicetree/bindings/dma/fsl,eloplus-dma.yaml   | 120 ++++++++++++
-> > > >  .../devicetree/bindings/powerpc/fsl/dma.txt        | 204 ---------------------
-> > > >  4 files changed, 354 insertions(+), 204 deletions(-)
-> > [...]
-> > > > +patternProperties:
-> > > > +  "^dma-channel@.*$":
-> > > > +    type: object
-> > >
-> > >        additionalProperties: false
-> >
-> > I'll add it.
-> >
-> > > (The tools should have highlighted this)
-> >
-> > With dtschema 2024.11 installed, "make dt_binding_check
-> > DT_SCHEMA_FILES=fsl,elo-dma.yaml" does not highlight this.
+On Mon, 03 Feb 2025 16:12:49 +0100, Bence Csókás wrote:
+> The doc-comment for `struct atmel_qspi_pcal` had a typo in one of the
+> struct members' name, causing a warning with the `W=1` option.
 > 
-> Actually, it's the top-level 'addtionalProperties: true' that disables
-> the check here. That should be false as well.
+> 
 
-Noted. This did indeed help me find more errors.
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
-J. Neuschäfer
+Thanks!
+
+[1/1] spi: atmel-quadspi: Fix warning in doc-comment
+      commit: 4fd2707e3e71bfd5d4df4f4c9656a009f09dfc7e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
