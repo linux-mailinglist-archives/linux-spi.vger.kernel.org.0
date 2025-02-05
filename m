@@ -1,53 +1,59 @@
-Return-Path: <linux-spi+bounces-6627-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6628-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B01CAA28AA3
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 13:46:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC3DA28AAA
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 13:47:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A22111881FE5
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 12:46:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 947A9168F7F
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 12:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D9522D4FB;
-	Wed,  5 Feb 2025 12:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4F922DF85;
+	Wed,  5 Feb 2025 12:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAf8SzSl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/2y+5Pb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3506222D4C7
-	for <linux-spi@vger.kernel.org>; Wed,  5 Feb 2025 12:44:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2488222D4D5;
+	Wed,  5 Feb 2025 12:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738759486; cv=none; b=rJv/ebOabYaKLorGnVtCZcS/aGoi0F+LLX1c+NE+G3SATqYNspUcQhKzfPlJToVl3FBin+LuLLaVV6z70+7EkJ1zX1a0MTW9hIy1jVKnjbhY/UV1dZc54bTPeSgZOzlSBL0D5keIGjrPAAMz+HaI+XEdFwR+pD92DMe3HgtdUjA=
+	t=1738759488; cv=none; b=BEup/b6nKpQk1BxBAdf8Llhy4eyTbzBkGTgycNZtPmLTzwGBdZh/mPFjo+IYU4j65WPMkrVuMKP+uLC50M8uSVcbyn5Qd9vfMPrwwZ5/4Gh8YxlXjSIubI9eAWdU+7m3ukp9sFt+UUX0NG1kHBZjfPpuHKuWlysg6US7Dc4RvNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738759486; c=relaxed/simple;
-	bh=2f0SRPSfX2QhNqAmWH+2bCMTXgE9boWLauLHqpp8ooY=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=LmXm2IQCr9aCi0USsviumLqzeZh33v+dE62atJ9rMlIqeyURQE+jJGS/6Y/ISc6nS3lvHBGJJA02BjqiPklcbQnU7HA8fZKVcrEXPhqb2fflyQK/P5NXXOkh/4eUJPtYWhct438pix0xT6LJDxtYZHjKhL/X5KiLvvUXEJd5pOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAf8SzSl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3B4C4CED1;
+	s=arc-20240116; t=1738759488; c=relaxed/simple;
+	bh=WjOWuwc31YAtptEAw9A+7e2wI1Rg1m7tf432kIXNr2M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JnsCRHASRz//H32u3kyuGc/TQRPTHafbk5wLOJ7Ocw+m6wiY3y3RkKEGnGoZaWlpTAsc50EfklEuQDiD0QHOkkKuuNyEJV7m7r6dUNBMhWuAEMM01IjINmH8RwaKgeEg/TyrPWl+6jSXaNkarKTE1EANerE9hVSv8MHR/6TZTyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/2y+5Pb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217F1C4CEE3;
 	Wed,  5 Feb 2025 12:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738759485;
-	bh=2f0SRPSfX2QhNqAmWH+2bCMTXgE9boWLauLHqpp8ooY=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=PAf8SzSltBC0tye5CqGYiBwaoKYqXIAhTlRpJwQ1clzpfN0y1Br7l0vxmfxJVAT71
-	 i2oBWi3ycrZzh2rYxFPOOru2/UNJkZFvKLTvnXrYwd1m3r4ML+ISwKl39xyEzsSgXP
-	 3xl+Hm2G9kk6jZFR8HQbS/zpTM5ttsln5KU4soM7u1LG43Qh5WF+7gp0kjeJnEprpL
-	 rL+VWLY4YQ92jcgb1DOyH4ntli1D3gdw+f0ccz5GX/N5ssnjAyZf5l7udmeUrJ1obE
-	 aa+v4YyRa5t/7c0+gAf6Mh09wMvf8fbIW3QifRIjrHgAP14v+e2g7DGWI+xdFj7Ehz
-	 r9Y/W7gdssFog==
+	s=k20201202; t=1738759487;
+	bh=WjOWuwc31YAtptEAw9A+7e2wI1Rg1m7tf432kIXNr2M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=L/2y+5Pb3U2QLXrnI6glT2NEJ3qTFmWNgyGPbk5I8w8Z6TPjkZQAssidNpDtTlhVA
+	 DSxHZbnAyukWeIx+QJbBAEHaPrTjtwP6pnO2WdLKOzJXa2++nmNcAwKqGZjgmY8Rrm
+	 jf0hgtDcjgbiC9h9DV/UrIgeH+dR4qXMnUdxSOCgrPC4oVIDR7+OvrIJpYp68YNXeD
+	 TyzP/dO0xBERzxvw5bbQ0QYQzBEiRxqDUwYnsTSTtc5PWQsLmh4nsdlbiJNjPQW4/E
+	 WFPYtb9XLM4H7jyCaq9Yob6ewPLGmdivdovAU9WnsXm8y10yOVrbJXl/rj5POPLsVJ
+	 TFL74Q2GfS6Lw==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <20250131200158.732898-1-eajames@linux.ibm.com>
-References: <20250131200158.732898-1-eajames@linux.ibm.com>
-Subject: Re: [PATCH] spi: fsi: Batch TX operations
-Message-Id: <173875948491.32625.17979483810877439376.b4-ty@kernel.org>
-Date: Wed, 05 Feb 2025 12:44:44 +0000
+To: linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, Mark Lord <mlord@pobox.com>
+In-Reply-To: <20250204174506.149978-1-andriy.shevchenko@linux.intel.com>
+References: <20250204174506.149978-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: pxa2xx: Fix regression when toggling chip
+ select on LPSS devices
+Message-Id: <173875948587.32625.7550036600044619684.b4-ty@kernel.org>
+Date: Wed, 05 Feb 2025 12:44:45 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,12 +64,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-1b0d6
 
-On Fri, 31 Jan 2025 14:01:58 -0600, Eddie James wrote:
-> Batch sequential write transfers up to the max TX size (40 bytes).
-> This controller must specify a max transfer size of only 8 bytes for
-> RX operations.
+On Tue, 04 Feb 2025 19:45:06 +0200, Andy Shevchenko wrote:
+> The commit 78b435c9044a ("spi: pxa2xx: Introduce __lpss_ssp_update_priv()
+> helper") broke speaker output on my ASUS UX5304MA laptop. The problem is
+> in inverted value that got written in the private register.
+> 
+> Simple bug, simple fix.
 > 
 > 
+> [...]
 
 Applied to
 
@@ -71,8 +80,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: fsi: Batch TX operations
-      commit: 652ffad172d089acb1a20e5fde1b66e687832b06
+[1/1] spi: pxa2xx: Fix regression when toggling chip select on LPSS devices
+      commit: aff2355d260e47e780cd96af127beaab18a664b1
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
