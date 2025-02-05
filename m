@@ -1,121 +1,189 @@
-Return-Path: <linux-spi+bounces-6633-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6634-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B364DA28B91
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 14:22:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBEEFA28FDD
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 15:30:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBC4A3A7466
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 13:21:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA8DC1883C32
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Feb 2025 14:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3123982D98;
-	Wed,  5 Feb 2025 13:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDC7155A30;
+	Wed,  5 Feb 2025 14:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cfPBMriY"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="PACWVV/B"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE1978F41;
-	Wed,  5 Feb 2025 13:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D84DE155747
+	for <linux-spi@vger.kernel.org>; Wed,  5 Feb 2025 14:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738761695; cv=none; b=Pc9LKtKJOdYNcE/UPytQ0jfIsZ3zs+OgfQET+lYqd9P/csUzYvt2DeqqUtcSLMXAqTo+vLRcuVMF01WTLWXjc/lWbf93hs5jQyyx69XNsPn9Xj3MeNI35vwYkIEs4QH2Rk5RKaFqv3FNZK+9y43hSkEpc521XGfKoTty0qwFmXw=
+	t=1738765765; cv=none; b=o160OOupCYpeltwMhcQtjdaN0gxxF//+UQD7qGLH2jZOQzzeFjkYCviZW8UMzyiUy+x3LM9zEnbbG7G2rHx9U8ajES0+dbLu0yVh8iAHCLy6tCX0khbAlGo0MkHmPCQ3Tmc46IEcrb0wfjDJvjrpv++VKjMXc7nF/QTuUf1LPeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738761695; c=relaxed/simple;
-	bh=hz3OU/cb9sPwt8Lyl1TUVPPz9LqumzBzVsrk/Nq98Jo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YspPeKDob4PEQCjBHZWejHnWzSztFccl3ZDOh92pXLSq353bniZJHHUWrMTTkwMBShhj7jkD0/29+QiZh7A4mrSZ5R92iMjmN84EjwwsfIcx6ORHcahzkSnE+3xzglWyapp1aEAkpulABuaOLTinO/+I9oGvBwNiyXjHS1Eo4uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cfPBMriY; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738761693; x=1770297693;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hz3OU/cb9sPwt8Lyl1TUVPPz9LqumzBzVsrk/Nq98Jo=;
-  b=cfPBMriYOmT/1dt8ZrkOG/PRbHaYdZ3y9kEZTGOxFHK4nb6Esq2t0vHz
-   DGj5parV63pvLkv4vIbeio1n4XSEZCL3Pet3pusoSkChF9tGLiiTg7wJP
-   nArU0NdH/BVni9M+swVnL+0gNyQuk7vQUjsH7tfucUwzOTQzYOE9q1f9R
-   SpKMeVziGxhciONwJ/vBX9F/agME8RnCNHG4p7W8F41E2BbW8gjGQPzdQ
-   Ue+lA3PGYeqDUp6LTkyWaTR7EtkG6I5QCUk4VaF94taxJYoWSCVYiBXGa
-   Ab2OsKxCj6x0S1aK+L4eXGrq3XpUt+NC9KAsz4o2YRyDUJttcDxRpl2+B
-   w==;
-X-CSE-ConnectionGUID: zrMj0W/jQsuST/u1TuwItQ==
-X-CSE-MsgGUID: 1xE1B1FyTwWvWlV4lRlxzQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="39437076"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="39437076"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 05:21:31 -0800
-X-CSE-ConnectionGUID: NcGzS3iWRtGhQMv/xujAMQ==
-X-CSE-MsgGUID: XLNr6UVUTKun8ckhYsQAPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110748760"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 05 Feb 2025 05:21:30 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 6B71110D; Wed, 05 Feb 2025 15:21:28 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 2/2] spi: gpio: Support a single always-selected device
-Date: Wed,  5 Feb 2025 15:19:20 +0200
-Message-ID: <20250205132127.742750-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20250205132127.742750-1-andriy.shevchenko@linux.intel.com>
-References: <20250205132127.742750-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1738765765; c=relaxed/simple;
+	bh=e42SIVOUhhbdor72mrNuSIArnji9rVNQMG+KjSfReLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nbKLb4HjIyxhxlWF3u8el9wD8USlCw9kvuxSJHtc7cFRUuvsw4915fzxlJMWnlq9O3kMLuViDd0UawSayGk+6altHjgs4TOaaVZi/as8SFAignVzC5udRRAg1F5OOuixzEGrw2+jHrcD0MqmFEiziMqmJrpWPS6e2GVnIbU0ymQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=PACWVV/B; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 36E19240103
+	for <linux-spi@vger.kernel.org>; Wed,  5 Feb 2025 15:29:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1738765761; bh=e42SIVOUhhbdor72mrNuSIArnji9rVNQMG+KjSfReLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=PACWVV/B2zEXa/3zM3iFyWGMCvq1ep2tJrc4lnPcQd3vMa6GfKW9yWUGJflhWkzB6
+	 mdwFgQnP74Q/JsCwaMpTD/CjCuigxBwGIzzFxwKWVOeHk4MaYvlikd7rp62zTC36An
+	 Agq7QhuBJJS77HdFXurVKxgAqrp2UMVQuGlfqmMXwEUvTE2X+Q7vjO9yeuFfneWNi4
+	 UzFkZdRD0ItU6gs7hUevNamTNwgpLFYRa/IWNqQMQfGMroi2NGU2e/DlG3TmQlVncm
+	 PLI6VUrrsbH50E1C83K8fRG84DpnJGcwKJONJ/5Rq2M0DazTqmw5sg53lAryZJ//tS
+	 +5vr8gbAqJFJA==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Yp2fz0fXhz9rxQ;
+	Wed,  5 Feb 2025 15:29:14 +0100 (CET)
+Date: Wed,  5 Feb 2025 14:29:14 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 8/9] dt-bindings: spi: Convert Freescale SPI bindings to
+ YAML
+Message-ID: <Z6N1uqg4Dji4Pt3X@probook>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-8-50649f51c3dd@posteo.net>
+ <20250127050901.GB3127337-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250127050901.GB3127337-robh@kernel.org>
 
-The generic SPI code, the SPI GPIO driver functions support
-a single always-connected device cases. The only impediment
-is that board instantiation prevents that from happening.
-Update spi_gpio_probe_pdata() checks to support the mentioned
-hardware setup.
+On Sun, Jan 26, 2025 at 11:09:01PM -0600, Rob Herring wrote:
+> On Sun, Jan 26, 2025 at 07:59:03PM +0100, J. Neuschäfer wrote:
+> > fsl-spi.txt contains the bindings for the fsl,spi and fsl,espi
+> > contollers. Convert them to YAML.
+> > 
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> >  .../devicetree/bindings/spi/fsl,espi.yaml          | 56 +++++++++++++++++
+> >  Documentation/devicetree/bindings/spi/fsl,spi.yaml | 71 ++++++++++++++++++++++
+> >  Documentation/devicetree/bindings/spi/fsl-spi.txt  | 62 -------------------
+> >  3 files changed, 127 insertions(+), 62 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/fsl,espi.yaml b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..350275760210c5763af0c7b1e1522ccbfb97eec7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+> > @@ -0,0 +1,56 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/spi/fsl,espi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Freescale eSPI (Enhanced Serial Peripheral Interface) controller
+> > +
+> > +maintainers:
+> > +  - J. Neuschäfer <j.ne@posteo.net>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: fsl,mpc8536-espi
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts: true
+> 
+> How many?
+> 
+> > +
+> > +  fsl,espi-num-chipselects:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: The number of the chipselect signals.
+> 
+> Constraints?
+> 
+> > +
+> > +  fsl,csbef:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Chip select assertion time in bits before frame starts
+> 
+> Constraints?
+> 
+> > +
+> > +  fsl,csaft:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Chip select negation time in bits after frame ends
+> 
+> Constraints?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-gpio.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+I'll add appropriate constraints to all of these.
 
-diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
-index 80a1aed42951..405deb6677c1 100644
---- a/drivers/spi/spi-gpio.c
-+++ b/drivers/spi/spi-gpio.c
-@@ -313,15 +313,14 @@ static int spi_gpio_probe_pdata(struct platform_device *pdev,
- 	struct spi_gpio *spi_gpio = spi_controller_get_devdata(host);
- 	int i;
- 
--	if (!pdata || !pdata->num_chipselect)
-+	if (!pdata)
- 		return -ENODEV;
- 
--	/*
--	 * The host needs to think there is a chipselect even if not
--	 * connected
--	 */
--	host->num_chipselect = pdata->num_chipselect ?: 1;
-+	/* It's just one always-selected device, fine to continue */
-+	if (!pdata->num_chipselect)
-+		return 0;
- 
-+	host->num_chipselect = pdata->num_chipselect;
- 	spi_gpio->cs_gpios = devm_kcalloc(dev, host->num_chipselect,
- 					  sizeof(*spi_gpio->cs_gpios),
- 					  GFP_KERNEL);
--- 
-2.43.0.rc1.1336.g36b5255a03ac
 
+> > diff --git a/Documentation/devicetree/bindings/spi/fsl,spi.yaml b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
+[...]
+> > +  clock-frequency:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> Don't need a type.
+
+Will remove
+
+> 
+> > +    description: input clock frequency to non FSL_SOC cores
+> > +
+> > +  cs-gpios: true
+> > +
+> > +  fsl,spisel_boot:
+> > +    $ref: /schemas/types.yaml#/definitions/flag
+
+I do wonder, what's the difference between
+$ref: /schemas/types.yaml#/definitions/flag and type: boolean?
+
+
+
+Thanks for your review.
+
+Best regards,
+J. Neuschäfer
 
