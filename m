@@ -1,50 +1,49 @@
-Return-Path: <linux-spi+bounces-6639-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6640-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3710FA2A3B3
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 09:58:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58DF3A2A53F
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 10:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3909C188203E
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 08:58:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8CFB16230B
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 09:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19CAB225798;
-	Thu,  6 Feb 2025 08:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57932226531;
+	Thu,  6 Feb 2025 09:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqaUeq0V"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0598822578A;
-	Thu,  6 Feb 2025 08:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.248.49.38
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE7A226522
+	for <linux-spi@vger.kernel.org>; Thu,  6 Feb 2025 09:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738832291; cv=none; b=uoY1JY/qMnC54vu1s84A0q7j7lApTS9FGOoLkwmk2647EKIXsB1gbcTzKcWZ19NBjjJYTmPLOtIR2T02737utcILNJjoxYiZzXq+REyTsgivWyGWk4CwEO3cnWRMH+e0DyzZCsxg+1jaDNHOg0+Nx1/HPHNwynJMc4rrT2wnCCE=
+	t=1738835815; cv=none; b=UqAOKgdBruzZ5Uw9bv87yOUtH+JJcadMCmiv6v4Jw6Dj3JBFIciRgFUxaWiDy3NlV7FKV5raDfFsWotAbEXX8+1UToGKVO31WGKOgG+ozAELAmjSIjeYZKrbaXM0u6y9MAEVDmhEjITYd1ykwYbJHv9goc0nr6wRYzoQ5eHVTHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738832291; c=relaxed/simple;
-	bh=snZetSh+O+16zu7OB+zRKFnyhedhxJaN1GrQR/Z19oo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ApluwlwkSFqHw7g16h2jn6Js9H5uHHdTCwbVvZw75+OMD2Fm17PthmXAdKpW2Eh2c9UYo1wDYOvc1Y8tcQvLQpDWHLQGZNQt3UosuzL1RpQ0G+fl7n2B/54pjJ8LBGZMLwQLTAGKed5Sse9ooifFOVGeWwB/HrP2aydjGx63NiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com; spf=pass smtp.mailfrom=socionext.com; arc=none smtp.client-ip=202.248.49.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=socionext.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=socionext.com
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 06 Feb 2025 17:58:08 +0900
-Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
-	by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 2FF02200F133;
-	Thu,  6 Feb 2025 17:58:08 +0900 (JST)
-Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Thu, 6 Feb 2025 17:58:08 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.245.39])
-	by kinkan2.css.socionext.com (Postfix) with ESMTP id E43ACAB187;
-	Thu,  6 Feb 2025 17:58:07 +0900 (JST)
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Kohei Ito <ito.kohei@socionext.com>
-Subject: [RESEND PATCH v1] spi: sn-f-ospi: Fix division by zero
-Date: Thu,  6 Feb 2025 17:57:47 +0900
-Message-Id: <20250206085747.3834148-1-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1738835815; c=relaxed/simple;
+	bh=Zeq0XdoQCTPx6xW1D90qkWkuX/Gw/LBIBy8xnufs2KI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ki4BNaYT3gXFizjFDO+62cSDQ04EIW829sqkEHZMyJSdInumPODZ92G4/503ZeB7d4SKXK/GLmcErMtPYCaFbijGerVMZa5jmvunM7j/JgqYCLRuDpUFGRvFfJvOeO8BxL73LLrIM7S9YURMruUlBEKctq7r/dqyacRPlclO3Vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqaUeq0V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F9AC4CEDD;
+	Thu,  6 Feb 2025 09:56:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738835814;
+	bh=Zeq0XdoQCTPx6xW1D90qkWkuX/Gw/LBIBy8xnufs2KI=;
+	h=Subject:From:Date:To:From;
+	b=CqaUeq0VqIpTqgQG7hGoiGKN9nSHJqTYJHzA/x6lQ87bYE7naZ4zDwiBYSCm51cJL
+	 okqPOXJsKyY0x1qd/NV4HBUoH7kRLkKd9X5RJm3yHhwwoTM2v1s7ljkPcPco3PhMnQ
+	 jQasfTcxDZAccmjCu9WU5tW9iATvYBJL4988W57GXuh5JnrYg0zJvXavMf1nutS44H
+	 kL6KorCO+3EIznDvFJPgcYJ8fxInT5l3E5hDPFr+CvUjR0Zyt6ZRBKMLh2NBxPdScj
+	 xQfWhWu+QstbDKPV3ZjAs8YKNMegB6vH7uf3JwLJjiM2lgowEMeSTe6z2v5ipwZBvV
+	 fxJejVrBSShjA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F4F380AAD9;
+	Thu,  6 Feb 2025 09:57:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -52,35 +51,20 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173883584208.1416072.9169668680319225063.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 06 Feb 2025 09:57:22 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-When there is no dummy cycle in the spi-nor commands, both dummy bus cycle
-bytes and width are zero. Because of the cpu's warning when divided by
-zero, the warning should be avoided. Return just zero to avoid such
-calculations.
+Latest series: [v1] spi: sn-f-ospi: Fix division by zero (2025-02-06T08:57:47)
+  Superseding: [v1] spi: sn-f-ospi: Fix division by zero (2025-02-06T08:27:17):
+    spi: sn-f-ospi: Fix division by zero
 
-Fixes: 1b74dd64c861 ("spi: Add Socionext F_OSPI SPI flash controller driver")
-Co-developed-by: Kohei Ito <ito.kohei@socionext.com>
-Signed-off-by: Kohei Ito <ito.kohei@socionext.com>
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/spi/spi-sn-f-ospi.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-sn-f-ospi.c b/drivers/spi/spi-sn-f-ospi.c
-index adac645732fe..56ef114effc9 100644
---- a/drivers/spi/spi-sn-f-ospi.c
-+++ b/drivers/spi/spi-sn-f-ospi.c
-@@ -116,6 +116,9 @@ struct f_ospi {
- 
- static u32 f_ospi_get_dummy_cycle(const struct spi_mem_op *op)
- {
-+	if (!op->dummy.nbytes)
-+		return 0;
-+
- 	return (op->dummy.nbytes * 8) / op->dummy.buswidth;
- }
- 
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
