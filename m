@@ -1,99 +1,80 @@
-Return-Path: <linux-spi+bounces-6644-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6645-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA37AA2ABA7
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 15:40:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE203A2ABD9
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 15:50:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66AF0188B0A5
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 14:40:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6A267A4CB5
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 14:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7244D1C7019;
-	Thu,  6 Feb 2025 14:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81FC02B9B9;
+	Thu,  6 Feb 2025 14:50:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJepLqP/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gk7izpiB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B301A5B8C;
-	Thu,  6 Feb 2025 14:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D15723644D
+	for <linux-spi@vger.kernel.org>; Thu,  6 Feb 2025 14:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738852795; cv=none; b=HBOsDLhK/KjvOm9rrpdPP5Us9FuQw0mD4uhPkrRaiCY1GbEIG2IBr6YRjluj3/WZyAQeNLd1JOz+G0RDCAdiXE5lu97kamURleTlDcCoQgncLQK84BjyQ6ScWCtVCGY3MwZFJZxOy9aaIp3FXgn3A0VarfxyH1HThs8VwJdtuNw=
+	t=1738853403; cv=none; b=Dmid5smf3LTeo+O14gA/yazv6goX/6j0fraS1C8t9yB1uU4Ddm1tmdW2wq2POh8cuo0uas2+8bEKn/TO7OXtM/mtMNqrIE4/eH7Aasss0sNEaYFCRkKI4R2YsHT6FTTOrHJInB/lnlXI9mMxwoAA8ph1F9o58Cfbfr/cI9G6Z1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738852795; c=relaxed/simple;
-	bh=nZz6okmmgJRHttY6GeW6J8e+lTfLet8Z+QhpBt4BmC8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=JQnShAmSEntE8j1+ECoVEcxIqMrGMjR6qDfLxu26FSlSWu2RKP6Y5L8b7jY9vd9rCZrlZ63c3atUYqV/KSYAccqfM9PzHROzi3l9W7JdMiGiYKXFnWLITRjdWXTuZiSfzwJQv0zCl7PhWyfReMbOQ2h4rIP0ps+mhgZkrhfqZQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJepLqP/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47DCC4CEE2;
-	Thu,  6 Feb 2025 14:39:51 +0000 (UTC)
+	s=arc-20240116; t=1738853403; c=relaxed/simple;
+	bh=BlWkDZcKwFwQVIKv5nbvyWilkjF+6DSMype4+4yF/8k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Os7nOP0a3qQNF4PmnVJkUJqdUTfYYFp6IXeqX9r4xn8VngRTtrutxZ3fP1KJD+WdrBNWLZU9tDZ5nKRg5dnG44/94m99Lhq7HwP4LMn7zX4iX5CfqJB+2X9JmkqkH7ENOB7vOI2VAHF0b3LNN1hN2VXzkQGUoo2+ST+RBdjzoUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gk7izpiB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2164C4CEDD;
+	Thu,  6 Feb 2025 14:50:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738852792;
-	bh=nZz6okmmgJRHttY6GeW6J8e+lTfLet8Z+QhpBt4BmC8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=GJepLqP/Iy+xUz88cw4M+MHOhc7SOTm7xXNsj4NlnxwII7Wks7J7EC7StJ9IxuWyQ
-	 yu7yko35qfVR0yvcvEdRPEVM74V5SpNlG+hEbyNo7VmxO7gynaKot4eSaMp/E4xd/x
-	 HFXbOkMul2fPiAaYt/QpueZVUGzsxXx464czFuH0TFtobe2xQDImsAurGY3Br0Kvfy
-	 pwlbvAr9up87e951ZOkstPgYHIrdc7lkuqboG92zTQ5ZQQA2Oe8Rs4hGQ7Mm6mwhPV
-	 zEmxUGnTdGYotBhOh1OaDKmyQqDhTUUneXPaSVcBWYdu+bHcIPosl2B/zhHI/Gn9ao
-	 bXfoNyes4ssIA==
-From: Mark Brown <broonie@kernel.org>
-To: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Kohei Ito <ito.kohei@socionext.com>
-In-Reply-To: <20250206085747.3834148-1-hayashi.kunihiko@socionext.com>
-References: <20250206085747.3834148-1-hayashi.kunihiko@socionext.com>
-Subject: Re: [RESEND PATCH v1] spi: sn-f-ospi: Fix division by zero
-Message-Id: <173885279159.193118.16335534944708815878.b4-ty@kernel.org>
-Date: Thu, 06 Feb 2025 14:39:51 +0000
+	s=k20201202; t=1738853402;
+	bh=BlWkDZcKwFwQVIKv5nbvyWilkjF+6DSMype4+4yF/8k=;
+	h=Subject:From:Date:To:From;
+	b=Gk7izpiBDLMHHtuR3kD0lZrkVQktW2SVntnS5USen7m8OCHOMfjeSfn0tSAaFa5Gs
+	 W1+G+at18UtCoOUpjqCEbO13Tq7BCsmQndB6dToCGYPg9Re3jEXckdjTS3rsqRsVL4
+	 P9QuHjggKInJf803wAq5IZA+7c5mb+yd/kXwg3yTzDIczO4QmXwd1FovFOBeCOEnJx
+	 pJ79aGEB9v4nABqQbr/07sINU+jDsnWxpg0M0J6euHpS8zVk00Lo+pwPlbiXFGLwc/
+	 qUKw4M6XnF3l7W8eDMUuGrzoM/5bKr4OvcjfaHFr64kBXZoWowOQnuhIwybbZJoCol
+	 18AgfNqjq3dXQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 77A75380AADE;
+	Thu,  6 Feb 2025 14:50:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <173885343002.1506195.14203074327377952348.git-patchwork-summary@kernel.org>
+Date: Thu, 06 Feb 2025 14:50:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 06 Feb 2025 17:57:47 +0900, Kunihiko Hayashi wrote:
-> When there is no dummy cycle in the spi-nor commands, both dummy bus cycle
-> bytes and width are zero. Because of the cpu's warning when divided by
-> zero, the warning should be avoided. Return just zero to avoid such
-> calculations.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [RESEND,v1] spi: sn-f-ospi: Fix division by zero
+  Submitter: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=931121
+  Lore link: https://lore.kernel.org/r/20250206085747.3834148-1-hayashi.kunihiko@socionext.com
 
-Thanks!
 
-[1/1] spi: sn-f-ospi: Fix division by zero
-      commit: 3588b1c0fde2f58d166e3f94a5a58d64b893526c
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
