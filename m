@@ -1,143 +1,118 @@
-Return-Path: <linux-spi+bounces-6649-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6650-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E37A2B62F
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 00:00:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A22A2C29A
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:23:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 781E63A2CCD
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Feb 2025 22:59:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 607D71884F24
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 12:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4362417F2;
-	Thu,  6 Feb 2025 22:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59271E0DEA;
+	Fri,  7 Feb 2025 12:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="f5fZ5dxc"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="Uf4ZWP7r"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74222417DF
-	for <linux-spi@vger.kernel.org>; Thu,  6 Feb 2025 22:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00C51E5B70;
+	Fri,  7 Feb 2025 12:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738882795; cv=none; b=VeAiymSVFf2Bu5G+PCjnam1rRbJS5YLTd7qC7W/ALqIibPnufxNXJZtGxkLvL1jCi7D0Y2psWvtzx8x2xAO3FjHw3pI59w/x4nph0oRmL6/oArxhUUl4ObxR4DmhRmNEEs6QsH+Yv9+7yDbSAVkITN9GPFWSlZr3nFBGJkMy6RQ=
+	t=1738931015; cv=none; b=OgXZB1u9Fn0ZXwea7qXVfI8Hewc3WrPp4r7jcw48kgyT13NsQ+oy1lEXos6gvaj3l1qnOzU0j3VbVTh1I5MzaW1lRQ75cvYjIKHZX7pX73o/Ftfv4Z0ru2AgQmWzg5CBMZ1kN3hR93f/vmW3/lbDHM22qN3ig34RevSIpcQpVeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738882795; c=relaxed/simple;
-	bh=8wEjDCTuOvcktBrfjhLQ0lipXUb5sf39X+VV2LrhSa8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ivYPr1l7Zd5iBlQi5ljD/gROYIbaBvWb9ySnWPoe7pYqv79xklLbj9gW1IguVpiqRaFWazJ4DP/Z4JPUzZecVVrVjHwBw025Yp4IzQNtdDefDWpl3N50X05v3qvWSZjWCVa/fMWPz+BfoKLlNK7WntjeETDifb6wttiCSPWNbdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=f5fZ5dxc; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id 71129240028
-	for <linux-spi@vger.kernel.org>; Thu,  6 Feb 2025 23:59:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738882792; bh=8wEjDCTuOvcktBrfjhLQ0lipXUb5sf39X+VV2LrhSa8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=f5fZ5dxc+yiDR/WQT0Po4+rbJRF/txKc1K68b+9pnLBawItBAJwI2Z+S2x4Y1a6dX
-	 3o9+6n8Ac6zOKWwBStCcVuzT4EfA0PH63bkmdao7A9yMOyDhJLdUvKZn+fvhstXL9L
-	 0eQBvnQV4jdarLr3kJ2yWQtio5/V7D4cf2HNmkQN4XUTDviSnDQU7R+xCWplMukXe9
-	 +/rP6AcoIJq9HCiegXVNIG3oaULtkuSzrOyxk3NmiwBryyj79VZfhfrWtcJpkaWkFz
-	 qbpUtlZoAlUOyOFhP/QKs6fx1h+aRBctKN8niJcY4kyyQox7dY+X47sFoQ99SfrYy8
-	 UeOGQqYnODnjQ==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Ypsxb3GYrz9rxD;
-	Thu,  6 Feb 2025 23:59:47 +0100 (CET)
-Date: Thu,  6 Feb 2025 22:59:43 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Frank Li <Frank.li@nxp.com>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH RFC 9/9] dt-bindings: nand: Convert fsl,elbc bindings to
- YAML
-Message-ID: <Z6U-38ONJ0F3ILCo@probook>
-References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <20250126-ppcyaml-v1-9-50649f51c3dd@posteo.net>
- <Z5qzMH1t7jIr39Ce@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1738931015; c=relaxed/simple;
+	bh=JBRpPPjKTB/xaMJUyOPPnxjYd0r/6g+Njh1lJ+RMoIM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jd6m0pJqTwXC5EjLBSu9lVF7WxUelQ2BRAV5iW8YtmNwylsvfiP47LDk+46NfHGfR7XJwJgem6t8vsVbo9TQdUCylj3VEw9VGKhGu0XpXWSP0rPoyZEDLyfFK7dw0fGOHJ0Mrt8QXtvsQD07O16KlGK6XyXLmFCUUwIG4GUNKkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=Uf4ZWP7r; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 1D7AAA1084;
+	Fri,  7 Feb 2025 13:23:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=WE3Hk7lRTT+a0M6s1YLVZX9XatRGh6ct0lOQcz7agLs=; b=
+	Uf4ZWP7rv7+w7P+nZEd1CYtR2+nuOfLFPJgyfUYuS1tk108HJ/NVdm+Ix8YkkpFu
+	FWpbhsPS9tGfiPh/xGDBeEEnemnbbja08uWGuzJ3kxMOMIp58TY0qF527EWy7Ayo
+	dRlunxQQLcnp+Z76x+ioJDrtHUNQarl4ceAugEmmRJ4EwtzMOq8dEb6Rm+eqTlG7
+	/mP0D6eQHd6BK6O1q5fHEc23dRRarSrth7c7BDIwahLre1XiPLRy0ASme18poDd5
+	tThkVKWPO0GVr6CI6EGSX2TzZl+UNIt8bCMJVGypKH/f/VrmIfWXTwlGzWl5Vo4T
+	Vs1tEmz4JXZ0vLw5BNJYg2fVc2MvvsyifP9Atv7GxqF9zDxB78y0FuEa/eA3iLwN
+	58N54r2rkCGr0jYHJMyAWl6mELSqYu42FuD8RVZENRHT0N2eZc/v/vOSeKMjNug0
+	o3Wv/XaWQEoOaK7MigJzyax7u02zr7/Kc+9ppO/BwgmGctCZqg3ZyWTdl35dbASv
+	enAW47CbeYwq7e0r6ivpPxmaW8Sp7Mw+faTQY7fdCIIwwrWtHUtmSViI+YTYJtou
+	D1xHU8vJTHU6kxeZZx+Ap9VzjrwGva/L0Rtf/Ea20vYT1UnMTDBC5DGppRN+cipR
+	RfQ9O9CJVWcE89oOHHQd0a9HHSM0QyQasmGM6xcJ4J0=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>,
+	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Durai Manickam KR
+	<durai.manickamkr@microchip.com>, Alexander Dahl <ada@thorsis.com>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>
+Subject: [PATCH resubmit2] spi: atmel-quadspi: remove references to runtime PM on error path
+Date: Fri, 7 Feb 2025 13:21:45 +0100
+Message-ID: <20250207122145.162183-2-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z5qzMH1t7jIr39Ce@lizhi-Precision-Tower-5810>
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738931011;VERSION=7984;MC=693355485;ID=413155;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94852617560
 
-On Wed, Jan 29, 2025 at 06:01:04PM -0500, Frank Li wrote:
-> On Sun, Jan 26, 2025 at 07:59:04PM +0100, J. Neuschäfer wrote:
-> > Convert the Freescale localbus controller bindings from text form to
-> > YAML. The list of compatible strings reflects current usage.
-> >
-> > Changes compared to the txt version:
-> >  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
-> >    appears in this example and nowhere else
-> >  - added a new example with NAND flash
-> >
-> > Remaining issues:
-> >  - The localbus is not really a simple-bus: Unit addresses are not simply
-> >    addresses on a memory bus. Instead, they have a format: The first cell
-> >    is a chip select number, the remaining one or two cells are bus
-> >    addresses.
-> >
-> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > ---
-> >  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml |  61 +++++++++
-> >  .../bindings/powerpc/fsl/fsl,elbc-gpcm-uio.yaml    |  55 ++++++++
-> >  .../devicetree/bindings/powerpc/fsl/fsl,elbc.yaml  | 150 +++++++++++++++++++++
-> >  .../devicetree/bindings/powerpc/fsl/lbc.txt        |  43 ------
-> >  4 files changed, 266 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
-[...]
-> > +  "#address-cells": true
-> 
-> should limit to a number set like
-> 
-> 	- const: 2
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Will do
+There is no need to call runtime PM put APIs on error path of
+`atmel_qspi_sama7g5_transfer()` as the caller (`atmel_qspi_exec_op()`)
+of it will take care of this if needed.
 
-> > +
-> > +  "#size-cells": true
-> 
-> the same as #address-cells.
+Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
+Reported-by: Alexander Dahl <ada@thorsis.com>
+Closes: https://lore.kernel.org/linux-spi/20250109-carat-festivity-5f088e1add3c@thorsis.com/
+[ csokas.bence: Rebase and clarify msg, fix/add tags ]
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+ drivers/spi/atmel-quadspi.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Will do
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index d8c9be64d006..244ac0106862 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -930,11 +930,8 @@ static int atmel_qspi_sama7g5_transfer(struct spi_mem *mem,
+ 
+ 	/* Release the chip-select. */
+ 	ret = atmel_qspi_reg_sync(aq);
+-	if (ret) {
+-		pm_runtime_mark_last_busy(&aq->pdev->dev);
+-		pm_runtime_put_autosuspend(&aq->pdev->dev);
++	if (ret)
+ 		return ret;
+-	}
+ 	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
+ 
+ 	return atmel_qspi_wait_for_completion(aq, QSPI_SR_CSRA);
+
+base-commit: d64ebde2a5acd9a516f6ea97ec2c9e6fc697f584
+-- 
+2.48.1
 
 
-Thanks,
-J. Neuschäfer
 
