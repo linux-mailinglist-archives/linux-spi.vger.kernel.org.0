@@ -1,61 +1,59 @@
-Return-Path: <linux-spi+bounces-6655-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6656-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EACEA2C360
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 14:17:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A60D1A2C364
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 14:18:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 304423A7138
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:17:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 459941642AE
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BBE1DF738;
-	Fri,  7 Feb 2025 13:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D181DF738;
+	Fri,  7 Feb 2025 13:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LXRnylWy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekP5Lsbi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E927D9454;
-	Fri,  7 Feb 2025 13:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6EE9454;
+	Fri,  7 Feb 2025 13:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738934274; cv=none; b=Vfl8iKXWs/NvjGN2WWzmev8k5XMrfDJ7ffCPh5SbY9JYIL3fnjoBYaOqo8+oDvu9LSRvZnap+DyOmkjgOavB6pJrGiNUC+4p5EVujwMeWIs+CFFRXfYxP2Uo6iR96BkNvCa5B87qCr5C0M2bQGN7b5DBa5GTFl5m6UXA0ft7qEI=
+	t=1738934329; cv=none; b=A5Ch+GtWpjUq29XLDZ14KvgYqtELLcpblGO8063g0143DMX9wA1ai/Km0bdJjop0ti0KNzWu9j//ycu9iOa37PnlGoQ/bePMGC+PvUhxAG2BwtiovQtfMiaVUibxytyv6jKly5BiPY1Nvz6kZ/L46Rutqxyp+p2AxwggQsPhamk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738934274; c=relaxed/simple;
-	bh=IkN+91g2ry7/izxkr090QMoaPLLE7yTdLaQvubsVUeA=;
+	s=arc-20240116; t=1738934329; c=relaxed/simple;
+	bh=eFIZAVuxn5LNa4zpyntsKVLMFZa8gU8T5EHqVMiE4xw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W3wcqcqf7W3qt+vh3FmyyzOPNtwBFsXUoohBrS/UCtDFypx7OZNEfqnd04U0eVhKWMVZi1ZGbA4wMUD7kLPKlbafTaejBO7IVPDLPOv5a6lqob1jtjVp+/DhdcOrxyTADAikpG2JYqMYqrVuKtwolQkTQneS+DJo9wYbyhPc0V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LXRnylWy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA9DC4CED1;
-	Fri,  7 Feb 2025 13:17:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=m1o/UQQthTWVY9OWrZx1fQnj0paF/x/DUy1//k/DAOWgRhX8dpHKcyPDfEjw2jzyZoSxlt7I3QZZUuWlWIBEfVwyuy7vknV57QIJv7EBkLHU91deX0f9nz8+oZEbxaHxVUfNh+gOhygLaRpvv2C5ZOW69De5wOZfHOAxreMS+fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekP5Lsbi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D19C4CED1;
+	Fri,  7 Feb 2025 13:18:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738934273;
-	bh=IkN+91g2ry7/izxkr090QMoaPLLE7yTdLaQvubsVUeA=;
+	s=k20201202; t=1738934329;
+	bh=eFIZAVuxn5LNa4zpyntsKVLMFZa8gU8T5EHqVMiE4xw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LXRnylWyhvFxk5XU/P0YRWezrAu+XaZzF4i5/Ca9GakNTqAStcaxowAAxrbLYxslV
-	 UwnunStOpd9y9+OwHqyqBNmM+yFZhlPaUOBPBMVSeU40ALmkhGG7Am2DmuWt2C2X4f
-	 2tp4C4hKc4ReBB2uAN0HPEk78oLh825TtTTtTBDEqUXFKrHA423xvVPqG1BY2cYxN7
-	 x3PD2BlNBL1EnTipjMxPMo8sEUKB4e4G3miCoowJbaUD4iaB+pWnY0rv96K7MJC3Rw
-	 l8UQYRPKIL2lDJQn3q/JARtbLiX7qPaq7FCZhSz6/Grxc5xQ+8QeK6EBoJWk9qjpo7
-	 Y+utI/Ogi0oGQ==
-Date: Fri, 7 Feb 2025 13:17:48 +0000
+	b=ekP5Lsbih4Qrni6R8KYuVNRJ8WRlBAeWg+Hu0ONFhF6aBh51clA7BNtyaooC8i1e0
+	 IAmVPKamC8BBigHoQMzjldd/m/rlgckmQaV/RVU6z+QVnnJzcGmj7vjTX65HuDyNfJ
+	 YgAfkv1OvdxhFW7kqg/U5JTZ8gUSB2NCVKdKdqcVQSH2AKxOYDSrp1M54LwJiAskUn
+	 9kCEd6/QBw5cHMhu6/8FfvO+11p74OOWW5bdWQbT2bi88J5mbBg2JDNDtJr+CL0GVy
+	 aA0e2KK0z8LJurpjLJQ8FTZ9WOH6efVoCPlAYlX5B4E2Ih/aQxD8jQao5S8TpcFIOH
+	 ptCuv/sgMmehg==
+Date: Fri, 7 Feb 2025 13:18:45 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>
-Cc: Varshini Rajendran <varshini.rajendran@microchip.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Durai Manickam KR <durai.manickamkr@microchip.com>,
-	Alexander Dahl <ada@thorsis.com>,
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH resubmit2] spi: atmel-quadspi: remove references to
- runtime PM on error path
-Message-ID: <6aaa852e-9a7b-45c4-a5d2-20ebd8f848f9@sirena.org.uk>
-References: <20250207122145.162183-2-csokas.bence@prolan.hu>
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH for-6.14 v3 3/4] spi: atmel-quadspi: Use
+ `devm_dma_request_chan()`
+Message-ID: <175b903c-59c9-40d6-baff-d5b8dc996318@sirena.org.uk>
+References: <20250207124802.165408-1-csokas.bence@prolan.hu>
+ <20250207124802.165408-4-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,42 +61,38 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="N8auyasM2SC+L5Gh"
+	protocol="application/pgp-signature"; boundary="yBiLvRP78GmtPzGu"
 Content-Disposition: inline
-In-Reply-To: <20250207122145.162183-2-csokas.bence@prolan.hu>
+In-Reply-To: <20250207124802.165408-4-csokas.bence@prolan.hu>
 X-Cookie: MMM-MM!!  So THIS is BIO-NEBULATION!
 
 
---N8auyasM2SC+L5Gh
+--yBiLvRP78GmtPzGu
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 07, 2025 at 01:21:45PM +0100, Bence Cs=F3k=E1s wrote:
-> From: Claudiu Beznea <claudiu.beznea@microchip.com>
->=20
-> There is no need to call runtime PM put APIs on error path of
-> `atmel_qspi_sama7g5_transfer()` as the caller (`atmel_qspi_exec_op()`)
-> of it will take care of this if needed.
+On Fri, Feb 07, 2025 at 01:47:58PM +0100, Bence Cs=F3k=E1s wrote:
+> Leave releasing of DMA channels up to the devm
+> facilities. This way we can eliminate the rest
+> of the "goto ladder".
 
-Please stop sending this out so often, this is the second resend in just
-a couple of weeks.  Allow some time for review, having multiple copies
-on the list makes it harder to keep track of any reviews that do happen.
+This is just a code cleanup, it's not suitable for a bug fix.
 
---N8auyasM2SC+L5Gh
+--yBiLvRP78GmtPzGu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmemB/sACgkQJNaLcl1U
-h9D7Wwf+M4ufdPA1DyzrOM/eDkbJJwzeNBiT4EENEGbaWFN3iNZZDY0apuK38f65
-ATrs1UHVLOyubSTpifTtz5he9gGCtr5QxN5fwYWH4nSo6PmmoV4twtadyjUTsGt1
-2D8Qa4tRD6Xwrda28O5tNjdouFD93jfMvhKlbOwucFGbjRXeL9ntYMV4hNqofixi
-t9wrmuekt3pEASBcfr9gI86Ff5jQ6/BvOzIhpmr0RWk5F2jKQt+V6tM2AvtKnxzO
-/oyV7gQAOSEhKMHGwWjW4bBrjaCEXQg9VIUOzGKXBqjaLChgX1s89T8dUcqhQtdY
-rk1bz3zqBTYoiMHBeMGyfJRL4PH7RQ==
-=QtKZ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmemCDQACgkQJNaLcl1U
+h9BPmgf+PzP0hQysLpvxFfaX3oeQdksaEVIPruNAjK9B1f8EI048STKEjrQuZdrA
+bvp2WDGRMPu20hr9XeavQTfF0nfNt6fmjdD6ZOolH+pGJg6roepiZfRl9ALIdjQp
+3Wve+bFF3/nYUJqj0jlG/H+Pyx//sJTaBFKTHGe+dTkCGw6sJ/Nd7poI5DE9dMbX
+zPyuUVFqLEXAueYDdDb1pzaAwcNip3eAfcAtj+EtO42lWRIPL03cr5Ap+i/f0DX2
+X0+OUpNFy77gmoMauGmQAZ0HuFOwKizFq+mTkbSRUQBtSF/z6RqKZ9W3bwlUAYqS
+aG9u9rdrdC3/wcxaJNW+c1A0suIVUw==
+=82/r
 -----END PGP SIGNATURE-----
 
---N8auyasM2SC+L5Gh--
+--yBiLvRP78GmtPzGu--
 
