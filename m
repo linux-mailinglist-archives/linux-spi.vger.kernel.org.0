@@ -1,102 +1,106 @@
-Return-Path: <linux-spi+bounces-6657-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6658-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C88B5A2C3CE
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 14:37:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41EFBA2C3D6
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 14:38:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15B5F3ACC2B
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:36:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBB8B168301
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C2B1F561B;
-	Fri,  7 Feb 2025 13:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6C6200108;
+	Fri,  7 Feb 2025 13:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hq026Jov"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="WGLsSyhy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5BF1F5615;
-	Fri,  7 Feb 2025 13:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6DC1FC115
+	for <linux-spi@vger.kernel.org>; Fri,  7 Feb 2025 13:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738935373; cv=none; b=Je9CfjXDFYUzXmdkaYrrbSfEDqWEvKCT0yTLc1i8ToDDwsodfRv1UnqKh1g6JH1l6yERaVHHRxMquLTs86JKlPa2JdTXIVn3prODMBiDNow1fGyX5IloVFCNL2zOGLiB4jxhjcpZEKCG9QEtaSL5B7MnwDf8A01H4hLLUJlVYPw=
+	t=1738935441; cv=none; b=KC2gN0/MXzmcQbziX+dq1uBGpjOWSQEjgrfqAPU1rnIbt5uIl9DGC+JwWAaTNQDJxSoBF3+llbiIGeEjbawr9ph5I5sJ3u3Fgclg4NUn56gm0r4QIfzl/unQCedZNZxbd5kaq7InU2PYz7+2wzqfKQzC06qA3PJPblHoWeSVzM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738935373; c=relaxed/simple;
-	bh=ojf88dhxc0pRcsyVS1I57XmZyRQ/XrFxIjRhU9DWu9E=;
+	s=arc-20240116; t=1738935441; c=relaxed/simple;
+	bh=IdbOi6N0+bHgyQ08uTaIC9JomsdE+10WelxdSZmGp0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOfjOPF8h2OlQQmHWILcH+8VbjmWG0xi5NqsY/fCerizJ73ifYPhT6I8a4GZIVjTrLiaHsYqw0cziiK7zkiwg/+ltgVAOxyoL7nNUo0FYiEgv0CSfblQ22AXwfAmcaRPtpTWW/7FfZykNjQgYHQkOlsQhzqPfp7syukiL1h2Xkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hq026Jov; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2EFC4CED1;
-	Fri,  7 Feb 2025 13:36:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738935373;
-	bh=ojf88dhxc0pRcsyVS1I57XmZyRQ/XrFxIjRhU9DWu9E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hq026JovajaQwDy/ikLGifCHv4cPbS4LfZNthRBxdLtKbXYLmGMdw4QdEbVU1f2dE
-	 9QXe+HFXM1A6IAHuZWnwKPW/WC16gTtIzqpK11NL0NcFExVjKD0HLF5LtgNn0IATdE
-	 mt3iSofseORjHhJAypfadAofJLE9Xrj83ZJUwhL/S7Pdty32GU7AiXSU1p4b24zsAa
-	 e+lWiMKYksVCD9cKNxh+Pq4XI+V6k+Fn1L5Ofj7Sq2FcFUe2Pe+d6U1gyOIYs/3ghv
-	 JINogUeHRaDmUSw9F4WjkD3Vh5065wkXGAWqG6bBrMfSimU6ceW5Ot6Y/luHa+YkCs
-	 0SOLpEApptbSw==
-Date: Fri, 7 Feb 2025 13:36:07 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] spi: axi-spi-engine: fix missing bitfield include
-Message-ID: <7b45b00a-a070-452a-9560-168e5585ac11@sirena.org.uk>
-References: <20250206215513.2842270-1-dlechner@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uMIwnTwgDfbZXkEFzxdK60HNquetIEF6LmrWbG43bDu3G1bWe3K4FqKvDF+dBOlyXFy8aplKQUzWM72W8nTAKfq2mtxXwp85UX1O9JWvmR2v0ZSJNcvgFD7cd67AoiKI1STFmqz8KDLQktHf75p7dPtzKqca84lE9s8xL1LIi+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=WGLsSyhy; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id D2544240028
+	for <linux-spi@vger.kernel.org>; Fri,  7 Feb 2025 14:37:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1738935431; bh=IdbOi6N0+bHgyQ08uTaIC9JomsdE+10WelxdSZmGp0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=WGLsSyhyR1M+holYpFY2DE/LqX/M15jThbkxjOYqB/FmQAFFwC+GWz5a9IBwAww3F
+	 mXlFcNxwX5ET/KIyhDzrzYAJY2KaepXF/mKP4+zXFWdqXcK2Rpm93qt97oV3bsN4U3
+	 6OYk4IO4oNfu/VfOtLRiUArkbEZMHnUtEJuShNd8ptsnidw4lztDocLchG9SWz9COQ
+	 GA8CeOLRgAiXRcPtFw1cPUr7OZALJdnNxBcwTv1PQp4jHg7fJVSTPfXh9ptk+RHx08
+	 mrnvnVzNvI/Gm1FUwiVaDkEn8atEz/5JPR20I63GGSttcZALk/3j01UOWYKbg5sLQG
+	 8/F+eljWn4kpQ==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4YqFPs4w9Pz9rxF;
+	Fri,  7 Feb 2025 14:37:05 +0100 (CET)
+Date: Fri,  7 Feb 2025 13:37:04 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 6/9] dt-bindings: pci: Add fsl,mpc83xx-pcie bindings
+Message-ID: <Z6YMgETdCZGMJI4i@probook>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-6-50649f51c3dd@posteo.net>
+ <Z5qx3jAFE81Ni2cJ@lizhi-Precision-Tower-5810>
+ <Z6KkBEaGTkSyWiE_@probook>
+ <689302c6-8fba-4fd1-a4b7-557cb2f8fa4d@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qoW/KnOVjkgeuTjA"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250206215513.2842270-1-dlechner@baylibre.com>
-X-Cookie: You enjoy the company of other people.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <689302c6-8fba-4fd1-a4b7-557cb2f8fa4d@quicinc.com>
 
+On Thu, Feb 06, 2025 at 06:12:47PM +0530, Mukesh Kumar Savaliya wrote:
+> neat: subject: since binding is already mentioned in the prefix of the
+> subject, no need to add bindings word again.
 
---qoW/KnOVjkgeuTjA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Feb 06, 2025 at 03:55:13PM -0600, David Lechner wrote:
-> Fix missing linux/bitfield.h include needed for FIELD_GET macro.
-
-This doesn't apply against current code, please check and resend.
-
-> I know you prefer patches like this to fix something in a patch that has
-> already been applied, but it doesn't look like you actually picked up the
-> offending commit[1] yet in your main tree, so I don't have a commit hash
-> for a proper Fixes: tag.
-
-> Do you want a fix like this or should I send a v8 with the fix squashed?
-
-> [1]: https://lore.kernel.org/linux-spi/20250113-dlech-mainline-spi-engine-offload-2-v7-7-e0860c81caae@baylibre.com/
-
-I haven't applied that because of all the build issues that the bots
-reported, you need to send a new version that build cleanly.
-
---qoW/KnOVjkgeuTjA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmemDEYACgkQJNaLcl1U
-h9CTEwf/cJ3gRShrmKyQ7ogFD+6LKBX64/IRoKomRnBPaqpeWYrTaxl9rf4/5LyF
-synrLy8kArPYbxfVFnzTa9eylLnEEAhxJJv3cFhG7GWO5+MqmJ/a5QI4kTMoTVcp
-0EqPhLiLpHHzo3UpbBjLopRwAiAoo9mgLG2Hb+516WvxjuetsFyeyOdnx+ysmeE9
-v4V2chtL460jHUUngvDkgJ1Jmus+eRymWYhPTfNkC/nKkJP7KJAeJRtnEoi9uYJL
-ryWrWlw7bsGt8BmBROlwElxa9V74VfyS5QidxrMqIV0OAXQxZiF3a3bEI20tOSB+
-9g0+mEQcHqF40hy9XwgagZxjJezsXg==
-=Bh0m
------END PGP SIGNATURE-----
-
---qoW/KnOVjkgeuTjA--
+Sounds reasonable, thanks
+J. Neuschäfer
 
