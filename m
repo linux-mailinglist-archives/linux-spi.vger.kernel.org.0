@@ -1,66 +1,69 @@
-Return-Path: <linux-spi+bounces-6650-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6651-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A22A2C29A
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:23:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4DE7A2C2FD
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 13:48:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 607D71884F24
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 12:23:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A8803A5E73
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Feb 2025 12:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59271E0DEA;
-	Fri,  7 Feb 2025 12:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 752DF1E5B6B;
+	Fri,  7 Feb 2025 12:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="Uf4ZWP7r"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="BytzGPT3"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00C51E5B70;
-	Fri,  7 Feb 2025 12:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD051DC99E;
+	Fri,  7 Feb 2025 12:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738931015; cv=none; b=OgXZB1u9Fn0ZXwea7qXVfI8Hewc3WrPp4r7jcw48kgyT13NsQ+oy1lEXos6gvaj3l1qnOzU0j3VbVTh1I5MzaW1lRQ75cvYjIKHZX7pX73o/Ftfv4Z0ru2AgQmWzg5CBMZ1kN3hR93f/vmW3/lbDHM22qN3ig34RevSIpcQpVeg=
+	t=1738932491; cv=none; b=lhsBDRI8JFoY6Tg4SR0FAmUAzu4TFMN7tqE24LRE0mAISQU7lp7sm2Q6rg0kD8j4RP50d2/N6VfGO04OTIRpFEMnZsC5UGrSSf4SPTHS0P4f41eFYzF8dsnNQDKtU34r4teK/d1ST2md6aKU626ZyqKpiI2i94vHal2B7Df81Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738931015; c=relaxed/simple;
-	bh=JBRpPPjKTB/xaMJUyOPPnxjYd0r/6g+Njh1lJ+RMoIM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jd6m0pJqTwXC5EjLBSu9lVF7WxUelQ2BRAV5iW8YtmNwylsvfiP47LDk+46NfHGfR7XJwJgem6t8vsVbo9TQdUCylj3VEw9VGKhGu0XpXWSP0rPoyZEDLyfFK7dw0fGOHJ0Mrt8QXtvsQD07O16KlGK6XyXLmFCUUwIG4GUNKkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=Uf4ZWP7r; arc=none smtp.client-ip=193.68.50.107
+	s=arc-20240116; t=1738932491; c=relaxed/simple;
+	bh=Z7GlX4G3CLXl4PdntmkGapZgBz10huhVzZfNPwGxMJY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dR9HmUdtU6WrndBEwJWzk623y4l2fw6GqaJcaTu+x5YpVYlLhDVp7PHmKmtFN/BVKHpJS/1dIjj8HccY3TaYgy/CfHF/IF6etyZZZ9hssKvwLN0W/tWFz0g57y5RhU5TKFNKnUAzJdmG1XVsKUkciarC22VyJxnEYeX7f3Hd978=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=BytzGPT3; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 1D7AAA1084;
-	Fri,  7 Feb 2025 13:23:32 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 9D100A037B;
+	Fri,  7 Feb 2025 13:48:05 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:from:from:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=mail; bh=WE3Hk7lRTT+a0M6s1YLVZX9XatRGh6ct0lOQcz7agLs=; b=
-	Uf4ZWP7rv7+w7P+nZEd1CYtR2+nuOfLFPJgyfUYuS1tk108HJ/NVdm+Ix8YkkpFu
-	FWpbhsPS9tGfiPh/xGDBeEEnemnbbja08uWGuzJ3kxMOMIp58TY0qF527EWy7Ayo
-	dRlunxQQLcnp+Z76x+ioJDrtHUNQarl4ceAugEmmRJ4EwtzMOq8dEb6Rm+eqTlG7
-	/mP0D6eQHd6BK6O1q5fHEc23dRRarSrth7c7BDIwahLre1XiPLRy0ASme18poDd5
-	tThkVKWPO0GVr6CI6EGSX2TzZl+UNIt8bCMJVGypKH/f/VrmIfWXTwlGzWl5Vo4T
-	Vs1tEmz4JXZ0vLw5BNJYg2fVc2MvvsyifP9Atv7GxqF9zDxB78y0FuEa/eA3iLwN
-	58N54r2rkCGr0jYHJMyAWl6mELSqYu42FuD8RVZENRHT0N2eZc/v/vOSeKMjNug0
-	o3Wv/XaWQEoOaK7MigJzyax7u02zr7/Kc+9ppO/BwgmGctCZqg3ZyWTdl35dbASv
-	enAW47CbeYwq7e0r6ivpPxmaW8Sp7Mw+faTQY7fdCIIwwrWtHUtmSViI+YTYJtou
-	D1xHU8vJTHU6kxeZZx+Ap9VzjrwGva/L0Rtf/Ea20vYT1UnMTDBC5DGppRN+cipR
-	RfQ9O9CJVWcE89oOHHQd0a9HHSM0QyQasmGM6xcJ4J0=
+	:to; s=mail; bh=BCu/ryqDczot25TDMnKcJhaUWntHdW2uO8lsXLpQ4VQ=; b=
+	BytzGPT360C98IhBFxeTx3NOwsyn+LLjSv0HyYRHltnx/CHg6fMAUgNUP0g/vhjs
+	HJxPAeodhFy0B9L8D+VPCYnu98rFe4cKHSX/pojtKyvogse4DqFFAbg51iZ2Jup5
+	uIxAv+GAjZemdhK5q5MI/MPNV7WbWu1fyaoPYgvY6svrrFaBp0nRadftitN00V5D
+	pzR5HEXN65zo1P+kvq0W5U7nf6H8KYekVzRcB8DAYKyDC0q9SdChzmib9RP2W9EF
+	Hjq/LD2nIqLG5a4Q0+oThW6llaY4XNGwZvFLuVeonmW/LKGf3ztbwQF86bU1w2ED
+	wmdGDqj9mMFWbvbAVzr77z75vqzYYAbFqPy9iAvdB+GCvSPsPU+wtvC6yGdtLwJI
+	y8BkaR6EFSwIqjbZSUsmqlDSH9EIyqGuWDOp6+jRRvddW/TY0Z/ncsWqzfX0Ckry
+	QSAQ7jIvcO96yTxLPoTddO2EAZcNQIKRvcCbUSYLvoKz/+2KphB+qP3TyvMh4fmT
+	26DbUX/oORlbm50fgAzvDeZ3Yd7CIqen5uEGq3CfegZacs6yVTjjLMfVScpOAcus
+	TE6BU59rVCQ1HTxjXJxUthHBY7RTKe92xlAAO6xfmM9Tqgb6iRBkXfljpFvsXwTM
+	8axDWRciHBAbucV/68S2oTKfum+ucJ5A8Nd7pygzZYk=
 From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>,
-	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, Mark Brown
-	<broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Durai Manickam KR
-	<durai.manickamkr@microchip.com>, Alexander Dahl <ada@thorsis.com>, "Nicolas
+To:
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
  Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>
-Subject: [PATCH resubmit2] spi: atmel-quadspi: remove references to runtime PM on error path
-Date: Fri, 7 Feb 2025 13:21:45 +0100
-Message-ID: <20250207122145.162183-2-csokas.bence@prolan.hu>
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH for-6.14 v3 0/4] Add more devm_ functions to simplify probe path in drivers/spi/atmel-quadspi.c
+Date: Fri, 7 Feb 2025 13:47:55 +0100
+Message-ID: <20250207124802.165408-1-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -70,47 +73,46 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738931011;VERSION=7984;MC=693355485;ID=413155;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738932485;VERSION=7985;MC=412144077;ID=401531;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94852617560
+X-EsetId: 37303A29ACD94852617560
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+The probe function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. To alleivate this - and similar problems in
+the future - an effort was made to migrate as many functions as possible,
+to their devm_ managed counterparts. The few functions, which did not yet
+have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
+and 4 then use these APIs to simplify and fix the probe() function.
 
-There is no need to call runtime PM put APIs on error path of
-`atmel_qspi_sama7g5_transfer()` as the caller (`atmel_qspi_exec_op()`)
-of it will take care of this if needed.
+Patch 4 in particular, fixes a bug present in 6.14-rc1, where the PM get()
+and put() calls were imbalanced.
 
-Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Durai Manickam KR <durai.manickamkr@microchip.com>
-Reported-by: Alexander Dahl <ada@thorsis.com>
-Closes: https://lore.kernel.org/linux-spi/20250109-carat-festivity-5f088e1add3c@thorsis.com/
-[ csokas.bence: Rebase and clarify msg, fix/add tags ]
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Links to previous versions:
+pre-series:
+https://lore.kernel.org/linux-kernel/20241222141427.819222-1-csokas.bence@prolan.hu/
+https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
+v1:
+https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
+v2:
+https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index d8c9be64d006..244ac0106862 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -930,11 +930,8 @@ static int atmel_qspi_sama7g5_transfer(struct spi_mem *mem,
- 
- 	/* Release the chip-select. */
- 	ret = atmel_qspi_reg_sync(aq);
--	if (ret) {
--		pm_runtime_mark_last_busy(&aq->pdev->dev);
--		pm_runtime_put_autosuspend(&aq->pdev->dev);
-+	if (ret)
- 		return ret;
--	}
- 	atmel_qspi_write(QSPI_CR_LASTXFER, aq, QSPI_CR);
- 
- 	return atmel_qspi_wait_for_completion(aq, QSPI_SR_CSRA);
+Bence Csókás (4):
+  dma: Add devm_dma_request_chan()
+  pm: runtime: Add new devm functions
+  spi: atmel-quadspi: Use `devm_dma_request_chan()`
+  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
 
-base-commit: d64ebde2a5acd9a516f6ea97ec2c9e6fc697f584
+ drivers/base/power/runtime.c | 36 +++++++++++++++++++++
+ drivers/dma/dmaengine.c      | 30 +++++++++++++++++
+ drivers/spi/atmel-quadspi.c  | 62 ++++++++++--------------------------
+ include/linux/dmaengine.h    |  7 ++++
+ include/linux/pm_runtime.h   |  4 +++
+ 5 files changed, 93 insertions(+), 46 deletions(-)
+
+
+base-commit: bb066fe812d6fb3a9d01c073d9f1e2fd5a63403b
 -- 
 2.48.1
 
