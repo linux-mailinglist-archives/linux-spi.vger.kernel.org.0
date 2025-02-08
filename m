@@ -1,123 +1,90 @@
-Return-Path: <linux-spi+bounces-6698-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6699-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6018AA2D309
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 03:21:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03F2EA2D62D
+	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 14:11:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DF9F188E11D
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 02:21:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED4DB167594
+	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 13:11:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E39E2AD32;
-	Sat,  8 Feb 2025 02:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8920246344;
+	Sat,  8 Feb 2025 13:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="RETv0pi8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPSiYF/G"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657E514A0B3
-	for <linux-spi@vger.kernel.org>; Sat,  8 Feb 2025 02:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F941A3157;
+	Sat,  8 Feb 2025 13:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738981257; cv=none; b=g2pwlHZNU4rM4VgHQ5v8DRIs8DGRlnMLBHo7PLTSw3qx0S9xFQ7g4Fdxx+4Hp4SAG3ImMG4ZrXuefRCV1JG7g3PHYYbm3mapecjTjOSKgSf3TH46conlZ88B0DzAGzvzpgjaE8nJdoJzCRlHXWTHnLDcvLnkHBb6qtzUN06jRTI=
+	t=1739020277; cv=none; b=U1CRgdMDJqYR1ZIYMxw+G7uEUT6U3MHAYfBH5bIKBv+mzSNRi18V8vYJY/dzdHzTNPgZSA+XbZ7TffKDWpHKZ73pzXC4XVz0rXs5OGKeSD7O8Y+LqaeA0FUFgTKwR0TRRsEhdwnsJ1lZeUpA316Qqej/XuVcc2jX2bZB4DXBdVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738981257; c=relaxed/simple;
-	bh=X/9UQWBS5m7Ib3mDDNhFlWLQ3zPrVaQFBwT1jLZLH3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhcHFxfTNqScIOEsHaA/STlKUt9tO3aDUQ/aW2yK7H9r6ngYj9mHZOKIoH+Z5XxPQBc9bHvysusH98OIWAAHYRMjzy/bGpKUyKdnLrNae83DItdQt5QoB7Xf9Be6TAV5ifRnyqhbhSz1YAGJcd6KRWrxE66NaTsB9QOK4Xa4DKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=RETv0pi8; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id BEE4A240103
-	for <linux-spi@vger.kernel.org>; Sat,  8 Feb 2025 03:20:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738981253; bh=X/9UQWBS5m7Ib3mDDNhFlWLQ3zPrVaQFBwT1jLZLH3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=RETv0pi8P373DiegxSUvi4C2fJev+HyWTRyNykg7oIgWn47X65NNvVgCsCbdWDAQP
-	 DMPA93xS+LXRfM/pNswr8q1Lv7jueqqTAaY6kl3zaQ3VQ6BVmyzau/3NjwVPv4x0pa
-	 DyRmTi86qoq2bQLzc/9fvmo0N+Y1eqLuyep9+vlpbT8B2at6F1Vx/ZEQ8QKMzSjGww
-	 1jnOpdg43i8qcuBMG9zpmrhFU1fjx68aD33m56Tv1/WyL22Pca//Bc0TkaL7owECs9
-	 ymKH6bYxsVIiQqiGoOvl+CE/ynq28UQJdSo/80Iw0zp4Bue42SfjvS9yUGrJOzKE2z
-	 WiW/Swc0Ab07w==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4YqZM431Sgz9rxL;
-	Sat,  8 Feb 2025 03:20:48 +0100 (CET)
-Date: Sat,  8 Feb 2025 02:20:47 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+	s=arc-20240116; t=1739020277; c=relaxed/simple;
+	bh=n5BuwU7uYtKvDB0Fk84TTCx9il8023N4ggMSK5Wt3Ic=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=At9mjuStAv1Febbz6iBEcXb37sIocD44S9msaCqTbVLi74n2e/B8tF+MJww2zrma/AISJhk3MFhreC9fdz32+sHj/FySVVQKhGR1a9Y1hu/e9PaOkTDMjm+aSf26jDfa7lAOQtqoSCgnxKxVFddMRVm95xYIBbTruQu2qHmATD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPSiYF/G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F1AC4CED6;
+	Sat,  8 Feb 2025 13:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739020277;
+	bh=n5BuwU7uYtKvDB0Fk84TTCx9il8023N4ggMSK5Wt3Ic=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=gPSiYF/GgGtAi4CdflkHyKdkuTvLKxF0yAtZwxinY8ohE8BND7zR0geK/5dAzRA3W
+	 Z++LkTQXDhNhj+Tby0fCEAGrRm0szgVZ/6bF42hn4nvjzADQc3W5MkCpo9MuC5ZXJn
+	 d/9HrX++8ylWOpcl4/9DqAoK5cvPXXBm0RJNKr+oCAnNuhhY+Hs47WeKIN9FawOqOe
+	 vHyA7BdpqVOJ6ZPZW1DHouLbTsF2U3o/2/xf7mmG4S64iGkvA0XrTtG8NKgVwrSBBA
+	 +dYZb9v4v/HoFrmC91wP0EdeequICLGnkYTr6/cUPjQvRJMNEYp8XirPzAlu6AbYVS
+	 KLGZ5I+rL0/Sg==
+Date: Sat, 8 Feb 2025 13:11:06 +0000
+From: Jonathan Cameron <jic23@kernel.org>
 To: Mark Brown <broonie@kernel.org>
-Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT
- bindings
-Message-ID: <Z6a_f03Ct9aB7Bbn@probook>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
+Cc: David Lechner <dlechner@baylibre.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
+ Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v8 14/17] iio: adc: ad4695: Add support for SPI offload
+Message-ID: <20250208131106.70d72ac4@jic23-huawei>
+In-Reply-To: <11b7f0fd-88ae-46c3-93b5-f7a0166e82be@sirena.org.uk>
+References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
+	<20250207-dlech-mainline-spi-engine-offload-2-v8-14-e48a489be48c@baylibre.com>
+	<11b7f0fd-88ae-46c3-93b5-f7a0166e82be@sirena.org.uk>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 07, 2025 at 09:38:05PM +0000, Mark Brown wrote:
-> On Fri, Feb 07, 2025 at 10:30:17PM +0100, J. Neuschäfer via B4 Relay wrote:
+On Fri, 7 Feb 2025 20:20:27 +0000
+Mark Brown <broonie@kernel.org> wrote:
+
+> On Fri, Feb 07, 2025 at 02:09:11PM -0600, David Lechner wrote:
 > 
-> > This is a spin-off of the series titled
-> > "powerpc: MPC83xx cleanup and LANCOM NWAPP2 board".
+> > Add support for SPI offload to the ad4695 driver. SPI offload allows
+> > sampling data at the max sample rate (500kSPS or 1MSPS).  
 > 
-> > During the development of that series, it became clear that many
-> > devicetree bindings for Freescale MPC8xxx platforms are still in the old
-> > plain-text format, or don't exist at all, and in any case don't mention
-> > all valid compatible strings.
-> 
-> What's the story with dependencies here - why is all this stuff in one
-> series?
+> This doesn't apply (against -rc1) so I'll skip all the IIO stuff.
 
-The patches are independent of each other, except for the four elbc/nand
-patches. They are in the same series because they came up during the
-same project and achieve similar goals, but it isn't necessary.
+We are pretty churn heavy for IIO in some of these drivers, so
+probably needs an immutable branch with just the SPI parts
+and I'll unwind the mess on top of that (or request rebases
+as needed!)
 
+Thanks,
 
-> Normally I'd expect bindings conversions to be standalone.
-
-Noted.
-
-
-J. Neuschäfer
+Jonathan
 
