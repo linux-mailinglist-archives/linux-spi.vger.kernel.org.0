@@ -1,90 +1,158 @@
-Return-Path: <linux-spi+bounces-6699-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6700-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03F2EA2D62D
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 14:11:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53ADDA2D9EE
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 01:07:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED4DB167594
-	for <lists+linux-spi@lfdr.de>; Sat,  8 Feb 2025 13:11:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D1357A2E1F
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 00:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8920246344;
-	Sat,  8 Feb 2025 13:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CC3136A;
+	Sun,  9 Feb 2025 00:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPSiYF/G"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="SR2TmtIo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F941A3157;
-	Sat,  8 Feb 2025 13:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672AF4683
+	for <linux-spi@vger.kernel.org>; Sun,  9 Feb 2025 00:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739020277; cv=none; b=U1CRgdMDJqYR1ZIYMxw+G7uEUT6U3MHAYfBH5bIKBv+mzSNRi18V8vYJY/dzdHzTNPgZSA+XbZ7TffKDWpHKZ73pzXC4XVz0rXs5OGKeSD7O8Y+LqaeA0FUFgTKwR0TRRsEhdwnsJ1lZeUpA316Qqej/XuVcc2jX2bZB4DXBdVU=
+	t=1739059635; cv=none; b=OJtCejnqjRF+TDveLZfbHNAWvxxG0fYyLa4YauGsWt1q1WiXkTrYeh+oiTuQnILtXPC9XY1JRzWuP5gZEP8wxclLizz9lCpBH+VtsXBikDwZ86GUslwuvzE8UgZ0NHPHeSG3goAeyQNXbuItU/SlnbjVY2DprU1ZPJZUaIOTI3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739020277; c=relaxed/simple;
-	bh=n5BuwU7uYtKvDB0Fk84TTCx9il8023N4ggMSK5Wt3Ic=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=At9mjuStAv1Febbz6iBEcXb37sIocD44S9msaCqTbVLi74n2e/B8tF+MJww2zrma/AISJhk3MFhreC9fdz32+sHj/FySVVQKhGR1a9Y1hu/e9PaOkTDMjm+aSf26jDfa7lAOQtqoSCgnxKxVFddMRVm95xYIBbTruQu2qHmATD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPSiYF/G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F1AC4CED6;
-	Sat,  8 Feb 2025 13:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739020277;
-	bh=n5BuwU7uYtKvDB0Fk84TTCx9il8023N4ggMSK5Wt3Ic=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gPSiYF/GgGtAi4CdflkHyKdkuTvLKxF0yAtZwxinY8ohE8BND7zR0geK/5dAzRA3W
-	 Z++LkTQXDhNhj+Tby0fCEAGrRm0szgVZ/6bF42hn4nvjzADQc3W5MkCpo9MuC5ZXJn
-	 d/9HrX++8ylWOpcl4/9DqAoK5cvPXXBm0RJNKr+oCAnNuhhY+Hs47WeKIN9FawOqOe
-	 vHyA7BdpqVOJ6ZPZW1DHouLbTsF2U3o/2/xf7mmG4S64iGkvA0XrTtG8NKgVwrSBBA
-	 +dYZb9v4v/HoFrmC91wP0EdeequICLGnkYTr6/cUPjQvRJMNEYp8XirPzAlu6AbYVS
-	 KLGZ5I+rL0/Sg==
-Date: Sat, 8 Feb 2025 13:11:06 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
- Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v8 14/17] iio: adc: ad4695: Add support for SPI offload
-Message-ID: <20250208131106.70d72ac4@jic23-huawei>
-In-Reply-To: <11b7f0fd-88ae-46c3-93b5-f7a0166e82be@sirena.org.uk>
-References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
-	<20250207-dlech-mainline-spi-engine-offload-2-v8-14-e48a489be48c@baylibre.com>
-	<11b7f0fd-88ae-46c3-93b5-f7a0166e82be@sirena.org.uk>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1739059635; c=relaxed/simple;
+	bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BoJb98RchEkaPzcPAuguxvVGCY7ukUuTq2VyIVqhCnhLmuHOtOXqPs5Xf/4xN7jlRYifRfM1OCH58wypXAX6UKMV/ca/7jJcHZ+DZp8u6LHDdK5R2WvNfcIUP75zWfOnXTm9ynQrJWV1rikvJ//0JGy0qOx+4xlRM/svqlrzk+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=SR2TmtIo; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 217B0240101
+	for <linux-spi@vger.kernel.org>; Sun,  9 Feb 2025 01:07:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739059628; bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=SR2TmtIo67z05s4kxF0Ofa2/igGTbKkcbZPByXWXy8i6zm9KWjhNMQ/3Vaqi5EU6A
+	 JkqODKQmGafdbjTgaw6zvXIjbwCea1icwXx7XJkKGwDvjrw6cOwzih3KjdBWDEkmeQ
+	 TAV2d8GBB+HcI8v0XRjQ89eked08X5Fnl4rHWmiAxvOraVLYfkyXf4raGqN9z9w9Gy
+	 VmloYIu+RyuefxPplg8tyDFctF4eRcBdw1kFlC36JnybCRp/IEQgKYg+M3g7QvpWUG
+	 ohkM9bj5pnzu735rDicaTmq0dj+A2G8d9R/pUbzadWaJ8mfgVociMnpq9oukqQgHOv
+	 /dTErrwHPl7Ag==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Yr7LD23pfz6v0D;
+	Sun,  9 Feb 2025 01:06:59 +0100 (CET)
+Date: Sun,  9 Feb 2025 00:06:59 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: j.ne@posteo.net
+Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 06/12] dt-bindings: pci: Convert fsl,mpc83xx-pcie to
+ YAML
+Message-ID: <Z6fxo4j5a6ro0f1w@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
 
-On Fri, 7 Feb 2025 20:20:27 +0000
-Mark Brown <broonie@kernel.org> wrote:
-
-> On Fri, Feb 07, 2025 at 02:09:11PM -0600, David Lechner wrote:
+On Fri, Feb 07, 2025 at 10:30:23PM +0100, J. Neuschäfer via B4 Relay wrote:
+> From: "J. Neuschäfer" <j.ne@posteo.net>
 > 
-> > Add support for SPI offload to the ad4695 driver. SPI offload allows
-> > sampling data at the max sample rate (500kSPS or 1MSPS).  
+> Formalise the binding for the PCI controllers in the Freescale MPC8xxx
+> chip family. Information about PCI-X-specific properties was taken from
+> fsl,pci.txt. The examples were taken from mpc8315erdb.dts and
+> xpedite5200_xmon.dts.
 > 
-> This doesn't apply (against -rc1) so I'll skip all the IIO stuff.
+> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> ---
+> 
+> V2:
+> - merge fsl,pci.txt into fsl,mpc8xxx-pci.yaml
+> - regroup compatible strings, list single-item values in one enum
+> - trim subject line (remove "binding")
+> - fix property order to comply with dts coding style
+> ---
+>  .../devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml   | 115 +++++++++++++++++++++
+>  Documentation/devicetree/bindings/pci/fsl,pci.txt  |  27 -----
+>  2 files changed, 115 insertions(+), 27 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..57c5503cec47e6e90ed2b09835bfad10309db927
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/pci/fsl,mpc8xxx-pci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale MPC83xx PCI/PCI-X/PCIe controllers
+> +
+> +description: |
+> +  Binding for the PCI/PCI-X/PCIe host bridges on MPC8xxx SoCs.
+> +  See also: Documentation/devicetree/bindings/pci/fsl,pci.txt
 
-We are pretty churn heavy for IIO in some of these drivers, so
-probably needs an immutable branch with just the SPI parts
-and I'll unwind the mess on top of that (or request rebases
-as needed!)
+This is obviously a bit wrong; I ended up putting the information from
+fsl,pci.txt entirely under the fsl,pci-agent-force-enum property, but
+forgot to remove the reference to the old txt file.
 
-Thanks,
-
-Jonathan
+> +properties:
+[...]
+> +  fsl,pci-agent-force-enum:
+> +    type: boolean
+> +    description:
+> +      Typically any Freescale PCI-X bridge hardware strapped into Agent mode is
+> +      prevented from enumerating the bus. The PrPMC form-factor requires all
+> +      mezzanines to be PCI-X Agents, but one per system may still enumerate the
+> +      bus.
+> +
+> +      This property allows a PCI-X bridge to be used for bus enumeration
+> +      despite being strapped into Agent mode.
+> +
+> +required:
+> +  - reg
+> +  - compatible
 
