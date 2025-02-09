@@ -1,158 +1,221 @@
-Return-Path: <linux-spi+bounces-6700-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6701-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53ADDA2D9EE
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 01:07:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 727D1A2DBF6
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 11:11:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D1357A2E1F
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 00:06:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59CB33A5ED3
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Feb 2025 10:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CC3136A;
-	Sun,  9 Feb 2025 00:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435331537CB;
+	Sun,  9 Feb 2025 10:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="SR2TmtIo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ktOQaRty"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672AF4683
-	for <linux-spi@vger.kernel.org>; Sun,  9 Feb 2025 00:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E41339A8;
+	Sun,  9 Feb 2025 10:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739059635; cv=none; b=OJtCejnqjRF+TDveLZfbHNAWvxxG0fYyLa4YauGsWt1q1WiXkTrYeh+oiTuQnILtXPC9XY1JRzWuP5gZEP8wxclLizz9lCpBH+VtsXBikDwZ86GUslwuvzE8UgZ0NHPHeSG3goAeyQNXbuItU/SlnbjVY2DprU1ZPJZUaIOTI3M=
+	t=1739095909; cv=none; b=FmLgMoeR1B2uHHd/2nXaK19U6AMfLlI9KN0U0E2EfUkk5Ls/77MygKWsXGsVuBL6x1PM1Q4h4v/spjwy1GQSQdQRGmBuN0JWLII5u8mdz0toGkVKiHJQJHNc8nBk9xi65r7aXEKoLAsfFW19ShY57jmFC1N5mFPPbUl9qI8M39w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739059635; c=relaxed/simple;
-	bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BoJb98RchEkaPzcPAuguxvVGCY7ukUuTq2VyIVqhCnhLmuHOtOXqPs5Xf/4xN7jlRYifRfM1OCH58wypXAX6UKMV/ca/7jJcHZ+DZp8u6LHDdK5R2WvNfcIUP75zWfOnXTm9ynQrJWV1rikvJ//0JGy0qOx+4xlRM/svqlrzk+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=SR2TmtIo; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 217B0240101
-	for <linux-spi@vger.kernel.org>; Sun,  9 Feb 2025 01:07:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1739059628; bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=SR2TmtIo67z05s4kxF0Ofa2/igGTbKkcbZPByXWXy8i6zm9KWjhNMQ/3Vaqi5EU6A
-	 JkqODKQmGafdbjTgaw6zvXIjbwCea1icwXx7XJkKGwDvjrw6cOwzih3KjdBWDEkmeQ
-	 TAV2d8GBB+HcI8v0XRjQ89eked08X5Fnl4rHWmiAxvOraVLYfkyXf4raGqN9z9w9Gy
-	 VmloYIu+RyuefxPplg8tyDFctF4eRcBdw1kFlC36JnybCRp/IEQgKYg+M3g7QvpWUG
-	 ohkM9bj5pnzu735rDicaTmq0dj+A2G8d9R/pUbzadWaJ8mfgVociMnpq9oukqQgHOv
-	 /dTErrwHPl7Ag==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Yr7LD23pfz6v0D;
-	Sun,  9 Feb 2025 01:06:59 +0100 (CET)
-Date: Sun,  9 Feb 2025 00:06:59 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: j.ne@posteo.net
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 06/12] dt-bindings: pci: Convert fsl,mpc83xx-pcie to
- YAML
-Message-ID: <Z6fxo4j5a6ro0f1w@probook>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
+	s=arc-20240116; t=1739095909; c=relaxed/simple;
+	bh=vNfQHGy9KvvHWawYZq7BNNrvnPQWExBbzHbPaHBUPaA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=t1PokcxpX61uqVV6f8KPrN4TwwEXiaqChJqukDhmNeUQjBaMM/+1muYuIPEhx0B3Kh7FO1dFf3IjEGaJtlTPItEx0GO6UvChbT67p1fbsJQ/fhiTU1jQkh9vsvWQRG3VpyfinTB4qXZkbzk1hdYUeDc+lNu8+meqrn0x06lwcBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ktOQaRty; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5199gVjw015074;
+	Sun, 9 Feb 2025 10:11:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Dmek2XxpbJMsM7efAFBBMti346SYX/rpk932t0eKqPQ=; b=ktOQaRtyNQa7+tB0
+	RdPe2UaAv6kRKotfPEya8EU3JadZpwA7k8e7jJ2i7UjMi8notIQdL4D3oekm9xMD
+	IJGcHgf+/2lzOiXhp4wPZZ+TiSyE1e8vIhgI7Tuel3M+g3eAOWVE/2ZY7DNGuApy
+	dZn3H2ugc5UqprbR1+HnTNCN/+ns8zTo0DOoeCmGqW8kPlTj3L/IbSQop5i7ha3o
+	D+OJrhoMdu2fWO9LqMwF0AYT/7Bg7zFk79xs+8ndu+DDit2F1nqFUYEHX/Oy5jTH
+	t30gC7JscRsei0AwaAU7+/l0Z0/aD3IqBSQppIPTdXUCaZRWPvoslyaCBsvnwTt7
+	M9PQnA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44p0dyhtfq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 09 Feb 2025 10:11:41 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 519ABepp019131
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 9 Feb 2025 10:11:40 GMT
+Received: from [10.216.10.172] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 9 Feb 2025
+ 02:11:33 -0800
+Message-ID: <01362821-ac7f-41d7-a4c1-b1f675e9f644@quicinc.com>
+Date: Sun, 9 Feb 2025 15:41:16 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/8] dt-bindings: serial: Add support for selecting
+ data transfer mode
+To: <neil.armstrong@linaro.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andi.shyti@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <broonie@kernel.or>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <johan+linaro@kernel.org>,
+        <dianders@chromium.org>, <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <quic_msavaliy@quicinc.com>, <quic_anupkulk@quicinc.com>
+References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
+ <20250124105309.295769-5-quic_vdadhani@quicinc.com>
+ <10060d39-87a4-4565-a2a6-80c93ac2266a@kernel.org>
+ <dudqd2y42wy6iq2k73aphd5ol4mtq7z4c54zhd27rl745rrw5x@p3oummf2jke7>
+ <374e16d6-46aa-4bdf-85e9-bc2e33c38057@kernel.org>
+ <v5n7wn3saiymi2ncgi35drzdjfeaa4ng2ftia6ggex6oh74ocg@7vuskxosh726>
+ <5f710113-08b0-468e-940a-2c65e8b42486@linaro.org>
+Content-Language: en-US
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+In-Reply-To: <5f710113-08b0-468e-940a-2c65e8b42486@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nO-jX9qXh2SLLs-_2Es2F7tOeMSivxvw
+X-Proofpoint-GUID: nO-jX9qXh2SLLs-_2Es2F7tOeMSivxvw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-09_04,2025-02-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502090089
 
-On Fri, Feb 07, 2025 at 10:30:23PM +0100, J. Neuschäfer via B4 Relay wrote:
-> From: "J. Neuschäfer" <j.ne@posteo.net>
-> 
-> Formalise the binding for the PCI controllers in the Freescale MPC8xxx
-> chip family. Information about PCI-X-specific properties was taken from
-> fsl,pci.txt. The examples were taken from mpc8315erdb.dts and
-> xpedite5200_xmon.dts.
-> 
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> ---
-> 
-> V2:
-> - merge fsl,pci.txt into fsl,mpc8xxx-pci.yaml
-> - regroup compatible strings, list single-item values in one enum
-> - trim subject line (remove "binding")
-> - fix property order to comply with dts coding style
-> ---
->  .../devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml   | 115 +++++++++++++++++++++
->  Documentation/devicetree/bindings/pci/fsl,pci.txt  |  27 -----
->  2 files changed, 115 insertions(+), 27 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..57c5503cec47e6e90ed2b09835bfad10309db927
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
-> @@ -0,0 +1,115 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +
-> +$id: http://devicetree.org/schemas/pci/fsl,mpc8xxx-pci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale MPC83xx PCI/PCI-X/PCIe controllers
-> +
-> +description: |
-> +  Binding for the PCI/PCI-X/PCIe host bridges on MPC8xxx SoCs.
-> +  See also: Documentation/devicetree/bindings/pci/fsl,pci.txt
 
-This is obviously a bit wrong; I ended up putting the information from
-fsl,pci.txt entirely under the fsl,pci-agent-force-enum property, but
-forgot to remove the reference to the old txt file.
 
-> +properties:
-[...]
-> +  fsl,pci-agent-force-enum:
-> +    type: boolean
-> +    description:
-> +      Typically any Freescale PCI-X bridge hardware strapped into Agent mode is
-> +      prevented from enumerating the bus. The PrPMC form-factor requires all
-> +      mezzanines to be PCI-X Agents, but one per system may still enumerate the
-> +      bus.
-> +
-> +      This property allows a PCI-X bridge to be used for bus enumeration
-> +      despite being strapped into Agent mode.
-> +
-> +required:
-> +  - reg
-> +  - compatible
+On 1/29/2025 1:48 PM, neil.armstrong@linaro.org wrote:
+> On 29/01/2025 03:21, Dmitry Baryshkov wrote:
+>> On Mon, Jan 27, 2025 at 05:24:21PM +0100, Krzysztof Kozlowski wrote:
+>>> On 27/01/2025 15:27, Dmitry Baryshkov wrote:
+>>>> On Mon, Jan 27, 2025 at 08:02:12AM +0100, Krzysztof Kozlowski wrote:
+>>>>> On 24/01/2025 11:53, Viken Dadhaniya wrote:
+>>>>>> Data transfer mode is fixed by TrustZone (TZ), which currently 
+>>>>>> restricts
+>>>>>> developers from modifying the transfer mode from the APPS side.
+>>>>>>
+>>>>>> Document the 'qcom,xfer-mode' properties to select the data 
+>>>>>> transfer mode,
+>>>>>> either GPI DMA (Generic Packet Interface) or non-GPI mode (PIO/CPU 
+>>>>>> DMA).
+>>>>>>
+>>>>>> UART controller can operate in one of two modes based on the
+>>>>>> 'qcom,xfer-mode' property, and the firmware is loaded accordingly.
+>>>>>>
+>>>>>> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>>>>> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+>>>>>> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+>>>>>> ---
+>>>>>>
+>>>>>> v1 -> v2:
+>>>>>>
+>>>>>> - Drop 'qcom,load-firmware' property and add 'firmware-name' 
+>>>>>> property in
+>>>>>>    qup common driver.
+>>>>>> - Update commit log.
+>>>>>>
+>>>>>> v1 Link: 
+>>>>>> https://lore.kernel.org/linux-kernel/20241204150326.1470749-4-quic_vdadhani@quicinc.com/
+>>>>>> ---
+>>>>>> ---
+>>>>>>   .../devicetree/bindings/serial/qcom,serial-geni-qcom.yaml | 8 
+>>>>>> ++++++++
+>>>>>>   1 file changed, 8 insertions(+)
+>>>>>>
+>>>>>> diff --git 
+>>>>>> a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>>>>> index dd33794b3534..383773b32e47 100644
+>>>>>> --- 
+>>>>>> a/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>>>>> +++ 
+>>>>>> b/Documentation/devicetree/bindings/serial/qcom,serial-geni-qcom.yaml
+>>>>>> @@ -56,6 +56,13 @@ properties:
+>>>>>>     reg:
+>>>>>>       maxItems: 1
+>>>>>> +  qcom,xfer-mode:
+>>>>>> +    description: Set the value to 1 for non-GPI (FIFO/CPU DMA) 
+>>>>>> mode and 3 for GPI DMA mode.
+>>>>>> +      The default mode is FIFO.
+>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +    enum: [1, 3]
+>>>>>> +
+>>>>>> +
+>>>>>
+>>>>> Just one blank line, but anyway, this property should not be in three
+>>>>> places. Do you really expect that each of serial engines within one
+>>>>> GeniQUP will be configured differently by TZ?
+>>>>
+>>>> Yes, each SE is configured separately and it's quite frequent when
+>>>> different SEs have different DMA configuration.
+>>>
+>>> Well, I checked at sm8550 and sm8650 and each pair of SE - which shares
+>>> resources - has the same DMAs, so I would not call it frequent. Care to
+>>> bring an example where same serial engines have different DMAs and
+>>> different TZ? We do not talk about single QUP.
+>>
+>> Well, I don't have access to the latest sm8550 / sm8650 devcfg sources.
+>> I checked the RB5 ones. As far as I understand out of 14 enabled SEs
+>> only two are configured for the GSI DMA, others should use FIFO / SE
+>> DMA. Same applies to the SM8250 MTP devices. Checking the RB1 / RB2
+>> setup also shows 3 out of 6 SEs being set for GSI.
+> 
+> I think selecting GSI DMA is only for devices needs high speed streaming 
+> to the
+> device, like the touch screen, using GSI DMA for random small access is 
+> a non-sense.
+> 
+> But the thing is, in the TZ world the configuration was static so we had 
+> no choice
+> of using GSI DMA when configured, but now we have the choice so we could 
+> totally
+> reconfigure the SE with the transfer type (FIFO, SE DMA or GSI DMA) as 
+> runtime and
+> drop this attribute.
+> 
+> So instead of hardcoding this, add a way to dynamically select either of 
+> the 3
+> transfer types when firmware can be loaded from HLOS.
+> 
+> Neil
+> 
+
+Yes, GSI DMA mode is required for specific use cases only.
+
+Dynamically switching from GSI mode to non-GSI mode is neither possible 
+nor useful. For each SE, the use case is fixed, and based on the use 
+case, the developer can choose the mode via the device tree property.
+
+>>
+>>>
+>>> Anyway, if you need property per node, this has to be shared schema.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>
+> 
 
