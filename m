@@ -1,119 +1,116 @@
-Return-Path: <linux-spi+bounces-6710-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6712-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05C27A2E6BD
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 09:45:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E58A2EABA
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 12:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 429203A5954
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 08:45:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489E91883A26
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 11:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF4B19DF99;
-	Mon, 10 Feb 2025 08:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A0A1DF960;
+	Mon, 10 Feb 2025 11:10:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZY02NguF"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="QI/aT7t/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D688D1E4A9;
-	Mon, 10 Feb 2025 08:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19281EF1D;
+	Mon, 10 Feb 2025 11:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177133; cv=none; b=WOSzAmx+FdNbRKt8aJs0afrTV92+8PpLO0p8fdnsZX9fKbG1yDqRpwGTzxVop1+tkfd05oCXi97GhBZ2PlrAm6rB0RNFJv/eWAU0Dz1ZT0nue0wJVYSCID8+U20mr7skaFUcpNpuCAut5gqzamqJ+qBHtYOBmMNOqD7qa5WhUX4=
+	t=1739185820; cv=none; b=hS8MX2/pbb/1rgwFl2SlRcw/XATvEAvHgdvm0YpMTW7kngHKxwQSsCu2fDcyviim0/qptbo5rEPsY9PzoWKP+SBhSUb3dxwlpizM95vPjkXbeD/HUeGcKyng+yhh1yy6AjfCHz/69tkWogl0DZPNtewVndmP2gm3RdAM5fHR94E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177133; c=relaxed/simple;
-	bh=8e9TvzMvnN655dD9mW3ziQ4pedVgVTCtFygXZeQGWbI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KyxgRLA/Ci3epCkfPiSGZZ3uXWW52YyNBuEfnc4EqMpXVobiGuEXG9r+99AVQV8RfEiCWqv9SkE3filo8TaDep31yyI9TBqHIWkb3ryNdvPDQlotWHJ0ordISoiYT1hX5hWztS3Mc41vKOmV+k1Hbj6AwKx5sBEshAjEgB2Ac5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZY02NguF; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 55A93582BA6;
-	Mon, 10 Feb 2025 08:27:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E7EC441F0;
-	Mon, 10 Feb 2025 08:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1739176047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8e9TvzMvnN655dD9mW3ziQ4pedVgVTCtFygXZeQGWbI=;
-	b=ZY02NguFvp2D4ou3No/QCzpfSTJ/vEq/6qT+XJ/nvm4ksYAK39lFMb0mQgDBqM0QIBRl1F
-	8lQkkIF/mc8rfl0l4flqx4G6JMtztvl8iq4f4mpGpYsw9F+0rmgop6/sp/OOfQsixdP9Hn
-	F5EBu6cuuY9MfhzpBOyfm3OiCFVmX2cf9gRlizM56NuNZNK60icbcTT+3/d+T/Unba6ad9
-	nIAJD/b54HfwpeWm89ATdYeoXB7ZO5w+IHsHy0eoz3L543OybW2v5YkqjOB1Y1pInLZonw
-	gvl82hS9MNgYZaE0ZItYKARh4AqYqBh+HH0IcpFf14eU4/gDM4YqjQJ7ekjhow==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: J. =?utf-8?Q?Neusch=C3=A4fer?= via B4 Relay
- <devnull+j.ne.posteo.net@kernel.org>
-Cc: devicetree@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,  Krzysztof
- Kozlowski <krzk@kernel.org>,  j.ne@posteo.net,  imx@lists.linux.dev,
-  Scott Wood <oss@buserror.net>,  Madhavan Srinivasan
- <maddy@linux.ibm.com>,  Michael Ellerman <mpe@ellerman.id.au>,  Nicholas
- Piggin <npiggin@gmail.com>,  Christophe Leroy
- <christophe.leroy@csgroup.eu>,  Naveen N Rao <naveen@kernel.org>,  Rob
- Herring <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>,  Damien Le Moal <dlemoal@kernel.org>,
-  Niklas Cassel <cassel@kernel.org>,  Herbert Xu
- <herbert@gondor.apana.org.au>,  "David S. Miller" <davem@davemloft.net>,
-  Lee Jones <lee@kernel.org>,  Vinod Koul <vkoul@kernel.org>,  Lorenzo
- Pieralisi <lpieralisi@kernel.org>,  Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=
- <kw@linux.com>,
-  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,  Bjorn Helgaas
- <bhelgaas@google.com>,  J. =?utf-8?Q?Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>,  Wim Van
- Sebroeck <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>,
-  Mark Brown <broonie@kernel.org>,  Richard Weinberger <richard@nod.at>,
-  Vignesh Raghavendra <vigneshr@ti.com>,  linux-kernel@vger.kernel.org,
-  linux-ide@vger.kernel.org,  linux-crypto@vger.kernel.org,
-  dmaengine@vger.kernel.org,  linux-pci@vger.kernel.org,
-  linux-watchdog@vger.kernel.org,  linux-spi@vger.kernel.org,
-  linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 12/12] dt-bindings: mtd: raw-nand-chip: Relax node
- name pattern
-In-Reply-To: <20250207-ppcyaml-v2-12-8137b0c42526@posteo.net> ("J.
- =?utf-8?Q?Neusch=C3=A4fer?=
-	via B4 Relay"'s message of "Fri, 07 Feb 2025 22:30:29 +0100")
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
-	<20250207-ppcyaml-v2-12-8137b0c42526@posteo.net>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Mon, 10 Feb 2025 09:27:22 +0100
-Message-ID: <87o6zaurv9.fsf@bootlin.com>
+	s=arc-20240116; t=1739185820; c=relaxed/simple;
+	bh=VDiIUf3hSRXCXLXCrJZy53jmb5EAldDkUmcpks1+V8s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jDuR52B0o+SR9zyoIoWS+rWminX8KCZ6apofEWwBgiychICh2jV9mOYUywulowa4ekPyUUfV6dzSa6lK4OFUYykC2OVnAdfmhRqJTAz/N+31wR1v9r/5LW/OzukJUDIkdJJZ4fYWQ/8dAB6bCy3CM8G/sNQ8rhZpLAEaQw3PIeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=QI/aT7t/; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 14CD1A0748;
+	Mon, 10 Feb 2025 12:10:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=2zJoI4zUhnQFWnhkAmCA/G6I5XpawwTFf8gjoo1QOYE=; b=
+	QI/aT7t/diqN7H9jybwNT2W3yN4oxmBwNbPh3vYnTLj2R4D0FHQx7ZOM3MfV6/Um
+	j6YP8qzSxoahWnlYZjXhj+h8e8ksVUcMNA1d5Lt3l2L59YvtI7jkw6wn263c7rsx
+	pxLtzpY4cXg/tHXgVPJf1O3+vlMDrnqHgssw6R9yArCCs4tZ1b4mIt+9AFujgxuZ
+	/Aq9fbv4Jt62FS4SLsAjhOv9pKkdVx0lcBF3kh4GthEmt42T1FcrNoKRIbKUdvjn
+	Ikm8yGUNAOCwuBlYIHPeWeXwPBRmy5e6Uu+lM3jNUpT5RUlk0mMXpLspSPXvsqKN
+	c91NjQpWs/qfGMedAkszrLOcDIikTJFSUa5neFsaE4PzPMx8cvWhHxptbvVQdlTW
+	RAaT764DEC6mvLy/d7rocaJXC85bq358RxQq75GiRKAggoxka0ZVK9+qxevEd+sA
+	wyPSII0IWnYl7RRe7JJz4P6HUJg5zN6QJaRzFBuTe1VzE5PaW4W7DPfd0bIoJm/g
+	9dw67GwjmHmOMNAMs3GK+Q+FB9ZVPtl4VAga4DbKpDcZS6pFcgBb+Qlwg8B1/D36
+	qCGs8Ma0sAWAiDEMdtKHTQcIYNybvtlwhgLTIFJ2xo6Ak4u4K/7Z14Rqp7rRJ89b
+	x86IZF7S2iFUyug1ZreAZYfr3gusurix7bsUCBM+NMM=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	=?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Varshini
+ Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>,
+	"Nicolas Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: [PATCH for-6.14 v4 0/2] Add more devm_ functions to fix PM imbalance in spi/atmel-quadspi.c
+Date: Mon, 10 Feb 2025 12:10:05 +0100
+Message-ID: <20250210111008.248929-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefjeehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffgffkfggtgfgsehtqhertddtreejnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeghfejtdefieeguddukedujeektdeihfelleeuieeuveehkedvleduheeivdefnecukfhppeelvddrudekgedrleekrdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeelvddrudekgedrleekrdekgedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfeelpdhrtghpthhtohepuggvvhhnuhhllhdojhdrnhgvrdhpohhsthgvohdrnhgvtheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrghdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhdrnhgvsehpohhst
- hgvohdrnhgvthdprhgtphhtthhopehimhigsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhsshessghushgvrhhrohhrrdhnvghtpdhrtghpthhtohepmhgrugguhieslhhinhhugidrihgsmhdrtghomh
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1739185812;VERSION=7985;MC=1898231991;ID=637647;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD9485261776A
 
-Hello,
+The probe() function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. During the port, a bug was introduced, where
+the PM get() and put() calls were imbalanced. To alleivate this - and
+similar problems in the future - an effort was made to migrate as many
+functions as possible, to their devm_ managed counterparts. The few
+functions, which did not yet have a devm_ variant, are added in patch 1 of
+this series. Patch 2 then uses these APIs to fix the probe() function.
 
-On 07/02/2025 at 22:30:29 +01, J. Neusch=C3=A4fer via B4 Relay <devnull+j.n=
-e.posteo.net@kernel.org> wrote:
+Change in v4:
+* the DMA cleanup was split out and will be submitted separately for 6.15
 
-> From: "J. Neusch=C3=A4fer" <j.ne@posteo.net>
->
-> In some scenarios, such as under the Freescale eLBC bus, there are raw
-> NAND chips with a unit address that has a comma in it (cs,offset).
-> Relax the $nodename pattern in raw-nand-chip.yaml to allow such unit
-> addresses.
+Links to previous versions:
+pre-series:
+https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
+v1:
+https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
+v2:
+https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
+v3:
+https://lore.kernel.org/linux-kernel/20250207124802.165408-1-csokas.bence@prolan.hu/
 
-This is super specific to this controller, I'd rather avoid that in the
-main (shared) files. I believe you can force another node name in the
-controller's binding instead?
+Bence Csókás (2):
+  pm: runtime: Add new devm functions
+  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
 
-Thanks,
-Miqu=C3=A8l
+ drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
+ drivers/spi/atmel-quadspi.c  | 18 +++++-------------
+ include/linux/pm_runtime.h   |  4 ++++
+ 3 files changed, 45 insertions(+), 13 deletions(-)
+
+
+base-commit: a64dcfb451e254085a7daee5fe51bf22959d52d3
+-- 
+2.48.1
+
+
 
