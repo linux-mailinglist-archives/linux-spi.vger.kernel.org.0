@@ -1,79 +1,80 @@
-Return-Path: <linux-spi+bounces-6750-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6751-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDCAAA2FE3E
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13096A2FE40
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:16:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A9FC1886B2A
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 23:16:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DC001886B9C
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 23:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C06B253F16;
-	Mon, 10 Feb 2025 23:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0FC26136D;
+	Mon, 10 Feb 2025 23:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TI8M4e5V"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="bTvUyoJE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ECE1509A0
-	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 23:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89801BBBD7
+	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 23:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739229382; cv=none; b=OE22antMp8S2DYuNar4kwHG1L4gEklFX7U5K1PQknxOUPYlxbxUk9p2rujhzGV4B+AfRZh5WHS9wEnbuwu1EXch4qVRROvcwgHel4xwCkXjWaCNrDGgjJsTTfQNvdm+h6sbgDkeqE7SsowxHGtWE9uudTVmuyXX+7MqwROKFwks=
+	t=1739229383; cv=none; b=qO11IFhHBoDTHHzkzzB4SO3qa0lK6463eccrVDF3WSIqtCi0CLXB4K34ktgaFpNWEHC7SSa2TY2wuHRK256rBl9JDvWqzFAWkHNRJFrEsNr18EIMmRwi6iloFNzH7maRst9RmID4I10WUF8fWajW+V0+Z8co91rMvKwk5lkOlnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739229382; c=relaxed/simple;
-	bh=NUApKyScjyNwhZt7QISmRvCwSkmNuMrMeDDGrzDTJE0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pKsR3i2Nu0bnwsbb8djy4KqhBM82+bHjCFrKKikkMw8T1/020B8S1xMcV7YEl680DetHMw4HcCeO1kk16PScUIy6gutmn9X9YbBlqHKTWJRNmTcrArdmB9YQ2+kB1biGcGOJKPy+NCna8CLh85XVYeu4L/PYv74Tb83uGRj42Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TI8M4e5V; arc=none smtp.client-ip=209.85.161.44
+	s=arc-20240116; t=1739229383; c=relaxed/simple;
+	bh=fwM8qEu5h1zUp2oTAbXzdbLh9akj8f0+B5V6fLJkDyU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=e2MZuhl3IEMTl9rytxLEPPcwksX3tkWNdF1rmL4V05MAVRLmWz9eEiFPlDSC6tNW8/WjUzIKsUr283WRWayoAog8oJ7V5Ybd5Jh8u64LRy97wZlgk5Y/RuApPaQYSwtKbnc4FKMihVltyFVqoDvE8IBk5PmEcfP5gOi40ccM0x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=bTvUyoJE; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5f6b65c89c4so1237533eaf.2
-        for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 15:16:19 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5fc73d5786eso1092252eaf.0
+        for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 15:16:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739229378; x=1739834178; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zOTiC9N25oxSFn8PJurmN+X05adw39aPm32FGiYhCiI=;
-        b=TI8M4e5VjtidvaV7h9z0OgQwBgGfq01PiIMPInWVy2sexE5/772Y+xAJsgvqPQ9YWB
-         B691eb9ytdvzwAms1p4bG2bD4kT91+Q7ANvdMy4N5VXEeeP8Rc854kWi+V+qUwAkWCyq
-         +3zghMOn8cU4gbMxCuGOJEf2JQKKKitjqC5ThpTZOE5UX/C4uQ7U4earKKhJXJYpwnJn
-         y7rv2TBZAbb61I4zbD1jWGqOIyhW3s32sTq4HWh59ZO5Q+4J9KSj/Q8A7PZlygXahDN4
-         hZogLhb2HZitohrSEHKVJsAQRKLVXrIk96L9I45+c/IkO62MLoR4J43NwxyMVooZOvlL
-         1PEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739229378; x=1739834178;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739229381; x=1739834181; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zOTiC9N25oxSFn8PJurmN+X05adw39aPm32FGiYhCiI=;
-        b=LQog3dJZjI4TeCNetCmbTwdo8ri53HUhclWYXrIdRjr4kcDvHNL322H5pJum2rV+Nt
-         Rzp5C9Hf7MbRjVO6K4aof9eaxn94KZnwuV19I97/Vq8A6NYvA3I6xZZqbXsuBkzbM8N7
-         sBfTF++O5ZfVIximO40rf9IxnZ8XNoAclk0Nu8wTw0EffIq2ifcrexlLk7QxNRzYtSkG
-         8+UcQzClCzQZYr3EVDMGurf9/6uBgerWF2+SEj4QK/ITm/e1xt+oCr+D2w3p/uz5FyOJ
-         KIRgj0qTPaaWwv4fiFIzCQkpvby8Ta1bHuXZyGRYv3T+RqOc/nsCQMMzANSj5NbSWUop
-         JPiQ==
-X-Gm-Message-State: AOJu0Ywd95fdxh33/tSLcFgCcqZmXormmt6CvasM9HA4jezQAVW3sRPD
-	QvAGTbG0Cs4RLWx5kZIp5n9YWpt0qmoa0a3LVb26kuJ3mm5NY/Rj/c71YptGXhCdQCXoNriUeDU
-	R
-X-Gm-Gg: ASbGncuch3ycpba9xjKtCF12StrlWdZ5/zVFwKfz2YtS7cwSbJvJ27mj3FZW7DMLl00
-	ftaPsuBgsVDaNLafPApdswULIepmQH9u8chO7QmzeyMhD/Z1N9foNcjda59d4sFMYKlSVyaeETb
-	gqAq/gPbjvu1eWYMd3i7kS7inVygf2qfukE+i6kuhE+fPxO55+TzK2psHZ3THoqN4f+RGKhDuNT
-	ygfmtFkf+kN+giF/97Qbmq9AVmYmtsZtI10P/nG485prZ5ZiZ3PUsSgK+H61PvxoypjeSuKXCuP
-	ScHu975P9tpmvcjNbKOcBuDNKQYDD989+6jdrQIsRQeuleQ=
-X-Google-Smtp-Source: AGHT+IH5xNEjbl5fvc3vvYa7TyhbGhLexFzpDFKP8guUzeJDkdNhhSooVjDClNMHdacLxvGBKWPMkQ==
-X-Received: by 2002:a05:6820:1787:b0:5fc:9430:d747 with SMTP id 006d021491bc7-5fc9430de7emr1578893eaf.1.1739229378396;
-        Mon, 10 Feb 2025 15:16:18 -0800 (PST)
+        bh=lzozfC/C/CNZbOHWxAaIbKwLQXLSUBmVfwbt3QVV2pc=;
+        b=bTvUyoJEyZ6dNQ965hSuNKoOTOBwSeEV//4LX4ZDLL35WK47VxOlgr+wW+8xEozduh
+         CBnm3udwcSB+GrpPFir68/TwGQk80+Syrro3UxWY9taIcGuWwAMN9GrgMnhK5vWHodgH
+         q5TJ3ztsZ/k/MhVr3ITLPZ+Sa3SCfXVO+mLMyaOawiWMFmTHLPph51VtfvXo/vdHfdp9
+         eXQ+UonNudU/i9gkufoPVnKOQooGNWZl9VsW/36eu7jyoiFUVTj9i9RR/UO26GooNowI
+         +RdAC+kJdZzARnmGPmf+yj8WKcg7oHJ5CQf99DCNoSR6n6iu7+VhqupA/J2fiG3TlDwF
+         E/0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739229381; x=1739834181;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lzozfC/C/CNZbOHWxAaIbKwLQXLSUBmVfwbt3QVV2pc=;
+        b=nyC9GgkOlSa/ry3Iry2TlodGVPRfrpS1Pja7d6DJGAHVGXvnUebcRVF8vJ7qBytYbK
+         7ky/uCog/4kb23/ikN721hBmis0VUhe948mPp/nQHTQSBXsNcZSsHpbvhZkfOOCUKkW7
+         TwlaXdVFrwCmmZBOzAjvJZsLLeO/NWm+yfwJeZDSB1uR51dra426Vq5pUt2XY+8lOMk0
+         3ECbqRo4ujq8eWmRaIhf6a50G9Va5AONBgLAdIJjzv/GIULucSmweQ9jkOYs/l0FoGOk
+         S0GeUiaujCPodlYS/zVLd2NskBUyJiwUNGwmAt2Kkm5PINp/JSEbYwFBsZcXMFMQ16P6
+         X4nA==
+X-Gm-Message-State: AOJu0YxeGFUefQwrmou/YvSB4RjlrkA8YVFDXZKc9iNyBhfce/dk+Mcj
+	jROs5DBb33yiV7VSnfDe20mJpAJvMsxzT+0h39IvbcTcESNGGdkQG1JbSb4LlpVtQNKG5DW0A8Y
+	W
+X-Gm-Gg: ASbGnctK970Oq4Z28IifD35cJwODx1LdW+oa5++/z445cuH+pf4vOGWYo2wjmtOv+uP
+	K1ii0ZFl8lo9cY+EcP515FyDbXGWQHwEgEadL9vy5jdTcY+krrPsxTqcc0sR9MxfmfUgL04Mlof
+	mQfadRKXTyHX0nSJuarbSwBtkAB5EuhbJbiOh/qogleejI5jX0X/k8Zg/CTNbiAEPGTKv62K6ST
+	AfkRCR5dXI+LO1rEnYGc8NRndXAmXU/q/F3IBxpAO9EGeXA32pd7qIk5oZKm7x5Rkzl3YN3t+Ge
+	jOlsFixx7242Z9mveDwEg2FIkiK/koRgDmrbO80Oxy+fO3k=
+X-Google-Smtp-Source: AGHT+IGg5a+3PHs2A+mC/Xs4YrchdRMKPJfOeNphn3yRBkRtdQVXcqW2zbyQzWyk7tGY2CWhFieumA==
+X-Received: by 2002:a4a:ee82:0:b0:5fc:8f9f:5a2e with SMTP id 006d021491bc7-5fc8f9f5efamr2207464eaf.2.1739229381087;
+        Mon, 10 Feb 2025 15:16:21 -0800 (PST)
 Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc545bc40esm2758043eaf.29.2025.02.10.15.16.15
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc545bc40esm2758043eaf.29.2025.02.10.15.16.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 15:16:17 -0800 (PST)
+        Mon, 10 Feb 2025 15:16:19 -0800 (PST)
 From: David Lechner <dlechner@baylibre.com>
-Subject: [PATCH 0/2] spi: offload: extra headers
-Date: Mon, 10 Feb 2025 17:16:13 -0600
-Message-Id: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
+Date: Mon, 10 Feb 2025 17:16:14 -0600
+Subject: [PATCH 1/2] spi: offload: types: include linux/bits.h
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,34 +83,38 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAL2IqmcC/x3MQQqDMBBG4avIrDuQRCzVq5QuovlTB8TITBFBv
- Luhy2/x3kkGFRgNzUmKXUzKWuEfDU1zXL9gSdUUXOhc8I5tEy45LyUmxvHTyDNighq/niNC3/s
- 2o6Pab4osx//9/lzXDSk7Kn1rAAAA
-X-Change-ID: 20250210-spi-offload-extra-headers-86be29913fe5
+Message-Id: <20250210-spi-offload-extra-headers-v1-1-0f3356362254@baylibre.com>
+References: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
+In-Reply-To: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
 To: Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  David Lechner <dlechner@baylibre.com>, 
  Andy Shevchenko <andriy.shevchenko@intel.com>
 X-Mailer: b4 0.14.2
 
-Following up from some late feedback, a couple patches adding extra
-headers to a few SPI offload files.
+Add #include <linux/bits.h> to linux/spi/offload/types.h since this
+file uses the BIT macro.
 
+Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
-David Lechner (2):
-      spi: offload: types: include linux/bits.h
-      spi: spi-offload-trigger-pwm: add extra headers
+ include/linux/spi/offload/types.h | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/spi/spi-offload-trigger-pwm.c | 9 ++++++++-
- include/linux/spi/offload/types.h     | 1 +
- 2 files changed, 9 insertions(+), 1 deletion(-)
----
-base-commit: d15cc2db846f73920688c045be6b4c782b68d058
-change-id: 20250210-spi-offload-extra-headers-86be29913fe5
+diff --git a/include/linux/spi/offload/types.h b/include/linux/spi/offload/types.h
+index 86d0e8cb9495bb43e177378b2041067de8ea8786..6f78923478713aa3c4fc03d7d47b768ed1d52682 100644
+--- a/include/linux/spi/offload/types.h
++++ b/include/linux/spi/offload/types.h
+@@ -7,6 +7,7 @@
+ #ifndef __LINUX_SPI_OFFLOAD_TYPES_H
+ #define __LINUX_SPI_OFFLOAD_TYPES_H
+ 
++#include <linux/bits.h>
+ #include <linux/types.h>
+ 
+ struct device;
 
-Best regards,
 -- 
-David Lechner <dlechner@baylibre.com>
+2.43.0
 
 
