@@ -1,154 +1,125 @@
-Return-Path: <linux-spi+bounces-6726-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6727-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A03AA2EFFB
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 15:38:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13D57A2F253
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 16:58:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75CAD1677DC
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 14:37:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3CC73A304B
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 15:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A728A223310;
-	Mon, 10 Feb 2025 14:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A309244186;
+	Mon, 10 Feb 2025 15:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kTgSMVwv"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="XJ32rxft"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D65252916;
-	Mon, 10 Feb 2025 14:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCEF2451D9
+	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 15:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739198190; cv=none; b=fPVU1hy03ZDC3UZCLQPNKT7PaEyYfuM1UHG7ZSEkzxytahzsD4mFJz9/oFPFVuv5k11rwZML9F2HP2gjdEsgta3le1w5sAjjXZ7Wsq5IqGfbMIMsftzVIR6ONaNFLwbL9yPwrSqLgcXRVgoCVgiACavXuwyOVF8y+lu4gnC9ksQ=
+	t=1739203076; cv=none; b=KLs6mc0RQlTuKQlG9GF6CZxJYqyHPW5ZgxuAvVMgrSa4dHQ2zw5h0TpXq+qBsPIZBDmT/oe5rOD6iJQVHY0hH0Hm5I2jjNqu1sgY0UF0rTsh9IWuJqb13h4vdMQDq2E3EykRSwcolTRNiLWVBYrJtVpB21/ujZePcWizFqrO1jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739198190; c=relaxed/simple;
-	bh=sT7t3DJuatcuKZvixf6dR95oYoRlkPug+NHm8gEIqLg=;
+	s=arc-20240116; t=1739203076; c=relaxed/simple;
+	bh=lQ9xjXE4fQ5E3R9uQe1RdCFTA3rQo7TSFCMdjBUTzJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YM2UgNNlh7maIj/RwKD4pfJanvaGnC4rfGaI8aVmW1kQfItke83tr53tW2NNZynZegUiOJX66BonSZqG8L95HX7N1bSIhWFzAc6QiukgKGeP6XaVqiIKhgvzWJO7dv9UtNxtkDGse06skWB+uUnHj6sMY6JZYTdh4QD6Q+nYw+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kTgSMVwv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 013F5C4CED1;
-	Mon, 10 Feb 2025 14:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739198190;
-	bh=sT7t3DJuatcuKZvixf6dR95oYoRlkPug+NHm8gEIqLg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kTgSMVwvxmkfippSsmURLqGz1913LkCdHzGbdqMBC5oMIJux1JJ0AoRTmva+a0gt1
-	 ohPzO/DTv9OxygYfdgSb9eUm4tJboqu6rIHo8wM8e681wSySH1t/N9WRHazG6OFDTh
-	 7DI76PJGOk5AZCasKymYVoJ0fyAnVCXYVeKLcQfBCK2JpRq4nOW+lkD5FO+baC3cSt
-	 0mcbMnZB152sjHJCb1D/gWHfRY2lRpt/9cHieD11ZPUDnAjhtH875/Az3Tg34UDwGS
-	 jP1ysIqAeHS45vskDFI+eBlpczvN9KA8sN69erkieH+DKydWvrP/qmQZX18uqeAv24
-	 OyUAIP/rk/AQA==
-Date: Mon, 10 Feb 2025 14:36:24 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=NSrm2nsMN402qijw76EnqorMAexcTlMNgSIerqzbRp9wfQPiviiSgXtZLx9s8ym4YBu/Ebh0Y3H4aOKyk/37pnRgFxM9bxFQBJm8kmdslfJO3Myha+qFjHVg+2RDzV2Y18jmVyMNsyV/EKxhr+0L4h15Ujku9dDuWLD5G8fhpqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=XJ32rxft; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 8C15A24002E
+	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 16:57:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739203069; bh=lQ9xjXE4fQ5E3R9uQe1RdCFTA3rQo7TSFCMdjBUTzJk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=XJ32rxft95edBr+EDeVQZGHUeecj5jwxAYiaY0fmQiw2umt38i4PSHy9Xqg3hFJiG
+	 /zwvz+V5oKOw72WAw2xrq8hAP8wB+Yc79C5RKXPI+nT84dGnO8FJJe6BgjV+2KCv1K
+	 1a/Sv9v6+tUMPu1OxatgL5s/rO/RkvTTXucwVQkuLC0FQKgeXGmOlzDLtEJL/rvaCK
+	 3aSKa8WrXTNh5x1YiXZFYpqIAEdpStyegfE2z3NDSW+zSkvotggBkO6XagnhOYe+Gy
+	 f22mnkpYg4Jfa392j6ToQbc6mTrz2xOh4/2lLIwaI1sSOLm6xfkPKEKVOGeJI1JRD3
+	 asuBpZK0jhXeA==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Ys8Nl2HW4z9rxD;
+	Mon, 10 Feb 2025 16:57:42 +0100 (CET)
+Date: Mon, 10 Feb 2025 15:57:42 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Mark Brown <broonie@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Axel Haslam <ahaslam@baylibre.com>
-Subject: Re: [PATCH v8 00/17] spi: axi-spi-engine: add offload support
-Message-ID: <544c0100-54a9-40e6-b9b7-b79555056237@sirena.org.uk>
-References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT
+ bindings
+Message-ID: <Z6oh9t2QQzz17Yt6@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
+ <Z6a_f03Ct9aB7Bbn@probook>
+ <0fe3416c-c3f3-44c4-a1c0-7e8262c54d4b@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QYNrgk6GkUqCktJq"
-Content-Disposition: inline
-In-Reply-To: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
-X-Cookie: A beer delayed is a beer denied.
-
-
---QYNrgk6GkUqCktJq
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <0fe3416c-c3f3-44c4-a1c0-7e8262c54d4b@sirena.org.uk>
 
-On Fri, Feb 07, 2025 at 02:08:57PM -0600, David Lechner wrote:
-> Only very minor fixes in this revision.
+On Mon, Feb 10, 2025 at 12:59:35PM +0000, Mark Brown wrote:
+> On Sat, Feb 08, 2025 at 02:20:47AM +0000, J. Neusch=C3=A4fer wrote:
+> > On Fri, Feb 07, 2025 at 09:38:05PM +0000, Mark Brown wrote:
 >=20
-> Also, now that trees are rebased on v6.14-rc1 we no longer have
-> dependencies for the IIO patches. So Mark can pick up all of the
-> patches if we want to go that way. In any case though, Jonathan will
-> need an immutable branch since we have other IIO patches in-flight
-> building on top of this series.
+> > > What's the story with dependencies here - why is all this stuff in one
+> > > series?
+>=20
+> > The patches are independent of each other, except for the four elbc/nand
+> > patches. They are in the same series because they came up during the
+> > same project and achieve similar goals, but it isn't necessary.
+>=20
+> Please don't do this, it just makes it harder to merge things since it
+> makes it look like there's cross tree merges needed when that's not the
+> case, complicating merging, and puts the entire series in everyone's
+> inbox which makes things more noisy.
 
-The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+How should I proceed with this series, in your opinion?
+I see potential advantages (less of the issues you describe) and
+disadvantages (somewhat harder to track patches) of splitting it up
+before sending v3.
 
-  Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+(Outside of this series, the conclusion is clear and simple)
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-=
-offload
-
-for you to fetch changes up to 700a281905f2a4ccf6f3b2d3cd6985e034b4b021:
-
-  spi: add offload TX/RX streaming APIs (2025-02-07 20:17:11 +0000)
-
-----------------------------------------------------------------
-spi: Add offload APIs
-
-This series adds support for offloading complete SPI transactions,
-including the initiation, to the hardware.
-
-----------------------------------------------------------------
-David Lechner (5):
-      spi: add basic support for SPI offloading
-      spi: offload: add support for hardware triggers
-      dt-bindings: trigger-source: add generic PWM trigger source
-      spi: offload-trigger: add PWM trigger driver
-      spi: add offload TX/RX streaming APIs
-
- .../bindings/trigger-source/pwm-trigger.yaml       |  37 ++
- MAINTAINERS                                        |  12 +
- drivers/spi/Kconfig                                |  15 +
- drivers/spi/Makefile                               |   4 +
- drivers/spi/spi-offload-trigger-pwm.c              | 162 +++++++
- drivers/spi/spi-offload.c                          | 465 +++++++++++++++++=
-++++
- drivers/spi/spi.c                                  |  10 +
- include/linux/spi/offload/consumer.h               |  39 ++
- include/linux/spi/offload/provider.h               |  47 +++
- include/linux/spi/offload/types.h                  |  99 +++++
- include/linux/spi/spi.h                            |  20 +
- 11 files changed, 910 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/trigger-source/pwm-tr=
-igger.yaml
- create mode 100644 drivers/spi/spi-offload-trigger-pwm.c
- create mode 100644 drivers/spi/spi-offload.c
- create mode 100644 include/linux/spi/offload/consumer.h
- create mode 100644 include/linux/spi/offload/provider.h
- create mode 100644 include/linux/spi/offload/types.h
-
---QYNrgk6GkUqCktJq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeqDucACgkQJNaLcl1U
-h9BpnQf8D5JC+0bbrb5LIrxK3eCQeHgPhCf+oMbdnS8UY9RTlTw8icE9O7OO2Ba6
-ukc9nzH+1n2gx057AL/7Jvv8lJufzeQ0DCPN9ii+WfcQct9cIAZlEFg2Xoxrd4jY
-UASIr6zBuznSuMZYoOKzxUQl9j6k1OMFZM5OHQtm6dj6MGDAnHKJNe0WDYUWpoYf
-XwDZRDQ6HuAUy0fAJm/Hffnp2lfYP+CmHL32H1QtwrxYC2HxyfyY3hyjZ3egxS5k
-weP888xMslLJzX0tuiUcODAbjU6mxaw1t+qLRQZgSC+8V6A6o8ZnnZ5IvGAhsVr6
-6vcgcEqL8Z0R9ZD6gGssxs1ficBvHA==
-=QTWQ
------END PGP SIGNATURE-----
-
---QYNrgk6GkUqCktJq--
+J. Neusch=C3=A4fer
 
