@@ -1,190 +1,138 @@
-Return-Path: <linux-spi+bounces-6738-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6739-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96A4BA2F7FF
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 19:56:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4D78A2F809
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 19:59:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED653A1F29
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 18:56:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B00318891B8
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 19:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF0825E462;
-	Mon, 10 Feb 2025 18:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0034525E450;
+	Mon, 10 Feb 2025 18:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="D1LJX8Ik"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJ8Ren6E"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABD025E450
-	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 18:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8E2179A7;
+	Mon, 10 Feb 2025 18:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739213774; cv=none; b=rkKqd94hnNtC/K4j9lsN6XJJOZAD8kXYhi6Dd9vAPOprp7f42tJfWHeXeVwdAShJwHRK5Vyz0A4wZ40s8JV+whhmbsbTln1NdziWjqFrviWGXW5BE0z1hrdbQbZCJpaPckvEO73Cjjs9mtQpMkKf6iILbXBFfn5H1p6IVRoVfKM=
+	t=1739213992; cv=none; b=cOcRNqdkY8cuxlWBBe2lG48USHDubjJXeHiYz+UhwF+fY+UHuC74EWZsrfIi6IxPqAiyuO43X/6RMDE4oYHNZ27s2cCsIN8srMq5IYlT7w2Gn7WGKcnWG8n9NEsA4nW32EY08bKZUlNOE3gdEvyIpawO2DDQuBb3pu+w4DSWms8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739213774; c=relaxed/simple;
-	bh=K1HErE+9n2ttTiWhv7TgYV84MOR53YCObeEEU4wqJ34=;
-	h=Message-ID:Date:MIME-Version:Subject:References:To:CC:From:
-	 In-Reply-To:Content-Type; b=rWIozAeccRqaQA7RCDIV44t8LUlIePI44Huqs4g4hLxHUxjcwKj3LsipNYKQOM9uTtuoQ3mUdz5lOBGCKgImgMLg6a8fid++tyrcqnEe/hqPF89sRpdGSn2HUEdXfbxr5CLhoAu9B+kbPvMg1hLLARBY+ywFS9GHlVOyQAJNuGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=D1LJX8Ik; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 790AEA008F;
-	Mon, 10 Feb 2025 19:56:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=ZeA1tKZEOWBrfGju6V3i
-	M5DXTUBJw5xJ1RYXprcK/rE=; b=D1LJX8Iklti/N171dY3bsAR7LJ1dyYti+rr+
-	+8o74dc8GfHJpoP6Jojx8Tt0pgyZx2AC1By6WLnOQ5wnAHzN9RHQcigfCfKsUUns
-	gIJVm75WPEw6nmvTt97XNEgNuljybRKuVAaCllzCGFpVws1VQsdqAu5fSOGEJuW9
-	2iqU17i/dV5CD0E1sGXinFKzx/EcfIG6qDbvpmDsABgpdCCt3Bbf7BHq2w+H7DQl
-	1fZyZrtKcoYp0c9ed+Lf6rPhlRqNymqSr1gRVfklTPBD1uKM1VyjqV60nqxgpC74
-	mbtq96BNuE2XuAtgjHK8d4en+Ir+76+VKkxoGIOSbte0loo/mA/T5gCHSyZs+TqI
-	wCIzs2gaM6CJAVMe/39Zmr/mBv9yKH0/MkK0DkkSUH8ZYKgDswpYgNIfVE4iF51i
-	oG24O3fzo4ne8bZJiudCkoNxVGw+ql6+4Bfaxuvie6TgbfzeyBYOHuLYPTc6vySn
-	3IoDtuvOF0e8bmwX+8LFCPsqTw/PKDtmoVd0Ixjt2wyPOW8V1q3tSXmPc4zB9gnM
-	ZiYFMMIDkuhHOuF5TJ8ne+MVAvgede+NmTvwbaWV0+9pqhx68kU14YC4DSvPb06N
-	N5OyFtASJop01Qz2p/qvKfpd1z3FlsyqTqyVXmzLj/QuJK7r2Dq8aL67kX9QlisL
-	QeCc350=
-Message-ID: <a5998b5f-f03b-4d9d-8e23-a7d688406371@prolan.hu>
-Date: Mon, 10 Feb 2025 19:56:07 +0100
+	s=arc-20240116; t=1739213992; c=relaxed/simple;
+	bh=0kby5yzJ82YbE3sKuDLWqLhBQL7R07TemAKHUgP/q9c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SQuDxXUGG1JEmCButs8w+jf8e2NNQ9G3TQQs8XUE3L6OAuC9P8gsuoDjwh6cVhdWDHHObxLDNyH0Be26Z8kN+jKbj2l0EeJVD4p4RflvWLswIkpd+V3bQlsH1p5TjN5Zf/+D+m66ZOsZcU67k1gUOUrG9BRd4siLJ9IPrCn9Gas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJ8Ren6E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5793EC4CED1;
+	Mon, 10 Feb 2025 18:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739213992;
+	bh=0kby5yzJ82YbE3sKuDLWqLhBQL7R07TemAKHUgP/q9c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kJ8Ren6Eb0rHZRUGgGe/ygbmSbsKib6UTxgaPeoLeQzDz+BCg2sSCFfrZoRik11gi
+	 CPWDrzTLAeohqWo8BX8xgiCqDiXdMlG4c0bsDxyHpeY9Gycwn8vomG1eLpjbUm2OqQ
+	 m63eYY1uA1E26Di7hXjDNe8Zyoch/sOWBDxy0TyVaZtvOOWZx2DLIRBZOw84Y6dIuO
+	 ofSW2r6aIqyQZ8nwdGlevx/8UtEAa79cHbSCJYcpY/9xp9ivEqgjRLFbTqaqa90Di/
+	 dgXMsGfr26Jq0O5yfkC8//nduDnhZX3lHKK8AABKM4CJjuFmj9bJBb5pTCL8wsKstG
+	 eWxlICOHaWvgA==
+Date: Mon, 10 Feb 2025 18:59:40 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
+ =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
+ Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
+ linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, Jonathan Cameron
+ <Jonathan.Cameron@huawei.com>, Axel Haslam <ahaslam@baylibre.com>
+Subject: Re: [PATCH v8 00/17] spi: axi-spi-engine: add offload support
+Message-ID: <20250210185940.441a0b8f@jic23-huawei>
+In-Reply-To: <544c0100-54a9-40e6-b9b7-b79555056237@sirena.org.uk>
+References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
+	<544c0100-54a9-40e6-b9b7-b79555056237@sirena.org.uk>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Fwd: [PATCH for-6.14 v4 1/2] pm: runtime: Add new devm functions
-References: <20250210111008.248929-2-csokas.bence@prolan.hu>
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Alexander Dahl
-	<ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Claudiu
- Beznea" <claudiu.beznea@tuxon.dev>
-CC: linux-spi <linux-spi@vger.kernel.org>
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <20250210111008.248929-2-csokas.bence@prolan.hu>
-X-Forwarded-Message-Id: <20250210111008.248929-2-csokas.bence@prolan.hu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94852617666
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
-This is the PM side of the series. As you can see, it just adds two 
-functions in the style of the already-existing `devm_pm_runtime_enable()`.
-Bence
+On Mon, 10 Feb 2025 14:36:24 +0000
+Mark Brown <broonie@kernel.org> wrote:
 
+> On Fri, Feb 07, 2025 at 02:08:57PM -0600, David Lechner wrote:
+> > Only very minor fixes in this revision.
+> > 
+> > Also, now that trees are rebased on v6.14-rc1 we no longer have
+> > dependencies for the IIO patches. So Mark can pick up all of the
+> > patches if we want to go that way. In any case though, Jonathan will
+> > need an immutable branch since we have other IIO patches in-flight
+> > building on top of this series.  
+> 
+> The following changes since commit 2014c95afecee3e76ca4a56956a936e23283f05b:
+> 
+>   Linux 6.14-rc1 (2025-02-02 15:39:26 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-offload
 
--------- Forwarded Message --------
-Subject: [PATCH for-6.14 v4 1/2] pm: runtime: Add new devm functions
-Date: Mon, 10 Feb 2025 12:10:06 +0100
-From: Bence Csókás <csokas.bence@prolan.hu>
-To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-CC: Bence Csókás <csokas.bence@prolan.hu>, Rafael J. Wysocki 
-<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek 
-<pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-Danilo Krummrich <dakr@kernel.org>
+Thanks. Merged into IIO and patches 8-17 applied on top with a few tweaks
+to the patch as mentioned in reply.
 
-Add `devm_pm_runtime_set_active()` and
-`devm_pm_runtime_get_noresume()` for
-simplifying common use cases in drivers.
+Pushed out for now as testing to see if 0-day spots anything new
 
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
-  drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
-  include/linux/pm_runtime.h   |  4 ++++
-  2 files changed, 40 insertions(+)
+Thanks,
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 2ee45841486b..f0a6c64bec19 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
-  }
-  EXPORT_SYMBOL_GPL(pm_runtime_enable);
-  +static void pm_runtime_set_suspended_action(void *data)
-+{
-+	pm_runtime_set_suspended(data);
-+}
-+
-+/**
-+ * devm_pm_runtime_set_active - devres-enabled version of 
-pm_runtime_set_active.
-+ *
-+ * @dev: Device to handle.
-+ */
-+int devm_pm_runtime_set_active(struct device *dev)
-+{
-+	pm_runtime_set_active(dev);
-+
-+	return devm_add_action_or_reset(dev, pm_runtime_set_suspended_action, 
-dev);
-+}
-+EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
-+
-  static void pm_runtime_disable_action(void *data)
-  {
-  	pm_runtime_dont_use_autosuspend(data);
-@@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
-  }
-  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
-  +static void pm_runtime_put_noidle_action(void *data)
-+{
-+	pm_runtime_put_noidle(data);
-+}
-+
-+/**
-+ * devm_pm_runtime_get_noresume - devres-enabled version of 
-pm_runtime_get_noresume.
-+ *
-+ * @dev: Device to handle.
-+ */
-+int devm_pm_runtime_get_noresume(struct device *dev)
-+{
-+	pm_runtime_get_noresume(dev);
-+
-+	return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action, dev);
-+}
-+EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
-+
-  /**
-   * pm_runtime_forbid - Block runtime PM of a device.
-   * @dev: Device to handle.
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index d39dc863f612..d7eca86150b8 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
-  extern void pm_runtime_drop_link(struct device_link *link);
-  extern void pm_runtime_release_supplier(struct device_link *link);
-  +int devm_pm_runtime_set_active(struct device *dev);
-  extern int devm_pm_runtime_enable(struct device *dev);
-+int devm_pm_runtime_get_noresume(struct device *dev);
-   /**
-   * pm_suspend_ignore_children - Set runtime PM behavior regarding 
-children.
-@@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct 
-device *dev, bool c) {}
-  static inline void pm_runtime_allow(struct device *dev) {}
-  static inline void pm_runtime_forbid(struct device *dev) {}
-  +static inline int devm_pm_runtime_set_active(struct device *dev) { 
-return 0; }
-  static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
-+static inline int devm_pm_runtime_get_noresume(struct device *dev) { 
-return 0; }
-   static inline void pm_suspend_ignore_children(struct device *dev, 
-bool enable) {}
-  static inline void pm_runtime_get_noresume(struct device *dev) {}
--- 
-2.48.1
+Jonathan
 
+> 
+> for you to fetch changes up to 700a281905f2a4ccf6f3b2d3cd6985e034b4b021:
+> 
+>   spi: add offload TX/RX streaming APIs (2025-02-07 20:17:11 +0000)
+> 
+> ----------------------------------------------------------------
+> spi: Add offload APIs
+> 
+> This series adds support for offloading complete SPI transactions,
+> including the initiation, to the hardware.
+> 
+> ----------------------------------------------------------------
+> David Lechner (5):
+>       spi: add basic support for SPI offloading
+>       spi: offload: add support for hardware triggers
+>       dt-bindings: trigger-source: add generic PWM trigger source
+>       spi: offload-trigger: add PWM trigger driver
+>       spi: add offload TX/RX streaming APIs
+> 
+>  .../bindings/trigger-source/pwm-trigger.yaml       |  37 ++
+>  MAINTAINERS                                        |  12 +
+>  drivers/spi/Kconfig                                |  15 +
+>  drivers/spi/Makefile                               |   4 +
+>  drivers/spi/spi-offload-trigger-pwm.c              | 162 +++++++
+>  drivers/spi/spi-offload.c                          | 465 +++++++++++++++++++++
+>  drivers/spi/spi.c                                  |  10 +
+>  include/linux/spi/offload/consumer.h               |  39 ++
+>  include/linux/spi/offload/provider.h               |  47 +++
+>  include/linux/spi/offload/types.h                  |  99 +++++
+>  include/linux/spi/spi.h                            |  20 +
+>  11 files changed, 910 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
+>  create mode 100644 drivers/spi/spi-offload-trigger-pwm.c
+>  create mode 100644 drivers/spi/spi-offload.c
+>  create mode 100644 include/linux/spi/offload/consumer.h
+>  create mode 100644 include/linux/spi/offload/provider.h
+>  create mode 100644 include/linux/spi/offload/types.h
 
 
