@@ -1,134 +1,191 @@
-Return-Path: <linux-spi+bounces-6732-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6733-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF4DBA2F311
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 17:20:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A0E1A2F3E8
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 17:45:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 374A91885356
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 16:20:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AF8C166B64
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 16:45:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381782580E2;
-	Mon, 10 Feb 2025 16:20:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54439190674;
+	Mon, 10 Feb 2025 16:45:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9PX+r4/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PeBETZeE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B022580C8;
-	Mon, 10 Feb 2025 16:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A9A156C6A;
+	Mon, 10 Feb 2025 16:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739204407; cv=none; b=iV64aRtO/wcuMhYRDqVX1qrDa3odZhAhBFj1KdAtuuGLJwiQOaKx7Wl79s0oIGd7bd5Sm5E+Q4CG4API6rMQFnqa7/s5qt349ksd9sPO/oWp2YdFlcyabo0xql5XMJljdtAtfk+cXUULTUCAgU8RLPJ3yc7x2AVjyzg4S50FCMk=
+	t=1739205918; cv=none; b=LtZughdLW1fkY+VJ+0g2HY7bMjtcyizjmGu3LJUX7btg5CrvrbVjLmXbzju/6rRa7rPj/No76rUbj++Zlk4RdkFXKp0nA7Fk7+QHGUt6hJobWcwUPnuT0dsYCJV9y+Cw379S6qcsWXBzMMcdL8dDbPU4eYNEkTicUEFpN/0fUjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739204407; c=relaxed/simple;
-	bh=NWngG/kFcyT8WtXP/QQ25Wit1MvMYs4YLqlxYuAuRm0=;
+	s=arc-20240116; t=1739205918; c=relaxed/simple;
+	bh=uWyvUsNMkIe7l8IREjf+iJ3w3iqoYDrAc20cPTNGVnQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DSOdNIl7mE6U9IIIlPyn0s47K2PxshHJ2OvASIOr5pF8r692UZD5d3UjUS/y3tRF2R9JEUTVO80OvCkNFgHH3HGIe6MmQ1x0b+Cxd1Rba9aBz2xu/1M/FZ2YEWnny4ZpLMAR/kVqXxK5zS2C7ODhfU6CDizINcfgmsS1fxWeCcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9PX+r4/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E92C4CED1;
-	Mon, 10 Feb 2025 16:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739204406;
-	bh=NWngG/kFcyT8WtXP/QQ25Wit1MvMYs4YLqlxYuAuRm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O9PX+r4//9gugSEWU7m1K8ZM3qhMdimRiJbSiYe86/w+9bR4X4/MhCjFvOn6jCtWl
-	 vB28xXU/PEd8OdGhiVaNzDs/FBXWoLFRH4kptOE8xbXpq2qGI6a1OOZVnXI0ym83jq
-	 LnGs4AcqzboBOb0532JVxtDrX12IZ6wn//naY2MVFJBPlNYsR41f8I13OeonC84QCk
-	 69CbLAibibKHMCZuy3S8PjUceMx28EdXjIP8T0trrzPnKbKuzKWElzT2zR5LGP78Nt
-	 r0Zexk9OTbCG39S9//bUNzD+y+hVdVaV0KhwIcQGWehOvV4XsKy2wNZZpg0KLnYd2E
-	 5bjdCF+rvXDcw==
-Date: Mon, 10 Feb 2025 16:19:56 +0000
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=AT/hInj5wVWYblrgE+zek0BcsLiGFvjBR5EXAdYfsLEK65mJziI8klNzQYMlINRy5s7c+Idjg8bLqr7N0EFAx6f8gHWNjr8LNavkYXxKjAsy6qzS34Z9LLN2XqG7aSfkNCvucId1KRUj8BNAAGSSHi9XfCJZ1/chndA1hihaCCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PeBETZeE; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739205917; x=1770741917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uWyvUsNMkIe7l8IREjf+iJ3w3iqoYDrAc20cPTNGVnQ=;
+  b=PeBETZeESoHelGvy+cX5Bt9hnrhCgMX1b3H/osflfY62rTtg5GmALOIT
+   R4Uzov6olRQkMkIKH+yx12YFr/pJQ4XdBjKTIchlbyTZd7xPowFT4TP5J
+   /cyZovlUn1xMg4KHPlhglraSWjuJOpAW9xAK6ud+U9qYr7Ai7kFYZOTpq
+   qptsPoDYKnJRlXG3IFxwmrMUMlD03S0cJG63fWXH5+00QCBrazhNgnrdQ
+   pVw7b/M3of7kGdYaCp/8AdDbiFgishy5iipZhxkAhrDPHFc0WaArkSvYs
+   N4u+WsfiABR9CXBiUa8HN1pWl8teSLhR1SjhPoP9zv5mWvkngCjn1Lf5H
+   Q==;
+X-CSE-ConnectionGUID: GNn+zzo+SO6E5RR7yGvs0A==
+X-CSE-MsgGUID: uFSNj7NLQ++zpRQm1P9nmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="43557632"
+X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
+   d="scan'208";a="43557632"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 08:45:16 -0800
+X-CSE-ConnectionGUID: cKWTUrckQNaRtUM1fN4juQ==
+X-CSE-MsgGUID: KVe2obcwSierHj2UNINipQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112088897"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa010.jf.intel.com with ESMTP; 10 Feb 2025 08:45:12 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 9563F2F2; Mon, 10 Feb 2025 18:45:10 +0200 (EET)
+Date: Mon, 10 Feb 2025 18:45:10 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT
- bindings
-Message-ID: <8087f0dc-8c79-48a2-abf4-f78636c23be6@sirena.org.uk>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
- <Z6a_f03Ct9aB7Bbn@probook>
- <0fe3416c-c3f3-44c4-a1c0-7e8262c54d4b@sirena.org.uk>
- <Z6oh9t2QQzz17Yt6@probook>
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	David Jander <david@protonic.nl>,
+	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v8 01/17] spi: add basic support for SPI offloading
+Message-ID: <Z6otFlsmEikIbI__@black.fi.intel.com>
+References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
+ <20250207-dlech-mainline-spi-engine-offload-2-v8-1-e48a489be48c@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dFkCMkVIcP+mIwAz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6oh9t2QQzz17Yt6@probook>
-X-Cookie: A beer delayed is a beer denied.
+In-Reply-To: <20250207-dlech-mainline-spi-engine-offload-2-v8-1-e48a489be48c@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+
+On Fri, Feb 07, 2025 at 02:08:58PM -0600, David Lechner wrote:
+> Add the basic infrastructure to support SPI offload providers and
+> consumers.
+> 
+> SPI offloading is a feature that allows the SPI controller to perform
+> transfers without any CPU intervention. This is useful, e.g. for
+> high-speed data acquisition.
+> 
+> SPI controllers with offload support need to implement the get_offload
+> and put_offload callbacks and can use the devm_spi_offload_alloc() to
+> allocate offload instances.
+> 
+> SPI peripheral drivers will call devm_spi_offload_get() to get a
+> reference to the matching offload instance. This offload instance can
+> then be attached to a SPI message to request offloading that message.
+> 
+> It is expected that SPI controllers with offload support will check for
+> the offload instance in the SPI message in the ctlr->optimize_message()
+> callback and handle it accordingly.
+> 
+> CONFIG_SPI_OFFLOAD is intended to be a select-only option. Both
+> consumer and provider drivers should `select SPI_OFFLOAD` in their
+> Kconfig to ensure that the SPI core is built with offload support.
+
+(I know that this is now in SPI tree, but still we have time to address something)
+
+> +++ b/include/linux/spi/offload/consumer.h
+
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2024 Analog Devices Inc.
+> + * Copyright (C) 2024 BayLibre, SAS
+> + */
+> +
+> +#ifndef __LINUX_SPI_OFFLOAD_CONSUMER_H
+> +#define __LINUX_SPI_OFFLOAD_CONSUMER_H
+> +
+> +#include <linux/module.h>
+> +#include <linux/spi/offload/types.h>
+> +#include <linux/types.h>
+
+> +MODULE_IMPORT_NS("SPI_OFFLOAD");
+
+This diminishes the point of the namespaces. Anybody who includes a (dangling)
+header gets namespace imported, which is not good. Same for other globally
+visible headers.
+
+(This is the main concern of this patch).
+
+...
+
+> +#ifndef __LINUX_SPI_OFFLOAD_TYPES_H
+> +#define __LINUX_SPI_OFFLOAD_TYPES_H
 
 
---dFkCMkVIcP+mIwAz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
++ linux/bits.h
 
-On Mon, Feb 10, 2025 at 03:57:42PM +0000, J. Neusch=E4fer wrote:
-> On Mon, Feb 10, 2025 at 12:59:35PM +0000, Mark Brown wrote:
+> +#include <linux/types.h>
+> +
+> +struct device;
+> +
+> +/* Offload can be triggered by external hardware event. */
+> +#define SPI_OFFLOAD_CAP_TRIGGER			BIT(0)
+> +/* Offload can record and then play back TX data when triggered. */
+> +#define SPI_OFFLOAD_CAP_TX_STATIC_DATA		BIT(1)
+> +/* Offload can get TX data from an external stream source. */
+> +#define SPI_OFFLOAD_CAP_TX_STREAM_DMA		BIT(2)
+> +/* Offload can send RX data to an external stream sink. */
+> +#define SPI_OFFLOAD_CAP_RX_STREAM_DMA		BIT(3)
 
-> > Please don't do this, it just makes it harder to merge things since it
-> > makes it look like there's cross tree merges needed when that's not the
-> > case, complicating merging, and puts the entire series in everyone's
-> > inbox which makes things more noisy.
+> +/**
+> + * struct spi_offload_config - offload configuration
+> + *
+> + * This is used to request an offload with specific configuration.
+> + */
+> +struct spi_offload_config {
+> +	/** @capability_flags: required capabilities. See %SPI_OFFLOAD_CAP_* */
+> +	u32 capability_flags;
+> +};
+> +
+> +/**
+> + * struct spi_offload - offload instance
+> + */
+> +struct spi_offload {
+> +	/** @provider_dev: for get/put reference counting */
+> +	struct device *provider_dev;
+> +	/** @priv: provider driver private data */
+> +	void *priv;
+> +};
+> +
+> +#endif /* __LINUX_SPI_OFFLOAD_TYPES_H */
 
-> How should I proceed with this series, in your opinion?
-> I see potential advantages (less of the issues you describe) and
-> disadvantages (somewhat harder to track patches) of splitting it up
-> before sending v3.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I'd rather that at least the SPI stuff were sent separately (well,
-ideally what you've done already is fine and it doesn't need a resend at
-all).
 
---dFkCMkVIcP+mIwAz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeqJysACgkQJNaLcl1U
-h9DNKQf/fZPJSroWubfTO8FLkUiOu5OAUNqM92OSlaM82yLjpcppqTwDH2c/TMS7
-uzik6Kqwe9iL95z0VpO/SEQh2gEiVVotP2LwUfc0VHm6Mj0CYUhJVu5CFspP2PTu
-H7A2qsXCPw2ASwOg8ZA+oH0PpNAI2mBdDeb7Dii4r186WNPit5Xunpx8I+9DoEyr
-Zr6lOUeCFVfJVy6oNc7ZCQUhRljOVtlyRzPVMTpsyaMzgT22K+F+CHvQR/XatQQF
-/2ywiEFKi5u2DSNtEgro0CF6bJ4U/ZtRMGcnEq9r6RmhpAINqFJhS0dysaqOIJfS
-37TAqV/OvijdnS0RGY+GC+jyvnaoJA==
-=DC91
------END PGP SIGNATURE-----
-
---dFkCMkVIcP+mIwAz--
 
