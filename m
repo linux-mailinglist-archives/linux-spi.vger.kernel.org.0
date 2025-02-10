@@ -1,273 +1,190 @@
-Return-Path: <linux-spi+bounces-6737-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6738-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B097EA2F7F8
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 19:54:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A4BA2F7FF
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 19:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B23166F06
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 18:54:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5ED653A1F29
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 18:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4158125E45C;
-	Mon, 10 Feb 2025 18:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF0825E462;
+	Mon, 10 Feb 2025 18:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sp/P4iNI"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="D1LJX8Ik"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0870D25E454;
-	Mon, 10 Feb 2025 18:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABD025E450
+	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 18:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739213673; cv=none; b=mu2pZEvY10e8qDuHH2BkACj+R/LNdHueNgmvk1CgIpt11hIF1GWJ42yvkOe+NVRl9yLHUK/Q6wU5X751sdLfpv2GfzxQMOKlXiPRrcTz4r/39rFHom/r+UfKi9Y6pMXUEX+BSqB/oLEsALdo2Wqf+bzrnU4r9AsSW1tZQff+sdM=
+	t=1739213774; cv=none; b=rkKqd94hnNtC/K4j9lsN6XJJOZAD8kXYhi6Dd9vAPOprp7f42tJfWHeXeVwdAShJwHRK5Vyz0A4wZ40s8JV+whhmbsbTln1NdziWjqFrviWGXW5BE0z1hrdbQbZCJpaPckvEO73Cjjs9mtQpMkKf6iILbXBFfn5H1p6IVRoVfKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739213673; c=relaxed/simple;
-	bh=jmk5FbAXpRJJs+zhZ1kUBUtl6Iq0ro+zbpNJ6Mnrfi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B6j3Nls9JBJt0ksC98OwPU1o5WXxc8WtZlDQ2JbnjNwwF9lAhOjDukHhTSTJoQYzJ472mRBRXVhdkt4ixeE7MkY58kPoeFfcAJxIQqhy8+rpsPZ/r3Z/fyqdO4jpYqq/8mIG+6LmV5KqgYFAXIuvh5YjBDE6x38yAjAnSnyVfhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sp/P4iNI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07935C4CED1;
-	Mon, 10 Feb 2025 18:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739213672;
-	bh=jmk5FbAXpRJJs+zhZ1kUBUtl6Iq0ro+zbpNJ6Mnrfi0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Sp/P4iNIWJV4FvGznJghtSsryXgA4WOjiI5dCtQdaK416ONwSjfhr7SKh0dckeFUO
-	 p8hCvDagkulR3WuGeTOciM4qGk7EQR1v8T8BaK7Y8M0Ev7F18T09CaCcAkCAurfT+7
-	 tPiRibBE1xGIPouE7gv1KF9kGUvYrOasrGuQlBivvg/GPPQhdzWDKxMEFUBywjy3Ab
-	 Byxm3T4EFyuV0CErHtA59G44F2F64M9oNDDrbRxfHdTTlrEymjZPtqSJz76LSgscPk
-	 iqi2MhU9GdtwfLbDZIYPcvnT15CjwQsItTJQdzl2TYDiCX5b1MBZGSvLxwqEqkihOq
-	 QPqD28ygr4/2A==
-Date: Mon, 10 Feb 2025 18:54:21 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Michael Hennerich
- <Michael.Hennerich@analog.com>, Lars-Peter Clausen <lars@metafoo.de>, David
- Jander <david@protonic.nl>, Martin Sperl <kernel@martin.sperl.org>,
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v8 14/17] iio: adc: ad4695: Add support for SPI offload
-Message-ID: <20250210185421.67d06a57@jic23-huawei>
-In-Reply-To: <8a8432e7-86b9-43dd-9aa0-75875747eedb@baylibre.com>
-References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
-	<20250207-dlech-mainline-spi-engine-offload-2-v8-14-e48a489be48c@baylibre.com>
-	<8a8432e7-86b9-43dd-9aa0-75875747eedb@baylibre.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1739213774; c=relaxed/simple;
+	bh=K1HErE+9n2ttTiWhv7TgYV84MOR53YCObeEEU4wqJ34=;
+	h=Message-ID:Date:MIME-Version:Subject:References:To:CC:From:
+	 In-Reply-To:Content-Type; b=rWIozAeccRqaQA7RCDIV44t8LUlIePI44Huqs4g4hLxHUxjcwKj3LsipNYKQOM9uTtuoQ3mUdz5lOBGCKgImgMLg6a8fid++tyrcqnEe/hqPF89sRpdGSn2HUEdXfbxr5CLhoAu9B+kbPvMg1hLLARBY+ywFS9GHlVOyQAJNuGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=D1LJX8Ik; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 790AEA008F;
+	Mon, 10 Feb 2025 19:56:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=ZeA1tKZEOWBrfGju6V3i
+	M5DXTUBJw5xJ1RYXprcK/rE=; b=D1LJX8Iklti/N171dY3bsAR7LJ1dyYti+rr+
+	+8o74dc8GfHJpoP6Jojx8Tt0pgyZx2AC1By6WLnOQ5wnAHzN9RHQcigfCfKsUUns
+	gIJVm75WPEw6nmvTt97XNEgNuljybRKuVAaCllzCGFpVws1VQsdqAu5fSOGEJuW9
+	2iqU17i/dV5CD0E1sGXinFKzx/EcfIG6qDbvpmDsABgpdCCt3Bbf7BHq2w+H7DQl
+	1fZyZrtKcoYp0c9ed+Lf6rPhlRqNymqSr1gRVfklTPBD1uKM1VyjqV60nqxgpC74
+	mbtq96BNuE2XuAtgjHK8d4en+Ir+76+VKkxoGIOSbte0loo/mA/T5gCHSyZs+TqI
+	wCIzs2gaM6CJAVMe/39Zmr/mBv9yKH0/MkK0DkkSUH8ZYKgDswpYgNIfVE4iF51i
+	oG24O3fzo4ne8bZJiudCkoNxVGw+ql6+4Bfaxuvie6TgbfzeyBYOHuLYPTc6vySn
+	3IoDtuvOF0e8bmwX+8LFCPsqTw/PKDtmoVd0Ixjt2wyPOW8V1q3tSXmPc4zB9gnM
+	ZiYFMMIDkuhHOuF5TJ8ne+MVAvgede+NmTvwbaWV0+9pqhx68kU14YC4DSvPb06N
+	N5OyFtASJop01Qz2p/qvKfpd1z3FlsyqTqyVXmzLj/QuJK7r2Dq8aL67kX9QlisL
+	QeCc350=
+Message-ID: <a5998b5f-f03b-4d9d-8e23-a7d688406371@prolan.hu>
+Date: Mon, 10 Feb 2025 19:56:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Fwd: [PATCH for-6.14 v4 1/2] pm: runtime: Add new devm functions
+References: <20250210111008.248929-2-csokas.bence@prolan.hu>
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Alexander Dahl
+	<ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Claudiu
+ Beznea" <claudiu.beznea@tuxon.dev>
+CC: linux-spi <linux-spi@vger.kernel.org>
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <20250210111008.248929-2-csokas.bence@prolan.hu>
+X-Forwarded-Message-Id: <20250210111008.248929-2-csokas.bence@prolan.hu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94852617666
 
-On Mon, 10 Feb 2025 10:01:57 -0600
-David Lechner <dlechner@baylibre.com> wrote:
-
-> On 2/7/25 2:09 PM, David Lechner wrote:
-> > Add support for SPI offload to the ad4695 driver. SPI offload allows
-> > sampling data at the max sample rate (500kSPS or 1MSPS).
-> > 
-> > This is developed and tested against the ADI example FPGA design for
-> > this family of ADCs [1].
-> > 
-> > [1]: http://analogdevicesinc.github.io/hdl/projects/ad469x_fmc/index.html
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Nuno Sa <nuno.sa@analog.com>
-> > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > ---
-> >   
-> 
-> ...
-> 
-> > ---
-> >  drivers/iio/adc/Kconfig  |   1 +
-> >  drivers/iio/adc/ad4695.c | 445 +++++++++++++++++++++++++++++++++++++++++++++--
-> >  2 files changed, 429 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-> > index 995b9cacbaa964d26424346120c139858f93cdcd..ec60b64c46e187e2be18ab1f8ca9e6f4f03299f9 100644
-> > --- a/drivers/iio/adc/Kconfig
-> > +++ b/drivers/iio/adc/Kconfig
-> > @@ -52,6 +52,7 @@ config AD4695
-> >  	tristate "Analog Device AD4695 ADC Driver"
-> >  	depends on SPI
-> >  	select IIO_BUFFER
-> > +	select IIO_BUFFER_DMAENGINE
-> >  	select IIO_TRIGGERED_BUFFER
-> >  	select REGMAP  
-> 
-> I missed adding
-> 
-> 	select SPI_OFFLOAD
-> 
-> Closes: https://lore.kernel.org/oe-kbuild-all/202502090910.ganYXEeF-lkp@intel.com/
-> 
-> >  	help  
-> 
-Thanks. Fixed up whilst applying.
-> ...
-> 
-> 
-> > +static int ad4695_offload_buffer_postenable(struct iio_dev *indio_dev)
-> > +{
-> > +	struct ad4695_state *st = iio_priv(indio_dev);
-> > +	struct spi_offload_trigger_config config = {
-> > +		.type = SPI_OFFLOAD_TRIGGER_DATA_READY,
-> > +	};
-> > +	struct spi_transfer *xfer = &st->buf_read_xfer[0];
-> > +	struct pwm_state state;
-> > +	u8 temp_chan_bit = st->chip_info->num_voltage_inputs;
-> > +	u8 num_slots = 0;
-> > +	u8 temp_en = 0;
-> > +	unsigned int bit;
-> > +	int ret;
-> > +
-> > +	iio_for_each_active_channel(indio_dev, bit) {
-> > +		if (bit == temp_chan_bit) {
-> > +			temp_en = 1;
-> > +			continue;
-> > +		}
-> > +
-> > +		ret = regmap_write(st->regmap, AD4695_REG_AS_SLOT(num_slots),
-> > +				   FIELD_PREP(AD4695_REG_AS_SLOT_INX, bit));
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		num_slots++;
-> > +	}
-> > +
-> > +	/*
-> > +	 * For non-offload, we could discard data to work around this
-> > +	 * restriction, but with offload, that is not possible.
-> > +	 */
-> > +	if (num_slots < 2) {
-> > +		dev_err(&st->spi->dev,
-> > +			"At least two voltage channels must be enabled.\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	ret = regmap_update_bits(st->regmap, AD4695_REG_TEMP_CTRL,
-> > +				 AD4695_REG_TEMP_CTRL_TEMP_EN,
-> > +				 FIELD_PREP(AD4695_REG_TEMP_CTRL_TEMP_EN,
-> > +					    temp_en));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Each BUSY event means just one sample for one channel is ready. */
-> > +	memset(xfer, 0, sizeof(*xfer));
-> > +	xfer->offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
-> > +	/* Using 19 bits per word to allow for possible oversampling */
-> > +	xfer->bits_per_word = 19;
-> > +	xfer->len = 4;
-> > +
-> > +	spi_message_init_with_transfers(&st->buf_read_msg, xfer, 1);
-> > +	st->buf_read_msg.offload = st->offload;
-> > +
-> > +	ret = spi_optimize_message(st->spi, &st->buf_read_msg);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * NB: technically, this is part the SPI offload trigger enable, but it
-> > +	 * doesn't work to call it from the offload trigger enable callback
-> > +	 * because it requires accessing the SPI bus. Calling it from the
-> > +	 * trigger enable callback could cause a deadlock.
-> > +	 */
-> > +	ret = regmap_set_bits(st->regmap, AD4695_REG_GP_MODE,
-> > +			      AD4695_REG_GP_MODE_BUSY_GP_EN);
-> > +	if (ret)
-> > +		goto err_unoptimize_message;
-> > +
-> > +	ret = spi_offload_trigger_enable(st->offload, st->offload_trigger,
-> > +					 &config);
-> > +	if (ret)
-> > +		goto err_disable_busy_output;
-> > +
-> > +	ret = ad4695_enter_advanced_sequencer_mode(st, num_slots);
-> > +	if (ret)
-> > +		goto err_offload_trigger_disable;
-> > +
-> > +	guard(mutex)(&st->cnv_pwm_lock);  
-> 
-> Apparently clang doesn't like this guard() after goto, so I'll have to figure
-> out what to do about that. Probably need to add a helper function to avoid
-> goto below from jumping out of scoped_guard().
-> 
-> https://lore.kernel.org/oe-kbuild-all/202502090806.KxEvxCZC-lkp@intel.com/
-
-Easiest option don't use guard(). Sometimes they are not the right choice!
-
-diff --git a/drivers/iio/adc/ad4695.c b/drivers/iio/adc/ad4695.c
-index d73d2ff77625..d1e7634001b3 100644
---- a/drivers/iio/adc/ad4695.c
-+++ b/drivers/iio/adc/ad4695.c
-@@ -800,7 +800,7 @@ static int ad4695_offload_buffer_postenable(struct iio_dev *indio_dev)
-        if (ret)
-                goto err_offload_trigger_disable;
- 
--       guard(mutex)(&st->cnv_pwm_lock);
-+       mutex_lock(&st->cnv_pwm_lock);
-        pwm_get_state(st->cnv_pwm, &state);
-        /*
-         * PWM subsystem generally rounds down, so requesting 2x minimum high
-@@ -808,6 +808,7 @@ static int ad4695_offload_buffer_postenable(struct iio_dev *indio_dev)
-         */
-        state.duty_cycle = AD4695_T_CNVH_NS * 2;
-        ret = pwm_apply_might_sleep(st->cnv_pwm, &state);
-+       mutex_unlock(st->cnv_pwm_lock);
-        if (ret)
-                goto err_offload_exit_conversion_mode;
+Hi,
+This is the PM side of the series. As you can see, it just adds two 
+functions in the style of the already-existing `devm_pm_runtime_enable()`.
+Bence
 
 
-For now I've applied this as I want to get some build testing on this series,  but
-feel free to send a patch to tweak this to a different solution.
+-------- Forwarded Message --------
+Subject: [PATCH for-6.14 v4 1/2] pm: runtime: Add new devm functions
+Date: Mon, 10 Feb 2025 12:10:06 +0100
+From: Bence Csókás <csokas.bence@prolan.hu>
+To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+CC: Bence Csókás <csokas.bence@prolan.hu>, Rafael J. Wysocki 
+<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek 
+<pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+Danilo Krummrich <dakr@kernel.org>
 
-Jonathan
+Add `devm_pm_runtime_set_active()` and
+`devm_pm_runtime_get_noresume()` for
+simplifying common use cases in drivers.
 
-> 
-> > +	pwm_get_state(st->cnv_pwm, &state);
-> > +	/*
-> > +	 * PWM subsystem generally rounds down, so requesting 2x minimum high
-> > +	 * time ensures that we meet the minimum high time in any case.
-> > +	 */
-> > +	state.duty_cycle = AD4695_T_CNVH_NS * 2;
-> > +	ret = pwm_apply_might_sleep(st->cnv_pwm, &state);
-> > +	if (ret)
-> > +		goto err_offload_exit_conversion_mode;
-> > +
-> > +	return 0;
-> > +
-> > +err_offload_exit_conversion_mode:
-> > +	/*
-> > +	 * We have to unwind in a different order to avoid triggering offload.
-> > +	 * ad4695_exit_conversion_mode() triggers a conversion, so it has to be
-> > +	 * done after spi_offload_trigger_disable().
-> > +	 */
-> > +	spi_offload_trigger_disable(st->offload, st->offload_trigger);
-> > +	ad4695_exit_conversion_mode(st);
-> > +	goto err_disable_busy_output;
-> > +
-> > +err_offload_trigger_disable:
-> > +	spi_offload_trigger_disable(st->offload, st->offload_trigger);
-> > +
-> > +err_disable_busy_output:
-> > +	regmap_clear_bits(st->regmap, AD4695_REG_GP_MODE,
-> > +			  AD4695_REG_GP_MODE_BUSY_GP_EN);
-> > +
-> > +err_unoptimize_message:
-> > +	spi_unoptimize_message(&st->buf_read_msg);
-> > +
-> > +	return ret;
-> > +}  
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+  drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
+  include/linux/pm_runtime.h   |  4 ++++
+  2 files changed, 40 insertions(+)
+
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 2ee45841486b..f0a6c64bec19 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
+  }
+  EXPORT_SYMBOL_GPL(pm_runtime_enable);
+  +static void pm_runtime_set_suspended_action(void *data)
++{
++	pm_runtime_set_suspended(data);
++}
++
++/**
++ * devm_pm_runtime_set_active - devres-enabled version of 
+pm_runtime_set_active.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_set_active(struct device *dev)
++{
++	pm_runtime_set_active(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_set_suspended_action, 
+dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
++
+  static void pm_runtime_disable_action(void *data)
+  {
+  	pm_runtime_dont_use_autosuspend(data);
+@@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
+  }
+  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
+  +static void pm_runtime_put_noidle_action(void *data)
++{
++	pm_runtime_put_noidle(data);
++}
++
++/**
++ * devm_pm_runtime_get_noresume - devres-enabled version of 
+pm_runtime_get_noresume.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_get_noresume(struct device *dev)
++{
++	pm_runtime_get_noresume(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action, dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
++
+  /**
+   * pm_runtime_forbid - Block runtime PM of a device.
+   * @dev: Device to handle.
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index d39dc863f612..d7eca86150b8 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
+  extern void pm_runtime_drop_link(struct device_link *link);
+  extern void pm_runtime_release_supplier(struct device_link *link);
+  +int devm_pm_runtime_set_active(struct device *dev);
+  extern int devm_pm_runtime_enable(struct device *dev);
++int devm_pm_runtime_get_noresume(struct device *dev);
+   /**
+   * pm_suspend_ignore_children - Set runtime PM behavior regarding 
+children.
+@@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct 
+device *dev, bool c) {}
+  static inline void pm_runtime_allow(struct device *dev) {}
+  static inline void pm_runtime_forbid(struct device *dev) {}
+  +static inline int devm_pm_runtime_set_active(struct device *dev) { 
+return 0; }
+  static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
++static inline int devm_pm_runtime_get_noresume(struct device *dev) { 
+return 0; }
+   static inline void pm_suspend_ignore_children(struct device *dev, 
+bool enable) {}
+  static inline void pm_runtime_get_noresume(struct device *dev) {}
+-- 
+2.48.1
+
 
 
