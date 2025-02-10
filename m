@@ -1,222 +1,115 @@
-Return-Path: <linux-spi+bounces-6749-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6750-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EB61A2FC83
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 22:53:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDCAAA2FE3E
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:16:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E635E16327D
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 21:53:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A9FC1886B2A
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 23:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9089424C695;
-	Mon, 10 Feb 2025 21:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C06B253F16;
+	Mon, 10 Feb 2025 23:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGcZXPMM"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TI8M4e5V"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA7417BCE;
-	Mon, 10 Feb 2025 21:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ECE1509A0
+	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 23:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739224406; cv=none; b=riEQqsIRPrKyrMb3qefPJjA08rSGM+4VIpE5VnKQZiGivTSzUSu3YUF68Mn77vchD+LZov0EEs1p51aOItP0DwFlKko4OJih3H9iNq3RHtFFFj5A6I0c7ccdTBiKuEzDoEtOs2a2MW2xZOkxOXrUUWoJMHh9YlESmTnWvo3OEJI=
+	t=1739229382; cv=none; b=OE22antMp8S2DYuNar4kwHG1L4gEklFX7U5K1PQknxOUPYlxbxUk9p2rujhzGV4B+AfRZh5WHS9wEnbuwu1EXch4qVRROvcwgHel4xwCkXjWaCNrDGgjJsTTfQNvdm+h6sbgDkeqE7SsowxHGtWE9uudTVmuyXX+7MqwROKFwks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739224406; c=relaxed/simple;
-	bh=1xp9i23qLHopM7Es6GWfv9JVXjG6ubbsAUbJbN9kf34=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+0hNS3gl1kXG6kzWSP+eQQaYPyW4Kxom43XKe47uNKv37HKGjCZT+XfoC16MSHYLgPTE+1Q9l/0G3CWSiRzW/Qwgngyn+CYfnNbpPrdOfoNU1D3uHe/VOeqfqEraNeAS7neE41xc35L3te70yYkkVkITSnGAGTzjnCTUDHfX8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGcZXPMM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FBCC4CED1;
-	Mon, 10 Feb 2025 21:53:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739224405;
-	bh=1xp9i23qLHopM7Es6GWfv9JVXjG6ubbsAUbJbN9kf34=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NGcZXPMM/lK6UWM10B0N7PXv1VH61bn282fDCJTlPl1oAnx1M4a7L4gil8TfoFjsQ
-	 iVfcXcyQtxu0uYmeY1b7SYwB+M4sNZA503rNTLJu8v4CS96dewxQfEwpGoxonNE1UD
-	 oHexGvB6qDhY4uMQdSN2oSqoSJDEjKyxe/81ZFw57xUGZzbjaP+f27Ra/fasNu6OBb
-	 WM28ie1HwprSTWcdnAgLoyl2lMvOYLFB2elGFwtEXUHNIZWCqXRj1ljrMziS8e1ANG
-	 GZfkZqxF80cbxhl1M24mvpPioI6iktw7xFRqhgaZ6WZxkC8UdK2gEFDtGIp+74767j
-	 ZTsZsRWmZENHA==
-Date: Mon, 10 Feb 2025 15:53:24 -0600
-From: Rob Herring <robh@kernel.org>
-To: Crystal Wood <oss@buserror.net>
-Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org, Li Yang <leoyang.li@nxp.com>,
-	John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH v2 09/12] dt-bindings: memory-controllers: Convert
- fsl,elbc to YAML
-Message-ID: <20250210215324.GA1040564-robh@kernel.org>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-9-8137b0c42526@posteo.net>
- <Z6kQpuQf5m-bXTyt@buserror.net>
+	s=arc-20240116; t=1739229382; c=relaxed/simple;
+	bh=NUApKyScjyNwhZt7QISmRvCwSkmNuMrMeDDGrzDTJE0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pKsR3i2Nu0bnwsbb8djy4KqhBM82+bHjCFrKKikkMw8T1/020B8S1xMcV7YEl680DetHMw4HcCeO1kk16PScUIy6gutmn9X9YbBlqHKTWJRNmTcrArdmB9YQ2+kB1biGcGOJKPy+NCna8CLh85XVYeu4L/PYv74Tb83uGRj42Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TI8M4e5V; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5f6b65c89c4so1237533eaf.2
+        for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 15:16:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739229378; x=1739834178; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOTiC9N25oxSFn8PJurmN+X05adw39aPm32FGiYhCiI=;
+        b=TI8M4e5VjtidvaV7h9z0OgQwBgGfq01PiIMPInWVy2sexE5/772Y+xAJsgvqPQ9YWB
+         B691eb9ytdvzwAms1p4bG2bD4kT91+Q7ANvdMy4N5VXEeeP8Rc854kWi+V+qUwAkWCyq
+         +3zghMOn8cU4gbMxCuGOJEf2JQKKKitjqC5ThpTZOE5UX/C4uQ7U4earKKhJXJYpwnJn
+         y7rv2TBZAbb61I4zbD1jWGqOIyhW3s32sTq4HWh59ZO5Q+4J9KSj/Q8A7PZlygXahDN4
+         hZogLhb2HZitohrSEHKVJsAQRKLVXrIk96L9I45+c/IkO62MLoR4J43NwxyMVooZOvlL
+         1PEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739229378; x=1739834178;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zOTiC9N25oxSFn8PJurmN+X05adw39aPm32FGiYhCiI=;
+        b=LQog3dJZjI4TeCNetCmbTwdo8ri53HUhclWYXrIdRjr4kcDvHNL322H5pJum2rV+Nt
+         Rzp5C9Hf7MbRjVO6K4aof9eaxn94KZnwuV19I97/Vq8A6NYvA3I6xZZqbXsuBkzbM8N7
+         sBfTF++O5ZfVIximO40rf9IxnZ8XNoAclk0Nu8wTw0EffIq2ifcrexlLk7QxNRzYtSkG
+         8+UcQzClCzQZYr3EVDMGurf9/6uBgerWF2+SEj4QK/ITm/e1xt+oCr+D2w3p/uz5FyOJ
+         KIRgj0qTPaaWwv4fiFIzCQkpvby8Ta1bHuXZyGRYv3T+RqOc/nsCQMMzANSj5NbSWUop
+         JPiQ==
+X-Gm-Message-State: AOJu0Ywd95fdxh33/tSLcFgCcqZmXormmt6CvasM9HA4jezQAVW3sRPD
+	QvAGTbG0Cs4RLWx5kZIp5n9YWpt0qmoa0a3LVb26kuJ3mm5NY/Rj/c71YptGXhCdQCXoNriUeDU
+	R
+X-Gm-Gg: ASbGncuch3ycpba9xjKtCF12StrlWdZ5/zVFwKfz2YtS7cwSbJvJ27mj3FZW7DMLl00
+	ftaPsuBgsVDaNLafPApdswULIepmQH9u8chO7QmzeyMhD/Z1N9foNcjda59d4sFMYKlSVyaeETb
+	gqAq/gPbjvu1eWYMd3i7kS7inVygf2qfukE+i6kuhE+fPxO55+TzK2psHZ3THoqN4f+RGKhDuNT
+	ygfmtFkf+kN+giF/97Qbmq9AVmYmtsZtI10P/nG485prZ5ZiZ3PUsSgK+H61PvxoypjeSuKXCuP
+	ScHu975P9tpmvcjNbKOcBuDNKQYDD989+6jdrQIsRQeuleQ=
+X-Google-Smtp-Source: AGHT+IH5xNEjbl5fvc3vvYa7TyhbGhLexFzpDFKP8guUzeJDkdNhhSooVjDClNMHdacLxvGBKWPMkQ==
+X-Received: by 2002:a05:6820:1787:b0:5fc:9430:d747 with SMTP id 006d021491bc7-5fc9430de7emr1578893eaf.1.1739229378396;
+        Mon, 10 Feb 2025 15:16:18 -0800 (PST)
+Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc545bc40esm2758043eaf.29.2025.02.10.15.16.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 15:16:17 -0800 (PST)
+From: David Lechner <dlechner@baylibre.com>
+Subject: [PATCH 0/2] spi: offload: extra headers
+Date: Mon, 10 Feb 2025 17:16:13 -0600
+Message-Id: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6kQpuQf5m-bXTyt@buserror.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL2IqmcC/x3MQQqDMBBG4avIrDuQRCzVq5QuovlTB8TITBFBv
+ Luhy2/x3kkGFRgNzUmKXUzKWuEfDU1zXL9gSdUUXOhc8I5tEy45LyUmxvHTyDNighq/niNC3/s
+ 2o6Pab4osx//9/lzXDSk7Kn1rAAAA
+X-Change-ID: 20250210-spi-offload-extra-headers-86be29913fe5
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ David Lechner <dlechner@baylibre.com>, 
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+X-Mailer: b4 0.14.2
 
-On Sun, Feb 09, 2025 at 02:31:34PM -0600, Crystal Wood wrote:
-> On Fri, Feb 07, 2025 at 10:30:26PM +0100, J. Neuschäfer via B4 Relay wrote:
-> > From: "J. Neuschäfer" <j.ne@posteo.net>
-> > 
-> > Convert the Freescale localbus controller bindings from text form to
-> > YAML. The updated list of compatible strings reflects current usage
-> > in arch/powerpc/boot/dts/, except that many existing device trees
-> > erroneously specify "simple-bus" in addition to fsl,*elbc.
-> > 
-> > Changes compared to the txt version:
-> >  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
-> >    appears in this example and nowhere else
-> >  - added a new example with NAND flash
-> >  - updated list of compatible strings
-> > 
-> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > ---
-> > 
-> > V2:
-> > - fix order of properties in examples, according to dts coding style
-> > - move to Documentation/devicetree/bindings/memory-controllers
-> > - clarify the commit message a tiny bit
-> > - remove unnecessary multiline markers (|)
-> > - define address format in patternProperties
-> > - trim subject line (remove "binding")
-> > - remove use of "simple-bus", because it's technically incorrect
-> 
-> While I admit I haven't been following recent developments in this area,
-> as someone who was involved when "simple-bus" was created (and was on the
-> ePAPR committee that standardized it) I'm surprised to hear simple-bus
-> being called "erroneous" or "technically incorrect" here.
+Following up from some late feedback, a couple patches adding extra
+headers to a few SPI offload files.
 
-Erroneous because the binding did not say "simple-bus" was used. Not 
-uncommon with the old .txt bindings.
+Signed-off-by: David Lechner <dlechner@baylibre.com>
+---
+David Lechner (2):
+      spi: offload: types: include linux/bits.h
+      spi: spi-offload-trigger-pwm: add extra headers
 
-Generally, if a bus has control registers or resources like clocks, then 
-we tend not to call them 'simple-bus'. And '"specific-bus", 
-"simple-bus"' gives some problems around what driver if any do you 
-bind to. 
+ drivers/spi/spi-offload-trigger-pwm.c | 9 ++++++++-
+ include/linux/spi/offload/types.h     | 1 +
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+---
+base-commit: d15cc2db846f73920688c045be6b4c782b68d058
+change-id: 20250210-spi-offload-extra-headers-86be29913fe5
 
-If you have chip selects, then you have config registers for those. 
-Not really "simple" if you ask me. That being said, you could keep 
-'simple-bus' here. I would tend to err on making the schema match the 
-actual .dts rather than updating the .dts files on older platforms like 
-these.
+Best regards,
+-- 
+David Lechner <dlechner@baylibre.com>
 
-> For non-NAND devices this bus generally meets the definition of "an
-> internal I/O bus that cannot be probed for devices" where "devices on the
-> bus can be accessed directly without additional configuration
-> required".  NAND flash is an exception, but those devices have
-> compatibles that are specific to the bus controller.
-
-NAND bindings have evolved quite a bit if you haven't been paying 
-attention.
-
-> The fact that the address encoding is non-linear is irrelevant; the
-> addresses can still be translated using the standard "ranges" mechanism. 
-> This seems to be a disconnect between the schema verification and the way
-> the compatible has previously been defined and used.
-> 
-> And as a practical matter, unless I'm missing something (which I might be
-> since I haven't been in devicetree-land for nearly a decade), Linux is
-> relying on simple-bus to probe these devices.  There is a driver that
-> binds to the bus itself but that is just for error interrupts and NAND.
-> 
-> You'd probably need something like commit 3e25f800afb82bd9e5f8 ("memory:
-> fsl_ifc: populate child devices without relying on simple-bus") and the 
-> subsequent fix in dd8adc713b1656 ("memory: fsl_ifc: populate child
-> nodes of buses and mfd devices")...
-> 
-> I'm curious what the reasoning was for removing simple-bus from IFC.  It
-> seems that the schema verification also played a role in that:
-> https://www.spinics.net/lists/devicetree/msg220418.html
-
-If a kernel change is needed to support changed .dts files, then we 
-shouldn't be doing that here (being mature platforms). That would mean 
-new DTB will not work with existing kernels.
-
-> 
-> ...but there's also the comment in 985ede63a045eabf3f9d ("dt-bindings:
-> memory: fsl: convert ifc binding to yaml schema") that "this will help to
-> enforce the correct probe order between parent device and child devices",
-> but was that really not already guaranteed by the parent/child
-> relationship (and again, it should only really matter for NAND except for
-> the possibility of missing error reports during early boot)?
-> 
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,mpc8313-elbc
-> > +              - fsl,mpc8315-elbc
-> > +              - fsl,mpc8377-elbc
-> > +              - fsl,mpc8378-elbc
-> > +              - fsl,mpc8379-elbc
-> > +              - fsl,mpc8536-elbc
-> > +              - fsl,mpc8569-elbc
-> > +              - fsl,mpc8572-elbc
-> > +              - fsl,p1020-elbc
-> > +              - fsl,p1021-elbc
-> > +              - fsl,p1023-elbc
-> > +              - fsl,p2020-elbc
-> > +              - fsl,p2041-elbc
-> > +              - fsl,p3041-elbc
-> > +              - fsl,p4080-elbc
-> > +              - fsl,p5020-elbc
-> > +              - fsl,p5040-elbc
-> > +          - const: fsl,elbc
-> 
-> Is it really necessary to list every single chip?
-
-Yes. If they exist, they have to be documented.
-
-> 
-> And then it would need to be updated when new ones came out?  I know this
-> particular line of chips is not going to see any new members at this
-> point, but as far as the general approach goes...
-> 
-> Does the schema validation complain if it sees an extra compatible it
-> doesn't recognize?  If so that's obnoxious.
-
-Yes.
-
-More annoying is having to boot and debug typos:
-
-compatible = "foo,bar", "simplebus";
-
-Rob
 
