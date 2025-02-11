@@ -1,191 +1,98 @@
-Return-Path: <linux-spi+bounces-6753-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6754-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 770E8A2FEBB
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 01:02:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0775BA30737
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 10:34:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30A233A6A49
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:01:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCF2D3A1830
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 09:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A532FC23;
-	Tue, 11 Feb 2025 00:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35081C1F02;
+	Tue, 11 Feb 2025 09:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q1j87QGs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fwUTjXzg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA932CA8;
-	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCB81BD9D2;
+	Tue, 11 Feb 2025 09:34:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739232119; cv=none; b=orpFdI33HLmsABVyv6jrgt3/YwVn5flWOq3fJWFpL5RRJGnLl+TQ8E6gPsiGGgZ/2G8+ypw4gQPe8rwVUKKTqrykFqCkLSykJKDHnFWu5BCvufLLgaIgcwRrsF7nFE1dsvPJDKJ1mC9vJvLTKJSqdhOIznBK0ZyGyWdvgH9TR4s=
+	t=1739266450; cv=none; b=XL2jxhbp7IUhHcyfP1rr9/I/KuwIIb5OqinCi3PJ8LFnCsnQmdB7mI2kNmuIDa74EQwa/yRMPsVtpVNh+LoquSYd1blqnmYf2bQGQDkIk/q4n7sTk3SDZrkxNJRXrMzPx8Dn+5HKa9AxbWU/aaOJTS1kmQWk2wkSTtTgs8MbiN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739232119; c=relaxed/simple;
-	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
+	s=arc-20240116; t=1739266450; c=relaxed/simple;
+	bh=Y7+oO2OZP1DNk/8EYMtFBmFLiKua9Hyu//B5IPMfpbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=phFMG2lITeO1sBiL+tcqCk0YYkqm300xsFdDUTlBNXXmTtVx7kSlclcHARSB33E1tkr315T1J3OVjOWqTkv+tADy74Jl61o83S+/0SbuKzt4Xd07mom6QSY79N0nAhb/jWhrd3q/+sbcVeuEHT0xFVW+lGeczAdrU16k1YssuLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q1j87QGs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C868C4CEDF;
-	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739232118;
-	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q1j87QGsjnUkqkcVlg2v4gnZWuuz2UEGFoQfFx8S5hm6OD3/mp8QI0dCwQT4YmTEr
-	 IB2Hu3/xsA738TjmL9hvDacqP3Cn1fn1l38WTUXKf4SHgxcaaqcmtfDjrQUDk9eoqE
-	 gB6wCJ5myKFPgBwelHmsgcxfai/gZhPdUPy8zVu8z/cx9kuD9+RM3Bb/ajecRTWHax
-	 fVRq4VYORDNdvHY/BD15McfYj6CkfxzLNVClI1u8/Pfa9FJn4JqDpQ7Nyn/Fr2156J
-	 CGUj1Kbf4bjxLul7s2ASKdEhbPJl+pwIxxn70nR5a5VyWkDiXJ4SybO3o/a5i5XUEL
-	 d5paRyJt5qYuQ==
-Date: Mon, 10 Feb 2025 18:01:57 -0600
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 11/12] dt-bindings: nand: Add fsl,elbc-fcm-nand
-Message-ID: <20250211000157.GA240011-robh@kernel.org>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nxZkTRczraQgq4VbZEsl5hrYM+DhRW4Vg7E8fauuXDQlr1EP+2DgPEynuvZA7p9/4S8iswQ5ZmhWR7OEkK/dQxEK2usk7cR/uqSVicw6VCIU4eqaMUsLzmKCvGVqho/3OgFLfYsIsXRyHe4ylAz52HgxU2spr2Ie2zOcoggt6Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fwUTjXzg; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739266449; x=1770802449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y7+oO2OZP1DNk/8EYMtFBmFLiKua9Hyu//B5IPMfpbo=;
+  b=fwUTjXzggmLZvh/r1q8OajFsHBNM6QDluVJ4TNlPX2pOs8HtYbHTzJq6
+   kSLAL0vu/te5RoJQ8IoHuGPqKFYSBo2F7i0Xn4K74/jOPbn1WaIrBukJM
+   dY6AjxflIXI4en/KJ7oCnukkSnydpr3C6A6i0LUzVbnaMuA2T/GX+Iy31
+   AJ2dzZFSVM0KUZA0ULjttOJ0gXiNeGId3Qk/2xbjkL2L+8CUJzunC0z1r
+   3/uMWKOtfLaZEUqhZgZHsjZXdTu2kOKLmfjbt6pzBLLm2nZXA8PBI9O2z
+   p7Agwk83VpjltY3bjEww8Xhs3ZXp2MIIuO/QAF0W/m5//HyMHpDEu4R+o
+   g==;
+X-CSE-ConnectionGUID: bq94FiAmSt6UaGz9qmp9/Q==
+X-CSE-MsgGUID: L5JcBbc1TGSjMoPW57hxSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="57414326"
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="57414326"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 01:34:09 -0800
+X-CSE-ConnectionGUID: Jr3zBeuAT/2OPMZVIMCU9g==
+X-CSE-MsgGUID: hmYDjOzVSlqgiJ9DPBJ8MQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112925516"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 01:34:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1thmea-0000000AST8-2rmQ;
+	Tue, 11 Feb 2025 11:34:04 +0200
+Date: Tue, 11 Feb 2025 11:34:04 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] spi: offload: extra headers
+Message-ID: <Z6sZjPj-izl_-cRc@smile.fi.intel.com>
+References: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
+In-Reply-To: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Feb 07, 2025 at 10:30:28PM +0100, J. Neuschäfer wrote:
-> Formalize the binding already supported by the fsl_elbc_nand.c driver
-> and used in several device trees in arch/powerpc/boot/dts/.
-> 
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> ---
-> 
-> V2:
-> - split out from fsl,elbc binding patch
-> - constrain #address-cells and #size-cells
-> - add a general description
-> - use unevaluatedProperties=false instead of additionalProperties=false
-> - fix property order to comply with dts coding style
-> - include raw-nand-chip.yaml instead of nand-chip.yaml
+On Mon, Feb 10, 2025 at 05:16:13PM -0600, David Lechner wrote:
+> Following up from some late feedback, a couple patches adding extra
+> headers to a few SPI offload files.
 
-Why? Doesn't look like you use anything from it. I think the correct 
-thing to use here is just mtd.yaml to pick up partitions.
+For both,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> ---
->  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..1de97bb24fa4a83e2ea5d94ab822dd0e37baa102
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/fsl,elbc-fcm-nand.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NAND flash attached to Freescale eLBC
-> +
-> +description:
-> +  The Freescale Enhanced Local Bus controller (eLBC) contains logic to
-> +  interface with NAND flash, called the NAND Flash Control Machine (FCM).
-> +  This binding describes flash attached to an eLBC using the FCM.
-> +
-> +maintainers:
-> +  - J. Neuschäfer <j.ne@posteo.net>
-> +
-> +allOf:
-> +  - $ref: raw-nand-chip.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - fsl,mpc8313-fcm-nand
-> +              - fsl,mpc8315-fcm-nand
-> +              - fsl,mpc8377-fcm-nand
-> +              - fsl,mpc8378-fcm-nand
-> +              - fsl,mpc8379-fcm-nand
-> +              - fsl,mpc8536-fcm-nand
-> +              - fsl,mpc8569-fcm-nand
-> +              - fsl,mpc8572-fcm-nand
-> +              - fsl,p1020-fcm-nand
-> +              - fsl,p1021-fcm-nand
-> +              - fsl,p1025-fcm-nand
-> +              - fsl,p2020-fcm-nand
-> +          - const: fsl,elbc-fcm-nand
-> +      - const: fsl,elbc-fcm-nand
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    localbus {
-> +        #address-cells = <2>;
-> +        #size-cells = <1>;
-> +
-> +        nand@1,0 {
-> +            compatible = "fsl,mpc8315-fcm-nand",
-> +                         "fsl,elbc-fcm-nand";
-> +            reg = <0x1 0x0 0x2000>;
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +        };
-> +    };
-> 
-> -- 
-> 2.48.0.rc1.219.gb6b6757d772
-> 
+Thank you!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
