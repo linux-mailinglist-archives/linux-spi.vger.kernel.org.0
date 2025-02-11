@@ -1,95 +1,88 @@
-Return-Path: <linux-spi+bounces-6760-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6761-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21AD0A30E75
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 15:35:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0779CA31263
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 18:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67B35188923C
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 14:35:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9B153A7160
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 17:05:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC05A2505C3;
-	Tue, 11 Feb 2025 14:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B15260A32;
+	Tue, 11 Feb 2025 17:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YpE1hIUx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JHEhO+JG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187E924C694;
-	Tue, 11 Feb 2025 14:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6648524E4C2;
+	Tue, 11 Feb 2025 17:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739284543; cv=none; b=D55pr56u9b6oYN48uWqR8TKldUIUnVh0rNwmufRCyY4iW8/+RF2nflfmKuPPVQPSLnjckIwuKH2GMtvn+a4cB3AI0SX6wBYwPAYo5E6v1q0ANx437PNU9OLXhENlb7SNepo3Wz0ea0Rgww92qnAaTR4ShI+WGfk65sGiWvJJgx4=
+	t=1739293543; cv=none; b=hGnUvFGWyxV3QPdfY7gG3n/zZI6tHDdp+mhDYbmIyT1PBbSgRsIdvf+v6lNWpxBZXx/LP/rSX/EW7zcFMpWJ6swZIB/MwdiB6tr87YX8hW0NyJ1TaP1pvWNPmZbaSU+rKEJpBRLtD3a6M6au+7APGCfXZ07TyG2Zj6J8Uk52rQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739284543; c=relaxed/simple;
-	bh=be5IPlcg0yWtYg4BxPhA+ASzqCK0AMCZ+Lgk+HS3Ib8=;
+	s=arc-20240116; t=1739293543; c=relaxed/simple;
+	bh=DE0r5jDm6YNSZPF5FU1DrOY1OpFwcpY96sjKQMUlUkM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dgteu+IlhHKw8RHv5O7Wv3XiUz19SNOpq07M4Ai35CP+6pJOzQr3a2cY2jkyfZAViB044EYvUKL/7VJs+yDg8O2r4EJCLZ/WuD8mwdKs16pAtB6WN8172pogKsy9QOc4IJYD5PJaWIy2QR5ceAUmeB/Ay1ou/DcSa2kWNl9GUJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YpE1hIUx; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=oMVoHUcoNSyMExriFBVKO1xrPQkDcVjqaC9weOAkXnzVoGAaGkoHU7RPHBFuQpaTUQjA78zSOM6sPExfjqU9xBw+wARX+cVK6U+BoUdUXdC4LoD70SHDrA5unpekYfmuIjg3qGBQxIf7vUxAdnR2WeSr612oGKjkqC9KsguJbZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JHEhO+JG; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739284542; x=1770820542;
+  t=1739293542; x=1770829542;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=be5IPlcg0yWtYg4BxPhA+ASzqCK0AMCZ+Lgk+HS3Ib8=;
-  b=YpE1hIUxoHVqBabrVMJBCjDt+Qe9GNM3fD9LACYI0YfXgD3jPFO64EDf
-   RH4JPk+k7i2OD5Nl4OT4N1fLUJiUloRFlzfb7cQFKFXj+LpgMPMeiCgiA
-   MIBTT35H9ywYZvWChf8W2i4Evs0di17HQsFWVAeYfAL4Rek9csrLLgCoh
-   737J0Q0jp1Pf1ev8pa/5GXIXLk+pGU8Sjss/rrcu6GZdjTOppNQ3pwo7r
-   HA7l4vlCexzN1CWjcT3IXtTASuMK+UwBUG1UHVCIBqeijFs94wTR9trHC
-   ul1fXQpgOibGCUfMV+88xzVJYIrmXLxj0/D6nML5SPe7Gkd/cyth++shr
+  bh=DE0r5jDm6YNSZPF5FU1DrOY1OpFwcpY96sjKQMUlUkM=;
+  b=JHEhO+JGPa+/HZFGmYFGpl5iP8HJ6BDkKvHrGBu0KBQPJcYnMB+Gs/SG
+   n/QJk3roWwl6UfiBOjt9rxQmXxRUQA5XoJDJbhxKEFjFyLEumd3/u0wfm
+   wU9cn3435iI0FxlBgHx3hEOZvbLaxXoFVNPzCmLeNKmPl/2+xY+runU9f
+   7LgQzyNt0t7/XApHS1Cv3pwrJWQTZiwA8IkdrK5g0jKi1YNTV7oab4piF
+   3lEx7AbY8Gn3qn9bzrpS0qGjcsulf4MijDxSzcXJk8SSHbOaF9V8YPWZb
+   T2HBHeyN7pnTAbaJj0oQ5HdFZ5nRoXbHk9fNUyRLBt8RVqDw+oEiNJkRr
    Q==;
-X-CSE-ConnectionGUID: 6z3d6f5KRJ62lqdqhIGl7Q==
-X-CSE-MsgGUID: lsFTbF4XRDONnEns0VGWrw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="65260307"
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="65260307"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 06:35:41 -0800
-X-CSE-ConnectionGUID: sldVeuXkQfGDCtT2EtCQig==
-X-CSE-MsgGUID: GSE/MADUQhK9nwiEDeAZNw==
+X-CSE-ConnectionGUID: ZG/jALMZRGOLQZM0wjyPGQ==
+X-CSE-MsgGUID: ZVLlTnZOR+mqt0TaCTqDQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="40048242"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="40048242"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 09:05:41 -0800
+X-CSE-ConnectionGUID: PyB6JRaRTtimkzGv6rTkog==
+X-CSE-MsgGUID: Jb+IUSR8RQW98MPBjjwg1w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113012472"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 06:35:38 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1thrMM-0000000AWv7-1eJ9;
-	Tue, 11 Feb 2025 16:35:34 +0200
-Date: Tue, 11 Feb 2025 16:35:34 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: David Lechner <dlechner@baylibre.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="112546840"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Feb 2025 09:05:36 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ththW-0014TX-0H;
+	Tue, 11 Feb 2025 17:05:34 +0000
+Date: Wed, 12 Feb 2025 01:04:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: patrice.chotard@foss.st.com, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v8 01/17] spi: add basic support for SPI offloading
-Message-ID: <Z6tgNjH6Qq5pe9Gt@smile.fi.intel.com>
-References: <20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com>
- <20250207-dlech-mainline-spi-engine-offload-2-v8-1-e48a489be48c@baylibre.com>
- <Z6otFlsmEikIbI__@black.fi.intel.com>
- <27d2a88c-b44a-4712-b066-b999e41774f0@baylibre.com>
- <b1dcbb19-190a-45e7-8e94-cb5ef65f1f1b@sirena.org.uk>
- <Z6pim_nLct33LzfN@smile.fi.intel.com>
- <b000d3fd-754a-43e8-ab10-82677eeee1d2@sirena.org.uk>
- <Z6tcwg7QgQwytoSb@smile.fi.intel.com>
- <Z6tezVXVxVCwXuds@smile.fi.intel.com>
- <Z6tfUfHilO2KLmxv@smile.fi.intel.com>
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	christophe.kerello@foss.st.com, patrice.chotard@foss.st.com
+Subject: Re: [PATCH v3 4/8] memory: Add STM32 Octo Memory Manager driver
+Message-ID: <202502120005.pznVoB0E-lkp@intel.com>
+References: <20250210131826.220318-5-patrice.chotard@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -98,77 +91,238 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6tfUfHilO2KLmxv@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20250210131826.220318-5-patrice.chotard@foss.st.com>
 
-On Tue, Feb 11, 2025 at 04:31:45PM +0200, Andy Shevchenko wrote:
-> On Tue, Feb 11, 2025 at 04:29:33PM +0200, Andy Shevchenko wrote:
-> > On Tue, Feb 11, 2025 at 04:20:50PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Feb 11, 2025 at 01:00:08PM +0000, Mark Brown wrote:
-> > > > On Mon, Feb 10, 2025 at 10:33:31PM +0200, Andy Shevchenko wrote:
-> > > > > On Mon, Feb 10, 2025 at 05:48:00PM +0000, Mark Brown wrote:
-> > > > > > On Mon, Feb 10, 2025 at 11:11:23AM -0600, David Lechner wrote:
-> > > > 
-> > > > > > > In this case, we specifically split up the headers so that the only time you
-> > > > > > > would ever include this header is if you need to call functions in this
-> > > > > > > namespace (i.e. struct definitions are in linux/spi/offload/types.h which
-> > > > > > > doesn't import the namespace). So this doesn't actually seem like a problem
-> > > > > > > to me.
-> > > > 
-> > > > > > Indeed - I can't see any case where a user would need the header without
-> > > > > > needing the namespace.
-> > > > 
-> > > > > You are looking from the other end. What I'm telling is that anyone who adds
-> > > > > a header, automatically gets a namespace. What's the point to have namespace
-> > > > > if it won't easily prevent from (ab)using it in the code. I consider putting
-> > > > > MODULE_IMPORT_NS() in the headers a bit weird.
-> > > > 
-> > > > Sure, but there's no case where anyone should ever be adding the header
-> > > > without adding the namespace which does rather sound like the sort of
-> > > > thing where you should just move the namespace addition to the header.
-> > > 
-> > > $ git grep -lw MODULE_IMPORT_NS | wc -l
-> > > 651
-> > > 
-> > > $ git grep -lw MODULE_IMPORT_NS | grep '\.h$'
-> > > 
-> > > drivers/base/firmware_loader/sysfs.h
-> > > drivers/iio/adc/ltc2497.h
-> > > drivers/pwm/pwm-dwc.h
-> > > ^^^ These ones are probably fine as they are not in include/
-> > > 
-> > > include/kunit/visibility.h
-> > > include/linux/module.h
-> > > include/linux/pwm.h
-> > > 
-> > > I believe these three are misuses of MODULE_IMPORT_NS(). Because one may add
-> > 
-> > _Two_, of course, module.h provides the macro :-)
-> 
-> And after looking into include/kunit/visibility.h it becomes only a single one.
-> So, PWM is abuser of MODULE_IMPORT_NS() and this series added one more.
+Hi,
 
-> > > a header just as a "proxy" one (copy'n'paste, for example) and we know that is
-> > > real as we saw a lot of code that has semi-random header inclusion blocks.
+kernel test robot noticed the following build warnings:
 
-And thinking of more realistic example when we want header and do *not* want a
-namespace is the simple use of the macro / or data type from it without
-actually relying on the APIs.
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on atorgue-stm32/stm32-next krzk-mem-ctrl/for-next linus/master v6.14-rc2 next-20250210]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So, in case of the header structure like
+url:    https://github.com/intel-lab-lkp/linux/commits/patrice-chotard-foss-st-com/dt-bindings-spi-Add-STM32-OSPI-controller/20250210-212554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20250210131826.220318-5-patrice.chotard%40foss.st.com
+patch subject: [PATCH v3 4/8] memory: Add STM32 Octo Memory Manager driver
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20250212/202502120005.pznVoB0E-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502120005.pznVoB0E-lkp@intel.com/reproduce)
 
-foo_constants.h
-foo_types.h
-foo_api.h
-foo_uplevel_something.h
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502120005.pznVoB0E-lkp@intel.com/
 
-The MODULE_IMPORT_NS() would make sense only to foo_api.h. And I still would
-question that. As I explained that header may simply become a stale one or
-being used by a mistake.
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/device.h:15,
+                    from include/linux/platform_device.h:13,
+                    from include/linux/bus/stm32_firewall_device.h:10,
+                    from drivers/memory/stm32_omm.c:7:
+   drivers/memory/stm32_omm.c: In function 'stm32_omm_set_amcr':
+>> drivers/memory/stm32_omm.c:82:38: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:82:25: note: in expansion of macro 'dev_err'
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                         ^~~~~~~
+   drivers/memory/stm32_omm.c:82:45: note: format string is defined here
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                          ~~~^
+         |                                             |
+         |                                             long long unsigned int
+         |                                          %x
+   drivers/memory/stm32_omm.c:82:38: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:82:25: note: in expansion of macro 'dev_err'
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                         ^~~~~~~
+   drivers/memory/stm32_omm.c:82:52: note: format string is defined here
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                                 ~~~^
+         |                                                    |
+         |                                                    long long unsigned int
+         |                                                 %x
+   drivers/memory/stm32_omm.c:82:38: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:82:25: note: in expansion of macro 'dev_err'
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                         ^~~~~~~
+   drivers/memory/stm32_omm.c:82:80: note: format string is defined here
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                                                             ~~~^
+         |                                                                                |
+         |                                                                                long long unsigned int
+         |                                                                             %x
+   drivers/memory/stm32_omm.c:82:38: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 6 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:82:25: note: in expansion of macro 'dev_err'
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                         ^~~~~~~
+   drivers/memory/stm32_omm.c:82:87: note: format string is defined here
+      82 |                         dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+         |                                                                                    ~~~^
+         |                                                                                       |
+         |                                                                                       long long unsigned int
+         |                                                                                    %x
+   drivers/memory/stm32_omm.c:96:46: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 3 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      96 |                                 dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:96:33: note: in expansion of macro 'dev_err'
+      96 |                                 dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+         |                                 ^~~~~~~
+   drivers/memory/stm32_omm.c:96:53: note: format string is defined here
+      96 |                                 dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+         |                                                  ~~~^
+         |                                                     |
+         |                                                     long long unsigned int
+         |                                                  %x
+   drivers/memory/stm32_omm.c:96:46: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 4 has type 'resource_size_t' {aka 'unsigned int'} [-Wformat=]
+      96 |                                 dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   include/linux/dev_printk.h:154:56: note: in expansion of macro 'dev_fmt'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                        ^~~~~~~
+   drivers/memory/stm32_omm.c:96:33: note: in expansion of macro 'dev_err'
+      96 |                                 dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+
+
+vim +82 drivers/memory/stm32_omm.c
+
+    44	
+    45	static int stm32_omm_set_amcr(struct device *dev, bool set)
+    46	{
+    47		struct stm32_omm *omm = dev_get_drvdata(dev);
+    48		struct regmap *syscfg_regmap;
+    49		struct device_node *node;
+    50		struct resource res, res1;
+    51		resource_size_t mm_ospi2_size = 0;
+    52		static const char * const mm_name[] = { "ospi1", "ospi2" };
+    53		u32 amcr_base, amcr_mask;
+    54		int ret, i, idx;
+    55		unsigned int amcr, read_amcr;
+    56	
+    57		for (i = 0; i < omm->nb_child; i++) {
+    58			idx = of_property_match_string(dev->of_node,
+    59						       "memory-region-names",
+    60						       mm_name[i]);
+    61			if (idx < 0)
+    62				continue;
+    63	
+    64			/* res1 only used on second loop iteration */
+    65			res1.start = res.start;
+    66			res1.end = res.end;
+    67	
+    68			node = of_parse_phandle(dev->of_node, "memory-region", idx);
+    69			if (!node)
+    70				continue;
+    71	
+    72			ret = of_address_to_resource(node, 0, &res);
+    73			if (ret) {
+    74				dev_err(dev, "unable to resolve memory region\n");
+    75				return ret;
+    76			}
+    77	
+    78			/* check that memory region fits inside OMM memory map area */
+    79			if (!resource_contains(omm->mm_res, &res)) {
+    80				dev_err(dev, "%s doesn't fit inside OMM memory map area\n",
+    81					mm_name[i]);
+  > 82				dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+    83					res.start, res.end,
+    84					omm->mm_res->start, omm->mm_res->end);
+    85	
+    86				return -EFAULT;
+    87			}
+    88	
+    89			if (i == 1) {
+    90				mm_ospi2_size = resource_size(&res);
+    91	
+    92				/* check that OMM memory region 1 doesn't overlap memory region 2 */
+    93				if (resource_overlaps(&res, &res1)) {
+    94					dev_err(dev, "OMM memory-region %s overlaps memory region %s\n",
+    95						mm_name[0], mm_name[1]);
+    96					dev_err(dev, "[0x%llx-0x%llx] overlaps [0x%llx-0x%llx]\n",
+    97						res1.start, res1.end, res.start, res.end);
+    98	
+    99					return -EFAULT;
+   100				}
+   101			}
+   102		}
+   103	
+   104		syscfg_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "st,syscfg-amcr");
+   105		if (IS_ERR(syscfg_regmap)) {
+   106			dev_err(dev, "Failed to get st,syscfg-amcr property\n");
+   107			return PTR_ERR(syscfg_regmap);
+   108		}
+   109	
+   110		ret = of_property_read_u32_index(dev->of_node, "st,syscfg-amcr", 1,
+   111						 &amcr_base);
+   112		if (ret)
+   113			return ret;
+   114	
+   115		ret = of_property_read_u32_index(dev->of_node, "st,syscfg-amcr", 2,
+   116						 &amcr_mask);
+   117		if (ret)
+   118			return ret;
+   119	
+   120		amcr = mm_ospi2_size / SZ_64M;
+   121	
+   122		if (set)
+   123			regmap_update_bits(syscfg_regmap, amcr_base, amcr_mask, amcr);
+   124	
+   125		/* read AMCR and check coherency with memory-map areas defined in DT */
+   126		regmap_read(syscfg_regmap, amcr_base, &read_amcr);
+   127		read_amcr = read_amcr >> (ffs(amcr_mask) - 1);
+   128	
+   129		if (amcr != read_amcr) {
+   130			dev_err(dev, "AMCR value not coherent with DT memory-map areas\n");
+   131			ret = -EINVAL;
+   132		}
+   133	
+   134		return ret;
+   135	}
+   136	
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
