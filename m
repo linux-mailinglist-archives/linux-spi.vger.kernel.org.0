@@ -1,133 +1,191 @@
-Return-Path: <linux-spi+bounces-6752-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6753-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83A4BA2FE42
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:16:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 770E8A2FEBB
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 01:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD8601886B5B
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Feb 2025 23:16:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30A233A6A49
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Feb 2025 00:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA6A261394;
-	Mon, 10 Feb 2025 23:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A532FC23;
+	Tue, 11 Feb 2025 00:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="fI4uEXCG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q1j87QGs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E92626137D
-	for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 23:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA932CA8;
+	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739229386; cv=none; b=pS/GHwrjP0W80snpJEn+ejQipLAkgyLN1WMUB3iAIc8rxS9Ef+q85fPiawvg+Xqv2aJ3/uQ0homRDUlHorX1qWKW3j8MtB6nPnLvAqm6VSuQiAtyJhQ9BpXQ5ZneTIbqrUP36hZfwUE4nGEeKCGlGDfbSqy/v49uslQTgQmCZk4=
+	t=1739232119; cv=none; b=orpFdI33HLmsABVyv6jrgt3/YwVn5flWOq3fJWFpL5RRJGnLl+TQ8E6gPsiGGgZ/2G8+ypw4gQPe8rwVUKKTqrykFqCkLSykJKDHnFWu5BCvufLLgaIgcwRrsF7nFE1dsvPJDKJ1mC9vJvLTKJSqdhOIznBK0ZyGyWdvgH9TR4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739229386; c=relaxed/simple;
-	bh=E64vimrA6sAQmqcb8D5CIBdvE/5/9FWh9JZxsOyC0Ro=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=n4BP+ueeFhp0JvIbt4X6JkxHl2IvTIGRpcyliMPf+gQ4vSVJMnG2NzbaTfIagM6eiqlkCRf+RLKj8Bgt5KO2YquT1+qckvTuAdXIF9iQKT3/5akZwkOL4pjVJz246C/mhw0LCjoG81+EkyADCUR+ggINpqVdjnRC4mwluurBIL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=fI4uEXCG; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-726e744c798so267027a34.1
-        for <linux-spi@vger.kernel.org>; Mon, 10 Feb 2025 15:16:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739229383; x=1739834183; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rzovOp0gWLRUdwhwXTDu1YuijsWTRmR+OknRU/gsakM=;
-        b=fI4uEXCGoe3H52IQSfOQA1UQAp5UBhAoxoLolvcj9MaTGlT9XQPm3zSX2hqaW02D0V
-         jwy3sWbYvuxab5s5Vh55bgM7P6DqXVdEKt7Rpa1kuwU5oS3JJltpaFzBQmMPRMpQafe9
-         T5m3WzUgQNBZLP2cGaRjJR88OA7aYsLVFNTK8URHCLl7lI15i0yM3X7FUX2LzFNGG49t
-         LWokoGJRp3XwhoqzJ1DRfkJZJbKQEQlBaVoSqjT8EEHyz5FXe79Bo6YW1F62Z944xeaH
-         bTSWaaKRfZ9RXnt4LWpnTNYFwtyoZocCg87kYNaB+iT4o5YaM8uSFwD2VcSDF+7h3pGz
-         xvzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739229383; x=1739834183;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rzovOp0gWLRUdwhwXTDu1YuijsWTRmR+OknRU/gsakM=;
-        b=LIjLt3XACV4qejjFRPr+UBjrOoQcBq+IMLG0PhpiFNpoaaKV3IdtvhZoE0tJsX1gnN
-         n1BnuMQE99tVISYr2D+gax84pkaxbEoYvhDu3bej+Df7n1q+cVjs9/p0/w9KPHVlmtbw
-         vkr6PviKjszBNi+B7msqDvd9ehcFqzbYS2JnTIUMP+0GOCtCNCl2E2DcWuxmL+yd/+li
-         iS7hdr0wAWCOz9rkxmQMz3/TWX5pWdQPtU0hn0ppHvSiJ46y+hVYHj2DdJlTz7kcZMN7
-         dq3g/o+Hsj0rA1jwWZ47tvv/SocTUXa7Uxh4Bm7BmQtwN4McmCwBbyRzn576z71FQe6u
-         Rt7w==
-X-Gm-Message-State: AOJu0YyhL7Qmmk9TkPZBjV098dmNMQJfnTm5SxF+ERSz3eT3eEAryTgh
-	Z0uZ5bWNsrLtr3xmgeE36HhvMzHhopWTTtDntgQqOok/3uXWrO1Hyj4A94cvFgjxOuVIhIe7sHl
-	n
-X-Gm-Gg: ASbGncv3BYpf9H3rn+VHjn9Bf3mLgvLAkG0eAKWNV87WjD0MrluLqybB7awIQ2Fi2QU
-	57G+e4rqoY5fRHFenkPTnw13HLG18yJI2Hy+QOO46nSBiURhl4ltvlwxQ2cULtPugDZ71BODok4
-	az8MglCYEUISdjm8Gl7HLvbTKmPGYHsLOeooob+yH3kcUwAiT6+UAlQ2iRNDvozL2R1+7+i50pO
-	1o0fpRsM+tznHqdmEifWjHCO1uuaa8BW1WRt+yHrc7nZJZitSNPyW+P6rL3vNA1/mMsArc9WuSA
-	4RY8tckLyL+JmKM+xLje0U3dkRCSB48KooAEFUWpsOHiR7E=
-X-Google-Smtp-Source: AGHT+IEVJH69m3Tol6MXlyMkcLSWbCYFUgZIG3ickNDxavyuj3Qbw/ZqUcyoMFnpf3iYuY0BbllMXw==
-X-Received: by 2002:a05:6830:4988:b0:71d:eee3:fd19 with SMTP id 46e09a7af769-726b87b3d9emr9563503a34.6.1739229383654;
-        Mon, 10 Feb 2025 15:16:23 -0800 (PST)
-Received: from [127.0.1.1] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fc545bc40esm2758043eaf.29.2025.02.10.15.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 15:16:22 -0800 (PST)
-From: David Lechner <dlechner@baylibre.com>
-Date: Mon, 10 Feb 2025 17:16:15 -0600
-Subject: [PATCH 2/2] spi: spi-offload-trigger-pwm: add extra headers
+	s=arc-20240116; t=1739232119; c=relaxed/simple;
+	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=phFMG2lITeO1sBiL+tcqCk0YYkqm300xsFdDUTlBNXXmTtVx7kSlclcHARSB33E1tkr315T1J3OVjOWqTkv+tADy74Jl61o83S+/0SbuKzt4Xd07mom6QSY79N0nAhb/jWhrd3q/+sbcVeuEHT0xFVW+lGeczAdrU16k1YssuLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q1j87QGs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C868C4CEDF;
+	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739232118;
+	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q1j87QGsjnUkqkcVlg2v4gnZWuuz2UEGFoQfFx8S5hm6OD3/mp8QI0dCwQT4YmTEr
+	 IB2Hu3/xsA738TjmL9hvDacqP3Cn1fn1l38WTUXKf4SHgxcaaqcmtfDjrQUDk9eoqE
+	 gB6wCJ5myKFPgBwelHmsgcxfai/gZhPdUPy8zVu8z/cx9kuD9+RM3Bb/ajecRTWHax
+	 fVRq4VYORDNdvHY/BD15McfYj6CkfxzLNVClI1u8/Pfa9FJn4JqDpQ7Nyn/Fr2156J
+	 CGUj1Kbf4bjxLul7s2ASKdEhbPJl+pwIxxn70nR5a5VyWkDiXJ4SybO3o/a5i5XUEL
+	 d5paRyJt5qYuQ==
+Date: Mon, 10 Feb 2025 18:01:57 -0600
+From: Rob Herring <robh@kernel.org>
+To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
+Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 11/12] dt-bindings: nand: Add fsl,elbc-fcm-nand
+Message-ID: <20250211000157.GA240011-robh@kernel.org>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250210-spi-offload-extra-headers-v1-2-0f3356362254@baylibre.com>
-References: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
-In-Reply-To: <20250210-spi-offload-extra-headers-v1-0-0f3356362254@baylibre.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- David Lechner <dlechner@baylibre.com>, 
- Andy Shevchenko <andriy.shevchenko@intel.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
 
-Add additional headers used in this driver. This is better than relying
-on implicit includes via other unrelated headers.
+On Fri, Feb 07, 2025 at 10:30:28PM +0100, J. Neuschäfer wrote:
+> Formalize the binding already supported by the fsl_elbc_nand.c driver
+> and used in several device trees in arch/powerpc/boot/dts/.
+> 
+> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> ---
+> 
+> V2:
+> - split out from fsl,elbc binding patch
+> - constrain #address-cells and #size-cells
+> - add a general description
+> - use unevaluatedProperties=false instead of additionalProperties=false
+> - fix property order to comply with dts coding style
+> - include raw-nand-chip.yaml instead of nand-chip.yaml
 
-Also sort the existing includes while doing so.
+Why? Doesn't look like you use anything from it. I think the correct 
+thing to use here is just mtd.yaml to pick up partitions.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/spi/spi-offload-trigger-pwm.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-offload-trigger-pwm.c b/drivers/spi/spi-offload-trigger-pwm.c
-index b26d4437c589052709a8206f8314ffd08355870e..805ed41560df090d85a8547b59f122cf2e3941a2 100644
---- a/drivers/spi/spi-offload-trigger-pwm.c
-+++ b/drivers/spi/spi-offload-trigger-pwm.c
-@@ -6,10 +6,17 @@
-  * Generic PWM trigger for SPI offload.
-  */
- 
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/math.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/pwm.h>
--#include <linux/mod_devicetable.h>
- #include <linux/spi/offload/provider.h>
-+#include <linux/spi/offload/types.h>
-+#include <linux/time.h>
- #include <linux/types.h>
- 
- struct spi_offload_trigger_pwm_state {
-
--- 
-2.43.0
-
+> ---
+>  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml | 68 ++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1de97bb24fa4a83e2ea5d94ab822dd0e37baa102
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/fsl,elbc-fcm-nand.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NAND flash attached to Freescale eLBC
+> +
+> +description:
+> +  The Freescale Enhanced Local Bus controller (eLBC) contains logic to
+> +  interface with NAND flash, called the NAND Flash Control Machine (FCM).
+> +  This binding describes flash attached to an eLBC using the FCM.
+> +
+> +maintainers:
+> +  - J. Neuschäfer <j.ne@posteo.net>
+> +
+> +allOf:
+> +  - $ref: raw-nand-chip.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - fsl,mpc8313-fcm-nand
+> +              - fsl,mpc8315-fcm-nand
+> +              - fsl,mpc8377-fcm-nand
+> +              - fsl,mpc8378-fcm-nand
+> +              - fsl,mpc8379-fcm-nand
+> +              - fsl,mpc8536-fcm-nand
+> +              - fsl,mpc8569-fcm-nand
+> +              - fsl,mpc8572-fcm-nand
+> +              - fsl,p1020-fcm-nand
+> +              - fsl,p1021-fcm-nand
+> +              - fsl,p1025-fcm-nand
+> +              - fsl,p2020-fcm-nand
+> +          - const: fsl,elbc-fcm-nand
+> +      - const: fsl,elbc-fcm-nand
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    localbus {
+> +        #address-cells = <2>;
+> +        #size-cells = <1>;
+> +
+> +        nand@1,0 {
+> +            compatible = "fsl,mpc8315-fcm-nand",
+> +                         "fsl,elbc-fcm-nand";
+> +            reg = <0x1 0x0 0x2000>;
+> +            #address-cells = <1>;
+> +            #size-cells = <1>;
+> +        };
+> +    };
+> 
+> -- 
+> 2.48.0.rc1.219.gb6b6757d772
+> 
 
