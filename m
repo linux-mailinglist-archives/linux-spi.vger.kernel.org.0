@@ -1,111 +1,149 @@
-Return-Path: <linux-spi+bounces-6799-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6800-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06402A33002
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 20:44:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A16EA33218
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 23:08:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 886B8188BEBF
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 19:45:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 291563A783F
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 22:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B66EE1FF7C2;
-	Wed, 12 Feb 2025 19:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CBF203711;
+	Wed, 12 Feb 2025 22:08:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oj8s8rQe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVmN2rQO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7575E1FF7A9;
-	Wed, 12 Feb 2025 19:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D6C2036ED;
+	Wed, 12 Feb 2025 22:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739389488; cv=none; b=Lu/zuYRsdmLoKlMF4RtXQa1jXeMA5xwWoHXS8DcroCbCVn89KYiFjBc0EchrEvRNeIC0RXbTzKL+cZDPxyf5BJmvNfjUI5NmhWbNLC/rtAqLQq/25iK8sgFbt8wRXQ/4qAcL/8ofyrWcDZOfHbGdzEGA9hDBM7iJPkyBIpLVp6o=
+	t=1739398133; cv=none; b=H0nFVwKKoPn+cqdkTJJwyT2wJA0F5cpsTLuwC3b/WDA01W+6zP4IPTl4I6eoWyf+CU8BMKKQaBQ0clCFdgbGSSOLpnOj3BV0HGbvbeG0ifh39GuxgQQaAJFGAzwSAfJ5VxBye8l/1LcwKNVMNRm8psJ4Vzz3JwYvoUBN0678yV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739389488; c=relaxed/simple;
-	bh=H2RGuJeh4p3PZLsKQKPNVcfG0Duy/0Y8WKyJ2Dp59WE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r3y5Pg+IiovjvfI8pkjqVIhVHahC8aF2VrSVdg8DGikz4jFeXp0qTngWE7LpoWl8vh7r5SSnuXFGVeSTIampRgW/EqC4RSM+UIdmBjzNLbne8gxWKQ4zHz78zPdP06ZrwWJDJptC0Qc+Y3ZFi1hKECJd015qm0WLzWJzixeG+wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oj8s8rQe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F4DC4CEDF;
-	Wed, 12 Feb 2025 19:44:47 +0000 (UTC)
+	s=arc-20240116; t=1739398133; c=relaxed/simple;
+	bh=kO4pmiuBXJVn23fh7yK0dMENTZZ3dsQpimEg4/VR7YM=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=axy1ghdO+gXAO0z+eG7k2YwCrwUd6ceohDfYJZRBAFiHXVn0Qr/m5pna5yl5a+7nUs79HSI45WETAYyYJUVyNhoLBySG7d76dh8dbm6eiI3wn4OUi77z2r1q5yO717jFZwHxKCdEIAraBha2kYxW8GEDITWOFlWH9UebokNIrF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVmN2rQO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F40C4CEDF;
+	Wed, 12 Feb 2025 22:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739389488;
-	bh=H2RGuJeh4p3PZLsKQKPNVcfG0Duy/0Y8WKyJ2Dp59WE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Oj8s8rQeyXI3HiYI0OHJHEumwjJXAFZetGXjJbiY2MBZzopmcHcKUK4kieSry0099
-	 qNx36t4mGK0OktWld9GOqZAbfj+DEYDz5hjoqokREJb1aTsdxd+D0cVUSAKj2jXwkb
-	 3Ikh8NfPF3xHwGEocZ2HwUUIauob/u7P6UYBy23gs43d4HX61Yu4L6kDfSazoHUPX9
-	 dknlKOu2PHYVpYSotcaWJoEHB3rHjT04kQpWWayQrdoJJH64ADn0YGdfCxkDeRfeU/
-	 NPBkKJBcXimLXoqBff+yziV//iNuFWxTlue95EVOH+6rBchwDwEvGyXEivB6zAwq2j
-	 5BkKP+eNC7jZg==
-Date: Wed, 12 Feb 2025 13:44:46 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
-Cc: Guenter Roeck <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Mark Brown <broonie@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Vinod Koul <vkoul@kernel.org>,
-	linux-watchdog@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-spi@vger.kernel.org, Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>, imx@lists.linux.dev,
-	linux-ide@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-mtd@lists.infradead.org, Conor Dooley <conor+dt@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	dmaengine@vger.kernel.org, Scott Wood <oss@buserror.net>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Niklas Cassel <cassel@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Richard Weinberger <richard@nod.at>,
-	Damien Le Moal <dlemoal@kernel.org>
-Subject: Re: [PATCH v2 10/12] dt-bindings: memory-controllers: Add
- fsl,elbc-gpcm-uio
-Message-ID: <173938948613.128569.16012047906715128997.robh@kernel.org>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-10-8137b0c42526@posteo.net>
+	s=k20201202; t=1739398133;
+	bh=kO4pmiuBXJVn23fh7yK0dMENTZZ3dsQpimEg4/VR7YM=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=HVmN2rQOSlZupdEeZ+yet8gDn7h4Vr3AL/qb1wa4LPnK/06A+yCt1/Z7EPcWvr+f9
+	 LtWMAkjqOL1o28u1hhVnDwSNzwjGPAPnNuop/FE3ykGyICcAIBrtNNjpgo2Il36Koj
+	 uB8A5Gj66Q5MiOUwAU67m6PqAHMVndGgRt1HzEWW1lqspwlQ1etEvetSBFZ+/REvtJ
+	 VXJ8z8LTWt8/KegEtZjaBo9Nz4SEd5r4K/lyiIR+pdGhO/u5YA0rw7Gtipa2Is/qeK
+	 ELSmUOhzrC/MimV6FtMb5MmhrT971hi18tLIg4yxMRJqvt+UM1jNtWxNUjnm7XfdPK
+	 9dysLU353e4dA==
+Date: Wed, 12 Feb 2025 16:08:52 -0600
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250207-ppcyaml-v2-10-8137b0c42526@posteo.net>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: jonathanh@nvidia.com, broonie@kernel.org, linux-spi@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ smangipudi@nvidia.com, skomatineni@nvidia.com, thierry.reding@gmail.com, 
+ ldewangan@nvidia.com, kyarlagadda@nvidia.com
+To: Vishwaroop A <va@nvidia.com>
+In-Reply-To: <20250212144651.2433086-1-va@nvidia.com>
+References: <s355cib7g6e3gmsy2663pnzx46swhfudpofv2s5tcaytjq4yuj@xqtvoa5p477n>
+ <20250212144651.2433086-1-va@nvidia.com>
+Message-Id: <173939808222.598724.14105549991547755635.robh@kernel.org>
+Subject: Re: [PATCH v2 0/6] Configure Clocks, Add Native Dma support.
 
 
-On Fri, 07 Feb 2025 22:30:27 +0100, J. Neuschäfer wrote:
-> Formalize the binding already supported by the uio_fsl_elbc_gpcm.c
-> driver.
+On Wed, 12 Feb 2025 14:46:45 +0000, Vishwaroop A wrote:
+> This patch series configures qspi clocks, fixes combined sequence
+> programming and introduces native dma support.
 > 
-> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> Vishwaroop A (6):
+>   arm64: tegra: Configure QSPI clocks and add DMA
+>   spi: tegra210-quad: Update dummy sequence configuration
+>   spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
+>   spi: tegra210-quad: remove redundant error handling code
+>   spi: tegra210-quad: modify chip select (CS) deactivation
+>   spi: tegra210-quad: Introduce native DMA support
+> 
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi |  14 ++
+>  drivers/spi/spi-tegra210-quad.c          | 273 +++++++++++++----------
+>  2 files changed, 174 insertions(+), 113 deletions(-)
+> 
 > ---
-> 
-> V2:
-> - split out from fsl,elbc patch
-> - add description
-> - remove "device_type" property
-> - move to bindings/memory-controllers
+> v1 -> v2:
+> 	* Removed Change-IDs from the patches.
+>         * Addressed kernel test bot warnings.
 > ---
->  .../memory-controllers/fsl,elbc-gpcm-uio.yaml      | 59 ++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+> --
+> 2.17.1
+> 
+> 
 > 
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
+
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/nvidia/' for 20250212144651.2433086-1-va@nvidia.com:
+
+arch/arm64/boot/dts/nvidia/tegra234-sim-vdk.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0000.dtb: spi@3270000: Unevaluated properties are not allowed ('dma-coherent', 'iommus' were unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0000.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0008.dtb: spi@3270000: Unevaluated properties are not allowed ('dma-coherent', 'iommus' were unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0008.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-sim-vdk.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dtb: spi@3270000: Unevaluated properties are not allowed ('dma-coherent', 'iommus' were unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0005.dtb: spi@3270000: Unevaluated properties are not allowed ('dma-coherent', 'iommus' were unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0005.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3740-0002+p3701-0008.dtb: spi@3270000: Unevaluated properties are not allowed ('dma-coherent', 'iommus' were unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0000.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3740-0002+p3701-0008.dtb: spi@3270000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0008.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0005.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3740-0002+p3701-0008.dtb: spi@3300000: 'dmas' is a dependency of 'dma-names'
+	from schema $id: http://devicetree.org/schemas/dma/dma.yaml#
+
+
+
+
 
 
