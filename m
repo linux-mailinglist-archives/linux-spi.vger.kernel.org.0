@@ -1,136 +1,211 @@
-Return-Path: <linux-spi+bounces-6775-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6776-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7E30A32414
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 11:58:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1FBCA32647
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 13:51:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 474C13A614F
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 10:58:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 356ED1886327
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 12:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF279209F44;
-	Wed, 12 Feb 2025 10:58:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O/X1Adqi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27252209696;
+	Wed, 12 Feb 2025 12:51:21 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9D0206F2C;
-	Wed, 12 Feb 2025 10:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDD61E87B;
+	Wed, 12 Feb 2025 12:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739357890; cv=none; b=Ba0X+J7rzCr5ZVTt7Iy8sPyecPyLBjpvlWm2/4MvUA9cr08+cTL1PnmG0zvhLHB0gILyVYjtzr0IJvj1XUH5dnKf7wnFCJ3L9XSleE96GAi8r5he7c60H2nrBlvEHFXsOquohiXvWkbsTfts8GeWBSBzAzD/hPT2EYDpbfTh/BQ=
+	t=1739364681; cv=none; b=T4H/bEdMQgLjiXwv4X1h77emZ5qeVHfxrXB9DKDCnwhjq+pkTcg2CJF2H1t2Gk45A0ELzFPoycuHftnj4251NRX4siyUFBw+wWPwRw5YYwzip4i2hpiBH6p3nJCH3D0q5vKpOMcRVkpPYsSiKylbcxGL//5GEIyNUk4LRGY0jC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739357890; c=relaxed/simple;
-	bh=+z2XvD2jfED7TixE7ouV+IiMt8A2lUXzW0REOLFZMxM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdoCBFt8zEnn7HzR9MLvin2iSZg7bBPJvpuApqNXNriioBK/I9SHFyLyQTEnOQL9Q9A7uW6InxXF8r7/gyS6PXAqEug7XzwZ/3f99KDQWOgtjGTnJM7/Mfevzi2zr61fnMO/ux0FVGEWQGB4+1ULyx6b9snHnahq35RV4G1gp4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O/X1Adqi; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739357889; x=1770893889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+z2XvD2jfED7TixE7ouV+IiMt8A2lUXzW0REOLFZMxM=;
-  b=O/X1AdqiymFiEC5aPbAg4zrUdmlPu+XJ7+rAF46m0FzY6LYL32t1WoWi
-   OxceSI38PDSnSJ9zl22IMCnDujfntjyHRzni3wA2kJhZHW7IRiWyFxOew
-   EiMexYLQazG1Yrl1vvBi4BPYgkYz9DhhasdFTyJ1rqH2vlnvYE4v7xu3D
-   nrHtffhVljCIx7YEZhxqh0WbxKw2fNSKs3rg3vfqk7obNYmqu2HKsjMYy
-   aelbDqyzr5iFPzJxur+MWblSUtaYTUJdXaJz/5G4OHJ/89TatIO1dG8LT
-   yFSNM7TWjIq6ZDwxg+cjOVKMCkujWngHKvcjy1byBAOLbHbrqsSxGyhyj
-   A==;
-X-CSE-ConnectionGUID: ptNvhZjQQxK5gTOusFjw6Q==
-X-CSE-MsgGUID: iKbD3aUXQS6NpoRJZpw1vg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="39932272"
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="39932272"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:58:09 -0800
-X-CSE-ConnectionGUID: ZCIVHWtYRQ+/zz/ylBdfnw==
-X-CSE-MsgGUID: vdPeYeeFT7KVQt2EtKQp9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149977759"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:58:05 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1tiARN-0000000AoM3-0RBJ;
-	Wed, 12 Feb 2025 12:58:01 +0200
-Date: Wed, 12 Feb 2025 12:58:00 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, David Lechner <dlechner@baylibre.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	David Jander <david@protonic.nl>,
-	Martin Sperl <kernel@martin.sperl.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v8 01/17] spi: add basic support for SPI offloading
-Message-ID: <Z6x-uBWEsoAIV2n-@smile.fi.intel.com>
-References: <b1dcbb19-190a-45e7-8e94-cb5ef65f1f1b@sirena.org.uk>
- <Z6pim_nLct33LzfN@smile.fi.intel.com>
- <b000d3fd-754a-43e8-ab10-82677eeee1d2@sirena.org.uk>
- <Z6tcwg7QgQwytoSb@smile.fi.intel.com>
- <Z6tezVXVxVCwXuds@smile.fi.intel.com>
- <Z6tfUfHilO2KLmxv@smile.fi.intel.com>
- <Z6tgNjH6Qq5pe9Gt@smile.fi.intel.com>
- <tnjsrq3trijh4agmbhrfnqeq4iojhwybtg45bwt5n7mg7qqgcx@s7gw7idjuxgd>
- <Z6uhHssgIvI2DJ4c@smile.fi.intel.com>
- <57swm23ik5kyzcjvnhkizctnemtlqf3duhrd5u3n6yelxkerxt@6akfoqmyqsup>
+	s=arc-20240116; t=1739364681; c=relaxed/simple;
+	bh=h6XDo9MqX66TbKJn2C4oVwqfyTVywHALJIHo9IR9uYs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bYLgzrCUiv3UDuUBLcIjhz+AgHWIibiTO88xoHvtTdrEZHLIm5Fy6S1MNn/3qrHKKFcpdAIG5Ayp3P9flKNmxdJuCuFhu/D9ejBVk9F0zEI3uweNyDQNymkjD7I5J4WQSLm74oDE6wLocbOybVOTn5laBzwJpGvIgx1FF/QbOm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86704887709so1598863241.3;
+        Wed, 12 Feb 2025 04:51:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739364677; x=1739969477;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MQ/1ab/AMMhwdUM5h+TBMpEY47u6kr9GW+SYGBdGrF8=;
+        b=JooYGfeAqsUex9YxZW2sKm2txxgYlfbwtBHvJ8dnDFrADej9SWbR2ZMn8GAu9BWjsM
+         p64lTBnZlgZgmFs2K27o+JxHq+MATUAgYsqZs3wp7lAkha1W4wNDX5AQF4Hyr2if3vKH
+         n/XKxf+O9eiPaU1ARAmI7sPBsZFliz1ZruE3PXt2Q4+JHG/aGdD1KjNuh815hlXas9u3
+         CMxHPCjihF+rwQme/Ju6/xYjWWrA3BfJeKANkfaKq3B4TJMxrlgeKb4yw/xQ6MD721+n
+         tUcY2WFW84pCkunUb4sjZDaUpwNVuSfcoq0oKV0nEEuJtaVwKPhpGyP6YPppgHae9tc4
+         hk3w==
+X-Forwarded-Encrypted: i=1; AJvYcCVog7TNveicoGTh5cIYIUBT0b1vuCfZhqPu/Hnds0aI1LAX8S1ghsswReKmfiHuAD+CE+Fu6W6i+QzI@vger.kernel.org, AJvYcCXbm16oR6wfSmZM78ymJV1J+6lOz4kB83wLu1ErhlvwtCEax+q7+AaYUBYWw8ZIauI0fI+4tO5tJtGU27Oa@vger.kernel.org, AJvYcCXnFtw5EOnwp7Ikcrak9VML9EAJyGKZc+wLf8Q2zFRd0SZF0NcuAu6Gf2nEdQvkrfV5WnhdfUnHDVwO@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqQmFP2NypAy/AStTtyAe6lCjNsmprwWD632eBVpRA6Sm26bJ5
+	wAbL0JOKnBBF2fMydb4RCkk65H8IwvsTrIuohwgc84wkKilvA4Qh0nrMSJnd
+X-Gm-Gg: ASbGncsLqG6fIbUojojvT79DV7ZBZh8F+/6alNJZYYhdX40ig6/FEeOqx6LqwlZ0LrE
+	CRqcmeS1RvbiCfpgzIu4rwFDo9n5d41EOr4A9KlW1apXcGH3cAiGKZnIZ9QuKmArkgpEWoiRofa
+	VqC7GZI0b9ssHvdeKInOlCeg/z8mxXwTKkjTuqKupj+RmNRaCTXOdsFV8E8zqMj0waknfvhUgt4
+	6v+ayWzqceULOZwZAVQIeXLXfPSgS5nllq2HhNGngRui++kQ4ogvqfZDWPBvz/Xg1JmlNibnbD2
+	nC3umpR13GO5hdk1lSGkNe4Q2vik9EcsZEbQM0ggj8/rNssTQgRatg==
+X-Google-Smtp-Source: AGHT+IGhjuojFyHJCG/QQ+Q42CBUu/uR/c7Ifr+gCc1PyAKmlLLAV94aP1MwThyHcebzPlywSVEvrw==
+X-Received: by 2002:a05:6122:32c6:b0:520:60c2:3fb with SMTP id 71dfb90a1353d-520678bd90cmr2363039e0c.0.1739364676701;
+        Wed, 12 Feb 2025 04:51:16 -0800 (PST)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5203a7d491fsm1016594e0c.0.2025.02.12.04.51.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Feb 2025 04:51:15 -0800 (PST)
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-8671441a730so1239846241.0;
+        Wed, 12 Feb 2025 04:51:15 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWK87vtpMprU+iaPdS5uZgbJgOhAjzq40DBbE+0bPVxGwvuyu5GxwbK7g/0oT9Ad4HJRxLLrA2vGTnZ@vger.kernel.org, AJvYcCWTAPRrAADFLuoSvVqrNo0363zlx8/zqdkhOWShTfNERucyXRtb37FySZR4KDid4DnGZ/lGo68OmM27fy83@vger.kernel.org, AJvYcCWoc6Sv+fDUegp97iu/MXvRFjtM21qzmc3AHfe+ptaTscUtLhpNodEyoQCOaHrJNjipRpNjPLrbut9J@vger.kernel.org
+X-Received: by 2002:a05:6102:3709:b0:4bb:d394:46c5 with SMTP id
+ ada2fe7eead31-4bbf21cdce8mr2389568137.9.1739364674977; Wed, 12 Feb 2025
+ 04:51:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <57swm23ik5kyzcjvnhkizctnemtlqf3duhrd5u3n6yelxkerxt@6akfoqmyqsup>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20250210131826.220318-1-patrice.chotard@foss.st.com> <20250210131826.220318-5-patrice.chotard@foss.st.com>
+In-Reply-To: <20250210131826.220318-5-patrice.chotard@foss.st.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 12 Feb 2025 13:51:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVkFym-3byZkszsi9tRoZ6zNOMCT79c2EgQQjn5xd19ig@mail.gmail.com>
+X-Gm-Features: AWEUYZnzYg0ThTq4p4M8sQ0EhbXz6WBb20xXzFHLgeW2YGdd91BJTbWp42U4Smo
+Message-ID: <CAMuHMdVkFym-3byZkszsi9tRoZ6zNOMCT79c2EgQQjn5xd19ig@mail.gmail.com>
+Subject: Re: [PATCH v3 4/8] memory: Add STM32 Octo Memory Manager driver
+To: patrice.chotard@foss.st.com
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	christophe.kerello@foss.st.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 12, 2025 at 09:52:37AM +0100, Uwe Kleine-König wrote:
-> On Tue, Feb 11, 2025 at 09:12:30PM +0200, Andy Shevchenko wrote:
-> > On Tue, Feb 11, 2025 at 07:45:30PM +0100, Uwe Kleine-König wrote:
-> > > I have no problem here. If the header becomes stale we will most
-> > > probably notice that eventually and remove it.
-> > 
-> > Lol. Look at the header hell we have now. 98% code in the drivers/ just show
-> > that the developers either don't care or do not understand C (in terms of
-> > what headers are for and why it's important to follow IWYU principle).
-> 
-> Yeah, there is a problem. The source is that we have a metric ton of
-> recursive includes (i.e. headers that include other headers that include
-> still more headers). Even if you care, its sometimes hard to know which
-> headers you actually need. One idea on my long-term list is to add a
-> machine-parsable info to header files about the list of symbols that the
-> given file is responsible for. With that in place we could create a
-> linter that tells you that this source file doesn't use any symbols from
-> <linux/of_irq.h> and it should #include <linux/of.h> directly instead to
-> make use of symbols defined there.
+Hi Patrice,
 
-There were already few attempts to untangle the dependency hell we have in LK
-project, but all seems to fail. The infamous one by Ingo stale, however a few
-patches (out of more than 2200!) made upstream.
+On Mon, 10 Feb 2025 at 14:21, <patrice.chotard@foss.st.com> wrote:
+> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>
+> Octo Memory Manager driver (OMM) manages:
+>   - the muxing between 2 OSPI busses and 2 output ports.
+>     There are 4 possible muxing configurations:
+>       - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
+>         output is on port 2
+>       - OSPI1 and OSPI2 are multiplexed over the same output port 1
+>       - swapped mode (no multiplexing), OSPI1 output is on port 2,
+>         OSPI2 output is on port 1
+>       - OSPI1 and OSPI2 are multiplexed over the same output port 2
+>   - the split of the memory area shared between the 2 OSPI instances.
+>   - chip select selection override.
+>   - the time between 2 transactions in multiplexed mode.
+>   - check firewall access.
+>
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
 
-So, any tooling for that will be warmly accepted!
+Thanks for your patch!
+
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@ -225,6 +225,23 @@ config STM32_FMC2_EBI
+>           devices (like SRAM, ethernet adapters, FPGAs, LCD displays, ...) on
+>           SOCs containing the FMC2 External Bus Interface.
+>
+> +config STM32_OMM
+> +       tristate "STM32 Octo Memory Manager"
+> +       depends on SPI_STM32_OSPI || TEST_COMPILE
+
+COMPILE_TEST
+
+> +       help
+> +         This driver manages the muxing between the 2 OSPI busses and
+> +         the 2 output ports. There are 4 possible muxing configurations:
+> +         - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
+> +              output is on port 2
+> +         - OSPI1 and OSPI2 are multiplexed over the same output port 1
+> +         - swapped mode (no multiplexing), OSPI1 output is on port 2,
+> +              OSPI2 output is on port 1
+> +         - OSPI1 and OSPI2 are multiplexed over the same output port 2
+> +         It also manages :
+> +           - the split of the memory area shared between the 2 OSPI instances.
+> +           - chip select selection override.
+> +           - the time between 2 transactions in multiplexed mode.
+> +
+>  source "drivers/memory/samsung/Kconfig"
+>  source "drivers/memory/tegra/Kconfig"
+
+> --- /dev/null
+> +++ b/drivers/memory/stm32_omm.c
+
+> +static int stm32_omm_set_amcr(struct device *dev, bool set)
+> +{
+> +       struct stm32_omm *omm = dev_get_drvdata(dev);
+> +       struct regmap *syscfg_regmap;
+> +       struct device_node *node;
+> +       struct resource res, res1;
+> +       resource_size_t mm_ospi2_size = 0;
+> +       static const char * const mm_name[] = { "ospi1", "ospi2" };
+> +       u32 amcr_base, amcr_mask;
+> +       int ret, i, idx;
+
+unsigned int i
+
+> +       unsigned int amcr, read_amcr;
+> +
+> +       for (i = 0; i < omm->nb_child; i++) {
+> +               idx = of_property_match_string(dev->of_node,
+> +                                              "memory-region-names",
+> +                                              mm_name[i]);
+> +               if (idx < 0)
+> +                       continue;
+> +
+> +               /* res1 only used on second loop iteration */
+> +               res1.start = res.start;
+> +               res1.end = res.end;
+> +
+> +               node = of_parse_phandle(dev->of_node, "memory-region", idx);
+> +               if (!node)
+> +                       continue;
+> +
+> +               ret = of_address_to_resource(node, 0, &res);
+> +               if (ret) {
+> +                       dev_err(dev, "unable to resolve memory region\n");
+> +                       return ret;
+> +               }
+> +
+> +               /* check that memory region fits inside OMM memory map area */
+> +               if (!resource_contains(omm->mm_res, &res)) {
+> +                       dev_err(dev, "%s doesn't fit inside OMM memory map area\n",
+> +                               mm_name[i]);
+> +                       dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
+> +                               res.start, res.end,
+> +                               omm->mm_res->start, omm->mm_res->end);
+
+As reported by the kernel test robot, this fails to build when
+resource_size_t differs from unsigned long long.  However, you can
+easily print the full resource instead:
+
+    dev_err(dev, "%pR doesn't fit inside %pR\n", &res, omm->mm_res);
+
+https://elixir.bootlin.com/linux/v6.13.2/source/Documentation/core-api/printk-formats.rst#L206
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
