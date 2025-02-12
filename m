@@ -1,211 +1,244 @@
-Return-Path: <linux-spi+bounces-6776-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6777-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1FBCA32647
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 13:51:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8AC6A328E0
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 15:42:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 356ED1886327
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 12:51:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37D3816A767
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Feb 2025 14:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27252209696;
-	Wed, 12 Feb 2025 12:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA532210F6B;
+	Wed, 12 Feb 2025 14:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bdc5ps9a"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2043.outbound.protection.outlook.com [40.107.236.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDD61E87B;
-	Wed, 12 Feb 2025 12:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739364681; cv=none; b=T4H/bEdMQgLjiXwv4X1h77emZ5qeVHfxrXB9DKDCnwhjq+pkTcg2CJF2H1t2Gk45A0ELzFPoycuHftnj4251NRX4siyUFBw+wWPwRw5YYwzip4i2hpiBH6p3nJCH3D0q5vKpOMcRVkpPYsSiKylbcxGL//5GEIyNUk4LRGY0jC0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739364681; c=relaxed/simple;
-	bh=h6XDo9MqX66TbKJn2C4oVwqfyTVywHALJIHo9IR9uYs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYLgzrCUiv3UDuUBLcIjhz+AgHWIibiTO88xoHvtTdrEZHLIm5Fy6S1MNn/3qrHKKFcpdAIG5Ayp3P9flKNmxdJuCuFhu/D9ejBVk9F0zEI3uweNyDQNymkjD7I5J4WQSLm74oDE6wLocbOybVOTn5laBzwJpGvIgx1FF/QbOm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86704887709so1598863241.3;
-        Wed, 12 Feb 2025 04:51:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739364677; x=1739969477;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MQ/1ab/AMMhwdUM5h+TBMpEY47u6kr9GW+SYGBdGrF8=;
-        b=JooYGfeAqsUex9YxZW2sKm2txxgYlfbwtBHvJ8dnDFrADej9SWbR2ZMn8GAu9BWjsM
-         p64lTBnZlgZgmFs2K27o+JxHq+MATUAgYsqZs3wp7lAkha1W4wNDX5AQF4Hyr2if3vKH
-         n/XKxf+O9eiPaU1ARAmI7sPBsZFliz1ZruE3PXt2Q4+JHG/aGdD1KjNuh815hlXas9u3
-         CMxHPCjihF+rwQme/Ju6/xYjWWrA3BfJeKANkfaKq3B4TJMxrlgeKb4yw/xQ6MD721+n
-         tUcY2WFW84pCkunUb4sjZDaUpwNVuSfcoq0oKV0nEEuJtaVwKPhpGyP6YPppgHae9tc4
-         hk3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVog7TNveicoGTh5cIYIUBT0b1vuCfZhqPu/Hnds0aI1LAX8S1ghsswReKmfiHuAD+CE+Fu6W6i+QzI@vger.kernel.org, AJvYcCXbm16oR6wfSmZM78ymJV1J+6lOz4kB83wLu1ErhlvwtCEax+q7+AaYUBYWw8ZIauI0fI+4tO5tJtGU27Oa@vger.kernel.org, AJvYcCXnFtw5EOnwp7Ikcrak9VML9EAJyGKZc+wLf8Q2zFRd0SZF0NcuAu6Gf2nEdQvkrfV5WnhdfUnHDVwO@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqQmFP2NypAy/AStTtyAe6lCjNsmprwWD632eBVpRA6Sm26bJ5
-	wAbL0JOKnBBF2fMydb4RCkk65H8IwvsTrIuohwgc84wkKilvA4Qh0nrMSJnd
-X-Gm-Gg: ASbGncsLqG6fIbUojojvT79DV7ZBZh8F+/6alNJZYYhdX40ig6/FEeOqx6LqwlZ0LrE
-	CRqcmeS1RvbiCfpgzIu4rwFDo9n5d41EOr4A9KlW1apXcGH3cAiGKZnIZ9QuKmArkgpEWoiRofa
-	VqC7GZI0b9ssHvdeKInOlCeg/z8mxXwTKkjTuqKupj+RmNRaCTXOdsFV8E8zqMj0waknfvhUgt4
-	6v+ayWzqceULOZwZAVQIeXLXfPSgS5nllq2HhNGngRui++kQ4ogvqfZDWPBvz/Xg1JmlNibnbD2
-	nC3umpR13GO5hdk1lSGkNe4Q2vik9EcsZEbQM0ggj8/rNssTQgRatg==
-X-Google-Smtp-Source: AGHT+IGhjuojFyHJCG/QQ+Q42CBUu/uR/c7Ifr+gCc1PyAKmlLLAV94aP1MwThyHcebzPlywSVEvrw==
-X-Received: by 2002:a05:6122:32c6:b0:520:60c2:3fb with SMTP id 71dfb90a1353d-520678bd90cmr2363039e0c.0.1739364676701;
-        Wed, 12 Feb 2025 04:51:16 -0800 (PST)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5203a7d491fsm1016594e0c.0.2025.02.12.04.51.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 04:51:15 -0800 (PST)
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-8671441a730so1239846241.0;
-        Wed, 12 Feb 2025 04:51:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWK87vtpMprU+iaPdS5uZgbJgOhAjzq40DBbE+0bPVxGwvuyu5GxwbK7g/0oT9Ad4HJRxLLrA2vGTnZ@vger.kernel.org, AJvYcCWTAPRrAADFLuoSvVqrNo0363zlx8/zqdkhOWShTfNERucyXRtb37FySZR4KDid4DnGZ/lGo68OmM27fy83@vger.kernel.org, AJvYcCWoc6Sv+fDUegp97iu/MXvRFjtM21qzmc3AHfe+ptaTscUtLhpNodEyoQCOaHrJNjipRpNjPLrbut9J@vger.kernel.org
-X-Received: by 2002:a05:6102:3709:b0:4bb:d394:46c5 with SMTP id
- ada2fe7eead31-4bbf21cdce8mr2389568137.9.1739364674977; Wed, 12 Feb 2025
- 04:51:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A1E20FA91;
+	Wed, 12 Feb 2025 14:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739371203; cv=fail; b=Y40lafsUm2Y0jjo9ceoWhShqaqJRaOlZnekVRpflporPIkCOTuHnxkGPxFzW4qHIHXis3oCEeHTVfv+YWEWPqbaoqa+S+/s/b15FDr8L3YKOBOxqzlFjKtDEYGaPfPbCJYqL0nsTdMe1bL/dYERRf54xSg8hbNjlRaUTndBKC+Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739371203; c=relaxed/simple;
+	bh=VGzpnlzm+R5s8XSHLiw6Xop/oRyDIiseHn6fZlsmkLU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=VN7fleJ2xHecCy96XN+tYy1ra0V2wDwv9YMpUnU6xpRJM2d9ODx+Gzy6PHW5Ra3UwQU7JCm/jLD/6nr5FZr7Nz1zBkrIaleX6TmaRGYftf2klUgbPGSAk+hatyT/Sa8DNIhd/nLVBh2mv767m9TLCFQso8FHbclAu/x29On9TSU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bdc5ps9a; arc=fail smtp.client-ip=40.107.236.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NmBeQCSK4ZvP4knfCc5gTf+S7FNEl5XgLJzKiZXS1ZUp2rwbWuWHuoOmIm77ds7pmrXAeXqBgDUvblTitxPdmKdXqV5AKRbeJt6OQEJZ6K+q5hPxff4JoSiOfvUaplWTj+xXnGTsfzp+D7B/Lkyjbm7bbpfRSMBgjx3zAwNKR52aAktby1aVe+ogeHbvmtfdt/ZfRghVNXJIsJuSO7eEpWfHutqxqo2eNMnGxgopSWkdpOYwNgyv0mjdEkCd+K7C565MbkAWoYOP1Aamo71a+Tk0oZtg/6CLlveDc/aLgfeIj+YfJ+zB/2frO+u06CgbRlafVzhCrXM7llpYImDlBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PzydTC6DeyN90U7HCXHla70g316fxnM/2TkQ9eCP8/g=;
+ b=YI9pjWLTiwyKnHy3e7tMs2daxuyCZTqGVIKXu7rbnUQerueg8HQF+vdu84PljZ5aInmNrDIja5eS/8O4maAy+QX3JyDYK4+92J2Tkq3wHDkOxPQ3gsipnwYAJgZN7DRtfTUs7P0XF0DN4CHekIzvI0qcZD9c8kshFh57UTu6sjKYU/DGB1BC53dtjtYTmqwKLoKDmX35gC7KGk/dGowaUNo9zjDuqyG6GIXj4NnlriDNyZyyt8WxxWvS362en5QXLHy7TYfk9FUv9pxwM3G3xqNLAcNWCQDg5djsY00YANaGcv2P8WcS+9acQU2NBefOgMsvmwXsFD8LPyKtrl0H7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PzydTC6DeyN90U7HCXHla70g316fxnM/2TkQ9eCP8/g=;
+ b=bdc5ps9aoSdk5M6wVIqdih6F6aStwRIK5vA4CwD8Yg6S3+1AyjXaHFP3x8c8MKn5n6fjoK5XGLO6ev479z0N/ME3tF6amBSUf8ac1u73l5lERVi2rqwth4a4E0g5r9BWYj2/R5kER5RUieYwi5JsoJLDMe2Wvbc0EK4lF3FKr6ex/uhrn3Gu4sRdOec7ohePR+SkVuJlNbIue9vX1eLXl/0OULn9JJ+8OCAOWc+3MRUTIvFQrLiZsocyUw3hPmeuxZO63VYc9D62dVEIny3FYUgdzpeLMo8o+bTpWx6dYEFJJmcNkicj7zKQzRoJPL4QhkNw0MAu1UMlA/eoUsEwVw==
+Received: from SN7PR12MB6768.namprd12.prod.outlook.com (2603:10b6:806:268::8)
+ by LV2PR12MB5919.namprd12.prod.outlook.com (2603:10b6:408:173::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.13; Wed, 12 Feb
+ 2025 14:39:58 +0000
+Received: from SN7PR12MB6768.namprd12.prod.outlook.com
+ ([fe80::bcba:e0a2:b1f7:eb30]) by SN7PR12MB6768.namprd12.prod.outlook.com
+ ([fe80::bcba:e0a2:b1f7:eb30%4]) with mapi id 15.20.8445.008; Wed, 12 Feb 2025
+ 14:39:58 +0000
+From: Vishwaroop A <va@nvidia.com>
+To: Thierry Reding <thierry.reding@gmail.com>
+CC: Jon Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni
+	<skomatineni@nvidia.com>, Laxman Dewangan <ldewangan@nvidia.com>,
+	"broonie@kernel.org" <broonie@kernel.org>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>, "linux-tegra@vger.kernel.org"
+	<linux-tegra@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+	Suresh Mangipudi <smangipudi@nvidia.com>
+Subject: Re: [PATCH V1 1/6] arm64: tegra: Configure QSPI clocks and add DMA
+Thread-Topic: [PATCH V1 1/6] arm64: tegra: Configure QSPI clocks and add DMA
+Thread-Index: AQHbXaVgT/gnWZOYtEy/xyoiiVmKTrMOSpQAgDWxe8U=
+Date: Wed, 12 Feb 2025 14:39:58 +0000
+Message-ID:
+ <SN7PR12MB67687FB2A524ED45AEEF6C17BFFC2@SN7PR12MB6768.namprd12.prod.outlook.com>
+References: <20250103060407.1064107-1-va@nvidia.com>
+ <20250103060407.1064107-2-va@nvidia.com>
+ <s355cib7g6e3gmsy2663pnzx46swhfudpofv2s5tcaytjq4yuj@xqtvoa5p477n>
+In-Reply-To: <s355cib7g6e3gmsy2663pnzx46swhfudpofv2s5tcaytjq4yuj@xqtvoa5p477n>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN7PR12MB6768:EE_|LV2PR12MB5919:EE_
+x-ms-office365-filtering-correlation-id: e1339984-fed7-453e-ca52-08dd4b731fb6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?eD4xPScfcIPmzH5JK/I+atC4C4SQ7gOGj/39rO0cReG6+IFbz5kDMPSKK5?=
+ =?iso-8859-1?Q?QyFWs3x+xlbEcbH8W2OjddPMta6nx7Z3GCBzzdI66ETYIXCaYMOA5OHE13?=
+ =?iso-8859-1?Q?EUVlHAGwoit/9EKHiuzsnxknI5Qn/VX7RQgW1qmO4ZvwcZgOGeJ+qxsrrb?=
+ =?iso-8859-1?Q?KDwW3BSx4yq+u5bxo6HdZFN4vKUSjmtrZcP2ie0G6RZkvGMtZmBoahPdGa?=
+ =?iso-8859-1?Q?qzzQqXTavzfAfKBfIThck2uH5V9hDrn8h8EtVVzYof9ReRvjUfvc+IX8gc?=
+ =?iso-8859-1?Q?HnRK3Sc72xTW48F44GNdJyb4s775OMLIwECv+n+zyfYzjuG6xPvH7TukzG?=
+ =?iso-8859-1?Q?DfJ3r5rZwPxaBGGDCUGIkIZo1pRvtiNcVF5Z+mMFAS+ll3/DL2S5OUJynE?=
+ =?iso-8859-1?Q?fuiGywsnwFk3+z0NKHLjNCYemn0Lz76cnr8HFQx7tVrY/m9dkayTzlJATn?=
+ =?iso-8859-1?Q?N3WyBcrzZTfzC3OGSsOIS9umZvugHWBHU2MQCjfCTtG/vYhFsq1TQCbCUh?=
+ =?iso-8859-1?Q?FM/uwDBDGICSKbBUcrlEsYLw8UZpy/0EjWWSwQ7IqN3nY7Xx8/r5MlDGG+?=
+ =?iso-8859-1?Q?A+xtGo3lt1QrydZSd0Jn6dmeue4UZ798OOoHVIS4o/rVN8m/F3J0lk8Yqd?=
+ =?iso-8859-1?Q?tsIZrvvhIEO3FuaRW9YZ8jj34kYpHad2Sfslj3OvOZ7U2DeNhcuT245ZIr?=
+ =?iso-8859-1?Q?ZlJvupETaMue97g6ttB7AZqFJbHslawjsopbK298OZbFf1ENia2kiTwYOz?=
+ =?iso-8859-1?Q?ivYrQ+3BLSugdZu6psBl/IIRSkICG6aWdolb56J9bPHY2uEvUvPmpxGc3e?=
+ =?iso-8859-1?Q?LjGGMuxlkrm7NAW6eiKJJ/hgr54aiBthZHBCkd5hGfOPUoXXAcstGpih2E?=
+ =?iso-8859-1?Q?wPKqsMtM5/Kp1KMOTxcaqKGwCzcJbxUMfL7kepXKdHFCLCk1xiYj+5fwHY?=
+ =?iso-8859-1?Q?PzQVkNWIc8AWJJFicvHxaOnjqHEJuPVCnTRLWKeWAel2t/uUUgKgQFNxRI?=
+ =?iso-8859-1?Q?2EweDRQxXBWTFloEl0GX+qssKXyQUWKZiZ85ezSfqkP9i2paEOU3B2IInk?=
+ =?iso-8859-1?Q?6fNttLuIZzEq/RCaQkon/NwR6/ymtQszUky76Fd6vj/s0/q3DQQn74+5TF?=
+ =?iso-8859-1?Q?s281RFg/ttdC2VpLTzaHnshCQZ9owtG/X8a9h1tVEGsiLUX/5Hsxg8hG4k?=
+ =?iso-8859-1?Q?JirVS17U2YY5QbtYIwGR7lb2560L79FZJ3ABx7Ki+4ntkdIhZ7dxLaDCVS?=
+ =?iso-8859-1?Q?XtUpfr2F/ha/5TWd5xpyJHgQQ5dr1M7AI4r9o5IITPbXzrBlUkk98qE1b6?=
+ =?iso-8859-1?Q?Ka57vyPQW4R6XJQcZ1uWBzYKF2Gap+S1WFPCs1yoxM8xFbe34gR0+lnFJS?=
+ =?iso-8859-1?Q?jNI+6Ep4dVLPOQnsbPFK3o9M28OKqGKmm2WkkoJIs9JZJHeUypVeTpyDLv?=
+ =?iso-8859-1?Q?GlaPHXVUaKMpaobF764w0w+Haiv/Cl+kLl1fZ8rE1Mt4k2BO6YXT+iZpHR?=
+ =?iso-8859-1?Q?fhqpCG4O9Dy45S7xNn+shG?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB6768.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?9zaR+Idb9bq8Zpq1UFhghUfM+AWJzpFAmg/pQFVRNMxEQEhyeM5iywxSS1?=
+ =?iso-8859-1?Q?tGf2nrzyb3OMEuG/PpBlqQKUpFriYj6UUVQXrXDr5RMO5FhlBqxslNOIrp?=
+ =?iso-8859-1?Q?vEUO8zDKlKqrqJgoYQvRlo2DmRJ2FjsQ+oek+Fw02nntTJBzw7UlRU02dp?=
+ =?iso-8859-1?Q?i5zp3LazZtkTzTQT1KxW5cJTjuBD6fk4JmrmsPLu3gh93a4BHZhwsYY0Lg?=
+ =?iso-8859-1?Q?SIN3wb3StK2YO4ln0Z8H0/SXqsf4k3ZrGtyEA0hw+g2sDtvm3LgvNzflpS?=
+ =?iso-8859-1?Q?wTnSR9LRIu2M6LF8toNZdnEj3by32/BS+ZyEvLms5fZdl7PrXw3KxBLdf/?=
+ =?iso-8859-1?Q?wsBvAo85idhCQT+GXg3Xuu0mqOJd3sE2wvHhv69YbOYzngiBqvBhT7gfXN?=
+ =?iso-8859-1?Q?JUFh3/PprlVZWwSTX/i44lM1BC7o0L8R+37o1co3vkfFJMlquL64xE+HME?=
+ =?iso-8859-1?Q?EWFHBSoZfEoRT16hxYl1JyPqSKgII76HebKml0mulCx/kPZRJ98CMeR6oU?=
+ =?iso-8859-1?Q?79IX8Ejw1BSbnCcNSxkiohk0dANjHKsJJw80u93pSmCHZdC7EC79bSD7U8?=
+ =?iso-8859-1?Q?QHYhRQpnMxCiFwXUNpYV5KYTusHMJzj9pp7BaaKrmKDpJSdaGn8pNmNH28?=
+ =?iso-8859-1?Q?OmT7Z7nb7PthoNlvj0oCRBO5sgJ/mw6VRDzLLhksEQU6fok+VEvS3Fev0C?=
+ =?iso-8859-1?Q?fRVec73DOSjB4HGjz7T1Lam7syyOI1WTtidCIkUB5kL0gU7RgsWCKXbdFm?=
+ =?iso-8859-1?Q?SUjncBZurLDrYfwqpO4FgGOs60OI+o1NEbZi22iWWJRVRz7gqWnmm7iF9A?=
+ =?iso-8859-1?Q?g4WN6IMxBe8OkdlyerKjq40WR1VALWcgbZdVfoTAObVopfCnScoEo59H6V?=
+ =?iso-8859-1?Q?HDY/umhRJmY9f6PE0o66+XD1PlCIFnAwp0ZBcO5GnnJtxrhmukQwkzgIhG?=
+ =?iso-8859-1?Q?tAyGo+LlwBppKWx99m/tIGjjzyJhbVKDtvsH9sOMzylk8O9MIM0hUjL3mH?=
+ =?iso-8859-1?Q?aXYS0rtMoZ5ed2kwTZRWPm1faVsd/8fjpDbuOQH7VYTABTIw6oMnpEFSA1?=
+ =?iso-8859-1?Q?6fASPogXSTZGcZKNTFSB2RhTPtD0a2nkE2qtjRnHo4YjonoaV6P8HRnOUU?=
+ =?iso-8859-1?Q?X1jOb1sL0x9CQEpuidu+qQmYQzMqm4EovSFT5NIG3J6kJrwfSvtLcOPlqq?=
+ =?iso-8859-1?Q?vq2ONvJOcjDDK8HODUukOTdmjdFYLb/BudrYql3pPWtwGRTxHXslTjYU5I?=
+ =?iso-8859-1?Q?PBlUmYXV4FMTxOkbBBGRT30dUQiIzeyhSQzXDsRVEnVSHRn9JpBUlzMaWf?=
+ =?iso-8859-1?Q?jvJb4IYiodrkwFvpoDhsH07w+njc6KMzDPy3usYbkJDHvSCT9IkGtss1na?=
+ =?iso-8859-1?Q?HeEZVs5vKn88Xl0H8ZvE+1wpBbTvzORjp8VeTumMb5ZVfSwJLce8cH6eKX?=
+ =?iso-8859-1?Q?v9DXrwmcOhiCAqvuftHBZr37MipiRME14DABe4LV3hcUXdxTAE2iwbv7xS?=
+ =?iso-8859-1?Q?bsJrD3l7xPc4H4VEVlZCqRXFV16QbcA9T00S5uV6vDeboXt9aTpqgC1C7B?=
+ =?iso-8859-1?Q?QeHHMhOz4XSpRL4hMFoR9EAXc0ixsjCY4eNwXRYUyYMrwsjxMUq9i0Clgo?=
+ =?iso-8859-1?Q?jZTRPfuBOK0xo=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210131826.220318-1-patrice.chotard@foss.st.com> <20250210131826.220318-5-patrice.chotard@foss.st.com>
-In-Reply-To: <20250210131826.220318-5-patrice.chotard@foss.st.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 12 Feb 2025 13:51:02 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVkFym-3byZkszsi9tRoZ6zNOMCT79c2EgQQjn5xd19ig@mail.gmail.com>
-X-Gm-Features: AWEUYZnzYg0ThTq4p4M8sQ0EhbXz6WBb20xXzFHLgeW2YGdd91BJTbWp42U4Smo
-Message-ID: <CAMuHMdVkFym-3byZkszsi9tRoZ6zNOMCT79c2EgQQjn5xd19ig@mail.gmail.com>
-Subject: Re: [PATCH v3 4/8] memory: Add STM32 Octo Memory Manager driver
-To: patrice.chotard@foss.st.com
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	christophe.kerello@foss.st.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB6768.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1339984-fed7-453e-ca52-08dd4b731fb6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Feb 2025 14:39:58.1556
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XcEUZiBc1MG16kn+XWdOLhwHDA8F924w9/STdoBcnaXpNlf/hR1aIz+Ottd/DNcZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5919
 
-Hi Patrice,
-
-On Mon, 10 Feb 2025 at 14:21, <patrice.chotard@foss.st.com> wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
->
-> Octo Memory Manager driver (OMM) manages:
->   - the muxing between 2 OSPI busses and 2 output ports.
->     There are 4 possible muxing configurations:
->       - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
->         output is on port 2
->       - OSPI1 and OSPI2 are multiplexed over the same output port 1
->       - swapped mode (no multiplexing), OSPI1 output is on port 2,
->         OSPI2 output is on port 1
->       - OSPI1 and OSPI2 are multiplexed over the same output port 2
->   - the split of the memory area shared between the 2 OSPI instances.
->   - chip select selection override.
->   - the time between 2 transactions in multiplexed mode.
->   - check firewall access.
->
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
-
-Thanks for your patch!
-
-> --- a/drivers/memory/Kconfig
-> +++ b/drivers/memory/Kconfig
-> @@ -225,6 +225,23 @@ config STM32_FMC2_EBI
->           devices (like SRAM, ethernet adapters, FPGAs, LCD displays, ...) on
->           SOCs containing the FMC2 External Bus Interface.
->
-> +config STM32_OMM
-> +       tristate "STM32 Octo Memory Manager"
-> +       depends on SPI_STM32_OSPI || TEST_COMPILE
-
-COMPILE_TEST
-
-> +       help
-> +         This driver manages the muxing between the 2 OSPI busses and
-> +         the 2 output ports. There are 4 possible muxing configurations:
-> +         - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
-> +              output is on port 2
-> +         - OSPI1 and OSPI2 are multiplexed over the same output port 1
-> +         - swapped mode (no multiplexing), OSPI1 output is on port 2,
-> +              OSPI2 output is on port 1
-> +         - OSPI1 and OSPI2 are multiplexed over the same output port 2
-> +         It also manages :
-> +           - the split of the memory area shared between the 2 OSPI instances.
-> +           - chip select selection override.
-> +           - the time between 2 transactions in multiplexed mode.
-> +
->  source "drivers/memory/samsung/Kconfig"
->  source "drivers/memory/tegra/Kconfig"
-
-> --- /dev/null
-> +++ b/drivers/memory/stm32_omm.c
-
-> +static int stm32_omm_set_amcr(struct device *dev, bool set)
-> +{
-> +       struct stm32_omm *omm = dev_get_drvdata(dev);
-> +       struct regmap *syscfg_regmap;
-> +       struct device_node *node;
-> +       struct resource res, res1;
-> +       resource_size_t mm_ospi2_size = 0;
-> +       static const char * const mm_name[] = { "ospi1", "ospi2" };
-> +       u32 amcr_base, amcr_mask;
-> +       int ret, i, idx;
-
-unsigned int i
-
-> +       unsigned int amcr, read_amcr;
-> +
-> +       for (i = 0; i < omm->nb_child; i++) {
-> +               idx = of_property_match_string(dev->of_node,
-> +                                              "memory-region-names",
-> +                                              mm_name[i]);
-> +               if (idx < 0)
-> +                       continue;
-> +
-> +               /* res1 only used on second loop iteration */
-> +               res1.start = res.start;
-> +               res1.end = res.end;
-> +
-> +               node = of_parse_phandle(dev->of_node, "memory-region", idx);
-> +               if (!node)
-> +                       continue;
-> +
-> +               ret = of_address_to_resource(node, 0, &res);
-> +               if (ret) {
-> +                       dev_err(dev, "unable to resolve memory region\n");
-> +                       return ret;
-> +               }
-> +
-> +               /* check that memory region fits inside OMM memory map area */
-> +               if (!resource_contains(omm->mm_res, &res)) {
-> +                       dev_err(dev, "%s doesn't fit inside OMM memory map area\n",
-> +                               mm_name[i]);
-> +                       dev_err(dev, "[0x%llx-0x%llx] doesn't fit inside [0x%llx-0x%llx]\n",
-> +                               res.start, res.end,
-> +                               omm->mm_res->start, omm->mm_res->end);
-
-As reported by the kernel test robot, this fails to build when
-resource_size_t differs from unsigned long long.  However, you can
-easily print the full resource instead:
-
-    dev_err(dev, "%pR doesn't fit inside %pR\n", &res, omm->mm_res);
-
-https://elixir.bootlin.com/linux/v6.13.2/source/Documentation/core-api/printk-formats.rst#L206
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+=0A=
+=0A=
+________________________________________=0A=
+From: Thierry Reding=0A=
+Sent: Thursday, January 09, 2025 16:10=0A=
+To: Vishwaroop A=0A=
+Cc: Jon Hunter; Sowjanya Komatineni; Laxman Dewangan; broonie@kernel.org; l=
+inux-spi@vger.kernel.org; linux-tegra@vger.kernel.org; linux-kernel@vger.ke=
+rnel.org; Krishna Yarlagadda; Suresh Mangipudi=0A=
+Subject: Re: [PATCH V1 1/6] arm64: tegra: Configure QSPI clocks and add DMA=
+=0A=
+=0A=
+On Fri, Jan 03, 2025 at 06:04:02AM +0000, Vishwaroop A wrote:=0A=
+> Set QSPI0_2X_PM to 199.99 MHz and QSPI0_PM to 99.99 MHz using=0A=
+> PLLC as the parent clock. These frequencies allow Quad IO DT=0A=
+> reads up to 99.99 MHz, which is the fastest that can be=0A=
+> achieved considering various PLL and clock divider constraints.=0A=
+>=0A=
+> Populate the DMA and IOMMU properties for the Tegra234 QSPI devices to=0A=
+> enable DMA support.=0A=
+>=0A=
+> Change-Id: I1dded904aa8e0f278c89998481e829f1ce474e8c=0A=
+> Signed-off-by: Vishwaroop A <va@nvidia.com>=0A=
+> ---=0A=
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 14 ++++++++++++++=0A=
+>  1 file changed, 14 insertions(+)=0A=
+>=0A=
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/d=
+ts/nvidia/tegra234.dtsi=0A=
+> index 984c85eab41a..96d0f13390ae 100644=0A=
+> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi=0A=
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi=0A=
+> @@ -2948,6 +2948,13 @@=0A=
+>                                <&bpmp TEGRA234_CLK_QSPI0_PM>;=0A=
+>                       clock-names =3D "qspi", "qspi_out";=0A=
+>                       resets =3D <&bpmp TEGRA234_RESET_QSPI0>;=0A=
+> +                     assigned-clocks =3D <&bpmp TEGRA234_CLK_QSPI0_2X_PM=
+>,=0A=
+> +                                       <&bpmp TEGRA234_CLK_QSPI0_PM>;=0A=
+> +                     assigned-clock-rates =3D <199999999 99999999>;=0A=
+> +                     assigned-clock-parents =3D <&bpmp TEGRA234_CLK_PLLC=
+>;=0A=
+> +                     dma-names =3D "rx", "tx";=0A=
+> +                     dma-coherent;=0A=
+> +                     iommus =3D <&smmu_niso1 TEGRA234_SID_QSPI0>;=0A=
+>                       status =3D "disabled";=0A=
+>               };=0A=
+>=0A=
+> @@ -3031,6 +3038,13 @@=0A=
+>                                <&bpmp TEGRA234_CLK_QSPI1_PM>;=0A=
+>                       clock-names =3D "qspi", "qspi_out";=0A=
+>                       resets =3D <&bpmp TEGRA234_RESET_QSPI1>;=0A=
+> +                     assigned-clocks =3D <&bpmp TEGRA234_CLK_QSPI1_2X_PM=
+>,=0A=
+> +                                       <&bpmp TEGRA234_CLK_QSPI1_PM>;=0A=
+> +                     assigned-clock-rates =3D <199999999 99999999>;=0A=
+> +                     assigned-clock-parents =3D <&bpmp TEGRA234_CLK_PLLC=
+>;=0A=
+> +                     dma-names =3D "rx", "tx";=0A=
+> +                     dma-coherent;=0A=
+> +                     iommus =3D <&smmu_niso1 TEGRA234_SID_QSPI1>;=0A=
+>                       status =3D "disabled";=0A=
+>               };=0A=
+>=0A=
+=0A=
+>> It looks like these are missing the "dmas" properties that go along with=
+ "dma-names".=0A=
+[Vishwaroop A] dmas property is not required as QSPI uses native dma engine=
+. dmas property is used for assigning  the dma channels. In case of QSPI it=
+ has own native DMA engine.  =0A=
+=0A=
+Thanks,=0A=
+Vishwaroop=0A=
+=0A=
+Thierry=0A=
 
