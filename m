@@ -1,234 +1,129 @@
-Return-Path: <linux-spi+bounces-6805-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6806-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADCEAA3396F
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 09:00:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 162F7A3399B
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 09:06:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38B243A4EEF
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 08:00:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24E857A4701
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 08:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D307A20B1FA;
-	Thu, 13 Feb 2025 08:00:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2991204C1E;
+	Thu, 13 Feb 2025 08:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sOLQeRwy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XiyrcJo7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94C6204C1E;
-	Thu, 13 Feb 2025 08:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F88D20B1EB
+	for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 08:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739433629; cv=none; b=KLDpfo5IwPKkImUTNxPw8d42j4hm1dL2ihRHIqeEMEPHoYPZjOjlPVIEGq50LwLkydg6FTyRRZB0D9uLUrub7I9jFfdgTv77URrSCQolV54oCCeiAw+GAhg8+oZ/5qzcohLYqdwktGIbpAigk+UFy5KlgVqzN6mbBAn+evlITao=
+	t=1739433826; cv=none; b=bI9ETPK0Xet0/OKP6TWKhxzUgCqnzPi6JNTUkJFKm6O0d1xFTbRB22iXH2u5/aC/Mw+ToI8dSwGLA+nQACYl0BpSjS9cKrjSk+HFXU3BHANrDzktyVtGZYpjm0pI3LrR70fDtLmlxY7NHf5MN4/IBHukqqR5aq8iDe5jhuJH9hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739433629; c=relaxed/simple;
-	bh=ofm3GeRHfD0mhMeYGLNiNgASQ8oj8xT5klGiVvoPLAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TfrGmfeJtGhw1kBx0YYaoJ3d6YO967TWMtucQxfCE9HBJr7+dR8jPltVJEF5J2r1bCSgtFkZqi+3FHxOy3kQKSn/O1SbVZQJ0Et81B0lySmJFKw3LPNEfOcfBv8BH7IfY+nCXqamNwk02cT9W16DsmwM0I9r+r9qKaK9EwgL4Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sOLQeRwy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 437BCC4CED1;
-	Thu, 13 Feb 2025 08:00:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739433629;
-	bh=ofm3GeRHfD0mhMeYGLNiNgASQ8oj8xT5klGiVvoPLAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sOLQeRwy+EiETM1vmVNilnA2npGC1wqQlVLtBVuB1ubAX2qac3lKEuz9B56CHnscO
-	 YGK//9mviI6btp+oVzTfFVdPkTJG8Ts8b+SSM0DsDb0VKVcgsvvLPvltWuMI7jgp0p
-	 d/mSN3Jy9Q/I1ivh7ajKOem54W6jPBEMZGPQkBT7GGbKy5Lw9NA9B4xIMVgVVKE8YA
-	 Oc1GFc5lEPSBNDEr0lkTou/wdaQ+agF3fC9o1WaxvGpISXQEMYBTI5B3IUNss7Nq2o
-	 s/n0pJXyMKCfJJdEXuyKZnukhMO6iy4EUZ6GND6amsCc6Iw2j46z6HUhrBC7nGwgWC
-	 Iq+g+XO256fXA==
-Date: Thu, 13 Feb 2025 09:00:25 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: patrice.chotard@foss.st.com
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, christophe.kerello@foss.st.com
-Subject: Re: [PATCH v3 3/8] dt-bindings: memory-controllers: Add STM32 Octo
- Memory Manager controller
-Message-ID: <20250213-adorable-conscious-pogona-4114cf@krzk-bin>
-References: <20250210131826.220318-1-patrice.chotard@foss.st.com>
- <20250210131826.220318-4-patrice.chotard@foss.st.com>
+	s=arc-20240116; t=1739433826; c=relaxed/simple;
+	bh=+cpwtn6ft5Mp1NhR7zmBNBss1tR3VCn4bdRQWVgKgxI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pvk6E7z0eH2pu+fC75w8rhGzoZoxqlFUwh0PQNRKG8sBU28E/E0fSMg0Dgx8A6Vk8/GKgmPM6U7VI744R7twsYdzwiyfPHtGyXkvMfdLJRd4ILHH82nCQe7juJLLe8dNJ4P9n51Kk71uOdTPTaINlIx+fvyE3L2kW4YsUXPKabQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XiyrcJo7; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4395b367329so3193615e9.3
+        for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 00:03:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739433823; x=1740038623; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PGK3HdKnBHt0qxrB+06GFcGxYYwUkBzqpNHrEbv5UZU=;
+        b=XiyrcJo7CS8HZPkF0topJHiuw29adWu8qIJnNevPhfODeclsmsV9Oq2S3wuGusQuFN
+         HAXqGLRZxv8p6nAYSSD9htN22fbue+bWTHvroG3ucDIEXCEInRZNotr5GwvNbHxuz7fl
+         kX2dVrxF1o8CrnFBv0rijcAaouzNMfa5BVpKXYDLh7jIksbSn1D/R5TfoQK+DR5xpa4C
+         gE12VrY1V/SsOY372JEgOuWg7m2Qk2tFeM7ewF0KoPHmSLZ1BnBJpIZUlN54hkBSuaRb
+         aOi3MZMhZpTiS6o/XOm5mfrD1I5UVdQ0f5Dcz6AxNmTqEur+OsFpzr5jp/5eNi9idOv4
+         Z0UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739433823; x=1740038623;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PGK3HdKnBHt0qxrB+06GFcGxYYwUkBzqpNHrEbv5UZU=;
+        b=laVoHpds/rNUDQOzC99T7ZnS15aS7WmltMc68QJiTssHZIYB6aOqQ/5oFtFEMVM5cX
+         uzkSjfq5x5Tmgzy2QmjHcE39uECC4qvmU/jyBn0jBYixszedGT9yuszWWVKCVGA0G0Da
+         lyq0GEMqPPbawWtlrc4zq24YqWz6iId6d6yXwv3DiG/65yL5EeQQZF8EaeYSD2VnB8DX
+         wh6ISUme/l1NXuxvmp6W7yZ8gE78OWA5DuSKDT/IqUuF1DGo+hbEBXcWJGCVDZvegK0k
+         uLHQnGNYXvgIcg5lRd+mFuDKxlqImWohM5Bg/AKLv61Znnmvg99TSylAuK06Hkq1OvUK
+         4VAA==
+X-Gm-Message-State: AOJu0Ywn1kxiCR05QSBVeWY1Xot2MD8E1P4YcCGTvzK7n+CrnUWKm8aM
+	o25QVXqVcZioirHEw2StZJ3yXvjPd/CtjwoiQPiFiLWsCI9ME+FBvWhSKHeXwdQ=
+X-Gm-Gg: ASbGncvKW3ZNAiuQuK7cDD9q+OUemBSHs7Zugd6QLvzUjh0mM8HJFLGkb9K/J37uQ9v
+	mAwY5FT1AP8TrYT+Fyegl83YaEK8moITDKsX2b3YCZBuCQ4dKFUYkcvXSxtI3K6nikXDmclsT5C
+	R8pwPlMfv7eEHYhDiNSSiA2elf02eYP/kyI7fR5mLUAcQpFrEuiBGrrKrJyLQlb6zOBkuXaphaI
+	TWNm7kkKxD8tSKRWQ9RUH4sc8WrHNQIR7K7kphZ87fTMqwjcHq07tvmXQkuHLZDGOB8eRRo6ScI
+	Ro4ec2FvYjzmi8w+I2L7gr0nzPIHFV5+mO1ZlpXIoO+X+qAsRtqOvJ5/fpObhEBgb0VWVfU=
+X-Google-Smtp-Source: AGHT+IGZkzm+ZCs9+jSrDpnGJaY+GxRIoci0mFIiMpdQIHQKUikeFgRtM+1vP6tmyadIVBpcdlOFPA==
+X-Received: by 2002:a5d:5a4f:0:b0:38d:db7b:5d90 with SMTP id ffacd0b85a97d-38f24511f69mr1969873f8f.41.1739433822766;
+        Thu, 13 Feb 2025 00:03:42 -0800 (PST)
+Received: from ta2.c.googlers.com (169.178.77.34.bc.googleusercontent.com. [34.77.178.169])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259f7987sm1090185f8f.87.2025.02.13.00.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 00:03:42 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+Date: Thu, 13 Feb 2025 08:03:41 +0000
+Subject: [PATCH] MAINTAINERS: add tambarus as R for Samsung SPI
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250210131826.220318-4-patrice.chotard@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250213-gs101-spi-r-v1-1-1e3ab8096873@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAF2nrWcC/x3MMQqAMAxA0auUzAaa2g56FXEQjTVLLQ2IUHp3i
+ +Mb/q+gXIQVZlOh8CMqd+qgwcB+bSkyytENzrpgHY0YlSyhZsGCZ+CJePT+IIJe5MKnvP9tWVv
+ 7AMY86kldAAAA
+To: Mark Brown <broonie@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739433822; l=819;
+ i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
+ bh=+cpwtn6ft5Mp1NhR7zmBNBss1tR3VCn4bdRQWVgKgxI=;
+ b=V0TVNrZONVF18PgyIPUrkSg+90Fdb4bF3PkyGBIktk0EIp1w5MP6VNcK7zk8EtNvkz2lo1yC6
+ zFjjtdA4YjkBEr3saIxrOIi37Mw/0N599Jc7/WhVBLRDKVMceEK7emT
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
+ pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
-On Mon, Feb 10, 2025 at 02:18:21PM +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> Add bindings for STM32 Octo Memory Manager (OMM) controller.
-> 
-> OMM manages:
->   - the muxing between 2 OSPI busses and 2 output ports.
->     There are 4 possible muxing configurations:
->       - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
->         output is on port 2
->       - OSPI1 and OSPI2 are multiplexed over the same output port 1
->       - swapped mode (no multiplexing), OSPI1 output is on port 2,
->         OSPI2 output is on port 1
->       - OSPI1 and OSPI2 are multiplexed over the same output port 2
->   - the split of the memory area shared between the 2 OSPI instances.
->   - chip select selection override.
->   - the time between 2 transactions in multiplexed mode.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> ---
->  .../memory-controllers/st,stm32mp25-omm.yaml  | 201 ++++++++++++++++++
->  1 file changed, 201 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
-> new file mode 100644
-> index 000000000000..c897e6bf490d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
-> @@ -0,0 +1,201 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/memory-controllers/st,stm32mp25-omm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STM32 Octo Memory Manager (OMM)
-> +
-> +maintainers:
-> +  - Patrice Chotard <patrice.chotard@foss.st.com>
-> +
-> +description: |
-> +  The STM32 Octo Memory Manager is a low-level interface that enables an
-> +  efficient OCTOSPI pin assignment with a full I/O matrix (before alternate
-> +  function map) and multiplex of single/dual/quad/octal SPI interfaces over
-> +  the same bus. It Supports up to:
-> +    - Two single/dual/quad/octal SPI interfaces
-> +    - Two ports for pin assignment
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stm32mp25-omm
-> +
-> +  "#address-cells":
-> +    const: 2
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  ranges:
-> +    description: |
-> +      Reflects the memory layout with four integer values per OSPI instance.
-> +      Format:
-> +      <chip-select> 0 <registers base address> <size>
-> +    minItems: 2
-> +    maxItems: 2
-> +
-> +  reg:
-> +    items:
-> +      - description: OMM registers
-> +      - description: OMM memory map area
-> +
-> +  reg-names:
-> +    items:
-> +      - const: regs
-> +      - const: memory_map
-> +
-> +  memory-region:
-> +    description: |
-> +      Memory region shared between the 2 OCTOSPI instance.
-> +      One or two phandle to a node describing a memory mapped region
-> +      depending of child number.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  memory-region-names:
-> +    description: |
-> +      OCTOSPI instance's name to which memory region is associated
-> +    items:
-> +      enum: [ospi1, ospi2]
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  access-controllers:
-> +    maxItems: 1
-> +
-> +  st,syscfg-amcr:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      The Address Mapping Control Register (AMCR) is used to split the 256MB
-> +      memory map area shared between the 2 OSPI instance. The Octo Memory
-> +      Manager sets the AMCR depending of the memory-region configuration.
-> +      The memory split bitmask description is:
-> +        - 000: OCTOSPI1 (256 Mbytes), OCTOSPI2 unmapped
-> +        - 001: OCTOSPI1 (192 Mbytes), OCTOSPI2 (64 Mbytes)
-> +        - 010: OCTOSPI1 (128 Mbytes), OCTOSPI2 (128 Mbytes)
-> +        - 011: OCTOSPI1 (64 Mbytes), OCTOSPI2 (192 Mbytes)
-> +        - 1xx: OCTOSPI1 unmapped, OCTOSPI2 (256 Mbytes)
-> +    items:
-> +      - description: phandle to syscfg
-> +      - description: register offset within syscfg
-> +      - description: register bitmask for memory split
-> +
-> +  st,omm-req2ack-ns:
-> +    description: |
-> +      In multiplexed mode (MUXEN = 1), this field defines the time in
-> +      nanoseconds between two transactions.
+I'm currently working on a Samsung SoC which includes SPI.
+I'd like to be Cc'ed to further contributions and help on reviewing
+them. Add me as reviewer.
 
-default: ?
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
-> +  st,omm-cssel-ovr:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Configure the chip select selector override for the 2 OCTOSPIs.
-> +      - 0: OCTOSPI1 chip select send to NCS1 OCTOSPI2 chip select send to NCS1
-> +      - 1: OCTOSPI1 chip select send to NCS2 OCTOSPI2 chip select send to NCS1
-> +      - 2: OCTOSPI1 chip select send to NCS1 OCTOSPI2 chip select send to NCS2
-> +      - 3: OCTOSPI1 chip select send to NCS2 OCTOSPI2 chip select send to NCS2
-> +    minimum: 0
-> +    maximum: 3
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 896a307fa065..254175fbe34f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21030,6 +21030,7 @@ F:	include/linux/clk/samsung.h
+ 
+ SAMSUNG SPI DRIVERS
+ M:	Andi Shyti <andi.shyti@kernel.org>
++R:	Tudor Ambarus <tudor.ambarus@linaro.org>
+ L:	linux-spi@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
 
-default: ?
-
-> +
-> +  st,omm-mux:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Configure the muxing between the 2 OCTOSPIs busses and the 2 output ports.
-> +      - 0: direct mode, default
-
-Don't repeat constraints in free form text.
-
-> +      - 1: mux OCTOSPI1 and OCTOSPI2 to port 1
-> +      - 2: swapped mode
-> +      - 3: mux OCTOSPI1 and OCTOSPI2 to port 2
-> +    minimum: 0
-> +    maximum: 3
-
-default: ?
-
-None of them are required, so usually we expect defaults.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250213-gs101-spi-r-f5e91e344d11
 
 Best regards,
-Krzysztof
+-- 
+Tudor Ambarus <tudor.ambarus@linaro.org>
 
 
