@@ -1,79 +1,75 @@
-Return-Path: <linux-spi+bounces-6813-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6814-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83DFBA3507E
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 22:30:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8805EA3521B
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 00:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D6F916D457
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 21:30:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 842C33AB3E9
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 23:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8528269832;
-	Thu, 13 Feb 2025 21:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B971822D7A3;
+	Thu, 13 Feb 2025 23:23:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qvpj7icB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KpY3ZJip"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA8026982D;
-	Thu, 13 Feb 2025 21:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDB92753F5;
+	Thu, 13 Feb 2025 23:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739482201; cv=none; b=DmbVjPhyjxB+gYjdsWfNBUQQGbDMTKEeWDLPageNwrIEb4XCmExlmF6DaMKgpRIAcA1UAjwNjqbyLfd8OcQX5l219mr+ADkEvychfW+GSCOTar1oEijgYLhStM0uHUjEW3Z7ajOQdGNI9NUgqEpxM6E/qAzq7wyb0VCyCg5GJ+s=
+	t=1739489035; cv=none; b=MfnWVKe0SEjvRQwhzowJV9jEU3KeDnPI62wv19/wZ2TVMvlI1+EIX5rUISq6tB+83s8GbLh37nk+iNpkygzvUdfvf/VQUxdv43UDmboJAIsKUWrB2oa0BFWMg7R3OC2f+JhM8O5nHRlUkV4gPz/jCcxX5W+VWEXH4Pddc6fVWQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739482201; c=relaxed/simple;
-	bh=fIue4ylapBJV5v99yA2lNverKPqn70NncYrXnmwLTpo=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=LrnHDM2QbSDzBV21yMGzs9DuuKMBcdiK0QX4j3sJtyZPmemY5SA8FC5hE+Gkgb6YcHEtwIlysNKUQxNCOa1nHTa9K2HXGzgB2GTW4zFI3vPX8lEvyMe4WYyxgoqwwvaR1qzUO5cdwqmWLSOFaq1A0qgDSo5ZDLmvsNEcrt3loyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qvpj7icB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFC2C4CEE2;
-	Thu, 13 Feb 2025 21:30:01 +0000 (UTC)
+	s=arc-20240116; t=1739489035; c=relaxed/simple;
+	bh=I3T/QPXE7rXkGliRyzAWducT1wQiNJwF9iqVAM/6yYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mBAKQohIRxXyp9nL9mm9lWJUYVtixZ/ouYb3lYnmEDRPiirPvge/epHDDg2dYSonlYNScDmwDIqIo6DGK5iKYg51h0/1x72ni4WUNcC/+UWfo7DclHFNJ5oDD+kH+cwlcMbrfr/uF20Tz+ERKPHcpPVIdq4mVHPTDuwl3MmaXnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KpY3ZJip; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A36C4CED1;
+	Thu, 13 Feb 2025 23:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739482201;
-	bh=fIue4ylapBJV5v99yA2lNverKPqn70NncYrXnmwLTpo=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=Qvpj7icBy5IeFgqOxKQn4Az+9mNA/PTqfUE/fYeZcNDtg122qCh2aAWU4dYjbms63
-	 9KJYCRzQ5E/Hb/DBE/0jpXRCwZjAgCftP2IqDColt3oLQm7HIrxUmVsV/JG29eppVD
-	 eRcmaTaK34XxYpLR+TwDWSarQDVQowDah5R9lhBk9+DKvm2j4hT+ifVWoe5L3Kguch
-	 6ylLsBb0zLjvACy9q25fRCypMBR1zgUkO3K9yyzIy3SVp/gDdMIXpasvo4OcyVzI1H
-	 QWttUMUjQTgviR6+1GbnM4h5XtBIc+LL1MlMll3XnUWhNKR+21NMge4gmhubZcUFvL
-	 NoMOLWtBxRaXw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB230380CEF1;
-	Thu, 13 Feb 2025 21:30:31 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.14-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <2b29351684e99c02491f86ee5cce20a6.broonie@kernel.org>
-References: <2b29351684e99c02491f86ee5cce20a6.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2b29351684e99c02491f86ee5cce20a6.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc2
-X-PR-Tracked-Commit-Id: 3588b1c0fde2f58d166e3f94a5a58d64b893526c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 68763b29e0a6441f57f9ee652bbf8e7bc59183e5
-Message-Id: <173948223065.1382339.5249143432596481944.pr-tracker-bot@kernel.org>
-Date: Thu, 13 Feb 2025 21:30:30 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1739489033;
+	bh=I3T/QPXE7rXkGliRyzAWducT1wQiNJwF9iqVAM/6yYw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KpY3ZJipc0s2z7KGMpqX2kHkREzOcskI+bA3dmiF2wu+6k1j8sIhd+BSkwoSDKT/e
+	 lq6rIUPBFlVwAW7qKU2KzquiXC7bS+Z4LWxjdH5yA8fLWAcSiqnb1xgyybbvVdvrku
+	 uGL3LjY4yRhu+HMSVYg7xDmhiMrLeygDIOTbeKwVhFkOE08IpbyyqksvaKmN3iKsZL
+	 PqtfdKbAZ0MZP7jzEzEhLJinyRSz/1ErIn8peXWOFTKT7YyHlEa4tMFYEdTlXqJ0FX
+	 z+I3ZX58/5quzxR+yGeKf1bsLFPAFlcEq4vSi7LY3ayQ1l1IbGU6IpPl/ww4pExXma
+	 oURrVKJANzIPw==
+Date: Fri, 14 Feb 2025 00:23:49 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add tambarus as R for Samsung SPI
+Message-ID: <i4gno2obchx7racy62grfb2g4zinfid7oaymsl74t65rtwsvoe@tyr4w3wywpow>
+References: <20250213-gs101-spi-r-v1-1-1e3ab8096873@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213-gs101-spi-r-v1-1-1e3ab8096873@linaro.org>
 
-The pull request you sent on Thu, 13 Feb 2025 19:00:31 +0000:
+Hi,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc2
+On Thu, Feb 13, 2025 at 08:03:41AM +0000, Tudor Ambarus wrote:
+> I'm currently working on a Samsung SoC which includes SPI.
+> I'd like to be Cc'ed to further contributions and help on reviewing
+> them. Add me as reviewer.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/68763b29e0a6441f57f9ee652bbf8e7bc59183e5
+Acked-by: Andi Shyti <andi.shyti@kernel.org>
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Andi
 
