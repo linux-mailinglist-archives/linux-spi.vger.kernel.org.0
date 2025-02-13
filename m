@@ -1,129 +1,126 @@
-Return-Path: <linux-spi+bounces-6806-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6807-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 162F7A3399B
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 09:06:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3319A34C46
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 18:46:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24E857A4701
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 08:03:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BC6F188A925
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Feb 2025 17:46:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2991204C1E;
-	Thu, 13 Feb 2025 08:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26D0241682;
+	Thu, 13 Feb 2025 17:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XiyrcJo7"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="MqwOKrlM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F88D20B1EB
-	for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 08:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40ADA2040B7;
+	Thu, 13 Feb 2025 17:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739433826; cv=none; b=bI9ETPK0Xet0/OKP6TWKhxzUgCqnzPi6JNTUkJFKm6O0d1xFTbRB22iXH2u5/aC/Mw+ToI8dSwGLA+nQACYl0BpSjS9cKrjSk+HFXU3BHANrDzktyVtGZYpjm0pI3LrR70fDtLmlxY7NHf5MN4/IBHukqqR5aq8iDe5jhuJH9hE=
+	t=1739468744; cv=none; b=aLlTLwJHmY8nKXGKm/AlylExHNrctWj8TBzeVGJBy/8pl14xSdKhaDvVPHx3ceO6t6UkzGCgI+UPTMGBuj022y5G87uaEEaBstv7Tjjfw6umvNHfe25VRrs7Mvk+mvA4xFH6yg9jjcdlsSovncX6mtKmglc5WGcWmfGc8Jf2z7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739433826; c=relaxed/simple;
-	bh=+cpwtn6ft5Mp1NhR7zmBNBss1tR3VCn4bdRQWVgKgxI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pvk6E7z0eH2pu+fC75w8rhGzoZoxqlFUwh0PQNRKG8sBU28E/E0fSMg0Dgx8A6Vk8/GKgmPM6U7VI744R7twsYdzwiyfPHtGyXkvMfdLJRd4ILHH82nCQe7juJLLe8dNJ4P9n51Kk71uOdTPTaINlIx+fvyE3L2kW4YsUXPKabQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XiyrcJo7; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4395b367329so3193615e9.3
-        for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 00:03:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739433823; x=1740038623; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGK3HdKnBHt0qxrB+06GFcGxYYwUkBzqpNHrEbv5UZU=;
-        b=XiyrcJo7CS8HZPkF0topJHiuw29adWu8qIJnNevPhfODeclsmsV9Oq2S3wuGusQuFN
-         HAXqGLRZxv8p6nAYSSD9htN22fbue+bWTHvroG3ucDIEXCEInRZNotr5GwvNbHxuz7fl
-         kX2dVrxF1o8CrnFBv0rijcAaouzNMfa5BVpKXYDLh7jIksbSn1D/R5TfoQK+DR5xpa4C
-         gE12VrY1V/SsOY372JEgOuWg7m2Qk2tFeM7ewF0KoPHmSLZ1BnBJpIZUlN54hkBSuaRb
-         aOi3MZMhZpTiS6o/XOm5mfrD1I5UVdQ0f5Dcz6AxNmTqEur+OsFpzr5jp/5eNi9idOv4
-         Z0UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739433823; x=1740038623;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PGK3HdKnBHt0qxrB+06GFcGxYYwUkBzqpNHrEbv5UZU=;
-        b=laVoHpds/rNUDQOzC99T7ZnS15aS7WmltMc68QJiTssHZIYB6aOqQ/5oFtFEMVM5cX
-         uzkSjfq5x5Tmgzy2QmjHcE39uECC4qvmU/jyBn0jBYixszedGT9yuszWWVKCVGA0G0Da
-         lyq0GEMqPPbawWtlrc4zq24YqWz6iId6d6yXwv3DiG/65yL5EeQQZF8EaeYSD2VnB8DX
-         wh6ISUme/l1NXuxvmp6W7yZ8gE78OWA5DuSKDT/IqUuF1DGo+hbEBXcWJGCVDZvegK0k
-         uLHQnGNYXvgIcg5lRd+mFuDKxlqImWohM5Bg/AKLv61Znnmvg99TSylAuK06Hkq1OvUK
-         4VAA==
-X-Gm-Message-State: AOJu0Ywn1kxiCR05QSBVeWY1Xot2MD8E1P4YcCGTvzK7n+CrnUWKm8aM
-	o25QVXqVcZioirHEw2StZJ3yXvjPd/CtjwoiQPiFiLWsCI9ME+FBvWhSKHeXwdQ=
-X-Gm-Gg: ASbGncvKW3ZNAiuQuK7cDD9q+OUemBSHs7Zugd6QLvzUjh0mM8HJFLGkb9K/J37uQ9v
-	mAwY5FT1AP8TrYT+Fyegl83YaEK8moITDKsX2b3YCZBuCQ4dKFUYkcvXSxtI3K6nikXDmclsT5C
-	R8pwPlMfv7eEHYhDiNSSiA2elf02eYP/kyI7fR5mLUAcQpFrEuiBGrrKrJyLQlb6zOBkuXaphaI
-	TWNm7kkKxD8tSKRWQ9RUH4sc8WrHNQIR7K7kphZ87fTMqwjcHq07tvmXQkuHLZDGOB8eRRo6ScI
-	Ro4ec2FvYjzmi8w+I2L7gr0nzPIHFV5+mO1ZlpXIoO+X+qAsRtqOvJ5/fpObhEBgb0VWVfU=
-X-Google-Smtp-Source: AGHT+IGZkzm+ZCs9+jSrDpnGJaY+GxRIoci0mFIiMpdQIHQKUikeFgRtM+1vP6tmyadIVBpcdlOFPA==
-X-Received: by 2002:a5d:5a4f:0:b0:38d:db7b:5d90 with SMTP id ffacd0b85a97d-38f24511f69mr1969873f8f.41.1739433822766;
-        Thu, 13 Feb 2025 00:03:42 -0800 (PST)
-Received: from ta2.c.googlers.com (169.178.77.34.bc.googleusercontent.com. [34.77.178.169])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259f7987sm1090185f8f.87.2025.02.13.00.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 00:03:42 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date: Thu, 13 Feb 2025 08:03:41 +0000
-Subject: [PATCH] MAINTAINERS: add tambarus as R for Samsung SPI
+	s=arc-20240116; t=1739468744; c=relaxed/simple;
+	bh=9g9XvpJ4vTHZRdoVn0NNOAe0M9fMrmh7qRY4E5RBo5I=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=JaRg7IidlKAQiBO4hGtq62ejHDNeya3befkWh7RYalf+92TzzDR2PJFtN6D3BKgVriWc/QsnRwtmnQLNK0gKn0wLnbvi/aHzIh+06UuPRUEPj1t96ZRi2b9Xbh6ZWGsb79MRdTILvmmMji50gKfCVYe8c/Ic2c+52AHMy5M/UDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=MqwOKrlM; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.65.1.94] (unknown [20.236.11.69])
+	by linux.microsoft.com (Postfix) with ESMTPSA id D7186203D61D;
+	Thu, 13 Feb 2025 09:45:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D7186203D61D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1739468742;
+	bh=CjdDB9uvZBBF3c03e9VylpCG5WkQPsjk1qSKlO3MQtE=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=MqwOKrlM0wNKTlUgCtpn9gJKIpfGiwVh9dHGNNF4ycPmXa/idcQ30iiksOd4FJJaH
+	 jrqNCD9r00CbzdjGOPFOZ+MnFU6woy29/+YEkOfP14iTKCcgK64o8pGQaLxlVNUpHe
+	 bIb4sXQD9rr6g8CsvFcC34/zgx+kxX5/LItW+SLg=
+Message-ID: <8f80b65e-724c-439c-a094-4bfbb1e296f1@linux.microsoft.com>
+Date: Thu, 13 Feb 2025 09:45:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Cc: eahariha@linux.microsoft.com, Yaron Avizrat <yaron.avizrat@intel.com>,
+ Oded Gabbay <ogabbay@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>,
+ Nicolas Palix <nicolas.palix@imag.fr>, James Smart
+ <james.smart@broadcom.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>,
+ Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>,
+ "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+ Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>,
+ Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+ Selvin Xavier <selvin.xavier@broadcom.com>,
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ cocci@inria.fr, linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ platform-driver-x86@vger.kernel.org, ibm-acpi-devel@lists.sourceforge.net,
+ linux-rdma@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 00/16] Converge on using secs_to_jiffies() part two
+To: Andrew Morton <akpm@linux-foundation.org>
+References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+ <20250128161643.289d9fe705ef2fdba0b82a52@linux-foundation.org>
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <20250128161643.289d9fe705ef2fdba0b82a52@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250213-gs101-spi-r-v1-1-1e3ab8096873@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAF2nrWcC/x3MMQqAMAxA0auUzAaa2g56FXEQjTVLLQ2IUHp3i
- +Mb/q+gXIQVZlOh8CMqd+qgwcB+bSkyytENzrpgHY0YlSyhZsGCZ+CJePT+IIJe5MKnvP9tWVv
- 7AMY86kldAAAA
-To: Mark Brown <broonie@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739433822; l=819;
- i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
- bh=+cpwtn6ft5Mp1NhR7zmBNBss1tR3VCn4bdRQWVgKgxI=;
- b=V0TVNrZONVF18PgyIPUrkSg+90Fdb4bF3PkyGBIktk0EIp1w5MP6VNcK7zk8EtNvkz2lo1yC6
- zFjjtdA4YjkBEr3saIxrOIi37Mw/0N599Jc7/WhVBLRDKVMceEK7emT
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
- pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
-I'm currently working on a Samsung SoC which includes SPI.
-I'd like to be Cc'ed to further contributions and help on reviewing
-them. Add me as reviewer.
+On 1/28/2025 4:16 PM, Andrew Morton wrote:
+> On Tue, 28 Jan 2025 18:21:45 +0000 Easwar Hariharan <eahariha@linux.microsoft.com> wrote:
+> 
+>> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+>> either use the multiply pattern of either of:
+>> - msecs_to_jiffies(N*1000) or
+>> - msecs_to_jiffies(N*MSEC_PER_SEC)
+>>
+>> where N is a constant or an expression, to avoid the multiplication.
+>>
+>> The conversion is made with Coccinelle with the secs_to_jiffies() script
+>> in scripts/coccinelle/misc. Attention is paid to what the best change
+>> can be rather than restricting to what the tool provides.
+>>
+>> Andrew has kindly agreed to take the series through mm.git modulo the
+>> patches maintainers want to pick through their own trees.
+> 
+> I added patches 2-16 to mm.git.  If any of these later get merged into
+> a subsystem tree, Stephen will tell us and I'll drop the mm.git copy.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi Andrew, I don't see these in mm-nonmm-unstable. Did these get dropped in the confusion around
+casting secs_to_jiffies() to unsigned long[1]? That has since been merged in 6.14-rc2 via tglx' tree,
+and I have a v2 for just the ceph patches that needed some fixups at [2].
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 896a307fa065..254175fbe34f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21030,6 +21030,7 @@ F:	include/linux/clk/samsung.h
- 
- SAMSUNG SPI DRIVERS
- M:	Andi Shyti <andi.shyti@kernel.org>
-+R:	Tudor Ambarus <tudor.ambarus@linaro.org>
- L:	linux-spi@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
+[1] https://lore.kernel.org/all/20250130192701.99626-1-eahariha@linux.microsoft.com/
+[2] https://lore.kernel.org/all/20250203-converge-secs-to-jiffies-part-two-v2-0-d7058a01fd0e@linux.microsoft.com/
 
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250213-gs101-spi-r-f5e91e344d11
-
-Best regards,
--- 
-Tudor Ambarus <tudor.ambarus@linaro.org>
-
+Thanks,
+Easwar (he/him)
 
