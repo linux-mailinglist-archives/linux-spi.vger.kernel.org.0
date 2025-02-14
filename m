@@ -1,140 +1,126 @@
-Return-Path: <linux-spi+bounces-6829-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6830-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24E38A357ED
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 08:33:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5765DA3582C
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 08:48:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FDF31891A95
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 07:33:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 118BA161413
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 07:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D33D20B1EC;
-	Fri, 14 Feb 2025 07:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E9021B1A7;
+	Fri, 14 Feb 2025 07:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YHZ4IOu1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bx2J24fp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F9A918E34A
-	for <linux-spi@vger.kernel.org>; Fri, 14 Feb 2025 07:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB282116F3;
+	Fri, 14 Feb 2025 07:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739518381; cv=none; b=S1Qs1qjFDJ8sxwhChpP8/wQpYkGgsSvfVwm/sQuiGhisLMjIG6EFlFACO3gRWh2GjlOYF5Zy1U5oxa3navaACzwo3abKRCOGJ1DEn1bTZV76e8L17l37IZI6hlzuG8NVRuPQzLrKQoM9+uF8vzi+l7xjiKYeKE7Up+F5RkJmKY8=
+	t=1739519315; cv=none; b=eSHb0d1fOMn8UFNm3JmlnhpWSZ9pzEdV9xILJ1COkBgXFc7s+JXu/itQR1g21t81jU2UDliuiZhfiUkzvPtIqgcUAYbWMUl4njJk/7memDe9Ikm6Qo4BIqz2xlBCRJvdolcTFMwC/Uh+pCB+bB1PY6AU1tVKq5+zhKF5LJxAcIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739518381; c=relaxed/simple;
-	bh=qroXXeauOVL+Iovn6a2A4yrahP1v9fykcfW2iddMnS4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bZAMGKC6fnx1kRdiPPrtamaQtV023OcWFw42oa1f92Pf+gDSrV8DLDZ66CXI06+Mr8mrRo4Vn2Ur9Byr6KZByCMIZ4JBsZoxGTK83+nGeelPnNPAzJfuJJXyGMgy8M//3CcDaWPF0hFeMTDpiDA+HQ/I6aodT/jaXZq5oCE1LDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YHZ4IOu1; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-436ce2ab251so12145595e9.1
-        for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 23:32:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739518378; x=1740123178; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=shBU7AF8cc3Gg0wYtL5qbOpWyX+VBS6JrNAtiNUzXh4=;
-        b=YHZ4IOu1XRgQ4UbWIpLBcs5tLQ6S8O5Jae2W75YjqI/t9P2PcfurXhs4GCD5TPCNed
-         S0MX/SqaTYZ4JIEBvC+Z8VOlrZPKA8UorEAhpfGAYLotg63zB/ThPnBAynCkLGs/WvJH
-         g1G3fAO+MPb80tXRDwNfULztgYXengQHi5KdMtMLAbteqri9hx621GXJsa5SO1cfpGmC
-         xVX1ChvY0Qkp00vRYqaaStpvZXoe6huXX8zZImOnUb1reLGNcd1gpZXJUU9sT0xPpvMK
-         AJDEx6lcMeJk7Bbw44oU86RSxVQ2vkToQABRUu3kuzjsomrdunSz50qMVNY/hPQ0FbsM
-         8/7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739518378; x=1740123178;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=shBU7AF8cc3Gg0wYtL5qbOpWyX+VBS6JrNAtiNUzXh4=;
-        b=GMC0d2RqKI7SrhTUlDj7e5E03fas7JuC9RGLW21d9Y3M+cFOyFdRMmAssoPuZihuzg
-         vRQ6ftDYClDIM+4L8N1weSZ3B1VBNGOxhZwv+zi5Mu+dLjP56whGtQ1sGDYi6ADwVWMH
-         W95YwqzoZkP/6LgxuOEXL5XPUMXLVOjPfOtRP6o1VF+y1oULXjFYP1ugJQNrYobMTisY
-         YtIRZXFIr/la5uhqM01Mo3C42H1h0uueU/1Ya4vvczwO6bmBvHpxTKlKBPSPGP/D5ucb
-         v+eHVSpiaC9CJ98nqw/YS8DNwnsA4J710EJlZxAQZAX+VYItA5VUMiS3t605+MHRhabN
-         02kQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUnSnFfT12TCBQtmuF2p4Bk2j1PZTF3Dm/f6+E7LTJRkFv8wTdNpPpE0JhN/H/uVjyZfp+LMYrVZDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWzGFU+KsRAXNB8XqRN7NoC52bGabGNJYChTnBj8P7n9b4BzcW
-	IBRNmCbuSG8LflikgsmQHbrfNEWBnImCMWYtteDCwOJdIDNFhnp71O3YbUKzSdg=
-X-Gm-Gg: ASbGncuYkL/jr7rDYz/NdTjBD0JnOvhsMonurKINB5lTPuCH4T+22nuxS388dKQ6XCN
-	73ws2ZmFS3AYFO4EoXRZDAIqpMjP10NSmXb1dsWz1ZMvvIYvMcaid69uEackP4hH9u7f8rIO8ea
-	Uk2OrgvSlIxjdvaWv0kLP/0oCRiCBNG9+9c8ma8a3D7v/hmE3PBe/eccWa1qY1FX2rr8pWo7phJ
-	THlEkJYpPEdKMS01BXrl1zGmxqtU/aSfr+e8JcsDdu7tsvLf49y/UEUwNWSEDBNkNZ/uRkc9Qx7
-	nByVzYcNUNV2k7/LixsrjwHNxZTnqXCZ/hKrg1M+3cx7/TY81SW+q7FEBLkVeEz7p/F71qg=
-X-Google-Smtp-Source: AGHT+IFuIc7UiGCJhgZrFsDUkrGq451Woe/uSGjG7ifl7lmj2MKi1SN0qMavFWZVChA7j+uVL+MrSQ==
-X-Received: by 2002:a05:600c:a00e:b0:439:688c:c5d7 with SMTP id 5b1f17b1804b1-439688ccb9cmr14257345e9.14.1739518377759;
-        Thu, 13 Feb 2025 23:32:57 -0800 (PST)
-Received: from ta2.c.googlers.com (169.178.77.34.bc.googleusercontent.com. [34.77.178.169])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439617da779sm37914255e9.7.2025.02.13.23.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 23:32:57 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-Date: Fri, 14 Feb 2025 07:32:51 +0000
-Subject: [PATCH] spi: s3c64xx: extend description of compatible's
- fifo_depth
+	s=arc-20240116; t=1739519315; c=relaxed/simple;
+	bh=5MY3iWyMndAEMYSaV5mEbVdwC2LV6f6DIkS96hlcgQw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T2/pJ0MoGT8teUFDwpUJpjZB+e4xJQH6asYDA39QBKGdcEQFju9821r1vR1FjkhLn/KGv+nbTFIkCfCXV7IsyKXdnz1OVYunwUrVYE4cIXsbuUtJUW13POpMViM3LiRSTfTl9aDgLTPz0P/QIJhhnJBp/X6+ouhYUKavk1uELr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bx2J24fp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF33C4CED1;
+	Fri, 14 Feb 2025 07:48:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739519315;
+	bh=5MY3iWyMndAEMYSaV5mEbVdwC2LV6f6DIkS96hlcgQw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bx2J24fpG/vOT7GO8dKCw6XA+xnaq0ZH5kqwWm0J34lbje1lMmVXBXU+GWcBx/3ps
+	 H3wK2RZEZS6d6a1ECntSo6YSFoNMyYhlfzJLRadlsxjooC1MJro5Jt7YRuzeK2aVwj
+	 J1KL3j8GxREGG1CBfBOOJk8YwToh4FSKlTZSc3Er7KCUSU8umbC+iJcsdEipJ3Dv8x
+	 5lkdCUnalJVMBo4QmEwJtjzkhWegyNp6PvuIPk7nvB7y4nO/1SWl46hem71lW7ovw6
+	 CMaEdxv6mZHRWvDabQ5SC3RpkWqhS74CceQvpyUdmo9gzky+eurByToYL8c047cYcR
+	 CVHatVndhXkMA==
+Message-ID: <32e3ffc2-d3f8-44eb-ae14-400ebcd6734f@kernel.org>
+Date: Fri, 14 Feb 2025 08:48:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250214-spi-s3c64xx-fifo-depth-v1-1-e1b1915e3ee7@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAKLxrmcC/x3MQQqAIBBA0avErBtQK5OuEi0qx5pNiRMhRHdPW
- r7F/w8IJSaBoXog0c3C51Gg6wrWfT42QvbFYJTplNEtSmSUZrVtzhg4nOgpXjva3vVBK7eQa6D
- EMVHg/I/H6X0/Nv6BHGgAAAA=
-To: Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: s3c64xx: extend description of compatible's
+ fifo_depth
+To: Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>,
  Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Denzeel Oliva <wachiturroxd150@gmail.com>, 
- Sam Protsenko <semen.protsenko@linaro.org>, linux-spi@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, Tudor Ambarus <tudor.ambarus@linaro.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739518376; l=1528;
- i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
- bh=qroXXeauOVL+Iovn6a2A4yrahP1v9fykcfW2iddMnS4=;
- b=pC0wnwQmYJD4VRMIu0mEU35gRvOsR5+nV7P0t6kj2Mi0FELhmNG6Z28A98l1CakNjcGIhYM9U
- cVx5nVDITq7CFuVM5o68gNDX3iuVdvCxa9gdRYs8H2LLzjPOiRybBHF
-X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
- pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
+Cc: Denzeel Oliva <wachiturroxd150@gmail.com>,
+ Sam Protsenko <semen.protsenko@linaro.org>, linux-spi@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20250214-spi-s3c64xx-fifo-depth-v1-1-e1b1915e3ee7@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250214-spi-s3c64xx-fifo-depth-v1-1-e1b1915e3ee7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The FIFO depth specified with the compatibles's data is used where all
-the instances of the IP define the same FIFO depth. It naturally has
-higher precedence than the FIFO depth specified via DT. Specifying FIFO
-depth in DT becomes superfluous in this case. Extend comment about
-compatible's FIFO depth.
+On 14/02/2025 08:32, Tudor Ambarus wrote:
+> The FIFO depth specified with the compatibles's data is used where all
+> the instances of the IP define the same FIFO depth. It naturally has
+> higher precedence than the FIFO depth specified via DT. Specifying FIFO
+> depth in DT becomes superfluous in this case. Extend comment about
+> compatible's FIFO depth.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
- drivers/spi/spi-s3c64xx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 389275dbc003..9c47f5741c5f 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -139,7 +139,9 @@ struct s3c64xx_spi_dma_data {
-  * struct s3c64xx_spi_port_config - SPI Controller hardware info
-  * @fifo_lvl_mask: [DEPRECATED] use @{rx, tx}_fifomask instead.
-  * @rx_lvl_offset: [DEPRECATED] use @{rx,tx}_fifomask instead.
-- * @fifo_depth: depth of the FIFO.
-+ * @fifo_depth: depth of the FIFOs. Used by compatibles where all the instances
-+ *              of the IP define the same FIFO depth. It has higher precedence
-+ *              than the FIFO depth specified via DT.
-  * @rx_fifomask: SPI_STATUS.RX_FIFO_LVL mask. Shifted mask defining the field's
-  *               length and position.
-  * @tx_fifomask: SPI_STATUS.TX_FIFO_LVL mask. Shifted mask defining the field's
-
----
-base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250214-spi-s3c64xx-fifo-depth-6787f108be83
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
--- 
-Tudor Ambarus <tudor.ambarus@linaro.org>
-
+Krzysztof
 
