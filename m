@@ -1,126 +1,158 @@
-Return-Path: <linux-spi+bounces-6816-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6817-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B607A35273
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 01:10:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983ACA35475
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 03:10:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70A61188E1A1
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 00:10:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5711116C77F
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Feb 2025 02:10:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C8D275415;
-	Fri, 14 Feb 2025 00:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B51DA189F56;
+	Fri, 14 Feb 2025 02:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X9tDXlms"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="Nm3LODJX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D073617D2
-	for <linux-spi@vger.kernel.org>; Fri, 14 Feb 2025 00:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6019242052
+	for <linux-spi@vger.kernel.org>; Fri, 14 Feb 2025 02:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739491796; cv=none; b=D9ct4fICC4sq3UZnJzy1uMQw4umn3JTpmE/lT9M2VzWekBStTt6HG6dznXlLNInEBAtiT09mil1HD1oMO3k0jB0zw5ksJDcElsJ0BQij/Yx/HI4vqht8zDeO4uCbysU8BYlfovyvWomTbs4WNKIZ9p55EAycKK1DL/yJuPtrHv0=
+	t=1739498659; cv=none; b=tuBRVshm/tWQd0t0mfSExskTNjmCbNM9gKAhqjuHmnamVWIbff/hBhaj4qVSOZOv9cwAZjL/5QKOzlWK/EZg5WcZ+JFsbGR3gBRzbLp5t5+GAyG8tuZJNIL8sR6nOX/4QSqHRpXkzreGPJDfFi5ZLuphh1N4PRBZ8HfQf5IVovw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739491796; c=relaxed/simple;
-	bh=lEZkR6Mx58pSq0zExuloJ9MtvWHa8LHWfZeVjgG9WZc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JPJtWXpap9TePvndZCq2Kpeo4SN4QCFRUeMWF/7bPWi3jI9O4W5gq1zGYz0MCaEY1gNiRRKEvKeuA9P2xFzHAx+LUOir8KxsfbeA94eIiiN2w9LZrl+MActh6CbFcqVS/xzg/sAEKXPH44SrzvGhIvX8G37ZOLw7wGVKhwsejvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X9tDXlms; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e5b29779d74so1373100276.2
-        for <linux-spi@vger.kernel.org>; Thu, 13 Feb 2025 16:09:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739491793; x=1740096593; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NqP9v9jg7baLiU2+93UgvbM9b74Tce3qrWwn1lgosFQ=;
-        b=X9tDXlmsUsIQfkaNZDlkbTZOQ6yJZhTnEba9AZbqdWmtiAnd4eL5TS1OF04JD17+ea
-         fOofewEVHOYcK02S5TygPLISQmY/3Uk4kcpGydKsR5TXMmFrvS7IrtDLD4vUFCTPH/F0
-         PFOVKzmXj2kyXNCr2zvUlrRCHWY3AVzIos1Wif9ULHw/79JCkiQG+lqakWt9D/FyNM7l
-         o+tExlNa0I7ciMuKBWs8Q4mxjQFiULrmRLSn8dKJ/qxM6IDnIzFDxL0mpoEpKtMtyKNl
-         cdicpkLsAGQjNrIieya1OdDUovgu0jpQBKYWvOJTDaZ2ulvUuBZAG7hcvSX9e0cA3l05
-         cXBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739491793; x=1740096593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NqP9v9jg7baLiU2+93UgvbM9b74Tce3qrWwn1lgosFQ=;
-        b=dimrJIZuozbeFdffBOM8ni9MxbY8c8TFFnY/T3Zb2tRnSJpE0ENEHEbBRvAWvzTngH
-         VGPCmW8wdDbshfGw+9F3nrVC05cVCgz8Bk6MU8zM4HIM4BadLM5UUw31P5tfK/Ko+UQL
-         y/A81TFfqFw0ccNZnN4PbtPuSZp6L9MCQElT+dSQZjGdb+GHhWFr4g8SeBT1lMUJYYtc
-         KQI4KQZVLE4ANDS15Et/BnNLphyXgPTOkkdDi7huI8Q1Fqg/AfVDAfnx2Zxr20jQ+4s+
-         BgpdYAhZAPrTDJqJxwoGZVYww+tnnResqkHhPIznCmkDu2Be2UhGbCBfDduYMZON15iQ
-         1hgg==
-X-Forwarded-Encrypted: i=1; AJvYcCWdqgXXLjc2W7JaEaes7Q5bm9QRVaySyBR5Z1e8lFCDb1Q6ChBOaqwnRgFHEFu80nV6pIL0PWFF6QQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrBtfW92sywE86bT2PgzypM697ILYe/k+rAoY/+7mYfulxASac
-	mM4X+NCXBk+wcWdUY8jq3GFtfNLXtTbQZAPC54tafx8w1PZemqVyYRkPuZ5sB3BzNVTOs3z/ysJ
-	3qUnDvD3+nnxBXdR0U5pNj9bk/j3Mm89SEoavIA==
-X-Gm-Gg: ASbGncvRHE2ZY/HA51aEj3P8SEpuvDzA40HXypIeJOCHZ3bfl0can/Jz4bZs0SD/sn8
-	nE62IhO4da8wxMbHLLNI+EbesXxxp1DOAt2Qjxcrb28o/bCNvKkD6Kf7tjtkwYk3gRxKHOeFFfw
-	mN45lqXiGxUOTCkVAHjv5xLDlCriXBe5A=
-X-Google-Smtp-Source: AGHT+IFd1EJtDVBHgzWdjgXFsf5jdNOMTYWQT9HHkgAZZC7VuvxH9RsRYnYxxoGtNZLN5u0QJ7cWcZkPmK0FyJYTFow=
-X-Received: by 2002:a05:6902:13c6:b0:e5b:3f8e:9e65 with SMTP id
- 3f1490d57ef6-e5d9f0f9e38mr9401293276.12.1739491792768; Thu, 13 Feb 2025
- 16:09:52 -0800 (PST)
+	s=arc-20240116; t=1739498659; c=relaxed/simple;
+	bh=WhJmekLyQeapuWa9J6WUco9/aFXXshTQJPKudksd1Lo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XKokwI20qqLaLIwbSYHk6dbohdmEI20WQpr/hMsN/Mne0nDIQxyeDMCbj2TeTzsEaRClvaxZWHYbETIBRlZoI1a734XgevVkawqBAeLzIOWXlk2axBmVLN9T0rjwDp6dS4NsCmwGEWEkUYygSwY79bUZvqLSMIk4A6snLdFXnco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=Nm3LODJX; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id CCE38240101
+	for <linux-spi@vger.kernel.org>; Fri, 14 Feb 2025 03:04:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739498648; bh=WhJmekLyQeapuWa9J6WUco9/aFXXshTQJPKudksd1Lo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=Nm3LODJXhqQCCv69Zz1N9FqongFoJT3V0NUa6zSUc6NA8FVuLeDXb1gY6jUNVQHk0
+	 za741AL0WLueAGlA/BFA+QKYt3CF9TzSKV5uIWL7ZRmYG65M75ziCewHvxV5bFjNvF
+	 iazMruPIDK5iKbKAZ/b3L7MbUm8urNpdqjf+7oZ+ilPu+gH9g8Qi0ILU6wPJ9jr/f2
+	 88Oy6Dd1u/V7CrpE27zO9e3Rst0yJX5xnoQo7GnAyMla0eUpw+1+/KNjIMvlu9JPTk
+	 Vkmt2BtBE48By8yPb8A9xA3GJCSUKi5lFDCACraCv2ZCkP4OvojLM4EmP/9XViOo53
+	 4Xmtf91bi8dMw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4YvFhy67kgz9rxF;
+	Fri, 14 Feb 2025 03:04:02 +0100 (CET)
+Date: Fri, 14 Feb 2025 02:04:02 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 03/12] dt-bindings: crypto: Convert fsl,sec-2.0 to YAML
+Message-ID: <Z66kksKzsknmOy5Q@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-3-8137b0c42526@posteo.net>
+ <20250212193314.GA4134845-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250213204044.660-1-wachiturroxd150@gmail.com> <20250213204044.660-2-wachiturroxd150@gmail.com>
-In-Reply-To: <20250213204044.660-2-wachiturroxd150@gmail.com>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Thu, 13 Feb 2025 18:09:42 -0600
-X-Gm-Features: AWEUYZnCMGwjd-AHWAZ_AQIcjbuE5HV5DBnJ9ZGUM8sZFqDGixnVhaKZX3Cd9ko
-Message-ID: <CAPLW+4=STm0=K8s+BTxiHWP9F_waw2H=fQ4W9_NTm7a4JcFy=w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] spi: dt-bindings: samsung: add samsung,exynos990-spi
- compatible
-To: Denzeel Oliva <wachiturroxd150@gmail.com>
-Cc: andi.shyti@kernel.org, broonie@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, alim.akhtar@samsung.com, 
-	linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250212193314.GA4134845-robh@kernel.org>
 
-On Thu, Feb 13, 2025 at 2:41=E2=80=AFPM Denzeel Oliva <wachiturroxd150@gmai=
-l.com> wrote:
->
-> Add "samsung,exynos990-spi" dedicated compatible for the SPI controller
-> on Exynos990 SoC. This ensures proper representation of the hardware
-> in the device tree.
->
-> Signed-off-by: Denzeel Oliva <wachiturroxd150@gmail.com>
-> ---
+On Wed, Feb 12, 2025 at 01:33:14PM -0600, Rob Herring wrote:
+> On Fri, Feb 07, 2025 at 10:30:20PM +0100, J. Neuschäfer wrote:
+> > Convert the Freescale security engine (crypto accelerator) binding from
+> > text form to YAML. The list of compatible strings reflects what was
+> > previously described in prose; not all combinations occur in existing
+> > devicetrees.
+> > 
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> > 
+> > V2:
+> > - several improvements suggested by Rob Herring:
+> >   - remove unnecessary multiline markers
+> >   - constrain fsl,num-channels to enum: [1,4]
+> >   - constrain fsl,channel-fifo-len to plausible limits
+> >   - constrain fsl,exec-units-mask to maximum=0xfff
+> > - trim subject line (remove "binding")
+> > ---
+> >  .../devicetree/bindings/crypto/fsl,sec2.0.yaml     | 142 +++++++++++++++++++++
+> >  .../devicetree/bindings/crypto/fsl-sec2.txt        |  65 ----------
+> >  2 files changed, 142 insertions(+), 65 deletions(-)
+[...]
+> > +title: Freescale SoC SEC Security Engines versions 1.x-2.x-3.x
+> > +
+> > +maintainers:
+> > +  - J. Neuschäfer <j.ne@posteo.net.
+> 
+> missing >
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Good catch, will fix.
 
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Doc=
-umentation/devicetree/bindings/spi/samsung,spi.yaml
-> index 3c206a64d..1d3c95bd2 100644
-> --- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> @@ -24,6 +24,7 @@ properties:
->            - samsung,exynos4210-spi
->            - samsung,exynos5433-spi
->            - samsung,exynos850-spi
-> +          - samsung,exynos990-spi
->            - samsung,exynosautov9-spi
->            - tesla,fsd-spi
->        - items:
-> --
-> 2.48.1
->
->
+
+> > +  fsl,descriptor-types-mask:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      The bitmask representing what descriptors are available. Descriptor type
+> > +      information should be encoded following the SEC's Descriptor Header Dword
+> > +      DESC_TYPE field documentation, i.e. as follows:
+> > +
+> > +        bit 0  = set if SEC supports the aesu_ctr_nonsnoop desc. type
+> > +        bit 1  = set if SEC supports the ipsec_esp descriptor type
+> > +        bit 2  = set if SEC supports the common_nonsnoop desc. type
+> > +        bit 3  = set if SEC supports the 802.11i AES ccmp desc. type
+> > +        bit 4  = set if SEC supports the hmac_snoop_no_afeu desc. type
+> > +        bit 5  = set if SEC supports the srtp descriptor type
+> > +        bit 6  = set if SEC supports the non_hmac_snoop_no_afeu desc.type
+> > +        bit 7  = set if SEC supports the pkeu_assemble descriptor type
+> > +        bit 8  = set if SEC supports the aesu_key_expand_output desc.type
+> > +        bit 9  = set if SEC supports the pkeu_ptmul descriptor type
+> > +        bit 10 = set if SEC supports the common_nonsnoop_afeu desc. type
+> > +        bit 11 = set if SEC supports the pkeu_ptadd_dbl descriptor type
+> 
+> Why 3 variations of 'descriptor type'?
+
+The reasons have been lost in time, I suppose. I'll normalize the spelling.
+
+
+Thanks,
+J. Neuschäfer
 
