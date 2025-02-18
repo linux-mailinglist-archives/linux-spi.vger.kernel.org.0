@@ -1,79 +1,65 @@
-Return-Path: <linux-spi+bounces-6848-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6849-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8D6A3878F
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Feb 2025 16:31:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3549A3961C
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 09:52:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 112471894295
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Feb 2025 15:32:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D27A3BA7F9
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 08:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34F46224AE6;
-	Mon, 17 Feb 2025 15:31:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608B722FE0A;
+	Tue, 18 Feb 2025 08:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="auzi/rSO"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Ibz22OBm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29B5321CA1B
-	for <linux-spi@vger.kernel.org>; Mon, 17 Feb 2025 15:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC37822E3EA;
+	Tue, 18 Feb 2025 08:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739806307; cv=none; b=OYxKGyGP5AngRQ35fHSRDRR2Gi6uTwLrO+IVIxCuAtF7d/e2eG6L3YeEOSFPJKPVOI3e1f5jxoaA3wwmGP0xD8xYZ3AUGS9qLexSmY7MgVTkDqHLnygI6hL1LffRvRMZHNyVdSEfUQebu1+vIIn6wW3bsrBsV7/0U17+lVvbQm0=
+	t=1739868159; cv=none; b=gA2JfeJH0X93k/pIuN03hBjHwm1L4FUE++JcOaLL26Y+qOCC30fqRd+lc5KXhN5+/XIwA5mWAuuNgnmzDQOwsmJluIaV0fzILj1f9FCdolNWKewpdv9HQiI5rwOatULy3QndvLk/dkQvFlSmX5f+hvESlDnffttA9SGhqWqCm5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739806307; c=relaxed/simple;
-	bh=i4cD0V8+nfCJgVSaBV4TSFCD+HZ8bi6YcjwUGYdl3Qk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lnEl9hg+d+Z/3+Qb+jvLNa13S7M8/kjI0pjngK0TSXqCW8SXcVFfLBWm3bHmcpZwgLqKOfZzXqoPV/LkRBTWhcimAOvFoz0HEv5g7XcER/6WcFAcZENgoBtFdFNBpkYNiIcOScbbeuFzCRb9fT0nTC02QZ59X3rU1jQOsOj+uII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=auzi/rSO; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2bcbd92d5dbso482397fac.2
-        for <linux-spi@vger.kernel.org>; Mon, 17 Feb 2025 07:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739806303; x=1740411103; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hLy6tCidb31UtJbepHKM6tCxizCfttBLfmcun9Z57EU=;
-        b=auzi/rSOT7lrk01fYLwijlvQnQLpts2nKb7Vj6exFCNMH/k9dd8/oOLdD11bEUZzH2
-         V22jAQPIaafhqfK5LeS7KaueOtzUM5q4qZ9/L4VK1DDr04fhOdLjaVQp82YZyLvJls5H
-         GyB4CAsa0BtB77j6X9tz+AfvNWQWrjBDpbdXL3ai/UucYJLv/XR5iXaiklmxqhtZp+ey
-         jB+RejG7V35CglT4BEVcRuHQJZ3mEJZdrGKSJsu9Tgg9H8Y61VJ1m4dlm8srbwEU+SGm
-         RswIQEGQNyZ5q+iXS2uZhJRpKxESsW9VRv+sjy1Jh4TJ6DekerSX6e0R2CSl3r66zj/U
-         hAyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739806303; x=1740411103;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLy6tCidb31UtJbepHKM6tCxizCfttBLfmcun9Z57EU=;
-        b=CSZ0qk2KurJzU23RKKdE5KswKEVl/TIkWkNSUPi/mHFmVdSUulUckZZRDUrHNMPDIT
-         3JCz6KgDi6tD7Z5tbu9jMc7knIIwUIsPeyi5z1ap5/wotCf2JATi2Q24yyGZUm8OyZEp
-         WQNls0zlti/x/xOvsxvgBoPRYYnT7F7fOyNntTVAz3Nh7CploenQhPo8kt8aozntI8vX
-         cl+MlsI8li+7jSFXSj7V83SJSN4M5RV4Dvh9gA4ktkxwI73xJvcY8J6Z/xv6wNrWVtq9
-         k8QWmb1nTMFd7CkuZ0Lxui2eqlAt/GiKJe/+Q7HZxyaGegMCr6f2d35odHv9arHXTyen
-         ky1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXK2fKHwel1oejc1j/pVm19aGB9GiLtu6Yy3HA4I4PoKjLuqfaEubgOu3aGUHtyHAk/61Ip5TxueGw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJsJUwZ0UaTNhV4AGVL4coAm5Z/T6q+tdJ9uT+Yi6L3/hLsWCV
-	bNdCBnpDPE8Z48vXVQu+1sLf2TIXw8ftiQVx26RH8qKLjYGXfuYw2uULSbBKGEc=
-X-Gm-Gg: ASbGncuCGPJ5BIMXpJwZH5ShkQKG23U+5zX3CDQFJTCkdri8KvHWmQvJogRy02ouwfH
-	YyjQ0y0kVzYlUMokOvup/2+XP0oNcQtlTvNf/yMcWoIGTsxNmhnHJTKHlml1+liHFp3h3GRoX5J
-	VVVroO01EhVSyUTSNo94KSfNtTE/4PNXd+dr5tC4bkBLJ6Y/eRMS7MhLByl/2fPr9NTFPKoy+Oq
-	4WwmYJVk1f6pBguebwbEY1cenGxBwItBqH7ytzlY4Zl8pbLzFcjkLA7WNYDPb8sONlh8Btab5X4
-	WPGxRIpzJqokvh5yHHxVOth6GrANM+5liFlFYHnvm+AmFed7mBYL
-X-Google-Smtp-Source: AGHT+IGNFQrTrIxdPZwMWpXCPOJVGNSy4LIlCpINievqrtoFIHd9q6fEfiQqQaF94LwUcwd34eFBIQ==
-X-Received: by 2002:a05:6870:912b:b0:296:a67c:d239 with SMTP id 586e51a60fabf-2bc99abc0ffmr5808371fac.12.1739806303211;
-        Mon, 17 Feb 2025 07:31:43 -0800 (PST)
-Received: from [192.168.0.142] (ip98-183-112-25.ok.ok.cox.net. [98.183.112.25])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2b9548205d6sm4061410fac.4.2025.02.17.07.31.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Feb 2025 07:31:41 -0800 (PST)
-Message-ID: <7f0689d4-e940-4889-a29f-4fcbe8a32676@baylibre.com>
-Date: Mon, 17 Feb 2025 09:31:39 -0600
+	s=arc-20240116; t=1739868159; c=relaxed/simple;
+	bh=8C1EJRRVd22x/9mu6auZ+la3X+ou4V+ayeu8ZUNVuEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=r2oCJAhixio4RLJBn1NdS3bBxAJqm8zTGdRiW3IZvowy2R7Rt8fKe5rkOoC79B/t0KEPhy7Vgh/Cv8dSt8Eeo5JMtztP9uNXbELrkbfcNDszXA+hL0jhcTMTI7VtvXWdIiXD2GYmgQZw+qEIypDwaZekim/Jdf4bFYQ7TGtJRSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Ibz22OBm; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51I8ERDf013018;
+	Tue, 18 Feb 2025 09:41:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	m+3/1tyVa1Qn4CQ2/7kBF87oG9qDd6zKjpbib5cEEhE=; b=Ibz22OBmZ62P3bGD
+	d9E/xAJHN3cUuLw6amZCi2WWuYjp70NmQobfeWx0UUlMYN3KpuVUe6u1hoM0qaAE
+	9SgLRIBxnVmEiUgdp6UrOsHvA052TQEQhIpkR0zY8M5GdkP8d9XsV+9eShy8yn1A
+	bvBdCsUoezygapIyhY5BxOckyFjaN3SNjKdR9BetHfFXiw27JnOYrA7PRk3WY679
+	yvfANtotS6xK1YwFXOr8PmEW0JQND75PIzBoaw4a3jEoF9i+OTyPWheb5zcHx3Y7
+	wKdFKVykqQ5c6ym7Np1M1SbG1oDYAH7U2leUlpW8tiESvHiI8NHicGX4uF6iRXte
+	nK+SRg==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44tkttu4rv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Feb 2025 09:41:58 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id D30AE40044;
+	Tue, 18 Feb 2025 09:40:35 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D7E7C2F80C7;
+	Tue, 18 Feb 2025 09:39:32 +0100 (CET)
+Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 18 Feb
+ 2025 09:39:32 +0100
+Message-ID: <ad738b22-7d09-4734-a546-759c23222925@foss.st.com>
+Date: Tue, 18 Feb 2025 09:39:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,52 +67,123 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: adjust the file entry in SPI OFFLOAD
-To: Lukas Bulwahn <lbulwahn@redhat.com>, Mark Brown <broonie@kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>, Nuno Sa
- <nuno.sa@analog.com>, linux-spi@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
- Lukas Bulwahn <lukas.bulwahn@redhat.com>
-References: <20250217092851.17619-1-lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH v3 1/8] dt-bindings: spi: Add STM32 OSPI controller
+To: Philipp Zabel <p.zabel@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann
+	<arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon
+	<will@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <christophe.kerello@foss.st.com>
+References: <20250210131826.220318-1-patrice.chotard@foss.st.com>
+ <20250210131826.220318-2-patrice.chotard@foss.st.com>
+ <67fe157ce8ca3c3c4e08451da52f7c94f73439b2.camel@pengutronix.de>
 Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250217092851.17619-1-lukas.bulwahn@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <67fe157ce8ca3c3c4e08451da52f7c94f73439b2.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-18_03,2025-02-18_01,2024-11-22_01
 
-On 2/17/25 3:28 AM, Lukas Bulwahn wrote:
-> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-> 
-> Commit 8e02d1886988 ("spi: add basic support for SPI offloading") adds a
-> new MAINTAINERS section referring to the non-existent file
-> include/linux/spi/spi-offload.h rather than referring to the files added
-> with this commit in the directory include/linux/spi/offload/.
-> 
-> Adjust the file reference to the intended directory.
-> 
-> Fixes: 8e02d1886988 ("spi: add basic support for SPI offloading")
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-> ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a54d8510ea6e..53cf3cbf33c9 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22402,7 +22402,7 @@ SPI OFFLOAD
->  R:	David Lechner <dlechner@baylibre.com>
->  F:	drivers/spi/spi-offload-trigger-pwm.c
->  F:	drivers/spi/spi-offload.c
-> -F:	include/linux/spi/spi-offload.h
-> +F:	include/linux/spi/offload/
->  K:	spi_offload
->  
->  SPI SUBSYSTEM
 
-Thanks for fixing that.
 
-Reviewed-by: David Lechner <dlechner@baylibre.com>
+On 2/17/25 10:17, Philipp Zabel wrote:
+> On Mo, 2025-02-10 at 14:18 +0100, patrice.chotard@foss.st.com wrote:
+>> From: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> Add device tree bindings for the STM32 OSPI controller.
+>>
+>> Main features of the Octo-SPI controller :
+>>   - support sNOR / sNAND / HyperRAM™ and HyperFlash™ devices.
+>>   - Three functional modes: indirect, automatic-status polling,
+>>     memory-mapped.
+>>   - Up to 4 Gbytes of external memory can be addressed in indirect
+>>     mode (per physical port and per CS), and up to 256 Mbytes in
+>>     memory-mapped mode (combined for both physical ports and per CS).
+>>   - Single-, dual-, quad-, and octal-SPI communication.
+>>   - Dual-quad communication.
+>>   - Single data rate (SDR) and double transfer rate (DTR).
+>>   - Maximum target frequency is 133 MHz for SDR and 133 MHz for DTR.
+>>   - Data strobe support.
+>>   - DMA channel for indirect mode.
+>>   - Double CS mapping that allows two external flash devices to be
+>>     addressed with a single OCTOSPI controller mapped on a single
+>>     OCTOSPI port.
+>>
+>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>> ---
+>>  .../bindings/spi/st,stm32mp25-ospi.yaml       | 105 ++++++++++++++++++
+>>  1 file changed, 105 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
+>> new file mode 100644
+>> index 000000000000..5f276f27dc4c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
+>> @@ -0,0 +1,105 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/st,stm32mp25-ospi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: STMicroelectronics STM32 Octal Serial Peripheral Interface (OSPI)
+>> +
+>> +maintainers:
+>> +  - Patrice Chotard <patrice.chotard@foss.st.com>
+>> +
+>> +allOf:
+>> +  - $ref: spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: st,stm32mp25-ospi
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  memory-region:
+>> +    description:
+>> +      Memory region to be used for memory-map read access.
+>> +      In memory-mapped mode, read access are performed from the memory
+>> +      device using the direct mapping.
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: phandle to OSPI block reset
+>> +      - description: phandle to delay block reset
+> 
+> Are you positive that these will only ever have to be reset together?
+> Otherwise I'd add a reset-names property just in case.
 
+Yes i confirm that these both reset are reset together.
+
+Thanks
+Patrice
+
+> 
+> regards
+> Philipp
 
