@@ -1,110 +1,104 @@
-Return-Path: <linux-spi+bounces-6864-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6865-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 702C3A3AABE
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 22:21:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E50A8A3AAED
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 22:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B39BD3AC7E4
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 21:21:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00035188C4B5
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Feb 2025 21:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4BE1C6FF8;
-	Tue, 18 Feb 2025 21:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6661D9595;
+	Tue, 18 Feb 2025 21:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rRRl3Oft"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bYtmVXqZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21DA1BEF78;
-	Tue, 18 Feb 2025 21:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528A11CDA0B;
+	Tue, 18 Feb 2025 21:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739913700; cv=none; b=l39U38WOcO0oMDwQd7bNJiJyQNL35F89zG94IzV/QGXb05rj7Aj0SAbXR3L+eS7EBpPsupr1X/630U804go03Vc3/9Mwb/NyJoNFCqT5pnKdghT+ib7IQUuqrKbCR0YvigD7OgmwbXHNy9e3gzcyWskjwCYYvSvsdenbIxnc2Lo=
+	t=1739914233; cv=none; b=h96hKusrbjdpibFZ8MQTP6BO4Q7W/xH33bJVW4lPM99510hhhLVsIihFmAgHgZwQxBBxlvOUyyhrMkkHoMHJc/nh2EZSBIy+ZtVy+BXZw3/Dg0M0zUY+0b3VtGwMYGTblXKqJQvv4dkyruSt+JpjvY8I2qYYy2q9bCgPO6CNlis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739913700; c=relaxed/simple;
-	bh=B9lSIUKtKaBWlF14BOO6dZrB7G6K1Zk063vl/H8dksY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pgwkSLI5UjhF13xNdq2IENMFpZ9CFemuPPugX6kDEidnchz3tHTxUlf6ulEBOPvUupBIx/6pX4EZ9wfIBcwoVprYFMpYAmrP16NU3nYP25YVzCse1vLw8xpICKQiqXPIM4zVyi9MQNTdyy6ECqQoXg9upSyC1ogdvcR9vweNAxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rRRl3Oft; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6D0C4CEE2;
-	Tue, 18 Feb 2025 21:21:39 +0000 (UTC)
+	s=arc-20240116; t=1739914233; c=relaxed/simple;
+	bh=xTa/0OwWZJ4BHR0ud2dUS1dB2jaa8N5kkkcbjzF4Os0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EnNf5qwKM02r3SysEl3OOeINPjKYyGfIzoTi+MzOGG+Fo0z962h3+j43V04Eo++2xyZh6LzGWTdeHRoreOX5WpFZzKeISkDk1t23m2TgZ51APVCPTgXUjWIoqe6JEKR4Gmhmn0y6L7uyYTXo88/1DLlAflPG0Wk2P4VR102ZUtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bYtmVXqZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8A6C4CEE8;
+	Tue, 18 Feb 2025 21:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739913699;
-	bh=B9lSIUKtKaBWlF14BOO6dZrB7G6K1Zk063vl/H8dksY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rRRl3Oft5D1yNq8A/9GdXQlhT4a0/layZcEr6m168EFyUt483vukkReL1VrsLfdVW
-	 zOO6npRBlyNM4X9gkvxRqfp6wI453gdsRZlmJofmiL8zFsCY0YRhJuey7zQfw9fWFU
-	 xogFI9TFgXaaOcQZYVUhiS3aMAEuqHwyWwWSH0Dzt2B5hsdZV/dN0urTVADAhSk6G0
-	 V9Ut2rkKOCfMDY7wY1cEm2cEiHavDVfRO2cvjELFHVIb0Z+e80RwGR/n6Z2ptYlHVt
-	 r5EzUyJauBdauhOBLVtjpVAvKiMVdxIfXO/TXeUhmiYpot8O+xydOproUw8+D0zbPb
-	 GGcv6XBWrNaOQ==
-Date: Tue, 18 Feb 2025 15:21:38 -0600
-From: Rob Herring <robh@kernel.org>
-To: patrice.chotard@foss.st.com
-Cc: Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	christophe.kerello@foss.st.com
-Subject: Re: [PATCH v4 0/8] Add STM32MP25 SPI NOR support
-Message-ID: <20250218212138.GA1092771-robh@kernel.org>
-References: <20250218130000.87889-1-patrice.chotard@foss.st.com>
+	s=k20201202; t=1739914233;
+	bh=xTa/0OwWZJ4BHR0ud2dUS1dB2jaa8N5kkkcbjzF4Os0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=bYtmVXqZym8wab8Y/7uCcT0VALemF8xHwzf20/ocZ+Xj3DVpYcVh01qKOqzvHCu0o
+	 mpJ/dRmH+kpkifuXUfhffGn8RDTs+WMXsP1aLL0pt0GKsPOd8lFtCQR/LQX2U54Q0W
+	 6fE3lWBhEFepM/tPAf+8sJHASaPzjqwcA5tSWIHlX7U5rJgX+T5cl6mOVu6bCBQIcv
+	 kcO0M2dnOaWpI64hm/xcirStHWtgpvdzE/U0MOFHqq6U3/jialo+7qaCny30asB5N/
+	 GN0WFvHw8+4fgxft+5GlR21Yul1mLnbqJc5LR7nFDXHfwyaF0Wi7hXFVC4FA3+P69X
+	 nBTW1esinGBdw==
+From: Mark Brown <broonie@kernel.org>
+To: David Lechner <dlechner@baylibre.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Nuno Sa <nuno.sa@analog.com>, linux-spi@vger.kernel.org, 
+ Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Lukas Bulwahn <lukas.bulwahn@redhat.com>
+In-Reply-To: <20250217092851.17619-1-lukas.bulwahn@redhat.com>
+References: <20250217092851.17619-1-lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] MAINTAINERS: adjust the file entry in SPI OFFLOAD
+Message-Id: <173991423052.1713526.6394807497548942772.b4-ty@kernel.org>
+Date: Tue, 18 Feb 2025 21:30:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250218130000.87889-1-patrice.chotard@foss.st.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-42535
 
-On Tue, Feb 18, 2025 at 01:59:52PM +0100, patrice.chotard@foss.st.com wrote:
-> From: Patrice Chotard <patrice.chotard@foss.st.com>
+On Mon, 17 Feb 2025 10:28:51 +0100, Lukas Bulwahn wrote:
+> Commit 8e02d1886988 ("spi: add basic support for SPI offloading") adds a
+> new MAINTAINERS section referring to the non-existent file
+> include/linux/spi/spi-offload.h rather than referring to the files added
+> with this commit in the directory include/linux/spi/offload/.
 > 
-> This series adds SPI NOR support for STM32MP25 SoCs from STMicroelectronics.
+> Adjust the file reference to the intended directory.
 > 
-> On STM32MP25 SoCs family, an Octo Memory Manager block manages the muxing,
-> the memory area split, the chip select override and the time constraint 
-> between its 2 Octo SPI children.
-> 
-> Due to these depedencies, this series adds support for: 
->   - Octo Memory Manager driver.
->   - Octo SPI driver.
->   - yaml schema for Octo Memory Manager and Octo SPI drivers.
-> 
-> The device tree files adds Octo Memory Manager and its 2 associated Octo 
-> SPI chidren in stm32mp251.dtsi and adds SPI NOR support in stm32mp257f-ev1
-> board.
-> 
-> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-> 
-> Changes in v4:
->   - Add default value requested by Krzysztof for st,omm-req2ack-ns, 
->     st,omm-cssel-ovr and st,omm-mux properties in st,stm32mp25-omm.yaml
->   - Remove constraint in free form test for st,omm-mux property.
->   - Fix drivers/memory/Kconfig by replacing TEST_COMPILE_ by COMPILE_TEST.
->   - Fix SPDX-License-Identifier for stm32-omm.c.
->   - Fix Kernel test robot by fixing dev_err() format in stm32-omm.c.
->   - Add missing pm_runtime_disable() in the error handling path in
->     stm32-omm.c.
->   - Replace an int by an unsigned int in stm32-omm.c
->   - Remove uneeded "," after terminator in stm32-omm.c.
->   - Update cover letter description to explain dependecies between 
->     Octo Memory Manager and its 2 Octo SPI children.
->   - Add Reviewed-by Krzysztof Kozlowski for patch 1 and 3.
+> [...]
 
-No, you didn't.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] MAINTAINERS: adjust the file entry in SPI OFFLOAD
+      commit: d1a09c610027e446ed30c21f61c2f2443bf92a3f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
