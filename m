@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-6877-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6874-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A706A3B323
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2025 09:05:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89778A3B329
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2025 09:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 864653ACBE4
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2025 08:05:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9F061898C9B
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Feb 2025 08:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8CC1CAA9C;
-	Wed, 19 Feb 2025 08:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE821C4A24;
+	Wed, 19 Feb 2025 08:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="8K6nxIiE"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="TEHfW30U"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8BD1C5D6C;
-	Wed, 19 Feb 2025 08:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993FD1C5D5C;
+	Wed, 19 Feb 2025 08:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739952248; cv=none; b=NPbvWW/026KwD+QsCEDtEokf4C/uuUiO1VP7d1RJ2PyXz4/gMiy02HhGkD8SrMAQhC0ebHPh0UKJJJAbZ48LWZEu1I77ELO/uJygX9khRK5KQ4vG4DIy/B4ejM+Y2J2Z4iWxj5HsvvJetFTOHjKIbZxCbk4FgA6cHiXPCgJyHr8=
+	t=1739952233; cv=none; b=rmn0DrYyccmn+5PqWYTCuaDDWlT66qIp3S0VEsr1zsUKBxPRz9r1JejP4ykAST11lllNFnFjycprIcwSvY+td25dwk1F8BZLxkw1hVacbOPZa9m8J7ADv7jRQ1YFzIUJDipd+/PUTYqNQaEjFod7ihFAh86le6HYSPh8uCBgPKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739952248; c=relaxed/simple;
-	bh=wTWjG02z5fQJbXJPxGXMp31fnADvwvJ/H7svonHqMy8=;
+	s=arc-20240116; t=1739952233; c=relaxed/simple;
+	bh=6KcRGHRocxE0j0HR0Uu0L86teOfQZnTh/A8PL/UeaR4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LiFYHYMoiKSSpTvSW1Qjj1XGwfFaxznuhcdFjZoCoJgKlZu5Dhd4oT9ropqNUdENF5/Hp2Bf+6PWwPzHAYAXIhZFxo39x0uGYx/PtxFenNhf6dAaSISvZDSXbS4CkS+MawscnPdBMDQLqDn3ytl/jNRQPdk+UHnIL7EY7g/KvbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=8K6nxIiE; arc=none smtp.client-ip=185.132.182.106
+	 MIME-Version:Content-Type; b=Wi70jR8mEVWaBYnOyxct0S+nCHD70bOktlRB220D68IQmI89GpMD/s4Sdsozz1ltYOUuj9+vEZmfT/boGs9CbQeXCKDvOqvvAIhfwPKn1maEGWKe9oavpz18kLnNrA2Qf1pxfNNa/ijNb+5riRgiVTolu1aphVjyGacCIUQO9U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=TEHfW30U; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51J4sOoY025662;
-	Wed, 19 Feb 2025 09:03:51 +0100
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51J4solX005550;
+	Wed, 19 Feb 2025 09:03:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	PJENfILoF7jnB9vqM3VCkEHbomo1lFXVX1iIHZL8o4Y=; b=8K6nxIiEA9Ox58ya
-	JF9oACkXkgne+DU40WN1iqz5cnZbtCkJ4QhNqOAaJKMfGuznRgbWZe2Cr7H6YH+j
-	9xfC+fQcO9xzclnQzKRpvFaYQUiVm/79gqtQmU8xjBdvSLo4JVjMN9ldJVlW4KGY
-	kRFd9277viRNQcBwh/5cUszNB/zTfgb+ribVku69d4xd3hNO2oVlENq6yXkS80FX
-	BsequXGz0UwSdd0L7D8Q9g2jrnHTBAiH2P2MYjHJf3u8sOe4vFksJ5TbYgaojeti
-	JeEWtuixYM7PyPYWSB6x7cbQFB3BXg1ifiDmyBZFLDae/gntYmkvCDoj+0JBNpRm
-	y6XZqg==
+	+B5bLqS5N8lyMpSFkuejlctXtH6/4yGnXqjE2IWcdB4=; b=TEHfW30UzMPomvr9
+	GBBvzgccOyYJWmq0twfjRg3UgAYD8WVNdKywjQVoq80P/XOP8AOQUxFTqEZp5HFd
+	GF+wl7KO/T6OVMMn8ElyTW4PdpNlOKQYk6doG1UkdDoDAKjPPMeW1e5Xy7s0dxVJ
+	GA4JC2Q964GHNbGpCPen2TjMQkFAHYekSbY8z15p9S1dcS1VFoMdu2Pzr2aVX15N
+	uH1facdq8SPI+opNoH1dx5fxr5IGvuRNjjwUcVi31/woyCTFymr5qvMkA2YLKkpq
+	YtGQG9epDWvDZJPmJoBoHe9M2fMh/x7XP5/nSAR1fNOeTEkSpXsu4Fw+zfdmpfaQ
+	9TFxRA==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44vyyna8t5-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44vyym26w8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Feb 2025 09:03:50 +0100 (CET)
+	Wed, 19 Feb 2025 09:03:30 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 50F864004F;
-	Wed, 19 Feb 2025 09:02:19 +0100 (CET)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 639414004C;
+	Wed, 19 Feb 2025 09:02:17 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D785642CB83;
-	Wed, 19 Feb 2025 09:01:14 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9EE03432BD8;
+	Wed, 19 Feb 2025 09:01:15 +0100 (CET)
 Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 19 Feb
- 2025 09:01:14 +0100
+ 2025 09:01:15 +0100
 From: <patrice.chotard@foss.st.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof
@@ -76,12 +76,10 @@ To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
 CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <christophe.kerello@foss.st.com>, <patrice.chotard@foss.st.com>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 3/8] dt-bindings: memory-controllers: Add STM32 Octo Memory Manager controller
-Date: Wed, 19 Feb 2025 09:00:54 +0100
-Message-ID: <20250219080059.367045-4-patrice.chotard@foss.st.com>
+        <christophe.kerello@foss.st.com>, <patrice.chotard@foss.st.com>
+Subject: [PATCH v5 4/8] memory: Add STM32 Octo Memory Manager driver
+Date: Wed, 19 Feb 2025 09:00:55 +0100
+Message-ID: <20250219080059.367045-5-patrice.chotard@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250219080059.367045-1-patrice.chotard@foss.st.com>
 References: <20250219080059.367045-1-patrice.chotard@foss.st.com>
@@ -101,9 +99,7 @@ X-Proofpoint-Virus-Version: vendor=baseguard
 
 From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Add bindings for STM32 Octo Memory Manager (OMM) controller.
-
-OMM manages:
+Octo Memory Manager driver (OMM) manages:
   - the muxing between 2 OSPI busses and 2 output ports.
     There are 4 possible muxing configurations:
       - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
@@ -115,224 +111,585 @@ OMM manages:
   - the split of the memory area shared between the 2 OSPI instances.
   - chip select selection override.
   - the time between 2 transactions in multiplexed mode.
+  - check firewall access.
 
 Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Christophe Kerello <christophe.kerello@foss.st.com>
 ---
- .../memory-controllers/st,stm32mp25-omm.yaml  | 204 ++++++++++++++++++
- 1 file changed, 204 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
+ drivers/memory/Kconfig     |  17 ++
+ drivers/memory/Makefile    |   1 +
+ drivers/memory/stm32_omm.c | 522 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 540 insertions(+)
+ create mode 100644 drivers/memory/stm32_omm.c
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
+diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+index c82d8d8a16ea..3a0703fbfee7 100644
+--- a/drivers/memory/Kconfig
++++ b/drivers/memory/Kconfig
+@@ -225,6 +225,23 @@ config STM32_FMC2_EBI
+ 	  devices (like SRAM, ethernet adapters, FPGAs, LCD displays, ...) on
+ 	  SOCs containing the FMC2 External Bus Interface.
+ 
++config STM32_OMM
++	tristate "STM32 Octo Memory Manager"
++	depends on SPI_STM32_OSPI || COMPILE_TEST
++	help
++	  This driver manages the muxing between the 2 OSPI busses and
++	  the 2 output ports. There are 4 possible muxing configurations:
++	  - direct mode (no multiplexing): OSPI1 output is on port 1 and OSPI2
++	       output is on port 2
++	  - OSPI1 and OSPI2 are multiplexed over the same output port 1
++	  - swapped mode (no multiplexing), OSPI1 output is on port 2,
++	       OSPI2 output is on port 1
++	  - OSPI1 and OSPI2 are multiplexed over the same output port 2
++	  It also manages :
++	    - the split of the memory area shared between the 2 OSPI instances.
++	    - chip select selection override.
++	    - the time between 2 transactions in multiplexed mode.
++
+ source "drivers/memory/samsung/Kconfig"
+ source "drivers/memory/tegra/Kconfig"
+ 
+diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
+index d2e6ca9abbe0..c1959661bf63 100644
+--- a/drivers/memory/Makefile
++++ b/drivers/memory/Makefile
+@@ -24,6 +24,7 @@ obj-$(CONFIG_DA8XX_DDRCTL)	+= da8xx-ddrctl.o
+ obj-$(CONFIG_PL353_SMC)		+= pl353-smc.o
+ obj-$(CONFIG_RENESAS_RPCIF)	+= renesas-rpc-if.o
+ obj-$(CONFIG_STM32_FMC2_EBI)	+= stm32-fmc2-ebi.o
++obj-$(CONFIG_STM32_OMM)		+= stm32_omm.o
+ 
+ obj-$(CONFIG_SAMSUNG_MC)	+= samsung/
+ obj-$(CONFIG_TEGRA_MC)		+= tegra/
+diff --git a/drivers/memory/stm32_omm.c b/drivers/memory/stm32_omm.c
 new file mode 100644
-index 000000000000..316e16ce238e
+index 000000000000..8f7f475769e7
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32mp25-omm.yaml
-@@ -0,0 +1,204 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/memory-controllers/st,stm32mp25-omm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/memory/stm32_omm.c
+@@ -0,0 +1,522 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) STMicroelectronics 2025 - All Rights Reserved
++ * Author(s): Patrice Chotard <patrice.chotard@foss.st.com> for STMicroelectronics.
++ */
 +
-+title: STM32 Octo Memory Manager (OMM)
++#include <linux/bitfield.h>
++#include <linux/bus/stm32_firewall_device.h>
++#include <linux/clk.h>
++#include <linux/err.h>
++#include <linux/mfd/syscon.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_platform.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pm_runtime.h>
++#include <linux/regmap.h>
++#include <linux/reset.h>
 +
-+maintainers:
-+  - Patrice Chotard <patrice.chotard@foss.st.com>
++#define OMM_CR			0
++#define CR_MUXEN		BIT(0)
++#define CR_MUXENMODE_MASK	GENMASK(1, 0)
++#define CR_CSSEL_OVR_EN		BIT(4)
++#define CR_CSSEL_OVR_MASK	GENMASK(6, 5)
++#define CR_REQ2ACK_MASK		GENMASK(23, 16)
 +
-+description: |
-+  The STM32 Octo Memory Manager is a low-level interface that enables an
-+  efficient OCTOSPI pin assignment with a full I/O matrix (before alternate
-+  function map) and multiplex of single/dual/quad/octal SPI interfaces over
-+  the same bus. It Supports up to:
-+    - Two single/dual/quad/octal SPI interfaces
-+    - Two ports for pin assignment
++#define OMM_CHILD_NB		2
 +
-+properties:
-+  compatible:
-+    const: st,stm32mp25-omm
++struct ospi_child {
++	struct device *dev;
++	struct device_node *node;
++	struct clk *clk;
++};
 +
-+  "#address-cells":
-+    const: 2
++struct stm32_omm {
++	struct ospi_child child[OMM_CHILD_NB];
++	struct resource *mm_res;
++	struct clk *clk;
++	void __iomem *io_base;
++	u32 cr;
++	u8 nb_child;
++	bool restore_omm;
++};
 +
-+  "#size-cells":
-+    const: 1
++static int stm32_omm_set_amcr(struct device *dev, bool set)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++	struct regmap *syscfg_regmap;
++	struct device_node *node;
++	struct resource res, res1;
++	resource_size_t mm_ospi2_size = 0;
++	static const char * const mm_name[] = { "ospi1", "ospi2" };
++	u32 amcr_base, amcr_mask;
++	int ret, idx;
++	unsigned int i, amcr, read_amcr;
 +
-+  ranges:
-+    description: |
-+      Reflects the memory layout with four integer values per OSPI instance.
-+      Format:
-+      <chip-select> 0 <registers base address> <size>
-+    minItems: 2
-+    maxItems: 2
++	for (i = 0; i < omm->nb_child; i++) {
++		idx = of_property_match_string(dev->of_node,
++					       "memory-region-names",
++					       mm_name[i]);
++		if (idx < 0)
++			continue;
 +
-+  reg:
-+    items:
-+      - description: OMM registers
-+      - description: OMM memory map area
++		/* res1 only used on second loop iteration */
++		res1.start = res.start;
++		res1.end = res.end;
 +
-+  reg-names:
-+    items:
-+      - const: regs
-+      - const: memory_map
++		node = of_parse_phandle(dev->of_node, "memory-region", idx);
++		if (!node)
++			continue;
 +
-+  memory-region:
-+    description: |
-+      Memory region shared between the 2 OCTOSPI instance.
-+      One or two phandle to a node describing a memory mapped region
-+      depending of child number.
-+    minItems: 1
-+    maxItems: 2
++		ret = of_address_to_resource(node, 0, &res);
++		if (ret) {
++			dev_err(dev, "unable to resolve memory region\n");
++			return ret;
++		}
 +
-+  memory-region-names:
-+    description: |
-+      OCTOSPI instance's name to which memory region is associated
-+    items:
-+      enum: [ospi1, ospi2]
-+    minItems: 1
-+    maxItems: 2
++		/* check that memory region fits inside OMM memory map area */
++		if (!resource_contains(omm->mm_res, &res)) {
++			dev_err(dev, "%s doesn't fit inside OMM memory map area\n",
++				mm_name[i]);
++			dev_err(dev, "%pR doesn't fit inside %pR\n", &res, omm->mm_res);
 +
-+  clocks:
-+    maxItems: 1
++			return -EFAULT;
++		}
 +
-+  resets:
-+    maxItems: 1
++		if (i == 1) {
++			mm_ospi2_size = resource_size(&res);
 +
-+  access-controllers:
-+    maxItems: 1
++			/* check that OMM memory region 1 doesn't overlap memory region 2 */
++			if (resource_overlaps(&res, &res1)) {
++				dev_err(dev, "OMM memory-region %s overlaps memory region %s\n",
++					mm_name[0], mm_name[1]);
++				dev_err(dev, "%pR overlaps %pR\n", &res1, &res);
 +
-+  st,syscfg-amcr:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: |
-+      The Address Mapping Control Register (AMCR) is used to split the 256MB
-+      memory map area shared between the 2 OSPI instance. The Octo Memory
-+      Manager sets the AMCR depending of the memory-region configuration.
-+      The memory split bitmask description is:
-+        - 000: OCTOSPI1 (256 Mbytes), OCTOSPI2 unmapped
-+        - 001: OCTOSPI1 (192 Mbytes), OCTOSPI2 (64 Mbytes)
-+        - 010: OCTOSPI1 (128 Mbytes), OCTOSPI2 (128 Mbytes)
-+        - 011: OCTOSPI1 (64 Mbytes), OCTOSPI2 (192 Mbytes)
-+        - 1xx: OCTOSPI1 unmapped, OCTOSPI2 (256 Mbytes)
-+    items:
-+      - description: phandle to syscfg
-+      - description: register offset within syscfg
-+      - description: register bitmask for memory split
++				return -EFAULT;
++			}
++		}
++	}
 +
-+  st,omm-req2ack-ns:
-+    description: |
-+      In multiplexed mode (MUXEN = 1), this field defines the time in
-+      nanoseconds between two transactions.
-+    default: 0
++	syscfg_regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "st,syscfg-amcr");
++	if (IS_ERR(syscfg_regmap)) {
++		dev_err(dev, "Failed to get st,syscfg-amcr property\n");
++		return PTR_ERR(syscfg_regmap);
++	}
 +
-+  st,omm-cssel-ovr:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Configure the chip select selector override for the 2 OCTOSPIs.
-+      - 0: OCTOSPI1 chip select send to NCS1 OCTOSPI2 chip select send to NCS1
-+      - 1: OCTOSPI1 chip select send to NCS2 OCTOSPI2 chip select send to NCS1
-+      - 2: OCTOSPI1 chip select send to NCS1 OCTOSPI2 chip select send to NCS2
-+      - 3: OCTOSPI1 chip select send to NCS2 OCTOSPI2 chip select send to NCS2
-+    minimum: 0
-+    maximum: 3
-+    default: 0
++	ret = of_property_read_u32_index(dev->of_node, "st,syscfg-amcr", 1,
++					 &amcr_base);
++	if (ret)
++		return ret;
 +
-+  st,omm-mux:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Configure the muxing between the 2 OCTOSPIs busses and the 2 output ports.
-+      - 0: direct mode
-+      - 1: mux OCTOSPI1 and OCTOSPI2 to port 1
-+      - 2: swapped mode
-+      - 3: mux OCTOSPI1 and OCTOSPI2 to port 2
-+    minimum: 0
-+    maximum: 3
-+    default: 0
++	ret = of_property_read_u32_index(dev->of_node, "st,syscfg-amcr", 2,
++					 &amcr_mask);
++	if (ret)
++		return ret;
 +
-+  power-domains:
-+    maxItems: 1
++	amcr = mm_ospi2_size / SZ_64M;
 +
-+patternProperties:
-+  ^spi@[a-f0-9]+$:
-+    type: object
-+    $ref: /schemas/spi/st,stm32mp25-ospi.yaml#
-+    description: Required spi child node
++	if (set)
++		regmap_update_bits(syscfg_regmap, amcr_base, amcr_mask, amcr);
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - clocks
-+  - st,syscfg-amcr
-+  - ranges
++	/* read AMCR and check coherency with memory-map areas defined in DT */
++	regmap_read(syscfg_regmap, amcr_base, &read_amcr);
++	read_amcr = read_amcr >> (ffs(amcr_mask) - 1);
 +
-+additionalProperties: false
++	if (amcr != read_amcr) {
++		dev_err(dev, "AMCR value not coherent with DT memory-map areas\n");
++		ret = -EINVAL;
++	}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/st,stm32mp25-rcc.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/st,stm32mp25-rcc.h>
-+    ommanager@40500000 {
-+      compatible = "st,stm32mp25-omm";
-+      reg = <0x40500000 0x400>, <0x60000000 0x10000000>;
-+      reg-names = "regs", "memory_map";
-+      ranges = <0 0 0x40430000 0x400>,
-+               <1 0 0x40440000 0x400>;
-+      memory-region = <&mm_ospi1>, <&mm_ospi2>;
-+      memory-region-names = "ospi1", "ospi2";
-+      pinctrl-0 = <&ospi_port1_clk_pins_a
-+                   &ospi_port1_io03_pins_a
-+                   &ospi_port1_cs0_pins_a>;
-+      pinctrl-1 = <&ospi_port1_clk_sleep_pins_a
-+                   &ospi_port1_io03_sleep_pins_a
-+                   &ospi_port1_cs0_sleep_pins_a>;
-+      pinctrl-names = "default", "sleep";
-+      clocks = <&rcc CK_BUS_OSPIIOM>;
-+      resets = <&rcc OSPIIOM_R>;
-+      access-controllers = <&rifsc 111>;
-+      power-domains = <&CLUSTER_PD>;
-+      #address-cells = <2>;
-+      #size-cells = <1>;
-+      st,syscfg-amcr = <&syscfg 0x2c00 0x7>;
-+      st,omm-req2ack-ns = <0>;
-+      st,omm-mux = <0>;
-+      st,omm-cssel-ovr = <0>;
++	return ret;
++}
 +
-+      spi@40430000 {
-+        compatible = "st,stm32mp25-ospi";
-+        reg = <0 0 0x400>;
-+        memory-region = <&mm_ospi1>;
-+        interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
-+        dmas = <&hpdma 2 0x62 0x00003121 0x0>,
-+               <&hpdma 2 0x42 0x00003112 0x0>;
-+        dma-names = "tx", "rx";
-+        clocks = <&scmi_clk CK_SCMI_OSPI1>;
-+        resets = <&scmi_reset RST_SCMI_OSPI1>, <&scmi_reset RST_SCMI_OSPI1DLL>;
-+        access-controllers = <&rifsc 74>;
-+        power-domains = <&CLUSTER_PD>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        st,syscfg-dlyb = <&syscfg 0x1000>;
-+      };
++static int stm32_omm_enable_child_clock(struct device *dev, bool enable)
++{
++	/* As there is only 2 children, remember first child in case of error */
++	struct clk *first_child_clk = NULL;
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++	u8 i;
++	int ret;
 +
-+      spi@40440000 {
-+        compatible = "st,stm32mp25-ospi";
-+        reg = <1 0 0x400>;
-+        memory-region = <&mm_ospi1>;
-+        interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
-+        dmas = <&hpdma 3 0x62 0x00003121 0x0>,
-+               <&hpdma 3 0x42 0x00003112 0x0>;
-+        dma-names = "tx", "rx";
-+        clocks = <&scmi_clk CK_KER_OSPI2>;
-+        resets = <&scmi_reset RST_SCMI_OSPI2>, <&scmi_reset RST_SCMI_OSPI1DLL>;
-+        access-controllers = <&rifsc 75>;
-+        power-domains = <&CLUSTER_PD>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        st,syscfg-dlyb = <&syscfg 0x1000>;
-+      };
-+    };
++	for (i = 0; i < omm->nb_child; i++) {
++		if (enable) {
++			ret = clk_prepare_enable(omm->child[i].clk);
++			if (ret) {
++				if (first_child_clk)
++					clk_disable_unprepare(first_child_clk);
++
++				dev_err(dev, "Can not enable clock\n");
++				return ret;
++			}
++		} else {
++			clk_disable_unprepare(omm->child[i].clk);
++		}
++
++		first_child_clk = omm->child[i].clk;
++	}
++
++	return 0;
++}
++
++static int stm32_omm_configure(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++	struct reset_control *rstc;
++	unsigned long clk_rate, clk_rate_max = 0;
++	int ret;
++	u8 i;
++	u32 mux = 0;
++	u32 cssel_ovr = 0;
++	u32 req2ack = 0;
++
++	omm->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(omm->clk)) {
++		dev_err(dev, "Failed to get OMM clock (%ld)\n",
++			PTR_ERR(omm->clk));
++
++		return PTR_ERR(omm->clk);
++	}
++
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
++		return ret;
++
++	/* parse children's clock */
++	for (i = 0; i < omm->nb_child; i++) {
++		clk_rate = clk_get_rate(omm->child[i].clk);
++		if (!clk_rate) {
++			dev_err(dev, "Invalid clock rate\n");
++			pm_runtime_disable(dev);
++			goto err_clk_disable;
++		}
++
++		if (clk_rate > clk_rate_max)
++			clk_rate_max = clk_rate;
++	}
++
++	rstc = devm_reset_control_get_optional_exclusive(dev, NULL);
++	if (IS_ERR(rstc)) {
++		ret = dev_err_probe(dev, PTR_ERR(rstc), "reset get failed\n");
++		pm_runtime_disable(dev);
++		goto err_clk_disable;
++	}
++
++	reset_control_assert(rstc);
++	udelay(2);
++	reset_control_deassert(rstc);
++
++	omm->cr = readl_relaxed(omm->io_base + OMM_CR);
++	/* optional */
++	ret = of_property_read_u32(dev->of_node, "st,omm-mux", &mux);
++	if (!ret) {
++		if (mux & CR_MUXEN) {
++			ret = of_property_read_u32(dev->of_node, "st,omm-req2ack-ns",
++						   &req2ack);
++			if (!ret && !req2ack) {
++				req2ack = DIV_ROUND_UP(req2ack, NSEC_PER_SEC / clk_rate_max) - 1;
++
++				if (req2ack > 256)
++					req2ack = 256;
++			}
++
++			req2ack = FIELD_PREP(CR_REQ2ACK_MASK, req2ack);
++
++			omm->cr &= ~CR_REQ2ACK_MASK;
++			omm->cr |= FIELD_PREP(CR_REQ2ACK_MASK, req2ack);
++
++			/*
++			 * If the mux is enabled, the 2 OSPI clocks have to be
++			 * always enabled
++			 */
++			ret = stm32_omm_enable_child_clock(dev, true);
++			if (ret) {
++				pm_runtime_disable(dev);
++				goto err_clk_disable;
++			}
++		}
++
++		omm->cr &= ~CR_MUXENMODE_MASK;
++		omm->cr |= FIELD_PREP(CR_MUXENMODE_MASK, mux);
++	}
++
++	/* optional */
++	ret = of_property_read_u32(dev->of_node, "st,omm-cssel-ovr", &cssel_ovr);
++	if (!ret) {
++		omm->cr &= ~CR_CSSEL_OVR_MASK;
++		omm->cr |= FIELD_PREP(CR_CSSEL_OVR_MASK, cssel_ovr);
++		omm->cr |= CR_CSSEL_OVR_EN;
++	}
++
++	omm->restore_omm = true;
++	writel_relaxed(omm->cr, omm->io_base + OMM_CR);
++
++	ret = stm32_omm_set_amcr(dev, true);
++
++err_clk_disable:
++	pm_runtime_put_sync_suspend(dev);
++
++	return ret;
++}
++
++static int stm32_omm_check_access(struct device *dev, struct device_node *np)
++{
++	struct stm32_firewall firewall;
++	int ret;
++
++	ret = stm32_firewall_get_firewall(np, &firewall, 1);
++	if (ret)
++		return ret;
++
++	return stm32_firewall_grant_access(&firewall);
++}
++
++static int stm32_omm_disable_child(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++	struct reset_control *reset;
++	int ret;
++	u8 i;
++
++	for (i = 0; i < omm->nb_child; i++) {
++		ret = clk_prepare_enable(omm->child[i].clk);
++		if (ret) {
++			dev_err(dev, "Can not enable clock\n");
++			return ret;
++		}
++
++		reset = of_reset_control_get_exclusive(omm->child[i].node, 0);
++		if (IS_ERR(reset)) {
++			dev_err(dev, "Can't get child reset\n");
++			return PTR_ERR(reset);
++		};
++
++		/* reset OSPI to ensure CR_EN bit is set to 0 */
++		reset_control_assert(reset);
++		udelay(2);
++		reset_control_deassert(reset);
++
++		reset_control_put(reset);
++		clk_disable_unprepare(omm->child[i].clk);
++	}
++
++	return 0;
++}
++
++static int stm32_omm_probe(struct platform_device *pdev)
++{
++	struct platform_device *vdev;
++	struct device *dev = &pdev->dev;
++	struct stm32_omm *omm;
++	struct clk *clk;
++	int ret;
++	u8 child_access_granted = 0;
++	u8 i, j;
++	bool child_access[OMM_CHILD_NB];
++
++	omm = devm_kzalloc(dev, sizeof(*omm), GFP_KERNEL);
++	if (!omm)
++		return -ENOMEM;
++
++	omm->io_base = devm_platform_ioremap_resource_byname(pdev, "regs");
++	if (IS_ERR(omm->io_base))
++		return PTR_ERR(omm->io_base);
++
++	omm->mm_res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "memory_map");
++	if (IS_ERR(omm->mm_res))
++		return PTR_ERR(omm->mm_res);
++
++	/* check child's access */
++	for_each_child_of_node_scoped(dev->of_node, child) {
++		if (omm->nb_child >= OMM_CHILD_NB) {
++			dev_err(dev, "Bad DT, found too much children\n");
++			ret = -E2BIG;
++			goto err_clk_release;
++		}
++
++		if (!of_device_is_compatible(child, "st,stm32mp25-ospi")) {
++			ret = -EINVAL;
++			goto err_clk_release;
++		}
++
++		ret = stm32_omm_check_access(dev, child);
++		if (ret < 0 && ret != -EACCES)
++			goto err_clk_release;
++
++		child_access[omm->nb_child] = false;
++		if (!ret) {
++			child_access_granted++;
++			child_access[omm->nb_child] = true;
++		}
++
++		omm->child[omm->nb_child].node = child;
++
++		clk = of_clk_get(child, 0);
++		if (IS_ERR(clk)) {
++			dev_err(dev, "Can't get child clock\n");
++			ret = PTR_ERR(clk);
++			goto err_clk_release;
++		};
++
++		omm->child[omm->nb_child].clk = clk;
++		omm->nb_child++;
++	}
++
++	if (omm->nb_child != OMM_CHILD_NB) {
++		ret = -EINVAL;
++		goto err_clk_release;
++	}
++
++	platform_set_drvdata(pdev, omm);
++
++	pm_runtime_enable(dev);
++
++	/* check if OMM's resource access is granted */
++	ret = stm32_omm_check_access(dev, dev->of_node);
++	if (ret < 0 && ret != -EACCES)
++		goto err_clk_release;
++
++	if (!ret && child_access_granted == OMM_CHILD_NB) {
++		/* Ensure both OSPI instance are disabled before configuring OMM */
++		ret = stm32_omm_disable_child(dev);
++		if (ret)
++			goto err_clk_release;
++
++		ret = stm32_omm_configure(dev);
++		if (ret)
++			goto err_clk_release;
++	} else {
++		dev_dbg(dev, "Octo Memory Manager resource's access not granted\n");
++		/*
++		 * AMCR can't be set, so check if current value is coherent
++		 * with memory-map areas defined in DT
++		 */
++		ret = stm32_omm_set_amcr(dev, false);
++		if (ret)
++			goto err_clk_release;
++	}
++
++	/* for each child, if resource access is granted and status "okay", probe it */
++	for (i = 0; i < omm->nb_child; i++) {
++		if (!child_access[i] || !of_device_is_available(omm->child[i].node))
++			continue;
++
++		vdev = of_platform_device_create(omm->child[i].node, NULL, NULL);
++		if (!vdev) {
++			dev_err(dev, "Failed to create Octo Memory Manager child\n");
++			for (j = i; j > 0; --j) {
++				if (omm->child[j].dev)
++					of_platform_device_destroy(omm->child[j].dev, NULL);
++			}
++
++			ret = -EINVAL;
++			goto err_clk_release;
++		}
++		omm->child[i].dev = &vdev->dev;
++	}
++
++err_clk_release:
++	for (i = 0; i < omm->nb_child; i++)
++		clk_put(omm->child[i].clk);
++
++	return ret;
++}
++
++static void stm32_omm_remove(struct platform_device *pdev)
++{
++	struct stm32_omm *omm = platform_get_drvdata(pdev);
++	int i;
++
++	for (i = 0; i < omm->nb_child; i++)
++		if (omm->child[i].dev)
++			of_platform_device_destroy(omm->child[i].dev, NULL);
++
++	if (omm->cr & CR_MUXEN)
++		stm32_omm_enable_child_clock(&pdev->dev, false);
++
++	pm_runtime_disable(&pdev->dev);
++}
++
++static const struct of_device_id stm32_omm_of_match[] = {
++	{ .compatible = "st,stm32mp25-omm", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, stm32_omm_of_match);
++
++static int __maybe_unused stm32_omm_runtime_suspend(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++
++	clk_disable_unprepare(omm->clk);
++
++	return 0;
++}
++
++static int __maybe_unused stm32_omm_runtime_resume(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++
++	return clk_prepare_enable(omm->clk);
++}
++
++static int __maybe_unused stm32_omm_suspend(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++
++	if (omm->restore_omm && omm->cr & CR_MUXEN)
++		stm32_omm_enable_child_clock(dev, false);
++
++	return pinctrl_pm_select_sleep_state(dev);
++}
++
++static int __maybe_unused stm32_omm_resume(struct device *dev)
++{
++	struct stm32_omm *omm = dev_get_drvdata(dev);
++	int ret;
++
++	pinctrl_pm_select_default_state(dev);
++
++	if (!omm->restore_omm)
++		return 0;
++
++	/* Ensure both OSPI instance are disabled before configuring OMM */
++	ret = stm32_omm_disable_child(dev);
++	if (ret)
++		return ret;
++
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
++		return ret;
++
++	writel_relaxed(omm->cr, omm->io_base + OMM_CR);
++	ret = stm32_omm_set_amcr(dev, true);
++	pm_runtime_put_sync_suspend(dev);
++	if (ret)
++		return ret;
++
++	if (omm->cr & CR_MUXEN)
++		ret = stm32_omm_enable_child_clock(dev, true);
++
++	return ret;
++}
++
++static const struct dev_pm_ops stm32_omm_pm_ops = {
++	SET_RUNTIME_PM_OPS(stm32_omm_runtime_suspend,
++			   stm32_omm_runtime_resume, NULL)
++	SET_SYSTEM_SLEEP_PM_OPS(stm32_omm_suspend, stm32_omm_resume)
++};
++
++static struct platform_driver stm32_omm_driver = {
++	.probe	= stm32_omm_probe,
++	.remove = stm32_omm_remove,
++	.driver	= {
++		.name = "stm32-omm",
++		.of_match_table = stm32_omm_of_match,
++		.pm = &stm32_omm_pm_ops,
++	},
++};
++module_platform_driver(stm32_omm_driver);
++
++MODULE_DESCRIPTION("STMicroelectronics Octo Memory Manager driver");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 
