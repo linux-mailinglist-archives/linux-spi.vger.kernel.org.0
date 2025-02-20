@@ -1,139 +1,338 @@
-Return-Path: <linux-spi+bounces-6880-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6881-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63FB9A3D8D8
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2025 12:37:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE5C0A3DA56
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2025 13:46:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D24F1888736
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2025 11:34:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA09019C0630
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Feb 2025 12:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08BF01D5CC6;
-	Thu, 20 Feb 2025 11:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45CD81C8618;
+	Thu, 20 Feb 2025 12:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SMG7YHHV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCqtXfko"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB6B1EB9E5;
-	Thu, 20 Feb 2025 11:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1847579CD;
+	Thu, 20 Feb 2025 12:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740051265; cv=none; b=cMwXLupAHobm6MUeAasUcfCHNh45z4rI9CB9yBOWQz1718sTUF6sfJEHizwGRrhJnn8MNpWGY1OhaN/cIktYW6D4vsHLGolf8ItBUAVglc4BlxquUV97TlnOFOYiQuiG/3QtjNDh1CHmQSrszefhQVBYknCMhVID3f/b8U1dCPo=
+	t=1740055600; cv=none; b=UukhdS/zN8htDZiA32bkATu9lpcvwPX0v8B/QiB406y+CSOqBusZjUlxRqv3qocTrKbMy0uk2b8fGa0b1+7Nklo4fE1d1GC0UaOr92Mot09kvAcVhw+JfvV3zjGVNZWMtB0GVdmccpo74w7pMBOOLzac4Q8mSV12OW9a1u6Q4RU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740051265; c=relaxed/simple;
-	bh=L4ur7hyj+TYrQe6s5H1vLxLu0G7YH2mB8YWHXQZIOJY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SVrxDIz5/FwyB9VB54suRwMP3f5EO7S8LvHsZuEtPJgme4XB9XLXKTUbmVUPMQ3rxvP2zLmcUKOF8TN/+lJhQQ9yJLcUCw+FDCo2f1V8aAWNnRwHyJ7/DwiaMcVUgliT5lfWF986CMLgV31zvHd+N9+wIUdZutSmcMksR4Gdzkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SMG7YHHV; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51K6BJTN009745;
-	Thu, 20 Feb 2025 11:34:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LU+sgihTDEVzhC8SvCsP/tL9QzmmAqy0PpSwPVODcQ0=; b=SMG7YHHVQcMogakw
-	nUXgiUQGPClSOigRwZNG70vXhsWf+Ua806w14/1A+V6QWAfcdxOSeMoieZtihJaN
-	390TRR/ZloWL9liVtXA4aFJ2u5ISAdy9F0W+82476FeMijg7LxN1HEMq3ppCXPLf
-	5kB6FGUBjLFzRP/xaBPHfRUszPqFGW6J970i1XE+C2klToHcBlf9K49Mwv6OPH3y
-	+bqkIGxhGDNVcZY/az67atHRoEtf/EzKIizksM4RqwRw9jCP3o3wslX+H4gOV8se
-	x/L/UCLbvqB76JKPOu7a/WrnwkO/bTDxuKXuVMUNFUzY3XEylL6sXjeaiCWTaVe1
-	uzfhtw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy1x17w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 11:34:03 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51KBY23X021125
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Feb 2025 11:34:02 GMT
-Received: from [10.152.201.53] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 20 Feb
- 2025 03:33:56 -0800
-Message-ID: <5022bc8c-a6ac-3782-43cc-19b0ca644a6a@quicinc.com>
-Date: Thu, 20 Feb 2025 17:03:34 +0530
+	s=arc-20240116; t=1740055600; c=relaxed/simple;
+	bh=g2f//fK8aq39T2Pf40WB9z+ft2RgJY8RkoVFTl07iro=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=a7zkPz/r+Tvp9nohsX9r8NSv/BdJ41uAco4G1o3bTe2PesvjZxxE/xmp7TPoFfKAbegNy57OCTENljyLaYyJx31QBx9NiqCCV6VdT7ccajCGG7DIPbfV5wUBmrhj7vWHqPPOJ/pYHve+9dBzU3u3FxGIUeOAGvUVjhbNGx/Pf+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCqtXfko; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 98095C4CED1;
+	Thu, 20 Feb 2025 12:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740055599;
+	bh=g2f//fK8aq39T2Pf40WB9z+ft2RgJY8RkoVFTl07iro=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=jCqtXfkoRqoRNaR/4Y+oEAWHZlB5kCJvT8WIioEVAp0p9EedZ6jlTprD8OtXzwd7F
+	 RWOIAI3+5N0e6rp+SpIoZUGuzcdV6/6Ua7FcEspz18d+MGWGJ8JK+rY7i4nRqpPp/v
+	 E4VpeIEpeo2XVKFCTqXa27KY++7WQdG7+WxVYQQwNKBEZwHplxAO1WwpO7vJxJfAz5
+	 oNfEYQt9+o47msCg9ku+6UVgAn0QdmmYiiTaaVpZkvwgNMxfdaZeAzbXnz4Llyis0E
+	 7Xg/9TymcdyYhwP8b3E0qHk3JsqufigVaBpHjmZmO13O5IJFMJq2xTvHbZ5Lp5f+Vm
+	 OPAtORO4fHcCQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 790C6C021B1;
+	Thu, 20 Feb 2025 12:46:39 +0000 (UTC)
+From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_B4_Relay?= <devnull+j.ne.posteo.net@kernel.org>
+Date: Thu, 20 Feb 2025 13:46:32 +0100
+Subject: [PATCH v3] dt-bindings: spi: Convert Freescale SPI bindings to
+ YAML
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [GIT PULL] mtd: topic branch for spi with Qcom changes
-To: Mark Brown <broonie@kernel.org>
-CC: Miquel Raynal <miquel.raynal@bootlin.com>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
-        <manivannan.sadhasivam@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>,
-        Tudor Ambarus <Tudor.Ambarus@linaro.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Michael Walle
-	<michael@walle.cc>,
-        Pratyush Yadav <pratyush@kernel.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>
-References: <87jzbp9hnt.fsf@bootlin.com> <87bjwkoxwh.fsf@bootlin.com>
- <96bdefb1-4607-4a4a-8bed-b4d9b5971171@sirena.org.uk>
- <80746729-2b32-9a13-93f5-8d5c222ce4d8@quicinc.com>
- <Z7SfQ4lu2fponEiX@finisterre.sirena.org.uk>
-Content-Language: en-US
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <Z7SfQ4lu2fponEiX@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6Hy-Y5cOnKZrdX0E3d5Gp5-E9paq87xl
-X-Proofpoint-ORIG-GUID: 6Hy-Y5cOnKZrdX0E3d5Gp5-E9paq87xl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-20_04,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 spamscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502200087
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250220-ppcyaml-spi-v3-1-e340613c7875@posteo.net>
+X-B4-Tracking: v=1; b=H4sIACckt2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyjHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyMD3YKC5MrE3Bzd4oJMXQvTNGMLI4skIxNjUyWgjoKi1LTMCrBp0bG
+ 1tQBkMzqJXQAAAA==
+X-Change-ID: 20250220-ppcyaml-spi-85f3828b2435
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740055598; l=7775;
+ i=j.ne@posteo.net; s=20240329; h=from:subject:message-id;
+ bh=boF0Ptb0S1YPvdr9oEqVUSafvrLS+pZmCso6Fl1gjco=;
+ b=PO2ytQrrgjrqH3PJyuQ+9iOvcuAke4DEX0xzz8Cm49UN4/5+8w6OZPfs71uwvMhAAjIDJMerw
+ 3HmahTtu0QwCZZN+iy42ppYB5whvaaz+5KXKgEiX/ZflrYRBt/PmFZx
+X-Developer-Key: i=j.ne@posteo.net; a=ed25519;
+ pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
+X-Endpoint-Received: by B4 Relay for j.ne@posteo.net/20240329 with
+ auth_id=156
+X-Original-From: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Reply-To: j.ne@posteo.net
+
+From: "J. Neuschäfer" <j.ne@posteo.net>
+
+fsl-spi.txt contains the bindings for the fsl,spi and fsl,espi
+contollers. Convert them to YAML.
+
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+---
+V3:
+- split out as a single patch
+- use IRQ_TYPE_* constants in examples
+- drop interrupt-parent from examples, add Rob's review tag
+
+V2:
+- part of series [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT bindings
+  Link: https://lore.kernel.org/lkml/20250207-ppcyaml-v2-8-8137b0c42526@posteo.net/
+- add missing end-of-document ("...") markers
+- add missing constraints to interrupts, fsl,espi-num-chipselects,
+  fsl,csbef and fsl,csaft properties
+- remove unnecessary type from clock-frequency property
+- fix property order to comply with dts coding style
+---
+ .../devicetree/bindings/spi/fsl,espi.yaml          | 65 +++++++++++++++++++
+ Documentation/devicetree/bindings/spi/fsl,spi.yaml | 74 ++++++++++++++++++++++
+ Documentation/devicetree/bindings/spi/fsl-spi.txt  | 62 ------------------
+ 3 files changed, 139 insertions(+), 62 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/fsl,espi.yaml b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..d267bbfaf02f56e5b1ab8f6b2a8a34be13fb6766
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+@@ -0,0 +1,65 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/fsl,espi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale eSPI (Enhanced Serial Peripheral Interface) controller
++
++maintainers:
++  - J. Neuschäfer <j.ne@posteo.net>
++
++properties:
++  compatible:
++    const: fsl,mpc8536-espi
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  fsl,espi-num-chipselects:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [ 1, 4 ]
++    description: The number of the chipselect signals.
++
++  fsl,csbef:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 15
++    description: Chip select assertion time in bits before frame starts
++
++  fsl,csaft:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 15
++    description: Chip select negation time in bits after frame ends
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - fsl,espi-num-chipselects
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi@110000 {
++        compatible = "fsl,mpc8536-espi";
++        reg = <0x110000 0x1000>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++        interrupts = <53 IRQ_TYPE_EDGE_FALLING>;
++        fsl,espi-num-chipselects = <4>;
++        fsl,csbef = <1>;
++        fsl,csaft = <1>;
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/spi/fsl,spi.yaml b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..d74792fc9bf2d74c1e3126c1dc28878df95bf57e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/fsl,spi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Freescale SPI (Serial Peripheral Interface) controller
++
++maintainers:
++  - J. Neuschäfer <j.ne@posteo.net>
++
++properties:
++  compatible:
++    enum:
++      - fsl,spi
++      - aeroflexgaisler,spictrl
++
++  reg:
++    maxItems: 1
++
++  cell-index:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      QE SPI subblock index.
++      0: QE subblock SPI1
++      1: QE subblock SPI2
++
++  mode:
++    description: SPI operation mode
++    enum:
++      - cpu
++      - cpu-qe
++
++  interrupts:
++    maxItems: 1
++
++  clock-frequency:
++    description: input clock frequency to non FSL_SOC cores
++
++  cs-gpios: true
++
++  fsl,spisel_boot:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      For the MPC8306 and MPC8309, specifies that the SPISEL_BOOT signal is used
++      as chip select for a slave device. Use reg = <number of gpios> in the
++      corresponding child node, i.e. 0 if the cs-gpios property is not present.
++
++required:
++  - compatible
++  - reg
++  - mode
++  - interrupts
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    spi@4c0 {
++        compatible = "fsl,spi";
++        reg = <0x4c0 0x40>;
++        cell-index = <0>;
++        interrupts = <82 0>;
++        mode = "cpu";
++        cs-gpios = <&gpio 18 IRQ_TYPE_EDGE_RISING          // device reg=<0>
++                    &gpio 19 IRQ_TYPE_EDGE_RISING>;        // device reg=<1>
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/spi/fsl-spi.txt b/Documentation/devicetree/bindings/spi/fsl-spi.txt
+deleted file mode 100644
+index 0654380eb7515d8bda80eea1486e77b939ac38d8..0000000000000000000000000000000000000000
+--- a/Documentation/devicetree/bindings/spi/fsl-spi.txt
++++ /dev/null
+@@ -1,62 +0,0 @@
+-* SPI (Serial Peripheral Interface)
+-
+-Required properties:
+-- cell-index : QE SPI subblock index.
+-		0: QE subblock SPI1
+-		1: QE subblock SPI2
+-- compatible : should be "fsl,spi" or "aeroflexgaisler,spictrl".
+-- mode : the SPI operation mode, it can be "cpu" or "cpu-qe".
+-- reg : Offset and length of the register set for the device
+-- interrupts : <a b> where a is the interrupt number and b is a
+-  field that represents an encoding of the sense and level
+-  information for the interrupt.  This should be encoded based on
+-  the information in section 2) depending on the type of interrupt
+-  controller you have.
+-- clock-frequency : input clock frequency to non FSL_SOC cores
+-
+-Optional properties:
+-- cs-gpios : specifies the gpio pins to be used for chipselects.
+-  The gpios will be referred to as reg = <index> in the SPI child nodes.
+-  If unspecified, a single SPI device without a chip select can be used.
+-- fsl,spisel_boot : for the MPC8306 and MPC8309, specifies that the
+-  SPISEL_BOOT signal is used as chip select for a slave device. Use
+-  reg = <number of gpios> in the corresponding child node, i.e. 0 if
+-  the cs-gpios property is not present.
+-
+-Example:
+-	spi@4c0 {
+-		cell-index = <0>;
+-		compatible = "fsl,spi";
+-		reg = <4c0 40>;
+-		interrupts = <82 0>;
+-		interrupt-parent = <700>;
+-		mode = "cpu";
+-		cs-gpios = <&gpio 18 1		// device reg=<0>
+-			    &gpio 19 1>;	// device reg=<1>
+-	};
+-
+-
+-* eSPI (Enhanced Serial Peripheral Interface)
+-
+-Required properties:
+-- compatible : should be "fsl,mpc8536-espi".
+-- reg : Offset and length of the register set for the device.
+-- interrupts : should contain eSPI interrupt, the device has one interrupt.
+-- fsl,espi-num-chipselects : the number of the chipselect signals.
+-
+-Optional properties:
+-- fsl,csbef: chip select assertion time in bits before frame starts
+-- fsl,csaft: chip select negation time in bits after frame ends
+-
+-Example:
+-	spi@110000 {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "fsl,mpc8536-espi";
+-		reg = <0x110000 0x1000>;
+-		interrupts = <53 0x2>;
+-		interrupt-parent = <&mpic>;
+-		fsl,espi-num-chipselects = <4>;
+-		fsl,csbef = <1>;
+-		fsl,csaft = <1>;
+-	};
+
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250220-ppcyaml-spi-85f3828b2435
+
+Best regards,
+-- 
+J. Neuschäfer <j.ne@posteo.net>
 
 
-
-On 2/18/2025 8:24 PM, Mark Brown wrote:
-> On Mon, Feb 17, 2025 at 11:25:24AM +0530, Md Sadre Alam wrote:
->> On 1/6/2025 9:06 PM, Mark Brown wrote:
-> 
->>> Thanks for the heads up - I didn't pull it yet so as you suggest I can
->>> just leave it and pick things up from mainline.
-> 
->> The QPIC raw nand patches are available in the linux-next. could you please
->> pick the QPIC SPI NAND patches [1]
->> [1]
->> https://lore.kernel.org/all/20241120091507.1404368-7-quic_mdalam@quicinc.com/
-> 
-> That looks like it was posted back in November, I'd have expected
-> anything for this release to have been posted after the merge window...
-> 
-> Please don't send content free pings and please allow a reasonable time
-> for review.  People get busy, go on holiday, attend conferences and so
-> on so unless there is some reason for urgency (like critical bug fixes)
-> please allow at least a couple of weeks for review.  If there have been
-> review comments then people may be waiting for those to be addressed.
-> 
-> Sending content free pings adds to the mail volume (if they are seen at
-> all) which is often the problem and since they can't be reviewed
-> directly if something has gone wrong you'll have to resend the patches
-> anyway, so sending again is generally a better approach though there are
-> some other maintainers who like them - if in doubt look at how patches
-> for the subsystem are normally handled.
-Sorry, will rebase, test and post a new version.
-
-Thanks,
-Alam.
 
