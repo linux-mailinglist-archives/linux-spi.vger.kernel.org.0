@@ -1,55 +1,53 @@
-Return-Path: <linux-spi+bounces-6896-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6897-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5B6A42331
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 15:36:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DBEEA4261D
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 16:22:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69F897AA019
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 14:33:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E05419C478C
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 15:17:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D26018A6BD;
-	Mon, 24 Feb 2025 14:31:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE6431632D3;
+	Mon, 24 Feb 2025 15:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/ibNImO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYhLEhGv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B5E18A6AD;
-	Mon, 24 Feb 2025 14:31:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8283A1519B0;
+	Mon, 24 Feb 2025 15:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740407461; cv=none; b=j7x5xkp3XC2Y8/l2ptFA9JwWSsh1aVqUl3yikynoNs7VbWGXccWbFWCYTvnByCFcLUXX9qEt1teS4YvHl3N2X1uZ9pCKbi0jlFsBmCe5VUvOOte6/DDq4mDY8bTazfHOvt949OrHOYm9TUHpvwonyaJHl3QGNYdHV9NUXudmJVA=
+	t=1740410203; cv=none; b=amvzKXqUC8HNluAJu2a8KgzmdG9UFgtW3w3o0WkMJVjr2fQB+6rIuFEf4G0fzdx9JrSTHrkjgZYjjA4X+qR34CZYrWhr5uDN1okx5HpRVI5Nwh+cdSDHtvOQDBjBl9NjCfRvvI60LaEEsUl4VXzQVFx3rg8xgWcAVd1kidQenZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740407461; c=relaxed/simple;
-	bh=I3P2jx0QsippUmVmm7L8IZBjxP5VjYTHjdhTlWaW9Qs=;
+	s=arc-20240116; t=1740410203; c=relaxed/simple;
+	bh=K0QZDgtlRnOJa9UjdXc+6jh5pVnTRQJroTBmUnt1KUA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YuynxJnHJdd6UoJAIG/DEyDGJVQbVDso8YEA8zrQQN7lXlNML0Emy0XXfoQXhaBPDgbCtfb+LhkOytbatQuYM2CBW+ljSJo+OF8KQ0whwHgvig38sHI4P9l1hjRwyZWTlAxqavix5zVBSxgrprjqzU48AJb/F/7rn4J2c4cJL10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/ibNImO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E0CC4CED6;
-	Mon, 24 Feb 2025 14:30:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=SUkX1XmRnWYeMc+Zbe4jvPxJSQS2bcfipA/jvgojyx0Y+dmvxG4Saa2a6T+kzcJ16ttiOMuS4ATjeddUPm2HGKMIjwZHnmnvWvW2o+cfU6wp27E1Ca7mQ13d6UMm96Z6gerTgwFtVr4P1icr0pVKxNUUmzFOB78ky7QAlIOHYtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYhLEhGv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16421C4CEE8;
+	Mon, 24 Feb 2025 15:16:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740407460;
-	bh=I3P2jx0QsippUmVmm7L8IZBjxP5VjYTHjdhTlWaW9Qs=;
+	s=k20201202; t=1740410202;
+	bh=K0QZDgtlRnOJa9UjdXc+6jh5pVnTRQJroTBmUnt1KUA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I/ibNImOh5PSSLOokVXE0TcwmYgSgdkk/TwIb56jmE4/lE42TFDxhcIOOlbtDlfoy
-	 XoecltAvevoKJCWNKyhhobAw+/B6i8wOlk8x7nwIyTNWrpI+t4Vnfk9mig06iMsJG3
-	 EwJauDgIw2vtOlHD1W+MNiJm9iMx+SbSQl1EkAz9hljpa+HPrtl0nXeHSl/Iqv6O1a
-	 p29tmVYAH/eYMmDXIPrkKPwsb+b9fv5V3PmEeslEXhy5uXa6171t8yVDUHthSMr1mG
-	 49LgjUtxy0dGnS1mtBtXDXXa3m/XYl43t+/EOipU70DUqLnzvRyPRnLF+VMZz7XZJY
-	 gwNMvmyNM++Wg==
-Date: Mon, 24 Feb 2025 14:30:56 +0000
+	b=fYhLEhGvmlerXvKccUvJDO5vW7UdQGGP42wVF3xTZ5ePNLfIVo1SfD4etJEIBfJh2
+	 bod6f/WBwQEiP6BqqKpX4nbuemuQcgETxy6G/hqyv07BRAr1xMtXGeeyxk5x2ULPng
+	 GS/b+HI8rz3pEONWoQbpNorkanj2z/hD6bJysaMx2zSiizCPjJF2FJvhcZ+G/1XzKd
+	 rBy/4CmV8MO1pF24/H2U99OuImN/I5n3EoArhF6AlCer31YlkVSI7UMPn7Z69/lcB5
+	 X6l5FQ4SU9TQ/C0awgBQP4CJXHdgtLuQu5iXJLFHQXPHDqJOLoS50MsRN3TGKcn+I1
+	 QYIMvDbRHM+2g==
+Date: Mon, 24 Feb 2025 15:16:38 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Rengarajan S <rengarajan.s@microchip.com>
-Cc: unglinuxdriver@microchip.com, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 for-next] spi: mchp-pci1xxxx: Updated memcpy
- implementation for x64 and bcm2711 processors
-Message-ID: <188ffb7d-47e2-45fd-80b1-b31ca58f0c0b@sirena.org.uk>
-References: <20250224125153.13728-1-rengarajan.s@microchip.com>
+To: Lukasz Majewski <lukma@denx.de>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spidev: Add compatible for LWE's btt device
+Message-ID: <5661510e-3aea-4c07-88d6-2c3efccadb37@sirena.org.uk>
+References: <20250221155644.1168860-1-lukma@denx.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,43 +55,38 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MlLoVElE3MSUpvYy"
+	protocol="application/pgp-signature"; boundary="PAo3YaDka89++Hzu"
 Content-Disposition: inline
-In-Reply-To: <20250224125153.13728-1-rengarajan.s@microchip.com>
+In-Reply-To: <20250221155644.1168860-1-lukma@denx.de>
 X-Cookie: Phone call for chucky-pooh.
 
 
---MlLoVElE3MSUpvYy
+--PAo3YaDka89++Hzu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Feb 24, 2025 at 06:21:53PM +0530, Rengarajan S wrote:
-> In Raspberry-pi CM4 devices with BCM2711 processor, the documentation
-> points to a limitation with 64-bit accesses. Using memcpy_fromio and
-> memcpy_toio for each 64-bit SPI read/write causes the first 4 bytes to be
-> repeated. To address the limitation, each read/write is limited to 4
-> bytes in case of BCM2711 processors.
+On Fri, Feb 21, 2025 at 04:56:44PM +0100, Lukasz Majewski wrote:
+> The Liebherr's BTT devices are using spidev to communicate via
+> SPI to monitoring devices. Extend compatibles to allow proper
+> DTS description.
 
-This feels like something we ought to be able to figure out from the PCI
-subsystem rather than requiring us to enumerate specific SoCs, or at
-least have PCI drivers be able to enumerate the system PCI quirk from
-the PCI core.  What's the story with making this a per driver per SoC
-thing - is there some reason it won't come up elsewhere?
+This is fine but we need a bindings document update too
+(trivial-devices.yaml should be fine I think).
 
---MlLoVElE3MSUpvYy
+--PAo3YaDka89++Hzu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme8gp8ACgkQJNaLcl1U
-h9AOAQf8D+mdh410SkwvAJh4jYE+cRoC+y24fSxtgCAugnVBJ9rTnWZ5xAPWU91v
-xqkyF3+a9L0BO60nuXO3TmU5Jt3JBIpF9K5W8oRqF92g++dLthRDfu3/MlH/lGLW
-iJIH4w476T0Ay5FU98J5jwFRYzkyG+MiQXfFpnykiprAzEQ3ejAJZnZhx1F6kWSr
-tb0CBZcVGxCoyB0ratJtVXzABdrIFtsco4/s+B4M5GVm3mTjSEH1UjeZ10poZCxw
-RIfUMEmn/XQy2IrOLOKw+LZQ0Q2AXYf5akdYup2nDKRg+6n6PFnHae3wtgte7Bhc
-k8CJ3wO83JDeJuWq5/8UEHwttxn+Gw==
-=8P/F
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme8jVYACgkQJNaLcl1U
+h9CEUwf+K3UDLV64CQs6pPKuiX5rxPq6c1k7Cv1JJGogmS1dyKty9DU8Ntd0SCkh
+hi3Wl+IZNB7O7xNMxLHagDEnTZVLn4JinDZZnsGy+MDj6TAN+tIfu68p2sEsLgIZ
+owiKb8m67tBFstocSND9CKcQqKIaQZWT0frpri3uUn2/MN11h8nQPDDDi95+xmbG
+6D3Xxt5IBUUV3UjwOkgIbfbY1BhR+GXsME8O0+Cpw4sAUNJf9YIB222+FBiG9Gsr
+NW6OqfkIkWmShuwN6PcpTXUCo+++fsjbdW3VOmS8lprecvqeywBR+yOTUUV/ladG
+vnD6+ooOO1TeLJjvnkmrFCPDR3alxA==
+=70nJ
 -----END PGP SIGNATURE-----
 
---MlLoVElE3MSUpvYy--
+--PAo3YaDka89++Hzu--
 
