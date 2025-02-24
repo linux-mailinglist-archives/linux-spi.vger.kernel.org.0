@@ -1,57 +1,95 @@
-Return-Path: <linux-spi+bounces-6885-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6886-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9350FA3FA4E
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Feb 2025 17:11:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6001BA41A71
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 11:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC00670595B
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Feb 2025 16:01:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ECB81885B94
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Feb 2025 10:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B22218AD2;
-	Fri, 21 Feb 2025 15:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CACD24A047;
+	Mon, 24 Feb 2025 10:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="LN4ajsLe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIMRpB+3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0F921858C;
-	Fri, 21 Feb 2025 15:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC6D242934;
+	Mon, 24 Feb 2025 10:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740153425; cv=none; b=tCtol3D7OGXHjVYtvuQWMfUzQZTttXU10ikWQ+AfCrS9g3OUsA1gla6ZSx35V3RYl8hrB6wewBLWjFVCysRinrcf3zVXsALAW8a1Qcz87n27Uqm7tOyDp/jJeP5Z0D1Q2OgEJMkD9ObGeYEhIoLAZaob5aTbQXqOmIW7ywtvUsE=
+	t=1740391966; cv=none; b=Wuzf4JRz0MAYnhOvOZ2ZXIXxcLPFPbduswByTTYohzEyXA3/Bj4nhAAOV8EF1n4JBLscwY2hCKp8X9gdw0yei1+BaOBlmYjfa5Lk6ya/3qXKaU//xiu9Vg6aC1hHiekP29x7P2vJlHLJohVLE//yv1I97Twn55H+K1GKLBDuI/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740153425; c=relaxed/simple;
-	bh=492TM+ddBdtrEar4I4w7H8TW4P41zEk1hJNB3oHWQlM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HFP8yxnh2Crc3exOxMiz9sHqp99je/b9fgDxA4F6BEP5iQJCIYg+rx5TXb3fPaHcMoDZPOaxjkO2QrbxcVLdYGpk9G0hllbat0VQzNoM9XiyZGzb4ieGx2FkNUz/Qx44AwUW02ja0lkT6EhXUK5YZ4kHLRQ+dSGMm87/75yExnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=LN4ajsLe; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 96538103BB5D9;
-	Fri, 21 Feb 2025 16:57:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1740153421;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NTPkJC8S7Tc2Qw4+IVsZXDQLXEDTO6mvUFRRMEEVFYA=;
-	b=LN4ajsLeHjC107GeauITx1TiuGChfkP2tN3BZ/ycBSTaOEtLajVpzMA9Vlleu3pUhBdb/u
-	qApAlJKSvrEIJ9+s/jic0icoUjIjVMZePAe/2iN/1MIKZPdRn494k3LF0n9fuzQ5LpycdG
-	Kgxxzb3TJzd41Rta0LZ3YlpTNMO44Mif1WGb4o6c//o56zRTkX8AUO2EeIboOTmIRj+fom
-	NRPxSOG43+JEfosRAV4WQVydxzyY5hC2MV1sycxuRBrl59N9BuQfZ8TaifjM9DwCbKIUeV
-	o2uzL6PBRKFJ7mmCOUNB1WxueGtYWBgNIbPtIgu9ZqTPiJiWdP8buPowbYg/dw==
-From: Lukasz Majewski <lukma@denx.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org,
+	s=arc-20240116; t=1740391966; c=relaxed/simple;
+	bh=9Bqo94YHiFiKkOBkFOEIOCxQ9JWo07gI933V6qyxAy4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h6CBEko06mAlySZ7EISsyV2A/3WQFttJe8VuztEHoLF+y2xcn7gze+a7T2PrZLi7a0XkB9PVRZD44Sl+qdHmdEe2HT7AuOFXq27CkoaQX8ZMfIGUdVAWHk+xfQ7w8cIAJ4kBwS68TRHGsxa2ixfk2lEeVcMmP+bskqByzVD5HAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lIMRpB+3; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-222e8d07dc6so10401985ad.1;
+        Mon, 24 Feb 2025 02:12:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740391964; x=1740996764; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IPGO+zy6qEo7yGIQSUB6POZKOvKXrvFXwU9PL0lZRak=;
+        b=lIMRpB+3Qn4kZENj7iSXBNOur5IBiT+RZzf2knmZn0q/5094+6NAdh8AUjhFxrkNtx
+         ij0phMBHvosTu26EH309V7UMrTwZjkIG6K19bJoT82T4iouxqzIxnv3vSdGRp1svdoDD
+         SjedUH4N17hGCP6nGqt5biR1O4ELeib2wNAXmQGKuJ5Kjlw67j/hjAJMr+m6IUC4qqOv
+         ApJTQYeDstCFJ93m5+/5xzoTxjj6nhKCiUR2PC6KGQ605doZb44deMUM2L63oxM+KJ3b
+         8O4s6BG/y97HZeTJ6c5eBcGv6fv2HSZZKn5f585bXdIsSKzN/snikQCIUH/YrYLUST/d
+         SR8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740391964; x=1740996764;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IPGO+zy6qEo7yGIQSUB6POZKOvKXrvFXwU9PL0lZRak=;
+        b=Tt2X+8PHP7xk8GuU3qqff+bE4GTK8aJvzrZUQPPcENwRJ6PALhQjUTKZ/cN7AXnh+P
+         czAPGTipNhTU6bPs7XObY9tLnio0lO4mB8o07iYqxuVs8p09wx4Y5gP5Lw9m7fGiMl5K
+         lfkRtej04LByB02vOErfj0ME20LPyfspM/KgYATrhRDbvtQbuO11MNjnXetfXLCddkp3
+         3Fs3SFPxlxjydc/2nUj/ez3DxKi1jXGjrsc065GIh8zpNpNFvNrHw/2/aplpvWdhCEGl
+         34GJaI2aLUK/a+FBHABFFz9NSgl4ZonaA/Xp/VrPcC1s3150tgw8RG9nZQyNWmhfy9Qb
+         KnyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ4laEwfR/6HN7viuOYK6nBcA4EqgSQ59NHYzkqFx8GnqmyJiifyW1fX8GgVCv3nXiUYxWRT+tx0B69RDy@vger.kernel.org, AJvYcCWo2HH3MscHYy6Tz/9rByECxFAlQehZwMKzsqOZr6l+yXXAsjRkN/dpUvDyYpzVSpD7hVXjZWPocEFA@vger.kernel.org, AJvYcCXUfKOlPQ8HAs45J82eEhG9m/dpDa/jXusUcGfpVBDGZc9W3BGOXvAXapxWP34me0y5fH9d1ogtKZkO@vger.kernel.org
+X-Gm-Message-State: AOJu0YwT/SXiJbBIt8WJoCzszTYb7p6N7sBYm4mrsExv0pMUMYj68N0b
+	KCvQBjUkVXCHllnw67Tl82z5mbxkQK5HkGWGfrFZ5cKsAmj3VpXR
+X-Gm-Gg: ASbGncu/PAOOeZMetIlBZ3WawxQ+bwbayth9uIdBtMma5kcgg41X3GraUWHw9E63S0T
+	q4fPNjUa8iWIrJlch3gY6M2HMe3mWqA4VPdSpswyIOE3y5my3bl5v9SNgSrM1FRwLINmd4myhmi
+	mLptDvLWjvzaAtM+4V9gN40so0donu0NxncSI2gGgVkC25vYwyd8v8vc5gCdGj1Ang68oXR73fh
+	PC55TV9d3+hUki+0phqV1ewHSnHT9xbbuYBptq0jwnJMmq6oN3M8BjGx5jvuPTpCqza3yE4bm0p
+	aeUdBBhuyZO3lrE8Py9i
+X-Google-Smtp-Source: AGHT+IHjrhSY3sFSqcYVrgR3HWHG17PPt8fPA3aXE8o1SDs3Jub8Wamh6wMCeD3ZCxlYYk/Q13AOhA==
+X-Received: by 2002:a17:902:cec1:b0:215:58be:3349 with SMTP id d9443c01a7336-2219ffa04dcmr239987545ad.14.1740391964148;
+        Mon, 24 Feb 2025 02:12:44 -0800 (PST)
+Received: from cu.. ([2001:19f0:ac00:4eb8:5400:5ff:fe30:7df3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d7a464f1sm173274365ad.206.2025.02.24.02.12.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 02:12:43 -0800 (PST)
+From: Longbin Li <looong.bin@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Longbin Li <looong.bin@gmail.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	sophgo@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	Lukasz Majewski <lukma@denx.de>
-Subject: [PATCH] spi: spidev: Add compatible for LWE's btt device
-Date: Fri, 21 Feb 2025 16:56:44 +0100
-Message-Id: <20250221155644.1168860-1-lukma@denx.de>
-X-Mailer: git-send-email 2.39.5
+	linux-riscv@lists.infradead.org
+Subject: [PATCH 0/3] spi: sophgo: add Sophgo SPI NOR controller driver
+Date: Mon, 24 Feb 2025 18:11:59 +0800
+Message-ID: <20250224101213.26003-1-looong.bin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -59,38 +97,25 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-The Liebherr's BTT devices are using spidev to communicate via
-SPI to monitoring devices. Extend compatibles to allow proper
-DTS description.
+Add SPI NOR driver for Sophgo, including read, write operations.
+This driver is only suitable for NOR flash.
 
-Signed-off-by: Lukasz Majewski <lukma@denx.de>
----
- drivers/spi/spidev.c | 2 ++
- 1 file changed, 2 insertions(+)
+Longbin Li (3):
+  dt-bindings: spi: add Sophgo SPI NOR controller driver
+  spi: sophgo: add Sophgo SPI NOR controller driver
+  riscv: dts: sophgo: add Sophgo SPI NOR controller driver
 
-diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-index 58ae4304fdab..ceaccc5cf8f5 100644
---- a/drivers/spi/spidev.c
-+++ b/drivers/spi/spidev.c
-@@ -707,6 +707,7 @@ static const struct spi_device_id spidev_spi_ids[] = {
- 	{ .name = /* dh */ "dhcom-board" },
- 	{ .name = /* elgin */ "jg10309-01" },
- 	{ .name = /* lineartechnology */ "ltc2488" },
-+	{ .name = /* lwe */ "btt" },
- 	{ .name = /* lwn */ "bk4" },
- 	{ .name = /* lwn */ "bk4-spi" },
- 	{ .name = /* menlo */ "m53cpld" },
-@@ -738,6 +739,7 @@ static const struct of_device_id spidev_dt_ids[] = {
- 	{ .compatible = "dh,dhcom-board", .data = &spidev_of_check },
- 	{ .compatible = "elgin,jg10309-01", .data = &spidev_of_check },
- 	{ .compatible = "lineartechnology,ltc2488", .data = &spidev_of_check },
-+	{ .compatible = "lwe,btt", .data = &spidev_of_check },
- 	{ .compatible = "lwn,bk4", .data = &spidev_of_check },
- 	{ .compatible = "lwn,bk4-spi", .data = &spidev_of_check },
- 	{ .compatible = "menlo,m53cpld", .data = &spidev_of_check },
--- 
-2.39.5
+ .../bindings/spi/spi-sophgo-nor.yaml          |  52 ++
+ .../boot/dts/sophgo/sg2044-sophgo-sd3-10.dts  |  18 +
+ arch/riscv/boot/dts/sophgo/sg2044.dtsi        |  24 +
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-sophgo-nor.c                  | 501 ++++++++++++++++++
+ 6 files changed, 605 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sophgo-nor.yaml
+ create mode 100644 drivers/spi/spi-sophgo-nor.c
 
+--
+2.48.1
 
