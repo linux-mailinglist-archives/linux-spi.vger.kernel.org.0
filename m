@@ -1,226 +1,324 @@
-Return-Path: <linux-spi+bounces-6904-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6905-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18556A4322A
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2025 01:58:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19485A43346
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2025 03:47:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2F3816D65A
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2025 00:58:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81789189B6CC
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Feb 2025 02:47:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A3632571B5;
-	Tue, 25 Feb 2025 00:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E770514387B;
+	Tue, 25 Feb 2025 02:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="U4Ktu4wj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dL1rKnIX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazolkn19010004.outbound.protection.outlook.com [52.103.68.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BE72FB2;
-	Tue, 25 Feb 2025 00:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.68.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740445114; cv=fail; b=VQqxyYzK2Kju9jGkXz4vJwCCqNAyNLFXjWWCdpWJ0N2aaVn9bqag++nP98S1Q4eyLOJdhIDcb4/eHr4oGkwrMNVbz5+e6O1JFZdMOygvfW54xR3APsNlicJ/QdAxbSG71LgZkNzCBL3SlEBNT+523MQumBVZu+nrB+mfFaMwNaM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740445114; c=relaxed/simple;
-	bh=ZoKqSBF9tqwHNdMnL13URYEIOuiC68he8yUnuD4V0Ow=;
-	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=WCKtdUhpk00k5JrzH0DpDw3ERm5f1nk1W2goAnLP03reztohRtQK99dt2T0NpFE4eVhpecW5rRib4YTykhuTirgpZwebabUt8oE2CjVwEv+wzDEBAvTVhdytWwelWfP1hTyjcs2nZ5XHaxXyJpW//y69obh1CVtXcCtA+h+dUtY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=U4Ktu4wj; arc=fail smtp.client-ip=52.103.68.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=asJfFWepwOV9zZenUwpR55c+Kk6VHX2PX7JI0nMyV1674YXExqbTmti3yHdeBl4K24n4TRCfDG99cLy73YmIN0Z+9iZeq+XpFJ2j/kX4m5h7nondn8C0VTGExjcrKQQQ8VqbXkYBPngd3Ho4gSR7zCs6thsafH8ljjEKQZobEHjsv1IFWgK7iQHurRt/tBFq6AxN2fgmxmf2e1aB72EXQMf9McpNyRlsGIboyxjzJ5nx/GDMVLJRqHA9o2lgCc3AGtSJ8RcP45PKgcyrU4Ee6+KGZv8CDfXlJRNEmmRtCSF/YhFVt4UTG0+ptC/NC1i7ACmstJZwj4XY43vSw8CWyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FSE9lT9jVxUOiZG2SLlaUb07XkpVIom2L6FPRIMzxpM=;
- b=M1fIgQxn45qVPyCycjWieYpNkm9ODQTNcT0HSqHpgeVeRe9rIeP/D9kIapKKrsA1pA7idF751pWrc8PldVK79pHfURCGPj74cpafZVFvYLPEdfX/IWiB5HX5tOi6So0AR3JQfTmgzvd+sk0ewlPexXNl5wYUcV/M97FXMdEL0I1OpAWZ0E7+FFrN0gPnzSzSN2HRFqH060ztNER/LouK5eg2X7NSkmmFuVxwNvMB2OA6efmILCOseFGDrEKyZLE0rjk+qZVtRL8EyLqx0tERpyhBR8RN/55Mmu2EBQ/RqyINIAvztoijeV0BHUvLRezy6t/DcycJUhp2D2B1/cE4DQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FSE9lT9jVxUOiZG2SLlaUb07XkpVIom2L6FPRIMzxpM=;
- b=U4Ktu4wj85jNHzVgBSQ6mtfmO5OLrQjBN0nALDObJ6QeoKeMBHK844KMT4+Z0dubIHkXuGGI44vqDl67jxITZ3ITpvP49pnzAjCPec2AdL2Fam5FsJSlmw9yRRRMhJnHJ7TwaH7rNW1eqPCsDn1Vgwq+ra23HSgEAWDkvvBYuoCp4sZKMmgoywmWjD/Vyqwf/ygaZxm+CG6+Ndv5h0wb7ySqEcw0uIrMAW6iGPy4ilghXqyY4o5r7YrlJJWghwEqNYuSpPy4lokzez9ZUsbQnvwqgFUxNKcftOmNflZxkMxdC2XDC5sshCivCg5lP2/qZcjMkhvtrkoFhpZMEuGe9Q==
-Received: from MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:10a::5)
- by MA1PR01MB4193.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:16::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.22; Tue, 25 Feb
- 2025 00:58:25 +0000
-Received: from MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::207c:c76a:271:28b]) by MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::207c:c76a:271:28b%5]) with mapi id 15.20.8466.020; Tue, 25 Feb 2025
- 00:58:25 +0000
-Message-ID:
- <MAZPR01MB9162502ED35D787218257179FEC32@MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM>
-Date: Tue, 25 Feb 2025 08:58:20 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] riscv: dts: sophgo: add Sophgo SPI NOR controller
- driver
-From: Chen Wang <unicorn_wang@outlook.com>
-To: Longbin Li <looong.bin@gmail.com>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- sophgo@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Inochi Amaoto <inochiama@gmail.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D5628DA1;
+	Tue, 25 Feb 2025 02:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740451616; cv=none; b=K6ftZYCoVxWkPBp/xgBBv1b80Th7lerJmGMY99fKmShQ5gFv3D55U+5m7Sq7tz9xseYsBGSii6e8O5eg6i2PCzXlfmZrFlxXWGhfMnefLScUl+0eWE/Q1xU8j8Tpe4X5GPjMhmXnmU0Up7KK3ER5mWpruIuWi+6ztns+Gsrzmco=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740451616; c=relaxed/simple;
+	bh=9sjMRPauckJrui2CkfrQ3cYi2VYBntbBubLUjwdMQjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QefgHbuXaKLNIpuHkAskcAoxXmR4udcMlnVNdCAv3m+t3BaZjCvNa3NA3y+WVaP/R9XIBDXNShN9YH7FkrZePZoUzBMJXVaAdVajbjkrr3HQMAmm8IgaObLLSYPIa7UoerKXjShWJE6B5N3Qyjje2mrKAWNvB4cAaUITOktnV/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dL1rKnIX; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-220c665ef4cso88629705ad.3;
+        Mon, 24 Feb 2025 18:46:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740451613; x=1741056413; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BmIWyDzbi7XG4PWOrNU7Jp5a97tuft4JsdTFHE1ZFT4=;
+        b=dL1rKnIXD6Vhlp6rFkqPvnWaXp8QQXbgrYrTDr2I8Xm+tG06t8Hi84a/3Sv4HIq7Rc
+         Dk0etgPwtkYxVYROVyL1+aZAA130TeHi7z5ACh/LNHvMQbkueQrW7vv498aMDV68B66e
+         ZuQR+XQzeHqjeQVshWdM/QEu3YZU72PeZHZQAbRSymL2xpd9JgWusIqysGBkc8rLECur
+         5mZ52d+XCRipG0E3Eszvf3gcCELv+6VuilXP3dmi8LbxBNZ28RTechAsyEhG62/qWJ2h
+         ALE9bfQ0q4bovK1KSI0a3dwHmwzyK9fyHsfLI/idVHdyCJHttQSEsWY85DGAElX+i2CA
+         WxHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740451613; x=1741056413;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BmIWyDzbi7XG4PWOrNU7Jp5a97tuft4JsdTFHE1ZFT4=;
+        b=qPolEimF7e7W9trSU3oeT8w+6e57Tz3bP6k8IUwayN1kpDfFhoDgVXBbg6Aplwxs2e
+         pTwroGY6J1nsDD5XEbZhSlFKLM06gDPm0FGAvVkmC+P2kZVd2/nyVVROPGf33OvW/UHO
+         N2ZS3hPU2T8KbM8q5kAhLoW2JPhKfV54x/FJfYCeVwKfCrLAOuw1mVae8GUvoQyxFmW1
+         Z3QEVqN5eWbeXaSSVXWg/VHsH7oYNuUWZq73jZQCniBiV9glnQZ3rXxemwYB0cOkUj3m
+         pUhFOzsWAdnPK2yfIGOgXEDvFS44ySDePtvAUCfEDwzyzaqPlhWJDPs56OYXqkqMeeUY
+         I70A==
+X-Forwarded-Encrypted: i=1; AJvYcCWCmo3b9qSz1NU4J/0/4fNYYEPOF+qeD6iJQFfBwpv4tdSVwBcVSbv2+7/rnFlxOvzeZcri27viPbn8ZyxX@vger.kernel.org, AJvYcCWGH1dXM93h97nR5/mUNN19n2LXo2PKpxrmEhuXdsW01FE3gUzNy9G993wS9DZAQFqrd5dZqJhYqPq7@vger.kernel.org, AJvYcCWhlpb+IaH3C8Jin0YAfHydJAEhXu8/LDwSsV/O6n29RHlWQEL1d37CWw6l1y0NdYfYAww0LQgsVYwS@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMObwc68SAdCPmopw/iHaY2sM6Csx57cRjW+VJm6feF0YJF+vl
+	zrHjetd4I2Xh8tyfP7JSu/yHQQwIkI0CboASF/eMMAV1jJtZJ2kn
+X-Gm-Gg: ASbGncs4U47eLzIFE2Z5Ugkw/4ecdop9TgCy5M8G+hewPVF0ZuNKf2HB1VKatGDYUTM
+	PC9gqcFp6h5n7p/jE9WzwS3L3M+R7ifanY9ZoluBBrkqrd+ckkVIwObPdr0LEuCy1uXiVo/lea+
+	2r+Z2EgVLF6rETMK6v2FtRfzjhnOXk+cpJZnmuFnCbBDSgP1jWvPDELKskSJ8eYN/xr7V628VtZ
+	vOqMFF3LoK2HV2hEeAQnOgBRN/sitDzEqZ8snn/LPmXDmAvUb0KKlyOGNlcfBBknd5yMHnJiZs3
+	G5oCgwzDkZofp6RksYKUrEA=
+X-Google-Smtp-Source: AGHT+IG62mV9bUNCTrCikvFZ49tzCfx9NyDU8cgaFnBUFHLGXzqnYJ/ncZN2tiei9ufed4SF/bBPXw==
+X-Received: by 2002:a17:903:41d2:b0:21f:33:ad2 with SMTP id d9443c01a7336-221a003892emr229965215ad.52.1740451613128;
+        Mon, 24 Feb 2025 18:46:53 -0800 (PST)
+Received: from localhost ([111.34.70.129])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2230a00ab6bsm3279565ad.58.2025.02.24.18.46.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 18:46:52 -0800 (PST)
+Date: Tue, 25 Feb 2025 10:46:49 +0800
+From: Longbin Li <looong.bin@gmail.com>
+To: Yixun Lan <dlan@gentoo.org>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+	sophgo@lists.linux.dev, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	looong.bin@gmail.com
+Subject: Re: [PATCH 2/3] spi: sophgo: add Sophgo SPI NOR controller driver
+Message-ID: <6sjygqay4kpwupau7gx5uulo4t32c3rn5kiktqxp6t2phi45ly@elsqfqzpnumz>
 References: <20250224101213.26003-1-looong.bin@gmail.com>
- <20250224101213.26003-4-looong.bin@gmail.com>
- <PN0PR01MB91662EB902D8B337A0526458FEC32@PN0PR01MB9166.INDPRD01.PROD.OUTLOOK.COM>
-In-Reply-To: <PN0PR01MB91662EB902D8B337A0526458FEC32@PN0PR01MB9166.INDPRD01.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
- (2603:1096:4:195::13) To MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:10a::5)
-X-Microsoft-Original-Message-ID:
- <cd6da9f6-74a6-4b9f-8b77-a1b4a2cd3001@outlook.com>
+ <20250224101213.26003-3-looong.bin@gmail.com>
+ <20250224132115-GYA41655@gentoo>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAZPR01MB9162:EE_|MA1PR01MB4193:EE_
-X-MS-Office365-Filtering-Correlation-Id: 230ab4e1-632d-4fc7-702e-08dd553781bb
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|7092599003|461199028|19110799003|5072599009|15080799006|6090799003|3412199025|440099028;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WDBUVEtpbDZHVGsxQmpiZk5FeTJxNndncXJrYTVpNEhnTmk0aWVmdHpkZWtl?=
- =?utf-8?B?MW04Z3Ztd0ZJRllOMzBzZE9yVXZPbmhjZWZSWFExTHFHK3hBV3lEa1k3VDBL?=
- =?utf-8?B?bnlJVDV4Q2Z1NmRTU1ZmMnFONzVNYllac3pPWWQvV3NkaG4zYVQvYW42M29l?=
- =?utf-8?B?WHlBU1YxQndKbmFtS2d3L0NHMG1uVlFTQTdNTzlrTklIb0lQaWFVcEt5ek1V?=
- =?utf-8?B?T2QxNHlBUUI5V05jSk8wOSt5WE5nQzVIbHJkVFpCOERUMVR1a3hIUjRGVmhi?=
- =?utf-8?B?S0VwQ2tMcTgwMzZ3Yy9JN3RIaU5NQzBUZDN6blA3YlhtNTdKeE5acXZjdTlm?=
- =?utf-8?B?SVc4NExTR0xJTzd3T2VSelYrMDA5dFM2R09hWi9LQmwvME92bHBkdUhnQ08w?=
- =?utf-8?B?UVdoRCtDMWZpSTRYdFl6cmRVRUdrSU1UaDVPK0t3TG5qbmpQZGdjUVFycWRW?=
- =?utf-8?B?UkplMmFGR2dXckVvOWdWRi9SdXAyV25HS2FuU05YSXAxNXBBdFk5aVAycG9k?=
- =?utf-8?B?TTFjd0hMeTJ0QmdvZ3lkY0FmejhVK1NiOGFFM0k5TERIRDVGUGZ5TWc5SEdW?=
- =?utf-8?B?NmR4MlhQT0MzMkI1SUxJcmpZNCt0N3lRcGhNcXZQbDZ6anRLOS9tV1lWVkxY?=
- =?utf-8?B?U3g0eU9yUi90NDhDTFNva2JGNEVkcWp4TE5kNmxTT2RuSVdpcjNOMURIaiti?=
- =?utf-8?B?eTJROWJRSlJPNThteE54Q0lFS3kvcFlKa0ZGODBFb0tiK3pIRnM4NXU0VEJ6?=
- =?utf-8?B?UEpvaDJoVjgzMjhKaFRNNmx0cjlOeDFpT2pQOWJQSmMrNXRRVnBIdWhwd2Vk?=
- =?utf-8?B?Y0MyS3FPUjdZQWVBVFJIcTFkYzlabzJHdGNPd3dLQUM4SUJIaXFHQ2pFcXor?=
- =?utf-8?B?MEk5aDh4UjdlbElLWmx3Z0ZjVFFXZUFKNk1yNTJNaW54eFFkNysvWktRZEZ4?=
- =?utf-8?B?MUJBNzFzdjRrQjRFRVI3WElxeE1GcVF3QmJJS2thOTdEK09va0pHd2NnNjM0?=
- =?utf-8?B?STBhT21xc2dYMXRQOUlDRUs4VWk4elBOMGNpc0ZwUWk1NmZ4bytKUjQ5Unkz?=
- =?utf-8?B?VHNnRElVTTRHc1hXZFBPcktiSEFvMUJEWWdWMlhsb3pGYXhhTmVhSW9rUnQ5?=
- =?utf-8?B?THg1SE1ZZ3hHT1dwMGkxVE1yRGdXY3NqUlpVQlM3NjhBOStTM20zM1dKRlFz?=
- =?utf-8?B?TW5PTVpHN2NDcVhJWncyNVUxUk9oeVZWb0crdHVqaFhkSENnL0FZQjFySm1n?=
- =?utf-8?B?enVoVnpuMHN3Z2RXb3FuVXFHbWlDWnhLWWxQaE9HREpMYndXNEN0clE4T3Nn?=
- =?utf-8?B?c05KcXM2T00rOGVkNHdHcGFjcG9YbDhHSjFLUkxDK2hVcVFMa29JOW85bWtY?=
- =?utf-8?B?WmZBRERBSjZzNFpKdHpHbVJUMUdhY2wyVEdZYTlyS1RBTnA2Vjd0M1pKTit3?=
- =?utf-8?B?WGNqT1FaNWpLRlVWS1h6UlpKcXhCelloajFFS1p0aEt2MFl1dEwyOVVTdGYv?=
- =?utf-8?Q?tKwe2A=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eXJjQUMyZkx2alNqdy9vS1RrVFB3ZUVySGNMNkRjS0xHWCt3YXNPOFhPM3VJ?=
- =?utf-8?B?cytXdEdpL0wvN2FwQ1N2cHA5WHNSaXBWWDlORW0yczhXNHZOZGhsTURSTGxm?=
- =?utf-8?B?MDBRVkNaY0xReDMxb3ljaGFYaUdzV2s1MDgyT1M5bjVYMS93R2lSVGxYcWtF?=
- =?utf-8?B?YVhEcHgzWlk3MmNycXlHaGFMT24zTDVUM0lWYjBKMFlYOVJJcXBQVVhyNVN0?=
- =?utf-8?B?ZWFOVnhLMTZYekNReEpDVkMwU1Q4RDl0WDlwSXBXTGpzYmwrNXEvVHFjd3Bz?=
- =?utf-8?B?Mm1MVnJuZG9yZWtiLzJOeWVvY0xVYURvZ1BJTWl5U1VCN25MNndRdW9sdGJu?=
- =?utf-8?B?OXBSUWJnN1pOMFNnaXhkN3R4WnE4azdwMStINTNqZFlLSDlsSzUvNkZzaktz?=
- =?utf-8?B?d1hNa3Zoa0xLWjMxT1Nma0FqazNCbndZQzI5RWZWMG1FVGhUY3MwOXJiQ0F4?=
- =?utf-8?B?TWdsTmN5Zms1Q1FWN1BiRk1ObytIWk9yU09uajZaK2o1ZEhiWUNDZ3JmRjBy?=
- =?utf-8?B?c0srQVBWa0xpa1hmVUZCWGgyakh3M253ZEpIVUQ1V1g2eGtwdVR3ak53R1JC?=
- =?utf-8?B?Nm9RRnBOMzVtN1Vtd2VwMG1pSnV6NWIyN2J2YlpBSlVjNlpsMGIyOHAxLzha?=
- =?utf-8?B?c296cmhMb2lUZERUL3N6YmRtUkcvL0Jad2x0NzJ2QXlEUnpyelFJYVViSnJz?=
- =?utf-8?B?dlpRRVBBVFJuMEV0UUhQRW81cXlyUGJhYWdNMEt6MjUwRG9wTGtaeFptUEho?=
- =?utf-8?B?VHVDUWw3SDB6WHJFQnJYRVlmeS9rTmN3d2lQZC9lcVhIRm44dFhTVjlxL05j?=
- =?utf-8?B?clFRb1JtYlYzNlBhaTFpMDZ3U1lmSmdCMEJHamsxdm85WUkzdXlPZmp6VXFK?=
- =?utf-8?B?VkV1K3l1Qm1NcTA3MHIvRVJxRHlzcHA4cWk1bmd6Yjk3MDdVV2FDcHpYZUJv?=
- =?utf-8?B?c1RuKzl2Qi9heE1NOVVSYVg1eTB1MEQxRm5hVi9rSlZITVp4dUg4WU9vbmFF?=
- =?utf-8?B?bStKQXNoY2VGSlF1aEFXdWZpRmtGTWI5RFJvNUNYRGRLR3RETnhsdFNKVmJ3?=
- =?utf-8?B?a1lBVUl5ak1NcTJmOUQwdFY2aDVwTzdEcVRyak1MRUhuU0hrODlQenM3ZXZm?=
- =?utf-8?B?TS9KazRsbUlTRno3WTJEbFpSQUVaSzAzeGJuU1BRbDVpRHl5dUYwNGZGc2ZN?=
- =?utf-8?B?Qng2VW1zM2d3U0RaY0hqYjFxMm5kc2gzZ0RzaFZVUEJQUElpc3V3cUpNODFv?=
- =?utf-8?B?UkloRGVacXhZTWo4RFVQeWFTZ1M3dk41NTNxNHdsQ2hSV2k5TkNYVVFST1RP?=
- =?utf-8?B?dVBhY1FIb3BCMkVQQnR3M3ExRnpVOEFjYVRkcFFVbnNhYURRZTd2VG1vM3N2?=
- =?utf-8?B?ckx2d3YrQURiWXFES2dmVk9jRFNoSHBYQnhRY3M0U1ozdjNycUVQYUQ0dWhT?=
- =?utf-8?B?TmlJeStZbzMvcmlpRVVCK25hcDJvZVRubUNYeGllUUJqNTdxOUorZExxeG4v?=
- =?utf-8?B?SW9wQkNjcTIyaWUxejhOWnNxVytucXBYcEFYbU41YzRtTThEZnFNTGNsSVpM?=
- =?utf-8?B?SjIrMFZEbFoxSUlEOFpvMFBhTWlJdWM0MDhsdmU3cHVINDcvN2RFQjVDRXZz?=
- =?utf-8?B?WWxjK0tSdUNEYVRtSitvWUpnOXFRTTVSTVlTbFVMdVJQNDJtb1RLNTVpcGZX?=
- =?utf-8?B?dFBzT2ZpV0l0c2ZqZHZ4NHU1V3RQUllyZC9VVzVFNkk2T1djZy9KU1pST0U3?=
- =?utf-8?Q?OFPvuCk7y5GaFZA7RQMOtW8hLOk/y4+Rae3yJRL?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 230ab4e1-632d-4fc7-702e-08dd553781bb
-X-MS-Exchange-CrossTenant-AuthSource: MAZPR01MB9162.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 00:58:25.0561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA1PR01MB4193
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250224132115-GYA41655@gentoo>
 
-hi, Longbin,
+On Mon, Feb 24, 2025 at 01:21:15PM +0000, Yixun Lan wrote:
+> Hi Longbin:
+> 
+> On 18:12 Mon 24 Feb     , Longbin Li wrote:
+> > Add support for Sophgo SPI NOR controller in Sophgo SoC.
+> > 
+> > Signed-off-by: Longbin Li <looong.bin@gmail.com>
+> > ---
+> >  drivers/spi/Kconfig          |   9 +
+> >  drivers/spi/Makefile         |   1 +
+> >  drivers/spi/spi-sophgo-nor.c | 501 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 511 insertions(+)
+> >  create mode 100644 drivers/spi/spi-sophgo-nor.c
+> > 
+> > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+> > index ea8a31032927..6b6d7b348485 100644
+> > --- a/drivers/spi/Kconfig
+> > +++ b/drivers/spi/Kconfig
+> > @@ -1021,6 +1021,15 @@ config SPI_SN_F_OSPI
+> >  	  for connecting an SPI Flash memory over up to 8-bit wide bus.
+> >  	  It supports indirect access mode only.
+> > 
+> > +config SPI_SOPHGO_NOR
+> > +	tristate "Sophgo SPI NOR Controller"
+> > +	depends on ARCH_SOPHGO || COMPILE_TEST
+> > +	help
+> > +	  This enables support for the Sophgo SPI NOR controller,
+> > +	  which supports Dual/Qual read and write operations while
+> > +	  also supporting 3Byte address devices and 4Byte address
+> > +	  devices.
+> > +
+> >  config SPI_SPRD
+> >  	tristate "Spreadtrum SPI controller"
+> >  	depends on ARCH_SPRD || COMPILE_TEST
+> > diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+> > index 9db7554c1864..9ded1de4b2fd 100644
+> > --- a/drivers/spi/Makefile
+> > +++ b/drivers/spi/Makefile
+> > @@ -134,6 +134,7 @@ obj-$(CONFIG_SPI_SH_SCI)		+= spi-sh-sci.o
+> >  obj-$(CONFIG_SPI_SIFIVE)		+= spi-sifive.o
+> >  obj-$(CONFIG_SPI_SLAVE_MT27XX)          += spi-slave-mt27xx.o
+> >  obj-$(CONFIG_SPI_SN_F_OSPI)		+= spi-sn-f-ospi.o
+> > +obj-$(CONFIG_SPI_SOPHGO_NOR)	+= spi-sophgo-nor.o
+> >  obj-$(CONFIG_SPI_SPRD)			+= spi-sprd.o
+> >  obj-$(CONFIG_SPI_SPRD_ADI)		+= spi-sprd-adi.o
+> >  obj-$(CONFIG_SPI_STM32) 		+= spi-stm32.o
+> > diff --git a/drivers/spi/spi-sophgo-nor.c b/drivers/spi/spi-sophgo-nor.c
+> > new file mode 100644
+> > index 000000000000..1139deeac327
+> > --- /dev/null
+> > +++ b/drivers/spi/spi-sophgo-nor.c
+> > @@ -0,0 +1,501 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Sophgo SPI NOR controller driver
+> > + *
+> > + * Copyright (c) 2025 Longbin Li <looong.bin@gmail.com>
+> > + */
+> > +
+> > [...]
+> > +struct sophgo_spifmc {
+> > +	struct spi_controller *ctrl;
+> > +	void __iomem *io_base;
+> > +	struct device *dev;
+> > +	struct mutex lock;
+> it will be great to document the lock
 
-sg2044.dtsi  seems also does not exist on the master yet, please double 
-check.
+Thanks, but I don't think the function of this lock is complicated,
+adding comments may be useless.
 
-Regards,
+> > +	struct clk *clk;
+> > +};
+> > +
+> > +static int sophgo_spifmc_wait_int(struct sophgo_spifmc *spifmc, u8 int_type)
+> > +{
+> > +	u32 stat;
+> > +
+> > +	return readl_poll_timeout(spifmc->io_base + SPIFMC_INT_STS, stat,
+> > +				  (stat & int_type), 0, 1000000);
+> > +}
+> > +
+> > +
+> > [...]
+> > +static ssize_t sophgo_spifmc_trans_reg(struct sophgo_spifmc *spifmc,
+> > +				       const struct spi_mem_op *op)
+> > +{
+> > +	const u8 *dout = NULL;
+> > +	u8 *din = NULL;
+> > +	size_t len = op->data.nbytes;
+> > +	u32 reg;
+> > +	int ret;
+> > +	int i;
+> squash them which save one line:
+> 	int i, ret;
+> 
 
-Chen
+Thanks, I will modify it.
 
-On 2025/2/25 8:23, Chen Wang wrote:
->
-> On 2025/2/24 18:12, Longbin Li wrote:
->> Add SPI NOR device node for Sophgo.
->>
->> Signed-off-by: Longbin Li <looong.bin@gmail.com>
->> ---
->>   .../boot/dts/sophgo/sg2044-sophgo-sd3-10.dts  | 18 ++++++++++++++
->>   arch/riscv/boot/dts/sophgo/sg2044.dtsi        | 24 +++++++++++++++++++
->>   2 files changed, 42 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/sophgo/sg2044-sophgo-sd3-10.dts 
->> b/arch/riscv/boot/dts/sophgo/sg2044-sophgo-sd3-10.dts
->> index c50e61a50013..9c634920f37e 100644
->> --- a/arch/riscv/boot/dts/sophgo/sg2044-sophgo-sd3-10.dts
->> +++ b/arch/riscv/boot/dts/sophgo/sg2044-sophgo-sd3-10.dts
->> @@ -80,6 +80,24 @@ &sd {
->>       status = "okay";
->>   };
->>
->> +&spifmc0 {
->> +    status = "okay";
->> +
->> +    flash@0 {
->> +        compatible = "jedec,spi-nor";
->> +        reg = <0>;
->> +    };
->> +};
->> +
->> +&spifmc1 {
->> +    status = "okay";
->> +
->> +    flash@0 {
->> +        compatible = "jedec,spi-nor";
->> +        reg = <0>;
->> +    };
->> +};
->> +
->>   &uart1 {
->>       status = "okay";
->>   };
->
-> What is your baseline? I can't see "sg2044-sophgo-sd3-10.dts " on the 
-> latest mainline yet.
->
-> BTW,  the name "sg2044-sophgo-sd3-10" seems a bit redundant. Wouldn't 
-> "sg2044-sd3-10" be better?
->
-> [......]
->
->
+> > +
+> > +	if (op->data.dir == SPI_MEM_DATA_IN)
+> > +		din = op->data.buf.in;
+> > +	else
+> > +		dout = op->data.buf.out;
+> > +
+> > +	reg = sophgo_spifmc_init_reg(spifmc);
+> > +	reg |= SPIFMC_TRAN_CSR_FIFO_TRG_LVL_1_BYTE;
+> > +	reg |= SPIFMC_TRAN_CSR_WITH_CMD;
+> > +
+> > +	if (din) {
+> > +		reg |= SPIFMC_TRAN_CSR_BUS_WIDTH_1_BIT;
+> > +		reg |= SPIFMC_TRAN_CSR_TRAN_MODE_RX;
+> > +		reg |= SPIFMC_TRAN_CSR_TRAN_MODE_TX;
+> > +
+> > +		writel(SPIFMC_OPT_DISABLE_FIFO_FLUSH, spifmc->io_base + SPIFMC_OPT);
+> > +	} else {
+> > +		/*
+> > +		 * If write values to the Status Register,
+> > +		 * configure TRAN_CSR register as the same as
+> > +		 * sophgo_spifmc_read_reg.
+> > +		 */
+> > +		if (op->cmd.opcode == 0x01) {
+> > +			reg |= SPIFMC_TRAN_CSR_TRAN_MODE_RX;
+> > +			reg |= SPIFMC_TRAN_CSR_TRAN_MODE_TX;
+> > +			writel(len, spifmc->io_base + SPIFMC_TRAN_NUM);
+> > +		}
+> > +	}
+> > +
+> > +
+> > [...]
+> > +static const struct spi_controller_mem_ops sophgo_spifmc_mem_ops = {
+> > +	.exec_op = sophgo_spifmc_exec_op,
+> > +};
+> > +
+> > +static void sophgo_spifmc_init(struct sophgo_spifmc *spifmc)
+> > +{
+> > +	u32 tran_csr;
+> > +	u32 reg;
+> > +
+> > +	writel(0, spifmc->io_base + SPIFMC_DMMR);
+> > +
+> > +	reg = readl(spifmc->io_base + SPIFMC_CTRL);
+> > +	reg |= SPIFMC_CTRL_SRST;
+> ..
+> > +	reg &= ~((1 << 11) - 1);
+> so this is a mask? use macro to define, instead of using magic number
+
+Yes, this is a mask to init SPI Clock Divider, I will add a macro, thanks.
+
+> > +	reg |= 1;
+> > +	writel(reg, spifmc->io_base + SPIFMC_CTRL);
+> > +
+> > +	writel(0, spifmc->io_base + SPIFMC_CE_CTRL);
+> > +
+> > +	tran_csr = readl(spifmc->io_base + SPIFMC_TRAN_CSR);
+> > +	tran_csr |= (0 << SPIFMC_TRAN_CSR_ADDR_BYTES_SHIFT);
+> > +	tran_csr |= SPIFMC_TRAN_CSR_FIFO_TRG_LVL_4_BYTE;
+> > +	tran_csr |= SPIFMC_TRAN_CSR_WITH_CMD;
+> > +	writel(tran_csr, spifmc->io_base + SPIFMC_TRAN_CSR);
+> > +}
+> > +
+> > +static int sophgo_spifmc_probe(struct platform_device *pdev)
+> > +{
+> > +	struct spi_controller *ctrl;
+> > +	struct sophgo_spifmc *spifmc;
+> > +	void __iomem *base;
+> > +	int ret;
+> > +
+> > +	ctrl = devm_spi_alloc_host(&pdev->dev, sizeof(*spifmc));
+> > +	if (!ctrl)
+> > +		return -ENOMEM;
+> > +
+> > +	spifmc = spi_controller_get_devdata(ctrl);
+> > +	dev_set_drvdata(&pdev->dev, ctrl);
+> > +
+> ..
+> > +	spifmc->clk = devm_clk_get(&pdev->dev, NULL);
+> > +	if (IS_ERR(spifmc->clk)) {
+> > +		dev_err(&pdev->dev, "AHB clock not found.\n");
+> > +		return PTR_ERR(spifmc->clk);
+> > +	}
+> > +
+> > +	ret = clk_prepare_enable(spifmc->clk);
+> > +	if (ret) {
+> > +		dev_err(&pdev->dev, "Unable to enable AHB clock.\n");
+> > +		return ret;
+> > +	}
+> you can combine above with devm_clk_get_enabled(), and simplify 
+> return routine by using "return dev_err_probe(..)"
+> 
+
+Thanks, I will modify it.
+
+> > +
+> > +	spifmc->dev = &pdev->dev;
+> > +	spifmc->ctrl = ctrl;
+> > +
+> > +	spifmc->io_base = devm_platform_ioremap_resource(pdev, 0);
+> > +	if (IS_ERR(base))
+> > +		return PTR_ERR(base);
+> > +
+> > +	ctrl->num_chipselect = 1;
+> > +	ctrl->dev.of_node = pdev->dev.of_node;
+> > +	ctrl->bits_per_word_mask = SPI_BPW_MASK(8);
+> > +	ctrl->auto_runtime_pm = false;
+> > +	ctrl->mem_ops = &sophgo_spifmc_mem_ops;
+> > +	ctrl->mode_bits = SPI_RX_DUAL | SPI_TX_DUAL | SPI_RX_QUAD | SPI_TX_QUAD;
+> > +
+> > +	mutex_init(&spifmc->lock);
+> strictly, you still need to do error handler, e.g, destroy mutex if probe fail
+
+Thanks, I will add it.
+
+> > +
+> > +	sophgo_spifmc_init(spifmc);
+> > +	sophgo_spifmc_init_reg(spifmc);
+> > +
+> > +	return devm_spi_register_controller(&pdev->dev, ctrl);
+> > +}
+> > +
+> > [...]
+> 
+> -- 
+> Yixun Lan (dlan)
+> Gentoo Linux Developer
+> GPG Key ID AABEFD55
 
