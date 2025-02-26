@@ -1,138 +1,82 @@
-Return-Path: <linux-spi+bounces-6951-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6952-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65622A46731
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 17:59:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 981BCA46706
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 17:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6CB142751F
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 16:48:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A97B43A51CB
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 16:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224FE223716;
-	Wed, 26 Feb 2025 16:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B77222587;
+	Wed, 26 Feb 2025 16:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJBntMAW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWilOKxH"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF34719005F;
-	Wed, 26 Feb 2025 16:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8915F2222D1
+	for <linux-spi@vger.kernel.org>; Wed, 26 Feb 2025 16:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740588501; cv=none; b=I+mQysjTGt4b+S7ACdPplboWQPFwdFh1NXs5S0a5TIPd1e5xyNVfhk1/82M2cqw9FyMl32KC1RVMx4JIkFzckWNYE0FIapAPrLdqUwSBcLFjwGDJWB/xEyJhXUIamR34TU+iV9Iye5dgVnYSFinr0Ux7qIrVZIWFNYwxK7mpYw0=
+	t=1740588616; cv=none; b=oToGW1KNB+e9LnS5mp+FCrmC7Tch/C3GgizYjLQrM/JOVwJ3rTt9osvUYJ+GpPXLZE3CF89rxFH+lpMq/jiw0plVbpb33WuCNCsyFQmIbAsTMSvWhclzJSyVP2TvIdp0nsSa009c49dd1Kv02focvKZcaD6irfFFS3uFxgpBZI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740588501; c=relaxed/simple;
-	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=G6cSdDMH+kKrbp5h0yk1/gCnKsMqBxy2ckyOK9U5FReF51pl1TRRtgEi8hceP1PT8BoHYJM7KML1QUFdCbKVqbDxCdUL7k8WtzTp1mFA8hge8eeWLlQoWYdv1YrAFSwsX/mVMe57ZNeR+84hCtsjDVfs1nwI3tfyw2Jf0saa3X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJBntMAW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F78BC4CED6;
-	Wed, 26 Feb 2025 16:48:07 +0000 (UTC)
+	s=arc-20240116; t=1740588616; c=relaxed/simple;
+	bh=fgtTq/5O8Eq+y4e/j3LvCl2ouPzw+k42DZFK8jVkirY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=uNEwp6141pi1bQbV3N/yV7qu+l/YzIKQJrUdJuFPoN3vPwnm8kGY7gTouRcPSBwnbFhti9JdS64oGzmteFtIZgEDDZZcFSS76iEwTftivGxM9rlX3mSHk0jV9OZDB0DqJQklAV5ivEomgr7nCFgHqa1pio2KGB1znlspy9R7NY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWilOKxH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0A2C4CEEB;
+	Wed, 26 Feb 2025 16:50:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740588501;
-	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gJBntMAWa9qiB6go6MBAYuIpUQmIV8zM3P7hOz/BcMP2byX2P+MCVmwTOF8y59cTA
-	 /dmsi2YnkvFk7WCs/BqmuQVZJqyuuK6B2L34n/nlGh5Fb/IjbLtuJF7xfHrd7ckNHI
-	 3aOmoTcDg9MwCwDV+lRzSbk3kKgtk7sY2T2rRnxcQXeSOKkWWTO2TN5iDQ7y45VEK4
-	 FrA2VRbWMMiI+WJDNW4z9L9r47+ekdDK20fY6zi5lQvVIKVd30Jsj0qJQM2+iV2vYy
-	 04RjgTb6SA4Au/0pUEMYaZh350XZsbrokrKevACKRy5XTZGyf9486J5GRsNNv9vMzQ
-	 71NtfIvQwN7Lw==
-From: Mark Brown <broonie@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
- Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
- James Smart <james.smart@broadcom.com>, 
- Dick Kennedy <dick.kennedy@broadcom.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
- David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
- Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
- Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
- Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
- "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
- Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
- Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
- Hans de Goede <hdegoede@redhat.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
- Selvin Xavier <selvin.xavier@broadcom.com>, 
- Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
- linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
- ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
- linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
- ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
- Takashi Iwai <tiwai@suse.de>, Carlos Maiolino <cmaiolino@redhat.com>
-In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-Subject: Re: (subset) [PATCH v3 00/16] Converge on using secs_to_jiffies()
- part two
-Message-Id: <174058848717.58970.18340675342808865020.b4-ty@kernel.org>
-Date: Wed, 26 Feb 2025 16:48:07 +0000
+	s=k20201202; t=1740588610;
+	bh=fgtTq/5O8Eq+y4e/j3LvCl2ouPzw+k42DZFK8jVkirY=;
+	h=Subject:From:Date:To:From;
+	b=UWilOKxHbk4Bu6eKIJeI3Jei9llFFvRG0R9+6OIBbiipjYfp2FzA9RuYYbzHoWs68
+	 8ptT/UiDB0B7ClJPaiJ51LuMTRj+IgVVD/u5WqJ1eDqxWTT9yzmAWgJ+zLIK9lNIqu
+	 S0/UGVcftREz/mD6GzXe2QRDhkuh4qAjNG24vR0SC314DjwYMa4qgkzvxRhAlarmkf
+	 b7UvD5cbmt2VtdTlz59Wy8MTEyIMO0MxQe4qt4KZrXXGXZBoVau9MSsBYoSOP/YFfn
+	 x09zAB0HJAWGcBUm3lHfdpHUxVtzPzHIC4bpmAY7qjhdyoi5upA6i2RuVax8uuSe8w
+	 Jv07G907vDeJw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B2ABE380CFDF;
+	Wed, 26 Feb 2025 16:50:31 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174058863023.772035.807039736684708069.git-patchwork-summary@kernel.org>
+Date: Wed, 26 Feb 2025 16:50:30 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 25 Feb 2025 20:17:14 +0000, Easwar Hariharan wrote:
-> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
-> either use the multiply pattern of either of:
-> - msecs_to_jiffies(N*1000) or
-> - msecs_to_jiffies(N*MSEC_PER_SEC)
-> 
-> where N is a constant or an expression, to avoid the multiplication.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Converge on using secs_to_jiffies() part two
+  Submitter: Easwar Hariharan <eahariha@linux.microsoft.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=937701
+  Lore link: https://lore.kernel.org/r/20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com
+    Patches: [v3,01/16] coccinelle: misc: secs_to_jiffies: Patch expressions too
+             [v3,12/16] spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
+             [v3,13/16] spi: spi-imx: convert timeouts to secs_to_jiffies()
 
-Thanks!
 
-[12/16] spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
-        commit: 32fcd1b9c397ccca7fde2fcbcf4fc7e0ec8f34aa
-[13/16] spi: spi-imx: convert timeouts to secs_to_jiffies()
-        commit: 1d2e01d53a8ebfffb49e8cc656f8c85239121b26
+Total patches: 3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
