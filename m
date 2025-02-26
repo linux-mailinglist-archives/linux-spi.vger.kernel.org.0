@@ -1,135 +1,138 @@
-Return-Path: <linux-spi+bounces-6950-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6951-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48C6BA464F2
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 16:34:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65622A46731
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 17:59:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 368CB19C1509
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 15:33:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6CB142751F
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 16:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3007221D585;
-	Wed, 26 Feb 2025 15:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224FE223716;
+	Wed, 26 Feb 2025 16:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ml4pa7kF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJBntMAW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BE021D00E;
-	Wed, 26 Feb 2025 15:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF34719005F;
+	Wed, 26 Feb 2025 16:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740583834; cv=none; b=GPt+rk4N5BaeB1D1rwVk3nEQzUztMU2Yu4JsAr83TXexyLzVKh1XW3pCWZFrjiSSDpBKFFXWO6MZ0R8aN+MLU5nJx6DiRCM0WKDyaUQbotzwUqTZe3oGOIxAcIGNPiVTmd+xdtb0kWbQJNjDkIZ/GuLRFKhAtzZLtvpSTkIZ6nM=
+	t=1740588501; cv=none; b=I+mQysjTGt4b+S7ACdPplboWQPFwdFh1NXs5S0a5TIPd1e5xyNVfhk1/82M2cqw9FyMl32KC1RVMx4JIkFzckWNYE0FIapAPrLdqUwSBcLFjwGDJWB/xEyJhXUIamR34TU+iV9Iye5dgVnYSFinr0Ux7qIrVZIWFNYwxK7mpYw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740583834; c=relaxed/simple;
-	bh=jWzDbbQHO9gEeKekcUVkcixWDMvI3qej9AstFronzn0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MmRubPwOXD8IyCr0nuaYx3xGEhwHbe58dDSxRcBM6aXLvkL0MnBw2pytZKZX7pY/YbRz5b+UtfbrdkG9tQHq8MsLg7KWBGl76aNe4dTuLh33ZsroP3/xH6P7T67RJtnZtt/gz015U6Kz0GjAraj3NK/Tv4yhN1ZAEYb0TT4A14E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ml4pa7kF; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f42992f608so10781244a91.0;
-        Wed, 26 Feb 2025 07:30:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740583832; x=1741188632; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TZ/QbTWZNshBxb5hC06ZzjWtL5HiviO0RmZtIpOJ43M=;
-        b=ml4pa7kF+RVJA6p3sjQ4lgR5iyJTXkzanwoXWm3sGgAL8OLzpET1CivN+c6PUrxsww
-         HqxbeTlORiu4n+yXdDZtOLGf5/ia2oMDTrzkHoyO9uqxp54Kx6Um+bORLI5dysbMetT0
-         dWod8W+A6jfHo/5lZP2t7GnKkyNfVmexpjcXQLUhmQ5LOZnybswTBWPSJx0UU+WTWSKC
-         WT4ctSgp6/+Wt4Ft/ZQirhIY/rGW/pOm/GnTPxwEXRAZ3zC26FKdXFRYgEQs+4hX9RXV
-         qPwXlcZ+ZdQbZjneCZyf3xI2A4nt2xQNEql9UgGbFIwHM2qqvc1gERzBALZDyhnJ4jGk
-         EZhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740583832; x=1741188632;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TZ/QbTWZNshBxb5hC06ZzjWtL5HiviO0RmZtIpOJ43M=;
-        b=ZudE8EOPB1fCe7y+Ih4RJ3jlnZFPdH2zOIKZjjEFB+zDCW5TmBd6IznmU4J7O5obdc
-         gChKp2z0OPhhuNxzAv5reLgWr/0ey6kT2FXZAs+kThiOwn4HYyVuqrTna+BvzOrZhSa/
-         AjkOsQGdxBsEBXeYXEfah7peScsqXk6R8RgSpA52ARiMMwHMZv8doIAeBnNU2mT3YOMl
-         MqqupYYYQwzs4Ni4T0hhBsap0I++F5d+ATuAf8vs0ycLLX5CIvy0oCUJ76tidNoWCVgm
-         DNnD7/7J+gIB8mPm76r20m0eHe/OQYsOWNB/UxfZHJrkfaG7kxnnd7jK8oSPVf1uS5S+
-         qW5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV0HSiX9W1pyvP1/wo1z7qMF6yR8yfya3NHkyVU6yddBUjh8GwHu1h9fbga3d36eIdIp1JSNeK700tH0ljA@vger.kernel.org, AJvYcCWnjq9yE201frbsc1GJk2k970YcAyyYkNWeG6NuvbBRHJ2JjT1ZN4q/3rOpDbOyRYQ8nhGy/HMU0XYi@vger.kernel.org, AJvYcCWxPYKiPQtRmAsZ9oIl+F2CvYFw3cQBAR6VfRHCxVGmRhh19dEkDrjyjAv9PjBX87/LREcuKOuxnshR@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAH0XmyqLwHpvlSQh2W4zgWzH1m9s+//p0wU7D1qIzGNkx84+/
-	SQHjJOYjKnW1wOgH4d2uSH3LsyUG+7GVNKI5QmcA0E/R8ExiMZs2DSRExHChl4xey3K0Qm/4SH0
-	1sLqkcxAaeI3EaHUB8eBJYbVww4E=
-X-Gm-Gg: ASbGncvszUgIv8IIymE51I/6eRe0kcPNUd0edI+S+2DKyqUlqSxz716gfSFiiintSL8
-	C87RzVEc78Epn7H83rrqWYccZ39EXOUQ7YU/puuMGkE/A7p/7cpD6hvtFqn4VvgVgHf3QfR7hXu
-	F20njv
-X-Google-Smtp-Source: AGHT+IFo6DOoGnTsS38LlUXMIhC0H9EtIGCJVFbM5Bu56nEtT839xcPAHtRDebmakeB9TC+KDHHS0qohqRpYH+q6d2s=
-X-Received: by 2002:a17:90a:c2c7:b0:2ee:e113:815d with SMTP id
- 98e67ed59e1d1-2fe68ada148mr12284035a91.8.1740583831681; Wed, 26 Feb 2025
- 07:30:31 -0800 (PST)
+	s=arc-20240116; t=1740588501; c=relaxed/simple;
+	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=G6cSdDMH+kKrbp5h0yk1/gCnKsMqBxy2ckyOK9U5FReF51pl1TRRtgEi8hceP1PT8BoHYJM7KML1QUFdCbKVqbDxCdUL7k8WtzTp1mFA8hge8eeWLlQoWYdv1YrAFSwsX/mVMe57ZNeR+84hCtsjDVfs1nwI3tfyw2Jf0saa3X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJBntMAW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F78BC4CED6;
+	Wed, 26 Feb 2025 16:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740588501;
+	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gJBntMAWa9qiB6go6MBAYuIpUQmIV8zM3P7hOz/BcMP2byX2P+MCVmwTOF8y59cTA
+	 /dmsi2YnkvFk7WCs/BqmuQVZJqyuuK6B2L34n/nlGh5Fb/IjbLtuJF7xfHrd7ckNHI
+	 3aOmoTcDg9MwCwDV+lRzSbk3kKgtk7sY2T2rRnxcQXeSOKkWWTO2TN5iDQ7y45VEK4
+	 FrA2VRbWMMiI+WJDNW4z9L9r47+ekdDK20fY6zi5lQvVIKVd30Jsj0qJQM2+iV2vYy
+	 04RjgTb6SA4Au/0pUEMYaZh350XZsbrokrKevACKRy5XTZGyf9486J5GRsNNv9vMzQ
+	 71NtfIvQwN7Lw==
+From: Mark Brown <broonie@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+ Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
+ James Smart <james.smart@broadcom.com>, 
+ Dick Kennedy <dick.kennedy@broadcom.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+ David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
+ Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+ "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+ Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+ Selvin Xavier <selvin.xavier@broadcom.com>, 
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+ Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
+ Takashi Iwai <tiwai@suse.de>, Carlos Maiolino <cmaiolino@redhat.com>
+In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+Subject: Re: (subset) [PATCH v3 00/16] Converge on using secs_to_jiffies()
+ part two
+Message-Id: <174058848717.58970.18340675342808865020.b4-ty@kernel.org>
+Date: Wed, 26 Feb 2025 16:48:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com> <20250226-initial_display-v2-4-23fafa130817@gocontroll.com>
-In-Reply-To: <20250226-initial_display-v2-4-23fafa130817@gocontroll.com>
-From: Daniel Baluta <daniel.baluta@gmail.com>
-Date: Wed, 26 Feb 2025 17:32:08 +0200
-X-Gm-Features: AWEUYZnVDiZ00SedBZ6EyKd9EOM22xcDBV6m1uAzMRnVUY2vdD1K52vvrRAuSvo
-Message-ID: <CAEnQRZDXxuviih+o-iFOtiS6j8=JqnhUOHaZf3RhGL++fg=moA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/12] arm64: dts: imx8mp: Add pinctrl config definitions
-To: maudspierings@gocontroll.com
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <quic_jesszhan@quicinc.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thierry Reding <thierry.reding@gmail.com>, Sam Ravnborg <sam@ravnborg.org>, 
-	Liu Ying <victor.liu@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-On Wed, Feb 26, 2025 at 4:23=E2=80=AFPM Maud Spierings via B4 Relay
-<devnull+maudspierings.gocontroll.com@kernel.org> wrote:
->
-> From: Maud Spierings <maudspierings@gocontroll.com>
->
-> Currently to configure each IOMUXC_SW_PAD_CTL_PAD the raw value of this
-> register is written in the dts, these values are not obvious. Add defines
-> which describe the fields of this register which can be or-ed together to
-> produce readable settings.
->
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
-> ---
-> This patch has already been sent in a different group of patches: [1]
-> It was requested there to submit it along with a user, this series also
-> includes some users for it.
->
-> [1]: https://lore.kernel.org/all/20250218-pinctrl_defines-v2-2-c554cad0e1=
-d2@gocontroll.com/
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h | 27 ++++++++++++++++++++=
-++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h b/arch/arm64/=
-boot/dts/freescale/imx8mp-pinfunc.h
-> index 0fef066471ba607be02d0ab15da5a048a8a213a7..0927ed11ec687d5b273c4a4a6=
-455e8d81468f676 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h
-> @@ -6,6 +6,33 @@
->  #ifndef __DTS_IMX8MP_PINFUNC_H
->  #define __DTS_IMX8MP_PINFUNC_H
->
-> +//Drive Strength
+On Tue, 25 Feb 2025 20:17:14 +0000, Easwar Hariharan wrote:
+> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+> either use the multiply pattern of either of:
+> - msecs_to_jiffies(N*1000) or
+> - msecs_to_jiffies(N*MSEC_PER_SEC)
+> 
+> where N is a constant or an expression, to avoid the multiplication.
+> 
+> [...]
 
-Please use C-style comments /* .. */
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[12/16] spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
+        commit: 32fcd1b9c397ccca7fde2fcbcf4fc7e0ec8f34aa
+[13/16] spi: spi-imx: convert timeouts to secs_to_jiffies()
+        commit: 1d2e01d53a8ebfffb49e8cc656f8c85239121b26
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
