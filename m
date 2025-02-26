@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-6938-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6939-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F0F6A4625B
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 15:20:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D4E9A4625A
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 15:20:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 174A1189D66D
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 14:20:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26A323B32A6
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 14:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287BB2222CA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D780222566;
 	Wed, 26 Feb 2025 14:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bL+z4glL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhrVIPGK"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F089980BEC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F092A191F6A;
 	Wed, 26 Feb 2025 14:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740579559; cv=none; b=aOddYSqyFlg7QC6Nq0ydLjRA4u8s9q/RCP7z8H5E2YGnkyXNpa2akKWnoiPDE9w7IyGvcXGzPW9QJex9tNdA8/ds8S59IV7D+aJNGLIw9i0Bd9TGuxDBaZq6cuUyweSq4NUU2H3BXLrwLPekN28qIWXxs3f0jA5OaIB2TExIhkM=
+	t=1740579559; cv=none; b=SSAvUo1xXoimenthA30wn5LJOjBM9VQV8+ZvRAvTIo0YX2cp4F8UZjpeO0k/Vt/cDmmAJ37k3mNXaQ2FbP4nKY8WjXLzuQWS3XutldZaqXP/RfQMARE0npvFjo9qe6YNusGiC+gJHUFbC2dW+5kXOaZgMDunJrG4WICru4i7IeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740579559; c=relaxed/simple;
-	bh=qPNp8kJ1SPfm9hzzYuFUJ6PYED9G/nfRjZrkm1H8psw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d0VuYOeUMYMHwbr9xNeihd2jklBXBpfQ6YBkLlXjLQSzdlzpa1g3CkYSUqokpGFIFsRmB5ZSIbgkVqYXe2FvM78ts5GRwUCsrZc2p9GVjeFloXgJMvNjwqvrm/UFTwIm2Ky2hkq//FuuxhrCYS/gn1EvJcKuTQZEWX+3kGMFMuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bL+z4glL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 725D1C4CED6;
+	bh=yzlu7C1Ilu9dacgUhIz/BCN7V18c7nAEEfTiqq67Dk8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=QW70iyRVkuFF0N00egIcXWOj/rhR74yaEyFPMVoAbDw01JbyB1cKdh3ubjpjztAwD12QCP6loBYjKzhmhXbYUBpTOiOwBj/Y+250HlHPk9sU4xmPQtdIi5BSKjJtuBqxKJt4FPjWRf656X24W0sZ7hJ5bqkWFPY3TjTNtnQBWoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhrVIPGK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8BEBDC4CEE8;
 	Wed, 26 Feb 2025 14:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1740579558;
-	bh=qPNp8kJ1SPfm9hzzYuFUJ6PYED9G/nfRjZrkm1H8psw=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=bL+z4glLMLjtif7nD9V/K+zaxSZc5JKr1f6vzndjetO9s6CLSiE3EieO271ZapLua
-	 w4DbabGONJtBQ1cSvWyZdKcxYMYuri+cVoFNBGE9GL1l1neZnpGDVJvmQtX9cbgpPE
-	 lOeGOExJzZRd4A1YOpI4/eq7TyJG7GOzboFnZCM1G/dPHWZaCUpgLMlrgeo2yMFdxw
-	 qAfj7yCnENDpX1iu52Jf2jWpMSjN4jENNcJdsPHbZWxG5v9Tt9l3KjlifPE+GzecVZ
-	 h1zoPYVbK32Yj86q11vI5Wr3oKSXojO2e2y6cAFgLNR11Sm7bsA2W6tVdTGNa7fjDd
-	 slxQu3SaHJwFg==
+	bh=yzlu7C1Ilu9dacgUhIz/BCN7V18c7nAEEfTiqq67Dk8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=fhrVIPGKnahShK0SdUq7Sbdkh7HdubhTJpTxC48yA6u/GfLI5Zc0jhlEDAlF3VT2C
+	 qPJuCY7yI5Uc02VEXsRa1Mkg736cyW4fb9BJjM+uDxD8CZhyP0eW++0Fy8oXsPBZuR
+	 ulIZ1B6fzC3mTYvWqrGeSCx819G7LZkuIXJ0AN6Mpjg2+rEaz0zRNEuG7B6X3Lz3in
+	 UXcf0PVwNi6CV7/EroUmlXVpn36Jmo8gxBCrlMAsKEzzIY2HTatvOKJNolZT3ev1jP
+	 mS1EVlPWSscvYKC9srdWTjrqfjdKzDZFe3l4oOLZN3p2r+jGGV7X0IfNsRiiRafE9y
+	 us2/mIruN3w2w==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64F8CC021B8;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 791D5C19778;
 	Wed, 26 Feb 2025 14:19:18 +0000 (UTC)
 From: Maud Spierings via B4 Relay <devnull+maudspierings.gocontroll.com@kernel.org>
-Subject: [PATCH v2 00/12] arm64: dts: freescale: Add support for the
- GOcontroll Moduline Display
-Date: Wed, 26 Feb 2025 15:19:11 +0100
-Message-Id: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
+Date: Wed, 26 Feb 2025 15:19:12 +0100
+Subject: [PATCH v2 01/12] dt-bindings: arm: fsl: Add GOcontroll Moduline
+ Display
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -55,12 +55,10 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAN8iv2cC/3WNQQqDMBBFryKzbkoyGpGueg+REuOoA2kiiUhFv
- HtT912+B//9AxJFpgSP4oBIGycOPgPeCrCz8RMJHjIDStQSsRLseWXjXgOnxZldjKZBVA3JmjT
- k1RJp5M9VbLvMM6c1xP062NTP/m9tSkihre37sValrsrnFGzwawzO3W14Q3ee5xejftpzswAAA
- A==
-X-Change-ID: 20250224-initial_display-fa82218e06e5
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250226-initial_display-v2-1-23fafa130817@gocontroll.com>
+References: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
+In-Reply-To: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
 To: Neil Armstrong <neil.armstrong@linaro.org>, 
  Jessica Zhang <quic_jesszhan@quicinc.com>, 
  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -78,11 +76,11 @@ Cc: dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org, 
  Maud Spierings <maudspierings@gocontroll.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740579556; l=2470;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740579556; l=1224;
  i=maudspierings@gocontroll.com; s=20250214; h=from:subject:message-id;
- bh=qPNp8kJ1SPfm9hzzYuFUJ6PYED9G/nfRjZrkm1H8psw=;
- b=RO2wdKrxZIYN3bZWZRvWLLnJ4q4OJ3zzHkzPM4aFfF+XjDIXbjVCFjRpeOidaQRPXZt2qJz7l
- zFN4KACCPHFDLlu/B1Tc95xI78GkFMvm5PPtjNbTX4mec1Lj8g+V8Sc
+ bh=XzzwrOc9xVSfmdKG+ke4olEHtzQu7fTQaSQ8cG5/qtY=;
+ b=ABwoQ4wLxyHJ5tU87/yspLvaG11vwwnIv6B4L53Ie07g0oyNP6tydHs5rrMs/AN0paPKTnCna
+ GOr63LBqd3TBdjdv91NmDAMexIUVEN3zcB5E57gBkdJZorPAJGVUhua
 X-Developer-Key: i=maudspierings@gocontroll.com; a=ed25519;
  pk=7chUb8XpaTQDvWhzTdHC0YPMkTDloELEC7q94tOUyPg=
 X-Endpoint-Received: by B4 Relay for maudspierings@gocontroll.com/20250214
@@ -90,55 +88,31 @@ X-Endpoint-Received: by B4 Relay for maudspierings@gocontroll.com/20250214
 X-Original-From: Maud Spierings <maudspierings@gocontroll.com>
 Reply-To: maudspierings@gocontroll.com
 
-Add inital support for 2 variants of the Moduline Display controller.
-This system is powered by the Ka-Ro Electronics tx8p-ml81 COM, which
-features an imx8mp SoC.
+From: Maud Spierings <maudspierings@gocontroll.com>
 
+Document the compatible strings for the Moduline Display controller.
+
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
 ---
-Changes in v2:
-- Dropped the trivial-devices patch
-- Added a patch with bindings for the gocontroll,moduline-module-slot
-- Added a patch to spidev.c to enable the spidev driver for the module
-  slot
-- Added a missing usb-c connector in the av101hdt-a10 variant dts
-- Switched to the new bindings for the module slots in the base dts
-- Fixed some commit typos
-- Link to v1: https://lore.kernel.org/r/20250224-initial_display-v1-0-5ccbbf613543@gocontroll.com
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
----
-Maud Spierings (12):
-      dt-bindings: arm: fsl: Add GOcontroll Moduline Display
-      dt-bindings: vendor-prefixes: add GOcontroll
-      dt-bindings: connector: Add the GOcontroll Moduline module slot bindings
-      arm64: dts: imx8mp: Add pinctrl config definitions
-      MAINTAINERS: add maintainer for the Ka-Ro tx8p-ml81 COM module
-      MAINTAINERS: add maintainer for the GOcontroll Moduline module slot
-      MAINTAINERS: add maintainer for the GOcontroll Moduline controllers
-      arm64: dts: freescale: add Ka-Ro Electronics tx8p-ml81 COM
-      arm64: dts: freescale: Add the GOcontroll Moduline Display baseboard
-      arm64: dts: freescale: Add the BOE av101hdt-a10 variant of the Moduline Display
-      arm64: dts: freescale: Add the BOE av123z7m-n17 variant of the Moduline Display
-      spi: spidev: Add an entry for the gocontroll moduline module slot
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index db781d31569811ca241b5bd9a32a0896f7d9c3b9..40b2734f0caf3c431f05d33637a6bed8312c9d10 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -1099,6 +1099,7 @@ properties:
+               - gateworks,imx8mp-gw74xx   # i.MX8MP Gateworks Board
+               - gateworks,imx8mp-gw75xx-2x # i.MX8MP Gateworks Board
+               - gateworks,imx8mp-gw82xx-2x # i.MX8MP Gateworks Board
++              - gocontroll,moduline-display # GOcontroll Moduline Display controller
+               - skov,imx8mp-skov-revb-hdmi # SKOV i.MX8MP climate control without panel
+               - skov,imx8mp-skov-revb-lt6 # SKOV i.MX8MP climate control with 7” panel
+               - skov,imx8mp-skov-revb-mi1010ait-1cp1 # SKOV i.MX8MP climate control with 10.1" panel
 
- Documentation/devicetree/bindings/arm/fsl.yaml     |   1 +
- .../connector/gocontroll,moduline-module-slot.yaml |  88 ++++
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |  17 +
- arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h     |  27 +
- ...tx8p-ml81-moduline-display-106-av101hdt-a10.dts | 100 ++++
- ...tx8p-ml81-moduline-display-106-av123z7m-n17.dts | 133 +++++
- .../imx8mp-tx8p-ml81-moduline-display-106.dtsi     | 535 ++++++++++++++++++++
- .../arm64/boot/dts/freescale/imx8mp-tx8p-ml81.dtsi | 547 +++++++++++++++++++++
- drivers/spi/spidev.c                               |   2 +
- 10 files changed, 1452 insertions(+)
----
-base-commit: 2bc63dbeabecce860eb8b261bf67b97552fe7747
-change-id: 20250224-initial_display-fa82218e06e5
-
-Best regards,
 -- 
-Maud Spierings <maudspierings@gocontroll.com>
+2.48.1
 
 
 
