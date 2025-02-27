@@ -1,88 +1,89 @@
-Return-Path: <linux-spi+bounces-6957-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6958-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A26A47A76
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 11:40:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C006DA47A93
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 11:44:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86E9F3B15F6
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 10:39:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E600188C625
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 10:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5F2229B00;
-	Thu, 27 Feb 2025 10:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C05122839A;
+	Thu, 27 Feb 2025 10:43:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPeGQvTV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MA2R6RIr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4EE21ABB4;
-	Thu, 27 Feb 2025 10:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC168229B00;
+	Thu, 27 Feb 2025 10:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740652796; cv=none; b=k6jMpBwxPAiFVeD2VoDohm0ni2APzfAITvBN+RzPP0oP6m/+dvl00ViHzCCzy7tACLPY/vsVAPN2++wjBKwKSj7xk6cTlOnwyg1zTWYq2QgU8pVYyH2IgKAvcs9CtQ70Zr5wlqOycyJZYoJvzl1aAh0xWt7f3h91exMbBOoEyIw=
+	t=1740652986; cv=none; b=LbMeMCd2k/3tf0bHG1scPdTNf9EspR5ddO89wWQM5QRaR/j5ZMR8t/x6UNuzgTkAN/0a7hTHAnxilZjc5Gc+74Lyq3Iu3zrbyxPlJvd4S65ggRo51Vb+w+IEWIOmGx8jp7wO9K7BaKuXFgl959anVMkmdTSRJA7HYpTcZbP67VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740652796; c=relaxed/simple;
-	bh=4Z5THPHBB0PyNdgQ73XQc7tWD13PorYiOsgFnskGl+A=;
+	s=arc-20240116; t=1740652986; c=relaxed/simple;
+	bh=q/kXL5Us3S1TImJ8vPmYLcGTSwjqZYa/nCqiSG53O7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gz/tb17Awrdi9283PtHqebGIklOeFRhYPEHA7+E0G+EUYoosLcaYPbB2OV+oq+ifzc74lb2162qr1Zsv3tNlnziXtWsT3B4p21vxt5BjKKxnAfSZxXous4AfwrmW3KFl0BqSHWciSttYit/zdkEaeC8kThROkRzPO+Thdszkjos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fPeGQvTV; arc=none smtp.client-ip=209.85.221.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=T2ifTuw0R2CK+sPDEivf8vNVfYgCssfSfHXCiStJLd4+/SorTtH0L3nXTI/RKAIVBXVvlJmJaqSeBn80D/oJ742G/ZV9YSuSUIpllORQ5sMxQKNsg0MpeqwoOUp+YVLZlt+sFCWmL0dXo2RCIbB0tbjjDVVEyO8N7XHqDoY44ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MA2R6RIr; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38f325dd9e6so400764f8f.1;
-        Thu, 27 Feb 2025 02:39:54 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43aac0390e8so4998305e9.2;
+        Thu, 27 Feb 2025 02:43:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740652793; x=1741257593; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740652983; x=1741257783; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PBNOuunCwK0S7uvVT7lUa1QkbPinEv6RhOlxsz3h1co=;
-        b=fPeGQvTVE58N6BSy+ua7dqbVmtpdoXnQ0OZyp8fluuahv4wBqhf2g806jGP/3pA/ba
-         bRskVGUZRiF1qd6C0ClBXPEmMfSDHCKWS2JYIr3AWoQp1UNGbd1nWpTR7/ORAFY3e89R
-         6RXM5sW45KPizUM5xrzwQRZj6C9+Ri3r22L5y905ySDOl6uc++8dqcprLt+SY6asO847
-         GqI2ev8noZUoUnKdqeF78V08X/Ru3sZcln2dD4714qy9Bq31w5sNX0zZB9MTHUcW2fWe
-         eFxXoKVUZBWj8ePq6Wd5Zl4h1sutwBLQebYHv7LwHgn3/xeo5kg+89MvdLKiiJ+GCD3N
-         QO7g==
+        bh=BiNB3394BHNPK8DuKnzmxQtxRBBmLgR2/ry0wUMsOLA=;
+        b=MA2R6RIrAAMNPE7sV6SDsH2Ro0GtTW5MVwrwKLzsA4xbBubJBFk4hbSHKkRf3UAC31
+         e8HSKBWGbGnN5GmslsXnVfZ19YkL86AkTq/SSgAd8eW6U7DWNbcVhp9MzsHfv4QVFF2B
+         6zGotO1zfj7X6ZIE0isiH+1/oXhhM4Uy1pGn6xYppMz4p45A3RNn2xd7oMnuJXxadzfO
+         7m0gANql8gMW2lU1QlkuBbZ5WbOS+QBg7IV050wXr36duwvUdgbmR7oQF9j+zf3yCzE5
+         hqvx2T7cyq3epU3GiCqKz9bw7l+j1YM4O1rUBAGBE59RWV0ypHp/Bf8kaXpqLBqafW5N
+         z9sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740652793; x=1741257593;
+        d=1e100.net; s=20230601; t=1740652983; x=1741257783;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PBNOuunCwK0S7uvVT7lUa1QkbPinEv6RhOlxsz3h1co=;
-        b=t9DNkrFXoPg6XE+tRsWLw56/CwPpdZ0pwtHMLoFUL4K5aHVpU7oIy7oDf/Q1q6z+Oo
-         x2ajE5M9ntpRNC0jIOfa+60M7IZ/X/JUPgI8AIuic3xYoeZuFX9PG3qi5PZ8GSIubh3B
-         gfipqTTIcvfaQFII+evrTQ4Ex/MbX9scfgI/BSqQEOKcfElX6je/CyEg3mbUEl/cB8/U
-         a8RNjWJ3tyFtkOOrMPoT0w01E0E+boRGhK20ukjQ5UK0UjbcGxds04x3cUYAPYpw5w9w
-         7RaSrGuBuR4+5PggagbvsrvqWXyddNaZMLkUgXaPCDmLUHvLmbdwEd7GCY1htTdHJDju
-         vzzw==
-X-Forwarded-Encrypted: i=1; AJvYcCV4wpdcA9cDeEDa0A5LhQ/ZQJKiShgH/2/T0p3AHNs1JQcOFOvSD7Q2RLJ8Fqn3T7THntZxrtv0PdHfXcI=@vger.kernel.org, AJvYcCWYWmbhcReL0uaMc9Bs7U3CZxhVisMlp/JB+7HE+fn114jw/5nWFK54NLoo4e5urJXL0EaFZc0Sm4xD@vger.kernel.org, AJvYcCXc7U4HSXEa6cZW+uRAYqMCAGUbSkGQ/iK8Bckdp+TDHN9XIagjwg399Tys07yQ2GmkIeyA8TvyrW2a1l0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPwXB64j06MIXjqLfp3wyz2qsnH8tiZUIJi/o+fpIrmbsNx+Zk
-	3pfgeQ911apkZOJsAKgxx5Duq0a9y5kHyNbyDH2gOLtZNGFCs37n
-X-Gm-Gg: ASbGncu2nww71Pp4nxQqQ3h3H1LDae3221cLZic4JMnFyP+DcL0SACuxfWnSM6UJlc1
-	qNKt1hbWLe1i+Ahlsf3s/VY4wPLEcOLd639vTpJGzhLh1CYR1BIWTToculSTMiyAlHI3lNm1vhn
-	rc34Zr0xRYQQFqbSH7y6IlbgKD8Q5avF5PxFXHTGkfemOP832fIkddUo6vIu7z1zYUVSH2KyTQP
-	jBbVHAjJW0svIbkUZZS7jjcBmBcENs41Rx9YgW9s/B5Pv4xHX8cc16+Xpe6kdtvK/5k4WS4siKI
-	ofgLNHpWlaF+sQQluI0iaP9tFjzVo/Y1voMueSZEd38DQHNnzjsNwyaI5xbOLQWYYEG1fUXnPuG
-	Oy912AAPvvBMY
-X-Google-Smtp-Source: AGHT+IH+VMXOi+Mhh3bGfInYKPLcazEFfAbSm2XIe+YZ54dISGf+tuIRq1SvNTEluwvTdl0cMpYLsg==
-X-Received: by 2002:a5d:5f8a:0:b0:38f:260f:b319 with SMTP id ffacd0b85a97d-390d4f84733mr7161091f8f.44.1740652792586;
-        Thu, 27 Feb 2025 02:39:52 -0800 (PST)
+        bh=BiNB3394BHNPK8DuKnzmxQtxRBBmLgR2/ry0wUMsOLA=;
+        b=r0my6A7wCXhbd/sEuujpwROUtKwsvUBnSflaDrnp6yR1fn5MTcC0uY0XveulaIRtW0
+         QunFPcaCBmKQsj8vCrXGYmZL3PRl+dnSPb8mq6pX0CrSauCxgHHVT8IlS/E+yD0QrSk4
+         9n72eRG/6cTFgKVTDUvs9KLcAl+6YoCSthte4eWfuLcEew6nePkuBU5ByUpsP+z3CbpU
+         YOqVRzcoYUrq5CiXo1gBpcGT0PMcMaiTrAKSwiyYYb97ObiYvCo7TeD6lhSW/xox8WeT
+         DcXxOLcM/gn8xpXydVqatuT+cx+O307xcDQIwCIQd9yjWNBxDWha36W8Wr/WRDvgDsh1
+         PLXg==
+X-Forwarded-Encrypted: i=1; AJvYcCVYVGd0R5k01uqNsS1E4oyME7Rw8rHmMOujHsl9nVmIblcZcgAHB0bkjUsNelogjlBLH7F4doPm6S0S@vger.kernel.org, AJvYcCVwOFwImIBSWoa6tYFz+EAFOX38C7i7cAGQq5/0qqUwzHa3GGIJnHxv7Y9K0HtGlWAiVvs0cjjL4501jPE=@vger.kernel.org, AJvYcCX/S+ruhE8jtZS/Wr9hrTNxn/vtOMpj/W9q6UywWlQ6wl7FFzef2hOKQb1n4pO32HkEMkc4o9h8e+DSPr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ+4TEcX4a9ckY+6v1RbJCsMcl1jSLz0yX0gI8lkf02akQxyvr
+	T4c7LsS6LeHXkWMoM2OzV73+IZU7RZ4jzaBxKXpIyW3wV9o2zy2fE7VNFQ==
+X-Gm-Gg: ASbGncuQxdcuaQ+qzrhWrq6KpjlcQMck0gJf5HoCct4U55cIIvhwwL+HajsfLA+F14B
+	PY98t1DU51kacrLZfzZ7m0LdwleufGhjE4efylpR659+rtqK2vUdCqFp1f4Q0S8tPIf24x8bSl0
+	LlhgRoVNJE3RBA9WKTPgknmYTUC7h7ohU+47M2xnX33A1MDGBuDf/+/R1BtaOB091YpYzrqvtaE
+	TMq5oDanPRNFiLoj2yEJKp/6FfFfo1k+TSa0KDhgSlUOplfUcuP+X2Z7itnSMLOjzVs7svhmoii
+	ITdfewok+u40YK+iiSBZ2a10+6mm8hPkxHODA6YmVdYyQKTzf/rhKLnexbkzcg8zg0BQ1NQQRYy
+	WHHV2s0vBX9rO
+X-Google-Smtp-Source: AGHT+IHFm0dUQ/NPjHHsDvyLGniaYHPyJmvRPPSkxTkyil6HbVz1xJ2cyk/bcrn9hLQuuLZq/+2M1Q==
+X-Received: by 2002:a05:600c:458e:b0:439:91dd:cfa3 with SMTP id 5b1f17b1804b1-439ae221d72mr208925685e9.29.1740652982970;
+        Thu, 27 Feb 2025 02:43:02 -0800 (PST)
 Received: from orome (p200300e41f187700f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f18:7700:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e479652dsm1644708f8f.16.2025.02.27.02.39.50
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43aba52b97bsm50615215e9.8.2025.02.27.02.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 02:39:51 -0800 (PST)
-Date: Thu, 27 Feb 2025 11:39:49 +0100
+        Thu, 27 Feb 2025 02:43:01 -0800 (PST)
+Date: Thu, 27 Feb 2025 11:42:59 +0100
 From: Thierry Reding <thierry.reding@gmail.com>
 To: Vishwaroop A <va@nvidia.com>
 Cc: jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com, 
 	broonie@kernel.org, linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, kyarlagadda@nvidia.com, smangipudi@nvidia.com
-Subject: Re: [PATCH v2 1/6] arm64: tegra: Configure QSPI clocks and add DMA
-Message-ID: <a26g7pt3pll5d6jmkucdychrectbaa27ft65cuw7mrlirupx63@ijeqgow2s4ij>
+Subject: Re: [PATCH v2 2/6] spi: tegra210-quad: Update dummy sequence
+ configuration
+Message-ID: <accylk4mbwwaln3ruvolqouhxsxzwjengf3k4c6ypz3piolul6@ukojglmcka2x>
 References: <s355cib7g6e3gmsy2663pnzx46swhfudpofv2s5tcaytjq4yuj@xqtvoa5p477n>
  <20250212144651.2433086-1-va@nvidia.com>
- <20250212144651.2433086-2-va@nvidia.com>
+ <20250212144651.2433086-3-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -90,71 +91,52 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4znkw4cymmoafvku"
+	protocol="application/pgp-signature"; boundary="uz2pkkg3tjvjfanl"
 Content-Disposition: inline
-In-Reply-To: <20250212144651.2433086-2-va@nvidia.com>
+In-Reply-To: <20250212144651.2433086-3-va@nvidia.com>
 
 
---4znkw4cymmoafvku
+--uz2pkkg3tjvjfanl
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/6] arm64: tegra: Configure QSPI clocks and add DMA
+Subject: Re: [PATCH v2 2/6] spi: tegra210-quad: Update dummy sequence
+ configuration
 MIME-Version: 1.0
 
-On Wed, Feb 12, 2025 at 02:46:46PM +0000, Vishwaroop A wrote:
-> Set QSPI0_2X_PM to 199.99 MHz and QSPI0_PM to 99.99 MHz using
-> PLLC as the parent clock. These frequencies allow Quad IO DT
-> reads up to 99.99 MHz, which is the fastest that can be
-> achieved considering various PLL and clock divider constraints.
->=20
-> Populate the DMA and IOMMU properties for the Tegra234 QSPI devices to
-> enable DMA support.
+On Wed, Feb 12, 2025 at 02:46:47PM +0000, Vishwaroop A wrote:
+> Adding support for the dummy sequence configuration. The dummy sequence
+> introduces a delay between the command and the data phases of a
+> transfer. This delay, measured in clock cycles, allows the slave
+> device to prepare for data transmission, ensuring data integrity and
+> proper synchronization.
 >=20
 > Signed-off-by: Vishwaroop A <va@nvidia.com>
 > ---
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra234.dtsi
-> index 2601b43b2d8c..0ac2d3aba930 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> @@ -2948,6 +2948,13 @@
->  				 <&bpmp TEGRA234_CLK_QSPI0_PM>;
->  			clock-names =3D "qspi", "qspi_out";
->  			resets =3D <&bpmp TEGRA234_RESET_QSPI0>;
-> +			assigned-clocks =3D <&bpmp TEGRA234_CLK_QSPI0_2X_PM>,
-> +					  <&bpmp TEGRA234_CLK_QSPI0_PM>;
-> +			assigned-clock-rates =3D <199999999 99999999>;
-> +			assigned-clock-parents =3D <&bpmp TEGRA234_CLK_PLLC>;
-> +			dma-names =3D "rx", "tx";
+>  drivers/spi/spi-tegra210-quad.c | 31 ++++++++++++++++++++++++++-----
+>  1 file changed, 26 insertions(+), 5 deletions(-)
 
-Other than the dma-names property which was already discussed, this
-looks fine.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Thierry
-
---4znkw4cymmoafvku
+--uz2pkkg3tjvjfanl
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmfAQPUACgkQ3SOs138+
-s6GgyQ//S5JgXIXb+r9r+GLX2BMYavKQT5LaHF3pKS453MqqbEXkhJX2/AH5w0yX
-uPjL5JuS47HyBaey26DxbHmoKUwdaFOFmstOJCs8qmzeox34XrXOeZpeXr2rhBCF
-y0Irvpw7HOvDGjYplqLur9NW+KQgOM6eJrGyes1Mc3hbVsUlWVFPNofN0eh4+aI5
-b0nwV3+93VvLYjPwr6Zi9SbVt+pjdhj+iPbZym3L7ZV0qo8R+SZ7ON+cB4lf3QWe
-dfC8FPNaD1dit/fOmpAM2BpPFBMnhg74i8kqkg8OqL2RpsjLqp+Tcm+U1TK0INiz
-NIcXtdqbXhk8Bornqwuxq3pA9E8xrpfZTrClLRR+HdgyR6I0ad0BxHYwyEPy60ZJ
-w0CzeZXlyjZeVaAqHPjPiY1e6oVAYDK0DqR34KgIiUS26XmliQgDGWdXQ5AcDLGe
-Wyp0tiHwVyvyAvTuOgZ1GkpmOZkppo7KNm9dvANgjS8fvxJVv5EAyIGRKEz9a3wi
-TtaUUFmBsZX9H8kcHAVs0mra5qLG6HTQ/tmu6wEQhf5jhNXYpFvCSZdfNgsOPV5h
-G3xw/r85MPogzEcIfAchOGW7G91XVnPeoF3NDlv6M5X/xoloveFwmN9qiJriuknt
-T2R+pHbXdKcvoKWnSJsV5aO55NzEjRRT4YHkV4mBD29AXM50LMs=
-=zY8k
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmfAQbMACgkQ3SOs138+
+s6Ff6RAAlXU8Q7C2JLdGnPQeITUXBqVMr19Qc1jw7721A1+FwGZSSx/xBY0C23J/
+RM7bqUuOcGPdy8F4oL3m+ACwhiAwJOq32qxKjRVf8UGRHY2zgeK3DL8m0KvLm1zg
+ehf0z/jtQNdJbM1sEekIiFlYrGMuhELqHAYrJdsxUhC+NiEJP/Vif0JTo/StveBP
+e43GoqUyI3QqGsHshEp1aHcyeOJoXRlwHvfrtchVlDNaN3RGad5C/a2UMIH0Q2F4
+m6rNBmqvSUfDzk4e9xS+NC5zMkUr5PustygCOcyuEHdhuJ7XH8FeGwOJ65QIj526
+AJ7YFJPVLxEriaeggXLws2/Jh32mivPLTr7CuVV6AN0oA4ESsAQbAxyFHwMYVd1J
+ZrGPkk9FxMEKJSIZbOAvR70xT52Y9NoctFr7nBo0/DZlMQ56m2k5gwh+vFUfU7Ql
+0WtPzJkRK7jCJFJ1LZTcv/37haxVyhVT41hrzgrXJ0LNYw8MprVh1wq4pncGaFLt
+TR2tsuCYSFJ/YOOIRDr2TvBCH67A36WdWI99tLIGoD4WAuSyPbA5r+bhY7lysV7D
+CHKFpyl5oxv++vZ+j3weszPpxLP4ZYrepRhPVTeNlpZmGCgYNm0T3AwoB4I+VkLL
+oB9m+IQk26clam6AF9z2FEYzvGjXxQUWOKx0UdZw0ySh2Kvnb2k=
+=t2rG
 -----END PGP SIGNATURE-----
 
---4znkw4cymmoafvku--
+--uz2pkkg3tjvjfanl--
 
