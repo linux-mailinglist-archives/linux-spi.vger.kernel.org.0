@@ -1,156 +1,128 @@
-Return-Path: <linux-spi+bounces-6955-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6956-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67D5BA46E83
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 23:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A15A47890
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 10:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62E7A16D2C1
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Feb 2025 22:28:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 694ED1679A1
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Feb 2025 09:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5BD725D91A;
-	Wed, 26 Feb 2025 22:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89356227B83;
+	Thu, 27 Feb 2025 09:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pJUentzn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nLspYqEw"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CB925D916;
-	Wed, 26 Feb 2025 22:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4BA22576C;
+	Thu, 27 Feb 2025 09:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740608855; cv=none; b=d76Q3Mwjz88n0xsCbBsWj58VZDPi8Xr5dH7o9/LVn9/Tn7hmULQo8KY1Hu8meTkvP5PnHWKCugg7nhm+f+lsnHUhxCQJuYBOZyjBHuB4M1UeWfj3X/YVQ2beJ/GyeCry6/Z18C0TU4yRFtXagwu89oxotKT0uCENIcbub9QVC6I=
+	t=1740646985; cv=none; b=SXR8cJvgeK28GNoIUbBSC2CPnlCrYcK/9dVqrQpjDaOGIlyGtuwOtFQzhJipfNsUeKFa/BIMsHrA1G2R803n1cQaxQVYJz9d+QJehmR/Yf+HaVqdBnH8oJyFsNBBR3+r4BDXyug7fcHXuRTj/6ijAVIDeeyMWCfqhxBC2jokAUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740608855; c=relaxed/simple;
-	bh=/TBxRjD+YRDof+mNKcnMf3FsANOHIzAqS1izxvRKSkA=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=Wr/qfZcZwKv3FHXGIG5nnmo28C9DHCY/wTsKev8oCzUVoWWP9Q/S4qBU7PfaYfwWIUppl7nUfiOhLYE8uaqTvuvl1LftJe7DIs/VaNmrnt1jflZVC829UWW/wAr8ji3WmBizOTsTGr6AR+a+Q3WiwdCY3Mugtno30q/r5uujqBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pJUentzn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63415C4CED6;
-	Wed, 26 Feb 2025 22:27:35 +0000 (UTC)
+	s=arc-20240116; t=1740646985; c=relaxed/simple;
+	bh=NVCpCk+nbSUsNJ/EU7EEuGOPqCNbb7okhZbn+Sil+6M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tiKcbViOayNAePsy0pUklxZwqZAKz5ZhJDjiW/QdW5lHGaxT+Vo5tfm0VqNhLPVFOMwAeAQi6wKqh5GEy+E3dflZVAGVaC6KcIWdzpA9FRLlTu4DM+sBdi+mk0OWcEJ+q7823JMaOAgky+oPyeIZyWfWStoybPumk/gacdR9Byw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nLspYqEw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7E3C4CEDD;
+	Thu, 27 Feb 2025 09:02:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740608855;
-	bh=/TBxRjD+YRDof+mNKcnMf3FsANOHIzAqS1izxvRKSkA=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=pJUentzn6RXKQfY73yLb7U7Z0MOp2FRQtxkufabY66glfMQGuamgElASdmZN6R8Up
-	 Fvi395sNQ2Vm3XBtm0TmeE6e3pIcideJviwU+2LB88nLxQ01yfWKaLyPCHtpIqKVy1
-	 d2BgqnPG9pUDZ21Kh7p0VjwtBARziCYpGNKNX65q1bjyx0+F07xEcdKiPL8jSjDZM5
-	 SXSka8fFGgmeCDkdRvDm41GKoaNBVvKDB9e7VvobgMyQL2g2YsfzMTj184/fQHdzuE
-	 EFXupjHCf8dKEdq3lRmSS6ZPWsaoOCwsoEdN8/aCv0B2WBo7G0GD1Do5aQrvdXXb22
-	 nRbCMHTWkdkeg==
-Date: Wed, 26 Feb 2025 16:27:34 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1740646984;
+	bh=NVCpCk+nbSUsNJ/EU7EEuGOPqCNbb7okhZbn+Sil+6M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nLspYqEw609cIT0ad0o594ZSe9+944oOqgtsX4PvzoyBCh2CjxvcaZKHcRlfZbkg3
+	 o98sgutNPNtNQvtB1V2TWfdkxk0jvPKNau6dHa8OKjnpZRzHC9C6ErL5o2r0XNXfYe
+	 ynD51HJPuofVM3zovm3pWhAZDAaeGPoIRj6tCVyu8o4t7sFTQlvipwFQwyRdAzsR2d
+	 B6voWJuIrlI+Cf1lPSYN2ZjYhqS7rvygaip7lyyFeeh6HBrO8Q/DpezIvl2iQUtyVl
+	 OXwKmfMuglQQ5kuzM1Q6kxE36HyfrIokC3I3woeNs2DsuZou71wXc13B0RkvyLg9Ys
+	 NykE1mhZbbdJQ==
+Date: Thu, 27 Feb 2025 10:02:45 +0100
+From: Carlos Maiolino <cem@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Easwar Hariharan <eahariha@linux.microsoft.com>, Yaron Avizrat <yaron.avizrat@intel.com>, 
+	Oded Gabbay <ogabbay@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>, 
+	Nicolas Palix <nicolas.palix@imag.fr>, James Smart <james.smart@broadcom.com>, 
+	Dick Kennedy <dick.kennedy@broadcom.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+	David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+	Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, Xiubo Li <xiubli@redhat.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	"Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>, Selvin Xavier <selvin.xavier@broadcom.com>, 
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, cocci@inria.fr, linux-kernel@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org, 
+	linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+	ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, Takashi Iwai <tiwai@suse.de>, 
+	Carlos Maiolino <cmaiolino@redhat.com>
+Subject: Re: [PATCH v3 00/16] Converge on using secs_to_jiffies() part two
+Message-ID: <3apo7evpkvcy5mafw7zdatr3n7lytugvfmumq2zou4nifyptnc@ucbu4c5g5jrq>
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+ <79b24031-5776-4eb3-960b-32b0530647fb@sirena.org.uk>
+ <hJl1qb89zCHWejINoRSGGIO0m7NNi3wAmY9N_VC7royLnZoyL-ZozLkmLO-vCPlYc55-IPh76PIB_2_aKKjp1A==@protonmail.internalid>
+ <20250226123851.a50e727d0a1bfe639ece4a72@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>, Mark Brown <broonie@kernel.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Jessica Zhang <quic_jesszhan@quicinc.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Conor Dooley <conor+dt@kernel.org>, 
- linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
- devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- Neil Armstrong <neil.armstrong@linaro.org>, Simona Vetter <simona@ffwll.ch>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- linux-arm-kernel@lists.infradead.org, Liu Ying <victor.liu@nxp.com>, 
- Maxime Ripard <mripard@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- linux-spi@vger.kernel.org, David Airlie <airlied@gmail.com>, 
- imx@lists.linux.dev, Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Maud Spierings <maudspierings@gocontroll.com>
-In-Reply-To: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
-References: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
-Message-Id: <174060863556.3857034.912870225795774413.robh@kernel.org>
-Subject: Re: [PATCH v2 00/12] arm64: dts: freescale: Add support for the
- GOcontroll Moduline Display
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250226123851.a50e727d0a1bfe639ece4a72@linux-foundation.org>
 
-
-On Wed, 26 Feb 2025 15:19:11 +0100, Maud Spierings wrote:
-> Add inital support for 2 variants of the Moduline Display controller.
-> This system is powered by the Ka-Ro Electronics tx8p-ml81 COM, which
-> features an imx8mp SoC.
+On Wed, Feb 26, 2025 at 12:38:51PM -0800, Andrew Morton wrote:
+> On Wed, 26 Feb 2025 11:29:53 +0000 Mark Brown <broonie@kernel.org> wrote:
 > 
-> Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
-> ---
-> Changes in v2:
-> - Dropped the trivial-devices patch
-> - Added a patch with bindings for the gocontroll,moduline-module-slot
-> - Added a patch to spidev.c to enable the spidev driver for the module
->   slot
-> - Added a missing usb-c connector in the av101hdt-a10 variant dts
-> - Switched to the new bindings for the module slots in the base dts
-> - Fixed some commit typos
-> - Link to v1: https://lore.kernel.org/r/20250224-initial_display-v1-0-5ccbbf613543@gocontroll.com
+> > On Tue, Feb 25, 2025 at 08:17:14PM +0000, Easwar Hariharan wrote:
+> > > This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+> > > either use the multiply pattern of either of:
+> > > - msecs_to_jiffies(N*1000) or
+> > > - msecs_to_jiffies(N*MSEC_PER_SEC)
+> > >
+> > > where N is a constant or an expression, to avoid the multiplication.
+> >
+> > Please don't combine patches for multiple subsystems into a single
+> > series if there's no dependencies between them, it just creates
+> > confusion about how things get merged, problems for tooling and makes
+> > everything more noisy.  It's best to split things up per subsystem in
+> > that case.
 > 
-> ---
-> Maud Spierings (12):
->       dt-bindings: arm: fsl: Add GOcontroll Moduline Display
->       dt-bindings: vendor-prefixes: add GOcontroll
->       dt-bindings: connector: Add the GOcontroll Moduline module slot bindings
->       arm64: dts: imx8mp: Add pinctrl config definitions
->       MAINTAINERS: add maintainer for the Ka-Ro tx8p-ml81 COM module
->       MAINTAINERS: add maintainer for the GOcontroll Moduline module slot
->       MAINTAINERS: add maintainer for the GOcontroll Moduline controllers
->       arm64: dts: freescale: add Ka-Ro Electronics tx8p-ml81 COM
->       arm64: dts: freescale: Add the GOcontroll Moduline Display baseboard
->       arm64: dts: freescale: Add the BOE av101hdt-a10 variant of the Moduline Display
->       arm64: dts: freescale: Add the BOE av123z7m-n17 variant of the Moduline Display
->       spi: spidev: Add an entry for the gocontroll moduline module slot
+> I asked for this.  I'll merge everything, spend a few weeks gathering
+> up maintainer acks.  Anything which a subsystem maintainer merges will
+> be reported by Stephen and I'll drop that particular patch.
+
+I'm removing this from my queue then and let it go through your tree.
+Cheers,
+
+Carlos
+
 > 
->  Documentation/devicetree/bindings/arm/fsl.yaml     |   1 +
->  .../connector/gocontroll,moduline-module-slot.yaml |  88 ++++
->  .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
->  MAINTAINERS                                        |  17 +
->  arch/arm64/boot/dts/freescale/imx8mp-pinfunc.h     |  27 +
->  ...tx8p-ml81-moduline-display-106-av101hdt-a10.dts | 100 ++++
->  ...tx8p-ml81-moduline-display-106-av123z7m-n17.dts | 133 +++++
->  .../imx8mp-tx8p-ml81-moduline-display-106.dtsi     | 535 ++++++++++++++++++++
->  .../arm64/boot/dts/freescale/imx8mp-tx8p-ml81.dtsi | 547 +++++++++++++++++++++
->  drivers/spi/spidev.c                               |   2 +
->  10 files changed, 1452 insertions(+)
-> ---
-> base-commit: 2bc63dbeabecce860eb8b261bf67b97552fe7747
-> change-id: 20250224-initial_display-fa82218e06e5
+> This way, nothing gets lost.  I take this approach often and it works.
 > 
-> Best regards,
-> --
-> Maud Spierings <maudspierings@gocontroll.com>
+> If these were sent as a bunch of individual patches then it would be up
+> to the sender to keep track of what has been merged and what hasn't.
+> That person will be resending some stragglers many times.  Until they
+> give up and some patches get permanently lost.
 > 
+> Scale all that across many senders and the whole process becomes costly
+> and unreliable.  Whereas centralizing it on akpm is more efficient,
+> more reliable, more scalable, lower latency and less frustrating for
+> senders.
 > 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/freescale/' for 20250226-initial_display-v2-0-23fafa130817@gocontroll.com:
-
-arch/arm64/boot/dts/freescale/imx8mp-tx8p-ml81-moduline-display-106-av101hdt-a10.dtb: usb@32f10108: usb@38200000: Unevaluated properties are not allowed ('connector' was unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
-arch/arm64/boot/dts/freescale/imx8mp-tx8p-ml81-moduline-display-106-av101hdt-a10.dtb: usb@38200000: Unevaluated properties are not allowed ('connector' was unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-
-
-
-
-
 
