@@ -1,112 +1,142 @@
-Return-Path: <linux-spi+bounces-6976-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6977-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BFB8A49E61
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 17:09:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72B48A4A5B5
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 23:12:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A9DC1895642
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 16:09:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E6551896003
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 22:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164EE274253;
-	Fri, 28 Feb 2025 16:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE351DE3AC;
+	Fri, 28 Feb 2025 22:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="TyCXX+0Y"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B56272938;
-	Fri, 28 Feb 2025 16:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9071A254C;
+	Fri, 28 Feb 2025 22:11:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740758924; cv=none; b=VGnptGVu8cLr6SaZr4gnt7b/+9aU19ZFWUMzuOxdllKP5wGaWlZA4dSpC9EC1/eO70sL+2TVMGnfqdzOpqTT7j0boUMqzVFj6cMlF0yhQOnUc/AsQBlUggS91uaAW4O+nnaRimhuu8i4/rQme12Lz9NQjFYM9Ztlf10NP/DFieA=
+	t=1740780721; cv=none; b=mzUFPcgwg3oOj2hhlnXDkBzUsAtv96ouWqZuH7FGYjAztNQ2ww6r55MzUGgtBp8LVNA4mckGL1/rvqSiCJFvy/AFMM6l8Icq0y5uxao98Msix5DDHRzUJfY053PVFnDAbQwRJU7i0at0NAnGvc0ANYRYX+sj4npEgK0XcNLMseQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740758924; c=relaxed/simple;
-	bh=4UJJqQRyHzJ174unLgvOh3fUNdKpwn0AlweFWdTco8I=;
+	s=arc-20240116; t=1740780721; c=relaxed/simple;
+	bh=n0RDSDT7lrDfgY2gY0Jx1+2UsomVL7pe4VNMSvttegY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=plpJt3VRWrndV/EBO00Rk99zbppcRrYMQDuKSF/1c7CieAKRm/xToWs2K1DdY36oF5vTseqza3ml6erbAHDcTuL6fBFbjdW/VsXpz1pOwGhvtoqJpp64dbriAKikddh3GS/kj5sSDf9k2SMzWfygnJiJQ7HSD6JFP99JK2wjVos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: M58fSqAGQj6kg9IG4sfmTA==
-X-CSE-MsgGUID: PEhSeUI9Swy6eZcLtZW3bA==
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 01 Mar 2025 01:08:39 +0900
-Received: from localhost.localdomain (unknown [10.226.92.94])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id C01D9401C213;
-	Sat,  1 Mar 2025 01:08:36 +0900 (JST)
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	 MIME-Version:Content-Type; b=pCygiEf+cF+0lcBYaLrpC0A3kl3XHISBARAaqepMmzSBbxFHd0xhMF8oIJldMFt/zBo6uPw46cXHjSe7ubo9bj/uka+KaOJcXQVlEqAodLaHxFZK3k/mHWsH+5Rf5CQprgZkIkQXjn4LWd7GHd4zPdPSlY9IbtayRheicCtxbbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=TyCXX+0Y; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=VZfcm07W8RwEaBy9lSmqnHo6WL11ba796zrsT4TrXJI=; b=TyCXX+0Y4INx6O+beYAL/qfnpw
+	xrOw0ZkMweR/I6PkMC5d1ncuABaxrCMZo/JxoY7hyf68suXi20D9bp/o5Jog748TyIWhA5xTtfdhJ
+	N/9WXodyRsorIeLIQ9+zLGNTYFHVsdtiPcbsloZD0vCvQINbv/s67+lmDR7NQnuJUO/+ETU16Om6R
+	1HlG2XdFsLUUWvKRrskWKV9dYBOCOtVuiwOaOjEGed51G+ukhAj1rBpT5OxC8+BgQa35paN0TGDQr
+	4hOOmhezcDXfbRRCWzsWXdkF0cebcaY93q/VeB5g6WxSIRp5W7DnHlnEvuEUKFlAL6zEGHxplPFXS
+	kAZzc4mQ==;
+Received: from i53875b47.versanet.de ([83.135.91.71] helo=localhost.localdomain)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1to8Zk-00040X-Sb; Fri, 28 Feb 2025 23:11:20 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	linux-rockchip@lists.infradead.org,
+	Simon Xue <xxm@rock-chips.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-usb@vger.kernel.org,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Johan Jonker <jbx6244@gmail.com>,
+	David Airlie <airlied@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	linux-i2c@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	FUKAUMI Naoki <naoki@radxa.com>,
+	linux-pwm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-serial@vger.kernel.org,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	ulf.hansson@linaro.org,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-spi@vger.kernel.org,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 8/8] spi: rpc-if: Add write support for memory-mapped area
-Date: Fri, 28 Feb 2025 16:08:02 +0000
-Message-ID: <20250228160810.171413-9-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250228160810.171413-1-biju.das.jz@bp.renesas.com>
-References: <20250228160810.171413-1-biju.das.jz@bp.renesas.com>
+	Andy Yan <andy.yan@rock-chips.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: Re: (subset) [PATCH v3 00/15] rockchip: Add rk3562 SoC and evb support
+Date: Fri, 28 Feb 2025 23:10:48 +0100
+Message-ID: <174078063579.504376.4763347846550378295.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Add write support for memory-mapped area as xSPI interface require
-it.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/spi/spi-rpc-if.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+On Thu, 27 Feb 2025 19:18:58 +0800, Kever Yang wrote:
+> This patch set adds rk3562 SoC and its evb support.
+> 
+> I have split out patches need driver change for different subsystem.
+> And all the modules with dt-binding document update in this patch set
+> do not need any driver change. I put them together to make it clear we
+> have a new SoC and board to use the new compatible. Please pick up the
+> patch for your subsystem, or please let me know if the patch has to
+> send separate.
+> 
+> [...]
 
-diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
-index e0c66a24a3cb..627cffea5d5c 100644
---- a/drivers/spi/spi-rpc-if.c
-+++ b/drivers/spi/spi-rpc-if.c
-@@ -75,6 +75,19 @@ static bool rpcif_spi_mem_supports_op(struct spi_mem *mem,
- 	return true;
- }
- 
-+static ssize_t xspi_spi_mem_dirmap_write(struct spi_mem_dirmap_desc *desc,
-+					 u64 offs, size_t len, const void *buf)
-+{
-+	struct rpcif *rpc = spi_controller_get_devdata(desc->mem->spi->controller);
-+
-+	if (offs + desc->info.offset + len > U32_MAX)
-+		return -EINVAL;
-+
-+	rpcif_spi_mem_prepare(desc->mem->spi, &desc->info.op_tmpl, &offs, &len);
-+
-+	return xspi_dirmap_write(rpc->dev, offs, len, buf);
-+}
-+
- static ssize_t rpcif_spi_mem_dirmap_read(struct spi_mem_dirmap_desc *desc,
- 					 u64 offs, size_t len, void *buf)
- {
-@@ -103,7 +116,7 @@ static int rpcif_spi_mem_dirmap_create(struct spi_mem_dirmap_desc *desc)
- 	if (!rpc->dirmap)
- 		return -EOPNOTSUPP;
- 
--	if (desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
-+	if (!rpc->xspi && desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
- 		return -EOPNOTSUPP;
- 
- 	return 0;
-@@ -125,6 +138,7 @@ static const struct spi_controller_mem_ops rpcif_spi_mem_ops = {
- 	.exec_op	= rpcif_spi_mem_exec_op,
- 	.dirmap_create	= rpcif_spi_mem_dirmap_create,
- 	.dirmap_read	= rpcif_spi_mem_dirmap_read,
-+	.dirmap_write	= xspi_spi_mem_dirmap_write,
- };
- 
- static int rpcif_spi_probe(struct platform_device *pdev)
+Applied, thanks!
+
+[05/15] dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+        commit: 049e7ac203d51fdc3a739f5f28906788e8eeea03
+
+Best regards,
 -- 
-2.43.0
-
+Heiko Stuebner <heiko@sntech.de>
 
