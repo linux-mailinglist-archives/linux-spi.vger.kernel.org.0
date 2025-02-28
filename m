@@ -1,110 +1,93 @@
-Return-Path: <linux-spi+bounces-6974-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-6975-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73103A498A1
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 12:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F838A49E53
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 17:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52D803BB4FA
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 11:58:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E48D3AF03B
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Feb 2025 16:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D97225F781;
-	Fri, 28 Feb 2025 11:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b="Zlg5zVHX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82DEE16F265;
+	Fri, 28 Feb 2025 16:08:21 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from outgoing1.jnb.host-h.net (outgoing1.jnb.host-h.net [129.232.250.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BADC23E32A
-	for <linux-spi@vger.kernel.org>; Fri, 28 Feb 2025 11:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.232.250.55
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608ED186294;
+	Fri, 28 Feb 2025 16:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740743894; cv=none; b=Vt7wnmq3UKtKZ6appn6+bWHcxDyna+5fMnSWC//0P8kTFVNnlnaibo4Uhc56htDULsusxbqKJzDm51vgFngG9kTDwAcNL8bexysBncMU3Vdc281d7JlfMjxyeGYTWtZ6hK1OvVOk34z3zmjdTQJZxYKLVBY9+phbWCHIP3O7uFU=
+	t=1740758901; cv=none; b=E5FZUCOoGcOZubO70gofcp9gZowlafjAUjq5USAarXr73g8n2lAEN8+U0E0GMUHq93NtnU/k9QSosderH84adiuL+ooPCjp6p1tuiR67Prf1NINeyPWLWwjczvmB5hrCJ2ao2y4CM5T3LTvlAa+lDBL4eKSylsOgUP5yyTbekR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740743894; c=relaxed/simple;
-	bh=LnJAb5OtSiiPPpVmdSEicOxdfy335XXtHun9Lv2d8Bw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iFAlU9lpKxDsyAi9jRyESlawtcDazZL6JJzsRQqUr0MRs8Ff09BSQUGzOpt3qE7oq15nJiFY5epoJCixtNoGwSK9HdrxX3IOl52IMdPEH5HZ0Fkslija3B/UK8cIqQqxZZxC+FWHI8WdHjeBs5lrwPo1dpsoLZ9he0XHxYtMAvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za; spf=fail smtp.mailfrom=coldcon.co.za; dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b=Zlg5zVHX; arc=none smtp.client-ip=129.232.250.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=coldcon.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=coldcon.co.za; s=xneelo; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:sender:cc:bcc:
-	in-reply-to:references; bh=t+qwmUT3iOAm1DfPM+nbVN5TXLHXkSwi3Xte37fm8Y0=; b=Zl
-	g5zVHXC0ic9lNsVizlVTaP7nauG87cqctZHGtgrEx0hsHEAbRoNINk2/ER+eE46oUmlFrrNjOqZUu
-	vgpjd4JEgeuZPPXeZhLPTKB1mG4viGuyf6CN7bCzbfxZCmJCvzFYjZaQtpRShaHIE2Y6+G3eIeeI1
-	vLR+lC69CkcBKBFtDLi7o5cu4I6NrOkKL2Q02wuRmpDgWUiW2RdUrlfr7YvFumsbrQY2pYBVgQ2I6
-	LtwTntSZoF13pg/iYLLJaD4w8wROQXdXMx6UjLVHUbAHXfLzmhLmXWG2TztTPegjJUFPFbUSqupeX
-	/Cgyzg7M8sS5aAk302EbyelBsUeVyZEg==;
-Received: from dedi166.jnb2.host-h.net ([41.203.16.166])
-	by antispam2-jnb1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnz0L-00422w-LR
-	for linux-spi@vger.kernel.org; Fri, 28 Feb 2025 13:58:10 +0200
-Received: from [104.192.5.240] (helo=coldcon.co.za)
-	by dedi166.jnb2.host-h.net with esmtpsa (TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256)
-	(Exim 4.98)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnz0K-00000006Dsm-2QgM
-	for linux-spi@vger.kernel.org;
-	Fri, 28 Feb 2025 13:58:09 +0200
-Reply-To: funding@investorstrustco.net
-From: Iyke Nikolas <avaril@coldcon.co.za>
-To: linux-spi@vger.kernel.org
-Subject: Re: The Business Loan/financing.
-Date: 28 Feb 2025 11:58:07 +0000
-Message-ID: <20250228112431.68B0F40CF56D2668@coldcon.co.za>
+	s=arc-20240116; t=1740758901; c=relaxed/simple;
+	bh=XpGpno9q/hlI0zZFJXJwrT9k3zLbf4BYFdvdY9dOP6I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=icAjurrD+2vhwkYEp6Un+19jP3VfAamKizhNJmpNYDqpVrl79LDGQA5FLaDG1YBgPl9r5CBKsCihrYLzF9drMHiPbwQppg+OjY7t5QuYWjcIg5vpSUcI0rtkex4ilDoJQNkTVS92eOiUpI+YqOBTtVSSW/bE279t6LZJ2UXcomU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: 9GMqdtG2Q9eeeqPG36EMbQ==
+X-CSE-MsgGUID: +NCBzf2ZSzqwxe5pEGk0MA==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 01 Mar 2025 01:08:15 +0900
+Received: from localhost.localdomain (unknown [10.226.92.94])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 7F218401C213;
+	Sat,  1 Mar 2025 01:08:12 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH 0/8] Add RZ/G3E xSPI support
+Date: Fri, 28 Feb 2025 16:07:54 +0000
+Message-ID: <20250228160810.171413-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Authenticated-Sender: avaril@coldcon.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: coldcon.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@coldcon.co.za
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.88)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+CzanhUpQxxY0jGcn2Rs0cPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5z7QsSqJg/tY26zecnzp7YKU2Itm39BdCc4FEP6OrUewhPm
- p87GC1OZvsh7yKER8sq3xHGjwY23W/fr1qIdwR0ceb4o0/MLsfRXq2B6Bj1eqIhJNeUYrwmMRp0o
- fTv2z6OWrRCR/TGJ+LxBEbBCS4VQbvH/y4TBKwDHfQa0wCenXC+SjAMhlxVTUP8RXDYi0U1JpmI0
- 71bWBu5BNTe7wFyCRVEbXfJnI+gG5QvGXTtovK7VZqJmzCeHtqZ+QtMgTB0iLwRMaKsK8lAeAhb+
- aZDwTMQ3Kg3hL2oXz5A5E5R/dS4GkJ5hfB+qWugfDEytZYoACfRtBjLzEjgIZNLWhI/Mb7SOSczA
- 6/BlLHspgKwfxkpFBMGtk0DHIsZm7eDIdidx3dBtceKX2dWiEm+7oHm9xBEeGmns8QeFADnQDTrf
- rq/iPB9nbD8ib8/LRKDL9uX6nH0SFAAL0wIn8kjcTporPPrEMEUywY28JQK/4tt3rRkgoL0bckEu
- e7jwJnlVscnY5Qx4fJOk03R5fJtf/Dv/9m9+uP0zyEETyQahh1k9u6fK30DS261NPJJTtvuBG/wS
- fPVkeRJRF5+7mPhPAjSIa1y0Nm02ZI+0HyPfbVEuRae1snr4e+V5iJLuGQh14kIlS9YoHFltGqun
- dRd2vfQDxRcLZivEDcmpAbM9ZRc0AilfB1kGL3fSE2MONRlXMKtuCu4G2nFtWAVIvsCOu5FM/fu3
- x7erbsjFB4F58vtkzTwlrzSXg1zOM5BMYR+ArXzMM41wUaeD7iI07wk7IBC1aeNzMeYMM/qc9He6
- zd8kb2nrAUZxhra3hcJgPbkQnKk3ClTXlSfQV8rvfnHgqk4U1Gt/9ppEoh7u4mXKDwivYDdQSwbI
- 5IDQMARnZ2/ixmby7m9xwLahPGY0/PEbdICFRgFnzGg9rgSSO4p0kGP/3qk3UfKQ9OIEeAN+Uhcn
- OZzPia/e3RTzWtZ565WlxfE2
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
-X-Complaints-To: abuse@antispammaster.host-h.net
+Content-Transfer-Encoding: 8bit
 
-Hello,
+The xSPI IP found on RZ/G3E SoC similar to RPC-IF interface, but it
+can support writes on memory-mapped area. Even though the registers are
+different, the rpcif driver code can be reused for xSPI by adding wrapper
+function to it.
 
-Do you require capital financing or low interest loans to advance=20
-your business projects or growth strategy? We can provide with=20
-the needed investments for your business. 
+This patch series tested on RZ/G2L and RZ/G3E by overwriting boot
+partitions.
 
-Get back to me if interested?
+Biju Das (8):
+  dt-bindings: memory: Document RZ/G3E support
+  memory: renesas-rpc-if: Move rpc-if reg definitions
+  memory: renesas-rpc-if: Use devm_reset_control_array_get_exclusive()
+  memory: renesas-rpc-if: Move rpcif_info definitions near to the user
+  memory: renesas-rpc-if: Add regmap to struct rpcif_info
+  memory: renesas-rpc-if: Add wrapper functions
+  memory: renesas-rpc-if: Add RZ/G3E xSPI support
+  spi: rpc-if: Add write support for memory-mapped area
 
-Best regards,
+ .../memory-controllers/renesas,rz-xspi.yaml   | 137 ++++
+ drivers/memory/renesas-rpc-if-regs.h          | 147 ++++
+ drivers/memory/renesas-rpc-if.c               | 667 +++++++++++++-----
+ drivers/memory/renesas-xspi-if-regs.h         | 105 +++
+ drivers/spi/spi-rpc-if.c                      |  16 +-
+ include/memory/renesas-rpc-if.h               |   4 +
+ 6 files changed, 884 insertions(+), 192 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/renesas,rz-xspi.yaml
+ create mode 100644 drivers/memory/renesas-rpc-if-regs.h
+ create mode 100644 drivers/memory/renesas-xspi-if-regs.h
 
+-- 
+2.43.0
 
-Iyke Nikolas
-Managing Partner
-Investors Trust
 
