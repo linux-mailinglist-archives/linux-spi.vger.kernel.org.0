@@ -1,82 +1,313 @@
-Return-Path: <linux-spi+bounces-7025-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7029-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3C60A4DF70
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 14:40:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7BFA4E2EC
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 16:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24CCA1787C1
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 13:40:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A010A7ABB48
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 15:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E62204090;
-	Tue,  4 Mar 2025 13:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315F6207A02;
+	Tue,  4 Mar 2025 15:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XnrTRuRW"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ED/TNXm+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643CB202F88
-	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 13:39:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8513F202F8F
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 15:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741101264; cv=pass; b=drhSygRXYaTSFHlKbu6pdEWqhy0Fn5MKkolsm4oJ8/Eeyruyuk5usLUXPHCXMj3XTdG6J+7VaKlyNRk+6wPUgHB8GGAYMC1GCT0mYpafsTBt+MG2m30uwwpnbX1/a1ZfUSdDwBDG2ldOB74zwIg3S65+08ovrmsYZ0XtRz6rCgA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741101264; c=relaxed/simple;
+	bh=JHN5XUVVnQv9cvYemNLq5jso/MbQRX5go/vqQODxWS0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OlY6X8aTCkIPU7uFKlNUIYGcAKRQUy68AE2P9Lh3Si52Hu44n0WZpWSdIC6cmnNDjiClt2A5M/M0gIOOvGkYa9zIhj7PPg7PhktkNp4jrJbGb4QC0qgml6Epf47ZYHmNYES4iYmzZ0IiKLWoimbpHDFXlkfapYoUNF2Rt8PhQNA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ED/TNXm+; arc=none smtp.client-ip=148.251.105.195; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; arc=pass smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id A0C8C40D2863
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 18:14:20 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key, unprotected) header.d=collabora.com header.i=@collabora.com header.a=rsa-sha256 header.s=mail header.b=ED/TNXm+
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fHN6jWFzFyjP
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 18:09:52 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id B768442746; Tue,  4 Mar 2025 18:09:25 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ED/TNXm+
+X-Envelope-From: <linux-kernel+bounces-541711-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ED/TNXm+
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 568D341E11
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:34:55 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id DF1332DCDE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:34:54 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65AEF3A7FB8
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:34:39 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600B920E714;
+	Mon,  3 Mar 2025 12:34:38 +0000 (UTC)
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D945661;
+	Mon,  3 Mar 2025 12:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741095598; cv=none; b=L5esHVf/N+UyeM0ZX1ODFxKLmLedFdgYf0GXafIWA4k0wZXhHD+dpt2iiONvXYw/PEeSJn6zzHgefOVHWyDGWGovDCqC/Fl0+VwnkMds1hECG5tC0a1kO6aroG9InfOGy4c6TDNUULg70g1dlWPxUfa5tUmbXcDnn+aZ3w/q+1o=
+	t=1741005275; cv=none; b=Tq5H/dDNCsxECgthghXxplY3txRKQHqfDCgv2NU6xqWKSswFUw8QujzaNTmQW7ktAVxgJ8RJ9cNYt5DjGYYqK/r18h7pRblamDYhC5aQneJSDmCXClpQBQH/FjvURsmwjY3FhQPDQ/VGw/Q0zZCXvXmkzd8KyAy6sIaw4GRKEqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741095598; c=relaxed/simple;
-	bh=s6MNCBdyyNNkobKaqGYB5/yiMikaS6DXfiGoEnE4Kpo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FUQ/86Atd5U/f0hOxqHrIZAKrhEaGRh1k+9cRYvIiaeLBizYMwiK25S9rERl4X4jMPDPn8+/9iMSXLyPG/xfvd74RH0HKn9adfIUMPw7fb1JeqgFFEjVfeXLyofghZkIEBWDQi7klqr2pDI1D6cwmLzGFibVKAwoXOnJeCof2hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XnrTRuRW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E640FC4CEE5;
-	Tue,  4 Mar 2025 13:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741095596;
-	bh=s6MNCBdyyNNkobKaqGYB5/yiMikaS6DXfiGoEnE4Kpo=;
-	h=Subject:From:Date:To:From;
-	b=XnrTRuRWUBanrM84vEZJ8oWL6T/mGixjMt+KdNo63QS5PflNzu4gw5RO0vIv5xdVP
-	 O+VL4WMLWavojobClMkk5iYNT75dtsAqvGnHVTGxHfNyx2g3bGulA0y8mAwmSMRFIt
-	 N1qAmwC59XCcDUpoHroKtI0m1aJ+edSABD3TSvG1ryLMw5zvYVxM+3FhZI6DhcsBvK
-	 XAIiUkBwaCf+hWeqHWSNdmlkYip6YDNqyovcMeEuvdeVvy/VqmFNmh2jfgvkKYCYoT
-	 KPgIfK+yUPOU9OA4H7IDw2LEGD3E9JGuuW58mx+r7Hjrlzkcy1cI8DE6E4f4aDh7Kv
-	 SwvR1oCBQg0Pg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EEB42380AA7F;
-	Tue,  4 Mar 2025 13:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741005275; c=relaxed/simple;
+	bh=JHN5XUVVnQv9cvYemNLq5jso/MbQRX5go/vqQODxWS0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=u7fmjXVrq0WNu7rJq40Y1uDu3KT1WrAL0S+aS6VNhVjvJCFBXBM0PUMydBt954d/CwpvnyM64sblaJ9KbKYBvqnN+eiKiZEPmNjDm6Cf8uG9dn4AOdQjvsx8NoCMRUS/dCEY6iLrk5oMJYDMPCR5STmP72y5Vjh44H1U+zLVBhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ED/TNXm+; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1741005270;
+	bh=JHN5XUVVnQv9cvYemNLq5jso/MbQRX5go/vqQODxWS0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ED/TNXm+3mmkw04O9PxoovNVGMKrA5Fe9qigZQWTOY+bD7MGMhkPtlbh0/YWyyzNQ
+	 LypOt+jOFhvs37SITmauEnXctcDbJymnsiI6BeagOjVN4a3pPOWezQf1zgfTY3mxtD
+	 y2aBDM1c6fr3+n6XQlD4nWyJFT89Pw1DcpqvxKB/28yrXjyDfmO6kVRgh6SQQjWh3c
+	 Pdj7SIsufBMNaes6Z2v1NdIUz+/UJ3T2Eh8NRHcYyQOFIFOvnY0L6KnEl7wxIPEUST
+	 ROIXu9NdBJNlXqKUMTnyjj5dF2KUAsloaCUvepT1sL6IlddaQVVdPFbp1cw/dqP7sk
+	 eZ/Qf0JmTsvCA==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 81DC417E0607;
+	Mon,  3 Mar 2025 13:34:29 +0100 (CET)
+Message-ID: <12c5ba3e-a151-44a8-ace7-3d944a09ae5e@collabora.com>
+Date: Mon, 3 Mar 2025 13:34:29 +0100
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174109562941.146024.11158717420088060468.git-patchwork-summary@kernel.org>
-Date: Tue, 04 Mar 2025 13:40:29 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [v2] spi: spi-mtk-nor: Modify the clock architecture of nor
+ controller
+To: mtk22730 <Cloud.Zhang@mediatek.com>, Mark Brown <broonie@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20250303114540.1617-1-Cloud.Zhang@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250303114540.1617-1-Cloud.Zhang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6fHN6jWFzFyjP
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741705941.30109@/8oAJBaVdLPZC98S5YE9Wg
+X-ITU-MailScanner-SpamCheck: not spam
 
-Hello:
+Il 03/03/25 12:45, mtk22730 ha scritto:
+> The clocks used by different platforms are not same. So it is
+> necessary to modify the clock architecture to be adaptable to more
+> platforms.
+> 
+> Signed-off-by: Cloud Zhang <cloud.zhang@mediatek.com>
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+You really shall fix your identity on outgoing emails: your name appears as
+"mtk22730", that's not right.
 
-Series: Add STM32MP25 SPI NOR support
-  Submitter: Patrice CHOTARD <patrice.chotard@foss.st.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=935460
-  Lore link: https://lore.kernel.org/r/20250219080059.367045-1-patrice.chotard@foss.st.com
-    Patches: [v5,1/8] dt-bindings: spi: Add STM32 OSPI controller
-             [v5,2/8] spi: stm32: Add OSPI driver
+Also, the title could be clarified a bit...
+
+spi: spi-mtk-nor: Migrate to clk_bulk API
+
+...and then: this should be a series, and the first commit shall be adjusting
+the dt-binding for this driver accordigly, otherwise whatever you're doing here
+will turn out to be unusable.
+
+> ---
+> Changes in v2:
+>    -Use clk_bulk_xxx related functions to enable/disable clocks.
+> 
+> Changes in v1:
+>    -Add new function mtk_nor_parse_clk() to parse nor clock parameters.
+> ---
+> ---
+>   drivers/spi/spi-mtk-nor.c | 103 ++++++++++++++++++++------------------
+>   1 file changed, 54 insertions(+), 49 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
+> index 85ab5ce96c4d..4863b9cb2706 100644
+> --- a/drivers/spi/spi-mtk-nor.c
+> +++ b/drivers/spi/spi-mtk-nor.c
+> @@ -99,6 +99,8 @@
+>   
+>   #define CLK_TO_US(sp, clkcnt)		DIV_ROUND_UP(clkcnt, sp->spi_freq / 1000000)
+>   
+> +#define MAX_CLOCK_CNT		6
+> +
+>   struct mtk_nor_caps {
+>   	u8 dma_bits;
+>   
+> @@ -116,10 +118,8 @@ struct mtk_nor {
+>   	void __iomem *base;
+>   	u8 *buffer;
+>   	dma_addr_t buffer_dma;
+> -	struct clk *spi_clk;
+> -	struct clk *ctlr_clk;
+> -	struct clk *axi_clk;
+> -	struct clk *axi_s_clk;
+> +	struct clk_bulk_data clocks[MAX_CLOCK_CNT];
+
+What about having this as a pointer?
+
+	struct clk_bulk_data *clks;
+
+...Then you count the clocks, and devm allocate the number of clks that you need.
+
+> +	int clock_cnt;
+
+u8 clock_cnt;
+
+>   	unsigned int spi_freq;
+>   	bool wbuf_en;
+>   	bool has_irq;
+> @@ -703,44 +703,68 @@ static int mtk_nor_transfer_one_message(struct spi_controller *host,
+>   
+>   static void mtk_nor_disable_clk(struct mtk_nor *sp)
+
+A function with one call means that you don't need a function at all.
+
+>   {
+> -	clk_disable_unprepare(sp->spi_clk);
+> -	clk_disable_unprepare(sp->ctlr_clk);
+> -	clk_disable_unprepare(sp->axi_clk);
+> -	clk_disable_unprepare(sp->axi_s_clk);
+> +	clk_bulk_disable_unprepare(sp->clock_cnt, sp->clocks);
+>   }
+>   
+>   static int mtk_nor_enable_clk(struct mtk_nor *sp)
+>   {
+
+You can also remove this function and transfer the contents into mtk_nor_probe():
+it's just something like 6 lines and even called only once, so... :-)
+
+>   	int ret;
+> +	int i;
+>   
+> -	ret = clk_prepare_enable(sp->spi_clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = clk_prepare_enable(sp->ctlr_clk);
+> +	ret = clk_bulk_prepare_enable(sp->clock_cnt, sp->clocks);
+>   	if (ret) {
+> -		clk_disable_unprepare(sp->spi_clk);
+> +		dev_err(sp->dev, "enable clk failed\n");
+>   		return ret;
+>   	}
+>   
+> -	ret = clk_prepare_enable(sp->axi_clk);
+> -	if (ret) {
+> -		clk_disable_unprepare(sp->spi_clk);
+> -		clk_disable_unprepare(sp->ctlr_clk);
+> -		return ret;
+> -	}
+> +	for (i = 0; i < sp->clock_cnt; i++) {
+> +		if (IS_ERR(sp->clocks[i].clk)) {
+> +			dev_err(sp->dev, "get %s fail\n", sp->clocks[i].id);
+> +			return PTR_ERR(sp->clocks[i].clk);
+> +		}
+>   
+> -	ret = clk_prepare_enable(sp->axi_s_clk);
+> -	if (ret) {
+> -		clk_disable_unprepare(sp->spi_clk);
+> -		clk_disable_unprepare(sp->ctlr_clk);
+> -		clk_disable_unprepare(sp->axi_clk);
+> -		return ret;
+> +		if (!strcmp(sp->clocks[i].id, "spi"))
+> +			sp->spi_freq = clk_get_rate(sp->clocks[i].clk);
+>   	}
+>   
+>   	return 0;
+>   }
+>   
+> +static int mtk_nor_parse_clk(struct device *dev, struct mtk_nor *sp)
+> +{
+> +	struct device_node *np = dev->of_node;
+> +	int ret;
+> +	const char *name;
+> +	int cnt, i;
+
+	struct device_node *np = dev->of_node;
+	const char *name;
+	int cnt, i, ret;
 
 
-Total patches: 2
+> +
+> +	cnt = of_property_count_strings(np, "clock-names");
+> +	if (!cnt || (cnt == -EINVAL)) {
+> +		dev_err(dev, "Unable to find clocks\n");
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+return -EINVAL;
+
+> +		ret = -EINVAL;
+> +		goto out;
+> +	} else if (cnt < 0) {
+> +		dev_err(dev, "Count clock strings failed, err %d\n", cnt);
+
+return cnt;
+
+> +		ret = cnt;
+> +		goto out;
+> +	}
+> +
+> +	sp->clock_cnt = cnt;
+> +	for (i = 0; i < cnt; i++) {
+> +		ret = of_property_read_string_index(np, "clock-names", i, &name);
+> +		if (ret) {
+> +			dev_err(dev, "failed to get clock string\n");
+> +			return ret;
+> +		}
+> +
+> +		sp->clocks[i].id = name;
+> +	}
+> +
+> +	ret = devm_clk_bulk_get(dev, sp->clock_cnt, sp->clocks);
+
+	if (ret)
+		return ret;
+
+	return 0;
+
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+
+Cheers,
+Angelo
 
 
 
