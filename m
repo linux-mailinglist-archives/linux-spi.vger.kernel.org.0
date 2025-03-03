@@ -1,119 +1,131 @@
-Return-Path: <linux-spi+bounces-7034-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7033-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F35FFA4EBD4
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 19:36:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1117CA4EA67
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 19:03:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3BA47A5258
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 18:32:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DE377A9613
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 18:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4074F24C093;
-	Tue,  4 Mar 2025 18:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E7E279359;
+	Tue,  4 Mar 2025 17:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="EABLV7M0"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QQbVVHDu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D5F1C84DB
-	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 18:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86120205AB0
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 17:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741112724; cv=fail; b=dg/unq90zzLpXzSxiJsViI6g1J+fWJeh2BWLuy8a2yChdNqpW4efinDvE+rZfnWMZDl+uLinCPQ5VsPtCw2MKgTq2cRTAdz1ZCljZBLNy0LrUnthaxVsxeZ1H4WCRvlpJumKMpiI46S95hmmZW4sL5xQD62exDp5lCxgqiVHmDA=
+	t=1741110160; cv=fail; b=QEw2/cEXQPBxP9RqTI4WUQuMFeSy+UZTXW8GqAQ5QTlYimRTi7pvfSUvxJ5FmFoStB2jCw7nyXMW4oMtb1Glh3/54gjTgdD9Vv/RRqj8EXSVZPEpmLG9Jef4fH3cSLY6di4BV/e8qEkamxkPlp8CYOtqhhLS7FKzwgMdF88iFB4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741112724; c=relaxed/simple;
-	bh=Bmygpzn/8Cwf0eDzohTCD08BpNlslOTqk9asMbjGsjM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TuLiKxl2j8stqMuA/xP4BygU3s3zgfS+L+30HprdsnrjzDjPik1C7a0a8jUUkSyb1R6KIzASxBVZA3GOIHEJD43SuFojMkacZHYcz4rVLCCil5eKcgUhkL0r7ptfXQqZZPVBdMh/6rkj9QlVAoFl9bY0RT5yk7sQ9+tkLNC9H5s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=microchip.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EABLV7M0 reason="signature verification failed"; arc=none smtp.client-ip=68.232.154.123; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; arc=fail smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=microchip.com
+	s=arc-20240116; t=1741110160; c=relaxed/simple;
+	bh=1DarwwdcHSgo8NBv1NWEBooWSWcuDdO8/nohsDYSTd8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=O2sHk4scDlt2SPTUkBRt1eU/mpT4xKNck62tb570AIg805oEHzn73NNAzRabaeo8AQ6FEdYrKQfKJrVNxupwefYkF63yud/99UKVrgnYoFbiAsvX2cH+SO2lWYGgFRBViCTjVIHnNZCwDg+pBuLuqC6FYEpmvxnV84p7QUSZMIc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu reason="signature verification failed"; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; arc=fail smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id B6466408B666
-	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 21:25:20 +0300 (+03)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id A891E40D0B9F
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 20:42:36 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=microchip.com header.i=@microchip.com header.a=rsa-sha256 header.s=mchp header.b=EABLV7M0
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dtR40DnzFxfr
-	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 17:51:43 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fpF3MK0zG0kH
+	for <linux-spi@vger.kernel.org>; Tue,  4 Mar 2025 18:33:09 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id D3BFF400C6; Tue,  4 Mar 2025 17:51:42 +0300 (+03)
+	id 5608E400C6; Tue,  4 Mar 2025 18:32:57 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EABLV7M0
-X-Envelope-From: <linux-kernel+bounces-541432-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu
+X-Envelope-From: <linux-kernel+bounces-541723-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EABLV7M0
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 3A52042FE5
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:49:49 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 113F63063EFE
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:49:49 +0300 (+03)
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 7BF904221D
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:45:41 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id BC5C42DCE0
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:45:40 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A415188676B
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 10:49:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C1F7A3E55
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:44:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99C311F3B9C;
-	Mon,  3 Mar 2025 10:49:33 +0000 (UTC)
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0834A212FA1;
+	Mon,  3 Mar 2025 12:44:18 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7D61E376C;
-	Mon,  3 Mar 2025 10:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4957220FABB;
+	Mon,  3 Mar 2025 12:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740998970; cv=none; b=gfg4ACCnLc2S+wfAof8ZZ3C7IrGfdyJjNEL0QcViJbZQ7ntmKMRCM2ZIhvAzd5HZa1a9luwCuZmldWpTyjlcBfJajcNGaLsQMzrjhPBwCovurFIdKNttkC+cF/9JPPjLs59ainUDbkprMMZswPemKGtSGAThRDwGGW4AJFrjoAw=
+	t=1741005854; cv=none; b=iAZuhgvSiZYj1tvHIuLMq4CE6VHIr7AMWpk9EHp71i+/4NfHxUigNXucQGXZWLPhBvn1+rjFsYfU3oWCtBL3Fo4DtfdJk9qqj22vJuQS7cJpzjEjGbqEZ9Gf1jZAtzkb3Sq6dIhnGU599tfnbvY3wIWncGhPA7aUAhO9Ia4UfD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740998970; c=relaxed/simple;
-	bh=FxTyFdldQ/Rg6PXUyOvwskxzWGQOyp4Jrbq8b9VUONU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PEWz2YR6Jr9tYsLewlvdyGUdZaZt9psvGaI6Nevcg9eTuQvj2Sj8fMc5fvKaWs3z7EHmIfIPCd8H3Ouv0PZMVQT/9Zv3HGB23BDDRl/JZeb6sruywcOFhHGO65fGXrqwodPZJRC899hl/kW2HfdGwUr49Ux9ghwDoezFhbMljCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EABLV7M0; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1740998969; x=1772534969;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FxTyFdldQ/Rg6PXUyOvwskxzWGQOyp4Jrbq8b9VUONU=;
-  b=EABLV7M0S4zxmAJV4JIEzkZhziFIkiS1AI3I9DHLV6z826RyiaGTVMAI
-   jMwtKPnN0h/xn6jJOKwMQ6BfWB3+oKJuaXVXNVBRQW7EV6lyeH2xREb3G
-   fF/B15RHqRIE9lQEEBZo8rSpiBJCBEicmEVyaL8bG0lXlqJc9O+JEyKNO
-   GJOjlsgmcxiJfvxVkX0n02Gs4SyaJhoDpG9QCZ/Ccg5DSVsVBKP+g97pc
-   D1Z4/T1rplsy1NPgIpNV34XIfBfo6IomolOroP1kuKhVRlvObpUrsOL8y
-   otHKuaK4vjfRn5ouRZ3auUshbt17b1cG24Lg602R7xOmcjEJtRnlOI1kK
-   Q==;
-X-CSE-ConnectionGUID: BikYLFOYSh2j96/3XZqldw==
-X-CSE-MsgGUID: eIVd+EFRTYWJnQbd7HU8Qg==
-X-IronPort-AV: E=Sophos;i="6.13,329,1732604400"; 
-   d="scan'208";a="38768207"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Mar 2025 03:49:28 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 3 Mar 2025 03:48:32 -0700
-Received: from wendy.microchip.com (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Mon, 3 Mar 2025 03:48:31 -0700
-From: Conor Dooley <conor.dooley@microchip.com>
-To: <linux-spi@vger.kernel.org>
-CC: Conor Dooley <conor.dooley@microchip.com>, <stable@vger.kernel.org>,
-	"Daire McNamara" <daire.mcnamara@microchip.com>, Mark Brown
-	<broonie@kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] spi: microchip-core: prevent RX overflows when transmit size > FIFO size
-Date: Mon, 3 Mar 2025 10:47:40 +0000
-Message-ID: <20250303-veal-snooper-712c1dfad336@wendy>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1741005854; c=relaxed/simple;
+	bh=5Pz3E1OrB0yL84X+0ShTfpEPaw1Jt/X9ouBXYxIxOFc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KcaaQdLKf3xrldVK0Yd9O6ehRGoo+e1NUalCvFwSqovm242HH2u0BOB0DI1qOFW+4TKN5KmRUJFAhCJn3Tolh8sSaz9phSryckAITH3Nht4dgFad4l0YdE0SyV+tJzk8ReEqkBtO81g+IWKnQ+MAl7FOEm6u0ehVjCnh7rONV8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523APJ4i000940;
+	Mon, 3 Mar 2025 12:44:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=ap+Is/pFfik
+	mdzgl/IVzBjkMnJpe+CGzhQU6WoEkJiM=; b=QQbVVHDuxVxfMJRO39yDOHtn23T
+	+6Q9gCrKGC0ASurjdovwdoqcJynDRsFvr/fJf6ieQg/SaAgYY/cX4Zmnyz7nuoNN
+	d+2p9iEO4Y7tAMtOIB2ng53nkcVDghPa1Sx1I0Gi5uvGKuu1Xii2Jv9n2pHMDN5J
+	thWdv5n31TJFNFj+tIDlHoRjQDaCMvwztj3sNMPKZjvPa/4PLXt/+U/KVNr47Q3y
+	k9wyEVnZuuASgX0vHdZG2ucCkNAx7H6pJuZkHZ/ZPWhuUj8p7REYsPMTdOD+bg0t
+	WDH2eSArWuRXwFvX4LLEhAWjdKKi6VeNyy42A5ndsct3liOnFXic01KCasg==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453tascy3h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:44:09 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523Ci5iB015256;
+	Mon, 3 Mar 2025 12:44:05 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx56x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:44:05 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523Ci5wt015251;
+	Mon, 3 Mar 2025 12:44:05 GMT
+Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523Ci5v3015250
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:44:05 +0000
+Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
+	id 83A5253B; Mon,  3 Mar 2025 18:14:04 +0530 (+0530)
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
+        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [PATCH v3 4/9] spi: dt-bindings: document qcom,gsi-dma-allowed
+Date: Mon,  3 Mar 2025 18:13:44 +0530
+Message-Id: <20250303124349.3474185-5-quic_vdadhani@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
+References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -121,153 +133,86 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4430; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=FxTyFdldQ/Rg6PXUyOvwskxzWGQOyp4Jrbq8b9VUONU=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDOlHO85KdGQ0fHr+8KSfXzH7n6m/Je2v/ju5m/9u/llPpozP H/zLO0pZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCRk8IM/ytqOt/+tbZ5fmjmnfAcXf G8t41L2VTfdNotn50cnhF0SIfhv8eGv2yppW3Whk79jGpT3XKuN+16IspsVXnh2+dYE/80XgA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Type: text/plain
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aiwDP_jtpYWrqfwNxMPcl13ED4_nc1Zk
+X-Proofpoint-ORIG-GUID: aiwDP_jtpYWrqfwNxMPcl13ED4_nc1Zk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030098
 Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6dtR40DnzFxfr
+X-ITU-Libra-ESVA-ID: 4Z6fpF3MK0zG0kH
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741717383.21695@M2tei6oGfuVcRPeRI3G9vA
+X-ITU-Libra-ESVA-Watermark: 1741714859.9473@JMDSgq7Ds1gfPc+C1mPm1Q
 X-ITU-MailScanner-SpamCheck: not spam
 
-When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
-overflows will be generated and receive data will be corrupted and
-warnings will be produced. For example, here's an error generated by a
-transfer of 36 bytes:
+Data transfer mode is fixed by TrustZone (TZ), which currently restricts
+developers from modifying the transfer mode from the APPS side.
 
-  spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen: =
-0
+Document the 'qcom,gsi-dma-allowed' property to select the data transfer
+mode to GPI DMA (Generic Packet Interface). If not set, FIFO mode
+(PIO/CPU DMA) will be selected by default.
 
-The driver is currently split between handling receiving in the
-interrupt handler, and sending outside of it. Move all handling out of
-the interrupt handling, and explicitly link the number of bytes read of
-of the RX FIFO to the number written into the TX one. This both resolves
-the overflow problems as well as simplifying the flow of the driver.
-
-CC: stable@vger.kernel.org
-Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers=
-")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
 ---
+v2 -> v3:
 
-Contrary to last time, the reporter did actually manage to this this
-version, and it resolved their probably apparently.
+- Drop the 'qcom,xfer-mode' property and add the 'qcom,gsi-dma-allowed' p=
+roperty.
+- Add a reference for the QUP peripheral shared YAML.
+- Update commit log.
 
-Changes in v2:
-- Move all FIFO interactions out of the interrupt handler
-- Disable the non-error interrupts since they're dealt with out of the
-  isr now
+v2 Link: https://lore.kernel.org/linux-arm-msm/20250124105309.295769-4-qu=
+ic_vdadhani@quicinc.com/
 
-v1: https://lore.kernel.org/all/20250114-easiness-pregame-d1d2d4b57e7b@sp=
-ud/
+v1 -> v2:
 
-CC: Conor Dooley <conor.dooley@microchip.com>
-CC: Daire McNamara <daire.mcnamara@microchip.com>
-CC: Mark Brown <broonie@kernel.org>
-CC: linux-spi@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
+- Drop 'qcom,load-firmware' property and add 'firmware-name' property in
+  qup common driver.
+- Update commit log.
+
+v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-3-qu=
+ic_vdadhani@quicinc.com/
 ---
- drivers/spi/spi-microchip-core.c | 41 ++++++++++++++------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+---
+ Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip=
--core.c
-index 5b6af55855efc..62ba0bd9cbb7e 100644
---- a/drivers/spi/spi-microchip-core.c
-+++ b/drivers/spi/spi-microchip-core.c
-@@ -70,8 +70,7 @@
- #define INT_RX_CHANNEL_OVERFLOW		BIT(2)
- #define INT_TX_CHANNEL_UNDERRUN		BIT(3)
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yam=
+l b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+index 2e20ca313ec1..012cb7aecb3d 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
+@@ -25,6 +25,7 @@ description:
 =20
--#define INT_ENABLE_MASK (CONTROL_RX_DATA_INT | CONTROL_TX_DATA_INT | \
--			 CONTROL_RX_OVER_INT | CONTROL_TX_UNDER_INT)
-+#define INT_ENABLE_MASK (CONTROL_RX_OVER_INT | CONTROL_TX_UNDER_INT)
+ allOf:
+   - $ref: /schemas/spi/spi-controller.yaml#
++  - $ref: /schemas/soc/qcom/qcom,se-common-props.yaml#
 =20
- #define REG_CONTROL		(0x00)
- #define REG_FRAME_SIZE		(0x04)
-@@ -133,10 +132,15 @@ static inline void mchp_corespi_disable(struct mchp=
-_corespi *spi)
- 	mchp_corespi_write(spi, REG_CONTROL, control);
- }
+ properties:
+   compatible:
+@@ -63,6 +64,8 @@ properties:
+   power-domains:
+     maxItems: 1
 =20
--static inline void mchp_corespi_read_fifo(struct mchp_corespi *spi)
-+static inline void mchp_corespi_read_fifo(struct mchp_corespi *spi, int =
-fifo_max)
- {
--	while (spi->rx_len >=3D spi->n_bytes && !(mchp_corespi_read(spi, REG_ST=
-ATUS) & STATUS_RXFIFO_EMPTY)) {
--		u32 data =3D mchp_corespi_read(spi, REG_RX_DATA);
-+	for (int i =3D 0; i < fifo_max; i++) {
-+		u32 data;
++  qcom,gsi-dma-allowed: true
 +
-+		while (mchp_corespi_read(spi, REG_STATUS) & STATUS_RXFIFO_EMPTY)
-+			;
-+
-+		data =3D mchp_corespi_read(spi, REG_RX_DATA);
-=20
- 		spi->rx_len -=3D spi->n_bytes;
-=20
-@@ -211,11 +215,10 @@ static inline void mchp_corespi_set_xfer_size(struc=
-t mchp_corespi *spi, int len)
- 	mchp_corespi_write(spi, REG_FRAMESUP, len);
- }
-=20
--static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi)
-+static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi, int=
- fifo_max)
- {
--	int fifo_max, i =3D 0;
-+	int i =3D 0;
-=20
--	fifo_max =3D DIV_ROUND_UP(min(spi->tx_len, FIFO_DEPTH), spi->n_bytes);
- 	mchp_corespi_set_xfer_size(spi, fifo_max);
-=20
- 	while ((i < fifo_max) && !(mchp_corespi_read(spi, REG_STATUS) & STATUS_=
-TXFIFO_FULL)) {
-@@ -413,19 +416,6 @@ static irqreturn_t mchp_corespi_interrupt(int irq, v=
-oid *dev_id)
- 	if (intfield =3D=3D 0)
- 		return IRQ_NONE;
-=20
--	if (intfield & INT_TXDONE)
--		mchp_corespi_write(spi, REG_INT_CLEAR, INT_TXDONE);
--
--	if (intfield & INT_RXRDY) {
--		mchp_corespi_write(spi, REG_INT_CLEAR, INT_RXRDY);
--
--		if (spi->rx_len)
--			mchp_corespi_read_fifo(spi);
--	}
--
--	if (!spi->rx_len && !spi->tx_len)
--		finalise =3D true;
--
- 	if (intfield & INT_RX_CHANNEL_OVERFLOW) {
- 		mchp_corespi_write(spi, REG_INT_CLEAR, INT_RX_CHANNEL_OVERFLOW);
- 		finalise =3D true;
-@@ -512,9 +502,14 @@ static int mchp_corespi_transfer_one(struct spi_cont=
-roller *host,
-=20
- 	mchp_corespi_write(spi, REG_SLAVE_SELECT, spi->pending_slave_select);
-=20
--	while (spi->tx_len)
--		mchp_corespi_write_fifo(spi);
-+	while (spi->tx_len) {
-+		int fifo_max =3D DIV_ROUND_UP(min(spi->tx_len, FIFO_DEPTH), spi->n_byt=
-es);
-=20
-+		mchp_corespi_write_fifo(spi, fifo_max);
-+		mchp_corespi_read_fifo(spi, fifo_max);
-+	}
-+
-+	spi_finalize_current_transfer(host);
- 	return 1;
- }
+   reg:
+     maxItems: 1
 =20
 --=20
-2.48.1
+2.34.1
 
 
 
