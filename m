@@ -1,56 +1,57 @@
-Return-Path: <linux-spi+bounces-7020-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7021-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5CDBA4DE0A
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 13:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68434A4DE10
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 13:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 438BB178F00
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 12:34:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10D11178D7A
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 12:35:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6550B20409B;
-	Tue,  4 Mar 2025 12:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069A22046B7;
+	Tue,  4 Mar 2025 12:34:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ufl9pv9Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rkL4x7tL"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399EE20408C;
-	Tue,  4 Mar 2025 12:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1C62040B3;
+	Tue,  4 Mar 2025 12:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741091648; cv=none; b=ZI8es/FakR2br/8/X2ytthF3TmrsCQPiP6PtjUMLDWirQMs0xwzuQpPOsp+yNbIKobPKJaBWQSarssvA7qDCaFbs7rTDQs79fMbh6ZpVgGbiGsw5t+qHWH9hNjEQdVW1lWqVKaGd7mqN6599flKpplCNbqR8zqOhtp3jlTlHaaI=
+	t=1741091651; cv=none; b=Tx/x1on3CVUvjtxkTLNSgOdRIWNJWD7VTBj7GqgiPza9lj1bbJEw0ywXJEY2lMmusdIHr8ZAMgIQ21zcbw6iLksVgusgwDn+1qjqcK8IpffqfGweIjwkzic/LZvdjnJ9/mJfOhb/r/w18RMO1Xxr+i2U2qnyvaUCQbkg/1sv3rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741091648; c=relaxed/simple;
-	bh=zTHWmApFgJPW07OqgetEzjrUkVWnD4jFsoH2YVPS7cM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nDfqYpIeXr1pHvHgNsFM2XobNwsZFeNgalzB2oK4/unR6x5ceyLnNZDmv2p9LqZUyafkwuNpCl/BCVGIKYTH7sLMVl0jID9aAGErOiFszXBR9mlPtHCK4rOtnQGCNQ4XFLHcTv4dpmQBfYObaloq//a93nnvYJRdwRaWmXVi/hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ufl9pv9Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9854FC4CEE7;
-	Tue,  4 Mar 2025 12:34:06 +0000 (UTC)
+	s=arc-20240116; t=1741091651; c=relaxed/simple;
+	bh=7b5Aviksp18gj3Jq/M/ztXfxsWCEz69HfwGOfusOsCo=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=OofsAvOVLIOZdIyNPcvPi5Ek00OgJXkMklnKIn0Zgr2AhwkcrelWu8cWgwe/k44ENtUqeB/r+B6cFnD9VS1+hPc0wtH5NB7/tBB8h4HO7zVM6dp0QOkt9tCIBbMeOCDrZiR3T0dFqTzdQ5f0WyyqlHH9gMoGZ2tb1FQWU4aHXQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rkL4x7tL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4FCC4CEE5;
+	Tue,  4 Mar 2025 12:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741091647;
-	bh=zTHWmApFgJPW07OqgetEzjrUkVWnD4jFsoH2YVPS7cM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Ufl9pv9Zvkj2t9gabq44ETpZFsS8ICkeYA5tMCRVXZeumQJUecaFqAF42fcwdeXuy
-	 Rpwjan7npCFZfydLy5hoUAb69rKCmbeE2dSKqxe6tXRad6Nkb4jjqkwGjoApiZOXBt
-	 GHkVC7Ja/AcwX+xhYtgkdg7csYXFR90iryllzQEx0yZ5cIf9TahMcYkqc+pjKorOVo
-	 iH9ZreU0KappLbyeUqFOfMbE1+DGAK5wbxl02GdaNx+czuO/JTvgOx6J8viZuZOpBm
-	 Qdp17OexetG315+tecsPG82Mj5TH9aPZ1kLp8VQ+eKgunf0YwrIEMX489l6+y/3zQ3
-	 Ft2aTNHkkaTqw==
+	s=k20201202; t=1741091650;
+	bh=7b5Aviksp18gj3Jq/M/ztXfxsWCEz69HfwGOfusOsCo=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=rkL4x7tLqt7ImDjZfOPzjkOeP2FvDPrEC/cQJtAycV6AgYSj9SIblZCpQKL7EyxHV
+	 XCFLRrSGQE8PQ9fOtV3z5M7ERYqhTOTxfvAn31fHV5pGYTx69lCwMMEJ0UsBr36pRW
+	 ocvu3HQ++TOe97EWv46FpYD9sY/OTPTVtVMPLj+ChKoM3S//EcNse99Z5z48UUrUJP
+	 w80gHguBe3dgtcjdRdd5VQJH8J9w1b7SRLwEV6cMAHmkIxbJVlmF73aQcXvl15CadY
+	 dUOwxJQ8ox6Knc4+a/yaZ3ANo3xi//dCrB1iOtijWdHvCJTVk2X+gEmweouV/Hrv9d
+	 34O28QthIyVMQ==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, stable@vger.kernel.org, 
- Daire McNamara <daire.mcnamara@microchip.com>, linux-kernel@vger.kernel.org
-In-Reply-To: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
-References: <20250114-easiness-pregame-d1d2d4b57e7b@spud>
-Subject: Re: [PATCH] spi: microchip-core: prevent RX overflows when
- transmit size > FIFO size
-Message-Id: <174109164637.27220.10404431321397753624.b4-ty@kernel.org>
-Date: Tue, 04 Mar 2025 12:34:06 +0000
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, 
+ linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20250224111414.2809669-1-quic_mdalam@quicinc.com>
+References: <20250224111414.2809669-1-quic_mdalam@quicinc.com>
+Subject: Re: [PATCH v15 0/2] Add QPIC SPI NAND driver
+Message-Id: <174109164799.27220.16782141488752139254.b4-ty@kernel.org>
+Date: Tue, 04 Mar 2025 12:34:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,13 +62,14 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-1b0d6
 
-On Tue, 14 Jan 2025 17:13:49 +0000, Conor Dooley wrote:
-> When the size of a transfer exceeds the size of the FIFO (32 bytes), RX
-> overflows will be generated and receive data will be corrupted and
-> warnings will be produced. For example, here's an error generated by a
-> transfer of 36 bytes:
-> 
->   spi_master spi0: mchp_corespi_interrupt: RX OVERFLOW: rxlen: 4, txlen: 0
+On Mon, 24 Feb 2025 16:44:12 +0530, Md Sadre Alam wrote:
+> v15:
+>  * Skipping the following patches
+> 	Merged:-
+> 		mtd: rawnand: qcom: cleanup qcom_nandc driver
+> 		mtd: rawnand: qcom: Add qcom prefix to common api
+> 		mtd: nand: Add qpic_common API file
+> 		mtd: rawnand: qcom: use FIELD_PREP and GENMASK
 > 
 > [...]
 
@@ -77,8 +79,10 @@ Applied to
 
 Thanks!
 
-[1/1] spi: microchip-core: prevent RX overflows when transmit size > FIFO size
-      commit: 91cf42c63f2d8a9c1bcdfe923218e079b32e1a69
+[1/2] spi: dt-bindings: Introduce qcom,spi-qpic-snand
+      commit: fd6bc2ba410bf7828dc2104bf78b51ccbb216c40
+[2/2] spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
+      commit: 7304d1909080ef0c9da703500a97f46c98393fcd
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
