@@ -1,137 +1,136 @@
-Return-Path: <linux-spi+bounces-7010-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7011-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1C9EA4D620
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 09:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 498EDA4D698
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 09:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C46E7A264B
-	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 08:21:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDF307A5C04
+	for <lists+linux-spi@lfdr.de>; Tue,  4 Mar 2025 08:35:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537281FBCB4;
-	Tue,  4 Mar 2025 08:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813401FBE89;
+	Tue,  4 Mar 2025 08:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PyzdO8cJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FC7uUNj2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D701FBC92;
-	Tue,  4 Mar 2025 08:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072991FAC4B;
+	Tue,  4 Mar 2025 08:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741076539; cv=none; b=SN9Tgai63UyEWRMHeJ/O+0t4PJVVebFy6CYX4Pw/uuJl4d+avfO6D2dsiZLnv8WYWV33cI+3nRzE3tdubHrlE0B3Yvc/UCZEhJ8dOwuEMrDGo6ooQoclzrfVl6eQjxdKNIWLE8Z0zcoclyZId8nGNpL1E3CWb01MZrWEcE2KJU8=
+	t=1741077385; cv=none; b=ppflcwZ0SWIMV8r3r/hPuyberx7D88a2ZAzo0xzfpqJ24fsrQbR+tVPzlP+zt28v5kek379FaYn2d+Nz+Jv1ueP6X2A99rTUgUcaSOjaUDa/S7EJ21N4OdN62CjkvPJxn17d4v4eex06nqcgJV6eQx7dUV1z12r0tTW9DnfQxOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741076539; c=relaxed/simple;
-	bh=La3t8WCUXE55o8yQK+zNpkESbCE5GrE9SU9sIKYjnHs=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=b6Kcza66QpgClUzsO10orsIESs9sjN9eiSGPy2J3D+I5gJWnVn5rz1dYjNukgK2wMgeKC6yvja3SToh3+Vorb7Fmw7ff9Zz6Ca7ivD/fcs3oGFOOC7YxvpvMsLIn7OZXVHEZ3KuPp/uuvXeDFaKwMChh75rxl4qBa9v66oH5zOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PyzdO8cJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 968C5C4CEE5;
-	Tue,  4 Mar 2025 08:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741076535;
-	bh=La3t8WCUXE55o8yQK+zNpkESbCE5GrE9SU9sIKYjnHs=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=PyzdO8cJ9wIWpeLN+Q67op/slwvg34P5dKTxdbpr9qBQ8b8yLx5XTcaTslEWzU+0N
-	 ji/i4vAoXJgAEt+f+8Dmt+EpHjAxv14BR4nfuS/7fQb7dAMW4k8hrZ76eybj1IdIhi
-	 88y2ijaHBj9IO4rcdkUU3QR5BGmdi1hpOjjQrxNbC6zEIun7/VPjawpraJVjdvbv7u
-	 Sj15FjEHNCY2JHhXIBMhFx9d84EgXjXrdG6RnJ9ry/JtdamnE+dATo85TP4c4gJ3lw
-	 uWqet2FfN2gACSd31qWivjVIr9tEHLlVIsND64nmiHzyd8JyOfkD3e8Nq//qHS22Jg
-	 Bae00/E1RCcGQ==
-Message-ID: <7f847ad3-354b-48a9-91f3-489308cef7a9@kernel.org>
-Date: Tue, 4 Mar 2025 09:22:05 +0100
+	s=arc-20240116; t=1741077385; c=relaxed/simple;
+	bh=JlScFjY8QWH6alV3B7iC/P9dMhJjSb4OnuXww/4RGEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NIQQQ69l2Cei6YqsJ9NN81S8aD3swMuLtl9ePofsDcegBLFS8mSEvbDZdprauAGjBX5d2sUU1+X/767u+pGzL+ng8u4bu43yz9nfeorG8SivV/Cyqf2S/2zYkF8yZ+EoSRnbw+aDnBtX3IHHvm1yyucmlWPQ7m0tht9QzVE9vSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FC7uUNj2; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2239f8646f6so44781195ad.2;
+        Tue, 04 Mar 2025 00:36:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741077383; x=1741682183; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UoXbxXKgyk87JlDdAMTtGXs2RE6Oglf8lNp5fJA+vrg=;
+        b=FC7uUNj29k0xnR7l9ay5C4NQzfTQN8lASRFB/HV/Te+SlFVju1zRARrzSRbWn7ld/O
+         0I5hNELJ5tqF+mtUTFPBvqIZxHVLbUpsj/7pgm3mjrQ2At3OqwCnlt6EPljK2L4FV8aC
+         VzxITzKPTfOXwnPMHOCRFlJVI4a2iJcEjHvVCwCI9KhZELey3ZPz8FiIHEj8qlDpI7+f
+         iLl3MdudTuqHm6DPXxtZwoFkul3SklSeY+kXWhWeh0vaeJsfzFcqDTSW9poAKC9PH7Kg
+         jfB/1r9m0EaHYVotjsE+GhqpQsrj/SsNMOdBHf0+CA/uBpHdB9iL7EX2Zz8rU5xhkOcH
+         stWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741077383; x=1741682183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UoXbxXKgyk87JlDdAMTtGXs2RE6Oglf8lNp5fJA+vrg=;
+        b=K45Hx+zih8D/p3cYC2fJTP4Lpd+GfrJeK972CCKPW1YVCXBxnx6sIShvc4xCGvslVc
+         vM4OjImoXUKJii85FJ9Q4szyFSl5RD4t7EGfvyjRe5pWYUFfx9NmA5NYiw1mb+PjGTU1
+         O7DZ0g6sxSbtaoqodgoBYd0wJs5Mcdn8d16DIp/NHtW/Opq6pVCnv+EvDY4vBkgRIvQM
+         SnXyubsQAP8ieQ5XLx+0IAOGyf+Vbd6J3EJGGfR2vMKGHZIinOhlcNsf2OxsiaTw9AT0
+         zUlv4dbB+BsqzrsmWyndwiRzjMG8fbfqtad7S45MRGQO1FJMZoNme3+3b2aGj+sjKYHW
+         Ph7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV3u+lh7nmLpEm6FmguOvHB+Rcs0KE6uKWhZjzp7Y137NKh5Kifek9NmRSvgtPvU9Cxb6Jb3YhTHTpF@vger.kernel.org, AJvYcCWZgL7HTRO++XoH9PM3XVIrYs45ee/7Axs4RzzH+eE5C0mOB/Fy7fDPcMHAaux9vpwp+8vpK/Xr9iXe3c/z@vger.kernel.org, AJvYcCWiHhZbTv0GwPTVFMNzL4MX1udcrmsmnj0L1jmHeJ3lQgxVlwQUS9KL4HvxLMxSr0emJXmYLam+Bjcb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7jqpfG6asAMcBMqDKmslkLwdsVge15mxJvzRBlTskVT1qoEpe
+	TfxQWKKK8p2I2iXRUiC/NrZUAmaXXKle4IksE52SqedKLA2jYnP9
+X-Gm-Gg: ASbGncsur9jrdrDFOxagdUlAMJxeUzSVlFX2HVbv6AP2W6yH9wjkMWz/euLfhY4ldOd
+	HKukAhqrGkQDx1x7LolF10x1vLGa5vWb7s/rLt1Ri6n7hLc5rOpMNGVDZk/J3huR0HEnagM+ZSW
+	qT5Kcg7Dl+BE10AyUIcj9eKAoDATfbqk1vpLlq6ApPNpri1zQgGk2AgB61V92Tx/9Z7Is0Pslfu
+	762+cruIK8BaRUcdhbiFeyCuahc4xByve4gqFxtbrYLUmMF7Ii6QkyEph6MdxFpxvwABfJMDNBy
+	rkufNS8vmSwyziLocyY7jVCsGFb+tlhjCr8j//A=
+X-Google-Smtp-Source: AGHT+IHftL+KBeXBmrscPavFmNZrOosSLvGSCAflYbLbvZZUp4Q0oBIUi+ZQvunyvSVmM/kyQ7jFFA==
+X-Received: by 2002:a17:902:d2cb:b0:223:6747:f82b with SMTP id d9443c01a7336-22368f7b57dmr221738015ad.13.1741077382988;
+        Tue, 04 Mar 2025 00:36:22 -0800 (PST)
+Received: from cu.. ([2001:19f0:ac00:4eb8:5400:5ff:fe30:7df3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-223504dc3b7sm90597735ad.173.2025.03.04.00.36.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Mar 2025 00:36:22 -0800 (PST)
+From: Longbin Li <looong.bin@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>
+Cc: Longbin Li <looong.bin@gmail.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	sophgo@lists.linux.dev
+Subject: [PATCH v2 0/2] spi: sophgo: add Sophgo SPI NOR controller driver
+Date: Tue,  4 Mar 2025 16:35:41 +0800
+Message-ID: <20250304083548.10101-1-looong.bin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/9] dt-bindings: qcom: se-common: Add QUP
- Peripheral-specific properties for I2C, SPI, and SERIAL bus
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Cc: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
- johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
- quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
-References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
- <20250303124349.3474185-3-quic_vdadhani@quicinc.com>
- <20250304-crafty-beaver-of-teaching-b58efb@krzk-bin>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250304-crafty-beaver-of-teaching-b58efb@krzk-bin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 04/03/2025 09:10, Krzysztof Kozlowski wrote:
-> On Mon, Mar 03, 2025 at 06:13:42PM +0530, Viken Dadhaniya wrote:
->> Introduce a new YAML schema for QUP-supported peripherals. Define common
->> properties used across QUP-supported peripherals.
->>
->> Add property `qcom,gsi-dma-allowed` to configure the Serial Engine (SE) for
->> QCOM GPI DMA mode.
->>
->> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
->> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
->> ---
->>  .../soc/qcom/qcom,se-common-props.yaml        | 26 +++++++++++++++++++
->>  1 file changed, 26 insertions(+)
-> 
-> You miss here any user of this.
+Add SPI NOR driver for Sophgo, including read, write operations.
+This driver is only suitable for NOR flash.
 
-I see now you have users in other patches, so it is fine.
+---
 
-Best regards,
-Krzysztof
+Changes in v2:
+
+  Fixed following issues as per comments from Yixun Lan, Chen Wang, Inochi Amaoto, thanks.
+
+  - Replaced "sophgo" to "sg2044" to avoid conflicts with other drivers.
+  - Improve driver code:
+    - Improve coding style.
+    - Removed the [PATCH 3/3] in previous submission that based on the baseline not submitted.
+    - Added error handler to destroy mutex if probe fail.
+
+Changes in v1:
+  You can simply review or test the patches at the link [1].
+
+Link: https://lore.kernel.org/linux-riscv/20250224101213.26003-1-looong.bin@gmail.com/ [1]
+---
+
+Longbin Li (2):
+  dt-bindings: spi: add SG2044 SPI NOR controller driver
+  spi: sophgo: add SG2044 SPI NOR controller driver
+
+ .../bindings/spi/spi-sg2044-nor.yaml          |  52 ++
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-sg2044-nor.c                  | 500 ++++++++++++++++++
+ 4 files changed, 562 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml
+ create mode 100644 drivers/spi/spi-sg2044-nor.c
+
+--
+2.48.1
 
