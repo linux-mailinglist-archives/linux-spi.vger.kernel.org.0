@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-7045-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7046-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F620A50C3C
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Mar 2025 21:09:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BC5A50C44
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Mar 2025 21:11:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F90C16B3E3
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Mar 2025 20:09:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAB20188A883
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Mar 2025 20:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E02E1A5B85;
-	Wed,  5 Mar 2025 20:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E132A253F01;
+	Wed,  5 Mar 2025 20:11:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ntw6iRZB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oK0ilH/R"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0D019D06A
-	for <linux-spi@vger.kernel.org>; Wed,  5 Mar 2025 20:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C39A255229
+	for <linux-spi@vger.kernel.org>; Wed,  5 Mar 2025 20:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741205390; cv=none; b=h+75IksG8mYjKiyRMOCfBxs0xghdhNWObcCmEOQS3ESFWzvTLfTbJz15m4rtFQuSWEkamsMbSh3Ocz4GPr8BYJlzrQoXepKnLDGBOups4rnvQ1J9zOPw4xu17Dy9lPhmAaC9z1ILlIPzZf9m8u79vrYZP2+kxDnjIvAJUPd292Y=
+	t=1741205514; cv=none; b=UcHJrCElVNAXhYRigQbUEQS/aWouor0o//w67gPngMfVg2YmwlSC5nRD4yre7bQ++fb/KQhEtqm9FKMMm8j8LqDnN15dswhDm7kDqHayn8ggV7F3qsTxMwMwSNY6LxZ1kRH+muoLB1TGC4Uo1MdNVIZs52lXTrLtz/XQFijUgtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741205390; c=relaxed/simple;
-	bh=1UH27UY+fcQziMHEw2K+3wLlnMyIFUnPrc2ix+7N5UI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=P67vlEYY1qtHn1qSDK4+d//c6YSdBVHe/DLgdDM3Hn/ENDcGZLNTYnnTt5WkgV0Q9ukb30JT8TifFgAUWkHi10+zP8Umyyd2CUoss7LPG8CBJT7dz6o4vrNktSlcn2EY0/BO+p+X7gSMUKV2gSBCIYmlrRi5Xk8QsmVLUnrKG/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ntw6iRZB; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1741205514; c=relaxed/simple;
+	bh=YL6WLyRA+5o5dzTsDp+ytZUJghG7qlk5qgS5tqoeTXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t6vJ2Etdcyrs/cLMRAeMOYMgHYzeYt1FW2vRR8/Q0xkw5G4IaUyeZRatEyYed432zNbIle5d3GIKNcYKHggOsegM07bHPH9qgz364Jg1x83EQpc225WytG82pKiDRuaWeDq0i/RQ8faUx5bRWq1IghkRozuLKJDEikawRV3jqug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oK0ilH/R; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 590DF442B2;
-	Wed,  5 Mar 2025 20:09:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23FCD44546;
+	Wed,  5 Mar 2025 20:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1741205386;
+	t=1741205511;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jEQNmi8WIVrqFymiVEP02jh11Ii5GRFTp/TusI0BYkc=;
-	b=ntw6iRZB3XqQwOwEoz/OLbmCMODYzkfrcQ5f+jeJUI1jenWG+d7CnnfsgmroheRa7FBdFG
-	gf944jbMuxH1qNN4pLKHqo5st0oQwx2LLT+/Ko9s/sFbkkDKi1MaU/dOJFasaEpqExAfiH
-	J1joic5DrsLHmdMPi5jIfLVQZJPxpoXOxUsRSMUOpg39UBQX1BRC7bsYPDzlIHA9ogHT8I
-	NN6RJoI+36FboA0mQIxGHbulBHy+gWz9cUx/vCFZOhbsrOMA7GDX/uAKc6QVC1QqX/2G9+
-	ZD9Bxqtq/DiGBkfxwrsk5D8J4EQ6Bd4kPAwy5SwYZzFeQA9ui3VQ1rycX/YggQ==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a2gIndlUno6UA/gHnCBKM+ii0UwEH+vzz5+GdMHZjbU=;
+	b=oK0ilH/RLWTCrbM4XlqExO00c6kM3ktvlPQx3UEIXFWslXfjL6ffGCRtIWWQKi79SMLEGz
+	EGAiP6JDzs4DGO2w9pammu6PJbuhPUiE4dMhEX8VJZa1CxBL09f9ICUFNmgw9VcGYkHEIW
+	GAmJKQ2d4DYy9QLa4kHQvdOr2kgg3fcA5HXXFLj1eq5oqSaR1NaEhueuoYs3vfC8/zm4nw
+	dPA77ogsPgQ8NF4PaFkkLzWC7BZFw+9IiGtljBDBfARTeyDAZ0Uoq41FKc0Wop4ElVYcDi
+	j6S7L0+VIjTOiI1U77kzhlx/xkDsqZu/PAW9nTOSuvLAAM6Irf7Hx0AYgD0PQg==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Mark Brown <broonie@kernel.org>,
 	<linux-spi@vger.kernel.org>
-Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+Cc: Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>,
+	<linux-mtd@lists.infradead.org>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 2/2] spi: cadence-qspi: Improve spi memory performance
-Date: Wed,  5 Mar 2025 21:09:33 +0100
-Message-ID: <20250305200933.2512925-3-miquel.raynal@bootlin.com>
+Subject: [PATCH] spi: spi-mem: Introduce a default ->exec_op() debug log
+Date: Wed,  5 Mar 2025 21:11:40 +0100
+Message-ID: <20250305201140.2513431-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250305200933.2512925-1-miquel.raynal@bootlin.com>
-References: <20250305200933.2512925-1-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -67,41 +67,144 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdehjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueffgeevteevkeegkeehleetteffhffffefgleeuleevjedtgeelgeeutdekgeelnecukfhppeelvddrudekgedruddtkedrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddukeegrddutdekrdeliedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhuughorhdrrghmsggrrhhusheslhhinhgrrhhordhorhhgpdhrtghpthhtohepvhhighhnvghshhhrsehtihdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihess
- ghoohhtlhhinhdrtghomhdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdehjeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetfeduleefjeffheevleeggfdtvdduhfdugeeuieejveejiedvhfdugfettdehnecukfhppeelvddrudekgedruddtkedrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddukeegrddutdekrdeliedphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrihgthhgrrhgusehnohgurdgrthdprhgtphhtthhopehvihhgnhgvshhhrhesthhirdgtohhmpdhrtghpthhtohepthhuughorhdrrghmsggrrhhusheslhhinhgrrhhordhorhhgpdhrtghpt
+ hhtohepphhrrghthihushhhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihgthhgrvghlseifrghllhgvrdgttgdprhgtphhtthhopehlihhnuhigqdhmthgusehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-I do not know the controller enough to really understand what is
-happening under the hood, but most of the supported IPs just disable
-direct access without explicit reason.
+Many spi-mem controller drivers have a very similar debug log at the
+beginning of their ->exec_op() callback implementation. This debug log is
+effectively useful, so let's create one that is complete and concise
+enough, so developers no longer need to write their own.
 
-In practice we observe a significant speed improvement when using
-indirect mode, some kind of direct mapping, instead of DAC, Direct
-ACcess. Add the relevant quirk for all boards with the same
-defaults as AM654 to use INDAC (INDirect ACcess) instead.
-
-Speed tests show no change on the write speed on a SPI NAND chip clocked
-at 25MHz on the AM62A LP SK, but a read speed jumping from 3500kiB/s up
-to more than 10000kiB/s (approximately x3).
+Remove the debug log from individual drivers and propose a common one.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-aspeed-smc.c   |  7 -------
+ drivers/spi/spi-mem.c          | 11 +++++++++++
+ drivers/spi/spi-mtk-snfi.c     |  3 ---
+ drivers/spi/spi-npcm-fiu.c     |  5 -----
+ drivers/spi/spi-stm32-qspi.c   |  5 -----
+ drivers/spi/spi-zynq-qspi.c    |  4 ----
+ drivers/spi/spi-zynqmp-gqspi.c |  4 ----
+ 7 files changed, 11 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index c90462783b3f..559fbdfbd9f7 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -2073,7 +2073,7 @@ static const struct cqspi_driver_platdata k2g_qspi = {
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index e9beae95dded..62a11142bd63 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -303,13 +303,6 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
+ 	u32 ctl_val;
+ 	int ret = 0;
  
- static const struct cqspi_driver_platdata am654_ospi = {
- 	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL | CQSPI_SUPPORTS_QUAD,
--	.quirks = CQSPI_NEEDS_WR_DELAY,
-+	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NEEDS_WR_DELAY,
- };
+-	dev_dbg(aspi->dev,
+-		"CE%d %s OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x len:%#x",
+-		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth,
+-		op->addr.nbytes, op->dummy.nbytes, op->data.nbytes);
+-
+ 	addr_mode = readl(aspi->regs + CE_CTRL_REG);
+ 	addr_mode_backup = addr_mode;
  
- static const struct cqspi_driver_platdata intel_lgm_qspi = {
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index a9f0f47f4759..dc51fe23d2a6 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -377,6 +377,17 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	/* Make sure the operation frequency is correct before going futher */
+ 	spi_mem_adjust_op_freq(mem, (struct spi_mem_op *)op);
+ 
++	dev_dbg(&mem->spi->dev, "[cmd: 0x%02x][%dB addr: %#8llx][%dB dummy][%4dB data %s] %d%c-%d%c-%d%c-%d%c @ %uHz\n",
++		op->cmd.opcode,
++		op->addr.nbytes, (op->addr.nbytes ? op->addr.val : 0),
++		op->dummy.nbytes,
++		op->data.nbytes, (op->data.nbytes ? (op->data.dir == SPI_MEM_DATA_IN ? " read" : "write") : "     "),
++		op->cmd.buswidth, op->cmd.dtr ? 'D' : 'S',
++		op->addr.buswidth, op->addr.dtr ? 'D' : 'S',
++		op->dummy.buswidth, op->dummy.dtr ? 'D' : 'S',
++		op->data.buswidth, op->data.dtr ? 'D' : 'S',
++		op->max_freq ? op->max_freq : mem->spi->max_speed_hz);
++
+ 	ret = spi_mem_check_op(op);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
+index fdbea9dffb62..e82ee6dcf498 100644
+--- a/drivers/spi/spi-mtk-snfi.c
++++ b/drivers/spi/spi-mtk-snfi.c
+@@ -1284,9 +1284,6 @@ static int mtk_snand_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->controller);
+ 
+-	dev_dbg(ms->dev, "OP %02x ADDR %08llX@%d:%u DATA %d:%u", op->cmd.opcode,
+-		op->addr.val, op->addr.buswidth, op->addr.nbytes,
+-		op->data.buswidth, op->data.nbytes);
+ 	if (mtk_snand_is_page_ops(op)) {
+ 		if (op->data.dir == SPI_MEM_DATA_IN)
+ 			return mtk_snand_read_page_cache(ms, op);
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index 958bab27a081..67cc1d86de42 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -550,11 +550,6 @@ static int npcm_fiu_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	int ret = 0;
+ 	u8 *buf;
+ 
+-	dev_dbg(fiu->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth, op->addr.val,
+-		op->data.nbytes);
+-
+ 	if (fiu->spix_mode || op->addr.nbytes > 4)
+ 		return -EOPNOTSUPP;
+ 
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 540b6948b24d..9691197bbf5a 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -362,11 +362,6 @@ static int stm32_qspi_send(struct spi_device *spi, const struct spi_mem_op *op)
+ 	u32 ccr, cr;
+ 	int timeout, err = 0, err_poll_status = 0;
+ 
+-	dev_dbg(qspi->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth,
+-		op->addr.val, op->data.nbytes);
+-
+ 	cr = readl_relaxed(qspi->io_base + QSPI_CR);
+ 	cr &= ~CR_PRESC_MASK & ~CR_FSEL;
+ 	cr |= FIELD_PREP(CR_PRESC_MASK, flash->presc);
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index 2bd25c75f881..5232483c4a3a 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -540,10 +540,6 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
+ 	int err = 0, i;
+ 	u8 *tmpbuf;
+ 
+-	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth);
+-
+ 	zynq_qspi_chipselect(mem->spi, true);
+ 	zynq_qspi_config_op(xqspi, mem->spi, op);
+ 
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index d800d79f62a7..1c78713ad61a 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1067,10 +1067,6 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 	u16 opcode = op->cmd.opcode;
+ 	u64 opaddr;
+ 
+-	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth);
+-
+ 	mutex_lock(&xqspi->op_lock);
+ 	zynqmp_qspi_config_op(xqspi, op);
+ 	zynqmp_qspi_chipselect(mem->spi, false);
 -- 
 2.48.1
 
