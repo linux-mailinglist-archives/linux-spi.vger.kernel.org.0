@@ -1,49 +1,55 @@
-Return-Path: <linux-spi+bounces-7062-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7063-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA5EA5506A
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:20:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C8BA5523E
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 18:06:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2AF21718D1
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 16:20:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44FA33A29D7
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA86212FB2;
-	Thu,  6 Mar 2025 16:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MdnXGZzM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B95325D1F1;
+	Thu,  6 Mar 2025 17:05:23 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AF51991CF
-	for <linux-spi@vger.kernel.org>; Thu,  6 Mar 2025 16:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFD8225C6FC;
+	Thu,  6 Mar 2025 17:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741277999; cv=none; b=hfxgiO4PfxhWVqODgnQLoo1WCFOYEB4wTbx347yPJPwdDJnN5kCWGVEZyaqizszP11Gb8tDozL3NTVzTiMXRbnHo3SV11T24sN+ztviEOpR8+gfAnP4e8Gz515s37twNiPYgBf7eilsjRknJjclo1rLgJJ/iSrzaLCcOFeFv0zo=
+	t=1741280723; cv=none; b=A7ZkU2lSwK1jxV/pnPG9nMwnUO1DGRa3MgIhn8leL/plHJKyklkoq+LXcrUpt3SRZhUcJANrJb6YxAOLFJ+roCR5xoxJDL11vo0AijN6enNX8TuPDKCZTSecj1JehPqbbyKhvQneNIfAN9eQtLs2GaGlgnA6dIKdwbbM54e7Wus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741277999; c=relaxed/simple;
-	bh=O5cUfQBtI4RZJ8Kkldqg8cJWD31IYffmZPV9mpuGSnA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FspsLMHT5aWdkz5BNySe2LzUqUKuAGl0WfP5E0CaQqHQWdr2dQxP98IMTZWvjn93OUDJJXuTb+lcWQi68qaXDnP+4ociEO0eXXFXN9HuAWasMf7l7f/BtX6DwTlGuFD8/vyulkzudkdk5a+BCxwkGbX+lb7SFJwXxz9NbR4k9Yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MdnXGZzM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC0B2C4CEE0;
-	Thu,  6 Mar 2025 16:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741277998;
-	bh=O5cUfQBtI4RZJ8Kkldqg8cJWD31IYffmZPV9mpuGSnA=;
-	h=Subject:From:Date:To:From;
-	b=MdnXGZzMdGy1YTSx/Np9x0DEk1J8UerEciINYxhqRMVqe4ms1RMG4yszrDdNU3A/x
-	 hFpWr/OBLhr9odMtUbmKe1/V66l+X9KCdff6vSiGf7nG6CQLgx9S5AmLc45eSZ0CsC
-	 7Mimwnu/ENooyt63IUKSsTb1kYj3XfSWD9boPhGQTm0jO+raYAd1GLpjAp6C5oUjZT
-	 cd4jdSqV7eL9PZW5lvCSk1NMPFtagNl8kTNy9+qpjei4ytacRKdAVCiCi1hC2plGFJ
-	 MuhNV9T7oAaLQ1L7om6IWgtHi4gB04jxQPRd+1eU2/mePCYvTJ0QnK4504BnePBCJN
-	 LhxC1yq0rtdBQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3B46C380CEE6;
-	Thu,  6 Mar 2025 16:20:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741280723; c=relaxed/simple;
+	bh=3W32JhXOXF9GCDRMf6VafmAYM1p9IYy4GyL8WGfPD4Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XlKF/OKGcK/5QSl6TgUcQqXa76G/zhepmmR3g09ivVp2bT8v9WuvOuFKe+8/GFtZqVpz4k5ynn5bTGK1Jw6TyWZnwx/86nVqOBfzcNQjhFO0mFayWPGKEJWDTkWN3zhH5d5/RrUGU8KVi4RjPLcDjS1CVotx+AZT0KttpxDh5S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: u6hfqNAnR0e7TqTXkUno2A==
+X-CSE-MsgGUID: 4kJAG/jFThSxQmAoIjk/sA==
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 07 Mar 2025 02:05:18 +0900
+Received: from localhost.localdomain (unknown [10.226.92.10])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id E3DC74016D60;
+	Fri,  7 Mar 2025 02:05:14 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v2 0/8] Add RZ/G3E xSPI support
+Date: Thu,  6 Mar 2025 17:04:58 +0000
+Message-ID: <20250306170512.241128-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,30 +57,50 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174127803167.1652351.8136855626771224182.git-patchwork-summary@kernel.org>
-Date: Thu, 06 Mar 2025 16:20:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+The xSPI IP found on RZ/G3E SoC similar to RPC-IF interface, but it
+can support writes on memory-mapped area. Even though the registers are
+different, the rpcif driver code can be reused for xSPI by adding wrapper
+function to it.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+This patch series tested on RZ/G2L and RZ/G3E by overwriting boot
+partitions.
 
-Patch: [next] spi: stm32-ospi: Fix an IS_ERR() vs NULL bug in stm32_ospi_get_resources()
-  Submitter: Dan Carpenter <dan.carpenter@linaro.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=940935
-  Lore link: https://lore.kernel.org/r/bc4c9123-df43-4616-962f-765801d30b4c@stanley.mountain
+v1->v2:
+ * As rz-xspi is too generic, replaced file name rz-xspi->rzg3e-xspi
+   and dropped generic compatible rz-xspi.
+ * Dropped prefix spi from interrupt names.
+ * Updated the example with above changes.
+ * Retained Rb tag from Rob as these changes are trivial.
+ * Fixed the build error reported by bot by dropping 
+   EXPORT_SYMBOL(xspi_dirmap_read) and restoring
+   EXPORT_SYMBOL(rpcif_dirmap_read).
+ * Replaced enum XSPI_RZ->XSPI_RZ_G3E.
+ * Replaced compatible rz-xspi->r9a09g047-xspi and device data
+   xspi_info_rz->xspi_info_r9a09g047.
 
+Biju Das (8):
+  dt-bindings: memory: Document RZ/G3E support
+  memory: renesas-rpc-if: Move rpc-if reg definitions
+  memory: renesas-rpc-if: Use devm_reset_control_array_get_exclusive()
+  memory: renesas-rpc-if: Move rpcif_info definitions near to the user
+  memory: renesas-rpc-if: Add regmap to struct rpcif_info
+  memory: renesas-rpc-if: Add wrapper functions
+  memory: renesas-rpc-if: Add RZ/G3E xSPI support
+  spi: rpc-if: Add write support for memory-mapped area
 
-Total patches: 1
+ .../renesas,rzg3e-xspi.yaml                   | 135 ++++
+ drivers/memory/renesas-rpc-if-regs.h          | 147 ++++
+ drivers/memory/renesas-rpc-if.c               | 665 +++++++++++++-----
+ drivers/memory/renesas-xspi-if-regs.h         | 105 +++
+ drivers/spi/spi-rpc-if.c                      |  16 +-
+ include/memory/renesas-rpc-if.h               |   4 +
+ 6 files changed, 881 insertions(+), 191 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/renesas,rzg3e-xspi.yaml
+ create mode 100644 drivers/memory/renesas-rpc-if-regs.h
+ create mode 100644 drivers/memory/renesas-xspi-if-regs.h
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
 
