@@ -1,102 +1,80 @@
-Return-Path: <linux-spi+bounces-7069-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7070-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0CB8A55631
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 20:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D88F0A55670
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 20:20:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9AA41747D7
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 19:09:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DE8E175D21
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 19:20:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF531263F5F;
-	Thu,  6 Mar 2025 19:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F4091269AE0;
+	Thu,  6 Mar 2025 19:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5KIu1om"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CjpRfJoh"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A10325A652;
-	Thu,  6 Mar 2025 19:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE7C420967A
+	for <linux-spi@vger.kernel.org>; Thu,  6 Mar 2025 19:19:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741288185; cv=none; b=ZcQvll6FVDA2Whi2PrE/vV00nHBuHnWBRygGyFIfg8A1wBwo1v1U02rnwq9u23Ji8EjX6hwuC2h1wSiH8ZcK3dHaNIL+nxrqKaJ4J7Sm2DEO8TU/xK3Tn2fG6++qI2P4d9g0i91c4jVBPnhrGoX13eLHcXby+jmCcPNvDWqNY/k=
+	t=1741288799; cv=none; b=gmA8EcrFN6nwii54ZSgaDWmtt//NKI1orIqG8RV93sh0f57O8Iq04yCAnS8SSSSJSXu7yvGCadjZK7uX0eamLE7KqOyA7KHxHjt2TdOHCRinouOlJQho8R1fYGrvoQJrSDJhH2cBx0SVJs1qWPQSs49t7Ym7ueyNPTXPeNk36qA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741288185; c=relaxed/simple;
-	bh=4gUFR0sw4nvaIHYvLbMR5g7jzOxVgrFF7Jlbd+HjFT0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=BsaLk/QgyvR0Pfg28H8uFDFDOymVcGPX+d6Ecxge16lvrxuKQ3bfzWP2UnjH3DJPEhIMScqAaRq1wZmJFQ+K5+BqJpgKMAYe8cl02RzEMHATi/ymQKQnYI1qhoZ8aDe9P0HNL9e5zEnlGNA9DGe6mlt3iL9n0HCRO7mOtzzA0ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5KIu1om; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F50BC4CEE0;
-	Thu,  6 Mar 2025 19:09:43 +0000 (UTC)
+	s=arc-20240116; t=1741288799; c=relaxed/simple;
+	bh=YJN9Bd+mZtYpCb1G+XUo1vXAXzELRM90BzA3aNr9r6o=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=fS005JtT6kGCHdNl0zTB9hV32fUmGC3/8GxRhfHdfbJ9R7e83mi8j4LHS5JC+Yx/1qUGQQmlsv7hWY7RvjfBMWGqzK/783EODnGzeTlzVKhO572UtqTjCJK74HKOY/x3hj2gNQJmuFfIh3odZFV5h7BqILh9V6V9o9vac85aqpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CjpRfJoh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 540EBC4CEE0;
+	Thu,  6 Mar 2025 19:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741288185;
-	bh=4gUFR0sw4nvaIHYvLbMR5g7jzOxVgrFF7Jlbd+HjFT0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=o5KIu1omqX47y3cQX8KbvJ5UFo1R84Uh3XRliXwF6CU9WGGUI7Qw5M/XTzsFqYebY
-	 OkNV/ONwZe+58SepWv9QhN33zIB78e9ZMa1PFtKepcj3aO43hB4rav939frg2/rjFa
-	 BVrLGbQ1LQ/cICb69LZfWlCVRg8z1KnjkZOkrchRdlg50WGnM/+2Bh/CwQ1poaw7on
-	 breaoY/R8U2sb8b7Dz8tVwlOi/XCYb5rfegBsVUQNfbv1zG/9Tj9ixXEVO/Q59+BWX
-	 RP3eVpOEo0/pL8cAgaXwDmMwIDNd8aOVm77sycsB84A6/fhxwIymQj4wiV1PkzuGCT
-	 HgU1x4cZQnQsA==
-From: Mark Brown <broonie@kernel.org>
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc: mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, 
- linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20250306024716.27856-1-jiapeng.chong@linux.alibaba.com>
-References: <20250306024716.27856-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH -next] spi: stm32: Remove unnecessary print function
- dev_err()
-Message-Id: <174128818323.185591.2600414701558020572.b4-ty@kernel.org>
-Date: Thu, 06 Mar 2025 19:09:43 +0000
+	s=k20201202; t=1741288798;
+	bh=YJN9Bd+mZtYpCb1G+XUo1vXAXzELRM90BzA3aNr9r6o=;
+	h=Subject:From:Date:To:From;
+	b=CjpRfJohqfQsQTi/jK/RlwLq+gOftnaV+nbt4s9AjOPJhFBoZKFoYEb0MozoJDAkG
+	 iQLiXz0GEQGvSd+NrW7R1OYvBXvew+NkB/8LhTk3qCdMV+FoMgnvq7oVO2+YpA1QDg
+	 m5clGbHX3QBzkxpBXs/TLT7iW/nR+1HqU7xXE4rB9LVW794z5HLIlGmOPw7M8Qfuql
+	 WynIm6vot3gCEFfbusPcIUYztOEB3yAcBePXnNemil3K1dF+DRQUwdoR6Bei/Lb8yE
+	 K6UdwLnTw2GVVVlA1A8ZCABXvBc/rtzTMf4qKoojwxl3vo0G9ymXW6/e9L4YShFqVg
+	 0dJi8j703bVbA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B3AEE380CEE6;
+	Thu,  6 Mar 2025 19:20:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174128883128.1748733.4309582661276047321.git-patchwork-summary@kernel.org>
+Date: Thu, 06 Mar 2025 19:20:31 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 06 Mar 2025 10:47:16 +0800, Jiapeng Chong wrote:
-> The print function dev_err() is redundant because platform_get_irq()
-> already prints an error.
-> 
-> ./drivers/spi/spi-stm32-ospi.c:798:2-9: line 798 is redundant because platform_get_irq() already prints an error.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [-next] spi: stm32: Remove unnecessary print function dev_err()
+  Submitter: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=940820
+  Lore link: https://lore.kernel.org/r/20250306024716.27856-1-jiapeng.chong@linux.alibaba.com
 
-Thanks!
 
-[1/1] spi: stm32: Remove unnecessary print function dev_err()
-      commit: 3707fd9c383fc7ae19733a3ad2e5a82bf86370a0
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
