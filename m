@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-7059-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7060-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A15C7A55015
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:04:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B45CA5501F
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:04:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 226057A92D8
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 16:03:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E7351751E3
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 16:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1792D21323D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805862135BC;
 	Thu,  6 Mar 2025 16:03:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="u+H8IMOs"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Wdt8JSwf"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3650920F062;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C28321149F;
 	Thu,  6 Mar 2025 16:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741277034; cv=none; b=SOULIZNPvbkVzBLtzm4AQF5MppckfxIfa0RiwMBNfM7e8kx7ukP6T0fg4dgI8YwEpGFCL/AUW0xqITPr/W/kLX45mK+tYRYGpjTeeN+EuoXr44R6H/toLg9Z08D58dSdGhZP7N41rrue58OC3Nwm5DyUOUKKtKXnZ7Jo6OR9amc=
+	t=1741277034; cv=none; b=EL4adsj4o/G+950FenSsgBJxmOLpUzCEq/9WtOhFBkrxCUdQIuI/T9yc9zCNQXKqYGp8nTXAUX4wlbB6l0yF3GlmWLkVBPdkaTKgARvRZjWMMG3KVDTo/EgxDmq/AXOeufBUplCFc+IpVnkDgq7pbjkKY97Wy4+EtIXoap/w3wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1741277034; c=relaxed/simple;
-	bh=T+l6OVVT45tzMYV8TY6DeZg93MwIQ0gaakx3sxA0rT0=;
+	bh=tkTOYHY7R/B78zoatm15ZoMCaySho/QN7uoUcwZA5m0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o4KVeQDUIOHJVZJfqaoavyRALSjAsbubrobGhXpw+SskPadTF60uMG6C5XfbLjinaA89KRdWXPKvd980sD9TwcxGPJ8dSCK/b/s5Nf6ZR9MoIZrqZ5KlCHSiPNMKl4dXTEsb0yin9bggEna3vVyKTX8MUFp+DgzjYbUvcMr7E7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=u+H8IMOs; arc=none smtp.client-ip=68.232.153.233
+	 MIME-Version:Content-Type; b=cgfW/rz2eQNHCY6HpadZVkPESPDrm1QflzR3Rg9QhP2Wq5fyDcLpC2n/cA9TeIyPua0M518XaJpIQGDILGmXnJUDoV7iD56WjqyeDSqkIvsWXWdxNfamUbGPniCtBbrgjPsV/4XQAeEi84PasUA1Jfq6Ei3sKnWWlqiWpRXl3Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Wdt8JSwf; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1741277032; x=1772813032;
+  t=1741277033; x=1772813033;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=T+l6OVVT45tzMYV8TY6DeZg93MwIQ0gaakx3sxA0rT0=;
-  b=u+H8IMOsha0tdkdrRC0z57HnhZ33FYUGtszyCA6SQYUuPQgrc6B8WEBK
-   +YRrdDlP3+xcisAAUrOryf6c/iiv39GSw16bH7h3+q8cfdrjyLvRMwm0h
-   L7aAZv7XsHPqRDtGbxVN1L2CAD1bUalZkB7eQIL7Wx80F+w6tuWtxpyoU
-   17j7GIXxbZTDsxj3cifsgQoWGwHSZsG1AUASccWIx7Pp480HZZ2+tmPI4
-   Kbup5eNYaM+mEz58F5tYlY9OMXBDBELeC62DYHgscKypkzoPZDOYuMi3j
-   bCZRyV3E68qb6W9Lq2mEv9hVHwem55nJnD0KPzBKufDBlCEx9Cqo7LYK7
-   A==;
+  bh=tkTOYHY7R/B78zoatm15ZoMCaySho/QN7uoUcwZA5m0=;
+  b=Wdt8JSwfmIvG1uXH+o8iaFCz7PyzOgd6hRZdL+wm7VjnZvqSc8qZNFeE
+   TTt63wkJ/6vvfO2C+9djlJ958Or0/ecPB5sYgcJh9n0eTs3kVEjSJB2+v
+   Vu0Hv6kxO4pFQEpbMNURGn5nOxbrWqM2BPt8H4h1eTu/gdoFKN0SVxfv9
+   sRgeH5E8vTcvxWAiJ5xwXrfFXRYWK320fqUM8sGlp2KdoZEnfONGxGAhe
+   a09DMjVSZK/MwnJHHKMvhXBHDWMY8yC7Fs2VQXTYos/InpzoZBOyebSRz
+   U9zzAOzHl5eGkHnsp7DjE4HHKfRDODfOxE3gPBqyKTlgEFZ7JfPYKyXfv
+   Q==;
 X-CSE-ConnectionGUID: Mtzc/U5nQtqKRw1uIzvygw==
-X-CSE-MsgGUID: q+68X2whTyi3QABO9oC+Fw==
+X-CSE-MsgGUID: D+4/U7qNTAm+QfzadrmBBA==
 X-IronPort-AV: E=Sophos;i="6.14,226,1736838000"; 
-   d="scan'208";a="269901969"
+   d="scan'208";a="269901970"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Mar 2025 09:03:42 -0700
@@ -68,9 +68,9 @@ CC: <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
 	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
 	<linus.walleij@linaro.org>, <ryan.wanner@microchip.com>, "Dharma
  Balasubiramani" <dharma.b@microchip.com>
-Subject: [RESEND PATCH v6 1/3] dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
-Date: Thu, 6 Mar 2025 09:03:18 -0700
-Message-ID: <07aa3489013b4d4105edb50d99fbee6a70ffca1e.1736522006.git.Ryan.Wanner@microchip.com>
+Subject: [RESEND PATCH v6 2/3] dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+Date: Thu, 6 Mar 2025 09:03:19 -0700
+Message-ID: <821255840c09d8d9cebbb1f2daaedd8a7c138875.1736522006.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1736522006.git.Ryan.Wanner@microchip.com>
 References: <cover.1736522006.git.Ryan.Wanner@microchip.com>
@@ -85,27 +85,27 @@ Content-Type: text/plain
 
 From: Dharma Balasubiramani <dharma.b@microchip.com>
 
-Add SAMA7D65 USART compatible to DT bindings documentation.
+Add pinctrl bindings for microchip sama7d65 SoC.
 
 Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml | 1 +
+ .../devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt      | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-index f466c38518c4..087a8926f8b4 100644
---- a/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-+++ b/Documentation/devicetree/bindings/serial/atmel,at91-usart.yaml
-@@ -26,6 +26,7 @@ properties:
-           - enum:
-               - microchip,sam9x60-usart
-               - microchip,sam9x7-usart
-+              - microchip,sama7d65-usart
-           - const: atmel,at91sam9260-usart
-       - items:
-           - const: microchip,sam9x60-dbgu
+diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
+index 774c3c269c40..81a05a09f19f 100644
+--- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
++++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
+@@ -6,6 +6,7 @@ configure it.
+ Required properties:
+ - compatible:
+ 	"atmel,sama5d2-pinctrl"
++	"microchip,sama7d65-pinctrl", "microchip,sama7g5-pinctrl"
+ 	"microchip,sama7g5-pinctrl"
+ - reg: base address and length of the PIO controller.
+ - interrupts: interrupt outputs from the controller, one for each bank.
 -- 
 2.43.0
 
