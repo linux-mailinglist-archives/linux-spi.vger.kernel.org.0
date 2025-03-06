@@ -1,124 +1,102 @@
-Return-Path: <linux-spi+bounces-7058-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7061-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A85E8A55014
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:04:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97186A5504E
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:11:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F01F5170A62
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 16:04:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 072213A9924
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 16:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D7621171D;
-	Thu,  6 Mar 2025 16:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8671F2144BC;
+	Thu,  6 Mar 2025 16:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="NdzKqLlE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCqBfell"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB5731A89;
-	Thu,  6 Mar 2025 16:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B452211A2A;
+	Thu,  6 Mar 2025 16:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741277032; cv=none; b=mNsGX6p8QcJ42G9122ixx6rgYewgS5Tns2aEU6sjS60pvXERD2L0swTyG6jKZ5nbIepPBtpUzLdAaKwtob2EfXIo7BXhsAEpC23D/GhKj7EXbSjqR/CLCOEU/uzCB3HrJ3pfC64jkXdVBT0v9EZPvaYs/rfe3xkYvOrjjem/iCg=
+	t=1741277442; cv=none; b=imrsCciLKZmHXYGNsXIo8i4EFlEEC09RVIAiq5Vkn83U9Nr4IWw+WWg3F6eCfnY4FRADj6lp0HO2iQQf2LwzRIu/L6iMj6vbPFyc0XwB8610IR/cbFSig7YvDeKPdx5j591LTqBGzQLqjoHOotv0ZNh2Ybo9tk0IzZOqe1ofhdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741277032; c=relaxed/simple;
-	bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rjJPmRxokKrC42qGMnXapk+HDS+RaiBZjdgcH1+t9YKCYGVPYcMpeulK1vMQA0Z/zkRxL+5U7hGd0yD8mtbYlIxDWzkRHgEtR1c8GXxNl72gcMKdYYYxeXTA5qhwxX1fg3xiwnMe8h7sfYrMWpKmjvBYa5PUzZ2knPOY64rAmmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=NdzKqLlE; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1741277030; x=1772813030;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
-  b=NdzKqLlESHVp2K40U7MKH/oUGHxChaxDv3lla9BdwG0ZJUTI/6FZX6uU
-   luTfWjpvgijWC2Ic/5aooL4Pcf/klaNcFN4dM065EQuyidmbXzFmrQTJB
-   WiD8pCAtmsRDtqAiiT6CEuARK8X3lEBZAbrBi9rO6O1NRjDS779Vo0nsE
-   hR+4rj25Q7Q2enaJScOkax53i4BpZUMWXWzWAoOtQYNlxyGXeJZ04lP2D
-   vh0PC2KZZ9nhdmBjuqnL6x3nR1UItDx1gMmPpKMUf5DjcsNo1DPEMixeJ
-   zH9EG2RGl7mSOBr4sJ6Vh0Grl9lxALUFcnHOgvQXGLgpGwKGZh8osTEVu
-   w==;
-X-CSE-ConnectionGUID: T4xyLWePQj2c6f8rorVSHA==
-X-CSE-MsgGUID: 4J1JphudQdeJVbQkdVZD4Q==
-X-IronPort-AV: E=Sophos;i="6.14,226,1736838000"; 
-   d="scan'208";a="206052093"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Mar 2025 09:03:43 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 6 Mar 2025 09:02:58 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Thu, 6 Mar 2025 09:02:58 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <lee@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>
-CC: <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<linus.walleij@linaro.org>, <ryan.wanner@microchip.com>, "Dharma
- Balasubiramani" <dharma.b@microchip.com>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH v6 3/3] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
-Date: Thu, 6 Mar 2025 09:03:20 -0700
-Message-ID: <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1736522006.git.Ryan.Wanner@microchip.com>
-References: <cover.1736522006.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1741277442; c=relaxed/simple;
+	bh=dO5KuEHT5N6JPz0mZT1IGgNKs9grKUWa+Hx4+yx3kc4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=tzq5kf39wsFuO3rKle4j8s8rfFBS8vg5tYGsxi6VsK4YyIualovMDnYSDvCmrvksughsCC0kx8FJKYtaiyZsE3FNuergUUDXvoj3bQ+yHJwLD//1ulDbRFU1PQCu6Kcbx7bfyLs3c/8J0RUaoNnOok4WoFQxHnGz0s04p7wIDCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCqBfell; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E12C4AF09;
+	Thu,  6 Mar 2025 16:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741277441;
+	bh=dO5KuEHT5N6JPz0mZT1IGgNKs9grKUWa+Hx4+yx3kc4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=JCqBfelle7bd3f+VaMdYkAAJYOLVyqPuRy+iagi9Fuw7JAId6/MsywpvuUBHTwnq1
+	 KvNpYZCs3czm870bWeKDTn0jRE0gxCsoMYcIrC5aYwe5zx/2k9GYF0rw9epTuSDhUV
+	 S0lLbFRV6Ur7yI9KI0CV5CJguD66+/7N1mtPAc6kcrNYarmwS6dTZSHWzB2SZhLc0f
+	 Z+lCGPXOl3bMpSMFPt078zrZtRfxTWL2o3ldBZqMbFYKHtYm4jHknp88vi7GI+GY8V
+	 BuL7zfDzeiyVfRUcZqHoX0TT6Yh8JmS0UYqTnAGpkX09C/tWXrJzOM7bg+FSs6SCkt
+	 wmh0cJSryQ2bA==
+From: Mark Brown <broonie@kernel.org>
+To: Patrice Chotard <patrice.chotard@foss.st.com>, 
+ Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kernel-janitors@vger.kernel.org
+In-Reply-To: <bc4c9123-df43-4616-962f-765801d30b4c@stanley.mountain>
+References: <bc4c9123-df43-4616-962f-765801d30b4c@stanley.mountain>
+Subject: Re: [PATCH next] spi: stm32-ospi: Fix an IS_ERR() vs NULL bug in
+ stm32_ospi_get_resources()
+Message-Id: <174127743980.139137.18227484559909848489.b4-ty@kernel.org>
+Date: Thu, 06 Mar 2025 16:10:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-From: Dharma Balasubiramani <dharma.b@microchip.com>
+On Thu, 06 Mar 2025 12:48:34 +0300, Dan Carpenter wrote:
+> The devm_ioremap() function returns NULL on error, it doesn't return
+> error pointers.  Fix the check to match.
+> 
+> 
 
-Add flexcom binding documentation for sama7d65.
+Applied to
 
-Consolidated entries into one enum to match proper coding style.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml   | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Thanks!
 
-diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-index 0dc6a40b63f4..c7d6cf96796c 100644
---- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-+++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-@@ -19,12 +19,11 @@ properties:
-     oneOf:
-       - const: atmel,sama5d2-flexcom
-       - items:
--          - const: microchip,sam9x7-flexcom
-+          - enum:
-+              - microchip,sam9x7-flexcom
-+              - microchip,sama7d65-flexcom
-+              - microchip,sama7g5-flexcom
-           - const: atmel,sama5d2-flexcom
--      - items:
--          - const: microchip,sama7g5-flexcom
--          - const: atmel,sama5d2-flexcom
--
- 
-   reg:
-     maxItems: 1
--- 
-2.43.0
+[1/1] spi: stm32-ospi: Fix an IS_ERR() vs NULL bug in stm32_ospi_get_resources()
+      commit: 7dfc9bdde9fa20cf1ac5cbea97b0446622ca74c7
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
