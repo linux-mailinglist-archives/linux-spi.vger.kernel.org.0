@@ -1,55 +1,54 @@
-Return-Path: <linux-spi+bounces-7065-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7066-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6FCCA55275
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 18:10:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FA4A55281
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 18:11:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A559175A6D
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:10:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7C867A184E
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 17:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE9A25A2D5;
-	Thu,  6 Mar 2025 17:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5020B25D202;
+	Thu,  6 Mar 2025 17:09:56 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1135C2561DB;
-	Thu,  6 Mar 2025 17:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10EF25A633;
+	Thu,  6 Mar 2025 17:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741280974; cv=none; b=YpP6FElKVkXGG4/DZCj7ejc5dfBfQu7l+K52PjmS/YalS68rM+LSqgPwaUucUFnCdK3sw5sKf6+O0RIr2g/ZNoRlZT1fSWK2FYMP35o11d4byRTith/bei4nBg/kJT8mh2MYqufYoZQGE1y7Mgrd5P5opFenyEr3Q05o6UtRWdU=
+	t=1741280996; cv=none; b=ZoHyoIKmUllSLJFr8oDirzfmWXumSsHi+qdp18sybSwre+nFny2lr7l5D5njDzLRoV8ZwjjICuFuwpDffzL5Pn+dGDpO8wXc6GFgGAHjus+lZPXEQVhTqLtiNydsROQpqQkeyoYa+GFAvXhV2OviL14J/A73lI4hsv2MNHM/04w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741280974; c=relaxed/simple;
-	bh=3W32JhXOXF9GCDRMf6VafmAYM1p9IYy4GyL8WGfPD4Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bAPzpF6lNLxl6VImVtenn8uuIHLgPHLzEAX/DgEiLHdXZNIm69klavc9eowQk3fIxt8QE4LkC+dHmrLFxLXYbuXqYaE+kvMb7i9LJPZhISAhZNVkcuaWTa+5YCq3NB1KHNMABK0mLyNxdCzOFrbTA+JeRjUmAlGFP1e2xzk//HE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+	s=arc-20240116; t=1741280996; c=relaxed/simple;
+	bh=D+X8tP2LDC9YiDuBE6bTFGT91uMG7BqoCbRc19P6eZI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fhYFA0NTreSTsAwaB2s/ez6HF7qU+mdvTorRoSvvU8KQv3odMSktpkDAK5zpl8UOy5Qq20yBjaULheBSfFy4fuidVK93/UqTPCjhmlcNIh9UajaLSkjE/7KhqBWqib66i/xAcvX41Z0tyujIUytniRHYojGwo+jQjlFLCgdRWWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: sOeLBJAeRbO/ZBhWevfofQ==
-X-CSE-MsgGUID: 76hBbNdMRtC3fPdpMcr1+A==
+X-CSE-ConnectionGUID: WmvQ8V4GRDKbEdpwj7OAug==
+X-CSE-MsgGUID: vLkCBgNoSSOY9sGSl/XN1Q==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 07 Mar 2025 02:09:30 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 07 Mar 2025 02:09:53 +0900
 Received: from localhost.localdomain (unknown [10.226.92.10])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 93554400857C;
-	Fri,  7 Mar 2025 02:09:27 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 4B0AF400857C;
+	Fri,  7 Mar 2025 02:09:51 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	devicetree@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
 	linux-spi@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 0/8] Add RZ/G3E xSPI support
-Date: Thu,  6 Mar 2025 17:09:10 +0000
-Message-ID: <20250306170924.241257-1-biju.das.jz@bp.renesas.com>
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 8/8] spi: rpc-if: Add write support for memory-mapped area
+Date: Thu,  6 Mar 2025 17:09:18 +0000
+Message-ID: <20250306170924.241257-9-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250306170924.241257-1-biju.das.jz@bp.renesas.com>
+References: <20250306170924.241257-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,48 +57,58 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The xSPI IP found on RZ/G3E SoC similar to RPC-IF interface, but it
-can support writes on memory-mapped area. Even though the registers are
-different, the rpcif driver code can be reused for xSPI by adding wrapper
-function to it.
+Add write support for memory-mapped area as xSPI interface require
+it.
 
-This patch series tested on RZ/G2L and RZ/G3E by overwriting boot
-partitions.
-
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
 v1->v2:
- * As rz-xspi is too generic, replaced file name rz-xspi->rzg3e-xspi
-   and dropped generic compatible rz-xspi.
- * Dropped prefix spi from interrupt names.
- * Updated the example with above changes.
- * Retained Rb tag from Rob as these changes are trivial.
- * Fixed the build error reported by bot by dropping 
-   EXPORT_SYMBOL(xspi_dirmap_read) and restoring
-   EXPORT_SYMBOL(rpcif_dirmap_read).
- * Replaced enum XSPI_RZ->XSPI_RZ_G3E.
- * Replaced compatible rz-xspi->r9a09g047-xspi and device data
-   xspi_info_rz->xspi_info_r9a09g047.
+ * No change.
+---
+ drivers/spi/spi-rpc-if.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Biju Das (8):
-  dt-bindings: memory: Document RZ/G3E support
-  memory: renesas-rpc-if: Move rpc-if reg definitions
-  memory: renesas-rpc-if: Use devm_reset_control_array_get_exclusive()
-  memory: renesas-rpc-if: Move rpcif_info definitions near to the user
-  memory: renesas-rpc-if: Add regmap to struct rpcif_info
-  memory: renesas-rpc-if: Add wrapper functions
-  memory: renesas-rpc-if: Add RZ/G3E xSPI support
-  spi: rpc-if: Add write support for memory-mapped area
-
- .../renesas,rzg3e-xspi.yaml                   | 135 ++++
- drivers/memory/renesas-rpc-if-regs.h          | 147 ++++
- drivers/memory/renesas-rpc-if.c               | 665 +++++++++++++-----
- drivers/memory/renesas-xspi-if-regs.h         | 105 +++
- drivers/spi/spi-rpc-if.c                      |  16 +-
- include/memory/renesas-rpc-if.h               |   4 +
- 6 files changed, 881 insertions(+), 191 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/renesas,rzg3e-xspi.yaml
- create mode 100644 drivers/memory/renesas-rpc-if-regs.h
- create mode 100644 drivers/memory/renesas-xspi-if-regs.h
-
+diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
+index e0c66a24a3cb..627cffea5d5c 100644
+--- a/drivers/spi/spi-rpc-if.c
++++ b/drivers/spi/spi-rpc-if.c
+@@ -75,6 +75,19 @@ static bool rpcif_spi_mem_supports_op(struct spi_mem *mem,
+ 	return true;
+ }
+ 
++static ssize_t xspi_spi_mem_dirmap_write(struct spi_mem_dirmap_desc *desc,
++					 u64 offs, size_t len, const void *buf)
++{
++	struct rpcif *rpc = spi_controller_get_devdata(desc->mem->spi->controller);
++
++	if (offs + desc->info.offset + len > U32_MAX)
++		return -EINVAL;
++
++	rpcif_spi_mem_prepare(desc->mem->spi, &desc->info.op_tmpl, &offs, &len);
++
++	return xspi_dirmap_write(rpc->dev, offs, len, buf);
++}
++
+ static ssize_t rpcif_spi_mem_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ 					 u64 offs, size_t len, void *buf)
+ {
+@@ -103,7 +116,7 @@ static int rpcif_spi_mem_dirmap_create(struct spi_mem_dirmap_desc *desc)
+ 	if (!rpc->dirmap)
+ 		return -EOPNOTSUPP;
+ 
+-	if (desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
++	if (!rpc->xspi && desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
+ 		return -EOPNOTSUPP;
+ 
+ 	return 0;
+@@ -125,6 +138,7 @@ static const struct spi_controller_mem_ops rpcif_spi_mem_ops = {
+ 	.exec_op	= rpcif_spi_mem_exec_op,
+ 	.dirmap_create	= rpcif_spi_mem_dirmap_create,
+ 	.dirmap_read	= rpcif_spi_mem_dirmap_read,
++	.dirmap_write	= xspi_spi_mem_dirmap_write,
+ };
+ 
+ static int rpcif_spi_probe(struct platform_device *pdev)
 -- 
 2.43.0
 
