@@ -1,49 +1,49 @@
-Return-Path: <linux-spi+bounces-7072-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7073-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01775A55899
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 22:20:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD4CA55E47
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Mar 2025 04:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59935188E7BB
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Mar 2025 21:20:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96198175E17
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Mar 2025 03:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68B2207DEB;
-	Thu,  6 Mar 2025 21:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="br+NGEcs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F105418DB1F;
+	Fri,  7 Mar 2025 03:25:51 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2378207A1F
-	for <linux-spi@vger.kernel.org>; Thu,  6 Mar 2025 21:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E642529408;
+	Fri,  7 Mar 2025 03:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741295998; cv=none; b=RYiQVhaFSQPt08LVv5vmILCdLMnQNFiJ2JSpcEWsgYg09Omfe+FjWuqzhv8O0tueXZ5CRJf+axh1mGcw6Hqg6z/QP8DECjD2BUg6tbaWtxLAU0vU7yJIXBTaQ3bmrWsl712BkzbWjuWZypHJKFmStYYWKqbYLE8JGvBphTpvmAc=
+	t=1741317951; cv=none; b=WcBrsvieWwBKP3mNIW5Bo526wmOvAHftD36JTUbV2232Bn0D1Twzll1p5oESglgBnEqAEvMku3cDtnOpsbSCR/tBH1iUMGlZyS6QHWKoVcDpyzaC918q/JfCpSgvRmkHJqeNU1RTShbJ0KeCIP440ndHnrJ9m2XrAjLBUTrEAVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741295998; c=relaxed/simple;
-	bh=TLkBLIioKXe62V4e0/uYX0XpoIbNEAkynCmbFC/OEQo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ZNZy1WGjNR3x318xH9lhU+FlFunn0aykrqpDmvTAUkbsVSOk8zS6F/haewiCDBkAbEYCjX1YvVQSGOmqngn+yYLQBBfe+FACTV3IsdyV6rdO2CNcmWJRDldMM6wFyCkHqQr7K2C4u4sD9ertCQ69IehfTVdIfkPsT1dD67LnJ5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=br+NGEcs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 494E7C4CEE0;
-	Thu,  6 Mar 2025 21:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741295998;
-	bh=TLkBLIioKXe62V4e0/uYX0XpoIbNEAkynCmbFC/OEQo=;
-	h=Subject:From:Date:To:From;
-	b=br+NGEcsjHVJH/htg0hZ+FF5ROPlFMKgcOsNBqUWQFdbyaErRsS9S0CbzD0PvVI9w
-	 fMOaAD5qP05YK+9MsSJ9pJZLOSWcgRcWz9vJdFuBSkf8E0FXYCqUHD/LoqIOJhKoyP
-	 dbyB3p/UF9kkaGw2BhcB4sP4eyEnUnRtgyh0uzssIGXrZPHey5bOkIJxJK9YxeJb7s
-	 atZdO+WStrS2dgakv2ZejXqFLMLSaGJbgoCpT4hODuMI8glKYKVjF1yrm/kTYGVEhT
-	 r/OtAqkXgrX2iS4jwvvtLenFJdvpXqbaQAYQ+vzxT1RqhhBIYes0MIAn6o+DyY/gvX
-	 sYCUyEnAYKP3g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1D39380CEE6;
-	Thu,  6 Mar 2025 21:20:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741317951; c=relaxed/simple;
+	bh=AeizJya3IEeXZE/xwtzLxLFEXt9d6U6q8b3BRF4dsEM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uIFNe0Val8kLOKvTqMQbDqWPkjcShblEIJjllH/rBij8YoHvZewEUJ8RspAODPdggjn981iDKIioht55qou11C2BRXy4takuJ/dQg3OfIiwfk/bpLRMVksYK5p5JuJ4tk/8IqjIth2oJi1TIpfTRly846K/hCFmJzqGzqr3NEEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from jtjnmail201610.home.langchao.com
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id 202503071125354834;
+        Fri, 07 Mar 2025 11:25:35 +0800
+Received: from locahost.localdomain (10.94.18.185) by
+ jtjnmail201610.home.langchao.com (10.100.2.10) with Microsoft SMTP Server id
+ 15.1.2507.39; Fri, 7 Mar 2025 11:25:34 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <broonie@kernel.org>, <mcoquelin.stm32@gmail.com>,
+	<alexandre.torgue@foss.st.com>, <patrice.chotard@foss.st.com>
+CC: <linux-spi@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Charles Han <hanchunchao@inspur.com>
+Subject: [PATCH] spi: stm32: Fix a NULL vs IS_ERR() bug
+Date: Fri, 7 Mar 2025 11:25:28 +0800
+Message-ID: <20250307032530.116837-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,30 +51,40 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174129603126.1782458.12386314021793581437.git-patchwork-summary@kernel.org>
-Date: Thu, 06 Mar 2025 21:20:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain
+tUid: 2025307112535a815d6c3a2c39f102f9dbacaeff8520a
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-Hello:
+The devm_ioremap() function doesn't return error pointers, it may
+returns NULL.  Update the error checking to match.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Fixes: 79b8a705e26c ("spi: stm32: Add OSPI driver")
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/spi/spi-stm32-ospi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patch: dt-bindings: spi: fsl-lpspi: Add i.MX94 support
-  Submitter: Frank Li <Frank.Li@nxp.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=941128
-  Lore link: https://lore.kernel.org/r/20250306170954.242707-1-Frank.Li@nxp.com
-
-
-Total patches: 1
-
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index 8eadcb64f34a..a544d7897edf 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -835,10 +835,10 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
+ 	if (rmem) {
+ 		ospi->mm_size = rmem->size;
+ 		ospi->mm_base = devm_ioremap(dev, rmem->base, rmem->size);
+-		if (IS_ERR(ospi->mm_base)) {
++		if (!ospi->mm_base) {
+ 			dev_err(dev, "unable to map memory region: %pa+%pa\n",
+ 				&rmem->base, &rmem->size);
+-			ret = PTR_ERR(ospi->mm_base);
++			ret = -ENOMEM;
+ 			goto err_dma;
+ 		}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
 
