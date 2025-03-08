@@ -1,254 +1,259 @@
-Return-Path: <linux-spi+bounces-7076-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7077-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4697A568F6
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Mar 2025 14:29:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA03EA57C9A
+	for <lists+linux-spi@lfdr.de>; Sat,  8 Mar 2025 19:06:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC6A5189B393
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Mar 2025 13:29:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D707916D320
+	for <lists+linux-spi@lfdr.de>; Sat,  8 Mar 2025 18:06:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE6F21A945;
-	Fri,  7 Mar 2025 13:28:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D3A1E8355;
+	Sat,  8 Mar 2025 18:06:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TohN6aRC"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="T2+J0Nuc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2062.outbound.protection.outlook.com [40.107.237.62])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC3521A44D;
-	Fri,  7 Mar 2025 13:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741354139; cv=fail; b=Glng2gUJ+EtJ+8AZnQvM2cUiaaaUAJjWxcXvP3jTpYCOYd/snX8yc3cjHP/qdZUA3MjKLE8Yu+KYLzquxdGDLFsDVUKDP/Jj57mQHvsyI/UvA/GbYg7dE2Ca/ClPvHyZjt5k/JVrZ0/cZ9SkkgWONggRkQAQealo/yrdfMtSFQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741354139; c=relaxed/simple;
-	bh=zHXkZb/fz2igccEBJpLvlR9OmKt81TmErYk58OAOJxs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=aFX3+JrEWC+/w233aJGDDL/AXxKjVBBqeq+w0UBtZRsSuHznouFmtuwHNwAsC2aSOwFwPQZFyG85Rs+yazWexccXR9T4Fz85crCW7zc515+hkvFwshtNyjkApVkLzoTWUV6m+s75krXu3iCwgtxAeTfmMsjxFL6TsoniasbalYU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TohN6aRC; arc=fail smtp.client-ip=40.107.237.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hmpJdnLGYm7tTx4CEOus3QygYx+3MDz9/lz9+SkcqxJWu05nJ0RClYFBWuqX19Lt3QirqSPwvU0jrEis7SbswbXKAlyjHvT4pJu6MJqWPyxU0Rvb8k4ge/lLB5ZcfNQ7jr7YXEst39D3RxaLJuPxNHgATb93974o6MwUpaguzWLexkQ0Onk5vSCVmNmFAuseQURww+/N179Su+AVY9/zjItfnwrVH74qzFfUUmBzIF+BcDwByXqAhQ0naCmsEpLWgHE2XETQ2LzE+K9MwkZc6778IQ9D063EFcqJCxdiYa2YxuvG3zKp+SOO2KeNHj3pkgtzkOOyjb7UV4YkFrE7Zw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dqbKquMIzmsVYY10VmGrPwRzjFueGDPmcvJc9VIfIv8=;
- b=PztFy0+J5UnevgkLhvKZJSTpnHPdyfKaAbWPCd3FnOt5H6dgS77GpZ4k2sCqZGrEDzjjjOigFU5l5CG3Lgy6n7TpAa/cblK1zC9ABC8OcIehUFbf4asGHr17QkUNcFveO7Po8sEzJRfpdZRNCkTPdITyUfo3urfkV6SzPrAoIol4PyUj4xqeuwmqFVCh1wVhZzQNKs9qiB59hK5PSj5dctnZIZX4M5xhAV4+1JazHrY8/MCNHaFRNOTChHD1xCbrJ+VpDjju2bWFJnCn9YGcZgFx+CoJYLwPB3cBJ1h9tHOlU8k18EdTsqQ6L/taQmTbbBRPORkcfcvGUfO7hoNusA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dqbKquMIzmsVYY10VmGrPwRzjFueGDPmcvJc9VIfIv8=;
- b=TohN6aRCInPAIGosUhhI8KVSDAHhtpVlOkN5wxUxYeTmiEEOZ398dSdqjBrUbdu1Wo+9GiA7k0Px7QhRJrsDCbMPtUCir9I92iWia/CoiXblVvUjj66Z1vPWYNTOVp6An0Zvn+E5nU+8ptcrIYrq6oBAOssNzRdMbZxnGgzRU5fz/eXj1N0CNItuMZYjAmEpQh0ymsxSaUxDl1E0jhsUSHtTi6N2djdwckRDjsGdiDjF07kPRe7nv92MblguZIWNIaL52YKdukI3CZL6xIZ2zPWZmzn2OsOY8w71LVoL0e9J9YCsUDLGUzTE1P14KMyV95yP/ghHmywN04xwvcHm1g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com (2603:10b6:a03:4d0::11)
- by SJ0PR12MB6926.namprd12.prod.outlook.com (2603:10b6:a03:485::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.19; Fri, 7 Mar
- 2025 13:28:53 +0000
-Received: from SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9]) by SJ2PR12MB8784.namprd12.prod.outlook.com
- ([fe80::1660:3173:eef6:6cd9%6]) with mapi id 15.20.8511.017; Fri, 7 Mar 2025
- 13:28:53 +0000
-Message-ID: <b10fb7e0-200a-4d2f-9ded-146841657a8f@nvidia.com>
-Date: Fri, 7 Mar 2025 13:28:48 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V1 1/6] arm64: tegra: Configure QSPI clocks and add DMA
-To: Vishwaroop A <va@nvidia.com>, Thierry Reding <thierry.reding@gmail.com>
-Cc: Sowjanya Komatineni <skomatineni@nvidia.com>,
- Laxman Dewangan <ldewangan@nvidia.com>,
- "broonie@kernel.org" <broonie@kernel.org>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- Krishna Yarlagadda <kyarlagadda@nvidia.com>,
- Suresh Mangipudi <smangipudi@nvidia.com>
-References: <20250103060407.1064107-1-va@nvidia.com>
- <20250103060407.1064107-2-va@nvidia.com>
- <s355cib7g6e3gmsy2663pnzx46swhfudpofv2s5tcaytjq4yuj@xqtvoa5p477n>
- <SN7PR12MB67687FB2A524ED45AEEF6C17BFFC2@SN7PR12MB6768.namprd12.prod.outlook.com>
-From: Jon Hunter <jonathanh@nvidia.com>
-Content-Language: en-US
-In-Reply-To: <SN7PR12MB67687FB2A524ED45AEEF6C17BFFC2@SN7PR12MB6768.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0361.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18e::6) To SJ2PR12MB8784.namprd12.prod.outlook.com
- (2603:10b6:a03:4d0::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782B82A8C1
+	for <linux-spi@vger.kernel.org>; Sat,  8 Mar 2025 18:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741457173; cv=none; b=X3tgjqqtCTihQjGP1QkEUagLeJTWODDOT49m0DeStFWYlsJ7UNqVcU0V1gQ1Yz1wljNYaBrkrR6TtOIxUcaWd5HS4worbnBH+5BO3IAmS6tw2V6FIZC5sYDsKy0m0WUjtwSEfneFyH6uiAFBdaIh4HJOzEfsTmQgostPjS95+7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741457173; c=relaxed/simple;
+	bh=0ccMwBeStGy4Ma7W+jN1i/KRXrV5Or0BGZ7xHh3TqYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e7YayeXfaIIHk0yXCEykQVmJQHsgKOPbxqNTOl4w/Vv60CFlbSc6ly3CPdj0fBJ0tsYpNkBa/+2cqfcWENsZWM1Z6YfMcZNdakFhEpaS6S6+ggn/ecAg6cdbQc84u3If7YAPcuMUnCU/lraLDvt/Kn5GpcORam06fkyVVFCkZRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=T2+J0Nuc; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5286RDH6016287
+	for <linux-spi@vger.kernel.org>; Sat, 8 Mar 2025 18:06:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LK+VWm8KVqF+/ZSN/J31md9ZAvpKwgVVPmIdig4/bew=; b=T2+J0NucwnuITXs/
+	hUvBMBivCZF7G7+/gR8KOl2verCrWDMIq4P1BgMlmhcuSqpOKa2lNiXNWRNrBDcJ
+	WQwwxAeIotz9H/XTxbVBSfBzxoRX/pdrh/iSkoZKGRD6EYGWVPlczVBfcE6T2SV6
+	vx1NasBEgjn7iz/v93EqSbGR9KEgh4af1FGFRsBguIR6g2CHWrppBSAZ81u2PQJU
+	gsClnEme3cPErJiAwX57KTSMxzPnNqZ0geVB7XT5gQvUus6WgzPh/c3Rz1dnhv3q
+	W+vK75bKQGB3h+DiAxaip/A5Z3oiYxBjX4hTmc/xRVrYuGni/G3Y9g7yxgFhsX1z
+	21SZHw==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 458eyt0xfu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Sat, 08 Mar 2025 18:06:09 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6e8f9c5af3dso4816186d6.1
+        for <linux-spi@vger.kernel.org>; Sat, 08 Mar 2025 10:06:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741457169; x=1742061969;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LK+VWm8KVqF+/ZSN/J31md9ZAvpKwgVVPmIdig4/bew=;
+        b=LG22QCRyNf+OBfrHl4gSf1nBs1ro9pUxREJ9h6/Q1VRXJ+fXRMbM2xVWmV70axrtBp
+         DhR8DCcqdDTttHe8m8Z0dldclhyx2SHvyc9zlBAcm+cvdxrC9gn1h2KgHRSQ0iGVcK12
+         Mhm+L8YbRYmHwh1hABBopSbwqtINRrt/FZM+hBF4WohpbWrFtJta1XDA80oGT/iuPowY
+         Knu88lKLtV8I38xbSyeM6ltPNFkfwGzeYxP43vblxIVW69wbvVx8YQgBPscCdL2Bq3TJ
+         KcgcVmmqyW8RFQ1ebrFTCAARdv0GLlRUqPilEnx/2TIOZwSwar2acOgyY0NsZfK0X8Ji
+         2sAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWUvHQxGpZRzoW+/00RNRCFJyqVKBkz1VZLj/xffJjfeiHPXdwWpEYVca1qXTVfdvpzmtpL/qnW2r8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkMsWg/jzWK/RkO5aEuqghZ2nuHu1Oj80b/Dbu0ijS3tU/Gf30
+	3kwV1NaOKX9mF+s145YiytfURie1lXS7VAgU2l8I3DSMpFWfYVwodrZ3Sej+Ti7d9Bj4HyJzMJ3
+	scpY4/cPjaMeQMAUgmfELsddfLCbuUD7LDww+9HXRzIOaIYjIJhewdb55rRg=
+X-Gm-Gg: ASbGncsY/v9pagTyzKTMif4YVDBHB1TfQb/Jovtp14Muda4bdygIDRJRz/c22mCA4s9
+	znmbLRJ/IIkK0S0zPTJx9N93LfPKkgnTk28yIjWubsEmrdnND4kfKdwxTLWXXlPSdpK37+S/R0I
+	Yy2lpCR8rIKNi3L09kMQ/g6qAHGWDxReFXK2JfFkENPpWoIq6VlOyYeKAWMbRDEUWLOYy0IYQ+3
+	eHjx03H3iim3CubCMtgd02Afw0daibQdsgRPVNiP3pFvEYOipEPksQcTzWPQgHSC5Qu2UwcE4R6
+	HXvVMs1xjdXcW0kfKiR63mqlFEHP+jNBCB2slPUJ7UI1r3taiUy9vvW9e5Oo0Pj7x5UYcg==
+X-Received: by 2002:a05:6214:501b:b0:6e4:4034:5ae8 with SMTP id 6a1803df08f44-6e908cceab1mr19640306d6.5.1741457169104;
+        Sat, 08 Mar 2025 10:06:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHMQkvbQh1rjRfG86SAdJJ5ORJCPHMqxLeQ9DLm77nL0J1hbYTt5Bzvldd0S5aoDLn5Aq+8SQ==
+X-Received: by 2002:a05:6214:501b:b0:6e4:4034:5ae8 with SMTP id 6a1803df08f44-6e908cceab1mr19640106d6.5.1741457168728;
+        Sat, 08 Mar 2025 10:06:08 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2394fd5b8sm464847666b.79.2025.03.08.10.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Mar 2025 10:06:08 -0800 (PST)
+Message-ID: <58f46660-a17a-4e20-981a-53cad7320e5a@oss.qualcomm.com>
+Date: Sat, 8 Mar 2025 19:06:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8784:EE_|SJ0PR12MB6926:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9617840-0570-46a2-8fde-08dd5d7c00ee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|10070799003|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aTN5cUcvS0cyMVIvU0hyY1Q0S2RUbWxwV285SmdzbWZFYmF5SDFaU3FZYnJG?=
- =?utf-8?B?MlFPWkpsZ1FHRmdQNXpnZW9yNm9jbXhtM2h4Z3lSb1VBcXdLZVhhRVAzYkVS?=
- =?utf-8?B?amJrOU1DbFJ1Zk9oOVBDTEhVaHNDYzE0MlJTeFcxSnkrQjFmRnpBdVZmeXlo?=
- =?utf-8?B?MjA4OU5CVk5DOEdnMitqRDVuUmo4TDFyU2RjbEVidE9yeXFTMGQ3R2VjWkJq?=
- =?utf-8?B?SWR5NU9jNmx3SU8yNTJVeUN4TmVMcUw0QUhDNlFPb2I4TnRjOXp4Szc5Q3dv?=
- =?utf-8?B?Y2R0RlNUVHhyQ1JrYW1SV2xHYXZSb2pKMXR0Y2hCcEkxRVlQcDROYzc4cmZ5?=
- =?utf-8?B?WTMreHFRY2N6VGxaQVY0bEtjK0VuY1QrV1BrSlIwcnM4aEZpS0h3dEhIeXJz?=
- =?utf-8?B?a3hxaEZUYUJwSmVYSVZ2czdYZ2xhTE5tbjVaZmVXUTZNbDdMT2NOQ2ZoM3Iz?=
- =?utf-8?B?M2tkc2JLRjZ2T295cGNIeUYwTkluY2xsUHBadmpDN2ZOdkpsaUJvMVdyZHJy?=
- =?utf-8?B?QjBjcE14Q1FudnFiY3BNNCtLVmE2bFM4NCt3dnFZc202YVhiT3JHVXZxNzht?=
- =?utf-8?B?dnV4dVZMN3Nhb2dONUFNcUZDK0Y1U1hveFQyck56RTI4YzJFbmVvaHJ6MzVj?=
- =?utf-8?B?SE5hR1lhdTFMQXBlOEtvWXRZVEhUSEVoeEtwL0dSZDd4eU5CTGk1c25ydkFD?=
- =?utf-8?B?VEJZNFNTNUFmOWFHTU9hWjQvUFRmSmIya3NnWXZzaVg0N3d3bmE1ZUJHZ1lk?=
- =?utf-8?B?RVdRU3FTZDdrc3dQclh4SUtuOUlTY0QzUFVacUI5eDVCUytRa2UwdmVOUnhL?=
- =?utf-8?B?THRnSHFCbldpakQ5ZmkwWjJ6bE5hWVJEV3lOdEdvK0xoUldaTFBLb3cyT25Z?=
- =?utf-8?B?N2pIQXRpNVJFeTQwUXhjOHplNk9oeTk5NDJjN3RLS2JhckRDV3JKd3V5cGsz?=
- =?utf-8?B?TjBPNjJoZUI1ZnNEbFpIRStOTTJHbHNld2d6SWt2QUMrZXJ5V1hIcG9XY2kx?=
- =?utf-8?B?MUVKRmFSTEQwdnhLeG11Z243K1NDTjYwY2pqYmUycnZBaVJQZ0FlRnpBV2l1?=
- =?utf-8?B?MDV5UlV0Z0R3KzlpMDlYNFZOalVJRHhKQnpadEprR1dFaHFsZmhROEZXWDBI?=
- =?utf-8?B?UW5mUjJ1Nk5sbytNWUlTalYraE5EWmhHRXdSL1djekx5Q0JRNG55ZkNFcEJ1?=
- =?utf-8?B?NTNOOVRZdEJSL0VyU0xCZnN0K2VCemIyN3FzYko2cEZDa1Z3SlRZYVJneVV0?=
- =?utf-8?B?Q1cwNXFXNXcyKzJlL0JPYU9UdWxCdUt6VTNJMnJpNW9aVVNLZnFEdGwrYjl1?=
- =?utf-8?B?UGczR004SHZ2ZUo4c2hZQ3hrR0N1eVFhZCtjT1o3dTZHTjRkcFJ6eEdqbDEx?=
- =?utf-8?B?VGJONWYwNDhlSXl2VHllM1lOK2ZwVCtZNjJWazN6K3VCamtYSFVuTE93MTVC?=
- =?utf-8?B?Q1libkpNaDY1R1QwWGJVTjZ0Sko4QnlZL2FzWGUyYXhRQjdhWVZ5NHdTOHZt?=
- =?utf-8?B?V1VKZGJXYkVYeEt5QUVWUGdxRCs0bXRJWHJQVEpXN00rN2NKQmt2YmNONDR2?=
- =?utf-8?B?MnNWV1JJZGFTUUIrVEZmMnFseGcvd0V0WmtUNTl4QjlJRTVyeTdEQTJFSEJp?=
- =?utf-8?B?RVpDN29vMmlDQ1lHRGZ6em1XSmRlRWViSC8xdkhEbmlpajdtamc4bTEvUkQ5?=
- =?utf-8?B?Ti82VndBQTR6dmVnZmc0Zkw2dFNBRzlzOU9CSEthTEJQTG12OE1DRTJ3cU8x?=
- =?utf-8?B?NTNSeHFidWN5ME1xQzl1UkZMS2Y2MG9KR2lOR2Y1cXVheGczZ0VrQjZmd2tD?=
- =?utf-8?B?elFNaTYrTWVnandIbmtzQUNnZlNZeWd3WGx4QXpKVzhEcG84MndqeUkzd1dx?=
- =?utf-8?Q?krr6eJwg31z7Z?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8784.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cTFsS1pjNE5yNVVxOGpBRGRGU3dhdStkVk9Ga3JxRVdvRGdzRE01UmYvMW9Y?=
- =?utf-8?B?NUVOcHNIQ3lrMWNaQ0JTMXhQTzdwajl3dVpFZWZmcFVyWFVYM09sSTZJM0Jh?=
- =?utf-8?B?VStRM3VKdkdTOTVHM0Q2UVlWUVpEemFOQkJsdm9KWkxERGNycE5INFVhS0Vv?=
- =?utf-8?B?dERHS2J3NUNsM1U2MHhBQzVHaUxjOFEvSHEzN0xhMnVlbTF0eDdXTWVoMU01?=
- =?utf-8?B?L3o3dEhJNWpSd3d6VEZweVcrR1ZiMys0eUxidVRKNkM4MTVybDVSYUhYTzhN?=
- =?utf-8?B?K3doQVQ5MXhpcGNJd1hWNWFCKy95VjJHbWJDVzVjR3BvZjZMVC9FZWgyeU9q?=
- =?utf-8?B?TWwwTEYvTlRhME9iNm9UWUJrU3VwYkNRYTJOSkxLTFFoRmF1RUVIUW1FZmVn?=
- =?utf-8?B?WWtRWXJ1TGlPWEd1YlVldmdMdUxlK2cvd1h1WHZQZW5MUHZwOXB2V0tWdEFs?=
- =?utf-8?B?VlhUUHBsazNITlJCV2FIMnp6T1dPbHRkdEFxWHA2YWZrZ3ZtZ3dXREltQnZl?=
- =?utf-8?B?ZTdydGszNEFjd2tMY0NNYkh3dm1sbUx6VUdkK1IrK1ZMZDdRM3p5Q0Vnc25s?=
- =?utf-8?B?MkhnVWhNK3FOd3FhdFRvQitkZmNxWS9NYWFIMWo2WWhSNWl1cWhkQ3dpcVZG?=
- =?utf-8?B?N0RNMk5uRE5aOUhwcmRYZlMySFhTR2R2YmVMcVIwQnp6aGwvenlreFVBZU1I?=
- =?utf-8?B?RU5zUXVsOHJxQ20rN2NzSkIwVmxUWThNNnpIaW5ZVVhWclpkRUg4RjhMWVdV?=
- =?utf-8?B?bzk4U3VRU1pwU0UrTnhJTEMrdW1TSGNkUTZYUjY2SjN0RVJSU1hCZERaQ2F0?=
- =?utf-8?B?UTFnNG8xUDRza1A4U1QvdUphTVlVWkt5TlBMa0U3VTNzdEI0UnpVRjY5ZS9J?=
- =?utf-8?B?SkFOcnVVZys5RHJRODBrODd1RWl2VHU2MDFSaXZjUWRWZi8yU3FITENDR0ZN?=
- =?utf-8?B?aVFKOGhvVUpDT2l4c0tFVlN3dGx3bDdYTUNjbVdBRFkrWFdZV1JaMWpUTUpK?=
- =?utf-8?B?Q0ZndlVrOEVwSFZGZnFtN2xNMUl1MkJ1K2VoS05BTWQ4SHJSQ1JZS1U2c2ta?=
- =?utf-8?B?VWhMOGtOYkM0MWVXNmROTXRIVHVuc2NsTFRVa21sa3U5YktZNC9aZWNKY25s?=
- =?utf-8?B?R3hRamRKU2UyMHBiYW12dVFpUHVtb0FHZUQ1MWp2ZW1BN1pzZHhPazhjbW5P?=
- =?utf-8?B?SDAycWRTUW1yVHorU3p0OVdCMVJuV0hmZWxNK0dUVjJFMitBL0tDamJFUnpD?=
- =?utf-8?B?QXBSREQxTExaUXdHMk9pZHhjTU5WS2tGYkxyUXB3OVlPT0xXRVFrMExEcjdt?=
- =?utf-8?B?S3VrdHdLdWZiSkszTlNmOENCYjVkKzUxdk81RGlWc1dTTmtzdHMwNDBnR2x6?=
- =?utf-8?B?amlrSmp6d3V0SGVsMHJqRzlQUlFrSnlablJweEIzTUp5VHA5azJ6V0dQbnBG?=
- =?utf-8?B?T2R3WDNxSEJiUVBWOEtHUTBpZ1U0QmRCaVpiR1lyY1hRcUFaaDRtTVdiZHR0?=
- =?utf-8?B?T2xuMTBCbzJkOFQwb1MvYzNQWVVVdmhRbzhKR1BPTjZyU0NqNVlHUDV0RGNh?=
- =?utf-8?B?b1BsdFRIMHJlRDBVdHhVMjhZSWNSQzN3aHZ3QlJXYVpOamNEVWIzRlM3UG5V?=
- =?utf-8?B?OHpKdk5HV2Rjd3JRb3NyNkVnS0NRdG43TEdVNVdsaFR6N3VXYjRBcDFseThy?=
- =?utf-8?B?WTZWenRyUkt2MEJwVVBSbGh5dUdSeGFldlFkYlhzZTlhUTgzQllZVUdTdXp3?=
- =?utf-8?B?b2p5c0tUVTR1Y1ZsTkNOWGsrUnltRUUwK29sZHc2Z0RONXhUSENKRExXVmc2?=
- =?utf-8?B?Qk1QTVprdmFwNjdvbXBuayt6N0ljanZwZ0FwVDhwM2NsbUFuMGxpbjJJejcw?=
- =?utf-8?B?SFhLY1UxU3ZXeW14OFdkRnpiejVzYTBQRU9oYkdobFE0cUhUdG5tZWZDZjFy?=
- =?utf-8?B?VFpiTDlwZlNtMGNDb3JGYWZkM3lxb28xYlBieDQrQWxHSC9EaTl0YS83RVFl?=
- =?utf-8?B?ZWhncklzQzFLc1NSSnBVTWRTTmFFYW1ma0trM2Zsa2hjbDFDclFRZFJBeEJI?=
- =?utf-8?B?cEk0Z01SeGNYb05BeDlpeURFRFNUOXJWTCttNktJcisyUEpkbkRWTXhLaVNF?=
- =?utf-8?B?Tm1PT1VjTndhZzlnYkZqTUZZQ3VqandjWjJrYlBubGFzdkxFMkVvbGlXMzQz?=
- =?utf-8?Q?TjTSaQybcQaT/387H5MBxnr/xoHqJW83opLoloV66qZk?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9617840-0570-46a2-8fde-08dd5d7c00ee
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8784.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2025 13:28:53.2522
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NHmnji5GiRG2mqwc70VEwQZ930/yAvGRIWgba9MfxpJD/lWEQ3U6ubjk07ii9ZuxGyZdhiPz+uH+BzHeybA/MQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6926
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 6/9] soc: qcom: geni-se: Add support to load QUP SE
+ Firmware via Linux subsystem
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>, andi.shyti@kernel.org,
+        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.or,
+        andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
+        dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
+ <20250303124349.3474185-7-quic_vdadhani@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250303124349.3474185-7-quic_vdadhani@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Z3tTRln8535tEgf5-JXzf_4Cu5ljxe_r
+X-Authority-Analysis: v=2.4 cv=CupFcm4D c=1 sm=1 tr=0 ts=67cc8711 cx=c_pps a=wEM5vcRIz55oU/E2lInRtA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=Gn0hrFsMAShasAEqVYMA:9 a=QEXdDO2ut3YA:10
+ a=OIgjcC2v60KrkQgK7BGD:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: Z3tTRln8535tEgf5-JXzf_4Cu5ljxe_r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-08_07,2025-03-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 mlxlogscore=999 lowpriorityscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503080139
 
-
-On 12/02/2025 14:39, Vishwaroop A wrote:
+On 3.03.2025 1:43 PM, Viken Dadhaniya wrote:
+> Load the firmware to QUP SE based on the 'firmware-name' property specified
+> in devicetree. Populate Serial engine and base address details in the probe
+> function of the protocol driver and pass to firmware load routine.
 > 
+> Skip the firmware loading if the firmware is already loaded in Serial
+> Engine's firmware memory area.
 > 
-> ________________________________________
-> From: Thierry Reding
-> Sent: Thursday, January 09, 2025 16:10
-> To: Vishwaroop A
-> Cc: Jon Hunter; Sowjanya Komatineni; Laxman Dewangan; broonie@kernel.org; linux-spi@vger.kernel.org; linux-tegra@vger.kernel.org; linux-kernel@vger.kernel.org; Krishna Yarlagadda; Suresh Mangipudi
-> Subject: Re: [PATCH V1 1/6] arm64: tegra: Configure QSPI clocks and add DMA
-> 
-> On Fri, Jan 03, 2025 at 06:04:02AM +0000, Vishwaroop A wrote:
->> Set QSPI0_2X_PM to 199.99 MHz and QSPI0_PM to 99.99 MHz using
->> PLLC as the parent clock. These frequencies allow Quad IO DT
->> reads up to 99.99 MHz, which is the fastest that can be
->> achieved considering various PLL and clock divider constraints.
->>
->> Populate the DMA and IOMMU properties for the Tegra234 QSPI devices to
->> enable DMA support.
->>
->> Change-Id: I1dded904aa8e0f278c89998481e829f1ce474e8c
->> Signed-off-by: Vishwaroop A <va@nvidia.com>
->> ---
->>   arch/arm64/boot/dts/nvidia/tegra234.dtsi | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> index 984c85eab41a..96d0f13390ae 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
->> @@ -2948,6 +2948,13 @@
->>                                 <&bpmp TEGRA234_CLK_QSPI0_PM>;
->>                        clock-names = "qspi", "qspi_out";
->>                        resets = <&bpmp TEGRA234_RESET_QSPI0>;
->> +                     assigned-clocks = <&bpmp TEGRA234_CLK_QSPI0_2X_PM>,
->> +                                       <&bpmp TEGRA234_CLK_QSPI0_PM>;
->> +                     assigned-clock-rates = <199999999 99999999>;
->> +                     assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLC>;
->> +                     dma-names = "rx", "tx";
->> +                     dma-coherent;
->> +                     iommus = <&smmu_niso1 TEGRA234_SID_QSPI0>;
->>                        status = "disabled";
->>                };
->>
->> @@ -3031,6 +3038,13 @@
->>                                 <&bpmp TEGRA234_CLK_QSPI1_PM>;
->>                        clock-names = "qspi", "qspi_out";
->>                        resets = <&bpmp TEGRA234_RESET_QSPI1>;
->> +                     assigned-clocks = <&bpmp TEGRA234_CLK_QSPI1_2X_PM>,
->> +                                       <&bpmp TEGRA234_CLK_QSPI1_PM>;
->> +                     assigned-clock-rates = <199999999 99999999>;
->> +                     assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLC>;
->> +                     dma-names = "rx", "tx";
->> +                     dma-coherent;
->> +                     iommus = <&smmu_niso1 TEGRA234_SID_QSPI1>;
->>                        status = "disabled";
->>                };
->>
-> 
->>> It looks like these are missing the "dmas" properties that go along with "dma-names".
-> [Vishwaroop A] dmas property is not required as QSPI uses native dma engine. dmas property is used for assigning  the dma channels. In case of QSPI it has own native DMA engine.
+> Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> ---
 
+[...]
 
-OK so that means we don't need the 'dma-names' here either. Please 
-remove this.
+> +static bool elf_phdr_valid(const struct elf32_phdr *phdr)
+> +{
+> +	if (phdr->p_type != PT_LOAD || !phdr->p_memsz)
+> +		return false;
+> +
+> +	if (MI_PBT_PAGE_MODE_VALUE(phdr->p_flags) == MI_PBT_NON_PAGED_SEGMENT &&
+> +	    MI_PBT_SEGMENT_TYPE_VALUE(phdr->p_flags) != MI_PBT_HASH_SEGMENT &&
+> +	    MI_PBT_ACCESS_TYPE_VALUE(phdr->p_flags) != MI_PBT_NOTUSED_SEGMENT &&
+> +	    MI_PBT_ACCESS_TYPE_VALUE(phdr->p_flags) != MI_PBT_SHARED_SEGMENT)
+> +		return true;
+> +
+> +	return false;
 
-Jon
+return (contents of the if condition)
 
--- 
-nvpublic
+> +}
+> +
+> +/**
+> + * valid_seg_size() - Validate the segment size.
+> + * @pelfseg: Pointer to the ELF header.
+> + * @p_filesz: Pointer to the file size.
+> + *
+> + * Validate the ELF segment size by comparing the file size.
+> + *
+> + * Return: true if the segment is valid, false if the segment is invalid.
+> + */
+> +static bool valid_seg_size(struct elf_se_hdr *pelfseg, Elf32_Word p_filesz)
+> +{
+> +	if (p_filesz >= pelfseg->fw_offset + pelfseg->fw_size_in_items * sizeof(u32) &&
+> +	    p_filesz >= pelfseg->cfg_idx_offset + pelfseg->cfg_size_in_items * sizeof(u8) &&
+> +	    p_filesz >= pelfseg->cfg_val_offset + pelfseg->cfg_size_in_items * sizeof(u32))
+> +		return true;
+> +	return false;
+> +}
 
+same here
+
+[...]
+
+> +static int geni_configure_xfer_mode(struct qup_se_rsc *rsc)
+> +{
+> +	/* Configure SE FIFO, DMA or GSI mode. */
+> +	switch (rsc->mode) {
+> +	case GENI_GPI_DMA:
+> +		setbits32(rsc->se->base + QUPV3_SE_GENI_DMA_MODE_EN,
+> +			  GENI_DMA_MODE_EN_GENI_DMA_MODE_EN_BMSK);
+> +		writel_relaxed(0x0, rsc->se->base + SE_IRQ_EN);
+> +		writel_relaxed(SE_GSI_EVENT_EN_BMSK, rsc->se->base + SE_GSI_EVENT_EN);
+> +		break;
+> +
+> +	case GENI_SE_FIFO:
+> +		clrbits32(rsc->se->base + QUPV3_SE_GENI_DMA_MODE_EN,
+> +			  GENI_DMA_MODE_EN_GENI_DMA_MODE_EN_BMSK);
+> +		writel_relaxed(SE_IRQ_EN_RMSK, rsc->se->base + SE_IRQ_EN);
+> +		writel_relaxed(0x0, rsc->se->base + SE_GSI_EVENT_EN);
+> +		break;
+> +
+> +	case GENI_SE_DMA:
+> +		setbits32(rsc->se->base + QUPV3_SE_GENI_DMA_MODE_EN,
+> +			  GENI_DMA_MODE_EN_GENI_DMA_MODE_EN_BMSK);
+
+This write is common across all 3 modes
+
+> +		writel_relaxed(SE_IRQ_EN_RMSK, rsc->se->base + SE_IRQ_EN);
+> +		writel_relaxed(0x0, rsc->se->base + SE_GSI_EVENT_EN);
+
+These two writes are common across !GPI_DMA
+
+> +		break;
+> +
+> +	default:
+> +		dev_err(rsc->se->dev, "invalid se mode: %d\n", rsc->mode);
+> +		return -EINVAL;
+
+I wouldn't expect this to ever fail..
+
+> +	}
+> +	return 0;
+> +}
+> +
+> +/**
+> + * geni_enable_interrupts() Enable interrupts.
+> + * @rsc: Pointer to a structure representing SE-related resources.
+> + *
+> + * Enable the required interrupts during the firmware load process.
+> + *
+> + * Return: None.
+> + */
+> +static void geni_enable_interrupts(struct qup_se_rsc *rsc)
+> +{
+> +	u32 reg_value;
+> +
+> +	/* Enable required interrupts. */
+> +	writel_relaxed(M_COMMON_GENI_M_IRQ_EN, rsc->se->base + GENI_M_IRQ_ENABLE);
+> +
+> +	reg_value = S_CMD_OVERRUN_EN | S_ILLEGAL_CMD_EN |
+> +				S_CMD_CANCEL_EN | S_CMD_ABORT_EN |
+> +				S_GP_IRQ_0_EN | S_GP_IRQ_1_EN |
+> +				S_GP_IRQ_2_EN | S_GP_IRQ_3_EN |
+> +				S_RX_FIFO_WR_ERR_EN | S_RX_FIFO_RD_ERR_EN;
+
+The S-es should be aligned, similarly for other additions in this patch
+
+[...]
+
+> +	/* Flash firmware revision register. */
+> +	reg_value = (hdr->serial_protocol << FW_REV_PROTOCOL_SHFT) |
+> +		    (hdr->fw_version & 0xFF << FW_REV_VERSION_SHFT);
+
+Use FIELD_PREP and GENMASK to denote bitfields
+
+> +	writel_relaxed(reg_value, rsc->se->base + SE_GENI_FW_REVISION);
+> +
+> +	reg_value = (hdr->serial_protocol << FW_REV_PROTOCOL_SHFT) |
+> +		    (hdr->fw_version & 0xFF << FW_REV_VERSION_SHFT);
+> +
+> +	writel_relaxed(reg_value, rsc->se->base + SE_S_FW_REVISION);
+> +}
+
+Konrad
 
