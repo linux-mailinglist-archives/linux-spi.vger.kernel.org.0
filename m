@@ -1,58 +1,58 @@
-Return-Path: <linux-spi+bounces-7091-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7092-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CDA7A5CBDC
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Mar 2025 18:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4650A5CBE0
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Mar 2025 18:17:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3719D3A5D67
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Mar 2025 17:17:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 494843AB433
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Mar 2025 17:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37B0260A52;
-	Tue, 11 Mar 2025 17:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19BF62620F2;
+	Tue, 11 Mar 2025 17:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRe4HbNG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+KELLa+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94374184F;
-	Tue, 11 Mar 2025 17:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27852620E7;
+	Tue, 11 Mar 2025 17:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741713446; cv=none; b=QNSpvB55NnPMXbRV3jlnFVadMvmd2mu5iXkgb3Z5cTtj+wXX5nnKYrxwD2AdteOc6SYxq3DOX1cyG7MTwfZcWKZA/5cYt8YzLvKBXiFoMiF+tz8LZP5AZEEYActOLI4fEgF9lYuIJFQMmPv4Lg9j20KGBnasR+49C2SZeHHLfgI=
+	t=1741713449; cv=none; b=ueeMU0BRJhNBQR10S6tZuxU4grwgzPHmg3a89aRDKWNbk4+YWbhee+wq4A310Pk2oJO/4PYDvU/OOtMeEFLXH2u58+Y6jAl+NTn5W7i6qjLaNq/P5hvK0wlcYLa9eZmR7Prgl5O60e25fjJXtPwni4Av505qboqLwOfb8c/SxHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741713446; c=relaxed/simple;
-	bh=RdfYl4n2/9SgcMMHHzjpqeg67v0PMk9cjFox8uwI04E=;
+	s=arc-20240116; t=1741713449; c=relaxed/simple;
+	bh=qymAbbIdLchqAtQBBL+pqPrr3X7OBh13PkUPlVUStBs=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RWu2wky/8/Recp5yRFE/dBHwmHRRmnDEjqx217RVTH+T9xvqc81w6y2Qr6mfBY77iGXa2fjo7X8US4COx1rqCHzLT9u3CyWWAhmmUxidH2HVXXqPWSvRnuTP+sP2Ja0rX1sezTm5o5fGmX1P7SUlwy7aI2G/47Mr0Myt5q5IaS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRe4HbNG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8CCFC4CEE9;
-	Tue, 11 Mar 2025 17:17:24 +0000 (UTC)
+	 MIME-Version:Content-Type; b=r8abjYdFTl8VqUvN7EBWU+Uv3AzlTgU86ll+YiKva3DhYxIEeupQs+WYNt9z9aPVLurygQcfM30qzf5o6WqXRsvH3X7sMtZfETPtkHi7zVhlrWmk0yzX61HOmt4qdl1rlKQcqcpNjRUbnG8nG2f9vuay0//7rFfIj+G8Ef2hpFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+KELLa+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91835C4CEEA;
+	Tue, 11 Mar 2025 17:17:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741713446;
-	bh=RdfYl4n2/9SgcMMHHzjpqeg67v0PMk9cjFox8uwI04E=;
+	s=k20201202; t=1741713448;
+	bh=qymAbbIdLchqAtQBBL+pqPrr3X7OBh13PkUPlVUStBs=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=CRe4HbNGIPbAqili4lACHIPgh+PthkDcZheWnoZep6Z74Ex7lU4FknU3yPZ0xP0UZ
-	 3ynHWYbuUBdeSmYYDXhyYWrr3oQ/48Jk49j97heh0/bOfGk8nJOT9KTsyEyGFVVFwn
-	 XUEg8azh8iFUF11K4utyyzsJvjQFQInn6kAaUYM5hEMGE28UAKXWP8BuC/fLSpQTiv
-	 yA1OSNzne3y6NNtYwv/LA3An3aNytW6sxxog8b/vD+LGUNk6OpBXSyvGuCOki1i/ZF
-	 1VQ/GHWLxWwVEQWw9uNFubcDcqmudDJwHOaTZ+IyuqjLJCg1qyIE8UwSL6Q1xjtojN
-	 WqggFxvs3ZWdw==
+	b=Y+KELLa+knvBq8Y6mOU+ZaIu7WLEGPkUTLOIifEoLx07A7YpymGP0EZ6RUaaNcqCo
+	 3k856Xxx9mvWBtD/kW1hpH8z5UicEuGryGX30wmmSHiELQpagjfqaS1agU6u+Ormzd
+	 H13ylecD0RyKi1f6lDHHyTw5SNprB9ReQRFALFQOf50T5hCqx8I/BLFZvKoOPgiFWb
+	 P9ZsWCFH5nLDGwZAdVzP6/CgAlYeJxf09jwL55/v2cRksfU8G5OAxxeW+m/CsF2CxO
+	 rtF6kcxMyfgI0v5VfXCYgJEublnndzXB34xpUffIw0lnOZfkJyTfhcCp14pIApgvAE
+	 Pp7+Yg2hJJ1MA==
 From: Mark Brown <broonie@kernel.org>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-In-Reply-To: <2f4b0a0b-2c03-41c0-8a4a-3d789a83832d@stanley.mountain>
-References: <2f4b0a0b-2c03-41c0-8a4a-3d789a83832d@stanley.mountain>
-Subject: Re: [PATCH next] spi: spi-qpic-snand: Fix ECC_CFG_ECC_DISABLE
- shift in qcom_spi_read_last_cw()
-Message-Id: <174171344440.214660.8181081504120181390.b4-ty@kernel.org>
-Date: Tue, 11 Mar 2025 17:17:24 +0000
+To: Leilk Liu <leilk.liu@mediatek.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-spi@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ fparent@baylibre.com
+In-Reply-To: <20250304024045.7788-1-leilk.liu@mediatek.com>
+References: <20250304024045.7788-1-leilk.liu@mediatek.com>
+Subject: Re: [PATCH v2] spi: mt65xx: add PM QoS support
+Message-Id: <174171344631.214660.9058567324727633834.b4-ty@kernel.org>
+Date: Tue, 11 Mar 2025 17:17:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,11 +63,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-1b0d6
 
-On Thu, 06 Mar 2025 12:40:01 +0300, Dan Carpenter wrote:
-> The ECC_CFG_ECC_DISABLE define is BIT(0).  It's supposed to be used
-> directly instead of used as a shifter.
+On Tue, 04 Mar 2025 10:37:15 +0800, Leilk Liu wrote:
+> Enable Quality of Service(QoS) support to speed up interrupt service
+> routine handle. Sometimes, a gic interrupt will be generated after
+> SPI transmission, but at this time the CPU is in an idle state and the
+> processing handler will be very slow. It takes time to exit the idle state
+> and then become active. This will cause the SPI handler to execute slowly
+> and cause SPI transfer timeouts.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -75,8 +79,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-qpic-snand: Fix ECC_CFG_ECC_DISABLE shift in qcom_spi_read_last_cw()
-      commit: cf1ba3cb245020459f2ca446b7a7b199839f5d83
+[1/1] spi: mt65xx: add PM QoS support
+      commit: 632556d5799a2b3e87dd5594a59245523b39cf31
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
