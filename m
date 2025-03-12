@@ -1,79 +1,107 @@
-Return-Path: <linux-spi+bounces-7101-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7102-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314BBA5E702
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 23:09:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6981FA5E7B4
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 23:54:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1F1B3BB24F
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 22:09:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD08E1781BB
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 22:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA081EC012;
-	Wed, 12 Mar 2025 22:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26BA1F12EA;
+	Wed, 12 Mar 2025 22:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cmGwbVmg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJQWMTdN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C330B1D5CD4;
-	Wed, 12 Mar 2025 22:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD9F1F0E5D
+	for <linux-spi@vger.kernel.org>; Wed, 12 Mar 2025 22:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741817372; cv=none; b=CEOScJmIo5EvrqjPYf+Lzs68g2Q8mFC732iP2XTNjc+lA6+fD0hLuLMAXkuAb156TjgkMPUVhOHWoyA/mUJEKJ4eWdwTREEAwnMe/qM5CPxq99IIbiqJ3K0D9UNkq5KOA5zrKWmu0wjvzaQ/1gOp6EIJaqyXiiRL5xGUTujR9Sc=
+	t=1741820053; cv=none; b=SPqRP6emqPj7R//Nb+KlSi4XLY5xZemhaPEYhMlok41UotQTwSrdrlppnYhEjEqfm+StGMLS27mYqDMRgCsXMAmH2l32eoszMfQe5dHY3gU8eZdOd75p8p+HqzzwNPk/gycRH4dB539T7agLIlKhtLJQmca5jyGawXDSO+DZuaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741817372; c=relaxed/simple;
-	bh=1RxSFH7LP0l1ozoJutBm6MFdFp3GINBmjeiwpGEZAdk=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=JrvUDctlN0O0PUpZVtNdxzcY7ZgW/wiNSGaBV3HsEWPdbLr1qVJWtrmp3pIkXXEj1KwVCULXaJ6mpW6D2nviNBjHSwTy8tsvL/g7IqJuMTKPkwIt7nzladNUsi18TFNyWSD44qGuQ8ShZ/spSmDR+4NH2GYgsBtsIqP345ZYBJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cmGwbVmg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 463D1C4CEDD;
-	Wed, 12 Mar 2025 22:09:32 +0000 (UTC)
+	s=arc-20240116; t=1741820053; c=relaxed/simple;
+	bh=xzjE1mFwplwXw3KogyNxD3cNh8ZkAMgOZsuhMVRkVvk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aNmXJmW1zinpIgWrnD3v5XWT/mPhzKPfRj47LmIxFcnMkDnhdV4oJHTpSUbupL3ZzNpwx16715njpozMqyDAp6jqqgry/65g2znAYal628YGoBL0SHFZKzIU0IF3FzmgyNTt4PQna07Yw3BI7NdBiAT+qpXMvOIE0vsaOrQMoU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJQWMTdN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B91C4CEDD;
+	Wed, 12 Mar 2025 22:54:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741817372;
-	bh=1RxSFH7LP0l1ozoJutBm6MFdFp3GINBmjeiwpGEZAdk=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=cmGwbVmgq3Kp7Nz/FH6d37SbQUrD2XkxQEiC2QBL8xsOqJMwmz8eeGQ2sU6kHMryI
-	 ZOgtfJYhZY9KtWkoR6U9dAdcO0wgNOhiOlb7RTdkojNRnDeYpqhDe+PHjKQd2fq9l7
-	 oN5L97U063aanq7acmujPw4vQcedd57e8rv1EWq7Qr3ptOIw0cwR0YqOV6RLBjP+HE
-	 lcY4MH+V20aUgsX/7Wv0QV+JG+e9EleStZRtW2VorJ7scCMpfFwJcnyywPDjxEionJ
-	 idgZAbNX+JEJ+57gad9P5s6ICyLKDUUKrinDLegMCYloWz3dHmbw93lA2HAPcTp7O5
-	 SAEHtFeDvwZbA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB810380DBDF;
-	Wed, 12 Mar 2025 22:10:07 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.14-rc6
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <a5d6a54f85162906b7ee1e0e9659e8f9.broonie@kernel.org>
-References: <a5d6a54f85162906b7ee1e0e9659e8f9.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a5d6a54f85162906b7ee1e0e9659e8f9.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc6
-X-PR-Tracked-Commit-Id: 91cf42c63f2d8a9c1bcdfe923218e079b32e1a69
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6e8e2f82bc26d4b4ac9bc4f3abe99a5661a04009
-Message-Id: <174181740645.948527.3426782416508957296.pr-tracker-bot@kernel.org>
-Date: Wed, 12 Mar 2025 22:10:06 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1741820053;
+	bh=xzjE1mFwplwXw3KogyNxD3cNh8ZkAMgOZsuhMVRkVvk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=JJQWMTdNl4WZXI70o4Wwg/nGy3160qSlvAEi2GjvSLrCjGktdidB4aoJiUEQ49lO4
+	 RPA8VgsiMIy64hcWxbHGr39Bram9X83ZpdJCFVS3WPI+zBnzHl7nhnSkiPUx34ixaY
+	 MJlTn8S+KuyfWpEmH8jHdjFl/K2S7Lf8WozJiEZv0Q4/BP50UpeL4KFAleHT6DhK/G
+	 VmeERh+Gr5DbnZIc8B3pP9OdKFAbBJP22GKKKM4O5kTpKHcG9X3z8vcCNQYfLANvwv
+	 HJVlHj3G3/VFspO1nZKwq/3BTFGDbmJMIKnMbpv5Pd/EF/i9OA2d+Kffbrx9r1A5XQ
+	 TPUyU07a5YQCw==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250305200933.2512925-1-miquel.raynal@bootlin.com>
+References: <20250305200933.2512925-1-miquel.raynal@bootlin.com>
+Subject: Re: [PATCH 0/2] spi: cadence-qspi: Make it work on AM62A LP SK
+Message-Id: <174182004841.192003.1973465132050742784.b4-ty@kernel.org>
+Date: Wed, 12 Mar 2025 22:54:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-The pull request you sent on Wed, 12 Mar 2025 14:08:33 +0000:
+On Wed, 05 Mar 2025 21:09:31 +0100, Miquel Raynal wrote:
+> low-power starter kit. I initially could not use the spi controller and
+> tried to find a working-while-not-breaking-the-others fix but TBH I am
+> not getting all subtleties of this driver so I might very well be in the
+> wrong direction.
+> 
+> I then observed a massive throughput difference when using the DAC mode,
+> and disabling it really improved things, so I am proposing to bypass it
+> as well on this platform (and some few others which would also be
+> impacted by the change).
+> 
+> [...]
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc6
+Applied to
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6e8e2f82bc26d4b4ac9bc4f3abe99a5661a04009
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Thank you!
+Thanks!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+[1/2] spi: cadence-qspi: Fix probe on AM62A LP SK
+      commit: b8665a1b49f5498edb7b21d730030c06b7348a3c
+[2/2] spi: cadence-qspi: Improve spi memory performance
+      commit: cce2200dacd6d7e0501c3811f24f5216710968fb
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
