@@ -1,105 +1,81 @@
-Return-Path: <linux-spi+bounces-7094-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7095-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A858EA5DCD6
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 13:40:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD2CA5DD12
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 13:50:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A18E57AB134
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 12:38:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBE69189C28B
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Mar 2025 12:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8920224293C;
-	Wed, 12 Mar 2025 12:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D702356D8;
+	Wed, 12 Mar 2025 12:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bbQ4ukLv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2lGFoEx"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598052417D4;
-	Wed, 12 Mar 2025 12:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBAE7083C
+	for <linux-spi@vger.kernel.org>; Wed, 12 Mar 2025 12:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741783196; cv=none; b=BvxoN+yDHAVf/ZPonTTNxO6VMie8ED8dH6l/7pr5dj2lE3HQyc9d2MO8msVRi1l8QKI3cKVw5f63eJqA3FFumlTxHhSg+eYIVhWfBRvfI54uoj7+4THmdSB6ls+tBA0VrAExJIdl/0lKoq8uYWnajjSZirfCga8e7fAvqQdm1Io=
+	t=1741783799; cv=none; b=A3NevQK5NWf8x0hSb8FKU7iTyDKCIN8a0Udw/0OQXDoAaNOQx8DZ3N7iKSEpUQrcv2ym9O2O6lMZCmzr25RIz3Qq+xn39XIR3KodT9P+5WotEm0wgyaz8QZ8yNmPmufPAFeW6rb+SMubH7ul1PGDQodgbYzQ56istqGJFfzMHh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741783196; c=relaxed/simple;
-	bh=uZiOVB8yQ9iEfQm3YhLtHeR0IQkVJXdxQFzGtq4+Wns=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=qT1FX/ROdEXfMQST/dKRCg5LkU5xoHcIKx5Usxb9fTEwp0ylIPmKUHm96oayUg59iqLhyaG/9LrSOs78gT6a6ENHyZB6W1DaItdqfCbjJ1J74eZBTa1J4jxWyms8cdfYTE60pgrMyH32OGjhRQ4CgiSTqOCRxnw82DH2z6dJKP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bbQ4ukLv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E249C4CEE3;
-	Wed, 12 Mar 2025 12:39:53 +0000 (UTC)
+	s=arc-20240116; t=1741783799; c=relaxed/simple;
+	bh=SFjJtinrKB55d4Y0AKebfbXv8fj7dDAcOx1dHQ75yLI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=kp0P476eamWtiScwUD7fgFHZ8RNwSJ6nVj57++ay33xc79cOGzM4eDNE5jKjLV76J5iY9zIPoKqTJrSykjJ6JzzNw9QE6OOwhQTCQ0dBsBOqFd7ClWHAPaLvR0eRGrpmbbXv8sPtWuk7r81hhdYKJ83d59rO40Y2dj2spyyTigA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2lGFoEx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 810ADC4CEE3;
+	Wed, 12 Mar 2025 12:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741783195;
-	bh=uZiOVB8yQ9iEfQm3YhLtHeR0IQkVJXdxQFzGtq4+Wns=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=bbQ4ukLvpEYQWQ1qWqxi0sY7vsSyUPCOm3PHti24zHG0WGJnQqmiwt9xEuUHr3KMt
-	 htqoqorYex7ALPwAKmFH+rihbbwBKpjrpGMOS7DLt/jlJSfU67Ft4tYTaLO4hxQEtH
-	 VOTHI062k12tz9zfAWsPF0fNYVJIJa64nLWxWq6ze8PkSbfqfIgB4brTphVOPRFxHt
-	 SfmDpuucqlTH763Nfx6t8hYed2lg3MCcQTB176yG8fD7a39lOAm8ANOY1rD8nhQzF7
-	 dnWrMIwVLdyj8Wv28N1fVFtHori2uW3SPtBxNmOUq+HHSiVvZeTVrxFi/YN1Zx968V
-	 oOogCKhPP5P0g==
-From: Mark Brown <broonie@kernel.org>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
- Longbin Li <looong.bin@gmail.com>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- sophgo@lists.linux.dev
-In-Reply-To: <20250304083548.10101-1-looong.bin@gmail.com>
-References: <20250304083548.10101-1-looong.bin@gmail.com>
-Subject: Re: [PATCH v2 0/2] spi: sophgo: add Sophgo SPI NOR controller
- driver
-Message-Id: <174178319298.22638.1373062138685342011.b4-ty@kernel.org>
-Date: Wed, 12 Mar 2025 12:39:52 +0000
+	s=k20201202; t=1741783798;
+	bh=SFjJtinrKB55d4Y0AKebfbXv8fj7dDAcOx1dHQ75yLI=;
+	h=Subject:From:Date:To:From;
+	b=h2lGFoExAYJlR0tMJ1Xw67HyyJ38lEOsXqolj5y92MyR/lCBJjIj0voRkIJ8LRRAQ
+	 r5QvYU4KUGJezxOJ55K7WjQBon16/6fiR9+Znxk9HpdyaWg9EPq+dw481t5rFbjtnq
+	 qzNEkdEeNGLC4zUX+bzeu2Gcg6qhj6Z6qj8DYoQ6tNTxbXltAE0Xart/3WXMCMMADj
+	 EE6NNdRacFrUWY78n5/wG3y1ksRu0XQpefd+PbNRU2dlAGfnd3e05t4uLiXuK3qY93
+	 48HRriag16Ggd6gIM99Or3jFXaKE2ZzNxEm5rHXGr4kl5Zdmg6/tF04+dGXuj9M7sy
+	 WQpavmK8h3+tQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF48B3806647;
+	Wed, 12 Mar 2025 12:50:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174178383245.457727.8166478450394430894.git-patchwork-summary@kernel.org>
+Date: Wed, 12 Mar 2025 12:50:32 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 04 Mar 2025 16:35:41 +0800, Longbin Li wrote:
-> Add SPI NOR driver for Sophgo, including read, write operations.
-> This driver is only suitable for NOR flash.
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: sophgo: add Sophgo SPI NOR controller driver
+  Submitter: Longbin Li <looong.bin@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=939926
+  Lore link: https://lore.kernel.org/r/20250304083548.10101-1-looong.bin@gmail.com
+    Patches: [v2,1/2] dt-bindings: spi: add SG2044 SPI NOR controller driver
 
-Thanks!
 
-[1/2] dt-bindings: spi: add SG2044 SPI NOR controller driver
-      commit: 9f95e2dff3fe6a5f4cec786a106558bb8f268a16
-[2/2] spi: sophgo: add SG2044 SPI NOR controller driver
-      commit: de16c322eefbe9026d4eabc8ae934bb778cffd1d
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
