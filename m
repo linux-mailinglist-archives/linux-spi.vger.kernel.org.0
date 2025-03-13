@@ -1,205 +1,138 @@
-Return-Path: <linux-spi+bounces-7105-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7106-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD28A5E919
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 01:52:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20DCCA5ED05
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 08:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA4577AB901
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 00:51:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EED61189A4C5
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 07:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2316EFC0B;
-	Thu, 13 Mar 2025 00:52:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691E422E40E;
+	Thu, 13 Mar 2025 07:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b+7YeKLa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbuiWT2i"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6327411CA9;
-	Thu, 13 Mar 2025 00:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B82422DFBB;
+	Thu, 13 Mar 2025 07:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741827141; cv=none; b=TXaWgLV34nyFqoy5v07eSyLZTTZQo2aPWq4jvIC6y7P/aUqVoSVpZtZtUPpXJyzb+U4XpAKADw5QrT3V1tJ1lUDqL9B+K4F8WlssSsRuzDksIXlQLkNwQLD5tZGGYXX8o/xvKSY5b/1p313wOoJ2zmN49X/7GAJBioZIzwx6nyM=
+	t=1741851021; cv=none; b=rhWn9LJpbRWN1HJcCKs7nZhLRHyCEDWt2Rq7YRqCIAX/0jYpvfeFViOqUfU2Qbs2sXI+wa6nIk40sqMGxmIKUvNHAJsLAz1SvUy6HFGM+qN5ugKP4ErPDIUxF7UvMk2Z1hB88ZbeTrXDd+QJyRUd8lyXJjWZdOyAYEL+VoV3qdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741827141; c=relaxed/simple;
-	bh=2HBnjGG9f2yzjZImRHG1ni8/0sMHCSwJPmWWfwr9lsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dr2Bs8AcqURokgQ7bNc8/Z0WDfjoj74V5RFKT1zsKgUXpaVVdPTs1Viuj3hZegQKELplqgKYUA+Wmn7JTWAqo+dMZWXXwShymTgNEcU4k672XyunJ8dSfNE3Lhl1rSDu9TGTgX/i3gutOLOluAy4pTeMEQFEia0ytFx0XWKXbY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b+7YeKLa; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741827139; x=1773363139;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2HBnjGG9f2yzjZImRHG1ni8/0sMHCSwJPmWWfwr9lsQ=;
-  b=b+7YeKLa2BcZGU+w3UDX9GvCK89ZRKYkyMx2GZ2bwoB5XgjQuX9rJ0Ma
-   CcJCvNepGWSSj8ZPxhcqa5aOi6I24njeio72aDzHwMQiwd5G+TvWg5XL2
-   kLurkJ8yBzmbtiQSQjIb5zG318+COfscMLdi4j/2paXdHk1cyG4JFaiNo
-   bJ6gIS/3c5ml6E+GOSHbueJijcm3jWC0rBku+DzipyMfDz0BIq8gfsWKU
-   0gRs3lQtafmfUGV5kNpvGIzo/gWQV/nTpgOjAoe3QEa4g/E7Eod0lHaSr
-   u6Xd10tDzWupN+ByIrM+a/e2wCkDHf7N2/y4zflPR82QVEWrZBVNe4CWS
-   Q==;
-X-CSE-ConnectionGUID: olEZPyKtQvupDtBduXO8Xg==
-X-CSE-MsgGUID: wUvY+Fa/TmmGaYzrY/IAGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11371"; a="30517892"
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="30517892"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2025 17:52:19 -0700
-X-CSE-ConnectionGUID: +jomK16XRs+7Q54rMkHXHQ==
-X-CSE-MsgGUID: mH65KXmARJCri59WIbO6Lw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,243,1736841600"; 
-   d="scan'208";a="124963133"
-Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Mar 2025 17:52:16 -0700
-Received: from kbuild by a4747d147074 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tsWo2-00091K-2f;
-	Thu, 13 Mar 2025 00:52:14 +0000
-Date: Thu, 13 Mar 2025 08:51:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Longbin Li <looong.bin@gmail.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed
- resources
-Message-ID: <202503130819.4zfx3AKS-lkp@intel.com>
-References: <20250312172016.4070094-2-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1741851021; c=relaxed/simple;
+	bh=QbnEtM3KvInKXQ/kzErd6KRfneGlpRJhzPkXfRN9iBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T+XPzmC9ZIA51DkHSgwWhPF6ZT44NXaPDac3snPZ0VPy3qFalg5DgA1aU7XTEvSan3OSnbkjSZpFdrEO5dZyzKuYKD+yOH8rzMkA0DOD2Q9I3V8ikknVw895dAZ8jZSc5UjekiMCV3PKKsdMOaNcyEuYvL8KFolNfo8/fG6u8QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbuiWT2i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66EC4C4CEE9;
+	Thu, 13 Mar 2025 07:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741851019;
+	bh=QbnEtM3KvInKXQ/kzErd6KRfneGlpRJhzPkXfRN9iBs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RbuiWT2id1vk9SO5vP9IVGY4KLvk+bWx0qdDElkGMxC2gYERw/QsfdRQ28KKLdtag
+	 0ke+edEIZ9T42U/pIyJgGb/i8XwKr/smO4zasvXrUdwPBF9OSPhQrwVXXOHSerNcea
+	 lo34vcCiPaMcFOyN/w/o+1c2tJi9vlm0vJcaTACpS+lZiAJizxE2CFIdF4lHGSXcZ7
+	 REiJcIfMEJiNQh6SUF1uYdZLrd+pm32tGgob0WnGPmYcwpH00QgCMB0hfxirAuTDqi
+	 dLNbtYs7u0SiK5Tk945gtzCHiFh7z4sWETHt4eoTv9rx4qnBbH0NjLlKyI5szysUvK
+	 b5L4UzVav22QQ==
+Message-ID: <49e87f3a-2f02-40d2-9307-22cfaaa8be7a@kernel.org>
+Date: Thu, 13 Mar 2025 08:30:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312172016.4070094-2-andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/8] memory: Add STM32 Octo Memory Manager driver
+To: Patrice CHOTARD <patrice.chotard@foss.st.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ christophe.kerello@foss.st.com
+References: <20250219080059.367045-1-patrice.chotard@foss.st.com>
+ <20250219080059.367045-5-patrice.chotard@foss.st.com>
+ <6e1757ea-3f5e-4cc0-b142-aee52f016c8f@foss.st.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <6e1757ea-3f5e-4cc0-b142-aee52f016c8f@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Andy,
+On 10/03/2025 14:52, Patrice CHOTARD wrote:
+>> +module_platform_driver(stm32_omm_driver);
+>> +
+>> +MODULE_DESCRIPTION("STMicroelectronics Octo Memory Manager driver");
+>> +MODULE_LICENSE("GPL");
+> 
+> 
+> Hi all,
+> 
+> Anybody alse has additionnal remarks on this driver ?
+BTW, you explained nothing about merging in the cover letter, mark
+already took the patch, but I see there is dependency. This cannot be
+merged and pinging will not change anything here.
 
-kernel test robot noticed the following build errors:
+In the future, ALWAYS document dependencies between patches and make it
+explicit for the maintainers.
 
-[auto build test ERROR on broonie-spi/for-next]
-[cannot apply to linus/master v6.14-rc6 next-20250312]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/spi-sg2044-nor-Fully-convert-to-device-managed-resources/20250313-012347
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20250312172016.4070094-2-andriy.shevchenko%40linux.intel.com
-patch subject: [PATCH v1 1/2] spi: sg2044-nor: Fully convert to device managed resources
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250313/202503130819.4zfx3AKS-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250313/202503130819.4zfx3AKS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503130819.4zfx3AKS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/spi/spi-sg2044-nor.c:11:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2224:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/spi/spi-sg2044-nor.c:459:37: error: too few arguments provided to function-like macro invocation
-     459 |         ret = devm_mutex_init(&spifmc->lock);
-         |                                            ^
-   include/linux/mutex.h:144:9: note: macro 'devm_mutex_init' defined here
-     144 | #define devm_mutex_init(dev, mutex)                     \
-         |         ^
->> drivers/spi/spi-sg2044-nor.c:459:8: error: use of undeclared identifier 'devm_mutex_init'; did you mean '__devm_mutex_init'?
-     459 |         ret = devm_mutex_init(&spifmc->lock);
-         |               ^~~~~~~~~~~~~~~
-         |               __devm_mutex_init
-   include/linux/mutex.h:129:5: note: '__devm_mutex_init' declared here
-     129 | int __devm_mutex_init(struct device *dev, struct mutex *lock);
-         |     ^
-   3 warnings and 2 errors generated.
-
-
-vim +459 drivers/spi/spi-sg2044-nor.c
-
-   425	
-   426	static int sg2044_spifmc_probe(struct platform_device *pdev)
-   427	{
-   428		struct spi_controller *ctrl;
-   429		struct sg2044_spifmc *spifmc;
-   430		void __iomem *base;
-   431		int ret;
-   432	
-   433		ctrl = devm_spi_alloc_host(&pdev->dev, sizeof(*spifmc));
-   434		if (!ctrl)
-   435			return -ENOMEM;
-   436	
-   437		spifmc = spi_controller_get_devdata(ctrl);
-   438	
-   439		spifmc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
-   440		if (IS_ERR(spifmc->clk))
-   441			return dev_err_probe(&pdev->dev, PTR_ERR(spifmc->clk),
-   442					     "%s: Cannot get and enable AHB clock\n",
-   443					     __func__);
-   444	
-   445		spifmc->dev = &pdev->dev;
-   446		spifmc->ctrl = ctrl;
-   447	
-   448		spifmc->io_base = devm_platform_ioremap_resource(pdev, 0);
-   449		if (IS_ERR(base))
-   450			return PTR_ERR(base);
-   451	
-   452		ctrl->num_chipselect = 1;
-   453		ctrl->dev.of_node = pdev->dev.of_node;
-   454		ctrl->bits_per_word_mask = SPI_BPW_MASK(8);
-   455		ctrl->auto_runtime_pm = false;
-   456		ctrl->mem_ops = &sg2044_spifmc_mem_ops;
-   457		ctrl->mode_bits = SPI_RX_DUAL | SPI_TX_DUAL | SPI_RX_QUAD | SPI_TX_QUAD;
-   458	
- > 459		ret = devm_mutex_init(&spifmc->lock);
-   460		if (ret)
-   461			return ret;
-   462	
-   463		sg2044_spifmc_init(spifmc);
-   464		sg2044_spifmc_init_reg(spifmc);
-   465	
-   466		ret = devm_spi_register_controller(&pdev->dev, ctrl);
-   467		if (ret) {
-   468			dev_err(&pdev->dev, "spi_register_controller failed\n");
-   469			return ret;
-   470		}
-   471	
-   472		return 0;
-   473	}
-   474	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
 
