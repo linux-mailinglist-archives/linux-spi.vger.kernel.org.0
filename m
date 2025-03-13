@@ -1,115 +1,88 @@
-Return-Path: <linux-spi+bounces-7122-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7123-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63CF6A5F8D5
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 15:46:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33C83A5F90C
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 15:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C63853A59DF
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 14:46:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A49B23B536A
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 14:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87349266F03;
-	Thu, 13 Mar 2025 14:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1737D268690;
+	Thu, 13 Mar 2025 14:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J59mzNUm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dlk75RX4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC7586337;
-	Thu, 13 Mar 2025 14:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC397126C1E;
+	Thu, 13 Mar 2025 14:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741877183; cv=none; b=frX/astY/jWRhXpQ4yBrwby0cb9KAtmeUsz1oCMBwnsK+FOwY0vY/e462RBwgfj2oeIRe4eXu9BAsGPjnqld8tpno7i+OpDFNsEkMXZXLYCXtHaFB7Jutm2eWrpZO6lqhoqZ8KkR4SKbE0EBvvl2kXfnWZmX/Yal1qDjg+JDfg8=
+	t=1741877592; cv=none; b=EgdmLkew8yPkINVLAPKfI8XXrglktUXBKBjGqxVjTKr4XpDzyOJRn/XfH5pk6J78MYtU2Zav1ZPNLTCUmessy+JT0TFk8dTxve6oSckPPD8knEfmKqvcsO9MHI2/m7iNBHnWtYrdqbW4BX2hAmPP6YUCwtv3/R6eESbLcR5oNKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741877183; c=relaxed/simple;
-	bh=tshyggDOde6rCy5WxES5KRnyBHK98eY57xGucW/T14k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T7u9XQHGZIgbu/VOmNJqCohdfEaLUHxIxnHII3qLwu5WieSlnrx+IYiozuUCHjQB7KFjiDewb01DyAs9JDA8s3qSXXWMaL9yQzBuRg+KWFRpT/ZVLr/IpmdfvCj+ICgg4/IYMqdUta3YIlwOUgeikGWNJKIZuMpG1x65hEmTF0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J59mzNUm; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741877182; x=1773413182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tshyggDOde6rCy5WxES5KRnyBHK98eY57xGucW/T14k=;
-  b=J59mzNUmu6aKO0B5e7jSChd9bf+dEKKGz27YyzeoJXM9zuoq/z/Mc9y8
-   Hk7tIVcdr/veSrXBiXqgkbBsJEPK97Aox+W4OEdZfl/s5M6hbMcvwUeV4
-   9Ta3Omi3NNqCoJwG7VKIKC9XOL9/ceapaW95JauAEizHjWChz3voJj+J3
-   CvhgvXPWTaiweSu0+wlX1iPlIlXfvMYOfrc4Dn6QRU5k46FszfW8dGD+I
-   QH9a4l6wuztv0ttNCKyHL8WU+afu6AX6aPYqsm1mbzNxvC0xIyCJ5agTt
-   4w0YF5NXREYzkCrcbTteNf2a+l/Hc1Y2a1BGtnWIAB4WpN2zlfJ6tpi/s
-   Q==;
-X-CSE-ConnectionGUID: EuPbakHSSZ2dHqkDasi3bw==
-X-CSE-MsgGUID: yoVLTT5eTX+SR8NIbF5aMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43128154"
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="43128154"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:46:21 -0700
-X-CSE-ConnectionGUID: 6aH8UiBVQRWTl1zZCHlr5w==
-X-CSE-MsgGUID: kkf6NXANQpCg4GIsyiprtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="120763387"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:46:20 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tsjpB-00000002Cuo-2dqq;
-	Thu, 13 Mar 2025 16:46:17 +0200
-Date: Thu, 13 Mar 2025 16:46:17 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: Use inclusive language
-Message-ID: <Z9LvueoWc1o7ayUS@smile.fi.intel.com>
-References: <20250313111442.322850-1-andriy.shevchenko@linux.intel.com>
- <1c49edb2-2ffc-419e-be5e-7e15669a7839@sirena.org.uk>
- <Z9LlTflb1HQMyEv2@smile.fi.intel.com>
- <e329812d-90a5-456e-9a00-abb5c2c8d25d@sirena.org.uk>
- <Z9LqyWr4GH4RX6Nj@smile.fi.intel.com>
- <Z9Ls-zhryd7mJv-b@smile.fi.intel.com>
- <dc17b87b-29c1-4b66-9353-c934a68b929a@sirena.org.uk>
+	s=arc-20240116; t=1741877592; c=relaxed/simple;
+	bh=w52BMGEb/zNW6DRdLAa5vip7+Q6bfilfvxV8/qdG/Ak=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Mb3E5Mt2Zi0arT7cWVva/w6YOThhNxFwb8Hn4MQuJWFMVnlT3sm99ylNpsAeSbBK7LzCoasD3UwnC59ee/xIDHQlWoHYK/gR1dgMTmvtpkHkaxGxDVVz4quWnskvfOXsaQvhD3RpjI+n9DdH04ewuSH3GXVbUejwHGAhJutL3XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dlk75RX4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4519BC4CEDD;
+	Thu, 13 Mar 2025 14:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741877591;
+	bh=w52BMGEb/zNW6DRdLAa5vip7+Q6bfilfvxV8/qdG/Ak=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=dlk75RX4BJJymKAK8ib8Bfq9GxVJVC5iw3D4UtFdjm3m2z8Pg2Q0X5iVmpCQ0sOnh
+	 uCT6cH49pKZGgqc62hABR3U7O1RQ5siUeNePNUP6Rq0fBAdTqYIriSK/ZoNx4Ai4ea
+	 pXhb/F+3VhgbaATFUYtUDKS6Ma968EHvM7riUwkHra5//pnsNNS/3akhiVw7GGCOIi
+	 aL+xpG5U+UgWe8c3YYiaykJg8kZhQDlU6Mxg501HsmyBYhfpBOeQaJSNZEc+Bxt5a7
+	 tAzNeP3CJQrOG15HT62bQh47ak3koZanZsE9XgkKjU7/pDnDSC8NiiVpSAsfhq1/B3
+	 EOlmQNs44gKaw==
+From: Lee Jones <lee@kernel.org>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ claudiu.beznea@tuxon.dev, mturquette@baylibre.com, sboyd@kernel.org, 
+ arnd@arndb.de, Ryan.Wanner@microchip.com
+Cc: dharma.b@microchip.com, mihai.sain@microchip.com, 
+ romain.sioen@microchip.com, varshini.rajendran@microchip.com, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
+References: <cover.1736522006.git.Ryan.Wanner@microchip.com>
+ <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
+Subject: Re: (subset) [PATCH v6 3/3] dt-bindings: mfd:
+ atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
+Message-Id: <174187758697.3701280.18234838828113464973.b4-ty@kernel.org>
+Date: Thu, 13 Mar 2025 14:53:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc17b87b-29c1-4b66-9353-c934a68b929a@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-510f9
 
-On Thu, Mar 13, 2025 at 02:39:27PM +0000, Mark Brown wrote:
-> On Thu, Mar 13, 2025 at 04:34:35PM +0200, Andy Shevchenko wrote:
-> > On Thu, Mar 13, 2025 at 04:25:13PM +0200, Andy Shevchenko wrote:
+On Fri, 10 Jan 2025 08:25:42 -0700, Ryan.Wanner@microchip.com wrote:
+> Add flexcom binding documentation for sama7d65.
 > 
-> > > Yes, the base where it was merged to is eds-acpi branch of my public GH [1],
-> > > which has no SPI stuff in there.
+> Consolidated entries into one enum to match proper coding style.
 > 
-> > $ git checkout -b test-spi-mrg spi/for-next
-> > $ git cherry-pick -1 87a228960033
-> > [test-spi-mrg 8a11d1063109] spi: Use inclusive language
-> > Date: Fri Dec 8 19:02:54 2023 +0200
-> > 2 files changed, 64 insertions(+), 66 deletions(-)
 > 
-> > In any case there is a v2, please try that one.
-> 
-> That one does apply.
 
-Okay, It might be that I send the previous version by a mistake or it was based
-on an old spi/for-next. Now I don't know as it's gone.
+Applied, thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
+[3/3] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
+      commit: c37ee2ed38391eef476fea6af8eccd0d31f5ed98
 
+--
+Lee Jones [李琼斯]
 
 
