@@ -1,54 +1,57 @@
-Return-Path: <linux-spi+bounces-7114-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7115-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1DBCA5F4D8
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 13:48:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF635A5F50D
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 13:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61C5119C2508
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 12:48:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 162713B9EDF
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 12:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D4E2673A1;
-	Thu, 13 Mar 2025 12:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8502676E0;
+	Thu, 13 Mar 2025 12:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkAHsgh6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m49Xp00X"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DA9267710;
-	Thu, 13 Mar 2025 12:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232F266590;
+	Thu, 13 Mar 2025 12:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741870056; cv=none; b=fQP8FzcplOz4EtrDwq20DDc9532YiU+I2n7zTncb0Ti5eROBFTSlGQedp2TseDJWYBtF8gvhOg5Q31PIfxu0kfpYhVfp0zkBh9W0/z7SI7hSxiS94XZFfikFI/X+JDxV4MGeuGhrU1CEXLa9KgDUrx1X17l5s3JuT09mM2sU0cc=
+	t=1741870765; cv=none; b=Wc0L6wym5t2NB6a1x9rZ71boBRlZ9icMarTgJNQlY3Jjdx4DcFGa69KfJdJ4tC1/KAQx8TfCwnrf5Ylv3wxT3rvVFb8Z0C0AeXsMLaxy6fmczYN7/b7nA56helObQ3xSxvn8bcrQuYCfA3r+zoP4g6m+kvUVgNzSBPsovrO5DCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741870056; c=relaxed/simple;
-	bh=oP+rCPfNiKnrKk85Jq6C+JjzXLFdQho9igaD+bca+vk=;
+	s=arc-20240116; t=1741870765; c=relaxed/simple;
+	bh=o1JokyjlqWN8gJ/eoZQUlSigREd9jnHfkinY7XpmE+M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hE3na95fogOwQTpBdctcBx4NnKcz48mkOMLJploaK2YyP8OSWjYCStuLSmVw2fyeKZ0bsjZoYnPBn1DzJJ19VTLYmmOkZ4ELCZXvJzWNlVOSjV1wyi4a44UgzS/7wxKFTXUIG8JE+aMbTQzkGaUHoStrMo7lCVskmRMjnodDPsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkAHsgh6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11904C4CEE5;
-	Thu, 13 Mar 2025 12:47:34 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DF7je9gIXzFRG74cxLtNsVSA/LkmsPQV8VjdzhQJ2OXg/Xmf86EEsXfGI/NWac4KyZLcBvJD5XVyeGJPD0XMJtPdtEtyvGvEuNs5Nd19W1C2abcjpJyJKEHA3hCUb8kYpGeYTFak0WxP9fnyMIdUntCBzW1E9/fkkGwuCGYZORU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m49Xp00X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71668C4CEDD;
+	Thu, 13 Mar 2025 12:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741870056;
-	bh=oP+rCPfNiKnrKk85Jq6C+JjzXLFdQho9igaD+bca+vk=;
+	s=k20201202; t=1741870765;
+	bh=o1JokyjlqWN8gJ/eoZQUlSigREd9jnHfkinY7XpmE+M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fkAHsgh6Ibk7JlDS5K6qVD8anQQvj/AQMf3sOg5mWmqrMZb1PxZP4F8FFuccrlSQ6
-	 NSHz+EqdP9fngEMUygXV7FbcYxEtMnDEpSXzjcJJLsb7myqnZqkq4Xmx3nDfGoJrsl
-	 hlsxF8XofqcH8UTdTxoNLPD3xJOoeOHWPRk6607nQ0Sly6ohv2gcMN5wNrqE7iCiRk
-	 UZjSFLeqJrOArUY1IkSQKLWB2rPpxwADyxCLRwE/O1e9eahwmhPeRFcVbDT51WJTAa
-	 1sO8WIugoZSCpJH/ne0GnAShd4DS8sBNYXc/LciTrEHb6ouUJQVHXv6QdJSFUjelXQ
-	 gtJB3kV57En5Q==
-Date: Thu, 13 Mar 2025 12:47:32 +0000
+	b=m49Xp00XfLAITcQER8VcGT7UtdqnNpSa1iL3rBZcQfRBl4OU9q69SQCwjLgBUE2Q4
+	 gXm5/MBUy1x5igul64eQjyxQ4oiK36VPOECUmdurnIepNmPPbqKtKJCdsTuxkNAJXf
+	 5mhYVJdv+N0Xuk/XywDFy0wYSPyIIQEM7p2qZdOfHIs6bIJ54NrWNpjDqVloX9PZ9V
+	 ZNVvxaUvFUsenAoPFLkyqWPNZUY/mzxXOA+6cqVO/uZcyYYR3mo6DLSvpyGY6Vl/j+
+	 +YMT4tfKsVdj2Q5BD8Xlw9QcuxM02TjC5j1ovy8Hw7N2EL0h398eLZp5lZhOoVJWZU
+	 B8qqSZkPyLB8g==
+Date: Thu, 13 Mar 2025 12:59:20 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v1 1/1] spi: Use inclusive language
-Message-ID: <1c49edb2-2ffc-419e-be5e-7e15669a7839@sirena.org.uk>
-References: <20250313111442.322850-1-andriy.shevchenko@linux.intel.com>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: manivannan.sadhasivam@linaro.org, miquel.raynal@bootlin.com,
+	richard@nod.at, vigneshr@ti.com, bbrezillon@kernel.org,
+	linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] spi: spi-qpic-snand: set nandc_offset for ipq9574
+Message-ID: <ac5673a7-d573-42ca-8535-254e2c1083aa@sirena.org.uk>
+References: <20250310120906.1577292-1-quic_mdalam@quicinc.com>
+ <20250310120906.1577292-5-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -56,36 +59,38 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="PdMZGyGqk6B7/MNF"
+	protocol="application/pgp-signature"; boundary="DLVPIcV9y3hPcH44"
 Content-Disposition: inline
-In-Reply-To: <20250313111442.322850-1-andriy.shevchenko@linux.intel.com>
-X-Cookie: Gravity brings me down.
+In-Reply-To: <20250310120906.1577292-5-quic_mdalam@quicinc.com>
+X-Cookie: A beer delayed is a beer denied.
 
 
---PdMZGyGqk6B7/MNF
+--DLVPIcV9y3hPcH44
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Thu, Mar 13, 2025 at 01:14:42PM +0200, Andy Shevchenko wrote:
-> Replace "master" by "[host] controller" in the SPI core code and comments.
-> All the similar to the "slave" by "target [device]" changes.
+On Mon, Mar 10, 2025 at 05:39:06PM +0530, Md Sadre Alam wrote:
+> The BAM block expects NAND register addresses to be computed based on
+> the NAND register offset from QPIC base. This value is 0x30000 for
+> ipq9574. Update the 'nandc_offset' value in the qcom_nandc_props
+> appropriately.
 
-This doesn't apply against current code, please check and resend.
+Acked-by: Mark Brown <broonie@kernel.org>
 
---PdMZGyGqk6B7/MNF
+--DLVPIcV9y3hPcH44
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfS0+MACgkQJNaLcl1U
-h9Cixgf/aIAxJ+wJ1Q/uSKPhqLD1V67CpGK6VZdTNBmVx+DhocdcASznzYJKAxLP
-Nd6h9Q8vbOh5iDa1LgpLV1milo7+shb6vajrFV6wZZyJSNxTJ/GkXSJULzE6tJVx
-7g3bMlSDJ0aQwMve3wP1NbPqVoCvfLI1biZJYbryhW+yTEFO1d0hOwA9EhbmdsZf
-yAe9LlTPygcfPPaPCIRakxNre4JFeBC5Cy3Ly/zI4NTeDqS480JfCOS/3SFz51F/
-izGixkffP952ANAMgyUe1oqcrKvNEpu1/jm11vNDm71HhmLPYM7SMVXzZ0tfh+oS
-lSUUCZysEDrT56Di++/HADSl5wtzDA==
-=9e+e
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfS1qcACgkQJNaLcl1U
+h9AZQAf7B6HWMHCl2lowKK3SbhxOes8At7H7cGoilgVUlhRLpGHnkHSjYEJ1FlTG
+QDGuOYVraIvxayTbRQNnxBDDAaGWWD4JYR/ukvFPL3CbN5+pyAuOKM1R2TsLwafC
+TidjQjxxD1Azv9+NwPaJYn9wTcwis7D/ENNLUqW7H9edkdxCmKIEYPQ0jtOIq4hI
+UnEtYy1FJN6ADYZeDJXLQZKyZY7steggwFKzz5HBekgS7Z2ILo3sFAfAVqb3C6p7
+qdf4X1H1fs+QuSAPJa1k632ZKMiPHy95hGkJssPyz/ft2zBuUbjQJbaDvt/GQAhk
+6Ha6C1g0bN2cV/ts0mfZaO2q2ld3BA==
+=pp4l
 -----END PGP SIGNATURE-----
 
---PdMZGyGqk6B7/MNF--
+--DLVPIcV9y3hPcH44--
 
