@@ -1,127 +1,106 @@
-Return-Path: <linux-spi+bounces-7120-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7121-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B45DA5F889
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 15:37:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65FFAA5F8A2
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 15:40:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C895B17718C
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 14:37:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06EC01884149
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 14:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5816D268FF6;
-	Thu, 13 Mar 2025 14:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FCC267B1D;
+	Thu, 13 Mar 2025 14:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hL4uX9eB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iNE3B9Tz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48F6267B1D;
-	Thu, 13 Mar 2025 14:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F2D22612;
+	Thu, 13 Mar 2025 14:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741876499; cv=none; b=M9T4aEfRrhRjLUEHDi+v3gAYcYyvQTDQ3j+mVLkVxPw4L9xmbUJCXH7m6hnE5WlW1CQWmsck3797NcrQgolhoyqg4svJWoExfZDujvwlg0gotuwcw0mc2B+cihT0eGDXZkk/MhHZjc6v8j1oy3vGtECO0MNB7NkwI1q6tm9gyRE=
+	t=1741876772; cv=none; b=Q0Vy06Ia4pue1bAhs+zcD6Z4TLMjj5HjlawmPY2zfJYUwt5tZjBLnSFX68pYquQt2a4sRIsx6Sv4wwCWAm0EojsqeFBvDYe6aLaKWzZm+7WGNk/XKgYWK5p2sYv3rbKtQwiYKRTCSlFYV2IAiHvD3Rv9Kz477bICe7d9c5kzIE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741876499; c=relaxed/simple;
-	bh=VnBsh24BaoeppzNWMgOUOfdRq51sCTPpk8XCqt9eJjw=;
+	s=arc-20240116; t=1741876772; c=relaxed/simple;
+	bh=MUgokbLQXVwrjubKZoMCX9GPPfkVn6vt/U2RaFfyvUk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nzeMTkHwAFYnHu4FUbQB86E9yiGzG4cES8cvXJjoEaPv4j6i8C6weXiurww9RAlFpeOqRv6ce2TqJjLk5mONQvddCvjsICKR6mp7v4XMhiXZHDmxJ7u/StEwIWovbaWAZZfhhBf/Qp5WKjE8+IIhylUC+6B5Y1AqN5FSnt2UowQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hL4uX9eB; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741876498; x=1773412498;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VnBsh24BaoeppzNWMgOUOfdRq51sCTPpk8XCqt9eJjw=;
-  b=hL4uX9eBapwa2a4ZDJ/3peQNpKj+FWa44eDAHVyKf/o8H39Ufeju/E32
-   sPdc2TqjkNh+fmP0YezuSUbBM+ul4zzqhcnh/hyQj6tie/kUGuGY3lXHR
-   dluNB4dbOhIo6FNXy2jUOgPGNZ/E1FuZA462/O2Q27x1YW6CKKlfzbq+g
-   cInEWsOzZ8kRGMC3bdBMqUV4C6iicHa3oy2AmusxWRdVxmkxKp2R+SR5J
-   KQbEyar+dHpGfh9tHotjBfJ6XIH3yDzy7Dd60A7UTIFao61fsjBO0Z7Ol
-   etekC6DpEVz4sSi9GfggMK0lVC/uct1McKUvsm1139zZZCprCh+LLXCXY
-   A==;
-X-CSE-ConnectionGUID: CuAmh4soTDC+88NrYwpi4w==
-X-CSE-MsgGUID: ioWQBl7yQNWaecdcM/hDVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="42245889"
-X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
-   d="scan'208";a="42245889"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:34:57 -0700
-X-CSE-ConnectionGUID: LtS4bOCgTp6/xbBa6O03Yw==
-X-CSE-MsgGUID: i5Rt2qekTFGP13lu5AdJJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,245,1736841600"; 
-   d="scan'208";a="158123773"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:34:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tsjdr-00000002Cia-1Ihl;
-	Thu, 13 Mar 2025 16:34:35 +0200
-Date: Thu, 13 Mar 2025 16:34:35 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fsG5lh8f+nMrQvwjWaun0VkFzIonpw8GUkuoE+HpCUl9jjNtWGOHI/cBYnCfxXOUuaP/8KtljA9Vfa0eMOFNMwBoO9wQlnhMoz9EtcKhGK3H1g1TlprYSOmh9PXd/Mm2X+QiJC+I+4sI0cEqjG/hfAJInQxFYND98dCVemsfZdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iNE3B9Tz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D42C4CEEA;
+	Thu, 13 Mar 2025 14:39:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741876772;
+	bh=MUgokbLQXVwrjubKZoMCX9GPPfkVn6vt/U2RaFfyvUk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iNE3B9TzqqCriHM+C3XTJXWg6i9B88Vj9eDoRgdP8Z9eGiIvrIlEjdpwIM+9GmmyT
+	 hHy7t7bLQ5z2wAUqED7XqJs9MDVej3Z+5rtO0PUhVM74l80gq+OwI5PzmRbVjDlXaV
+	 WEM07GqqmLYaWVgnvlGX0kxOjhPd70hTIwTfogmUCAIQ6ndbHKKEIj2k1hxHTykPPw
+	 BZ9HGXLc1FpgGdZqGDUnRGwNOnBpeYFkiG1qaLPmDPO3s+BZuA6W8k4GOesKKPy/Cf
+	 lEW8lT9hLRLCbd+ksTXbToEQtP7x5+CJ9NdfP+nzo+tfFe3ID5G6gQWESQ8q8l+Uc+
+	 ldVt0XeQqBPeA==
+Date: Thu, 13 Mar 2025 14:39:27 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>
 Subject: Re: [PATCH v1 1/1] spi: Use inclusive language
-Message-ID: <Z9Ls-zhryd7mJv-b@smile.fi.intel.com>
+Message-ID: <dc17b87b-29c1-4b66-9353-c934a68b929a@sirena.org.uk>
 References: <20250313111442.322850-1-andriy.shevchenko@linux.intel.com>
  <1c49edb2-2ffc-419e-be5e-7e15669a7839@sirena.org.uk>
  <Z9LlTflb1HQMyEv2@smile.fi.intel.com>
  <e329812d-90a5-456e-9a00-abb5c2c8d25d@sirena.org.uk>
  <Z9LqyWr4GH4RX6Nj@smile.fi.intel.com>
+ <Z9Ls-zhryd7mJv-b@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FBNcT1LVjMOpystl"
+Content-Disposition: inline
+In-Reply-To: <Z9Ls-zhryd7mJv-b@smile.fi.intel.com>
+X-Cookie: A beer delayed is a beer denied.
+
+
+--FBNcT1LVjMOpystl
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z9LqyWr4GH4RX6Nj@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Mar 13, 2025 at 04:25:13PM +0200, Andy Shevchenko wrote:
-> On Thu, Mar 13, 2025 at 02:12:29PM +0000, Mark Brown wrote:
-> > On Thu, Mar 13, 2025 at 04:01:49PM +0200, Andy Shevchenko wrote:
-> > > On Thu, Mar 13, 2025 at 12:47:32PM +0000, Mark Brown wrote:
-> > 
-> > > > This doesn't apply against current code, please check and resend.
-> > 
-> > > Hmm... It's based on the spi/for-next. Should I use another branch?
-> > 
-> > I did try to apply it against that in case there were fixes that needed
-> > merging up, it didn't apply.  Are you sure you're using an up to date
-> > copy?  I have ebd50ac3cd97ecae231f92b2d64b68d3c66b3474.
-> 
-> 87a228960033 spi: Use inclusive language
-> 0d9a21198453 defconfig: enable SERIAL_MULTI_INSTANTIATE
-> 90485ebfb4b3 defconfig: enable SPI_TOPCLIFF_PCH
-> 6d91e1fce386 defconfig: enable EEPROM_AT24 and EEPROM_AT25
-> 331ffc354c53 defconfig: enable GPIO_PCH
-> d519315d6bed Merge remote-tracking branch 'spi/for-next' into HEAD
-> ebd50ac3cd97 (spi/for-next) Merge remote-tracking branch 'spi/for-6.15' into spi-next
-> 
-> Yes, the base where it was merged to is eds-acpi branch of my public GH [1],
-> which has no SPI stuff in there.
+On Thu, Mar 13, 2025 at 04:34:35PM +0200, Andy Shevchenko wrote:
+> On Thu, Mar 13, 2025 at 04:25:13PM +0200, Andy Shevchenko wrote:
 
-> [1]: https://github.com/andy-shev/linux/commits/eds-acpi/
+> > Yes, the base where it was merged to is eds-acpi branch of my public GH [1],
+> > which has no SPI stuff in there.
 
-$ git checkout -b test-spi-mrg spi/for-next
-$ git cherry-pick -1 87a228960033
-[test-spi-mrg 8a11d1063109] spi: Use inclusive language
-Date: Fri Dec 8 19:02:54 2023 +0200
-2 files changed, 64 insertions(+), 66 deletions(-)
+> $ git checkout -b test-spi-mrg spi/for-next
+> $ git cherry-pick -1 87a228960033
+> [test-spi-mrg 8a11d1063109] spi: Use inclusive language
+> Date: Fri Dec 8 19:02:54 2023 +0200
+> 2 files changed, 64 insertions(+), 66 deletions(-)
 
-In any case there is a v2, please try that one.
+> In any case there is a v2, please try that one.
 
--- 
-With Best Regards,
-Andy Shevchenko
+That one does apply.
 
+--FBNcT1LVjMOpystl
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfS7h4ACgkQJNaLcl1U
+h9DQZAf/eERa8ly5YiZRIBreTJqXGAWex0ryWJYXkdSj9ol4ISYlBg/6U/nDq6/x
+UZys6FWmMoeCEtClsQTxw0FLLBXcE2YDUhQ7H99VXUWzmZAHIxxMWW09jlL6YOKr
+R4NSqOb4xvjPomzVmk+LRdEK+fhY+pzSMs473CQnihWY6eV0c72nbnmm7UcexAwk
+PM3PFW9sEdiqY48I2gWVTccUAAbqG2gWBEHH4RX1+2XlE6d9SqsbN9D+UTfMhgcD
+6IJ/mXvJY144tYPYzx763/8p2vS7V3Pb2xCQel6UwZrJTmWYIi9luxiwmf4Gycro
+aBsEbSfyt4F/gv9etaBKDsbm/d2Jsw==
+=cf78
+-----END PGP SIGNATURE-----
+
+--FBNcT1LVjMOpystl--
 
