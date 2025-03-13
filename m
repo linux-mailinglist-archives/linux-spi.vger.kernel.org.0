@@ -1,120 +1,112 @@
-Return-Path: <linux-spi+bounces-7140-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7141-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B094A603AA
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 22:49:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35EF3A60448
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 23:28:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 625F87A7C56
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 21:48:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F104019C284C
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 22:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251351F560E;
-	Thu, 13 Mar 2025 21:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D3B1F868C;
+	Thu, 13 Mar 2025 22:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqG97IDz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e64LBVlY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A3C1EA7C9;
-	Thu, 13 Mar 2025 21:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17791F8672
+	for <linux-spi@vger.kernel.org>; Thu, 13 Mar 2025 22:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741902592; cv=none; b=nbQXVeSwdooa9elgNrCK3SD9WO2pnJpnCG/O7x6IjMNGa36nqLIQnY07HAPih8Q44JRMs8XeI0zlC+h3VRTKqtSU/rT8gIPrtO0MPyqYhNn2pnSyxtCXHZEKpJ6fw+kScLTjlL5PkL+OLg2fxLVgXOgGzt01BiYV/gNx4oAlQDU=
+	t=1741904880; cv=none; b=gUUd3WsdoXGKoizIOrwquWECeL6EeG5RO31FwKkzyumFnhq4zWg4QlJpWWaVNg3DSDv4ulkKGKVYm7CW6pxQKH4gkRMtyO56IAnUTurY1loYPRMoZEbJoLCablWQP1LLbHcOGpWFu4YVjgKD/Rc3u4vUvIvAmq3N+gze1xeHOF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741902592; c=relaxed/simple;
-	bh=s6ZZPBgSNm+7Tbxr4xxDMwt/ylG47kRI0MABXLDAZRk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nBOca9xIZKFD/Ebh0PlHeEPj22NgmjJBkqGsuJWbugc5jT7MOV34utOW9Nj/9WbO1yzbyuL/Qw9P9MGQbuVqSmDkTAelqryRGFqfUuFvvNF6B0kq9p9OOEKb/+VJ0nGYtUw+mHl4nGabxMFtoeR5kK9yNZyUfh7OmWOalcG8MSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqG97IDz; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso13511295e9.3;
-        Thu, 13 Mar 2025 14:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741902588; x=1742507388; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a59t5p4Ssda8jFWgClkE2Iz19PPyQUZbqugYJx8T19A=;
-        b=BqG97IDzCwo+1m1rz24KgDUItqKcpU+bnIS09mLBd5u4jJEVaasU7P/aGkE9Bd3dFA
-         ukEIJkIBZHC/kOE/hDwHtJ5n6Lgv0agMvoACi3oeSsXc050SubYlUWdjX1tXU5liZBhW
-         7sNKaR5C+U221OxwnIelPp4H0h8yXFSnMePYAtdckiEi9b9UUqCRslSaL3WFpGeIhfrE
-         2ymDsCpl3q0BcZBWNm/g/GjQpmT91a6jqPVWGVZRk7B++VTzANmXZSylKDt/2hW+5XgY
-         3QNBWzjYhI7pLweaUzdOA9dAh6PyjkVM7puzxBkDmCrEfZMtgIxvCAbINBevujI8f5B5
-         fLkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741902588; x=1742507388;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a59t5p4Ssda8jFWgClkE2Iz19PPyQUZbqugYJx8T19A=;
-        b=w5ZklRTh5yspYotNANPBVsl+Zxtlj450+LU3Qjl9AwxjNUVq0zk6iv3M+x9PInYt64
-         7S5jO3LQWcjvcCnURQdYLY+N0y6Y33wEyZXPa88SL5D2vKpBgWGGJqhqVT5OOxooRj+4
-         +1rO2KcqBAxbanlPpMdkUGX9cQ4HE9OGxummP9V+oUI0XxQwCFKLsZtgz7OPOHkqNpVr
-         ZhkgCkFRNyOCFoG0Ye/gMbZvq93ZgflAIwenmPudcoM+zYAjEVWmQmJ+Rsziu9fXHCnc
-         mjB4AZITDu0elHmy0H2BJ2MKD2oUx9HKT6MSX6BRuLFmN+ztc2xcjsURk1jf3ULLBiMz
-         +B1w==
-X-Forwarded-Encrypted: i=1; AJvYcCXd9jsPsgBgJrbZHVbuuxLIYgcqYxrPTEIWi9Nd2r+G12+KiWpoNsDqgplxjDMI3+GX9ie7bON/XLt2SG4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpIGXq1d9FsC5J66wFikQ0uK5r83CfQis0q3TBljjqOxfZH0ES
-	Qntv+3Z2xoPjVw7kHRvV6/acGLN0Q+tS410DrAGeXizB+4yvzJyh
-X-Gm-Gg: ASbGncskodnPygRP5VFrvNDFdKB7YfGNDM3JE6X8IFTPIEe/ZCX3K/AniuNFlFUDtiB
-	6r6Sdq5qh95ZHr+Jj1ljszQ6vQGeHJ9dAI1/EtjzK4IhXf/5BmpdJoRQpBViS8b1dU+0ODuZtLf
-	WUz2+3Agi86hqXtNCzt3V3Fdysjm+dNUIDvkUzGX49wjEyXtb0trl/xkmdcCz6Z3LA5364KO3vH
-	94Ilf2oCp8xy3cM9+61JVeaJ7+rNSbivI0TOwV+HuMmcr3GKY4hsp+StynwTK6h5bL9TXtyPePo
-	pAIHndiDlpIiszmhJdrFQptBjoIWWmARzl4x/6lQ+E0R9LxsR43Ik6FrDw==
-X-Google-Smtp-Source: AGHT+IHZvu3jRI8WQeMxTbEoEDws1DiHY2ifl3Vv+mDsE6UBOTt4rTvgF8i8qZsVjtG+V6o8Trwohw==
-X-Received: by 2002:a05:600c:4e94:b0:43c:fcbc:9680 with SMTP id 5b1f17b1804b1-43d1ecff346mr1837285e9.25.1741902588406;
-        Thu, 13 Mar 2025 14:49:48 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:c7c:6696:8300:f7f:aa2d:c9ce:6bac])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a8d0c4csm64669865e9.38.2025.03.13.14.49.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Mar 2025 14:49:48 -0700 (PDT)
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: broonie@kernel.org,
-	looong.bin@gmail.com
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: sophgo: fix incorrect type for ret in sg2044_spifmc_write()
-Date: Thu, 13 Mar 2025 21:45:45 +0000
-Message-Id: <20250313214545.7444-1-qasdev00@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1741904880; c=relaxed/simple;
+	bh=6RwwkHmdGoLVN/PfCoi7y3N9L+cMBx5Qov8w7P5m2U0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bMBP/r5AIiQSHocTb7zaTQyOoF/yQ8OBHphNCR/JMN2xPiEEwZGr9BMGYnf2hFJeRskZzyWztEnu4eKOGuqZ7EmwxdlETSbLZXE35fMpK/o75d/e2xha5TwLDcNO9iF0Ulkln2s1yDaTaOakm4BewdSw05ZOImTKy2nsUl72u/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e64LBVlY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A549C4CEDD;
+	Thu, 13 Mar 2025 22:27:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741904879;
+	bh=6RwwkHmdGoLVN/PfCoi7y3N9L+cMBx5Qov8w7P5m2U0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e64LBVlYys+pxwCUzmNcxQ/gLQaNVd2Q84LovYPXYV7s1IEgc2xnXrBWu3S4GBW/C
+	 73gNYBD7KMTp+9oj4lXIzKCusWKVToZJKUV6HaKXg64VErUho2H0rEno3lD6+4GwRS
+	 8EoK2DMsBTk3gTpbxAWSVI3zm4c+wbc394uL7PEi1dhwNVahXRO5QLh/8dOdI3G0jF
+	 SKy4xkiS0CRClw7quxEloh+USkMSpAiw1DTsLhaZlTvEJ0y0pfUlBG63hwqYHGlLEU
+	 iH0H60N3dhFu//wPrctBveUet6nccUua9BTPl4Z4nY1TyQX5RUDiJIUNzfUr+0PSCU
+	 DGW6/p+hj+jDA==
+Date: Thu, 13 Mar 2025 22:27:54 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>, linux-spi@vger.kernel.org,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] spi: spi-mem: Introduce a default ->exec_op() debug log
+Message-ID: <ce648080-2964-40d2-a2a7-cafcb6592cd1@sirena.org.uk>
+References: <20250305201140.2513431-1-miquel.raynal@bootlin.com>
+ <a073191e-afab-484e-9659-66b957301db1@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ECiJ96NhrvPZjXLD"
+Content-Disposition: inline
+In-Reply-To: <a073191e-afab-484e-9659-66b957301db1@linaro.org>
+X-Cookie: A beer delayed is a beer denied.
 
-The sg2044_spifmc_write() function uses 'ret' of unsigned type 
-size_t to capture return values from sg2044_spifmc_wait_xfer_size() 
-and sg2044_spifmc_wait_int(). Since these functions may return 
-negative error codes, using an unsigned type prevents proper 
-error detection, as size_t cannot represent negative values. 
 
-Change 'ret' to type int so that negative values are handled correctly.
+--ECiJ96NhrvPZjXLD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: de16c322eefb ("spi: sophgo: add SG2044 SPI NOR controller driver")
-Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
----
- drivers/spi/spi-sg2044-nor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Mar 06, 2025 at 09:05:39AM +0000, Tudor Ambarus wrote:
+> On 3/5/25 8:11 PM, Miquel Raynal wrote:
 
-diff --git a/drivers/spi/spi-sg2044-nor.c b/drivers/spi/spi-sg2044-nor.c
-index 454153a63b42..baa4cf677663 100644
---- a/drivers/spi/spi-sg2044-nor.c
-+++ b/drivers/spi/spi-sg2044-nor.c
-@@ -216,7 +216,7 @@ static ssize_t sg2044_spifmc_write(struct sg2044_spifmc *spifmc,
- 	size_t xfer_size;
- 	const u8 *dout = op->data.buf.out;
- 	int i, offset;
--	size_t ret;
-+	int ret;
- 	u32 reg;
- 
- 	reg = sg2044_spifmc_init_reg(spifmc);
--- 
-2.39.5
+> > --- a/drivers/spi/spi-mem.c
+> > +++ b/drivers/spi/spi-mem.c
+> > @@ -377,6 +377,17 @@ int spi_mem_exec_op(struct spi_mem *mem, const str=
+uct spi_mem_op *op)
+> >  	/* Make sure the operation frequency is correct before going futher */
+> >  	spi_mem_adjust_op_freq(mem, (struct spi_mem_op *)op);
+> > =20
+> > +	dev_dbg(&mem->spi->dev, "[cmd: 0x%02x][%dB addr: %#8llx][%dB dummy][%=
+4dB data %s] %d%c-%d%c-%d%c-%d%c @ %uHz\n",
 
+> Isn't this too "chatty", especially on page program ops? I wouldn't be
+> surprised if the prints introduce timings that change controller's
+> behavior. How about using dev_vdbg?
+
+That, or covert to trace_printk() or even better a trace event - with a
+trace event you get really fine grained control and extremely low
+overhead.
+
+--ECiJ96NhrvPZjXLD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfTW+oACgkQJNaLcl1U
+h9DmFgf8CAQjBsT26zFqjATsL1yUuYG5KpE5rSCbPOz7lsut6U0aSlWOe7BxwpAY
+hRniNYuzot2vM+glrgJPxiKHOL2dXb+af8L5cBGDYfTLWmEUPCeGJ/cCt9I4t4vD
+/Nd5lYDqxcVf+HVyi1vtnJxK5OXGJHae+mp5jXsdSE83YJ8MiFd1yKmu+G7M0yUM
+VL6PpEfZHBvGJC2EJ+XyKALKMa3cRSWT/pEni0V/lJQrcAglocTN4hgPGSUXUUm8
+YpQu1DnbHZrUxidvBh/wV5jleCVH19x94dWtiYaz/1WoWqBqvmrfzWfqhIgSeS5q
+KJ2E5EuGtKIL1GpuYHWIwSWw3KKhdw==
+=hxID
+-----END PGP SIGNATURE-----
+
+--ECiJ96NhrvPZjXLD--
 
