@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-7106-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7107-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20DCCA5ED05
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 08:30:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08B15A5ED11
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 08:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EED61189A4C5
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 07:30:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E1601787D1
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 07:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691E422E40E;
-	Thu, 13 Mar 2025 07:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D98AC25F98D;
+	Thu, 13 Mar 2025 07:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbuiWT2i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWEMnlQE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B82422DFBB;
-	Thu, 13 Mar 2025 07:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A987B25F96F;
+	Thu, 13 Mar 2025 07:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741851021; cv=none; b=rhWn9LJpbRWN1HJcCKs7nZhLRHyCEDWt2Rq7YRqCIAX/0jYpvfeFViOqUfU2Qbs2sXI+wa6nIk40sqMGxmIKUvNHAJsLAz1SvUy6HFGM+qN5ugKP4ErPDIUxF7UvMk2Z1hB88ZbeTrXDd+QJyRUd8lyXJjWZdOyAYEL+VoV3qdo=
+	t=1741851250; cv=none; b=f+F/d0lg9ML3zHNmtpoEb9yyMotzkFGUbjxdIt/Sg0Bgb8N82rUzM8w1fdb8Ql4lkVPpePU2GgEj4IpPnAP+REfukHActsyHfwrO7gTjBP/oBNkNbcofXhYqIreDEaUCy7DQG3DPq97uD/16ad9YiqSqyC2ucFfxDpCcE1gHP0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741851021; c=relaxed/simple;
-	bh=QbnEtM3KvInKXQ/kzErd6KRfneGlpRJhzPkXfRN9iBs=;
+	s=arc-20240116; t=1741851250; c=relaxed/simple;
+	bh=n7oj+3BMVatFUBrwyBY2k5vyym+icTWhFSlMuR1riQQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T+XPzmC9ZIA51DkHSgwWhPF6ZT44NXaPDac3snPZ0VPy3qFalg5DgA1aU7XTEvSan3OSnbkjSZpFdrEO5dZyzKuYKD+yOH8rzMkA0DOD2Q9I3V8ikknVw895dAZ8jZSc5UjekiMCV3PKKsdMOaNcyEuYvL8KFolNfo8/fG6u8QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbuiWT2i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66EC4C4CEE9;
-	Thu, 13 Mar 2025 07:30:13 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=e45bMVbYmCMOPgciDeaeuBFVetetx4w53rdDeW29rRixSPMQUtV+Ore6mkCBnJoVtIgrPa9BJDvxBPQz5YipH1vJRjsBm8/7d9+4f5W+fOzetc0iZd/WXR6yid8yfP1DwZHLKhQRlQ09FOW7LxcPHTDd2d0LFqUFWxtafbUgYb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWEMnlQE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB9FC4CEF2;
+	Thu, 13 Mar 2025 07:34:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741851019;
-	bh=QbnEtM3KvInKXQ/kzErd6KRfneGlpRJhzPkXfRN9iBs=;
+	s=k20201202; t=1741851250;
+	bh=n7oj+3BMVatFUBrwyBY2k5vyym+icTWhFSlMuR1riQQ=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RbuiWT2id1vk9SO5vP9IVGY4KLvk+bWx0qdDElkGMxC2gYERw/QsfdRQ28KKLdtag
-	 0ke+edEIZ9T42U/pIyJgGb/i8XwKr/smO4zasvXrUdwPBF9OSPhQrwVXXOHSerNcea
-	 lo34vcCiPaMcFOyN/w/o+1c2tJi9vlm0vJcaTACpS+lZiAJizxE2CFIdF4lHGSXcZ7
-	 REiJcIfMEJiNQh6SUF1uYdZLrd+pm32tGgob0WnGPmYcwpH00QgCMB0hfxirAuTDqi
-	 dLNbtYs7u0SiK5Tk945gtzCHiFh7z4sWETHt4eoTv9rx4qnBbH0NjLlKyI5szysUvK
-	 b5L4UzVav22QQ==
-Message-ID: <49e87f3a-2f02-40d2-9307-22cfaaa8be7a@kernel.org>
-Date: Thu, 13 Mar 2025 08:30:10 +0100
+	b=SWEMnlQEFBJ8GwE92hn7JMZ2dVjqBKlPftKjdsyQ5qcJ/CEJKL/tM2IRMpZhqsUTP
+	 grm9zrIZ8uUvdNwcZTZj2x0qs2juS8xDrW+08tHPfFHWVYO6Hoq6tpor6R3ytf3cH6
+	 cGaOZ456RyvR3B66rM5267AYTY1T9yzuJzpBfL9gPcu/SaJcJkyYXcTXF0/MlnkIiB
+	 SJhVnfddaYr1bk7Xf+RfaW/AQrCmxayUuii7KXFH2Jfc4UjlKUbWDdIwgIfOgODEML
+	 SYeidepb6r/SZX1tQsD5EmCtUQiklQ/nhj0Jh9E/sCVK2ITQg/EBx/neYjTqKQo2RM
+	 +e5Ch+aHBc4wg==
+Message-ID: <ac119dba-6e73-496c-97e1-d59ac0fe4a27@kernel.org>
+Date: Thu, 13 Mar 2025 08:33:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,7 +66,8 @@ Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
  christophe.kerello@foss.st.com
 References: <20250219080059.367045-1-patrice.chotard@foss.st.com>
  <20250219080059.367045-5-patrice.chotard@foss.st.com>
- <6e1757ea-3f5e-4cc0-b142-aee52f016c8f@foss.st.com>
+ <eaf1ecca-4fde-4128-8590-6013c3a13a04@kernel.org>
+ <8b1b7df5-07f4-4f95-88e7-4e95ee909ffd@foss.st.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,26 +113,216 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <6e1757ea-3f5e-4cc0-b142-aee52f016c8f@foss.st.com>
+In-Reply-To: <8b1b7df5-07f4-4f95-88e7-4e95ee909ffd@foss.st.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/03/2025 14:52, Patrice CHOTARD wrote:
->> +module_platform_driver(stm32_omm_driver);
->> +
->> +MODULE_DESCRIPTION("STMicroelectronics Octo Memory Manager driver");
->> +MODULE_LICENSE("GPL");
+On 12/03/2025 15:23, Patrice CHOTARD wrote:
+>>> +static int stm32_omm_disable_child(struct device *dev)
+>>> +{
+>>> +	struct stm32_omm *omm = dev_get_drvdata(dev);
+>>> +	struct reset_control *reset;
+>>> +	int ret;
+>>> +	u8 i;
+>>> +
+>>> +	for (i = 0; i < omm->nb_child; i++) {
+>>> +		ret = clk_prepare_enable(omm->child[i].clk);
+>>> +		if (ret) {
+>>> +			dev_err(dev, "Can not enable clock\n");
+>>> +			return ret;
+>>> +		}
+>>> +
+>>> +		reset = of_reset_control_get_exclusive(omm->child[i].node, 0);
+>>> +		if (IS_ERR(reset)) {
+>>> +			dev_err(dev, "Can't get child reset\n");
+>>
+>> Why do you get reset of child? Parent is not suppposed to poke there.
+>> You might not have the reset there in the first place and it would not
+>> be an error.
 > 
+> By ressetting child (OSPI), we ensure they are disabled and in a known state.
+> See the comment below.
 > 
-> Hi all,
+>>
+>>
+>>> +			return PTR_ERR(reset);
+>>> +		};
+>>> +
+>>> +		/* reset OSPI to ensure CR_EN bit is set to 0 */
+>>> +		reset_control_assert(reset);
+>>> +		udelay(2);
+>>> +		reset_control_deassert(reset);
+>>
+>> No, the child should handle this, not parent.
 > 
-> Anybody alse has additionnal remarks on this driver ?
-BTW, you explained nothing about merging in the cover letter, mark
-already took the patch, but I see there is dependency. This cannot be
-merged and pinging will not change anything here.
+> Octo Memory Manager can only be configured if both child are disabled.
+> That's why here, parent handles this.
 
-In the future, ALWAYS document dependencies between patches and make it
-explicit for the maintainers.
+So if device by any chance started and is doing some useful work, then
+you cancel that work and reset it?
+
+And what if child does not have reset line? Your binding allows that, so
+how is it supposed to work then?
+
+This also leads me to questions about bindings - if you need to assert
+some reset, doesn't it mean that these resets are also coming through
+this device so they are part of this device node?
+
+
+> 
+>>
+>>> +
+>>> +		reset_control_put(reset);
+>>> +		clk_disable_unprepare(omm->child[i].clk);
+>>> +	}
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int stm32_omm_probe(struct platform_device *pdev)
+>>> +{
+>>> +	struct platform_device *vdev;
+>>> +	struct device *dev = &pdev->dev;
+>>> +	struct stm32_omm *omm;
+>>> +	struct clk *clk;
+>>> +	int ret;
+>>> +	u8 child_access_granted = 0;
+>>
+>> Keep inits/assignments together
+> 
+> ok
+> 
+>>
+>>> +	u8 i, j;
+>>> +	bool child_access[OMM_CHILD_NB];
+>>> +
+>>> +	omm = devm_kzalloc(dev, sizeof(*omm), GFP_KERNEL);
+>>> +	if (!omm)
+>>> +		return -ENOMEM;
+>>> +
+>>> +	omm->io_base = devm_platform_ioremap_resource_byname(pdev, "regs");
+>>> +	if (IS_ERR(omm->io_base))
+>>> +		return PTR_ERR(omm->io_base);
+>>> +
+>>> +	omm->mm_res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "memory_map");
+>>> +	if (IS_ERR(omm->mm_res))
+>>> +		return PTR_ERR(omm->mm_res);
+>>> +
+>>> +	/* check child's access */
+>>> +	for_each_child_of_node_scoped(dev->of_node, child) {
+>>> +		if (omm->nb_child >= OMM_CHILD_NB) {
+>>> +			dev_err(dev, "Bad DT, found too much children\n");
+>>> +			ret = -E2BIG;
+>>> +			goto err_clk_release;
+>>> +		}
+>>> +
+>>> +		if (!of_device_is_compatible(child, "st,stm32mp25-ospi")) {
+>>> +			ret = -EINVAL;
+>>> +			goto err_clk_release;
+>>> +		}
+>>> +
+>>> +		ret = stm32_omm_check_access(dev, child);
+>>> +		if (ret < 0 && ret != -EACCES)
+>>> +			goto err_clk_release;
+>>> +
+>>> +		child_access[omm->nb_child] = false;
+>>> +		if (!ret) {
+>>> +			child_access_granted++;
+>>> +			child_access[omm->nb_child] = true;
+>>> +		}
+>>> +
+>>> +		omm->child[omm->nb_child].node = child;
+>>> +
+>>> +		clk = of_clk_get(child, 0);
+>>
+>> Why are you taking children clock? And why with this API, not clk_get?
+> 
+> I need children's clock to reset them.
+
+
+The device driver should reset its device. It is not a discoverable bus,
+that would explain power sequencing from the parent.
+
+> Why of_clk_get() usage is a problem here ? i can't get your point ?
+
+Because it is not the API which device drivers should use. You should
+use clk_get or devm_clk_get.
+
+
+> 
+>> This looks like mixing clock provider in the clock consumer.
+>>
+>>> +		if (IS_ERR(clk)) {
+>>> +			dev_err(dev, "Can't get child clock\n");
+>>
+>> Syntax is always return dev_err_probe (or ret = dev_err_probe).
+> 
+> ok
+> 
+>>
+>>> +			ret = PTR_ERR(clk);
+>>> +			goto err_clk_release;
+>>> +		};
+>>> +
+>>> +		omm->child[omm->nb_child].clk = clk;
+>>> +		omm->nb_child++;
+>>> +	}
+>>> +
+>>> +	if (omm->nb_child != OMM_CHILD_NB) {
+>>> +		ret = -EINVAL;
+>>> +		goto err_clk_release;
+>>> +	}
+>>> +
+>>> +	platform_set_drvdata(pdev, omm);
+>>> +
+>>> +	pm_runtime_enable(dev);
+>>> +
+>>> +	/* check if OMM's resource access is granted */
+>>> +	ret = stm32_omm_check_access(dev, dev->of_node);
+>>> +	if (ret < 0 && ret != -EACCES)
+>>> +		goto err_clk_release;
+>>> +
+>>> +	if (!ret && child_access_granted == OMM_CHILD_NB) {
+>>> +		/* Ensure both OSPI instance are disabled before configuring OMM */
+>>> +		ret = stm32_omm_disable_child(dev);
+>>> +		if (ret)
+>>> +			goto err_clk_release;
+>>> +
+>>> +		ret = stm32_omm_configure(dev);
+>>> +		if (ret)
+>>> +			goto err_clk_release;
+>>> +	} else {
+>>> +		dev_dbg(dev, "Octo Memory Manager resource's access not granted\n");
+>>> +		/*
+>>> +		 * AMCR can't be set, so check if current value is coherent
+>>> +		 * with memory-map areas defined in DT
+>>> +		 */
+>>> +		ret = stm32_omm_set_amcr(dev, false);
+>>> +		if (ret)
+>>> +			goto err_clk_release;
+>>> +	}
+>>> +
+>>> +	/* for each child, if resource access is granted and status "okay", probe it */
+>>> +	for (i = 0; i < omm->nb_child; i++) {
+>>> +		if (!child_access[i] || !of_device_is_available(omm->child[i].node))
+>>
+>> If you have a device available, why do you create one more platform device?
+>>
+>>> +			continue;
+>>> +
+>>> +		vdev = of_platform_device_create(omm->child[i].node, NULL, NULL);
+>>
+>> Why you cannot just populate the children?
+> 
+> I can't use of_platform_populate(), by default it will populate all OMM's child.
+> Whereas here, we want to probe only the OMM's child which match our criteria.  
+
+
+Why wouldn't you populate everyone? The task of bus driver is not to
+filter out DT. If you got such DT - with all device nodes - you are
+expected to populate all of them. Otherwise, if you do not want all of
+them, it is expected that firmware or bootloader will give you DT
+without these nodes.
 
 Best regards,
 Krzysztof
