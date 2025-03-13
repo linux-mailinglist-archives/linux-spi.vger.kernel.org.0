@@ -1,96 +1,99 @@
-Return-Path: <linux-spi+bounces-7115-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7116-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF635A5F50D
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 13:59:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0938DA5F72C
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 15:02:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 162713B9EDF
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 12:59:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC9D519C239B
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Mar 2025 14:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8502676E0;
-	Thu, 13 Mar 2025 12:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B6770813;
+	Thu, 13 Mar 2025 14:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m49Xp00X"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gHyC3yRy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232F266590;
-	Thu, 13 Mar 2025 12:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF347346D;
+	Thu, 13 Mar 2025 14:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741870765; cv=none; b=Wc0L6wym5t2NB6a1x9rZ71boBRlZ9icMarTgJNQlY3Jjdx4DcFGa69KfJdJ4tC1/KAQx8TfCwnrf5Ylv3wxT3rvVFb8Z0C0AeXsMLaxy6fmczYN7/b7nA56helObQ3xSxvn8bcrQuYCfA3r+zoP4g6m+kvUVgNzSBPsovrO5DCk=
+	t=1741874515; cv=none; b=O0zyULSPQD9zNNNmo/+VBCBaz/+UYB1zWBLQQig73dBuqpU+jb8XZ/7d706vTRLJfDcSCBr5JCcftuB6s2PRo2LjYslpYTguFiQhCCaqJiduGbc5I4qTrpOktEuRtKRMeVEoID9VOo9O4k++jW9lU9jWl5w6mbgU+BpYAEVJChA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741870765; c=relaxed/simple;
-	bh=o1JokyjlqWN8gJ/eoZQUlSigREd9jnHfkinY7XpmE+M=;
+	s=arc-20240116; t=1741874515; c=relaxed/simple;
+	bh=UQJd59E6gmYMorGBrKuxpH2LfzIAgPkg97I9q5PiEec=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DF7je9gIXzFRG74cxLtNsVSA/LkmsPQV8VjdzhQJ2OXg/Xmf86EEsXfGI/NWac4KyZLcBvJD5XVyeGJPD0XMJtPdtEtyvGvEuNs5Nd19W1C2abcjpJyJKEHA3hCUb8kYpGeYTFak0WxP9fnyMIdUntCBzW1E9/fkkGwuCGYZORU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m49Xp00X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71668C4CEDD;
-	Thu, 13 Mar 2025 12:59:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741870765;
-	bh=o1JokyjlqWN8gJ/eoZQUlSigREd9jnHfkinY7XpmE+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m49Xp00XfLAITcQER8VcGT7UtdqnNpSa1iL3rBZcQfRBl4OU9q69SQCwjLgBUE2Q4
-	 gXm5/MBUy1x5igul64eQjyxQ4oiK36VPOECUmdurnIepNmPPbqKtKJCdsTuxkNAJXf
-	 5mhYVJdv+N0Xuk/XywDFy0wYSPyIIQEM7p2qZdOfHIs6bIJ54NrWNpjDqVloX9PZ9V
-	 ZNVvxaUvFUsenAoPFLkyqWPNZUY/mzxXOA+6cqVO/uZcyYYR3mo6DLSvpyGY6Vl/j+
-	 +YMT4tfKsVdj2Q5BD8Xlw9QcuxM02TjC5j1ovy8Hw7N2EL0h398eLZp5lZhOoVJWZU
-	 B8qqSZkPyLB8g==
-Date: Thu, 13 Mar 2025 12:59:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: manivannan.sadhasivam@linaro.org, miquel.raynal@bootlin.com,
-	richard@nod.at, vigneshr@ti.com, bbrezillon@kernel.org,
-	linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] spi: spi-qpic-snand: set nandc_offset for ipq9574
-Message-ID: <ac5673a7-d573-42ca-8535-254e2c1083aa@sirena.org.uk>
-References: <20250310120906.1577292-1-quic_mdalam@quicinc.com>
- <20250310120906.1577292-5-quic_mdalam@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jn0ZU63bpp+WNnQk46A6bjiKQjGnkSEQK16pp/8nplwhliok645NUPOs551NrvsigeJwg92ef1Ue2d95RDKzdz3BDHjAdU6eAlfobVIdxhnaI3VU9m98scIcHSMmWt/BA3AZjJMOKLO/koYW6MYNfwAWo59oxr5RyXsHt/PZB+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gHyC3yRy; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741874515; x=1773410515;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UQJd59E6gmYMorGBrKuxpH2LfzIAgPkg97I9q5PiEec=;
+  b=gHyC3yRyoRHrCoqEmSL1T5OcdzjbFth0JvRuCKkqRirynFXZ4FwaJlq3
+   GvLM6XWfrCB2OVQLT0dCdM3CCvFpgmh2wohEgRD75/anBQ40oYSLKKCda
+   yu4+pzXK2LMT+z7i1HdTzC5N/sjRmH/gfoKAGwF27745IkM/H29f/vzNO
+   rd63Nu/bmtFI2xMR0x+/JsqYDQG74IqVnMay+HeHHojJMqh1kwr4MjC4C
+   JYPClXFzOiPOioABgyRXSUW0Y90Ld3zMip/znQqwqWEenPRJig8semmL6
+   71tLrbKg6uEkfRKUh0CXS7rZvz3I89TdHt/SO7PG+/8qIcXs/cExF8bc5
+   A==;
+X-CSE-ConnectionGUID: WtypmPDhQXGIs6h+T0TXmA==
+X-CSE-MsgGUID: e8YgJr+HTQCMjJ4ZVEbxdQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11372"; a="43093363"
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="43093363"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:01:54 -0700
+X-CSE-ConnectionGUID: Wpao57hOS6mRoQigZrL1vw==
+X-CSE-MsgGUID: UiAD3bjaS/GJXieHF//i5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,244,1736841600"; 
+   d="scan'208";a="120750166"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2025 07:01:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tsj8A-00000002C55-00qX;
+	Thu, 13 Mar 2025 16:01:50 +0200
+Date: Thu, 13 Mar 2025 16:01:49 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org, Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v1 1/1] spi: Use inclusive language
+Message-ID: <Z9LlTflb1HQMyEv2@smile.fi.intel.com>
+References: <20250313111442.322850-1-andriy.shevchenko@linux.intel.com>
+ <1c49edb2-2ffc-419e-be5e-7e15669a7839@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="DLVPIcV9y3hPcH44"
-Content-Disposition: inline
-In-Reply-To: <20250310120906.1577292-5-quic_mdalam@quicinc.com>
-X-Cookie: A beer delayed is a beer denied.
-
-
---DLVPIcV9y3hPcH44
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1c49edb2-2ffc-419e-be5e-7e15669a7839@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Mar 10, 2025 at 05:39:06PM +0530, Md Sadre Alam wrote:
-> The BAM block expects NAND register addresses to be computed based on
-> the NAND register offset from QPIC base. This value is 0x30000 for
-> ipq9574. Update the 'nandc_offset' value in the qcom_nandc_props
-> appropriately.
+On Thu, Mar 13, 2025 at 12:47:32PM +0000, Mark Brown wrote:
+> On Thu, Mar 13, 2025 at 01:14:42PM +0200, Andy Shevchenko wrote:
+> > Replace "master" by "[host] controller" in the SPI core code and comments.
+> > All the similar to the "slave" by "target [device]" changes.
+> 
+> This doesn't apply against current code, please check and resend.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Hmm... It's based on the spi/for-next. Should I use another branch?
 
---DLVPIcV9y3hPcH44
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+With Best Regards,
+Andy Shevchenko
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfS1qcACgkQJNaLcl1U
-h9AZQAf7B6HWMHCl2lowKK3SbhxOes8At7H7cGoilgVUlhRLpGHnkHSjYEJ1FlTG
-QDGuOYVraIvxayTbRQNnxBDDAaGWWD4JYR/ukvFPL3CbN5+pyAuOKM1R2TsLwafC
-TidjQjxxD1Azv9+NwPaJYn9wTcwis7D/ENNLUqW7H9edkdxCmKIEYPQ0jtOIq4hI
-UnEtYy1FJN6ADYZeDJXLQZKyZY7steggwFKzz5HBekgS7Z2ILo3sFAfAVqb3C6p7
-qdf4X1H1fs+QuSAPJa1k632ZKMiPHy95hGkJssPyz/ft2zBuUbjQJbaDvt/GQAhk
-6Ha6C1g0bN2cV/ts0mfZaO2q2ld3BA==
-=pp4l
------END PGP SIGNATURE-----
-
---DLVPIcV9y3hPcH44--
 
