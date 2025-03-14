@@ -1,84 +1,83 @@
-Return-Path: <linux-spi+bounces-7144-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7145-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C59A60E4B
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 11:10:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4EECA60E4D
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 11:10:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBB9B1B609D9
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 10:10:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 259B617724A
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 10:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1081F3D5D;
-	Fri, 14 Mar 2025 10:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E7C1F236B;
+	Fri, 14 Mar 2025 10:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IYSZJ0Gc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yeQh5Txs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B67225D6
-	for <linux-spi@vger.kernel.org>; Fri, 14 Mar 2025 10:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B015B1F30CC
+	for <linux-spi@vger.kernel.org>; Fri, 14 Mar 2025 10:10:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741947022; cv=none; b=PybQN2JM+HrAbjGA0bSFx9Hmjkxwat2FUcwBenRL64AS2UQjL+qRoJEakaq3PqRpmyV2H6LHPts74WZlqUDylYfFylDZPkaWG5repmeiy1fcKV0xklUh5j2PYc5gy6VGJ+ItggjbRvwKONugUrb1Jj6HiJ0qC6bNE/Z6nD2+O2Y=
+	t=1741947033; cv=none; b=Xpb1hRP6UTa1/KySaaDcgZAfLyDEMZszy+E0qZ/3alfFGF5QNRm66Hz5tn0Sl4ZuQLT5rnmdSz/uhOHu2iw/jCD3MJPmlxmB/aMcubFJ/1reT2IC0QrnS94WuERvZUnbml9p/RAmKh2Tj4o4K4U5Ec6Yw2LDpgBV6oHdh4Ev20A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741947022; c=relaxed/simple;
-	bh=npAfM/D95DLWrhMgnpbK79dbd/8CwbndFi8Um7n00Z8=;
+	s=arc-20240116; t=1741947033; c=relaxed/simple;
+	bh=BcXDWjNDH9NxBSFwCKcCR4CNXdHbwnkXYntrn0DgUxs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=tVOEj7lE7FF1cU/A7lq9MVr92lIV6x38s4OP6oA/ZC34qYIOxBN/6YD6JJPEI9JIZxVk//3RwTx1Vk1bY0INh8pJRetzg+I97iAa58kyJ1nEGBwuv2BC4MxGLU4aisB3G9OpLNRm/6K4puQ4njUoRCMTQPIH9ZaY9CRtkmDf9sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IYSZJ0Gc; arc=none smtp.client-ip=209.85.221.42
+	 Content-Disposition:In-Reply-To; b=u0H4xDCVvT+KC2trmHcdfB9iWnG31uqRMWEmywu247JiOceDrfv5bKObGbYNltn5RlEpsHTXxBhhkiU6U97A1fQnPs9L8O7xlguD6FuQpeNLLaUGjNgiX8dGkFpq6MmRu4yOZG0Ds8FRInj1YLZ71DXqssHkoHF0sibaiJh1W1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yeQh5Txs; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3912baafc58so1673029f8f.1
-        for <linux-spi@vger.kernel.org>; Fri, 14 Mar 2025 03:10:20 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43d0c18e84eso12635155e9.3
+        for <linux-spi@vger.kernel.org>; Fri, 14 Mar 2025 03:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741947019; x=1742551819; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741947030; x=1742551830; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
          :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHBf1AZS6BuzpUz3+oCl4k1y+Tt83Lx+NAGAApql9uw=;
-        b=IYSZJ0GcC4Tt/T1mE/KQCrBINIPgH6b0TK15f9SvL+ESzUoL1DBQUBKtE3DawSce3R
-         IRscePDvLL90NWvTbDJiMcCrzHNbsoiMN69NkIcfrVNNW0av2UdoxyxMrlJ+yueI3Aws
-         L4n0PivRAzaMA/bI1ozolp8JFstkefxob8li+i7o4fjKcGyJ+eAQmCay6lq5joofcbKh
-         Ay2xGuXglzd6ijL4wdb3fQa6O6dRJpDa3uVAbGWYFGl8l1y1kVtijREm5GJMX64cNqIg
-         bXkqJfYvCrM7IcuWXd/n7QdwZd2ly6YJayLFnaZ84h4AJwXm/59NuyjWAF0VWzjrxOtc
-         LqRQ==
+        bh=/yH/A8g/K36DzReQ5QPIAfNlm2z6G0ua2f9/UOEVNfA=;
+        b=yeQh5TxsE/Zn0ovKKnABzxT5d1YlflNH1uxPrW5qwwFMmW4lZUo3rUxfBqKgJYv4t+
+         kFajJBom1SGitl2Bd9/FajND4CGfl6da9G9zctTlWtt7Os221Cck0uDNmecv2/FQBpYH
+         5qwYpmcUX0NRHkOcuvTazjjjnGO/d4gq7dUwUOMoAa4f+Ka7q8f/DpB4aGHHOu+DH0nb
+         Q9EV0lq2Kt9rtaONO+3yLY3RVjrlfok1J6eT0volhFE8cJETATN/KymTCEje9HZuPqud
+         9UpxMGL8ONEkyV8p7cp3Lp5/hAiExbgcpsbOrZYl9cXznnC1vSlaRYxMyZLoXI83t7YY
+         x0jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741947019; x=1742551819;
+        d=1e100.net; s=20230601; t=1741947030; x=1742551830;
         h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
          :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EHBf1AZS6BuzpUz3+oCl4k1y+Tt83Lx+NAGAApql9uw=;
-        b=FKP7vYu7KSz5Ani4r1lt1D8NvsrS79P0qzz2frdlNaadjOO7Y9CUloYh+Il4KKgcIh
-         qOK6SOudfq5ov7GT0mFWE7d8Vkm0POG8Yd9aOfY/lnZYt1TEwmk2FVf62iPrAOVWZ8zW
-         E35UL6Mv5Uef2zdOjCAGUW2EsANrKUb9ZtVHoTG/xtaZfZxsImhAeYJVTbEFtgK6EUt3
-         SxtG1HeLqqBooFW8RJzn8E4OMxIOijOvFxKpqnGW/VFrMyKGCG8e3WdzmvnSTi7M61Uf
-         wl1UILZUHqN7F4jgkI4DjfknND1Xivh9VZaQveGR7uGG1UIDbm9pkM6ZyOiCiVtk2Dhl
-         xp1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUrk+jYrVnpPMctGayXeivKwRtdmqiJ06yvYCY2u+53UAAgbaXDEK9HQYSsDcgKJSD6jdpUHUm9o6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzX9MLERIc2jyxyg6VRdLS70B3IeeOIjodvjkOaVavd/h6kqjc
-	pbDpBlNO08TT6YBEF7rSwDob1a1lqUOlmY4YHL/KT51UMAOZ/yQ5IYHBnkLxg6E=
-X-Gm-Gg: ASbGncvXq7Uk3XTg5JyOj118DE/nbHQoiwGC8YfNhCHvVRt624opVEzU4+waQsGNEVt
-	0BvQRk9xeeDyEXbZ6qAN+W47z0Txt5wjzKJ0Ij+5sRvkFyCK/PXwuzV3rSzNB6OdX7MUSCdTUh2
-	SZKhbTMETCa4UNRfYjbAcBg4jMwC9ckfZN+HDG/K9RzylNCWGUvVPjvLxJw9ITrnTN4c5p5q3br
-	n3RGDwlQC+lEZpPLW6Ptofq1O8ElmexTUhqnLtUC73A4HUHOt9FLHKL845C6pGZPCHFPxGgLiYw
-	ozNJB0RE/f5MXAt+FWLssEZ1gldkihyvIYEIzE4dCk75yA8H7nQiBGsgnoDn
-X-Google-Smtp-Source: AGHT+IG1sxTE6WTNjzIQp91HxiQTObGusic65wZslfKY6Ot3KoscqKikKk9/AjhiDq2kcsqvmeb41A==
-X-Received: by 2002:a05:6000:2a7:b0:391:13ef:1af5 with SMTP id ffacd0b85a97d-3971fadbdb5mr2747764f8f.48.1741947019105;
-        Fri, 14 Mar 2025 03:10:19 -0700 (PDT)
+        bh=/yH/A8g/K36DzReQ5QPIAfNlm2z6G0ua2f9/UOEVNfA=;
+        b=bmBQ02iPmYhok52rRViGlLMxPNCPcaWzw1gQDuj1SS+Bf7QWh1LWGmEq5gdQhu7L9/
+         lI0xuygFovCDgQtw1LHDRgNl6NS945J+DucjqMr7snREooHZgLiusGs3Jamn7I5fONDQ
+         CIGCIlwf4ZJtlutQNYiA4TueKh08Xreiotg0U7xOSELaNd7ZB6YwleEC+Ut+XM6tpAtw
+         wH3onb0SI+HkgpDRwyvLSjw5ekUxkHqDudVvdvWx/2WPIg/PD9D/GYqgSOqpZlhYn3bI
+         XYf879RiYZ+inwu1/XTH7xJ8UqPBUGQj3xxeR1+mX+U10pm6hFsggF4QiELmDspv/Bik
+         MKOg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4zCOXf6Y7xjjkdAmxfDvgx2HUZqYDnSaAqluQ285RyMYXMUN2L9tUtYV5zzGBx/QhZao2YzN+hmY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzicQIAhz2jKTJkLspjAn7sAETf+298D6ih4/JdzLSNR3E+UEWS
+	gPuKqyIvATHZEzVKyKG8cKxDqU3QC+1G2JRMXQl5t+raFdIFqW12Ycg396vUmWY=
+X-Gm-Gg: ASbGncv0v87f+CyaXIRNtR8yhmxZXKlFW6y9faOcDeM9h0qhk8+CBVwhbwJFbDigN74
+	n6ntcHfVlKZtOxdLdFJeayleBW1GEH80T3Q16U+F1Pit/NzghouA0/HZ0vi2eJDXDhBhZU8qemz
+	SMjzCHvXiHzMIXm+xjlhd03AwIhmJxEaSRcKFPv04vbToJ+3wEUyn6zOpms9n+4/xwwNFJSOU4+
+	aRqAaGIZMtyrOD/fNFfsE7J1lavH3BYF+lAS7OE1I/YOE5K6gKdElCZd/hvTjnfGim3ycIoZAC5
+	J5j2r4Gm4DiV9wdkFrBYHE8KGFEZz8IHwGSGVa2LeoHOSRIStw==
+X-Google-Smtp-Source: AGHT+IEECOLyJp5NIeQvulNAkbhsGSs7V93hbdXM58mYrb+Q+2KYj17/lCT2jxHZ53RSu/8bRhtopA==
+X-Received: by 2002:a05:600c:3592:b0:43c:f44c:72b7 with SMTP id 5b1f17b1804b1-43d1ec86200mr26793325e9.14.1741947030009;
+        Fri, 14 Mar 2025 03:10:30 -0700 (PDT)
 Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-395cb318a80sm5127616f8f.61.2025.03.14.03.10.18
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-395c8975d65sm5143965f8f.56.2025.03.14.03.10.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Mar 2025 03:10:18 -0700 (PDT)
-Date: Fri, 14 Mar 2025 13:10:15 +0300
+        Fri, 14 Mar 2025 03:10:29 -0700 (PDT)
+Date: Fri, 14 Mar 2025 13:10:26 +0300
 From: Dan Carpenter <dan.carpenter@linaro.org>
 To: Longbin Li <looong.bin@gmail.com>
 Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] spi: sg2044-nor: fix signedness bug in
- sg2044_spifmc_write()
-Message-ID: <4e16e1bf-e5fb-4771-bc92-c5cba9aac473@stanley.mountain>
+Subject: [PATCH 2/2] spi: sg2044-nor: fix uninitialized variable in probe
+Message-ID: <d343921b-16b8-429b-888a-f51bb6f2edc8@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -89,29 +88,38 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <79c71b81-73a9-407d-be6f-481da27180bc@stanley.mountain>
 
-The "ret" variable needs to be signed for the error handling to work.
-It should be type int, since it only holds zero and negative error
-codes.
+The "base" pointer is uninitialized.  It should be "spifmc->io_base"
+instead.
 
 Fixes: de16c322eefb ("spi: sophgo: add SG2044 SPI NOR controller driver")
 Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
- drivers/spi/spi-sg2044-nor.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-sg2044-nor.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-sg2044-nor.c b/drivers/spi/spi-sg2044-nor.c
-index 454153a63b42..baa4cf677663 100644
+index baa4cf677663..97d6b3a21d54 100644
 --- a/drivers/spi/spi-sg2044-nor.c
 +++ b/drivers/spi/spi-sg2044-nor.c
-@@ -216,7 +216,7 @@ static ssize_t sg2044_spifmc_write(struct sg2044_spifmc *spifmc,
- 	size_t xfer_size;
- 	const u8 *dout = op->data.buf.out;
- 	int i, offset;
--	size_t ret;
-+	int ret;
- 	u32 reg;
+@@ -427,7 +427,6 @@ static int sg2044_spifmc_probe(struct platform_device *pdev)
+ {
+ 	struct spi_controller *ctrl;
+ 	struct sg2044_spifmc *spifmc;
+-	void __iomem *base;
+ 	int ret;
  
- 	reg = sg2044_spifmc_init_reg(spifmc);
+ 	ctrl = devm_spi_alloc_host(&pdev->dev, sizeof(*spifmc));
+@@ -447,8 +446,8 @@ static int sg2044_spifmc_probe(struct platform_device *pdev)
+ 	spifmc->ctrl = ctrl;
+ 
+ 	spifmc->io_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(base))
+-		return PTR_ERR(base);
++	if (IS_ERR(spifmc->io_base))
++		return PTR_ERR(spifmc->io_base);
+ 
+ 	ctrl->num_chipselect = 1;
+ 	ctrl->dev.of_node = pdev->dev.of_node;
 -- 
 2.47.2
 
