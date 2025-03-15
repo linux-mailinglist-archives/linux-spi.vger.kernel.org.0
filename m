@@ -1,231 +1,120 @@
-Return-Path: <linux-spi+bounces-7152-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7153-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05B9A61D97
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 22:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52658A62642
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Mar 2025 06:01:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3997F42088F
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Mar 2025 21:07:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C6FD17F443
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Mar 2025 05:01:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8267B2040A1;
-	Fri, 14 Mar 2025 21:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC54D531;
+	Sat, 15 Mar 2025 05:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mllpNJ2v"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fK4QFioK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F89B190676;
-	Fri, 14 Mar 2025 21:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64725228;
+	Sat, 15 Mar 2025 05:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741986413; cv=none; b=satuQsh3Xw9tOP9nVg/WicQTWCq/cBuuaQ7imJJOviNjQ0UU/kA3y6YEfvVMToehi27VZZpwGNkh9QHZDUpAbMB2lSLU7cy0Fg7TAadESyjsl+FYAY/tdwEr0LQcdxDT7oH/frRimpQKYob31qMgXkBMFtAXKTInF2WSB3ZyLOA=
+	t=1742014861; cv=none; b=apwNRe9tF/Ycf4TvbKa/1IaMMUWXetvS1ASvGeg6wjeHa3V1tyCOZqrBCFONXFgW+XDkeDjIWtWaf8OpoH7n+RM89DTMuKbkf2fFj6QGoid4dVgNj3a0PbGKwSryogvMKfeurXp7N/QIELxnw4hM4ChWg2BlF+mCgDMsvVHfv3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741986413; c=relaxed/simple;
-	bh=updmW668AXuEczJRzXxFtdkEvCU4OrjNSAp3qpvjLw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QAoEprK5pRTt3IXscKDk+jDJQWCw6NEK6G6Mpwn0G6VOVCE4BLCho7HmN36NviYT13u+iSKJ8znilNOqP1c7EUmQM0WI5BDeVZtVljy/rLyZdZrY5HP//0DgQ4SeIW0Y2I4QQypaN4lAnjHjFz+ZzeUdZefR2iYjfHdY7+P6ZAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mllpNJ2v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01900C4CEE3;
-	Fri, 14 Mar 2025 21:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741986413;
-	bh=updmW668AXuEczJRzXxFtdkEvCU4OrjNSAp3qpvjLw4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mllpNJ2vShm53XePYhANE9KP2D4263ZkCTgGDLtAm7AFn21OBMlK1F/dNkxUhUoAM
-	 mf80c3yVKPa9GP29CvxlKBUKkSHRggb1ciT/HolwQ/a4TktfQQ2aBweYsUCF8mU7ad
-	 jIgbER5NtY8oSUMWQmNbDQlhKZfhjyeYxtz0VbLDHegKY7dlrWDLuAsz9CQ/kmqxPK
-	 lyDdyxynK7HtA/JZPnlUrCAtFmEZ/iojSonoH+9hM+IquUbweStcvNr5oR/POr7te1
-	 0oj5dQidA4o4fwcw0lD6fQ/a9CtRtcH47crB4M+bXH6C6VGlUw9SpRo22zeT78Hwad
-	 Vpbw40GJ/8tVA==
-Date: Fri, 14 Mar 2025 16:06:52 -0500
-From: Rob Herring <robh@kernel.org>
-To: Maud Spierings <maudspierings@gocontroll.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <quic_jesszhan@quicinc.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Sam Ravnborg <sam@ravnborg.org>, Liu Ying <victor.liu@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Mark Brown <broonie@kernel.org>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 03/12] dt-bindings: connector: Add the GOcontroll
- Moduline module slot bindings
-Message-ID: <20250314210652.GA2300828-robh@kernel.org>
-References: <20250226-initial_display-v2-0-23fafa130817@gocontroll.com>
- <20250226-initial_display-v2-3-23fafa130817@gocontroll.com>
+	s=arc-20240116; t=1742014861; c=relaxed/simple;
+	bh=ufCbX4wDhYfEKmDJ7X2B/vgP/oog7w8CSCvAEkWvnr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FlpoL7fJI8hvr7tIjX3mg9daSqvNVjqDCTeRtjg3BHsnsKWB+9N8BDHiLpJU/hDlvTSgKi96+lFkR0IPUuNcnGcZGIzdsmEWzdwwok/jSwv09BU3CsM4wSrpvowTC3GMB2poxTMZ8wsfJof3+ILFqS/F2M17Va6rY0qbBjrj/I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fK4QFioK; arc=none smtp.client-ip=209.85.161.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5fe9c1c14baso1570644eaf.0;
+        Fri, 14 Mar 2025 22:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742014859; x=1742619659; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7a5ZrbTklH/cZhoNtA/q7i5fBAs3LP0PvXI1WH8nm0=;
+        b=fK4QFioKN/W4ucd67Unzvr5qAnLDIwOChGuF78ilN+UXHT/VzXtYZCUaOQEcSiUoe6
+         WWyvigSnCYhSXZYWZK0kUpBs63oJ/rqBCuGipP1M6SvOXmkhXxfowja2/nL5kVHMoUqg
+         W9sdjDqqtONvSIUuPjTloQ/gUdGW4FGNEYlnghREMIiIoRy5yofX85z/GVn+peIT9Cm3
+         vSfajPi5qyabOemfZe4BkpLd8pU5R8cBMXY/qWKU6YncnQR/nrZldCk3sJqY5iFAnCcz
+         BuvJL1FmM+a9/IoIt4jHyQFvw4n8/YhHcu8uLncWOiFlx+ZGJcZHizDtrETZBY1tk5fA
+         l2iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742014859; x=1742619659;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S7a5ZrbTklH/cZhoNtA/q7i5fBAs3LP0PvXI1WH8nm0=;
+        b=G61fH8PQpfcMy4ufbqlO3um0obyoqevG1XkqClO+cRjilW2LKW3euoc4JEFtLvCElo
+         jGltWjHHV5SUP0RJDKY6hwT10gBz87QUwfNeHwq4N/QVUBcc/Z+bi+mgTvRkmtOpPG8l
+         VEU62yj6L3YrTtFmRR+d7UQqkjjTlSVJ1Y8R/H7+ufpvXrP7i6M2e7/xwl3dsE541z1a
+         HTz2V9418KwnG1IkEgqw3W82TjJjEX8TbzC6Uqun6zYEvKrPwJWnuRPxJeddykEOvJV/
+         3eU6IjIoha+qdEjdVtlsqerjgg/JDl0Z3ZjQoMU9xvNjSFAEioEGvXEf+atLDOuDVSSB
+         mslg==
+X-Forwarded-Encrypted: i=1; AJvYcCXTXbJlupQcuHlxImZeHn4qHwqqQ+6gpuMKWCFEMifaQvY79oKXf4dsZOmn2Xgy3HKM71ija0TmY896aPg=@vger.kernel.org, AJvYcCXaPHvdWVV3LVkjT6bFRnYY/RVFJAW+uiJuhAT0ZOOeSiPXx0EncL8IfKIno5wTdXMCT344XLukU/bW@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYB3ASbrDdeX2wOzfKaqtNi5b3QZqS4k0xRdC8nfsXj7F6+tB0
+	9y5EA/Se9uRVfFv/KbCpGM7YZqbGyEpMv+AZCAP71Peq+vqFrKTN
+X-Gm-Gg: ASbGncsQqqc2ZYgdHb7S46EuWo7A73qF/0Cf+fgfZZ99Apax9Y1wancawIqGybFhpKN
+	CQ/ZZQHb3jNSvbWIFZLOCqWjoXkhm5aLudiWEmUMqIoKFxnthE12Yo9HOSAdwEyQngYCV/uSN0d
+	muD3ISKZ7F8LLD4mW9ZbY9QVHBq/uYGbuPuUJ1HdR/IX24RQNfAPrT+tWBfiBSmS0/xuzCweTvk
+	JvAuLfMKg98tWVGzloYh7EKjIMp8Uq3A5iwsVSdad3sqrhV6OycO5Jvb23kwmEBKeIS0d6FGMxN
+	6mC1k4wgmNeedAFXOYKlDZRm23odWzGPuidC3ai+rUxKaw==
+X-Google-Smtp-Source: AGHT+IG8gQM5ZIlrT1QhC0UHYeZZ8AHDFWhL8amMXKDr5ttcSgilM0pTiFSBppMBAYCbtT0hRryC7w==
+X-Received: by 2002:a05:6820:2781:b0:601:a5d8:6a9e with SMTP id 006d021491bc7-601e44835e3mr2316066eaf.0.1742014858690;
+        Fri, 14 Mar 2025 22:00:58 -0700 (PDT)
+Received: from s-machine2.. ([2806:2f0:5501:d07c:e7c:e504:c0b1:f8be])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-601db6598aesm869578eaf.5.2025.03.14.22.00.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Mar 2025 22:00:58 -0700 (PDT)
+From: Sergio Perez Gonzalez <sperezglz@gmail.com>
+To: broonie@kernel.org,
+	skhan@linuxfoundation.org
+Cc: Sergio Perez Gonzalez <sperezglz@gmail.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: spi-mux: Fix coverity issue, unchecked return value
+Date: Fri, 14 Mar 2025 22:59:22 -0600
+Message-ID: <20250315045936.27421-1-sperezglz@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250226-initial_display-v2-3-23fafa130817@gocontroll.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 26, 2025 at 03:19:14PM +0100, Maud Spierings wrote:
-> Add the bindings that describe a GOcontroll Moduline module slot. This
-> slot provides all the interfaces to interface with a Moduline compatible
-> IO module. The actual module is not reasonable to describe as it can be
-> swapped at will, with this connector the driver will be able to probe
-> for a module on boot.
-> 
-> The connector consists of 2 parts, one part for interfacing with the SoC
-> and main board, the other part has 13 IO channels for the module to
-> interact with the outside world. The functions of these IO channels are
-> determined by the type of module in the slot. The IO on the SoC side is
-> as follows:
-> 
->  - a 3v3 supply, this tends to be the logic level of the module and its
->    microcontroller
->  - a 5v0 supply, this can be used to power low power peripherals on the
->    module
->  - a 6v-8v supply, this can be used for high power peripherals on the
->    module
->  - a 6v-30v supply, this tends to be a dirty supply that comes from the
->    controller supply after some circuit protection, or is the same as
->    the 6v-8v supply.
->  - an SPI bus which carries the communication between the SoC and the
->    microcontroller on the module.
->  - an I2C bus shared between the SoC and all module slots which can
->    carry direct module-to-module communication.
->  - a reset line
->  - an interrupt line that indicates a clear to transmit signal
->  - a sync line shared between the SoC and all module slots which could
->    be used to synchronize modules for time sensitive IO spread across
->    modules.
->  - a SMBus alert line that is shared between the modules but is not
->    connected to the SoC so that is ignored.
-> 
-> A slot-number property is used to identify the physical location of a
-> module slot. Without it, it would be impossible to identify which module
-> to control if there are multiple of one type, to address the desired IO.
+The return value of spi_setup() is not captured within
+spi_mux_select() and it is assumed to be always success.
 
-Is that for a person to identify slots or s/w? If just a person, we 
-generally use 'label' as in a sticker on the connector. If s/w, we 
-generally try to avoid made up indexing in DT though there are some 
-exceptions.
+CID: 1638374
 
-> 
-> Signed-off-by: Maud Spierings <maudspierings@gocontroll.com>
-> ---
->  .../connector/gocontroll,moduline-module-slot.yaml | 88 ++++++++++++++++++++++
->  1 file changed, 88 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml b/Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..a16ae2762d160180d5b163e20f5294235e65053b
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/connector/gocontroll,moduline-module-slot.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: GOcontroll Moduline Module slot
-> +
-> +maintainers:
-> +  - Maud Spierings <maudspierings@gocontroll.com>
-> +
-> +description:
-> +  The GOcontroll Moduline module slot represents a connector that fullfills the
-> +  Moduline slot specification, and can thus house any IO module that is also
-> +  built to this spec.
-> +
-> +properties:
-> +  compatible:
-> +    const: gocontroll,moduline-module-slot
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: indicates readiness, high means busy.
-> +    maxItems: 1
-> +  reset-gpios:
-> +    description: resets the module, active low.
-> +    maxItems: 1
-> +  sync-gpios:
-> +    description: sync line between all module slots.
-> +    maxItems: 1
-> +
-> +  vdd-supply:
-> +    description: low power 3v3 supply generally for the microcontroller.
-> +  vddp-supply:
-> +    description: medium power 5v0 supply for on module low power peripherals.
-> +  vddhpp-supply:
-> +    description: high power 6v-8v supply for on module high power peripherals.
-> +  power-supply:
-> +    description: high power 6v-30v supply for high power module circuits.
-> +
-> +  i2c-bus:
-> +    description: i2c bus shared between module slots and the SoC
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +  slot-number:
-> +    description:
-> +      The number of the module slot representing the location of on the pcb.
-> +      This enables access to the modules based on slot location.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +
-> +  spi-max-frequency: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reset-gpios
-> +  - interrupts
-> +  - sync-gpios
-> +  - i2c-bus
-> +  - slot-number
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    spi {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        connector@0 {
+Signed-off-by: Sergio Perez Gonzalez <sperezglz@gmail.com>
+---
+ drivers/spi/spi-mux.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I find this being a SPI device a bit strange. Is there a defined SPI 
-device that every slot is going to have? Or the connector has SPI 
-interface and *anything* could be attached on it?
+diff --git a/drivers/spi/spi-mux.c b/drivers/spi/spi-mux.c
+index c02c4204442f..0f45a88bfbe7 100644
+--- a/drivers/spi/spi-mux.c
++++ b/drivers/spi/spi-mux.c
+@@ -68,9 +68,9 @@ static int spi_mux_select(struct spi_device *spi)
+ 
+ 	priv->current_cs = spi_get_chipselect(spi, 0);
+ 
+-	spi_setup(priv->spi);
++	ret = spi_setup(priv->spi);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int spi_mux_setup(struct spi_device *spi)
+-- 
+2.43.0
 
-> +            reg = <0>;
-> +            compatible = "gocontroll,moduline-module-slot";
-> +            reset-gpios = <&gpio5 10 GPIO_ACTIVE_LOW>;
-> +            sync-gpios = <&gpio4 16 GPIO_ACTIVE_HIGH>;
-> +            interrupt-parent = <&gpio4>;
-> +            interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
-> +            vdd-supply = <&reg_3v3_per>;
-> +            vddp-supply = <&reg_5v0>;
-> +            vddhpp-supply = <&reg_6v4>;
-> +            i2c-bus = <&i2c2>;
-> +            slot-number = <1>;
-> +        };
-> +    };
-> 
-> -- 
-> 2.48.1
-> 
 
