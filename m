@@ -1,70 +1,121 @@
-Return-Path: <linux-spi+bounces-7164-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7166-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E809A64D6C
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Mar 2025 12:56:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7A03A651DC
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Mar 2025 14:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7BEB216CECE
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Mar 2025 11:56:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 906857A7168
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Mar 2025 13:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FFE723536A;
-	Mon, 17 Mar 2025 11:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27F0E23FC40;
+	Mon, 17 Mar 2025 13:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgtYX/2d"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="Tr2NgHJA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA9C233727
-	for <linux-spi@vger.kernel.org>; Mon, 17 Mar 2025 11:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E172323E34E;
+	Mon, 17 Mar 2025 13:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742212582; cv=none; b=YUachKy+A2gJVa6b+Bo0PL3bMu8H40n/K9ncrMDuFhZUxPIrrNLc4tOypwA7L7ARdag/TebkgZw5SxnOr318+WbqkdZCV+iA7cXp8iaWllgbvUR3o8aytshxauSYHQPKzujBFN5jChbDMIcmRkmWmVIP0gsvJcIuwbtUPuxh848=
+	t=1742219637; cv=none; b=RuPoYEpw68Q+n1Ha9POaQF9KIkUFyPyPZDGira/iFx8CyVpzBtFTtkmMv80INHiU5aYNqZFnVBSmzbAx2oXbFVD6vizulLjckyxSVAH7XUAt4zoq+QGdr1l+qG6K+dITWmNv+hvLKh0iIvprortvhKNyFbKw2Kug4XR1E1NGnN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742212582; c=relaxed/simple;
-	bh=C6IcQoTNH0nBmiPpTbZ95RwvMeY8JWuz3twPjKDjO5M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=QkI3AH0uXY5bU0FkhRyAQjYbSw3+dJnlH3M1zjonXin6CPMXoJsfCiSlHJthoqvZpn+hh2zEL2rKFb6mV5Mm/9ajBYpMA6plCQmGgsJJvOsJzTNEpMoG8luLn2pUf66lv3+sRPRENLJvvXqqt+5AJdw0CZIJVga2XEuKcgLcJYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgtYX/2d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B345EC4CEE3;
-	Mon, 17 Mar 2025 11:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742212581;
-	bh=C6IcQoTNH0nBmiPpTbZ95RwvMeY8JWuz3twPjKDjO5M=;
-	h=Subject:From:Date:To:From;
-	b=KgtYX/2dpz2m6B4hayEYu8nT32TgWaqyusbGQTOWzL6y+tZ30Zntn8KlUO+tf+FDz
-	 qd8CsEgr5uNZY9a7/zPzm1dF+pn9N2S+f2fgVahyAVoXtPPKa5HDfw7sQUkb7jYmNJ
-	 9Uu6P6TFCLUUfS3MaJA/7QJKzdDpgjhOKGeS1V20D6D1iB6OFIB8dfyz8ecALU1RMg
-	 1NEqPZLBZrEHUaGlu3O9p533Vch9sMEEjUu/WXiiWKG1nmHXhIVob40r17pupf1II8
-	 S+dw9d0zYLvyVEeu/48uSOu28+PYafWn/BNPXHC2+qq/4TOjNKdb9DJqMt3o86Ht1x
-	 yAxaAFclEiY2Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 343EB3804CB5;
-	Mon, 17 Mar 2025 11:56:58 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1742219637; c=relaxed/simple;
+	bh=TzVF+VseBxemugrIi5lFGtBk9lTNgeveFOacPZEDCbY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PtzWeO2AJhaqqL0KTgftD9gPMten5zo/obnKHGufVVBcsAmj5D4jdOB4PqhW8fWBDNNNEwSCuGAC2xFs/7MRUnC9s1MiQb6QjxFgbkLr8UpQ0PDgcPWXEOPRXH4T+B2qufhZCFVyTGmklb9j7RD+VssQwU6h9xeb1wJpgp2gfe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=Tr2NgHJA; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 7735FA02E3;
+	Mon, 17 Mar 2025 14:53:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=vW45Eevfr0UBpOE/gxMFRs6QWIzi9YcGFWpOxweiOQ0=; b=
+	Tr2NgHJAnGKpz9P0iyFjnrROvAJyRjVeWKR9vlIQaJKhiPEFUrelC8+I9yzOoiGI
+	3Ws2+hWl9K58e4Rg1v0W/PxXLJQ4NxVI6T7iP1ek+TTudAWc1c4pGnmt3ARadCOE
+	v9chae1nxG56/rAMnKAGsDiVjgcChUT22/q0vPkH1Pms+zucbNJdmr8pYa8hskzN
+	2ha3KNPcn4z8W5WRGrQ0Shg7hA+ZqtcsFCZNi6kEERIjwghckmKubPIe5qkzCONF
+	R+ysD4VmglioFko0tF5aRtYqtnyUUC12lq4JON/M4Rvl6fx7+YwOlUSG3A7KsHm4
+	x3x7RbXYAo7+BZ/uOB2u2CZPPwemSKGhvYmjBkrbCIOa2xqM9CmS90JcjRSl6Zab
+	aEnPdts8ERakkAqylGyHE6NYrXquACPMd8I5KydCDh5GBFA6YfAIiUFiPdmnuRze
+	aDnv1KPQFqtywWzrWbNT10/mzAfTwJemyb1+GEYLQi4avksOR/nJnoBdzfBDI3/h
+	84qbOMe6Vn0sTV/vSTQcreA2Q1wEL9LtmDN2LfpQj0UtCiih5hSdk+99UTBYju/g
+	QURzWniqfeGv3b5YfMgPbIVhymPQULQOhhvQjkkHmkdNEluZ2pLW40Dv76vcOXey
+	lkCmzigsGLKv1JEhTln3bmMHKu9cSnYmX+OsfbWSErY=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To:
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/2] Add `devm_dma_request_chan()` to simplify probe path in atmel-quadspi.c
+Date: Mon, 17 Mar 2025 14:53:36 +0100
+Message-ID: <20250317135340.382532-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174221261674.3399077.3951514572664035896.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 17 Mar 2025 11:56:56 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1742219629;VERSION=7985;MC=71617524;ID=155895;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD948526D7460
 
-Latest series: [v5] Add more devm_ functions to fix PM imbalance in spi/atmel-quadspi.c (2025-03-17T09:34:43)
-  Superseding: [v4] Add more devm_ functions to fix PM imbalance in spi/atmel-quadspi.c (2025-02-10T11:10:07):
-    [for-6.14,v4,2/2] spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
+The probe function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. To alleivate this - and similar problems in
+the future - an effort was made to migrate as many functions as possible,
+to their devm_ managed counterparts. Patch 1 adds the new
+`devm_dma_request_chan()` function. Patch 2 then uses this APIs to
+simplify the probe() function.
 
+Change in v4:
+* split PM imbalance fix [1] and DMA cleanup [this series]
+
+This series is to be applied after the PM imbalance fix [1].
+
+[1]
+https://lore.kernel.org/linux-kernel/20250317093445.361821-1-csokas.bence@prolan.hu/
+
+Links to previous versions:
+pre-series:
+https://lore.kernel.org/linux-kernel/20241222141427.819222-1-csokas.bence@prolan.hu/
+https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
+v1:
+https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
+v2:
+https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
+v3:
+https://lore.kernel.org/linux-kernel/20250207124802.165408-1-csokas.bence@prolan.hu/
+
+Bence Csókás (2):
+  dma: Add devm_dma_request_chan()
+  spi: atmel-quadspi: Use `devm_dma_request_chan()`
+
+ drivers/dma/dmaengine.c     | 30 +++++++++++++++++++++++++
+ drivers/spi/atmel-quadspi.c | 44 ++++++++++---------------------------
+ include/linux/dmaengine.h   |  7 ++++++
+ 3 files changed, 48 insertions(+), 33 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.48.1
+
 
 
