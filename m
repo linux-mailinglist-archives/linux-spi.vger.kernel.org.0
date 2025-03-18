@@ -1,116 +1,76 @@
-Return-Path: <linux-spi+bounces-7208-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7209-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B10BCA67C7A
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 20:00:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 733BAA67CD4
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 20:11:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9CDD19C31ED
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 19:00:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9447B42612A
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 19:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F011D63CD;
-	Tue, 18 Mar 2025 19:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Mc/Of9Zt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bNwThTXK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F411D212D6B;
+	Tue, 18 Mar 2025 19:09:02 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605261531E1;
-	Tue, 18 Mar 2025 19:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144E2211A3D;
+	Tue, 18 Mar 2025 19:09:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742324431; cv=none; b=DhZXbhlRpsiG9BEdTZVZLmlN6Luw1YFoRHJmuTCkXCvbkOftKwbWcPH+etLQpGMU55R5FwrRfArDbpBhXMiDcyPwA7OtOMk6ag/OPSxO76e5ArUIrqcj2XWBQ7WFO1M2GlGKpkEc9tcaKtNM+N6QMnryd/KpI4har/cC64zX9ng=
+	t=1742324942; cv=none; b=i9RKz58RC7w7CJPA8AapziFvVs6ElDyVp2peX/AvjS0uTF7chk8Dxup1CwmNUdUKxPByxbYzUkF/7GInYQT2NJ4InVyLlx8bnF7nG4avDAjoHHfMs+vUhFMSs8sDrP0YkvM9zDk1nShC0DrXzNpftLWA6DgF07kw1/4Z5u7ickw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742324431; c=relaxed/simple;
-	bh=cgk55InILhtLB9t3QF4V9pMJKTwljv/A3WuG52Scxi8=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Nn7GW1l1US3YQ8UKGqrkfjlTtjfaMLf0RFl+1ieAsw5X35TiyrlhJDpoeDUZcejrsEM2qkpsNMS924eeJY30CosyOz5qm9VCoGANClIepyhZr+Jqo1G3DskQ6yXD9Jj1aitrswMAUNPfLi7bh7fYwCUoEIA4jSxkxk3QQVwdRXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Mc/Of9Zt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bNwThTXK; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 4CACB1140206;
-	Tue, 18 Mar 2025 15:00:27 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Tue, 18 Mar 2025 15:00:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742324427;
-	 x=1742410827; bh=yjMyRl4RpOThDnjibhG8CaMinr6uxQHbj7Pp+a6/SUc=; b=
-	Mc/Of9ZtNe63d+fv8oSNLRPpDRdZLeKyzXR27g0TGTK8U3VNbs0CJFPL1dH1+pDJ
-	sOM3oaEKSXXP0zmxcK6KiWfaaaI1xDffoVIuO/ld5QQ0URhZlGbBKecCdHkWdBJP
-	gR1VvBiN0KIqEYeYViNNk7YDU7DZLyzRaf655h1omHw2ORHVL96wttbgFvXglBSl
-	MTLnrfTPY5nL0wLNFyuYUgra+9MSq//sjAA1Nrlg58jA4WsFLOmGyDsuNvltakV9
-	5W5TjHaS8feyZ3RK5UThZ7JpIojj83AoUDZXGid8emBwkwoRkxkn2w7QVp+oG+tY
-	OVVzVt3Kc1m4nVYmd2ohig==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742324427; x=
-	1742410827; bh=yjMyRl4RpOThDnjibhG8CaMinr6uxQHbj7Pp+a6/SUc=; b=b
-	NwThTXKbSWDN7wR93dtaAQciDr4/XCaFpkP70ADq0NQAPgdqKkbdA1kSG+nXZqOg
-	u2+6NLt2XrYJ7ltzbLRn5egBUpwMyoS/yw53VNuHIUab1uwmY+w7e0rcxyxG/ZIf
-	OItWWsMkMVSrHRKdv8jsd6TAfGOVnHZnl3RVZQcHihyP6qua0h5ePH4mkFOcBCeg
-	acV+m3Q4W+bEfKtOL5airVGm4g6aZ3wZTZPBbvv8wMTKTnEF+ezZaQsMqaXsUFyh
-	ki89VYliblvE7wvg3+F5okpC+cSjlKQx4kHYis65BdtouKtkTGk82d3CWGjbToXt
-	KVXn2jXTTW8Sgls2pr9VQ==
-X-ME-Sender: <xms:ysLZZ4xTrz0_b_jyHV72-9ikFDuUqR_zYe2Pa3robS6OKYdJwuVbxA>
-    <xme:ysLZZ8R2vH2oGKKuJdIhJLIZbR7QziksXwaKhaeanrQrf-ZJJecDzU6kPOiihSasW
-    ZCqCgrIipjhxiPRaSw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeefvddvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    udeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsrhhoohhnihgvseguvggsih
-    grnhdrohhrghdprhgtphhtthhopehlvghithgrohesuggvsghirghnrdhorhhgpdhrtghp
-    thhtohepnhhoohgulhgvshesvggrrhhthhdrlhhipdhrtghpthhtohepthhhihgvrhhrhi
-    drrhgvughinhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhhhuhgvfigv
-    sehgmhigrdguvgdprhgtphhtthhopehjrghrkhhkoheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghp
-    thhtohepkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhrtghpthhtoheprhhmih
-    hkvgihsehmvghtrgdrtghomh
-X-ME-Proxy: <xmx:ysLZZ6UBA0jiTr9m9KYQCeWBDtpb8EIOo7yruLfrtE-v-o-IIeZTSg>
-    <xmx:ysLZZ2hdwTugqRQqMmKVMti45EqVDngNMEmWhi22BsjWoGazVIAQLQ>
-    <xmx:ysLZZ6D5Y7Oeli2C1HvyDtNssmGYB2TVmyVXC79IabxhXpxaKUkvcg>
-    <xmx:ysLZZ3KlPZTau6hs8zvLnuWUo-YsXNq04PpBhfhjmFObatYXWttIjQ>
-    <xmx:y8LZZwSGDPZU2zj8kIValPGmVD0ZGN_TivRm6zHN-SAdblX6XiLgrvq2>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9134B2220072; Tue, 18 Mar 2025 15:00:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-Precedence: bulk
-X-Mailing-List: linux-spi@vger.kernel.org
-List-Id: <linux-spi.vger.kernel.org>
-List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-ThreadId: Tce50d14c41957055
-Date: Tue, 18 Mar 2025 20:00:05 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Breno Leitao" <leitao@debian.org>, "Mark Brown" <broonie@debian.org>
-Cc: "Thierry Reding" <thierry.reding@gmail.com>,
- "Jon Hunter" <jonathanh@nvidia.com>,
- "Sowjanya Komatineni" <skomatineni@nvidia.com>,
- "Laxman Dewangan" <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, rmikey@meta.com,
- kernel-team@meta.com, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- noodles@earth.li, "Jarkko Sakkinen" <jarkko@kernel.org>,
- "Peter Huewe" <peterhuewe@gmx.de>, jgg@ziepe.c
-Message-Id: <b3da27ce-161b-4462-a608-c36f4b0696ce@app.fastmail.com>
-In-Reply-To: <20250318-psychedelic-thundering-guppy-22bba2@leitao>
-References: <20250317-tegra-v1-0-78474efc0386@debian.org>
- <20250317-tegra-v1-1-78474efc0386@debian.org>
+	s=arc-20240116; t=1742324942; c=relaxed/simple;
+	bh=ZGGZME9btt7FCuf3LYHWPQnMBsioZA/zWJtYZ67EYXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lEO/IZuqg3KrRbC/ZDajAgpnzIQuuf+cuXhLfxIrtoPcn+X3Yt2g2/VpJwpIo1cH67qYUGacGir54MbOH7JNTnPKIruhzWrhwFMFembuNl70weLsXY7Ovea9fp+W3NLrEO5gdi906u8OsSJJX07Bo2J8aG2fNVFy+OqDwnGVpRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so580548866b.3;
+        Tue, 18 Mar 2025 12:09:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742324939; x=1742929739;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zTHy8KzyUCOX4E8SztWoQbpq6eM6Toce0g6QZf7AXbU=;
+        b=sdluRHnsP237jLHBLG0u12iKoHECCLdxYeu6/YafvV5+iqHPDmDod0Rmdv6Kx1X3HH
+         DhFjL5vfkOGGiXg8cpGRq34V3/TP+FgGzPfFSrmy8gTHo/spCvdyohwqOWPsGuyPQZZ+
+         AunMFTi34y3TWsq3FbW9JPRaWWY1Pqmy0zdzEN26lNA78/EaDVQdMCMbjEB0em5N06+2
+         hmSmav91KNFDmkME2/dcm4zW7US2Fs6xwwfqFzzuF8jIaF80zEbAkNwe7jrVoMF3EoYw
+         VvS1J1/XRFWN8fd9rhpUDXkBC9AaXo19fzHly6EVJj29+AuJa7ujMUG6+HlhYYqfKXUm
+         L7lw==
+X-Forwarded-Encrypted: i=1; AJvYcCVaSQOOs48osJ65nnAM59psU+xdBU2dPoMkEINc018fZo7v/2kQC4gp09x9s2Zqmv7asHnkrQNSWHe4Hrw=@vger.kernel.org, AJvYcCW/SZaNsyWy2q320JASi35BFH0G1dxYg6V3m0JMT6EH2HNT2kPunKzIL4vuwIPBJZwJMkhOaKVasszNQ+c=@vger.kernel.org, AJvYcCWMPx88NM2uuKm3ugHWUpbMEdHF3rwLsFSbDtsXal2oyyFCu6yTp36IE5iQrBPTePp4x9/1RLBnwGxC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3VsCH/POyDTY7olX2lq8Wa/2tI7QvF/5xKpdtWrn/j74lM0rZ
+	KPxZZtwzM4C1OC1qH8hHpTnbWx43EbKp7Ysp0kheCDvjbjjq8V55
+X-Gm-Gg: ASbGncsz17u1b8/G+LPHfL9TYaEFdwHDde+TSUYMxOPMuCjZMtKccGC+kt2AE7KvLnc
+	KrPjgA6jXCxc1fB2Ha2RLsAs7keW3CZsbbURzVR+Vie7I7Uge7K0BjkpwmJM0vokjZFJJ0jqfhP
+	JTib/qmh3Ik1mhkY8KVES+4CnHeN+W5qp3cEx5KflJnEvcw/+vUg1qmB7r5ETZEjCGWlGNVkkkt
+	6sHbdRv6P1HglOTpNptsfyBVtutteo/nXNZ6ajK/QlgWcgLZphQyirrEkGuR35XfjcAaLnA2Yse
+	G3YA/fOUa1nNV8mPfdvwACzL1/D5u564W7g=
+X-Google-Smtp-Source: AGHT+IGuzWPvTvfw/MmeqFCv3w696lCvdp5HT3v4F80QEn8ekrgZn2etIb1k2ztir6ec4whvMXJFUw==
+X-Received: by 2002:a17:907:7290:b0:ac2:1793:adc3 with SMTP id a640c23a62f3a-ac330442f1bmr2148721866b.41.1742324938947;
+        Tue, 18 Mar 2025 12:08:58 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:2::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3149d0b4csm884622666b.122.2025.03.18.12.08.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Mar 2025 12:08:58 -0700 (PDT)
+Date: Tue, 18 Mar 2025 12:08:56 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Mark Brown <broonie@debian.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Laxman Dewangan <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rmikey@meta.com, kernel-team@meta.com
+Subject: Re: [PATCH 1/3] spi: tegra210-quad: use device_reset_optional()
+ instead of device_reset()
+Message-ID: <20250318-impetuous-vagabond-pig-eb288c@leitao>
+References: <20250317-tegra-v1-1-78474efc0386@debian.org>
  <22ffa8f5-6590-4602-853d-ceffed580f22@sirena.org.uk>
  <20250317-solemn-debonair-sambar-f04fa7@leitao>
  <f3e47d12-f6be-4bb5-b87b-84aa0037e1ef@sirena.org.uk>
@@ -119,34 +79,54 @@ References: <20250317-tegra-v1-0-78474efc0386@debian.org>
  <20250318-furry-piquant-orca-da28c2@leitao>
  <47c40ec0-291c-4664-a66e-d76bd6360c0d@sirena.org.uk>
  <20250318-boisterous-adorable-chowchow-cea03b@leitao>
- <20250318-psychedelic-thundering-guppy-22bba2@leitao>
-Subject: Re: [PATCH 1/3] spi: tegra210-quad: use device_reset_optional() instead of
- device_reset()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+ <7f2ac489-51e5-4798-a38a-a8b7ef3d4c83@sirena.org.uk>
+Precedence: bulk
+X-Mailing-List: linux-spi@vger.kernel.org
+List-Id: <linux-spi.vger.kernel.org>
+List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f2ac489-51e5-4798-a38a-a8b7ef3d4c83@sirena.org.uk>
 
-On Tue, Mar 18, 2025, at 19:32, Breno Leitao wrote:
-> On Tue, Mar 18, 2025 at 11:29:26AM -0700, Breno Leitao wrote:
->> On Tue, Mar 18, 2025 at 05:34:55PM +0000, Mark Brown wrote:
->> 
->> Summary of the proiblem: tpm_tis is trying to read random numbers
->> through a dead SPI controller. That causes infinite amounts of warnings
->> on the kernel, given that the controller is WARNing on time outs (which
->> is being fixed in one of the patches in this patchset).
->> 
->> Question: Should tpm_tis be aware that the underneath SPI controller is
->> dead, and eventually get unplugged?
->
-> Adding Arnd to the email.
+On Tue, Mar 18, 2025 at 06:35:18PM +0000, Mark Brown wrote:
 
-Hi Breno,
+> > Do you want me to resend those two separately, or, is this thread
+> > enough?
+> 
+> Please resend.  I think I was anticipating a new version of this patch
+> with a clarified changelog and some rework to tone down the logging
+> that's generated similar to the other patches rather than just silently
+> ignoring the lack of a reset controller.
 
-That does sound like the easiest answer: if the spi controller driver
-knows that it needs a reset but there is no reset controller, shutting
-itself down and removing its child devices seems like the least
-offensive action.
+Sorry, I am more than happy to change it the way you prefer, but, the
+warnings coming from "device reset failed" are already printed once:
 
-No idea if there are other spi controllers that do something like this.
+Here are the instances of calls to device_reset(), all of them with
+`dev_warn_once()`:
 
-      Arnd
+	if (device_reset(tqspi->dev) < 0)
+		dev_warn_once(tqspi->dev, "device reset failed\n");
+
+and
+
+	/* Reset controller if timeout happens */
+	if (device_reset(tqspi->dev) < 0)
+		dev_warn_once(tqspi->dev,
+			"device reset failed\n");
+
+
+So, this one is not very noisy. Should I change anything?
+
+On the other side, I see some other messages that are very noise, being
+displayed at every message that is failing to go through. They are:
+
+           spi_master spi0: failed to transfer one message from queue
+           spi_master spi0: noqueue transfer failed
+
+I will rate limit those as well.
+
+Thanks for your direction,
+--breno
 
