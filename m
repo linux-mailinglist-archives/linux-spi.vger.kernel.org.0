@@ -1,193 +1,152 @@
-Return-Path: <linux-spi+bounces-7184-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7185-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A444A668C7
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 05:57:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECE84A66BBE
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 08:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF3BD17676E
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 04:57:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA27C7A7B5C
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 07:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D57B817A30B;
-	Tue, 18 Mar 2025 04:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CEE31E520F;
+	Tue, 18 Mar 2025 07:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="ukbpa7kD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nVKN73q4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013045.outbound.protection.outlook.com [40.107.159.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AB717A306;
-	Tue, 18 Mar 2025 04:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742273825; cv=fail; b=GGEsuZEzYZ78XNOWoJz4Ubvh/yTGrJAb0aXdx7M3bD7yomArPjI/ppe8dzK36aYi+/JZFKyVGM+XR71cZKeygeBatu3JqYThjw7eOo6/ygBnu85QagVtXwoVQ2CQ5sGWTLRIj21xETEpAPE9ykRbixHTOB1gDm+lAo7GjvI89WE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742273825; c=relaxed/simple;
-	bh=OadLYbzNTF9LAxKv0PDOY8WYtOexpVUI1g4DWQK1lQs=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=uUZKdaCkwSbfcosk4yj9kxkw74Eg7W6yzpjxNFMR5OyY3zLtArV61PFKmdv/c4+Zjvshev6sLGgi95DPknnT8Hb8ZgQqJj6eWTREi+5k5hh1dsXUD61CK/rVhPr4kR0mbd6t09rJhgQZQv839IKRRBzPFCXALqykr2Lon1pDPNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=ukbpa7kD; arc=fail smtp.client-ip=40.107.159.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XnbAs54gPNau14t6lRbkfakcJIFRudf5g3gH7iAqQmxBoWk683+TQM8wiMKEa7V3BLjErBsuKXv5fp7U1FfSEClLaG9ZjZl5HyhvxxwPWfe/Qnn71HhzHmboGBaQY7cmeNO9T20KTb7kKHfyauuu1WxFgoLC0+6FaLoelSXDMmvrnj/f8rK3kMc1j0Fe9fra/bhLCWfb4dJdfxELRwg1TxPHxD6pvlpEk3RMA6F5yBSH+OmKrO5VhE4yCtuIYtZdXHToVLgRvq/Oj2ohGJEZvC0lu0rSQGeZuJS9IfzehIiZcgQHPqe3REsowPhpqC6JpaHtUFvDwA80u9Y/B94V5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k5rlZc62dv5AUo5lJyryoZgi/mwGEvOeps4cgdCPUn0=;
- b=sx8aGysyUMpD+6Seal7fJjiMCZNnL0ciCmzT4ZTtOgI36xCsR7NOquUzYQZHv0MNptO2tFkyN1yhJioYpRQMuNN+zhEeLSH7ZrltNhUdXQ5PVXXOP7QJ2DexGF5yFyD3ZxscEAIXn0RSD4LzqOtzw9sZEq6TBG8XpIliQKc0E1bgmeTwaZ6JHqA2AI/4Rq5AC1VEsFdVQDQFoZpQipB4B4mPutcEoGr/dveJDXgSXOiOIMThLSbwTpcKyh4FHzsXCT0vCKBqd+95RYVoLS1KbFYZ9N8FGv8ErXVJmzlAfZsVxbJ2tXjwuSogJq2ALuOrFofbpgv1b3QfD/5tl43k5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector1-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k5rlZc62dv5AUo5lJyryoZgi/mwGEvOeps4cgdCPUn0=;
- b=ukbpa7kDYkwgwXKRDrQ24p7/fyVe5G9Qq8KZPnOO5ndNb93S3pp/ZWq/r6gzq9NLKGSDyQb+eAjbaUx3i1iNl3fDyI0vKsXN8ecqsIpbQZ5wl/5El8EZEIuqPrjtXzyVcGc5RUxmEqRgn/w+o43ixfffKlvO1y+rEShlBM0aok2s5OVImJJlF+9bhxUgAjUVNziCCvsd3GZjM4ZHIXzl6y+qzI6IoXOYKFnPgacco63LZRmCo7/AHTE0B9e4mZwQBLTFLz9U/vxikkqstPYNBRq+g7DFKGyY9De6dI1fCpfNk9Utz1PDkuTlImt6jTFveJkwE13vEgpTIrzm9sYx0A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by PAXPR04MB8845.eurprd04.prod.outlook.com (2603:10a6:102:20c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.33; Tue, 18 Mar
- 2025 04:57:00 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.8534.031; Tue, 18 Mar 2025
- 04:57:00 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To: broonie@kernel.org,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com
-Cc: linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] spi: stm32-ospi: Include "gpio/consumer.h"
-Date: Tue, 18 Mar 2025 12:55:49 +0800
-Message-Id: <20250318045549.1711502-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0095.apcprd03.prod.outlook.com
- (2603:1096:4:7c::23) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC9F1DE3A5
+	for <linux-spi@vger.kernel.org>; Tue, 18 Mar 2025 07:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1742283219; cv=none; b=iASAUfDXVxi29QyzayePk1tBO1uVVrFjpn2OEVYG0mS45Y5ObHK30My4SHR/BqyIqRMWG3evku96op9X7BqHflXqmZyAzz7bgeeWskXt+rTb2Qvl2tyR5MAkAPxGtUoLJPbAhRodUr4s+6qZnUTFoV1N8V/AJrJnHO4RZfJf1iA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1742283219; c=relaxed/simple;
+	bh=8wzE6JQOqeICaxML7C018pHl5X7ishDt9mrfTLXYJyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=soGN+YZkevlHfE4nZF5F7gaIqe1+QTKg8DoTtTxjS6FE+GGANeer90gdRkXwo0pgOHyfMvfPySjx/H7A1dRNT3YD3RFPWEkE1zMoGxnDAzpK8jv3+qlYmRSPcJku37YXaHpOAJZ1fC/MzQgWw3umM5vDyU/2wC+MfRPoZyrRLj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nVKN73q4; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-22409077c06so132143625ad.1
+        for <linux-spi@vger.kernel.org>; Tue, 18 Mar 2025 00:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742283217; x=1742888017; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oOISki8dnLdBinmyN5Fhhwr/b+hOKzHW4IWqOj6LscA=;
+        b=nVKN73q4CCjo2AgKYwkfE9EqfswVwo92wiI39Dr2osL8XntAGgJLYllldQ90JiiAmc
+         bEjbmZWi1K5mfXoGOep3PVz1sa2fYlVJKbZqEfAiUw5I2az2jdV4iXyUNbD273f2a1D8
+         uJPJabu3MP/sS9dazEYVf/HJs9q8HF8/nB/AA7MABg55eOBefLdfI7abuMQHs6aw1bHo
+         WUgaQVt4I4UCeY0jbk1qK7MzQyGPeeJwr8NISWBcPF6cmR2MEtBUTuT9fnT8dJl6N9FW
+         dec6YwQPsfEeJZuFhDMSB0t0ailAYEs7ANHXYXBcy7s8ZLr0gViI/met6cHkp1ryZWqD
+         t41Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742283217; x=1742888017;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOISki8dnLdBinmyN5Fhhwr/b+hOKzHW4IWqOj6LscA=;
+        b=Pn6Csm2u0TyJ7SgMg3jD9Qb2oVcyvrtHiKFVorj+rEz9dSjbhPkvuNjq/h+DrxB2XV
+         HvR/UKlCZMTcoPQ2J+MBfugqJ9lEBxXyG/3eEtyGDPAES8N6pGKiSFLxxQ0TpWyf/q88
+         2oSWgC9xTW5IR9HJQuMT/QHr/hlIGYn837epA2+irY9pcDtytKD3zq2yiNPQbdkck4ce
+         AOz7W8AT5F2iuHXCu8lqAYAxhyf7c7VEacQmakl51w7h/iZTiML0wUNtoUq7JKlV9tWV
+         g+wRlOFqvG4rqdmS887am0YoldNPMOQwGh4L7dFR2Gn8pqqZ7Lb5XMy48kFNoc9PCrdw
+         HAww==
+X-Forwarded-Encrypted: i=1; AJvYcCVnlv9GcVZtyc9sdtiLjZf/3WHDPDk8GJXHdEIRn/WEO8r+w+QHdfcTIOag3eQcWCd+woGw1vnIqsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwscHlICPlmP9WSARTJKGdCieAnPGb2DYL/bAlF0wqXv2rhDjBJ
+	ETUFgkfLkmobKVcMxRrX0cZX8C6vrJZviKdi/Kw+nCRNWlD172Ayme4YQFuiCg==
+X-Gm-Gg: ASbGncsMysXk0DwyTyaFC+z5YJRtHAzTscld78rACwan0exJ+mtgyFwEv5xva+38Wj3
+	uI6u80kvRa8YXu98aO/tTf4D8Fb5iwdxSoBV115lWYMFMrcOMCERmdYNCOjKpiU5Yt4s8MMZMze
+	SECHJ6MwWOHxivif2ZYgzWhBKsL5koTf9jU1D24TQTLlnEkOPE33wfb3fKRQazGG7tuPFyFynPd
+	GJd0T9oWrrH4mteJ1jQxdjbVZrzz2clpB6VMiFeDTphPUxtPcMszNbwMQoityPXqpZEvRii1E47
+	UELPLMDqTBwl0ANrftLK1h5SXsc2M9Rix/QIZL8vRXdpO74667upnU8+E2ELldgIINg=
+X-Google-Smtp-Source: AGHT+IHFVJZtu55P6A5DXRQBgEp/mTXhH/XT9ESOfze6ksB+o7qEeCG3zUQ7NMUJih+FIIspGKyTcQ==
+X-Received: by 2002:a05:6a00:3cc8:b0:736:5b85:a911 with SMTP id d2e1a72fcca58-7372239a441mr22267474b3a.8.1742283216714;
+        Tue, 18 Mar 2025 00:33:36 -0700 (PDT)
+Received: from thinkpad ([120.56.195.170])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73760713875sm260507b3a.33.2025.03.18.00.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Mar 2025 00:33:36 -0700 (PDT)
+Date: Tue, 18 Mar 2025 13:03:32 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+	broonie@kernel.org, bbrezillon@kernel.org,
+	linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] mtd: rawnand: qcom: Pass 18 bit offset from QPIC
+ base address to BAM
+Message-ID: <20250318073332.guylcyqjmfq5nyyr@thinkpad>
+References: <20250310120906.1577292-1-quic_mdalam@quicinc.com>
+ <20250310120906.1577292-2-quic_mdalam@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|PAXPR04MB8845:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92195100-41ee-464a-055e-08dd65d950fb
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|366016|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?1yV8li2xr88wNij3tGXU807kqCL2QtF5heTf9OdSgc0P5iUvL3UQ1Wt2ucqc?=
- =?us-ascii?Q?3ftllec7+qQs8TYwHxigb+FlWtzHrRGnQ8LJrotrh6MZn99gVKPMxVDzevcg?=
- =?us-ascii?Q?NO5nw5xZkO723jsOjBODomDAuZ0bY3HFqkSdeAz6P9e7cdJvrv0TIKA1vw9v?=
- =?us-ascii?Q?hlbSqFXRA3LZlGNP98c7eXowuut7AMzeznjDMjSeI2y9y1dapYun+bnkOKEI?=
- =?us-ascii?Q?y+Lk1vypThW6TCvFHZ8dVxhv43dr7ha8T9yvV5NBSSailZQHR9htQSz6mvVi?=
- =?us-ascii?Q?sSGEtZYhe27qxNBAReBHMA7PobrEnNymRVKs+7Vp+QAwd1aV82AyP8gGEEVC?=
- =?us-ascii?Q?1SgFeqoOIeDG1D3IYdX/0zONm2L5KiaHmQWYtM5m8tjLEyoadq3PxbtkXyl8?=
- =?us-ascii?Q?I/U2xZaNeXdvOhlmSXc0kQmtgpYZjfLH/rdQlLP9HtL/BGo3Ap8w2ClQygZs?=
- =?us-ascii?Q?kihive0aw2gvRAjk7F42EyfQTfHAu4XV59hBhcs4yRmdQEAaRUxK/qMY9cnR?=
- =?us-ascii?Q?x5gtVOM3I8MPb8t2Dy/lCDjbtjGAQ7BMgVNvuikRc1fNzWC0J0yyIRTIZI5+?=
- =?us-ascii?Q?CjPcDCIWqKSKxWjaryf0TvZRLPmywCg81nUEjUGqtrs4gdc8d6wnTcA1ieQe?=
- =?us-ascii?Q?U9KSdek34jhwC5JDh1jJmXogcOmkPzkgBd5Kzs0AG2GvVYfHmnTkEBie5sD7?=
- =?us-ascii?Q?xWlslfJN1MWbW3+vwD30BqSg499WKHSFEOnHsclhYmEyeFylr58EIkBgJaCV?=
- =?us-ascii?Q?j9KWc1O9pEkdzWmdzahnqv/5y4059ViqIU1KoBoEucEAEfdzkQPCqZSzgIPW?=
- =?us-ascii?Q?CzArVp79b+NOY8O0OQuzNkEAY5RaaVpCkDshkkrXw2tq0SgRtyJLHWBBZWeH?=
- =?us-ascii?Q?uZklb95PLdKXYo93FL0ZbZ6nkToxzepk3DP9sxTN+TUE3x2gLLuF/Ch6XMxn?=
- =?us-ascii?Q?lDT6/ZxgcYwcDRDwMiD9qaxAneVc7qpnKtPywBRj6FUdtmWZg4BwAqlLZmon?=
- =?us-ascii?Q?rZFK5FoJFdDQeVys+jnLMb7CyulrQwySjCuIjFN+UtqnmoMraT73rABG0iuu?=
- =?us-ascii?Q?aHEuRganYLXbJj+74FEFu4n+yTy82bgbqkwaaZpqSGkS7cEnCdPm2CLUf6Lu?=
- =?us-ascii?Q?GZHJwG+dda6MmDrzPvmjytvvzGYRJBY15XvQA0CSEtMAeCYl5IgM+KD/ZL/j?=
- =?us-ascii?Q?bDVx2W6nrH7L0+tshVOfLua+UvR2cDCOa8Grc91ERM37VaKoeeaFFO7p+gX4?=
- =?us-ascii?Q?c722oLdS4LWJ3l2QStZvWtdwkGJAJZwgWQvl1ZZ/mqo/4hY37jX3XguxpiPz?=
- =?us-ascii?Q?xDffrX4ZcC1CFAGnQA01scleTnMRtYfJfBHzCkM8y5uxJn7VJQdzKvWb3N3z?=
- =?us-ascii?Q?tOppwzPOPx2HdFO551ZsEpVAFv+TTrsqyPqbYiv9ifOrjruUIvI4OJsUs/OS?=
- =?us-ascii?Q?8AjlFYZhMvKgINNyIeVhRpgj4XseIwpI?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(366016)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ePBKUF9KDF/nk5BdqJlpgBfLiz8GAFQZ8PSZR+SW0vfmkvc6YWqAKj6oVJzy?=
- =?us-ascii?Q?MLHhDaXx7piFVR0wyrzIn21ho4OWmYH9Dk2SxdIb2Jk+U2YVCFfFndE0f1X4?=
- =?us-ascii?Q?P3oMkvtl18S0zgzryonrzpw5gElxLRo5piBPpBeLtOctG4wMaSBquPE8mUFU?=
- =?us-ascii?Q?5sHAT4QLlFouxtB9fEy8SwYbLSLjgwuWRvQnrYscmGJihLUthEbFccRnY2px?=
- =?us-ascii?Q?RjjiCUMbX63MRYgcHirVjxMyh4ym03Ijy60Aq+YLxLKkTMmiof7nJeWlaU8J?=
- =?us-ascii?Q?HPBEj6G/KG7f/yq9fPp9WEBFkh94qy9VPUR1QKKkNojGoxjitN3NR1oDTFG5?=
- =?us-ascii?Q?KjrxdR58QBQryblSGH9sAj+r+PtTOcLJeEilfk0O6iHSJ96I/C7JtdwhnJY8?=
- =?us-ascii?Q?qhoM632snm4QR4JKufNjDQFRh4ByYe6tstAaelqm/IcbtIapYnJF/QS54ixa?=
- =?us-ascii?Q?YIM34xhI9HybDyndjYyP0oiZcWGD3WpUXO7xz8QIKKkjyDUbpusU0act0MOw?=
- =?us-ascii?Q?NaADY3h5bf0ZxdIh2v6YDzBAQYaj4L/31EmYSEdtQNiha1mS+cbHi9O+iOON?=
- =?us-ascii?Q?n5GXSliVn1Ke60anW2KX34ufTMkd+k8OeoYYX5PFwbduOCgY8fsPlsUE6qLj?=
- =?us-ascii?Q?n7ybj2ieZnf+F7Oux5Thz2xB8AClMZ9WlohoRkiPn6EKpseNfsNotXfy4Nms?=
- =?us-ascii?Q?7m6AFWWQjJEVVH7UwFjgX1lEdcQ+2CmAKBWBDhjzZqBkcjBZwvgnrbnHQxy/?=
- =?us-ascii?Q?IKbP9ZA+DjBKLIb7BdF/nXoxkj7nW9ZD+BDWwSncv4s7/Gy9Loo0gbU5HEaw?=
- =?us-ascii?Q?2GvPisi6R9/yMzMqe+Zl85W3qOFEHXRsbPGAffT/e/B/wXFW4VO+gyu1/3df?=
- =?us-ascii?Q?NgOsT64OkbLUpgB29U/rxlX2jxBcWnpmJFPCet0MgvhzIAkGwrEbSM4hEVkZ?=
- =?us-ascii?Q?jfGyRNBMDzrXOAFx8BLLjFR0fMdB7ikdX7a6eA+W5mpR5nO3h1fHdYiScmRR?=
- =?us-ascii?Q?FivUG6kJnOjd5LfRzR/GQ28CLcHZWF/Lsw0GlMEXkpOEVCp1PcX6UBFDUUxq?=
- =?us-ascii?Q?S/gwJoSdrVcCH8kPvN2RXl17uecOpHbg52ej04gFWaPvmloNfSFcXFLzSEFA?=
- =?us-ascii?Q?l5oJVjZQYzEoaSF5ESsZ2FwlFWquv0p3aB1VZW1JwFvqI5qUf4R7wUVgn+zM?=
- =?us-ascii?Q?2GD8Pk+pkBUfVZaE+rIpfiHdHBNGIaxCC6kQgZom9SccMwdUxBLVYwZAUY2D?=
- =?us-ascii?Q?BNO5tPKx07i+d9CnYZ+Hd/bvdSNMB6buTbNT5fNvIFFeaM21eL8HxV/7rIS6?=
- =?us-ascii?Q?19MPBvTwaRPOJodHskHwlCcgAVIr93DvPrN3sBhgnY7gFsNlO0W8JYA8zVyh?=
- =?us-ascii?Q?KadGMVNH4bahZ9dtvK5k0TSXDPRSzv3+32edOIq59tTyLx85u6LX7MddAltb?=
- =?us-ascii?Q?ukIxxZ6p6OVsHyvyq7WL+fAUb723nun9qYbG37IEsbnc2u8BetHnLoZ5Smkj?=
- =?us-ascii?Q?6NpdQD+/ayxtFr3hCJfmvE3gGbB2SryAirrHtnIuLjSXMeKVE3oaC+ciVEjV?=
- =?us-ascii?Q?sNKw2Yyl82KvJQSl0JytZiCWWRylycwbwBad4FSP?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92195100-41ee-464a-055e-08dd65d950fb
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Mar 2025 04:57:00.1117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Ay5o6srrh6vDDUcf1IKWw9n1/x7Fy0WqqlMKW+UnsQY05D3nsYqs2DhePM0avw8VpNO3FLDYZyncEidNADJ+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8845
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250310120906.1577292-2-quic_mdalam@quicinc.com>
 
-From: Peng Fan <peng.fan@nxp.com>
+On Mon, Mar 10, 2025 at 05:39:03PM +0530, Md Sadre Alam wrote:
+> Currently we are configuring lower 24 bits of address in descriptor
+> whereas QPIC design expects 18 bit register offset from QPIC base
+> address to be configured in cmd descriptors. This is leading to a
+> different address actually being used in HW, leading to wrong value
+> read.
+> 
+> the actual issue is that the NANDc base address is different from the
+> QPIC base address. But the driver doesn't take it into account and just
+> used the QPIC base as the NANDc base. This used to work as the NANDc IP
+> only considers the lower 18 bits of the address passed by the driver to
+> derive the register offset. Since the base address of QPIC used to contain
+> all 0 for lower 18 bits (like 0x07980000), the driver ended up passing the
 
-of_gpio.h should be deprecated, use "gpio/consumer.h".
+What is this address? Is it coming from DT?
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/spi/spi-stm32-ospi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> actual register offset in it and NANDc worked properly. But on newer SoCs
+> like SDX75, the QPIC base address doesn't contain all 0 for lower 18 bits
+> (like 0x01C98000). So NANDc sees wrong offset as per the current logic
+> 
+> The address should be passed to BAM 0x30000 + offset. In older targets
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index d4f413c8c3ce..668022098b1e 100644
---- a/drivers/spi/spi-stm32-ospi.c
-+++ b/drivers/spi/spi-stm32-ospi.c
-@@ -10,6 +10,7 @@
- #include <linux/dmaengine.h>
- #include <linux/err.h>
- #include <linux/errno.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -19,7 +20,6 @@
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_device.h>
--#include <linux/of_gpio.h>
- #include <linux/of_reserved_mem.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
+You gave no explanation on how this 0x30000 offset came into picture. I gave the
+reasoning in v2:
+
+"SDX55's NANDc base is 0x01b30000 and it has bits 17 and 18 set corresponding to
+0x30000. So it is correct that the IP only considers lower 18 bits and it used
+to work as the driver ended up passing 0x3000 + register offset."
+
+Then you replied:
+
+"This address 0x30000 is the address from QPIC_BASE to QPIC_EBI2NAND
+e.g for SDX55 and SDX65 the QPIC_BASE is 0x01B00000. So here lower 18-bits
+are zero only."
+
+No one outside Qcom knows what QPIC_BASE and QPIC_EBI2NAND are. We just know the
+NANDc address mentioned in DT, which corresponds to 0x01b30000 for SDX55.
+
+Please reword the commit message to present the full picture and not half baked
+info. This is v3, I see no improvement in the commit message, sorry.
+
+> the lower 18-bits are zero so that correct address being paased. But
+> in newer targets the lower 18-bits are non-zero in QPIC base so that
+> 0x300000 + offset giving the wrong value.
+> 
+> SDX75 : QPIC_QPIC | 0x01C98000 (Lower 18 bits are non zero)
+> SDX55 : QPIC_QPIC | 0x1B00000 (Lower 18 bits are zero) Same for
+
+There is no address as '0x1B00000' in DT.
+
+- Mani
+
 -- 
-2.37.1
-
+மணிவண்ணன் சதாசிவம்
 
