@@ -1,50 +1,46 @@
-Return-Path: <linux-spi+bounces-7210-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7211-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A32A67CE9
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 20:15:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8044BA67CEB
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 20:16:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 541683B25E2
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 19:13:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D165D19C056A
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 19:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6B82139B2;
-	Tue, 18 Mar 2025 19:13:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C01E8199924;
+	Tue, 18 Mar 2025 19:16:44 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDCC2139A2;
-	Tue, 18 Mar 2025 19:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCA615C0;
+	Tue, 18 Mar 2025 19:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742325198; cv=none; b=gRha1jCYNzSsnocXemWLXeenX3Vr1oisLHjWyesCXYF9WFekipKJLfC1YqMSG6kSOU5nL2vhnEddYC1/AMk3lz/0O3ih8tH0xednmWg7/YKX+IF6CfJXvZI4wEavxBzjRJD/9tsbtdAI+4wdop8w/Fm8qkkiI+Hp0dS5Qg4RD6M=
+	t=1742325404; cv=none; b=KM5IrkMXC6uo8BBy0/YiiHAllN4L5EsmbBQbfy6+OgkHuZYBXqlfKt8L28iJKzSxI61lWDw8IjTP51PQicN5G8zzgf/NllAypze6HoquB+UxxOZU7dmBiyIc73HGUCjyQtl8Rrl1vyU1YVlPqIoU8almhsIIPIuDTPpc9OCJLpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742325198; c=relaxed/simple;
-	bh=8wTedWLvcS9YJAHF+ZNeZe2q8fASOnTz6qRoYTkeLWo=;
+	s=arc-20240116; t=1742325404; c=relaxed/simple;
+	bh=89sJZybhvqn8VMKAoelBFvG6TNx8/1Nxp66TfZ9HfIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e+/zPrMfZUdljvyg5Itayydu9nL2E8rZPs++LOV+kj0BaBElvfI+enBXHDpVi0fUxurWQrIfCGNLiLVw/lT1vw7Ye4wfBAx5qzyQksMa6QXEiU2H67qW21ZrjT3xVk0Mr5DGvj/Dp4W0bAhZpNYSB+iSb4kSv2RJmyJcTKJOWus=
+	 Content-Type:Content-Disposition:In-Reply-To; b=lDnbInAabSvOKKGkblkY96QA6baUtxbW9EkB56wUv9QIDep8VL2SIjPZzXtfoWN0adK0DNVPNK23dxiePytntHD/grX6xha8X99axNjI3fgpCFi5hoVO0/Cz2TDttsNKYgm1oexCSgT+nacg5zJM68J9vneQXrvXd1fK1iiAGQY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F761C4CEDD;
-	Tue, 18 Mar 2025 19:13:13 +0000 (UTC)
-Date: Tue, 18 Mar 2025 19:13:10 +0000
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C21FC4CEDD;
+	Tue, 18 Mar 2025 19:16:42 +0000 (UTC)
+Date: Tue, 18 Mar 2025 19:16:39 +0000
 From: Mark Brown <broonie@debian.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Breno Leitao <leitao@debian.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
+To: Breno Leitao <leitao@debian.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
 	Sowjanya Komatineni <skomatineni@nvidia.com>,
 	Laxman Dewangan <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rmikey@meta.com, kernel-team@meta.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, noodles@earth.li,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>, jgg@ziepe.c
+	rmikey@meta.com, kernel-team@meta.com
 Subject: Re: [PATCH 1/3] spi: tegra210-quad: use device_reset_optional()
  instead of device_reset()
-Message-ID: <fbeca9fd-38a6-49ba-bb5f-6df5302d139d@sirena.org.uk>
+Message-ID: <1cd3e228-7a1a-4696-aae3-0ede63b4103e@sirena.org.uk>
 References: <22ffa8f5-6590-4602-853d-ceffed580f22@sirena.org.uk>
  <20250317-solemn-debonair-sambar-f04fa7@leitao>
  <f3e47d12-f6be-4bb5-b87b-84aa0037e1ef@sirena.org.uk>
@@ -53,8 +49,8 @@ References: <22ffa8f5-6590-4602-853d-ceffed580f22@sirena.org.uk>
  <20250318-furry-piquant-orca-da28c2@leitao>
  <47c40ec0-291c-4664-a66e-d76bd6360c0d@sirena.org.uk>
  <20250318-boisterous-adorable-chowchow-cea03b@leitao>
- <20250318-psychedelic-thundering-guppy-22bba2@leitao>
- <b3da27ce-161b-4462-a608-c36f4b0696ce@app.fastmail.com>
+ <7f2ac489-51e5-4798-a38a-a8b7ef3d4c83@sirena.org.uk>
+ <20250318-impetuous-vagabond-pig-eb288c@leitao>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,48 +58,41 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XIRHKOAFtKcUKZqC"
+	protocol="application/pgp-signature"; boundary="06Okc7PKDjPjNTC5"
 Content-Disposition: inline
-In-Reply-To: <b3da27ce-161b-4462-a608-c36f4b0696ce@app.fastmail.com>
+In-Reply-To: <20250318-impetuous-vagabond-pig-eb288c@leitao>
 X-Cookie: Swim at your own risk.
 
 
---XIRHKOAFtKcUKZqC
+--06Okc7PKDjPjNTC5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Mar 18, 2025 at 08:00:05PM +0100, Arnd Bergmann wrote:
+On Tue, Mar 18, 2025 at 12:08:56PM -0700, Breno Leitao wrote:
 
-> That does sound like the easiest answer: if the spi controller driver
-> knows that it needs a reset but there is no reset controller, shutting
-> itself down and removing its child devices seems like the least
-> offensive action.
+> Sorry, I am more than happy to change it the way you prefer, but, the
+> warnings coming from "device reset failed" are already printed once:
 
-In that case it's probably more just refuse to probe in the first case
-without the reset controller.  Given that the device isn't working at
-all it seems like the hardware description is broken anyway...
+> Here are the instances of calls to device_reset(), all of them with
+> `dev_warn_once()`:
 
-> No idea if there are other spi controllers that do something like this.
+Oh, in that case I guess just drop it (or based on Arnd's suggestion
+change the one in probe() to be fatal).
 
-I'm really not thrilled about adding runtime error handling at that
-level in the controller - it'll start to get into policy stuff if anyone
-does something clever and realistically it's all broken hardware
-description or very severe physical failure type stuff.
-
---XIRHKOAFtKcUKZqC
+--06Okc7PKDjPjNTC5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfZxcUACgkQJNaLcl1U
-h9D2AAf/dcmiOcYOqIN2/BwSZjt4h18B3OrnfoCLBAEpCGkIzCyP/u8pyZOtbA0c
-suiHpLtVriTdLzLusypmh7oFOhXa+fUNfnyRvgJt2DfJiKxPHQsEUaOYQWZxpz/C
-k05RPoaRCDv2XA8QE47ibiBgW+v6KMcWBaZa60ix/QrcqdwxNO/DSro/6xfl6aHg
-Z/un/hG3ODxg6KSPC8/pFTZKP+6pGBTslVSNr1b2C5IhpdFovL73JvxNKXmvFi1S
-nt8G77PPDeIUkuQJ6gruZeHD4Bo+IQ/K50kyRu2gj4pwYJTTRhLo9v+2cW3yVVb8
-xK4V3Sg6oOQSo4X4kYrVOMnym1/nLA==
-=hEhA
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfZxpYACgkQJNaLcl1U
+h9B6Ogf/UAh9iu2rs/VrO8Vz7kMb4Z3hYJg/yGx/meH/M7xZ4PCyRSpBtLxJlsba
+1KylyWcIRqPr3KCLurjgPRnTyeBaxu8Q0nsJyMzKi8ThewiLQlP6WvESb6uWnXDr
+IM5aZKDk2DtQSdoX8bSh2Kcl5eCzpDoiswZZiAeICX/AKoOd1yyKTsYFMf1JgB38
+Lzm+lxf1EyF3sd4T3amraBiuPAHpn98LpJKll18XXDtdJi6oZCueUgwePh4Jfw13
+iVFYKk1D4h2GJiIVAvX95KuJbvPzGhs54syXnEI48qLEujAHiF/T/QfnnIfhspaC
+Xm39wMLELjn7ZFDU6N6JZfR15RIx1g==
+=tv7R
 -----END PGP SIGNATURE-----
 
---XIRHKOAFtKcUKZqC--
+--06Okc7PKDjPjNTC5--
 
