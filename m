@@ -1,60 +1,60 @@
-Return-Path: <linux-spi+bounces-7236-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7237-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63202A69CBF
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 00:32:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 194A8A69CC1
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 00:33:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD188189A7C8
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Mar 2025 23:32:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3AC016C59D
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Mar 2025 23:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2423218585;
-	Wed, 19 Mar 2025 23:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B23321CFF4;
+	Wed, 19 Mar 2025 23:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bBsabnTj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+4dR1Jk"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88220290F;
-	Wed, 19 Mar 2025 23:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A52290F;
+	Wed, 19 Mar 2025 23:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742427122; cv=none; b=IGzat/Vey6tG4hO/KGWJ2tAnEiV3vaLwNBTXoteol1sDetJM9K9teBbDXUja+IC5/AO19Q5jm9dM5lheVH37KBceIIkie1wdypZDJbHF+/5ZqOmDPWHfYEEKwUwjuAt4nm2Og6Ngl/YFSw59HSiEj9xB6dSrJjdoR9lmvdbFXZk=
+	t=1742427224; cv=none; b=Jmv6KDzqBilWrLWMB0Z7ImMxOqAOnyUe9yztehiJFW+9w4jCTh5cMqVblxYcs6/7wFvG4rj98dZx+T08R4uyntklgsAM6Vy9DW82rNulHk1/0rfDLEw9T1T1RBJRvgexiFW0cDUC+hJeEOg+YC2HILzKvU+BZOASt/fjalH2X5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742427122; c=relaxed/simple;
-	bh=BYK7wiJ3IYPwdWQ9eDYlq5k6sKt6lDU1cGmgoZP2yUA=;
+	s=arc-20240116; t=1742427224; c=relaxed/simple;
+	bh=PxRttoTvNB9J1QacekgUAuBtHXKYjOGUJEnneRLw5j4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoSASekW5pshfBGkFu/g0tk9f3+bXbuAHaFrXTThIgZT/qBfOAvc7YLKfUSc7DljXQy45hm7XNj0MGqK/+/m2DgMv5inABxTLh9ECTOC5Dun09pyGMraEMpfETWn6S04LfPIKYSv8kxM+Bz2g7jk502KJKi0wo0OxhRv5pTXU9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bBsabnTj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A10C4CEE4;
-	Wed, 19 Mar 2025 23:32:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y7pDCe5XNEtzDNNOviThzbNINqwIr9mwO/rnVE8pj6zPNCeuUNhhca1bpTYNvWO26EHoCrZf2tNJA6JfPZ+3wwaFC1Galop5KMbEAGdRB2PHVz41PN9sgqM0bDkU5Ax05jRSlgbQsdkcX6LLtxc2dRmAo85+2ZXoAnz8b0/jIlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+4dR1Jk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763A9C4CEE4;
+	Wed, 19 Mar 2025 23:33:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742427122;
-	bh=BYK7wiJ3IYPwdWQ9eDYlq5k6sKt6lDU1cGmgoZP2yUA=;
+	s=k20201202; t=1742427222;
+	bh=PxRttoTvNB9J1QacekgUAuBtHXKYjOGUJEnneRLw5j4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bBsabnTj81gFC7wRg/9WIU4kKuVP7fT1PO9L/OsjlWxxlpqH4d8eLeKOeEwYd5F+q
-	 A8GfplZG8AnZjZykwZppd8kpBmfNrzCbxrVNHFEOOauxbVwTctan2CyjEgdfnYvXWU
-	 51LDtfz3mJqFUuNIX7gDvcC7xQ8bQbStmUPLgM1PnoKVGmYakyG699q/0JVLbGptMj
-	 b6x/HRtDWBrwLfTlGzNVn0xULoPjfclGz2oI8Z+nkGf8LQJBSBbVeAt2Ia5J0yiL8A
-	 7D6uEIDy9IrVPc7YV15Lc21OkJ0DPO6VR5OuKLGaO976X3cbcFf22CSG+TDfOl2/sl
-	 1+/RZ56NzXR5A==
-Date: Wed, 19 Mar 2025 18:32:00 -0500
+	b=r+4dR1Jk/LM38UAR+qw0mVLqpw7BJkDuD/wtNo677PfT5RxIWEQ5WIiNpDCHSgDHx
+	 JersdSUebdsUgIFHYbsXCYTYM9/E/5yDzQ87+tb0IuTxc1baX61f/g+ULRt2XGmbT1
+	 Y2iJCdcmt+VFeGYLerouQg0ovXnwcEx10zBZuAY2kZb4MwAspiZpi7htQo3obo/kKd
+	 xk7MwRgN2vqMHVi1tiOm2U41DFpADh2Vwn5Y+o8eyBWCnuyz9e8l66yb7cOpHUy5nf
+	 o4Ex/hNPcxUiuQX/5DbOaQl1zHsDNNIQknbjzUPWtRnS0hCUn3ICxdRVQsDnakPtAg
+	 UZLa4evf8s17w==
+Date: Wed, 19 Mar 2025 18:33:41 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Vaishnav Achath <vaishnav.a@ti.com>, linux-spi@vger.kernel.org,
+Cc: Vaishnav Achath <vaishnav.a@ti.com>, linux-spi@vger.kernel.org,
+	Rob Herring <robh+dt@kernel.org>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] spi: dt-bindings: cdns,qspi-nor: Deprecate the
- Cadence compatible alone
-Message-ID: <174242712038.2634185.12472009117874721270.robh@kernel.org>
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 3/3] spi: dt-bindings: cdns,qspi-nor: Require some
+ peripheral properties
+Message-ID: <174242722090.2636630.12361103968129083480.robh@kernel.org>
 References: <20250319094651.1290509-1-miquel.raynal@bootlin.com>
- <20250319094651.1290509-3-miquel.raynal@bootlin.com>
+ <20250319094651.1290509-4-miquel.raynal@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,27 +63,18 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250319094651.1290509-3-miquel.raynal@bootlin.com>
+In-Reply-To: <20250319094651.1290509-4-miquel.raynal@bootlin.com>
 
 
-On Wed, 19 Mar 2025 10:46:50 +0100, Miquel Raynal wrote:
-> The initial SPI controller IP from Cadence has always been implemented
-> into controllers from various hardware manufacturers and because of
-> that, it has always been (rightfully) doubled with a more specific
-> compatible. There are likely no reasons to keep this compatible
-> legitimate, alone. Make sure people do not get mislead by officially
-> deprecating this compatible.
-> 
-> While at deprecating, let's update the examples to avoid documenting
-> deprecated properties.
+On Wed, 19 Mar 2025 10:46:51 +0100, Miquel Raynal wrote:
+> There are 5 mandatory peripheral properties. They are described in a
+> separate binding but not explicitly required. Make sure they are
+> correctly marked required and update the example to reflect this.
 > 
 > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 > ---
-> It happens that there is a single in tree DT node named spi@ff705000,
-> so use the same second compatible to match a real life example.
-> ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/spi/cdns,qspi-nor.yaml  | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
 
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
