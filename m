@@ -1,155 +1,126 @@
-Return-Path: <linux-spi+bounces-7212-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7213-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94C1BA67DBA
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 21:07:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ECB7A683AF
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Mar 2025 04:23:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AC4D3B7427
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Mar 2025 20:07:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50F1619C6573
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Mar 2025 03:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B981F4C94;
-	Tue, 18 Mar 2025 20:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5139A24E4A6;
+	Wed, 19 Mar 2025 03:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Wa6G3XdC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JgXMCynC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a+1ErBMo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6461DC9BA;
-	Tue, 18 Mar 2025 20:07:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF4DA524F;
+	Wed, 19 Mar 2025 03:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742328473; cv=none; b=AEGW+yjYcnfTly0gOyhi/8EqVKF3dJ23vfqfKPXg4XdumQXbz6KfEU6rmhUiHViY7iWgf4ZJiGGjP5yAjDq/STp4XcT3E+/VlmWFyQGZzMTpJvfO9/8wv3jTPLaC89J4HfN0TKGctX+YRg0mNVO4URVoZjouyxxZZGqjxJtZ4JA=
+	t=1742354594; cv=none; b=A2Z5TS2VO6wOjsZf6lVDSiUpD8v/RZlX942ShwkBWeYkdT+p3SU7tIT7ECniAHi6ocBxPcejS/OL/IuZlYVlFKh/l2pgLHP4ESlFQ8lNTDttOjoR65RW6n+9XDJQdSyhSoj65oeTirHzTakXyKzcSURbdQ6r/ynUxCLTyGxKMYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742328473; c=relaxed/simple;
-	bh=b+GkVTVPdGMjesdH6roRJPL1rMkE7RQF6/rr9WZywxU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=NerkkefF71o5fWQechtxNEUE0H2JvbxdZ6oVsDFSBXJMIZc9z+c/5rmVSJHawdxFHFkfV6zrj4T0nY2JVWH35V4l7JbOi+81RnOmUqWScb2gHhjHhpba6G6r9aNvj/0tcVKpSiOKO9S4NO3h+L4e25Lee9VClHz31fl+B/Vsix4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Wa6G3XdC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JgXMCynC; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 7DFEB11401BA;
-	Tue, 18 Mar 2025 16:07:49 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Tue, 18 Mar 2025 16:07:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742328469;
-	 x=1742414869; bh=WkPt1j2YvUBVtY8MndwTQrQ/WFhEaBCQORkXakLQz2A=; b=
-	Wa6G3XdC1qGAiYU4KHemJv6ugYF6qLQPvbqAnpmssz9SDViP28TXWxTaEWLxr9fu
-	WpWmmNVqIMwWKozrcOR+aXc6d0Q5ex/LjaatQDUZ0EkKh3TJsrXlu3emb26+lnLh
-	R9ApHSKejtoA7Ci5GDtBA9fabU8ZC60uNd0nLr6S0xaOUMqpNndAv8ztfiO3RSIJ
-	SEqzYj9MO43LQ1TK3qu2z3v84Ni4brQuV6j+CfiupN25jIUpNLxTciKJ6/i7Xa5t
-	S9LlnBVVpIDg6Jxo0VqQXqXIuZUOsBCd9J5Xgti/1mGpNSw/1iZhq4ucOy9198bV
-	L/QAYE1jfNZY5diMC2GZLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742328469; x=
-	1742414869; bh=WkPt1j2YvUBVtY8MndwTQrQ/WFhEaBCQORkXakLQz2A=; b=J
-	gXMCynCO0TMtBvuNl902cmlUZzNKJUoGj/8ZWye4wVjf7NnzqUlliFOFHTIFvPaQ
-	Yu5T1V/zdNYfgJnutUmAy4UwRAtjCN3Aw8OLCFNelfgrjSBhtEUgyAlRDrfwrbEx
-	x/LLrPe4QmXCiqj1I0jXjpyLE2bGbTnZIOtMx0IcFjpVWfTVxEjAjTyvZRDv8RFX
-	jqhRH2t26J0s0WIKItyTaVhzvmYX84adCnrfwWiO9Qkwyi2MpHGQf9m23gGZIMSo
-	4J9WqLyz9Dbzqjs4HT4VZnbyulT5csOG9jjCQQsZwMyGhlkIzmTOfPjpECGfc6co
-	K8RK6fa8VWV0+8xCCaxzA==
-X-ME-Sender: <xms:lNLZZ1RvQIlI2l9piKL0B_K6httTa77aXMDRCsPhxDXWrjBAA7d5zw>
-    <xme:lNLZZ-z62hWgfAcE_76DJxx57O7R5duZoHb3YxNMiV85g7FWGgCvUJevg27meI4ux
-    SYyXBlPVBydbGYf3Zk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeeffeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    udeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsrhhoohhnihgvseguvggsih
-    grnhdrohhrghdprhgtphhtthhopehlvghithgrohesuggvsghirghnrdhorhhgpdhrtghp
-    thhtohepnhhoohgulhgvshesvggrrhhthhdrlhhipdhrtghpthhtohepthhhihgvrhhrhi
-    drrhgvughinhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepphgvthgvrhhhuhgvfigv
-    sehgmhigrdguvgdprhgtphhtthhopehjrghrkhhkoheskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghp
-    thhtohepkhgvrhhnvghlqdhtvggrmhesmhgvthgrrdgtohhmpdhrtghpthhtoheprhhmih
-    hkvgihsehmvghtrgdrtghomh
-X-ME-Proxy: <xmx:ldLZZ602nfxAnr7TCVrWt-BJ4tFe8u28zQB-vEdG6R0kLxofVuc2aQ>
-    <xmx:ldLZZ9Ahb4CQZwjN8ndIW2_zHTKg4sYNQQB96zQ-hnvP5Re-hn2JmQ>
-    <xmx:ldLZZ-gJtk-H8h2oFdn6DrUqy-g2io0AUs0UEucaGLqtVfDZ1S7bXA>
-    <xmx:ldLZZxpEL1De9LD3OfkBQ3iaLqWe3DKFk4I0erQsE9UhK3FYhg-PSQ>
-    <xmx:ldLZZywBs4gnlcZ2mLTXQUQqgHzrDh3s91EqqhuAPUWdT8fz4cSaXpXO>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E21222220073; Tue, 18 Mar 2025 16:07:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1742354594; c=relaxed/simple;
+	bh=kKjAvj/AN5gYTkbsbr9Dtg3vdgdIpD2AgBSDbtGlOmk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T0N1kIFC9vooGh7MkIxOycxsPXl5RqI+mfYSQVacmomV4u23zZ3oeSbbam7kcTEdANItKkUI6qpngHwHfngJTR5zIfr4XGjmA5L91S4P5dn9TJ0XuKqLGEKEuetV3calhjfAcAVqP+f8v34vwW7P2nqsB9IULRVne8sqY9HGE9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a+1ErBMo; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22398e09e39so136672335ad.3;
+        Tue, 18 Mar 2025 20:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742354592; x=1742959392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FeTfA5EvYDZdhGTqIyHcGqcsQRwK5RGXcRhBZWZJHcs=;
+        b=a+1ErBMoscIi1XI5N5b0W6JrVMN08uCWxoxk0oCTxH4K/f9Tado3uAfTBVYNzBaF1a
+         KDeHkiCBSEQzJ/hoX65E8n0jQjNBgxr9dBpdkRzFcAoMU1ylWS+frm40nMguRQQcNcim
+         M13/iPwo2mhLLl5MeUXEMB9/R/tu0Ws0LAi4YK+aja7872LOj1tZi0KWJBuwleexQTPZ
+         1RxxA79sRYDpQwdK/fC2sPreQ//fbh4hWTM6CQmCOE/PudPs0gJ6s+hWBvPLzDpXSMV0
+         DP9TVKMU9P/b0g/BKA8OL/cMFCJy3h+u9i5p6IspLYMkQaJ/ZPxSsOgWgex4C4ynvs6j
+         CATQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742354592; x=1742959392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FeTfA5EvYDZdhGTqIyHcGqcsQRwK5RGXcRhBZWZJHcs=;
+        b=OQvydOzjpVd0P2iBlLTwhWDETiT2oFr5jta/6UBOZj+J7JarAa1Ut5DHWE5xDVV6az
+         xYF+cKItUTkqdLiyMsauAFBLFMEdYw1DHWq0+qtxXScFNRLcyD66gkWSkeaS1vbnTimQ
+         yd+ySB+Xbp/6GZPT/flVHtD8IxVo5nGFC2GnEfXH5d/Vew543cbVUZT8/5aRq/qDkiJS
+         nE6fu6U8QZEPOWBsfoIohu2/39/uUNwQ8GBoHlv7hMyKhr39g3aGNkwsfeAiA6uC5Qfu
+         jMjPn2ovV8ZVu1t0JbjMo9X6zIebiF9ZHirYo4OnXLki/qnViPhPhiVWD0tZicMvke/D
+         PP1w==
+X-Forwarded-Encrypted: i=1; AJvYcCVDjHR/axM+Ij12RdWi9FS43hqKd41RZs3SZH8xfPcgXz2V6EhJ+0a8UMnGJ2wFajxAg7q11Asyjx1w@vger.kernel.org, AJvYcCXaKnoN+8inXKcP0WXC9lbS7hZmf6wijzeINI/SkVjioQYuCvashSIFkjsTiiMVzaNxGxm62BzLYWTu/MA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbYx5csXnve+pDd1bovOqCuRS/VftXiO6aSvpfUiuc/3c1+R5h
+	BaC6tyT4nrNmIky49NarIfvH0J+nOw3D38VafxQBKZzJy+yqIFKS
+X-Gm-Gg: ASbGncu/WxC8NdtiY5OXuCLob8GHmcyrWFm3GIbuiYJnmPLQbXdooSOBW6I2zMzZjZF
+	NqnnMFtGty4FTFginEcwH+oXdVDIs52zDA7jF4nqXVw+m0l+cDPPrvekn+64C80QrFO7hUGP8uz
+	uWfJlIvMKIf0XkOQU5sT1c/8/PS/X8NTrTiBRWrZwo8c42eXDu23NDIWZzZT8V6GRQU+K40VM4V
+	6dpuSao5Y/Q+GTo9iX6lAuCE8tB2WqB4zRRoH5A+XoX5xQmxoUt6N2ywLQlh6FKah0VbChQadQA
+	i0+0eAIjJcFOYqJIYMYB0hjrlARPUDPcKJ8pz+6hmH0kyKkIbuQsbWELcNC9HpenSA==
+X-Google-Smtp-Source: AGHT+IF2HGClT2t/YkULY9YGPj3N+zFEFj0PL3eDhpw9zJ/zZ1YETqaRj2KCXx2TkxDFDpecXKOS9Q==
+X-Received: by 2002:a17:903:2310:b0:224:256e:5e4e with SMTP id d9443c01a7336-226498228b4mr18231035ad.16.1742354592020;
+        Tue, 18 Mar 2025 20:23:12 -0700 (PDT)
+Received: from localhost.localdomain ([114.254.9.37])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-225c68bedd4sm103109595ad.105.2025.03.18.20.23.09
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 18 Mar 2025 20:23:11 -0700 (PDT)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linmq006@gmail.com
+Subject: [PATCH] spi: Fix reference count leak in slave_show()
+Date: Wed, 19 Mar 2025 11:23:04 +0800
+Message-Id: <20250319032305.70340-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tce50d14c41957055
-Date: Tue, 18 Mar 2025 21:07:28 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mark Brown" <broonie@debian.org>
-Cc: "Breno Leitao" <leitao@debian.org>,
- "Thierry Reding" <thierry.reding@gmail.com>,
- "Jon Hunter" <jonathanh@nvidia.com>,
- "Sowjanya Komatineni" <skomatineni@nvidia.com>,
- "Laxman Dewangan" <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, rmikey@meta.com,
- kernel-team@meta.com, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- noodles@earth.li, "Jarkko Sakkinen" <jarkko@kernel.org>,
- "Peter Huewe" <peterhuewe@gmx.de>, jgg@ziepe.c
-Message-Id: <6cf8af69-634e-40fa-af45-912540b29aac@app.fastmail.com>
-In-Reply-To: <fbeca9fd-38a6-49ba-bb5f-6df5302d139d@sirena.org.uk>
-References: <22ffa8f5-6590-4602-853d-ceffed580f22@sirena.org.uk>
- <20250317-solemn-debonair-sambar-f04fa7@leitao>
- <f3e47d12-f6be-4bb5-b87b-84aa0037e1ef@sirena.org.uk>
- <20250318-cuddly-translucent-teal-e2ac2d@leitao>
- <6355bbb3-a4b1-4fdc-8a97-d81bc5e1cf65@sirena.org.uk>
- <20250318-furry-piquant-orca-da28c2@leitao>
- <47c40ec0-291c-4664-a66e-d76bd6360c0d@sirena.org.uk>
- <20250318-boisterous-adorable-chowchow-cea03b@leitao>
- <20250318-psychedelic-thundering-guppy-22bba2@leitao>
- <b3da27ce-161b-4462-a608-c36f4b0696ce@app.fastmail.com>
- <fbeca9fd-38a6-49ba-bb5f-6df5302d139d@sirena.org.uk>
-Subject: Re: [PATCH 1/3] spi: tegra210-quad: use device_reset_optional() instead of
- device_reset()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 18, 2025, at 20:13, Mark Brown wrote:
-> On Tue, Mar 18, 2025 at 08:00:05PM +0100, Arnd Bergmann wrote:
->
->> That does sound like the easiest answer: if the spi controller driver
->> knows that it needs a reset but there is no reset controller, shutting
->> itself down and removing its child devices seems like the least
->> offensive action.
->
-> In that case it's probably more just refuse to probe in the first case
-> without the reset controller.  Given that the device isn't working at
-> all it seems like the hardware description is broken anyway...
+Fix a reference count leak in slave_show() by properly putting the device
+reference obtained from device_find_any_child().
 
-Right, I see now that it's doing a rather silly
+Fixes: 6c364062bfed ("spi: core: Add support for registering SPI slave controllers")
+Fixes: c21b0837983d ("spi: Use device_find_any_child() instead of custom approach")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/spi/spi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-       if (device_reset(tqspi->dev) < 0)
-               dev_warn_once(tqspi->dev, "device reset failed\n");
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index a7a4647717d4..ff07c87dbadc 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2954,9 +2954,13 @@ static ssize_t slave_show(struct device *dev, struct device_attribute *attr,
+ 	struct spi_controller *ctlr = container_of(dev, struct spi_controller,
+ 						   dev);
+ 	struct device *child;
++	int ret;
+ 
+ 	child = device_find_any_child(&ctlr->dev);
+-	return sysfs_emit(buf, "%s\n", child ? to_spi_device(child)->modalias : NULL);
++	ret = sysfs_emit(buf, "%s\n", child ? to_spi_device(child)->modalias : NULL);
++	put_device(child);
++
++	return ret;
+ }
+ 
+ static ssize_t slave_store(struct device *dev, struct device_attribute *attr,
+-- 
+2.39.5 (Apple Git-154)
 
-after which it just continues instead of propagating returning
-the error from the probe function. This is also broken when
-the reset controller driver has not been loaded yet and it
-should do an -EPROBE_DEFER.
-
-In case of a broken ACPI table, this would simply fail the
-probe() with an error, which seems like a sensible behavior.
-
-    Arnd
 
