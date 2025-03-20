@@ -1,181 +1,202 @@
-Return-Path: <linux-spi+bounces-7256-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7257-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABFACA6AAB9
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 17:12:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74B25A6AB1A
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 17:31:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBF293B2959
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 16:08:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6193AB457
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 16:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D381DED6F;
-	Thu, 20 Mar 2025 16:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07601EB5E0;
+	Thu, 20 Mar 2025 16:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I15WQL+z"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TbJSHnep";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3DKUZmtu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222EF21D5B0
-	for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 16:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F421E25FA;
+	Thu, 20 Mar 2025 16:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742486933; cv=none; b=V38h7vUjGZ+V3LZ9A/R/JXnPS9LRZkT4JvxE6jQf9UW0w537Dqc57gxlZXoOn3EnnHLgo7AuwVEhiezfWa6M3SUn7MSdanwMKaSRCfrf+9oc6zbR2jXp1DFPkvxlRmhP5claLNBHURn4XMBhxqHVUsnNJqxV0botOi3T+xzS76E=
+	t=1742488245; cv=none; b=oD6sBW2aSOEGDVwqxDV07GwwvDc+JmR1r06DSMaap6SKU895SFyOhnQIF4287qTl1n1LDtyjKPBhmm0jnh3OyuW0DZKrS2q99qsJfCvOIG0Ez1gWqWMhTwJ/tR6eNAtSDa4SHmlnwH2e3wRz1vur9EI6dPAeH+ZRc4UXmJ/L7z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742486933; c=relaxed/simple;
-	bh=z84sso7f3UfJQQ/31OsOx2FNEB5xtG36UftFfRP7B8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mXy+O26kGSEnKSWfQDDglvlo6CyOEaUFtfPUT9rsgBroVyzzBsfUltKOLwJ3fTsIXwAnzkroUmVC9+lfVwkvf6uzpbyQwIFUhpcGKXv7ojXFLkMI8M0TlUH7XUIADJDhlCsZhAs32SFT3SaYay7e4qnyG+puxgrnPEkFqH6fV1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I15WQL+z; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-391324ef4a0so126905f8f.2
-        for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 09:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742486929; x=1743091729; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6kHa60JIYKX9PlEg/V64hxswvAVtVGYMyVrVKFBfiB0=;
-        b=I15WQL+z42+lJ28g7mTs90ZQWyiHemkkhySDP86hqkOMQ2Qf1VVS4tjPMAy75GZ9Jb
-         pVkHf3i6lylfZCr17gZKr/qgWy2tAzVCyT1PPHWqdUlgDj4iqxnY6LwLFiixX3Rc72P0
-         VCvayJee/TwqtAs7rQt99KsGCCpSQQzFvTtThMOg25PlYM65wzjryNBvFNKZ+eDSX774
-         xr4X/e+6xDrBfYDEsgUjrzTm019nLNHeAZn8AvqfPN4CrY8CAXwTlJc4fOdDXVOpbiKL
-         PnJBh8WqfD+bs00oCPjeO65aihd1yiVU0hsnkK7d24+JbXN391wxIF2GK1dcLvdXOZ/F
-         BacQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742486929; x=1743091729;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6kHa60JIYKX9PlEg/V64hxswvAVtVGYMyVrVKFBfiB0=;
-        b=InCD1E6LaSA7qrb/ZCGvH6l4x/+BOvB5w2fjGFh0HxpirtVuuePGhoGxoa0A/X5hh5
-         MUa9RNoHXAZjtY7RI2KU8W8IZrt25p8RGbRXav9Fb1newpFo+azZQS94W6v1gP/80Ca6
-         BkfuWizMBDdUGodZ4YIBfTLibyLmzIj2+dSPHjIhw9P9cU1cVpCiuOwY0AnI/hcDo5vO
-         COBD1afiDSyDOdfzL+nv+evHXxIQQGYsBn+rApjo3eFW8eeg4UesMVqS0RTMiaj9D8LZ
-         20AsFWb5Efgq19y1UOPZ1z9tx2GLImTyHu5MovUuproQJMlSrj/w6G6yxPSDE0zwRaY5
-         JE6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXgTowdI2z8ycP3j0zXvu2AE4nv/N04ZxMIBY1supkSy1poYfLJ1c+5Li0CGEslRT0/DQdD+6TbxLw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzULdJU6rQISGrgdqNZpCGibiaHvhs8PmLnckfqMLUK8Sy1EpYZ
-	UPWE+Eurw1jjXRrg/CzR8JMXgTukndIyGikxCuQTty66It2yjlQ2Hpl1FpbduTg=
-X-Gm-Gg: ASbGnctZhLTrBzspUBVBTVR9uNjbCuWAsEkz6t1TLJuFmxA+i/eP1s+YNxNbjJ1tfC0
-	GR01duhgbzKlAS2z1x9qwCJHtP/UV9cAjLQvfodDvph6TAi0OP66xitICD0EQ6HrpOmmrMD9UoB
-	G5D7GCulXCAGcr1/RfXzTa/s+ntIhFdX2IFVaZzi9zgu5EmX506Zzhx6Wknw/X9MrBRn3qon2W9
-	8bdkOJzzjLwwT0Ff5dap5lmbVg5qtPIK7mQGtUBc/B537b2dFLV5uXmzE5CTDMrklZugJ0GMfl3
-	Mg+Ir+fdda1sTvhaBZ/3zQxvGt3+VaPXdxO0udpp3QfRT5ag9MZdcj2G68PZT66VPKyitpRGFwc
-	KG561alMQ6lMuhekn8QNZCm7YwtNOS5K3WvPmVUnb2SdUfnjKtg==
-X-Google-Smtp-Source: AGHT+IF+n4/125DWwRd4QO/E8Ib23KmYraVt8CqKURPcw7uagoIh6m4BUkg4QsmBHaueqHPBc4Swww==
-X-Received: by 2002:a5d:6da1:0:b0:38d:d371:e03d with SMTP id ffacd0b85a97d-3997f8ee224mr36284f8f.3.1742486928898;
-        Thu, 20 Mar 2025 09:08:48 -0700 (PDT)
-Received: from mordecai.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-3010-3bd6-8521-caf1.ipv6.o2.cz. [2a00:1028:83b8:1e7a:3010:3bd6:8521:caf1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9a3f81sm9920f8f.35.2025.03.20.09.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 09:08:48 -0700 (PDT)
-Date: Thu, 20 Mar 2025 17:08:46 +0100
-From: Petr Tesarik <ptesarik@suse.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Grant Likely <grant.likely@secretlab.ca>,
- linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, Robin Murphy
- <robin.murphy@arm.com>
-Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is
- DMA safe
-Message-ID: <20250320170846.64db4a4d@mordecai.tesarici.cz>
-In-Reply-To: <9ac953ec-fba3-41a7-8e5d-b867abc1566f@sirena.org.uk>
-References: <1359268504-24937-1-git-send-email-broonie@opensource.wolfsonmicro.com>
-	<20130205142128.2E28D3E1265@localhost>
-	<20250320124330.480d652d@mordecai.tesarici.cz>
-	<ca70e24d-57b6-4250-bd0d-7f5c72e1d282@sirena.org.uk>
-	<b37480a4-5344-4cf4-8fd1-400e2588fc28@app.fastmail.com>
-	<20250320153536.44774a74@mordecai.tesarici.cz>
-	<9ac953ec-fba3-41a7-8e5d-b867abc1566f@sirena.org.uk>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1742488245; c=relaxed/simple;
+	bh=BHivrOxBWXgpQ2Qkyf5uKnPvePmfhjahgzYNxwnvgxs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=ZxBkPWSD/bhH9jSZ5MPpebb2vXs/i7nz2uIBA2YDjSSLmBeCQ2hbS8fL0fVT1wWlmALEbxbDl2YFmgYumIZzACagA2G9RmTZgUySFnPmIfpb6877XObt9lnUQ2f448azRWKcX9jB8uzA6iWyVBRbSzc/66ORCG4iAPT9hEDK8e4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TbJSHnep; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=3DKUZmtu; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.stl.internal (Postfix) with ESMTP id 7EF1E11401BC;
+	Thu, 20 Mar 2025 12:30:42 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Thu, 20 Mar 2025 12:30:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742488242;
+	 x=1742574642; bh=uo+XX4cyhKiRxGLv7AY3F164TXma7z08UisUC+nuz1Q=; b=
+	TbJSHnepOMLAoWG+oPR3oCOOk1Bvtg3OliBmew69c26wlGAyvw7wXvw56Nzujo0X
+	892EhO9SqV7TjsZrOtXzONDX+IEOMsJK+HLWICDMunMtFqgxL2LzQTtQgIKDt08A
+	TWp6mMj4QSMFXoL9QDXCiBOaowMNIJc7cak2EYLa3KqmZFojwnHeoRaDisSSeeFL
+	tsVX7agAHZiVrk1FhW7y5thpnJLqLta71wI7+ZV7IYBoX2g8FvwPOw4GM12yq61T
+	hUaSHKl+Tdf7Wfx8MLDG7KgVFSQeIhTk5RwzTHoU6ez2ZOs2C4xby1uxnz9X2b8k
+	ESB2v269jG4N0uUoezKy6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742488242; x=
+	1742574642; bh=uo+XX4cyhKiRxGLv7AY3F164TXma7z08UisUC+nuz1Q=; b=3
+	DKUZmtuny24DSkd7h0EMrywIWhkZ9wA4Rknb8dTFF7W0/I6F6DLtfzBddlvjunhb
+	eodfjJylNmNk42FXea5wqMuDQYGGo4R2MC/Hcrf9ZJfJH/keSVkTE4VsCRSwyBnN
+	9vupvPgZV78HV8IkTdZfefVx0xjePs1+AuKwPvlOrTBBpJ3nfSVDxnFcMTG0PhAG
+	Fp+MJMux/8ef2pmanSpspSlYSWBa6ZSw06BvPPpQnIE9whtTp/mh4s6HGNtrJjkj
+	OdGRiMMOZt+j+gBQBgDGxAN1eigfp0LYR5WDUhwi2Q3QPYCqBujl15s32GhPSdrE
+	LdbbuVkvbxKmiixilMPOQ==
+X-ME-Sender: <xms:sULcZ_pRmvVBfu800I3i5v1dwDXA9Kqd2CEoR7HWVjy7q96M7yStJg>
+    <xme:sULcZ5qfyd6YGWukM_AHEyQRPvr6Gp3ENuVZ4S8jUlXDc-oGTUTUlLxNwhrMz-385
+    VR0_BdSbjYlGnF2-t4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekieelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepghhrrghnthdrlhhikhgvlhihsehsvggtrhgvthhlrggs
+    rdgtrgdprhgtphhtthhopehpthgvshgrrhhikhesshhushgvrdgtohhmpdhrtghpthhtoh
+    eplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:sULcZ8Oolaa-t68dBBdBFEePDdGMOVTsm6HO1ENjNjCAlCwORUwRfw>
+    <xmx:sULcZy55_1WR1-pwiJYUlIBNeLxHhB40mjWJD5JVSFJLk8An-nVtUw>
+    <xmx:sULcZ-6wUfuPN8R_Tuzwn1Ojn1A076234tEdd84dmLLYRQSY5m3KAw>
+    <xmx:sULcZ6jFDGeBCW3Q-Us-t-PZ-qt3C1hLofZ1fGCvauGWHTezfDIyhg>
+    <xmx:skLcZ50sbubEzst7DLlRz3J_rjhsrR7z18cU-6rU7zztW7sRaFtwmGuh>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D126E2220072; Thu, 20 Mar 2025 12:30:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-ThreadId: T6af0c8f44e761c09
+Date: Thu, 20 Mar 2025 17:30:01 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mark Brown" <broonie@kernel.org>
+Cc: "Petr Tesarik" <ptesarik@suse.com>,
+ "Grant Likely" <grant.likely@secretlab.ca>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Message-Id: <efe910db-77d0-4ddf-8fc2-df4955e7b9f3@app.fastmail.com>
+In-Reply-To: <db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
+References: 
+ <1359268504-24937-1-git-send-email-broonie@opensource.wolfsonmicro.com>
+ <20130205142128.2E28D3E1265@localhost>
+ <20250320124330.480d652d@mordecai.tesarici.cz>
+ <ca70e24d-57b6-4250-bd0d-7f5c72e1d282@sirena.org.uk>
+ <b37480a4-5344-4cf4-8fd1-400e2588fc28@app.fastmail.com>
+ <db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
+Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is DMA safe
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On Thu, 20 Mar 2025 15:34:42 +0000
-Mark Brown <broonie@kernel.org> wrote:
+On Thu, Mar 20, 2025, at 15:42, Mark Brown wrote:
+> On Thu, Mar 20, 2025 at 02:35:41PM +0100, Arnd Bergmann wrote:
+>> On Thu, Mar 20, 2025, at 13:29, Mark Brown wrote:
+>
+>> > On a lot of systems most transfers are short and won't be DMAed at all
+>> > since PIO ends up being more efficient, and most hardware is perfectly
+>> > happy to DMA to/from wherever so *shrug*.  SPI_BUFSIZ is a maximum of 32
+>> > bytes which is going to be under the copybreak limit for quite a few
+>> > controllers, though admittedly 16 is also a popular number, so a lot of
+>> > the time we don't actually DMA out of it at all.
+>
+>> I saw the same thing looked at it the other day and got confused
+>> about why 'local_buf' is allocated with GFP_DMA and 'buf'
+>> uses plain GFP_KERNEL when they are both used in the same place.
+>
+> Really we just don't expect the small buffer to be DMAed.
 
-> On Thu, Mar 20, 2025 at 03:35:36PM +0100, Petr Tesarik wrote:
-> 
-> > CC'ing Robin Murphy, because there seem to be some doubts about DMA API
-> > efficiency.  
-> 
-> Or possibly just documentation, the number of memory types we have to
-> deal with and disjoint interfaces makes all this stuff pretty miserable.
+I looked at a couple of drivers and found many have a copybreak
+limit less than SPI_BUFSIZE
 
-I have to agree here. Plus the existing documentation is confusing, as
-it introduces some opaque terms: streaming, consistent, coherent ...
-what next?
+#define SPI_BUFSIZ      max(32, SMP_CACHE_BYTES)
 
-I volunteer to clean it up a bit. Or at least to give it a try.
+drivers/spi/atmel-quadspi.c:#define ATMEL_QSPI_DMA_MIN_BYTES    16
+drivers/spi/spi-at91-usart.c:#define US_DMA_MIN_BYTES       16
+drivers/spi/spi-atmel.c:#define DMA_MIN_BYTES   16
+drivers/spi/spi-davinci.c:#define DMA_MIN_BYTES 16
+drivers/spi/spi-stm32.c:#define SPI_DMA_MIN_BYTES       16
+drivers/spi/spi-imx.c:  .fifo_size = 8,
 
-> > > > The whole goal there is to try to avoid triggering another copy to do
-> > > > the DMA so just reverting rather than replacing with some other
-> > > > construct that achieves the same goal doesn't seem great.  I think
-> > > > possibly we should just not do the copy at all any more and trust the
-> > > > core to DTRT with any buffers that are passed in, I think we've got
-> > > > enough stuff in the core though I can't remember if it'll copy with
-> > > > things allocated on the stack well.  I'd need to page the status back
-> > > > in.    
-> 
-> > No, I'm afraid kernel stack addresses (and many other types of
-> > addresses) cannot be used for DMA:  
-> 
-> > https://docs.kernel.org/core-api/dma-api-howto.html#what-memory-is-dma-able  
-> 
-> Right, that's what I thought.  Part of what spi_write_then_read() is
-> doing is taking the edge off that particular sharp edge for users, on
-> the off chance that the controller wants to DMA.
+so any transfers from 17 to 32 bytes would try to use the
+non-GFP_DMA 'buf' and then try to map that.
 
-Thanks for explaining the goal. It seems that most subsystems pass this
-complexity down to individual device drivers, and I agree that it is
-not the best approach.
+>> It also seems that the copy happens in the regmap_bulk_read()
+>> path but not the regmap_bulk_write(), which just passes down
+>> the original buffer without copying, as far as I can tell.
+>
+> Yes, writes don't need to do anything.
 
-If we want to make life easier for authors who don't need to squeeze
-the last bit of performance from their driver, the core DMA API could be
-extended with a wrapper function that checks DMA-ability of a buffer
-address and takes the appropriate action. I kind of like the idea, but
-I'm not a subsystem maintainer, so my opinion doesn't mean much. ;-)
+Can you explain why writes are different from reads here?
 
-> > > From what I found, there are two scenarios that may depend on
-> > > GFP_DMA today:  
-> 
-> > >  a) a performance optimization where allocating from GFP_DMA avoids
-> > >     the swiotlb bounce buffering. This would be the normal case on
-> > >     any 64-bit machine with more than 4GB of RAM and an SPI
-> > >     controller with a 32-bit DMA mask.  
-> 
-> > I must be missing something. How is a memcpy() in spi_write_then_read()
-> > faster than a memcpy() by swiotlb?  
-> 
-> spi_write_then_read() is just a convenience API, a good proportion of
-> users will be using spi_sync() directly.
+>> I think we have some corner cases where a driver allocates
+>> a GFP_DMA buffer, calls spi_write_then_read through regmap,
+>> which copies the data to the non-GFP_DMA global buffer,
+>> and then the SPI controller driver calls dma_map_single()
+>> on that, ending up with a third bounce buffer from
+>> swiotlb.
+>
+> I suspect that practically speaking almost everything will be under the
+> copybreak limit.  Probably we should just make regmap use spi_sync()
+> with the supplied buffers here and avoid spi_write_then_read().
 
-Got it.
+I'm a bit lost in that code, but doesn't spi_sync() require
+a buffer that can be passed into dma_map_sg() and (in theory
+at least) GFP_DMA?
 
-> > I still believe the SPI subsystem should not try to be clever. The
-> > DMA API already avoids unnecessary copying as much as possible.  
-> 
-> It's not particularly trying to be clever here?
+Based on what I see, every SPI transfer code paths goes
+through __spi_pump_transfer_message() and spi_map_msg(),
+which then tries to map it. This means two things:
 
-Well, it tries to guess whether the lower layer will have to make a
-copy, but it does not always get it right (e.g. memory encryption).
+- any user passing 17 to 32 bytes into the read function
+  either works correctly because the GFP_DMA was not needed,
+  or it's broken and nobody noticed
 
-Besides, txbuf and rxbuf might be used without any copying at all, e.g.
-if they point to direct-mapped virtual addresses (e.g. returned by
-kmalloc).
+- the way that spi_map_buf_attrs() is written, it actually
+  supports addresses from both kmap() and vmalloc() and
+  will attempt to correctly map those rather than reject
+  the buffer. While this sounds like a good idea, handling
+  vmalloc data like this risks stack data corruption
+  on non-coherent platforms when failing to map stack
+  buffers would be the better response.
 
-At the end of the day, it's no big deal, because SPI transfers are
-usually small and not performance-critical. I wouldn't be bothered
-myself if it wasn't part of a larger project (getting rid of DMA zones).
+>> I don't know what a good replacement interface would be, but
+>> ideally there should never be more than one copy here,
+>> which means that any temporary buffer would need to be
+>> allocated according to the dma_mask of the underlying
+>> bus master (dmaengine, spi controller, ...).
+>
+> Which is a pain because even if you've got the device for the SPI
+> controller there's no way to discover if it does it's own DMA.
 
-Petr T
+__spi_map_msg() already handles the case of an external
+DMA master through ctlr->dma_map_dev, so I think the same
+could be used to get a temporary buffer using
+dma_alloc_noncoherent() inside of spi_write_then_read()
+in place of the kmalloc(, GFP_DMA).
+
+      Arnd
 
