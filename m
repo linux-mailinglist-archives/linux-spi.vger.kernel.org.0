@@ -1,202 +1,132 @@
-Return-Path: <linux-spi+bounces-7257-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7258-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74B25A6AB1A
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 17:31:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A0FA6ACF0
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 19:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA6193AB457
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 16:30:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB92165F3C
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 18:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07601EB5E0;
-	Thu, 20 Mar 2025 16:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603EF226173;
+	Thu, 20 Mar 2025 18:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="TbJSHnep";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3DKUZmtu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nT2xM0mp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F421E25FA;
-	Thu, 20 Mar 2025 16:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54341DED4B;
+	Thu, 20 Mar 2025 18:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742488245; cv=none; b=oD6sBW2aSOEGDVwqxDV07GwwvDc+JmR1r06DSMaap6SKU895SFyOhnQIF4287qTl1n1LDtyjKPBhmm0jnh3OyuW0DZKrS2q99qsJfCvOIG0Ez1gWqWMhTwJ/tR6eNAtSDa4SHmlnwH2e3wRz1vur9EI6dPAeH+ZRc4UXmJ/L7z0=
+	t=1742494341; cv=none; b=hZZwcdjm4CLOlRM1b01MabJwEOY0gGipOFc4Pv3jfbuQEIbFyUnNKDdFj1ZZ8Zzn2J8Yg0udJbpBbn8hzuVWFSlWm1dLKnSc5MBn4QeKZAU6N0qJ9LNXckRGFYjE146qtwNzFFp9NrFzmCvnhyHfGHgw8UxY7zQj5upNXHqXTYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742488245; c=relaxed/simple;
-	bh=BHivrOxBWXgpQ2Qkyf5uKnPvePmfhjahgzYNxwnvgxs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=ZxBkPWSD/bhH9jSZ5MPpebb2vXs/i7nz2uIBA2YDjSSLmBeCQ2hbS8fL0fVT1wWlmALEbxbDl2YFmgYumIZzACagA2G9RmTZgUySFnPmIfpb6877XObt9lnUQ2f448azRWKcX9jB8uzA6iWyVBRbSzc/66ORCG4iAPT9hEDK8e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=TbJSHnep; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=3DKUZmtu; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id 7EF1E11401BC;
-	Thu, 20 Mar 2025 12:30:42 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Thu, 20 Mar 2025 12:30:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1742488242;
-	 x=1742574642; bh=uo+XX4cyhKiRxGLv7AY3F164TXma7z08UisUC+nuz1Q=; b=
-	TbJSHnepOMLAoWG+oPR3oCOOk1Bvtg3OliBmew69c26wlGAyvw7wXvw56Nzujo0X
-	892EhO9SqV7TjsZrOtXzONDX+IEOMsJK+HLWICDMunMtFqgxL2LzQTtQgIKDt08A
-	TWp6mMj4QSMFXoL9QDXCiBOaowMNIJc7cak2EYLa3KqmZFojwnHeoRaDisSSeeFL
-	tsVX7agAHZiVrk1FhW7y5thpnJLqLta71wI7+ZV7IYBoX2g8FvwPOw4GM12yq61T
-	hUaSHKl+Tdf7Wfx8MLDG7KgVFSQeIhTk5RwzTHoU6ez2ZOs2C4xby1uxnz9X2b8k
-	ESB2v269jG4N0uUoezKy6w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1742488242; x=
-	1742574642; bh=uo+XX4cyhKiRxGLv7AY3F164TXma7z08UisUC+nuz1Q=; b=3
-	DKUZmtuny24DSkd7h0EMrywIWhkZ9wA4Rknb8dTFF7W0/I6F6DLtfzBddlvjunhb
-	eodfjJylNmNk42FXea5wqMuDQYGGo4R2MC/Hcrf9ZJfJH/keSVkTE4VsCRSwyBnN
-	9vupvPgZV78HV8IkTdZfefVx0xjePs1+AuKwPvlOrTBBpJ3nfSVDxnFcMTG0PhAG
-	Fp+MJMux/8ef2pmanSpspSlYSWBa6ZSw06BvPPpQnIE9whtTp/mh4s6HGNtrJjkj
-	OdGRiMMOZt+j+gBQBgDGxAN1eigfp0LYR5WDUhwi2Q3QPYCqBujl15s32GhPSdrE
-	LdbbuVkvbxKmiixilMPOQ==
-X-ME-Sender: <xms:sULcZ_pRmvVBfu800I3i5v1dwDXA9Kqd2CEoR7HWVjy7q96M7yStJg>
-    <xme:sULcZ5qfyd6YGWukM_AHEyQRPvr6Gp3ENuVZ4S8jUlXDc-oGTUTUlLxNwhrMz-385
-    VR0_BdSbjYlGnF2-t4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekieelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtohepghhrrghnthdrlhhikhgvlhihsehsvggtrhgvthhlrggs
-    rdgtrgdprhgtphhtthhopehpthgvshgrrhhikhesshhushgvrdgtohhmpdhrtghpthhtoh
-    eplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:sULcZ8Oolaa-t68dBBdBFEePDdGMOVTsm6HO1ENjNjCAlCwORUwRfw>
-    <xmx:sULcZy55_1WR1-pwiJYUlIBNeLxHhB40mjWJD5JVSFJLk8An-nVtUw>
-    <xmx:sULcZ-6wUfuPN8R_Tuzwn1Ojn1A076234tEdd84dmLLYRQSY5m3KAw>
-    <xmx:sULcZ6jFDGeBCW3Q-Us-t-PZ-qt3C1hLofZ1fGCvauGWHTezfDIyhg>
-    <xmx:skLcZ50sbubEzst7DLlRz3J_rjhsrR7z18cU-6rU7zztW7sRaFtwmGuh>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D126E2220072; Thu, 20 Mar 2025 12:30:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1742494341; c=relaxed/simple;
+	bh=nvjPdX71LGd7inkaVZszmyMyYxdINYEkosCxlU1kpvw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kN1HHDNUWyXOT62flNSu28rrayOX+4ZrdUAyRBzcuw0XMyYzmpOBVDZSicaKfR/uqjPmYSJ5JNfKZ3VeeAwlq3QCAXaI2cCzCUNO5NVdqWcx0yavrZYy5qKwX6UIAVEXvjY8kXjisoG9z9jyoroVuQD5XKwkJF2S5z4WrrPXU0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nT2xM0mp; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43948021a45so9478935e9.1;
+        Thu, 20 Mar 2025 11:12:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742494338; x=1743099138; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DAj8w99nfg2slGXPfJ5zVyi4hbC1dv2j2JscG9r1JDg=;
+        b=nT2xM0mpKI2nHl5DsOknORFGkuxHYYps4MTSHAnyoHLV9TcbY9Xe82D291odPKqswo
+         66CrgyxJCsAob5q2uKDJYtnY39w87TqEtlHF2uCNExFAL1iKOuG2bwS0hCEDalQM4+ul
+         HPoalkz6Qd40aUx4tuNH3A8+PsPfDCD899iP96f//topntbbfSBnFxzM/pGorTWoRkTs
+         Rz5vLiStrZ9si9IGGdcbTd8dj/GAFJt3L4199W7QTSh9zcixdQKS/tK03oLEAGoQ3Iqg
+         mS6SeMmU9ctKgnyfJduq5KhZiMSinU855n35GfezGo+LC8261Ncko9G4/sxGvlfQNzyV
+         OuyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742494338; x=1743099138;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DAj8w99nfg2slGXPfJ5zVyi4hbC1dv2j2JscG9r1JDg=;
+        b=GqhQ59JbsSqRN0qac4jlmnDYQJ5Hh/IWvYkNZa/DO6hOZROk0g50NYQN9lnG1ybuw4
+         bMdZPLUybFkl5lEoFq6ypInxpHJqr0cZQhOvFTPJrFenSArgOHugEid6QjlPK75obl3B
+         Qm+OoXukP4cTyz54yfsnbngI5lu2fFqVndFF3lxkH3btwHy9CfADQL6yfwaqzFbqIwT0
+         vbmq+x0jU/pBlQFYoPFXe8laj8Y+iof9CJdzyOfL1Dqa8H76+Rt1v0E2cdsFtg6cV3Tz
+         GhyPGuC970kt8HPzr/7DyelC3OAXQKzq/9TZqiCBLHED4kNMqW0CtN/qCPgmjHD4T2wS
+         CyJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUF+XyoVym3SaBcgfJwrWIMaZdmeL7cPBeaRXrk3/xa5RZ+IB9tAiTM7LvVpuEMkcu0EBfo8ZXs+Ig3bkZ4@vger.kernel.org, AJvYcCUVZFoJifunnYkjpVBnbmn05FLsbo9AXsMZRZmg92MUgNF6X10nKWh2hEwKaIay7s9ONCTp6HqWgvpd4qnv@vger.kernel.org, AJvYcCX+HtJRKyA28Hjj6HlCoDEQswrl3Drc0RricFMcZ7eiG3XGhrohIuVD2Kmoex7k34BXUU9H9JG1xGW2@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTNhaVu/zuabCPOZRbCcSRelAd+dMJcC6eA0aI8m7+gOaADsKp
+	slFU44rf7aMHt7ICt7fkB2eTkliJqgnaHnk1Nd/eEYqiXJxUBmCV
+X-Gm-Gg: ASbGncsSYySAOsHmxr7oblUgHzlEPtEx1LbWEcLzWhA+HV71MIC+oxPHiyRE0ydTldK
+	s8idrFQTkpl3TeyflNSPdcs1pHLGKFP3ktCL+Hl2AGZdW5Mt21X9V7/CCkMvVerjknLDko5sqng
+	b1lroKurEZ9W3MXq40fU14YxecRlKTA97CoEI9Bg1sEqOgoEJek8SISEN/fjDMddlyL6+Q/Sq4F
+	kSD93Z1fiIZiRPNzsNVrEVi8Wg6EQXgj2MO12NEmdCg5e9wFLCsxCBcxnzcuOaDxykfeHCB8lGl
+	Ko0NRrnGbMZW37j+xfTFcSYBg9AjEGxYMBlinraMOmduEw+ixQRSrgv/lAIJjxN3xfsIoLC/URH
+	Bf1Rn8jFJ
+X-Google-Smtp-Source: AGHT+IFO7iQjH9/emMYq4Rm2sLpWs0UGB0cabmOue8uCKayYG0tr9zTuXMmtVUGNfuO0SoFF75D25g==
+X-Received: by 2002:a5d:588b:0:b0:391:4282:f60e with SMTP id ffacd0b85a97d-3997f91d8e1mr508399f8f.32.1742494337662;
+        Thu, 20 Mar 2025 11:12:17 -0700 (PDT)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3997f9e6544sm236209f8f.68.2025.03.20.11.12.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Mar 2025 11:12:17 -0700 (PDT)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Thu, 20 Mar 2025 19:11:59 +0100
+Subject: [PATCH next] spi: spi-qpic-snand: use kmalloc() for OOB buffer
+ allocation
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T6af0c8f44e761c09
-Date: Thu, 20 Mar 2025 17:30:01 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mark Brown" <broonie@kernel.org>
-Cc: "Petr Tesarik" <ptesarik@suse.com>,
- "Grant Likely" <grant.likely@secretlab.ca>, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org
-Message-Id: <efe910db-77d0-4ddf-8fc2-df4955e7b9f3@app.fastmail.com>
-In-Reply-To: <db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
-References: 
- <1359268504-24937-1-git-send-email-broonie@opensource.wolfsonmicro.com>
- <20130205142128.2E28D3E1265@localhost>
- <20250320124330.480d652d@mordecai.tesarici.cz>
- <ca70e24d-57b6-4250-bd0d-7f5c72e1d282@sirena.org.uk>
- <b37480a4-5344-4cf4-8fd1-400e2588fc28@app.fastmail.com>
- <db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
-Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is DMA safe
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20250320-qpic-snand-kmalloc-v1-1-94e267550675@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAG9a3GcC/x3MQQqDMBBA0avIrB2ICbXFq4iLdJzYoTpqIkUI3
+ r3B5Vv8nyFxFE7QVRki/yTJqgVNXQF9vE6MMhaDNfZhnDW4b0KY1OuI38XP80roQktNeLf0ejo
+ o4RY5yHlPe1A+Dxiu6w8mnKgFagAAAA==
+X-Change-ID: 20250320-qpic-snand-kmalloc-3f6c1fb6c873
+To: Mark Brown <broonie@kernel.org>
+Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, linux-spi@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Thu, Mar 20, 2025, at 15:42, Mark Brown wrote:
-> On Thu, Mar 20, 2025 at 02:35:41PM +0100, Arnd Bergmann wrote:
->> On Thu, Mar 20, 2025, at 13:29, Mark Brown wrote:
->
->> > On a lot of systems most transfers are short and won't be DMAed at all
->> > since PIO ends up being more efficient, and most hardware is perfectly
->> > happy to DMA to/from wherever so *shrug*.  SPI_BUFSIZ is a maximum of 32
->> > bytes which is going to be under the copybreak limit for quite a few
->> > controllers, though admittedly 16 is also a popular number, so a lot of
->> > the time we don't actually DMA out of it at all.
->
->> I saw the same thing looked at it the other day and got confused
->> about why 'local_buf' is allocated with GFP_DMA and 'buf'
->> uses plain GFP_KERNEL when they are both used in the same place.
->
-> Really we just don't expect the small buffer to be DMAed.
+The qcom_spi_ecc_init_ctx_pipelined() function allocates zeroed
+memory for the OOB buffer, then it fills the buffer with '0xff'
+bytes right after the allocation. In this case zeroing the memory
+during allocation is superfluous, so use kmalloc() instead of
+kzalloc() to avoid that.
 
-I looked at a couple of drivers and found many have a copybreak
-limit less than SPI_BUFSIZE
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+ drivers/spi/spi-qpic-snand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-#define SPI_BUFSIZ      max(32, SMP_CACHE_BYTES)
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index fbba7741a9bf336deed1c07eab8d5a94204878d7..b60f5c3fd1db84e66f9263404a52251460a4afec 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -261,7 +261,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+ 	ecc_cfg = kzalloc(sizeof(*ecc_cfg), GFP_KERNEL);
+ 	if (!ecc_cfg)
+ 		return -ENOMEM;
+-	snandc->qspi->oob_buf = kzalloc(mtd->writesize + mtd->oobsize,
++	snandc->qspi->oob_buf = kmalloc(mtd->writesize + mtd->oobsize,
+ 					GFP_KERNEL);
+ 	if (!snandc->qspi->oob_buf) {
+ 		kfree(ecc_cfg);
 
-drivers/spi/atmel-quadspi.c:#define ATMEL_QSPI_DMA_MIN_BYTES    16
-drivers/spi/spi-at91-usart.c:#define US_DMA_MIN_BYTES       16
-drivers/spi/spi-atmel.c:#define DMA_MIN_BYTES   16
-drivers/spi/spi-davinci.c:#define DMA_MIN_BYTES 16
-drivers/spi/spi-stm32.c:#define SPI_DMA_MIN_BYTES       16
-drivers/spi/spi-imx.c:  .fifo_size = 8,
+---
+base-commit: ad4488845193e81549c11903a5083b4c9cc19785
+change-id: 20250320-qpic-snand-kmalloc-3f6c1fb6c873
 
-so any transfers from 17 to 32 bytes would try to use the
-non-GFP_DMA 'buf' and then try to map that.
+Best regards,
+-- 
+Gabor Juhos <j4g8y7@gmail.com>
 
->> It also seems that the copy happens in the regmap_bulk_read()
->> path but not the regmap_bulk_write(), which just passes down
->> the original buffer without copying, as far as I can tell.
->
-> Yes, writes don't need to do anything.
-
-Can you explain why writes are different from reads here?
-
->> I think we have some corner cases where a driver allocates
->> a GFP_DMA buffer, calls spi_write_then_read through regmap,
->> which copies the data to the non-GFP_DMA global buffer,
->> and then the SPI controller driver calls dma_map_single()
->> on that, ending up with a third bounce buffer from
->> swiotlb.
->
-> I suspect that practically speaking almost everything will be under the
-> copybreak limit.  Probably we should just make regmap use spi_sync()
-> with the supplied buffers here and avoid spi_write_then_read().
-
-I'm a bit lost in that code, but doesn't spi_sync() require
-a buffer that can be passed into dma_map_sg() and (in theory
-at least) GFP_DMA?
-
-Based on what I see, every SPI transfer code paths goes
-through __spi_pump_transfer_message() and spi_map_msg(),
-which then tries to map it. This means two things:
-
-- any user passing 17 to 32 bytes into the read function
-  either works correctly because the GFP_DMA was not needed,
-  or it's broken and nobody noticed
-
-- the way that spi_map_buf_attrs() is written, it actually
-  supports addresses from both kmap() and vmalloc() and
-  will attempt to correctly map those rather than reject
-  the buffer. While this sounds like a good idea, handling
-  vmalloc data like this risks stack data corruption
-  on non-coherent platforms when failing to map stack
-  buffers would be the better response.
-
->> I don't know what a good replacement interface would be, but
->> ideally there should never be more than one copy here,
->> which means that any temporary buffer would need to be
->> allocated according to the dma_mask of the underlying
->> bus master (dmaengine, spi controller, ...).
->
-> Which is a pain because even if you've got the device for the SPI
-> controller there's no way to discover if it does it's own DMA.
-
-__spi_map_msg() already handles the case of an external
-DMA master through ctlr->dma_map_dev, so I think the same
-could be used to get a temporary buffer using
-dma_alloc_noncoherent() inside of spi_write_then_read()
-in place of the kmalloc(, GFP_DMA).
-
-      Arnd
 
