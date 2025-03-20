@@ -1,161 +1,217 @@
-Return-Path: <linux-spi+bounces-7243-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7244-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65B93A6A52C
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 12:45:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03787A6A5A4
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 13:00:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8098B7AC453
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 11:43:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE354846B2
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 11:58:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EF9222157E;
-	Thu, 20 Mar 2025 11:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D5F224224;
+	Thu, 20 Mar 2025 11:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Zoqc6Eox"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VuWNkm7m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A9521CA18
-	for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 11:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451EB2222A0
+	for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 11:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742471016; cv=none; b=XkaEAPv+vCnMYR8tl+w7h0F8/xa0wxcWsmxM9ykxqB9E0RBZNAwZh0eOJ0JFXsuXDVg/0519Wg0Y4XDF9TOhjllsv9eSaxu54GKOHo9Rb3k/AIz9hDwQ5+pyMRn8Mw/Nme6Q4ybgwoVuYn029glGn+jyQTRFL5BN7Lq0V7wzmo4=
+	t=1742471812; cv=none; b=iTVSgicoiR31d2ebYY424XLkuv16omn0EwrsQVTLhC0A15jf6zNNmkOMPnb298A1MDJB/HZQuR+zpahsfEcEgtE8XazIznR2t2m5S9UI2ccuHUhowx4YdLQhxPz8OSxwqBo9KCRjwqN6IZogO2wNJmpucUdku5SI1sMqTS3Ep/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742471016; c=relaxed/simple;
-	bh=QocqAbZ08O5BhqwJt2qkDxM3p5JVemrgvncg1R1Btw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bj7bZ4+Np7bFvJp3Tq3YBAqW4Wel8usrN3KuL5+37tKG2cAW7TK5Aj27/8tmmRV19swtR3Z9VWK548KwtylRwZhNj6REtf8xaKyMjJRbJJx8nerMG6Jy3Kl5NmKHyn5MwX9lxQVCzD8+1Ci3wknoweitWDN26+F7Oeau+b83HYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Zoqc6Eox; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3912ebb8e88so92726f8f.0
-        for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 04:43:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742471013; x=1743075813; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=awrVXoOgwgbowP/3YV5mb7Sfi/C/P3UfmEoAWYPQvvE=;
-        b=Zoqc6EoxibkNrftGMQrWpDzOjmv4h3zy4Bv9HY87+6fWP/i33DVhC43UBeQxuislkl
-         Q3o2ALxxzBQ46vujJVhfkax0r/HSFqeeM97Zsrmt6pHojhmFDOtZUOH4J1IMiHmGVkGB
-         2Ggh7mpMnWcWnziSJJflDVn8fG/WVZmneEFzkWeBNUBP5YiqNM2gmpklUoVBHjhoEPUg
-         TJMcXgQ/9FuLAMdBbXw67NtekTMt/DfmWoNIlTXtE9WJp/5Z6xSCxOMAwMvBH2hW0nON
-         zjyFDCwhy0qZMPES8ja03617PJJnHU9EfG30RFZpcTqTv0rJHiK97FqZKo4N3MTy54AV
-         LOJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742471013; x=1743075813;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=awrVXoOgwgbowP/3YV5mb7Sfi/C/P3UfmEoAWYPQvvE=;
-        b=t+Toyo/nN31QMkKZJURxqMI/XDKBcfH6y/b2/K9NFh/xZ5RSliUoD1jPNyER8sLsIm
-         97KD0N9+ftx6UyHsbwWWAcA/h7XJsX3KkPG8N3EQyloHFHXi765TcZQO8vCQuRv2Bhsa
-         Bu5oGNhPwwrci4RfdCtZ1hjH9Wx5HDPMOocuOxBQ/2HPMn8aYrA7qq5aCMtmYYMH7Zvx
-         lsi4dPHIREH2vdghjbtzg157KDXS4lUh5MC6uC4uXoWlULZjn+BxxYOt9bhO7Vy8E2rP
-         x937RuyTr4LVWyCiAypxAx74sQZ6/L44G94si0H2yglSSC6qhMdmqbxLlquJmAIZKZy4
-         4lPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUo39iZAQDVUAOpmsXQAYwwII55jDD0NVJDGWejo7q5EbUcQSPmfnorliPJIyUunxpP8MqxWa7PC4U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIVyMrPMPIU/V6I30isgMcmWNWjaIp7HFFTCroPl+toay9wMXa
-	tlC+rFZL6aBgdEgNJu5Ufr/3G7Hm7UPLEXreiKddUAnj4C43Hd/vEhJOyREGHeFxpW829ehCvd+
-	s
-X-Gm-Gg: ASbGncvpHnGV68Y09e423ZttG4yTEg2ueMCd+foJaIwJlYR9KCY/X4EtFuxfb06YdJx
-	9EKAPwjfstA44U9EaWqf6sMBH6TEZv3nHR4i68UeKGlB1t4+c2W1Pwl5sNSPvDxa9LR4g06A/fj
-	9FENIVK4FpoNXgkUmXDoyPKnCCQ2rl8cKQbN5ctAmqa+Zo+aA6l/vmSkDPXi0lOHhL00fgY+1JQ
-	iiTKKcSRPTV6zpRiEJBkngdgWceCnnVCU/IgFd+aiCom8Id8lKBUW01n9cgu3J+cYv2J5nsbw18
-	dLugRYOIt5oPQzDqjcAThzp5V4eXZau+m8UePHg4Jsu6RN0JaRKrbe9GRNu2JesMwdna4OA6GVe
-	W7hnOxl0r/9rSEbSvzvwY2pp/gJl2MXheusRTlwGjuotxuIxkdQ==
-X-Google-Smtp-Source: AGHT+IHpoeXYuSVaprnjvdPl/2KuINI57p2j38u8R+niUsmvbeZxMH/KDG1MEHxH3qO539selj/9zA==
-X-Received: by 2002:a05:6000:18a3:b0:382:4e5c:5c96 with SMTP id ffacd0b85a97d-39973b4672amr2382210f8f.8.1742471012795;
-        Thu, 20 Mar 2025 04:43:32 -0700 (PDT)
-Received: from mordecai.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-3010-3bd6-8521-caf1.ipv6.o2.cz. [2a00:1028:83b8:1e7a:3010:3bd6:8521:caf1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43fdab7asm46308595e9.29.2025.03.20.04.43.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Mar 2025 04:43:32 -0700 (PDT)
-Date: Thu, 20 Mar 2025 12:43:30 +0100
-From: Petr Tesarik <ptesarik@suse.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Grant Likely <grant.likely@secretlab.ca>, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is
- DMA safe
-Message-ID: <20250320124330.480d652d@mordecai.tesarici.cz>
-In-Reply-To: <20130205142128.2E28D3E1265@localhost>
-References: <1359268504-24937-1-git-send-email-broonie@opensource.wolfsonmicro.com>
-	<20130205142128.2E28D3E1265@localhost>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1742471812; c=relaxed/simple;
+	bh=WVor5m3mbnrL3MedZdiLuNiEk+8o9BLWI0Lc4lBZLU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YQpmzIIgTV64d5D9n1qOQ1jXs6D5m1cX5o+3KGviYy8gyaGw8P1zjlHwNb0mPnmvue/7uDptB8UjrIWddBvLzmemXOt+pF3+N3wc6pNLy7zXIdtBOleBnpfKdDJj+DHLX+5q9lk42NRFP1onzsMPiTclcguxsDr0uwSNXojTcHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VuWNkm7m; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5855244385;
+	Thu, 20 Mar 2025 11:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1742471807;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RrpUX2OXuDUhZRsn6w7EKaY4qY5AvVZ6xE/Z2kuruH4=;
+	b=VuWNkm7m3hHVaoyEWBwMudbnHbcUsY95uC/1am4IJ5jPwTrlRVfiTql+2GJdGbRRILSOFK
+	gPvKEfcroqX7+cK1uH+pMyiJ0AOlrA1F5DYTXgdEPWRU5E16DBvOX5nFuLWNxxh4uLG+vz
+	iaHeqi4LJPbX8jkOjByw1AX7zpZzpOopBlQpRwHOh3qosl1wq7RFCLi0rtXpaq4Ya9Wm0m
+	1QYHKGld8tvbHv8mrlVgeaPQzl+rnV/tekbeeH5X+uDcqFKN0UQXtwHRZlo+TPlaawHJ5y
+	AyqiBk5+kVNzxwFbQOIdoVawjoZBpJ+FpAoLBcRoREKTpH8TGxZLTg2IVXGq8A==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Mark Brown <broonie@kernel.org>,
+	<linux-spi@vger.kernel.org>
+Cc: Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <michael@walle.cc>,
+	<linux-mtd@lists.infradead.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v2] spi: spi-mem: Introduce a default ->exec_op() debug log
+Date: Thu, 20 Mar 2025 12:56:44 +0100
+Message-ID: <20250320115644.2231240-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekudehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetfeduleefjeffheevleeggfdtvdduhfdugeeuieejveejiedvhfdugfettdehnecukfhppeelvddrudekgedruddutddrfedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddukeegrdduuddtrdeftddphhgvlhhopehffidrshhtvghphhgrnhigphdrlhhotggrlhdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhitghhrghrugesnhhougdrrghtpdhrtghpthhtohepvhhighhnvghshhhrsehtihdrtghomhdprhgtphhtthhopehtuhguohhrrdgrmhgsrghruhhssehlihhnrghrohdrohhrghdprhgtphhtthhop
+ ehprhgrthihuhhshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhitghhrggvlhesfigrlhhlvgdrtggtpdhrtghpthhtoheplhhinhhugidqmhhtugeslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Tue, 05 Feb 2013 14:21:28 +0000
-Grant Likely <grant.likely@secretlab.ca> wrote:
+Many spi-mem controller drivers have a very similar debug log at the
+beginning of their ->exec_op() callback implementation. This debug log is
+effectively useful, so let's create one that is complete and concise
+enough, so developers no longer need to write their own. The verbosity
+being high, VERBOSE_DEBUG will be required in this case.
 
-> On Sun, 27 Jan 2013 14:35:04 +0800, Mark Brown <broonie@opensource.wolfsonmicro.com> wrote:
-> > Use GFP_DMA in order to ensure that the memory we allocate for transfers
-> > in spi_write_then_read() can be DMAed. On most platforms this will have
-> > no effect.
-> > 
-> > Signed-off-by: Mark Brown <broonie@opensource.wolfsonmicro.com>  
-> 
-> Applied, thanks.
+Remove the debug log from individual drivers and propose a common one.
 
-Hi all,
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+Changes in v2:
+- Switch to dev_vdbg() as the log is quite chatty as advised by Tudor.
+- Use two characters for the dummy bytes number to make sure alignment
+  is not broken in octal mode.
+---
+ drivers/spi/spi-aspeed-smc.c   |  7 -------
+ drivers/spi/spi-mem.c          | 11 +++++++++++
+ drivers/spi/spi-mtk-snfi.c     |  3 ---
+ drivers/spi/spi-npcm-fiu.c     |  5 -----
+ drivers/spi/spi-stm32-qspi.c   |  5 -----
+ drivers/spi/spi-zynq-qspi.c    |  4 ----
+ drivers/spi/spi-zynqmp-gqspi.c |  4 ----
+ 7 files changed, 11 insertions(+), 28 deletions(-)
 
-I'm sorry to revive such an old thread, but I'm trying to clean up DMA
-zone use in preparation of killing the need for that zone entirely, and
-this use looks fishy to me. I'm curious if it solves a real-world issue.
-
-First, the semantics of GFP_DMA can be confusing. FWIW allocating with
-GFP_DMA does *not* mean you get a buffer that can be directly passed to
-a DMA controller (think of cache coherency on arm, or memory encryption
-with confidential computing).
-
-Second, this code path is taken only if transfer size is greater than
-SPI_BUFSIZ, or if there is contention over the pre-allocated buffer,
-which is initialized in spi_init() without GFP_DMA:
-
-	buf = kmalloc(SPI_BUFSIZ, GFP_KERNEL);
-
-IIUC most transfers use this buffer, and they have apparently worked
-fine for the last 10+ years...
-
-What about reverting commit 2cd94c8a1b41 ("spi: Ensure memory used for
-spi_write_then_read() is DMA safe"), unless you have strong evidence
-that it is needed?
-
-Petr T
-
-> g.
-> 
-> > ---
-> >  drivers/spi/spi.c |    3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 19ee901..14d0fba 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -1656,7 +1656,8 @@ int spi_write_then_read(struct spi_device *spi,
-> >  	 * using the pre-allocated buffer or the transfer is too large.
-> >  	 */
-> >  	if ((n_tx + n_rx) > SPI_BUFSIZ || !mutex_trylock(&lock)) {
-> > -		local_buf = kmalloc(max((unsigned)SPI_BUFSIZ, n_tx + n_rx), GFP_KERNEL);
-> > +		local_buf = kmalloc(max((unsigned)SPI_BUFSIZ, n_tx + n_rx),
-> > +				    GFP_KERNEL | GFP_DMA);
-> >  		if (!local_buf)
-> >  			return -ENOMEM;
-> >  	} else {
-> > -- 
-> > 1.7.10.4
-> >   
-> 
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index e9beae95dded..62a11142bd63 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -303,13 +303,6 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
+ 	u32 ctl_val;
+ 	int ret = 0;
+ 
+-	dev_dbg(aspi->dev,
+-		"CE%d %s OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x len:%#x",
+-		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth,
+-		op->addr.nbytes, op->dummy.nbytes, op->data.nbytes);
+-
+ 	addr_mode = readl(aspi->regs + CE_CTRL_REG);
+ 	addr_mode_backup = addr_mode;
+ 
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index a9f0f47f4759..a31a1db07aa4 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -377,6 +377,17 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	/* Make sure the operation frequency is correct before going futher */
+ 	spi_mem_adjust_op_freq(mem, (struct spi_mem_op *)op);
+ 
++	dev_vdbg(&mem->spi->dev, "[cmd: 0x%02x][%dB addr: %#8llx][%2dB dummy][%4dB data %s] %d%c-%d%c-%d%c-%d%c @ %uHz\n",
++		 op->cmd.opcode,
++		 op->addr.nbytes, (op->addr.nbytes ? op->addr.val : 0),
++		 op->dummy.nbytes,
++		 op->data.nbytes, (op->data.nbytes ? (op->data.dir == SPI_MEM_DATA_IN ? " read" : "write") : "     "),
++		 op->cmd.buswidth, op->cmd.dtr ? 'D' : 'S',
++		 op->addr.buswidth, op->addr.dtr ? 'D' : 'S',
++		 op->dummy.buswidth, op->dummy.dtr ? 'D' : 'S',
++		 op->data.buswidth, op->data.dtr ? 'D' : 'S',
++		 op->max_freq ? op->max_freq : mem->spi->max_speed_hz);
++
+ 	ret = spi_mem_check_op(op);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
+index fdbea9dffb62..e82ee6dcf498 100644
+--- a/drivers/spi/spi-mtk-snfi.c
++++ b/drivers/spi/spi-mtk-snfi.c
+@@ -1284,9 +1284,6 @@ static int mtk_snand_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
+ 	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->controller);
+ 
+-	dev_dbg(ms->dev, "OP %02x ADDR %08llX@%d:%u DATA %d:%u", op->cmd.opcode,
+-		op->addr.val, op->addr.buswidth, op->addr.nbytes,
+-		op->data.buswidth, op->data.nbytes);
+ 	if (mtk_snand_is_page_ops(op)) {
+ 		if (op->data.dir == SPI_MEM_DATA_IN)
+ 			return mtk_snand_read_page_cache(ms, op);
+diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
+index 958bab27a081..67cc1d86de42 100644
+--- a/drivers/spi/spi-npcm-fiu.c
++++ b/drivers/spi/spi-npcm-fiu.c
+@@ -550,11 +550,6 @@ static int npcm_fiu_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 	int ret = 0;
+ 	u8 *buf;
+ 
+-	dev_dbg(fiu->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth, op->addr.val,
+-		op->data.nbytes);
+-
+ 	if (fiu->spix_mode || op->addr.nbytes > 4)
+ 		return -EOPNOTSUPP;
+ 
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 540b6948b24d..9691197bbf5a 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -362,11 +362,6 @@ static int stm32_qspi_send(struct spi_device *spi, const struct spi_mem_op *op)
+ 	u32 ccr, cr;
+ 	int timeout, err = 0, err_poll_status = 0;
+ 
+-	dev_dbg(qspi->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth,
+-		op->addr.val, op->data.nbytes);
+-
+ 	cr = readl_relaxed(qspi->io_base + QSPI_CR);
+ 	cr &= ~CR_PRESC_MASK & ~CR_FSEL;
+ 	cr |= FIELD_PREP(CR_PRESC_MASK, flash->presc);
+diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
+index 2bd25c75f881..5232483c4a3a 100644
+--- a/drivers/spi/spi-zynq-qspi.c
++++ b/drivers/spi/spi-zynq-qspi.c
+@@ -540,10 +540,6 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
+ 	int err = 0, i;
+ 	u8 *tmpbuf;
+ 
+-	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth);
+-
+ 	zynq_qspi_chipselect(mem->spi, true);
+ 	zynq_qspi_config_op(xqspi, mem->spi, op);
+ 
+diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
+index d800d79f62a7..1c78713ad61a 100644
+--- a/drivers/spi/spi-zynqmp-gqspi.c
++++ b/drivers/spi/spi-zynqmp-gqspi.c
+@@ -1067,10 +1067,6 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 	u16 opcode = op->cmd.opcode;
+ 	u64 opaddr;
+ 
+-	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
+-		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
+-		op->dummy.buswidth, op->data.buswidth);
+-
+ 	mutex_lock(&xqspi->op_lock);
+ 	zynqmp_qspi_config_op(xqspi, op);
+ 	zynqmp_qspi_chipselect(mem->spi, false);
+-- 
+2.48.1
 
 
