@@ -1,217 +1,101 @@
-Return-Path: <linux-spi+bounces-7244-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7245-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03787A6A5A4
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 13:00:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C05FA6A60F
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 13:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE354846B2
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 11:58:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64FF2188BE4C
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Mar 2025 12:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D5F224224;
-	Thu, 20 Mar 2025 11:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF3BA21D5BF;
+	Thu, 20 Mar 2025 12:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VuWNkm7m"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ccRvMMc4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451EB2222A0
-	for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 11:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398DA21CFE0
+	for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 12:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742471812; cv=none; b=iTVSgicoiR31d2ebYY424XLkuv16omn0EwrsQVTLhC0A15jf6zNNmkOMPnb298A1MDJB/HZQuR+zpahsfEcEgtE8XazIznR2t2m5S9UI2ccuHUhowx4YdLQhxPz8OSxwqBo9KCRjwqN6IZogO2wNJmpucUdku5SI1sMqTS3Ep/U=
+	t=1742472632; cv=none; b=I0SWsfE94jXnp0DWJjnwxEXEu5ORaXweXLLV1ymFj8LNNlxCRpMxUVWDqmgUrw4iFWc6hY7pEl1av0wpj+21XYC0gGCLArQWEkYJ0hzsPJMZaUxlJYl/8mo4Vu/MtHKb+AL0WYugbRUG+rigbeFXL59rO7NYb45qZa7gxBJAUPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742471812; c=relaxed/simple;
-	bh=WVor5m3mbnrL3MedZdiLuNiEk+8o9BLWI0Lc4lBZLU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YQpmzIIgTV64d5D9n1qOQ1jXs6D5m1cX5o+3KGviYy8gyaGw8P1zjlHwNb0mPnmvue/7uDptB8UjrIWddBvLzmemXOt+pF3+N3wc6pNLy7zXIdtBOleBnpfKdDJj+DHLX+5q9lk42NRFP1onzsMPiTclcguxsDr0uwSNXojTcHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VuWNkm7m; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5855244385;
-	Thu, 20 Mar 2025 11:56:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742471807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RrpUX2OXuDUhZRsn6w7EKaY4qY5AvVZ6xE/Z2kuruH4=;
-	b=VuWNkm7m3hHVaoyEWBwMudbnHbcUsY95uC/1am4IJ5jPwTrlRVfiTql+2GJdGbRRILSOFK
-	gPvKEfcroqX7+cK1uH+pMyiJ0AOlrA1F5DYTXgdEPWRU5E16DBvOX5nFuLWNxxh4uLG+vz
-	iaHeqi4LJPbX8jkOjByw1AX7zpZzpOopBlQpRwHOh3qosl1wq7RFCLi0rtXpaq4Ya9Wm0m
-	1QYHKGld8tvbHv8mrlVgeaPQzl+rnV/tekbeeH5X+uDcqFKN0UQXtwHRZlo+TPlaawHJ5y
-	AyqiBk5+kVNzxwFbQOIdoVawjoZBpJ+FpAoLBcRoREKTpH8TGxZLTg2IVXGq8A==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>,
-	<linux-spi@vger.kernel.org>
-Cc: Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <michael@walle.cc>,
-	<linux-mtd@lists.infradead.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2] spi: spi-mem: Introduce a default ->exec_op() debug log
-Date: Thu, 20 Mar 2025 12:56:44 +0100
-Message-ID: <20250320115644.2231240-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1742472632; c=relaxed/simple;
+	bh=Yyfk8X7hQAsUD9G+4fe4CzUE4boCyIRsCV8/4Z21Gnc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lkMKM/F2tKIYZUKLuUOVWY9rYK2ZXLUj0w34YpUvOzmTfrBX60W4dhA/T/hu1AZ4CfY5+DombNxhM7/MhqLayF25yxPcvUuxqiAkE1q8W47VezRW/SOtMMooa6YXGOEDB+iOedCD9s8wVIDGg1YiUPVGWzEzxr/J8GUgnQREiPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ccRvMMc4; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43bb6b0b898so6308965e9.1
+        for <linux-spi@vger.kernel.org>; Thu, 20 Mar 2025 05:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742472629; x=1743077429; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yyfk8X7hQAsUD9G+4fe4CzUE4boCyIRsCV8/4Z21Gnc=;
+        b=ccRvMMc4wwTC5+yQ0umYlUTILedkfcQJyYTeG8uDndq7NLiYFpi9qwlKe9lxE1Ruvc
+         VfaoZ2cst7tpzviN2mX84MXe45YXBWm4NyGqV//iacuzKqNRU256gKNZUlhIz+Gh8YwM
+         /pzFT0N7CQXgWcyObJaut+ZfG1HOoJKb+UeYXw1VVgScMZH4mb0nNOAvLbwiXb3HCHW/
+         XlkAnPgDxihH7xnhk/7zc3ZH9pywMUBrhDCQvKlaDlN2PnL27oN+fy92k7S4FXbnATKq
+         eTb8qozimP1htJb7ip3OlW4/MGEkuRJ5JrUhYXEaLQ2a8kckk0HhvajqdqsZdD3Dgx97
+         qFjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742472629; x=1743077429;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yyfk8X7hQAsUD9G+4fe4CzUE4boCyIRsCV8/4Z21Gnc=;
+        b=oDXiSGlX+fUu6G3IuDaaY8aD35bt540kDtJXAk3QzjLk7NXO2EShhckVfyeDjGMmJ6
+         J8mw4HfTpVpn8mCWFQLIsPe7qzUIwgFDOPQtZi8o4OZEgjZ41YgIlBkcGpE9MRKjn7dL
+         KcTUBSOT+rfV2L8MDu/B04fg9PdXVZBeXFJi/nmCOMLDPdo6LrbTYEizw8VvfjV4tAXD
+         h3nISYoyVlyM/yPQBTSGWW7mR5uvp6tDuZiyFnr4HFG4u9bGG2HG7RtCzPcnzrjsqK8q
+         rsksXJ95NsA3vT+f9jk2ysCkxwdqM/XY3rZOG7uzLeHqOv1+jsafbe/WI9XvfhEi14Cu
+         xSrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiAxz2BJE5Xb4EKhcVzICLWLQ0wskiYCNiGu56gpFsdRsIuq5Rqwoq7xU96Ox3ZCIAeQM398GyzBM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTWGkhO5HEGdnCClRDh1Ya53ZS9w7KymBMMpRx8BaAqMEBc+eS
+	fng9cyRZB98CiwPsTvqm+CHxOWDjSSjbDgF6zFsTsJHQZWINsszw01H/+4oWd0A=
+X-Gm-Gg: ASbGnctFYoS0HIwMotGsZvAjnWlit4L8rwnrTOXGY7AKPQ+wu/U8Rybj0g0jTvBHEp7
+	IohjIteoMOJuMBgvCnD348e+w1tS/+dN4AEJoKJD/zhC24EYCyOs94bvUTX02hgeS5XOiYYGLu6
+	sKrb266EohnNmzuYiFLA2aMhIRjwOAmZL23L4BQlwXEI95p84mG8NspW6lRZBLIbdsmR7jyIlwF
+	y9V0V1fa+8sp7UugNPYT+9sVB5Jp/vUZ3t2WVsltAg8FPAuE0ffxNYcNyuU95WfZz9Nb5l4MU3V
+	CHEIL2KoXx8yYsP7l7/W3LAJUE4rEW/czAljKsVKmPk7Z/kyQ4c3nw==
+X-Google-Smtp-Source: AGHT+IHSHEnAtCV472PdfnFW98IAihH7mJvzaZ29n1/yTOK9+JEss+YYOZt3hAmGvjq3O6DpMDzK8A==
+X-Received: by 2002:a5d:5f89:0:b0:391:4231:414 with SMTP id ffacd0b85a97d-39973af92a0mr7530290f8f.40.1742472629340;
+        Thu, 20 Mar 2025 05:10:29 -0700 (PDT)
+Received: from [192.168.0.14] ([79.115.63.206])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d3bb2b2ffsm58289185e9.1.2025.03.20.05.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 05:10:28 -0700 (PDT)
+Message-ID: <d93de101-42e7-4433-8c77-a8bcb5a9ae6f@linaro.org>
+Date: Thu, 20 Mar 2025 12:10:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekudehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeetfeduleefjeffheevleeggfdtvdduhfdugeeuieejveejiedvhfdugfettdehnecukfhppeelvddrudekgedruddutddrfedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddukeegrdduuddtrdeftddphhgvlhhopehffidrshhtvghphhgrnhigphdrlhhotggrlhdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhitghhrghrugesnhhougdrrghtpdhrtghpthhtohepvhhighhnvghshhhrsehtihdrtghomhdprhgtphhtthhopehtuhguohhrrdgrmhgsrghruhhssehlihhnrghrohdrohhrghdprhgtphhtthhop
- ehprhgrthihuhhshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhitghhrggvlhesfigrlhhlvgdrtggtpdhrtghpthhtoheplhhinhhugidqmhhtugeslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
-X-GND-Sasl: miquel.raynal@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: spi-mem: Introduce a default ->exec_op() debug
+ log
+To: Miquel Raynal <miquel.raynal@bootlin.com>, Mark Brown
+ <broonie@kernel.org>, linux-spi@vger.kernel.org
+Cc: Richard Weinberger <richard@nod.at>, Vignesh Raghavendra
+ <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>,
+ Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250320115644.2231240-1-miquel.raynal@bootlin.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20250320115644.2231240-1-miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Many spi-mem controller drivers have a very similar debug log at the
-beginning of their ->exec_op() callback implementation. This debug log is
-effectively useful, so let's create one that is complete and concise
-enough, so developers no longer need to write their own. The verbosity
-being high, VERBOSE_DEBUG will be required in this case.
 
-Remove the debug log from individual drivers and propose a common one.
-
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
-Changes in v2:
-- Switch to dev_vdbg() as the log is quite chatty as advised by Tudor.
-- Use two characters for the dummy bytes number to make sure alignment
-  is not broken in octal mode.
----
- drivers/spi/spi-aspeed-smc.c   |  7 -------
- drivers/spi/spi-mem.c          | 11 +++++++++++
- drivers/spi/spi-mtk-snfi.c     |  3 ---
- drivers/spi/spi-npcm-fiu.c     |  5 -----
- drivers/spi/spi-stm32-qspi.c   |  5 -----
- drivers/spi/spi-zynq-qspi.c    |  4 ----
- drivers/spi/spi-zynqmp-gqspi.c |  4 ----
- 7 files changed, 11 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index e9beae95dded..62a11142bd63 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -303,13 +303,6 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
- 	u32 ctl_val;
- 	int ret = 0;
- 
--	dev_dbg(aspi->dev,
--		"CE%d %s OP %#x mode:%d.%d.%d.%d naddr:%#x ndummies:%#x len:%#x",
--		chip->cs, op->data.dir == SPI_MEM_DATA_IN ? "read" : "write",
--		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
--		op->dummy.buswidth, op->data.buswidth,
--		op->addr.nbytes, op->dummy.nbytes, op->data.nbytes);
--
- 	addr_mode = readl(aspi->regs + CE_CTRL_REG);
- 	addr_mode_backup = addr_mode;
- 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index a9f0f47f4759..a31a1db07aa4 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -377,6 +377,17 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	/* Make sure the operation frequency is correct before going futher */
- 	spi_mem_adjust_op_freq(mem, (struct spi_mem_op *)op);
- 
-+	dev_vdbg(&mem->spi->dev, "[cmd: 0x%02x][%dB addr: %#8llx][%2dB dummy][%4dB data %s] %d%c-%d%c-%d%c-%d%c @ %uHz\n",
-+		 op->cmd.opcode,
-+		 op->addr.nbytes, (op->addr.nbytes ? op->addr.val : 0),
-+		 op->dummy.nbytes,
-+		 op->data.nbytes, (op->data.nbytes ? (op->data.dir == SPI_MEM_DATA_IN ? " read" : "write") : "     "),
-+		 op->cmd.buswidth, op->cmd.dtr ? 'D' : 'S',
-+		 op->addr.buswidth, op->addr.dtr ? 'D' : 'S',
-+		 op->dummy.buswidth, op->dummy.dtr ? 'D' : 'S',
-+		 op->data.buswidth, op->data.dtr ? 'D' : 'S',
-+		 op->max_freq ? op->max_freq : mem->spi->max_speed_hz);
-+
- 	ret = spi_mem_check_op(op);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
-index fdbea9dffb62..e82ee6dcf498 100644
---- a/drivers/spi/spi-mtk-snfi.c
-+++ b/drivers/spi/spi-mtk-snfi.c
-@@ -1284,9 +1284,6 @@ static int mtk_snand_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- {
- 	struct mtk_snand *ms = spi_controller_get_devdata(mem->spi->controller);
- 
--	dev_dbg(ms->dev, "OP %02x ADDR %08llX@%d:%u DATA %d:%u", op->cmd.opcode,
--		op->addr.val, op->addr.buswidth, op->addr.nbytes,
--		op->data.buswidth, op->data.nbytes);
- 	if (mtk_snand_is_page_ops(op)) {
- 		if (op->data.dir == SPI_MEM_DATA_IN)
- 			return mtk_snand_read_page_cache(ms, op);
-diff --git a/drivers/spi/spi-npcm-fiu.c b/drivers/spi/spi-npcm-fiu.c
-index 958bab27a081..67cc1d86de42 100644
---- a/drivers/spi/spi-npcm-fiu.c
-+++ b/drivers/spi/spi-npcm-fiu.c
-@@ -550,11 +550,6 @@ static int npcm_fiu_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 	int ret = 0;
- 	u8 *buf;
- 
--	dev_dbg(fiu->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
--		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
--		op->dummy.buswidth, op->data.buswidth, op->addr.val,
--		op->data.nbytes);
--
- 	if (fiu->spix_mode || op->addr.nbytes > 4)
- 		return -EOPNOTSUPP;
- 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 540b6948b24d..9691197bbf5a 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -362,11 +362,6 @@ static int stm32_qspi_send(struct spi_device *spi, const struct spi_mem_op *op)
- 	u32 ccr, cr;
- 	int timeout, err = 0, err_poll_status = 0;
- 
--	dev_dbg(qspi->dev, "cmd:%#x mode:%d.%d.%d.%d addr:%#llx len:%#x\n",
--		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
--		op->dummy.buswidth, op->data.buswidth,
--		op->addr.val, op->data.nbytes);
--
- 	cr = readl_relaxed(qspi->io_base + QSPI_CR);
- 	cr &= ~CR_PRESC_MASK & ~CR_FSEL;
- 	cr |= FIELD_PREP(CR_PRESC_MASK, flash->presc);
-diff --git a/drivers/spi/spi-zynq-qspi.c b/drivers/spi/spi-zynq-qspi.c
-index 2bd25c75f881..5232483c4a3a 100644
---- a/drivers/spi/spi-zynq-qspi.c
-+++ b/drivers/spi/spi-zynq-qspi.c
-@@ -540,10 +540,6 @@ static int zynq_qspi_exec_mem_op(struct spi_mem *mem,
- 	int err = 0, i;
- 	u8 *tmpbuf;
- 
--	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
--		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
--		op->dummy.buswidth, op->data.buswidth);
--
- 	zynq_qspi_chipselect(mem->spi, true);
- 	zynq_qspi_config_op(xqspi, mem->spi, op);
- 
-diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index d800d79f62a7..1c78713ad61a 100644
---- a/drivers/spi/spi-zynqmp-gqspi.c
-+++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -1067,10 +1067,6 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
- 	u16 opcode = op->cmd.opcode;
- 	u64 opaddr;
- 
--	dev_dbg(xqspi->dev, "cmd:%#x mode:%d.%d.%d.%d\n",
--		op->cmd.opcode, op->cmd.buswidth, op->addr.buswidth,
--		op->dummy.buswidth, op->data.buswidth);
--
- 	mutex_lock(&xqspi->op_lock);
- 	zynqmp_qspi_config_op(xqspi, op);
- 	zynqmp_qspi_chipselect(mem->spi, false);
--- 
-2.48.1
-
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
