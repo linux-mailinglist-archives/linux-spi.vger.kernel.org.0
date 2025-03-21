@@ -1,174 +1,157 @@
-Return-Path: <linux-spi+bounces-7278-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7279-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA0A7A6BEDA
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 16:56:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A9C2A6BF21
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 17:07:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D96A7188371C
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 15:56:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B25FB7A92C4
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 16:05:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55838214A98;
-	Fri, 21 Mar 2025 15:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A49B229B28;
+	Fri, 21 Mar 2025 16:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mxewWAmH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NvGalA/i"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C701E98ED;
-	Fri, 21 Mar 2025 15:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331401DE4C2;
+	Fri, 21 Mar 2025 16:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742572553; cv=none; b=ZwbqLjQKb5rR3npnmd1J2viw47GKGZq/awBYGrVyrMZ/hV/UBibQUW7fbdyFZMjCQ5RWuj7UxzemSbiSC2PZDsC8tN5BpuL4q+VGUTJ43Ttpn01pgrTQKs4j8MveQE9ClpRnhoOPbU23KTyAqXrE6rMQ9BQv/VIKDjEVovnn+oE=
+	t=1742573186; cv=none; b=gEnUNae3wa4xi6f2ces2Q61CkdgJfoBVGrp8eaJ07S9AmZeEBlffta5pnP0YnUfio8TVYtzenehObOREp8JWk5GUcKuTjDKXnD83sslP/EeCBK4EX2Rmf88aT1oerMHfb4iF92GOJrhOW3i49wsrgjSeZLFY69ddisAKj+nIN4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742572553; c=relaxed/simple;
-	bh=2SlFIB8v0xefZ/EJZpkooXcHOHALtHcJ5QRFslS5Zfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XeFu3+zZkaUmt6lw78G7mmk/GiG0o1hQS0wZvfQ6e+PMKbr2rB6tuRhvoy2wihvZcqwub47LmCTJgiJlS4AajOBttUI3SMpA1FP/p3eqInc4OcOb0jswUUa0UKRLKffrGvir9SSkR/iHz5GgZ1Ih4EnlXk1y6kFEEDXltKXzLvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mxewWAmH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A928C4CEE3;
-	Fri, 21 Mar 2025 15:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742572552;
-	bh=2SlFIB8v0xefZ/EJZpkooXcHOHALtHcJ5QRFslS5Zfk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mxewWAmH0ZjQcibQXJV1yMRt/EXAhC+spAiVZxQVODy5XHNBiFzVc4XSggVY7rl6q
-	 KRrQbIUB1lVJZZVKOUPiP3/IvAdzeVUGXPUoecpnsx3nrC5hhGHZ5+aByMBkmSYL5h
-	 bUe+3/C9AaggBne38+kE3xFDAj7rt8AnFB3E2J1La6mIJrt/j62KWG17DwzuvNmGg1
-	 Rzs8vASVZ45bXzph5iHkFkIw260Vb1oWiJit40fdqTm/BGp6Lkbt1S/9gg5e57k6wq
-	 sySgZEJUMUZAeRCQIDLO9KmqVXoGytU2lV/wov7bODxxYwoDGiNNApX+fgww7wPcOJ
-	 2cJuOsAIEmLdA==
-Date: Fri, 21 Mar 2025 15:55:49 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Han Xu <han.xu@nxp.com>
-Cc: Kevin Hao <haokexin@gmail.com>, linux-spi@vger.kernel.org,
-	Volker Haspel <volker.haspel@linutronix.de>,
-	John Ogness <john.ogness@linutronix.de>, imx@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] spi: fsl-qspi: Explicitly unregister SPI host in
- remove()
-Message-ID: <Z92MBTs_K-6Eiyv_@finisterre.sirena.org.uk>
-References: <20250321-spi-v1-0-b9939baa64b6@gmail.com>
- <20250321-spi-v1-2-b9939baa64b6@gmail.com>
- <20250321152307.wzjmouuoypkukoqk@cozumel>
+	s=arc-20240116; t=1742573186; c=relaxed/simple;
+	bh=WgBVYTr0URRl3zJspKTAryBSC/YiYErKzgv7WS4Rg/s=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=fJoKGR3W3Q57YTby4gOkViWWAZYQGgRP4WXCGkwxoW+qEM2Rmq1yRYL39BRFUe+ENF1cwAmveTDwcwGla6fcZOfrUPwSbuLA/z+sBYL/NW8AAS4AMucvLZ8iG6BOUJPwdcwyUMywYtLi/9JPlxZNX7EHjQT8Mq/1ejneVX5+MJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NvGalA/i; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1742573184; x=1774109184;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WgBVYTr0URRl3zJspKTAryBSC/YiYErKzgv7WS4Rg/s=;
+  b=NvGalA/ikOrL5oPJYs+QnTxjGygBeYWWOIvfFHc3OkbJX2AwHpopTwqS
+   OrJ7JGqvsLvcwKeP1prZM7mVJTOfER54Pu75l/Fxr9j8e/jK3wFjwN7qC
+   SK/5ji+VMYsX0/5AhSQhmE9n8DiGMEF7b+LjyblXx5blGM0B6v0DiKpB9
+   7qQZ9t3oQhCYinN742ZwcgN+X4JUGCey/94l/s0aWmz+DeK3rMLdvIdAr
+   VOz0V9xhnp8gPVoJI15e8EZBeavaDkLOepeFPGKjHBbFPdNQ3UOf5upEx
+   k4Kt0Ju3dJwZMJUlGC8aC6kaTxjBeWUEXBcxhuhtx35JSY0kXfzmt0vxz
+   A==;
+X-CSE-ConnectionGUID: uCVdhp/3So2cYbOJXCtPug==
+X-CSE-MsgGUID: onEv0mKKQBKLcJNtxbhz7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="43726622"
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="43726622"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:06:23 -0700
+X-CSE-ConnectionGUID: g7UgcbV4QTih6n+cWYD8tQ==
+X-CSE-MsgGUID: 1EcrVXRMQNGo+fC3Vk/4zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
+   d="scan'208";a="123417648"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.112])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:06:06 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 21 Mar 2025 18:06:02 +0200 (EET)
+To: Easwar Hariharan <eahariha@linux.microsoft.com>, 
+    Andrew Morton <akpm@linux-foundation.org>
+cc: Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+    Julia Lawall <Julia.Lawall@inria.fr>, 
+    Nicolas Palix <nicolas.palix@imag.fr>, 
+    James Smart <james.smart@broadcom.com>, 
+    Dick Kennedy <dick.kennedy@broadcom.com>, 
+    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+    "Martin K. Petersen" <martin.petersen@oracle.com>, 
+    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+    Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+    David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+    Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
+    Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
+    Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+    "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+    Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+    Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+    Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+    Sascha Hauer <s.hauer@pengutronix.de>, 
+    Pengutronix Kernel Team <kernel@pengutronix.de>, 
+    Fabio Estevam <festevam@gmail.com>, 
+    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+    Hans de Goede <hdegoede@redhat.com>, 
+    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+    Selvin Xavier <selvin.xavier@broadcom.com>, 
+    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
+    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+    cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>, 
+    linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+    linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+    ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+    linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+    linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+    linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+    linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+    ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v3 15/16] platform/x86: thinkpad_acpi: convert timeouts
+ to secs_to_jiffies()
+In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-15-a43967e36c88@linux.microsoft.com>
+Message-ID: <9e761e10-eb4d-0a34-79b5-ef4507f002c5@linux.intel.com>
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com> <20250225-converge-secs-to-jiffies-part-two-v3-15-a43967e36c88@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xRXT/26yeaN5ujJS"
-Content-Disposition: inline
-In-Reply-To: <20250321152307.wzjmouuoypkukoqk@cozumel>
-X-Cookie: Well begun is half done.
+Content-Type: text/plain; charset=US-ASCII
 
+On Tue, 25 Feb 2025, Easwar Hariharan wrote:
 
---xRXT/26yeaN5ujJS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> secs_to_jiffies().  As the value here is a multiple of 1000, use
+> secs_to_jiffies() instead of msecs_to_jiffies() to avoid the multiplication
+> 
+> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
+> the following Coccinelle rules:
+> 
+> @depends on patch@
+> expression E;
+> @@
+> 
+> -msecs_to_jiffies
+> +secs_to_jiffies
+> (E
+> - * \( 1000 \| MSEC_PER_SEC \)
+> )
+> 
+> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
 
-On Fri, Mar 21, 2025 at 10:23:07AM -0500, Han Xu wrote:
-> On 25/03/21 08:40PM, Kevin Hao wrote:
+Applied to the review-ilpo-next branch.
 
-> > Since the host is already disabled inside the remove(), any pending IO
-> > from child devices can easily corrupt the kernel.
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index ab1cade5ef231e9a9a520bc0cca82384c911a331..d269e791f7fbc2a8ccf96f28cb476beccb57c9a7 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -8512,7 +8512,7 @@ static void fan_watchdog_reset(void)
+>  	if (fan_watchdog_maxinterval > 0 &&
+>  	    tpacpi_lifecycle != TPACPI_LIFE_EXITING)
+>  		mod_delayed_work(tpacpi_wq, &fan_watchdog_task,
+> -			msecs_to_jiffies(fan_watchdog_maxinterval * 1000));
+> +			secs_to_jiffies(fan_watchdog_maxinterval));
+>  	else
+>  		cancel_delayed_work(&fan_watchdog_task);
+>  }
 
-=2E..
+-- 
+ i.
 
-> > To fix this, explicitly call spi_unregister_controller() in the
-> > remove() callback. This ensures that all child devices are properly
-> > removed before the host is disabled.
-
-> If you explicitly remove the child devices, such as=20
-> cd /sys/bus/spi/drivers/spi-nor
-> echo spi0.0 > unbind
-> then unbind the fsl-quadspi driver, the kernel panic does not occur.
-
-> Not sure if it should be the responsibility of the fsl-quadspi driver to =
-handle
-> this, IMO it is a common issue with all SPI drivers.
-
-This is a bug in the driver, it needs to be able to continue supporting
-child devices until it is unregistered.  This means that either the
-unregistration needs to be manual or any disabling also needs to be done
-via devm.
-
->=20
-> >=20
-> > Cc: stable@vger.kernel.org
-> > Fixes: 8fcb830a00f0 ("spi: spi-fsl-qspi: use devm_spi_register_controll=
-er")
-> > Signed-off-by: Kevin Hao <haokexin@gmail.com>
-> > ---
-> >  drivers/spi/spi-fsl-qspi.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-> > index efd87f44c63a5b12b76538aa459ca8eb203b9dcd..4767d2085510c2f231476ba=
-75e46f83271c4c645 100644
-> > --- a/drivers/spi/spi-fsl-qspi.c
-> > +++ b/drivers/spi/spi-fsl-qspi.c
-> > @@ -272,6 +272,7 @@ struct fsl_qspi {
-> >         struct device *dev;
-> >         int selected;
-> >         u32 memmap_phy;
-> > +       struct spi_controller *host;
-> >  };
-> >=20
-> >  static inline int needs_swap_endian(struct fsl_qspi *q)
-> > @@ -862,6 +863,7 @@ static int fsl_qspi_probe(struct platform_device *p=
-dev)
-> >=20
-> >         q =3D spi_controller_get_devdata(ctlr);
-> >         q->dev =3D dev;
-> > +       q->host =3D ctlr;
-> >         q->devtype_data =3D of_device_get_match_data(dev);
-> >         if (!q->devtype_data) {
-> >                 ret =3D -ENODEV;
-> > @@ -934,7 +936,7 @@ static int fsl_qspi_probe(struct platform_device *p=
-dev)
-> >=20
-> >         ctlr->dev.of_node =3D np;
-> >=20
-> > -       ret =3D devm_spi_register_controller(dev, ctlr);
-> > +       ret =3D spi_register_controller(ctlr);
-> >         if (ret)
-> >                 goto err_destroy_mutex;
-> >=20
-> > @@ -957,6 +959,8 @@ static void fsl_qspi_remove(struct platform_device =
-*pdev)
-> >  {
-> >         struct fsl_qspi *q =3D platform_get_drvdata(pdev);
-> >=20
-> > +       spi_unregister_controller(q->host);
-> > +
-> >         /* disable the hardware */
-> >         qspi_writel(q, QUADSPI_MCR_MDIS_MASK, q->iobase + QUADSPI_MCR);
-> >         qspi_writel(q, 0x0, q->iobase + QUADSPI_RSER);
-> >=20
-> > --
-> > 2.48.1
-> >=20
-
---xRXT/26yeaN5ujJS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfdjAQACgkQJNaLcl1U
-h9ANJQf/SfjkNYuNlRmpIy2WD3/HHjEf+0t7RVtwZCDf2DNuQnfc6XU85+h9JlVl
-YYOFNpwvJgH7E4o/2V5V9ffGzTf3aiRpH9OZkYRYLEHFaPjwm6GVb8jgaNQbE687
-XkAwyjvG1NAfp3wcV5gdXPW8899jaQusw9dtbB9sBEuO3WNG1RR3+JR+iOW/iaMN
-2ffJHk7NzuXiIe5YVosk1pl7gpPy/WErR+X8qRO+XHgWXx6fqDdJVCb1EqgkTjRE
-vqleBsNfbaHRaazZmH1mBmyjgQsMo0PqzlFghw7NYKwefr6c2Z+akTlp8QuLfSka
-FhkVDzdRbp7sb58HNPch+KwYL51ZGA==
-=v6b3
------END PGP SIGNATURE-----
-
---xRXT/26yeaN5ujJS--
 
