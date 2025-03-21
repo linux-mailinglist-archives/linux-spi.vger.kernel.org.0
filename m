@@ -1,79 +1,81 @@
-Return-Path: <linux-spi+bounces-7269-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7270-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0231BA6BAF3
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 13:43:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C8AA6BAEE
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 13:42:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B30C33BE425
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 12:41:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21B83189FA68
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 12:42:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5229C22A7F0;
-	Fri, 21 Mar 2025 12:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A8C22B590;
+	Fri, 21 Mar 2025 12:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hwyKucgd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L2GoAwZz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A4A226CF8
-	for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 12:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C36227B94;
+	Fri, 21 Mar 2025 12:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742560882; cv=none; b=b/qvsLwhEcnQ4PmuB/XHbyKfczAbWqSGQ9oVYDKKSkceNQrZu/wlZBKkPgEp5K7XCPj8Z9iMIjgzMMow95OFy3LeKUk7c5ltZ7vRYyfZZ4HdUEdYz81k5tMD8S/ZjvU806YMYEjJ9qZFxObm3tLAtHygAtV3v9b8Bs4qQrUAblU=
+	t=1742560885; cv=none; b=LeymHQa4cvHl7DvtTidqep+tGziFKI0aG0Wl83vhkTsyHg2NywBXrG2urPcC2uF7FCz1i53Ihu2gfF/LElbNGDJxC+r8MqiVxM+bGjYadtjW7KEzHokZnrk0HY7y5cSk9xLSv1fqCaZgOoE+tAaIZkQFzgBmaxIBpi7T+rncXXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742560882; c=relaxed/simple;
-	bh=QGBMCqw+5BdhL+voht3B+7pdNey58iclUXO+oz6ej8U=;
+	s=arc-20240116; t=1742560885; c=relaxed/simple;
+	bh=BG95/kpH2T2XChYHmeVEkv+OFNTEZEMhajpahTEw5MA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DmLY7IL/dZ9VSKZaANVMqzdHqcC+k3PhpKTZqxoojNP7XdEMLXofdfASC3QyLgjIPDbWC/jFryiA6mlzlpsl5yrOJ65Izdft2d2jCjKJ13FUXnpXHABovuyZJwvTgeW1jsdUoHayjQ4/J15zghl4roFR4+Hwt6Sd9VgFZdp5H8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hwyKucgd; arc=none smtp.client-ip=209.85.216.42
+	 In-Reply-To:To:Cc; b=ilupazpaQlJe/LOU3HJMP/Nbflk/clMs6aJhh0trX1FTcL7EhOxHeZOYGn35UNGhtyPaOLeZFrzBzBfin3d+duDqlfDXwRZBmV1GNh+rGbcszOQsBX3A4gBZd+Gn2NaZstxOitbtOLsGquJ5bTvssryYnstgvm31l3GTokoqUa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L2GoAwZz; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ff797f8f1bso3237546a91.3
-        for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 05:41:20 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-300fefb8e06so3624477a91.0;
+        Fri, 21 Mar 2025 05:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742560880; x=1743165680; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1742560883; x=1743165683; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=diANNUeYaMPdVTg7XPTc4czQqkwfrVpFES5HMSIw3o0=;
-        b=hwyKucgdNhzQ1DnUDFUazsa+VcIXgXL3FVdJi/OX8PgbH3UNTnHWEHzR4TkfwLvKUr
-         Ip4CGzVInSLF8HcENzwOoMm1uXK3UXerkkGMIsAnEJdMvDYGyRF+1ka7mqEj7QOwmRCw
-         0cvAjvS0AP+6djetLBCnkuWdyr2BB0JrpfhRV5BIM2/yInHJPKlOv8jFg7UgVbHLNfmM
-         LD2CB2iFiTuuWgUHFDGkGjud12YeZzOcbHvEqwpe0eZtOD2dod77CSHbqKP2S8zRSlOM
-         xQgMx4+lnDzDWo1ldrDoxImUFXhRIbsJWGi6ZIEih0579o3r1waFQWYb4WX7kbG9L8O6
-         SoQg==
+        bh=7wwN9Kvr/NKHQSZ1VFBzwzCVRSebNdFa88rDFhJwVuA=;
+        b=L2GoAwZzI/6AlR2ZNatpoKwrfOfuGwmi+0vNWkZcqiI21aKhQlG8OSjv8wj6nIcdNa
+         XyWbYJagu8uM3waSGgHTZLLIW9zGGWl1zuPpSnRAMw7xVphqBPkyJ083bzKF9pnfMYoM
+         oAaNjzhWDxjp7CtygJii2UPMb7j0KzD4eR4fezVf8c2tlW6Z+/ap3X2y2ayL1cXJYFSY
+         PpuBqfcZaeE1XNO3XOHYAHrL0/6+pdvJh3rLhDaq9BrqRanQE4OlBo5dLi6QUkjDZQE2
+         FvjGWFYo36s2wbBhJXjmlnlR6UzWiosr5c29kmjEOPRO3fFr8TUC8zdoPGa6vuPMAbOe
+         CO8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742560880; x=1743165680;
+        d=1e100.net; s=20230601; t=1742560883; x=1743165683;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=diANNUeYaMPdVTg7XPTc4czQqkwfrVpFES5HMSIw3o0=;
-        b=tMS5+222Xq/RwiHex+oKC1/wTy8CBcdFnKRM+zL6AUhBjD2eRccytUK7Eg+Lehg6ci
-         TbQmF+ud+5OlKwNDZYCKQJAqqlLZ0Gw3XzrAvbOAgvL7zPwzBH7AQDl8cfbTNijs+Aet
-         kDkvMUMSiuLetpA+dLBDw8cINxYKZasgKcRSC91HIZu6q9I+C9q4NpqtFc/GXU6KUBil
-         9F/nYROyjY3aTic+hC2RZ2i476qQkpCeWIw6bE2X3W6332hJtmzdTSg3p+EI1+BZE7bv
-         7+3kT6BHXrgZxQajG1E9NwiQLnWYtxeWatGttFxqe6DJ6m4RDRHTxuXp4yKZ+51dtDvo
-         n9QQ==
-X-Gm-Message-State: AOJu0YwrABl/HkNyrvb0AFR2WmEp5nT5E6XbN4dkvnH7cMCuXtCJ1OHm
-	GlSlEkI1WmVZKDp+ZmWOuDOr/9vFRvuisJHhtuhx+Sk5jWNRP1gN
-X-Gm-Gg: ASbGncunD7cFKrklq+EjLKaUFf+1WIyqyrEOEeSP0XFa2TMnkWdlj4XZCnqvP3ZUzRs
-	Eyy8vY13fTrFYCnZDaiQwI/rSW7eu71qu24MN/Zhjq7w5khjmfaRwwsS5Z2lcL6kGqaI3i0hZLk
-	XjhCXTtnD+dkhcy7HA59eYHUt4e6LGNfmJNcKJUQRbO+ve77hYGc7YmMbAH1xXcCzr9yiyyp8rP
-	hWKGQKuR6SuLGACu7C3++BBknnL6DhMBKBDW5gQRUQvFBggvn4lFX7n0vXUCC3YYUod9n+D1d+7
-	HK3hp7qtien8cgSOUQ21cDFduvbariaaQFQBB/G4TsWzxfNUdB2OCrda
-X-Google-Smtp-Source: AGHT+IGZilBpVbmHwXqE1RayB8VznKS8a5ZcQyaITGTBbOO5RAWktzmx/m01r2dAzCV2xhRFLinUDQ==
-X-Received: by 2002:a17:90b:5826:b0:2f6:d266:f462 with SMTP id 98e67ed59e1d1-3030ff0df9dmr4523968a91.35.1742560879930;
-        Fri, 21 Mar 2025 05:41:19 -0700 (PDT)
+        bh=7wwN9Kvr/NKHQSZ1VFBzwzCVRSebNdFa88rDFhJwVuA=;
+        b=JdvDdyQFU4tT78/4XpKM2pf3Iud2ETCQv/8HjT0F1iV6RaAEyzEbwoQW1ZqEBd1ThP
+         ZFPR9eSdH6O9roK7+1K9F9y+0KEUGX0/he96pBerpN3HqrFRu+7m1sTIOKwdBokvWvyH
+         j67pesKAhaPLNrl32ciiP3vSaS3KDjjv+hRk0mpDRLBoppEjLbrABuq/PPO6M8O5K6ZD
+         PsrCHwmM9NonXuyD93PqR391OTRr5zlBt7du7ROA6Ka/jMhRaG2xOmEB+kKuz1nzHo4y
+         69RKjxUBVKMe6AM8bU2wUFHFT7eQtCwNKLYOdBYbbfUrhKxqBk8Iwhoj5Qzml9sS9Djd
+         Ia0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ26eqjpfGReKqZkLM0utcEtAYnW2Duw/h5nWQpc9yukZ0rLzYTH4/wChWwL/d+JwLPUzudVQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK8aN0ieO9r6CA7GLptsurhVTGgwIs4pjxLKZ0AD+7iY9dLCxz
+	XetTw5w6Mokl5pGaUkPop6SePehEnQvnoWsHHao8RiWQcGZ7fvP7Z1gCQyQ+
+X-Gm-Gg: ASbGnctPl+BEB9iAvL9K9xRu6BfTxGLBuR6slvCpcWG147tKF8CcMWIOR3OGGeT8l/i
+	Ac5DuHLiFQ94+StIupt2+g8qzsO7b3DTSqyyK2YE1C5tMqf5f00HmBj5nezUur2XkdJwphui0z+
+	WXzl6+M/cPNfsc3VFldFGQL+sXKuNdcaipJp+CJ4shEDCy+4CynOsvKhtS7ZqK28z1KyhRZ5Vvk
+	wDHts+kM7NYdnHceYvcp59kIej82ftjJ0NZrSBTlCdhU3E1xg7qMuYMgiZEUY2VzblR16o7D+SG
+	nxPZaqaKhPzTEYr14iq1u+peh5ofdAR0oFrcEZFv4PBgRnLorWxlueIz
+X-Google-Smtp-Source: AGHT+IHKoofb89gkg69CyAvY7SuA69KooT8+07mHaCKF1Sl6zFIL6xNY6g4HTxlAOxSKosmFiBX+8g==
+X-Received: by 2002:a17:90b:280b:b0:2ee:d824:b559 with SMTP id 98e67ed59e1d1-3030fef09b9mr4797264a91.28.1742560883477;
+        Fri, 21 Mar 2025 05:41:23 -0700 (PDT)
 Received: from localhost.localdomain ([147.11.105.121])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf635929sm6424975a91.40.2025.03.21.05.41.16
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-301bf635929sm6424975a91.40.2025.03.21.05.41.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 05:41:19 -0700 (PDT)
+        Fri, 21 Mar 2025 05:41:22 -0700 (PDT)
 From: Kevin Hao <haokexin@gmail.com>
-Date: Fri, 21 Mar 2025 20:40:21 +0800
-Subject: [PATCH 1/2] spi: fsl-qsi: Optimize fsl_qspi struct
+Date: Fri, 21 Mar 2025 20:40:22 +0800
+Subject: [PATCH 2/2] spi: fsl-qspi: Explicitly unregister SPI host in
+ remove()
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,84 +84,77 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250321-spi-v1-1-b9939baa64b6@gmail.com>
+Message-Id: <20250321-spi-v1-2-b9939baa64b6@gmail.com>
 References: <20250321-spi-v1-0-b9939baa64b6@gmail.com>
 In-Reply-To: <20250321-spi-v1-0-b9939baa64b6@gmail.com>
 To: linux-spi@vger.kernel.org
 Cc: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>, 
  Volker Haspel <volker.haspel@linutronix.de>, 
  John Ogness <john.ogness@linutronix.de>, imx@lists.linux.dev, 
- Kevin Hao <haokexin@gmail.com>
+ stable@vger.kernel.org, Kevin Hao <haokexin@gmail.com>
 X-Mailer: b4 0.14.2
 
-Reorgize the members of the fsl_qspi struct to:
-  - Reduce a hole in the struct.
-  - Group members required by each op (e.g., iobase, ahb_addr,
-    devtype_data and lock) into the same cacheline.
+Currently, the SPI host is registered using a managed API, which
+automatically unregisters it when the device is detached from its driver.
+However, this unregistration occurs after the driver's remove() callback.
 
-Before:
-struct fsl_qspi {
-	[...]
+Since the host is already disabled inside the remove(), any pending IO
+from child devices can easily corrupt the kernel.
 
-	/* size: 176, cachelines: 3, members: 11 */
-	/* sum members: 168, holes: 1, sum holes: 4 */
-	/* padding: 4 */
-	/* member types with holes: 1, total: 1 */
-	/* last cacheline: 48 bytes */
-};
+For example, the following steps on an imx8mq-evk board can trigger a
+kernel panic:
+  while true; do cat /dev/mtd0 >/dev/null; done &
+  echo 30bb0000.spi >/sys/bus/platform/drivers/fsl-quadspi/unbind
 
-after:
-struct fsl_qspi {
-	void *                     iobase;               /*     0     8 */
-	void *                     ahb_addr;             /*     8     8 */
-	const struct fsl_qspi_devtype_data  * devtype_data; /*    16     8 */
-	struct mutex               lock;                 /*    24    32 */
-	struct completion          c;                    /*    56    32 */
+To fix this, explicitly call spi_unregister_controller() in the
+remove() callback. This ensures that all child devices are properly
+removed before the host is disabled.
 
-	/* XXX last struct has 1 hole */
-
-	/* --- cacheline 1 boundary (64 bytes) was 24 bytes ago --- */
-	struct clk *               clk;                  /*    88     8 */
-	struct clk *               clk_en;               /*    96     8 */
-	struct pm_qos_request      pm_qos_req;           /*   104    48 */
-	/* --- cacheline 2 boundary (128 bytes) was 24 bytes ago --- */
-	struct device *            dev;                  /*   152     8 */
-	int                        selected;             /*   160     4 */
-	u32                        memmap_phy;           /*   164     4 */
-
-	/* size: 168, cachelines: 3, members: 11 */
-	/* member types with holes: 1, total: 1 */
-	/* last cacheline: 40 bytes */
-};
-
+Cc: stable@vger.kernel.org
+Fixes: 8fcb830a00f0 ("spi: spi-fsl-qspi: use devm_spi_register_controller")
 Signed-off-by: Kevin Hao <haokexin@gmail.com>
 ---
- drivers/spi/spi-fsl-qspi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/spi/spi-fsl-qspi.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-index 355e6a39fb41896f460e2474a90b8f0b42068ff3..efd87f44c63a5b12b76538aa459ca8eb203b9dcd 100644
+index efd87f44c63a5b12b76538aa459ca8eb203b9dcd..4767d2085510c2f231476ba75e46f83271c4c645 100644
 --- a/drivers/spi/spi-fsl-qspi.c
 +++ b/drivers/spi/spi-fsl-qspi.c
-@@ -264,14 +264,14 @@ static const struct fsl_qspi_devtype_data ls2080a_data = {
- struct fsl_qspi {
- 	void __iomem *iobase;
- 	void __iomem *ahb_addr;
--	u32 memmap_phy;
--	struct clk *clk, *clk_en;
--	struct device *dev;
--	struct completion c;
- 	const struct fsl_qspi_devtype_data *devtype_data;
- 	struct mutex lock;
-+	struct completion c;
-+	struct clk *clk, *clk_en;
- 	struct pm_qos_request pm_qos_req;
-+	struct device *dev;
+@@ -272,6 +272,7 @@ struct fsl_qspi {
+ 	struct device *dev;
  	int selected;
-+	u32 memmap_phy;
+ 	u32 memmap_phy;
++	struct spi_controller *host;
  };
  
  static inline int needs_swap_endian(struct fsl_qspi *q)
+@@ -862,6 +863,7 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+ 
+ 	q = spi_controller_get_devdata(ctlr);
+ 	q->dev = dev;
++	q->host = ctlr;
+ 	q->devtype_data = of_device_get_match_data(dev);
+ 	if (!q->devtype_data) {
+ 		ret = -ENODEV;
+@@ -934,7 +936,7 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+ 
+ 	ctlr->dev.of_node = np;
+ 
+-	ret = devm_spi_register_controller(dev, ctlr);
++	ret = spi_register_controller(ctlr);
+ 	if (ret)
+ 		goto err_destroy_mutex;
+ 
+@@ -957,6 +959,8 @@ static void fsl_qspi_remove(struct platform_device *pdev)
+ {
+ 	struct fsl_qspi *q = platform_get_drvdata(pdev);
+ 
++	spi_unregister_controller(q->host);
++
+ 	/* disable the hardware */
+ 	qspi_writel(q, QUADSPI_MCR_MDIS_MASK, q->iobase + QUADSPI_MCR);
+ 	qspi_writel(q, 0x0, q->iobase + QUADSPI_RSER);
 
 -- 
 2.48.1
