@@ -1,160 +1,108 @@
-Return-Path: <linux-spi+bounces-7280-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7281-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8B02A6BF3A
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 17:11:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5582EA6BFE1
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 17:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E53013AF868
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 16:10:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC0F016BB28
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 16:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0039E22CBDC;
-	Fri, 21 Mar 2025 16:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KD1uX7gP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4ED1D86F2;
+	Fri, 21 Mar 2025 16:28:41 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E185422A4EA;
-	Fri, 21 Mar 2025 16:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E31228C9D;
+	Fri, 21 Mar 2025 16:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742573390; cv=none; b=I9StbMDukHYd/6DrdUlGnxZwARh3RFDXz2RxzLsCbj/3YfqpZAIkOrkmaku/a7h2fbMLoGk6mcmSSZPttiSXCGBO4ntOmNVnRLa+54r60clDj6oG32UQsuJcABSj5iGllhhChx7fHjrWKL4dETdQ2wOeLDgUCu7j22VcnlRid8s=
+	t=1742574521; cv=none; b=glqkqlMtYCpsuzSGLqrWSoOMjE7kgljs2vwtvs2S7Z3mbYibMUsZrrWkE9J/v6hcpzBAdRIWrDpnxxMQ5SuTD/O/haVXTR1gvJ+vz4nhLk+Xp0u4dOzd/kvWZWO7Y5rAUGsRZUvrWieLa1QFLyWuU6GvE4L9fzfWXB06IHltURI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742573390; c=relaxed/simple;
-	bh=aDAlamYyZ4jkLWyWBaRa75vEGUzN9zvUrX/xuDuvQhE=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=W8GSzjFGkTawitgT+C3LIx/prfaouzw2I9HtJAEFRJyYUrydiAVX2KPqMpw614wRo92tIm444HvTqEltO+7sutpTrjx09TjNHUw3jCp6B+2NIxiE0zc8qHyguky0+Oo1UZuVLSvxPWP/jmhrrNfbnvcuhES4QMUis+qMGb9xcRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KD1uX7gP; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1742573390; x=1774109390;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=aDAlamYyZ4jkLWyWBaRa75vEGUzN9zvUrX/xuDuvQhE=;
-  b=KD1uX7gP/LojJ727AwyAAyD0Nif/BSbN6jJiNHdeu/UGg7KOcOSrIayc
-   zib/pyedUdNPJ4gkTR8fD+esqiAblSHVsozPQfuaLHTdPbRxCF5v7uaWS
-   yMtSEWBAwysHpJPOtpgiKebJjf20UbffOFIPsV5FpUflgzXTFxqWy7l7r
-   H8ubMuMdMU6XS2ACvFM1Kamh45nczZD2ix4bS85icbG+Xtyz2+MqMEftg
-   nJcEJyaCFejn3YlHhic51frQvzNhQ2fHxP+fIu8ir8UDtRroTGy+VNX6W
-   AkZ8ajr1b+0kxXohXJ2Ncd607RBSDXS2ns4ll1OnKQA/AKzLpYk5Xl3ir
-   g==;
-X-CSE-ConnectionGUID: 1QYfAh+lSPyiBhy4jKntNg==
-X-CSE-MsgGUID: D0Sr5P9LT/CIeSc9ezn13w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11380"; a="61366675"
-X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
-   d="scan'208";a="61366675"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:08:47 -0700
-X-CSE-ConnectionGUID: s+SzOXF7TAiwIAcfG0mbgQ==
-X-CSE-MsgGUID: 6hxEBaxKRL6vcWoyAx4wig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,264,1736841600"; 
-   d="scan'208";a="124388577"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.112])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2025 09:08:30 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 21 Mar 2025 18:08:26 +0200 (EET)
-To: Easwar Hariharan <eahariha@linux.microsoft.com>, 
-    Andrew Morton <akpm@linux-foundation.org>
-cc: Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
-    Julia Lawall <Julia.Lawall@inria.fr>, 
-    Nicolas Palix <nicolas.palix@imag.fr>, 
-    James Smart <james.smart@broadcom.com>, 
-    Dick Kennedy <dick.kennedy@broadcom.com>, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    "Martin K. Petersen" <martin.petersen@oracle.com>, 
-    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-    Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
-    David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
-    Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
-    Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
-    Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
-    "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-    Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-    Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
-    Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-    Sascha Hauer <s.hauer@pengutronix.de>, 
-    Pengutronix Kernel Team <kernel@pengutronix.de>, 
-    Fabio Estevam <festevam@gmail.com>, 
-    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
-    Selvin Xavier <selvin.xavier@broadcom.com>, 
-    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-    cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>, 
-    linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-    linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-    ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
-    linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
-    linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
-    linux-spi@vger.kernel.org, imx@lists.linux.dev, 
-    linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-    ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v3 14/16] platform/x86/amd/pmf: convert timeouts to
- secs_to_jiffies()
-In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-14-a43967e36c88@linux.microsoft.com>
-Message-ID: <1252f601-97fd-f199-c339-5bd4ea8060dc@linux.intel.com>
-References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com> <20250225-converge-secs-to-jiffies-part-two-v3-14-a43967e36c88@linux.microsoft.com>
+	s=arc-20240116; t=1742574521; c=relaxed/simple;
+	bh=R+Ec4aiXeWd9fjSjxhbIB3UkueMseKkz0W5jsG/A6Zs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XAIAiWga9J3leLLGXabVr5mWpjqpTqBWiQuU+jvbv0kwdwuN6r4Ha4wzTEtl+h4MoYLN0XV8Tly3LqTq21nKYbu2HrTtZ0i0bUiJet9mdVxdvxBDVkTWI0mAzrW/El5R5a4LQ9qdxnFMFEQuxoeE6JfAiEeHbsRcE+Tmbf7p9c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e8be1c6ff8so3890455a12.1;
+        Fri, 21 Mar 2025 09:28:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742574518; x=1743179318;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R+Ec4aiXeWd9fjSjxhbIB3UkueMseKkz0W5jsG/A6Zs=;
+        b=YRiohsX+rRFXB5EsvB+K4c3Tj9CWqceoMag2aKyhi6ht/kmlgCXuhszDAHNtCRK/HJ
+         wbRxMQUGJnODbXe19tnClHQwn/MPDLYEYVCtps0esWLFVXoCkpl88ExyWYI6YNOXX9qM
+         40lMrpo+lTISvQqdv4s7a4pMsmqIQmSGIAOKM7rE3x5g6XmL+tHnnAyzJSL939Gz9uLg
+         0vioVUlveJTKrw4o8tf+P7EEv7yANGkA/5kHyWKXhg41qkD8nU06v1b+Gq9cmInSwGtG
+         uqaMi4LFp3YZ6QrQzOeirOW3Vr7YjIZyAFO5LYMVlzWS9ZWeAL0yq/MXBV2/L+C8yJel
+         qojw==
+X-Forwarded-Encrypted: i=1; AJvYcCUiX015ebfid9jTdtMLXAuzSzosY5Sa46pK9FFCybTc4kQLXBSqMkYWDOL5SaTx9n4JvCGcnOyhP4Pl@vger.kernel.org, AJvYcCWbJr0diKg6tflGAuRzRjbWV5t0efuJM5QDuBYQMYHPlJ7rvKlebPGOTu/QMsgdytoYE5fXqZqXLHFSdtY=@vger.kernel.org, AJvYcCXfFWve6UZcaGY97KSiwPc3WzSXGJiLQX5ejhsGShjAb4rUHupvwbovncFqPAoV/VOMc5EiXICaEVog1M4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv/ygIMNuDBJ5JiLOaSQ/s8MkI2ezC4E+BZWZX2bnHwEQUcVV7
+	S45aoQ/7y8en/v/34ZSyL7e7xypvjulJI0w6e0p/T9obc09p12rA
+X-Gm-Gg: ASbGncu+KdsOwa/Wv8vdiWiaR3x9PNl6Dqfh/fefbuTUUjdUGdgwLTpEhmHZyaQHFvp
+	EyRn0wgVJzHbvHxRYU/ZEOaXnsE2S6fM03HfmgK31FkdUoK1bkw7TgXIoOXSs9f93/Ihx3lO5XI
+	hvXC+OyqRmMMoLsozTRwJQq9DKlnQx1snxcUR1+0iTbFoPk9l+Wcxa3UV0W1jZNgyeV+dHsyvUF
+	KwwgCgoaTHTDMkT2efgCi4uJEh5IMGqHmyH/c/mk5hGJhNGHXUnoKQnf8aWHSbDhcA6GBTX4dcw
+	ONnqYK02231rcM45EIDWGka5MAJIwT1vgbyP
+X-Google-Smtp-Source: AGHT+IF3Y1nlm1q24hCDlL2xCcrRUAMYeM66rfzyDf3IuHTh6oHYbpiVZDk9ODGrkAnZjmTpth9WFw==
+X-Received: by 2002:a05:6402:3483:b0:5e6:1352:c53d with SMTP id 4fb4d7f45d1cf-5ebcd519820mr4353887a12.28.1742574517537;
+        Fri, 21 Mar 2025 09:28:37 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:73::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ebccf687fbsm1589504a12.4.2025.03.21.09.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Mar 2025 09:28:36 -0700 (PDT)
+Date: Fri, 21 Mar 2025 09:28:34 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, jonathanh@nvidia.com,
+	skomatineni@nvidia.com, Mark Brown <broonie@debian.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	rmikey@meta.com, kernel-team@meta.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, noodles@earth.li,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH 1/3] spi: tegra210-quad: use device_reset_optional()
+ instead of device_reset()
+Message-ID: <20250321-colossal-binturong-of-debate-055aeb@leitao>
+References: <47c40ec0-291c-4664-a66e-d76bd6360c0d@sirena.org.uk>
+ <20250318-boisterous-adorable-chowchow-cea03b@leitao>
+ <20250318-psychedelic-thundering-guppy-22bba2@leitao>
+ <b3da27ce-161b-4462-a608-c36f4b0696ce@app.fastmail.com>
+ <fbeca9fd-38a6-49ba-bb5f-6df5302d139d@sirena.org.uk>
+ <6cf8af69-634e-40fa-af45-912540b29aac@app.fastmail.com>
+ <20250319-aloof-rottweiler-of-perception-4c1ad4@leitao>
+ <5doq6itaz6uicvqcn37q2dkaxyzy3etz5qgv6wlsyd5troqlag@yqs6ltjp3gsz>
+ <20250319-unbiased-rousing-finch-95ecdf@leitao>
+ <ac44uxpojpov7fcdx3qfiif3idhbp2hrrr4efqeat6jazbosv4@uoy72g6u3ibf>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac44uxpojpov7fcdx3qfiif3idhbp2hrrr4efqeat6jazbosv4@uoy72g6u3ibf>
 
-On Tue, 25 Feb 2025, Easwar Hariharan wrote:
+Hello Thierry,
 
-> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
-> secs_to_jiffies().  As the value here is a multiple of 1000, use
-> secs_to_jiffies() instead of msecs_to_jiffies() to avoid the multiplication
-> 
-> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
-> the following Coccinelle rules:
-> 
-> @depends on patch@
-> expression E;
-> @@
-> 
-> -msecs_to_jiffies
-> +secs_to_jiffies
-> (E
-> - * \( 1000 \| MSEC_PER_SEC \)
-> )
-> 
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+On Fri, Mar 21, 2025 at 01:40:44PM +0100, Thierry Reding wrote:
+> Can you maybe help clarify at what point you start seeing errors induced
+> by the recovery mechanism?
 
-Applied to the review-ilpo-next branch.
+This is after a while. Something happen to QSPI and the warnings and
+device reset failed start going haywire.
 
-> ---
->  drivers/platform/x86/amd/pmf/acpi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/amd/pmf/acpi.c b/drivers/platform/x86/amd/pmf/acpi.c
-> index dd5780a1d06e1dc979fcff5bafd6729bc4937eab..f75f7ecd8cd91c9d55abc38ce6e46eed7fe69fc0 100644
-> --- a/drivers/platform/x86/amd/pmf/acpi.c
-> +++ b/drivers/platform/x86/amd/pmf/acpi.c
-> @@ -220,7 +220,7 @@ static void apmf_sbios_heartbeat_notify(struct work_struct *work)
->  	if (!info)
->  		return;
->  
-> -	schedule_delayed_work(&dev->heart_beat, msecs_to_jiffies(dev->hb_interval * 1000));
-> +	schedule_delayed_work(&dev->heart_beat, secs_to_jiffies(dev->hb_interval));
->  	kfree(info);
->  }
->  
-> 
-> 
+Most of the machines are fine, but, some get into this situation.
 
--- 
- i.
-
+Thanks
+--breno
 
