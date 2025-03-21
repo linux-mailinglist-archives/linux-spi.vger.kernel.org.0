@@ -1,119 +1,167 @@
-Return-Path: <linux-spi+bounces-7272-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7273-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4F9EA6BB51
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 13:59:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62EEAA6BCAF
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 15:14:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0CC73AD1D4
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 12:57:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D537166A58
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 14:13:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7869227EB6;
-	Fri, 21 Mar 2025 12:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF21178F44;
+	Fri, 21 Mar 2025 14:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wzaob1vg"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TdnK0mPS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC33B1C2DB2
-	for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 12:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31CA86321
+	for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 14:13:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742561878; cv=none; b=YugiN3MG8c9Z2Ec0coAS14ydym+r556Ot9Fw5z1YIiFcP0neEqVGKdOQjYZXCsZ7PQ2Gz2yxSW9kxOnN8Yip1LFkRgSx7Grlf1wONbY1dI7X+VPEOuj+uvUMYSQEEfwEmwe+9s3xz9gLKc/m8cI1yfFGuT7ECQVvl42W/0tCCWo=
+	t=1742566414; cv=none; b=RH8XdUjNsepWr2DQ7gULGbMIVkDS5oN2jETchFWfK5GGb8tZs/oNAVFhLj6LxzLKzgV2Gi9VT7HRqlf2WvQL/PupFcDkfXbQR2nt8vNb3lszW6WBiMXzgVV9lEVZtHFNOb++QHwwMowo1+ZrGc4+lCh8M6bzvMKyJyBl3STbPTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742561878; c=relaxed/simple;
-	bh=WV8h01DTcYDCIkHtkZM+u69dA+vE5s2D8YrFHIABG3A=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=Z7OeGX7xt6DcIHNmoCqGXztqcjAJFvsar2KV9kn1DN7TE08xOMSVDA9GVWPuXay+c2NTLxFh/p4h/VwqLkLDOEwoT+IHm1kEuUdN95iJotJyKDjlhUIBCE8ZcL27526TwtrZ+HmHqJbM3+8guTjzKrpt/gSlLgzIJT0dGgg1W0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wzaob1vg; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cfe574976so11740945e9.1
-        for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 05:57:56 -0700 (PDT)
+	s=arc-20240116; t=1742566414; c=relaxed/simple;
+	bh=FrV+bDqB1tLxVykOuhmGdQwc/M3ZynizoVZrL3TV5sk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=N81ynHU7dPou/poS6EyJdkaXgjUYHp3CgNuRG3zU0ur2hpBO/Q+O9JxjOl/iH81s8DIsoHOY16z/XfzUEV0BGVMUcGT2PAfaV8FFR7hXVdwRK4ICf6NL5reIJ6cdX3MQs4hl/1KxT9dk4MLs/jgjbdyoV+9o9YQ1eiTf45BZmwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TdnK0mPS; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43ba8bbeae2so2452905e9.0
+        for <linux-spi@vger.kernel.org>; Fri, 21 Mar 2025 07:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742561875; x=1743166675; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=tMXqvTBhDsmIU46dwieyVJOz1wRi4N2crzClzNAU/UQ=;
-        b=Wzaob1vg4MKFuSRb0G0UfW1s154fHWpptt8xwIdCDpgqIXmIykl6gpNCu3jMTZU4Fv
-         AKdl7w5A1KB3bUkGRJK0nhHynFBjR5ha8zGmJlrSSGiSGVNQQ43PXQvOlFAotYJcxFpm
-         rO/Ts5MXxAKvOVG9Wq6xA9AnDtZWubYUR9FIrvyf3NhmDDKI+4XF7OU7fVhZvt3H6Be9
-         z5lCYuWNEiWUP4UtsL8ZgjAzDH+cVeqTeY6abTYOa1KxEWsQ+OEXkNW968meuXgdn1cb
-         0DlCdTGc9gHX4fE59gwk2V82XOvohYrm1Hh6vPEIg68Ajz1iHsBfRomLyZqMzs3fTdev
-         x8RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742561875; x=1743166675;
-        h=mime-version:user-agent:content-transfer-encoding:date:cc:to:from
-         :subject:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=suse.com; s=google; t=1742566411; x=1743171211; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tMXqvTBhDsmIU46dwieyVJOz1wRi4N2crzClzNAU/UQ=;
-        b=cq0bQ3+YgY3ABB2EjA2c3VGCmJ3cDTxzzA6E9eNCy0DcCcVQL6cY7ZuIbriwA2WC2u
-         XOT0/SSj8wfIy+3WWY7Hkxu+HLg/WE9iBakAMnvly7AqIUgauPnClOFvy9U/nSaOTz+n
-         iJ6UCVu/fkbdY49qzKOdWVvWxn8yL58l9IlTrU0HpmrdYJXJZSw1G8NVS/bZtZRNw9zq
-         A688W7is0p5xinZOhx0wrIW1ipVXSJlOvhwRpzPcqpm4kmR58d/MlFvkq6RGxnmfnPRh
-         VUuEyt2R3SGZ0ii4xpxzuDN+STHRdAWm+Huems3S2gQgatS2Ij+GAVYzTi4T0ICBRe5n
-         Qx6w==
-X-Gm-Message-State: AOJu0YxxN8uB/D8gKVFC73L1cLBvrNjZRWsXiXj4XJ1OqNqIoIRfSX6T
-	uuAV6HGcg1Cv1RkAcyd8wmxVGh9Eaf5I39IYr2DFxYT1n4ICliSLVuU8no/yZMM=
-X-Gm-Gg: ASbGncuikGDZxTTQ+H95cx4Pez6VQtew7RNydya0vIgANe63cWceFdLhxDRIf+iC/HH
-	kWgBELVWwwZeusUwRL+PEp/DTqcU6n7CI8peXZ/V3UYNM8MgnGqbsMdYS7JpmeDH08kz6zkDdd0
-	WUdFqqhtc9asCM1Qq6Evpm2E5Dyl59A21TtgJ80Q8j1PuqXOHZ4hs9hHNInDH6Wky7PcheRt8O1
-	Pe9+lhdH0NpwbVu0fDWPk8hcmwyFAErP0ZE1nUXRKvRrGKqvLHO1HgPXgRmfG6fJ24d1/TsFaVn
-	vYZEWC4FP5+gfnHq8HVbxJdvLHZIJonpYC953ZA1UqG0LoqR22A+BqO2IQT5zJn/gDtxBQnqw/u
-	aUSBvuWEcAErBVw==
-X-Google-Smtp-Source: AGHT+IGWi+Gt4v13gDghCGe+Jbu5Q3l2IMxPm/TVT4lgzDqW9EW/9FUF0r63MdffknW3eQkELufzyQ==
-X-Received: by 2002:a05:600c:5488:b0:43c:fe5e:f040 with SMTP id 5b1f17b1804b1-43d50a219a4mr31708785e9.23.1742561874835;
-        Fri, 21 Mar 2025 05:57:54 -0700 (PDT)
-Received: from uefi-arm64.Home (236.red-88-30-84.staticip.rima-tde.net. [88.30.84.236])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d43f331dasm78492825e9.8.2025.03.21.05.57.53
+        bh=6Rdyxkiadn/5T3WYrYH0qVA/Z6DnwQVizjdYlS/XfmA=;
+        b=TdnK0mPSTpMY/vhBDrpLfM+jb7KzDKO8MmP9cjqF3luwd4YHddXuO8hTAKmaPMc17x
+         z7iOhfp1Y0xg53hyNoJFirI6Be5y/RmGW6CpifB8OIMv6WNQnHbCMYk0pjf6XB0aVBKi
+         x9b0MLvWPKwGTvtBeru2IyIjDUBdyqThMyFjx40zpVSl80XzpjA4QBaCKGmlUE0V+L2u
+         IAUq1iSrSN5+lSUrfOmBVs31O4blwSlA/RJR7KI2P7zjL/McBeUrsVdOnbWg3twcxQL8
+         gm0q7jc8TVbQ1UmybcG18lZSPoWjdeZfITBxq/QeilahYAPrHBjsGEjqNQsIPeP94CQf
+         9MBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742566411; x=1743171211;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6Rdyxkiadn/5T3WYrYH0qVA/Z6DnwQVizjdYlS/XfmA=;
+        b=FN8D95byboL32CH+wMsZW0XzjuJbAsE60ISmZGhJbkfOQ7FMU6GLqewjbIih1roY32
+         e3qhGdYd9LVmtHkMR8+Q4oJdcrse1kgB+E/fKtJ3kn82TXs3vWMZnfH8l5A65gyAHnfj
+         Ss0BNH8HbdMQT/KLXew6tjFRVfD8k3nNJzfviB1Ju+2D/rCvNYvlUYYtT3Foq9+gcpAS
+         EoP0LDOK/a2AaCaEZcllj/7USeXLn1A1lbtcHnidbxhcnmftqOQsod+INLuhEUppwjb5
+         R54AGmXhAbCIKOnoBpYv4W8EWd45UOgCyJe20dTOGd9jJu2+IzVr2ZQFgqUNSmpDazus
+         Wcnw==
+X-Forwarded-Encrypted: i=1; AJvYcCVumTIaAtIk1YvLMYInZNRRzOswtYa8LCdrwPPFRub0cVcRygoSJPIPkzoq0aVSicvedbVKpY3+weA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMsEyrr5Xx2ig5wpaD9RWaqFyrcFQXB0Xp3ewkprrhbqGMUnNb
+	Bm3izAXkqonk2HKKap84rXk4tWMDdStPVgZ36Xtrmu7U6Yw5heakw6aGfan5ED4=
+X-Gm-Gg: ASbGnct/e7m4oOyVZOBrlbUZIKGCdCwspO3XhzlpQ5Fa0JGUEWcKw7wqgzMVWNr9qne
+	r/Lurua8H8e7pdC9C/vybK5bG+QjABca2Zie362U9dfWgn414db3KRiAFw6yiHGko84GiV287Uc
+	lx6GdCIzhUBAeEtvYfKhsHvWgpeGp4J2UVYHqQ02KopHejf6G1FJgQqDArOr+oIcaci8cau17Up
+	E5B+eHfPrXQASaWLby1ZRyrEFMrizUSUOFoqnIDzNssJ2+Myqbg6uiCNaANiVGX3dYEEywxbDw5
+	jakgeFpbuO/dCpPvPvcn4M+CSRi3ebKTEcDYIW22F4G/OUpg2/Lr9FFBNHlSEG8jJRpHlnR3sUS
+	d49nl21ILJc4/DCValTvEGZYrGI1Nor1cuaL4lvvJdI4FaOfeKJ5AjkuqVvOH
+X-Google-Smtp-Source: AGHT+IHsVVOmA7WlwUcfsWQI7Vx5L2vYKwzVZKcT6mDdvsGKiJ+a/4JzzLFh+HqgxXEPyHUExoARyg==
+X-Received: by 2002:a05:6000:1a87:b0:391:42f:7e83 with SMTP id ffacd0b85a97d-3997f940614mr1490523f8f.13.1742566410785;
+        Fri, 21 Mar 2025 07:13:30 -0700 (PDT)
+Received: from mordecai.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-3010-3bd6-8521-caf1.ipv6.o2.cz. [2a00:1028:83b8:1e7a:3010:3bd6:8521:caf1])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3997f9a3b83sm2526258f8f.33.2025.03.21.07.13.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 05:57:54 -0700 (PDT)
-Message-ID: <365ccddfba110549202b3520f4401a6a936e82a8.camel@gmail.com>
-Subject: [PATCH] spi-rockchip: Fix register out of bounds access
-From: Luis de Arquer <ldearquer@gmail.com>
-To: linux-spi@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc: broonie@kernel.org, heiko@sntech.de,
- linux-arm-kernel@lists.infradead.org,  Robin Murphy <robin.murphy@arm.com>,
- luis.dearquer@inertim.com
-Date: Fri, 21 Mar 2025 13:57:53 +0100
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+        Fri, 21 Mar 2025 07:13:30 -0700 (PDT)
+Date: Fri, 21 Mar 2025 15:13:27 +0100
+From: Petr Tesarik <ptesarik@suse.com>
+To: "Arnd Bergmann" <arnd@arndb.de>
+Cc: "Mark Brown" <broonie@kernel.org>, "Grant Likely"
+ <grant.likely@secretlab.ca>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is
+ DMA safe
+Message-ID: <20250321151327.4c8f8d4c@mordecai.tesarici.cz>
+In-Reply-To: <38fe54d2-bd8a-4655-863d-cd1c482ac9a8@app.fastmail.com>
+References: <1359268504-24937-1-git-send-email-broonie@opensource.wolfsonmicro.com>
+	<20130205142128.2E28D3E1265@localhost>
+	<20250320124330.480d652d@mordecai.tesarici.cz>
+	<ca70e24d-57b6-4250-bd0d-7f5c72e1d282@sirena.org.uk>
+	<b37480a4-5344-4cf4-8fd1-400e2588fc28@app.fastmail.com>
+	<db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
+	<efe910db-77d0-4ddf-8fc2-df4955e7b9f3@app.fastmail.com>
+	<06435855-531b-4a3b-9f2e-1a5caea0d65b@sirena.org.uk>
+	<38fe54d2-bd8a-4655-863d-cd1c482ac9a8@app.fastmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-suse-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Luis de Arquer <luis.dearquer@inertim.com>
+On Fri, 21 Mar 2025 13:41:52 +0100
+"Arnd Bergmann" <arnd@arndb.de> wrote:
 
-Do not write native chip select stuff for GPIO chip selects.
-GPIOs can be numbered much higher than native CS.
-Also, it makes no sense.
+> On Thu, Mar 20, 2025, at 19:39, Mark Brown wrote:
+> > On Thu, Mar 20, 2025 at 05:30:01PM +0100, Arnd Bergmann wrote:  
+> >> On Thu, Mar 20, 2025, at 15:42, Mark Brown wrote:  
+>[...]
+> >> >> It also seems that the copy happens in the regmap_bulk_read()
+> >> >> path but not the regmap_bulk_write(), which just passes down
+> >> >> the original buffer without copying, as far as I can tell.  
+> >  
+> >> > Yes, writes don't need to do anything.  
+> >  
+> >> Can you explain why writes are different from reads here?  
+> >
+> > I think there may have been some context lost there while replying?  
+> 
+> I found the answer now: at least on common architectures (arm,
+> powerpc, mips, ...), doing a write from an unaligned buffer
+> on stack or in a shared data structure won't cause data corruption,
+> but doing a read into that buffer can end up throwing away
+> data that shares the same cacheline.
 
-Signed-off-by: Luis de Arquer <luis.dearquer@inertim.com>
----
- drivers/spi/spi-rockchip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+That's right. Additionally, any cache aliasing issues are irrelevant
+for a write. Yes, there are (were?) some processors with a
+virtual-indexed, virtual-tagged cache. Thank you, Arm...
 
-diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
-index 1bc012fce..1a6381de6 100644
---- a/drivers/spi/spi-rockchip.c
-+++ b/drivers/spi/spi-rockchip.c
-@@ -547,7 +547,7 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
- 	cr0 |=3D (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
- 	if (spi->mode & SPI_LSB_FIRST)
- 		cr0 |=3D CR0_FBM_LSB << CR0_FBM_OFFSET;
--	if (spi->mode & SPI_CS_HIGH)
-+	if ((spi->mode & SPI_CS_HIGH) && !(spi_get_csgpiod(spi, 0)))
- 		cr0 |=3D BIT(spi_get_chipselect(spi, 0)) << CR0_SOI_OFFSET;
-=20
- 	if (xfer->rx_buf && xfer->tx_buf)
---=20
-2.43.0
+>[...]
+> >> - the way that spi_map_buf_attrs() is written, it actually
+> >>   supports addresses from both kmap() and vmalloc() and
+> >>   will attempt to correctly map those rather than reject
+> >>   the buffer. While this sounds like a good idea, handling
+> >>   vmalloc data like this risks stack data corruption
+> >>   on non-coherent platforms when failing to map stack
+> >>   buffers would be the better response.  
+> >
+> > IIRC that's there to support filesystems on SPI flashes or some other
+> > application that uses vmalloc()ed buffers, it's definitely not intended
+> > to support data on stack.  If it does anything for stack allocated data
+> > that's accidental.  
+> 
+> Ok, then the question is what we should do about callers that pass
+> in stack data. I can send a patch that adds a WARN_ONCE() or similar,
+> but it would trigger on things like 
+> 
+> static int rt1711h_read16(struct rt1711h_chip *chip, unsigned int reg, u16 *val)
+> {
+>         return regmap_raw_read(chip->data.regmap, reg, val, sizeof(u16));
+> }
+> static int rt1711h_write16(struct rt1711h_chip *chip, unsigned int reg, u16 val)
+> {
+>         return regmap_raw_write(chip->data.regmap, reg, &val, sizeof(u16));
+> }
+> 
+> which happens in a number of drivers but is harmless as long
+> as the driver doesn't actually try to DMA into that buffer.
 
+This sounds like we should push the WARN_ONCE() one level deeper, into
+the DMA code. That's a good idea, actually, because it's always wrong
+to do DMA to a stack address, not just when SPI does it.
 
+Petr T
 
