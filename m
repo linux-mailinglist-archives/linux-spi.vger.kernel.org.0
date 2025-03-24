@@ -1,67 +1,67 @@
-Return-Path: <linux-spi+bounces-7285-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7287-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CB2AA6D7C8
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 10:44:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FF8A6D7C6
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 10:44:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3D583B3214
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 09:43:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F26287A6FB2
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 09:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E7025DCE5;
-	Mon, 24 Mar 2025 09:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A4025DD12;
+	Mon, 24 Mar 2025 09:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="RjZcSVc6"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="DNAUbfq6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E04225DAEE;
-	Mon, 24 Mar 2025 09:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C75725DB0D;
+	Mon, 24 Mar 2025 09:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742809410; cv=none; b=ggFVeAwkNnQMf0xBo7qyhmrBkph/6FMwgFodDce6obv0apAdbBSi52jUiH3t57mBFrbNrDF1AiL3ApuPCP3h0KIkG119lTI6ecfhw/ZUkpxEqZX3rLFcBLYyfrhW7TyIGARlHzyxVNixVw44qTpTHQQmCtQzoAZMlNpayMh7iqo=
+	t=1742809411; cv=none; b=Nk+YhzNU/Ak07I8Lw7/r74ZvPZ8fNuji35yGmwrI7G7S63l3DS2SAxM1xQWE1jWiopd3cweEpY01tUTptCOr33PACfY/NidGbNSRIC0OLCswEC760AYDGKOIbnuLPdviu8E+w4LNzfUOaBTBxS4P04IYSLPd3O/t+76l87KmP90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742809410; c=relaxed/simple;
-	bh=lxXDM6IwsJB8cs+wlaDqcJWHjbK0q3C2slLZ72Fn0J4=;
+	s=arc-20240116; t=1742809411; c=relaxed/simple;
+	bh=xwAXpf2r+v5WIM5PWE9zJkDFTC8uCLULd81muUqM9Ow=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=nkf9vt3YgOkDj7HwuHbynj+2AGlzZkIklFuuN/lwCUSf5A7REHh1LKGG50FeYuNdNd51BCsnEgpyY6cXQH45ZgHgYEQi2epxNrZQcH6UFKv39KXGOmpoQVgbI49QXC/kcIMwi8jJsKnHmDKemqNADgQZJVvgXgFGDU0hTR/0Zko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=RjZcSVc6; arc=none smtp.client-ip=185.132.182.106
+	 In-Reply-To:To:CC; b=XVpNTX3HUB/yUF5H40pYbtO5AyHJ9g6GHvxTACtfW04+MQ8JGuqWX8SEp8L1X/R5HMF1MrPY650iFgARVy1szdSu+P37y8FUVKgxq2/YI/JtGnhglDUSdENdbuUwdDWc7TSPoLFK9YQud18BFRe8Yq2UwjuwMQdIXUBsZ7c/Y08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=DNAUbfq6; arc=none smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O9bkhv012912;
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O9BbeC031035;
 	Mon, 24 Mar 2025 10:42:59 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	NzLmfHxTjgjzxH2MLhlvyo1SC7eJ5Hj+e6zOGJcJg9E=; b=RjZcSVc6/aR2sEEY
-	p3+BtYB+Ow7xIIr5Zlmif8LHp0BXyL7U/CXvQCDlo3ElPwrs6FqMnlWzmcXm1DPK
-	rH0kQ3KIL+8NjPBh+buHONUDAD1JKonPfsTnn2Xv+RlWegZzs4TGw4zdWTOJ1qe8
-	t2VkWPdFcgkBHkI+9s41y6qim0O39+VTOlbLMZ6U7Kxcp+Zyn5EToWLu6Hoo7cHj
-	Mkipvnv1f4yVJUmwaGp9h0OVk+pTJqI7d8fpXiJM1zkejYnwv8yBcfgqd4qLy0uT
-	MjO2zzu1L/5TGYKx3FnEDJAcfUG2pfccNb82WW8acU/FxPA7qGYGGDT6x51S+tHl
-	VwAJMw==
+	yT8oLnhtXkXINGnaV4SHYt3aHucazcGEQTHZoc9QZSc=; b=DNAUbfq6/Jhr49dY
+	UZilZG/nPpJwxSNbjdOvw8cWhtKG/mHo2Y0ypVErwGGlkSe1cK97HchCEhDqF6BE
+	+1ZkOxPxph/8n7q9NqR0zNKhYFVOpa8pXZZm2W9ITA4na6iyPIzV5A3mt28oojBs
+	VQ73wEQoDPj6GoKshGNVxWD1Fevf6NytbNHGaWCYh3pkRX4PepyD5FYcgXZv7YV3
+	jh8XbguA0IC31l3kDeM8aJCTx4/Qkxozorv4HEL88YKnJCjbvPLqvbCVfI5uLAnT
+	m2YQ72WpAGy6wR3zolGKfe7YdaPQloUzGcYRc0QnJHJrypJ+enO+93ZvO781orGb
+	E9dGgw==
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45hne56t0m-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45hkgr71x2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Mon, 24 Mar 2025 10:42:59 +0100 (CET)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E3C6C400DB;
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id DFB6A40063;
 	Mon, 24 Mar 2025 10:41:40 +0100 (CET)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CA1817DCB33;
-	Mon, 24 Mar 2025 10:40:16 +0100 (CET)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 87D8D7EE783;
+	Mon, 24 Mar 2025 10:40:17 +0100 (CET)
 Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 24 Mar
- 2025 10:40:16 +0100
+ 2025 10:40:17 +0100
 From: Patrice Chotard <patrice.chotard@foss.st.com>
-Date: Mon, 24 Mar 2025 10:40:13 +0100
-Subject: [PATCH v2 1/2] spi: dt-bindings: st,stm32mp25-ospi: Make "resets"
- a required property
+Date: Mon, 24 Mar 2025 10:40:14 +0100
+Subject: [PATCH v2 2/2] spi: spi-stm32-ospi: Make "resets" a required
+ property
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250324-upstream_ospi_required_resets-v2-1-85a48afcedec@foss.st.com>
+Message-ID: <20250324-upstream_ospi_required_resets-v2-2-85a48afcedec@foss.st.com>
 References: <20250324-upstream_ospi_required_resets-v2-0-85a48afcedec@foss.st.com>
 In-Reply-To: <20250324-upstream_ospi_required_resets-v2-0-85a48afcedec@foss.st.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -95,28 +95,29 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-03-24_04,2025-03-21_01,2024-11-22_01
 
-On STM32MP2x SoC's family, OSPI is child of Octo Memory Manager which
-must have asccess to OSPI's reset to ensure its initialization.
-Make "resets" a required property.
+On some STM32MP2 SoCs, an Octo Memory Manager is embedded and
+need to retrieve OSPI's reset to perform its own initialization.
+Make "resets" property mandatory.
 
-Fixes: bed97e35786a ("dt-bindings: spi: Add STM32 OSPI controller")
+Fixes: 79b8a705e26c ("spi: stm32: Add OSPI driver")
 Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
 ---
- Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi-stm32-ospi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-index 5f276f27dc4c1fd2056f129cafc1005eaee8008f..272bc308726b2dfdf3ec80740d70e0fd1bfc4fea 100644
---- a/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-+++ b/Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
-@@ -68,6 +68,7 @@ required:
-   - compatible
-   - reg
-   - clocks
-+  - resets
-   - interrupts
-   - st,syscfg-dlyb
+diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+index d4f413c8c3ce1a51d2302602d46c7605a8bbc605..d3839a4dacf9f2eb95bafad9f7a8538ce2bb3598 100644
+--- a/drivers/spi/spi-stm32-ospi.c
++++ b/drivers/spi/spi-stm32-ospi.c
+@@ -804,7 +804,7 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
+-	ospi->rstc = devm_reset_control_array_get_optional_exclusive(dev);
++	ospi->rstc = devm_reset_control_array_get_exclusive(dev);
+ 	if (IS_ERR(ospi->rstc))
+ 		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
+ 				     "Can't get reset\n");
 
 -- 
 2.25.1
