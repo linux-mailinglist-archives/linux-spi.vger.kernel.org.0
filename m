@@ -1,265 +1,161 @@
-Return-Path: <linux-spi+bounces-7291-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7292-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 611F8A6DD15
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 15:33:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F925A6DFAC
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 17:30:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B44164898
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 14:33:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AAFDA3B194B
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 16:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B2925E83E;
-	Mon, 24 Mar 2025 14:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D21263F30;
+	Mon, 24 Mar 2025 16:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZpb03jp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YryIBtIe"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F307D25E460;
-	Mon, 24 Mar 2025 14:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633CC263C9E
+	for <linux-spi@vger.kernel.org>; Mon, 24 Mar 2025 16:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742826821; cv=none; b=jeR5rKLUsP4fSrqe+r71srrbDX/67XZdzWMuLf2gC8RcWIicMkUjo/qBMvfVjKeMf294AgORiH9eUXJcD1t+K2zuzd+KSvwItoKXSmUJcQGsvc+iaCIWNQFX+KlMeTctzYkkuFMPIUrkE0PSwpZYqUAeygrZoqH9Ojlo7UN6AFQ=
+	t=1742833741; cv=none; b=LKqF7X81t7LAYjfOudWUVcEjGGrf0KIMl4oANaW74A43UntwjYUwmk67xIEJsDV3CwhxugUBxQn78Quz7uv0X/JDkW8mmbXPYNfkYvrvmvDzAkUvaNy2EZYij5xfqjzrhCa1Fw5y3YXYlErw+b6neoX7VkHJjcn4LVJSIwYVbJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742826821; c=relaxed/simple;
-	bh=2gOYVTAicYdaWJTk9wJNXaIM2IDk2asChbUGRS1TqN4=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=dtDH3x4+kbtPvxHKrHHTBE5sITAntoq+mNKxXaZULmtzgx1lnDr/y5Z0WJlEVbehXHiHxqzs+tOf8FTKxyZXYEQ+2KxT7VJTSoIYp1xcqVrFU5AVb/QgUl3nLHSZgU+1iz27VTX/B4aMQZx5fVaPxaYQmbL/pEK1m1rjPq0g82U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZpb03jp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1B3AC4CEDD;
-	Mon, 24 Mar 2025 14:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742826820;
-	bh=2gOYVTAicYdaWJTk9wJNXaIM2IDk2asChbUGRS1TqN4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pZpb03jpxLA29JMyc8RDNpbEBOjAflCh4TJY3udstSoa6vbW0mnqW5zhzX/moXsim
-	 IvsLKjsP0Rw9tU8yZhzkKXHnVBFxvzOYTvxuDEe2862+dgF03JwhGIxW3tnXAFhuN6
-	 lmtRRe7CDrrhhXSLN4olIhiJoWGAMNM8LGk1bwcH+XfiDdHIhk0R8GDGKEvpghqXQU
-	 R+Dsh6g+oOY+k6iq5iqpe2Vj9gFcfDnjSknV+BzUkSBTUNk3+xV/OBcNa5Zf1HTrWh
-	 79Vv4hFN+ASn88aqdbsuF0DR2nIipuZfF/8DEtj6ldwsH+wqy/B6IIiXQLAqQ/28n8
-	 3+6KRbV/r8qJw==
-Message-ID: <a34186c0c3374ac5ddcee4c723ace2c2.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI updates for v6.15
-Date: Mon, 24 Mar 2025 14:33:29 +0000
+	s=arc-20240116; t=1742833741; c=relaxed/simple;
+	bh=Of9YMko5FbZoOy2finDHkvUohPxZbv+U79/wtMxZLIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l8pS5pIC/9FroZ+Dv7IPlIohVqKdyyrQhZoPAPDA8w4jMMVZz4Th4V7Wh4iRQFh4aTd6dFrB4KpkKVE7SXdpPoF+fCsWS0xrp+bMaZcmNmLl48AestRAnF6R182uKWcjvvzzfBuH7KU4NXjW0bnjw4XsO5TebBUF2BYo8s6DVQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YryIBtIe; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43938828d02so6926585e9.1
+        for <linux-spi@vger.kernel.org>; Mon, 24 Mar 2025 09:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1742833737; x=1743438537; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZEReYFBLgPBx6msQMgi21dW4Zu9uLX2ewii7o9t6CM=;
+        b=YryIBtIej1Y50MkDUx62vV3i4P+H/NpbLdUAiuHKLsV8WF0iTPrcSmHCv6ymOycmAc
+         iXJr+YkESaQxdIhAT2/tMjsf95E9VP9XwXh9MPd72fpzdASihRFi/E9cj3t31Opl+0qB
+         NKmQhIDhqL9sDPODrnOsTEmaWTW1alLcavUoTv9x4hkYiOHGeeGr7Cr1AAyw3EhA/Ld9
+         pKOaUCmj79nTUoKuk/BXm8MI+JcWMdCoy/9e0h99P4u+gcjFhk9xj5f2OM8aIK8dKZNp
+         EERCw7czy3Get9s+OMpgk3cRpkFZZx3384qbhrImLlg3+fabx33podE5iPuwMVDgn5kZ
+         5S0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742833737; x=1743438537;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wZEReYFBLgPBx6msQMgi21dW4Zu9uLX2ewii7o9t6CM=;
+        b=VAhiTZtO7HqQfeklczMOanQo5pwz/KWT7XkTc0pPgX1HK3cY/IpTMiwCZInpBrvEJo
+         gxBFJBRXKgGkOn1+I9ngL6/+tFpIM/dtg+8+N2Mgmo0WhGbB/rVKD2305Wi/P9EEauYC
+         5W9Hyl7RfYXo4jXwd6KF0+nUWeyar4Vddv2SqeedP5ZUCV0AxMoi6ZE3bKMT/EPtD1HD
+         VEtlton9uoMAgSLVaxJVtzmNBhsi+Bb2DOEpTiMoBMJ9CQW60Yx1mIzgj5sviT86WwRf
+         Eiltv50yFwEwaR9C3zYY49GW6ym7fjxN+i9L34JJera13vIHj5y2FyzySQ5MQ8IUOdqq
+         tKfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZJma3StbkwcVO7ZOlUzgMcn81zN6DtOJlcIJa/Eh9aB7NpM4Mab5qJOr+N21hsRTqEWXlslWJf+8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDj//pbGdMPXPsWi03/l2niSvyprlVSIHDxw6/vhGp9mhtLBaF
+	kZTmz+bfIpIgR/cmUxQ1B4q4ncUD8virPOyFR3Owe2l422k6+vry5VL6BeXDQu0=
+X-Gm-Gg: ASbGnct/braqmKh6mE0iALqNSUnzy+ybfYb/J1PQtjMvqOqB8HMW32B+Jkty8a1PzFn
+	+DkmyJ3y0LXyAQuasM17EDaOPGEWZ2A9PTQxfe6DsjBvgYn1f0+CBOB3ru7406ZIogyB53Nso5g
+	JsZ4qCBE8DMXn08o4ruahR+HF6FuOV0fT1b9PdAVU0pAAZd2oMSuW63H8TurUojDonalj5bmv9P
+	QbU9spnTbtOjJNyb9u7ZiQ7lko1GaSUqgwl1qOAt1rFR9EOZjQUBcWG+O0NauyfElQPUC3Z9jyq
+	2/tYg2D+1p+ps2fbOuQaE7yX+xOA9UPouZYsvi85FXqU88txros2bVBK6I18j3U=
+X-Google-Smtp-Source: AGHT+IFJIYkh8vR9dlTNbyS66WVsmBjsvJ1GO0jTZ0q/rIGpNF+C4dmPmFyT8t4LO/JNW4kAQQ/RpQ==
+X-Received: by 2002:a05:600c:4e93:b0:43b:c0fa:f9c4 with SMTP id 5b1f17b1804b1-43d5100ad46mr44338935e9.4.1742833737453;
+        Mon, 24 Mar 2025 09:28:57 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.198.86])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d4fd26cecsm124700985e9.17.2025.03.24.09.28.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Mar 2025 09:28:56 -0700 (PDT)
+Message-ID: <86a15b6d-6195-4b4a-9820-081f07fd72cc@linaro.org>
+Date: Mon, 24 Mar 2025 17:28:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] spi: dt-bindings: st,stm32mp25-ospi: Make "resets"
+ a required property
+To: Patrice Chotard <patrice.chotard@foss.st.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: christophe.kerello@foss.st.com, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20250324-upstream_ospi_required_resets-v2-0-85a48afcedec@foss.st.com>
+ <20250324-upstream_ospi_required_resets-v2-1-85a48afcedec@foss.st.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250324-upstream_ospi_required_resets-v2-1-85a48afcedec@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The following changes since commit 4701f33a10702d5fc577c32434eb62adde0a1ae1:
+On 24/03/2025 10:40, Patrice Chotard wrote:
+> On STM32MP2x SoC's family, OSPI is child of Octo Memory Manager which
+> must have asccess to OSPI's reset to ensure its initialization.
+> Make "resets" a required property.
+> 
+> Fixes: bed97e35786a ("dt-bindings: spi: Add STM32 OSPI controller")
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> ---
 
-  Linux 6.14-rc7 (2025-03-16 12:55:17 -1000)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.15
-
-for you to fetch changes up to ee2ecf2cf501eaa69dcd723d76b434767195b64e:
-
-  spi: dt-bindings: cdns,qspi-nor: Improve (2025-03-20 15:35:31 +0000)
-
-----------------------------------------------------------------
-spi: Updates for v6.15
-
-The biggest change for SPI this release is the addition of offload
-support from David Lechner, allowing the hardware to trigger SPI
-transactions autonomously.  The initial use case is for triggering IIO
-operations but there are other applications where having the hardware
-ready to go at a minimal signal is useful for synchronising with
-external inputs (eg, interrupt handling) or reducing latency (eg, CAN
-networking).  Otherwise there's the usual fixes, improvements and
-cleanups, plus support for a bunch of new devices.
-
- - Support for offloaing support from David Lechner.
- - Support for GOcontrol1 Moduline modules, Mediatek MT7988, NXP i.MX94,
-   Qualcomm SPI NAMD, Rockchip RK3562, Sophogo SG2044 and ST STM32 OSPI.
-
-----------------------------------------------------------------
-Andy Shevchenko (7):
-      spi: realtek-rtl-snand: Drop unneeded assignment for cache_type
-      spi: gpio: Remove stale documentation part
-      spi: gpio: Support a single always-selected device
-      spi: Replace custom fsleep() implementation
-      spi: Use inclusive language
-      spi: sg2044-nor: Fully convert to device managed resources
-      spi: sg2044-nor: Convert to dev_err_probe()
-
-Dan Carpenter (4):
-      spi: stm32-ospi: Fix an IS_ERR() vs NULL bug in stm32_ospi_get_resources()
-      spi: spi-qpic-snand: Fix ECC_CFG_ECC_DISABLE shift in qcom_spi_read_last_cw()
-      spi: sg2044-nor: fix signedness bug in sg2044_spifmc_write()
-      spi: sg2044-nor: fix uninitialized variable in probe
-
-David Lechner (11):
-      spi: add basic support for SPI offloading
-      spi: offload: add support for hardware triggers
-      dt-bindings: trigger-source: add generic PWM trigger source
-      spi: offload-trigger: add PWM trigger driver
-      spi: add offload TX/RX streaming APIs
-      spi: dt-bindings: axi-spi-engine: add SPI offload properties
-      spi: axi-spi-engine: implement offload support
-      spi: offload: types: include linux/bits.h
-      spi: spi-offload-trigger-pwm: add extra headers
-      spi: fix missing offload_flags doc
-      spi: offload: fix use after free
-
-Easwar Hariharan (2):
-      spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
-      spi: spi-imx: convert timeouts to secs_to_jiffies()
-
-Eddie James (1):
-      spi: fsi: Batch TX operations
-
-Frank Li (1):
-      spi: dt-bindings: fsl-lpspi: Add i.MX94 support
-
-Frank Wunderlich (1):
-      dt-bindings: spi: add compatibles for mt7988
-
-Gabor Juhos (1):
-      spi: spi-qpic-snand: avoid memleak in qcom_spi_ecc_init_ctx_pipelined()
-
-J. Neuschäfer (1):
-      spi: dt-bindings: Convert Freescale SPI bindings to YAML
-
-Jiapeng Chong (1):
-      spi: stm32: Remove unnecessary print function dev_err()
-
-Kever Yang (1):
-      spi: dt-bindings: Add rk3562 support
-
-Leilk Liu (1):
-      spi: mt65xx: add PM QoS support
-
-Longbin Li (2):
-      dt-bindings: spi: add SG2044 SPI NOR controller driver
-      spi: sophgo: add SG2044 SPI NOR controller driver
-
-Lukas Bulwahn (2):
-      MAINTAINERS: adjust the file entry in SPI OFFLOAD
-      MAINTAINERS: adjust the file entry in GOCONTROLL MODULINE MODULE SLOT
-
-Mark Brown (10):
-      spi: zynqmp-gqspi: Clean up the driver a bit
-      spi: gpio: Enable a single always-selected device
-      spi: axi-spi-engine: add offload support
-      Add STM32MP25 SPI NOR support
-      spi: sophgo: add Sophgo SPI NOR controller driver
-      arm64: dts: freescale: Add support for the GOcontroll Moduline Display
-      spi: sg2044-nor: A couple of cleanups
-      spi: Merge up fixes
-      spi: sg2044-nor: fix a couple static checker bugs
-      spi: dt-bindings: cdns,qspi-nor: Improve
-
-Maud Spierings (4):
-      dt-bindings: vendor-prefixes: add GOcontroll
-      dt-bindings: connector: Add the GOcontroll Moduline module slot bindings
-      MAINTAINERS: add maintainer for the GOcontroll Moduline module slot
-      spi: spidev: Add an entry for the gocontroll moduline module slot
-
-Md Sadre Alam (2):
-      spi: dt-bindings: Introduce qcom,spi-qpic-snand
-      spi: spi-qpic: add driver for QCOM SPI NAND flash Interface
-
-Miquel Raynal (6):
-      spi: cadence-qspi: Fix probe on AM62A LP SK
-      spi: cadence-qspi: Improve spi memory performance
-      spi: dt-bindings: cdns,qspi-nor: Be more descriptive regarding what this controller is
-      spi: dt-bindings: cdns,qspi-nor: Deprecate the Cadence compatible alone
-      spi: dt-bindings: cdns,qspi-nor: Require some peripheral properties
-      spi: spi-mem: Introduce a default ->exec_op() debug log
-
-Patrice Chotard (2):
-      dt-bindings: spi: Add STM32 OSPI controller
-      spi: stm32: Add OSPI driver
-
-Peng Fan (1):
-      spi: stm32-ospi: Include "gpio/consumer.h"
-
-Qasim Ijaz (1):
-      spi: sophgo: fix incorrect type for ret in sg2044_spifmc_write()
-
-Sean Anderson (5):
-      spi: zynqmp-gqspi: Reformat long line
-      spi: zynqmp-gqspi: Add some more debug prints
-      spi: zynqmp-gqspi: Add helpers for enabling/disabling DMA
-      spi: zynqmp-gqspi: Clean up fillgenfifo
-      spi: zynqmp-gqspi: Always acknowledge interrupts
-
-Sergio Perez Gonzalez (1):
-      spi: spi-mux: Fix coverity issue, unchecked return value
-
-Tudor Ambarus (1):
-      spi: s3c64xx: extend description of compatible's fifo_depth
-
- .../connector/gocontroll,moduline-module-slot.yaml |   88 ++
- .../bindings/spi/adi,axi-spi-engine.yaml           |   24 +
- .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |   25 +-
- .../devicetree/bindings/spi/fsl,espi.yaml          |   65 +
- Documentation/devicetree/bindings/spi/fsl,spi.yaml |   74 +
- Documentation/devicetree/bindings/spi/fsl-spi.txt  |   62 -
- .../bindings/spi/mediatek,spi-mt65xx.yaml          |    2 +
- .../bindings/spi/qcom,spi-qpic-snand.yaml          |   83 +
- .../devicetree/bindings/spi/spi-fsl-lpspi.yaml     |    1 +
- .../devicetree/bindings/spi/spi-rockchip.yaml      |    1 +
- .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |   52 +
- .../devicetree/bindings/spi/st,stm32mp25-ospi.yaml |  105 ++
- .../bindings/trigger-source/pwm-trigger.yaml       |   37 +
- .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
- MAINTAINERS                                        |   17 +
- drivers/mtd/nand/Makefile                          |    4 +
- drivers/spi/Kconfig                                |   44 +
- drivers/spi/Makefile                               |    7 +
- drivers/spi/spi-aspeed-smc.c                       |    7 -
- drivers/spi/spi-axi-spi-engine.c                   |  315 +++-
- drivers/spi/spi-cadence-quadspi.c                  |    8 +-
- drivers/spi/spi-fsi.c                              |   13 +
- drivers/spi/spi-fsl-lpspi.c                        |    2 +-
- drivers/spi/spi-gpio.c                             |   45 +-
- drivers/spi/spi-imx.c                              |    2 +-
- drivers/spi/spi-mem.c                              |   11 +
- drivers/spi/spi-mt65xx.c                           |   17 +
- drivers/spi/spi-mtk-snfi.c                         |    3 -
- drivers/spi/spi-mux.c                              |    4 +-
- drivers/spi/spi-npcm-fiu.c                         |    5 -
- drivers/spi/spi-offload-trigger-pwm.c              |  169 ++
- drivers/spi/spi-offload.c                          |  468 ++++++
- drivers/spi/spi-qpic-snand.c                       | 1633 ++++++++++++++++++++
- drivers/spi/spi-realtek-rtl-snand.c                |    1 -
- drivers/spi/spi-s3c64xx.c                          |    4 +-
- drivers/spi/spi-sg2044-nor.c                       |  488 ++++++
- drivers/spi/spi-stm32-ospi.c                       | 1063 +++++++++++++
- drivers/spi/spi-stm32-qspi.c                       |    5 -
- drivers/spi/spi-zynq-qspi.c                        |    4 -
- drivers/spi/spi-zynqmp-gqspi.c                     |  173 +--
- drivers/spi/spi.c                                  |  111 +-
- drivers/spi/spidev.c                               |    2 +
- include/linux/mtd/nand-qpic-common.h               |    7 +
- include/linux/spi/offload/consumer.h               |   39 +
- include/linux/spi/offload/provider.h               |   47 +
- include/linux/spi/offload/types.h                  |  100 ++
- include/linux/spi/spi.h                            |   56 +-
- 47 files changed, 5188 insertions(+), 307 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/connector/gocontroll,moduline-module-slot.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/fsl,espi.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/fsl,spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/fsl-spi.txt
- create mode 100644 Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml
- create mode 100644 Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
- create mode 100644 drivers/spi/spi-offload-trigger-pwm.c
- create mode 100644 drivers/spi/spi-offload.c
- create mode 100644 drivers/spi/spi-qpic-snand.c
- create mode 100644 drivers/spi/spi-sg2044-nor.c
- create mode 100644 drivers/spi/spi-stm32-ospi.c
- create mode 100644 include/linux/spi/offload/consumer.h
- create mode 100644 include/linux/spi/offload/provider.h
- create mode 100644 include/linux/spi/offload/types.h
+Best regards,
+Krzysztof
 
