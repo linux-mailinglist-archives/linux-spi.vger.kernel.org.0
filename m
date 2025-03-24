@@ -1,79 +1,124 @@
-Return-Path: <linux-spi+bounces-7284-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7286-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CCE4A6C51A
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 22:26:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3933A6D7C3
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 10:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9A0F57AA3DC
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Mar 2025 21:25:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 050B57A64D5
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Mar 2025 09:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24205231A5F;
-	Fri, 21 Mar 2025 21:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CCC425DCE9;
+	Mon, 24 Mar 2025 09:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdZELiqx"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="o0SeTaSK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E271EF08D;
-	Fri, 21 Mar 2025 21:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0A325DAEF;
+	Mon, 24 Mar 2025 09:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742592386; cv=none; b=QZv+X3kOVTKVnPFh9SPmIPKRZjgDHdGG6TDEZKBAs81qtnv0pj7GZup5oO9lEjraUbTcFNnwKm2XXz1yp/NU+H5409Ux85aCcdOEJDAz74okwj0kKaN+ksgdP+DQqlVudWWKJ668lIem+EOGSzC5WBCkzztTuPn6u6qy2uwCh+o=
+	t=1742809410; cv=none; b=j31hR0i16zkgmqVzOypUjAg5XqL9ffxvCA7EYAGr08gK3TgqLuyVKv4ErBDiTcugsUsF9Wg1T6dgatnLNWftvx4RYsJI5RUsQYuEXvA8UeXazrMRyyA5u59BkrigpHEjJ73NqCr2Y3L3lurlbtYh10fj1scdGdtnEfjOSEZA1xs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742592386; c=relaxed/simple;
-	bh=QyJ/ruzc3o3bTATFbHX0o2OHrDLiJdc9CfELSIkf6Go=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Yg29xzd5LCYNnIFygKVi8mcXHVjA/U8ZiSIlhkuNtbb2RVmhe8GXmxxr2cweLnC1S2ZvoeyGo8BJg1ceuiEE0skish+Bl6hte327km9iBkn0w1VnezzoxK+NlOsBKAiTrpQm5G/5niMC+Aco9FMkseWSCHI9LqI11fcb9H/ZM5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdZELiqx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8F3C4CEE3;
-	Fri, 21 Mar 2025 21:26:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742592385;
-	bh=QyJ/ruzc3o3bTATFbHX0o2OHrDLiJdc9CfELSIkf6Go=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=RdZELiqx19u7FDEwstcTPga8qOSAGncEuDqxHatiqyioQXpTN2Zw18HcdLp8Tf+Gs
-	 KESpmbKYXbk8VgN+oEdJY33x49fQ2vcS20WFg7JthLKc37G3yl44tccUkyQHmLCTZk
-	 rORQPezbgwqrKR5EM3ImonY9MQT4o1kKCwlv2WpiLrVNMT6JYRUeTufDTdjcF3JyYy
-	 Mf3tRgyNxbK+H/5dIktWMXuF3F/AxJ0EiIblG9fV6OqpzmB3okFkf+rsO8LvrI4+ne
-	 O1XCP+d5HCZNs5zrAyExI825676/UdUXw5lOO+sCyr03Q+Z50VpkCNPqRdMZBth7mU
-	 sUGNo7iuURclQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD583806659;
-	Fri, 21 Mar 2025 21:27:02 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.14-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <a63096e1e044f828a77f611d7ef76140.broonie@kernel.org>
-References: <a63096e1e044f828a77f611d7ef76140.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <a63096e1e044f828a77f611d7ef76140.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc7
-X-PR-Tracked-Commit-Id: 176fda56d72a267731f82aa4a3aeca430394f10e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 88d324e69ea9f3ae1c1905ea75d717c08bdb8e15
-Message-Id: <174259242142.2631089.1984753684459844773.pr-tracker-bot@kernel.org>
-Date: Fri, 21 Mar 2025 21:27:01 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1742809410; c=relaxed/simple;
+	bh=n3Nby/fIzs+O/ZqCo+jpEq1LFeyxYS3UFTduSwDh0Ks=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=MwbEmnOwRott/JRxb6MJ90S29b9QhLra/fMHq/ApJwoH460hmkUAvwiuBnofPpOyuskWmr3M8c+1UQl0WmsJGBOdiwMdqbgFC0Q2H+w2mW7rkZpSlejzhuvUHGbcFqauI8cHKzhRU3gUMTMoWY/xN0EjoEJx+fN5d2jpi5PmRl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=o0SeTaSK; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52O7ELVd032168;
+	Mon, 24 Mar 2025 10:42:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=5fV2R1E3CKBb4WFfRo1d9P
+	Yp2TC8wiqYUiEwsJbh6Qc=; b=o0SeTaSKKMUsYOUmOa4/jofgvOu2CbNHqPZR4J
+	0590RDqcPG3Niu91HZ96V9+SDVJLcRZEQxzXpO+NqAsm1OdYKg7GrrGWPHiB5sCq
+	eS32CMq9KCaOAzG0KB64861IdL8niNlDmjJiJdaWejHtDhX/i8alovllZCCZyVu5
+	YamOpIJRGcro4TNuZ9uI25C0c8Gjk+12Lc+FN9BtTMY7/NUvNvDG9O34TtlN2U7F
+	H4LWx37jWYYfr8jMweBJRTkARmFIVR4W3VmvEpYMLV8vFKZgS3jjBxWuygR5X+go
+	ufO4+/kzPAsIOeYUpViumltgWd4rZih9TcGGtSNkPku75yvQ==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45j7n84eqn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 24 Mar 2025 10:42:59 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E3BD1400DA;
+	Mon, 24 Mar 2025 10:41:40 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 14FE17EE902;
+	Mon, 24 Mar 2025 10:40:16 +0100 (CET)
+Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 24 Mar
+ 2025 10:40:15 +0100
+From: Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: [PATCH v2 0/2] spi: spi-stm32-ospi: dt-bindings fixes
+Date: Mon, 24 Mar 2025 10:40:12 +0100
+Message-ID: <20250324-upstream_ospi_required_resets-v2-0-85a48afcedec@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHwo4WcC/42NQQ6CMBBFr0JmbUlbENSV9zCEFBhkFlCcKURDu
+ LuVE7j77y/e20CQCQVuyQaMKwn5KYI9JdAObnqioi4yWG3POrNGLbMERjfWXmaqGV8LMXZxCAZ
+ RWe4ujSkLY5oComNm7Ol9+B9V5IEkeP4cudX83n/Nq1FaXZ3LS20xc2jvvRdJJaStH6Ha9/0LN
+ jJtXcwAAAA=
+X-Change-ID: 20250321-upstream_ospi_required_resets-34a8b17611b6
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <christophe.kerello@foss.st.com>, <linux-spi@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+X-Mailer: b4 0.14.2
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-24_04,2025-03-21_01,2024-11-22_01
 
-The pull request you sent on Fri, 21 Mar 2025 14:39:10 +0000:
+Make "resets" property mandatory.
+Update spi-stm32-ospi driver and dt-bindings accordingly.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.14-rc7
+Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+---
+Changes in v2:
+- Update dt-bindings commit message to explain why OSPI's resets becomes
+  a required property.
+- Link to v1: https://lore.kernel.org/r/20250321-upstream_ospi_required_resets-v1-0-9aa4702e3ae2@foss.st.com
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/88d324e69ea9f3ae1c1905ea75d717c08bdb8e15
+---
+Patrice Chotard (2):
+      spi: dt-bindings: st,stm32mp25-ospi: Make "resets" a required property
+      spi: spi-stm32-ospi: Make "resets" a required property
 
-Thank you!
+ Documentation/devicetree/bindings/spi/st,stm32mp25-ospi.yaml | 1 +
+ drivers/spi/spi-stm32-ospi.c                                 | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+---
+base-commit: e94bd4ec45ac156616da285a0bf03056cd7430fc
+change-id: 20250321-upstream_ospi_required_resets-34a8b17611b6
 
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Patrice Chotard <patrice.chotard@foss.st.com>
+
 
