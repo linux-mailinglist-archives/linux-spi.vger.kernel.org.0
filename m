@@ -1,112 +1,99 @@
-Return-Path: <linux-spi+bounces-7326-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7327-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101E1A71C0B
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 17:42:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39715A71C75
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 17:55:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76401898C48
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 16:42:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A4217A92A3
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 16:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A363B1EDA34;
-	Wed, 26 Mar 2025 16:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6411F4178;
+	Wed, 26 Mar 2025 16:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="gStzZ2jW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXGV3BTK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79CF1F416D;
-	Wed, 26 Mar 2025 16:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CDF1E835A;
+	Wed, 26 Mar 2025 16:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743007354; cv=none; b=AFvHEn91eBwHYiwApsn8q1yDyVCCX0kBvuDGcCe0NMnhNhN1F0Kmwp6m+tQPHYR5dzdzDfw07dTDVOjZUm3FFOVbyIcUy3WyDIeGxxeGoK3/3Sssxsejuu8Nhf4uvg+MHR379lxdqDxB44x23IIiBnjYMys+j6zTsPwC+3wXtN4=
+	t=1743008129; cv=none; b=V0bxMhZQF8TzmEJLyGVclGz/3RrxuHLbVajAMH4wFHzYHfgpW5+Tx+39YosmK9P4vFBR3JKPMj85UA7jKcI/cM6HM7HqgL2e40szRFBdqDGCAkRFJCwF4DyfxcdExfjd0WZlzQYPhrkqqhuZ+CiGnlM/KqiN0c5htza7Ket9Ey0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743007354; c=relaxed/simple;
-	bh=X2DxkO3Z0ZiZDUVuslfUvsTVKz2yIhEjymSgEAgeaLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=olH5cRwnlPmJpFO6OAD3cOntBloEngKRRl2OK4vh2slJnD5G0wCDwbRCZgbET8oy+iWqqz7Ngv/axp2cY4CFsQHdy09daoKDNtTDV2YDVWn/gTl28d4zCQzO6VHBCgpsZFTe4zkJxhh/7s+exam7S7sElmC03jxQd7E2qDkrBGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=gStzZ2jW; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BB251102EBA43;
-	Wed, 26 Mar 2025 17:42:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1743007350; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=hbMcfALOKLAN5Mw8Wpa0WVyi0wWl2REb7L9X3HcdnTo=;
-	b=gStzZ2jWmk/ps9fxv0Xdm24uIRj7EOfQSWtMlG4q2HLsqIK2ipKvs4dCZOhcH48Xz4Akop
-	wZht0GqxbGAcTqflnmDst9lZMj4ssC+c2h4TNql7nk7YcZ/g4BBXJjwaohk9tmc6drgS+F
-	r4/yQYYfRaDnaO4pAVJ5cpB7FzGj2svJUqjW7jS8fjIi4cuuXmXqkrHJfZWtssJLItZJyV
-	avTkPNmh8A0BO7pSa1z7n2zU9IT2S1QWERGrsiTv4TapRXaN4oZ3QuOMMtvEDv0FvRdwhL
-	bQ0nrWYofK1SRcIpEz10neiS94keFeipxh4K1y6+oo/qyBJZ3xJ64JpgNTnF1A==
-Date: Wed, 26 Mar 2025 17:42:28 +0100
-From: Lukasz Majewski <lukma@denx.de>
-To: Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1743008129; c=relaxed/simple;
+	bh=xUH+r591VfZvvi48wtVpf1oVKcmO4AvfWE+ihcIT/sI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pChUWaRmpbrbSLONmFWAicHdRT9McAFXHSjqi66QJ6a/JfiomNMv90PT0cz2DUIt61d+mo79D8eij7ZqnFxaqzYu2zim94nJEZpYqvG8N1IO6reOggc8aWTo6sid2WRfeRpkPgVHTJ74ODmVNYptY3T2FGJyGsx9+b6J64cb+rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXGV3BTK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA92C4CEE2;
+	Wed, 26 Mar 2025 16:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743008129;
+	bh=xUH+r591VfZvvi48wtVpf1oVKcmO4AvfWE+ihcIT/sI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lXGV3BTKRSh52WreuGx6SZ13KMFC9b/jMYXF78SjuQYL4LLk62DH8ljs32wONa1tX
+	 7KwtviOXJ3XQrfraMv70gcQhyK6p05XuFU4CdR6Wju/qFF5roLMJSTiudyd4wW5Vfr
+	 kF4gmYouaJ3tuDZArUV3QWovUtAldpWfB0URt6uO/qDsxE9zPU1xcdgJoPgcHh5ilc
+	 PrhHLx1BaunkVbXalZf9EW2E0IoscE06jD06IDKlKEeU0+PTCVE5XpWmu3C+0GSdz5
+	 v7Vljtof8M5E1/v/sn67QtGkIfn4c2m/IErdXn3lqBvCzbMYIgT+U2Kxugo96wk9EZ
+	 FlVZGiTYFMNsQ==
+Date: Wed, 26 Mar 2025 16:55:25 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Lukasz Majewski <lukma@denx.de>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] spi: spidev: Add compatible for LWE's btt device
-Message-ID: <20250326174228.14dfdf8c@wsk>
-In-Reply-To: <5661510e-3aea-4c07-88d6-2c3efccadb37@sirena.org.uk>
+Message-ID: <6575e094-dbf9-459e-b222-95a7ce7e1c85@sirena.org.uk>
 References: <20250221155644.1168860-1-lukma@denx.de>
-	<5661510e-3aea-4c07-88d6-2c3efccadb37@sirena.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <5661510e-3aea-4c07-88d6-2c3efccadb37@sirena.org.uk>
+ <20250326174228.14dfdf8c@wsk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TbvFq.HIl7AIxb9_22=7h/N";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bint7rKj/FLQArSq"
+Content-Disposition: inline
+In-Reply-To: <20250326174228.14dfdf8c@wsk>
+X-Cookie: To err is humor.
 
---Sig_/TbvFq.HIl7AIxb9_22=7h/N
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+--bint7rKj/FLQArSq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> On Fri, Feb 21, 2025 at 04:56:44PM +0100, Lukasz Majewski wrote:
-> > The Liebherr's BTT devices are using spidev to communicate via
-> > SPI to monitoring devices. Extend compatibles to allow proper
-> > DTS description. =20
->=20
-> This is fine but we need a bindings document update too
-> (trivial-devices.yaml should be fine I think).
+On Wed, Mar 26, 2025 at 05:42:28PM +0100, Lukasz Majewski wrote:
+> > On Fri, Feb 21, 2025 at 04:56:44PM +0100, Lukasz Majewski wrote:
 
-I've just resend the update for trival-devices.yaml.
-https://lore.kernel.org/linux-devicetree/20250326140930.2587775-1-lukma@den=
-x.de/T/#u
+> > This is fine but we need a bindings document update too
+> > (trivial-devices.yaml should be fine I think).
 
-Hopefully you can pull it soon.
+> I've just resend the update for trival-devices.yaml.
+> https://lore.kernel.org/linux-devicetree/20250326140930.2587775-1-lukma@denx.de/T/#u
 
-Best regards,
+> Hopefully you can pull it soon.
 
-Lukasz Majewski
+I would have expected the two updates to go together...
 
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/TbvFq.HIl7AIxb9_22=7h/N
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--bint7rKj/FLQArSq
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmfkLnQACgkQAR8vZIA0
-zr25kQf/cOf4hhdmDPZdvK50au5ouoJer5+qchALJYHNbPPJiz2SOnTORGBTMIin
-asIWsLFA/0khJ998ok64v5e8TRqulltQxLAgZjf858QPpC3T0KXrBuXg+oGADSik
-8Ioqs5dqKB/1hUCfu1sTxqUgS7sYjYCmEhjZnJEyklCtreyRwxjHpqhrvwBz7WOZ
-u1wzMvNa0e+6Juqqh24QbkWC3/j8RsrMnU4r9FS3l6FukeCpBP/oqJm14u56KQOH
-a1LQmVwsMm5yDNOjSFHmDCgV7Na/kXMBexLUaQ7idw2mcQudkd1/8l4I0OrTzoqD
-0DgzwaYgtG8dFvgr4EehPu+BFvwdbA==
-=umD7
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfkMXwACgkQJNaLcl1U
+h9Abewf/YkPA8w4NfZYSC3pvZCu3Fn+bI+hKTgg6ZspkStlk1z9gZiqFIgmcrrdF
+CQTsMTRzc6gEdS8FagkLObLxsRUJVmSsAm2Mi/DRtW7UmD+DOspi35AbKhqX/dlE
+coNrLJWQ9I1ROT9OtRUX6JNVtOfFl/RdZy9dlyC05df01K9a6qkXfPf6T6ljLbvD
+YA73XJaWGOXqAecnJtvnG/CMO6TQo+6IjTi1XWb8Sy0aJspQqd7RrrIvMn7cEjFv
+4PbVOEKMJhngBlTqVTJVOhLrKaPhhONg+LMQ7n6ho8YA8kOHm3jgavIThCy3wq5W
+M29Jjy3zmhRE9gXK9+b7+o2cfTV2mg==
+=CPvd
 -----END PGP SIGNATURE-----
 
---Sig_/TbvFq.HIl7AIxb9_22=7h/N--
+--bint7rKj/FLQArSq--
 
