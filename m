@@ -1,100 +1,114 @@
-Return-Path: <linux-spi+bounces-7316-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7317-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 009F7A7170F
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 14:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DB94A7185E
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 15:22:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFCF71890018
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 13:04:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9219E1885975
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 14:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACCD41DE3DE;
-	Wed, 26 Mar 2025 13:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRh4OKmc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABBAB1EDA13;
+	Wed, 26 Mar 2025 14:22:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B8B1C701C;
-	Wed, 26 Mar 2025 13:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EDA54652
+	for <linux-spi@vger.kernel.org>; Wed, 26 Mar 2025 14:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742994270; cv=none; b=tHQQr9pg49wPtO1mg8RdY7Zn6QxBIvUdUjdF4iK8tmciiMukdzIQwAPRWARyOZCCrzqdzbHeXWdt+oGzhVmeN9ZdpNN1/DKA8UY255W1lbuA4M/bYTiab8iFIUymFA43KdqK/6ujOqjgf8yT/beHC9BGs18T64dv4y6q/eRGAOg=
+	t=1742998950; cv=none; b=df6MgVkx3vk4wmFmCYq8DWJ9Vuo8sLpvIp6AN/TPBimhBpDA6ZR5+sRedqYgywBPI5L8yvUDlDwXWsILT0kxzikLR17HeISA3WBAkrWE1e6H6R1PKlk8mmSNk8IbHcg2y0XDe7HROdGzlz2piCm5K9Bwu/UFqMovyOYZfWU074E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742994270; c=relaxed/simple;
-	bh=KDANuWDZlRVtR6lwucYZCGj0Psq7ZuBgCEMzfQRPj8Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PK2mSKTdrk2StgMPSsA2UBno7Kh1ro++83AqTi2dhaUY0UV1+p8Pmqwgv9kkbUa2oCqnSpG7G5frUDKVDZ6i77Mr+NdeKBXJEjIqip3vfAnIokY0ZqhBAq26wWpf1PF/CsnT6A5wxS8yDadWHlfGDqgE/NoOmmUDIPM4CDp/Hms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRh4OKmc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A12C4CEE2;
-	Wed, 26 Mar 2025 13:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742994270;
-	bh=KDANuWDZlRVtR6lwucYZCGj0Psq7ZuBgCEMzfQRPj8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nRh4OKmctbtFdVLYbdRm+XzAtVN4zENUm+iHGX4Jn4Y9XLM9+QctbzlZkwUuMjB7j
-	 d5hEev0amv694c4xTzeQXaZMRaI6HZQTxJOdddkyrvjpmsyRSrDfbPI4++IEnCB1zM
-	 UWc8yNaytz+5ZreTtZM7kz8LOApt3g0SGKSnNarV0/DzKK5pkJezRemzItKFUjvwmO
-	 a6Qs/q76n3k7va4WK9vkVa4hfhO8Ok/KDa3GLC8mUu2oHPs5Ow7iB3FdnCENNsgW0G
-	 QuwC/6BeCCOJEfi3KxmuqjFwYTlS4KAYtuHJMoPa1mwc2ONTGXZUvLOMfb4RRHkRTr
-	 6UHBG/zHXmBYw==
-Date: Wed, 26 Mar 2025 13:04:26 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	andersson@kernel.org, konradybcio@kernel.org
-Subject: Re: [PATCH V1] spi: Add support for Double Transfer Rate (DTR) mode
-Message-ID: <40db39ef-7ef3-4720-9c85-ccfe1c11c299@sirena.org.uk>
-References: <20250326083954.3338597-1-quic_msavaliy@quicinc.com>
+	s=arc-20240116; t=1742998950; c=relaxed/simple;
+	bh=TKxti6j94LxS0EU/52dbpDWY1Jx1BVAWz3BmQzJD2tA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aDDpRuZncZHxSiDeprLWc9TvCYt1ZlaOcNrIjiZ4ZCauGtxtMwJlz+htYIyijkihC9TFLDLDD+FSfc9oR2r1xwR7L2klEkzuSQ8oZr6wz1W587nuuZU+rCH7PVhADHVPVEZgkry41/WGUa2AK7geeERxIiOjRRAs8aNWID9jzfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b1ef:107c:7814:6642])
+	by michel.telenet-ops.be with cmsmtp
+	id VSNL2E0085Szt1p06SNLFp; Wed, 26 Mar 2025 15:22:21 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1txRdf-0000000FjIr-0Skx;
+	Wed, 26 Mar 2025 15:22:20 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1txRe8-0000000Gytg-2oz1;
+	Wed, 26 Mar 2025 15:22:20 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Mark Brown <broonie@kernel.org>,
+	Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+	Md Sadre Alam <quic_mdalam@quicinc.com>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] spi: SPI_QPIC_SNAND should be tristate and depend on MTD
+Date: Wed, 26 Mar 2025 15:22:19 +0100
+Message-ID: <b63db431cbf35223a4400e44c296293d32c4543c.1742998909.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qd8pf4HPEhmM3qAr"
-Content-Disposition: inline
-In-Reply-To: <20250326083954.3338597-1-quic_msavaliy@quicinc.com>
-X-Cookie: To err is humor.
+Content-Transfer-Encoding: 8bit
 
+SPI_QPIC_SNAND is the only driver that selects MTD instead of depending
+on it, which could lead to circular dependencies.  Moreover, as
+SPI_QPIC_SNAND is bool, this forces MTD (and various related symbols) to
+be built-in, as can be seen in an allmodconfig kernel.
 
---qd8pf4HPEhmM3qAr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Except for a missing semicolon, there is no reason why SPI_QPIC_SNAND
+cannot be tristate; all MODULE_*() boilerplate is already present.
+Hence make SPI_QPIC_SNAND tristate, let it depend on MTD, and add the
+missing semicolon.
 
-On Wed, Mar 26, 2025 at 02:09:54PM +0530, Mukesh Kumar Savaliya wrote:
+Fixes: 7304d1909080ef0c ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Compile-tested only.
+---
+ drivers/spi/Kconfig          | 4 ++--
+ drivers/spi/spi-qpic-snand.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> This change introduces a new field `dtr_mode` in the `spi_transfer`
-> structure. The `dtr_mode` field allows protocol drivers to indicate if
-> Double Transfer Rate (DTR) mode is supported for a given transfer. When
-> `dtr_mode` is set to true, the SPI controller will use DTR mode
-> otherwise, it will default to single transfer mode.
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index c18bb46ed13fea9a..0121ecb13d541799 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -945,9 +945,9 @@ config SPI_QCOM_QSPI
+ 	  QSPI(Quad SPI) driver for Qualcomm QSPI controller.
+ 
+ config SPI_QPIC_SNAND
+-	bool "QPIC SNAND controller"
++	tristate "QPIC SNAND controller"
+ 	depends on ARCH_QCOM || COMPILE_TEST
+-	select MTD
++	depends on MTD
+ 	help
+ 	  QPIC_SNAND (QPIC SPI NAND) driver for Qualcomm QPIC controller.
+ 	  QPIC controller supports both parallel nand and serial nand.
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index fbba7741a9bf336d..17eb67e19132612c 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -1614,7 +1614,7 @@ static const struct of_device_id qcom_snandc_of_match[] = {
+ 		.data = &ipq9574_snandc_props,
+ 	},
+ 	{}
+-}
++};
+ MODULE_DEVICE_TABLE(of, qcom_snandc_of_match);
+ 
+ static struct platform_driver qcom_spi_driver = {
+-- 
+2.43.0
 
-> The QSPI controller driver uses this flag and configures single or double
-> transfer rate using the controller register.
-
-We should have a flag in the controller indicating if it supports this,
-and code in the core which returns an error if a driver attempts to use
-it when the controller doesn't support it.
-
---qd8pf4HPEhmM3qAr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfj+1kACgkQJNaLcl1U
-h9DJQAf/YJ+ojB+devzgPrAXauOe46juaTWouRZEJJh1yRZj/wGvASS+XzaM+7Op
-1JnoQDosb0Ig8+MfNIzVInw19R1kRjiDL9ZdybDp5U3phlna86Wqdns+Q93qS3Uk
-HfJptnAFS9VsJhguL7sZ3Ki7okwteN4r9/SAvr2y6Ag1TOugrtR0DvFW0HBTR29Y
-Ljjd72DDZXOFDk7EiRorjE/Afl1gGUiAzNPbYoub0n/5DNk9Z/QolKCNBFINZKfM
-xfZOpYpGH5BAbrRjE5AT6VihV4k+2MzJfHFPcr1+sOD78xv1D+l55I1tU8UBR18Y
-M3Q7mVyxyM+fQhLJ+Vy9mDa5b8Errw==
-=eDGt
------END PGP SIGNATURE-----
-
---qd8pf4HPEhmM3qAr--
 
