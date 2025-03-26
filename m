@@ -1,132 +1,153 @@
-Return-Path: <linux-spi+bounces-7334-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7335-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F94EA720C9
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 22:28:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE844A720F6
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 22:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92A273B7231
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 21:28:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 412BF188E58B
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 21:46:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D8F25F7AD;
-	Wed, 26 Mar 2025 21:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4623D2AD02;
+	Wed, 26 Mar 2025 21:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="A0tc0IoH"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Nvlx3ZLj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UChe62aA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8750A19FA93;
-	Wed, 26 Mar 2025 21:28:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20814217730;
+	Wed, 26 Mar 2025 21:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743024498; cv=none; b=RLhT2ksuKrEYymgaRvUNU8JHa2UmuP5xQN9CkRf02/R8Y7z7WhDh6mbJWN/T/egeMbhO1FnUX2mLDb3aDBgFNhvOVmV3o6IneoXA5YhYXCKDfXoKTXe6ymjZjdqIaO1kC0G8FXfGgFFeALjl4h3dgkHFOMihGMSiRKIoA58Tpc4=
+	t=1743025581; cv=none; b=nPgDRF9TokEmHdaJjc+kO2fCr4GkCipI3SDzfq7ryVzeaSDfL6x15qyCUtXQfmgOCULPWMvcNcW3y1gTAz31hm9BI+bxJjfMF59ZXY7QNN5z0qFZVoBEeRwGV7qwmgYCqvZuaTE+kwZB2pGoLAtaJi35K5SJe/gwzEqolvgKx1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743024498; c=relaxed/simple;
-	bh=OBw9ipfX8DLQWYwCbr3x/zmBXAhxvC081tQVlHAiy+c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XF90GPXJBV6jlGoNa9cwpFoGnm849O/qPl/tvg2RQPsABU5e170Ynj14iE12Q7IPfRPNmYUviqbPNXUN683xBNTl5efoLGh2rO//KRvQy1RjNftxvqE8qm7K3KRuPkK0TaZw99FHWvAhe7qnrNhSDQa8M9cKL8nZurZfw7ikhrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=A0tc0IoH; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0F69C102EB802;
-	Wed, 26 Mar 2025 22:28:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1743024492; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=F8xEET/KGibHoNetoXRxyjjf3phhHE3/7Rrox+PgyYc=;
-	b=A0tc0IoHhQmVH+iKTnDidJKCMtXcGfXyDU5bXXYHDPXwha6s64aFrEvupYQho2JACGAcY4
-	GhR0i91+sl4Q17s5n0iI2KgWPA3M8RdfLK3cWtFpnN6KXTv7KW6Ufn8u6Xw+8DzFUqJGHv
-	5XXTHLTISwWbP4YTiDqWymwt7/Y2Ua56KjVxwaEvoTFQ7M0DXaNLAHd/jUUeqnowbgEz0q
-	vCyJcdigmcsI/NwlhIMz2M9aoW+l/Mk1IbxWJ6nZR8BOWFASE48IoTh/mvai1lDdDsCF12
-	UFOmDPTm9JfbgEo1VnBprC/cIfXxWl5D3jTfD1fZk3NXW5wyxgkcUnX9mTUXRQ==
-Date: Wed, 26 Mar 2025 22:28:11 +0100
-From: Lukasz Majewski <lukma@denx.de>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spi: spidev: Add compatible for LWE's btt device
-Message-ID: <20250326222811.5313429d@wsk>
-In-Reply-To: <5f514949-5162-4944-8424-bf19318c5611@sirena.org.uk>
-References: <20250326174228.14dfdf8c@wsk>
-	<20250326172445.2693640-1-lukma@denx.de>
-	<83685ed2-f41a-456c-8a22-0ac069304386@sirena.org.uk>
-	<20250326184553.0756c496@wsk>
-	<5f514949-5162-4944-8424-bf19318c5611@sirena.org.uk>
-Organization: denx.de
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1743025581; c=relaxed/simple;
+	bh=u9R36/IsROu8bruoDQpXpqnhu//PolX8vPGtOhlbB9s=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=ttrtEPfjgHmOvnQ5KnS5WCI6KmPIdv6dKHknMbng+BjBjVuEZjyIcuwg9uoUEzogqUWv11c3nF2R9F1Y+NrwZYTNcFDC8A/G81aJq9God0KvKpk7UpPrMv+fCjzmayWQ46V05rDK0CqB/J8aDMgnSXWWT1F05o9zLMh2Baow1Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Nvlx3ZLj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UChe62aA; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 3FE3D1140156;
+	Wed, 26 Mar 2025 17:46:18 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Wed, 26 Mar 2025 17:46:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1743025578;
+	 x=1743111978; bh=9+8vkdLD5edBgu/Z6+0yI7pGtpzrZlbFrLN5LN5tBnU=; b=
+	Nvlx3ZLjFTvblohn50tYZTmgLmcilzCDC/u7zuXQCwVzAQ6ClR1TcDXwegnt0QSg
+	pa8SgUUUdmvRmPEMOjD54SCv6aOiILY2/fh74XgjKO/oDX0xjuEtkZacMnhHLqxt
+	FIcDAXl1ui4BqEHudSO4ElA2+DktqrhgbKQidP3e6f8vuevwCNQFs4+GYHSWa7m/
+	tjynPambIeV0whmVd7e0jJ2PD9V2MBX4YHfzXBp70yOQUvHXiDRM5MDH3tkduPNL
+	4fd8vbQme4BdNTvI0y3GLFg/sLpjb/jCgQA9+XBdpQsdpEUDTh+eb/8HDHmKIdy3
+	SzZx5ESnKeqH5O2LtDqEsg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743025578; x=
+	1743111978; bh=9+8vkdLD5edBgu/Z6+0yI7pGtpzrZlbFrLN5LN5tBnU=; b=U
+	Che62aAMjPI9B+5C6jr53khkrnFNqD7Db/DZasnQzOkDVMla0hiwo3Ip0Y3Gcqqv
+	Wha3DSf4ZzIJUAfAAL4GXZIeuM9D8vVf+1L4stDg4iFTIdpCSFcl/A4jjoXH8+y2
+	yp8t5WII/qVlL2yDrIlf5p0Ayhxri6MmzGjYtkaLVsvLBRb933nK9CC2EwjJi7Tf
+	UIE7MP1oPPtzFLREpQH4VF0l47wn6Wx+mAlbGBc0yPuGX46DVr+GCFn9M16qZ6OU
+	/56by01VUINvLTpL8BxZXyjBldvorrcK+t+Va+wBwy9WEcwMdGDaVA6/UwJO4q2X
+	+OqkRo0dSONHu686AnapA==
+X-ME-Sender: <xms:qXXkZ01Y7gUoJK_ZW0qbwJAGzxOBGL6LDzQHe4vCfPCZ8eDo_fhwnA>
+    <xme:qXXkZ_Hiwh5jhQXfFuURl3oFPIBJv1-wWpwnyTIIKXTl_hS5Way6_brzbTD7zZAQD
+    6dSfKxk6c7gt_pCHZo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeiieegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    hedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvg
+    hlrdhorhhgpdhrtghpthhtohepghhrrghnthdrlhhikhgvlhihsehsvggtrhgvthhlrggs
+    rdgtrgdprhgtphhtthhopehpthgvshgrrhhikhesshhushgvrdgtohhmpdhrtghpthhtoh
+    eplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:qXXkZ85-a1wQZtPFTAHAhnOYIdDuxyLbIEt1bGM47Navssz0yaTarQ>
+    <xmx:qXXkZ919fbw2MCa8wprph6htnqfQ9_Q1UzIulXk-7sWQVrY4j0cuZA>
+    <xmx:qXXkZ3HpguqUsxOgR_LEdn9FF1Ijj02P_CZHdSMzRP2yPqY_p8JpJQ>
+    <xmx:qXXkZ2-Hiyq-Yn9sGkFTVMAi5PJzwMLKafeSkX0n0fsBTIShhN1UuA>
+    <xmx:qnXkZ7gUraxPEjKrJNbXdUMQLjrHeAcsiHJkp-Pwe_kXb9ADTJbwuphi>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id BC4852220072; Wed, 26 Mar 2025 17:46:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ks3BX76zcDf=4OtGr_CtXxi";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Last-TLS-Session-Version: TLSv1.3
+X-ThreadId: T6af0c8f44e761c09
+Date: Wed, 26 Mar 2025 22:45:57 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mark Brown" <broonie@kernel.org>
+Cc: "Petr Tesarik" <ptesarik@suse.com>,
+ "Grant Likely" <grant.likely@secretlab.ca>, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org
+Message-Id: <92817727-d0f2-4d91-8fef-84ee92ab42e7@app.fastmail.com>
+In-Reply-To: <8ff02f5a-fa66-4403-b193-a18c23879e0d@sirena.org.uk>
+References: <20130205142128.2E28D3E1265@localhost>
+ <20250320124330.480d652d@mordecai.tesarici.cz>
+ <ca70e24d-57b6-4250-bd0d-7f5c72e1d282@sirena.org.uk>
+ <b37480a4-5344-4cf4-8fd1-400e2588fc28@app.fastmail.com>
+ <db36bbf0-0ad5-4c37-bfcc-917508805eba@sirena.org.uk>
+ <efe910db-77d0-4ddf-8fc2-df4955e7b9f3@app.fastmail.com>
+ <06435855-531b-4a3b-9f2e-1a5caea0d65b@sirena.org.uk>
+ <38fe54d2-bd8a-4655-863d-cd1c482ac9a8@app.fastmail.com>
+ <Z917hRQM2ZhSwvFx@finisterre.sirena.org.uk>
+ <6a3a4b10-f51b-43e2-8281-057f6751424b@app.fastmail.com>
+ <8ff02f5a-fa66-4403-b193-a18c23879e0d@sirena.org.uk>
+Subject: Re: [PATCH] spi: Ensure memory used for spi_write_then_read() is DMA safe
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
---Sig_/Ks3BX76zcDf=4OtGr_CtXxi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Mar 26, 2025, at 17:20, Mark Brown wrote:
+> On Fri, Mar 21, 2025 at 08:42:12PM +0100, Arnd Bergmann wrote:
+>> Using dma_alloc_noncoherent() should make the implementation
+>> much nicer than GFP_DMA in the past, so we could add a bus
+>> specific helper for SPI that checks if the controller actually
+>> wants to do DMA and whether the buffer is problematic at all,
+>> and then decides to either allocate a bounce buffer and
+>> fill the sg table with the correct DMA address, map the
+>> existing buffer, or pass it without mapping depending on
+>> what the device needs.
+>
+> That query feels a lot like spi_optimize_message().  Which should
+> possibly then just do the bouncing if it's needed.
 
-Hi Mark,
+Would that require attaching the temporary buffer to the message
+or could that be a permanent bounce buffer?
 
-> On Wed, Mar 26, 2025 at 06:45:53PM +0100, Lukasz Majewski wrote:
-> > > On Wed, Mar 26, 2025 at 06:24:45PM +0100, Lukasz Majewski wrote: =20
->=20
-> > > Note also that as previously mentioned I expect to see a binding
-> > > document update too which doesn't appear to be here. =20
->=20
-> > I've just send it to be accepted to trivial-devices.yaml =20
->=20
-> As previously mentioned you should send the bindings update along with
-> the driver code.
+The idea I had come up with was to have one or two pages
+permanently allocated in the spi_controller, the spi_device
+or the regmap and then use appropriate serialization to
+ensure only one transfer uses it at a time, similar to
+how spi_controller->dummy_tx gets allocated, or how
+spi_write_then_read() uses its small global buffer.
 
-Ok, so first shall be the patch 0001, which updates
-trivial-devices.yaml and then 0002, with changes for spidev (this
-patch).
+The advantage of using a permanent buffer is that it
+avoids both the kmalloc and the iommu mapping in the fast
+path and only needs to do the dma_sync_single_()
+for cache management, which should be faster for small
+transfers.
 
->=20
-> > > Please don't send new patches in reply to old patches or serieses,
-> > > this makes it harder for both people and tools to understand what
-> > > is going on - it can bury things in mailboxes and make it
-> > > difficult to keep track of what current patches are, both for the
-> > > new patches and the old ones. =20
->=20
-> > Ok, I thought that it would be the opposite - that you would see v2
-> > as the reply to the old one - especially that the change is just a
-> > single letter. =20
->=20
-> That's exactly the problem.
+The downside would be a higher memory usage and the
+need for a mutex.
 
-Ok. I will not use --in-reply-to=3D switch.
-
-
-Best regards,
-
-Lukasz Majewski
-
---
-
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
-
---Sig_/Ks3BX76zcDf=4OtGr_CtXxi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmfkcWsACgkQAR8vZIA0
-zr3r7Af9F6q/GhqW88ZJpgmdXjoUCT3appA+loaa8LkyXE5J/k2jEsL5oWAkp7e2
-bPhjl2yBDggw6MrpodSSH01/A41obcGI/2cMTwEfYXw3458vhxBgz8rxgD7S2CPR
-XNESHJMiWAgmxvLJVP9vDqiwKKAWs5aBtFSkQpko41M316+8g2AYTaInMMnm3MuT
-2P1oZf+AuCxksrjrta+Ct003xNJfAAghsaaRgulAXT2tDwCSxuXsWyTceQQKCcTq
-1wRLXd885bDrxuzUxsA9UaYwGRosHK3Wz0+E6iOusuDa4Y0MRD7nMv8Ocvy3ox/N
-ksRdPyEh/XLN/MzhUnsQ1mL6t4/djA==
-=hRyJ
------END PGP SIGNATURE-----
-
---Sig_/Ks3BX76zcDf=4OtGr_CtXxi--
+      Arnd
 
