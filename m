@@ -1,220 +1,129 @@
-Return-Path: <linux-spi+bounces-7330-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7331-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2492AA71D50
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 18:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C61A71DA5
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 18:48:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7560318898B5
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 17:38:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7508188C063
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 17:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5A9B23BD1D;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B9B9219313;
+	Wed, 26 Mar 2025 17:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNLiZKgm"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="aMSBvJQZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.denx.de (mx.denx.de [89.58.32.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77AE22ACD1;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D73017E4;
+	Wed, 26 Mar 2025 17:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743010714; cv=none; b=cMxxVS2ISajpUjomQFEmEA/BTPC/st92xp99S8M5867rSjTvqnzr76QNClycr10YqL/Vvqu2ziIqIt9YdEIrfYvImf5YzKgZMGzVNNNstNxAm//R/IgA+hQEbeY+O3YQ1WkXi13iULR75Ser3gAttpQhOAHcebYVzHhsv7AUReE=
+	t=1743011158; cv=none; b=le6UdtNUPIxk6BHtG2VJi2tBZfR/ofOOwys6iDOhSC9l3GUUCX2c3wAioYC/4uL7TyC7pI0yMANm10xL4MtIbs3M1R6XBYc0Bm2cuvvme6U95PzFtBMpejwne8j5id7miK2Vm0dgmgJ832Sb8KajnsgRbtHT0TNb+vvm6YLK3+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743010714; c=relaxed/simple;
-	bh=ZyxutTsVh46fH3XEd2TbSh2/N648DOeEQ0+sSrSt2iU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Asemec58egtuRTClSYCLV+fxyUmoI7oUH6+tRQUuNnWf6HVlk3Pbpj25UNYoNeZar/k2UGx9gHzu1xaVnxaA/An1EyBi/khNWodEiUlu9eRiDWwYQ3m8hd27J7oJ8icKiAOe4rLYIjziKjX+aOAFfAPi2BOQTe0vfVLphlgGz5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNLiZKgm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B513C4CEF2;
-	Wed, 26 Mar 2025 17:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743010714;
-	bh=ZyxutTsVh46fH3XEd2TbSh2/N648DOeEQ0+sSrSt2iU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fNLiZKgmPihLdjwoInNV7fqOMOc/StItt6c3ipl+qfnrjmUIPCojqIbIqcgR3kQr2
-	 QZUV1QTiYfD0eOU/hR9LUwbm5c4ZGkQZNt1LsTm6MYi+LkgedCgFQd0mgNn8Vi/RqU
-	 j5s6ws2mKKQp81hDDZrpKh70ICJngD3NOB1Fe3Ttbf0MimxG64mF6bxx3ciqBoXNhS
-	 8Odoew8ggFEnzscFFQbgxWZqorgkQPCi3GW7yHmrKM0n0gGEF2Xq5r0QlFZPsj7nX9
-	 G89yQcs34d7wUxOtGWZGCdtqlnh5wShQKEbncOC/SnfYfRoIA5kK5l/AerhpyxHnjs
-	 ko+095DmLIqzg==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-600038877ebso70287eaf.0;
-        Wed, 26 Mar 2025 10:38:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU6XxPbL831fg9pWAv14daxpE8o+WawW9TbWmVqXtvFHkrDHc7q6aIcnjjnQGBPvObNf+1eXlSaez5L@vger.kernel.org, AJvYcCULBsBL7/5ubP/nU+8O611BEALjgMn6e6pEA3iFtXSe1B8ORy0plqNCs5DpE2Tzg1GXbtZ5JDJLYWQaOHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD1egAa81CVr5fZAxzQsgtgek7ipXz1MqiBHP4hqciSORwQK39
-	QXeLfbR8ZOlBj32mLfKL1wGWR5vJmBL6qGD8zYNFvaMGtiCjbJvLvUbN8E/oTmmhbyumJIEhJXc
-	SB0/pC0Knz1v9cReikLc7MiwV884=
-X-Google-Smtp-Source: AGHT+IGg7eH9QWYfbDrBJ2FJDudyXDT9YK3hV3X5mb5l8doONA3okbIYrYqOJiry/b3Gtou6+i/QFZ04lWY33we4Jao=
-X-Received: by 2002:a05:6870:5b9b:b0:2c1:3d93:c192 with SMTP id
- 586e51a60fabf-2c848221302mr204027fac.37.1743010713193; Wed, 26 Mar 2025
- 10:38:33 -0700 (PDT)
+	s=arc-20240116; t=1743011158; c=relaxed/simple;
+	bh=t1iLPADlrRh7sTkLR+8K2hYQjsHR9MdLT3BhEufi6uY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YuP0moeR8JKfq/7/+ikkpdcmur3liaXln2yYWx2E0YKDf+9l5MNqogQWsYZkcMlBX2VqAnyzQTalErJV5YL+Qztvm6YJLyhIwTmIINnnlvAtU+OvDwP+Z+NEK+cNyKnDrcrlHgrBSfCUducnWUMiUzsIZDX4gr6CzXmKRAHqKws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=aMSBvJQZ; arc=none smtp.client-ip=89.58.32.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3E79210246DBA;
+	Wed, 26 Mar 2025 18:45:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
+	t=1743011154; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=H2uGHhEWg3JZ/p8Dt7d9szFu3FMB52FFPqrpmORpQ8A=;
+	b=aMSBvJQZByJxxa9rDE0UHlPGY9xvTFLXnmGeZg2qR59XMscq6ggfcXSetM6lLMrLC3mUKl
+	vZSBOK2Ld/1tScvTiyLVpeNZUHU+PfhaB+e/9+h7rBBvIa6Jy/bl3RlT5+ZwQHY1Qg6Lzi
+	IEK+k6MJ2zjbFDIYsA8WNyLftzzZbS+yF/ys6ORRM2Op8NYcJywIX5yollJ45PvZsvoiX9
+	DMJX3WQbgVEX4UOiVlaS85mLREDqIdtHv9Eg+fX17Wvc67Bjg+yUch9l7ZP936PGPRZTUL
+	a34vC8u8BU1hNAkudOgOlDTaBeYR7WfPiQV16B3/itcTj4klOD7Uv8wHdJufeQ==
+Date: Wed, 26 Mar 2025 18:45:53 +0100
+From: Lukasz Majewski <lukma@denx.de>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: spidev: Add compatible for LWE's btt device
+Message-ID: <20250326184553.0756c496@wsk>
+In-Reply-To: <83685ed2-f41a-456c-8a22-0ac069304386@sirena.org.uk>
+References: <20250326174228.14dfdf8c@wsk>
+	<20250326172445.2693640-1-lukma@denx.de>
+	<83685ed2-f41a-456c-8a22-0ac069304386@sirena.org.uk>
+Organization: denx.de
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250317093445.361821-1-csokas.bence@prolan.hu> <20250317093445.361821-2-csokas.bence@prolan.hu>
-In-Reply-To: <20250317093445.361821-2-csokas.bence@prolan.hu>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Mar 2025 18:38:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
-X-Gm-Features: AQ5f1JrcLyMXU0AXf56Zv0FLxsWH5M_UdoHXg48ickDdwk4WFSdM0LXMMkgNyG4
-Message-ID: <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] pm: runtime: Add new devm functions
-To: =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <csokas.bence@prolan.hu>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Alexander Dahl <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Pavel Machek <pavel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/2TmOQDCUmF/H18MMAiJ03ic";
+ protocol="application/pgp-signature"; micalg=pgp-sha512
+X-Last-TLS-Session-Version: TLSv1.3
+
+--Sig_/2TmOQDCUmF/H18MMAiJ03ic
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 17, 2025 at 10:35=E2=80=AFAM Bence Cs=C3=B3k=C3=A1s <csokas.ben=
-ce@prolan.hu> wrote:
->
-> Add `devm_pm_runtime_set_active()` and
-> `devm_pm_runtime_get_noresume()` for
-> simplifying common use cases in drivers.
->
-> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
-> ---
->  drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/pm_runtime.h   |  4 ++++
->  2 files changed, 40 insertions(+)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 9589ccb0fda2..821a8b4961d4 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1568,6 +1568,24 @@ void pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_enable);
->
-> +static void pm_runtime_set_suspended_action(void *data)
-> +{
-> +       pm_runtime_set_suspended(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set=
-_active.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_set_active(struct device *dev)
-> +{
-> +       pm_runtime_set_active(dev);
-> +
-> +       return devm_add_action_or_reset(dev, pm_runtime_set_suspended_act=
-ion, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
+Hi Mark,
 
-I said I didn't like it and I'm still not liking it.
+> On Wed, Mar 26, 2025 at 06:24:45PM +0100, Lukasz Majewski wrote:
+>=20
+> > Changes for v2:
+> > - Use 'lwn' vendor prefix instead of 'lwe' (as the former one is
+> > already well used in Linux sources). =20
+>=20
+> Are you sure?
 
-The problem is that the primary role of pm_runtime_set_active() is to
-prepare the device for enabling runtime PM, so in the majority of
-cases it should be followed by pm_runtime_enable().  It is also not
-always necessary to call pm_runtime_set_suspended() after disabling
-runtime PM for a device, like when the device has been
-runtime-suspended before disabling runtime PM for it.  This is not
-like releasing a resource that has been allocated and using devm for
-it in the above way is at least questionable.
+Yes, the lwn is already present for a quite few years for this company.
+The lwe is just the different branch.
 
-Now, there is a reason why calling pm_runtime_set_suspended() on a
-device after disabling runtime PM for it is a good idea at all.
-Namely, disabling runtime PM alone does not release the device's
-suppliers or its parent, so if you want to release them after
-disabling runtime PM for the device, you need to do something more.
-I'm thinking that this is a  mistake in the design of the runtime PM
-core.
+>=20
+> Note also that as previously mentioned I expect to see a binding
+> document update too which doesn't appear to be here.
+>=20
 
-If there were functions like pm_runtime_enable_in_state() (taking an
-additional state argument and acquiring all of the necessary
-references on the parent and suppliers of the target device) and
-pm_runtime_disable_and_forget() (that in addition to disabling runtime
-PM would drop the references acquired by the former), then it would
-make a perfect sense to provide a devm variant of
-pm_runtime_enable_in_state() with the cleanup action pointing to
-pm_runtime_disable_and_forget().
+I've just send it to be accepted to trivial-devices.yaml
 
-If this helps, I can do some work on providing
-pm_runtime_enable_in_state() and pm_runtime_disable_and_forget() or
-equivalent.
+> Please don't send new patches in reply to old patches or serieses,
+> this makes it harder for both people and tools to understand what is
+> going on - it can bury things in mailboxes and make it difficult to
+> keep track of what current patches are, both for the new patches and
+> the old ones.
 
-> +
->  static void pm_runtime_disable_action(void *data)
->  {
->         pm_runtime_dont_use_autosuspend(data);
-> @@ -1590,6 +1608,24 @@ int devm_pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
->
-> +static void pm_runtime_put_noidle_action(void *data)
-> +{
-> +       pm_runtime_put_noidle(data);
-> +}
-> +
-> +/**
-> + * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_g=
-et_noresume.
-> + *
-> + * @dev: Device to handle.
-> + */
-> +int devm_pm_runtime_get_noresume(struct device *dev)
-> +{
-> +       pm_runtime_get_noresume(dev);
-> +
-> +       return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action=
-, dev);
-> +}
-> +EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
-> +
->  /**
->   * pm_runtime_forbid - Block runtime PM of a device.
->   * @dev: Device to handle.
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 7fb5a459847e..364355da349a 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -96,7 +96,9 @@ extern void pm_runtime_new_link(struct device *dev);
->  extern void pm_runtime_drop_link(struct device_link *link);
->  extern void pm_runtime_release_supplier(struct device_link *link);
->
-> +int devm_pm_runtime_set_active(struct device *dev);
->  extern int devm_pm_runtime_enable(struct device *dev);
-> +int devm_pm_runtime_get_noresume(struct device *dev);
->
->  /**
->   * pm_suspend_ignore_children - Set runtime PM behavior regarding childr=
-en.
-> @@ -294,7 +296,9 @@ static inline bool pm_runtime_blocked(struct device *=
-dev) { return true; }
->  static inline void pm_runtime_allow(struct device *dev) {}
->  static inline void pm_runtime_forbid(struct device *dev) {}
->
-> +static inline int devm_pm_runtime_set_active(struct device *dev) { retur=
-n 0; }
->  static inline int devm_pm_runtime_enable(struct device *dev) { return 0;=
- }
-> +static inline int devm_pm_runtime_get_noresume(struct device *dev) { ret=
-urn 0; }
->
->  static inline void pm_suspend_ignore_children(struct device *dev, bool e=
-nable) {}
->  static inline void pm_runtime_get_noresume(struct device *dev) {}
-> --
-> 2.48.1
->
->
->
+Ok, I thought that it would be the opposite - that you would see v2 as
+the reply to the old one - especially that the change is just a single
+letter.
+
+
+
+Best regards,
+
+Lukasz Majewski
+
+--
+
+DENX Software Engineering GmbH,      Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: (+49)-8142-66989-59 Fax: (+49)-8142-66989-80 Email: lukma@denx.de
+
+--Sig_/2TmOQDCUmF/H18MMAiJ03ic
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEgAyFJ+N6uu6+XupJAR8vZIA0zr0FAmfkPVEACgkQAR8vZIA0
+zr00NQgAhPs6iLe5eGeJbcOnS+YaVgIIuosnstmqfPtM4c2H9vVehP1fyt6p0+6e
+NcD1H2VXAz78n0ur9Ba2/FLfIJl8xDNT8npBxybJVvEPy6xWEkcxIcKkqYkuV0xB
+oXeXTuWcK9p8Amqm35OInDjBrIie5rKpMpYxhJ1HeVeD7EgDGNQc3rMW+jBXN2DL
+2U9fnw6rg1xOQPnJX0RsRgZCUT4Z6PyuzvjlnoNv20JMchJx12PnXbds46iFYAhQ
+MflE7bsOZWxHxXAIwu4yEAY8hsBegOXDPQedaLLSx8s+mkuhraYqyqkzYYLnRs5h
+aUPENLEL3T4ikgu6LdrV6Ag2Pngvng==
+=uKOe
+-----END PGP SIGNATURE-----
+
+--Sig_/2TmOQDCUmF/H18MMAiJ03ic--
 
