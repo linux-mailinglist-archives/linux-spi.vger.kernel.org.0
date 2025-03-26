@@ -1,48 +1,87 @@
-Return-Path: <linux-spi+bounces-7314-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7315-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12626A71682
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 13:22:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABE07A716F5
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 13:55:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D9FE3A754C
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 12:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE751173C09
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Mar 2025 12:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8E81E1DEA;
-	Wed, 26 Mar 2025 12:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADEAA1A83E6;
+	Wed, 26 Mar 2025 12:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d852OeBw"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="l/ebEhV7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5121DFE12;
-	Wed, 26 Mar 2025 12:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4C0158A09
+	for <linux-spi@vger.kernel.org>; Wed, 26 Mar 2025 12:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742991682; cv=none; b=eLMKqse9sFENWt0Yga6Sdu4dcGhmV4x+PabmEr6f10/Eq/6ROVRYngErVNG6Mv34fRi1q4fEUroTXU6jK+SJc+wYQw9H2c5wSYVkc06Y7+SLl9EmDHhreJqgXbIFQ8HZLW9a0UIcZr/FbJ9X8sZWDfo9ulpjNas3e5zdXy5+rpg=
+	t=1742993734; cv=none; b=OYIbEBVH6sZJq7d9/V34+ZGfOSumXtMlgdt2ksAqbkmL4tL4Ev1w+BBzGW5U/P07dPr2oAHH6WkqFCWBfsSDN9I2na4ustWtMup3wxPvmW/mYbX/3OT6tlOTDBfRZBV2W7PlToqhzA2CFjqmCvNzSFQsYF5gx/HtkQDZVwPrfWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742991682; c=relaxed/simple;
-	bh=F+UTro7qxQyOTKSepxN6JKqVHXJ4srwwzq6xtNZ/Pdo=;
+	s=arc-20240116; t=1742993734; c=relaxed/simple;
+	bh=Hlpcqk5lqaENv3KqC4F73OEnJFQv5GOY/52c173rl4w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pPsAR8ALoIapwfQQj3Jx2m4zhYM0NjY3w6j+e6Kxu7Rg6aE91OHaMr8la513wY0RbvSKdYUuP6n7LkKndlSJ1BmxFWOHDa58rZMwY0fXAoX3H/lFNhAvr1Mm0MkykL4/bxRG8flBKxfrEQyd8mOFHwf77qUuwQ0HxyXqChFPq3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d852OeBw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DBB9C4CEE2;
-	Wed, 26 Mar 2025 12:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742991681;
-	bh=F+UTro7qxQyOTKSepxN6JKqVHXJ4srwwzq6xtNZ/Pdo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=d852OeBwYEbh29vfchDr2GrK5GwPHGV3jWITXZ3KB+qgkB2UiKjaY/cM3E7w3XBj/
-	 P37rjVmgV9trFeHdYasnM9j+s2ab9Sd7AwmUT6HB76iECYKOyyf+8XLGTYYSWz7G7o
-	 SDcEG63ZTaidSJ/W30ZHyvkBKChSH8dpI2lXt9Ww+eya+2wXksynCY/GoaSFZVo6w2
-	 LR3x73eAzD7EcQHgNSGX9HcBXK/y5cAiqX3KqwGfhUjIUE5X9mTOJAxGm+FNuIiDUw
-	 fixbhmU5PqGkMBs1UUVdllgVYS2sfURCVY5fGC70g4YG+IJOKBmNUUXrR62hMFScjm
-	 n0lmfvA7LRI5A==
-Message-ID: <8936844a-c6a0-4107-bb6d-f67a32b13eff@kernel.org>
-Date: Wed, 26 Mar 2025 13:21:17 +0100
+	 In-Reply-To:Content-Type; b=MwZdkQqFnuQRilkr4RsASUXqr3F6OyBw0Emp1ZE+TFHRaG89qt3JO/FL2egzz0aiSkDTScUWPGHSQM27E4/YcozeJeqYITw+tzqrWm/h6VcFtNhimmjNoE3nwwau2VRJdCEynWUBPODOkMDLtSaxnFRnE2QSTa/md4LcE4E8smA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=l/ebEhV7; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52Q739x8014432
+	for <linux-spi@vger.kernel.org>; Wed, 26 Mar 2025 12:55:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Hlpcqk5lqaENv3KqC4F73OEnJFQv5GOY/52c173rl4w=; b=l/ebEhV76SQj544f
+	+Y9r1ooTACuPTCY63Yqe56Nqli39mCMsLBfhIwNpvnuSkj3yOVipyx0k8/Bd2GUA
+	odTtkngLscm0xc5KyIbSwBzZ03m/9Oe0UyQF9sWlt8QNqmMbWi9L3Hc5Qo2twtjp
+	qZuEPh/13Z9ajYyXJNLsbjABFpEEA0SSW2kShMdzSdQUq9IHSBylS1ieI3jB938k
+	0dPGaPBj7tQCeUQrRAKCnkMhUXm1tPK3crHcfynVoflTZswRKFa9IWO7Al28g+nE
+	DKJeuDjYII7JnYL7mcz94MJyWKQPnquiXS0XJiqT+RcoFcUdqqoOSJyKN9tQD44n
+	xovTvw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45mb9ms9ve-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Wed, 26 Mar 2025 12:55:31 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7c552802e9fso204878285a.0
+        for <linux-spi@vger.kernel.org>; Wed, 26 Mar 2025 05:55:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742993730; x=1743598530;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hlpcqk5lqaENv3KqC4F73OEnJFQv5GOY/52c173rl4w=;
+        b=RByyUaOQtcqSNwK57cByVi3uDoxFfHozxC+BqTGkNjh9LGo70oXjXM3OKzbFUdQtt/
+         jEHAxdo9+vigpfhVMxoo/2/FdgkIaoOdN7RnqYKJoKgv/BsLFh4/S4w87t4Ece3eNFld
+         15kAi9GPqs32hY3r+aY1JXmjFyb4Bzgro9gXpYB6O95psM9shHRwp/9cphEa/UbG+WzR
+         K2qVLBvQT+Pb/KU7e4BPpofrdOngMvUZZD5hGFM4uLZBlbskpetzeXvWbo1xGRRdwWgN
+         BbdfkMQUyUEhdJA/08kCmrlbSBrSnSeuLqMTT5iIILM81xeFVkltevNAQCj7dAF6nY1K
+         3iow==
+X-Forwarded-Encrypted: i=1; AJvYcCUEbX60/0C3Qbd53588KMPkTGzsZ4HlFfAIyO9+lQg4wABzbR4+8SWlUxX8ocpzxDi34QeUdU4jkdg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3v5VSyN0YXKO2qr92uHkEGAhtq9zAWmYuUqxMbovrnanzHV8C
+	/LLf1J1UYE52AJspo+vn7yPWZZ/jacaLbEk5r0JER7gRV3tTx7anZyGSUn5NMVF4kGwa8LYkQgn
+	l2Y63pIJIpb+XjCfb5GTQizHAX4lGhXiv9uKQ615Y11vvjD7CXuOELiun7FA=
+X-Gm-Gg: ASbGncs1zisKXb4dnYbV0LpF31q6Ra8jTPlz7kBn62ESMvBZalilX8oEyPkzkVBIzds
+	vCNB/wZs1EdJqj2hrbcmMsk8Q3Mk2SMnj2/iAIWA9wyc3kvx6rLH4CK8BnszGoOfv9liHWwURui
+	WtI73B70HQ+S8V7MZLp8c5PMGWQpaA9N5bQdE3ihfZc31my4nysXMBTCRMvtYM2c7n6yI/dTyFR
+	15x/33NfJRs3NAqCAJ11Xi/EGKyjcrgBQn5A9gw/8IY/+jQBbM1eGf1ZEGXuad9pl52PqNAMV31
+	XPixchOx+ggM2tEVWif+wIRJwdrTFVGSCoBvtaokqzOCtGIMkC5P4+NGq6TmW+I4h6VcwA==
+X-Received: by 2002:a05:620a:bcd:b0:7c3:c814:591d with SMTP id af79cd13be357-7c5ba12db8fmr1183628185a.1.1742993730499;
+        Wed, 26 Mar 2025 05:55:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFWjYJmUaR2pS0MBM+C9tZ4PgAEjRTIBh+2Os/3Hu9gB8kQ2ZslbY19JmbOXtqnWcm0svpCcw==
+X-Received: by 2002:a05:620a:bcd:b0:7c3:c814:591d with SMTP id af79cd13be357-7c5ba12db8fmr1183626085a.1.1742993729994;
+        Wed, 26 Mar 2025 05:55:29 -0700 (PDT)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac6f0b99fc4sm51757966b.85.2025.03.26.05.55.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Mar 2025 05:55:29 -0700 (PDT)
+Message-ID: <b1f16d67-b61c-44ef-9e96-869aad0e17c8@oss.qualcomm.com>
+Date: Wed, 26 Mar 2025 13:55:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,115 +89,37 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: dt-bindings: cdns,qspi-nor: Update minItems/maxItems
- of resets for Cadence OSPI controller
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, broonie@kernel.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, git@amd.com, amitrkcian2002@gmail.com
-References: <20250326113731.1657593-1-amit.kumar-mahapatra@amd.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH V1] spi: Add support for Double Transfer Rate (DTR) mode
+To: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, broonie@kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: andersson@kernel.org, konradybcio@kernel.org
+References: <20250326083954.3338597-1-quic_msavaliy@quicinc.com>
+ <d6210c5e-339e-4feb-ad4b-fad456ec5710@quicinc.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250326113731.1657593-1-amit.kumar-mahapatra@amd.com>
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <d6210c5e-339e-4feb-ad4b-fad456ec5710@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=cs+bk04i c=1 sm=1 tr=0 ts=67e3f943 cx=c_pps a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=qToX29ahzgIKO7lzqbIA:9 a=QEXdDO2ut3YA:10 a=ibwWHe-yqzEA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: 9gXB4Q5-h5TVTLD_LYbjW9nTDcT4Lr8u
+X-Proofpoint-ORIG-GUID: 9gXB4Q5-h5TVTLD_LYbjW9nTDcT4Lr8u
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-26_04,2025-03-26_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=823 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2503260078
 
-On 26/03/2025 12:37, Amit Kumar Mahapatra wrote:
-> The Cadence Octal SPI (OSPI) controller on AMD Versal SoCs requires only
-> one reset entry. To reflect this, the maxItems for "resets" and
-> "reset-names" has been set to 1 for AMD Versal SoCs, and the minItems for
-> these properties has also been updated to 1. Additionally, these properties
-> have been added to the required property list for Versal SoCs.
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> BRANCH: mtd/next
-> ---
->  .../devicetree/bindings/spi/cdns,qspi-nor.yaml     | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index d48ecd6cd5ad..cc94c59280a1 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -17,8 +17,18 @@ allOf:
->            contains:
->              const: xlnx,versal-ospi-1.0
->      then:
-> +      properties:
-> +        resets:
-> +          maxItems: 1
-> +
-> +        reset-names:
-> +          maxItems: 1
-> +          items:
-> +            enum: [ qspi ]
+On 3/26/25 10:21 AM, Jyothi Kumar Seerapu wrote:
+> Tested-by: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>
 
-Just list the items instead of these three lines.
+It doesn't look like there's much to test here, you may want to
+leave an a-b or r-b instead
 
->        required:
->          - power-domains
-> +        - resets
-> +        - reset-names
-
-Why? That's an ABI break.
-
-
->    - if:
->        properties:
->          compatible:
-> @@ -132,11 +142,11 @@ properties:
->      maxItems: 1
->  
->    resets:
-> -    minItems: 2
-> +    minItems: 1
-
-You need to update other variants now.
-
-Best regards,
-Krzysztof
+Konrad
 
