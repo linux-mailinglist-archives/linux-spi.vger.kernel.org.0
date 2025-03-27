@@ -1,141 +1,125 @@
-Return-Path: <linux-spi+bounces-7339-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7340-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA902A72D79
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 11:12:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43DB9A72E88
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 12:09:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72DEF188F5DC
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 10:11:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D3AF7A6716
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 11:07:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F2120E32A;
-	Thu, 27 Mar 2025 10:11:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DACD20FAB6;
+	Thu, 27 Mar 2025 11:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Qq4ixooq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NyIYuwq9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1EA20E327;
-	Thu, 27 Mar 2025 10:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAC120FAA9;
+	Thu, 27 Mar 2025 11:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743070297; cv=none; b=gFR/u2/Q1b597j+gqNibjTwhcVBXgRMB/pLHNNoOYBd+rn4z45MwkC3KFl90Oi1wwhL/Hm1p+OMlZxEN4f3AYIsqMsCrbKIbzbjQW6MZTvJqSEVcqzYwvEoEyHjdwrlHo+1abmKp9KtLZlrAPoMQk5zm/jg2XHuP8UxWN8aL8So=
+	t=1743073731; cv=none; b=oBrqRtLImmlNGtQVnmMTQQuxbn9FsmtMW8OITR4oGiUvkCk1nJvq5g5qVwA/ywRmmN41G5mIoKiXMRUmpRggAdnO7m0RyKV6YeOXAEs+YYlanIfpHzkVTCGJ71A4urRd0OTZZPkjrwQGAksb57v6VoYtTRVc1hO2ud15zEJrX3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743070297; c=relaxed/simple;
-	bh=DVsxgEbsS305z/iQfasSuEkx0kuBk4XtdduDSR4LT/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=L9KWu1u4FjHikFMWhgwcXgllx3qB9ayC9mSe1d22tPWg3H8aRotTd0aTwh6j3ckvrU32iOnRazZcuTP1QAU1uHE4jtlqZvDpNYzwMjsOeuBT2ACnAuilGeCjJyiiogXCELiGevINrJIcwG4JUInUmkv5rG4dHyHX3C54pGpvb1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qq4ixooq; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52R5jIE2005506;
-	Thu, 27 Mar 2025 10:11:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	O+2bieIXA8WeKEzcm0BpS3Lzfvr897zZoGaEkY0UtgI=; b=Qq4ixooqoJeUlOaS
-	1RQFlSjoAmUkUE06+XirVT2mVYb8JxIfRPEygG/XP2jDkR1eVD1A0FOn+C/LNKl5
-	+/Ye3bj/xFUKD60cldodIpHfSa4ADN2O41lpz0nPZ19unapuAQ+P1BEU9xJaLO6J
-	pi0yl/U0p8rhT9XgM3KJCQX+osxz7G5XJsBTCaw1S/Np3UXwaBqo9RgEAz6VBfIX
-	0fcvMi7C4nXEEbdpeYs8m0kT9kBDmjk0QbAtcAYLwr7ncBnpupaz80Q49Ua5pK4V
-	hMRUWaxjoIs0oQe3Xxz9lZ6zS7m1Xqtkqb9a1P6HPMk+sPtgyCpzoTYAWf+ZbkWb
-	8Mqs5w==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ktenexa3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 27 Mar 2025 10:11:31 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52RAAiGG025177
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 27 Mar 2025 10:10:44 GMT
-Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 27 Mar
- 2025 03:10:42 -0700
-Message-ID: <1734ca66-bba7-4318-96af-8658874af907@quicinc.com>
-Date: Thu, 27 Mar 2025 15:40:39 +0530
+	s=arc-20240116; t=1743073731; c=relaxed/simple;
+	bh=T/C1IUzTPhJ0AN1d10OTPlRbro4QgLVWrO1x971kKwc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nn9rhxBvHw9MTG4rnUGLZoj3v/8+kz52LEAnsMprrSRZHlSX/ydRDUGp1sjAPDyrQl9kOz/LVyald9p2yOxyhrvRZYL7gggq7iBXo7OWDcywc/unTjvIG9/uG4BXqZHl849WthB+kHtI+XZRw9J/AUpYpw+C3Dq6kVEMLnVLhuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NyIYuwq9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A43C4CEEA;
+	Thu, 27 Mar 2025 11:08:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743073730;
+	bh=T/C1IUzTPhJ0AN1d10OTPlRbro4QgLVWrO1x971kKwc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=NyIYuwq92qkpapnL1++RMaYr29mPEFFyI9WshKXFK9pLSq4lxwFq42yWJOufZ6zLR
+	 fVPRSAHkfDsKTmttLhgeL3SkJ3HvdoQRyR8+Ktkj2dHQ2RS9tEmrtrMPYYMBDJCxLX
+	 Ad/+IFymViK6TuMRCpqKIWVXX17RK9vQ3Dzv6Ij6aH7m1++NMJPQzcaYFzZ9hQ/bua
+	 cpO5UV1B9i07C0iyZJJGk8IjTePBYgzNYzgsh/gjqGQdJZh9CF8L/QbTGIvAflcKVk
+	 9X7NOUWLUTVT18Infp5WvNgmmaFB7sRbCWsOlbncGD7sVGAQAKkZSZDsZgqMxzd1+8
+	 7+DHZkNDF9HbQ==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-602513d2201so454873eaf.0;
+        Thu, 27 Mar 2025 04:08:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU2QXQ5r1UrSDJUqeNGFNbGlonu6Ra+wn8IKm80LmTtsNE2skikeMN/z8GQMFimsuL8S0JL1rbNugRHzh0=@vger.kernel.org, AJvYcCX3j3i30O78ayRO49corQsjZ/fwrV1khhnLnuypTEcb7aTLUR/NMlNQl2QaxPuUbxWgkA2ovzcA2Ikp@vger.kernel.org, AJvYcCXlPWrz9MvoZMPsnEAxfGddNKVPTx+mShQWBL54B9oJFdsbY+7ofW1w9yy7pjRByjjyqm9JYdUd6X8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9/CJthQu4tmrT3FpqfmnZ6yjph/afb2WyWhEsDMcaC9Izldg2
+	p/NUtpNgFRfcZHwsJLvJBfIN8mPB3erMuCylUjuA9n5a6gU+9Ib0KZUuyDk4f0ci/hJZyeicB1K
+	IMPVo2/yDIMduOK9SVR+py5UNxl0=
+X-Google-Smtp-Source: AGHT+IEzurn8PX84DTZbLqJSvwaaZ/eB8XCLr0efqELPQTTYzC0Yup16jliPriSvS/8iQ71yl9XaN5ogWrNYP+wzo1I=
+X-Received: by 2002:a05:6870:391e:b0:29e:6394:fd4a with SMTP id
+ 586e51a60fabf-2c847f04c10mr1532382fac.2.1743073730142; Thu, 27 Mar 2025
+ 04:08:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V1] spi: Add support for Double Transfer Rate (DTR) mode
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <andersson@kernel.org>, <konradybcio@kernel.org>
-References: <20250326083954.3338597-1-quic_msavaliy@quicinc.com>
- <40db39ef-7ef3-4720-9c85-ccfe1c11c299@sirena.org.uk>
- <c89603b7-b70c-4b55-ac87-f84ce5be2c6c@quicinc.com>
- <fbad733f-d034-4d63-ab82-ed867f0ed5d4@linaro.org>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <fbad733f-d034-4d63-ab82-ed867f0ed5d4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=TuvmhCXh c=1 sm=1 tr=0 ts=67e52454 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=xXiMeSlKV-wmB5rnH6MA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: xAMnC-99BwejgnZk1wl3n23n6zvpgkcg
-X-Proofpoint-ORIG-GUID: xAMnC-99BwejgnZk1wl3n23n6zvpgkcg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-26_09,2025-03-26_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- suspectscore=0 adultscore=0 phishscore=0 clxscore=1011 lowpriorityscore=0
- mlxscore=0 spamscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503270069
+References: <20250317093445.361821-1-csokas.bence@prolan.hu>
+ <20250317093445.361821-2-csokas.bence@prolan.hu> <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
+ <3e6d7071-1ba9-484c-9dcb-c5da6ad1ffe3@prolan.hu>
+In-Reply-To: <3e6d7071-1ba9-484c-9dcb-c5da6ad1ffe3@prolan.hu>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 27 Mar 2025 12:08:39 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jka2r9PaKsF0FE2qJaFfnVNGd8sZRE6Aay-Ugpzot44w@mail.gmail.com>
+X-Gm-Features: AQ5f1JpUPqZNN73veAwvZFBlgl93lXp6y3hqKwdnBmubsLfvOeNP8EFhQHFKtCM
+Message-ID: <CAJZ5v0jka2r9PaKsF0FE2qJaFfnVNGd8sZRE6Aay-Ugpzot44w@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] pm: runtime: Add new devm functions
+To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Len Brown <len.brown@intel.com>, 
+	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Pavel Machek <pavel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Tudor !
+On Thu, Mar 27, 2025 at 10:02=E2=80=AFAM Cs=C3=B3k=C3=A1s Bence <csokas.ben=
+ce@prolan.hu> wrote:
+>
+> Hi,
+>
+> On 2025. 03. 26. 18:38, Rafael J. Wysocki wrote:
+> > I said I didn't like it and I'm still not liking it.
+>
+> You didn't really elaborate further, but now I'm glad I could understand
+> your dislike.
+>
+> > The problem is that the primary role of pm_runtime_set_active() is to
+> > prepare the device for enabling runtime PM, so in the majority of
+> > cases it should be followed by pm_runtime_enable().  It is also not
+> > always necessary to call pm_runtime_set_suspended() after disabling
+> > runtime PM for a device, like when the device has been
+> > runtime-suspended before disabling runtime PM for it.  This is not
+> > like releasing a resource that has been allocated and using devm for
+> > it in the above way is at least questionable.
+> >
+> > Now, there is a reason why calling pm_runtime_set_suspended() on a
+> > device after disabling runtime PM for it is a good idea at all.
+> > Namely, disabling runtime PM alone does not release the device's
+> > suppliers or its parent, so if you want to release them after
+> > disabling runtime PM for the device, you need to do something more.
+> > I'm thinking that this is a  mistake in the design of the runtime PM
+> > core.
+>
+> Well, this is the order in which the original driver worked before
+> anyways. As a quick fix, would it work if we created a devm function
+> that would pm_runtime_set_active(), immediately followed by
+> pm_runtime_enable(), and on cleanup it would pm_runtime_set_suspended()
+> followed by pm_runtime_disable_action() (i.e.
+> pm_runtime_dont_use_autosuspend() and pm_runtime_disable())?
 
-On 3/26/2025 8:18 PM, Tudor Ambarus wrote:
-> 
-> 
-> On 3/26/25 2:25 PM, Mukesh Kumar Savaliya wrote:
->> Hi Mark, thanks for your comment.
->>
->> On 3/26/2025 6:34 PM, Mark Brown wrote:
->>> On Wed, Mar 26, 2025 at 02:09:54PM +0530, Mukesh Kumar Savaliya wrote:
->>>
->>>> This change introduces a new field `dtr_mode` in the `spi_transfer`
->>>> structure. The `dtr_mode` field allows protocol drivers to indicate if
->>>> Double Transfer Rate (DTR) mode is supported for a given transfer. When
->>>> `dtr_mode` is set to true, the SPI controller will use DTR mode
->>>> otherwise, it will default to single transfer mode.
->>>
->>>> The QSPI controller driver uses this flag and configures single or
->>>> double
->>>> transfer rate using the controller register.
->>>
->>> We should have a flag in the controller indicating if it supports this,
->>> and code in the core which returns an error if a driver attempts to use
->>> it when the controller doesn't support it.
->> Have added below in spi.h which can be set by client and controller
->> driver should be using it to decide mode.
->>
->> + bool        dtr_mode;
->>
->> since default it's false, should continue with SDR.
->> I believe for QSPI, it supports SDR or DDR, but it's not applicable to
->> standard SPI right ? So not sure in which case we should return an error ?
->>
-> 
-> Please check how spimem is dealing with DTR, same ideas shall be applied
-> for spi transfers.
-> 
-Yes, i just got it. Have kept my proposal aligning to this. Looks 
-similar to spi_mem_controller_is_capable(). Please review reply to Mark 
-if that is matching expectations OR have more suggestion/corrections.
-> Cheers,
-> ta
+On cleanup you'd need to ensure that pm_runtime_disable() is followed
+by pm_runtime_set_suspended() (not the other way around).  Also
+pm_runtime_dont_use_autosuspend() needs to be called when runtime PM
+is still enabled.
 
+With the above taken into account, it would work.
 
