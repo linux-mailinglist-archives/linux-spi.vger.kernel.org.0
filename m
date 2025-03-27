@@ -1,144 +1,114 @@
-Return-Path: <linux-spi+bounces-7341-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7342-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B6CA7334F
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 14:24:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 005A4A733E6
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 15:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C2A6188F834
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 13:24:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7063189B01C
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 14:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DA5E215044;
-	Thu, 27 Mar 2025 13:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F870216399;
+	Thu, 27 Mar 2025 14:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="T2v/kcmB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlNePcCL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334121BC41;
-	Thu, 27 Mar 2025 13:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06667212B00;
+	Thu, 27 Mar 2025 14:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743081877; cv=none; b=GrnRGW/jb7QOtLrHe858kKP3M5eACn3E/M3zKcnl10pO8rmyByLtaXbCoDFyT8E+hMLcM8aOblPqF+g7dJbzvTA5B7I/YUYU5hNy6+Riadhe5zb65Osf/traRyQW46maeyzyTLiIJFHCA+olA89vCAP3WsBC3wSdMCVIxp+OThg=
+	t=1743084429; cv=none; b=X1wfx+Mya4jtSuy3mbRYGjWqapbIimyyV8d9GRk+eZn1Ww406CHyXOOAOieL8xPFVSRlCFvtAjRYQtZZsbpIon2aKcD/e06zENFehxmN3NZumQg6GQ/14zYA/5e9XIZiSeJSS7xk/WItNgogO3BjPo6rdmfS71dhw/oO3gxOTpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743081877; c=relaxed/simple;
-	bh=sY6FV5/uKBCe6AyMiZCOLlHCJID+Ian9uQiSoj3WWWQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HzuJQ/OigmYqm3aDXioTzoF7wjmR7rRo7bwXby/xIUF63CbE8h2/JpISn5+m0DkR+/AOdOp1kHXC0eMoLTR5Bxbp5S2e/NcLI0eXuy4yQ12Na8F02joanzKCym/nGgBW4dYDUdo90PURiedlyv2U2yW23+fAODWp9Qi9FLJncls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=T2v/kcmB; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 43674A0796;
-	Thu, 27 Mar 2025 14:24:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=tPQ5Rb+uDwVDwRdIPGfF
-	+58tdlTfGsVmd3yos4V09g8=; b=T2v/kcmB6tFbyuMu5NwmyUBgQSYcIZKoLVvT
-	oKdfDBwuWwd4mEaI427gIs6DV11zNLJqBlNPkTB9q9VCSbGoKQeTgrOwT7pHo7HW
-	XV/aWJIA2l/KtrQPr93rwrfzoR4jPfCNPRYyqO488WRHxe53iuk+QI9fYjXnJPFs
-	EU5v8tOejto2U2l7GGUVyQ/5tPvPWN58lJKONcUFQKLjZFrTikFLcHvacHfSj8na
-	6E6mMKWQaSFwkTqdogWkpHOXieAF1mlON2XkbEdsZ+ZSqG9lkRZ40DnkVr7alnKu
-	jwFnQMY3U9ulEYHW/h6P7sItZibRIllIGHAMf6o+JcWNY7eOQJLvoq1FH0PISx5u
-	S5tvsFJ8olJ/17CZ9vyv5ggtr7I5hw2hnyDMjVgFr0X0FKtDkWFnwkNX39065bHx
-	6McZHOM0D88TSlA9qGKNev5v0qtiZfD/Z/X8wwjo90USD6Xo9wbFgyoJx5iEmQCn
-	yJV8Z+Xkzgbq5Z9AD/iEgJGJO6T99nJjGSqsUIM2J5ysC+OX5KPq1BUCbLXwOREc
-	a+uCIKoD8GtLJ06TpNDepzG9A1DZPgwW89JlnV5LA2FOOeW7W6sQxC4tJXlNjfTg
-	LpuEFSuLYs/B7MGNgsBDjFV30EQa7a+Q312BfYb8uP4XQp4/pfKpttQOfnAoGPd4
-	UkLAqw4=
-Message-ID: <d926d2c2-8cc9-4a71-b8ca-b5f03ac9afb8@prolan.hu>
-Date: Thu, 27 Mar 2025 14:24:28 +0100
+	s=arc-20240116; t=1743084429; c=relaxed/simple;
+	bh=ylAWPbcULtSaZe34dKWVThPXcBtGPQIYkRD3zXK0jv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZtfpTP5Rj0VuFUppJ19K81u+GBLwPYglV11pi8wp42Xwn7etmrOMeSNKg+FCM4ptTBbuyHm0SQ13BC03iaYRUT+KIP0G64p7JifEwQpC5aWamcVU9e5Z4GUyz8qrFyx2MBX5Kv/WMkBYs0ICtK1xtN1ahKveHsYXF7LXVEpZiYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlNePcCL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44E0CC4CEEA;
+	Thu, 27 Mar 2025 14:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743084428;
+	bh=ylAWPbcULtSaZe34dKWVThPXcBtGPQIYkRD3zXK0jv0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JlNePcCLfToBC2V80buwbF7hDm4cODW591JUZKXC7jYOsbBYiLE3imKkGNI8oMDuv
+	 aMcE1Pg4wpXRcR/WL/KlNcz4cVY7kyahY/rNM976Ke/WDaIlCCu1mzsa4jlJoUEw2r
+	 D06695KHjfWkSZSZis1fG20XslUzL2qo+FzqN9DVsZkm3q8e9sK+qfLdFkhTxTVWAU
+	 gs1Apq/l6ay9uP/nMwuPDhtS6lkzNDrVIZN8Z4kZ+nito8NSZ/+9JNEkgXumk27O1/
+	 45lahgHvDPnm4IsxX4eQW2oRWEtZSo/w7Q+m9b6xHrvUcZyhImnR9hsU6g7RXdYgWS
+	 xQbvUdMWftaCQ==
+Date: Thu, 27 Mar 2025 14:07:04 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org
+Subject: Re: [PATCH V1] spi: Add support for Double Transfer Rate (DTR) mode
+Message-ID: <f3115251-8fa9-4019-8fb0-145daf32cfa2@sirena.org.uk>
+References: <20250326083954.3338597-1-quic_msavaliy@quicinc.com>
+ <40db39ef-7ef3-4720-9c85-ccfe1c11c299@sirena.org.uk>
+ <c89603b7-b70c-4b55-ac87-f84ce5be2c6c@quicinc.com>
+ <3aa2c190-ce4d-4805-943b-f65e98ce762c@sirena.org.uk>
+ <8435b037-8b54-401a-b4f6-b4b497c4c3eb@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] pm: runtime: Add new devm functions
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Varshini
- Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
-	<tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Len
- Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, "Alexander
- Dahl" <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>, Pavel Machek <pavel@kernel.org>
-References: <20250317093445.361821-1-csokas.bence@prolan.hu>
- <20250317093445.361821-2-csokas.bence@prolan.hu>
- <CAJZ5v0hJZBxU6SSq9C8gp2peETFWu0jbhrM82B5GvQkVXPR+9Q@mail.gmail.com>
- <3e6d7071-1ba9-484c-9dcb-c5da6ad1ffe3@prolan.hu>
- <CAJZ5v0jka2r9PaKsF0FE2qJaFfnVNGd8sZRE6Aay-Ugpzot44w@mail.gmail.com>
-Content-Language: en-US, hu-HU
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <CAJZ5v0jka2r9PaKsF0FE2qJaFfnVNGd8sZRE6Aay-Ugpzot44w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D948526C7766
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UgfMhIpRC9osdcao"
+Content-Disposition: inline
+In-Reply-To: <8435b037-8b54-401a-b4f6-b4b497c4c3eb@quicinc.com>
+X-Cookie: Multics is security spelled sideways.
 
-Hi,
 
-On 2025. 03. 27. 12:08, Rafael J. Wysocki wrote:
->>> Now, there is a reason why calling pm_runtime_set_suspended() on a
->>> device after disabling runtime PM for it is a good idea at all.
->>> Namely, disabling runtime PM alone does not release the device's
->>> suppliers or its parent, so if you want to release them after
->>> disabling runtime PM for the device, you need to do something more.
->>> I'm thinking that this is a  mistake in the design of the runtime PM
->>> core.
->>
->> Well, this is the order in which the original driver worked before
->> anyways. As a quick fix, would it work if we created a devm function
->> that would pm_runtime_set_active(), immediately followed by
->> pm_runtime_enable(), and on cleanup it would pm_runtime_set_suspended()
->> followed by pm_runtime_disable_action() (i.e.
->> pm_runtime_dont_use_autosuspend() and pm_runtime_disable())?
-> 
-> On cleanup you'd need to ensure that pm_runtime_disable() is followed
-> by pm_runtime_set_suspended() (not the other way around).  Also
-> pm_runtime_dont_use_autosuspend() needs to be called when runtime PM
-> is still enabled.
-> 
-> With the above taken into account, it would work.
+--UgfMhIpRC9osdcao
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Ok, so which is the correct order then?
+On Thu, Mar 27, 2025 at 03:33:15PM +0530, Mukesh Kumar Savaliya wrote:
 
-1. the way it is done now in [PATCH v5 2/2] (which is the same order the 
-driver has been using before anyways):
+> IIUC, It comes to the point of first identifying if it's in context of QSPI
+> controller or SPI controller right ?
 
-     pm_runtime_use_autosuspend()
-/-- devm_pm_runtime_set_active()
-|   /-- devm_pm_runtime_enable()
-|   |   /-- devm_pm_runtime_get_noresume()
-|   |   |
-|   |   \-> pm_runtime_put_noidle()
-|   \-> pm_runtime_dont_use_autosuspend() &&
-|       pm_runtime_disable()
-\-> pm_runtime_set_suspended()
+> Identify if SPI/QSPI controller has this capability using dtr_caps =
+> true/false. Then check if it's supporting SDR/DDR mode. Can we then
+> introduce below struct to first mark capability as true/false and then
+> process dtr_mode ?
 
-or,
-2. swapped set_suspended() and runtime_disable()
+> if not supported (dtr_caps = false), then don't care dtr_mode.
 
-     pm_runtime_use_autosuspend()
-/-- devm_pm_runtime_set_active_enabled() [new fn]
-|    == pm_runtime_set_active() &&
-|       pm_runtime_enable()
-|   /-- devm_pm_runtime_get_noresume()
-|   |
-|   \-> pm_runtime_put_noidle()
-\--> pm_runtime_set_suspended()
-      pm_runtime_dont_use_autosuspend()
-      pm_runtime_disable()
+We should complain if the device requsted anything the controller can't
+support.
 
-Bence
+> struct spi_caps {
+> 	bool dtr_mode;
+> 	bool dtr_caps;
+> };
 
+The controller capabilities are currently mainly advertised via the
+SPI_CONTROLLER_ flags but adding some bools also works, some things
+already do use that.  I'm not sure we need to wrap things in a further
+struct though.
+
+--UgfMhIpRC9osdcao
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmflW4cACgkQJNaLcl1U
+h9DO7gf9GK9kaZ7F5byJPJNQeOitCwqJBmRUPfkO3oVkQLL0DGjU/ckyHfNcq/27
+Iv3KniQ2oZAEqO9UpGcOY7fjEl+e1eb+aDyEBGHBZnrJbqVbaAmB4dBH4PYu/zRm
+F/u8ibgorqythriUu1YW8nTxg81x5sHZhNvLR9geyXyKrMrIXYoZJ/T8bAfnDpKo
+EdBKdh3Skcj830O+HytvyPNcZDBKZQc2kMGPMh1qnGNKQc0GIa/oGOQ7g6vXcRjz
+i+e8CScGMdLsDc0yp9t46TA/NF0TMNVo2N6bPrPSe9425vmOBz8fiN7kqnpxP/5g
+1cdoovWzMFF/PNqGxnOkRHJDMbXTdg==
+=rjSg
+-----END PGP SIGNATURE-----
+
+--UgfMhIpRC9osdcao--
 
