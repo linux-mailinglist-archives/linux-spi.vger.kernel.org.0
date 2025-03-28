@@ -1,147 +1,104 @@
-Return-Path: <linux-spi+bounces-7357-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7358-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E6FCA74356
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 06:27:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2E35A74550
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 09:24:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 778EF7A7B76
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 05:26:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 688D43AD8C3
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 08:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92F31FF7D8;
-	Fri, 28 Mar 2025 05:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="XsTA9zfS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091B518DB2B;
+	Fri, 28 Mar 2025 08:24:14 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE37C28373;
-	Fri, 28 Mar 2025 05:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743139663; cv=pass; b=AEhsDRC9iUKTOfCnquS5+EibHHuvcw/3XH8wVz2Re2hIHi9yxgS78FeW/TluOP/QofUw9wAJY0vWh7anHFTD8hDRfMLCkchaS7gnrNbDjk5I28S4uqSaCeGOt855PCL3u/7OudnFhg2TTqSUI/REf+OC3oqoax1/d628qQ4+hTg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743139663; c=relaxed/simple;
-	bh=UA/jB0jRtT9MrE0m/chZoZltKCIECcikeSy39MQlrkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j7PUew1aAhmhntzPFeSAXJEnH9ezjiZrW23RiYafQH+OApqfjBQDk5rvzgW2sp/0lV68CvQeawpWj3IcWCmdmNe9imxu29fcLA+4dmNkb/P2A64YNSn9BUwxG/cVhe5Pux0I/NnGSmG0OFN+7WzwdxNZgY5UCRKMyhuJvu/ksY0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=XsTA9zfS; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1743139628; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=SNkk3gtNPaXXwdrW6fxgFUV/5Bey7TsGy4tPCrEBB6ffAggQ3W2qc1RBP7BNbBjB2eIRKtT46QJJedOiwPrTMp3R7/QFTd+rhIJer7xpXyPI/Diu5QVxKkpoZ7h1eZ0c4tV+z49+vFzbt7x7w3VSnswzE9czqg2uGZCsKrHRWHU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1743139628; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=8fm2pR+vn3KKxWHjwpsQpoYtJSPoJCzGUQuWZmtgZF4=; 
-	b=M6nKWV3en9cG17a7BT25zDUHyaiQrcbuzq05N6Hm3rsL08KyooohItgXD7toFOnD2TljvYM1ZLGlA8v1DXIls2/Q3r4WuUBqljR0TIVnfy3ZGn2c2TotR8GNNKsftbdv+HLns4AsM2gVGNeU2gwmp6+RJkMpinGuyWXnm60SWgk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
-	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1743139628;
-	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=8fm2pR+vn3KKxWHjwpsQpoYtJSPoJCzGUQuWZmtgZF4=;
-	b=XsTA9zfSLisYIt+9lTUsiXcJIOA/gC/jYCxQE5wi/9x8WyiT+abmCx9pUJhlraM6
-	0gYnZbsqu1MFEO9Q2m+g3QxPi4oTn2yz1ZPA27L2g73KmlsqgSq2wJb9pkqREB55cKl
-	O3FDQX75S2LXpaQmWu18VSsVKmncypAdeMVm9f8o=
-Received: by mx.zohomail.com with SMTPS id 1743139625825613.9288733094755;
-	Thu, 27 Mar 2025 22:27:05 -0700 (PDT)
-Message-ID: <f9be4614-95ec-4b63-9cfd-0936a323b131@collabora.com>
-Date: Fri, 28 Mar 2025 08:27:01 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0907542AA5
+	for <linux-spi@vger.kernel.org>; Fri, 28 Mar 2025 08:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743150253; cv=none; b=BMmYY7DYARZpXMnufMllLQ3yM3ZNUpi7/iHb0i6FGuR6jJeJUaGeMWJtAcjmzSQ+UirnnRVGZ0bf8ahSx2wAmbMaZJtgayNm9K50e9xZzeOUPIbEGVZF0/Vtg29HiNjqZwdiZJZTyCffzdNkT1Mdapj1IFVx7krwY7KPFts2YrY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743150253; c=relaxed/simple;
+	bh=3K9E9P/3fJhtWUagyMGSRbT2D5mew/Y9C8iypQyVCXw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ptUQCMJTnD9K2pJvKFvg9pNZHBtBUlwdcjwmvBdCz0zEcSppNAS7LIQ31Lf31mo34i0CvGsCgA+34mGnLs2uK67ulKTujI5o2ZU3GbRjBGMGO9VywmJWiFU31e2feSewO55Oepb0TYmN9lbFEdocL98d91oAX25uXZbOmPyW82g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:84f5:57a8:7b3b:9088])
+	by laurent.telenet-ops.be with cmsmtp
+	id W8Q32E0051KBnwa018Q3pj; Fri, 28 Mar 2025 09:24:07 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1ty50U-0000000G6nn-2d5Y;
+	Fri, 28 Mar 2025 09:24:03 +0100
+Received: from geert by rox.of.borg with local (Exim 4.97)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1ty50V-00000006N2R-0Qmy;
+	Fri, 28 Mar 2025 09:24:03 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Md Sadre Alam <quic_mdalam@quicinc.com>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>,
+	Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-mtd@lists.infradead.org,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] mtd: nand: Drop explicit test for built-in CONFIG_SPI_QPIC_SNAND
+Date: Fri, 28 Mar 2025 09:24:01 +0100
+Message-ID: <99eef91c334f3f2314c2f5671e1eb55211a5ff19.1743150196.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: SPI transfers in atomic context [Was: Re: [PATCH v1 1/1] mfd:
- rk8xx: Fix shutdown handler]
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>,
- Lee Jones <lee@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>,
- Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-Cc: Urja <urja@urja.dev>, Heiko Stuebner <heiko@sntech.de>,
- linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@collabora.com, stable@vger.kernel.org
-References: <20240730180903.81688-1-sebastian.reichel@collabora.com>
- <20240801131823.GB1019230@google.com>
- <ih7hiojzuvqzpyipj66mgu5pmcderltabim7s5dnfzm6qpztbh@jqkst5tfw5ra>
- <sg5kgo5qjqyzfyk5nyjbkpgvbx6sfb7agc67ch6wsdq3etrsbf@h6xbtfs45k4w>
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Content-Language: en-US
-In-Reply-To: <sg5kgo5qjqyzfyk5nyjbkpgvbx6sfb7agc67ch6wsdq3etrsbf@h6xbtfs45k4w>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-On 3/20/25 13:10, Uwe Kleine-König wrote:
-> Hi,
-> 
-> On Thu, Aug 01, 2024 at 05:22:24PM +0200, Sebastian Reichel wrote:
->> On Thu, Aug 01, 2024 at 02:18:23PM GMT, Lee Jones wrote:
->>>> +	/*
->>>> +	 * Currently the Rockchip SPI driver always sleeps when doing SPI
->>>> +	 * transfers. This is not allowed in the SYS_OFF_MODE_POWER_OFF
->>>> +	 * handler, so we are using the prepare handler as a workaround.
->>>> +	 * This should be removed once the Rockchip SPI driver has been
->>>> +	 * adapted.
->>>> +	 */
->>>
->>> So why not just adapt the SPI driver now?
->>
->> This patch is simple and thus can easily be backported, so that the
->> Acer Chromebook shutdown is fixed in the stable kernels. SPI based
->> rkxx has been using SYS_OFF_MODE_POWER_OFF_PREPARE from the start,
->> so it's not a regression.
->>
->> As far as I could see the SPI framework does not have something
->> comparable to the I2C .xfer_atomic handler. So fixing up the
->> Rockchip SPI driver probably involves creating some SPI core
->> helpers. I'm not yet sure about the best way to deal with this.
->> But I guess it will be better not having to backport all of the
->> requires changes to stable.
->>
->> In any case I think the next step in this direction is discussing
->> how to handle this in general for SPI.
->>
->>> What's the bet that if accepted, this hack is still here in 5 years time?
->>
->> Even if I don't work on this now, I would expect somebody to have
->> issues with broken shutdown on RK3588 boards before 5 years are
->> over :)
-> 
-> I'd like to have power-off working on Qnap TS-433 in the next Debian
-> stable. With my Debian Kernel hat on I'd say cherry-picking such a
-> commit (if it's in mainline) is acceptable. Backporting a major
-> extension to the spi framework isn't.
-> 
-> So: Expectation confirmed! And while I agree that hacks are not nice,
-> I prefer a hack now over a machine that doesn't shut down properly over
-> the next five years (if Lee's expectation is also correct).
-> 
-> Can we maybe go forward and do both? Accept this hack patch now and work
-> on spi to make atomic xfers possible?
-> 
-> Mark, are there concerns from your side? 
-> Wolfram, are there things you would recommend to do differently in spi
-> than what you have in i2c?
+If CONFIG_SPI_QPIC_SNAND=m, but CONFIG_MTD_NAND_QCOM=n:
 
-Hi, want let you know that I've started to work recently on atomic SPI
-transfer support to have SPI shutdown working properly with this driver.
-It's in progress.
+    ERROR: modpost: "qcom_nandc_unalloc" [drivers/spi/spi-qpic-snand.ko] undefined!
+    ...
 
-Meanwhile this patch should've been merged a year ago because it fixes
-the regression.
+Fix this by dropping the explicit test for a built-in
+CONFIG_SPI_QPIC_SNAND completely.  Kbuild handles multiple and mixed
+obj-y/obj-m rules for the same object file fine.
 
-Lee, please apply it for -stable.
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202503280759.XhwLcV7m-lkp@intel.com/
+Fixes: 7304d1909080ef0c ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/mtd/nand/Makefile | 3 ---
+ 1 file changed, 3 deletions(-)
 
+diff --git a/drivers/mtd/nand/Makefile b/drivers/mtd/nand/Makefile
+index db516a45f0c52635..44913ff1bf12cc24 100644
+--- a/drivers/mtd/nand/Makefile
++++ b/drivers/mtd/nand/Makefile
+@@ -3,11 +3,8 @@
+ nandcore-objs := core.o bbt.o
+ obj-$(CONFIG_MTD_NAND_CORE) += nandcore.o
+ obj-$(CONFIG_MTD_NAND_ECC_MEDIATEK) += ecc-mtk.o
+-ifeq ($(CONFIG_SPI_QPIC_SNAND),y)
+ obj-$(CONFIG_SPI_QPIC_SNAND) += qpic_common.o
+-else
+ obj-$(CONFIG_MTD_NAND_QCOM) += qpic_common.o
+-endif
+ obj-y	+= onenand/
+ obj-y	+= raw/
+ obj-y	+= spi/
 -- 
-Best regards,
-Dmitry
+2.43.0
+
 
