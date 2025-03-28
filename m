@@ -1,80 +1,147 @@
-Return-Path: <linux-spi+bounces-7356-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7357-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF225A74063
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 22:40:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E6FCA74356
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 06:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA96E7A3B70
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Mar 2025 21:38:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 778EF7A7B76
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Mar 2025 05:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 744AA1DC9AB;
-	Thu, 27 Mar 2025 21:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92F31FF7D8;
+	Fri, 28 Mar 2025 05:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NxbedYK9"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b="XsTA9zfS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500F31CCB21
-	for <linux-spi@vger.kernel.org>; Thu, 27 Mar 2025 21:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743111598; cv=none; b=TrYAq2whzBOfGj2S9TkGj4uecoSqnb2UPztD7GT+MzqlHdBZGe4KfaSSs2XVn/2hHzDPk5iNFxeDwJtMN0PP/W6Za4VAOP9pUzQ+DukgikxzWJWmf1YCrfwg3XYJyLL2ESQ2RWNxwlUlvRsRO3lLkOFmoNfSNYdBefyxkYjt0nI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743111598; c=relaxed/simple;
-	bh=4WBy/iS6qRsK0SI4vy0Oc0jXxzHu+BL384GtD5RBR28=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=OQnvb+Hvb8DapnPr8BO3BKyDIk+bKVYJcnVgXWy7q1+iDRS/k/hpaRTugGJOAQY8qiKOs5RwPJoaIDs3qjGJNYX0Vv3B1NaHydTG9ujy7jasmTpMbcubLTHeqjc2ROFit88Ra5piAHhjzTqa7jWa3HzKEWAUjejxQthvOgFdOBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NxbedYK9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1351C4CEDD;
-	Thu, 27 Mar 2025 21:39:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743111596;
-	bh=4WBy/iS6qRsK0SI4vy0Oc0jXxzHu+BL384GtD5RBR28=;
-	h=Subject:From:Date:To:From;
-	b=NxbedYK9Qy5NXoDEN4nEQvpZBKbqoJTNSsDGkfnMWeF6+DdfSe6WSQrXZLhNGWmJr
-	 6GoswcZ4Mo2I1Cqwmp1f6lUjfXruNT6deJe6p7d1ctGsY8ozYIsAeiF70fGgj9fs05
-	 P7670XGWNadvGz4g+AHBDVTakDe3TZ8njCcCx/9vnGWx4JqdX9YgeeAaxsZkJYRSmD
-	 u0oTdyU747iMCo2G+WWn06Bt8lBtwflL2YefXSMO/bpt8ZLqlKl9bowX98HHRNkxP+
-	 X0OGgvi3+EjDzMrN2g1QkI6lOGlyWuFlxy/8pjMGUDhGz4wJh7jTrzwCF7xMj7NYUG
-	 aX1IGupwRDPmA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 39CFA380AAFD;
-	Thu, 27 Mar 2025 21:40:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE37C28373;
+	Fri, 28 Mar 2025 05:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1743139663; cv=pass; b=AEhsDRC9iUKTOfCnquS5+EibHHuvcw/3XH8wVz2Re2hIHi9yxgS78FeW/TluOP/QofUw9wAJY0vWh7anHFTD8hDRfMLCkchaS7gnrNbDjk5I28S4uqSaCeGOt855PCL3u/7OudnFhg2TTqSUI/REf+OC3oqoax1/d628qQ4+hTg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1743139663; c=relaxed/simple;
+	bh=UA/jB0jRtT9MrE0m/chZoZltKCIECcikeSy39MQlrkc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j7PUew1aAhmhntzPFeSAXJEnH9ezjiZrW23RiYafQH+OApqfjBQDk5rvzgW2sp/0lV68CvQeawpWj3IcWCmdmNe9imxu29fcLA+4dmNkb/P2A64YNSn9BUwxG/cVhe5Pux0I/NnGSmG0OFN+7WzwdxNZgY5UCRKMyhuJvu/ksY0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=dmitry.osipenko@collabora.com header.b=XsTA9zfS; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1743139628; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=SNkk3gtNPaXXwdrW6fxgFUV/5Bey7TsGy4tPCrEBB6ffAggQ3W2qc1RBP7BNbBjB2eIRKtT46QJJedOiwPrTMp3R7/QFTd+rhIJer7xpXyPI/Diu5QVxKkpoZ7h1eZ0c4tV+z49+vFzbt7x7w3VSnswzE9czqg2uGZCsKrHRWHU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1743139628; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=8fm2pR+vn3KKxWHjwpsQpoYtJSPoJCzGUQuWZmtgZF4=; 
+	b=M6nKWV3en9cG17a7BT25zDUHyaiQrcbuzq05N6Hm3rsL08KyooohItgXD7toFOnD2TljvYM1ZLGlA8v1DXIls2/Q3r4WuUBqljR0TIVnfy3ZGn2c2TotR8GNNKsftbdv+HLns4AsM2gVGNeU2gwmp6+RJkMpinGuyWXnm60SWgk=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=dmitry.osipenko@collabora.com;
+	dmarc=pass header.from=<dmitry.osipenko@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1743139628;
+	s=zohomail; d=collabora.com; i=dmitry.osipenko@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=8fm2pR+vn3KKxWHjwpsQpoYtJSPoJCzGUQuWZmtgZF4=;
+	b=XsTA9zfSLisYIt+9lTUsiXcJIOA/gC/jYCxQE5wi/9x8WyiT+abmCx9pUJhlraM6
+	0gYnZbsqu1MFEO9Q2m+g3QxPi4oTn2yz1ZPA27L2g73KmlsqgSq2wJb9pkqREB55cKl
+	O3FDQX75S2LXpaQmWu18VSsVKmncypAdeMVm9f8o=
+Received: by mx.zohomail.com with SMTPS id 1743139625825613.9288733094755;
+	Thu, 27 Mar 2025 22:27:05 -0700 (PDT)
+Message-ID: <f9be4614-95ec-4b63-9cfd-0936a323b131@collabora.com>
+Date: Fri, 28 Mar 2025 08:27:01 +0300
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: SPI transfers in atomic context [Was: Re: [PATCH v1 1/1] mfd:
+ rk8xx: Fix shutdown handler]
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@debian.org>,
+ Lee Jones <lee@kernel.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc: Urja <urja@urja.dev>, Heiko Stuebner <heiko@sntech.de>,
+ linux-rockchip@lists.infradead.org, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@collabora.com, stable@vger.kernel.org
+References: <20240730180903.81688-1-sebastian.reichel@collabora.com>
+ <20240801131823.GB1019230@google.com>
+ <ih7hiojzuvqzpyipj66mgu5pmcderltabim7s5dnfzm6qpztbh@jqkst5tfw5ra>
+ <sg5kgo5qjqyzfyk5nyjbkpgvbx6sfb7agc67ch6wsdq3etrsbf@h6xbtfs45k4w>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Content-Language: en-US
+In-Reply-To: <sg5kgo5qjqyzfyk5nyjbkpgvbx6sfb7agc67ch6wsdq3etrsbf@h6xbtfs45k4w>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174311163283.2230226.9925235583514256314.git-patchwork-summary@kernel.org>
-Date: Thu, 27 Mar 2025 21:40:32 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-ZohoMailClient: External
 
-Hello:
+On 3/20/25 13:10, Uwe Kleine-König wrote:
+> Hi,
+> 
+> On Thu, Aug 01, 2024 at 05:22:24PM +0200, Sebastian Reichel wrote:
+>> On Thu, Aug 01, 2024 at 02:18:23PM GMT, Lee Jones wrote:
+>>>> +	/*
+>>>> +	 * Currently the Rockchip SPI driver always sleeps when doing SPI
+>>>> +	 * transfers. This is not allowed in the SYS_OFF_MODE_POWER_OFF
+>>>> +	 * handler, so we are using the prepare handler as a workaround.
+>>>> +	 * This should be removed once the Rockchip SPI driver has been
+>>>> +	 * adapted.
+>>>> +	 */
+>>>
+>>> So why not just adapt the SPI driver now?
+>>
+>> This patch is simple and thus can easily be backported, so that the
+>> Acer Chromebook shutdown is fixed in the stable kernels. SPI based
+>> rkxx has been using SYS_OFF_MODE_POWER_OFF_PREPARE from the start,
+>> so it's not a regression.
+>>
+>> As far as I could see the SPI framework does not have something
+>> comparable to the I2C .xfer_atomic handler. So fixing up the
+>> Rockchip SPI driver probably involves creating some SPI core
+>> helpers. I'm not yet sure about the best way to deal with this.
+>> But I guess it will be better not having to backport all of the
+>> requires changes to stable.
+>>
+>> In any case I think the next step in this direction is discussing
+>> how to handle this in general for SPI.
+>>
+>>> What's the bet that if accepted, this hack is still here in 5 years time?
+>>
+>> Even if I don't work on this now, I would expect somebody to have
+>> issues with broken shutdown on RK3588 boards before 5 years are
+>> over :)
+> 
+> I'd like to have power-off working on Qnap TS-433 in the next Debian
+> stable. With my Debian Kernel hat on I'd say cherry-picking such a
+> commit (if it's in mainline) is acceptable. Backporting a major
+> extension to the spi framework isn't.
+> 
+> So: Expectation confirmed! And while I agree that hacks are not nice,
+> I prefer a hack now over a machine that doesn't shut down properly over
+> the next five years (if Lee's expectation is also correct).
+> 
+> Can we maybe go forward and do both? Accept this hack patch now and work
+> on spi to make atomic xfers possible?
+> 
+> Mark, are there concerns from your side? 
+> Wolfram, are there things you would recommend to do differently in spi
+> than what you have in i2c?
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Hi, want let you know that I've started to work recently on atomic SPI
+transfer support to have SPI shutdown working properly with this driver.
+It's in progress.
 
-Patch: spi: fsl-qspi: use devm function instead of driver remove
-  Submitter: Han Xu <han.xu@nxp.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=947594
-  Lore link: https://lore.kernel.org/r/20250326224152.2147099-1-han.xu@nxp.com
+Meanwhile this patch should've been merged a year ago because it fixes
+the regression.
 
-
-Total patches: 1
+Lee, please apply it for -stable.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best regards,
+Dmitry
 
