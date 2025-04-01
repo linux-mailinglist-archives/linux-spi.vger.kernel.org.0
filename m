@@ -1,117 +1,134 @@
-Return-Path: <linux-spi+bounces-7371-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7372-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD709A7676D
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Mar 2025 16:09:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 239B0A77300
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Apr 2025 05:37:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BD7C7A2D1E
-	for <lists+linux-spi@lfdr.de>; Mon, 31 Mar 2025 14:08:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1A913ACBA3
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Apr 2025 03:36:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C572135CE;
-	Mon, 31 Mar 2025 14:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DEB189F56;
+	Tue,  1 Apr 2025 03:37:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PJsyv5B8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NRldvwnl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809F53234;
-	Mon, 31 Mar 2025 14:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09D033F6;
+	Tue,  1 Apr 2025 03:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743430160; cv=none; b=NgeEl3dD9Lo/mKecy4Pq2ljc4JTMMdT0YW+NDhWSBxtcnF5trrbukqv0sJkGbhOUpnYz363wTSlzYh/RczftvEzHD13m4u2NLQpsvFEiKylgOdschv5fIgZB62nG1VlnKYUC/LKzrIHb90Vl8fMWepnabyMxoac400zQIjv0y7I=
+	t=1743478621; cv=none; b=UxJz3BmXDmDD5M+o/TCehsPe4TvTNzusmBRxpnhrZRJzlDFINKiPSHmo2jqKmIGTIaP6IsKrt+pzcwp+jWyngs1InuB8aj3krq6kIJByo12py68zkxIPM3/mRZUlV7E/ZX75gYZ1h2gwdzSvtXyB3WCUS39qlojyAjJkFWTLQH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743430160; c=relaxed/simple;
-	bh=d28ybu49teeHHXEma/cD2nF7x0uH3LgBVcfGEuOwjbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MS0qF+Mw9rEiI4AZmHmhhsYUnfW2/idTA+KN3hHHfZilCARvwQhLp54tkO7nDmFxyefQvAfG+M8k+XSnmJNy7xSB4oRwQkvcIaV+ysx9JUu09uWvMJgtrvwZzX4MnO3hBG+rOLwkaA3+S64CHZbqruzE8EXkEu9bbggBwoqKh5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PJsyv5B8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078C7C4CEE3;
-	Mon, 31 Mar 2025 14:09:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743430158;
-	bh=d28ybu49teeHHXEma/cD2nF7x0uH3LgBVcfGEuOwjbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PJsyv5B8dLZkZGa7j+YmqIbYg8TyZD/rV3JehPm1CK3LhAYpxWZnnc38UCQTssY6/
-	 U7apE7igeCqbQeD9GS/4NO7wuOWNV0tCeuTet24j4jjnoUX1JST/hX98V7Q1QEAmFe
-	 zifFk6540qBSD8U/mx63BRrf8KLGConpstX45SUGhZmP6ieNVXDZlWpgj+rG9vPldq
-	 /CPg/PVQCPR1aUARxrRKUaGhXATrq4DZ9G+FSW/FqtDpTKB9ofXmdPQD37oa/B0Qn/
-	 OFkV5uDtH1D4PtOZUSMNMu6y5YIkhkqyHhrV/Y0BsbyIsX8vj2+TgUl5bzg/fULWEb
-	 LeWwpe7cxuAag==
-Date: Mon, 31 Mar 2025 15:09:14 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jon Hunter <jonathanh@nvidia.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>, Vishwaroop A <va@nvidia.com>,
-	krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: spi: Add DT schema for Tegra SPIDEV
- controller
-Message-ID: <99e23453-04a3-489a-b50d-c4c8eec9c326@sirena.org.uk>
-References: <4zic633abvwj377kfqem42zmc2yruflbwfmmqrpvjjgr6jae6h@jthoycb3vzzz>
- <ljxxml7z2k6xniamzzw4ssi7u75qqfpcvmidzy3ekr3imtoxau@eztnxovsjplg>
- <499703ae-dba1-49a6-869b-a60b44c2a85f@sirena.org.uk>
- <2oxhmcrhbwlwqgyqy62p77eoag6nkavhjwmwfjfizcrhunrkjv@eaxjy6uoxszq>
- <25857b7f-5c10-46ec-b0b7-9ff89ca5ab1e@sirena.org.uk>
- <63b87feb-32ee-423c-8d82-61445414c6f7@nvidia.com>
- <9760cd70-cbd6-4865-92b9-b48eb2cdea55@sirena.org.uk>
- <69aaba89-10c6-408e-b328-c3e31a1aeaf7@nvidia.com>
- <3b0f4fee-d46b-4086-9d63-f4093b52748e@sirena.org.uk>
- <c81d7e8b-bcce-46a8-8938-c1ead71a988d@nvidia.com>
+	s=arc-20240116; t=1743478621; c=relaxed/simple;
+	bh=EmZc9fGyZ4WOv9wWfmw+4n13U0kP5pM4qafVVV493oY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cNIU1vzayqtQG6Hr9KIrEO62wcDBCfb/Cbz0+AdyBK6PubTCVuEiRYCtdBm8vLOlkevMNsz+1/eJ6XH5iSU/ubBHfEWbWbbg1IgYpAqSUsoVsG7OepzRxSniTWtEJHRrefa/Aq8QXmqoGZrCRJpZRq8XZBSEW9wBZNMRpRpV71w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NRldvwnl; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5310J4a3032238;
+	Tue, 1 Apr 2025 03:36:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=ZngRXbQhr0AX1t7xK7gvyM
+	OGEcVTjVWIPufvcRDcJK8=; b=NRldvwnlVep1E8FJOO5Fcxndtepx83X07ReD4B
+	u5wBCK2kLipplUgn5faKi8OgHiMw2gJB1wSDj14B1t9khMVY2wbV8/+wXuwYfn2F
+	D2uBBhvuP1wFUEyM+39VFZzqTx2mUy4K1+59zOIo2bN2ptzeaYBkCR7GF+WWJxKL
+	LELlMqB1g5S4l+lEeqh9hJh4ibiBSFwffPm+u5b0QFM4HsnMlPUkru9KYwmD3Gz8
+	uCXjH5gOPNDqhHAkh+LnIkKzsikym2prNpc2sFsaB2qf8PuA7dIhLOTBvdCKwCU7
+	WAYhLvO3/Lzx08m9WsGCIHJ9/dQVrzmleywHoSrL87ddr+6g==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45p9mjp84e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 01 Apr 2025 03:36:48 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5313alms017867
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 1 Apr 2025 03:36:47 GMT
+Received: from haixcui1-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 31 Mar 2025 20:36:45 -0700
+From: Haixu Cui <quic_haixcui@quicinc.com>
+To: <quic_haixcui@quicinc.com>, <broonie@kernel.org>,
+        <virtio-dev@lists.oasis-open.org>, <viresh.kumar@linaro.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hdanton@sina.com>, <qiang4.zhang@linux.intel.com>,
+        <alex.bennee@linaro.org>
+CC: <quic_ztu@quicinc.com>
+Subject: [RFC PATCH v4 0/3] Virtio SPI Linux driver
+Date: Tue, 1 Apr 2025 11:36:18 +0800
+Message-ID: <20250401033621.1614194-1-quic_haixcui@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NN1C5YwfL50hWv5J"
-Content-Disposition: inline
-In-Reply-To: <c81d7e8b-bcce-46a8-8938-c1ead71a988d@nvidia.com>
-X-Cookie: The Ranger isn't gonna like it, Yogi.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Authority-Analysis: v=2.4 cv=Mfhsu4/f c=1 sm=1 tr=0 ts=67eb5f50 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=XR8D0OoHHMoA:10 a=NEAV23lmAAAA:8 a=Qpdbqe6kpIhgmtwBI9EA:9
+X-Proofpoint-ORIG-GUID: iz9HYiUE3ZHw9A5pmpxZOdXSQMK1yX8x
+X-Proofpoint-GUID: iz9HYiUE3ZHw9A5pmpxZOdXSQMK1yX8x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-01_01,2025-03-27_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 suspectscore=0 clxscore=1011 impostorscore=0
+ malwarescore=0 spamscore=0 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504010023
+
+This is the 4th RFC version of a virtio SPI Linux driver which is
+intended to be compliant with the upcoming virtio specification
+version 1.4. The specification can be found in repository
+https://github.com/oasis-tcs/virtio-spec.git branch virtio-1.4.
+ 
+Changes between 3rd and 4th virtio SPI driver RFC:
+- Remove the logic code for statically creating SPI devices through
+  the spi_new_device function.
+- Add ACPI support.
+- According to Hillf Danton's comment, use init_completion instead of
+reinit_completion in virtio_spi_transfer_one function.
+ 
+Changes between 2nd and 3rd virtio SPI driver RFC:
+- Order header inclusion alphabetically.
+- Add Viresh Kumar's "signed-off" to the header files.
+- Rework virtio_spi_one_transfer
+  - Rework the delays according to Haixu Cui's advise. Delays are now
+    handled in a new sub-function virtio_spi_set_delays.
+  - Minor change: Re-formulate arguments of sg_init_one.
+- Rework virtio_spi_probe
+  - Replace some goto in error paths by return.
+  - Add spi_unregister_controller to an error path. Abstained from
+    using devm_spi_register_controller to keep order of
+    de-initialization in virtio_spi_remove.
+  - Add deletion of vqueue to all error paths taken after the virtqueues
+    have been initialized.
+ 
+Changes between 1st and 2nd virtio SPI driver RFC:
+- Update from virtio SPI draft specification V4 to V10.
+- Incorporate review comments gotten from the community.
+- A proposal for a performance enhancement having more than only one SPI
+message in flight had to be kept out. The more complicated code would
+have caused an unacceptable project risk now.
+ 
+The virtio SPI driver was smoke tested on qemu using Qualcomm's
+target hardware providing a physical SPI backend device, based on
+vhost-user protocol. Take vhost-device-spi as the vhost-user backend
+and qemu integrated with vhost-user-spi implementation as the vhost-user
+frontend. The Linux version used for testing is 6.12.
 
 
---NN1C5YwfL50hWv5J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Mon, Mar 31, 2025 at 02:11:35PM +0100, Jon Hunter wrote:
-> On 31/03/2025 13:44, Mark Brown wrote:
-
-> > Why would you need to use a compatible string for anything?  I'd expect
-> > the overlay to add the entire new device, compatible and all.
-
-> We need a compatible string for the SPI device in device-tree. Sorry, but I
-> am not sure how we can add a SPI device without one.
-
-> Can you confirm what you mean by 'overlay'? To me an overlay, is purely a
-> device-tree overlay and even if we have a device-tree overlay, we are still
-> missing the kernel driver part that matches the compatible string.
-
-I would expect the overlay to be a device tree overlay and to add the
-entire definition of the device, not just patch the compatible in an
-existing half constructed device.  I would expect the driver portion of
-supporting the device to happen as normal, if spidev makes sense for
-whatever devices these are then then that could be upstreamed without
-adding them to any board.
-
---NN1C5YwfL50hWv5J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfqogkACgkQJNaLcl1U
-h9Bpjwf/XOd6Yi/IMXBqmmEYx3YawbjauWiLhFVNVXsRuyG8pqImhTrg1c18lkBK
-5UA3ZR61auRwTT5eLKNIXen1mH265jaVk6yxuxtr/H8/SqVQql3f9tz89muqaR1K
-AE5Q+cxD3A/vUuVxbrWwRePOc0eXxNA6JQekGmcrooDmGCGy7xQsJCGME8q5t4Yr
-34kYYHH89MjNZkMdhpOQiaIAqBWndVh+FexqiY2saR/o+iDvhzgoacMym9XhdM5f
-p51rcOniKwi1cqGDeqMiqKS5BVaQuvmENng9Ptx2f6ZLNdmZrgTFVqguKHxTtmcl
-aDDuCgMU3RCig4CJ/iHueWEtiu4DnQ==
-=Kfc4
------END PGP SIGNATURE-----
-
---NN1C5YwfL50hWv5J--
 
