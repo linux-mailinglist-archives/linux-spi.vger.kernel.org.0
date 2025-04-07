@@ -1,59 +1,55 @@
-Return-Path: <linux-spi+bounces-7436-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7437-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAA22A7E64F
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 18:25:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55991A7E651
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 18:26:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89BF33B043A
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 16:18:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55589189BFD0
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 16:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E25D20B21A;
-	Mon,  7 Apr 2025 16:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC54520CCF3;
+	Mon,  7 Apr 2025 16:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6+8k+pT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CtbHGJ6v"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1476C207E1B;
-	Mon,  7 Apr 2025 16:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A5B2080C7;
+	Mon,  7 Apr 2025 16:15:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744042547; cv=none; b=NbCANNTMFobf9ITXH7eITBshRHOr5DGRgD+0KJNvs9T4GVeMlgjolz0ZGQmVgpm96WK4gnr69QgfmKoHeS8SzgGejPlAY8QEtG7aEFadI6zUXYQGabv/sBhMKA9ChVolOFvZWZB29r28jzzmzOBE55Zo/U2WXaLp/nGdfweVeCw=
+	t=1744042548; cv=none; b=kwr9Uv0ydbMh1K2t3Uz5FKq5z40wK6ZOEBTrK8uR70u1oaeLYN+RJimTFEfnVKRW5PeyxB+bqdOcmWX6uq01aL1hk7kp3JGhYFVVjs66WGMtAesJcWxXlJYkY5zmieALhwVRVz4SqOF64tSmM/GGRdnWTqvXkgjSaB0Z/Pipo7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744042547; c=relaxed/simple;
-	bh=/vZrV4sTxkcoN28b/L2BHGZocW18xExXmkYKNBBY7JA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nMon/Vn/fDMLwP4WTRcrLZW//9U4iVTRcNvw3FQkLj7NrhcFWhs+XdH5EQYU4j7ok5PZD4KrDFKNpKbPIcIw+Zpv45lPI9MfD81IECO9TkY2iMXvxwz3FFg5ey1Z9oua/keQ0lFsqAe08pjxTs85fLBR5DBlri4HV/g3A3wl1Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6+8k+pT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E19CC4CEDD;
-	Mon,  7 Apr 2025 16:15:45 +0000 (UTC)
+	s=arc-20240116; t=1744042548; c=relaxed/simple;
+	bh=jombHbNVEOCAWGip74Dnz/uQIXJRv6AQc4zOVPtINCQ=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LnGwTNwVztBdGa8p3mo3eDtwIzUk47h4lps2Lrdm8ujO+gUk1MA84gyRcIrdETfaH/NZoWaLORlPiBD4ZKdnFABUpVoOoOwZI9Xgym1ypkMhZkmuuYziLrmSsF1vS7AwtjQNw5fn7iZJCGGUXKZoE6N0GSaJwrg3c2+0eysarFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CtbHGJ6v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D3FC4CEEC;
+	Mon,  7 Apr 2025 16:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744042546;
-	bh=/vZrV4sTxkcoN28b/L2BHGZocW18xExXmkYKNBBY7JA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=m6+8k+pTP+eQ5L1rJZalS2n9o8JLaIHkqpYaDH4HWm5Jt8FAOftYvYzgYYntHdbgt
-	 VRfxh6vTQhLfVW7KbLPtcSdrv+0O9cgh9hKGPzAR2SUUncF6Z1fMjBB/poXyzJjPy4
-	 rZVUxatZDX9MyjueUQ3lwriMMxzoj7APJL6eZX4waS5/c7XryZuxLG3E4hw1zzkyyL
-	 /dWEzGvDZqSVvncbLDPndVQfNRfzreNpqz1JaF3M0OD+NOuJlaxWy93Mxkx7Pdb6EL
-	 Gm0ZC1FOYMQjkHVSSjTtTbp45X4bAtrsMaRM2fnyqbo1JhJr0zyi6FpiLMYzBCqDE6
-	 5TDpTGvVM2HCw==
+	s=k20201202; t=1744042548;
+	bh=jombHbNVEOCAWGip74Dnz/uQIXJRv6AQc4zOVPtINCQ=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=CtbHGJ6vATer0WOXT2bbjoxtVaTDd4OueRoFdb0Tfzt0px2a446r0eSyCbxgDz2EL
+	 CqupXYOCwb/05CspNLE9ShUTWC5gf0sAotfAxDt5p2N75u/kgwY/ANP2XGhed0/ZcR
+	 qnzjSjDZFjIL10Q1MtS3pdqFT2GDog7wgL0BwitJbilZwq3lig16Ge1iBO+UxQ/KfS
+	 YI+D0yfSDBkKyTDV5mqKaXslMv8qi50N+qjXhlvYN5PgTo10WlN/n0AJoB0zTBXoZd
+	 3HyX4lG3xnEq9ruNOCAiZ7E6NfAchXtZlZm1+j0qTiudu++CbAjwdRNbtM88Heq6J2
+	 v3Wz5DJ/JuyAA==
 From: Mark Brown <broonie@kernel.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, linux-spi@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250320-qpic-snand-kmalloc-v1-1-94e267550675@gmail.com>
-References: <20250320-qpic-snand-kmalloc-v1-1-94e267550675@gmail.com>
-Subject: Re: [PATCH next] spi: spi-qpic-snand: use kmalloc() for OOB buffer
- allocation
-Message-Id: <174404254509.780717.1127447329039664549.b4-ty@kernel.org>
-Date: Mon, 07 Apr 2025 17:15:45 +0100
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20250331103609.4160281-1-andriy.shevchenko@linux.intel.com>
+References: <20250331103609.4160281-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] spi: Group CS related fields in struct
+ spi_device
+Message-Id: <174404254713.780717.12583188125245773601.b4-ty@kernel.org>
+Date: Mon, 07 Apr 2025 17:15:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,15 +60,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Thu, 20 Mar 2025 19:11:59 +0100, Gabor Juhos wrote:
-> The qcom_spi_ecc_init_ctx_pipelined() function allocates zeroed
-> memory for the OOB buffer, then it fills the buffer with '0xff'
-> bytes right after the allocation. In this case zeroing the memory
-> during allocation is superfluous, so use kmalloc() instead of
-> kzalloc() to avoid that.
+On Mon, 31 Mar 2025 13:35:59 +0300, Andy Shevchenko wrote:
+> The CS related fields are sparse in the struct spi_device. Group them.
+> While at it, fix the comment style of cs_index_mask.
 > 
 > 
-> [...]
 
 Applied to
 
@@ -80,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-qpic-snand: use kmalloc() for OOB buffer allocation
-      commit: f48d80503504257682e493dc17408f2f0b47bcfa
+[1/1] spi: Group CS related fields in struct spi_device
+      commit: dd8a9807fa03666bff52cb28472fb227eaac36c9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
