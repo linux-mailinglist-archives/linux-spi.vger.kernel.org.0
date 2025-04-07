@@ -1,145 +1,174 @@
-Return-Path: <linux-spi+bounces-7440-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7441-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52930A7E7C7
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 19:08:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57C78A7EEAB
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 22:13:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 744803A8D50
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 17:00:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E132442695
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 20:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FA2B214A9C;
-	Mon,  7 Apr 2025 17:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD74221ADA2;
+	Mon,  7 Apr 2025 20:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrIRZWRt"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="qxWeMnez"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2AE215F43
-	for <linux-spi@vger.kernel.org>; Mon,  7 Apr 2025 17:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6FF1EE032;
+	Mon,  7 Apr 2025 20:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744045259; cv=none; b=rhzJuyumYywJSyT0RS4ubh8JIYbjJnbpyeAU8se7ie3T3IpXI1Ll3MwMWj57imeyY5bCRdx7oaaafGsUtsgd2YrEDBbR+gkz9ztV0yEFJd4Ba7MHO+GDJNLPfS1M5Y6P+fMyYmM9WyL8grkEoPt91XnNMkdDf3lKohagzvQr1E0=
+	t=1744056354; cv=none; b=qrFN0xdCegD7r9WFtw4XDuM5D/8imAggVKK7ORTXFIQOfWofzBdc3AE4ZcbECByz6Sm2nnSYJ7dN80sdXZ4oqNVbmCeTFtU049MyMn5iXusDIOteFG98N1LRF3jykcW5QsdRImLSX/qgbb5hJhIekJ6LD7b70pVZd2RIasn3Ljk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744045259; c=relaxed/simple;
-	bh=0CiJN4T6ILydjtZFtNIU5ke8rMfl4RRFaq/w4+nwQRI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=IxFNkL/5it/cAapwevk3V3GnZ6u41VR6jb237SV6YcjEV6QOu4MIooRLatvoGNB41kFieO6zDKnJIlN4aOttofvY7dd7OeJGP7W5f9qIaVKzulMHFZw+Xlg0M2wMi+DPaBio45k0kWSa0jwnKCWgvfDd3vg1mRnxDzWqc4bZnz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrIRZWRt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90AF8C4CEDD;
-	Mon,  7 Apr 2025 17:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744045258;
-	bh=0CiJN4T6ILydjtZFtNIU5ke8rMfl4RRFaq/w4+nwQRI=;
-	h=Subject:From:Date:To:From;
-	b=hrIRZWRtEkCC5UKpQRVRoKWQyTBOr18GQXZ36IzA4WvSRMZujxaLj/eQhGTnnJ/bB
-	 ijgglYDj6OoeeooJw+hiarwydDdoRhGJ19R9vwLNMAPC0Vllr0cfk+3OplrB1NdGVM
-	 lFKFoh1kVgRg3i/bIPZex2pSmLEcnGtCYe9+bHKYhhfz8G/cIoWqtmhXnFfQHKkgIK
-	 /0FFff/8Pz4xTDyW4dln/+KmyekmytnO7ppM7GplD4QlOXhY5RqwOuDTICArdEgDS0
-	 QJzXs8cWkU+k4msGkm9doLdA4Bs2uAsauW+ZyhJsYqbeq0xUKV+1I/r5hvhGfvkfM7
-	 UnSdxF0v91RQA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF20E380CEEF;
-	Mon,  7 Apr 2025 17:01:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1744056354; c=relaxed/simple;
+	bh=sOI/Ws0aQosMDdWy0Ov4bIs+PItfPMvkWap9D35EHWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BzzQEDRVSV1sMnjLKS9mt7m+8eRTvD4tfM0YaB6DxWhpeBAcpEsnkG9fCVcuZBcQC7uH8Zfn/dKCZ6UM8D75BNn7cvVv51vh2mI1cWdTbVRhDZN1tQEA/iqcroueF7gd2FeR35NXDf9erCOQ7jz1i8SMT54PaBfinlslxACpJHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=qxWeMnez; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=nl5JULT9PoC4C0/72HEzW8Mzovg/wHI2O7mxt7leeac=; b=qxWeMnezbVGyFUZ5BOqEZBMjTK
+	4viXQQ3adWeVMFtj8DWC62nPkKxNP3JRzHmTYRUWNXDWfiC9zspf3TzS6xn3/qt+/aH7SogayZXAf
+	9FfUvh72FV/sVaQ9VxcIoxpCx6DEvrtYWOUpWwVcdeWwajTvujFf2v2Ta/AVHazNifO0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1u1sip-008Igt-Tz; Mon, 07 Apr 2025 22:05:31 +0200
+Date: Mon, 7 Apr 2025 22:05:31 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 15/16] misc: lan966x_pci: Add dtso nodes in order to
+ support SFPs
+Message-ID: <19f1a382-1b6b-42bd-a548-a1a5644c9a1b@lunn.ch>
+References: <20250407145546.270683-1-herve.codina@bootlin.com>
+ <20250407145546.270683-16-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174404529557.1107196.7642978804616349429.git-patchwork-summary@kernel.org>
-Date: Mon, 07 Apr 2025 17:01:35 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250407145546.270683-16-herve.codina@bootlin.com>
 
-Hello:
+On Mon, Apr 07, 2025 at 04:55:44PM +0200, Herve Codina wrote:
+> Add device-tree nodes needed to support SFPs.
+> Those nodes are:
+>  - the clock controller
+>  - the i2c controller
+>  - the i2c mux
+>  - the SFPs themselves and their related ports in the switch
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  drivers/misc/lan966x_pci.dtso | 111 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 111 insertions(+)
+> 
+> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
+> index 94a967b384f3..a2015b46cd44 100644
+> --- a/drivers/misc/lan966x_pci.dtso
+> +++ b/drivers/misc/lan966x_pci.dtso
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Series: Converge on using secs_to_jiffies() part two
-  Submitter: Easwar Hariharan <eahariha@linux.microsoft.com>
-  Committer: Andrew Morton <akpm@linux-foundation.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=937701
-  Lore link: https://lore.kernel.org/r/20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com
-    Patches: [v3,01/16] coccinelle: misc: secs_to_jiffies: Patch expressions too
-             [v3,02/16] scsi: lpfc: convert timeouts to secs_to_jiffies()
-             [v3,03/16] accel/habanalabs: convert timeouts to secs_to_jiffies()
-             [v3,04/16] ALSA: ac97: convert timeouts to secs_to_jiffies()
-             [v3,05/16] btrfs: convert timeouts to secs_to_jiffies()
-             [v3,08/16] ata: libata-zpodd: convert timeouts to secs_to_jiffies()
-             [v3,09/16] xfs: convert timeouts to secs_to_jiffies()
-             [v3,10/16] power: supply: da9030: convert timeouts to secs_to_jiffies()
-             [v3,11/16] nvme: convert timeouts to secs_to_jiffies()
-             [v3,14/16] platform/x86/amd/pmf: convert timeouts to secs_to_jiffies()
-             [v3,15/16] platform/x86: thinkpad_acpi: convert timeouts to secs_to_jiffies()
-             [v3,16/16] RDMA/bnxt_re: convert timeouts to secs_to_jiffies()
-
-Series: Add support for SAMA7D65
-  Submitter: Ryan Wanner <Ryan.Wanner@microchip.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=924303
-  Lore link: https://lore.kernel.org/r/cover.1736522006.git.Ryan.Wanner@microchip.com
-    Patches: [v6,1/3] dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
-             [v6,2/3] dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
-             [v6,3/3] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
-
-Patch: [next] spi: spi-qpic-snand: use kmalloc() for OOB buffer allocation
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=946026
-  Lore link: https://lore.kernel.org/r/20250320-qpic-snand-kmalloc-v1-1-94e267550675@gmail.com
-
-Series: spi: axi-spi-engine: add offload support
-  Submitter: David Lechner <dlechner@baylibre.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=931743
-  Lore link: https://lore.kernel.org/r/20250207-dlech-mainline-spi-engine-offload-2-v8-0-e48a489be48c@baylibre.com
-    Patches: [v8,01/17] spi: add basic support for SPI offloading
-             [v8,08/17] iio: buffer-dmaengine: split requesting DMA channel from allocating buffer
-             [v8,09/17] iio: buffer-dmaengine: add devm_iio_dmaengine_buffer_setup_with_handle()
-             [v8,10/17] iio: adc: ad7944: don't use storagebits for sizing
-             [v8,12/17] doc: iio: ad7944: describe offload support
-             [v8,13/17] dt-bindings: iio: adc: adi,ad4695: add SPI offload properties
-             [v8,15/17] doc: iio: ad4695: add SPI offload support
-             [v8,16/17] iio: dac: ad5791: sort include directives
-             [v8,17/17] iio: dac: ad5791: Add offload support
-
-Series: Add support to load QUP SE firmware from
-  Submitter: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-  Committer: Bjorn Andersson <andersson@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=939594
-  Lore link: https://lore.kernel.org/r/20250303124349.3474185-1-quic_vdadhani@quicinc.com
-    Patches: [v3,1/9] dt-bindings: qcom: geni-se: Add 'firmware-name' property for firmware loading
-
-Patch: spi: spi_amd: Add PCI-based driver for AMD HID2 SPI controller
-  Submitter: Raju Rangoju <Raju.Rangoju@amd.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=949298
-  Lore link: https://lore.kernel.org/r/20250402121514.2941334-1-Raju.Rangoju@amd.com
-
-Patch: arm64: zynqmp: Move firmware constants from binding to platform
-  Submitter: Michal Simek <michal.simek@amd.com>
-  Committer: Michal Simek <michal.simek@amd.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=930095
-  Lore link: https://lore.kernel.org/r/cover.1738600745.git.michal.simek@amd.com
-
-Patch: [v1,1/1] spi: Simplify conditionals in spi_set_cs()
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=948506
-  Lore link: https://lore.kernel.org/r/20250331093915.4041600-1-andriy.shevchenko@linux.intel.com
+What exactly does this DTSO file represent?
 
 
-Total patches: 29
+> @@ -47,6 +47,47 @@ sys_clk: clock-15625000 {
+>  				clock-frequency = <15625000>;  /* System clock = 15.625MHz */
+>  			};
+>  
+> +			i2c0_emux: i2c0-emux {
+> +				compatible = "i2c-mux-pinctrl";
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +				i2c-parent = <&i2c0>;
+> +				pinctrl-names = "i2c102", "i2c103", "idle";
+> +				pinctrl-0 = <&i2cmux_0>;
+> +				pinctrl-1 = <&i2cmux_1>;
+> +				pinctrl-2 = <&i2cmux_pins>;
+> +
+> +				i2c102: i2c@0 {
+> +					reg = <0>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +				};
+> +
+> +				i2c103: i2c@1 {
+> +					reg = <1>;
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +				};
+> +			};
+> +
+> +			sfp2: sfp2 {
+> +				compatible = "sff,sfp";
+> +				i2c-bus = <&i2c102>;
+> +				tx-disable-gpios = <&gpio 0 GPIO_ACTIVE_HIGH>;
+> +				los-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+> +				mod-def0-gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
+> +				tx-fault-gpios = <&gpio 2 GPIO_ACTIVE_HIGH>;
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+DT files are generally hierarchical. There is a soc .dtsi file which
+describes everything internal to the SoC.  And then we have .dts file
+which describes the board the SoC is placed on.
 
+We have a slightly different setup here. A PCI chip instead of a SoC.
+And a PCI card in a slot, which could be seen as the board.
 
+The SFP cage is on the board. How the GPIOs and i2c busses are wired
+to the SFP cage is a board property, not a SoC/PCI chip
+property. Different boards could wire them up differently. So to me,
+it seems wrong these nodes are here. They should be in a dtso file
+which represents the PCIe board in the slot, and that .dtso file
+imports the .dtso file which represents the PCIe chip.
+
+I suppose this comes down to, what do the PCIe IDs represent, since
+that is what is used for probing? The PCIe chip, or the board as a
+whole. When somebody purchases the chips from Microchip, and builds
+their own board, are they required to have their own PCIe IDs, and a
+.dtso file representing their board design? The PCIe chip part should
+be reusable, so we are talking about stacked dtso files, or at least
+included .dtso files.
+
+      Andrew
 
