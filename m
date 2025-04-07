@@ -1,79 +1,81 @@
-Return-Path: <linux-spi+bounces-7405-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7406-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25923A7D43C
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 08:35:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FC89A7D445
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 08:36:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B04653AB565
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 06:35:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F4916FED0
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 06:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D49C224AFB;
-	Mon,  7 Apr 2025 06:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8B722541C;
+	Mon,  7 Apr 2025 06:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MpnaFRpj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzCujVmt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FEB221F3C;
-	Mon,  7 Apr 2025 06:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81E62253FF;
+	Mon,  7 Apr 2025 06:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744007722; cv=none; b=Q+G/oRvcVI7h93lneFik16Fdngdyn/k3FJXtC/+b1uO7K5HpkQ2HnY+JSm1AGfwIoMBCKwUYadeJrLaMdqWlO0Xfi3NS9Ris65Mo9eW75IA+/SpkBT2GzDNfIG/KrfluKddxF64Sg4hZWedwi2lNB6hnl/ITlpaqUjxxqKU683Y=
+	t=1744007726; cv=none; b=erwCfOQ5C/GZzvyMbL1JD+0+r4omz0JM8vH6de8cOrZap7Y7G50uo1LQkWBq5M57401KyqpB0VVjwLa1ylMYvgR7G8Gxrr/FeO3ZOZRTnkTygrux5OG5uA/in3zc5j5wfozp4pwLVD5DzYgE5U8dgnJ98tagi54RZuny98FfjZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744007722; c=relaxed/simple;
-	bh=PrUQRbB1c+rJuvNmtq5sRl5XHonz7LhulE1jv95UeZM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YTi5a9zBHeRMrP2o2x8XL4KafWZErkzsUTBJEW8G6JigP8h0orDWqrsDJupc/RAHybeqXufqoDH5nBs4/FVgLkYz+h/VQ1mGKm5QJTdFSe/BOtzyUCX8UmoJApuy/n9kTbSmvHw0x4W18HwMCK/cNlQWSQjlqmM0o8nz6fQ11o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MpnaFRpj; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1744007726; c=relaxed/simple;
+	bh=Ocz7+gcKVvx9JS7ROJOowK4HkGeQFJNuw93TvrjIVTM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=mVjgR3G6p8eZUK7ue8BwqF//kV4HuMXI9oBIjUqFqMf6Io/vIb41PQ8ncE7MWm93O3mpYA4ZD7ooYKJpEZyMDg3AUzbBEcJ4ufkw8BBmT258A+41tNv6xGoH4gKSaW0Vi+LDZwOctsfw3QfdRLZJUpqIfozPM6xHM4dN6PXHjXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzCujVmt; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-af5139ad9a2so2558303a12.1;
-        Sun, 06 Apr 2025 23:35:19 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301e05b90caso3759107a91.2;
+        Sun, 06 Apr 2025 23:35:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744007719; x=1744612519; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nUKnCXni+ZS+V5rei8asTaXf4mmG/ra2/KlqUzUvNL8=;
-        b=MpnaFRpjcU4UjbMww+9pqRtasa/ZZi1c2XcgzLI9XTv8oWwf0Z5cQ6qo9CAyUukMA0
-         8sx40iRy9OuSdN5PwWZZ9dMRThLERmY4l126QUJ4LxKwRaK5W5gRCyoen8K5iTxyqP/f
-         6DG1ymzM5MU2Evw9K1+zVlgG7YMNGSlpwzZVh3xGKDVO5512JDf412r9g43n7dfhqU2e
-         JeMCGoUcOMMZpvIsgQqDK4K2QkGjURaGjHIsS+eFJXhFPtyZgvzYcekh3F3ag3DCDyeZ
-         VWnwWSVxAY3WRLZNkdpWv0sRyB0wmnuL5Jd/CKDMbqu2C0o+ASBE9CkXmzkUi3eDKBmJ
-         yvEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744007719; x=1744612519;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1744007724; x=1744612524; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nUKnCXni+ZS+V5rei8asTaXf4mmG/ra2/KlqUzUvNL8=;
-        b=Divh8gJgOwxlkWfM0QHd8M6jsRpJqstwbPxZF+J2DG3t6NcscBnX4jnTee98/VCZub
-         ocvi1dds6vjJYavngbjfZjwAEUx2FOmURc1WkW8yxC4tfvmpMLMSye0jOQSoJ6aNRzwS
-         7GoLj8r87/w/QNFrq3IZJwhzFbqxs3XiltfWjWRQVYvPQrQU5p3mJeAbARI3mgNd0ckK
-         l90dsmQdBtR4/O8pRmJJmIrx6TiUIOSNfX9ymDer1RBAaLggefn9XpCmXg1tSCTVYxmj
-         NZDDpsHJXaeZ1tR0sffaejPhXQZUrzx2QZXlNp9S69GDqJ+NTsxN98JOwHxU9OxlNQgb
-         u9Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWn+xABwicHq4X/sgJ29ANv7jgUYrkPYYIMKyPcQLD1Rowvq3gIzygL+ICYx/PQFnTUMqWiqLtQ1LEL@vger.kernel.org, AJvYcCXLtbBA20gyyC3cNDlTBI7/ZsMrEye/R0Ky/NzjI5l6DsndimFVjd7p1zKg8qFsCRBGNGhvtsC1/P9FWOQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRCs6L4G6ejEiSy4g1lYX3cW3CjQSNhIIS+2jr4BdUl2N4LcIG
-	lA5rrrnWScUl+wlwHq7noShss31k1z5/F8rw2YZmXleH8gzBUr6y
-X-Gm-Gg: ASbGncuM50CYAgBtbFzarqk/f0vWpFilEldvKJszPBWXW1AjY6P4gcqn+qjwfkfYBWC
-	OvASt9TEjNwFUuzTR/lhlvx6sRqA03Hy7ANt/8A6O5jHKiZyXlxCAMES4zYEEl4Pfn8Ao0d668k
-	/kuUk0F6xg/dUfGeSURkQLmLuexwHcfjFQ5fJ5DqwAbPGTxu7GtD9hwDrTOCI3GYbPDRwnSNmbs
-	kRzg826HbFr/8wyKh2SFQ1+1QfwoWxdzpSiAGn0Z/6sNQGSv67ir8uqwqzogS0YSOtJtO48NmOg
-	xTc8Kqd4dTvirO7uXM7RG2LWv7JeynJRFk2Q
-X-Google-Smtp-Source: AGHT+IGRG2C26zGOmhoXFbiYCUXmZOta5ZKasjUrRKCZwa8ZEA1iM0n9fmVIC+YnuIVVcjAsIQP16Q==
-X-Received: by 2002:a17:90b:5190:b0:2ff:62f8:9a12 with SMTP id 98e67ed59e1d1-306a62134c9mr12842046a91.23.1744007718706;
-        Sun, 06 Apr 2025 23:35:18 -0700 (PDT)
+        bh=GGIQTeSUJ/msyOcBGgyCOEy8RB/Vu85gn7KiLYCFQmg=;
+        b=PzCujVmt+Wu0e+e9e3pDOlx4PKjGChyO2lKUa74ku14vdWgeu5U2GDFXKjiYzNqHfv
+         0OPmw3aBZw0Rzgb4Z3sHnnm8aQ8sDyYfKVo44eG/14LmDQvn5fXnskPK1Kzqq250XB2i
+         w1IhDw/4ZtnVYlcjWdr23xGcAou7otVi2QoEhBiLF/X3MSkxN8IsVJKrs2xQ0gn8SVzn
+         OObhMlp6vhdBCFo9u+/RY+N6pxgVUwLmo1eNhPznQNFiuHJ4jl7+WhXmoRVMJs/rx4W3
+         AsS6zqXm+5wYyRwGPjcUPIZlIRPEa+n4tNmUavePgEGrCIZP9wQqhyeuZg8zPfFBSOrl
+         yBRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744007724; x=1744612524;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GGIQTeSUJ/msyOcBGgyCOEy8RB/Vu85gn7KiLYCFQmg=;
+        b=G1UNGXSbfwDXNnKkYSoXUqcmfWY+pkL2FoZteLL7WQdMy5Kp7jU07pRZc+25Lr/jvC
+         8KiDPOEGT+EDJ5ASkjQ4Mv7c0IxpVNInmpgsOO/1xphTLh2zEIZGh12RKgZz8nd2JE84
+         MA2ctZH+0H8TUauznCWt6Ndgyvw4H5mQFvpfj/3bPq2S8Z+Z3sQpwlE0d3WMbe43pVis
+         husRcHgUMJnNgOj86knV3+9GjslZnB0jKkQMoPjWsywLYegFsKnsIGJeo67C2dgKdU0n
+         hCF1CU5hFopChUPR7rCNFJ2WSuLzJ/p25bpVFVSKmCw3XYB8Kg8EkHlrhFSB2ctE5BHX
+         ojkg==
+X-Forwarded-Encrypted: i=1; AJvYcCUC8Pts3JZa9X9u/bSvTwrtWDzf3y+1dup7PuYCPx3E37LupOms65d7adawhvwBNjNpUPtKnC8XE/3YXUY=@vger.kernel.org, AJvYcCUIpQrm3znD/TITyvCWPzSvED0bCTf1PBSzqNLsvLD2vTMwS9Yw4CZA8Ckx51gQUU1ZIpddAoZFVDmz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5/2YrBcEa/PHyueZYKTcGd4t7+xdGZpfn3w0wXe+1q4oTU1JZ
+	Ki1foNnR5yzWdWiJA4wo6LcVQtouOzFnS5xK8fa9puqjACl0HtOo
+X-Gm-Gg: ASbGnct6qzrMDBV88bygvquD8Ct33wngV6kbc3aMWKKUT9Q+hs+GmkAxY4yI/WOLIWM
+	tWpj+iZuk8ShD7ZvQHH1vhgotQVbEq/DaaziAe3l6daEoXXvGWZMJWlTMDoTe5zps7RSJKz1RVQ
+	DsO+8cNrOzZQ7sDlW1TgCPX9Hphuf8c1iSj6b5dMlOwj0MgkXyDwh1aQfzH7CsR6iQpgZgLIw10
+	OQfjQ24kZ7HUCUO5HgBoV3pGg6nRdOZgNczWQJyV8Dw9/pDk2xKVWOGO3+6jbY5vkwpSWTC1NPw
+	mgDvpFbR7PVaKx0DAoxWMQX+t3TwOi1M+KEy
+X-Google-Smtp-Source: AGHT+IHBFpIgTbEaMnBWm5RVBjeYevVuixu+5yTWxBRjJdtCoVEVF/pCoi2mcsaK29zligKIYWm+4w==
+X-Received: by 2002:a17:90b:1f8c:b0:2ff:52e1:c49f with SMTP id 98e67ed59e1d1-306a4892fafmr14203035a91.26.1744007723635;
+        Sun, 06 Apr 2025 23:35:23 -0700 (PDT)
 Received: from [127.0.0.1] ([2001:250:5800:1000::610c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983da691sm8048044a91.47.2025.04.06.23.35.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983da691sm8048044a91.47.2025.04.06.23.35.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Apr 2025 23:35:18 -0700 (PDT)
+        Sun, 06 Apr 2025 23:35:23 -0700 (PDT)
 From: Zixian Zeng <sycamoremoon376@gmail.com>
-Subject: [PATCH v4 0/2] Add basic SPI support for SG2042 SoC
-Date: Mon, 07 Apr 2025 14:35:11 +0800
-Message-Id: <20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com>
+Date: Mon, 07 Apr 2025 14:35:12 +0800
+Subject: [PATCH v4 1/2] spi: dt-bindings: snps,dw-apb-ssi: Add compatible
+ for SOPHGO SG2042 SoC
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,11 +84,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAB9y82cC/3XMTQ7CIBCG4as0rMXAQCu48h7GBbRDS2J/AoZom
- t5d2k2NxuU3meedScTgMZJzMZOAyUc/DnnIQ0HqzgwtUt/kTYBByQAUja6lcfIUhQODtWHaWJK
- /p4DOP7fS9ZZ35+NjDK8tnPh6/W0kTjm1WmmDjZaa80vbG38/1mNP1kaCPw6yU9Y6EFaVDcNvJ
- 3YnuNidoIxipSoJJ8GlhU+3LMsbN/KdLQ4BAAA=
-X-Change-ID: 20250228-sfg-spi-e3f2aeca09ab
+Message-Id: <20250407-sfg-spi-v4-1-30ac949a1e35@gmail.com>
+References: <20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com>
+In-Reply-To: <20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, 
  Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -99,60 +99,39 @@ Cc: devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
  sophgo@lists.linux.dev, chao.wei@sophgo.com, xiaoguang.xing@sophgo.com, 
  dlan@gentoo.org, Zixian Zeng <sycamoremoon376@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744007713; l=1831;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744007713; l=1084;
  i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
- bh=PrUQRbB1c+rJuvNmtq5sRl5XHonz7LhulE1jv95UeZM=;
- b=+Go8UegZSi0E77pZKJXd0DldPDvqti7TxLG0uptVeWXzxZduvooGHEgeSM4M2YYM6pATGfmqi
- JNh79RwI3F1B23p/37XeiAocKXBVwsXHOPhGKqqgwGevMOI5xoQHKvL
+ bh=Ocz7+gcKVvx9JS7ROJOowK4HkGeQFJNuw93TvrjIVTM=;
+ b=Uxcj0G45ieTZvKKQjyJrxTtDAyr9bek1RVrok389pH1B68f9abGhumzllp68p4QUAXIPiL0cU
+ w83qtuBizUND2pqbvQGlxfR9NsMTPYVLoZS9AoWD/VKGhB/9V9nGlcB
 X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
  pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-Implemented basic SPI support for SG2042 SoC[1] using 
-the upstreamed Synopsys DW-SPI IP.
-
-This is tested on milkv-pioneer board on bus level. Using 
-driver/spi/spidev.c for creating virtual /dev/spidevX.Y and 
-tools/spi/spidev_test for testing functionality.
+add compatible property to include "sophgo,sg2042-spi" for
+the SOPHGO SG2042 SoC SPI Controller.
 
 Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 ---
-Changes in v4:
-- Adjust the order of spi nodes
-- Place the binding after Renesas
-- Fix the description issues of patches
-- Link to v3: https://lore.kernel.org/r/20250313-sfg-spi-v3-0-e686427314b2@gmail.com
+ Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Changes in v3:
-- Remove the spi status on sg2042-milkv-pioneer board
-- Remove remove clock GATE_CLK_SYSDMA_AXI from spi[2]
-- Create dt-binding of compatible property
-- Replace the general compatible property with SoC-specific in dts
-- Link to v2: https://lore.kernel.org/r/20250228-sfg-spi-v2-1-8bbf23b85d0e@gmail.com
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index bccd00a1ddd0ad92b437eed5b525a6ea1963db57..94102d94ed5dffe889a8a11c1c637d466713c208 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -88,6 +88,10 @@ properties:
+               - renesas,r9a06g032-spi # RZ/N1D
+               - renesas,r9a06g033-spi # RZ/N1S
+           - const: renesas,rzn1-spi   # RZ/N1
++      - description: SOPHGO SG2042 SoC SPI Controller
++        items:
++          - const: sophgo,sg2042-spi
++          - const: snps,dw-apb-ssi
+       - description: T-HEAD TH1520 SoC SPI Controller
+         items:
+           - const: thead,th1520-spi
 
-Changes in v2:
-- Rebase v1 to sophgo/master(github.com/sophgo/linux.git).
-- Order properties in device node.
-- Remove unevaluated properties `clock-frequency`.
-- Set default status to disable.
-- Link to v1: https://lore.kernel.org/r/20250228-sfg-spi-v1-1-b989aed94911@gmail.com
-
-[1] https://github.com/sophgo/sophgo-doc/blob/main/SG2042/TRM/source/SPI.rst
-[2] https://github.com/sophgo/sophgo-doc/blob/main/SG2042/TRM/source/clock.rst#clock-tree
-
----
-Zixian Zeng (2):
-      spi: dt-bindings: snps,dw-apb-ssi: Add compatible for SOPHGO SG2042 SoC
-      riscv: sophgo: dts: Add spi controller for SG2042
-
- .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   |  4 ++++
- arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 26 ++++++++++++++++++++++
- 2 files changed, 30 insertions(+)
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250228-sfg-spi-e3f2aeca09ab
-
-Best regards,
 -- 
-Zixian Zeng <sycamoremoon376@gmail.com>
+2.49.0
 
 
