@@ -1,81 +1,80 @@
-Return-Path: <linux-spi+bounces-7406-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7407-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FC89A7D445
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 08:36:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51A8FA7D440
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 08:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41F4916FED0
-	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 06:35:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49C9D188E086
+	for <lists+linux-spi@lfdr.de>; Mon,  7 Apr 2025 06:36:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8B722541C;
-	Mon,  7 Apr 2025 06:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF8C2253B7;
+	Mon,  7 Apr 2025 06:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PzCujVmt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GoQuQzVX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81E62253FF;
-	Mon,  7 Apr 2025 06:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B742253AE;
+	Mon,  7 Apr 2025 06:35:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744007726; cv=none; b=erwCfOQ5C/GZzvyMbL1JD+0+r4omz0JM8vH6de8cOrZap7Y7G50uo1LQkWBq5M57401KyqpB0VVjwLa1ylMYvgR7G8Gxrr/FeO3ZOZRTnkTygrux5OG5uA/in3zc5j5wfozp4pwLVD5DzYgE5U8dgnJ98tagi54RZuny98FfjZE=
+	t=1744007730; cv=none; b=SYN90IJld5L8ZEMV1m+8CYMEY+M5XuAz6+OLMl8o+WLbOwudMHjU5ZtLEhET6mxf5YsWLzaqxGQPXV9O9JWrfXAXuwSVBn720zMWTjCrgh4gKjuiDbeSRhr5IeRM4dclHpDkd5plC88xD1RYMAGFyEj/HNovnnhORsGMuJn5GNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744007726; c=relaxed/simple;
-	bh=Ocz7+gcKVvx9JS7ROJOowK4HkGeQFJNuw93TvrjIVTM=;
+	s=arc-20240116; t=1744007730; c=relaxed/simple;
+	bh=bsOb61YGYomuONd3drp4jb88EZWek6I8D8vdw/YFqjA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mVjgR3G6p8eZUK7ue8BwqF//kV4HuMXI9oBIjUqFqMf6Io/vIb41PQ8ncE7MWm93O3mpYA4ZD7ooYKJpEZyMDg3AUzbBEcJ4ufkw8BBmT258A+41tNv6xGoH4gKSaW0Vi+LDZwOctsfw3QfdRLZJUpqIfozPM6xHM4dN6PXHjXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PzCujVmt; arc=none smtp.client-ip=209.85.216.41
+	 In-Reply-To:To:Cc; b=amRx3srYkMS1ODymytbTOp0B7OU6YfAeM4YzicIuA6i8acmtY2UgaudyO3uWZsYLEt9qR9q2rF5gokrPd3GCC7iRKISo+ZlTf/I8C7V1HaQ2tgg4pfDDEjvuB/++WLQ9scvRNllm4QQhRiJJBbvsLyi3Ca7Vzr6OHE+LfLKxYLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GoQuQzVX; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301e05b90caso3759107a91.2;
-        Sun, 06 Apr 2025 23:35:24 -0700 (PDT)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ff784dc055so3333861a91.1;
+        Sun, 06 Apr 2025 23:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744007724; x=1744612524; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1744007729; x=1744612529; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GGIQTeSUJ/msyOcBGgyCOEy8RB/Vu85gn7KiLYCFQmg=;
-        b=PzCujVmt+Wu0e+e9e3pDOlx4PKjGChyO2lKUa74ku14vdWgeu5U2GDFXKjiYzNqHfv
-         0OPmw3aBZw0Rzgb4Z3sHnnm8aQ8sDyYfKVo44eG/14LmDQvn5fXnskPK1Kzqq250XB2i
-         w1IhDw/4ZtnVYlcjWdr23xGcAou7otVi2QoEhBiLF/X3MSkxN8IsVJKrs2xQ0gn8SVzn
-         OObhMlp6vhdBCFo9u+/RY+N6pxgVUwLmo1eNhPznQNFiuHJ4jl7+WhXmoRVMJs/rx4W3
-         AsS6zqXm+5wYyRwGPjcUPIZlIRPEa+n4tNmUavePgEGrCIZP9wQqhyeuZg8zPfFBSOrl
-         yBRg==
+        bh=PYhIc8nI7TQrbMQ5ehdUi9XRR8BUa9kFTApEz1i6px8=;
+        b=GoQuQzVXnSDQQHaUr+X1VBukmVpkEqYfJCUKSrwJ89l3E6j8nv4TZi0kypC/E1iT7w
+         LZImr/5OtwPNwYv0kGIlFgtuilzZjWXmt1V1lqISMMJAjGAKOVvSGy+Vgvzk/DPi59YK
+         0zZE7OG5kUe0O3RJ/3U/aS0S8LjDNzGkdJKLWQ4NRN/LJGYNz+YLL8xUdpkU49z3XfnJ
+         HCiOxJvJ8DqyMVoTtSpctFApAfroeoTPSdf8gQXjg7wMt+uZHrYvJ2Es8nF31JJp59fQ
+         iQ0cuCQdOFsrXxLwXaTZVUoGGB1yFZdYmDy8JyIZyzugNsz18Rf6WH689mxZAxL4QHnp
+         8mqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744007724; x=1744612524;
+        d=1e100.net; s=20230601; t=1744007729; x=1744612529;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GGIQTeSUJ/msyOcBGgyCOEy8RB/Vu85gn7KiLYCFQmg=;
-        b=G1UNGXSbfwDXNnKkYSoXUqcmfWY+pkL2FoZteLL7WQdMy5Kp7jU07pRZc+25Lr/jvC
-         8KiDPOEGT+EDJ5ASkjQ4Mv7c0IxpVNInmpgsOO/1xphTLh2zEIZGh12RKgZz8nd2JE84
-         MA2ctZH+0H8TUauznCWt6Ndgyvw4H5mQFvpfj/3bPq2S8Z+Z3sQpwlE0d3WMbe43pVis
-         husRcHgUMJnNgOj86knV3+9GjslZnB0jKkQMoPjWsywLYegFsKnsIGJeo67C2dgKdU0n
-         hCF1CU5hFopChUPR7rCNFJ2WSuLzJ/p25bpVFVSKmCw3XYB8Kg8EkHlrhFSB2ctE5BHX
-         ojkg==
-X-Forwarded-Encrypted: i=1; AJvYcCUC8Pts3JZa9X9u/bSvTwrtWDzf3y+1dup7PuYCPx3E37LupOms65d7adawhvwBNjNpUPtKnC8XE/3YXUY=@vger.kernel.org, AJvYcCUIpQrm3znD/TITyvCWPzSvED0bCTf1PBSzqNLsvLD2vTMwS9Yw4CZA8Ckx51gQUU1ZIpddAoZFVDmz@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5/2YrBcEa/PHyueZYKTcGd4t7+xdGZpfn3w0wXe+1q4oTU1JZ
-	Ki1foNnR5yzWdWiJA4wo6LcVQtouOzFnS5xK8fa9puqjACl0HtOo
-X-Gm-Gg: ASbGnct6qzrMDBV88bygvquD8Ct33wngV6kbc3aMWKKUT9Q+hs+GmkAxY4yI/WOLIWM
-	tWpj+iZuk8ShD7ZvQHH1vhgotQVbEq/DaaziAe3l6daEoXXvGWZMJWlTMDoTe5zps7RSJKz1RVQ
-	DsO+8cNrOzZQ7sDlW1TgCPX9Hphuf8c1iSj6b5dMlOwj0MgkXyDwh1aQfzH7CsR6iQpgZgLIw10
-	OQfjQ24kZ7HUCUO5HgBoV3pGg6nRdOZgNczWQJyV8Dw9/pDk2xKVWOGO3+6jbY5vkwpSWTC1NPw
-	mgDvpFbR7PVaKx0DAoxWMQX+t3TwOi1M+KEy
-X-Google-Smtp-Source: AGHT+IHBFpIgTbEaMnBWm5RVBjeYevVuixu+5yTWxBRjJdtCoVEVF/pCoi2mcsaK29zligKIYWm+4w==
-X-Received: by 2002:a17:90b:1f8c:b0:2ff:52e1:c49f with SMTP id 98e67ed59e1d1-306a4892fafmr14203035a91.26.1744007723635;
-        Sun, 06 Apr 2025 23:35:23 -0700 (PDT)
+        bh=PYhIc8nI7TQrbMQ5ehdUi9XRR8BUa9kFTApEz1i6px8=;
+        b=p/y6KsQc3AMHibTHb2cZfLPoqtyeh7kTcuvQJRMaXekFQkBN4oLMsRi0mMZKzfiI+1
+         zmpBBEDM5eJTbidzgxtJM8GA7VQjPUWkVk4yRXoGwut0v+0KHCbVy/tJ1o1rEEvT/ac8
+         wqKbMBXDVUzwZGshSV4wI6AT65kzLJN+PVYM33NRhp9/IyIQgXzqniU5waM1rg/BV1j0
+         1jE9Dly5xP7qSQz3LhQrauS3qHGVwRmuVamLREpCz5Q4fjfaYuDsKeDibMV0b+VFZXeH
+         xeE0nteSqtorp3GaE1bleI3zs/PFz1oJZW+O24r2WE7nQFD5igN2AZ6/xG943PJrmKCj
+         3d9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWgFiV4JdWfsceaHF4dVy8V19Ia8yQ61jGLES9AOZwumlf8tiN7Y+0wFGbT2jyiJqxz4BV+m3lR4dxWzTU=@vger.kernel.org, AJvYcCX51Qy0xqVzWtruKqQDXA+rHscDmoB6igft0V8le/tLbuaRbqXfGNmSmqqKf6TssfnLsV0B1XswWnsA@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBaxo0Utm3xX7fN659kICtc3eIUCAyZ5nBO7JGpYxBXpoVbgJE
+	iEtTey/vZqnw4dO66xq5EMa143T1X4+hU54O4VDCaMUbNQtos7/y
+X-Gm-Gg: ASbGnctueW01NK/P7M80xSmM446XEoOuqDU3GSAfx9S6ZJet5YrgAr2HQeIicEsuQVF
+	mlxkbGPSZ5VXoQ0581WeLt9vMjsZjv9iefUZUSVs1wip2pLKJfnf8B7p1SbQQjMIhQ8dZ8/0cRv
+	iJ2d8s6L/pfnuO5wHZ/lWnIgso3nf+0EkmODfMtgawygbdbDbAjOnQ4I8IwtJxA0XBGhZ+84M64
+	eiwQEUqZciq2eu7YsX9myZgeEVt9v7ikMHu4msmmBU5D/tt+IcI/u9Sq0k+OCQsuBc425m46nx9
+	p/AS7yF68WH7HNoEGEhVJ6BWYCHfiIcedHhi
+X-Google-Smtp-Source: AGHT+IEOZv/5BU5DtfI0kqmCTpjbskhnz9UwTHMxtKxMAXxrUs6NBY985DM+w/yiSsTGLeLjCsEYhA==
+X-Received: by 2002:a17:90a:d606:b0:2ee:c6c8:d89f with SMTP id 98e67ed59e1d1-306af71d944mr11933303a91.14.1744007728522;
+        Sun, 06 Apr 2025 23:35:28 -0700 (PDT)
 Received: from [127.0.0.1] ([2001:250:5800:1000::610c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983da691sm8048044a91.47.2025.04.06.23.35.19
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-305983da691sm8048044a91.47.2025.04.06.23.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Apr 2025 23:35:23 -0700 (PDT)
+        Sun, 06 Apr 2025 23:35:28 -0700 (PDT)
 From: Zixian Zeng <sycamoremoon376@gmail.com>
-Date: Mon, 07 Apr 2025 14:35:12 +0800
-Subject: [PATCH v4 1/2] spi: dt-bindings: snps,dw-apb-ssi: Add compatible
- for SOPHGO SG2042 SoC
+Date: Mon, 07 Apr 2025 14:35:13 +0800
+Subject: [PATCH v4 2/2] riscv: sophgo: dts: Add spi controller for SG2042
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,7 +83,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250407-sfg-spi-v4-1-30ac949a1e35@gmail.com>
+Message-Id: <20250407-sfg-spi-v4-2-30ac949a1e35@gmail.com>
 References: <20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com>
 In-Reply-To: <20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -99,37 +98,60 @@ Cc: devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
  sophgo@lists.linux.dev, chao.wei@sophgo.com, xiaoguang.xing@sophgo.com, 
  dlan@gentoo.org, Zixian Zeng <sycamoremoon376@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744007713; l=1084;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1744007714; l=1524;
  i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
- bh=Ocz7+gcKVvx9JS7ROJOowK4HkGeQFJNuw93TvrjIVTM=;
- b=Uxcj0G45ieTZvKKQjyJrxTtDAyr9bek1RVrok389pH1B68f9abGhumzllp68p4QUAXIPiL0cU
- w83qtuBizUND2pqbvQGlxfR9NsMTPYVLoZS9AoWD/VKGhB/9V9nGlcB
+ bh=bsOb61YGYomuONd3drp4jb88EZWek6I8D8vdw/YFqjA=;
+ b=NJH8TpWiMW4r06WrPW4gxUE+TCU5HZSZXBlR3ljOxPFklJJaLgR52pUKwZe9T4LAOIjOMf7QK
+ kowq5MZbB3oC1jnWhE+PHAwndhoVtcWtlfI6l6C42zbkuA6xE66e3bw
 X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
  pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-add compatible property to include "sophgo,sg2042-spi" for
-the SOPHGO SG2042 SoC SPI Controller.
+Add spi controllers for SG2042.
+
+SG2042 uses the upstreamed Synopsys DW SPI IP.
 
 Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 ---
- Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-index bccd00a1ddd0ad92b437eed5b525a6ea1963db57..94102d94ed5dffe889a8a11c1c637d466713c208 100644
---- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-+++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
-@@ -88,6 +88,10 @@ properties:
-               - renesas,r9a06g032-spi # RZ/N1D
-               - renesas,r9a06g033-spi # RZ/N1S
-           - const: renesas,rzn1-spi   # RZ/N1
-+      - description: SOPHGO SG2042 SoC SPI Controller
-+        items:
-+          - const: sophgo,sg2042-spi
-+          - const: snps,dw-apb-ssi
-       - description: T-HEAD TH1520 SoC SPI Controller
-         items:
-           - const: thead,th1520-spi
+diff --git a/arch/riscv/boot/dts/sophgo/sg2042.dtsi b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
+index aa8b7fcc125d71eec12b09493964d90f5dfed27c..ddde4c613c4734db191de500b016b322a9602efc 100644
+--- a/arch/riscv/boot/dts/sophgo/sg2042.dtsi
++++ b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
+@@ -537,6 +537,32 @@ uart0: serial@7040000000 {
+ 			status = "disabled";
+ 		};
+ 
++		spi0: spi@7040004000 {
++			compatible = "sophgo,sg2042-spi", "snps,dw-apb-ssi";
++			reg = <0x70 0x40004000 0x00 0x1000>;
++			clocks = <&clkgen GATE_CLK_APB_SPI>;
++			interrupt-parent = <&intc>;
++			interrupts = <110 IRQ_TYPE_LEVEL_HIGH>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			num-cs = <2>;
++			resets = <&rstgen RST_SPI0>;
++			status = "disabled";
++		};
++
++		spi1: spi@7040005000 {
++			compatible = "sophgo,sg2042-spi", "snps,dw-apb-ssi";
++			reg = <0x70 0x40005000 0x00 0x1000>;
++			clocks = <&clkgen GATE_CLK_APB_SPI>;
++			interrupt-parent = <&intc>;
++			interrupts = <111 IRQ_TYPE_LEVEL_HIGH>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			num-cs = <2>;
++			resets = <&rstgen RST_SPI1>;
++			status = "disabled";
++		};
++
+ 		emmc: mmc@704002a000 {
+ 			compatible = "sophgo,sg2042-dwcmshc";
+ 			reg = <0x70 0x4002a000 0x0 0x1000>;
 
 -- 
 2.49.0
