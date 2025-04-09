@@ -1,136 +1,198 @@
-Return-Path: <linux-spi+bounces-7480-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7481-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59D4FA81E85
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 09:44:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEACEA81EAF
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 09:53:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54EF57A690C
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 07:43:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F253B1DC6
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 07:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81F825A34A;
-	Wed,  9 Apr 2025 07:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADB51DD9AD;
+	Wed,  9 Apr 2025 07:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KBN4MtLm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sU9G9DO/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6085E25A2DC;
-	Wed,  9 Apr 2025 07:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25189259C;
+	Wed,  9 Apr 2025 07:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744184674; cv=none; b=MeOlfvnEvZ9oXQo7rYg3ntuZLppV1rrWdD1JlN2giiIsict2R2HN5wT9RzsFyKjFbQpJDemKr5n4h+1hoCTy6CzQlf0Wq1DlRmuKT2pPOlPQdpSti0NrhDW0BcnDR/+QQCtxDmBojKQ/B1DayJq11GElnMxNUIHsDUehH6G+QxE=
+	t=1744185173; cv=none; b=QIx1xgzKQDoswznqvduArCQz04e2KtsYMi0TZpV1lkZo0n9WJnEYDRyBftdCB6AxNalAT7X17EXZ4ndgBU08C3EVq1jwJ0c89RfEuY8SWUrAHgy93DdSXk9/WmzlAIsJ6xmVFXesg8Glg0mst3/EWRtHIncABmxxh3/2ZQVGGY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744184674; c=relaxed/simple;
-	bh=6/lISzTq668qQ7uGuyXccltwj34lZyxstw5bOAhTdQo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=jomILgyHf1fGLTuEkKoMVmXGMPw7nXsioO8YOjpoeArrtyrOJL7O2dBJo9fqNGuAq805+GO8+JhCc5uiIF7Yr2sayuxxeE3kqDi0NCtUtAbbzm2qtSgwXXeAdl+UNoMUTwUJ7sCXbuMkUr0zo6IqLNljo25TT8f1s8Ke4iTE5FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KBN4MtLm; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D4BAF44385;
-	Wed,  9 Apr 2025 07:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744184669;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=my7uBvqECB/sOAyowfZ/THu4bYXk54wQNm2Isuf7bmI=;
-	b=KBN4MtLmPlhJT8jyUC4btDJo3IEAdZK//JQBMi7WbMu/B+rCd/e6Jjtu4cHLo5Kvj0EdSK
-	cugph51E69gQ0bAP5GT4BfMviEgNRyDv+6Q2i207sMKEQ+GV5sawf6B9HJSK+Qsyn4X/PN
-	4yPiF1OBscq24kUYPPVXW4w9d9VlbVXMqxUF0yNfYdo4rFZEZPVtEzqgkoHwrl0JJm7BzJ
-	TSpA6RdHpamm5Yoj9OBR39bhxgTZKO8wDuumRem3GtazowyfpJjclvaPQM/0K9m+EiGHjT
-	RDa4wOKHabrkyze9/YPiVgxCjo8zBIFHrKoSUYE+jAcFRe4jajvaKNcasMBX5g==
+	s=arc-20240116; t=1744185173; c=relaxed/simple;
+	bh=XjAKn4aDznWhBOaqEoB9bXhZFVhxOdYJJPaXIpo77zM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pf2davA4MmUJq3Log0On81MAjTyuFbIcOgqqbm/ffiEZRipR4tCtsbXCWIBvkm3aR6l2EhPAo52c3onBqFrx6GxswVxihwToR7Npvn4DDNoYLMTOP3oO6AUvde8zkfoLMrTjMNdetQw3Pf1pqm2/18IWBZvY2dAH4g3oRPaK7zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sU9G9DO/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE36C4CEE3;
+	Wed,  9 Apr 2025 07:52:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744185172;
+	bh=XjAKn4aDznWhBOaqEoB9bXhZFVhxOdYJJPaXIpo77zM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sU9G9DO/fROyMfqlpzDHMTPzJtcZtuh73c4/hx6JY4ntTgETXl5pVnYebOrdn0Iz6
+	 WBo8htxQ73LcrAOWbQ/0dEFhb+EFWDab7zuEe6M7PAzRohgB1BCUwxMusSVHdFkzxt
+	 DykxPGdgngfGNEk5IOl7Br2OoRIcN66WZqE2rU7glaGfz7AB03oph6JZ3LJkla9XzV
+	 b04VY+KYo3oRYkMW9ST1cazdrbmvXu9yXEyHkG3VTfeO5KTsFEzHqItQLYXF6EchQo
+	 RdNrnK4dOFw9VCqFZrAf11I1J4YsWiiDD2u3KIhkngnJBJB1oUefDeebX9FlFMphvq
+	 Pb6EinzZNbc+w==
+Date: Wed, 9 Apr 2025 09:52:49 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 5/7] ASoC: renesas: add MSIOF sound Documentation
+Message-ID: <20250409-functional-cheetah-of-honor-b9d9cf@shite>
+References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
+ <87y0wa9mb2.wl-kuninori.morimoto.gx@renesas.com>
+ <bd15c145-c175-468d-a1ac-1ad157358aea@kernel.org>
+ <CAMuHMdUiO2mVzYn4PGZwUat6W_0JQjD3be7X6ThzK7vcPisKEg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 09 Apr 2025 09:44:25 +0200
-Message-Id: <D91XV1I4CY37.20T12FMZ5QLQ5@bootlin.com>
-Cc: "Herve Codina" <herve.codina@bootlin.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Danilo Krummrich" <dakr@kernel.org>, "Shawn Guo" <shawnguo@kernel.org>,
- "Sascha Hauer" <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
- <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Andi Shyti" <andi.shyti@kernel.org>, "Wolfram Sang"
- <wsa+renesas@sang-engineering.com>, "Peter Rosin" <peda@axentia.se>, "Derek
- Kiernan" <derek.kiernan@amd.com>, "Dragan Cvetic" <dragan.cvetic@amd.com>,
- "Arnd Bergmann" <arnd@arndb.de>, "Rob Herring" <robh@kernel.org>, "Saravana
- Kannan" <saravanak@google.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
- "Mark Brown" <broonie@kernel.org>, "Len Brown" <lenb@kernel.org>, "Andy
- Shevchenko" <andriy.shevchenko@linux.intel.com>, "Daniel Scally"
- <djrscally@gmail.com>, "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
- "Sakari Ailus" <sakari.ailus@linux.intel.com>, "Wolfram Sang"
- <wsa@kernel.org>, "Geert Uytterhoeven" <geert+renesas@glider.be>,
- <linux-kernel@vger.kernel.org>, <imx@lists.linux.dev>,
- <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-pci@vger.kernel.org>, <linux-spi@vger.kernel.org>,
- <linux-acpi@vger.kernel.org>, "Allan Nielsen"
- <allan.nielsen@microchip.com>, "Horatiu Vultur"
- <horatiu.vultur@microchip.com>, "Steen Hegelund"
- <steen.hegelund@microchip.com>, "Luca Ceresoli" <luca.ceresoli@bootlin.com>
-From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-To: "Andrew Lunn" <andrew@lunn.ch>
-Subject: Re: [PATCH 15/16] misc: lan966x_pci: Add dtso nodes in order to
- support SFPs
-X-Mailer: aerc
-References: <20250407145546.270683-1-herve.codina@bootlin.com>
- <20250407145546.270683-16-herve.codina@bootlin.com>
- <19f1a382-1b6b-42bd-a548-a1a5644c9a1b@lunn.ch>
- <20250408162603.02d6c3a1@bootlin.com>
- <D91CSNC07NYM.3KC467K0OZ4GG@bootlin.com>
- <c14dd5c6-2dae-4398-89a9-342e7a25bb30@lunn.ch>
-In-Reply-To: <c14dd5c6-2dae-4398-89a9-342e7a25bb30@lunn.ch>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdehgeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvefhvffuofhfjgesthhqredtredtjeenucfhrhhomhepfdfvhhhomhgrshcurfgvthgriiiiohhnihdfuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeevledvgedtgfekgffffeefgfegieegffeivdekheejgfffueduvdehgeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedupdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtt
- hhopegurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhrgifnhhguhhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrdhhrghuvghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggv
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUiO2mVzYn4PGZwUat6W_0JQjD3be7X6ThzK7vcPisKEg@mail.gmail.com>
 
-On Tue Apr 8, 2025 at 5:38 PM CEST, Andrew Lunn wrote:
+On Wed, Apr 09, 2025 at 09:01:22AM GMT, Geert Uytterhoeven wrote:
+> > > +select:
+> > > +  properties:
+> > > +    compatible:
+> > > +      contains:
+> > > +        pattern: "renesas,.*-msiof"
+> > > +  required:
+> > > +    - compatible
+> > > +    - port
+> >
+> > Drop entire select.
+> 
+> This is needed to avoid matching when using the device in SPI mode.
 
-> "HW blocks inside an SoC." That would be the SoC .dtsi file. Anything
-> outside of the SoC is in the .dts file. OEM vendors take the SoC,
-> build a board around it, and name there .dts file after the board,
-> describing how the board components are connected to the SoC.
->
-> So..
->
-> So by PCI endpoint, you mean the PCIe chip? So it sounds like there
-> should be a .dtsi file describing the chip.
->
-> Everything outside of the chip, like the SFP cages, are up to the
-> vendor building the board. I would say that should be described in a
-> .dtso file, which describes how the board components are connected to
-> the PCIe chip? And that .dtso file should be named after the board,
-> since there are going to many of them, from different OEM vendors.
+Which you need to avoid, so drop the select. One device, one schema.
 
-Indeed, that makes sense. So if I get correctly your suggestion,
-instead of having a .dtso that describes everything, it should be
-split between:
+> 
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > > +      - const: renesas,msiof-r8a779g0   # R-Car V4H
+> >
+> > Use expected format of all soc compatibles. It has been always: SoC-module.
+> 
+> This is a pre-existing compatible value, so it cannot be changed.
+> 
+> > > +      - const: renesas,rcar-gen4-msiof  # generic R-Car Gen4
+> >
+> > If you have duplicated compatibles then:
+> > 1. It rarely makes sense because you claim that two different devices
+> > are using the same compatible. Different device, different compatible.
+> > 2. Or if this is really same device, then only one schema.
+> 
+> This the same device, but it can be used in two (actually more)
+> different modes: SPI and I2S.  Hence it has two separate DT binding
+> documents.  If this needs to be merged (the result is gonna be ugly):
 
- - A .dtsi that describes what's inside the LAN996x when used in PCI
-   endpoint mode
+... then next time don't post incomplete bindings. I know we do not have
+time machine, but any mess is on contributors who posted some limited
+scope/view of the hardware entirely ignoring the rest of interfaces.
 
- - A .dtso that includes the above .dtsi, and that describes what on
-   the PCI board around the LAN966x.
+> where to fit it in the DT binding doc hierarchy?
 
-Correct?
+Does not matter, whatever fits better in overal picture/purpose of this
+device.
 
-Thomas
---=20
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+> 
+> > > +  reg:
+> > > +    minItems: 1
+> > > +    maxItems: 2
+> >
+> > Drop these two.
+> >
+> > > +    oneOf:
+> >
+> > Why is this flexible?
+> 
+> I am not sure where this is coming from (an old SH part?).
+> The SPI bindings have the same construct.  As this binding supports
+> R-Car Gen4 only, a single reg should be fine.
+> 
+> >
+> > > +      - items:
+> > > +          - description: CPU and DMA engine registers
+> > > +      - items:
+> > > +          - description: CPU registers
+> > > +          - description: DMA engine registers
+> 
+> > > +  dmas:
+> > > +    minItems: 2
+> > > +    maxItems: 4
+> >
+> > Why flexible?
+> >
+> > > +
+> > > +  dma-names:
+> > > +    minItems: 2
+> > > +    maxItems: 4
+> > > +    items:
+> > > +      enum: [ tx, rx ]
+> >
+> > How would that work? tx rx tx rx? And then driver requests 'tx' (by
+> > name) and what is supposed to be returned?
+> 
+> The module may be connected to one or more DMA controllers (see below).
+
+Yes, but how the implementation would work?
+
+Anyway, this needs to be strictly ordered, not random rx rx tx tx or rx
+rx rx rx.
+
+> 
+> > > +
+> > > +    msiof1: serial@e6ea0000 {
+> >
+> > serial means UART controller. You need name matching the class of the
+> > device.
+> > Node names should be generic. See also an explanation and list of
+> > examples (not exhaustive) in DT specification:
+> > https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> What is the recommend generic node name for a flexible serial device
+> that can operate as (a.o.) either SPI or I2S controller?
+
+i2s
+or even not so generic msiof, but definitely not serial because that is
+reserved for UART.
+
+> 
+> > > +      compatible = "renesas,msiof-r8a779g0",
+> > > +                   "renesas,rcar-gen4-msiof";
+> > > +      reg = <0 0xe6ea0000 0 0x0064>;
+> > > +      interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>;
+> > > +      clocks = <&cpg CPG_MOD 619>;
+> > > +      dmas = <&dmac0 0x43>, <&dmac0 0x42>,
+> > > +             <&dmac1 0x43>, <&dmac1 0x42>;
+> > > +      dma-names = "tx", "rx", "tx", "rx";
+> >
+> > So test it now - get DMA by name 'tx'. What do you get?
+> 
+> A handle to either <&dmac0 0x43> or <&dmac1 0x43>; which one is
+> random. It's been working like that for ages.
+
+Interesting. And is this expected behavior? Driver does not care which
+RX and which TX it gets? Like RX from dmac0 and TX from dmac1?
+
+Best regards,
+Krzysztof
 
 
