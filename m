@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-7473-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7474-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198E4A81D19
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 08:31:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 566E4A81D27
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 08:37:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 282C07B0ED0
-	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 06:30:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28E044631A4
+	for <lists+linux-spi@lfdr.de>; Wed,  9 Apr 2025 06:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037401DF247;
-	Wed,  9 Apr 2025 06:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 686EB1D618E;
+	Wed,  9 Apr 2025 06:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dNkGSMo9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpsxwpFB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9971DE884;
-	Wed,  9 Apr 2025 06:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBC88F5B;
+	Wed,  9 Apr 2025 06:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744180283; cv=none; b=Cuj9WALpkwgJbw4BpUcFlVOTY/YMsKwuSXS9lge5BtHaultmpQ5w2bySunKar3UC1j0wI2A8jeBaUgglWnRkQaSFJ8bwQLr4CwlPMYuKLqMfugNV6ROM15+4Ev/hh6Ga37sXd7HK8dWVEEr9o6KvpcQ4YAXaBAjZQ/7UkMoVnSo=
+	t=1744180629; cv=none; b=fGifEJO3vX2Txxga1JEbjA9jxjN5Rvaxr5Nvk643ktL6K6DUPpDN/kDqh7JH3WOFPr2vB1m1ANuXVNyvmPIE65m32sdCUg/UL8gVh78tHRp7sxo2DtMlhi2t9+/QvjdE4Phv30IoxfsXFRFwDaa50a9J7TrY76OrpYcHYYJnp2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744180283; c=relaxed/simple;
-	bh=bSqmtQt6Y90TPCAPpS9SHgxyup/nXbow7xJwS9rFhe4=;
+	s=arc-20240116; t=1744180629; c=relaxed/simple;
+	bh=ssZQLtPFOGYfzs6D9lipnWv8s9TxH2insoaGQ0AhVEo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YHvCkcEFqCebGpepuVjRx78ypYMsEjjdD09yMx8Yfn+DxEjAK4EJXst6fdSlYYgL9DKnHpaxsCIy2Cl5qXDhhkR2dFRvfvtyOCtCCDzvmD0D7x4VpDU/+Imv3y1Wlqi7pjtrjj6/XU58EIHutN0BuEzJqNscXd8QS5vZ38IAnEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dNkGSMo9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F209C4CEE7;
-	Wed,  9 Apr 2025 06:31:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=JSAjmpUjvHaCNeGMiyFvxoy8/PuZTXy5rwSxRZufGFE6G3OGL/jz6NvhngaGsTc7+xAQHuSV/3cbg9lRDSPBoGQoBoGVMuIStEdcC2OD94oqA8SehAp/kKl9pqeZYj098HRaWxVa9KzCB4BrII+sPpSGL7sNWRR//Ge36JnpKrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpsxwpFB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE19C4CEE3;
+	Wed,  9 Apr 2025 06:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744180283;
-	bh=bSqmtQt6Y90TPCAPpS9SHgxyup/nXbow7xJwS9rFhe4=;
+	s=k20201202; t=1744180628;
+	bh=ssZQLtPFOGYfzs6D9lipnWv8s9TxH2insoaGQ0AhVEo=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=dNkGSMo9fpnNGq+GOs1hy8WEYX1QEHKfpuvPdgpgV+Aw82d3ZzUTPB4eHw6LZ4dNB
-	 wSSdKRswKcj76Yj8kAOWSyCdcH3SGMmZnw7fVHOd0G1Ar7VxjOYAzX1AX6ClyteuOn
-	 r14lfEhomubpWySJ4/6N7+ndCbJK+lbGYIBSJE+Cb+mU+Nh7h3KQ4B02jadX0j2Qw3
-	 JeAygHrqYv+qq7PFL4asBMYuJEPqWHWuVVwtj6WUXAkFnzu5cGE5Ak5MV0/CZb5e4v
-	 oZe9MHnRB+FHkO9IC38756Q7iFExjp+icnRw35rVxk839pOD9feC6HaIWOZ6oBsC3j
-	 mnxyLmVkccipg==
-Message-ID: <66808fa5-2b81-4145-b2c6-9b0d76d2a6dc@kernel.org>
-Date: Wed, 9 Apr 2025 08:31:18 +0200
+	b=VpsxwpFBmnUywW8RENY6FUNgiy7FPrdH6g7mATYs5fabujACyEHcCzMIbP4jewZeN
+	 t/g/6Bdcc4sNmOvdCze2ngMUMF6qbAu9I0xKPcZeqcZjXY81BYAg4+8wcwac+isd5H
+	 doeqXL4zI+qeA0WQLAGJtiWEa6EhnuqzKJnJ82AF7dtSe6rlKmQyqFtzjy1IKGAN+2
+	 KzoHZlXN46qhxOSCgs1A8BW8Spw8DFFz0FjqEAUTNJ5caQfpeKa/cFcg2I1eRy3mxM
+	 FszxBQWEMfURN4SjLUJjLQieqlLifFTpIoDYOYx8SLKOPX3Yi3QcUDBUqHHawZvSSs
+	 4utnMnmGv7x9A==
+Message-ID: <bd15c145-c175-468d-a1ac-1ad157358aea@kernel.org>
+Date: Wed, 9 Apr 2025 08:37:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] spi: renesas,sh-msiof: Living separately from MSIOF
- I2S Sound
+Subject: Re: [PATCH 5/7] ASoC: renesas: add MSIOF sound Documentation
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
  Conor Dooley <conor+dt@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -61,7 +60,7 @@ To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
  devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-spi@vger.kernel.org
 References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
- <874iyyb0w2.wl-kuninori.morimoto.gx@renesas.com>
+ <87y0wa9mb2.wl-kuninori.morimoto.gx@renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,20 +106,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <874iyyb0w2.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87y0wa9mb2.wl-kuninori.morimoto.gx@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 18/03/2025 03:06, Kuninori Morimoto wrote:
+On 09/04/2025 03:05, Kuninori Morimoto wrote:
 > Renesas MSIOF (Clock-Synchronized Serial Interface with FIFO) can work as
 > both SPI and I2S. MSIOF-I2S will use Audio Graph Card/Card2 driver which
 > uses Of-Graph in DT.
 > 
-> MSIOF-SPI/I2S are using same DT compatible properties.
-> MSIOF-I2S         uses Of-Graph for Audio-Graph-Card/Card2,
-> MSIOF-SPI doesn't use  Of-Graph.
-> 
-> Ignore MSIOF-I2S case (= Of-Graph) in MSIOF-SPI Doc.
 
 Please use subject prefixes matching the subsystem. You can get them for
 example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
@@ -128,41 +122,184 @@ your patch is touching. For bindings, the preferred subjects are
 explained here:
 https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
-Missing dt-bindings.
+A nit, subject: drop second/last, redundant "Documentation". The
+"dt-bindings" prefix is already stating that these are documentation.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
 
+
+> MSIOF-SPI/I2S are using same DT compatible properties.
+> MSIOF-I2S         uses Of-Graph for Audio-Graph-Card/Card2,
+> MSIOF-SPI doesn't use  Of-Graph.
+> 
+> Adds MSIOF-I2S documentation for Sound.
 > 
 > Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 > ---
->  .../devicetree/bindings/spi/renesas,sh-msiof.yaml    | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  .../bindings/sound/renesas,msiof.yaml         | 112 ++++++++++++++++++
+>  1 file changed, 112 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/renesas,msiof.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> index 49649fc3f95a..c491ef5bc78c 100644
-> --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> @@ -9,6 +9,18 @@ title: Renesas MSIOF SPI controller
->  maintainers:
->    - Geert Uytterhoeven <geert+renesas@glider.be>
->  
-> +# sharing with MSIOF I2S
-
-That's not how you create common schemas. You need to separate schema
-which is then referenced with $ref with all users.
-
+> diff --git a/Documentation/devicetree/bindings/sound/renesas,msiof.yaml b/Documentation/devicetree/bindings/sound/renesas,msiof.yaml
+> new file mode 100644
+> index 000000000000..5173e80698fb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/renesas,msiof.yaml
+> @@ -0,0 +1,112 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/renesas,msiof.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas MSIOF I2S controller
+> +
+> +maintainers:
+> +  - Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> +
+> +# sharing with MSIOF SPI
 > +# see
-> +# ${LINUX}/Documentation/devicetree/bindings/sound/renesas,msiof.yaml
-
-In anycase drop ${linux}, so the path is verifiable.... which leads to
-problem: I do not see that file in next.
-
+> +# ${LINUX}/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
 > +select:
 > +  properties:
 > +    compatible:
 > +      contains:
-> +        pattern: "^renesas,.*-msiof$"
+> +        pattern: "renesas,.*-msiof"
+> +  required:
+> +    - compatible
+> +    - port
 
-You don't get custom selects. This replaces existing select which breaks
-the binding.
+Drop entire select.
+
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: renesas,msiof-r8a779g0   # R-Car V4H
+
+
+Use expected format of all soc compatibles. It has been always: SoC-module.
+
+> +      - const: renesas,rcar-gen4-msiof  # generic R-Car Gen4
+
+If you have duplicated compatibles then:
+1. It rarely makes sense because you claim that two different devices
+are using the same compatible. Different device, different compatible.
+2. Or if this is really same device, then only one schema.
+
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+
+Drop these two.
+
+> +    oneOf:
+
+Why is this flexible?
+
+> +      - items:
+> +          - description: CPU and DMA engine registers
+> +      - items:
+> +          - description: CPU registers
+> +          - description: DMA engine registers
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  dmas:
+> +    minItems: 2
+> +    maxItems: 4
+
+Why flexible?
+
+> +
+> +  dma-names:
+> +    minItems: 2
+> +    maxItems: 4
+> +    items:
+> +      enum: [ tx, rx ]
+
+How would that work? tx rx tx rx? And then driver requests 'tx' (by
+name) and what is supposed to be returned?
+
+> +
+> +  port:
+> +    $ref: audio-graph-port.yaml#/definitions/port-base
+> +    unevaluatedProperties: false
+> +    patternProperties:
+> +      "^endpoint(@[0-9a-f]+)?":
+> +        $ref: audio-graph-port.yaml#/definitions/endpoint-base
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - power-domains
+> +  - port
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r8a779g0-cpg-mssr.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/r8a779g0-sysc.h>
+> +
+> +    dummy-codec {
+> +      compatible = "test-codec";
+> +
+> +      port {
+> +        codec_ep: endpoint {
+> +          remote-endpoint = <&msiof1_snd_ep>;
+> +        };
+> +      };
+> +    };
+
+Drop, not related to the binding.
+
+> +
+> +    msiof1: serial@e6ea0000 {
+
+serial means UART controller. You need name matching the class of the
+device.
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +      compatible = "renesas,msiof-r8a779g0",
+> +                   "renesas,rcar-gen4-msiof";
+> +      reg = <0 0xe6ea0000 0 0x0064>;
+> +      interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>;
+> +      clocks = <&cpg CPG_MOD 619>;
+> +      dmas = <&dmac0 0x43>, <&dmac0 0x42>,
+> +             <&dmac1 0x43>, <&dmac1 0x42>;
+> +      dma-names = "tx", "rx", "tx", "rx";
+
+So test it now - get DMA by name 'tx'. What do you get?
+
+Also schema should fail here.
+
+> +      power-domains = <&sysc R8A779G0_PD_ALWAYS_ON>;
+> +      resets = <&cpg 619>;
+> +
+> +      port {
+> +        msiof1_snd_ep: endpoint {
+> +          remote-endpoint = <&codec_ep>;
+> +        };
+> +      };
+> +    };
 
 
 Best regards,
