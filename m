@@ -1,126 +1,114 @@
-Return-Path: <linux-spi+bounces-7506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FAC7A839B9
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 08:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10B31A839FA
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 08:56:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D44E4630F6
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 06:48:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F317544010A
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 06:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE126204690;
-	Thu, 10 Apr 2025 06:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974E6204594;
+	Thu, 10 Apr 2025 06:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Mwkv66tx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rztw6B1o"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E091D5143;
-	Thu, 10 Apr 2025 06:48:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7222045A3;
+	Thu, 10 Apr 2025 06:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744267700; cv=none; b=hFZTa/11fbXZqL3QFkUf69uy7rL7JUtCNL4Ct5JfaYvH37kQ9ewgFEZG8S982sYrrE53X3iracGqHJTZa/NcTau1eL1dHLfTbmodoenjfLjR9VOjucIO7audFXAgRX9pu8Pau/A1C3+rqywu4csddqiNUDHo9CdKiBclDqeZN2E=
+	t=1744268198; cv=none; b=hdXt0EWWt4s/yri+yd8xpukxIMxnKymBH74g+T8FOFvFJvZKJAtKR5Xaa+Y7co8StmH+4yEg5p3vutxeK/yD5iVfEPUTc6CEZ2KLh7nhgtRMpPNXuQeleGKY2Nz74XoouYXmR9V6loTsjp/vhV82NHXOey7XyluRbLYPVwK1fWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744267700; c=relaxed/simple;
-	bh=C5ec5lNyuqtEj/fcsCGEIrivAFsHAGSQ3zeL0mFILag=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GxjtAqlMAAn5MOfDQGZPcaYT1i2wQ2HFh0ncDhgfr64NFi4Wt5pzdaUQLD/l3xsUGm91LxbSgsMFyvDkGXlryyrO5MbgHe8Uuw46uVz8vZdP/kCNmTpSemZakJ8CZhJVziLiFmhEEA47vMeP6rf6PdU5CPDfTzdSKazaWSSOP/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Mwkv66tx; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B5F4433F1;
-	Thu, 10 Apr 2025 06:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744267694;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cb7IK28fqEaigcH00aeaSLMccq7nNJere64F79CGyO8=;
-	b=Mwkv66txch40E6HcDevxLYZTrvLuTp8ktqfEwmvtNg/7fATJe9Enq5Pl4FboeK0VzIrNA3
-	42gz3ZOndZbTsKbnCSq9uIQNaf0wt0lEtOkGJWkO2fqBLqrFyxDvS5GD2FBLfCZxj0URQD
-	gZ1QyODj5QmRHH1WQ/OwA+1UyCoY/MWGdd/wsd3BLh5Lobmsbs58f3VQJD1YnOtJGrhnvB
-	pqQC/Y6BGqq4QwCrX1TEUNCgimIX/wdjzqN4xOcBC+NWqijh5yLav3QVqI8VrZCYAJFaxu
-	bCUFbybtq2gwlHLAz0eU1h7vuZ+O3zuLe8GkHZMakPNnWzfnozRO/3gROFUD8w==
-Date: Thu, 10 Apr 2025 08:48:09 +0200
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Herve Codina <herve.codina@bootlin.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
- Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, Saravana
- Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Mark
- Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: Re: [PATCH 15/16] misc: lan966x_pci: Add dtso nodes in order to
- support SFPs
-Message-ID: <20250410084809.1829dc65@windsurf>
-In-Reply-To: <c6257afe-36bb-46d8-8c22-da3b85028105@lunn.ch>
-References: <20250407145546.270683-1-herve.codina@bootlin.com>
-	<20250407145546.270683-16-herve.codina@bootlin.com>
-	<19f1a382-1b6b-42bd-a548-a1a5644c9a1b@lunn.ch>
-	<20250408162603.02d6c3a1@bootlin.com>
-	<D91CSNC07NYM.3KC467K0OZ4GG@bootlin.com>
-	<c14dd5c6-2dae-4398-89a9-342e7a25bb30@lunn.ch>
-	<D91XV1I4CY37.20T12FMZ5QLQ5@bootlin.com>
-	<b1b33000-4c10-43cd-bcf4-d24fc73902b1@lunn.ch>
-	<20250409161444.6158d388@windsurf>
-	<c6257afe-36bb-46d8-8c22-da3b85028105@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1744268198; c=relaxed/simple;
+	bh=IR5zfONGQPrG/O5K6oH/e0DDicgiAHZk9hVpRV/9g9I=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LosVU+gHyEyn/mkMWmXhf1r14S4kr9ckWujaaguIptM4A9x/viqI6x9ojoGjkHKmwhV3wCSCphfSBwntfPc5eWYp6jThQD5uFxuccE0W6yECl4MjAm17iUmL9KAwGpYtrX62ht6bcgNkfERB+S8KwlW8kAG9hwjMv8ctqn/ieA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rztw6B1o; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7be49f6b331so57582585a.1;
+        Wed, 09 Apr 2025 23:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744268195; x=1744872995; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=stSZx6MxVd9/oupgvZW3EPBQ9cRhM3rlEoAObWRga44=;
+        b=Rztw6B1oyj1LLSQ8C9P/yw82qbME4PB+0arL7FtuV1tx5lZP7UcmovKVT48XdGeDmF
+         pMJg9KcW1ERyGn7ZnjEIo8AP5JbIKaMK9EtTCf8cEFlS5hM0leDIEZ5DSnHL6DbXNrjg
+         C/sz9vVp8HyU78l0xyXXBN+9fK11+HJdzaMNBJmm9kcjFm2XaE8dB83s1z3Z19JYd1Hw
+         fyN8H/lHLhgXh/nMHU5q1ZhH72cGvis5iMVIw/u8bWByoaDFQLJVdGkZX5KqdI7ppY2/
+         GvTNxRijanxorgPvhUeeh/doNjFYPe55MrUpIbOZGRqDVsIRJm+HQv5KRvKht5v43AFS
+         MVMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744268195; x=1744872995;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=stSZx6MxVd9/oupgvZW3EPBQ9cRhM3rlEoAObWRga44=;
+        b=omg+g2rtWtSOBSTerS+iGKaTy2EdiySqCdGIqArWS2KWheuh0t3Hgtegx+P2Vn/B7J
+         1ovTLjpNIsz44RgwTuuKuWZpiP/wfZlDwarKlrt9hvw3NL0Z3Jh7vzAPyXWFS5OWFPq1
+         SmKaUPyDEtU7QHFFZQOabbxfcS8D2aIuiBiuvCgfdhIQPpsQVQ/woEc5fGvDb/D0WfOX
+         fa+Y797ykcIR04Ik4tRz/dItnjsnKMBa3eVRbe8IOMmP2Pyu6HONP3vbzq24SoF2VK9V
+         7yO3rD7XRANGGe53Kvetjiz+CQqAyiMHGz5HKqG0IGPlPbJ2FpiGWZIgqFZrQvbntAvb
+         yynw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwjKthm4+SKesAopCguO4VqT7y0EsUcxIGeJuqDTDq+XTBNPjTViHmTH/J532daqQOgGE+Ao0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwneMz/+O6jLNp4+GfJB4l0s3gGXKRfwHhk05/n606k1FRNnOz0
+	XyyxSEqDYfB6lMcFuSbsw90/8BhG+ljqBlYV+7sPPMfK5Fa0yNN4QqMn8AoU
+X-Gm-Gg: ASbGncvx1YZXjPbJVeHDz23jHcNIXUGjDxvdrbMEyQKAZ63mS1EIMCgZzuP2C2ccPGr
+	4QSEqBj0pMfiiOejRppj3Fgh9UqU1AdWkV4fHBJ+hh4NP/efiptoaYAHEhoEibusN1ybHBwk0dL
+	CFLg9EABnkUpE7ARVUy02YKIE2WDHU30SLNjMgAep/LplXQlIE+8be0hdqgkF3iaqhIK+bamJOq
+	bFzMUVQtHY7tsGF+ez3KX1yoGWLOuDTS8S3xKR6lVs5vmJz91dMQwUdmB5urqREGIKNLbSdvGQL
+	4VBjntaLpPWsZ1/0vJTYHEgI23oSU+WRJ/b+s27Jmc/CX5IVtP8=
+X-Google-Smtp-Source: AGHT+IGEzb8q4GErf4E2NhVLOjPHUdc4Kh3rGDJV2EoEuCzx8hGLlVjXwE9MK+5LWlUf1cjz6YXrXA==
+X-Received: by 2002:a05:620a:3949:b0:7c5:79c6:645d with SMTP id af79cd13be357-7c7a765500fmr240369885a.11.1744268195554;
+        Wed, 09 Apr 2025 23:56:35 -0700 (PDT)
+Received: from localhost.localdomain ([128.224.253.2])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c7a89515e4sm46547285a.26.2025.04.09.23.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Apr 2025 23:56:34 -0700 (PDT)
+From: Kevin Hao <haokexin@gmail.com>
+Subject: [PATCH 0/3] spi: fsl-qspi: Fix double cleanup in probe error path
+Date: Thu, 10 Apr 2025 14:56:08 +0800
+Message-Id: <20250410-spi-v1-0-56e867cc19cf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdekvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedupdhrtghpthhtoheprghnughrvgifsehluhhnnhdrtghhpdhrtghpthhtohephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhop
- egurghkrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhrgifnhhguhhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrdhhrghuvghrsehpvghnghhuthhrohhnihigrdguvgdprhgtphhtthhopehkvghrnhgvlhesphgvnhhguhhtrhhonhhigidruggv
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-B4-Tracking: v=1; b=H4sIAIhr92cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDE0MD3eKCTF1Dg8SUZANLixRTMzMloMqCotS0zAqwKdGxtbUAgQSRAFU
+ AAAA=
+X-Change-ID: 20250410-spi-10adc098d566
+To: linux-spi@vger.kernel.org
+Cc: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>, 
+ imx@lists.linux.dev, stable@vger.kernel.org
+X-Mailer: b4 0.14.2
 
-On Wed, 9 Apr 2025 17:03:45 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+This patch series fixes double cleanup issues in the fsl-qspi probe
+error path and also simplifies the probe error handling using managed APIs.
 
-> So it only supports a single .dtbo. In its current form it does not
-> scale to multiple .dtso files for multiple different boards built
-> around the PCIe chip.
-> 
-> At the moment, that is not really an issue, but when the second board
-> comes along, some refactoring will be needed.
+Signed-off-by: Kevin Hao <haokexin@gmail.com>
+---
+Kevin Hao (3):
+      spi: fsl-qspi: Fix double cleanup in probe error path
+      spi: fsl-spi: Remove redundant probe error message
+      spi: fsl-qspi: Simplify probe error handling using managed API
 
-Indeed, but that's really an implementation detail. It doesn't change
-anything to the overall approach. The only thing that would have to
-change is how the driver gets the .dtbo. We could bundle several .dtbos
-in the driver, we could fall back to request_firmware(), etc.
+ drivers/spi/spi-fsl-qspi.c | 77 +++++++++++++++++++---------------------------
+ 1 file changed, 31 insertions(+), 46 deletions(-)
+---
+base-commit: 29e7bf01ed8033c9a14ed0dc990dfe2736dbcd18
+change-id: 20250410-spi-10adc098d566
 
 Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Kevin Hao <haokexin@gmail.com>
+
 
