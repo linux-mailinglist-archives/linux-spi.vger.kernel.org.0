@@ -1,210 +1,196 @@
-Return-Path: <linux-spi+bounces-7533-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7534-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E58A84977
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 18:22:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A07A84FF8
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Apr 2025 01:05:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4BD99A1087
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 16:22:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9D779A50C4
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 23:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6661EDA3C;
-	Thu, 10 Apr 2025 16:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E342E202F7B;
+	Thu, 10 Apr 2025 23:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="x6CFAcwx"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="C5uBWrbQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011049.outbound.protection.outlook.com [40.107.74.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FB61D5CE8;
-	Thu, 10 Apr 2025 16:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744302149; cv=none; b=SD6XoC6gjxLgxRZGTKmGBONBVuues9luNS8HNf/FIELU001M4DcmfpOFT8NKPyBSojYwKBn4D1bA/OIRmcUih5U+Tap2A7LsATRROIXAuGl3gsP0AxTRGJkiCBwLEIHOTaIrB0B088ls+WUW2u0q8H3x5y98IA/40cXwW4LrvOo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744302149; c=relaxed/simple;
-	bh=Xoy2UXN+13eDn3d9NbGQJzjAXldLD+QfeSGSQ2Ee+wU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=utM77tN1Wm9f/rLCP0Ve7HqQ/SUYYHKX4NH2iM0NxgY3UDD/roXEaKEqG1+x8z6Jw/UC7wlBL7RKlEDA71yoTUO7ruWtSVk1rF+Dgt3lVaf7gQINoM9PA8GZ0q37fxM3dzl1j9mtA2QlQmXFLIvfTjYnmuLcUNFfviT98wNDYPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=x6CFAcwx; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53ADlLVw001665;
-	Thu, 10 Apr 2025 18:22:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	HMGtnLk9M2H509FvgAtICrK2wNS2Az56Eo03rGYmFeY=; b=x6CFAcwxG8UnUI2H
-	TuaNAuR8Ypm1IcmTovy8U4tg6zbMQxa5pQB88pyjWWe8xi6hhWf9TWfcRRUawVWw
-	qvKSC7QNQ0Mo5qFoe/ZZubdmOJvopfYSFOvFkqUT7TjJyiDpH2toNEs2TdCKKsV2
-	JT3WaclKNglz0lCh7hCTd3N5+dNhYi35Rlw4/7yaHMTK/MMw7c9GtViQ5BM4mOtm
-	0JXC8mClI6VEUJ8vjDQdh+DavUzubUvT2kW5cZZBJY5DVUMuRsbmRqTyE3i8+DM4
-	0CAH2mGMReAyn+hNN+vWMDB6wQsZXYJ0F5GPfyJJw7rGpetot79n69wF2qsslFF0
-	GfjLOw==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45tw5ghh7h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 18:22:11 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id C33E440044;
-	Thu, 10 Apr 2025 18:21:13 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AA72298CE8C;
-	Thu, 10 Apr 2025 18:20:29 +0200 (CEST)
-Received: from [10.48.87.62] (10.48.87.62) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 10 Apr
- 2025 18:20:28 +0200
-Message-ID: <81d04bf3-8a7e-4287-afd0-d6a0464bb995@foss.st.com>
-Date: Thu, 10 Apr 2025 18:20:28 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFE61C700D;
+	Thu, 10 Apr 2025 23:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744326306; cv=fail; b=ur1YE1pOzV1pPgkkxFD1P1vU9WEONKQ+EK/JxR4IB6hTK+7+c1WuObr3675OFPJeww/Vm6ndmTaj1py3jz6C5oG+rbNSaQ5xHtU7q7eJwV+GZAHJN2o8O+qa4lJ9oB3LAHq5n8SYuxLBhk1/wjuZ7S2d1+CCVR0Ab4ZJh0mPf0Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744326306; c=relaxed/simple;
+	bh=Uv7mNcSVNrwrjCKHJjah/ki8HHk65RacRs+8UPckS20=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=fpXa6RlMOtJ4cWy8Xm7ShYy0AoP8P+imnzqj1ZKzcD5mmSoWWsJmcu6/3HzErPf8d3g4wIrLY8q//Nijyga5Mm/qteH3XhV3xwkeufm3gIRn6I5QObAxOFvMcMOdi3UVXvdGFOGaKoMWjV0bo6DkGL7GUoX/gsoXLj2oLPplQxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=C5uBWrbQ; arc=fail smtp.client-ip=40.107.74.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SuC88UhxHYSVpyU/WiukE1b3k0ldK3hSnqGdmqyhkUUxfrhwm6cfq56YKV2+HpXFfsvR+cbE7cWYjFWdnk822tUFU1nt0XRvYz9qFGOhB4aTX8OxSoPidc5vhibOHvOPMyOZOvyf/g66yeIl0olaaDyoOT4W4K8T61BfMvGvmFKXWmdvT/DJMw4wYI4KAQOtK8aJsp11pjUy0njzbTbpUQu5Pkxu0cyBc9T3SgT85jp1dObmLJU9dkyRAu5kq9nX3z/h8bRkYvG2FGUTVfnV6tiAzLos5SelqJiCxuxuS9xneZMfTzCRs0iH6dPGC/OzhEYuGnMxroa3cRYlrsFvDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EiVtfVxZ72ufST0pUmAotl2v+FCL/hxbkoGXdlfjQ3E=;
+ b=wyfrU6E/eATqd24uziY7bv4/yfLn+vCmhU5y9+5iQzuGimvSQDJvMWdFIeVNy/uyuEMTkKH7uS7NACy4njj7w2hKWzyPDY6c0NtyyqTxBjI2JlM7HGFyaOQ4GVNrg6IjVCvEvSRuaOGZiLwO9CsGOoNYmmQ5mIJinhZlqypDtdzXf03Nc44p8B8Tnng7Q25PQM35iWE7XIb2McQog0Q1H6SCB961wTKfdYTTwInVNfZdywOq5yVJnAvhkhT8ta2ItN4j0UAs4nW0C8fCX1wDUU7TfyevzFj1YsoIP1io+biaw7gBbBrdSHDttOw8wOYSEyTf33wXGrvnYhHTbcOnhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EiVtfVxZ72ufST0pUmAotl2v+FCL/hxbkoGXdlfjQ3E=;
+ b=C5uBWrbQmhbOMGaa7fAyxGHdqdDTAb3dfR7oVa+NHGAnIeQMRrbT9GhZfjAEgezf/E1yAI2hCSumZ80foUgz6kdXMvALdDZrYGikmpc9HiiksJf0o88h7BvZvXvbjdCnDVefcuzybvOLkn88kXAcBpiKhVVo5o6msM3gIbhC2lU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11) by OSCPR01MB13678.jpnprd01.prod.outlook.com
+ (2603:1096:604:37c::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.33; Thu, 10 Apr
+ 2025 23:04:57 +0000
+Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
+ ([fe80::c568:1028:2fd1:6e11%5]) with mapi id 15.20.8606.033; Thu, 10 Apr 2025
+ 23:04:57 +0000
+Message-ID: <87o6x3hb3a.wl-kuninori.morimoto.gx@renesas.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Conor Dooley <conor+dt@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 6/7] ASoC: renesas: add MSIOF sound support
+In-Reply-To: <CAMuHMdXYYYAabmsuVmM6mAqNM6XHyzKsScwAr0TruSe_LMo1kQ@mail.gmail.com>
+References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
+	<87wmbu9may.wl-kuninori.morimoto.gx@renesas.com>
+	<CAMuHMdWL_C-Vg3d+fAK_nXvzeZNNPDkkzPjB1oHRKHh16rZUHw@mail.gmail.com>
+	<8734egnbl0.wl-kuninori.morimoto.gx@renesas.com>
+	<87iknclp1w.wl-kuninori.morimoto.gx@renesas.com>
+	<CAMuHMdXYYYAabmsuVmM6mAqNM6XHyzKsScwAr0TruSe_LMo1kQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 Emacs/29.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date: Thu, 10 Apr 2025 23:04:57 +0000
+X-ClientProxiedBy: TYCP286CA0083.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b3::11) To TYCPR01MB10914.jpnprd01.prod.outlook.com
+ (2603:1096:400:3a9::11)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] spi: stm32-ospi: Make usage of
- reset_control_acquire/release() API
-To: Philipp Zabel <p.zabel@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20250410-b4-upstream_ospi_reset_update-v1-0-74126a8ceb9c@foss.st.com>
- <20250410-b4-upstream_ospi_reset_update-v1-2-74126a8ceb9c@foss.st.com>
- <2bb410e34babc4c66895e8e74cf014f89127914d.camel@pengutronix.de>
-Content-Language: en-US
-From: Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <2bb410e34babc4c66895e8e74cf014f89127914d.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-10_04,2025-04-10_01,2024-11-22_01
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|OSCPR01MB13678:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61b0b3f3-0214-4a33-b809-08dd78841d00
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|52116014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?wVzrzaMjqWQaz+If5zK16QGDiswDYAhBpxxKVOhhm/eSSN4DFw/m2Jo4ZDn3?=
+ =?us-ascii?Q?NUO3CIh7AYLRXCSybkqOwn0Kfr3S9nx8JsRAIQesTTxzYxqH3Xqfa5vA37vZ?=
+ =?us-ascii?Q?Ft2EL8iWZWyfYn08BCnlomnfcOen6WMQAP/Ju5jd1RlKlynE7HowEdmmOe3p?=
+ =?us-ascii?Q?O9tV1O80jVDm2F77UaUWETR/xt3JQB++kUT6vwIOuTYOlBN6v6AVbSNv/dt7?=
+ =?us-ascii?Q?ZCZhKUJbjto40m4C4r6PqdF4eDv6g74N/JJe7Vs06ENks2QT7m/bCQiPOT+Y?=
+ =?us-ascii?Q?MH5hLqe91w0Rz5KA9VHujT/P7uHFaev4p7t0EJ3LUThNmeqL7MTV3xjJLIVW?=
+ =?us-ascii?Q?vvfQg9OWJo7jXDdpb/ROOIm5KCjAbly7kS5IdFAeZ71+LPTgGfrvFm4V9qHT?=
+ =?us-ascii?Q?JVPnQQRtK5BDDK6Rsc10UzAmm1imyxV1CSIbctaS2eUzThNvsLG9hjO7UZhe?=
+ =?us-ascii?Q?GsZq9W2tA2wwuLvSTrLeiJRfOL1Uoh6UzoYy2HvXJ8btsFkpPHiA7VuHyIli?=
+ =?us-ascii?Q?R3rYFj2kyZdyjnBI57YuR2HcfuqASV3JT/YUwFsx50RAeGYKs1MlDJrAyWj6?=
+ =?us-ascii?Q?YLbZHZ8Bf4NAo8kDG4WGCoMfjyh+q19gIfesHU//4pLsHRjN4rl2EGT3OCSs?=
+ =?us-ascii?Q?fDcCGboAPbySDsWT8u4e4/WTIoqwm0RN+2xqIK/Ce/m7LUubHfFv8T7Wra2U?=
+ =?us-ascii?Q?lnv5T/UA8rsAkQgaZuKfM8qlcienW9bAfqECHv/Zh/qqQkPoOTFKiZpLIzAs?=
+ =?us-ascii?Q?CG2zvq8INy3l/vxapP/zZPDxox3kZ289LGxRCMhq4cXsTO1fC9daM5lDlRyh?=
+ =?us-ascii?Q?34gvo7mLZYP++0IiJpJL0h5yuRaU7mmcAMQGArFxTuqLl034nyiaYtPOxUVn?=
+ =?us-ascii?Q?uocR5iqJpIqXbvzbs1uxkOvYJLloDr0/3f9eIgrgqDTkC6mGwji8+YH/3+WZ?=
+ =?us-ascii?Q?IQZtVSUlbgbEBVh66fDN/Ulew/zl9cxmzdvRlaGTzK/qdF/YB85TTlPBdP41?=
+ =?us-ascii?Q?P/3BiIOl/P9iOz5m9ZwkCJu7X6LnW9elB0kcO9jCmNEreZz+9MG99GjYzZhh?=
+ =?us-ascii?Q?xE6/YIh7y1nVBqBMbq0ii0p+2McG9YBWb99hoPfJhVWzsjE0flhlZxt0pAGu?=
+ =?us-ascii?Q?7Z6uNEzBX3Uo4hNkcU/nbtHTdkzp9tZloQJzDa33+Pp/Exz+HRf2Xn7DtX/e?=
+ =?us-ascii?Q?za5iT3U2i5WoVXPd1465nrAwmZ+WUUh1bCLAafndb1EYD+ddjrv1jfVjPEAF?=
+ =?us-ascii?Q?0HQn3g1lacCDWshWFXLoZJrQHOzHoH3SGVWNEFfK4kfb4IBKBwikB6ldnkoW?=
+ =?us-ascii?Q?tZSLWSX1oUPaH9XOFU8wHBkyf8jHdJZPaHYqSkCyTvsBspm4hsaT537AiB94?=
+ =?us-ascii?Q?PXlIVBAS+p22QFeKxNNBtdB4Jc/klJwKFIFZo6qouCNP8sa1/IJsARZcSI2P?=
+ =?us-ascii?Q?nM2LN8QCNf+y2YhLIgKY7LCDOOvimJx8?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?zGvC3ehfqr8sAuaezKHXaEVTH/kQ2mA0BwDGCR20JLk6WdkB/xEhejD80l9E?=
+ =?us-ascii?Q?XZXa55q+OsEl3r5G2WVIx+GRrePmPCmgdgL8qw7R2oi7ouTh1gtA35pcLpbW?=
+ =?us-ascii?Q?eThTbs32VIHuybkXUWg9eMnlC+gGswwL37ErS3gF2HIQe/XMe6zNG2gewOJM?=
+ =?us-ascii?Q?vKHne6KfXU3QX3yVXMpH9pBvyvpYFXqJfXqFA4k7RMUvMkpEpIN7s7aJiM/a?=
+ =?us-ascii?Q?6TS0zcDg8quuwRNEar2J8uTod7f8cY/3II4BioccGPfprB0d8AeqUVWuS5SC?=
+ =?us-ascii?Q?KIQJn+ObeHyJRkfkkU/b1edqzYXqBxy9WLqrNo2cVbwmPlxEwrFnkhGc9h3B?=
+ =?us-ascii?Q?xKkEJ6AzFaOO8UjZ62gx8ZJnJVeZfmas9Y1R1cXwNPQhH7JEP8aGVvS064Hl?=
+ =?us-ascii?Q?zsy5EW3yxRYb822hR8jyjODRLYRuGQab0bnWGXeemlxSixCvrlLruX0yJ+Vh?=
+ =?us-ascii?Q?s/uJLV6vpH9ANtxtCVt/rRtpb9/qafDDthwhbW6uy/HRYmcFKy4Vt48U9DLV?=
+ =?us-ascii?Q?6A1ZCY8p1/1XJHfbLj+D6zS/IMz7kbcZT/68Xz+PudcNLC1Ek8JM4Gr03dtD?=
+ =?us-ascii?Q?WGF2itQzmEqUByDbXlVlLoeEFjQGU+8+JbA1UfzaZFc7yICtOGamkjx0BZvm?=
+ =?us-ascii?Q?i82r4aXfq6Jhx7v3qXHRmhAXfB5QK7Lh8L7yeScZm+64dogHRQNX4HbLXU4x?=
+ =?us-ascii?Q?glzWYsy4yJEqaeB7LUGQNuf0Ac7rRBvbkwUmErv7+zC4LuJfwRCvYq9inoKi?=
+ =?us-ascii?Q?fAaOfxdOQ0BBJHqXyCKTtMUAP6eSu9aZ4PKcipTJxCCLeGpILH93oMZT+Ean?=
+ =?us-ascii?Q?9RcQ3p1pDAfBe5lBGuPmTLPehRq/XHAZMNuKCbd4ecXmtTi+bwk6G7QcmHDr?=
+ =?us-ascii?Q?JTjoiUYsou+aGXkCYKof+U7pLcpk815SPDw/J5FZV5Vh0yTPLLssg4dxguvs?=
+ =?us-ascii?Q?RXEmWx8RhnGMBd1ff6p0kL5xTCzNVJsHfT0zjQW6LE3S2lNPEEVcVrS+OI4W?=
+ =?us-ascii?Q?TX1O/HOS0FVGyBxwJAqCjOy4WeTOptiT245strMyDz2CnztbXqwBslmdt7Ah?=
+ =?us-ascii?Q?lQ08ayTDtt/Y4VGTIcuBdl0zQnuagdmOHWYfyLIO4VkW28hW8jVZcVw8UHWJ?=
+ =?us-ascii?Q?JmdoZo2qnFFc/ARpW41v5h/SZdn4cQw18oEB11KkklKGkI98t9VaHlQ+8KUu?=
+ =?us-ascii?Q?Ym9Hm1iSBjlIcbXnZScOhm7riP4fYby5JnjbssDO8COsfNrYDXEUSQLAdLA5?=
+ =?us-ascii?Q?y76wU8ylX3CtQrp5tZE72PamGrX9ah1ugUOpmXTaJ2/GgB42WEsdRdmE5/qD?=
+ =?us-ascii?Q?IsnlEYSJtCQOQzVO51Y7N9K5uSLCtfR+iu9Dfmgk9H3rRGnkCCbTKHPZYTbZ?=
+ =?us-ascii?Q?vCsHvuO7ty64kPkOu4Ln0V6hgryxTKj+l3OKAsyK8pn41gwnqR+f55Rn0tF5?=
+ =?us-ascii?Q?2qbtu9Yr5Q5a9k8In/tMMT2Hg7MMuVarfu7S6atSA2mgHaOEvpxhUFINGGh6?=
+ =?us-ascii?Q?bf81oprDVhpcp3j/oUfKz8j7TGRXVzRGavn8zkI+8DPeZOcsFkKAKg7QWSwR?=
+ =?us-ascii?Q?JDJxB0xzm/Ytd9A4/YA3lu9JQxZnaa6uoKK+Z9ZW0oiGuMv1EuHtoWtbHMTS?=
+ =?us-ascii?Q?1MGDLN4b82WRxL5EoK1at9M=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61b0b3f3-0214-4a33-b809-08dd78841d00
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2025 23:04:57.4964
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dYCbyYk5w+1cQaoggvPUMX5qFpDJvANkr3+i41uIqdP9IYQSqcO/oBAAW4mgF5Zr+j3zviI1XJuJyUN9qO/BIhnfHULRchap9T+vYidSp6WXw8CjUuaai90mVu197weo
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13678
 
 
+Hi Geert
 
-On 4/10/25 14:48, Philipp Zabel wrote:
-> On Do, 2025-04-10 at 14:23 +0200, Patrice Chotard wrote:
->> As ospi reset is consumed by both OMM and OSPI drivers, use the reset
->> acquire/release mechanism which ensure exclusive reset usage.
->>
->> This avoid to call reset_control_get/put() in OMM driver each time
->> we need to reset OSPI children and guarantee the reset line stays
->> deasserted.
->>
->> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->> ---
->>  drivers/spi/spi-stm32-ospi.c | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
->> index 668022098b1eac3628f0677e6d786e5a267346be..96fa362432f13c19e4dde63d964a0db64c8ade95 100644
->> --- a/drivers/spi/spi-stm32-ospi.c
->> +++ b/drivers/spi/spi-stm32-ospi.c
->> @@ -804,7 +804,7 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
->>  		return ret;
->>  	}
->>  
->> -	ospi->rstc = devm_reset_control_array_get_optional_exclusive(dev);
->> +	ospi->rstc = devm_reset_control_array_get_exclusive_released(dev);
+> > > > > +config SND_SOC_MSIOF
+> > > > > +       tristate "R-Car series MSIOF support"
+> > > > > +       depends on OF
+> > > >
+> > > > depends on ARCH_RENESAS || COMPILE_TEST
+> > >
+> > > Ah, yes indeed. Will add in v2
+> >
+> > Renesas category Sound drivers are under below menu.
+> > So, it is not needed on each drivers.
+> >
+> > menu "SoC Audio support for Renesas SoCs"
+> >         depends on SUPERH || ARCH_RENESAS || COMPILE_TEST
 > 
-> Why does this drop _optional?
+> Thanks, I should have checked that...
 
-Hi Philip
+No problem.
+Thank you for your review anyway
 
-I wrongly based this patchset on the reset/next branch instead of the spi/for-next which include this ospi fix [1].
-which make resets a required property. I will rebased it on last spi/for-next.
-
-> 
-> Also, since _acquire() is right below in the same function, I see no
-> benefit in requesting the reset control in released state.
-
-As explained in commit message, OSPI reset are also used by OMM driver which is parent of OSPI.
-
-If i use devm_reset_control_array_get_exclusive() instead of devm_reset_control_array_get_exclusive_released()
-here, i got the following kernel warning:
-
-[    8.654378] ------------[ cut here ]------------
-[    8.656524] WARNING: CPU: 1 PID: 385 at drivers/reset/core.c:799 __reset_control_get_internal+0x70/0x1d0
-[    8.665999] Modules linked in: spi_stm32_ospi(+) hantro_vpu v4l2_vp9 dwmac_stm32(+) stmmac_platform v4l2_h264 v4l2_jpeg v4l2_mem2mem stmmac videobu6
-emon.
-[    8.691282] CPU: 1 UID: 0 PID: 385 Comm: (udev-worker) Not tainted 6.15.0-rc1-next-20250408-00018-g0f9105d08519 #22 PREEMPT 
-[    8.691301] Hardware name: STMicroelectronics STM32MP257F-EV1 Evaluation Board (DT)
-[    8.691307] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    8.691317] pc : __reset_control_get_internal+0x70/0x1d0
-[    8.691336] lr : __of_reset_control_get+0x1a4/0x270
-[    8.691348] sp : ffff80008359b5f0
-[    8.691352] x29: ffff80008359b5f0 x28: 0000000000000000 x27: ffff80007b06c100
-[    8.691371] x26: ffff80007b06c118 x25: 0000000000000001 x24: 0000000000000000
-[    8.691385] x23: 0000000000000004 x22: ffff000082ecc780 x21: 0000000000000005
-[    8.691399] x20: ffff000082ecc7a0 x19: ffff000083898d00 x18: 00000000ffffffff
-[    8.691414] x17: ffff000082ff9a00 x16: ffff0000802d6800 x15: ffff80008359b4c0
-[    8.691429] x14: 0000000000000001 x13: 007473696c5f7974 x12: 0000000000000001
-[    8.691444] x11: 0000000000000003 x10: ffff80008257ec4f x9 : 0000000000000028
-[    8.691459] x8 : 0101010101010101 x7 : 00000000736c6c65 x6 : 000000000080f2e5
-[    8.691473] x5 : ffff80008359b698 x4 : 0000000000000000 x3 : 0000000000000005
-[    8.691487] x2 : 0000000000000004 x1 : 0000000000000005 x0 : 0000000000000005
-[    8.691501] Call trace:
-[    8.691506]  __reset_control_get_internal+0x70/0x1d0 (P)
-[    8.691522]  __of_reset_control_get+0x1a4/0x270
-[    8.691535]  of_reset_control_array_get+0x9c/0x174
-[    8.691549]  devm_reset_control_array_get+0x50/0xb0
-[    8.691563]  stm32_ospi_get_resources+0xd4/0x344 [spi_stm32_ospi]
-[    8.691584]  stm32_ospi_probe+0xf8/0x3d0 [spi_stm32_ospi]
-
-Which means that bool acquired is set.
-
-This is due to usage of devm_reset_control_array_get_exclusive() which sets flags to RESET_CONTROL_EXCLUSIVE
-on an already controlled reset line.
-
-
-> 
->>  	if (IS_ERR(ospi->rstc))
->>  		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
->>  				     "Can't get reset\n");
->> @@ -937,9 +937,11 @@ static int stm32_ospi_probe(struct platform_device *pdev)
->>  		goto err_pm_enable;
->>  
->>  	if (ospi->rstc) {
-> 
-> This check only makes sense if the reset control (array) is optional,
-> otherwise ospi->rstc can never be NULL.
-
-Right, i will remove this check.
-
-> 
->> +		reset_control_acquire(ospi->rstc);
-> 
-> This is missing error handling. Alternatively, you could just use the
-> normal request function to get an already-acquired reset control.
-
-Ok, i will add a check.
-
-
-[1] https://patches.linaro.org/project/linux-spi/patch/20250324-upstream_ospi_required_resets-v2-2-85a48afcedec@foss.st.com/
-
-Thanks
-Patrice
-
-> 
->>  		reset_control_assert(ospi->rstc);
->>  		udelay(2);
->>  		reset_control_deassert(ospi->rstc);
->> +		reset_control_release(ospi->rstc);
->>  	}
->>  
->>  	ret = spi_register_controller(ctrl);
-> 
-> regards
-> Philipp
-> 
+Best regards
+---
+Kuninori Morimoto
 
