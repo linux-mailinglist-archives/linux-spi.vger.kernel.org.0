@@ -1,101 +1,82 @@
-Return-Path: <linux-spi+bounces-7518-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7519-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFCF9A84192
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 13:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46AE8A8425D
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 14:02:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8D204C3B94
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 11:19:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6A2A4E0C27
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 12:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3DA3210F53;
-	Thu, 10 Apr 2025 11:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDJ/YYu1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC022836B9;
+	Thu, 10 Apr 2025 12:00:51 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DEF1DDC0F;
-	Thu, 10 Apr 2025 11:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE461EA7F4;
+	Thu, 10 Apr 2025 12:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.2.72.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744283951; cv=none; b=q9BFfgo+MBPqv6hMflawqBFcyTt0+cBRuMMX3z1T63/VFnnNN9GZNWflOUS/cQCSr+Wohj+9AOFD8OLa1h/37aWJ50GDMquBBrBzrlJu2h/fZcMPbg2yTVnroreuw0R94YgT60J53U4zhtmlsUGuSIwhtOmcRhicKEsqk+90zgQ=
+	t=1744286451; cv=none; b=Bitwxp22dBrTy9QYsak5Jz+XumlY93AuGa+5VwJoZbOjRkh+uNFsPke/6OZ5BGbLx5GNYo9IWsqUz+VT+WPYEvi/U9a/T+BPWzfCmTD6ijikft1VTDoUeP2xPuFJLpYhM60px4D2VhM9UiRdK6k429PdXtLeENKskhGaddzW8tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744283951; c=relaxed/simple;
-	bh=gAFvWpcAGBkegBSikm87MrNHJtZam8cHZvJScZa1YO8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mukuBIonDJVSDJBU/4zpCM+/dEhXL1sdKSBvn66AOvzucdZA0onWeuLPlKg1pr21uEL6RcfilRWyNy6djl9wJaAsS46gosU8D8VxVr2lH3jdnvBBOQ4oee5IjaEfdDPbb1Rc7bRmtC11BCJWL24rjrLj5lGYPGKb1YVen5hJBdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDJ/YYu1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5194AC4CEE3;
-	Thu, 10 Apr 2025 11:19:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744283951;
-	bh=gAFvWpcAGBkegBSikm87MrNHJtZam8cHZvJScZa1YO8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nDJ/YYu1BZTH/wCI43Y6qFG2VpBm778RH4Ahe5Lc/hjvbh1mPHOR+bvIjtIPJjYgJ
-	 v76zeBUcAzeaobXpwpPB7F7N0ALkeKNOaFnrhpk6sh66f9Qq5EB3MlOqdwPKagcXVR
-	 qESJGDXIsbKlwIZEcvsjR9TJHMy91PyntBiKbuwosnfvlBOiCpyaX6CEbo+QYYZdQo
-	 989+V2m7iEwdmFqFModMA/SB7YnDKCkRP0j3+pIwbbXK833s0X/Mj41iX3O1OhOXiw
-	 EGkOzcjwYaS1KffEtbBp/kiovBdomvAga1HaEZ7a6AukOUsLLIF4iCovZVhtRDb3i8
-	 Ly1tWWkexHEjQ==
-Date: Thu, 10 Apr 2025 12:19:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	manivannan.sadhasivam@linaro.org, absahu@codeaurora.org,
-	bbrezillon@kernel.org, architt@codeaurora.org,
-	quic_srichara@quicinc.com, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mtd: rawnand: qcom: Pass 18 bit offset from NANDc
- base to BAM base
-Message-ID: <79349446-2e87-4f3a-9644-9262a4ccb12a@sirena.org.uk>
-References: <20250410100019.2872271-1-quic_mdalam@quicinc.com>
- <20250410100019.2872271-2-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1744286451; c=relaxed/simple;
+	bh=wcg7C+k1bcrv+bIk+uzHk4gA5FuzRRg0xdj/HxqQ+G0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uOonh6swmba4f2bDQcG5YLgEsDJm6sakjU5sTWFlriqoDCv9fZAAtqHUxVXBRjMB314QwXTXjpCIfkGtMDkYPNPa2xJGZS7ME4mMKJ0FHxG8Yb2jnt6nXWsaOE47Clr7PjCCzW4+sKcKbIKAHlsaFZwR/5hUz+GECPcAQz31MeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com; spf=pass smtp.mailfrom=mansr.com; arc=none smtp.client-ip=81.2.72.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mansr.com
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+	by unicorn.mansr.com (Postfix) with ESMTPS id D4E3C15360;
+	Thu, 10 Apr 2025 12:53:34 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+	id C35A421A3DC; Thu, 10 Apr 2025 12:53:34 +0100 (BST)
+From: Mans Rullgard <mans@mansr.com>
+To: Mark Brown <broonie@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: Pan Nan <pannan@allwinnertech.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: sun4i: add support for GPIO chip select lines
+Date: Thu, 10 Apr 2025 12:53:03 +0100
+Message-ID: <20250410115303.5150-1-mans@mansr.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BHGlqQ/YgKipM5ku"
-Content-Disposition: inline
-In-Reply-To: <20250410100019.2872271-2-quic_mdalam@quicinc.com>
-X-Cookie: You will be awarded some great honor.
+Content-Transfer-Encoding: 8bit
 
+Set use_gpio_descriptors to true so that GPIOs can be used for chip
+select in accordance with the DT binding.
 
---BHGlqQ/YgKipM5ku
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+---
+ drivers/spi/spi-sun4i.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Thu, Apr 10, 2025 at 03:30:17PM +0530, Md Sadre Alam wrote:
-> The BAM command descriptor provides only 18 bits to specify the NAND
-> register offset. Additionally, in the BAM command descriptor, the NAND
-> register offset is supposed to be specified as "(NANDc base - BAM base)
-> + reg_off". Since, the BAM controller expecting the value in the form of
-> "NANDc base - BAM base", so that added a new field 'bam_offset' in the NAND
-> properties structure and use it while preparing the command descriptor.
+diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
+index 2ee6755b43f5..6645d218bcf3 100644
+--- a/drivers/spi/spi-sun4i.c
++++ b/drivers/spi/spi-sun4i.c
+@@ -462,6 +462,7 @@ static int sun4i_spi_probe(struct platform_device *pdev)
+ 	sspi->host = host;
+ 	host->max_speed_hz = 100 * 1000 * 1000;
+ 	host->min_speed_hz = 3 * 1000;
++	host->use_gpio_descriptors = true;
+ 	host->set_cs = sun4i_spi_set_cs;
+ 	host->transfer_one = sun4i_spi_transfer_one;
+ 	host->num_chipselect = 4;
+-- 
+2.49.0
 
-Acked-by: Mark Brown <broonie@kernel.org>
-
---BHGlqQ/YgKipM5ku
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmf3qSgACgkQJNaLcl1U
-h9A8LQf/Qdes70/Rw94WVFtMtWkzp5YAtG82yLUA5LOSLIt8DTuvKh/B7Q216lDc
-DeHth7xNLhU0NKwpmVt0ESrPHrcLcMYMdq59924cs3EY5/HN4hk7YStIIX3OJxVM
-qcLdtHyiWGvQBAKptqbjM997MTKHzNMtPSb0ZZWNXjLe/x/rizeTgOQ7loGdgxFv
-bpDvk3Fy4TDZmBQ6ZcolMTFBV+B0S8ZIjv8bDbaN/hbbsuoayf1erKpP0tSW9Wvm
-Ag+/0fS0Lp/aD4ZaRPMLNH9e5ZtgFfDWSSAf88NypR3se0QgelmM9Vi45JEdK0ML
-fiTlbY3OQXlRIFO/WkjvS4GBx2t2sA==
-=JRjg
------END PGP SIGNATURE-----
-
---BHGlqQ/YgKipM5ku--
 
