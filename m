@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-7501-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7502-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F6DDA83891
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:45:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82950A8389A
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D4B33B5C8C
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 05:44:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C82B465155
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 05:46:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C15191FC10E;
-	Thu, 10 Apr 2025 05:45:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A671F12F8;
+	Thu, 10 Apr 2025 05:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMxfyg1V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Obooz3dB"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DC41F1311;
-	Thu, 10 Apr 2025 05:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7C72AEFE;
+	Thu, 10 Apr 2025 05:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744263908; cv=none; b=oPbOXFWWtHMeQuyZ+VsQLL0msQtCIqmiM9CPpNrd/7Uh4GoNFSiohk42RSzdQh/ztu9oTt/euZwu/GXGn75fgXUJLZjhjEMqANDKzQwpYvA+Q/j7D/ukWQH1QIon/zhr9dyIM1/sGTK8xvIXQqPobyYoWKkHZIpQEfQMAYHdUNQ=
+	t=1744263992; cv=none; b=RIMXKnaQ6eci3ASQh3Alsfeb4kaf5JG63suETfgVKWQtkNsg35+ewBwc3ZoZiHV2jBagV8hI4HBK1rtULyFalnUbAJw7eNDlOWBW+qI2B9GU4PkveQEOWPMky00vrjSc5+BW6G6glTSPlJsX7XXKPArftFkbv+hutFeh0DCye2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744263908; c=relaxed/simple;
-	bh=RboU6uhGGPWDL+bQLFLur5ymIfVePBC11accQGUOSxc=;
+	s=arc-20240116; t=1744263992; c=relaxed/simple;
+	bh=WqrVJJMU8blV/cUkX0K0yR472iJdfkiIxU62KNmQxts=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JOPup2awggTqWjnqngs+NIFUmX51xiJ8oqP3Dnv0ARuRqj7arTxiNsHSR6paqfmVCqJKavzenEEtDUUUdiU8/r5OgpBQF+C/wIceQQZ3WYlLB5nfAejv39K1BDqiXGCAlcyRgtkBxhAr2g9XmvzNcDSZ2eE0IusuBRVIpKive0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMxfyg1V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1C5C4CEDD;
-	Thu, 10 Apr 2025 05:45:03 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=G0FK3cEni3SgLjKXdRIPw3TrOsD+MmOyFfKgjSGB4w0r1jFLYxVaDakBHdUMdtIA+Jr6q58oeEgTArewVnDEfsQnT8iDGxtNyCxHtR+OCxZGtPluKDoNiFWWmlb8UNqmEgiDCcg1pQwUncZbpOCHEP6Q6T/LTKUa6lGioCYf2gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Obooz3dB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6256C4CEDD;
+	Thu, 10 Apr 2025 05:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744263906;
-	bh=RboU6uhGGPWDL+bQLFLur5ymIfVePBC11accQGUOSxc=;
+	s=k20201202; t=1744263992;
+	bh=WqrVJJMU8blV/cUkX0K0yR472iJdfkiIxU62KNmQxts=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JMxfyg1VOdUwaS5aO6twDY+9L2CJtijjxz9M8f5JzChS9Nk7jAW7s+kQdNk67k07O
-	 s+hB8uaCPUG4F2cphGyNHpDAYfhALwUofBGhdqCPZbmgPLQ30Dvw9gd6LI83NsT3hs
-	 0iTknXOfPXHD89w438G5niKbHoiGOXu19OEeIUsK5AkhhF9qtDoIqAE+9TJ6tEOxHl
-	 /ILm8uWuKHuh5ZwyzuwZh7QEUvyP2zFwTwHB8X7NvgjlyeQCHq/kNYQgxFdbOJ5Set
-	 0VlSO2ZYCExAiVZuQqpYfaQKDPfgMXEPG3Xf/DnkM2j3HtnRotdMhyQIbnv+apQGQR
-	 0l+nSMELCl/oA==
-Message-ID: <81e496d4-7643-445e-a274-e28add84da3e@kernel.org>
-Date: Thu, 10 Apr 2025 07:45:02 +0200
+	b=Obooz3dBnXcxmXUhDuj7oJG68of/SwZPYI9rMjg3CUPWjifStovny4czHew/1xovL
+	 ZHOJ1PNikbgyDHNPXstlYE49DTXdtt/Ev3iNfWVhwB1TqFhBpD6HpNg6Nk2jW7V+dI
+	 aONywaqx4y25vSc9jsdlnP3sXSNA6s+Q3cm2KiWEti7mNdIH7slVGZqKJgx+wG4npD
+	 HAFBOsBneP/ZQFDwuJq6LBHX5e+qYqPbhhpJKdx+6ktzIVkcPiC4TVJn/sQegiMNsl
+	 T5hHuy8T2DTuKGefUyLFGXENStPs4Olt2NW5fGyo8jKAbJ0rHXlkR7PVmLl5vuV4gV
+	 UwZTGb9YOj51w==
+Message-ID: <6904e6b5-aa54-4874-a420-462f7225ff31@kernel.org>
+Date: Thu, 10 Apr 2025 07:46:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/7] ASoC: renesas: add MSIOF sound support
+Subject: Re: [PATCH 5/7] ASoC: renesas: add MSIOF sound Documentation
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: Conor Dooley <conor+dt@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -60,9 +60,10 @@ Cc: Conor Dooley <conor+dt@kernel.org>,
  devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-spi@vger.kernel.org
 References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
- <87wmbu9may.wl-kuninori.morimoto.gx@renesas.com>
- <24d1c5d9-0eeb-4f59-86bd-cd3690145981@kernel.org>
- <875xjcnci6.wl-kuninori.morimoto.gx@renesas.com>
+ <87y0wa9mb2.wl-kuninori.morimoto.gx@renesas.com>
+ <bd15c145-c175-468d-a1ac-1ad157358aea@kernel.org>
+ <20250409-mouse-of-eternal-warranty-5eafd2@shite>
+ <87wmbslu18.wl-kuninori.morimoto.gx@renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,43 +109,46 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <875xjcnci6.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87wmbslu18.wl-kuninori.morimoto.gx@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/04/2025 01:25, Kuninori Morimoto wrote:
+On 10/04/2025 02:49, Kuninori Morimoto wrote:
 > 
-> Hi Krzysztof, Mark, Iwai-san
+> Hi Krzysztof
 > 
->>> +	dev_info(dev, "probed\n");
+>> Yes, probably. Although missing cells is easy to change but missing
+>> protocol, like this patchset here, is quite more challenging.
+> 
+> MSIOF-I2S is using MSIOF-SPI's property, these are compatible.
+> The diff is I2S is using Of-Graph, SPI is not. Not so challenging ?
+
+Not challenging? Then I don't see the point why we are discussing and
+just implement the feedback.
+
+> 
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    items:
+>>>> +      - const: renesas,msiof-r8a779g0   # R-Car V4H
+>>>
+>>>
+>>> Use expected format of all soc compatibles. It has been always: SoC-module.
 >>
->> Drop. Driver should be silent on success and simple success messages are
->> useless. Core already gives you information that probe succeeded.
+>> ... unless this is an existing compatible, but then it should be in one
+>> schema, not two.
 > 
-> What does "Core" mean here ??
-
-Core of Linux.
-
+> If I merged MSIOF-I2S/SPI into one, Of-Graph part will be option ?
 > 
->>> +MODULE_ALIAS("platform:msiof-pcm-audio");
+>>> where to fit it in the DT binding doc hierarchy?
 >>
->> You should not need MODULE_ALIAS() in normal cases. If you need it,
->> usually it means your device ID table is wrong (e.g. misses either
->> entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
->> for incomplete ID table.
+>> Does not matter, whatever fits better in overal picture/purpose of this
+>> device.
 > 
-> Iwai-san, Mark, do you have any comment about this ?
-> Almost all ALSA drivers are using it
-> 
-> 	> git grep MODULE_ALIAS sound | wc -l
-> 	249
+> Can I put info like
+> linux/Documentation/devicetree/bindings/sound/renesas,msiof.txt
 
-
-What do you need it for? You already have ID table.
-
-Just because drivers need it, is not a justification that you need. If
-other drivers have poor code, it's okay to do the same?
-
+No. TXT bindings are not accepted. There is no benefit in this.
 
 Best regards,
 Krzysztof
