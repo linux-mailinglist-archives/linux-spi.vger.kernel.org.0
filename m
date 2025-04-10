@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-7502-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7503-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82950A8389A
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:46:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA560A838A5
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:50:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C82B465155
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 05:46:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E9773B87CB
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 05:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2A671F12F8;
-	Thu, 10 Apr 2025 05:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BFE1F1311;
+	Thu, 10 Apr 2025 05:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Obooz3dB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFxc5APp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7C72AEFE;
-	Thu, 10 Apr 2025 05:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0861E5B71;
+	Thu, 10 Apr 2025 05:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744263992; cv=none; b=RIMXKnaQ6eci3ASQh3Alsfeb4kaf5JG63suETfgVKWQtkNsg35+ewBwc3ZoZiHV2jBagV8hI4HBK1rtULyFalnUbAJw7eNDlOWBW+qI2B9GU4PkveQEOWPMky00vrjSc5+BW6G6glTSPlJsX7XXKPArftFkbv+hutFeh0DCye2A=
+	t=1744264126; cv=none; b=Py66p5DhgoyXytFu3W0ayVfqTg4wsXmBtlcxHDLLeqyXzCVUWFQGWYGs3YAUiKgRyncEwj/G8K/G7T/ArXzeefDnXYtZPRgnYnh1Cn9oxuEKpCIJ1Jh+UsPbAS5CI9XD2It9QcHCnMEmOCr4ml3VCD072P2N0+XzKBtk9G3v1c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744263992; c=relaxed/simple;
-	bh=WqrVJJMU8blV/cUkX0K0yR472iJdfkiIxU62KNmQxts=;
+	s=arc-20240116; t=1744264126; c=relaxed/simple;
+	bh=6fn5vcSDryK9vSzw72XFbRg8osxtfXYjvoVJ0Ux0BSY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0FK3cEni3SgLjKXdRIPw3TrOsD+MmOyFfKgjSGB4w0r1jFLYxVaDakBHdUMdtIA+Jr6q58oeEgTArewVnDEfsQnT8iDGxtNyCxHtR+OCxZGtPluKDoNiFWWmlb8UNqmEgiDCcg1pQwUncZbpOCHEP6Q6T/LTKUa6lGioCYf2gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Obooz3dB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6256C4CEDD;
-	Thu, 10 Apr 2025 05:46:28 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bIAj9hM+MVohbYNS1fjo2WxLtRXSNL86vUjXvQtnGatjLEpo2Y0BgNh1CiPoJxV/yp058jeb5yLALG3pjGJ3hyl34SXhYbgpKcpppisMfsKbUw7HZC5I+NM495V7Lz9hJB7tkp8sSBIsuBGTpHh0SDJ3YK3vs7BNQlWQ5HlPXek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFxc5APp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CDEFC4CEE8;
+	Thu, 10 Apr 2025 05:48:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744263992;
-	bh=WqrVJJMU8blV/cUkX0K0yR472iJdfkiIxU62KNmQxts=;
+	s=k20201202; t=1744264124;
+	bh=6fn5vcSDryK9vSzw72XFbRg8osxtfXYjvoVJ0Ux0BSY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Obooz3dBnXcxmXUhDuj7oJG68of/SwZPYI9rMjg3CUPWjifStovny4czHew/1xovL
-	 ZHOJ1PNikbgyDHNPXstlYE49DTXdtt/Ev3iNfWVhwB1TqFhBpD6HpNg6Nk2jW7V+dI
-	 aONywaqx4y25vSc9jsdlnP3sXSNA6s+Q3cm2KiWEti7mNdIH7slVGZqKJgx+wG4npD
-	 HAFBOsBneP/ZQFDwuJq6LBHX5e+qYqPbhhpJKdx+6ktzIVkcPiC4TVJn/sQegiMNsl
-	 T5hHuy8T2DTuKGefUyLFGXENStPs4Olt2NW5fGyo8jKAbJ0rHXlkR7PVmLl5vuV4gV
-	 UwZTGb9YOj51w==
-Message-ID: <6904e6b5-aa54-4874-a420-462f7225ff31@kernel.org>
-Date: Thu, 10 Apr 2025 07:46:26 +0200
+	b=lFxc5APp2lJZSj/vEKqsTrYPUS1X+t26HLfaq2Kv4nRVkZKl8s9xoZH5P838sxzOE
+	 Umj/ravAORcI067ASZDLkIRscWIN2yMJUn6k91RF9yz22h7GpL07bFTpmde25/y1bl
+	 VcRrTa5vyI69j5Z/uT4TQ6usMK8+Bv6Oj+oSbZDKxOXsF39T4JBgny1ZwmGH3KTFRS
+	 QG2dXjsImL5AOmDe1IVTneHlZ/RuDTiaX33WWcOpOIzxuqlPYKfgCyleJcfFZEDsQh
+	 HhJwRehMPsAxULg2/AAl40r83txe2fDuvNMvoM/l7QJD71sO9ZorKFnewwQslJ1Vvr
+	 kpsFzgR9v7nEA==
+Message-ID: <17e20b8a-dd96-4d7e-a05f-f7fecc49469e@kernel.org>
+Date: Thu, 10 Apr 2025 07:48:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] ASoC: renesas: add MSIOF sound Documentation
+Subject: Re: [PATCH 1/7] spi: renesas,sh-msiof: Living separately from MSIOF
+ I2S Sound
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: Conor Dooley <conor+dt@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -60,10 +61,9 @@ Cc: Conor Dooley <conor+dt@kernel.org>,
  devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-spi@vger.kernel.org
 References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
- <87y0wa9mb2.wl-kuninori.morimoto.gx@renesas.com>
- <bd15c145-c175-468d-a1ac-1ad157358aea@kernel.org>
- <20250409-mouse-of-eternal-warranty-5eafd2@shite>
- <87wmbslu18.wl-kuninori.morimoto.gx@renesas.com>
+ <874iyyb0w2.wl-kuninori.morimoto.gx@renesas.com>
+ <66808fa5-2b81-4145-b2c6-9b0d76d2a6dc@kernel.org>
+ <877c3sncs9.wl-kuninori.morimoto.gx@renesas.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,46 +109,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <87wmbslu18.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <877c3sncs9.wl-kuninori.morimoto.gx@renesas.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/04/2025 02:49, Kuninori Morimoto wrote:
+On 10/04/2025 01:19, Kuninori Morimoto wrote:
 > 
-> Hi Krzysztof
+> Hi
 > 
->> Yes, probably. Although missing cells is easy to change but missing
->> protocol, like this patchset here, is quite more challenging.
-> 
-> MSIOF-I2S is using MSIOF-SPI's property, these are compatible.
-> The diff is I2S is using Of-Graph, SPI is not. Not so challenging ?
-
-Not challenging? Then I don't see the point why we are discussing and
-just implement the feedback.
-
-> 
->>>> +properties:
->>>> +  compatible:
->>>> +    items:
->>>> +      - const: renesas,msiof-r8a779g0   # R-Car V4H
+>>> Renesas MSIOF (Clock-Synchronized Serial Interface with FIFO) can work as
+>>> both SPI and I2S. MSIOF-I2S will use Audio Graph Card/Card2 driver which
+>>> uses Of-Graph in DT.
 >>>
+>>> MSIOF-SPI/I2S are using same DT compatible properties.
+>>> MSIOF-I2S         uses Of-Graph for Audio-Graph-Card/Card2,
+>>> MSIOF-SPI doesn't use  Of-Graph.
 >>>
->>> Use expected format of all soc compatibles. It has been always: SoC-module.
+>>> Ignore MSIOF-I2S case (= Of-Graph) in MSIOF-SPI Doc.
 >>
->> ... unless this is an existing compatible, but then it should be in one
->> schema, not two.
+>> Please use subject prefixes matching the subsystem. You can get them for
+>> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+>> your patch is touching.
 > 
-> If I merged MSIOF-I2S/SPI into one, Of-Graph part will be option ?
+> Yeah, I did :)
 > 
->>> where to fit it in the DT binding doc hierarchy?
->>
->> Does not matter, whatever fits better in overal picture/purpose of this
->> device.
-> 
-> Can I put info like
-> linux/Documentation/devicetree/bindings/sound/renesas,msiof.txt
+> git log --oneline --no-merges Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml 
 
-No. TXT bindings are not accepted. There is no benefit in this.
+So run it on the directory. Apparently many contributors decided to
+ignore Mark's rule about naming and if people ignore Mark's rule, Mark
+was removing dt-bindings prefix, thus you have what you have below:
+
+> 
+> 1f48cbd6f00f spi: renesas,sh-msiof: Add r8a779h0 support
+> a0dcd1ff9629 spi: renesas,sh-msiof: Miscellaneous improvements
+> aa69dc65e3b3 spi: renesas,sh-msiof: Add r8a779g0 support
+> f4d381038700 spi: renesas,sh-msiof: Fix 'unevaluatedProperties' warnings
+> b076fdd02133 spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+> e1e62f05d5d9 spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+> 5a674d9dc9a0 dt-bindings: Fix array constraints on scalar properties
+> 6be69293196c spi: renesas,sh-msiof: Add r8a779a0 support
+> 6fdc6e23a7d1 dt-bindings: Add missing 'unevaluatedProperties'
+> aef161f4f1b8 spi: renesas,sh-msiof: Add r8a77961 support
+> b4f7f5f54705 spi: renesas,sh-msiof: Add r8a774e1 support
+> 6383b118efaf spi: renesas,sh-msiof: Add r8a7742 support
+
+Prefixes are explained in the docs I linked to.
 
 Best regards,
 Krzysztof
