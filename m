@@ -1,133 +1,135 @@
-Return-Path: <linux-spi+bounces-7520-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7523-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DDAA8430D
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 14:25:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71AF3A843A5
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 14:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCDF37B18F7
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 12:24:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D46B4429E7
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 12:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0B36284B4A;
-	Thu, 10 Apr 2025 12:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Z2+VX8KW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570292857EB;
+	Thu, 10 Apr 2025 12:48:17 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08767267F64;
-	Thu, 10 Apr 2025 12:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4532857CB
+	for <linux-spi@vger.kernel.org>; Thu, 10 Apr 2025 12:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744287916; cv=none; b=XpjQTuWlaNMAhM57YbRf8Sk+s4tWmlZuo5n7CYHx7KXMiHRMh8XQ2iNDBlnmxf77mcX1g3YpIvTKkMQZN+Kanq4ITWugKo9ZS0XMpMlJl38BJXetP6NLL1KZs09VN2Zh15H+iLtDisqSebhnDq7Oe6uOq01C47O8Jvl2W3/SYHU=
+	t=1744289297; cv=none; b=JwEKjCDMWF0zfGkEgq+HJ8ti9cRUC7cVxf2UUk+Af305hrfOP+khzbJOz7G8043nYR+DRkDnSmA+DJiHlWQtsZH3wibD60mcCKLdCyQDS7JiioiKNU0Lg25J0IR+HpuLgqciIc2L7lqa3yNb4hWva4HRUgvPgEtPI4ogKODZZ0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744287916; c=relaxed/simple;
-	bh=iYJFt+1IPlHzGtNX9AuRhPmwmrpFd5TRE57E6j7Db+c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Y0m89kkWAoQHTHoiONcK1ULinHU9RQqLNWI0SrX8LTeB5KqRK0GRg8wFgcVdSu7DPFV5EbP4+sUMjlaCh4SbKPtcbzxJfnUrw0hX9eoSUPRxz1zwz1MNijpMKUwnPBXnO9nksSs84swlGJdV5/T0FPpRy0AEGCYUny+bjxc3VYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Z2+VX8KW; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53A9Vcd9005154;
-	Thu, 10 Apr 2025 14:24:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	j3whygk/RlYZ76wCT9iuIKZGh9irSBykOVLGvkqBG2k=; b=Z2+VX8KWhkYoLhJ3
-	+WwT+RVMajJsw5ZympDzFiFPGYtx8inCj5BMPy8602sEWNSlY4wMtehVtCEa/ov3
-	nLj/tji8xO1U5/gPn4eKFu33+LX3xmfNofUthW2OmYS8zBqzmjEyF+CLuxo8jret
-	eFVZPcviTQcfEIuqIMeuC74N+Lv0mZQWS4l4NOV33hesNbmw3hFX1qJ2pGFwVZsp
-	2Ix/oEOjaB00GQh4oX7nzMAG1YvaNXaYop48YhYXRxrYx3R2aEI/9Eb/DsaWbLQ0
-	NpTqmGNYbqrnrCDeSFHfhdbhW+r05flFhI0cXoj20097/TI7Z1gqL2mbd9ubnzFF
-	hfwmGA==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45uffmwdtk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Apr 2025 14:24:58 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id A568240047;
-	Thu, 10 Apr 2025 14:24:00 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1D5AB958201;
-	Thu, 10 Apr 2025 14:23:47 +0200 (CEST)
-Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 10 Apr
- 2025 14:23:46 +0200
-From: Patrice Chotard <patrice.chotard@foss.st.com>
-Date: Thu, 10 Apr 2025 14:23:45 +0200
-Subject: [PATCH 2/2] spi: stm32-ospi: Make usage of
+	s=arc-20240116; t=1744289297; c=relaxed/simple;
+	bh=XWRyqZQPWdogCOVY7DJKLUH14Wag6FL0hExrw8wiAhg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=El72owND8LD+bpJKyYrMva4CLU3zwVTIa5Vu0MX2/0jJmiqwNQkOtX1a2w+Arm+M0WfNvVDrRYXlNifMynEh8me65FJUqCbMY96+VmhMUSGsLQ1Emxl7UvLmmmiBUYwckgSQQQbeaNBnwM36IecrT/jbw1cWlr9beqZ8EQEPq5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1u2rKC-00081a-9j; Thu, 10 Apr 2025 14:48:08 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1u2rKB-004Guz-1D;
+	Thu, 10 Apr 2025 14:48:07 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1u2rKB-00093a-0z;
+	Thu, 10 Apr 2025 14:48:07 +0200
+Message-ID: <2bb410e34babc4c66895e8e74cf014f89127914d.camel@pengutronix.de>
+Subject: Re: [PATCH 2/2] spi: stm32-ospi: Make usage of
  reset_control_acquire/release() API
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Patrice Chotard <patrice.chotard@foss.st.com>, Mark Brown
+ <broonie@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org
+Date: Thu, 10 Apr 2025 14:48:07 +0200
+In-Reply-To: <20250410-b4-upstream_ospi_reset_update-v1-2-74126a8ceb9c@foss.st.com>
+References: 
+	<20250410-b4-upstream_ospi_reset_update-v1-0-74126a8ceb9c@foss.st.com>
+	 <20250410-b4-upstream_ospi_reset_update-v1-2-74126a8ceb9c@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250410-b4-upstream_ospi_reset_update-v1-2-74126a8ceb9c@foss.st.com>
-References: <20250410-b4-upstream_ospi_reset_update-v1-0-74126a8ceb9c@foss.st.com>
-In-Reply-To: <20250410-b4-upstream_ospi_reset_update-v1-0-74126a8ceb9c@foss.st.com>
-To: Philipp Zabel <p.zabel@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Patrice Chotard
-	<patrice.chotard@foss.st.com>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-10_03,2025-04-08_04,2024-11-22_01
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-As ospi reset is consumed by both OMM and OSPI drivers, use the reset
-acquire/release mechanism which ensure exclusive reset usage.
+On Do, 2025-04-10 at 14:23 +0200, Patrice Chotard wrote:
+> As ospi reset is consumed by both OMM and OSPI drivers, use the reset
+> acquire/release mechanism which ensure exclusive reset usage.
+>=20
+> This avoid to call reset_control_get/put() in OMM driver each time
+> we need to reset OSPI children and guarantee the reset line stays
+> deasserted.
+>=20
+> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> ---
+>  drivers/spi/spi-stm32-ospi.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
+> index 668022098b1eac3628f0677e6d786e5a267346be..96fa362432f13c19e4dde63d9=
+64a0db64c8ade95 100644
+> --- a/drivers/spi/spi-stm32-ospi.c
+> +++ b/drivers/spi/spi-stm32-ospi.c
+> @@ -804,7 +804,7 @@ static int stm32_ospi_get_resources(struct platform_d=
+evice *pdev)
+>  		return ret;
+>  	}
+> =20
+> -	ospi->rstc =3D devm_reset_control_array_get_optional_exclusive(dev);
+> +	ospi->rstc =3D devm_reset_control_array_get_exclusive_released(dev);
 
-This avoid to call reset_control_get/put() in OMM driver each time
-we need to reset OSPI children and guarantee the reset line stays
-deasserted.
+Why does this drop _optional?
 
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
----
- drivers/spi/spi-stm32-ospi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Also, since _acquire() is right below in the same function, I see no
+benefit in requesting the reset control in released state.
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 668022098b1eac3628f0677e6d786e5a267346be..96fa362432f13c19e4dde63d964a0db64c8ade95 100644
---- a/drivers/spi/spi-stm32-ospi.c
-+++ b/drivers/spi/spi-stm32-ospi.c
-@@ -804,7 +804,7 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ospi->rstc = devm_reset_control_array_get_optional_exclusive(dev);
-+	ospi->rstc = devm_reset_control_array_get_exclusive_released(dev);
- 	if (IS_ERR(ospi->rstc))
- 		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
- 				     "Can't get reset\n");
-@@ -937,9 +937,11 @@ static int stm32_ospi_probe(struct platform_device *pdev)
- 		goto err_pm_enable;
- 
- 	if (ospi->rstc) {
-+		reset_control_acquire(ospi->rstc);
- 		reset_control_assert(ospi->rstc);
- 		udelay(2);
- 		reset_control_deassert(ospi->rstc);
-+		reset_control_release(ospi->rstc);
- 	}
- 
- 	ret = spi_register_controller(ctrl);
+>  	if (IS_ERR(ospi->rstc))
+>  		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
+>  				     "Can't get reset\n");
+> @@ -937,9 +937,11 @@ static int stm32_ospi_probe(struct platform_device *=
+pdev)
+>  		goto err_pm_enable;
+> =20
+>  	if (ospi->rstc) {
 
--- 
-2.25.1
+This check only makes sense if the reset control (array) is optional,
+otherwise ospi->rstc can never be NULL.
+
+> +		reset_control_acquire(ospi->rstc);
+
+This is missing error handling. Alternatively, you could just use the
+normal request function to get an already-acquired reset control.
+
+>  		reset_control_assert(ospi->rstc);
+>  		udelay(2);
+>  		reset_control_deassert(ospi->rstc);
+> +		reset_control_release(ospi->rstc);
+>  	}
+> =20
+>  	ret =3D spi_register_controller(ctrl);
+
+regards
+Philipp
 
 
