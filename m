@@ -1,70 +1,70 @@
-Return-Path: <linux-spi+bounces-7512-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7513-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CB4A83B6D
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 09:40:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CAE8A83BAE
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 09:52:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A81E170701
-	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:39:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FF468A150F
+	for <lists+linux-spi@lfdr.de>; Thu, 10 Apr 2025 07:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95C91F0E50;
-	Thu, 10 Apr 2025 07:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17891D2F53;
+	Thu, 10 Apr 2025 07:47:59 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79B91B81DC;
-	Thu, 10 Apr 2025 07:39:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FC6130A54;
+	Thu, 10 Apr 2025 07:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744270787; cv=none; b=hA/SxEOCAo4Ug/r09sYtvjBajQguZT5ZFZNS7cxAQMcjJBtjRYjAfF6B0pwBzMTb1tCb7YG1SntaDKy/5JFeEtsFtRWAmDL8JT0EtJ5XTddpQZoPD1orxgM109SlaoaVXM2esU9KFbdrwOjWcfK9qNKxpYXUQ+Ty9iCRpg0yQU4=
+	t=1744271279; cv=none; b=pxMvsPAUZlyHtUz823gznmQKF0Dy0YdgHlnK1I/7Km4dsLRWPpIZ+ANhyTzv9ObEKI8Y5nRXB0qcIAlhIX1ANMBQkPkZDyayB50o0cereFaZDccOrvIVTE92v+h0/VQalLUVcP308iuIqiziZCMjUTMv/uw8e9ZadcSH1Td8Y2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744270787; c=relaxed/simple;
-	bh=L1sXf+9FqINNB+qS1AHvdqZAgpqLVBCQX8MZALCtQgw=;
+	s=arc-20240116; t=1744271279; c=relaxed/simple;
+	bh=RoRER4+1aEdpOme56/aP1R/kwbFrrc4I8Nn6Jg8C1ho=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E+YFpR3jwHL4XgFEMLWjK0nvoH7XGxu+FKWwNQ7gqjw0IePM2xWzk5FpFy6CXLneYWxvySWMStSEADq32yXiVrMDGqOp1euR4oglKa39Qwu4rsqj2NSJFDLvO6A4Sa8lIMEMdenkbmxvj0BmD+dsVE1smIXXGrk8d9BH40hmWXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.169
+	 To:Cc:Content-Type; b=nXRe7a1O/0jp24dZTH70QZdQRmlvnk/zbUDFSCpHAoSi0m6xbpkid2kYU3DCepRF4UZRajwSf6Z3msCMLhfzM5LBwpaoyDq/4HhRognadoKJVVMXsJsmTDL6G+rlLPE5k5JE0X7IvDLEgnCGqHFZ6rUEESyYEsj73Gu+Z0PFsLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-52413efd0d3so251099e0c.2;
-        Thu, 10 Apr 2025 00:39:45 -0700 (PDT)
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-86b9b1def28so460038241.3;
+        Thu, 10 Apr 2025 00:47:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744270784; x=1744875584;
+        d=1e100.net; s=20230601; t=1744271276; x=1744876076;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QdhhHhNL4jcHghdMHoTj4SWhcku+gXEaGiUBtSR+CRE=;
-        b=vjdnqTMvqWNS4lsIxxkaD6zQE3lahA5rXyQhniwRrIea3ISpQxpnFJSMpJ+lJeDzxH
-         bkiLmWB4TsTbJBWdKv4mfGFKB/xC73ftzTBUvxbDut10TMEc3LAMqpEmV3ktsBpao1BT
-         Dy9s7oeXFpf/uRxC+rOxWZk+pgd3FBWHNgMZlMne31ZzWx8kny4d0tNWE6zT0Y46HcZq
-         o0QA5lMfHRJS8lJpMKIdnZ2KUuGH+qkErN5OOshu5FLoj1W02odETrzQLsWSOU9Yuvj6
-         oIZx1OZxeSZi+d+MHojb08ApfKqCu/OdcVH566jY24OxC99T5jxIvwY0LiLyiJ3pBjjh
-         tuyA==
-X-Forwarded-Encrypted: i=1; AJvYcCVh+nyhY+6pZfjBiXBm8S7MhuNu4VxoCVl0jMz0PE6MPpJ7/2cwldG+lXGkeJw9RJ+02Cd1PwBgnLPF@vger.kernel.org, AJvYcCX/zPaBifESNxr8JrL0MUApeojAXaAtholdGnBmMB68sy06cQEEp+M/qjWBbEZoZ5HyY7r9pI2Fmzln@vger.kernel.org, AJvYcCXcGJD2LkNuiUGB7tPFM9N8lbJ8W8Yf9PL5SY7LKgnb5Y9OzyqB6HoJbSHKLgB8zJHPEMbG9GWhNLL0iBA=@vger.kernel.org, AJvYcCXoEzL0M+ezC6h07k6ZJu84mi4EEmtrlw50D4pvDIiSS404+DxN+K4QGVyk3q9W3anO/4zBadylAZT8ZuucL87zdkw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJN4M9TLzjD0hCHEPqkzqSAa0Z7r46P5kjhiYs+ujWHZwt6BXh
-	LIjF8wmSwypgs9tDVamXxBVqli+RbvSbwVKf4c/0bTXmyDEHNN9LmsNJtiVkijc=
-X-Gm-Gg: ASbGncvdnHHEhT4+FfYPGx4nhTSrkdinQNSGYxxInR1k1PWOgW4IZqtcrUiMWrsX1iw
-	dbogEHbfT4jIEg97MV0F0faSiM72P9s9cTSqhrHGg3ZhsSnV76wo2uwq9D2IIXHDrN+7s7CLIIs
-	g9XyDk2cVNPxw7S9HhWas/frBAUTwptoS+61OEeGJEql8go917kQDrhHnK0/RBvgqAGQ1iE09vw
-	yivj5EUSfGiJsB+KhflIQBrmd7xkI7XiEPH5Z6I/rP4MZrtNFvKsI2Bkw4j0AUbA77mL0WJG9rC
-	Ci8Vq3Cpsmo9r7ZeU4WbGkVKx6VPKP7MQEhOx45RVK+StoGhTNS7Q6+/sk1Hp1fVrOxpyzarHjK
-	valk=
-X-Google-Smtp-Source: AGHT+IFNUEigN4Q8OdWD5uHh1HcaRF0zgQhg092oSOiRrItqQWX8wj0NHnS/0WN4hRWDsvBUyfXH0A==
-X-Received: by 2002:a05:6102:c4e:b0:4b6:20a5:8a11 with SMTP id ada2fe7eead31-4c9d34801dfmr1290034137.1.1744270783970;
-        Thu, 10 Apr 2025 00:39:43 -0700 (PDT)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-875560e4a9asm545013241.6.2025.04.10.00.39.43
+        bh=CYlM/NWonpmxHHJcBtv1TyUMxukkVC17bMxK3+UA8ZU=;
+        b=s1UAkivChL4T4cUYx+I2YsPT1upXBoTPjMRLBG7r6EHYcW9JQ1T8BHI5WmPKliNtCt
+         ufynrQM+vLxM67mnJuSyjOGpUKsS1T+m6XPXKNCo7U/nMq+p9bkCoEz/CcEHW2mdb/oF
+         ksSaoLl8mrY0UM4SYVLavyn1whdjpkxWhl269477GSRqJPKwR9vuATnSD5IUi2VhSP7+
+         dptLfuIVYHvfSY9P8Nr1BE7+qQHxAZmScvYozXxRSyGliwl/OTpWJ/QBubvlUxK4x32T
+         7G8KVSlOijPUANbiwzLJE2zcrwW3SXYKC+YIxU8fQQD/9rAf/2j7mNRP7g1Dt1pPJxTW
+         FhEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV28S0PTyxVGoan19ZxGS5ACrbSqrkqnIMGxCzWuOEJfTNgx4S8Z8LCs9jTXLl8UCZH+1QD1JXQ92XOwpzG0dcq/vw=@vger.kernel.org, AJvYcCV7DZ1NYbPNRamOgxgfjDxvRmxayvEHajd4inPkPq7aGQU99iYi37ob6hYP7Q6V41UgP68z69f8NXaW@vger.kernel.org, AJvYcCVjbMCIivYw5rgBmDyTGwiDFiyT/EgUxGav3bYB+bInQHxLV1TG4kQxgGFb+7f3J6ImKytSGuzIDZ5A@vger.kernel.org, AJvYcCX0hSjJlEuP+QsRnTeaZI8Mlfo+R9JfulaVUYXysSZqOxE1ySJmf+gIIE2Rt3MAxbve7orN+FDmSA+iUho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIaJJUGpUJo2A9+EDRWYq4Xmp9NNFy6/E88CsUuV74DlMEPh1U
+	QzLmx/3bmZk07anqVXAoATdeevaDe6y4ZsivDu7zJmayfut95Zpij2Lna+tQJXk=
+X-Gm-Gg: ASbGnctijNc+xM5R0H27eaLK1u//RdK6LgI/FLM18i8GoX/IuCOoloUqFjE2o31EtIk
+	zYxuRUq0Dcf9Myn3jXwrKI/OGRR1PzVl/XNB5Hf8HkeDmYRPjoxmqN3P54+ANqUD4iIHbSefSwS
+	AH1y+Y1R7WuyRorpmWzg0CiBB9giHcRf3rcE0ZDPX2HumLwr4nUZKuan1J4DnIcwTOCTekfofva
+	yNMJR923PxgG8TG81dXe8hf8ocod41IjycvnSwY8wTDVp0GQVDubzsFhQD9aMbdiMC/zDsTHrlE
+	3mlsmR6PSB9z7LQWlKNgxvsLRqd+PpVS7KKQlpo4b5gpRTfIDXxOXHrFdnjXhnTfNrvcYlA67U9
+	mnPE=
+X-Google-Smtp-Source: AGHT+IFWtghlh+ER1WsXyvSCmrqME5dCdsLfms8hbIgVkpugq65/Biw+fMQynCL88Q8G9pOF+qeelQ==
+X-Received: by 2002:a05:6102:3f48:b0:4c1:b2c2:61a with SMTP id ada2fe7eead31-4c9d362a2f9mr1257188137.25.1744271275900;
+        Thu, 10 Apr 2025 00:47:55 -0700 (PDT)
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com. [209.85.222.50])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4c9c98ee518sm500928137.28.2025.04.10.00.47.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 00:39:43 -0700 (PDT)
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-86b9d1f729eso215830241.3;
-        Thu, 10 Apr 2025 00:39:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUY04djTYtfpwv/W3C8nQL1f7l83x3WSf8aeHPR7kL1Pr6GMqnjE0Zruz8SwvGIq9ig1SGH4NpDLNYez2k=@vger.kernel.org, AJvYcCVIfSy+hXA8jZSZn2iuSSl5Y6P0s0ZotsNp55r3OTGx8hx4nnPLq2NOdKNPqJM/zKDE2wi6RuDDl6Kfev3Pn86JpO4=@vger.kernel.org, AJvYcCWNpoZyvxJFDz+BUMTEZvk++xTHdlifIKsqpDEhZxXvR8pVBiOZSPMZLX1raJ/69rAwEVPMt3IHwOzd@vger.kernel.org, AJvYcCXDE6pYy+/MUI/VLKu+AYnionbgV1DGB3cGT0JhEBVccvxBFvW6SdrcURmSnZo5zED1Q4zCXbGCflBZ@vger.kernel.org
-X-Received: by 2002:a05:6102:3f0c:b0:4c1:c10d:cf65 with SMTP id
- ada2fe7eead31-4c9d361f9a5mr1118125137.25.1744270783521; Thu, 10 Apr 2025
- 00:39:43 -0700 (PDT)
+        Thu, 10 Apr 2025 00:47:55 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-86b9b1def28so460025241.3;
+        Thu, 10 Apr 2025 00:47:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+aHCBr95T2EjIZuuIp1o5b4tLwvnX/DUn/7TH+uwSGfmIfIXhIBRNNlLHryaATsZFgfdpiilhTEOGsNHDVnrucPE=@vger.kernel.org, AJvYcCVLJ6Wj2QFhY9JbXYHBKTYXmFypZfnGBltub5i44t5Ll2eNseBEywL+H9Fpoy47XgaH+E3ROl+CsgHo@vger.kernel.org, AJvYcCW+k+Z0qg1tnmyiem9XOHWCo0YxG/wmQhcppuJkkz3rHfq3ROnVR5l6FyZho6l9/98QEu+2CPhGpZHO@vger.kernel.org, AJvYcCWE8k96qFW4C9zeIeJgDbO2vWEngLbFbjbQWr2WjruGjW3nKXG/UC2PFwWgYMl0Ol1lyv1l73v8Yns4cm8=@vger.kernel.org
+X-Received: by 2002:a05:6102:1515:b0:4bb:de88:d027 with SMTP id
+ ada2fe7eead31-4c9d34af187mr1482504137.7.1744271275576; Thu, 10 Apr 2025
+ 00:47:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -73,13 +73,13 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <875xjeb0wu.wl-kuninori.morimoto.gx@renesas.com>
  <87wmbu9may.wl-kuninori.morimoto.gx@renesas.com> <CAMuHMdWL_C-Vg3d+fAK_nXvzeZNNPDkkzPjB1oHRKHh16rZUHw@mail.gmail.com>
- <8734egnbl0.wl-kuninori.morimoto.gx@renesas.com> <87iknclp1w.wl-kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <87iknclp1w.wl-kuninori.morimoto.gx@renesas.com>
+ <8734egnbl0.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <8734egnbl0.wl-kuninori.morimoto.gx@renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 10 Apr 2025 09:39:31 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXYYYAabmsuVmM6mAqNM6XHyzKsScwAr0TruSe_LMo1kQ@mail.gmail.com>
-X-Gm-Features: ATxdqUFE85rUT8Av9gY4HgZmbdXhKV7A7wBHH1G6a_BtzkDiwH5i1TwKTn-l6uQ
-Message-ID: <CAMuHMdXYYYAabmsuVmM6mAqNM6XHyzKsScwAr0TruSe_LMo1kQ@mail.gmail.com>
+Date: Thu, 10 Apr 2025 09:47:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV3Wm=aES=WZtYNGQrA1W3OFGrrOR=Nwb2FXACeVmPzAg@mail.gmail.com>
+X-Gm-Features: ATxdqUHt59yuP5KWiSc_poBM0f4cr5ZmpOk68rO_kue5X07KSV3L3oZ8ztd4RY0
+Message-ID: <CAMuHMdV3Wm=aES=WZtYNGQrA1W3OFGrrOR=Nwb2FXACeVmPzAg@mail.gmail.com>
 Subject: Re: [PATCH 6/7] ASoC: renesas: add MSIOF sound support
 To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 Cc: Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
@@ -91,23 +91,41 @@ Content-Type: text/plain; charset="UTF-8"
 
 Hi Morimoto-san,
 
-On Thu, 10 Apr 2025 at 04:37, Kuninori Morimoto
+On Thu, 10 Apr 2025 at 01:45, Kuninori Morimoto
 <kuninori.morimoto.gx@renesas.com> wrote:
-> > > > +config SND_SOC_MSIOF
-> > > > +       tristate "R-Car series MSIOF support"
-> > > > +       depends on OF
-> > >
-> > > depends on ARCH_RENESAS || COMPILE_TEST
+> > > +       /* SITMDRx */
+> > > +       if (is_play) {
+> > > +               val = PCON | SYNCMD_LR | SYNCAC | TXSTP;
+> > > +               if (msiof_flag_has(priv, MSIOF_FLAGS_NEED_DELAY))
+> > > +                       val |= DTDL_1;
+> > > +
+> > > +               msiof_write(priv, SITMDR1, val);
+> > > +
+> > > +               val = BITLEN1(width);
+> > > +               msiof_write(priv, SITMDR2, val | GRP);
+> > > +               msiof_write(priv, SITMDR3, val);
+> > > +
 > >
-> > Ah, yes indeed. Will add in v2
+> > Don't you have to initialize SITMDR[123] unconditionally, as reception
+> > requires transmitting dummy data on R-Car (cfr. SPI_CONTROLLER_MUST_TX)?
 >
-> Renesas category Sound drivers are under below menu.
-> So, it is not needed on each drivers.
->
-> menu "SoC Audio support for Renesas SoCs"
->         depends on SUPERH || ARCH_RENESAS || COMPILE_TEST
+> Good catch, but I added 1 restriction for MSIOF-I2S mode.
+> I have explained it on top of this driver. The restriction is
+> "MSIOF-I2S doesn't work as Clock/Frame Provider Mode".
+> So, dummy transmit for RX is not needed/assumed.
+> I think it is one of big-diff between MSIOF-SPI ?
 
-Thanks, I should have checked that...
+IC.  Being just a mortal sound-noob, I didn't know what "Clock/Frame
+Provider Mode" means ;-) Oh, now I understand. I had missed
+completely that you are running MSIOF in slave mode. So everything
+should be fine.
+
+And
+
+    /* SITSCR */
+    #define SITSCR_V(p, d) ((p << 8) + d)
+
+is unused, and can be removed.
 
 Gr{oetje,eeting}s,
 
