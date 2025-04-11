@@ -1,175 +1,176 @@
-Return-Path: <linux-spi+bounces-7558-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7559-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E32DA8668D
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Apr 2025 21:43:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF95A866A8
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Apr 2025 21:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5441F189E527
-	for <lists+linux-spi@lfdr.de>; Fri, 11 Apr 2025 19:42:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4704A8C316F
+	for <lists+linux-spi@lfdr.de>; Fri, 11 Apr 2025 19:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DC0280A32;
-	Fri, 11 Apr 2025 19:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B151922DF9B;
+	Fri, 11 Apr 2025 19:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uBqvOm9M"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="md1/lGE2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DBB2586FE;
-	Fri, 11 Apr 2025 19:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650272356DC
+	for <linux-spi@vger.kernel.org>; Fri, 11 Apr 2025 19:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744400505; cv=none; b=eKyZTTNY6uYkAn814nIC/dWGELNCyneVZ4U0jU3Um9zT3aZN3qOobwsQGAKZc3d0bTbPLTJoCMLV6Da7D1mVD0M6YG1chclKZM4J5KaEPAWDLjG8IVtvaQ2w3pyTcTZmGElzybD/xWk/IejGZ7MFxezziBIntxFVGbg0xzKHzA0=
+	t=1744400940; cv=none; b=O/x49YtZtfAGYY99+G0zzQx/EnPjgU4ljJ0hy8ZutYffA6c/tS5RagSRg9DZKdbqnwEggOiSYRTn52h5QOJWaPZIfB2JfQMlWQqq15K0DT/wy5OcXxyQmdjiC4378VmB48bFXhRGxBjBHR6QKdHV7UoemYt1SH0v3rMgV5HP77E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744400505; c=relaxed/simple;
-	bh=/wFLNpPmWUKjvlLcHH3mgD6Psd/L7xQwFmxNcgBEH1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GG9AS1WFUW7Ms2E9y3J6OXuHLZ2tW0YM+d47wfDgRZ/iosOKYTmQ+l6YxvzZCtjMF4+Jc99/fts5uoWxzzlJTTaL/RJHgb7QwbwD6KwY927rjmwewU7duv7C4IbeHQm5MCXNtcFByrW7uJ2s8AD0FMKpVmseli6USyH/YV2hd0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uBqvOm9M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6808C4CEE2;
-	Fri, 11 Apr 2025 19:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744400502;
-	bh=/wFLNpPmWUKjvlLcHH3mgD6Psd/L7xQwFmxNcgBEH1I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uBqvOm9Ms6X6s6eKJZcgknAjmqo1NfiDC41m1l2Bw62d0RzLP5dBKlw2Gmf61/GHM
-	 FQIYySGY4t8Obirw8UlQAIDkFAMOsFYrGa4vDaerOYukhlh3ckbmjib0GrY65yJ/X7
-	 wdk3BUoE1pfEoKdNoCDvr5xcVjsZ/0ttu6pRnmaZ8GU5CSWeRq30n6JLXXz5ezNsxd
-	 vyiKJCp9uuGqyLeaUubvSHj2BKcVhdPSEs4MIuUQWkJXKYePxc58BBVxQEaEjQW+c8
-	 tTH+etxD8MCj980d7zPPI2LczGlXkkmz15F7BmiWYuvV7WmKjk0bnRyaBahpK5B/gR
-	 tBtK7tsPRv3Fg==
-Date: Fri, 11 Apr 2025 14:41:40 -0500
-From: Rob Herring <robh@kernel.org>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jaroslav Kysela <perex@perex.cz>,
+	s=arc-20240116; t=1744400940; c=relaxed/simple;
+	bh=dwX7lrYmi9zzC7dMvDxV9tnKHwWc/98WqddHYdda8zQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HSwP0Ph7TJYgo7rmNG67hJcGy+LlpJkajCNYk/QM+BfZwtAUrS14SjlCq/RJr7lOUz0DGPC99/KMBYWFjt2ORNWvLtXk5IUlzm2+MU92pMTfq+7gic+OUukXp05rDguGaP55Jb59ScdqumtFOjb5JExHTUvRG5GrnbStetOeVTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=md1/lGE2; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=qOkEUf9VE+o8qt
+	Kh7W5+vm+94aknEFFFwvSgu055GlE=; b=md1/lGE2BpJfcsswkeLB0hVBlBtTCM
+	9bgc6Pn+ahKxf9qfOttx/9iLNAmldN0RkIFV3gx+qisB9ZOKJ8Q0a+8+s7HblUN/
+	FpeT2rw1TVAdNSNNNDJQ2REkDKWwEbgDPxCW/r6jt+49w1xadaznC3XTaZ2Hv2Oa
+	/VZaJdB3znVO8hGmctWQ7Po0+vFXbqrzO6tiaoyPimWkCdc7NDrg8kdAzSw3Ol74
+	HGxqLckN4JFYsI1gINckzralP4Gsnbc/M0pmLsw0YRZgVRTYV1JTocmZ6KkdY9gO
+	8Gs5ZFCZQkYVG4A4zDIATXf495fNrQRt2ij7xg7CWF+UbN32z+Gzh5Gg==
+Received: (qmail 1407061 invoked from network); 11 Apr 2025 21:48:54 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Apr 2025 21:48:54 +0200
+X-UD-Smtp-Session: l3s3148p1@F8UN/oUyCKwujnsS
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] dt-bindings: renesas,sh-msiof: Add MSIOF I2S
- Sound support
-Message-ID: <20250411194140.GA3767706-robh@kernel.org>
-References: <87h62vh5mj.wl-kuninori.morimoto.gx@renesas.com>
- <87frifh5ls.wl-kuninori.morimoto.gx@renesas.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfgang Grandegger <wg@grandegger.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	linux-can@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] dt-bindings: remove RZ/N1S bindings
+Date: Fri, 11 Apr 2025 21:47:57 +0200
+Message-ID: <20250411194849.11067-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87frifh5ls.wl-kuninori.morimoto.gx@renesas.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 11, 2025 at 01:03:27AM +0000, Kuninori Morimoto wrote:
-> Renesas MSIOF (Clock-Synchronized Serial Interface with FIFO) can work as
-> both SPI and I2S. MSIOF-I2S will use Audio Graph Card/Card2 driver which
-> uses Of-Graph in DT.
-> 
-> MSIOF-SPI/I2S are using same DT compatible properties.
-> MSIOF-I2S         uses Of-Graph for Audio-Graph-Card/Card2,
-> MSIOF-SPI doesn't use  Of-Graph.
-> 
-> Adds schema for MSIOF-I2S (= Sound).
-> Because MSIOF is no longer SPI specific device, remove spi specific schema
-> 
-> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> ---
->  .../bindings/spi/renesas,sh-msiof.yaml        | 23 +++++++++++++------
->  1 file changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> index 49649fc3f95a..9f73120e97c1 100644
-> --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> @@ -4,14 +4,11 @@
->  $id: http://devicetree.org/schemas/spi/renesas,sh-msiof.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Renesas MSIOF SPI controller
-> +title: Renesas MSIOF SPI / I2S controller
->  
->  maintainers:
->    - Geert Uytterhoeven <geert+renesas@glider.be>
->  
-> -allOf:
-> -  - $ref: spi-controller.yaml#
+Except for these four quite random bindings, no further upstream
+activity has been observed in the last 8 years. So, remove these
+fragments to reduce maintenance burden.
 
-if:
-  properties:
-    $nodename:
-      pattern: '^spi@'
-then:
-  $ref: spi-controller.yaml#
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Or just always use 'spi' node name even if used for i2s.
+In the previous discussion [1], Rob offered to take this patch.
 
-> -
->  properties:
->    compatible:
->      oneOf:
-> @@ -70,6 +67,12 @@ properties:
->            - description: CPU registers
->            - description: DMA engine registers
->  
-> +  "#address-cells":
-> +    enum: [0, 1]
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
+[1] https://lore.kernel.org/r/CAL_Jsq+DOp8YOcshTVqYcbmgbuc4etTQeeswmMUYjw1sws4mAA@mail.gmail.com
 
-Then drop these.
+ .../devicetree/bindings/net/can/nxp,sja1000.yaml     |  4 +---
+ .../bindings/pinctrl/renesas,rzn1-pinctrl.yaml       |  4 +---
+ .../devicetree/bindings/serial/snps-dw-apb-uart.yaml | 12 +++---------
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml     |  4 +---
+ 4 files changed, 6 insertions(+), 18 deletions(-)
 
->    interrupts:
->      maxItems: 1
->  
-> @@ -146,14 +149,20 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      default: 64
->  
-> +  # for MSIOF-I2S
-> +  port:
-> +    $ref: ../sound/audio-graph-port.yaml#/definitions/port-base
-> +    unevaluatedProperties: false
-> +    patternProperties:
-> +      "^endpoint(@[0-9a-f]+)?":
-> +        $ref: audio-graph-port.yaml#/definitions/endpoint-base
+diff --git a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+index 144a3785132c..ec0c2168e4b9 100644
+--- a/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
++++ b/Documentation/devicetree/bindings/net/can/nxp,sja1000.yaml
+@@ -16,9 +16,7 @@ properties:
+           - nxp,sja1000
+           - technologic,sja1000
+       - items:
+-          - enum:
+-              - renesas,r9a06g032-sja1000 # RZ/N1D
+-              - renesas,r9a06g033-sja1000 # RZ/N1S
++          - const: renesas,r9a06g032-sja1000 # RZ/N1D
+           - const: renesas,rzn1-sja1000 # RZ/N1
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/pinctrl/renesas,rzn1-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/renesas,rzn1-pinctrl.yaml
+index 816688580e33..aa882b5bfe97 100644
+--- a/Documentation/devicetree/bindings/pinctrl/renesas,rzn1-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzn1-pinctrl.yaml
+@@ -13,9 +13,7 @@ maintainers:
+ properties:
+   compatible:
+     items:
+-      - enum:
+-          - renesas,r9a06g032-pinctrl # RZ/N1D
+-          - renesas,r9a06g033-pinctrl # RZ/N1S
++      - const: renesas,r9a06g032-pinctrl # RZ/N1D
+       - const: renesas,rzn1-pinctrl   # Generic RZ/N1
+ 
+   reg:
+diff --git a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+index 1aa3480d8d81..1ee0aed5057d 100644
+--- a/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+@@ -17,9 +17,7 @@ allOf:
+       properties:
+         compatible:
+           items:
+-            - enum:
+-                - renesas,r9a06g032-uart
+-                - renesas,r9a06g033-uart
++            - const: renesas,r9a06g032-uart
+             - const: renesas,rzn1-uart
+             - const: snps,dw-apb-uart
+     then:
+@@ -45,15 +43,11 @@ properties:
+   compatible:
+     oneOf:
+       - items:
+-          - enum:
+-              - renesas,r9a06g032-uart
+-              - renesas,r9a06g033-uart
++          - const: renesas,r9a06g032-uart
+           - const: renesas,rzn1-uart
+           - const: snps,dw-apb-uart
+       - items:
+-          - enum:
+-              - renesas,r9a06g032-uart
+-              - renesas,r9a06g033-uart
++          - const: renesas,r9a06g032-uart
+           - const: renesas,rzn1-uart
+       - items:
+           - enum:
+diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+index bccd00a1ddd0..ff77ad6d4d8c 100644
+--- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
++++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+@@ -84,9 +84,7 @@ properties:
+         const: canaan,k210-spi
+       - description: Renesas RZ/N1 SPI Controller
+         items:
+-          - enum:
+-              - renesas,r9a06g032-spi # RZ/N1D
+-              - renesas,r9a06g033-spi # RZ/N1S
++          - const: renesas,r9a06g032-spi # RZ/N1D
+           - const: renesas,rzn1-spi   # RZ/N1
+       - description: T-HEAD TH1520 SoC SPI Controller
+         items:
+-- 
+2.47.2
 
-The correct way is:
-
-port:
-  $ref: audio-graph-port.yaml#
-  unevaluatedProperties: false
-
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
->    - clocks
->    - power-domains
-> -  - '#address-cells'
-> -  - '#size-cells'
->  
->  if:
->    not:
-> @@ -173,7 +182,7 @@ examples:
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->      #include <dt-bindings/power/r8a7791-sysc.h>
->  
-> -    msiof0: spi@e6e20000 {
-> +    msiof0: serial-engine@e6e20000 {
->          compatible = "renesas,msiof-r8a7791", "renesas,rcar-gen2-msiof";
->          reg = <0xe6e20000 0x0064>;
->          interrupts = <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
-> -- 
-> 2.43.0
-> 
 
