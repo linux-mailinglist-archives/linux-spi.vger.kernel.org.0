@@ -1,115 +1,99 @@
-Return-Path: <linux-spi+bounces-7574-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7575-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C2EA88562
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 16:42:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83549A885A5
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 16:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 587871904735
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 14:34:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 258A3190581A
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 14:42:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 788BD2749F0;
-	Mon, 14 Apr 2025 14:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB69127F74B;
+	Mon, 14 Apr 2025 14:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RsE1fqnY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KyP9D3Nv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A37E19539F;
-	Mon, 14 Apr 2025 14:10:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8676C27F73A;
+	Mon, 14 Apr 2025 14:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744639833; cv=none; b=DRNitMs4b+/KJ0CrMIiF/qPRf0tCRWGpmSq3MacLSrezkqOU6k96pcySSEbGVCeAKVa0Y6x0XvR/WCt/R4nVMG7Ox4Jp836PSEmtD0YbNubr3ftLD53nCdIfxf95AHpTW6chZTve/+D0faVmdcyr2h4BYRxyY4U3QXMjjgMoivo=
+	t=1744640728; cv=none; b=G4vP7eL853s1u1MZqqObSVnMbXxbZtm8whLA/bo8HS6nQ4L//j2eywgwps3gLPYUclw5kDBhzwKoa7xaFuWLEpxQh23k07sLhsaHJYMmbjWsB70AevaoKQA7W5KcPtkEDtrvYRq/f30O/1h4hsUxN1ygR/5my0xJJ+KSpa/fBt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744639833; c=relaxed/simple;
-	bh=UAdCAcDDcbUAFaQhhiPijezFVFrbVIScJZbGC9BYzaw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BygdRO6AmEo4Nl+RhRXCD/kB/b6H0/xhP7iXX+o6/+uOSVIsetrg7QyFZxr/rJDvBP1DwXwPVnNhDkXsrrFHFhFKMnobMOtpF3LlxoR+m1x8iu/uAvIUkEIf8U4jyY4A3TMsVMQ8BVeg5kFyfph+mJgx2zcU2nEan5e7c0IG1MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RsE1fqnY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEAEAC4CEE2;
-	Mon, 14 Apr 2025 14:10:29 +0000 (UTC)
+	s=arc-20240116; t=1744640728; c=relaxed/simple;
+	bh=3daDj0mcIsp68OogGpd0fzNPIdyotvmgnk6RkCbuVWc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=cnU2LjeRg4GC6PpCA5TF8rPtfH6dP1nGMMTMadO4ddvb8JY2RpRiasQu74338fPKLs1+lnt5T6fQsSEgj9VLLqPkhK/GDh7gWUPVa/PUNVYm6DnpHAUawpDBVtdj+vzfGKns2wn++R6yIFw2TYByQHnwoSedy0MOxnGCIG8llpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KyP9D3Nv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FE2DC4CEE2;
+	Mon, 14 Apr 2025 14:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744639833;
-	bh=UAdCAcDDcbUAFaQhhiPijezFVFrbVIScJZbGC9BYzaw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RsE1fqnYQ0D/umEGmNaSWaZcYYZlpe8oJ4M9bNmQUXNC47OUyTTQ7DB18P+L6ECfU
-	 BUOknsLyEtUAUxoXGJ8P/TLemQCIiv7oKKaL7iPzY3CrBKbeA/VaAUOTSQOnLviFpH
-	 Z/1mOoDTt3raVyS/XYhqxZBV5YbWFQpPnBReB/ykzLWof49KucUxQCJ4tD5/dfiWkI
-	 Wvqm1qlxJwJnHY5kRdOgzC9m2nEm6ThmVtaNH7tkkIPxgWfFZ59yHNhwe8jiGYfbmY
-	 jrrMTJPPkCNVGmSDXakfvukg/6IL18z5IwrDVgDp6vHgvx+YVoswa+iJJC1RfYw/91
-	 SVNFl3op8CVzw==
-Date: Mon, 14 Apr 2025 15:10:27 +0100
+	s=k20201202; t=1744640727;
+	bh=3daDj0mcIsp68OogGpd0fzNPIdyotvmgnk6RkCbuVWc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=KyP9D3Nvl9VPs4Y+adIbgJ/kWDV8oOJFDl25SW4Z8E3+fC5MdUg2iVjQ3ngxK6IHd
+	 xveMv/ctz4aIS3rkjZhiFXun4FauYhVpTc2nNHA4xMvq6kV4ZiXWvPE8melIYiWUd5
+	 WyGC28M9iH2WBh+W4SvBqfKeGzMPFqTKT7rNVN8Sl0KmrJ+8iuyGjqxdvXf11M1So3
+	 bYcp2JgZBOB5D553M4LCbhOyqODMDAxOKOCe8jJj0cRJvhNAuI3A2Docv8DbQn/jS9
+	 Hu3nE2pUhk3iL5f667EVFF7Ns2T2KTRFl8m6EvMW4c6HiwJsh4+D8qw7O8nW5iH2aW
+	 d7RuK1wsCPezQ==
 From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Varshini Rajendran <varshini.rajendran@microchip.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>, linux-spi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Dahl <ada@thorsis.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Pavel Machek <pavel@kernel.org>
-Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
-Message-ID: <58e37046-f9fd-41cf-a5f5-f7cbb1eb97ab@sirena.org.uk>
-References: <20250327195928.680771-2-csokas.bence@prolan.hu>
- <20250327195928.680771-3-csokas.bence@prolan.hu>
- <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
- <832eb5e3-7e2d-4ed2-8571-eca9fe129013@prolan.hu>
+To: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Mans Rullgard <mans@mansr.com>
+Cc: Pan Nan <pannan@allwinnertech.com>, Maxime Ripard <mripard@kernel.org>, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20250410115303.5150-1-mans@mansr.com>
+References: <20250410115303.5150-1-mans@mansr.com>
+Subject: Re: [PATCH] spi: sun4i: add support for GPIO chip select lines
+Message-Id: <174464072481.99542.17446384569030524351.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 15:25:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nb4I0smoCForxcgo"
-Content-Disposition: inline
-In-Reply-To: <832eb5e3-7e2d-4ed2-8571-eca9fe129013@prolan.hu>
-X-Cookie: Good day to avoid cops.  Crawl to work.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
+On Thu, 10 Apr 2025 12:53:03 +0100, Mans Rullgard wrote:
+> Set use_gpio_descriptors to true so that GPIOs can be used for chip
+> select in accordance with the DT binding.
+> 
+> 
 
---nb4I0smoCForxcgo
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Apr 14, 2025 at 03:56:47PM +0200, Cs=F3k=E1s Bence wrote:
-> On 2025. 04. 09. 19:43, Rafael J. Wysocki wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> > I can apply this one alone if you want me to do that, but I could also
-> > apply the other patch in the series if it got an ACK from the driver
-> > maintainer.
+Thanks!
 
-> I think you can apply it and then Mark can apply the SPI part to his tree.
-> @broonie what do you think?
+[1/1] spi: sun4i: add support for GPIO chip select lines
+      commit: 36ff6c3f5084f2dbb6cd89d15b78cf734e9abfa6
 
-Please don't add random characters to my name.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-I'd need a tag since the driver change isn't going to build without the
-new API.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---nb4I0smoCForxcgo
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmf9F1IACgkQJNaLcl1U
-h9CVyQf+OoBLAj4WQr+H7BEg9lObLdNL4KRPrtCilkLER2n2jv1LKxR5AOVaM5s0
-a5jKczyVXb543ZHBu2u2Mr3F2ofULa7INlrO88vcmVjI0QQgaKweqTO0Z6bL8atX
-D0gRFG0/QKfQ/EscdGHTVDza0RH5LNDwzz7Jw3guBzw5lu1d7raDhXCmorKVzMAc
-H1yoyUGhmLGv71cpmm3Y4vO3hvQZP4O50+8f83Ntf7A/TpByOrxd8RI6wtFndpJU
-FJalHnIvuMSv1djWNklF0r2E41AheaCGCxGO3SlLffqjXbGh98QS7a3mG8yjMOCA
-TR41WG7xTs+F7TjDT4E1tYyh/vdRjg==
-=mnIx
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---nb4I0smoCForxcgo--
 
