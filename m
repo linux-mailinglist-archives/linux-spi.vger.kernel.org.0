@@ -1,56 +1,54 @@
-Return-Path: <linux-spi+bounces-7571-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7570-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF6A3A87CC0
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 12:03:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03B4DA87CC1
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 12:04:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F2841887699
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 10:03:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A989166ACF
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 10:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8D925D55F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8A525D8FF;
 	Mon, 14 Apr 2025 10:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="autzkZMc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1AT/X3/"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DB3191493;
-	Mon, 14 Apr 2025 10:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D67482EB;
+	Mon, 14 Apr 2025 10:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744625023; cv=none; b=auX7IiTgEIOOjGATH+ZrG9TZz2AVlhpvXeC8MDmEkcZXhPchB9C5fQ2WIqAIWEegO/xIiTrGig7jI9rUrrwgWozTX949ozzV2uGDEjebowjwnQd7Eoav/4qEK0WVKqm05z0/m3xiTZQS/6q0p09NApgkp6Fn7ntsMs85RM/Ndow=
+	t=1744625023; cv=none; b=g0sBqzLewc6T7XuESFH9Ml6g1GnBdlflSvKfFj6Z13TisyvySNnT4WlQ71+RVeQdrEhv3LfWa/NWVHpjLypM6gnh39QAXDPu3xQFXGim5CfZBcoAlkc/eaKXXwwttkuD0oJ52/1fBxz7VApKTHyKktUDdvoZ88Hyt6wZV/fRyWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1744625023; c=relaxed/simple;
-	bh=ODYW5ybWUOgIk3FjZgLf+TuI99lrnB3LjKGzb/UKJkY=;
+	bh=xqW9QjI1wIZWYuNCR1WZbXL3UGVYI7WLqjrhdOvgZik=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=aeuNFDy76JPCllou7MlCmiNYv/QBDtho1MYC0XikFNDb1Lt6ochT+fFDSz8c2U/8a/dZngs0bFgk2DQJress23R1+8aww2BvWwdy20jteKFepCq0hSQKKMSpULEJlR0ehFl2oxkJ0gnk72j9JcPz7UPshe3xXvELwAnr3gUH8a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=autzkZMc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF40C4CEE2;
-	Mon, 14 Apr 2025 10:03:40 +0000 (UTC)
+	 MIME-Version:Content-Type; b=WX+wOxiSlDvz9M42SyZJaAyDGZPZrPTmC0BQvylpXe9YTE8FMUIZb+K+HUmjP8yD8X4+izDj3M0APW4TBCJLgjGiXuEI7GoKTa7qHhI4zGapLL9YsElcZ5M/JNLprV1j/AZLSjwMXSLx/UkP255w56Mp3Ig2Ak6K55rIxcrjwmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1AT/X3/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49FCC4CEE5;
+	Mon, 14 Apr 2025 10:03:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744625021;
-	bh=ODYW5ybWUOgIk3FjZgLf+TuI99lrnB3LjKGzb/UKJkY=;
+	s=k20201202; t=1744625022;
+	bh=xqW9QjI1wIZWYuNCR1WZbXL3UGVYI7WLqjrhdOvgZik=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=autzkZMcZWjfTrCRfBjAj+nH3k8Ih40sLGuCu615POSr4LnB8kD3wsAchacW2yFVO
-	 SNl3AvhMPHc1FGUyhuaLb9y7ETTaAKCxmmfeCeqbHn5uxMta1WuraGYaKxfpCKvTJ4
-	 SqwVQZZZZs6qeo3jNwyEruckrIXVnT+BUGU9SG0tA9FwyHt7zudwO9DTpRIpLJ6tCq
-	 5YsL+E/WQPZglY858lhQtNObJKiOGwBs+c20LHvIx5P51MtYGmArF/gtPs36ctEYhb
-	 s4t5JKMDw8j4Wpq0MFbJCgzU0Bv5VVnyw8Hq/9NRqLq+AyUyO1TauFI3hqgug8TW5Q
-	 Npkl2tSMTB12Q==
+	b=E1AT/X3/yj+A9wWT2zFEQwHo+Mi+akyBniDkIg4ff4w+lxPGye+To8//wiWzwj+U2
+	 jcyPa8IQl8vlWlyYorVoeA4GMwbJIUh3dJTp2tR9ZURuDdvZTGVKJ9BnqVuYBCcnOP
+	 8p8yET0Rx9xW7yybu1D05d5E6BgEuFQRR/hRSwtK6yhuOBv4KN7/QcfGsN782I6kDC
+	 XHtI69shb504AKXEkL6tny7JoIX3ZvA2OywTkhlqaGwv6H8tgvohyrkq7hbFGl7XZy
+	 CVGrMSltyEEmdJxHBedOKyjVPf2m33cT4zgXd9Tq4JFEMrt93q1g1d9HbGFolt/apZ
+	 KfGeudrVG6TUQ==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: quic_tdas@quicinc.com, andersson@kernel.org, konradybcio@kernel.org
-In-Reply-To: <20250404135427.313825-1-quic_msavaliy@quicinc.com>
-References: <20250404135427.313825-1-quic_msavaliy@quicinc.com>
-Subject: Re: [PATCH v2] spi: Add support for Double Transfer Rate (DTR)
- mode
-Message-Id: <174462501993.12165.4079866099404006000.b4-ty@kernel.org>
-Date: Mon, 14 Apr 2025 11:03:39 +0100
+To: linux-spi@vger.kernel.org, Kevin Hao <haokexin@gmail.com>
+Cc: Han Xu <han.xu@nxp.com>, imx@lists.linux.dev
+In-Reply-To: <20250411-spi-v1-1-8d6dfb1a9262@gmail.com>
+References: <20250411-spi-v1-1-8d6dfb1a9262@gmail.com>
+Subject: Re: [PATCH v2] spi: fsl-qspi: Optimize fsl_qspi struct
+Message-Id: <174462502149.12165.11097943181673773187.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 11:03:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,17 +59,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Fri, 04 Apr 2025 19:24:27 +0530, Mukesh Kumar Savaliya wrote:
-> Introduce support for protocol drivers to specify whether a transfer
-> should use single or dual transfer mode. Currently, the SPI controller
-> cannot determine this information from the user, leading to potential
-> limitations in transfer capabilities.
+On Fri, 11 Apr 2025 15:06:41 +0800, Kevin Hao wrote:
+> Reorgize the members of the fsl_qspi struct to:
+>   - Reduce a hole in the struct.
+>   - Group members required by each op (e.g., iobase, ahb_addr,
+>     devtype_data and lock) into the same cacheline.
 > 
-> Add a new field `dtr_mode` in the `spi_transfer` structure. The `dtr_mode`
-> field allows protocol drivers to indicate if Double Transfer Rate (DTR)
-> mode is supported for a given transfer. When `dtr_mode` is set to true,
-> the SPI controller will use DTR mode; otherwise, it will default to single
-> transfer mode.
+> Before:
+> struct fsl_qspi {
+> 	[...]
 > 
 > [...]
 
@@ -81,8 +77,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Add support for Double Transfer Rate (DTR) mode
-      commit: 88113e09ada52be28968aacf4af7b3d667832f00
+[1/1] spi: fsl-qspi: Optimize fsl_qspi struct
+      commit: 279b418f477fd6c1c21b1cf212837622c774f15f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
