@@ -1,102 +1,99 @@
-Return-Path: <linux-spi+bounces-7570-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7572-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03B4DA87CC1
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 12:04:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17AB0A87D27
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 12:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A989166ACF
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 10:03:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A0AF188DEFE
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 10:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8A525D8FF;
-	Mon, 14 Apr 2025 10:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A25264FB2;
+	Mon, 14 Apr 2025 10:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1AT/X3/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXF9nIJ6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D67482EB;
-	Mon, 14 Apr 2025 10:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F411C84BB
+	for <linux-spi@vger.kernel.org>; Mon, 14 Apr 2025 10:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744625023; cv=none; b=g0sBqzLewc6T7XuESFH9Ml6g1GnBdlflSvKfFj6Z13TisyvySNnT4WlQ71+RVeQdrEhv3LfWa/NWVHpjLypM6gnh39QAXDPu3xQFXGim5CfZBcoAlkc/eaKXXwwttkuD0oJ52/1fBxz7VApKTHyKktUDdvoZ88Hyt6wZV/fRyWs=
+	t=1744625520; cv=none; b=ZZoxFftSHGadrVIqNp102QGExouWdJuteUPCYHz6YYmJ+2Bseine9100qJXdy27s9DXpzH0trC3aDQ8gNEu7P0ou3+X/mmzlR/tj91Pfc4n5UrSXjvXGlpAomj8xcK7lC1QwatK/5sqgvgHsWecJpPdhFFn/ydj60IW75BtvLYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744625023; c=relaxed/simple;
-	bh=xqW9QjI1wIZWYuNCR1WZbXL3UGVYI7WLqjrhdOvgZik=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=WX+wOxiSlDvz9M42SyZJaAyDGZPZrPTmC0BQvylpXe9YTE8FMUIZb+K+HUmjP8yD8X4+izDj3M0APW4TBCJLgjGiXuEI7GoKTa7qHhI4zGapLL9YsElcZ5M/JNLprV1j/AZLSjwMXSLx/UkP255w56Mp3Ig2Ak6K55rIxcrjwmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1AT/X3/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49FCC4CEE5;
-	Mon, 14 Apr 2025 10:03:41 +0000 (UTC)
+	s=arc-20240116; t=1744625520; c=relaxed/simple;
+	bh=oqzvS1cWE9l6qlNdQPy3BGzI6QbmDw3Eem//LFv6YOA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dmE+n04TqouFsIC5U8RzzFKUZ2QQb68R6dsxb0ufo3OkuMqirvMgLyAnDYhG/DEppFRSgDZ1S51Q+0vKz21baiu1aW7ov5tUELPRHRA78eGhMeWfikEKPhodf0z3PHEcRyfalxXMXdZn8tfyaZ0ysavRhIRVQPTgpAtl+ATHIfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXF9nIJ6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC57BC4CEE2;
+	Mon, 14 Apr 2025 10:11:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744625022;
-	bh=xqW9QjI1wIZWYuNCR1WZbXL3UGVYI7WLqjrhdOvgZik=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=E1AT/X3/yj+A9wWT2zFEQwHo+Mi+akyBniDkIg4ff4w+lxPGye+To8//wiWzwj+U2
-	 jcyPa8IQl8vlWlyYorVoeA4GMwbJIUh3dJTp2tR9ZURuDdvZTGVKJ9BnqVuYBCcnOP
-	 8p8yET0Rx9xW7yybu1D05d5E6BgEuFQRR/hRSwtK6yhuOBv4KN7/QcfGsN782I6kDC
-	 XHtI69shb504AKXEkL6tny7JoIX3ZvA2OywTkhlqaGwv6H8tgvohyrkq7hbFGl7XZy
-	 CVGrMSltyEEmdJxHBedOKyjVPf2m33cT4zgXd9Tq4JFEMrt93q1g1d9HbGFolt/apZ
-	 KfGeudrVG6TUQ==
-From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, Kevin Hao <haokexin@gmail.com>
-Cc: Han Xu <han.xu@nxp.com>, imx@lists.linux.dev
-In-Reply-To: <20250411-spi-v1-1-8d6dfb1a9262@gmail.com>
-References: <20250411-spi-v1-1-8d6dfb1a9262@gmail.com>
-Subject: Re: [PATCH v2] spi: fsl-qspi: Optimize fsl_qspi struct
-Message-Id: <174462502149.12165.11097943181673773187.b4-ty@kernel.org>
-Date: Mon, 14 Apr 2025 11:03:41 +0100
+	s=k20201202; t=1744625519;
+	bh=oqzvS1cWE9l6qlNdQPy3BGzI6QbmDw3Eem//LFv6YOA=;
+	h=Subject:From:Date:To:From;
+	b=jXF9nIJ68Xs7qoOVcAZZOq3vtXEb1+WGF6NNrYCLs+tDtD2+YTrs6UtdqNYcw3228
+	 wH/G0uGGun65B71/zCOEe6lTvcNI0vTzvxnwru4zgeqqsvaQ1QMe+r9QUgWAqRUuwW
+	 fyIQU7TPAK/iXwSBZlZ5RxY+24c1df8vEP6YJo7+O0Bs4YRW2e/rpAPC7NVpCjh1J/
+	 beTku67D8WrVO9z0UaOfvc/6TV4B1oFc2J7f2Evn1ad0r/iJDfFg0bMLUFs0xQS4HN
+	 A/eFDQw9ofrKtnQSQe1hx8MkXgsaE4vsD0q6V2za1Fng9m6e3Sg0qyjhuq8nYI2jJK
+	 DFbWdCSL66Hag==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B25BD380CEF9;
+	Mon, 14 Apr 2025 10:12:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174462555740.1828697.8937781048460018611.git-patchwork-summary@kernel.org>
+Date: Mon, 14 Apr 2025 10:12:37 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 11 Apr 2025 15:06:41 +0800, Kevin Hao wrote:
-> Reorgize the members of the fsl_qspi struct to:
->   - Reduce a hole in the struct.
->   - Group members required by each op (e.g., iobase, ahb_addr,
->     devtype_data and lock) into the same cacheline.
-> 
-> Before:
-> struct fsl_qspi {
-> 	[...]
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: fsl-qspi: Fix kernel panic when unbinding the SPI host
+  Submitter: Kevin Hao <haokexin@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=946247
+  Lore link: https://lore.kernel.org/r/20250321-spi-v1-0-b9939baa64b6@gmail.com
+    Patches: [1/2] spi: fsl-qsi: Optimize fsl_qspi struct
 
-Thanks!
+Patch: [v2] spi: fsl-qspi: Optimize fsl_qspi struct
+  Submitter: Kevin Hao <haokexin@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952350
+  Lore link: https://lore.kernel.org/r/20250411-spi-v1-1-8d6dfb1a9262@gmail.com
 
-[1/1] spi: fsl-qspi: Optimize fsl_qspi struct
-      commit: 279b418f477fd6c1c21b1cf212837622c774f15f
+Patch: mtd: nand: Drop explicit test for built-in CONFIG_SPI_QPIC_SNAND
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=947979
+  Lore link: https://lore.kernel.org/r/99eef91c334f3f2314c2f5671e1eb55211a5ff19.1743150196.git.geert+renesas@glider.be
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: [RESEND,v2] spi: Add support for Double Transfer Rate (DTR) mode
+  Submitter: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952036
+  Lore link: https://lore.kernel.org/r/20250410130207.3688117-1-quic_msavaliy@quicinc.com
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Total patches: 4
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Mark
 
 
