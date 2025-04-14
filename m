@@ -1,99 +1,105 @@
-Return-Path: <linux-spi+bounces-7572-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7573-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AB0A87D27
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 12:12:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD1D6A8855C
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 16:41:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A0AF188DEFE
-	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 10:12:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A25C567333
+	for <lists+linux-spi@lfdr.de>; Mon, 14 Apr 2025 14:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A25264FB2;
-	Mon, 14 Apr 2025 10:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5962C1E13;
+	Mon, 14 Apr 2025 14:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXF9nIJ6"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="t9pCPRQ2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F411C84BB
-	for <linux-spi@vger.kernel.org>; Mon, 14 Apr 2025 10:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AC727FD7D;
+	Mon, 14 Apr 2025 14:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744625520; cv=none; b=ZZoxFftSHGadrVIqNp102QGExouWdJuteUPCYHz6YYmJ+2Bseine9100qJXdy27s9DXpzH0trC3aDQ8gNEu7P0ou3+X/mmzlR/tj91Pfc4n5UrSXjvXGlpAomj8xcK7lC1QwatK/5sqgvgHsWecJpPdhFFn/ydj60IW75BtvLYA=
+	t=1744639335; cv=none; b=F1+6XPkbiQr45XjqDchGSGUjQKZVaXu5Nsg1ueW+TnV6fF7capHEsQ3OvkUbcMhj7zBS0gxnideduSzlRtAtWzCA0xtguyjpevfQSHoAdnfewX1jEpRae0mDAfRpL60y4Ia3rOPWcZaPZ3F/cjIBhXont/MpWF+Wbhao0NzVyE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744625520; c=relaxed/simple;
-	bh=oqzvS1cWE9l6qlNdQPy3BGzI6QbmDw3Eem//LFv6YOA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dmE+n04TqouFsIC5U8RzzFKUZ2QQb68R6dsxb0ufo3OkuMqirvMgLyAnDYhG/DEppFRSgDZ1S51Q+0vKz21baiu1aW7ov5tUELPRHRA78eGhMeWfikEKPhodf0z3PHEcRyfalxXMXdZn8tfyaZ0ysavRhIRVQPTgpAtl+ATHIfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXF9nIJ6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC57BC4CEE2;
-	Mon, 14 Apr 2025 10:11:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744625519;
-	bh=oqzvS1cWE9l6qlNdQPy3BGzI6QbmDw3Eem//LFv6YOA=;
-	h=Subject:From:Date:To:From;
-	b=jXF9nIJ68Xs7qoOVcAZZOq3vtXEb1+WGF6NNrYCLs+tDtD2+YTrs6UtdqNYcw3228
-	 wH/G0uGGun65B71/zCOEe6lTvcNI0vTzvxnwru4zgeqqsvaQ1QMe+r9QUgWAqRUuwW
-	 fyIQU7TPAK/iXwSBZlZ5RxY+24c1df8vEP6YJo7+O0Bs4YRW2e/rpAPC7NVpCjh1J/
-	 beTku67D8WrVO9z0UaOfvc/6TV4B1oFc2J7f2Evn1ad0r/iJDfFg0bMLUFs0xQS4HN
-	 A/eFDQw9ofrKtnQSQe1hx8MkXgsaE4vsD0q6V2za1Fng9m6e3Sg0qyjhuq8nYI2jJK
-	 DFbWdCSL66Hag==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B25BD380CEF9;
-	Mon, 14 Apr 2025 10:12:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1744639335; c=relaxed/simple;
+	bh=CndQFGuLnQ703+fOAOJDmmHIDhuS/2SEJT3iDiK/hvQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Xf9S0Ler6W4VNGoMqKB/f7064MxTKWW9aw49ET07mo//ikBfl1hLxe4mftJzpAelhwHxtpe+Cef4SY4GcxRQD/+uBJKlnQQSI8+xLzzPJ2ebnlGCjPLwPh6jG7tBrvDGi4sJuo19mp57KWSY+bYzijMnrJvCFnxoqddpyg9nVD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=t9pCPRQ2; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id B451CA0370;
+	Mon, 14 Apr 2025 15:56:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=8fUTt49ngH9LwQeutmpq
+	Atan+y77TmFvSLDx00ftJms=; b=t9pCPRQ2tmxUZmdzLFDzbVZeoRtXZjDfgQoU
+	JMJpuozYaayHGe5M8rtZeul0OU/+F9X4CpMRAVyMFQFkPO7wR8zzEFtkI74Ye0dI
+	ADOz7gwLOQPJeZujzuajq635AW7etk4of6jaKUDWUnjyUgcgFHA4wFSlBn/Wema8
+	h8PFPH2UyOzNqCyjL2KDQXPqbCYhed4NZ+0Rdyx3IVfp7MVupbKlIeo055aR5zyn
+	HiCcr96E4uWhI47L71f0twy8JsoxjMausdIw6mCa8yjWiEtCvWdk6CGx7J6CHx0T
+	3vuIVBNAzb4osY94mucmeauKFPNuFOfSdxzd9dJ8utOPILJ/OE8X5nPlPxMHeiMC
+	wVXUT1b961oG1BveaAZz2BIctqzdxleO5HU5r+7ayNSEvR5IdBqo6C18d17+1q/k
+	6OfkDYosROTg7TUakxHUyXJ8/R5NGwv3dJcEYDWEujln53H1zsGk5oI6J/J0KlkT
+	D6Sfd2ElQtNUWMqubsWtaD+9X51Ux5MhtelheK6OGoHUbcfr/RTY2UgGmTWZJrVd
+	zrgeq4F2WGqcvULyHEHgHmQqicc3w6dcEJqT07jV+Rc7UpvLaUahU8thqM5ebD+i
+	PQ0nPK8VdUJDejG2Hffd2qnwkKH5+R/XbwdIHNuP1hKpkDZkJbL0w8fkZJkLUI+F
+	Y3cED88=
+Message-ID: <832eb5e3-7e2d-4ed2-8571-eca9fe129013@prolan.hu>
+Date: Mon, 14 Apr 2025 15:56:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Mark Brown <broonie@kernel.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Varshini
+ Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
+	<tudor.ambarus@linaro.org>, <linux-spi@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>,
+	"Nicolas Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Pavel Machek <pavel@kernel.org>
+References: <20250327195928.680771-2-csokas.bence@prolan.hu>
+ <20250327195928.680771-3-csokas.bence@prolan.hu>
+ <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
+Content-Language: en-US, hu-HU
+From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174462555740.1828697.8937781048460018611.git-patchwork-summary@kernel.org>
-Date: Mon, 14 Apr 2025 10:12:37 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
+ ATLAS.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A2980D94853647464
 
-Hello:
+Hi,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+On 2025. 04. 09. 19:43, Rafael J. Wysocki wrote:
+> On Thu, Mar 27, 2025 at 8:59 PM Bence Csókás <csokas.bence@prolan.hu> wrote:
+>>
+>> Add `devm_pm_runtime_set_active_enabled()` and
+>> `devm_pm_runtime_get_noresume()` for simplifying common cases in drivers.
+>>
+>> Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+> 
+> I can apply this one alone if you want me to do that, but I could also
+> apply the other patch in the series if it got an ACK from the driver
+> maintainer.
 
-Series: spi: fsl-qspi: Fix kernel panic when unbinding the SPI host
-  Submitter: Kevin Hao <haokexin@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=946247
-  Lore link: https://lore.kernel.org/r/20250321-spi-v1-0-b9939baa64b6@gmail.com
-    Patches: [1/2] spi: fsl-qsi: Optimize fsl_qspi struct
+I think you can apply it and then Mark can apply the SPI part to his 
+tree. @broonie what do you think?
 
-Patch: [v2] spi: fsl-qspi: Optimize fsl_qspi struct
-  Submitter: Kevin Hao <haokexin@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952350
-  Lore link: https://lore.kernel.org/r/20250411-spi-v1-1-8d6dfb1a9262@gmail.com
-
-Patch: mtd: nand: Drop explicit test for built-in CONFIG_SPI_QPIC_SNAND
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=947979
-  Lore link: https://lore.kernel.org/r/99eef91c334f3f2314c2f5671e1eb55211a5ff19.1743150196.git.geert+renesas@glider.be
-
-Patch: [RESEND,v2] spi: Add support for Double Transfer Rate (DTR) mode
-  Submitter: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952036
-  Lore link: https://lore.kernel.org/r/20250410130207.3688117-1-quic_msavaliy@quicinc.com
-
-
-Total patches: 4
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Bence
 
 
