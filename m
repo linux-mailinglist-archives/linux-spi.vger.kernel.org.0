@@ -1,131 +1,204 @@
-Return-Path: <linux-spi+bounces-7590-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7591-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A25DCA893AA
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 08:07:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9682BA89524
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 09:31:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D83D27A1FF5
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 06:06:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 749053BABE6
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 07:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28972274FC7;
-	Tue, 15 Apr 2025 06:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZTVs4eZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164EA27A124;
+	Tue, 15 Apr 2025 07:31:12 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4E1218589;
-	Tue, 15 Apr 2025 06:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E95224A043;
+	Tue, 15 Apr 2025 07:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744697250; cv=none; b=kHAkii8GEWxr6z8SHVyOPFyYIQ39pP2VXqUaCzUy3h6E0PBT+wASR/+L/ST25x8plFcgj+W5vlCb2ithMobrocrzxXqiLHuhXVTyZZ6vTwGL3FzR0L5h8XGkIBe/B2HszI82uzc4SZvzE450IQHnM2v3OzbzVPQtnpT3ao76DyY=
+	t=1744702272; cv=none; b=W5RvCGZJYahOX/3zfOd9ozguYrx71Lg53mNJ5B234LjOU14/J/Hwj3ZSmaZ2NAuRrPlBQfoSyeRCVRKE8qmJWA7wKWjjZ1gnMPxoCk2UvXnrpeWTNn2hmkYdsMifE4H/b949XselwqIIqRNcC2rwdG1s/kcXAksAKtZZqut0IvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744697250; c=relaxed/simple;
-	bh=MzVChSVFysFXWfQVwCLbgpXkfHffuVCd+JiWC9tceRg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BHEdVJghTLGp2ph4XZtNh+H4GQbL5Fo7oyfb4CHwUo/MV9QrnHb5i/m6j4XAxf1pJJEutrkGGLIDkMbGzRbwARCBV5HhNWMC89yCxVEWsLxRIQ1j+Am5qQqgS7jAsYQyAvI3TV/eCACtMcSpYutSzlwUpRxb5SqJdyu1YibHFSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZTVs4eZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8753C4CEDD;
-	Tue, 15 Apr 2025 06:07:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744697249;
-	bh=MzVChSVFysFXWfQVwCLbgpXkfHffuVCd+JiWC9tceRg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aZTVs4eZfKX7cecLiVGvDIJVUppeaWkG/J8nKnsSIXQHgTdF4PLOuBkBKfcjO/Dw/
-	 69oUDlZ8WpDnOUk9D2FLAtzILWiQE75Mv7HKp1IYdnAv8xXGxOHHxF+M2sKm/VFX22
-	 EjrdZMw7w1mDVo5CePT/YANvXsMB36ZiXpo1EHim7X6EjkdHr9B4F3wokzBd+sxJBw
-	 BPCtw8yq1O9qg5c+GnU0dzrzmAiom+MNXXV4PzQXLYOhf/Yjxp6qIC3BUUfGEYr2Oh
-	 v+DFXwNTcRNv+zeswrmRg8ObhbeZv1inz0vImPBGbL040mYpaR4wJQG06lSQ6prPNz
-	 XUDXj16v7DocA==
-Message-ID: <5cefa668-8920-456b-ac82-0ce7f9226fcc@kernel.org>
-Date: Tue, 15 Apr 2025 08:07:26 +0200
+	s=arc-20240116; t=1744702272; c=relaxed/simple;
+	bh=VTZCWyCGjdciP3aZHJhTk6E9mLATfcs0U4wCy0CbtGU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rOVPlTo1bUfePfTbzCjra6EgMadFcTcnQ4xjNYqtgJlLoV189ezLp/pStyaTQy1sGEVYxMPzxFUMVBpIlz7FdedrFUEvXwCNT4J4hnry1aIdbVUS3Hnnxkm/+yjT9+ZGmtw36XZNHTYdETwQjLqzrI3g4PLm69Mr46LH5V4DMBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-525b44ec88aso2451048e0c.3;
+        Tue, 15 Apr 2025 00:31:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744702268; x=1745307068;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IGw5spwHw8NIdX95wcfYNhGWI1R6yaJkvthw0sRY1HE=;
+        b=wfWH+/Ztq0+3RycVU5UAFi8QA6R8FTLU7+3NHy67IlPbHiGjFT69phqdFtRdGeDaiH
+         FmtiofoyiWgSDChubPEpBfVBdXAAXcAjRUkwG9qrasvJ6jq53Cum55LCpkFdkw6KcKJv
+         yZeYye8mYW61CMzIyB/l6xHdY/gjV+TglM/8VraqetS0Cjt1FyzwAmdBqipGhzwzIi0f
+         HsWRgfSdprc4YkWxZWnGFa1E36j3aRYAfsaS37iHCjE60p9l6JuQF15x3b2OvU7WEiMO
+         PMJ9HURFt8dA9R+UoxakW7lX8KRM88mp+WCKN1ZEebjLerfiediqm4LNddXWvPZdNd8/
+         peyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWUIVmgNjd9sj833wLF+YXftJFzpOnsxEW8L4CCukRmZZtgjzmOmDvlaacBXTD4nZe1y0PB8gzCQBxDCP8=@vger.kernel.org, AJvYcCWVrg7bv97ANX2smnQdvTAWbB3s6vJjJEX5JhAUQPKcarw89jgOG2IxuU7Npa1HJNHg/v/N78C56QR6AYc7QSzpP6A=@vger.kernel.org, AJvYcCX/df+EwSDeCOkYR9bGirwwlmR9jZ3K0wz6j3/VLpjbexwZ+3lakIZo33rFCUJa6MR7G27BmIS6bde9@vger.kernel.org, AJvYcCXHBvdcxFM+iKcVYW4jkKdmxrqQz0Cbz1Fl0YJ90VitxU6QmZ4TStPKF5fEdTOAJRUyWJaZIBcdk/wH@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEfw5uh9/luy46Mwweji+Jb9Qov6hwrcTSN6eFQeqpTJlggAS8
+	3zQLmZx1BQu/gUtW7xR68UMqvRPyc/yPjbRnJ3G9098mb+u8gzMWsKud1YrY
+X-Gm-Gg: ASbGncsoaXgKh/CFXqyacG51xmWO5cW4Luw9US/tuNzV610JCJ5s/fTRHs8H8EkrVDV
+	GTSEVlFiaq77itEIvJhkPiT4XWR2j4WLZAmxCfibj1qpjWh1RRz3T3lINBaJt+2VlgYWzWJ97og
+	42m2qtmvWkyLesyUwhiIHoIwuPZeXcs+pn4+zXHCxskgjfRDUDjgvq4dbZaEEpzqi4G8DP91zA7
+	kzDJ6TG3vselpVjqTQKn9HKkCo0sJlDVokoRgsTzk3KzcB1qNRdL8R2VAARlehbrq6g03XOdjLg
+	lGImqxnQQFKGoQ9QYsvwdRzyTZRyVl+3cPO9tnoE0KIIvofES1bD9aecmu6ML//SocfI0Iw+RJh
+	fjI7/7vkZ/XxdDme5DA==
+X-Google-Smtp-Source: AGHT+IGbEYFoAWecDGlS6CiSHgeDQgxz+wOiqMKSXznm3SEV7fRlVBWhHmmjN54WUunr0GsfRHQKJQ==
+X-Received: by 2002:a05:6122:512:b0:520:5a87:66eb with SMTP id 71dfb90a1353d-527c34956f9mr10680173e0c.3.1744702268541;
+        Tue, 15 Apr 2025 00:31:08 -0700 (PDT)
+Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com. [209.85.221.171])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-875560e3077sm2577525241.2.2025.04.15.00.31.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Apr 2025 00:31:08 -0700 (PDT)
+Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-5241abb9761so2202769e0c.1;
+        Tue, 15 Apr 2025 00:31:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUg1GzQrvuZ//+2HhdKKWxBryRD7EBjkhJv+KOXKDZJRx2LC83u7bqIahpbuAcS4LLsiEUHbbxfFecYDho=@vger.kernel.org, AJvYcCVa0aazrxUgnU8YhCaORduQOKfQNeckF1jdZumicBE/9UYgafKQq785W1GzT1KRbdkEZkc+m9cloAF0@vger.kernel.org, AJvYcCWnA0ahEC9P/ss9bqCPDtcmTJtRx6GEpDe9UueBXBKquvmsKxzJgGoDxc4hJx70rkx4EdNrUFJGdXapR+flKsSIFZs=@vger.kernel.org, AJvYcCXl5ZaZplbqEgA//FLrsYw+QAIi1clZXNqsoolXFVzJYWu6kIEMarGHaRAQJxNCCIk53/TOZXsJOkqR@vger.kernel.org
+X-Received: by 2002:a05:6122:8282:b0:520:5185:1c31 with SMTP id
+ 71dfb90a1353d-527c35c2351mr10043766e0c.9.1744702268047; Tue, 15 Apr 2025
+ 00:31:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 9/9] spi: rpc-if: Add write support for memory-mapped
- area
-To: Biju Das <biju.das.jz@bp.renesas.com>, Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
-References: <20250401143537.224047-1-biju.das.jz@bp.renesas.com>
- <20250401143537.224047-10-biju.das.jz@bp.renesas.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250401143537.224047-10-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <87zfgi1a5a.wl-kuninori.morimoto.gx@renesas.com> <87y0w21a4h.wl-kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <87y0w21a4h.wl-kuninori.morimoto.gx@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 15 Apr 2025 09:30:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXwJGj-xTqEgtsNNX2UR4kPnJ5m2H+KbULdjX7dmUoW8A@mail.gmail.com>
+X-Gm-Features: ATxdqUGJna7AxHia-Op7KClT4HpJfHRHVf9wGRzfALZvGSP0kVUzM1m0vvE3Efc
+Message-ID: <CAMuHMdXwJGj-xTqEgtsNNX2UR4kPnJ5m2H+KbULdjX7dmUoW8A@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] dt-bindings: renesas,sh-msiof: Add MSIOF I2S
+ Sound support
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, ALOK TIWARI <alok.a.tiwari@oracle.com>, 
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 01/04/2025 16:35, Biju Das wrote:
-> Add write support for memory-mapped area as xSPI interface require
-> it.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v3->v4:
->  * No change.
-> v2->v3:
->  * No change.
-> v1->v2:
->  * No change.
-> ---
->  drivers/spi/spi-rpc-if.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-That's also unrelated change to memory controller. Cover letter explains
-nothing about dependencies and merging (checked few first lines where
-this should be documented).
+Hi Morimoto-san,
 
-Best regards,
-Krzysztof
+On Tue, 15 Apr 2025 at 03:33, Kuninori Morimoto
+<kuninori.morimoto.gx@renesas.com> wrote:
+> Renesas MSIOF (Clock-Synchronized Serial Interface with FIFO) can work as
+> both SPI and I2S. MSIOF-I2S will use Audio Graph Card/Card2 driver which
+> uses Of-Graph in DT.
+>
+> MSIOF-SPI/I2S are using same DT compatible properties.
+> MSIOF-I2S         uses Of-Graph for Audio-Graph-Card/Card2,
+> MSIOF-SPI doesn't use  Of-Graph.
+>
+> Adds schema for MSIOF-I2S (= Sound).
+>
+> Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+
+Thanks for the update!
+
+> --- a/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> +++ b/Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+> @@ -4,14 +4,11 @@
+>  $id: http://devicetree.org/schemas/spi/renesas,sh-msiof.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>
+> -title: Renesas MSIOF SPI controller
+> +title: Renesas MSIOF SPI / I2S controller
+>
+>  maintainers:
+>    - Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+>      oneOf:
+> @@ -146,24 +143,38 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      default: 64
+>
+> +  # for MSIOF-I2S
+> +  port:
+> +    $ref: ../sound/audio-graph-port.yaml#
+> +    unevaluatedProperties: false
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - interrupts
+>    - clocks
+>    - power-domains
+> -  - '#address-cells'
+> -  - '#size-cells'
+> -
+> -if:
+> -  not:
+> -    properties:
+> -      compatible:
+> -        contains:
+> -          const: renesas,sh-mobile-msiof
+> -then:
+> -  required:
+> -    - resets
+> +
+> +allOf:
+> +  # additional "required""
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              const: renesas,sh-mobile-msiof
+> +    then:
+> +      required:
+> +        - resets
+> +
+> +  # "MSIOF-SPI" specific
+> +  - if:
+> +      properties:
+> +        $nodename:
+> +          pattern: '^spi@'
+
+This condition does not match what you wrote in the cover letter:
+the controller is used in I2S mode when a port(s) subnode is present,
+and in SPI mode when no port(s) subnode is present.
+
+> +    then:
+> +      allOf:
+> +        - $ref: spi-controller.yaml#
+
+Documentation/devicetree/bindings/spi/spi-controller.yaml indeed
+requires that the node-name matches "^spi(@.*|-([0-9]|[1-9][0-9]+))?$".
+The controller's node is located in the SoC-specific .dtsi, where its
+intended use case is not yet known, and its node name cannot easily be
+overridden in the board .dts that specifies the use case.  Hence the
+node name must always be "spi" (and cannot be e.g. "serial-engine").
+Let's hope there is no other use case for MSIOF that requires using
+a different node name...
+
+>
+>  unevaluatedProperties: false
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
