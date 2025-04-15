@@ -1,96 +1,108 @@
-Return-Path: <linux-spi+bounces-7598-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7599-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53924A8A7D6
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 21:25:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4ED6A8A8F4
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 22:12:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C223619033EC
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 19:25:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B666188E0B1
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Apr 2025 20:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E4F2475CB;
-	Tue, 15 Apr 2025 19:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 079FB2522A9;
+	Tue, 15 Apr 2025 20:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMC9v116"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nsSnOwDI"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AAF2356B1;
-	Tue, 15 Apr 2025 19:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD1528E3F;
+	Tue, 15 Apr 2025 20:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744744993; cv=none; b=VOv/ip/887qtzl4rVhSexZL6r05A+pxQ6VoYrk2IGmUlNTZL0ehuKVei5cy1yfaB2Zvha1aXil/kYdT8mvqbM0wzqGPpHiEU0tY6IlfTDb9vtwJLUC8YhZ6XdP8rI00jWJeLax1lKIeB8R41Aj5rEkxIp/sqh2GihaUtfrMdZRA=
+	t=1744747946; cv=none; b=l5zq+oLWyJkPxZyJPfhO6OYBsxvo2rzZb+b0ReSva5hzLiWpE36bY32SZlhaYIsqhZayWoFPBbbWTfay9qHomh7HiAIYwzOI3GUrjN+mbYgKa7k7zE94/QIBz83mS569k+1qkw6SkBPAp8XTlwuYWCDtAUKBpNKEbFeI/ksMUaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744744993; c=relaxed/simple;
-	bh=x09FjVOAZBwkbITfwM+C4hWOy9jtbp+fErNxZ4F57Zs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=riuAtX3MxLwE4pihO9fzxD6xOdSACZTDTpo6l0dWPp8K7bk5wncUNrTfq9M9YDSMVnUDx32X16KR/ehEADyUHcq7zLfExsu5zJwEiHxgoLhlYzoEAz78XbznTpjjpApryLhQMTMKZk9t5YVqfrSq6TrWrcnSECjEyNeBFqseTlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMC9v116; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CB0DC4CEE7;
-	Tue, 15 Apr 2025 19:23:11 +0000 (UTC)
+	s=arc-20240116; t=1744747946; c=relaxed/simple;
+	bh=CRMG8Zo6ps4IacifJ4+/Vz/sac8EDxbZzPUiT/AZtfI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hNZO4PZsZrscYtrzGzvyjWB1/TU+aw1/PDPZIYzLipAZ7V6kLCKaPeJESqdG+Vygct7kM7CccavgCNL58yoN/6WCtBdaX5Xw1LMcEt96B+hIVWoc/XaaFIVLkNi33Tf277tdcGNOW7XDdgP5myWKJb8FX0cTYFZz8yJ5VyGKED8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nsSnOwDI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A88C4CEE7;
+	Tue, 15 Apr 2025 20:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744744992;
-	bh=x09FjVOAZBwkbITfwM+C4hWOy9jtbp+fErNxZ4F57Zs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AMC9v116l3kDuwOh8VnyqdgEUvSUHqvSzRJWkGOhFzh0KBD+gd3Vjsx6V47nKLfG2
-	 Xb8Pu12XAN7Aoq0Ts58Dz/j+YqBecvZAEYYRDqunkVaixuSI3SbX9eCJkfpBzJzP1C
-	 pYsugK7hhCik+56+v5Qg1o9XkXjgTFrzZwVWVkezuakwfiP0zFipPVzXYvEH6Vo2z2
-	 xQLMfX7OEsZvWxerQIsKZYtvr/gY4nHepBi4c9zZmwlTiD4tV10AnTQZ+1OZ+BBZTT
-	 mHxeYRjxzc+/1Lw7+Ip5U2t+n/+T4XgrgkGzTg3diIuCkckddZIuBouU0AnTP+4E1H
-	 n4RTzWysfnOpg==
-Date: Tue, 15 Apr 2025 14:23:10 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-gpio@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	Mark Brown <broonie@kernel.org>, linux-can@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Subject: Re: [PATCH] dt-bindings: remove RZ/N1S bindings
-Message-ID: <174474498632.835692.11318420233043373659.robh@kernel.org>
-References: <20250411194849.11067-2-wsa+renesas@sang-engineering.com>
+	s=k20201202; t=1744747946;
+	bh=CRMG8Zo6ps4IacifJ4+/Vz/sac8EDxbZzPUiT/AZtfI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=nsSnOwDIglcMO65HoUItvURy0yMGsR+RO4D1XCsFYzJOCxsYxxgxqcqYEwTAxGTBJ
+	 gTreP+lqa1LCvBssGXg2Wyo1uJ/AELu0llj4hosvjuYvs9Rmny/cfuA7aYw+Etb9/5
+	 rA1/JdGAe5BVvJyGh/9S8RcCAHn2JnEjvJ7LLmUvaoIjyeiqxZlqFw4v5HfZsFXUhS
+	 br1YY8xeyKeeyadZdfX5okG8aYmeLZNtjSCn71cMKqZjvvXeyWYrDLf+outvqDSpxV
+	 5Pw0JeecFPkVW+kuoTLumD0J6Ya81dgmTQPPYFGaJpYBSRYecvcpAUqYDjquy0htQg
+	 q2H+UJOAjPSDg==
+From: Mark Brown <broonie@kernel.org>
+To: Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Sowjanya Komatineni <skomatineni@nvidia.com>, 
+ Laxman Dewangan <ldewangan@nvidia.com>, Breno Leitao <leitao@debian.org>
+Cc: linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, rmikey@meta.com, kernel-team@meta.com
+In-Reply-To: <20250401-tegra-v2-0-126c293ec047@debian.org>
+References: <20250401-tegra-v2-0-126c293ec047@debian.org>
+Subject: Re: [PATCH v2 0/2] spi: tegra210-quad: Improve messages on
+ pathological case
+Message-Id: <174474794125.1085405.1696078775184536618.b4-ty@kernel.org>
+Date: Tue, 15 Apr 2025 21:12:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250411194849.11067-2-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
+On Tue, 01 Apr 2025 06:47:48 -0700, Breno Leitao wrote:
+> I maintain several hosts with tegra210-quad controllers, some of which
+> experience data transmission failures. Debugging these issues has been
+> challenging due to excessive log messages from the driver.
+> 
+> Since these devices do not have a way to reset[1], then we want to avoid
+> warning and printing a bunch of messages, otherwise the host will
+> overflow the serial. Fix it by:
+> 
+> [...]
 
-On Fri, 11 Apr 2025 21:47:57 +0200, Wolfram Sang wrote:
-> Except for these four quite random bindings, no further upstream
-> activity has been observed in the last 8 years. So, remove these
-> fragments to reduce maintenance burden.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> In the previous discussion [1], Rob offered to take this patch.
-> 
-> [1] https://lore.kernel.org/r/CAL_Jsq+DOp8YOcshTVqYcbmgbuc4etTQeeswmMUYjw1sws4mAA@mail.gmail.com
-> 
->  .../devicetree/bindings/net/can/nxp,sja1000.yaml     |  4 +---
->  .../bindings/pinctrl/renesas,rzn1-pinctrl.yaml       |  4 +---
->  .../devicetree/bindings/serial/snps-dw-apb-uart.yaml | 12 +++---------
->  .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml     |  4 +---
->  4 files changed, 6 insertions(+), 18 deletions(-)
-> 
+Applied to
 
-Applied, thanks!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/2] spi: tegra210-quad: use WARN_ON_ONCE instead of WARN_ON for timeouts
+      commit: 41c721fc093938745d116c3a21326a0ee03bb491
+[2/2] spi: tegra210-quad: add rate limiting and simplify timeout error message
+      commit: 21f4314e66ed8d40b2ee24185d1a06a07a512eb1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
