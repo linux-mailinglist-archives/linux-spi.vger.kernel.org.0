@@ -1,161 +1,124 @@
-Return-Path: <linux-spi+bounces-7626-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7627-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F2A0A9070F
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 16:56:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8FD8A9076F
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 17:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86DF418977E5
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 14:56:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61E573B9A31
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 15:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB371F8676;
-	Wed, 16 Apr 2025 14:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916002040A7;
+	Wed, 16 Apr 2025 15:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="cqTapv4o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PzVtHVOL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706211DED64
-	for <linux-spi@vger.kernel.org>; Wed, 16 Apr 2025 14:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0792189BB5;
+	Wed, 16 Apr 2025 15:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744815378; cv=none; b=nEgFTtn9xOqxRgS08gS3bBmzgqvDWG3Z2Soi04TFrQGqewTcD+d7eANRVUxGFAKasIgLkPAVfoj2Lhp6je1BlMMcboPunV5MrErHuf2SUoY6Zx8PNUVU1xn/7tGIIS4fspFeA4U6UnHcHaAzpyqePQp2qmodt1OXRCWaFM8d4do=
+	t=1744816450; cv=none; b=tioUI+dVNwXcbuzbcMM1VGYKFvMg0XJOCgLx90AD8ktEqZxUVqWrC9OmSkz1R9vSJI9kq6W+iFIM+m8Jsen7uwjDmhPJ5YEizMXQpRXkzYU7uGEB8oQKleZyayyRUBb7sO9kYdw7FKchNceSDZrsbwlGuSMXWGIjj9RX5oOplEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744815378; c=relaxed/simple;
-	bh=TpJkuyVyiGKbiCkxT8923fCXqjl1DNCwQm+CCNcVdJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nYoirgLC9VaRO/FUzjdBCCBkUL1NSnfZlDPPHAql/1Oo9wuu1otmfnhGNv0AeHpmNTmVacImQ1YCy4Ovm3ykOIWanliWK546MHPtbgFpSWikMOk6iW9ppabdtGKbWCvjpXauMCcI59Wjr3VBLQOJvAkJ6sUtoR5IqZwOWvz49rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=cqTapv4o; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-72ec926e828so170396a34.0
-        for <linux-spi@vger.kernel.org>; Wed, 16 Apr 2025 07:56:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744815374; x=1745420174; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=H8pTGTrXsv1bU7lsSy6vhbggWvwnaQhyzXjfsFA3qKU=;
-        b=cqTapv4o95ToTaNomeYqjiq2psvCA9vXOdein6A6R/XHMprlApK1LR/tTYaHviIkLN
-         D8m6QSDYhvhe+sUPhlj8ZXkZ2TZ9I5S101hks9hFvEpIgYd0C8lc/u0ImfAUriZEmhb0
-         W3QaI4//C4b/0mmCUenDFhnYhUpW1OUJ3ciDC4/UgsIT9aznGIWfbqPOJl0SF8LIeZEx
-         i015Z6HiCq5k+vKAC5Dm8vtVOGq1vJCiJPGd5/mGDOVJasXdD8OKDhP9sU+NNMxXlTz8
-         gg5TgS+HiL5kZ+4W3tGwQlGjOadaO+Kyr2Ydod9dPmFOSvEBk74TjkWjXveCAsEbIg3a
-         bbCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744815374; x=1745420174;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H8pTGTrXsv1bU7lsSy6vhbggWvwnaQhyzXjfsFA3qKU=;
-        b=X42NSwPWs9Gy/FNjxm4+ihHvjdmPjkDsETKRuUtcAp+RCmXcUXgUC7UeINcR+a+RI2
-         vtKzAZKrCfzpQcNjwRAOnlla5MipPheID7lHZFLibA9DPdN5s6Tr8T1KexoVdEZVMFt6
-         y4Y4sGCJ6+FbMgedIyh05I48CFi30euaGzXaRscSMkVvnniJqnenVpwTPbpSsV7AARM8
-         vwPJonKIN79rmno895XaEHkbnNjPNqBU065PKOf3Fn36MbfTvFFE7kVu7XkZmKwMIvtD
-         RvxU1EERKcnP6LjVHxQT2vc9DBRlcpqufU8vgNx4c1apBG/JkpY498e30V4l0EXnPL8o
-         Thgw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRYdDx6B4qVVXGw7E50PAGxhnUwhF4dsCkahaGpo8yrD6WW45psNPQ49euOBlIyM2eUK4a+o3r/Po=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxH8taHdv3qfv8dGYw+E/Nz/k8I9+8ZRTH94TSibn7jLRlI32+3
-	0yWW7KKxXx6aSvZwiK6bBeV40cvT21scQUNCh64KjoNjlQ2q7+hvEfIeGupG9Vo6IyLcvxUQoVc
-	PXvs=
-X-Gm-Gg: ASbGncvoSVdmXfc37ve2culaHcG9JhC80sCfjjjoWyZK6ulR2t1nCeq8Ox/dVkkSn96
-	/PMtBnFlnMW3pVH+iPprIGMIVA1MREBihPW1o/PBmYvbm63dCvqc4Lxnjk0+S85JecepNwP2wl4
-	gWi5VwROuXOJKKL28ZUtWXmk1/lq3WATpy8WMZuTOnBA2K19GYB89gOc9ByAUF8J1aZ4/zCm5Js
-	brXF2pdaizvRJ47aigPPnf2c3ZT9kaPi7fr1QHxAru/vMlkWRSjdhAVt2iOeYhHzdCY70/gZger
-	l+dSKH6WuI4aUt9NV/xXnWh8fIJqrYixU5TTmMNPZgXU2iuQAKCCEzUzKXWpa4Gd03ZY6VhyHIe
-	FM+OuqARmVoSOUmMczf5JoqMnp/nt
-X-Google-Smtp-Source: AGHT+IHdqhtFZPPAlHvZWZ21iQNUSR5yWEe2y+iJIz1IDF8U/7b477uDDwHean2EZ4U2BNcEasuINg==
-X-Received: by 2002:a05:6830:2a16:b0:72b:7fc2:2f1 with SMTP id 46e09a7af769-72ec6bb9ca3mr1506039a34.12.1744815374378;
-        Wed, 16 Apr 2025 07:56:14 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:58f0:670c:6b15:7fd3? ([2600:8803:e7e4:1d00:58f0:670c:6b15:7fd3])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-72e73d8cc9asm2849274a34.30.2025.04.16.07.56.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Apr 2025 07:56:13 -0700 (PDT)
-Message-ID: <bd28d718-ab7e-4470-a4de-22b995db8b94@baylibre.com>
-Date: Wed, 16 Apr 2025 09:56:12 -0500
+	s=arc-20240116; t=1744816450; c=relaxed/simple;
+	bh=NYBX+03u4Px6LAM1RE7h6qnfefn2E2pZYsDb6oGo3r4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZwttYHuE27Bndu3GPcjhswK6SvlR+iXj1soqHvVniVO48VIU8hlEWSTH/h3sZ0rte/UiSpMGW4Sk9/pZtgMR2FwkV/Vniz1IGZkVz/DE0ZmuDCFkdUnolQvO8bHQkbitCv/y+ABB80HDyfNKj/rNZBrW0fYuf3HwfHC3v8ilEYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PzVtHVOL; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744816448; x=1776352448;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NYBX+03u4Px6LAM1RE7h6qnfefn2E2pZYsDb6oGo3r4=;
+  b=PzVtHVOLs5h23tqUZMBVUp/KRpS4+nxCvXtykcxfU+8Aa5RC3/eexDYh
+   FcuA6wAONphYZy+iJk5JLMl4cuhFff81QC4Ehbbv/jKa93rmPL9GVkwk7
+   4xIQ/JiDOLJh0qE3fYbe/MCHdTlXj2aGMlQXSRQi7B26o0jXmZtFFcydg
+   L2YZK+Q89ZRiC7wsEiyadbtKEZkERHSCyT7U45BRIMxPx7pNalL8gQAt4
+   0bKskMAyiEtJ6fRXG4oaQ3roGTXhD/WkCzmZfb/KMXN2AlbJDAgbgqQ9I
+   I2Kx+OyA01WnaYV69MstWKqFMqVRHKcTP0XDvJnyGVf/uLleKFino2biO
+   Q==;
+X-CSE-ConnectionGUID: dme1CS7MRX+SZTLSgbwYpQ==
+X-CSE-MsgGUID: g9VYu6uiS7qpygOeJTJr4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11405"; a="68860004"
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="68860004"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 08:14:08 -0700
+X-CSE-ConnectionGUID: zIe+yycQTh+XrjdEhHfIKw==
+X-CSE-MsgGUID: h0eIZ2zITcuJHZgAonVMIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,216,1739865600"; 
+   d="scan'208";a="130829538"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2025 08:14:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u54Si-0000000CtXJ-1ilv;
+	Wed, 16 Apr 2025 18:14:04 +0300
+Date: Wed, 16 Apr 2025 18:14:04 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] spi: Add spi_bpw_to_bytes() helper and use it
+Message-ID: <Z__JPFge9MHFXb9c@smile.fi.intel.com>
+References: <20250416062013.1826421-1-andriy.shevchenko@linux.intel.com>
+ <20250416062013.1826421-2-andriy.shevchenko@linux.intel.com>
+ <bd28d718-ab7e-4470-a4de-22b995db8b94@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] spi: Add spi_bpw_to_bytes() helper and use it
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250416062013.1826421-1-andriy.shevchenko@linux.intel.com>
- <20250416062013.1826421-2-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250416062013.1826421-2-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd28d718-ab7e-4470-a4de-22b995db8b94@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 4/16/25 1:16 AM, Andy Shevchenko wrote:
-> This helper converts the given bits per word to bytes. The result
-> will always be power-of-two (e.g. for 37 bits it returns 8 bytes)
-> or 0 for 0 input.
+On Wed, Apr 16, 2025 at 09:56:12AM -0500, David Lechner wrote:
+> On 4/16/25 1:16 AM, Andy Shevchenko wrote:
+
+...
+
+> > +/**
+> > + * spi_bpw_to_bytes - Covert bits per word to bytes
+> > + * @bpw: Bits per word
+> > + *
+> > + * This function converts the given @bpw to bytes. The result is always
+> > + * power-of-two (e.g. for 37 bits it returns 8 bytes) or 0 for 0 input.
 > 
-> There are a couple of cases in SPI that are using the same approach
-> and at least one more (in IIO) would benefit of it. Add a helper
-> for everyone.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/spi/spi.c       |  2 +-
->  include/linux/spi/spi.h | 15 +++++++++++++++
->  2 files changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index b0e7702951fe..1bc0fdbb1bd7 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -3800,7 +3800,7 @@ int spi_split_transfers_maxwords(struct spi_controller *ctlr,
->  		size_t maxsize;
->  		int ret;
->  
-> -		maxsize = maxwords * roundup_pow_of_two(BITS_TO_BYTES(xfer->bits_per_word));
-> +		maxsize = maxwords * spi_bpw_to_bytes(xfer->bits_per_word);
->  		if (xfer->len > maxsize) {
->  			ret = __spi_split_transfer_maxsize(ctlr, msg, &xfer,
->  							   maxsize);
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 834a09bd8ccc..abfc7f5e19e4 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -1340,6 +1340,21 @@ static inline bool spi_is_bpw_supported(struct spi_device *spi, u32 bpw)
->  	return false;
->  }
->  
-> +/**
-> + * spi_bpw_to_bytes - Covert bits per word to bytes
-> + * @bpw: Bits per word
-> + *
-> + * This function converts the given @bpw to bytes. The result is always
-> + * power-of-two (e.g. for 37 bits it returns 8 bytes) or 0 for 0 input.
+> The SPI subsystem currently only supports bpw up to 32, so perhaps not
+> the best choice of value for the example. I would go with 20 bits getting
+> rounded up to 4 bytes to match the existing docs for @bits_per_word.
 
-The SPI subsystem currently only supports bpw up to 32, so perhaps not
-the best choice of value for the example. I would go with 20 bits getting
-rounded up to 4 bytes to match the existing docs for @bits_per_word.
+Okay, I think I come up with a few examples, so it will show that it's not
+4-byte multiple or so.
 
-> + *
-> + * Returns:
-> + * Bytes for the given @bpw.
-> + */
-> +static inline u32 spi_bpw_to_bytes(u32 bpw)
-> +{
-> +	return roundup_pow_of_two(BITS_TO_BYTES(bpw));
+> > + * Returns:
+> > + * Bytes for the given @bpw.
+> > + */
+> > +static inline u32 spi_bpw_to_bytes(u32 bpw)
+> > +{
+> > +	return roundup_pow_of_two(BITS_TO_BYTES(bpw));
 
-Do we need to #include <linux/log2.h> for roundup_pow_of_two()?
+> Do we need to #include <linux/log2.h> for roundup_pow_of_two()?
 
-> +}
-> +
->  /**
->   * spi_controller_xfer_timeout - Compute a suitable timeout value
->   * @ctlr: SPI device
+Right now I prefer not to touch that (it is implicitly included); the headers
+needs to have a bigger cleanup and my first attempt had miserably failed.
+
+> > +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
