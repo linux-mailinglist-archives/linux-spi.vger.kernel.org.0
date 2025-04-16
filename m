@@ -1,104 +1,133 @@
-Return-Path: <linux-spi+bounces-7622-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7623-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85C49A8B8D5
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 14:23:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A52F8A8B97D
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 14:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4BDC3B2464
-	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 12:23:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 290B83BC5FF
+	for <lists+linux-spi@lfdr.de>; Wed, 16 Apr 2025 12:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E90A23D297;
-	Wed, 16 Apr 2025 12:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D55614B945;
+	Wed, 16 Apr 2025 12:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NafguyGv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QXcfBdH9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312DB2288D5;
-	Wed, 16 Apr 2025 12:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441491494BB;
+	Wed, 16 Apr 2025 12:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744806209; cv=none; b=ZgDun8OKrc52ZFr60kv3oJyS6nYPkaXWqIZQHQcM/zjOjixzbCTqlxkDDiSVSCaxKSjn5hLO/9zbalfORqG1aFzAtXtF5s9MMtVQE5OqNYT4/16oy+1D4lQBsz6ztXxXPedrBx1IHdc/xIa0bUwEKiwyNYefzJZo+UDktuhC1iI=
+	t=1744807423; cv=none; b=XXcRRqJuPRH+BBqQxw4/64KDzNYaW1bA8NQt8kyCkTfs2mtyG6XZgZpglTzbFy085YQZR2Z9nYMJ2rqj9fHBhx6nyeVuS5ZyphRTChMSTzDclLUUjOquVgGAmL1a0+pI/js25rIRP715oRk5FUnjvY58Zirv9OiDyrwuF5x/Hdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744806209; c=relaxed/simple;
-	bh=P56Z/IiDnB23WkuikAUBMBExc1JHKB4iFe4OzvZkFfA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=omys6c5WtWyS0RgD1Uy57k+cEPSVyFUiwK1UzpjSE1pdi6w81DXx+rhsKn3O6vpUtzsqExzi7lUNMoyx4JEYuhHQGDtXwBTV8L47gkM0Kydw5+R00nuEnkZAnxvRIcgnsndGPKj3vr7+RpcE+uWGbIZMQwVsv0KYeZz7yScp1e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NafguyGv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC786C4CEE2;
-	Wed, 16 Apr 2025 12:23:26 +0000 (UTC)
+	s=arc-20240116; t=1744807423; c=relaxed/simple;
+	bh=EptSh/Z5xPJhA1aDHMn9nfTawQKCHKc+FCmO0lVffUQ=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=f8jMxRsQWiGCsgRTDM2+n6aUiMQK8+K8c+/OPx9Whw1N2+NLrg8d3da8YpOZvGF2H72VBaQvKLVKZiSlCMnW4f364z/R3gQpJc2TfL9ny2iSA7VQ1KYeS1fpGDmfNbRBPhNv2OwPMWMEGIApFBo0kblCkmtk1ff40Gd3iNqJZ7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QXcfBdH9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7849DC4CEE2;
+	Wed, 16 Apr 2025 12:43:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744806209;
-	bh=P56Z/IiDnB23WkuikAUBMBExc1JHKB4iFe4OzvZkFfA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NafguyGv20ELsWAGUq6gX+fnFbFkRb5H334d5h3lxUl7pwLz0MSmF4cuPDMLqYcFe
-	 t16I2n7/WZO88iKhSLzVp+jYfOLbuFRyIK5Pb+1GXNI0b85fmW+9keG6ysnD/u6AIe
-	 tum5V5fAbgE1+o6GfvSF93o80ZVgm8pGH4nm/5tVk7+3/Wq26jrjPZyiVwv/uicABU
-	 xMTwEN2wNvrX07ZfXZFh0Leskf8Ic0xhWCzEBvrEdcLGjCOr15kCe9R/NnMtlUA0/a
-	 6qbFjbpRmcUtVl7D+ZLowsxmNDPPabvG+zfrVSBHWS+DAtiV3NCgFWi279vjMyeBb4
-	 A+GyYceskYKAg==
-Date: Wed, 16 Apr 2025 13:23:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: Vishwaroop A <va@nvidia.com>, thierry.reding@gmail.com,
-	jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
-	linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kyarlagadda@nvidia.com,
-	smangipudi@nvidia.com
-Subject: Re: [PATCH v3 6/6] spi: tegra210-quad: Add support for internal DMA
-Message-ID: <44923989-c102-4fdb-a95a-96962b2b79ad@sirena.org.uk>
-References: <20250416110606.2737315-1-va@nvidia.com>
- <20250416110606.2737315-7-va@nvidia.com>
- <1484e250-bbb6-4d1e-9285-2ccf1b8215fd@quicinc.com>
+	s=k20201202; t=1744807421;
+	bh=EptSh/Z5xPJhA1aDHMn9nfTawQKCHKc+FCmO0lVffUQ=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=QXcfBdH9jEPiCjRYz89ioGIpTxNnOCwd0yHyigjxmBqmMyYOPp3L1BXcotqhjbsRt
+	 F+dl72ZdNGecgFs45ASxQfhrnfP/X/itLyOY+j3G7WYPjuFq1mQW0JT5IuiGIJhvDU
+	 UwDQiUc6eGUO0tmIkL1pkZGHoL2dB4DEgLJJQgz+kLvHZLHlW+LOV9zYQEUfGUasCC
+	 DorokKdm8Q9/Js4FKAj8K3aBk0h5FSS70LCw34YxTAGzviwkoSjse5GbSZ4IY9+FEC
+	 hoks8NPyQB+e0nEEoNuac8F8BvdtTFnpy88u5gr/Qx/WCVpq3WE9D8Ya/L55gd8BG+
+	 +JAdIlrS8GLaA==
+Date: Wed, 16 Apr 2025 07:43:39 -0500
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1+die5o1YKGXNoaP"
-Content-Disposition: inline
-In-Reply-To: <1484e250-bbb6-4d1e-9285-2ccf1b8215fd@quicinc.com>
-X-Cookie: System going down in 5 minutes.
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-tegra@vger.kernel.org, smangipudi@nvidia.com, 
+ linux-spi@vger.kernel.org, skomatineni@nvidia.com, thierry.reding@gmail.com, 
+ kyarlagadda@nvidia.com, ldewangan@nvidia.com, linux-kernel@vger.kernel.org, 
+ broonie@kernel.org, jonathanh@nvidia.com
+To: Vishwaroop A <va@nvidia.com>
+In-Reply-To: <20250416110606.2737315-1-va@nvidia.com>
+References: <20250416110606.2737315-1-va@nvidia.com>
+Message-Id: <174480737097.2514153.5351260600015584210.robh@kernel.org>
+Subject: Re: [PATCH v3 0/6] Configure Clocks, Add Internal DMA support
 
 
---1+die5o1YKGXNoaP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 16 Apr 2025 11:06:00 +0000, Vishwaroop A wrote:
+> This series introduces QSPI clock configuration and internal DMA
+> support for Quad SPI controller. The patches have been reorganized
+> for better logical flow and review comments from v2 have been addressed.
+> 
+> Vishwaroop A (6):
+>   spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
+>   spi: tegra210-quad: remove redundant error handling code
+>   spi: tegra210-quad: modify chip select (CS) deactivation
+>   arm64: tegra: Configure QSPI clocks and add DMA
+>   spi: tegra210-quad: Update dummy sequence configuration
+>   spi: tegra210-quad: Add support for internal DMA
+> 
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi |  10 +
+>  drivers/spi/spi-tegra210-quad.c          | 282 +++++++++++++----------
+>  2 files changed, 176 insertions(+), 116 deletions(-)
+> 
+> ---
+> v2 -> v3:
+>         * Reorganized the patches.
+>         * Addressed review comments received on the patches.
+> ---
+> 
+> --
+> 2.17.1
+> 
+> 
+> 
 
-On Wed, Apr 16, 2025 at 05:27:47PM +0530, Mukesh Kumar Savaliya wrote:
->=20
->=20
-> On 4/16/2025 4:36 PM, Vishwaroop A wrote:
-> > Previous generations of Tegra supported DMA operations by an external
-> > DMA controller, but the QSPI on Tegra234 devices now have an internal
-> > DMA controller.
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
---1+die5o1YKGXNoaP
-Content-Type: application/pgp-signature; name="signature.asc"
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
------BEGIN PGP SIGNATURE-----
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmf/oTsACgkQJNaLcl1U
-h9BBWgf/T/fpuX5zgXV8BczuJRzrU8Jrh6qt8bgpncRfHuoXzhUBmixR2IlRL9Yt
-g+N5j2NezSezySp5y02xfnrUZ8ArPBDkOG/GKGApLx2NIS5uSuMBoGvigOGbk/ZA
-HFmRgrJ3QjibMU/ZZXBjecCMEkLt/NTZxViGgED1QkqmnYMbP2BrKbWQizPw2s+h
-Vfkl3mDqINQN/RrA+TqlluodQDmYeYNOobZ+5nVmbVKLUxSw6jDw5PlqVIxeQgXP
-navmqs9qHHBjKicrJKHdFHiImHF43kkslfSN9Z0ffU6hqzNnJ6ihtdb+qd/Hefof
-c3V8dIBvIksRuCjvuJ23YSgzJqCbJw==
-=4OgC
------END PGP SIGNATURE-----
+  pip3 install dtschema --upgrade
 
---1+die5o1YKGXNoaP--
+
+This patch series was applied (using b4) to base:
+ Base: attempting to guess base-commit...
+ Base: tags/v6.15-rc2-1-g36ff6c3f5084 (exact match)
+
+If this is not the correct base, please add 'base-commit' tag
+(or use b4 which does this automatically)
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/nvidia/' for 20250416110606.2737315-1-va@nvidia.com:
+
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0008.dtb: spi@3270000 (nvidia,tegra234-qspi): Unevaluated properties are not allowed ('iommus' was unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0000.dtb: spi@3270000 (nvidia,tegra234-qspi): Unevaluated properties are not allowed ('iommus' was unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3768-0000+p3767-0005.dtb: spi@3270000 (nvidia,tegra234-qspi): Unevaluated properties are not allowed ('iommus' was unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dtb: spi@3270000 (nvidia,tegra234-qspi): Unevaluated properties are not allowed ('iommus' was unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+arch/arm64/boot/dts/nvidia/tegra234-p3740-0002+p3701-0008.dtb: spi@3270000 (nvidia,tegra234-qspi): Unevaluated properties are not allowed ('iommus' was unexpected)
+	from schema $id: http://devicetree.org/schemas/spi/nvidia,tegra210-quad.yaml#
+
+
+
+
+
 
