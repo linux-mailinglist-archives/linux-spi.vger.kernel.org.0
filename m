@@ -1,74 +1,115 @@
-Return-Path: <linux-spi+bounces-7644-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7645-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CFADA92214
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 17:56:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33190A92225
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 18:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 336EA178DC8
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 15:56:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F0E91B60E0A
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 16:00:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE8A253330;
-	Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D54A35973;
+	Thu, 17 Apr 2025 16:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZGk9oFF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KnVKcOXK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3C1145323
-	for <linux-spi@vger.kernel.org>; Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825E71B4257;
+	Thu, 17 Apr 2025 16:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744905415; cv=none; b=OQeRl57Ge0UXHXUhfyjcziVEtCTca/rx//GJgX5u4OrgCziHiYIyOCPMBpZFnoYxi6Br8Kh+WbRcrH78Zlj8HRTFVmwMhOdCVNoXyEX7YHhfwLLlw2k1mN/hnGVWsLxlHE3M9ntGAEOTd/xUrcalgTfCnslDryizNjeOt1vGRC0=
+	t=1744905615; cv=none; b=HeIYC/ZAUnVff13eKNRRNVydLB5OwH7P4ZKLxm32zm42/A1trAPWsw3oyiz4xe+6VspfkYl0YcVfiXLGJxnWdslIHEdOF+xXZTIf2qQP5aLCSp9skaRIOw4B1N1VXUcNNfzFxkaqVW6pn+hPektAudtL2W+OMiYGiSaq1kmIBiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744905415; c=relaxed/simple;
-	bh=vqkjlq+4P4ArL2MWXgP1zZhrf/CZ/ySNU2ej3ohSM9w=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=RzFDT5i22UNDqmfr0HJ+UfDTIgbBHtsX6gtCagmGGf4vOi/jKeEhy/U8M5WI3qSpVV8lRqQ6eTwioRd8mGbshiRnw0R/Jvxb0ypO7PLEUtfXJ9iviS2tvc88FJTp5BgjHxI4MzcRMB5xPDEAIYpcI1FTDBOd6nSKmad5cmFKMjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZGk9oFF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30014C4CEE4;
-	Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744905415;
-	bh=vqkjlq+4P4ArL2MWXgP1zZhrf/CZ/ySNU2ej3ohSM9w=;
-	h=Subject:From:Date:To:From;
-	b=YZGk9oFF3ATw68ahZaMc6BpUk2Js1p1AQcdYsgJoWgo7dng8Lg5uhlGJtLbH/Azna
-	 XkvsiDA3MjbJ735r9q49OanGnnudmsZ7eehBWf7zGrECL5asNC9MhtlIIAIPZTlG+R
-	 fBzaQ1c08bh9t+5yJxtEnLzt6V7KFZN7gKTi8W9iO6xBQY40qZm8t327uIBMAqMdfe
-	 pCafQYiObWLmB2BuXaRLSnUQ6SHsnsItmejanO7rwbxNtrRcFJaHgVuOmH7LAAGy27
-	 zQghmUmlgOBF+g7LXKuCnl268kFq4cVG4Xo7ajHPIjRIaM7mf0rayJScpqVeZ4ymwQ
-	 fDOTe/vHTKxZQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71027380664C;
-	Thu, 17 Apr 2025 15:57:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1744905615; c=relaxed/simple;
+	bh=ZS6x8bwMHLKxIJFgPFcle45gVqwHALfPYTkIqt51OIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cgelFZ+9Xi7XXLOxfXHP86C2ptfW+rxhOub/CI37MBntew8Ao6Oo3kxWaA8aPcAo+Azcy34RoLN595An63WDTqhxXUDjH1CGDhWZc6t9YDTrL72hnGRVPXVZFSwbsloybxF9shHlf4DEXyn5IMjyPeKrsfPNRRBf8K995Y+rJDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KnVKcOXK; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1744905614; x=1776441614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZS6x8bwMHLKxIJFgPFcle45gVqwHALfPYTkIqt51OIg=;
+  b=KnVKcOXK1dRtUbGYCaAFSYvwpoNJfOFE1/Sg87IhkXUC/fLnLPQJHZ8B
+   0zik8tKKZMUtLTz0VC/cWew7AI+xFV6zPgqx4BX2CmSwowu622d2HwowH
+   vEBDxwqOp1/ZUTD7R6AO7RtA9AIIWg/7Zu1RGnnTQ8sjC1grXtN2dn/Mh
+   lfdM5pi53JzGfNqVmwrNUjDd4A721WGfFaRkCU2vQZyaknELHvxbLr9oh
+   j+oiTiNV+pp9aLjKtAga0+64kNfzQ+wBvfYpXB8X0kFbCDQt3AlEJAIpi
+   lTElFZS+iczLOyKSrc6IIx5ZWGxiF0xAZ8yztFE8A1HxiXzQ8CxHvSCl/
+   g==;
+X-CSE-ConnectionGUID: PjAiZrjlRdWa4Tc2kYDdjg==
+X-CSE-MsgGUID: lnJdVi2xQUS4BTQS8tP0KA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11406"; a="50323733"
+X-IronPort-AV: E=Sophos;i="6.15,219,1739865600"; 
+   d="scan'208";a="50323733"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 09:00:13 -0700
+X-CSE-ConnectionGUID: nrHJ4FFhSL6QwQxXjGyLEw==
+X-CSE-MsgGUID: wf/ikSkJTQ2l4EvXayOsWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,219,1739865600"; 
+   d="scan'208";a="168033914"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2025 09:00:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1u5Req-0000000DFFp-3clD;
+	Thu, 17 Apr 2025 19:00:08 +0300
+Date: Thu, 17 Apr 2025 19:00:08 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] spi: Introduce and use spi_bpw_to_bytes()
+Message-ID: <aAEliMw1YDjnfEjc@smile.fi.intel.com>
+References: <20250417152529.490582-1-andriy.shevchenko@linux.intel.com>
+ <1e22baf9-303e-4e49-9e9a-0daa3cd4caec@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174490545312.4124714.15644412200637151641.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 17 Apr 2025 15:57:33 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e22baf9-303e-4e49-9e9a-0daa3cd4caec@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Latest series: [v3] spi: Introduce and use spi_bpw_to_bytes() (2025-04-17T15:24:46)
-  Superseding: [v1] spi: Introduce and use spi_bpw_to_bytes() (2025-04-16T06:16:33):
-    [v1,1/2] spi: Add spi_bpw_to_bytes() helper and use it
-    [v1,2/2] spi: dw: Use spi_bpw_to_bytes() helper
-  Superseding: [v2] spi: Introduce and use spi_bpw_to_bytes() (2025-04-17T15:17:51):
-    [v2,1/2] spi: Add spi_bpw_to_bytes() helper and use it
-    [v2,2/2] spi: dw: Use spi_bpw_to_bytes() helper
+On Thu, Apr 17, 2025 at 10:30:46AM -0500, David Lechner wrote:
+> On 4/17/25 10:24 AM, Andy Shevchenko wrote:
+> > Recently in the discussion with David the idea of having
+> > a common helper popped up. The helper converts the given
+> > bits per word to bytes. The result will always be power-of-two
+> > (e.g. for 37 bits it returns 8 bytes) or 0 for 0 input.
+> > More details are in the respective code comment.
+> > 
+> > This mini-series introduces it and replaces current users
+> > under drivers/spi and we expect more (and possibly some
+> > lurking in other subsystems).
+> > 
+> > Mark, if you okay with the idea, please, make this to be
+> > an immutable branch or tag for others to pull.
+> > 
+> > In v3:
+> > - fixed the typos in the examples
+> > 
+> > In v2:
+> > - improved examples in the code comment and commit message (David)
+> 
+> Reviewed-by: David Lechner <dlechner@baylibre.com>
 
+Thank you for the review!
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
+
 
 
