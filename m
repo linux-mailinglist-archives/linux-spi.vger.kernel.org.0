@@ -1,120 +1,74 @@
-Return-Path: <linux-spi+bounces-7643-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7644-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A36A0A9219F
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 17:30:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFADA92214
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 17:56:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 487281B601A1
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 15:31:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 336EA178DC8
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 15:56:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EEF6253B43;
-	Thu, 17 Apr 2025 15:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE8A253330;
+	Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ozlSgqsR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZGk9oFF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E12024E003
-	for <linux-spi@vger.kernel.org>; Thu, 17 Apr 2025 15:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3C1145323
+	for <linux-spi@vger.kernel.org>; Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744903850; cv=none; b=fe7DlJuRa3fqmfawsoxeI/dyYf/Jw/f8VFnb0xkWrBJUgAuY1wupG29Z0bcK3+uOmDkIHIu83MJv6L6d4Segz99GI0HFkW34s7gN7+cZiHKqAYH4GUp8oI+WxWbgToG9iZl3z+OUFCKKebMLngETpQQBiwoo3H6283u6FuEQfvk=
+	t=1744905415; cv=none; b=OQeRl57Ge0UXHXUhfyjcziVEtCTca/rx//GJgX5u4OrgCziHiYIyOCPMBpZFnoYxi6Br8Kh+WbRcrH78Zlj8HRTFVmwMhOdCVNoXyEX7YHhfwLLlw2k1mN/hnGVWsLxlHE3M9ntGAEOTd/xUrcalgTfCnslDryizNjeOt1vGRC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744903850; c=relaxed/simple;
-	bh=1/T6eTWyjdWP8JXLFox7jHloAnTqxA+En1HzeLc8tMc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jKXOGM3cIV+sxL+IrdN8nsgM4CPyGYxeuwnBxQm2IKQBNEpJlzVDZRuzn/G9E2ypphT+U+fLKzx9yfQBuVzjLkMAiVETf4f/oDsT5QThKy6Ioi6JAoaxzhdc9ApiceF/h5MMkbp/bMgzQ2Np8FXRU7lEr566S7hNX9PvhzRNghI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ozlSgqsR; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3f6dccdcadaso561970b6e.2
-        for <linux-spi@vger.kernel.org>; Thu, 17 Apr 2025 08:30:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744903847; x=1745508647; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XOeGPuCuer24nPs3jiXqTFKRA2f4CnIaphU/0fLPogg=;
-        b=ozlSgqsRIAI8kucwGHF1c0gSxmM++NWPIlGor3E+KpGDKrULaH6dmu+soYKX2gvhXx
-         v52T74HyF7n0U4TmRj9DPVV+aHZkw3WuVVlZGhKApKad10eZRsFP+Jty5kp/2RbsXhdl
-         L1WRewnVypSIqrCqMaUNWEKXqqSmOjU2D8bH/KJVgHa4U0l3bCiQgxJTch6s93NqY/FF
-         fVuUYkE44vTcEwlX8TQ6v5LwZOg8s/uLS31WOgEcKZqCyzvRWXh7/g/EGbvJ5jKOZW1e
-         A8IstxVW3mYKBqC+trsmkrzzQBm/wuFvwu2CO0BDaF872O9EYKGhdAn0oxX72P07Lf82
-         TyWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744903847; x=1745508647;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XOeGPuCuer24nPs3jiXqTFKRA2f4CnIaphU/0fLPogg=;
-        b=rdRjb2m/v3zQFaC2QKf4zVJJ+ZTd9ZU+x4Du9vfITvxzWZ581IW2F0nKl2jrq5Zmwu
-         KtmHXxbJIKe7JAB7XjQN6lLIdL/GAF+fTR+eBRIp/QwT0IFpDinVADttZHFmwUKeofbs
-         j04W4zNAYfTVS+ZUyngd1Zf9Df4Zhd1fgA7/Ihq36dMflH3hUTr4i0cqlmRq+taDnkOa
-         fTE46xgGXkTuhT6dNTg+weN01aB/m69F8/WuMZowoUjkr4xej9rbLRJ1uIRHEIw1X579
-         MPPfH4mi/ZOh/nwmLuUvfjaF7im0mrOIs6fi5+xr2jQ8cCwpDXAIqhsPgoKoZb1u6faZ
-         NVww==
-X-Forwarded-Encrypted: i=1; AJvYcCWbSsDn60bnboeE6UpWddMfIiELQolA5PbVAFcjnFji8LCq9MluJlgwOqLjbXKK8gI7DjShgA7w2HU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqlXTUIAXOdGNp5EOSUllXNef9GnWqdmwaErc7YPNZau/j24HM
-	WVBzJL1522rNcuD/oF3GVGlczUssZ6+Am0Q5OxQ48Lixvl6Hd1EN1mPaovHU1ZqqVdBdGuHqULg
-	DwcE=
-X-Gm-Gg: ASbGncutaddixaCYN8cs5eC+F108DK/rHQBlurMlPdfnc46OjEa5hXs0ThLj8eVXi3M
-	9cDz7i71jqoekeY6gG8PWe0GpzuRzx7zUH2eQMZCYhoAEzwpWwGCJCtVuHJMOaMIyfN+wc+pjqo
-	G6+MEOLRAI3Dlai1yCaf0QXhkaycde+k5GGSIf2A9x1StYvCo5CMbcLCjZccCfA5TVU8uUKNz5w
-	YM14jlhIIMQFY0YP+uhkmgyat5IjtWkrAbo17wZQWsqXDPiWGzleV4ni259YNNRlU41MhuAKIG/
-	ZxcRI53+XYtJGGoyBJwBD9tp4fiKDcnBUgv6uYz1yBqV7B7zLZbqYV6Q+nlyfUGG+FghP1qMr9E
-	gov5zMTxbK34NichXZQ==
-X-Google-Smtp-Source: AGHT+IGAfa1PX8vDkTnj8WdCvrzF5q7nd7OzjW4lFji9+sTfZfkL3x0sCXY/RLK+4LCF+9aRtpGwLQ==
-X-Received: by 2002:a05:6808:23c2:b0:3f7:e553:56c6 with SMTP id 5614622812f47-400b0242959mr3658195b6e.37.1744903847383;
-        Thu, 17 Apr 2025 08:30:47 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:c91b:eea3:7afd:2dee? ([2600:8803:e7e4:1d00:c91b:eea3:7afd:2dee])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4007639de56sm3244201b6e.34.2025.04.17.08.30.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Apr 2025 08:30:46 -0700 (PDT)
-Message-ID: <1e22baf9-303e-4e49-9e9a-0daa3cd4caec@baylibre.com>
-Date: Thu, 17 Apr 2025 10:30:46 -0500
+	s=arc-20240116; t=1744905415; c=relaxed/simple;
+	bh=vqkjlq+4P4ArL2MWXgP1zZhrf/CZ/ySNU2ej3ohSM9w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=RzFDT5i22UNDqmfr0HJ+UfDTIgbBHtsX6gtCagmGGf4vOi/jKeEhy/U8M5WI3qSpVV8lRqQ6eTwioRd8mGbshiRnw0R/Jvxb0ypO7PLEUtfXJ9iviS2tvc88FJTp5BgjHxI4MzcRMB5xPDEAIYpcI1FTDBOd6nSKmad5cmFKMjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YZGk9oFF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30014C4CEE4;
+	Thu, 17 Apr 2025 15:56:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744905415;
+	bh=vqkjlq+4P4ArL2MWXgP1zZhrf/CZ/ySNU2ej3ohSM9w=;
+	h=Subject:From:Date:To:From;
+	b=YZGk9oFF3ATw68ahZaMc6BpUk2Js1p1AQcdYsgJoWgo7dng8Lg5uhlGJtLbH/Azna
+	 XkvsiDA3MjbJ735r9q49OanGnnudmsZ7eehBWf7zGrECL5asNC9MhtlIIAIPZTlG+R
+	 fBzaQ1c08bh9t+5yJxtEnLzt6V7KFZN7gKTi8W9iO6xBQY40qZm8t327uIBMAqMdfe
+	 pCafQYiObWLmB2BuXaRLSnUQ6SHsnsItmejanO7rwbxNtrRcFJaHgVuOmH7LAAGy27
+	 zQghmUmlgOBF+g7LXKuCnl268kFq4cVG4Xo7ajHPIjRIaM7mf0rayJScpqVeZ4ymwQ
+	 fDOTe/vHTKxZQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71027380664C;
+	Thu, 17 Apr 2025 15:57:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] spi: Introduce and use spi_bpw_to_bytes()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250417152529.490582-1-andriy.shevchenko@linux.intel.com>
-From: David Lechner <dlechner@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <20250417152529.490582-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174490545312.4124714.15644412200637151641.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 17 Apr 2025 15:57:33 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On 4/17/25 10:24 AM, Andy Shevchenko wrote:
-> Recently in the discussion with David the idea of having
-> a common helper popped up. The helper converts the given
-> bits per word to bytes. The result will always be power-of-two
-> (e.g. for 37 bits it returns 8 bytes) or 0 for 0 input.
-> More details are in the respective code comment.
-> 
-> This mini-series introduces it and replaces current users
-> under drivers/spi and we expect more (and possibly some
-> lurking in other subsystems).
-> 
-> Mark, if you okay with the idea, please, make this to be
-> an immutable branch or tag for others to pull.
-> 
-> In v3:
-> - fixed the typos in the examples
-> 
-> In v2:
-> - improved examples in the code comment and commit message (David)
-> 
+Latest series: [v3] spi: Introduce and use spi_bpw_to_bytes() (2025-04-17T15:24:46)
+  Superseding: [v1] spi: Introduce and use spi_bpw_to_bytes() (2025-04-16T06:16:33):
+    [v1,1/2] spi: Add spi_bpw_to_bytes() helper and use it
+    [v1,2/2] spi: dw: Use spi_bpw_to_bytes() helper
+  Superseding: [v2] spi: Introduce and use spi_bpw_to_bytes() (2025-04-17T15:17:51):
+    [v2,1/2] spi: Add spi_bpw_to_bytes() helper and use it
+    [v2,2/2] spi: dw: Use spi_bpw_to_bytes() helper
 
-Reviewed-by: David Lechner <dlechner@baylibre.com>
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
