@@ -1,57 +1,60 @@
-Return-Path: <linux-spi+bounces-7633-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7634-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE9BA91699
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 10:40:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02DC2A91A64
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 13:16:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6631E3B77B2
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 08:39:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FE5B44565F
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 11:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D0A2253B5;
-	Thu, 17 Apr 2025 08:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DEC4238D38;
+	Thu, 17 Apr 2025 11:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TliwaA5y"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="c5REP31x"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2AE22422F;
-	Thu, 17 Apr 2025 08:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E025236A98
+	for <linux-spi@vger.kernel.org>; Thu, 17 Apr 2025 11:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744879194; cv=none; b=FknV/vRYcLanGpEmUKEeZIhXQTGE1bUe8vGM88XYaP94k/73YBJ1wEuwZowDbXUKLzs0vKmse9RxHlPMMFrHHCrPJ3FEbzfVJ3D2j7RJyN0ebiDewHJcFBFKkBAVadUKoliY1ZJbtjRt+/vBstTYSbohUmx2f3zSBnS/AeVxXnc=
+	t=1744888611; cv=none; b=Ue0w2Q5Pd8eTxDbOUWsHoO20eF5XrPC6mBcLTvdOoTk6L5UM+Q752OCb8ll8cug0VoD78NVECXI9//q2geS8VABRgTFt0WPrNQjb5X6LHkYjgPLz09RcLekNYQTVhc8BlFqJITWjnNBJDSclxHETxEP5mg++rnAts0hf1C/HLc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744879194; c=relaxed/simple;
-	bh=/re34Jijx67qh7ep0kYMZSfCwz9MDqjL7GzZBKLxH7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=smU3dyEt98mSWvast9oU1W2Kvk4fnrhs7pgZaom9XVWNcKh1hDTKcVPIh5kqu6gczwg1elIBPPZFmUlJkx6xDg7E4Olr1i/eHXf288NPFWQqw7KQ3JpKehNSXj0qT0JYNbKkHPkJWSMkm3ZlrTxVPGtlH9lQbU4oaVc7HTWZHKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TliwaA5y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7278C4CEE7;
-	Thu, 17 Apr 2025 08:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744879194;
-	bh=/re34Jijx67qh7ep0kYMZSfCwz9MDqjL7GzZBKLxH7A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TliwaA5y2u57bdhOZ7iJAFcvhsQX9BAu1zkOyCqNXe4ZleisgVo3sdrH+c6Gqeb/s
-	 9LS6vEjClRpGM1pyGdP/J+bZ64CHyVa6dH41Sc3B+8+3eT6+Go65GDjgYRc0g1xtK4
-	 NKG3cJFGQ5NRiJ1d4K5n6twG7tT2HxeGqujDM903vc8B/mUgIjTVc0ovrCo2G5sDXQ
-	 6KWHFh4TLwfhpGB+pEOWZuy/btomDE9i6Mci9FVYO7CAkzdxwKAwj8QYs7MG/hZfL1
-	 z6CO/uGaA+5fR+of8zvu4i1Upkqdhw/cs+Db+IQctnBq0I21Y1oUwXjUZgx966u9HG
-	 XrrQMFe2zEjOQ==
-From: Philipp Stanner <phasta@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Philipp Stanner <phasta@kernel.org>
-Subject: [PATCH 2/2] spi: pci1xxxx: Use non-hybrid PCI devres API
-Date: Thu, 17 Apr 2025 10:39:04 +0200
-Message-ID: <20250417083902.23483-4-phasta@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250417083902.23483-2-phasta@kernel.org>
-References: <20250417083902.23483-2-phasta@kernel.org>
+	s=arc-20240116; t=1744888611; c=relaxed/simple;
+	bh=EMpv3jolt945KdxEwM+fpv4lTRMv1TR/RhfjSpJhFiQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A0+Unx2452/PR3Il/SNFlFZDunxAD2y88eqGK068NOyZn2tbPWrGpBPi1UrKLJWBQ7D/9Tg3mBkGt0ZdtK2Albo0IcF7wMv7l2+caej0o3Kz4dHZkpMVnoMtkGS/YC4O6V9ODITtjiAIKe8QPt4EFfiW6wxqFvt+7jB81iGFdRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=c5REP31x; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=gRDp2fEIK8ZrD/
+	Qsr9hnUov7ClwJjL4bpJhLFXq0ZH8=; b=c5REP31xe4AIzkoh5NJ5nbCX4NaRvv
+	pj/VTMIf3oMsFrJN2ee9wUZVVKqOop2X7bdrog1XlfHDUzyCJ9BGIADIkXkYRCiF
+	C9wpEZ+7D0S+hMukwiDsZp3BszwLPBlf1N63sTsNDXxyiuqp1G9r1wUJwb3VN7rP
+	yr6fvc29HhrdNPeFgeaRdptkgSh0mMkbjL6xzpXYEBUMcMiaoyGr5619Cex4Rdwc
+	3yLBzJVpMoBh02h9ABHGHu8cvQTQiMA5zH4sLqZsuW9b/LvkdJWzX6oC0emoHbJ2
+	gG1IS2Vh3M2ey88sNquE61tW5ZuQG+qZzkIJDjStMxdwPqanZP+yD8jQ==
+Received: (qmail 1071622 invoked from network); 17 Apr 2025 13:16:42 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Apr 2025 13:16:42 +0200
+X-UD-Smtp-Session: l3s3148p1@EcVIifcy5pcgAwDPXyfYALbiJ46yNPq3
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: linux-renesas-soc@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: [PATCH] spi: dt-bindings: Fix description mentioning a removed property
+Date: Thu, 17 Apr 2025 13:16:31 +0200
+Message-ID: <20250417111630.53084-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,101 +63,41 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-pci1xxxx enables its PCI device with pcim_enable_device(). This,
-implicitly, switches the function pci_request_regions() into managed
-mode, where it becomes a devres function.
+'spi-cpha' was removed from this file. So, replace it in the description
+with an existing example. Reformat the paragraph to adhere to max line
+length.
 
-The PCI subsystem wants to remove this hybrid nature from its
-interfaces. To do so, users of the aforementioned combination of
-functions must be ported to non-hybrid functions.
-
-Moreover, since both functions are already managed in this driver, the
-call to pci_release_regions() is unnecessary.
-
-Remove the call to pci_release_regions().
-
-Replace the call to sometimes-managed pci_request_regions() with one to
-the always-managed pcim_request_all_regions().
-
-Signed-off-by: Philipp Stanner <phasta@kernel.org>
+Fixes: 233363aba72a ("spi/panel: dt-bindings: drop CPHA and CPOL from common properties")
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/spi/spi-pci1xxxx.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
+ .../bindings/spi/spi-peripheral-props.yaml          | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index fc98979eba48..330078b1d50f 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -741,21 +741,19 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 			if (ret)
- 				return -ENOMEM;
+diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+index 0bb443b8decd..8fc17e16efb2 100644
+--- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+@@ -8,12 +8,13 @@ title: Peripheral-specific properties for a SPI bus.
  
--			ret = pci_request_regions(pdev, DRV_NAME);
-+			ret = pcim_request_all_regions(pdev, DRV_NAME);
- 			if (ret)
- 				return -ENOMEM;
+ description:
+   Many SPI controllers need to add properties to peripheral devices. They could
+-  be common properties like spi-max-frequency, spi-cpha, etc. or they could be
+-  controller specific like delay in clock or data lines, etc. These properties
+-  need to be defined in the peripheral node because they are per-peripheral and
+-  there can be multiple peripherals attached to a controller. All those
+-  properties are listed here. The controller specific properties should go in
+-  their own separate schema that should be referenced from here.
++  be common properties like spi-max-frequency, spi-cs-high, etc. or they could
++  be controller specific like delay in clock or data lines, etc. These
++  properties need to be defined in the peripheral node because they are
++  per-peripheral and there can be multiple peripherals attached to a
++  controller. All those properties are listed here. The controller specific
++  properties should go in their own separate schema that should be referenced
++  from here.
  
- 			spi_bus->reg_base = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
--			if (!spi_bus->reg_base) {
--				ret = -EINVAL;
--				goto error;
--			}
-+			if (!spi_bus->reg_base)
-+				return -EINVAL;
- 
- 			ret = pci_alloc_irq_vectors(pdev, hw_inst_cnt, hw_inst_cnt,
- 						    PCI_IRQ_ALL_TYPES);
- 			if (ret < 0) {
- 				dev_err(&pdev->dev, "Error allocating MSI vectors\n");
--				goto error;
-+				return ret;
- 			}
- 
- 			init_completion(&spi_sub_ptr->spi_xfer_done);
-@@ -773,13 +771,12 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 			if (ret < 0) {
- 				dev_err(&pdev->dev, "Unable to request irq : %d",
- 					spi_sub_ptr->irq);
--				ret = -ENODEV;
--				goto error;
-+				return -ENODEV;
- 			}
- 
- 			ret = pci1xxxx_spi_dma_init(spi_bus, spi_sub_ptr->irq);
- 			if (ret && ret != -EOPNOTSUPP)
--				goto error;
-+				return ret;
- 
- 			/* This register is only applicable for 1st instance */
- 			regval = readl(spi_bus->reg_base + SPI_PCI_CTRL_REG_OFFSET(0));
-@@ -808,8 +805,7 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 			if (ret < 0) {
- 				dev_err(&pdev->dev, "Unable to request irq : %d",
- 					spi_sub_ptr->irq);
--				ret = -ENODEV;
--				goto error;
-+				return -ENODEV;
- 			}
- 		}
- 
-@@ -828,15 +824,11 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 		spi_controller_set_devdata(spi_host, spi_sub_ptr);
- 		ret = devm_spi_register_controller(dev, spi_host);
- 		if (ret)
--			goto error;
-+			return ret;
- 	}
- 	pci_set_drvdata(pdev, spi_bus);
- 
- 	return 0;
--
--error:
--	pci_release_regions(pdev);
--	return ret;
- }
- 
- static void store_restore_config(struct pci1xxxx_spi *spi_ptr,
+ maintainers:
+   - Mark Brown <broonie@kernel.org>
 -- 
-2.48.1
+2.47.2
 
 
