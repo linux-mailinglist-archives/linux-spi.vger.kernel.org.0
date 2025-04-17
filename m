@@ -1,131 +1,110 @@
-Return-Path: <linux-spi+bounces-7647-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7646-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8FD7A9229E
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 18:22:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24A0AA9229A
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 18:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66E817AF847
-	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 16:21:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CCB719E3677
+	for <lists+linux-spi@lfdr.de>; Thu, 17 Apr 2025 16:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 682DA254AEC;
-	Thu, 17 Apr 2025 16:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EF4254867;
+	Thu, 17 Apr 2025 16:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V3Rfaq32"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7hcoEI1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D27253944;
-	Thu, 17 Apr 2025 16:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E811253944;
+	Thu, 17 Apr 2025 16:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744906941; cv=none; b=uQ6tuWM/nA1VOVHkfar1wEG7D1fDmAsfCVZ/RYp1RT8VsjKDM7vZHf6ZZpPD6U3s7AI331vZHQ0cywTu/MExg1CrlQmzJVxlP9DeZ0RW/W+WVjHsKUzPaGnCsJHQyarz/uw0rwRsWeB2U8+0DVg0WNb0x4OC1gc/TSnX6FotAbY=
+	t=1744906930; cv=none; b=Gr2e1Q0rtg5Ds4IrrLone6HMH5E2Q7GtpWGOdyrpGh6UlcP2i7GFp7ZmJA1LCF7X9xT+6etKfTXgiZX/y8einJysgH4TmtDAYiJ2J2wXnlf8BM8TSrMFLnLZf9ifA9hchBBDTPTAyk1WdNSmwgUtk5fvgX8DkPVkebk5ipHJ7Rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744906941; c=relaxed/simple;
-	bh=bDa/rH8Ry3QTTEGBrimeA+PJkNogZR5madrUnxo/lXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nFYt8rou5WHXTJmmJ+jQwOUgV0rlfDzph1glZl8pUm3r6DfMLe0qTXk5I+2lpaXPvrG+WBX6vLX1w0nb67Er5YnIAHdYQDc9UJHwCb3vi9wH315UBCfMOZ7WUhBx/wB/PqiLNe+nOFJUdyfU/s5m9FG6ZtWm7l5OfBtbO2sXot0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V3Rfaq32; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53HCld0A008818;
-	Thu, 17 Apr 2025 16:22:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+tyaPfggl3NKsrf6rIcBYHuQAViZpRCVotLYqRJT9b4=; b=V3Rfaq32iRuHoYsL
-	vhXsQNmIxzty8CsFCUKv63mGXM8MqohDHF2opuWIvL1aDqLZ1A8YURxrmdyalR0j
-	7slIJuQjy9egzaTMnTw8yMMi1bi1H4C3JkxWRNHZrqy4bpbVhgR+52dTv/WFC0Ri
-	4AH8OTsoUd0ak20WnFZynJVnPbVLaHdrVY2aolmO6A2ZmmCoduW2g3//hN5xZKD3
-	VpHuOCw2hoKq7a0kbUOE9ef+i1JJfea4XWzc/8FeNBMYvKvAmlmjLuNIQmlQCKnr
-	kSXcaT2osDQ3Uv/z4V+bTgveCFAjPXPsCrVTEASvPOai8XsVhERH+jznQ8uh4v86
-	HVFsTw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ygxk7e3d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Apr 2025 16:22:14 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53HGMD03025196
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Apr 2025 16:22:13 GMT
-Received: from [10.216.33.21] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 17 Apr
- 2025 09:22:11 -0700
-Message-ID: <4fbc3fc6-df2e-4d13-a152-47fc4d77a082@quicinc.com>
-Date: Thu, 17 Apr 2025 21:52:04 +0530
+	s=arc-20240116; t=1744906930; c=relaxed/simple;
+	bh=+tJVKOIu+gBSCFEwwsnlu5dV6AI8KsV8zFpj108Zr4o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=O6l/lFb59kpQJvuel32am8H1pMmI7B/RbCs2J+sDun1Jfkd0WnG+wCSs4zS2aY0A/dlei7NdcDTjwXRdeMtDl+1jS2QoYeztRTl2ABrLQ8qo5fH0j68guL5nHNeG/NRtW4oOzlbixFcPLMKrK1hEcageKJfFkceI0gYPYlg5Td8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7hcoEI1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A355C4CEE4;
+	Thu, 17 Apr 2025 16:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744906929;
+	bh=+tJVKOIu+gBSCFEwwsnlu5dV6AI8KsV8zFpj108Zr4o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=e7hcoEI1K2N7tr2pPvAvyGf9F2OS0j6PilDcGIYecuC+tWybN1PsAfR/i1HPUXMoV
+	 5dIH0NEUai+CFJeC5gkKpXo2g/WIqqkFRtSTEao/i/e28EpyWfGjY2V2QSIg1rMRof
+	 Ux/w/fbqIyvS+fTcFPDMAwOZwTqKwcMnPsUiywa5Q5mpASAY63CbgFMxf594yLjFRS
+	 kSxHLWbblcwy3YmhptglAY35iQ/TnzyvlEirtSpft+EEomL8naaEvil33ZvQExiwz0
+	 rxi4wWP8ocVY5/4dQXCV5SmGxIBQzXGDs4yCDmJld52zduHnvNSxUrsw8KxT45ZZUK
+	 Ep0J7+gOUDeJw==
+From: Mark Brown <broonie@kernel.org>
+To: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Tamura Dai <kirinode0@gmail.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250417011700.14436-1-kirinode0@gmail.com>
+References: <20250417011700.14436-1-kirinode0@gmail.com>
+Subject: Re: [PATCH] spi: spi-imx: Add check for spi_imx_setupxfer()
+Message-Id: <174490692776.121478.4533295304176579175.b4-ty@kernel.org>
+Date: Thu, 17 Apr 2025 17:22:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] spi: Introduce and use spi_bpw_to_bytes()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown
-	<broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: David Lechner <dlechner@baylibre.com>
-References: <20250417152529.490582-1-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <20250417152529.490582-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=WecMa1hX c=1 sm=1 tr=0 ts=68012ab6 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=COk6AnOGAAAA:8 a=tzvkvtfgrtsM4S2kMOoA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: KyMHB6vgmRrXks39WOBZ3x-DcFVcC1ng
-X-Proofpoint-ORIG-GUID: KyMHB6vgmRrXks39WOBZ3x-DcFVcC1ng
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-17_05,2025-04-17_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxscore=0
- impostorscore=0 mlxlogscore=850 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504170120
+X-Mailer: b4 0.15-dev-c25d1
 
+On Thu, 17 Apr 2025 10:16:05 +0900, Tamura Dai wrote:
+> Add check for the return value of spi_imx_setupxfer().
+> spi_imx->rx and spi_imx->tx function pointer can be NULL when
+> spi_imx_setupxfer() return error, and make NULL pointer dereference.
+> 
+>  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+>  Call trace:
+>   0x0
+>   spi_imx_pio_transfer+0x50/0xd8
+>   spi_imx_transfer_one+0x18c/0x858
+>   spi_transfer_one_message+0x43c/0x790
+>   __spi_pump_transfer_message+0x238/0x5d4
+>   __spi_sync+0x2b0/0x454
+>   spi_write_then_read+0x11c/0x200
+> 
+> [...]
 
+Applied to
 
-On 4/17/2025 8:54 PM, Andy Shevchenko wrote:
-> Recently in the discussion with David the idea of having
-> a common helper popped up. The helper converts the given
-> bits per word to bytes. The result will always be power-of-two
-> (e.g. for 37 bits it returns 8 bytes) or 0 for 0 input.
-> More details are in the respective code comment.
-> 
-> This mini-series introduces it and replaces current users
-> under drivers/spi and we expect more (and possibly some
-> lurking in other subsystems).
-> 
-> Mark, if you okay with the idea, please, make this to be
-> an immutable branch or tag for others to pull.
-> 
-> In v3:
-> - fixed the typos in the examples
-> 
-> In v2:
-> - improved examples in the code comment and commit message (David)
-> 
-> Andy Shevchenko (2):
->    spi: Add spi_bpw_to_bytes() helper and use it
->    spi: dw: Use spi_bpw_to_bytes() helper
-> 
->   drivers/spi/spi-dw-core.c |  2 +-
->   drivers/spi/spi.c         |  2 +-
->   include/linux/spi/spi.h   | 26 ++++++++++++++++++++++++++
->   3 files changed, 28 insertions(+), 2 deletions(-)
-> 
-Acked-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: spi-imx: Add check for spi_imx_setupxfer()
+      commit: 951a04ab3a2db4029debfa48d380ef834b93207e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
