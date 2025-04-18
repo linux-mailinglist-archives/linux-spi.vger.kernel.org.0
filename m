@@ -1,130 +1,119 @@
-Return-Path: <linux-spi+bounces-7683-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7684-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 322EAA93F92
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 23:52:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1342A93FEB
+	for <lists+linux-spi@lfdr.de>; Sat, 19 Apr 2025 00:39:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E5388E070A
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 21:52:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 987DF1B665F2
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 22:39:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151EC1DB124;
-	Fri, 18 Apr 2025 21:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13521241661;
+	Fri, 18 Apr 2025 22:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WgqdujH5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eG521lMX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BE61B6CE0
-	for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 21:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81735233128
+	for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 22:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745013138; cv=none; b=o7xTWizRLdko3fuxMg7Nxwam4za33kD2znwftAT8WC10R/95xuA3QOqQl2bsOW9LIdpjB8dg2bMr/xu6P8FyY6VWPlCAMM4lSwa5C/smdNKZrrb/4Mx9WItoe4XrPVHqs2C+T5rRER8ANYto26TiTZDxDeP94AsACKJm5ACU2ws=
+	t=1745015955; cv=none; b=tSqVBEjqy2txz/yhwR7d3Yq/w85Yo0I9/Gekaw/n5VqY5erWItcAaGfsQCdMs8jX1Fb4+hDUVcwPx8kDQUdgvqOW+k2YeELPewkqZvjw3lyHJbjRK29Rb1akTKmjIdY6HVm3sLCGQm3idb1scEUphlBNqgIgW0UWvFpodSSKf80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745013138; c=relaxed/simple;
-	bh=N7TanafbnuUEls/FFcZxrrUNd3LlytQUrsEw9mUviTQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YeNnQR/hrSBZvZLivqFiy56SDaZ3VkKbtkCP3PGOPgBOdlwYF11XiFV6WKtzZ1FcCxOAtJvlZW6j39y1Jh0GnWcXBH1SrkRrBIt3rCnb7+ydNAtFL2AJBzVNat9GpRK7hxDcciifSl2Jcg+psvZnUVJcSlcbKC5nQ9PaJASJLvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WgqdujH5; arc=none smtp.client-ip=209.85.160.171
+	s=arc-20240116; t=1745015955; c=relaxed/simple;
+	bh=tklkS0cPrO9sPZbMRK5A6mjigmvMPbtlej1qarezBFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oXtDiiTxC0XnzoKfjk8VUth97LfwaCLexNap43EY383npQvBvSR3TJCmrRph4V/5fSziOOzBn8ImHFs0MtWsPIaGN3gEvpRT9vIxjkH0Wy2L6IZJHUAfa6Xr8Mn0adHkDu64ZC48Qx2RWDeSNDIIfU1kvZEi0RsYlDWF26d0vcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eG521lMX; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-47677b77725so24373961cf.3
-        for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 14:52:16 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6ff0c9d1761so20755557b3.1
+        for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 15:39:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745013135; x=1745617935; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bJteemHQdPIHijdfba5JF3B0sKiKzz1cQmWIpU4FubQ=;
-        b=WgqdujH5lFjfHMyRZXuldXQ2tpGrdAV4wQxAhioq8xb6yC56hgtypvEQSOPa9P/PbJ
-         x87arD9lyob798CKylR5B2qoE6S3iGVn1HoijuiCEI/uGsY7faCIxbCHefVAcri3Pjkh
-         03K2hwZJX4IIBCSKUZdHYwvBqkB27kP2vWHIXbtddFEVuVpx/mHFzA3BmlA5se4FIn7D
-         Goy0HImxcOBsPuIyzZ1YQFn5gbnVZIjkrgQo12+u3fb0zk+Rx+DfHAOYXpahpCHHLN8g
-         ftpQr4aGk5N5osXfT85WSbWiSPaogYG2gg7j5NuY23xpM9SBON3aBhsmaQaUrIdqqpcj
-         3/BQ==
+        d=gmail.com; s=20230601; t=1745015952; x=1745620752; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W5GhXqgKcWpJArYwrJW6cEhSHYi2oqhhybRAnDYZdGU=;
+        b=eG521lMX7hgO7BUyopk3D+veup7D1flWVu/WOyBBJ4f86+F27tFzGjKNP2bY8E7DqP
+         VrNuErl0JkelCmWlZk/KoTodzfuZHV6Dv3FPKBNgylhu1H4VqE/pGb4xqVaX9l4Byg7Y
+         NYSlhLrms9X8RZHAQ2Iq3W2p60CCt4roadQgHHK127MGCblN+sxVfclZRzuWLAFvPRXz
+         p0GbINBeZa/1d7S+JH9+mGBRmUVEMh3eknTc4L66kmNq9QMoInrgq/NbLu+i4LsnOo0K
+         M2c013zhE43d9Qc03eE9qgrSONMow1ij7F2RGrhGAX3baFfZabihdkihbhGXiYdNDcTP
+         igkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745013135; x=1745617935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bJteemHQdPIHijdfba5JF3B0sKiKzz1cQmWIpU4FubQ=;
-        b=U3LJdVxOY5OTGoZfWIua5Q7wKe0XyChWhFw9R18JesdbEPcXWwYPE7jYk5o9GTXOnd
-         aVbiMY1brJk5Av8UuJY4+JCS7wJmNP+OQ0x+iSZ4bG0v3c1QE/28yCdfny0peYqVqJFD
-         P+5aOybksfESQZe9OGxZRAKy+Yx1GEu/lybKmS/uEqZhlKJVvgbMpH2Q9i/7bkKkd53A
-         pK3En/gOGWdVMZW0Md900/bGAS1WDQwRIABP0N9KkSdqJvBQNQOkl0sqxAlLSGQNf2hh
-         Qddh+iES65rZn2aLdmUwNgZ57Y5mhHEdiNFZvsS+llT3jVg4CjRsL6b+ZX4D/DkzNnJI
-         DvkA==
-X-Forwarded-Encrypted: i=1; AJvYcCUe7JWHGZqvDvrLS9GBvhCYGr1dsm7lFF5oFHcgOnhCjKvc8bdMbtMR2Ba10BZpt7Sjyk2TB3CgpjQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlsYJBb9y3ETtDwgaIaKZVZZOPkOy5JwTVaCw+ZHhBwmSFR05B
-	J3Oj3FIAd1mIPvZuWz/494A8lIPn9zQGh9LK9UGQJIpauXG+glrjF/dwro6eTsLuTucBEKq0uuF
-	0A3P11lUnDrOjNU6LGNKCIF3EJeC1J6Xd
-X-Gm-Gg: ASbGncvfZ2MnGmXE+oH2sjwNZ2cL/PtUa7A6C3rlrRKlGs0RCKq4grVa2HjMQmUJKxg
-	cja+R0R17Q3mzCMOOyRERAZo4CTSQIeqV71Yl2ICU+1JXialTDmpE7CX8BsHWLBSW327El+3pIn
-	sRln1AWYoZXft5sMpsGYA+1B8=
-X-Google-Smtp-Source: AGHT+IH4Ilebq7fpF0wTTBCMo8d/IRhgIAzPurEDsbKeAt92njYWwpiEJcXnrNeTE7a2Ay3CPF5CbL4vcIyHuwHf2aM=
-X-Received: by 2002:a05:622a:11c7:b0:476:ae71:eabe with SMTP id
- d75a77b69052e-47aec4bd58emr86100721cf.50.1745013135412; Fri, 18 Apr 2025
- 14:52:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1745015952; x=1745620752;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W5GhXqgKcWpJArYwrJW6cEhSHYi2oqhhybRAnDYZdGU=;
+        b=cv93HeitQ+m1C7r5g4ZX3so3C3lmYt+s5FRXlncl5ANRa/MclpVBN+Uy1ngNAUKC+9
+         NtW7UlGz0yNCQUTfvRNegG/lKW5GEujqbDVtWMYdDBSidqilzkSUdGr1N+e5AISz/MyA
+         nr+0ec8hOVOMC2sGyu+iyY/GfFUynb4Y8v/3EbY4PoMnSWvjTZkPt7d2HXPAY/CneePT
+         G7CWkKjK2Cnd2SDBiA8KPiNpw1aZUKqUVgfP31rKnQz3lXJvPkAv6Bo8hwvJVBfyW5g8
+         bCAyQCj3Kim/g33cTNBg6Mg3F2wJCxIY3PBfY9yRbSzMYCPEVz+tYwsIt/4HfYCyLDwj
+         xKkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVUdTsusFB5gRyB0rSVe/jzDxfdE3IfrdhkZVK43fFCO+S1pf1THWB+E+913ANwj3/uSibFZH9lWKE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7Ov4JNU4/7pJ88rEwimGLQpeTMSXpDUNqzPHTLI2GYGNenTPU
+	RypiwW2OZQMJZ5bJf5VEHmwtV94egKD2bhCB5CksEq3TyTINJhox
+X-Gm-Gg: ASbGnct4XbqT7pfIZPLtOcUmuHHY0yCSNgL2Qb57Uc5r4xWAvSJlFBn/WgjnWaVFRQT
+	6WBooqW6EaWU7f1pLBqbAEiKzJJms1YDkHXZbSJim0lbHJ5nxbAmlq7+ozY0r2/iSbHSWuDm2Ot
+	flDErT3x5qRFGbKR0vhSj+ll8ApuPgYPneTLJDtWhB9Cb1wVfl52UvcXhrFIMN+bTwXdczIF/WL
+	rgHFhsn5095eHKdm8js4c4ozYM9+UaHHN2Pe1Nexk62sgxy0gDA8aNdNzK5O3mZ6I4eeVDP3HvH
+	nPuQie/bBIoZFimTL4NJevkRj36KcPFcDaI3nrM=
+X-Google-Smtp-Source: AGHT+IEoTe+IXTTL83mRIDqKa9U6jQtyQCsu1go+Sv6krPR7z5q+6BEaGT9fQaERm8lL6E+KZH78FA==
+X-Received: by 2002:a05:690c:6c91:b0:6f9:a062:2a06 with SMTP id 00721157ae682-706cccbe366mr63472387b3.8.1745015952340;
+        Fri, 18 Apr 2025 15:39:12 -0700 (PDT)
+Received: from velo.. ([191.156.36.61])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-706ca491c7fsm7281857b3.55.2025.04.18.15.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Apr 2025 15:39:12 -0700 (PDT)
+From: Andres Urian Florez <andres.emb.sys@gmail.com>
+To: dlechner@baylibre.com,
+	broonie@kernel.org
+Cc: Andres Urian Florez <andres.emb.sys@gmail.com>,
+	skhan@linuxfoundation.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: offload: check for match callback when a trigger is being registered
+Date: Fri, 18 Apr 2025 17:39:03 -0500
+Message-ID: <20250418223905.45402-1-andres.emb.sys@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418175542.13820-1-andres.emb.sys@gmail.com> <e0fab22d-c929-4111-9f4c-fbf4fd525c58@baylibre.com>
-In-Reply-To: <e0fab22d-c929-4111-9f4c-fbf4fd525c58@baylibre.com>
-From: Andres Urian <andres.emb.sys@gmail.com>
-Date: Fri, 18 Apr 2025 16:52:04 -0500
-X-Gm-Features: ATxdqUGQCfKRuKkFD4CNhSE5FnE-oO6F71ulWnTR_YgztIxSQGoC38YM-YcZa-o
-Message-ID: <CAMihqu8mw5+jK_tm9PkKg9n6_ACJvpfRcWyZv8xZYoUrUtRLwg@mail.gmail.com>
-Subject: Re: [PATCH] spi: offload: check for match callback when a trigger is
- being registered
-To: David Lechner <dlechner@baylibre.com>
-Cc: broonie@kernel.org, skhan@linuxfoundation.org, linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 18, 2025 at 2:49=E2=80=AFPM David Lechner <dlechner@baylibre.co=
-m> wrote:
->
-> On 4/18/25 12:55 PM, Andres Urian Florez wrote:
-> > Make match a required callback when a new trigger is being registered,
-> > this allows that other functions like spi_offload_trigger_get() could
-> > safelly invoke the callback when it is required
->
-> s/safelly/safely/
->
-> >
-> > Signed-off-by: Andres Urian Florez <andres.emb.sys@gmail.com>
-> > ---
-> >  drivers/spi/spi-offload.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
-> > index 6bad042fe437..6f4c5188e6ad 100644
-> > --- a/drivers/spi/spi-offload.c
-> > +++ b/drivers/spi/spi-offload.c
-> > @@ -434,7 +434,7 @@ int devm_spi_offload_trigger_register(struct device=
- *dev,
-> >  {
-> >       struct spi_offload_trigger *trigger;
-> >
-> > -     if (!info->fwnode || !info->ops)
-> > +     if (!info->fwnode || !(info->ops && info->ops->match))
->
-> IMHO, this would be easier to read and understand as:
->
->         if (!info->fwnode || !info->ops || !info->ops->match)
->
-> >               return -EINVAL;
-> >
+Make match a required callback when a new trigger is being registered,
+this allows that other functions like spi_offload_trigger_get() could
+safely invoke the callback when it is required
 
-> >       trigger =3D kzalloc(sizeof(*trigger), GFP_KERNEL);
->
+In v2:
+- improve readability of the condition
 
-Right, I will apply your recommendation.
-Thanks!
+Signed-off-by: Andres Urian Florez <andres.emb.sys@gmail.com>
+---
+ drivers/spi/spi-offload.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
+index 6bad042fe437..21a0f3a3a176 100644
+--- a/drivers/spi/spi-offload.c
++++ b/drivers/spi/spi-offload.c
+@@ -434,7 +434,7 @@ int devm_spi_offload_trigger_register(struct device *dev,
+ {
+ 	struct spi_offload_trigger *trigger;
+ 
+-	if (!info->fwnode || !info->ops)
++	if (!info->fwnode || !info->ops || !info->ops->match)
+ 		return -EINVAL;
+ 
+ 	trigger = kzalloc(sizeof(*trigger), GFP_KERNEL);
+-- 
+2.43.0
+
 
