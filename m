@@ -1,112 +1,119 @@
-Return-Path: <linux-spi+bounces-7678-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7679-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC125A93B34
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 18:45:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7DF4A93BD4
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 19:17:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E16F17A8B44
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 16:44:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 534811B6038E
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 17:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F65215792;
-	Fri, 18 Apr 2025 16:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AEC218E99;
+	Fri, 18 Apr 2025 17:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="XcbhjcJC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPVn7Mzg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1851DC992
-	for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 16:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D592211488
+	for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 17:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744994728; cv=none; b=syuxYsoF9pfv4yOVh4LKTJQfEmjQC6h85tRHdNd9ikSJyDSvrfZEtd0bumsPV0JXmIUDyN/OapbiitwaLOPL8iBio2Rv1NHWblgg5wmLAy7vUYEoNgE+g9NatAK6m0u4IdDXH0XkyP/M1vPGEx2n0hQWIVbx5kP7FSdGZBxxiTo=
+	t=1744996494; cv=none; b=T4wf+os2J99pw0w7Jy2HI6KZrOI1C2sGQxylpj8oX58qySsuZzedAj6/yYGifTSAS3F+62Z/nVtmyj82/GClKnZcUszIgdCA0UOzJlCQYigzLrWMNROYlykqWQNQoH275qEvH4695adiGj7KxupG+2W9ggeV0nAgS+kIJcTWNNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744994728; c=relaxed/simple;
-	bh=Uo4qWoaPJqLSHj0LVQHUBiENxwtfpIYD2d0ih9fPzv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R/zTQpN7zMTY3Y6y0JkOReQ0qSjM6NIdIliz9aomILu2SsdfhDwY2Sb6eyuWX1H6ZK3iJpj0Ocxe7yYviIa4gn9ah5UsGIuOePPAXWVl9iYfj6YwK4kpbcJS5LlE26YRi6jmoq78lAejp/Cpc2se2dA1OlNTxV+wLRD0uwNxtKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=XcbhjcJC; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-601b6146b9cso959807eaf.0
-        for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 09:45:25 -0700 (PDT)
+	s=arc-20240116; t=1744996494; c=relaxed/simple;
+	bh=gCqcyjk5eTEm7SdjDXcY84MK1gxM9EVji+5Cn80slas=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G/xbdOdC8cYCnrANiklYoviw+mqhACFW82EP7/dUrxExVxLRByocAZ8vnwbUdp6U0I1GQAAQJ2td/kVyKAM+YfmKcx0nRN/GlM7OdvuplPnwTDqk9vaxihTcIOoCrzt8ubFypMfIdNBLRbfRAVLOVcDx7+x9vpEUOwCx7etg+Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gPVn7Mzg; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e461015fbd4so1789409276.2
+        for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 10:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744994725; x=1745599525; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K6NzstuCAOmmHk9gufPNMowPg4ZJqKGQeUURUENblfU=;
-        b=XcbhjcJCJUL+nG9nMbUxZhI4jQ/KGmyQkTYMis39h2G79xCmSIcsW8JAN3LJ1emJBt
-         Vu1qB/o3EHJ7Qyru++GvqqsYvvUVChrdv5YLZLfzHwssiGjebwlTiSVsFdeNNAQR+YuX
-         B83PqJHy90q69JHRzhAzryxYanoDgK08K1m4INfZVU0fozckiJE5qtiaxWKmwVYx/JEV
-         JbLuGH8QsNemdCXYG4U9PTq+Ghk5Qi9FiFTJvTpWBqdI8sSeQR0HOyv5PvZ2MFAjlG9M
-         QWr71yZce9vESxU3jw5wS7LSp7XBKD4La+Hs+G4665zAQhSesctCBonga0BOEjs14OQv
-         BzMA==
+        d=gmail.com; s=20230601; t=1744996491; x=1745601291; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jY6atDzv19RvLV9eZAkYAmM7T2p6jzWpN8By3FtLwAo=;
+        b=gPVn7MzgREyMUYynun3/I9QTgUp9fqzBdGbWRNiaolWbqp4FEQ+J68Tcqkna2qBkmj
+         h62mGLU3bM+oqCV9i6ddHJvTajzA9KHCY9BT7piYgiWVY6exT9ShhGsMyJkcioOehzsq
+         OfqLxGy9nXcb+epLg2d9wju7NLLMiI/kgjjCNBiiV9Vk9k3gUIuOFye3knDOvTex+RKa
+         6ZrLHVR+WTh8spABn+pjvV525t2OXKe3ESA/xsrtgYSN2FQ0vyPVqASc9JuaI577eO6D
+         vN4umIQK3kuMPiRj9fWjagtqMh/UPeUbuCRCgRL9JruEy91Qc8SyUrXBnnmUGFmLNDLN
+         Favg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744994725; x=1745599525;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K6NzstuCAOmmHk9gufPNMowPg4ZJqKGQeUURUENblfU=;
-        b=fu1lqOqVI0h8JGH1eaz4m6QfdlybX07f/w876TI+ipMPRLxr9l9fixec20LA621lnd
-         20VUHNxGgbJyO9uMS1PzsZ9nsUeQmB4X49HKlLBLSoKnpqQsepl+Hb35Yr7+VP2Peqrk
-         JVb5CZgPIDmEmoi3zdw54jc9gANPt0D66oszjSKUwjZPmSZHnrolqQ/V8+XnNOpNKuor
-         zPziDHOu8sJE7NISPfRY9UymEpgQ7rdUHoTEoiDTQ9xGfrEy364zMh/m2oj9mvaWANY5
-         hxorYdYWZnBiUPIeXI7IzFqgsqIVlOEiUq9Sjkk5/8J2pl2q1h8RKS93KkxrPJ76C67c
-         wMYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYBqvD46+XB96lraNmr2g+g7dqYiFaOx/G807gm8OZLWM+fs4g6y09FJnEUlQkDkGMFhL8EtwJtAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdAee6D1+JVNVtXo3k0TGrU9IcqpendRtY2BiUFC/q6P+LFPo+
-	Zl+fIlDNgCHO/UEO1D2L1hR4K1fw1NI8l6NjVncGgKAEauFl4oLT1pP18tn11uM=
-X-Gm-Gg: ASbGncsahA2Sn5JmtylfE9iQcqazQK9CEwBBmyP1siM5ntMxhiA9UnBcJKN6dtEpovt
-	Xxe7nZ3atfywgCRN1Q1ImZCsZHY0WQE8E50Q2NcCyUlsrqAADgksrzo8LsYRS9vK1ogn9+9oTFU
-	4KXAhRjBGgfleDM39cPJsrxbZXuYIyCCVQTQg/gKXry+N86SRDw9SEwii1KMl6eq4FMDeueDKS7
-	GlYP1ojZZHwM1NX25cFhh5MN0bXkSo7RKuyaH9ZdqjU2lcpw6BEHY6fhSwFHtgaaIEMOmuipN+t
-	ktIjb2C+E2hr9OM59ztagjoZDNyj18R1S4RccSoF+uYINcW4iFHNCDrDIYpFETEl86NCqGoG5bf
-	3C/VjDsQ06KnA7i30DA==
-X-Google-Smtp-Source: AGHT+IHlrWEvPvcpyQH3vfEagV8y+fG9NzkNtLJpHiwahEvDHTBbsyJNEUPJDmzVUONvuzHkoQoeCw==
-X-Received: by 2002:a4a:e911:0:b0:603:f526:5e76 with SMTP id 006d021491bc7-6060055bb2emr2042535eaf.6.1744994724882;
-        Fri, 18 Apr 2025 09:45:24 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:dcdf:46e0:18e5:c279? ([2600:8803:e7e4:1d00:dcdf:46e0:18e5:c279])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-605ff69cbb2sm429485eaf.27.2025.04.18.09.45.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Apr 2025 09:45:23 -0700 (PDT)
-Message-ID: <c6177e8a-f024-452e-80d4-a801410ce05e@baylibre.com>
-Date: Fri, 18 Apr 2025 11:45:21 -0500
+        d=1e100.net; s=20230601; t=1744996491; x=1745601291;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jY6atDzv19RvLV9eZAkYAmM7T2p6jzWpN8By3FtLwAo=;
+        b=rDrgCn34lBINx+v+xebN+KJsiAYWRcFBHRxZ2hUH8UOR1UaTmuhJY/Vr2KI3UG/wq3
+         HwwTLmQL0fYUTslKUM84HnaMy8EwRuyqvouJqzfBWnS+nMXwN4TnzuwkL4adHrYiWkq6
+         UlpLbykQ/yEECfJeRBK13GLgztlXSDPTAp87F1jWPnMVrurP0vraC0LmJMn77nLVWspe
+         Af89QtjDl/9pEDb3LZ7p99z4ac6iLgmv9IumElyxo0agND81uGat+/SZMGV3ops9blv/
+         /TgOZq5t+6A/POdHOr250h88zVcf7fONgEUjWNntjjBI7WIYkfam/pEycA6BaY8whB7v
+         t4Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCVaySy1UF8ipa3cEgRy3OnFEvrKcKtd87gUwTswZCGfRg54HE88zEZ/R06Sq/xAj+ypuA+xPdkGk0k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4tAgJ9jxrOhuuhh0GkA/Vq0LPwXEjMvel3Tz2U+Y1KVylA1ek
+	TGran6Z/rFtI5G49xzFC02FMjX/0YgmO72ZsW9qZoZGUG08mkPbM
+X-Gm-Gg: ASbGncsbUel/OgpCOYzC/YXXiJVE6fisnRVbmTjUoyYcD9wrYA/UVIST0dmTvOTWxHm
+	hAXI4cngsgqiPTR0Itp58vTVaMwVRNRgRkf78LruG0Xj+NbkYH2ZXSYjN25kPa59aM5SADbSkRP
+	KvZwoFhQpiPueJoOlqbPHwoWKjwx1+VWlAHLfugdhOC1YIIp8XmXPQ/dtGYGaChR/wjbF4qIgw8
+	YT0szel34T8fEBlEaaGlTDZS5XZWnM2sZ3CCfSZeVvwBIxPtqXC+ndS4jiy8fXZaSpfcgpKwAcD
+	RpfmWyJVZol+WO7rsV/tEWSGGrifNKD75rJHyugatQ==
+X-Google-Smtp-Source: AGHT+IFfR1QNkOJPs0M6dAbyMSunCMbSqFI1JmZ+J2snKkkqaD4sD6R/fEkgQ7YX9IFZnbV4VJpMTA==
+X-Received: by 2002:a05:6902:2b8a:b0:e6d:f287:bf9 with SMTP id 3f1490d57ef6-e7297dee75dmr3816397276.22.1744996491448;
+        Fri, 18 Apr 2025 10:14:51 -0700 (PDT)
+Received: from velo.. ([152.203.179.108])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e729585aaaasm520520276.18.2025.04.18.10.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Apr 2025 10:14:51 -0700 (PDT)
+From: Andres Urian Florez <andres.emb.sys@gmail.com>
+To: dlechner@baylibre.com,
+	broonie@kernel.org
+Cc: Andres Urian Florez <andres.emb.sys@gmail.com>,
+	skhan@linuxfoundation.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: offload: remove unnecessary check on trigger->ops
+Date: Fri, 18 Apr 2025 12:14:24 -0500
+Message-ID: <20250418171426.9868-1-andres.emb.sys@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: offload: check ops and match pointers before use
-To: Andres Urian <andres.emb.sys@gmail.com>
-Cc: broonie@kernel.org, skhan@linuxfoundation.org, linux-spi@vger.kernel.org
-References: <20250417232319.384094-1-andres.emb.sys@gmail.com>
- <6d6b5ea4-0f08-4618-9fe2-d681cd2f51ea@baylibre.com>
- <CAMihqu_GcW9PuXdacfNSop8MByh1O6RkczAO7WphFpCAxcm8Tg@mail.gmail.com>
-From: David Lechner <dlechner@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <CAMihqu_GcW9PuXdacfNSop8MByh1O6RkczAO7WphFpCAxcm8Tg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/18/25 11:37 AM, Andres Urian wrote:
+Considering that trigger->ops = NULL happens only when the trigger is
+being removed from the list, and at that point the operation is protected
+with the spi_offload_triggers_lock, it is possible to remove the
+!trigger->ops check because it will never be true in 
+spi_offload_trigger_get()
 
+Signed-off-by: Andres Urian Florez <andres.emb.sys@gmail.com>
+---
+ drivers/spi/spi-offload.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-> Hi David.
-> 
-> Thanks for your comments! I did not see the full picture and now it is
-> clear to me that it is not required to check the trigger->ops in
-> spi_offload_trigger_get().
-> 
-> Then I will create another patch to remove the trigger->ops check that you
-> mentioned in spi_offload_trigger_get, and make match a required callback
-> in devm_spi_offload_trigger_register() instead.
+diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
+index 6bad042fe437..c43264dc3900 100644
+--- a/drivers/spi/spi-offload.c
++++ b/drivers/spi/spi-offload.c
+@@ -183,9 +183,6 @@ static struct spi_offload_trigger
+ 
+ 	guard(mutex)(&trigger->lock);
+ 
+-	if (!trigger->ops)
+-		return ERR_PTR(-ENODEV);
+-
+ 	if (trigger->ops->request) {
+ 		ret = trigger->ops->request(trigger, type, args->args, args->nargs);
+ 		if (ret)
+-- 
+2.43.0
 
-To save some future review, I would consider these two separate changes and put
-them in two separate patches.
 
