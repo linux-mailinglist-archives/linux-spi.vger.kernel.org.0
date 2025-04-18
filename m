@@ -1,63 +1,80 @@
-Return-Path: <linux-spi+bounces-7675-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7676-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 547B3A937C1
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 15:17:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AFD4A93891
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 16:20:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 776AE1780EF
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 13:17:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FBDB1765BF
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Apr 2025 14:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D9A26A0FD;
-	Fri, 18 Apr 2025 13:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF8D148316;
+	Fri, 18 Apr 2025 14:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hxGQwJ/O"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nrsmk/M0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11342C1A2;
-	Fri, 18 Apr 2025 13:17:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9E1156237
+	for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 14:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744982242; cv=none; b=O7wpavSVxjcnvSSjKN7Lm0W4h/UIgysy94cFkbHJKLu3TVFh5n7yfh86NlVbVRf5Rc0JbEj4DmGEHnH717abyAVjfrDAgCl20M3f+nrWFDkQFeNVncFEe0QNjfM6toWnLPjqcq/3FBQdi4j/3kUSSu/95ZamPlZ3wQSHCxSiO+A=
+	t=1744986019; cv=none; b=u+BCGqylBwhUhimxSWY7f4B3mQpjNUjv7NITyRd+xfqZraJrukTgZeDKWNy5bfs7Meznd0aG8nf5TyHIRKTosfwCaAuqoxn0WOulYoUGjKW/hjBMilruMAUEhLjbbJ4gZknBCI7tfnowaMmMCUROQB3N+/GIeNyiNcntdHjnd6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744982242; c=relaxed/simple;
-	bh=n0utsyMghaOj6Z5F0gjl4M6Pk3uj1acevUv1zi/cYLg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AK5boVzV4ntfDoINslaKQbtqx3ypIHvFzFEooXEtUHI3Q2W7lB1DfTZ6a0FDjQrE/WEaQsCbEE4aBuzIOXleEGyKqDXxWJ9Ef1jZTRH3Gj3dyoVp5XEXxHA09y3TzBtrvnr+cMgUdnuK7jMFArJyjyU/DkTj5qxvMQJmMDM6d3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hxGQwJ/O; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53I2PFO0008123;
-	Fri, 18 Apr 2025 13:17:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	m9D8vUJMZiZvxPh0ECvIefj34JxtipJ5vMqGMNe+u5M=; b=hxGQwJ/OzAb6bLah
-	B2I3KmvKr0VZJ7UgkgSUUZSUl8pZGHV3CYMSg4607KJwoPZrJJhcqrvYyQpb7yLs
-	T16DbgUzpZWfhXcs04YnnqUV3dTaHE/Kkx9h8ajLQKdI8tMpjm0oQST0tU9lvPgS
-	jDjE7CzAtMwTYx/hC2GU+vVxGqOxd0H36v//9I+hDvNKplgVgrMzmCRucPF3t/sQ
-	UQb8/QIjC+psph5HqaPBCaRfG8LidOQMyozolw9HSJKBkmz+s3akA1HdrX6W0ERP
-	dBOCmVad6kp1eX9FTuExNBtETAuXUneMML3xljJUB0ppY6gTDKV7D0c+8ECXD8eq
-	OQXDAQ==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45ygxk9vfk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 13:17:05 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53IDH4xO010429
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Apr 2025 13:17:04 GMT
-Received: from [10.217.219.207] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 18 Apr
- 2025 06:17:01 -0700
-Message-ID: <71dd2d77-9d20-4c8f-9735-a9256635a271@quicinc.com>
-Date: Fri, 18 Apr 2025 18:46:58 +0530
+	s=arc-20240116; t=1744986019; c=relaxed/simple;
+	bh=Vzmgb2YVSAC09WUYdKxYwuz1OWECRrGPzIaX9sFbqSw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QRCrcVZQo5OwkPyMlK8hAypzZcNSSGqw01ikBx3ojw/b8r3dIh1gbiAVkf4ImsQfgltL0TwBXw2ps95ZOCFO3RlN32bKJdbiepJfXi3AZPmMKboyDkQMKJF7QQKR0Xvatnh2lvBX1PfVccg6H+EYf/He96xPYDRfOlFmkXYz/oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nrsmk/M0; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-601c469cce3so433603eaf.2
+        for <linux-spi@vger.kernel.org>; Fri, 18 Apr 2025 07:20:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1744986015; x=1745590815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=H1eba4P1qVaLqn42Ksru3y0UuXsYFhqPkLqomasx6Gs=;
+        b=nrsmk/M0hU8jrLs5E3dY0P2di2JaCUXnS0cG6p3vJwD4/fnKQOkvL3NAgABzwTbQb8
+         Oluvrg4oZ5NYHanBOMy3YeBFnz1dpMF4loEUPEFY5emLFk/M26Kf5c3OBhX9zcHlVoP8
+         uF8NHuCTHIALTX4Kx8GKsC8CtpZUKRIcV2JXw1NZyRncpNAUrclzr5TOk3gS5ExDknC3
+         SriUseYe07DN9L+i111grjS3OLgnkBmBXj8k/z1FTlfinNNjLXZgXlPc3Wtj2v5IwJyK
+         bAR1AD47JA6Rb0DCeAiSjBoXJN+o82p6HJK05pJeQwpMuKpg+y5z7mqYdmfnn13uTUaj
+         0j2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744986015; x=1745590815;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H1eba4P1qVaLqn42Ksru3y0UuXsYFhqPkLqomasx6Gs=;
+        b=SQm2tjLdQYOJ3GGsdKVr8kEVkDsZQMDWhd3EutNMBi7S8DVmZV7gWcM2ohZsibcB/4
+         mNcPpiaeG8amLt9GPdSNlyBEQd+2PsA/ic8tcyCxy7Sxkty4F9OrNazkYwFs88DC7Syu
+         reBlIObPGsH+4MbdhVtfRk0WUYhpwebU0nYtdONz9WNvkl1MTBUVK63mzypxZvUGQ0HN
+         tFGU7ysTIvyw1duktPIJS5h3fuqcbWpOQXT9XJaE654JdQPJ5SyfjBcFnMUDt8+7d8dH
+         TTV8IKY7QzfsAPshXrsQY+0RBihyMyIVamnTmBpOKYOyEJa0Zqd4CgghzMCT0HbQe/NG
+         e3IA==
+X-Forwarded-Encrypted: i=1; AJvYcCXOf09l6mjmVmvJSCRf/LTcv494LG5TC7L+7NBECbOiJoXTpNuWlYBHIbX0BDwZ+ezT8nBlzREImBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMA99TN3LzxipYjG07ciaf9sTA2bpaZ72zk0fGZKe8VacaCH6y
+	oi+wbF3EGN5hswkdggutfqmRPePrCznHo4FL8yeJw1RMBCk8itpBP27ZPs0E1/c=
+X-Gm-Gg: ASbGncuQPk7yXwDYcvlnaALenXEbQfOC6LjXDIZSdj1Gp9gXIVVuPhXTn4S3VsrAwwf
+	HyfACoO5h02McRZ+K3WRXSlKSU87HQgFSQ7p1xXnQnWSsSptTn9GG88sbjU96b82Tu3mGZuZw6W
+	BOekNfEw2aQlP1FFnEy4rUbIcTU84+jJ1l8JrSSs0zLyssLcULPP1ESRy0TONVnmBd+KctblT/5
+	nSARjl1JL3UaLsZqOsbGoNvvcP3I3swKEMmcE8myl+1xihhLbRXfa+PnbAdi2WvaGEX3XJ73zBD
+	c7/BZXRTeOzMCoT7sp7slLcpTQ7xZebajlIpTWG7lPbbvszQDmUs3sfU15peO2lKKv8BP8Suhbq
+	1f0YRbkt+G9f6ciKD0Q==
+X-Google-Smtp-Source: AGHT+IGZNYOSy4+ZxjGRZbyK6GcilX43zc3tXRiFObJ2vk5IWBB5E1kA60wbllmKw1SCTFCJfNM7aA==
+X-Received: by 2002:a05:6820:2224:b0:5fe:9edb:eafe with SMTP id 006d021491bc7-606005cb343mr1439651eaf.5.1744986015309;
+        Fri, 18 Apr 2025 07:20:15 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:1d00:dcdf:46e0:18e5:c279? ([2600:8803:e7e4:1d00:dcdf:46e0:18e5:c279])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-605ff5fd242sm387307eaf.21.2025.04.18.07.20.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Apr 2025 07:20:13 -0700 (PDT)
+Message-ID: <6d6b5ea4-0f08-4618-9fe2-d681cd2f51ea@baylibre.com>
+Date: Fri, 18 Apr 2025 09:20:12 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,80 +82,62 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: stm32-ospi: Fix an error handling path in
- stm32_ospi_probe()
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC: <alexandre.torgue@foss.st.com>, <broonie@kernel.org>,
-        <kernel-janitors@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <mcoquelin.stm32@gmail.com>, <patrice.chotard@foss.st.com>
-References: <2674c8df1d05ab312826b69bfe9559f81d125a0b.1744975624.git.christophe.jaillet@wanadoo.fr>
- <72f49447-5c99-4028-90cf-3f5cc11e8b53@quicinc.com>
- <e148faa8-6ee0-45bd-8cd8-37ea42a1de2a@wanadoo.fr>
+Subject: Re: [PATCH] spi: offload: check ops and match pointers before use
+To: Andres Urian Florez <andres.emb.sys@gmail.com>, broonie@kernel.org
+Cc: skhan@linuxfoundation.org, linux-spi@vger.kernel.org
+References: <20250417232319.384094-1-andres.emb.sys@gmail.com>
+From: David Lechner <dlechner@baylibre.com>
 Content-Language: en-US
-From: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-In-Reply-To: <e148faa8-6ee0-45bd-8cd8-37ea42a1de2a@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=WecMa1hX c=1 sm=1 tr=0 ts=680250d1 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=8IxrUdWRUM5EU-Lu3hgA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 7uc3GSTUJv9cVxAOP8QcAl1G97B--19L
-X-Proofpoint-ORIG-GUID: 7uc3GSTUJv9cVxAOP8QcAl1G97B--19L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-18_04,2025-04-17_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxscore=0
- impostorscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
- priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504180098
+In-Reply-To: <20250417232319.384094-1-andres.emb.sys@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 4/17/25 6:23 PM, Andres Urian Florez wrote:
+> Before checking if one of the triggers matches, check if 'ops' and 'match'
+> exist
 
+Can you please explain in more detail why this change is needed? For example,
+show the code path where we could actually have null pointer de-reference here
+that would be fixed by this change.
 
-On 4/18/2025 5:50 PM, Christophe JAILLET wrote:
-> Le 18/04/2025 à 14:09, Mukesh Kumar Savaliya a écrit :
->>
->>
->> On 4/18/2025 4:57 PM, Christophe JAILLET wrote:
->> [...]
->>> diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
->>> index 668022098b1e..9ec9823409cc 100644
->>> --- a/drivers/spi/spi-stm32-ospi.c
->>> +++ b/drivers/spi/spi-stm32-ospi.c
->>> @@ -960,6 +960,10 @@ static int stm32_ospi_probe(struct 
->>> platform_device *pdev)
->>>   err_pm_enable:
->>>       pm_runtime_force_suspend(ospi->dev);
->>>       mutex_destroy(&ospi->lock);
->>> +    if (ospi->dma_chtx)
->>> +        dma_release_channel(ospi->dma_chtx);
->> why can't you move to devm_dma_request_chan ? No need to cleanup.
 > 
-> Unless I miss something obvious, this function does not exist.
+> Signed-off-by: Andres Urian Florez <andres.emb.sys@gmail.com>
+> ---
+>  drivers/spi/spi-offload.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> CJ
-> 
-Yes, You are right. Seems the patch is yet not merged.
+> diff --git a/drivers/spi/spi-offload.c b/drivers/spi/spi-offload.c
+> index 6bad042fe437..fcb226887488 100644
+> --- a/drivers/spi/spi-offload.c
+> +++ b/drivers/spi/spi-offload.c
+> @@ -173,7 +173,9 @@ static struct spi_offload_trigger
+>  		if (trigger->fwnode != args->fwnode)
+>  			continue;
+>  
+> -		match = trigger->ops->match(trigger, type, args->args, args->nargs);
+> +		if (trigger->ops && trigger->ops->match)
 
-https://lore.kernel.org/all/20250115160244.1102881-1-csokas.bence@prolan.hu/T/ 
+The check for trigger->ops != NULL here should not be necessary. The only place
+where trigger->ops = NULL is when the trigger is removed from the list and that
+operation is done with the spi_offload_triggers_lock held. The same lock is also
+currently held here, so it should not be possible for ops to be set to NULL here.
 
-dma: Add devm_dma_request_chan()
+In fact, there is this later in the same function:
 
-Can ignore it for now.
->>> +    if (ospi->dma_chrx)
->>> +        dma_release_channel(ospi->dma_chrx);
->>>       return ret;
->>>   }
->>
->>
->>
-> 
+	if (!trigger->ops)
+		return ERR_PTR(-ENODEV);
 
+that could be removed (since we have shown that the condition can never be true).
+
+
+> +			match = trigger->ops->match(trigger, type, args->args, args->nargs);
+> +
+>  		if (match)
+>  			break;
+>  	}
+
+If trigger->ops->match == NULL then the trigger could never be used because it
+would never be matched. So instead, I think it would be better to check for
+that in devm_spi_offload_trigger_register() and fail registration if it is
+missing. In other words, make match a required callback.
 
