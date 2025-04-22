@@ -1,61 +1,60 @@
-Return-Path: <linux-spi+bounces-7699-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7700-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11967A95BD1
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 04:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C1EA95BE2
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 04:34:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D982162D3B
-	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 02:32:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A653A1664F0
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 02:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 606F426A0BA;
-	Tue, 22 Apr 2025 02:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429F026E173;
+	Tue, 22 Apr 2025 02:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NYjeP7gU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukwxnxS4"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D0E26A0B1;
-	Tue, 22 Apr 2025 02:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177D926E168;
+	Tue, 22 Apr 2025 02:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745288319; cv=none; b=OcNnhPz1sjtP2mvddIAen3tMxS36Nt8azMSrSL/ml8L4uMiqtRSG1d4WAhito+D96wYPmjKNYSyZYTrt9dqhLwVq+xfWVY1GIbyZ5nfxJ0B0/hE2EWV9Zy2HYjl67YeezReysbgfoh6SEEVw8ylXVkBYu/3bHSFnIqbmXcWW4ak=
+	t=1745288327; cv=none; b=Y5WiTqT437ZneoKD/3yZNHm6yas/NaGzKuibU35ZuFSMseKkeVw3VaAZf1o7rwGYt76B2zD6Cevj5bztE1CDp3wjsBPbl6Qfx4az6iPXc84nil2GBF4c6futUj9n0EmsSG2YSlV/L2G0Lf/HDTUCvPRqcPMBeyW1fGykWRgtNYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745288319; c=relaxed/simple;
-	bh=3SuNu8D0mD+U18QgEcJYNwSGbP2bAYLuvqR4EsC3Z3I=;
+	s=arc-20240116; t=1745288327; c=relaxed/simple;
+	bh=KvDZ7mCzuTOxw/CCqAMaB+URIEE6MZ+aoISGUCA8yYc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uH6sk4HR9VMWp5u9lQ76I/tYR9D7dJRlZCMGtb4fw/qVou9jidyGMRNVSow4hOjeMXWp8pVpcZXoNVYImDYoxhHGm4Pg8O8twHIRoVjJrzlnWjWNlD6eKwDc9Z0fVeSitnRx/fw1/ZGitcGKUdlUFCWkHeBMhJYrALoCFa0zj5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NYjeP7gU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70AD4C4CEEE;
-	Tue, 22 Apr 2025 02:18:37 +0000 (UTC)
+	 MIME-Version; b=SWqjePiBXqcqlUpL+rI6517ItCmXGlb/zwRpBFyLN24ZInecdot3FGiBEkKuU0QsD8a11r/GA5Fm9Rry4IxjK9LtBe9pUQuOfRoJGF4RAvUzSnihcQXgyQOGntzHsRvlfbBlqHjEaG2cZgxN0hEprmNM3liLxNRI0tmerO+mQ38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukwxnxS4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68EB1C4CEEC;
+	Tue, 22 Apr 2025 02:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745288318;
-	bh=3SuNu8D0mD+U18QgEcJYNwSGbP2bAYLuvqR4EsC3Z3I=;
+	s=k20201202; t=1745288326;
+	bh=KvDZ7mCzuTOxw/CCqAMaB+URIEE6MZ+aoISGUCA8yYc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NYjeP7gUUUNYbtPHi8wH0PAD+jRc2fWsWykY57b1pPXrmrauyzYkKlB6x9ohobL3F
-	 2phWUtlrKFlRAcLTSSORuoDIj3XUzG14nQP9o1dWDjMH3IAOm2dhQHZxiWzc6YdnPd
-	 SHUgXvYHTv99b72JC3A/rk8A8PsmyddGOoZJ7YypC5KKkcHcMNCGFGXDftnL1IQDKa
-	 FCKc0Jc+Jh0QtzXyubBPH27YQshNq0j0X/LWnV2wH4SkSaeHXS3Y5a30iFUmUf6MZS
-	 F56/usTfrKiUFKn8+SMhqVBwid4lbAurFLEzHb/8TksI2T1jChb6iZf58scEXtKeiX
-	 90PS3k1sshkVw==
+	b=ukwxnxS4E9aiPd+zo7kBtgcmVjYH54GcFyibucy9+xyfMed6VSMpPwqSaTXvw9ZFB
+	 Do8EJrOEsiKhnKwQFUmdIELZLa6BRlBQU53oFIzNBeUZIOMGstXgrMEOddQPEnHn1g
+	 ptFAxbcQEU4DnwXmkmseg2mSMh0fokw1Cur1SfHzig3hUz9ki3JyyvjiSUQUKv+fg/
+	 S79PpsLMoT8tz9IaFgIxOo/J3FoSj0anW0vWeY7PttIJ51Ug1qIqVKSs2IOeKXTNwH
+	 M9Fgb7v8n+vjiRz23VVjAFr/8umjB4RBxNnq7iYlmLXuWll6XFlCzMVcB4u8NkGV2H
+	 U+aYMo96LLgcA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Breno Leitao <leitao@debian.org>,
+Cc: Tamura Dai <kirinode0@gmail.com>,
+	Carlos Song <carlos.song@nxp.com>,
 	Mark Brown <broonie@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ldewangan@nvidia.com,
-	thierry.reding@gmail.com,
-	jonathanh@nvidia.com,
-	skomatineni@nvidia.com,
-	linux-tegra@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 07/12] spi: tegra210-quad: add rate limiting and simplify timeout error message
-Date: Mon, 21 Apr 2025 22:18:21 -0400
-Message-Id: <20250422021826.1941778-7-sashal@kernel.org>
+	shawnguo@kernel.org,
+	linux-spi@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 12/12] spi: spi-imx: Add check for spi_imx_setupxfer()
+Date: Mon, 21 Apr 2025 22:18:26 -0400
+Message-Id: <20250422021826.1941778-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250422021826.1941778-1-sashal@kernel.org>
 References: <20250422021826.1941778-1-sashal@kernel.org>
@@ -70,45 +69,52 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.1.134
 Content-Transfer-Encoding: 8bit
 
-From: Breno Leitao <leitao@debian.org>
+From: Tamura Dai <kirinode0@gmail.com>
 
-[ Upstream commit 21f4314e66ed8d40b2ee24185d1a06a07a512eb1 ]
+[ Upstream commit 951a04ab3a2db4029debfa48d380ef834b93207e ]
 
-On malfunctioning hardware, timeout error messages can appear thousands
-of times, creating unnecessary system pressure and log bloat. This patch
-makes two improvements:
+Add check for the return value of spi_imx_setupxfer().
+spi_imx->rx and spi_imx->tx function pointer can be NULL when
+spi_imx_setupxfer() return error, and make NULL pointer dereference.
 
-1. Replace dev_err() with dev_err_ratelimited() to prevent log flooding
-   when hardware errors persist
-2. Remove the redundant timeout value parameter from the error message,
-   as 'ret' is always zero in this error path
+ Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+ Call trace:
+  0x0
+  spi_imx_pio_transfer+0x50/0xd8
+  spi_imx_transfer_one+0x18c/0x858
+  spi_transfer_one_message+0x43c/0x790
+  __spi_pump_transfer_message+0x238/0x5d4
+  __spi_sync+0x2b0/0x454
+  spi_write_then_read+0x11c/0x200
 
-These changes reduce logging overhead while maintaining necessary error
-reporting for debugging purposes.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Link: https://patch.msgid.link/20250401-tegra-v2-2-126c293ec047@debian.org
+Signed-off-by: Tamura Dai <kirinode0@gmail.com>
+Reviewed-by: Carlos Song <carlos.song@nxp.com>
+Link: https://patch.msgid.link/20250417011700.14436-1-kirinode0@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra210-quad.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-imx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 97f3a4d3c31a9..442d42130ec87 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -1111,8 +1111,8 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
- 					QSPI_DMA_TIMEOUT);
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index df73a2c7120c9..13a6ebef01894 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -1605,10 +1605,13 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+ 				struct spi_device *spi,
+ 				struct spi_transfer *transfer)
+ {
++	int ret;
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+ 	unsigned long hz_per_byte, byte_limit;
  
- 			if (WARN_ON_ONCE(ret == 0)) {
--				dev_err(tqspi->dev, "QSPI Transfer failed with timeout: %d\n",
--					ret);
-+				dev_err_ratelimited(tqspi->dev,
-+						    "QSPI Transfer failed with timeout\n");
- 				if (tqspi->is_curr_dma_xfer &&
- 				    (tqspi->cur_direction & DATA_DIR_TX))
- 					dmaengine_terminate_all
+-	spi_imx_setupxfer(spi, transfer);
++	ret = spi_imx_setupxfer(spi, transfer);
++	if (ret < 0)
++		return ret;
+ 	transfer->effective_speed_hz = spi_imx->spi_bus_clk;
+ 
+ 	/* flush rxfifo before transfer */
 -- 
 2.39.5
 
