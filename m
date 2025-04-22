@@ -1,200 +1,112 @@
-Return-Path: <linux-spi+bounces-7688-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7689-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE10AA9442E
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Apr 2025 17:30:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA605A95B27
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 04:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E8AF18989C6
-	for <lists+linux-spi@lfdr.de>; Sat, 19 Apr 2025 15:31:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DD9016FB1A
+	for <lists+linux-spi@lfdr.de>; Tue, 22 Apr 2025 02:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7D81DE2A7;
-	Sat, 19 Apr 2025 15:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344C92367C6;
+	Tue, 22 Apr 2025 02:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kqy9yxI0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNx5+pFR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCB72D613;
-	Sat, 19 Apr 2025 15:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D472367B8;
+	Tue, 22 Apr 2025 02:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745076646; cv=none; b=WZMdtSjrXxXjbG9omWsJNp5GH8guhQDe0Pl3oLmFnTmzdcNlLagtKsbPSAHsSFOMsRhKbYSCTDCjst3KHujoXGj7uydlVaNqR5kwyjKUwf1tv+DJ1Gw6WcMNdENlHK8ZplugqQMBC5RDOJ726toijEb8shHN/y6IXGitu/KEzFI=
+	t=1745288183; cv=none; b=ErBwObDg7mdzFcfThGNC7fJHgCRLeNgBJ5maH42nWl6aaCaz04uEDUSYn5EUKjhh2r7KB2ZGL6E5fYzdYtabdFMFu0rP/EgvXNpWROU9U2I5IQPiTpsipWpwbiYgNWmxV4JbjLRa7kwZd/Gf0xCyKcKZh8XnnrRx46xjGrJ8ohQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745076646; c=relaxed/simple;
-	bh=EJY6VnbO/oorT+t/r51LBHIJCvd7pfE+OXcRXcdWp/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ti17lqHbCON2jdLEZmzsy2kys466Bas8u5XvAfHoiBAlqukOGGy9Z8KTyaRseiSaL4WwKXbS06GNfNFV+NcEaUhk3r3TnsFJBOrO49tzDv9WJcykqKJZTq488p3U8dgZBmIX4YK8zoY4l+uuM3u29XvQaa1vaX1sHiCTtnRljuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kqy9yxI0; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745076645; x=1776612645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=EJY6VnbO/oorT+t/r51LBHIJCvd7pfE+OXcRXcdWp/Y=;
-  b=kqy9yxI0ZfoOWs1glYcuiUfAd8IeLhIOjzDKlyVWWtXmPI8Z9C3j6jdY
-   xg8nQpw9MkLbdPvL8dbzKq056ND84nxA0H+5Qujl7xO/ooR7uS2K/OOds
-   xAl+EoI3kw/L4UDV6+XO/MuBhtCt9LcHiEcCONqz+TvmGRdhQYERB0RHg
-   M/V4SXIwfEoEHO4b5XXwlXMh8dS4RWo6KnvzNsRFPiB2mIY3wGRL4f0VB
-   xW/6CqPb+7xI7w6rSL8+LulS6lJ4oL0UqgRQRwtzfgvZKF+8945e8fvif
-   qumRL0jDAoG5D4fndeSpAOK3l/R9fwoLOz1iZID/agGds9sJy/s0ohkO4
-   A==;
-X-CSE-ConnectionGUID: OO56U8EaR3y71mlFyqiocg==
-X-CSE-MsgGUID: 2P+9OFUcSfyqAHX5Eluckg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11408"; a="46806652"
-X-IronPort-AV: E=Sophos;i="6.15,224,1739865600"; 
-   d="scan'208";a="46806652"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2025 08:30:44 -0700
-X-CSE-ConnectionGUID: CuoieLxUT1K3ksC/Kut48Q==
-X-CSE-MsgGUID: ZSJTu6nsQF+IEiTNRnHGnA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,224,1739865600"; 
-   d="scan'208";a="154517506"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2025 08:30:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1u6A9I-0000000DqsB-0AwJ;
-	Sat, 19 Apr 2025 18:30:32 +0300
-Date: Sat, 19 Apr 2025 18:30:31 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 11/16] of: property: Allow fw_devlink device-tree support
- for x86
-Message-ID: <aAPBl7qdbUizMQko@smile.fi.intel.com>
-References: <20250407145546.270683-1-herve.codina@bootlin.com>
- <20250407145546.270683-12-herve.codina@bootlin.com>
- <Z_Pw_MoPpVNwiEhc@smile.fi.intel.com>
- <20250408154925.5653d506@bootlin.com>
- <Z_U0DkSemHK0lrJW@smile.fi.intel.com>
- <20250418151036.719f982b@bootlin.com>
+	s=arc-20240116; t=1745288183; c=relaxed/simple;
+	bh=Dt0yFF5R3hBKBjCcKd/RCEn3N9BrfwIh7OIkUIo0ZcU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OSoCRsdMvbTSVc5dnFIKSbL02kfemuV1oQZdc5lIP9oiqzaPeYDT1aCfZ5p8vtvwdzOCJ0MrzYo66RIvCAIbkqKVAPOvTe0fLfJepsM+oVxH0MhhUffc79+9Tcw/Co8Hsovs417H5MZvK4t38SM3LuTPiDuaQnK0+l0o9lGzBiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rNx5+pFR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3330BC4CEE4;
+	Tue, 22 Apr 2025 02:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745288182;
+	bh=Dt0yFF5R3hBKBjCcKd/RCEn3N9BrfwIh7OIkUIo0ZcU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rNx5+pFRgKnAe9i+aHqdsDrkmjy6Pjbka57wCT9Bg05wrLXjGgJoWD0rz6CPNoxYC
+	 oeREHhn6K5LgsaObOU733ntfvWcbPAu24+lRWXlUUQ9BGL3wt3+qLThyvpWE+SH7rD
+	 8XABlvJoZTMj1N6p0+B9joOfpf1JDk5cOZTbxVijwyPIi7zKKtf64jaw/v2FRzJ4HO
+	 vmKtymufKzQQg9vBwB60vStkX1x6rs/Bt9q6VVqglIQj+R7LrwHe3mSScohE6mrger
+	 N3x7uOh+MEBArWnqIh9VSS0s38BS9pfEUzfR9HTv+YuIVAJFIFiJljN2Xx86c6H0TP
+	 lCq2av2vEca1w==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Breno Leitao <leitao@debian.org>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	ldewangan@nvidia.com,
+	thierry.reding@gmail.com,
+	jonathanh@nvidia.com,
+	skomatineni@nvidia.com,
+	linux-tegra@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 17/30] spi: tegra210-quad: use WARN_ON_ONCE instead of WARN_ON for timeouts
+Date: Mon, 21 Apr 2025 22:15:37 -0400
+Message-Id: <20250422021550.1940809-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250422021550.1940809-1-sashal@kernel.org>
+References: <20250422021550.1940809-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.3
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250418151036.719f982b@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Apr 18, 2025 at 03:10:36PM +0200, Herve Codina wrote:
-> On Tue, 8 Apr 2025 17:34:54 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Tue, Apr 08, 2025 at 03:49:25PM +0200, Herve Codina wrote:
-> > > On Mon, 7 Apr 2025 18:36:28 +0300
-> > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:  
-> > > > On Mon, Apr 07, 2025 at 04:55:40PM +0200, Herve Codina wrote:  
+From: Breno Leitao <leitao@debian.org>
 
-...
+[ Upstream commit 41c721fc093938745d116c3a21326a0ee03bb491 ]
 
-> > > > This is incorrect, they never had ACPI to begin with. Also there is third
-> > > > platform that are using DT on x86 core — SpreadTrum based phones.  
-> > > 
-> > > I will rework the commit log to avoid 'mixing ACPI and device-tree'
-> > > 
-> > > For "SpreadTrum based phones", do you have an idea about the Kconfig symbol
-> > > I could use to filter our this x86 systems?  
-> > 
-> > Hmm... good question. I don't think it was anything. The Airmont core just
-> > works and doesn't require anything special to be set. And platform is x86 with
-> > the devices that are established on ARM, so nothing special in device tree
-> > either, I suppose. Basically any x86 platform with OF should be excluded,
-> > rather think of what should be included. But I see that as opposite
-> > requirements to the same function. I have no idea how to solve this. Perhaps
-> > find that SpreadTrum Intel Atom-based device? Would be really hard, I believe.
-> > Especially if we want to install a custom kernel there...
-> > 
-> > > Anything I find upstream related to SpreadTrum seems base on ARM cpus.
-> > > I probably miss something.  
-> > 
-> > There were two SoCs that were Intel Atom based [1]. And some patches [2] to x86
-> > DT code were made to support those cases.
-> > 
-> > > > And not sure about AMD stuff (Geode?).  
-> > > 
-> > > Same here, if some AMD devices need to be filtered out, is there a specific
-> > > Kconfig symbol I can use ?  
-> > 
-> > This is question to AMD people. I have no clue.
-> > 
-> > [1]: https://www.anandtech.com/show/11196/mwc-2017-spreadtrum-launches-8core-intel-airmontbased-soc-with-cat-7-lte-for-smartphones
-> > 
-> > [2]: 4e07db9c8db8 ("x86/devicetree: Use CPU description from Device Tree")
-> > and co. `git log --no-merges 4e07db9c8db8 -- arch/x86/kernel/devicetree.c
-> 
-> I have tried to find a solution for this topic.
-> 
-> Indeed, this patch enables fw_devlink based on device-tree on all x86
-> platform except OLPC and CE4100.
-> 
-> You have mentioned some other x86 based system that could have issues with
-> fw_devlink and it seems to be hard to have a complete list of systems for
-> which we should not enable fw_devlink (potential issues and so regression
-> against current kernel behavior).
-> 
-> As you also proposed, we can thing on the opposite direction and enable
-> fw_devlink on x86 systems that need it.
-> 
-> We need it because we need the device-tree description over PCI device feature
-> (CONFIG_PCI_DYNAMIC_OF_NODES) on x86 in order to support the LAN966x use case.
-> 
-> What do you think about the following condition?
-> 
-> 	if (IS_ENABLED(CONFIG_X86) && !IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES))
->  		return 0; /* Not enabled */
-> 
-> CONFIG_PCI_DYNAMIC_OF_NODES has already to set explicitly by the user.
-> 
-> Do you think it makes sense and could be a good alternative instead of
-> filtering out a list of x86 systems ?
+Some machines with tegra_qspi_combined_seq_xfer hardware issues generate
+excessive kernel warnings, severely polluting the logs:
 
-At least this won't break old platforms that won't set that configuration
-option. Ideally, of course, it would be nice to have some kind of detection
-at run-time...
+    dmesg | grep -i "WARNING:.*tegra_qspi_transfer_one_message" | wc -l
+    94451
 
+This patch replaces WARN_ON with WARN_ON_ONCE for timeout conditions to
+reduce log spam. The subsequent error message still prints on each
+occurrence, providing sufficient information about the failure, while
+the stack trace is only needed once for debugging purposes.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Link: https://patch.msgid.link/20250401-tegra-v2-1-126c293ec047@debian.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-tegra210-quad.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index 08e49a8768943..2d320fbb8875f 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -1117,7 +1117,7 @@ static int tegra_qspi_combined_seq_xfer(struct tegra_qspi *tqspi,
+ 					(&tqspi->xfer_completion,
+ 					QSPI_DMA_TIMEOUT);
+ 
+-			if (WARN_ON(ret == 0)) {
++			if (WARN_ON_ONCE(ret == 0)) {
+ 				dev_err(tqspi->dev, "QSPI Transfer failed with timeout: %d\n",
+ 					ret);
+ 				if (tqspi->is_curr_dma_xfer &&
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.5
 
 
