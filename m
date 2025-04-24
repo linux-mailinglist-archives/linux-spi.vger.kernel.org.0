@@ -1,107 +1,88 @@
-Return-Path: <linux-spi+bounces-7728-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7735-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58DEFA9A2C2
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 09:01:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 560ABA9A45C
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 09:41:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9A553A9CB6
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 07:00:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82AD4921FC2
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 07:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F8E199396;
-	Thu, 24 Apr 2025 07:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FE31F4614;
+	Thu, 24 Apr 2025 07:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u6LSBbTl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NAn5IBCa"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EE82701C3
-	for <linux-spi@vger.kernel.org>; Thu, 24 Apr 2025 07:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5304679F5;
+	Thu, 24 Apr 2025 07:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745478070; cv=none; b=RKtAW02euvcjSptvgS3N6mqfdN3DB8ZCFyl3P19MgolRtDfsVkHw38ySWVlM70No8kLDcMyyo5+ho05kq0WuL1wB0AuDYNM10GIdBZVCt1PO1R0xyQFUImmkowIMd4WNibFzAmhxWLwmGkjUe/l3x9PciUvp2cGgrDVbGYBhSpE=
+	t=1745480001; cv=none; b=HS7PcaPMXkkTXzHPvPJWBgFe3ifDIGFImUl8fSPv+M27vzp3cIiUd5UuSj8CRgdgdBgfN0snkfwxEpRVa7WODBQiBTjVkImsVIRvLfujd7CTNfVln5Pilh47Koncm6RZAaXYSTgb6gdJ3K6Julag6dZTtqlbdX5ekpDzjphVPqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745478070; c=relaxed/simple;
-	bh=L3APaDNcpcKWy+ljj6wYw1aJYFyDyEbeFg9xBsk1Bwc=;
+	s=arc-20240116; t=1745480001; c=relaxed/simple;
+	bh=SuP8EraeigJb0KaR9dhLAlA0oVM0b7bWlw5kuLh8108=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YFuIsIRzBt4EJyC7KX1JFHuOQ8M4aH+uPFUmAov2+mXS0nPnmCOfx4YUKPgYXIaHt+IwuXftlKNrtHyej1BZeL00v7VTHCTkucQA/KaGPhq+VdDSj5cYnmHvKmGKIz4agLGIJApCL8ef3wqIY9YcCu9EUW3SNS9C7/8pRJ16qjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u6LSBbTl; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso111417166b.1
-        for <linux-spi@vger.kernel.org>; Thu, 24 Apr 2025 00:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1745478066; x=1746082866; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bd6KF7qnJBjEfDBLcMQiy13vHf6l7mQMuJsOH543KwE=;
-        b=u6LSBbTlQhU7mz7toADwhLtFhAiWw2+cePcyVPY3yXZQ2w93aFUK7rov6CuCfndUoM
-         piAZ+Da5LEIRWWWRl3kSFx/WAnDzdj1ElmzXRuCmfY2NyGoOQR2govNEE7GTxJdFHwra
-         ZeaH3r+GSgoOX0DrWeHA2xoQ5bDTcnpXKpT1Sdra4REaRPnfvwG1osPo8jFE4PjA0bPL
-         Wbwm5cFQ2g/x+F+RVph9DyBhoj6EDsy9WMLdZkcoSaZqKC8D0EXiXnM5yFc1SLCogasF
-         DEdAOwLYh3kdnS+nWajJ3W/CE+rrWKnZh4r2OAmz1HSLhuN0IjAGNS/PgQyTHAOMRPQv
-         GkNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745478066; x=1746082866;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bd6KF7qnJBjEfDBLcMQiy13vHf6l7mQMuJsOH543KwE=;
-        b=oaNxOtnh38GXsPYNFGGqzP/DPbmYzKgHfZb6XJovW/zbthh/hNoJIdkMGmLNL4R91s
-         p3MTlJBlyB2d6/Ed50BXYGpYXSVzMrTRMWecPc5ceIVEeNp5hCPeuAymOK7qI7yFeg26
-         DxTtFiJrtiQMkXQEnWoXAv1WWoy75BfNcLWloHW80wHljiN7lcP5tm34y/odTRlRHh24
-         mYDl/LIsJt+XE5JdIou1mX0Kq+ZaLPrSb9JbO5cb+zFO4UYR0t4Q8pCQx1juDmCxrxZ9
-         nteGR+G621W+465Cjq1EV0WJNNB2jGzfE8ypMt3CUjlCKPYS5VweB2w+durXpV/kSPfX
-         mn0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXxTk1WU3Og6jLnDhp9qaOxx1meLLlr2Pkiy/YSBSe5uAF7VikMiE6TGNxhOTuH/nhCFnR5HCOxoPw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy32tX3lOeIoVQj/h1pDU+eTSql4GIwRWksSSqCoFwOURnwkOTr
-	D2IbViOdgIcpkx36u9StBIG2m9p8H6stXhENLa+9cpPGElpqXrw20/cSBf5cwUR6/RKN/WEsrY3
-	i
-X-Gm-Gg: ASbGncvaVuv0iW2BD83dz95GHywHUHeyrkZ/jAAXlGuhQFKsJ3OmIPkGges41pqGEDO
-	5GSrK8fswEnhTgUEP9/QPyctWcV8f4aX0CGdY0LY+nRBPE2t04FFyLELwN3JSyuGWcsTKhVZoHU
-	FsocaGnjs6W928cqPcf6w34o+Vh/VDMM4fo18Q/UOmBbURuP+9snSTAPFKTvl3H73tZWbhT5jCh
-	P+24NvFcGOprfCW9txNMNt91ajl6XP8nB0WDDAqb1ERiKm1QAt+Cz+pfdRnrNNDvzHCSf0S4/9V
-	Tadb4gJGKRAp1c4HAdY2jcqWS6wL3Ds7yol2aA==
-X-Google-Smtp-Source: AGHT+IGwr/WuZPUfvax9eIsb96aaCta/8FzIuwMP4WW4Ar2s0sxwfKKsr5uKtNR7HMl6jcdgRdFKDA==
-X-Received: by 2002:a17:906:44e:b0:aca:a204:5df2 with SMTP id a640c23a62f3a-ace573a6ec3mr96658366b.49.1745478056074;
-        Thu, 24 Apr 2025 00:00:56 -0700 (PDT)
-Received: from linaro.org ([62.231.96.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace59830fe7sm59240666b.13.2025.04.24.00.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 00:00:55 -0700 (PDT)
-Date: Thu, 24 Apr 2025 10:00:53 +0300
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-	Varadarajan Narayanan <quic_varada@quicinc.com>,
-	Md Sadre Alam <quic_mdalam@quicinc.com>, linux-spi@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: spi-qpic-snand: propagate errors from
- qcom_spi_block_erase()
-Message-ID: <aAnhpVaVzn/G8TR3@linaro.org>
-References: <20250423-qpic-snand-propagate-error-v1-1-4b26ed45fdb5@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OL0EB1uwycvqQj4SCtwTYM3BjXwCTZLrSNv9wz+pPw9N2gbo9qKfyeUog3EgTG8CcqZ2cPp2nMtdh3ZJX9LTX6rsboZl3XwmfIywXbd0GxAkfc5cOZh6Xgy8P0oHIsMN1wp2OUDhoINY1b0aIFKH316Q7BN5Nxw1RlAnIQOZ5so=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NAn5IBCa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E2EC4CEE3;
+	Thu, 24 Apr 2025 07:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745480000;
+	bh=SuP8EraeigJb0KaR9dhLAlA0oVM0b7bWlw5kuLh8108=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NAn5IBCa1HR8cgzP/yQgp/EiVv3myBY0mp+DotdwTIpXvXyZ14/MJUwmL6OdMvjUv
+	 KI8WGC0P/EY8lc2jDgnXraGmBOZs8wUK39z3R69blFJ54MTgb5/4QLvVHna+buVBNv
+	 GrmUcxdw+gpa6jwyC87fekJTv16cFXG5mp2R97yZGECyBfgX5X/slw0jch2C+MomMs
+	 wixVvFDPCXIzoGsFaR8gYX/kzKrb9Xb4PDWYfTfKK4lX13WCzgQPvOO3N2QsBISx4h
+	 iSOsD7gZKVAFrCoa2x76r1X62CE0B50BtKjwitjKBVFf2P6yFFWLqLN50jK8cF++aW
+	 EvDM3Pn7jCG+A==
+Date: Thu, 24 Apr 2025 09:33:18 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Zixian Zeng <sycamoremoon376@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@outlook.com>, Alexandre Ghiti <alex@ghiti.fr>, Mark Brown <broonie@kernel.org>, 
+	Inochi Amaoto <inochiama@gmail.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, sophgo@lists.linux.dev, 
+	chao.wei@sophgo.com, xiaoguang.xing@sophgo.com, dlan@gentoo.org, 
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] spi: dt-bindings: snps,dw-apb-ssi: Merge
+ duplicate compatible entry
+Message-ID: <20250424-awesome-caracara-of-priority-57f9dd@kuoka>
+References: <20250422-sfg-spi-v5-0-c7f6554a94a0@gmail.com>
+ <20250422-sfg-spi-v5-1-c7f6554a94a0@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250423-qpic-snand-propagate-error-v1-1-4b26ed45fdb5@gmail.com>
+In-Reply-To: <20250422-sfg-spi-v5-1-c7f6554a94a0@gmail.com>
 
-On 25-04-23 21:31:57, Gabor Juhos wrote:
-> The qcom_spi_block_erase() function returns with error in case of
-> failure. Change the qcom_spi_send_cmdaddr() function to propagate
-> these errors to the callers instead of returning with success.
+On Tue, Apr 22, 2025 at 10:27:08AM GMT, Zixian Zeng wrote:
+> Microsemi Ocelot/Jaguar2, Renesas RZ/N1 and T-HEAD TH1520
+> SoC-specific compatibles, which eventually fallback to the
+> generic DW ssi compatible, it's better to combine them in single entry
 > 
-> Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
+> ---
+>  .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml       | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
