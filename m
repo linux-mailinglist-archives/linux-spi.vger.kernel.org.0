@@ -1,103 +1,105 @@
-Return-Path: <linux-spi+bounces-7744-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7745-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A027FA9AEFC
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 15:29:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA049A9B0E5
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 16:31:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35E819A1E5D
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 13:29:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 176701B84636
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 14:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D58D27CB12;
-	Thu, 24 Apr 2025 13:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E976C27FD68;
+	Thu, 24 Apr 2025 14:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/v5YuJ5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gs1EOdzj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5829514B06C;
-	Thu, 24 Apr 2025 13:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E6F27F73C;
+	Thu, 24 Apr 2025 14:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745501354; cv=none; b=jAJqvUaLsyw9sO3fbcUD6Hcz/SjN70lXPjyjzwjnUN1OVrPKV0axWf62huNCuaUdPL57ekFpzehtUmJAWGXJJO0cBNw7xrwxO1+FcQ9X6tRWAdoZGisDbpjY3wro+nfUZlcyVkhUmAukkN5uT2EuZsg9cht/d4fihYoYaiNwySw=
+	t=1745504726; cv=none; b=WDoMfmGfODHDLlqRRFjBfNjeWtURzYZKW20tj1wM0nCCZku6ogZvD/izdIOcEILeS+rRFMzYBR6Zanj+7fR23IZHK6u6Lr0tcs41b6Tef6uuXAuAjGCNUk2hNszYYunb+4pVjbGw2NrnbmCh2kHJSmPmif3GxFUXfVQyNqAKDCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745501354; c=relaxed/simple;
-	bh=BfwZuS5qWp/PCKn69n0OyRsKh0sB1r30vAbBifl8M9U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eMRcWCBIFi0NegojyGGTdDF/lXFeao33qYzaIVQ7z+Jwyn1hN5zr223zJGgJGsV5nY+m8EEsZATkygHNXnK0BXFZ6OMhQfhPXPnz08GhGqlRmszqLBlnacuERoDV2DeXytGhN43+iAmnscOD4gEqKM2aIT4wSgaGwLy+1yJT6Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/v5YuJ5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BFFC4CEE3;
-	Thu, 24 Apr 2025 13:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745501353;
-	bh=BfwZuS5qWp/PCKn69n0OyRsKh0sB1r30vAbBifl8M9U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B/v5YuJ5s/tsbcrDMuYh+oHTJ1IvlMoLUcCsvGMLZ6VGE4vIWDO5WlNMYG3TW5Nwv
-	 xcw1kh0bERp331SqtZNxd1RiRzFagY69ftydjHf95WTvdCAuT4nLRnKXQSILYdoYjF
-	 ozb9Jogjd/Zvmy+wIvr93UtTc7bY9OIuuFOPsTsUtY38+jQ/rPlqb1f7tCXqYLmn9/
-	 3MOCsMONKl/jOCrl6MZVwoqGTguzb65zYxcNvQev7dEss3/HDvoMnGH+rnFRdgrglK
-	 fvyTl1r7vkTJ2bCuYRZEz+TqY33nx9os2mkOosaa2RoCJvUlHvGUNc2XDhvN26ni+9
-	 KvXkD6aU4xFOg==
-Date: Thu, 24 Apr 2025 14:29:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Vishwaroop A <va@nvidia.com>
-Cc: thierry.reding@gmail.com, jonathanh@nvidia.com, skomatineni@nvidia.com,
-	ldewangan@nvidia.com, linux-spi@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kyarlagadda@nvidia.com, smangipudi@nvidia.com
-Subject: Re: [PATCH v3 6/6] spi: tegra210-quad: Add support for internal DMA
-Message-ID: <4a4391ff-d632-4c12-90d9-6c301e64612f@sirena.org.uk>
-References: <20250416110606.2737315-1-va@nvidia.com>
- <20250416110606.2737315-7-va@nvidia.com>
+	s=arc-20240116; t=1745504726; c=relaxed/simple;
+	bh=e5RtvncoOTQkxZ4hTTM84fepiasWkNvfegkvWb+gsbg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S9UE+57xvAfLSAzHIamhD1SDwBmRUCCW1G3nyVzZP2cESjPZFFzggXNG6RhcjM7RlN8bonpZbpXDQUqKr+DVzbCrPTOQHq6pRJIjCiWUdct0GiAgSjCqZr2ZXLxnKvEFi9cH1R3ZGPXl63hsoMTbQBSUzO8Pi3MwwKfPIBjlJ9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gs1EOdzj; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D5AF43A22;
+	Thu, 24 Apr 2025 14:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1745504722;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NKfuiDBm2asL1WGTg5mJo41pFCMZGBetlyuQnkV7VKk=;
+	b=gs1EOdzjoMBPBa5Vre4GK9KL1WN1z4/D09qlwCJBqlUGmXAwaygy/cj3jppaD/03z4MGCp
+	rylU/5/RiQgP2evGNJB/E60t6CLMK8k0/w7sRhHV7oHkql/iMRRXwLurEq9v5OBNjG7C1P
+	lRHCGEOR/mObGA7OxvMho6+9jj98Ct2XqptGl0qCkSk7aV8d/JPOrru8djgCo/IgotufL+
+	tkhuh7yWCYH1RUp8Dh0rh/5lW+mhKM0pvPpmta1M85OJmSuEnXcpi18YJNvwIYM/lTbh1P
+	+nFWoBAnc61/vytoRjLR9rEp1q420Y6JL5kuZ5jZg/CFmWYP0NCHSyyKwxkcuw==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Raju Rangoju <Raju.Rangoju@amd.com>
+Cc: <broonie@kernel.org>,  <linux-spi@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  Krishnamoorthi M
+ <krishnamoorthi.m@amd.com>,  Akshata MukundShetty
+ <akshata.mukundshetty@amd.com>
+Subject: Re: [PATCH] spi: spi-mem: Add fix to avoid divide error
+In-Reply-To: <20250424121333.417372-1-Raju.Rangoju@amd.com> (Raju Rangoju's
+	message of "Thu, 24 Apr 2025 17:43:33 +0530")
+References: <20250424121333.417372-1-Raju.Rangoju@amd.com>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Thu, 24 Apr 2025 16:25:21 +0200
+Message-ID: <87msc5hc1a.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5DWBOk62MdjZ4De0"
-Content-Disposition: inline
-In-Reply-To: <20250416110606.2737315-7-va@nvidia.com>
-X-Cookie: The Korean War must have been fun.
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeeljedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtgfesthhqredttderjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffgefhjedtfeeigeduudekudejkedtiefhleelueeiueevheekvdeludehiedvfeenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheptfgrjhhurdftrghnghhojhhusegrmhgurdgtohhmpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhhishhhnhgrmhhoohhrthhhihdrmhesrghmu
+ gdrtghomhdprhgtphhtthhopegrkhhshhgrthgrrdhmuhhkuhhnughshhgvthhthiesrghmugdrtghomh
+X-GND-Sasl: miquel.raynal@bootlin.com
 
 
---5DWBOk62MdjZ4De0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> --- a/drivers/spi/spi-mem.c
+> +++ b/drivers/spi/spi-mem.c
+> @@ -596,7 +596,11 @@ u64 spi_mem_calc_op_duration(struct spi_mem_op *op)
+>  	ns_per_cycles =3D 1000000000 / op->max_freq;
+>  	ncycles +=3D ((op->cmd.nbytes * 8) / op->cmd.buswidth) / (op->cmd.dtr ?=
+ 2 : 1);
+>  	ncycles +=3D ((op->addr.nbytes * 8) / op->addr.buswidth) / (op->addr.dt=
+r ? 2 : 1);
+> -	ncycles +=3D ((op->dummy.nbytes * 8) / op->dummy.buswidth) / (op->dummy=
+.dtr ? 2 : 1);
+> +
+> +	/* Dummy bytes are optional for some SPI flash memory operations */
+> +	if (op->dummy.nbytes)
+> +		ncycles +=3D ((op->dummy.nbytes * 8) / op->dummy.buswidth) / (op->dumm=
+y.dtr ? 2 : 1);
+> +
+>  	ncycles +=3D ((op->data.nbytes * 8) / op->data.buswidth) / (op->data.dt=
+r ? 2 : 1);
+>=20=20
+>  	return ncycles * ns_per_cycles;
 
-On Wed, Apr 16, 2025 at 11:06:06AM +0000, Vishwaroop A wrote:
-> Previous generations of Tegra supported DMA operations by an external
-> DMA controller, but the QSPI on Tegra234 devices now have an internal
-> DMA controller.
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-This breaks an allmodconfig build:
+Actually even address bytes sometimes may be skipped (eg. status reads). Bu=
+t there is no
+reason for using spi_mem_calc_op_duration() in this case.
 
-/build/stage/linux/drivers/spi/spi-tegra210-quad.c:1091:7: error: unused variable 'has_ext_dma' [-Werror,-Wunused-variable]
- 1091 |         bool has_ext_dma = tqspi->soc_data->has_ext_dma;
-      |              ^~~~~~~~~~~
-/build/stage/linux/drivers/spi/spi-tegra210-quad.c:1232:7: error: unused variable 'has_ext_dma' [-Werror,-Wunused-variable]
- 1232 |         bool has_ext_dma = tqspi->soc_data->has_ext_dma;
-      |              ^~~~~~~~~~~
-
-
---5DWBOk62MdjZ4De0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmgKPKQACgkQJNaLcl1U
-h9DJNgf/Sw6jEiIgKo9TW4+7ap0L8E12mk9B7QC/qyj6juFHB4tUJULHFK+94uRq
-xGtjdXiAv9e+OWGVC1J+YDR5zcs2YEzRGgyKLWFzwnWBtUy5nwb1TAQXpNLi7PjZ
-8AnB+dRPyvMdUs0CJ6amI39SHeGr3+WM07kqhWuIpkFnhlZ2hvD760x0WsACQa+W
-QZVWQ/tjGAuLsvRosCQZNxzE25zkoqVCIhUa0zhiKedQZB+wS63DsOS2qoVZwTRL
-wFCg6DX+6LF4MmylABOkJN1h4QIqG0Ex/Zt9NwswdpJJAGw9ninWQLox0SDn1yEs
-a9TekZEWBXUGuCWHitq2c/UeD0ejWQ==
-=s4S1
------END PGP SIGNATURE-----
-
---5DWBOk62MdjZ4De0--
+Thanks,
+Miqu=C3=A8l
 
