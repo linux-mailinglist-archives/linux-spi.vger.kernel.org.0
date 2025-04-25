@@ -1,57 +1,61 @@
-Return-Path: <linux-spi+bounces-7772-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7773-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4A0BA9D5F7
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Apr 2025 01:00:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FBD0A9D5FA
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Apr 2025 01:00:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D936A7AF763
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 22:59:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70AB89C2604
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 23:00:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E45242D80;
-	Fri, 25 Apr 2025 23:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A9FC242D68;
+	Fri, 25 Apr 2025 23:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTLOmcjZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HdRV3vIP"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3543D21770C;
-	Fri, 25 Apr 2025 23:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53D6296D09;
+	Fri, 25 Apr 2025 23:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745622007; cv=none; b=J9WbRka57vl4qF5GO2MqsNG6FHqatYpDfRtwrInGRsKG2H55yLURPV6lPFsEm5t/Rfqqo7nXAsiHzLoSpnCFigvzNiEnZmn6VZep4Ih1cDE2/emg33/M1HVJZILD3h3AcmNZe+Dly5ZUI2kZ1BfVA66rWAQifwBVDcQfOS9Kcd8=
+	t=1745622011; cv=none; b=OYDk2v3A15uph1NrY/oKagmeUC10QDym6pt0j8szwteHKK1icaIDRMgAjT0XKwmIpYOsDo5t7Wblehwm7ctGn5l72uHhjHzPptPNhwdr5LB6PtYcb730sX+DvBXOsDKKpNclb/MT5gAX1cY+3wjZW8T/VMc3K79rBfPcEszL360=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745622007; c=relaxed/simple;
-	bh=/bRJ1TosTwWc07Gu44FOUKRyH9x1FUl0wV2GXEtu9Bw=;
+	s=arc-20240116; t=1745622011; c=relaxed/simple;
+	bh=oUEnrqD2+9dOuYjzTrjG5PiuI832wU+JdlseXm2eCmk=;
 	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=aMtnYmaiDZnJr1zSrH7DdznF/xh1mOfNi7cUbuIBF1PaU/Y9UMShybet9HNxasgYI/U8ZrBcpQf2oYExvCWbFIlMRUmFq0dAIOCsfDt4wUOQmU9rEEyZqlp1pB5iClJiAMRin4CMp4eTLnDnZssUrvRfmpIjNzVOJsTOvg9MAXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTLOmcjZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96D0C4CEE4;
-	Fri, 25 Apr 2025 23:00:04 +0000 (UTC)
+	 MIME-Version:Content-Type; b=jAvnf9YuuukwMdFkS0/LHzu4iK5RSepxSpwUtGBpATHZvnNLhkSwUA8JWIdIF6yCgIKTWSkfHGV7vtYER2mKW2eQnp783RvBRjZNxr6cWsqFuLJcEtD3MH2C0BwT2E0D0AqathfVR78fa/eQWghOO5SjIiRaxj/F4J+EQw8e6ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HdRV3vIP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30FA6C4CEEC;
+	Fri, 25 Apr 2025 23:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745622006;
-	bh=/bRJ1TosTwWc07Gu44FOUKRyH9x1FUl0wV2GXEtu9Bw=;
+	s=k20201202; t=1745622010;
+	bh=oUEnrqD2+9dOuYjzTrjG5PiuI832wU+JdlseXm2eCmk=;
 	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=BTLOmcjZdXzEn8z5qOerh47Ehfu3VX9yrQ3lbcY7KFxeU8+Z8rci7MVHhRfaTLRKO
-	 mHxaElLVaMHz+sOIMvA7OEbIjdzRiI/IJxnKb7qKaNwJqLokd8O3otoPlPhJgOeOgd
-	 bwFHs8AP89LwLAnQbAlJxoAzrPZE4tV6n1LaDQTkln21uY0Sg64b/NB9B0hTAyDKIy
-	 lnngbK2IkEIi8t+eSn19bX2HwCvWmLRDkxBz3sqfsPfdBWnSMiiDyt/iaOL1UR4hKT
-	 VeRoIZWxntPc0/Qi8Z/tLNGPTBolQiFsqLYqHj6LwRIeHJLZnozofzW5p09eqFZcyY
-	 4pbybWu78T2wA==
+	b=HdRV3vIPiIGKHO7TMpEv/mkPd1Q2fvLm3cUsN5pGlgirGN7BLHzWJuo8xHUa+woBh
+	 8A+cnep+OHlDgvqimEmfPdValVXOyE+oRdJOYqIqK1BoM76hxtPsY3aoesesNBabzI
+	 0QgOn2y78bWTW4saLgNexCUKCCkw0qfUY4v3US+pRoNgPu3D+FtCTvaH8wKzF/B3SR
+	 nulo4lLB6vrHmgihcf/5BeklBWQVoWVBZkfwqEg9uXiZROMBG6oHcykE4Sr3xq5b5m
+	 U1g/bwWb0fglYwN4LMus6kxBkatF+ZcYT8v+BAeEwIjBPaImcTErBnR3PU+BDasDZR
+	 OHCUW9Q7t0cNg==
 From: Mark Brown <broonie@kernel.org>
-To: thierry.reding@gmail.com, jonathanh@nvidia.com, skomatineni@nvidia.com, 
- ldewangan@nvidia.com, linux-spi@vger.kernel.org, 
- linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kyarlagadda@nvidia.com, smangipudi@nvidia.com, Vishwaroop A <va@nvidia.com>
-In-Reply-To: <20250416110606.2737315-1-va@nvidia.com>
-References: <20250416110606.2737315-1-va@nvidia.com>
-Subject: Re: (subset) [PATCH v3 0/6] Configure Clocks, Add Internal DMA
- support
-Message-Id: <174562200441.302167.12352642386794751784.b4-ty@kernel.org>
-Date: Sat, 26 Apr 2025 00:00:04 +0100
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Jaroslav Kysela <perex@perex.cz>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Takashi Iwai <tiwai@suse.com>, Will Deacon <will@kernel.org>, 
+ devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-spi@vger.kernel.org, 
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+In-Reply-To: <871ptq4blr.wl-kuninori.morimoto.gx@renesas.com>
+References: <871ptq4blr.wl-kuninori.morimoto.gx@renesas.com>
+Subject: Re: (subset) [PATCH v4 0/9] ASoC: add Renesas MSIOF sound driver
+Message-Id: <174562200689.302167.2459698940161068697.b4-ty@kernel.org>
+Date: Sat, 26 Apr 2025 00:00:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,18 +66,18 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Wed, 16 Apr 2025 11:06:00 +0000, Vishwaroop A wrote:
-> This series introduces QSPI clock configuration and internal DMA
-> support for Quad SPI controller. The patches have been reorganized
-> for better logical flow and review comments from v2 have been addressed.
+On Thu, 17 Apr 2025 23:22:40 +0000, Kuninori Morimoto wrote:
+> Cc Geert
 > 
-> Vishwaroop A (6):
->   spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
->   spi: tegra210-quad: remove redundant error handling code
->   spi: tegra210-quad: modify chip select (CS) deactivation
->   arm64: tegra: Configure QSPI clocks and add DMA
->   spi: tegra210-quad: Update dummy sequence configuration
->   spi: tegra210-quad: Add support for internal DMA
+> Renesas MSIOF can work as both SPI and I2S.
+> Current Linux supports MSIOF-SPI. This patch-set adds new MSIOF-I2S.
+> 
+> Because it is using same HW-IP, we want to share same compatible for both
+> MSIOF-SPI/I2S case. MSIOF-I2S (Sound) will use Audio-Graph-Card/Card2 which
+> uses Of-Graph, but  MSIOF-SPI is not use Of-Graph.
+> So, this patch-set assumes it was used as MSIOF-I2S if DT is using Of-Graph,
+> otherwise, it is MSIOF-SPI (This assumption will works if SPI *never*
+> use Of-Graph in the future).
 > 
 > [...]
 
@@ -83,16 +87,10 @@ Applied to
 
 Thanks!
 
-[1/6] spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
-      commit: dcb06c638a1174008a985849fa30fc0da7d08904
-[2/6] spi: tegra210-quad: remove redundant error handling code
-      commit: 400d9f1a27cc2fceabdb1ed93eaf0b89b6d32ba5
-[3/6] spi: tegra210-quad: modify chip select (CS) deactivation
-      commit: d8966b65413390d1b5b706886987caac05fbe024
-[5/6] spi: tegra210-quad: Update dummy sequence configuration
-      commit: c283fcdc4e2b89678c171691fd26f576139fc256
-[6/6] spi: tegra210-quad: Add support for internal DMA
-      (no commit info)
+[2/9] spi: sh-msiof: use dev in sh_msiof_spi_probe()
+      commit: c4887bd4b35b225f4fe26d2d459c76236e27a759
+[3/9] spi: sh-msiof: ignore driver probing if it was MSIOF Sound
+      commit: cf0668184d1d2f9ad3f98dd5bbe0ed4d9d090eaa
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
