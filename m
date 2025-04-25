@@ -1,108 +1,57 @@
-Return-Path: <linux-spi+bounces-7771-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7772-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42A85A9D5D6
-	for <lists+linux-spi@lfdr.de>; Sat, 26 Apr 2025 00:46:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4A0BA9D5F7
+	for <lists+linux-spi@lfdr.de>; Sat, 26 Apr 2025 01:00:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D7574C2765
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 22:46:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D936A7AF763
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 22:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847BC2957CF;
-	Fri, 25 Apr 2025 22:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E45242D80;
+	Fri, 25 Apr 2025 23:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1TYpNMA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTLOmcjZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0ECC2147F6;
-	Fri, 25 Apr 2025 22:46:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3543D21770C;
+	Fri, 25 Apr 2025 23:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745621201; cv=none; b=emlpcpKNf+g6Vfv1utWcD5fSRS5muALsq5jVYOvgr9iqg2A4AzaXI5OaW8Cx2WS/oPyPw78MgBQFcT9PYT8RJnHe/XhdcUDy5cGpSFPcTmiV/y/MD16i6vZdezX1t9ow0o7odV9Spucd/I10Z/pZB6zN5+SNSbJtSF8L7N4Do8k=
+	t=1745622007; cv=none; b=J9WbRka57vl4qF5GO2MqsNG6FHqatYpDfRtwrInGRsKG2H55yLURPV6lPFsEm5t/Rfqqo7nXAsiHzLoSpnCFigvzNiEnZmn6VZep4Ih1cDE2/emg33/M1HVJZILD3h3AcmNZe+Dly5ZUI2kZ1BfVA66rWAQifwBVDcQfOS9Kcd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745621201; c=relaxed/simple;
-	bh=mqrro+vxZhjTZLSg80tSis2wub+LIUloe3g0FjU34k8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VEexe7Q8YECS6GLcbxfWZHp0nwGlwyN5xcqj0FJc1qexSXg8TW+i5eEB3whjj6WAeJZYdlDQwVBZvoU8pPRQJ1yMgtmGl6+HkjWFT9qnA9Qy8Gx1NN8ZqdmgHCV3pcFWVOc+ZNWu2fKTKySnBYfU90hcBzy+pfie5IQ4ylBJIoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1TYpNMA; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-47690a4ec97so32416131cf.2;
-        Fri, 25 Apr 2025 15:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745621199; x=1746225999; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Ts2LHLz4I7Y52dAaMUvDVUrX5c5MFwWvzizIevoXa8=;
-        b=c1TYpNMAV2gVJmgme7STvRNOQgfaDuSPGr1/7aVm48GL0PKZzqwzQjXSINwn0Jz3lg
-         TeydQgxchVeyUQy10N8l3Sz0vFXEYp8WW2ojMPXXc5rkLxoOt2wAW3d0Z52puBX2B89y
-         xL73IrZWIJ3yN9/yaYQJ/i/zLduWlxJ3JBgLTzRvGuX7CO5M3lHk5m5Cz5N5xpu6Sghm
-         jECK/xcI62l0S+M8AIxbCybSIC/y4Ra9olmwNjFZclv+CmpffqclkEhUj3ZjXomEVsNP
-         O2lGrACpxAWdhvoEEs9KATfbSPezy/qNyXAzVGtT8osJZlSptmJk2ZUbZDDxY5ASfq0u
-         SWdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745621199; x=1746225999;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5Ts2LHLz4I7Y52dAaMUvDVUrX5c5MFwWvzizIevoXa8=;
-        b=beLg6B+OyoeJRhSj6qDIKhejuVeewAfT+jkwmEU7bPTfjtrmfFCMMbLxSirQtr0dgU
-         eQsBHQndGFUtFhMqPrtZwIGXLCzMqQEmEGQtoKjdeT8vC8BnKhx3V8rWaaftYw/l/mIF
-         WoLOmmN2nckpCynRm3TsP7q3cug0kMyI1q7BZEm08+qJ9jEJb5jUjT+cgG+hUtH9Ukbb
-         a3allJelbXa0jiUvZh2s0LZg+cXeHR47PsK8ar9jpc0wxhBGtetEa/ltrOUr8c4CRiP6
-         WIMt9Bl++P//VYHCxl9yJl+9smZazxXJgtqVi1QfvZ5jkM28fvDsVee34JqcT0rxcnWw
-         /42g==
-X-Forwarded-Encrypted: i=1; AJvYcCUzSVfNazTlmrnOvsluvOSvcYFjELmrlwam5WIwU+lyJJu1889i6nVGjafqnB3VLyIHC+21qVX+4gr8@vger.kernel.org, AJvYcCW8UZvxiLo2JAIOEho/0TEhqwbVtcPYKkCA9tKhLDwesgitSIBHOjw0AEZ5lWTlSndBkg7tR/bbQJ+Jm9XIjr2mCm8=@vger.kernel.org, AJvYcCWMbm5IP1Th0nUHZKXO5AYR2i1clAO13J3Sp77Z7PR22LsYvnaz5he13puqXAW7EQfB73/nIW2Q1FOvSGcq@vger.kernel.org, AJvYcCXZ6cDAVFQlD1ynWze92OC/To0K5LNqO7+hm4i5+JW4GL6ayw5BVbdvxO8mjBj4asQYI4Z8Yo37LgXy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/KwQtcyQ674zvvSCGsTruGEHuo2tgvjKPOJ3mXv2iLgnca+f5
-	1vARzvgNi2JjC5ISl4uGlHQGID+NuG1k9V56+LE/AFLfIoIm3TE4
-X-Gm-Gg: ASbGncub8F7FDNj1KaIFC4MCYzV6B4/X1PIwi1f869kQCYvhYJOc1I3gdMjEE3m06g9
-	wgY4Wn70BGc3da613VFJt51IFkOFldm9tTs43hNZ5M9AgQTxN14O37+p3OSUBuQvwYo+c2X0FmR
-	6dPbwfHLq8bGFDsUQEg5TsXcamlsrKZPMrWeBDsV8j4l/Djdi2aIUf2RV+B1no1eXVDUvWy3l1n
-	BRSwUfeBXmCAtel3EyuTAXU+uFdk3OyEq4/NaEpbnbuxqJmay4l4iOLEuovdZneAAH3NNv+tIi5
-	UuABip54CqRT09mn
-X-Google-Smtp-Source: AGHT+IHFMnb3Dv8ueG3yqBlwgHCe8l9Ust4EP/2O6HiGpIC9Wsr8B1BoBXzzFa/o+yntyw1+DEItgA==
-X-Received: by 2002:a05:622a:44:b0:476:653d:5aea with SMTP id d75a77b69052e-48022c311f2mr71095971cf.4.1745621198814;
-        Fri, 25 Apr 2025 15:46:38 -0700 (PDT)
-Received: from localhost ([2001:da8:7001:11::cb])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-47e9f7aade9sm31608541cf.40.2025.04.25.15.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 15:46:38 -0700 (PDT)
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Mark Brown <broonie@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Zixian Zeng <sycamoremoon376@gmail.com>
-Cc: Inochi Amaoto <inochiama@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	sophgo@lists.linux.dev,
-	chao.wei@sophgo.com,
-	xiaoguang.xing@sophgo.com,
-	dlan@gentoo.org,
-	linux-renesas-soc@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v6 0/3] Add basic SPI support for SOPHGO SG2042 SoC
-Date: Sat, 26 Apr 2025 06:46:24 +0800
-Message-ID: <174562116075.44155.16153568743582416091.b4-ty@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com>
-References: <20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com>
+	s=arc-20240116; t=1745622007; c=relaxed/simple;
+	bh=/bRJ1TosTwWc07Gu44FOUKRyH9x1FUl0wV2GXEtu9Bw=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aMtnYmaiDZnJr1zSrH7DdznF/xh1mOfNi7cUbuIBF1PaU/Y9UMShybet9HNxasgYI/U8ZrBcpQf2oYExvCWbFIlMRUmFq0dAIOCsfDt4wUOQmU9rEEyZqlp1pB5iClJiAMRin4CMp4eTLnDnZssUrvRfmpIjNzVOJsTOvg9MAXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTLOmcjZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96D0C4CEE4;
+	Fri, 25 Apr 2025 23:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745622006;
+	bh=/bRJ1TosTwWc07Gu44FOUKRyH9x1FUl0wV2GXEtu9Bw=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=BTLOmcjZdXzEn8z5qOerh47Ehfu3VX9yrQ3lbcY7KFxeU8+Z8rci7MVHhRfaTLRKO
+	 mHxaElLVaMHz+sOIMvA7OEbIjdzRiI/IJxnKb7qKaNwJqLokd8O3otoPlPhJgOeOgd
+	 bwFHs8AP89LwLAnQbAlJxoAzrPZE4tV6n1LaDQTkln21uY0Sg64b/NB9B0hTAyDKIy
+	 lnngbK2IkEIi8t+eSn19bX2HwCvWmLRDkxBz3sqfsPfdBWnSMiiDyt/iaOL1UR4hKT
+	 VeRoIZWxntPc0/Qi8Z/tLNGPTBolQiFsqLYqHj6LwRIeHJLZnozofzW5p09eqFZcyY
+	 4pbybWu78T2wA==
+From: Mark Brown <broonie@kernel.org>
+To: thierry.reding@gmail.com, jonathanh@nvidia.com, skomatineni@nvidia.com, 
+ ldewangan@nvidia.com, linux-spi@vger.kernel.org, 
+ linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kyarlagadda@nvidia.com, smangipudi@nvidia.com, Vishwaroop A <va@nvidia.com>
+In-Reply-To: <20250416110606.2737315-1-va@nvidia.com>
+References: <20250416110606.2737315-1-va@nvidia.com>
+Subject: Re: (subset) [PATCH v3 0/6] Configure Clocks, Add Internal DMA
+ support
+Message-Id: <174562200441.302167.12352642386794751784.b4-ty@kernel.org>
+Date: Sat, 26 Apr 2025 00:00:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -110,22 +59,58 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-On Fri, 25 Apr 2025 10:28:11 +0800, Zixian Zeng wrote:
-> Implemented basic SPI support for SG2042 SoC[1] using
-> the upstreamed Synopsys DW-SPI IP.
+On Wed, 16 Apr 2025 11:06:00 +0000, Vishwaroop A wrote:
+> This series introduces QSPI clock configuration and internal DMA
+> support for Quad SPI controller. The patches have been reorganized
+> for better logical flow and review comments from v2 have been addressed.
 > 
-> The way of testing can be found here [2].
+> Vishwaroop A (6):
+>   spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
+>   spi: tegra210-quad: remove redundant error handling code
+>   spi: tegra210-quad: modify chip select (CS) deactivation
+>   arm64: tegra: Configure QSPI clocks and add DMA
+>   spi: tegra210-quad: Update dummy sequence configuration
+>   spi: tegra210-quad: Add support for internal DMA
 > 
-> 
+> [...]
 
-Applied to for-next, thanks!
+Applied to
 
-[3/3] riscv: sophgo: dts: Add spi controller for SG2042
-      https://github.com/sophgo/linux/commit/ae246f5c0ce444e5c964aa3a7d2d14a6df9153d6
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/6] spi: tegra210-quad: Fix X1_X2_X4 encoding and support x4 transfers
+      commit: dcb06c638a1174008a985849fa30fc0da7d08904
+[2/6] spi: tegra210-quad: remove redundant error handling code
+      commit: 400d9f1a27cc2fceabdb1ed93eaf0b89b6d32ba5
+[3/6] spi: tegra210-quad: modify chip select (CS) deactivation
+      commit: d8966b65413390d1b5b706886987caac05fbe024
+[5/6] spi: tegra210-quad: Update dummy sequence configuration
+      commit: c283fcdc4e2b89678c171691fd26f576139fc256
+[6/6] spi: tegra210-quad: Add support for internal DMA
+      (no commit info)
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-Inochi
+Mark
 
 
