@@ -1,162 +1,199 @@
-Return-Path: <linux-spi+bounces-7753-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7754-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF6AEA9BCDE
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 04:29:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F76AA9BD54
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 05:46:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AD62F7AE34B
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 02:28:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85CFB1B67B93
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 03:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D95156F20;
-	Fri, 25 Apr 2025 02:29:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C63B194A67;
+	Fri, 25 Apr 2025 03:46:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ia4Zbbq0"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OZWHiR3v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939921487F6;
-	Fri, 25 Apr 2025 02:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB6B1ADC97;
+	Fri, 25 Apr 2025 03:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745548141; cv=none; b=kGcsK6LHiMdvXL+KFsZGQzUXw80a/P5AhCvHkrZAY7OnMTjExvFbeMHqnt+lrkQTfS4J3QJSZssXqmbi4oiZK4OKsIzRu2wPUFY9XkG2C0wKvXlpOXeCTwoUjoM51/sANJuy8Gc2e3/ae9P2iGh46o2Q2r62BQ2Ot6jnFkK5xXY=
+	t=1745552767; cv=none; b=g+qzXY0dye12XqrWYjRjh26lpkIIf69S2XL2DfoDz2W2wYa1vOCpPDfK/Yf5dEzDsU66ufHmjjUpJ9HQyHD7QekrfsMlPILjZoZMWCt9hxC8KRbYdl7JjhjEp8u+klWesLrV++I3LrbcjZljBFYDUNPmoS94Xih7RKNR3aJGUY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745548141; c=relaxed/simple;
-	bh=bsOb61YGYomuONd3drp4jb88EZWek6I8D8vdw/YFqjA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Rh3H49vRk945uiigRpb2+nJd7/VJPlqq83/7Jd+w2es9+PywEgraAVxYpLY3c8BS0DgjkCOTbaDDaCzkpT1aKLPcCfowUDHBhD23aX+eWJw5LB/6I6iNEYMMPt42Hg7sNQsaa/FUI/dhiAnCefzsa95lVC8VkJjDVXFhWaXi6Jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ia4Zbbq0; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3035858c687so1434733a91.2;
-        Thu, 24 Apr 2025 19:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745548138; x=1746152938; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PYhIc8nI7TQrbMQ5ehdUi9XRR8BUa9kFTApEz1i6px8=;
-        b=ia4Zbbq0IHIPS4s48TlLwbwphEXCntwfkhmu7ggJSV6q4r3wMj991lLsE4SgeYYR02
-         h5UlnSjToqn60W5oUSbcXV8RYYzRDpid9t+yD9dRHaSkPnTHegXzmwMdOX7Bb+f7Rvsd
-         MoOhnp3zTTbF4RFjA0qb1QmqMOgv7QD/1GpGOmZFQ6VATpeOyGLNy24r7R1IqU3o51Cd
-         ob6VwxLYNbDF3wssbGHsRe0T6S2k2+Eky7i4CBojrJB38KaiVvBUQDXVi9MxFJTCc5Bp
-         4FfCUzQPHQ+qVh7bqYxr2YR8NWzN/PQge84OSDjglXz0NmZ5+0tRdsR26F8v42mDsHE4
-         WwDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745548138; x=1746152938;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PYhIc8nI7TQrbMQ5ehdUi9XRR8BUa9kFTApEz1i6px8=;
-        b=m+QktRt71kMCrxQh8SqKpmDK/HjvNSvNQrvGYA6dQf6laB7E99lKItmmaUPdQY/1x7
-         /SOfjo7kWAh1B9V9kwwF4FmuxUfrF2Yu0GStamVxIQPUdABz6WV++lLlKXoSp38uXOS8
-         fZnH1CgyJmgRKvhqRlb4PWgAsqMCI6kzxwNwJzTzoSHKOK0QUc47Z6c+oFPjwDWJ/VGL
-         nCq5/W0L8ail7EjLqnmUBtD1SKCbJXkqqlCGABsDA0Xt2pnY8yVwRsLt9pWk+dRas9/k
-         Y927kGE2Am92khvJ5Atemj/4Cws1GVPnrU3hySfA8zLJOJIbbrfXsb8XR8O3b39w5/yH
-         rpEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUr1TMlqz23hJ3WZ1qKDpsgFCD1H0G9i0xsR3gOptUCm0UcH+6UJQZ0PA/k9TF1Ily6DnF+STUPMaKIR8Fo7ak4SnQ=@vger.kernel.org, AJvYcCV+PUryZsyJanB6D3v26jt4Zm2UHA6rOojf2hq2z6w0x+Uu7Hi8CmqTESAdtjMpx3QbS5Zn0V+u1CY3PkM=@vger.kernel.org, AJvYcCXP3vSOr/cHAj4nANfxTVBndAm+0YeIZQmDN7ga4GeQjEKFUukgKJRg5MsSa9UyEnrhYPyVKB6agblM@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+wN0KwR5ibVKT1aTwtkJBWlAQLXy90Twru5cNTVRMZ7ZV9HIY
-	yejmmqo0mMKHTLVTOs2KRuWg/lKtfjZGwPLP869g0UUEuWSwoNLgDAF32uBr6jA=
-X-Gm-Gg: ASbGncsyBxlZ0Zd/Q1MgeQ8PiZSdolK5/oFSpmfQCjiXqpy3nkxCWS5uuUKmctiYFcF
-	6/O7kaW92NPrLdtgOWEQpmFMTxLamKhmjJwyaVIcp9ajVf5q3hNVfDpgFMsXkjzHK9cz2fLfo9A
-	WQIf1wiy24PZys9uCAR6CWqEu6E6Zfe/DE0Y0M8QvTlaVkCKF9xF+Xc4plFxqv/8GMVMSwtF2LG
-	gsLoLQoGLP/xUfPW7ZP1Xg/f0ckLvkLIIy2bBeo6uQrIdpVq3gZbqwOFrFsqqzR6UTSw/s3wwRl
-	kizm5jP5P1D+NfCUNSpSvILVr0nu4pcbzDs8NeMOh1UOVA==
-X-Google-Smtp-Source: AGHT+IFQ/ASdtiEJLWyy0JwXJvK9BuImD6nRYcmLkOuTSd7G4uxDP0nuVfFuf8LFPcPjATGegctLZg==
-X-Received: by 2002:a17:90b:558c:b0:2f2:ab09:c256 with SMTP id 98e67ed59e1d1-309f7ea86abmr1328288a91.33.1745548137606;
-        Thu, 24 Apr 2025 19:28:57 -0700 (PDT)
-Received: from [127.0.0.1] ([223.80.110.9])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309f782d4a9sm365455a91.30.2025.04.24.19.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 19:28:57 -0700 (PDT)
-From: Zixian Zeng <sycamoremoon376@gmail.com>
-Date: Fri, 25 Apr 2025 10:28:14 +0800
-Subject: [PATCH v6 3/3] riscv: sophgo: dts: Add spi controller for SG2042
+	s=arc-20240116; t=1745552767; c=relaxed/simple;
+	bh=xhVNRHduzZjRRUfRq3/T2oiC9yTO/0pmfgrW1d0MUHo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=rqNnpG/P2gEagKzlQ9+5j078xbRQsGvhgNnNquQk1zSV7LMNpb1EzxfE88eIwJla3C+yqclYFTC+5FVzjC2TVT0Kg0Ckfy+fXawgvgIrD60hssK8gij8QTU15f1KoUj3RcklCM47HVeSnlBelw4e0FINtRPchAN9VRxOEHKr55c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OZWHiR3v; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53P17gaJ017817;
+	Fri, 25 Apr 2025 03:45:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4DFsysEFYC/b80s/A2U/Fnblh0O4u+KWny7r9scaEvU=; b=OZWHiR3v9QOItA/1
+	2x2b0mqC09hZejkiEYUDf2/k53fVVCw9HcPRnOmmxjuDHOCFo490QjoZzFql9veh
+	gNiYkNvFgBlwaR6Ldcgyq7058RdHoYTJv2WivMScK5aBQW7Bv67b7niNrMJYjgrK
+	0kGLdheAPSK4XTNPYISN/3wPjmlwIf21ZC6OojekGq1sqnt6XuOiZc8CX6V9gejA
+	7NPNALbUwCUN69ZTXYRy85+1DEqBfTBRyQZ/CAyUkqIVaazJt3gm/Ytlo9IKaeWj
+	NQ3kx1T1zc2onal1CGxK35oiDNp/W2LwKnypa5ZXS1I9odEfBuDFnE38yBBqNwEr
+	zISs2Q==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 466jh3qj06-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Apr 2025 03:45:51 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53P3joe2025519
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 25 Apr 2025 03:45:50 GMT
+Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 24 Apr
+ 2025 20:45:47 -0700
+Message-ID: <b5a6a9d6-50da-4ab9-878d-d4dbad270f22@quicinc.com>
+Date: Fri, 25 Apr 2025 11:45:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250425-sfg-spi-v6-3-2dbe7bb46013@gmail.com>
-References: <20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com>
-In-Reply-To: <20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
- Alexandre Ghiti <alex@ghiti.fr>, Mark Brown <broonie@kernel.org>, 
- Inochi Amaoto <inochiama@gmail.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- sophgo@lists.linux.dev, chao.wei@sophgo.com, xiaoguang.xing@sophgo.com, 
- dlan@gentoo.org, linux-renesas-soc@vger.kernel.org, 
- Zixian Zeng <sycamoremoon376@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1745548101; l=1524;
- i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
- bh=bsOb61YGYomuONd3drp4jb88EZWek6I8D8vdw/YFqjA=;
- b=0QyxC+63XX3Z4RcBnZwI+jfagaTUbfSPhQbRudW6e2AL4aoUOOld3mI48zwlew9sNlIgXaoqk
- YmltacDzoa4Aa3AoJ2E0K74/56hzddLfwyrfC7PxbezhYZU+k/gUfTg
-X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
- pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v4 3/3] SPI: Add virtio SPI driver
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>, <broonie@kernel.org>,
+        <virtio-dev@lists.oasis-open.org>, <viresh.kumar@linaro.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hdanton@sina.com>, <qiang4.zhang@linux.intel.com>,
+        <alex.bennee@linaro.org>
+CC: <quic_ztu@quicinc.com>
+References: <20250401033621.1614194-1-quic_haixcui@quicinc.com>
+ <20250401033621.1614194-4-quic_haixcui@quicinc.com>
+ <74698d99-db5b-4ec7-a965-eea2a29e54b1@quicinc.com>
+Content-Language: en-US
+From: Haixu Cui <quic_haixcui@quicinc.com>
+In-Reply-To: <74698d99-db5b-4ec7-a965-eea2a29e54b1@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: qHEw8uJ7dZuoow54j3tNEJotXUfkIQe7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI1MDAyNSBTYWx0ZWRfX6qww51k3oV0B JgeEUQLvScGC0jACtH58xaWiwVnE0zrTdZFTOsNPrKn8GSD9u9iLlL72BuhLWYjisZJLmi3PKnZ zjyjpjASMof2w8R+D1B85+ABZPsd/rjsIdYBPRmxwc/fwpDJykgEoyAg9/syxdHx4o2C2Tj3QCU
+ AlV6MNQ9OuiKvONd+vkeDH1CWGdKcn3Guld4rtV2/1T9D+sECy/8/KDdbTL6kM4nK+ANagiOssA n1Bse2Rr0kAVnl/1fxzp8oTgqvt4xHA2pT62aWA3HWMjB/F8jTlZ9IyrTpjrvd/AeV200zCb9fY wnvBnaobpxcl41/EK86ayUulfF31Qu4AmoGIc+G+RsanHKCfB6powwBrl3+Irmi+T9WjVXkw5mM
+ GYgLQmWMa3sNZXyPHIdq5ZIvOjB8IvGDh3BCowHzhRdtmLjBnBXghUU9/4ec8J/l6clHGmu8
+X-Authority-Analysis: v=2.4 cv=ELgG00ZC c=1 sm=1 tr=0 ts=680b056f cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VOKzCr2XFDUyxE7n414A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: qHEw8uJ7dZuoow54j3tNEJotXUfkIQe7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-25_01,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 phishscore=0 spamscore=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=999 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504250025
 
-Add spi controllers for SG2042.
+Hi Mukesh,
 
-SG2042 uses the upstreamed Synopsys DW SPI IP.
+Thank you for your detailed review and valuable feedback.
+I have carefully considered your comments and would like to
+address them as follows:
 
-Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
----
- arch/riscv/boot/dts/sophgo/sg2042.dtsi | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
 
-diff --git a/arch/riscv/boot/dts/sophgo/sg2042.dtsi b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-index aa8b7fcc125d71eec12b09493964d90f5dfed27c..ddde4c613c4734db191de500b016b322a9602efc 100644
---- a/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-+++ b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
-@@ -537,6 +537,32 @@ uart0: serial@7040000000 {
- 			status = "disabled";
- 		};
- 
-+		spi0: spi@7040004000 {
-+			compatible = "sophgo,sg2042-spi", "snps,dw-apb-ssi";
-+			reg = <0x70 0x40004000 0x00 0x1000>;
-+			clocks = <&clkgen GATE_CLK_APB_SPI>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <110 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			num-cs = <2>;
-+			resets = <&rstgen RST_SPI0>;
-+			status = "disabled";
-+		};
-+
-+		spi1: spi@7040005000 {
-+			compatible = "sophgo,sg2042-spi", "snps,dw-apb-ssi";
-+			reg = <0x70 0x40005000 0x00 0x1000>;
-+			clocks = <&clkgen GATE_CLK_APB_SPI>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <111 IRQ_TYPE_LEVEL_HIGH>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			num-cs = <2>;
-+			resets = <&rstgen RST_SPI1>;
-+			status = "disabled";
-+		};
-+
- 		emmc: mmc@704002a000 {
- 			compatible = "sophgo,sg2042-dwcmshc";
- 			reg = <0x70 0x4002a000 0x0 0x1000>;
+> Could you please help add exact function description which can help 
+> understand below details with some background/purpose ?
+> 
 
--- 
-2.49.0
+Different delay parameters impact various phases of SPI transfers,
+governing the assertion/deassertion of the CS and the timing intervals
+between adjacent words in a single transfer or between consecutive
+transfers.
 
+Some delays are inherent device attributes, such as word_delay and
+cs_setup in the spi_device structure, while others are specified
+per-transfer via fields in the spi_transfer structure, such as
+cs_change_delay and delay.
+
+Although virtio SPI cannot directly configure transfer-stage delays by
+manipulating hardware registers or precisely control CS signal behavior,
+it can indirectly achieve fine-grained transfer control by passing
+parameters like cs_delay_hold_ns and cs_setup_ns in the
+spi_transfer_head structure to the host.
+
+Function virtio_spi_set_delays is designed to implement this feature,
+and will add description like:
+
+/*
+  * virtio_spi_set_delays - Set delay parameters for SPI transfer
+  *
+  * This function sets various delay parameters for SPI transfer,
+  * including delay after CS asserted, timing intervals between
+  * adjacent words within a transfer, delay before abdafter CS
+  * deasserted. It converts these delay parameters to nanoseconds using
+  * spi_delay_to_ns and stores the results in spi_transfer_head
+  * structure.
+  * If the conversion fails, the function logs a warning message and
+  * returns an error code.
+  */
+
+Could you please review this comment and let me know if it's clear
+and easy to understand? Your feedback will be greatly appreciated.
+
+
+
+>> + * E => struct spi_device -> cs_inactive
+>> + * F => struct spi_transfer -> cs_change_delay
+
+> Alignment of single line arrow  -> .
+
+Alignment is now consistent with "=>", could you please confirm if it 
+also needs to be aligned with "->"?
+
+
+
+>> + *
+>> + * So the corresponding relationship:
+>> + * A <===> cs_setup_ns (after CS asserted)
+>> + * B <===> word_delay_ns (no matter with CS)
+> what does it mean when you say "no matter with CS" ? Any other 
+> simplified statement ?
+> Delay from sending actual data /Clock generation ?
+
+"no matter with CS" means this delay is not related to CS actually.
+B is the timing interval between 2 words, during which the CS remains 
+asserted.
+
+I agree this description is unclear, just update as:
+
+B <===> word_delay_ns (delay between adjacent words within a transfer)
+
+>> + * C+D <===> cs_delay_hold_ns (before CS deasserted)
+>> + * E+F <===> cs_change_delay_inactive_ns (after CS deasserted, these two
+>> + * values are also recommended in the Linux driver to be added up)
+> Alignment of all double dashed line arrows <===> to left side symbols .
+
+OK, will update to be aligned with "<===>".
+
+
+>> +    err = virtio_spi_find_vqs(priv);
+>> +    if (err) {
+>> +        dev_err(&vdev->dev, "Cannot setup virtqueues\n");
+>> +        return err;
+> Use dev_err_probe()
+>> +    }
+
+Yes, will update as:
+
+dev_err_probe(&vdev->dev, err, "Cannot setup virtqueues\n");
+
+
+Thanks & BR
+Haixu Cui
 
