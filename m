@@ -1,100 +1,80 @@
-Return-Path: <linux-spi+bounces-7769-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7770-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51711A9D3FB
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 23:13:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70CCEA9D413
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 23:19:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98A1B4E23F3
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 21:13:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 801681BC2DDD
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 21:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99364222599;
-	Fri, 25 Apr 2025 21:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3398221DBC;
+	Fri, 25 Apr 2025 21:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWODcmFX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URDyBAmh"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D831B414B;
-	Fri, 25 Apr 2025 21:13:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED0452F88
+	for <linux-spi@vger.kernel.org>; Fri, 25 Apr 2025 21:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745615618; cv=none; b=lS5ClwElApSgD+4ueDgQn3tWvYvp5JBgM4WDjAc3LnZ9whIBM1rnFECysLB1kg6boLtOQFOJoYst/HaicrELj4VpptZBCIlEYtZTex4t2mtY6gJl4lJ8Fn/wwG78B/TbgYmUo3hQumKQ2Cww0i6uJ/0Ij4mDv8I2XPCz5xB1WDY=
+	t=1745615990; cv=none; b=V5BVIDB+rSYz/F4t9B+/fr4K9rfQ7Nx2bEwIUrXGKyCH6ngMxlzHUAk9OcCAOFOmw/EtFcovg7uud6LYDa2eoS+ZAuC64mFnxreXMO74IPwZvqlCVf0S71Bvev4vB8C/CqNACKMZTXBfVlXmczxMYZCAfxo5AaWMSOZ2NzVfD6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745615618; c=relaxed/simple;
-	bh=GIP+JmKsDq1yXJB9cilTTsWdJEXeurxdE+/HL3zld/U=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=pIJ4avy/EfPpJL6LnikxCMIQlKGmk2XPG57CwFNHBHJbq63V8OC3oUxcaA+0andG8Q6OdV2VyR13meshDXEkD2AFcVlHpNirw/7vY7bc5dpqAKUwbHn1NGZk6QxtlaPBKysCBqd6Zi6IwuLwk4+py6PN69nGY4CynnplQD10q4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWODcmFX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F195C4CEE4;
-	Fri, 25 Apr 2025 21:13:36 +0000 (UTC)
+	s=arc-20240116; t=1745615990; c=relaxed/simple;
+	bh=FCPm55c8REzp83cU1A7sXg/4IbKk7YLq6bTGVcYTSQA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=eQn6JtZbwy52IvioC/lg6PEhubzDZK6rApPwpbqDLLfPKD5Oi6zS3NJFSzre1zdkSSTNdud9LvhWf4RDsS13x1fnyAYWEomRwmPKyti5s4WYxD70m5pdscESDkMduJecFN6n0LCKD62uuas/DqZmaMl6ABoBOuuLm9/K7EY2ytA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URDyBAmh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE851C4CEE4;
+	Fri, 25 Apr 2025 21:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745615617;
-	bh=GIP+JmKsDq1yXJB9cilTTsWdJEXeurxdE+/HL3zld/U=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=PWODcmFXsj8MovENvqkwg1hQfAYLkvq1lQpV5/cE8YabCtAlCAUO7KbeWVJTg2c4d
-	 0YV21hKqcZzdOYMbkNYX1xPHbGPWOZ6GgR6rm9c3rF2y/86Y6L7nsrkn1SkWE37ng9
-	 o3TJaEB6KMlAkd2KdGmaI36KAaHLALqikZCIx4mkYX5AXjic0zAIoE2o5Zv9HO0AGa
-	 LTzATgLzY2GGzGEWIyg2VLWPvCzVt1LHJHvZZGL5v2hE5Hi5NEne6X9R2d1D8T6zGk
-	 aLsPw6z1S3dZh+MmsKJfo3A8dWqlN3uowoWUaI4pCPdJkRrMiWmZ4oPVX8gwY6XVtA
-	 PNoNwQJoveXjg==
-From: Mark Brown <broonie@kernel.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, linux-spi@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250424-qpic-snand-remove-wlen-v1-1-2a7467ce2e3a@gmail.com>
-References: <20250424-qpic-snand-remove-wlen-v1-1-2a7467ce2e3a@gmail.com>
-Subject: Re: [PATCH] spi: spi-qpic-snand: remove unused 'wlen' member of
- 'struct qpic_spi_nand'
-Message-Id: <174561561639.278558.2940962492116902835.b4-ty@kernel.org>
-Date: Fri, 25 Apr 2025 22:13:36 +0100
+	s=k20201202; t=1745615990;
+	bh=FCPm55c8REzp83cU1A7sXg/4IbKk7YLq6bTGVcYTSQA=;
+	h=Subject:From:Date:To:From;
+	b=URDyBAmhUVK9jPUamyLSu6UAdm0l5GEuo/o5NOjRsM7KCmSPhwUJN9GdlAJvUFMgO
+	 9Pn8QSDJrXUUNjSpb3oD+D3NcO0uE44TZ4+m0OGDclYR4Odl1oTsimCTBd5S0HAyS5
+	 IiBnJLyM7fxUc83LXXl9KnmlhfZtYCaaHMkEL2J3ZA3qQ4aKnR4K5pwTM+sDenurv8
+	 7ablJdUQLsauzfvisMFb8tvhKc828ZIyCbfn3UPuhVV734z/PAc3RWuPVOU7274AEq
+	 R1ltIlO1nsrRjNOkt+0OMchAvQY/L38oiGe7MGQeRQC02X9DG55GsVV4BWGnhIC1UM
+	 l9EIcuATDDCwQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B2EA4380CFD7;
+	Fri, 25 Apr 2025 21:20:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174561602830.3844535.934949507715321423.git-patchwork-summary@kernel.org>
+Date: Fri, 25 Apr 2025 21:20:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 24 Apr 2025 20:10:59 +0200, Gabor Juhos wrote:
-> The 'wlen' member of the qpic_spi_nand structure is never used in the
-> code so remove that.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-qpic-snand: remove unused 'wlen' member of 'struct qpic_spi_nand'
+  Submitter: Gabor Juhos <j4g8y7@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=956715
+  Lore link: https://lore.kernel.org/r/20250424-qpic-snand-remove-wlen-v1-1-2a7467ce2e3a@gmail.com
 
-Thanks!
 
-[1/1] spi: spi-qpic-snand: remove unused 'wlen' member of 'struct qpic_spi_nand'
-      commit: 64c05a1d66193b3a40ad1f29c3d8ba5483e4e0dc
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
