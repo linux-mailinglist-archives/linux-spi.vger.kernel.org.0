@@ -1,361 +1,174 @@
-Return-Path: <linux-spi+bounces-7749-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7750-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92A8A9BA77
-	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 00:13:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22AC0A9BCD2
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 04:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A4A84C03C2
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Apr 2025 22:13:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CE5492358B
+	for <lists+linux-spi@lfdr.de>; Fri, 25 Apr 2025 02:28:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187071FDD;
-	Thu, 24 Apr 2025 22:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C5614A0A8;
+	Fri, 25 Apr 2025 02:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="BWVVYF3j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9SSKVW/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2067.outbound.protection.outlook.com [40.107.22.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828C128467A;
-	Thu, 24 Apr 2025 22:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.67
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745532782; cv=fail; b=Hb7ln/N7mKh5oiM5JalCaRHu+MD2l4jJ24N/fHDysb073i3LtOdvrVdtG9hxxHAo8fAsm3rM/bIFty13DZoFHTyuTcBnsY7l+f1PJEkuBIaG4lv3kGJp929SK3NX4FKDUC12xPOK/tX5J3+L9wxxP/y2zEqTs4S1sMD3jqaXmHQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745532782; c=relaxed/simple;
-	bh=4YaFwBuaNISTelYOFls9cOggcte9vhJIgWIhkkV/ZGE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Mpj6Td0CwZGNPMmbwlbIVQY2t0vc9cQ+HfdFPR8usNDx142sR7VtJsjS9EmLU4pvDr8fAY2d2V+S6LTfPwHLdnJJq6cpBg4HIl1p6tTwRrqMB7V3f9ACBFPualU9WKGdEW/2mGP9DCxeGK6zsvQh7ffGt0WVKy/PFU8xftPFsb8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=BWVVYF3j; arc=fail smtp.client-ip=40.107.22.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BxOrIlRgCWRh/p0dlXfbM68I9UFFiFzEJx/m6Vqt9BmGhzOs/oXr+2r2btdLmBvoj+8kyBo+G15ulhU6HfVsQEEsA7H2U6O/HyiX7yz1Dn/o3trQVpAfGwXRKwwYzA87I+rKeK+4sTuluq59BMDMGAjYHGeYKZsYNeYOUqnCbzrjhYGFMLhH7xtS/PPPDdtyrg5M4zgzNApHXU86AMldNQPJXf6IBzVsaVmgtnoE+gPTnbSdiqcNBMOnHbmaync4J4i1uTy+EgcIUxiB/dAexv3z8SeFBpFAizjW7C9w7bl9Lwha2ZDxAlr+2ASRD9KzRoWVJI9+HUn7ypDs6P8xEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3WRiFTAhgR505F7vD9QZZySO0lZkaHfh97PrfSue90A=;
- b=DEPklD2a9JjTgHN0h7drQgLsWr/vpkAOGYle63QSa4GGlwms3JaP/FozLAcwBMNl4EnjUsbIYZY78bDSo2Q7/1aYOFa+gFnniQpfAJPD8Oir4XKwrU7Ut5b65sXg48qJNtj0JXTChFmX81vRZPAjHwXpukdDC+VhGCketFCTewPnxFpd1uLhP5elEqwX/1aZhHX5wlhz6u28pcOVu2NOGfazayAytuk8ZlP32SrzRcj2yniKQqlBfrhOtjPNX6O/IoBVaHKsuNnxiNNl0i1jCdvr5zEnkpgU4dWfAXSog/53w0hLJmmjIkPpZqvZXr5BgbWRBZoh4cwJ/YZtQBazPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3WRiFTAhgR505F7vD9QZZySO0lZkaHfh97PrfSue90A=;
- b=BWVVYF3j7622yIhP7Z+9tXKE919psqv6V/R/KJoub73GiQmqFEFz5PdGQJ7HmQHM3EN3CHUWHEBkEOCo7zZCZrv9b1AGVMoN/rMudfr5/XYDSMhFPSHv+tnxN69oNYiR7Qhh2Wl5oGFkYd31OJmZoYflBa8JcZ1l1OpeEnGS/7NR0FOCOJ1vIXyqq6glBvkF641lrCHGWdQ/5Z0TxQ99nMapquusaYDeY+1A2MxOrst2TFebklAd4LXeoKDtu2Cna/LX3/x8JFL8LxU1Qv1IvaBYbKqersr1sBOpVHsdzKQaWemWuzAWOSgpGau2J7JdkJW7LajjoWD+iAxQGMe6Sw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com (2603:10a6:150:22::11)
- by GVXPR04MB10304.eurprd04.prod.outlook.com (2603:10a6:150:1e9::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.25; Thu, 24 Apr
- 2025 22:12:56 +0000
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::b7f2:1d0:6b6a:ba58]) by GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::b7f2:1d0:6b6a:ba58%3]) with mapi id 15.20.8678.025; Thu, 24 Apr 2025
- 22:12:55 +0000
-Date: Thu, 24 Apr 2025 17:12:48 -0500
-From: Han Xu <han.xu@nxp.com>
-To: Haibo Chen <haibo.chen@nxp.com>
-Cc: Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] spi: spi-nxp-fspi: enable runtime pm for fspi
-Message-ID: <20250424221248.pmhi3eixqbjgpr4o@cozumel>
-References: <20250424-flexspipatch-v2-0-e9eb643e2286@nxp.com>
- <20250424-flexspipatch-v2-2-e9eb643e2286@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250424-flexspipatch-v2-2-e9eb643e2286@nxp.com>
-X-ClientProxiedBy: BYAPR07CA0104.namprd07.prod.outlook.com
- (2603:10b6:a03:12b::45) To PAXPR04MB9073.eurprd04.prod.outlook.com
- (2603:10a6:102:225::21)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4D154763;
+	Fri, 25 Apr 2025 02:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1745548114; cv=none; b=QLs15b2GaOf2bzLG85/9uAsI/q8mc5ktdiKkdm0xDdfPxFUtf51qSo+SEC4LQGzrOPPPqurs48gSjSqXrQdraEpA0rX9UIXslXrXs62sxJcJG13BucKthlNr9n2kEj3mi5J+Fy9t1h2VimkOk7F8ZcXpGvH/qhjjsiWhcCqdH84=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1745548114; c=relaxed/simple;
+	bh=8wmermrE5M1bwblIgtOTe7sR30SfNY0obp+bchFCYvQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CVx3xO3Dj6ndqR/ZXw/BPmPtxU0CUie316PzA+6C1v+G37GtIGfqrgzgqkCIC7p+/+lgGc70CJTdUSNaVhxYTVZOmBRA9OED92am4WxSXMkiYtHdjBWLRANp1nE2toRhBc/p2TdCFOxy9W7lmBSKbnTfFudUwrgEfTSJoXLHynA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9SSKVW/; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ff6cf448b8so2338172a91.3;
+        Thu, 24 Apr 2025 19:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745548112; x=1746152912; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gWs7czVv33WD5QwKCbEc0JN2+JAvd6m2fpFPVxVDwgA=;
+        b=E9SSKVW/deVLSlCnLjwCypFMD0LZcgKwFY5ITVAKcu6RtoSJgfz9GvHxjCUUijEJvZ
+         1csKa81759GYeqaXmcHBG9d0fJZkDhZqozl0D82jAnSBukKCv4aAGwd9VtMBty5Exmfr
+         LMyDjmNYaAzvFYVOfD+3Q5IsoguD3fdr4nx1dMqXntREiBwRl/Xvt3vAStnRBg4k6RtT
+         F8TpJ++x7dbAiIidsPHg7mJcmVRz6i2gFOW177WWH4IY8qtECaMFnSbYUriLY3BdeWjJ
+         VOHa4t7XGhKJcC5fDN1siMnYGoFMfT6VR/SnW0OahGg0J8b7t2Y3UXjeWt78VJE9JF6k
+         X4xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745548112; x=1746152912;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gWs7czVv33WD5QwKCbEc0JN2+JAvd6m2fpFPVxVDwgA=;
+        b=Touszoj6PDT2W7aIgc9kfxn+YdtZ6em9gOApZtPM58ss4x2PqjrQ0lMbNk8TA1b+4t
+         3GZmgSoX/vNnR7lSc9+/exMJEPKi8t5A+l26tr6Nk86Jz/Kk1F09I0+MfqjUCRFvoWBk
+         DhVyVj4444aHIX7x81ApxI00N5JeU+sRm7/KdFh7HhA2O7yy+IM6VabpBGxZRtfKfLIA
+         FgJMf7LxTlS2VtyQaMfj/FJYfmKu6jwkjMzsq5iMt/R3DAg1OGp9jaUyMZfBdnSTAAn/
+         6e9nfOwGn/cQyJW2TyoHGPG3b1SsJCAqGZCsOpq8VaoVdlNQgOsWIjCBhs+LKMTm6eo0
+         dDyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUFaph55gMCVtLoWY86IBc1Kq66azwaZ3gsJl310Z/XpaQY3Yji8FcIZDK0BIdoLqo/oTBWnQrtsahyIK8=@vger.kernel.org, AJvYcCVa41uw2RJyUtHytTLOozLLDLhUZWdFjtfmkTOVrAqnzaT7LAqYrL8PcWtOd8xFduFLgYMX8KWE8hQR@vger.kernel.org, AJvYcCWg7uXIo4mCe/dTPwpqD5so31ho7WXB6KAm4SJuMexzDpsWTDtBlPR0oG/VH4GrWAigoDweNp3H1YAf6LpJ4RFM9yI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzva2FF2UiL5LvNS5/7UA6K6K+TkSe3v5zHqIwrDzd7EBlSDnJi
+	daaHDxuaj+Y6RT/u/enz8m5a85+/ZPo+IVCWF+h39BvjdJKmqJSnCH+A9k/bIijfHg==
+X-Gm-Gg: ASbGncthPCXbp6kZ136clIioqTGq6govYN7p/2VwlVyCMzOjnKcHUJtd91t5Jeel3os
+	Me9cV5q/tNFCXSUECldaHrB9fvBiITRXqpr8KGmjNJbh3zSB+zNYHCpVYcj4XKpj5dIm0Ms4gGC
+	R+/ZdDwAnOnIiDIET7BZIG1aGapcW/4BXjMZc5PLkzpDyRjWBVShhJrhn3jEs9g9JJa4MYt6vOU
+	6akQpaY6cEe+UqgQRoASJZ7bQ9a0IRz5bl1gpjEYJZxCCgjtZWyyqL/T7BR1h4JPPgvzkWxo7dq
+	A6SXe9KaFUcDnUQBg1PyRqpFwC7lYGd5OxFR154psgNVQaaj8m+fh2d3
+X-Google-Smtp-Source: AGHT+IGXRHecCFcL64rpDvSNx0T+kbwJIyVpg8y/+sbcGf/XoI8mdp3d7daOKwWfUyt8OoeRaQFhdg==
+X-Received: by 2002:a17:90b:4e87:b0:301:1c11:aa74 with SMTP id 98e67ed59e1d1-309f7e7027fmr1187414a91.28.1745548110992;
+        Thu, 24 Apr 2025 19:28:30 -0700 (PDT)
+Received: from [127.0.0.1] ([223.80.110.9])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-309f782d4a9sm365455a91.30.2025.04.24.19.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Apr 2025 19:28:30 -0700 (PDT)
+From: Zixian Zeng <sycamoremoon376@gmail.com>
+Subject: [PATCH v6 0/3] Add basic SPI support for SOPHGO SG2042 SoC
+Date: Fri, 25 Apr 2025 10:28:11 +0800
+Message-Id: <20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV1PR04MB9071:EE_|GVXPR04MB10304:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6e7a419-bb00-49d1-6a9b-08dd837d298a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|1800799024|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TzGBybw4TFBy4W0BLCnHU5OULFc/OH4IMZg8fLMS8AH/bYWgca/Sfyfqy6P3?=
- =?us-ascii?Q?7iBPITtvDv4npv+vrztt/q8R4v4hC80Cn62fVMvL3equc6TxInBnekjam1ar?=
- =?us-ascii?Q?bk0nYvGOk2NpHdeBzB+FhrtYt0QHmjq+OOTWeRBroQ3vmJcizJfIuYozebXW?=
- =?us-ascii?Q?liECod5NqN6mBpa9p0Z7pauYBGZDUVdXdl9zlwgGrGphbiW5RTySiLfOL8mX?=
- =?us-ascii?Q?1ee0jRpdJsuMQ0stoQ0i0HI+PkrUe5H6QXxjLBMDAmqOhqRj37CePq/mrTPz?=
- =?us-ascii?Q?bLLIFfrv6yzB2IqcchV0FQqBlksSLCUcOF1tV+z0qLDZLovw6tKEqGBHF3rF?=
- =?us-ascii?Q?N2Au/YX6nozMhX+UItY5Kx5kIzlIETBGb9bFF4cT5s5btkhGVXtUT/lts+rM?=
- =?us-ascii?Q?gF225WTweVitGDMjGiGqom5I5ioqP5vX4GZpmeFWZpMVuhPyfnohppTDng+N?=
- =?us-ascii?Q?glhsqHZeyT9xpDAVues9IUPO4IAK13AZbI2uG7m1IaZjcTbqpw3l6QePchvE?=
- =?us-ascii?Q?uSxyht7O0ynlAa+Z4wzJ4pWPSL2Ks+Tc0rRYmMR9nQg3HRo32iP2edcnGTQ8?=
- =?us-ascii?Q?gLlpSC11ch9zEmbZOGIOWUeUarIshx9K5DT2GiBxR3rSJhsjLf2Y+SGqkFD3?=
- =?us-ascii?Q?jtdpb7qx0zxp4PNGXXU5Doi5p3U2i12xcXHfod7Fmacmiom2iW/mX5dpjM0U?=
- =?us-ascii?Q?7I9ue4Q28uMC4xpXy3SABwKBJwnsipRCl/4fU/njsYNe+mUT++Ss2z17mZWl?=
- =?us-ascii?Q?5jmBCQoO04FimD/ioN/zBqWsZ0/ph71VERbw2myEFOzAy4eC2EOPK8jFY/L+?=
- =?us-ascii?Q?cv1PbEOZeLg6WjUWLOacwJyQcS4juaXcFgNa5zHz37NCX2s7o71i1MVhniq9?=
- =?us-ascii?Q?WshJoyMIUb2MOzEHT9u+OJ2rgrRuDp+csmCLzrVqxoz/J4XIJcHMi/ReOHax?=
- =?us-ascii?Q?Md9DW6am7DPFLGNIC10hp1q4PjNCqH3GsPP/17vvR0/AZrzq5Mste66dEkJk?=
- =?us-ascii?Q?Bev8VCTKWonLwYaeTtlepbT5mGVTpZRuGfOT+B3obhsKzMpbcxdbdGQJwq1S?=
- =?us-ascii?Q?cnOhp1o1XUT8vyZ3NTUGjixuSq6fSVpmd7KG0uTI1//TT42excoIJzllliKA?=
- =?us-ascii?Q?4UYj7fdkabORLzwnBcUhJeAjjqO+alXC+ykqpTcQcvPHk5Ne5lFA+LDt2bkV?=
- =?us-ascii?Q?1Doc5+J31KVJOSYi/uYWeP2qkd0ePeJPDoGmS2HvXecE+z9HyExx73TH/wMD?=
- =?us-ascii?Q?IBB+oZQKT+pQavoQ1d++vX9TaILP3xcJYfwOdxlj/yGiACkwjEDy2PkxOdDX?=
- =?us-ascii?Q?edT/13di5wcJgsRXdvOywHNQnbgFUFIBn56OwBMbIAFavVZpagocm3ewY5KE?=
- =?us-ascii?Q?z8btYWB0UBWgQyNHNaCqbLOVcEthySYwn4fmiyG8IO17ASJvdGu3AF4CyYOm?=
- =?us-ascii?Q?NII73pbEQ2vFkx6WJr6lGa2Ili4GOjf0Dge3oZpQ2ZzH1w5X8qFRqQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9071.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kv4A8iLVtjQTgW+FiJoSFToqDcROCbwRfdSbHFlH+pGSWju2hAHh7FgMHddL?=
- =?us-ascii?Q?mEC+Qfreqi3gMV0lnjYbzTn+zyQlKQ3AEudBk8YxCtoMONfaUjwnOVDHVXUh?=
- =?us-ascii?Q?V9CStErw1AxyHxrF2UYcHGYU6qYgsbBLaFqQVTXKHkAk3TDPrreVruzMgOh4?=
- =?us-ascii?Q?/MyP1MyIl67IKZ/vOnrQq0nh04x4GlGbw0P3URCUaWOZ2STe9hsgnV5l7wLI?=
- =?us-ascii?Q?y0z0woA0alzXf9hTIVWJQr9GcOFP1SJD8vFxj9BWVDiburowRkbn25LbGcgm?=
- =?us-ascii?Q?OkfLVH+Rp6naUbDBygTIDIh1kP7ozRQwm33+635WaaN4chPVvYyNEur17Cj9?=
- =?us-ascii?Q?WUyKjTrkf6aMhQNeLWmw4oZe96Mruem7o8qTbCwZeSZajmBBuLf8KT5pJ/pm?=
- =?us-ascii?Q?6kztcqOuOPbCFPG9bnh30mhZz4uVx37r9/8hftoPsJ5bhoyqLBK6Q/dk0PFL?=
- =?us-ascii?Q?iA8CEe2ZHEYMTyCJ0nju7TFJvNXcLWq6AMKzuWyeIL5/MWi+QQ3D4qWvPvaK?=
- =?us-ascii?Q?Oy1/DeWC1EBiQ8mGXbG0f50RqV8uO4GY/Zm+0fISvHZ8DyOW7ElfdjCccKpc?=
- =?us-ascii?Q?UqtCdDQ2GUTXBtJp79TS2bBu19iTn3jSMUlc3iVc7VlYiqrBnJEKRwxS0HiS?=
- =?us-ascii?Q?LzIo0WUTciq7VlHQr2Mdz+1F2weFQG9lzEKuaQIT+uTSGU9PDl+69XkKF9XT?=
- =?us-ascii?Q?WAABA9lnNRJz4IxfBQqQklS+TUAlikQJlXq08WWXwAmY2WffVhFgGsY0FjXT?=
- =?us-ascii?Q?NhTtxezLxuLU8qMKRckHCbwa65ok0b6Cahy6ETgfuOn6qHVAJnF6aEvr2QaT?=
- =?us-ascii?Q?v2kl87JfYKufszq1wWcs92RHm/Rvw3+QzwLbaOT/yRCS7jXkZAgNfpBsdEPy?=
- =?us-ascii?Q?tSjRMHB8L03HJhjiPY6Nfd/kcs/FJ68RJ4ecKIPlrbzlvI62h5lQF8jT5dbn?=
- =?us-ascii?Q?pc1VCC2WYe6WzicNY5ZmWHzg4qyPFf73IJI1o2aTfgS/nA3B/my9IhYlgBr6?=
- =?us-ascii?Q?Czzbbc2nvPRdmDZ665/CnFgoO4pw+ExVnO9Z7s5nT6PTdhdOcEziLBZIsRGw?=
- =?us-ascii?Q?sL6nzHpBuLHFngC8bYYlnx6WcIC/a6fSSdZPfRN/IaMgM9JVTWndEdJRPXDL?=
- =?us-ascii?Q?VMMcgdsxrl7F/imkwJGnJ2x90y4QnGKjKBzxxbfs6kEqzuPxN0+Aom/umbQn?=
- =?us-ascii?Q?dBkxA5VJpEOyzF9jEYEaYKPkPviCKbDcUvw+PxqW1PcLZ/jzi2ssrY/8NDiY?=
- =?us-ascii?Q?Y2/xbqbPWTM5souTBE7qH4JKUX4Z1R+cC5xZ60s7b63jup8P6WdKWUY8PkRB?=
- =?us-ascii?Q?X5eCeC0s+foroUf9woVaR8urayFitEtvxi2UwF5pAiXQj5qkaCXnoLX86QHS?=
- =?us-ascii?Q?s4w81f+05mZdNPbeFDCDclh8vpKYlZkWXYl7ErIfCg42XSEayzS2YCu3Qu5A?=
- =?us-ascii?Q?nHEexZILZLLs9cn/jADJ6g0hqN2R/6tjPHTvD34gTsXrfyoalWJxwKpVuzHa?=
- =?us-ascii?Q?RsPg129ZvNX2q+OPdagOxxQgHy7F579gq2/IeG2oWGfn5P2ZcgdNrakjP4wX?=
- =?us-ascii?Q?0+4SChe5/7UfQaDANhxJrt1rTAZp4f5WpmNBhinh?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6e7a419-bb00-49d1-6a9b-08dd837d298a
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9073.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 22:12:55.7967
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CEl6tD7wFpOlysVSCv+E5Kx6+uZ7bl+WE2d4Qzu3msBPhkTsgBM/Hy+iv3XH9QVQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10304
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADzzCmgC/3XOQW7DIBCF4atErEsFM2BDVrlHlcWABwepiSMTW
+ Y0i370kGyJXXb4R3y8eovCcuYj97iFmXnLJ06WO7mMn4okuI8s81C1AgVUATpY0ynLNkjEBcST
+ lKYj6+jpzyj+v0tex7lMut2m+v8KLfl7/NhYttQzeeeLBG6/1YTxT/v6M01k8Gwv846A6F0ICD
+ M4OircOm0ONzaFUkjvXGehRmwBbZ5ozqm/OVIeKYv0kaUa7dfbNATRnq4t96qw15A2pd7eu6y8
+ oCkCYfgEAAA==
+X-Change-ID: 20250228-sfg-spi-e3f2aeca09ab
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Mark Brown <broonie@kernel.org>, 
+ Inochi Amaoto <inochiama@gmail.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>
+Cc: devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ sophgo@lists.linux.dev, chao.wei@sophgo.com, xiaoguang.xing@sophgo.com, 
+ dlan@gentoo.org, linux-renesas-soc@vger.kernel.org, 
+ Zixian Zeng <sycamoremoon376@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745548101; l=2302;
+ i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
+ bh=8wmermrE5M1bwblIgtOTe7sR30SfNY0obp+bchFCYvQ=;
+ b=7QwgjA4uNKIVGLxb1ctjXPQAAYavFTWZ6Y6YdPmSoLAuI9YIU1Ytgaum4LNiHoUPTHn47KJ97
+ rmaiwgO+wpHANGbzaIIIZcQtR+VK1L9NU75DipCTetUZKEuV4xbdVo8
+X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
+ pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-On 25/04/24 03:33PM, Haibo Chen wrote:
-> Enable the runtime PM in fspi driver.
-> Also for system PM, On some board like i.MX8ULP-EVK board,
-> after system suspend, IOMUX module will lost power, so all
-> the pinctrl setting will lost when system resume back, need
-> driver to save/restore the pinctrl setting.
-> 
-> Signed-off-by: Han Xu <han.xu@nxp.com>
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  drivers/spi/spi-nxp-fspi.c | 95 ++++++++++++++++++++++++++++++++++++++--------
->  1 file changed, 79 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index 00da184be88a026bf562c9808e18e2335a0959e9..438a9c103c5969bcae06b4e02d98397ffdcaa345 100644
-> --- a/drivers/spi/spi-nxp-fspi.c
-> +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -48,6 +48,8 @@
->  #include <linux/mutex.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> +#include <linux/pinctrl/consumer.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/pm_qos.h>
->  #include <linux/regmap.h>
->  #include <linux/sizes.h>
-> @@ -57,6 +59,9 @@
->  #include <linux/spi/spi.h>
->  #include <linux/spi/spi-mem.h>
->  
-> +/* runtime pm timeout */
-> +#define FSPI_RPM_TIMEOUT 50	/* 50ms */
-> +
->  /* Registers used by the driver */
->  #define FSPI_MCR0			0x00
->  #define FSPI_MCR0_AHB_TIMEOUT(x)	((x) << 24)
-> @@ -394,6 +399,8 @@ struct nxp_fspi {
->  	struct mutex lock;
->  	struct pm_qos_request pm_qos_req;
->  	int selected;
-> +#define FSPI_NEED_INIT		(1 << 0)
-> +	int flags;
->  };
->  
->  static inline int needs_ip_only(struct nxp_fspi *f)
-> @@ -927,6 +934,13 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
->  
->  	mutex_lock(&f->lock);
->  
-> +	err = pm_runtime_get_sync(f->dev);
-> +	if (err < 0) {
-> +		mutex_unlock(&f->lock);
-> +		dev_err(f->dev, "Failed to enable clock %d\n", __LINE__);
-> +		return err;
-> +	}
-> +
->  	/* Wait for controller being ready. */
->  	err = fspi_readl_poll_tout(f, f->iobase + FSPI_STS0,
->  				   FSPI_STS0_ARB_IDLE, 1, POLL_TOUT, true);
-> @@ -955,8 +969,10 @@ static int nxp_fspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
->  	/* Invalidate the data in the AHB buffer. */
->  	nxp_fspi_invalid(f);
->  
-> -	mutex_unlock(&f->lock);
-> +	pm_runtime_mark_last_busy(f->dev);
-> +	pm_runtime_put_autosuspend(f->dev);
->  
-> +	mutex_unlock(&f->lock);
->  	return err;
->  }
->  
-> @@ -1216,9 +1232,14 @@ static int nxp_fspi_probe(struct platform_device *pdev)
->  	if (irq < 0)
->  		return dev_err_probe(dev, irq, "Failed to get irq source");
->  
-> -	ret = nxp_fspi_clk_prep_enable(f);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "Can't enable the clock\n");
-> +	pm_runtime_enable(dev);
-> +	pm_runtime_set_autosuspend_delay(dev, FSPI_RPM_TIMEOUT);
-> +	pm_runtime_use_autosuspend(dev);
-> +
-> +	/* enable clock */
-> +	ret = pm_runtime_get_sync(f->dev);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to enable clock");
->  
->  	/* Clear potential interrupts */
->  	reg = fspi_readl(f, f->iobase + FSPI_INTR);
-> @@ -1227,12 +1248,14 @@ static int nxp_fspi_probe(struct platform_device *pdev)
->  
->  	nxp_fspi_default_setup(f);
->  
-> +	ret = pm_runtime_put_sync(dev);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to disable clock");
-> +
->  	ret = devm_request_irq(dev, irq,
->  			nxp_fspi_irq_handler, 0, pdev->name, f);
-> -	if (ret) {
-> -		nxp_fspi_clk_disable_unprep(f);
-> +	if (ret)
->  		return dev_err_probe(dev, ret, "Failed to request irq\n");
-> -	}
->  
->  	devm_mutex_init(dev, &f->lock);
->  
-> @@ -1249,28 +1272,73 @@ static void nxp_fspi_remove(struct platform_device *pdev)
->  {
->  	struct nxp_fspi *f = platform_get_drvdata(pdev);
->  
-> +	/* enable clock first since there is reigster access */
-> +	pm_runtime_get_sync(f->dev);
-> +
->  	/* disable the hardware */
->  	fspi_writel(f, FSPI_MCR0_MDIS, f->iobase + FSPI_MCR0);
->  
-> +	pm_runtime_disable(f->dev);
-> +	pm_runtime_put_noidle(f->dev);
->  	nxp_fspi_clk_disable_unprep(f);
->  
->  	if (f->ahb_addr)
->  		iounmap(f->ahb_addr);
->  }
->  
-> -static int nxp_fspi_suspend(struct device *dev)
-> +#ifdef CONFIG_PM
-> +static int nxp_fspi_runtime_suspend(struct device *dev)
->  {
-> +	struct nxp_fspi *f = dev_get_drvdata(dev);
-> +
-> +	nxp_fspi_clk_disable_unprep(f);
-> +
->  	return 0;
->  }
->  
-> -static int nxp_fspi_resume(struct device *dev)
-> +static int nxp_fspi_runtime_resume(struct device *dev)
->  {
->  	struct nxp_fspi *f = dev_get_drvdata(dev);
-> +	int ret;
->  
-> -	nxp_fspi_default_setup(f);
-> +	ret = nxp_fspi_clk_prep_enable(f);
-> +	if (ret)
-> +		return ret;
->  
-> -	return 0;
-> +	if (f->flags & FSPI_NEED_INIT) {
-> +		nxp_fspi_default_setup(f);
-> +		ret = pinctrl_pm_select_default_state(dev);
-> +		if (ret)
-> +			dev_err(dev, "select flexspi default pinctrl failed!\n");
-> +		f->flags &= ~FSPI_NEED_INIT;
-> +	}
-> +
-> +	return ret;
->  }
-> +#endif	/* CONFIG_PM */
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int nxp_fspi_suspend(struct device *dev)
-> +{
-> +	struct nxp_fspi *f = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = pinctrl_pm_select_sleep_state(dev);
-> +	if (ret) {
-> +		dev_err(dev, "select flexspi sleep pinctrl failed!\n");
-> +		return ret;
-> +	}
-> +
-> +	f->flags |= FSPI_NEED_INIT;
-> +
-> +	return pm_runtime_force_suspend(dev);
-> +}
-> +#endif	/* CONFIG_PM_SLEEP */
-> +
-> +static const struct dev_pm_ops nxp_fspi_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(nxp_fspi_runtime_suspend, nxp_fspi_runtime_resume, NULL)
-> +	SET_SYSTEM_SLEEP_PM_OPS(nxp_fspi_suspend, pm_runtime_force_resume)
-> +};
+Implemented basic SPI support for SG2042 SoC[1] using
+the upstreamed Synopsys DW-SPI IP.
 
-We can use the newer RUNTIME_PM_OPS()/SYSTEM_SLEEP_PM_OPS() alternatives.
+The way of testing can be found here [2].
 
->  
->  static const struct of_device_id nxp_fspi_dt_ids[] = {
->  	{ .compatible = "nxp,lx2160a-fspi", .data = (void *)&lx2160a_data, },
-> @@ -1291,11 +1359,6 @@ static const struct acpi_device_id nxp_fspi_acpi_ids[] = {
->  MODULE_DEVICE_TABLE(acpi, nxp_fspi_acpi_ids);
->  #endif
->  
-> -static const struct dev_pm_ops nxp_fspi_pm_ops = {
-> -	.suspend	= nxp_fspi_suspend,
-> -	.resume		= nxp_fspi_resume,
-> -};
-> -
->  static struct platform_driver nxp_fspi_driver = {
->  	.driver = {
->  		.name	= "nxp-fspi",
-> 
-> -- 
-> 2.34.1
-> 
+Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
+---
+Changes in v6:
+- patch 1: Apply Krzysztof's tag.
+- patch 2: Adjust enum to alphabetical order.
+- Link to v5: https://lore.kernel.org/r/20250422-sfg-spi-v5-0-c7f6554a94a0@gmail.com
+
+Changes in v5:
+- patch 1: New patch merges all vendors fall back to snps,dw-apb-ssi into one entry
+- Link to v4: https://lore.kernel.org/r/20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com
+
+Changes in v4:
+- Adjust the order of spi nodes.
+- Place the binding after Renesas.
+- Fix the description issues of patches.
+- Link to v3: https://lore.kernel.org/r/20250313-sfg-spi-v3-0-e686427314b2@gmail.com
+
+Changes in v3:
+- Remove the spi status on sg2042-milkv-pioneer board.
+- Remove clock GATE_CLK_SYSDMA_AXI from spi. [3]
+- Create dt-binding of compatible property.
+- Replace the general compatible property with SoC-specific in dts.
+- Link to v2: https://lore.kernel.org/r/20250228-sfg-spi-v2-1-8bbf23b85d0e@gmail.com
+
+Changes in v2:
+- Rebase v1 to sophgo/master(github.com/sophgo/linux.git).
+- Order properties in device node.
+- Remove unevaluated properties `clock-frequency`.
+- Set default status to disable.
+- Link to v1: https://lore.kernel.org/r/20250228-sfg-spi-v1-1-b989aed94911@gmail.com
+
+Link: https://github.com/sophgo/sophgo-doc/blob/main/SG2042/TRM/source/SPI.rst [1]
+Link:
+https://lore.kernel.org/all/CAKyUbwXqg13Ho7QHw8vV2W6OcObphwhQ8HUrZMDNBxrVxLmdug@mail.gmail.com/
+[2]
+Link: https://github.com/sophgo/sophgo-doc/blob/main/SG2042/TRM/source/clock.rst#clock-tree [3]
+
+---
+Zixian Zeng (3):
+      spi: dt-bindings: snps,dw-apb-ssi: Merge duplicate compatible entry
+      spi: dt-bindings: snps,dw-apb-ssi: Add compatible for SOPHGO SG2042 SoC
+      riscv: sophgo: dts: Add spi controller for SG2042
+
+ .../devicetree/bindings/spi/snps,dw-apb-ssi.yaml   | 19 ++++++----------
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 26 ++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 12 deletions(-)
+---
+base-commit: 8ffd015db85fea3e15a77027fda6c02ced4d2444
+change-id: 20250228-sfg-spi-e3f2aeca09ab
+
+Best regards,
+-- 
+Zixian Zeng <sycamoremoon376@gmail.com>
+
 
