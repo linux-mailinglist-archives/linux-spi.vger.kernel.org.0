@@ -1,78 +1,79 @@
-Return-Path: <linux-spi+bounces-7787-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7788-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B29A9FB7F
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Apr 2025 23:05:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54549A9FB85
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Apr 2025 23:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 268771A87439
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Apr 2025 21:05:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EA973BC5EF
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Apr 2025 21:05:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF25F20E034;
-	Mon, 28 Apr 2025 20:59:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0890620F066;
+	Mon, 28 Apr 2025 20:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Doiy4D3q"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="DmLOTPdy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6810F205519
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3258920E021
 	for <linux-spi@vger.kernel.org>; Mon, 28 Apr 2025 20:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745873985; cv=none; b=tLUcMdhxLd3++nLrsOpveQePgJWPt1kYvpbJPE/c01kEAtAQcDuq/NuejL3tt5qi7NhuOhSsR3lAgoEe08V7ZPjn1rWHUVyyLsq5QbmN1ky0mE9xwahVzXPIEZryEQnpPKmxh6qKmKDsFu6ewt4B6nAmYlMXQ+jW2SsDxEVMra0=
+	t=1745873986; cv=none; b=L83V/8bHE9KV/1aPrB+d/O6b1smGssluacEf6l+OurspdEw2bUYe8MEmK4lXfsCvmmdU8m0P0hlhU3yJkCTy7jrxCJjOps879ouiPL87yby6iXBYraXVEWRaSto6kUUHPe+oK1K+EP4pHE4CaP6LeWCXBzwBHteuvjqSavR7mP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745873985; c=relaxed/simple;
-	bh=QvUul7P7AsGMFv4R3G/+ROuDAPMlgtEDwetlk7UIGB0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eTKS6aQbPSpqrVedfQ/I+NsiTUvehBR7qG71xyH7KClFlHGWgqERKX71yNE01WoqXAncR1taIGAOTF/+LHP4FqoykTyYZdb3J8xiRwZrZyzaIdI9m1qDUugvhE1ZyvGyptDsdRFvyMRW1644pkVlI2JsiPKTZ7EAZUnQLa4R0hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Doiy4D3q; arc=none smtp.client-ip=209.85.210.43
+	s=arc-20240116; t=1745873986; c=relaxed/simple;
+	bh=4YUyAmqj6DMqtc0zwouOnq7KPjPXOMqMgSZciQQWnro=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=l7ML8fBUKq6QjtQqSkS5fupWweIYOCnXntSgGTH4dKWGVWa1iGbP/XobVxFi0ABt/JGFM6GeggFzit1PnppbN4py182ocSSGSAsuNqQW9imOa4SP49kWoXKsjU0mYUqNH25+wQtxwXMqRwZZ9++dYmsgxlY59CJZ4H82V8yi7C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=DmLOTPdy; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-72bc3987a05so3029358a34.1
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7301c227512so3155896a34.2
         for <linux-spi@vger.kernel.org>; Mon, 28 Apr 2025 13:59:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1745873982; x=1746478782; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=y2EIqTs1TgX6bm49NLj9s9Ql9X7BAhggXRPkJc6829s=;
-        b=Doiy4D3q6on6By+MY3bOL09b5mlTh1E4wRn3DWh8Q1gv4PUpuThtmYh+H9uVbBGXgH
-         HOs8aKjA1ILNQ+5wwr+we2LKEmhHMR5gRcHa/+yfai4HW/Hsq4VdjrOO5qtwwu/uOsOC
-         m7fnQREJBEh/AKM0uFQOpBHcN+EK5JaRXSZbZvrQhFCK+sr3nHcrhQE1Q5/ac7v1A5hA
-         KVzngIGrCyPHloiNCVBqpmVsTtBcImyMs/7YGpjvW2jzIRMkLeOiJd6FqcFJK9VrHR0j
-         /VEjLaLhrgRrt2+5KbG9InnFw6yiMIuoP8iulR8DiHWeab2ysnHBj5dP6iuLyTi14+Yj
-         UiYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745873982; x=1746478782;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1745873983; x=1746478783; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=y2EIqTs1TgX6bm49NLj9s9Ql9X7BAhggXRPkJc6829s=;
-        b=cw88r69LDi14a2MfPsexdwEv+NWPskKmPuxsQOWLgXxDqYf7TrnSoL4w9XyyJcYHZt
-         olXt1Bmm5Aks6xA09hqkmmhlTI05RWNom//sB77sAiByNF4JpWGKoIeavTiDtmaPoY9A
-         nr1ehj51Tqx+0y1E1JmzxgTr6m8vBW+3jzELuX+tcOQoJf44mchIyqmtYPmGcp+H69RD
-         8iRXEC2PZnSiMOydTfwQVVQRx/8pAlsQ8K4xCROf8ko3IJKXBTyuoU0O4WitB2I1NG8d
-         g1joGLu1fKIJowUu4XwG9R7Zny9jsboMsKLB2yHXfXaTbWNRoPuWU7V31GlC/yYYysWy
-         vKqg==
-X-Gm-Message-State: AOJu0YwgosxecF8bz7ZKfbL5TYziJ9ptZm2bEO8X78dTp71+WiPFaYuz
-	G7g8i8LFSiIRw+N3qXi5k+AitIqnRsuEMKbf0rt2cl+a1rTXXWMEa7TLEykHljc=
-X-Gm-Gg: ASbGncviFaFFE77Gu6Ut8pR0y7RZoYVdhCnCFEglDuve9RnPuDTSfyfgndKsAw56uGk
-	I0hOvu+Fbjhxh9ZgSso+2BRKpQnquf8Za0/13s95znRCM8LusgDwdn0nqCYTQxRHScCzsP+Rh0P
-	p5PJKIeIodSnf7XunErptIGi7T51sHGI/rCRvv/FvgZp5E9tDxUOup2+SOOvaRdZ6GTnmYE6Utp
-	+j4/IJ/DPHJLER6Kcjr/JOqWpSBB7MQgQnWm2kj/bhiRorJCUc6RP9YixsWXqPJUfu0GU6JS2DK
-	eAMJXBd5/QAu0pFXyucbG+UogZtwX/2xtiFIgSMFohQScH0=
-X-Google-Smtp-Source: AGHT+IHzkS6dTmYI2nXJFRjdvYktsXRp0acyZXyKq5290XGI313oJ5apKfMQaKbv9asJ/o2fv3/mzg==
-X-Received: by 2002:a05:6830:6888:b0:72b:974f:de49 with SMTP id 46e09a7af769-730898ef2dbmr386791a34.7.1745873982408;
-        Mon, 28 Apr 2025 13:59:42 -0700 (PDT)
+        bh=+6lQOjzQQhFPGZyqHYohzhwr3/IzfWMuRpfSMF+bnRg=;
+        b=DmLOTPdyuKxtpEVOax4fJuIRfwwjBMl9eKm7afA9mQiBB6TF9XtTm4wUHskbQQ1Uks
+         c4PgsNZ1E11eRr7xb+mhiQQj5WStadXiJKNJCI22gG+wAWy8EitEzS7XFgmrPNyu6t5v
+         RiI+6ubi942OAfsLFJFJ7op/WG57P8XEGn89VZCpJV5oBkHOC4opJk+1g22nvQ87Enju
+         XAnQpar2yFWU5bksr9G+WJfc/2uiGhJVDvTB2BS+6CpZCeBL8cWMof1g4nt1UKw6jI2r
+         qd83C0Sha8AbkihvtQt1RE/C3TRRHrdufrRz+Lqws5cF9BftUX+FYwhby4KoTVSDAJyT
+         ysCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745873983; x=1746478783;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+6lQOjzQQhFPGZyqHYohzhwr3/IzfWMuRpfSMF+bnRg=;
+        b=UBKxlVF995cxUV+nJLDmn+qIFVvJrym8ihbdeCSUV8edUbDq6Qtlo2GX9tjYrFUz4b
+         P7PBQ9/H6YamI9Y5EWaUafYDox/c+22gxOu2yco/UTl0DICve8mPwz0uo46yY5w5EJNS
+         AltACu1sQtiCOiIIJMiQUzH5hdrnsjSMEwSihx5/7Z6Vzy8Dim4Uvbgh09JHfvB3RK8D
+         VrfwtI0OvQFcLK7CLtnrFKrAUrW81iB5/108SqaHA1tJN6aIwAdwJvcXvfv0gCbk08Dw
+         shbQmm5oirVTx3Ba6ovk2LiGiqrSkWwTDXW0zZ/yV+b1gy1R8LI1sW9wssfLSDOTh8lw
+         Iukw==
+X-Gm-Message-State: AOJu0YxRwVm9M5qKMkAjy3KHDWlfX1eYEZA1VYCe175Mwby7Omyr/f3L
+	a1vFY8I/L/YZSnLkI9vvAnKbBGW1/9iS9eYdv9UwgM/UjO1ZFHAOi1B6SpK0V6Q=
+X-Gm-Gg: ASbGncsG41ugFeoqW5greYfqLsCOQ4NRiMOFg9xDBcK7E44Xd76v5VHXG4GVF3yFzf7
+	6Rniow5jrzKcRPeKpLP/54nfC7YqIG3Y6cAL1xGeMeOa3pEtSNJs1H66KOjVkDMe7KU0+uz1xdE
+	TAHZV5NOCtgCU0aLuZ8rFBry8XAVKBJvxgzg0L9pLCS7el1RPV+HaWUvUCX0WfehXIL/7s+4JI1
+	RLro59ICf/STAUBVc9x+0khpnkETFl/5IZbnZmVTZHf63iHBm1e7YdXpHpBZtxKRWFgbaTzv+O3
+	l70Ga95mGF3T6h6pdKFdMA2VayFU9kpzGzf5FlE979NEX14=
+X-Google-Smtp-Source: AGHT+IHlJSQkB9+ichJ14rfahl9hWPuKPe33valnFBNvz69hHak5mbInhbEyboqZmxSs35P3xykTfg==
+X-Received: by 2002:a05:6830:6406:b0:72b:9316:d596 with SMTP id 46e09a7af769-7308a4f129amr197220a34.3.1745873983137;
+        Mon, 28 Apr 2025 13:59:43 -0700 (PDT)
 Received: from [127.0.1.1] ([2600:8803:e7e4:1d00:cff6:9ed0:6e45:1ff9])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7304f056ed8sm1907614a34.0.2025.04.28.13.59.40
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7304f056ed8sm1907614a34.0.2025.04.28.13.59.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Apr 2025 13:59:41 -0700 (PDT)
+        Mon, 28 Apr 2025 13:59:42 -0700 (PDT)
 From: David Lechner <dlechner@baylibre.com>
-Subject: [PATCH 0/4] spi: axi-spi-engine: offload instruction optimization
-Date: Mon, 28 Apr 2025 15:58:55 -0500
-Message-Id: <20250428-adi-main-v1-0-4b8a1b88a212@baylibre.com>
+Date: Mon, 28 Apr 2025 15:58:56 -0500
+Subject: [PATCH 1/4] spi: axi-spi-engine: wait for completion in setup
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,56 +82,82 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAA/sD2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDY2ND3cSUTN3cxMw8XRMzCzPjxOS0ZFMTAyWg8oKi1LTMCrBR0bG1tQC
- 9orVsWgAAAA==
-X-Change-ID: 20250331-adi-main-46863acfc540
+Message-Id: <20250428-adi-main-v1-1-4b8a1b88a212@baylibre.com>
+References: <20250428-adi-main-v1-0-4b8a1b88a212@baylibre.com>
+In-Reply-To: <20250428-adi-main-v1-0-4b8a1b88a212@baylibre.com>
 To: Michael Hennerich <michael.hennerich@analog.com>, 
  =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
  Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  David Lechner <dlechner@baylibre.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1361; i=dlechner@baylibre.com;
- h=from:subject:message-id; bh=QvUul7P7AsGMFv4R3G/+ROuDAPMlgtEDwetlk7UIGB0=;
- b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBoD+wYlIGLHSGHsasichpx7lAD1+EteZmTn+Bwi
- JfGOdspmNmJATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaA/sGAAKCRDCzCAB/wGP
- wOroB/4j4xjnCOzRdziE0l83g7H8bQ3H/T3MB66sbUo/gUuWXjqcGWAchp215k5G8Dn3ugt2Xbk
- ElDtuHGiYuC5o5T8mEdcrTVZ9VTj79hYDgPzy/NPBiiJPjHxGaC0OhhS7F9AeszxpZu/zsCA256
- x+Q5iw9eKjL9GFJjqovqMKoMBDhivEJ6/U22HJQlpoagHTZm0cLoWlEbWDmFgy5rwfhVwsiTPwI
- U6rLa+vAWetGKYoNwjkAZjzrsBoVni+9Aqod9RnSmX6ww5s9Ki/0HlxuZE9rZ2V+t37aCAUfcK4
- oXqKuo0JkPTsyaQdsdpJmdS//X9FWNByT53EOyK9Gom/y/1v
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2117; i=dlechner@baylibre.com;
+ h=from:subject:message-id; bh=4YUyAmqj6DMqtc0zwouOnq7KPjPXOMqMgSZciQQWnro=;
+ b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBoD+wgikM7d41wI70h43Y6kTnzcebvjLzmaVj/T
+ q/8VSAwnR6JATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaA/sIAAKCRDCzCAB/wGP
+ wAIsCACO6ZHobVgzjDmekcnGZALCIK/EXWkkoE/NMYAc7xb0Ud4owkNWJTHEKw1QP5B4mGCN+hi
+ ZrWj/rkiCoOQb1itABa0a5M62SluKm/saalgejkAAwDqrIk4it7PBc3zgBvYdTr47Mo+sUKLOmX
+ 3WaZim/Q8BPMCUpl5uvA8IJT+GKvPYjxsxkNjWkd748tfBc7St6kZ+G7m7UQ1DuvmVHqnPGv+vZ
+ lcfFY3EkihtaEb/QFIeQfgMSVTGDVY4xxc9lK3n/MxuJmskVNzSbmAsVEf4ty5j3YeiL95E/Mng
+ gweqI4hh0GQTtEoS64lFtIN3NCbuCM6vVNGNK06Dws4SHu6X
 X-Developer-Key: i=dlechner@baylibre.com; a=openpgp;
  fpr=8A73D82A6A1F509907F373881F8AF88C82F77C03
 
-In order to achieve a 4 MSPS rate on a 16-bit ADC with a 80 MHz SCLK
-using the SPI offload feature of the AXI SPI Engine, we need to shave
-off some time that is spent executing unnecessary instructions. There
-are a few one-time setup instructions that can be moved so that they
-execute only once when the SPI offload trigger is enabled rather than
-repeating each time the offload is triggered. Additionally, a recent
-change to the IP block allows dropping the SYNC instruction completely.
-With these changes, we are left with only the 3 instructions that are
-needed to to assert CS, transfer the data, and deassert CS. This makes
-3 + 16 * 12.5 ns = 237.5 ns < 250 ns which is comfortably within the
-available time period.
+Add a polling wait for SPI instruction execution to complete in the
+spi_engine_setup() function. In practice, these instructions complete
+in a few 10s of nanoseconds, so we never ran into any race conditions,
+but it is good practice to wait for the completion of the SPI engine
+instructions before returning from the setup function.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
-David Lechner (4):
-      spi: axi-spi-engine: wait for completion in setup
-      spi: axi-spi-engine: don't repeat mode config for offload
-      spi: axi-spi-engine: optimize bits_per_word for offload
-      spi: axi-spi-engine: omit SYNC from offload instructions
+ drivers/spi/spi-axi-spi-engine.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
- drivers/spi/spi-axi-spi-engine.c | 91 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 85 insertions(+), 6 deletions(-)
----
-base-commit: aba9c2fee9598d797034ffd289b0da770d9119e8
-change-id: 20250331-adi-main-46863acfc540
+diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
+index da9840957778579dad3286f493abad87ad8a3bfc..d040deffa9bb9bdcb67bcc8af0a1cfad2e4f6041 100644
+--- a/drivers/spi/spi-axi-spi-engine.c
++++ b/drivers/spi/spi-axi-spi-engine.c
+@@ -14,6 +14,7 @@
+ #include <linux/fpga/adi-axi-common.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/of.h>
+ #include <linux/module.h>
+ #include <linux/overflow.h>
+@@ -739,12 +740,16 @@ static int spi_engine_setup(struct spi_device *device)
+ {
+ 	struct spi_controller *host = device->controller;
+ 	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
++	unsigned int reg;
+ 
+ 	if (device->mode & SPI_CS_HIGH)
+ 		spi_engine->cs_inv |= BIT(spi_get_chipselect(device, 0));
+ 	else
+ 		spi_engine->cs_inv &= ~BIT(spi_get_chipselect(device, 0));
+ 
++	writel_relaxed(SPI_ENGINE_CMD_SYNC(0),
++		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
++
+ 	writel_relaxed(SPI_ENGINE_CMD_CS_INV(spi_engine->cs_inv),
+ 		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
+ 
+@@ -755,7 +760,11 @@ static int spi_engine_setup(struct spi_device *device)
+ 	writel_relaxed(SPI_ENGINE_CMD_ASSERT(0, 0xff),
+ 		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
+ 
+-	return 0;
++	writel_relaxed(SPI_ENGINE_CMD_SYNC(1),
++		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
++
++	return readl_relaxed_poll_timeout(spi_engine->base + SPI_ENGINE_REG_SYNC_ID,
++					  reg, reg == 1, 1, 1000);
+ }
+ 
+ static int spi_engine_transfer_one_message(struct spi_controller *host,
 
-Best regards,
 -- 
-David Lechner <dlechner@baylibre.com>
+2.43.0
 
 
