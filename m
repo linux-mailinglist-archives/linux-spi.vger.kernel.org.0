@@ -1,140 +1,109 @@
-Return-Path: <linux-spi+bounces-7797-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7798-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B113AA085A
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Apr 2025 12:21:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08B9CAA0944
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Apr 2025 13:09:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FDC24612F1
-	for <lists+linux-spi@lfdr.de>; Tue, 29 Apr 2025 10:21:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7870F171FCF
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Apr 2025 11:09:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6827129DB6C;
-	Tue, 29 Apr 2025 10:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818272C1089;
+	Tue, 29 Apr 2025 11:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dQ9JAecL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJoNtR21"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C954E1DF73C;
-	Tue, 29 Apr 2025 10:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54DAA1E766F;
+	Tue, 29 Apr 2025 11:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745922064; cv=none; b=PVqxIZVW8DX8bD3SUpEyruiLTuPu/KxVMOKNV/CY1HNhKGS5t2RJCB0NOjcSftxe3DU84Rk6+EtjylKevaMpEJDftsa/7RaPKXAPkS3NcjUGTBpLx3lH+0P5DVaT29DLqAtGsTyx0/U3zMEy0Ssm3gMqIGphlhsZa9VovRtPI+w=
+	t=1745924944; cv=none; b=MBDkaIBxHtL6JnsJBaeNf6UaLbzU48AWxlhhU66+YJ2n9n0c6yG8V98bBCFqKvoRuz/LBZSjXbAvMFYX8mSNlCIARdWMiujjMJey7opeJwNdSubaBpH77S8fWM1SZvnDc1isk+iBhsrXwREtS7Lc09IvH+AMsTXJdXSiyBccL40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745922064; c=relaxed/simple;
-	bh=uR6VaioCimeVIQ8bNRlrgSUX6z+R8FlO4/2NaftC328=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=i8/7j1y+xf8/SO5zhP391qbyGGnAZGxi0/tdqzRhjpl6G1FPbXCC62ODs6R0Nzdkckamz1m748oaSSf4ldsr83TmC2Z9WlyVzxLPcuNyLrLZ3VSOapz0fuKqnqAVwpvkDut7PA2UO/+eA2rjRNWtGRH+PQzwI5T17E/fS9iAWYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dQ9JAecL; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53T9rPq3015584;
-	Tue, 29 Apr 2025 10:20:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	EIbRRhBoADcI+1rAWz3pn4vq2fzm9cFIBshsTy1XdCw=; b=dQ9JAecLAzkwoqc9
-	q7DDZNAH3aXnJXTq0Wws6gnWoDqsVzo3JMIDQkdr2mMzg8yi9/DxCK4bqgU5QPYA
-	x+3454539bvNAVxXTC37HpX95gpu7LdBuFdrUTCCZFvbOPlvIbI07A0l/0XjqL/R
-	oMkMtVslfxTBc2/xqQpEL8K5Ywb8g4Wc4F7F34OhSFn2uBzeShi2w6yHbdzP9n/Y
-	R5JZCyF8CBCgSYleKqu25XXvmTWschb802jsZkpmZstQkyDHeT+hF7ck4mMGa6YY
-	ROZs53EU0zNEq+Kyr9yL2n514wqNq0pkIqFhMifFAYmBSo5XTbqYNuMlM9QgCBb7
-	g1tAtg==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 468qjwv4kx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Apr 2025 10:20:50 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 53TAKbHT026640
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Apr 2025 10:20:37 GMT
-Received: from [10.151.36.30] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 29 Apr
- 2025 03:20:34 -0700
-Message-ID: <ab24fa96-8c2a-8be3-bcb2-f31e9e6f1ec6@quicinc.com>
-Date: Tue, 29 Apr 2025 15:50:31 +0530
+	s=arc-20240116; t=1745924944; c=relaxed/simple;
+	bh=6W5bZ7kV+SEAo1aKDYzV8iQ9Oc96d7635w7XhaN2yN0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FGu4VDmrytwEsR2HqvbA4TMvZJTW+TYlaM/gKXpklfrU0xkcZFA+DJAL5WXHxUI/91cOngSfggMxf5LiYoclYxpi+Y1biuzwORtz0vyAwdz+mNhShdr9SSMTRe7/AEMy+CRxSRZe5Tb6VP6mDVV75Osx0SYUHPF/ai61KxYK9/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJoNtR21; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0FECC4AF0C;
+	Tue, 29 Apr 2025 11:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745924943;
+	bh=6W5bZ7kV+SEAo1aKDYzV8iQ9Oc96d7635w7XhaN2yN0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kJoNtR21vvtiSK5I4AhujhMcNV+jG3JNu8FI7oxh5yfbV+ZGNOJAcf70SZ6ZSbSSh
+	 WBA6V6p0QtkKVHNdfpf78MPtWIqpmwUBJlYJTzrZvhAcslEg+Ok3J8Th6QnSWh8qvV
+	 10U4NKBGv5e21OLZCs4VfN9DALwLzye40muCMeiO6cNaIXV7O6k77LyqZA0oBKafXN
+	 qVziuIj7I6gsva59f529qRXh9gygYQYEzDjUdqla68igWIwRnbbirGlzXeO2cbCs9r
+	 PYgmQ9Ww/z9N3j3sDgyS4MQc7ykvmUy+DCcAa6TahzHBHr9YBfpaSxLoPgOHYximNo
+	 7L0asRTv1pDAg==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2da3c5729fcso646430fac.0;
+        Tue, 29 Apr 2025 04:09:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUHV1BWex9W/CZ/9MRrEIffWgutpHrgPtD8P1h+dEj+d4O+kaHn1dzYqXjjipIKSigvIfGmVwVZ+8mjq10=@vger.kernel.org, AJvYcCUrGPX+pqDFJPv5is1z9q+cfizHJFIgKuiXKKk0X0u+YT8TmZDOmHOIA9u49UK41KgoQxyK05ydyOU=@vger.kernel.org, AJvYcCWcmwdSjP/HAgry7FvLnBMoWffnohSwJpGsBXfjjNbWYIKRXwxXzVHZbcskzac9AqDJBh7OHEwUSH4T@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7k3Qc2V1mVq9G+g2wWzU7j7iut1GSOJY11TBdd56oBFVUgGkR
+	tgj3AVtPDUX0UQ0rRzyqCMuQiDmTR1AthS5pIwBNY145nO+HKJA5iCRGR6oQasoCeOKzs2Wco0n
+	Y6TnK2QEFyTkKBwMQXxLAL6a7QWw=
+X-Google-Smtp-Source: AGHT+IFY4i+B3pR5hn7A2kqkAlnBnbb/HDJe+RY21qXj4tISAk0tiDxufLtwdDVT//wBwk48KcRpyo3+ep5C+qD0nl0=
+X-Received: by 2002:a05:6871:2886:b0:2c3:f8e3:bdb9 with SMTP id
+ 586e51a60fabf-2da486a7a9amr1047877fac.28.1745924943157; Tue, 29 Apr 2025
+ 04:09:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] spi: spi-qpic-snand: fix NAND_READ_LOCATION_2 register
- handling
-Content-Language: en-US
-To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>,
-        "Sricharan Ramabadhran" <quic_srichara@quicinc.com>,
-        Varadarajan Narayanan
-	<quic_varada@quicinc.com>
-CC: <linux-spi@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20250428-qpic-snand-readloc2-fix-v1-1-50ce0877ff72@gmail.com>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <20250428-qpic-snand-readloc2-fix-v1-1-50ce0877ff72@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cheBpp22EDXEz9QtfgNkn56uxQHyxvKc
-X-Proofpoint-GUID: cheBpp22EDXEz9QtfgNkn56uxQHyxvKc
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI5MDA3NyBTYWx0ZWRfX3RVWVafmDu3r aiVKwtepLBdc4DmaFd1072webve7JoHqsJolLlzIj0+M9wu9uHNwimZ4LOtrNU7OSMq4V04CIqS pPiXV9fv52MDG5A11domMkWxenTTj2j+kFBJ/ZUeNibFyhySO34l+ojWpYGkeuwb5VGelHSXz7f
- YGcZ5UjXHRwPtSM8X3tp0F7FehEAc3JLUxJd2pfdI1dvSUhGn0KtUoSWqYiNXt2y1H4/TLqqCmb YbWBXDB9jy/kVURRSNquO1IUNvVBhfoCNKbloJBdTpQ8Bnt1/BDs80O7GpMFwR4J8Amk6KUOHy3 7jIaJrnP8ADYFSIMtb2jQpdFFylfVF9BlqFeb0Re/rLbYlx1NhnM9Rwm3LVAUYIcyV+2pDWnYVw
- TrIRhD1ZRelo9FZmbgI1G09Tz6D9sWRODhSjSKALusW7vff/S7iAyPd1eYy/mddiwWTHWfAQ
-X-Authority-Analysis: v=2.4 cv=c/urQQ9l c=1 sm=1 tr=0 ts=6810a802 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=pGLkceISAAAA:8 a=COk6AnOGAAAA:8 a=2CvQLFO0oMS28NyxHQUA:9
- a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-29_03,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=995
- phishscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0
- clxscore=1015 spamscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504290077
+References: <20250327195928.680771-2-csokas.bence@prolan.hu>
+ <20250327195928.680771-3-csokas.bence@prolan.hu> <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
+ <b38b27d4-c3d3-450c-8634-2e07f393a76c@prolan.hu>
+In-Reply-To: <b38b27d4-c3d3-450c-8634-2e07f393a76c@prolan.hu>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 29 Apr 2025 13:08:51 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
+X-Gm-Features: ATxdqUES0FmjmyEqrlOpgBYB8t6ofrTgX8zGFUf5SN2x5tU_vCgg6l81l9wKEDc
+Message-ID: <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
+To: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Varshini Rajendran <varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, Len Brown <len.brown@intel.com>, 
+	Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexander Dahl <ada@thorsis.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Pavel Machek <pavel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Apr 28, 2025 at 10:44=E2=80=AFAM Cs=C3=B3k=C3=A1s Bence <csokas.ben=
+ce@prolan.hu> wrote:
+>
+> Hi,
+>
+> On 2025. 04. 09. 19:43, Rafael J. Wysocki wrote:
+> > On Thu, Mar 27, 2025 at 8:59=E2=80=AFPM Bence Cs=C3=B3k=C3=A1s <csokas.=
+bence@prolan.hu> wrote:
+> >>
+> >> Add `devm_pm_runtime_set_active_enabled()` and
+> >> `devm_pm_runtime_get_noresume()` for simplifying common cases in drive=
+rs.
+> >>
+> >> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
+> >
+> > I can apply this one alone if you want me to do that, but I could also
+> > apply the other patch in the series if it got an ACK from the driver
+> > maintainer.
+>
+> Did this end up being applied?
 
+Just applied as 6.16 material, I'll let you know when the tag to pull
+from is ready.
 
-On 4/28/2025 1:00 PM, Gabor Juhos wrote:
-> The precomputed value for the NAND_READ_LOCATION_2 register should be
-> stored in 'snandc->regs->read_location2'.
-> 
-> Fix the qcom_spi_set_read_loc_first() function accordingly.
-> 
-> Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
-> ---
->   drivers/spi/spi-qpic-snand.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-> index ae32c452d0bcf852b69b76e595f3588ea7e1a670..94948c8781e83f30650e5fbac56897daf5eb3c2c 100644
-> --- a/drivers/spi/spi-qpic-snand.c
-> +++ b/drivers/spi/spi-qpic-snand.c
-> @@ -142,7 +142,7 @@ static void qcom_spi_set_read_loc_first(struct qcom_nand_controller *snandc,
->   	else if (reg == NAND_READ_LOCATION_1)
->   		snandc->regs->read_location1 = locreg_val;
->   	else if (reg == NAND_READ_LOCATION_2)
-> -		snandc->regs->read_location1 = locreg_val;
-> +		snandc->regs->read_location2 = locreg_val;
->   	else if (reg == NAND_READ_LOCATION_3)
->   		snandc->regs->read_location3 = locreg_val;
->   }
-> 
-> ---
-> base-commit: 15cfe55ec58ace931a73e19e5367598734ceb074
-> change-id: 20250428-qpic-snand-readloc2-fix-bccd07cf26d3
-
-Reviewed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-
-> 
-> Best regards,
+Thanks!
 
