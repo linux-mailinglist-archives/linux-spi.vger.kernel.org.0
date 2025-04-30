@@ -1,70 +1,70 @@
-Return-Path: <linux-spi+bounces-7801-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7802-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E09AA40DB
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 04:13:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0ADAA4134
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 05:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A918C9853F8
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 02:13:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C62D1BC82E4
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 03:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D663B13C9A3;
-	Wed, 30 Apr 2025 02:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE512DC78C;
+	Wed, 30 Apr 2025 03:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b="MNSYsdrk"
+	dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b="ARc/ampw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D950839F4
-	for <linux-spi@vger.kernel.org>; Wed, 30 Apr 2025 02:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5E7BE5E
+	for <linux-spi@vger.kernel.org>; Wed, 30 Apr 2025 03:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745979213; cv=none; b=gNBm3sT0+VKu1wI8F6ydDYvrMYBDwoZrgJaZmgCjm/E/esI2x4eIrA02zudBf9zvEkUfOCYEJpQnfJfkzu/dglFqDASkjNTn6XRI5+u2VN2vKombVt+XtJtQNzV8HnszNEbGjlwTB//4lA4RStCMHeHTQfTPl2T5mcOTPtNmdC4=
+	t=1745982203; cv=none; b=l4oenH/aycpl8tTu7YjZHbaL6Hkv3vfG+vawuDGeIetCbPzcHNCBq2Avjbz1IjSSYHxgI3zgb47XCmu9Imvad8IKGmtSSP4N/yzrp2HlqdmPmdssCzsTPE00xuwWbOQTNmkBCA4cz9bpLIG4ledX3u1RvvAZ8n8FdrJCMnICRPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745979213; c=relaxed/simple;
-	bh=zFZlbFIFgKXluwwz4NSj8L4Sj2ltXBd1M+pTDGo+hdU=;
+	s=arc-20240116; t=1745982203; c=relaxed/simple;
+	bh=hhT0Y/U9PDMlusGDAdwCcKpvrKucv7BGFwbtHtapOl0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OvyGbP62n7Va17yC7ncrdriEIstr7gg6w3njwB6d9toq5ow/a9r9KomrKWrDa69h56zYgVNHbIB4ga3/BQwEqy3o8rJC2xy5REf3aUSa5yOQRejzdH9F9jk4pQPmoX2COplmhRFICS3wv2pfsOif0++Aj3sdOjVR8kkMwen5CfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lessconfused.com; spf=pass smtp.mailfrom=lessconfused.com; dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b=MNSYsdrk; arc=none smtp.client-ip=209.85.216.42
+	 To:Cc:Content-Type; b=G2yPN+Fe6noXYdI4KgquWf6FxlR64lIozLnivdiRjOe4enAiEwjOsGh4h2h4cJn6FzaKWtl4J9dAkM8g2bMDBOBVk1Nt/R/QCeWhXkK56+Q6DaxQKsvaZA1UrbUQbGXxBOINrQ5Dy3yqkh0f0MwSgekbUVmFYqX5DaCcOZq9Ens=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lessconfused.com; spf=pass smtp.mailfrom=lessconfused.com; dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b=ARc/ampw; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lessconfused.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lessconfused.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-301e05b90caso7388111a91.2
-        for <linux-spi@vger.kernel.org>; Tue, 29 Apr 2025 19:13:30 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b07d607dc83so5985843a12.1
+        for <linux-spi@vger.kernel.org>; Tue, 29 Apr 2025 20:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lessconfused.com; s=lessconfused; t=1745979210; x=1746584010; darn=vger.kernel.org;
+        d=lessconfused.com; s=lessconfused; t=1745982200; x=1746587000; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hxQSNWJIpgLL0K345+9EHCJtfozXJ2Yu+qkzD2t1E54=;
-        b=MNSYsdrkS289FScvzD9oq9EigytwUdpUt0OqpCGay6Ams3kys1vv7G16jUDjWh0eUT
-         O2ASnFH2j/aPJsGgsZ2QNd4/Vbyccs8MGOEH8jECiZzcqZKNEM9eksK9TfHxy5PfxSSc
-         v0RRYuQ/pqnzeNlLIi5zvvxWuZ2MXBjc/QBms=
+        bh=FtsFXATNoShqTVkbay8QH27/CZbtOqHUZhXlCbT05hw=;
+        b=ARc/ampwfNpgg7nBq63HiBO3bnLO2NeAcRS7BLPhImI6UpNF+E1SmwvPgilpmXbhTb
+         4+puXrxDvn+MSQDygxLKpkBuJVhkkCLQwxo9gdedyNcYnnH91TKmMyt/5uWW50AacWcv
+         Kr2YBUp26aD7eG1C3PTd4RXMBWnfi9I+1rj+M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745979210; x=1746584010;
+        d=1e100.net; s=20230601; t=1745982200; x=1746587000;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hxQSNWJIpgLL0K345+9EHCJtfozXJ2Yu+qkzD2t1E54=;
-        b=T8OqGWAeQzu5w90umDtRXtDhYDJg662yczEP5JNm6ouZ3gWnUf+Jp0mvu9dqlDNqNG
-         sAr+ZV5pRcrQbMJn2GczPpNoxrAqwsFlWrYD/IxdMzPXtl+9CHe6oEyjat0xIa0M9Ad4
-         4ZfNtkUPWxoVfKDvrhP2YEVDP526wx+mppeqp8hFSg22sQpqlo1eEdx2dePZ+eXhrQv9
-         5+Sf0H6PZX9Pcihw7sDrSk4VO8aVFy71Jf4rLQX30dLKSxRbmfTQTQosTEjnm4gN1ONV
-         WlY5SqizZLJHGNVuJIFsaTWioZ3QLmWuQ24HRpG8NHz4B3WZzeZU8cEEsCBfEWg5elMI
-         9N/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWMrvBxqjC8o77vM2sx4whKq5fkbqWT6CNHbzAC/HIULlmXfzE7uC5lV3YpbZ/pgRhgC+YZ+VGx6WE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCGAbwGxpAPA5TFpfijN0u4pVfyxXY3W3c4iXYjcBKNQE8pMfr
-	F9URjmBSvV1j90HQmUWWi/iKKpE22rCOMah+EzH5qT76RJIqtUyHTI676xn/ROnMF55qyxeTgIS
-	k1mY3YTpwxrl8DQX9h3QNGjTb0nVZ3clPDWM5KA==
-X-Gm-Gg: ASbGncuVb8BAg+PO96BhV+YNym5MpL4h/iIxAlF+ReNkBzUjK8UG2qeBAT09tFc69lL
-	uHV2RmrsvfpQvXWA9U1JYZ4b7olEdpRayiC0nFysMeZC8epXA8IivtNK4TQAAaw+cAqEWJ+aN1l
-	VlUTLp2jMOjGZ3PN5FPlah0M/QOgiBy2K/iuK+yr6lFdDzelSoCK/sUxQ=
-X-Google-Smtp-Source: AGHT+IFWh6po6oeHM9w2N/xbVzQ8pllPfaIp/ocjh5/n+lZ05a6r7QzsR9e8d0QT+TpFdsiXtNRkoEQTcLTUuUwJQ44=
-X-Received: by 2002:a17:90a:bd97:b0:2ff:6167:e92d with SMTP id
- 98e67ed59e1d1-30a34489514mr915586a91.32.1745979209448; Tue, 29 Apr 2025
- 19:13:29 -0700 (PDT)
+        bh=FtsFXATNoShqTVkbay8QH27/CZbtOqHUZhXlCbT05hw=;
+        b=Ja/avj9UJvDDRpmeGmDF24Mjr1ruAWXmsJ90cwOkMAKKAh1oRpGbuS64sAKj9k5ZJ8
+         THoLBJwCVAlZSZS9bPdcmTOcoeN4bJYldrdc0lFdT5Bslkzk3hVNGB43O5havey7tMUK
+         bYMZvi2oWtxetI6YWxXheXvfe380GHAW1eEFbKXr1IY3zgsq+BIHyxLrzTEXypHI4w7w
+         5DthyJA8UoFvr7XBYlmidZnRpjQIR56KATsoLuBwQ0unKpotqac5h9nodCdLHlhKKuFI
+         MwesR2UGyXZD6wCgELiKspuKSQBn0k75A4ZOPQyK/EmcM2Rvn7WTyPiDsSu1Sz6d8xnF
+         nbBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVdhF80Sw/fjf5Qa4h31RR1Zr+rqeh5Ty54DjMkAjNYNp+gT8TVXGmRcovXfMJKnHfKcEl+G72lvVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVRfRyDzUTZ9w21xZOZoD9Ka3j5ykzyXLtr/+me6OFKDrhMtxH
+	8+qLDIwrHFqFLXoczJ4xHH9DWBFXgvcy2tSflcW1o+J+WVTrrXMyZ6ubMcMV2oEIH8ZiFNFQpze
+	mMUkyxMORC1aycukx5bO8aRZTX+aF/mOGVwxj1A==
+X-Gm-Gg: ASbGncsQX5FkBOXW/jrdYijp6zUT8V95iXhdm4DWlGgR60SfcxZ2S0XvuiBsPIOVkNI
+	0iZXegWSHT32iNwN2BJgf3Q6TCVLHMJixHBtSEQ+xSrqG8oDHL2GoarkD0rPitGw9YAsmyeLuud
+	6LqdgzVaEOZncbMNkdO4Wj1d8r0/lFJP2dc4vSG5gGejbfa97FzjIYPdk=
+X-Google-Smtp-Source: AGHT+IHWYkcIquDI14ZP8nSc+0ia5OdshYR2d5iL7cj8Ucq5COtov48MTjtXrFOaO18tlx5e/iPOZ1TfkjF00Ry6HrM=
+X-Received: by 2002:a17:902:e80c:b0:21f:85af:4bbf with SMTP id
+ d9443c01a7336-22df34d60ebmr23401035ad.20.1745982200362; Tue, 29 Apr 2025
+ 20:03:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -74,9 +74,9 @@ MIME-Version: 1.0
 References: <20250414-spi-dma-v2-1-84bbd92fa469@amlogic.com>
 In-Reply-To: <20250414-spi-dma-v2-1-84bbd92fa469@amlogic.com>
 From: Da Xue <da@lessconfused.com>
-Date: Tue, 29 Apr 2025 22:13:18 -0400
-X-Gm-Features: ATxdqUF1uePmGqw_DHzosv8XmIVsTIOhJnSFRlSHFpTZiilbCy-M7TFAp_71R8M
-Message-ID: <CACdvmAhEXstEBdaiktU4n-R6M6mYiBnSx15ZJfb1FOKGD7Zfaw@mail.gmail.com>
+Date: Tue, 29 Apr 2025 23:03:09 -0400
+X-Gm-Features: ATxdqUHPbISbrbEOxVf_PPZYjEH_HG4hR4i1yA1A-Bal6nglQ_Jfu1FJL1hoW6U
+Message-ID: <CACdvmAheh-nV=nevH6sodZFOwxJzbsPnQJvvEprAd27BaCsSYA@mail.gmail.com>
 Subject: Re: [PATCH v2] spi: meson-spicc: add DMA support
 To: xianwei.zhao@amlogic.com
 Cc: Mark Brown <broonie@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
@@ -162,11 +162,6 @@ the
 > + * preset number of words from RXFIFO, then write them into RX buffer.
 > + * DMA works if the transfer meets the following conditions,
 > + * - 64 bits per word
-
-Just for clarification, DMA can only send 64-bit words due to hardware
-design, right?
-The bit-per-word in spi control register (CONREG) has no effect?
-
 > + * - The transfer length in word must be multiples of the dma_burst_len,=
  and
 > + *   the dma_burst_len should be one of 8,7...2, otherwise, it will be s=
@@ -196,12 +191,10 @@ plit
 > +#define DMA_BURST_COUNT_MAX            0xffff
 > +#define SPI_BURST_LEN_MAX      (DMA_BURST_LEN_DEFAULT * DMA_BURST_COUNT_=
 MAX)
+
+The controller should also specify host->max_transfer_size.
+
 > +
-
-LD_CNTL0 and LD_CNTL1 are not in this datasheet for GXL
-(S805X/S905X/S905D). Do they exist on these SoCs and are not
-documented?
-
 >  #define SPICC_ENH_CTL0 0x38    /* Enhanced Feature */
 >  #define SPICC_ENH_CLK_CS_DELAY_MASK    GENMASK(15, 0)
 >  #define SPICC_ENH_DATARATE_MASK                GENMASK(23, 16)
@@ -473,13 +466,6 @@ imeout)))
 > -                                  SPI_BPW_MASK(24) |
 > -                                  SPI_BPW_MASK(16) |
 > -                                  SPI_BPW_MASK(8);
-
-This should not be removed. SPI_BPW_MASK(64) needs to be added.
-Removing bits_per_word_mask causes other code to assume this is an
-8-bit only controller.
-
-
-
 >         host->flags =3D (SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX)=
 ;
 >         host->min_speed_hz =3D spicc->data->min_speed_hz;
