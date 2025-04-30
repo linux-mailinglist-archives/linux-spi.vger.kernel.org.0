@@ -1,533 +1,235 @@
-Return-Path: <linux-spi+bounces-7804-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7805-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8689FAA4D95
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 15:34:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D48B1AA54AE
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 21:31:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F2FC9A6E53
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 13:33:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E56D37B01CE
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Apr 2025 19:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E702139A2;
-	Wed, 30 Apr 2025 13:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC1319A;
+	Wed, 30 Apr 2025 19:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b="f/UVVlnD"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EInOMRP0";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="aB7mYlde"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A546944C94
-	for <linux-spi@vger.kernel.org>; Wed, 30 Apr 2025 13:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746020040; cv=none; b=Qb0mNZ4QyGMqT5/Mf3HD6nhzF8O29EAf4ZRuQnBYhv4VtpyGpH7v4Mo79+6yzZ1/irbPp5qgFVwjlMU2GU9yV37BFZUZpko3rh56H7Mt4edrKQsO96znrv/jMn8pbgeGqVpWOKJTm/EbAKeRtqRWP5hNGFdBcl+iXFRlWiprN+Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746020040; c=relaxed/simple;
-	bh=fna2DscqG7Uu3tGTDg//dtYjfiuekD0zlhnVfeeuQGs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qLPxFaAKOdCsYdLXNBA9q3ouMU7q0+tWxA996VNsa19mbiggo68Vth8uY5HBIwd1LtUQmEP6C93Z4Fh0nGLphyiJE0sGIaFasOUsggPIGw1YchRF6DP76fDs3hcqaDfqlWDBJtKB9sXC32TGUf47F/LoROb8t2V88KCVhfhS8LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lessconfused.com; spf=pass smtp.mailfrom=lessconfused.com; dkim=pass (1024-bit key) header.d=lessconfused.com header.i=@lessconfused.com header.b=f/UVVlnD; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lessconfused.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lessconfused.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ff6cf448b8so9356587a91.3
-        for <linux-spi@vger.kernel.org>; Wed, 30 Apr 2025 06:33:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42AD63D76;
+	Wed, 30 Apr 2025 19:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746041452; cv=fail; b=NEpM27/EWo9MCoTpgE/KW8cpsnRdDUvMgJmRHKsVxwyWSAZbphSElHzDdiiGByOJumGj7hb6UweG4AoNQRz3wsuZf703EyCmlHDrep3IGg9nJjRAlq5r2ofPud10nrMz9WuVHptACWrpwLs+lVffKkFeRorOBSJ6Kxk71c8VNHw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746041452; c=relaxed/simple;
+	bh=/I75pgRSN7VHpP2rX3tLG3n+8XubxCYqxIq39WFxD4M=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=iRb5oOlREotdrluAw7N7M108IXGHfuu8bKjJpvwn3CzQpt0VXhLDCe7yZYooEeNG1XXxFu9KnOe9TF7KKtNFzcvC0g8owY8Hauqyg1b/UuW/tj9T810WT99Br5QljVryhlGooM5Z1oUBwXJF0RHKbwVPF7EWkkxE9AM44fTTu4s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EInOMRP0; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=aB7mYlde; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53UHttl8008798;
+	Wed, 30 Apr 2025 19:30:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=z+iF3vXQxC+Cu41/0TyeX9USft6A//9va7fdZlkepoE=; b=
+	EInOMRP0/oha4HCzlqow5h3Y9zRg+X0hap8WcxUb8v9XcNs7SK2vzjokECVzkwAJ
+	I+4S8xp3ipJsS1f+Ia9Sux7yraHBXj1TXuSdW3np3MfWsbdQp1uGWiqJTgiu2g3C
+	i7ZNpgWKCd8BiifdqAmR1awC4om6gd3Hbw5uGRWsFV5x0MoMAFpy9zqF0B7I9PtE
+	Mav3dJPiYH5AnObqRGH5v1WFuM27ETq0B/u2Lyy8mEb7rmxjmtHaJKRX274tZgGW
+	XflSoYkVba1+tcBcj3FUwZ9+qEzWJU1GSWDr9ordmb5FWZVMsRAbnUHnQC8tQV9c
+	qhsZmHj+Gi/Hmx1SVjsxrQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46b6ut9y2g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 30 Apr 2025 19:30:41 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 53UIv1R5013788;
+	Wed, 30 Apr 2025 19:30:40 GMT
+Received: from cy4pr05cu001.outbound.protection.outlook.com (mail-westcentralusazlp17010000.outbound.protection.outlook.com [40.93.6.0])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 468nxbs0kd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 30 Apr 2025 19:30:40 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qoHuKD/Huj2GMojO8LveEGhuIsJB3sJZYO4eDUljcxrqJCCzbAlKRzZJomtYVgblVwDJBpcqm14I7sDIZdgf8WZaa9qWg+1ufWFZWlmwkyXShiJRVcond7tuedZsjrPMXuLV1t1ryqKBltSkHfgPLe40kefOK0wlut2GkdkQa1axDyng8S0GDbb/EP3rvVxeUuxk1lYL0dOMwL5vpT42qUNk1HopFVdE98LPNXd733fw/Hf/eyawApI6nZM+nTpGX3AB8A8RC/GVvMBXFNwP8Tgtto/N16QSiuJb5F29BuQ8cTCCinZn+y9FKxS+ndUYTq9/p/E+/c1AVUs6nXBu8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z+iF3vXQxC+Cu41/0TyeX9USft6A//9va7fdZlkepoE=;
+ b=C2mM0Vq6mHYBFz22dlpxjs+yeLFGBgFcy7VQVyTnP7aAZrSBN8S6HeHxQBHJglgxJv7AB/D37MvjcC9TKH4rVho3kVCGzgWi5FqBJp5ADJsh/htb4UjTWtZgHIxlsyaMIKrYVCc/tngWkhZ8JYX0NyoqOqxcGRS8jtlWmtYvSZqV4JCTLztYWv+VIg9zlA1nOrD/pXgi7q87AS/TmQRJ4rsOkSn5ZkfuYW1ydOtdMxmFjlT0MgCXH6F+uGDqocfTfj3LrVYjMSzf89xq5ljbS2lK6zc2Zi83IPeThD1QFvfv8kUD9P4U20czHlyVYssPo5pGvalsmYkjzhpb+djZmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lessconfused.com; s=lessconfused; t=1746020038; x=1746624838; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ajhOxA0iLtPGZthYkQtI8A6lcJYtYBFoJkVbhPTNhMI=;
-        b=f/UVVlnDgX1aJ55+/OxH1szYIKrMueBKlFtbVZPlkad+uImoCWtRurVmvo26cHmT1J
-         dOesUJRE8CrIdSJq1RHziag8iWEPFI/64BMPd3Oa9hNiyPoCjZkgBnMS9I9/kAPdIiYB
-         yre/LzYg0xKZfEumJT6V1CP4DbWq/Mo0PjTgo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746020038; x=1746624838;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ajhOxA0iLtPGZthYkQtI8A6lcJYtYBFoJkVbhPTNhMI=;
-        b=rX+XIwQvX28qoGh5D2uY5S77AFiYAnyRimdN3byh2Lb7bUcxrgpFAU5VVEOCPa2fQB
-         V9zQP4UKAVoQ0B1Zk331CIQniStI7LlK38DrM2zqhaU79x2A+aIbvw310+qYDV8sCr37
-         6YRhdF8mPO/BmN5uEQfkR5zwVY/NXUBgN0leHSaX4q8JDzIPnzgHlAs69LTzES4gG7Us
-         iUHc2mjVr6khasc5k2br5/KLO0VEpNdT0HwwCgeIJ2Jhgmj5V0znWAg9mK0lZvOHxoeJ
-         gVnlO75M13dc2wkraH/kgNtUvG3qcO0zoWIq5DmEEMwE3QcCdfYXhcHE3+pgBzUlk4pL
-         LR8A==
-X-Forwarded-Encrypted: i=1; AJvYcCW86be+JdfU6jLpIlcp69wVbe4JLl/0QxS1n7IUHjVgyV8wqDe0tGu3q8gJir7CCNUkcWp5xA0Y5Cg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuFO4bMrBHXRVv5gcT7dPYsWFwfoDY4PL4w63GdSjRjcPBUukI
-	ccPEv15HyUguFY4dqpyLy4mREHyt5D89+8j5IS6Mw2wNe1DuSsKotEuVW9t8dnswtsc9GYmXI3H
-	56zBC3+Oi4R+CIEZKgBw+5tYKKj6D/ps3nrOUPUMVxV7twjZOAZ0io5OB
-X-Gm-Gg: ASbGncsbeTGvctYs9T9VfaF4jlM692p3ttR1wKKM3pyVQzPG7RBTHfxG91qloYMXKoN
-	8SiYVLMD6odQlbblrkVqfcC4/FVwY1bUjb14GgDQdVfDw/nBtbDwACl+tNh+ZZfQ/EbWN2VtGuL
-	y9cPRI62dqgMOzjxQnzsXFYKrl1jS1jv8u8nNODKKKAUt6Nso3X6eFOyc=
-X-Google-Smtp-Source: AGHT+IHbzPeyJtSRyKZO2Vl0Bhsgs4DAx2IroFrsEz3RFT0nCQ9OG827L6aMMdnhNikRttLwYZXOzLzgBnKVihMBAyY=
-X-Received: by 2002:a17:90b:584f:b0:2ee:e945:5355 with SMTP id
- 98e67ed59e1d1-30a333020b2mr4073447a91.19.1746020037617; Wed, 30 Apr 2025
- 06:33:57 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z+iF3vXQxC+Cu41/0TyeX9USft6A//9va7fdZlkepoE=;
+ b=aB7mYldeFACmDs2y38kU2ebTStue5cUnA/E8ZepXdVZ9UwK8k9UG7NrCpX4f4C5MVnY2Hlr5s2ojKoGfi6RD7grPXFDwF3SmzK8VaFA0Lft1Z+HK44mPVBOaZXo/z8eRc1zz/yrANnMJNNsyX3tzC/PypLU5p/CWNzf8+cjgHxs=
+Received: from DS7PR10MB5328.namprd10.prod.outlook.com (2603:10b6:5:3a6::12)
+ by CY8PR10MB7217.namprd10.prod.outlook.com (2603:10b6:930:71::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.33; Wed, 30 Apr
+ 2025 19:30:37 +0000
+Received: from DS7PR10MB5328.namprd10.prod.outlook.com
+ ([fe80::ea13:c6c1:9956:b29c]) by DS7PR10MB5328.namprd10.prod.outlook.com
+ ([fe80::ea13:c6c1:9956:b29c%2]) with mapi id 15.20.8678.028; Wed, 30 Apr 2025
+ 19:30:37 +0000
+Message-ID: <17183bc3-0f15-4789-89b8-b4bfbdac5872@oracle.com>
+Date: Thu, 1 May 2025 01:00:30 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] spi: spi-nxp-fspi: enable runtime pm for fspi
+To: Haibo Chen <haibo.chen@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Yogesh Gaur <yogeshgaur.83@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20250428-flexspipatch-v3-0-61d5e8f591bc@nxp.com>
+ <20250428-flexspipatch-v3-2-61d5e8f591bc@nxp.com>
+Content-Language: en-US
+From: ALOK TIWARI <alok.a.tiwari@oracle.com>
+In-Reply-To: <20250428-flexspipatch-v3-2-61d5e8f591bc@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0069.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:153::20) To DS7PR10MB5328.namprd10.prod.outlook.com
+ (2603:10b6:5:3a6::12)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250414-spi-dma-v2-1-84bbd92fa469@amlogic.com>
- <CACdvmAhEXstEBdaiktU4n-R6M6mYiBnSx15ZJfb1FOKGD7Zfaw@mail.gmail.com> <b202538e-5520-48ce-a957-034c0ce7beb1@linaro.org>
-In-Reply-To: <b202538e-5520-48ce-a957-034c0ce7beb1@linaro.org>
-From: Da Xue <da@lessconfused.com>
-Date: Wed, 30 Apr 2025 09:33:46 -0400
-X-Gm-Features: ATxdqUFHYK_nvBUpmd79vpJx2UJLfO_GZ6NdPKb9rFzoLu69sqOWtWG7sM5p8mU
-Message-ID: <CACdvmAhcCUTFBrMkgrnt03iY4=siSiYKU9Ss4M-+HT-h6wphWA@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: meson-spicc: add DMA support
-To: neil.armstrong@linaro.org
-Cc: xianwei.zhao@amlogic.com, Mark Brown <broonie@kernel.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-spi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Sunny Luo <sunny.luo@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR10MB5328:EE_|CY8PR10MB7217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 466d2c3a-fb46-4869-c4a2-08dd881d7bb6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RUN5U2tmU1ZveWFveFNTc0ozOThZaE9WQ2svcHVUQjdOb25Zejd2b2Nsbnhr?=
+ =?utf-8?B?NU5walRRYnU3S2xjSzN4R2tGaHVtUGU1RkVNVUExM2U5b0pucFBaOTNwaFZR?=
+ =?utf-8?B?cGFueWRSU01JZDJJblRIMDVpRHY2N1hzRklSV0htSFBXV1FMNmhTa2ZoYXhR?=
+ =?utf-8?B?T3VkWXpqWkRyN3gzcnBVcUc4MFYxZE0yVXZVN25HVk1xNzBJQ05yalNQRW5F?=
+ =?utf-8?B?TVEzdnh1SGNwUVZudDYwb1VVTEErNmh4L2NsUmRCdkFlN3dQM3JLR2NOY1NW?=
+ =?utf-8?B?aVUyYTlWVEo4elFKaXB3ckppQ3ZIRlY4QzRxUWtmOVBtb0RZeld0UjBrQmlB?=
+ =?utf-8?B?MkZBY2hqU3hTQlh0bXd3cXRQYldOOW94MWpneGg5NHc5R0ZLS3d0QU1kWkxz?=
+ =?utf-8?B?TnpEV1ZhSzFiT1pkcU0wd2RuL1lxdWJ3ZGIvSXhaTzc1bmJURFZpY2NjRGYv?=
+ =?utf-8?B?YWVVL1pSdDVFZlg3anlFUnoyTllCUGhQd1pIa3BFZEV1N2ZiNGdLRVo4Yi9C?=
+ =?utf-8?B?ditpTUpPd0FQeVcwMVNYbC9DM3RCT3V5aTVyZmNtVTZmNEhQQ0RHVXN1L2t0?=
+ =?utf-8?B?cGZSTGUyUW9nNm1GYmF6RkRUU0djS3c0UGpzNjRnR3Q2UUl2dWd0SUFmcjlL?=
+ =?utf-8?B?cWFzSE8zL3pkVmhzdlFWZ29KUWdoeEtnYms4VEF4dUNzdUNVV0I4VWp1Szhu?=
+ =?utf-8?B?RFVFZFFhWGtxdHUzbE44eUFJd2loZ1JWUnpxaGV3SEQvdndKd1FBK0dKRFEw?=
+ =?utf-8?B?WUw2K2NMcGcyL2cvYmhJL1ExREcyZE9xTFBqcWJ1Ui9ha0JGUk44U2I2MDNN?=
+ =?utf-8?B?RXNHMW5qZ1JjUFFkejl5MEVNa2J3dU14cTVoaWd4d1dZR3k0TDZ5dUIwNU1V?=
+ =?utf-8?B?L3d0SUhucVEzOVBIVzZ3NlhrZGdhMVBFZ1RBcWd5OC81TDNzU3RHSG9pQzhB?=
+ =?utf-8?B?TlRaYmZqcExDZnNtMkNLOFpkV3lyTGxUNithU09mZmpYd1EyYXFuR3ZzMlQv?=
+ =?utf-8?B?SGxJd1gzQ3VBS2s1OWF5Mk5pTm9oRVkveDZVcjlETm9NN0Fxc3Vld21mdThN?=
+ =?utf-8?B?Mjl4cVowTUVKc1pnNkhjamN6a2J0a3NoR3ZaQm1GUDkyZTR2dnNOVlpBaVV2?=
+ =?utf-8?B?VU1sbnd2bXlKMThaU2h4VEZaY0k0dTB6cSt3Y2FTbU9Ka2lwMTNUdkJQdmZo?=
+ =?utf-8?B?cDU0ZWR2MUZ3dnZtK0pTMVNLNUxRU1VtVHJhQk9QWEd6NEE1UkRuWHYra1dq?=
+ =?utf-8?B?YmxHZU1Pc0EzcXVNUS9HWlRuWERzUEUxVFYxeGxHU3JPc0ZhdTR4TzIvQmtV?=
+ =?utf-8?B?Ry80UC9vRk9ySFp5N01DNzFxeGhhRG0zSXpvUTd1UC9HN3ZlNlowdUNIMnoz?=
+ =?utf-8?B?QkV2RHRmV3NwR2p4RVIxUDl0WXVoVzFCeERHSTNUNnN3VXZhMGdybUR2a2xJ?=
+ =?utf-8?B?LzcyMW9MdVd0clBKdlpDZytwaUE4MjNMeDB0MG9KakFOTjZDeGIxM2M3bHY4?=
+ =?utf-8?B?SEtTdkJONHVLTE9IVzVGb24yaGVLYmFGTVUrbnppMDZKOEl0ZWR6Ukc3V1Ax?=
+ =?utf-8?B?OGRPcktIVThucXdjL0R0TkZqNGNiT2NnZVo2ZFRnNWtBRTlFS1kvTHFQUXRX?=
+ =?utf-8?B?WUZUL2JIOWI5bWw4NHI5bkdyaURXa0YrbnVCYlNtVXFlVEZMNFduc1VYYjUz?=
+ =?utf-8?B?WEViV1Z5L2F5WngveUcxQlBmZCs1TmNKRWNUVGIxenBtakVwMFZLZFBuSTRa?=
+ =?utf-8?B?TWEvL3M5dmdKYXhDTnkwS1FtbGF5Z0lRSXluRWY5VDBNMWFiVlAyeVRlV1Mx?=
+ =?utf-8?B?bmc5cEt1cTJ6d0RsOUdsTVZXeStaeXpnUGNMY3NMWVJGbDFHTisraHhsTmw3?=
+ =?utf-8?B?dmN6QkZyNGNzdVZmWFVTdGh2eTd6TzlUbkdTV29hWlJmanFkRnViVEgvUkJs?=
+ =?utf-8?Q?ySxjkCSFHnk=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5328.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U1haTmpqSTh2MFRkbU9ERCtFMnFpVkJDd21lNC95RFVIcnhOc1JvSHd6TWEw?=
+ =?utf-8?B?NklXTHQ5eW5IMWxycC8xZ2N3TU9KbmdyVndCLytBMjdEQUgreWdkU0tsSisw?=
+ =?utf-8?B?dy81d2RQTmZUb1Y1dFdPVFR1dEFNbkpvNU9OSUFGclNHUlU3VS94YjV4RjhJ?=
+ =?utf-8?B?a0FHMmZ0RHJhdktBYkhzOHdHWFdUYW0xYy9mS0xseWhyeTY2a292TUpqYmwx?=
+ =?utf-8?B?QytwUnI3QUtZMXAyVFF3dE9pdFlrSDVhZXlOdjVjV1RHbGlKVmM0dkI4bVJH?=
+ =?utf-8?B?NW00RnFXckNQRm1UY2xJYU9PclRVbzNKV21wdUtEbS9DT3V4OWIvalBJQ1hF?=
+ =?utf-8?B?NWJvSnlFVnhjWHJtY04rMUhnaWtvejR3elo3THZHdjFFVks5YjFFNlJnb3BI?=
+ =?utf-8?B?Wmp3Ty9HQjRhVDZaSWpUbkxLaCtOWDhHaU1zamU0VFlsSHYwK3hBVktCb2pQ?=
+ =?utf-8?B?WUlGTE9QSnp6dGhyUmR3VXQ4VSsyelBwOEgraEJJR0UwOFFSSlVITlNMbXFH?=
+ =?utf-8?B?NDBKcjhRZnBwMlROUFZDMG5XYmZTSkw4QUZ5OFVlczJYQzJEdXNvVU1HMUVM?=
+ =?utf-8?B?amNLTWpvRXNHaG9jdHdldmZReTEvNmxwYUprcWk1WXJnT2xLbVg2Y2FKNzVC?=
+ =?utf-8?B?U3RmbDcwb3dLdXdzTUYraGprNG5XeExqd2poRlB2UG8yU0ZiZGNxckpZbXN0?=
+ =?utf-8?B?TVJ6ZWhrUitmWmFDaXVFUzJtM0VZU0d5SFNhN0N6dnRmUkFkeXJldlR5WVpj?=
+ =?utf-8?B?ZjJ0NUI2Qm94UDhMdXNsK2NSVHlOZmlHeXpwN0VQeEFuUmhoMEx2dHA1NWpk?=
+ =?utf-8?B?ZDNSekNqNWt2RmN4QmgxZnc1ZXR1Z05FWXpCL2x3RVdyTGsvaGJEcTRqTVVJ?=
+ =?utf-8?B?WGNMR0YvNElVS2EyZnhISEdGTjFYb1RKZzA0aGRmd1NrMmVEdm80ejczdW9P?=
+ =?utf-8?B?TE5hUmZYRzEyenI1UGsyR2xLRFRIaVhpQ2R0VTNWckpzVUszNlFpZVhSMktj?=
+ =?utf-8?B?cCt0K2xJMUxBamIxWHFtdGJWL2ZYancxU3NKNkRUekdPaVN0aXo0cStGcU16?=
+ =?utf-8?B?ZGxaZFBCQ3c0QWtUVU5qb0JmVk9hYUozcTBWYTFSRCtQbTIzMTZJWUVYbWhN?=
+ =?utf-8?B?RWRaV3RSMklqZWI4WVJZbnlXUmJGMnMzZEJBL2MvU3BlUVpjcnl3QlFGL0JC?=
+ =?utf-8?B?VlZ0NUdNNTVZMnpVMGErOVlrQkxuQXJDQldveXVUaFYwaXhaejdJQlRCM3Vw?=
+ =?utf-8?B?ZWRkVmk1bjlCcnRhMWpLd1hiRGlYRVk1SnA4TDRONFhMelhLNWJJQnR6bkh2?=
+ =?utf-8?B?LzFXYTdsWmZaQ0xiM21DUTNyK0dYV3lYaFZJOTBqdEU1SzMvcnhCd1ZQRGIw?=
+ =?utf-8?B?Y2RRUk9RK2Y4cDQzVEhIMVNpa294L3dxendjVXdMRjNLanRvaTVVK1kxdktp?=
+ =?utf-8?B?U2tBV2w4Rys4QW9OU1h2WDJQejQzaVZxSCtDWEdkUFFCSzhGOTJOYS81eHhW?=
+ =?utf-8?B?L1g5VFJDSlR1Wlc0Z0V4SEpZR3ZrMUVPRTlmOFJKd3pFU2VlRHNxSXJvM2Fa?=
+ =?utf-8?B?eXJ4MEZoRGs1MXBhVjg0dUFYQmtRWnV5Wm5Db0JxTUVOem4yWE1JcGV0RUpn?=
+ =?utf-8?B?M2N5ZVJPcnBuN2VLS1loOGRkS1lyRVNpTlVUZzQvYTlxSVBBSVM3RVFZUENF?=
+ =?utf-8?B?Y2V5T3MxdTkyaWhOREpnT0lHOUtSQzB3THVvTnNHZHU5c3NtYzFRb1JFTUdx?=
+ =?utf-8?B?d2NtZitoKzBDNXpUZTYwQytNcHA0N3RpeTJwVVhUbWpPd0tBeGpyRWxWT3FD?=
+ =?utf-8?B?RkMwMjN3M3hFYTZkMlc1NWhYVWdCSDZXMDlYbTRpSmw1WTBrODNRaVNpSFN6?=
+ =?utf-8?B?c0ZEcHV5NUNBcXhDNHgrSHJ1eFNCVmtWajFNeG1wQzNzRWdXc2JJZjFZV3k1?=
+ =?utf-8?B?VnNXMzhvK0JIMlNGMGl1c0RqOGx2YnBnczluVWlUd1BqcG9UVjRvbnBGck9H?=
+ =?utf-8?B?N292OFhBcUxSYnZUYkdNL0laaDMzRFlzUDI0Y3NYV3gzOTJjZnZqNVZUSXNz?=
+ =?utf-8?B?MDRLeG16T0tReEpiNGVJRXB1em1ibitvVUdPcEx0aEJ1bElKZVZFRkQxSkZp?=
+ =?utf-8?Q?UuKiAAMScnQXcgTqgh+6IrXuW?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	iqB3q/ZVHJu2Zpx0c7TjLk1UDtSV2UWrKlR0H9BPChqRfEhWNqqYxKP4DTA9Vv3xy3cy3QxpxfKzM//kZM7Nyw+OQYBH5o3HqcKcbNr2L6kWaqQgm2+SU7E/Nde3RzwPZHAcLPZDEkt1MCJ75MsMIchGiOz0rfD7T84OA/WS1o5+Ezupyht0o3cOzQHOltkk0TrppzzoT/h2xsKB5QAPhaV8QRpbZYAbFAjymv2p1uuD67O4itT5xndpBqMeTiJ8yq3R4KqsQt1E1o0TpHk1TP9SnGtEoUGfCxUBfhv1jZgK+VZp5AzzBeGI52q40ZMMRnRUKM/N/SoZ9msz5x5/qqPmCGVI+a2EBqSEoniSxRnCyObWlm/Tk4MW1uWSKJaJ8qzZkaVRted+vqmovf+DT1lI4dcbS8ogvyWRvCU3b4k+Yokya/FvrqkYCr486MxR+pJJmCcfBqdAo7dIfCXCNqxDCHYf3rAvLYg8g60qxtiQ4dAMV/cXFJ0U/hds+HH1phJvBOLsxjMZdL6csqPtXM6ydFuXJznvxKNWKCxB+m9oGIdi+QZGe6JDWVhGyhCpNphUZO6q2GzR+BaJz4ps1uLIN648vWnud8m6xAMsDWA=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 466d2c3a-fb46-4869-c4a2-08dd881d7bb6
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5328.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2025 19:30:37.0550
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: chxWrfpqvqx2oeMVl/a0STvKI0XpkMVfWUGARxm5/rFo+uS5SoNKBS5lMNhbNNU+nwlQEENzqPT3fdL0heMxXrEAcvthFAGjdrm7KZOTKz8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB7217
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-30_06,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2504070000
+ definitions=main-2504300143
+X-Proofpoint-GUID: -VVjaaq6_jGbbQ8J8CxH_9AW-6H6l7L-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDE0MyBTYWx0ZWRfX8EZZhTBVdnJ3 BpuJUt43tM3XgAudxiM6IX15l8QuchdZgSfv/sHCKfMpYB6QA7nLzIqdCQZDquIypgJql2vb2dy e1MY4fuaPQ3Q5yfOmyE36hLFaxbuOaiUxwAGuTueUbsEheJ2jBDP5LDXnmLuWT6yHpTVkQpLKu9
+ lNGaXgcs6ils+y53hB4Zno2GTE76T3GbmHENlbSLfJ9es0Xxlt1q71UOMQsFSTnNYCci7XXGXZk /zq180DCN1jHPJirHcjSwFDp+SzUeR0GrZbHlwGvDA8Swbc5Q7azcA44/n0GZWd9ghf12p9JIGg ExY5LuC63Z/yVh+sS9JeYK+I5mRv9JNK5sbPjQVvWujTpUqM+H8jSveCIbOyPq1A+dVZk5rc4zX
+ TECTjwN3ogGEUE3I8YQ2AX9bAXVQvASszsbp7zCQHBkjk/7pVrqkj0Kojfy1Ftbwt4T7lkzC
+X-Authority-Analysis: v=2.4 cv=ZuHtK87G c=1 sm=1 tr=0 ts=68127a61 b=1 cx=c_pps a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
+ a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=GoEa3M9JfhUA:10 a=wcHvg5fK96uDVXhtC5MA:9 a=QEXdDO2ut3YA:10 a=6PhqOlfQFvMA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-ORIG-GUID: -VVjaaq6_jGbbQ8J8CxH_9AW-6H6l7L-
 
-On Wed, Apr 30, 2025 at 3:43=E2=80=AFAM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> On 30/04/2025 04:13, Da Xue wrote:
-> > On Mon, Apr 14, 2025 at 2:30=E2=80=AFAM Xianwei Zhao via B4 Relay
-> > <devnull+xianwei.zhao.amlogic.com@kernel.org> wrote:
-> >>
-> >> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> >>
-> >> Add DMA support for spicc driver.
-> >>
-> >> DMA works if the transfer meets the following conditions:
-> >> 1. 64 bits per word;
-> >> 2. The transfer length must be multiples of the dma_burst_len,
-> >>     and the dma_burst_len should be one of 8,7...2,
-> >>     otherwise, it will be split into several SPI bursts.
-> >>
-> >> Signed-off-by: Sunny Luo <sunny.luo@amlogic.com>
-> >> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> >> ---
-> >> Changes in v2:
-> >> - Make formatting adjustments and code optimizations according to Neil=
-'s suggestions.
-> >> - Remove two special DMA trigger modes that are not fully implemented.
-> >> - Link to v1: https://lore.kernel.org/r/20250408-spi-dma-v1-1-3c38be62=
-c09c@amlogic.com
-> >> ---
-> >>   drivers/spi/spi-meson-spicc.c | 241 ++++++++++++++++++++++++++++++++=
-++++++----
-> >>   1 file changed, 220 insertions(+), 21 deletions(-)
-> >>
-> >> diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spi=
-cc.c
-> >> index df74ad5060f8..6b9137307533 100644
-> >> --- a/drivers/spi/spi-meson-spicc.c
-> >> +++ b/drivers/spi/spi-meson-spicc.c
-> >> @@ -21,18 +21,26 @@
-> >>   #include <linux/interrupt.h>
-> >>   #include <linux/reset.h>
-> >>   #include <linux/pinctrl/consumer.h>
-> >> +#include <linux/dma-mapping.h>
-> >>
-> >>   /*
-> >> - * The Meson SPICC controller could support DMA based transfers, but =
-is not
-> >> - * implemented by the vendor code, and while having the registers doc=
-umentation
-> >> - * it has never worked on the GXL Hardware.
-> >> - * The PIO mode is the only mode implemented, and due to badly design=
-ed HW :
-> >> - * - all transfers are cutted in 16 words burst because the FIFO hang=
-s on
-> >> - *   TX underflow, and there is no TX "Half-Empty" interrupt, so we g=
-o by
-> >> - *   FIFO max size chunk only
-> >> - * - CS management is dumb, and goes UP between every burst, so is re=
-ally a
-> >> - *   "Data Valid" signal than a Chip Select, GPIO link should be used=
- instead
-> >> - *   to have a CS go down over the full transfer
-> >> + * There are two modes for data transmission: PIO and DMA.
-> >> + * When bits_per_word is 8, 16, 24, or 32, data is transferred using =
-PIO mode.
-> >> + * When bits_per_word is 64, DMA mode is used by default.
-> >> + *
-> >> + * DMA achieves a transfer with one or more SPI bursts, each SPI burs=
-t is made
-> >> + * up of one or more DMA bursts. The DMA burst implementation mechani=
-sm is,
-> >> + * For TX, when the number of words in TXFIFO is less than the preset
-> >> + * reading threshold, SPICC starts a reading DMA burst, which reads t=
-he preset
-> >> + * number of words from TX buffer, then writes them into TXFIFO.
-> >> + * For RX, when the number of words in RXFIFO is greater than the pre=
-set
-> >> + * writing threshold, SPICC starts a writing request burst, which rea=
-ds the
-> >> + * preset number of words from RXFIFO, then write them into RX buffer=
-.
-> >> + * DMA works if the transfer meets the following conditions,
-> >> + * - 64 bits per word
-> >
-> > Just for clarification, DMA can only send 64-bit words due to hardware
-> > design, right?
-> > The bit-per-word in spi control register (CONREG) has no effect?
-> >
-> >> + * - The transfer length in word must be multiples of the dma_burst_l=
-en, and
-> >> + *   the dma_burst_len should be one of 8,7...2, otherwise, it will b=
-e split
-> >> + *   into several SPI bursts by this driver
-> >>    */
-> >>
-> >>   #define SPICC_MAX_BURST        128
-> >> @@ -128,6 +136,23 @@
-> >>
-> >>   #define SPICC_DWADDR   0x24    /* Write Address of DMA */
-> >>
-> >> +#define SPICC_LD_CNTL0 0x28
-> >> +#define VSYNC_IRQ_SRC_SELECT           BIT(0)
-> >> +#define DMA_EN_SET_BY_VSYNC            BIT(2)
-> >> +#define XCH_EN_SET_BY_VSYNC            BIT(3)
-> >> +#define DMA_READ_COUNTER_EN            BIT(4)
-> >> +#define DMA_WRITE_COUNTER_EN           BIT(5)
-> >> +#define DMA_RADDR_LOAD_BY_VSYNC                BIT(6)
-> >> +#define DMA_WADDR_LOAD_BY_VSYNC                BIT(7)
-> >> +#define DMA_ADDR_LOAD_FROM_LD_ADDR     BIT(8)
-> >> +
-> >> +#define SPICC_LD_CNTL1 0x2c
-> >> +#define DMA_READ_COUNTER               GENMASK(15, 0)
-> >> +#define DMA_WRITE_COUNTER              GENMASK(31, 16)
-> >> +#define DMA_BURST_LEN_DEFAULT          8
-> >> +#define DMA_BURST_COUNT_MAX            0xffff
-> >> +#define SPI_BURST_LEN_MAX      (DMA_BURST_LEN_DEFAULT * DMA_BURST_COU=
-NT_MAX)
-> >> +
-> >
-> > LD_CNTL0 and LD_CNTL1 are not in this datasheet for GXL
-> > (S805X/S905X/S905D). Do they exist on these SoCs and are not
-> > documented?
-> >
-> >>   #define SPICC_ENH_CTL0 0x38    /* Enhanced Feature */
-> >>   #define SPICC_ENH_CLK_CS_DELAY_MASK    GENMASK(15, 0)
-> >>   #define SPICC_ENH_DATARATE_MASK                GENMASK(23, 16)
-> >> @@ -171,6 +196,9 @@ struct meson_spicc_device {
-> >>          struct pinctrl                  *pinctrl;
-> >>          struct pinctrl_state            *pins_idle_high;
-> >>          struct pinctrl_state            *pins_idle_low;
-> >> +       dma_addr_t                      tx_dma;
-> >> +       dma_addr_t                      rx_dma;
-> >> +       bool                            using_dma;
-> >>   };
-> >>
-> >>   #define pow2_clk_to_spicc(_div) container_of(_div, struct meson_spic=
-c_device, pow2_div)
-> >> @@ -202,6 +230,148 @@ static void meson_spicc_oen_enable(struct meson_=
-spicc_device *spicc)
-> >>          writel_relaxed(conf, spicc->base + SPICC_ENH_CTL0);
-> >>   }
-> >>
-> >> +static int meson_spicc_dma_map(struct meson_spicc_device *spicc,
-> >> +                              struct spi_transfer *t)
-> >> +{
-> >> +       struct device *dev =3D spicc->host->dev.parent;
-> >> +
-> >> +       if (!(t->tx_buf && t->rx_buf))
-> >> +               return -EINVAL;
-> >> +
-> >> +       t->tx_dma =3D dma_map_single(dev, (void *)t->tx_buf, t->len, D=
-MA_TO_DEVICE);
-> >> +       if (dma_mapping_error(dev, t->tx_dma))
-> >> +               return -ENOMEM;
-> >> +
-> >> +       t->rx_dma =3D dma_map_single(dev, t->rx_buf, t->len, DMA_FROM_=
-DEVICE);
-> >> +       if (dma_mapping_error(dev, t->rx_dma))
-> >> +               return -ENOMEM;
-> >> +
-> >> +       spicc->tx_dma =3D t->tx_dma;
-> >> +       spicc->rx_dma =3D t->rx_dma;
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static void meson_spicc_dma_unmap(struct meson_spicc_device *spicc,
-> >> +                                 struct spi_transfer *t)
-> >> +{
-> >> +       struct device *dev =3D spicc->host->dev.parent;
-> >> +
-> >> +       if (t->tx_dma)
-> >> +               dma_unmap_single(dev, t->tx_dma, t->len, DMA_TO_DEVICE=
-);
-> >> +       if (t->rx_dma)
-> >> +               dma_unmap_single(dev, t->rx_dma, t->len, DMA_FROM_DEVI=
-CE);
-> >> +}
-> >> +
-> >> +/*
-> >> + * According to the remain words length, calculate a suitable spi bur=
-st length
-> >> + * and a dma burst length for current spi burst
-> >> + */
-> >> +static u32 meson_spicc_calc_dma_len(struct meson_spicc_device *spicc,
-> >> +                                   u32 len, u32 *dma_burst_len)
-> >> +{
-> >> +       u32 i;
-> >> +
-> >> +       if (len <=3D spicc->data->fifo_size) {
-> >> +               *dma_burst_len =3D len;
-> >> +               return len;
-> >> +       }
-> >> +
-> >> +       *dma_burst_len =3D DMA_BURST_LEN_DEFAULT;
-> >> +
-> >> +       if (len =3D=3D (SPI_BURST_LEN_MAX + 1))
-> >> +               return SPI_BURST_LEN_MAX - DMA_BURST_LEN_DEFAULT;
-> >> +
-> >> +       if (len >=3D SPI_BURST_LEN_MAX)
-> >> +               return SPI_BURST_LEN_MAX;
-> >> +
-> >> +       for (i =3D DMA_BURST_LEN_DEFAULT; i > 1; i--)
-> >> +               if ((len % i) =3D=3D 0) {
-> >> +                       *dma_burst_len =3D i;
-> >> +                       return len;
-> >> +               }
-> >> +
-> >> +       i =3D len % DMA_BURST_LEN_DEFAULT;
-> >> +       len -=3D i;
-> >> +
-> >> +       if (i =3D=3D 1)
-> >> +               len -=3D DMA_BURST_LEN_DEFAULT;
-> >> +
-> >> +       return len;
-> >> +}
-> >> +
-> >> +static void meson_spicc_setup_dma(struct meson_spicc_device *spicc)
-> >> +{
-> >> +       unsigned int len;
-> >> +       unsigned int dma_burst_len, dma_burst_count;
-> >> +       unsigned int count_en =3D 0;
-> >> +       unsigned int txfifo_thres =3D 0;
-> >> +       unsigned int read_req =3D 0;
-> >> +       unsigned int rxfifo_thres =3D 31;
-> >> +       unsigned int write_req =3D 0;
-> >> +       unsigned int ld_ctr1 =3D 0;
-> >> +
-> >> +       writel_relaxed(spicc->tx_dma, spicc->base + SPICC_DRADDR);
-> >> +       writel_relaxed(spicc->rx_dma, spicc->base + SPICC_DWADDR);
-> >> +
-> >> +       /* Set the max burst length to support a transmission with len=
-gth of
-> >> +        * no more than 1024 bytes(128 words), which must use the CS m=
-anagement
-> >> +        * because of some strict timing requirements
-> >> +        */
-> >> +       writel_bits_relaxed(SPICC_BURSTLENGTH_MASK, SPICC_BURSTLENGTH_=
-MASK,
-> >> +                           spicc->base + SPICC_CONREG);
-> >> +
-> >> +       len =3D meson_spicc_calc_dma_len(spicc, spicc->xfer_remain,
-> >> +                                      &dma_burst_len);
-> >> +       spicc->xfer_remain -=3D len;
-> >> +       dma_burst_count =3D DIV_ROUND_UP(len, dma_burst_len);
-> >> +       dma_burst_len--;
-> >> +
-> >> +       if (spicc->tx_dma) {
-> >> +               spicc->tx_dma +=3D len;
-> >> +               count_en |=3D DMA_READ_COUNTER_EN;
-> >> +               txfifo_thres =3D spicc->data->fifo_size - dma_burst_le=
-n;
-> >> +               read_req =3D dma_burst_len;
-> >> +               ld_ctr1 |=3D FIELD_PREP(DMA_READ_COUNTER, dma_burst_co=
-unt);
-> >> +       }
-> >> +
-> >> +       if (spicc->rx_dma) {
-> >> +               spicc->rx_dma +=3D len;
-> >> +               count_en |=3D DMA_WRITE_COUNTER_EN;
-> >> +               rxfifo_thres =3D dma_burst_len;
-> >> +               write_req =3D dma_burst_len;
-> >> +               ld_ctr1 |=3D FIELD_PREP(DMA_WRITE_COUNTER, dma_burst_c=
-ount);
-> >> +       }
-> >> +
-> >> +       writel_relaxed(count_en, spicc->base + SPICC_LD_CNTL0);
-> >> +       writel_relaxed(ld_ctr1, spicc->base + SPICC_LD_CNTL1);
-> >> +       writel_relaxed(SPICC_DMA_ENABLE
-> >> +                   | SPICC_DMA_URGENT
-> >> +                   | FIELD_PREP(SPICC_TXFIFO_THRESHOLD_MASK, txfifo_t=
-hres)
-> >> +                   | FIELD_PREP(SPICC_READ_BURST_MASK, read_req)
-> >> +                   | FIELD_PREP(SPICC_RXFIFO_THRESHOLD_MASK, rxfifo_t=
-hres)
-> >> +                   | FIELD_PREP(SPICC_WRITE_BURST_MASK, write_req),
-> >> +                   spicc->base + SPICC_DMAREG);
-> >> +}
-> >> +
-> >> +static irqreturn_t meson_spicc_dma_irq(struct meson_spicc_device *spi=
-cc)
-> >> +{
-> >> +       if (readl_relaxed(spicc->base + SPICC_DMAREG) & SPICC_DMA_ENAB=
-LE)
-> >> +               return IRQ_HANDLED;
-> >> +
-> >> +       if (spicc->xfer_remain) {
-> >> +               meson_spicc_setup_dma(spicc);
-> >> +       } else {
-> >> +               writel_bits_relaxed(SPICC_SMC, 0, spicc->base + SPICC_=
-CONREG);
-> >> +               writel_relaxed(0, spicc->base + SPICC_INTREG);
-> >> +               writel_relaxed(0, spicc->base + SPICC_DMAREG);
-> >> +               meson_spicc_dma_unmap(spicc, spicc->xfer);
-> >> +               complete(&spicc->done);
-> >> +       }
-> >> +
-> >> +       return IRQ_HANDLED;
-> >> +}
-> >> +
-> >>   static inline bool meson_spicc_txfull(struct meson_spicc_device *spi=
-cc)
-> >>   {
-> >>          return !!FIELD_GET(SPICC_TF,
-> >> @@ -293,6 +463,9 @@ static irqreturn_t meson_spicc_irq(int irq, void *=
-data)
-> >>
-> >>          writel_bits_relaxed(SPICC_TC, SPICC_TC, spicc->base + SPICC_S=
-TATREG);
-> >>
-> >> +       if (spicc->using_dma)
-> >> +               return meson_spicc_dma_irq(spicc);
-> >> +
-> >>          /* Empty RX FIFO */
-> >>          meson_spicc_rx(spicc);
-> >>
-> >> @@ -426,9 +599,6 @@ static int meson_spicc_transfer_one(struct spi_con=
-troller *host,
-> >>
-> >>          meson_spicc_reset_fifo(spicc);
-> >>
-> >> -       /* Setup burst */
-> >> -       meson_spicc_setup_burst(spicc);
-> >> -
-> >>          /* Setup wait for completion */
-> >>          reinit_completion(&spicc->done);
-> >>
-> >> @@ -442,11 +612,36 @@ static int meson_spicc_transfer_one(struct spi_c=
-ontroller *host,
-> >>          /* Increase it twice and add 200 ms tolerance */
-> >>          timeout +=3D timeout + 200;
-> >>
-> >> -       /* Start burst */
-> >> -       writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_=
-CONREG);
-> >> +       if (xfer->bits_per_word =3D=3D 64) {
-> >> +               int ret;
-> >> +
-> >> +               /* dma_burst_len 1 can't trigger a dma burst */
-> >> +               if (xfer->len < 16)
-> >> +                       return -EINVAL;
-> >> +
-> >> +               ret =3D meson_spicc_dma_map(spicc, xfer);
-> >> +               if (ret) {
-> >> +                       meson_spicc_dma_unmap(spicc, xfer);
-> >> +                       dev_err(host->dev.parent, "dma map failed\n");
-> >> +                       return ret;
-> >> +               }
-> >> +
-> >> +               spicc->using_dma =3D true;
-> >> +               spicc->xfer_remain =3D DIV_ROUND_UP(xfer->len, spicc->=
-bytes_per_word);
-> >> +               meson_spicc_setup_dma(spicc);
-> >> +               writel_relaxed(SPICC_TE_EN, spicc->base + SPICC_INTREG=
-);
-> >> +               writel_bits_relaxed(SPICC_SMC, SPICC_SMC, spicc->base =
-+ SPICC_CONREG);
-> >> +       } else {
-> >> +               spicc->using_dma =3D false;
-> >> +               /* Setup burst */
-> >> +               meson_spicc_setup_burst(spicc);
-> >>
-> >> -       /* Enable interrupts */
-> >> -       writel_relaxed(SPICC_TC_EN, spicc->base + SPICC_INTREG);
-> >> +               /* Start burst */
-> >> +               writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base =
-+ SPICC_CONREG);
-> >> +
-> >> +               /* Enable interrupts */
-> >> +               writel_relaxed(SPICC_TC_EN, spicc->base + SPICC_INTREG=
-);
-> >> +       }
-> >>
-> >>          if (!wait_for_completion_timeout(&spicc->done, msecs_to_jiffi=
-es(timeout)))
-> >>                  return -ETIMEDOUT;
-> >> @@ -545,6 +740,14 @@ static int meson_spicc_setup(struct spi_device *s=
-pi)
-> >>          if (!spi->controller_state)
-> >>                  spi->controller_state =3D spi_controller_get_devdata(=
-spi->controller);
-> >>
-> >> +       /* DMA works at 64 bits, the rest works on PIO */
-> >> +       if (spi->bits_per_word !=3D 8 &&
-> >> +           spi->bits_per_word !=3D 16 &&
-> >> +           spi->bits_per_word !=3D 24 &&
-> >> +           spi->bits_per_word !=3D 32 &&
-> >> +           spi->bits_per_word !=3D 64)
-> >> +               return -EINVAL;
-> >> +
-> >>          return 0;
-> >>   }
-> >>
-> >> @@ -853,10 +1056,6 @@ static int meson_spicc_probe(struct platform_dev=
-ice *pdev)
-> >>          host->num_chipselect =3D 4;
-> >>          host->dev.of_node =3D pdev->dev.of_node;
-> >>          host->mode_bits =3D SPI_CPHA | SPI_CPOL | SPI_CS_HIGH | SPI_L=
-OOP;
-> >> -       host->bits_per_word_mask =3D SPI_BPW_MASK(32) |
-> >> -                                  SPI_BPW_MASK(24) |
-> >> -                                  SPI_BPW_MASK(16) |
-> >> -                                  SPI_BPW_MASK(8);
-> >
-> > This should not be removed. SPI_BPW_MASK(64) needs to be added.
-> > Removing bits_per_word_mask causes other code to assume this is an
-> > 8-bit only controller.
->
-> SPI_BPW_MASK(64) doesn't not exist, it's only a 32bit field, removing it =
-is fine,
-> the check is done later.
 
-The spi_is_bpw_supported function in include/linux/spi/spi.h checks
-bits_per_word_mask.
-Without this set, drm_mipi_dbi behavior is changed to 8-bit transfers.
 
-Yeah, the 64 won't work. I didn't check the macro.
+On 28-04-2025 15:36, Haibo Chen wrote:
+> @@ -1249,29 +1272,70 @@ static void nxp_fspi_remove(struct platform_device *pdev)
+>   {
+>   	struct nxp_fspi *f = platform_get_drvdata(pdev);
+>   
+> +	/* enable clock first since there is reigster access */
 
->
-> Neil
->
-> >
-> >
-> >
-> >>          host->flags =3D (SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST=
-_TX);
-> >>          host->min_speed_hz =3D spicc->data->min_speed_hz;
-> >>          host->max_speed_hz =3D spicc->data->max_speed_hz;
-> >>
-> >> ---
-> >> base-commit: 49807ed87851916ef655f72e9562f96355183090
-> >> change-id: 20250408-spi-dma-c499f560d295
-> >>
-> >> Best regards,
-> >> --
-> >> Xianwei Zhao <xianwei.zhao@amlogic.com>
-> >>
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-amlogic mailing list
-> >> linux-amlogic@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-amlogic
->
+typo reigster -> register
+
+> +	pm_runtime_get_sync(f->dev);
+> +
+>   	/* disable the hardware */
+>   	fspi_writel(f, FSPI_MCR0_MDIS, f->iobase + FSPI_MCR0);
+
+Thanks,
+Alok
+
 
