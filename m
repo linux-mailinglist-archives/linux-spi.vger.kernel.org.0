@@ -1,52 +1,53 @@
-Return-Path: <linux-spi+bounces-7810-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7809-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21169AA5C90
-	for <lists+linux-spi@lfdr.de>; Thu,  1 May 2025 11:21:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C18ACAA5C8E
+	for <lists+linux-spi@lfdr.de>; Thu,  1 May 2025 11:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE2851BA7D72
-	for <lists+linux-spi@lfdr.de>; Thu,  1 May 2025 09:21:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 320B44618A0
+	for <lists+linux-spi@lfdr.de>; Thu,  1 May 2025 09:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A5D22C35C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A813620E70E;
 	Thu,  1 May 2025 09:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rfBoIe2j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2X/WuIq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81CB221F32;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C38B20F091;
 	Thu,  1 May 2025 09:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746091265; cv=none; b=kLCyxPQnh7q7yvx7spLSR44JEsuVPjFJnbgCzY/qWQaFPn9ifM4jnSxxy+zHGrlOUjUS2Lmr+sGM0e8TTvaChub0lpSxq9AqMg9OzEHhEaCM8Kn1Ae2TkuW6fu2geF/whSybB81SsHN1KE8zmDqQq8opqv5oZrUw4K3ogWJfaHk=
+	t=1746091265; cv=none; b=WckiApUDGz8kfBQtZZ/LgGKQ7G3EHinV8MKPFXZekoe+fOiwPOiOlvPJITO6mupCS4rqxB97TzEMC56aUQPfuODJJuC78/ideI9sgROntQUPzqKkMxXr+P48rQPcfDQAiwtSCb8SeKcNptCkbua9pgzXOKMgFX/CuMVWDs48cyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746091265; c=relaxed/simple;
-	bh=sSsvDIDiTu5nOi19ywpZdxlp3ipgkMJ6o2Ryy/qOOTo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r/KfMymt9FsDz5NvbBEtoeCBBBpQKT9QCYvyoOakd1RpVUq5mzyv3GGfOqkT/NLe05bLiNWXne/gwNhoxNyE4+p6P1SZ+lNoybGs92vT1XyRWYXAT3HfCcqiuNy1tJnEOWl2oTLAiuDbh2o88DK+qSQBdjA2W7eNJaG21c4Taug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rfBoIe2j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1FACBC4CEE3;
+	bh=VrVkL3ZKkmH7IRchxu6hs4KunGiXp7bNuu+DRsYoQLU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VwyHNur9x7ko4Il5V6PozVqgO1rFYlm0sNJnNtk8bsGr0q9Tpt0tq0bPNUiMVSOO2GNhxqsp6zQmpowxWxqsix1Sfn4RAtoDWlLTLxwV/qFhgSO9+FrJIGSaQs9Wlm+0uszFOakpsgs4+7NfHFS1qFJuVBYWYzsy2mHviJGo8Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2X/WuIq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32B5CC4CEED;
 	Thu,  1 May 2025 09:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1746091265;
-	bh=sSsvDIDiTu5nOi19ywpZdxlp3ipgkMJ6o2Ryy/qOOTo=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=rfBoIe2jCFv2tApHIoGsF1cE9EgUjrm+656Ez2HSi1gUqQRlkYA3gHEp9myCYfejC
-	 MltobLrwSqrPllJCTnP7iJ/VJFAqxdpa0QOxsH8FYcJWP4A7HPi5yR4zhgw7d9K9od
-	 HlykZCSBin+uBIfcKh6eqMGUrrSkyM3I8gKevccM+xOmktVzT4EAEOwUM6w0WP74fh
-	 QZlrB19+UK3Pi31OtuFaSvdpOWseh4lyyv+u4qZUP4eAWXXT2Y5TwXdIwL69RFPwlk
-	 fYFD+IYUZ5YJ1cWQo4gG5DJ0416DGrbtDlkqB2m58/fIlpu3bPro1jcIBjH1m07h2f
-	 42oTavR30DwrQ==
+	bh=VrVkL3ZKkmH7IRchxu6hs4KunGiXp7bNuu+DRsYoQLU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=R2X/WuIqE/ACfjAl+TA7NjEX1qW7cHsXZ6Pk4xJuPkUG0jJTleGgcGmddyOWfv+ZC
+	 QtSTOUPsOTr9rarM2hqTGJ6p6Eoe1CKfXFY6FHxq+pRdcU55EKiUfPI+ojZ8tVkrb0
+	 ad6bBiDFgrF2mwHxku1Vl/bkXRPlPthlBpI9qWQeVpHI8c2sUnjxOSleS+AimDo012
+	 icAazWrqqdWYoX5ZxZD/Up/Gu61f/KefTvc1kFSQtZA6sdtsc2r+20vZvniAJZ4sGe
+	 rxEm68V0LyjCs6Z9Nl+kzfXDkWMxSvE8y7/LeqTHMlJJJg4NjMxWlZC7lOw+oNFtMI
+	 GdEqLRZj7xk7g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E89AC369DC;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D006C3ABA9;
 	Thu,  1 May 2025 09:21:05 +0000 (UTC)
 From: George Moussalem via B4 Relay <devnull+george.moussalem.outlook.com@kernel.org>
-Subject: [PATCH 0/2] Add QPIC SPI NAND support for IPQ5018
-Date: Thu, 01 May 2025 13:20:50 +0400
-Message-Id: <20250501-ipq5018-spi-qpic-snand-v1-0-31e01fbb606f@outlook.com>
+Date: Thu, 01 May 2025 13:20:51 +0400
+Subject: [PATCH 1/2] dt-bindings: spi: spi-qpic-snand: Add IPQ5018
+ compatible
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -55,10 +56,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPI8E2gC/x2MQQqAIBAAvxJ7bkEtQ/tKdAjdai9mLkQQ/T3pN
- Mxh5gGhwiQwNg8Uulj4SFV020DYl7QRcqwORhmrrNLI+axwKJnxzBxQ0pIi+t4Plpz3puugxrn
- Qyvc/nub3/QClA3oLaAAAAA==
-X-Change-ID: 20250501-ipq5018-spi-qpic-snand-94965e899233
+Message-Id: <20250501-ipq5018-spi-qpic-snand-v1-1-31e01fbb606f@outlook.com>
+References: <20250501-ipq5018-spi-qpic-snand-v1-0-31e01fbb606f@outlook.com>
+In-Reply-To: <20250501-ipq5018-spi-qpic-snand-v1-0-31e01fbb606f@outlook.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, sadre Alam <quic_mdalam@quicinc.com>, 
@@ -68,11 +68,11 @@ Cc: linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  George Moussalem <george.moussalem@outlook.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1746091263; l=712;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746091263; l=1065;
  i=george.moussalem@outlook.com; s=20250321; h=from:subject:message-id;
- bh=sSsvDIDiTu5nOi19ywpZdxlp3ipgkMJ6o2Ryy/qOOTo=;
- b=dPiMz7NRt1koz/E3E/avUsHajxPy09iBfUN43fwRdISRwABYDTJr4dqvb1UlWfJAWwqysI8fx
- hK+kUXl/TWWAyNs74JEmoWmcAILR3YMmZKqKBEFJJ6ySjpizF5uXSbS
+ bh=Vn57KyOsNu/ySFd+C3/QjJQvANGt6ZH80rH1wCZ1tT8=;
+ b=3RrQmearoVavPvbKtCI1KwwwSX1OTyhq6rOVklLPGZFGFKhyVqAfnJoUZCOids4dHNnILQ1AZ
+ 2W6MX43xx7PAi+38BpFmh99VvSWL/OLtdiAl9MDE8yRrH95LgCMBm/q
 X-Developer-Key: i=george.moussalem@outlook.com; a=ed25519;
  pk=/PuRTSI9iYiHwcc6Nrde8qF4ZDhJBlUgpHdhsIjnqIk=
 X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
@@ -80,25 +80,39 @@ X-Endpoint-Received: by B4 Relay for george.moussalem@outlook.com/20250321
 X-Original-From: George Moussalem <george.moussalem@outlook.com>
 Reply-To: george.moussalem@outlook.com
 
-Add support for the QPIC SPI NAND controller found in IPQ5018 which is 
-the same as the one found in IPQ5018.
+From: George Moussalem <george.moussalem@outlook.com>
+
+IPQ5018 contains the QPIC-SPI-NAND flash controller which is the same as
+the one found in IPQ9574. So let's document the IPQ5018 compatible and
+use IPQ9574 as the fallback.
 
 Signed-off-by: George Moussalem <george.moussalem@outlook.com>
 ---
-George Moussalem (2):
-      dt-bindings: spi: spi-qpic-snand: Add IPQ5018 compatible
-      arm64: dts: qcom: ipq5018: Add SPI nand support
+ Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- .../bindings/spi/qcom,spi-qpic-snand.yaml          |  8 +++--
- arch/arm64/boot/dts/qcom/ipq5018.dtsi              | 38 ++++++++++++++++++++++
- 2 files changed, 44 insertions(+), 2 deletions(-)
----
-base-commit: 8a2d53ce3c5f82683ad3df9a9a55822816fe64e7
-change-id: 20250501-ipq5018-spi-qpic-snand-94965e899233
+diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml b/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+index aa3f933192034fe6d54d6149373d50c31ec4aa96..cb1f15224b45574a3c3d603566c859a9bec41937 100644
+--- a/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
++++ b/Documentation/devicetree/bindings/spi/qcom,spi-qpic-snand.yaml
+@@ -21,8 +21,12 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - qcom,ipq9574-snand
++    oneOf:
++      - items:
++          - enum:
++              - qcom,ipq5018-snand
++          - const: qcom,ipq9574-snand
++      - const: qcom,ipq9574-snand
+ 
+   reg:
+     maxItems: 1
 
-Best regards,
 -- 
-George Moussalem <george.moussalem@outlook.com>
+2.49.0
 
 
 
