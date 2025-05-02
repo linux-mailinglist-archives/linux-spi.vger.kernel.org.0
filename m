@@ -1,81 +1,82 @@
-Return-Path: <linux-spi+bounces-7857-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7858-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 899C9AA7A43
-	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 21:31:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59E55AA7A47
+	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 21:32:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E51E24C7B0C
-	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 19:31:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1158A1C06771
+	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 19:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7438D1F4CA0;
-	Fri,  2 May 2025 19:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775911F7569;
+	Fri,  2 May 2025 19:31:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nnzKYdH1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CT3KEjC3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA061DB125;
-	Fri,  2 May 2025 19:31:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7AD1F4C8B;
+	Fri,  2 May 2025 19:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746214299; cv=none; b=DBJQlJ4KGzOET/giyYFpW3QCYbgFVH0KUXxsqtTZ2eeDoTVoZK2cr3ck2zVJBq0QYjRy1ddSFnj12VPlZm/VwhOZ+xeuftXOx6d6JtNbGKdT5wguvPRXWxWVL9LeXpXfp99qCr9SADiW3nvRk/j5duxhmuGy8BRqKtA/MQ/sSFQ=
+	t=1746214301; cv=none; b=dBMORXocwH5UnjSfSYl2mpHDLUIJzWzwtwOkx1VA+2hFdFkXfZrPSuu8lus18ei67o7kNgxpjvsvyLLpSZsqF4BWd1+UyaH9OHZEzFJE/NsY4kHDdZkEDEAOFJp6tr7D2os3p6IV6PGaOHeJxv5Kjg9sa4V0D/Tgm8+Er/dnMj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746214299; c=relaxed/simple;
-	bh=bbDs/UYh+nkmCWHZGm/LBTS/UbFEV4hw5cvNhhW6Qz0=;
+	s=arc-20240116; t=1746214301; c=relaxed/simple;
+	bh=TTDZCrZB3DgfBU3wRn6mUNHv1aqV3frHKpUYnznDBzY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ATSAXooHVM93H19ueiyt+RqpjDsi+est4qDbTdOK25mIL4lD34YLv6Xdn9gUdPB3HgfUFuchOSZIeniVdeUOxXXlnQnTyz5qmihKUNG3KF/MdztPGYoSIQkCzSVtRDpkkqSU5BtVnVph2i/JZxSqwQqRriuNvbHPFTZQRZiuWHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nnzKYdH1; arc=none smtp.client-ip=209.85.208.45
+	 In-Reply-To:To:Cc; b=LHOo97RvVHGeQSFKv2RPY7BqpM1gIhIlL6mdXONnUZxSVszEM7Q8Sb75yCADL0ILwcZn7EfBcvkgIbTCtB3IXur1QDUeRLlhoy9LJnuw62/00uVQdPVriUNoqjCORA//uCNWcdMwu1tudRNG97BeH+g4Zdla+YsWkENJFW5XCJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CT3KEjC3; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e6f4b3ebe5so4349326a12.0;
-        Fri, 02 May 2025 12:31:37 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2902f7c2aso369937666b.1;
+        Fri, 02 May 2025 12:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746214296; x=1746819096; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1746214297; x=1746819097; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yYru7OZrKrqfltHny9tU6nYbNSpx3ucjTn2eAVnRMu8=;
-        b=nnzKYdH1b3u2rWDqnxbunlVXFCHlmt1d/NBiE8hvUsIPMRPkcwN6ycrsEv02ephtay
-         x6qR4/jVJ+tdiGhNgjFRxgsU6Mo7iYWo9dAtR93blOa9TpKYqSipdNrX9NQ4W0+7n7xa
-         2eJ9c08AvCVt8TWnaSiRhVCLd2gKcCJt1FIhQGOv+ul4I5QWOLQc3r1Sg+8fkB0g5D13
-         fmctODbXZbfvPIGP7c8eiP/E6J7QTnLW7u7ZwzOdFg1fVdXYuvSwpzCkIBWlxNYs7riR
-         uKhegE4upYc6+HVmPc2X+OYqwdHoMyNXfXuzMEE60dlwp4XSQWzK2L+pNn1GdKP96S0e
-         Jfkw==
+        bh=othoxVOsSVwEVajjeie3q6xtuMloxRMpbCT5kDCo34A=;
+        b=CT3KEjC39iIyFxGHrH5tKemw2uRwiVYtjQ8NDPKNuDvdTP0zq5cT0wzS+keGrSdRL3
+         pNJb7qg+lVWEAzBn7EGARFKg0NbHYzVdi8YLxax5NvDk7QPHbSg35e7ceBJohb3QiZjX
+         k3IPsykO8YFGYL/Ss7fyiwJMnJyloZcwWoHgqHSaVXjlnGzHmNlbt03BM6gXGoZiXjhA
+         mUo5+SrO0sZ4VFBs+ylep6N0J98NSj94Wipa1p3Eib08cdnUrAcxJfPkcyZZ7+loaK4h
+         rqbkQnTMK+XhDp9n2JI/zY6VGFR1VG8ThmyAnmrGr9aS0JPnyFlPklCjlseGN7eUN1pP
+         F19Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746214296; x=1746819096;
+        d=1e100.net; s=20230601; t=1746214297; x=1746819097;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yYru7OZrKrqfltHny9tU6nYbNSpx3ucjTn2eAVnRMu8=;
-        b=MmPX/d7jvsLzJI8po1XH/sKbDPPI6xAfWjba9pzcEmoOK4XBsjQfu7lRzH73q/NujM
-         R/nVo15FPEqF2r0jB8os1Q1asHq620fzEqJ83AEBHx+koD+DqLlqY9ThXWuka0y91KrT
-         +sEvYJQg/y7ZQ+Xv7ns5seMksKrgdY/JWkF6neabgkk6PKhDrHgwake/8u36ajZFV7vp
-         4oAOugw9IfGS8KU7q1ydKIgXHuL2mSJbxhtMHXUojyu1oIMZtzVPHyROTToy69L2xTTY
-         l7WuTluuK9dz3SeMN1u67+oEF+1LgR/lh0LZ5/9GA5Bj13r9o+zwqT3aWky3gnv+sRxP
-         SMfw==
-X-Forwarded-Encrypted: i=1; AJvYcCW81oF0Z8kkHMoEo2o5EHZPxxKhF2o9yiQ29zGPZjLdvhA0QCt7LU0TBPUUYphZvpXmRGSZNgfQt4Dc@vger.kernel.org, AJvYcCWQFCsGdFGndQZKhmise382pUwJ1slavabSfU1Jb9B/2xmeN9VDNo/DYE6V9EpO6r/c9y5q8gvaJjjv8EDY@vger.kernel.org, AJvYcCXvEWf4qTPP2mXqVQma5iL3FBfduHa80SeqiYv5uYP4w592kyCk3WTxwmwSvsI6c8+crDYa7s4b2vejk0i5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlMgq8nzaNUu52OE+EhofIOx+C8AYegx8HThQUfsQ/PVpzO80C
-	NO4AMkCegVms+k5LVks0bcJXs75xYGZhfpXxPhet/hDnbsejGDLW
-X-Gm-Gg: ASbGncuCxoIu+f9X6Nqxnrbo5zcCDHXU4VwVfVjU3pFrUgLy3fWXd8itlLTo4OEYUvu
-	YA1F2jLiKmVG6XTHg1+AdTRRzfdoBH1b/OetAJnzwuYn201s9XckXqq1Q60t6wIcGYxh8XVT9nu
-	pgltLsfYmUSN/O2iW1iOHKkPfzyfG/okwlW3vlyMBhx59v8Di5U36X70voqvWh2ThLlg+vpXAT9
-	Uj9Wvovudae1VOuVckigprVXDHOSzfS+D8IUdK9nsQOUQ2mGcQAVgw7h8Mai1iiRChH5gXHnvri
-	730ln98VQafCE6YpRme90j164ZzRv/REwTLlCTjHU5ROD1PzIySmJVv3UFXAKxnStvt1Fg==
-X-Google-Smtp-Source: AGHT+IEP+FDZGU9hYZfYrSG5ghaZutVUFxUR9ebLBrAfE5499Gp7fnlH3NJSbsc49+MPHKS29brqmg==
-X-Received: by 2002:a17:907:3d50:b0:aca:d4d1:37c2 with SMTP id a640c23a62f3a-ad17ad3a8b8mr387683666b.8.1746214295475;
-        Fri, 02 May 2025 12:31:35 -0700 (PDT)
+        bh=othoxVOsSVwEVajjeie3q6xtuMloxRMpbCT5kDCo34A=;
+        b=bQbU7g8Pr8rdofuDVOR88pzDKVomeCCCUxk+mAsxeGK7139o4phmxtJB0vC6XFLNT0
+         3W4eg+lHbIJNJidVo1iuPy9BLvU3dgRX64vwG4WeoqiCa76CfHJnOBravB7PJHg6xzsh
+         LlzAhHbhcr4YcFCmredHadfROv8/ahEXDpfGIvoMvBFzZ/dLetLNLhYOEJxkQSKmQhmw
+         c0Zq3jE3/pKA4Et3azqaVbQSUqwIiafmh1o7i9Fb5PZTBDl9CyNXx0mzybz/96iK2/yt
+         07erjzzxcI/POy9oFFMqM9trAO3LVPjPXT2ahWUOO/PV301jeV4Z/RtTVC0C64bLVVTn
+         blmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/dDVPPjylRFmzc31a6hoINbmkpWutnA4GcM0Xd6bcAoOJ/byzFa63/f/0THrlPYi5jpgBp8MlwjD1@vger.kernel.org, AJvYcCVzpaaWNbSXAGSMeQpjb80IhlJ4x7Yod0qdMPCbHT70GR8CuM2BlrBW4q8b88rcwgxVu9iO8JrIr0hB8fi7@vger.kernel.org, AJvYcCXNoKti9kImF77Nxn0RYSBUMmJjYjtol2bNhLGESHsSyBMeMdXY0e/OjD62LQqiMP5pJYzywG1Z+KKy7OP1@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFK5gV6eX+mD0CD2uko6yu077ZC2t/idVx8sY/Ozvg923WFieU
+	RTO0p4eiREFA3EhY0/vMUemQP/BgK8V6+cLeA5XHxQDdR0m05MiXO6IJvA==
+X-Gm-Gg: ASbGncsLIVZ546QExuY1BiDp/GN6oS7hhcaR945hA07lazIiNVrmi7/oGDlCynbJhcs
+	JqSz8IK/S6L7YuDGr+APSQHWXWDKm5ZbmqcSI3z0Jc55TZxAwxYQe45/PLpyequoLV4MFA+eOny
+	6MBrSv1pBsHsO+ndMSo1BAM1YAUzDValhvaZmysqvwVx1di0mfuaG9SZIM7CNoSPFxzdeEcHJd6
+	Uj7YjJVF6pt53CjzEtZOLOmHXGUwG3ddTq9aATmy41jPHICjifldO1yJIC589Z9Fk871HaCWbcb
+	NrpCK0EvM8OE6xDBr4jzQebIWyuCcK6WQXboNNI4yM1inR+A9YFtEP3Dt4EAUIVFlSH6n3w7acF
+	4nDfN
+X-Google-Smtp-Source: AGHT+IGJFUM2AZ0WPT/s8AA07yrwc0K4Or7jTYNZuQwSxRC/fQBw+UJZfx6c1b39eCN76E3hQi4ugA==
+X-Received: by 2002:a17:907:86a5:b0:ad1:79e0:12ed with SMTP id a640c23a62f3a-ad17afb8a38mr436128666b.50.1746214296889;
+        Fri, 02 May 2025 12:31:36 -0700 (PDT)
 Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ad1894c025esm87824266b.114.2025.05.02.12.31.34
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ad1894c025esm87824266b.114.2025.05.02.12.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 12:31:35 -0700 (PDT)
+        Fri, 02 May 2025 12:31:36 -0700 (PDT)
 From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Fri, 02 May 2025 21:31:16 +0200
-Subject: [PATCH next 1/2] mtd: nand: qpic-common: add defines for ECC_MODE
- values
+Date: Fri, 02 May 2025 21:31:17 +0200
+Subject: [PATCH next 2/2] spi: spi-qpic-snand: add support for 8 bits ECC
+ strength
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,7 +85,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250502-qpic-snand-8bit-ecc-v1-1-95f3cd08bbc5@gmail.com>
+Message-Id: <20250502-qpic-snand-8bit-ecc-v1-2-95f3cd08bbc5@gmail.com>
 References: <20250502-qpic-snand-8bit-ecc-v1-0-95f3cd08bbc5@gmail.com>
 In-Reply-To: <20250502-qpic-snand-8bit-ecc-v1-0-95f3cd08bbc5@gmail.com>
 To: Mark Brown <broonie@kernel.org>, 
@@ -99,77 +100,391 @@ Cc: Varadarajan Narayanan <quic_varada@quicinc.com>,
  Gabor Juhos <j4g8y7@gmail.com>
 X-Mailer: b4 0.14.2
 
-Add defines for the values of the ECC_MODE field of the NAND_DEV0_ECC_CFG
-register and change both the 'qcom-nandc' and 'spi-qpic-snand' drivers to
-use those instead of magic numbers.
+Even though the hardware supports 8 bits ECC strength, but that is not
+handled in the driver yet. This change adds the missing bits in order
+to allow using the driver with chips which require 8 bits ECC strength.
 
-No functional changes. This is in preparation for adding 8 bit ECC strength
-support for the 'spi-qpic-snand' driver.
+No functional changes intended with regard to the existing 4 bits ECC
+strength support.
+
+Tested on an IPQ9574 platform using a GigaDevice GD5F2GM7REYIG chip.
 
 Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 ---
- drivers/mtd/nand/raw/qcom_nandc.c    | 6 +++---
- drivers/spi/spi-qpic-snand.c         | 2 +-
- include/linux/mtd/nand-qpic-common.h | 2 ++
- 3 files changed, 6 insertions(+), 4 deletions(-)
+mtdtest results:
 
-diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-index 5eaa0be367cdb847d48dbed6f8326a75a5922347..67641ce28bd6435fffda3ffe5e38c777f4708cf8 100644
---- a/drivers/mtd/nand/raw/qcom_nandc.c
-+++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -1379,7 +1379,7 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
- 	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
- 	int cwperpage, bad_block_byte, ret;
- 	bool wide_bus;
--	int ecc_mode = 1;
-+	int ecc_mode = ECC_MODE_8BIT;
- 
- 	/* controller only supports 512 bytes data steps */
- 	ecc->size = NANDC_STEP_SIZE;
-@@ -1400,7 +1400,7 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
- 	if (ecc->strength >= 8) {
- 		/* 8 bit ECC defaults to BCH ECC on all platforms */
- 		host->bch_enabled = true;
--		ecc_mode = 1;
-+		ecc_mode = ECC_MODE_8BIT;
- 
- 		if (wide_bus) {
- 			host->ecc_bytes_hw = 14;
-@@ -1420,7 +1420,7 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
- 		if (nandc->props->ecc_modes & ECC_BCH_4BIT) {
- 			/* BCH */
- 			host->bch_enabled = true;
--			ecc_mode = 0;
-+			ecc_mode = ECC_MODE_4BIT;
- 
- 			if (wide_bus) {
- 				host->ecc_bytes_hw = 8;
+  # dmesg | grep nand
+  [    0.678143] spi-nand spi0.0: GigaDevice SPI NAND was found.
+  [    0.687393] spi-nand spi0.0: 256 MiB, block size: 128 KiB, page size: 2048, OOB size: 128
+  # cat /proc/mtd
+  dev:    size   erasesize  name
+  mtd0: 10000000 00020000 "spi0.0"
+  # insmod mtd_test
+  # insmod mtd_speedtest dev=0
+  [   63.128425]
+  [   63.128452] =================================================
+  [   63.128979] mtd_speedtest: MTD device: 0
+  [   63.134622] mtd_speedtest: MTD device size 268435456, eraseblock size 131072, page size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [   63.139561] mtd_test: scanning for bad eraseblocks
+  [   63.756447] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [   71.085514] mtd_speedtest: testing eraseblock write speed
+  [  202.745977] mtd_speedtest: eraseblock write speed is 1991 KiB/s
+  [  202.746022] mtd_speedtest: testing eraseblock read speed
+  [  284.104591] mtd_speedtest: eraseblock read speed is 3222 KiB/s
+  [  291.405533] mtd_speedtest: testing page write speed
+  [  422.516341] mtd_speedtest: page write speed is 1999 KiB/s
+  [  422.516384] mtd_speedtest: testing page read speed
+  [  504.144630] mtd_speedtest: page read speed is 3211 KiB/s
+  [  511.476726] mtd_speedtest: testing 2 page write speed
+  [  643.114443] mtd_speedtest: 2 page write speed is 1991 KiB/s
+  [  643.114485] mtd_speedtest: testing 2 page read speed
+  [  724.434752] mtd_speedtest: 2 page read speed is 3223 KiB/s
+  [  724.434796] mtd_speedtest: Testing erase speed
+  [  731.792729] mtd_speedtest: erase speed is 35648 KiB/s
+  [  731.792772] mtd_speedtest: Testing 2x multi-block erase speed
+  [  739.162513] mtd_speedtest: 2x multi-block erase speed is 35589 KiB/s
+  [  739.162558] mtd_speedtest: Testing 4x multi-block erase speed
+  [  746.486241] mtd_speedtest: 4x multi-block erase speed is 35820 KiB/s
+  [  746.486287] mtd_speedtest: Testing 8x multi-block erase speed
+  [  753.789683] mtd_speedtest: 8x multi-block erase speed is 35919 KiB/s
+  [  753.789728] mtd_speedtest: Testing 16x multi-block erase speed
+  [  761.093075] mtd_speedtest: 16x multi-block erase speed is 35920 KiB/s
+  [  761.093120] mtd_speedtest: Testing 32x multi-block erase speed
+  [  768.396145] mtd_speedtest: 32x multi-block erase speed is 35922 KiB/s
+  [  768.396222] mtd_speedtest: Testing 64x multi-block erase speed
+  [  775.699819] mtd_speedtest: 64x multi-block erase speed is 35918 KiB/s
+  [  775.699863] mtd_speedtest: finished
+  [  775.705259] =================================================
+  # insmod mtd_readtest dev=0
+  [  919.060671]
+  [  919.060699] =================================================
+  [  919.061226] mtd_readtest: MTD device: 0
+  [  919.066957] mtd_readtest: MTD device size 268435456, eraseblock size 131072, page size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [  919.070556] mtd_test: scanning for bad eraseblocks
+  [  919.086016] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [  919.089465] mtd_readtest: testing page read
+  [ 1090.778227] mtd_readtest: finished
+  [ 1090.778286] =================================================
+  # insmod mtd_pagetest dev=0
+  [ 1216.297313]
+  [ 1216.297341] =================================================
+  [ 1216.297867] mtd_pagetest: MTD device: 0
+  [ 1216.303509] mtd_pagetest: MTD device size 268435456, eraseblock size 131072, page size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [ 1216.307213] mtd_test: scanning for bad eraseblocks
+  [ 1216.322680] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [ 1216.326077] mtd_pagetest: erasing whole device
+  [ 1223.694968] mtd_pagetest: erased 2048 eraseblocks
+  [ 1223.695009] mtd_pagetest: writing whole device
+  [ 1223.763930] mtd_pagetest: written up to eraseblock 0
+  [ 1240.268942] mtd_pagetest: written up to eraseblock 256
+  [ 1256.641498] mtd_pagetest: written up to eraseblock 512
+  [ 1273.139048] mtd_pagetest: written up to eraseblock 768
+  [ 1289.718929] mtd_pagetest: written up to eraseblock 1024
+  [ 1306.244553] mtd_pagetest: written up to eraseblock 1280
+  [ 1322.939723] mtd_pagetest: written up to eraseblock 1536
+  [ 1339.246937] mtd_pagetest: written up to eraseblock 1792
+  [ 1355.613729] mtd_pagetest: written 2048 eraseblocks
+  [ 1355.613770] mtd_pagetest: verifying all eraseblocks
+  [ 1355.854290] mtd_pagetest: verified up to eraseblock 0
+  [ 1416.657733] mtd_pagetest: verified up to eraseblock 256
+  [ 1477.384593] mtd_pagetest: verified up to eraseblock 512
+  [ 1538.008142] mtd_pagetest: verified up to eraseblock 768
+  [ 1599.080797] mtd_pagetest: verified up to eraseblock 1024
+  [ 1660.775431] mtd_pagetest: verified up to eraseblock 1280
+  [ 1722.177149] mtd_pagetest: verified up to eraseblock 1536
+  [ 1783.090166] mtd_pagetest: verified up to eraseblock 1792
+  [ 1844.450757] mtd_pagetest: verified 2048 eraseblocks
+  [ 1844.450798] mtd_pagetest: crosstest
+  [ 1844.455676] mtd_pagetest: reading page at 0x0
+  [ 1844.458603] mtd_pagetest: reading page at 0xffff800
+  [ 1844.463047] mtd_pagetest: reading page at 0x0
+  [ 1844.467790] mtd_pagetest: verifying pages read at 0x0 match
+  [ 1844.471636] mtd_pagetest: crosstest ok
+  [ 1844.477062] mtd_pagetest: erasecrosstest
+  [ 1844.480833] mtd_pagetest: erasing block 0
+  [ 1844.488498] mtd_pagetest: writing 1st page of block 0
+  [ 1844.489821] mtd_pagetest: reading 1st page of block 0
+  [ 1844.494475] mtd_pagetest: verifying 1st page of block 0
+  [ 1844.498942] mtd_pagetest: erasing block 0
+  [ 1844.507505] mtd_pagetest: writing 1st page of block 0
+  [ 1844.509042] mtd_pagetest: erasing block 2047
+  [ 1844.516725] mtd_pagetest: reading 1st page of block 0
+  [ 1844.518087] mtd_pagetest: verifying 1st page of block 0
+  [ 1844.522415] mtd_pagetest: erasecrosstest ok
+  [ 1844.527495] mtd_pagetest: erasetest
+  [ 1844.531613] mtd_pagetest: erasing block 0
+  [ 1844.538671] mtd_pagetest: writing 1st page of block 0
+  [ 1844.540249] mtd_pagetest: erasing block 0
+  [ 1844.547869] mtd_pagetest: reading 1st page of block 0
+  [ 1844.548927] mtd_pagetest: verifying 1st page of block 0 is all 0xff
+  [ 1844.553326] mtd_pagetest: erasetest ok
+  [ 1844.559440] mtd_pagetest: finished with 0 errors
+  [ 1844.563233] =================================================
+  # insmod mtd_subpagetest dev=0
+  [ 1942.429708]
+  [ 1942.429736] =================================================
+  [ 1942.430262] mtd_subpagetest: MTD device: 0
+  [ 1942.435905] mtd_subpagetest: MTD device size 268435456, eraseblock size 131072, page size 2048, subpage size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [ 1942.439994] mtd_test: scanning for bad eraseblocks
+  [ 1942.457111] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [ 1949.824564] mtd_subpagetest: writing whole device
+  [ 1949.826670] mtd_subpagetest: written up to eraseblock 0
+  [ 1950.351816] mtd_subpagetest: written up to eraseblock 256
+  [ 1950.875797] mtd_subpagetest: written up to eraseblock 512
+  [ 1951.399912] mtd_subpagetest: written up to eraseblock 768
+  [ 1951.923618] mtd_subpagetest: written up to eraseblock 1024
+  [ 1952.447361] mtd_subpagetest: written up to eraseblock 1280
+  [ 1952.970834] mtd_subpagetest: written up to eraseblock 1536
+  [ 1953.494635] mtd_subpagetest: written up to eraseblock 1792
+  [ 1954.016265] mtd_subpagetest: written 2048 eraseblocks
+  [ 1954.016294] mtd_subpagetest: verifying all eraseblocks
+  [ 1954.021617] mtd_subpagetest: verified up to eraseblock 0
+  [ 1954.347458] mtd_subpagetest: verified up to eraseblock 256
+  [ 1954.667446] mtd_subpagetest: verified up to eraseblock 512
+  [ 1954.987343] mtd_subpagetest: verified up to eraseblock 768
+  [ 1955.307385] mtd_subpagetest: verified up to eraseblock 1024
+  [ 1955.627462] mtd_subpagetest: verified up to eraseblock 1280
+  [ 1955.947277] mtd_subpagetest: verified up to eraseblock 1536
+  [ 1956.266834] mtd_subpagetest: verified up to eraseblock 1792
+  [ 1956.585581] mtd_subpagetest: verified 2048 eraseblocks
+  [ 1963.889308] mtd_subpagetest: verifying all eraseblocks for 0xff
+  [ 1963.930487] mtd_subpagetest: verified up to eraseblock 0
+  [ 1974.592567] mtd_subpagetest: verified up to eraseblock 256
+  [ 1985.180953] mtd_subpagetest: verified up to eraseblock 512
+  [ 1995.805397] mtd_subpagetest: verified up to eraseblock 768
+  [ 2006.348859] mtd_subpagetest: verified up to eraseblock 1024
+  [ 2016.900530] mtd_subpagetest: verified up to eraseblock 1280
+  [ 2027.447587] mtd_subpagetest: verified up to eraseblock 1536
+  [ 2037.962383] mtd_subpagetest: verified up to eraseblock 1792
+  [ 2048.587863] mtd_subpagetest: verified 2048 eraseblocks
+  [ 2048.587906] mtd_subpagetest: writing whole device
+  [ 2048.648174] mtd_subpagetest: written up to eraseblock 0
+  [ 2062.643145] mtd_subpagetest: written up to eraseblock 256
+  [ 2076.699015] mtd_subpagetest: written up to eraseblock 512
+  [ 2091.004910] mtd_subpagetest: written up to eraseblock 768
+  [ 2105.149879] mtd_subpagetest: written up to eraseblock 1024
+  [ 2119.470691] mtd_subpagetest: written up to eraseblock 1280
+  [ 2133.746861] mtd_subpagetest: written up to eraseblock 1536
+  [ 2147.776477] mtd_subpagetest: written up to eraseblock 1792
+  [ 2161.947734] mtd_subpagetest: written 2048 eraseblocks
+  [ 2161.947776] mtd_subpagetest: verifying all eraseblocks
+  [ 2161.986109] mtd_subpagetest: verified up to eraseblock 0
+  [ 2170.818316] mtd_subpagetest: verified up to eraseblock 256
+  [ 2179.596875] mtd_subpagetest: verified up to eraseblock 512
+  [ 2188.405116] mtd_subpagetest: verified up to eraseblock 768
+  [ 2197.188588] mtd_subpagetest: verified up to eraseblock 1024
+  [ 2206.002204] mtd_subpagetest: verified up to eraseblock 1280
+  [ 2214.784815] mtd_subpagetest: verified up to eraseblock 1536
+  [ 2223.557141] mtd_subpagetest: verified up to eraseblock 1792
+  [ 2232.472832] mtd_subpagetest: verified 2048 eraseblocks
+  [ 2239.818213] mtd_subpagetest: verifying all eraseblocks for 0xff
+  [ 2239.861404] mtd_subpagetest: verified up to eraseblock 0
+  [ 2250.439035] mtd_subpagetest: verified up to eraseblock 256
+  [ 2261.176485] mtd_subpagetest: verified up to eraseblock 512
+  [ 2271.713183] mtd_subpagetest: verified up to eraseblock 768
+  [ 2282.356892] mtd_subpagetest: verified up to eraseblock 1024
+  [ 2292.891424] mtd_subpagetest: verified up to eraseblock 1280
+  [ 2303.543110] mtd_subpagetest: verified up to eraseblock 1536
+  [ 2314.116690] mtd_subpagetest: verified up to eraseblock 1792
+  [ 2324.607804] mtd_subpagetest: verified 2048 eraseblocks
+  [ 2324.607846] mtd_subpagetest: finished with 0 errors
+  [ 2324.611859] =================================================
+  # insmod mtd_oobtest dev=0
+  [ 2336.159109]
+  [ 2336.159138] =================================================
+  [ 2336.159664] mtd_oobtest: MTD device: 0
+  [ 2336.165308] mtd_oobtest: MTD device size 268435456, eraseblock size 131072, page size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [ 2336.169043] mtd_test: scanning for bad eraseblocks
+  [ 2336.184354] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [ 2336.187716] mtd_oobtest: test 1 of 5
+  [ 2343.495966] mtd_oobtest: writing OOBs of whole device
+  [ 2343.496073] mtd_oobtest: written up to eraseblock 0
+  [ 2343.516803] mtd_oobtest: written up to eraseblock 256
+  [ 2343.533527] mtd_oobtest: written up to eraseblock 512
+  [ 2343.549945] mtd_oobtest: written up to eraseblock 768
+  [ 2343.563666] mtd_oobtest: written up to eraseblock 1024
+  [ 2343.575186] mtd_oobtest: written up to eraseblock 1280
+  [ 2343.584310] mtd_oobtest: written up to eraseblock 1536
+  [ 2343.593011] mtd_oobtest: written up to eraseblock 1792
+  [ 2343.600847] mtd_oobtest: written 2048 eraseblocks
+  [ 2343.600861] mtd_oobtest: verifying all eraseblocks
+  [ 2343.604542] mtd_oobtest: verified up to eraseblock 0
+  [ 2343.616606] mtd_oobtest: verified up to eraseblock 256
+  [ 2343.623992] mtd_oobtest: verified up to eraseblock 512
+  [ 2343.631390] mtd_oobtest: verified up to eraseblock 768
+  [ 2343.638788] mtd_oobtest: verified up to eraseblock 1024
+  [ 2343.646184] mtd_oobtest: verified up to eraseblock 1280
+  [ 2343.653570] mtd_oobtest: verified up to eraseblock 1536
+  [ 2343.660970] mtd_oobtest: verified up to eraseblock 1792
+  [ 2343.668356] mtd_oobtest: verified 2048 eraseblocks
+  [ 2343.668369] mtd_oobtest: test 2 of 5
+  [ 2350.985635] mtd_oobtest: writing OOBs of whole device
+  [ 2350.985743] mtd_oobtest: written up to eraseblock 0
+  [ 2351.006445] mtd_oobtest: written up to eraseblock 256
+  [ 2351.023170] mtd_oobtest: written up to eraseblock 512
+  [ 2351.039645] mtd_oobtest: written up to eraseblock 768
+  [ 2351.053395] mtd_oobtest: written up to eraseblock 1024
+  [ 2351.064954] mtd_oobtest: written up to eraseblock 1280
+  [ 2351.074144] mtd_oobtest: written up to eraseblock 1536
+  [ 2351.082848] mtd_oobtest: written up to eraseblock 1792
+  [ 2351.090707] mtd_oobtest: written 2048 eraseblocks
+  [ 2351.090721] mtd_oobtest: verifying all eraseblocks
+  [ 2351.094373] mtd_oobtest: verified up to eraseblock 0
+  [ 2351.099353] mtd_oobtest: verified up to eraseblock 256
+  [ 2351.104460] mtd_oobtest: verified up to eraseblock 512
+  [ 2351.109437] mtd_oobtest: verified up to eraseblock 768
+  [ 2351.114528] mtd_oobtest: verified up to eraseblock 1024
+  [ 2351.119683] mtd_oobtest: verified up to eraseblock 1280
+  [ 2351.124772] mtd_oobtest: verified up to eraseblock 1536
+  [ 2351.129996] mtd_oobtest: verified up to eraseblock 1792
+  [ 2351.135187] mtd_oobtest: verified 2048 eraseblocks
+  [ 2351.140130] mtd_oobtest: test 3 of 5
+  [ 2358.448438] mtd_oobtest: writing OOBs of whole device
+  [ 2358.448546] mtd_oobtest: written up to eraseblock 0
+  [ 2358.469297] mtd_oobtest: written up to eraseblock 256
+  [ 2358.486095] mtd_oobtest: written up to eraseblock 512
+  [ 2358.501993] mtd_oobtest: written up to eraseblock 768
+  [ 2358.515473] mtd_oobtest: written up to eraseblock 1024
+  [ 2358.526708] mtd_oobtest: written up to eraseblock 1280
+  [ 2358.535426] mtd_oobtest: written up to eraseblock 1536
+  [ 2358.544152] mtd_oobtest: written up to eraseblock 1792
+  [ 2358.551732] mtd_oobtest: written 2048 eraseblocks
+  [ 2358.551744] mtd_oobtest: verifying all eraseblocks
+  [ 2358.555424] mtd_oobtest: verified up to eraseblock 0
+  [ 2358.567572] mtd_oobtest: verified up to eraseblock 256
+  [ 2358.575045] mtd_oobtest: verified up to eraseblock 512
+  [ 2358.582537] mtd_oobtest: verified up to eraseblock 768
+  [ 2358.590024] mtd_oobtest: verified up to eraseblock 1024
+  [ 2358.597511] mtd_oobtest: verified up to eraseblock 1280
+  [ 2358.604984] mtd_oobtest: verified up to eraseblock 1536
+  [ 2358.612468] mtd_oobtest: verified up to eraseblock 1792
+  [ 2358.619923] mtd_oobtest: verified 2048 eraseblocks
+  [ 2358.619936] mtd_oobtest: test 4 of 5
+  [ 2365.924669] mtd_oobtest: attempting to start write past end of OOB
+  [ 2365.924711] mtd_oobtest: an error is expected...
+  [ 2365.929795] mtd_oobtest: error occurred as expected
+  [ 2365.934520] mtd_oobtest: attempting to start read past end of OOB
+  [ 2365.939150] mtd_oobtest: an error is expected...
+  [ 2365.945371] mtd_oobtest: error occurred as expected
+  [ 2365.950087] mtd_oobtest: attempting to write past end of device
+  [ 2365.954660] mtd_oobtest: an error is expected...
+  [ 2365.960623] mtd_oobtest: error occurred as expected
+  [ 2365.965422] mtd_oobtest: attempting to read past end of device
+  [ 2365.970064] mtd_oobtest: an error is expected...
+  [ 2365.975925] mtd_oobtest: error occurred as expected
+  [ 2365.984256] mtd_oobtest: attempting to write past end of device
+  [ 2365.985300] mtd_oobtest: an error is expected...
+  [ 2365.991242] mtd_oobtest: error: wrote past end of device
+  [ 2365.996064] mtd_oobtest: attempting to read past end of device
+  [ 2366.001389] mtd_oobtest: an error is expected...
+  [ 2366.007028] mtd_oobtest: error: read past end of device
+  [ 2366.011776] mtd_oobtest: test 5 of 5
+  [ 2373.317991] mtd_oobtest: writing OOBs of whole device
+  [ 2373.318034] mtd_oobtest: written up to eraseblock 0
+  [ 2373.322028] mtd_oobtest: written up to eraseblock 0
+  [ 2373.327465] mtd_oobtest: written up to eraseblock 256
+  [ 2373.331576] mtd_oobtest: written up to eraseblock 256
+  [ 2373.337501] mtd_oobtest: written up to eraseblock 512
+  [ 2373.341820] mtd_oobtest: written up to eraseblock 512
+  [ 2373.347566] mtd_oobtest: written up to eraseblock 768
+  [ 2373.351888] mtd_oobtest: written up to eraseblock 768
+  [ 2373.357634] mtd_oobtest: written up to eraseblock 1024
+  [ 2373.361957] mtd_oobtest: written up to eraseblock 1024
+  [ 2373.367710] mtd_oobtest: written up to eraseblock 1280
+  [ 2373.372113] mtd_oobtest: written up to eraseblock 1280
+  [ 2373.377841] mtd_oobtest: written up to eraseblock 1536
+  [ 2373.382355] mtd_oobtest: written up to eraseblock 1536
+  [ 2373.387962] mtd_oobtest: written up to eraseblock 1792
+  [ 2373.392597] mtd_oobtest: written up to eraseblock 1792
+  [ 2373.398190] mtd_oobtest: written 2047 eraseblocks
+  [ 2373.402838] mtd_oobtest: verifying all eraseblocks
+  [ 2373.407629] mtd_oobtest: verified up to eraseblock 0
+  [ 2373.412483] mtd_oobtest: verified up to eraseblock 256
+  [ 2373.417625] mtd_oobtest: verified up to eraseblock 512
+  [ 2373.422518] mtd_oobtest: verified up to eraseblock 768
+  [ 2373.427650] mtd_oobtest: verified up to eraseblock 1024
+  [ 2373.432760] mtd_oobtest: verified up to eraseblock 1280
+  [ 2373.437912] mtd_oobtest: verified up to eraseblock 1536
+  [ 2373.443091] mtd_oobtest: verified up to eraseblock 1792
+  [ 2373.448337] mtd_oobtest: verified 2047 eraseblocks
+  [ 2373.453358] mtd_oobtest: finished with 2 errors
+  [ 2373.458250] =================================================
+
+Note: the two errors are present even even without this patch when testing
+the driver with a flash chip requiring 4 bits ECC strength.
+
+  # insmod mtd_stresstest dev=0
+  [ 2383.256453]
+  [ 2383.256482] =================================================
+  [ 2383.257008] mtd_stresstest: MTD device: 0
+  [ 2383.262650] mtd_stresstest: MTD device size 268435456, eraseblock size 131072, page size 2048, count of eraseblocks 2048, pages per eraseblock 64, OOB size 128
+  [ 2383.268254] mtd_test: scanning for bad eraseblocks
+  [ 2383.281992] mtd_test: scanned 2048 eraseblocks, 0 are bad
+  [ 2383.285565] mtd_stresstest: doing operations
+  [ 2383.291047] mtd_stresstest: 0 operations done
+  [ 2427.841267] mtd_stresstest: 1024 operations done
+  [ 2471.142229] mtd_stresstest: 2048 operations done
+  [ 2514.405277] mtd_stresstest: 3072 operations done
+  [ 2555.451926] mtd_stresstest: 4096 operations done
+  [ 2598.107133] mtd_stresstest: 5120 operations done
+  [ 2639.936952] mtd_stresstest: 6144 operations done
+  [ 2680.724751] mtd_stresstest: 7168 operations done
+  [ 2720.344163] mtd_stresstest: 8192 operations done
+  [ 2761.645640] mtd_stresstest: 9216 operations done
+  [ 2791.760534] mtd_stresstest: finished, 10000 operations done
+  [ 2791.760817] =================================================
+  #
+---
+ drivers/spi/spi-qpic-snand.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
 diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index 88f8fa98687fa292861d46648872135aa7fad80f..dfc8cc5d97624fe741121228b97d2b3562cc5cc4 100644
+index dfc8cc5d97624fe741121228b97d2b3562cc5cc4..5e2eacb83b08016ab85a4b676a06f5dfb8cf5808 100644
 --- a/drivers/spi/spi-qpic-snand.c
 +++ b/drivers/spi/spi-qpic-snand.c
-@@ -349,7 +349,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+@@ -283,9 +283,22 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+ 		goto err_free_ecc_cfg;
+ 	}
+ 
+-	if (ecc_cfg->strength != 4) {
++	switch (ecc_cfg->strength) {
++	case 4:
++		ecc_cfg->ecc_mode = ECC_MODE_4BIT;
++		ecc_cfg->ecc_bytes_hw = 7;
++		ecc_cfg->spare_bytes = 4;
++		break;
++
++	case 8:
++		ecc_cfg->ecc_mode = ECC_MODE_8BIT;
++		ecc_cfg->ecc_bytes_hw = 13;
++		ecc_cfg->spare_bytes = 2;
++		break;
++
++	default:
+ 		dev_err(snandc->dev,
+-			"only 4 bits ECC strength is supported\n");
++			"only 4 or 8 bits ECC strength is supported\n");
+ 		ret = -EOPNOTSUPP;
+ 		goto err_free_ecc_cfg;
+ 	}
+@@ -302,8 +315,6 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+ 	nand->ecc.ctx.priv = ecc_cfg;
+ 	snandc->qspi->mtd = mtd;
+ 
+-	ecc_cfg->ecc_bytes_hw = 7;
+-	ecc_cfg->spare_bytes = 4;
+ 	ecc_cfg->bbm_size = 1;
+ 	ecc_cfg->bch_enabled = true;
+ 	ecc_cfg->bytes = ecc_cfg->ecc_bytes_hw + ecc_cfg->spare_bytes + ecc_cfg->bbm_size;
+@@ -349,7 +360,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
  			       FIELD_PREP(ECC_SW_RESET, 0) |
  			       FIELD_PREP(ECC_NUM_DATA_BYTES_MASK, ecc_cfg->cw_data) |
  			       FIELD_PREP(ECC_FORCE_CLK_OPEN, 1) |
--			       FIELD_PREP(ECC_MODE_MASK, 0) |
-+			       FIELD_PREP(ECC_MODE_MASK, ECC_MODE_4BIT) |
+-			       FIELD_PREP(ECC_MODE_MASK, ECC_MODE_4BIT) |
++			       FIELD_PREP(ECC_MODE_MASK, ecc_cfg->ecc_mode) |
  			       FIELD_PREP(ECC_PARITY_SIZE_BYTES_BCH_MASK, ecc_cfg->ecc_bytes_hw);
  
  	ecc_cfg->ecc_buf_cfg = 0x203 << NUM_STEPS;
-diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/nand-qpic-common.h
-index cd7172e6c1bbffeee0363a14044980a72ea17723..a070af4593754384d9df4f6206a24665e2040aad 100644
---- a/include/linux/mtd/nand-qpic-common.h
-+++ b/include/linux/mtd/nand-qpic-common.h
-@@ -101,6 +101,8 @@
- #define	ECC_SW_RESET			BIT(1)
- #define	ECC_MODE			4
- #define	ECC_MODE_MASK			GENMASK(5, 4)
-+#define	ECC_MODE_4BIT			0
-+#define	ECC_MODE_8BIT			1
- #define	ECC_PARITY_SIZE_BYTES_BCH	8
- #define	ECC_PARITY_SIZE_BYTES_BCH_MASK	GENMASK(12, 8)
- #define	ECC_NUM_DATA_BYTES		16
 
 -- 
 2.49.0
