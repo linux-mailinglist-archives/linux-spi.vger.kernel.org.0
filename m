@@ -1,48 +1,45 @@
-Return-Path: <linux-spi+bounces-7827-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7844-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89EB6AA6EF5
-	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 12:14:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF3A7AA6F1F
+	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 12:14:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00C674635F6
-	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 10:14:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 648197B5EE4
+	for <lists+linux-spi@lfdr.de>; Fri,  2 May 2025 10:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779D023C515;
-	Fri,  2 May 2025 10:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECEFC23C4EF;
+	Fri,  2 May 2025 10:14:17 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7856F238D54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A966F23C4F7
 	for <linux-spi@vger.kernel.org>; Fri,  2 May 2025 10:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746180853; cv=none; b=tLZPvxjxdko20rm/bM98gmlqZYozniEfik5Il0MC+6s9UZgMy1HFmIXRjdwt9a4RUNgbR2d+UkmRvUcU+7AKRM87sKX6qSdZyoHwpGWId31V2xPipXDx7y3Fbe9mLGcUhXRdqGzi/CXfwU7GLvlBkl/WYvoMr/94yaOpg2ruETU=
+	t=1746180857; cv=none; b=LY1YIzpyCTZKSmPx5TRGtXHM8jpr/RL48fQhaiREUYjienMEiVCQXAzdoZNh21r+9QtP1qIk+5iXZg3X5ilV6kzmTf4tC4neW+F+OnEKyK4m6keLibG5ejtfw8DnXTUWAXngfNYDnN7e/c1GKLSf7c6KDCRh8zk60kM66iARyaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746180853; c=relaxed/simple;
-	bh=9b2cOjEgTnfNPoJfA5ijW1PyfAnFfzJfyNpHSsdkpMg=;
+	s=arc-20240116; t=1746180857; c=relaxed/simple;
+	bh=2eqVnUZBwrfjmIS21M7Y79WYMnohfN8iZlDyk5bQvX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o2V2V9hSMxY8Mao/laSOvTK5YO4lJcumVhTMUq8UYe8Uq3zNpDoZQ80swAKuWGA9tqjAwEL2gVMlOtLcF9Lx34lBsb+64RmgH/OWIxtwHv1kgc4HCNjGtXRMAN+vlGrlHSou/TwThwtYqbRU/qF23s/8InifD35wKCKYif2U+uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
+	 MIME-Version; b=XZP+a6vZSjx1I1RIlRGMlVoNtj5FDtCC4BVj5y7lsd31uCqh4avGCtb59VTV9TlocDvwctnFyzOfnCi1XlhZI8YJE7gKNhlupWhyeRjl38QLd/g4wUfkuLm5npsT5Jmb/hGPoNeaFHrZq78ijyXQbFo568zUQXcLfHO4W9oqCfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4Zpmwn0slJz4x5J1
-	for <linux-spi@vger.kernel.org>; Fri, 02 May 2025 12:14:01 +0200 (CEST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:df64:35e8:502:4ac0])
-	by baptiste.telenet-ops.be with cmsmtp
-	id kAE02E00l4sst1101AE0qM; Fri, 02 May 2025 12:14:01 +0200
+	by michel.telenet-ops.be with cmsmtp
+	id kAE02E0104sst1106AE0oh; Fri, 02 May 2025 12:14:01 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uAnP2-00000000WAU-10uk;
+	id 1uAnP2-00000000WAX-19a4;
 	Fri, 02 May 2025 12:14:00 +0200
 Received: from geert by rox.of.borg with local (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uAnP6-00000008oXe-2sdb;
+	id 1uAnP6-00000008oXi-2yfq;
 	Fri, 02 May 2025 12:14:00 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Mark Brown <broonie@kernel.org>,
@@ -55,9 +52,9 @@ Cc: linux-spi@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 19/22] spi: sh-msiof: Double maximum DMA transfer size using two groups
-Date: Fri,  2 May 2025 12:13:51 +0200
-Message-ID: <0158448958b5b40aff29969188684eb77ccf8116.1746180072.git.geert+renesas@glider.be>
+Subject: [PATCH 20/22] spi: sh-msiof: Document frame start sync pulse mode
+Date: Fri,  2 May 2025 12:13:52 +0200
+Message-ID: <e50f4dd4fdc23c1e3f2abece458fe178b76ada1f.1746180072.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1746180072.git.geert+renesas@glider.be>
 References: <cover.1746180072.git.geert+renesas@glider.be>
@@ -69,68 +66,25 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The maximum DMA transfer size is limited by the maximum values that can
-be written to the word count fields (WDLENx) in the Transmit and Control
-Data Registers (SITDR2/SIRDR2).  As all MSIOF variants support
-transferring data of multiple (two or four) groups, the maximum size can
-be doubled by using two groups instead of one, thus reducing setup
-overhead for very large SPI transfers.
+Unused, but nice to have it documented.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Tested on R-Car M2-W, E3, V4H, and V4M with spi-loopback-test and a
-logic analyzer.
----
- drivers/spi/spi-sh-msiof.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/spi/spi-sh-msiof.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 2b8c143b21219521..4d9a44118e1c9d6c 100644
+index 4d9a44118e1c9d6c..5d9d551dbd220389 100644
 --- a/drivers/spi/spi-sh-msiof.c
 +++ b/drivers/spi/spi-sh-msiof.c
-@@ -767,10 +767,12 @@ static void sh_msiof_dma_complete(void *arg)
- }
- 
- static int sh_msiof_dma_once(struct sh_msiof_spi_priv *p, const void *tx,
--			     void *rx, unsigned int len)
-+			     void *rx, unsigned int len,
-+			     unsigned int max_wdlen)
- {
- 	u32 ier_bits = 0;
- 	struct dma_async_tx_descriptor *desc_tx = NULL, *desc_rx = NULL;
-+	unsigned int words1, words2;
- 	dma_cookie_t cookie;
- 	int ret;
- 
-@@ -817,7 +819,9 @@ static int sh_msiof_dma_once(struct sh_msiof_spi_priv *p, const void *tx,
- 		       FIELD_PREP(SIFCTR_RFWM, SIFCTR_RFWM_1));
- 
- 	/* setup msiof transfer mode registers (32-bit words) */
--	sh_msiof_spi_set_mode_regs(p, tx, rx, 32, len / 4, 0);
-+	words1 = min(len / 4, max_wdlen);
-+	words2 = len / 4 - words1;
-+	sh_msiof_spi_set_mode_regs(p, tx, rx, 32, words1, words2);
- 
- 	sh_msiof_write(p, SIIER, ier_bits);
- 
-@@ -969,7 +973,7 @@ static int sh_msiof_transfer_one(struct spi_controller *ctlr,
- 		 *  DMA supports 32-bit words only, hence pack 8-bit and 16-bit
- 		 *  words, with byte resp. word swapping.
- 		 */
--		unsigned int l = min(round_down(len, 4), max_wdlen * 4);
-+		unsigned int l = min(round_down(len, 4), 2 * max_wdlen * 4);
- 
- 		if (bits <= 8) {
- 			copy32 = copy_bswap32;
-@@ -982,7 +986,7 @@ static int sh_msiof_transfer_one(struct spi_controller *ctlr,
- 		if (tx_buf)
- 			copy32(p->tx_dma_page, tx_buf, l / 4);
- 
--		ret = sh_msiof_dma_once(p, tx_buf, rx_buf, l);
-+		ret = sh_msiof_dma_once(p, tx_buf, rx_buf, l, max_wdlen);
- 		if (ret == -EAGAIN) {
- 			dev_warn_once(&p->pdev->dev,
- 				"DMA not available, falling back to PIO\n");
+@@ -86,6 +86,7 @@ struct sh_msiof_spi_priv {
+ /* SITMDR1 and SIRMDR1 */
+ #define SIMDR1_TRMD		BIT(31)		/* Transfer Mode (1 = Master mode) */
+ #define SIMDR1_SYNCMD		GENMASK(29, 28)	/* SYNC Mode */
++#define SIMDR1_SYNCMD_PULSE	0U		/*   Frame start sync pulse */
+ #define SIMDR1_SYNCMD_SPI	2U		/*   Level mode/SPI */
+ #define SIMDR1_SYNCMD_LR	3U		/*   L/R mode */
+ #define SIMDR1_SYNCAC		BIT(25)		/* Sync Polarity (1 = Active-low) */
 -- 
 2.43.0
 
