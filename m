@@ -1,99 +1,80 @@
-Return-Path: <linux-spi+bounces-7875-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7876-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34DC3AA8362
-	for <lists+linux-spi@lfdr.de>; Sun,  4 May 2025 02:06:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35925AA8363
+	for <lists+linux-spi@lfdr.de>; Sun,  4 May 2025 02:09:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FE267A19ED
-	for <lists+linux-spi@lfdr.de>; Sun,  4 May 2025 00:04:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D7A217D0F1
+	for <lists+linux-spi@lfdr.de>; Sun,  4 May 2025 00:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD4936B;
-	Sun,  4 May 2025 00:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90BC518D;
+	Sun,  4 May 2025 00:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RcXOP8pP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cBcC6z+F"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BDE18D
-	for <linux-spi@vger.kernel.org>; Sun,  4 May 2025 00:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B730A29
+	for <linux-spi@vger.kernel.org>; Sun,  4 May 2025 00:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746317162; cv=none; b=qB3I+1DWjoagPb+bxR/TgNxPx6z4ps0nRMa6bw/g3Kyomsa1gQXUHGSOb4EIdYUx7zXwo9XSX0FX1Ut2thlDqb01WAXSDmXbJNmu8qqRgh2iHs1xTFeZ3onG82H3pzUhrrMUWRcONtKXx/XwR/70NXAou+nJTa+5wlYRUiW+gUY=
+	t=1746317387; cv=none; b=MYhb12PE1CLzRx6fdvPeGOde6VFsuujJRZA+W67vvqsFiXINQluOFrr641Dkc/Cn9EfAUrl8316p/f8dziOKjVNfgB9uUY+TpoiVvp5tc/QfTRTaQ19X0SHmODBFnT6GgZUHEVrKpcFU0oct583yNEDQQiPByqTlqTrl+ZpF2To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746317162; c=relaxed/simple;
-	bh=0Vrp+Ur6ISOTzJlrzOPXGRAgwHCJ1gHHY5mb9EEyYeM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SFQ/e0ux6TSHwLLlYbPTnff6qsFPCmdSg6hekksBEtcTu5AUKwvLi+6WPGbB937BusVS6xL8SGZKznQfR42NshFVLtHTW9qI8us1TRsZwPnDV8G6zGBtT2ZiwjceaN++sSIgsMtFo6qt+n+p2/BeOutscCRGQetlVggz94n1gI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RcXOP8pP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41341C4CEE3;
-	Sun,  4 May 2025 00:06:01 +0000 (UTC)
+	s=arc-20240116; t=1746317387; c=relaxed/simple;
+	bh=B8vOYFP65UFTUG2J+mZFhzEshg+YU8NBqmxVfrBqDfg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=n0srs1dSi1l5LjQECT3WhJ3C2FQRwsOyWPRXeHpYT8E0B+Td4w/P8bfJpdW8IHdoHvHwPRAPctJ1dNogvT19p16+tz8wqPkqsENvcyRQ8K/pHvJHeVPPxDt+WWLTYcZKPUvNc9CKpKnBQa8RlC6/c8DoWArWfDekkqhaMXgNCXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cBcC6z+F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46FCC4CEE3;
+	Sun,  4 May 2025 00:09:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746317162;
-	bh=0Vrp+Ur6ISOTzJlrzOPXGRAgwHCJ1gHHY5mb9EEyYeM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=RcXOP8pPYTOneCRD0XmLHE9DsNb5CS9qOf+duwEUUxC+XAbCLdX0Juy3aYsCxv/o5
-	 JFniwOLPL/iLhZGwrk7BZcp/IvXokMHbfeTRGDuXaOSdGj/gGFkHAx5AOiQL4Yzcf9
-	 EW6vwsPPBmd1cY2lE420emi42l/bQmi3rJzfHyhFLe+J11t4CLdKFBib2aeydW5kvy
-	 swKKhMHhbZG18MWxlt+UiUsiELI9Acb8xXsJx8XkvxC7jzOl683Cz9lkEYlZbzKDqV
-	 P5zUK5kv1dV+UZd9EupeyR/XYAOK8zRuvOyhQzartYKqS+cYAIzjw/H2SVhrZ5zrP2
-	 eDCeEXokDG2FQ==
-From: Mark Brown <broonie@kernel.org>
-To: Martin Sperl <kernel@martin.sperl.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-spi@vger.kernel.org
-In-Reply-To: <da612090f543c8c7cc99fb9dc6ef4abc9560abe4.1746184293.git.geert+renesas@glider.be>
-References: <da612090f543c8c7cc99fb9dc6ef4abc9560abe4.1746184293.git.geert+renesas@glider.be>
-Subject: Re: [PATCH] spi: loopback-test: Simplify strange loopback value
- check
-Message-Id: <174631715990.4097732.7258246864070806147.b4-ty@kernel.org>
-Date: Sun, 04 May 2025 09:05:59 +0900
+	s=k20201202; t=1746317385;
+	bh=B8vOYFP65UFTUG2J+mZFhzEshg+YU8NBqmxVfrBqDfg=;
+	h=Subject:From:Date:To:From;
+	b=cBcC6z+FJ0RUqgQA89Sl05Uja3+DMBG164iXsf0df3nlxU8x2KwRpmvl0PC7tQAqy
+	 ik9YsX3fFx0S3ZgjUtw7xXVnHmrqoqa8BaerjWIyzRRLtAdmo28zE4RMMJtYiS8WIL
+	 JRqAe08XgJThadDuXTHu7/dFF787Dk60468zHzb86AuR4CAeRjuXVLh01nXOAfKduY
+	 AmdvPqwZeTnXZ959p6+k8lCu97rdfiiYFGcegkT5A3mU9MpH+dDeD2/Dog+Rmhorle
+	 7l5AjWaji3ef0qkMXZoASSzeD8oo7ACtSznUA3qeT1xO9eyHC9qjJfzYl8nr2VzPz6
+	 4Oyjh5O0/TO3w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 37AFF380DBE9;
+	Sun,  4 May 2025 00:10:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174631742464.3944607.10746022867752897775.git-patchwork-summary@kernel.org>
+Date: Sun, 04 May 2025 00:10:24 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 02 May 2025 13:12:39 +0200, Geert Uytterhoeven wrote:
-> Apply De Morgan's Theorem and drop superfluous parentheses to simplify
-> the check for strange loopback values.
-> While at it, add the missing zero in the related comment.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: loopback-test: Simplify strange loopback value check
+  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=959045
+  Lore link: https://lore.kernel.org/r/da612090f543c8c7cc99fb9dc6ef4abc9560abe4.1746184293.git.geert+renesas@glider.be
 
-Thanks!
 
-[1/1] spi: loopback-test: Simplify strange loopback value check
-      commit: 233d740e3a819829ccd6d21319015a94349d64eb
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
