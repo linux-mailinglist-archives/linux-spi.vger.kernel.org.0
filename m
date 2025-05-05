@@ -1,106 +1,103 @@
-Return-Path: <linux-spi+bounces-7903-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7904-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5C78AA9C2B
-	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 21:02:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9EB0AA9F73
+	for <lists+linux-spi@lfdr.de>; Tue,  6 May 2025 00:23:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C21017A3419
-	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 19:01:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A8ED1891CBD
+	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 22:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700DA25C6E5;
-	Mon,  5 May 2025 19:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16B3283C83;
+	Mon,  5 May 2025 22:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="snbSOG35"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiQ0ATgx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8811BEF8C;
-	Mon,  5 May 2025 19:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C7B283C81;
+	Mon,  5 May 2025 22:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746471748; cv=none; b=WHQTx6GCA5q+qRmgWlXYR3yUgaJsbOpwTE9RPoT3Kqi9wru+QECrPNFZfGx6toWOZqhdi6fjXw0fXb86ROkn6rrNqmqsFUZb5As0HNGpkhPJuVz6DiQVuVc/XmmRh2i0jo2o3vTUjM26UAuW3xgoYTliH53zuBdwIgy9xAN+0ac=
+	t=1746483327; cv=none; b=Df5H/F/FQWn19WDQcLiZ2LPKd9US6Vx/xIJKpiCLp5IkVoEfl0bTpisyJOvKcTwDN8qfWVYho8MsvqEXPPO8uXcQ6MrsLIf1Cz7oF47jPEQrSR3RbZVqJmqI7qW14ENWzMVAVO3oOkjhhSDr6WdtSi0XWDIs60VWH7kcov/wjc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746471748; c=relaxed/simple;
-	bh=5Ocka9NXimvK/4LAht1ULSkY1xlJ9KYEYW2PzYVXnQ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RWkmyGnm8fT39ZzN/Pn3pZXAnpuWpLPj3RKkWYAlDsgxtQ4JoUUmEGpxCt2HkgSIdbN+M+faxqtpcB4asqmuNb8QreA0wmhZ1W4pFnYT1FF9XNUs48bU+UVWRMqwdZCX/VtzFocJoL/jeHzwN100H8mr8X3Rrpra4vtfVyyFbcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=snbSOG35; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 28873A05E5;
-	Mon,  5 May 2025 21:02:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=AJYT6ZXuMuODnWTrjnxZ
-	jizwjH0vp02GLwvaZErh7mQ=; b=snbSOG35oaQvBdSf6VaV1gV/6zvxxxNyHKQW
-	tYw6RhTVHkK16mjkL/r7Db6oPOAhB7rbSd69JFIMNKZM5W6W3zY82sSfQxjdrfbP
-	zGnsYbHor5ZonPp9VxpNY8P7sHV2Unt7H7YIaur10jdUVGlDRsmJx2jYDFlOxSLM
-	x1NSP5TJ1GEDjnYv19WaXXTSnudSOXqCdOKid5FSj0AGkWhCpM3QHzr3VdMEIEpG
-	KBRUMScbM8WdW2axJN2IETyUho7EtH0JMNZLLkpS6YRQ5uAsm2ZzipNod33gcBSu
-	iSeMgV8kkwtOcgUR7hWmdVCunD51Tzl3Sk+wZiuvE7OhAIaXm/5Vq3G6hhHpvtNH
-	4HxxxorIKW4Hr4GsBwsqvT8tIeoDJfCgZM9kO0lVxtNhZAhYZdv0rxY09AYyj9v2
-	kXlhf1nPW4suPKjnzAj3eCVBW5ntxb2zK/u96KHxpbJJDPdhBrhkHlxG/JJWeY9u
-	NU+HeQWU1mQvYMqoWyBi0Qb2BTZny5q+Da6nQ8S9E4bL82q8jsfTQXfadCafQixV
-	VfRPSOQb4SlJDtjrI2Apqzh8aB2D+yxkfFe6VKcbizZJUIgEOApW3G/duWIDKj9u
-	cysUJL3KeJsMu2KudAxIKI7M+ioEfj9HKSfM5H4gldEm7xaybxzWPs3ovo9iIW94
-	Rmov+kU=
-Message-ID: <8dadb7ae-1a7d-48d4-8dbd-40f6d9f35a6d@prolan.hu>
-Date: Mon, 5 May 2025 21:02:22 +0200
+	s=arc-20240116; t=1746483327; c=relaxed/simple;
+	bh=lnta+hZMPY5VaUkaDF8fXZF2WkKJfxgBtucIMgpK6Sw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Dw/dm4hRcuBzoH1aOWAiE4qlC1D2NHrxkc++ncg1q81mxo7fJCPxMEYviE693Qsqi5J3bQQS8KMXm220fMwcxdCVE3R5rb334EVsny+Wf5h9PNezVt6fyPYipifJ1q0I1VjtUUzIjJw1ZTWsY2huXQB9lexDv8ndO7nKBbACb7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiQ0ATgx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F82DC4CEED;
+	Mon,  5 May 2025 22:15:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746483327;
+	bh=lnta+hZMPY5VaUkaDF8fXZF2WkKJfxgBtucIMgpK6Sw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kiQ0ATgxjroPDOnvO9zV771Z0Dw6rlgLXCGaZt7DbeGPHL4tDDjcJhOmYdl6pBRds
+	 m68vJGJi1C4AJleqG0Q9albUmimGK4VXKUsTVgh6IddLztdY+btV7znaSySOsZ1OOj
+	 32WVqhhi3wTiEyazzq71cpZfJ9pAjuWE0/dXRuqHv6mvpdD26vekLamaIrShjAzHtl
+	 oxpTAtgI7tkqd+/Xm8L3m13BAEVTOu3E9+jYgbutOx7tLUw8WmecF2r2aZ+YnA8Qnp
+	 C/qz2N1UARtrlZmskA4DuotM0cFASw5aoqVWnMCjdyixXMgqF/WGC6ZKU8WULbyYY8
+	 KQWgstagRsSpA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Luis de Arquer <luis.dearquer@inertim.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	heiko@sntech.de,
+	linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.14 035/642] spi-rockchip: Fix register out of bounds access
+Date: Mon,  5 May 2025 18:04:11 -0400
+Message-Id: <20250505221419.2672473-35-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
+References: <20250505221419.2672473-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] pm: runtime: Add new devm functions
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Varshini
- Rajendran" <varshini.rajendran@microchip.com>, Tudor Ambarus
-	<tudor.ambarus@linaro.org>, Mark Brown <broonie@kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>, "Len
- Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, "Alexander
- Dahl" <ada@thorsis.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>, Pavel Machek <pavel@kernel.org>
-References: <20250327195928.680771-2-csokas.bence@prolan.hu>
- <20250327195928.680771-3-csokas.bence@prolan.hu>
- <CAJZ5v0jmuzvo-xzGBDhGVBbY7svbrqEdi-SeJrx5BG=qtN6ZiQ@mail.gmail.com>
- <b38b27d4-c3d3-450c-8634-2e07f393a76c@prolan.hu>
- <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
-Content-Language: en-US, hu-HU
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <CAJZ5v0hRsXw45utNMEhLB=i56tsJDz8AvYfV2stPbtRHh09HUg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94853667166
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.5
+Content-Transfer-Encoding: 8bit
 
-Hi Rafael,
+From: Luis de Arquer <luis.dearquer@inertim.com>
 
-On 2025. 04. 29. 13:08, Rafael J. Wysocki wrote:
->> Did this end up being applied?
-> 
-> Just applied as 6.16 material, I'll let you know when the tag to pull
-> from is ready.
-> 
-> Thanks!
-> 
+[ Upstream commit 7a874e8b54ea21094f7fd2d428b164394c6cb316 ]
 
-Thank you! In the meantime, I submitted the DMA cleanup part as well, 
-for now rebased onto pm-next, but there seems to be no diff between it 
-and dma-next in the relevant files (drivers/dma/dmaengine.c and 
-drivers/spi/atmel-quadspi.c).
+Do not write native chip select stuff for GPIO chip selects.
+GPIOs can be numbered much higher than native CS.
+Also, it makes no sense.
 
-Bence
+Signed-off-by: Luis de Arquer <luis.dearquer@inertim.com>
+Link: https://patch.msgid.link/365ccddfba110549202b3520f4401a6a936e82a8.camel@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi-rockchip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 1bc012fce7cb8..1a6381de6f33d 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -547,7 +547,7 @@ static int rockchip_spi_config(struct rockchip_spi *rs,
+ 	cr0 |= (spi->mode & 0x3U) << CR0_SCPH_OFFSET;
+ 	if (spi->mode & SPI_LSB_FIRST)
+ 		cr0 |= CR0_FBM_LSB << CR0_FBM_OFFSET;
+-	if (spi->mode & SPI_CS_HIGH)
++	if ((spi->mode & SPI_CS_HIGH) && !(spi_get_csgpiod(spi, 0)))
+ 		cr0 |= BIT(spi_get_chipselect(spi, 0)) << CR0_SOI_OFFSET;
+ 
+ 	if (xfer->rx_buf && xfer->tx_buf)
+-- 
+2.39.5
 
 
