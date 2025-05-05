@@ -1,66 +1,68 @@
-Return-Path: <linux-spi+bounces-7901-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7902-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69C8DAA9BE6
-	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 20:49:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B76DAA9BE8
+	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 20:49:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D840616F328
-	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 18:49:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B03DD3BECC2
+	for <lists+linux-spi@lfdr.de>; Mon,  5 May 2025 18:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9797D269B12;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E718B26D4C1;
 	Mon,  5 May 2025 18:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="BObpQanz"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="Etsucjkc"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D751D54EE;
-	Mon,  5 May 2025 18:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A918E19CC22;
+	Mon,  5 May 2025 18:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746470985; cv=none; b=PBSTRIP5MTrwLbxj1acPyN3vokv4LSFPk8Ewt2cC0RVHxpFrlWYaJgyXMMy3Un9tD80abtRSefBwQFlu0dOlhZ42JDCP4MbXBNKhY6YwlfTwXbRu4cNXB2MNd7ION77XI0CmiNJooKSvGJdQXC5yhDFOXv7qzyTEsTlc3aOqQto=
+	t=1746470985; cv=none; b=O7FFlxB849Sm168qjZafjOCTIXCwXsDr4hhP0ztSnzXsmRiwbIHJUxQwPKMFRfjq+qSZXtSgc4WEP9Ug/fk9crIrN57XnLN5FpweDJyFbQAKSxxg4Rcw/NCkgWO76+tvrH1k7V23j+90umJobWtp7/semlqBMHgRyhZiEi5V+KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746470985; c=relaxed/simple;
-	bh=T6Ncts6N/Z58qzqhIEes9iZ3oovStagca0bRASPa1Kk=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YInFQ87yR5qMcrX7qNis1q/JGbrXC+Th5DCHx1z44PR8s0WNSCkUYG0mDB9Ida9PcMme5cCDbfC/M1NRacqYjXdEOUvrmeOyT+9DyIlorcZwRt6G/Taalwbm7oJL4R5HiMKj9gu4ILCALn3mDOUw1kYCzV96NWz6vUDUi7niO78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=BObpQanz; arc=none smtp.client-ip=193.68.50.107
+	bh=0UX04jtlgTNdeY9qnlTEG0Y1NBKHXwDo+YBtMn+bcm4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=meySWt/yW5nAYdUIoqzZDGNo9z90BXuhy2DjoIfhlYXk07Q8fpXpxxqjONBxgjS75jrX7sgk8CFnqeyHx3vFb22KzSGgK22IV66zHp1n/+F+AhY6hwI4h+Dh3VAemnOz5XTjS4BZBZMGI8teXtE4+Lte9tRZKpb+3W1kgBcdw7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=Etsucjkc; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 8C8FFA075A;
-	Mon,  5 May 2025 20:49:39 +0200 (CEST)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 7FD0BA0ACD;
+	Mon,  5 May 2025 20:49:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=mail; bh=R/6cNWBETRGF/BzVYwj3W2JbTh79XOgcLvtKJ6KLVXg=; b=
-	BObpQanzbwc2zx5Bu3udvjAbucVfX4D/BXajPDzK3MyuHoeKcV1xgftTvPwlcMRB
-	MPndqU2RX12hVVuCKclMxGeYzm5kKS0c42zJ/SBUrkMGAvEwegqPeR6Q2QX5PRL/
-	Z02zXsysnmiSuTQxkBlvVpWjK2/oOUf8vRteUH9cyF2F+4hqcA+aLc1/+dnYbVRm
-	Sx2D6zaiitgFZyuGJ5uaQ65MyAXVK/NnPmS0FY9+TzB1UMqoeOPrttxAh2P6fvJB
-	anFMv3xqWp87WgS2hD98LaEOpfh7t/BrqrE1rogd4qjgsY/WMRXPhryHLA3Cy8+F
-	Qe9Wayzh1bLCqFDgaX0VTa0uUno1zZ/yhV0WJ6zrLMjqYgkyv19uI1W8v+fOPAmU
-	5o/Ev1QDu5Rilik81hRxL6bBsWrlXU7mLNqIXNTXqB0EaawFTkXOT4kWzbANZ98W
-	5TJ/jS0B4xHZKrwZG35fa+g8IExUYOuSZ7DFpKnZxbducb00D3HGUKMQ7q3FanKn
-	+rONFBMoGRBERKlOt50zFn9g5/weDnon5z+mXUkBlHHPvWytXmqzJ+se4C38uowL
-	75t9mQguYsVxtdSEgr+EGqdxjKWfEwqebXlcGpewkUiedyCQlHgLQ4C0f/YKDFjT
-	KqeuZaPCZFgHujwRxQfaO2XRP/M2pwUFOymTbTYAKiM=
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=A8eEJvFMu/G8fSNsQRyZ
+	7m8pQKvtChPB4Eaz2stzIqQ=; b=Etsucjkcd5P/kAVx7Ys7kErnTcIn23B0EUE0
+	4CRXWX0ZQgdUaE2KbyFQh2Dsk5ldPEcXVFRsFd4+lS2SOHDIQjTu5+kiMMqF6PNQ
+	6bSE+SE6WoKH2IdgB9zadLjJlfC3TvcW5SCrFYdDn4/gyEJrFiT0ErQw2Hsznuvr
+	6E46cG/WTITq9UcD3qNcf+yHdoocAKHMVZNXTaHuOqPDXNeY0kRzPdFB3qiFmcMy
+	c1sfg0RUxllma9YfAHwf12b8JcxE4RrgPzWYMgAAc2dK7vHwzW4dK7xCc5LalBdg
+	7yKWxWFSpH2Mt4jsVgszd42OVoHFWrVNSPmYXewRqq/rOAfya6r2R95C8AM6b4JH
+	nke/uLp0wiI3tWjRuZlURZ3R5ZLt8Em6ffWmfqAy8N7/ML6UHgX04sowG4rdvJb+
+	k7iOTGZ6mKsiUkAbB9GlDcq8SpZYfx3LgkkU5M52wKv0loDfi/uCqtUAcC1BWVPc
+	rcBy/zvGQGMRd5IYgXZUeAe1o2LC1akG6eO3Q4nLKdovVmCcUwxoxtVIv8l9x5HP
+	W3B/SIv6hqFzaruHVCOTBbd2HvhGFAeYvAJmdUR4WS00+OZvDE+nusuV+Z38lXln
+	1Ha0JIZQ4BOhOgN1qu8PIs627gTT+wypnZGG/Rq+7mslNcYWBSBM8BIyT+0leRj7
+	xDPVDuU=
 From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Vinod Koul
-	<vkoul@kernel.org>, Mark Brown <broonie@kernel.org>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, Tudor Ambarus
-	<tudor.ambarus@linaro.org>
-Subject: [PATCH v5 0/2] Add `devm_dma_request_chan()` to simplify probe path in atmel-quadspi.c
-Date: Mon, 5 May 2025 20:49:32 +0200
-Message-ID: <20250505184936.312274-1-csokas.bence@prolan.hu>
+To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Alexandre
+ Belloni" <alexandre.belloni@bootlin.com>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>
+Subject: [PATCH v5 2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
+Date: Mon, 5 May 2025 20:49:34 +0200
+Message-ID: <20250505184936.312274-3-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250505184936.312274-1-csokas.bence@prolan.hu>
+References: <20250505184936.312274-1-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -69,54 +71,122 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1746470978;VERSION=7990;MC=3789806188;ID=217951;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1746470980;VERSION=7990;MC=561884614;ID=217953;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
 X-EsetId: 37303A2980D94853667166
 
-The probe function of the atmel-quadspi driver got quite convoluted,
-especially since the addition of SAMA7G5 support, that was forward-ported
-from an older vendor kernel. To alleivate this - and similar problems in
-the future - an effort was made to migrate as many functions as possible,
-to their devm_ managed counterparts. Patch 1/2 adds the new
-`devm_dma_request_chan()` function. Patch 2/2 then uses this APIs to
-simplify the probe() function.
+Leave releasing of DMA channels up to the devm facilities. This way we can
+eliminate the rest of the "goto ladder".
 
-Change in v4:
-* split PM imbalance fix [1] and DMA cleanup [this series]
-
-Patch 2/2 is to be applied after the PM imbalance fix [1]. Patch 1/2 can
-(and should) be applied immediately, to a for-6.16 branch.
-
-[1]
-https://lore.kernel.org/lkml/20250327195928.680771-2-csokas.bence@prolan.hu/
-
-Links to previous versions:
-pre-series:
-https://lore.kernel.org/linux-kernel/20241222141427.819222-1-csokas.bence@prolan.hu/
-https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
-v1:
-https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
-v2:
-https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
-v3:
-https://lore.kernel.org/linux-kernel/20250207124802.165408-1-csokas.bence@prolan.hu/
-v4:
-https://lore.kernel.org/lkml/20250317135340.382532-1-csokas.bence@prolan.hu/
-
-Bence Csókás (2):
-  dma: Add devm_dma_request_chan()
-  spi: atmel-quadspi: Use `devm_dma_request_chan()`
-
- drivers/dma/dmaengine.c     | 30 +++++++++++++++++++++++++
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
  drivers/spi/atmel-quadspi.c | 44 ++++++++++---------------------------
- include/linux/dmaengine.h   |  7 ++++++
- 3 files changed, 48 insertions(+), 33 deletions(-)
+ 1 file changed, 11 insertions(+), 33 deletions(-)
 
-
-base-commit: 70cb3b9a371fe9ff4f50cd7889763abd4ab621dc
-base-tree: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-prerequisite-patch-id: e698614397eaaf4da550babe05eea26b7ebbfe39
+diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
+index e7b61dc4ce67..ef1416bbdf89 100644
+--- a/drivers/spi/atmel-quadspi.c
++++ b/drivers/spi/atmel-quadspi.c
+@@ -1285,18 +1285,20 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
+ 	int ret;
+ 
+-	aq->rx_chan = dma_request_chan(&aq->pdev->dev, "rx");
++	aq->rx_chan = devm_dma_request_chan(&aq->pdev->dev, "rx");
+ 	if (IS_ERR(aq->rx_chan)) {
+ 		aq->rx_chan = NULL;
+ 		return dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
+ 				     "RX DMA channel is not available\n");
+ 	}
+ 
+-	aq->tx_chan = dma_request_chan(&aq->pdev->dev, "tx");
++	aq->tx_chan = devm_dma_request_chan(&aq->pdev->dev, "tx");
+ 	if (IS_ERR(aq->tx_chan)) {
+ 		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->tx_chan),
+ 				    "TX DMA channel is not available\n");
+-		goto release_rx_chan;
++		aq->rx_chan = NULL;
++		aq->tx_chan = NULL;
++		return ret;
+ 	}
+ 
+ 	ctrl->dma_rx = aq->rx_chan;
+@@ -1307,20 +1309,6 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
+ 		 dma_chan_name(aq->tx_chan), dma_chan_name(aq->rx_chan));
+ 
+ 	return 0;
+-
+-release_rx_chan:
+-	dma_release_channel(aq->rx_chan);
+-	aq->rx_chan = NULL;
+-	aq->tx_chan = NULL;
+-	return ret;
+-}
+-
+-static void atmel_qspi_dma_release(struct atmel_qspi *aq)
+-{
+-	if (aq->rx_chan)
+-		dma_release_channel(aq->rx_chan);
+-	if (aq->tx_chan)
+-		dma_release_channel(aq->tx_chan);
+ }
+ 
+ static const struct atmel_qspi_ops atmel_qspi_ops = {
+@@ -1425,14 +1413,13 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 
+ 	/* Request the IRQ */
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		err = irq;
+-		goto dma_release;
+-	}
++	if (irq < 0)
++		return irq;
++
+ 	err = devm_request_irq(&pdev->dev, irq, atmel_qspi_interrupt,
+ 			       0, dev_name(&pdev->dev), aq);
+ 	if (err)
+-		goto dma_release;
++		return err;
+ 
+ 	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
+ 	pm_runtime_use_autosuspend(&pdev->dev);
+@@ -1441,22 +1428,16 @@ static int atmel_qspi_probe(struct platform_device *pdev)
+ 
+ 	err = atmel_qspi_init(aq);
+ 	if (err)
+-		goto dma_release;
++		return err;
+ 
+ 	err = spi_register_controller(ctrl);
+ 	if (err)
+-		goto dma_release;
++		return err;
+ 
+ 	pm_runtime_mark_last_busy(&pdev->dev);
+ 	pm_runtime_put_autosuspend(&pdev->dev);
+ 
+ 	return 0;
+-
+-dma_release:
+-	if (aq->caps->has_dma)
+-		atmel_qspi_dma_release(aq);
+-
+-	return err;
+ }
+ 
+ static int atmel_qspi_sama7g5_suspend(struct atmel_qspi *aq)
+@@ -1506,9 +1487,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
+ 
+ 	ret = pm_runtime_get_sync(&pdev->dev);
+ 	if (ret >= 0) {
+-		if (aq->caps->has_dma)
+-			atmel_qspi_dma_release(aq);
+-
+ 		if (aq->caps->has_gclk) {
+ 			ret = atmel_qspi_sama7g5_suspend(aq);
+ 			if (ret)
 -- 
 2.49.0
 
