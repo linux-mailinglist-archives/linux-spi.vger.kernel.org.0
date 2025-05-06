@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-7936-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7937-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBFCAAACCDE
-	for <lists+linux-spi@lfdr.de>; Tue,  6 May 2025 20:12:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E58CAACCE9
+	for <lists+linux-spi@lfdr.de>; Tue,  6 May 2025 20:14:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACCD27B180E
-	for <lists+linux-spi@lfdr.de>; Tue,  6 May 2025 18:11:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 919604A107F
+	for <lists+linux-spi@lfdr.de>; Tue,  6 May 2025 18:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 255202857FA;
-	Tue,  6 May 2025 18:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7FF286429;
+	Tue,  6 May 2025 18:14:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKt91tey"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uXuoLZ6T"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABF554739;
-	Tue,  6 May 2025 18:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29DC286421;
+	Tue,  6 May 2025 18:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746555154; cv=none; b=Z2wxFB4QU7GuRPskdUOXKR+kgZ6J7w19aRIVt5h1buTcEIziIMEdbx5ut6pNEsb9ODmOKU7v1cpaitVPOw1Tw0Vf5z6myZBcNnnF+luvRkCIPr4r1jijzrFvNADIGtGSBe0A1LvJZtR3F3UTk5MUIKs7kL+9SAX5i8scqJpxv78=
+	t=1746555271; cv=none; b=ijbSVAUnNs9HcsjYLEiRsbPP0u8N0C+4S6lGDfBW5DWqJn7YvNpmt6eUQMang1+yqh+fmc9hbTnTILoD1Dz53VGkEOyaSkJqzH1i0Rgeu2oXxtuPNqFAW2K0fwp19bRU1m9jPMhFp79MAjIvWknDZsFt5/84244JiFEKfAYBh8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746555154; c=relaxed/simple;
-	bh=hdqJCIoHpWG2oC0+5/RZxc665pSoigGd4qD/q+klCts=;
+	s=arc-20240116; t=1746555271; c=relaxed/simple;
+	bh=ztulQ8cY061bEozVp4mo/exk+xw1YyIV7kFsfNA4nUU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=uNch4ZKBRnJuRP39r6u70NM1ksUIejxb/GndkL91nnJxdS0VrEV9e7Bj3NuAYbqzACZxYahDR932x4/wBcaVZNoUHueo6C6PUXD+qYwXYyX4bJh3PkcPzIg945rRvOw8/Xwq8mM5wGvxjaJENvjfP54j3V930kKVSZBq6JsfEF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKt91tey; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF68FC4CEE4;
-	Tue,  6 May 2025 18:12:28 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=lqRIIT/Va2eb8Qp687kpmQAT6COKA+pDx91EtpmyZNRKshwMBDrKNZCt52her+FJ1OdhPM5AhdsgcvPP2xxJMbHxw9C692hl/x+EwjAxFxTkFTqXr0lgomRYTnd5Gnu4sF+BVocRBw5kCO70ZTl60QssupDAlt+PWsmj5fOhIe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uXuoLZ6T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFCAAC4CEE4;
+	Tue,  6 May 2025 18:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746555152;
-	bh=hdqJCIoHpWG2oC0+5/RZxc665pSoigGd4qD/q+klCts=;
+	s=k20201202; t=1746555270;
+	bh=ztulQ8cY061bEozVp4mo/exk+xw1YyIV7kFsfNA4nUU=;
 	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=iKt91tey8+RVqP1Wsy2wS+grHhXjuz0kVzrzCblps7/GnEp5a5J8AA3vQZD+Rvycv
-	 h6acvQgb5V5wYIkEONt3AZVOV2qM2vMYL34mf/k06ro1IZHMyeRfkeNY6XIBaNtMzI
-	 e82l/HeBdU69OlyPg7+ZtgA+sC8GGEb30x3aXWAiNSfALt1KqlgxM3g4IaHlEK2jMC
-	 hhcberw9My4Vk462+nob31Ev9QgUQ73SwepXf4tF8dV5uutqRHwHTpQCHeQuVeFf24
-	 IfdfCEmUifxGleICfpix/doAgQXaTQFedAvkQGWjQyadbTwnvwleVkqmrYJcHJB8NL
-	 lVyiYOw2a+v5Q==
-Message-ID: <ea922410-d3e5-4406-9c16-3ac920caab89@kernel.org>
-Date: Tue, 6 May 2025 20:12:27 +0200
+	b=uXuoLZ6T+8evFqGlcM2xqEAu+MrwE8V2yLfNc+LjbcWkPg6YIR/UC8CYQnMw1PLb6
+	 wXkxWe5OtwY/bPkjmmDAsf6StHRlNRZXfgUVMBx6BPCiAh7OX0LSaMbilQb3sjWS6L
+	 +PGfuE1pQc1WH6yqb2dVtDSYw9FNt83lLfY5BLrTxdVW/wuWo/8JLLeKPFUwTdXcCD
+	 7OSIjwxyhjUiLM7b8IezcPgsUsNsaTaq+QxmWQQTRXZrnJmBkbJRGhV4nsrCIW5Q3e
+	 XViBMswPtlwZYV2WYK62I8uyLfrEzoiEMME6encVUhX8lQFg/4gMw0o7zFu6X9QyEX
+	 byBHviUo0xQXA==
+Message-ID: <a4c935a7-0723-46c9-8f85-09f5c895833d@kernel.org>
+Date: Tue, 6 May 2025 20:14:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,7 +58,7 @@ To: Vishwaroop A <va@nvidia.com>, broonie@kernel.org, robh@kernel.org,
  kyarlagadda@nvidia.com, smangipudi@nvidia.com, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20250506175813.3429319-1-va@nvidia.com>
+References: <20250506180848.3430191-1-va@nvidia.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,31 +104,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250506175813.3429319-1-va@nvidia.com>
+In-Reply-To: <20250506180848.3430191-1-va@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 06/05/2025 19:58, Vishwaroop A wrote:
-> The Tegra210 Quad SPI controller uses internal DMA engines to efficiently transfer data between system memory and the SPI bus. On Tegra234 platform, DMA transactions must be properly mapped and protected through IOMMU to ensure system security and functional correctness. Tegra241 uses external DMA and doesn't require IOMMU.
-
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-I don't think you read the review, just skimmed. I explained there how
-to construct subject prefix and gave a link explaining it better.
-
-Can you reach to your colleagues to help in upstreaming process to avoid
-easy mistakes? Many companies have internal checklists or internal
-guides helping in that...
-
+On 06/05/2025 20:08, Vishwaroop A wrote:
+> The Tegra210 Quad SPI controller uses internal DMA engines to efficiently
+> transfer data between system memory and the SPI bus. On Tegra234 platform,
+> DMA transactions must be properly mapped and protected through IOMMU to
+> ensure system security and functional correctness. Tegra241 uses external
+> DMA and doesn't require IOMMU.
 > 
-> Add the iommus property to the device tree binding, making it required only for Tegra234 platform while explicitly disallowing it for other platforms including Tegra241.
-
-Why requiring it for Tegra234? Do not explain what you did - we see it
-easily. Explain what we do not see, so why you are breaking ABI.
-
+> Add the iommus property to the device tree binding, making it required
+> only for Tegra234 platform while explicitly disallowing it for other
+> platforms including Tegra241.
+> 
+> Signed-off-by: Vishwaroop A <va@nvidia.com>
+That's another v2? I reviewed one. Some of my comments are still valid.
+Can you slow down with new versions and spend some time to read the
+feedback you receive?
 
 Best regards,
 Krzysztof
