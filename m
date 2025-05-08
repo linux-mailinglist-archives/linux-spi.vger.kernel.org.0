@@ -1,126 +1,116 @@
-Return-Path: <linux-spi+bounces-7998-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7999-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E3B9AAF8BB
-	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 13:30:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FDBFAAF8FF
+	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 13:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A0499C2592
-	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 11:29:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9632E1C06B5A
+	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 11:48:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DAE221F01;
-	Thu,  8 May 2025 11:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB6122333B;
+	Thu,  8 May 2025 11:47:48 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651A121D3E2;
-	Thu,  8 May 2025 11:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6099F35957;
+	Thu,  8 May 2025 11:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746703801; cv=none; b=F3DXt0VhQHAD6oqr7RoJ5j4XxKco3JL974FllzRro9GyyhUjLqEc7D6ksDWni2JgYXcWV24ExIfQQX/F/bDZBBE/LfINh+KAgvLG7VV8f79gBdpdbOP+j9ndWC+GfhMC1KblVvgST+kGSuphfFTskBHL+rAOxJkkYm5o8Hwqv/8=
+	t=1746704868; cv=none; b=fDvpRdrvyn0V/u8bgEtB7cUOzzhMSbFdL4N/vdAPBL9s93j/jCTZ+lg7TWXxDm9y7BPSWOuagrFjA5uUHixKbJ9EwY7JHyCCNqQ7uGDOaMgzo73TItM/LciFd/EJGVC0+a648PoTxeRm/A5Rn5KIejqilra9E86CXGXSMwF3cqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746703801; c=relaxed/simple;
-	bh=kSaI/zdJnKbLO1hmFQjrwS7/k27n7lnFXTe6Z6uQ/60=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MN772EMscqJfJWLaDON/aQgige5+Z5HgwOzXkXNeB4b3u+bHkGyLD3f1LkNGyit7KlRycuMTJjkY0N6MHdHnDK2AmGMgfMifu8qXzIvtdXKWBr0tEaWNQvYLQrkibNdvZrojVhMH4GKyUlhTGycNfHcu3gB86g/Pcet1Ol/8xf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43B8D106F;
-	Thu,  8 May 2025 04:29:48 -0700 (PDT)
-Received: from [10.57.75.225] (unknown [10.57.75.225])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D097F3F673;
-	Thu,  8 May 2025 04:29:56 -0700 (PDT)
-Message-ID: <f1b41874-1535-4457-9747-eee3d816091a@arm.com>
-Date: Thu, 8 May 2025 12:29:45 +0100
+	s=arc-20240116; t=1746704868; c=relaxed/simple;
+	bh=wY2rXlF9lNnn5R10zAhDvzddR0b8o48odmpoov1tV7A=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CBQRkGaEdl95YU9iIk04EqWnFgIgugW+DfHo4KQaZ3bo2/xSOsV6r2ryyrndRymbT2wCsHcakMz2DeG8AMwjZdZKrj4G744GFc4MvuNSKxGA+aXAGKKiDZfwHmad0vggMDNDYkQ4w7a8t1b57w7L+CbwV+ob/dvYaQycWKH2zbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZtVg63KzCz6L5VR;
+	Thu,  8 May 2025 19:45:06 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 95D9C140121;
+	Thu,  8 May 2025 19:47:36 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 8 May
+ 2025 13:47:34 +0200
+Date: Thu, 8 May 2025 12:47:33 +0100
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+	<rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
+	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, "Pengutronix
+ Kernel Team" <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
+	<wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, "Derek
+ Kiernan" <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, Arnd
+ Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, "Saravana Kannan"
+	<saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, "Mark Brown"
+	<broonie@kernel.org>, Len Brown <lenb@kernel.org>, Daniel Scally
+	<djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>, <linux-kernel@vger.kernel.org>,
+	<imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-clk@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-acpi@vger.kernel.org>, Allan Nielsen
+	<allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli
+	<luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	<linux-cxl@vger.kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, Dave Jiang
+	<dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, Vishal
+ Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan
+ Williams <dan.j.williams@intel.com>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH v2 09/26] cxl/test: Use device_set_node()
+Message-ID: <20250508124733.00001208@huawei.com>
+In-Reply-To: <aBt38JR-YGD5nnC4@smile.fi.intel.com>
+References: <20250507071315.394857-1-herve.codina@bootlin.com>
+	<20250507071315.394857-10-herve.codina@bootlin.com>
+	<aBt38JR-YGD5nnC4@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] applespi from 6.12 onwards
-To: Baolu Lu <baolu.lu@linux.intel.com>, Aditya Garg <gargaditya08@live.com>,
- =?UTF-8?Q?Berkel_J=C3=B6rg?= <joerg.berkel@bfh.ch>,
- linux-input@vger.kernel.org
-Cc: dmitry.torokhov@gmail.com, stable@vger.kernel.org,
- regressions@lists.linux.dev, linux-spi@vger.kernel.org, lukas@wunner.de,
- David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-References: <4dada48a-c5dd-4c30-9c85-5b03b0aa01f0@bfh.ch>
- <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
- <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 2025-05-08 3:15 am, Baolu Lu wrote:
-> On 5/8/25 01:07, Aditya Garg wrote:
->> Keyboard and touchpad stopped working on several Apple Macbooks from 
->> the year 2017 using kernel 6.12.xx . Until now I could only find this 
->> discussion affirming the bug on Debian and Fedora:https://github.com/ 
->> Dunedan/mbp-2016-linux/issues/202
->>
->> On siduction I also tried the more recent kernels 6.14.5 and mainline 
->> 6.15-rc4 (from Ubuntu) and the issue persisted with my testdevice 
->> MacBookPro14,1 -- see the relevant output:
->>
->> kernel: platform pxa2xx-spi.3: Adding to iommu group 20
->> kernel: input: Apple SPI Keyboard as /devices/pci0000:00/0000:00:1e.3/ 
->> pxa2xx-spi.3/spi_master/spi2/spi-APP000D:00/ input/input0
->> kernel: DMAR: DRHD: handling fault status reg 3
->> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
->> 0xffffa000 [fault reason 0x06] PTE Read access is not set
->> kernel: DMAR: DRHD: handling fault status reg 3
->> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
->> 0xffffa000 [fault reason 0x06] PTE Read access is not set
->> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
->> kernel: DMAR: DRHD: handling fault status reg 3
->> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
->> 0xffffa000 [fault reason 0x06] PTE Read access is not set
->> kernel: DMAR: DRHD: handling fault status reg 3
->> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
+On Wed, 7 May 2025 18:10:40 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> On Wed, May 07, 2025 at 09:12:51AM +0200, Herve Codina wrote:
+> > The code set directly dev->fwnode.
+> > 
+> > Use the dedicated helper to perform this operation.  
 > 
-> It appears that all DMA faults are related to a fixed address,
-> 0xffffa000. Is this address something special?
-
-Maybe it's retrying the same buffer a few times before finally giving 
-up? The address does look like a plausible iommu-dma IOVA, so I can 
-imagine at least two possibilities where a change in the IOMMU driver 
-might have an impact:
-
-- It's the right address in the right context but incorrectly mapped as 
-DMA_FROM_DEVICE, where that previously had implicit read permission as 
-well but is now write-only (can the Intel 2nd-stage format do that like 
-Arm does? I forget...)
-
-- It's the right address in the wrong context, because the DMA mapping 
-was done with the wrong device, which was previously in the same IOMMU 
-group as 00:1e.3, but now we assign groups differently. I don't know if 
-lpss_spi_setup() is relevant to this particular hardware setup, but 
-"dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));" 
-there certainly catches my attention, at least.
-
-The DMA mapping tracepoints should be able to shed light on how that 
-address is mapped prior to the fault.
-
-> Also what does below message mean from a SPI driver's perspective?
+> ...
 > 
-> "applespispi-APP000D:00: Error writing to device: 01 0e 00 00"
+> > @@ -1046,7 +1046,7 @@ static void mock_companion(struct acpi_device *adev, struct device *dev)
+> >  {
+> >  	device_initialize(&adev->dev);
+> >  	fwnode_init(&adev->fwnode, NULL);
+> > -	dev->fwnode = &adev->fwnode;
+> > +	device_set_node(dev, &adev->fwnode);
+> >  	adev->fwnode.dev = dev;
+> >  }  
 > 
-> I am asking this because the IOMMU fault messages are about DMA Reads
-> (device raised memory read), while above message complains failing to
-> write to device.
+> This code is questionable to begin with. Can the original author explain what
+> is the motivation behind this as the only callers of fwnode_init() are deep
+> core pieces _and_ this only module. Why?!
+> 
 
-AFAICS it's a "write" at the SPI level, i.e. the SPI controller is 
-sending data *to* the SPI device (the keyboard), so at the PCI/platform 
-level the controller itself is fetching that data *from* memory.
+More likely to happen if CXL folk are +CC.  Added.
 
-Thanks,
-Robin.
+Dan, maybe one for you?
 
