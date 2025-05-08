@@ -1,121 +1,117 @@
-Return-Path: <linux-spi+bounces-7990-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-7991-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 991B3AAEEB5
-	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 00:24:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40B1EAAF11A
+	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 04:20:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA16A1C07828
-	for <lists+linux-spi@lfdr.de>; Wed,  7 May 2025 22:24:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 483D77B9C9E
+	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 02:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E4B291151;
-	Wed,  7 May 2025 22:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E574C19CC02;
+	Thu,  8 May 2025 02:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="H3AhQNzf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDpgfJz/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF07290DA4;
-	Wed,  7 May 2025 22:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12609145FE8;
+	Thu,  8 May 2025 02:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746656661; cv=none; b=il771HPd3xstg3MlZHOVB9S0LnGntdpA8zhYLpWdjcOduQLDSUi66Ii7/vrJiL2T0sJX9v5YF8vEw/qJredljO0qsWoYwrwRM5mGqEhKHCgVGGe8a1n1kl+6gBU+8G0X/n9f5ryO2641dB+HJYmzudxv6zElzebMT+PS/GC8AIM=
+	t=1746670804; cv=none; b=WBJgvcqOimAR3Y2Yj4W3zTLo7PocwoxzlvbpI6uPzrurmO3eHPK3Yel/9liTCn7z6QwpwcwVJGLdxEikZ0Dz/KtYFSXndX2O3Rx9Mdj1S1C8Mi+FfESc5OcOQeSeHOzIH/0MSwjCi00qkAUHne+9fMamVHI/w30opq77Iz9Y/8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746656661; c=relaxed/simple;
-	bh=AzuzgfE6GFKxTRRxcmQmVIVwtjphxNohFQ1mkjj32Gs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gS/FwG0VxdZkL1MG94ysJ+xODHnHe7ETZCYV8mD7/ytD2yF7snK/4AuJ0K4bMhHR7etar/4UOYwo/mJq0QpGzdsoIbGMOMRaONp306SJJBMgzj3XrqPgpWOrHFPYCLLPCIrHLwPPDvqxzeFMbs/qI/KZAdOM//SYh4JEQeJwCEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=H3AhQNzf; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=PzMdG6ucufIYiDDg070rOIAisSRRkIriDyNiBBXVH3U=; b=H3AhQNzfKur7H3echOL82K5wSj
-	UWauEM7K0xtUngTkTiumFckVqkxTSQmxx04ybKUuXMGDwQxdg9v4LTVktEbeK1wYbAEG7wA2phbCJ
-	WOEUl0ZmHpOetacgwgUET9KPOR85GwrqWO+zoimHuICTlzt/azYqhg8fHIiVUKBeUXS8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uCnBL-00BwDo-6P; Thu, 08 May 2025 00:24:03 +0200
-Date: Thu, 8 May 2025 00:24:03 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 23/26] misc: lan966x_pci: Introduce board specific data
-Message-ID: <8b97e095-dbed-438c-9c6d-d3c2c5929fc0@lunn.ch>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-24-herve.codina@bootlin.com>
+	s=arc-20240116; t=1746670804; c=relaxed/simple;
+	bh=K9VvzZF7FrE8ISkenxe5c39/nohHVfBIj4VJaVLF+LU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lV1tm+hMAMz0tedH1EY0OcRNQXN1EXxtSj3el3PMYaCVEddkcSUUU8gVpOsrZ94c9m5ncrHKSGurdl6KJZNm+Jf5wbsmOrdGiVp1A9ZEy05Su6QSI4QgJqHOhEuQBR5PejFC6MjFHrWiqhuAkLiezsGI44fR8SsaaR4gwA0ETGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDpgfJz/; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746670803; x=1778206803;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K9VvzZF7FrE8ISkenxe5c39/nohHVfBIj4VJaVLF+LU=;
+  b=gDpgfJz/NRxGT0Cfp861UuvhRUxkHbLY0hjSQGq2Fd6rseXFckQsGyNt
+   kW9/6PN/mkRWpHhp22fGSn6nIMfxKUAcAlGXxeAl4DCyn/U3Jt+QYF9QQ
+   z2Njh+8tpdfMrGZaVrnwOOE3xPmYOjVAEdXmQPqJvoiBNcTO0FIA1uIx1
+   8SHyCCMCGsRtCRx4KqZjKa0wIhCJD6XNKKFF2DL0tav9bo/ZpkY+quhFj
+   GkjJJB85fPBbTQBnJ4y5Nt0wTaRh2ZDse9eT6u78gU5dSQlvgEuvu5ttt
+   5ykNZeW2NBVmrTiwPJBv9zpJBDTrOdVdM9DXgXRbl8V4lDxZrvNNjptXE
+   w==;
+X-CSE-ConnectionGUID: BJC/qMlRSOueQ9BPWrGfvg==
+X-CSE-MsgGUID: LeJigqWlQg+EUsZcsOyZQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48595813"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="48595813"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 19:20:02 -0700
+X-CSE-ConnectionGUID: uSsh+Kr3TOykkChxmyuWfg==
+X-CSE-MsgGUID: lD7yVttdQDu9Q5ECKqVsVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="159462536"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2025 19:19:59 -0700
+Message-ID: <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
+Date: Thu, 8 May 2025 10:15:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507071315.394857-24-herve.codina@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] applespi from 6.12 onwards
+To: Aditya Garg <gargaditya08@live.com>, =?UTF-8?Q?Berkel_J=C3=B6rg?=
+ <joerg.berkel@bfh.ch>, linux-input@vger.kernel.org
+Cc: dmitry.torokhov@gmail.com, stable@vger.kernel.org,
+ regressions@lists.linux.dev, linux-spi@vger.kernel.org, lukas@wunner.de,
+ David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>
+References: <4dada48a-c5dd-4c30-9c85-5b03b0aa01f0@bfh.ch>
+ <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 07, 2025 at 09:13:05AM +0200, Herve Codina wrote:
-> Only one device-tree overlay (lan966x_evb_lan9662_nic.dtbo) is handled
-> and this overlay is directly referenced in lan966x_pci_load_overlay().
+On 5/8/25 01:07, Aditya Garg wrote:
+> Keyboard and touchpad stopped working on several Apple Macbooks from the year 2017 using kernel 6.12.xx . Until now I could only find this discussion affirming the bug on Debian and Fedora:https://github.com/Dunedan/mbp-2016-linux/issues/202
 > 
-> This avoid to use the code for an other board.
+> On siduction I also tried the more recent kernels 6.14.5 and mainline 6.15-rc4 (from Ubuntu) and the issue persisted with my testdevice MacBookPro14,1 -- see the relevant output:
 > 
-> In order to be more generic and to allow support for other boards (PCI
-> Vendor/Device IDs), introduce the lan966x_pci_info structure and attach
-> it to PCI Vendor/Device IDs handled by the driver.
-> 
-> This structure contains information related to the PCI board such as
-> information related to the dtbo describing the board we have to load.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> kernel: platform pxa2xx-spi.3: Adding to iommu group 20
+> kernel: input: Apple SPI Keyboard as /devices/pci0000:00/0000:00:1e.3/pxa2xx-spi.3/spi_master/spi2/spi-APP000D:00/ 
+> input/input0
+> kernel: DMAR: DRHD: handling fault status reg 3
+> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 0xffffa000 [fault reason 0x06] PTE Read access is not set
+> kernel: DMAR: DRHD: handling fault status reg 3
+> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 0xffffa000 [fault reason 0x06] PTE Read access is not set
+> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
+> kernel: DMAR: DRHD: handling fault status reg 3
+> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 0xffffa000 [fault reason 0x06] PTE Read access is not set
+> kernel: DMAR: DRHD: handling fault status reg 3
+> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
 
-How big is the dtbo ?
+It appears that all DMA faults are related to a fixed address,
+0xffffa000. Is this address something special?
 
-This is going in the right direction. I'm just wondering if each dtbo
-should be wrapped in its own very slim PCI driver, which simply
-registers its lan966x_pci_info structure to a core driver. Only the
-needed dtbo will then be loaded into memory as a module, not them all.
+Also what does below message mean from a SPI driver's perspective?
 
-Pretty much all the pieces are here, so it can be done later.
+"applespispi-APP000D:00: Error writing to device: 01 0e 00 00"
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+I am asking this because the IOMMU fault messages are about DMA Reads
+(device raised memory read), while above message complains failing to
+write to device.
 
-    Andrew
+Thanks,
+baolu
 
