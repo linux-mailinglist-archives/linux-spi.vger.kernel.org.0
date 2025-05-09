@@ -1,148 +1,164 @@
-Return-Path: <linux-spi+bounces-8009-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8010-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E62AB049B
-	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 22:28:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 221B3AB0813
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 04:52:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9331C4C6D7E
-	for <lists+linux-spi@lfdr.de>; Thu,  8 May 2025 20:28:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4130B1BA3969
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 02:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5704728BA9F;
-	Thu,  8 May 2025 20:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E39782309B6;
+	Fri,  9 May 2025 02:52:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrconPu9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZCQt4XHj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1006C1E1E1D;
-	Thu,  8 May 2025 20:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F1E22FDFF;
+	Fri,  9 May 2025 02:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746736079; cv=none; b=rJmC8v7BUBXn/GhGXO/wtn+OKMR4S698mhzbR2gJFiSRmhgqI8xA074p3R5M0uszTMV+7WDKtnsKcokYzQbkr3sNitjnvJmQY4De8Zd6p1zx1O4wGDLCGZ6T1cfOFGPGXS8oDolbJhGKnnbFShUCrk7uSLwvWd1QccheKuJkweU=
+	t=1746759143; cv=none; b=P4ezAqBVB2YJGFoLPiDfRtF8EWgrBP4DSLVZRHPqwzbsWM7WejcRN9h5kD/jLf/xPsgy6wjY9wI5Bogaljuoxgbv4AyTCXLHNqp5ZtJXXjnfrBdRrQLyUl6ttM2ibX6/8SV91E0lQ2CkK9g2D/lrKvLMgpZ1OXE0Ee9ihDR+kZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746736079; c=relaxed/simple;
-	bh=IWqkUmC/HtU7UDGaSHEgVSzn5B33kawytOqertPrlMA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M20SYJcCNeA1hNbTHAPTuNORkPGXSbf0Pe71XMeO8CFFGamUBY0VI2nu+3sr97PDcNdlbn4sINEWpW4xUeuXHrHbKxWp5SfP0b7fYgXjmxCQLYCAqo1GXkHqT5CUhlrvKd99Im/sdB3IO6GponEPtc1PaFqInWZErYNLW+Hig0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrconPu9; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43cebe06e9eso10641275e9.3;
-        Thu, 08 May 2025 13:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746736075; x=1747340875; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YtJQMxYGFNll0psACjnIjhFMP7aU5XrgGwRcy9F2bBg=;
-        b=VrconPu9L/7ItdTaAtknvjg6rmV8QocFh0yjVYp+z/PXrdjhFQPKXzrYXYWw/nz6o8
-         MioM2Y8yADLc3uKEc9FFbo6Tktjs25zqUhUYYh5KIEM+wNas6vo69voEIdnv2jQaLawM
-         3X3sRhFWrGssFcGYNVozPVtuH9eR0k8wcSGshRT5hm3Z5u4kXnD9yxQQ4TXhW9DtYlxP
-         TWkX3/Y/W/zKM2ECiJNWYrdS461iyJ4SAEe00hk4Ai+vthciOMEXl2/V2c/NY6tTjwyH
-         WSOzyu8gXentgMdNCmm1GIcsPeSFFb/eKV+FkTMtd3WafA+GrKWA6sUEjcZ/NWeGTGFt
-         hmiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746736075; x=1747340875;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YtJQMxYGFNll0psACjnIjhFMP7aU5XrgGwRcy9F2bBg=;
-        b=AXS4/I6oQTmldKciO6WAxTiR5jW7J9Uct76PXDoDz6aPB8+mw4eBKWXHdmKnVIXF6z
-         JXXr5YQJd/ymE0DrYkkGkdMFIf7yECi9BRe5JcQieTk1xAcwEfWp9Zd11oNEjQqRXQQd
-         /BYWD7ep12kBwFTMlwsDBeZyDYFtzm8cAcEIPBlhf+NNNSAo26lfHYVp5mOibz9BNiRZ
-         DYCUIDGzFRKeS6tqFCOqQQ5r73/orb/iiLKgoBlfZ6FjrtHvvesMNHvMps01b5+K8OIN
-         zSkflH0DWeSM6ESIMM9Wq67kyQM2i+rDaLjE3Tr6bKiET0yU3n4sF30DPcws6zaVwzJh
-         ufew==
-X-Forwarded-Encrypted: i=1; AJvYcCUa+UnXnJn5VwBgNm3lpWnvqUFbM3TNrB1nNskWCRCCxoCnOVwA8Kd9E17swNvb/QhgjW7wjIQIBUiT@vger.kernel.org, AJvYcCUaVFFm1N5t7G118QiRSh1YQQbpEFGsn9J1BiP5i0hTAFJMVRr5cqjpU1gYTjVg6rFR8sA0rtVeJ1jvCl7M@vger.kernel.org, AJvYcCVlNbpqi+ST5UHvqxBY6b3m+rV/Rux24gR9rTXBJpP6o67Co751K0NriX9j0wWy5kWNmEWElAMsrnNQ@vger.kernel.org, AJvYcCWetnK1wQx1G9+ct3XUR58H9naA+9Czayuu1QCpst1sstYdinKhRgxYYtpenynfLujm9y8oHAQxHG2FsRI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyS+WurefoNjbDuRPdzcBDiokYPe5D1BQNJBcVSGWj9TCn0VO3o
-	h2gz68X+IcHGsBninF26TJk5b23reJuib/dWcZPRC66SvAcWw3pIj4c7lA==
-X-Gm-Gg: ASbGnct6a6s9kjKZx7S80pD2TYVuyIL6+qMgpINTgwIDEqC+VZ9wF5jpJcBkPR+1lZ5
-	VjFbHME3COQY9MFkEGERK46SSq/FhlTG9QudAKlceRALILnm1UnyXNaACNcqqNwMF7XzogqtKWw
-	lB6MdLrEnN1Q5okcTgj0LwhgPTeScAPGoeRQAepam1kSnzw9S1vhTdkuHZARL2oXJXix7UlkLlb
-	k4VEiXrmsY/danYDeQf9f1eUzTwgjRHZeYXel/ZaQxT0KEawXmdiYjF9TR0BFzgceMFSC3dTlwt
-	rLop//AdNe3rmQIFIRd1R2q7fgeOYe+C07UHMileVYGefbDC8bzysnXPGpHyEdqKShn2y9DAji+
-	v2g3uXCsmqjVefgTFOhwFsj++GgM=
-X-Google-Smtp-Source: AGHT+IFnWjQ33MMtDxBoEYIvCnklurS8mH7kZx1CC/YeUHC8q6GxC44TL9JcvWZRp5envBhfwaWZqw==
-X-Received: by 2002:a05:600c:6819:b0:43d:649:4e50 with SMTP id 5b1f17b1804b1-442d6d44db5mr6188455e9.13.1746736075099;
-        Thu, 08 May 2025 13:27:55 -0700 (PDT)
-Received: from orome (p200300e41f281b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1b00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd3aecb0sm49042075e9.28.2025.05.08.13.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 13:27:53 -0700 (PDT)
-Date: Thu, 8 May 2025 22:27:51 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Vishwaroop A <va@nvidia.com>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, jonathanh@nvidia.com, skomatineni@nvidia.com, 
-	ldewangan@nvidia.com, kyarlagadda@nvidia.com, smangipudi@nvidia.com, 
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/3] arm64: tegra: Configure QSPI clocks and add
- DMA
-Message-ID: <lvzu2huonk6fm7ce77xej7kiwqtwupvbr7ilpn2yppq2cmtrnb@jw2ohtmicprs>
-References: <20250506152350.3370291-1-va@nvidia.com>
- <20250506152350.3370291-2-va@nvidia.com>
+	s=arc-20240116; t=1746759143; c=relaxed/simple;
+	bh=6GJl5/03p4qtZ357VqegbeleeR8vc8nJug60jKGZQws=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b8wKB1kIv+Cy8jpmXuEUXqUxqUimZAd9kX2ibaoemtgqEBrGCNl9An2vs1LiCmaEoS+QVv2BZU4nIGBNDVAVLGzwmhDJ6XAXBTNQRwJ3qjOpOD87/wcRuqk1vavtezIjfMi8fllqGSUhsTRgtcHZigPHfbcTEGhO0935f3hQdYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZCQt4XHj; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746759142; x=1778295142;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6GJl5/03p4qtZ357VqegbeleeR8vc8nJug60jKGZQws=;
+  b=ZCQt4XHjlNLsLN26Yy6Uj9zo6VzjyYe15TPp/B6Q9ajcvi1OXd5IDXAg
+   Ms4piGdHGoomfmed1Hze04fNw1NY/DOOGYXB/Oqs4L0n0S4iVAxefzhtt
+   aezT6cWakksk4ml0avSwyj72ssOm+rn7zXKjIyI8bU8fVYGiSJhr/hbq7
+   yfuRbY9lJ6rMqXvJw7ZutVYlzSqGLtsKfxurxbbulJXaykXScl4gRUUed
+   4NV5P8rL6SaQpa4y5iGir9XI9rm5viN39eCxsTIPoMBrYuWcVahxdEhs1
+   5bfH1gEFlarDvfmqVgse1cgeeXZ7PYwo6PCBmud/ypHAUMh9tYGR+0APu
+   Q==;
+X-CSE-ConnectionGUID: TJpYdmIMTai529IxgWC6Zw==
+X-CSE-MsgGUID: zl+DiOZaRbW9PcM3YU3Rzw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11427"; a="59971005"
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="59971005"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 19:52:21 -0700
+X-CSE-ConnectionGUID: mzkDUzqyTteGozfkbYOQ0g==
+X-CSE-MsgGUID: z1gCnSq0RGKtHzq0AizYig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,274,1739865600"; 
+   d="scan'208";a="136185823"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 19:52:18 -0700
+Message-ID: <db0bf1b9-dd6c-4451-8eb9-ab789d732992@linux.intel.com>
+Date: Fri, 9 May 2025 10:47:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="gvljn3izqgvhquae"
-Content-Disposition: inline
-In-Reply-To: <20250506152350.3370291-2-va@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] applespi from 6.12 onwards
+To: Robin Murphy <robin.murphy@arm.com>, Aditya Garg <gargaditya08@live.com>,
+ =?UTF-8?Q?Berkel_J=C3=B6rg?= <joerg.berkel@bfh.ch>,
+ linux-input@vger.kernel.org
+Cc: dmitry.torokhov@gmail.com, stable@vger.kernel.org,
+ regressions@lists.linux.dev, linux-spi@vger.kernel.org, lukas@wunner.de,
+ David Woodhouse <dwmw2@infradead.org>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <4dada48a-c5dd-4c30-9c85-5b03b0aa01f0@bfh.ch>
+ <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+ <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
+ <f1b41874-1535-4457-9747-eee3d816091a@arm.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <f1b41874-1535-4457-9747-eee3d816091a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 5/8/25 19:29, Robin Murphy wrote:
+> On 2025-05-08 3:15 am, Baolu Lu wrote:
+>> On 5/8/25 01:07, Aditya Garg wrote:
+>>> Keyboard and touchpad stopped working on several Apple Macbooks from 
+>>> the year 2017 using kernel 6.12.xx . Until now I could only find this 
+>>> discussion affirming the bug on Debian and Fedora:https://github.com/ 
+>>> Dunedan/mbp-2016-linux/issues/202
+>>>
+>>> On siduction I also tried the more recent kernels 6.14.5 and mainline 
+>>> 6.15-rc4 (from Ubuntu) and the issue persisted with my testdevice 
+>>> MacBookPro14,1 -- see the relevant output:
+>>>
+>>> kernel: platform pxa2xx-spi.3: Adding to iommu group 20
+>>> kernel: input: Apple SPI Keyboard as /devices/ 
+>>> pci0000:00/0000:00:1e.3/ pxa2xx-spi.3/spi_master/spi2/spi-APP000D:00/ 
+>>> input/input0
+>>> kernel: DMAR: DRHD: handling fault status reg 3
+>>> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
+>>> 0xffffa000 [fault reason 0x06] PTE Read access is not set
+>>> kernel: DMAR: DRHD: handling fault status reg 3
+>>> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
+>>> 0xffffa000 [fault reason 0x06] PTE Read access is not set
+>>> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
+>>> kernel: DMAR: DRHD: handling fault status reg 3
+>>> kernel: DMAR: [DMA Read NO_PASID] Request device [00:1e.3] fault addr 
+>>> 0xffffa000 [fault reason 0x06] PTE Read access is not set
+>>> kernel: DMAR: DRHD: handling fault status reg 3
+>>> kernel: applespispi-APP000D:00: Error writing to device: 01 0e 00 00
+>>
+>> It appears that all DMA faults are related to a fixed address,
+>> 0xffffa000. Is this address something special?
+> 
+> Maybe it's retrying the same buffer a few times before finally giving 
+> up? The address does look like a plausible iommu-dma IOVA, so I can 
+> imagine at least two possibilities where a change in the IOMMU driver 
+> might have an impact:
+> 
+> - It's the right address in the right context but incorrectly mapped as 
+> DMA_FROM_DEVICE, where that previously had implicit read permission as 
+> well but is now write-only (can the Intel 2nd-stage format do that like 
+> Arm does? I forget...)
 
---gvljn3izqgvhquae
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH RESEND 2/3] arm64: tegra: Configure QSPI clocks and add
- DMA
-MIME-Version: 1.0
+Intel 2nd-stage page table format allows write-only permission. But
+commit eea53c581688 ("iommu/vt-d: Remove WO permissions on second-level
+paging entries") has already removed it, and v6.12 kernel contains this
+commit.
 
-On Tue, May 06, 2025 at 03:23:49PM +0000, Vishwaroop A wrote:
-> For Tegra234 devices, set QSPI0_2X_PM to 199.99 MHz and QSPI0_PM to
-> 99.99 MHz using PLLC as the parent clock. These frequencies enable
-> Quad IO reads at up to 99.99 MHz, the maximum achievable given PLL
-> and clock divider limitations. Introduce IOMMU property which is
-> needed for internal dma transfers.
->=20
-> Signed-off-by: Vishwaroop A <va@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+By the way, we are about to restore the write-only permission on 2nd-
+stage page table,
 
-I've applied this now. The remaining discussions on the bindings patch
-are details about how to deal with IOMMU on older platforms, but this
-patch in isolation is just adding standard properties.
+https://lore.kernel.org/all/0-v1-c26553717e90+65f-iommu_vtd_ss_wo_jgg@nvidia.com/
+
+... if the device driver provides only DMA_FROM_DEVICE and the iommu
+driver uses 2nd-stage page table for its dma translation.
+
+The iommu driver currently treats DMA_FROM_DEVICE as a hint rather than
+a mandatory requirement. If we want to enforce write-only permission in
+the future, we should allocate a domain allocation flag so that the
+iommu driver could have the opportunity to select the appropriate page
+table format.
+
+> 
+> - It's the right address in the wrong context, because the DMA mapping 
+> was done with the wrong device, which was previously in the same IOMMU 
+> group as 00:1e.3, but now we assign groups differently. I don't know if 
+> lpss_spi_setup() is relevant to this particular hardware setup, but 
+> "dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));" 
+> there certainly catches my attention, at least.
+> 
+> The DMA mapping tracepoints should be able to shed light on how that 
+> address is mapped prior to the fault.
+
+Yes. DMA mapping trace messages would shed more lights.
 
 Thanks,
-Thierry
-
---gvljn3izqgvhquae
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmgdE8cACgkQ3SOs138+
-s6EMIRAAliY7GR+xDac7+0PmuP71PKaV5MtA/YTnq/5d7xUbjCtUfR7kXzjUzqKG
-mWKbwmdx75U2U3ATorGUa+pTK0Tj9Ews2blJx+K+alww20/MGqKY4wHQTbjZW9vq
-EsBPJ3p4LLL6gtmf0NBpPBCjH7dJYCCLOwAUeRV62QKZ4qv22TBlpfS+m8Ff2zPc
-JCCazFWMajzIBafGZ+N3p9pqc5W7mcHppFOs+46fX2dCvjTkEBLkCbQqx/4gJBPO
-+eIdhJSivuVN9KSuShTsVC3WnCvIF/HCqFRvrj1X3gkxGCS63N2jmyr1/B5z8WnD
-x4l7hfdJ87WhQtpiN8/AZUKG7T9jCg4RHsnTHzC55DlnMR08DitjaCmH9cQGamm+
-YEJAPlmlwf4ArUr9JR3FC2Ol8hBM+J8Jo7P7RI8pIi7ZSPTc0aoFTDhDFsu3HOYi
-pr3zndqEm+Em5AXP0WAJ2qUDIF6/FyuDGy8hH/6Q1ppF6Je5UMHIf0rIFryGQL/x
-gGTweqx8CgtG7/I/nYW7NwsRiTgzHmnDzoFXaMt7pNc6r9P3Hs807cAnkPllG1yo
-dOuhedLJq2pNKVSKC4JTGak66uJyij1VdbzeR7irooiAZ+vpKCvGP91QKE09udiD
-btDZrdgW8Kwl+Sg8OJvRQXMp1vCTXJ9hZAP2XToxNWC7ckfz9VM=
-=wjHe
------END PGP SIGNATURE-----
-
---gvljn3izqgvhquae--
+baolu
 
