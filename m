@@ -1,142 +1,164 @@
-Return-Path: <linux-spi+bounces-8029-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8031-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E408AB121D
-	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 13:22:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BE3EAB122F
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 13:26:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49673B21855
-	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 11:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5133522C35
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 11:26:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA13228FFF0;
-	Fri,  9 May 2025 11:21:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7133628FAA5;
+	Fri,  9 May 2025 11:26:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pIDfMFGg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X/W5IgPQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C077128FFDF
-	for <linux-spi@vger.kernel.org>; Fri,  9 May 2025 11:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3635428FA99;
+	Fri,  9 May 2025 11:26:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746789703; cv=none; b=oMUdpG4Mn1PPoRHzNF7aAUrqTznzQ++w2UrJ/ihZ3iF5YxOJMawAd6VU/e0dlIGqjfaO3GQyXI3wHMU1oAflUX+ulLlRTF5maKu+H+iCTOi3RlV9ppsDCYVTSESEbgUVqOPSC+NBnKjZd1+OafXAIasXlLc6Iq4BPN/qzZ2NblM=
+	t=1746789988; cv=none; b=BZZRL8S7Sl186xqLjY3qI7qqDViM01WOTx6ZjqvkX5IkV4E/1YTzcGolT2XqNZKG4GQN3TWt7QSNMqeyyytIuhf909uYxlx/RvCXBa9kYSk9GJIwCXtYCZyeQ+MbdtQ8tc8ZO2k1+tzLpooJlOJvoJch+J8Eci4F7XU9Dx345fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746789703; c=relaxed/simple;
-	bh=0BuO/miu0FNdGeIwKI4Igcv8UGoaQFfIol3GnMmPqqQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ekPPzkf76Jz0VM1hYakjyeKWm1MjJG8BJ4THg8D0sm9VfDmobte4cvOoIf7p1XekMj2nC9fxSULSAHSEmcJYq0mkM97wkGCpNp4Q8tlxq+j69vqc75yY0XSDl5sETsyfXfFZhCm2Wj+eo+EPU7b9BqHjn3aGj3x0Z74C9c9r9rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pIDfMFGg; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-43d4ff56136so1880555e9.3
-        for <linux-spi@vger.kernel.org>; Fri, 09 May 2025 04:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746789700; x=1747394500; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0zvaxLdQ0qhtC7Jg6xocbXcJy/vEo+u7LRWPS1JM5/o=;
-        b=pIDfMFGgO0Hrlt8MMl0kZ9RISa2qcjnwC3tO8RCk6eDiBXdZUcw+0Ar+QyClfzjjZy
-         q7rcmL7awLcC34ICwfPrZeq/wiwJaHqDPX6H/ajLjV466tOFN9TNhpAiOdW3yCwMdSr2
-         rOh36bgF1jWPEXBP+kcLn+mrYhM/1fGrb9R+UQBfyssoShzTwB9LV2LMet077oelBZnP
-         M7ievaT+a/NedGigYAbg8JbMIz2iNJvbcTjP7MJTQ6dWQ4zHRxOecc6PvWo1/s30197N
-         rIQY7W3sO/zbL6+WbkWpVsr3TBrPlskz6WJWPSNjiMYQ/bum8QWKus1rFmZlGJcagngz
-         Av8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746789700; x=1747394500;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0zvaxLdQ0qhtC7Jg6xocbXcJy/vEo+u7LRWPS1JM5/o=;
-        b=Oi2S6oB3LqSWagxogIj9Y3ANqu6EHfyvbwF0/7N25Y91G4ia3GcnzpBh/TqbVb3rYd
-         H3kZdhtT2KEMUCfzVx0Y093eoMIuSYQs+nryJvL+xiq0kulxZGsL2vzcYXr6K+UFGkhc
-         TZog3wSeFpxIakLK3uv2xXyhizYhxLkcHAq+IolmSWQyVVhAhTgeQAm6kQ+bgH+fYyeZ
-         QCINoDoZbhUkbpdkdWKzL+3cQV976jqRYpjOtXiVPk9e0nGQXKBbZr+W7pSsw0eOHoXe
-         UUT0on5dQMFEqafRJ3waJfjn3AjGpbD77d4ByZHiedodXpdKCo+9JHCtDBY28XS5qQQd
-         5jQw==
-X-Forwarded-Encrypted: i=1; AJvYcCV+MMy7h32U85GzcG5EFK91PJfx0CaczqAmPbLe7DnLJ4a2IphOuBjLMXNXMC2XjM3Y75tStJ7whHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKR1sEQA7pYZoUC7t1jn/X5euVq0uBPggfJH9hWKlU0ra1Bewk
-	J+2/Y49qxHSQlK5p2uMJ8r+SNclEP/AaYrQpfjFcxoj6dYUPZClyYg6Oqj0qDnY=
-X-Gm-Gg: ASbGncsyoaEd+No9LCp0lWPOdgrS5Rs2S9qbiLlytV5TQAHQ/w0vxkB9zF9MWLUqVtE
-	mYyrMiJQnUz9ssiTbc55Uhlj/J/94ZAcQCCCBiGt7/oYe/hBz52NrNRw6NGXVmyVFecfKGup6Lk
-	HqF0lvpzjZnXKU0SeQWmXbGdBvHvq0e47wp3z3FbMvxFvPyIZG0KuZ6KvYYIJxfFccK5QYEpY8A
-	cBZZ5SFesrdQqtqpkLxhPAcT4AiG0/nVtLhZFsoM8ufhixKUzMfGbk+TiJ/EsB0DpywrTm/+Jum
-	Coi6T4v+lZ/QVM7YiUKUotQuaHxvR/1364ZQEpC+cnmSHi/lWA==
-X-Google-Smtp-Source: AGHT+IEuDuBg93OxIQQoW+nylcXuRFPBeBathaUSkxBNEQ4jD3mR42Jzx1DI1Z0ON8bFZOIloNRtJQ==
-X-Received: by 2002:a05:600c:1382:b0:439:a30f:2e49 with SMTP id 5b1f17b1804b1-442d6dd5413mr8885805e9.5.1746789699803;
-        Fri, 09 May 2025 04:21:39 -0700 (PDT)
-Received: from kuoka.. ([178.197.207.88])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd328455sm69946945e9.2.2025.05.09.04.21.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 May 2025 04:21:39 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Vladimir Oltean <olteanv@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Frank Li <Frank.Li@nxp.com>,
-	linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	openbmc@lists.ozlabs.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] spi: dt-bindings: nuvoton,wpcm450-fiu: Drop unrelated nodes from DTS example
-Date: Fri,  9 May 2025 13:21:32 +0200
-Message-ID: <20250509112130.123462-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250509112130.123462-3-krzysztof.kozlowski@linaro.org>
-References: <20250509112130.123462-3-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1746789988; c=relaxed/simple;
+	bh=hzLS1kXe+h9iNMiiyoZn+cOfweZp3O9xMdrElxq55yA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YJJRZjoVKrVHQX1xpZKSaVFaoU/JgLmchmRYgGpdrg+x6S7z1CVwEPuTLZv116HY+Y7dp+uLi8GFkOuhsVqJ9uNsZQII9wJnULeHeC1OKxuj3DSZibez4Mz7ZkyEWd5orXPZVWiE+nOuIJvdiOYafDxDGn97U1mMlmGoytxGwew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X/W5IgPQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 306F8C4CEE4;
+	Fri,  9 May 2025 11:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746789987;
+	bh=hzLS1kXe+h9iNMiiyoZn+cOfweZp3O9xMdrElxq55yA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=X/W5IgPQzAckzO/++fEBxwjg3pQP0vPff3cu0Dxhfr33pO6EJnBpJWZIzACDdY9ZL
+	 xeVkXUlMRyb+xJnth6Ud/bnE7zO8iRsFxnSGKiGIJlsXm6R87oughaoQ9gaBTdzHyB
+	 TaQajUFSNrSQk6Dw9EQGN6MdaA2pMpWIEOLcro7zN0h4abcDHLEKvJhJ+7UKMd1z+t
+	 sYRR7bGqZ5/5EE3d35JXABRExqEiB+VVB9ezEUyTbt+7yMeYFjl2IP7/91h8Z+Xucl
+	 eTs1mDfp0hXc53vsEpSoBFHdIjVa3fCOTfGesOT+BP0wubtsQkBP2hL5+ojKgM2O3P
+	 EeOslwo0d7DXw==
+Message-ID: <3ddde799-76b5-43f9-971e-a52ec322e9b1@kernel.org>
+Date: Fri, 9 May 2025 13:26:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=869; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=0BuO/miu0FNdGeIwKI4Igcv8UGoaQFfIol3GnMmPqqQ=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoHeU9Raekbf2tG03zWC6ko3skitxMRci9RwRJu
- 8slhDM2iNaJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaB3lPQAKCRDBN2bmhouD
- 14v3D/9iuwKe4zn277rUfVsmgt/II8fADdf1u/LFF8b+e1VT3f1aiSpH7QsV6sp6QMDJZT/Sjan
- EA5EpUVZRySb6x1OoQPqh9geb8YTnuzu+1mWMxtmBwBzSqNa/ip2dEhYZIkq+zUlobn5dkMP6/N
- z0P5+VQc/vFc6uFcTHXE4h3Ngj/l7NEMSlEJzaV5zdlAJh6LqF1L7x04TAc9S7KqAEwToyaJENd
- LX0+FVaiwpPNKbElXgizKP16egYtBw+RTrZjsUxgOfIccAbaCPDSWQbw5Dd2tsfLhlD56fuQ//U
- bkTV252AgvsA0CBs5BFD1CN7zHWsKzQF6SYkq+LlHWC8dTO8IViLSn09zJnknFgQCsUiYh8y5jE
- xav332eHokzZ/JmqqM1BjdCrVPnlsxrvgaHLhJLu8h3bW4bucGZCs3LNUC+U2deDOeYbrAXE6D6
- 5jqPWdMYxx5FLKVIJkMSJyDtTPV0YiXrqDmFsPJKYUNJAnIZFKGpN0Wpk6VYWZ9rDtepU0781rB
- oO3zGPlWD4Snadvawz9PIqeEAueNplqWUjDezYjF3SvujhiPpmZpXkQ+Q1jV4stqNtnVPNXh3HW
- nSGGYwfk/aaVVWfKANaOQqz0C69xQIXbDORTrC1Ts5aDxeQa4LgzFEkrxuJ4aZyTW7vw1Crk4AP WWtlsOiCaLqiCxg==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 14/14] arm64: dts: Add DSPI entries for S32G platforms
+To: James Clark <james.clark@linaro.org>, Vladimir Oltean
+ <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Chester Lin <chester62515@gmail.com>, Matthias Brugger <mbrugger@suse.com>,
+ Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
+ NXP S32 Linux Team <s32@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, larisa.grigore@nxp.com, arnd@linaro.org,
+ andrei.stefanescu@nxp.com, dan.carpenter@linaro.org
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
+References: <20250509-james-nxp-spi-v1-0-32bfcd2fea11@linaro.org>
+ <20250509-james-nxp-spi-v1-14-32bfcd2fea11@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250509-james-nxp-spi-v1-14-32bfcd2fea11@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Binding example should not contain other nodes, including other
-providers like syscon, because this is redundant and only adds
-unnecessary bloat.
+On 09/05/2025 13:06, James Clark wrote:
+> +&spi1 {
+> +	pinctrl-0 = <&dspi1_pins>;
+> +	pinctrl-names = "default";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	status = "okay";
+> +
+> +	spidev0: spidev@0 {
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml         | 5 -----
- 1 file changed, 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml b/Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml
-index 4e0d391e1d69..c97bf48b56b4 100644
---- a/Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml
-+++ b/Documentation/devicetree/bindings/spi/nuvoton,wpcm450-fiu.yaml
-@@ -59,8 +59,3 @@ examples:
-         reg = <0>;
-       };
-     };
--
--    shm: syscon@c8001000 {
--      compatible = "nuvoton,wpcm450-shm", "syscon";
--      reg = <0xc8001000 0x1000>;
--    };
--- 
-2.45.2
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
+
+> +		compatible = "rohm,dh2228fv";
+
+
+Nah, I really doubt. That's not the device you have there. It's
+possible, though, so can you share schematics?
+
+> +		spi-max-frequency = <4000000>;
+> +		reg = <0>;
+> +		fsl,spi-cs-sck-delay = <100>;
+> +		fsl,spi-sck-cs-delay = <100>;
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi b/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
+> index ba53ec622f0b..798b58fa9536 100644
+> --- a/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
+> @@ -127,6 +127,77 @@ i2c4-gpio-grp1 {
+>  			pinmux = <0x2d40>, <0x2d30>;
+>  		};
+>  	};
+> +
+> +	dspi1_pins: dspi1_pins {
+
+No underscores in node names. Please use upstream as basis of your
+changes, not downstream code. See also DTS coding style.
+
+Best regards,
+Krzysztof
 
