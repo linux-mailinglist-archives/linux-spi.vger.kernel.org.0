@@ -1,182 +1,153 @@
-Return-Path: <linux-spi+bounces-8027-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8028-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D941AAB11F7
-	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 13:14:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1237BAB1226
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 13:23:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEB0C7A9C0C
-	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 11:13:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F1763A226D
+	for <lists+linux-spi@lfdr.de>; Fri,  9 May 2025 11:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9804228F925;
-	Fri,  9 May 2025 11:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6DC28FFE1;
+	Fri,  9 May 2025 11:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvzeELq8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NwwOJdTm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6336128ECE9;
-	Fri,  9 May 2025 11:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264C728FAA7
+	for <linux-spi@vger.kernel.org>; Fri,  9 May 2025 11:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746789252; cv=none; b=pailuKZwQ8Iwf/1p4YkXcmdKNG8zaeBysjsvDGmzNuU/z48HuV94uXogML7wkM4M0pNKBXK9cbptX+GZj1KKH4J0LR9YOxwP6/dENbidxwKr9zTllKMnAr+QN0uATLYB+cqMmTtLMDZkL/emWKRSbwkUDM+nGXj5AculQ7e3VNA=
+	t=1746789702; cv=none; b=P4rT+5hDEImIGGqeTYbYMaVHlimkTi/pFArAksjgmJ8VhA6axjaiEvBnWfxNnk8Hylt1Jqj66lZvu54/kDJETm3ZQK9DnvnZtT9RtYBK3XKc0L4rdigMh/M2YZOX1Z3+x+rg8aiNTt6SAyjicI9OnMRPBIzPJUGhtHSG97KIfyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746789252; c=relaxed/simple;
-	bh=k7G921yPgxgQuLbDV/CqmiMWdYexVQs7eW3UyOEo0Ek=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SPGQGfKOBpOZikgkG9J6k8q7Vs/FHp6larSPj8nfO9G4AfgbFszkBYsfmOs95Ex9ku5XepiMAw7rhDmv4IpwtZEV03pr12UOUHU1KNfFuI6tlOF19gH+ZFXycUYDo2GIuwJhUQUvq9275j8XXYAyrXPi3bOqHTLVmIe2LW+HtCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OvzeELq8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D81C4CEE4;
-	Fri,  9 May 2025 11:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746789251;
-	bh=k7G921yPgxgQuLbDV/CqmiMWdYexVQs7eW3UyOEo0Ek=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OvzeELq8205dZHReoAgw/C+jcPMr8OGOfXcpco7HYR/uXWR4ANWzNWs81MgGG8wZI
-	 BoYb53Iv96Bc8LpnpQ4coOkYzh++HKMtB0+fmYYI0jDOiv0V6c6G57Try7lwYiDFoA
-	 +eit/isGJe+f11iTuUevq86gdpIUdYP1L0KVV3WGTWWdNiXr3LpqwcMyBTHzTsdJfS
-	 4grInBkhvdymaF/+7+NHRtvdskP6aOUYmcQfr/pnSfojI7mmxrbEjt3dWwJsMNNeZs
-	 yZ3/hLBIVJZ8gnfdWuwIgNSPXika8t9sT1jtFnlzo7fplLcV0ThBdEijOzMS26Nh0F
-	 486C94kqORNEw==
-Message-ID: <af92e978-e6f1-43db-8a84-334e7dd0d43d@kernel.org>
-Date: Fri, 9 May 2025 13:14:04 +0200
+	s=arc-20240116; t=1746789702; c=relaxed/simple;
+	bh=s66Afxw8a3xMB/SBhQiPMSJcaB2YeSJGVtDWMjyFv0E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PXfT4X1tFPV0ulJzVs0AdR5Kew/kFhFEKD6cSkF4dies8aHyZR38qjgEDkTPmfKzrAwupBjdMaTQVSoZAs+lYXwxr6nrwH9Y6pOsGz5koWKLasWrZZGdDhe9rZA8YDF4XEWNAq9OZG/Ed07zKiMI3FCdOMG+X5wtZRVZkejukA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NwwOJdTm; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43e9ccaa1ebso571975e9.1
+        for <linux-spi@vger.kernel.org>; Fri, 09 May 2025 04:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746789698; x=1747394498; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKYrxiUxy0npi+Mk4ryYuieCR3b8bkKwTBnIOJMWofc=;
+        b=NwwOJdTmQxq/VG/dYTC6cSfE8YTviK5PrmwmJzCW1NZROf2OE48QjwMWKPgZWESYTZ
+         2v94o0+zRGE0j8nAl5mDBsKSVq5Sz5EoMyXhU6UozDovNhyZLLK/gtm2kvkj5fMZRYGR
+         nJLKKz0JNbkN22Zn5YBdsvAgJzi3AhX6fGrtCfOYUHjxjiSyU1r16zcoWW7FnNinGxrq
+         ro+fW5Hr9Pa+UP6d2F9V+Vg7GmeJwXQ3LHTscGcEGWfT/QBRcfnzDFWZV0O8dgI9bsG4
+         3aA/WZWOkUybS58A+huGulskl9Snz0fTx8qiMFeCG+U+noPqMoo85C/LXQ2ol5hGkkyB
+         sjWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746789698; x=1747394498;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oKYrxiUxy0npi+Mk4ryYuieCR3b8bkKwTBnIOJMWofc=;
+        b=kYWch4usRqRaEinnch8VwUR2uDfX1wjh9kZSlKGtffXPzcjjvjrFVdeglkkp0hjYCA
+         8MfihfyW9wFeD1YMwe9PYVLOMqUXPiWPGUYqmC/TND6WDQV/ZzF57x5W1YbtZB9OXK41
+         acsYmSiP8U+7eJOTHJXwYAKjuDBqUuHqY7vZcLb+qjyu/A0Awf0MHwB3Tr5RQEj+TK5P
+         MnLV34H99HR+h+zzPMqEL4/pRHcpm5jNfdZs7ql1VbEzHWFhTGWz43xOHbmKJ0wPS7CW
+         zFeiQ9Kvl40552aAd8m+LZCbNd37m1BGuQm6HSUpcjaUOxR6gAVlm8+ul519w5/ounXC
+         j1dw==
+X-Forwarded-Encrypted: i=1; AJvYcCUc76MPP0pHg9kzUQUCzLZhFIT0n6NQS+qT9pXwVXtulclPpfnJ3jza2oYpZQohiwE2LUtnzBb31G8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLAeKFtROAUFA5eJYFZHDrtJGyGbenclSukfa0ApIXPgmCewnV
+	FeM2osLHTePpZO5Qjlm1zzufGsWXBr1yxbcBEzk6K232bs/m5OP/AxGqSQKvR/w=
+X-Gm-Gg: ASbGnctcg4dGqf9jkbLpopx0qpvR3ohm3J76tEfB0H4pF3MgeghOQv8EXwOuNtW42Fr
+	iV7XOtcc752b3+wg3WPutTdjVta+43YT6z2+dt7MtRGv/yKRFNaJ2Odm07TpEHOmtXBwEDHUkZ5
+	5rcsaNgkywVypPH64b8zxYUVeYk+nKqHuoZ3gSGMv0382fzT3s69e9LKVn4X48N/cMmEtV8XyUJ
+	6NPU7JYjqr6WuFPetHLKom4D83yHw4LqBuaZhlh0UwP7EJn3HmGyLeWzmuBKSveHyJdVVKSimsS
+	TfhKP0Q0T4r8QxmcexxKbtyNMsSe1EkJ1Tp0TWmWsM7HywWnpuI00K2iGCcu
+X-Google-Smtp-Source: AGHT+IFlbI/ktfksQQOpGjeIwbwt/o9L6Xz+ipgRzNOoWeXM2S9UxEpNqGKoq6dMD0VJeqXmsLSN+g==
+X-Received: by 2002:a05:600c:4451:b0:43b:c0fa:f9c4 with SMTP id 5b1f17b1804b1-442d6dc7d2dmr9532715e9.4.1746789698392;
+        Fri, 09 May 2025 04:21:38 -0700 (PDT)
+Received: from kuoka.. ([178.197.207.88])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442cd328455sm69946945e9.2.2025.05.09.04.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 May 2025 04:21:37 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Vladimir Oltean <olteanv@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Frank Li <Frank.Li@nxp.com>,
+	linux-spi@vger.kernel.org,
+	imx@lists.linux.dev,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	openbmc@lists.ozlabs.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] spi: dt-bindings: fsl,dspi: Fix example indentation
+Date: Fri,  9 May 2025 13:21:31 +0200
+Message-ID: <20250509112130.123462-3-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/14] dt-bindings: spi: dspi: Add S32G support
-To: James Clark <james.clark@linaro.org>, Vladimir Oltean
- <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
- Chester Lin <chester62515@gmail.com>, Matthias Brugger <mbrugger@suse.com>,
- Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
- NXP S32 Linux Team <s32@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, larisa.grigore@nxp.com, arnd@linaro.org,
- andrei.stefanescu@nxp.com, dan.carpenter@linaro.org
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
-References: <20250509-james-nxp-spi-v1-0-32bfcd2fea11@linaro.org>
- <20250509-james-nxp-spi-v1-12-32bfcd2fea11@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250509-james-nxp-spi-v1-12-32bfcd2fea11@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1380; i=krzysztof.kozlowski@linaro.org;
+ h=from:subject; bh=s66Afxw8a3xMB/SBhQiPMSJcaB2YeSJGVtDWMjyFv0E=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBoHeU66+RBLo+l0lSwvGSnhzCY2cPM9tZGuIQ2p
+ wsaUNeN9bOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaB3lOgAKCRDBN2bmhouD
+ 17OnD/wKNyvGnBHJUSNZxdQlvkRO2cr4Gton4WSAWbZ2wKtlwLfNMdH+g91UdqFkXbytN2611vW
+ RcWUGYGRpoCMqelb2OjY+fLEfn5HIJi2Wpxaxyx8h8fzjCUKngY7dfgLJDqbaFa/hLkmkCcimnG
+ g3sFRdTXd+scm6fQHI++SP+ovsyGOHo/zHC60TCcusbm8CL8lweGzKuzVt+jdkbd3KYoSWsBH7X
+ paH2jYlUqunABAf3g0XH6ay4Ib2CnW2dO9fdfN18DuiOl972ClrhYBKBcYYnEyaW1xSOl0fhaDD
+ dVgvsd2JoQd0OC9ccfzCTSX9kQFZbR0zE0lTP5IBahHEut7bhUbr5tvGdnxYQK0XQvSMUHIXhNZ
+ X8wfIDUGWRuygCbj0BdrLv6+m0OKJBOJjhjJo38KGkOW3LpqwmAd+47ottvB9ofZQoHfmg7DBvA
+ HtyZ7r8C2siQqDa+N0Z2XYWKyB/ugPh4pw22tAOfJG+kZ72V8RksiGAFEIwuqzGt8ddNm6DE9SI
+ BeSDarp7Jaqomm5eoDAYnxgff9GlYokHuol19yq9RDrFM37tvykY1ArwU2VTFPXs6vyf6MXUO1l
+ xaSpQNs56nhvSp/MYbpZ7JfQo5ml5GGRp7mktfDKpWKJazgMpdteFiS5DRQwZpXgnPhC3L+e5oX iiM4xKX/3xOH2bg==
+X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
 
-On 09/05/2025 13:05, James Clark wrote:
-> From: Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
-> 
-> Document S32G compatible strings. 's32g2' and 's32g3' use the same
-> driver so 's32g2' must follow 's32g3'.
-> 
-> The SPI controller node in dts can define both host and target pinctrl.
-> The selection between them will be done based on pinctrl-names. The
-> default pinctrl will be loaded first and will be used by the host. If
-> the controller is configured as target (spi-slave property is added in
-> the dts node), the driver will look for the "slave" pinctrl and apply it
-> if found.
+DTS example in the bindings should be indented with 2- or 4-spaces, so
+correct a mixture of different styles to keep consistent 4-spaces.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I do not see any changes in the binding related to above paragraph, so I
-do not understand why are you explaining driver?
+---
 
-> 
-> Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
-> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  Documentation/devicetree/bindings/spi/fsl,dspi.yaml | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
-> index 7ca8fceda717..b5fac0bb142a 100644
-> --- a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
-> @@ -23,6 +23,7 @@ properties:
->            - fsl,ls2080a-dspi
->            - fsl,ls2085a-dspi
->            - fsl,lx2160a-dspi
-> +          - nxp,s32g2-dspi
->        - items:
->            - enum:
->                - fsl,ls1012a-dspi
-> @@ -37,6 +38,9 @@ properties:
->        - items:
->            - const: fsl,lx2160a-dspi
->            - const: fsl,ls2085a-dspi
-> +      - items:
-> +          - const: nxp,s32g3-dspi
-> +          - const: nxp,s32g2-dspi
->  
->    reg:
->      maxItems: 1
-> @@ -114,3 +118,17 @@ examples:
->                  spi-cs-hold-delay-ns = <50>;
->          };
->      };
-> +  # S32G3 in target mode
-> +  - |
-> +    spi0: spi@401d4000 {
+No functional changes here, but saves some comments during reviews of
+new patches built on existing code.
+---
+ .../devicetree/bindings/spi/fsl,dspi.yaml          | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Drop unused label.
+diff --git a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
+index 7ca8fceda717..bf9cce53c48d 100644
+--- a/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
++++ b/Documentation/devicetree/bindings/spi/fsl,dspi.yaml
+@@ -105,12 +105,12 @@ examples:
+         big-endian;
+ 
+         flash@0 {
+-                compatible = "jedec,spi-nor";
+-                reg = <0>;
+-                spi-max-frequency = <16000000>;
+-                spi-cpol;
+-                spi-cpha;
+-                spi-cs-setup-delay-ns = <100>;
+-                spi-cs-hold-delay-ns = <50>;
++            compatible = "jedec,spi-nor";
++            reg = <0>;
++            spi-max-frequency = <16000000>;
++            spi-cpol;
++            spi-cpha;
++            spi-cs-setup-delay-ns = <100>;
++            spi-cs-hold-delay-ns = <50>;
+         };
+     };
+-- 
+2.45.2
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
 
