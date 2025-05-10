@@ -1,109 +1,110 @@
-Return-Path: <linux-spi+bounces-8053-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8054-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AEDCAB20E2
-	for <lists+linux-spi@lfdr.de>; Sat, 10 May 2025 03:51:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34846AB20F3
+	for <lists+linux-spi@lfdr.de>; Sat, 10 May 2025 04:09:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7BC41B66806
-	for <lists+linux-spi@lfdr.de>; Sat, 10 May 2025 01:51:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D5CA1BC59CE
+	for <lists+linux-spi@lfdr.de>; Sat, 10 May 2025 02:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A98266EEA;
-	Sat, 10 May 2025 01:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4858D267729;
+	Sat, 10 May 2025 02:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8qycWpG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCbueTt9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229211754B;
-	Sat, 10 May 2025 01:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 229791F03D4
+	for <linux-spi@vger.kernel.org>; Sat, 10 May 2025 02:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746841883; cv=none; b=agdEXMSqWiTWPuiyLcCsald5LWmooiUlcHrFaa1B+2LCB6tvlvDEIP4+jhvA2setbWwkfpHihJ//W99uKyMzgSFz3hcXEEf7ExnqlJv8mSUNE8TPhHvrVg1oXI9s1TG5U5eyIH9+paQ4k8YT2n8eS2K9dqP1OCw6QHeJKD92rKo=
+	t=1746842991; cv=none; b=RThcMij6TbhXSZgX95qHlwZz4aPIYl68qPKr5JKG6/IHNBzMc6esFzILnQLQZcaSnZbT+cP6rJv8p9wgVt9PBa47MGlDvWw7Qb8w2Ca6tA4uDJ0qaw2bGaHz2lACxI8EfxSttqMhYvuMRkx4dx9VocQ5xoFihx8aHxyolOtkxxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746841883; c=relaxed/simple;
-	bh=97RdXJzhWuNgO+NHgDHCu6JgmKsxcavy2vgt0LibjAs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=moMf4PxwvkwTHp/yQ8ymp7U/hKLVTDx1Jd7PMWd6bNy/KgEQj2xBkLQxlCLN6sJ9DOmdm3e+EI387pQgwf6b60v3SLGZfo72LpJsWumYesghc0KcKGIMXoGykRx995LgV2Cy/Ln0hBYmBN2/4xz71GINA3Bb4StbM5m257ywttQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8qycWpG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BE7C4CEE4;
-	Sat, 10 May 2025 01:51:20 +0000 (UTC)
+	s=arc-20240116; t=1746842991; c=relaxed/simple;
+	bh=X8dw0px8I1d6T2nDtcOfi1BkVl8TPfPk2gBhiViPlb0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=qUG9Ch0llqdE+H1AJpQWbZ9qwVJFOYSQLjds7X+zgBEq33QU9pCQ+tJf8QuR2GA+JJszp3rHagQ17fVnycPABh3eqhgN6rDe8dicAO6K/ogUZiK4wkvj5a8w6grC5QFIcyT/VEiiKveqdtFMstnI2KT56jJFn3h3Jq+4A2EazRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hCbueTt9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7F0C4CEE4;
+	Sat, 10 May 2025 02:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746841883;
-	bh=97RdXJzhWuNgO+NHgDHCu6JgmKsxcavy2vgt0LibjAs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=d8qycWpGU+AGABgxrrU6VoNPAPryCBC2bxzMnA6/J/cMbYKFM5nfIt2qCrGwG7oid
-	 NSf4ChlQqo5tl2ZhTJ4UNaMGVMWzCj/nlD9cGPsNHP4/VcRa3y7ggJsLt4stIZR1wH
-	 Y37kvm4o7rH4Can0bXnBpuT9ruUIWkZTSSEpS6dolU+FXHry0cDX8miZwWim+I+15v
-	 ZuVgKGHsrB7XKsX38zmUWaSHGEtBQd0BB8dXTCPugn2H1pMwADBcEu+S5hh4INW2Eq
-	 8GHIGBUJ3kcoStQ/HDXS2bZNgmzONQS7aaN6XIBrgOu86NCsVOQT0ryrLuP0QqDKIG
-	 p7By0dSD4aRMg==
-From: Mark Brown <broonie@kernel.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Biju Das <biju.das.jz@bp.renesas.com>
-Cc: devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- linux-spi@vger.kernel.org, 
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
- Biju Das <biju.das.au@gmail.com>
-In-Reply-To: <20250424090000.136804-1-biju.das.jz@bp.renesas.com>
-References: <20250424090000.136804-1-biju.das.jz@bp.renesas.com>
-Subject: Re: (subset) [PATCH v5 0/7] Add RZ/G3E xSPI support
-Message-Id: <174684188045.50878.18296470644838923077.b4-ty@kernel.org>
-Date: Sat, 10 May 2025 10:51:20 +0900
+	s=k20201202; t=1746842990;
+	bh=X8dw0px8I1d6T2nDtcOfi1BkVl8TPfPk2gBhiViPlb0=;
+	h=Subject:From:Date:To:From;
+	b=hCbueTt98+3ZkndBy1Fn8D90YpeEV/qTI8pSBFv5ng41WATLY3i6qSz9lRKoaGMH1
+	 beXzvoPobBeRNbB3cYrieh1ryXiIvNUv4dfVxfaLihFCTGnG03YqavI7h/NhsE+1iL
+	 QM+DMAkSL58WYmvECuGq86u4Bpq6h6oxyvLFeIFghZjnqnsmij89TQuasEjYXiiS+U
+	 fLDVYthcqUQ+YiqxQCzgfWqUAwVJo1xtEuWhIppH4ys2btLArRHO0gBvndqNzQtTy/
+	 p1/iigrQKSBvDQvwjM7dSEgAwKQQ2xmWInnc77j9/ckWl3U4DGWpuuuq3MsqiygxuW
+	 MunWl7b9AuBrQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EE2B63822D41;
+	Sat, 10 May 2025 02:10:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174684302855.3867418.7783126463833720786.git-patchwork-summary@kernel.org>
+Date: Sat, 10 May 2025 02:10:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 24 Apr 2025 09:59:48 +0100, Biju Das wrote:
-> The xSPI IP found on RZ/G3E SoC similar to RPC-IF interface, but it
-> can support writes on memory-mapped area. Even though the registers are
-> different, the rpcif driver code can be reused for xSPI by adding wrapper
-> functions.
-> 
-> Merge strategy:
->  Patch#7 in this series is spi related patch and has build dependency on
->  patch#6. Maybe an Ack from SPI maintainer is required so that it can go
->  through memory subsystem.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=939063
+  Lore link: https://lore.kernel.org/r/20250228160810.171413-1-biju.das.jz@bp.renesas.com
 
-Thanks!
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=941109
+  Lore link: https://lore.kernel.org/r/20250306170512.241128-1-biju.das.jz@bp.renesas.com
 
-[7/7] spi: rpc-if: Add write support for memory-mapped area
-      commit: b0b8d3aeadb5c49bf78305a1bc844e5a9378257c
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=941127
+  Lore link: https://lore.kernel.org/r/20250306170924.241257-1-biju.das.jz@bp.renesas.com
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=942683
+  Lore link: https://lore.kernel.org/r/20250311113620.4312-1-biju.das.jz@bp.renesas.com
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=948984
+  Lore link: https://lore.kernel.org/r/20250401143537.224047-1-biju.das.jz@bp.renesas.com
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Patch: Add RZ/G3E xSPI support
+  Submitter: Biju Das <biju.das.jz@bp.renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=956531
+  Lore link: https://lore.kernel.org/r/20250424090000.136804-1-biju.das.jz@bp.renesas.com
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
 
-Thanks,
-Mark
+Total patches: 6
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
