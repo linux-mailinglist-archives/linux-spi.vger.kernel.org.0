@@ -1,159 +1,469 @@
-Return-Path: <linux-spi+bounces-8098-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8099-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8B39AB43A7
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 20:38:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6841AAB4563
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 22:19:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08A23464A75
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 18:37:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACACC19E6CBC
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 20:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE88B228C9D;
-	Mon, 12 May 2025 18:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33443255F26;
+	Mon, 12 May 2025 20:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MSGvZeRL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EB6175BF;
-	Mon, 12 May 2025 18:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E02B242D6E;
+	Mon, 12 May 2025 20:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747074909; cv=none; b=t69SIU1HicCM41x/Eo4EfuxELVLhj9eA45MjUwXqDjaVuVYRShYoBOxBJq30c9hHdv5JrFMrX0oDs7cmLpNxM1x5BCG6nQ8Iom3dzG1LQ8Pla7Q6bQhT+PlVIGR6ZoG7QvZ30DJ+LgeqEoQvF7Cr0eWpz0toyA34rTncl8Qbsf0=
+	t=1747081151; cv=none; b=JCRV6903xQcw1dCk2+ZgiXgPiGmW3L0xv89ILOxtJGMU9yMbpWkGT8Mzce7IXvyzegy7KanqoAPZq4i4rvM30x1IzknxzVlve6Ep45FhAmYm09/5tmUuIlkwcc4qruh3392pIvk1x1s4a/CfR2gDJ2Mcf7wICcvGU4Ba/6VJLes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747074909; c=relaxed/simple;
-	bh=t9E7jaIRgmZ+jhjkrMSLZufPgigLkMJGG8vibrwiY9A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e+VoSKg1F96Qlyya+MlttTu5dO71aagILBTDkgQb/ezyW6rHA80EE8sGjelSbu6kft7h+d2il8I+zbXi324tvmeBCkJEvoeT/Jvf9GbTS0dJs9Y7FVcoN5/RfLQKNf6SqY5/9P2grzWS8gekP1thCQ42bdEQk9ohybhOFRDWQJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1747081151; c=relaxed/simple;
+	bh=w4eLwKb9QryIkuwP6kyQLGalPTyQ/jVoK2Tlo+8db74=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=SzsOrWxL0nu0O/LXJnWm3emXtPkc5YKyop5AUc0LqrK1JG+y6vWPcvk5RMKe+X+AeFwv6kJhPKedKF40ztOb6qhhOP42fkG4M1qUmhTglYrzwmK9rjRF4HyLfCOOMG8INmLi4X8rENCn5W12Q23Y3a56yo8Ew5p/1/wfSrqOXaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MSGvZeRL; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-8783bce9f84so1235614241.2;
-        Mon, 12 May 2025 11:35:07 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ad243cdbe98so369219666b.0;
+        Mon, 12 May 2025 13:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747081147; x=1747685947; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C8FAVJr0o8XNrHXrMvp/p04Y4NbnfovofF+b0K2NKsU=;
+        b=MSGvZeRLme5xL1AZ5D4Ut0ZaN+WOaMQ2NnU9OXRKCkUpWRaUrTJffYRVQy325y3E0H
+         2PEHMXeavTkYSRF79X1WQrydG0X3W0UUXOJXrJMI5SLN5Geibg5HMsPidEucyCziATyx
+         MQpZ6jPuGheeyqhXo5nbXgDsOOT11uL4Om435S7CYlAxLInEL4Ddx/pAUrdx59UNbaSR
+         /BX1D4cVFnJQl2d+uIflM2j9I73MUj8uWU0lrTbez7NAYZchG5Dwpfe3tR2g+57+Bult
+         4JHPq5shdhdI2X7CF7FwEE7sEzMePv6d4PaLMTD9wPBW6qaYWLuYSdbf54ZrFR9LDJIn
+         XZIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747074906; x=1747679706;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=faDWq4SXHnuv6JR8rza3bg7AFXqM/F53I5xb503DYJA=;
-        b=DWRxmg7uBvsWUAxnD3meLSTpQXi1ClsJ7VQ6Tt/0+OV9F+FxT7dGHGHT67R0VmXxNm
-         voLpakFWLL2rZoUbNRbxM8UH0PAy4xXb6yECuwyd8i88aRy3vriULgRLHFkjg4sNXE98
-         79upgFrtUnhRYIrXOKUQIFi7mf79ltrogR6+KgNRQr7HpfF7baNToawkHw3GRGiWOg1t
-         Eu6pisGb44trL6hh5cV7CQNo+I2PPZQEJI1K0FabMBldn4RbPZ5ECklDXJzlYzHYD6OA
-         wOQMsGjmjJR3KaoVy2Hn4Z2kDqvVcvoTaVPTcQph6JRFM2kDq17RAFdqSUFqwjznmB6V
-         41jg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoDGP+mOSqJcbv1Oioox3YDTr8M+vbUZvgUcn2oOONU+illYyKV7Ipg6WTzjSXSFyNJBIOkgdNXUv3@vger.kernel.org, AJvYcCVUVVeDgDJLPmJ0aPC1E5x/X2eJBrcRKrvtSQIQAzY2w8RfuUR+SU2nOGBSBwszX81mCqw8ba13HldW0OA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTwg6thpDt0EsTCP7yEW/c+tGKJ6Ih63tymJW9vsJpuRzUHR2Z
-	YIikRcV4Bfyg9S2unZNd5GTcZjBcvwnE38GDvHBCUx07i8JHgfeLhkfYVmbw
-X-Gm-Gg: ASbGnctNDaMl9oei7gV+N8LZNH6hNlBDly1ajN5zNKxUO44tOyDgnUR9K2KvEp+uKFS
-	wS643+MO0qvgzLzt3SzQkaj7uY8m5AMtznHaBE1wlRm5LM9KpIo+E4JqP3UFR+APyfG6ex0OCcr
-	A7vHrOvCI+I7k17Anlxklg9Fqk88JUPBdN0SnKAUPsBfuJ4RqGhcidxrASa7gnex0tJLOZz6TJk
-	UnG8DD4L6nGr8rLvU2sLheqiixzp6CK/IAM2DFLO441Xvt46aoC+mx7ZP/fLeTv5Md2/M8LI2u4
-	Nn4XR3vt0UCKmRxe5VBwjOU7uGY0nZt2n4YRUnum2/Lfhfg+L91G56i7c98o9/gWQl8jssRc4NO
-	nMtBJse3+PoVBSw==
-X-Google-Smtp-Source: AGHT+IG/Baza7umAn+ya2o1lnut6yQn9jj5gSstGFTFrs+dHvbM44monQFWD669h+oRYGD7XbZhA7Q==
-X-Received: by 2002:a05:6102:800f:b0:4bb:9b46:3f87 with SMTP id ada2fe7eead31-4deed3374d9mr10491936137.6.1747074905969;
-        Mon, 12 May 2025 11:35:05 -0700 (PDT)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4deb2016d22sm5382267137.19.2025.05.12.11.35.05
+        d=1e100.net; s=20230601; t=1747081147; x=1747685947;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C8FAVJr0o8XNrHXrMvp/p04Y4NbnfovofF+b0K2NKsU=;
+        b=a+yhS2h5CRsEOyOWNHdMRui1AaRKtZmThXN2ce2OeXvVE/IYc+JOLW4ZQiCDBAm1AY
+         pwbbFmQmvyxvDWxUZSQMiAoBjO5/8V7/bN/th8nRRzzwjWFLpFXU5MTBkWkdkh4OrE4k
+         DpFlzTHJITwTod6cPNLPYtSSbTmKF0AvBnDg2iqTM7p/yFbf/PVMnEqReXx11jBSw2DD
+         +0bmI0J/CJp0aFVmBGilqavgmaNDv4OY1JmE6OY5PM42QP+kBg53X1aiiTQjzFBn9RRB
+         xx3P0ppToRfxp2ARcFVu5dmTrNL/4/mdqI9xpp+pzK/IpACDhch2kMlfo9jZPGtoMZlW
+         unsg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbi4TrBfgsb6k55x/WssCVtEw45hixD7wjMm2iEMaE34vzG+6CsDKH7MNijvgdRMq/KO73iz3GtzyQkV/a@vger.kernel.org, AJvYcCV6vLrD5Jn56BdHH1cjwRUrwz8+uO5d3swqIFdAkwxZXM4OSWtDeeTgKvOUNRe86QliPbK86qGzhNp0AvFv@vger.kernel.org, AJvYcCVq9apD1zDOyoxLOzRo7X1q2u4v2IjMNVioFzVutd5zOuweL6eKPIZ2IyYKe4kJDbYG4SCkYEpxU2/Q@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRGEBSP2TRf5SrmiC5GHeO2Zhjo9TqIXBiMrbD+ylBC8ofaXtH
+	uchJuSLQ+KRmeiS563i6KXQuVrCGivYOsgj6XRMQSu/N133fD6nV
+X-Gm-Gg: ASbGncvnxs4ElsW5wXZNfHifTJdCdNTPVprI8fenVfuivmYEuvPjXSuY04wnjLf7wtS
+	Z71zpCyJBeYzkTW3SNbpVSeD04j7M4PdvFtXKDb2Y8R20zjsxYmZpubjPsJJwWZyHhfROzfOnal
+	ORbkD401Gevc+g0cAcJ2qePcuJ1Y4ZKIQI6xjBPMWUt6JSnXmPec9WE2tIfCFEn/SqtSMFbEXd9
+	r90eJBDqUX1qbhKuM1jNiO9ipBnyLBlQEnZxLPgwaQaLxyS10Eao5uuI3lAPfTkwFRuWvqaL4dN
+	5lWu6YD3mctRsBCdF41Hq6THb1svm2+NF8s0sdCpHXhulsad21QPY/TRUI+fHQihehvkrfSJcoF
+	724G+rLnJi3Xm8PnQ
+X-Google-Smtp-Source: AGHT+IExGQP+nxOYo8zMTkffifhTHXQnLbGVL/FVwKnNvWu4Fbp1SbYneT3NIy50ZzT/FwDunJsb2w==
+X-Received: by 2002:a17:907:9453:b0:ace:f53b:ff4a with SMTP id a640c23a62f3a-ad21917f5d3mr1480781766b.50.1747081146541;
+        Mon, 12 May 2025 13:19:06 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad22ba81523sm545279366b.65.2025.05.12.13.19.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 May 2025 11:35:05 -0700 (PDT)
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4def152384eso1064942137.1;
-        Mon, 12 May 2025 11:35:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUDgvJGtubwoP7MUrLUKEqvRwXPTfoAcVdmhs820/8VJDh/G9xGIC7+SyTFrqHKxmyNLjSHkuxmILp1@vger.kernel.org, AJvYcCUJ6xIqvnJyHxKytjpA3FjATlYm/zgAyNGzj9mmdysdJJvYDUU5BwbYCULsBfOTzAGvSSz10nBbg0ymM8g=@vger.kernel.org
-X-Received: by 2002:a05:6102:5345:b0:4dd:c8f6:c479 with SMTP id
- ada2fe7eead31-4deed337524mr12552678137.7.1747074904660; Mon, 12 May 2025
- 11:35:04 -0700 (PDT)
+        Mon, 12 May 2025 13:19:06 -0700 (PDT)
+Message-ID: <16195524-1f31-4968-a3fd-f3d24f1c4223@gmail.com>
+Date: Mon, 12 May 2025 22:19:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250509181737.997167-1-Raju.Rangoju@amd.com> <202505110641.zLT16Dv7-lkp@intel.com>
- <e84f5483-a203-4095-82cd-23fa94c87700@amd.com> <CAMuHMdUAE2umYggDdBjYZJY2-mYwim=P_=4Q00k9b8gB1tNY+Q@mail.gmail.com>
- <8c89410b-80f2-47ad-97fd-6ac10752c040@amd.com>
-In-Reply-To: <8c89410b-80f2-47ad-97fd-6ac10752c040@amd.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 12 May 2025 20:34:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX_ugjS475udqa1oOOfbOJ+0s_JAKcCyCcdQfPhhaWOTQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvM4NO1qlCePh4MALJ9BqQGETeVVgnvPLy3fBf6nSRJBizZ7wMT2W-NF_U
-Message-ID: <CAMuHMdX_ugjS475udqa1oOOfbOJ+0s_JAKcCyCcdQfPhhaWOTQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi_amd: Add HIDDMA basic write support
-To: "Rangoju, Raju" <raju.rangoju@amd.com>
-Cc: kernel test robot <lkp@intel.com>, broonie@kernel.org, oe-kbuild-all@lists.linux.dev, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Krishnamoorthi M <krishnamoorthi.m@amd.com>, 
-	Akshata MukundShetty <akshata.mukundshetty@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+From: Gabor Juhos <j4g8y7@gmail.com>
+Subject: Re: [PATCH next 2/2] spi: spi-qpic-snand: add support for 8 bits ECC
+ strength
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, Mark Brown <broonie@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Varadarajan Narayanan <quic_varada@quicinc.com>,
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+ linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250502-qpic-snand-8bit-ecc-v1-0-95f3cd08bbc5@gmail.com>
+ <20250502-qpic-snand-8bit-ecc-v1-2-95f3cd08bbc5@gmail.com>
+ <8aa3d4da-da3e-2af4-e0f9-cd56d6259d8f@quicinc.com>
+ <c1729d39-9f7f-4c6d-b8a4-72dfee4bfca5@gmail.com> <878qn2nsa0.fsf@bootlin.com>
+Content-Language: hu
+In-Reply-To: <878qn2nsa0.fsf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Raju,
+2025. 05. 12. 10:32 keltezéssel, Miquel Raynal írta:
+> On 05/05/2025 at 15:21:52 +02, Gabor Juhos <j4g8y7@gmail.com> wrote:
+> 
+>> 2025. 05. 05. 13:17 keltezéssel, Md Sadre Alam írta:
+>>>
+>>>
+>>
 
-On Mon, 12 May 2025 at 19:55, Rangoju, Raju <raju.rangoju@amd.com> wrote:
-> On 5/12/2025 7:47 PM, Geert Uytterhoeven wrote:
-> > On Mon, 12 May 2025 at 09:29, Rangoju, Raju <raju.rangoju@amd.com> wrote:
-> >> On 5/11/2025 3:51 AM, kernel test robot wrote:
-> >>> kernel test robot noticed the following build warnings:
-> >>>
-> >>> [auto build test WARNING on v6.15-rc5]
-> >>> [also build test WARNING on linus/master]
-> >>> [cannot apply to broonie-spi/for-next next-20250509]
-> >>> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> >>> And when submitting patch, we suggest to use '--base' as documented in
-> >>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >>>
-> >>> url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Rangoju/spi-spi_amd-Add-HIDDMA-basic-write-support/20250510-021954
-> >>> base:   v6.15-rc5
-> >>> patch link:    https://lore.kernel.org/r/20250509181737.997167-1-Raju.Rangoju%40amd.com
-> >>> patch subject: [PATCH] spi: spi_amd: Add HIDDMA basic write support
-> >>> config: m68k-randconfig-r111-20250511 (https://download.01.org/0day-ci/archive/20250511/202505110641.zLT16Dv7-lkp@intel.com/config)
-> >>> compiler: m68k-linux-gcc (GCC) 14.2.0
-> >>
-> >> Thanks for reporting this. We do not support m68k.
-> >
-> > All write[bwlq]() functions take a volatile void __iomem pointer
-> > (https://elixir.bootlin.com/linux/v6.14.6/source/include/asm-generic/io.h#L174)
-> > while you are passing a void *, so sparse should complain about this
-> > on all architectures.
->
-> My bad, with the following flags included, sparse now complains this on
-> all architectures.
->
-> -fmax-errors=unlimited -fmax-warnings=unlimited
->
-> And sparse is right, this driver is using MMIO
-> > accessors on allocated DMA memory, which is just plain wrong:
-> >
-> >      amd_spi->dma_virt_addr = dma_alloc_coherent(dev, AMD_SPI_HID2_DMA_SIZE,
-> >              &amd_spi->phy_dma_buf, GFP_KERNEL);
-> >
-> >       for (i = 0; left_data >= 8; i++, left_data -= 8)
-> >              *buf_64++ = readq((u8 __iomem *)amd_spi->dma_virt_addr + (i * 8));
-> >
-> >> Will re-spin v2 with necessary changes in Kconfig.
-> >
-> > Please fix the real issue instead ;-)
->
-> We are using read*/write* calls instead of memcpy to copy data to/from
-> DMA memory due to performance concerns, as we observed better throughput
-> during continuous read/write compared to the memcpy functions.
+[...]
 
-Perhaps your memcpy() copies backwards?
-https://lwn.net/Articles/1016300/
+>> [   48.940586] ==================================================
+>> [   48.941112] mtd_nandbiterrs: MTD device: 0
+>> [   48.946811] mtd_nandbiterrs: MTD device size 268435456, eraseblock=131072,
+>> page=2048, oob=128
+>> [   48.950837] mtd_nandbiterrs: Device uses 1 subpages of 2048 bytes
+>> [   48.959448] mtd_nandbiterrs: Using page=0, offset=0, eraseblock=0
+>> [   48.969014] mtd_nandbiterrs: incremental biterrors test
+>> [   48.971596] mtd_nandbiterrs: write_page
+>> [   48.977594] mtd_nandbiterrs: rewrite page
+>> [   48.981277] mtd_nandbiterrs: read_page
+>> [   48.985247] mtd_nandbiterrs: verify_page
+>> [   48.988269] mtd_nandbiterrs: Successfully corrected 0 bit errors per subpage
+>> [   48.992327] mtd_nandbiterrs: Inserted biterror @ 0/5
+>> [   48.999428] mtd_nandbiterrs: rewrite page
+>> [   49.005508] mtd_nandbiterrs: read_page
+>> [   49.008836] mtd_nandbiterrs: Read reported 1 corrected bit errors
+>> [   49.011858] mtd_nandbiterrs: verify_page
+>> [   49.018061] mtd_nandbiterrs: Successfully corrected 1 bit errors per subpage
+>> [   49.022015] mtd_nandbiterrs: Inserted biterror @ 0/2
+>> [   49.029058] mtd_nandbiterrs: rewrite page
+>> [   49.034848] mtd_nandbiterrs: read_page
+>> [   49.038516] mtd_nandbiterrs: Read reported 1 corrected bit errors
+>> [   49.041545] mtd_nandbiterrs: verify_page
+>> [   49.047755] mtd_nandbiterrs: Successfully corrected 2 bit errors per subpage
+>> [   49.051702] mtd_nandbiterrs: Inserted biterror @ 0/0
+>> [   49.058760] mtd_nandbiterrs: rewrite page
+>> [   49.064565] mtd_nandbiterrs: read_page
+>> [   49.068203] mtd_nandbiterrs: Read reported 1 corrected bit errors
+>> [   49.071232] mtd_nandbiterrs: verify_page
+>> [   49.077432] mtd_nandbiterrs: Successfully corrected 3 bit errors per subpage
+>> [   49.081389] mtd_nandbiterrs: Inserted biterror @ 1/7
+>> [   49.088432] mtd_nandbiterrs: rewrite page
+>> [   49.094197] mtd_nandbiterrs: read_page
+>> [   49.097889] mtd_nandbiterrs: Read reported 2 corrected bit errors
+>> [   49.100919] mtd_nandbiterrs: verify_page
+>> [   49.107121] mtd_nandbiterrs: Successfully corrected 4 bit errors per subpage
+>> [   49.111077] mtd_nandbiterrs: Inserted biterror @ 1/5
+>> [   49.118137] mtd_nandbiterrs: rewrite page
+>> [   49.123892] mtd_nandbiterrs: read_page
+>> [   49.127576] mtd_nandbiterrs: Read reported 2 corrected bit errors
+>> [   49.130608] mtd_nandbiterrs: verify_page
+>> [   49.136808] mtd_nandbiterrs: Successfully corrected 5 bit errors per subpage
+>> [   49.140764] mtd_nandbiterrs: Inserted biterror @ 1/2
+>> [   49.147807] mtd_nandbiterrs: rewrite page
+>> [   49.153607] mtd_nandbiterrs: read_page
+>> [   49.157268] mtd_nandbiterrs: Read reported 2 corrected bit errors
+>> [   49.160294] mtd_nandbiterrs: verify_page
+>> [   49.166496] mtd_nandbiterrs: Successfully corrected 6 bit errors per subpage
+>> [   49.170452] mtd_nandbiterrs: Inserted biterror @ 1/0
+>> [   49.177498] mtd_nandbiterrs: rewrite page
+>> [   49.183253] mtd_nandbiterrs: read_page
+>> [   49.186974] mtd_nandbiterrs: Read reported 2 corrected bit errors
+>> [   49.189983] mtd_nandbiterrs: verify_page
+>> [   49.196194] mtd_nandbiterrs: Successfully corrected 7 bit errors per subpage
+>> [   49.200140] mtd_nandbiterrs: Inserted biterror @ 2/6
+>> [   49.207182] mtd_nandbiterrs: rewrite page
+>> [   49.212895] mtd_nandbiterrs: read_page
+>> [   49.216671] mtd_nandbiterrs: Read reported 3 corrected bit errors
+>> [   49.219670] mtd_nandbiterrs: verify_page
+>> [   49.225872] mtd_nandbiterrs: Successfully corrected 8 bit errors per subpage
+>> [   49.229827] mtd_nandbiterrs: Inserted biterror @ 2/5
+>> [   49.236871] mtd_nandbiterrs: rewrite page
+>> [   49.242629] mtd_nandbiterrs: read_page
+>> [   49.246348] mtd_nandbiterrs: error: read failed at 0x0
+>> [   49.249356] mtd_nandbiterrs: After 9 biterrors per subpage, read reported
+>> error -74
+>> [   49.257958] mtd_nandbiterrs: finished successfully.
+>> [   49.262029] ==================================================
+>> #
+> 
+> This is not the intended behavior. The reporting is wrong and should
+> report an increasing number of bitflips instead of 1, 1, 1, 2, 2, 2, 2,
+> 3.
+> 
+> With this behavior, wear levelling will not work correctly.
+> 
+> This is not related to Gabor's changes, but I believe this should be
+> updated otherwise it does not make much sense to increase the strength.
 
-There is no guarantee that read*/write* calls work on normal RAM on
-all architectures. It may just crash, as some architectures return
-cookies instead of real pointers when mapping MMIO.
+It still makes some sense. For example, the bootloader on my board uses 8 bits
+strength when it handles the NAND flash. Without supporting that, the kernel
+can't read the data written by the bootloader and vice versa.
 
-Gr{oetje,eeting}s,
+> Gabor, can you look into it? Both patches look fine otherwise, thanks a
+> lot!
 
-                        Geert
+I have checked it. According to the code, the driver reads the reported values
+from a hardware register.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Here is the result of another test but i have added some debug code to the
+driver so the output contains the hardware register values:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  # insmod mtd_nandbiterrs dev=0
+  [   64.791395] 
+  [   64.791423] ==================================================
+  [   64.791950] mtd_nandbiterrs: MTD device: 0
+  [   64.797592] mtd_nandbiterrs: MTD device size 268435456, eraseblock=131072, page=2048, oob=128
+  [   64.801779] mtd_nandbiterrs: Device uses 1 subpages of 2048 bytes
+  [   64.810313] mtd_nandbiterrs: Using page=0, offset=0, eraseblock=0
+  [   64.820832] mtd_nandbiterrs: incremental biterrors test
+  [   64.822452] mtd_nandbiterrs: write_page
+  [   64.828511] mtd_nandbiterrs: rewrite page
+  [   64.832270] mtd_nandbiterrs: read_page
+  [   64.836184] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0200 erased_cw:00000002
+  [   64.839091] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   64.847364] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   64.855694] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   64.864020] qcom_snand 79b0000.spi: corrected:0 failed:0 bitflips:0
+  [   64.872349] mtd_nandbiterrs: verify_page
+  [   64.878598] mtd_nandbiterrs: Successfully corrected 0 bit errors per subpage
+  [   64.882760] mtd_nandbiterrs: Inserted biterror @ 0/5
+  [   64.889793] mtd_nandbiterrs: rewrite page
+  [   64.895541] mtd_nandbiterrs: read_page
+  [   64.899228] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0201 erased_cw:00000002
+  [   64.902282] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   64.910549] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   64.918860] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   64.927206] qcom_snand 79b0000.spi: corrected:1 failed:0 bitflips:1
+  [   64.935552] mtd_nandbiterrs: Read reported 1 corrected bit errors
+  [   64.941789] mtd_nandbiterrs: verify_page
+  [   64.948043] mtd_nandbiterrs: Successfully corrected 1 bit errors per subpage
+  [   64.952042] mtd_nandbiterrs: Inserted biterror @ 0/2
+  [   64.959048] mtd_nandbiterrs: rewrite page
+  [   64.964815] mtd_nandbiterrs: read_page
+  [   64.968490] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0201 erased_cw:00000002
+  [   64.971586] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   64.979814] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   64.988131] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   64.996481] qcom_snand 79b0000.spi: corrected:1 failed:0 bitflips:1
+  [   65.004810] mtd_nandbiterrs: Read reported 1 corrected bit errors
+  [   65.011059] mtd_nandbiterrs: verify_page
+  [   65.017313] mtd_nandbiterrs: Successfully corrected 2 bit errors per subpage
+  [   65.021307] mtd_nandbiterrs: Inserted biterror @ 0/0
+  [   65.028319] mtd_nandbiterrs: rewrite page
+  [   65.034131] mtd_nandbiterrs: read_page
+  [   65.037862] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0201 erased_cw:00000002
+  [   65.040844] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.049069] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.057418] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.065763] qcom_snand 79b0000.spi: corrected:1 failed:0 bitflips:1
+  [   65.074082] mtd_nandbiterrs: Read reported 1 corrected bit errors
+  [   65.080341] mtd_nandbiterrs: verify_page
+  [   65.086584] mtd_nandbiterrs: Successfully corrected 3 bit errors per subpage
+  [   65.090574] mtd_nandbiterrs: Inserted biterror @ 1/7
+  [   65.097589] mtd_nandbiterrs: rewrite page
+  [   65.103374] mtd_nandbiterrs: read_page
+  [   65.107030] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0202 erased_cw:00000002
+  [   65.110120] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.118340] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.126689] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.135032] qcom_snand 79b0000.spi: corrected:2 failed:0 bitflips:2
+  [   65.143357] mtd_nandbiterrs: Read reported 2 corrected bit errors
+  [   65.149611] mtd_nandbiterrs: verify_page
+  [   65.155855] mtd_nandbiterrs: Successfully corrected 4 bit errors per subpage
+  [   65.159844] mtd_nandbiterrs: Inserted biterror @ 1/5
+  [   65.166860] mtd_nandbiterrs: rewrite page
+  [   65.172645] mtd_nandbiterrs: read_page
+  [   65.176301] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0202 erased_cw:00000002
+  [   65.179389] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.187611] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.195961] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.204289] qcom_snand 79b0000.spi: corrected:2 failed:0 bitflips:2
+  [   65.212623] mtd_nandbiterrs: Read reported 2 corrected bit errors
+  [   65.218858] mtd_nandbiterrs: verify_page
+  [   65.225139] mtd_nandbiterrs: Successfully corrected 5 bit errors per subpage
+  [   65.229102] mtd_nandbiterrs: Inserted biterror @ 1/2
+  [   65.236147] mtd_nandbiterrs: rewrite page
+  [   65.241899] mtd_nandbiterrs: read_page
+  [   65.245572] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0202 erased_cw:00000002
+  [   65.248635] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.256902] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.265234] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.273561] qcom_snand 79b0000.spi: corrected:2 failed:0 bitflips:2
+  [   65.281895] mtd_nandbiterrs: Read reported 2 corrected bit errors
+  [   65.288129] mtd_nandbiterrs: verify_page
+  [   65.294408] mtd_nandbiterrs: Successfully corrected 6 bit errors per subpage
+  [   65.298373] mtd_nandbiterrs: Inserted biterror @ 1/0
+  [   65.305413] mtd_nandbiterrs: rewrite page
+  [   65.311170] mtd_nandbiterrs: read_page
+  [   65.314843] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0202 erased_cw:00000002
+  [   65.317906] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.326170] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.334501] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.342833] qcom_snand 79b0000.spi: corrected:2 failed:0 bitflips:2
+  [   65.351164] mtd_nandbiterrs: Read reported 2 corrected bit errors
+  [   65.357399] mtd_nandbiterrs: verify_page
+  [   65.363680] mtd_nandbiterrs: Successfully corrected 7 bit errors per subpage
+  [   65.367643] mtd_nandbiterrs: Inserted biterror @ 2/6
+  [   65.374684] mtd_nandbiterrs: rewrite page
+  [   65.380445] mtd_nandbiterrs: read_page
+  [   65.384112] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0203 erased_cw:00000002
+  [   65.387177] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.395445] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.403769] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.412103] qcom_snand 79b0000.spi: corrected:3 failed:0 bitflips:3
+  [   65.420436] mtd_nandbiterrs: Read reported 3 corrected bit errors
+  [   65.426671] mtd_nandbiterrs: verify_page
+  [   65.432950] mtd_nandbiterrs: Successfully corrected 8 bit errors per subpage
+  [   65.436915] mtd_nandbiterrs: Inserted biterror @ 2/5
+  [   65.443958] mtd_nandbiterrs: rewrite page
+  [   65.449719] mtd_nandbiterrs: read_page
+  [   65.453386] qcom_snand 79b0000.spi: cw[0] flash:00003030 buffer:00ff0301 erased_cw:00000002
+  [   65.456448] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   65.464715] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   65.473041] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   65.481374] qcom_snand 79b0000.spi: corrected:0 failed:1 bitflips:3
+  [   65.489706] mtd_nandbiterrs: error: read failed at 0x0
+  [   65.495941] mtd_nandbiterrs: After 9 biterrors per subpage, read reported error -74
+  [   65.504609] mtd_nandbiterrs: finished successfully.
+  [   65.508700] ==================================================
+
+
+Basically, the driver reads the page as 4 codewords along with reading the
+register values after each. The reported values are coming from the low 
+5 bits of the 'buffer' values printed above. The layout of the register is
+barely documented in the driver, so the exact meaning of the bits is unknown.
+
+Despite that, I had an idea, so I have changed the code in the nandbiterrs
+module to insert only single bit error into a given byte. By doing the test
+with the modified module results in the following:
+
+  # insmod mtd_nandbiterrs dev=0
+  [   37.125416] 
+  [   37.125444] ==================================================
+  [   37.125970] mtd_nandbiterrs: MTD device: 0
+  [   37.131764] mtd_nandbiterrs: MTD device size 268435456, eraseblock=131072, page=2048, oob=128
+  [   37.135695] mtd_nandbiterrs: Device uses 1 subpages of 2048 bytes
+  [   37.144314] mtd_nandbiterrs: Using page=0, offset=0, eraseblock=0
+  [   37.155047] mtd_nandbiterrs: incremental biterrors test
+  [   37.156481] mtd_nandbiterrs: write_page
+  [   37.162518] mtd_nandbiterrs: rewrite page
+  [   37.166298] mtd_nandbiterrs: read_page
+  [   37.170193] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0200 erased_cw:00000002
+  [   37.173111] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.181383] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.189708] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.198020] qcom_snand 79b0000.spi: corrected:0 failed:0 bitflips:0
+  [   37.206367] mtd_nandbiterrs: verify_page
+  [   37.212631] mtd_nandbiterrs: Successfully corrected 0 bit errors per subpage
+  [   37.216768] mtd_nandbiterrs: Inserted biterror @ 1/7
+  [   37.223809] mtd_nandbiterrs: rewrite page
+  [   37.229569] mtd_nandbiterrs: read_page
+  [   37.233244] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0201 erased_cw:00000002
+  [   37.236301] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.244571] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.252896] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.261227] qcom_snand 79b0000.spi: corrected:1 failed:0 bitflips:1
+  [   37.269560] mtd_nandbiterrs: Read reported 1 corrected bit errors
+  [   37.275795] mtd_nandbiterrs: verify_page
+  [   37.282075] mtd_nandbiterrs: Successfully corrected 1 bit errors per subpage
+  [   37.286039] mtd_nandbiterrs: Inserted biterror @ 3/7
+  [   37.293080] mtd_nandbiterrs: rewrite page
+  [   37.298877] mtd_nandbiterrs: read_page
+  [   37.302531] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0202 erased_cw:00000002
+  [   37.305572] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.313839] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.322169] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.330498] qcom_snand 79b0000.spi: corrected:2 failed:0 bitflips:2
+  [   37.338818] mtd_nandbiterrs: Read reported 2 corrected bit errors
+  [   37.345078] mtd_nandbiterrs: verify_page
+  [   37.351352] mtd_nandbiterrs: Successfully corrected 2 bit errors per subpage
+  [   37.355310] mtd_nandbiterrs: Inserted biterror @ 5/7
+  [   37.362352] mtd_nandbiterrs: rewrite page
+  [   37.368094] mtd_nandbiterrs: read_page
+  [   37.371814] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0203 erased_cw:00000002
+  [   37.374843] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.383111] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.391437] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.399769] qcom_snand 79b0000.spi: corrected:3 failed:0 bitflips:3
+  [   37.408089] mtd_nandbiterrs: Read reported 3 corrected bit errors
+  [   37.414351] mtd_nandbiterrs: verify_page
+  [   37.420616] mtd_nandbiterrs: Successfully corrected 3 bit errors per subpage
+  [   37.424581] mtd_nandbiterrs: Inserted biterror @ 7/7
+  [   37.431622] mtd_nandbiterrs: rewrite page
+  [   37.437419] mtd_nandbiterrs: read_page
+  [   37.441072] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0204 erased_cw:00000002
+  [   37.444114] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.452380] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.460708] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.469047] qcom_snand 79b0000.spi: corrected:4 failed:0 bitflips:4
+  [   37.477360] mtd_nandbiterrs: Read reported 4 corrected bit errors
+  [   37.483621] mtd_nandbiterrs: verify_page
+  [   37.489888] mtd_nandbiterrs: Successfully corrected 4 bit errors per subpage
+  [   37.493852] mtd_nandbiterrs: Inserted biterror @ 8/7
+  [   37.500893] mtd_nandbiterrs: rewrite page
+  [   37.506636] mtd_nandbiterrs: read_page
+  [   37.510342] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0205 erased_cw:00000002
+  [   37.513385] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.521652] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.529978] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.538297] qcom_snand 79b0000.spi: corrected:5 failed:0 bitflips:5
+  [   37.546643] mtd_nandbiterrs: Read reported 5 corrected bit errors
+  [   37.552896] mtd_nandbiterrs: verify_page
+  [   37.559161] mtd_nandbiterrs: Successfully corrected 5 bit errors per subpage
+  [   37.563123] mtd_nandbiterrs: Inserted biterror @ 10/7
+  [   37.570168] mtd_nandbiterrs: rewrite page
+  [   37.575956] mtd_nandbiterrs: read_page
+  [   37.579702] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0206 erased_cw:00000002
+  [   37.582743] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.591010] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.599354] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.607655] qcom_snand 79b0000.spi: corrected:6 failed:0 bitflips:6
+  [   37.616004] mtd_nandbiterrs: Read reported 6 corrected bit errors
+  [   37.622249] mtd_nandbiterrs: verify_page
+  [   37.628504] mtd_nandbiterrs: Successfully corrected 6 bit errors per subpage
+  [   37.632497] mtd_nandbiterrs: Inserted biterror @ 12/7
+  [   37.639524] mtd_nandbiterrs: rewrite page
+  [   37.645353] mtd_nandbiterrs: read_page
+  [   37.649047] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0207 erased_cw:00000002
+  [   37.652100] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.660367] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.668679] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.677029] qcom_snand 79b0000.spi: corrected:7 failed:0 bitflips:7
+  [   37.685358] mtd_nandbiterrs: Read reported 7 corrected bit errors
+  [   37.691607] mtd_nandbiterrs: verify_page
+  [   37.697861] mtd_nandbiterrs: Successfully corrected 7 bit errors per subpage
+  [   37.701852] mtd_nandbiterrs: Inserted biterror @ 14/7
+  [   37.708867] mtd_nandbiterrs: rewrite page
+  [   37.714683] mtd_nandbiterrs: read_page
+  [   37.718397] qcom_snand 79b0000.spi: cw[0] flash:00003020 buffer:00ff0208 erased_cw:00000002
+  [   37.721478] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.729718] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.738037] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.746433] qcom_snand 79b0000.spi: corrected:8 failed:0 bitflips:8
+  [   37.754719] mtd_nandbiterrs: Read reported 8 corrected bit errors
+  [   37.760972] mtd_nandbiterrs: verify_page
+  [   37.767218] mtd_nandbiterrs: Successfully corrected 8 bit errors per subpage
+  [   37.771214] mtd_nandbiterrs: Inserted biterror @ 17/7
+  [   37.778225] mtd_nandbiterrs: rewrite page
+  [   37.784054] mtd_nandbiterrs: read_page
+  [   37.787754] qcom_snand 79b0000.spi: cw[0] flash:00003030 buffer:00ff0301 erased_cw:00000002
+  [   37.790836] qcom_snand 79b0000.spi: cw[1] flash:00002020 buffer:00ff0200 erased_cw:00000002
+  [   37.799076] qcom_snand 79b0000.spi: cw[2] flash:00001020 buffer:00ff0200 erased_cw:00000002
+  [   37.807395] qcom_snand 79b0000.spi: cw[3] flash:00000020 buffer:00ff0200 erased_cw:00000002
+  [   37.815743] qcom_snand 79b0000.spi: corrected:0 failed:1 bitflips:8
+  [   37.824073] mtd_nandbiterrs: error: read failed at 0x0
+  [   37.830321] mtd_nandbiterrs: After 9 biterrors per subpage, read reported error -74
+  [   37.838993] mtd_nandbiterrs: finished successfully.
+  [   37.843068] ==================================================
+
+Interestingly enough, it reports the correct number of bit errors now.
+For me it seems, that the hardware reports the number of the corrected
+*bytes* instead of the corrected *bits*.
+
+I can't figure out whether this is a configuration problem only, or it
+is a hardware limitation.
+
+Nevertheless, it is possible that I'm entirely wrong about this, since
+I have no documentation for the hardware.
+
+Maybe Alam has some ideas about what could be wrong.
+
+Regards,
+Gabor
 
