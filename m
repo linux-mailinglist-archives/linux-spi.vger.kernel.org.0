@@ -1,118 +1,170 @@
-Return-Path: <linux-spi+bounces-8094-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8095-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD438AB3BE6
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 17:22:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B25EBAB3E0C
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 18:49:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435E919E07F7
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 15:22:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C066188E317
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 16:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 541942367C0;
-	Mon, 12 May 2025 15:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A5E25335E;
+	Mon, 12 May 2025 16:49:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="mbVsRsCz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vJny5x2q"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECD823BCEC
-	for <linux-spi@vger.kernel.org>; Mon, 12 May 2025 15:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A051C84DE;
+	Mon, 12 May 2025 16:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747063346; cv=none; b=hnio232tplQtDRHsK+j5Gel99PRTI0nUO4zXEyZRs7ID/ITqN5fMv6vu7yOqYkCFAepn8GW3xck3fxqOdbLsjjCjipnSuLjRNdlf0D8FGKbAToPloal+KANRgWPn4fAALH7F1mDeCLLP7i5yNwMqEXMTTpUJJLObNFV/ANH7U8A=
+	t=1747068575; cv=none; b=Uy3B23i5m7/Er15/0sZUlhWqPp/XRfoBAkT9XINXyB2Pncm2AITLSGKqicpvnhEH0ALyMTW6jv6GOpBrxSWSZIRhFSXdqf6IvAzR8SagNoW5baI6dLJ/JFoWGky6Hqse49RVuQBOkXcDfGHfGSc0qc/lX9ojYIdzFTlc0bSNE3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747063346; c=relaxed/simple;
-	bh=Q44I9l9A6bvt+4X1Jm8yKDlsTfz7OTm9T4HQgSxLV9c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d6MvQO/l76yA601bHfX/d91IrjZxusJiwZIBRWD0chL08E/cWWgxLKKl7cd88DTdGvpT+loutwZIsZi4XBVZBPFynaxlkLxxggjmSOEpKaRvB359AmX+h/W7I6cpmwv3N7AP7ASN8yKwVA6g0lDk0CahWIvIR1CBxijl6QPt3O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=mbVsRsCz; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-73044329768so3767092a34.3
-        for <linux-spi@vger.kernel.org>; Mon, 12 May 2025 08:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1747063343; x=1747668143; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehw97cZ7zSM30yNLRgq/QkB3dg1EfknESH7kBGZVvBE=;
-        b=mbVsRsCzWPlROmO/4sbHdF+vsB/XjMas/p6KKCm61e2jARKKO21QzJNUOHNAE90eik
-         cCUoHIuC68AuPvQCfisee/2dQPSwuvLuYeZyxyvzFSiUU13na2aUvSbhpTcgLGE67yvu
-         hzYeel2U5bdLbqAdpdHInuzxUUXA805ybrC4sZjgchOY7joGVEsxUGuLeXV8/VUK9+Jr
-         n5DTrrNw75QgBuMdrSMoMXYb0HMWVIrIOMrsRtqYEWDkuoeY6olKjcRgIt7HyUQTAyRG
-         GIdxbxfD8Xlql016VfKTPzCG+avLge9HR8Tt/OHLsIFlJY7/lqUkNR7Yd+2SGeBZxqk7
-         HGVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747063343; x=1747668143;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehw97cZ7zSM30yNLRgq/QkB3dg1EfknESH7kBGZVvBE=;
-        b=t577kthlZExLtJNyyn4VZT9tJAQQ5R9FMgqOpa7XXF66GfKjGoag6A0SpcNnscMqsu
-         N7pTVwYlIVlQ1T9w8ap83wE07Kq2ekzrX898P14M0HByo3ThnvDb8bI0r8fO05xldIKW
-         nq+i9o+69dL0WEt+iHJ13ZELssHshfRdneGTBb4m6upXuqA4FcZyOXjeAYm4kFbHLeWc
-         sWpG7LBsYzuRFCL1A578DdCTCDV37y54BmhQFKE938DpJ7i2hh90vnz0f6QbIVqxsZWM
-         N8qa5SJmqdGY9m7ATNeuAWlpbKP89SDZcopiZpoR+C8YvuVyykpW+Y7Qu0JOnPtIU/Ha
-         TngQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXGEPT+XAXMj6xII19kLp+BD6KbP56qZ1HDZ7pUXXWP3J9otdn6EDq0D9H0lKSenxXPBk19Ix95jzM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUTDZZqpQt1bE5eAX/TodKy8GpewGdkygIKIVibGjIZo5yMtVo
-	+rzbKx1wl5q5rg0AwXQO6qZpm37oU9iE/VHJoFBOUPoXMzd6dXpxKXt8iD2qFyM=
-X-Gm-Gg: ASbGncuWwF2mPqEZqDGz1wRYFNQ8q292RyU9McS77tI9BMWS6l2A+OnLbeEyx+Ml9JZ
-	uTqo+N/vtRMHgGdUnXmPMVjCBe0qZr8vHVuvQ1h3OewOJxQE440okAQJ0N7Br42sjIfrwUH4CRB
-	Ota0H2wwcSITCJ1oUdImD0Ul5a0QrPJxvxHpFHy7ZiPw5FPkiIVX6fFnwByUDZ0+HjpiHtPSUQz
-	kjhJ9zp3gzx0RGavXACrCH0x1heSMvQWPgirJxfvQoQg4rpWSvfSK7r60mbFxvJRCn7Ss7udJR3
-	eX0gMCjxhQ+YOBHXd5JGaEXdYddIVxtho+C83ErMTrOfE0BBDhaa08ANJf4D4v5qKZcJxi6YJwH
-	ai7/rAEdDYcoY8p22ni33nJQrOXh+eEnRRlh4Kig=
-X-Google-Smtp-Source: AGHT+IFg8Sgjr8yxeNG/IhUScUIAVa1OFc7m7FxlwqSYuIM0xhwp6QZ1req1LRFjA6ZAnmsIbAxIvg==
-X-Received: by 2002:a05:6830:648b:b0:72a:47ec:12da with SMTP id 46e09a7af769-732269d6a12mr9682527a34.10.1747063343145;
-        Mon, 12 May 2025 08:22:23 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:fd2e:ffda:4c42:b314? ([2600:8803:e7e4:1d00:fd2e:ffda:4c42:b314])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-732264d78fbsm1584954a34.32.2025.05.12.08.22.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 May 2025 08:22:22 -0700 (PDT)
-Message-ID: <a810d8ff-535c-4d6c-bec3-8a275bcbe483@baylibre.com>
-Date: Mon, 12 May 2025 10:22:21 -0500
+	s=arc-20240116; t=1747068575; c=relaxed/simple;
+	bh=/yvw1nnqbyiVtf/uj+S0pMN9yyaV6992GcjalVXEwT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=utt2Rj1e7PPGcQQ7o3C6M6PsDszAl3jNM/btye0a157KvO14HnXGOAas3wHdn7x4kriQ4yM8DrOiqm+iQ9v9pai5y+s3lE1/KTJ/rPYDvcW8B3ku6JW7Z0sCe74ri7xSetBVU/HrvaPT/saMNR4M2Y+0/7PUQIMFDleBdNLchJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vJny5x2q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91D2C4CEE7;
+	Mon, 12 May 2025 16:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747068574;
+	bh=/yvw1nnqbyiVtf/uj+S0pMN9yyaV6992GcjalVXEwT4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vJny5x2q4gf3xJGNPgU7Nodhe9m8fzdkqw1uAIgor8FXemN3ONwapqcMFXU6eg9TB
+	 oi7xEmSdK3lZmS198wi6IcnsyuAjpL3everT/F5Jr/aCrZIv5FA+HPC/4gJA1ZSYi1
+	 WO+VY0tI/K1XOZCEKOiQLYjoPLBEQG0mYUXWtG/4IWfDo9kUi4RuwW2nWam7yatAu/
+	 KPw0Uy76pKNWj28mdBAs0VxE30hHwxm1+2j0QxxCN7KI1hYsEYNmbbTq2fWzsxqF6y
+	 30dVyAr1lloZ2irFv5PaLcLE7hwbNitqbDc4rcEwpk1b1TS1bc/+54UDmTtk9GGs4V
+	 ONXt0r+xl2iNg==
+Date: Mon, 12 May 2025 17:49:29 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Vishwaroop A <va@nvidia.com>
+Cc: krzk@kernel.org, broonie@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, thierry.reding@gmail.com,
+	jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
+	kyarlagadda@nvidia.com, smangipudi@nvidia.com, bgriffis@nvidia.com,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 RESEND 1/2] dt-bindings: spi: tegra: Document IOMMU
+ property for Tegra234 QSPI
+Message-ID: <20250512-observant-rental-21927c85c709@spud>
+References: <20250509165409.311912-1-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/7] clk: clk-axi-clkgen: improvements and some fixes
-To: nuno.sa@analog.com, linux-clk@vger.kernel.org,
- linux-fpga@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: Stephen Boyd <sboyd@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Moritz Fischer
- <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
- Tom Rix <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>,
- Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>,
- Xu Yilun <yilun.xu@linux.intel.com>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="b7v6v0TWl91jPaKU"
+Content-Disposition: inline
+In-Reply-To: <20250509165409.311912-1-va@nvidia.com>
 
-On 5/12/25 9:46 AM, Nuno Sá via B4 Relay wrote:
-> This series starts with a small fix and then a bunch of small
-> improvements. The main change though is to allow detecting of
-> struct axi_clkgen_limits during probe().
-> 
+
+--b7v6v0TWl91jPaKU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 09, 2025 at 04:54:08PM +0000, Vishwaroop A wrote:
+> Add the 'iommus' property to the Tegra QSPI device tree binding.
+> The property is needed for Tegra234 when using the internal DMA
+> controller, and is not supported on other Tegra chips, as DMA is
+> handled by an external controller.
+>=20
+> Signed-off-by: Vishwaroop A <va@nvidia.com>
 > ---
-How we added the linux/adi-axi-common.h include to the clk-axi-clkgen
-driver could have been tidier, but not strictly worth a v6 just for that.
+>  .../bindings/spi/nvidia,tegra210-quad.yaml    | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>=20
+> Changes since v2:
+> - Fixed version number to match the actual version
+> - Added proper changelog section
+> - No functional changes from v2
+>=20
+> Changes since v1:
+> - Fixed subject prefix to match subsystem (dt-bindings: spi: tegra)
+> - Improved commit message formatting to follow Linux coding style
+> - Clarified that IOMMU is only required for Tegra234 platform
+> - Added explicit disallow for IOMMU on other platforms
+> - Removed redundant explanations of what the patch does
+> - Fixed commit message to use imperative mood
+>=20
+> Initial Version:
+> - Initial implementation of IOMMU property documentation
+> - Added iommus property to device tree binding
+> - Added support for Tegra234 platform
+> - Added explanation of DMA and IOMMU requirements
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.y=
+aml b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> index 48e97e240265..04d3b1a47392 100644
+> --- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> +++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> @@ -10,9 +10,6 @@ maintainers:
+>    - Thierry Reding <thierry.reding@gmail.com>
+>    - Jonathan Hunter <jonathanh@nvidia.com>
+> =20
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+> @@ -47,6 +44,9 @@ properties:
+>        - const: rx
+>        - const: tx
+> =20
+> +  iommus:
+> +    maxItems: 1
+> +
+>  patternProperties:
+>    "@[0-9a-f]+$":
+>      type: object
+> @@ -69,6 +69,19 @@ required:
+> =20
+>  unevaluatedProperties: false
+> =20
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          const: nvidia,tegra234-qspi
 
-Reviewed-by: David Lechner <dlechner@baylibre.com>
+> +    then:
+> +      properties:
+> +        iommus: true
+
+This is a NOP, no?
+Just invert the case above and drop a clause.
+
+> +    else:
+> +      properties:
+> +        iommus: false
+> +
+>  examples:
+>    - |
+>      #include <dt-bindings/clock/tegra210-car.h>
+> --=20
+> 2.17.1
+>=20
+
+--b7v6v0TWl91jPaKU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaCImmQAKCRB4tDGHoIJi
+0nCdAP0SwhcOv3w78KUp3q+/132CGvA5hXO8+nprMYHRBeAVJwD/Z4Jiu2d4tJ6/
+Q3o7E6/SGMTjBqGnVwJK9M/+r8H+XwQ=
+=qS0d
+-----END PGP SIGNATURE-----
+
+--b7v6v0TWl91jPaKU--
 
