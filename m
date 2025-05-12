@@ -1,150 +1,141 @@
-Return-Path: <linux-spi+bounces-8082-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8083-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03765AB3A48
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 16:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B30CCAB3AFB
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 16:46:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 895F717C9E3
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 14:17:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 462BA17E0ED
+	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 14:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A811DF754;
-	Mon, 12 May 2025 14:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039A022A4D2;
+	Mon, 12 May 2025 14:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MVesmxv4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9611E3DE5;
-	Mon, 12 May 2025 14:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B976A19C569;
+	Mon, 12 May 2025 14:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747059441; cv=none; b=F4BR1MfOP81rZuLCQBnEwbLmt8mIqrwBr142yuWo4jeDHEjXS0nYUyHlw1lVkI5Q9Oam5MCtBA7Z9tkr5EkZlKjRsclV45I9vRWZgIkWqDZtAdspaSDOZ5WgAkQXsjRibMfFu+PSGhCw/GGOWFdqmSc65PQIrfLG7+f/m8yUmv4=
+	t=1747061206; cv=none; b=U3knhArpRhWjdL4eLqEQdGnrLO8iBtylLznEWr8efW31XRBCrkfzShKoLYZNbpt6Kh+fvC8oN2S0jl//3adVGcni9wf0H3WgUumUqjE5G4vTx+wRQShDU5r2nFH5N8bXuL35oyzyJclFwBmHGHZlvahu0H0ZLPTyaFAxwfWSxsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747059441; c=relaxed/simple;
-	bh=2IyyNXNnQSfbvykHq8rn1B+uBUbYbh7+8zI3pXsppGE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dOwcgnhkriG1uvIlUQZKR5sW0Mw+WogZmcPVe9C9iGSgonbnMIoKKzQLFaHBb9CUGa3VLVSsBFrA4vnI5EOUO/YdNO/t0c+/ra9xRu9+H+79bRcnq1XfOWI+5vQKw1wQv+NqEm63mj9eU4QyXN3bdsbrTiCtfw7wtcEKWgWj9yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-70a35432c21so37572527b3.0;
-        Mon, 12 May 2025 07:17:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747059438; x=1747664238;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z+uGFXyTYFqNhdsh1y5nDVvPcnH9qAzMoSdfww0Dh/E=;
-        b=gxmQ3kF8d8GURSYa+/qad8HT1B0VWwiycukVVZ3ERYFWCu+Imo6dYyBH2sN3R3sSv1
-         J/3IzgBmuCV3B2CiM64xSM59te8oFIVyAmomIwJ/bsUJK569f1fODelr1Jb8xrdsrvwD
-         6uNSyqzZxnttyTRY7f7omLEN4puI3+3wRqztwS9opcyoqthwKYR/3rSpUDJd0RqIbTX1
-         73uCRmJXjbOwylYIl3YlG1gRuN8QzpN1HstPqBx9R3wJS3apRkqd126KhhKcgl6R+rmW
-         CmcNbscaH9ebPh6gNABfWz9xCnfXkJ8WJeKRLWT+43b5/EzohNyRUJiZnowY4pKEPCOB
-         CHew==
-X-Forwarded-Encrypted: i=1; AJvYcCU2FHmHzZHvnc+sHp0tBVE7dwuEj1PT4+SkU03qV5xlZz3HewkH7Iutf8bCBkQZ6dmxQfBVC4IZwaO/r98=@vger.kernel.org, AJvYcCW5X/vICkGw5kKDve3L2qAB/bo1GCQ1iv0yqJSc90/AKyCDyPCKEew96dypVadlV1+ZDOQVOOoTtvQ0@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyks2TwjqSbtuj+ZKMG02JdKSg96E/BAtDzzjGvilT3HQ9jOKk8
-	hPdhc5tm2rhBxIHPqrrRa1RGHL2H+3LmwBUfxq0idetgXV9IrA/TB52VOHR6
-X-Gm-Gg: ASbGncvjs//TMImyb4nrTGr0IMLtLl/TY7/r8hSZUfUm0iyFJYypXEpwyI8VXmwByYe
-	s9Dy6A6a6RJJaWlnGdMnwPBdDIpjPCLzNIdk9Kl7cqDkCqKArmY8VYx9OxDtS75XQQ6E0g5ca3T
-	UeInG+FSpNhQ87HsmcrFew0R4Le3GsQXV9ZL8RCzgua/ekgG9TFn9spopUVIJjN2CXDVwgItK6i
-	rlTbCc6eF+annXebGzozqBuIphwXs307+/USpngjVX0aHXefa7p/kJvc5Kt/+26KTqe/atFxG0I
-	io8A/ZwdUMb2dEUlE67gFNtBfGc1JjwvShPbIvqvz14FlhwNoVdX6AsLYnpCuTdJBDfCXAaGkCc
-	G1y9RCs5zQGtY5BntZw==
-X-Google-Smtp-Source: AGHT+IG0oAMuhT3R8lJ4MNgVuX25ZEk6AkcShmOGbeTE1tI0iPoZPalrexbJGU8biGeqQ87XzZVhiw==
-X-Received: by 2002:a05:690c:6f81:b0:708:3375:3a33 with SMTP id 00721157ae682-70a3fa1fd64mr172961307b3.12.1747059438177;
-        Mon, 12 May 2025 07:17:18 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-70a3d896049sm19563027b3.9.2025.05.12.07.17.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 May 2025 07:17:18 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7082ad1355bso37678257b3.1;
-        Mon, 12 May 2025 07:17:18 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVmtYrkS7KjKwH14t4/0yLlRWbkJOKkrctTLEJr6lHYxrj+YaiAh/yIUVc86Ce1LNmvfYKtMclF8FaA2E4=@vger.kernel.org, AJvYcCWaTtcceJNaz6mAl6zCByXO39FJ8tVBFragW9CGtpElxTtnYWS/6rpJSoGcqELC+gznhsGTb8tm85ig@vger.kernel.org
-X-Received: by 2002:a05:690c:7406:b0:703:afd6:42e3 with SMTP id
- 00721157ae682-70a3fb68ed7mr176247997b3.37.1747059437816; Mon, 12 May 2025
- 07:17:17 -0700 (PDT)
+	s=arc-20240116; t=1747061206; c=relaxed/simple;
+	bh=JkM/nxZuW8/XtDWXx2zZGIoDGGsavYmJRK+QqVbajJI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M5BGeECu1KqY2S0YDApWtvXEZD25at8GEjYYRvLzyP57T10EJj1Bkh3iE5Xy6kqp5YlngaoyfdAlforSkrXy1rKYRgMNu38KYrFLYdnqO8EOwHvmnHtYyQ3I+SnMZm+wmsFCXE2A02CMRqX1qENDE2DU+/V1glArAv1DJJfsyUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MVesmxv4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C07CC4CEE7;
+	Mon, 12 May 2025 14:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747061206;
+	bh=JkM/nxZuW8/XtDWXx2zZGIoDGGsavYmJRK+QqVbajJI=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=MVesmxv41We+7F72e7PtVsvCBvv91s5xU5hCghkJoW8SO/YIDgxAWNOavgcR6BYFz
+	 uJ6zl9RAXK6EI8VMqrm9dxFqWFj0khKCuaV6A5EuYJrgt6ACQ3B3txKq/+HDn8e/Si
+	 84q5k8oHvtxItigKhH55sMQalbQBJoPKa/ZnQ3Ru0Oy+fTBdoajfyaw7+aKXIrJXOD
+	 7AUcIc38xNq5gandCeQSIyjLQfACunq5bOIrl7U3OHR/XKq0iFwaYK4cP0AU3bOdok
+	 Uk5geLw0ojo/lAiX+Gxc5W9oIxNc9hEVBTBcQKzrdvChf/90uj5jTnBsefdjb4OnZv
+	 jj+4bV/ouy6JQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79EB2C3ABC3;
+	Mon, 12 May 2025 14:46:46 +0000 (UTC)
+From: =?utf-8?q?Nuno_S=C3=A1_via_B4_Relay?= <devnull+nuno.sa.analog.com@kernel.org>
+Subject: [PATCH v5 0/7] clk: clk-axi-clkgen: improvements and some fixes
+Date: Mon, 12 May 2025 15:46:43 +0100
+Message-Id: <20250512-dev-axi-clkgen-limits-v5-0-a86b9a368e05@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250509181737.997167-1-Raju.Rangoju@amd.com> <202505110641.zLT16Dv7-lkp@intel.com>
- <e84f5483-a203-4095-82cd-23fa94c87700@amd.com>
-In-Reply-To: <e84f5483-a203-4095-82cd-23fa94c87700@amd.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 12 May 2025 16:17:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUAE2umYggDdBjYZJY2-mYwim=P_=4Q00k9b8gB1tNY+Q@mail.gmail.com>
-X-Gm-Features: AX0GCFvPeCVVWJSx_u6CiKRqRCs9Wi8eoap8nT8SCO-AJVBCg084LJ1ts4ptq_o
-Message-ID: <CAMuHMdUAE2umYggDdBjYZJY2-mYwim=P_=4Q00k9b8gB1tNY+Q@mail.gmail.com>
-Subject: Re: [PATCH] spi: spi_amd: Add HIDDMA basic write support
-To: "Rangoju, Raju" <raju.rangoju@amd.com>
-Cc: kernel test robot <lkp@intel.com>, broonie@kernel.org, oe-kbuild-all@lists.linux.dev, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Krishnamoorthi M <krishnamoorthi.m@amd.com>, 
-	Akshata MukundShetty <akshata.mukundshetty@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIANMJImgC/33QQW7DIBAF0KtErEPFzGA7dNV7VFlgGBxUx65Mh
+ BJFvntx1MqtIlesPtI8/nAXiafISbzu7mLiHFMchxKq/U64kx06ltGXLFBhpRAO0nOW9hql6z8
+ 6HmQfz/GSZE2hVa5iR4dWlNnPiUO8Ptz3Y8mnmC7jdHs8k2G5/RHNhphBKol1aDiAdt64NzvYf
+ uxe3HgWC5lxZQhoi8HCQEOW0fqaAJ4YWhmtmi2GCkPkmoCNM742v5n99/dohP/GNSpqdWCPzjy
+ 10GuLcrYYvbSwvgLUDIb/LjPP8xf9wCNvzwEAAA==
+X-Change-ID: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+To: linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+Cc: Stephen Boyd <sboyd@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, 
+ Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, 
+ Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
+ Mike Turquette <mturquette@linaro.org>, Xu Yilun <yilun.xu@linux.intel.com>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747061206; l=1903;
+ i=nuno.sa@analog.com; s=20231116; h=from:subject:message-id;
+ bh=JkM/nxZuW8/XtDWXx2zZGIoDGGsavYmJRK+QqVbajJI=;
+ b=hHrYNf5zdtiVEfAwcvmOhlMT+ZU1AkRzIsgLoiDGry69CjKzUCbhlVY0RfXmGxN4pKrc5pVmC
+ ZcKXEopQJzqAX+m/sI6uEaAxg/7M2jXGpKgRMURR4Of1Orfqswj7jOQ
+X-Developer-Key: i=nuno.sa@analog.com; a=ed25519;
+ pk=3NQwYA013OUYZsmDFBf8rmyyr5iQlxV/9H4/Df83o1E=
+X-Endpoint-Received: by B4 Relay for nuno.sa@analog.com/20231116 with
+ auth_id=100
+X-Original-From: =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>
+Reply-To: nuno.sa@analog.com
 
-Hi Rangoju,
+This series starts with a small fix and then a bunch of small
+improvements. The main change though is to allow detecting of
+struct axi_clkgen_limits during probe().
 
-On Mon, 12 May 2025 at 09:29, Rangoju, Raju <raju.rangoju@amd.com> wrote:
-> On 5/11/2025 3:51 AM, kernel test robot wrote:
-> > kernel test robot noticed the following build warnings:
-> >
-> > [auto build test WARNING on v6.15-rc5]
-> > [also build test WARNING on linus/master]
-> > [cannot apply to broonie-spi/for-next next-20250509]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Rangoju/spi-spi_amd-Add-HIDDMA-basic-write-support/20250510-021954
-> > base:   v6.15-rc5
-> > patch link:    https://lore.kernel.org/r/20250509181737.997167-1-Raju.Rangoju%40amd.com
-> > patch subject: [PATCH] spi: spi_amd: Add HIDDMA basic write support
-> > config: m68k-randconfig-r111-20250511 (https://download.01.org/0day-ci/archive/20250511/202505110641.zLT16Dv7-lkp@intel.com/config)
-> > compiler: m68k-linux-gcc (GCC) 14.2.0
->
-> Thanks for reporting this. We do not support m68k.
+---
+Changes in v5:
+- Patch 5:
+  * Drop voltage register from common header (not common);
+  * Drop 'fpga' from the commit subject.
+- Patch 6:
+  * Define voltage register here.
+- Patch 8:
+  * Sort headers in alphabetical order.
 
-All write[bwlq]() functions take a volatile void __iomem pointer
-(https://elixir.bootlin.com/linux/v6.14.6/source/include/asm-generic/io.h#L174)
-while you are passing a void *, so sparse should complain about this
-on all architectures.  And sparse is right, this driver is using MMIO
-accessors on allocated DMA memory, which is just plain wrong:
+- Link to v4: https://lore.kernel.org/r/20250505-dev-axi-clkgen-limits-v4-0-3ad5124e19e1@analog.com
+- Link to v3: https://lore.kernel.org/r/20250421-dev-axi-clkgen-limits-v3-0-4203b4fed2c9@analog.com
+- Link to v2: https://lore.kernel.org/r/20250313-dev-axi-clkgen-limits-v2-0-173ae2ad6311@analog.com
+- Link to v1: https://lore.kernel.org/r/20250219-dev-axi-clkgen-limits-v1-0-26f7ef14cd9c@analog.com
 
-    amd_spi->dma_virt_addr = dma_alloc_coherent(dev, AMD_SPI_HID2_DMA_SIZE,
-            &amd_spi->phy_dma_buf, GFP_KERNEL);
+---
+Nuno Sá (7):
+      clk: clk-axi-clkgen: fix fpfd_max frequency for zynq
+      clk: clk-axi-clkgen: make sure to include mod_devicetable.h
+      include: linux: move adi-axi-common.h out of fpga
+      include: adi-axi-common: add new helper macros
+      clk: clk-axi-clkgen: detect axi_clkgen_limits at runtime
+      clk: clk-axi-clkgen move to min/max()
+      clk: clk-axi-clkgen: fix coding style issues
 
-     for (i = 0; left_data >= 8; i++, left_data -= 8)
-            *buf_64++ = readq((u8 __iomem *)amd_spi->dma_virt_addr + (i * 8));
+ drivers/clk/clk-axi-clkgen.c        | 160 +++++++++++++++++++++++++-----------
+ drivers/dma/dma-axi-dmac.c          |   2 +-
+ drivers/hwmon/axi-fan-control.c     |   2 +-
+ drivers/iio/adc/adi-axi-adc.c       |   3 +-
+ drivers/iio/dac/adi-axi-dac.c       |   2 +-
+ drivers/pwm/pwm-axi-pwmgen.c        |   2 +-
+ drivers/spi/spi-axi-spi-engine.c    |   2 +-
+ include/linux/adi-axi-common.h      |  56 +++++++++++++
+ include/linux/fpga/adi-axi-common.h |  23 ------
+ 9 files changed, 175 insertions(+), 77 deletions(-)
+---
+base-commit: 82f69876ef45ad66c0b114b786c7c6ac0f6a4580
+change-id: 20250218-dev-axi-clkgen-limits-63fb0c5ec38b
+--
 
-> Will re-spin v2 with necessary changes in Kconfig.
+Thanks!
+- Nuno Sá
 
-Please fix the real issue instead ;-)
 
-> > reproduce: (https://download.01.org/0day-ci/archive/20250511/202505110641.zLT16Dv7-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202505110641.zLT16Dv7-lkp@intel.com/
-> >
-> > sparse warnings: (new ones prefixed by >>)
-> >>> drivers/spi/spi-amd.c:594:57: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void * @@
-> >     drivers/spi/spi-amd.c:594:57: sparse:     expected void volatile [noderef] __iomem *addr
-> >     drivers/spi/spi-amd.c:594:57: sparse:     got void *
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
