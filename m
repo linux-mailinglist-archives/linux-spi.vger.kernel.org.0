@@ -1,95 +1,233 @@
-Return-Path: <linux-spi+bounces-8100-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8101-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 232ECAB474E
-	for <lists+linux-spi@lfdr.de>; Tue, 13 May 2025 00:33:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01A8FAB48E4
+	for <lists+linux-spi@lfdr.de>; Tue, 13 May 2025 03:42:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D09D08661C9
-	for <lists+linux-spi@lfdr.de>; Mon, 12 May 2025 22:32:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DAF57B10F6
+	for <lists+linux-spi@lfdr.de>; Tue, 13 May 2025 01:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94956266B5C;
-	Mon, 12 May 2025 22:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00EE9195B37;
+	Tue, 13 May 2025 01:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLZ1KgzQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Chy+YN34"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BCC186A;
-	Mon, 12 May 2025 22:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A5517583;
+	Tue, 13 May 2025 01:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747089184; cv=none; b=d34MhThXQ05YY705fntZxXUM3/aCWfpZvf71ovMtIUT/9XQMYCCMTxt65+QwibZRXXzXNnktwmKm/vkgm5/ElRK7gpTa0OJ8yEO6sf1YH147obE5sXLIBi1WC/A5wxFbr09btVSae1tJoXVDRhTzJXfSJvBz7TdKGY/6x1EY0ac=
+	t=1747100534; cv=none; b=MdzSf3q/AH5N3SX/zRHvbDTZ5J/GvqX+EYNINU1zz5rDyBx728ywOmXjS3F10r242H5lYtGd7WuWQKGDcVngu0Y1ipRrn9FafeUTCKPxLHs3aH4lkg3VKHN/xHTk/GqvXknQEgA4DXnNozdO6w8uopZ+i9WUwRm/SQwHm8ONtnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747089184; c=relaxed/simple;
-	bh=7uaPkVruATXm9Huody3+3MZx6tE8WbKbRuYqnjKm0pI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M6L0Oa6RfpotKk2a/7URWTjFPE9sJ1IwANHcOSJEsblALhs/aIc4qp1KM7ysixxaCTXjuVkzX/JmWZL9tg3Zduv2i4GXqBEvnXXxGr9tqqrZNat/78ocipwnnX8CphjQruPjpg6fs6mTIEcjAbvkk5i+ILw1PuSGde2mfDOhB54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLZ1KgzQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80E1C4CEE7;
-	Mon, 12 May 2025 22:33:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747089183;
-	bh=7uaPkVruATXm9Huody3+3MZx6tE8WbKbRuYqnjKm0pI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MLZ1KgzQOJhVUAg9HL/gG+/R//L7FAoO/kB/yvK5yZYA02+YkydJW15gu7HC4e1/l
-	 TwDqKmCGX8QJ1BMBsPkhEMfaHO0CeBjM16ODGskLNGUuuwssFGg9Zg2pN2cZMZhkxz
-	 yZftrJotY5E5fl3AFwbv/ZA0XqmSjhZUZ3j4L05gEo4q0Gd71DcA7BPV0j+n88AqC/
-	 /lXlbS0VrgwPwF4yyi7g4nUmRvIHmlMf4NUEQUPT6Bwunk1fLQ09V4q/NQG5V8APL6
-	 zyyz1I7mHgeS9gkiYzuw+Zlc0XZcHmMtcT8e3ZxeSTWAKYT4a64llabhgqhbPyg1lX
-	 Ent9sEQe4ZTww==
-Date: Tue, 13 May 2025 00:32:59 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Peter Rosin <peda@axentia.se>, Derek Kiernan <derek.kiernan@amd.com>, 
-	Dragan Cvetic <dragan.cvetic@amd.com>, Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Wolfram Sang <wsa@kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 19/26] i2c: busses: at91: Add MCHP_LAN966X_PCI
- dependency
-Message-ID: <t362y4tvg3y2q5yop3vnqme3qi6wxxehpbyzbx6qp7zbrihqkr@5bvsxvd2ti7i>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-20-herve.codina@bootlin.com>
+	s=arc-20240116; t=1747100534; c=relaxed/simple;
+	bh=tqfQS6oxsFjhPs/Z50e9x6aN2DzbxyZhm92wCnbhKDU=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To; b=WDZMH0TU8JnhYd/5KIISUp8SKg/2IDzpAq7MyySEJtsl/dybSewwLAK9AoXpsOaveH7BzMvd3UX4AhOA68qBasZHO9zxlXR8S2q0H+EmdGr69DwX3QsJp0lcMTQD+xeskqoqMkdvrVSrsGBNrGsPDtI+Y/SvGkpxfdE6j198dmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Chy+YN34; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747100533; x=1778636533;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to;
+  bh=tqfQS6oxsFjhPs/Z50e9x6aN2DzbxyZhm92wCnbhKDU=;
+  b=Chy+YN34mY22ZozBYtd+UuJLKPU0k1atSJLJxHgE8OJYrSbYWNknitm5
+   k0TfKjYt+u41Mz/zSwY9mLVkeRgULYZnKU1GNIFoHoD6qFXKRY1WvD3Dp
+   rj6NhzSn3eLvElDobR72/6AfD4ZVwIcVlaeBOLroLmPklJ29LTpWXe1wZ
+   wLY+SBpwtqvhpkyOfxgV6NqMLM1MTvPRjIlnnbNnMVhWcHbzfXT+2wPgn
+   wSI/W0voq/szmnEtNneRVoMhwzhS2vRzHcoRKTVh+END9bNNAaUm0BKHT
+   LvAlCtatqTCpJwW1GbM3aQdrvSB/KYPV6mXSZqQwYWCnoBQaYWzH6h+r+
+   g==;
+X-CSE-ConnectionGUID: HwHAbeAYRFCWAZp1ygjLoQ==
+X-CSE-MsgGUID: B2tVQlv9Qn6R8btHW58VWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="66332200"
+X-IronPort-AV: E=Sophos;i="6.15,283,1739865600"; 
+   d="scan'208";a="66332200"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 18:42:13 -0700
+X-CSE-ConnectionGUID: gs+bo9UCRS6oUiHvHgEzow==
+X-CSE-MsgGUID: 98vXkWv8RyW7ZTZtktSHOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,283,1739865600"; 
+   d="scan'208";a="142497925"
+Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 18:42:10 -0700
+Content-Type: multipart/mixed; boundary="------------Pmc9TytVRXbvZn0nfSt18r6r"
+Message-ID: <5d760ba9-031f-469b-96e0-a171b7142f88@linux.intel.com>
+Date: Tue, 13 May 2025 09:37:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250507071315.394857-20-herve.codina@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] applespi from 6.12 onwards
+To: kobarity <kobarity@gmail.com>
+Cc: Aditya Garg <gargaditya08@live.com>, =?UTF-8?Q?Berkel_J=C3=B6rg?=
+ <joerg.berkel@bfh.ch>, Robin Murphy <robin.murphy@arm.com>,
+ "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+ "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+ "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "lukas@wunner.de" <lukas@wunner.de>, David Woodhouse <dwmw2@infradead.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <4dada48a-c5dd-4c30-9c85-5b03b0aa01f0@bfh.ch>
+ <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+ <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
+ <f1b41874-1535-4457-9747-eee3d816091a@arm.com>
+ <PN3PR01MB959764E908600CD45169348CB88BA@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+ <c0bbfcc8-1275-43de-be40-acb8f2653359@bfh.ch>
+ <PN3PR01MB959708DEEA1567DD38447D5AB895A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
+ <eke7wmanw9xq.wl-kobarity@gmail.com>
+ <089b2370-23e4-4a22-bf57-886e46247a1f@linux.intel.com>
+ <eke7v7q6vxai.wl-kobarity@gmail.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <eke7v7q6vxai.wl-kobarity@gmail.com>
 
-Hi Herve,
+This is a multi-part message in MIME format.
+--------------Pmc9TytVRXbvZn0nfSt18r6r
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 07, 2025 at 09:13:01AM +0200, Herve Codina wrote:
-> The AT91 I2C driver depends on ARCH_AT91.
+On 5/12/25 20:16, kobarity wrote:
+> Baolu Lu wrote:
+>> On 5/11/25 21:31, kobarity wrote:
+>>>
+>>> Hi
+>>>
+>>> I'm also experiencing this problem on my MacBookPro14,3.
+>>>
+>>> Aditya Garg wrote:
+>>>>
+>>>> Hi Jörg
+>>>>
+>>>> Can you test the kernel here to see if this fixes your issue:
+>>>>
+>>>> https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/actions/runs/14944200356
+>>>>
+>>>> Alternatively you can try compiling your own kernel with this patch:
+>>>>
+>>>> https://lore.kernel.org/all/0-v1-c26553717e90+65f-iommu_vtd_ss_wo_jgg@nvidia.com/
+>>>
+>>> As far as I have tried, this patch did not solve the problem.
+>>>
+>>> By bisecting, I found that this problem was introduced by commit
+>>> 2031c469f816 ("iommu/vt-d: Add support for static identity domain").
+>>> In fact, since this commit, it will panic at startup.  This panic was
+>>> fixed by commit 6e02a277f1db ("iommu/vt-d: Fix incorrect
+>>> pci_for_each_dma_alias() for non-PCI devices").  So I applied commit
+>>> 6e02a277f1db on commit 2031c469f816 and confirmed that the keyboard
+>>> and touchpad is not working.
+>>
+>> Have you tried to apply commit 64f792981e35 ("iommu/vt-d: Remove device
+>> comparison in context_setup_pass_through_cb")?
 > 
-> This I2C controller can be used by the LAN966x PCI device and so
-> it needs to be available when the LAN966x PCI device is enabled.
+> Yes, I tried it on yesterday's master branch, including commit
+> 64f792981e35.
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> - Keyboard/Touchpad NOT working:
+>    - No patches
+>    - With patch in https://lore.kernel.org/all/0-v1-c26553717e90+65f-iommu_vtd_ss_wo_jgg@nvidia.com/
+> - Keyboard/Touchpad working:
+>    - With my workaround patch
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+Okay, thanks! Can you please try below change? I also attached a diff
+file in the attachment for your convenience.
+
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 49530d5d8c85..9a86ead8377d 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1832,6 +1832,8 @@ static int dmar_domain_attach_device(struct 
+dmar_domain *domain,
+         if (ret)
+                 goto out_block_translation;
+
++       info->domain_attached = true;
++
+         return 0;
+
+  out_block_translation:
+@@ -3206,6 +3208,10 @@ void device_block_translation(struct device *dev)
+         struct intel_iommu *iommu = info->iommu;
+         unsigned long flags;
+
++       /* Device in DMA blocking state. Noting to do. */
++       if (!info->domain_attached)
++               return;
++
+         if (info->domain)
+                 cache_tag_unassign_domain(info->domain, dev, 
+IOMMU_NO_PASID);
+
+@@ -4302,6 +4308,9 @@ static int identity_domain_attach_dev(struct 
+iommu_domain *domain, struct device
+         else
+                 ret = device_setup_pass_through(dev);
+
++       if (!ret)
++               info->domain_attached = true;
++
+         return ret;
+  }
+
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index cbfb8bb4c94a..3ddbcc603de2 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -774,6 +774,7 @@ struct device_domain_info {
+         u8 ats_supported:1;
+         u8 ats_enabled:1;
+         u8 dtlb_extra_inval:1;  /* Quirk for devices need extra flush */
++       u8 domain_attached:1;   /* Device has domain attached */
+         u8 ats_qdep;
+         unsigned int iopf_refcount;
+         struct device *dev; /* it's NULL for PCIe-to-PCI bridge */
 
 Thanks,
-Andi
+baolu
+--------------Pmc9TytVRXbvZn0nfSt18r6r
+Content-Type: text/x-patch; charset=UTF-8; name="diff.patch"
+Content-Disposition: attachment; filename="diff.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaW9tbXUvaW50ZWwvaW9tbXUuYyBiL2RyaXZlcnMvaW9t
+bXUvaW50ZWwvaW9tbXUuYwppbmRleCA0OTUzMGQ1ZDhjODUuLjlhODZlYWQ4Mzc3ZCAxMDA2
+NDQKLS0tIGEvZHJpdmVycy9pb21tdS9pbnRlbC9pb21tdS5jCisrKyBiL2RyaXZlcnMvaW9t
+bXUvaW50ZWwvaW9tbXUuYwpAQCAtMTgzMiw2ICsxODMyLDggQEAgc3RhdGljIGludCBkbWFy
+X2RvbWFpbl9hdHRhY2hfZGV2aWNlKHN0cnVjdCBkbWFyX2RvbWFpbiAqZG9tYWluLAogCWlm
+IChyZXQpCiAJCWdvdG8gb3V0X2Jsb2NrX3RyYW5zbGF0aW9uOwogCisJaW5mby0+ZG9tYWlu
+X2F0dGFjaGVkID0gdHJ1ZTsKKwogCXJldHVybiAwOwogCiBvdXRfYmxvY2tfdHJhbnNsYXRp
+b246CkBAIC0zMjA2LDYgKzMyMDgsMTAgQEAgdm9pZCBkZXZpY2VfYmxvY2tfdHJhbnNsYXRp
+b24oc3RydWN0IGRldmljZSAqZGV2KQogCXN0cnVjdCBpbnRlbF9pb21tdSAqaW9tbXUgPSBp
+bmZvLT5pb21tdTsKIAl1bnNpZ25lZCBsb25nIGZsYWdzOwogCisJLyogRGV2aWNlIGluIERN
+QSBibG9ja2luZyBzdGF0ZS4gTm90aW5nIHRvIGRvLiAqLworCWlmICghaW5mby0+ZG9tYWlu
+X2F0dGFjaGVkKQorCQlyZXR1cm47CisKIAlpZiAoaW5mby0+ZG9tYWluKQogCQljYWNoZV90
+YWdfdW5hc3NpZ25fZG9tYWluKGluZm8tPmRvbWFpbiwgZGV2LCBJT01NVV9OT19QQVNJRCk7
+CiAKQEAgLTQzMDIsNiArNDMwOCw5IEBAIHN0YXRpYyBpbnQgaWRlbnRpdHlfZG9tYWluX2F0
+dGFjaF9kZXYoc3RydWN0IGlvbW11X2RvbWFpbiAqZG9tYWluLCBzdHJ1Y3QgZGV2aWNlCiAJ
+ZWxzZQogCQlyZXQgPSBkZXZpY2Vfc2V0dXBfcGFzc190aHJvdWdoKGRldik7CiAKKwlpZiAo
+IXJldCkKKwkJaW5mby0+ZG9tYWluX2F0dGFjaGVkID0gdHJ1ZTsKKwogCXJldHVybiByZXQ7
+CiB9CiAKZGlmZiAtLWdpdCBhL2RyaXZlcnMvaW9tbXUvaW50ZWwvaW9tbXUuaCBiL2RyaXZl
+cnMvaW9tbXUvaW50ZWwvaW9tbXUuaAppbmRleCBjYmZiOGJiNGM5NGEuLjNkZGJjYzYwM2Rl
+MiAxMDA2NDQKLS0tIGEvZHJpdmVycy9pb21tdS9pbnRlbC9pb21tdS5oCisrKyBiL2RyaXZl
+cnMvaW9tbXUvaW50ZWwvaW9tbXUuaApAQCAtNzc0LDYgKzc3NCw3IEBAIHN0cnVjdCBkZXZp
+Y2VfZG9tYWluX2luZm8gewogCXU4IGF0c19zdXBwb3J0ZWQ6MTsKIAl1OCBhdHNfZW5hYmxl
+ZDoxOwogCXU4IGR0bGJfZXh0cmFfaW52YWw6MTsJLyogUXVpcmsgZm9yIGRldmljZXMgbmVl
+ZCBleHRyYSBmbHVzaCAqLworCXU4IGRvbWFpbl9hdHRhY2hlZDoxOwkvKiBEZXZpY2UgaGFz
+IGRvbWFpbiBhdHRhY2hlZCAqLwogCXU4IGF0c19xZGVwOwogCXVuc2lnbmVkIGludCBpb3Bm
+X3JlZmNvdW50OwogCXN0cnVjdCBkZXZpY2UgKmRldjsgLyogaXQncyBOVUxMIGZvciBQQ0ll
+LXRvLVBDSSBicmlkZ2UgKi8K
+
+--------------Pmc9TytVRXbvZn0nfSt18r6r--
 
