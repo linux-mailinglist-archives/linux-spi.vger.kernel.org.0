@@ -1,155 +1,186 @@
-Return-Path: <linux-spi+bounces-8114-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8115-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33D4AAB614D
-	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 05:44:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C79FAB68A8
+	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 12:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64FA33B090A
-	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 03:44:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1621C1BA0D76
+	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 10:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4441C1E5B9C;
-	Wed, 14 May 2025 03:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DA325C70C;
+	Wed, 14 May 2025 10:16:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IAgWLMh9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ecTpoxRF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6D01E5716;
-	Wed, 14 May 2025 03:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4072581;
+	Wed, 14 May 2025 10:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747194262; cv=none; b=WRQcTi/ed9AO1hVY9jE0iqmptoErg5u9pD8/nhGMRuD35chtryK5ttb7LxS/M1UIiK+AiNpUtW7ai3Iw3JU87NfpMbH7l4j+hjKjF4yNPa4sbAjiDjUzI0m6u+4vRzCJZqemBGmhYq4XrT1FDCr77d+TpKfiYxlXQCsgOUNaGPw=
+	t=1747217807; cv=none; b=PskoLSfotJKsuwPXeGtdz/atU1w5X0bfMouobMsFgzj9AWkMoMQA9VIiEtlJnXnd624ZH92Dy1cmlkDnHINkqoM8yNpF1WrW3KjGtBebxSd8nidPOFxfOLEPLHGXIL/Bl/lQyslnAhvW5Ah+Gz7qVgv5Mgvy6w05D3Zh/3qBFvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747194262; c=relaxed/simple;
-	bh=9pMoTXmFukaRAYw6b+fuA5BhdZG//oKKOf6c8Cvwb8U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fJeq6hSBvxi9rkXqQIgWQX9k/LnjVld+/I7bzomEmHZetqbSMk1t61bjB/tH+Bz19RtFXmK7pZGqPnCfjRzOLRcX2MHa8jSRIatRRou6TL2MzJuO1rms57pC/T24w8zeYKCIDghTtYP/18Gd48YMD0ILi79ExFymMx5ChyFIxgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IAgWLMh9; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747194261; x=1778730261;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9pMoTXmFukaRAYw6b+fuA5BhdZG//oKKOf6c8Cvwb8U=;
-  b=IAgWLMh9IaMFCTGckaXb+BqAo2A+H/Q4elaiGwkTS1MLOG+8zHs6lJ0u
-   iB/B1uI08XpFbk6XliEmvsPWe/Qtb5MT89Me1VN5FYpIJOXINTt1DuWJR
-   MYYjC0gK2JFOcXJZjNvIVOB8DAIfK3fAUK1TMrxFIoGogVGyEGlijyesh
-   U0ZM0c9wVv/7RkFLjpiVX7HVXsg6drtgXlVnTmhW+Sk8DLLDF8kd1QDMS
-   bL0HIoy+WQh2GfWpXF5BRM5SJZLyjbQtToS+9Z627MrAefLPHlus8mIyi
-   R4lM8fnUyzDqSt/uBpAvzlQf9ank4AmDdRPvznI5A0CcSC9FnMOMn4tkR
-   w==;
-X-CSE-ConnectionGUID: RZ6RVDBDTs2BrKsGBZrmBQ==
-X-CSE-MsgGUID: UXU04rQiS/2SwA2eVNLuIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11432"; a="49234758"
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="49234758"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 20:44:20 -0700
-X-CSE-ConnectionGUID: muIbOqbaRXmZ/mhVFl4nFA==
-X-CSE-MsgGUID: cQDMq4JaQmS+JjO//4qkEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,287,1739865600"; 
-   d="scan'208";a="142852843"
-Received: from allen-sbox.sh.intel.com (HELO [10.239.159.30]) ([10.239.159.30])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2025 20:44:17 -0700
-Message-ID: <d0e31e5e-3965-4f7d-8881-55e13dcabaaf@linux.intel.com>
-Date: Wed, 14 May 2025 11:39:39 +0800
+	s=arc-20240116; t=1747217807; c=relaxed/simple;
+	bh=xUrXMqnTLFPEX7yU7U+LYrYTOBZ2oDw/xXihZ9FZOZI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KZcnV5Hf6nCrceIwui+HPIPUEMuz518dQJN416QgCRcS/d0wlb++HrWBiVSVrOkn6DVBcbOyVhGY1syxHjFV0jRr61evwyfCbe4l+aFnBNNsFVLVjjkJIzseBHxMvUKcbzaNGYadoKrkm67q9rKuONCidR+UDg5JWCrqnKYQjgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ecTpoxRF; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a1fb17a9beso3093198f8f.3;
+        Wed, 14 May 2025 03:16:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747217804; x=1747822604; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xt5jpPl9R9r3M1DxHFUgl8SbNW1F0avaN7jhoorozrg=;
+        b=ecTpoxRFZNaCn3aLlPtKERKJhTFIquFtUUietKO86PAfMmILiMVZB1vs+BxruOdPxs
+         dmBH3L0fRkb8lcheeDSV5Su0Bqu7j2uBR2gKDqPJ3dXJBLN15mAxs4aEtQskVm1hvdEi
+         ZTa9rc3Xq842PRG+KE9zpqxQsISDcu0A0/NuSredv5xo1J7oO8nNpTk7PgGDHL9HT+hD
+         s7FPg0pfi4C+VOlYUvbLCuoyWBrTGdaX4tHHQMgLJyKKxeDjvIKdnZ/nNudp/kuTIApK
+         xA3pfWtgkV+yrHi1McPMWx1YosvJkdKrkbA/fpNvnlcCHaAbpzg1hNaWaCvRE8wxeSa8
+         hQAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747217804; x=1747822604;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xt5jpPl9R9r3M1DxHFUgl8SbNW1F0avaN7jhoorozrg=;
+        b=tArKzM0S1jC6anDYbYH+qXz/caiukBnzJgAZMdp9mKqI2WKm4Go/GOwFoz8w4P7HKe
+         4lS3LcedSJSPvZHRjzHGVFv3A+5v3GXX1ZIxXVDw64GMLWvfOBjsBmdBq8iEabHlRG3Q
+         joqGjvmnfUgBkHRDab3vMaG7zQWV/FLJ0ge6YQebGRQst/6Zf1Vo2aQcWBLCZoXUr3WJ
+         8n2jyip8qmVr5YXNmOObcxlaLg2tdvRiXP2omYroSbsnfpTcU8yKh4+OnbyGQfJDstGZ
+         sKdfeznLFGuwgj9LxuVvLTn3h9q7A4jZt9VQuaTIMBbi8U8gyQ3aOJMLZM3Zv5Fmgnh2
+         MNIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUPXGnSQyuHF5L6M41mUd1SbfkrUtFCNUIg8j1vvyWp2xj3b1OBbIitfLcxPAUeqeeWWI4057QmObkxrzL3@vger.kernel.org, AJvYcCWNgvAB+Q4ralDrbkuGn26DKyKTSQwsKG7dooYACVNEfda8/GBpWdCdxW2vYoageCAFg2c/vxa2qrbA1ceW@vger.kernel.org, AJvYcCWWERvLskMTE+bivH88Xcuqdoh0tvDcMXLE+U/2TbgAcELQ6GAWev6b+H0OW01ydF8y9smZUKiFCaWO@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqOabkzmXfi272C2+4KcZ/42spv+6SsXwgFTAyYiXAuge5MrYE
+	o8obNrmsrDLSz05dDXr+Kp97YUBP/hIQsPDJvv0USTcVaAdOhsKv
+X-Gm-Gg: ASbGncvkIKYq8H0/4gTiwNR2NnpaaR33AjpNlPkWRv8khQy9RQPsiToVu2F6JLgFeLo
+	wUEojdz3s08XoNnCWftz3JMgOkTC4acOWNb69OczovuScR0+YYzTzibzZ01E4gldQm+AbPnAOiX
+	RP+uuZRc2kjIlzyqdyhn/RcZZES0iY/scpj3wBB6AdpkGQnNVGFY68HWsyaxnyFt76lCAGTvaxC
+	+NaV3RG6qVZXYhvmsKaVgcr2K3sDFfsLcmbgobPlyaAXtiffN7RG50KC3iAPu9ow1CsmNS5XP/k
+	1rL5ReFg8v/LiwIr3aDdKk4AKO1hGTwy/p70K/HE6ZobF7lXwi3yA/YX4fteLG5Ez9dP03sbESU
+	NyAM6
+X-Google-Smtp-Source: AGHT+IGTBzXJ8khuka4ANfCsJsFYflJ8G0mPpcLcLGB4Y+fmnHYrjMluF3TVeXvhgi5hMkdHZs1XCQ==
+X-Received: by 2002:a05:6000:1a8c:b0:3a2:12a:e637 with SMTP id ffacd0b85a97d-3a34994fee5mr2322746f8f.56.1747217803976;
+        Wed, 14 May 2025 03:16:43 -0700 (PDT)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a1f57dde27sm19596519f8f.17.2025.05.14.03.16.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 03:16:43 -0700 (PDT)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Wed, 14 May 2025 12:16:38 +0200
+Subject: [PATCH] spi: spi-qpic-snand: reuse
+ qcom_spi_check_raw_flash_errors()
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] applespi from 6.12 onwards
-To: kobarity <kobarity@gmail.com>
-Cc: Aditya Garg <gargaditya08@live.com>, =?UTF-8?Q?Berkel_J=C3=B6rg?=
- <joerg.berkel@bfh.ch>, Robin Murphy <robin.murphy@arm.com>,
- "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
- "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- "lukas@wunner.de" <lukas@wunner.de>, David Woodhouse <dwmw2@infradead.org>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-References: <4dada48a-c5dd-4c30-9c85-5b03b0aa01f0@bfh.ch>
- <PN3PR01MB9597D8E327CC7910673849D3B888A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
- <122a1f90-ddd9-4e74-96d1-57e21e580ae2@linux.intel.com>
- <f1b41874-1535-4457-9747-eee3d816091a@arm.com>
- <PN3PR01MB959764E908600CD45169348CB88BA@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
- <c0bbfcc8-1275-43de-be40-acb8f2653359@bfh.ch>
- <PN3PR01MB959708DEEA1567DD38447D5AB895A@PN3PR01MB9597.INDPRD01.PROD.OUTLOOK.COM>
- <eke7wmanw9xq.wl-kobarity@gmail.com>
- <089b2370-23e4-4a22-bf57-886e46247a1f@linux.intel.com>
- <eke7v7q6vxai.wl-kobarity@gmail.com>
- <5d760ba9-031f-469b-96e0-a171b7142f88@linux.intel.com>
- <eke7tt5oww4r.wl-kobarity@gmail.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <eke7tt5oww4r.wl-kobarity@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250514-qpic-snand-error-check-v1-1-c0ebd3aae72a@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAIVtJGgC/x3MSwqAMAwA0auUrA3Y+gOvIi40jRqEWlMQQby7x
+ eVbzDyQWIUT9OYB5UuSHCHDFgZom8LKKD4bXOmasrE1nlEIU5iCR1Y9FGlj2tHNbLu2o8qTgxx
+ H5UXufzyM7/sBCVK1amgAAAA=
+X-Change-ID: 20250514-qpic-snand-error-check-2be1767c3dc2
+To: Mark Brown <broonie@kernel.org>
+Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.14.2
 
-On 5/13/25 20:08, kobarity wrote:
-> Baolu Lu wrote:
->> On 5/12/25 20:16, kobarity wrote:
->>> Baolu Lu wrote:
->>>> On 5/11/25 21:31, kobarity wrote:
->>>>>
->>>>> Hi
->>>>>
->>>>> I'm also experiencing this problem on my MacBookPro14,3.
->>>>>
->>>>> Aditya Garg wrote:
->>>>>>
->>>>>> Hi Jörg
->>>>>>
->>>>>> Can you test the kernel here to see if this fixes your issue:
->>>>>>
->>>>>> https://github.com/t2linux/T2-Debian-and-Ubuntu-Kernel/actions/runs/14944200356
->>>>>>
->>>>>> Alternatively you can try compiling your own kernel with this patch:
->>>>>>
->>>>>> https://lore.kernel.org/all/0-v1-c26553717e90+65f-iommu_vtd_ss_wo_jgg@nvidia.com/
->>>>>
->>>>> As far as I have tried, this patch did not solve the problem.
->>>>>
->>>>> By bisecting, I found that this problem was introduced by commit
->>>>> 2031c469f816 ("iommu/vt-d: Add support for static identity domain").
->>>>> In fact, since this commit, it will panic at startup.  This panic was
->>>>> fixed by commit 6e02a277f1db ("iommu/vt-d: Fix incorrect
->>>>> pci_for_each_dma_alias() for non-PCI devices").  So I applied commit
->>>>> 6e02a277f1db on commit 2031c469f816 and confirmed that the keyboard
->>>>> and touchpad is not working.
->>>>
->>>> Have you tried to apply commit 64f792981e35 ("iommu/vt-d: Remove device
->>>> comparison in context_setup_pass_through_cb")?
->>>
->>> Yes, I tried it on yesterday's master branch, including commit
->>> 64f792981e35.
->>>
->>> - Keyboard/Touchpad NOT working:
->>>     - No patches
->>>     - With patch in https://lore.kernel.org/all/0-v1-c26553717e90+65f-iommu_vtd_ss_wo_jgg@nvidia.com/
->>> - Keyboard/Touchpad working:
->>>     - With my workaround patch
->>
->> Okay, thanks! Can you please try below change? I also attached a diff
->> file in the attachment for your convenience.
-> 
-> Thanks!  The keyboard and touchpad now work with this patch.  I tested
-> it with the same master branch as before (commit 3ce9925823c7).
-> 
+The qcom_spi_check_raw_flash_errors() function can be used to
+verify the flash status after raw operations.
 
-Okay, thanks! Let me post a formal fix patch for this.
+Move the function slightly up in the code and change the
+qcom_spi_read_last_cw() function to call it instead of using
+an open coded implementation of the same check.
 
-Thanks,
-baolu
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+ drivers/spi/spi-qpic-snand.c | 40 +++++++++++++++++++---------------------
+ 1 file changed, 19 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index 18a8e572434e81b698332aceeff852e88e1d6b13..3ee891fd5b5e334950a8da58221658b62b8378c2 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -492,6 +492,22 @@ static void qcom_spi_config_single_cw_page_read(struct qcom_nand_controller *sna
+ 	qcom_read_reg_dma(snandc, NAND_FLASH_STATUS, 1, 0);
+ }
+ 
++static int qcom_spi_check_raw_flash_errors(struct qcom_nand_controller *snandc, int cw_cnt)
++{
++	int i;
++
++	qcom_nandc_dev_to_mem(snandc, true);
++
++	for (i = 0; i < cw_cnt; i++) {
++		u32 flash = le32_to_cpu(snandc->reg_read_buf[i]);
++
++		if (flash & (FS_OP_ERR | FS_MPU_ERR))
++			return -EIO;
++	}
++
++	return 0;
++}
++
+ static int qcom_spi_read_last_cw(struct qcom_nand_controller *snandc,
+ 				 const struct spi_mem_op *op)
+ {
+@@ -537,11 +553,9 @@ static int qcom_spi_read_last_cw(struct qcom_nand_controller *snandc,
+ 		return ret;
+ 	}
+ 
+-	qcom_nandc_dev_to_mem(snandc, true);
+-	u32 flash = le32_to_cpu(snandc->reg_read_buf[0]);
+-
+-	if (flash & (FS_OP_ERR | FS_MPU_ERR))
+-		return -EIO;
++	ret = qcom_spi_check_raw_flash_errors(snandc, 1);
++	if (ret)
++		return ret;
+ 
+ 	bbpos = mtd->writesize - ecc_cfg->cw_size * (num_cw - 1);
+ 
+@@ -622,22 +636,6 @@ static int qcom_spi_check_error(struct qcom_nand_controller *snandc, u8 *data_bu
+ 	return 0;
+ }
+ 
+-static int qcom_spi_check_raw_flash_errors(struct qcom_nand_controller *snandc, int cw_cnt)
+-{
+-	int i;
+-
+-	qcom_nandc_dev_to_mem(snandc, true);
+-
+-	for (i = 0; i < cw_cnt; i++) {
+-		u32 flash = le32_to_cpu(snandc->reg_read_buf[i]);
+-
+-		if (flash & (FS_OP_ERR | FS_MPU_ERR))
+-			return -EIO;
+-	}
+-
+-	return 0;
+-}
+-
+ static int qcom_spi_read_cw_raw(struct qcom_nand_controller *snandc, u8 *data_buf,
+ 				u8 *oob_buf, int cw)
+ {
+
+---
+base-commit: d43eef530946783cb5537ee58bec892253b68648
+change-id: 20250514-qpic-snand-error-check-2be1767c3dc2
+
+Best regards,
+-- 
+Gabor Juhos <j4g8y7@gmail.com>
+
 
