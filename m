@@ -1,70 +1,96 @@
-Return-Path: <linux-spi+bounces-8117-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8118-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E807AB6EA0
-	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 16:57:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07BDCAB7139
+	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 18:25:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA57F1BA001C
-	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 14:57:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22D8A3ACD86
+	for <lists+linux-spi@lfdr.de>; Wed, 14 May 2025 16:25:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A731A4F2F;
-	Wed, 14 May 2025 14:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B037227FD7E;
+	Wed, 14 May 2025 16:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o5mcIhSy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFNZUBSs"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804381624EA
-	for <linux-spi@vger.kernel.org>; Wed, 14 May 2025 14:57:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF4D27FD4F;
+	Wed, 14 May 2025 16:25:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747234631; cv=none; b=jQYsIPw/9l0wcKmnZRxPXG8M4CRxrlhYgm+Xy7ZWBPK3D4TulfEezeC3lP5i5feG3kwsJ2/BkLAaQauudukeFidHvTXJcxwqs2jqN2CfdnSh+NSIykkJBvFJjFC4Ge2f+44I2wak7xxK+/KFA1yB+ZCUZMnDo1rhfgkmKkGmi2A=
+	t=1747239909; cv=none; b=PhzXJYeTCirTiQ0xBDYO5ynbiLuHjRXi5I0uSflNVd11dn1W8sd5LV1nszp1plmqxS5AINiHjfs9pGzbO0SUdtsw2H2nv1t6nMy29xCEZwJLeu+Qnaw5fyrWYRVqQpYz5Cayoc+IxL0+3M8jOYyj2ZwF3IhVRLitZi3KVocUCp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747234631; c=relaxed/simple;
-	bh=1+SDrO5u+PLv3Ck57Zy4eu8GpS58DBF3ZkMbGXDEClg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dREg9pg8X34s0YteZAdn75NMurWm3vWbUZWnLaxGfHX0kXnqZz1kDjC64Ba3236hnYt8IovpNDS6QAPm7SnyoybGKxMN1QUeHqahisR14CR+uN0LiSaVu9JXPOo2oBNiQJln90rw0KJswwU2RUWfz7y7Ebfi4EZt6ZJ7DTL/2ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o5mcIhSy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39C3C4CEE3;
-	Wed, 14 May 2025 14:57:10 +0000 (UTC)
+	s=arc-20240116; t=1747239909; c=relaxed/simple;
+	bh=8YOc48xEuXr4DJ2sYcMuh/KPNLlwfh6kUwEIoaMrSoE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dxe/r3gzDaz/6iiTZrEgYqsBcRGxCCvbtMl3ts4hYVgTYuzLqaXzD5DsYlp4xhgW7JpmcNbWZrgUUdHn1t6HVbteGQGE7jTQD7hGXYhD0KmRrp80hnyKvsSXHXfiH2PEDJmqzgZfRxlH4q9eKWx+l1I/vBVvPFBccYSM9vqWEs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFNZUBSs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F2AC4CEE3;
+	Wed, 14 May 2025 16:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747234630;
-	bh=1+SDrO5u+PLv3Ck57Zy4eu8GpS58DBF3ZkMbGXDEClg=;
-	h=Subject:From:Date:To:From;
-	b=o5mcIhSyLq8m47FNuVILFLEvqP+9A4yvJ51r2eIT5Vg85zS6LqEfmZMox95BSeTY+
-	 KWWTwHuaJk5/HZfVW+Djg2lJ8ycf0Tkri2IMABxWxqRT/puPUtJlLkyrCPYfHoNO6Y
-	 2dAQOrm6MuP01t2SW/taQdcmBPxsfDh2FctDJN44F2D6MJlet5XvB47oeAAQk5Feyx
-	 jOiNzunNZgAjt9mpv2YK28wcrGqwHheqpk9HQWIaCmYzS4zaK9zwqH1KdfR3wkM7mN
-	 MUFu0/2/aA/YBF2y1MTSdzGgKongz7YTD00AVEE2oMs1hmTRp5PwErXAzEDP9LLcs+
-	 D/e2OY6Z728ug==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D83380AA66;
-	Wed, 14 May 2025 14:57:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1747239908;
+	bh=8YOc48xEuXr4DJ2sYcMuh/KPNLlwfh6kUwEIoaMrSoE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aFNZUBSs18u7vNTlMtcWiIJ8SvP2FFDkbpHlQrN+YoDFwueqYt+X6WcXB1yFHQtTr
+	 aVku4Tyavvh6Bv+6WOoMfBnz4VbdDC0T+hYE04Nb3HuLpnt04x2Cjxs23JmA4wwaTR
+	 v/SaYkB7Fzuob4sgAeMa49ka8t2xajp2Bj15IhADoeujJ50oyQDDv5kZ6KTStdPThy
+	 rz7ZFuPdNpI47t8nz/TOx3xAQFJUWfaiwu+M+CcGjdD/8nFebdDoRClVveb7r6VZYp
+	 eEu0xX1iGdNvbkcr1a96/VKeJ/ED49wWQ2HjThtvMtFT/cT3ENLei+/I4FnQFLoNqv
+	 iVV2CK+CwZouQ==
+Date: Wed, 14 May 2025 17:25:03 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Vishwaroop A <va@nvidia.com>
+Cc: krzk@kernel.org, broonie@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, thierry.reding@gmail.com,
+	jonathanh@nvidia.com, skomatineni@nvidia.com, ldewangan@nvidia.com,
+	kyarlagadda@nvidia.com, smangipudi@nvidia.com, bgriffis@nvidia.com,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 1/2] dt-bindings: spi: tegra: Document IOMMU property
+ for Tegra234 QSPI
+Message-ID: <20250514-shrimp-ranged-14b4529eb997@spud>
+References: <20250513200043.608292-1-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174723466793.2395908.18073327626211361407.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 14 May 2025 14:57:47 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v5] spi: stm32-ospi: Make usage of reset_control_acquire/release() API (2025-05-14T13:56:01)
-  Superseding: [v4] spi: stm32-ospi: Make usage of reset_control_acquire/release() API (2025-05-12T07:01:04):
-    [v4] spi: stm32-ospi: Make usage of reset_control_acquire/release() API
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="DQh+ciSLDM9qG+dk"
+Content-Disposition: inline
+In-Reply-To: <20250513200043.608292-1-va@nvidia.com>
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--DQh+ciSLDM9qG+dk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, May 13, 2025 at 08:00:42PM +0000, Vishwaroop A wrote:
+> Add the 'iommus' property to the Tegra QSPI device tree binding.
+> The property is needed for Tegra234 when using the internal DMA
+> controller, and is not supported on other Tegra chips, as DMA is
+> handled by an external controller.
+>=20
+> Signed-off-by: Vishwaroop A <va@nvidia.com>
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+--DQh+ciSLDM9qG+dk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaCTD3wAKCRB4tDGHoIJi
+0t2XAP4/BH7fs0e/BmQhWpvWaKGS3RlpZ6n1pIQr0ApCchqAXgEAqGfukdfko0bU
+H52InxlNzKSfABdad/KmdkSjoHLYTQ8=
+=b50c
+-----END PGP SIGNATURE-----
+
+--DQh+ciSLDM9qG+dk--
 
