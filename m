@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-8142-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8143-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E166AB8F8E
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 20:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97330AB8F91
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 20:59:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD84F189FB20
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 18:59:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50FC31BA1634
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 18:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E89298C28;
-	Thu, 15 May 2025 18:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0D129B765;
+	Thu, 15 May 2025 18:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pc/7XNPO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aqukJCwA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2774628AAE1;
-	Thu, 15 May 2025 18:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D93628642D;
+	Thu, 15 May 2025 18:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747335511; cv=none; b=vEL2wlNWMovyqrUQGpSWm0qQ8uDI/iCygJrD0ucCEEv62DoA8R2oVKsM+V5hqtnFi/LiypmsnhGeeSpGU9w0GjM7fvqv3BwB4x1qtk2iBo4vIZB+1QF7FMAnT63cgDhkBeeyV3eA4qAnCRSuVxVyC8bCjEUO3JoNVxBmlI6dSUI=
+	t=1747335512; cv=none; b=MCfO5awCNF4Sb3BIgHVXB8dyk4MtoIkEceqcB0sUFg/yMUxMSSht8o3myL7DEANHGbyWvFzcWNY2UbxdKxifPqDS9IKvTLvo1ixL1NGZm/cZfbi8x32ZKTpilFdjmkL0EEtJ2kJlz0um2E1uQQj3Xr9rXREOgfcpRGOPbyRyp2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747335511; c=relaxed/simple;
-	bh=QhQGb2DW+k4qcx3WHDeffB52u7s0YSmQKid0jbHEx2A=;
+	s=arc-20240116; t=1747335512; c=relaxed/simple;
+	bh=R9+E/jvRIAgbErtUCsQF7o2wS8bqNaKox9ed/uj0mR0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=feNUhDA1FUaCt9Pz1/RnrJKHhT0PpUT9CvkCfSAfrddtpaHR261W/U1W71+b+oL7ZJuXIfpIBzbgEVgJpkufX/rrhTkrqI5GYseYWH41PnmZS8DZhuMgtIoXFMbLgEhmeWE/NCYPokjwJ8fsOO1ggWP2BRuxCfwYq7TfJACJCOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pc/7XNPO; arc=none smtp.client-ip=209.85.221.49
+	 In-Reply-To:To:Cc; b=JHZjpU5ZPLHhoykqNRpi6MMCD6bZSWJ9Q0tEB7pphZNYYHIsvsRuie0Tjd6Qe+rfZoMZ7ptKHna18pv6J/c4ZxrfaPuUWMTFJD8Ph5EUmqdZDQ/jp691MqMHIxebtfW+8/JXt/z55NE/j/4wE7V9Hl26G4zoTYqdVBwaApbAwY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aqukJCwA; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a0b9c371d8so1091683f8f.0;
-        Thu, 15 May 2025 11:58:28 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-441d1ed82faso10422705e9.0;
+        Thu, 15 May 2025 11:58:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747335507; x=1747940307; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1747335508; x=1747940308; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vN4zS8Ov4vOND0MqD7gEwYhjgQ4bApUSGr8+gPK0fio=;
-        b=Pc/7XNPOe8vpVC6beSVkJxEYHwKBNDG7lCx1TqYanv4HVg2TpvEa5jmWUSzbkyAjph
-         kPM0uNT6OWvxCX8RuRc+T94uDzE57wNOG+/V59m6svGw2Kp/eOEk77FyXhaEdDmlzVwQ
-         1GoiEPyKb9BYVOcCzqCdbwC0avNaYdMHUgJ/u2GH5lBybhgDSJpXgH2yI+QYJJud9ZsD
-         olQKcSAxWc3LkrczJ+igCk56YCwHhaM5y2r5DK0xK0unCFEFxsu6l/eXsQf50NZx8bIn
-         AyMlFCfbgrYrHp8Sl6diJq9+qK6u7MLS5E+p6Tlm2pNBJOasa7rxyNvSvGOAPwnjGsS5
-         Y+pg==
+        bh=2uyejmtz0c+qWQ5LaiwciCgzl0ypKnF8Po4gKuJr/+k=;
+        b=aqukJCwAtkf9mpyrqE9NT82ARLqmmRP/XfUrI4USwx1/QbOGwgT0CmKXhO+LD76Cb+
+         46DSSX7igFPq7hx4K9MUMS/rNXBHmKKpQHmEVrkyKZ2wGHFWErK5Qf/Uc6oJ4othMhw6
+         6eUwGWGPAX0yAW62j2swPPDEGdwjoY9fww1EPtpM6zxuC4c228HMKiahdDLY8Qjkl7TL
+         pAcxGsGkQF14VLdIDv7JMHlR7Xwp+V6EAknPImthBZf4xXVY+KcIPg0Bgls1V6JoLZwq
+         yETFY/qiDkOQIbQDmL+o2PcXwZV3wKwbI2FQx3CNtII7Sd3JjXB0EKNHziI0wWltyRuA
+         deoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747335507; x=1747940307;
+        d=1e100.net; s=20230601; t=1747335508; x=1747940308;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vN4zS8Ov4vOND0MqD7gEwYhjgQ4bApUSGr8+gPK0fio=;
-        b=RfDIQ2CWG/Gfm9fA1FPThCQlPUL6gTrO1f7wB1z3phjIZ2kU/k/0vU3yVGUrXPabit
-         51kV6xo+MSmeCKQJ2FbROO+xgYOmqXYujT5qmW0QQNM/BEakq234xiJcB6R1WIkufgtg
-         ONLx6dodC//0kXjm5fa2k/W+SBl2vGn8f4hxyS17tiI2rKm6WXQSgrkPrWCjIXasFNYS
-         pcppo9CObODuA5bTvpWOySc9qiuBzZ5QKgTu9iC3j9wFVc/kBKkk4rkoEIi3pYj/988b
-         czPrW8Z4nbyRFhAR1BQM9uuYtbwNRxI5pCTpckg9QSOZPlKIed8dAbNO3R+kG405CCbc
-         P5zg==
-X-Forwarded-Encrypted: i=1; AJvYcCViyCnNaNwQv5lHdyB/fKlXYaaDLByxWPTf0yKq47WzFcNBatj1fhpuors6tu+2Kh/L8MTN2/wkjxUdjwE2@vger.kernel.org, AJvYcCVkYe5efJbH2VeaQTSIhgi/ineGhE2VG0gAOgCyYMdNMtjpl43XYuy2y2JwEAs969IQESQlebj+x2MDU10u@vger.kernel.org, AJvYcCWV5IzbLoeOqFk+QqsDeFtLBeLiPHcDsUkoPmOr9NhJCgCRK4ZE+XqN/BH0Ubx/TEspasqPbgF4nQKo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcGKYxeEocXMkxzkGQYByV3TIE+Om/3T5emnx8P6YPfP8D0iKa
-	C+7bOrdrd60Yd8bdl93dwXg7WGPFqVrdYF4kAtauR0FJmcbSyQh47rDBsWJAsg==
-X-Gm-Gg: ASbGncsJLnhpM49ZDx0AMzvrfgUbTAtIE75fjCt1jVaftxG6U+5PCnzgDMd5w3ABOBd
-	/xki7xeLRrrh7X7nAWux6HxYJBaJIdtByRAK3EsZFQ2h2TI7/DfRrxP1gVoRP2MPFNODpTCrYGi
-	mAHzLYkfF9iCvsZBeESNjRmLqxzq4Gxei2Fbvw08L1VicDucW6dDlZeB8f1Zr+g+tTdy04egdIw
-	ty6GMCPj5a5umYAAS9+zThqDlmubVV9aFCRPwgyRcUn1qsEt7FBXfckDXcqPH/PLLBsWV10ilWy
-	9LcGYa7w6d20p9FpEZNvZMzbTUm4jOfhU8mtioEZUIDoCi5EAyN6fQqsRPgs+5UGXFjrfRQPQml
-	gHgR+
-X-Google-Smtp-Source: AGHT+IF59ZHvQRzBDwGpTzr3onUTfd7fsdZeTn+qh3y2jNptGBAMnHdW0F4KfYB9nYA7aauukxGcGQ==
-X-Received: by 2002:a05:6000:3107:b0:3a1:fd60:887 with SMTP id ffacd0b85a97d-3a35c84a6b1mr835097f8f.45.1747335507298;
-        Thu, 15 May 2025 11:58:27 -0700 (PDT)
+        bh=2uyejmtz0c+qWQ5LaiwciCgzl0ypKnF8Po4gKuJr/+k=;
+        b=TcC1SWB8mQTry67aQ6x+RO+L5X9wmAzGx+FY0ns2SHFL0CPTtXoSPhyjQjQNEd/pEz
+         2Is00qv+Hj4miyUqBoTg4amLE3LDKpndjRAtl7k4j8Sk8rzSts1nm+PiYM80ZD6lZdpD
+         jNxW8mQTBVmX53oWtUYoMg9Cu17r1J4sXp27MXyFg7b5DISRKdqMKuRYSae2ZqNKN+5n
+         /FszLtC/S+JGcAGkP5fT0CRMm6kt8JT2EgSImAwGN+AfiqyRohemy+52Eu90nE5JTGJf
+         ZgHCmkvxSzr5QxHVnDLae3diqGZKG4Hk8r8BxZIFDZ8o8BlaNIcVLlkN4G4Mdg43XXXW
+         QkJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAwAjZD5OAyRTef4QcLldN6+2hSteQ/HfxcRPK5kWa8lDOfCwqTByPiJcxGWGyo6/iXqJQg/H64PQk67B/@vger.kernel.org, AJvYcCVuXrZLk68uDlGb1F/DcPxAXxWVm7J6BGDhemJAFaexoWi1Wq054YYjRm5XMTkDcus9Jl/qpDE5BgSYOh2B@vger.kernel.org, AJvYcCW4HgxQWVV0sB+iyGvO/9kkY2k3xkk4ZCL/BnS8Tqwqq0ONW4AHLRd7gXEvrr4UR+8nOQxz7mrFufPE@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBJYq7jn0oJkWN/JJyqC/3kBImiJ1HlPYtI/bxdbhPNasG0244
+	nGt2kNm9LTWK93mjeUlIfgmGQF3XrrsXSMEMIu3zpi/CgdcUeXifsI3fAstUeQ==
+X-Gm-Gg: ASbGncuS/mLl1UUUV376Dlgaj6B2yRR1DJlK/j6PDe3U0UNog35vsk7R3r5zrPSinTD
+	qbRhjnf4CDupqB/8ieces9/rSndwHCdGztwExHhLqx6bc+WzYzyDyohAl49L2Y/dRwxs8j60Aa2
+	nI7y5B3SXQUbF9YAYIFkd+Qi2KkEn/3DbtSfZZtslD3J1QsrBTSxnARrscMrvQThwYXDxUySmL1
+	YQn/FszqzUl5g+1f3RuUm+9QrnA2AubsacTtTBaNAvKLJK0kqVpHEyXCw999RWhmPW4Pug11K6c
+	ASGQ1D+OZ5q3SxaqD6jvQcif7iWI6+nCYHm/UjWP1TiWzM9tTOMhLImrz+T+oMhMP0ZG7QY+2BO
+	IsN8E
+X-Google-Smtp-Source: AGHT+IHaF5/8q+je2iW1pwj88K62M744soT9y5wHNJ4gvYxacC9IaeaSHOljAqzLiWm7Ak+nx/AzHA==
+X-Received: by 2002:a05:6000:1446:b0:3a1:fe77:9e0b with SMTP id ffacd0b85a97d-3a35c843f52mr1022650f8f.16.1747335508447;
+        Thu, 15 May 2025 11:58:28 -0700 (PDT)
 Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a35ca5a857sm335778f8f.32.2025.05.15.11.58.26
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a35ca5a857sm335778f8f.32.2025.05.15.11.58.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 11:58:26 -0700 (PDT)
+        Thu, 15 May 2025 11:58:28 -0700 (PDT)
 From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Thu, 15 May 2025 20:58:05 +0200
-Subject: [PATCH 1/2] spi: spi-qpic-snand: use CW_PER_PAGE_MASK bitmask
+Date: Thu, 15 May 2025 20:58:06 +0200
+Subject: [PATCH 2/2] spi: spi-qpic-snand: extend FIELD_PREP() macro usage
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-qpic-snand-use-bitmasks-v1-1-11729aeae73b@gmail.com>
+Message-Id: <20250515-qpic-snand-use-bitmasks-v1-2-11729aeae73b@gmail.com>
 References: <20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com>
 In-Reply-To: <20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com>
 To: Mark Brown <broonie@kernel.org>
@@ -96,9 +96,10 @@ Cc: Varadarajan Narayanan <quic_varada@quicinc.com>,
  Gabor Juhos <j4g8y7@gmail.com>
 X-Mailer: b4 0.14.2
 
-Change the code to use the already defined CW_PER_PAGE_MASK
-bitmask along with the FIELD_PREP() macro instead of using
-magic values.
+Large part of the code uses the FIELD_PREP() macro already to construct
+values to be written to hardware registers. Change the code to use also
+the macro for more registers of which the corresponding bitmasks are
+defined already.
 
 This makes the code more readable. It also syncs the affected
 codes with their counterparts in the 'qcom_nandc' driver, so it
@@ -109,100 +110,48 @@ No functional changes intended.
 
 Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 ---
- drivers/spi/spi-qpic-snand.c | 31 ++++++++++++++++---------------
- 1 file changed, 16 insertions(+), 15 deletions(-)
+ drivers/spi/spi-qpic-snand.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index 7207bbb57802ce53dfab4d9689113e7f9ba8f131..bc45b834fadc5456eda1fe778e5ca8b16177465e 100644
+index bc45b834fadc5456eda1fe778e5ca8b16177465e..ad01bb456a88b54f0ffc801dd14eb3fa2708ec2e 100644
 --- a/drivers/spi/spi-qpic-snand.c
 +++ b/drivers/spi/spi-qpic-snand.c
-@@ -483,7 +483,8 @@ static int qcom_spi_block_erase(struct qcom_nand_controller *snandc)
- 	snandc->regs->cmd = snandc->qspi->cmd;
- 	snandc->regs->addr0 = snandc->qspi->addr1;
- 	snandc->regs->addr1 = snandc->qspi->addr2;
--	snandc->regs->cfg0 = cpu_to_le32(ecc_cfg->cfg0_raw & ~(7 << CW_PER_PAGE));
-+	snandc->regs->cfg0 = cpu_to_le32((ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
-+					 FIELD_PREP(CW_PER_PAGE_MASK, 0));
- 	snandc->regs->cfg1 = cpu_to_le32(ecc_cfg->cfg1_raw);
- 	snandc->regs->exec = cpu_to_le32(1);
+@@ -130,9 +130,9 @@ static void qcom_spi_set_read_loc_first(struct qcom_nand_controller *snandc,
+ 					int is_last_read_loc)
+ {
+ 	__le32 locreg_val;
+-	u32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
+-		  ((read_size) << READ_LOCATION_SIZE) | ((is_last_read_loc)
+-		  << READ_LOCATION_LAST));
++	u32 val = FIELD_PREP(READ_LOCATION_OFFSET_MASK, cw_offset) |
++		  FIELD_PREP(READ_LOCATION_SIZE_MASK, read_size) |
++		  FIELD_PREP(READ_LOCATION_LAST_MASK, is_last_read_loc);
  
-@@ -544,8 +545,8 @@ static int qcom_spi_read_last_cw(struct qcom_nand_controller *snandc,
- 	snandc->regs->addr0 = (snandc->qspi->addr1 | cpu_to_le32(col));
- 	snandc->regs->addr1 = snandc->qspi->addr2;
+ 	locreg_val = cpu_to_le32(val);
  
--	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
--		0 << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, 0);
- 	cfg1 = ecc_cfg->cfg1_raw;
- 	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
+@@ -151,9 +151,9 @@ static void qcom_spi_set_read_loc_last(struct qcom_nand_controller *snandc,
+ 				       int is_last_read_loc)
+ {
+ 	__le32 locreg_val;
+-	u32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
+-		  ((read_size) << READ_LOCATION_SIZE) | ((is_last_read_loc)
+-		  << READ_LOCATION_LAST));
++	u32 val = FIELD_PREP(READ_LOCATION_OFFSET_MASK, cw_offset) |
++		  FIELD_PREP(READ_LOCATION_SIZE_MASK, read_size) |
++		  FIELD_PREP(READ_LOCATION_LAST_MASK, is_last_read_loc);
  
-@@ -687,8 +688,8 @@ static int qcom_spi_read_cw_raw(struct qcom_nand_controller *snandc, u8 *data_bu
- 	qcom_clear_bam_transaction(snandc);
- 	raw_cw = num_cw - 1;
+ 	locreg_val = cpu_to_le32(val);
  
--	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
--				0 << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, 0);
- 	cfg1 = ecc_cfg->cfg1_raw;
- 	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
+@@ -352,7 +352,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+ 			       FIELD_PREP(ECC_MODE_MASK, 0) |
+ 			       FIELD_PREP(ECC_PARITY_SIZE_BYTES_BCH_MASK, ecc_cfg->ecc_bytes_hw);
  
-@@ -808,8 +809,8 @@ static int qcom_spi_read_page_ecc(struct qcom_nand_controller *snandc,
- 	snandc->buf_start = 0;
- 	qcom_clear_read_regs(snandc);
+-	ecc_cfg->ecc_buf_cfg = 0x203 << NUM_STEPS;
++	ecc_cfg->ecc_buf_cfg = FIELD_PREP(NUM_STEPS_MASK, 0x203);
+ 	ecc_cfg->clrflashstatus = FS_READY_BSY_N;
+ 	ecc_cfg->clrreadstatus = 0xc0;
  
--	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
--				(num_cw - 1) << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
- 	cfg1 = ecc_cfg->cfg1;
- 	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
- 
-@@ -904,8 +905,8 @@ static int qcom_spi_read_page_oob(struct qcom_nand_controller *snandc,
- 	qcom_clear_read_regs(snandc);
- 	qcom_clear_bam_transaction(snandc);
- 
--	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
--				(num_cw - 1) << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
- 	cfg1 = ecc_cfg->cfg1;
- 	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
- 
-@@ -1015,8 +1016,8 @@ static int qcom_spi_program_raw(struct qcom_nand_controller *snandc,
- 	int num_cw = snandc->qspi->num_cw;
- 	u32 cfg0, cfg1, ecc_bch_cfg;
- 
--	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
--			(num_cw - 1) << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
- 	cfg1 = ecc_cfg->cfg1_raw;
- 	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
- 
-@@ -1098,8 +1099,8 @@ static int qcom_spi_program_ecc(struct qcom_nand_controller *snandc,
- 	int num_cw = snandc->qspi->num_cw;
- 	u32 cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg;
- 
--	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
--				(num_cw - 1) << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
- 	cfg1 = ecc_cfg->cfg1;
- 	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
- 	ecc_buf_cfg = ecc_cfg->ecc_buf_cfg;
-@@ -1175,8 +1176,8 @@ static int qcom_spi_program_oob(struct qcom_nand_controller *snandc,
- 	int num_cw = snandc->qspi->num_cw;
- 	u32 cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg;
- 
--	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
--				(num_cw - 1) << CW_PER_PAGE;
-+	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
-+	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
- 	cfg1 = ecc_cfg->cfg1;
- 	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
- 	ecc_buf_cfg = ecc_cfg->ecc_buf_cfg;
 
 -- 
 2.49.0
