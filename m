@@ -1,59 +1,63 @@
-Return-Path: <linux-spi+bounces-8133-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8134-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3640BAB825D
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 11:20:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F23DAB8268
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 11:22:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 02DFB1B61B80
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 09:20:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A3A57B4862
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 09:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83656296721;
-	Thu, 15 May 2025 09:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94EBE28CF42;
+	Thu, 15 May 2025 09:22:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lN542K2t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTauZgz0"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE47295DB5;
-	Thu, 15 May 2025 09:19:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67715289E03;
+	Thu, 15 May 2025 09:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747300799; cv=none; b=RWa+tvrHdwJbLV19NgiCkvh7bViwjXDj1AOzHTEOyGjZ4C2aRR+VHYWIZxx1bXhd+TuPuSdZDsDIoexUSbSOvV3GBZYp3j6PS8Gw6TcEJvZ2nCsE9a2Hc6a9wE71DTdYZ//RFPMcmmdM+hEePO1JaEjGXqwFJgJCaq2sYydGIxg=
+	t=1747300964; cv=none; b=uSHd9rwrzi444fbT7zHOrSCxz03NlihhdkpfpYccY7EY2Y2hoSknkqOfLsx8DudCTvf9CwATJUlcBG27X/dlchGCawcL1wcJsbupjno5zKAFMUU3GaKJK19eFpeRQWpdERlxUiKaxvcIU26nwatE/+HLeKBiySiuty4iC7L+Hso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747300799; c=relaxed/simple;
-	bh=yAE5ZaqBHdVLWaZoDrZHlWAUy//bRfgw5fCUmaQcQXw=;
+	s=arc-20240116; t=1747300964; c=relaxed/simple;
+	bh=09psgg/FDIgxF3WszEeFUp1upo+WVfhoS0WFJ5ThPzM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZBVUQa+CLxz8pYuQ5JATk7vY7tpBJWsFfOhywatPl2TYE9a4NwIEh7E1o2Fu/dDJZ4BdM06BJK2JdBYFqRbRwMn9njY8swrdwkjNsRBU9NPtDDt8FlKPueg2mNL5DyZh3bcTMENQ3WdjmfK/UEW5KmKoEAbrhykJ+XAEg5VJZrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lN542K2t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E82C4CEE7;
-	Thu, 15 May 2025 09:19:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=G1dCaj962hkg+cKF8xmnTVcWk5stRk6wMCiz6GkIhVoZGjlqF6pmpORFM9xoaxVcykeFUf7+PqPhBVbg+eYRBLDkSAjIVf4NQv27/Edp6IuwGB/E/nQWsuR/1hBQqNZumBj5nt0BHFOE8wUGI3lpp+ta+zsM2y57+XbcITA1J2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTauZgz0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF4DEC4CEE7;
+	Thu, 15 May 2025 09:22:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747300798;
-	bh=yAE5ZaqBHdVLWaZoDrZHlWAUy//bRfgw5fCUmaQcQXw=;
+	s=k20201202; t=1747300963;
+	bh=09psgg/FDIgxF3WszEeFUp1upo+WVfhoS0WFJ5ThPzM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lN542K2tpX5KeIGgI5eh1Qj9mt3QfJDXZrQxR2X5IRG3WttDFY3pHx2Zdv28uKO9h
-	 NNRjgNVuZOptIjAmgcO8VBWBt0GFqfBETj3B2FbXWgZOXig/OF6cwo+mnAPtlNswzx
-	 ny3y2JxKtfU7xKXsFBI2fasxxM3PmQmYgbasJol+hp7J051xlDPTXTN6jv54rMgqhA
-	 wsfzNFh7LNm+pN0DgY+RcaVAKra0e0RJEoB0fpvO6yn/urlS9RCiGt0PgZYJk2AliY
-	 g5j/+ekx6LRPo+sCcwI0tJJi1GPgD/g5P8SHQmf1HyjyerWvx5BMZUuQSaR+1K6g/l
-	 LMWRL5Wcg1Ugg==
-Date: Thu, 15 May 2025 11:19:54 +0200
+	b=BTauZgz0HZn5DsUlIaSxS6Xagzd8AziP1XStFm3Jt2dV4YjGOu9KP03KWV4m6zbJ+
+	 gqotrf1hy/DvzOr0lZM+qJqdGHXc7Ba6/mpIYabCJ6C2+7Wq20OLC4PgviEMxPTgDP
+	 jW4nVGr0cnat8geUD0HXFabpdw/rlcUWoWPzg3nS98yclZsWwJe7NA78HZjk1po9wD
+	 9MEcTnDm/CAXzP70gJ8W91+zk6bKs9bomcr2TYd3IhN/8gfMzPTu9/teIkz1Jtt8SG
+	 ydnVS1OhJZHd4YSgFgLI5Zi/fONKW2vnuOoJ6XxyXptZLg71PyXThuRKnHD51rN1Sp
+	 E2OG/W1aflNVg==
+Date: Thu, 15 May 2025 11:22:38 +0200
 From: Mark Brown <broonie@kernel.org>
-To: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5] spi: stm32-ospi: Make usage of
- reset_control_acquire/release() API
-Message-ID: <aCWxusdUYgeGRaqk@finisterre.sirena.org.uk>
-References: <20250514-b4-upstream_ospi_reset_update-v5-1-7b5de0552c8c@foss.st.com>
+To: =?iso-8859-1?B?Q3Pza+Fz?= Bence <csokas.bence@prolan.hu>
+Cc: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Vinod Koul <vkoul@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: Re: [PATCH v6 0/2] Add `devm_dma_request_chan()` to simplify probe
+ path in atmel-quadspi.c
+Message-ID: <aCWyXsJ2iRXRUmOi@finisterre.sirena.org.uk>
+References: <20250515083132.255410-1-csokas.bence@prolan.hu>
+ <aCWpjplhAXUvr9fj@finisterre.sirena.org.uk>
+ <e4e6c7a9-9b7a-4012-8bda-75804229ec95@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,49 +65,54 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NvFxYeYGiMf1vQuJ"
+	protocol="application/pgp-signature"; boundary="lsS54prYZ+c1tDdi"
 Content-Disposition: inline
-In-Reply-To: <20250514-b4-upstream_ospi_reset_update-v5-1-7b5de0552c8c@foss.st.com>
+In-Reply-To: <e4e6c7a9-9b7a-4012-8bda-75804229ec95@prolan.hu>
 X-Cookie: Well begun is half done.
 
 
---NvFxYeYGiMf1vQuJ
-Content-Type: text/plain; charset=us-ascii
+--lsS54prYZ+c1tDdi
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 14, 2025 at 03:56:01PM +0200, Patrice Chotard wrote:
+On Thu, May 15, 2025 at 11:14:22AM +0200, Cs=F3k=E1s Bence wrote:
+> On 2025. 05. 15. 10:45, Mark Brown wrote:
 
-> This patch is dependent on commit 6b3754009f87
-> ("reset: Add devm_reset_control_array_get_exclusive_released()")
-> available on tag reset-for-v6.16.
+> > I can't tell what the plan is here, or what the status is for the first
+> > patch (since I'm not CCed).  The second patch depends on a new API
+> > introduced in the first patch so it can't be merged independently.
 
-When telling people about dependencies like this the standard thing is
-to also specify the repostiory, or link to a pull request.  The git
-repository is needed to actually pull the tag.  This appears to be the
-PR at:
+> Yes, the situation is a bit convoluted. Obviously 2/2 will be applied aft=
+er
+> 1/2, in a similar vein than the former PM series.
 
-   https://lore.kernel.org/all/20250513092516.3331585-1-p.zabel@pengutronix.de/
+> So what I was trying to say: Vinod should be able to apply 1/2 to his bra=
+nch
+> (dma/next) right now, which can then be merged to spi/for-next. This merg=
+ed
+> branch should be able to then cleanly apply 2/2.
 
-which is the full reset pull request for v6.16.  The commit you
-referenced isn't the tagged commit, it's further back in the history
-but still has a whole new reset driver backed up behind it.  I'd have
-expected that if this was expected to be pulled into other subsystems
-it'd be on a topic branch and directly tagged?
+I wouldn't expect to pull the whole DMA tree in, that'll have a huge
+amount of extra stuff in it - if I was going to pull something I'd
+expect a topic branch.  Wouldn't it be simpler for me to just apply both
+patches at this point if there's no conflicts with the DMA tree?  We're
+at -rc6 now...
 
---NvFxYeYGiMf1vQuJ
+--lsS54prYZ+c1tDdi
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmglsbkACgkQJNaLcl1U
-h9ClaQf/duEFMH9ku1tjFSWXgNBEHbSEBi9hfGtmNs2Vmy0bYAFCf/Ny5aHYrPmK
-JJ7L1eHj3dfPW+ihDp5TgXjKgxHQdI5GMG2ywfUKCzT+I1Y12sb4g8F3CUWCAS1V
-Wsu2gEje4X/5agpo3BprY1CgvAcuM9/u8/ycG7/DBXBmriq7BrYjbgxYIk8oxFpK
-UAU49XCozl1o1It3RaLMSB3xnYnMyX+FaM2tMPrHXZJHLtAwuWChuCfQDo/qZIpa
-yX7DwKID+h+/Lr5+EiUuaGLutyvNqjiC/kLtCi3LhSnVkgmFtvnfXQWZyCEZRkuL
-J7OieaxVMHoILV2MPzAnMhSalQ5VGg==
-=WTr9
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmglsl0ACgkQJNaLcl1U
+h9CkSQf/aHhDgShaJOuGnP6gxQePQyEyifKpyjggCAaRO0Sesc+kJpLP+WmA0tu5
+zR8dncLAeFAWIhOnoiv/TvWp37UG0ZMzmoMeVYSzQNijpT1i3K3Hj59K/7Xj7pOY
+DfM+te9RzU6zFCqQCBsG/HzrtmN135ZWSITtrqSZIMerQPzwj1gRxn739aVsdeEu
+uMpbZiLJ5kCiQrzKGo8Ixui87RlSho7whEs38ryCVpHsHdKIqHhu6KdqbAIdtbse
+o9sgfNAOjjua7YHhcNiEqCmUoj9cbzMjXA8YAYuWXfJwj4w8bys8xRCi3nGF7zXc
+nVbkjKLI5vJuum8GbeDZrTefcfktBw==
+=bjGy
 -----END PGP SIGNATURE-----
 
---NvFxYeYGiMf1vQuJ--
+--lsS54prYZ+c1tDdi--
 
