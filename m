@@ -1,159 +1,285 @@
-Return-Path: <linux-spi+bounces-8143-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8144-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97330AB8F91
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 20:59:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B46BEAB901C
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 21:50:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50FC31BA1634
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 18:59:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B330B3A9DFB
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 19:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0D129B765;
-	Thu, 15 May 2025 18:58:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1071F584E;
+	Thu, 15 May 2025 19:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aqukJCwA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4NiOE7v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D93628642D;
-	Thu, 15 May 2025 18:58:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1187D1E480;
+	Thu, 15 May 2025 19:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747335512; cv=none; b=MCfO5awCNF4Sb3BIgHVXB8dyk4MtoIkEceqcB0sUFg/yMUxMSSht8o3myL7DEANHGbyWvFzcWNY2UbxdKxifPqDS9IKvTLvo1ixL1NGZm/cZfbi8x32ZKTpilFdjmkL0EEtJ2kJlz0um2E1uQQj3Xr9rXREOgfcpRGOPbyRyp2A=
+	t=1747338618; cv=none; b=cgCKH3aheOdG3LKK+hYnURIF8XP8jz9/D9EsafO7Z0lbxxz36krOMasj9w3SZ7ojAQ6tpz9cphS894SdipQQGL6XddcINnUtZIStgoWhHqx9pCmiLch1ASvKJCZJEL3YAuf18AH2U3PkM65KNqfuA5gdQ/ySq/mk7ck64A7BslU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747335512; c=relaxed/simple;
-	bh=R9+E/jvRIAgbErtUCsQF7o2wS8bqNaKox9ed/uj0mR0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JHZjpU5ZPLHhoykqNRpi6MMCD6bZSWJ9Q0tEB7pphZNYYHIsvsRuie0Tjd6Qe+rfZoMZ7ptKHna18pv6J/c4ZxrfaPuUWMTFJD8Ph5EUmqdZDQ/jp691MqMHIxebtfW+8/JXt/z55NE/j/4wE7V9Hl26G4zoTYqdVBwaApbAwY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aqukJCwA; arc=none smtp.client-ip=209.85.128.41
+	s=arc-20240116; t=1747338618; c=relaxed/simple;
+	bh=lxxelPHJ7wXSemMsnQrJQMrKhPa3J1sfe3rMd1zKZqw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qqLYGqKrgS5mTvmQZ3kvIIl9Vkp6zuVWdiSe7iSvKiHbZh+eeQ0zzSZt6bsRXPFsVV4a4Cv7nyC75jdhUn1R+Ttb9HeF7QnE1mGvtq3eTEt+COB0A4auxJnVpJWID8kPuU8Dpfyjsm4DmqhfaNQJNNCWSKjxjrGVWNU+A/5Z2Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4NiOE7v; arc=none smtp.client-ip=209.85.160.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-441d1ed82faso10422705e9.0;
-        Thu, 15 May 2025 11:58:29 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4766631a6a4so14793131cf.2;
+        Thu, 15 May 2025 12:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747335508; x=1747940308; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2uyejmtz0c+qWQ5LaiwciCgzl0ypKnF8Po4gKuJr/+k=;
-        b=aqukJCwAtkf9mpyrqE9NT82ARLqmmRP/XfUrI4USwx1/QbOGwgT0CmKXhO+LD76Cb+
-         46DSSX7igFPq7hx4K9MUMS/rNXBHmKKpQHmEVrkyKZ2wGHFWErK5Qf/Uc6oJ4othMhw6
-         6eUwGWGPAX0yAW62j2swPPDEGdwjoY9fww1EPtpM6zxuC4c228HMKiahdDLY8Qjkl7TL
-         pAcxGsGkQF14VLdIDv7JMHlR7Xwp+V6EAknPImthBZf4xXVY+KcIPg0Bgls1V6JoLZwq
-         yETFY/qiDkOQIbQDmL+o2PcXwZV3wKwbI2FQx3CNtII7Sd3JjXB0EKNHziI0wWltyRuA
-         deoQ==
+        d=gmail.com; s=20230601; t=1747338615; x=1747943415; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ijKQzzLB6fn0l9HXOynSzKmWa93u4m5lk6YgCJ/52bA=;
+        b=m4NiOE7vNKqVRTEU/F8GlsUirH+Ksvb4wfsXrcijSbrFw+BurpygyyldGS4h2tXwz/
+         m+VrYutNVVpC12CTwKlZPMYp57jw1cJaSYVu3eqT1qWu8wXAlAhQXNoFbc8r/5IyOXCY
+         uWApjC8ZEOHv3ofs+oVt03JJMfAK63EeV14XCNtNRe4ykds02EvNP4eNjaXo7dhuVApR
+         lRuFZLmkj8uSE9QRioyTEyztOAmR5jY2uwulBbMgNneIHMt8/Q2GYp035aC+DXAwxOE2
+         6/G2ia7CI2Byt9YVu1fIMAa6PI+TKcPWgWfeWViNkjoKhae24jQT7ZpMC/0VpdjHlhcI
+         qZKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747335508; x=1747940308;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1747338615; x=1747943415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2uyejmtz0c+qWQ5LaiwciCgzl0ypKnF8Po4gKuJr/+k=;
-        b=TcC1SWB8mQTry67aQ6x+RO+L5X9wmAzGx+FY0ns2SHFL0CPTtXoSPhyjQjQNEd/pEz
-         2Is00qv+Hj4miyUqBoTg4amLE3LDKpndjRAtl7k4j8Sk8rzSts1nm+PiYM80ZD6lZdpD
-         jNxW8mQTBVmX53oWtUYoMg9Cu17r1J4sXp27MXyFg7b5DISRKdqMKuRYSae2ZqNKN+5n
-         /FszLtC/S+JGcAGkP5fT0CRMm6kt8JT2EgSImAwGN+AfiqyRohemy+52Eu90nE5JTGJf
-         ZgHCmkvxSzr5QxHVnDLae3diqGZKG4Hk8r8BxZIFDZ8o8BlaNIcVLlkN4G4Mdg43XXXW
-         QkJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAwAjZD5OAyRTef4QcLldN6+2hSteQ/HfxcRPK5kWa8lDOfCwqTByPiJcxGWGyo6/iXqJQg/H64PQk67B/@vger.kernel.org, AJvYcCVuXrZLk68uDlGb1F/DcPxAXxWVm7J6BGDhemJAFaexoWi1Wq054YYjRm5XMTkDcus9Jl/qpDE5BgSYOh2B@vger.kernel.org, AJvYcCW4HgxQWVV0sB+iyGvO/9kkY2k3xkk4ZCL/BnS8Tqwqq0ONW4AHLRd7gXEvrr4UR+8nOQxz7mrFufPE@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBJYq7jn0oJkWN/JJyqC/3kBImiJ1HlPYtI/bxdbhPNasG0244
-	nGt2kNm9LTWK93mjeUlIfgmGQF3XrrsXSMEMIu3zpi/CgdcUeXifsI3fAstUeQ==
-X-Gm-Gg: ASbGncuS/mLl1UUUV376Dlgaj6B2yRR1DJlK/j6PDe3U0UNog35vsk7R3r5zrPSinTD
-	qbRhjnf4CDupqB/8ieces9/rSndwHCdGztwExHhLqx6bc+WzYzyDyohAl49L2Y/dRwxs8j60Aa2
-	nI7y5B3SXQUbF9YAYIFkd+Qi2KkEn/3DbtSfZZtslD3J1QsrBTSxnARrscMrvQThwYXDxUySmL1
-	YQn/FszqzUl5g+1f3RuUm+9QrnA2AubsacTtTBaNAvKLJK0kqVpHEyXCw999RWhmPW4Pug11K6c
-	ASGQ1D+OZ5q3SxaqD6jvQcif7iWI6+nCYHm/UjWP1TiWzM9tTOMhLImrz+T+oMhMP0ZG7QY+2BO
-	IsN8E
-X-Google-Smtp-Source: AGHT+IHaF5/8q+je2iW1pwj88K62M744soT9y5wHNJ4gvYxacC9IaeaSHOljAqzLiWm7Ak+nx/AzHA==
-X-Received: by 2002:a05:6000:1446:b0:3a1:fe77:9e0b with SMTP id ffacd0b85a97d-3a35c843f52mr1022650f8f.16.1747335508447;
-        Thu, 15 May 2025 11:58:28 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a35ca5a857sm335778f8f.32.2025.05.15.11.58.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 11:58:28 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Thu, 15 May 2025 20:58:06 +0200
-Subject: [PATCH 2/2] spi: spi-qpic-snand: extend FIELD_PREP() macro usage
+        bh=ijKQzzLB6fn0l9HXOynSzKmWa93u4m5lk6YgCJ/52bA=;
+        b=pA0lX7h053XefjVZuSMsKJpEOLfpqSjKU8ddX0dqdXoAPT9/Z2JvGos2O1VFo6y6p9
+         81NZeqqq3Ixt4vGFAFfVd9ztyK77t04oUenybX+PIoNcqbYCPEpNdRXgxdb4zagiAa2x
+         yuU/1U8RwNaGccymxcC/qiQ+X/LRDa8ag0mwvP7xaTRVlxAy1Mk8FtRAdznoqbdTold7
+         DvQ+JN6B74b9avPttEMZeWMg0mg/+9AZlMtnO/5AYh2vB/bewgmbWpzy2TjvP72mLvLP
+         r2FRA+xVhJAd/4te+hdt/jBsn8wVobwKhSruF4OOotoZY31dh0l49yMzvvUWVewqU2t5
+         ncFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVh4RvByJgdGJ3BW+d5HCixYvTrJMjwVcnRf9tKU6VGkDmbtTrOchSHMx1OmfR/iuPD2WhBBQuM4TQM@vger.kernel.org, AJvYcCW1fy96OqjYcmeIBVUyVaNhwTYCkuxcO4WY90moGw3wBsh03oLNVMs90j2mwENRbJz1wfChCfZBoqGP@vger.kernel.org, AJvYcCWuWsDEV6wcpASZB+HOG4yO3TFcHEQHwbtcd81L7EZM64PXfSQF14UoWGnUToRrHzxQ41a3FVZdpe3Ty5dz@vger.kernel.org
+X-Gm-Message-State: AOJu0YxghtiZt5CFHjmOQDEx9keejMWhq/gZnKEJd6UW/Z8bbS49tKli
+	h73PmIevHdk4HEkBqJcyTibgpQ2Bzpd1SUemrHbNMkFfNR28gkIR0IBr+OVz13AaFE3muad1PF9
+	HKS6P7XjyG0u55okv5yX01vOTVzWk458=
+X-Gm-Gg: ASbGnctU9A4lIi7oYycbViBQsQHjw0Yo5r0Qr2935DU2HTpRyQEf5mNDAREEFgTgt3F
+	1nywtkQewItNBjEFBqbLS3NjsA+0d5BPfDGZxd7sQaT6vDsLhkJpxylAFgT9Hq+NmJPRumWrR79
+	YeFj7fwgINh8i6nmEX/jowLQn0jiC6VmZ6
+X-Google-Smtp-Source: AGHT+IFg/wcvnBBQLcYze3vfJPGy+GNXDNI9xDfhAt+JQBd/EhhLBzPOLi2CERDJ8hqiCo+MSJ2a3RvbExF4wMUuIyY=
+X-Received: by 2002:a05:622a:8c9:b0:476:b02d:2b4a with SMTP id
+ d75a77b69052e-494ae39531dmr14532621cf.27.1747338614671; Thu, 15 May 2025
+ 12:50:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-qpic-snand-use-bitmasks-v1-2-11729aeae73b@gmail.com>
-References: <20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com>
-In-Reply-To: <20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
+References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
+ <20250510-wmt-sflash-v1-1-02a1ac6adf12@gmail.com> <20250514204159.GA2988411-robh@kernel.org>
+In-Reply-To: <20250514204159.GA2988411-robh@kernel.org>
+From: Alexey Charkov <alchark@gmail.com>
+Date: Thu, 15 May 2025 22:50:03 +0300
+X-Gm-Features: AX0GCFtuH7yt6ihjR9mFd6CzYnznZejyyxToXHyqEx8rsfGB1bgn9WZkvaxFaRI
+Message-ID: <CABjd4Yz3w75PtkRk_edzD5yf6b2xPuf20gopbm8ygddgCBfpkw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: spi: Add VIA/WonderMedia serial flash controller
+To: Rob Herring <robh@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Krzysztof Kozlowski <krzk@kernel.org>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Large part of the code uses the FIELD_PREP() macro already to construct
-values to be written to hardware registers. Change the code to use also
-the macro for more registers of which the corresponding bitmasks are
-defined already.
+On Wed, May 14, 2025 at 11:42=E2=80=AFPM Rob Herring <robh@kernel.org> wrot=
+e:
+>
+> On Sat, May 10, 2025 at 11:42:21PM +0400, Alexey Charkov wrote:
+> > Add a binding for the serial flash controller found on VIA/WonderMedia
+> > SoCs, which provides semi-transparent access to SPI NOR chips by
+> > mapping their contents to the physical CPU address space.
+> >
+> > Signed-off-by: Alexey Charkov <alchark@gmail.com>
+> > ---
+> >  .../devicetree/bindings/spi/via,vt8500-sflash.yaml | 122 +++++++++++++=
+++++++++
+> >  MAINTAINERS                                        |   1 +
+> >  2 files changed, 123 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/spi/via,vt8500-sflash.ya=
+ml b/Documentation/devicetree/bindings/spi/via,vt8500-sflash.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..d2ea0dacdd56118c0cb5a1c=
+b510ceb7591e1e5ca
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/via,vt8500-sflash.yaml
+> > @@ -0,0 +1,122 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/spi/via,vt8500-sflash.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: VIA/WonderMedia serial flash controller
+> > +
+> > +description:
+> > +  This controller is used on VIA/WonderMedia SoCs such as VIA VT8500,
+> > +  WonderMedia WM8850 and similar. It provides a semi-transparent inter=
+face
+> > +  for reading and writing SPI NOR chip contents via a physical memory =
+map,
+> > +  abstracting away all SPI communication, while also providing a direc=
+t
+> > +  mechanism for issuing "programmable commands" to the underlying SPI =
+chip
+> > +
+> > +maintainers:
+> > +  - Alexey Charkov <alchark@gmail.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - via,vt8500-sflash
+> > +      - wm,wm8505-sflash
+> > +      - wm,wm8650-sflash
+> > +      - wm,wm8750-sflash
+> > +      - wm,wm8850-sflash
+> > +
+> > +  reg:
+> > +    items:
+> > +      - description: MMIO registers region of the controller
+> > +      - description:
+> > +          Physical memory region within which the controller will map =
+the
+> > +          flash contents of chip 0 for reading and writing. If the fla=
+sh
+> > +          size is smaller than this region, it will be mapped at its e=
+nd.
+> > +          Note that if this chip is used as the boot device (as is mos=
+t
+> > +          often the case), the boot ROM maps it at the very end of the
+> > +          CPU address space (i.e. ending at 0xffffffff)
+>
+> Period needed on the end.
 
-This makes the code more readable. It also syncs the affected
-codes with their counterparts in the 'qcom_nandc' driver, so it
-makes it easier to spot the differences between the two
-implementations.
+Noted, thank you! Will adjust in the next version.
 
-No functional changes intended.
+> > +      - description:
+> > +          Physical memory region within which the controller will map =
+the
+> > +          flash contents of chip 1 for reading and writing. If the fla=
+sh
+> > +          size is smaller than this region, it will be mapped at its e=
+nd
+>
+> Period needed on the end.
 
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/spi/spi-qpic-snand.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Ditto.
 
-diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index bc45b834fadc5456eda1fe778e5ca8b16177465e..ad01bb456a88b54f0ffc801dd14eb3fa2708ec2e 100644
---- a/drivers/spi/spi-qpic-snand.c
-+++ b/drivers/spi/spi-qpic-snand.c
-@@ -130,9 +130,9 @@ static void qcom_spi_set_read_loc_first(struct qcom_nand_controller *snandc,
- 					int is_last_read_loc)
- {
- 	__le32 locreg_val;
--	u32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
--		  ((read_size) << READ_LOCATION_SIZE) | ((is_last_read_loc)
--		  << READ_LOCATION_LAST));
-+	u32 val = FIELD_PREP(READ_LOCATION_OFFSET_MASK, cw_offset) |
-+		  FIELD_PREP(READ_LOCATION_SIZE_MASK, read_size) |
-+		  FIELD_PREP(READ_LOCATION_LAST_MASK, is_last_read_loc);
- 
- 	locreg_val = cpu_to_le32(val);
- 
-@@ -151,9 +151,9 @@ static void qcom_spi_set_read_loc_last(struct qcom_nand_controller *snandc,
- 				       int is_last_read_loc)
- {
- 	__le32 locreg_val;
--	u32 val = (((cw_offset) << READ_LOCATION_OFFSET) |
--		  ((read_size) << READ_LOCATION_SIZE) | ((is_last_read_loc)
--		  << READ_LOCATION_LAST));
-+	u32 val = FIELD_PREP(READ_LOCATION_OFFSET_MASK, cw_offset) |
-+		  FIELD_PREP(READ_LOCATION_SIZE_MASK, read_size) |
-+		  FIELD_PREP(READ_LOCATION_LAST_MASK, is_last_read_loc);
- 
- 	locreg_val = cpu_to_le32(val);
- 
-@@ -352,7 +352,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
- 			       FIELD_PREP(ECC_MODE_MASK, 0) |
- 			       FIELD_PREP(ECC_PARITY_SIZE_BYTES_BCH_MASK, ecc_cfg->ecc_bytes_hw);
- 
--	ecc_cfg->ecc_buf_cfg = 0x203 << NUM_STEPS;
-+	ecc_cfg->ecc_buf_cfg = FIELD_PREP(NUM_STEPS_MASK, 0x203);
- 	ecc_cfg->clrflashstatus = FS_READY_BSY_N;
- 	ecc_cfg->clrreadstatus = 0xc0;
- 
+> > +
+> > +  reg-names:
+> > +    items:
+> > +      - const: io
+> > +      - const: chip0-mmap
+> > +      - const: chip1-mmap
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+>
+> This follows the SPI binding, right? Drop these 2 and add a $ref to
+> spi-controller.yaml.
 
--- 
-2.49.0
+Need some advice here. While this controller speaks SPI protocol to
+its connected flash chips, it's a special-purpose thing that doesn't
+expose much SPI functionality to the outside world, nor can it drive
+any SPI devices other than SPI NOR flash. Does that still qualify as
+an SPI controller as far as the bindings are concerned?
 
+Happy to reference the spi-controller.yaml binding if so.
+
+> > +patternProperties:
+> > +  "^flash@[0-1]$":
+> > +    type: object
+> > +    additionalProperties: true
+> > +
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - reg-names
+> > +  - clocks
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    sflash: spi-nor-controller@d8002000 {
+>
+> spi@...
+
+Related to the question above... Happy to call it spi@ if appropriate
+in this case.
+
+> > +        compatible =3D "wm,wm8850-sflash";
+> > +        reg =3D <0xd8002000 0x400>,
+> > +              <0xff800000 0x800000>,
+> > +              <0xef800000 0x800000>;
+> > +        reg-names =3D "io", "chip0-mmap", "chip1-mmap";
+> > +        clocks =3D <&clksf>;
+> > +        #address-cells =3D <1>;
+> > +        #size-cells =3D <0>;
+> > +
+> > +        flash@0 {
+> > +            compatible =3D "jedec,spi-nor";
+> > +            reg =3D <0>;
+> > +
+> > +            partitions {
+> > +                compatible =3D "fixed-partitions";
+> > +                #address-cells =3D <1>;
+> > +                #size-cells =3D <1>;
+> > +
+> > +                partition@0 {
+> > +                    label =3D "U-boot";
+>
+> The somewhat standard value here is 'u-boot'.
+
+Noted, thanks - will adjust in the next version.
+
+> > +                    reg =3D <0 0x50000>;
+> > +                    read-only;
+> > +                };
+> > +
+> > +                partition@1 {
+> > +                    label =3D "U-boot environment 1";
+>
+> u-boot-env
+
+Ditto.
+
+> > +                    reg =3D <0x50000 0x10000>;
+> > +                };
+> > +
+> > +                partition@2 {
+> > +                    label =3D "U-boot environment 2";
+>
+> alt-u-boot-env or u-boot-env-backup?
+
+Ditto.
+
+Thanks for your review and comments Rob!
+
+Best regards,
+Alexey
 
