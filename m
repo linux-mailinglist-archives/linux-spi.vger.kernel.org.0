@@ -1,129 +1,145 @@
-Return-Path: <linux-spi+bounces-8139-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8140-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F7FAB864F
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 14:26:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D95CAB8D35
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 19:09:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 676471882444
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 12:21:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0804E3A2B4F
+	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 17:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695FB29A9F7;
-	Thu, 15 May 2025 12:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934D921A42D;
+	Thu, 15 May 2025 17:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vkwlCqZ0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AseQbg7w"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA5D2989AB
-	for <linux-spi@vger.kernel.org>; Thu, 15 May 2025 12:20:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B5519D07E;
+	Thu, 15 May 2025 17:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747311649; cv=none; b=V2I0E/gF7UtdRKe03w/Al0/+1l5myvTBHNJwheXQ7MDH4ZdMVCl5JamWmKvtWqJ1mtHc99jKNlrUs35UfKF0tDJapGSAhAleOGHXSQP+fDz5GciRVjNSjdJbQZsCpwWw4scYmbddYS1MCd/BFgskLZ0ggrvPJlba7ozrT+jP6Bo=
+	t=1747328784; cv=none; b=eclR+hxjaoPOq1v2X/Tj+BUkbVHFgkOMU7P6Fj7uGtzSjSlfCNLcj/wIRMUJwdNOq373WZUCu/4Ek/Xh2oBiZa8GnBxOZS22rLxIWwDcyuQdbcu4jwXWaEoAR8soFuEDZVMur7D2VQCspjObQ4G9Pj/w0qQUrhBTRTF+eK6ELX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747311649; c=relaxed/simple;
-	bh=ySi+0M+CVuWfwFeLu3PPC0j4nsW75CVo4AF4TCbTxnI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CuZNQc/9QOCh1NjwBTxDSdWgnxtY4TTqJbJ4toELzr7wRxVPiB30/c8554xMZ5nPaFagvzTm9/WtO1SFjIjLQQyKJIuebPm2o0Auo+6NKorSj5KwF/Nj+TbdeUqfhm+wm1qoeXDJx+SD8RyGbJkB5En/1aEIEJXYkQpr+e5XqzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vkwlCqZ0; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-442ed8a275fso9667225e9.2
-        for <linux-spi@vger.kernel.org>; Thu, 15 May 2025 05:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747311645; x=1747916445; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UYYmwpP0MAwsA931NniE7DuDU5H48aT0XrSHju++1ic=;
-        b=vkwlCqZ0SwyVN+cPtAK9kv43zZeGM4qFKReGHN7DGwZd7emjYjPH1vUi8xhrbRCcAw
-         kJ6Q4FsCxiwN/HMxHllvoG4N532uzrQQnYf3ubwNePu6lqcMxgjxrA3KEcq3TSudUtW9
-         E5Hpvls5kJA3DfCmjyES1anB5cVdKL7JbvZzdn4iqVUuWibMPnqFcBtMoGzqOsfscvAT
-         an0nxyeZ4ogjVTZKCbU7T7J6xyu1WwqKLjcI8UXRTruBHPslrHRNILhZZqMiQEW+HLvY
-         EoqE8Mg32OKjtoEWCzdmDazHkkWymizXLq7/Y/U6L69aTTthnV/gDj3QDFY8z7r09lzK
-         QLLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747311645; x=1747916445;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UYYmwpP0MAwsA931NniE7DuDU5H48aT0XrSHju++1ic=;
-        b=bdWcJ0bU+mNImk7L8xedOg7I0Tx+9FcY3bk9HZ5EaFzFd4jHBmOJtcj7gCITZD/szC
-         vbhZ0wiSBNZsxf2u/0EUjigT/5LZGcxHTOe3M3dLDkWOGMghU62Jf/Bk6ryRbnZ+U59R
-         Kxw2johJv7AHaVdxXIiD0QoP5bXtERwhM7FSTE9BKoLYsBC2//zSZq98RFz1TJd7bhwA
-         9J/bMofmg1CXzPOtn0VWuBBpwWxL2tIiVpXMocZEq6SVZZhJi/Z0Zq9Y+ZyheEQzHYS3
-         ZJuDW/6C59hMT9ylqBkwCgAX6G/LpN7ljtxsPNMViU6SVA5qbedO/p+LTKhhUQ//Qqug
-         HTvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHh9c9nZrjD1BCqfwUET2noy8IKOoDqtx0xLKeXpfl6xrw53Fp7oPcOEZC5v8pUGxt8tKnpiIjNW0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnF+Ou+rXQ3k2wNJQWa0Qe9EKaVAAVZ7Jl3rgdwCZGG/l+MDQn
-	k6EqXU4LOOEjaVGjfJW+zrGhaKBwi24qEhYHreXbrUJ1HPZwO1RWj8FNDBHzsnI=
-X-Gm-Gg: ASbGnctriVXFe4cIwG/SvpLaXqq4gFPSHXuGDH/z7ysqZDULLTX8dbDCfJmmFT+R8lS
-	XyJngeV6gF1y8t54EIntKJguZcVR98Nwrx1dst88I573EBjJWg2gUgl0vOzeUJQCn0chnyAlIXe
-	7tFDQTIE4bK+oVnaHMGuqaXn3djo2kFqxyfALRYiExHRXb9Jx2gRD7zSg7ebJL3Lp2J19WAnbR0
-	gyfBsqV0QwkV6eV2RjR3699w59cpzzVytJsVuM9vtAV2nhOaC6Jj4IpeTtLPfkgYtdCaYGSMoUZ
-	umbssavK3VR+TbWAhSy2ymh86QBFB9lhibiTw8ki6A9g1H1hkjMW5jYj57mKgqePtW3jb5z1RWO
-	5ybZhssi2
-X-Google-Smtp-Source: AGHT+IFf5pIVLw9OgzawdBaBFW6KZvXprzzPf2JHeKzZZEBmezUo1iUF8T/ujeptaHHKPw8LeA0tyA==
-X-Received: by 2002:a05:600c:3e88:b0:43c:fb95:c76f with SMTP id 5b1f17b1804b1-442f20e33b0mr74335285e9.9.1747311644763;
-        Thu, 15 May 2025 05:20:44 -0700 (PDT)
-Received: from [10.61.2.175] (110.8.30.213.rev.vodafone.pt. [213.30.8.110])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a1f57dde01sm22985463f8f.15.2025.05.15.05.20.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 May 2025 05:20:44 -0700 (PDT)
-Message-ID: <586c877d-0d0a-48bf-9c55-97bd24e86638@linaro.org>
-Date: Thu, 15 May 2025 13:20:42 +0100
+	s=arc-20240116; t=1747328784; c=relaxed/simple;
+	bh=HjI5Tmn7uWq4Z2O/TbcEhEVsZ2+CrZPS4Rlv2p45C0o=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LwGTs9K6j2X/TJRyVodZ4H8KqN8fzdeFbOk9Z9vdKsD/MQ8Vbn+ixnFhHVSFscgquQpbFvgLhkngtORCTGMlnWYD/jPtpzkIqQGcGtvWpXuXBI53GtS96KN+TOD+IhkNJxuLOtcheIuj/ffDV5VHVIc2NnxZpmcnAGRUtbhSFx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AseQbg7w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1187C4CEE7;
+	Thu, 15 May 2025 17:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747328783;
+	bh=HjI5Tmn7uWq4Z2O/TbcEhEVsZ2+CrZPS4Rlv2p45C0o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AseQbg7wRARQBQ+CyKQkQHPlWuKwhALHHIkn+7oJ2y5aBiSgDjKhroXBy3N+Xu+AJ
+	 3dU1Okr0va3lJJC8YgY0SNGOmH5XXVQKbaKWgrtaLdkJMo1vyiyLjHNGm5hFFNrtTT
+	 y2liCnw8+tmF7glFmZfPYvrn8wRM08nBXlk+7x0k9FS3avNHH10VslbvWtJx3/zjcd
+	 XngCIGFFdUfnnuPZ+RYr3+sB3ELUBqnYJpGsOvglarffY5wEtR9hMGtItoscXK6JsI
+	 CtrzTi9CYobYdRpETDEOrGicvlbVXwq9q3N4KDtoZPMMFxpqzSadGYyxhH92EpmGeG
+	 dKUoRNQftpW6Q==
+Date: Thu, 15 May 2025 18:06:16 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lars-Peter Clausen
+ <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Rob
+ Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
+ Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown
+ <broonie@kernel.org>, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] iio: adc: ad7476: Support ROHM BU79100G
+Message-ID: <20250515180616.23ca96fd@jic23-huawei>
+In-Reply-To: <5ed56b89-8a9b-464f-9b87-f6553395a941@gmail.com>
+References: <cover.1747123883.git.mazziesaccount@gmail.com>
+	<a6d84a4c9cdd961fbda38182501983f26cceadc9.1747123883.git.mazziesaccount@gmail.com>
+	<5f36c304-ed09-4a13-b22d-ceb5924c3739@gmail.com>
+	<5ed56b89-8a9b-464f-9b87-f6553395a941@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/14] spi: spi-fsl-dspi: Enable modified transfer
- protocol
-To: Mark Brown <broonie@kernel.org>
-Cc: Vladimir Oltean <olteanv@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
- Chester Lin <chester62515@gmail.com>, Matthias Brugger <mbrugger@suse.com>,
- Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
- NXP S32 Linux Team <s32@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, larisa.grigore@nxp.com, arnd@linaro.org,
- andrei.stefanescu@nxp.com, dan.carpenter@linaro.org,
- linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, Andra-Teodora Ilie
- <andra.ilie@nxp.com>, Bogdan-Gabriel Roman <bogdan-gabriel.roman@nxp.com>
-References: <20250509-james-nxp-spi-v1-0-32bfcd2fea11@linaro.org>
- <20250509-james-nxp-spi-v1-10-32bfcd2fea11@linaro.org>
- <aB6pa9m0emX2vMH8@finisterre.sirena.org.uk>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <aB6pa9m0emX2vMH8@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, 14 May 2025 12:21:30 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+
+> On 14/05/2025 10:38, Matti Vaittinen wrote:
+> > On 13/05/2025 11:26, Matti Vaittinen wrote: =20
+> >> ROHM BU79100G is a 12-bit, single channel ADC. Support reading ADC
+> >> measurements using the ad7476.c
+> >>
+> >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> >> ---
+> >> =C2=A0 drivers/iio/adc/ad7476.c | 8 ++++++++
+> >> =C2=A0 1 file changed, 8 insertions(+) =20
+> >=20
+> > For anyone who might hit this mail thread later:
+> >=20
+> > Conor made me realize that, for now, the BU79100G looks identical to th=
+e=20
+> > ads7866. Thus, these code-changes aren't needed at the moment, and this=
+=20
+> > patch can be dropped. For those who wish to use BU79100G, please=20
+> > introduce it as
+> >=20
+> > compatible =3D "rohm,bu79100g", "ti,ads7866";
+> >  =20
+>=20
+> I was too hasty.
+>=20
+> It seems to me that the fallback won't work with the current driver=20
+> because the driver is not populating the of_match_table, but is relying=20
+> solely on the spi_device_id table.
+>=20
+> Judging a quick code reading, the spi_driver_id table entries are=20
+> matched to the modalias:
+> https://elixir.bootlin.com/linux/v6.15-rc6/source/drivers/spi/spi.c#L393
+>=20
+> Which is (as far as I understand), generated from the first compatible:
+> https://elixir.bootlin.com/linux/v6.15-rc6/source/drivers/of/base.c#L1170
+>=20
+> and not from the fallback one.
+>=20
+> I suppose this means that we would need to add the of_match_table entry=20
+> for the ti,ads7866 to make the fallback entry to match the driver.
+>=20
+> But...
+>=20
+> The __spi_register_driver() has following comment:
+> 	/*
+> 	 * For Really Good Reasons we use spi: modaliases not of:
+> 	 * modaliases for DT so module autoloading won't work if we
+> 	 * don't have a spi_device_id as well as a compatible string.
+> 	 */
+> https://elixir.bootlin.com/linux/v6.15-rc6/source/drivers/spi/spi.c#L487
+>=20
+> So, having the of_match_table for would not be sufficient for the=20
+> autoloading, which would still require the bu79100g to be in the=20
+> spi_device_id table.
+>=20
+> Am I missing something? I don't see how the Linux SPI drivers benefit=20
+> from the fallback entries in the dt? (Not saying fallbacks wouldn't be=20
+> The Right Thing To Do. Ideally DTs aren't for Linux only, maybe some=20
+> other systems can utilize them). To me it seems I still need to add the=20
+> spi_device_id entry for the BU79100G, and of_match_table has no=20
+> additional benefit? If this is right, then this patch is still relevant,=
+=20
+> even though the binding should be done as in v2.
++CC Mark Brown and linux-spi.
 
 
+>=20
+> Yours,
+> 	-- Matti
+>=20
+>=20
+>=20
 
-On 10/05/2025 02:18, Mark Brown wrote:
-> On Fri, May 09, 2025 at 12:05:57PM +0100, James Clark wrote:
->> From: Andra-Teodora Ilie <andra.ilie@nxp.com>
->>
->> Set MTFE bit in MCR register for frequencies higher than 25MHz.
-> 
-> Is this a bug fix?
-
-Not this one as it's only supported for s32g which isn't enabled until 
-later. The commit message is lacking though so I will elaborate.
-
-For the other bug fixes it looks like they are, so I'll put them at the 
-beginning and add fixes tags.
-
-Thanks
-James
 
