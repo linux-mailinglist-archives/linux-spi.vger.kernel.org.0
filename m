@@ -1,48 +1,45 @@
-Return-Path: <linux-spi+bounces-8158-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8163-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA86DAB9D6F
-	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 15:32:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B09AB9D7E
+	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 15:33:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F0227B5030
-	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 13:31:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 993AE1BC5650
+	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 13:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DDF13AD3F;
-	Fri, 16 May 2025 13:32:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7407B73451;
+	Fri, 16 May 2025 13:32:47 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cantor.telenet-ops.be (cantor.telenet-ops.be [195.130.132.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [195.130.137.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47761E48A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA4578F4F
 	for <linux-spi@vger.kernel.org>; Fri, 16 May 2025 13:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.48
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747402363; cv=none; b=IByCuwCgBX34IeZz3Mb0C0rFe3EBnIOjtdTz5rrQYMXw7VqCFvISfbxoOEVxtliDC4isWDWxLzHQJAV8I2c7oaDWGJsG/uw9/k6+b+zHvKgKMLEzAxx4UA7iSmy19m0AKn8UrVPvph4Xr65AuVW/eUqhauAIgFrHMjxzKhCLKzY=
+	t=1747402366; cv=none; b=phgWW5x01hQYKrP8Ewe1dwBgo1g9oxiyqANRL+pV4O9AOgs39VvWY1ergrz0g0B3lUugEq/VmasL2LI9ki7iERwrh/AoHZdlcDd4ZmCcsxwjwcUb01kckdZCgWEguM5mhdjMbeRLyZHDejfh6GlBVYu2RTdte1U0WMSDml/utHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747402363; c=relaxed/simple;
-	bh=LuODtqMqNqE67UFe8dKvyWUrqUEvf/b+rEpkFnOSe+g=;
+	s=arc-20240116; t=1747402366; c=relaxed/simple;
+	bh=Z79Ft/DewGnTQHlDwWL9zKlnsIlUgjuVxh0Sq6RBDmk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cyk/I7mCjnJetZJLsTNuFd0BWh6R8chdWyV9RJEjOoSMOE1GhEjKD5kWcDaz3bPRZ/PP7Pvd3L2mUweZGEGT6DBSvUHwmsj32M+vSbSmtJIMgIayCpLwYJgTs5qYVmwTrnQwzVG2dfnubhCiCVAO9hJWO/VCa1h6f8cgslNyIm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.48
+	 MIME-Version; b=ia2E4tZe42lGocfKD8URHbURr1Pi862te6cAO0f50SscO3VvsWF6Nb5eFNn4H5BYXjl6NxRbQlZq30Ozc6ozF1fksljy1UxNtL6k5iIEgGbWxJglaU+xlDJGDS7ZGhR6XtuhZc6k56pRsYL3e0G29/2HI5VC/wb0ql8mM7+J7QY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.88
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
-	by cantor.telenet-ops.be (Postfix) with ESMTPS id 4ZzSgP37T3z4x92B
-	for <linux-spi@vger.kernel.org>; Fri, 16 May 2025 15:32:33 +0200 (CEST)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:b0d6:ccd4:58dc:70fd])
-	by andre.telenet-ops.be with cmsmtp
-	id ppYY2E0053S8nz401pYYf4; Fri, 16 May 2025 15:32:33 +0200
+	by michel.telenet-ops.be with cmsmtp
+	id ppYY2E0033S8nz406pYY0Z; Fri, 16 May 2025 15:32:33 +0200
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uFvAi-000000020jL-2Q4O;
+	id 1uFvAi-000000020jP-2Ww7;
 	Fri, 16 May 2025 15:32:32 +0200
 Received: from geert by rox.of.borg with local (Exim 4.97)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1uFvAt-0000000153L-44sw;
+	id 1uFvAt-0000000153Q-4AuP;
 	Fri, 16 May 2025 15:32:31 +0200
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Mark Brown <broonie@kernel.org>,
@@ -56,9 +53,9 @@ Cc: linux-spi@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2 17/22] spi: sh-msiof: Increase TX FIFO size for R-Car V4H/V4M
-Date: Fri, 16 May 2025 15:32:20 +0200
-Message-ID: <69cb5fc48f034d37484fa127b9864a1971a83417.1747401908.git.geert+renesas@glider.be>
+Subject: [PATCH v2 18/22] spi: sh-msiof: Simplify BRG's Division Ratio
+Date: Fri, 16 May 2025 15:32:21 +0200
+Message-ID: <e736221942b0381fb53dc64109a1389f7ec5f44a.1747401908.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1747401908.git.geert+renesas@glider.be>
 References: <cover.1747401908.git.geert+renesas@glider.be>
@@ -70,68 +67,70 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The MSIOF transmit FIFOs on R-Car V4H and V4M have 256 stages.
-Add a new family-specific match entry to handle this.
-Add quirk match entries for older R-Car Gen4 Socs (R-Car V3U and S4-8)
-that have transmit FIFOs with only 64 stages, just like on R-Car Gen3.
-
-Update the (unused) definition of SIFCTR_TFUA for consistency.
+As FIELD_PREP() masks the value to be stored in the field, the Baud Rate
+Generator's Division Ratio handling can be simplified from a look-up
+table to a single subtraction.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-Alternatively, the family-specific match entry could keep referring to
-rcar_gen3_data, and R-Car V4H and V4M could refer to the new entry.
+Gcc 13.3.0 is not smart enough to consider all possible values of
+div_pow in the current code, hence this works fine.
+However, the simpler test loop
 
-Tested on White Hawk (R-Car V4H) and Gray Hawk Single (R-Car V4M) with
-spi-loopback-test and external loopback, DMA and PIO, and a logic
-analyzer.
+    for (unsigned int pow = 0; pow < 6; pow++)
+	    pr_info("pow %u scr 0x%08lx\n", pow,
+		    FIELD_PREP(SISCR_BRDV, (pow - 1)));
+
+does trigger a "FIELD_PREP: value too large for the field" compile-time
+assertion, unless an explicit "& FIELD_MAX(SISCR_BRDV)" is added.
+Should we be pro-active and add an extra "& FIELD_MAX(SISCR_BRDV)" now,
+to prepare for compilers becoming smarter?
 
 v2:
   - No changes.
 ---
- drivers/spi/spi-sh-msiof.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/spi/spi-sh-msiof.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
-index 8afb7c1f64cd4486..26e71fc8890fda6d 100644
+index 26e71fc8890fda6d..2b8c143b21219521 100644
 --- a/drivers/spi/spi-sh-msiof.c
 +++ b/drivers/spi/spi-sh-msiof.c
-@@ -149,7 +149,7 @@ struct sh_msiof_spi_priv {
- #define SIFCTR_TFWM_8		5U		/*  Transfer Request when 8 empty stages */
- #define SIFCTR_TFWM_4		6U		/*  Transfer Request when 4 empty stages */
- #define SIFCTR_TFWM_1		7U		/*  Transfer Request when 1 empty stage */
--#define SIFCTR_TFUA		GENMASK(26, 20) /* Transmit FIFO Usable Area */
-+#define SIFCTR_TFUA		GENMASK(28, 20) /* Transmit FIFO Usable Area */
- #define SIFCTR_RFWM		GENMASK(15, 13)	/* Receive FIFO Watermark */
- #define SIFCTR_RFWM_1		0U		/*  Transfer Request when 1 valid stages */
- #define SIFCTR_RFWM_4		1U		/*  Transfer Request when 4 valid stages */
-@@ -1113,6 +1113,15 @@ static const struct sh_msiof_chipdata rcar_gen3_data = {
- 	.min_div_pow = 1,
- };
+@@ -112,12 +112,6 @@ struct sh_msiof_spi_priv {
+ /* SITSCR and SIRSCR */
+ #define SISCR_BRPS		GENMASK(12, 8)	/* Prescaler Setting (1-32) */
+ #define SISCR_BRDV		GENMASK(2, 0)	/* Baud Rate Generator's Division Ratio */
+-#define SISCR_BRDV_DIV_2	0U
+-#define SISCR_BRDV_DIV_4	1U
+-#define SISCR_BRDV_DIV_8	2U
+-#define SISCR_BRDV_DIV_16	3U
+-#define SISCR_BRDV_DIV_32	4U
+-#define SISCR_BRDV_DIV_1	7U
  
-+static const struct sh_msiof_chipdata rcar_gen4_data = {
-+	.bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
-+			      SPI_BPW_MASK(24) | SPI_BPW_MASK(32),
-+	.tx_fifo_size = 256,
-+	.rx_fifo_size = 256,
-+	.ctlr_flags = SPI_CONTROLLER_MUST_TX,
-+	.min_div_pow = 1,
-+};
-+
- static const struct sh_msiof_chipdata rcar_r8a7795_data = {
- 	.bits_per_word_mask = SPI_BPW_MASK(8) | SPI_BPW_MASK(16) |
- 			      SPI_BPW_MASK(24) | SPI_BPW_MASK(32),
-@@ -1128,7 +1137,9 @@ static const struct of_device_id sh_msiof_match[] __maybe_unused = {
- 	{ .compatible = "renesas,rcar-gen2-msiof", .data = &rcar_gen2_data },
- 	{ .compatible = "renesas,msiof-r8a7795",   .data = &rcar_r8a7795_data },
- 	{ .compatible = "renesas,rcar-gen3-msiof", .data = &rcar_gen3_data },
--	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen3_data },
-+	{ .compatible = "renesas,msiof-r8a779a0",  .data = &rcar_gen3_data },
-+	{ .compatible = "renesas,msiof-r8a779f0",  .data = &rcar_gen3_data },
-+	{ .compatible = "renesas,rcar-gen4-msiof", .data = &rcar_gen4_data },
- 	{ .compatible = "renesas,sh-msiof",        .data = &sh_data }, /* Deprecated */
- 	{ /* sentinel */ }
- };
+ /* SICTR */
+ #define SICTR_TSCKIZ		GENMASK(31, 30)	/* Transmit Clock I/O Polarity Select */
+@@ -256,11 +250,6 @@ static void sh_msiof_spi_reset_regs(struct sh_msiof_spi_priv *p)
+ 				  100);
+ }
+ 
+-static const u32 sh_msiof_spi_div_array[] = {
+-	SISCR_BRDV_DIV_1, SISCR_BRDV_DIV_2, SISCR_BRDV_DIV_4,
+-	SISCR_BRDV_DIV_8, SISCR_BRDV_DIV_16, SISCR_BRDV_DIV_32,
+-};
+-
+ static void sh_msiof_spi_set_clk_regs(struct sh_msiof_spi_priv *p,
+ 				      struct spi_transfer *t)
+ {
+@@ -299,7 +288,8 @@ static void sh_msiof_spi_set_clk_regs(struct sh_msiof_spi_priv *p,
+ 
+ 	t->effective_speed_hz = parent_rate / (brps << div_pow);
+ 
+-	scr = FIELD_PREP(SISCR_BRDV, sh_msiof_spi_div_array[div_pow]) |
++	/* div_pow == 0 maps to SISCR_BRDV_DIV_1 == all ones */
++	scr = FIELD_PREP(SISCR_BRDV, div_pow - 1) |
+ 	      FIELD_PREP(SISCR_BRPS, brps - 1);
+ 	sh_msiof_write(p, SITSCR, scr);
+ 	if (!(p->ctlr->flags & SPI_CONTROLLER_MUST_TX))
 -- 
 2.43.0
 
