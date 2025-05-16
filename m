@@ -1,149 +1,225 @@
-Return-Path: <linux-spi+bounces-8145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A8EAB909E
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 22:13:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 603ADAB976C
+	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 10:20:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FB9B3A6422
-	for <lists+linux-spi@lfdr.de>; Thu, 15 May 2025 20:13:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A4254E647B
+	for <lists+linux-spi@lfdr.de>; Fri, 16 May 2025 08:20:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F278283FEE;
-	Thu, 15 May 2025 20:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AEE22D4DB;
+	Fri, 16 May 2025 08:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hEFA3tw7"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OUbyQ1t+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A309C27F75F;
-	Thu, 15 May 2025 20:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80398225A40;
+	Fri, 16 May 2025 08:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747340019; cv=none; b=HH/CxaGOutkgs/Wvjan/AEe+2E6yQnMHNAyRS1RK7y5SJA/Ll8kqijx2xXN18MIbQZaETT9ZkeFDK7LJ4X37gQGPUdbtlPn7ymvE9udPRmtP+XYGpvEahtrbtnxZ0Dm5Ey4T38dMplXnhbxjh3ipv7yavG7yQVWp5Jzxv/Jf/08=
+	t=1747383644; cv=none; b=dEOjOWf/Bfw9h05bIvqvr83BPy9i/HsipcJmuPYbLSsDuNds015vC/8wo+tCad7gRWzn8/ta/6D6JYu36CZXl/TkMa9A1AdHt2518VMKFq395WTFBDutljn5pjdjZ9iW1NEEtEVAe77rpuRRFl0fB0zn2VoLux1yuB5iaAKRcR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747340019; c=relaxed/simple;
-	bh=ylgYcjlgh9rGDFe8987LAqtE0I8aoviICsthulq3/xo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=t5+htzw9HBxMGNQ/hnIzdmW1YtgMPCpsOHc+n5b7KMkNAVwBHQ1Hd3+UPg5wk+U7J2P5m0Ou+lT7clF7KppekswRNfxAyMIoRtDNqnF+c+jS01bxfXBCJWZvQ2Nr0y490EGudtg7vd90+bUzXxNlOQIDUzbFwvC4XA9dSpOKMQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hEFA3tw7; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43ede096d73so9740285e9.2;
-        Thu, 15 May 2025 13:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747340016; x=1747944816; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZuJGtF+v5v/zwiKXtg5bHQxWdc3nNCiHNpzHfrfyNeg=;
-        b=hEFA3tw7MqVpu7fUp+xjszCQtL9+6bIFDqo/BslicjrFPnG/1RXnhsOlf3iLSCQS2D
-         RscDTDmYfdWGEsTUkkKd014GfVL3eJ3wyoJjkNPSG/hJ3pPQZyWyPfMyv4m5u3vPy4S5
-         zTyRf/MzoX30K1bWq2/b8t8ZffssGC6dT5TGt5QsV6/NEXwrgFCZU3pumuYL4EXbNuZz
-         0fDqU42/sYTdZoKD/s8/FdI4NAEaKiYcxqIafTPbwyV5384CXtAbSdQIxeTkvOLa7sJb
-         j+2a2MTvrZBJMue86uGcuTpNUPBfLBA4et6k9MKeVK1PLfjD16bOSGPPXq/uKMx3KUur
-         jNPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747340016; x=1747944816;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZuJGtF+v5v/zwiKXtg5bHQxWdc3nNCiHNpzHfrfyNeg=;
-        b=uzSzAa61qYAoqrprj8UHolUjupoKkrMIKZIPpBr8r0wP+jTcaIxfuImJtR74qDY6t3
-         oD0pYoBsInOhDjSg1BlebJoZppC3jpHf0uOZQdX9e6sLMyjQHpWWc3+lx4LadErCuv90
-         jmpvi/hlddkrY7tAcQAVZ44KiUXwoeZkgFyKU6+CZfrGfYCGxr8bQoU7lOKFMD/yIKX2
-         4ux22PCbgPC17w3TSJqkNx/CyxJY5HPXfV502y4oBTtwHOte7qPfbvB1NBC1GAym//ql
-         zURN2e0hPrdUmr4DR5dytnCx5gshWa2eNGNn5Aj/gSiOHy9MsfEBIJUoPvMTAoSgvXG7
-         7vKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbth23XlgIbXhqTOb8knKq2CHYwhQPKuIvAuWC2V/z8iHP99vW7u5+Gdbn2CeCy+SYckZqyjoPkq3+zlls@vger.kernel.org, AJvYcCWRgEJndhzwZ2tN+v1Z6PpBB2tzvmntzNn55uYC9ZMATD7bMHgglYGR1ooqpr2xaD3v3lX+ZgHTRN1e@vger.kernel.org, AJvYcCWX8l1qY8AEVG9fAdK7T79vBkhez5YvF7NMzTgUzUIDiHsiMTvLucqYfEV23qO5rNgzlvSOhGV6j+KgGUu8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys/3E4UNWwkG4ULDn/1809iyS67Smkh6xgHJfRS8H03+etH4kB
-	UqXFp7C5lUuwnWplyMCSd27bI66sBuX2CjBM+ABbyb+yrgF7yH7jjRmBz18A+w==
-X-Gm-Gg: ASbGncs4Csnfzk6p4JIehcdJehasU/vj9LGEt9R7R3HKbAas4WNgg5YtkzgXgbfuiEP
-	O3DQGQyun3sUKE3gSoC5ATz2HJlnGOjsfjOKaSvMmZxoNRR0xQE/xqsAp6WfAYinRMvAZ7Ck56A
-	vbMwtyzWbFu47sv4YVZ0KeD4bTO2P1k1lvM3wKTl9JyqC7BiI1Gv3nSoB5lAaf/gWOqRtaZvLN5
-	qxbkf895ByddW8I+ESgQ2lA8rWe1Gg/oGyehcJbYXSbmsPd+wHEdYDIFCQQUnWbHggEwF+z/S2h
-	3WxpHqrSo9JtFc6/bcw1d9zZWJaUp9l7uu0K2pOuSZQ9K0H++QdbjbAOG4Fw4eD+5JDDq5Ir4v0
-	cswQS
-X-Google-Smtp-Source: AGHT+IHG6RNWwbRDay3N+hyQJzL+sBLOAagvHNHCy6oSlBzCgno6ceuyCOZJAL6IFJsmeYnHqoVwUA==
-X-Received: by 2002:a05:600c:a378:b0:43c:f70a:2af0 with SMTP id 5b1f17b1804b1-442fd64dfb3mr10603535e9.16.1747340015618;
-        Thu, 15 May 2025 13:13:35 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-442f3369293sm83248585e9.6.2025.05.15.13.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 May 2025 13:13:35 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Thu, 15 May 2025 22:13:29 +0200
-Subject: [PATCH] spi: spi-qpic-snand: return early on error from
- qcom_spi_io_op()
+	s=arc-20240116; t=1747383644; c=relaxed/simple;
+	bh=4KxDsjfmuWwumtBSQpxtMjShXqpffTu9yrvlxS6EKGk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Hm0tAfFDW8pteF3vtuAfOGrdKxQYH24/k3xiOotl3EBC7/cnopVcQ+9POaNk+ncx/6kgzsed9mYkf0Ed+KqYnHhmVccwkxGM9jG3vQpbOEnAIuPN4nmnoOXiaoygvNJ3O+LfLGglb7tTP158p6fmu3Ui7fQS6cx4Slc4YP4ODvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OUbyQ1t+; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54G38k3p018185;
+	Fri, 16 May 2025 08:20:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	TAtG8onWHzVbtQpTvV5KpBDQBOr77n6vrrRyZgC1p7I=; b=OUbyQ1t+oEovg1bI
+	jZLYkvLCQynJJpgDoylma9QKO75UvYkmxgrGQ3gn3ELy+yLgYp+/jUQ6KbNwHRzL
+	gycMZZahvawUvOnctmlxrfZeWITkRDYOh7J5i1RCHCxBgATxhPRgO5BriCnsttbK
+	wvHujTVnd/9Hq7e7RX67MVY/BXPkhe3/OhqLADkIquC6w5CRXH/NYZwfOp8mgBU2
+	Tw1qX1Iu+HLUVL49dRYuPxtIxh1cQllaLYhv15U18kwiXGY6fC0xDnUjumhVLU3l
+	Vq9W9CpCOPzRAWwyTlTM1NLDkeVK7MMagpsu50qof6KnqRgeVTGGzmCM4rvPPm+U
+	kSJegg==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 46mbcns6a2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 May 2025 08:20:33 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 54G8KWHD026533
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 May 2025 08:20:32 GMT
+Received: from [10.151.36.184] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 16 May
+ 2025 01:20:29 -0700
+Message-ID: <ee487379-0aab-d2ac-eb24-d38a0b3805ef@quicinc.com>
+Date: Fri, 16 May 2025 13:50:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 1/2] spi: spi-qpic-snand: use CW_PER_PAGE_MASK bitmask
+Content-Language: en-US
+To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>
+CC: Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Sricharan Ramabadhran
+	<quic_srichara@quicinc.com>,
+        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com>
+ <20250515-qpic-snand-use-bitmasks-v1-1-11729aeae73b@gmail.com>
+From: Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20250515-qpic-snand-use-bitmasks-v1-1-11729aeae73b@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250515-qpic-snand-early-error-v1-1-681c87611213@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAOhKJmgC/x3MQQ5AMBBA0avIrE2ipYKriEXVYBIppomQxt01l
- m/xf4RAwhSgyyIIXRx49wkqz8Ct1i+EPCWDLrQpjDJ4HuwweOsnJCvbgySyCzZ16apR6drMLaT
- 4EJr5/sf98L4fECVEOWgAAAA=
-X-Change-ID: 20250515-qpic-snand-early-error-863c4b1265f9
-To: Mark Brown <broonie@kernel.org>
-Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: U4FXvq5EHSmoxfcHHbYDYzz3c4KEsJEH
+X-Authority-Analysis: v=2.4 cv=aIbwqa9m c=1 sm=1 tr=0 ts=6826f551 cx=c_pps
+ a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=pGLkceISAAAA:8
+ a=COk6AnOGAAAA:8 a=llW5jWN4sgg2yBcSlIUA:9 a=QEXdDO2ut3YA:10
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: U4FXvq5EHSmoxfcHHbYDYzz3c4KEsJEH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE2MDA3NyBTYWx0ZWRfX9bXDlppfeXMx
+ VAzR9C8b8eak5YA6TuuJuqW0hY142k0Wf/ebVHUAf0HAtGqnspmXauA3vpjbKABgDL/rv1hvgww
+ FgWc3Ad/UcZWHqrCHPK/4bO4w+FfIhvSe5CIUB9zLR9gNSIXoT3jbELQOiljKICKKYlRKeGcdn9
+ GGPM6I0F7pHXBVr57xVs5WQVU2OzeIQwggv+vQpx6e8nwRmHn5Wlzw6I1vIO97VGJCHWDa+IRWG
+ 2nFrkoHwAJLOrM0jUHn0dkJupIcikDaUlJMi1eoqKS9FwI0xyIpguF93zQtNfBI52FhZaJoO2nx
+ CeDq0j78s7U4Eycla5pX7wLlIQMd1tA7fmSr3LXfrf0GEcliOqfCZGqZXriN2P6JeBWb+CXpBKN
+ vHo4FfhdQqNR+tME7sAKjGL9+bm6ZdVBgwaPmM0C6w/a85wDqwnmi8qlMOrT0RkHDNsYCCGc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-16_03,2025-05-15_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 impostorscore=0
+ clxscore=1015 phishscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505070000 definitions=main-2505160077
 
-When submitting of the descriptors fails, it is quite likely that
-the register read buffer contains no valid data. Even if the data
-is valid the function returns with an error code anyway.
 
-Change the code to return early if qcom_submit_descs() fails to
-avoid superfluously copying possibly invalid data.
 
-Also change the return statement at the end of the function to use
-zero value to indicate success obviusly.
+On 5/16/2025 12:28 AM, Gabor Juhos wrote:
+> Change the code to use the already defined CW_PER_PAGE_MASK
+> bitmask along with the FIELD_PREP() macro instead of using
+> magic values.
+> 
+> This makes the code more readable. It also syncs the affected
+> codes with their counterparts in the 'qcom_nandc' driver, so it
+> makes it easier to spot the differences between the two
+> implementations.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> ---
+>   drivers/spi/spi-qpic-snand.c | 31 ++++++++++++++++---------------
+>   1 file changed, 16 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+> index 7207bbb57802ce53dfab4d9689113e7f9ba8f131..bc45b834fadc5456eda1fe778e5ca8b16177465e 100644
+> --- a/drivers/spi/spi-qpic-snand.c
+> +++ b/drivers/spi/spi-qpic-snand.c
+> @@ -483,7 +483,8 @@ static int qcom_spi_block_erase(struct qcom_nand_controller *snandc)
+>   	snandc->regs->cmd = snandc->qspi->cmd;
+>   	snandc->regs->addr0 = snandc->qspi->addr1;
+>   	snandc->regs->addr1 = snandc->qspi->addr2;
+> -	snandc->regs->cfg0 = cpu_to_le32(ecc_cfg->cfg0_raw & ~(7 << CW_PER_PAGE));
+> +	snandc->regs->cfg0 = cpu_to_le32((ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
+> +					 FIELD_PREP(CW_PER_PAGE_MASK, 0));
+>   	snandc->regs->cfg1 = cpu_to_le32(ecc_cfg->cfg1_raw);
+>   	snandc->regs->exec = cpu_to_le32(1);
+>   
+> @@ -544,8 +545,8 @@ static int qcom_spi_read_last_cw(struct qcom_nand_controller *snandc,
+>   	snandc->regs->addr0 = (snandc->qspi->addr1 | cpu_to_le32(col));
+>   	snandc->regs->addr1 = snandc->qspi->addr2;
+>   
+> -	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
+> -		0 << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, 0);
+>   	cfg1 = ecc_cfg->cfg1_raw;
+>   	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
+>   
+> @@ -687,8 +688,8 @@ static int qcom_spi_read_cw_raw(struct qcom_nand_controller *snandc, u8 *data_bu
+>   	qcom_clear_bam_transaction(snandc);
+>   	raw_cw = num_cw - 1;
+>   
+> -	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
+> -				0 << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, 0);
+>   	cfg1 = ecc_cfg->cfg1_raw;
+>   	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
+>   
+> @@ -808,8 +809,8 @@ static int qcom_spi_read_page_ecc(struct qcom_nand_controller *snandc,
+>   	snandc->buf_start = 0;
+>   	qcom_clear_read_regs(snandc);
+>   
+> -	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
+> -				(num_cw - 1) << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
+>   	cfg1 = ecc_cfg->cfg1;
+>   	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
+>   
+> @@ -904,8 +905,8 @@ static int qcom_spi_read_page_oob(struct qcom_nand_controller *snandc,
+>   	qcom_clear_read_regs(snandc);
+>   	qcom_clear_bam_transaction(snandc);
+>   
+> -	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
+> -				(num_cw - 1) << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
+>   	cfg1 = ecc_cfg->cfg1;
+>   	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
+>   
+> @@ -1015,8 +1016,8 @@ static int qcom_spi_program_raw(struct qcom_nand_controller *snandc,
+>   	int num_cw = snandc->qspi->num_cw;
+>   	u32 cfg0, cfg1, ecc_bch_cfg;
+>   
+> -	cfg0 = (ecc_cfg->cfg0_raw & ~(7U << CW_PER_PAGE)) |
+> -			(num_cw - 1) << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0_raw & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
+>   	cfg1 = ecc_cfg->cfg1_raw;
+>   	ecc_bch_cfg = ECC_CFG_ECC_DISABLE;
+>   
+> @@ -1098,8 +1099,8 @@ static int qcom_spi_program_ecc(struct qcom_nand_controller *snandc,
+>   	int num_cw = snandc->qspi->num_cw;
+>   	u32 cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg;
+>   
+> -	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
+> -				(num_cw - 1) << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
+>   	cfg1 = ecc_cfg->cfg1;
+>   	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
+>   	ecc_buf_cfg = ecc_cfg->ecc_buf_cfg;
+> @@ -1175,8 +1176,8 @@ static int qcom_spi_program_oob(struct qcom_nand_controller *snandc,
+>   	int num_cw = snandc->qspi->num_cw;
+>   	u32 cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg;
+>   
+> -	cfg0 = (ecc_cfg->cfg0 & ~(7U << CW_PER_PAGE)) |
+> -				(num_cw - 1) << CW_PER_PAGE;
+> +	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
+> +	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
+>   	cfg1 = ecc_cfg->cfg1;
+>   	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
+>   	ecc_buf_cfg = ecc_cfg->ecc_buf_cfg;
+>
 
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/spi/spi-qpic-snand.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index 7207bbb57802ce53dfab4d9689113e7f9ba8f131..02b7e21479e5d5f663cd054b9241e6deb284b8ef 100644
---- a/drivers/spi/spi-qpic-snand.c
-+++ b/drivers/spi/spi-qpic-snand.c
-@@ -1405,8 +1405,10 @@ static int qcom_spi_io_op(struct qcom_nand_controller *snandc, const struct spi_
- 	}
- 
- 	ret = qcom_submit_descs(snandc);
--	if (ret)
-+	if (ret) {
- 		dev_err(snandc->dev, "failure in submitting descriptor for:%d\n", opcode);
-+		return ret;
-+	}
- 
- 	if (copy) {
- 		qcom_nandc_dev_to_mem(snandc, true);
-@@ -1420,7 +1422,7 @@ static int qcom_spi_io_op(struct qcom_nand_controller *snandc, const struct spi_
- 		memcpy(op->data.buf.in, &val, snandc->buf_count);
- 	}
- 
--	return ret;
-+	return 0;
- }
- 
- static bool qcom_spi_is_page_op(const struct spi_mem_op *op)
-
----
-base-commit: 4614fd6342ab69feebb067d5db84a9bfb9aada9f
-change-id: 20250515-qpic-snand-early-error-863c4b1265f9
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
+Reviewed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
 
