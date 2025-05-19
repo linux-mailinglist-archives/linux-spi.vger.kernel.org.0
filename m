@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-8208-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8209-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD983ABC9AE
-	for <lists+linux-spi@lfdr.de>; Mon, 19 May 2025 23:34:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B799ABC9BE
+	for <lists+linux-spi@lfdr.de>; Mon, 19 May 2025 23:35:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4823176075
-	for <lists+linux-spi@lfdr.de>; Mon, 19 May 2025 21:33:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89E907B11F0
+	for <lists+linux-spi@lfdr.de>; Mon, 19 May 2025 21:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B504239E68;
-	Mon, 19 May 2025 21:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC1C23F421;
+	Mon, 19 May 2025 21:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iGCHFKr5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZiYJLWd6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC37239E65;
-	Mon, 19 May 2025 21:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CEB220F41;
+	Mon, 19 May 2025 21:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747689784; cv=none; b=RBGQrvIn/LWmFyyvQU1FVgElxls4E433jDADh9DKYvpnbTCZBnCTsffCHp3TFQY+vQ3csIZrhdxU9o5Nz6JQIVOeZLjivQA+BFoRjrmySbiNduRRnKnC2OgTvh231x0uXBX0BxsybbJA/VF0sXcxrc4EgYjX5eL7M13CAhqWC7Y=
+	t=1747689799; cv=none; b=qW1Xh3SjwQyI51WzX/bQMAeFZNqMtyBpqI8JvaVRkvP70+VmH2CckxlwWtIS+putAOoOQxQW48yZPd6+q8LcMki+KYGhTG/uOZnlypy6UNB1hpcNklzeqz50863isKblsDGCd4+imAT5Im1PbhSzTymv/dm1ZFnR8QLWkfKZqF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747689784; c=relaxed/simple;
-	bh=2y+Ih0YzpsawfkOfFrpKV58vdTkM+6PUkQz/ckM/Q3c=;
+	s=arc-20240116; t=1747689799; c=relaxed/simple;
+	bh=pOFSHYTAt9k+byuw5GnkOTfdc/p6LzC2lKTZF/eBYfU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CKP3pTbkm2HsSKa9BqjjD63PQ4kCmuNFa3KDqBNmuKC7W/qdf4oFDAQLuVptjWEemRNIsdFrQIPdu5TRJt6BjbMBx+zqaQQvPPdcEfzI2eLAnK9krBvGB1s13+ujTYlWBrLHDc70l0vKROjdBfFarqP8Am4mANVowhZ2D11fzo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iGCHFKr5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 150CFC4CEE4;
-	Mon, 19 May 2025 21:23:02 +0000 (UTC)
+	 MIME-Version; b=hr8jBYRjPxpbKPT7BW5/4MSjtdl5ssQpbnXFt2ePsFdvr0AkGwDrZYSIs6ZuK3otfyol4QEzdXDS/3tGnav/AUjjaQkElJ3fslNt5SlTpr8+JmKwVc4gzIkhTWSH56RPJLUqyHRFPzrABv3arl01K+91Maoc9ewae06RiU9W/ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZiYJLWd6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 504BCC4CEE9;
+	Mon, 19 May 2025 21:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747689784;
-	bh=2y+Ih0YzpsawfkOfFrpKV58vdTkM+6PUkQz/ckM/Q3c=;
+	s=k20201202; t=1747689797;
+	bh=pOFSHYTAt9k+byuw5GnkOTfdc/p6LzC2lKTZF/eBYfU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iGCHFKr5uayY8oleaIQ6wihs5suNKChFgPF6NGVLrCmR/tj5vTrzo2aW0MLOokJow
-	 RZSTrZLjaAbDHJw0UuSdEMXgCaKg8OpYKSJVYVGvqR0Pwadt9GEqMUUmKQkZS3L/uR
-	 OjSXnCW7vql+SdR236MJU/HwhQ1+VLC/auYjY7o/JhbSt+HtsZwWNkeGUCakSN04Zg
-	 XrIbKv8sw0wKSfEL+Yu5ITmJGNH7kApRRC20s7FFN5+RqNlnMnBJUfbPOaT5DeTyRG
-	 Zkwg8HMAP6/b/7889pmzbNEbVXXRwkWl3RC/k2ef/Ds+xpy5Pqzl+O4zxmjzroO1Sb
-	 fMRhmICadWBKQ==
+	b=ZiYJLWd6gLDu2O+0iYStgFZBhJo0PctqhcF8IkVBBRwXPuEMIXgO+RHOk9jb+8zRy
+	 MV2/gc+U0DNXnqI1BOshcsLPGl1jl3mF0CJFdceRrTSq4PzEgfQnG7Yd0xiPr8s2Pe
+	 lQNYhU633lDaGvnIa6BloEKz8Vm1fzYIcoG/0YSpuKP9Pb8yTo8Hn3QvF+/lFS0NKW
+	 p/PtCew42odVHlpCNXpx1v7rKfIKzirRFFga7ea2vDeLIg6whBQBiT+/ZpRG3mFwzW
+	 u8JO50TeBbq4BRt33JtmE5McfAai7HTyaa74YGReaZ7HqDE/lq8G0QuI+OW8ny7WNC
+	 sJcaDeQ6IlQPA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Alessandro Grassi <alessandro.grassi@mailbox.org>,
 	linux-spi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 5/8] spi: spi-sun4i: fix early activation
-Date: Mon, 19 May 2025 17:22:52 -0400
-Message-Id: <20250519212255.1986527-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 5/7] spi: spi-sun4i: fix early activation
+Date: Mon, 19 May 2025 17:23:06 -0400
+Message-Id: <20250519212308.1986645-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250519212255.1986527-1-sashal@kernel.org>
-References: <20250519212255.1986527-1-sashal@kernel.org>
+In-Reply-To: <20250519212308.1986645-1-sashal@kernel.org>
+References: <20250519212308.1986645-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.139
+X-stable-base: Linux 5.15.183
 Content-Transfer-Encoding: 8bit
 
 From: Alessandro Grassi <alessandro.grassi@mailbox.org>
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-sun4i.c b/drivers/spi/spi-sun4i.c
-index 6000d0761206c..6937f5c4d868f 100644
+index 1fdfc6e6691d2..a8fba310d7004 100644
 --- a/drivers/spi/spi-sun4i.c
 +++ b/drivers/spi/spi-sun4i.c
 @@ -263,6 +263,9 @@ static int sun4i_spi_transfer_one(struct spi_master *master,
