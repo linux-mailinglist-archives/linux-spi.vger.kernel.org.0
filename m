@@ -1,49 +1,56 @@
-Return-Path: <linux-spi+bounces-8219-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8220-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937A9ABD6A1
-	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 13:21:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E4CFABD7F6
+	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 14:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C4EE17426F
-	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 11:21:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4B93A6304
+	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 12:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4D5D2FF;
-	Tue, 20 May 2025 11:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qOdT+U72"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808D327AC30;
+	Tue, 20 May 2025 12:06:42 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5681026FD83
-	for <linux-spi@vger.kernel.org>; Tue, 20 May 2025 11:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9FA14F9FB;
+	Tue, 20 May 2025 12:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747740086; cv=none; b=kzJTA0oErZY02tfDdKLZCxQr8bsjLTx+mBWXF7iqCFueqVsw4M16z//HnPufouKv163yyASnU7VOgcYYEWWtptduB3UfwKqPuQCaNUaOBSai4HpSZmVIjKsa6kXGcpuTJdgYA1KjlknhYRAFedcPFWcQq+g6nsPdYXHOWETPZX0=
+	t=1747742802; cv=none; b=mp5bCzQREUhhwaoelQhPPdbHupWuYXwGFYLsLFvBlOLyJJKeqWNFysQXcSDKjoKvQKEGMujnn5SfTEYXsDw44KxtUuwF5KA5PN7jpVmWSURuHfucGXhMVyqG9QGSSRTsuMcap//bE3s1woaEO92ZIdz27/C3ewMzEp3jukcAwKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747740086; c=relaxed/simple;
-	bh=kESabZoGCapp+QKU8v9AHS5uk+4YSH4ssYglvyaUXBw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=sWze2nUYPdx6/nkd9pfTHyHH5yDRhkl2i1bcyLi40R0rIbTLMW196bi0GaUGlHWBp191LgQgeuBNYdqM7iUIFMKO+CVIRGE7FvTLRvj+IBMIO3AOr1AlQTrZP/MZVG0iM4n9h2bvJ8YnHw9dI29BqLEbvUPdAB+if0ZGKpUEo9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qOdT+U72; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06B5C4CEE9;
-	Tue, 20 May 2025 11:21:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747740085;
-	bh=kESabZoGCapp+QKU8v9AHS5uk+4YSH4ssYglvyaUXBw=;
-	h=Subject:From:Date:To:From;
-	b=qOdT+U72ax76UcVQ9l+NH0sh2U9mw2p0zGA+qa2Osq4IM/IPP/MJEa5hMbgTpk/aM
-	 NMpoLNeo5B4+wlu6UHAKVRiYoBdsAKmlG9w8ORNAD0PSds5K9ZG2y5UFwAkDOKXEC/
-	 KJcs8sm7XHoiiBdI3Ucj/AQJ1Q+ub4OCrv+bcRY5qwKHQw1ZO5jpFytH+5T0bGV8h5
-	 RRc7+BI3BASaNPNOrzBdyFtp7kL0Me4cgkTId/drTieDEWT1j2htCIrz4wTO8mZX2f
-	 iM1G1/dtYJ4I2erRb9sEq0FBG2Waik7PhWrU0KV5JJeRaksMtidiVV6iGf+GjJ/N8Q
-	 wmknPFMslDljw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EED34380AA70;
-	Tue, 20 May 2025 11:22:02 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747742802; c=relaxed/simple;
+	bh=QB4woBeehsgVS80OXDYO14NGhGjOwiQ0uBVYCKGpkjs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=UBdMBdFixKi9qfvt/55rSd1syB8aOWUox7z1EyQeKLLTDPojrf5+MLMZfU7RVJjFIaCIsO+o11eYVPxqBCptTIrkOxIDB+Jmw0m84R+NnSra6wzoVv3FuagNVpTt1b2RLYmD9mSyAic3MlL09cM+BBwGcv9/q9DwRLkz4iHnB84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
+Received: from amadeus-Vostro-3710.lan (unknown [IPV6:240e:3b3:2c04:7a30:290:8105:3706:5628])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 15bc46b45;
+	Tue, 20 May 2025 20:01:26 +0800 (GMT+08:00)
+From: Chukun Pan <amadeus@jmu.edu.cn>
+To: jonas@kwiboo.se
+Cc: amadeus@jmu.edu.cn,
+	broonie@kernel.org,
+	conor+dt@kernel.org,
+	heiko@sntech.de,
+	krzk+dt@kernel.org,
+	ziyao@disroot.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add spi nodes for RK3528
+Date: Tue, 20 May 2025 20:01:18 +0800
+Message-Id: <20250520120118.1246479-1-amadeus@jmu.edu.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <28b03818-0290-412a-8d1e-9b88a163d387@kwiboo.se>
+References: <28b03818-0290-412a-8d1e-9b88a163d387@kwiboo.se>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,60 +58,36 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174774012146.1275309.7779842064995610922.git-patchwork-summary@kernel.org>
-Date: Tue, 20 May 2025 11:22:01 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaQ0lOVk8aS09CHksYQxgYSlYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJT0seQUgZSEFJGEtPQUwaSEtBSUJLQUNKS05BSExLTUFOTUlDWVdZFhoPEh
+	UdFFlBWU9LSFVKS0hKTkxOVUpLS1VKQktLWQY+
+X-HM-Tid: 0a96ed91f06c03a2kunmccf6e257ad0b5
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ngw6MAw4HTE6HBpCCkNMDz4i
+	MVEaCSpVSlVKTE9MTE9JT0NMTUtOVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlP
+	Sx5BSBlIQUkYS09BTBpIS0FJQktBQ0pLTkFITEtNQU5NSUNZV1kIAVlBSklCTDcG
 
-Hello:
+Hi,
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+> This is missing power-domains after "rockchip: Add power controller
+> support for RK3528" [1], spi0 depend on pclk_rkvenc_root:
+>
+> 	power-domains = <&power RK3528_PD_RKVENC>;
 
-Series: spi: sh-msiof: Transfer size improvements and I2S reuse
-  Submitter: Geert Uytterhoeven <geert+renesas@glider.be>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=963630
-  Lore link: https://lore.kernel.org/r/cover.1747401908.git.geert+renesas@glider.be
-    Patches: [v2,01/22] spi: sh-msiof: Drop comma after OF match table sentinel
-             [v2,02/22] spi: sh-msiof: Remove unneeded compatible values
-             [v2,03/22] spi: sh-msiof: Fix maximum DMA transfer size
-             [v2,04/22] spi: sh-msiof: Complete using dev in sh_msiof_spi_probe()
-             [v2,05/22] spi: sh-msiof: Use bool for boolean flags
-             [v2,06/22] spi: sh-msiof: Make words/bits unsigned in sh_msiof_spi_txrx_once()
-             [v2,07/22] spi: sh-msiof: Make words/fs unsigned in FIFO helpers
-             [v2,08/22] spi: sh-msiof: SITMDR1/SIRMDR1 bitfield conversion
-             [v2,09/22] spi: sh-msiof: SITMDR2 and SIRMDR2 bitfield conversion
-             [v2,10/22] spi: sh-msiof: SITSCR/SIRSCR bitfield conversion
-             [v2,11/22] spi: sh-msiof: SICTR bitfield conversion
-             [v2,12/22] spi: sh-msiof: SIFCTR bitfield conversion
-             [v2,13/22] spi: sh-msiof: Correct SIMDR2_GRPMASK
-             [v2,14/22] spi: sh-msiof: Add core support for dual-group transfers
-             [v2,15/22] spi: sh-msiof: Correct RX FIFO size for R-Car Gen2
-             [v2,16/22] spi: sh-msiof: Correct RX FIFO size for R-Car Gen3
-             [v2,17/22] spi: sh-msiof: Increase TX FIFO size for R-Car V4H/V4M
-             [v2,18/22] spi: sh-msiof: Simplify BRG's Division Ratio
-             [v2,19/22] spi: sh-msiof: Double maximum DMA transfer size using two groups
-             [v2,20/22] spi: sh-msiof: Document frame start sync pulse mode
-             [v2,21/22] spi: sh-msiof: Move register definitions to <linux/spi/sh_msiof.h>
+> Same here, spi1 depend on pclk_vpu_root:
+>
+> 	power-domains = <&power RK3528_PD_VPU>;
+>
+> [1] https://lore.kernel.org/r/20250518220707.669515-1-jonas@kwiboo.se
 
-Series: spi: spi_amd: Add DMA write and Kconfig changes
-  Submitter: Raju Rangoju <Raju.Rangoju@amd.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=963560
-  Lore link: https://lore.kernel.org/r/20250516100658.585654-1-Raju.Rangoju@amd.com
-    Patches: [v2,1/3] spi: spi_amd: Remove read{q,b} usage on DMA buffer
-             [v2,2/3] spi: spi_amd: Add HIDDMA basic write support
-             [v2,3/3] spi: spi_amd: Update Kconfig dependencies
+Thanks for the reminder, I didn't notice this.
+If the power-domains patches gets merged I'll add it.
 
+Thanks,
+Chukun
 
-Total patches: 24
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+--
+2.25.1
 
 
