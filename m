@@ -1,93 +1,94 @@
-Return-Path: <linux-spi+bounces-8220-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8221-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E4CFABD7F6
-	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 14:10:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71AC6ABDF6B
+	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 17:45:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4B93A6304
-	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 12:06:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A43A47B286D
+	for <lists+linux-spi@lfdr.de>; Tue, 20 May 2025 15:44:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808D327AC30;
-	Tue, 20 May 2025 12:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F35125DB14;
+	Tue, 20 May 2025 15:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Elr5GmgN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m155101.qiye.163.com (mail-m155101.qiye.163.com [101.71.155.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9FA14F9FB;
-	Tue, 20 May 2025 12:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E14F24E4C4;
+	Tue, 20 May 2025 15:45:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747742802; cv=none; b=mp5bCzQREUhhwaoelQhPPdbHupWuYXwGFYLsLFvBlOLyJJKeqWNFysQXcSDKjoKvQKEGMujnn5SfTEYXsDw44KxtUuwF5KA5PN7jpVmWSURuHfucGXhMVyqG9QGSSRTsuMcap//bE3s1woaEO92ZIdz27/C3ewMzEp3jukcAwKM=
+	t=1747755923; cv=none; b=PrVAUxEz5U/TxCGfoYv4JlN1reM0sFoFVLxWmukLfVELq0xHrEhIFtU3fcF5g0rlvw+WpK/XUgnC8qi4aQUZ34TDWj+h3dLmvUjVNAmsHnFiREYvbDyD14m6IW3dKPY4Oefx/SnugGqBGl23hzeOYtJF0/sLU612DNJcelzyDew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747742802; c=relaxed/simple;
-	bh=QB4woBeehsgVS80OXDYO14NGhGjOwiQ0uBVYCKGpkjs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UBdMBdFixKi9qfvt/55rSd1syB8aOWUox7z1EyQeKLLTDPojrf5+MLMZfU7RVJjFIaCIsO+o11eYVPxqBCptTIrkOxIDB+Jmw0m84R+NnSra6wzoVv3FuagNVpTt1b2RLYmD9mSyAic3MlL09cM+BBwGcv9/q9DwRLkz4iHnB84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=101.71.155.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from amadeus-Vostro-3710.lan (unknown [IPV6:240e:3b3:2c04:7a30:290:8105:3706:5628])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 15bc46b45;
-	Tue, 20 May 2025 20:01:26 +0800 (GMT+08:00)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: jonas@kwiboo.se
-Cc: amadeus@jmu.edu.cn,
-	broonie@kernel.org,
-	conor+dt@kernel.org,
-	heiko@sntech.de,
-	krzk+dt@kernel.org,
-	ziyao@disroot.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1747755923; c=relaxed/simple;
+	bh=QZwMAMHXJadVhVw8rt/Vxp0DnIWTSyCOm/9s7Dh/5ic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sotpM3kG06ROdSULoaPmvHWspcYTZC0iHM9Wq1sVXZh9e/NrjOOeNNsPAwHB3MPjboqlCr4NErUZ3SRdTXXImG2//WtTpCmLl9gDLcAS+14lED82/Bjn42nroElXoqyhcnWoPrR/ElJOLUJXUb2PDbMYop0m7DhrNmtiG7gj/Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Elr5GmgN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE88C4CEE9;
+	Tue, 20 May 2025 15:45:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747755922;
+	bh=QZwMAMHXJadVhVw8rt/Vxp0DnIWTSyCOm/9s7Dh/5ic=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Elr5GmgNc0bnO/D8dP3JhuMcFuYUtNJYb/rzzI2WfYx5tqf7SA2MAdFN7YMAYXGxP
+	 pivBuyfPYAXFhdZqx8M3E3KyBR2MHQ9x1FR9VvYw8xnYvB10+J1b+diHcW7jglP8sF
+	 HQcwJOv4KQwaZaNem9JD1R9TqoA9/0J/YqMNZnMQU9LjHLKKa1Lb3tciG26m2czvmr
+	 MBoV/Kod0NSu8cHBvot15yRaGPwdhgExvpqfZ02uWndqhWOZabXHdZkqAZBf3I+XNl
+	 2I/CrV4RPe4gJW7Cf+pFKuYNM8QV/Oc+GaqaX3eHLqIJNWsuVd8O9GcCZ40det8nj6
+	 XkghhF4IXfz3Q==
+Date: Tue, 20 May 2025 16:45:18 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Chukun Pan <amadeus@jmu.edu.cn>
+Cc: Heiko Stuebner <heiko@sntech.de>, Yao Zi <ziyao@disroot.org>,
+	Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Jonas Karlman <jonas@kwiboo.se>, Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add spi nodes for RK3528
-Date: Tue, 20 May 2025 20:01:18 +0800
-Message-Id: <20250520120118.1246479-1-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <28b03818-0290-412a-8d1e-9b88a163d387@kwiboo.se>
-References: <28b03818-0290-412a-8d1e-9b88a163d387@kwiboo.se>
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/2] spi: dt-bindings: Add rk3528-spi compatible
+Message-ID: <20250520-safely-taekwondo-c9daf6ee76c2@spud>
+References: <20250520100102.1226725-1-amadeus@jmu.edu.cn>
+ <20250520100102.1226725-2-amadeus@jmu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaQ0lOVk8aS09CHksYQxgYSlYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJT0seQUgZSEFJGEtPQUwaSEtBSUJLQUNKS05BSExLTUFOTUlDWVdZFhoPEh
-	UdFFlBWU9LSFVKS0hKTkxOVUpLS1VKQktLWQY+
-X-HM-Tid: 0a96ed91f06c03a2kunmccf6e257ad0b5
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Ngw6MAw4HTE6HBpCCkNMDz4i
-	MVEaCSpVSlVKTE9MTE9JT0NMTUtOVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWUlP
-	Sx5BSBlIQUkYS09BTBpIS0FJQktBQ0pLTkFITEtNQU5NSUNZV1kIAVlBSklCTDcG
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="g+s0XxxpsHPxzUUk"
+Content-Disposition: inline
+In-Reply-To: <20250520100102.1226725-2-amadeus@jmu.edu.cn>
 
-Hi,
 
-> This is missing power-domains after "rockchip: Add power controller
-> support for RK3528" [1], spi0 depend on pclk_rkvenc_root:
->
-> 	power-domains = <&power RK3528_PD_RKVENC>;
+--g+s0XxxpsHPxzUUk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Same here, spi1 depend on pclk_vpu_root:
->
-> 	power-domains = <&power RK3528_PD_VPU>;
->
-> [1] https://lore.kernel.org/r/20250518220707.669515-1-jonas@kwiboo.se
+On Tue, May 20, 2025 at 06:01:01PM +0800, Chukun Pan wrote:
+> This adds a compatible string for the SPI controller on RK3528.
+>=20
+> Signed-off-by: Chukun Pan <amadeus@jmu.edu.cn>
 
-Thanks for the reminder, I didn't notice this.
-If the power-domains patches gets merged I'll add it.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Thanks,
-Chukun
+--g+s0XxxpsHPxzUUk
+Content-Type: application/pgp-signature; name="signature.asc"
 
---
-2.25.1
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaCyjjQAKCRB4tDGHoIJi
+0ndWAP40ZWHqwSwJvdKd3NHs8XCjLGX9F2LFsU7/nG3hlT8jKQEAhR+Ap19CEIou
+UEYSvVw8j3bzPZ+4rhf6pNr0X3HJ6QQ=
+=xOeR
+-----END PGP SIGNATURE-----
+
+--g+s0XxxpsHPxzUUk--
 
