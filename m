@@ -1,136 +1,106 @@
-Return-Path: <linux-spi+bounces-8226-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8227-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBE42ABF253
-	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 13:03:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C865ABFC8E
+	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 19:56:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DC17189A6C6
-	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 11:03:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00EA74E7319
+	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 17:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AF823C4E9;
-	Wed, 21 May 2025 11:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3214028B7F1;
+	Wed, 21 May 2025 17:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDSvSWsK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbnxd02T"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AAF21D3C7;
-	Wed, 21 May 2025 11:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E47482EB;
+	Wed, 21 May 2025 17:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747825399; cv=none; b=GqozKwAPzhQHNr87HFcdz5or598sypxZyh6KAy4A63IoA06tCoSXsSXNvS2CNvz6IrL8olE0n1noayb4gS3AQ2dfTpzWUMPlYvXwPbtODxqv2C4CxkgGRTP1CmXbi+J9o+3cTAyOHRbsMEJGsJYXM0o9dOyebYpNeqrZbXztiFo=
+	t=1747850166; cv=none; b=nOtq4bKHOVITXuzNA/4aMcKNXWUrYbj/GjHDZPwZwzVSbn7bEDgjBZbqHk1wfX0w9QNWhbbPOppkZyzmJQGtUUG6DqoMB6DIkYm7ez66rProBRjMgBewrZGplnAsJm4yfMM9rYayUgoKIKuLsirfr94oXON7NT9y3JawX039Df8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747825399; c=relaxed/simple;
-	bh=bhHmZbwVXxo2YTG4v7bpaobU+l4PFSmRgT16OMHE4BQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IKApqeTYaGKUU/Sspjye394VZO2HuTRaq4SwBVjbszxbzFZaHxl2DaCVq85R1t5m0WDxYM4kiiLn56fuNt/8CXZ1IXmFuBgsKFB0pd5+k/mgbQoBDpaCWq1vKtYa3sXkpD5e0vOzqS9mwxmc1hiD9K5hA1WiWVGTFPrbFH5HOGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDSvSWsK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02062C4CEE4;
-	Wed, 21 May 2025 11:03:12 +0000 (UTC)
+	s=arc-20240116; t=1747850166; c=relaxed/simple;
+	bh=SH3v7r/YeP+ILksXxAq4H6i/5FdXirbGQTMwOfTFny0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=COIOsr0K/hQJPzLhxyGOqlCS6ow8aDhMWVroXdSl7Vn8qn/iXRqqPwynG2avEBW2Ycnmb6c73TJGwcEjoCtjPeY4OIryWE0AASQj4nwZyCfc11aA94vEeGpaQS0TFP6l6rR68+HOi7GqnGxNzDr3mLv42ZqxiLp7d8jl1bKABrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbnxd02T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D6CC4CEE4;
+	Wed, 21 May 2025 17:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747825396;
-	bh=bhHmZbwVXxo2YTG4v7bpaobU+l4PFSmRgT16OMHE4BQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RDSvSWsKRUP4z2d85N5aWxliMgigMMoQaEtx4yVK1A8mSmzJeNdmxn9IsSMVNdiVz
-	 Z+qhgyl/TXX++tF0Zw4jLe+Nukpqz/hOi7s6Kh5TGH11AHIaFIVC6vwtq1XsBwmFiY
-	 fX4yTAQWAqjcScUwirrPaDayH6TLOXIjPRKm/6Pn9V/yClTl2uATxZc9fzRAVHLC7e
-	 1dpi5duqVYQJuqHzHsQsRJgRuKutI8ZD42g5kIKSaf4c8HZ3sZe6I1p+m/H0gu3q73
-	 /vtmMz98O/PBAEFD/I1ynOaFj2qqgmg0qDGgwoBBlIIaXJJ7RDgGVLaIR8Hyk4Ogwj
-	 xFqnXaC8DrN+Q==
-Message-ID: <7fdf9fb1-bbb0-4bbc-b8fd-12883fcdca24@kernel.org>
-Date: Wed, 21 May 2025 13:03:10 +0200
+	s=k20201202; t=1747850164;
+	bh=SH3v7r/YeP+ILksXxAq4H6i/5FdXirbGQTMwOfTFny0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=pbnxd02T3gFqUPMywHByGWNqP4yHJv049nk0XpF8GLIt6EkzkEVJp3Mq0lDhrCpLV
+	 nDe3S5GGj1AbfQcnTfI6EhFgN8zEI+yeXzhI6EYBQdTOKU1aICAOrvBl1fPsp4yDzw
+	 26GdpAQisHmuBYM/aItT8RbInXIZVISglDGWrWtd4RAZ51y5hH5FuFQjJNCOqg2QAi
+	 u8MvnleyLUJh2SvrJjSG8WbHUCre3t+6aCKOCdsrsMJFop0RnD92g0cms9fyvKxGs3
+	 XXGOb70FeRtmlnuDMOw16h0nv6xnQGhti9PhX8rLu/8aGcnmzAEClsa6jrjP4qfdxa
+	 pTer5+zRybQQg==
+From: Mark Brown <broonie@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
+Cc: Yao Zi <ziyao@disroot.org>, Rob Herring <robh@kernel.org>, 
+ Jonas Karlman <jonas@kwiboo.se>, Conor Dooley <conor+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <20250520100102.1226725-1-amadeus@jmu.edu.cn>
+References: <20250520100102.1226725-1-amadeus@jmu.edu.cn>
+Subject: Re: (subset) [PATCH 0/2] arm64: dts: rockchip: Add spi nodes for
+ RK3528
+Message-Id: <174785016195.188147.3036453631222636236.b4-ty@kernel.org>
+Date: Wed, 21 May 2025 18:56:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] dt-bindings: spi: samsung: add exynosautov920-spi
- compatible
-To: Faraz Ata <faraz.ata@samsung.com>, andi.shyti@kernel.org,
- tudor.ambarus@linaro.org, broonie@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- alim.akhtar@samsung.com, rosa.pila@samsung.com, dev.tailor@samsung.com
-References: <CGME20250521083341epcas5p243dac11e4c5f2221473b8df8c3d7f060@epcas5p2.samsung.com>
- <20250521084324.2759530-1-faraz.ata@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250521084324.2759530-1-faraz.ata@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-On 21/05/2025 10:43, Faraz Ata wrote:
-> Add "samsung,exynosautov920-spi" dedicated compatible for
-> SPI found in ExynosAutov920 SoC.
+On Tue, 20 May 2025 18:01:00 +0800, Chukun Pan wrote:
+> There are 2 SPI controllers on the RK3528 SoC, describe it.
+> Tested using st7789v chip with spi-cpha and spi-cpol properties.
 > 
-> Signed-off-by: Faraz Ata <faraz.ata@samsung.com>
-> ---
->  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> [   10.831306] fb_st7789v spi0.0: fbtft_property_value: buswidth = 8
+> [   11.042915] graphics fb0: fb_st7789v frame buffer, 240x320, 150 KiB
+>  video memory, 4 KiB buffer memory, fps=20, spi0.0 at 15 MHz
 > 
-> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> index 3c206a64d60a..fe298d47b1a9 100644
-> --- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-> @@ -29,6 +29,7 @@ properties:
->        - items:
->            - enum:
->                - samsung,exynos8895-spi
-> +              - samsung,exynosautov920-spi
->            - const: samsung,exynos850-spi
+> [...]
 
-I am surprised this is not compatible with exynosautov9.
+Applied to
 
-Best regards,
-Krzysztof
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/2] spi: dt-bindings: Add rk3528-spi compatible
+      commit: 70e5f38e734572ca5a56cff48cf01a0f31917099
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
