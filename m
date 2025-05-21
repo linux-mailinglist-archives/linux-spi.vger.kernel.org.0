@@ -1,134 +1,136 @@
-Return-Path: <linux-spi+bounces-8225-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8226-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74BAAABEE57
-	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 10:46:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBE42ABF253
+	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 13:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 306AC4E3124
-	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 08:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DC17189A6C6
+	for <lists+linux-spi@lfdr.de>; Wed, 21 May 2025 11:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D748E22B8B6;
-	Wed, 21 May 2025 08:46:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AF823C4E9;
+	Wed, 21 May 2025 11:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GCwY3wbF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDSvSWsK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D1422B59D
-	for <linux-spi@vger.kernel.org>; Wed, 21 May 2025 08:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AAF21D3C7;
+	Wed, 21 May 2025 11:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747817203; cv=none; b=Yh0EPNgNkfIwc5a7l0h/mSKc5ddre5uhH+Mn7B3ucLVaU7ZlLYHjzu2m7Hxpg7Xg3n8+668pt6Upfi+Rj7IgNDGxf4x61+1z4yzBd6n98egy5CdLqqNkXvgqahWElmDVAnNDhWEfJPWA0ciH02vUxPwG39R0HDpK7CvHvzoOwmM=
+	t=1747825399; cv=none; b=GqozKwAPzhQHNr87HFcdz5or598sypxZyh6KAy4A63IoA06tCoSXsSXNvS2CNvz6IrL8olE0n1noayb4gS3AQ2dfTpzWUMPlYvXwPbtODxqv2C4CxkgGRTP1CmXbi+J9o+3cTAyOHRbsMEJGsJYXM0o9dOyebYpNeqrZbXztiFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747817203; c=relaxed/simple;
-	bh=WnhL7uoBNqMZ3Cbebs3yyWF/yxiYNx9JjYSDc3RKJZs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=E+yyj0XhqqtZ5SwJqyQQf4FOzTZgz92ohvhDN6KvBUfi0WbsGu7BtGA7i+QDep0Wg84zAQVbF0f37hFNSFBn9fJFFPMzcliQSiNaVfJqdubrbO/BTyjUwfcJuSTLN21hjhIHpxDrsHS0CD/EncBK7gT6C2Ev5w+a9AihlWzk074=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GCwY3wbF; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250521084639epoutp03ba0919f6ad86fa7469e2febf188344cb~BfnuJlHzY0752707527epoutp03G
-	for <linux-spi@vger.kernel.org>; Wed, 21 May 2025 08:46:39 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250521084639epoutp03ba0919f6ad86fa7469e2febf188344cb~BfnuJlHzY0752707527epoutp03G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747817199;
-	bh=shbECNWSz86NpuLRg7p7TU1AfWaNOBZLxT9Qlix0Iyw=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=GCwY3wbFiUvS5MlwKmYAu0tp1ZNdGfc87EuGYRJHtZlkST5CnseL2oNkdSq4+QN97
-	 oKeMm+4LNou75HPrEmdOAixUL7t+tBXZLLDQY6IMksv4yHwyO7PpIZszpOdFK+N9+U
-	 XTVW+Ym4mUPFt0oVkHEg2Y2R8iGkC2V3+OsDVq6g=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250521084638epcas5p3c250d169b4a59ed73f9af721159bd62c~BfntdVWms0169101691epcas5p3Q;
-	Wed, 21 May 2025 08:46:38 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4b2Q572nhDz6B9mH; Wed, 21 May
-	2025 08:46:35 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250521083341epcas5p243dac11e4c5f2221473b8df8c3d7f060~BfcZpYq3P0049100491epcas5p2Q;
-	Wed, 21 May 2025 08:33:41 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250521083341epsmtrp15d2cf9fc5d29a621b7b9c91d2dda336e~BfcZffJTZ0709607096epsmtrp1L;
-	Wed, 21 May 2025 08:33:41 +0000 (GMT)
-X-AuditID: b6c32a52-f0cb424000004c16-ba-682d8fe55e25
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	5C.15.19478.5EF8D286; Wed, 21 May 2025 17:33:41 +0900 (KST)
-Received: from bose.samsungds.net (unknown [107.108.83.9]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250521083339epsmtip19122db928827b44efd1a728582b64fef~BfcXjjrho0917109171epsmtip1M;
-	Wed, 21 May 2025 08:33:39 +0000 (GMT)
-From: Faraz Ata <faraz.ata@samsung.com>
-To: andi.shyti@kernel.org, tudor.ambarus@linaro.org, broonie@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
-Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	alim.akhtar@samsung.com, rosa.pila@samsung.com, dev.tailor@samsung.com,
-	faraz.ata@samsung.com
-Subject: [PATCH v1] dt-bindings: spi: samsung: add exynosautov920-spi
- compatible
-Date: Wed, 21 May 2025 14:13:24 +0530
-Message-Id: <20250521084324.2759530-1-faraz.ata@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1747825399; c=relaxed/simple;
+	bh=bhHmZbwVXxo2YTG4v7bpaobU+l4PFSmRgT16OMHE4BQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IKApqeTYaGKUU/Sspjye394VZO2HuTRaq4SwBVjbszxbzFZaHxl2DaCVq85R1t5m0WDxYM4kiiLn56fuNt/8CXZ1IXmFuBgsKFB0pd5+k/mgbQoBDpaCWq1vKtYa3sXkpD5e0vOzqS9mwxmc1hiD9K5hA1WiWVGTFPrbFH5HOGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDSvSWsK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02062C4CEE4;
+	Wed, 21 May 2025 11:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747825396;
+	bh=bhHmZbwVXxo2YTG4v7bpaobU+l4PFSmRgT16OMHE4BQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RDSvSWsKRUP4z2d85N5aWxliMgigMMoQaEtx4yVK1A8mSmzJeNdmxn9IsSMVNdiVz
+	 Z+qhgyl/TXX++tF0Zw4jLe+Nukpqz/hOi7s6Kh5TGH11AHIaFIVC6vwtq1XsBwmFiY
+	 fX4yTAQWAqjcScUwirrPaDayH6TLOXIjPRKm/6Pn9V/yClTl2uATxZc9fzRAVHLC7e
+	 1dpi5duqVYQJuqHzHsQsRJgRuKutI8ZD42g5kIKSaf4c8HZ3sZe6I1p+m/H0gu3q73
+	 /vtmMz98O/PBAEFD/I1ynOaFj2qqgmg0qDGgwoBBlIIaXJJ7RDgGVLaIR8Hyk4Ogwj
+	 xFqnXaC8DrN+Q==
+Message-ID: <7fdf9fb1-bbb0-4bbc-b8fd-12883fcdca24@kernel.org>
+Date: Wed, 21 May 2025 13:03:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBLMWRmVeSWpSXmKPExsWy7bCSnO7Tft0Mg5nbBS0ezNvGZnH/awej
-	xdSHT9gs1uw9x2Rxb8cydov5R86xWly7sZDd4uWse2wWl3fNYbOYcX4fk0Xjx5vsFv/37GC3
-	+PLzAbPFp1txDnwem1Z1snncubaHzaNvyypGj8+b5AJYorhsUlJzMstSi/TtErgy5q7cz1iw
-	nq2icc5elgbGPtYuRk4OCQETiW+nHrF0MXJxCAlsZ5Q4tXonC0RCUuLw07tQRcISK/89Zwex
-	hQTeMko0HY8GsdkE1CVm3jgC1iwi0M0o0T/jEDOIwyzwnFHi+KY/TCBVwgIBErubfgNVcXCw
-	CKhKnJ8dChLmFbCRuLSthR1igbzE/oNnmSHighInZz4BO4IZKN68dTbzBEa+WUhSs5CkFjAy
-	rWIUTS0ozk3PTS4w1CtOzC0uzUvXS87P3cQIDmytoB2My9b/1TvEyMTBeIhRgoNZSYQ3doVO
-	hhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXFe5ZzOFCGB9MSS1OzU1ILUIpgsEwenVANTp5GChMFE
-	PRsu8f3Nkzh1L946LZd4Pz/8zJtMxSI/8zihlN9K7V+/5J76Oi942s+ShU5iqSqhws/ZzDaX
-	pXl4ekTGeNlU2cpEd0+NS/xj9LvFYdKmPyuf+h3lOpthuzTszPEfx3tLU8wC8u6vvW7L+6mZ
-	x5Kj3DrzQUNgybPFRwV5LQVluWKMWTgPhbMyhRy4+iPxto2wQYn6I283kSAlBY77T26wX7m6
-	hs3L7sJ3GQuO140FJ/8fi9+5yvuYRsLBt2U84fqLtWbPPT3XfmVtbfLyg/9MjAvWfGb2F5+3
-	0KI0OZaFyb9auDxPbXkx8/H2TEaz7b6N30+5v7HujS5ptVutvr/hs3fb3h+nlViKMxINtZiL
-	ihMBSxZgnNsCAAA=
-X-CMS-MailID: 20250521083341epcas5p243dac11e4c5f2221473b8df8c3d7f060
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250521083341epcas5p243dac11e4c5f2221473b8df8c3d7f060
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] dt-bindings: spi: samsung: add exynosautov920-spi
+ compatible
+To: Faraz Ata <faraz.ata@samsung.com>, andi.shyti@kernel.org,
+ tudor.ambarus@linaro.org, broonie@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ alim.akhtar@samsung.com, rosa.pila@samsung.com, dev.tailor@samsung.com
 References: <CGME20250521083341epcas5p243dac11e4c5f2221473b8df8c3d7f060@epcas5p2.samsung.com>
+ <20250521084324.2759530-1-faraz.ata@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250521084324.2759530-1-faraz.ata@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add "samsung,exynosautov920-spi" dedicated compatible for
-SPI found in ExynosAutov920 SoC.
+On 21/05/2025 10:43, Faraz Ata wrote:
+> Add "samsung,exynosautov920-spi" dedicated compatible for
+> SPI found in ExynosAutov920 SoC.
+> 
+> Signed-off-by: Faraz Ata <faraz.ata@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> index 3c206a64d60a..fe298d47b1a9 100644
+> --- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
+> @@ -29,6 +29,7 @@ properties:
+>        - items:
+>            - enum:
+>                - samsung,exynos8895-spi
+> +              - samsung,exynosautov920-spi
+>            - const: samsung,exynos850-spi
 
-Signed-off-by: Faraz Ata <faraz.ata@samsung.com>
----
- Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 +
- 1 file changed, 1 insertion(+)
+I am surprised this is not compatible with exynosautov9.
 
-diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-index 3c206a64d60a..fe298d47b1a9 100644
---- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-@@ -29,6 +29,7 @@ properties:
-       - items:
-           - enum:
-               - samsung,exynos8895-spi
-+              - samsung,exynosautov920-spi
-           - const: samsung,exynos850-spi
-       - const: samsung,exynos7-spi
-         deprecated: true
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
