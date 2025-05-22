@@ -1,92 +1,95 @@
-Return-Path: <linux-spi+bounces-8232-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8233-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6707AC08AE
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 11:30:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF114AC0A11
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 12:47:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6410B7A6F9F
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 09:28:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31048A2106F
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 10:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE86D267F5D;
-	Thu, 22 May 2025 09:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A087266562;
+	Thu, 22 May 2025 10:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hb0q4Zfs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b7qlbFlu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9898170814
-	for <linux-spi@vger.kernel.org>; Thu, 22 May 2025 09:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3029C33DB;
+	Thu, 22 May 2025 10:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747906193; cv=none; b=Ib4RoJOy37KGZ0bz5myE1eszrHEphcoqZaJ97C4cQEDMfDQrnW/itwKPJpwhyruqV2+EKR9Rm/4pORhJLadD+a7CtklwkIqZFZ6IPtzHhFw0iwfe1AsICZC0S1trdB+QRU+48fzL0bYPA6/1iKw9s3u9+hHgIHXfmzJMvfGwGKI=
+	t=1747910857; cv=none; b=dcekPoY9ygbUBOqRqPbqn9GHAXy6LCcjYanYTMEBGLR9m3GYDx5gmwcivdmrwzVaEP2UROI+Asq9N16mwJ5IyEuKD0Fjrb4baN+DlIjGAeh19HXCVyiCRZEgbzYa9DmD3glVbPTtGau4POVXZjg0W8zM7SgXjyXntqFoJBWLVSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747906193; c=relaxed/simple;
-	bh=t7nK1mRgNhbajUt4xA6fydOhzO+EnfdJ1Psb/tLTVAo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=NFF1vI2uOPgEY/vsX4BNuCIAZ8fIWdlDcX4K7FOavFYA1G9CGFkBLVSt6nh4XozSsZilo65FE/B2BYtRSLMaLnaDfKB7YT439RzjojrBit485GeELsAlhIn2HXXrtCvpHxhZT2USQOnaPkfvsYlEbXhoPyWdEaRljzqV3YLot5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hb0q4Zfs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A4C5C4CEEF;
-	Thu, 22 May 2025 09:29:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747906193;
-	bh=t7nK1mRgNhbajUt4xA6fydOhzO+EnfdJ1Psb/tLTVAo=;
-	h=Subject:From:Date:To:From;
-	b=hb0q4ZfsZYZVyZAav5qfw0TSPeXexisOm5dO3oEYQBPJW180L/a/BVhdqK69+Lf14
-	 lvThlE1TuRsDmnx93A8IE3NI+dvaPk5c12hy+AzorS3JgedaOsUzTPn1AYGEyVmd01
-	 XNd386i2E1S++LFgKlIkh9KOj/y9QysWoIfzT3kSxKKG7IKmOJYMt+0sDDHIk9BAlG
-	 Lv8+ygbHCG3MHsXfuN2g6drl+WDqV4aKu5oLNRTHvRI/oK3+EhOuQQ0xLHA2VPpuOT
-	 vem4c8/aozjVjg80Oa4oaxRvs2cEPTGyG6Twz3LMBJd5CBOFnfL+7NJcrw4AbfnwdJ
-	 1UpqXX313xyYA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1C8C380AA7C;
-	Thu, 22 May 2025 09:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747910857; c=relaxed/simple;
+	bh=2XCxImrdcg6+7NaD9mTOQb0dWzeNFJsZamV2rMfEfH8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mgVi+lYapFKGBzrbSn1bUS6ULcu2Ug17I/smKupvRSJqdALbwjGvHJW3n/YfTamxiZZ6oP/vlTg6mV952CpM9p5089kzQ0X5AeDvtZeJIgqcclAJ+niD0QWduesWcjkTjG4UaP5PnMls47CAB/wWpKBmTofq1YEGd0lyrTa2ICU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b7qlbFlu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00466C4CEE4;
+	Thu, 22 May 2025 10:47:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1747910856;
+	bh=2XCxImrdcg6+7NaD9mTOQb0dWzeNFJsZamV2rMfEfH8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=b7qlbFluo7o8UZK0fdtddsXzci8pF3lv/8mFRuADe31Uc/mvwBjDOP5ssc4vrjG5h
+	 4iqCODHgrCy/Szpa9V3Nqak9uGA7TO1Vr6wlkByXMEbnmh6vizyKalIQh3U2Z+1rhj
+	 QP3Y9t8LeKF9qMRVsFbrcWEozYzInSQbDka9VEoM=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH] spi: use container_of_cont() for to_spi_device()
+Date: Thu, 22 May 2025 12:47:31 +0200
+Message-ID: <2025052230-fidgeting-stooge-66f5@gregkh>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Lines: 34
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1509; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=2XCxImrdcg6+7NaD9mTOQb0dWzeNFJsZamV2rMfEfH8=; b=owGbwMvMwCRo6H6F97bub03G02pJDBn6DIeYsuovdd7n1/kudmL+Ac25DzhnSc7+cWLJoxccb tl51n7GHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR+tkMC9rkt9alnhNmd13d kvXDK2nyoitVpQwLNtkpFBS/4Jrxpa/vsJXD4V2MKufNAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174790622812.2464246.17318383151688156233.git-patchwork-summary@kernel.org>
-Date: Thu, 22 May 2025 09:30:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+Some places in the spi core pass in a const pointer to a device and the
+default container_of() casts that away, which is not a good idea.
+Preserve the proper const attribute by using container_of_const() for
+to_spi_device() instead, which is what it was designed for.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Note, this removes the NULL check for a device pointer in the call, but
+no one was ever checking for that return value, and a device pointer
+should never be NULL overall anyway, so this should be a safe change.
 
-Patch: spi: spi-qpic-snand: reuse qcom_spi_check_raw_flash_errors()
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=962775
-  Lore link: https://lore.kernel.org/r/20250514-qpic-snand-error-check-v1-1-c0ebd3aae72a@gmail.com
+Cc: Mark Brown <broonie@kernel.org>
+Fixes: d69d80484598 ("driver core: have match() callback in struct bus_type take a const *")
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/spi/spi.h | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Patch: [next] spi: spi-qpic-snand: remove superfluous parameters of qcom_spi_check_error()
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=964704
-  Lore link: https://lore.kernel.org/r/20250520-qpic-snand-superfluous-params-v1-1-86dd4963e90f@gmail.com
-
-Patch: [v1] dt-bindings: spi: samsung: add exynosautov920-spi compatible
-  Submitter: Faraz Ata <faraz.ata@samsung.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=964882
-  Lore link: https://lore.kernel.org/r/20250521084324.2759530-1-faraz.ata@samsung.com
-
-
-Total patches: 3
-
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 0ba5e49bace4..6e64f0193777 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -249,10 +249,7 @@ struct spi_device {
+ static_assert((SPI_MODE_KERNEL_MASK & SPI_MODE_USER_MASK) == 0,
+ 	      "SPI_MODE_USER_MASK & SPI_MODE_KERNEL_MASK must not overlap");
+ 
+-static inline struct spi_device *to_spi_device(const struct device *dev)
+-{
+-	return dev ? container_of(dev, struct spi_device, dev) : NULL;
+-}
++#define to_spi_device(__dev)	container_of_const(__dev, struct spi_device, dev)
+ 
+ /* Most drivers won't need to care about device refcounting */
+ static inline struct spi_device *spi_dev_get(struct spi_device *spi)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.49.0
 
 
