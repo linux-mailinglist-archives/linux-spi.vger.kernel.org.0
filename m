@@ -1,70 +1,92 @@
-Return-Path: <linux-spi+bounces-8235-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8236-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0094AC0A21
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 12:56:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E839AC0A28
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 12:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DB57171665
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 10:56:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 055DA1BC2025
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 10:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9445317BB6;
-	Thu, 22 May 2025 10:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E5C6288535;
+	Thu, 22 May 2025 10:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJc3URsz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2XZBffpV"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7038033DB
-	for <linux-spi@vger.kernel.org>; Thu, 22 May 2025 10:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1430289E11;
+	Thu, 22 May 2025 10:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747911369; cv=none; b=AXfuUOfJRz3106Omr82Bta3EouRp5s/36ANBis6ooh7wdgfhi8GQmAsQYj01ezzg5N6PqnaNwVc7XMRxFFpL4Inrhh/WN/f9z2HrzOEA1yFEL8YaJGHggIFNdhXNJhcEPvSq2dQyCl1xIgRjFHp59+3JUliP7U2ljMnW2kDGvjg=
+	t=1747911450; cv=none; b=lBhMnHE+m5+pio7hQpfVA+n/LXDsHhJhuwwJmiTsnSkVHV45Dzzpa5qimWTUfaRiJZI5UPe+EMvQ+uI2TSK0HMtqUj5fxRVyjDXAEIwxoAHKXxe9TVoSnYg8D0sq+LqCgySiwzRZL0nhbx3f9tciuJ+T53UwvRdJ+72Og5JDhHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747911369; c=relaxed/simple;
-	bh=HxNd6Qu4OweVVm1Am0BG6c+oH2ze7RMGDe4rNUI0jOY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=S140zpSPQ4XsLfvqNWrqwDBN1cg9llsVzLvtWBkF0Z3AbNAJYKJq1mkwVjwJSVrrQj1qC3DOBk34xhXZZpqyyEWYrpfVKDNgn6+RWujUUeFQe4HRXp+3rgQZ7W+ojgbmBfx3KuzoZ9skO4cdaoaKf842lsuZp927ll+DMaDH7XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJc3URsz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB28C4CEE4;
-	Thu, 22 May 2025 10:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747911368;
-	bh=HxNd6Qu4OweVVm1Am0BG6c+oH2ze7RMGDe4rNUI0jOY=;
-	h=Subject:From:Date:To:From;
-	b=VJc3URszRWhDl89vBoqz0hlM6i10Dq2gAgk02o7Tn7/bX/7MTdsO36vrM2Aih4UJd
-	 ODGfX2nwBusTo41YYVbXtYvmhH8RzArkocV4fUqWKmbK6m5wDaa5lLmNNefMwzjWS7
-	 cafCLcVCF90hPmQJaumRIUec1lnOgM5OqqFiFgq8V65G2rOqInXv7e6q18SAWNF/kP
-	 bYVCwEg0X8UcfxVGAiKZ/WUluGeWKsUIsfdLpLbZj/8DHziqHDsqoR7fR4fDd1HYQ9
-	 sl/tIpH4unogLaBEsNlZ5DZVJGP/LrIXTwSZUdyRYNPOSKfnYs1bfK3rx3Vl17MoOY
-	 aAisUhf2G8uxg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7454D3805D89;
-	Thu, 22 May 2025 10:56:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747911450; c=relaxed/simple;
+	bh=/w2C647Ki1Ko/omjghXi8LGBFeBgUweyzHfDIxNLXoE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NVwmwqjWP/R7fgt174vsn8zQQGbS1xx9POpyNy82tLoKFoEdcLXeufWaVdyNNZ2vLpluLVqJhqzgOjaxvYdxSsalGLluE96udIrn6Mv46fQeu1EJNOt9x+dpDQUvILOL/APOzaMq7GZRC6hLWcGC+cDMxunijv/RRvffFoNS1ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2XZBffpV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB53C4CEED;
+	Thu, 22 May 2025 10:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1747911450;
+	bh=/w2C647Ki1Ko/omjghXi8LGBFeBgUweyzHfDIxNLXoE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=2XZBffpV30J0Onf55Twmzqk+YpDldKg0KzeOvia+dFe80KUE/yzQcWxszNXatz6LK
+	 nTVV2rdmRaiIAuPAKsdtadRGQrdeJgyWwioVf2j1dp0rmiz6a7tnw7kQ/8wUB1dc//
+	 RpAYU1r3o2GhLh+Ut56eIMFqYQpL9xs3JYg3E2O0=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [PATCH] spi: gpio: fix const issue in spi_to_spi_gpio()
+Date: Thu, 22 May 2025 12:57:26 +0200
+Message-ID: <2025052225-scallion-ritzy-dbbd@gregkh>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Lines: 31
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1163; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=/w2C647Ki1Ko/omjghXi8LGBFeBgUweyzHfDIxNLXoE=; b=owGbwMvMwCRo6H6F97bub03G02pJDBn6zGJ/5EpTgpf+kRC5sPDUaz/75tmzFn39xLyzss3HN 2+n68aejlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZhIaCzDPJNYs3h2u8iPoQ8y 7IL7Nfmlrdv/Miw4G8A8t5t1/v9TbovU/i0Nk5+4pvAlAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174791140406.2830333.17865192085931864461.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 22 May 2025 10:56:44 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Latest series: [v2] spi: dt-bindings: cdns,qspi-nor: Update minItems/maxItems of resets for Cadence OSPI controller (2025-05-22T10:47:45)
-  Superseding: [v1] spi: dt-bindings: cdns,qspi-nor: Update minItems/maxItems of resets for Cadence OSPI controller (2025-03-26T11:37:31):
-    spi: dt-bindings: cdns,qspi-nor: Update minItems/maxItems of resets for Cadence OSPI controller
+While the struct spi_device * passed into spi_to_spi_gpio() is a const
+one, the struct spi_bitbang * that is retrieved from the controller
+field in the spi_device is NOT a const pointer, as it is coming from the
+spi_controller_get_devdata() call, and then passed to container_of()
+which would strip off the const attribute for no good reason (i.e. if a
+const pointer is passed to container_of() it still is const coming out).
 
+Fix this all up by properly declaring the struct spi_bitbang * as not
+const.
 
+Cc: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/spi/spi-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-gpio.c b/drivers/spi/spi-gpio.c
+index 405deb6677c1..ea5f1b10b79e 100644
+--- a/drivers/spi/spi-gpio.c
++++ b/drivers/spi/spi-gpio.c
+@@ -46,7 +46,7 @@ struct spi_gpio {
+ static inline struct spi_gpio *__pure
+ spi_to_spi_gpio(const struct spi_device *spi)
+ {
+-	const struct spi_bitbang	*bang;
++	struct spi_bitbang		*bang;
+ 	struct spi_gpio			*spi_gpio;
+ 
+ 	bang = spi_controller_get_devdata(spi->controller);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.49.0
 
 
