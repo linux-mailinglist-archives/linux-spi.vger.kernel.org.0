@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-8230-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8231-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 110DAAC08A4
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 11:27:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F885AC08A7
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 11:28:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7F014A0F73
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 09:27:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 595291BA83EC
+	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 09:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B126286D67;
-	Thu, 22 May 2025 09:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42FCD2882C3;
+	Thu, 22 May 2025 09:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WBBPFL3V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJlxGnYD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F573286D55;
-	Thu, 22 May 2025 09:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171292882B5;
+	Thu, 22 May 2025 09:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747906059; cv=none; b=rXJ0e0x4wmq4z+EdgcLeTnr03qDjsBzfEq7hrp3qZP/zgK/xs4t50ZS4VZEghaaksVUvyUOcZPdVe4eQvGLk+vEwNMolr2DZ8Cuzw6GCXnXaIOnddJ4icaGY6QlcV1aAIR/MSx4Xmu494GE8bS1zCMR77DcFYEGlSnyd/W5CvUE=
+	t=1747906061; cv=none; b=uSFQsfuUtOEvgMFWQl7laJ0WLmVeNPZWGhod6icdAnJsj8EwgnK7CXLe8LUeZT3FFy6g/cXQ+u1/Msg2K2aPKVwlWkbE1LWEhTSJIIgkpGRxeyEyFcfyK+gNF01hnaIni2VUIrEUriad1Yx6IaUTc9Ec80FWtXShdGQkAI/9NyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747906059; c=relaxed/simple;
-	bh=CakTWiRTuc1kwxhluKVp8AMxsPKiZuuQKUFMa9udh6s=;
+	s=arc-20240116; t=1747906061; c=relaxed/simple;
+	bh=8zYFm2/+iwmpkOGr5JNANwTIY7S1T/GRs1rvV4bxXfg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=oDFyod8DbMTgd06vXduSxZK9+Q+HtWL0P4mFaPZF5iWCrTyVFdNow2pDKVcmQs7qWzg/DKhqtyBkqRipdWnkxp0j8Pp++P5X8adv2549rbO/axyYbSosyJs2LCJJ0XoRACD2hhX3ZZ0QgCzc6uTWRtl8E3W4ps9hR0hVGSpU5s4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WBBPFL3V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED8CC4CEED;
-	Thu, 22 May 2025 09:27:36 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FHD4i8FWJyDwYodQ9gRXvbtLLG9ujBiws8oDb68FcgQ1OJ0YqHF31Q6IsTTnTMa5YgfE0FJYZO+lQAb5DOOLQ0KKLooz1u+D4q0oTU4NPa3HnG8+yLV0cTK5UgUbuUgpQiP0zv8DzNh6QB6TK8jXp7VpN1KbkTlGqxCB31FbsDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJlxGnYD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E29C4CEEF;
+	Thu, 22 May 2025 09:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747906058;
-	bh=CakTWiRTuc1kwxhluKVp8AMxsPKiZuuQKUFMa9udh6s=;
+	s=k20201202; t=1747906060;
+	bh=8zYFm2/+iwmpkOGr5JNANwTIY7S1T/GRs1rvV4bxXfg=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=WBBPFL3V+XOLjxC8hQGucC04A2kD6Kd63bj7dTwhvUsvlh+lI9bpYNiOH4qUdQrCZ
-	 9Tl1NrptEO+2ekEMfcO9Fc/8L4ZMgCxooC91YbjImqKGb/dChknJXAukPRoLmkB6lv
-	 MWvSLnkxN+x25EsrnTcwloEG/N/o6PNsPY4wQbHItrtZP6tCdV/hl3Sr3D7gjeE6fx
-	 Ot7gul2PK8eru4TKTsF48l6uYNGe0bFPX+YFoQJm+x8dpjYNjKeFKmy1tnGDsO0WgJ
-	 16fvstYqwuFJyMc0thiU/DgHw1CmR+WNTmmucrCYPeU3TIguWiT09SwMvIwNsw8375
-	 lG/yYna/ei1Ow==
+	b=KJlxGnYDHsrrJJ7Q69yDauuRz6o9ebRYVFgSnPSy+ebfpVhSFcMMLuBM8O9H755qs
+	 YA1B7c8dewFsFnuLE8hkZ06+1iTRMEUl0yVqMyIH87X8mcw+vKbHuqFYJLoJF9UNhX
+	 pJ+KBxXS63nSf44Jjr8c08yznZsMYzbYfzFpqES4JjrD050JyR8MGf0ZSXOxdkw8HS
+	 WiZTo7zgIJtf3gU9kB17C8j64hdG0VrPa+X1mJezVp4EyemGXO8iNHLr3j5M2s9/LB
+	 KOc8LJElLUCh5yVraqU+F4GmpWnqzi0Yla9yFyHzEWUiJkx/vc60yNwZPNloIrMIXP
+	 WRZsmR+GDYIxg==
 From: Mark Brown <broonie@kernel.org>
 To: Gabor Juhos <j4g8y7@gmail.com>
 Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, 
@@ -48,12 +48,12 @@ Cc: Md Sadre Alam <quic_mdalam@quicinc.com>,
  Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
  linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250520-qpic-snand-superfluous-params-v1-1-86dd4963e90f@gmail.com>
-References: <20250520-qpic-snand-superfluous-params-v1-1-86dd4963e90f@gmail.com>
-Subject: Re: [PATCH next] spi: spi-qpic-snand: remove superfluous
- parameters of qcom_spi_check_error()
-Message-Id: <174790605671.30110.1298547023446316402.b4-ty@kernel.org>
-Date: Thu, 22 May 2025 10:27:36 +0100
+In-Reply-To: <20250514-qpic-snand-error-check-v1-1-c0ebd3aae72a@gmail.com>
+References: <20250514-qpic-snand-error-check-v1-1-c0ebd3aae72a@gmail.com>
+Subject: Re: [PATCH] spi: spi-qpic-snand: reuse
+ qcom_spi_check_raw_flash_errors()
+Message-Id: <174790605877.30110.13985629144771079611.b4-ty@kernel.org>
+Date: Thu, 22 May 2025 10:27:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,15 +64,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Tue, 20 May 2025 21:08:56 +0200, Gabor Juhos wrote:
-> The qcom_spi_check_error() function determines the errors of a previous
-> page read operation solely by using the cached register values in the
-> register read buffer. The data pointed by the 'data_buf' and the 'oob_buf'
-> parameters are not used for that at all.
+On Wed, 14 May 2025 12:16:38 +0200, Gabor Juhos wrote:
+> The qcom_spi_check_raw_flash_errors() function can be used to
+> verify the flash status after raw operations.
 > 
-> Remove the superfluous parameters of the function along with the related
-> local variables to simplify the code. Also, remove the variables from the
-> caller functions which became unused due to the change.
+> Move the function slightly up in the code and change the
+> qcom_spi_read_last_cw() function to call it instead of using
+> an open coded implementation of the same check.
 > 
 > [...]
 
@@ -82,8 +80,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-qpic-snand: remove superfluous parameters of qcom_spi_check_error()
-      commit: 0f529570ecaf99244dc86b8af13618f0d07b0e44
+[1/1] spi: spi-qpic-snand: reuse qcom_spi_check_raw_flash_errors()
+      commit: 4026c6b51cb9ffd1eea2206191552f8aa3cb55ea
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
