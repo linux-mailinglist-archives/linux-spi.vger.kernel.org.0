@@ -1,79 +1,80 @@
-Return-Path: <linux-spi+bounces-8265-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8266-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F0BAC218B
-	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 12:55:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA2D5AC218D
+	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 12:55:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8285D7B3AC3
-	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 10:53:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD8D13B06A5
+	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 10:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F1A22A7E8;
-	Fri, 23 May 2025 10:55:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E2822CBF3;
+	Fri, 23 May 2025 10:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3oRe6cP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9uB0jon"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E8B14A627;
-	Fri, 23 May 2025 10:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E562F14A627;
+	Fri, 23 May 2025 10:55:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747997700; cv=none; b=Y4lrlpyt1KmA54hMQ6PAklylzLwmdA/hYYx8YpVV5z5ewlVBP97mjGH6+9usqIM+8i7D8sMWq0TloUte70BLMlCZauhwc+qWhHeLYYYaLWiEgezMUxQcvtMpV//YzVw4EOWkCaK1y9AWXcXDpjSFhn/cGycYyLbWgDsCC/5L6p0=
+	t=1747997706; cv=none; b=nfddHgN+FnfmrDigfOAjlhctrpq/8LsylvAPKbpp2VLw7JHFxOx9wmVQ97oFLj94IMbDLoY/tXoa5vpbrzrH1rnLnXP4pq+X2sYnybBXFZN397oVCAJ7iYNsdCnRVI5aUnc71883DiSPgJoYsyt+JD8Z/pN7qAwgDI46NY22ge4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747997700; c=relaxed/simple;
-	bh=PDAjNrHei5clcEsWtlb1tcKXX5+6Ez534sPDENqfREs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DkzLCqVhqDKzY4liuW5r/IqGrY98KzWqKXbTLoZlr5sLQrkL8S3zsEJAFOvfrMbaxLeNevbdBO/Vl5k/xH3uziIwIpJcgZnW/dJbSIT3+inAXkqEBWqO9EqHNddeIH518fYWRQ6A3rVyD1ODaoVeJrk5GbZnT0v1G/ijDlk1q/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3oRe6cP; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1747997706; c=relaxed/simple;
+	bh=B1L+ns3J9BEA46JOnVmHJRQ+0e4FHF2prsHtqzS74ao=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=S4c2sX2crHWjqZR8LxPIYtTXb1sLBrD06qVd0FV1kNLwt64tgwns8vPyOBlBluE2sO8J0NwJaGihH91OOpKb0ipgZPXVijNcM22b5EJ1okawvzVNNmameaM84X7foV2PbghlSesFYJ7pDQ3efBvGpQdrm7FVm8NUbyzfFRZt4G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N9uB0jon; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-74068f95d9fso7863302b3a.0;
-        Fri, 23 May 2025 03:54:58 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-73bf5aa95e7so7922722b3a.1;
+        Fri, 23 May 2025 03:55:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747997698; x=1748602498; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gx2NMAGILchCpYDTM4FKpaWOrSAXV5ZVZLo5ud4chIc=;
-        b=d3oRe6cPvZ8ZrweVI2dd3kNXjYc/BzsbSi4hnuV/n7AdfC37EWEpgnVnt3AkWf7fgo
-         j7dSlERAEnKt1eHD65XMzYUuHyqtpYVGTeQMbzHIHhgEoAYROrY21wgmBMsgBx4Aaqp6
-         DkZXfE4XmMOCqaHVeF7eX6Y42n2AscB7WY0AVKQwh+hf4XBzXAvmBVKLvaB9QM/Y4z3O
-         VLeZcAcm4G4sAFSGbWh9FNeUbaRi9iiwbCWbxhpI2p9CWRYfznVzdNkwcZDV10ouJnbs
-         yMv+zdYnIJ6+DyesmeFSvQRUqEGJjeUB6MsBefb7tdrFLOQoRLjDTPK35kZ6FUKEAX+i
-         VpVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747997698; x=1748602498;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1747997704; x=1748602504; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gx2NMAGILchCpYDTM4FKpaWOrSAXV5ZVZLo5ud4chIc=;
-        b=UA9HZmmjgNGiZoEA/UkhiTJcsq0P7T2bqqaLn9TogbqNyCkfrM4EQZOE0558zZTHBF
-         7es2jpRT3ixTv0DPOto/XzWoDnVZOcg3//7tW0D0Qu8eP3zaWWe3kvG1vVORoSs0ywLW
-         OigU6zkdEJuHIkubwonAGS8YRo2aEQvDSiums5O5+4Sa1KhjKdribsF+d4TasqSrLies
-         ypqAJ7umrM4KmodIozFuzj36QfrvzqTVZV81ZAaa14a+rbMQXhsd9aQGGWlks2j/qmrn
-         94UYPQ5TbGuBrHW9880bzBnOhQriO0aDucY9BhSo2ruKi23ocuL8XEAOg433p2CGpQpB
-         ee5w==
-X-Forwarded-Encrypted: i=1; AJvYcCWTKGgc6KfPtHqpiEiqs9W3u1kQHFK1CfXE0J8kT6Rq13OUhB8+CPLTgy/AkKrlX+vqrqMGoEAGopgj@vger.kernel.org, AJvYcCWbxrhQKDy1PSwlUTX7GLRE6QERB1RqMDAHvSZeTWksstd+KQdyrZXDNZU25MuYVdR44jD2n6f3BB9Z+O+W@vger.kernel.org, AJvYcCXXBlCaKJD8BqyAwD4HTNGdJkRahZ+H403ZP+M1LY/BL2lH17Q9zA2kdJCv3EUeUDShUWEeD6GzwNFe@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXY23TVsHdXVONrYq+TQeG6X9TvhfxtTdFzx7lDBDWSo6rMX6D
-	3F1yHPHQQsG2nndt80dSUNWzTsEarM/zi9oVMTxHPbVW/ZYMVV4AhlqX
-X-Gm-Gg: ASbGncsjNqeWa2NN9l4Z+ncUqVT8ceK+S5fYvkEdsTVc4yCEtv5iJYxDtiLERqKgEAA
-	1qKMZzNIQNLcr27KPpuLPiRbQbOpnvdDAd47OjXGiIZZEHLRKAix2jajopYlqM0wvcDvpY/S934
-	7Za2t+TfZtDT5CM2g8VRt2g3xzWo7++RvU0I9/UwpPF/ybh/w1lkvjs6LfMsCUY6Mpap3qjKoFz
-	Fyf3/Wcp8l+DZPmD8A5bI+YXJFXutS3zcOV99eJetGc26t9C4AC9XghaHbIMdtvVaPkl1ZrhPro
-	kIMEFT1NxXNxn4Vsu204gY8h8fOZ2oD33pIiSLvqTAc=
-X-Google-Smtp-Source: AGHT+IFypCY7WCS5VRqKJwgRs1MNVp/Tllo9WTcuJPwUOgHY8A/NI05aS1ZGOdCAv2mrHaxVdZW0kw==
-X-Received: by 2002:a05:6a00:a06:b0:742:4545:2d2b with SMTP id d2e1a72fcca58-742acc8d18amr40326934b3a.3.1747997697689;
-        Fri, 23 May 2025 03:54:57 -0700 (PDT)
+        bh=Jn/O3K1DYv29m3uWPUXSAZ2bq2VSrL80s8QgFG0aSI0=;
+        b=N9uB0jonuhHxpSvqCVpIo7D7PtHUtaWFDdRCgj8c8HxwdP3tnP87fzDzsM8kEghi4C
+         R80617PQaRlKhGgZVPNI7tOSv+N+Api/SB9P9CFOKODzm85+ZMEksHapGd6wFwGvPvhm
+         Oz1e49rhgyWYq6Io4FnOqt3cDXUI0R8Y5OkNX6pRNb0ZAHEZAgLLOZ6xrsP2OJyy2AoZ
+         57zpY9wvvjMPULDZjmmaJdrHG1pvbdnQPXiXXberAPTr4bVulCFD3WVI/9oHRTy7bMMn
+         KXibdi4fgKy0MzNhtm2NYWjKv8yXXlmNwFTpsEq2zZtjaF+SjNOwAEW696RI8fGX9wfR
+         ciUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747997704; x=1748602504;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jn/O3K1DYv29m3uWPUXSAZ2bq2VSrL80s8QgFG0aSI0=;
+        b=bMItrC4ETXsuy5wZCfc/Ce20FJYVn0Qj0wJDhI8qepiD5vQcANC1zDTBGkws3Goxpr
+         UTqOYCCZoqueIP6NyFIGR78mJvnIPF4A+TlD87NnsUk6UZtuIRnESxdJL5fT/fpj1xJ4
+         9tkWuNIgWl/BPukSvZV47AkTOUq7UqM5oaJ9IKYqJBcTXaIdYoYWhHuhFbQqaxgJM5uz
+         QGTymem1/D6lekMH5UvJ1vkuJXQjEhjxy97oihCC/K1Z1mLfZg6UUaRbDYovQFBWJPzQ
+         B67PxtUFMaiUvRuPyhOw7It9z/LOzmBeESzoRTVfOQtZiehfF8DCV6Gg/hQSGBlb9Dav
+         IpiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7MfvSMeJ0fARM5Z/rReqOET0g6gvRsq2SeHvAWnd3c95ln0X9AIy5EElBOnJdzJzDIetcTR5O33hENns4@vger.kernel.org, AJvYcCWh4k2yy6x5UiIbjm9eoVBhw9fKOYaf3+5pgS7FvHJWj39/5rEkLWZg7LF6j4bRgHdKp+QQL6NLJPfX@vger.kernel.org, AJvYcCXZKNlDs6n3oQnoeRvg90h1mwZEoP/Jrdmh+bnUwBbCSSjKimV7BM+Q5TdMawo2PTHm27Y5nG9CS8zp@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl+ITJAgEhW5sKUjUJEdmVVmVoeQghp29SE0T1+vEiRqhIUJyw
+	2k0EGV0b3Ngir+jm3Pg4FWg9z73cMgUs4IvbR4uViC2UXsjrcTEauMJw
+X-Gm-Gg: ASbGncvP24PcG6bJCHVQ53r+1PK4PIO34tXYf6UvXBTpUTc6ed6IgFP4k91JWpL8PT0
+	V2SykYsiIaWO/LIzJ6JR98RhpjLgMZDGgZBZ63tfhG6CukWKvy9aoqIV0Hvzl4Ui8347XjLaIq5
+	QaWxmtrfCbt5C4x1LfRi7uGzXS9Usft0tGw/DKECbeDhOx80KTRAt3locQTAKa3tQtr5s+CJ8GF
+	PpjA4tnTP4FlUXNDCHjLibxSjuenh11Fsr6hMwKg0dyiaiEqpyr+YpewXZUYkbo781yJA8+pSoN
+	mqzW88Wc+lSUJTfFEwDSmxkLeWXvZaKRW7mqUF9QsWQ=
+X-Google-Smtp-Source: AGHT+IGb/whdK5OVcrGLs3cyAdkZSpq6Qu930wT4pSb23mGATkPV/R5AcFIK2e65lJrScVQ63J616A==
+X-Received: by 2002:a05:6a00:4648:b0:742:a0cf:7753 with SMTP id d2e1a72fcca58-745ed842a10mr3899729b3a.3.1747997703789;
+        Fri, 23 May 2025 03:55:03 -0700 (PDT)
 Received: from [127.0.0.1] ([2001:250:5800:1000::3fc8])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9739cdesm12623687b3a.82.2025.05.23.03.54.51
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9739cdesm12623687b3a.82.2025.05.23.03.54.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 May 2025 03:54:57 -0700 (PDT)
+        Fri, 23 May 2025 03:55:03 -0700 (PDT)
 From: Zixian Zeng <sycamoremoon376@gmail.com>
-Subject: [PATCH 0/3] spi: sophgo: Add SPI NOR controller for SG2042
-Date: Fri, 23 May 2025 18:54:48 +0800
-Message-Id: <20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com>
+Date: Fri, 23 May 2025 18:54:49 +0800
+Subject: [PATCH 1/3] dt-bindings: spi: Add bindings for SOPHGO SG2042
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,10 +83,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPhTMGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDUyNj3eK0dN3igsy03GRd80RLQwMjS4NUSzMTJaCGgqLUtMwKsGHRsbW
- 1AHAnD71cAAAA
-X-Change-ID: 20250523-sfg-spifmc-7a910290e964
+Message-Id: <20250523-sfg-spifmc-v1-1-4cf16cf3fd2a@gmail.com>
+References: <20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com>
+In-Reply-To: <20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com>
 To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
  Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
  Miquel Raynal <miquel.raynal@bootlin.com>, 
@@ -102,37 +102,41 @@ Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
  dlan@gentoo.org, ziyao@disroot.org, Zixian Zeng <sycamoremoon376@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1747997691; l=922;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747997691; l=966;
  i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
- bh=PDAjNrHei5clcEsWtlb1tcKXX5+6Ez534sPDENqfREs=;
- b=CCKTQTavAwLlkuUXuY4stTPw/85OwemMYUtj6yfdOghqgply89hsXdfJBOkPcCTT9xLG068E0
- Ryh10IHN37YCfwX2Hooj7pBf4WL3JneGkc2cee05xx17dzdi6drcjE4
+ bh=B1L+ns3J9BEA46JOnVmHJRQ+0e4FHF2prsHtqzS74ao=;
+ b=5V4GegDuuILrVGuFqa9Oq5IP1YPnTcqKDhaZEcKM4DPE7MLjCwzBI7L8guAOu8jPUW7VeG0A6
+ DYYBa4K4hzZBp+BBJVsdr7nXYCILxF0QkTqDrfu3c77sijBT/HVcNQp
 X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
  pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-Add support SPI NOR flash memory controller for SG2042, using upstreamed
-SG2044 SPI NOR driver.
-
-Tested on SG2042 Pioneer Box, read, write operations.
+Add bindings for the SOPHGO SG2042 SPI-NOR flash controller,
+which is compatible with SOPHGO SG2044.
 
 Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 ---
-Zixian Zeng (3):
-      dt-bindings: spi: Add bindings for SOPHGO SG2042
-      mtd: spi-nor: Add GD25LB512ME GigaDevice flash_info
-      riscv: dts: sophgo: Add SPI NOR node for SG2042
+ Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |  6 +++++-
- .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 18 ++++++++++++++++
- arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 24 ++++++++++++++++++++++
- drivers/mtd/spi-nor/gigadevice.c                   | 17 +++++++++++++++
- 4 files changed, 64 insertions(+), 1 deletion(-)
----
-base-commit: 99d1d6293ed114e94253ec8b71f57b6c8d938dfd
-change-id: 20250523-sfg-spifmc-7a910290e964
+diff --git a/Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml b/Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml
+index 948ff7a096433a8c3c64cba13fc1339d18f6c19d..e083362e8f76f7a7582fd7b98c0b7a36f61577cc 100644
+--- a/Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml
+@@ -14,7 +14,11 @@ allOf:
+ 
+ properties:
+   compatible:
+-    const: sophgo,sg2044-spifmc-nor
++    description: Compatible strings for SOPHGO SPI NOR controller
++    items:
++      - enum:
++        - sophgo,sg2042-spifmc-nor
++      - const: sophgo,sg2044-spifmc-nor
+ 
+   reg:
+     maxItems: 1
 
-Best regards,
 -- 
-Zixian Zeng <sycamoremoon376@gmail.com>
+2.49.0
 
 
