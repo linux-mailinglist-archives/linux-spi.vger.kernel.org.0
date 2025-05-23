@@ -1,179 +1,138 @@
-Return-Path: <linux-spi+bounces-8264-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8265-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9018AC12A3
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 19:49:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9F0BAC218B
+	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 12:55:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E2DDA40948
-	for <lists+linux-spi@lfdr.de>; Thu, 22 May 2025 17:49:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8285D7B3AC3
+	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 10:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC6118C91F;
-	Thu, 22 May 2025 17:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F1A22A7E8;
+	Fri, 23 May 2025 10:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZL9UKNX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3oRe6cP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C970BDDAD;
-	Thu, 22 May 2025 17:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E8B14A627;
+	Fri, 23 May 2025 10:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747936169; cv=none; b=oLUHSzmqfu3H94nAJ6L3qEg+F2bKebAbyjjx0Gmz/EqVOrKjHy0Y3jiCPY43c5+FTSZ3aazm4qbrh6rCq1NKBWI7bIKkov1uECNuGECiHrl/vlZEpUMT8+2cDIVXb4+TbjgX0dmEfU8ir6b43oYn3THh9zchJTY50x6qjBRTViA=
+	t=1747997700; cv=none; b=Y4lrlpyt1KmA54hMQ6PAklylzLwmdA/hYYx8YpVV5z5ewlVBP97mjGH6+9usqIM+8i7D8sMWq0TloUte70BLMlCZauhwc+qWhHeLYYYaLWiEgezMUxQcvtMpV//YzVw4EOWkCaK1y9AWXcXDpjSFhn/cGycYyLbWgDsCC/5L6p0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747936169; c=relaxed/simple;
-	bh=v7g1Ex2cXiw8By3eneFXol0Fe6RHlOeOIGko9KQUZ4E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cc0Z88RgjgOe/d1EQ0zE7QzRegcsWfYgPpv+evcQDvgMfvGXI5NRQwYydtAmRR/M1N3FBJamybtHi8ErCR/lCGMCHeQ1YVlcQ/2hcXzrpoWxrH5fLpaIU8FEdGRdkoJOsWr/9dEKygr3kimNRz5I3C8935jV3/4PwvXsgCngb9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZL9UKNX; arc=none smtp.client-ip=209.85.208.41
+	s=arc-20240116; t=1747997700; c=relaxed/simple;
+	bh=PDAjNrHei5clcEsWtlb1tcKXX5+6Ez534sPDENqfREs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DkzLCqVhqDKzY4liuW5r/IqGrY98KzWqKXbTLoZlr5sLQrkL8S3zsEJAFOvfrMbaxLeNevbdBO/Vl5k/xH3uziIwIpJcgZnW/dJbSIT3+inAXkqEBWqO9EqHNddeIH518fYWRQ6A3rVyD1ODaoVeJrk5GbZnT0v1G/ijDlk1q/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3oRe6cP; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-601f1914993so7890723a12.0;
-        Thu, 22 May 2025 10:49:27 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-74068f95d9fso7863302b3a.0;
+        Fri, 23 May 2025 03:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747936166; x=1748540966; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UXlb98Jq8xguu+7ZKl/TCFGce1LzzWdMVuvQ7hjHTWY=;
-        b=jZL9UKNXfwsiKbbUcoFHOnEihhpGRJ9ZteH7Fzz1wA1OSmPEIeEK+iFnC1YKjWp9yd
-         gW/jdHi9DD9lSRnhECqnrCZHH2NFs0p48hfBUV16lOh2sGuZuHP5j+eXqcNiIlNvGlOa
-         qNRHfs/cgRPNunMxsSaitA2kvH/hLiMVcqsyivaHePck2k8+ux9xFSLYO0LqNJN1K21f
-         1I83vEfmuaaJVcRVNCgooUgc3LjcN58poaXn15ktg5d7Le+geLbiL51UYg5xoeBT3mhh
-         z+wX874NUM9FLkIbowF+Cax1KbB95poAp6tM7xMjgBJAXKUfw+TGqVkPdZ5F1Ap2R/6p
-         Iylg==
+        d=gmail.com; s=20230601; t=1747997698; x=1748602498; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gx2NMAGILchCpYDTM4FKpaWOrSAXV5ZVZLo5ud4chIc=;
+        b=d3oRe6cPvZ8ZrweVI2dd3kNXjYc/BzsbSi4hnuV/n7AdfC37EWEpgnVnt3AkWf7fgo
+         j7dSlERAEnKt1eHD65XMzYUuHyqtpYVGTeQMbzHIHhgEoAYROrY21wgmBMsgBx4Aaqp6
+         DkZXfE4XmMOCqaHVeF7eX6Y42n2AscB7WY0AVKQwh+hf4XBzXAvmBVKLvaB9QM/Y4z3O
+         VLeZcAcm4G4sAFSGbWh9FNeUbaRi9iiwbCWbxhpI2p9CWRYfznVzdNkwcZDV10ouJnbs
+         yMv+zdYnIJ6+DyesmeFSvQRUqEGJjeUB6MsBefb7tdrFLOQoRLjDTPK35kZ6FUKEAX+i
+         VpVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747936166; x=1748540966;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UXlb98Jq8xguu+7ZKl/TCFGce1LzzWdMVuvQ7hjHTWY=;
-        b=u2c+8ZCe29alzGKszyWKKAM/VNzS5TjLtwrm3Nj68wtMK5WfRBprdz3a9aG0qUSjQg
-         p9XnleURsYesFgqAvIbJU4nw5pNJay0SQ4gqIZQdbZ/CSP9YHMp3GEapOuXCvSt+fu0c
-         0/c62vTiVDQFpUJynREV+bujuN3h1Hc63Xu4lzHurpLqnc6GAzTQjh9yIyAaUzmJGamP
-         ydqHm4ZoAE3tyUNJM9IvWBnpkvnS1WglS15US3TtPiKk7rX110OLF2g/v01IcmpKJoHf
-         w0mzfQMDI/GXR8SLUh98fMZFmNyvSTpAKCFCJG4f8m4BBBVdU/ylLZsiE4LLr/lbKaly
-         0Hrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqENUIqVhHz7AwDZOADaAHYq+sbpj+T2AXMfqx02pEdMDQXWZRAMs8CHCf6Oj84P1TaoIa3Xkvlh52@vger.kernel.org, AJvYcCVabkzOQuCL3AWMEQMbkfwlPnJpG+00a2hjXBWMearOQqM/YHOvSrGqDP1TGHTYee5vZrN9Qr3drT2RJC7t@vger.kernel.org, AJvYcCWF7dkdpKMcVy6rOc2Hfm0nrKV9n/8S1bZB2kDtjhFV+GBel9QVHVPpEBA54B0QDzHA/1zAcnkBoD1cDZYC@vger.kernel.org
-X-Gm-Message-State: AOJu0YzklhJALih4pTVGTUSAnllQsM5FAHGEqMP/NpjDnjau8bewZSYP
-	PQOVkyvhSi/GsUInR59ugdvhT1luwHIX5q3j5PNGxUlF98ZKXZCFP5Gg
-X-Gm-Gg: ASbGncufOFEQhJlgiVe3fZyNEPx7Fy2SSt8QdB4Piuv9jcpCad8yb5eV1oEQ2VfrxcZ
-	Zkr4X+3U9ShYYX6KAFJLfk7uy3aXh9fgYNwxewUHrkej1PR5OLnRT23wd6oZaGcpXo5+HGr0jeR
-	XGd/KnsHZdA2zfD4TY3K6piiMaZ8jkYuv9v0Hyq/XNeENyA7v/72KbQhqvSr5ZcHY+0IQyKAfN6
-	aeqwj3DOqDQpUhSxWChehf1K/UYxjtQXso+Iq8Ze4l/RbToCapV8aT9t7lVllTUM+4FhF6O+ZTe
-	B9dD7wpAr10rgAlOWXiFR6DpscTUwjLgo5PG8XC584CJ6PVZOWVHVENBd6Rrj4zQcF7F8SIJnON
-	HM9ZU6C4j6novt1SL
-X-Google-Smtp-Source: AGHT+IEacT+OnQkIksGL3phaucP09y9PwnZSl4uyglfhmqkNpX/VieVElIyjZVOywJVl3/l2zAuGmw==
-X-Received: by 2002:a17:907:3ea4:b0:ad2:49b5:8e0d with SMTP id a640c23a62f3a-ad536b7f1c3mr2350148266b.15.1747936165504;
-        Thu, 22 May 2025 10:49:25 -0700 (PDT)
-Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad52d047c30sm1101122166b.6.2025.05.22.10.49.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 10:49:24 -0700 (PDT)
-Message-ID: <dec260e9-8874-4727-9211-de939991a344@gmail.com>
-Date: Thu, 22 May 2025 19:49:24 +0200
+        d=1e100.net; s=20230601; t=1747997698; x=1748602498;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gx2NMAGILchCpYDTM4FKpaWOrSAXV5ZVZLo5ud4chIc=;
+        b=UA9HZmmjgNGiZoEA/UkhiTJcsq0P7T2bqqaLn9TogbqNyCkfrM4EQZOE0558zZTHBF
+         7es2jpRT3ixTv0DPOto/XzWoDnVZOcg3//7tW0D0Qu8eP3zaWWe3kvG1vVORoSs0ywLW
+         OigU6zkdEJuHIkubwonAGS8YRo2aEQvDSiums5O5+4Sa1KhjKdribsF+d4TasqSrLies
+         ypqAJ7umrM4KmodIozFuzj36QfrvzqTVZV81ZAaa14a+rbMQXhsd9aQGGWlks2j/qmrn
+         94UYPQ5TbGuBrHW9880bzBnOhQriO0aDucY9BhSo2ruKi23ocuL8XEAOg433p2CGpQpB
+         ee5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWTKGgc6KfPtHqpiEiqs9W3u1kQHFK1CfXE0J8kT6Rq13OUhB8+CPLTgy/AkKrlX+vqrqMGoEAGopgj@vger.kernel.org, AJvYcCWbxrhQKDy1PSwlUTX7GLRE6QERB1RqMDAHvSZeTWksstd+KQdyrZXDNZU25MuYVdR44jD2n6f3BB9Z+O+W@vger.kernel.org, AJvYcCXXBlCaKJD8BqyAwD4HTNGdJkRahZ+H403ZP+M1LY/BL2lH17Q9zA2kdJCv3EUeUDShUWEeD6GzwNFe@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXY23TVsHdXVONrYq+TQeG6X9TvhfxtTdFzx7lDBDWSo6rMX6D
+	3F1yHPHQQsG2nndt80dSUNWzTsEarM/zi9oVMTxHPbVW/ZYMVV4AhlqX
+X-Gm-Gg: ASbGncsjNqeWa2NN9l4Z+ncUqVT8ceK+S5fYvkEdsTVc4yCEtv5iJYxDtiLERqKgEAA
+	1qKMZzNIQNLcr27KPpuLPiRbQbOpnvdDAd47OjXGiIZZEHLRKAix2jajopYlqM0wvcDvpY/S934
+	7Za2t+TfZtDT5CM2g8VRt2g3xzWo7++RvU0I9/UwpPF/ybh/w1lkvjs6LfMsCUY6Mpap3qjKoFz
+	Fyf3/Wcp8l+DZPmD8A5bI+YXJFXutS3zcOV99eJetGc26t9C4AC9XghaHbIMdtvVaPkl1ZrhPro
+	kIMEFT1NxXNxn4Vsu204gY8h8fOZ2oD33pIiSLvqTAc=
+X-Google-Smtp-Source: AGHT+IFypCY7WCS5VRqKJwgRs1MNVp/Tllo9WTcuJPwUOgHY8A/NI05aS1ZGOdCAv2mrHaxVdZW0kw==
+X-Received: by 2002:a05:6a00:a06:b0:742:4545:2d2b with SMTP id d2e1a72fcca58-742acc8d18amr40326934b3a.3.1747997697689;
+        Fri, 23 May 2025 03:54:57 -0700 (PDT)
+Received: from [127.0.0.1] ([2001:250:5800:1000::3fc8])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a9739cdesm12623687b3a.82.2025.05.23.03.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 May 2025 03:54:57 -0700 (PDT)
+From: Zixian Zeng <sycamoremoon376@gmail.com>
+Subject: [PATCH 0/3] spi: sophgo: Add SPI NOR controller for SG2042
+Date: Fri, 23 May 2025 18:54:48 +0800
+Message-Id: <20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH next 2/2] spi: spi-qpic-snand: add support for 8 bits ECC
- strength
-Content-Language: hu
-To: Miquel Raynal <miquel.raynal@bootlin.com>,
- Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc: Mark Brown <broonie@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Varadarajan Narayanan <quic_varada@quicinc.com>,
- Sricharan Ramabadhran <quic_srichara@quicinc.com>,
- linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250502-qpic-snand-8bit-ecc-v1-0-95f3cd08bbc5@gmail.com>
- <20250502-qpic-snand-8bit-ecc-v1-2-95f3cd08bbc5@gmail.com>
- <8aa3d4da-da3e-2af4-e0f9-cd56d6259d8f@quicinc.com>
- <c1729d39-9f7f-4c6d-b8a4-72dfee4bfca5@gmail.com> <878qn2nsa0.fsf@bootlin.com>
- <16195524-1f31-4968-a3fd-f3d24f1c4223@gmail.com> <87msbhezjf.fsf@bootlin.com>
- <007881c9-e03c-1473-d8eb-53fbad8c6a8e@quicinc.com>
- <87frh4ej87.fsf@bootlin.com>
- <e9f460c3-a575-1014-cca7-27f1d79024e2@quicinc.com>
- <87h61e8kow.fsf@bootlin.com>
-From: Gabor Juhos <j4g8y7@gmail.com>
-In-Reply-To: <87h61e8kow.fsf@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPhTMGgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDUyNj3eK0dN3igsy03GRd80RLQwMjS4NUSzMTJaCGgqLUtMwKsGHRsbW
+ 1AHAnD71cAAAA
+X-Change-ID: 20250523-sfg-spifmc-7a910290e964
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Longbin Li <looong.bin@gmail.com>
+Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ sophgo@lists.linux.dev, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ dlan@gentoo.org, ziyao@disroot.org, Zixian Zeng <sycamoremoon376@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1747997691; l=922;
+ i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
+ bh=PDAjNrHei5clcEsWtlb1tcKXX5+6Ez534sPDENqfREs=;
+ b=CCKTQTavAwLlkuUXuY4stTPw/85OwemMYUtj6yfdOghqgply89hsXdfJBOkPcCTT9xLG068E0
+ Ryh10IHN37YCfwX2Hooj7pBf4WL3JneGkc2cee05xx17dzdi6drcjE4
+X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
+ pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-2025. 05. 21. 9:52 keltezéssel, Miquel Raynal írta:
-> On 21/05/2025 at 11:08:02 +0530, Md Sadre Alam <quic_mdalam@quicinc.com> wrote:
-> 
->> Hi,
->>
->> On 5/16/2025 7:44 PM, Miquel Raynal wrote:
->>>
->>>>>> Interestingly enough, it reports the correct number of bit errors now.
->>>>>> For me it seems, that the hardware reports the number of the corrected
->>>>>> *bytes* instead of the corrected *bits*.
->>>>> I doubt that, nobody counts bytes of errors.
->>>>> You results are surprising. I initially though in favour of a software
->>>>> bug, but then it looks even weirder than that. Alam?
->>>> I have checked with HW team , the QPIC ECC HW engine reports the bit
->>>> error byte wise not bit wise.
->>>>
->>>> e.g
->>>>      Byte0 --> 2-bitflips --> QPIC ECC counts 1 only
->>>>      Byte1 --> 3-bitflips --> QPIC ECC counts 1 only
->>>>      Byte2 --> 1-bitflips --> QPIC ECC counts 1 only
->>>>      Byte3 --> 4-bitflips --> QPIC ECC counts 1 only (in 8-bit ecc)
->>>>      Byte4 --> 6-bitflips --> QPIC ECC counts 1 only (in 8-bit ecc)
->>>>
->>>> Hope this can clearify the things now.
->>> o_O ????
->>> How is that even useful? This basically means UBI will never refresh
->>> the
->>> data because we will constantly underestimate the number of bitflips! We
->>> need to know the actual number, this averaging does not make any sense
->>> for Linux. Is there another way to get the raw number of bitflips?
->> I have re-checked with HW team, unfortunately currently there is no
->> register fields available to get the raw number of bit flips. But
->> for newer chipset they have fixed this issue. But currently the QPIC
->> QPIC_NANDC_BUFFER_STATUS | 0x79B0018 register bit-8 will get set if
->> there is uncorrectable bitflips happened.
->>
->> For 4-bit ECC if 5-bit raw bit flips happened then bit-8 will get set in
->> QPIC_NANDC_BUFFER_STATUS.
->>
->> similar for 8-bit ECC if 9-bit raw bit flips happened then bit-8 will
->> get set in QPIC_NANDC_BUFFER_STATUS.
-> 
-> I believe the unrecoverable situation is handled correctly. What is not
-> is the fact that we care about the number of bitflips before having a
-> failure because if it reaches a certain threshold (typically 2/3 of the
-> strength) the upper layer is responsible of moving the data around to
-> avoid loosing it.
-> 
-> You need to identify the hardware revision that fixed it and provide a
-> warning otherwise, or at least a comment in the code...
+Add support SPI NOR flash memory controller for SG2042, using upstreamed
+SG2044 SPI NOR driver.
 
-In itself, neither a comment, nor a warning will help as far as the upper layer
-is concerned. However the driver can be changed to overestimate the number of
-corrected bitflips.
+Tested on SG2042 Pioneer Box, read, write operations.
 
-I just sent a patch [1] which tries to addresses this. I admit that it is not
-ideal, but in my opinion it is a reasonable tradeoff which can be used as a
-temporary solution.
+Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
+---
+Zixian Zeng (3):
+      dt-bindings: spi: Add bindings for SOPHGO SG2042
+      mtd: spi-nor: Add GD25LB512ME GigaDevice flash_info
+      riscv: dts: sophgo: Add SPI NOR node for SG2042
 
-For a long term fix, probably it would be possible to change the driver to do
-the ECC correction in software.  Although I have no idea how that would impact
-the performance.
+ .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |  6 +++++-
+ .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 18 ++++++++++++++++
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 24 ++++++++++++++++++++++
+ drivers/mtd/spi-nor/gigadevice.c                   | 17 +++++++++++++++
+ 4 files changed, 64 insertions(+), 1 deletion(-)
+---
+base-commit: 99d1d6293ed114e94253ec8b71f57b6c8d938dfd
+change-id: 20250523-sfg-spifmc-7a910290e964
 
-[1]
-https://lore.kernel.org/r/20250522-qpic-snand-overestimate-bitflips-v1-1-35c65c05068e@gmail.com
+Best regards,
+-- 
+Zixian Zeng <sycamoremoon376@gmail.com>
 
-Regards,
-Gabor
 
