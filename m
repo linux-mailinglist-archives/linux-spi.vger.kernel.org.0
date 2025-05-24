@@ -1,88 +1,89 @@
-Return-Path: <linux-spi+bounces-8276-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8277-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 728E9AC2B3B
-	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 23:10:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D29AC31D2
+	for <lists+linux-spi@lfdr.de>; Sun, 25 May 2025 00:35:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C37ED7A2A48
-	for <lists+linux-spi@lfdr.de>; Fri, 23 May 2025 21:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BBA33B5867
+	for <lists+linux-spi@lfdr.de>; Sat, 24 May 2025 22:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB8E19F12D;
-	Fri, 23 May 2025 21:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28921AAE28;
+	Sat, 24 May 2025 22:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nggQatbY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+qK9bo6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297517482
-	for <linux-spi@vger.kernel.org>; Fri, 23 May 2025 21:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90837482;
+	Sat, 24 May 2025 22:35:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748034594; cv=none; b=raSj2zRSDOk/Ozv/J3LbMjBwKwzkYe1tS3wSbjyyIxys6hwMXXAQKtYxixmZOx+xezYVFVF1cSsEypJBLiMie0bKlE3IdoWnHsx+y/+TUJN+P4DBg/x4e4NNs+SDKeOxRZzVtQcWRkN5227Yj1dUEjitnpAvZOB4568N89P5eIU=
+	t=1748126123; cv=none; b=fjlqjdUDc+ET3wYT2/ddRd5NsWZWXQRNhCqpQDhl1WnxY+xBv6mzmGK1ubClveDJ8H2kmrS7RlzlR/g/0UuvzylIKTj2H+2EiC3wdB3Nd+Vzj1BEn0izK0nxI2XS4QbsEdgL5jIXwwbG6Cktw5dmezEbYxut0xfUdDeISPkw12I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748034594; c=relaxed/simple;
-	bh=LTN7xUELxq7/xK7akYkV1xRsWOMXfxRpKFP1J0H4HKg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dkayfkXN043ozupvepBi7debVm7MAa9xiiaC6oK3C9NsbdBdDDv8yxLdaT2B2iYEqIZipBfu93kUYK3kcxiSNhMfG+650LVu5RDB75NQ5EGYAMh/tEyoO8+Sa9ABt45ldpVsA9/QQhpaPakZLAA5kNuNQ4TdXIGha6u3enXixgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nggQatbY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA47C4CEE9;
-	Fri, 23 May 2025 21:09:53 +0000 (UTC)
+	s=arc-20240116; t=1748126123; c=relaxed/simple;
+	bh=dU4AyeWP+INwsL+aKLcDRQiaDCQV4Vh2+r41wSbmyK4=;
+	h=Message-ID:From:To:Cc:Subject:Date; b=TawpeEQ7G97AEHZn5CBP4btzwzgOVP0zCjazdMNAzoe2YhMhc0hv2KMNobBdAVh6V0IGAEp5Z18HCj5o4W3r/JnWgw4ftYBsqoTcPTzgJsd2xBcPXWldCUTVsal8wWbVn4HjBYj1Q9vgWAnhw7ZvNIl6gOSz9ue0PmBKH5WsFlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+qK9bo6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B9DC4CEE4;
+	Sat, 24 May 2025 22:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748034593;
-	bh=LTN7xUELxq7/xK7akYkV1xRsWOMXfxRpKFP1J0H4HKg=;
-	h=Subject:From:Date:To:From;
-	b=nggQatbYtj5dOR9McdyuLIZBFwD1a2nln0gD59hMmbP/JTc5u32ADUDrv+NryTAb+
-	 fvr12tXSYillIJ5ikU6R7l9jLt1t3CW+RPAQEY+WzlZbMu/PaSzXY/ceS6y+NfVbnm
-	 HaXMTe4OcuUut9BQoYMJvukgafbetP4EIw/JOxcpP4G/GwUUc2fpDhamdZS7JFi955
-	 RWLE2CctfZTNWsG2ErlyVeuHFNfi/8zIYF2oRffGOy7HOCNqWIOy0cYU/7vKdqXOwb
-	 c6do4SB/iLyE2rAIIur49YVwIxwr5GrWH9dzLYFjrJzd/5wbSu02KEu3LMcw5qPI7l
-	 CMsqMzVquvC9g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1BA7380DBEB;
-	Fri, 23 May 2025 21:10:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1748126123;
+	bh=dU4AyeWP+INwsL+aKLcDRQiaDCQV4Vh2+r41wSbmyK4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=l+qK9bo6qbJ9gjihICWvh113OdRUA+orlSAbSxmdcmIn5gkmJ7WWBYOh36nerhDjS
+	 Ic43/ThJhBHuXCjEIW2Ssl4LRlpNq5rIe+BZvB6D+tN5OSp523Zpmsd6HwKx5ADdGP
+	 Uz+49w58tkV2lX6Jp55p2+rz17r6t5424WShsp97cELKJXrukcLx53ZKC88MQmVjGZ
+	 KgkJtZu2TRXr77ihIN1ftP9ckNUZcrewq5vZLFqyf+q/xjmy3jbSg06rlx/Rx8j9mb
+	 OKaEmR+DNPxyxKYZs6xYgudMD59OlsmugJ2W1WaokszaNpcJUXtrxNYKNwYQhlxch8
+	 0hzrPa+A/emFw==
+Message-ID: <cc4326d57c0588f9916731c203773a17.broonie@kernel.org>
+From: Mark Brown <broonie@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.15-rc7
+Date: Sat, 24 May 2025 23:35:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <174803462833.3730264.3324127836503021246.git-patchwork-summary@kernel.org>
-Date: Fri, 23 May 2025 21:10:28 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+The following changes since commit a5806cd506af5a7c19bcd596e4708b5c464bfd21:
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+  Linux 6.15-rc7 (2025-05-18 13:57:29 -0700)
 
-Series: spi: spi-qpic-snand: extend bitmasks usage
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=963347
-  Lore link: https://lore.kernel.org/r/20250515-qpic-snand-use-bitmasks-v1-0-11729aeae73b@gmail.com
-    Patches: [1/2] spi: spi-qpic-snand: use CW_PER_PAGE_MASK bitmask
-             [2/2] spi: spi-qpic-snand: extend FIELD_PREP() macro usage
+are available in the Git repository at:
 
-Patch: spi: spi-qpic-snand: return early on error from qcom_spi_io_op()
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=963373
-  Lore link: https://lore.kernel.org/r/20250515-qpic-snand-early-error-v1-1-681c87611213@gmail.com
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.15-rc7
 
+for you to fetch changes up to 7aba292eb15389073c7f3bd7847e3862dfdf604d:
 
-Total patches: 3
+  spi: spi-fsl-dspi: Reset SR flags before sending a new message (2025-05-22 16:05:26 +0100)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+----------------------------------------------------------------
+spi: Fixes for v6.15
 
+A few final fixes for v6.15, some driver fixes for the Freescale DSPI
+driver pulled over from their vendor code and another instance of the
+fixes Greg has been sending throughout the kernel for constification of
+the bus_type in driver core match() functions.
 
+----------------------------------------------------------------
+Bogdan-Gabriel Roman (1):
+      spi: spi-fsl-dspi: Halt the module after a new message transfer
+
+Greg Kroah-Hartman (1):
+      spi: use container_of_cont() for to_spi_device()
+
+Larisa Grigore (2):
+      spi: spi-fsl-dspi: restrict register range for regmap access
+      spi: spi-fsl-dspi: Reset SR flags before sending a new message
+
+ drivers/spi/spi-fsl-dspi.c | 46 +++++++++++++++++++++++++++++++++++++++++++++-
+ include/linux/spi/spi.h    |  5 +----
+ 2 files changed, 46 insertions(+), 5 deletions(-)
 
