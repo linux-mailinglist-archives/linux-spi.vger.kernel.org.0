@@ -1,79 +1,79 @@
-Return-Path: <linux-spi+bounces-8279-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8280-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A8D4AC3517
-	for <lists+linux-spi@lfdr.de>; Sun, 25 May 2025 16:15:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D6BAC3544
+	for <lists+linux-spi@lfdr.de>; Sun, 25 May 2025 16:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FB581894F42
-	for <lists+linux-spi@lfdr.de>; Sun, 25 May 2025 14:15:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24E6716EF4B
+	for <lists+linux-spi@lfdr.de>; Sun, 25 May 2025 14:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835D4433A5;
-	Sun, 25 May 2025 14:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94CBB1F540F;
+	Sun, 25 May 2025 14:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SXFEvqYJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MuZfsvQZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF09111A8;
-	Sun, 25 May 2025 14:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CBC1F4C8B;
+	Sun, 25 May 2025 14:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748182540; cv=none; b=Xd2Mb1vVilkXVWcAUDQvX09NIJMpPusF49yT08weKfQNsIiMpgQ/6RCI70a1Ynq+8B/CknlxCIkRDzRFhC4fYronmcC+7XVFNm3K0UQgtDmt2fFNYujtr8c8hqUHK8tWP3G5X7cPbWHAE9GLTxm9deVdUY1W/eL6/HbXj/QcWrU=
+	t=1748185175; cv=none; b=uvdUWl+YhxQOjLVl5kSuxek2MB+YdF+9+T9Oqv5H3OzqUBPsVxDjAmdfuQbbCEPKWrV1jkdRp/dNiSzbd2DdTRUdqh2QifNDvHeGA+RQBGTPzmMOK5unffXZTB3mrC3DSR/2WOfdVYLMNXbigJTu7Y51yyKotESwio1m2bviBFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748182540; c=relaxed/simple;
-	bh=wmGk+TBaNRY5nDS1rKgBaAEKQmTkq/N72QkhaTSVfWQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Z6bw3nkzwP0WGQHDNWc51fM44TLZBKl2TxN4WZvMGMS1yy1r3pGmkq63YoV+FFjzLqyAzFwCRrBrOrGNn4Zuq1sMB9afzPt2JTPow92M6q83FfFJ1e5dKMoLlXxXCi1AdYdUq/OGW5V9hqvzUsl4HjAS2HBP1TMr83vlir0ER5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SXFEvqYJ; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1748185175; c=relaxed/simple;
+	bh=5Rf+XH7wYeHA/1Ip4R0wdkjAiYWlYPDMcrHiaZwX1Ls=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DkAaspbeTl9ao1VlT21gdLgbUG3RTtmE46gESHH6wJUgh9T/qJui/wT6e6rF2GHof3vIla+vF00jMW7PKemZmzgwPqmJjuQ6uH7zLeRFk4sfaQCeVD7yjtIwMFLaWG+R8qJ+5BNin5vRMPg8WaCLHeKnVaDsxC/T22QvCOtwUAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MuZfsvQZ; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf257158fso12188975e9.2;
-        Sun, 25 May 2025 07:15:38 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2346765d5b0so690255ad.2;
+        Sun, 25 May 2025 07:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748182537; x=1748787337; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZcVpD8BamrnSmEiURzydGig52hbzqfoQ0eu8lXwHW4=;
-        b=SXFEvqYJpVDl44nMBmZMxxW5UfPMQVn2PeqSZnScTBbEO/VHdUbpTZoaS+L6kqSs2A
-         OfSVoMxKc1oEb0bTpYihWtnDmrlDHEe9mWOPo3/1qDd7ihtLIrQQRlu4l/9qgltSIRrV
-         IJX1TiLD7HpMMpD5+dLEnhlREgWhnauFadpPyXXErI2iNljISD4mm06LqZ1CPw9yZsgm
-         5oFIDUlNyVhS1tde3gdNGgwytywjKd+r4AJNARFApPiJmYvu968u+FNwxb69MRT9LnVG
-         rX69KjAdrPQUm+BA5GsADjwJ5qp8V+6vy3bLHMOw6Le7UH3wdQ8lcZwM5GPLjYjjorvb
-         SAKQ==
+        d=gmail.com; s=20230601; t=1748185173; x=1748789973; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FJSZqhft8oN88RWw/icnXyxnygR+ybrApsl+WofewtM=;
+        b=MuZfsvQZ+p2nbzlGJy8lWpY+ufgo188CVi7gR1vLuqQt0NsJHkqnVx7JnQvSJ1h1V8
+         NlqVBWJuJgAs7wFVVa1wnptuN/XZvRw2sTnrzBsVrUxAsd/5PYbgn5qkRVOoPRoJw1fv
+         ZkGcOwrKCzDZL9ui0THHuAAJaJTJ2Q9p+HBYYEWLYY3kq8s5UKfRLzwu0lTkGru3Y0jf
+         Gkmubel1Ef0uvSjhjNbgkDiZiVpwKGJnWBknH+kz2tTNPwk4Z361rBvB4weN8IHKmyUB
+         NOtvz1uzdWtA1FpJRGz35EQ8fnegPZH3cXBSZUIBf0prK1uOeDSYb6MgRI1+S288tUFF
+         jleg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748182537; x=1748787337;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1748185173; x=1748789973;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IZcVpD8BamrnSmEiURzydGig52hbzqfoQ0eu8lXwHW4=;
-        b=NLc88FHKEOR2/Z8DgaiqeLO5z1oVz9sZcmP39JVVo8zEooXWLyl87ZKvUU4NLIWACE
-         rQD4eNC1Zf20DT0FupuWPbyLwuW10GGCjhWq35JcdylZQ3fj2/XGivbe8VXbpnZR/6iV
-         KlniJsOtk97Nc+pjbJF422XIwTEKnnl4Al+EtiqY6tHDNCxsUnNhVtybIb/v8uaUFCI6
-         KJYpsyQyx/DxQVdR2oP3J79CprwXCaB8z8h01AQ9p5f7AA2H0DyMeTq7M/3m9heoNcNb
-         E24MkmXLCV2q3Z1l3OIRgTMpEwMELAa8Lkr6wWateYkytRoSeYbS/Cyxj5Ad1Epy8Q4h
-         qdUw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4hqgS2g/gZj46pWsVOltehy3OrImht1SJHc1NsQefeJ/hCTO+MyVtSbr6IuYFj0efiDaSCUBgPacTZUU9@vger.kernel.org, AJvYcCVlitl5+IcBrTeK4gxeZX16cvEqmJlW5I5CcrynsXob2K4GQkpceWX0ngTAzh+mrETCPwGR938lZ14jyicv@vger.kernel.org, AJvYcCW2CDkZqAJ4NE6/4shIR0ohoNbxVctmVSqSxlpAZ68YVUrItflyD0QvMQhFDhN48f7y+mXC4PiMKyQX@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+pkF+jTuTs+gU6/iskBUJS+CqqEZqZ1/iTw5ovpvkBwzUeY1J
-	sxIHZHLp96MEKCPTlQraEE7kWGnhyKlQ3yTAg7N58CZxlRfXppDvlMtkcDMXXw==
-X-Gm-Gg: ASbGnctR8rLLfY8mCzs1U7nfCkTBrmTGU7fpABqSeSNuH9fL1Uiu54Y0VPvWvJtKhrw
-	SZwLYE2/54GpwZR0f7pTE3JtVO/IpI/OIDMV22VBeXWA0aMVz25qsPABVbUe2EVJ3VoTMFkvnJl
-	lf+p8W2sCI1I0vhKOLjrF3Vb/zP3QACFXuAz2Upe+g9fuQfg3nFln70Iv60AQlJ6795C13at8Qx
-	YXP8YmPaJzbEAIRnqyliDdQKS9xrjhwzfBpKmQHocE2P3HZL15NP7/f3xzLAaIG7hLRVxONTHhE
-	0ooFVM3EwsUnikCtv6mNMDQZ5QHFqIGj0Z88QBYGlB7HTkGOdIpFn8WlYF20+I40EJ3Z9vc0l8a
-	WTATouUgRLolqVZI=
-X-Google-Smtp-Source: AGHT+IF1N9STeA39eRmGKM0ICfxskkUCsw4Lm8yXlQoDq9JXVNyUdGxuzaTax6DPjJd8skO1R3hUTA==
-X-Received: by 2002:a05:600c:8487:b0:442:d9fb:d9f1 with SMTP id 5b1f17b1804b1-44c933ed9bbmr55049605e9.4.1748182536874;
-        Sun, 25 May 2025 07:15:36 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-447f7bae847sm203607445e9.36.2025.05.25.07.15.35
+        bh=FJSZqhft8oN88RWw/icnXyxnygR+ybrApsl+WofewtM=;
+        b=nokYu0L7DuOaoN/rsuCKpmOGUk8CbEAeyHZTxqXXxkfM96fDfac32qF9wSoQtPVoaO
+         dlHAQ1Sd3W8/cDYL59y89Hchcd0MYJAgFaMS7ZwaLQlvTJrRRtO/V/syWe9Sdei+lTxG
+         B5m/ckQUkGvzVi8DRuf83Al4G3RibFh2icS19tkYslNqxQ2uYFFF6UDnxx/ActV8jKLu
+         UCkoralPVYZs0UFmvMqEvg5ee2LfYW8NpNTgCfepId+JAwXv/rhKBh8bRC48zKlNnG0E
+         687lE0dkKnf0Ybxiyz/c6tS+CIixdknV7oVkjO5HjF96fJrkpOXndcv09sL+fK+MVgMM
+         GhIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4v5p6hY3MkvyiJnAA9Cj7Tgtf9B10kFXzeCK704Pt2vlLRTn5xGypQnK2igHVZbDA76Lu5WC+yzh+@vger.kernel.org, AJvYcCVpoWVSILpOUBuTIx19c1o+ZnxzYAbbhCTpF7AbLJ46W0KxxU/SO3JBmtZE9Eoxl3SZK8ynuNjscSQq@vger.kernel.org, AJvYcCXkrGdwjci+BVxPPtiXTbhW5JpWHTXVJKtQK5J3ti4QF5XQcQl4a1lAFPifQwgPtpF2H8eK7P89eucxATX2@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF548OzgQfZWpBmBK7XTqP4QypK1QGvmvAYbNcmz7Xdw6CjgaO
+	FcV0K6U4z/rPanyTq/vhcyYC6Sg40fIu+gS9TAX/3hPWmyW9sTtEqIy4
+X-Gm-Gg: ASbGncu/zZlWiMWM0Vqxu9DX+3X3SktvDOB35oSojzwPy27LtT1lKLibPJK8Wz+hKmb
+	u/fjTwalur9zfIM1xm6vkLgYAsaHNDGFfGr/639ElCXhhUS30BDFiWUdqFt4C17fUzW20M9lYvV
+	VXuhZUIPAleoUYo33BPt0cXz0d8TrA7BNuKVKXotkL9//TauDDNTD9jfHSxmSr60Bs/DaPgx8bl
+	dIqRv23kUgFQqh7VdP2ouO7DRAJ3IKIWjgjKEvewg8CB66ALZZWus9PR4HwXxtGPWTKbzCDJwUq
+	uoS2eZTWMMW52W926ZfQ2Vg8lIzNRq3HCYcu35HDQHMh5jXroGc8/w==
+X-Google-Smtp-Source: AGHT+IGMA891Z9QcMnUNy37nLhB0qBQRarrDsxvWe011CA95ftR2WVjmKQaGn9yEpFYZJ8bwv7RwvQ==
+X-Received: by 2002:a17:903:32c3:b0:220:c34c:5760 with SMTP id d9443c01a7336-23414fd3f1fmr80933825ad.51.1748185172627;
+        Sun, 25 May 2025 07:59:32 -0700 (PDT)
+Received: from [127.0.0.1] ([2001:250:5800:1000::3fc8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2343f8e2fbesm12204845ad.250.2025.05.25.07.59.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 May 2025 07:15:36 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Sun, 25 May 2025 16:15:25 +0200
-Subject: [PATCH] spi: spi-qpic-snand: use NANDC_STEP_SIZE consistently
+        Sun, 25 May 2025 07:59:32 -0700 (PDT)
+From: Zixian Zeng <sycamoremoon376@gmail.com>
+Subject: [PATCH v2 0/3] spi: sophgo: Add SPI NOR controller for SG2042
+Date: Sun, 25 May 2025 22:58:40 +0800
+Message-Id: <20250525-sfg-spifmc-v2-0-a3732b6f5ab4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,51 +82,65 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250525-qpic-snand-nandc_step_size-v1-1-6039e9bfe1c6@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPwlM2gC/x3MQQqEMAxA0atI1hOoxbqYq4iU0EbNplMbkUHp3
- e3M5sPb/BuUi7DCu7uh8Ckqn9TQvzoIG6WVUWIzWGOdcdbhniWgJkoRfwleD85e5WJ0oxmXgYg
- jGWiDXHiR738+zbU+WbYWRWwAAAA=
-X-Change-ID: 20250525-qpic-snand-nandc_step_size-5606f4aaeda0
-To: Mark Brown <broonie@kernel.org>
-Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACAwM2gC/23MywrDIBCF4VcJs+4UNZdiV3mPkoWY0QzUJGiRl
+ uC712bd5X/gfAckikwJ7s0BkTIn3tYa6tKAXczqCXmuDUqoXvSqxeQ8pp1dsHgzWgqlBemhg3r
+ YIzl+n9hjqr1wem3xc9pZ/ta/TJYosLNODta1blZm9MHw82q3AFMp5Qsn912RpAAAAA==
+X-Change-ID: 20250523-sfg-spifmc-7a910290e964
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Longbin Li <looong.bin@gmail.com>
+Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ sophgo@lists.linux.dev, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ Zixian Zeng <sycamoremoon376@gmail.com>
 X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1748185167; l=1277;
+ i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
+ bh=5Rf+XH7wYeHA/1Ip4R0wdkjAiYWlYPDMcrHiaZwX1Ls=;
+ b=w3J+SqKPY7joyY5psDMZB+uFx1T6KaYC9OLGQsA2Thu53R2RBdIYrBT7sOAQn4ef7ZzEtCD6V
+ eLvSJDWaMGPAXW6EgcdiNWwkHqxEtfQ79HoahVSQP1t4TRogUPsN1fz
+X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
+ pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-Change the qcom_spi_read_page_ecc() function to use NANDC_STEP_SIZE
-instead of a magic number while calculating the data size to keep it
-consistent with other functions like qcom_spi_program_{raw,ecc,oob}
-and qcom_spi_read_cw_{raw,page_oob}.
+Add support SPI NOR flash memory controller for SG2042, using upstreamed
+SG2044 SPI NOR driver.
 
-No functional changes.
+Tested on SG2042 Pioneer Box, read, write operations.
 
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 ---
- drivers/spi/spi-qpic-snand.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index fd129650434f0129e24d3bdac7e7c4d5542627e6..037178d6576e82c3f19c3cc2c6c78f056dc488af 100644
---- a/drivers/spi/spi-qpic-snand.c
-+++ b/drivers/spi/spi-qpic-snand.c
-@@ -821,7 +821,7 @@ static int qcom_spi_read_page_ecc(struct qcom_nand_controller *snandc,
- 		int data_size, oob_size;
- 
- 		if (i == (num_cw - 1)) {
--			data_size = 512 - ((num_cw - 1) << 2);
-+			data_size = NANDC_STEP_SIZE - ((num_cw - 1) << 2);
- 			oob_size = (num_cw << 2) + ecc_cfg->ecc_bytes_hw +
- 				    ecc_cfg->spare_bytes;
- 		} else {
+Changes in v2:
+- patch1: Accept devicetree nodes whose compatible contains only
+  "sophgo,sg2044-spifmc-nor" to avoid breaking existing devicetrees.
+- patch1: Improve the commit subject message.
+- patch2: Dump the SFDP information to commit message.
+- Link to v1: https://lore.kernel.org/r/20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com
 
 ---
-base-commit: b00d6864a4c948529dc6ddd2df76bf175bf27c63
-change-id: 20250525-qpic-snand-nandc_step_size-5606f4aaeda0
+Zixian Zeng (3):
+      spi: dt-bindings: spi-sg2044-nor: Add SOPHGO SG2042
+      mtd: spi-nor: Add GD25LB512ME GigaDevice flash_info
+      riscv: dts: sophgo: Add SPI NOR node for SG2042
+
+ .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |  7 ++++++-
+ .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 18 ++++++++++++++++
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 24 ++++++++++++++++++++++
+ drivers/mtd/spi-nor/gigadevice.c                   | 17 +++++++++++++++
+ 4 files changed, 65 insertions(+), 1 deletion(-)
+---
+base-commit: bd8ad2bcb8ff8e7af8d35273a8194104ca9ba5c0
+change-id: 20250523-sfg-spifmc-7a910290e964
 
 Best regards,
 -- 
-Gabor Juhos <j4g8y7@gmail.com>
+Zixian Zeng <sycamoremoon376@gmail.com>
 
 
