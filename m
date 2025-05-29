@@ -1,127 +1,98 @@
-Return-Path: <linux-spi+bounces-8329-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8330-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FE54AC7E95
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 15:19:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F65AC7FF8
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CC033AEB02
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 13:18:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25C614E56C7
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 15:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47657225A31;
-	Thu, 29 May 2025 13:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6540922ACCE;
+	Thu, 29 May 2025 15:07:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bGpNNkhu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BOQS2LLM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCFA225404;
-	Thu, 29 May 2025 13:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D4001D6DC5;
+	Thu, 29 May 2025 15:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748524755; cv=none; b=QbITcokUhcS+NStmNadzgiYktK1KCTqsq6mdm2BtGOhHwDu+ghDldwmll7UaY/EUOvXiVimhsAfnx7k0DGO0s1/O1rMsfsV2DJ7oYVLHprXQaX51fW7ZP1kevFSgNfd8lA6fgrGNrsxTnx+S4Z2WXBOpvGlGk1Cwqm1LxXm1iUw=
+	t=1748531239; cv=none; b=XSlt1zsdRuByudzeF05UY7gLbljWC+za52oWF5BR4TqaMr/J/sO0io2x7rtPiFx+GaspgSJ2QYbyPEBCZIq50c/IHllnvxaeDcLXjLLZFSp6lV2/w1IuxrbalrECTSps9HW0dMjmD9dO5xBbbjGmVWUwkhrqL9YfHn1YbddLyJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748524755; c=relaxed/simple;
-	bh=0FPlq097Hcbp5iDFnnpPEASquDvr0YwVHBR1ZnHEybM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E4g2iG+mYGYySi+Vc4ndUJ+AIwFkgGas8acigmEncOq3Qp1P1MPOc216D6axVSIzKawZZn0oeZhCGGBGHYagQx5j4iRDr64wCCE/wkEEqcLCPGSfOwDTWl9otIkBXcmaPmUhVUGN2aUdzLAh6Ykq9ijsUjJo+YfWOKzeNHbRRMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bGpNNkhu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23FFAC4CEE7;
-	Thu, 29 May 2025 13:19:14 +0000 (UTC)
+	s=arc-20240116; t=1748531239; c=relaxed/simple;
+	bh=7Uuer2ZMLk3n/otquF9YSCMQXFD4ZRTJB33B7pmdhyE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=HSGAMtLtSlySQHDUjmzaO62CHpi353Rg8LEYT3BtGRdu/uiE8KCV9wnZDFvBVxURaZ43KGpdR/mwoAfGn4KPGfiPupbd/eVrZUDwGb56Hr0NahgZHFeclBt0E/Y+KzDZdscOjNJyIZjllDyrGaqSHKyQ5x/8uAOpdeuQjPoW8lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BOQS2LLM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A089CC4CEE7;
+	Thu, 29 May 2025 15:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748524754;
-	bh=0FPlq097Hcbp5iDFnnpPEASquDvr0YwVHBR1ZnHEybM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bGpNNkhuC+2wzq01z4Hg6fg9gFT4OCGfEH33UX/SRQFSxkuIstRSlH8RLLfCGnjJP
-	 uLFY9f0FoIssiPqFtK9kkSboA5flQ+CQUdZkyEvUwI67Iiz3100skqqJj3zl5NaBIC
-	 Vp4raynx46b7liwMGM5/alirwYlvjt0bi622Gh8UzySB9RP2UZTKFwyuOOACBZsj5A
-	 pSpwn6kw8oVm/aNX63avKm3Mz/WoaVdPCbAW/fWLnWIr9O0l/EKUmgRgHLwFGzWJCx
-	 /PUGfC1aBQdwZF90uxJqFFjJOuTfvP2Yg5RcNQ/yU4N0Y5PYuqmpr1pgm64RrXUaE4
-	 IXj77ReiEv96Q==
-Date: Thu, 29 May 2025 08:19:12 -0500
-From: Rob Herring <robh@kernel.org>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Herve Codina <herve.codina@bootlin.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 23/26] misc: lan966x_pci: Introduce board specific data
-Message-ID: <20250529131912.GA2798026-robh@kernel.org>
-References: <20250507071315.394857-1-herve.codina@bootlin.com>
- <20250507071315.394857-24-herve.codina@bootlin.com>
- <8b97e095-dbed-438c-9c6d-d3c2c5929fc0@lunn.ch>
- <CAMuHMdUVvOMavxSAKaSMOwj_zXR=5h8KrrqNg4RS2Yaw3WXpKg@mail.gmail.com>
+	s=k20201202; t=1748531238;
+	bh=7Uuer2ZMLk3n/otquF9YSCMQXFD4ZRTJB33B7pmdhyE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=BOQS2LLMsIB/LXRcGH2mvdym55pwQ2s1SGKjy6t7HhjIh7v0bh0xsB2G0pYCheYvF
+	 Rq/28ZPNJPWrOvBLC6+wMsmLLn4YHrRcFQ+qj3UTLwMwQL0PpYV31Q3XmpmnTVaGio
+	 49/imMN9oV3gXI2McxBdqK/KOYoYjWfKtSpAN75+txfUj21HJ9X58PcM9rg/+mphZS
+	 4s08H8PdyI45QRKQkkPoKD/ntGt2QMKUke/xSVnr9kikUHJwSqytsWHpjsDg6uVPzi
+	 2V1voYIeVwVFvOOCvPCAoDxEECDAP9vDYiQmS57uQXFrtmSz9+v0weK1ALg9Rzmp0u
+	 /TplQizW+dxyA==
+From: Mark Brown <broonie@kernel.org>
+To: prime.zeng@hisilicon.com, fanghao11@huawei.com, f.fangjian@huawei.com, 
+ Yang Shen <shenyang39@huawei.com>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20250529061406.183992-1-shenyang39@huawei.com>
+References: <20250529061406.183992-1-shenyang39@huawei.com>
+Subject: Re: [PATCH] MAINTAINERS: Update HiSilicon SPI Controller driver
+ maintainer
+Message-Id: <174853123734.49583.13550481147232391697.b4-ty@kernel.org>
+Date: Thu, 29 May 2025 16:07:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdUVvOMavxSAKaSMOwj_zXR=5h8KrrqNg4RS2Yaw3WXpKg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-On Thu, May 08, 2025 at 09:13:33AM +0200, Geert Uytterhoeven wrote:
-> On Thu, 8 May 2025 at 00:24, Andrew Lunn <andrew@lunn.ch> wrote:
-> > On Wed, May 07, 2025 at 09:13:05AM +0200, Herve Codina wrote:
-> > > Only one device-tree overlay (lan966x_evb_lan9662_nic.dtbo) is handled
-> > > and this overlay is directly referenced in lan966x_pci_load_overlay().
-> > >
-> > > This avoid to use the code for an other board.
-> > >
-> > > In order to be more generic and to allow support for other boards (PCI
-> > > Vendor/Device IDs), introduce the lan966x_pci_info structure and attach
-> > > it to PCI Vendor/Device IDs handled by the driver.
-> > >
-> > > This structure contains information related to the PCI board such as
-> > > information related to the dtbo describing the board we have to load.
-> > >
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> >
-> > How big is the dtbo ?
-> >
-> > This is going in the right direction. I'm just wondering if each dtbo
-> > should be wrapped in its own very slim PCI driver, which simply
-> > registers its lan966x_pci_info structure to a core driver. Only the
-> > needed dtbo will then be loaded into memory as a module, not them all.
+On Thu, 29 May 2025 14:14:06 +0800, Yang Shen wrote:
+> Add Yang Shen as the maintainer of the HiSilicon SPI Controller driver,
+> replacing Jay Fang.
 > 
-> Alternatively, the dtbo could be loaded through request_firmware().
-> That could lead to a generic support option in the PCI core, which would
-> fallback to loading pci-<vid>-<pid>.dtbo when no driver is available.
+> 
 
-Yes!
+Applied to
 
-Rob
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] MAINTAINERS: Update HiSilicon SPI Controller driver maintainer
+      commit: 3b5d1efc878adee4835165663297a75193343d37
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
