@@ -1,80 +1,81 @@
-Return-Path: <linux-spi+bounces-8333-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8334-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD66AAC81A1
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 19:25:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9D15AC81A7
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 19:25:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A43DA1BA1078
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:25:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6600A4A6D08
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70E222E414;
-	Thu, 29 May 2025 17:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E339822FE0E;
+	Thu, 29 May 2025 17:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JfzwpGDT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAnlFT7X"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E597F1632C8;
-	Thu, 29 May 2025 17:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC5522E3FF;
+	Thu, 29 May 2025 17:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748539524; cv=none; b=cQRNPgL7iOXfhT41YraS74t8iF1cyY2qADJqmA293gayHm2d5XTOC+iqTHf4dNUI8w0tKJPhKAAa7wMFU2JKUB+h/vpBfLDDgAvSFUFpVLvcO8xOuQDcczB5w3Fah+RMorAXA6/AhcCNT1w8lMhmxGtQyxcZOt2F4u0R5LcrLcc=
+	t=1748539525; cv=none; b=hDZYvIk+rWWP3zzlmPLJ9hfPupLqD/c7/dTR/S8u+DsparGH5UB23gUHPlwc8HmzLF8C0KzeGtzuEM5BbSXGwzdRy16wfzmgnTwcNnv4FXDXp8IthWRk3T2WhXUa08RbE2IGVrfvA/A0eovjoFTfqAch5c5Rvx+teHNWw23ice8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748539524; c=relaxed/simple;
-	bh=dQPZmlzhmVqwEc5qR/GIfGI+29MFbkSn2moMSyu2has=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bxhUCdn0JW/IDZDSk7CUI7qnZjO7g42NlQPhAtpwiJ9yfiOMjLAfTb+R7cq1D1HYH6ZTi+IeYIZQgM1gk6vzy9leD/oSi73COjVVNo+UqAwykurP/F55PTSIINty0mBtBKGu9qrWYgJRw9XzeqbtU5lmoP1bX8IeZbTG9f1Ptmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JfzwpGDT; arc=none smtp.client-ip=209.85.218.52
+	s=arc-20240116; t=1748539525; c=relaxed/simple;
+	bh=p/AFBV+anPQgs9p7zBoG39a/vXPwY5Uv3p8J9POWPZQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=D1fbssP0w0vaIAvhFFsUu8y5GOfcCowc4PU4Nq6hKfOLYPLBEcxxlahLtkmI20fSS2Q6M4WR7kVEeYoa44NLiBuILiY6grdY78MLwshfSKhh4+P3c5bdWf8n603as92D0Vmw7iRu7LghsZi+Cum4SyYP8DP5uuL7XGuHw6FevY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAnlFT7X; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-acb39c45b4eso170135566b.1;
-        Thu, 29 May 2025 10:25:22 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ad89333d603so222824166b.2;
+        Thu, 29 May 2025 10:25:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748539521; x=1749144321; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zuDRW6dNj0IOWTOPcp8s+afnvWue4+ReSENfxrc7Ikc=;
-        b=JfzwpGDTUUTmwmq4fT+jHBjlRNKFXJpjon0qziwGQEXTvVvjUxjcD4eJEIasP7z/qD
-         BpWlKWOKs3ZQmXIxPUOjr8iif5d0B6mTW65QvyVnRLpC6Ba1374BJMaU3Da6TR8w8Zre
-         mQoxJEbjwp/X6cq/eVLgq75g0qNpeYPBXoChlu+6y0zoairTPdV0b06TIecNGpmHmPRC
-         ktChpDs4Wd7mc7Beskb1w0/2fZhYoWSeMP5J41rkc06CwNfyNjWS/fgixntygNuZI3Vr
-         Gj9cPKjCf9OPfrGPHKfoYcXfJmxhE0KyNtviploOI+x5xlB+WGQSMTW7Oq2eeF+glvou
-         B6QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748539521; x=1749144321;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1748539522; x=1749144322; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zuDRW6dNj0IOWTOPcp8s+afnvWue4+ReSENfxrc7Ikc=;
-        b=kf6U6ORy12pAlEeNHQ8IiFOLTPA5y4MJcGpOo6rIFoOCHT+/W7f0XzlhSDTbqMVLEv
-         /vUXqIa/4n/MlDqzoO0kDgKlUeUtd+gbv3AN98b5ZNT/ClW2b8hbgNJa81Lhqy0TqYH6
-         1m9vPcr65AUg7fTM2jh4fkHO6Yh2emmm9dHwQS4rkSRg7uELBizGIIyIJRK+Fa+AXOwK
-         r8IbCy4jznrmBdCNALcOh6A04sJ3eIZQid+BWF6sZaJ+dB93VuaJ8h+dFWNa49zJyee7
-         tU/i8OfRLtmNBrp6gpA24Pn8BScMwIW3ohNAK2/Csqeb2uMdkrJ80KJGsYNkLi7cX3Qr
-         JJVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+n98hWZASRsQ23wv6XnuSKzNqj+2TXwnZQ4lOjubJvDKyw+kGp6/k3ETZmVhbliQevOndhgz0V7XVg8LI@vger.kernel.org, AJvYcCXkMH/VJ3r+poBd0kScUlQXEMzkt+akxYLzsFIk0L5+nLFHnaBRej0cDPIdyl5mDVOn4NwSU9OoIX+sBlNH@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEliq+wVTFJjuq697huokGtCkkQ0Y2glS/lIxrrVOTi5op3T9H
-	DXWk+FTkInuxO+PAGMh4t7j3KSmAWPnvU/OEuGRu3ROTo9HPl5eEY61H
-X-Gm-Gg: ASbGncvSvnsU4ciFDa0zesg85gnRtzeQqX2n/YLMQNktT+laFV0edTVoFkq2Y2dGMhj
-	+dodeuO+/gnmbF8mA7j6cOIT1Pq0oNab4hPBG41XGVTpsp1/z0aTBPfyI9b57Jtw4lgPbE2WfUT
-	2UIjOY2cV4FddswNpun1MCCi0hc4crO0xIHrczQsA3FnB4kv2PyvdGScoWj+MSqWgVPnUQbX2bY
-	3T1e5jqql2MmrZsyi9T1ELqH2ZwGfyl9BV2TV2XKO4xMivzJYbwM4YCPYb0zOmpVSrByAtuFvUO
-	SOKMvZGbPuepnESRDhqhck5V26Os2ECz2Kl2SrDHICZF/+GDIGnhPfSI3WZ/RhM71ooFY3HFi18
-	SFX7S
-X-Google-Smtp-Source: AGHT+IE3tPbHzEot+7hFeyg0S5+wiBWgftUOvAeih6bJHDPmAVbEJrAG1T10BSS9j25nPX/oPKWAMA==
-X-Received: by 2002:a17:907:9405:b0:ad5:a2d0:567 with SMTP id a640c23a62f3a-adb32450330mr21988666b.51.1748539520911;
-        Thu, 29 May 2025 10:25:20 -0700 (PDT)
+        bh=6GdNV2oKT/fQvp43ajW0Lkwa3+TyZyp+QXrIA3Ktqto=;
+        b=gAnlFT7X+jHsCnUHEk0rZ7lYM3KUHGv4oFqusdRs6QtTLLzgcaIqHlxQ4zpJ0wpyoZ
+         jH6ao1yHgTnFjSUqDHjXEmf3aY1AlCUHidvZ3jR6KYX9rDWa4QvVH1z4gGKHP7jQgu1D
+         OSOr0tyJEoYKel5PFYLqgB0M7k2uRm+6urKjdDGNc2dGMNOpBd5giWpjNznmEWjXeOpA
+         f4v3kBweELFOt1fU08XmxU302cJs52Ctjfq/0UddJa9EK9FgCh1qDdoXo/43vmZVy6+G
+         tUDRhIG6GmGN5w/GT6nCzq8dIzQPVYVdHD5oCGeT3CHcjHFt+bTQuvUKU26j32zgkv1t
+         BF2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748539522; x=1749144322;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6GdNV2oKT/fQvp43ajW0Lkwa3+TyZyp+QXrIA3Ktqto=;
+        b=bIeLDrHJprx4AeWwp0sy0CBZxkTXkrOcL6YgyJbQRYYDlqN3Y+B9F+zv38jrGbq5a0
+         eCcgroSZRaIGD9i/E0o6/YLLzcxh91jGWplDTNLfXhXpweOMUeiPiU8fbfxGnUOckk5+
+         hWKAt7IjKujzzwa7kXL/3pp4YvBD1eYguQduxU0zISG2BoOBcsjX69oCDmdbk++V2d4E
+         8FkpOIiaX8M24PG3QY3CMzo8lhU9CQp3NG8Xh7zOZ38V573tAy/jYZkAXB0L2hoXhRtF
+         UWU2KCaVci/rWvHzn7NnO76W/Y6paYxS6SOkv1qAN5cMlCtE+InTc0r5SvZbW39OAYSB
+         OesA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxBAYJRleyrXLDIO+l/lvP/8Wo/tghNg/kmsvM6PLxbtu8SYWAZ4QsHaC3AffdE5LhskywIgGV4x0Sm8mz@vger.kernel.org, AJvYcCXBuINGhO5yD4MHEFeU18pMZhVZ375w35N8H3kyeduzJ+WOOZXb98BJ9PDMbnVjdvm1q1M9tW5f/yciwVS2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb7QWrrCHGcEuVG3+vYHxwSQxYCVblFcVlErpuJLpzxKU163BD
+	uUbmkLJmYOLlwiSEScI2FfhCLGwd8IDRkDlb355hLB/mItocXTPxzOJU
+X-Gm-Gg: ASbGnctrEZcIAYQq81jk9fqDhGozovgSWIrvkJQjoX6NWJg9nepQOCeiaduw2T3zkUA
+	V+ef7cDRRdHr6XlbCAJtlazWuDpcqP0n/fEnT7gTMHe5pBayb2jt6Lutqun6ayxRHFbYcQNz2IC
+	XRQp9c0bBvRL60RoTuw4zCxoPcAgPKgsobY8e6kKr7dwTV/Rj99/5srK21zcEyeMpMptvyT/r8/
+	QuM5ROv8WSmN+DpfqaL/IxuowMnoggM4ZR/HqBiHFiIC0vl6jNsclijSvoYddlENtGdhaTophVO
+	7cBMcrYpIwSJXG1FoVyLuG9dTcnqq19bLYCxwf3So5HF91SMijTzPD9fZHBSoZdooJmYyjOYv6i
+	wqqg6
+X-Google-Smtp-Source: AGHT+IE8AVp2q1GaO5YsqzyrmEI1XXn/yvdzwiz5FsB8zf7Ac5exZX28gfdjzaS4/cLtOgXfHqmbsA==
+X-Received: by 2002:a17:907:7245:b0:ad8:e4ab:7715 with SMTP id a640c23a62f3a-adb32305342mr28684366b.37.1748539522213;
+        Thu, 29 May 2025 10:25:22 -0700 (PDT)
 Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ada5d82d95bsm177793366b.57.2025.05.29.10.25.19
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ada5d82d95bsm177793366b.57.2025.05.29.10.25.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 10:25:20 -0700 (PDT)
+        Thu, 29 May 2025 10:25:21 -0700 (PDT)
 From: Gabor Juhos <j4g8y7@gmail.com>
-Subject: [PATCH v2 0/2] spi: spi-qpic-snand: avoid memory corruption
-Date: Thu, 29 May 2025 19:25:09 +0200
-Message-Id: <20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com>
+Date: Thu, 29 May 2025 19:25:10 +0200
+Subject: [PATCH v2 1/2] spi: spi-qpic-snand: reallocate BAM transactions
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,11 +84,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHWYOGgC/4WNywrCMBBFf6Vk7UiaEhRX/od0kcekHTBJTWpQS
- v7dWHDt8ly452wsYyLM7NJtLGGhTDE0EIeOmVmFCYFsYya4kFyKAR4LGchBBQuqRLLg0YOJKT2
- XtX1h4L1ySqPmqFmzLAkdvfbCbWw8U15jeu/B0n/Xn1v+dZceOEiHUpwtupPT18kruh9N9Gyst
- X4AeksKj84AAAA=
-X-Change-ID: 20250523-qpic-snand-avoid-mem-corruption-301afabeb0eb
+Message-Id: <20250529-qpic-snand-avoid-mem-corruption-v2-1-2f0d13afc7d2@gmail.com>
+References: <20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com>
+In-Reply-To: <20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com>
 To: Mark Brown <broonie@kernel.org>, 
  Md Sadre Alam <quic_mdalam@quicinc.com>, 
  Varadarajan Narayanan <quic_varada@quicinc.com>, 
@@ -96,43 +95,91 @@ To: Mark Brown <broonie@kernel.org>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
 Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gabor Juhos <j4g8y7@gmail.com>, Lakshmi Sowjanya D <quic_laksd@quicinc.com>
+ Gabor Juhos <j4g8y7@gmail.com>
 X-Mailer: b4 0.14.2
 
-The 'spi-qpic-nand' driver may cause memory corruption under some
-circumstances. The first patch in the series changes the driver to
-avoid that, whereas the second adds some sanity checks to the common
-QPIC code in order to make detecting such errors easier in the future.
+Using the mtd_nandbiterrs module for testing the driver occasionally
+results in weird things like below.
 
-Preferably, the two patches should go along in via the SPI tree.
-It is not a strict requirement though, in the case the second patch
-gets included separately through the MTD tree it reveals the bug
-which is fixed in the first patch.
+1. swiotlb mapping fails with the following message:
 
+  [   85.926216] qcom_snand 79b0000.spi: swiotlb buffer is full (sz: 4294967294 bytes), total 512 (slots), used 0 (slots)
+  [   85.932937] qcom_snand 79b0000.spi: failure in mapping desc
+  [   87.999314] qcom_snand 79b0000.spi: failure to write raw page
+  [   87.999352] mtd_nandbiterrs: error: write_oob failed (-110)
+
+  Rebooting the board after this causes a panic due to a NULL pointer
+  dereference.
+
+2. If the swiotlb mapping does not fail, rebooting the board may result
+   in a different panic due to a bad spinlock magic:
+
+  [  256.104459] BUG: spinlock bad magic on CPU#3, procd/2241
+  [  256.104488] Unable to handle kernel paging request at virtual address ffffffff0000049b
+  ...
+
+Investigating the issue revealed that these symptoms are results of
+memory corruption which is caused by out of bounds access within the
+driver.
+
+The driver uses a dynamically allocated structure for BAM transactions,
+which structure must have enough space for all possible variations of
+different flash operations initiated by the driver. The required space
+heavily depends on the actual number of 'codewords' which is calculated
+from the pagesize of the actual NAND chip.
+
+Although the qcom_nandc_alloc() function allocates memory for the BAM
+transactions during probe, but since the actual number of 'codewords'
+is not yet know the allocation is done for one 'codeword' only.
+
+Because of this, whenever the driver does a flash operation, and the
+number of the required transactions exceeds the size of the allocated
+arrays the driver accesses memory out of the allocated range.
+
+To avoid this, change the code to free the initially allocated BAM
+transactions memory, and allocate a new one once the actual number of
+'codewords' required for a given NAND chip is known.
+
+Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+Reviewed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 ---
 Changes in v2:
-  - collect offered tags
-  - reduce kernel log spam in commit description of patch 1
-  - remove inline error printing function from patch 2, and adjust the
-    commit message of the patch
-  - Link to v1: https://lore.kernel.org/r/20250525-qpic-snand-avoid-mem-corruption-v1-0-5fe528def7fb@gmail.com
-
+  - add 'Reviewed-by' tag from Alam
+  - reduce kernel log spam in the commit message
 ---
-Gabor Juhos (2):
-      spi: spi-qpic-snand: reallocate BAM transactions
-      mtd: nand: qpic_common: prevent out of bounds access of BAM arrays
+ drivers/spi/spi-qpic-snand.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
- drivers/mtd/nand/qpic_common.c       | 30 ++++++++++++++++++++++++++----
- drivers/spi/spi-qpic-snand.c         | 16 ++++++++++++++++
- include/linux/mtd/nand-qpic-common.h |  8 ++++++++
- 3 files changed, 50 insertions(+), 4 deletions(-)
----
-base-commit: b00d6864a4c948529dc6ddd2df76bf175bf27c63
-change-id: 20250523-qpic-snand-avoid-mem-corruption-301afabeb0eb
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index fd129650434f0129e24d3bdac7e7c4d5542627e6..c552cb7aa80e368e193d71e1826b2cc005571a9c 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -315,6 +315,22 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+ 
+ 	mtd_set_ooblayout(mtd, &qcom_spi_ooblayout);
+ 
++	/*
++	 * Free the temporary BAM transaction allocated initially by
++	 * qcom_nandc_alloc(), and allocate a new one based on the
++	 * updated max_cwperpage value.
++	 */
++	qcom_free_bam_transaction(snandc);
++
++	snandc->max_cwperpage = cwperpage;
++
++	snandc->bam_txn = qcom_alloc_bam_transaction(snandc);
++	if (!snandc->bam_txn) {
++		dev_err(snandc->dev, "failed to allocate BAM transaction\n");
++		ret = -ENOMEM;
++		goto err_free_ecc_cfg;
++	}
++
+ 	ecc_cfg->cfg0 = FIELD_PREP(CW_PER_PAGE_MASK, (cwperpage - 1)) |
+ 			FIELD_PREP(UD_SIZE_BYTES_MASK, ecc_cfg->cw_data) |
+ 			FIELD_PREP(DISABLE_STATUS_AFTER_WRITE, 1) |
 
-Best regards,
 -- 
-Gabor Juhos <j4g8y7@gmail.com>
+2.49.0
 
 
