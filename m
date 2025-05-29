@@ -1,81 +1,82 @@
-Return-Path: <linux-spi+bounces-8334-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8335-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9D15AC81A7
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 19:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1972DAC81AA
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 19:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6600A4A6D08
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:25:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC4744A6E72
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E339822FE0E;
-	Thu, 29 May 2025 17:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D45230BD2;
+	Thu, 29 May 2025 17:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAnlFT7X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kCxO5Ppr"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC5522E3FF;
-	Thu, 29 May 2025 17:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F41622FDEC;
+	Thu, 29 May 2025 17:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748539525; cv=none; b=hDZYvIk+rWWP3zzlmPLJ9hfPupLqD/c7/dTR/S8u+DsparGH5UB23gUHPlwc8HmzLF8C0KzeGtzuEM5BbSXGwzdRy16wfzmgnTwcNnv4FXDXp8IthWRk3T2WhXUa08RbE2IGVrfvA/A0eovjoFTfqAch5c5Rvx+teHNWw23ice8=
+	t=1748539527; cv=none; b=bPycR1g0PUgoFqrqSOD+cFlcXOLH5w2fiLdrUeUiBUWlDGpmehz2hio22bbzhxOzdgENl8iJvhHkN+NimOwrZFs44yqbZoi5BOsJESZXDZ+sQ3KiXy5Y4LeOXT37wRf/FpZ/599IdqcV02/j0/HX3QUc6dnJxf+v2wwa8CpOpSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748539525; c=relaxed/simple;
-	bh=p/AFBV+anPQgs9p7zBoG39a/vXPwY5Uv3p8J9POWPZQ=;
+	s=arc-20240116; t=1748539527; c=relaxed/simple;
+	bh=cUCOSDkZVKViBX+XB8/cLIW/bIM7FFUfwedr8//UWEg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D1fbssP0w0vaIAvhFFsUu8y5GOfcCowc4PU4Nq6hKfOLYPLBEcxxlahLtkmI20fSS2Q6M4WR7kVEeYoa44NLiBuILiY6grdY78MLwshfSKhh4+P3c5bdWf8n603as92D0Vmw7iRu7LghsZi+Cum4SyYP8DP5uuL7XGuHw6FevY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAnlFT7X; arc=none smtp.client-ip=209.85.218.43
+	 In-Reply-To:To:Cc; b=LUxAZiFrBsDaYpt0QSiU3w6u25kDfG83h7HPhS+CmpedolwftePuZOIvODz3S26X1yLoerAtbE1ZOPfv2O/+HhffW1w9rqV5DILJzVhkUK2d2fO5ra0Ykzub43EL2kAcxxWRdnnO+OA8hRp50Qs7Ecy2usRTvcvOe3aaQSd6BQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kCxO5Ppr; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ad89333d603so222824166b.2;
-        Thu, 29 May 2025 10:25:23 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ad56829fabdso168755066b.1;
+        Thu, 29 May 2025 10:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748539522; x=1749144322; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1748539524; x=1749144324; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6GdNV2oKT/fQvp43ajW0Lkwa3+TyZyp+QXrIA3Ktqto=;
-        b=gAnlFT7X+jHsCnUHEk0rZ7lYM3KUHGv4oFqusdRs6QtTLLzgcaIqHlxQ4zpJ0wpyoZ
-         jH6ao1yHgTnFjSUqDHjXEmf3aY1AlCUHidvZ3jR6KYX9rDWa4QvVH1z4gGKHP7jQgu1D
-         OSOr0tyJEoYKel5PFYLqgB0M7k2uRm+6urKjdDGNc2dGMNOpBd5giWpjNznmEWjXeOpA
-         f4v3kBweELFOt1fU08XmxU302cJs52Ctjfq/0UddJa9EK9FgCh1qDdoXo/43vmZVy6+G
-         tUDRhIG6GmGN5w/GT6nCzq8dIzQPVYVdHD5oCGeT3CHcjHFt+bTQuvUKU26j32zgkv1t
-         BF2A==
+        bh=XV2butVDw2bUeLpVaXq6xRsCyjyAgxB8qAYckam2iV4=;
+        b=kCxO5PprU258A60L3f6TunCGE9yoyZXH2flX95r6b0Ek1t4YXCzT2Oe7LzPmn9crph
+         ZObesni/faBqWfxqzyjk+FyEpZFpu+yVRaUAlHqXOB6Q45hi8BoTUKHoqrv8L7BSNcWY
+         JH40YSHHymEzH1g+3T6L/Xhc8kpYsxp1yQUOrlHzEhoVx19QUv27krf+yUApP41mnTaV
+         8Sf4Ud1ZAJD+0FVHrrA2GuJYhogDkLEX42E8wxcVRGgKV0mKXKQWrskx3BA8B7lUtrCp
+         5rkM5pApR+956JMBT+mynXXOKnzRe3eo3d1SfyM0ihyGwsbsobmggxCqQMeAaoLbuBhc
+         WZBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748539522; x=1749144322;
+        d=1e100.net; s=20230601; t=1748539524; x=1749144324;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6GdNV2oKT/fQvp43ajW0Lkwa3+TyZyp+QXrIA3Ktqto=;
-        b=bIeLDrHJprx4AeWwp0sy0CBZxkTXkrOcL6YgyJbQRYYDlqN3Y+B9F+zv38jrGbq5a0
-         eCcgroSZRaIGD9i/E0o6/YLLzcxh91jGWplDTNLfXhXpweOMUeiPiU8fbfxGnUOckk5+
-         hWKAt7IjKujzzwa7kXL/3pp4YvBD1eYguQduxU0zISG2BoOBcsjX69oCDmdbk++V2d4E
-         8FkpOIiaX8M24PG3QY3CMzo8lhU9CQp3NG8Xh7zOZ38V573tAy/jYZkAXB0L2hoXhRtF
-         UWU2KCaVci/rWvHzn7NnO76W/Y6paYxS6SOkv1qAN5cMlCtE+InTc0r5SvZbW39OAYSB
-         OesA==
-X-Forwarded-Encrypted: i=1; AJvYcCWxBAYJRleyrXLDIO+l/lvP/8Wo/tghNg/kmsvM6PLxbtu8SYWAZ4QsHaC3AffdE5LhskywIgGV4x0Sm8mz@vger.kernel.org, AJvYcCXBuINGhO5yD4MHEFeU18pMZhVZ375w35N8H3kyeduzJ+WOOZXb98BJ9PDMbnVjdvm1q1M9tW5f/yciwVS2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb7QWrrCHGcEuVG3+vYHxwSQxYCVblFcVlErpuJLpzxKU163BD
-	uUbmkLJmYOLlwiSEScI2FfhCLGwd8IDRkDlb355hLB/mItocXTPxzOJU
-X-Gm-Gg: ASbGnctrEZcIAYQq81jk9fqDhGozovgSWIrvkJQjoX6NWJg9nepQOCeiaduw2T3zkUA
-	V+ef7cDRRdHr6XlbCAJtlazWuDpcqP0n/fEnT7gTMHe5pBayb2jt6Lutqun6ayxRHFbYcQNz2IC
-	XRQp9c0bBvRL60RoTuw4zCxoPcAgPKgsobY8e6kKr7dwTV/Rj99/5srK21zcEyeMpMptvyT/r8/
-	QuM5ROv8WSmN+DpfqaL/IxuowMnoggM4ZR/HqBiHFiIC0vl6jNsclijSvoYddlENtGdhaTophVO
-	7cBMcrYpIwSJXG1FoVyLuG9dTcnqq19bLYCxwf3So5HF91SMijTzPD9fZHBSoZdooJmYyjOYv6i
-	wqqg6
-X-Google-Smtp-Source: AGHT+IE8AVp2q1GaO5YsqzyrmEI1XXn/yvdzwiz5FsB8zf7Ac5exZX28gfdjzaS4/cLtOgXfHqmbsA==
-X-Received: by 2002:a17:907:7245:b0:ad8:e4ab:7715 with SMTP id a640c23a62f3a-adb32305342mr28684366b.37.1748539522213;
-        Thu, 29 May 2025 10:25:22 -0700 (PDT)
+        bh=XV2butVDw2bUeLpVaXq6xRsCyjyAgxB8qAYckam2iV4=;
+        b=R5XQn508QyagcR9hdj2szy5QBFdrSXVy/qMiYttMqRrchgwbG5YoNB9/IkIVWiyduw
+         bnG9A5uHkDQzx7DROaTdwfK6tAPb2+QF6EQn9BdicTt6qHiE0VLdOlLYiXsd6Olmw+TP
+         yg/5BiCmkK3YQ1CyqNiJDSjLZP4ldODke3+7L3Ljsd1djDhcVpw4daqPHndwvje9HU1t
+         q21SWHc3iDaCFYtPqMwrAH9bhmVvv5NaNI771i/Yik1DbBIq9C3yDcQ2KKR2qAWbmIZp
+         5JsV8ukuK8+4h5S2f7meBWYMA98oUOYwII4ryKQaSw/KdN4RBICSJ+p+tsdh92K8SAam
+         bk7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVfpjvB1rS1HerkgrSBNOe4FUXc8fZ9ipWdVORoB8eUtg3INvG/n804KETSzA0xfoBQgh2xva86gsck1MyJ@vger.kernel.org, AJvYcCXYSSGmwDBtscrmtNX2AM0RAb+EH/Kzjv7hwXP0Xv3Hud021uv8C6mhCau93m2K9N9FYoVw/CvGP4zcskjV@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaH9UUKw9dlvDuHr88ChdaCCnfBpEhwXdRC8eYr2ybzS6l59ci
+	5ZJgFPzvW8YmlsxnNYC06zX/CP9MLpW/pSU4mLy+izVsY9LMLZRPWg0d
+X-Gm-Gg: ASbGnctlNtP2vwRMH66WEk0JWEnHV92goPoW4ekn4vgRBmQqPd4dQgZiZWToPjhYI+T
+	7FVWvtZ76GGXNh8EgLNo9zHv4+o4cRKjL9Fn1gJEoA3F/i07v6H6pgBis8sEWDJFvJIRwL82EPt
+	Av5NMH4Wc9iEYbzHoSnL/FN8kUP69THnrn7OQ/2wilyf6ZEXHvQhdVHoGRZWcUwZl3U+KfRD8t4
+	WlHmgRcC/14IRGk65KRljoKMLlTqTTUTJFrKNyzWFdpBHpbO9iUz99jaZUoS+kb3joMe0kef7DC
+	so86rrdCZFz/yE4AbGXQy0iaLRhBpXbnx6N/6LkBRTmc6SLkrIEtqzPquAhuUw+lyVeyc3H9NX1
+	jcB0b698CB5nXtxQ=
+X-Google-Smtp-Source: AGHT+IEZkkD1K+H0tmuFbouKJ3viSpyOf9KVWq/Uggp+KKsRk/X1ojEXByAsL9hV2hKgOrH6f6eaTQ==
+X-Received: by 2002:a17:907:7fa4:b0:ad8:8529:4f9b with SMTP id a640c23a62f3a-adb325838e8mr28059366b.38.1748539523503;
+        Thu, 29 May 2025 10:25:23 -0700 (PDT)
 Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ada5d82d95bsm177793366b.57.2025.05.29.10.25.21
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ada5d82d95bsm177793366b.57.2025.05.29.10.25.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 May 2025 10:25:21 -0700 (PDT)
+        Thu, 29 May 2025 10:25:23 -0700 (PDT)
 From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Thu, 29 May 2025 19:25:10 +0200
-Subject: [PATCH v2 1/2] spi: spi-qpic-snand: reallocate BAM transactions
+Date: Thu, 29 May 2025 19:25:11 +0200
+Subject: [PATCH v2 2/2] mtd: nand: qpic_common: prevent out of bounds
+ access of BAM arrays
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,7 +85,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250529-qpic-snand-avoid-mem-corruption-v2-1-2f0d13afc7d2@gmail.com>
+Message-Id: <20250529-qpic-snand-avoid-mem-corruption-v2-2-2f0d13afc7d2@gmail.com>
 References: <20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com>
 In-Reply-To: <20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com>
 To: Mark Brown <broonie@kernel.org>, 
@@ -95,89 +96,139 @@ To: Mark Brown <broonie@kernel.org>,
  Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
 Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
  linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gabor Juhos <j4g8y7@gmail.com>
+ Gabor Juhos <j4g8y7@gmail.com>, Lakshmi Sowjanya D <quic_laksd@quicinc.com>
 X-Mailer: b4 0.14.2
 
-Using the mtd_nandbiterrs module for testing the driver occasionally
-results in weird things like below.
+The common QPIC code does not do any boundary checking when it handles
+the command elements and scatter gater list arrays of a BAM transaction,
+thus it allows to access out of bounds elements in those.
 
-1. swiotlb mapping fails with the following message:
+Although it is the responsibility of the given driver to allocate enough
+space for all possible BAM transaction variations, however there can be
+mistakes in the driver code which can lead to hidden memory corruption
+issues which are hard to debug.
 
-  [   85.926216] qcom_snand 79b0000.spi: swiotlb buffer is full (sz: 4294967294 bytes), total 512 (slots), used 0 (slots)
-  [   85.932937] qcom_snand 79b0000.spi: failure in mapping desc
-  [   87.999314] qcom_snand 79b0000.spi: failure to write raw page
-  [   87.999352] mtd_nandbiterrs: error: write_oob failed (-110)
+This kind of problem has been observed during testing the 'spi-qpic-snand'
+driver. Although the driver has been fixed with a preceding patch, but it
+still makes sense to reduce the chance of having such errors again later.
 
-  Rebooting the board after this causes a panic due to a NULL pointer
-  dereference.
+In order to prevent such errors, change the qcom_alloc_bam_transaction()
+function to store the number of elements of the arrays in the
+'bam_transaction' strucutre during allocation. Also, add sanity checks to
+the qcom_prep_bam_dma_desc_{cmd,data}() functions to avoid using out of
+bounds indices for the arrays.
 
-2. If the swiotlb mapping does not fail, rebooting the board may result
-   in a different panic due to a bad spinlock magic:
-
-  [  256.104459] BUG: spinlock bad magic on CPU#3, procd/2241
-  [  256.104488] Unable to handle kernel paging request at virtual address ffffffff0000049b
-  ...
-
-Investigating the issue revealed that these symptoms are results of
-memory corruption which is caused by out of bounds access within the
-driver.
-
-The driver uses a dynamically allocated structure for BAM transactions,
-which structure must have enough space for all possible variations of
-different flash operations initiated by the driver. The required space
-heavily depends on the actual number of 'codewords' which is calculated
-from the pagesize of the actual NAND chip.
-
-Although the qcom_nandc_alloc() function allocates memory for the BAM
-transactions during probe, but since the actual number of 'codewords'
-is not yet know the allocation is done for one 'codeword' only.
-
-Because of this, whenever the driver does a flash operation, and the
-number of the required transactions exceeds the size of the allocated
-arrays the driver accesses memory out of the allocated range.
-
-To avoid this, change the code to free the initially allocated BAM
-transactions memory, and allocate a new one once the actual number of
-'codewords' required for a given NAND chip is known.
-
-Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
-Reviewed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+Tested-by: Lakshmi Sowjanya D <quic_laksd@quicinc.com>     # on SDX75
 Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 ---
 Changes in v2:
-  - add 'Reviewed-by' tag from Alam
-  - reduce kernel log spam in the commit message
+  - remove the inline qcom_err_bam_array_full() function and print the error
+    messages directly from the respective functions instead
+  - add 'Tested-by' tag from Lakshmi Sowjanya D, and remove the
+    "Tested with the 'spi-qpic-snand' driver only." line from the
+    commit message as SDX75 uses the qcom_nandc driver
+  - move the note about of the preferred merging order into the cover letter
 ---
- drivers/spi/spi-qpic-snand.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/mtd/nand/qpic_common.c       | 30 ++++++++++++++++++++++++++----
+ include/linux/mtd/nand-qpic-common.h |  8 ++++++++
+ 2 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index fd129650434f0129e24d3bdac7e7c4d5542627e6..c552cb7aa80e368e193d71e1826b2cc005571a9c 100644
---- a/drivers/spi/spi-qpic-snand.c
-+++ b/drivers/spi/spi-qpic-snand.c
-@@ -315,6 +315,22 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
+diff --git a/drivers/mtd/nand/qpic_common.c b/drivers/mtd/nand/qpic_common.c
+index e0ed25b5afea9b289b767cd3d9c2d7572ed52008..30f17d959300cc7448d0c2e9e2516c52655494f0 100644
+--- a/drivers/mtd/nand/qpic_common.c
++++ b/drivers/mtd/nand/qpic_common.c
+@@ -57,14 +57,15 @@ qcom_alloc_bam_transaction(struct qcom_nand_controller *nandc)
+ 	bam_txn_buf += sizeof(*bam_txn);
  
- 	mtd_set_ooblayout(mtd, &qcom_spi_ooblayout);
+ 	bam_txn->bam_ce = bam_txn_buf;
+-	bam_txn_buf +=
+-		sizeof(*bam_txn->bam_ce) * QPIC_PER_CW_CMD_ELEMENTS * num_cw;
++	bam_txn->bam_ce_nitems = QPIC_PER_CW_CMD_ELEMENTS * num_cw;
++	bam_txn_buf += sizeof(*bam_txn->bam_ce) * bam_txn->bam_ce_nitems;
  
-+	/*
-+	 * Free the temporary BAM transaction allocated initially by
-+	 * qcom_nandc_alloc(), and allocate a new one based on the
-+	 * updated max_cwperpage value.
-+	 */
-+	qcom_free_bam_transaction(snandc);
-+
-+	snandc->max_cwperpage = cwperpage;
-+
-+	snandc->bam_txn = qcom_alloc_bam_transaction(snandc);
-+	if (!snandc->bam_txn) {
-+		dev_err(snandc->dev, "failed to allocate BAM transaction\n");
-+		ret = -ENOMEM;
-+		goto err_free_ecc_cfg;
+ 	bam_txn->cmd_sgl = bam_txn_buf;
+-	bam_txn_buf +=
+-		sizeof(*bam_txn->cmd_sgl) * QPIC_PER_CW_CMD_SGL * num_cw;
++	bam_txn->cmd_sgl_nitems = QPIC_PER_CW_CMD_SGL * num_cw;
++	bam_txn_buf += sizeof(*bam_txn->cmd_sgl) * bam_txn->cmd_sgl_nitems;
+ 
+ 	bam_txn->data_sgl = bam_txn_buf;
++	bam_txn->data_sgl_nitems = QPIC_PER_CW_DATA_SGL * num_cw;
+ 
+ 	init_completion(&bam_txn->txn_done);
+ 
+@@ -237,6 +238,11 @@ int qcom_prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
+ 	struct bam_cmd_element *bam_ce_buffer;
+ 	struct bam_transaction *bam_txn = nandc->bam_txn;
+ 
++	if (bam_txn->bam_ce_pos + size > bam_txn->bam_ce_nitems) {
++		dev_err(nandc->dev, "BAM %s array is full\n", "CE");
++		return -EINVAL;
 +	}
 +
- 	ecc_cfg->cfg0 = FIELD_PREP(CW_PER_PAGE_MASK, (cwperpage - 1)) |
- 			FIELD_PREP(UD_SIZE_BYTES_MASK, ecc_cfg->cw_data) |
- 			FIELD_PREP(DISABLE_STATUS_AFTER_WRITE, 1) |
+ 	bam_ce_buffer = &bam_txn->bam_ce[bam_txn->bam_ce_pos];
+ 
+ 	/* fill the command desc */
+@@ -258,6 +264,12 @@ int qcom_prep_bam_dma_desc_cmd(struct qcom_nand_controller *nandc, bool read,
+ 
+ 	/* use the separate sgl after this command */
+ 	if (flags & NAND_BAM_NEXT_SGL) {
++		if (bam_txn->cmd_sgl_pos >= bam_txn->cmd_sgl_nitems) {
++			dev_err(nandc->dev, "BAM %s array is full\n",
++				"CMD sgl");
++			return -EINVAL;
++		}
++
+ 		bam_ce_buffer = &bam_txn->bam_ce[bam_txn->bam_ce_start];
+ 		bam_ce_size = (bam_txn->bam_ce_pos -
+ 				bam_txn->bam_ce_start) *
+@@ -297,10 +309,20 @@ int qcom_prep_bam_dma_desc_data(struct qcom_nand_controller *nandc, bool read,
+ 	struct bam_transaction *bam_txn = nandc->bam_txn;
+ 
+ 	if (read) {
++		if (bam_txn->rx_sgl_pos >= bam_txn->data_sgl_nitems) {
++			dev_err(nandc->dev, "BAM %s array is full\n", "RX sgl");
++			return -EINVAL;
++		}
++
+ 		sg_set_buf(&bam_txn->data_sgl[bam_txn->rx_sgl_pos],
+ 			   vaddr, size);
+ 		bam_txn->rx_sgl_pos++;
+ 	} else {
++		if (bam_txn->tx_sgl_pos >= bam_txn->data_sgl_nitems) {
++			dev_err(nandc->dev, "BAM %s array is full\n", "TX sgl");
++			return -EINVAL;
++		}
++
+ 		sg_set_buf(&bam_txn->data_sgl[bam_txn->tx_sgl_pos],
+ 			   vaddr, size);
+ 		bam_txn->tx_sgl_pos++;
+diff --git a/include/linux/mtd/nand-qpic-common.h b/include/linux/mtd/nand-qpic-common.h
+index cd7172e6c1bbffeee0363a14044980a72ea17723..3ca4073a496b8fd2a99112a9caefd3f110260568 100644
+--- a/include/linux/mtd/nand-qpic-common.h
++++ b/include/linux/mtd/nand-qpic-common.h
+@@ -240,6 +240,9 @@
+  * @last_data_desc - last DMA desc in data channel (tx/rx).
+  * @last_cmd_desc - last DMA desc in command channel.
+  * @txn_done - completion for NAND transfer.
++ * @bam_ce_nitems - the number of elements in the @bam_ce array
++ * @cmd_sgl_nitems - the number of elements in the @cmd_sgl array
++ * @data_sgl_nitems - the number of elements in the @data_sgl array
+  * @bam_ce_pos - the index in bam_ce which is available for next sgl
+  * @bam_ce_start - the index in bam_ce which marks the start position ce
+  *		   for current sgl. It will be used for size calculation
+@@ -258,6 +261,11 @@ struct bam_transaction {
+ 	struct dma_async_tx_descriptor *last_data_desc;
+ 	struct dma_async_tx_descriptor *last_cmd_desc;
+ 	struct completion txn_done;
++
++	unsigned int bam_ce_nitems;
++	unsigned int cmd_sgl_nitems;
++	unsigned int data_sgl_nitems;
++
+ 	struct_group(bam_positions,
+ 		u32 bam_ce_pos;
+ 		u32 bam_ce_start;
 
 -- 
 2.49.0
