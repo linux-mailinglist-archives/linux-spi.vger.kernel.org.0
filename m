@@ -1,97 +1,86 @@
-Return-Path: <linux-spi+bounces-8331-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8332-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8073AC7FFB
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8176DAC8001
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 17:09:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C49ACA4077B
-	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 15:07:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBBC6A4034C
+	for <lists+linux-spi@lfdr.de>; Thu, 29 May 2025 15:09:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CA422CBD2;
-	Thu, 29 May 2025 15:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36FE22AE5E;
+	Thu, 29 May 2025 15:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uiPKhwjJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qus+Kilz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39B322CBCB;
-	Thu, 29 May 2025 15:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF54B226D1E
+	for <linux-spi@vger.kernel.org>; Thu, 29 May 2025 15:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748531240; cv=none; b=Co+QI6zfijAdy/k3DZE+S2c/id8QzZIEfiCAguKRoY4cFRkA//TSVkCgJQm4S/JBV4IqWJWb10urCcW+84WcyVOZSPEN3WFUyNADp1EglbJZYX1/DzUnkxetpt4AM8vwIUk2HpWrn5jfoj60QlnDyr2h3u7uJhQ7OWr54lLvj8k=
+	t=1748531395; cv=none; b=mtOxFrIlbu912x2ohaIzow/nduBLsmzlQCVOobh/kBeXzfVj9UwOS6PhTNYSNh+X+A9dGlChPe60EHX7NoU+curki7I0CjkCZJEzpjOuiWwF3TAqWAwfQm+fhb5xTqi57VfLNPkn4wEdmBhcp087myfjLnNI47MimmOzzzTyltk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748531240; c=relaxed/simple;
-	bh=oIikqErvY0/2Yw/HLI970NexWLLJ2jSpoVZKtL13Ib4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SNvVlBuDZHvNoprjq8Mc38l5/hXSSKqgeIxRTylv67MB4XqP5P9ZUOLv6vXQtuqfXXWZyN2ilPxvO8mxlOgOz3u8kMz7lu9v0oSs3W1Au5Dv+l811uqZ5EutfRtfpDHyG4+YAXAdqqQ9CXH5dYUTAUYF+/WSsUitsav0ncyobHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uiPKhwjJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D702C4CEEB;
-	Thu, 29 May 2025 15:07:18 +0000 (UTC)
+	s=arc-20240116; t=1748531395; c=relaxed/simple;
+	bh=0U+8mkZ1KKrdL9cNiX7pI+9+Eh5XPJV5PT+8jOkMqqk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ZYpibbIUgod9GOVQbV2dpN4VMSJ1U5ElmSlzLtsNiB1BCrjBwsh5g7iyx16+mc3LxHziuGiAbzaLYs01Gwm6OAL5XcYEGti+1ChSrFYCkY4jIBX/bz5oqK1m2dE+VmNPPV8A+odQiXH1b7wouQkCGuJhbtuVtuVOpT37yAdEZS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qus+Kilz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2409FC4CEED;
+	Thu, 29 May 2025 15:09:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748531240;
-	bh=oIikqErvY0/2Yw/HLI970NexWLLJ2jSpoVZKtL13Ib4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=uiPKhwjJuYwyK/zuMgpElLDGS3i4ExNLt0O8h3MjAF8Mr+t9Wx7X/tmtqtohiW7aE
-	 YW3srUc5qpkkSxVKBq7e7tPYQ31GCCmOtLICTkfE6XWnAPB+7uXqxmTqubDOEX7QGM
-	 kBuwpmsvZn/pS/TpuIT5/kqo2JfyHAlMwoodCX2MMBLEdkxnkSAJjOK+JXhDsvL+pf
-	 wxqSCezhltVEC+WwQZcBNQ0/ewaJxk42nOVtRGvWnJ5Nxt3MAxjREfXboE9b5sIfPZ
-	 y+nJEMx3xY9LMwB0q4ZHeVwHW1K0USjC3cQ++DUi00Z+bVdqxn/Aijx/c0iQ83mICG
-	 CzmLgDdbXZmqA==
-From: Mark Brown <broonie@kernel.org>
-To: prime.zeng@hisilicon.com, fanghao11@huawei.com, f.fangjian@huawei.com, 
- Yang Shen <shenyang39@huawei.com>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20250529061704.190725-1-shenyang39@huawei.com>
-References: <20250529061704.190725-1-shenyang39@huawei.com>
-Subject: Re: [PATCH] MAINTAINERS: Update HiSilicon SFC driver maintainer
-Message-Id: <174853123887.49583.10719064798255686718.b4-ty@kernel.org>
-Date: Thu, 29 May 2025 16:07:18 +0100
+	s=k20201202; t=1748531395;
+	bh=0U+8mkZ1KKrdL9cNiX7pI+9+Eh5XPJV5PT+8jOkMqqk=;
+	h=Subject:From:Date:To:From;
+	b=qus+Kilzkbse3APeMFLjhUgr5atBlTaRx6lnGIUy9PYVXJm9jZsonSeRqtqn54EB2
+	 5arjhLt9uhk2g/aGAB2e28drmTidSztKtIt7Iehda8sCPOGshH0JIHSZ34ybkLBwpX
+	 ybtKrisjB/Mvbuc70plYczxICFmpazVcRPV2MiMYu6RYTyggXlHznjSQDwye7TFKpr
+	 WE+i2E4UZg9Xsl7KzwUxNFIVIXGvVHHkBpaBfXiopnV269kj/sHMC2FWHTPHgyaY4/
+	 IJ+FASRH1VouLdJ0w4JVbA9YFM/PIv4is+PgcTz9pRp+2y54BXQS2uSXzjfmwaAszh
+	 XOZDCG/ajrX5Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EEE31380664F;
+	Thu, 29 May 2025 15:10:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-c25d1
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174853142836.3293316.17061132438510919727.git-patchwork-summary@kernel.org>
+Date: Thu, 29 May 2025 15:10:28 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 29 May 2025 14:17:04 +0800, Yang Shen wrote:
-> Add Yang Shen as the maintainer of the HiSilicon SFC driver,
-> replacing Jay Fang.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: MAINTAINERS: Update HiSilicon SFC driver maintainer
+  Submitter: Yang Shen <shenyang39@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967228
+  Lore link: https://lore.kernel.org/r/20250529061704.190725-1-shenyang39@huawei.com
 
-Thanks!
+Patch: MAINTAINERS: Update HiSilicon SPI Controller driver maintainer
+  Submitter: Yang Shen <shenyang39@huawei.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967227
+  Lore link: https://lore.kernel.org/r/20250529061406.183992-1-shenyang39@huawei.com
 
-[1/1] MAINTAINERS: Update HiSilicon SFC driver maintainer
-      commit: 589561cb455189154a7110a39d9fcc39965f3104
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
