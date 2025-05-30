@@ -1,101 +1,86 @@
-Return-Path: <linux-spi+bounces-8343-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8344-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0BE3AC92A0
-	for <lists+linux-spi@lfdr.de>; Fri, 30 May 2025 17:41:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD28AAC92DE
+	for <lists+linux-spi@lfdr.de>; Fri, 30 May 2025 18:00:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3711D1C08449
-	for <lists+linux-spi@lfdr.de>; Fri, 30 May 2025 15:41:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9885C7AEE98
+	for <lists+linux-spi@lfdr.de>; Fri, 30 May 2025 15:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED30B2356B3;
-	Fri, 30 May 2025 15:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9972F235055;
+	Fri, 30 May 2025 15:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avICfzR3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qJmR0BlZ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FA72356A7;
-	Fri, 30 May 2025 15:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7599A20AF98
+	for <linux-spi@vger.kernel.org>; Fri, 30 May 2025 15:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748619688; cv=none; b=gLQMJ6jbRwVwxri6u1otASIVkuXP/tlvJ1yYV7JsxlhipZjQmhP2aG1nDfClFXtbmVoWiIwx7Usth/7+SVP0/Kn/HKDy6OzP0NzgXLDzzYjB7xZFionxWisDxFEXbPSOWVPYwwq6gwyUp2UqARjhxbN8kS3JY6woBt5bqwboNe8=
+	t=1748620796; cv=none; b=bLUt1F6occd5f4PgZdUK0DtmDPfpQ+IrG22wUM6YQkKj+bVyKolPiA6OD0I82R8Dhj94DlAc4gDCcahWphagtd1UYiP5h7BN65d0t40Rsx5Dplnsn5gU1kcJ9ftI+i3M7v+eu2GCGcN6ZVnV84fPugXdp8R+kffFgX0NcjFwc6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748619688; c=relaxed/simple;
-	bh=fP3/MPEkqWYTER/4VjVnFo7B5KkWWe1JsVPclIWRWds=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RY6i4OyCg9n32XV+lGTX9uQ9YGN9AdIvvxzpD6gUsTl9tR/Y1mM5awPiJHl1kxTVSaieJpG40QqxOPuaj4iaGdeHlE5F1Ruxodg9UFo+SiHxSNnAqr1n2jgFTvBHymobHas4Kx5mW9SmGwEHs4wiWS4pMO2mbbdL1IYIQSfgDl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avICfzR3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E04C4CEE9;
-	Fri, 30 May 2025 15:41:26 +0000 (UTC)
+	s=arc-20240116; t=1748620796; c=relaxed/simple;
+	bh=J7jDZ80s6T/nmMCaWX6l4WtG7fT/I+mAKlmbnesJ3wE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=VbZuQvC+2k1D/CyCUT3qr8Gv+yrZrNk3IN/QxcT3tbclur8LDZl2l7tYkkOGVcPn0p+8E5lOi/+GKTywbE+ZVsFHO/PWd9fdkXzD6PxRP4NxyMxwQl8ifJtTqIyfj7kHEBfV/IFpDhUTplTzdE2+FyikHZbTI3Vgnu/B2DMdFAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qJmR0BlZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1ADFC4CEE9;
+	Fri, 30 May 2025 15:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748619688;
-	bh=fP3/MPEkqWYTER/4VjVnFo7B5KkWWe1JsVPclIWRWds=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=avICfzR32NbCcsTtfq0qwiZKQ4S8x26apEq15QNnnkQBSfDKcGwYH5x1ri9lFFLjX
-	 Ra3Y3eJhoSAbRo0QygTuZXrV/27pqJrJ6mPna5znErocPb8ZLuhoqpu7u179Pb+z1x
-	 pfPLc+Mlyvy9t3i75QiOjD3XiCygZBUcJs9cZt0sJ045BuZtDsob1TD8nLfeUWs5AI
-	 1n4u1XlMiIqwo27EV57Cd9alr4Ev/MMIefpvG1T/D6a5LYKA3/cvPwW/A55Mo1/ZCp
-	 Td/cvM8FZHt78jTi0OlSdSaWjaPNR5mFagXLUqtwPWckSQeTBKHqZ9lJKdnJpg4QUw
-	 qJFOYfIIYZU3g==
-From: Mark Brown <broonie@kernel.org>
-To: dgcbueu@gmail.com, florian.fainelli@broadcom.com, 
- william.zhang@broadcom.com, kursad.oney@broadcom.com, 
- jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com, 
- p.zabel@pengutronix.de, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>
-In-Reply-To: <20250529130915.2519590-3-noltari@gmail.com>
-References: <20250529130915.2519590-1-noltari@gmail.com>
- <20250529130915.2519590-3-noltari@gmail.com>
-Subject: Re: [PATCH] spi: bcm63xx-hsspi: fix shared reset
-Message-Id: <174861968637.656925.5551215410725929280.b4-ty@kernel.org>
-Date: Fri, 30 May 2025 16:41:26 +0100
+	s=k20201202; t=1748620794;
+	bh=J7jDZ80s6T/nmMCaWX6l4WtG7fT/I+mAKlmbnesJ3wE=;
+	h=Subject:From:Date:To:From;
+	b=qJmR0BlZPKkZAjMlNfENXm84O0WvpBElY421UGvprOjhyV/RQyXkH8ht41mQMDefF
+	 6Xm6NjP3AVWxBlhk/kimuTaV5UnvnvgDpRPPaMFICgCmrit/1T0L13Gb8F0EPObYoq
+	 giRkJqGIM9pR49pI6mZ+Os8Xszat/nfLmdoH1+8rkz4HepQsvdILLhgk01z/JX/GJR
+	 NjL0Lj6oOcb9DBIlik+Xb0g/4LXWL5FXTp2ATdKWgbRCGWt86s0D6RM/E7y/enFuQj
+	 dzNHC9PwXe1OoPDjnMtopopV1oGgW3JxN30vHOItrGRwLUiZwoE7zPvA/p/4N0H+hA
+	 jzYcELidVbEbQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 74B1839F1DF2;
+	Fri, 30 May 2025 16:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-c25d1
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174862082794.4001687.13794103392391270622.git-patchwork-summary@kernel.org>
+Date: Fri, 30 May 2025 16:00:27 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Thu, 29 May 2025 15:09:15 +0200, Álvaro Fernández Rojas wrote:
-> Some bmips SoCs (bcm6362, bcm63268) share the same SPI reset for both SPI
-> and HSSPI controllers, so reset shouldn't be exclusive.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: bcm63xx-spi: fix shared reset
+  Submitter: Álvaro Fernández Rojas <noltari@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967337
+  Lore link: https://lore.kernel.org/r/20250529130915.2519590-2-noltari@gmail.com
 
-Thanks!
+Patch: spi: bcm63xx-hsspi: fix shared reset
+  Submitter: Álvaro Fernández Rojas <noltari@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967338
+  Lore link: https://lore.kernel.org/r/20250529130915.2519590-3-noltari@gmail.com
 
-[1/1] spi: bcm63xx-hsspi: fix shared reset
-      commit: 3d6d84c8f2f66d3fd6a43a1e2ce8e6b54c573960
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
