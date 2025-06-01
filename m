@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-8350-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8351-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06182ACA46F
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 02:09:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CAA1ACA59B
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 02:34:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90B397A2899
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 00:08:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6D6188F082
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 00:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84F3E299AB2;
-	Sun,  1 Jun 2025 23:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C272306E8C;
+	Sun,  1 Jun 2025 23:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0tWNHoD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q9n87MD8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E9E299AAC;
-	Sun,  1 Jun 2025 23:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4FE306E88;
+	Sun,  1 Jun 2025 23:37:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748820827; cv=none; b=SB9L2Wobi5W6CS0CD3eKd5ZMQbC4GgCh7f/Z3kVfQd6nSAzy1C/5ylaFnuMi9f3DH18U+1WDhXehzxW3g8CIeYaBoBlKCStULNHFsvw7dUJI6pcNtlgIysgn8nPEmn4H8OGn8cDo18rJTx1vjQifkeJC6PWiGVXDgifR+Ue3Zz0=
+	t=1748821053; cv=none; b=TNvQpAIINWiW4c2Ur3IfL2sl1Su9odAqAX/7TeSypCNro+UdXLZc+WekniIP8X+NLJrrGu7NU2UxRVZWe4ltUCvQzZ/uGuhlSFHVmUtx1p0qJJuA0XRngnFoLEo5JJW5d1MO/hKD+59aNcHrVko1ylveCHJi3Djf5K6QbdbieIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748820827; c=relaxed/simple;
-	bh=+WYfTlB0TnClHWldkmkWcG2WhxhwMOSmaA1Mc2YHFF8=;
+	s=arc-20240116; t=1748821053; c=relaxed/simple;
+	bh=Wjdo5TnE9fcnb/jOq2/qZNz2bpE7qnzF3XNNH6ecuWg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OZqRKnuCNtlkRbHlwMqHUfQRsohh4UyNvTnbeNm+87HWBxpAkn08dbC9CTFt99CayodSiWqf3NCDzjBaqIbk3lWA6fRgVHbVMa+uXfoXbodhQmGcPNn1pRlqd3IADac5YPVpfTV4w2t5WAOxUZVfU1ehJojllQVGxqXEULijd9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0tWNHoD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392A3C4CEEE;
-	Sun,  1 Jun 2025 23:33:46 +0000 (UTC)
+	 MIME-Version:Content-Type; b=bqNWPWBPw4KacQ2e7+inlyD1bJB9Rrm08CiCdA9LsJM99HB59akPw21PUOnIZQaq5nF1A9hQLcQEWJ0uG/XmcGr/1OC2PClpzvIGkgtTXFqpOWeR50Qvv5ZsDj2zIpQ1rDjig13ioRkrMCmCBbS3PuKrNHZSMJUnFIMDjHOF1dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q9n87MD8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94410C4CEEE;
+	Sun,  1 Jun 2025 23:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748820827;
-	bh=+WYfTlB0TnClHWldkmkWcG2WhxhwMOSmaA1Mc2YHFF8=;
+	s=k20201202; t=1748821052;
+	bh=Wjdo5TnE9fcnb/jOq2/qZNz2bpE7qnzF3XNNH6ecuWg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=S0tWNHoDVZBz1EgjYQmjd9Al6bAB2pNrvuri/Bb4ZQMjOyx7Eik5AAYWiJ5odtzSx
-	 5wSUDzyWKKGqh0onPxGC/hAHrojgKo/xq+e9bnP8g5h26jZz/P7rvSRm5ltnPSJmAM
-	 mU726cpaqZsYBkorqyt/MnE0uhNJpnhxojuT5Nq71qmrvBFS+UkArjQ3yv/17nJjiG
-	 6y6Y7UQBbmqZVO1WEJg8xX6MwciSF+JZ6PTmGhAwoM/Qti2CoPcqng3ruobqHPjcnY
-	 Hu0MBTVn4CdQLaEk2oQ6MvR6b6JSiUXNWRn0nBZklb3EyE6P/2ldUCcUL2qVrTkm26
-	 +kwxIbDXzEMpg==
+	b=q9n87MD8b1///cFophoz5IjaPYB8mi8BP37HwJbTnW0a7NvZXC+5mfK55kcKpY+os
+	 cRStRhtIQVnpHHmTFTmyJ5ryDTPGVFeefGL6OxdM4uxxPBhT9vrNVbZO0FmH6Sw4db
+	 aLbRWg8bfVF36ChbCuOchpHNDIDMxn/kUBk4axFtlroXOZPhCcyOUUdZmAhBIH4+nU
+	 MmZ7czctN8IFn8V1gf2WvXU1/5ILEoxEFg861PRC4H4RS1ygXbfPQs244P3ytA8g70
+	 ynCywsj6Ueo4mUmrQ+el+L72hbHaBHcxmxaJGqjPnkvLv/9/BlbtYlJ4oWtv6l5q8y
+	 SvhE4l6/5iPWw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: David Lechner <dlechner@baylibre.com>,
 	nuno.sa@analog.com,
 	linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 095/102] spi: axi-spi-engine: wait for completion in setup
-Date: Sun,  1 Jun 2025 19:29:27 -0400
-Message-Id: <20250601232937.3510379-95-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 87/93] spi: axi-spi-engine: wait for completion in setup
+Date: Sun,  1 Jun 2025 19:33:54 -0400
+Message-Id: <20250601233402.3512823-87-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250601232937.3510379-1-sashal@kernel.org>
-References: <20250601232937.3510379-1-sashal@kernel.org>
+In-Reply-To: <20250601233402.3512823-1-sashal@kernel.org>
+References: <20250601233402.3512823-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.9
+X-stable-base: Linux 6.12.31
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -140,7 +140,7 @@ changes, making it ideal for stable kernel trees.
  1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 7c252126b33ea..de5b71b5ab77a 100644
+index 2dff95d2b3f5d..f4030202d32ff 100644
 --- a/drivers/spi/spi-axi-spi-engine.c
 +++ b/drivers/spi/spi-axi-spi-engine.c
 @@ -10,6 +10,7 @@
@@ -151,7 +151,7 @@ index 7c252126b33ea..de5b71b5ab77a 100644
  #include <linux/of.h>
  #include <linux/module.h>
  #include <linux/overflow.h>
-@@ -555,12 +556,16 @@ static int spi_engine_setup(struct spi_device *device)
+@@ -554,12 +555,16 @@ static int spi_engine_setup(struct spi_device *device)
  {
  	struct spi_controller *host = device->controller;
  	struct spi_engine *spi_engine = spi_controller_get_devdata(host);
@@ -168,7 +168,7 @@ index 7c252126b33ea..de5b71b5ab77a 100644
  	writel_relaxed(SPI_ENGINE_CMD_CS_INV(spi_engine->cs_inv),
  		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
  
-@@ -571,7 +576,11 @@ static int spi_engine_setup(struct spi_device *device)
+@@ -570,7 +575,11 @@ static int spi_engine_setup(struct spi_device *device)
  	writel_relaxed(SPI_ENGINE_CMD_ASSERT(0, 0xff),
  		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
  
