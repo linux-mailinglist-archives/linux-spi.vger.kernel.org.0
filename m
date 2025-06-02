@@ -1,105 +1,89 @@
-Return-Path: <linux-spi+bounces-8352-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8353-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4027AACAA3E
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 09:58:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06108ACAB68
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 11:31:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 430EF7A56F4
-	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 07:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD6F53BC14E
+	for <lists+linux-spi@lfdr.de>; Mon,  2 Jun 2025 09:31:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD9E19CC36;
-	Mon,  2 Jun 2025 07:58:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YG7iR5UU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD15B2AD02;
+	Mon,  2 Jun 2025 09:31:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0CA2C3255;
-	Mon,  2 Jun 2025 07:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7194AD5E
+	for <linux-spi@vger.kernel.org>; Mon,  2 Jun 2025 09:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748851120; cv=none; b=pr/rOoYGAplaMJ+F6w+AIWo1MSXvwyjSYnd94a/2CfyAJ42Hh/USWrbrVMgQR2DOb6fMkVmU3lryajEOw8fVyJ/n4fTjuimtXFKeqluawzSpvFXYlBd7Q8z+YqRobStmdXWyTgDO79zYQFJpFAZ/q4iLlyap/IKh53a/gXHmjMg=
+	t=1748856690; cv=none; b=ZzcPMelxRbjf4wf/fhjWubzviXv7JcU/GY9if4dFzMPvu3YJvlevuxsRe/9aAP7SWTMuP/oYcedOtgpdpTJOISSNbsIdkPgv/u1RkXLBwH+EbBANX87hOJs0J7EEGjaifLKslO4bMeSLeMeyBUNx2PhcoHU4YIuZWcQuWnPF608=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748851120; c=relaxed/simple;
-	bh=544lQiqDWQm+uX2Zups+rNvGYpg3RDJp/RoqS3mQbXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Km2PC7F5cCvScNIbUKV8/nXbFt8TOEmgGFj1esskai5VivnHOgF2q14crZXw+PWEydFax3Wh8xPLirLQsunp6cPbkwsZR+1AM7G97Q6hyDubhyuxEioumu0+j/WN6C//OKGfEqEs52kFmzTTb4YGfsSNQl2DsDJNuXKUSAmJzAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YG7iR5UU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09459C4CEEB;
-	Mon,  2 Jun 2025 07:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748851119;
-	bh=544lQiqDWQm+uX2Zups+rNvGYpg3RDJp/RoqS3mQbXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YG7iR5UUTf4WRRRbxYFk0IlK8l9Vbh57IGFkUQ69NdQC0dbuApSDMY7VQ1zAenXVo
-	 jQfUmja+Wrix6TMloeCtNEyLX+lADPCdCwYj7Uu61Rss/vLn/WeiaxneQgWZZOepdn
-	 6mEU6zWB9z8OA8NSkm6kiCZf4xkM8ii5pgUT61frSV0R0s7QQhzFfU39NB9NU9HO9I
-	 mMsoTELnmF9yX0yU5ew6M2ItuRbbjn6ZdDDfiXksUlFAYX2m75k8SeI1WSlFvE5QmI
-	 3nnKhZwMraeWYs5Ssf9iZSnA/tsOxv6PeIXg1KEZQ3emmzur9vWTmkdO+Htbjh1GBk
-	 m7vel9um4Imig==
-Date: Mon, 2 Jun 2025 09:58:37 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, git@amd.com, amitrkcian2002@gmail.com
-Subject: Re: [PATCH v3] spi: dt-bindings: cdns,qspi-nor: Update
- minItems/maxItems of resets for Cadence OSPI controller
-Message-ID: <20250602-precious-hound-of-argument-de01be@kuoka>
-References: <20250527063438.504207-1-amit.kumar-mahapatra@amd.com>
+	s=arc-20240116; t=1748856690; c=relaxed/simple;
+	bh=DDQCYoxGnWSY2S+soWqfqhkVaAWwzBsBgbxvaeWkF7I=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ipiSJsEdjGxpS10vFBj1LXm+ijB7vbFGcJ0QxK2V18mTzovjhOtiKWryYjk+oMFRjelrygq5HmgOFsEZQUJDeN6on+gn5ZE37NnMvv+B60QMZoB6bakqgBYESib6UYORvSscIYvOOSfoxxppk74L4lyr6QVDvru9h1BSVD/QT1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uM1Vr-0003wb-C5; Mon, 02 Jun 2025 11:31:23 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uM1Vq-001Qlw-29;
+	Mon, 02 Jun 2025 11:31:22 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1uM1Vq-000A3f-1v;
+	Mon, 02 Jun 2025 11:31:22 +0200
+Message-ID: <83e59280261ad0769dd7e9f6135656c795836878.camel@pengutronix.de>
+Subject: Re: [PATCH] spi: bcm63xx: fix shared reset
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: =?ISO-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>, 
+ dgcbueu@gmail.com, florian.fainelli@broadcom.com,
+ william.zhang@broadcom.com,  kursad.oney@broadcom.com,
+ jonas.gorski@gmail.com,  bcm-kernel-feedback-list@broadcom.com,
+ broonie@kernel.org,  linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 02 Jun 2025 11:31:22 +0200
+In-Reply-To: <20250529130915.2519590-1-noltari@gmail.com>
+References: <20250529130915.2519590-1-noltari@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250527063438.504207-1-amit.kumar-mahapatra@amd.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-spi@vger.kernel.org
 
-On Tue, May 27, 2025 at 12:04:38PM GMT, Amit Kumar Mahapatra wrote:
-> The Cadence Octal SPI (OSPI) controller on AMD Versal SoCs requires only
-> one reset entry. To reflect this, the maxItems for "resets" and
-> "reset-names" has been set to 1 for AMD Versal SoCs.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
-> BRANCH: mtd/next
-> 
-> Changes in v3:
->  - Updates to 'resets' and 'reset-names' removed for non-Versal platforms.
->  - Updated patch description.
->  - Added Mark's Acked-by tag.
-> 
-> Changes in v2:
->  - Removed "resets" & "reset-names" from required properties.
->  - To address review comments, removed "maxItems" from "reset-names".
->  ---
->  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index d48ecd6cd5ad..81e8342db4bc 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -17,6 +17,13 @@ allOf:
->            contains:
->              const: xlnx,versal-ospi-1.0
->      then:
-> +      properties:
-> +        resets:
-> +          maxItems: 1
+On Do, 2025-05-29 at 15:09 +0200, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> Some bmips SoCs (bcm6362, bcm63268) share the same SPI reset for both SPI=
+ and
+> HSSPI controllers, so reset shouldn't be exclusive.
+>=20
+> =C3=81lvaro Fern=C3=A1ndez Rojas (2):
+>   spi: bcm63xx-spi: fix shared reset
 
-And now this is not synced with top-level properties. They say
-minItems:2. I never asked to drop update of top-level - read carefully
-v1 feedback.
+Both drivers currently enable the SPI clock before triggering a reset.
+Can the hardware cope with being reset before the clock is enabled?
+That could happen for the second device to be bound [1], unless the SPI
+clock is shared as well or already running for another reason.
 
-Best regards,
-Krzysztof
+[1] https://docs.kernel.org/driver-api/reset.html#triggering
 
+regards
+Philipp
 
