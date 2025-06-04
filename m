@@ -1,124 +1,110 @@
-Return-Path: <linux-spi+bounces-8362-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8365-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 410A1ACC4C0
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Jun 2025 12:56:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2EA6ACD8B9
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Jun 2025 09:41:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 849CA7A636E
-	for <lists+linux-spi@lfdr.de>; Tue,  3 Jun 2025 10:55:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51ED518969DE
+	for <lists+linux-spi@lfdr.de>; Wed,  4 Jun 2025 07:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D54822B8B5;
-	Tue,  3 Jun 2025 10:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78F2238166;
+	Wed,  4 Jun 2025 07:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7bNRXUC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YhLDvS/J"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E7122B8A9
-	for <linux-spi@vger.kernel.org>; Tue,  3 Jun 2025 10:56:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EF922B8C2;
+	Wed,  4 Jun 2025 07:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748948211; cv=none; b=JHOtx8zWZHQLRpEqyDvwRyu2PXPSn97RM10dt1G0zukTDXweN2vPgjsub+OTb5DmCPpE2gEYQXjmu7NZMcg9auFIIKL79gZN9I1g/vHEIeEgnhOJCsS3U5vgN/UpKsIrwFv8gqDbOm/C5U22obopF9DLBWH12lPojHxUo2hNxYo=
+	t=1749022853; cv=none; b=dfbXrfuGhQ9lKNKAJNPRBl4oc/bE21yKh7r3ao0jZbj7RSRDl9gKwoFoWXrhaJxbEnXlLsv0LPpMw9QCWWmTEaWYihKJMMOUPKVPWOqB0egP/IulpyBXk/xnWVt6RUwfj+WyhKwlLKtvonVevjH3xmq29ULTjUpKMDFkgeSeqfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748948211; c=relaxed/simple;
-	bh=JQBKBvxbo8qdmgbBRpt4bGFN7/J+DjHIJIJPh4ZJ7vU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rDI23DsRNZKD81sMp4mylJabZyI1aK2pruDenJW/pCB7MOzFM4UPQaBL+V41oA59YyR/yqfnwtZcavKJRiPQKkzo6mG0cjyobB/eFMhgGPM+BV6fZOoTmXu09n1a0Yg0ldTLJywJ7zOqdN838j79frDgVhggxaRlewQrimIEtOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7bNRXUC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFD5C4CEEF;
-	Tue,  3 Jun 2025 10:56:49 +0000 (UTC)
+	s=arc-20240116; t=1749022853; c=relaxed/simple;
+	bh=pHr+iNzLv9GxJXJt/p1c4oLkaW7OLQQwQD2ifOprTdk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gryMWx+jyh/nmeojXdMaR+N3sC+of8cx2yWWdt4hgdX4MV9vpff2PNZnty4QJge08m2lVJIKrzF4bPPG7MbZrdy3PNUDwKCMAL4xFb2pNRd2jueQOZRj6t4WlL71VGNe7DIwDEnCX+Gk1CGVnbDXuIRJt1nYkfgY9WXQ52YHPIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YhLDvS/J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 374DEC4CEED;
+	Wed,  4 Jun 2025 07:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748948210;
-	bh=JQBKBvxbo8qdmgbBRpt4bGFN7/J+DjHIJIJPh4ZJ7vU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u7bNRXUCkvObKp/A4B3izhHGJHjvRsF0eDuIokaOgYDcYVidJK/uB/MNXzJta0cyp
-	 s309y//MmW5RrlIrPOsl4SlxvF7ZPJ0o2VnB9s7FiTKSy0663FdLwbGDO8giuf2bcS
-	 VRC9k2ieU5dJIwPaZ6Xm03kddSjtKwkWIFlef3VdtJ3Etwb8Zjaw4kIlv5PQkRbHUA
-	 iUMTaAntrMEY8pBUMHvosq7GPaS0+hhbCPHB7TGZGSPNfeuUhf5DjHqD8E832GaTaK
-	 HAcH4+kkyrYPlfY2gF37rml9xhRogtACny5qXIg9/476/B39uAc3McN5uw34eW83jB
-	 XaqUtLL1OiyDw==
-Date: Tue, 3 Jun 2025 11:56:47 +0100
-From: Mark Brown <broonie@kernel.org>
-To: khairul.anuar.romli@altera.com
-Cc: "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
-	Khairul Anuar Romli <khairulanuar.romli@altera.com>
-Subject: Re: [PATCH] spi: spi-cadence-quadspi: Fix pm runtime unbalance
-Message-ID: <20a64c7d-fd5a-4e19-86f3-c0f450f1e332@sirena.org.uk>
-References: <20250603002402.11024-1-khairul.anuar.romli@altera.com>
+	s=k20201202; t=1749022853;
+	bh=pHr+iNzLv9GxJXJt/p1c4oLkaW7OLQQwQD2ifOprTdk=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=YhLDvS/JK1MQjqJOCtFmwY4ee7MnE1rf5k+7mIya90zdFIJZ0WTetG5/26ePTXhiG
+	 /1svIGiL6GaK1QRuwQPdTMST0ZZADHh7rblpDdYAcPkAQ/9bbMcvreT4hsTc+/zk/m
+	 BlRGWM/WvmCFDRJ7aq6lku1l6OOkio/Ch5mSjVRz0r2J63C0MWxchQrOKD4zvCEteC
+	 eqsPlR2aX7ZXv8x7wCLHHc/FsfwezehO5/tIY4+HGbLfWJ/Mu0YGRYwDzWybrY2YiB
+	 4EnsOoyCtwy4ipeHNfIs8N/IBPp2wvs6cy51zQlygEb4O3FaJbbAz2jKHUmdheTPVI
+	 tZE2CrSZpaqZg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE15C5B552;
+	Wed,  4 Jun 2025 07:40:53 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH 0/3] support for amlogic the new SPI IP
+Date: Wed, 04 Jun 2025 15:40:50 +0800
+Message-Id: <20250604-spisg-v1-0-5893dbe9d953@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EDyINtb0Bv8NY0W+"
-Content-Disposition: inline
-In-Reply-To: <20250603002402.11024-1-khairul.anuar.romli@altera.com>
-X-Cookie: Avec!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIL4P2gC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDMwNj3eKCzOJ0XXOLNCNDMwuj1KTEZCWg2oKi1LTMCrA50bG1tQCIsWq
+ JVwAAAA==
+To: Sunny Luo <sunny.luo@amlogic.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1749022851; l=1058;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=pHr+iNzLv9GxJXJt/p1c4oLkaW7OLQQwQD2ifOprTdk=;
+ b=zYbYWKMNv3d0lQCjOkN7LVwChi6psdws+UWgSlWO/xtLIY8JcHtqxIaHqmCGEcRkP5u6l4uxN
+ mPd/KhjEPTcBNK2OHN9ffH7JR2kD8r/8Mo2jJr8HnFlCej2L0E4QD0C
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
+
+Introduced support for the new SPI IP (SPISG). The SPISG is
+a communication-oriented SPI controller from Amlogic,supporting
+three operation modes: PIO, block DMA, and scatter-gather DMA.
+
+Add the drivers and device tree bindings corresponding to the SPISG.
+
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Sunny Luo (2):
+      dt-bindings: spi: Add binding document of Amlogic SPISG controller
+      spi: Add Amlogic SPISG driver
+
+Xianwei Zhao (1):
+      MAINTAINERS: Add an entry for Amlogic spi driver
+
+ .../devicetree/bindings/spi/amlogic,a4-spisg.yaml  |  55 ++
+ MAINTAINERS                                        |   9 +
+ drivers/spi/Kconfig                                |   9 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-amlogic-spisg.c                    | 944 +++++++++++++++++++++
+ 5 files changed, 1018 insertions(+)
+---
+base-commit: 57cf46cd1fe351846e1b065ca9546eef66675ecd
+change-id: 20250603-spisg-78f21682ebac
+
+Best regards,
+-- 
+Xianwei Zhao <xianwei.zhao@amlogic.com>
 
 
---EDyINtb0Bv8NY0W+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jun 03, 2025 at 08:24:02AM +0800, khairul.anuar.romli@altera.com wr=
-ote:
-
-> +	bool			runtime_pm;
-
-What's this intended to do?
-
-> @@ -1958,10 +1959,11 @@ static int cqspi_probe(struct platform_device *pd=
-ev)
->  			goto probe_setup_failed;
->  	}
-> =20
-> -	ret =3D devm_pm_runtime_enable(dev);
-> -	if (ret) {
-> -		if (cqspi->rx_chan)
-> -			dma_release_channel(cqspi->rx_chan);
-> +	if (!cqspi->runtime_pm)
-> +		pm_runtime_enable(dev);
-> +
-
-This is probe so everything is newly allocated and runtime_pm is
-guaranteed to be false.
-
-> -	clk_disable_unprepare(cqspi->clk);
-> +	if (pm_runtime_get_sync(&pdev->dev) >=3D 0)
-> +		clk_disable(cqspi->clk);
-> =20
->  	if (cqspi->is_jh7110)
->  		cqspi_jh7110_disable_clk(pdev, cqspi);
-> =20
->  	pm_runtime_put_sync(&pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
-> +	cqspi->runtime_pm =3D false;
->  }
-
-This is the remove() function so the driver data structure is about to
-be freed and will never be referenced again.
-
---EDyINtb0Bv8NY0W+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmg+1O4ACgkQJNaLcl1U
-h9BZhQf+JxLOQeGEIVVWVvRRyLmua1xOZ1+1wo1ZRJlujwy9TySJd/lHImo7jdH4
-pYKCy1iTHFw5Ui0uFSvpgHfz1Cgfg6PJdm+AwJe7/zqrMKXoARzWCZNOz5t2sFP2
-0qY7L2TmFqRfxnVONzJlmyf1B34shEpyJU7PEcBvp0MmEhm8Dfoc7P7arxLzdmQB
-4ROqMD8W9085P7Bm57pgrmoT6WSEbr8wFGS01pCyRIcbmAK/Gx7kXqUfoLjJKdt9
-Ru5u/PkWYcHACVA7xNdtvQRYuQ4zx4m6LA1jrUtCDaQYj7kAp5eEFZirjA5Tb8cn
-Nozkw5TGsYqD4EQOhxRk3/iotFu3eQ==
-=XHV/
------END PGP SIGNATURE-----
-
---EDyINtb0Bv8NY0W+--
 
