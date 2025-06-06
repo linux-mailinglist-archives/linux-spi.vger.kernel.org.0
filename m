@@ -1,144 +1,187 @@
-Return-Path: <linux-spi+bounces-8371-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8372-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 196B4ACFECA
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 11:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C261ACFF02
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 11:15:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 629723A1ED1
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 09:06:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CD6E3AB886
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 09:15:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE470286405;
-	Fri,  6 Jun 2025 09:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA121FC0FC;
+	Fri,  6 Jun 2025 09:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8l9QigN"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UxhzmmsG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3EE283FFB;
-	Fri,  6 Jun 2025 09:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749200794; cv=none; b=jFSUiODyuubhNZXWwr/UkYTSg0tHk0+bCadk8CFQQtgE32tvbxOgrdXEskWiqBvJEECShLAh7ZyxQyyjcjZzmKuIDxAAXFozv7/IZu8WyfAHDLp2eATM8BOkLgW+Sls81yi4olgvem7I0XOFN1piTyPq4VOMnyWyC1jFHc8CgoA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749200794; c=relaxed/simple;
-	bh=xZFCh0EkmJ6fC+3ypO4Zo22JJAr5ALjmJDD8E4XtJ4c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WPF0vsipdOiX5N966BI87eF45X/8M8if5eC3a4hAMRbWmMa+SiNMk0p6fnaPRHQ5NIcZfaZbHUVgdSghR59l5Fhpf9eNr8D3tgSE6otl7MLCm5XFZCmv8EApChqkkojX2YlUNsngzdG1LH98qElX/VW8dfs/QLk5OMBmKQ0pMXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8l9QigN; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a42cb03673so22606291cf.3;
-        Fri, 06 Jun 2025 02:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749200792; x=1749805592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+iEKTaT2LElUyz6hn/T8Mh2vQ8hFTWoMkAbmwi0/NDg=;
-        b=G8l9QigN6nfbatr8wQSZiI11udlH5vGQPTx2U7+LrqY1Awy53ZEXckqGqAigXghwt+
-         1NCqQauHeC+6KCNhkX4+FYJJ+PMvTpPMZx+qSm1I7nNqRW4FXBX6L3japGSSq+JXosRw
-         FlVAZFYo3zSIawiEW/n4sWN48wu5vu807krtI196kEdZD64qW4O5qiFRilyiHKjE1yI7
-         EN9a63OiJs1voPbG50R8hX/kVk/4PehyVZTyfEAxdV0/dw+KJMnOa+Ot4kzo4RikNUtn
-         AOogTrPIVPFZahy6zgCzeMnaZvctU7tV8J6fWgNI9yK7oVrFF0PglJ85eXfINV5gOKvk
-         sIaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749200792; x=1749805592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+iEKTaT2LElUyz6hn/T8Mh2vQ8hFTWoMkAbmwi0/NDg=;
-        b=GYodUHo/nEhYE0/0x1pHFFs5p+CdDhd4Vt/eRNXZ4bkaWdTmIddT/elgH/G3rxZm2+
-         wrEd29eOB71ClmjmPuSPunwfMiqcvVfEULv+x55BLLKyI0/FTDG0OElGzCO6SF/PVJhy
-         39KhyDmhDUix9oqfMNmA1FdHR1jwdZDhCzkPWM4xiABvJHa1dFKFQwNhpNgmLpm3xu9/
-         Rc7Gtf68ffLyII1hrZxd7JN29aeZ/vl5w+00x6sgWeQ7OiSZYmvF2Bthgd1Lk5IM1VSk
-         1Ty7GfCKQ+5zPLMxcYgNOB/JQyTI21hp25kU9XcmC9zuRcpnSDo04dkRPAdRHHbHRe7B
-         pPpg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4Bj4SX3vrQlPWUSLrDyOdvtxvdlSDD+3Bk16+jE7U8sSo3URdGSVFg8ZTVArPKSV0MzcFY4mD+x/D@vger.kernel.org, AJvYcCWhpojanAgvn9y4TU4f1EIEmoZnwLLoEMfIAmiBsCElN5jSaGruzjXit14ddz0WWvv08wqb85qXl2GIMTQv@vger.kernel.org, AJvYcCXONlUgkja/NrJaT/AONMt3TEdWIb05wH8M3qr3vrQ8f9IKl5oQWSQpwDhPjTVEYFS2f1FVuDDaM4Pb@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWygNfphq9quIPtbotKKykGIS0pg8n3R+Y3ajgolM2+vMUD8TO
-	/b22nLenxE4G75MroBhNCvICwUIeEswva9nTNuvvKldAxHbtZ6AZe9AKfO5bFtw0aAaWcvwLBHJ
-	TqQlvjTZqMQRh81eMM8T5qbp1D9ZrZew=
-X-Gm-Gg: ASbGncvBda2DHTarZCUjWP7JJJNVggmyUdJ8Dx2F6s/2Edw/yVuO8BBStoXb++ZHFVG
-	x4R8thZGFoS1yIFA1T7T0zmQzU5CJShOKOSz0yUFL5zHdxJRMB/UGShehFTnldx08Eekiy09Mhm
-	fhTmHtLWMdzWjmp74rVS0ZTPbZTyu7LQKmNJ6GOwbSV3p9TarbZz8Z5bS4xDx+2SWZNuSjB8D23
-	9Kl
-X-Google-Smtp-Source: AGHT+IEAnnzIxtW3T+9hMHK+wBH7ZD7AMKC5gNvjX9nEPuofdL7PSuw1v4ThDP1ou2X6MNg+w1DXRb5CyDe5GpT5zFk=
-X-Received: by 2002:a05:622a:90a:b0:491:20d6:75ff with SMTP id
- d75a77b69052e-4a5b9e55b32mr50608161cf.31.1749200791922; Fri, 06 Jun 2025
- 02:06:31 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369F74A0A;
+	Fri,  6 Jun 2025 09:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749201335; cv=fail; b=Tt9BGqC7ILHhMnYQcqWff5SgTw+F7/ig1stllF3MVbIb/P+aBZ3O5hwpo0+p2xojY2ACCWvKloVcAu6NENln811Eh7HbvnrgzjccQyzJYWgfujQn9d88zSUNe1jcy0kIdFHH7O/7ORQy6lsSDUidym+fMJIiKE9nmGSD2CzBVnE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749201335; c=relaxed/simple;
+	bh=bR2t6FFlLpfjJqoaUwDHBXKVXxu9op8f68TcWKAGglM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=SU/HUP6m3E2RiMkK4q8S9h0dMRKADR/KKHX9KRT8m4nWPhtSCMOrA99dXm4KhjTzbKuBbtdNUubyGw1a9M0FQ4c4Pu1+H/+XR2q1y1sjJBBOk2wHctIYr9FccDpHAySxj+66Wo01djYo2bSnEMKuQ2DGkfOnNnvM2+QdWU/i2QY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UxhzmmsG; arc=fail smtp.client-ip=40.107.220.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=CYpY00Vcz8iO+/Y5rnNhQZ/+9YVUy7fi05uqGvtfEMrc7ha8b93B8atinyUCVEn8ep65/RbehPoQcyQ+wFDWVqrxZgq3wu4Tp++z2pu1onyT0wRziy95+zjE1xpx0U3RqTWJ4K/3nFoTKcabIGN9H98OX2K06bmo3+fu6hgRXcbJWvGrY2HlVE2gEWFrRZiLLEoKAQlQWN8xtsucjYm56fFcA6qiqiqTs+qxLMiS/aQC12K1LAILpqW3kX46Llc7uCpNV18g4mIKCAg6BBwxiMBNicHSfZHa2RU+H7aeabdhuj4Q2/LEZSm8grtFzx8FYiJQ6B0puZsqsV9r/xE8xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bR2t6FFlLpfjJqoaUwDHBXKVXxu9op8f68TcWKAGglM=;
+ b=IaLmZ6plzremG+Ap3/eMsWoTplL6Y74hggrxkQYbJ8PqbkEPTZwi6yo+B491fQ6Y3IXDjIWGhwGiqRkmCBAJJ25hGoTFKy8OCSyHQ3BE0/94AVplKg08H4om03lsAXwP9VK0JZZEnCaVUOEOup+E0stnB7Eh08IQSyic/KsRgu+5VRr9yAor0bLfjDw9dIh39pfolwSn8Dl87UoNEVXmBfpOCQpQh+tI9w4pr40inVMrpLr3Fo9CeJP/5A5g40b53lZwb+M3490BOv9z37H8R0Jf7MNwCbBjGMHrRZoOcuGoOZJIFDM9gq7jXYO1OJ90kioNzPlPhP9p0REiz5pjmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bR2t6FFlLpfjJqoaUwDHBXKVXxu9op8f68TcWKAGglM=;
+ b=UxhzmmsGSFORWDbTseAqW38S7vNYZCy6ZRylil3EbuJot4Lo6oqi6h7lW4m4XwwkMSrJTMonC4xnrNukUlDR7fcbUqwNCfeMdeez385PAbWMPqK8579RxtUehgBKT/Kx0rx3187aMM+hiTS4uJ49rxIJ/B3uSIjaIwdZiiGSRey4L1/BX0V06snbz4/XKxYylD9wy6X8TaGExqBmoQVnwG+oVpwHAtlSH8W2imrharKLvmIk93dWxFLyiJrKnyMi6XIeZ5QC0Bqc59kdGY7XLozt/5cNS3TWeSDtKLcjkGw1uy1nj0XWMrRt/ZOVujABFkmetSt67+J13g/bH6Sivw==
+Received: from IA1PR11MB8804.namprd11.prod.outlook.com (2603:10b6:208:597::7)
+ by CY5PR11MB6281.namprd11.prod.outlook.com (2603:10b6:930:23::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.33; Fri, 6 Jun
+ 2025 09:15:29 +0000
+Received: from IA1PR11MB8804.namprd11.prod.outlook.com
+ ([fe80::fa56:fac3:2d22:311f]) by IA1PR11MB8804.namprd11.prod.outlook.com
+ ([fe80::fa56:fac3:2d22:311f%5]) with mapi id 15.20.8813.020; Fri, 6 Jun 2025
+ 09:15:29 +0000
+From: <Thangaraj.S@microchip.com>
+To: <dan.carpenter@linaro.org>
+CC: <linux-spi@vger.kernel.org>, <broonie@kernel.org>,
+	<kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH next] spi: spi-pci1xxxx: Fix error code in probe
+Thread-Topic: [PATCH next] spi: spi-pci1xxxx: Fix error code in probe
+Thread-Index: AQHb1sIAf3cxr89dH0GxQwe8etbSebP12IAA
+Date: Fri, 6 Jun 2025 09:15:29 +0000
+Message-ID: <5813d7e82bcbae960712a77651a1dc448919a1b4.camel@microchip.com>
+References: <aEKvDrUxD19GWi0u@stanley.mountain>
+In-Reply-To: <aEKvDrUxD19GWi0u@stanley.mountain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR11MB8804:EE_|CY5PR11MB6281:EE_
+x-ms-office365-filtering-correlation-id: ba0aea3f-bead-4c76-ed48-08dda4daaea5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?emF2b05ZSmJsZjFtUGtPVW5UbEFCaDJFbVBBVkprcFlLam9QWEFRM1FSMXRI?=
+ =?utf-8?B?c09yUEc1VnFDaVRzV1p2OVVuVnc0bDJNYjV3NFZBZmZCSnFScU9nWkF5RWJ2?=
+ =?utf-8?B?UFg1Y1k3SGNtcnYwWkV0YjlIVTZ6OUNDd05ueTh3OXExb0ZoMEQ1ZVUyOWQ1?=
+ =?utf-8?B?WXlmVWpIZmJxQ2pvbFc3c3lZU3dGam9rbWtPaHNRV0IydnFsMGxtTlFWR3Mz?=
+ =?utf-8?B?bXI0VTM1YVZsUmpRSllUcEU5OUdBQXh4YVdVSFpkWkN5L3c1K0J6OGJ5T3Fn?=
+ =?utf-8?B?Vjk5SENsNXcxMEt4N3ZlSk0wVlZLU0wzekcxUW9XcWluVlN4UnpnaThzbjdR?=
+ =?utf-8?B?MTRXVFA2cUlPaVlvU2ZOL01kOWN1MnhCRzI0c3ZWa3p5RWFyWFhodlJCTEtt?=
+ =?utf-8?B?MkliQUZoeFNzekdEWnpWeHo4TnYwTExQSEtkcCt6aExoaTFDZnVaY1pWd0xS?=
+ =?utf-8?B?WUpTeHZrV1BFTFBWaDFGUmFVNjlTemZ3S2lkejRWZURjVVlDZURLSHdwUWtM?=
+ =?utf-8?B?K25ZRnlyUW9aSXhMcHZucEY2Y2lCOWl3amVBalhsZnEvYmVIOEFGWmUrNFo3?=
+ =?utf-8?B?Y0RUaGprSjlnVyt6UjJJajQvbVBZY3d3VnFmWlArNWMxOCtpbW82OHlZOXE0?=
+ =?utf-8?B?STJkVTF2eVE0TE9VekRsK1JnUmxzdUtqcDF1VnRDdVlPRnJvQlJnNXZ1ZUg3?=
+ =?utf-8?B?cjhqRWZXM1lNaGxla1NBZ0VMQUkybVdKdFE0cG1mL3Uvd2dFVVphQnZPbUN3?=
+ =?utf-8?B?eHZ3c3JJSlUrYi9VUll3K1lHZjNWOXR2dXd5eDROWmg4M1ljbVV1bk5SN0I3?=
+ =?utf-8?B?QVdEU0t4OGhjK1l0L1l6TGhlVDdRc0w2Zk5HYTVWaEZGUW44V2VITUdRT3Uy?=
+ =?utf-8?B?ek12Rm1nMWh5cjJ2SC9xZzc0NjVza1RwSVdteHBjbHZ0d2g0aXhDMEc2SkE0?=
+ =?utf-8?B?ZUEydW9GL1JlQUN1MHc2Q3hENEg2SVNMdzBoZHVEcXFvcDlZRVVwMGYvVHd4?=
+ =?utf-8?B?emxGdmRYa1ZVZHRqdDFkZnpVNVVDcE9md2cweHA3WkVsZlp3c2N5MStmK3Qy?=
+ =?utf-8?B?eHM4cWRHWHFmbkFvVWN4NXQwU2FYUldsNGNZOGp4dTZQbTE2SmZYQkxiRGVp?=
+ =?utf-8?B?TVR6bDd5V1AyNFJpZXpwNWo1Z1RzaHlXekl0a2gzc21NazQzL1p5ekRxR0xZ?=
+ =?utf-8?B?VkR6MkRiQTFVZWdiY0EwK3R4aHgzSC8wZm9kMFZoclpzVndheVlzb0JHR01t?=
+ =?utf-8?B?OE5kSUpLQStKNmgxZ3QzVjRPUG1zRVZITWF5dlNyQ3NmNzhDQXpCTlVXdmRi?=
+ =?utf-8?B?Wko4QWo2ZEg4SThNanhRSkxxamh5aitIMXFNTFNweFRKVmtLaXloSkZLbS9k?=
+ =?utf-8?B?RWZodUFMRjA0WGFSc2pBUDRYUk0zUzJ5NUl2ekNYQzdPRFdMaFlCYkZHS20x?=
+ =?utf-8?B?TnNUZXI4M0RLY3FMZGhJS1F2L1dnR05nc2ZSdmNqczVTbHlmWW1LNWpmOEx3?=
+ =?utf-8?B?YnNBbmR1Smh3Ym1ZMUZoT3VkSmhnN2l3RllMMFNvNzNxMHNPMCtoY2tkN253?=
+ =?utf-8?B?T0pLT3lXSGR4ak02TXRBT3VTR2xrMGpFNnliVHRDYVF4RjkvQnZaY2RuWG05?=
+ =?utf-8?B?QmdFb2RzanZsSUZ5alN5NXRHNUlpRTVKM2s5L1M4WFlyZC9wQzF4bm5mRW5T?=
+ =?utf-8?B?Q1pKVHV3R2pFdjRPcFdBMG5pQ1pGUmJVN3JhdmR3UXBYeUJ1QWJUOUpnVFFQ?=
+ =?utf-8?B?UnkzL082ZDAxbG1HUm9TSDdRZVQ3UDBFZlBSdWs1NWY5Z0NXUHZQZFpuQWE3?=
+ =?utf-8?B?TXB2VkJDem85M3BpeWpNV3JNWkRXdmwzaWRnSUpaVDRNL0NVRDYwN0JTcXhs?=
+ =?utf-8?B?VzM1aUZQVHJydzhsMUs3Q0tQRDBFRk9CdElldkM1Y1RCVmJUdEV2cllXUUpC?=
+ =?utf-8?B?OWhCMnhKUmw3R0JpaUJBM2FPWmUvUklXU3hYa1VFTDZKYVptTkhHaEx1WXJt?=
+ =?utf-8?B?eUk2NDZ1TnhBPT0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB8804.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?d25RTlRCbnhZLzVhalFWNGpselFubWNXVzFBSDdlUEY2UFJ2QWFrQndXMmpO?=
+ =?utf-8?B?T3pyVzQxdGFINXYzQ1BEbVc3bmdnaTBUUGE0OG5JeGIzT1hKM01Fam5kWmc5?=
+ =?utf-8?B?NmJTTjRSRDNMOElkc3g4WGtzb3hKdVZQQldlVHBZeDlMeW04RFNGWDdXVGtK?=
+ =?utf-8?B?NHl1S2tFZC9mb2RVWEFNWW9mcTRMUUJtSG5IaThYbzNrUWpwczgvb3dLN3Vu?=
+ =?utf-8?B?aitYVW13SE9keXF1Tmloankrcm1GTjUycDVKWVVNcnljSXc1bHdteGhHZFJR?=
+ =?utf-8?B?Y0JiKzlJa0ZiN25QeitrSGFub051c2lpQjhWZTAvMHgrWDFlU2lpMG5MaDJj?=
+ =?utf-8?B?N3h1Qm1uTkZCNmg1TFB3WlhCVGw5Rjk3MUdWV28xK2crWTlqM21tQ2xkRm5E?=
+ =?utf-8?B?U1o0YXcvU2tScGY1QzRKL0d3NnJRUDN3S2o5dU1tN2JuSS91R0JjelpBSjIw?=
+ =?utf-8?B?R3dVd0hOSWFNU2V0M0tsTTBpR3J1S0xuOWwveDd2eFQ3NnB4UFhuRitrdTY1?=
+ =?utf-8?B?Q2JERG9zYnluVEUyQU1tRHNlMWRWTE12VjV4L2RDb3JDNzc0QTJGeVBCWC9w?=
+ =?utf-8?B?QkxIL1lXTlc1Y0RRclRJN3VQb3RSUkZSdHdqeXBmUklYVkRSRFpBRGhPUGRp?=
+ =?utf-8?B?a3FPcVdnbmNUQ1pZamszby8rTVFXTVdaRVg1dmgzWXdDYmdsZ3dOK25YV1Bw?=
+ =?utf-8?B?L0x0NWhGZ3E4djlLbHdudHNRWDhhNzNleUxhYWlMalN6KzcxMTlITlZaTnNq?=
+ =?utf-8?B?OGd1SGhCS21uMG9UK3N4T0dnT05LaFVYMmNnbGtxS1EvNXRXVDVRL0dGR01R?=
+ =?utf-8?B?MTNheVMrSGVUYUFRYnRTWmIrc0ZaeURDdkNQanYrdWtIL1MycjlMVmFUb2oz?=
+ =?utf-8?B?TjIreDFsRFJDYkpqeXpUb2xNRzNiQ3J5c2JJYlRpRDJoWGQxVVo2cFEwak5H?=
+ =?utf-8?B?WGNNMzRhaWZGcldhR1dIUW4wSFErbTJoZlAxc2hRd3dqMjdoWWhyRFpGaE5H?=
+ =?utf-8?B?b2dTdkg3cWJXZUFocFhpY3F1RjM5aEFuazRid3lDZlJrTXdocWpxb2NLZDhp?=
+ =?utf-8?B?TWk5R2drOTIzM0ZOYjExOHRzeU5jV20wcm92QlNFaXI1N093VVB1SU1TeFpT?=
+ =?utf-8?B?VUlZeG90cExUSW5UdzJHaDBiTUxQbEluazVUVzJ2L2lDems0SW8ydEpKTnYz?=
+ =?utf-8?B?TU5DSnlhYVJCRUkwN3hYUWJXREZLaUxJcFo4a045cWxHd3NiK3pPZTloS0Fm?=
+ =?utf-8?B?am01N3RYQ3JMZTJzUjhDWitjRm1JMjFwak9Hd3FoR3Z4R3VSNVFWbWptb2NF?=
+ =?utf-8?B?dVdNaTJxMmRvcU4vS2s4dHk3RUNsNXRuQ1JtdUQ5aFJEeTlKWmpid2NSZFR2?=
+ =?utf-8?B?UlZQWmVTald5NnRRNlhqWnhEeDRmWnVzbEFoVEhCWU1UTXhydEZwMWNYeHlV?=
+ =?utf-8?B?ZTF3L25CYTUrMXYzN1BqNUluemdlWDQwREo4aGhFcDI4U29laERxOFZsSDdV?=
+ =?utf-8?B?RnhwVllFRm9tTFdObmtOMThXM05MSE93UXp6RDBITFhvUm9XbWJkVy9IcTJI?=
+ =?utf-8?B?KzVGWDhvZlRZYWdsZkIxcFpwNDdtNzBwdVBEYk8xUWdiRStzU2kyeFNTV2Iw?=
+ =?utf-8?B?bHd1RjBaZWF4a0dSejlvQUVsOTQ0Zm9DT3lnWEszR2VtdG5qOU5kYnFlRENZ?=
+ =?utf-8?B?ZXVMOGg2Uk82VmtpYnUyeVdLWUVsZkJMMStEV2pqM2tkdHlDSXdVTTdEOEVp?=
+ =?utf-8?B?dTNtUWliSFE0czB5cVdIcEYzeStMcTNJQnNzUktLcTc4MzB1UU10aGozV3Fs?=
+ =?utf-8?B?OXlRRXF2ZmVUdmdlZkdJVzBkbXMvWWg4ZEF6dFZjM2RNZmFmNUNhYzlQbS9r?=
+ =?utf-8?B?RzdCaDdic3FRdTRPaVlpV3MyMk5MSEdXOVowQXdyUVZRTnZpTzgycU5CVkRj?=
+ =?utf-8?B?TUJ3ZFJrSEIrYThSNFRCQzhCaGJscTdCUVZkcEZXczJvUlNzOVA2WGZWbzN2?=
+ =?utf-8?B?Z3N2N24yK3IwY204Y21UaGFGRUVrUXpyc0ZRRlpCa2I1R1dQc1Exbmk5VDAz?=
+ =?utf-8?B?RjYvdUdCQjNqRUs2Z01OOGQwT283NEkrd0JNUEpaMTJDUXZlc2hDejFiL1ls?=
+ =?utf-8?B?MzV5YkFja2FPTUNFSXlvK3VLVEU5K3VVRHRralhLWHJFZ0JPZEpBNzFCaU9x?=
+ =?utf-8?B?ckE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3E7037BE30CE9D43AA6CA7B854F809DA@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
- <20250510-wmt-sflash-v1-1-02a1ac6adf12@gmail.com> <20250514204159.GA2988411-robh@kernel.org>
- <CABjd4Yz3w75PtkRk_edzD5yf6b2xPuf20gopbm8ygddgCBfpkw@mail.gmail.com> <2b520ae5-eb0d-40eb-ba73-cc18759f33b9@kernel.org>
-In-Reply-To: <2b520ae5-eb0d-40eb-ba73-cc18759f33b9@kernel.org>
-From: Alexey Charkov <alchark@gmail.com>
-Date: Fri, 6 Jun 2025 13:06:22 +0400
-X-Gm-Features: AX0GCFtSe5pvb_MWkkzTKnls_WaiQE0eICzI9uRkedvlSrNICRkV_prB9UA_SHY
-Message-ID: <CABjd4YxRMfi3ZFQxhB__6U4Rm3KQ7bm6J=wQLWAkpb++61ddEg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: spi: Add VIA/WonderMedia serial flash controller
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Pratyush Yadav <pratyush@kernel.org>, 
-	Michael Walle <mwalle@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
-	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB8804.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba0aea3f-bead-4c76-ed48-08dda4daaea5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2025 09:15:29.6349
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Kywpv9LA1RUrcz72CV08OElD/JoSOswcCDog+IifydpzdNLB7SujSo45ra2nSw2sB3zoiMq9TR2OIrr4mcsSWoecajBHVe3CrUBP1KRmZs8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6281
 
-On Fri, Jun 6, 2025 at 12:29=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On 15/05/2025 21:50, Alexey Charkov wrote:
-> >>> +
-> >>> +  "#address-cells":
-> >>> +    const: 1
-> >>> +
-> >>> +  "#size-cells":
-> >>> +    const: 0
-> >>
-> >> This follows the SPI binding, right? Drop these 2 and add a $ref to
-> >> spi-controller.yaml.
-> >
-> > Need some advice here. While this controller speaks SPI protocol to
-> > its connected flash chips, it's a special-purpose thing that doesn't
-> > expose much SPI functionality to the outside world, nor can it drive
-> > any SPI devices other than SPI NOR flash. Does that still qualify as
-> > an SPI controller as far as the bindings are concerned?
-> >
-> > Happy to reference the spi-controller.yaml binding if so.
->
-> SPI NOR flashes are still child devices of an SPI controller. You can
-> look at other examples - aren't they all using spi-controller? Why this
-> would be different? Unless you found some cases that are different, but
-> then which ones?
-
-No strong opinions here, and no expectation of any special treatment
-:) Just wanted to consult on what's most appropriate.
-
-My (subjective and perhaps unfounded) expectation when seeing
-something advertise itself as an SPI controller was that it would be a
-general purpose SPI master, to which one can e.g. connect an SPI
-driven LCD screen and get it to work with generic Linux SPI
-infrastructure - which would not be possible with this single-purpose
-NOR-only flash controller. Given that I don't know how flexible or
-restrictive other examples are in terms of driving arbitrary SPI
-devices, I thought it's better to just ask.
-
-What I'm getting from this exchange here is that I'd better use the
-spi-controller binding and respective node names regardless of the
-fact that this controller cannot drive arbitrary SPI devices beyond
-NOR flash (which, as I'm getting, is irrelevant after all).
-
-Best regards,
-Alexey
+T24gRnJpLCAyMDI1LTA2LTA2IGF0IDEyOjA0ICswMzAwLCBEYW4gQ2FycGVudGVyIHdyb3RlOg0K
+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMg
+dW5sZXNzIHlvdQ0KPiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IFJldHVybiB0aGUg
+ZXJyb3IgY29kZSBpZiBwY2lfYWxsb2NfaXJxX3ZlY3RvcnMoKSBmYWlscy4gIERvbid0IHJldHVy
+bg0KPiBzdWNjZXNzLg0KPiANCj4gRml4ZXM6IGI0NjA4ZTk0NDE3NyAoInNwaTogc3BpLXBjaTF4
+eHh4OiBGaXggUHJvYmUgZmFpbHVyZSB3aXRoIER1YWwNCj4gU1BJIGluc3RhbmNlIHdpdGggSU5U
+eCBpbnRlcnJ1cHRzIikNCj4gU2lnbmVkLW9mZi1ieTogRGFuIENhcnBlbnRlciA8ZGFuLmNhcnBl
+bnRlckBsaW5hcm8ub3JnPg0KPiANCg0KUmV2aWV3ZWQtYnk6IFRoYW5nYXJhaiBTYW15bmF0aGFu
+IDx0aGFuZ2FyYWouc0BtaWNyb2NoaXAuY29tPg0K
 
