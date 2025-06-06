@@ -1,116 +1,144 @@
-Return-Path: <linux-spi+bounces-8370-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8371-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9712EACFEB1
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 11:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 196B4ACFECA
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 11:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E20B93A1DF6
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 09:04:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 629723A1ED1
+	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 09:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC736286409;
-	Fri,  6 Jun 2025 09:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE470286405;
+	Fri,  6 Jun 2025 09:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FLBdE6Ky"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G8l9QigN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DF91FECDD
-	for <linux-spi@vger.kernel.org>; Fri,  6 Jun 2025 09:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3EE283FFB;
+	Fri,  6 Jun 2025 09:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749200663; cv=none; b=hSu8guOQ4MAVlrHrF++S8EhbOElYCmajVHTsGmqKjTFw77xT9UC/7ZZaegS319TDjPfVzLLc2Y/QMHtDEBxhm3QHy+ZkGnPvlDWVN29Qkc07vud9gOi78wngK6SPC3pgTztqtsCcNad9r/XxEl2m6RAf1za3eFKg4dPwD5Va3/w=
+	t=1749200794; cv=none; b=jFSUiODyuubhNZXWwr/UkYTSg0tHk0+bCadk8CFQQtgE32tvbxOgrdXEskWiqBvJEECShLAh7ZyxQyyjcjZzmKuIDxAAXFozv7/IZu8WyfAHDLp2eATM8BOkLgW+Sls81yi4olgvem7I0XOFN1piTyPq4VOMnyWyC1jFHc8CgoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749200663; c=relaxed/simple;
-	bh=atA00FElL1PdAn8QEx0N6GgZX//dcCoPP67oO9WxXfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=G7Hu3jN1wU19Gh1i0luXUSneeGhUMShpO3LNoyOtFlzx1jxQHSu7QdbNVnbQbD1bOJjrWzJoM0ybn5rXNtohWPwvZM+VTpAdo0lF1PJdnxaubaWaGZoK8Getbvtyu5s4Tdjxs4rAKWYc+WVueegtPg+q6V7UwfiL9EBE3nMwnyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FLBdE6Ky; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-450cf214200so16754985e9.1
-        for <linux-spi@vger.kernel.org>; Fri, 06 Jun 2025 02:04:21 -0700 (PDT)
+	s=arc-20240116; t=1749200794; c=relaxed/simple;
+	bh=xZFCh0EkmJ6fC+3ypO4Zo22JJAr5ALjmJDD8E4XtJ4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WPF0vsipdOiX5N966BI87eF45X/8M8if5eC3a4hAMRbWmMa+SiNMk0p6fnaPRHQ5NIcZfaZbHUVgdSghR59l5Fhpf9eNr8D3tgSE6otl7MLCm5XFZCmv8EApChqkkojX2YlUNsngzdG1LH98qElX/VW8dfs/QLk5OMBmKQ0pMXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G8l9QigN; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4a42cb03673so22606291cf.3;
+        Fri, 06 Jun 2025 02:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749200660; x=1749805460; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f+0n8NKWl3riyF7/7I5pRPKqW7VrVfcXJo61+Gw+kIg=;
-        b=FLBdE6KyuWCOEJ6DiXopQgcFNtVLB0ly443e90Gh7P+zYuFY6tBGjir/iwBQc8CkOY
-         62oNPoizn4tGbJn/app7aq2Ai2NEuqSQJMFK6rSJ7mFBSfeMXgKylT3g+Zu9JtpQmW1w
-         /kUSJn3rAHmgmOqKshbeGuBdib1jBT09PqLx69EMYj448NQqfdI00M12OlVw7d9HWOjV
-         z1/tdYqUi8/EkpvwvDiL7uQukUTL/1LFlLLr2EAM51MPm0VZZjJN0aZedogcXjXm+d2L
-         k7rSfokygEUPo7ff5ziU+EsHh25FeAnw2lGQr3t3Sa8CCVFb/bOJ11/MbXRcVmMNnhvN
-         Kq5Q==
+        d=gmail.com; s=20230601; t=1749200792; x=1749805592; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+iEKTaT2LElUyz6hn/T8Mh2vQ8hFTWoMkAbmwi0/NDg=;
+        b=G8l9QigN6nfbatr8wQSZiI11udlH5vGQPTx2U7+LrqY1Awy53ZEXckqGqAigXghwt+
+         1NCqQauHeC+6KCNhkX4+FYJJ+PMvTpPMZx+qSm1I7nNqRW4FXBX6L3japGSSq+JXosRw
+         FlVAZFYo3zSIawiEW/n4sWN48wu5vu807krtI196kEdZD64qW4O5qiFRilyiHKjE1yI7
+         EN9a63OiJs1voPbG50R8hX/kVk/4PehyVZTyfEAxdV0/dw+KJMnOa+Ot4kzo4RikNUtn
+         AOogTrPIVPFZahy6zgCzeMnaZvctU7tV8J6fWgNI9yK7oVrFF0PglJ85eXfINV5gOKvk
+         sIaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749200660; x=1749805460;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+0n8NKWl3riyF7/7I5pRPKqW7VrVfcXJo61+Gw+kIg=;
-        b=UJ6vBkYcM6RC1W8oefdnzZeaiaNdswaKD4Q5zuJnXzI+ca93eeJDvqt9ahBOpdzu91
-         GMPaDTCMkQVfYFqKqfJBhHDQMLjbHdImdKilRJQ8yONRwxbzab34rzItKVhpJrDpIyl6
-         MQ4VkZ+MDnJ0IkdcSngD0KRET9ITNHO97RorDRbRC0DOI0ejWNltl3exiIWWSLxZThaU
-         atrIYQrK6vGtGNAlpyV5UkXAUOIXreYXXcfj1r1hIHNkFhMmLTNn6fMOVMLG9OPY1Y+K
-         cLMELBC7OK1nd3vS0pTebeifFl3Gd8QUo80bFzTUzNsFr+vq34OA0q9WV8XWPZyaNMpI
-         Nb+g==
-X-Forwarded-Encrypted: i=1; AJvYcCV3ZezS0iEahawkyycO0J5gLSLecAuW7s3EsqOO28Xt2xWkU0F+/YuI+qxV6CxK8mqwGyScOZefvFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR6zxTT3twMKhtU1sS9oMN4CXbLhXgUeZ4otAUx3Q0X8YbO5IY
-	QEfQZuS10WbWWwul8pAvbi546+4z2VcZhxsdQe0ZGuU4OB8yTCykBRxbNLQCbhkItQbmeagooOC
-	PeM2u
-X-Gm-Gg: ASbGncsCQPIKwtb2eRDydxWnaR5xodGnVH0JlPpuKthdx8uSJwLo/IDoGAtVU3VrLfL
-	w74XsFJkgtem1JfbRicYCs+m/yYVcJ6Of8quMwrD4UhprpGOSug51+0mdqbs9gmVV/w71JnhZML
-	k/fCKRFKMd+EjSIUv03YDuSBe9W9ik5Otez3Z+Rv9H9kYP3Jqx30MyhWvuGLme0XSxKeJRvWeRe
-	K2P7ft4qGORvLeShABH3rPgAu0qfNP83ALx0W5zKX1Kv9r88Yg39gRtAwZKoIsjix9WASGgMZOI
-	FwXw7+MCumvzVrKQLB4dHKm+SPY3t0j6eK7DzPXL45l2l9sBDL7BJqYzsQx87bqAOVY=
-X-Google-Smtp-Source: AGHT+IEMgnQm6IyXJETnU1joAUlaC9jQwH6ZYJk+ZFID2NbYjHHTWiY2iKL9SlP/kooNnTgG9NsR4A==
-X-Received: by 2002:a05:600c:3b0e:b0:43c:f8fe:dd82 with SMTP id 5b1f17b1804b1-4520147f41emr28594825e9.18.1749200659602;
-        Fri, 06 Jun 2025 02:04:19 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4526e158428sm14173225e9.14.2025.06.06.02.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jun 2025 02:04:18 -0700 (PDT)
-Date: Fri, 6 Jun 2025 12:04:14 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Thangaraj Samynathan <thangaraj.s@microchip.com>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] spi: spi-pci1xxxx: Fix error code in probe
-Message-ID: <aEKvDrUxD19GWi0u@stanley.mountain>
+        d=1e100.net; s=20230601; t=1749200792; x=1749805592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+iEKTaT2LElUyz6hn/T8Mh2vQ8hFTWoMkAbmwi0/NDg=;
+        b=GYodUHo/nEhYE0/0x1pHFFs5p+CdDhd4Vt/eRNXZ4bkaWdTmIddT/elgH/G3rxZm2+
+         wrEd29eOB71ClmjmPuSPunwfMiqcvVfEULv+x55BLLKyI0/FTDG0OElGzCO6SF/PVJhy
+         39KhyDmhDUix9oqfMNmA1FdHR1jwdZDhCzkPWM4xiABvJHa1dFKFQwNhpNgmLpm3xu9/
+         Rc7Gtf68ffLyII1hrZxd7JN29aeZ/vl5w+00x6sgWeQ7OiSZYmvF2Bthgd1Lk5IM1VSk
+         1Ty7GfCKQ+5zPLMxcYgNOB/JQyTI21hp25kU9XcmC9zuRcpnSDo04dkRPAdRHHbHRe7B
+         pPpg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4Bj4SX3vrQlPWUSLrDyOdvtxvdlSDD+3Bk16+jE7U8sSo3URdGSVFg8ZTVArPKSV0MzcFY4mD+x/D@vger.kernel.org, AJvYcCWhpojanAgvn9y4TU4f1EIEmoZnwLLoEMfIAmiBsCElN5jSaGruzjXit14ddz0WWvv08wqb85qXl2GIMTQv@vger.kernel.org, AJvYcCXONlUgkja/NrJaT/AONMt3TEdWIb05wH8M3qr3vrQ8f9IKl5oQWSQpwDhPjTVEYFS2f1FVuDDaM4Pb@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWygNfphq9quIPtbotKKykGIS0pg8n3R+Y3ajgolM2+vMUD8TO
+	/b22nLenxE4G75MroBhNCvICwUIeEswva9nTNuvvKldAxHbtZ6AZe9AKfO5bFtw0aAaWcvwLBHJ
+	TqQlvjTZqMQRh81eMM8T5qbp1D9ZrZew=
+X-Gm-Gg: ASbGncvBda2DHTarZCUjWP7JJJNVggmyUdJ8Dx2F6s/2Edw/yVuO8BBStoXb++ZHFVG
+	x4R8thZGFoS1yIFA1T7T0zmQzU5CJShOKOSz0yUFL5zHdxJRMB/UGShehFTnldx08Eekiy09Mhm
+	fhTmHtLWMdzWjmp74rVS0ZTPbZTyu7LQKmNJ6GOwbSV3p9TarbZz8Z5bS4xDx+2SWZNuSjB8D23
+	9Kl
+X-Google-Smtp-Source: AGHT+IEAnnzIxtW3T+9hMHK+wBH7ZD7AMKC5gNvjX9nEPuofdL7PSuw1v4ThDP1ou2X6MNg+w1DXRb5CyDe5GpT5zFk=
+X-Received: by 2002:a05:622a:90a:b0:491:20d6:75ff with SMTP id
+ d75a77b69052e-4a5b9e55b32mr50608161cf.31.1749200791922; Fri, 06 Jun 2025
+ 02:06:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
+ <20250510-wmt-sflash-v1-1-02a1ac6adf12@gmail.com> <20250514204159.GA2988411-robh@kernel.org>
+ <CABjd4Yz3w75PtkRk_edzD5yf6b2xPuf20gopbm8ygddgCBfpkw@mail.gmail.com> <2b520ae5-eb0d-40eb-ba73-cc18759f33b9@kernel.org>
+In-Reply-To: <2b520ae5-eb0d-40eb-ba73-cc18759f33b9@kernel.org>
+From: Alexey Charkov <alchark@gmail.com>
+Date: Fri, 6 Jun 2025 13:06:22 +0400
+X-Gm-Features: AX0GCFtSe5pvb_MWkkzTKnls_WaiQE0eICzI9uRkedvlSrNICRkV_prB9UA_SHY
+Message-ID: <CABjd4YxRMfi3ZFQxhB__6U4Rm3KQ7bm6J=wQLWAkpb++61ddEg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: spi: Add VIA/WonderMedia serial flash controller
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Pratyush Yadav <pratyush@kernel.org>, 
+	Michael Walle <mwalle@kernel.org>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+	Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Return the error code if pci_alloc_irq_vectors() fails.  Don't return
-success.
+On Fri, Jun 6, 2025 at 12:29=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 15/05/2025 21:50, Alexey Charkov wrote:
+> >>> +
+> >>> +  "#address-cells":
+> >>> +    const: 1
+> >>> +
+> >>> +  "#size-cells":
+> >>> +    const: 0
+> >>
+> >> This follows the SPI binding, right? Drop these 2 and add a $ref to
+> >> spi-controller.yaml.
+> >
+> > Need some advice here. While this controller speaks SPI protocol to
+> > its connected flash chips, it's a special-purpose thing that doesn't
+> > expose much SPI functionality to the outside world, nor can it drive
+> > any SPI devices other than SPI NOR flash. Does that still qualify as
+> > an SPI controller as far as the bindings are concerned?
+> >
+> > Happy to reference the spi-controller.yaml binding if so.
+>
+> SPI NOR flashes are still child devices of an SPI controller. You can
+> look at other examples - aren't they all using spi-controller? Why this
+> would be different? Unless you found some cases that are different, but
+> then which ones?
 
-Fixes: b4608e944177 ("spi: spi-pci1xxxx: Fix Probe failure with Dual SPI instance with INTx interrupts")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/spi/spi-pci1xxxx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+No strong opinions here, and no expectation of any special treatment
+:) Just wanted to consult on what's most appropriate.
 
-diff --git a/drivers/spi/spi-pci1xxxx.c b/drivers/spi/spi-pci1xxxx.c
-index c6489e90b8b9..9112d8a1a0c8 100644
---- a/drivers/spi/spi-pci1xxxx.c
-+++ b/drivers/spi/spi-pci1xxxx.c
-@@ -765,7 +765,7 @@ static int pci1xxxx_spi_probe(struct pci_dev *pdev, const struct pci_device_id *
- 							   PCI_IRQ_ALL_TYPES);
- 			if (num_vector < 0) {
- 				dev_err(&pdev->dev, "Error allocating MSI vectors\n");
--				return ret;
-+				return num_vector;
- 			}
- 
- 			init_completion(&spi_sub_ptr->spi_xfer_done);
--- 
-2.47.2
+My (subjective and perhaps unfounded) expectation when seeing
+something advertise itself as an SPI controller was that it would be a
+general purpose SPI master, to which one can e.g. connect an SPI
+driven LCD screen and get it to work with generic Linux SPI
+infrastructure - which would not be possible with this single-purpose
+NOR-only flash controller. Given that I don't know how flexible or
+restrictive other examples are in terms of driving arbitrary SPI
+devices, I thought it's better to just ask.
 
+What I'm getting from this exchange here is that I'd better use the
+spi-controller binding and respective node names regardless of the
+fact that this controller cannot drive arbitrary SPI devices beyond
+NOR flash (which, as I'm getting, is irrelevant after all).
+
+Best regards,
+Alexey
 
