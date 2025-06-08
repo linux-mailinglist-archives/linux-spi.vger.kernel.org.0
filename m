@@ -1,79 +1,105 @@
-Return-Path: <linux-spi+bounces-8378-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8379-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D239AD0919
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 22:30:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 037E6AD12A5
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Jun 2025 16:30:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B6B816B628
-	for <lists+linux-spi@lfdr.de>; Fri,  6 Jun 2025 20:30:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 155DB3AAE8C
+	for <lists+linux-spi@lfdr.de>; Sun,  8 Jun 2025 14:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55F62206B2;
-	Fri,  6 Jun 2025 20:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjjRihJB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4B324DD0A;
+	Sun,  8 Jun 2025 14:29:59 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B15B2206AC;
-	Fri,  6 Jun 2025 20:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F354924DFE6;
+	Sun,  8 Jun 2025 14:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749241822; cv=none; b=kluci+EagIRLuR4HkPogoFBaeGnHfqCbUu8TVd6fol0MZ5+jQjcpIZUpDQix4tYvVMgb5+jCkRVoLsWE1Rx7mH1D/iTT5jjUrKssnIao4KHQn2JAKp7epfH101iHGRBug+NAbAjiSQ7NwboSHS5ZD83qR+/C683f/4WxbRlac1Y=
+	t=1749392999; cv=none; b=hUbqFlt7mtwR5H4BIfLOGiaXzyc95Ngj9kWK6GNOPUMTjmK3nIzuk4e1Q4PbijLvyCGVLUk5vUuqIl+aOtFQ2kcsIqhq2euVwZ7zvXWZEplFXvtSmY4Rm3oZ0ZsM8Xl8N3zy6IJ5v/hv2EGwO+5jEH5jNodaKuyLRTtfgOc2g4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749241822; c=relaxed/simple;
-	bh=7AEqDwzu6KDTm7ciF2WMD0cK7H8dvye3fiLzz/Cv9G4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=M/Tm6txOI6FRX9XIpQu0BRsuvTd2iod3iIobxxlezQWmB6G7sJ1NgxfGKAneqbLyiOWIp5jhp2FomcsNuVrZLjxNmzobIn4sZ+cH8e5gQOZtL1Xd3pf/ffpOdfZwTNH05lD0bjQrm3esHaa/YR0/cZ7/R3q2wm489siuIFkBzqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjjRihJB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FE32C4CEEF;
-	Fri,  6 Jun 2025 20:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749241822;
-	bh=7AEqDwzu6KDTm7ciF2WMD0cK7H8dvye3fiLzz/Cv9G4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=HjjRihJB9g1CN+iFAFItpHPtSz7URP0ZgfJHLvmyNaVVCgHZ/cP7JnIKXeBD6m4Xl
-	 rgctnq2aZ1ETqx2h01g4gto/e6RE8TWIRE8GPU/pVYPIwWmIpjSnIW5HdHi5J/mDCC
-	 SeWKYgmv2EmtR2OErvy5vnVoTIgpRceGdIv8JwPl5/a2GDdGrebEharuvlcDOJY7MP
-	 AUyzUPLfUGDqzQPDgQIJe0dz9dmEbqD9mWS+kzpdAyMjG2EJdD7ahdWCUUjvZu+7YT
-	 K6m12VChMyqQjP6SnMEgN+9jgGYCL2PoI7tBTMFRblp0xP8XL6KKrc4VU4ixG7ydx+
-	 iukK9Wbt4a0mA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C2339F1DF9;
-	Fri,  6 Jun 2025 20:30:55 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI updates for v6.16-merge-window
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <6cc76c26f4d4cca79b1f6fa9c7152f91.broonie@kernel.org>
-References: <6cc76c26f4d4cca79b1f6fa9c7152f91.broonie@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <6cc76c26f4d4cca79b1f6fa9c7152f91.broonie@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.16-merge-window
-X-PR-Tracked-Commit-Id: 57cf46cd1fe351846e1b065ca9546eef66675ecd
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7a912d04415b372324e5a8dfad3360d993d0c23a
-Message-Id: <174924185396.3981198.8080624054043824553.pr-tracker-bot@kernel.org>
-Date: Fri, 06 Jun 2025 20:30:53 +0000
-To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+	s=arc-20240116; t=1749392999; c=relaxed/simple;
+	bh=DiCQiArzwbFcPFdOQvg+itZINo5n3ZPTmTduwYUCqaQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y8DZcfgfcsCopRoQ4xXw8SV4s0un3+bp0t2YOG1nCM3/shqV9kMzeKWVvkLVzdyJX5atePB48Zo8jUmsQEA34lwvwRFbBzpVpE5h+t8241OzgycH02SSbG8LSy/ll+AbwPW7BL67DT8NherZ0Dlv4nU16zb7+xLPg4tCARxAMgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.69.3])
+	by gateway (Coremail) with SMTP id _____8Bx22phnkVoEXUQAQ--.7797S3;
+	Sun, 08 Jun 2025 22:29:53 +0800 (CST)
+Received: from localhost.localdomain (unknown [223.64.69.3])
+	by front1 (Coremail) with SMTP id qMiowMDxuhpbnkVo7sEQAQ--.31632S2;
+	Sun, 08 Jun 2025 22:29:53 +0800 (CST)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>,
+	Yinbo Zhu <zhuyinbo@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Xuerui Wang <kernel@xen0n.name>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] spi: loongson: Fix build warnings about export.h
+Date: Sun,  8 Jun 2025 22:29:39 +0800
+Message-ID: <20250608142939.172108-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxuhpbnkVo7sEQAQ--.31632S2
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj9xXoW7GFWrZw4kJryrGryDKFy8JFc_yoWDWFb_Cw
+	1xCr1Igr4xtw47K3WSvF9Fyr90g34rXw4YqF1v9r13X3WDt3y5Ka43CasxG3W7Cwn0vFs5
+	ur4xW348ury5CosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jOdb8UUUUU=
 
-The pull request you sent on Fri, 06 Jun 2025 15:45:47 +0100:
+After commit a934a57a42f64a4 ("scripts/misc-check: check missing #include
+<linux/export.h> when W=1") and 7d95680d64ac8e836c ("scripts/misc-check:
+check unnecessary #include <linux/export.h> when W=1"), we get some build
+warnings with W=1:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.16-merge-window
+drivers/spi/spi-loongson-core.c: warning: EXPORT_SYMBOL() is used, but #include <linux/export.h> is missing
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7a912d04415b372324e5a8dfad3360d993d0c23a
+So fix these build warnings for SPI/Loongson.
 
-Thank you!
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ drivers/spi/spi-loongson-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/spi/spi-loongson-core.c b/drivers/spi/spi-loongson-core.c
+index 4fec226456d1..b46f072a0387 100644
+--- a/drivers/spi/spi-loongson-core.c
++++ b/drivers/spi/spi-loongson-core.c
+@@ -5,6 +5,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
++#include <linux/export.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.47.1
+
 
