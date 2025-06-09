@@ -1,60 +1,55 @@
-Return-Path: <linux-spi+bounces-8403-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8404-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F20AD229E
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 17:40:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28ADCAD22A2
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 17:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59D5116813E
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:40:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E35E18876A9
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A046519F461;
-	Mon,  9 Jun 2025 15:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7879878F4C;
+	Mon,  9 Jun 2025 15:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sO3OTTOS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tLi6Yc/C"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE57CA5A;
-	Mon,  9 Jun 2025 15:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A0CCA5A
+	for <linux-spi@vger.kernel.org>; Mon,  9 Jun 2025 15:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749483598; cv=none; b=kHGZ9EeWDL2RMgNlMbjALjORA72B/aXoomCeYyA9qfnb/isVK9g++krw17MRhyGgc3fjHmYJe7aVjCOmCMvZd21cS+U6R/n7AgEhlOOu22eeQmtD+ub5Uj8My+FeXu3V1nEcxUisUL98/sLx703RFjnZbL47/t16z3baGRqjTOg=
+	t=1749483614; cv=none; b=Xae8XfDJUrnYRkdzERvUSeH9ksyHIQNDUrfql+RY4COOZJ/GPAfjmnd+yIuCDZ8hOY01Z7EaGve5zsfJRyPaegHBKg1IZvgtgV3r9mFVm8+q4DBZxwnKYd0LdSzAQAhpfYgBFsXSEdUaO9giSrOZUlcJcLWlVW2tJIL4xT3giTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749483598; c=relaxed/simple;
-	bh=EqC/uvkRrrh4ubAMjbTCQuOMddZGul995t0PkHwoBco=;
+	s=arc-20240116; t=1749483614; c=relaxed/simple;
+	bh=1TffTsn/46+6uWHTGOhzaSPmd3beCMG+xK8avzSuPb4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=CqI7xqbaHI5+1gfp9k3kZRNdIUSNMiFUBUxrafI47ib2b7jmum/wbbDm1/sECgTh1Oj1E+n5F3Fte+wZkVpLRhBGIyASLyMLnaso2wcypTdNahjIpRir2sMLIf88An/RZzrOBl5c4I5weyjHEumFGu5wEdfRVtMqvhxrZTMKbVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sO3OTTOS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B442C4CEEB;
-	Mon,  9 Jun 2025 15:39:55 +0000 (UTC)
+	 MIME-Version:Content-Type; b=g/fg4NpXFkm5M/UYkzF7xUxRyD57CRSnDyM9KjbDytl5Sj1E7c5J3P6u1oYRcEDuXZAZiq/rMeWsx8Qh0xDi7BlLNviwFyuVlrw9p853Ypnq2cnZWBbrA0JE0Xoo2/iR2UMqpgFTNR8y1vYGPAgcw6j39xFHc6XQKElG+gZJ/Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tLi6Yc/C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B967C4CEEF;
+	Mon,  9 Jun 2025 15:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749483598;
-	bh=EqC/uvkRrrh4ubAMjbTCQuOMddZGul995t0PkHwoBco=;
+	s=k20201202; t=1749483614;
+	bh=1TffTsn/46+6uWHTGOhzaSPmd3beCMG+xK8avzSuPb4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=sO3OTTOSLyxGQMnoZ3sceHt3YjgWfYP3wYTWdYSF0LajblcI6aLzDs7E+PB30/+Jz
-	 xUF/yhk5uw6kVtwLcf7QABf/KFS0Y71CHHJ3U4Phjf9Tpc1bCRO4E9DBhe4VrU4hnq
-	 WKLySNzDhRb/uKtxMUy87je9kye8YXNLcOK0EcQa/lIPBvywffo5spd0VdyJTbbEFc
-	 sJ+TzWeKy5OO1UlELS4VPmiXYw2lEVdi/3mhSpkvWxIacixDcf5WhOcpgBQk7g3mD9
-	 C7KXuInur2HeKwWpn53VRhd+05hlBaDunpBiU0s7MwoTQ2enqhKvG7TCPJQwEKYjUt
-	 qT+BOJPGgKzDg==
+	b=tLi6Yc/CXzggpjBwsAOc64IrtI1l33pPEndF9ul7DpTo1iXqvPqEgnJMKqi7lwcSo
+	 m6bT1Zjgzg6/zgoZsiVmHKHOtUjzT02Lr7r4X1xsyO3u5rSZj0ehFTDKWAWaGAmdBv
+	 DLXlfeauYS6jlwsLOna5M0M98hlV4fLw4bHu01vQr9GZPr+yG825TvuS9/EWEaSr5Z
+	 v8Bgxv2sBul6iNcbZDKqcGLjoJQahfyzEg/mQbDF+Ld+MpPUtHf4XlnmlUK6jHDRyC
+	 G7vDrVIqPGN6V+oq03aBoSMMnR6scXa8SO7CEhwxjRQEtxEbZABuvPgu6sj0MOnG9I
+	 6yX+wOzsDws2Q==
 From: Mark Brown <broonie@kernel.org>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>, Koji Matsuoka <koji.matsuoka.xm@renesas.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-spi@vger.kernel.org, linux-sound@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org
-In-Reply-To: <cover.1747401908.git.geert+renesas@glider.be>
-References: <cover.1747401908.git.geert+renesas@glider.be>
-Subject: Re: (subset) [PATCH v2 00/22] spi: sh-msiof: Transfer size
- improvements and I2S reuse
-Message-Id: <174948359584.187608.4441619994832648508.b4-ty@kernel.org>
-Date: Mon, 09 Jun 2025 16:39:55 +0100
+To: dlechner@baylibre.com, Andres Urian Florez <andres.emb.sys@gmail.com>
+Cc: skhan@linuxfoundation.org, linux-spi@vger.kernel.org
+In-Reply-To: <20250608230422.325360-1-andres.emb.sys@gmail.com>
+References: <20250608230422.325360-1-andres.emb.sys@gmail.com>
+Subject: Re: [PATCH] spi: offload: check offload ops existence before
+ disabling the trigger
+Message-Id: <174948361310.189907.12236490414966189651.b4-ty@kernel.org>
+Date: Mon, 09 Jun 2025 16:40:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,28 +60,20 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Fri, 16 May 2025 15:32:03 +0200, Geert Uytterhoeven wrote:
-> 	Hi all,
+On Sun, 08 Jun 2025 18:04:21 -0500, Andres Urian Florez wrote:
+> Add a safe guard in spi_offload_trigger to check the existence of
+> offload->ops before invoking the trigger_disable callback
 > 
-> This patch series (A) improves single transfer sizes in the MSIOF
-> driver, using two methods:
->   - By increasing the assumed FIFO sizes, impacting both PIO and DMA
->     transfers,
->   - By using two groups, impacting DMA transfers,
-> and (B) lets the recently-introduced MSIOF I2S drive reuse the SPI
-> driver's register definitions.  All of this is covered with a thick
-> sauce of fixes for (harmless) bugs, cleanups, and refactorings.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[22/22] ASoC: renesas: msiof: Convert to <linux/spi/sh_msiof.h>
-        commit: 6ba68e5aa9d5d15c8877a655db279fcfc0b38b04
+[1/1] spi: offload: check offload ops existence before disabling the trigger
+      commit: e51a086117ed857ea455c9ea774dbfb82f53e517
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
