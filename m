@@ -1,206 +1,171 @@
-Return-Path: <linux-spi+bounces-8397-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8396-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D04EAD2209
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 17:13:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84A67AD2200
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 17:13:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59C80170D15
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:08:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 478FA3A1F33
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847501B425C;
-	Mon,  9 Jun 2025 15:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5156E72606;
+	Mon,  9 Jun 2025 15:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="zbUEhb1w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JjEVpKPL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A37B1DED4C;
-	Mon,  9 Jun 2025 15:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7731A841A
+	for <linux-spi@vger.kernel.org>; Mon,  9 Jun 2025 15:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749481712; cv=none; b=NaKv2M3yprolmWChIkfhWYM8j3jFxBxeCYqfrNI8tVl6w05znQD+3/WJwhHh9erC4rBpOQFc0avDCy1OQSf6qe7uC0Ezs2Ly3FCUJBim9yEipnh87aEUklauY2WyOb8axNZn6yWjk6ITvJ0eceIjgDIH1LniY0jhs2m1780kZYs=
+	t=1749481699; cv=none; b=Tya9TNjV9OpF1H1RXC+jnGPofDRoPy45Cw28dIGRjcOFKEtS3M+ozOAaZOajKxNwBVwqxp7vr1iKbijRHdu3jiDTDQt7ovjRGI1rmSoM0fQl3O+HCHaNhRkDEA8OHvRkJzC990kgSri1JZxHtUctfjkFGGOdOGnO++Ax3ideTyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749481712; c=relaxed/simple;
-	bh=6RlQJGYc3cQByqEQ5UnVltcdkYr558XiHh/+3IPkFFk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=EUHiYu/MdCIw5EL68v7NnWPAzbyu9uSfsd89W2KIj/4OoRHNa5i2RaLTX5XzdiuLaKCbnZjafUSi0E/NV4iRl5vqKN0XafMN2bIzXjSnF75oxwzrjZbPZi1UCrK5YmbQjfqaOGtR/MTXC8FaNkoqLyzIgbFKw10NdMypimW/Do4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=zbUEhb1w; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 559Dtxkd009830;
-	Mon, 9 Jun 2025 17:08:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=selector1; bh=RHEwRJAXNMJDW0r76HBXTU
-	vBrd9il/gic2C2Cm/Al7k=; b=zbUEhb1wGJdOJ/EdOcGNg/EOItH3HgAucyc4iH
-	H/6bHmOMVjo3nWzrkxzox/38KHwSZ+84vdNY809jnf2dK4lDD3UzxWuzjbAyJrcR
-	jQHGkOKT6wRfkj3EDEwcYq97C7wgngpdL+FMcHE2fjRmSW/DOqghihikjknX6e6o
-	jYOEiH7+sQRRK4TDHyZO7gBXxCHRfbclXgOhcr1ENV+uC+pCEqTNkh/M1RDCWUwt
-	hkuPcQsuw3iJwYRhV4yTFELIrzn+Xy90Gw5J2J4q5rPRr0R0wrgtjHn38FS8VL/R
-	ZnObw8yfEN8Q6S8TJlcuQeL7jEEEc62pS/qwG2aEYPIsZeGg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 474cs2g878-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Jun 2025 17:08:12 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 01A8B4004B;
-	Mon,  9 Jun 2025 17:06:53 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 18427BCE4C4;
-	Mon,  9 Jun 2025 17:05:05 +0200 (CEST)
-Received: from localhost (10.48.87.62) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 9 Jun
- 2025 17:05:04 +0200
-From: Patrice Chotard <patrice.chotard@foss.st.com>
-Date: Mon, 9 Jun 2025 17:05:04 +0200
-Subject: [PATCH v6] spi: stm32-ospi: Make usage of
- reset_control_acquire/release() API
+	s=arc-20240116; t=1749481699; c=relaxed/simple;
+	bh=9mFa0rp8B+5wNs/R5dyPySMEUZgssjrZ7l5QQ5LDHhU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=KkALslxUGA/9rp+2XTyON9jILlTCTvu0P4ihNrdFtSHPrD0MFSjWEgPAKqv8Zizc3BzBKiUY8M/2Z2zj1rI2MfCmoERqryosZHaxVH+bZO7KSV8wDC299Qm3lLdFGd3WHjwvd0GBijUec3toYmoXd5IMPmcB/d/VL5xxar5WlfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JjEVpKPL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0A41C4CEEB;
+	Mon,  9 Jun 2025 15:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749481697;
+	bh=9mFa0rp8B+5wNs/R5dyPySMEUZgssjrZ7l5QQ5LDHhU=;
+	h=Subject:From:Date:To:From;
+	b=JjEVpKPLAfPktuCHAKDok56aOUCJeLzxa9ZuApFeyRtotVsIHeLWr3hTCFX9IItdP
+	 W9911jR6SEsx3a5eGEBQ8SMrEQG/owm/ctocbIiySh2+hg73D+hn3keQneDjkLUnhD
+	 +5SMqGHzpin/GEbz8Db/F+292y3psdufMgkxE6iaSujzIfPbzSVMlCAj8qGJcxIGY4
+	 VRnbMS/Se9eHZoLir6lc6duXveT7IQzTQYUT80fQgRew01eVfNlEqnWuiSkNYGc4Ws
+	 x2VHWm3wqtcbmrNN3CwQ34FVoIYn+EQ/E4wIPoPPZdC0Kk6rLWC2RYdQsmI1RqI3Vz
+	 zVJI//Z5BxM+g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7501F380DBE9;
+	Mon,  9 Jun 2025 15:08:49 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250609-b4-upstream_ospi_reset_update-v6-1-5b602b567e8a@foss.st.com>
-X-B4-Tracking: v=1; b=H4sIAB/4RmgC/43OsW7DIBDG8VeJmEsEhAPcqe9RVRaBo2FIsDhit
- Yr87sVZmiqDO/5v+H13Y4Q1I7HX3Y1VnDPlculhXnYsnPzlE3mOvZkSCoSWkh81v07UKvrzWGj
- KY0XCNl6n6BtyGExApcFHL1k3poopf93994/ep0yt1O/73KzW63/lWXHBdUSbIEblB/mWCtGe2
- j6UM1vt+fDrgbBb3oFLblEb7+xgwapnTz94Um15unuDU8Ek65zB9OzBo6e3PFj/O0JEAaCCC3+
- 9ZVl+AH+8dva8AQAA
-X-Change-ID: 20250411-b4-upstream_ospi_reset_update-596ce245ada1
-To: Philipp Zabel <p.zabel@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue
-	<alexandre.torgue@foss.st.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-X-Mailer: b4 0.14.2
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-09_05,2025-06-09_01,2025-03-28_01
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <174948172792.1126847.9443962717566870401.git-patchwork-summary@kernel.org>
+Date: Mon, 09 Jun 2025 15:08:47 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-As ospi reset is consumed by both OMM and OSPI drivers, use the reset
-acquire/release mechanism which ensure exclusive reset usage.
+Hello:
 
-This avoid to call reset_control_get/put() in OMM driver each time
-we need to reset OSPI children and guarantee the reset line stays
-deasserted.
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-During resume, OMM driver takes temporarily control of reset.
+Series: ASoC: add Renesas MSIOF sound driver
+  Submitter: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=954674
+  Lore link: https://lore.kernel.org/r/871ptq4blr.wl-kuninori.morimoto.gx@renesas.com
+    Patches: [v4,1/9] dt-bindings: renesas,sh-msiof: Add MSIOF I2S Sound support
+             [v4,4/9] ASoC: renesas: rsnd: allow to use ADG as standalone
+             [v4,5/9] ASoC: renesas: rsnd: care BRGA/BRGB select in rsnd_adg_clk_enable()
+             [v4,6/9] ASoC: renesas: rsnd: enable to use "adg" clock
+             [v4,7/9] ASoC: renesas: add MSIOF sound support
+             [v4,9/9] arm64: defconfig: add Renesas MSIOF sound support
 
-Fixes: 79b8a705e26c ("spi: stm32: Add OSPI driver")
-Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
----
-Changes in v6:
-- Add Fixes tag.
-- Rebase on top of v6.16-rc1
-- Link to v5: https://lore.kernel.org/r/20250514-b4-upstream_ospi_reset_update-v5-1-7b5de0552c8c@foss.st.com
+Patch: spi: loongson: Fix build warnings about export.h
+  Submitter: Huacai Chen <chenhuacai@loongson.cn>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=969585
+  Lore link: https://lore.kernel.org/r/20250608142939.172108-1-chenhuacai@loongson.cn
 
-Changes in v5:
-  - Add dependency with commit 6b3754009f87 ("reset: Add devm_reset_control_array_get_exclusive_released()")
-    in commit message.
-  - Link to v4: https://lore.kernel.org/r/20250512-b4-upstream_ospi_reset_update-v4-1-982c6f7886ef@foss.st.com
+Patch: [next] spi: spi-pci1xxxx: Fix error code in probe
+  Submitter: Dan Carpenter <dan.carpenter@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=969189
+  Lore link: https://lore.kernel.org/r/aEKvDrUxD19GWi0u@stanley.mountain
 
-Changes in v4:
-  - Add a comment about reset sharing between OSPI and OMM drivers durig resume.
-  - Link to v3: https://lore.kernel.org/r/20250507-b4-upstream_ospi_reset_update-v3-1-7e46a8797572@foss.st.com
+Series: QPIC v2 fixes for SDX75
+  Submitter: Md Sadre Alam <quic_mdalam@quicinc.com>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=951957
+  Lore link: https://lore.kernel.org/r/20250410100019.2872271-1-quic_mdalam@quicinc.com
+    Patches: [v4,1/3] mtd: rawnand: qcom: Pass 18 bit offset from NANDc base to BAM base
+             [v4,2/3] mtd: rawnand: qcom: Fix last codeword read in qcom_param_page_type_exec()
+             [v4,3/3] mtd: rawnand: qcom: Fix read len for onfi param page
 
-Changes in v3:
-  - Remove previous patch 1/2 as already merged.
-  - Keep the reset control acquired from probe() to remove().
-  - Link to v2: https://lore.kernel.org/r/20250411-b4-upstream_ospi_reset_update-v2-0-4de7f5dd2a91@foss.st.com
+Patch: dt-bindings: remove RZ/N1S bindings
+  Submitter: Wolfram Sang <wsa+renesas@sang-engineering.com>
+  Committer: Rob Herring (Arm) <robh@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952624
+  Lore link: https://lore.kernel.org/r/20250411194849.11067-2-wsa+renesas@sang-engineering.com
 
-Changes in v2:
-  - Rebased on spi/for-next (7a978d8fcf57).
-  - Remove useless check on reset.
-  - Add error handling on reset_control_acquire().
-  - Link to v1: https://lore.kernel.org/all/20250410-b4-upstream_ospi_reset_update-v1-0-74126a8ceb9c@foss.st.com/
----
- drivers/spi/spi-stm32-ospi.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+Patch: [1/1] spi: dt-bindings: mxs-spi: allow clocks properpty
+  Submitter: Frank Li <Frank.Li@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967165
+  Lore link: https://lore.kernel.org/r/20250528222821.728544-1-Frank.Li@nxp.com
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index 7c1fa55fbc4726d2f3c5516245ccd81f59c3c44d..db6b1cfc970f6c80515a39073e2389311796da8f 100644
---- a/drivers/spi/spi-stm32-ospi.c
-+++ b/drivers/spi/spi-stm32-ospi.c
-@@ -804,7 +804,7 @@ static int stm32_ospi_get_resources(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ospi->rstc = devm_reset_control_array_get_exclusive(dev);
-+	ospi->rstc = devm_reset_control_array_get_exclusive_released(dev);
- 	if (IS_ERR(ospi->rstc))
- 		return dev_err_probe(dev, PTR_ERR(ospi->rstc),
- 				     "Can't get reset\n");
-@@ -936,11 +936,13 @@ static int stm32_ospi_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_pm_enable;
- 
--	if (ospi->rstc) {
--		reset_control_assert(ospi->rstc);
--		udelay(2);
--		reset_control_deassert(ospi->rstc);
--	}
-+	ret = reset_control_acquire(ospi->rstc);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Can not acquire reset %d\n", ret);
-+
-+	reset_control_assert(ospi->rstc);
-+	udelay(2);
-+	reset_control_deassert(ospi->rstc);
- 
- 	ret = spi_register_controller(ctrl);
- 	if (ret) {
-@@ -987,6 +989,8 @@ static void stm32_ospi_remove(struct platform_device *pdev)
- 	if (ospi->dma_chrx)
- 		dma_release_channel(ospi->dma_chrx);
- 
-+	reset_control_release(ospi->rstc);
-+
- 	pm_runtime_put_sync_suspend(ospi->dev);
- 	pm_runtime_force_suspend(ospi->dev);
- }
-@@ -997,6 +1001,8 @@ static int __maybe_unused stm32_ospi_suspend(struct device *dev)
- 
- 	pinctrl_pm_select_sleep_state(dev);
- 
-+	reset_control_release(ospi->rstc);
-+
- 	return pm_runtime_force_suspend(ospi->dev);
- }
- 
-@@ -1016,6 +1022,12 @@ static int __maybe_unused stm32_ospi_resume(struct device *dev)
- 	if (ret < 0)
- 		return ret;
- 
-+	ret = reset_control_acquire(ospi->rstc);
-+	if (ret) {
-+		dev_err(dev, "Can not acquire reset\n");
-+		return ret;
-+	}
-+
- 	writel_relaxed(ospi->cr_reg, regs_base + OSPI_CR);
- 	writel_relaxed(ospi->dcr_reg, regs_base + OSPI_DCR1);
- 	pm_runtime_mark_last_busy(ospi->dev);
+Patch: spi: spi-qpic-snand: use NANDC_STEP_SIZE consistently
+  Submitter: Gabor Juhos <j4g8y7@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=966229
+  Lore link: https://lore.kernel.org/r/20250525-qpic-snand-nandc_step_size-v1-1-6039e9bfe1c6@gmail.com
 
----
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
-change-id: 20250411-b4-upstream_ospi_reset_update-596ce245ada1
+Series: [RESEND,1/3] spi: tegra210-quad: Add iommus property to DT bindings
+  Submitter: Vishwaroop A <va@nvidia.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=960089
+  Lore link: https://lore.kernel.org/r/20250506152350.3370291-1-va@nvidia.com
+    Patches: [RESEND,1/3] spi: tegra210-quad: Add iommus property to DT bindings
+             [RESEND,2/3] arm64: tegra: Configure QSPI clocks and add DMA
 
-Best regards,
+Patch: spi: spi-qpic-snand: remove 'qpic_snand_op' structure
+  Submitter: Gabor Juhos <j4g8y7@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=967403
+  Lore link: https://lore.kernel.org/r/20250529-qpic-snand-remove-qpic_snand_op-v1-1-6e42b772d748@gmail.com
+
+Series: Add basic SPI support for SG2042 SoC
+  Submitter: Zixian Zeng <sycamoremoon376@gmail.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=950358
+  Lore link: https://lore.kernel.org/r/20250407-sfg-spi-v4-0-30ac949a1e35@gmail.com
+    Patches: [v4,1/2] spi: dt-bindings: snps,dw-apb-ssi: Add compatible for SOPHGO SG2042 SoC
+             [v4,2/2] riscv: sophgo: dts: Add spi controller for SG2042
+
+Series: Add basic SPI support for SOPHGO SG2042 SoC
+  Submitter: Zixian Zeng <sycamoremoon376@gmail.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=956817
+  Lore link: https://lore.kernel.org/r/20250425-sfg-spi-v6-0-2dbe7bb46013@gmail.com
+    Patches: [v6,1/3] spi: dt-bindings: snps,dw-apb-ssi: Merge duplicate compatible entry
+             [v6,3/3] riscv: sophgo: dts: Add spi controller for SG2042
+
+Series: reset: Add devm_reset_control_array_get_exclusive_released()
+  Submitter: Patrice CHOTARD <patrice.chotard@foss.st.com>
+  Committer: Philipp Zabel <p.zabel@pengutronix.de>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=952506
+  Lore link: https://lore.kernel.org/r/20250411-b4-upstream_ospi_reset_update-v2-0-4de7f5dd2a91@foss.st.com
+    Patches: [v2,1/2] reset: Add devm_reset_control_array_get_exclusive_released()
+
+Patch: Add support for SAMA7D65
+  Submitter: Ryan Wanner <Ryan.Wanner@microchip.com>
+  Committer: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=959147
+  Lore link: https://lore.kernel.org/r/cover.1746201835.git.Ryan.Wanner@microchip.com
+
+Patch: [v1,for-next] spi: spi-pci1xxxx: Add support for 25MHz Clock frequency in C0
+  Submitter: Thangaraj Samynathan <thangaraj.s@microchip.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=966393
+  Lore link: https://lore.kernel.org/r/20250526104908.404564-1-thangaraj.s@microchip.com
+
+
+Total patches: 24
+
 -- 
-Patrice Chotard <patrice.chotard@foss.st.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
