@@ -1,140 +1,98 @@
-Return-Path: <linux-spi+bounces-8385-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8386-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CF1FAD1A5A
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 11:15:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D49F5AD1B7A
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 12:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DED4C1889F99
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 09:16:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6362B16B0FD
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 10:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DFD1A8F6D;
-	Mon,  9 Jun 2025 09:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E69C254848;
+	Mon,  9 Jun 2025 10:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O54UYKfC"
+	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="X3aQk6g9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7DBBA45;
-	Mon,  9 Jun 2025 09:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6AF253954;
+	Mon,  9 Jun 2025 10:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749460544; cv=none; b=dx/5jXhXYnr03JHaTnkviOY5hFr4GcV+D9ro6EtaPO9mQZAg/iuh4I6o7DzX9yx6EHMEC3kESzCQueC/735AGrXwr6oFO4VrlXR35Z0VUk+DWWJZIlzQP+P/03JE37y98D1078jP/DLGI0Iz5jjtQRPQ7WXsm6aAwdL94wc+jaU=
+	t=1749464623; cv=none; b=FWJe3QiXx/OFCfPhx1G/yp9f7Hhc7qKce0I+DQ0rAINo4JUIbxZJR3LahaA6w7ESXViWlcHQsrXXY+M1C2XZbs9dYUD+/qjfdcwqSLaeddtSjBVDJPdcHpyZISLJWUl7GfJT4qzz/IqpR/KzljrNr6ZsNha+bc018Gl78Nas7Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749460544; c=relaxed/simple;
-	bh=SpmkGucy2RS3jBDTNw16VboUFxkjN0cf7us7G6qbOho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lh0WLVf+ossePWkqde3c1OmyIf8aOaXRqAVartT7CPcW3UwoBHlSNW+RV28aSSB8dL/W0ydRqYRQsLYDn0kBbyYgmSYOsSKTf2iMe7oloKVCmoIh/j3spfxoxU+++TbgH7eiBB2RTxfMiIaNBgY/FCWMeFpwGdMCHMTsqIs9oHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O54UYKfC; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-742c46611b6so5097839b3a.1;
-        Mon, 09 Jun 2025 02:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749460542; x=1750065342; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SpmkGucy2RS3jBDTNw16VboUFxkjN0cf7us7G6qbOho=;
-        b=O54UYKfC26WlOd2zlUvRMrb/r6wwJckBcweM7jTnLNvgM6+OjsDorQNxBg3FGXUOxe
-         4LwLQBVvdZ6pFPG0N7K/sZSShedke2mAyKEsRpjxDJLW4rduMMXBj3ZbwWnMrTTrwdfs
-         Zud6Qj+zN1d1LWGdNqWvGCEBiKLfJuH74XE+ypB+qNGBfCgCOxJXAbOa1kVvMP2c1ugI
-         1jhkf1HUmzkhw2+7AaKBabBLJn8bkwtORLOFsmcvjxefS6/FCXkSdqAtHUwcZwWbvsI4
-         zKZziARWYstyc/LdqXiHys/NcnOtt0lzQJs0AfPEMYTnB8w5Q3INIpwnWzItW/YEPDaP
-         Qs5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749460542; x=1750065342;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SpmkGucy2RS3jBDTNw16VboUFxkjN0cf7us7G6qbOho=;
-        b=Sni5DM6fuQ0HFGB2qV1mpEqoF/gu42jdHn+ByX1aW9t6vkEReTQEYqnozuMfy4ozqW
-         bBkf2DC1vxjqSRr9RnIAjh9JhDR+5xl2++gUkTj5n4eonYzqB6U1sOQ6toVF7Q/SNBGR
-         6EQ1A85tgPbMd0T1s8jMGSxvGD0gQDALEDuh6tNxYXND80HKdmcuWRnBnfaIkGRiM3or
-         voCyqipNxc2vSwg98e4vufcc0sDYZeZyWglIyCjOsNNpSslgFSZTiHKM7JtNSYzEbFoT
-         u5viQB9nfyWyrkxWLvbMNMQCO6XJTlPxAZar3f20ZvGAeaJI/A5tjcVS9BDjdVxUs0HV
-         NIxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6lEdJuZl96XKHttFJFkQGXn67dRUtD7reOeQ+UbC2GJ2QPvTolG86oTHIhybAjNwXw9wWX+4V60er@vger.kernel.org, AJvYcCVg8XLhxpmbgXwmxvFlIkRDQAdiaohZnBnHNRjknii8dEpfIN9xYWCM5Cbi2GCixoGzqOK+Y3RLauCbcSGj@vger.kernel.org, AJvYcCWKOk72v4ibGlDWiHKZ6H90eR6nyikC0MICQEeZcZiSFc/XKgE+S08Df8c6ClckliyBxvVjxSQuuN1P@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY1Jz6TCNufn+hzlMhghSZ0CloGFnuJny3RCzEx8sO9EQpzjZR
-	E94LJ3zcqPnPjx4QYmpgYxxlQcQe6tMe9Rjslk1bovneHan5lIjRfLd2DCh4+6lbxpxK6eSCEs9
-	I6lpf6scNhtXGx9JhVYpr2Jg7gH8Y2Ev5UyTLN8dJVY1r
-X-Gm-Gg: ASbGncu6+6FDYNHJf5ypJ1jSfqDWTJmYhhfwKKLOoVsmbG8O7aYr1FbesUVtcP6h/LF
-	5T/tNUAjGMkiR0RzJNOEYJJ+v4stJkwTNurkovf4eYQvvsVNzo0w+XTiE7yRWRtvRyDzjLRJNZK
-	fYqBqWoEhg8Y7UpeVNM7LBd922mE2TXEq40pIJZ8NkyVo4H41c5875
-X-Google-Smtp-Source: AGHT+IFEiclBaTJZlih4iswbFa1U+LhgFwjDy1Wcd+BvQJmUmpObry6wPhiUxn5NKpdaFyOWKSitROu6/8JAQhawYRU=
-X-Received: by 2002:a05:620a:460c:b0:7ce:bd8b:2d08 with SMTP id
- af79cd13be357-7d229862b2cmr1761187785a.10.1749460530096; Mon, 09 Jun 2025
- 02:15:30 -0700 (PDT)
+	s=arc-20240116; t=1749464623; c=relaxed/simple;
+	bh=QLKevxjgpLuMuZS/j47Bya3QvOELVxCtvO5e5Jg3Cf4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z7Hge/JjU7HHpcM7PixguvdAxupTygn1M709SBt3RCwUQzCa3c625q/D1xTDoctbzJMnxfqBmDpIl18veAjtZ3SpWQt/GpJ611q4IpI/hVRxl4VdNdSmqpNXCTXBLXC5qXXo8wgb1S94Crh03auUxX4W/03/IMveClAq6WvoGzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=X3aQk6g9; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=daOC+vKgljGGAi24/WQBuWAe1UD9I//0tA3pjxmN7ro=; b=X3aQk6g97/OfFKGH+TrgrKp7+9
+	XphR7NRaWmB8Ir2rLPm9OgPt5xHBAz7e/yweXDZq0rU3NJEzCvMXzq0QUa3N4tTM0gTJutwAm4Hw8
+	ZZyxTLkzjfuFQWVDl/zx7qxMvhIIv7PzL2ChCmmEx80YEaHj8pL+QAIyK71dpHGGdQjEo94vLUJ+v
+	IXjWyW3fsIQSVPwGdBj5Lwzca1kOCT1gtKV7uXr3M93azRn8U97uqWU4qhEdd+UNErDvz+YeoekI8
+	JJkSbAeQhifiOPtGDVjndTyaOwZOiS1L5VIHLkRDXy6GCa9DEUGjKz9w7l+e6M8Mw+lW+jLAtu/dK
+	XUHRhAFg==;
+Received: from i53875b1c.versanet.de ([83.135.91.28] helo=phil.fritz.box)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1uOZfB-0006Av-AU; Mon, 09 Jun 2025 12:23:33 +0200
+From: Heiko Stuebner <heiko@sntech.de>
+To: Chukun Pan <amadeus@jmu.edu.cn>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	Yao Zi <ziyao@disroot.org>,
+	Rob Herring <robh@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/2] arm64: dts: rockchip: Add spi nodes for RK3528
+Date: Mon,  9 Jun 2025 12:22:56 +0200
+Message-ID: <174946455541.762051.5287964403437718499.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250520100102.1226725-1-amadeus@jmu.edu.cn>
+References: <20250520100102.1226725-1-amadeus@jmu.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
- <20250510-wmt-sflash-v1-1-02a1ac6adf12@gmail.com> <20250514204159.GA2988411-robh@kernel.org>
- <CABjd4Yz3w75PtkRk_edzD5yf6b2xPuf20gopbm8ygddgCBfpkw@mail.gmail.com>
- <2b520ae5-eb0d-40eb-ba73-cc18759f33b9@kernel.org> <CABjd4YxRMfi3ZFQxhB__6U4Rm3KQ7bm6J=wQLWAkpb++61ddEg@mail.gmail.com>
- <87y0u1z3jk.fsf@bootlin.com>
-In-Reply-To: <87y0u1z3jk.fsf@bootlin.com>
-From: Alexey Charkov <alchark@gmail.com>
-Date: Mon, 9 Jun 2025 13:15:22 +0400
-X-Gm-Features: AX0GCFvOvTOTy7296A8LugdUtVGVag1zgpyjF2HNfUyXz1MiexIEF2mhKUtpCQk
-Message-ID: <CABjd4YyMavJ414JY4bfouTDy41wB=aajJvJ6vCM55mdEiTFPDw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dt-bindings: spi: Add VIA/WonderMedia serial flash controller
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Pratyush Yadav <pratyush@kernel.org>, 
-	Michael Walle <mwalle@kernel.org>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 9, 2025 at 1:07=E2=80=AFPM Miquel Raynal <miquel.raynal@bootlin=
-.com> wrote:
->
-> Hi Alexey,
->
-> >> > Happy to reference the spi-controller.yaml binding if so.
-> >>
-> >> SPI NOR flashes are still child devices of an SPI controller. You can
-> >> look at other examples - aren't they all using spi-controller? Why thi=
-s
-> >> would be different? Unless you found some cases that are different, bu=
-t
-> >> then which ones?
-> >
-> > No strong opinions here, and no expectation of any special treatment
-> > :) Just wanted to consult on what's most appropriate.
-> >
-> > My (subjective and perhaps unfounded) expectation when seeing
-> > something advertise itself as an SPI controller was that it would be a
-> > general purpose SPI master, to which one can e.g. connect an SPI
-> > driven LCD screen and get it to work with generic Linux SPI
-> > infrastructure - which would not be possible with this single-purpose
-> > NOR-only flash controller. Given that I don't know how flexible or
-> > restrictive other examples are in terms of driving arbitrary SPI
-> > devices, I thought it's better to just ask.
-> >
-> > What I'm getting from this exchange here is that I'd better use the
-> > spi-controller binding and respective node names regardless of the
-> > fact that this controller cannot drive arbitrary SPI devices beyond
-> > NOR flash (which, as I'm getting, is irrelevant after all).
->
-> Just for information, there are several SPI controllers which are
-> optimized for flash handling (not only NOR, though) and for that we have
-> a spi-mem layer which allows to reference a set of SPI memory "only"
-> callbacks. On the description side though, these controllers are like
-> all other SPI controllers, so the same controller bindings may apply.
 
-Noted, thank you Miqu=C3=A8l!
+On Tue, 20 May 2025 18:01:00 +0800, Chukun Pan wrote:
+> There are 2 SPI controllers on the RK3528 SoC, describe it.
+> Tested using st7789v chip with spi-cpha and spi-cpol properties.
+> 
+> [   10.831306] fb_st7789v spi0.0: fbtft_property_value: buswidth = 8
+> [   11.042915] graphics fb0: fb_st7789v frame buffer, 240x320, 150 KiB
+>  video memory, 4 KiB buffer memory, fps=20, spi0.0 at 15 MHz
+> 
+> [...]
+
+Applied, thanks!
+
+[2/2] arm64: dts: rockchip: Add spi nodes for RK3528
+      commit: 2783335329e5762deb0dc5b6d634225d8613af16
 
 Best regards,
-Alexey
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
