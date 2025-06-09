@@ -1,58 +1,56 @@
-Return-Path: <linux-spi+bounces-8392-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8393-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE233AD1F25
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:43:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D12ECAD1F1B
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 15:42:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 018843AF3BC
-	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 13:42:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C54417A6896
+	for <lists+linux-spi@lfdr.de>; Mon,  9 Jun 2025 13:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60E125D1EE;
-	Mon,  9 Jun 2025 13:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FE125D522;
+	Mon,  9 Jun 2025 13:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUFx4Ao9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODzXGffl"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAB425A65A;
-	Mon,  9 Jun 2025 13:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF31F25B1C5;
+	Mon,  9 Jun 2025 13:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749476448; cv=none; b=AwNm2jpGCmiJw3GlLJYAYrdPh6QMMTL/b9pj63ovNz66KaO7zJoUOI27kCCrQXssujr6itsPy0VQ9KNTgGDXVS/Pmat0t8UadZ2XObsM3fFLGlFH5o5LKVQgp1+GDU88F9Q+U7B7KlDAItmuQj4PDLCKuU6xwp3Qcd2WaP0Y0/w=
+	t=1749476450; cv=none; b=liAXg8uKWS+f5dEmX5Zd0h6Z44W62jXjCuv100BRvJG1tBINMlCULjRKON4gf6FYBhlDDEPa3Y6csmwXHzZUmjsroUPN2AZh5KsQhhOm1FScWXn6OHvWXa3ZYPLu3fKbpORPH7m+wjQ9ZexKQ2K144oxo+wj/qZUS/q8RhP2QDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749476448; c=relaxed/simple;
-	bh=PWNpIUfACgNMqjyCpMvNLYXJP3ujq/QCOWwkCMkHvLk=;
+	s=arc-20240116; t=1749476450; c=relaxed/simple;
+	bh=F1aqTjBRQnFnGblh+To52pURYZgvRaaeerBAldcPAZU=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=VRhS0vLuxjhjWioxHccum+1Q1I8X+WFK75cyc5ZjV1ISQlO6kQoyBBlSMuC7e1hlT/vshDhsw6PJyoj6yCesw0jyiFR4ooFSv5rwF+DSGNhRfRUVz2xsWZQQnOvwGHojM6OeSE2Fv+AbdaD9GqlIhiRGSuxAoAWKnY++vWuSgsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUFx4Ao9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD9F3C4CEEB;
-	Mon,  9 Jun 2025 13:40:46 +0000 (UTC)
+	 MIME-Version:Content-Type; b=HVOiDcT4bgm34Wj9bx/+SWytdbLPz+r5R0kzNvDvxMNpHeDm8bV1i6Tce7iHTo8JTOeeLKMxiLLme6+nIHmE8bX0tY3YSo2JIJMtCXkL/mIJOIYOT10fJW0YxK5VkoWNPmlir3nhKAe8nq4llBQ9T8/gdM8GQxfF//8iEiKDJ70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODzXGffl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3357C4CEEB;
+	Mon,  9 Jun 2025 13:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749476448;
-	bh=PWNpIUfACgNMqjyCpMvNLYXJP3ujq/QCOWwkCMkHvLk=;
+	s=k20201202; t=1749476449;
+	bh=F1aqTjBRQnFnGblh+To52pURYZgvRaaeerBAldcPAZU=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=lUFx4Ao9NaOycYVdbGZ5Xy1c+6vjqNNzhdDlEg1Il1qHQFlEDgX8pe+2yoOR2Y4od
-	 gVo6zDq7jHZm0HA7RkmYHAQ2bXAfRYAsaNqax36uhk923N580AubfL+h5sOhUUAKJw
-	 YcJmK93tYas3qBgq4l0j6sK1sG7kVg22nIMvMnZwaUXMInoc1E0XucmLt2m82Lg+68
-	 SNQaaa5moGyE8OqRbGlUcBaHv9JpiNDegJB2R6wW1CtVzTUHn3/sFMoQLIQWpCpAgt
-	 EB0Iko69IC+vPMHRMkTCaf7qzR+uCKD3FgFt1+7GSYkOb5cSCJ81aiE8u6A4JFSf2J
-	 eP9XHH0D0sHlA==
+	b=ODzXGfflEPD8LOudRwcQsaCG7o95VziaCkoFEJUD7pz90wvqScETgC/oNiSUMetZc
+	 Pg5kDnf/QBjDosYDz2rOcDYmPVjTFRjAco2lO2uti6XAfb2+5agYyhFUv71Ya346NN
+	 geEH4Yx1uZ9Y6btEvAq3+oAGt1OvLMGSy91gpe0HWvJqtrux76Y23joJLVv8Xw9ZAb
+	 iuHUAFWywEHXGefDv9RS6/W2T87dXXC9buXOzPIExHiznB7SURJ0x9zW64xXso9usx
+	 J0DWXlKcnb93SyL3r5wV+bsOaGZMgz/h/yQgkaizz5umP4NcAP1i50+tOATRzd8v+F
+	 Ym/2YpvL12CHA==
 From: Mark Brown <broonie@kernel.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250529-qpic-snand-remove-qpic_snand_op-v1-1-6e42b772d748@gmail.com>
-References: <20250529-qpic-snand-remove-qpic_snand_op-v1-1-6e42b772d748@gmail.com>
-Subject: Re: [PATCH] spi: spi-qpic-snand: remove 'qpic_snand_op' structure
-Message-Id: <174947644664.127013.16116071467167037102.b4-ty@kernel.org>
-Date: Mon, 09 Jun 2025 14:40:46 +0100
+To: Thangaraj Samynathan <thangaraj.s@microchip.com>, 
+ Dan Carpenter <dan.carpenter@linaro.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel-janitors@vger.kernel.org
+In-Reply-To: <aEKvDrUxD19GWi0u@stanley.mountain>
+References: <aEKvDrUxD19GWi0u@stanley.mountain>
+Subject: Re: [PATCH next] spi: spi-pci1xxxx: Fix error code in probe
+Message-Id: <174947644859.127013.15989165632026703633.b4-ty@kernel.org>
+Date: Mon, 09 Jun 2025 14:40:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,17 +61,11 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-c25d1
 
-On Thu, 29 May 2025 19:35:44 +0200, Gabor Juhos wrote:
-> The 'qpic_snand_op' structure is used only in the qcom_spi_send_cmdaddr()
-> function as a type of a local variable. Additionally, the sole purpose of
-> that variable is to keep some interim values before those gets passed as
-> arguments for cpu_to_le32() calls.
+On Fri, 06 Jun 2025 12:04:14 +0300, Dan Carpenter wrote:
+> Return the error code if pci_alloc_irq_vectors() fails.  Don't return
+> success.
 > 
-> In order to simplify the code, remove the definition of the structure
-> along with the local variable, and use the corresponding values directly
-> as parameters for cpu_to_le32() calls.
 > 
-> [...]
 
 Applied to
 
@@ -81,8 +73,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-qpic-snand: remove 'qpic_snand_op' structure
-      commit: f73dc37ebf45573349aee0aae168e8dc3d13ecee
+[1/1] spi: spi-pci1xxxx: Fix error code in probe
+      commit: 2b74aea6d078ade810a3b0f7d1bcfcba2eaad416
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
