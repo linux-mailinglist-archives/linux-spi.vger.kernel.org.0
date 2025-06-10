@@ -1,197 +1,134 @@
-Return-Path: <linux-spi+bounces-8421-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8422-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC3D8AD301C
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 10:25:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D5CFAD304B
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 10:29:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B876188FB0F
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 08:24:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 805D83AD1EA
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 08:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2C928134A;
-	Tue, 10 Jun 2025 08:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D4D3220699;
+	Tue, 10 Jun 2025 08:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="aeGxAGuS"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="rXo78bJk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="az34+tl6"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from fhigh-b4-smtp.messagingengine.com (fhigh-b4-smtp.messagingengine.com [202.12.124.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F7C28002E;
-	Tue, 10 Jun 2025 08:23:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9F828137F;
+	Tue, 10 Jun 2025 08:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749543784; cv=none; b=hHmPfMDtGZVJXhR2rwpQHnXcKT4c2P9gtO0I+2uN39hzn6sSbYqMIfUtpyf4XX+X7EuLl1+zwkS4Npi+k6psaz+hfxKURGSgEp1kbV/HBnfPe46vRDGQC3q88ByCq9VAyD2H2Bt0X7K5reWNeoaNDaF3J2YryLBCBZdSQzRhUuM=
+	t=1749544013; cv=none; b=u0mUGMlhmzXSyLL91o/AXuGydUKwACdxf+Y86TX89GgWfV9IoH0D+ICnzPrTtc21CoL8LRunbEmyQQP9nV3vXsvitG4fjs11RVw9poXgHp4nLeNT3tJAMWLV4CByt0GSIZbbtPJ0IrvmZwIazRxPh2+7P6HlEU7qG4v2EaCl+ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749543784; c=relaxed/simple;
-	bh=teRKCpcCZjRrySHJh7DujU1cBHibTtbcNpxnYm/ruiU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q6T8KtnXscXgZp3TzYS5fh80MuLZeIFlDvEtwg5lcl7hjn+wKnVn6kfraZkjK1snDnzWL+fPIL9FbO+xvQH+gmsjDqXlrgKxZ0D3VXQ+uIpyY4xbG/YCA6WY6vNwxIDEh4uk8PysxEFxkOwBhClc5ev/P46om4aLQiRwBiL1JnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=aeGxAGuS; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 19A53A06EF;
-	Tue, 10 Jun 2025 10:23:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	s=arc-20240116; t=1749544013; c=relaxed/simple;
+	bh=jDhdLXBPgSGt6oRlbGs9cOp8/AQDYr5pxPRzrgiK+8k=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=qHuln0FO/8vosr31ioBS+y88y8DieGenheBRfqV2UkugvJfTG8mGsLBKiq2jKH2gDWrj0/KAF4rTb9WoEg6MccRJgjehzNMq8pjJZoVgvl/Mr1eNgdOZU+3T42akichiNP5mOJjHBzjRFyDij3DrvhbAb7oZYejBnrPbHmYPwfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=rXo78bJk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=az34+tl6; arc=none smtp.client-ip=202.12.124.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 81B062540150;
+	Tue, 10 Jun 2025 04:26:49 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 10 Jun 2025 04:26:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=h4hvPkDpasDOqzvoPlQR
-	6fqCNAD2mH8pnt4CYS2HbjE=; b=aeGxAGuSxVT46TiaInzLbpyuWugAaXShxQHd
-	7JYhH280LZezFPdLjyOAJ+78ycxQzs6b6SJhd3l7TE5uAv0LYbcATx4wHzBRL6Fa
-	S9Qxpm7+0M1rLMRyyeh9VBeq573O+6U4wbfXlnSLuRhucQtcYraMdMMqyErsp7W7
-	bFFL0XKAOs50acQv12bB9xG7KK5HetpLCEu+oAw5+mOoai1dlZoJP14nGFLriXiy
-	AKPMFq1jZyRvphMuy4lB2/ci5NxQXLioiH5ej8RdyQI1CbqWbbM5sDDTyyyiVIUj
-	jNgeLPCniB2W2LM3+2asubSdk+DUTxMBBP1PP+05sb9tV+zuEfaW6x3D7l1G0p8E
-	eUIzDxJsyprW/0oGnEk5rTvnaoxNU9Sx4VIm6DSELemOc6/Ig8GTnP7FAOSqDgwF
-	XRmg2BMbapGxDQnlhsKzPtLfk5QZINWj6HcoQhuKaW+qKtlPHWwde9MaWtEHYgIj
-	lOGawqkL1VvJbLm1KwKrkVpHTtbIcJ9FVDJzykpfvJCyk+BxDYYVs20vAb3r2kHr
-	ckRF0IlYTv/XIIIdCh1Qnr3HeYc4z0nL4EiMa8cooicukKe5BqYwDeER1+qScb5a
-	nWfNXHOBMKeohoAI+amCFXuBDvdMyvq2BgNWJ3dh6GBlNqOJRRn+Ls7IwJpLETkq
-	vEbjeYc=
-From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: <linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
-	<broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, "Alexandre
- Belloni" <alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>
-Subject: [PATCH v7 2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
-Date: Tue, 10 Jun 2025 10:22:54 +0200
-Message-ID: <20250610082256.400492-3-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250610082256.400492-1-csokas.bence@prolan.hu>
-References: <20250610082256.400492-1-csokas.bence@prolan.hu>
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1749544009;
+	 x=1749630409; bh=Zsf/amW9Z6SOQQ8AqKNeaHP1tfn0mldyK1FoWg2o0x8=; b=
+	rXo78bJkWsapuiVOISzl0DtpeV6Pz0tERB+odlfUvvg2BZ2rqjt/L3qvvvRN2orf
+	JpUboAJZaeHqFqcy6buVd/2Fm+fac5kRy3iQ4BoschLMISfbTt9BE5q4Q4gUuUdG
+	nJUPVWNfOkNWytMgbGT1ibpe2LB5p2x0wl4b1GSdxtZR6FTgoaPMqe7Tm2Rbey1i
+	UWu/1f1FUoZJfqPVG4G+klPijfUWQqbULTf+2VcW0zlovW6jhFYFDrVH79SzlFlU
+	1sNVm4Q7oYJiZt1exctzcAtcPNsKCy+9qwbvQq+V0AANfhkzN/Ztfj3nbTMFJYo8
+	98odcmbXPsiuwJH+tW4Vog==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749544009; x=
+	1749630409; bh=Zsf/amW9Z6SOQQ8AqKNeaHP1tfn0mldyK1FoWg2o0x8=; b=a
+	z34+tl6t7Av4+T3zFyKBxHVPpEBM9lFx7VSkrk7z0M2AJ9SCb4brI65hSjeH8DAp
+	nx9zli7+06P7NX1mencOXAGCQRIuQJh1wi3bmOxYIxvc/MDM+BIUUWTbx2ZKamDB
+	XV+a50P+Fa3/znYfVSEJq4R/WL1Lh/VdWsqhdTqxK3idmajqhKLm6amDbJzKqYHT
+	w5/bcqHaQy/FVkwqG/NMO0ykokE5UsuMvKSqYguUXi+fzmD6+Oh31lHS4c7gZDMJ
+	JBRlO3S8QBenbRcSbVWSltc5HV6XiJ3mNVF3k7qvlDEzbn6XSbRgE6SQEpQiP6tG
+	eoA9cos+cTrd6Oox2s8nw==
+X-ME-Sender: <xms:SexHaNRe0LUD-K-YgB_fC0izq4_KzgOcyfzQbqx5IQyknhtZjx1XBQ>
+    <xme:SexHaGz0UCq2Ld00OfCIOI3VPFYebjxD_GaDKSnaVBHsD2qigfKRDmPunxx4kdfnw
+    5p-YGtuXD60ItmhkN8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddutdeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeej
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeholhhtvggrnhhvsehgmhgrihhlrd
+    gtohhmpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    ohepjhgrmhgvshdrtghlrghrkheslhhinhgrrhhordhorhhgpdhrtghpthhtohepihhmgi
+    eslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhopehvlhgrughimhhirhdrohhl
+    thgvrghnsehngihprdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvgh
+    gvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:SexHaC1yAbPVefVqCNiUSkTXxY2XxPbIQb9pW_-6ohHdILnQmHP0Kw>
+    <xmx:SexHaFB3kRAeS8J-HYWoaouuiYsuHQKOiQDeQA7sSBXleszmnbbhXQ>
+    <xmx:SexHaGhxJVkxiRU2rwGQadFZ7mybFUTSIM4EIOW4XbqHZsDEIAkllg>
+    <xmx:SexHaJpVm9WuYgZB57VL66NTD62Dt2pPlxelsRJls_lzpN0mBKPTmw>
+    <xmx:SexHaAp1ANxjI_D5_lui4d8maVF1RhQpDAfFWXRRAFDNQ9euaDwElp3->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 0A90D700062; Tue, 10 Jun 2025 04:26:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1749543780;VERSION=7993;MC=3965923373;ID=452480;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A296767155D62776A
+X-ThreadId: T7ec8a5524929d219
+Date: Tue, 10 Jun 2025 10:26:20 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Clark" <james.clark@linaro.org>,
+ "Vladimir Oltean" <olteanv@gmail.com>, "Mark Brown" <broonie@kernel.org>
+Cc: "Vladimir Oltean" <vladimir.oltean@nxp.com>, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-Id: <1c579729-4461-4666-ab1a-77f17a320ee9@app.fastmail.com>
+In-Reply-To: <20250609-james-nxp-spi-dma-v1-2-2b831e714be2@linaro.org>
+References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
+ <20250609-james-nxp-spi-dma-v1-2-2b831e714be2@linaro.org>
+Subject: Re: [PATCH 2/4] spi: spi-fsl-dspi: Use non-coherent memory for DMA
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Leave releasing of DMA channels up to the devm facilities. This way we can
-eliminate the rest of the "goto ladder".
+On Mon, Jun 9, 2025, at 17:32, James Clark wrote:
+> Using coherent memory here isn't functionally necessary. Because the
+> change to use non-coherent memory isn't overly complex and only a few
+> synchronization points are required, we might as well do it while fixing
+> up some other DMA issues.
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 48 ++++++++++---------------------------
- 1 file changed, 13 insertions(+), 35 deletions(-)
+This version looks good to me,
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index 2f6797324227..fc555c0ce52e 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -1285,18 +1285,21 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
- 	struct atmel_qspi *aq = spi_controller_get_devdata(ctrl);
- 	int ret;
- 
--	aq->rx_chan = dma_request_chan(&aq->pdev->dev, "rx");
-+	aq->rx_chan = devm_dma_request_chan(&aq->pdev->dev, "rx");
- 	if (IS_ERR(aq->rx_chan)) {
- 		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->rx_chan),
- 				    "RX DMA channel is not available\n");
--		goto null_rx_chan;
-+		aq->rx_chan = NULL;
-+		return ret;
- 	}
- 
--	aq->tx_chan = dma_request_chan(&aq->pdev->dev, "tx");
-+	aq->tx_chan = devm_dma_request_chan(&aq->pdev->dev, "tx");
- 	if (IS_ERR(aq->tx_chan)) {
- 		ret = dev_err_probe(&aq->pdev->dev, PTR_ERR(aq->tx_chan),
- 				    "TX DMA channel is not available\n");
--		goto release_rx_chan;
-+		aq->rx_chan = NULL;
-+		aq->tx_chan = NULL;
-+		return ret;
- 	}
- 
- 	ctrl->dma_rx = aq->rx_chan;
-@@ -1307,21 +1310,6 @@ static int atmel_qspi_dma_init(struct spi_controller *ctrl)
- 		 dma_chan_name(aq->tx_chan), dma_chan_name(aq->rx_chan));
- 
- 	return 0;
--
--release_rx_chan:
--	dma_release_channel(aq->rx_chan);
--	aq->tx_chan = NULL;
--null_rx_chan:
--	aq->rx_chan = NULL;
--	return ret;
--}
--
--static void atmel_qspi_dma_release(struct atmel_qspi *aq)
--{
--	if (aq->rx_chan)
--		dma_release_channel(aq->rx_chan);
--	if (aq->tx_chan)
--		dma_release_channel(aq->tx_chan);
- }
- 
- static const struct atmel_qspi_ops atmel_qspi_ops = {
-@@ -1426,14 +1414,13 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 
- 	/* Request the IRQ */
- 	irq = platform_get_irq(pdev, 0);
--	if (irq < 0) {
--		err = irq;
--		goto dma_release;
--	}
-+	if (irq < 0)
-+		return irq;
-+
- 	err = devm_request_irq(&pdev->dev, irq, atmel_qspi_interrupt,
- 			       0, dev_name(&pdev->dev), aq);
- 	if (err)
--		goto dma_release;
-+		return err;
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
- 	pm_runtime_use_autosuspend(&pdev->dev);
-@@ -1442,22 +1429,16 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 
- 	err = atmel_qspi_init(aq);
- 	if (err)
--		goto dma_release;
-+		return err;
- 
- 	err = spi_register_controller(ctrl);
- 	if (err)
--		goto dma_release;
-+		return err;
- 
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
- 	return 0;
--
--dma_release:
--	if (aq->caps->has_dma)
--		atmel_qspi_dma_release(aq);
--
--	return err;
- }
- 
- static int atmel_qspi_sama7g5_suspend(struct atmel_qspi *aq)
-@@ -1507,9 +1488,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
- 
- 	ret = pm_runtime_get_sync(&pdev->dev);
- 	if (ret >= 0) {
--		if (aq->caps->has_dma)
--			atmel_qspi_dma_release(aq);
--
- 		if (aq->caps->has_gclk) {
- 			ret = atmel_qspi_sama7g5_suspend(aq);
- 			if (ret)
--- 
-2.43.0
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
+I had reviewed an internal version originally and had some comment
+on that, all of which are addressed now. You did not Cc me on the
+other patches, so I looked them up in the archive, Patch 3 also
+looks good to me and complements this one (i.e. you really want
+the combination). I did not understand the logic in patch 4,
+and it would be good if someone else can take a closer look
+at that in order to Ack that.
 
+      Arnd
 
