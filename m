@@ -1,77 +1,79 @@
-Return-Path: <linux-spi+bounces-8436-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8437-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401F9AD450E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 23:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 54B04AD45FF
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 00:31:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5F3B1893787
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 21:53:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B9E2189C301
+	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 22:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6876B242D94;
-	Tue, 10 Jun 2025 21:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B293A25D546;
+	Tue, 10 Jun 2025 22:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="gRNE50i6"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="pcPhDUXT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011033.outbound.protection.outlook.com [52.101.65.33])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2045.outbound.protection.outlook.com [40.107.220.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D81E27FD73;
-	Tue, 10 Jun 2025 21:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9911442F4;
+	Tue, 10 Jun 2025 22:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749592364; cv=fail; b=SksfCjWOYV0yK+NhTg0zpwt9aJbO+jM+I/jHtnJ67hHMtRhfgL9oyINoh3AnlblZc77CNGi+gCyDIc0rkGyde5jViGZTpZqx8v76ONX1i6ga7xZ2VcRvA7da6lihiPgJscOiuUafE2xLhZkaBWQeTgeQTlgD/52gqHot7xg97YI=
+	t=1749594708; cv=fail; b=tz+SyYWnb45jBk5efkMlyC/70PXv8DQjr4wEPQCU/VHvWivejw5jnRTb64/pm38kuOOWgawMz43pQMjfuZ7NQXMSkolv+rXeu54F5i9TpPxqRUUsycShGA44GKIjslE5AjvdlakOcJ8NSMGH8XjOM4O9o9IQ3B6m+KbzNfJaRIQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749592364; c=relaxed/simple;
-	bh=vvPUt6tL9rim4VdMyFm0r7YPAsUGT/Ui2EO5bLeUAEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Zc5OQpBhWyP3CbY/R5U+uomFIyz3gUDif6HiNtsbjaMwLpOajq1GXwdnEaTWoUfoHJhd3/Y3PMA+42zm39T0Q96KSHvi1aubgFKYUV09r9rEGHamCwyKc6l8jJIT+yVNPaSBPlbSZ+6wDswyDM/1qmZakxEMAdJ8AEyKoLU4R+8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=gRNE50i6; arc=fail smtp.client-ip=52.101.65.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1749594708; c=relaxed/simple;
+	bh=wiY5CorgzM4QcGwmEf0t1yyokqMbYyhDOnz5RJeQdAI=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jk5Qba64CocTH4JWvsuU/VkcgZDyJmz08kXoUced0+FoTwGoM12e7WdcsuGWbJeK+F088A3WABHoSDhU7jVYP4lwZ/enxTCC2MXfwbDEAlIVchGw7T+wTIVeEi/PqQS2kY6INS8w+2ruIpQwjl5x57IpoGkWPu+Ka9nOZRP09fo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=pcPhDUXT; arc=fail smtp.client-ip=40.107.220.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wL1DDQo+2lymt//X1AJ8piDi9UZjRnZB0Feyoh26wi+jU+GWIclENC0CwDzudDL766382MQ2VMdI/KZ+rW5YXo/3QRZ2kywnc2yedUbzQOEOCOpj9TW/tjhVNkiJoBHLikleJwHbxk514drOHwy5bLGtn3F5I6sQuTMPsi9CXnUcHO/pSl6nZyZG/FkpGd5h5BLCK0i+63SLhtlCtMNpJ6hUK+rgM3DzB3kV6gpF5HwZvC+YzfoHnHyRa1KRQvOUTb4qqC7hK0MxGXCNAp65QTQCsGJ2jzGumr+3d3pv7SzeM8FVdj/Wtoc242ZwQs7ufp2UffWMz1PlvgIY/0LJag==
+ b=qcoBRNCU2tDsI2x6HL8YWJ9TYSNvVkNx0VakD79i1kRJs6AjaxGng+9WiWMKx3iRFGqaBl8H1CqEIuJglWacgpyfblvF/mJ9+5qF+L5dzwYjD50Z4z7obD56vVN/S0gQemZO7tQzIaiBJsCPMxA/IEn04KiRVse7GBCqdppaFGpYqVQwbpa97XWsuLGE5SnZQBvW+NJVwWAf8Ol9jhxDkBya/U3XXiJvZsZlSc4H2PG2mFFTH1nrgUDCUMi6hZHBTqBTpll07BV+hawcN8AWtgirRU1op1TOLvXOY4tBTMCZb0icEXMYM+0XOaE+50SzxL5Q8sHtETzJK2i5N61R1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z9Opefa4BANhPC7X1y25r8ijlP9dUutnz0Lt0k39cIA=;
- b=TcDhITVOO/ds6BMSvlpwq8YP36iQoLvg16icGQRRglAJeXtbJGOV86goMk3dLLzkYI2AS05p1K/hToYmQe1zzks4pPXnTMbZoUygF7MHmcHdyCX1s1JQC66BrEwb7/wGn04C6tCQAcv/7CyoeLGS33Z7Q/m+FPlNbb+dZH+/0/UmVRmbl4xvrsEvuF21uTNSdD8OwdRX0K+pI4E6OuKgPHNvKAvODCTCp7pyfIG3+RQMz4gW/KurA5sA4nL0+yGg5xcWkfhAsy5qe1YM//a1PsGEj4fbbkfdx2yAstU0T5eRndOD4F1WyB1UwyqKZY2hI4r3dCighHy9nY826EQUYw==
+ bh=kgEjPL4dPqJZGO5LJV9vU7Dwya8117JGidtDk1lDvuY=;
+ b=D4978jAJXcV7GaDdFNgQuyE7gxsowaXEh2cSCOXYYVO84EKzKDH8jOvqCtNbCPssmOGbABUHJ0A4OuHKMUoVPmxEcEolXa/GZBnLqID8Z/3dsFDK147Gap6I5sMOzZOTg6O8ZMO2nPAob3vUcRhAfX6GSh9NbADEOty7TOOLFj0Prl5X3IvQILYeeWOTb528AE3oBCy7r0BZFwkZbFDFipCgZk9DUGxHUU0EaYvqFdQOo9ZKi5teoiSYGlIUYo0jJ++pAY4rVY8NtAsiKmNQ94ihr/L9w9ghFiR3nhr4fupbvRSkQrxcmyCWsB5VXuGVubrIJW0ghY1twnsDMbr2ag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z9Opefa4BANhPC7X1y25r8ijlP9dUutnz0Lt0k39cIA=;
- b=gRNE50i6Plk1W27YDDUX4BiGH3yz/xDTxsS4YRDRxBtEw6pqWwnXQ71v3URMzQ41FxD7qg/6ujvs4mhY0p0cTC1+zMu7OinsO/CBiXORTMreYnohG5/ZOPxPHAWv1CxKtGwvSiGarAZjJ9HoqTRwJXss8yJEOJT0TUNdP4ue9sUWi5HipPJqFa5Cn62WZVfwTfiH686Hdd/4tPttmMgn9+ZKmbyD6vNscv5poamuwy1DvYk7sE+lDmRt1LWruwywOQsEvFmyWKToXwGBL/KZVvwMz3IuQ8Ej7QVkVBr2TIGa4VOpxK4Dw9WJYA9zddUQB4RNpYPsD0EEcpIkI4YQFA==
+ bh=kgEjPL4dPqJZGO5LJV9vU7Dwya8117JGidtDk1lDvuY=;
+ b=pcPhDUXTP7fsHPNpLASElmF+kMcbRsCwD8j4j+IsiDZUY+IxtBtvkzWI4SdlRSRKh5HGBD9qHXc8DVXuJD2p0iRNciUl7a7UBdsBiCz3/zvbwf/w3+IvUumLT4gpPO0bnS6P3jr7PhEft3u3dMIXUpKjwSkWTwR9zIkbSB9YJ3tFkIBKIvY71Ug81n8SQn2w/6OG9Pg7nlV7MwTi5qYYg6Ec4cCqL1IDB7Y/SWev/Tv2HRD7up+/TzTsDrXO+LDjUbaHZ15yWUrZCMNc0oFaaeFYhSTPDX5/MpKOYp3oOsm7riEaz62XDirKyNDQXH8x6TKsjMw1783rs0JtjdEW0Q==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
- by GVXPR04MB10071.eurprd04.prod.outlook.com (2603:10a6:150:11a::18) with
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from DM6PR03MB5017.namprd03.prod.outlook.com (2603:10b6:5:1ee::21)
+ by DM4PR03MB6029.namprd03.prod.outlook.com (2603:10b6:5:390::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.19; Tue, 10 Jun
- 2025 21:52:36 +0000
-Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
- ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
- ([fe80::7417:d17f:8d97:44d2%3]) with mapi id 15.20.8813.024; Tue, 10 Jun 2025
- 21:52:36 +0000
-Date: Wed, 11 Jun 2025 00:52:33 +0300
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: James Clark <james.clark@linaro.org>
-Cc: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] spi: spi-fsl-dspi: Report FIFO overflows as errors
-Message-ID: <20250610215233.35ikv4sslkyukgwr@skbuf>
-References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
- <20250609-james-nxp-spi-dma-v1-4-2b831e714be2@linaro.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250609-james-nxp-spi-dma-v1-4-2b831e714be2@linaro.org>
-X-ClientProxiedBy: VI1P194CA0044.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:803:3c::33) To AM8PR04MB7779.eurprd04.prod.outlook.com
- (2603:10a6:20b:24b::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.36; Tue, 10 Jun
+ 2025 22:31:44 +0000
+Received: from DM6PR03MB5017.namprd03.prod.outlook.com
+ ([fe80::2898:accd:c6dc:2168]) by DM6PR03MB5017.namprd03.prod.outlook.com
+ ([fe80::2898:accd:c6dc:2168%5]) with mapi id 15.20.8835.018; Tue, 10 Jun 2025
+ 22:31:44 +0000
+From: khairul.anuar.romli@altera.com
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list),
+	Matthew Gerlach <matthew.gerlach@altera.com>,
+	Khairul Anuar Romli <khairulanuar.romli@altera.com>
+Subject: [PATCH v2 1/1] spi: spi-cadence-quadspi: Fix pm runtime unbalance
+Date: Wed, 11 Jun 2025 06:30:19 +0800
+Message-Id: <e1ecafc55f7fc1b2450f7c7ce0c11b9efa68844f.1749516352.git.khairul.anuar.romli@altera.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <cover.1749516352.git.khairul.anuar.romli@altera.com>
+References: <cover.1749516352.git.khairul.anuar.romli@altera.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0007.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::12) To DM6PR03MB5017.namprd03.prod.outlook.com
+ (2603:10b6:5:1ee::21)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -79,225 +81,160 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|GVXPR04MB10071:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37f98620-4ff1-4d41-7ace-08dda8691c7a
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5017:EE_|DM4PR03MB6029:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a9c11da-699a-4787-262b-08dda86e9291
+X-MS-Exchange-AtpMessageProperties: SA
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7053199007;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5TTY/D3RCq6Htnt7UT9Un1CBZj3njA3NxlQ3Lx6gsFXbwqBj7UQtW+91zfuP?=
- =?us-ascii?Q?AANrUuATO2sCT56jPidwIg4qehjTr0BhvihWAPk85IkLsyky4dexH0HECkNJ?=
- =?us-ascii?Q?mOG1ft9UXV2jz6EpabgakV+vS9Ad+NBnMorP7pfFe5XU5Eimu6LQcTzXKw9A?=
- =?us-ascii?Q?GkYny+aAeFHOusKPzxvOheSbT3a28zpfGB2pcuVC3Zw9Qf191aMJeoJEowE7?=
- =?us-ascii?Q?98UVOL7ZCDj0FvkmjDu1ZuwXqD/TCkVU3ZWQhcN9mArgoMibQkqxoPG221oT?=
- =?us-ascii?Q?FLj9rlzc6i52VVbBK/q7t8p5wYeGcr8Q5iwDwlI7bLwFzSowDdpQVOh6acqy?=
- =?us-ascii?Q?WTDaiSzsfOeSFGUVl+1D7UZkOE+G5leRj2byX0K0yvhjFCaS4YfTWG+Lhkyh?=
- =?us-ascii?Q?XVARwGFMM4T25Lj3bodea2Dg6gLd9Ows2KOa7/8t4X6aD1e16lMcq7EuLlxX?=
- =?us-ascii?Q?mQbxE/BVE07nyaRE0FU+gIpFS3qLWehf4BtCI8EnlwXqcQaR7Ob3vSvOd5BT?=
- =?us-ascii?Q?AUBkR2vy2IXr7x9Eqm6u+vLhRD71nx7HJe9CmGmgQoUear5C6tol0EMFLoN8?=
- =?us-ascii?Q?Dmc8yLwLceqdXei257BfcylhtzM3pViGHV3Mk1H1HkkhGHyBXvooISsph7YC?=
- =?us-ascii?Q?HfIp8z7ZOp3Dqnq72io7MZXp1AXNtkgW5iyTmPxqOMRAP6KGhuyYxvODiyPX?=
- =?us-ascii?Q?cbbD1QRBdk+n6MEMAd1yQjsAV9Y1A2TwP34+A2ebCAGTjzSBfFDAguDaga0D?=
- =?us-ascii?Q?gHAGnZjnRB5Thk8j10aIeztO7GsLIvd6HRSvi5vEhm9kOY2aW+zixQR/ydVn?=
- =?us-ascii?Q?e1LHuhj0wmanHNvsMmLEqCQtbYtTA9TYFgIznd9M3TJ3o7eUJI7JDBv14FBe?=
- =?us-ascii?Q?qMEbFnWe1a1fc2PXgl6ctS4rUXbh1Q3fm4UWoXM6W4tNeGVCRtoHPUzuCuPd?=
- =?us-ascii?Q?5ml6zJ9mhyI45Xd6UfzdTqVxToZzs+k8d58twgDTjdjNZDrwDfYrkn6mX3oc?=
- =?us-ascii?Q?GFF+HqvNRbAgl+15WqlZkQtsSJtO0sZebOmVy/k4pVdwDDC8bBvJq3IC1IR7?=
- =?us-ascii?Q?72u64pIGuq96sH79mT7L9/b5ph35p3DIPqnsx3bP51wQVqJm9SiwxLm5fGaU?=
- =?us-ascii?Q?u/o5mJPYySkr+XQ1HwVCvy4G953Q2P7iMG04c7+XflWfFibBQpq5Pj9pW/ST?=
- =?us-ascii?Q?+Svnh2FgRbEcswYNcNIjEujaXiS+UGdamNvJxhryAUyOYWdZ9ggJwHtxO9wP?=
- =?us-ascii?Q?Jw1QXlPM4ZKSGuvFcPKnszoDkrm2J1pm8kF/ynZEbVbUueIRD3iK853HuPZd?=
- =?us-ascii?Q?WHfo5lF4woEQMlCBCaeHQfmPA6dYOYMc3Yq7w6d6wwnKkghWMEnVXPI9OqzC?=
- =?us-ascii?Q?ouk9Imc6Y06N5s0sc5veUxJRnFb0dP/hOwm6/YBHsf9tEd6HuSHJ4I+F8O6q?=
- =?us-ascii?Q?SMacdU/z3cQ=3D?=
+	=?us-ascii?Q?a6LZuw6JNJirwaG3N+CflpPyhiavoAEdunigY8rMF/lvvm01V7bK5MS2KvQe?=
+ =?us-ascii?Q?gQaugjzN7MU6CpYJtf83SGTkY5UKp3MXIXeqMJxZqS0grMTDOA8nwK78rJZo?=
+ =?us-ascii?Q?d1OV1kgqZj6uq7R9OqD/TpnHvOpNAbmJsojEXEPXu4mi5YX81K+XNnd0Aa1m?=
+ =?us-ascii?Q?xA4tnHpCnQCwHbm+BK7/7cDOwj91lqSYvrKkvAjfRlNJxaZXX1+/US5Ms4lu?=
+ =?us-ascii?Q?+SPahBe9RSdBwQ40UA2VoTwcrMbTmFwmnYl3dVfIHvqrVQ+4qa5ockT1Mmvy?=
+ =?us-ascii?Q?AUU8JnP+YAEluBi7Q1Hw5Nz38rjeA3HbjedAafi8mOBvQwL8tBrF+HRSChmX?=
+ =?us-ascii?Q?c2cLxdCWEcdtpmcWupiGRlNGpFZ7PD3Qh1+VDe7emqzsMtp6XqQUlmFHG9+y?=
+ =?us-ascii?Q?2fEitYFbY//PJBR53O2r0IaElDlzlsQNjgUoYkAkPJjrDJBG3h/Iya+8g5Uz?=
+ =?us-ascii?Q?+w8zvOEkaRxKjXVzg+OuebUT/kk6AlZjbeBssYyUXZMaMMmZfvExQTahY/iI?=
+ =?us-ascii?Q?NzNCPzdi/AuSx3tMVtJtKo7hVwwGwfrbTlN56adbDzxY7+PpRfZT+cg52GWY?=
+ =?us-ascii?Q?vXsVIrR/PMUiF8EIPkjl6J+nimjEXAgfxSMBfccuIYamFfcMI//zujL3qmgX?=
+ =?us-ascii?Q?1r0rb+yOcNZhMipcLeD1HjDusTPuKZi6SklHq+1r2xiMK9clm0Rd1KcmlY97?=
+ =?us-ascii?Q?XJLwHK56638OB5S/u1cN6APOnxMEP43yztzcE3fiKg5lk6417pjHBwleZk5W?=
+ =?us-ascii?Q?E9BbrqwSSaJIZ5CK7F7axasCUPjzesVfKlyFZeDSHiNueUPWrgiE2xdFR2Lx?=
+ =?us-ascii?Q?f+6uwXbTvKXqI0Zch5iD/BCqjyH4PRrjVMR0qg3IZfCtskxWJ6Yafv37j9Cl?=
+ =?us-ascii?Q?qmZbSp4pgls1NitSMDuW8fed55t0GGfjc6USpFpfWaicO21xvDXvByY5+57t?=
+ =?us-ascii?Q?sUM3uSlZwwtEgJ7OF1Zm02li13ICsfdLXHRMFS7Q8DC8XpohTh8G59vw0UoH?=
+ =?us-ascii?Q?JmrfV1UcUZOZ60U9v7lICfRu7EAG+5QJyGPglOZo0w5/Dhi+CK2itp30grG8?=
+ =?us-ascii?Q?DhMQZeV7NpOwSazobD2s8j7HvPAyx5hVTouwiYn7HX2vmwJjeGnfQ1G3dyso?=
+ =?us-ascii?Q?9Xgbzd6Suh7kVa7xHBzIBX+waqlRg2MQD7BnaiYjyJcX+yIUdIi+WBpQn2et?=
+ =?us-ascii?Q?IJ7UiI0A/K4KV2SlxtzjDQWZigZfzeuluCR1tQs23weSjT7qAZpb6kzeiBYw?=
+ =?us-ascii?Q?b5Z5dC7uhXaQ+HycvLohC367OZ/FvGvSM0IM7DbYy2Ge/dtRReUuLTlQB2+v?=
+ =?us-ascii?Q?q2vl/7HfAQjI4tPEFD9WDdalPCTRRR2Dg6/nS5BBvEQel/a+9tCfAJMgv/p3?=
+ =?us-ascii?Q?BSjDXDtzwh1anR7b6w0Fmq+r+OfHzvElgs27affL0lrHOZNLsvB8dnC6b/Be?=
+ =?us-ascii?Q?BfmsqBSj28c=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7053199007);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5017.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/UErteI6dphjeRwom/aephvh7GZo1hNAV99YVwTkkzXLXAb0BGArQJFFTGjI?=
- =?us-ascii?Q?jvm07SDhJZbj3PpTghNeNUCfVmO/4qrIkXuqf2quQrQfQFCCHYYXr4EgspkI?=
- =?us-ascii?Q?jHj0MCjp72Q6sGeOZARqTKfWUz2B5/GzPt4iL90jzl9bbW9HnHV9QE5L/j8i?=
- =?us-ascii?Q?0HvuvAPE75kjnhl/8J6as5DmGiDWT9pCThmIKKF1NJYekwrLbpmJoUZe2Vna?=
- =?us-ascii?Q?0g1+HLUVDK1vgrahjwtkkG9szEs2icEwHxgRrZRM9z8QhGze4MFe8HtFTYmL?=
- =?us-ascii?Q?AqcWATcH4V+CLx5goDHIuyhW4JwQ8tjQhYhbOV7bM4i07ShQaDaEDXlnAQv9?=
- =?us-ascii?Q?4klXwcDeZMzZXvGc35SR0k0lEiQGRbFJlXHJukE+ocK0zbdm8+DrIvOwC+fp?=
- =?us-ascii?Q?xq1Y2GsOezzp9ZwoZLVaLabdIbcYiw8/H8Vys5uS1z+kve7AIqYc8jpVApxV?=
- =?us-ascii?Q?rEpEiZbGsxy9A7Pp98/a4Ce95ivz30wgD7tp5WQP//5Y76nM+AnJesZnXiP8?=
- =?us-ascii?Q?VMklcqejUlfq5gJs8ehVmUaZ2rX3pmkk+Fq7znx8R5UhS01T2jHfZ55xYZh7?=
- =?us-ascii?Q?PVKYb6fEL/Iz60rpp3BQjayG2doArF0m1T9hbSLN89nU0KeymLh7uLHp3YSb?=
- =?us-ascii?Q?wJl3BXF2FVJLzCsrpGCGE6eBhM7JO16eoM55aFM/FnXHIwTKXR78xYwN6K06?=
- =?us-ascii?Q?qZVC9PqfYm7H1gJt3Q3fx+HfAMuNQlYbMOsTFkfJAEGMhPZM25/rCyLwEZw1?=
- =?us-ascii?Q?bjJJ4m+300thC+LQNcZiWTKjYCUmvZOJrIG7TdtyhcZ86KLKud4DptA4yGmL?=
- =?us-ascii?Q?v80R+JsIN4ErFj9ODCS45Ok30MzF+ru4Hjli7nvlnBF8/eblRJoUVdLfoI35?=
- =?us-ascii?Q?OYV9ihBK4CaJB67Ei5XbBhb2pzb0TxXzrgrXRQ2mX69ddJDNe1NZQ2TtP2PR?=
- =?us-ascii?Q?Lm2kwjuRDsUkMqJuE1ZaCe1asbTcrbigacIjQ4uJk+l/Y9EfH8Z4ernCbjxR?=
- =?us-ascii?Q?DD61kmwL7sl/nGZwaAfD+VPoiwvFfAUB/Bh/UDssAZimWHpuTYgO93ok88mv?=
- =?us-ascii?Q?kXLB+CmKtA3TO1oDkMLK9vGFHwYXrVJCG209FDhhRsX9wGLtNXOxxEbi5Cti?=
- =?us-ascii?Q?/vLMt25yl1vaiKf0cLxtIaEQdX3Znx+lJwbvqiYdmX4E3I601k/8OCA3UDTl?=
- =?us-ascii?Q?V0JB83Ab6hrTJyLNC/oRz9jpB2LbJEGMpCSr52OetLiZa3ybA1IpOwSNYyAA?=
- =?us-ascii?Q?GFjJXPMW3e0v1vDRI5tbj/534pkQ1iPLbCWTJNv2YirHhS7jfJS2z0ZTy3Vf?=
- =?us-ascii?Q?iipRFC5Xbgr2Xbl7V4SgbuRgFrtwkwoxgqWnqL5AZbfgEcMzolBb+h35GvWb?=
- =?us-ascii?Q?R9OP+v5WffZFjXJvXwAIs7rIC4iDO1XpsMeoRAKNSf2wYs1RPM/EZychgitv?=
- =?us-ascii?Q?YyQjnFvwqgTLO8+zFz8VD2QW7UQpxp+yRS1jKqJ2S1QURqM2j2wo7Qc5C32+?=
- =?us-ascii?Q?fwwt7sfV9WPfVheg+Ahgp+zDapFayfJibAtQhh/mX/S+dZMlfayhEU00EbZZ?=
- =?us-ascii?Q?zGoMeqI87VNzibCtkFM69S36WmlUe/WPx9xWcdacVcZQsmdUzrgYS6CKDtON?=
- =?us-ascii?Q?4A=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37f98620-4ff1-4d41-7ace-08dda8691c7a
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
+	=?us-ascii?Q?6S/zwgNA1xdCtzXspksfqUjbbzNMKLVo4rdcr9+v5YFXXliEgHWJB9vBfRuC?=
+ =?us-ascii?Q?0yTWe49C+v0x4TiciCKsIQIfvaVFg+Mwrf2Ya5Hw1zITLi5YtXgOoHsSZv49?=
+ =?us-ascii?Q?mq0iCXq7m3Z9JReRkXr48eK8JcQ0LsLS+wDz6F2Bf7pGlk5i8K08L3x2nQ2y?=
+ =?us-ascii?Q?UkS+/+hrirdjPPYb6j8N+3BJ/p0nt0BaogJCCN/SGsjJQZKF6gv12P8Lg4a3?=
+ =?us-ascii?Q?VaWUOK55ByhbD87LGWyffkNaXDK3hDOV6caurtexcVp12CbTUh7VqjDG2WKY?=
+ =?us-ascii?Q?pbpwGGTY/xzFNY4pEs3AbJDO/my09Ap84/H/QRZNOmMfrComUQV1ZDGECd21?=
+ =?us-ascii?Q?+JEAMDBDjN7H07FZuk7xFipM3cw0twTKUkJYkZU5y9HkbrYiPlKXJ/DymK6F?=
+ =?us-ascii?Q?Yvw5E1j+1r9yqzx310Hj2/ynrhQxj0emrqmL/zh2AlE4JHjJiHaW/uJZTNNL?=
+ =?us-ascii?Q?7FjaIIBXxZLbaNzcKNOOdVbkcmDtuyMNezARrMcT+11RM99zsgfIyEWy9nNV?=
+ =?us-ascii?Q?+GBgXRc6pOLYAGxUbERswGc6R0GZqrWLQRUqz40kWhTD09pZPZWcFlg2tU4l?=
+ =?us-ascii?Q?b0tra0zE8SPBTkt0tV2nHJfl6PtBp6k82/TUOBXqwy+/W0JhzXdF3b1DwvXi?=
+ =?us-ascii?Q?afOxm3XxyOBN5QQxZldpm2JUhQR+tewsZkGGA1MgM8PvAaWg2eNnOgxOmD0H?=
+ =?us-ascii?Q?bt4SgqsTauygadoI13KaxingO5gElZBc6wAQbBXiYF8LBoqsSRiZHt6k5TBy?=
+ =?us-ascii?Q?srlUcm0PDcq8u4gIN75x8CHSx38sceqqYvptvGwfxYCjn9ZXeaxNZ2Ep5diT?=
+ =?us-ascii?Q?MabsPWwGNnB0fE1aIN+44QSK5FITpTBDc7f4lhD6YA+tTFDRFOWzLUQePio9?=
+ =?us-ascii?Q?IZqnjCVMxGUDW/B5pZIpbLE9cTRDKdDL7Al7pONKHjh6sRkIDok9FmQ/Rw1S?=
+ =?us-ascii?Q?7s/XRKMeF0k0axThzisCSCl/4NtIan8ajYBIDFtf8GGUTVAJ+PQEIAn716HT?=
+ =?us-ascii?Q?b0Y301/d12QytD1Xhgp7THviUwwu3pLFnOieOwRSSvwrC+rJa/kYyPTMB/Iy?=
+ =?us-ascii?Q?FMeEm4p36TdHq+GtetTnai7FQX3QqthpgfCS4b+L7aM0NjSn5YMoNEf3ODnE?=
+ =?us-ascii?Q?ErNbNRcub0atk/QDoZTfYV+v+44KBCVjjqv4Lw7djqAUDOhpAaBfL9bGYQeL?=
+ =?us-ascii?Q?1bljovr7UChMG/ARv4e9EzrS1ZzShdgBiytGfyZWAnccwWzYPfgL1iYaOHY1?=
+ =?us-ascii?Q?hi15K3E70KzGQTCK84rcMkPGdORMDwBX5zm1O1+ZteRI5MuriioiVoodNRLq?=
+ =?us-ascii?Q?JuQtatjT/0ZZfhBx5LMjrhILK6c15zzBmTurPPMWZ7AeWz8EHgUPonjYX+js?=
+ =?us-ascii?Q?usg8YTIo5ODnWjrnANYpikfc991V4hLqHHir7PFczP1lp6/hAy14Nk/cUgKv?=
+ =?us-ascii?Q?viM07sZq6IjMSFiNEqGgO9Lt5b4V91VyxT82ZKT5BknyoaBRRZ7vRmwVyz2u?=
+ =?us-ascii?Q?M/NmcSX06NfCAMbzaPPFMp1SU2/PwQadxzF6DAR6TCMv4XS3PZaZ2Weat+Sg?=
+ =?us-ascii?Q?5INiWnq+iqSC8/mz5kmpMuFsLdrwnVkJq6AOBv/JVZBVODmcJ2ldaUu5cSCY?=
+ =?us-ascii?Q?iQ=3D=3D?=
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a9c11da-699a-4787-262b-08dda86e9291
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5017.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 21:52:36.0579
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 22:31:43.9799
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GpoOxLg1Xnda28jtq8jyvL6iLNXSx/VjvdSKxj/WV19aMnVkd8G9hXkaMrLTptAxE0Hlp79fbDk2eOBtNocjIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10071
+X-MS-Exchange-CrossTenant-UserPrincipalName: xGNYOfSUN3wnGSdJsXxRBUVbX0+HIz2jn3Pr78ce7BUGBGtNhe93qKCCrPvHf7AetapqwKbliqhWzT6gcWc/U9frBbmN5mHwJoi/jYSWlbg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR03MB6029
 
-On Mon, Jun 09, 2025 at 04:32:41PM +0100, James Clark wrote:
-> In target mode, the host sending more data than can be consumed would be
-> a common problem for any message exceeding the FIFO or DMA buffer size.
-> Cancel the whole message as soon as this condition is hit as the message
-> will be corrupted.
-> 
-> Only do this for target mode in a DMA transfer because we need to add a
-> register read. In IRQ and polling modes always do it because SPI_SR was
-> already read and it might catch some host mode programming/buffer
-> management errors too.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  drivers/spi/spi-fsl-dspi.c | 31 ++++++++++++++++++++++++++++---
->  1 file changed, 28 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-> index e211e44e977f..75767d756496 100644
-> --- a/drivers/spi/spi-fsl-dspi.c
-> +++ b/drivers/spi/spi-fsl-dspi.c
-> @@ -228,6 +228,7 @@ struct fsl_dspi {
->  	const struct fsl_dspi_devtype_data	*devtype_data;
->  
->  	struct completion			xfer_done;
-> +	int                                     xfer_status;
+From: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
 
-This is certainly simple, and simple is not bad.
+Having PM put sync in remove function is causing PM underflow during
+remove operation. This is caused by the function, runtime_pm_get_sync,
+not being called anywhere during the op. Ensure that calls to
+pm_runtime_enable()/pm_runtime_disable() and
+pm_runtime_get_sync()/pm_runtime_put_sync() match.
 
-But based on the fact that you care about the xfer_status only when
-there's an associated dspi->cur_msg, have you considered to update
-dspi->cur_msg->status directly?
+echo 108d2000.spi > /sys/bus/platform/drivers/cadence-qspi/unbind
+[   49.644256] Deleting MTD partitions on "108d2000.spi.0":
+[   49.649575] Deleting u-boot MTD partition
+[   49.684087] Deleting root MTD partition
+[   49.724188] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
 
-You'd need to reset dspi->cur_msg to NULL at the end of
-dspi_transfer_one_message(), and then check for NULL when you update
-the transfer status.
+Continuous bind/unbind will throw Unbalanced pm_runtime_enable error.
+Subsequent unbind will return No such device error while bind attempt
+will return Resource temporarily unavailable error.
 
->  
->  	struct fsl_dspi_dma			*dma;
->  
-> @@ -504,12 +505,22 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
->  
->  static void dspi_setup_accel(struct fsl_dspi *dspi);
->  
-> +static bool dspi_is_fifo_overflow(struct fsl_dspi *dspi, u32 spi_sr)
+[   47.592434] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
+[   49.592233] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
+[   53.232309] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
+[   55.828550] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
+[   57.940627] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
+[   59.912490] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
+[   61.876243] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
+[   61.883000] platform 108d2000.spi: Unbalanced pm_runtime_enable!
+[  532.012270] cadence-qspi 108d2000.spi: probe with driver cadence-qspi failed1
 
-Can you name this some way else, like dspi_fifo_error()? It's strange
-for a reader for this to return true on an underflow.
+Also change the clk_disable_unprepare() to clk_disable() as continuous
+bind and unbind will cause warning being thrown with inidication that
+the clock is already unprepared.
 
-> +{
-> +	if (spi_sr & (SPI_SR_TFUF | SPI_SR_RFOF)) {
-> +		dev_err(&dspi->pdev->dev, "FIFO under/overflow");
+Fixes: 4892b374c9b7 ("mtd: spi-nor: cadence-quadspi: Add runtime PM support")
+cc: stable@vger.kernel.org # 6.6+
+Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+Reviewed-by: Matthew Gerlach <matthew.gerlach@altera.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-Missing \n.
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index c90462783b3f..506a139fbd2c 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1958,10 +1958,10 @@ static int cqspi_probe(struct platform_device *pdev)
+ 			goto probe_setup_failed;
+ 	}
+ 
+-	ret = devm_pm_runtime_enable(dev);
+-	if (ret) {
+-		if (cqspi->rx_chan)
+-			dma_release_channel(cqspi->rx_chan);
++	pm_runtime_enable(dev);
++
++	if (cqspi->rx_chan) {
++		dma_release_channel(cqspi->rx_chan);
+ 		goto probe_setup_failed;
+ 	}
+ 
+@@ -1981,6 +1981,7 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	return 0;
+ probe_setup_failed:
+ 	cqspi_controller_enable(cqspi, 0);
++	pm_runtime_disable(dev);
+ probe_reset_failed:
+ 	if (cqspi->is_jh7110)
+ 		cqspi_jh7110_disable_clk(pdev, cqspi);
+@@ -1999,7 +2000,8 @@ static void cqspi_remove(struct platform_device *pdev)
+ 	if (cqspi->rx_chan)
+ 		dma_release_channel(cqspi->rx_chan);
+ 
+-	clk_disable_unprepare(cqspi->clk);
++	if (pm_runtime_get_sync(&pdev->dev) >= 0)
++		clk_disable(cqspi->clk);
+ 
+ 	if (cqspi->is_jh7110)
+ 		cqspi_jh7110_disable_clk(pdev, cqspi);
+-- 
+2.35.3
 
-And you should use dev_err_ratelimited(), as you don't want an external
-entity, when in target mode, to DoS you.
-
-Also, could there be individual error messages for TFUF and for RFOF?
-If you are concerned about the penalty for the error-free case, make the
-check two-level. First for all errors, then for individual errors.
-
-> +		return true;
-> +	}
-> +	return false;
-> +}
-> +
->  static int dspi_dma_xfer(struct fsl_dspi *dspi)
->  {
->  	struct spi_message *message = dspi->cur_msg;
->  	int max_words = dspi_dma_max_datawords(dspi);
->  	struct device *dev = &dspi->pdev->dev;
->  	int ret = 0;
-> +	u32 spi_sr;
->  
->  	/*
->  	 * dspi->len gets decremented by dspi_pop_tx_pushr in
-> @@ -531,6 +542,12 @@ static int dspi_dma_xfer(struct fsl_dspi *dspi)
->  			dev_err(dev, "DMA transfer failed\n");
->  			break;
->  		}
-> +
-> +		if (spi_controller_is_target(dspi->ctlr)) {
-> +			regmap_read(dspi->regmap, SPI_SR, &spi_sr);
-> +			if (dspi_is_fifo_overflow(dspi, spi_sr))
-> +				return -EIO;
-> +		}
->  	}
-
-Can this go within this block from dspi_next_xfer_dma_submit() instead?
-
-	if (spi_controller_is_target(dspi->ctlr)) {
-		wait_for_completion_interruptible(&dspi->dma->cmd_rx_complete);
-		// here
-		return 0;
-	}
-
->  
->  	return ret;
-> @@ -918,6 +935,8 @@ static int dspi_poll(struct fsl_dspi *dspi)
->  		regmap_read(dspi->regmap, SPI_SR, &spi_sr);
->  		regmap_write(dspi->regmap, SPI_SR, spi_sr);
->  
-> +		if (dspi_is_fifo_overflow(dspi, spi_sr))
-> +			return -EIO;
->  		if (spi_sr & SPI_SR_CMDTCF)
->  			break;
->  	} while (--tries);
-> @@ -939,8 +958,12 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
->  	if (!(spi_sr & SPI_SR_CMDTCF))
->  		return IRQ_NONE;
->  
-> -	if (dspi_rxtx(dspi) == 0)
-> +	if (dspi_is_fifo_overflow(dspi, spi_sr)) {
-> +		WRITE_ONCE(dspi->xfer_status, -EIO);
-> +		complete(&dspi->xfer_done);
-> +	} else if (dspi_rxtx(dspi) == 0) {
->  		complete(&dspi->xfer_done);
-> +	}
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -1032,13 +1055,15 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
->  		if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
->  			status = dspi_dma_xfer(dspi);
->  		} else {
-> -			if (dspi->irq)
-> +			if (dspi->irq) {
-> +				WRITE_ONCE(dspi->xfer_status, 0);
->  				reinit_completion(&dspi->xfer_done);
-> -
-
-Nitpick: The blank line was doing fine here.
-
-> +			}
->  			dspi_fifo_write(dspi);
->  
->  			if (dspi->irq) {
->  				wait_for_completion(&dspi->xfer_done);
-> +				status = READ_ONCE(dspi->xfer_status);
->  			} else {
->  				do {
->  					status = dspi_poll(dspi);
-> 
-> -- 
-> 2.34.1
->
 
