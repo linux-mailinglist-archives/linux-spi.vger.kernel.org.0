@@ -1,124 +1,170 @@
-Return-Path: <linux-spi+bounces-8449-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8450-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 551C9AD5689
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 15:10:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3174DAD585C
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 16:17:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52A493A2C65
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 13:09:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A945E189421A
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 14:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34E57283CA3;
-	Wed, 11 Jun 2025 13:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D03628A1D9;
+	Wed, 11 Jun 2025 14:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L3KnW3Uh"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="izLqvBZw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAEE27145F
-	for <linux-spi@vger.kernel.org>; Wed, 11 Jun 2025 13:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BA31885B4
+	for <linux-spi@vger.kernel.org>; Wed, 11 Jun 2025 14:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749647394; cv=none; b=labxLbrGlbRQ4gPODYRWeE4nch37p/Tymw+bgNSlJqS8bN/wOYEtBfkdf8Tt8o6FWJyceFQClqpnlpLotXv26YGoZFtEwkW+Hf7iH6qb2dPfAI0Uus0gMybJNKjZJ0oPv8uuE0TX0sz9mPvQiJfv7wx/aazHBE51LL3zZhv9E5M=
+	t=1749651383; cv=none; b=n/PxMm+zhrCX1SPW5/AwGaoRo5+yOk4Z6tjrUe0QTOvCgtram4o0lAKWPYWF+4q4m4pPzc3R77tOAbZjmOhiZS1hVYrXuEMM3fi+4pWAP2V+tmqHPRu2KPyRuGZSZofScy2PirdWNMD/cJbjqlv2F0Sb2VICX0hOcCrYJeWyJ/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749647394; c=relaxed/simple;
-	bh=L2yruaMlTjnh6snqZlpt4phoeh5TVI4kMDcp31WpKUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CpvSVKdbL/Vzlx1f4bdmtZUHV16zJ5LK/pi/o1kfweyQulcmcH4JuZ0edX/nUWeVGtdU00YR7JfMfyIK33w/zU4o8Y6iwO/g6ytIE9RdfqPbS6LPDTOVpAaV9M6tEuzg8x3pwJwc2zJEJC/o8bxECyxRsJXsTUmKZdUUYnGu+dI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L3KnW3Uh; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-442e9c00bf4so55571185e9.3
-        for <linux-spi@vger.kernel.org>; Wed, 11 Jun 2025 06:09:51 -0700 (PDT)
+	s=arc-20240116; t=1749651383; c=relaxed/simple;
+	bh=EXJnlVTnNud7vFOMtkEXkO8+20lQ+8pjSYNNNw59vac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bslM5pP7bNX9hie5fXsJz1ODnSUHviN3VOhrI0OEwwJGyr+fq9drFeIKezc/YrUOfVKg60YjLj0ESVMTCoNtBQ+8L5XSLplp9YDG94DMP9NHoR5wBsyxrvSzEJBTLjcSv7plJkDINsH7U92V/d9quw7/eijmVvYIplBV69U3Ma8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=izLqvBZw; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6f0ad74483fso67254956d6.1
+        for <linux-spi@vger.kernel.org>; Wed, 11 Jun 2025 07:16:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749647389; x=1750252189; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749651379; x=1750256179; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gZtQA0IihRFr37LmrEZeXl1GzobVsfcdH49oAK/210w=;
-        b=L3KnW3UhmSOCJ6NAkkrydI6OhuvBQlJ7G3QK54wpYUZzW1wCelUqiscAOSqkCACntn
-         zvIv/vnKO5gynA35/c/IPrpNt65kXIMc+GdWoikR0Kn6ZNMpzYLNciqHJ49U/EhU/S59
-         IouqO1dFu86kadaRqSI604ybwh+w534FqyohYGG9usoFIs30XHMX0LUSBIzwpxZGnY9f
-         ArhnNMjfnO0aMmx1Z6Wh4xTaAqZRevqTMYtOCG1GwQq379dHg5RPzdZDWVPEUHgYXISq
-         Myh1B1Dj6DOVoD69p9E07cOyMvMfAU1BK8ED4R6s9Le+/Ol0UvGykGwoAsLrUf/8XRbS
-         h3TQ==
+        bh=O1AY2fjU0MUFNTnTPpkTJ6hjB0BWW24lbL76NZAT2+E=;
+        b=izLqvBZwE/raCYSzZHNgg0eiXBHn6pBEPxMWO09cnwCp8FCwNG117tEZz40BiTRGvv
+         gPSWeLr2wU7/nF05VV2q29yuAx4L1m7xjbHNSP1U3OWCvd3Ro7G8u6Tt5Z+i8u2hEAee
+         fQyAhaQTOAuF9mS32Sh4mfVlf2zBH98cJ803l+we7Vr9NvjVf5exSpVuSu1WhuNOuOh5
+         Js74VQnNGFnSVNsRL/A2GtWXH8jne9CfQFZPifR7QF8xMlYGwm5wpFk48mgoXGD9nII4
+         G9s2AfCwrpzJdwQyZz0XTx2sflCqsVG4ToO0u5vCdaGaRo+71FPaiIME7uZTXtsVsYlJ
+         Hubg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749647389; x=1750252189;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1749651379; x=1750256179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZtQA0IihRFr37LmrEZeXl1GzobVsfcdH49oAK/210w=;
-        b=fqneh/XwRIZcmcUU4fFgQYBvxL94W1LW8R3Q6rNE0iEwGgNPMjqS72EzDY2qxIct/k
-         hQzHjIPKiziWKaLf0Mk93RlO1OjiE1dYKx+ZUhFiejYqIfFMNuoGQmrFpS82FSsXWPfC
-         BGjybFmAMrdyR7z2U/BMaPWfDTY0bJWLYE4WpY//w0JDrbqkM1iVDnEO9qYuRO3X4yVK
-         WfahkKBsfYEKTz3uYw1r5GFR9OKtZKUeGzQCmkoV2/Ybs3PyRm8Gl+v6gwjmviIvLhNt
-         8SUs+nzrGicD54H6ciRV4hHuWyaowosaMSTfrnCSjbPMcEm/pivg7VNXPedkVLAs1jKl
-         NztQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEe/exPQx3aEmpXUDGtpj7+qgKwwAHSJFsQ+874nA3V3pTjG7N3PaBmdlTnW1P5VxjP2ZPNcXuz1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSjWN5iWLEX149twW/5tWEOBZ6BpHV89GRvZoZZaYEtLA+TDPM
-	K9ub6CWIfFhVFMBQDCh0fxv+4hnKXVKgmWr6POl63SInjRsSlRXtzZelUsfYT4g2Tqo=
-X-Gm-Gg: ASbGnctdqW2Qqcy717/cbWAQxmxaHou+tm7FPV8K0wOmMyq9D0kORX5d3Flk6a7vBD7
-	S45JyimdxDi/NWunSnQ9W3vRICIqOBgtTd8dHqf4CraBHn84W33YlkAqikT3uKcmEdTIFv/oTpz
-	0oI9EsS429y2Rnm0KE6y/wDLcCeJAmcKFvEDO55FT8+uOeepdJ7j38gD5QyFE/qHYVVOMAQcvcR
-	sAFEQN+qR/w6YYi6uCggFz8jUp6gj9TzgV2Uv/wN6XP5Ivk5rSPpqP9OwsU6Cr1X//bqJLtuGee
-	Ky0XEQ6cX4PShDP+QnCdd3yWqt8O04MASRA5gbl0OigoOp6EwWVykKDDItBEkbM8Ax0=
-X-Google-Smtp-Source: AGHT+IEBRO+SagBJ4t0nPcz40k+JfMlWO7SvxBp7cy9P/imnH5Z03hsajw0WU0mj5IxyTgoNyCPJNA==
-X-Received: by 2002:a05:6000:2204:b0:3a4:fc0a:33ca with SMTP id ffacd0b85a97d-3a558a926a5mr2258868f8f.4.1749647389545;
-        Wed, 11 Jun 2025 06:09:49 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a53246b678sm15078061f8f.101.2025.06.11.06.09.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jun 2025 06:09:49 -0700 (PDT)
-Date: Wed, 11 Jun 2025 16:09:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH next] spi: stm32-ospi: clean up on error in probe()
-Message-ID: <aEmAGTUzzKZlLe3K@stanley.mountain>
+        bh=O1AY2fjU0MUFNTnTPpkTJ6hjB0BWW24lbL76NZAT2+E=;
+        b=f2JGtS/VUeKJ9NFWY27j2vvHrykBVc6DJWGycSWzmot+0agjhTcUUIQmX5XewQBVXk
+         RjQ2dmwE2T+Bv1L6GbPWQR/96s2+iOrMb60TlXCZcX5gMJEFiWatZaaMluTr1dqMngIV
+         Jqx5E9WclQthlw32xr6s0Ym9EZccZviuGT5yuMAH3silQTtc6/nXo7/8uO4krd16yUg8
+         UpqJyYviwVaJQl1/icFNhMI7a3P4M3eJLpa+6M2HWkFKp65RlbwB6O5NPKBn/rp5XU0f
+         ZvBpWOzR6xvLEcfBsnX3JGR7jSKGVsEM28kgBZBJL7pV/JugC4k89KBBFv/sgzygJFcP
+         xKpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0G2CBQaTXD8lHkGXRpDIn937GTBwlO4cEqVwwMC7fejusRP5pvxch/qtYLp/xTj2qNFui+u4go1w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZXU7OhK0B7d7oD1uuXeCAUAzwlHC91yayDyIqHrjZguGhp2GH
+	k1v0buVfin22t8XHPvycsG9VflHAegU3Lx95vEN5rO9dDCARSB7Ah9TF59fMXzZh+DX8kGvr/pq
+	6njix
+X-Gm-Gg: ASbGncsR+sju9XveTcS/CKvpi68sOhsCio2xyGpE83j4HyVeE/RjPXYLsf392LvtFCd
+	Nql6ld+uDFDeJ41s15W/g9yfv6IipeCjsswm6GrerpHlsPYpC0t58H15ybOktrM/C0ZUuBqvpck
+	nYLqeEoA0QKDYlLjFwVq1uFbeZWIR9DfaYrrCtdUYr2EogqpJriJqEJ2MPVn9OLAiTuDkT9fY5n
+	bIxzQP3Hz8f+Adg/fe2Yf2udxPBQiKPqMBuhTUXfS210fk4HxYy+TqBtRa9GmB9xH/lMx/QVmsa
+	hLe3bzgHWxexlgWp8voGcRsG+Vm5BB5z6gZn/w08nxvifLkp9fVjISyhelNRwyszpQ6HX1hMq+H
+	UtNz8g32puB6JQ2/ZFyLKDhZoXknTwW86BQxD
+X-Google-Smtp-Source: AGHT+IHUfOaV6u8X5qxFKUlC7LB2yebCfftGMi8JimcjPKwM6QWalazzeWJt1jF5l4ISY9kVP+ktuQ==
+X-Received: by 2002:a05:6808:3086:b0:403:3814:b2b1 with SMTP id 5614622812f47-40a5d081c0emr2562964b6e.10.1749651368697;
+        Wed, 11 Jun 2025 07:16:08 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:1d00:eb6c:30d1:632b:494? ([2600:8803:e7e4:1d00:eb6c:30d1:632b:494])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-40a5d95e797sm337318b6e.40.2025.06.11.07.16.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jun 2025 07:16:08 -0700 (PDT)
+Message-ID: <71b66cbb-ab2f-44e3-926f-9ae4bcb3aadc@baylibre.com>
+Date: Wed, 11 Jun 2025 09:16:06 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] spi: expand bits_per_word_mask to 64 bits
+To: Da Xue <da@libre.computer>, Lars-Peter Clausen <lars@metafoo.de>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Rui Miguel Silva <rmfrfs@gmail.com>,
+ Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+ Alex Elder <elder@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, greybus-dev@lists.linaro.org,
+ linux-staging@lists.linux.dev
+References: <20250611000516.1383268-1-da@libre.computer>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20250611000516.1383268-1-da@libre.computer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-If reset_control_acquire() fails, then we can't return directly.
-We need to do a little clean up first.
+On 6/10/25 7:05 PM, Da Xue wrote:
+> Most current controller IP support 64-bit words.
+> Update the mask to u64 from u32.
+> 
+> Signed-off-by: Da Xue <da@libre.computer>
+> ---
+>  drivers/iio/adc/ad7949.c         | 2 +-
+>  drivers/spi/spi-dln2.c           | 2 +-
+>  drivers/spi/spi-ingenic.c        | 2 +-
+>  drivers/spi/spi-sh-msiof.c       | 2 +-
+>  drivers/spi/spi.c                | 4 ++--
+>  drivers/staging/greybus/spilib.c | 2 +-
+>  include/linux/spi/altera.h       | 2 +-
+>  include/linux/spi/spi.h          | 6 +++---
+>  8 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad7949.c b/drivers/iio/adc/ad7949.c
+> index edd0c3a35ab7..469789ffa4a3 100644
+> --- a/drivers/iio/adc/ad7949.c
+> +++ b/drivers/iio/adc/ad7949.c
+> @@ -308,7 +308,7 @@ static void ad7949_disable_reg(void *reg)
+>  
+>  static int ad7949_spi_probe(struct spi_device *spi)
+>  {
+> -	u32 spi_ctrl_mask = spi->controller->bits_per_word_mask;
+> +	u64 spi_ctrl_mask = spi->controller->bits_per_word_mask;
 
-Fixes: cf2c3eceb757 ("spi: stm32-ospi: Make usage of reset_control_acquire/release() API")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/spi/spi-stm32-ospi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I think this driver is incorrectly accessing bits_per_word_mask
+directly and should be using spi_is_bpw_supported() instead.
 
-diff --git a/drivers/spi/spi-stm32-ospi.c b/drivers/spi/spi-stm32-ospi.c
-index db6b1cfc970f..4ab7e86f4bd5 100644
---- a/drivers/spi/spi-stm32-ospi.c
-+++ b/drivers/spi/spi-stm32-ospi.c
-@@ -937,8 +937,10 @@ static int stm32_ospi_probe(struct platform_device *pdev)
- 		goto err_pm_enable;
- 
- 	ret = reset_control_acquire(ospi->rstc);
--	if (ret)
--		return dev_err_probe(dev, ret, "Can not acquire reset %d\n", ret);
-+	if (ret) {
-+		dev_err_probe(dev, ret, "Can not acquire reset %d\n", ret);
-+		goto err_pm_resume;
-+	}
- 
- 	reset_control_assert(ospi->rstc);
- 	udelay(2);
--- 
-2.47.2
+This driver checks for SPI_BPW_MASK(8) at one point but doesn't
+take into account that if bits_per_word_mask == 0, then 8 is
+implied. spi_is_bpw_supported(), on the other hand, takes this
+into account.
 
+>  	struct device *dev = &spi->dev;
+>  	const struct ad7949_adc_spec *spec;
+>  	struct ad7949_adc_chip *ad7949_adc;
+
+...
+
+> diff --git a/drivers/staging/greybus/spilib.c b/drivers/staging/greybus/spilib.c
+> index 24e9c909fa02..087eed1879b1 100644
+> --- a/drivers/staging/greybus/spilib.c
+> +++ b/drivers/staging/greybus/spilib.c
+> @@ -27,7 +27,7 @@ struct gb_spilib {
+>  	unsigned int		op_timeout;
+>  	u16			mode;
+>  	u16			flags;
+> -	u32			bits_per_word_mask;
+> +	u64			bits_per_word_mask;
+
+This is assigned by:
+
+	spi->bits_per_word_mask = le32_to_cpu(response.bits_per_word_mask);
+
+in gb_spi_get_master_config(), so changing to u64 doesn't have any
+effect and should likely be omitted to avoid confusion.
+
+(The response struct is defined by a communication protocol and can't be
+changed, otherwise it would break the communications.)
+
+>  	u8			num_chipselect;
+>  	u32			min_speed_hz;
+>  	u32			max_speed_hz;
 
