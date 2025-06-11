@@ -1,120 +1,105 @@
-Return-Path: <linux-spi+bounces-8446-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8447-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C481AD536E
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 13:14:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6D5AAD53A0
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 13:18:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 456FB1C241A4
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 11:08:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 594EE18930BE
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 11:13:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDE312E6119;
-	Wed, 11 Jun 2025 11:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 878EF2E611B;
+	Wed, 11 Jun 2025 11:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XdjLxKY0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FB+OkxzF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5118625;
-	Wed, 11 Jun 2025 11:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A862E610B;
+	Wed, 11 Jun 2025 11:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749640082; cv=none; b=G+Gh0dFt3CQh0n85NtfHxxyeTe0goGhhLGH2byXda4FBMxmrNYxTmpN/XCHAhWLZKiGwhrjIle+NoSICRzaVnlXLBJ3zwCkag8eUpN08DFNLzhhM5k3/9O9yq19lTz9UNhKzIrvZGwiMGWE2ngo/5jiPX2rEFQrLpRl0kDyaJUY=
+	t=1749640377; cv=none; b=Oxu5AKrfFusWjyOtCX5reZPXpS8edG3cGNJ0fFzJugNAn0Z7r5/Kc8h5sMVWbwmnkyvIEogWSD2+OcPnXh+5NdhIONX5vZHJvmQot8Kz3maQqNxZwMS/GlqxgaFpHSGJL2DLFsppUczHWVboRbn7zYIG+39wsECOI7U52oqJt2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749640082; c=relaxed/simple;
-	bh=AZdbARWOeCnWEmDLRenfjc1WfkYQIODwwqhvNjwz+1E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KOVwrpjkrT4jtbTwI6o0HMs6+nZVr2orfjGSMLJwdEhfJaYs6hKkkNBTOPabjdru/5GPR8Lj43Q9W9YcPE/uQpdjRgs4YCQn7FEpp+RkE4mC9pitZtNfYf0132K5S3lQI0bzNr2U6UexB+b+RlbpGbA5yI4kWaX0fBGJX1tNLWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XdjLxKY0; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1749640079;
-	bh=AZdbARWOeCnWEmDLRenfjc1WfkYQIODwwqhvNjwz+1E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XdjLxKY0sG7cDYnt0erdLwjdWYFThlRyNe8Kw9epJBHnh2JDpFMKGQsRZvEPOohbV
-	 F1/wOcCO4xTNDc7QXvaPtexs6N06xcBb1mM09nzKw7i/N2LuBkjf9sdvFPZJZKK2ls
-	 O1jHlKDESpQhctlMnkcpz/lwAQXEAokeLtb5mLgDJX/qgnxfr4TYwe2l2xAlHVk18C
-	 763RrlGtjPU8NsRr7F/jZJI6bS8ofnmpM4ckuneBdxBMy2CnaMC3zQrb917RSFirGM
-	 +11bO/Wp/IFo2n71qED+vHYZiR4qzmvJmmLNWyYxxrinVUdT051Epw8VHtD7FKg8TX
-	 afy45P7Z/Qowg==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4E27017E0F66;
-	Wed, 11 Jun 2025 13:07:58 +0200 (CEST)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: broonie@kernel.org
-Cc: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	leilk.liu@mediatek.com,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com
-Subject: [PATCH 2/2] spi: spi-mt65xx: Add support for MT6991 Dimensity 9400 SPI IPM
-Date: Wed, 11 Jun 2025 13:07:47 +0200
-Message-ID: <20250611110747.458090-2-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250611110747.458090-1-angelogioacchino.delregno@collabora.com>
-References: <20250611110747.458090-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1749640377; c=relaxed/simple;
+	bh=cuL/gnq/gn/v2XXovLUaVPiE6Y9kxenTDBpAhcvSFog=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R6fWRcx1A/Dc2pfpUSl+e5+e2GIJNqt6MYHmeQfpKQYWXs4jQh8nZbx+pwAdgP6yXbmOzHCDSzIp0W6zZt6mEauE3KJW/eIZVnV9xfxicfpezIqypvLokEVr6g5i6ai0OaTMRxHyPiI2Hmtq6C5RaOf3ztc+GLM4Hji2c6gTS0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FB+OkxzF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E41C4CEEE;
+	Wed, 11 Jun 2025 11:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749640375;
+	bh=cuL/gnq/gn/v2XXovLUaVPiE6Y9kxenTDBpAhcvSFog=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FB+OkxzF/JTkIABV3hZpRIBuk3D+cl0hLPtR5s//hJ7x70YRGgWCw5cRt9djzjTKx
+	 NaPRoPJGUt7Qxwjv/+Hk2Gboyqg6TRSjdOJb5bmwQujFGTkHcHv9oe+u3zxRblOtFE
+	 a+LJD4KRpv2w5g7rKZQgjQOr2jpRr5j9Su+E4RBzrAt6xhRwkHxlDd5VRTDMJtuUvG
+	 X3WN1/q0ZFW/cQ4j+ufuMPcbCFFTV0e6kATr9sV9+w4qfbXk1kLX9uvuXefQwQ+KIs
+	 q8GYmBwxblMzQqbLVAX0A/GaTZbI+q6FaNPH4Z9QwdXvPNFepj1pzHgZMKOlgnFtBv
+	 fmC+G/lveDWsw==
+Date: Wed, 11 Jun 2025 12:12:50 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Da Xue <da@libre.computer>
+Cc: Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>, Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev
+Subject: Re: [RFC] spi: expand bits_per_word_mask to 64 bits
+Message-ID: <b3d2a914-77be-4be6-bd43-cfaea7e450c9@sirena.org.uk>
+References: <20250611000516.1383268-1-da@libre.computer>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bucA20IzGsWOGyc7"
+Content-Disposition: inline
+In-Reply-To: <20250611000516.1383268-1-da@libre.computer>
+X-Cookie: No skis take rocks like rental skis!
 
-Add support for the SPI IPM controller found in the MediaTek
-Dimensity 9400 (MT6991) SoC. As a note, this is the same SPI
-IPM Controller IP found on the MT8196 Kompanio counterpart.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/spi/spi-mt65xx.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+--bucA20IzGsWOGyc7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 4b0a1c0db041..a6032d44771b 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -220,6 +220,14 @@ static const struct mtk_spi_compatible mt6893_compat = {
- 	.no_need_unprepare = true,
- };
- 
-+static const struct mtk_spi_compatible mt6991_compat = {
-+	.need_pad_sel = true,
-+	.must_tx = true,
-+	.enhance_timing = true,
-+	.dma_ext = true,
-+	.ipm_design = true,
-+};
-+
- /*
-  * A piece of default chip info unless the platform
-  * supplies it.
-@@ -245,6 +253,9 @@ static const struct of_device_id mtk_spi_of_match[] = {
- 	{ .compatible = "mediatek,mt6765-spi",
- 		.data = (void *)&mt6765_compat,
- 	},
-+	{ .compatible = "mediatek,mt6991-spi",
-+		.data = (void *)&mt6991_compat,
-+	},
- 	{ .compatible = "mediatek,mt7622-spi",
- 		.data = (void *)&mt7622_compat,
- 	},
--- 
-2.49.0
+On Tue, Jun 10, 2025 at 08:05:15PM -0400, Da Xue wrote:
 
+> Most current controller IP support 64-bit words.
+> Update the mask to u64 from u32.
+
+The change looks broadly good, the only concern I have is making sure
+that the controllers are individually checked for support and impose any
+restrictions they need.
+
+--bucA20IzGsWOGyc7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhJZLEACgkQJNaLcl1U
+h9DHHgf/dHG/rr6Bv2YtqYL+Ket5fd/hqjQ86KroqI0toxCmA1eE9KbCpJt6vXZc
+oJed5XwyXWhlOInKHxFal9yCkn2RDV3B8DI4XYOc4L+PXKJXFSsFu/Hcck+5Q1hr
+OWTFIVJVM8g082nL9ds4yHZgBXhuoA6om8/y3vLSSymOYV2r3muV9TLtuLi7RRvp
+cffMdI7ojL9FHwYhYl/q+9K/NBqP95o4pdPY8mCjJUhGGxJhr6PlhV3rRC/Xwsyc
+XCcE3aGY4vwURe2IhfiK+9ZIk+SnzaQ3lkdtdmAW5oaP6lE162f8hgLFjnDBegiH
+LVe9SYAWS++X3iV5XYI6XUvbTbkiYw==
+=7Xzl
+-----END PGP SIGNATURE-----
+
+--bucA20IzGsWOGyc7--
 
