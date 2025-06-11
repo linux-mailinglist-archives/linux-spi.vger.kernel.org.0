@@ -1,269 +1,240 @@
-Return-Path: <linux-spi+bounces-8439-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8440-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAD19AD46A5
-	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 01:22:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13FB0AD472F
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 02:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71D533A710E
-	for <lists+linux-spi@lfdr.de>; Tue, 10 Jun 2025 23:22:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85B957AA763
+	for <lists+linux-spi@lfdr.de>; Wed, 11 Jun 2025 00:05:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44798260593;
-	Tue, 10 Jun 2025 23:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B409B211F;
+	Wed, 11 Jun 2025 00:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="Ge5pIdCe"
+	dkim=pass (2048-bit key) header.d=libre.computer header.i=@libre.computer header.b="D1P+ya6w"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2080.outbound.protection.outlook.com [40.107.243.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3CA2D5401;
-	Tue, 10 Jun 2025 23:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749597763; cv=fail; b=NQHx0iZpQrpG67h2uVZ0DHtXCx1rew62zalocR7epE857D/V14nQfw78VD6rXWLDadQ4oEMBVWFwAy7K9qJ/CVD9nRyI9ZXMMCLPz3qATkJI5CzKfNicbAS0SF8y9eZ9NaocFVVbw4AedSGbXtrn3QNfuVqb1kD+Ry1ZGrvDx9w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749597763; c=relaxed/simple;
-	bh=jjOuNNl68GJ4fBeYoSHFQpNOW4CAU3YOp5odG9u42Dk=;
-	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nn02NN0bp3oHGZhvXlyic8bOYoL0g/GcRCZ6oxHjTINzqDtXLLzBUOAjgkNDOGTSm+R0mqlvgdWWcT6Z10P+YhSI02Jr4Tsi/ufORNMzPRpz1doYovcl/Wm4hOvJDVHu9bru6gEpDIdKNa5VInLQCWJtu3vQc8NVPhEByUd1Khs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=Ge5pIdCe; arc=fail smtp.client-ip=40.107.243.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lUknGayWg12L+4pYSeofx0zJPGp0zLZGWW5L5OAcE354ErrBm3YguyURl5A4gJ5FTIB0zHiUApXjgHGkaPNxEtsru7BN2vuBT3UudvcNJ1SAVl0uHk6RbsvUtsyBrFgtxr4ZjHhgmp9nAAXX4//FGYd2cU1wi3dROq/8IkONb/z+ADdhsT715H9PVB+ELyZ8IEUj/YmUvGVngiKLGRdwidfJ9XGXUNkpMacfjgA9kPmYxKrVpG57mPJlrFcNnNm+tKaCWHOOFOUQ4tSf2jUA7iL6Khzy4Anry5Ynq6HrdkxuDq0cTStQ8gPacrweNOQGS33TeMHI3tgbPwCEOt/e1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=klvpqcwyXau2l+IgUgPFCotYArRphaJECVnPMDtTs2U=;
- b=FP8MzPGX9hEEMvr/oJ8Rshh/+fmzWZVGu8CmTVs/baOW1pQL2HwJv9m+oc7nt+MY3NlxLwfl+dyMXgLQsx0nunh/AZ+PxDJGJctM0u0fkPkjg43N6Nkm/OOPkWi+SozbfkAOcbVU5cFxz9AmcMBMF2xY3lBuY7uVZuHvZw1bdrZwsZfvYE2UsNUdEik44KSdYF4lpFNyIxMXVKrrgvfE8cJtmrD+H8SFs7BnZWp69aL5/MMlXRKjb3jWYp+gzKJX2XTH3odrJR0N7VnWZZ55QTbgpeQDImcEbGQI/lO51Wv5s2h9l/+GKg5YcvcM3q5Odtpj5RdWH8CZn4qHcM5nIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
- dkim=pass header.d=altera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=klvpqcwyXau2l+IgUgPFCotYArRphaJECVnPMDtTs2U=;
- b=Ge5pIdCeo42OvniuHg8zz9UcRvyiFDjrFf0jqKWoKdxuaAvwqjoDeOTE+gwl4YCBVioifEtfgtZ/x/DNR7LI6FcUUqB+7MmNWAqkTh+zSdgcjwwcAX5jGRp2PY31GfT8EP0dWlbDK84vvEt7xhwJCuUISyGc95qGgiWQWExCR7RI9hQV18yB6rbM7im3kxYc6PDnbmnovn7s/3IBEc2jmJAB5FCmT90+mpEhd4qbeVaSSw/Zt8/YhMQMENHVSvnwbzW8Iyxcdc6SUAce1/2cW/johVaY+M40xl7i5X7atGDPIVkDAFNDHolHt4msu1bJOkPaoIo3hDqaS6SOOD/CKQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-Received: from BYAPR03MB3461.namprd03.prod.outlook.com (2603:10b6:a02:b4::23)
- by SA2PR03MB5707.namprd03.prod.outlook.com (2603:10b6:806:11f::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.40; Tue, 10 Jun
- 2025 23:22:39 +0000
-Received: from BYAPR03MB3461.namprd03.prod.outlook.com
- ([fe80::706b:dd15:bc81:313c]) by BYAPR03MB3461.namprd03.prod.outlook.com
- ([fe80::706b:dd15:bc81:313c%5]) with mapi id 15.20.8792.040; Tue, 10 Jun 2025
- 23:22:39 +0000
-Message-ID: <65124dfd-3f52-45b4-b514-222f47ec8baf@altera.com>
-Date: Tue, 10 Jun 2025 16:22:37 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] spi: spi-cadence-quadspi: Fix pm runtime unbalance
-To: khairul.anuar.romli@altera.com, Mark Brown <broonie@kernel.org>,
- "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Khairul Anuar Romli <khairulanuar.romli@altera.com>
-References: <cover.1749516352.git.khairul.anuar.romli@altera.com>
- <e1ecafc55f7fc1b2450f7c7ce0c11b9efa68844f.1749516352.git.khairul.anuar.romli@altera.com>
-Content-Language: en-US
-From: Matthew Gerlach <matthew.gerlach@altera.com>
-In-Reply-To: <e1ecafc55f7fc1b2450f7c7ce0c11b9efa68844f.1749516352.git.khairul.anuar.romli@altera.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0095.namprd03.prod.outlook.com
- (2603:10b6:a03:333::10) To BYAPR03MB3461.namprd03.prod.outlook.com
- (2603:10b6:a02:b4::23)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85728282ED
+	for <linux-spi@vger.kernel.org>; Wed, 11 Jun 2025 00:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749600372; cv=none; b=R7TLLunglcVt+gsGJZtYZLteNgE0ZKd58X+xVs+RPPEfGQtYU5BCmFM0jGBZV+K10OGp3FjjvnwNGHJ6S6E9y6f1eJKSM2I+XSYi8UKS39acEkWSQk4UU0LR7NjnPTNpMUX/zSZr8dc55YpObhOHDyVNWLXcklevpVCpeoV6m8E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749600372; c=relaxed/simple;
+	bh=0L0QrdrbF3eIPEJwxeoIpihmmZc23N/FFGqyE7epieQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=crgdVrePut/y6O03qyQ+nyVJOimx7uqEOXT5SqhsYkg0b9w87h/OMSnKRJt2V4mf0T+Cyzt4iccXovRwNugj5DGXXQprM7RVBhT+ZhAueKnu62ioJenmguZVSaqpi2MJxkoC/+GdIU3TY+3wjpW814GTTLwBimmLCGPsg3uCkFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libre.computer; spf=none smtp.mailfrom=libretech.co; dkim=pass (2048-bit key) header.d=libre.computer header.i=@libre.computer header.b=D1P+ya6w; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=libre.computer
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=libretech.co
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7d09f11657cso566294985a.0
+        for <linux-spi@vger.kernel.org>; Tue, 10 Jun 2025 17:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=libre.computer; s=google; t=1749600369; x=1750205169; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/S+u5mk3bLFvYAEjEuTrh1x6JcZ8zFH062YgbiH+X0s=;
+        b=D1P+ya6wsD5CeOoLO5gAeHDdgoD+y8seQ3NjaO6pJ/KicYeuK0txsP1EZNbgUNTigU
+         MjdFbJ7GtNTlhrbSPUFTdJw8CyNjAFDASk+83i2oaVtrccm0TpeoLCOfiq2Mqo67auso
+         ONOvsFK44zPaXk3Z4XBszl96xRGqwZlmaZz6ecl9I7wAozeowiND8haRkBCaiLmSyMPg
+         b3TXBiEufu02Eg4X8AGHR1tPpn1ohT0Mp12Xr54qgh3LYY0D6w8sxi4TLG1g9A7qNtVb
+         FsQqmJy6jUkqf97vHbERRwYLD4ILFvKgGUXd4y7yUfO5pc6Zue64aK+/A/FWsZ3k+Z+I
+         yXfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749600369; x=1750205169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/S+u5mk3bLFvYAEjEuTrh1x6JcZ8zFH062YgbiH+X0s=;
+        b=P2jz1hw3ByTrcEleIZZEzwesUDDmBH9zxduF6I7fG546e0o6xuduThiwnCflCfZra1
+         Zb3/KX+3Lm5G59U+r1XWNQdsul+yWV38GZP9gcwD+mip9/LXYRnHi/nMV0XLkFD0bxAc
+         NtZAvDE/6s0OsaVcUDUbCRXhQJxAO/WJet6SxvLCE9+Ctb+tfthQ69xEuDJcKrMvy3BF
+         5Bkex1eYrNcdNqAGBKW6E6qCYZJRD25g/O+9ITaOMn59OPRqPwK9waksuOQ7eZsJ8E0d
+         hilMMWJT7NJNl5vcZiexe3DmyVLKNcWlhb4H364Q85lzGiM9KPe+MB8KzlqHBvAe2Riv
+         /gqw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfkjcf2iYdHV3raq/UPFoSBqBDgAJF7hy+JIJv36H3lFolB+x2jvT1EOCULR+VPCrlH8Fs5jWZkvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaewuPqZ33oM8Bra+Kzg1JvfBkg1LFuu4KtzlK9+pTO54RdNqw
+	PC9Q7mQfmSce8I7qQALMqRh73wIsRRO/SoO3O9O58h4AZg8e7kFPNFXlNZLlmzccLQ==
+X-Gm-Gg: ASbGncvt0xe9TmbewMF8u76WgwnVMM5qQOn/BFJKY+T7IscOjv3nvqUn3dLqlhbehrz
+	d1A6Np8OMjyZoq+ltftBKGr22x/VNHLvZRDsi/bLcHNwNo3S6+Y/FmI1eleTBAteeJ+N6Ok31Nk
+	5WQ4o4Sp4mg0o/Ic+gdvjtVY4fjtyMn1qsqnvuIWEN/cOKIQEeMYpA2v86MdUsNkYoopq8O805e
+	LkFVbZs9gFnRf+TCM8DctsOPb1lmqAbKcUf+LQLck2YTG6JWkibO0F5MHxXfWmW631BjGHSWtvM
+	ENGfpWgGFf6PMPvl0QufUVUAEfDGIDFbXEAGO2Ni3kWZIDvc2FpXa+zhCQ==
+X-Google-Smtp-Source: AGHT+IEwSwD1OTQv/cY8Rdnwddhjk6tvIVxJAG/PkD4t1En++yl7NMDCXVoGb+ITA72UocpaA9kshw==
+X-Received: by 2002:a05:6214:2263:b0:6fa:f94e:6e82 with SMTP id 6a1803df08f44-6fb2c31b3a3mr26501776d6.7.1749600369307;
+        Tue, 10 Jun 2025 17:06:09 -0700 (PDT)
+Received: from localhost ([2607:fb91:eb2:c0a0:10e4:4464:87db:3a66])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d38de859casm501567085a.38.2025.06.10.17.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jun 2025 17:06:08 -0700 (PDT)
+From: Da Xue <da@libre.computer>
+To: Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Rui Miguel Silva <rmfrfs@gmail.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Johan Hovold <johan@kernel.org>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Da Xue <da@libre.computer>,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev
+Subject: [RFC] spi: expand bits_per_word_mask to 64 bits
+Date: Tue, 10 Jun 2025 20:05:15 -0400
+Message-Id: <20250611000516.1383268-1-da@libre.computer>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3461:EE_|SA2PR03MB5707:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43209245-a5d1-420f-4eaa-08dda875b0f7
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?L3dXV3pxUHJtS09CZ2ZLMUpSdWFPM2dWZTFTQVhST3lvUEVRUDdDdWZMZ3dm?=
- =?utf-8?B?UnFRUVdjQnMxWWQ5R0tKWmZEU0dwT0dkemR4TDVKeFkvdndGTDlGMGQyS3Bk?=
- =?utf-8?B?NTUxdFJXOVlMZUtXaVdnMm5BS09sOGthUHZTMEF1SEVBTkptT3l4TGhoYzhL?=
- =?utf-8?B?VVRBK1lUcUwraC9WTE0xaVN5VlQ3TThaWE05QysxczByUjVzUDREMEt6Z0Zk?=
- =?utf-8?B?blIrdnZOZnFwRWxZUXlMN0JZKzJINWU0YVJkdFV3TXl0cmMyL0I0SUFodDVa?=
- =?utf-8?B?czRvSGluaGMybTJjUlJPbExBLzdvZmVKc3NLOWc0K2R1ZnVmL0w0a0lhMGdH?=
- =?utf-8?B?UFlsd3BuWWFiWndtN0c3YmlCRzhVajJ5VUl1eU1YZVl1aVA2bXl5LzZRSHBm?=
- =?utf-8?B?MFRZaStHanIrRzJKS0lHeU4wdVh3RWpWMkhTbTY4V1pzZGUvYkxmZnJVN0lG?=
- =?utf-8?B?amxFSHJueFRpYVRmeWFuRzNIemg5dSttRy9JUml5WTEzREtDZzZDSitxMFp1?=
- =?utf-8?B?ODRONEdaWnV2Z2NxOHM4aXczNzZtVUlwMUlmYmlkYmVzc1lGR2R3NUVTQkVu?=
- =?utf-8?B?QUdyY1JXd2RKL2czTDBZVU8xQjJPYzh5L2s1NjlQZE4xbVhEeWlTZldWakk2?=
- =?utf-8?B?RGlXSldGcDRkejFKTTVWL2dHbE1veE1EK1dxbklTREpoMkxTUjBTVTFRSW02?=
- =?utf-8?B?ak9CSENaYW5jZk1Xd0NFY082UkFEUnBIRklKbkpCMnNxanZyVkY4bHhEZmpa?=
- =?utf-8?B?V1A3NDJZeUp1MHhad0t6MTg1eXVDWEJkN3hZUVY0ajVCOWgzZ0RjNk9iMGdJ?=
- =?utf-8?B?OFJzYWxNdWYvazY2TTlySHJKN2Y0UVdRc2pnbEg1bk90empsVnVvZ3FrM2Uz?=
- =?utf-8?B?VytoMDdwNGxVSWVxUU5pdWZMVnNyT1F3S1o4QmRFZDlYNE12VHl3VFZadDRH?=
- =?utf-8?B?MnFYZHZ4S1pGMjJ5cE1mNGpjQ3lHUlpoR2xwcHhrRGFPdGN6MDM2M1M3Uk9x?=
- =?utf-8?B?dytyRnBraFVpS0p5NWJuRi9GdjZqRFhSRDFWZ21DaGFRTXVYNlFYTzFhSnZJ?=
- =?utf-8?B?MEdEK0VnQTB5Snd5VSt2QTJ1THlQd2tESXNyYmduVkM5SmZNZVRZQ1NJVVR5?=
- =?utf-8?B?YVREY3FNdXdXTFZCdmcyVHRiOGZUbGFrMzY1aEVuSUIzMjhrdjZKNGtWcFpz?=
- =?utf-8?B?Z2lDVzlLdzZQVnRNeHd0RGFkM3FJM3RMeXNDaWo3Y1FYZUY3NGtVTUgvc08v?=
- =?utf-8?B?YUUzUk0yVEZlVlpyU3FuZkw0bmtVUmROMUFOSnhtcjV0SnExeFdicmtLazR4?=
- =?utf-8?B?RWx1NTBMcWJaUnFzV0R2WTM4ZWZyNU8xTDVoYjBrdjNPdzRlRHUvMEtNOWZw?=
- =?utf-8?B?QUttMit3a2VBTmFhTGlzQjV5VWxRaTRGZzUxbUhrTGhqUTBUQkw5S2dmRXFv?=
- =?utf-8?B?NmJLanE2TmNZY3AzalRGbEFmSlNOOUhBQ1NzNWMzejlUR0FuWjBZd25ZSzM4?=
- =?utf-8?B?aGVCaUd3MmhDV0g1VVBIclc1RHpKY09HaFhZSGlWa0M4bUpXa296dzg3cU9r?=
- =?utf-8?B?eUtXOEUxK05DOFp1UHRid2o1QjRnYXhmUGYzV3QwV01XbUl5K3F0NmJTazlz?=
- =?utf-8?B?MGVmMlJtRUo4MUVLTjZNMWZQRzVaYjlaYlJQT0FHdzMyK1hEeXIxZktMSE9N?=
- =?utf-8?B?aVhleDk3U1pIa2Fqb1VhN1IydTJoRllUZEM3WE1TREd4MG1BWFpUdlVmTE9t?=
- =?utf-8?B?dFkvZUFqdVJFTDdvSW9USVNEdEQyYVNVeXBvRFRsd2tzN1RBaXFLTDh6Vm16?=
- =?utf-8?B?YSt0dXozUWlWTTM5eEo3a1ArbitVUHVkSk51WDlUVWRWdnNvcFg2ZFpCaWYx?=
- =?utf-8?B?QVpLbjBJSVBGamYrYlA4LzVDejBNVENxSGlFNDQ2TTVLRzlNcHBITFJjZVVQ?=
- =?utf-8?Q?6l/d09mu2A8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3461.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UlQwVVhFU1oyY0h3clVZUENQeDlaWEFwN1BYd3BpYkRFUTIwNVhzdk9ZVkhV?=
- =?utf-8?B?UjRZaHVmY1Iza1JRNmd1TjllTUc0ZmFqMEQ4QlF2K2ZEa0ZSdkRTYVpmRXpp?=
- =?utf-8?B?NGNnQUM2aDNtZXhJdjJmeWdLSmk0WHkwbFNycGg1eUVBVW91TGYxL3dnRDdS?=
- =?utf-8?B?TmJwekJQUzBzN3luN0hXRDBPaXlHTk5HcHlDVFJJSE9NdnNORnV2STZpYkRD?=
- =?utf-8?B?LzQ0QmJIZXpPWmFUaTZKcTUrMmlyZ0RIVzNsM2tqK1FpWmFkek40cnVYVmFS?=
- =?utf-8?B?STdWbHAwZXV0SkkwVU40ZVp3ZVhBbFhZNGJjcVJ3ZjVmbFhQZEdoNHNLL1Ro?=
- =?utf-8?B?U1gwOFJDWTZZUEVlS3JqUHBUdThvWVdWa0l0VmNISWtaOUpUQm0xeHVZeG1r?=
- =?utf-8?B?VVd4QkxEVEsyNEtqR3AzMk5uTHc3dm5rd1RaVThYRlZYWkJQTzFvaFRqbHlQ?=
- =?utf-8?B?SElFL1U3SVRiRzJXcStwT0tFRzJHZ0hqaVdRcUo3WHBZdnV6RmdCOHh0TkFX?=
- =?utf-8?B?bWN4cTRIeXIrdFNLNzQrZHJaWkxQN3NCZjVjRFc0OEFETWQvV2ttVjU5bytB?=
- =?utf-8?B?T2pBNkdPaTVMaTk0MEZLdExpNVJBc3VtRHZjYUhTU2hPbTg2RHczNE9aWEhG?=
- =?utf-8?B?Qk85WnZvckhzMXBUM0plajYzTEYweFhldzBHUk1WbHNWR3JuR2MvWUtKcHN4?=
- =?utf-8?B?SDdhMHBWYkVSWjl2bVNmblRyMjl1Q3dPT2swQUgxcGd5N1hyWDEwSENYTXVY?=
- =?utf-8?B?M3VIdkJQY1c4N3hXR24vQnlxUE1mSnFTeFYxbUhWMWhnZXNuNWJBTUZJVlpK?=
- =?utf-8?B?dnpKTlNUMmNjQ1F1YUNzTThkb29BUHI0QU9jZkRVUWhJVVpVWlNGelF0bG1i?=
- =?utf-8?B?NVlXY09Rd25tTEgyK0dCRFpreHNBZC9UQjBKVkU4MTgza2dhbmFxcHZ2NzZs?=
- =?utf-8?B?WllOQXQ2eVdiejhFczNvL2NsYm1YVlk1Z3lYUmZyT2xaVEdNTXRkZ1dYa0dM?=
- =?utf-8?B?ZGdlRnJFYlhxY0RpV2pDMEE3eHNBbzRaS3JNM1hnWFN2K0RDeExTdS9FQ1Zp?=
- =?utf-8?B?MGNXMU1mNmRVcWdOaUsxbkt5QU1VelZRSlpyd2JHcGs4N0xCZHQvaVV0R3VM?=
- =?utf-8?B?bk5wSzZ1SHBkNFdPbWtiSVdCNWN0TU44Q2xKazZzYWxHYlV2dkljWm9OS0pC?=
- =?utf-8?B?SDJnWWE4ZE1LS1J4MndQRy80bGxqT0wvQ0ZHdFhlZnNhQVd6ZURIaUFOQ0tn?=
- =?utf-8?B?dnYxd3RBOUs2NTBUL1N0djlUZ3VmVzZ6cW8zODE2aDFYc3lqYXlCN2lIMWVp?=
- =?utf-8?B?MXdaYzNYUDNrV0FJZ2RRTmpCSXh6ZVlBTGVSYzRxbms0T0VpS29tR2lLVzFO?=
- =?utf-8?B?TjZYWDhMRUk3eDB1Wks3ZUpJV2xPcEFtOVl3VGVxMUs4elhhdlR3VEY5YXpP?=
- =?utf-8?B?K1pjN3UwOWhKbmVSRERTcXFFUHZYcFd5bUFSdXBHL2M2OXVuV1NNY3ZXWWJQ?=
- =?utf-8?B?eXZ2OFdwWkxoS1lJWHFFVHcvRWxxNnEvd2VvUE5WeG9jN05UcCtOTFFkSTJC?=
- =?utf-8?B?S3pYNjhyVlRqREgwK3BrTmlQN0lvOHArWkdDeWJhd2xrQVo1WWhheVlKVk9P?=
- =?utf-8?B?MWk3b3YraGdDUFRnNWFBOUdQdS9VREkrZnVlN2dwSTZPYlMzY1lFNnF5SW5u?=
- =?utf-8?B?b3p6Z0daNkdJa04wcnBHZmZxbmFDYkQ0aUZSb3Y5ZXdxeVB2Tng3VzBKRFdm?=
- =?utf-8?B?em9vc0hIaXlVdzl2YzMvQWZaTXN0ekhmZGZrcEk5WDZtbmNQZlZFNUxIcWJs?=
- =?utf-8?B?MDEwYjNQeHNDNnRkNEtkQWs4ME9KNVJCWlNIRTMrNHVjcnV1Q3c5dGJSZFM2?=
- =?utf-8?B?bXcxODQwTEFaWGZnenoxT0hoWFVKQUU3RUkvOFF4UGZUTHFXZ3NPT081bm1p?=
- =?utf-8?B?WjJxYUNMTGxoTHQ0eUtkSUkydmhyY3Q1WGx2L0laam9ZR3QzUW8xVE9GMDdI?=
- =?utf-8?B?SkJNNVNOaFJDZEhXNmZRT0h4eUNac1d3YVlkbkZBVXRHbkl4bTI5Wlp1bzZu?=
- =?utf-8?B?WTIrVm1ra3NYa1Jzam1ZekErejI1YVRCT0pDTjFva1FSWTZXcGNyNkVvUnNo?=
- =?utf-8?B?QW05dzNoamFkSlgvdk5vb3FDYzJORXlGNmwwYysxdUd0enNOKzRpVDF2QXBP?=
- =?utf-8?B?Snc9PQ==?=
-X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43209245-a5d1-420f-4eaa-08dda875b0f7
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3461.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2025 23:22:39.1823
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kcMNDRgGKIVgGG7+y0R0CPVU7vL/AZFKu6+GGHGvsKcyu5+ED7koxRs46eKfPeXn447HkO4u1w0KLD8LNOhVJGrI4/29QCT2/872HYzR8qI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR03MB5707
+Content-Transfer-Encoding: 8bit
 
+Most current controller IP support 64-bit words.
+Update the mask to u64 from u32.
 
+Signed-off-by: Da Xue <da@libre.computer>
+---
+ drivers/iio/adc/ad7949.c         | 2 +-
+ drivers/spi/spi-dln2.c           | 2 +-
+ drivers/spi/spi-ingenic.c        | 2 +-
+ drivers/spi/spi-sh-msiof.c       | 2 +-
+ drivers/spi/spi.c                | 4 ++--
+ drivers/staging/greybus/spilib.c | 2 +-
+ include/linux/spi/altera.h       | 2 +-
+ include/linux/spi/spi.h          | 6 +++---
+ 8 files changed, 11 insertions(+), 11 deletions(-)
 
-On 6/10/25 3:30 PM, khairul.anuar.romli@altera.com wrote:
-> From: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
->
-> Having PM put sync in remove function is causing PM underflow during
-> remove operation. This is caused by the function, runtime_pm_get_sync,
-> not being called anywhere during the op. Ensure that calls to
-> pm_runtime_enable()/pm_runtime_disable() and
-> pm_runtime_get_sync()/pm_runtime_put_sync() match.
->
-> echo 108d2000.spi > /sys/bus/platform/drivers/cadence-qspi/unbind
-> [   49.644256] Deleting MTD partitions on "108d2000.spi.0":
-> [   49.649575] Deleting u-boot MTD partition
-> [   49.684087] Deleting root MTD partition
-> [   49.724188] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
->
-> Continuous bind/unbind will throw Unbalanced pm_runtime_enable error.
-> Subsequent unbind will return No such device error while bind attempt
-> will return Resource temporarily unavailable error.
->
-> [   47.592434] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
-> [   49.592233] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
-> [   53.232309] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
-> [   55.828550] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
-> [   57.940627] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
-> [   59.912490] cadence-qspi 108d2000.spi: detected FIFO depth (1024) different from config (128)
-> [   61.876243] cadence-qspi 108d2000.spi: Runtime PM usage count underflow!
-> [   61.883000] platform 108d2000.spi: Unbalanced pm_runtime_enable!
-> [  532.012270] cadence-qspi 108d2000.spi: probe with driver cadence-qspi failed1
->
-> Also change the clk_disable_unprepare() to clk_disable() as continuous
-> bind and unbind will cause warning being thrown with inidication that
-> the clock is already unprepared.
->
-> Fixes: 4892b374c9b7 ("mtd: spi-nor: cadence-quadspi: Add runtime PM support")
-> cc: stable@vger.kernel.org # 6.6+
-> Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
-> Reviewed-by: Matthew Gerlach <matthew.gerlach@altera.com>
-> ---
-Hi Khairul,
-It helps the reviewers, if a revision list highlighting the changes 
-between is provided under the ---.
-Something like the following:
-
-v2:
-  - Description of first change since v1.
-  - Description of second change since v1.
-
-Matthew Gerlach
->   drivers/spi/spi-cadence-quadspi.c | 12 +++++++-----
->   1 file changed, 7 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-> index c90462783b3f..506a139fbd2c 100644
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
-> @@ -1958,10 +1958,10 @@ static int cqspi_probe(struct platform_device *pdev)
->   			goto probe_setup_failed;
->   	}
->   
-> -	ret = devm_pm_runtime_enable(dev);
-> -	if (ret) {
-> -		if (cqspi->rx_chan)
-> -			dma_release_channel(cqspi->rx_chan);
-> +	pm_runtime_enable(dev);
-> +
-> +	if (cqspi->rx_chan) {
-> +		dma_release_channel(cqspi->rx_chan);
->   		goto probe_setup_failed;
->   	}
->   
-> @@ -1981,6 +1981,7 @@ static int cqspi_probe(struct platform_device *pdev)
->   	return 0;
->   probe_setup_failed:
->   	cqspi_controller_enable(cqspi, 0);
-> +	pm_runtime_disable(dev);
->   probe_reset_failed:
->   	if (cqspi->is_jh7110)
->   		cqspi_jh7110_disable_clk(pdev, cqspi);
-> @@ -1999,7 +2000,8 @@ static void cqspi_remove(struct platform_device *pdev)
->   	if (cqspi->rx_chan)
->   		dma_release_channel(cqspi->rx_chan);
->   
-> -	clk_disable_unprepare(cqspi->clk);
-> +	if (pm_runtime_get_sync(&pdev->dev) >= 0)
-> +		clk_disable(cqspi->clk);
->   
->   	if (cqspi->is_jh7110)
->   		cqspi_jh7110_disable_clk(pdev, cqspi);
+diff --git a/drivers/iio/adc/ad7949.c b/drivers/iio/adc/ad7949.c
+index edd0c3a35ab7..469789ffa4a3 100644
+--- a/drivers/iio/adc/ad7949.c
++++ b/drivers/iio/adc/ad7949.c
+@@ -308,7 +308,7 @@ static void ad7949_disable_reg(void *reg)
+ 
+ static int ad7949_spi_probe(struct spi_device *spi)
+ {
+-	u32 spi_ctrl_mask = spi->controller->bits_per_word_mask;
++	u64 spi_ctrl_mask = spi->controller->bits_per_word_mask;
+ 	struct device *dev = &spi->dev;
+ 	const struct ad7949_adc_spec *spec;
+ 	struct ad7949_adc_chip *ad7949_adc;
+diff --git a/drivers/spi/spi-dln2.c b/drivers/spi/spi-dln2.c
+index 2013bc56ded8..cccbb00ad5ce 100644
+--- a/drivers/spi/spi-dln2.c
++++ b/drivers/spi/spi-dln2.c
+@@ -315,7 +315,7 @@ static int dln2_spi_set_bpw(struct dln2_spi *dln2, u8 bpw)
+ }
+ 
+ static int dln2_spi_get_supported_frame_sizes(struct dln2_spi *dln2,
+-					      u32 *bpw_mask)
++					      u64 *bpw_mask)
+ {
+ 	int ret;
+ 	struct {
+diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
+index 318b0768701e..21d453d6e46e 100644
+--- a/drivers/spi/spi-ingenic.c
++++ b/drivers/spi/spi-ingenic.c
+@@ -51,7 +51,7 @@
+ #define SPI_INGENIC_FIFO_SIZE		128u
+ 
+ struct jz_soc_info {
+-	u32 bits_per_word_mask;
++	u64 bits_per_word_mask;
+ 	struct reg_field flen_field;
+ 	bool has_trendian;
+ 
+diff --git a/drivers/spi/spi-sh-msiof.c b/drivers/spi/spi-sh-msiof.c
+index 94a867967e02..97f5a6192279 100644
+--- a/drivers/spi/spi-sh-msiof.c
++++ b/drivers/spi/spi-sh-msiof.c
+@@ -33,7 +33,7 @@
+ #define SH_MSIOF_FLAG_FIXED_DTDL_200	BIT(0)
+ 
+ struct sh_msiof_chipdata {
+-	u32 bits_per_word_mask;
++	u64 bits_per_word_mask;
+ 	u16 tx_fifo_size;
+ 	u16 rx_fifo_size;
+ 	u16 ctlr_flags;
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 1bc0fdbb1bd7..4f47201f2462 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3824,8 +3824,8 @@ static int __spi_validate_bits_per_word(struct spi_controller *ctlr,
+ 					u8 bits_per_word)
+ {
+ 	if (ctlr->bits_per_word_mask) {
+-		/* Only 32 bits fit in the mask */
+-		if (bits_per_word > 32)
++		/* Only 64 bits fit in the mask */
++		if (bits_per_word > 64)
+ 			return -EINVAL;
+ 		if (!(ctlr->bits_per_word_mask & SPI_BPW_MASK(bits_per_word)))
+ 			return -EINVAL;
+diff --git a/drivers/staging/greybus/spilib.c b/drivers/staging/greybus/spilib.c
+index 24e9c909fa02..087eed1879b1 100644
+--- a/drivers/staging/greybus/spilib.c
++++ b/drivers/staging/greybus/spilib.c
+@@ -27,7 +27,7 @@ struct gb_spilib {
+ 	unsigned int		op_timeout;
+ 	u16			mode;
+ 	u16			flags;
+-	u32			bits_per_word_mask;
++	u64			bits_per_word_mask;
+ 	u8			num_chipselect;
+ 	u32			min_speed_hz;
+ 	u32			max_speed_hz;
+diff --git a/include/linux/spi/altera.h b/include/linux/spi/altera.h
+index 3b74c3750caf..d6e036ed00e2 100644
+--- a/include/linux/spi/altera.h
++++ b/include/linux/spi/altera.h
+@@ -24,7 +24,7 @@
+ struct altera_spi_platform_data {
+ 	u16				mode_bits;
+ 	u16				num_chipselect;
+-	u32				bits_per_word_mask;
++	u64				bits_per_word_mask;
+ 	u16				num_devices;
+ 	struct spi_board_info		*devices;
+ };
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 4789f91dae94..f44120d5a63c 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -586,7 +586,7 @@ struct spi_controller {
+ 	u32			buswidth_override_bits;
+ 
+ 	/* Bitmask of supported bits_per_word for transfers */
+-	u32			bits_per_word_mask;
++	u64			bits_per_word_mask;
+ #define SPI_BPW_MASK(bits) BIT((bits) - 1)
+ #define SPI_BPW_RANGE_MASK(min, max) GENMASK((max) - 1, (min) - 1)
+ 
+@@ -1329,9 +1329,9 @@ spi_max_transfer_size(struct spi_device *spi)
+  */
+ static inline bool spi_is_bpw_supported(struct spi_device *spi, u32 bpw)
+ {
+-	u32 bpw_mask = spi->controller->bits_per_word_mask;
++	u64 bpw_mask = spi->controller->bits_per_word_mask;
+ 
+-	if (bpw == 8 || (bpw <= 32 && bpw_mask & SPI_BPW_MASK(bpw)))
++	if (bpw == 8 || (bpw <= 64 && bpw_mask & SPI_BPW_MASK(bpw)))
+ 		return true;
+ 
+ 	return false;
+-- 
+2.39.5
 
 
