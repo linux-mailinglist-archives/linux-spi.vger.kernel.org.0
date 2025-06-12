@@ -1,92 +1,70 @@
-Return-Path: <linux-spi+bounces-8475-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8476-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EFB0AD7353
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Jun 2025 16:14:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0443DAD73AC
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Jun 2025 16:23:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCEEA7A9A68
-	for <lists+linux-spi@lfdr.de>; Thu, 12 Jun 2025 14:13:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD317176DB7
+	for <lists+linux-spi@lfdr.de>; Thu, 12 Jun 2025 14:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1447124678F;
-	Thu, 12 Jun 2025 14:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E855C31A60;
+	Thu, 12 Jun 2025 14:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZWc7a+aQ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SDLLC2FJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR03CU001.outbound.protection.outlook.com (mail-westeuropeazon11012065.outbound.protection.outlook.com [52.101.71.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0172418A6AD
-	for <linux-spi@vger.kernel.org>; Thu, 12 Jun 2025 14:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749737680; cv=none; b=CJ3BvLXuI1zxvPpq51MAD6ahA/6JiUMpxMu0ZcOWKiB0h89RHcjw50GwcLtsU8k5odqtMxWSXNGrljp8Rz82u3PffmfY6e3FlzGgy0yYgTUx6pEmxpJnfcsO/3h1t4NxtdWkgkqRvJfpfEDggipZG1j+N2W21+q30Q6aR+oZA64=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749737680; c=relaxed/simple;
-	bh=60WDQiWn4ERcM4sXmxu8hCFJPSCd2H/JsWpNpGO9EBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dFCsMWL3OKDFjjM7CveeMi+Cajl14pAfjOSqyU3vfIo8V34jw7jLn8wJnjkIAdLcgiaip4fh/KSS+Z6EhC7UnhfWWf/9IMLmovXQspLocTZZSoP0gywW/IWE+A0xrJlDro5dwB+Nx1LtpqsP3td4Y98hERfq67ErWtz/BwAnyRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZWc7a+aQ; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3a528243636so679851f8f.3
-        for <linux-spi@vger.kernel.org>; Thu, 12 Jun 2025 07:14:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1749737674; x=1750342474; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J19QzIs1SpN2V+Z84587yjfC+A6S3Z0DqJUi8/rsIps=;
-        b=ZWc7a+aQHcTTvXzje3+dB4qw/TBms4ehHn53nXBEU3WJGPqi7w60eTsKpF8fcQxGIZ
-         Iox5Be8J+2c/nDpwqfmJ+ii2k0tiuD7IaQ1YFlMlvu9o0Ux9h1wNNt1NQ4QOfxpX85gc
-         YZrYkdqaPKbVA/sTC0QUHandbm024ofuExH0tBPBV32J6PeETfrirOm7OApkodq7jQr3
-         Nb3WF3Qfikwf2p/ZR6NQPTulQ99Am6j+dey+adTYJwDHne4VG+9HngY3WFc/Cl1ZLn+h
-         UVjbXNBYurr0/ahOKwndgA4Tc9wwwkcnqYKDQR/KKt9vqHBf4AaEgsZM3RREthzjiNoH
-         BGwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749737674; x=1750342474;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J19QzIs1SpN2V+Z84587yjfC+A6S3Z0DqJUi8/rsIps=;
-        b=FjI3h64Hf78Ofh5RGQMsEyELkmhyr44WlYnFxMIRlSCg3uVIgQLCgkoJjt2ucfMODC
-         bUg5jtKjMaSHNfZ7tbYVIGj4Auc+ejppgO/6uIOVSdJ5mEat+QNCqSoMo/pkrUvBMFXV
-         5tyHUDFKugXyHCGWmf72jC6/DhecPalJ+ZA8S/AkB/GGyA/1LjSwCBuw53OIQNeIQn7K
-         ev09WoRayH7RW9fRG53Aog5pt5DFcgYFxjaHepyOm07N97TCPxJ7o8DvVOrDJDYpHOZ6
-         f4UZKl6Hy/iaMLDR8+KJ2OrrzeufVPQ18xOCAPqP2D7oKN6j7N/lNYiDDg0rfBjXWn1R
-         cJ+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXcSOCb8+QkoXMmEbpht1tE71tWQzBzSTgp0ZQ08y8CBsi6uCPwDzELzMXEfLNI4IDW3AgUb/0hNSs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1u+DKiY2kRhWKeC/gbWspiK6arXXWEFqnvoQ3NGpjpouXJLoI
-	c6sWQWnnr17QhCWIjZJKPZr5RWmy8URQyIvhNg3g+GaboU4u1CtuTiT2Qe+HBb8hVf8=
-X-Gm-Gg: ASbGncs8fvW6CgfvFfJjU8ut0Jh9S6iM3VClS5YddRJ7zeuy2poAgG94RGmRqbS2bUW
-	w3ScXpr0HZMQZutMHC4P0/JKmLfOCKWTDzBj2bn3ckLCW9ymb4N0v+nmWQpyLra/ogNRzAy9mkW
-	QPtq4EPh9pFcN7a6RXMRymxTxWMtDRmKf/jjT6o4vtObLB0wKjfWdzwEHUBVITiElzBuZL5lDBO
-	5RfZ/ZfEGtC64taE0FbLREdA8wpS1MRj9xDBLQz2I6symuMHldNujFXoXRnq2JwtgX0b6w9UlFh
-	VsGt5fFD1KbddRKSTPTQAOl+a7St0hyq4nvKE+mSgotmECyizYO8tdQ3Ud3Optte0PAW5CeGZoK
-	k3w==
-X-Google-Smtp-Source: AGHT+IGMvfoiQPigVo7iO2Dw6iilpFxrDO4WGsQDGLouqfPnH55vE1SO0OF49/vNlZbAzHfxJoNlPQ==
-X-Received: by 2002:a5d:64c5:0:b0:3a4:d700:f773 with SMTP id ffacd0b85a97d-3a5606a2f5amr2978490f8f.11.1749737674171;
-        Thu, 12 Jun 2025 07:14:34 -0700 (PDT)
-Received: from [192.168.1.3] ([37.18.136.128])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a56198f827sm2077031f8f.29.2025.06.12.07.14.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jun 2025 07:14:33 -0700 (PDT)
-Message-ID: <ad7e9aa7-74a3-449d-8ed9-cb270fd5c718@linaro.org>
-Date: Thu, 12 Jun 2025 15:14:32 +0100
-Precedence: bulk
-X-Mailing-List: linux-spi@vger.kernel.org
-List-Id: <linux-spi.vger.kernel.org>
-List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F9A219FC;
+	Thu, 12 Jun 2025 14:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.71.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749738193; cv=fail; b=mnBDbB/5/5WxQqe3F5n1xkW56FphIBAXEj833z1ukF2QAWrwedRvxiK7lPcAphO1Yuo2BqUTrx7ga/B+h6A/XIh6i6JxdSbWlE+QKTyOj084JgaVJNb0lIQ+4QnWQ8wV3qqRnCao8oHQ8CeNCndAFvGq0dImLUodWPfyJm+RSIA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749738193; c=relaxed/simple;
+	bh=EIexqerODwFutexwyUbAJ63l/FpK88HYVcirsfvr9VY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ZI//pq+hAuh9C3GmenVb71gpZCBayk97eZs2A211rxHPqpWv73ksbdCGTpENFlwKzmzoKuYtPIxrCSXOwpYeMnW1W1PV83YDLcDAZEIuk4dhLQtdpgtCzrLDIs4SUB31M3L7Z+P77bQ5iBnSRJKLQUlyW7isWwePPyp6bOogbHs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SDLLC2FJ; arc=fail smtp.client-ip=52.101.71.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=m58Txpy0/Rqn6nW81o3JZRsfX2wmcTtf2DslJ6ipfSRl2d/3uqj+iBBgxlwIHTFRVxpHPviVADy5lwWeQG1lI1qnqGAF08p6sZxieGgObBbyWtpek+RqP1+36s8ZkMdMvq9KnpI1Nu9J9E3ILnoxjNind4y9bI7trcO2IzoRpdxaVTmPfHwvm3EkW6o9WL12l7K1jYd2grjc+UW/Vuh9eygUV8enlV45cLn8CQFboGQ1wwH1O+Po7YUb9QHIsTPjtNYRlC2y5IP+A0fkuqw9OK2PuZRuI7+2yX2SWaj5uyu2ry1m/KFUIBNuBYYHWeZor5mJGJUAVHlat8GxvrqV8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MFToZSy0hkK88iCHuYRCnUDpD445h2a7zvWyHm2KbRk=;
+ b=hIakz8wF01z7efi4zFN2i/+N4QtWHi036lBeK9c5EYjFCYpNUE4jeZSJe49dPWq64TZgzu3LKtqGNX+KcwmYNf8g6TpjLdgZjtKg4Fn87GeXf28xsplWL/mZZjCSKqnNyb4GtDOqJLhe40TyfXCmwPKQCMYMvYxeeNEOVESrYIk7yWSj2j6n7n3jLP3e5ygVrHGoUJ2/0hDE8Y8/nX5iT/Na8IoH5TV5YTJDSbf/QsYnixlaK2N5kWk6daNo/Lbd8TxrA0O9G04jfuHpTcmWg7y/TJY20uPhppMo/GRzxKjnuuK0GLwbHhl80NguxbX4K6wtdqgrnIb+NLniKAQnVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MFToZSy0hkK88iCHuYRCnUDpD445h2a7zvWyHm2KbRk=;
+ b=SDLLC2FJ00xbXRX9CtvY1ni/7BmDrpzzGzyrR4q4sq2aqhdHxcbA7V1n/jBFg7AxMsSJ2uyNgBgmrH1k4i0PvngVSFkljHMqJ+UuPybL9f5NHgHf3VQqsJ03Cj1l3ut9crKMmIHJHmkyclLy2D6C/nE6DCFnI4PBgJHrvMprO1kiv2PQlS/VoTlxcCkI2MciobJSaCrMb/sxmG4IPUvCfsOAptqahw9GdEtB9JEO83e3Ng1tAktXStrWLHsKHFFWN+HCQqsPwwJv6mFk+joiuhHf+d/zM23rO3p9BrxqpJHx0y9mW/6+ziSeh3NOhLM+t0M5FhIE+F00TiqHgOay8Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
+ by PAXPR04MB8253.eurprd04.prod.outlook.com (2603:10a6:102:1bf::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.26; Thu, 12 Jun
+ 2025 14:23:09 +0000
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::7417:d17f:8d97:44d2%3]) with mapi id 15.20.8835.018; Thu, 12 Jun 2025
+ 14:23:09 +0000
+Date: Thu, 12 Jun 2025 17:23:06 +0300
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: James Clark <james.clark@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Frank Li <Frank.li@nxp.com>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/4] spi: spi-fsl-dspi: Use non-coherent memory for DMA
-To: Vladimir Oltean <vladimir.oltean@nxp.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Frank Li <Frank.li@nxp.com>, Vladimir Oltean <olteanv@gmail.com>,
- Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-ID: <20250612142306.3c3dl46z326xvcud@skbuf>
 References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
  <20250609-james-nxp-spi-dma-v1-2-2b831e714be2@linaro.org>
  <aEhMBsqlx9I4XqJS@lizhi-Precision-Tower-5810>
@@ -95,79 +73,112 @@ References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
  <20250611090107.t35zatn47vetnvse@skbuf>
  <c65c752a-5b60-4f30-8d51-9a903ddd55a6@linaro.org>
  <20250612111514.rfb3gpmlilznrfxs@skbuf>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20250612111514.rfb3gpmlilznrfxs@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <ad7e9aa7-74a3-449d-8ed9-cb270fd5c718@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad7e9aa7-74a3-449d-8ed9-cb270fd5c718@linaro.org>
+X-ClientProxiedBy: VI1PR07CA0229.eurprd07.prod.outlook.com
+ (2603:10a6:802:58::32) To AM8PR04MB7779.eurprd04.prod.outlook.com
+ (2603:10a6:20b:24b::14)
+Precedence: bulk
+X-Mailing-List: linux-spi@vger.kernel.org
+List-Id: <linux-spi.vger.kernel.org>
+List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|PAXPR04MB8253:EE_
+X-MS-Office365-Filtering-Correlation-Id: dcf3b83b-bae6-4eb4-8484-08dda9bca7a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7bP9B1xfh8pnRDjj5+nAYXv1EbDMEol7nWTQF1a9bt2iVVXsKqw+bJLROW77?=
+ =?us-ascii?Q?Qs8qiH/ieapv3MzHDj1MS28KD0VrWkMJhTMpjmIF+XiXDRsq2hVTLG1ghD6e?=
+ =?us-ascii?Q?4kWBWppNQ+/ShrAqsbVVy5nIH2ot3bU+11RqYPb9hCUki3z522WAcfHukqVa?=
+ =?us-ascii?Q?KgZ3QrfGB4577BhD27pbNoquv0sJ8d6jPqT1ULSkPoMPagYzmAsHpOp6oyMK?=
+ =?us-ascii?Q?hZyFpdQQCHLfs1SrFAL4g24tJlsw2gKsVL1N4TQr34m1HaMH/4T4DcXQMhAj?=
+ =?us-ascii?Q?inukjYLhaCPzZMsP848bzrzUw2hHLXRkoQkO8YhNObN4am8Pp+oF/xrFYAyT?=
+ =?us-ascii?Q?NL4G0JjeYan6I8+NTMwbXThW37KWZDq5JP7iJF4byS8IymI2S11bt6rkPZQ5?=
+ =?us-ascii?Q?AjTWaeZqMvFBuv5YvZq5hwXj84WaAeCenVykmgVU4wREQTZlVLwnPfEwvce7?=
+ =?us-ascii?Q?jzFBKleuRBWFuqZlgXlciQaltp37muPXLFRMtx4HF0A98+mgij1ojAJfK1fr?=
+ =?us-ascii?Q?zmIT0llEXG8hexdIT1b8lkvA23uEYJA0U32Py3J9phgPOZJbk0uFBmIJJPPk?=
+ =?us-ascii?Q?bHAUfEq29yjrGpPzvdLoRqvvN01sihn3NEp9NYc6ytP5CQt4qePcbrXCfr9s?=
+ =?us-ascii?Q?/Gmz2mIBf9C+su6YlZRGKn7lsMPg2UCgseUpoudSkGqiJoTs0ymKMLwyWa/F?=
+ =?us-ascii?Q?taQ4ztaQ1hbE93xJZZkGkxE5yCbEjjq6WU/RR/JuBEEnPzhqxLfdVS/7igp8?=
+ =?us-ascii?Q?fIpIDOeUhDLNWQ87pUmGl/ZWc9ANBS4vY3fEeG3fEM+qhyxYpcgU4lZAdZ7i?=
+ =?us-ascii?Q?4UTzu77p0Z0Kj0wNoUwx/fN/M7Mwr79ePtkYE4HHM2TtsWap0u9/gausak9Q?=
+ =?us-ascii?Q?H8Vw8I4vplGASlZjbiQ7zQ/bIXhc4OFj7eHMet8nt6wCnfpUOQCz6RB5Ic8M?=
+ =?us-ascii?Q?PPZKW9bw4KuL1EwD9bzQbFoZvTa+K6GhPB2kEHbZ0rp57Nk6lWnbpv6rs2lH?=
+ =?us-ascii?Q?kdFy5nlMo4CmD7xXxWmwZwBxvgwUsicTEuhb6wvtWEjAqPZB3xypYhHPEHFW?=
+ =?us-ascii?Q?WkS8svHAXnH+NqPCRZv9hIipGYRfSxvOoACkEMCqpmUp8+pGi84csHPAbqxi?=
+ =?us-ascii?Q?UkTpdXyvbMKqolHvRVGS1WPqFgoDBH6572FAG4inqiPnpu7UiH5dc4Ru1k2l?=
+ =?us-ascii?Q?JF84RM26Gn/DqgtYhDewIEbSLM5E3XN6clo3HOe/A01r2WzC9QNR3DLmDTXx?=
+ =?us-ascii?Q?DsDsXP7mhaHbZbh6o7AfMblFfcVaOXjgp04Hlp9RfaIP1Ol5dNeQgbBfNkXL?=
+ =?us-ascii?Q?X6116k0/yVIG/ruQ2G2uIDZGSciy/jPCzYtwDsc3KZK9AMgHne6aQicyFwvu?=
+ =?us-ascii?Q?G4wyWhsCj2JQxbhu7OCBWihoRfe/Pa9kPtuDyOQ813PxHQOOvw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?VVupAfBGtJs7DRotyiWLz9r1lqqz2M/KDvae2uJZj+cwLOqCPPZqbd/HeAWo?=
+ =?us-ascii?Q?8K6JEuq/4mbBjt/a79rWma2I7A9CoptNTZl80qXbyrjBtX/L8uRip1z8j6my?=
+ =?us-ascii?Q?exMn1QAmtxvklfXzLGHthDKY4J0I40JiAPGpOYb5nEm/Ort03cKfQV91ja/n?=
+ =?us-ascii?Q?kF4NCiblpN4ayAGm/+J/kTFEqUnjDVHU7wSd3nFR8o3GLtfOV56nS5R0gzgJ?=
+ =?us-ascii?Q?Ohhehu4RBaL+voWz8ZzBjkz19fC0Fmhqq0DZKFj9X2GwVv1djH8IjULPtZE5?=
+ =?us-ascii?Q?iyUR+Qe/QwQvQJQluTRCpSWWJ5Y4fifzTbB65svkYJeY2/tfu1F3VyXCV2vV?=
+ =?us-ascii?Q?MTJhTvjwVGVmngKT/Hi8dtqjcBTE91iZ1NpYUHRzZ+O9VJRqijOo6xCvtafd?=
+ =?us-ascii?Q?zZz8g+qGU0UeKkZkn6ZCbzfTVDQNNxp6P4NuxGiy9F+VhSU1MD9cxy++t9h8?=
+ =?us-ascii?Q?+9t/E6u1iD6nytWdHc3zAbitUsGqzvP4ZVG90M2J5qC2OFLngOXHxGZov0cf?=
+ =?us-ascii?Q?qi5fSx/ay630PedoOS+t65mIdfxqz7VMp8HurloP9y/u/0KtzKoZvC3dIA4P?=
+ =?us-ascii?Q?MimWAkAqdR2HAXIl95r7UCSKd6pFkvVgFk9cGxB1pyY5m6SXQFN9UC4MVe7Q?=
+ =?us-ascii?Q?7rygmqXQFn2YkNvo1wOszigq9fhfHPuUxEkWXbAkK+doOWoO6NaCWJZfr9o3?=
+ =?us-ascii?Q?aSrLwijPeg6kBXPT4QjgPg5eZvd+o7wmQQnkk+BHqTEnFqpOLaQgphXY8Kr5?=
+ =?us-ascii?Q?njwejw/h3meoLOTRVCDK2+reARGBZfOypbmMDjX1a8QeIUouh2pCHMUDCR/q?=
+ =?us-ascii?Q?wMs0tsl0g6D67+Zh603BvkBgVkmpjGUSNq5pHjDMi7quFT0b4ZvuHMQcz/cp?=
+ =?us-ascii?Q?9/zFYcK1PoPjPZ5XaywEf9X9RJ7IXSI5AC369fwfXXHVpqcKua/PmZxPOIbN?=
+ =?us-ascii?Q?wyZa0/tLVIrjivlsnlmDnqFS7v6vX8BY7QvFjaAxCUQWEWqBL9DfISi8p8Oz?=
+ =?us-ascii?Q?YjqDo3Q+/eGkhGk5q6M6gyIMX7Ga3/L8lK7+KLwj3GoJJ8bHdmVcmQDU5SCt?=
+ =?us-ascii?Q?nbRQIbVvoFMetBG7U0LFvygPkju/EfircvChA8EjFTEQjJA9RfPQznbcV+g7?=
+ =?us-ascii?Q?FUXrYLFvxEeDQ4CKGmmRoPeGkuvjxBp13XA6mTzBfRD2JHPsGiNbndo+5QFB?=
+ =?us-ascii?Q?hCpgzr1qiLNMJtidsy/k22zQvBbYUFW+jHPRDJaN7bwjie7HUkbOmfTHm383?=
+ =?us-ascii?Q?Li7gvkZI6rWL843ULM73JVYC3nRxn7Gf1PIn2W3VVhK2Po5pkz5/nz/JowuA?=
+ =?us-ascii?Q?0I72cmdnNGFjl8F1I7Fu5oajberBiB744O+Qk/HUS8k/BR1n3DnYyQqNxhZ/?=
+ =?us-ascii?Q?S6JUKqq1RgbIGaywy5WVkock6/fYXXIZgUypIo2J5O8A0SgNCnjHVubkC7IX?=
+ =?us-ascii?Q?2+ud7hunxV+6Ywm8+hIR42+66INRI5zj31l1wRm4oKGMr/ypFl6sgkViLgsF?=
+ =?us-ascii?Q?JL1S1OFukyLAkxDtj4m7BZr+ky8aH6AvSKpOSgg5WXN+GS4pCZjEB3PhCzS7?=
+ =?us-ascii?Q?DZ3W6KJgrxAKdCai9jGgyQQ/csWZH73jQOVrcYoe3vI/p2UZ6pdLqHpuW4F5?=
+ =?us-ascii?Q?2g=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcf3b83b-bae6-4eb4-8484-08dda9bca7a1
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2025 14:23:08.9911
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OoDBtS1B7RPI2/Ig8NYz2Srv7GycEid8ffmTz9U5ymjhK3tPFYgoXgtYgFd9Q2jr5+EmB2fVq4OJpFOpoy7QIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8253
 
-
-
-On 12/06/2025 12:15 pm, Vladimir Oltean wrote:
-> On Thu, Jun 12, 2025 at 12:05:26PM +0100, James Clark wrote:
->> (No idea why it goes faster when it's under load, but I hope that can be
->> ignored for this test)
+On Thu, Jun 12, 2025 at 03:14:32PM +0100, James Clark wrote:
+> > That's why I don't like the DMA mode in DSPI, it's still CPU-bound,
+> > because the DMA buffers are very small (you can only provide one TX FIFO
+> > worth of data per DMA transfer, rather than the whole buffer).
 > 
-> Might be because of dynamic CPU frequency scaling as done by the governor.
-> If the CPU utilization of spidev_test isn't high enough, the governor
-> will prefer lower CPU frequencies. You can try to repeat the test with
-> the "performance" governor and/or setting the min frequency equal to the
-> max one.
-> 
+> Is that right? The FIFO size isn't used in any of the DMA codepaths, it
+> looks like the whole DMA buffer is filled before initiating the transfer.
+> And we increase the buffer to 4k in this patchset to fully use the existing
+> allocation.
 
-That doesn't seem to make a difference, I get the same results with 
-this. Even for the "fixed" DMA test results below there is a similar 
-small performance increase when stressing the system:
+Uhm, yeah, no?
 
-   # cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
-   1300000
-   ...
+dspi_dma_xfer():
 
-   # cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
-   1300000
-   ...
-
-   # cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-   performance
-   ...
-
-> That's why I don't like the DMA mode in DSPI, it's still CPU-bound,
-> because the DMA buffers are very small (you can only provide one TX FIFO
-> worth of data per DMA transfer, rather than the whole buffer).
-
-Is that right? The FIFO size isn't used in any of the DMA codepaths, it 
-looks like the whole DMA buffer is filled before initiating the 
-transfer. And we increase the buffer to 4k in this patchset to fully use 
-the existing allocation.
-
-> 
-> FWIW, the XSPI FIFO performance should be higher.
-
-This leads me to realise a mistake in my original figures. My head was 
-stuck in target mode where we use DMA so I forgot to force DMA in host 
-mode to run the performance tests. The previous figures were all XSPI 
-mode and the small difference in performance could have been just down 
-to the layout of the code changing?
-
-Changing it to DMA mode gives figures that make much more sense:
-
-Coherent (4096 byte transfers): 6534 kbps
-Non-coherent:                   7347 kbps
-
-Coherent (16 byte transfers):    447 kbps
-Non-coherent:                    448 kbps
-
-
-Just for comparison running the same test in XSPI mode:
-
-4096 byte transfers:            2143 kbps
-16 byte transfers:               637 kbps
-
-
-So for small transfers XSPI is slightly better but for large ones DMA is 
-much better, with non-coherent memory giving another 800kbps gain. 
-Perhaps we could find the midpoint and then auto select the mode 
-depending on the size, but maybe there is latency to consider too which 
-could be important.
-
+	while (dspi->len) {
+		dspi->words_in_flight = dspi->len / dspi->oper_word_size;
+		if (dspi->words_in_flight > dspi->devtype_data->fifo_size)
+			dspi->words_in_flight = dspi->devtype_data->fifo_size;
+		dspi_next_xfer_dma_submit();
+	}
 
