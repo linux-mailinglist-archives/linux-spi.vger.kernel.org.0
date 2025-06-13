@@ -1,123 +1,159 @@
-Return-Path: <linux-spi+bounces-8542-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8543-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64899AD923E
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 17:59:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8329AD9236
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 17:59:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA9213A7EBE
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 15:56:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3492D16D266
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 15:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B8D202C52;
-	Fri, 13 Jun 2025 15:56:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E52D820C487;
+	Fri, 13 Jun 2025 15:57:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WtJvzLIU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IRz3QDl5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C351F463A;
-	Fri, 13 Jun 2025 15:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E6E202C31;
+	Fri, 13 Jun 2025 15:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749830204; cv=none; b=s7dNHHfALcB3fjZFo21Z+snAfxnH67wzp76pggtSIeW6b1VdA+//9+h3lqbawCtHsY7Tt+IEEY4fRbty/qUeSRb6ceBtdDq5o1P5DcwpsU162OLAlITNbnKwVmrKUgGSANwx4UTsxlpbPJJrMeDqpP6Qds6xRoSyIxtN6Kb7aFM=
+	t=1749830273; cv=none; b=Kf/jBLWB+jMfWkt2Cz1mL2Q+zKDbS7VItpWNNShAJK+mMKJIrrrtlEj5edSmkZ2FfYDlMY0hyxncjJZ4RhFVtMWpP2AsizXY9tQGhRp5MZx3KaHzTk1aa7aQk105bRjbRatoETc+UkoPMuYyq3AO+hWzcIHb4mRo2qkRBfO8h3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749830204; c=relaxed/simple;
-	bh=OwWwJMJMz1gVCx/M2Des8/aF3uScnadX1L2LxSc73zo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lia9isCdDn+IcmhDXLd2Q8vDRPSTI5AXPs4EZgDLbgPuPCZmBc+U41vrVvEqoPkdRbW/hKVcuiyBIkBcgVot/CkH7BeuPse1QyWWeXYqNBHAS8GPZnGI8H+1tvE0RTMl0aAT8DNWQaWgEigtIu+g9DagAb8GSOV9hLwnNOYdVvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WtJvzLIU; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so17596385e9.0;
-        Fri, 13 Jun 2025 08:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749830201; x=1750435001; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qPo6H/9j3Ay9teefhcqMxpNsx0jvAC7MjlPzeeLu5rE=;
-        b=WtJvzLIU5z2gsfsyfs2NvE2Vu7stYrE5zg/WHTCxjLyuQODy45mMFrGEmc7kWcWLTy
-         4R9qZwdcJRuvjWLR/fVHIbY5KrMRoiqiMBIbub671TSbcQBrFEsBM3pFNVy1LhsSFhFF
-         1iJIgn/+b4Nxzl+F7tns8XM85R1tZSosw8Cntr1hUSk9rk2bhDX6d7y9r+plULrNpqO6
-         WYIw/g/mSb9hCylllFa1ts6WPeyrUfRtoLWKtSRH3foSDLQAhGMa6hE52LMejbtbcBHo
-         PJpgXUbJA0Lc7339r+XDHop8zPLqKsRVuPa+6aAO63MLhbYekKM+3PfNfosQG8IZqZic
-         J15A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749830201; x=1750435001;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qPo6H/9j3Ay9teefhcqMxpNsx0jvAC7MjlPzeeLu5rE=;
-        b=jxybNoFOl3guTZDbva2/WThvZ54R6rfFHM2DwSyD2S4bQWrvGYOvXCVziyBZi5ZvnM
-         6c6zwmDsfu8dUIr6tUoQnYEwp8Pya/XKaLReTYgz+LnQhWXzhMo1+ocOUPub+M3laYID
-         iSQZ96xIq88DNdwIFDlPa8lc8DgvWZLcIzxIgLzP7kjBTpWWJW2scS/9tbc87KAY8ZtE
-         t2m4IZzIW5Nfl3zIYn8wIf8xMGtnwtZkx6Y0u7HYCozfUWrh3RzHK2llgrYaEtmNDEXQ
-         +JEe3+w4p23tajN03r3KGBedXtjIYBrCowpFk7rNtr77a94SMBMq6JPc1RhGsHAoSqWI
-         u/Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSEP5+zTleaWixrzwhYIf67HvXNynMOP1RT/1CkRKn+0jvbOPAM0tz0ZHqgX9zvOS2gC0mymwhKx9U@vger.kernel.org, AJvYcCWgGN6WcqZ6ETswc4EwGJpKE1Rb2M08EJAu2MQwaaciCXE2KbB453ZbfAeaux6CAYV+YwhXLyV/FBmTN8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxY9j/2CJotS7zs3tPLmEQJ0tSIwOlVrm5LqPxSdcXAbxgRP/Y
-	xPIN5sIxH72QFEHwRiCaK97L4llA+q2ZEWiosXIp1+ep2s/c0r/0U5d3IlVRiQ==
-X-Gm-Gg: ASbGnctbGWTI9LCzcVYddYEmZCxRUaVx9e1WXk+Dmv+nWOJbGXeH7eaQAYOU3No+iV7
-	5+ab4dv9oATYRny7wtmQdtvdWApyOJWzNjtcHakYfosD3QtwzOTqIac44Gno6/yZTo2qCMkW4Dm
-	VndF+WOw/OsUBjqTK61Lw/Pqki4IybvaQYULPD1dOgFOVE1XISO1jtL3mzddUuTg6BaPNumJyIU
-	imP3lWXsJ2WJ7ieeUUL/U2SoP26qXsnk+MP4V179mvHmiYbs+UFaCh39Fhr+5gvKownTGr9N813
-	6jLKLweAX26/ixmWTOShYv75Rza/BsnscwEybubodkjqpFEbbOqd4i8VolHsbe9aNDg/+F8PyLh
-	/j++dBxWYsfSuBqOabKkOM8P/
-X-Google-Smtp-Source: AGHT+IEek+xBG8qH6etYMJhHA/6eRULw+qWjFJ15S/9q/UV/dFart736CLdrph6JJHU+y3p0PfPeMA==
-X-Received: by 2002:a05:6000:4284:b0:3a4:da87:3a73 with SMTP id ffacd0b85a97d-3a572e8cd82mr226657f8f.42.1749830200407;
-        Fri, 13 Jun 2025 08:56:40 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568a54b7asm2782895f8f.16.2025.06.13.08.56.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 08:56:40 -0700 (PDT)
-Date: Fri, 13 Jun 2025 16:56:38 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: James Clark <james.clark@linaro.org>
-Cc: Frank Li <Frank.li@nxp.com>, Vladimir Oltean <olteanv@gmail.com>, Mark
- Brown <broonie@kernel.org>, Vladimir Oltean <vladimir.oltean@nxp.com>,
- linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 2/4] spi: spi-fsl-dspi: Use non-coherent memory for DMA
-Message-ID: <20250613165638.5d8ed000@pumpkin>
-In-Reply-To: <d364667f-e0b1-4f1b-9034-2fadfd5d457b@linaro.org>
-References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
-	<20250609-james-nxp-spi-dma-v1-2-2b831e714be2@linaro.org>
-	<aEhMBsqlx9I4XqJS@lizhi-Precision-Tower-5810>
-	<d364667f-e0b1-4f1b-9034-2fadfd5d457b@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1749830273; c=relaxed/simple;
+	bh=0k0685jiPxrDvImAtuIYSnm0V/jmg0N9/cne/apm2Rw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mPnLaC10pbcrMCkpL/gJRRH+/M1beikyR4+FN0safppGBtBhx+OwVO5DXCtk5mgcFtPp3zVKkKDtcbXVpOR6H1Ay0Nehe1dKYvFz4oqqXlRmoHvm8nB8e/mYAWNU6u44dg4OO0ip4dr8FudjfHnZ02uvaBFvkIwnkFwdR6zhsC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IRz3QDl5; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <f3160819-f6f4-4079-9562-802caa2fef20@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1749830260;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=27fXVhxsftq5EDoqBWvyXb7dA+Q8HBVNKfdnJWl2xe0=;
+	b=IRz3QDl5Oaf6RGCCivGPUThJ0GToGh3KlZtALUtgQYMqrgWJ+JZK2lZPIfeLG4Ne09vrs6
+	lRM43ovdJrUzgRco9Z9lLR3THckDkWE8OTIG/rXRKwdY6iCB/+Ag2fwNwNI9qKOi2VjhoH
+	+ByATj80xnUHOoEN2OPUX3JxHEPLOXU=
+Date: Fri, 13 Jun 2025 11:57:34 -0400
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH 1/7] dt-bindings: spi: zynqmp-qspi: Split the bus
+To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
+ linux-arm-kernel@lists.infradead.org,
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ linux-kernel@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+ Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org,
+ "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>, =?UTF-8?Q?Nuno_S=C3=A1?=
+ <nuno.sa@analog.com>
+References: <20250116232118.2694169-1-sean.anderson@linux.dev>
+ <20250116232118.2694169-2-sean.anderson@linux.dev>
+ <9f40295b-484a-48e8-b053-ff8550e589d7@baylibre.com>
+ <46a7eba6-a705-4543-b967-e83ccc89e7d4@linux.dev>
+ <6afc379a-2f9f-4462-ae30-ef6945a83236@baylibre.com>
+ <dbe26b36-a10c-4afb-88ad-a6f7f9bff440@linux.dev>
+ <4923f49f-273f-4166-94bc-afe39618672c@baylibre.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <4923f49f-273f-4166-94bc-afe39618672c@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 10 Jun 2025 16:46:36 +0100
-James Clark <james.clark@linaro.org> wrote:
-
-> On 10/06/2025 4:15 pm, Frank Li wrote:
-> > On Mon, Jun 09, 2025 at 04:32:39PM +0100, James Clark wrote:  
-> >> Using coherent memory here isn't functionally necessary.
-> >> Because the
-> >> change to use non-coherent memory isn't overly complex and only a few
-> >> synchronization points are required, we might as well do it while fixing
-> >> up some other DMA issues.  
-> > 
-> > Any beanfit by use on-coherent memory here?
-> > 
-> > Frank
-> >   
+On 6/13/25 10:20, David Lechner wrote:
+> On 6/12/25 6:44 PM, Sean Anderson wrote:
+>> Hi David,
+>> 
+>> I am (finally!) getting around to doing v2 of this series, and I ran
+>> into a small problem with your proposed solution.
+>> 
+>> On 1/23/25 16:59, David Lechner wrote:
+>>> ---
+>>> From: David Lechner <dlechner@baylibre.com>
+>>> Date: Thu, 23 Jan 2025 15:35:19 -0600
+>>> Subject: [PATCH 2/2] spi: add support for multi-bus controllers
+>>>
+>>> Add support for SPI controllers with multiple physical SPI buses.
+>>>
+>>> This is common in the type of controller that can be used with parallel
+>>> flash memories, but can be used for general purpose SPI as well.
+>>>
+>>> To indicate support, a controller just needs to set ctlr->num_buses to
+>>> something greater than 1. Peripherals indicate which bus they are
+>>> connected to via device tree (ACPI support can be added if needed).
+>>>
+>>> In the future, this can be extended to support peripherals that also
+>>> have multiple SPI buses to use those buses at the same time by adding
+>>> a similar bus flags field to struct spi_transfer.
+>>>
+>>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>>> ---
+>>>  drivers/spi/spi.c       | 26 +++++++++++++++++++++++++-
+>>>  include/linux/spi/spi.h | 13 +++++++++++++
+>>>  2 files changed, 38 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+>>> index 10c365e9100a..f7722e5e906d 100644
+>>> --- a/drivers/spi/spi.c
+>>> +++ b/drivers/spi/spi.c
+>>> @@ -2364,7 +2364,7 @@ static void of_spi_parse_dt_cs_delay(struct device_node *nc,
+>>>  static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+>>>  			   struct device_node *nc)
+>>>  {
+>>> -	u32 value, cs[SPI_CS_CNT_MAX];
+>>> +	u32 value, buses[8], cs[SPI_CS_CNT_MAX];
+>>>  	int rc, idx;
+>>>  
+>>>  	/* Mode (clock phase/polarity/etc.) */
+>>> @@ -2379,6 +2379,29 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
+>>>  	if (of_property_read_bool(nc, "spi-cs-high"))
+>>>  		spi->mode |= SPI_CS_HIGH;
+>>>  
+>>> +	rc = of_property_read_variable_u32_array(nc, "spi-buses", buses, 1,
+>>> +						 ARRAY_SIZE(buses));
+>>> +	if (rc < 0 && rc != -EINVAL) {
+>>> +		dev_err(&ctlr->dev, "%pOF has invalid 'spi-buses' property (%d)\n",
+>>> +			nc, rc);
+>>> +		return rc;
+>>> +	}
+>>> +
+>>> +	if (rc == -EINVAL) {
+>>> +		/* Default when property is omitted. */
+>>> +		spi->buses = BIT(0);
+>> 
+>> For backwards compatibility, the default bus for CS 1 on gqspi must be 1
+>> and not 0. Ideally there would be some hook for the master to fix things
+>> up when the slaves are probed, but that doesn't seem to exist. I was
+>> thinking about doing this with OF changesets. Do you have any better
+>> ideas?
+>> 
 > 
-> Presumably less cache maintenance traffic?
+> Does this work? 
+> 
+> 		spi->buses = BIT(cs[0]);
+> 
+> (would have to move all the new code after cs[0] is assigned of course)
 
-I bet it only helps when cache-coherent memory has to be uncached.
-Otherwise the software cache operations are pretty much guaranteed
-to be more expensive than the hardware ones.
+Yeah, but do we really want to make this the default for all drivers?
+This is really a quirk of the existing gqspi binding and I don't think
+it makes sense in general.
 
-	David
+--Sean
 
