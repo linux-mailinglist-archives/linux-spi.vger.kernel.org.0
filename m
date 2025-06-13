@@ -1,107 +1,79 @@
-Return-Path: <linux-spi+bounces-8550-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8551-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29EEFAD93BC
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 19:24:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77169AD9428
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 20:05:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36065188B30D
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 17:24:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A8EC17B37A
+	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 18:05:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC54B1F4722;
-	Fri, 13 Jun 2025 17:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A491B241674;
+	Fri, 13 Jun 2025 18:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rElbI7LX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R2N/vG01"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06DE1DE3D6;
-	Fri, 13 Jun 2025 17:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D6E23F429;
+	Fri, 13 Jun 2025 18:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749835443; cv=none; b=LAG2PnhpHEIlup2LemoI7LrGHX6cs8yit/ZLHI5ZWGIkLO60Ysjwh9Lqp0De145tkeUJL15lkWRy5aki8bxtfOqRgALCRAqyv+x6PjJEETEhXPUQSyExZeZnsMOrDTgDBJ/brrR2PzxfxAeoGTlpQAndkQCZjOUrx+OLU6RExiI=
+	t=1749837870; cv=none; b=XhdqH4rVAjEc4lFRHW8Az+Aggd8jJBti+klv0w1BOdWIB/W+gUidGL2HaLEkLn663DXxZcD/VMmodPyD5nkQmzepNCc9n8mKktJ69MMIjVKOFLny9B6vRMHZWi6gx+wdcv0TjHr8g0o/DN3+f1dHugcQaTJwp7tDVkgqclsQ9Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749835443; c=relaxed/simple;
-	bh=BHv4FZ2RKkUXVAc8+iK0FCz2f0vExdZ7AbSQmQUHUkU=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=cXa5wiwh4i7zi/qV1gdkU4OZsWtCmoq6+JFWv3IVTCCm+i70eXOOaV1lPGzjwOgV4CYD/IEXhFuxbBR36ZpcEXoSPRLZnU3A+39VonGvY3141pOsIWR999tt4W9l0rFfG+nvK31B7D4U2lj/CdEarhP2o5xowqTFiro7hRVWkU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rElbI7LX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09A54C4CEE3;
-	Fri, 13 Jun 2025 17:24:02 +0000 (UTC)
+	s=arc-20240116; t=1749837870; c=relaxed/simple;
+	bh=4lgOtRux7AhkwT1tqi+zKVMpv+dgcgt+LmxUhdElYh4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Y5+HO972CIqeXvofGeXMijvTEwRVert8XM73eOz2asU1/5jUumfy3yOuJBj0U1m/rhoq6puZvKvEjGTIwoLBoDM6hDS3/6xbHNqNliA7DSi8gAEYOtoCGL27Hj3UebIBYogUdzHOzTA6mqzl/kyCY1W5M+aJOb21NciiA9OKVTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R2N/vG01; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C32FC4CEEB;
+	Fri, 13 Jun 2025 18:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749835443;
-	bh=BHv4FZ2RKkUXVAc8+iK0FCz2f0vExdZ7AbSQmQUHUkU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rElbI7LX9zkpN4F7hFliTEexbMMaR70UHdAFH39OdyN2uTLych7/YzrfGsCMxSANI
-	 RVEiQ5pyJNwibj3elih5EzX03q1dDo+0ghBlIV1J8vZEBC9MkFCn1FWgHBNA5uv5vW
-	 FrBmoNNcl5ZCqlLJ8X79R7c1+Fb+SP+5+2yYySSRlqZP7u2Fei9PvibJ+YvELnPWuN
-	 LblgYgft2CcVxoXyQbpUyWN0/c56n7Cwt+ZIU2IR+3EHL/UT22YIN8rsHdgtg3HdAz
-	 R04iM5rNphTkrwiWk8Xk23N1V5a3lxxt956EOwW2MGI2BAzIco4/JuUCXRTOFSjEzd
-	 x84pASFh0PvkQ==
-Message-ID: <6b7c1c97241248c0f3c35512f1150ffd.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.16-rc1
-Date: Fri, 13 Jun 2025 18:23:53 +0100
+	s=k20201202; t=1749837870;
+	bh=4lgOtRux7AhkwT1tqi+zKVMpv+dgcgt+LmxUhdElYh4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=R2N/vG01o6zUug0W9HmR1YiqvbrX2kawn+ic2zDOtFave/mXT/pLHtYfI/bcCnRPr
+	 g3NqCPtyrUlKkAAVaFscYOCYWzorHGDUMXkWiPq4zB08KpxtAFtLDs++egx8kAFdoW
+	 YzODnGcu96yO0GHTuaBNRqTEGY23ZbolLmzljFACp3goms4+mLmklR9SZOWUj4xhr9
+	 HaMJOQVKNyn6NkpfjjkYWow1YNr+c/YpnqPW3kjIuXDiXSoCO/2qAhwgGVm8DSF7cw
+	 TxLihz9kQ9mGbVxxe04Jauy/oaL/2Jw/efGyqjTQlc2/lx28Okvx+b7vcVzm5sUZyk
+	 u6DKt9jN0ljxw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33B36380AAD0;
+	Fri, 13 Jun 2025 18:05:01 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.16-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <6b7c1c97241248c0f3c35512f1150ffd.broonie@kernel.org>
+References: <6b7c1c97241248c0f3c35512f1150ffd.broonie@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <6b7c1c97241248c0f3c35512f1150ffd.broonie@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.16-rc1
+X-PR-Tracked-Commit-Id: 9f0ad43b158d07bc7144d219ceabdea36e28e392
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 02adc1490e6d8681cc81057ed86d123d0240909b
+Message-Id: <174983789978.834702.5471087257660089155.pr-tracker-bot@kernel.org>
+Date: Fri, 13 Jun 2025 18:04:59 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 
-The following changes since commit 19272b37aa4f83ca52bdf9c16d5d81bdd1354494:
+The pull request you sent on Fri, 13 Jun 2025 18:23:53 +0100:
 
-  Linux 6.16-rc1 (2025-06-08 13:44:43 -0700)
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.16-rc1
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/02adc1490e6d8681cc81057ed86d123d0240909b
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.16-rc1
+Thank you!
 
-for you to fetch changes up to 9f0ad43b158d07bc7144d219ceabdea36e28e392:
-
-  spi: spi-pci1xxxx: Drop MSI-X usage as unsupported by DMA engine (2025-06-13 12:25:31 +0100)
-
-----------------------------------------------------------------
-spi: Fies for v6.16
-
-A collection of driver specific fixes, most minor apart from the OMAP
-ones which disable some recent performance optimisations in some
-non-standard cases where we could start driving the bus incorrectly.
-
-The change to the stm32-ospi driver to use the newer reset APIs is a fix
-for interactions with other IP sharing the same reset line in some SoCs.
-
-----------------------------------------------------------------
-Andres Urian Florez (1):
-      spi: offload: check offload ops existence before disabling the trigger
-
-Dan Carpenter (2):
-      spi: spi-pci1xxxx: Fix error code in probe
-      spi: stm32-ospi: clean up on error in probe()
-
-Félix Piédallu (2):
-      spi: omap2-mcspi: Disable multi mode when CS should be kept asserted after message
-      spi: omap2-mcspi: Disable multi-mode when the previous message kept CS asserted
-
-Huacai Chen (1):
-      spi: loongson: Fix build warnings about export.h
-
-Mark Brown (1):
-      SPI: omap2-mcspi: Fix SPI CS behaviour around
-
-Patrice Chotard (1):
-      spi: stm32-ospi: Make usage of reset_control_acquire/release() API
-
-Thangaraj Samynathan (1):
-      spi: spi-pci1xxxx: Drop MSI-X usage as unsupported by DMA engine
-
- drivers/spi/spi-loongson-core.c |  1 +
- drivers/spi/spi-offload.c       |  2 +-
- drivers/spi/spi-omap2-mcspi.c   | 30 ++++++++++++++++++------------
- drivers/spi/spi-pci1xxxx.c      |  4 ++--
- drivers/spi/spi-stm32-ospi.c    | 24 +++++++++++++++++++-----
- 5 files changed, 41 insertions(+), 20 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
