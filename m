@@ -1,156 +1,122 @@
-Return-Path: <linux-spi+bounces-8553-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8554-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AFF8AD9751
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 23:27:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD66AD9C4D
+	for <lists+linux-spi@lfdr.de>; Sat, 14 Jun 2025 13:01:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C2DA1BC4523
-	for <lists+linux-spi@lfdr.de>; Fri, 13 Jun 2025 21:27:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 277563B58FF
+	for <lists+linux-spi@lfdr.de>; Sat, 14 Jun 2025 11:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14F728D8C9;
-	Fri, 13 Jun 2025 21:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7251118A6DF;
+	Sat, 14 Jun 2025 11:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nZbpXBjn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mLRhGuDi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5A72397A4;
-	Fri, 13 Jun 2025 21:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475D1156677;
+	Sat, 14 Jun 2025 11:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749850031; cv=none; b=HQDm+WTZ0apLTCuy4mTNHR1wZbmOC1mjjVWrrtTOSGayzMNk5o/gi3ezkrwpgOxtAisdrosb/O0NHMswqSC8p8kQledHjOYllY2F5mRWoIX0oioj1zQGF8XtNmoqA8UgkdFKchP93Gumsb2WoWaDi9wUNDfUG0nFOK2UFFb+S2Y=
+	t=1749898882; cv=none; b=Zuz2y1BvQ3im8jzWWfRvVvt73S/DzYzzon2eqbrmfBvMgPuE2FE8MA6+dqRBPO2fY+k3jyY5Y+mPaec/pBHx6PhnFKlddPJZxlXJUYEMINoD2gU5EXRAyb95zTLyOf8Qq7HQm5dN1xDcM3DsQkLa7QfCbGq0XzcvucW5ukyfEmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749850031; c=relaxed/simple;
-	bh=uao9vXicfmNGv7hAWWVlUXBcpeUEFrEd/9ktZYSF5ig=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=dilfbHh4ddjSDIa8/lp8fKlVdZIezejxeMDxe8Tr9xUG195kgAjoDmbIO7onYUXKV+f7nRdqry/KPOASd07SvIWsLvGAqIFceaVUDDEUPBFgCERaGMOB2U9k/TmWG2ZrqzQuSMsJpMf8CyRlvx+gk43XFa50ueSKfj133mg2wNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nZbpXBjn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62DCC4CEE3;
-	Fri, 13 Jun 2025 21:27:10 +0000 (UTC)
+	s=arc-20240116; t=1749898882; c=relaxed/simple;
+	bh=enuUPhuo/JbUI2DEWJ66kHzZbT1qSJXbA8n8jA4y4G8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=bDaF7T1f4jvEXBL8lJVLTVU9XMJfU2TOQ3HFVdXPcjt7OKaBTvWRhawplsCgxPtoscbIcKHyUI3NHazuj4BR8VpG61FjEwj9lDP1tR4f29PXhnK32j7/Qx6hkphn+b0ay6EsivOnY79VAv5c4pCqLt3df+aFCDAk8gDDRBlsHVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mLRhGuDi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C3AC4CEEB;
+	Sat, 14 Jun 2025 11:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749850030;
-	bh=uao9vXicfmNGv7hAWWVlUXBcpeUEFrEd/9ktZYSF5ig=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=nZbpXBjnZAtM27vBM686WDSlmCevbldUDcv0haHfTvmlSbLoJxSVxv9p7sUN/igzZ
-	 DQK/ujQyUDtDXKo2+9/B+og9k8xaILfs7yj0Ci3wDQTJoB15fvuJM/ChAGShZ3sJS/
-	 bufKhI9YRG+YCjlQBcTTG/xsYrSg2fEsxsIA3vHaqMgwXY8cAwIwDfocOYkk4kfsyJ
-	 P4ztXwL4ANgDMym+oXwaG7Bg27bJtH+40UVzknDgw/qfvepHaMcja5TXadWM+ftgzY
-	 JKVnZ/05xPQ/3S7h35bYqr18+mF84NOxMFMKg9d3gusw5T0wrId6QwXlt1I1+pXePB
-	 G+ukl5JR60TBg==
-Date: Fri, 13 Jun 2025 16:27:09 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 24/28] PCI: Add Microchip LAN9662 PCI Device ID
-Message-ID: <20250613212709.GA979346@bhelgaas>
+	s=k20201202; t=1749898881;
+	bh=enuUPhuo/JbUI2DEWJ66kHzZbT1qSJXbA8n8jA4y4G8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=mLRhGuDiVXRgnTfNUD7AJZeY32CydG9ouk/nymwpctEhhVXWQR63gw9hCqNV6UK2x
+	 Pgh7NWBZ6/oZMciwg/5WShhamWuRJHL5djCXHMCXhyFT3b4SZxg1MvmxjM9VGB8tFj
+	 ugdohn7JTP3T6HD4ha9gCz7dZblGR70bhW0UNXUYE5GkwStV7VyCuH/7LR8Ihh1sGK
+	 jzi3WN0ifyiyFAsWvk5sP/jG11F7bslzQUo+tHtyb4q7LWu4soMaslFGJYFHUJC49w
+	 f8fqGYb7IlvfVEbVgTFZQjI2BrM69CVbOkGZ8MvoudQaCJqwfgOqD4SEVPNgQf3Z//
+	 RxmzYOjamxyYg==
+From: Mark Brown <broonie@kernel.org>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Vishwaroop A <va@nvidia.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+ linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org, 
+ Brad Griffis <bgriffis@nvidia.com>
+In-Reply-To: <20250613123037.2082788-1-thierry.reding@gmail.com>
+References: <20250613123037.2082788-1-thierry.reding@gmail.com>
+Subject: Re: [PATCH] spi: tegra210-qspi: Remove cache operations
+Message-Id: <174989888039.16810.4266283693498371215.b4-ty@kernel.org>
+Date: Sat, 14 Jun 2025 12:01:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613134817.681832-25-herve.codina@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-On Fri, Jun 13, 2025 at 03:48:04PM +0200, Herve Codina wrote:
-> Existing code uses the 0x9660 value (LAN9662 PCI Device ID) in several
-> places.
+On Fri, 13 Jun 2025 14:30:37 +0200, Thierry Reding wrote:
+> The DMA memory for this driver is allocated using dma_alloc_coherent(),
+> which ends up mapping the allocated memory as uncached. Performing the
+> various dma_sync_*() operations on this memory causes issues during SPI
+> flashing:
 > 
-> Avoid this direct use of the 0x9660 value replacing it by defined PCI
-> Device ID.
+> [    7.818017] pc : dcache_inval_poc+0x40/0x58
+> [    7.822128] lr : arch_sync_dma_for_cpu+0x2c/0x4c
+> [    7.826854] sp : ffff80008193bcf0
+> [    7.830267] x29: ffff80008193bcf0 x28: ffffa3fe5ff1e908 x27: ffffa3fe627bb130
+> [    7.837528] x26: ffff000086952180 x25: ffff00008015c8ac x24: ffff000086c9b480
+> [    7.844878] x23: ffff00008015c800 x22: 0000000000000002 x21: 0000000000010000
+> [    7.852229] x20: 0000000106dae000 x19: ffff000080112410 x18: 0000000000000001
+> [    7.859580] x17: ffff000080159400 x16: ffffa3fe607a9bd8 x15: ffff0000eac1b180
+> [    7.866753] x14: 000000000000000c x13: 0000000000000001 x12: 000000000000025a
+> [    7.874104] x11: 0000000000000000 x10: 7f73e96357f6a07f x9 : db1fc8072a7f5e3a
+> [    7.881365] x8 : ffff000086c9c588 x7 : ffffa3fe607a9bd8 x6 : ffff80008193bc28
+> [    7.888630] x5 : 000000000000ffff x4 : 0000000000000009 x3 : 000000000000003f
+> [    7.895892] x2 : 0000000000000040 x1 : ffff000086dbe000 x0 : ffff000086db0000
+> [    7.903155] Call trace:
+> [    7.905606]  dcache_inval_poc+0x40/0x58 (P)
+> [    7.909804]  iommu_dma_sync_single_for_cpu+0xb4/0xb8
+> [    7.914617]  __dma_sync_single_for_cpu+0x158/0x194
+> [    7.919428]  __this_module+0x5b020/0x5baf8 [spi_tegra210_quad]
+> [    7.925291]  irq_thread_fn+0x2c/0xc0
+> [    7.928966]  irq_thread+0x16c/0x318
+> [    7.932467]  kthread+0x12c/0x214
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> [...]
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Applied to
 
-> ---
->  drivers/misc/lan966x_pci.c | 2 +-
->  drivers/pci/quirks.c       | 2 +-
->  include/linux/pci_ids.h    | 1 +
->  3 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/misc/lan966x_pci.c b/drivers/misc/lan966x_pci.c
-> index b28066c96534..e60ab662b8f3 100644
-> --- a/drivers/misc/lan966x_pci.c
-> +++ b/drivers/misc/lan966x_pci.c
-> @@ -197,7 +197,7 @@ static void lan966x_pci_remove(struct pci_dev *pdev)
->  }
->  
->  static struct pci_device_id lan966x_pci_ids[] = {
-> -	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, 0x9660) },
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_LAN9662) },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(pci, lan966x_pci_ids);
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index d7f4ee634263..bde077ce663a 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -6302,7 +6302,7 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0xa76e, dpc_log_size);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_REDHAT, 0x0005, of_pci_make_dev_node);
-> -DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_EFAR, 0x9660, of_pci_make_dev_node);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_LAN9662, of_pci_make_dev_node);
->  
->  /*
->   * Devices known to require a longer delay before first config space access
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index e2d71b6fdd84..5d69fde7dd97 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -934,6 +934,7 @@
->  #define PCI_VENDOR_ID_EFAR		0x1055
->  #define PCI_DEVICE_ID_EFAR_SLC90E66_1	0x9130
->  #define PCI_DEVICE_ID_EFAR_SLC90E66_3	0x9463
-> +#define PCI_DEVICE_ID_EFAR_LAN9662	0x9660
->  
->  #define PCI_VENDOR_ID_MOTOROLA		0x1057
->  #define PCI_DEVICE_ID_MOTOROLA_MPC105	0x0001
-> -- 
-> 2.49.0
-> 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: tegra210-qspi: Remove cache operations
+      commit: d57e92dd660014ccac884eda616cafc7b04601e0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
