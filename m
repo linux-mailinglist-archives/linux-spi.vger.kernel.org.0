@@ -1,94 +1,113 @@
-Return-Path: <linux-spi+bounces-8593-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8594-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31611ADB1BB
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 15:23:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 998ECADB28B
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 15:52:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BB20161C2F
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:23:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341273A6650
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9472A2BEC28;
-	Mon, 16 Jun 2025 13:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825A52877CA;
+	Mon, 16 Jun 2025 13:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TRqGg63o"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Z4uIJC/a";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SWV475mM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FCD52C08B4
-	for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 13:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DDE22097;
+	Mon, 16 Jun 2025 13:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750080222; cv=none; b=P8Ac66wj9vJyiJpJICzyLZA0ZkjGasMvfPzDixpCEAJGIUutkn1ROD6lvppzeApScpltCnUxaVN2rutactakUIIrMAUmuYiFwErrFRLMPOPDV+DaPZeqHBf66tLST9deUTPNv52NYoBYhLyRIGaRo5+b7wV7Mn2wXP8QmEF0guk=
+	t=1750081754; cv=none; b=gFY89z+fjpDNDMH2pg3UFCKT1cNVQ5WaqNyxvPhjOvNMJ/zyvAw4DlnwmzET9xCqwxg0lOpYy4hT17rq1Gl96mYIVKeJnhxiqhuVb04PC16y/ar8q3PvD4KGdDhwFcXjuSvVlPbtF3YMiJyejqtiE2+RKdVqZ6s/mxXiBi60c0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750080222; c=relaxed/simple;
-	bh=cyawNk1X0Zi/5eV0YddzR83paiy0w8sFEtP0KMTHO+Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NSlapzHYY1l9+GQpqzRI9x+erpvKkDjPxPbxuO/CKhbjgn0A5qRSn3kIbHEmZIAqnLgfyJQ8tUldL4oTWMRYcEt0JDlOTsws1I2ZxxErmsZfBKfByQJbDoiMnYSwb7MzgSkndUWy+xp+dfNIC6TKbKSiKM7C1i8U/pxtuof5PIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TRqGg63o; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-451ebd3d149so29562035e9.2
-        for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 06:23:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750080219; x=1750685019; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/qEWpHoeWIO3tFYAF9CvYNghxJJaKn+YeJWG4YUN/nk=;
-        b=TRqGg63ou/s3tD74bRsyVsr2sY1dkVhUms4/6J8wHrZt5ko0oWZhelFQEU8RRlbj8/
-         Prd6UuBno5THmCRv2c/2vmxutGq9tgRZ79JAcRkDTezmyyOJXGtoUwGIwWkinNF65tkR
-         0w8QAGj6elBXSSVLtKpkeik/cN5HNpkjmVVKkXuX2rLdgkMGqMvdDikqiQS3OZBPJUGy
-         y1ayWGUCOgLQz1Or1WJ0Ptz0fVGhgTyGL8WyAI4Jd48uWcG8h2lszXnX0H/JaNQXrpjW
-         5NQ7lrk1W9q4vlAOuqqduyg1WD3ib+LFrjzEwT2eN85Ybrql5F3q86WxD8r3NQSq7OM5
-         zU6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750080219; x=1750685019;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/qEWpHoeWIO3tFYAF9CvYNghxJJaKn+YeJWG4YUN/nk=;
-        b=mfBlud+zz0W5Od18/muo8VZ5L1uzs1WbrTf+OxKOVr2oqHhdHCpfaZBGjK0MNNVjtz
-         HVF1QjInZcSdubRJPeU3UjUBPOtuHrymuM8Ej/4952+0CVYbWw4LVa8j+F0zu5bKNND4
-         MxGu4x4FRE5AIffLh/seyftd23Yw4F3gOH0xGI1UECQwFg6itteHmKHIrlS8leFmyX23
-         rkox9atduCng/H1SOQiTnyo0lKWOXe+yeyosper0X2aRQ0XjFJxPbP6+GSmA/bLYuMWj
-         WyrAAqBg0GjqwtvKhbssjHP0zOc35XYg+4Tig4vRNpRtq/Yw9MDZrErJVBEqWvxdED9s
-         u4bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhH7csj9EVpqiP8pdngH1A1WUl216t7LApEy7lWyb7HSwaDDkVXFM9q0AtZuKCpiAO1JdVKCd4MD0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYH9npWWuT4vhdabJbr6pwTXZOBSkM6c6etYCS4k8muEJ7exI3
-	cgmBl/5zd6Xg9e9HakZCNRuBlJ8LRgDDSaGUhM8Gphti2oZh5dSH2HNAymCawz/4L8I=
-X-Gm-Gg: ASbGncuXInz53wyvYUZ/TEpsDDfHWUlXmwrvORdTgzpS2aTujpfzc0fpDt4kgtr++ZE
-	7QZmxRKGESqKCU2029Z3YsUoEhKBNBObuuK3EgVAo2gMvSYQQrDGRlmlP+6Icq5jURH+sVZeZTd
-	QyjROyHWm8CoM56FKuiq8d5CUIssAtl4pkPBG/JNulBnJ+YJ+tF2rW3NrV9PnsDiyHAdyVqPuBw
-	u9JoLAW35XcusJYGmlFjZaZMQJJK/JB6sdk9ZRhJJS5ntssxoBnjhtuBWCuW6xN8c6sP9LNU+bv
-	136uu8uJ25S+MLcp8+E2LE5K5jVuSnjkn5RVyHbwQRpMwrnuOjfcdeIv0kjUJ1+luac=
-X-Google-Smtp-Source: AGHT+IERCtaWBolBNjDrXYPOFWEd3Y/yA2ERjVGzzTRMp9TUI6iIxEBCxIQatiSsuRqkKHIXYBVg9A==
-X-Received: by 2002:a05:600c:1d1f:b0:440:68db:9fef with SMTP id 5b1f17b1804b1-4534f9f165amr12231765e9.20.1750080218851;
-        Mon, 16 Jun 2025 06:23:38 -0700 (PDT)
-Received: from [192.168.1.3] ([37.18.136.128])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e241b70sm142753815e9.18.2025.06.16.06.23.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 06:23:38 -0700 (PDT)
-Message-ID: <f723d490-c228-42d5-9f9f-158df54a092d@linaro.org>
-Date: Mon, 16 Jun 2025 14:23:37 +0100
+	s=arc-20240116; t=1750081754; c=relaxed/simple;
+	bh=lIoE9gcdwJ3ykhVZ65gPKl4QqyXImX16Y6imO4XoKpo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Yoc5cCUJwq6t05M7abjWfF9HD2/o6jk2JfM+SpF/Zn9mvhnXpwNXD6BbxpiACspV9T3FOzE9LHOIth/L4DSQexIncUYAtAsSvqszopc5AbkU2TsNdYDmwNWlbQLoyfMmUXiL1BBCbE6eNFUmAbNXRYRSYYVICZ/dauN5y0TG2b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Z4uIJC/a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SWV475mM; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A7B9211402B7;
+	Mon, 16 Jun 2025 09:49:11 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 09:49:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750081751;
+	 x=1750168151; bh=8qsrTRHcvOAd2c9i2pGiJI5TDC5V+Z/Uoi8ty2RR4eU=; b=
+	Z4uIJC/aCJl5TCM7IJcxdppiQeF9UinlgJ2FAyHxVkhcbrEisiiFz6bUlWGEeZXd
+	/d5wIDHzl+uT+3Zn1PimRM7erbMWjE0B6lgEglmMpgNW8BJ/CrLM1wrixtFzEVmN
+	kcUbY5GkddT9ORS9T5vTVBNefyf1Hm8cgrk5ClP8fXWtCkwghqO95Cc5kW+iCGzD
+	taBqRXfX2aCqKTT4gmrm6ZaJOugD/3+yABMtAjV9GHv9PDH3nAbdhnDVnwOvCk1M
+	1it0uzJGhC1lKG9AO5hF0CXdRZUbA6pw7zcdtsEqaKApoS0U+JAILj41qfCidCMe
+	PKvPm2ujwVvhL71oKEM3Kw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750081751; x=
+	1750168151; bh=8qsrTRHcvOAd2c9i2pGiJI5TDC5V+Z/Uoi8ty2RR4eU=; b=S
+	WV475mMLO7x4A5sZtbebmxvM8OcaNLnVCtokq8g6gTNSCzQBy4s025IKdGXzlnfc
+	T7N0xGe8eeZpfQCa3gK1yt3CpZgatrJ+Y/VqbkpCn4BF/ZHybXzF0SiP3tm9j3zC
+	9TYsF5kvNUfT4YDBhPxJsGkJ2qDt91JmaJ1FzBEH6yY6hN6a/YilWxajwkf7ONEC
+	cKXnkQj2sqK5bjPm9qyRx7tTdrawXLK5kgcz5J9zsytUuN6C8eaNAKkzFtvbge+3
+	7+YpUYa0T+fwb1mYR2yyK/0q2BBunr595MFRJPDqzGYJX4PiPzjkOTtY8hvfYOg6
+	YdWcjeLIrBV/zATgtPzpg==
+X-ME-Sender: <xms:1iBQaJovrZfMAJmFVtahyuzCOC3jdKDplIkMzJtu7T1-Vridmdy1CA>
+    <xme:1iBQaLq8b-MxDM4GeGqxtFEGrppMWOXAax4vZH-AGalSjHJp3JJFDCtDSBYVGAhyP
+    seZ43u0GUSxV_1ttno>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvieejgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    gedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhosghinhdrmhhurhhphhihse
+    grrhhmrdgtohhmpdhrtghpthhtohepohhlthgvrghnvhesghhmrghilhdrtghomhdprhgt
+    phhtthhopehlkhhpsehinhhtvghlrdgtohhmpdhrtghpthhtohepsghrohhonhhivgeskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgrmhgvshdrtghlrghrkheslhhinhgrrhho
+    rdhorhhgpdhrtghpthhtohepihhmgieslhhishhtshdrlhhinhhugidruggvvhdprhgtph
+    htthhopehiohhmmhhusehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgv
+    qdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhope
+    hhtghhsehlshhtrdguvg
+X-ME-Proxy: <xmx:1iBQaGPP-njiVQWYcMzKqfN8lWKt9KF-S1wtG_wm6kPw_gxZUfGVFg>
+    <xmx:1iBQaE6rRCeVI14O_0cd-8ltlcUvcT-2wBWXWvZmHREULi8sUN979w>
+    <xmx:1iBQaI7IUDY9acNm7MIkvYwTI1PPa3BRqYfGOWPARWICCfoy8ytxkw>
+    <xmx:1iBQaMiUYzyNEksn2mo2FifTqnPgZNYfQAh_z6slzGqt4lIDho2R7A>
+    <xmx:1yBQaCJ-8dPrB2ejqDv-iCGGYbucZDq8lQpAyVmE_WAP8eNfUxFTF9Ap>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id CFC38700062; Mon, 16 Jun 2025 09:49:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dma-mapping: Stub out dma_{alloc,free,map}_pages() API
-To: Christoph Hellwig <hch@lst.de>
-Cc: Mark Brown <broonie@kernel.org>, olteanv@gmail.com,
- oe-kbuild-all@lists.linux.dev, arnd@arndb.de, larisa.grigore@nxp.com,
- Frank.li@nxp.com, linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev
+X-ThreadId: T4808b90e09d8ad4f
+Date: Mon, 16 Jun 2025 15:48:50 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Clark" <james.clark@linaro.org>, "Christoph Hellwig" <hch@lst.de>
+Cc: "Mark Brown" <broonie@kernel.org>, "Vladimir Oltean" <olteanv@gmail.com>,
+ oe-kbuild-all@lists.linux.dev, "Larisa Grigore" <larisa.grigore@nxp.com>,
+ "Frank Li" <Frank.li@nxp.com>, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "kernel test robot" <lkp@intel.com>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>,
+ "Robin Murphy" <robin.murphy@arm.com>, iommu@lists.linux.dev
+Message-Id: <9788991a-ac37-4fde-81db-c55035d00f27@app.fastmail.com>
+In-Reply-To: <f723d490-c228-42d5-9f9f-158df54a092d@linaro.org>
 References: <20250616111749.316413-1-james.clark@linaro.org>
  <20250616112927.GA21689@lst.de>
  <5f1ca0ac-b66c-4b92-8f69-027c2468b117@sirena.org.uk>
@@ -100,35 +119,55 @@ References: <20250616111749.316413-1-james.clark@linaro.org>
  <83855c1a-c128-4762-9d6b-e17f2c4c8820@linaro.org>
  <d16bdc40-20d6-49db-bf41-18bb9b8e01fd@linaro.org>
  <20250616131944.GA30260@lst.de>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20250616131944.GA30260@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <f723d490-c228-42d5-9f9f-158df54a092d@linaro.org>
+Subject: Re: [PATCH] dma-mapping: Stub out dma_{alloc,free,map}_pages() API
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
+On Mon, Jun 16, 2025, at 15:23, James Clark wrote:
+> On 16/06/2025 2:19 pm, Christoph Hellwig wrote:
+>> On Mon, Jun 16, 2025 at 02:15:56PM +0100, James Clark wrote:
+>>>> Yes it does, it has a few modes that don't require it. Presumably we can't
+>>>> just add a depends into the kconfig for all devices because they might not
+>>>> be using DMA.
+>>>
+>>> *for all the different variants of spi-fsl-dpsi devices I mean
+>> 
+>> This is drivers/spi/spi-fsl-dspi.c?
+>> 
+>> Yes, looks like it is one of those rare devices supporting a DMA and
+>> non-DMA mode.  But everything seems nicely guarded off using
+>> "dspi->devtype_data->trans_mode == DSPI_DMA_MODE" checks there.  So
+>> wrap them into a little helper using IS_ENABLED(CONFIG_HAS_DMA) and
+>> everything should be sorted out.
+>
+> Sure, I don't mind doing it.
+>
+> But separately to that, I still think making the stubs consistent would 
+> save people a lot of time diagnosing build failures if they switch 
+> existing code to any of those 3 functions. Principle of Least 
+> Astonishment and all that.
 
+As far as I can tell, the difference here is that the
+dma_alloc_coherent()/dma_free_coherent() calls all get stubbed
+out, so the 827 drivers using those can all build cleanly on
+mk68knommu, shnommu and UML, while dma_alloc_noncoherent()/
+dma_free_noncoherent() are only used on 15 files that are all
+guarded by some other Kconfig dependency at the moment and won't
+build on the those platforms.
 
-On 16/06/2025 2:19 pm, Christoph Hellwig wrote:
-> On Mon, Jun 16, 2025 at 02:15:56PM +0100, James Clark wrote:
->>> Yes it does, it has a few modes that don't require it. Presumably we can't
->>> just add a depends into the kconfig for all devices because they might not
->>> be using DMA.
->>
->> *for all the different variants of spi-fsl-dpsi devices I mean
-> 
-> This is drivers/spi/spi-fsl-dspi.c?
-> 
-> Yes, looks like it is one of those rare devices supporting a DMA and
-> non-DMA mode.  But everything seems nicely guarded off using
-> "dspi->devtype_data->trans_mode == DSPI_DMA_MODE" checks there.  So
-> wrap them into a little helper using IS_ENABLED(CONFIG_HAS_DMA) and
-> everything should be sorted out.
+I agree that it would be best to treat the coherent/noncoherent
+cases the same, and I also think the existing stubs are a bit
+silly, but just removing them would likely require fixing
+hundreds of drivers with added Kconfig or IS_ENABLED() checks.
 
-Sure, I don't mind doing it.
+Maybe we can actually remove CONFIG_NO_DMA/CONFIG_HAS_DMA
+entirely and remove all the checks for CONFIG_HAS_DMA? 
+My guess is that this would only lead to a small code size
+increase on the affected targets, but since they are not
+actually trying to do DMA, and they all have a very limited
+set of drivers they actually use, it won't break existing
+code.
 
-But separately to that, I still think making the stubs consistent would 
-save people a lot of time diagnosing build failures if they switch 
-existing code to any of those 3 functions. Principle of Least 
-Astonishment and all that.
-
+    Arnd
 
