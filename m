@@ -1,135 +1,219 @@
-Return-Path: <linux-spi+bounces-8579-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8580-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D53C7ADAEFD
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:46:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85724ADAF43
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBE83172AB9
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 11:46:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0632188CB76
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 11:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DE52BEC28;
-	Mon, 16 Jun 2025 11:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kbf3Mba5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 998D22E88A3;
+	Mon, 16 Jun 2025 11:56:57 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB3E27E059;
-	Mon, 16 Jun 2025 11:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB59413D51E;
+	Mon, 16 Jun 2025 11:56:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750074357; cv=none; b=BCo0iHr/ECy/e7WKiRKntY759vdqtMzYOqlGyvCV2pnUQKbDGC9rcWhY8c8kOP0H1+VznEEPXPdo9JITf0xAboWroyuLrCHyfJF+OTh4y1Nrws1qvckb309mY2NIZ8Q8xrgpc8xAO9muEbQec19i9osFygT0oFCuPKe1B5fqz98=
+	t=1750075017; cv=none; b=o06keET/UhXrhzUzWI+6+AZX9Ews2MIHLL1XoONA5uJKzVWoMYfboDRagUCw5Fsa5gzOlXrK79UvMW6plMjkJPh+AVpS4XiGkxNRp9bzyP3obfUUXR/lqRMMtCxiM8pPDsLvOjLrVzSbE2lpaQuoZR/4CaZc6Qy3k5+xu17awjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750074357; c=relaxed/simple;
-	bh=O7zqOTuFLCOrB6zke/k+DoaYmhGkvGgv200R9Xh9Rv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=stTCNcicH4HPa1Juu+9MW01jXse/1kMqCcw5vJMk8vwsn9nZRnRDwK9DHmIcN5ruh38A/Se3KCIQY6Y13MlTM4RZLOJnzsufpZZ6ZyQtH1IKduqZ/oaaMO8OtVLThWU9bKV0l1t3bZa2iytW6wIJgT2x1KUkwNhXkYv+NEI9dyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kbf3Mba5; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750074355; x=1781610355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O7zqOTuFLCOrB6zke/k+DoaYmhGkvGgv200R9Xh9Rv0=;
-  b=Kbf3Mba5ujKZypBR2wIFKFyXP2jDydWZiWqnkCWSjV//2oHf4L7KLUZ3
-   mPIGNyf+4BzQIebMf7pl0Wu8IHJMsjAGgHQKHiV/jZxc+sD3ctOpTA0RU
-   dYO2a5NKyt2iikZchHcvHXhjdlecC2zncKbekLVeZOK4NlI5T+BHkFM8+
-   GUyHDDx0tREYPRdz9FXd4bNHyImr2TlctrXJFwOEFd8I1KEq1EV19nKvV
-   4OduPrG3PjfJdmR64+1t5s2xzVMRp2efzhdI8rIlCco3zNbIGX3VD1S1V
-   F/zzrfnBNKo3ybIRp3NpUcDRtaSi3oluzFaVEgB4zBGR7zh2pYmMMCAH4
-   Q==;
-X-CSE-ConnectionGUID: gOMbagrtSzKEhzy9DzzA/A==
-X-CSE-MsgGUID: 8MHOkuv5SOKrX9eqeReAMw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11465"; a="63629545"
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="63629545"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:45:54 -0700
-X-CSE-ConnectionGUID: YPoKs+xPTJS23+lwLuQK+g==
-X-CSE-MsgGUID: 2/EHphBLS6e1qatprLVKeA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,241,1744095600"; 
-   d="scan'208";a="148991459"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2025 04:45:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uR8HR-000000073td-2aiv;
-	Mon, 16 Jun 2025 14:45:37 +0300
-Date: Mon, 16 Jun 2025 14:45:37 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>,
-	Derek Kiernan <derek.kiernan@amd.com>,
-	Dragan Cvetic <dragan.cvetic@amd.com>,
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 11/28] PCI: of: Use fw_devlink_set_device()
-Message-ID: <aFAD4czF-qPxoc-X@smile.fi.intel.com>
-References: <20250613134817.681832-1-herve.codina@bootlin.com>
- <20250613134817.681832-12-herve.codina@bootlin.com>
+	s=arc-20240116; t=1750075017; c=relaxed/simple;
+	bh=3KqHxu39UApIOLYF5HgyfX74IQyuDyWpyGrIlCRcXa4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SU2R1QGwnk/0KqD4b/E5ljbpMCQWsBM+3bQZsnGFYf4lL4p0nhNzif6XJS64Q3Zjd/5+c3+Wibtbx+iNQOPChDJW7eKVYvlITWxoxQlIvVY202+M25kZiCaHdFDDavtN/p0Kyl4VFiHiCv6C+rKj1qspnFnp3XI6Q3BHDFH4OXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A661F150C;
+	Mon, 16 Jun 2025 04:56:33 -0700 (PDT)
+Received: from [10.57.28.131] (unknown [10.57.28.131])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891413F58B;
+	Mon, 16 Jun 2025 04:56:53 -0700 (PDT)
+Message-ID: <adbbfc9c-5d21-4c8f-ba71-ae1103569037@arm.com>
+Date: Mon, 16 Jun 2025 12:56:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250613134817.681832-12-herve.codina@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] spi: spi-fsl-dspi: Use non-coherent memory for DMA
+To: James Clark <james.clark@linaro.org>, Vladimir Oltean
+ <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
+ Larisa Grigore <larisa.grigore@nxp.com>, Frank Li <Frank.li@nxp.com>,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20250613-james-nxp-spi-dma-v2-0-017eecf24aab@linaro.org>
+ <20250613-james-nxp-spi-dma-v2-2-017eecf24aab@linaro.org>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20250613-james-nxp-spi-dma-v2-2-017eecf24aab@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jun 13, 2025 at 03:47:51PM +0200, Herve Codina wrote:
-> The code set directly fwnode.dev field.
+On 2025-06-13 10:28 am, James Clark wrote:
+> Using coherent memory here isn't functionally necessary. Because the
+> change to use non-coherent memory isn't overly complex and only a few
+> synchronization points are required, we might as well do it while fixing
+> up some other DMA issues.
+
+If it doesn't need coherent memory then does the driver really need to 
+do its own bounce-buffering at all? Could you not simplify the whole lot 
+even more by getting rid of {tx,rx}_dma_buf altogether and relying on 
+the SPI core helpers to DMA-map the messages in-place?
+
+Thanks,
+Robin.
+
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: James Clark <james.clark@linaro.org>
+> ---
+>   drivers/spi/spi-fsl-dspi.c | 55 +++++++++++++++++++++++++++++-----------------
+>   1 file changed, 35 insertions(+), 20 deletions(-)
 > 
-> Use the dedicated fw_devlink_set_device() helper to perform this
-> operation.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
+> index 744dfc561db2..f19404e10c92 100644
+> --- a/drivers/spi/spi-fsl-dspi.c
+> +++ b/drivers/spi/spi-fsl-dspi.c
+> @@ -379,6 +379,11 @@ static bool is_s32g_dspi(struct fsl_dspi *data)
+>   	       data->devtype_data == &devtype_data[S32G_TARGET];
+>   }
+>   
+> +static int dspi_dma_transfer_size(struct fsl_dspi *dspi)
+> +{
+> +	return dspi->words_in_flight * DMA_SLAVE_BUSWIDTH_4_BYTES;
+> +}
+> +
+>   static void dspi_native_host_to_dev(struct fsl_dspi *dspi, u32 *txdata)
+>   {
+>   	switch (dspi->oper_word_size) {
+> @@ -493,7 +498,10 @@ static void dspi_tx_dma_callback(void *arg)
+>   {
+>   	struct fsl_dspi *dspi = arg;
+>   	struct fsl_dspi_dma *dma = dspi->dma;
+> +	struct device *dev = &dspi->pdev->dev;
+>   
+> +	dma_sync_single_for_cpu(dev, dma->tx_dma_phys,
+> +				dspi_dma_transfer_size(dspi), DMA_TO_DEVICE);
+>   	complete(&dma->cmd_tx_complete);
+>   }
+>   
+> @@ -501,9 +509,13 @@ static void dspi_rx_dma_callback(void *arg)
+>   {
+>   	struct fsl_dspi *dspi = arg;
+>   	struct fsl_dspi_dma *dma = dspi->dma;
+> +	struct device *dev = &dspi->pdev->dev;
+>   	int i;
+>   
+>   	if (dspi->rx) {
+> +		dma_sync_single_for_cpu(dev, dma->rx_dma_phys,
+> +					dspi_dma_transfer_size(dspi),
+> +					DMA_FROM_DEVICE);
+>   		for (i = 0; i < dspi->words_in_flight; i++)
+>   			dspi_push_rx(dspi, dspi->dma->rx_dma_buf[i]);
+>   	}
+> @@ -513,6 +525,7 @@ static void dspi_rx_dma_callback(void *arg)
+>   
+>   static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+>   {
+> +	size_t size = dspi_dma_transfer_size(dspi);
+>   	struct device *dev = &dspi->pdev->dev;
+>   	struct fsl_dspi_dma *dma = dspi->dma;
+>   	int time_left;
+> @@ -521,10 +534,9 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+>   	for (i = 0; i < dspi->words_in_flight; i++)
+>   		dspi->dma->tx_dma_buf[i] = dspi_pop_tx_pushr(dspi);
+>   
+> +	dma_sync_single_for_device(dev, dma->tx_dma_phys, size, DMA_TO_DEVICE);
+>   	dma->tx_desc = dmaengine_prep_slave_single(dma->chan_tx,
+> -					dma->tx_dma_phys,
+> -					dspi->words_in_flight *
+> -					DMA_SLAVE_BUSWIDTH_4_BYTES,
+> +					dma->tx_dma_phys, size,
+>   					DMA_MEM_TO_DEV,
+>   					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+>   	if (!dma->tx_desc) {
+> @@ -539,10 +551,10 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+>   		return -EINVAL;
+>   	}
+>   
+> +	dma_sync_single_for_device(dev, dma->rx_dma_phys, size,
+> +				   DMA_FROM_DEVICE);
+>   	dma->rx_desc = dmaengine_prep_slave_single(dma->chan_rx,
+> -					dma->rx_dma_phys,
+> -					dspi->words_in_flight *
+> -					DMA_SLAVE_BUSWIDTH_4_BYTES,
+> +					dma->rx_dma_phys, size,
+>   					DMA_DEV_TO_MEM,
+>   					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+>   	if (!dma->rx_desc) {
+> @@ -644,17 +656,17 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+>   		goto err_tx_channel;
+>   	}
+>   
+> -	dma->tx_dma_buf = dma_alloc_coherent(dma->chan_tx->device->dev,
+> -					     dma_bufsize, &dma->tx_dma_phys,
+> -					     GFP_KERNEL);
+> +	dma->tx_dma_buf = dma_alloc_noncoherent(dma->chan_tx->device->dev,
+> +						dma_bufsize, &dma->tx_dma_phys,
+> +						DMA_TO_DEVICE, GFP_KERNEL);
+>   	if (!dma->tx_dma_buf) {
+>   		ret = -ENOMEM;
+>   		goto err_tx_dma_buf;
+>   	}
+>   
+> -	dma->rx_dma_buf = dma_alloc_coherent(dma->chan_rx->device->dev,
+> -					     dma_bufsize, &dma->rx_dma_phys,
+> -					     GFP_KERNEL);
+> +	dma->rx_dma_buf = dma_alloc_noncoherent(dma->chan_rx->device->dev,
+> +						dma_bufsize, &dma->rx_dma_phys,
+> +						DMA_FROM_DEVICE, GFP_KERNEL);
+>   	if (!dma->rx_dma_buf) {
+>   		ret = -ENOMEM;
+>   		goto err_rx_dma_buf;
+> @@ -689,11 +701,12 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+>   	return 0;
+>   
+>   err_slave_config:
+> -	dma_free_coherent(dma->chan_rx->device->dev,
+> -			  dma_bufsize, dma->rx_dma_buf, dma->rx_dma_phys);
+> +	dma_free_noncoherent(dma->chan_rx->device->dev, dma_bufsize,
+> +			     dma->rx_dma_buf, dma->rx_dma_phys,
+> +			     DMA_FROM_DEVICE);
+>   err_rx_dma_buf:
+> -	dma_free_coherent(dma->chan_tx->device->dev,
+> -			  dma_bufsize, dma->tx_dma_buf, dma->tx_dma_phys);
+> +	dma_free_noncoherent(dma->chan_tx->device->dev, dma_bufsize,
+> +			     dma->tx_dma_buf, dma->tx_dma_phys, DMA_TO_DEVICE);
+>   err_tx_dma_buf:
+>   	dma_release_channel(dma->chan_tx);
+>   err_tx_channel:
+> @@ -714,14 +727,16 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
+>   		return;
+>   
+>   	if (dma->chan_tx) {
+> -		dma_free_coherent(dma->chan_tx->device->dev, dma_bufsize,
+> -				  dma->tx_dma_buf, dma->tx_dma_phys);
+> +		dma_free_noncoherent(dma->chan_tx->device->dev, dma_bufsize,
+> +				     dma->tx_dma_buf, dma->tx_dma_phys,
+> +				     DMA_TO_DEVICE);
+>   		dma_release_channel(dma->chan_tx);
+>   	}
+>   
+>   	if (dma->chan_rx) {
+> -		dma_free_coherent(dma->chan_rx->device->dev, dma_bufsize,
+> -				  dma->rx_dma_buf, dma->rx_dma_phys);
+> +		dma_free_noncoherent(dma->chan_rx->device->dev, dma_bufsize,
+> +				     dma->rx_dma_buf, dma->rx_dma_phys,
+> +				     DMA_FROM_DEVICE);
+>   		dma_release_channel(dma->chan_rx);
+>   	}
+>   }
+> 
 
 
