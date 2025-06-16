@@ -1,144 +1,121 @@
-Return-Path: <linux-spi+bounces-8598-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8604-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 181B4ADB8E5
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 20:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 628D8ADBC8B
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 00:02:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACF6416DAD1
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 18:35:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 113C816ABDE
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 22:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBAA289803;
-	Mon, 16 Jun 2025 18:34:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A1D236435;
+	Mon, 16 Jun 2025 22:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CkAQbKwL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KEsNygaq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iL+3CM+D"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66422289372;
-	Mon, 16 Jun 2025 18:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E36225405
+	for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 22:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750098899; cv=none; b=EqA8B6AQb71Ri3NDSj9ZfDuWznDA1FWdEcRe6GwgzoFTIino25YPe6k3vFTvKQFV+RmDNvi4s7Kl5nWchPG+AiFfdRU3Ntu9q0WA4vPCcFPS2eRR6wOA0+E4m5s6GcBCa+Eh5br5WwEt6xwRMx8t/SLl2YYkZ532s+f8WeA5TpA=
+	t=1750111283; cv=none; b=GrG6yH9y8EbYBbPemJPf07MO9y1/pfFE+3MAnC3uWldwIxz5GgPt30wwu3xfnUNUIvsAhiGWscTIIguvU7w1NqvqZsnM5RiyoB81DoPsIaUI1vGm7Yww/PtO7HklUj3W/FWnzJmsHfoFiPAfTJwz3OC+zFJ87viY/k6X83x1IqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750098899; c=relaxed/simple;
-	bh=k3U8hdUVf2mysDGF9j7sGFSXq/NHg1BAR9W4A1e7FBY=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=R0yHX9vWn8ZHzu5DVLC7auJIs5n6v+tYJqygR5XTJByStvvaDnO7FZ/y7YTCESq1bC8APlTg+SJwiKpxLXNfBdv3HEs6l8oJ3P7UG2YD+vPm2Kj9Cap8yLkSEmgryOr4kUMy+O7g3tsXeyQKHoi5m727iHxLkqKfmaJ0vsOuWO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CkAQbKwL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KEsNygaq; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 337F0254012F;
-	Mon, 16 Jun 2025 14:34:56 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 14:34:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750098896;
-	 x=1750185296; bh=qRwibQTbtTFkc/qCHLHPXCkbTuwR1ipXTlm5cdeOUc4=; b=
-	CkAQbKwLRJX2qandCly0sWKOMtf77gN4MgYUuG+OsOzmG9buhoB1zAZUt2ybs+s+
-	WmpvOgS6fN47mDAumZkluDJWBK/0X5X0MWxxxXVGYGEddsSPLnDb4tDzwRPyqEEe
-	1TET4TyLtO+8vp8XiTLBs7hxKkuda37K+lr2eXSvmWrkF5ewuuTW1iQdxwTkdmTk
-	6eXvfnz5QtT1UDMOK+LVbs1kYSHQrteUiv0qfRYwmQD+FUq/jYyvzyxu4CKBn/G7
-	yQkaK3WsuaL9pK8PdvLge8pbRkN1dCtXTgWmBXfDFQp2PJPRo8PNd1aYg+s3DHeI
-	YFB789jS8Qab+ttLYZ/O0w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1750098896; x=1750185296; bh=q
-	RwibQTbtTFkc/qCHLHPXCkbTuwR1ipXTlm5cdeOUc4=; b=KEsNygaqVgj7WbCwZ
-	Lkvakt2piIfCMaBt1ZbJrSwo4TK7oIkyX4Uoa9XJkgfm1OQP+3u1brIo11UMHbL1
-	84tfEe8rsX9Q3gIlO4CAxB2hm2py3yaD8D5YdOUIVdpWbaLmFIopaUFhBbzTs/qe
-	kUTiISvnEf5hjsrwF8mFI49VrSwxA4CnQw01e/+H5PaxqtIQa3SQ3iUwbxKtmZeb
-	ZEnrDwtSNoPspZvBlo3k7hGL85lsrP4TdTtDQ+qF7Xb3o8DBwzPsKR0WobtUQwt2
-	foTLiVMGGX7ZCjuRShvV4eFXAxLJSicbiC+3IxzCRFEqsUSxJqv1SwcRh4l1Rs4u
-	q28pA==
-X-ME-Sender: <xms:zmNQaIO0hvU2mt4H2Xvk5AnX0iB1kD8BTIM0kmdEAL52qNH_X7Zt-A>
-    <xme:zmNQaO-pQtuwcQxZUMYxJEK6v4sPWP1MMPZ4mTg4DyfSTda8L3t54rfvrxWL8zo-n
-    VTn7Y50tNPm6fcmkVo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvjeefvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfekledtffefhffghfetteehuefhgfetgefhtdeu
-    feduueeltefghedtjeeifffhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepudel
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrg
-    hssegrrhhmrdgtohhmpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgv
-    thdprhgtphhtthhopehhvghrsggvrhhtsehgohhnughorhdrrghprghnrgdrohhrghdrrg
-    hupdhrtghpthhtoheprghnughirdhshhihthhisehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvkhhouhhlse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgrug
-    gvrggurdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhmrggthhhonhesmhhitghrohgt
-    hhhiphdrtghomh
-X-ME-Proxy: <xmx:zmNQaPRswyGdepgzEcq8ZxPpnVu2Wrc6-oOZ7im99CjLcZTGH4eBjA>
-    <xmx:zmNQaAsI7EG80DBY_yZ4XKwGWgi6xUtMqBQBeetDFZIs5zE557ilxQ>
-    <xmx:zmNQaAcTIVEBWFXjvaHxr56Nf0Ub6-2ApA-P1suW0_0LL4_J5QTA6w>
-    <xmx:zmNQaE0AiF_i6R0owGd_wFWswJPr2jjUGwz6T9iv27LgZiCo4HITeQ>
-    <xmx:0GNQaAnKS3ebf6Eh4ZHo3SUihb-d9QthvKL2qiqOPzxP4wLM775-Y9gS>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 87E5E700062; Mon, 16 Jun 2025 14:34:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1750111283; c=relaxed/simple;
+	bh=q7tD4d0yNr2pbj8cYfhujZP3byO/0ot0K8Igx0jNNuE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AMwvWXxzAQgFIm5ZRzeRCfEinXFzI0EKa6pQzGntfk/29ZhKTZWhmHTH/hTpekTD/g+LXszDUh6MVbWwyUmk+BywAlvZ2BPNPZRM160OyCOAslXKzfInyG6Ryc96g0oB2XM/g2Fx1QY1ao0hPU1sGMWooejeijxM/JsnFuWgVQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iL+3CM+D; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1750111270;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4s03yPEhF45+lWh5hyBpMppSw2oqj+GdWmyYq1pWC3U=;
+	b=iL+3CM+DtVo4+gmEcNyja3IwWUGWPIvvvUP9mUdkZpBaCIC8Z8NAxdgHcEBFZgeO8YSfJa
+	oNioV1esuk2dUqqUWhTtNaQH8m1XvDXAl6NtTGNZf1TOwE849tKso4U0wbTTOG6SBRnFox
+	+qb/om8Jl/33MlLXRAD+sz9iVuLAUT0=
+From: Sean Anderson <sean.anderson@linux.dev>
+To: Mark Brown <broonie@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	linux-spi@vger.kernel.org
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	David Lechner <dlechner@baylibre.com>,
+	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	devicetree@vger.kernel.org
+Subject: [PATCH v2 0/9] spi: zynqmp-gqspi: Support multiple buses and add GPIO support
+Date: Mon, 16 Jun 2025 18:00:45 -0400
+Message-Id: <20250616220054.3968946-1-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tad13d72cbf59a799
-Date: Mon, 16 Jun 2025 20:34:34 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Robert Marko" <robert.marko@sartura.hr>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Olivia Mackall" <olivia@selenic.com>,
- "Herbert Xu" <herbert@gondor.apana.org.au>,
- "David S . Miller" <davem@davemloft.net>, "Vinod Koul" <vkoul@kernel.org>,
- "Andi Shyti" <andi.shyti@kernel.org>, "Mark Brown" <broonie@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
- "Pengutronix Kernel Team" <kernel@pengutronix.de>, ore@pengutronix.de,
- luka.perkov@sartura.hr, "Daniel Machon" <daniel.machon@microchip.com>
-Message-Id: <3ba837f8-70bb-4b9e-a9f9-0e71b9e073c4@app.fastmail.com>
-In-Reply-To: <20250613114148.1943267-1-robert.marko@sartura.hr>
-References: <20250613114148.1943267-1-robert.marko@sartura.hr>
-Subject: Re: [PATCH v7 0/6] arm64: lan969x: Add support for Microchip LAN969x SoC
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jun 13, 2025, at 13:39, Robert Marko wrote:
-> This patch series adds basic support for Microchip LAN969x SoC.
->
-> It introduces the SoC ARCH symbol itself and allows basic peripheral
-> drivers that are currently marked only for AT91 to be also selected for
-> LAN969x.
->
-> DTS and further driver will be added in follow-up series.
->
-> Robert Marko (6):
->   arm64: lan969x: Add support for Microchip LAN969x SoC
->   spi: atmel: make it selectable for ARCH_LAN969X
->   i2c: at91: make it selectable for ARCH_LAN969X
->   dma: xdmac: make it selectable for ARCH_LAN969X
->   char: hw_random: atmel: make it selectable for ARCH_LAN969X
->   crypto: atmel-aes: make it selectable for ARCH_LAN969X
+This device really has two SPI buses but they are currently determined
+by the slave's CS. Decouple bus selection from CS, and add support for
+GPIO chipselects. This allows adding arbitrary devices on either bus.
 
-If the drivers on ARCH_LAN969X are largely shared with those on
-ARCH_AT91, should they perhaps depend on a common symbol?
+This version does the bus selction using a spi-buses property in
+slaves's node, as opposed to having separate nodes for the upper and
+lower buses. This should be backwards compatible with existing bindings,
+and could allow supporting "parallel" memories in the future (identical
+flashes on both buses controlled in lockstep).
 
-That could be either the existing ARCH_AT91 as we do with LAN966,
-or perhaps ARCH_MICROCHIP, which is already used for riscv/polarfire.
+Changes in v2:
+- Add spi-buses property
+- Update spi-zynqmp-qspi.yaml with new binding style
+- Support multi-bus controllers
+- Add flag to determine default bus
+- Support multiple buses with spi-buses instead of explicit
+  upper/lower/merged buses
 
-    Arnd
+David Lechner (2):
+  dt-bindings: spi: Add spi-buses property
+  spi: Support multi-bus controllers
+
+Sean Anderson (7):
+  dt-bindings: spi: zynqmp-qspi: Add example dual upper/lower bus
+  spi: Add flag to determine default bus
+  spi: zynqmp-gqspi: Support multiple buses
+  spi: zynqmp-gqspi: Pass speed directly to config_op
+  spi: zynqmp-gqspi: Configure SPI mode dynamically
+  spi: zynqmp-gqspi: Support GPIO chip selects
+  ARM64: xilinx: zynqmp: Add spi-buses property
+
+ .../bindings/spi/spi-peripheral-props.yaml    |  10 ++
+ .../bindings/spi/spi-zynqmp-qspi.yaml         |  22 ++-
+ .../boot/dts/xilinx/zynqmp-sm-k26-revA.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zc1254-revA.dts    |   1 +
+ .../dts/xilinx/zynqmp-zc1751-xm015-dc1.dts    |   1 +
+ .../dts/xilinx/zynqmp-zc1751-xm018-dc4.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu102-revA.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu104-revA.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu104-revC.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu106-revA.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu111-revA.dts    |   1 +
+ .../boot/dts/xilinx/zynqmp-zcu1275-revA.dts   |   1 +
+ drivers/spi/spi-zynqmp-gqspi.c                | 155 ++++++++++++++----
+ drivers/spi/spi.c                             |  31 +++-
+ include/linux/spi/spi.h                       |  15 ++
+ 15 files changed, 208 insertions(+), 35 deletions(-)
+
+-- 
+2.35.1.1320.gc452695387.dirty
+
 
