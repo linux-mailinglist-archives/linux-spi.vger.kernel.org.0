@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-8606-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8607-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49047ADBC94
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 00:03:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A34BADBC91
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 00:02:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B8E13A8E74
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 22:02:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C08AD1892F7A
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 22:02:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6803238C36;
-	Mon, 16 Jun 2025 22:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDBE225388;
+	Mon, 16 Jun 2025 22:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vpEA3/2l"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fRpI7zM8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3848237176
-	for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 22:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8285A23313E
+	for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 22:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750111286; cv=none; b=AefxRzppCuIXnoqUyKjvhIh2NQdlYri/6JcQh8jpQSX5zLazgh1z/h2PXOJYDRhKJ8khMG0ZFl2rUtBpxV5j2bpbIjrGcGjBF/zdaStlfttD13MjEss6esUgl3ReH3Fca8tXZ0sfD8EC+Ref/UpFvr/S46sYEhNpnkVHfzkOJGQ=
+	t=1750111288; cv=none; b=TEBAAuo6p6THiAHx6BiWnUmSP1cxcnVbXeE4Woj8+xJ9JScFilDHOuf4eVm9mrluQedwFt7urid0Qwk8EWLMM8KQ8aSMAVuldA8p24bBbPyezh7DFrGGZdXheaoSauvSYkAtL1xvJrw+Tapc0W2xJ1co03rwYyOyr3Z3hPg5jn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750111286; c=relaxed/simple;
-	bh=Wraj1hZ3EBxKe2cyb3q1iqv3qisL2xc0bmwF6cli6Hk=;
+	s=arc-20240116; t=1750111288; c=relaxed/simple;
+	bh=GDARaksPLKEKseFYGSFlXG8ZZvfvQwPmIQyC3rwaexU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KFGya1Y7Xer1etG+XrDe4kfTn7NeOKjJRSfT0Yf2zwEB5gIxz+SFutsbilqn/aVFtmlbz1LQXKxJcd/Xrbu9+qXcdqfaG7ur6yCHYCXzvvao+Hwiuc3B+D4fPpeCLBOvlSSg9gixo45WAI5o8xgWPCCcV2xLeGw5T5P/NUXeuvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vpEA3/2l; arc=none smtp.client-ip=95.215.58.183
+	 MIME-Version; b=eJW+0AET//8whJl49vy3eebz5sWFfK3PZCWNlsn3rjMy6tQ55PZh5XoIgXzN90aa3X/N9sEOi3NELY1movMh9v5ip0c8dnouo0x+JPvqJkpNMYbRqBw02j+vzLsoxqeoHSSOvHcGyrwBWnwpkW+15np3WmgmhdJ/RvQ8Fs2BSy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fRpI7zM8; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1750111283;
+	t=1750111284;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NGOH8Yvcz0WgyTH+Nb2rF8MG3xwZ18CiFbl2INC4Pwc=;
-	b=vpEA3/2lKQLW1KlQy0fAkRGHmm41rLVtpUYTk/FtQEClVaZDGiw59+7LhF+lpXDM4UzepZ
-	fb4cLEp2SSBV37UlS50QI9aUP5JoKCOYg8XHGzaXk3p8SXV1m7VcZ9qcay0zX7+/bT9NfA
-	vwKxcXFL30SFCIuAsagUKLA+gFHt3mw=
+	bh=U8s2DHgn3w9rCn5wed99fTlnLPjizNqzhROnC2hjDTA=;
+	b=fRpI7zM8EJ3lvBmGn2ZK6cQPnRoS5fEUqpX4uEe/Q79CiQkoJ8ri/t072mO5lxXCYc/qbc
+	3KTVhRUQHgYXwCYzio47tXfi1X9NhHR5sreoEhqfjwuviauAq0QTq/k8y7nquFpMCUJpxW
+	RNJwGK6tuqfrBzMKUy133m4n6EGrudc=
 From: Sean Anderson <sean.anderson@linux.dev>
 To: Mark Brown <broonie@kernel.org>,
 	Michal Simek <michal.simek@amd.com>,
@@ -53,9 +53,9 @@ Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
 	David Lechner <dlechner@baylibre.com>,
 	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
 	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH v2 7/9] spi: zynqmp-gqspi: Configure SPI mode dynamically
-Date: Mon, 16 Jun 2025 18:00:52 -0400
-Message-Id: <20250616220054.3968946-8-sean.anderson@linux.dev>
+Subject: [PATCH v2 8/9] spi: zynqmp-gqspi: Support GPIO chip selects
+Date: Mon, 16 Jun 2025 18:00:53 -0400
+Message-Id: <20250616220054.3968946-9-sean.anderson@linux.dev>
 In-Reply-To: <20250616220054.3968946-1-sean.anderson@linux.dev>
 References: <20250616220054.3968946-1-sean.anderson@linux.dev>
 Precedence: bulk
@@ -67,114 +67,150 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The SPI mode (phase/polarity) can change between spi_transfers. In
-preparation for transfer_one support, program the SPI mode on every
-operation instead of once during init.
+GPIO chipselects use the traditional SPI API instead of the SPIMEM API.
+Implement it with transfer_one and set_cs (for non-GPIO chipselects). At
+the moment we only support half-duplex transfers, which is good enough
+to access SPI flashes.
 
 Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 ---
 
-(no changes since v1)
+Changes in v2:
+- Use ->buses instead of an upper/lower split
 
- drivers/spi/spi-zynqmp-gqspi.c | 43 +++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 14 deletions(-)
+ drivers/spi/spi-zynqmp-gqspi.c | 93 ++++++++++++++++++++++++++++++----
+ 1 file changed, 84 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/spi/spi-zynqmp-gqspi.c b/drivers/spi/spi-zynqmp-gqspi.c
-index a17e77dc4e27..b36159dbaff0 100644
+index b36159dbaff0..87d375fae653 100644
 --- a/drivers/spi/spi-zynqmp-gqspi.c
 +++ b/drivers/spi/spi-zynqmp-gqspi.c
-@@ -184,7 +184,8 @@ struct qspi_platform_data {
-  * @mode:		Defines the mode in which QSPI is operating
-  * @data_completion:	completion structure
-  * @op_lock:		Operational lock
-- * @speed_hz:          Current SPI bus clock speed in hz
-+ * @speed_hz:		Current SPI bus clock speed in hz
-+ * @spi_mode:		Current SPI bus mode
-  * @has_tapdelay:	Used for tapdelay register available in qspi
-  */
- struct zynqmp_qspi {
-@@ -207,6 +208,7 @@ struct zynqmp_qspi {
- 	struct completion data_completion;
- 	struct mutex op_lock;
- 	u32 speed_hz;
-+	u32 spi_mode;
- 	bool has_tapdelay;
- };
- 
-@@ -387,16 +389,11 @@ static void zynqmp_qspi_init_hw(struct zynqmp_qspi *xqspi)
- 	config_reg |= GQSPI_CFG_WP_HOLD_MASK;
- 	/* Clear pre-scalar by default */
- 	config_reg &= ~GQSPI_CFG_BAUD_RATE_DIV_MASK;
--	/* Set CPHA */
--	if (xqspi->ctlr->mode_bits & SPI_CPHA)
--		config_reg |= GQSPI_CFG_CLK_PHA_MASK;
--	else
--		config_reg &= ~GQSPI_CFG_CLK_PHA_MASK;
--	/* Set CPOL */
--	if (xqspi->ctlr->mode_bits & SPI_CPOL)
--		config_reg |= GQSPI_CFG_CLK_POL_MASK;
--	else
--		config_reg &= ~GQSPI_CFG_CLK_POL_MASK;
-+
-+	/* Set default mode */
-+	xqspi->spi_mode = SPI_MODE_3;
-+	config_reg |= GQSPI_CFG_CLK_PHA_MASK;
-+	config_reg |= GQSPI_CFG_CLK_POL_MASK;
- 
- 	/* Set the clock frequency */
- 	clk_rate = clk_get_rate(xqspi->refclk);
-@@ -535,6 +532,7 @@ static inline u32 zynqmp_qspi_selectspimode(struct zynqmp_qspi *xqspi,
-  *				transfer
-  * @xqspi: Pointer to the zynqmp_qspi structure
-  * @req_speed_hz: Requested frequency
-+ * @mode: Requested SPI mode
-  *
-  * Sets the operational mode of QSPI controller for the next QSPI transfer and
-  * sets the requested clock frequency.
-@@ -551,7 +549,8 @@ static inline u32 zynqmp_qspi_selectspimode(struct zynqmp_qspi *xqspi,
-  *	by the QSPI controller the driver will set the highest or lowest
-  *	frequency supported by controller.
-  */
--static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi, u32 req_speed_hz)
-+static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi, u32 req_speed_hz,
-+				 u32 mode)
- {
- 	ulong clk_rate;
- 	u32 config_reg, baud_rate_val = 0;
-@@ -577,7 +576,23 @@ static int zynqmp_qspi_config_op(struct zynqmp_qspi *xqspi, u32 req_speed_hz)
- 		zynqmp_qspi_set_tapdelay(xqspi, baud_rate_val);
- 	}
- 
--	dev_dbg(xqspi->dev, "config speed %u\n", req_speed_hz);
-+	mode &= SPI_MODE_X_MASK;
-+	if (xqspi->spi_mode != mode) {
-+		xqspi->spi_mode = mode;
-+
-+		config_reg = zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST);
-+		if (mode & SPI_CPHA)
-+			config_reg |= GQSPI_CFG_CLK_PHA_MASK;
-+		else
-+			config_reg &= ~GQSPI_CFG_CLK_PHA_MASK;
-+		if (mode & SPI_CPOL)
-+			config_reg |= GQSPI_CFG_CLK_POL_MASK;
-+		else
-+			config_reg &= ~GQSPI_CFG_CLK_POL_MASK;
-+		zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST, config_reg);
-+	}
-+
-+	dev_dbg(xqspi->dev, "config speed %u mode %x\n", req_speed_hz, mode);
- 	return 0;
+@@ -499,6 +499,15 @@ static void zynqmp_qspi_chipselect(struct spi_device *qspi, bool is_high)
+ 		dev_err(xqspi->dev, "Chip select timed out\n");
  }
  
-@@ -1050,7 +1065,7 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
- 	u64 opaddr;
++static void zynqmp_qspi_set_cs(struct spi_device *qspi, bool is_high)
++{
++	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(qspi->controller);
++
++	mutex_lock(&xqspi->op_lock);
++	zynqmp_qspi_chipselect(qspi, is_high);
++	mutex_unlock(&xqspi->op_lock);
++}
++
+ /**
+  * zynqmp_qspi_selectspimode - Selects SPI mode - x1 or x2 or x4.
+  * @xqspi:	xqspi is a pointer to the GQSPI instance
+@@ -1197,6 +1206,73 @@ static int zynqmp_qspi_exec_op(struct spi_mem *mem,
+ 	return err;
+ }
  
- 	mutex_lock(&xqspi->op_lock);
--	zynqmp_qspi_config_op(xqspi, op->max_freq);
-+	zynqmp_qspi_config_op(xqspi, op->max_freq, mem->spi->mode);
- 	zynqmp_qspi_chipselect(mem->spi, false);
- 	genfifoentry |= xqspi->genfifocs;
- 	genfifoentry |= xqspi->genfifobus;
++static int zynqmp_qspi_transfer_one(struct spi_controller *ctlr,
++				    struct spi_device *spi,
++				    struct spi_transfer *transfer)
++{
++	struct zynqmp_qspi *xqspi = spi_controller_get_devdata(ctlr);
++	unsigned long timeout;
++	u32 genfifoentry;
++	u32 mask = 0;
++	int ret;
++
++	dev_dbg(xqspi->dev, "xfer %u/%u %u\n", transfer->tx_nbits,
++		transfer->rx_nbits, transfer->len);
++
++	if (transfer->tx_nbits && transfer->rx_nbits)
++		return -EOPNOTSUPP;
++
++	guard(mutex)(&xqspi->op_lock);
++	zynqmp_qspi_config_op(xqspi, transfer->speed_hz, spi->mode);
++	if (spi_get_csgpiod(spi, 0)) {
++		xqspi->genfifobus =
++			FIELD_PREP(GQSPI_GENFIFO_BUS_MASK, spi->buses);
++		xqspi->genfifocs = 0;
++	}
++	genfifoentry = xqspi->genfifocs | xqspi->genfifobus;
++
++	reinit_completion(&xqspi->data_completion);
++	if (transfer->tx_nbits) {
++		xqspi->txbuf = transfer->tx_buf;
++		xqspi->rxbuf = NULL;
++		xqspi->bytes_to_transfer = transfer->len;
++		xqspi->bytes_to_receive = 0;
++		zynqmp_qspi_write_op(xqspi, transfer->tx_nbits, genfifoentry);
++		mask = GQSPI_IER_TXEMPTY_MASK | GQSPI_IER_GENFIFOEMPTY_MASK |
++		       GQSPI_IER_TXNOT_FULL_MASK;
++		timeout = zynqmp_qspi_timeout(xqspi, transfer->tx_nbits,
++					      transfer->len);
++	} else {
++		xqspi->txbuf = NULL;
++		xqspi->rxbuf = transfer->rx_buf;
++		xqspi->bytes_to_transfer = 0;
++		xqspi->bytes_to_receive = transfer->len;
++		ret = zynqmp_qspi_read_op(xqspi, transfer->rx_nbits,
++					  genfifoentry);
++		if (ret)
++			return ret;
++
++		if (xqspi->mode != GQSPI_MODE_DMA)
++			mask = GQSPI_IER_GENFIFOEMPTY_MASK |
++			       GQSPI_IER_RXNEMPTY_MASK | GQSPI_IER_RXEMPTY_MASK;
++		timeout = zynqmp_qspi_timeout(xqspi, transfer->rx_nbits,
++					      transfer->len);
++	}
++
++	zynqmp_gqspi_write(xqspi, GQSPI_CONFIG_OFST,
++			   zynqmp_gqspi_read(xqspi, GQSPI_CONFIG_OFST) |
++			   GQSPI_CFG_START_GEN_FIFO_MASK);
++	if (mask)
++		zynqmp_gqspi_write(xqspi, GQSPI_IER_OFST, mask);
++	else
++		zynqmp_gqspi_write(xqspi, GQSPI_QSPIDMA_DST_I_EN_OFST,
++				   GQSPI_QSPIDMA_DST_I_EN_DONE_MASK);
++
++	if (!wait_for_completion_timeout(&xqspi->data_completion, timeout))
++		return -ETIMEDOUT;
++	return 0;
++}
++
+ static const struct dev_pm_ops zynqmp_qspi_dev_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(zynqmp_runtime_suspend,
+ 			   zynqmp_runtime_resume, NULL)
+@@ -1316,27 +1392,26 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto clk_dis_all;
+ 
++	ctlr->max_native_cs = 2;
+ 	ret = of_property_read_u32(np, "num-cs", &num_cs);
+-	if (ret < 0) {
++	if (ret < 0)
+ 		ctlr->num_chipselect = GQSPI_DEFAULT_NUM_CS;
+-	} else if (num_cs > GQSPI_MAX_NUM_CS) {
+-		ret = -EINVAL;
+-		dev_err(&pdev->dev, "only %d chip selects are available\n",
+-			GQSPI_MAX_NUM_CS);
+-		goto clk_dis_all;
+-	} else {
++	else
+ 		ctlr->num_chipselect = num_cs;
+-	}
+ 
+ 	ctlr->num_buses = 2;
+-	ctlr->flags = SPI_CONTROLLER_DEFAULT_BUS_IS_CS;
++	ctlr->flags = SPI_CONTROLLER_DEFAULT_BUS_IS_CS |
++		      SPI_CONTROLLER_HALF_DUPLEX;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctlr->mem_ops = &zynqmp_qspi_mem_ops;
+ 	ctlr->mem_caps = &zynqmp_qspi_mem_caps;
+ 	ctlr->setup = zynqmp_qspi_setup_op;
++	ctlr->set_cs = zynqmp_qspi_set_cs;
++	ctlr->transfer_one = zynqmp_qspi_transfer_one;
+ 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctlr->dev.of_node = np;
+ 	ctlr->auto_runtime_pm = true;
++	ctlr->use_gpio_descriptors = true;
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+ 	if (ret) {
 -- 
 2.35.1.1320.gc452695387.dirty
 
