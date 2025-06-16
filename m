@@ -1,175 +1,140 @@
-Return-Path: <linux-spi+bounces-8571-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8572-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E0AADAE34
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:21:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3086ADAE6E
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:28:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B20DB170458
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 11:21:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 415A11887FB6
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 11:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9839E26C3B7;
-	Mon, 16 Jun 2025 11:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39BD2C08B4;
+	Mon, 16 Jun 2025 11:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hExHp9/8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OrcJD8QV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nwBZ4NGb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B121C2750E9
-	for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 11:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594542D9EF3;
+	Mon, 16 Jun 2025 11:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750072877; cv=none; b=RYlsrjkaf/Yb0pkF6Dn0Fh9fvpN+3VWnEVUBNPwN9ihWezbaB8zBKbz3ds6dSSA/NZyF4wJdgzLlIPDXIw2n6dPVYcgyiKZLW89rj8cUw0EyQamySuoysnu6el42femiwlh0WpMhybbLiCc8rXg8KnUe6Pj2zLIuo+lu5UjHiqw=
+	t=1750073313; cv=none; b=DB1W8e7fXlNHl78bUvWftydRRZdpSwZSbOwWFH5RWVOYby4JX+wkR0fMg22s6hZyzDV+VEZu6ojGxEN77D5S18bIon9Zjl035Pq02TpM7Xl+BDhy/eNL01097cjPY9kPw7oZNHaPUP+9PCfS8QxdWyhpX7JaMB9ElW/mR2ntzXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750072877; c=relaxed/simple;
-	bh=qgYShiCICLGlyXPXkMFaa9MBddkYx+zhgvPZouJhpug=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OW4Gx+kc9rCKEMKgxUG1GuviqzWAleyVx6rfPV3QjBexiNTZb5b3gYgriUBdxDY4af1W1UCa2oy/VoppOLoudVwqCDxhYo8vRy3cug0sDUlPPf/te1S/VtBo/mDy6+GTK0win0+XYT6QHeJVZu058tdDjmvNXRbwcglanWvVVyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hExHp9/8; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-450cb2ddd46so24109295e9.2
-        for <linux-spi@vger.kernel.org>; Mon, 16 Jun 2025 04:21:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1750072873; x=1750677673; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M4euJ7IL/UtIuqUuTsf6umM3mNJN/f7JKsQPFpax4oo=;
-        b=hExHp9/875LeWT6ykEHjyAWx7hjRXx4I/jz3F3zzbyLI4pJjJtjB1N9IS1Os4Bko7t
-         ta6y8ucgNyiEv56NAVFlcZWCRO5z4/9NjamcaBdHxqQmnoqUzO9Ag+kAEkog+h+iDgfc
-         liMGVLt5zvXH6/GsfvY/T9xcBzNS3yqiRrqMyMGUGEQolnADI216pPY+dVx0WOjWbl/5
-         beUc809JabUOTS/Pyaqk44pY14CK0FEjzOEYB0XKI1g0mGaWfftRW6yRLaft0FVx4mvQ
-         WfVd8VrldHMB88S5Wdfq+at4z7osBsvH39CANk8uWrbnwrkL9RDEFdzZHvo2RxeW5VJn
-         BnCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750072873; x=1750677673;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4euJ7IL/UtIuqUuTsf6umM3mNJN/f7JKsQPFpax4oo=;
-        b=tGzsBHawRqDwwL9jwRzexKyFAVOHszjKQwcQp+r7OoVDOaIZavV1YbPbDbaPsEK+OL
-         2jNClQ6GE5uHeChdgmEviGv7ec0UodeLLn4O/DGLdgCLG6RDsLeAEEUX9/953gJWe37s
-         he0ch/XZ9ujgUUPV9U1yLIoWi9jJ8QOdLrclAqxqjedO+jxG61qKo4TkFNLCy7WKy7vt
-         tSn5QIS2jgewIznsFCvqHcnsuTvvNNec4pBF4lZEpAV5qPadnwD2Ftkbs24iESYMqCBn
-         JmtS4bIgnKS+V5d6+TPx/zguGQGJss/eJueY0oLpGHzgkFKOjRb2JMVNK6fK9R8vijUO
-         69rg==
-X-Forwarded-Encrypted: i=1; AJvYcCW16izvChCSAj2ural4QYKCiGTszyxoZCMlCs+odOzU4JdkE9rpwIljmKqqcsgrMn9ONYvHT3M/EVg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2oU9Dx6qLa37MHPhiZMxLG1AjdPbbYMvV3/DRDbdcCigV0hjJ
-	TS9wFBRtCNYlqwDpnTDwQryYDxQWFOQJRtWOURsJ2cxJQQ6Gdll6/ecnonTISxqJXB8=
-X-Gm-Gg: ASbGncvRh/jCVQWnSao/SXcS3h6v8PioVsVkJC5JgP8QS4dUvU8yEHF9LesPpFaSPqm
-	rRLsOs9UtBnI88/zjXFItuWPzNwiQ9Efmhkxr3z71gZfRhv4O88GN2hNP7o32RjYJLuFZks1KBV
-	BhfhXGXc6oEzSTePq/4EcXXKwNTovixs8BzuEqBA90QGng/wSWyXN/zcItGDWKWuhiJ8fy8rZOL
-	T2tJ0fIwIRvBBAWBz3RhAIHzzBayKsSWPVGIh8RxAeRmUD1H5hEdUwaU/p9g6GOT52fUwsbW8j9
-	ZTxNlpeW2y+JLwKOyHthOEu1C2mrdS3xb7/Y8KwSBB50Nv+xzattew5TW9we6miSCOI=
-X-Google-Smtp-Source: AGHT+IFm7lURtK3nakQke2Eo0A04R9F5ogbYQ5oAvV51pSxGomor7dB0raebWDwLvF03RocQuXgBNA==
-X-Received: by 2002:a05:600c:a218:b0:451:edc8:7806 with SMTP id 5b1f17b1804b1-4533e57d98dmr39178155e9.32.1750072872918;
-        Mon, 16 Jun 2025 04:21:12 -0700 (PDT)
-Received: from [192.168.1.3] ([37.18.136.128])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e254396sm145401575e9.28.2025.06.16.04.21.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jun 2025 04:21:12 -0700 (PDT)
-Message-ID: <7cf90a89-b381-48ae-98bc-1316022e03b6@linaro.org>
-Date: Mon, 16 Jun 2025 12:21:11 +0100
+	s=arc-20240116; t=1750073313; c=relaxed/simple;
+	bh=kwKwjxom4d2Clj5IKZBF+Gh4TrODLRQoQQE/qE6/bhE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=t6A7fa+2zDHHakFPP7dsPlPxnD3bQsb+mSy9fdfGcvdGRqLVDlg2BN2JNDwGzSC6ekOqfarWWqoq/1hb897gBjAcIwRCmYLBHrUonHPto0QW0rPwTzUodziWw5ogJytrw9nSVGJcVAVktk6rn0mFBI7MJqCKCSqg0fegAlFckuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=OrcJD8QV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nwBZ4NGb; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 0EE161140187;
+	Mon, 16 Jun 2025 07:28:30 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 07:28:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1750073309;
+	 x=1750159709; bh=BVMDxZyh3izjfJAnNlsndwBLshhlRT2Ze7VL++djkf8=; b=
+	OrcJD8QVYTRhsoyYQ0cyohPkjdpt+ai5PwbIJEkleDS5aZUjTubyu5x9ywbZaGR9
+	aW3WxPsEB/8T8Ihm0HCmMSiCzSV8oS6dR5479NzttSZbENg7ko0Acq6F14Yq4A5h
+	RuqlndtjQuV9ffrrHduRjVGvlIcSoh+rYpM3EsOtE3wQzZJnY3U1bnDDmnxk0Wpt
+	Cc/1/9TI5hGuZi3sdzM7NL8DZ1Du310xMQKo0DsmpbDajYmI8611ikobEDv+Eo1S
+	25yQjpr0hTc7k84mYmbtphGM7AxjVvbcBfN+cypI6IYviFVaxguZU+Oj4U/re15m
+	GJ8OP/LIpiZOIu2auHZosQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750073309; x=
+	1750159709; bh=BVMDxZyh3izjfJAnNlsndwBLshhlRT2Ze7VL++djkf8=; b=n
+	wBZ4NGbFS28NdjYFzZe+tNjg5Gs4n7S1GOSAdMglbHy+5bBBnhRzezK6iBEORItP
+	6lT1VLK37LQuCnOzfY1Z3rwkDStQo+9R9QG68wawr8A5CMLx2ZlF11NZgQbmw58o
+	fsmmXSFxHJEQLIuNNrvvecRk8YJNNaEi4FCiIqFdjm5O/asb7GajXIPPYQO4oHjj
+	PklplRKuf2oclQ/w4xRn1f1lApXj9VM6JflNZdSxpsJ9925u+9kHdsSFsVTyHWEv
+	e4k0aXZaT2AZOC8vmsX9SzNK0/4/dR8hqhOAJ7IANPkZ6Enm82AmetLiaq214dv+
+	4Pnq2+co6P7YOH17FiPmQ==
+X-ME-Sender: <xms:3P9PaNUnQVMHUu4XWcFLlylXS0eP-at0_KY5Shza6RruFae920owdA>
+    <xme:3P9PaNlv2bKfspANLmvW5eCcAKtKIasAbBCs0cHOljCbnYk5kkEGlGuZpvbHqBZCL
+    h0vyvH3TCZyGpPjBL8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvieegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeef
+    keekleffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegr
+    rhhnuggsrdguvgdpnhgspghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopehrohgsihhnrdhmuhhrphhhhiesrghrmhdrtghomhdprhgtphhtthhopeho
+    lhhtvggrnhhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtg
+    homhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pehjrghmvghsrdgtlhgrrhhksehlihhnrghrohdrohhrghdprhgtphhtthhopehimhigse
+    hlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepihhomhhmuheslhhishhtshdr
+    lhhinhhugidruggvvhdprhgtphhtthhopehovgdqkhgsuhhilhguqdgrlhhlsehlihhsth
+    hsrdhlihhnuhigrdguvghvpdhrtghpthhtohephhgthheslhhsthdruggv
+X-ME-Proxy: <xmx:3P9PaJbtfcII8kzrU1FJpVnWlx4UYkFWT6n_eR-B2zWTyTjgBREBKA>
+    <xmx:3P9PaAVZPlJo80npW_EEzKEN4IbN0rxFSiaBjdGQeHxk4iwXhq-iyw>
+    <xmx:3P9PaHkpZqsJiaQ6KmJX84qoYqtV_3a_3IeySqfhlO4kTMnG79N_ng>
+    <xmx:3P9PaNf6NG5OjRgHxLwOWM8K4SHTMGCej1dOzxxo2U9hXLu9ke3eWw>
+    <xmx:3f9PaBo6tmID6JpPEkkm-X_XtyPzIYfFOM3pzMFLRLRNlKVF4hpFcwTW>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 8C069700062; Mon, 16 Jun 2025 07:28:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dma-mapping: Stub out dma_{alloc,free,map}_pages() API
-To: hch@lst.de
-Cc: olteanv@gmail.com, broonie@kernel.org, oe-kbuild-all@lists.linux.dev,
- arnd@arndb.de, larisa.grigore@nxp.com, Frank.li@nxp.com,
- linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev
+X-ThreadId: T4808b90e09d8ad4f
+Date: Mon, 16 Jun 2025 13:28:05 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Clark" <james.clark@linaro.org>, "Christoph Hellwig" <hch@lst.de>
+Cc: "Vladimir Oltean" <olteanv@gmail.com>, "Mark Brown" <broonie@kernel.org>,
+ oe-kbuild-all@lists.linux.dev, "Larisa Grigore" <larisa.grigore@nxp.com>,
+ "Frank Li" <Frank.li@nxp.com>, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+ "kernel test robot" <lkp@intel.com>,
+ "Marek Szyprowski" <m.szyprowski@samsung.com>,
+ "Robin Murphy" <robin.murphy@arm.com>, iommu@lists.linux.dev
+Message-Id: <86ad0f01-1c07-4a9d-bb63-3ddf8f88d988@app.fastmail.com>
+In-Reply-To: <20250616111749.316413-1-james.clark@linaro.org>
 References: <202506160036.t9VDxF6p-lkp@intel.com>
  <20250616111749.316413-1-james.clark@linaro.org>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20250616111749.316413-1-james.clark@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] dma-mapping: Stub out dma_{alloc,free,map}_pages() API
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-
-
-On 16/06/2025 12:17 pm, James Clark wrote:
+On Mon, Jun 16, 2025, at 13:17, James Clark wrote:
 > The implementations are in mapping.c which requires HAS_DMA so stub them
 > out if not present. This is required for some drivers to pass randconfig
 > builds.
-> 
-
-So the commit message makes it seem like this fixes an existing issue 
-and it would need a fixes: tag. But I didn't add one because it seems 
-like it would only hit new users like in the linked patchset. It might 
-be better to add a tag but it was changed 5 years ago and nobody hit it 
-until now so I'm not sure.
-
+>
 > Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202506160036.t9VDxF6p-lkp@intel.com/
+> Closes: 
+> https://lore.kernel.org/oe-kbuild-all/202506160036.t9VDxF6p-lkp@intel.com/
 > Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->   include/linux/dma-mapping.h | 28 +++++++++++++++++++++-------
->   1 file changed, 21 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-> index 55c03e5fe8cb..766f28a0e11f 100644
-> --- a/include/linux/dma-mapping.h
-> +++ b/include/linux/dma-mapping.h
-> @@ -161,6 +161,12 @@ void *dma_vmap_noncontiguous(struct device *dev, size_t size,
->   void dma_vunmap_noncontiguous(struct device *dev, void *vaddr);
->   int dma_mmap_noncontiguous(struct device *dev, struct vm_area_struct *vma,
->   		size_t size, struct sg_table *sgt);
-> +struct page *dma_alloc_pages(struct device *dev, size_t size,
-> +		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp);
-> +void dma_free_pages(struct device *dev, size_t size, struct page *page,
-> +		dma_addr_t dma_handle, enum dma_data_direction dir);
-> +int dma_mmap_pages(struct device *dev, struct vm_area_struct *vma,
-> +		size_t size, struct page *page);
->   #else /* CONFIG_HAS_DMA */
->   static inline dma_addr_t dma_map_page_attrs(struct device *dev,
->   		struct page *page, size_t offset, size_t size,
-> @@ -291,6 +297,21 @@ static inline int dma_mmap_noncontiguous(struct device *dev,
->   {
->   	return -EINVAL;
->   }
-> +static inline struct page *dma_alloc_pages(struct device *dev, size_t size,
-> +		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
-> +{
-> +	return NULL;
-> +}
-> +static inline void dma_free_pages(struct device *dev, size_t size,
-> +		struct page *page, dma_addr_t dma_handle,
-> +		enum dma_data_direction dir)
-> +{
-> +}
-> +static inline int dma_mmap_pages(struct device *dev, struct vm_area_struct *vma,
-> +				 size_t size, struct page *page)
-> +{
-> +	return -EINVAL;
-> +}
->   #endif /* CONFIG_HAS_DMA */
->   
->   #ifdef CONFIG_IOMMU_DMA
-> @@ -438,13 +459,6 @@ static inline bool dma_need_unmap(struct device *dev)
->   }
->   #endif /* !CONFIG_HAS_DMA || !CONFIG_DMA_NEED_SYNC */
->   
-> -struct page *dma_alloc_pages(struct device *dev, size_t size,
-> -		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp);
-> -void dma_free_pages(struct device *dev, size_t size, struct page *page,
-> -		dma_addr_t dma_handle, enum dma_data_direction dir);
-> -int dma_mmap_pages(struct device *dev, struct vm_area_struct *vma,
-> -		size_t size, struct page *page);
-> -
->   static inline void *dma_alloc_noncoherent(struct device *dev, size_t size,
->   		dma_addr_t *dma_handle, enum dma_data_direction dir, gfp_t gfp)
->   {
 
+Looks good to me
+
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+It may be worth adding here that HAS_DMA is set on almost
+all configurations, this only showed up as an error in
+a randconfig build for m68k/dragonball, which is barely
+supported at all.
+
+The other two architectures without DMA support are sh-nommu
+and uml.
+
+     Arnd
 
