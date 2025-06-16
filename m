@@ -1,173 +1,106 @@
-Return-Path: <linux-spi+bounces-8594-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8595-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 998ECADB28B
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 15:52:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29B75ADB680
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 18:20:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 341273A6650
-	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 13:48:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA01A188DB2A
+	for <lists+linux-spi@lfdr.de>; Mon, 16 Jun 2025 16:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 825A52877CA;
-	Mon, 16 Jun 2025 13:49:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B142C269CF0;
+	Mon, 16 Jun 2025 16:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Z4uIJC/a";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SWV475mM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSkAjDcT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DDE22097;
-	Mon, 16 Jun 2025 13:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843A920C030;
+	Mon, 16 Jun 2025 16:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750081754; cv=none; b=gFY89z+fjpDNDMH2pg3UFCKT1cNVQ5WaqNyxvPhjOvNMJ/zyvAw4DlnwmzET9xCqwxg0lOpYy4hT17rq1Gl96mYIVKeJnhxiqhuVb04PC16y/ar8q3PvD4KGdDhwFcXjuSvVlPbtF3YMiJyejqtiE2+RKdVqZ6s/mxXiBi60c0o=
+	t=1750090825; cv=none; b=tWQqNDGhs/hOWS/0c5m3BCNoCIhivWH9focbwGStJMSMM4CiySR2w5ODp/F6bE8tWmxAFzTcV25IelSCPy5RLr6E6qy/rNzZsm8JJRdQgDI7G5VdJnZ64cQ9CBHNFcQODhOG8jKBOchJLiab2Mf14ztKYh8y0xzEsY2RrfmUxKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750081754; c=relaxed/simple;
-	bh=lIoE9gcdwJ3ykhVZ65gPKl4QqyXImX16Y6imO4XoKpo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Yoc5cCUJwq6t05M7abjWfF9HD2/o6jk2JfM+SpF/Zn9mvhnXpwNXD6BbxpiACspV9T3FOzE9LHOIth/L4DSQexIncUYAtAsSvqszopc5AbkU2TsNdYDmwNWlbQLoyfMmUXiL1BBCbE6eNFUmAbNXRYRSYYVICZ/dauN5y0TG2b8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Z4uIJC/a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SWV475mM; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A7B9211402B7;
-	Mon, 16 Jun 2025 09:49:11 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 16 Jun 2025 09:49:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1750081751;
-	 x=1750168151; bh=8qsrTRHcvOAd2c9i2pGiJI5TDC5V+Z/Uoi8ty2RR4eU=; b=
-	Z4uIJC/aCJl5TCM7IJcxdppiQeF9UinlgJ2FAyHxVkhcbrEisiiFz6bUlWGEeZXd
-	/d5wIDHzl+uT+3Zn1PimRM7erbMWjE0B6lgEglmMpgNW8BJ/CrLM1wrixtFzEVmN
-	kcUbY5GkddT9ORS9T5vTVBNefyf1Hm8cgrk5ClP8fXWtCkwghqO95Cc5kW+iCGzD
-	taBqRXfX2aCqKTT4gmrm6ZaJOugD/3+yABMtAjV9GHv9PDH3nAbdhnDVnwOvCk1M
-	1it0uzJGhC1lKG9AO5hF0CXdRZUbA6pw7zcdtsEqaKApoS0U+JAILj41qfCidCMe
-	PKvPm2ujwVvhL71oKEM3Kw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750081751; x=
-	1750168151; bh=8qsrTRHcvOAd2c9i2pGiJI5TDC5V+Z/Uoi8ty2RR4eU=; b=S
-	WV475mMLO7x4A5sZtbebmxvM8OcaNLnVCtokq8g6gTNSCzQBy4s025IKdGXzlnfc
-	T7N0xGe8eeZpfQCa3gK1yt3CpZgatrJ+Y/VqbkpCn4BF/ZHybXzF0SiP3tm9j3zC
-	9TYsF5kvNUfT4YDBhPxJsGkJ2qDt91JmaJ1FzBEH6yY6hN6a/YilWxajwkf7ONEC
-	cKXnkQj2sqK5bjPm9qyRx7tTdrawXLK5kgcz5J9zsytUuN6C8eaNAKkzFtvbge+3
-	7+YpUYa0T+fwb1mYR2yyK/0q2BBunr595MFRJPDqzGYJX4PiPzjkOTtY8hvfYOg6
-	YdWcjeLIrBV/zATgtPzpg==
-X-ME-Sender: <xms:1iBQaJovrZfMAJmFVtahyuzCOC3jdKDplIkMzJtu7T1-Vridmdy1CA>
-    <xme:1iBQaLq8b-MxDM4GeGqxtFEGrppMWOXAax4vZH-AGalSjHJp3JJFDCtDSBYVGAhyP
-    seZ43u0GUSxV_1ttno>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugddvieejgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    gedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhosghinhdrmhhurhhphhihse
-    grrhhmrdgtohhmpdhrtghpthhtohepohhlthgvrghnvhesghhmrghilhdrtghomhdprhgt
-    phhtthhopehlkhhpsehinhhtvghlrdgtohhmpdhrtghpthhtohepsghrohhonhhivgeskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepjhgrmhgvshdrtghlrghrkheslhhinhgrrhho
-    rdhorhhgpdhrtghpthhtohepihhmgieslhhishhtshdrlhhinhhugidruggvvhdprhgtph
-    htthhopehiohhmmhhusehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohgv
-    qdhksghuihhlugdqrghllheslhhishhtshdrlhhinhhugidruggvvhdprhgtphhtthhope
-    hhtghhsehlshhtrdguvg
-X-ME-Proxy: <xmx:1iBQaGPP-njiVQWYcMzKqfN8lWKt9KF-S1wtG_wm6kPw_gxZUfGVFg>
-    <xmx:1iBQaE6rRCeVI14O_0cd-8ltlcUvcT-2wBWXWvZmHREULi8sUN979w>
-    <xmx:1iBQaI7IUDY9acNm7MIkvYwTI1PPa3BRqYfGOWPARWICCfoy8ytxkw>
-    <xmx:1iBQaMiUYzyNEksn2mo2FifTqnPgZNYfQAh_z6slzGqt4lIDho2R7A>
-    <xmx:1yBQaCJ-8dPrB2ejqDv-iCGGYbucZDq8lQpAyVmE_WAP8eNfUxFTF9Ap>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CFC38700062; Mon, 16 Jun 2025 09:49:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1750090825; c=relaxed/simple;
+	bh=kLhHtvrDdsH/A1VjWV9b+OF8x5gSjBd5qG3IvXEFejY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=DcJj3gV9dRau6FYosqLqhcFi4KzaoUFQ2NR+ZMDfBMheoy1umypDK4O3j1FVtDS0dRAvcxwtjTCAVBgH9XrXNmcB/T+RzZSdKxgLpBQa05bElloOYXAdhWyMBR22tbA6zyUi0SNg+PqNxF9TslQvgAVZDFlZKIty3wMfTVn6we4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSkAjDcT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677BAC4CEEA;
+	Mon, 16 Jun 2025 16:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750090825;
+	bh=kLhHtvrDdsH/A1VjWV9b+OF8x5gSjBd5qG3IvXEFejY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=sSkAjDcTkNf0l0XibHmp4iF13gTnIhTQBqYrjkriQcUVdr/fQWmUKlgqcABulsO2t
+	 sBwCo+uQA+hIr1VAYBvjBxK8EVGclR89K9ZVowJRXgei+Cfr/Rfln+AYAYMXc/EkC2
+	 dDoa0Acnm4cgmNrkPbNFt7Q4M/LgnHAZuFZ/Tdazaj7MnUpC9CbVpsqw5DK2b+LlpB
+	 EFold/wOBHepbW6OyCpORFex3IQ7mx36oj3gY/xFVWrxHasJHpmtsPjh+0X5afPsSH
+	 Edp8ZWe4iVeWabIwnCjqPT7VHdbWlqPhVibZUKYOhniBRw+ajL/WjCVS2DLJFUf/Sx
+	 YgmqNP0DtHchQ==
+From: Mark Brown <broonie@kernel.org>
+To: James Clark <james.clark@linaro.org>, 
+ Ciprian Marian Costea <ciprianmarian.costea@nxp.com>, 
+ Larisa Grigore <Larisa.Grigore@nxp.com>, 
+ Stoica Cosmin-Stefan <cosmin.stoica@nxp.com>, linux-spi@vger.kernel.org, 
+ Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Lukas Bulwahn <lukas.bulwahn@redhat.com>
+In-Reply-To: <20250616091955.20547-1-lukas.bulwahn@redhat.com>
+References: <20250616091955.20547-1-lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] spi: spi-fsl-dspi: Revert unintended dependency change
+ in config SPI_FSL_DSPI
+Message-Id: <175009082316.296200.2676929998940689118.b4-ty@kernel.org>
+Date: Mon, 16 Jun 2025 17:20:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T4808b90e09d8ad4f
-Date: Mon, 16 Jun 2025 15:48:50 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "James Clark" <james.clark@linaro.org>, "Christoph Hellwig" <hch@lst.de>
-Cc: "Mark Brown" <broonie@kernel.org>, "Vladimir Oltean" <olteanv@gmail.com>,
- oe-kbuild-all@lists.linux.dev, "Larisa Grigore" <larisa.grigore@nxp.com>,
- "Frank Li" <Frank.li@nxp.com>, linux-spi@vger.kernel.org,
- imx@lists.linux.dev, linux-kernel@vger.kernel.org,
- "kernel test robot" <lkp@intel.com>,
- "Marek Szyprowski" <m.szyprowski@samsung.com>,
- "Robin Murphy" <robin.murphy@arm.com>, iommu@lists.linux.dev
-Message-Id: <9788991a-ac37-4fde-81db-c55035d00f27@app.fastmail.com>
-In-Reply-To: <f723d490-c228-42d5-9f9f-158df54a092d@linaro.org>
-References: <20250616111749.316413-1-james.clark@linaro.org>
- <20250616112927.GA21689@lst.de>
- <5f1ca0ac-b66c-4b92-8f69-027c2468b117@sirena.org.uk>
- <20250616120832.GA24959@lst.de>
- <2d62254e-5cbe-4174-95d8-e80cae4f4543@sirena.org.uk>
- <20250616121444.GA25443@lst.de>
- <7cfcf919-3c7d-4f0c-911f-697ea3141080@linaro.org>
- <20250616131346.GB29838@lst.de>
- <83855c1a-c128-4762-9d6b-e17f2c4c8820@linaro.org>
- <d16bdc40-20d6-49db-bf41-18bb9b8e01fd@linaro.org>
- <20250616131944.GA30260@lst.de>
- <f723d490-c228-42d5-9f9f-158df54a092d@linaro.org>
-Subject: Re: [PATCH] dma-mapping: Stub out dma_{alloc,free,map}_pages() API
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-08c49
 
-On Mon, Jun 16, 2025, at 15:23, James Clark wrote:
-> On 16/06/2025 2:19 pm, Christoph Hellwig wrote:
->> On Mon, Jun 16, 2025 at 02:15:56PM +0100, James Clark wrote:
->>>> Yes it does, it has a few modes that don't require it. Presumably we can't
->>>> just add a depends into the kconfig for all devices because they might not
->>>> be using DMA.
->>>
->>> *for all the different variants of spi-fsl-dpsi devices I mean
->> 
->> This is drivers/spi/spi-fsl-dspi.c?
->> 
->> Yes, looks like it is one of those rare devices supporting a DMA and
->> non-DMA mode.  But everything seems nicely guarded off using
->> "dspi->devtype_data->trans_mode == DSPI_DMA_MODE" checks there.  So
->> wrap them into a little helper using IS_ENABLED(CONFIG_HAS_DMA) and
->> everything should be sorted out.
->
-> Sure, I don't mind doing it.
->
-> But separately to that, I still think making the stubs consistent would 
-> save people a lot of time diagnosing build failures if they switch 
-> existing code to any of those 3 functions. Principle of Least 
-> Astonishment and all that.
+On Mon, 16 Jun 2025 11:19:55 +0200, Lukas Bulwahn wrote:
+> Commit 9a30e332c36c ("spi: spi-fsl-dspi: Enable support for S32G
+> platforms") reworks the dependencies of config SPI_FSL_DSPI, but introduces
+> a typo changing the dependency to M5441x to a dependency on a non-existing
+> config M54541x.
+> 
+> Revert the unintended change to depend on the config M5441x.
+> 
+> [...]
 
-As far as I can tell, the difference here is that the
-dma_alloc_coherent()/dma_free_coherent() calls all get stubbed
-out, so the 827 drivers using those can all build cleanly on
-mk68knommu, shnommu and UML, while dma_alloc_noncoherent()/
-dma_free_noncoherent() are only used on 15 files that are all
-guarded by some other Kconfig dependency at the moment and won't
-build on the those platforms.
+Applied to
 
-I agree that it would be best to treat the coherent/noncoherent
-cases the same, and I also think the existing stubs are a bit
-silly, but just removing them would likely require fixing
-hundreds of drivers with added Kconfig or IS_ENABLED() checks.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Maybe we can actually remove CONFIG_NO_DMA/CONFIG_HAS_DMA
-entirely and remove all the checks for CONFIG_HAS_DMA? 
-My guess is that this would only lead to a small code size
-increase on the affected targets, but since they are not
-actually trying to do DMA, and they all have a very limited
-set of drivers they actually use, it won't break existing
-code.
+Thanks!
 
-    Arnd
+[1/1] spi: spi-fsl-dspi: Revert unintended dependency change in config SPI_FSL_DSPI
+      commit: dce4bc30f42d313b4dc5832316196411b7f07ad0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
