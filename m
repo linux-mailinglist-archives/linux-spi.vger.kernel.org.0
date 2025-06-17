@@ -1,127 +1,118 @@
-Return-Path: <linux-spi+bounces-8610-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8611-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A84ADBEE2
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 04:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 580DBADBF4D
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 04:48:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3804E3AE459
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 01:59:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 449633AC25E
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 02:48:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534A81C7009;
-	Tue, 17 Jun 2025 02:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B906220297C;
+	Tue, 17 Jun 2025 02:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R42I15/W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXAdnN/V"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8D51EB2F;
-	Tue, 17 Jun 2025 01:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCD11624DD;
+	Tue, 17 Jun 2025 02:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750125600; cv=none; b=dkWdAgZMtD2MRcyIfjTeOH4tDVVao6fKYXm9RwgQb2m0xRiCw/kpMUoSpUJc0HbcrVz3KTZXO8aKZm23ECBjk8wVIUtuSHMQ8vcZgwdbfaiXqXSpNEfk8u8B0ye03Mu4Gsz1HeyZNoX/oEAAEgWoXaswTBY7I25ak3hiJx/Ju0o=
+	t=1750128523; cv=none; b=sTt0rXg/W7TPHgeIKuxb5igQzmDZb76YgriUv0YzR0mAlcMNWsn8dHhrNgtMxzAGe3y+YPmBdP3IL4He8qu3pSD24ioXUAnE3imChjgPtb6Fuui981zFAV2QL7z8brxSlCW/qb5Hc3ul0ggE5eumPL9YCBSxwr2FIJOAyu4oPqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750125600; c=relaxed/simple;
-	bh=8AHskTTSmpL1cVyJIzyA7INB00VBnp62zgkfDcOrtS0=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=lozVE6xaZRxUBVnLQtvWHY2TQ7cY/xV5NIPmteHAP1q26GUCBLv4G3oPDcO6blBxMdReHnpJGDeqVU0piiC0fTDd2II4MmiOFk99qbmPA8FZRhwkat5Lf/np/p1sMLcl50TQm1PCQI4wy6jaWd7bF6DD74X3UOCddctURKsg42s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R42I15/W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95901C4CEEA;
-	Tue, 17 Jun 2025 01:59:59 +0000 (UTC)
+	s=arc-20240116; t=1750128523; c=relaxed/simple;
+	bh=DklztjJ2Mw4DZTzCJXFIusPWDE6iqwE0hRAVc+zb/5M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EZzj2HyJuKdABuGcHBi7qjqpiFbTxmYBaLXNHOBS12H5YDq67L6xCuuq0AGHFzNm3bmk8JcazDL42k9fbMCWjtWtf0/OhZbdlrbmZGkqkEqXTIKaGi2IomYAVhXOeI7L6OK78y9IeHHu3jtMY1Yj95BmfSTzKJGDRgRosZCaigI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXAdnN/V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1410FC4CEEA;
+	Tue, 17 Jun 2025 02:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750125599;
-	bh=8AHskTTSmpL1cVyJIzyA7INB00VBnp62zgkfDcOrtS0=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=R42I15/WkdBn4FZ6+Rja1IQ1QOAbBCsq0EtRuDOa0VNQFd72Q2luG+ZgvHaRBitCV
-	 hpwn65LydAI8h2a4EWCti/O9yGwt4nIAnihrfgZIFFXK21sX6zGK0n/zufBd14YgoE
-	 kKn9sCOzipPfOS+0SwpHqmU4g4tolPPIuYq6q+Y1AM7xWT8S0Le0LULOwjQqbSliAS
-	 c1kHdG1n65CtjzuSwURDdzuO/vkd+rlp7qxTJHutUkUA46iZfNzTjQm4AHhlAXX1YO
-	 2J83Wwd8raNbgO3TXFTx5qmUGNjHEkTsHTLcIBV6uzyqpUDJEoJNxF/0qbobwZVYkP
-	 tK4ZXnfGK5ZCg==
-Date: Mon, 16 Jun 2025 20:59:58 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1750128523;
+	bh=DklztjJ2Mw4DZTzCJXFIusPWDE6iqwE0hRAVc+zb/5M=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=RXAdnN/VH4whkEDHi0WhWsgK0TD7IDzbqiegcOr8PAe/4GJk+joOalb9pVGxfU9W8
+	 vzRlHw2yZ9Y3UzN5eZkuCRmU/GV/Uj3OvEZRx0zow+BdXW+jLfvEDF3o7r8+QEH+/X
+	 WlwW9rnX/FR09001rWLFG8GucBxi64Yc0JZanNOWuq+f/8nC4NE1nVM58O1LbIcPtr
+	 Nv6HAJCQ7SE5N99mdASgfCpoIAGvR8PghnVFgSrZLGB0ZM55r8BFCXXCfjKEbCIaSY
+	 ZmJtjLPb3sRjnj5ep7Ji4LLWzUFJK8++bzt8FnVLgxNsw/Gs7Rv6GqvZ2Ty4kYuMwm
+	 bX8YIABlGxAWw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F41F2C71155;
+	Tue, 17 Jun 2025 02:48:42 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH v2 0/3] support for amlogic the new SPI IP
+Date: Tue, 17 Jun 2025 10:48:35 +0800
+Message-Id: <20250617-spisg-v2-0-51a605a84bd5@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
- Michal Simek <michal.simek@amd.com>, David Lechner <dlechner@baylibre.com>, 
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Jinjie Ruan <ruanjinjie@huawei.com>, Conor Dooley <conor+dt@kernel.org>, 
- devicetree@vger.kernel.org
-To: Sean Anderson <sean.anderson@linux.dev>
-In-Reply-To: <20250616220054.3968946-3-sean.anderson@linux.dev>
-References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-3-sean.anderson@linux.dev>
-Message-Id: <175012559872.3174543.9779809862801791863.robh@kernel.org>
-Subject: Re: [PATCH v2 2/9] dt-bindings: spi: zynqmp-qspi: Add example dual
- upper/lower bus
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIPXUGgC/zXMQQ6DIBCF4auYWZcGsFh11Xs0LhBGnKSKgYa0M
+ dy91LTL/+Xl2yFiIIzQVzsETBTJryXkqQIz69UhI1saJJeKN7xmcaPo2LWdpGhaiaM2UL5bwIl
+ eh3MfSs8Unz68DzaJ7/oXLj8hCcaZarvajtjZTtU3vTy8I3M2foEh5/wBvye3UZwAAAA=
+To: Sunny Luo <sunny.luo@amlogic.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750128521; l=1440;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=DklztjJ2Mw4DZTzCJXFIusPWDE6iqwE0hRAVc+zb/5M=;
+ b=8h9iC9im/B3MsOYxsjoF/SsNde6GwLGzHa0m3zbNfwkanuyQJc2YiiDB/4mkEiGbxoWFHVw3a
+ mrUv4z5DSneBIlVg5e9geBhXGLt5rG9DeNZfOReOCIDhe1z5P9+zp4m
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
+Introduced support for the new SPI IP (SPISG). The SPISG is
+a communication-oriented SPI controller from Amlogic,supporting
+three operation modes: PIO, block DMA, and scatter-gather DMA.
 
-On Mon, 16 Jun 2025 18:00:47 -0400, Sean Anderson wrote:
-> Add an example of the spi-buses property showcasing how to have devices
-> on both the upper and lower buses.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> ---
-> 
-> Changes in v2:
-> - New
-> 
->  .../bindings/spi/spi-zynqmp-qspi.yaml         | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
-> 
+Add the drivers and device tree bindings corresponding to the SPISG.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Changes in v2:
+- Use regmap to operation register and drop bitfied define.
+- Use "SPISG" prefix intead of "SPICC", and declare clock div table in the spisg_device. 
+- Delete other power operation functions except for runtime_supspend and runtime_resume.
+- Fix some format corrections.
+- Link to v1: https://lore.kernel.org/r/20250604-spisg-v1-0-5893dbe9d953@amlogic.com
 
-yamllint warnings/errors:
+---
+Sunny Luo (2):
+      dt-bindings: spi: Add binding document of Amlogic SPISG controller
+      spi: Add Amlogic SPISG driver
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:40.15-25: Warning (reg_format): /example-0/soc/spi-controller@ff0f0000/flash@0:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:46.15-25: Warning (reg_format): /example-0/soc/spi-controller@ff0f0000/flash@1:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:52.15-25: Warning (reg_format): /example-0/soc/spi-controller@ff0f0000/flash@2:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:39.21-43.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@0: Relying on default #address-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:39.21-43.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@0: Relying on default #size-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:45.21-49.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@1: Relying on default #address-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:45.21-49.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@1: Relying on default #size-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:51.21-55.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@2: Relying on default #address-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dts:51.21-55.15: Warning (avoid_default_addr_size): /example-0/soc/spi-controller@ff0f0000/flash@2: Relying on default #size-cells value
-Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: spi-controller@ff0f0000 (xlnx,zynqmp-qspi-1.0): $nodename:0: 'spi-controller@ff0f0000' does not match '^spi(@.*|-([0-9]|[1-9][0-9]+))?$'
-	from schema $id: http://devicetree.org/schemas/spi/spi-zynqmp-qspi.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.example.dtb: spi-controller@ff0f0000 (xlnx,zynqmp-qspi-1.0): Unevaluated properties are not allowed ('cs-gpios', 'flash@0', 'flash@1', 'flash@2', 'num-cs' were unexpected)
-	from schema $id: http://devicetree.org/schemas/spi/spi-zynqmp-qspi.yaml#
+Xianwei Zhao (1):
+      MAINTAINERS: Add an entry for Amlogic spi driver
 
-doc reference errors (make refcheckdocs):
+ .../devicetree/bindings/spi/amlogic,a4-spisg.yaml  |  55 ++
+ MAINTAINERS                                        |   9 +
+ drivers/spi/Kconfig                                |   9 +
+ drivers/spi/Makefile                               |   1 +
+ drivers/spi/spi-amlogic-spisg.c                    | 878 +++++++++++++++++++++
+ 5 files changed, 952 insertions(+)
+---
+base-commit: bd30b995df8fd053e13d10f78dbc7b2fa5ed1aae
+change-id: 20250603-spisg-78f21682ebac
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250616220054.3968946-3-sean.anderson@linux.dev
+Best regards,
+-- 
+Xianwei Zhao <xianwei.zhao@amlogic.com>
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
 
