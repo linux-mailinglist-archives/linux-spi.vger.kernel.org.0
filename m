@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-8617-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8618-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D7BADC206
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 08:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EDBAADC20E
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 08:07:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAA831896984
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 06:06:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D431A18969B9
+	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 06:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422E3221F11;
-	Tue, 17 Jun 2025 06:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CAE202C48;
+	Tue, 17 Jun 2025 06:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2aul9gn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lltu9USM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BBA19F421;
-	Tue, 17 Jun 2025 06:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA02B1B043C;
+	Tue, 17 Jun 2025 06:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750140354; cv=none; b=nV2UkFfF4I2XtzS8XwiCPgdcGcQm0a3FWSdXjd2hd11hqOTg0LJrMFfn8ldhxe5Vg2OtjlsWbyOg2lsQ5WKQ60FHQRAKyiLgcy9qxRdx6GhMPcsCNGZnc4bSwSJCyKLPZyLfzzUxYVrwAO3YbD0Pa+Iqv5k2lmIm3KM7XFWXITg=
+	t=1750140431; cv=none; b=LsCRVqBYKHfpqWfujztOAmS3NzS2xkd4Q4YrJ5BFpRoID1RD4jHDjNHIeUsZoHBGRIMYA6gUFTL51e0NVIbObZVThCyeERjKbFVzrWb3Lqgs5TL/hWIqht9karLldSCNTTAmrKE3j/Jqtg7LM+cVJpS2O38c5l+mzAEg5jlfIIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750140354; c=relaxed/simple;
-	bh=6wUhUeVPTr7SOLxRIvWJOPbsU195e72G9vbKVpsiegM=;
+	s=arc-20240116; t=1750140431; c=relaxed/simple;
+	bh=mFMrX2PmYbA54J62FTMIDoAR1Cnr1l3itbLBIBwh1Ak=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YFvL5klcMNZ5Spm4pEXSDkRrssrByxPN7exu1P/00mLKk4v1b/m+Tuabn3CKK0NEzve4/0AQoHIKYxHEY0J+wBuXAmDARg1fVRabPCASWoPbZP5TrUmIl2LkFuQD6xgt6LscSUyx9ribNdkTAripLdcry9wjnzEOKHJYWqdjYQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2aul9gn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57ADDC4CEE3;
-	Tue, 17 Jun 2025 06:05:50 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=r2xsaX2kIyGzUOx64sLCwmQZOgIRmZOSpa6iaGfN7I98MmaVDNbkIhCbbJ/I9/jYZWyt8KxKpHOaeaU32uq2qmSFyVAsLr9+rxCV7T6K7xrDqh3PupoCC7qEO5w64AnhyGFoJNX+dXSBs04bmTgC5XyEIYZUvY689qCqqqKw0NQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lltu9USM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07064C4CEE3;
+	Tue, 17 Jun 2025 06:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750140352;
-	bh=6wUhUeVPTr7SOLxRIvWJOPbsU195e72G9vbKVpsiegM=;
+	s=k20201202; t=1750140430;
+	bh=mFMrX2PmYbA54J62FTMIDoAR1Cnr1l3itbLBIBwh1Ak=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=A2aul9gn8HaiBwh9iRqpYSLxwASbspLhiCMFpQdhJEo68atwwFoBOSVn2Tmh051I8
-	 93OVNF40KqtLPIgKkKFwJs1TazqaspoTe6+eZbScMxF6r6S8PtwnkLpSWEn2w4nZdm
-	 t45/ywQTLA4xHQdhUI4PQVcji+9Ka9r8nuIezvmOP0JwQOOe2ep1bmeIhF8hMflNHI
-	 wrFKJf/XmpStwheN0T6z0XqCmxfAeIwIsomgOPbmBCge8AzTpFe8TdZO0iX4hMoPH2
-	 +66F6YkrgfuqN+uynK+c2zR6APFDI2ypbjOIUuEjvjo5658utNm5lZsCMBKPWSbYDI
-	 XkqP/utm9rlog==
-Message-ID: <e541f1a9-1977-4f45-b82e-7e0a44f6eb88@kernel.org>
-Date: Tue, 17 Jun 2025 08:05:48 +0200
+	b=lltu9USMO6lgqz7XfulXgAzlFCv33lY0VTvJ4hnkuig/YNBOICkEoH3rW+Z8EoYKS
+	 LqZ2xjrpsLC8OcGBqcKN9dYzeX41AZLWW+hnkUrqGz/b0g2aUsY1Kd7GyHePbv8Ju9
+	 F4EoSlg7lZkTpcbejBfVCq459SOFt4o9Bm0XiV8azNGt4Fhp6tEceXRojPOr2sr+rI
+	 CI5pxwPCUSilIkGf9nVJcAabn2Jt7Es48qbMVR6n+wuxVp1qgVbyBrw5B0H4NiNKo9
+	 xCovlZy6wiIMlEgTEj5ErCJxqH/jXWTh/rNCWUgfcsx0RebCpzSprzr1/ib0d86zwX
+	 vGV40k3bdmO0w==
+Message-ID: <e4e018a4-1481-4132-9a5a-34233403df89@kernel.org>
+Date: Tue, 17 Jun 2025 08:07:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,16 +50,19 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
+Subject: Re: [PATCH v2 9/9] ARM64: xilinx: zynqmp: Add spi-buses property
 To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
  Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
 Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
  Miquel Raynal <miquel.raynal@bootlin.com>,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  David Lechner <dlechner@baylibre.com>,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
+ Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ devicetree@vger.kernel.org
 References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-2-sean.anderson@linux.dev>
+ <20250616220054.3968946-10-sean.anderson@linux.dev>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,46 +108,43 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250616220054.3968946-2-sean.anderson@linux.dev>
+In-Reply-To: <20250616220054.3968946-10-sean.anderson@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/06/2025 00:00, Sean Anderson wrote:
-> From: David Lechner <dlechner@baylibre.com>
+> Add the spi-buses property to the ZynqMP devicetrees. This is pretty
+> simple, since all boards use the lower bus.
 > 
-> Add a spi-buses property to the spi-peripheral-props binding to allow
-> specifying the SPI bus or buses that a peripheral is connected to in
-> cases where the SPI controller has more than one physical SPI bus.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
 > Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 > ---
 > 
-> Changes in v2:
-> - New
+> (no changes since v1)
 > 
->  .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dts | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dts | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dts      | 1 +
+>  arch/arm64/boot/dts/xilinx/zynqmp-zcu1275-revA.dts     | 1 +
+>  10 files changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> index bfa7ea6b9224..3d3cb656f38c 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
+> @@ -132,6 +132,7 @@ &qspi { /* MIO 0-5 - U143 */
+>  	spi_flash: flash@0 { /* MT25QU512A */
+>  		compatible = "jedec,spi-nor"; /* 64MB */
+>  		reg = <0>;
+> +		spi-buses = <0>;
 
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-</form letter>
+Default is 0, so this entire patch is noop. Commit msg should explain
+that if noop is still needed for any reason.
 
 Best regards,
 Krzysztof
