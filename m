@@ -1,107 +1,96 @@
-Return-Path: <linux-spi+bounces-8630-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8631-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8DD5ADDBF9
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 21:02:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CECF5ADE656
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 11:12:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6DDBC7A209A
-	for <lists+linux-spi@lfdr.de>; Tue, 17 Jun 2025 19:01:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FBFC1897911
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 09:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1324521771A;
-	Tue, 17 Jun 2025 19:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C9D527FD4E;
+	Wed, 18 Jun 2025 09:12:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rDm18xTi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Zy1Rwuwu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay15.mail.gandi.net (relay15.mail.gandi.net [217.70.178.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F118F54;
-	Tue, 17 Jun 2025 19:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE9327FD4A;
+	Wed, 18 Jun 2025 09:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750186947; cv=none; b=lFIVjXioyChV+cSVRJ0XHB5FoduSfjmIDS3v80tN0Fv5Sz09qPz6Djej1+bZL5MSzucR0izOzX7HU+jacRlRYIgLlgUKf6ouQgj/0x64q0DlAjsAIkejpgwgxtrglIVeIdjVr08sVRDiXMhH+V3mi6Z9iFiP7EEdX57EyP3HBz8=
+	t=1750237951; cv=none; b=g/wAgGdHpA2MB+46CXGqxzJN9bXD4+KaPBI1gXa7TEyhiKcXXANWfbe/v1u+g9Mn9CU8/6RbXDqpsySaiFRgToFqr3NNRdLg5ltUT9evvRWrY59An0W62+1d0SCc5TYQl+PVN02ZhHOamS81Ab+4LzT7YULXFuVusSkesogt8UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750186947; c=relaxed/simple;
-	bh=R6HIk76NDv1XIk8WybWPXOJkOb7X10okP0rTRuTfkpg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jFGYvj3lG4JkzUBPRjSFPK7y0rikhlkmfx/Z/W6Jf+ai++QGbrJxbyZC1OD/IqYCxda0AxBab0DfkXZTMeYN+DcL9LRAXEP29jqUUMO7XuRgcy/vmRbTcguAAP/qOLFBlhYCBmD1/LWw//vKqbp8i66FTwb46hrYyRUv6tGN9Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rDm18xTi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FF65C4CEE3;
-	Tue, 17 Jun 2025 19:02:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750186946;
-	bh=R6HIk76NDv1XIk8WybWPXOJkOb7X10okP0rTRuTfkpg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rDm18xTimWFNcL6/ygxtCwBlM3/uGMreMhF1zB5bMe9APb0AYy5tNaEwj0equh764
-	 Scq3LzjJqQMbyq/pf21x489pq7Tm7oMsPF/chSxt2AYdVx2xQJbNsaKPYMv9nKNRJn
-	 jmaKMs4yXIK+huPjVlvCVCL06cKGuRN1krg+LhASZfYcZT7H9Ii4y4VbziJE0fRrao
-	 oIhktH72tb2nYFn++hUb2FbF7R6+G5JBI7PQHnOIpvFq2WgU9lwsCFYSvAl3Wu3z85
-	 TEEYxkhXdkfttsJ6QSFbgJQ8cU8/YbDA1Qjf6s20TIubW3OSZ9eS/idVfw7xsWxkEt
-	 6ChK1MQmWuzfg==
-Date: Tue, 17 Jun 2025 20:02:19 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Vicentiu Galanopulo <vicentiu.galanopulo@remote-tech.co.uk>,
-	Will Deacon <will@kernel.org>, Han Xu <han.xu@nxp.com>,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Andrew Davis <afd@ti.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-leds@vger.kernel.org
-Subject: Re: [PATCH v7 1/3] spi: spi-nxp-fspi: check return value of
- devm_mutex_init()
-Message-ID: <41c9baef-5c86-41ff-8a95-0cac18d8d558@sirena.org.uk>
-References: <20250617-must_check-devm_mutex_init-v7-0-d9e449f4d224@weissschuh.net>
- <20250617-must_check-devm_mutex_init-v7-1-d9e449f4d224@weissschuh.net>
+	s=arc-20240116; t=1750237951; c=relaxed/simple;
+	bh=cj6KRD0up+ErYS+u+qJncczJtEr5FTwpg3NwGMa9s/c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iM/45Yg8RiFl12jjkQGox2Is8N+xJPKyhL8SjBx0sL0P4N2CDGWjREHf8azAxfKC6S1iq/iB146v68kaXNw3oEMPDjYeYnLB8P5qD86jr1EyIZ6sBey+AgOWwd5JQT+A3DzjAwMsZ9ZCgAKexZVbw4rXn76QjKNfWfp8DWbhNNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Zy1Rwuwu; arc=none smtp.client-ip=217.70.178.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F216C442DD;
+	Wed, 18 Jun 2025 09:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1750237946;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cj6KRD0up+ErYS+u+qJncczJtEr5FTwpg3NwGMa9s/c=;
+	b=Zy1RwuwuMUY2gqRqK8VF9qHB4Zg8JNw0Z6EJbt6lzo982uKdDFH16wzC1d858R3tjaoaEn
+	UTAPopdQetgAQrAXZlHbn/ZsxEllWfCzZKnu8IrI0/5lyjJUvFzhWnOu4CX0QT9LGAX1Zj
+	bgEbLI69ACbdtti9XaBGiaI3x9NOEZVkzgxdgNp1YkOH6hOP9GAj2rASp3M1ttRpWAqgr4
+	qia26896ElN3P5rt+fyIij8/xnBPoHb1rBhB7iVOWaDEArjqFJAK1RY3J5zVrAcwk2L0+M
+	6xFLCUrY2Uik3mGlmC3fkmE4fSk6029rnab0VhuCJf5eotjro8QSIr/PHDvhZQ==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>,  Md Sadre Alam
+ <quic_mdalam@quicinc.com>,  Varadarajan Narayanan
+ <quic_varada@quicinc.com>,  Sricharan Ramabadhran
+ <quic_srichara@quicinc.com>,  linux-spi@vger.kernel.org,
+  linux-mtd@lists.infradead.org,  linux-arm-msm@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: spi-qpic-snand: document the limited bit error
+ reporting capability
+In-Reply-To: <20250527-qpic-snand-limited-biterr-caps-v1-1-61f7cf87be1e@gmail.com>
+	(Gabor Juhos's message of "Tue, 27 May 2025 13:08:16 +0200")
+References: <20250527-qpic-snand-limited-biterr-caps-v1-1-61f7cf87be1e@gmail.com>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Wed, 18 Jun 2025 11:12:25 +0200
+Message-ID: <87zfe5l8g6.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eZcz5BBWoAZIa4y4"
-Content-Disposition: inline
-In-Reply-To: <20250617-must_check-devm_mutex_init-v7-1-d9e449f4d224@weissschuh.net>
-X-Cookie: It is your destiny.
-
-
---eZcz5BBWoAZIa4y4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvvdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtgfesthhqredttderjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffgefhjedtfeeigeduudekudejkedtiefhleelueeiueevheekvdeludehiedvfeenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepjhegghekhiejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghmuggrlhgrmhesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehquhhitggpvhgrrhgruggrsehquhhitghinhgtrdgtohhmpdhrtghpthhtohepqhhuihgtpghsrhhitghhrghrrgesqhhuihgtihhntgdrtghomhdprhgtphhtthhop
+ ehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhtugeslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhmshhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
 
-On Tue, Jun 17, 2025 at 07:08:12PM +0200, Thomas Wei=DFschuh wrote:
-> devm_mutex_init() can fail. With CONFIG_DEBUG_MUTEXES=3Dy the mutex will =
-be
-> marked as unusable and trigger errors on usage.
->=20
-> Add the missed check.
+Hi Gabor,
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+On 27/05/2025 at 13:08:16 +02, Gabor Juhos <j4g8y7@gmail.com> wrote:
 
---eZcz5BBWoAZIa4y4
-Content-Type: application/pgp-signature; name="signature.asc"
+> The QPIC hardware is not capable of reporting the exact number of the
+> corrected bit errors, it only reports the number of the corrected bytes.
+>
+> Document this behaviour in the code, and also issue a warning message
+> to inform the user about it.
+>
+> No functional changes.
+>
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 
------BEGIN PGP SIGNATURE-----
+This change no longer applies on v6.16-rc1, can you please rebase and
+resend?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhRu7sACgkQJNaLcl1U
-h9Djzgf7BjmyCihz/P6gU0L4P94mhmO5dgXIPIxPiwFT3Mpl2kAzQWGYY6JeN8T2
-dH4XWEPagzh09mHdcCiV6HhFRgMFs2d3ELDE/gxgzjEEK5WNFI6rgQxvf8MENvgm
-bSTkSPPZlcxn8TJyvr3kbPtU0roSEwrXkRUJIXwKnWPORqGxlTSfOP2LLNLF5klh
-kvQMcwJ8S+Q/QuRoEJanrPAzIDvyl7PZZfSoqH+ZLEP4opBExbtUFQRsEJ8qNByd
-dSejPKSktzkN3cEOFw5JeN9aLDCrEIX/0u5ImnTO7LfqKJG4T1ieV7dRBamnO6M5
-nJp2GTTvmdeA0DS6IE3sJKn0OLrlzQ==
-=iZ19
------END PGP SIGNATURE-----
-
---eZcz5BBWoAZIa4y4--
+Thanks,
+Miqu=C3=A8l
 
