@@ -1,108 +1,123 @@
-Return-Path: <linux-spi+bounces-8660-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8661-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B850FADF0BE
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 17:09:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B7CEADF177
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 17:37:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D95853A6763
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 15:08:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC9F44A1675
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 15:37:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A7C2EE96F;
-	Wed, 18 Jun 2025 15:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9059D2EF9AF;
+	Wed, 18 Jun 2025 15:37:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDmqv8OH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jfYxUja2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060D12EE962;
-	Wed, 18 Jun 2025 15:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FAC2EE615;
+	Wed, 18 Jun 2025 15:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750259332; cv=none; b=hOEATeVpVVkem5Czt0zpPsdS7M6WZ5g1udjItObuWOHxBa4UrK7tM3P2Vk/hCAeVcFBBspbhZsxW2BeEeqh/6q5AzvjX+APtXmtllpdKKRHXuAoBclaprOHazrhOICrTHVzp/B+SN/+vBgpMX03X6O/ZQgIb3sM/84AaOIsVMDw=
+	t=1750261053; cv=none; b=VNHg5feGua4HshHM5c5Yvc0voaAsT6ZRjMLJ33Dlq28QPCXsTDIl7WVJhDLnNS/Zd5AbQIJPuvE4F5A9+NllqrVATYqFITYr/JJkkDOxbE/EtXIeziQaVDf8NCP3c6auKeVecn+zRNrD5zBFI86lZVH0TnJPQ4wqy6jRJLLZBHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750259332; c=relaxed/simple;
-	bh=X7QMCBMIwOTwFm94q45BeJ4PoCWomPFcgOijpd3TPE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nCTc2T2rWOTFOPGdS9rK+uEN+3baBG+XPFXEeNoUEsT6uFqv14a+7iBFaAEHjkw4Uan1Afrt726EDTTwCJtRPxPI707eGDyaqi7XkMCc3t6vWnmdtlJRLEXaSXsHrebP5brCJZ5ZZX4/XHrh7RCPMzlYB6u1n5jmXoN6kW/mDtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDmqv8OH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF21BC4CEE7;
-	Wed, 18 Jun 2025 15:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750259331;
-	bh=X7QMCBMIwOTwFm94q45BeJ4PoCWomPFcgOijpd3TPE4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jDmqv8OHYq+Gwia71auzXNmq1OAzja/cYi0tkehA6GbSdTRqpbTX6HSo5cVYJwlnH
-	 aSqLv1UKlIHTM3zZVuMzrp/JoXR4DOgft2e/sMB18aie0Z1PZMr52ZAgOqUb+7p+mJ
-	 XFJrfeDI9O5UiZp5er1lXMCScU0PM+c7YFKL/2HQepK9MDsvzzc2A7bhCefGAUy3ZV
-	 0XJ/mUb7ZigYYjvdfu1lf56C3IsW9vtOJeBiGB5p42Cm/B1vFTQvGiT5hsqIpISvKL
-	 rWVq86VoQgrXsI4DH0IhzGQse7Fsd3Ha9stce54Z1tjdnu7n1pk7hRNK57Y7zLeu5R
-	 1IPSoEkxzPKxQ==
-Date: Wed, 18 Jun 2025 16:08:47 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Shiji Yang <yangshiji66@outlook.com>
-Cc: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	John Crispin <john@phrozen.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/16] spi: falcon: mark falcon_sflash_xfer() as static
-Message-ID: <f81ec27e-8c3a-4998-a31c-dcb4453bbe0c@sirena.org.uk>
-References: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
- <OSBPR01MB16705BE87E549B6210CD6BCABC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1750261053; c=relaxed/simple;
+	bh=38oLIBSzvwS9F/ZdoXgoz55RXnTesyPZaehl42RAHdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Js79QtLUdRS8ht+TF+6/uGNnqXUsWRaADoXt2M+76CAF8cXzJJPjuZWcbCuTqBNPnjbHiioYzeouXq5PToy0PVntOxT8wnan0CN+VJfNcpP4XVy/Q766FfnvCsPcNybFJ+gSQgGVDjCt7iYySiJxQp66Ud6tm13SKUpagIlFwjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jfYxUja2; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3a51481a598so4126699f8f.3;
+        Wed, 18 Jun 2025 08:37:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750261050; x=1750865850; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7rots1tBuEj+icP+SlfA9bvZe/4e1MCmHxB3VSaBaYU=;
+        b=jfYxUja2tdX29FY5wAwfJ0jo11flwIEewIBsVHIGswC2urtX/8xTXLQcT+T4jkzhxN
+         cfyv542vAefiimkaCBnQSe+F2EnW9ePMaKPHsQMNn4TEdRTo9CqFS4BI8V/SjBCpK1gI
+         An0N5e61dtc8EV2qaQfOIblpg9gla7RtByWm9hkbdq2vaex5K2lbinI3Ro3rISlpHrmp
+         vxAyv+keN/46moLV4/mz0vnPizdyCUXI/53hzlqPn3kMMqc8kAP5OKbm0CgemC/dxb+Q
+         jTI0WiTyr5yYpoCRw1TvQ6EYDhAgdXmcbNpF6PFtdqOu9ScUwH5uhrRXhgBcEImP4TMs
+         kVwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750261050; x=1750865850;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rots1tBuEj+icP+SlfA9bvZe/4e1MCmHxB3VSaBaYU=;
+        b=t7Z3RPvKfmqu6zHtoO/GBkp7c5RX4zhQfk2gmshr4qERVO3+F2B2ufw73TFB7GQk0K
+         6rnmFeOEaq3Dt+gz7fPyM0c1gMh2+yUKImWoa4avl6n4UDnYCmdQPuPwPdSoFX2ISJ+R
+         lUaMjABtuKuYuet3YBXl65W07yn6URSzVRmNxtyh4lD7h0iBmfFdckPKvjYvkMb3sg9Y
+         PtSVuW/otl531tWA7k7L6Y1c5JFjD/8zgtJ4u/xB3/Rs5GP2ti9qG8gVBHwzWoV7rBcp
+         5SMU4G4wmhtLEPwB1lLTpu+8KlR4af1Xf6JlkDcceqmLArnZeSGIHLBMTFSx1FXHUbyW
+         NBig==
+X-Forwarded-Encrypted: i=1; AJvYcCWL1WaWxG/McMC8JmE+PIijR0QvFXCLBCQ61O6EtiXybWMNLW+IW/NLoNIGOpZwaCONtPl0cE9PGx4R@vger.kernel.org, AJvYcCWlhqiblpjigRC4jWeY5Z2Pmi6XVgrGTed69Z4tYQFtzwEEvACQcQ46QkZxiMhjijw0J1wA2DQFxJnjZE2S@vger.kernel.org, AJvYcCXgez+hUpeqP9zoF2jMQ5gbj7cXMuskMKjwN2zfuGwIEIXQ6n20peHcuz3h4jyV/wfnpxYmTP7T9RYXMBw8@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL8Ybwm7u9K14rZM9hMg41AYJ5lOsHCsWoJMTQ8n/Q7hWEhcrf
+	sS+y28+SHJz6s1cOO2LHyL2VajHQKWMQFKoz8MO8ojSATHnvcTCYE4MORdz46vJG
+X-Gm-Gg: ASbGncut6iBwnBe9wklQqohBzHeZtNtFA9bvUhmOe8M78uXphaUvs229L3Zdqc2DFgo
+	F2Lr5UpgnZQ0HKO/D4nAaLzoOY8WB6O1239D5JinKOQgS2TqeqK+vsh+clxksVusr4G+qvhcnMr
+	CLACryn35DRWpY5Q2uEu23KHlbfs2b9i4HLorzABx0mlnuSHzS9Oj8ahlH3itFvPpOt/dVtpMZw
+	rrwIFAU/MEDHp1mKNvzyw+wXuLsBulWn1ueLaOQAYZmMN4xFkQfOUXQpB1yYfgCyqboHuEp3g8D
+	ZlhkwWfgWVgAf+BymvRBNKhQs6GtaIvsVrRtWdK0rhrRco06yR8X9xRT+Ljh8xKwSfz33Jj3IIy
+	iajcyHUPfedvahKGfXTzJ9u8BW9sVlQWbUchrOw==
+X-Google-Smtp-Source: AGHT+IF2VV+CTQDFvL+Rf1YFT4Teh7oJnJWmdd/7flA9WH+cFonugqwJIfxyEtFJSjjrtaGHyVPTeQ==
+X-Received: by 2002:a5d:5f93:0:b0:3a5:1c70:5677 with SMTP id ffacd0b85a97d-3a5723676c0mr14030160f8f.7.1750261049844;
+        Wed, 18 Jun 2025 08:37:29 -0700 (PDT)
+Received: from [192.168.20.170] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b47198sm16964027f8f.81.2025.06.18.08.37.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jun 2025 08:37:29 -0700 (PDT)
+Message-ID: <96e2a25c-89d1-42c6-b2e6-eb51b6964849@gmail.com>
+Date: Wed, 18 Jun 2025 17:37:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tGm6mU2I4HqfE/Y5"
-Content-Disposition: inline
-In-Reply-To: <OSBPR01MB16705BE87E549B6210CD6BCABC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
-X-Cookie: This bag is recyclable.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: spi-qpic-snand: document the limited bit error
+ reporting capability
+Content-Language: hu
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Mark Brown <broonie@kernel.org>, Md Sadre Alam <quic_mdalam@quicinc.com>,
+ Varadarajan Narayanan <quic_varada@quicinc.com>,
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+ linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250527-qpic-snand-limited-biterr-caps-v1-1-61f7cf87be1e@gmail.com>
+ <87zfe5l8g6.fsf@bootlin.com>
+From: Gabor Juhos <j4g8y7@gmail.com>
+In-Reply-To: <87zfe5l8g6.fsf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+Hi Miquel,
 
---tGm6mU2I4HqfE/Y5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 27/05/2025 at 13:08:16 +02, Gabor Juhos <j4g8y7@gmail.com> wrote:
+> 
+>> The QPIC hardware is not capable of reporting the exact number of the
+>> corrected bit errors, it only reports the number of the corrected bytes.
+>>
+>> Document this behaviour in the code, and also issue a warning message
+>> to inform the user about it.
+>>
+>> No functional changes.
+>>
+>> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> 
+> This change no longer applies on v6.16-rc1, can you please rebase and
+> resend?
 
-On Wed, Jun 18, 2025 at 10:53:29PM +0800, Shiji Yang wrote:
-> Fix the following missing-prototypes build warning:
->=20
-> drivers/spi/spi-falcon.c:97:5: error: no previous prototype for 'falcon_s=
-flash_xfer' [-Werror=3Dmissing-prototypes]
->    97 | int falcon_sflash_xfer(struct spi_device *spi, struct spi_transfe=
-r *t,
->       |     ^~~~~~~~~~~~~~~~~~
->=20
-> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+It is not needed since v6.16-rc1 contains the change already (57cf46cd1fe3).
 
-I believe there's no actual dependency on the rest of the series?  In
-general it is better not to mix patches for different subsystems in a
-single series unless there's some interaction between them, it just
-means people get more mail and makes it a bit less clear how things
-should be applied.
+Regars,
+Gabor
 
---tGm6mU2I4HqfE/Y5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhS1n4ACgkQJNaLcl1U
-h9CUGgf/VMiIz8Es9j48Ut1l7gBNpiIGWt379JGiZA4QIu7uAeyzPthqI8mCaKe/
-dyShCUmCfpYIPO4QrTR7z/bOAjFfscEHJMpEZGyxpjvkMpTQdr5FWWoD+hPOpNZa
-ogvrN/6wNZ8djo8fSfi3LWJ+XDvYuhq54gz5xtoKP19xUpxlWylALYZFXQWQKOdG
-NociOy6DfKysiO7KFvDSjARptxZJsjGAoz1VqBqQKJON7sClpLbXNTTgZ1XtY3MM
-VhVV0tGgOdMokW0D4fg+++kh+q4/i26KNVw5NYcc97ML3SlGgnflbAWylvPOuZnv
-l4bnvcnOVFBDtIvGacfW5LtzqM1IRQ==
-=HjUo
------END PGP SIGNATURE-----
-
---tGm6mU2I4HqfE/Y5--
 
