@@ -1,52 +1,54 @@
-Return-Path: <linux-spi+bounces-8632-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8635-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B468ADEB9E
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 14:18:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CBB9ADEBBC
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 14:21:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDB571BC01CC
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 12:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52C9D3B770C
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 12:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C8E2E8E05;
-	Wed, 18 Jun 2025 12:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B1C2E92D1;
+	Wed, 18 Jun 2025 12:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ReCysK3e"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DtZWb7pz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695A62DFF38;
-	Wed, 18 Jun 2025 12:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDE62E7F38;
+	Wed, 18 Jun 2025 12:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750248940; cv=none; b=IcWMMn6S2RmqbhklmDLpEt180fxEH5zuGDqPAVfoi5ng4xzJpx2I8XH5DnZmYv7d5o24tcuNr08PmPvwK4r1f+OY1gNnYThbwbSyUb2K6DLqZpd9x0V+gOnPVFG7jXGV6JIZBZZP1lvK+fR0d43mBXnW73hkWJ5ekK/gyLxvWG0=
+	t=1750248941; cv=none; b=uBSx3oOAOTx1IFDjAmzBWcjLfcA+XijFCZL8lRfZv//HQzvk5Di8bkSaGk0v93VgLFR650FCTW4CIax96+r/Oh82uwSehgsCHWKndFXOEPr/0B9ccstXkZrJPkKN7zSUiX2IAaZlokRLVIWNvr7nMWIfjRsPGvNg53dzG45Dkc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750248940; c=relaxed/simple;
-	bh=GFufJpqJ0Ix6bVrqA6ceJslfkj3EMcpE3IDWXBToN5k=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=phXcAmR8LhaZuU+LhJcer+nAdf+axxXlNyy2BB1PxO1GXAYpTFC+0m/Jyut3ftw5jHL36Q33Fiknq6BojXCAd/rINwHmIdAAj7FSUlzcoZfo4Km2gp2P5UTtPaZGRA0igFBkJGvcNdFFkXqxzbskQ2n2F4zzaHqsz3kin8D1YBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ReCysK3e; arc=none smtp.client-ip=217.70.183.194
+	s=arc-20240116; t=1750248941; c=relaxed/simple;
+	bh=02WLi4M+pNsnbuuLYVR5qxwoHIYVrFMrzO8jkeSWyt4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Iqd15OR9n/W9tsBbZWvmxu+BDN2qOxV8ejHRaSDVpihjemO5/uqin66jKkfM+qd7rREN/t09vI8yWBCLg/PAyxDo2vfZzqWkZQkwHi7Lp8R3uC+rdb7Q0tjOX8ID6JwsLtfiRazyyoo1Kh8aD09l+sNUBj9gAj1unISm+tZHy7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DtZWb7pz; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6DBF143137;
-	Wed, 18 Jun 2025 12:15:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8791B4385A;
+	Wed, 18 Jun 2025 12:15:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750248935;
+	t=1750248936;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lMS/pXtR5fwL/ucwouvgnFv8lBxKiYbXC7dEbGzUabk=;
-	b=ReCysK3eNS/98qQKJ59qIiZ2mDTh/7ctALlXb4OB3bqeSABHuNY/s/17JpKvhVUr+jq9co
-	MM4ArA1+5u7Fe46sPfCFL87o3cUl2qa4bQwNolsGeXVbOHgFJ2ooot0iGyyfWUTn39nojq
-	EBOFg9MxnhYYHlFSMDFCfBaAULLqOeGUHYLGnYgLgR/aw1oGJLUNMiNU0SGNfGo8Xnuegf
-	ulVR7z9FZb1Ml41e9sVUuLmlbUej1irMuzVBhHFf/dAp9/1Kp74rTQq3A2iRgWquUTNBuO
-	30Ix0CVJBC/tvOlzaUPiVeWzxKZXEHIqUbmwZTKNhYIeK/K/JJ3oF6317yRYNw==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WZWJRW69q+SS7CXANDbY2irrOFqYZ2dZT16BR2PmS8w=;
+	b=DtZWb7pzdH4o/7Nzgzkk0725atjbsimy+D+gYddGTforoC1m6f2p02mQUigg4nRo4H8KE3
+	y6u7d9s4F0P+LJwg1fYfzxnVwBEeoCAYZj5VKe5u3K9B9GJmy8iZzbNancOYNAlKA1T99B
+	46n9WbCrgkdJWgV9ejdAutMxJ8mCpjO3bAQqEU97XapNlA34mHgr4PxyJVRqXoNCok5r7A
+	+mT1Lis3KgB9RuyYn6Iz5CacPyQwc52Sgs4VMiZxcmzRIUyfO083HG3eoTEUY46+Ach5qS
+	lbw9TLqhDprM6IDcXWjQU5/FFZI2wisEkoMMLnKFLOGBmu5/09Ey5Iu6VyQeKQ==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 0/8] Enhance Winbond SPI NAND support
-Date: Wed, 18 Jun 2025 14:14:17 +0200
-Message-Id: <20250618-winbond-6-16-rc1-octal-phy-upstream-v1-0-513202126013@bootlin.com>
+Date: Wed, 18 Jun 2025 14:14:18 +0200
+Subject: [PATCH 1/8] spi: spi-mem: Use picoseconds for calculating the op
+ durations
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -55,10 +57,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJqtUmgC/x3NSw7CMAwA0atUXmOpNhC1XAV1ERJDLUESOeWnq
- ncnYvk2MytUMZUKp24Fk5dWzamBdh2E2aeboMZm4J6PvaM9vjVdcorokBxaIMxh8Xcs8xefpS4
- m/oFhGHkcDiyRCVqpmFz187+cp237AbHezPd1AAAA
-X-Change-ID: 20250613-winbond-6-16-rc1-octal-phy-upstream-c8929842ed21
+Message-Id: <20250618-winbond-6-16-rc1-octal-phy-upstream-v1-1-513202126013@bootlin.com>
+References: <20250618-winbond-6-16-rc1-octal-phy-upstream-v1-0-513202126013@bootlin.com>
+In-Reply-To: <20250618-winbond-6-16-rc1-octal-phy-upstream-v1-0-513202126013@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
  Vignesh Raghavendra <vigneshr@ti.com>
 Cc: Yogesh S <yogeshs@ti.com>, Santhosh Kumar K <s-k6@ti.com>, 
@@ -69,87 +70,70 @@ Cc: Yogesh S <yogeshs@ti.com>, Santhosh Kumar K <s-k6@ti.com>,
 X-Mailer: b4 0.15-dev
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeghfffiedvfeffheehgfevgeelueeihfeiudfgkeffuedtjefhudeglefhgfeuteenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrgedvrdegiegnpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihoghgvshhhshesthhirdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepr
- hhitghhrghrugesnhhougdrrghtpdhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopefuvffnihhnvdesfihinhgsohhnugdrtghomhdprhgtphhtthhopehlihhnuhigqdhmthgusehlihhsthhsrdhinhhfrhgruggvrggurdhorhhg
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelgfehvdduieefieeikeffgffggfdttdeugeffieetheeuleelfeehffdtffetveenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrdegvddrgeeingdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeihohhgvghshhhssehtihdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehrihgthhgrrhgusehnohgurdgrthdprhgtp
+ hhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepuffvnfhinhdvseifihhnsghonhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhtugeslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Both w25n**jw and w35n**jw chips have a "normal" and a "high speed"
-mode. In order to use the high speed modes, we need to configure
-internal registers and adapt the number of dummy cycles. The benefits
-are too interesting for not paying attention to this little extra
-configuration. In particular, it is an important building block for the
-introduction of PHY calibration on TI SPI controllers. With these
-changes combined, the frequency used on these chips can be bumped from
-~25MHz up to 166MHz.
+spi_mem_calc_op_duration() is deriving the duration of a specific op, by
+multiplying the number of cycles with the time a cycle will last. This
+time was measured in nanoseconds, which means at high frequencies the
+delta between two frequencies might not be properly catch due to
+roundings.
 
-This series was tested on TI AM62A SK with a W35N01JW and on Nuvoton
-MA35D with a W25N01JW. At low speeds, this series does not bring any
-improvement. However when enabling high speed modes (on TI's platform),
-the difference is outstanding:
+For instance, the Winbond driver has a changing number of dummy cycles
+depending on the speed, adding +8 dummy cycles when running at 166MHz
+compared to 162MHz.
 
-W35N*JW running in 1S-8S-8S @ 25MHz:
+Both frequencies would lead to using a 6ns delay per cycle for the op
+duration computation, whereas in practice there is a small difference
+which actually offsets the number of extra dummy cycles on a normal page
+read.
 
-	 eraseblock read speed is 9552 KiB/s
-	 page read speed is 9516 KiB/s
-	 2 page read speed is 9552 KiB/s
-
-W35N*JW running in 1S-8S-8S @ 166MHz:
-
-	eraseblock read speed is 35555 KiB/s
-	page read speed is 33684 KiB/s
-	2 page read speed is 35068 KiB/s
-
-Enabling high speeds currently requires applying extra patches from TI
-to enable PHY calibration. They are currently in the upstreaming process.
-
-Link: https://github.com/miquelraynal/linux/tree/winbond/6.16-rc1/octal-phy
-
-In order to introduce all these variants and derive the quickest one, I
-had to improve a bit the helper deriving the time an ops would
-take. These changes can go through the spi tree, the other patches do
-not depend on them and the performance hit is rather acceptable without.
-
-While at adding maximum operation frequencies, I realized I got myself
-confused with the macro parameters due to some of them being
-optional (with variable arguments in macros). I decided it was too error
-prone so I propose to add these values on all READ_FROM_CACHE
-variants (where they are often relevant).
+Augmenting the precision of the calculation by using picoseconds
+prevents selecting a lower frequency if we can do slightly better with
+another frequency involving more cycles. As a result, the above
+situation leads to comparing cycles of 6024 and 6172 picoseconds which
+leads to picking the most efficient variant.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
-Miquel Raynal (8):
-      spi: spi-mem: Use picoseconds for calculating the op durations
-      spi: spi-mem: Take into account the actual maximum frequency
-      mtd: spinand: Fix macro alignment
-      mtd: spinand: Add a frequency field to all READ_FROM_CACHE variants
-      mtd: spinand: Add a ->configure_chip() hook
-      mtd: spinand: winbond: Enable high-speed modes on w25n0xjw
-      mtd: spinand: winbond: Enable high-speed modes on w35n0xjw
-      mtd: spinand: winbond: Add comment about the maximum frequency
+ drivers/spi/spi-mem.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
- drivers/mtd/nand/spi/alliancememory.c |  12 +--
- drivers/mtd/nand/spi/ato.c            |   6 +-
- drivers/mtd/nand/spi/core.c           |  22 +++--
- drivers/mtd/nand/spi/esmt.c           |   8 +-
- drivers/mtd/nand/spi/foresee.c        |   8 +-
- drivers/mtd/nand/spi/gigadevice.c     |  48 +++++-----
- drivers/mtd/nand/spi/macronix.c       |   8 +-
- drivers/mtd/nand/spi/micron.c         |  20 ++---
- drivers/mtd/nand/spi/paragon.c        |  12 +--
- drivers/mtd/nand/spi/skyhigh.c        |  12 +--
- drivers/mtd/nand/spi/toshiba.c        |   8 +-
- drivers/mtd/nand/spi/winbond.c        | 163 ++++++++++++++++++++++++++++++----
- drivers/mtd/nand/spi/xtx.c            |  12 +--
- drivers/spi/spi-mem.c                 |  27 ++++--
- include/linux/mtd/spinand.h           |  70 +++++++++------
- include/linux/spi/spi-mem.h           |   2 +-
- 16 files changed, 308 insertions(+), 130 deletions(-)
----
-base-commit: 065b897a1044b1c67ba4d1066ee090097bae1499
-change-id: 20250613-winbond-6-16-rc1-octal-phy-upstream-c8929842ed21
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 5db0639d3b01596b6f2f2df4b914422316eb9a3f..c42c227eb2a29ccd291bdced6b9d188c3b0bfb67 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -591,9 +591,11 @@ EXPORT_SYMBOL_GPL(spi_mem_adjust_op_freq);
+ u64 spi_mem_calc_op_duration(struct spi_mem_op *op)
+ {
+ 	u64 ncycles = 0;
+-	u32 ns_per_cycles;
++	u64 ps_per_cycles, duration;
++
++	ps_per_cycles = 1000000000000ULL;
++	do_div(ps_per_cycles, op->max_freq);
+ 
+-	ns_per_cycles = 1000000000 / op->max_freq;
+ 	ncycles += ((op->cmd.nbytes * 8) / op->cmd.buswidth) / (op->cmd.dtr ? 2 : 1);
+ 	ncycles += ((op->addr.nbytes * 8) / op->addr.buswidth) / (op->addr.dtr ? 2 : 1);
+ 
+@@ -603,7 +605,12 @@ u64 spi_mem_calc_op_duration(struct spi_mem_op *op)
+ 
+ 	ncycles += ((op->data.nbytes * 8) / op->data.buswidth) / (op->data.dtr ? 2 : 1);
+ 
+-	return ncycles * ns_per_cycles;
++	/* Derive the duration in ps */
++	duration = ncycles * ps_per_cycles;
++	/* Convert into ns */
++	do_div(duration, 1000);
++
++	return duration;
+ }
+ EXPORT_SYMBOL_GPL(spi_mem_calc_op_duration);
+ 
 
-Best regards,
 -- 
-Miquel Raynal <miquel.raynal@bootlin.com>
+2.48.1
 
 
