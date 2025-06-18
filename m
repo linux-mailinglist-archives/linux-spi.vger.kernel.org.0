@@ -1,157 +1,143 @@
-Return-Path: <linux-spi+bounces-8663-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8664-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4CE5ADF5D7
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 20:27:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85E36ADF798
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 22:23:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 005BF188D82D
-	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 18:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC92F16B112
+	for <lists+linux-spi@lfdr.de>; Wed, 18 Jun 2025 20:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D39B53085AF;
-	Wed, 18 Jun 2025 18:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4835921ADC7;
+	Wed, 18 Jun 2025 20:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Vd2WvKgj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F8HqFDuw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A652F3C33
-	for <linux-spi@vger.kernel.org>; Wed, 18 Jun 2025 18:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3293085A6;
+	Wed, 18 Jun 2025 20:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750271259; cv=none; b=XB03CxU5ZFzDMAsVpdgROq6D3FhpngzwXzQtNaCpD7USr4oU3dSGbkQs2nR+bcpWHomumkurLlbGiaErtR3vlBJMg4OPSwbLU7zjXTwij3gvuExvFpWqRpGcV1aqf6+7rtM/87/vZQy3YOrR1TxLEwLXMextfCDU+fJgD/EzQLg=
+	t=1750278187; cv=none; b=TZMusOR/rYg0+6dcQsljmfPDZJD02/8nJsJnjrmICt1psWNPwbEBnzvdw7kIbbzzWwdDCB8N5XU+DNYutgk9vAykgEJekRGEdHID5sCAbBiorhwe2hvJxxWTL4KqtnQd0pBVdTIqD0sx2kJZkCoMMNxCTHzWcvXthAiCQccWn1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750271259; c=relaxed/simple;
-	bh=8erTa4lex0kgWaCiz++yqQTutSRNZ0et/sDqzyR34Rw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gSrJVPqIaRuyzCjLTZmRnMEwzVaPsA398goe8sVEBa6TSfXHr3kyWSqfuW4fM5khDWi1YojvKJavnerj0Z/F6BZB1wvtsAGbI0BedoDVnew7XN4Y6la725s78cl6IKQqaTj7tYM3q9tQ0XgSPyuNEmrfmbqiWfwFPZiHnlYUkZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Vd2WvKgj; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-40669fd81b5so4374606b6e.1
-        for <linux-spi@vger.kernel.org>; Wed, 18 Jun 2025 11:27:37 -0700 (PDT)
+	s=arc-20240116; t=1750278187; c=relaxed/simple;
+	bh=TdUtYEhnQdQ77j1KGrvr4R8bCHthVyxHQ4vv3bltKf0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tT/guytVAjQ04iTVvtpwTWsNwLyEj2K3onMMyBu+0ZOUd2k2utLUHurA5W7tlzDjHMlqaCuNnYGb4+IFtAug6U5yq7bwowzX7nD01ml90J7jKPoCs63yiJIL8iLx9j0UMrQ/4aNQrdZCeRW5xkdb6kJzdif7X4ZHTnAvguIkV6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F8HqFDuw; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3a4fea34e07so52813f8f.1;
+        Wed, 18 Jun 2025 13:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750271256; x=1750876056; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/YBYuQYbzLC80oZvh7S2m5LwCzlb8lJZIkclLoGPtU8=;
-        b=Vd2WvKgjICOoIyD3DUGFwVR0jICN8GM8IOCFL1VOC93a/lKI/F+L4qLfEiWuUTxAbU
-         FMfHcGhW5FnTbgPSspLrz/nDVHrVXjvXxrQofbX9HqUTpPpDR4jgMRmDY4YUAFRjN0Hy
-         AMHKmhzmsYckUnfZnuoc9aY/wLJ0q8gkoSgs6F122yoA70VAAFdmjJKWtfe0o8hQORE2
-         PxRYzuL+8lrRjovbhLgtZ8rzsPntfp6AaRxBQbn6yo7CRlSviky46p/Bxl26gFKyJ/A5
-         oKy96jDoIeE1v5EoFTuqZFEiL8y8pdvtv/JaOh83Tx1c24RCwYCj8WAwhiBEO0AfobZD
-         Tb+A==
+        d=gmail.com; s=20230601; t=1750278184; x=1750882984; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DdY90JVNXT4QPFohJuCx2RaKTGnu0SRF1dWwzgFg3Ls=;
+        b=F8HqFDuwwKNIa7lRS0tZS3exIe5BOoQvZ1zr3KIMzbs+rpalIY+3kU9enfozI63bS/
+         gxtgtsRr3zXIXosSBgWTAeK+HBUbv+SKQxnt0g2Cw0967OA+6WoWuyS6OlMrSIkiAKoi
+         wKIbsgBwxD+ZYZ/J6zYZc55zcT1RFmvSobSETwiTVsWjJJ3DQDrMi3WcZ74y2hh+t230
+         QwxK4HDrTZrrivAHWdQ1LsJYWGCQ7YaDwtN4W/tGDgiRQY/kzYa5GNl14vcEUvWCFke/
+         BwgoO0o4qY1YyOzUDCVFl8B7XQOHQQF0wC+uoMyjb2FEDVVuNzOADSFm9i6Ss4dauGv/
+         B6IQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750271256; x=1750876056;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YBYuQYbzLC80oZvh7S2m5LwCzlb8lJZIkclLoGPtU8=;
-        b=QKhmvJwfyC3IdVv86a9YmORvhTl/YZmwknILEoLdHK+Z3iUjgXTz1iFkbNTr5RGsP0
-         /7iClU7XbP69Kkz0puB9CCjO+2HAX34puj+EwLb6cDuUBNlmrXMxsMN8i9LniR+WmoCY
-         MMZuUtuUwVzeFJPemnNynypNDun04ras14gCzmGE+4H6r0r0YOcqiqqdEp2VZ/OoiiXd
-         zVeja1UrMJ7TKI1TzuHbnHHnw4SbaXPlsOB1Bk3+LuQn7so/LPTyIZwUZzdB71w1jZqQ
-         ZNoprFCrzzfO7vwHIAAmBXkhNhDdQoIoG9DaZ9owGbP9Vyp8OQgrKZ6KIWvbMADJgzwV
-         bHmA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkAS8o73bjlmnF2O9PIXI1Dl9Z8z4r0oPWwX1sESy/mnARO5ahDP7wtlzVtmb6tpmmcpNVP7M+xIQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRDJTAUQh3fpcAetOzB7aWwGUrh2E8Y2BpnB9Cc8nQTDHDAEaf
-	L0kQmKdXfLIGbHeFWmA3gHB87NRIw9EUK6D3klx1SaCFn4ijC1WCsTTvQA18HQhu+tQ=
-X-Gm-Gg: ASbGncsQWvzzAOnlcYexqw94lWEqCSTkwuB5IxPceLm09P87ICJqyy16IrzVMO+wREJ
-	7oQPLeMRinAHKseMievAc9YkJ2Q+P9/K263X8NxjIXjmSAlJV2OKqAdw9lY4RsH/vdK17//n+qT
-	mRJYl1YC+JKO2aU5zG8U09ipRc2b9VgSRqGycV0l4tz5hRcJXABR/2M9CV/p+iXXfNSiG/gqi6M
-	fb6BlGMTttk1EP5SnNX8J5AinBpVssvCgwDQFANxWKG1pIKyTLnvHfhTA0ZtDOEyaW8wFpxMYb8
-	gpvHxjbZFZVABURK83BQ5HQW1PfrenvW7VPyzC7AeKezNtcJeigIzWtNdZvMR1eUXsAstu62oRg
-	P3I0/lIJF6puvy32YMF/zFD2tlv2fJZM85SU+t/c=
-X-Google-Smtp-Source: AGHT+IGfYT6pTX84G34dN1v1rA2QrNVoZ5Qci8skHuTcu6xXSLE5XMAg/YdsULkFqRm5674RrJMxag==
-X-Received: by 2002:a05:6808:13c7:b0:403:3fb7:3870 with SMTP id 5614622812f47-40a7c1cbe28mr10969858b6e.10.1750271256246;
-        Wed, 18 Jun 2025 11:27:36 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:9583:1e37:58ed:10ae? ([2600:8803:e7e4:1d00:9583:1e37:58ed:10ae])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-40a740c2748sm2437844b6e.18.2025.06.18.11.27.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jun 2025 11:27:35 -0700 (PDT)
-Message-ID: <2588bb7f-2a3a-4001-ab1b-6d9bd57b545b@baylibre.com>
-Date: Wed, 18 Jun 2025 13:27:35 -0500
+        d=1e100.net; s=20230601; t=1750278184; x=1750882984;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DdY90JVNXT4QPFohJuCx2RaKTGnu0SRF1dWwzgFg3Ls=;
+        b=fy1Bbl0ejSuTgwQKlauXYM5Y4YJmg03ZlBYHzeUZJFfAlQerQRlGGYLyK2hvb3CNJK
+         0DNa1GCLGq+fjsPmYPyMwEz/ejg76sl3lEfGG/OigZju73uTJWnHy5UqPnXb9d/XeaM1
+         qgIYxy53bZGoht4G/1Qe4aOmVcX3/CiL528c/KhTYgIVatdZ8GX03ASPpmBG1v+Kl5dw
+         FizWQB1vOjrBy9HEeOSNfwQvQavlI/r+ldXwSAs2CbCwIt9fMSbjiCr2TrPNW9+cjdSo
+         xttqdYj+mpz1dlCQRvbl7NdI9IyIo+RzbPW3VUyRdYX9i4Firb5nPcc/VS+HyvgyP7aY
+         4wPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVjCkk8fvhvGiCK9ieK0sbO0cHWfgP5y6adWHxF4UO6eAArfSrp6oKH0kRyaBPYMp8bChy3JB5AJJekxrmq@vger.kernel.org, AJvYcCX4mkSZlsQe3vs0BTkzDfCaoqxbOHO1xR+p1yQGcBu8mMQnreM5WOfGnH86Z097D/1PKvBs+EzaFlpl9jHY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/c23DqTJMaMkWZ41UfeCQkiqnMqhS17meLlQcrRBRtcNK78XM
+	9HSyG0lidjqLXSaKqWMubu8JtrKfoQFDYlo287DIvlgbT7SERhbracr5
+X-Gm-Gg: ASbGncviVq9f9PVTxGWZf3w+Vf4vKo/CTq6c1lhxV8tsexhmiAdMRcG+Fsxlc8398Q4
+	XMvd0RO56AwdJGEfFu3rGHh6OaqsR4xPtK76CAwqIW9+PvquxR1Nl9exVdG34EdIq99tb7pRch6
+	8ZPNX7/KkKZmxj99X8IPX2DHGnmfJ2K01k4thaaGBk+a6fK6MG1h9CBwPS0WKxFuIba387JeWpz
+	XmQe87FSvzkF9zHntUPS/1ai4VL6yaiQuDaa/H5zwV0QcUTe0X+JzlG5uZ2jrNzl6iJglP+VvVF
+	MimNc1Ae09gdUZ01MNoeYo5E9tO1En8YiRFMarICBHgJEjgP39+UO8PpXhoj5MfZ98yfMNXtkQp
+	ZNSRmXRkOwPogulc=
+X-Google-Smtp-Source: AGHT+IHoejpqZzdcxb15o9qORclA2awd92JClJvR/ZCPZyDuQip+yhKFOk2EIbxVxD6hNuRNxXHhbQ==
+X-Received: by 2002:a05:6000:4305:b0:3a4:dbac:2db6 with SMTP id ffacd0b85a97d-3a572e553e0mr14325235f8f.49.1750278183806;
+        Wed, 18 Jun 2025 13:23:03 -0700 (PDT)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a568a633ddsm17617951f8f.26.2025.06.18.13.23.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jun 2025 13:23:03 -0700 (PDT)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Subject: [PATCH v3 0/2] spi: spi-qpic-snand: avoid memory corruption
+Date: Wed, 18 Jun 2025 22:22:48 +0200
+Message-Id: <20250618-qpic-snand-avoid-mem-corruption-v3-0-319c71296cda@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/9] dt-bindings: spi: zynqmp-qspi: Add example dual
- upper/lower bus
-To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org
-References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-3-sean.anderson@linux.dev>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250616220054.3968946-3-sean.anderson@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABggU2gC/4XNQQrCMBCF4auUrB1JU0LVlfcQF2kyaQdMUpMal
+ NK7mxaE7lz+A/O9mSWMhIldqplFzJQo+BLNoWJ6UL5HIFOaCS4kl6KB50gaklfegMqBDDh0oEO
+ Mr3Eqv9DwWlnVYcexY0UZI1p6bwu3e+mB0hTiZxvM9Xr92fKvnWvgIC1KcTJoW9tde6focdTBs
+ dXOYu+d/3uieMJyUzfK6taIvbcsyxct9gZNHgEAAA==
+X-Change-ID: 20250523-qpic-snand-avoid-mem-corruption-301afabeb0eb
+To: Mark Brown <broonie@kernel.org>, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gabor Juhos <j4g8y7@gmail.com>, Lakshmi Sowjanya D <quic_laksd@quicinc.com>
+X-Mailer: b4 0.14.2
 
-On 6/16/25 5:00 PM, Sean Anderson wrote:
-> Add an example of the spi-buses property showcasing how to have devices
-> on both the upper and lower buses.
-> 
-> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
-> ---
-> 
-> Changes in v2:
-> - New
-> 
->  .../bindings/spi/spi-zynqmp-qspi.yaml         | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> index 02cf1314367b..c6a57fbb9dcf 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
+The 'spi-qpic-nand' driver may cause memory corruption under some
+circumstances. The first patch in the series changes the driver to
+avoid that, whereas the second adds some sanity checks to the common
+QPIC code in order to make detecting such errors easier in the future.
 
+Preferably, the two patches should go along in via the SPI tree.
+It is not a strict requirement though, in the case the second patch
+gets included separately through the MTD tree it reveals the bug
+which is fixed in the first patch.
 
-In addition to changing the example, we could also extend the
-spi-buses property for this controller since we know this controller
-has 2 buses.
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+Changes in v3:
+  - rebase on top of current spi/for-6.16
+  - add 'Acked-by' tag from Miquel to patch 2
+  - Link to v2: https://lore.kernel.org/r/20250529-qpic-snand-avoid-mem-corruption-v2-0-2f0d13afc7d2@gmail.com
 
-  properties:
-    ...
+Changes in v2:
+  - collect offered tags
+  - reduce kernel log spam in commit description of patch 1
+  - remove inline error printing function from patch 2, and adjust the
+    commit message of the patch
+  - Link to v1: https://lore.kernel.org/r/20250525-qpic-snand-avoid-mem-corruption-v1-0-5fe528def7fb@gmail.com
 
-    spi-buses:
-      description: 0 is the "lower" bus, 1 is the "upper" bus
-      maxItems: 2
-      items:
-        enum: [0, 1]
+---
+Gabor Juhos (2):
+      spi: spi-qpic-snand: reallocate BAM transactions
+      mtd: nand: qpic_common: prevent out of bounds access of BAM arrays
 
-Not sure what to do about the default though since as discussed elsewhere,
-this controller needs the default bus number to be the CS number for
-backwards compatibility rather than `default: [0]` as is specified in the
-previous patch.
+ drivers/mtd/nand/qpic_common.c       | 30 ++++++++++++++++++++++++++----
+ drivers/spi/spi-qpic-snand.c         | 16 ++++++++++++++++
+ include/linux/mtd/nand-qpic-common.h |  8 ++++++++
+ 3 files changed, 50 insertions(+), 4 deletions(-)
+---
+base-commit: d57e92dd660014ccac884eda616cafc7b04601e0
+change-id: 20250523-qpic-snand-avoid-mem-corruption-301afabeb0eb
 
-I suppose we could leave default out of the generic binding and leave it
-up to each individual controller to decide how to handle that.
+Best regards,
+-- 
+Gabor Juhos <j4g8y7@gmail.com>
 
-> @@ -69,7 +69,7 @@ examples:
->        #address-cells = <2>;
->        #size-cells = <2>;
->  
-> -      qspi: spi@ff0f0000 {
-> +      qspi: spi-controller@ff0f0000 {
-
-It seems more common to have spi@ rather than spi-controller@.
-Is there a push to change this in general?
-
->          compatible = "xlnx,zynqmp-qspi-1.0";
->          clocks = <&zynqmp_clk 53>, <&zynqmp_clk 82>;
->          clock-names = "ref_clk", "pclk";
 
