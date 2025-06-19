@@ -1,153 +1,120 @@
-Return-Path: <linux-spi+bounces-8676-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8677-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA731AE0B63
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 18:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C563AE0C43
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 20:01:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7569117D083
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 16:29:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 02E334A4DCD
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 18:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D745428BAA2;
-	Thu, 19 Jun 2025 16:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE02E28D8F7;
+	Thu, 19 Jun 2025 18:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="RAvdPmVZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5I0A1/a"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FF225D527
-	for <linux-spi@vger.kernel.org>; Thu, 19 Jun 2025 16:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04B124290B;
+	Thu, 19 Jun 2025 18:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750350562; cv=none; b=hU5ZHc+APVlyNJ292GntJUKPi2lo1zQh0mhdyYtQqOxRyep3Dwbq+H+74LeQpYWATDdR+UkXz6jaHd0rKCbQjrfKC9rpltKr9/7M6+h4brnq+Bje1Pj4jVkJcNxKpP23f0AYSuwxvwSZctUM7srtmO2w3Xkk8v9fDSImZoZIC9Y=
+	t=1750356049; cv=none; b=vGFWM/dqI5uQkPPLsmmsfDCajWsSnb2oSim5ae9dp4qSegCuc+C9AeUFDHF45dkZv+r/LPBLlkHdrmr729XaPNGXmel+phnLD+gU4gHPU/zD2kGngeHatVnJBBhzXHgtijLsqAq+CK/IKVdUuRPWgL02bAkswAxR6l+r+1H3iHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750350562; c=relaxed/simple;
-	bh=EMyL1Uo0zzWNprcGuHaXIt2QwhvXtZojt+40ir9jHkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jZDcl8Jbms7g0q2hRW2mmn+8ngrkTihdHK8ojoofQTJSB2Kwj1CAsMPQfJK5oTmnhkEW9YH997NLH+FDri1dUiI5XT9zMdC4saCsGop402v1kvStBXKxmkUaUbxALv2yuk8appKli5VmvnOgg9B/qEiPwWCxYjRaMTwfJhCYN/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=RAvdPmVZ; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-40a55314d06so245839b6e.1
-        for <linux-spi@vger.kernel.org>; Thu, 19 Jun 2025 09:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750350559; x=1750955359; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Id+f7kVLppAX20HAP2AURqNW1tLLgPJWhJTti78Nq48=;
-        b=RAvdPmVZiiyVV4XKLJ/iNfBCoCl62eXfu4FRUgmdYnhCOWt2SZTcRC1I3WR3MS1/Nq
-         jCuzzAKhWNHn5vpD1jA3NxkVySJT2XQQ1xmaOdljUbkiV0jiOLfrcMusqmxqrkZC+iJy
-         FyGi2IMa6cQLNbiF4zpsPH9ZIjpRZ+MSYxaKKm5uoAzaw5Y0B+U3O9PrFV8CLHqbxrh2
-         vkRIhltCm/N9tAiADQh1A4dpMxJKeYJOOJ0oifd0o+mkrbEhOPxrwk+FN/Kj12NGSUI0
-         Z8CdYGf1TgBNftKk1//XtTnEeudbOLwecnK3RJfc25/NK7ofRaifBv6j81/QOCNno0QT
-         36wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750350559; x=1750955359;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Id+f7kVLppAX20HAP2AURqNW1tLLgPJWhJTti78Nq48=;
-        b=hgDgbbX18Fn3gJFe0vq6L7CvBWT1IrZ+q2IljC6ipwcpGtgG+hIMC2xeFCxpJSW3mk
-         //a1Ck3cELDpRHAPEXkP7kC9nQo85Vlcy4dK/bi39GRn6YMoGM1IsU6S5ckRhPIoYK62
-         W3ZGRD0t3iutl7B8vBq8JfLkQ/9RcTYfP9/TdCCUtDQyUvycHOSd6NP5bC0R5oYNVJzV
-         mtwXHRgw2wc0vzJaWh+B0ncQcjP9Zb5vnD27rC3zkunsjJNk41HoVoWiNaZdRp5+NBv3
-         abJv9iLFmAGVXXF0/wOxWeXxJ7fsGRimW50wd7R/K2xE36Kvw0G8tz/a2XJCPQ0bYYWC
-         TOuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVr6WcHCkPYgoGTTNH1oidlB3c//rb6WLdeXNJgxRIy1Tlu4z0jTnw5VH9RqBHYKGeDg0p5iEHExCE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysJbPJLQTZmHa1khnAd5LiZ4bROPekRPVFy4sX+G5wETnPyTPe
-	WJJ09LvdBOkNGN1tYwD1HChZfHDgZzGTtUhJbd4+m/nSxHUUYP1/qpKmaUy2Pf1FTrU=
-X-Gm-Gg: ASbGncteSuR418JBYZdZDxX9Sx0CwFanT7ZLIeDjKSEFT9QA1MhCsktIVXwZEhPj11c
-	OTTiDdMCiti7Yfxz60la9OHRwznNOwzlHQVdZdo320ZMKijks3I5ojJr1CoF4C/D6RdyhdpN0bF
-	/wT3lAFmQYm4DRGWSq4rpL2dP/3hFP/quAKGdcGrH8g0nOcWh1NSKozPHtmtt1AkKwEXSDFEpLH
-	11PXTx7AEJ56FE26lgdnnaZThmagrlPeC/v1sRtbnjBW8UWCb1dySQpDfMpYhlSwcG07FDEldBZ
-	kcZSdsiEn5NEtI+nG7Y2sB/X6TE8AXPqMLv2HkVjJCO4sUVkM5YTziKGvfCaAJ2iaGl1rDtYw0S
-	9gk6f6rL39UmNrk5x4i64xrgYbdAFVuJwAlN7daM=
-X-Google-Smtp-Source: AGHT+IE3wykgtpudCLPxyYXHgot19QH7CguFGEPEsZeTABHQ1Nd9aytQtOo9OtA4EGXFPZmqiX54mQ==
-X-Received: by 2002:a05:6808:189c:b0:40a:56e7:1e59 with SMTP id 5614622812f47-40a7c17ecdemr15537482b6e.5.1750350559492;
-        Thu, 19 Jun 2025 09:29:19 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:5504:5211:6fc4:c093? ([2600:8803:e7e4:1d00:5504:5211:6fc4:c093])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-40a74172cb3sm2790979b6e.25.2025.06.19.09.29.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jun 2025 09:29:19 -0700 (PDT)
-Message-ID: <b27c6aab-e363-45df-8521-e85c2b3f4421@baylibre.com>
-Date: Thu, 19 Jun 2025 11:29:17 -0500
+	s=arc-20240116; t=1750356049; c=relaxed/simple;
+	bh=Srwp2iLw4QM9QiJcm+XyF2ewuN6J1w1QzFgVha1WoaA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Ton16bxfSIkeaJreQjiCddTOQbsdVEmBcQDZpdknVE/mpp7P1V0XlZJ7nGZ3P1xcZCYF6D1W/iv1im2vk5936P/6HbIMx2sccdsPwhKamqqk+qpHLX6Zq1MWjUyRJjWrh5vVU/SHusb59rTsZqLogl5pscl/MwNyrml4g+Rz07g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5I0A1/a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0524C4CEF0;
+	Thu, 19 Jun 2025 18:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750356049;
+	bh=Srwp2iLw4QM9QiJcm+XyF2ewuN6J1w1QzFgVha1WoaA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=M5I0A1/aUJtATUyvDp6wFYVlrNghgCcIX6X08SPbxlg9C4rwi77I7Erp39cEWFBXT
+	 48k2Cz1swL6iCoQo0bL2Rpmdq0NX8w7oPTucWpbVo5doSwdvR5zzyOhqj50L9ssIbV
+	 3XtLd0wlYHITA7lj/M7QPYAsGGDftAzdhUTak6Rwqv5pejFVrT9SOlOduvFCNqkBB2
+	 dQXwcAJ2BdX4hXm5wN9iSN3KmfSkmvXd5iz35qs2LV1/gomSeRmbnLibBP6gWBw6cg
+	 fbjEU/dT6aKDAy24cnOTDiNv/UNJ59IGgY3g81+yAcjjIVG1ic9pDeJQ6WDqHbNpAO
+	 eyI+G3yf++aCg==
+From: Mark Brown <broonie@kernel.org>
+To: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-spi@vger.kernel.org, Shiji Yang <yangshiji66@outlook.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ John Crispin <john@phrozen.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+References: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+Subject: Re: (subset) [PATCH 00/16] MIPS: some compilation fixes for the
+ Lantiq platform
+Message-Id: <175035604752.283409.17816680036110051430.b4-ty@kernel.org>
+Date: Thu, 19 Jun 2025 19:00:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/9] dt-bindings: spi: zynqmp-qspi: Add example dual
- upper/lower bus
-To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- devicetree@vger.kernel.org
-References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-3-sean.anderson@linux.dev>
- <2588bb7f-2a3a-4001-ab1b-6d9bd57b545b@baylibre.com>
- <cdeb54e8-0624-42de-bac2-25b151c37872@linux.dev>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <cdeb54e8-0624-42de-bac2-25b151c37872@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-08c49
 
-On 6/19/25 11:20 AM, Sean Anderson wrote:
-> On 6/18/25 14:27, David Lechner wrote:
->> On 6/16/25 5:00 PM, Sean Anderson wrote:
->>> Add an example of the spi-buses property showcasing how to have devices
->>> on both the upper and lower buses.
->>>
->>> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
->>> ---
->>>
->>> Changes in v2:
->>> - New
->>>
->>>  .../bindings/spi/spi-zynqmp-qspi.yaml         | 22 ++++++++++++++++++-
->>>  1 file changed, 21 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->>> index 02cf1314367b..c6a57fbb9dcf 100644
->>> --- a/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml
->>
->>
->> In addition to changing the example, we could also extend the
->> spi-buses property for this controller since we know this controller
->> has 2 buses.
->>
->>   properties:
->>     ...
->>
+On Wed, 18 Jun 2025 22:53:13 +0800, Shiji Yang wrote:
+> This patch series fixes some MIPS Lantiq platform compilation issues
+> found on the 6.12 kernel[1].
 > 
-> OK, but this property is for the slaves not the master. I'm not sure what the right incantation is.
-
-
-I think using patternProperties, like in Documentation/devicetree/
-bindings/spi/spi-controller.yaml
-
-patternProperties:
-  "^.*@[01]$":
-    spi-buses:
-      ...
-
+> [1] https://github.com/openwrt/openwrt/pull/18751
 > 
->>     spi-buses:
->>       description: 0 is the "lower" bus, 1 is the "upper" bus
->>       maxItems: 2
->>       items:
->>         enum: [0, 1]
->>
+> Shiji Yang (16):
+>   MIPS: lantiq: xway: mark ltq_ar9_sys_hz() as static
+>   MIPS: lantiq: xway: mark dma_init() as static
+>   MIPS: lantiq: xway: mark dcdc_init() as static
+>   MIPS: lantiq: irq: fix misc missing-prototypes warnings
+>   MIPS: lantiq: xway: add prototype for ltq_get_cp1_base()
+>   MIPS: pci: lantiq: marks pcibios_init() as static
+>   MIPS: lantiq: falcon: fix misc missing-prototypes warnings
+>   MIPS: lantiq: falcon: sysctrl: remove unused falcon_trigger_hrst()
+>   MIPS: lantiq: falcon: sysctrl: add missing header prom.h
+>   MIPS: lantiq: falcon: sysctrl: fix request memory check logic
+>   MIPS: lantiq: xway: gptu: mark gptu_init() as static
+>   MIPS: vpe-mt: mark vpe_free() and vpe_stop() as static
+>   MIPS: vpe-mt: drop unused functions vpe_alloc() and vpe_start()
+>   pinctrl: xway: mark xway_pinconf_group_set() as static
+>   pinctrl: falcon: mark pinctrl_falcon_init() as static
+>   spi: falcon: mark falcon_sflash_xfer() as static
+> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[16/16] spi: falcon: mark falcon_sflash_xfer() as static
+        commit: 5fc2c383125c2b4b6037e02ad8796b776b25e6d0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
