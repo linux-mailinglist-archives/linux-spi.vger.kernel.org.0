@@ -1,508 +1,137 @@
-Return-Path: <linux-spi+bounces-8669-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8670-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53665ADFEDE
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 09:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC176AE0325
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 13:13:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E535D17776C
-	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 07:42:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBF4C16FADA
+	for <lists+linux-spi@lfdr.de>; Thu, 19 Jun 2025 11:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2F1248F6D;
-	Thu, 19 Jun 2025 07:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="XYzXHUcm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B262226CE8;
+	Thu, 19 Jun 2025 11:13:06 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9828E1624FE;
-	Thu, 19 Jun 2025 07:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6DE221F30;
+	Thu, 19 Jun 2025 11:12:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750318924; cv=none; b=OKbGfXvEaGB/kzrMkVvz5/Nlk4b9NHgJYtOdjhryh1f2vTKpQQzYVKBajNT7A+kdKK3+2vzB6Mg4uR4hTIsgya301Bsco04I57IzQA01jPCnZn0BIV8eSIoKitAicuJmFQB9U4jBHyMvBxnz71UnD86dwZSq9dUSMLjUoUnYGds=
+	t=1750331585; cv=none; b=PX/AclYrZF3kWxxktQ7NRERXrlX8Z99G4dXi4YMi6MLFMEEz8F96VCh1BPosKADVWOyo/vxJTn1R8GG4wgU/xaRGMn4nXVsEn17fBL6bOpxhEj+1ALLDm5+xe6pvAAUzSc11DocAKAjXGYcPTZ9Sz/Sho2n+SpS7h0dgqGVz6Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750318924; c=relaxed/simple;
-	bh=efWHes7HDMdspmOV8dzOtgJqVZ+OPzndAVDSY3yLVu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gf3n8usNEnNMlE2P2ZYHce/KXYyjfqQ5iBXo8CTsv9H9xNeD571xuseHqJJaB4XFh+A/dK3DRpO1fDuYFV3rOwyHdjot++Pz9KjXNblf1XF+EELt6NJsSru9gMQPGR481lm6vsTqn47QkcgtVDsSVMjzIlge2LbOjeC4DGdkJHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=XYzXHUcm; arc=none smtp.client-ip=220.197.32.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:To:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=s7usLyk0noPkEv2ge2kQqBK/ILFniJZuPZ4hyGzkrYs=;
-	b=XYzXHUcmxLI5+cRkznmkVQEWL3Or3K317seMkpsm2fMSJIOfakdTK0JKxVFhf8
-	SzK2zor0fbQhe3C5TUBVAzLHQPzMC83xaHET+8+eibi+piuCgVbci8WVyQNyUcrg
-	p/AlXLEmz0JGou+aeGlKaLh/V0xSZznkN9pLbmeQXzGUs=
-Received: from dragon (unknown [])
-	by gzsmtp3 (Coremail) with SMTP id M88vCgAnnw6GvlNox8n5AA--.38868S3;
-	Thu, 19 Jun 2025 15:38:49 +0800 (CST)
-Date: Thu, 19 Jun 2025 15:38:46 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: James Clark <james.clark@linaro.org>
-Cc: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Chester Lin <chester62515@gmail.com>,
-	Matthias Brugger <mbrugger@suse.com>,
-	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>,
-	NXP S32 Linux Team <s32@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Chao Fu <B44548@freescale.com>,
-	Xiubo Li <Li.Xiubo@freescale.com>, Lukasz Majewski <lukma@denx.de>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Larisa Grigore <larisa.grigore@nxp.com>,
-	"Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Subject: Re: [PATCH v2 14/14] arm64: dts: Add DSPI entries for S32G platforms
-Message-ID: <aFO+htx92aa90SL0@dragon>
-References: <20250522-james-nxp-spi-v2-0-bea884630cfb@linaro.org>
- <20250522-james-nxp-spi-v2-14-bea884630cfb@linaro.org>
+	s=arc-20240116; t=1750331585; c=relaxed/simple;
+	bh=25dSeC1C95FRQ+c3GHZW4DawUiBAT/q3D5t53M8lRXA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GVOmOXJ70nPzrRno1PbvlrhZQ9UthjxgP82rImtuuqyFrYvi0zHCNSWxVeqadbxV5nnVz5FqjHycmwnc0mtwu76CmSCo9I6YWWotaDLSJ9sxB9drNPxLjauSTk8LWVwoND/5xRYyH9uHH1+ChKR7QCKX3mGM5RLSqEt7vMipAlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from inp1wst086.omp.ru (85.26.170.34) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Thu, 19 Jun
+ 2025 14:12:48 +0300
+From: Dmitriy Privalov <d.privalov@omp.ru>
+To: <stable@vger.kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Dmitriy Privalov <d.privalov@omp.ru>, Sanjay R Mehta
+	<sanju.mehta@amd.com>, Mark Brown <broonie@kernel.org>, Shreeya Patel
+	<shreeya.patel@collabora.com>, Lucas Tanure <tanureal@opensource.cirrus.com>,
+	<linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>, kernel test robot <lkp@intel.com>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, Ingo Molnar <mingo@kernel.org>, Raju Rangoju
+	<Raju.Rangoju@amd.com>, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 6.1 1/1] objtool, spi: amd: Fix out-of-bounds stack access in amd_set_spi_freq()
+Date: Thu, 19 Jun 2025 14:12:19 +0300
+Message-ID: <20250619111219.748491-1-d.privalov@omp.ru>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250522-james-nxp-spi-v2-14-bea884630cfb@linaro.org>
-X-CM-TRANSID:M88vCgAnnw6GvlNox8n5AA--.38868S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKw48trW8Ary5Gr1rZr4rAFb_yoWDGFWkpF
-	9xKayfJr10qF12g3sxtr4kWr1kG3ykKr1a9rnruFyjvay29FyfKFs7KF4ku34fZF1UXw4U
-	XF4vvrW3Crsrtw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j0xRDUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiAQFxZWhTmlaGagAAsP
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 06/19/2025 10:57:42
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 194191 [Jun 19 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: d.privalov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 62 0.3.62
+ e2af3448995f5f8a7fe71abf21bb23519d0f38c3
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 85.26.170.34 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;85.26.170.34:7.1.2;lore.kernel.org:7.1.1;127.0.0.199:7.1.2;inp1wst086.omp.ru:7.1.1
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 85.26.170.34
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/19/2025 10:59:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/19/2025 5:52:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Thu, May 22, 2025 at 03:51:43PM +0100, James Clark wrote:
-> From: Larisa Grigore <larisa.grigore@nxp.com>
-> 
-> S32G3 and S32G2 have the same 6 SPI devices, add the DT entries. Devices
-> are all the same except spi0 has 8 chip selects instead of 5. Clock
-> settings for the chip rely on ATF Firmware [1].
-> 
-> [1]: https://github.com/nxp-auto-linux/arm-trusted-firmware
-> Co-developed-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
-> Signed-off-by: Radu Pirea (NXP OSS) <radu-nicolae.pirea@oss.nxp.com>
-> Signed-off-by: Larisa Grigore <Larisa.Grigore@nxp.com>
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  arch/arm64/boot/dts/freescale/s32g2.dtsi        | 78 +++++++++++++++++++++++
->  arch/arm64/boot/dts/freescale/s32g3.dtsi        | 78 +++++++++++++++++++++++
->  arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi | 83 +++++++++++++++++++++++++
->  arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi | 83 +++++++++++++++++++++++++
->  4 files changed, 322 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/s32g2.dtsi b/arch/arm64/boot/dts/freescale/s32g2.dtsi
-> index ea1456d361a3..68848575bf81 100644
-> --- a/arch/arm64/boot/dts/freescale/s32g2.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/s32g2.dtsi
-> @@ -376,6 +376,45 @@ uart1: serial@401cc000 {
->  			status = "disabled";
->  		};
->  
-> +		spi0: spi@401d4000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x401d4000 0x1000>;
-> +			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <8>;
-> +			bus-num = <0>;
-> +			dmas = <&edma0 0 7>, <&edma0 0 8>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi1: spi@401d8000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x401d8000 0x1000>;
-> +			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <1>;
-> +			dmas = <&edma0 0 10>, <&edma0 0 11>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi2: spi@401dc000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x401dc000 0x1000>;
-> +			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <2>;
-> +			dmas = <&edma0 0 13>, <&edma0 0 14>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
->  		i2c0: i2c@401e4000 {
->  			compatible = "nxp,s32g2-i2c";
->  			reg = <0x401e4000 0x1000>;
-> @@ -460,6 +499,45 @@ uart2: serial@402bc000 {
->  			status = "disabled";
->  		};
->  
-> +		spi3: spi@402c8000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x402c8000 0x1000>;
-> +			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <3>;
-> +			dmas = <&edma0 1 7>, <&edma0 1 8>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi4: spi@402cc000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x402cc000 0x1000>;
-> +			interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <4>;
-> +			dmas = <&edma0 1 10>, <&edma0 1 11>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi5: spi@402d0000 {
-> +			compatible = "nxp,s32g2-dspi";
-> +			reg = <0x402d0000 0x1000>;
-> +			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <5>;
-> +			dmas = <&edma0 1 13>, <&edma0 1 14>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
->  		i2c3: i2c@402d8000 {
->  			compatible = "nxp,s32g2-i2c";
->  			reg = <0x402d8000 0x1000>;
-> diff --git a/arch/arm64/boot/dts/freescale/s32g3.dtsi b/arch/arm64/boot/dts/freescale/s32g3.dtsi
-> index 991dbfbfa203..4f883b1a50ad 100644
-> --- a/arch/arm64/boot/dts/freescale/s32g3.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/s32g3.dtsi
-> @@ -435,6 +435,45 @@ uart1: serial@401cc000 {
->  			status = "disabled";
->  		};
->  
-> +		spi0: spi@401d4000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x401d4000 0x1000>;
-> +			interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <8>;
-> +			bus-num = <0>;
-> +			dmas = <&edma0 0 7>, <&edma0 0 8>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi1: spi@401d8000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x401d8000 0x1000>;
-> +			interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <1>;
-> +			dmas = <&edma0 0 10>, <&edma0 0 11>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi2: spi@401dc000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x401dc000 0x1000>;
-> +			interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <2>;
-> +			dmas = <&edma0 0 13>, <&edma0 0 14>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
->  		i2c0: i2c@401e4000 {
->  			compatible = "nxp,s32g3-i2c",
->  				     "nxp,s32g2-i2c";
-> @@ -524,6 +563,45 @@ uart2: serial@402bc000 {
->  			status = "disabled";
->  		};
->  
-> +		spi3: spi@402c8000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x402c8000 0x1000>;
-> +			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <3>;
-> +			dmas = <&edma0 1 7>, <&edma0 1 8>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi4: spi@402cc000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x402cc000 0x1000>;
-> +			interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <4>;
-> +			dmas = <&edma0 1 10>, <&edma0 1 11>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
-> +		spi5: spi@402d0000 {
-> +			compatible = "nxp,s32g3-dspi", "nxp,s32g2-dspi";
-> +			reg = <0x402d0000 0x1000>;
-> +			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&clks 26>;
-> +			clock-names = "dspi";
-> +			spi-num-chipselects = <5>;
-> +			bus-num = <5>;
-> +			dmas = <&edma0 1 13>, <&edma0 1 14>;
-> +			dma-names = "tx", "rx";
-> +			status = "disabled";
-> +		};
-> +
->  		i2c3: i2c@402d8000 {
->  			compatible = "nxp,s32g3-i2c",
->  				     "nxp,s32g2-i2c";
-> diff --git a/arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi b/arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi
-> index d26af0fb8be7..d8bf734aa267 100644
-> --- a/arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/s32gxxxa-evb.dtsi
-> @@ -173,6 +173,77 @@ i2c4-gpio-grp1 {
->  			pinmux = <0x2d40>, <0x2d30>;
->  		};
->  	};
-> +
-> +	dspi1_pins: dspi1-pins {
-> +		dspi1-grp0 {
-> +			pinmux = <0x72>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi1-grp1 {
-> +			pinmux = <0x62>;
-> +			output-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi1-grp2 {
-> +			pinmux = <0x83>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi1-grp3 {
-> +			pinmux = <0x5F0>;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi1-grp4 {
-> +			pinmux = <0x3D92>,
-> +				 <0x3DA2>,
-> +				 <0x3DB2>;
-> +		};
-> +	};
-> +
-> +	dspi5_pins: dspi5-pins {
-> +		dspi5-grp0 {
-> +			pinmux = <0x93>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi5-grp1 {
-> +			pinmux = <0xA0>;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi5-grp2 {
-> +			pinmux = <0x3ED2>,
-> +				 <0x3EE2>,
-> +				 <0x3EF2>;
-> +		};
-> +
-> +		dspi5-grp3 {
-> +			pinmux = <0xB3>;
-> +			output-enable;
-> +			slew-rate = <150>;
-> +		};
+If speed_hz < AMD_SPI_MIN_HZ, amd_set_spi_freq() iterates over the
+entire amd_spi_freq array without breaking out early, causing 'i' to go
+beyond the array bounds.
 
-Missing a newline.
+Fix that by stopping the loop when it gets to the last entry, so the low
+speed_hz value gets clamped up to AMD_SPI_MIN_HZ.
 
-I fixed it up and applied the patch.
+Fixes the following warning with an UBSAN kernel:
 
-Shawn
+  drivers/spi/spi-amd.o: error: objtool: amd_set_spi_freq() falls through to next function amd_spi_set_opcode()
 
-> +		dspi5-grp4 {
-> +			pinmux = <0xC3>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +	};
->  };
->  
->  &can0 {
-> @@ -220,3 +291,15 @@ &i2c4 {
->  	pinctrl-1 = <&i2c4_gpio_pins>;
->  	status = "okay";
->  };
-> +
-> +&spi1 {
-> +	pinctrl-0 = <&dspi1_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&spi5 {
-> +	pinctrl-0 = <&dspi5_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi b/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
-> index ba53ec622f0b..b0a21e4468da 100644
-> --- a/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/s32gxxxa-rdb.dtsi
-> @@ -127,6 +127,77 @@ i2c4-gpio-grp1 {
->  			pinmux = <0x2d40>, <0x2d30>;
->  		};
->  	};
-> +
-> +	dspi1_pins: dspi1-pins {
-> +		dspi1-grp0 {
-> +			pinmux = <0x72>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi1-grp1 {
-> +			pinmux = <0x62>;
-> +			output-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi1-grp2 {
-> +			pinmux = <0x83>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi1-grp3 {
-> +			pinmux = <0x5F0>;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi1-grp4 {
-> +			pinmux = <0x3D92>,
-> +				 <0x3DA2>,
-> +				 <0x3DB2>;
-> +		};
-> +	};
-> +
-> +	dspi5_pins: dspi5-pins {
-> +		dspi5-grp0 {
-> +			pinmux = <0x93>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +		};
-> +
-> +		dspi5-grp1 {
-> +			pinmux = <0xA0>;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +
-> +		dspi5-grp2 {
-> +			pinmux = <0x3ED2>,
-> +				 <0x3EE2>,
-> +				 <0x3EF2>;
-> +		};
-> +
-> +		dspi5-grp3 {
-> +			pinmux = <0xB3>;
-> +			output-enable;
-> +			slew-rate = <150>;
-> +		};
-> +		dspi5-grp4 {
-> +			pinmux = <0xC3>;
-> +			output-enable;
-> +			input-enable;
-> +			slew-rate = <150>;
-> +			bias-pull-up;
-> +		};
-> +	};
->  };
->  
->  &can0 {
-> @@ -155,6 +226,18 @@ pcal6524: gpio-expander@22 {
->  	};
->  };
->  
-> +&spi1 {
-> +	pinctrl-0 = <&dspi1_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
-> +&spi5 {
-> +	pinctrl-0 = <&dspi5_pins>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +};
-> +
->  &i2c2 {
->  	pinctrl-names = "default", "gpio";
->  	pinctrl-0 = <&i2c2_pins>;
-> 
-> -- 
-> 2.34.1
-> 
+Fixes: 3fe26121dc3a ("spi: amd: Configure device speed")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Acked-by: Mark Brown <broonie@kernel.org>
+Cc: Raju Rangoju <Raju.Rangoju@amd.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/78fef0f2434f35be9095bcc9ffa23dd8cab667b9.1742852847.git.jpoimboe@kernel.org
+Closes: https://lore.kernel.org/r/202503161828.RUk9EhWx-lkp@intel.com/
+Signed-off-by: Dmitriy Privalov <d.privalov@omp.ru>
+---
+ drivers/spi/spi-amd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index bfc3ab5f39ea..b53301e563bc 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -243,7 +243,7 @@ static int amd_set_spi_freq(struct amd_spi *amd_spi, u32 speed_hz)
+ 	if (speed_hz < AMD_SPI_MIN_HZ)
+ 		return -EINVAL;
+ 
+-	for (i = 0; i < ARRAY_SIZE(amd_spi_freq); i++)
++	for (i = 0; i < ARRAY_SIZE(amd_spi_freq)-1; i++)
+ 		if (speed_hz >= amd_spi_freq[i].speed_hz)
+ 			break;
+ 
+-- 
+2.34.1
 
 
