@@ -1,70 +1,74 @@
-Return-Path: <linux-spi+bounces-8681-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8682-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 815FBAE124A
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 06:17:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEF36AE1247
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 06:16:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A8E05A5889
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 04:15:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 435A01BC4B45
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 04:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4951E1EB5FE;
-	Fri, 20 Jun 2025 04:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC37E1FFC54;
+	Fri, 20 Jun 2025 04:13:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DIFq8ThY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UuBJ6Y1m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD0C1EB5D0;
-	Fri, 20 Jun 2025 04:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB711FCFE2;
+	Fri, 20 Jun 2025 04:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750392796; cv=none; b=N33LHhec7stFuNZdPLeJhaVX0mPQJn5rSFKyWmymI98H9Wrmpb896SxDodHTKbqHQSA0TcENqzNxpbbWz8tRiyr5grZqp9TXCGZuYExm9EaTHPg3mKg7yCM7R1x7uLHhCU9DmLxaZAniTw9scGdpQ86jL8uwi5512ljZOdTcsyk=
+	t=1750392800; cv=none; b=WphSPDVh7lzw0QtxmFkxNccECsD83t2a3TjgQRCsSVL5cYGM+SAX9AfybhZzuL7627PYZstGGwsno5SSvIchkQUeVxGrcZQtJM21Qg32ic6rANtwNvltGI5IHvmPrvH/osLlhssliYJT4sBLVYjZdke0OMP4JRrreq9ZWbMpaFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750392796; c=relaxed/simple;
-	bh=Qg6fg+NzuqdMyYShoYlTo9gRbCDKuVtxvxlAQWxQfUI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UGem03hkJtPVi4eINvtPGbFeXn9mKmpcS47epwfi9bdL5Lx2UywF6gPeg32KJqHTSsu3aADL21HivfX9pryD6XavRltFUxzEaxPcYPkydyW/wUXg7TbO+gyoXbi0CLcIOrarOY4J6cWYXiuDQ0ZazVIKE37zLt+E4lhShsFRMe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DIFq8ThY; arc=none smtp.client-ip=205.220.180.131
+	s=arc-20240116; t=1750392800; c=relaxed/simple;
+	bh=7wJzoEv8YDNZyYETeC8ZRHjCTW6ZM17M2gsTP78Urss=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GY2QMXdFlKDteEiHC+doO6iwt81/FrErVncBeOwijJRw/qZO7RefP/2S7ywcgaLI90UXoKdbjmCQQ7y50uUYpeaiNzE3gRjrvYfpYd+yp7dRC1FMUW9Vx6auNJ99+Dno23RrHaTkGYe5gEGzubmF7HED83fvAaWsHfbyxBY7N1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UuBJ6Y1m; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55JEAOXS015004;
-	Fri, 20 Jun 2025 04:13:02 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55JIe3E7024378;
+	Fri, 20 Jun 2025 04:13:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=PMtzEGhSufS4nLaMd0b5SX
-	z4IBNgJ9Xh3vB/9v3FTf0=; b=DIFq8ThYW9nyFwKFlEw/LFhBq/DeNsXywNDei1
-	838KjSjYkYfwFuWrw+rcdHT0edeRHZ7doD5GcdBW/v1FrklTm5LyqA7pByZ7ZxJF
-	15+KSMlfs6pn4hF3Ob/28lWl6yg9zvclhPpeXG3l1mxLefCb1fYzhyPimgcZRr/4
-	O5DoNvxKG4bxeIdVlyXPNjngwb93KWezz8KT/JgSfGq6tcVMV9qcR2KJmH7+OP11
-	FwknHW0VFmn2jm56d2Cesr6R/LCUE62UD3Uz5sPSq/8wN2FE2t3yRfPXLNpS1v0x
-	hlj4k+wjFtfyCIs6Dz2vkoifvyXg/pFOLXrTstvCQwgyWuJw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4791h9hx9q-1
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	65cKja2++68EnoivUXPMGbaeXz7WwEYJdjlAIZT1PpA=; b=UuBJ6Y1m5FKHOxaV
+	VVquOzTZrKnofTUxAWQYyl2JOkKzO8FVvNXCn48bdn0qFCIL6ksm/9hBYimNWIxC
+	7ZfoUw3SiyZtLGHmcUbPOh2O2NiRgH4ucXC7Q5oWIElYIo0DjsLLZk+GV1R0dIzp
+	jdKUIgh45Aq4c339qfSmJEWuFMtn9etRn2aepd1WnSA3n5L64rkVUrfOMdQ33UlT
+	k1kpmBWoUuLzYm2x0uXqrAICVJ4zgOnxe2xp95/WJ7U7QPAhecdKw9jFgx2Yzv3k
+	HL88k2vdfkc6Fg32btBJb3MiSF6t6DtHs25TA/I+95oRGkTGIj0kjPp6mY8SUrmT
+	3lp27A==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47bw13e095-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Jun 2025 04:13:01 +0000 (GMT)
+	Fri, 20 Jun 2025 04:13:05 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55K4D0Zx008099
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 55K4D4ZS014874
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Jun 2025 04:13:00 GMT
+	Fri, 20 Jun 2025 04:13:04 GMT
 Received: from haixcui1-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 19 Jun 2025 21:12:57 -0700
+ 15.2.1544.9; Thu, 19 Jun 2025 21:13:02 -0700
 From: Haixu Cui <quic_haixcui@quicinc.com>
 To: <quic_msavaliy@quicinc.com>, <broonie@kernel.org>,
         <virtio-dev@lists.linux.dev>, <viresh.kumar@linaro.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <hdanton@sina.com>, <qiang4.zhang@linux.intel.com>,
         <alex.bennee@linaro.org>
-CC: <quic_ztu@quicinc.com>
-Subject: [RFC PATCH v5 0/3] Virtio SPI Linux driver
-Date: Fri, 20 Jun 2025 12:12:27 +0800
-Message-ID: <20250620041230.731504-1-quic_haixcui@quicinc.com>
+CC: <quic_ztu@quicinc.com>, Haixu Cui <quic_haixcui@quicinc.com>
+Subject: [RFC PATCH v5 1/3] virtio: Add ID for virtio SPI
+Date: Fri, 20 Jun 2025 12:12:28 +0800
+Message-ID: <20250620041230.731504-2-quic_haixcui@quicinc.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250620041230.731504-1-quic_haixcui@quicinc.com>
+References: <20250620041230.731504-1-quic_haixcui@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,75 +81,49 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: X6z2IO_0_QW95-oAIbWrCq2WrozstSvS
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDAyOSBTYWx0ZWRfX/gfwoQmqgMNU
- uIm8McDcMPj9fq+Re6XnqevKiBzA6AmgLFLZxiAjNOXhJtDIWn+1cypNpP9rgeGe/ZhfWqdu8MP
- 2nYQ+MMNYVJyoBjnsAC72UPqRS0LGftN1crsIknueMw+9JZdNOuuasLx15blvMAXy1AvBtxUG72
- 4+bKtn27mxeFm7op1cL91bZYIBlFQmpTZCyWvmlSb1ZUiBi6xnnCjRBdhefyXLwY9t7adb42/Tc
- X07hhqjUc3MVLkVUDI1EecPhgy1sma6aWTDysNFZ4q0x+oYRoG4OThvmzXtVq9Lzi1/8+fPOKsz
- e2ZmNeyzMMY61xTGOgcIrE2O1dc0BkacOgLKwdrjPEISWBPn1HFDn+6Bpj7sMYvqG3vYTIU/kOL
- gLhgo8abR7WeoyxWpt9Rh89gGBaHHNp8gCT9QEsckdCfZDVc+Rst9fmLoIwY5TfmOw00VdgE
-X-Authority-Analysis: v=2.4 cv=UL/dHDfy c=1 sm=1 tr=0 ts=6854dfcd cx=c_pps
+X-Authority-Analysis: v=2.4 cv=QbBmvtbv c=1 sm=1 tr=0 ts=6854dfd1 cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=6IFa9wvqVegA:10 a=NEAV23lmAAAA:8 a=FS0OwZJzMusLKYCsq9IA:9
-X-Proofpoint-GUID: X6z2IO_0_QW95-oAIbWrCq2WrozstSvS
+ a=GEpy-HfZoHoA:10 a=6IFa9wvqVegA:10 a=COk6AnOGAAAA:8 a=KqJd8QcNxZFF0aacHC0A:9
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: 1CVezG6BQlDKWsGyVdRqCdiGYthjtn7n
+X-Proofpoint-GUID: 1CVezG6BQlDKWsGyVdRqCdiGYthjtn7n
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIwMDAyOSBTYWx0ZWRfXzY0etZ4TJsHm
+ 1MvvoRHa7g4zxTqdZ1bawGpPT2Ju5o9wibWfDORtVIx9enVz8CbxO8kDL65CnpCrwzTZhXgm3QO
+ 251bF3N/VxE+igeB99ewyRGLVBrszcGjmEK6HuHO78pdplKRM+g9LGYJNVrwalpOXBQK66K9ANU
+ uKaj/7tc3J+qgy+t4AoIbMkQcyCL1xGQZhaYzkw/YpySFLLSPbIYI6Ky1n/SRotH0o29+Y5KZsD
+ i0MXEABEhTrAUxG+zg2qV7zdh/p0NQgwjr2y7nEwHt8/ix5sYlFXfrWvK/ZYG5xZbaIOi0K+YCr
+ 526Gr7iENku8SPXvzdHzF7oBq/8kb07jynHXVij9AWu3T0QfyhyX9iyLdM88C8CKv0xeJr7SCLV
+ LE+d2S7RFJ/VKJO9SnzrWwaBrZWum7smKien6czVQ//suMROm+nKFGKzwVAHj7Dj/9a5+y84
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-06-20_01,2025-06-18_03,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- mlxscore=0 clxscore=1011 suspectscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=732 bulkscore=0
+ adultscore=0 phishscore=0 clxscore=1011 suspectscore=0 lowpriorityscore=0
+ mlxscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
  route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
  definitions=main-2506200029
 
-This is the 5th RFC version of a virtio SPI Linux driver which is
-intended to be compliant with the upcoming virtio specification
-version 1.4. The specification can be found in repository
-https://github.com/oasis-tcs/virtio-spec.git branch virtio-1.4.
+Add VIRTIO_ID_SPI definition for virtio SPI.
 
-Changes between 4th and 5th virtio SPI driver RFC:
-- Use dev_err_probe instead of dev_err in virtio_spi_probe function
-  to improve error handling.
-- Add comments to virtio_spi_set_delays function and revise several
-  field descriptions in mode_func_supported for improved clarity.
-- Update bitmask definitions from (1 << n) to BIT(n) to enhance code
-  readability.
- 
-Changes between 3rd and 4th virtio SPI driver RFC:
-- Remove the logic code for statically creating SPI devices through
-  the spi_new_device function.
-- Add ACPI support.
-- According to Hillf Danton's comment, use init_completion instead of
-reinit_completion in virtio_spi_transfer_one function.
- 
-Changes between 2nd and 3rd virtio SPI driver RFC:
-- Order header inclusion alphabetically.
-- Add Viresh Kumar's "signed-off" to the header files.
-- Rework virtio_spi_one_transfer
-  - Rework the delays according to Haixu Cui's advise. Delays are now
-    handled in a new sub-function virtio_spi_set_delays.
-  - Minor change: Re-formulate arguments of sg_init_one.
-- Rework virtio_spi_probe
-  - Replace some goto in error paths by return.
-  - Add spi_unregister_controller to an error path. Abstained from
-    using devm_spi_register_controller to keep order of
-    de-initialization in virtio_spi_remove.
-  - Add deletion of vqueue to all error paths taken after the virtqueues
-    have been initialized.
- 
-Changes between 1st and 2nd virtio SPI driver RFC:
-- Update from virtio SPI draft specification V4 to V10.
-- Incorporate review comments gotten from the community.
-- A proposal for a performance enhancement having more than only one SPI
-message in flight had to be kept out. The more complicated code would
-have caused an unacceptable project risk now.
- 
-The virtio SPI driver was smoke tested on qemu using Qualcomm's
-target hardware providing a physical SPI backend device, based on
-vhost-user protocol. Take vhost-device-spi as the vhost-user backend
-and qemu integrated with vhost-user-spi implementation as the vhost-user
-frontend. The Linux version used for testing is 6.12.
+Signed-off-by: Haixu Cui <quic_haixcui@quicinc.com>
+---
+ include/uapi/linux/virtio_ids.h | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/include/uapi/linux/virtio_ids.h b/include/uapi/linux/virtio_ids.h
+index 7aa2eb766205..6c12db16faa3 100644
+--- a/include/uapi/linux/virtio_ids.h
++++ b/include/uapi/linux/virtio_ids.h
+@@ -68,6 +68,7 @@
+ #define VIRTIO_ID_AUDIO_POLICY		39 /* virtio audio policy */
+ #define VIRTIO_ID_BT			40 /* virtio bluetooth */
+ #define VIRTIO_ID_GPIO			41 /* virtio gpio */
++#define VIRTIO_ID_SPI			45 /* virtio spi */
+ 
+ /*
+  * Virtio Transitional IDs
+-- 
+2.34.1
 
 
