@@ -1,364 +1,162 @@
-Return-Path: <linux-spi+bounces-8690-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8691-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8613AAE1C3C
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 15:30:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F99BAE258A
+	for <lists+linux-spi@lfdr.de>; Sat, 21 Jun 2025 00:28:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CA354A37BB
-	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 13:30:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D5393A78AC
+	for <lists+linux-spi@lfdr.de>; Fri, 20 Jun 2025 22:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F90728F501;
-	Fri, 20 Jun 2025 13:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549A323E346;
+	Fri, 20 Jun 2025 22:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="teoIhE3b"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="GIF1FiK1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D2F28A71B;
-	Fri, 20 Jun 2025 13:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7ECE23E32D
+	for <linux-spi@vger.kernel.org>; Fri, 20 Jun 2025 22:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750426197; cv=none; b=ZFU6TAR013sBAIeZwrnXeoqRBMhpXC2fyTJpUd0/qd9VMv84Z05SkdNdSPrYFo9pdsjTcordzQv27N3rZszXzc9p7E5vMMr+MFBf1Ne1miW6oYyKgKwipydgjrR67bPibhZOvacgDtL3IuhtK70/8SkQRDFye9cmIjETtnVP9/w=
+	t=1750458085; cv=none; b=F/8N1IPGA9FDQptaipRssydLHtjmzHNeOdGJtdY4FMFim649LCKbIivG5wRm/758Dj4wWLzo9hV0Q+eqd6hMcAOIdbsiV+zbcjgiDSL2qASfpxRe4j31u7Rw7rcrmDn9L17jOAwubr8vdedr1ur7VleGSgWbz0+2jLBY3l+F/DI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750426197; c=relaxed/simple;
-	bh=oWZq8aHxoc/AYd0TeBWtl/V2VXdCuqI5kEwoI43IORQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=F3iTfos0D+5Z4oS7/35e8GfxRe+XcKxUqP2JFB0TxSSUx6wE5lzA/ehfc0pZKEa5e0dP32k3cHT/WUex8cOjG3Oy7l1n+xuLDM1JiDGANRVhKkD6HEYjRCAuLbZkSYGXhm9FJpE9wbuv+XjQJbdrMVSUeGKIn+afUZUrcroaX2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=teoIhE3b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA05EC4CEEE;
-	Fri, 20 Jun 2025 13:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750426197;
-	bh=oWZq8aHxoc/AYd0TeBWtl/V2VXdCuqI5kEwoI43IORQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=teoIhE3b69B20cXfAnxZDTU8IeYgJQqBp5sv3+i3ikg53kah4GZrT7tfidWxFXDMy
-	 8xbhaMug9gurh0D2cNPJNQCI/VAh9BvzpRUSU903ZveVUhU6kkBQcNAXPN4VPUca5a
-	 AykcwGI6fc0Pprk7MQyvmcnkaHtaTcfz0Hkn5IYonPuZZtzohQdcE+vbsXv0vZQFMu
-	 ac/Djz+Zq8IKs2wbpq9x8qEbpZAY8GNpdaNg2KD5pSNSkaB5p7arg5HxcZeDj4fl3g
-	 REWv+NoW11Z8TkWGnCstejqZsQiJD/1O3fsfJJa6u/5H59A2jW+SlVPGRgFMWtmlcb
-	 aE79GU8NGCtFQ==
-From: Conor Dooley <conor@kernel.org>
-To: linux-spi@vger.kernel.org
-Cc: conor@kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Cyril Jean <cyril.jean@microchip.com>
-Subject: [PATCH v2 3/3] spi: microchip-core-qspi: Add regular transfers
-Date: Fri, 20 Jun 2025 14:28:26 +0100
-Message-ID: <20250620-splice-shelter-310771564886@spud>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250620-finer-yoyo-0bcae988a299@spud>
-References: <20250620-finer-yoyo-0bcae988a299@spud>
+	s=arc-20240116; t=1750458085; c=relaxed/simple;
+	bh=vVDOA4sZGcugRpefiICW8+34bR/a/+ZbrGgJnmbrQc4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=npUc4/sDAAeZ3f4W4M0o8btAUw361S5sA2TmoJDnoHlpZitzWT3YRBgDTMx+wIKJ2tBsZlKto+6YTFQWd8SFHnjo9ckr8iZ08mDhORCs52OaGr8zZGo20Qz0CJgft6QjNefZ8RTTd1JPjowWJpFxnBm9QDa13WaG7mLVcNl11mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=GIF1FiK1; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6113f0cafb2so1232094eaf.1
+        for <linux-spi@vger.kernel.org>; Fri, 20 Jun 2025 15:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750458080; x=1751062880; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LnoWbL9TACCNhDK9xUx+88BoeMpitd1subnhXAJpw30=;
+        b=GIF1FiK10eYBo6H2UG1AHfoaxkd6T6rQbg3PjfpqmPT9Wm0Uria1yqU0m4FATCJZou
+         cWKEumktX/qs542qeBlf1iNUeGqVGZAYJlZEdfu0OE3Q0ViZGDICWgbIquXiYmiTHJFS
+         6CV2K5E8EWNF22X6RZzCUH3BRGZYE1Mz/+dBoksAKxePzNi/HmV5Ms1jE6huIUIH0Wl+
+         /FERCdfmANRZ7iNRgsL1SyuI8DyINfVsLHy3jZNewlEAiylEIM2t7zoZJg30O5piydOG
+         osLJam6SElDcT4p3Hy7af29yEgj4P80CghJOgdSNO54wI2T1NJYdK3qzY0xVXZpFs4g8
+         NWag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750458080; x=1751062880;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LnoWbL9TACCNhDK9xUx+88BoeMpitd1subnhXAJpw30=;
+        b=sfbfTdvSyasxngxLUfiXB2+V5X8tyyji5AnXe1IZeUwPEiTmfD7U6ahfLdf2XJZnaP
+         pOGvFdlfMmNnaBQ32EsiSR5zcuOnw6mRrhKp0vQB0+4MCDP5ZqMXUoyx0AFDhWA5AlQm
+         vMYcxg49+2Z/HbfFhTeoOKax1BxyjF3zBzD51i/vX5HLNOKq4tyRS5cNHHXPeffTZ+Jd
+         0+HHqljlYo2L6JSeAeLtGaNrY1cDWX3zjn3qZnI6srzC3/hqRjFhR5Iv1QlGbS60w2J6
+         LhD+hQsBiHclAJJ9V/UAaua5FUbbpnWXzdbqFxgNLvHY2hGuVWneQi3Xak9Ipi8iJDBu
+         mZtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/hpZAG33oQV1PWPQGBvm5guMK2dJ9V61Fmsb1+6y2SvLPz3IIQOLmi/ZJP37R4F7DjnLdu5OY6gI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxT1hiUB1LDtEIipffTFrINHRJqX4WsP7frYzdw00TVhZ4q5eRU
+	U0KwxhIfvhDZHk95f06yRMI2/WscNmopPIQ0Zv3BDzUYO3RIdG7hrUupqEeBCTaUa2M=
+X-Gm-Gg: ASbGncvgpqsMaoT+yedrqYGu1gh1vbk7ZSYlsuZuJ6k3zlflPLSXCOr99raPSN/aBW9
+	FBYJOjAZpbdNS9oEBoqPUJWxna7ZCm0JpVtqeiANmutyXl2lmffkYcxonRkdUiAir25ylxxF/7k
+	VSpem2xkMRD0aUftoq0WFR/frumBjkUVjSMXirvV20bSNPVioWOYIrbkM0+C3/4+DN/EaRqJrt4
+	KuRUdet608PrMfB2FI5bEDAqEVlHr3ZXvKqkH0bqYupB0U42tUwcf0BwcckZ1Vq2/WqwtAqeaPK
+	56akQwHFBht8oNTkdz7fCyGaOLRRVaiBG5+cWOiIw6Sb3LpcpCfWZtAdfYAlbFwy/iiH
+X-Google-Smtp-Source: AGHT+IHkTikpQuDj9PrDQbT93iaWgnTsK9tNVi2euCxupUEhaUXbbEmdqU7CyKKsoAEt4Ih15q9KuA==
+X-Received: by 2002:a05:6871:7287:b0:2c2:d2b8:e179 with SMTP id 586e51a60fabf-2eeda503eb1mr3907370fac.4.1750458080484;
+        Fri, 20 Jun 2025 15:21:20 -0700 (PDT)
+Received: from [127.0.1.1] ([2600:8803:e7e4:1d00:c4bf:cf27:203c:f8b0])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2ef481fe06esm7561fac.35.2025.06.20.15.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jun 2025 15:21:19 -0700 (PDT)
+From: David Lechner <dlechner@baylibre.com>
+Subject: [PATCH 0/9] iio: adc: ad7173: add SPI offload support
+Date: Fri, 20 Jun 2025 17:20:06 -0500
+Message-Id: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-0-0766f6297430@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9361; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=B/q2ukzJYNYor7gOpnDgWbzzJt0rZvSzVJ1H4vtiFaw=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDBmhiT+aGD79Yf3you3GoyaJoA1PCzbuklkWL3vi/xSby P/yocsbOkpZGMQ4GGTFFFkSb/e1SK3/47LDuectzBxWJpAhDFycAjCRawGMDHNFNedVPbJ7l76u zfPQoa4QCeOZB7U2SjsKvDjDILNFT5zhv3tHhseln8+tfTRSTsw4s0LZasbOScue6C13uqmkHmR vygcA
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJbeVWgC/yWNQQqDMBBFryKz7kASMSlepbiIZmwHqkmTWATx7
+ h3qYvjz/uK/AwplpgJ9c0CmLxeOq4C+NTC9/Pok5CAMRplOWaOQOaIPk5zTrpUIWBJjnOd39PJ
+ vKcVcsTVeu/torfUtyFjKNPP+Fz2GizN9NvHVq4TRF8IpLgvXvllpr3g5VQfDef4A9F3IIqkAA
+ AA=
+X-Change-ID: 20250620-iio-adc-ad7173-add-spi-offload-support-32a178b666a3
+To: Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Jonathan Cameron <jic23@kernel.org>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org, 
+ David Lechner <dlechner@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2128; i=dlechner@baylibre.com;
+ h=from:subject:message-id; bh=vVDOA4sZGcugRpefiICW8+34bR/a/+ZbrGgJnmbrQc4=;
+ b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBoVd6ccHt5opDnwzqD7X47mzjQNTTXgUlbBycN7
+ 2/akJOTiEWJATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaFXenAAKCRDCzCAB/wGP
+ wEMLB/wMEb7Dmzk8reprmZqPVXSc2NrTVvvDc2tkK5otrsFDRmw0uWuDPj+OyaqHeoUjTNsjfyP
+ P+1Jki+TmRbv7iKl3mZgMH6u6B5oMjovISPcfhl4fhuaddPntAYl3oF4wnEupKvtTz3ueAC9xRM
+ PVicwTt5OBxAiv7SnHfdmbFgOuuQJzg3bNPvCMyaBzJmxraC8U4PIP9mkudYIeBtvMXcUw6p5/i
+ 6CgIPKLaUTFCMw3bKF6ci4C9cf4lvFUfAqCKjiHmir4fXvAx8x6wEWgXQ3GywxlBt7FFSpFClUB
+ PhtBjY6oyjCIh4SQ+eq4JmQyyv/MNWrzTzDxQU5dfYI0RxlI
+X-Developer-Key: i=dlechner@baylibre.com; a=openpgp;
+ fpr=8A73D82A6A1F509907F373881F8AF88C82F77C03
 
-From: Cyril Jean <cyril.jean@microchip.com>
+Here comes another series for adding SPI offload support to an ADC.
 
-The driver for CoreQSPI only supports memory operations at present, so
-add support for regular transfers so that the SD card slot and ADC on
-the BeagleV Fire can be used.
+The primary target is AD411x, but since this uses the ad_sigma_delta
+shared module, a lot of this series is focused on that.
 
-Signed-off-by: Cyril Jean <cyril.jean@microchip.com>
-Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+To start with, we have some cleanups to the ad_sigma_delta code, so feel
+free to pick these up as they are ready as they generally stand on their
+own.
+
+Then before adding proper SPI offload support, we make use of
+spi_optimize_message() to reduce CPU usage of all users of this driver
+during buffered reads.
+
+Also there is a new dt-binding and driver for a special SPI offload
+trigger FPGA IP core that is used in this particular setup.
+
+Then finally actual SPI offload support is added to the ad_sigma_delta
+module and the ad7173 driver.
+
+This was tested using EVAL-AD4112ARDZ on a DE10-Nano.
+
 ---
- drivers/spi/spi-microchip-core-qspi.c | 217 +++++++++++++++++++++++---
- 1 file changed, 199 insertions(+), 18 deletions(-)
+David Lechner (9):
+      iio: adc: ad_sigma_delta: sort includes
+      iio: adc: ad_sigma_delta: use u8 instead of uint8_t
+      iio: adc: ad_sigma_delta: use BITS_TO_BYTES() macro
+      iio: adc: ad_sigma_delta: refactor setting read address
+      iio: adc: ad_sigma_delta: use spi_optimize_message()
+      dt-bindings: trigger-source: add ADI Util Sigma-Delta SPI
+      spi: offload trigger: add ADI Util Sigma-Delta SPI driver
+      iio: adc: ad_sigma_delta: add SPI offload support
+      iio: adc: ad7173: add SPI offload support
 
-diff --git a/drivers/spi/spi-microchip-core-qspi.c b/drivers/spi/spi-microchip-core-qspi.c
-index 67ff5f8aa84d0..d13a9b755c7f8 100644
---- a/drivers/spi/spi-microchip-core-qspi.c
-+++ b/drivers/spi/spi-microchip-core-qspi.c
-@@ -222,6 +222,87 @@ static inline void mchp_coreqspi_write_op(struct mchp_coreqspi *qspi)
- 	}
- }
- 
-+static inline void mchp_coreqspi_write_read_op(struct mchp_coreqspi *qspi)
-+{
-+	u32 control, data;
-+
-+	qspi->rx_len = qspi->tx_len;
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	control |= CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->tx_len >= 4) {
-+		while (readl_relaxed(qspi->regs + REG_STATUS) & STATUS_TXFIFOFULL)
-+			;
-+
-+		data = qspi->txbuf ? *((u32 *)qspi->txbuf) : 0xaa;
-+		if (qspi->txbuf)
-+			qspi->txbuf += 4;
-+		qspi->tx_len -= 4;
-+		writel_relaxed(data, qspi->regs + REG_X4_TX_DATA);
-+
-+		/*
-+		 * The rx FIFO is twice the size of the tx FIFO, so there is
-+		 * no requirement to block transmission if receive data is not
-+		 * ready, and it is fine to let the tx FIFO completely fill
-+		 * without reading anything from the rx FIFO. Once the tx FIFO
-+		 * has been filled and becomes non-full due to a transmission
-+		 * occurring there will always be something to receive.
-+		 * IOW, this is safe as TX_FIFO_SIZE + 4 < 2 * TX_FIFO_SIZE
-+		 */
-+		if (qspi->rx_len >= 4) {
-+			if (readl_relaxed(qspi->regs + REG_STATUS) & STATUS_RXAVAILABLE) {
-+				data = readl_relaxed(qspi->regs + REG_X4_RX_DATA);
-+				*(u32 *)qspi->rxbuf = data;
-+				qspi->rxbuf += 4;
-+				qspi->rx_len -= 4;
-+			}
-+		}
-+	}
-+
-+	/*
-+	 * Since transmission is not being blocked by clearing the rx FIFO,
-+	 * loop here until all received data "leaked" by the loop above has
-+	 * been dealt with.
-+	 */
-+	while (qspi->rx_len >= 4) {
-+		while (readl_relaxed(qspi->regs + REG_STATUS) & STATUS_RXFIFOEMPTY)
-+			;
-+		data = readl_relaxed(qspi->regs + REG_X4_RX_DATA);
-+		*(u32 *)qspi->rxbuf = data;
-+		qspi->rxbuf += 4;
-+		qspi->rx_len -= 4;
-+	}
-+
-+	/*
-+	 * Since rx_len and tx_len must be < 4 bytes at this point, there's no
-+	 * concern about overflowing the rx or tx FIFOs any longer. It's
-+	 * therefore safe to loop over the remainder of the transmit data before
-+	 * handling the remaining receive data.
-+	 */
-+	if (!qspi->tx_len)
-+		return;
-+
-+	control &= ~CONTROL_FLAGSX4;
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	while (qspi->tx_len--) {
-+		while (readl_relaxed(qspi->regs + REG_STATUS) & STATUS_TXFIFOFULL)
-+			;
-+		data = qspi->txbuf ? *qspi->txbuf : 0xaa;
-+		qspi->txbuf++;
-+		writel_relaxed(data, qspi->regs + REG_TX_DATA);
-+	}
-+
-+	while (qspi->rx_len--) {
-+		while (readl_relaxed(qspi->regs + REG_STATUS) & STATUS_RXFIFOEMPTY)
-+			;
-+		data = readl_relaxed(qspi->regs + REG_RX_DATA);
-+		*qspi->rxbuf++ = (data & 0xFF);
-+	}
-+}
-+
- static void mchp_coreqspi_enable_ints(struct mchp_coreqspi *qspi)
- {
- 	u32 mask = IEN_TXDONE |
-@@ -266,7 +347,7 @@ static irqreturn_t mchp_coreqspi_isr(int irq, void *dev_id)
- }
- 
- static int mchp_coreqspi_setup_clock(struct mchp_coreqspi *qspi, struct spi_device *spi,
--				     const struct spi_mem_op *op)
-+				     u32 max_freq)
- {
- 	unsigned long clk_hz;
- 	u32 control, baud_rate_val = 0;
-@@ -275,11 +356,11 @@ static int mchp_coreqspi_setup_clock(struct mchp_coreqspi *qspi, struct spi_devi
- 	if (!clk_hz)
- 		return -EINVAL;
- 
--	baud_rate_val = DIV_ROUND_UP(clk_hz, 2 * op->max_freq);
-+	baud_rate_val = DIV_ROUND_UP(clk_hz, 2 * max_freq);
- 	if (baud_rate_val > MAX_DIVIDER || baud_rate_val < MIN_DIVIDER) {
- 		dev_err(&spi->dev,
- 			"could not configure the clock for spi clock %d Hz & system clock %ld Hz\n",
--			op->max_freq, clk_hz);
-+			max_freq, clk_hz);
- 		return -EINVAL;
- 	}
- 
-@@ -367,23 +448,13 @@ static inline void mchp_coreqspi_config_op(struct mchp_coreqspi *qspi, const str
- 	writel_relaxed(frames, qspi->regs + REG_FRAMES);
- }
- 
--static int mchp_qspi_wait_for_ready(struct spi_mem *mem)
-+static int mchp_coreqspi_wait_for_ready(struct mchp_coreqspi *qspi)
- {
--	struct mchp_coreqspi *qspi = spi_controller_get_devdata
--				    (mem->spi->controller);
- 	u32 status;
--	int ret;
- 
--	ret = readl_poll_timeout(qspi->regs + REG_STATUS, status,
-+	return readl_poll_timeout(qspi->regs + REG_STATUS, status,
- 				 (status & STATUS_READY), 0,
- 				 TIMEOUT_MS);
--	if (ret) {
--		dev_err(&mem->spi->dev,
--			"Timeout waiting on QSPI ready.\n");
--		return -ETIMEDOUT;
--	}
--
--	return ret;
- }
- 
- static int mchp_coreqspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
-@@ -396,11 +467,13 @@ static int mchp_coreqspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
- 	int err, i;
- 
- 	mutex_lock(&qspi->op_lock);
--	err = mchp_qspi_wait_for_ready(mem);
--	if (err)
-+	err = mchp_coreqspi_wait_for_ready(qspi);
-+	if (err) {
-+		dev_err(&mem->spi->dev, "Timeout waiting on QSPI ready.\n");
- 		goto error;
-+	}
- 
--	err = mchp_coreqspi_setup_clock(qspi, mem->spi, op);
-+	err = mchp_coreqspi_setup_clock(qspi, mem->spi, op->max_freq);
- 	if (err)
- 		goto error;
- 
-@@ -515,6 +588,109 @@ static const struct spi_controller_mem_caps mchp_coreqspi_mem_caps = {
- 	.per_op_freq = true,
- };
- 
-+static int mchp_coreqspi_unprepare_message(struct spi_controller *ctlr, struct spi_message *m)
-+{
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata(ctlr);
-+
-+	/*
-+	 * This delay is required for the driver to function correctly,
-+	 * but no explanation has been determined for why it is required.
-+	 */
-+	udelay(750);
-+
-+	mutex_unlock(&qspi->op_lock);
-+
-+	return 0;
-+}
-+
-+static int mchp_coreqspi_prepare_message(struct spi_controller *ctlr, struct spi_message *m)
-+{
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata(ctlr);
-+	struct spi_transfer *t = NULL;
-+	u32 control, frames;
-+	u32 total_bytes = 0, cmd_bytes = 0, idle_cycles = 0;
-+	int ret;
-+	bool quad = false, dual = false;
-+
-+	mutex_lock(&qspi->op_lock);
-+	ret = mchp_coreqspi_wait_for_ready(qspi);
-+	if (ret) {
-+		mutex_unlock(&qspi->op_lock);
-+		dev_err(&ctlr->dev, "Timeout waiting on QSPI ready.\n");
-+		return ret;
-+	}
-+
-+	ret = mchp_coreqspi_setup_clock(qspi, m->spi, m->spi->max_speed_hz);
-+	if (ret) {
-+		mutex_unlock(&qspi->op_lock);
-+		return ret;
-+	}
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	control &= ~(CONTROL_MODE12_MASK | CONTROL_MODE0);
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	reinit_completion(&qspi->data_completion);
-+
-+	list_for_each_entry(t, &m->transfers, transfer_list) {
-+		total_bytes += t->len;
-+		if (!cmd_bytes && !(t->tx_buf && t->rx_buf))
-+			cmd_bytes = t->len;
-+		if (!t->rx_buf)
-+			cmd_bytes = total_bytes;
-+		if (t->tx_nbits == SPI_NBITS_QUAD || t->rx_nbits == SPI_NBITS_QUAD)
-+			quad = true;
-+		else if (t->tx_nbits == SPI_NBITS_DUAL || t->rx_nbits == SPI_NBITS_DUAL)
-+			dual = true;
-+	}
-+
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	if (quad) {
-+		control |= (CONTROL_MODE0 | CONTROL_MODE12_EX_RW);
-+	} else if (dual) {
-+		control &= ~CONTROL_MODE0;
-+		control |= CONTROL_MODE12_FULL;
-+	} else {
-+		control &= ~(CONTROL_MODE12_MASK | CONTROL_MODE0);
-+	}
-+	writel_relaxed(control, qspi->regs + REG_CONTROL);
-+
-+	frames = total_bytes & BYTESUPPER_MASK;
-+	writel_relaxed(frames, qspi->regs + REG_FRAMESUP);
-+	frames = total_bytes & BYTESLOWER_MASK;
-+	frames |= cmd_bytes << FRAMES_CMDBYTES_SHIFT;
-+	frames |= idle_cycles << FRAMES_IDLE_SHIFT;
-+	control = readl_relaxed(qspi->regs + REG_CONTROL);
-+	if (control & CONTROL_MODE12_MASK)
-+		frames |= (1 << FRAMES_SHIFT);
-+
-+	frames |= FRAMES_FLAGWORD;
-+	writel_relaxed(frames, qspi->regs + REG_FRAMES);
-+
-+	return 0;
-+};
-+
-+static int mchp_coreqspi_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
-+				      struct spi_transfer *t)
-+{
-+	struct mchp_coreqspi *qspi = spi_controller_get_devdata(ctlr);
-+
-+	qspi->tx_len = t->len;
-+
-+	if (t->tx_buf)
-+		qspi->txbuf = (u8 *)t->tx_buf;
-+
-+	if (!t->rx_buf) {
-+		mchp_coreqspi_write_op(qspi);
-+	} else {
-+		qspi->rxbuf = (u8 *)t->rx_buf;
-+		qspi->rx_len = t->len;
-+		mchp_coreqspi_write_read_op(qspi);
-+	}
-+
-+	return 0;
-+}
-+
- static int mchp_coreqspi_probe(struct platform_device *pdev)
- {
- 	struct spi_controller *ctlr;
-@@ -563,6 +739,11 @@ static int mchp_coreqspi_probe(struct platform_device *pdev)
- 			  SPI_TX_DUAL | SPI_TX_QUAD;
- 	ctlr->dev.of_node = np;
- 	ctlr->min_speed_hz = clk_get_rate(qspi->clk) / 30;
-+	ctlr->prepare_message = mchp_coreqspi_prepare_message;
-+	ctlr->unprepare_message = mchp_coreqspi_unprepare_message;
-+	ctlr->transfer_one = mchp_coreqspi_transfer_one;
-+	ctlr->num_chipselect = 2;
-+	ctlr->use_gpio_descriptors = true;
- 
- 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
- 	if (ret)
+ .../trigger-source/adi,util-sigma-delta-spi.yaml   |  49 ++++
+ MAINTAINERS                                        |   7 +-
+ drivers/iio/adc/ad7173.c                           |  13 +
+ drivers/iio/adc/ad_sigma_delta.c                   | 281 +++++++++++++--------
+ drivers/spi/Kconfig                                |   5 +
+ drivers/spi/Makefile                               |   1 +
+ .../spi/spi-offload-trigger-adi-util-sigma-delta.c |  59 +++++
+ include/linux/iio/adc/ad_sigma_delta.h             |  27 +-
+ 8 files changed, 330 insertions(+), 112 deletions(-)
+---
+base-commit: d02f330b0c78bcf76643fbb7d3215a58b181f829
+change-id: 20250620-iio-adc-ad7173-add-spi-offload-support-32a178b666a3
+
+Best regards,
 -- 
-2.45.2
+David Lechner <dlechner@baylibre.com>
 
 
