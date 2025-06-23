@@ -1,140 +1,92 @@
-Return-Path: <linux-spi+bounces-8706-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8707-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D774AE30B7
-	for <lists+linux-spi@lfdr.de>; Sun, 22 Jun 2025 18:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90576AE3527
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 07:49:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1310D3B1DFB
-	for <lists+linux-spi@lfdr.de>; Sun, 22 Jun 2025 16:14:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFF973B0E06
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 05:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C9B1F4261;
-	Sun, 22 Jun 2025 16:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5E11C700C;
+	Mon, 23 Jun 2025 05:49:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="2Cek2Rca"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="UhL7QmOY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 685CC219FC
-	for <linux-spi@vger.kernel.org>; Sun, 22 Jun 2025 16:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1D642065;
+	Mon, 23 Jun 2025 05:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750608867; cv=none; b=h54iME3lVMAT/N65fMbce1FKmq6/Of2eOoxR3i/ygN+9dl2EcpJDo6a9g7KwPSe9QAI9/vp4+4W4zlekn1G7Q3wGE4MNJBKzLH+gHPcWjio2G3L90gaH3hXkZKzpBRU8hOaJN6mCbTk6sd+9FAms+ETMqJ91muZJeDavpb56T4g=
+	t=1750657778; cv=none; b=hDUx/8oxey1jXJo+f/ezE6uVc3fOfuGfKAclmY6i/+xCm3F4etxAh/3FrN+uWoUiwfxrMKnfCnsPzrNpP/657+TX82tFCvjjH/CFLUYSc7Cs71e1k+wO9E6zhStR4GoEaxjo7SgXWLrMQGFwi0KjpJLFnhe/wMkzqCrNH6x8NA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750608867; c=relaxed/simple;
-	bh=E4rFypkPIrk7vg0K520K6GmgIY8PC6BjosDROkARYXk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dnHucos4/BvBYEPC5j/6FWFtFiBAmpYxVqwnhwTfN+99rvIvGm7sd/wc5y3nSdJooklErETUeOKjjLhzf/X+3Y3qbEYAGS5tzyLFrli0514Wh6cEBb0wMixinD56yc7DUvZQSe2eDptW+tVb9B3EtR0AbJj96dsR8P8d1HOYgbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=2Cek2Rca; arc=none smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-400fa6eafa9so2571624b6e.1
-        for <linux-spi@vger.kernel.org>; Sun, 22 Jun 2025 09:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750608863; x=1751213663; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RT55BdTQMsSqQTGnDjBdNFy42bnLM9kJKWOx56hzQ1A=;
-        b=2Cek2RcabWnqywSSBWimNtiF2CrvFqWJTQc1N8NFIlnfqjFoWRcrgZJQ3BlXwrIKeA
-         4prNiMII4GBcXkyGdWiQ6vSd0GzFL5RbZuTJNkXuWa8VHVEzI7DO1e0v23+XN5YiBUNW
-         VRezCx0d1fAJ2P0Dk9FSUDSeVbmcCFwqpRa5+zcrWTXR896C/hfxwxtQg1VFx7gIVbXA
-         kXyIsEdyrA0G8N/cMrmschusgo+e8xs0hyYoRY3MmO1Y5uinSt4gyFlTkGZtmj0SGzp4
-         gE8ONpq3cVXKsF4fCBKPNMMFOBTZr01+3hZR2DFtU7+ApgjcSmGeVbrNepSDzuIc6nNG
-         +mdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750608863; x=1751213663;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RT55BdTQMsSqQTGnDjBdNFy42bnLM9kJKWOx56hzQ1A=;
-        b=dIikPhETY7jDCmmJZ8M2KHdzz9Cs9aHlr16E2dKVLdJhItxlSS+w9WqtDcIlfG0Wu9
-         QFpekUrmXZ6o/c0/9P2rORvXXY/McYtKVFC39wy/BV5IyMQdH4r1kgyS9LLy6eSYASmD
-         jwM6X8r8kEFkvrEZS9oFzq2SEPrBbnDAtxgYcq39j6mtwrX1oMYi2XN2mgcytzpkRn6u
-         uoUNaAmJT1id2haqQvn8Ey5y7EjYsU3bZnxaFDXxNS36U+P7pMCkwTlgt8BaAURRAEtF
-         fns26XuW8D5i62RvZWvrQ9HNTFph6LfXo78sL7t83XSM8BokKl5bWn3slHhSCY6ZVHzJ
-         wUSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxKDbEVQiw0pMUwcgRgKPSbR2eZKtyYJkB9nGOY4addRJR6chN7WwUvw3EtmMKIkz31VVBbPr5whw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRNl+0to7v9Jm6yUhXfHz3brUzoqImw919zx6m4pC5SJS1pB5M
-	pvEp/s7nOHW5+bNo9V/lYUp1ICEaEz7mChx8GKXNRTMWtfRM3gd977Ff5lBqn8n63SU=
-X-Gm-Gg: ASbGnctw8bIGmzKICTaNLz6+ntIXUwYRGKWzPMPaC57OqY6gfnLcAgv9t5MxkF97A5X
-	RjeCB68VsxefLJvjXDOpjTJpeIgphNUWRnxI2YtgUvs7vlkA1n/XJJRQ3u6Xaqn/DMVK30QWKE3
-	ugOuVBsAvfmJr9AAcYndjxlsu1SyI37vdGfqkpg6Yb34eG5SdiE/cE+hyFgjfpDaGS3Cn7FzBKU
-	jxnuZhaH+hKHz0i4A7ZocabqxpIFdQI4KFw3+iWdpOtG1MjM+Lye9rtwXB6+JMKm4v25nxGtkQQ
-	DfsqZSSvY4GZp46tcxnhqsU/goWJd/Wd/7YG9xshZMPap6SfWekZEuAiUxzKh5ENhxITZSelfJB
-	Z5Y1PvelJBPfbKYbRN5TzOB5dDE5WbFWcdwgKFIA=
-X-Google-Smtp-Source: AGHT+IGsvJy3BWTWHSAyPkEPTBTxxziw2HN/QGBf2hFT6oQ7sBwQLlzrgTMkODdA9iou2mDpphfKRg==
-X-Received: by 2002:a05:6808:1207:b0:406:6e31:18a1 with SMTP id 5614622812f47-40ac6eea095mr7296063b6e.2.1750608863396;
-        Sun, 22 Jun 2025 09:14:23 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:a78a:24a9:21db:1532? ([2600:8803:e7e4:1d00:a78a:24a9:21db:1532])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-40adc0842b6sm417298b6e.8.2025.06.22.09.14.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jun 2025 09:14:22 -0700 (PDT)
-Message-ID: <fb7c3825-89d5-4ae2-a19f-c527b0b000b4@baylibre.com>
-Date: Sun, 22 Jun 2025 11:14:20 -0500
+	s=arc-20240116; t=1750657778; c=relaxed/simple;
+	bh=94VgTjMU6PiVQFaYN73bwAfslp6WOu3wpqg2T5I3uNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+yL6WFu4UolW4lKWrnetq2fBvV5OvJ3frRQ2xkDzQyOfWiWuF50FjaFGeH6Apq5kR/TCe//MVYyXzRybm4QqeiwT+psCkDvuo085Og2Lw7+6BtGhYsmf+HWn5c+pLwqbyzmxFq57D/BY+KBkr4dgm+9OCAg5tlLjmOPkn4qsRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=UhL7QmOY; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Gc8ST05/lU4vkA1b2+jaw3Ej+aipM8BwFYTtBem1TFQ=; b=UhL7QmOY09cYp0raNZkdvXbms0
+	GMOKiPj+ZfCfhAhtkyR2fk0uMDxy3w+2aZIkBdsMECrog9d2vW5V2SYTaGmS0fPuovWnsJApzV5SG
+	9vaMKVrfSIjJNMEyMq6eUzdSNAXPmBIlKzEVj6H79ZZJpyvIKFWZAru/hIW5FzTt+a8HOCZHitbSq
+	tLnUBgzYJ8NS8RLxoWkWAowUDEYmNHlitYnpd8Q7QpGwgJRA5MfBiwKfWHdRyUbOKD7F8A4qvYTdZ
+	IYNPdzP0JtLo2rkBkkkx2cvFp7CAdUoDjeVSFYLt2sA82oLZVlx2pfHMIf37eK1G1aLvdHkQZO7Vh
+	6L8R5ZCQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uTZnn-000CoY-2v;
+	Mon, 23 Jun 2025 13:49:05 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 23 Jun 2025 13:49:04 +0800
+Date: Mon, 23 Jun 2025 13:49:04 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
+	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
+	broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, kernel@pengutronix.de,
+	ore@pengutronix.de, luka.perkov@sartura.hr, arnd@arndb.de,
+	daniel.machon@microchip.com
+Subject: Re: [PATCH v7 6/6] crypto: atmel-aes: make it selectable for
+ ARCH_LAN969X
+Message-ID: <aFjq0EO0Uj3MGcqU@gondor.apana.org.au>
+References: <20250613114148.1943267-1-robert.marko@sartura.hr>
+ <20250613114148.1943267-7-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] iio: adc: ad_sigma_delta: add SPI offload support
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
- linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-spi@vger.kernel.org
-References: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-0-0766f6297430@baylibre.com>
- <20250620-iio-adc-ad7173-add-spi-offload-support-v1-8-0766f6297430@baylibre.com>
- <20250622160054.31cc5103@jic23-huawei>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250622160054.31cc5103@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250613114148.1943267-7-robert.marko@sartura.hr>
 
-On 6/22/25 10:00 AM, Jonathan Cameron wrote:
-> On Fri, 20 Jun 2025 17:20:14 -0500
-> David Lechner <dlechner@baylibre.com> wrote:
+On Fri, Jun 13, 2025 at 01:39:41PM +0200, Robert Marko wrote:
+> LAN969x uses the same crypto engine, make it selectable for ARCH_LAN969X.
 > 
->> Add SPI offload support to the ad_sigma_delta module.
->>
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+>  drivers/crypto/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-...
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
->> @@ -670,7 +700,8 @@ static irqreturn_t ad_sd_data_rdy_trig_poll(int irq, void *private)
->>  	if ((!sigma_delta->rdy_gpiod || gpiod_get_value(sigma_delta->rdy_gpiod)) &&
->>  	    ad_sd_disable_irq(sigma_delta)) {
->>  		complete(&sigma_delta->completion);
->> -		iio_trigger_poll(sigma_delta->trig);
->> +		if (sigma_delta->trig)
-> 
-> Is this defensive or can we actually get here with out a trigger?
-> I would have thought in the offload case (so no trigger here) we'd not call this
-> function at all.  Mind you, can't we get here with no trigger when doing
-> a calibration or simple read normally?  
-
-The difference is that with SPI offload, sigma_delta->trig is NULL
-but without SPI offload, it is never NULL. iio_trigger_poll() doesn't
-check for NULL and would crash with NULL pointer dereference.
-
-During calibration and single conversion the poll function isn't
-attached to the trigger, so I guess that is why it didn't really
-hurt to call iio_trigger_poll() in that case.
-
-> 
->> +			iio_trigger_poll(sigma_delta->trig);
->>  
->>  		return IRQ_HANDLED;
->>  	}
-> 
-> 
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
