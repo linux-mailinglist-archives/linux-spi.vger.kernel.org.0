@@ -1,69 +1,83 @@
-Return-Path: <linux-spi+bounces-8707-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8708-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90576AE3527
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 07:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1331EAE3638
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 08:50:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFF973B0E06
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 05:49:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE5A83B2054
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 06:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5E11C700C;
-	Mon, 23 Jun 2025 05:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1816E1EB5CE;
+	Mon, 23 Jun 2025 06:50:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="UhL7QmOY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fRBcgby0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1D642065;
-	Mon, 23 Jun 2025 05:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584CF45948;
+	Mon, 23 Jun 2025 06:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750657778; cv=none; b=hDUx/8oxey1jXJo+f/ezE6uVc3fOfuGfKAclmY6i/+xCm3F4etxAh/3FrN+uWoUiwfxrMKnfCnsPzrNpP/657+TX82tFCvjjH/CFLUYSc7Cs71e1k+wO9E6zhStR4GoEaxjo7SgXWLrMQGFwi0KjpJLFnhe/wMkzqCrNH6x8NA8=
+	t=1750661428; cv=none; b=Kc/Gbju/jROYO84a36gJ9YvMCTbr+sXMtL/Mp3/Ind72Eu1hx7bQcBjQrbZmLf5vk2QLIJKAjhPU2rZ97SegmB5RZZ7E7a4oUCAgQeRzSeKeJi7w7Tj2jo8jdZPhUe65SjENrpFFOOZmjpkkUqT6qW6zUaE7/8RYFMyYM5F/Me0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750657778; c=relaxed/simple;
-	bh=94VgTjMU6PiVQFaYN73bwAfslp6WOu3wpqg2T5I3uNg=;
+	s=arc-20240116; t=1750661428; c=relaxed/simple;
+	bh=UbcP0cmmfsC3C6N2WW8XNuMzgOKu5ngUqMV28HejEJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K+yL6WFu4UolW4lKWrnetq2fBvV5OvJ3frRQ2xkDzQyOfWiWuF50FjaFGeH6Apq5kR/TCe//MVYyXzRybm4QqeiwT+psCkDvuo085Og2Lw7+6BtGhYsmf+HWn5c+pLwqbyzmxFq57D/BY+KBkr4dgm+9OCAg5tlLjmOPkn4qsRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=UhL7QmOY; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Gc8ST05/lU4vkA1b2+jaw3Ej+aipM8BwFYTtBem1TFQ=; b=UhL7QmOY09cYp0raNZkdvXbms0
-	GMOKiPj+ZfCfhAhtkyR2fk0uMDxy3w+2aZIkBdsMECrog9d2vW5V2SYTaGmS0fPuovWnsJApzV5SG
-	9vaMKVrfSIjJNMEyMq6eUzdSNAXPmBIlKzEVj6H79ZZJpyvIKFWZAru/hIW5FzTt+a8HOCZHitbSq
-	tLnUBgzYJ8NS8RLxoWkWAowUDEYmNHlitYnpd8Q7QpGwgJRA5MfBiwKfWHdRyUbOKD7F8A4qvYTdZ
-	IYNPdzP0JtLo2rkBkkkx2cvFp7CAdUoDjeVSFYLt2sA82oLZVlx2pfHMIf37eK1G1aLvdHkQZO7Vh
-	6L8R5ZCQ==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uTZnn-000CoY-2v;
-	Mon, 23 Jun 2025 13:49:05 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 23 Jun 2025 13:49:04 +0800
-Date: Mon, 23 Jun 2025 13:49:04 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
-	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
-	broonie@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, kernel@pengutronix.de,
-	ore@pengutronix.de, luka.perkov@sartura.hr, arnd@arndb.de,
-	daniel.machon@microchip.com
-Subject: Re: [PATCH v7 6/6] crypto: atmel-aes: make it selectable for
- ARCH_LAN969X
-Message-ID: <aFjq0EO0Uj3MGcqU@gondor.apana.org.au>
-References: <20250613114148.1943267-1-robert.marko@sartura.hr>
- <20250613114148.1943267-7-robert.marko@sartura.hr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mK7EW264agStuP6sSyHhhJFAnJnXUJXE+E7NWuxIHckOc+rqPrt6XD4C1KcFbppL7hw4uedePxsMzzXLtG3HIzimyu94G8H1Y8mPXqHGPzFBCIi+D6/YzcbX80Xk8uTsWODUu/lh+ZRw9zMSrV2+DkLAOhRuA/k+2hLzFt/2hQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fRBcgby0; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750661426; x=1782197426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UbcP0cmmfsC3C6N2WW8XNuMzgOKu5ngUqMV28HejEJk=;
+  b=fRBcgby0VJ9kCNF4E7VF/S9gqoqnF37Fvi/gaNcl9akfW+C38dreBf6J
+   Rgw4ZXgdeX3E0futE6H/zZDCJEQ0ChVKi0+/KZ9vwQ1P7F/0h5232ke6A
+   /cNOga++I4Y10FTnF7uiWLnUt+0gC5WV1PwrOUoSf9sJwsz1G3W3L3rO9
+   k+pK9iKTTl0vTMyusa9JlVNyNJpGwIR3P4LKudmGVEFoCiBcAkUdA5lWu
+   obJAPxLdmsPN95FLqLzg2+dYL6jPN4Rx71YjravAnnyjRnm1sA4LPrltc
+   NvFCbO4pjKOdjhH+3Le+NKzbTMpNdF3PLVRQgHLjJ04+Agr/d31a3tOQ6
+   g==;
+X-CSE-ConnectionGUID: 6R1DUhXqRf6DQircYCGXwg==
+X-CSE-MsgGUID: jAoEyVr5TYe3tpVzpah2oA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11472"; a="52991935"
+X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
+   d="scan'208";a="52991935"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:50:25 -0700
+X-CSE-ConnectionGUID: +re5Y0YfToC1nTqiNs4yHw==
+X-CSE-MsgGUID: zZMCEPxSQBq65qOLm1B5ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
+   d="scan'208";a="150983125"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2025 23:50:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uTb0V-000000095Ss-25lZ;
+	Mon, 23 Jun 2025 09:50:19 +0300
+Date: Mon, 23 Jun 2025 09:50:19 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/9] iio: adc: ad_sigma_delta: sort includes
+Message-ID: <aFj5K2iBOt3cGPDv@smile.fi.intel.com>
+References: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-0-0766f6297430@baylibre.com>
+ <20250620-iio-adc-ad7173-add-spi-offload-support-v1-1-0766f6297430@baylibre.com>
+ <20250622153733.44eca388@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -72,21 +86,34 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613114148.1943267-7-robert.marko@sartura.hr>
+In-Reply-To: <20250622153733.44eca388@jic23-huawei>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, Jun 13, 2025 at 01:39:41PM +0200, Robert Marko wrote:
-> LAN969x uses the same crypto engine, make it selectable for ARCH_LAN969X.
+On Sun, Jun 22, 2025 at 03:37:33PM +0100, Jonathan Cameron wrote:
+> On Fri, 20 Jun 2025 17:20:07 -0500
+> David Lechner <dlechner@baylibre.com> wrote:
+
+...
+
+> >  #include <linux/kernel.h>
+> Andy normally points this out (and may well do here) but in
+> general if we are tidying up headers we should try to drop includes
+> of kernel.h if favour of more specific headers.
 > 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
->  drivers/crypto/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Doesn't need to be in same patch as this one though!
+> 
+> This is trivial and correct as it stands and would want to be
+> done as a precursor to any actual changes anyway.
 
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Yeah, kernel.h in the (leaf) drivers is a red flag to me.
+But replacing it is out of scope of this patch and may be
+done separately. My only point that please do it rather
+sooner.
 
-Cheers,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+With Best Regards,
+Andy Shevchenko
+
+
 
