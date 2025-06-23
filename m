@@ -1,116 +1,132 @@
-Return-Path: <linux-spi+bounces-8720-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8721-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD2EAE45E1
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 16:04:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B489DAE52FD
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 23:49:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F7BA440B2A
-	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 13:56:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8FBC4A2273
+	for <lists+linux-spi@lfdr.de>; Mon, 23 Jun 2025 21:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95DD25393A;
-	Mon, 23 Jun 2025 13:56:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE515220686;
+	Mon, 23 Jun 2025 21:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XApXZgei"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="C87dIOdB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698D823E344;
-	Mon, 23 Jun 2025 13:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A811E5206
+	for <linux-spi@vger.kernel.org>; Mon, 23 Jun 2025 21:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750686991; cv=none; b=c5/E60ec8dBcn/f2LAw5ftRHuO9fylOAJRAOXYscOT3gn55PGDnVSfTq+haUuT2Al7C350TNtYiPNmZsspHeyMfH1UndBPSYpsmXrb900yr+065Bwu4NH52atzhMjvfPtM1JHIf8SpO2pZJS3adrWXr2iAZv9+2zXcK/FeI3Uco=
+	t=1750715324; cv=none; b=MHr57jZWOY74C4+VEC/x+7D7TnlYtMZdgRdNgEM0yB8GC0YMm8P0oFYdMX80GwkJlcZrEDH+5oiJPyG6wsACotvB63A2B5YwF8DpiNZQhKjrhDPCByce6c0Ch/mkYyqQ54OySzGCGjswetYQXajB0hQEhLLNNNPbBvl7Kh4BrvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750686991; c=relaxed/simple;
-	bh=BTYyyGYNVnjSCNBgeNkFIdfjEBcqf+09SP/3DndyJ+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S4fYeZ3ssL3QFuwTbI4bhxcaaNwkpwbUWM3FzhXjDxjsf7MCBV4d3+vt4OzJK04RZROiTj+d1DcxBKBA6nlm14uxO9Of0HVcD50j2juZIGIr02DubQMnfEOGdHtXAUJn2j5vt4T/SNFGR+NTihBUOAF7ArcuqZid5+QDbvxFmw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XApXZgei; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1750686989; x=1782222989;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BTYyyGYNVnjSCNBgeNkFIdfjEBcqf+09SP/3DndyJ+8=;
-  b=XApXZgeiVfowjuRzJTgoCfXdkVx8oramMgTANMGEPi/DXsFt1DNUVKuA
-   X0Ed1MyNaB2XXUfaSPmbpa9XBtc69WDYfRvIeEUJcWpX9gbplVt540QdO
-   4AuIFpbDBl3O+QqRo8q8Q7D1G8wnAFSQPCWb4Mq/Nc/Rt6sFPwZAS0SoB
-   A8H5tQcqpn0cyo27zdNS4D6pMtV8kobRdB0tRrzy5LopbSEsbq8A+h8Xh
-   rfhZdn0bKaewU/aRpj/h/f+p1surjiHcJsl+8nuvASWWpPOABT16Xz30t
-   rCOCHs//tT5zpC/3vFSEXKv35Kt8nr9r3epzpsDbb8fOQGbMkyda+rPC1
-   Q==;
-X-CSE-ConnectionGUID: wFTS6WrYR1uftpdojCU5vg==
-X-CSE-MsgGUID: PvmxDSX5TZ2R1aVbUCdeug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11473"; a="75428941"
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="75428941"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2025 06:56:28 -0700
-X-CSE-ConnectionGUID: vV3UJ73dRKevd5zXEFEfSA==
-X-CSE-MsgGUID: +HErZaZ4Q0S7IuRdDW+3CQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,258,1744095600"; 
-   d="scan'208";a="151901679"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 23 Jun 2025 06:56:25 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uThep-000OyM-0V;
-	Mon, 23 Jun 2025 13:56:23 +0000
-Date: Mon, 23 Jun 2025 21:55:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Lechner <dlechner@baylibre.com>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-Subject: Re: [PATCH 8/9] iio: adc: ad_sigma_delta: add SPI offload support
-Message-ID: <202506232119.aLbzgQow-lkp@intel.com>
-References: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-8-0766f6297430@baylibre.com>
+	s=arc-20240116; t=1750715324; c=relaxed/simple;
+	bh=4bYjjF2yI77Na1nfsIj+g4X8U6tLp5T8SWhZcd9HNQM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uJK0ru+k6Wb0r75OUxFRUUarzOcsouG1MpkfLUSRi8S6bnGMH+JzmWzIjxAHyiY6dKZFz6Ee75wT0uiN/OGH76+ermiwqFVPzVnU6utg09koX7fNsAtuoHSoZ9UC4ycnre+tZnu9DFlDQ+yuuLgePLtAoDJQvj1MBXB0mcD/wCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=C87dIOdB; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-32b595891d2so41404081fa.2
+        for <linux-spi@vger.kernel.org>; Mon, 23 Jun 2025 14:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750715321; x=1751320121; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lnU+QVcxCYxEYL6PbzPZLje0addWyJna8P/l/C/lVg0=;
+        b=C87dIOdBKEHiRR4ASB6zeIVNydIg4vXXMHRB2eSnxdu6Xmg1YM/ZB/XV/UH+dnKX8y
+         Fa+b0QGkAGRh+BY03nBCQroT2iyjAqOBatlfLU4iPmVgRCxFa/9urbBVLAATmI7pYCVy
+         ArFGjm94IyXezHc0arYfoG1Gjzg4bKRyE06HKJs6zOg+4HDa0QY8Q8QpKaiUOk9EvkWE
+         6JcQVmglXz8LjQTt34uShPjORshpZIgvpnOomAPhtvLG5aapyx+Mf7SBNwAWNNSCSiJv
+         t337DfPivHq8AUIHLn9UaItSg7/ad9v8Xjm+8zR+vF2CnOkKYia72VUSzCfjHk/trSOH
+         h2EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750715321; x=1751320121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lnU+QVcxCYxEYL6PbzPZLje0addWyJna8P/l/C/lVg0=;
+        b=pe4BckA/21nZqsecL0qdd/Z/Q3Lhum52E8loP8L3RfNVlAmWt2A9ghbNjPS7ivbrsl
+         j2IuLaFdO/DTazyrUVzL/wHL2FmKdqSl8/yUpMdV021Z1Kg17JuJswb0Y8QZiAmHV4AH
+         TAramMRHKAmjaNUqqMCBJ36xOLOpeSIzqknpKncrc5pixlZzsU5ZJtki3C1zbK+oEusV
+         +MxdHJ29NmycukRK6kzTjWM6hcaXyFM6Xcvk3eOGiX9mvWoQBhU1lXyBcunH90VFA752
+         TOOyZc9u7lu9sStXAC6K4ocdxdQAwIPkNDGSPurrgtssfPILWMEaVOsBDkoCYdHDuh7Z
+         2DbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVekLs8wgUAn5SvgxmRitrE4qWocXgouzdNGd1T2bOPiXiaA+La2t7jiXIYnw7KGlCngTKng1/TE5I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxK4Q+ew2kepAqsDZ7xzUn89mDgOGeisBj26ojvdb4GG+vijZa
+	09MKXi0/bvISiXe2dQ7y8jdp6bKlXQSQZr11ndPO3cZVCE99W4ab4aOVlOs/Vavp0e5UkLwH/ne
+	YyoJWP34Aa7fuuMrzgk0yPVNoyLm/3owXWNVhTyMokw==
+X-Gm-Gg: ASbGncsLpbo4hYiPXUHxtbldNo64TY+Qb7zRN1OLKWefcJv0F3c5YRbhD42UOp7v63A
+	clxGTG+2bLROhedi8kDR7bL28nvOItz2EI0PHDC38kmIcG0pG484Xah0q2zrgMBIVdPAf4A6nv0
+	rJfx017XNnkG23Pzc/Sp0/mytkvLCyX9UZSv5Egn9PhKtg
+X-Google-Smtp-Source: AGHT+IFEqza0DpEdoJWsbOSXs+4vZVjClIQT5f7IxRB12yNjDJQmhlzB577QjPcTEosoLth3err0U0r4QBcPWJHQ7Rk=
+X-Received: by 2002:a05:651c:1a0c:b0:32a:8c12:babf with SMTP id
+ 38308e7fff4ca-32b9918b02fmr47960381fa.2.1750715320985; Mon, 23 Jun 2025
+ 14:48:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-8-0766f6297430@baylibre.com>
+References: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-0-0766f6297430@baylibre.com>
+ <20250620-iio-adc-ad7173-add-spi-offload-support-v1-2-0766f6297430@baylibre.com>
+ <aFj5eEvn2uw_HSl0@smile.fi.intel.com>
+In-Reply-To: <aFj5eEvn2uw_HSl0@smile.fi.intel.com>
+From: David Lechner <dlechner@baylibre.com>
+Date: Mon, 23 Jun 2025 15:48:30 -0600
+X-Gm-Features: AX0GCFtsL-oycWVZVWTYTg3bjp_VLHo3OYdhTaf-OnhrFfyHZtM-ORpccSVZDA0
+Message-ID: <CAMknhBHuJY=8rxgJsMhvRNxZskmPhEZc1jJMQnHzQHFFoucWRA@mail.gmail.com>
+Subject: Re: [PATCH 2/9] iio: adc: ad_sigma_delta: use u8 instead of uint8_t
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, 
+	=?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+On Mon, Jun 23, 2025 at 12:51=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
+>
+> On Fri, Jun 20, 2025 at 05:20:08PM -0500, David Lechner wrote:
+> > Replace uint8_t with u8 in the ad_sigma_delta driver.
+> >
+> > Technically, uint8_t comes from the C standard library, while u8 is a
+> > Linux kernel type. Since we don't use the C standard library in the
+> > kernel, we should use the kernel types instead.
+>
+> ...
+>
+> >       unsigned int reset_length =3D sigma_delta->info->num_resetclks;
+> > -     uint8_t *buf;
+> > +     u8 *buf;
+> >       unsigned int size;
+> >       int ret;
+>
+> Wondering if in the cases like this we may make it to be reversed xmas tr=
+ee.
 
-kernel test robot noticed the following build errors:
+Fine with me as long as Jonathan doesn't mind the noise since it looks
+like I will be doing a v2 anyway.
 
-[auto build test ERROR on d02f330b0c78bcf76643fbb7d3215a58b181f829]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-adc-ad_sigma_delta-sort-includes/20250621-063127
-base:   d02f330b0c78bcf76643fbb7d3215a58b181f829
-patch link:    https://lore.kernel.org/r/20250620-iio-adc-ad7173-add-spi-offload-support-v1-8-0766f6297430%40baylibre.com
-patch subject: [PATCH 8/9] iio: adc: ad_sigma_delta: add SPI offload support
-config: x86_64-buildonly-randconfig-001-20250621 (https://download.01.org/0day-ci/archive/20250623/202506232119.aLbzgQow-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250623/202506232119.aLbzgQow-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506232119.aLbzgQow-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: module ad_sigma_delta uses symbol devm_iio_dmaengine_buffer_setup_with_handle from namespace IIO_DMAENGINE_BUFFER, but does not import it.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>         unsigned int reset_length =3D sigma_delta->info->num_resetclks;
+>         unsigned int size;
+>         u8 *buf;
+>         int ret;
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
