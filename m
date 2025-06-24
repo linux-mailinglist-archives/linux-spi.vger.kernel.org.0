@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-8746-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8747-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A5C3AE6DA2
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 19:33:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE91AAE6DA4
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 19:33:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A931D17F950
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 17:33:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB1695A4500
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 17:33:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455A426CE2E;
-	Tue, 24 Jun 2025 17:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71552E613A;
+	Tue, 24 Jun 2025 17:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYQkEZph"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pVGV72AA"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B8E95234;
-	Tue, 24 Jun 2025 17:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA692E612C;
+	Tue, 24 Jun 2025 17:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750786423; cv=none; b=ZEKctD4m1NsQJ+Oxy4aXNxAvfsr1A1JeUgnJCk3KUaPruUf8FIwICGfPrxO8rH0dkmqELVxMum0Kv2ZT59PozLS1CZU9l20/A54DyrnQUHjqDMKAoz572U0kR+4j1kPwiVzczLCCwEz6A0PUyd4j4WGYUqoKljC5cXo8fvrIskw=
+	t=1750786424; cv=none; b=GBd489MlO/2em4Ycw2WBCpFkbQk6so4+a3Fv3FmAVoya5GbeWwpzFVZXfVIBj7MJiiQInI5to1gmshRCFJIM19khVOUKYP+bI1dO7YzTg6McPYPUXOiKn9Us61oae5ydyuI8XPqHE3rDjSXX30CaCDGzdp4AwvdYSaZiwzG28f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750786423; c=relaxed/simple;
-	bh=49075kBqXb4dYxt5pzpnktXrUUakSrsdjGpdp8Ie9T0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RVSXqEte3VfdYhZ6LkjbDTmpSkKsq6VJLZh/wux4xgs+hp9fsP/nLh6GEXZIUMBrLOLW0riRS5PObtgsIDtFJ9jpE6UL7POXzzmx7Pw/HI4CfiAg7uWDb0A1hG9SveAr/AQS9DTsgr6aGktOUAOQ58z1VlpCgxvl+f6gC4AJVT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYQkEZph; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC099C4CEE3;
-	Tue, 24 Jun 2025 17:33:41 +0000 (UTC)
+	s=arc-20240116; t=1750786424; c=relaxed/simple;
+	bh=Cmix75u5AdlxAc65xH0CoxFE7U9aH1lHC+yRRGN/iEk=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LVF5+J15E7Yv9tV5NxOBPVdAz9Xn0EsDrS/+wWM/FWYu0g/tEdLqJnOOsz38UCeEbqsw6uMGXunxoEASyFLF4tkDqIUhuCbghaB1n+ajgrJsb94KPb2ldcMqjBA7KesNQfFLpdFTFzEBKZ+R/pzjiGLcRUGcwzyCfEQGQBHHZLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pVGV72AA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0BCC4CEF2;
+	Tue, 24 Jun 2025 17:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750786422;
-	bh=49075kBqXb4dYxt5pzpnktXrUUakSrsdjGpdp8Ie9T0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=aYQkEZphpqT34ZSC6OmP22/6CMi3i6QB+BK1cM4lbQJYS5YyC4dYMidgyVZksNRdy
-	 +p2MpFE6rSe/RXBUmjvdjm/WxDSINW/3aQt+M1OVCCIIyC+erbDqTBA3gQ7Oc3I/26
-	 KEtxuIHE1r4kIa6PSEN34sHUqunhhy3MOPxZlZ8NMdQZbO+VnB10ueEhcbj+aRz+1g
-	 QVarcnKaA0u0eiyaLcDFvg6ORGhLRDuk1FT1sgsC3ugjRl0FRFzDCOBb3uixLWBiPW
-	 KgkNlmdPe1gQEm9W//T+ywNhCGDTPXh23qa7HkfQjaRY+NpLuerYCDpsD5rxv2bO8X
-	 xlpK/VX16MKCA==
+	s=k20201202; t=1750786424;
+	bh=Cmix75u5AdlxAc65xH0CoxFE7U9aH1lHC+yRRGN/iEk=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=pVGV72AAzL7+uO+6a6FctZEV5pQdEuzREnR7PShQHPQkKqiK7srVD+W5Pm7sk6dlB
+	 EGRvLWuTvQpvkAoHKbGdXlMJELUx2axkwZ9fnZottJkpRg/WsjkgAdzSM06PRqWSNp
+	 tGAPlZONWmcwHBq8MR6MHiMpmhzJWa7WTsvej/ZccLFVk0xhAE1kwN6j6kQuhPVcPD
+	 bybULrK4i4OB3PUHwyn/UbALk75xg7sOaFqh3K6LI9Ol1jr0aGKAPAqqcLq4kYZXOl
+	 Qkq//dfkjXT5xZABqaqaYyd6Tis2nmEIurXQEnrXKVQSTi1xOp9k5jUr7JGI2xLEH7
+	 cLzL7vU4lKQ0w==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, 
- Daire McNamara <daire.mcnamara@microchip.com>, linux-kernel@vger.kernel.org
-In-Reply-To: <20250620-finer-yoyo-0bcae988a299@spud>
-References: <20250620-finer-yoyo-0bcae988a299@spud>
-Subject: Re: [PATCH v2 0/3] spi: microchip-core-qspi: Add regular transfers
-Message-Id: <175078642162.219793.16163815657944029556.b4-ty@kernel.org>
-Date: Tue, 24 Jun 2025 18:33:41 +0100
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thangaraj Samynathan <thangaraj.s@microchip.com>
+In-Reply-To: <20250624033028.74389-1-thangaraj.s@microchip.com>
+References: <20250624033028.74389-1-thangaraj.s@microchip.com>
+Subject: Re: [PATCH v2 for-next] spi: spi-pci1xxxx: Add support for
+ per-instance DMA interrupt vectors
+Message-Id: <175078642312.219793.13260288534994177625.b4-ty@kernel.org>
+Date: Tue, 24 Jun 2025 18:33:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,18 +60,14 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-08c49
 
-On Fri, 20 Jun 2025 14:28:23 +0100, Conor Dooley wrote:
-> Hey,
+On Tue, 24 Jun 2025 09:00:28 +0530, Thangaraj Samynathan wrote:
+> Add support for dedicated DMA interrupt vectors for each SPI hardware
+> instance in the pci1xxxx driver. This improves scalability and interrupt
+> handling for systems using multiple SPI instances with DMA.
 > 
-> This is a v2 of a patchset I sent about this time last year, adding the
-> regular transfer_one_message op to the microchip-core-qspi driver. In that
-> v1 Mark expressed his dislike for that op, so v2 is using
-> prepare/unprepare/transfer_one instead. The unprepare implementation still
-> contains the 750 us delay that the driver had back in v1. I've heard a
-> suggestion internally as to why this is needed, but it was unsubstantiated,
-> so I still have no justification for it. I held off on sending a v2 because
-> of a lack of explanation for the delay, but I don't wanna hold off forever
-> for something I might never understand.
+> Introduce a constant `NUM_VEC_PER_INST` to define the number of IRQ
+> vectors per instance (main, DMA write, DMA read). Update the
+> `pci1xxxx_spi_internal` structure to use an IRQ array.
 > 
 > [...]
 
@@ -81,12 +77,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: microchip-core-qspi: set min_speed_hz during probe
-      commit: 76f03ce1c6f22805ecf689b1f3ecfb56582eddd5
-[2/3] spi: microchip-core-qspi: remove unused param from mchp_coreqspi_write_op()
-      commit: 75ca45c472dac206df2ebbc1c0f1f9c3bbdace50
-[3/3] spi: microchip-core-qspi: Add regular transfers
-      commit: 1256eb42db5d1635f4c6da5b1b58db0b53320883
+[1/1] spi: spi-pci1xxxx: Add support for per-instance DMA interrupt vectors
+      commit: 3e36c822506d924894ff7de549b9377d3114c2d7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
