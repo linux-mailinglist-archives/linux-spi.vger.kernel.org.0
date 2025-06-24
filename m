@@ -1,246 +1,229 @@
-Return-Path: <linux-spi+bounces-8724-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8725-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0221CAE602B
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 11:05:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57D86AE614F
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 11:51:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8225F4C0F8D
-	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 09:05:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FAC2189C0AA
+	for <lists+linux-spi@lfdr.de>; Tue, 24 Jun 2025 09:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81F6279DD4;
-	Tue, 24 Jun 2025 09:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B528027BF85;
+	Tue, 24 Jun 2025 09:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="mJ9nXdcY"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="P+RoxOQA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022085.outbound.protection.outlook.com [40.107.75.85])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A7B19CD01;
-	Tue, 24 Jun 2025 09:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750755946; cv=fail; b=uETppu4DPNTqMv6VASBPDACCfDHktEqgvJgySrFPzgCybH/bEH+uK4nwBaz8YF4CCcuO9lX6bH1spqZ5h+KtA1CmZw+JjGvHn9QMPCRXpkqMSoEOOLyTZCw/MfYGtEpY/hKEijdN9R/102sx6bqc1/pqPEBBYfgV7XSIg/mCCL0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750755946; c=relaxed/simple;
-	bh=y8CNy3h0kmXmJhus1S0AE5j4v+Jq0LLQiX7QGrO7xW0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hFijxtBK61y1/R0a08m5Ohz6NNtMigeGiDpnysQV+BBUofekS2WSEz53fIjuOUd1BwE5Pz/anaW4a3xCbl3Zdyi+F8bxrk7lXEjauugGLZCt4gEeNVUrM0UeCf2XmZAlkM8JOBcJaSjCUEWNrfq55RKkNlXaTONwQKaIA0Q6ly8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=mJ9nXdcY; arc=fail smtp.client-ip=40.107.75.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=amlogic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bIgqcAh50iffsbzbi/OHOjVg0IT3Mfs34y9R7Y15KLwdWS2JqMzQBPmQzLkaYHXmpofCElSAGI1bI/g0IwEBhe52GcclPfbgi5mchFE/uGCgGDjLwYvzbGB/ubqm4ZSyEKUvtrhGfXK5ymQdzapmHyp1fN3qDczRnc57+KSME+avy3FZ0vz3o96vQaI7NR3H6/hPaop1tQDkw7QyltU0/iybaLPmfa9MXTzs7j+TKMkirvEP1N3ND2C2lKzC5kuE4yfP0iNJADrJ01wmJ6ptlXzXs8H+9pa2X/puyfQAfbFrND+zU4rQry9Qh5iQiNkA0xFTM/gvO5AkfCCH8ioDjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qEkXxx85UJjISfmCqJZGelx5WGso7azuSWCwVlu71LM=;
- b=XxL7RAB4sqiQhPiuCk6OBN79iPe0fJqzr3z+LIEl63EWh10+SIuF3ipSbCdSuEKKk0BlfaRG713tGFD6zHRZSZTmR7QwWec60Q54kdEEsUy8XUrnEzWb5JXXnnHM9i3Jc/6z9N8ITZQVKu9MVCY3psxQiuqBFk/OEJ6H4/Ig/tQF4Xrg9xbWUElyYngrg2Ch7i8OskVCBzKSg7j4gz0lpCqI5Uzw3oKtILioT5De3NpSEsxdvA197+GHiUlkOK1AwAYzsQ3l9Z7fn01pDr4wZtEHcZriN9Vk9tRv23+Cahe3kabTIjZr3KTQOnNgDisglkjbE1OXJZffg33Q8BFO0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qEkXxx85UJjISfmCqJZGelx5WGso7azuSWCwVlu71LM=;
- b=mJ9nXdcYrsYkNfesKW/yJuys1JRr/3ski5v6orGg6zNhMd/mx4DC2bm2g0DcJvX/lO4LgccZI4u+K7I3uvvrNOcTSURO3/6E3VaprvQ0nev9p65dR7Ea6/mfRvoA67H2/59+Xr44meeHABwe4lQe8kiM42h987y8G09BxhmbkPAbLY2z8mgPT2gbyByw3aY8Ul00jppgwFBc71suAbLwj8vDXSFebKLHqA9FdKAHAfUAww5tYt6v9ZL1mOOtU1ZO1MzFU9HyufQniQ/yTljoZWT+uOnlqC4W9Rvv0f94t4QSiip7PNcPGkIC0h1qCmH2fuP6Ajy6UzYZHYfmhtiCLg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
- by TY1PPF346E03860.apcprd03.prod.outlook.com (2603:1096:408::a4d) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8835.29; Tue, 24 Jun
- 2025 09:05:41 +0000
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::ac4e:718:3b03:3123]) by TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::ac4e:718:3b03:3123%2]) with mapi id 15.20.8857.026; Tue, 24 Jun 2025
- 09:05:40 +0000
-Message-ID: <aef4d4c8-3058-47c1-8d4a-28e2bfc2549e@amlogic.com>
-Date: Tue, 24 Jun 2025 17:05:36 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] dt-bindings: spi: Add binding document of Amlogic
- SPISG controller
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, Sunny Luo <sunny.luo@amlogic.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20250623-spisg-v3-0-c731f57e289c@amlogic.com>
- <20250623-spisg-v3-1-c731f57e289c@amlogic.com>
- <45514054-1bb0-450c-bff6-ffdf491417b1@kernel.org>
-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-In-Reply-To: <45514054-1bb0-450c-bff6-ffdf491417b1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TYAPR01CA0226.jpnprd01.prod.outlook.com
- (2603:1096:404:11e::22) To TYZPR03MB6896.apcprd03.prod.outlook.com
- (2603:1096:400:289::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACFB25CC50;
+	Tue, 24 Jun 2025 09:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750758676; cv=none; b=cdmBpvPVJqm1Zwf8MTSTyLrjUeOPQbLqqaLrP3mLqRwx+KvHTE0wJYkhemFCPFTzN5Wov6vw07+BN7JE/fKbF+Ok5XLBKUlyKVgjiVblfb3CMxOfKbQbz+hj6rBnZL0Yi8JbLzusa4+b7T6GoP5+3ozjjg7hDnpRn9872LJD2qM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750758676; c=relaxed/simple;
+	bh=JYmiyGEacQq75Q27iwEKQgp/kF0padbvVGq+8y+OVa0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PC5UeC2n+kxRKYCCeOMJ2C623OzvJdL0X88o5YcaS+KN11cCIMsabsWt+LCx0QWbxOBhOh/vaBMpXtN8DjCwsX8MAjxGbeu33YlAmUujmFVOxygoRosRZ4XLNG3UgKm5v5KGdXba8VoCBiAUjXW1YurE8rZ88zjFGXIMMT3tsN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=P+RoxOQA; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55O8xQaw022985;
+	Tue, 24 Jun 2025 09:51:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=CxVzBY/H1+RhoLMscX59zfnY1PMC/8fIUY+
+	OGESrTJw=; b=P+RoxOQAp8qhWqZndvy7rh2Q71FI4OoGbXXaDKKDBJc+vv3MklT
+	VgSRh54O8ixq1vN43+bpExg1mnVTa5hIisK4+yxqt7c22Yy8oWPvZjMEOgk4Rsh4
+	L4KNAevHvHHxvPkn5JblDjjHJVNwyRpWDjgvOdW0wEODqlhWTiGLAa9WWkAQ0hLx
+	Z2H224x3Cvx1c9iS8srcM3CtZ124hJhyqr+lP8baAoJUdOao18/eiB7uz85Rw5le
+	slB7MTN0q8SaVugRVYqgYNCtylDhvnML6ZO+kyvIYagsB2IYzSQFiNHvpSsh0EKy
+	r/cRmXskLVoCYro9k7UJrXmmrOGS8G4TxoA==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47f3bgbme5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Jun 2025 09:51:09 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 55O9p6uj024161;
+	Tue, 24 Jun 2025 09:51:06 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 47dntktds5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Jun 2025 09:51:06 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 55O9p6m0024153;
+	Tue, 24 Jun 2025 09:51:06 GMT
+Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 55O9p5ff024146
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Jun 2025 09:51:06 +0000
+Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
+	id 30F2656E; Tue, 24 Jun 2025 15:21:05 +0530 (+0530)
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        andersson@kernel.org, konradybcio@kernel.org, johan+linaro@kernel.org,
+        dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: mukesh.savaliya@oss.qualcomm.com, quic_anupkulk@quicinc.com,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v5 0/5] Add support to load QUP SE firmware from
+Date: Tue, 24 Jun 2025 15:20:57 +0530
+Message-Id: <20250624095102.1587580-1-viken.dadhaniya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|TY1PPF346E03860:EE_
-X-MS-Office365-Filtering-Correlation-Id: c426ca1e-2ee7-4c58-901c-08ddb2fe4ade
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZjJiN3lSMnNNTGdKaWVtcjRWdzdNUG1SNGZ0Q1hOTXNna3I0UDl6REM2d0JY?=
- =?utf-8?B?Q3VVYUF1Vng5cjEvaFpZM1FrekI5dFJobGtqYnpRMG5TZGdKVGlONS9FMk9a?=
- =?utf-8?B?Wm83eFcxVDJpNDNveGQ5NVQwSXlHc3orNmovMVdOZGRxNmg3eUR3RzVLQkxr?=
- =?utf-8?B?cXBpb1NqdCtLNkdyQVBkRStlVWE2ZWw4NXB3d2dWNzdsYW8wd05SMG1MN0E0?=
- =?utf-8?B?Skx4L3NLZUEyQWxlbTRacFV2WlE2c1d3c0VrVzE4OExBY3EvL3VENDhBLy9G?=
- =?utf-8?B?SzRvellUc1FiYTRNVTg4c1A0NXVGUXZLNk9xcm1nZFZBYzR2VXEya21BeDlH?=
- =?utf-8?B?NVlTaHMzbDlpOHZJZTdXSmZ3a3BITFArT1BYZnNlWGxJclJpanRYN0RFQWx1?=
- =?utf-8?B?Q3lvdk9vQTB6V1Jmc2lPNnNvT292V2YrOFRlQVZoK0JoUWgxL3pEWU9JS3Jo?=
- =?utf-8?B?OVlLNDhCeUsrNVNZd3VnQWlMM3FpaG5BSTdHNmUvd0tQbzBJTmV0NGVaVk4r?=
- =?utf-8?B?RlFJUHUyTldpOW9wTFJ3a0U1SlhvdG5DWTRpQS9BUUlDMGErWnJqbG1WQ0VU?=
- =?utf-8?B?cDlnbXdmTS8ySzNpZHQxbW9HT2lZWWZBOWhQcTIzYjdyU2xndlBoWDJ0V0d5?=
- =?utf-8?B?aks2LzFwQVc0bHZmd25nWlozVGdzbWlBRFFIWk5BcGpja3hMTXNneURNT1hK?=
- =?utf-8?B?OHdmVVFtR1dkM1k1bmMwQkQ2MG8wWUtlU0dCdU82a0RrZmgxUnBUR3lrbzVJ?=
- =?utf-8?B?YmhEcVJCMlNuYVlFRlRlNGlzdnhpc2pRL3o3c2Z3YWFDOTFMZVlGbG1MY1c5?=
- =?utf-8?B?N0R5OW1RUzZ1WEdFZzNLNnpEWnJPejAxZVJDc0lzUXAxalAzK3JJL3BrOUh6?=
- =?utf-8?B?eFo4MnM4TU9NYkZvNnpWclNLZEdaeXFwYjVNR0tVYmxQdS9JeGxYN1ovdlB6?=
- =?utf-8?B?RkgvZk9UenFXNUtlTkZLL1NzKzEvNHA4OVhhbXlud3J0MmVKQ29vUUVtNGky?=
- =?utf-8?B?V2FRdS9heUdlL1pjVVE5Q0k3NjNzOEtrQ2tSZE40MlRhV29JRkV5RGxoWmpS?=
- =?utf-8?B?MEFpcTlsTEp4bG9kWlNIcytObm10eVczeTdQOU5Cc2FQL3pKcmsxUEhKOWhj?=
- =?utf-8?B?VVYxSzNma01pRmY4RWhYbTFMdlNJRk9mZ0FQeU5FUWtoZFkwVDgzaXFSKzFQ?=
- =?utf-8?B?Y0dsVDhUTDJQeWxKVmF2djJyOEFONFR4WThjaEI5aGduTkFWK2p2S0V4WUZl?=
- =?utf-8?B?MHVjNjFHbTJPckROeTVKTy9icWk1dWhlOGNaMmFGbDUwTW9mRHFaMlR1WURH?=
- =?utf-8?B?WkFIMis5QWo1WThXWktoaEpNMVpuNmhDY2FmSkJPWWtCbkRDUldBNWJSb3Iw?=
- =?utf-8?B?d3R1TGRHTWw2U3hKV3I4ZVVZeWJRaWFpeVVzdlIyTnlXeXExS0cwK1Y5dUFh?=
- =?utf-8?B?WkxnU2ZYOGpMV0o0NDRFQ2RXcHpUY20wWnNZSmpPTnhoMndzQ3RaWTU3bDl3?=
- =?utf-8?B?dmljMEZuWllsOFdYalFOeG5halBSVFJnU1RYRlpBVmk5OUs5V1VxRURla1o2?=
- =?utf-8?B?ZHlDOEdnUFNtVCtDNjdMTlpSOEdKNzNXNVZXU291YUpYMzVKb3ZIakVVSCtL?=
- =?utf-8?B?VlZ4eWpNNFgyQ0N1ZUtFUEZtZ2NnaG5rOWdHcGpWSUM5aC81VzRFTXdTaDhj?=
- =?utf-8?B?T1FqNEkwODI5aURQY3NGRXRzaDBSUTlvOTFTQWJ4Z2NndlV2VDhIRzNVSDhI?=
- =?utf-8?B?aklpVTRDRitwM3BQaS9kNG5xa1RyNmMzYi9DRytPM1IwVTA0ZUg3eFVLaVRX?=
- =?utf-8?B?czlMYS9XeTlvUUVqYUphZ0p6QlBnUFhtWGJuM3RwMHhvajIwR0o0amdUYzVN?=
- =?utf-8?B?VWZrRUwvaW5ZT1RkYSs0dDB0VHpMOUdYcW5IbjVFOE14djN6aUw4b29YNVFh?=
- =?utf-8?Q?tAgCgqlRpLU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YXJSVXBrV05zU21PQ084WXR3cEdsbHczV0FpTlFpUzEvb1dmWUJKbi9nK0Nj?=
- =?utf-8?B?bm10U1RpbzBVUnpkNGd5cThBdFFPclJTbUo3RjFYaWd5M0hQaVVNL1JvUTRD?=
- =?utf-8?B?VExwVnZhWkNDT25wcFJabTcvVEh6L0c5SVRVcWx1ZjQ3aVlSV2RacjNUSkJW?=
- =?utf-8?B?ZjhSZkVLbnF4WW94bmdZMzhFV1R3K1VXZlY0SGYrODl1MlJuV0pJNTN5KzBh?=
- =?utf-8?B?eis4NTBCRTNMWU9POHIzWHlTYS9vSVBydGwrb2JLUTRGeHE4aGZLN2RZUmVK?=
- =?utf-8?B?VWx6T252alh2RW05b1ZUM2lEVnowTytDdnA1cXpJUUEwWTJSVmJiZ3hnZXhP?=
- =?utf-8?B?NXdPanYwU2V3L3NwMllNRHNaWWV2T2ZCNzRTQmgyWXpjZm10ZEx4cDBRM2FS?=
- =?utf-8?B?RTdGYmdpTWE1U0NkZ2ljdXovV1FVeHdPdExwMEpWR3pEejhJUDBMZjltcjh4?=
- =?utf-8?B?b2IzQkVoSjhNTk5yOEpiTWFtRG1UQm1oZTNLS05ja3EzVGVOQzYvc2kybkly?=
- =?utf-8?B?S1dTK1NRdUJoRG9vSSttbG1uam04ZDVnam92RFQrbXF4Q2o1MXhNaHFzVXd1?=
- =?utf-8?B?d0djajNuVm9UT04yQm5KRHdEdFNKMm9xQ0FJQmYrVzU2UmprMUw1cjFQQlBJ?=
- =?utf-8?B?R29rRVhYR2tHRGRzZDRKeS9WeGUzeHVZaWkrQXFMOVNOZk9WTUJsQjFyN0JD?=
- =?utf-8?B?SS9rOUpLbkZyc1RJWEpLRzNmRmIxZkk4QmJlRlpGZm9ESXpVYXZnc2UxOVJi?=
- =?utf-8?B?QUxYOC9pbXAvSWQyd2ZNMmszSzhxb3hTclAvMWgxVDBSOXlXNWZ6dTNvTWlF?=
- =?utf-8?B?cmYxWU8raXY4T3Z0VUpZQ204bFpsY1E3YXVpMzU4SGpSY2RmTXE1V2phYUFn?=
- =?utf-8?B?VWRRT0NLeHZiQjdZS0NYRkV1UTgxNzFEZXkzWjV6Vlorc2Z3WkNTV0FKQ1Jn?=
- =?utf-8?B?K0ZqU1BhMVVpTFhERXphTDQzZnRkWmNhYmlZckdMc3hVUjIwSEt5eUtDdTZy?=
- =?utf-8?B?TzZCenZNQWJKSFdwWW9wMXdLWkVhUDdpYU91ZEpMTEs0cVEvMTA5YnEzV1JK?=
- =?utf-8?B?WnI5NGRsY3ByMStCUVFScllNak9XdGpzeXk1YU51OCsxdnNyd3UzVlkwNmsr?=
- =?utf-8?B?ZHZSWnJ1RXViM0s3ZTBKYkFINlQ1YjRSOGVCK1J3YkJkbnpBTVpwalVzVDdu?=
- =?utf-8?B?Y2RGM3ZNRFFxVGxSREk4WGV5N0JEcGdXcnc1bzV4YzBYczhwbXc1Wk9yTnZW?=
- =?utf-8?B?a1AxeWRmTVVTa1cwbURLd0ZLN1hubDBMSE5pOUpxelFpdG9tMUVjek5EUFYv?=
- =?utf-8?B?TFhUYStGR0JCbVBhMEs3UDhiUjQwKzBGK01XbWUxL2ZwUEppOXlKVnVFM280?=
- =?utf-8?B?MGsyTm9KZ1BqL2ltVTdYNzBzNkxVMmdNSnEyZ1FaME9yT3A0OXpLYThXVmph?=
- =?utf-8?B?R2JHODMyRm1zajlGMW9BL0ZaM2JZTDlobkJtdzI5eEUvWGZERFgyZXJEUHUw?=
- =?utf-8?B?eVMvRzI5UlYvZUdSMFVkQmF4UDRqQ0pCR0dpMW1JK3AxZVU5Zk9pZXF6RHNL?=
- =?utf-8?B?T09YQlVQSFJSZkVhN1JDS1dhV0RhRnkveDMzM0xyR1JyNjBzbTZmaTQyVGJK?=
- =?utf-8?B?ZGRyZ2FpYWdEWUk4cmZBWitEOVRhVmVBakpXNlU4ZUd5ZUZsNlI4UllneE9v?=
- =?utf-8?B?Z1NDa051TU5CeTdYUkUvMGN3K2I4bEdlUzFJTU1DT3M2ZExndDRPVm5Dd0dw?=
- =?utf-8?B?anpEaGo1SHl1UXp1UHViVWxNaVNUSjR6d2pDY2hVSnh2R0tzUWJFcTJDemlj?=
- =?utf-8?B?bjJCT2Y5dzBVQWYrdnpycWtoZ1l0MUw4aTV0Z0t2RXYyNmVxZEFqMUhSVU1X?=
- =?utf-8?B?RUVtWG9sNUREWVl3ZG9WMFR2UWhsWTNRNVRpK1hyRGw4L0JoVEcrNjU0OGRi?=
- =?utf-8?B?UW13RTA4OENVUGtKVTFQL1dLV3dHKzhsYks3elp1dWNBSzA2cElHMlVXeWhm?=
- =?utf-8?B?alZIV3ZBQUgrSHdFMDRLVi93TnZmNEoxNmFGRDR2cUFKWVBKU0FMbmFPQXBt?=
- =?utf-8?B?Y3VCTGNUc3JWTWttMHV0UGFKLzF5cjE0TVgrb3hJbnZ4QU9rSDc0ZGQ0MWY5?=
- =?utf-8?B?UnVZdkZGV0hVb1ZVbTY3VWlvdUM2bFNEVXhDKzAzbjkrZVZrSTVuZk13RlVp?=
- =?utf-8?B?V0E9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c426ca1e-2ee7-4c58-901c-08ddb2fe4ade
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2025 09:05:40.7547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pNpAs7cWGVQno0x5zIjr8Cs/b09oL4qfS3bNLJALfUaJivEML/DTcQYuMvc29qAR61tCuxT25LMcuj3NSGFXOQbVRdh0sgBbu04zrM9oP/U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PPF346E03860
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F_FlamUoFfvpgJgurMu0z-lMQaPI-l39
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjI0MDA4MyBTYWx0ZWRfXwST6OOVC5jYz
+ HrygCDUlLWdMBSu4M1yc1ZcIrmRpfCuKFHlVxrB0Rxv+4A9tfnqQ6ADSYxM6XVBNsJayXg7QFZn
+ ncm+/TkI9YfCEwwxAqYLV1ler4YOekrl5BLeWng7Z9nBDKZGP7gqV3NOvIv1MRN41Odgovq5C8h
+ RnFInt69CX2201smfzkkCwdkT+WR+ssq2XnYuc1LrRLTlE19EQsoB+bXJ81MKnzEm513DWZoLaF
+ 4TUzZzQ0Dtr01qflDulW5uBxNyLg4c0wzXvP0VAQ6CnnPIltik7tAAVhzM77axVQYrKCUz3jQVD
+ 9J6DTrzjioJxbnDU74/lrkT5sr2tiy4wdpK2yWWpvgaetHBAmmvafBHILKuOcEFKdeKOS2tIBFC
+ z/t4ElFgMm5iV0e8yS7qnS2kVKn2VSaCWYAjYyGOUSO2j1JmQ1wI8xr9cjXQ85gsxxY/ippA
+X-Authority-Analysis: v=2.4 cv=L4kdQ/T8 c=1 sm=1 tr=0 ts=685a750e cx=c_pps
+ a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=03-ClwGjdYBXaTv5q9oA:9
+ a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-GUID: F_FlamUoFfvpgJgurMu0z-lMQaPI-l39
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-24_03,2025-06-23_07,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxscore=0 malwarescore=0 bulkscore=0 clxscore=1011 suspectscore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 mlxlogscore=999 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2506240083
 
-Hi Krzysztof,
-    Thanks for your reply.
+In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+hardware has traditionally been managed by TrustZone (TZ). This setup
+handled Serial Engines(SE) assignments and access control permissions,
+ensuring a high level of security but limiting flexibility and
+accessibility.
+ 
+This limitation poses a significant challenge for developers who need more
+flexibility to enable any protocol on any of the SEs within the QUP
+hardware.
+ 
+To address this, we are introducing a change that opens the firmware
+loading mechanism to the Linux environment. This enhancement increases
+flexibility and allows for more streamlined and efficient management. We
+can now handle SE assignments and access control permissions directly
+within Linux, eliminating the dependency on TZ.
+ 
+We propose an alternative method for firmware loading and SE
+ownership/transfer mode configuration based on device tree configuration.
+This method does not rely on other execution environments, making it
+accessible to all developers.
+ 
+For SEs used prior to the kernel, their firmware will be loaded by the
+respective image drivers (e.g., Debug UART, Secure or trusted SE).
+Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
+will not be loaded by Linux driver but TZ only. At the kernel level, only
+the SE protocol driver should load the respective protocol firmware.
+---
+v4 -> v5:
 
-On 2025/6/23 17:15, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 23/06/2025 10:53, Xianwei Zhao via B4 Relay wrote:
-> 
-> Please use subject prefixes matching the subsystem. You can get them for
-> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-> your patch is touching. For bindings, the preferred subjects are
-> explained here:
-> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
-> 
+- Added Reviewd-by tag.
+- Resolved kernel test robot error by including the missing bitfield header file.
+- Updated the SE firmware ELF structure name for consistency.
+- Specified _leb4 format for the magic number definition.
+- Updated the email domain from 'quic' to 'oss'.
 
-Will fix subjects "spi: dt-bindings: Add binding document of Amlogic 
-SPISG controller"
+v4 Link: https://lore.kernel.org/all/20250503111029.3583807-1-quic_vdadhani@quicinc.com/ 
 
->> +properties:
->> +  compatible:
->> +    const: amlogic,a4-spisg
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    minItems: 2
-> 
-> Nope, maxItems. Look at other bindings.
-> 
+v3 -> v4: 
 
-Will do.
+- Drop patch 1 of the v3 series as it has been reviewed and merged.
+- Update the qcom,gsi-dma-allowed property name to qcom,enable-gsi-dma.
+- Remove the full stop from the title.
+- Add a reference to the common schema YAML in the I2C, SPI, and SERIAL
+  YAML files in a single patch and drop the individual patches for protocol YAML.
+- Update the commit message.
+- Resolve kernel test robot warnings.
+- Add a multiline comment in the Copyright section.
+- Remove valid_seg_size and geni_config_common_control functions and add the code inline.
+- Rename read_elf function to geni_read_elf.
+- Add a firmware size check.
+- Assign *pelfseg after finding a match.
+- Break one large condition check into multiple checks to improve code readability.
+- Remove return type documentation for void functions.
+- Update error messages to be more descriptive.
+- Correct indentation.
+- Rename geni_flash_fw_revision function to geni_write_fw_revision.
+- Remove __func__ from all print statements.
+- Move resource_on to the appropriate section after parsing the firmware file.
+- Update variable names and function arguments as suggested.
+- Use FIELD_GET, FIELD_PREP, and GENMASK.
+- Use memcpy_toio() instead of memcpy.
+- Remove duplicate registers and bitmask macros.
+- Remove rsc struct and add required variables in geni_se struct.
+- Add a patch dependency note.
 
->> +
->> +  clock-names:
->> +    items:
->> +      - const: core
->> +      - const: pclk
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +  - clocks
->> +  - clock-names
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    spi@50000 {
->> +        compatible = "amlogic,a4-spisg";
->> +        reg = <0x50000 0x38>;
->> +        interrupts = <0 183 4>;
-> 
-> Use proper defines
-> 
-Will modify "interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;"
-> 
-> 
-> Best regards,
-> Krzysztof
+v3 Link: https://lore.kernel.org/linux-arm-msm/20250303124349.3474185-1-quic_vdadhani@quicinc.com/ 
+
+v2 -> v3:
+
+- Add a new YAML file for QUP peripheral-specific properties for I2C, SPI, and SERIAL buses.
+- Drop the 'qcom,xfer-mode' property and add the 'qcom,gsi-dma-allowed' property in protocol-specific YAML.
+- Add a reference for the QUP peripheral shared YAML to protocol-specific YAML.
+- Enhance error handling and remove redundant if conditions in the qcom-geni-se.c driver.
+- Remove the ternary operator in the qup_fw_load function.
+- Update function descriptions and use imperative mood in qcom-geni-se.c
+- Load firmware during probe only if the protocol is invalid.
+
+v2 Link: https://lore.kernel.org/linux-kernel/20250124105309.295769-1-quic_vdadhani@quicinc.com/ 
+ 
+v1 -> v2:
+
+- Drop the qcom,load-firmware property.
+- Remove the fixed firmware path.
+- Add the 'firmware-name' property in the QUP common driver.
+- Add logic to read the firmware path from the device tree.
+- Resolve kernel test robot warnings.
+- Update the 'qcom,xfer-mode' property description.
+
+v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-1-quic_vdadhani@quicinc.com/ 
+---
+Viken Dadhaniya (5):
+  dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties
+    for I2C, SPI, and SERIAL bus
+  soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux
+    subsystem
+  i2c: qcom-geni: Load i2c qup Firmware from linux side
+  spi: geni-qcom: Load spi qup Firmware from linux side
+  serial: qcom-geni: Load UART qup Firmware from linux side
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   1 +
+ .../serial/qcom,serial-geni-qcom.yaml         |   1 +
+ .../soc/qcom/qcom,se-common-props.yaml        |  26 ++
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |   1 +
+ drivers/i2c/busses/i2c-qcom-geni.c            |   8 +-
+ drivers/soc/qcom/qcom-geni-se.c               | 404 +++++++++++++++++-
+ drivers/spi/spi-geni-qcom.c                   |   6 +
+ drivers/tty/serial/qcom_geni_serial.c         |   8 +-
+ include/linux/soc/qcom/geni-se.h              |  32 +-
+ include/linux/soc/qcom/qup-fw-load.h          |  93 ++++
+ 10 files changed, 556 insertions(+), 24 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,se-common-props.yaml
+ create mode 100644 include/linux/soc/qcom/qup-fw-load.h
+
+-- 
+2.34.1
+
 
