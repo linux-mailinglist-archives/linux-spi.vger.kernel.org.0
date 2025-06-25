@@ -1,123 +1,121 @@
-Return-Path: <linux-spi+bounces-8774-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8775-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00322AE8E3B
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 21:13:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04C9DAE8E3F
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 21:13:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88F956A19B9
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 19:10:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ECE47B3F25
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 19:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3626C2DCBEC;
-	Wed, 25 Jun 2025 19:09:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F512E11BD;
+	Wed, 25 Jun 2025 19:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q4QXLqq6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jQXCQmT8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D482DAFDC;
-	Wed, 25 Jun 2025 19:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD7A2E11AC;
+	Wed, 25 Jun 2025 19:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750878561; cv=none; b=P/TgM6TNzTYr4aIdITNPMvbqwSj6dXALeIgRygDc5dfIUClpnGXEhkK/158tlTLIIc44Ki1U06G1R7APcnvi0XmnPsp9fjx7hODDtcmvIO8Yo4/55ThDDv2xPvid6Z+FfRi9uRFPpn8OPVgsG06rylBCf7SHji2C9pU6dnV0EqY=
+	t=1750878748; cv=none; b=VdkQ0lRpfuJreI2qixr2tzpQ9XUFycNrknRd+BbbZ2vRbheVLK4HZm+jSHCK97SF+P/6LIs0pY+9lyKQ3YN/2DNvaSVrrF0ZjMrNqTcQ8miukGFaUzcbeSro41SwLAys6m8nUuoWVkddZno82v+Df5i70+Af6wkrAqVjU1Sewe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750878561; c=relaxed/simple;
-	bh=7Sd7sVxVdbI5zpGrbLMBR22Yay4++u6jSk3NFuFiVcM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vCqIgMAav7BA5F0LfzcFLuhsbhb4f/L2/PJE43v+RzB4sj/okXl88mL+ooxOtMzRBtTKH9jg2Z0k4YIUkusSyYy1UhLyZxrNb6thmAjO0Wj8LJe6EgHoTw3jBfz5cJqpEjdTiDXz2LUUJWrMcGFCG27uU1SJt2u9k8+PkOtI0rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q4QXLqq6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF1E9C4CEEA;
-	Wed, 25 Jun 2025 19:09:17 +0000 (UTC)
+	s=arc-20240116; t=1750878748; c=relaxed/simple;
+	bh=+qriwj9qU4FY/kuIp4wDLlM/t8OqijQo1R2YW3zdLuU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=FWS7WRMiATkTIkA2jJ+IUqd346fM+XYRrhjf8wUgwn65HF7y7QnsrWsa1ZC3XAmvhOo2pVspCtsSdz5iw+yKylZVP/za1rLSH0SjfjTq0sZL0+M55xyW5EGQR2G/7hgCO6NH2BUARVwplmaTgnAZWLIyaWC0nVm3frUIkYwfTdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jQXCQmT8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC099C4CEEE;
+	Wed, 25 Jun 2025 19:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750878560;
-	bh=7Sd7sVxVdbI5zpGrbLMBR22Yay4++u6jSk3NFuFiVcM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q4QXLqq6E4COOnW6sbwSuEqhg635cQt7j06+oahl2yEACpCq3I2TMxI2GNCice/yn
-	 DIklwP07sjLEkZzVMdwmm6mn+ju01/BrtuxsUgh8nKq4NfdD+7RkIlSH5QnsJ7KVbW
-	 O5kae0LKcDGeCB2mItEJq6H54FscdzuvosP7YoUOu3gMNeMmYHidaLGto45gk+IEBA
-	 u/F0O2s3d3IyIp8RqvdGYQXQNFneZPpw27TSAcA33AOmnPseIDZ94YVnn9MYEl6eaI
-	 tmWoKjt/wlT4jfbHVqEVz6fK2So3goY/sSWosfq1eIqCezapWnUEoRQfsq1TRAUEXa
-	 p6P+4QgZcsvQQ==
-Date: Wed, 25 Jun 2025 20:09:15 +0100
+	s=k20201202; t=1750878747;
+	bh=+qriwj9qU4FY/kuIp4wDLlM/t8OqijQo1R2YW3zdLuU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jQXCQmT8D2h0EMiy0LeKaMVgq4MMLwiB5Ojl9jxZUv3lfWTMXOdg/Ik0UrDQyUSjL
+	 4MyfWPrrhsFgzVudtvHgpM62ZTCCpPxy35fmIvUUFQNGqTyaa+MlvHiuIsfLG1LPq7
+	 DqO/X6euoQBAnIVWUFCtnMvL/ngetC26Gn7NfJVTg6zqih6MrgmXqtLPNUAMhF8Dyl
+	 MqUCjuQmArTDzS7IxOthC7s73wiH1W/851Whej89BlsJAhXIvMsYOcLLDNVEoVpD4k
+	 IO0k5pr5rxMRmHCfbJBy4JwocPtv2E4fPF/CDD2INuRNUBPSpXrHi/aKwXrLqj48Gf
+	 MZhLmOg8QqPSA==
 From: Mark Brown <broonie@kernel.org>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 3/6] spi: Add driver for the RZ/V2H(P) RSPI IP
-Message-ID: <b4649385-ee50-499b-a965-e08f04fe0d3b@sirena.org.uk>
-References: <20250624192304.338979-1-fabrizio.castro.jz@renesas.com>
- <20250624192304.338979-4-fabrizio.castro.jz@renesas.com>
+To: Alain Volmat <alain.volmat@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Valentin Caron <valentin.caron@foss.st.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Erwan Leray <erwan.leray@foss.st.com>, 
+ Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-media@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+ kernel test robot <lkp@intel.com>
+In-Reply-To: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
+References: <20250616-spi-upstream-v1-0-7e8593f3f75d@foss.st.com>
+Subject: Re: [PATCH 0/6] Add few updates to the STM32 SPI driver
+Message-Id: <175087874236.261602.8727707950137724434.b4-ty@kernel.org>
+Date: Wed, 25 Jun 2025 20:12:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3H6V8ZNFDZaGNSIs"
-Content-Disposition: inline
-In-Reply-To: <20250624192304.338979-4-fabrizio.castro.jz@renesas.com>
-X-Cookie: He who hates vices hates mankind.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-08c49
 
+On Mon, 16 Jun 2025 11:21:01 +0200, Clément Le Goffic wrote:
+> This series aims to improve the STM32 SPI driver in different areas.
+> It adds SPI_READY mode, fixes an issue raised by a kernel bot,
+> add the ability to use DMA-MDMA chaining for RX and deprecate an ST bindings
+> vendor property.
+> 
+> 
 
---3H6V8ZNFDZaGNSIs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Tue, Jun 24, 2025 at 08:23:01PM +0100, Fabrizio Castro wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> +static int rzv2h_rspi_unprepare_message(struct spi_controller *ctlr,
-> +					struct spi_message *message)
-> +{
-> +	struct rzv2h_rspi_priv *rspi = spi_controller_get_devdata(ctlr);
-> +
-> +	rzv2h_rspi_spe_disable(rspi);
-> +	rzv2h_rspi_clear_fifos(rspi);
+Thanks!
 
-A bit interesting that we need to clear the FIFOs, but it's just one
-register write so probably not worth worrying about.
+[1/6] spi: stm32: Add SPI_READY mode to spi controller
+      commit: e4feefa5c71912ebfcb97a3dbe2b021fd1cea9d1
+[2/6] spi: stm32: Check for cfg availability in stm32_spi_probe
+      commit: 21f1c800f6620e43f31dfd76709dbac8ebaa5a16
+[3/6] dt-bindings: spi: stm32: update bindings with SPI Rx DMA-MDMA chaining
+      commit: bd60f94a3eb4f80cb66c9687d640554fd0c579d0
+[4/6] spi: stm32: use STM32 DMA with STM32 MDMA to enhance DDR use
+      commit: d17dd2f1d8a1d919e39c6302b024f135a2f90773
+[5/6] spi: stm32: deprecate `st,spi-midi-ns` property
+      commit: 4956bf44524394211ca80aa04d0c9e1e9bb0219d
+[6/6] dt-bindings: spi: stm32: deprecate `st,spi-midi-ns` property
+      commit: 9a944494c299fabf3cc781798eb7c02a0bece364
 
-> +	ret = devm_clk_bulk_get(dev, RSPI_CLK_NUM, rspi->clks);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot get clocks\n");
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> +	ret = devm_request_irq(dev, irq_rx, rzv2h_rx_irq_handler, 0,
-> +			       dev_name(dev), rspi);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "cannot request `rx` IRQ\n");
-> +
-> +	ret = clk_bulk_prepare_enable(RSPI_CLK_NUM, rspi->clks);
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Are you sure that the interrupt handler is safe with the IP in reset and
-clocks disabled...
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> +	init_waitqueue_head(&rspi->wait);
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-...and the wakequeue head it wakes up not yet initialised?  This is also
-a concern during unregistration where devm things will be unwound after
-the remove() function has run.
+Thanks,
+Mark
 
---3H6V8ZNFDZaGNSIs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhcSVoACgkQJNaLcl1U
-h9AzsQf/Qa7qnQsZsSuz1hz9jQymHdMNk+PB06BGH0NHeck6ow7ZoGnmDbl7AK3C
-9d7F2yTAXGk+wl8+1rzETO/TU4X3wgRRekZF3bEJ/yoISR1J5AEMhClbpyvPiR88
-yvQsYJiuveAs6iU55L7Z0neYAvp7RiKaiim6ni/VDKuK59PmK/enC8yJm0UwR/el
-3SnwQqrMaSq/MfQ9f6C54OVGcxNvQE+On9pd2wqyDCeCjpVsFV9K0+7lSgbEjg/k
-MDYM2XDLubJRXIdL9a0gOl6IYi/kZXhYcSO4T4Cvci0otYitat6CVWOwcStyQ/df
-ON+fNZbTzzQbRXjOziitywFskeuh9w==
-=EA/O
------END PGP SIGNATURE-----
-
---3H6V8ZNFDZaGNSIs--
 
