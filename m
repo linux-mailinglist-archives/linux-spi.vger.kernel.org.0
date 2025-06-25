@@ -1,103 +1,125 @@
-Return-Path: <linux-spi+bounces-8760-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8761-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8C4AE7B6C
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 11:05:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 152DAAE7CC8
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 11:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EFB916ED13
-	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 09:04:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77BF21893F42
+	for <lists+linux-spi@lfdr.de>; Wed, 25 Jun 2025 09:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3F727F73D;
-	Wed, 25 Jun 2025 09:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4246A2D9ED7;
+	Wed, 25 Jun 2025 09:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rqte5sv6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yVSS5ONl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4EE28689C;
-	Wed, 25 Jun 2025 09:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4917729B237
+	for <linux-spi@vger.kernel.org>; Wed, 25 Jun 2025 09:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750842286; cv=none; b=aoo1VQTo0DLey/Z8Q9msuQrvx7aKgWOKAhn8YLizAew4FlNoxo+FzjuIET72yNCcP2CFm9wlXrvcV3fzcC/I4T53SgdzgxefAH8FbeUmxcKveLc+Vf15zx4Wanwegg+kdE6rDjnGz3CVS/APXbPebdJd6V9wvXgBEyYMHw6Bj0I=
+	t=1750843147; cv=none; b=RNLCTAAwY/FZoEF8iIo9CYJiEi9lmZsqCFXqPPqCJx95mOTFVNh2y2ztHz7W+3OM9iE+BkzTd1XfLp9xklEOSipnZEjcrb+v1LCmxG/pGSFpLGiyW+/YUrh9CBj0d15m+cgNeqRFgMKwBLMq1kxRd1EhwUTMzStFhCb40vwV+wE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750842286; c=relaxed/simple;
-	bh=VE6S4IdljfLojze0jkDz8OAExWzhUG5J1Makz+kHkU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rbFuT+qm6Ea/cRHmsQTU9UfLsjynaefbSsUIPYz/Zvgr6Eb8P46gUdq14JkoCprAKd17GRNC7sIDnzt35O6fgqtYSzugHqRDz2mahm7xjM4GUpYV/Qk0A4SKg8qQx3kFtNGQcyu2qkNNOmTXHrd3vDU/cQKfjCPtkfwTKlxKyjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rqte5sv6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18646C4CEEA;
-	Wed, 25 Jun 2025 09:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750842285;
-	bh=VE6S4IdljfLojze0jkDz8OAExWzhUG5J1Makz+kHkU0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rqte5sv6J+gkHvmA7D3NKdMprt8FzCyTpRTZf8mcie7sPp78rbteCQ+1eJbjwgdGn
-	 UJw+wyyD5nKM+mEFYlmfmj+hJiHBGtbllto4diPX78bfNRziCDixfukr3AlViQ1bMi
-	 qF/XuEamC3u/u9Puwl2Z1FYAOz5OMUR11pHZmbfUDS1PbmcH6v+ojFNIkkDZltWRn9
-	 zFLTgaAhiACdCBRcmOj9Zn+cZ0h+vR5ZXzttCggbx6vCWhe2k73fnTwLuBD9wiu9dc
-	 51lCZrgY60/eY7q1UELawOu0JtmdzbSa+/tA6s+gmDQLPcqaEiJOVSVKG3DHqG4Lhj
-	 oLa/cIEnEeRuA==
-Date: Wed, 25 Jun 2025 10:04:39 +0100
-From: Lee Jones <lee@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Vicentiu Galanopulo <vicentiu.galanopulo@remote-tech.co.uk>,
-	Will Deacon <will@kernel.org>, Han Xu <han.xu@nxp.com>,
-	Haibo Chen <haibo.chen@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Andrew Davis <afd@ti.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-leds@vger.kernel.org
-Subject: Re: (subset) [PATCH v7 2/3] leds: lp8860: Check return value of
- devm_mutex_init()
-Message-ID: <20250625090439.GQ795775@google.com>
-References: <20250617-must_check-devm_mutex_init-v7-2-d9e449f4d224@weissschuh.net>
- <175033649656.801367.11888454651585197053.b4-ty@kernel.org>
- <f1cc8959-d420-4ba3-922f-ed7c6f054f22@t-8ch.de>
+	s=arc-20240116; t=1750843147; c=relaxed/simple;
+	bh=20e3PphxG30T3V+Zob/qx0IQxDG73Gud5foeaYVbVvE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ffv4rXNIlWEeH7wLTdV9tq+1H4x6O/ZFwuUs8AsHwvxA9ueX5GR5L2xg3PiQsByB2WWcZaHq2tfnoJhQ7quTdk+CqI1ZQHpUqtR9U5C11SCcnljxbfdQYjLiNtGdv9TzyKOEf2gkZJi5sbUVRTuddoSHyFT7CWr06tZm0P16TW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yVSS5ONl; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-451e2f0d9c2so4857535e9.1
+        for <linux-spi@vger.kernel.org>; Wed, 25 Jun 2025 02:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1750843143; x=1751447943; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ojAQtrqRfWE5uG2/EcUt6MJrN5Ulz0bDOzZRTcZgA5A=;
+        b=yVSS5ONlgQZLL68PH2r2KmK7ETejyMcCm5wiF5j70L9Vqdb3h9BBcWEk2B9ZP7ufC0
+         V53h6hyFMq6bEmwmovlKSZqLyLSD1O+ij+0VMJk6XrmfPUVTrusL/TaZT9y3miQ8C75k
+         1n0cIRrqKg2F828yMfKfD+giWFjaQNY+5cUX36nZFNp0uklf6TyQTbYvKs5BXyOYyHvE
+         6Lfh9KF/Ue6pfb+lDm+hirDnoK+x/tbgXf/Kh0e42jYU4VmvVXiauFRSy4E/KFXTmcdj
+         7eXd4Gi6OuLPWK0zWIun3Snav05yV2b4V2nK+94bX7cg1HUUYHzlBbpMQ7/Jod6y8KO2
+         zYkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750843143; x=1751447943;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojAQtrqRfWE5uG2/EcUt6MJrN5Ulz0bDOzZRTcZgA5A=;
+        b=tfMpOQ2T56XEdcj+v0H1MNL4AR8ItKHM4VfHDwLIv2ANO/xccdf6XZsH8cVBo66AGv
+         nCvy1q6KQ3ViV7oP8ijEIqYlWyPmdz/niuw8KHgK3XG1xYEIzxn3qeEEIxApx9dpD5d1
+         TnRyvL9n3jlkLWskXAz4MVDKMp3V1YFObJmeETdQPnLzXYLO4j2GducJdrQZp+GqIHD1
+         PoJ1i05XlJuuffUZR8zm+eckKUgE8P1kSNNpGMWd18BCmbl+9juTNE/h+S5xt3qLiecF
+         cUTYP/hbMnapNqhAkaAyh9DYXx2Px6YcdcVxzgW94Qx+gVMV+XRdfurdNcK8Ib/XFK7s
+         zMnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUyAZrhRGM3rSa5B9+Gsk+XwQiVqFqMHB3NBIGjSNGnG+n4UVENUNVqxDuwQwQ8xuBXQLkfKkylFfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIJS6pWtoo/vkpsp8YCBqgWG9Hh+4iZAHMaroODH6P3wac5bOa
+	ojw11/WHwE+qmRk60NzUJ6P/FSclLxavKOHKQi0h2G+BpbAWL9C0k04u1woXg6nG49M=
+X-Gm-Gg: ASbGncsjZ4EigUJI1tykhXaM4NuxQLiJ1uWS3yZq1ifsGvOvcmQtE2qsVplNk+pZOeh
+	EJiKbNNgvdyeeJr7z8OSMYnCFwoHR6/TRY1IPT82x7Ky7aOpLNrZn70hdoCMA/whCpVb5VxNapF
+	8HIPvOyt3+f2EtwhePNi0HuRgG9N0XXik/i3k8qOKP2eshBGj8BgF0+iGetzlx0IJX2KO3jLgcj
+	CZsO0J9df3kuUiM8tXIC0Pvk16+xJenv1Ig1NzS7e+QIwWy1zUicoSMQz8UsY0QkTwlYLSyqcTh
+	QMDFZxYaf4AiSp7t8GFozVptoif+Mn+IYLOe/ZvsTYnbs5mNY9FZr2RAyOqBp73b7IQ=
+X-Google-Smtp-Source: AGHT+IHH7ZCWqc0u7ZgOrAL3WMonYTs/JRdAzK3sDu8U1/EewCY+ihQcjBc/zfznNgiZP8hFENkJ8Q==
+X-Received: by 2002:a05:600c:450f:b0:43d:174:2668 with SMTP id 5b1f17b1804b1-4537b631db6mr57163895e9.0.1750843143517;
+        Wed, 25 Jun 2025 02:19:03 -0700 (PDT)
+Received: from [192.168.1.3] ([37.18.136.128])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a6e80693c6sm3957051f8f.41.2025.06.25.02.19.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jun 2025 02:19:03 -0700 (PDT)
+Message-ID: <0c6c78da-575a-4d29-a79a-3903aa801b42@linaro.org>
+Date: Wed, 25 Jun 2025 10:19:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f1cc8959-d420-4ba3-922f-ed7c6f054f22@t-8ch.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/6] spi: spi-fsl-dspi: Stub out DMA functions
+To: Arnd Bergmann <arnd@arndb.de>, Frank Li <Frank.li@nxp.com>
+Cc: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>,
+ Larisa Grigore <larisa.grigore@nxp.com>, Christoph Hellwig <hch@lst.de>,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20250624-james-nxp-spi-dma-v3-0-e7d574f5f62c@linaro.org>
+ <20250624-james-nxp-spi-dma-v3-3-e7d574f5f62c@linaro.org>
+ <aFrSgJ5xZfccEX9x@lizhi-Precision-Tower-5810>
+ <290fc244-e88f-47a3-8dd3-0ec27eb5c60b@app.fastmail.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <290fc244-e88f-47a3-8dd3-0ec27eb5c60b@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 19 Jun 2025, Thomas Weißschuh wrote:
 
-> Hi Lee,
+
+On 24/06/2025 6:16 pm, Arnd Bergmann wrote:
+> On Tue, Jun 24, 2025, at 18:29, Frank Li wrote:
+>> On Tue, Jun 24, 2025 at 11:35:33AM +0100, James Clark wrote:
+>>> This will allow the build to succeed with !CONFIG_HAS_DMA, either due to
+>>> a randconfig build test or when the target only uses one of the non-DMA
+>>
+>> I supposed you met kbuild error. If yes, can you add kbuild build report
+>> tags.
 > 
-> On 2025-06-19 13:34:56+0100, Lee Jones wrote:
-> > On Tue, 17 Jun 2025 19:08:13 +0200, Thomas Weißschuh wrote:
-> > > devm_mutex_init() can fail. With CONFIG_DEBUG_MUTEXES=y the mutex will be
-> > > marked as unusable and trigger errors on usage.
-> > > 
-> > > Add the missed check.
-> > 
-> > Applied, thanks!
-> > 
-> > [2/3] leds: lp8860: Check return value of devm_mutex_init()
-> >       commit: 426e0c8e8eed26b67bbbd138483bb5973724adae
+> Actually I would suggest making it a dependency on CONFIG_DMA_ENGINE
+> instead of CONFIG_HAS_DMA, since that is the more relevant symbol.
 > 
-> Thanks, but (as mentioned in the cover letter) these patches should go
-> together through the mutex/locking tree.
-> Could you drop it on your side and give an Ack instead?
 
-There has to be good reasons to do this.
+Makes sense.
 
-I didn't see any dependents or dependencies in this patch.
+> It would also be simpler to enforce this in Kconfig if we only
+> care about users that use the DMA support.
+> 
+>        Arnd
 
--- 
-Lee Jones [李琼斯]
+But most of the devices supported by the driver don't do any DMA. That 
+was the reason to stub them out rather than add the Kconfig depends.
+
 
