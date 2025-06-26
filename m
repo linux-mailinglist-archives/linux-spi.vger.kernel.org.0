@@ -1,66 +1,61 @@
-Return-Path: <linux-spi+bounces-8785-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8786-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A73DAE9CA1
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 13:34:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DED80AE9E31
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 15:06:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C2473BD790
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 11:34:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 484204E02EC
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 13:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3708F27584E;
-	Thu, 26 Jun 2025 11:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g8t0lUe0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 787C92E5404;
+	Thu, 26 Jun 2025 13:05:59 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from glittertind.blackshift.org (glittertind.blackshift.org [116.203.23.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0988C27584C;
-	Thu, 26 Jun 2025 11:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 681842E427A
+	for <linux-spi@vger.kernel.org>; Thu, 26 Jun 2025 13:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.23.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750937675; cv=none; b=AW6O4EJ7NOj7Qr+yyJH7KAIpuEmf3R46e+i6t4oD4xkfjKwOUOHaq9TxHqNiQdilwMCqszH3jitlQUPy6yV6hSpSuEKcOfWWUqN3QWytjyeNGXZ/ekL9SIgrldNh5Sw3dTEe4YW0DgvOS0J2nDqKGpAuxCInRWddHwfteNg9KGE=
+	t=1750943159; cv=none; b=OmzSLiqr05nNevhcrJJJXgYmBwilWBrqu6ydYTfPsgPCxpmZTsW6ADb1mM540CCKNeW284iSv+MhbRhiPMVwJnEXrc/NWRODt/G+I0kB20buQBLyvq18VXLweFOtqXBBg/Qwxl/R6CgJVjBiDNeyIH4b9TzIYZbt4vzuC70kwMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750937675; c=relaxed/simple;
-	bh=y8dtuue6zG3Z62+ha6QZpJFJOue7deklq2PrhNeGUVs=;
+	s=arc-20240116; t=1750943159; c=relaxed/simple;
+	bh=mg4SwQNbvzeE2sj3wCDg1tjz/VjheXExlZOnS8rGJFM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HhpI9Y9KGAuKnDZXwP1yDaJoW651gvHmZIFzmKVs5SQuQKLSOHplZw5JIQlR/zRepk8+wvgsFmiG7Hpw7/zTBbnrAcFzEHQ9tQxJrpDOKtGjMm8/63vhBbG4UsMyvbwWcN62ZxM07D3Im4OalPyGV8QUi7iUisg0JfQ5b5qbv6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g8t0lUe0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14633C4CEEE;
-	Thu, 26 Jun 2025 11:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750937674;
-	bh=y8dtuue6zG3Z62+ha6QZpJFJOue7deklq2PrhNeGUVs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g8t0lUe0dnz6RaK5LdH/exbPa16uKUOtSiPaw03l72RLwXsju6MWzQ1UBNcOIjhcs
-	 dyYSTBvMlLdF8mbr9Z33+2aebEM8tKRidxEcKCbWetP/VG5l4ZtdytiOQZnzrwyTzT
-	 ilvOS9Iz55pYWfTzbCa9CMq3l1hE7y51/LvDpgGGh+nPiZKKevXqLgGhWwO7I4e1/1
-	 JIm3moezVZFf+Vexrpz/5V7ueppOuXm/5BfQNcxPjtk/OZ+T3Arba0WKYUbK5IDbnh
-	 M4H3vIxhWAUdhxISc7ovYd2wnSfXazvNoluKgeHliaD15koq+9VvVGbVEhxAzcQy8f
-	 b/650v3DU9+tg==
-Date: Thu, 26 Jun 2025 12:34:28 +0100
-From: Mark Brown <broonie@kernel.org>
-To: James Clark <james.clark@linaro.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Frank Li <Frank.li@nxp.com>,
-	Vladimir Oltean <olteanv@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Larisa Grigore <larisa.grigore@nxp.com>,
-	Christoph Hellwig <hch@lst.de>, linux-spi@vger.kernel.org,
-	imx@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] spi: spi-fsl-dspi: Stub out DMA functions
-Message-ID: <aF0wRFKOkejfvuYT@finisterre.sirena.org.uk>
-References: <20250624-james-nxp-spi-dma-v3-0-e7d574f5f62c@linaro.org>
- <20250624-james-nxp-spi-dma-v3-3-e7d574f5f62c@linaro.org>
- <aFrSgJ5xZfccEX9x@lizhi-Precision-Tower-5810>
- <290fc244-e88f-47a3-8dd3-0ec27eb5c60b@app.fastmail.com>
- <0c6c78da-575a-4d29-a79a-3903aa801b42@linaro.org>
- <0f904f12-295c-48fe-96c7-c64c461cdbbd@app.fastmail.com>
- <884e86be-112b-44dd-a827-30355a5fdba6@linaro.org>
- <82824032-26d4-42a6-8a92-3e4a410741c5@app.fastmail.com>
- <faf23c39-af14-40ae-ad22-849aea87a4bd@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hTfSdor9s2Eco/nZ+zjCaCvvj/TCUMVCDCoG/P0Q5D2jFVcnQcil6bV31/RVVZa7vaS1bjZKFLkKyxX8fJ93Wh9U3src3kC7Ynp5wtWQcRJUQZ51Ny9KI7r40N6Y9efgLUoiHzkHWa71oWDNOM4TZdKsRWj19CDm90gPxqYFODA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hardanger.blackshift.org; spf=none smtp.mailfrom=hardanger.blackshift.org; arc=none smtp.client-ip=116.203.23.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hardanger.blackshift.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=hardanger.blackshift.org
+Received: from bjornoya.blackshift.org (unknown [IPv6:2003:e3:7f3d:bb00:dea6:32ff:feb1:177a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1)
+	 client-signature RSA-PSS (4096 bits))
+	(Client CN "bjornoya.blackshift.org", Issuer "R10" (verified OK))
+	by glittertind.blackshift.org (Postfix) with ESMTPS id 55E01678AD1
+	for <linux-spi@vger.kernel.org>; Thu, 26 Jun 2025 12:59:37 +0000 (UTC)
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+	by bjornoya.blackshift.org (Postfix) with SMTP id 2240C43114C
+	for <linux-spi@vger.kernel.org>; Thu, 26 Jun 2025 12:59:37 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bjornoya.blackshift.org (Postfix) with ESMTPS id 05D47431147;
+	Thu, 26 Jun 2025 12:59:36 +0000 (UTC)
+Received: from localhost (hardanger.blackshift.org [local])
+	by hardanger.blackshift.org (OpenSMTPD) with ESMTPA id 42c87de3;
+	Thu, 26 Jun 2025 12:59:35 +0000 (UTC)
+Date: Thu, 26 Jun 2025 14:59:35 +0200
+From: Marc Kleine-Budde <frogger@hardanger.blackshift.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: Raise limit on number of chip selects
+Message-ID: <pulc4xhdpqfseyugxloid6vvjeducuxghfuh7qre67k5v2zie3@wfpiyoyzalmf>
+References: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -68,53 +63,71 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ToakUxsci4O8JHpH"
+	protocol="application/pgp-signature"; boundary="wqkdkixsemn3jz2k"
 Content-Disposition: inline
-In-Reply-To: <faf23c39-af14-40ae-ad22-849aea87a4bd@linaro.org>
-X-Cookie: Do not cut switchbacks.
+In-Reply-To: <20240124-spi-multi-cs-max-v2-1-df6fc5ab1abc@kernel.org>
 
 
---ToakUxsci4O8JHpH
-Content-Type: text/plain; charset=us-ascii
+--wqkdkixsemn3jz2k
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] spi: Raise limit on number of chip selects
+MIME-Version: 1.0
 
-On Thu, Jun 26, 2025 at 11:04:50AM +0100, James Clark wrote:
-> On 25/06/2025 11:54 am, Arnd Bergmann wrote:
+On 24.01.2024 13:24:24, Mark Brown wrote:
+> As reported by Guenter the limit we've got on the number of chip selects =
+is
+> set too low for some systems, raise the limit. We should really remove the
+> hard coded limit but this is needed as a fix so let's do the simple thing
+> and raise the limit for now.
 
-> > In theory you may also want to turn off DMA mode for testing,
-> > which is supported by at least the DW_DMA driver.
+We currently have a use case for 24 chip selects.
 
-> > I see that SPI_TEGRA114 has a dependency on TEGRA20_APB_DMA,
-> > which is yet another variation. This is clearly done for
-> > usability purposes since that SPI driver only ever works with
-> > the specific DMA driver in practice, but it seems worse
-> > conceptually.
+> Fixes: 4d8ff6b0991d ("spi: Add multi-cs memories support in SPI core")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Suggested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> Changes in v2:
+> - Raise the limit further, the highest I've seen thus far is 12.
+> - Link to v1: https://lore.kernel.org/r/20240122-spi-multi-cs-max-v1-1-a7=
+e98cd5f6c7@kernel.org
+> ---
+>  include/linux/spi/spi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 471fe2ff9066..600fbd5daf68 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -21,7 +21,7 @@
+>  #include <uapi/linux/spi/spi.h>
+> =20
+>  /* Max no. of CS supported per spi device */
+> -#define SPI_CS_CNT_MAX 4
+> +#define SPI_CS_CNT_MAX 16
 
-> I can add it, I'm just questioning the usefulness of adding a new config
-> option that's unlikely to be used in reality. It only achieves the same
-> thing as doing #if CONFIG_DMA_ENGINE in one place in the code.
+Just further increase the limit to 24? Add a Kconfig symbol?
 
-> Ultimately we're just trying to fix some randconfig error, if we start
-> adding new knobs for people to turn just do that, there's a risk they won't
-> get used and we'll make configuring more complicated for people.
+regards,
+Marc
 
-Please just keep things simple, as you say nobody is likely to be
-actually trying to run such a configuration practically.
-
---ToakUxsci4O8JHpH
+--wqkdkixsemn3jz2k
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhdMEIACgkQJNaLcl1U
-h9D1uwf/W8rTmqkdTiKU7xj3NMtSpLL8sDI/4bHSRpuB6QSHXQDDRXuCYViMgF+U
-kVQwp4yY74+/yow0Vu1M/CvdDxHfQDMo3Lh9/nSm+NQFGWLUxcgfV3I9IkZPmAS7
-UOcbrJx7avU0i9o3To3WAhZHhej768yo0886n36qymiZwJdB2q4dIvx0tLw/Jy2a
-oqD9w6yp5c623561vSUWNida2FbAIp8vhNac7RiylL3mWtxcZE3BXN2Vrlz8D33+
-OIjxf129P5Up4H/lpD/mrhj7MS30zIjN1LjPKA3PcUJeWLTB8KEwTLGlEFPmdwAH
-dCoZNv9w8YgG58EXqf/LFoqsd1nLOQ==
-=MUyY
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmhdRDQACgkQDHRl3/mQ
+kZyyOwf+OXLwobSDwvA5qRpH1KP1AEORA/RtlDzudGtBpnaxtppG+/nc5YI1+icd
+/pozE0gF+623mhD2iA/IeNc74OHUHNnDdsHSa6LzHUZfdFjCkcs/lJWBPlMgoyGB
+U9Ewsf9Zu/4oCHYRLyxNWQKBwCfQ7EAkxYqryKvDeFh5+jiqFiQecKuv77EnH9c+
+Ffa7qk3bWX3Cn4zypT8a0Huih8kNygUP9/MMKylY3gKIMD5bXjsZX96uaXSylllu
+Nw8m0NbvkedOpLILA5crJm21gXWZV8IXALy2dvCKq7/9ArHtFgl668G78GDSJ4xb
+KdmZ+QRQS2HWOtdZZQYVmG3AGgJMNA==
+=TG5b
 -----END PGP SIGNATURE-----
 
---ToakUxsci4O8JHpH--
+--wqkdkixsemn3jz2k--
+
 
