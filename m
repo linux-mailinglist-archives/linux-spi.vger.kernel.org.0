@@ -1,94 +1,79 @@
-Return-Path: <linux-spi+bounces-8791-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8792-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E6A7AEAA0D
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 00:50:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22047AEAAFF
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 01:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66CE118870A1
-	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 22:49:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85E3F4E2B42
+	for <lists+linux-spi@lfdr.de>; Thu, 26 Jun 2025 23:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9C6227E80;
-	Thu, 26 Jun 2025 22:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03235226D1D;
+	Thu, 26 Jun 2025 23:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUnQGwQE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxPrTB21"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3743226D1D;
-	Thu, 26 Jun 2025 22:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65132264C7;
+	Thu, 26 Jun 2025 23:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750978089; cv=none; b=im4z8Ui8DZBas9JXDp+aaybxgqw4njttRjWDy4J5fCISEEdEaytLzFAP1qnwloCc1pQOmUWZ5Lq0gNBx4ngxiJzW4PPsHQUJNADgyIcAISWG51DdSGXIfidPZO9cWRPAdIhEM3y/kk9uz+s1UgMA4Z6bKtVcgwr5h/TYXGwctd8=
+	t=1750982155; cv=none; b=nmtlgcJCRQgYVzBywdt7j1mZyc6m5bSQdyoFcIkfqqIU6ww+c12OxlUCZmL4ne45VsNq35a2lHFdXZG/75b+68FHHl8yzSp45lF0QyNLteDiLqnENoRdoRqyW3HMQyk1ZrR5QQ2Kd9mZvUK1qR3iRQgHuO9YPGW2nA9vRMoufxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750978089; c=relaxed/simple;
-	bh=UOOZqUVVQFUoc7bZ295+uDKZCugXA5Wvp3MAd/fhdrM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=W1fZNz3jvkTRx4hC3Z6GmwnzvqbSfvGclWZyk7UWkP/jrv5WSSJ3S7S33y7P+TYIAYdGtts1QU8Lwi9cZkCLR5QpU75p9ruwSyHMi8Swa8itUKSs+Rh9eNzsTYWMlL59RV+RA6qYP2IM5gOe8spmzwvURY7Sy+Zke1/UJBo9y1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUnQGwQE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18258C4CEF0;
-	Thu, 26 Jun 2025 22:48:09 +0000 (UTC)
+	s=arc-20240116; t=1750982155; c=relaxed/simple;
+	bh=5q/h+3DJYN/pbUXgz2Yx1HCCXOVW+num0rrcpIOKu2c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QT+5Q9dTrKqb/IvaaZKXPxVeK1Pjwlp8h0Lap3v+68K6cnk9syTN8PAi4zOWirlkhAUuzeD0FvdmroR3IaKQvM6GaOiygSeVR6IvvxH3HrCqGcQXLTHU7nC4AS4fh/Yegg164Sfd2vse2DrG2fHW4pB+4fa8fu7H32rG7cSonek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxPrTB21; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B5F9C4CEEB;
+	Thu, 26 Jun 2025 23:55:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750978089;
-	bh=UOOZqUVVQFUoc7bZ295+uDKZCugXA5Wvp3MAd/fhdrM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gUnQGwQEsJ9ge0VZgXMVu9Lv/49qvmNlKocha/kF6+BrmG2ufSjIXEmYLD/HB41cv
-	 nzvk52EAXwiC6JkuCNvDsnaf5iq7/iafMHo0AnCrkeJBopgzhsCkF8MkwlbWwgpKKE
-	 UYDEAYkODZT57+HuzQ+J64ivbHy1KdhKgIA9SeRJeu27BqyZlt7dDrub1653yzZfmu
-	 ASC2m1uhUTZlST2RooJ1KgL3VGqpX4K454reuLGnb8xx+Uw+5v0C4uejj0voJtqkDh
-	 trIBg73kgc7jgrdpy/ARO543hpPEUzc9CICIxNdlIp5YYdrcAGNEDinJNY3j9trKKx
-	 d+DS1yRWEZrWQ==
-From: Vinod Koul <vkoul@kernel.org>
-To: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-Cc: Mark Brown <broonie@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20250610082256.400492-1-csokas.bence@prolan.hu>
-References: <20250610082256.400492-1-csokas.bence@prolan.hu>
-Subject: Re: [PATCH v7 0/2] Add `devm_dma_request_chan()` to simplify probe
- path in atmel-quadspi.c
-Message-Id: <175097808905.79884.10352681234846740562.b4-ty@kernel.org>
-Date: Thu, 26 Jun 2025 15:48:09 -0700
+	s=k20201202; t=1750982155;
+	bh=5q/h+3DJYN/pbUXgz2Yx1HCCXOVW+num0rrcpIOKu2c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YxPrTB21Ngv6csFOPm2RQ0pN5AQcFVaGIzqdvwoTnjBPOFmSpJfopuZsaic+h8J/j
+	 rYhMDXbKbC+VSu6JX9upHv0GazowbQKZakQxSlxaCYbI1Y0Sm5qTbrOakFTpHsXbAt
+	 wrkppV00le/etXCgN/5HoQNRnZZ1Eq1lfU3wsQMy+KFi4xhHVGKn05VyyJ5dLgFvNx
+	 nnSpPHv+lvPntrccAXbdXf/efcQQbT90PrdbntZhGPFY5EWM31MSN5PGHgbQaIc58c
+	 mHlh9XP9/UzxNhAuFQnQNqzKPaWSnDZSWffTGZxfMBg6OeXuZtdzYnZwyAVMUP/1Xm
+	 Kqn1U+OTYhGKw==
+Date: Thu, 26 Jun 2025 18:55:54 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+	imx@lists.linux.dev, devicetree@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
+Message-ID: <175098215389.1435530.4404307945311612465.robh@kernel.org>
+References: <20250625215255.2640538-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250625215255.2640538-1-Frank.Li@nxp.com>
 
 
-On Tue, 10 Jun 2025 10:22:52 +0200, Bence Csókás wrote:
-> The probe function of the atmel-quadspi driver got quite convoluted,
-> especially since the addition of SAMA7G5 support, that was forward-ported
-> from an older vendor kernel. To alleivate this - and similar problems in
-> the future - an effort was made to migrate as many functions as possible,
-> to their devm_ managed counterparts. Patch 1/2 adds the new
-> `devm_dma_request_chan()` function. Patch 2/2 then uses this APIs to
-> simplify the probe() function.
+On Wed, 25 Jun 2025 17:52:54 -0400, Frank Li wrote:
+> Add lpc3220 spi controller binding doc to fix below CHECK_DTBS warning:
+>   arch/arm/boot/dts/nxp/lpc/lpc3250-ea3250.dtb: /ahb/apb/spi@20088000: failed to match any schema with compatible: ['nxp,lpc3220-spi']
 > 
-> [...]
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../bindings/spi/nxp,lpc3220-spi.yaml         | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/nxp,lpc3220-spi.yaml
+> 
 
-Applied, thanks!
-
-[1/2] dma: Add devm_dma_request_chan()
-      commit: 08bf1663c21a3e815eda28fa242d84c945ca3b94
-[2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
-      (no commit info)
-
-Best regards,
--- 
-~Vinod
-
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
