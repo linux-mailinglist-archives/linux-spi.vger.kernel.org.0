@@ -1,99 +1,80 @@
-Return-Path: <linux-spi+bounces-8807-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8808-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E16EAEB5AF
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 13:03:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20F14AEB605
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 13:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBE274A46BA
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 11:03:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5317C564C78
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 11:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BAF42D2391;
-	Fri, 27 Jun 2025 11:01:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79162980B4;
+	Fri, 27 Jun 2025 11:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vuim5axm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkQ9UN54"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E134029CB3C;
-	Fri, 27 Jun 2025 11:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B3D1DE2AD
+	for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 11:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751022107; cv=none; b=tp/7GkMdS6DQzYqXylnqE1Jo23SS8xc9zBZpPLVNXwz9m/ws0sLdLw2p8U3+48syp9urLSDk1Tj9ZtEfyJDgrt9v7+JMVFPxmnrSTP1SCIbVeDe1ATBYUCHgOm5xp9nGVWUojm3Hkj3BLCZ7BWGMhtSCX/USIiBnBq0WZdep9zw=
+	t=1751022579; cv=none; b=s9UQ9f2PbDnQDr6Xmn/IXWbiZvoV0WbyjGNIza2FSfUrHRg9UdWnrvev/iymXB32OyH+eD6519P3W0Yj0Zc9ylDHpBdLIMWXiAMh8jozM3VnQqYEil6wTndJQYkNGXM9rvOHziwYcguVoecwrxVkqbgOobL/oDGx/UjGDcuUt/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751022107; c=relaxed/simple;
-	bh=A1bxFNSWz35yFvhEfWY+CykpQc2zGdJBAlx9+90e2dY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=BbyE+JDoiV8JDf2VHJQge6VIiS6I+viCr67VZ7rXvF/gU37J+2jZ8ceQSWXMKktK9/ZhP1nGCqMVEmRK4ng4R5BXG/qCnuJf9P0fUkbYl2vCuleSmUFPuXiPBNivqQtcFERGbORUXA2eRSQ08vDN+qpepdGtw8EpuyYumP59tTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vuim5axm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B3FC4CEEB;
-	Fri, 27 Jun 2025 11:01:36 +0000 (UTC)
+	s=arc-20240116; t=1751022579; c=relaxed/simple;
+	bh=MWLSd1nLeiDyGdriFe8wEdJh0F0tF1t23X8GqTXVPig=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ZxV2htOyH0dYETyLnG6kydjo1n32jcL3iGWVhFAd2wAU2PUmrrfflPpN397GAqM0SEMRCqiU50n3nZos/g4vy+oPPVRQ99yHGEvuwsqepuXoCtBJML9pxDHOXJDDqlgHT+7PUd/r2qfDe3GLhznBt4T5Glin0SYC/QMYbGRri0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkQ9UN54; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034B0C4CEE3;
+	Fri, 27 Jun 2025 11:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751022106;
-	bh=A1bxFNSWz35yFvhEfWY+CykpQc2zGdJBAlx9+90e2dY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Vuim5axmcv1budcLMxptutxipo6ZXvXL5obJaxzRyYtPfv94hXtUQ50S0joXsI5o3
-	 9kZN1cwE8jTBmE2kvjaQ9swQ5QN15VrgHV1Zu8UPHTSJE5cbn4KCZswpmABjlYHyQC
-	 Fx1fErSFiH43/LDVA7C8QrVBo/5V9REKDIMxsXNsOT3KF3J+raB9qbpnUV3YIt3BYC
-	 Hu9pjITmoTEsHzLTi09CCXiEtuPPEPwJ9JhJXoSNvXtw9oL46iotjuwmYmZmyc64Hg
-	 oAJ4v/eYtXsLLnPpjdwaUKZ4dpYaxQqaXBM5UeKOw7kw0BA7mQdFx0f73RivtvOwdk
-	 1iC2N58+q8Tog==
-From: Mark Brown <broonie@kernel.org>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Frank Li <Frank.Li@nxp.com>
-Cc: imx@lists.linux.dev
-In-Reply-To: <20250625215255.2640538-1-Frank.Li@nxp.com>
-References: <20250625215255.2640538-1-Frank.Li@nxp.com>
-Subject: Re: [PATCH 1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
-Message-Id: <175102209646.386964.15013271820664016381.b4-ty@kernel.org>
-Date: Fri, 27 Jun 2025 12:01:36 +0100
+	s=k20201202; t=1751022578;
+	bh=MWLSd1nLeiDyGdriFe8wEdJh0F0tF1t23X8GqTXVPig=;
+	h=Subject:From:Date:To:From;
+	b=qkQ9UN542QdWd4FFeUFml5rMqgsASiPH+32XgLlpURHPA7/bkGY0VPstCgsTeoSXO
+	 zvFgZi+j+dVPQVOSK4ysZYdzSjN5wvtzd/OuRYFGSKs8feEqwP7uTcSoWaGgE/O51T
+	 f+PA9pi6CS31URI5y7FRd9I9gZyRYjfzaXSPNPkjTPkcpBTyDg8UevLv6HNQ7Iuq8L
+	 x627E+M4HS5nwdYk2Zox+GYkMBlLrMLARyaJ6XTSU3n90YgcrDNTLmg8tSsn0Foomu
+	 /dtYoihSWIPPI94AgzHgHfIZtrhV0yUSfLKiYO68z9kwyjyuPpjgRgd7gHYEc9Tk6a
+	 FMqU0HaKEVL6Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 380F3380DBEE;
+	Fri, 27 Jun 2025 11:10:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-07fe9
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175102260382.1885559.3360950230513796726.git-patchwork-summary@kernel.org>
+Date: Fri, 27 Jun 2025 11:10:03 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 25 Jun 2025 17:52:54 -0400, Frank Li wrote:
-> Add lpc3220 spi controller binding doc to fix below CHECK_DTBS warning:
->   arch/arm/boot/dts/nxp/lpc/lpc3250-ea3250.dtb: /ahb/apb/spi@20088000: failed to match any schema with compatible: ['nxp,lpc3220-spi']
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
+  Submitter: Frank Li <Frank.Li@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=975987
+  Lore link: https://lore.kernel.org/r/20250625215255.2640538-1-Frank.Li@nxp.com
 
-Thanks!
 
-[1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
-      commit: ac4c064f67d3cdf9118b9b09c1e3b28b6c10a7ea
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
