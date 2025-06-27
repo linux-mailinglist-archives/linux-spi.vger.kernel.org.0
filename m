@@ -1,183 +1,141 @@
-Return-Path: <linux-spi+bounces-8823-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8824-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBB9DAEBB9D
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 17:25:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AE24AEBC7C
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 17:53:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1076617C2DC
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 15:25:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B73BF16A14F
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 15:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B352E8DF1;
-	Fri, 27 Jun 2025 15:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 793B62EA167;
+	Fri, 27 Jun 2025 15:52:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Mm/EsKR7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyPdnJ7Q"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3242980BF
-	for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 15:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5152EA14C;
+	Fri, 27 Jun 2025 15:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751037924; cv=none; b=MRnwQE82uT1Vda8psS9Zb4ydb1ShWWtGXb3Vynr/8/ehXgJTDCv2Kic6a1vGVuqJvzzmGQmBt4M8ec4dkKcnzoUqepvPP0w07ioa9ZsyfzD/R4wr+MAy86hv0OoKwKd5lQjHcz94b/ZBFhdOBP417IZDZudzw6Lb+Ix5d/93aeE=
+	t=1751039522; cv=none; b=LEw7Nl1HIzJZGatY7RH84Lx86NIdHR+BQFd18S2OJq5IxqiIl2XFYmEfHGHDJachz8frR5dS2JqLNvVPtp27gSQcY16fvWPp+71ZQNPdms5jOGKiXPrhIfcDjl+NVThwjlmRhEgY2NsFB4KCfmtaZlpBByKmE75wGgD3ZFJJV7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751037924; c=relaxed/simple;
-	bh=PPP9dYyOg8N2Au2CCDUbGXRJ5XeaAvBQwjH9ODIo3k4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lM7PapGty3GV5tfLQfvAoMTbfVfIpMM+a1DpXs5OjKmYWF6dZMhQ5qZ2VAayPNhGNLDkxgZjuDxrgo65Xe/E1/NUIkUuJsI3ydG0dX+BB5AHJm4vBdPDoHJeUBP97fXTh1zr+fG3CO7ZEghlqqWIpWsfQf4cJNxevFsdgeJ8c1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Mm/EsKR7; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-40a4bf1ebb7so10417b6e.0
-        for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 08:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751037922; x=1751642722; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1GL305iW8U70/WbPcKPNqjt0qQFBTkqtisgtq1PzurQ=;
-        b=Mm/EsKR7oNzyKnvR576soaIO2Xmst8rjmNCWo6Koh/eCDu8fS9aQa/YFjElqAPx4T1
-         q6JfUAc2W6z1pWy+dH9op/uUMqlo6AJmFrppPmFrYifRXtuP93TYRuTVkc4K/Qn9czPl
-         3kquyTJXsz3hw7YonxCcMBtx0qoPjpO21laHCCDLYsafL5BmAz751YvdVlPmm7BqzBmW
-         qORbx/NFWMuE+KiDAIsgBJ5MnPRYfZXiVZR/dxTGdfOvO7eaPdLJZNQt5cw/7AR75IYY
-         EJZo5RJ2c3xQ2OCGnh9l0H0Ykv0cQ8vQMbv9xvHbCd31B+/PELgEhl4x/klNcsvtlwFG
-         lswg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751037922; x=1751642722;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1GL305iW8U70/WbPcKPNqjt0qQFBTkqtisgtq1PzurQ=;
-        b=sfMtA+b6PBBqg+20ao6ix6cKYvAZhCFjHVwb0D4DJuyhpsosJBWb8T9fZloc3DpXVU
-         SoNfDxX/2wCtyAPKsqcDeM4KwQa4BuLPsm6WINMGXrhMUnW1qpx7RMK4vIJ3YNSnHVLf
-         vpsmzezouVYtG32dKgTEGnl6ZgjoSbrL2u0UezZLYJw/6cPpd4aZnO0BYZ728zHrFck2
-         e25f1weMqH0O0CuX2AYOJQspoMbwSMRTVtTWafu5+ccUKUTB3SUCpFlo9rHDHxxJO49K
-         3lChHrm+2WpCguYbKXsFrSF4qliJEvov0ZjmAJcrD5a3o4LUmahJRfvdZfFCY6zU1kHK
-         I+uA==
-X-Gm-Message-State: AOJu0YwMYXxb8EFcTm4xEp5n0ng7mXR59fIuIoryRgPEnsavtW0itaPn
-	+XOY/rYpyTROl53QMGMqLBYm4K7h4/7k7Zctydh2XPQKpfGYflm+FGqhFBlPItlc5uFWU2fhDiB
-	0linjHQY=
-X-Gm-Gg: ASbGnctKN0gy2LnFnQ4ob6HiRDedOPOoYX4ApN/vtpYQzwBytVwyYcbB89xGIYW/0Pf
-	sn4r5D2TgudqX2Xibe7z7JC7f9K2FQjH2hOcYeQlor4q/CHpTo/4bHPZKDr/hq5eefy33gKdeez
-	dS3ZPegHXOzUrCobMYrASAFSHhdwU24HKtZqmhBnB3BJlwgvjgY59G6NmtPl7ZgAcpsLWNnOfGp
-	VclBM2GqofHZmJS+GDsLO96WbbIIPC6NnloMplR6X4Jm14E0uVRyRKI47g6/IRgLYPI2IyOe8X6
-	ztt3XN+oHK2odNLRo93l996h/A8oeVvX9f/Vs58Gug5kQziDyxn4zSJ0OHAfEVoK6TVPcQ==
-X-Google-Smtp-Source: AGHT+IHAUxWWr1y1uxwbsFaIwnq5meydtkfKIk/oo6bIi9Yb+hIAOaEx1JrFYQ6LwNKvCWxfR4SIzQ==
-X-Received: by 2002:a05:6808:1902:b0:3fa:3a0:137b with SMTP id 5614622812f47-40b33e37050mr3123295b6e.29.1751037922100;
-        Fri, 27 Jun 2025 08:25:22 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700:e9c1:9891:4bfd:dadf])
-        by smtp.gmail.com with UTF8SMTPSA id 5614622812f47-40b3243dc52sm388059b6e.46.2025.06.27.08.25.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 08:25:21 -0700 (PDT)
-Date: Fri, 27 Jun 2025 10:25:19 -0500
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-Cc: linux-spi@vger.kernel.org
-Subject: [bug report] spi: stm32: use STM32 DMA with STM32 MDMA to enhance
- DDR use
-Message-ID: <ef580688-54a0-44c0-8de0-25303bb021a0@sabinyo.mountain>
+	s=arc-20240116; t=1751039522; c=relaxed/simple;
+	bh=f0UYA/EuZoGSHsVhZD3Fus+HSK9WipcpF5RxkV+BP5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGV7y1jQ45g4SXi1xJX7Ki495PudN3emL0VPxvAyvWaOzY5/KK5XiUr++9Ccp4AHluPh7dUAN9kA0ie1Q5HkWuzKi+sBhguyJQxwBK5DIkBlkyUL/ol5BI6D79XMNwvJbGOD4C2meXk3Zp1nM+FkGYN2IWi6WvehwGexpsRQTA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyPdnJ7Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B088C4CEED;
+	Fri, 27 Jun 2025 15:52:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751039521;
+	bh=f0UYA/EuZoGSHsVhZD3Fus+HSK9WipcpF5RxkV+BP5o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pyPdnJ7Q7HuuIiKgrWaMDcrBwxGTZiscgxJc6vl+XrICm0G79l/w04xJOgIgSsiT4
+	 nyJKeqIT4LG/SdOrP9BThyVFe+sK/VvM3jidhmIf4FL5wNqqTU5vXGLNIqJcAXv1fB
+	 qKTpyLWg6gUYFK9zYNPKm3MeePbH4VzwGEN7jkKanOyl7pqQcVspMU/YR0KWDgEe+y
+	 Zv5XPVN4hnsL9/6Codf3WfenmJLS/Wop+OvwNF2usYFuIMsbN5lfU8nIT0Fa6ZEQ9G
+	 1eaaz5yVdyekzbuVGyJ58FdAsHP1VfbszTS+QL47CPNvx+4zmaedL/KBAtCkPkCxRv
+	 NsSgI1XvWhPIA==
+Date: Fri, 27 Jun 2025 10:52:00 -0500
+From: Rob Herring <robh@kernel.org>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>,
+	Derek Kiernan <derek.kiernan@amd.com>,
+	Dragan Cvetic <dragan.cvetic@amd.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 05/28] bus: simple-pm-bus: Populate child nodes at
+ probe
+Message-ID: <20250627155200.GB3234475-robh@kernel.org>
+References: <20250613134817.681832-1-herve.codina@bootlin.com>
+ <20250613134817.681832-6-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250613134817.681832-6-herve.codina@bootlin.com>
 
-Hello Clément Le Goffic,
+On Fri, Jun 13, 2025 at 03:47:45PM +0200, Herve Codina wrote:
+> The simple-pm-bus driver handles several simple busses. When it is used
+> with busses other than a compatible "simple-pm-bus", it doesn't populate
+> its child devices during its probe.
+> 
+> This confuses fw_devlink and results in wrong or missing devlinks.
+> 
+> Once a driver is bound to a device and the probe() has been called,
+> device_links_driver_bound() is called.
+> 
+> This function performs operation based on the following assumption:
+>     If a child firmware node of the bound device is not added as a
+>     device, it will never be added.
+> 
+> Among operations done on fw_devlinks of those "never be added" devices,
+> device_links_driver_bound() changes their supplier.
+> 
+> With devices attached to a simple-bus compatible device, this change
+> leads to wrong devlinks where supplier of devices points to the device
+> parent (i.e. simple-bus compatible device) instead of the device itself
+> (i.e. simple-bus child).
+> 
+> When the device attached to the simple-bus is removed, because devlinks
+> are not correct, its consumers are not removed first.
+> 
+> In order to have correct devlinks created, make the simple-pm-bus driver
+> compliant with the devlink assumption and create its child devices
+> during its probe.
 
-Commit d17dd2f1d8a1 ("spi: stm32: use STM32 DMA with STM32 MDMA to
-enhance DDR use") from Jun 16, 2025 (linux-next), leads to the
-following Smatch static checker warning:
+IIRC, skipping child nodes was because there were problems with 
+letting the driver handle 'simple-bus'. How does this avoid that now?
 
-	drivers/spi/spi-stm32.c:2489 stm32_spi_probe()
-	error: we previously assumed 'spi->sram_pool' could be null (see line 2432)
+The root of_platform_populate() that created the simple-bus device that 
+gets us to the probe here will continue descending into child nodes. 
+Meanwhile, the probe here is also descending into those same child 
+nodes. Best case, that's just redundant. Worst case, won't you still 
+have the same problem if the first of_platform_populate() creates the 
+devices first?
 
-drivers/spi/spi-stm32.c
-    2428         if (spi->dma_tx || spi->dma_rx)
-    2429                 ctrl->can_dma = stm32_spi_can_dma;
-    2430 
-    2431         spi->sram_pool = of_gen_pool_get(pdev->dev.of_node, "sram", 0);
-    2432         if (spi->sram_pool) {
-
-spi->sram_pool can be NULL
-
-    2433                 spi->sram_rx_buf_size = gen_pool_size(spi->sram_pool);
-    2434                 dev_info(&pdev->dev, "SRAM pool: %zu KiB for RX DMA/MDMA chaining\n",
-    2435                          spi->sram_rx_buf_size / 1024);
-    2436                 spi->sram_rx_buf = gen_pool_dma_zalloc(spi->sram_pool, spi->sram_rx_buf_size,
-    2437                                                        &spi->sram_dma_rx_buf);
-    2438                 if (!spi->sram_rx_buf) {
-    2439                         dev_err(&pdev->dev, "failed to allocate SRAM buffer\n");
-    2440                 } else {
-    2441                         spi->mdma_rx = dma_request_chan(spi->dev, "rxm2m");
-    2442                         if (IS_ERR(spi->mdma_rx)) {
-    2443                                 ret = PTR_ERR(spi->mdma_rx);
-    2444                                 spi->mdma_rx = NULL;
-    2445                                 if (ret == -EPROBE_DEFER) {
-    2446                                         goto err_pool_free;
-    2447                                 } else {
-    2448                                         gen_pool_free(spi->sram_pool,
-    2449                                                       (unsigned long)spi->sram_rx_buf,
-    2450                                                       spi->sram_rx_buf_size);
-    2451                                         dev_warn(&pdev->dev,
-    2452                                                  "failed to request rx mdma channel, DMA only\n");
-    2453                                 }
-    2454                         }
-    2455                 }
-    2456         }
-    2457 
-    2458         pm_runtime_set_autosuspend_delay(&pdev->dev,
-    2459                                          STM32_SPI_AUTOSUSPEND_DELAY);
-    2460         pm_runtime_use_autosuspend(&pdev->dev);
-    2461         pm_runtime_set_active(&pdev->dev);
-    2462         pm_runtime_get_noresume(&pdev->dev);
-    2463         pm_runtime_enable(&pdev->dev);
-    2464 
-    2465         ret = spi_register_controller(ctrl);
-    2466         if (ret) {
-    2467                 dev_err(&pdev->dev, "spi controller registration failed: %d\n",
-    2468                         ret);
-    2469                 goto err_pm_disable;
-    2470         }
-    2471 
-    2472         pm_runtime_mark_last_busy(&pdev->dev);
-    2473         pm_runtime_put_autosuspend(&pdev->dev);
-    2474 
-    2475         dev_info(&pdev->dev, "driver initialized (%s mode)\n",
-    2476                  STM32_SPI_HOST_MODE(spi) ? "host" : "device");
-    2477 
-    2478         return 0;
-    2479 
-    2480 err_pm_disable:
-    2481         pm_runtime_disable(&pdev->dev);
-    2482         pm_runtime_put_noidle(&pdev->dev);
-    2483         pm_runtime_set_suspended(&pdev->dev);
-    2484         pm_runtime_dont_use_autosuspend(&pdev->dev);
-    2485 
-    2486         if (spi->mdma_rx)
-    2487                 dma_release_channel(spi->mdma_rx);
-    2488 err_pool_free:
---> 2489         gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf, spi->sram_rx_buf_size);
-                               ^^^^^^^^^^^^^^
-Unchecked dereference.
-
-    2490 err_dma_release:
-    2491         if (spi->dma_tx)
-    2492                 dma_release_channel(spi->dma_tx);
-    2493         if (spi->dma_rx)
-    2494                 dma_release_channel(spi->dma_rx);
-    2495 err_clk_disable:
-    2496         clk_disable_unprepare(spi->clk);
-    2497 
-    2498         return ret;
-    2499 }
-
-regards,
-dan carpenter
+Rob
 
