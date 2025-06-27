@@ -1,61 +1,60 @@
-Return-Path: <linux-spi+bounces-8834-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8835-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67618AEC080
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 21:59:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5397AEC0F0
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 22:28:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A53493BE8F0
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 19:59:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58E0B7A1F49
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 20:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BCC2E92D1;
-	Fri, 27 Jun 2025 19:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA6E220698;
+	Fri, 27 Jun 2025 20:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jl75e3BH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5yqlZCz"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC7F212D97;
-	Fri, 27 Jun 2025 19:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF7DC2FB;
+	Fri, 27 Jun 2025 20:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751054394; cv=none; b=mSK/STpPSdxMOr/FPXM5owd/P2sg+SFiIbZALslxsK2x2TU4kxyrzOTeuXb5O+jqr+PNYpAYodyQPDCEcH/6c/QWc5sl/YYKVgCOAWcnrZk1OcjpuU8+YJLr2125rDD3+LL3OmUvSb00cTZAkVfG+wwQN/mzMxPvucL4qjQfB9g=
+	t=1751056115; cv=none; b=BFw0uy0GelsMyKcxmglk4WyGKkzF62O7gC9pU+eAE7kKlX50i1qxWa67uDX1uj+l/C67k7RbLMua+Doq3OOUNdkSUve0sBst0GUzk7jdcPrfLSKITYd7oS0QknCBK2xsoOj9GPjYIe0vqoPmVk4eTV8Yp0qKXVn3kCNccmS3UEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751054394; c=relaxed/simple;
-	bh=4mRsa86Oo0RFDcooBdEjv4m67WRLaTXVEDibhrLW7SY=;
+	s=arc-20240116; t=1751056115; c=relaxed/simple;
+	bh=l5bThpeYgD4nwLUsGFwxtgtbBvr/hpMTIowA58WLrsw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/e1eSWbacYi9qgJWYusqOXIyuhawaXAnLPJ3WZybY7ll28Hb8ZRlp4m+NP6bQ/jH+jPfs3cWk9g14hVyzQPZG38rkivsLVoiZ+U5u1zVmqKU8l2uK4oASsDHvZd6Q31DdrClDFK6Ar662UUAh8Ac/Az5V7DxV4a6auTCUBqzcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jl75e3BH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A629EC4CEE3;
-	Fri, 27 Jun 2025 19:59:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TNJaQR9jSwppfvr+3TqVd95Fiay2rMlBXshzFypVI0h/akOpfbIoFwWovg1iYD9yW4Cij5DLcXCLKoH7MwSIbXv/M+VapeIpAK1OKgD8ddpG4jt1ohN6zd+eHsdVZ2RQqpYNg9arXFUjurYP4v2Q1Nct/LQS+uEjkRHekdR1XUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5yqlZCz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADAEC4CEE3;
+	Fri, 27 Jun 2025 20:28:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751054393;
-	bh=4mRsa86Oo0RFDcooBdEjv4m67WRLaTXVEDibhrLW7SY=;
+	s=k20201202; t=1751056114;
+	bh=l5bThpeYgD4nwLUsGFwxtgtbBvr/hpMTIowA58WLrsw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jl75e3BHTr61OF4y9Ruh5ZrjXbWeATtjFLcSR4SLt8Y7t+ldMj3iilKEXNTROseP8
-	 ugBzgD8m/W+9q1q/+7hHmEiV4mwrPx6vyQfXxuxjMMAJtUdhN63fzVt6KiBr+cixed
-	 95ljvUeD31tVeHd9TBFjpPnlda4XFeel3/f8THBjIFion7z6/iQpVqAy+NfCzHWMOE
-	 jwf/vNK9/PPg0Peon5qT+yPaCwTRowUFGMWp+/cFRdb2Nel1A+UlM3R8vv3H2nx0tC
-	 EraGgWC2idAENTo3Cf6NN3DY2jRcpJsz+Ri6C2Xu8RHkscCP2Ou2ItrUSSsIkAXiBz
-	 DucY2roYat2dQ==
-Date: Fri, 27 Jun 2025 14:59:52 -0500
+	b=k5yqlZCzC+s9BYC0oBPqjqjF9B5PII9nJmRMoxO7g+8Jb3eKovxDYc/ezeL2hutE/
+	 V9jpKQnCsByJTXd79boeLzq9eLIm8PSuy3ppQUiys+bCw/v1BRt+2SmRZ+vE2fWej2
+	 fmLtfhMmVZikXVUQ6xER+7hT2dteoPVHJlDNuy0I0eVwtbc49mvhJkl6aPzeSNTxgj
+	 YMZXXeO2LxSNBFoQnvxEFVj3LNlTuCQGYmL+NJLlSoHIg2XohETTC/h8BBpUGX/bq4
+	 HQPjeX1ZBQ6M1jHw+oryFTqVti5ddJVj3ajNWpFOUdIWXHT76KdX7RaCPKvbzg03xB
+	 fpE1EYfJ7pLcA==
+Date: Fri, 27 Jun 2025 15:28:33 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Michael Hennerich <Michael.Hennerich@analog.com>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-spi@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
-Subject: Re: [PATCH 6/9] dt-bindings: trigger-source: add ADI Util
- Sigma-Delta SPI
-Message-ID: <175105439247.4081173.1981785333834339523.robh@kernel.org>
-References: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-0-0766f6297430@baylibre.com>
- <20250620-iio-adc-ad7173-add-spi-offload-support-v1-6-0766f6297430@baylibre.com>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: Mark Brown <broonie@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-spi@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 2/6] spi: dt-bindings: Document the RZ/V2H(P) RSPI
+Message-ID: <175105611355.30065.8146598698552154225.robh@kernel.org>
+References: <20250624192304.338979-1-fabrizio.castro.jz@renesas.com>
+ <20250624192304.338979-3-fabrizio.castro.jz@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,20 +63,18 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250620-iio-adc-ad7173-add-spi-offload-support-v1-6-0766f6297430@baylibre.com>
+In-Reply-To: <20250624192304.338979-3-fabrizio.castro.jz@renesas.com>
 
 
-On Fri, 20 Jun 2025 17:20:12 -0500, David Lechner wrote:
-> Add new binding for the ADI Util Sigma-Delta SPI FPGA IP Core.
+On Tue, 24 Jun 2025 20:23:00 +0100, Fabrizio Castro wrote:
+> Add dt-bindings for the RSPI IP found inside the Renesas RZ/V2H(P)
+> SoC.
 > 
-> This is used to trigger a SPI offload based on a RDY signal from the
-> ADC while masking out other signals on the same line.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 > ---
->  .../trigger-source/adi,util-sigma-delta-spi.yaml   | 49 ++++++++++++++++++++++
->  MAINTAINERS                                        |  5 +++
->  2 files changed, 54 insertions(+)
+>  .../bindings/spi/renesas,rzv2h-rspi.yaml      | 96 +++++++++++++++++++
+>  1 file changed, 96 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
 > 
 
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
