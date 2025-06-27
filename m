@@ -1,79 +1,79 @@
-Return-Path: <linux-spi+bounces-8803-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8802-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890B7AEB483
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 12:26:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00419AEB495
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 12:28:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 659227AF7E2
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 10:24:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88FF7642AAD
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 10:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6937E2D3EDF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58BC72D3EDC;
 	Fri, 27 Jun 2025 10:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kTubgysl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ou2fT85A"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461F3299943
-	for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 10:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F324D2C032C
+	for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 10:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751019738; cv=none; b=CiMqBEFRe03FPKyQhG7CPP5HeEs+eSjlMpJTpSJpOfkjytQRtvbJAKBS3tZ5ufMDh7MNL8qnPfvZaovpe/DhSjnPdCsyqNMc2oZOoZn7z1c3nibHG90poV1JjP3zWbhhJ6YsUrmO2d19j9xeSKXC+y1SmwWtMqFXJS9hCONRXK8=
+	t=1751019738; cv=none; b=uhmVfU+SH2smGu8TzhVoRT2uIH9dXSprDF8tZy0sHtGg8haL8Ymm9Ttj8LNXbRtrHlnl81kDbPssJ8PVEjZDh1eH4Nwff3J5rvbPFNd7uTYLxYT1YeMUVGNhNsC4JAjjL5GVWE+RlY2aOzWtw9Z+P7PdpRFG7vczrq0h/SCU5qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751019738; c=relaxed/simple;
-	bh=W5RB8ofdrCpDCxp+XelolJjRKHlOwBuWzYdhjuY+18A=;
+	bh=Z8frqqy30nG+OKukuzOwifOyefXL07H88wTOTdMsN+8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FTIyGF/2XvfoUpGWtJ0s/Um9L4sAulZGCNFNgpjO+VhLg8/BYmepEijtn58NjArBD0PxfyS8sMy+1gPhKixnoYLYM4wEXvjIisEzG+ffAckKWceW9/hMHfT7QMTbwWvunTs6tqQZyN1yjvjrpSJgbSGYGgtoLcPNl+BjQ2iPxx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kTubgysl; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:To:Cc; b=EKWQqgsWpJtdj2gsWJRczMGGdKNR2Rrz/ZC+CWhaeSIJvWV3S941wptIrZ6qPviKizulvsqqi/t24dSWPwvD8TRrALr5eauL+dTvc7boHTyCLMZzdkJIzJdg1gACVGk1Yb3VP6WdaFdNh/VsoJ5P0FaSokEIPg5oiJ3t38rTqvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ou2fT85A; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45377776935so21255465e9.3
-        for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 03:22:13 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3a53359dea5so1232786f8f.0
+        for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 03:22:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1751019732; x=1751624532; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1751019733; x=1751624533; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q1FhM4WVr7ZEX7RFMvmUpdlE0FbKvEgU2ax6ATn6XZY=;
-        b=kTubgyslG8YTj8izLLDgl5CWuMoDOxDfur6QV6TfLEi0F9G+J7oMCdTDNHTvQt1m+Q
-         dVEI8Yi03bnlsQJNve0bkXwlxjaq13dEpE2khBN91F5a1M06xvYNi/HMTdGOue3Lih1d
-         /M041DSg2G4/GlvlOUMPMu/X8MqvA6Bpt9cBoY7n1XYGb660+W1MWXXZ0JM+FgBbl9AK
-         UBDc3v1QGp+s/w/OlG3a7q26wMErlrg7v++ox0KHtsQcMDjr01dC5lPS2VPS9A+OdU2c
-         l5Ijy2KlGhK5ZmdPFs/uy6AknoK2szcmHgFSaOg5hv2gsJbqe0XQGyfuh0GsKAqN5P9W
-         IlCA==
+        bh=lbrbKVrAfsFPHXHgG1UiQWZ27CeKEpZkvt6/TbfRDzE=;
+        b=Ou2fT85AH+BRsNrhjgVDHQJijwhNjzTDfbw3VKxqdKPrp9Z4PAtzvlSuVRuJmdd+Eu
+         dXvhFMubcVTgccRmY82cnX73NQj0Q4SYyTGNI7pck90nNxST8kdc9e5OY+rsbESe5vgW
+         vPwzj+PTcwRf2P1qKk4zhYaBa9+r9hd/XcZyyvYqbnzwlwEqhxVvviZiti0NhQfOq5H1
+         oI0tIY+m0kDOCR87f4+65uZR/cjzm1PmAxiiSHLPcz5Lm2eaHZ+ddF40FzGQB8ayU8bP
+         nXf8GeDxQQXyQSSFkj6poGCy2jJvaUpLCzwAwoixQowxEJw/cK3LR+gjAOlS1b07grPb
+         IfeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751019732; x=1751624532;
+        d=1e100.net; s=20230601; t=1751019733; x=1751624533;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q1FhM4WVr7ZEX7RFMvmUpdlE0FbKvEgU2ax6ATn6XZY=;
-        b=td6V5cStGjOGe+lSp3ROgQbmzT2UdFPvPDyRlqYDCDkJF2TWD6WPzpKAZ7sx/7QdKi
-         tT+CQB0i0sSMIOOcq30S2bil50/Gybaev9cbCm0KvNVgRBpspibh1TrRJ8fC1QNMY87e
-         X8GltMzDH5ljUf7O4bYHkk8Uhsw/k8Qm5+LNtwxT+xbavB/zmxgMTO2qcKVz1t7clN3y
-         9CoROm9FwT0XhqV4Oh9ZBjSN8hWM0lrkaJSerUh32baXERpv31jlySe49+tXxXRH8MuB
-         Bs3ITz4bNUu2TpxG/zBmc7WmbSLLbtKzvmZuLp8Pe2+bXlN59KDuuux2KbDm3TGv1G+t
-         OIBg==
-X-Gm-Message-State: AOJu0YyBCA3U/UabuV+AKVP7jnGPGVr5cfM7cpE/lbK88j/l7RMW4Bzh
-	yYXuRsk7vpli8l1cgoXoZkVYBJOjR38S9ksG3Z3fT3l6KUR5oiwDEe6Hk+UKXKh9rDM=
-X-Gm-Gg: ASbGnct8w5YWaJbGmKciayvwBuqbc3KcVbX2pK7TbwWk6nUy3pocYaFc4cCw+iDP7lk
-	2Nlr2WW4f7VtLS2OvhATJ3zwN0WBwuRJ+aVEVTGYjZV5I7ym3QFkIHe4z7X6XHiq4HOJZar+zL6
-	FlWy0PxrcbQ4Ve8g/X5RsAb6Xysc2Ryv2d/tXjlX4tt8htp3HX+nYsEVaF+9x+qSEE6R5cb2pN4
-	po/ZgZeEMQH+t8S9fbs4+DWs1BrnRpTKr7l55gKTrteMSl0lFhAy3f/V9mm/RjOBSsfYxOunv2m
-	95YMQyMu9VZKX8HxB6PRXq0WGpzwz9eJ9M3Q2JLDkygLZgkf++jNthC4sRY60COj2nldyBU=
-X-Google-Smtp-Source: AGHT+IHlOyXervQn+haGiBOZ0vl0FJLTAGumJfi3y5HJSPxa1Q9XBHEO6HL8VaKj5iB0Ic1H05DlqQ==
-X-Received: by 2002:a05:600c:608a:b0:43c:ee3f:2c3 with SMTP id 5b1f17b1804b1-4538ee4f7c2mr28086715e9.7.1751019732480;
-        Fri, 27 Jun 2025 03:22:12 -0700 (PDT)
+        bh=lbrbKVrAfsFPHXHgG1UiQWZ27CeKEpZkvt6/TbfRDzE=;
+        b=uxOFpMm82qFnkLTbXtyeCqH0hel7euThURePg6xR8KMNJ8f35KCTCHG5e7WCDgpsdD
+         SpPGC7A4XqZtJO55I2Efyr7uxGMKbmWy9q+xDm2mhOVE9bXrYVEbXuzL7eK19tPJTzso
+         yYik44EggeGy1fxRdOLRGRrB+qdDkD8T8EE0KIDqIQVlTvlrbPJIbPwpTNQrWA//J35W
+         Pk7ybTfXHG3e7QWxSOJsKf5aUQ4M+YkFjik+pZG5f3n9zOSEgQI7DoNr+1+EnClWn/c1
+         66iqU9AdzwfctWMuNmYJfh0RseU5e5Ax6nWmOZP2gKQMsBI72ZN6vJ1M9zh7bODfsqXK
+         RoyQ==
+X-Gm-Message-State: AOJu0Yzg0lPlHe+SzpaW1JTU/kzqc3vsZQugVY3L8xcD2DYer+owyqgR
+	9bNbATjDPiVCaS/LHfEyfYv5/Lx00fhDULFQWzV3a82UBsLoj4Cl/JttC63yfrJJiXU=
+X-Gm-Gg: ASbGnctOneJY2eiGYfGP3E/guo8NCEGFdzdCiP1Bji9FKCnGN4ULF+r/3uhuorE52kK
+	GDVit8DALajGVK39vrSc1pTCpkJc2qj/E4oSBzck9uc8KI7eB+MkKKKDrGwVEXNYbD8rTP167IO
+	VvAiYkj0xa70jrTN2DuKTvShlippScoIBsJD4NmOzRM/QeyvmPTzWPmQh9O/ArjLViWiwC/3ZIo
+	ihyJ4UXuBYIoR4lrCl166jKExXJrNo6FUIyXdXs3DKHBzBt+R+3IxvX/wCyTeW12W4Q7FE29z7Y
+	PlyzKq8pAA07tKm1ZXLQuODy6gqGj3tLeZPBlcEj4wBS+iwm5KWKSy+1iGWj5LK99BVzIL4=
+X-Google-Smtp-Source: AGHT+IHT99Km+vRDHeIrDRPxOZCus1ggOuBcUxJZEPSSQ7juhoGgMSdwHinFGAjaa5ldBFrah6fCRQ==
+X-Received: by 2002:adf:fccb:0:b0:3a5:3930:f57 with SMTP id ffacd0b85a97d-3a9004801acmr2028143f8f.51.1751019733389;
+        Fri, 27 Jun 2025 03:22:13 -0700 (PDT)
 Received: from ho-tower-lan.lan ([37.18.136.128])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a3a5599sm47250955e9.13.2025.06.27.03.22.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a3a5599sm47250955e9.13.2025.06.27.03.22.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 03:22:12 -0700 (PDT)
+        Fri, 27 Jun 2025 03:22:13 -0700 (PDT)
 From: James Clark <james.clark@linaro.org>
-Date: Fri, 27 Jun 2025 11:21:39 +0100
-Subject: [PATCH v4 3/6] spi: spi-fsl-dspi: Stub out DMA functions
+Date: Fri, 27 Jun 2025 11:21:40 +0100
+Subject: [PATCH v4 4/6] spi: spi-fsl-dspi: Use non-coherent memory for DMA
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250627-james-nxp-spi-dma-v4-3-178dba20c120@linaro.org>
+Message-Id: <20250627-james-nxp-spi-dma-v4-4-178dba20c120@linaro.org>
 References: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
 In-Reply-To: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
 To: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -93,88 +93,155 @@ Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
  linux-kernel@vger.kernel.org, James Clark <james.clark@linaro.org>
 X-Mailer: b4 0.14.0
 
-This will allow the build to succeed with !CONFIG_HAS_DMA, either due to
-a randconfig build test or when the target only uses one of the non-DMA
-transfer modes which this driver supports.
+Using coherent memory here isn't functionally necessary, we're only
+either sending data to the device or reading from it. This means
+explicit synchronizations are only required around those points and the
+change is fairly trivial.
 
+This gives us around a 10% increase in throughput for large DMA
+transfers and no loss for small transfers.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: James Clark <james.clark@linaro.org>
 ---
- drivers/spi/spi-fsl-dspi.c | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 55 +++++++++++++++++++++++++++++-----------------
+ 1 file changed, 35 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 65567745fe9a..feff475dddfc 100644
+index feff475dddfc..e7856f9c9440 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -373,6 +373,8 @@ struct fsl_dspi {
- 	void (*dev_to_host)(struct fsl_dspi *dspi, u32 rxdata);
- };
- 
-+static void dspi_setup_accel(struct fsl_dspi *dspi);
-+
- static bool is_s32g_dspi(struct fsl_dspi *data)
- {
- 	return data->devtype_data == &devtype_data[S32G] ||
-@@ -468,6 +470,16 @@ static u32 dspi_pop_tx(struct fsl_dspi *dspi)
- 	return txdata;
- }
- 
-+/* Push one word to the RX buffer from the POPR register (RX FIFO) */
-+static void dspi_push_rx(struct fsl_dspi *dspi, u32 rxdata)
-+{
-+	if (!dspi->rx)
-+		return;
-+	dspi->dev_to_host(dspi, rxdata);
-+}
-+
-+#if IS_ENABLED(CONFIG_DMA_ENGINE)
-+
- /* Prepare one TX FIFO entry (txdata plus cmd) */
- static u32 dspi_pop_tx_pushr(struct fsl_dspi *dspi)
- {
-@@ -481,14 +493,6 @@ static u32 dspi_pop_tx_pushr(struct fsl_dspi *dspi)
+@@ -493,11 +493,19 @@ static u32 dspi_pop_tx_pushr(struct fsl_dspi *dspi)
  	return cmd << 16 | data;
  }
  
--/* Push one word to the RX buffer from the POPR register (RX FIFO) */
--static void dspi_push_rx(struct fsl_dspi *dspi, u32 rxdata)
--{
--	if (!dspi->rx)
--		return;
--	dspi->dev_to_host(dspi, rxdata);
--}
--
++static int dspi_dma_transfer_size(struct fsl_dspi *dspi)
++{
++	return dspi->words_in_flight * DMA_SLAVE_BUSWIDTH_4_BYTES;
++}
++
  static void dspi_tx_dma_callback(void *arg)
  {
  	struct fsl_dspi *dspi = arg;
-@@ -589,8 +593,6 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
- 	return 0;
+ 	struct fsl_dspi_dma *dma = dspi->dma;
++	struct device *dev = &dspi->pdev->dev;
+ 
++	dma_sync_single_for_cpu(dev, dma->tx_dma_phys,
++				dspi_dma_transfer_size(dspi), DMA_TO_DEVICE);
+ 	complete(&dma->cmd_tx_complete);
  }
  
--static void dspi_setup_accel(struct fsl_dspi *dspi);
--
- static void dspi_dma_xfer(struct fsl_dspi *dspi)
+@@ -505,9 +513,13 @@ static void dspi_rx_dma_callback(void *arg)
  {
- 	struct spi_message *message = dspi->cur_msg;
-@@ -722,6 +724,18 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
+ 	struct fsl_dspi *dspi = arg;
+ 	struct fsl_dspi_dma *dma = dspi->dma;
++	struct device *dev = &dspi->pdev->dev;
+ 	int i;
+ 
+ 	if (dspi->rx) {
++		dma_sync_single_for_cpu(dev, dma->rx_dma_phys,
++					dspi_dma_transfer_size(dspi),
++					DMA_FROM_DEVICE);
+ 		for (i = 0; i < dspi->words_in_flight; i++)
+ 			dspi_push_rx(dspi, dspi->dma->rx_dma_buf[i]);
+ 	}
+@@ -517,6 +529,7 @@ static void dspi_rx_dma_callback(void *arg)
+ 
+ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ {
++	size_t size = dspi_dma_transfer_size(dspi);
+ 	struct device *dev = &dspi->pdev->dev;
+ 	struct fsl_dspi_dma *dma = dspi->dma;
+ 	int time_left;
+@@ -525,10 +538,9 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ 	for (i = 0; i < dspi->words_in_flight; i++)
+ 		dspi->dma->tx_dma_buf[i] = dspi_pop_tx_pushr(dspi);
+ 
++	dma_sync_single_for_device(dev, dma->tx_dma_phys, size, DMA_TO_DEVICE);
+ 	dma->tx_desc = dmaengine_prep_slave_single(dma->chan_tx,
+-					dma->tx_dma_phys,
+-					dspi->words_in_flight *
+-					DMA_SLAVE_BUSWIDTH_4_BYTES,
++					dma->tx_dma_phys, size,
+ 					DMA_MEM_TO_DEV,
+ 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!dma->tx_desc) {
+@@ -543,10 +555,10 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
+ 		return -EINVAL;
+ 	}
+ 
++	dma_sync_single_for_device(dev, dma->rx_dma_phys, size,
++				   DMA_FROM_DEVICE);
+ 	dma->rx_desc = dmaengine_prep_slave_single(dma->chan_rx,
+-					dma->rx_dma_phys,
+-					dspi->words_in_flight *
+-					DMA_SLAVE_BUSWIDTH_4_BYTES,
++					dma->rx_dma_phys, size,
+ 					DMA_DEV_TO_MEM,
+ 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!dma->rx_desc) {
+@@ -643,17 +655,17 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 		goto err_tx_channel;
+ 	}
+ 
+-	dma->tx_dma_buf = dma_alloc_coherent(dma->chan_tx->device->dev,
+-					     dma_bufsize, &dma->tx_dma_phys,
+-					     GFP_KERNEL);
++	dma->tx_dma_buf = dma_alloc_noncoherent(dma->chan_tx->device->dev,
++						dma_bufsize, &dma->tx_dma_phys,
++						DMA_TO_DEVICE, GFP_KERNEL);
+ 	if (!dma->tx_dma_buf) {
+ 		ret = -ENOMEM;
+ 		goto err_tx_dma_buf;
+ 	}
+ 
+-	dma->rx_dma_buf = dma_alloc_coherent(dma->chan_rx->device->dev,
+-					     dma_bufsize, &dma->rx_dma_phys,
+-					     GFP_KERNEL);
++	dma->rx_dma_buf = dma_alloc_noncoherent(dma->chan_rx->device->dev,
++						dma_bufsize, &dma->rx_dma_phys,
++						DMA_FROM_DEVICE, GFP_KERNEL);
+ 	if (!dma->rx_dma_buf) {
+ 		ret = -ENOMEM;
+ 		goto err_rx_dma_buf;
+@@ -688,11 +700,12 @@ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+ 	return 0;
+ 
+ err_slave_config:
+-	dma_free_coherent(dma->chan_rx->device->dev,
+-			  dma_bufsize, dma->rx_dma_buf, dma->rx_dma_phys);
++	dma_free_noncoherent(dma->chan_rx->device->dev, dma_bufsize,
++			     dma->rx_dma_buf, dma->rx_dma_phys,
++			     DMA_FROM_DEVICE);
+ err_rx_dma_buf:
+-	dma_free_coherent(dma->chan_tx->device->dev,
+-			  dma_bufsize, dma->tx_dma_buf, dma->tx_dma_phys);
++	dma_free_noncoherent(dma->chan_tx->device->dev, dma_bufsize,
++			     dma->tx_dma_buf, dma->tx_dma_phys, DMA_TO_DEVICE);
+ err_tx_dma_buf:
+ 	dma_release_channel(dma->chan_tx);
+ err_tx_channel:
+@@ -713,14 +726,16 @@ static void dspi_release_dma(struct fsl_dspi *dspi)
+ 		return;
+ 
+ 	if (dma->chan_tx) {
+-		dma_free_coherent(dma->chan_tx->device->dev, dma_bufsize,
+-				  dma->tx_dma_buf, dma->tx_dma_phys);
++		dma_free_noncoherent(dma->chan_tx->device->dev, dma_bufsize,
++				     dma->tx_dma_buf, dma->tx_dma_phys,
++				     DMA_TO_DEVICE);
+ 		dma_release_channel(dma->chan_tx);
+ 	}
+ 
+ 	if (dma->chan_rx) {
+-		dma_free_coherent(dma->chan_rx->device->dev, dma_bufsize,
+-				  dma->rx_dma_buf, dma->rx_dma_phys);
++		dma_free_noncoherent(dma->chan_rx->device->dev, dma_bufsize,
++				     dma->rx_dma_buf, dma->rx_dma_phys,
++				     DMA_FROM_DEVICE);
  		dma_release_channel(dma->chan_rx);
  	}
  }
-+#else
-+static void dspi_dma_xfer(struct fsl_dspi *dspi)
-+{
-+	dspi->cur_msg->status = -EINVAL;
-+}
-+static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
-+{
-+	dev_err(&dspi->pdev->dev, "DMA support not enabled in kernel\n");
-+	return -EINVAL;
-+}
-+static void dspi_release_dma(struct fsl_dspi *dspi) {}
-+#endif
- 
- static void hz_to_spi_baud(char *pbr, char *br, int speed_hz,
- 			   unsigned long clkrate, bool mtf_enabled)
 
 -- 
 2.34.1
