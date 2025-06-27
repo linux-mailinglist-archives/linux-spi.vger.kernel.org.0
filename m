@@ -1,75 +1,107 @@
-Return-Path: <linux-spi+bounces-8805-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8806-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C10AEAEB58E
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 12:56:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E032BAEB59D
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 13:01:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A86591BC7762
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 10:56:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9D2F562507
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 11:00:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A28E2980BF;
-	Fri, 27 Jun 2025 10:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6294229552F;
+	Fri, 27 Jun 2025 11:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjKIJLj3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjI4W1Z7"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA103224893
-	for <linux-spi@vger.kernel.org>; Fri, 27 Jun 2025 10:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FD529A9E4;
+	Fri, 27 Jun 2025 11:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751021781; cv=none; b=qj0KTaUV9vUSMAlkqB9Cx4tjzXB0ovXneAFCn+BzjoiiCmz0ig7KC43pk3NwADjJECzZLML/za/CLSZhaaK+PU2SlPjgHBwhLDI0c+wy9xLOBTwiqTtH113oz646m2EpcDHU8NPsaT1peLgXBjpv9D1o66GGGCtJW/od47IdklY=
+	t=1751022049; cv=none; b=B0SipqKp9Ixj7ejzVxp9nUQBMgnabIFZXLOhbWSMoDyJ0rvtEjrDfoDOgbF/ORqGvlle0kZ5IG7LDofHCq43R1jegm+Yt/0eyVtDY6biGy24jCrVxctaabUupwr6HnDkTheWd9HfeSD9EMjJSm+F3oCi1b5j/tEp+oPqQEugNdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751021781; c=relaxed/simple;
-	bh=NPGd6WiCB1L6pVtrQiTy+xK+6GHTSA0fU/CdgoAnZzI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=bIAM3bDtqdUQLC9rpxpwolte8FnZrw45dIEe26iZJLYb+D8aRb3DF2RAsAvNyYjFwOWgRrH+ptREA//OJHSdZUj/vVRKVbVsX28ehwwvs+vkO0ZxlMalvjgLN+SlUV3KgFRceD6sAjvtgs6aVb3OIMTv4w4viZ8UkCugillqxmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjKIJLj3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701D4C4CEE3;
-	Fri, 27 Jun 2025 10:56:18 +0000 (UTC)
+	s=arc-20240116; t=1751022049; c=relaxed/simple;
+	bh=lqMMTP1yhhlfjf6iJhvfIFcNWwN4TjqIAC4xUq/hPm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iNZ39buHCvCCI/PZAgC0I+1fO8Jqi+xh1IQYhM86yiTrGPZ896Cd7vorrF8rmnJesXR4TJQ63h2ZSknf1/jAFrKL9uPGweCKSCithgKRnqAqvi0ombzDB+KYKe2hQ3yZ2BoNcEUd7PybJTEdQlMuXP1LYJR2I7E2aHnbnGTzhJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjI4W1Z7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3EDC4CEEB;
+	Fri, 27 Jun 2025 11:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751021778;
-	bh=NPGd6WiCB1L6pVtrQiTy+xK+6GHTSA0fU/CdgoAnZzI=;
-	h=Subject:From:Date:To:From;
-	b=IjKIJLj37MFV7V3Ql/TvcUqGVvZLiycoEynQjE2XIo0ReFu1aNAkjtGFTRNcprSSx
-	 zooatxqyQ5mZ58jtRi77/frk5dnS+MjFzw9JSS4w3WWjKx+kWUcpDJpG61nXi+T0xR
-	 R7ViknQUJX3GwGZujZ5MjxFDizYC7jpzQX8DgrQTikVk4hNKZE+Lt7QoZ0XFkKTdZY
-	 0VVh2jUCk/PYIRlhaMR0ro2IdNaZ5AeWX2joOwAH/PdjWg5nAIuFQeTdmvPzECL97w
-	 HWmKpWbZoeHEx6yajaQ+6wLYDcs6CjMDVaK7TxO//5bQ/EY+jixwiPP5077qBN6klz
-	 ESdxXDbUCma6A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE38380DBEE;
-	Fri, 27 Jun 2025 10:56:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1751022048;
+	bh=lqMMTP1yhhlfjf6iJhvfIFcNWwN4TjqIAC4xUq/hPm8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IjI4W1Z73WmLTsreROLH+fYoV6wXIJEMOb3MNKX/yuRJmS7griT1taFprJ5PGNkNc
+	 m4gYkn7Nhnb5Tc56ERd9/1X4hQK374cglRCaWiyqZxi/Fk0gywqShd8G5bzk/HAVZ+
+	 uhJNuoqDhUf0Qp7A2KdbKTSj+oMxAoL7cvdDg4XwviAc3mmrmckadBlt9H7uDT6tL1
+	 Gfkr9kz7XBadf7H9ZVcDnz+eX4FOzkmyjzpQ7fmbXQdbVuXSyJHppShIXRR4L20wk5
+	 STdzfO503JuVgiF3SrFLsZ4dmDNUjlzyjWtqGKnj1GLPzX/ig29bWxlCTtP7EMyecy
+	 bT/Kk4oT47SGg==
+Date: Fri, 27 Jun 2025 12:00:44 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Hohn, Torben" <Torben.Hohn@bruker.com>
+Cc: "amit.kumar-mahapatra@amd.com" <amit.kumar-mahapatra@amd.com>,
+	"frogger@hardanger.blackshift.org" <frogger@hardanger.blackshift.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"linux@roeck-us.net" <linux@roeck-us.net>
+Subject: Re: [PATCH v2] spi: Raise limit on number of chip selects
+Message-ID: <aF553GU_btT81_b_@finisterre.sirena.org.uk>
+References: <FR4P281MB343441EB901D3DD286B923D6837AA@FR4P281MB3434.DEUP281.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175102180419.1880578.1103317312636650360.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 27 Jun 2025 10:56:44 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v4] spi: spi-fsl-dspi: Target mode improvements (2025-06-27T10:21:36)
-  Superseding: [v3] spi: spi-fsl-dspi: Target mode improvements (2025-06-24T10:35:30):
-    [v3,1/6] spi: spi-fsl-dspi: Clear completion counter before initiating transfer
-    [v3,2/6] spi: spi-fsl-dspi: Store status directly in cur_msg->status
-    [v3,3/6] spi: spi-fsl-dspi: Stub out DMA functions
-    [v3,4/6] spi: spi-fsl-dspi: Use non-coherent memory for DMA
-    [v3,5/6] spi: spi-fsl-dspi: Increase DMA buffer size
-    [v3,6/6] spi: spi-fsl-dspi: Report FIFO overflows as errors
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="u0SfgTdM+pvwNqIA"
+Content-Disposition: inline
+In-Reply-To: <FR4P281MB343441EB901D3DD286B923D6837AA@FR4P281MB3434.DEUP281.PROD.OUTLOOK.COM>
+X-Cookie: Do not cut switchbacks.
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--u0SfgTdM+pvwNqIA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Thu, Jun 26, 2025 at 04:58:20PM +0000, Hohn, Torben wrote:
+> Hello Marc,
+
+That isn't my name...
+
+> +#define SPI_CS_CNT_MAX 16
+
+> If this is increased to 24 now, we need to carry another patch on top of mainline again once we add another Chipselect
+> into our FPGA, or into the next iteration of our hardware. We would really prefer that a Kconfig value is used.
+> We have handed a patch to pengutronix, because they can send proper emails.
+
+> In the IIO framework there is a Konfig Value for something similar:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/iio/trigger.h#n74
+
+This doesn't really work, we're supposed to support single kernel image
+so putting per platform configuration in Kconfig ends up being at best a
+usability problem.  At some point it's better to just bite the bullet
+and make things dynamic.
+
+--u0SfgTdM+pvwNqIA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmheedsACgkQJNaLcl1U
+h9AplQf+MNNvZr6JlQ5WWyzKnDpp9b0sjYa821cSH1QHeD+oHTrihMnplm+jnQ3Y
+B1V8xWmszYWsy6m8ZtpZPr1be703DDoS2dfyOe6EnY8dLI2hrWQvJmtUcLvBxZQi
+VZakbibVhTbWVaUWk5z6jLtmpGMuQKG005S0jtuMJtOgLICgYTYeHX4dzlxuR4Wm
+I5vzSZHDwEBDoVH62o4FbWllRnV6Vm281oP/dXWcP6L2xxQngG4/LmxZZy70/Zro
+5uL/rLzlOPGj+/48E8Abxn3lyKv7Azt4O9grikgyNfFjN2719QjyZ/TkC6c5e1pv
+2NV66TvwnpBvh162R5YLFzPToo6dJw==
+=Pcx2
+-----END PGP SIGNATURE-----
+
+--u0SfgTdM+pvwNqIA--
 
