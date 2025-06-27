@@ -1,107 +1,99 @@
-Return-Path: <linux-spi+bounces-8806-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8807-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E032BAEB59D
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 13:01:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E16EAEB5AF
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 13:03:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9D2F562507
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 11:00:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBE274A46BA
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 11:03:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6294229552F;
-	Fri, 27 Jun 2025 11:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BAF42D2391;
+	Fri, 27 Jun 2025 11:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjI4W1Z7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vuim5axm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39FD529A9E4;
-	Fri, 27 Jun 2025 11:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E134029CB3C;
+	Fri, 27 Jun 2025 11:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751022049; cv=none; b=B0SipqKp9Ixj7ejzVxp9nUQBMgnabIFZXLOhbWSMoDyJ0rvtEjrDfoDOgbF/ORqGvlle0kZ5IG7LDofHCq43R1jegm+Yt/0eyVtDY6biGy24jCrVxctaabUupwr6HnDkTheWd9HfeSD9EMjJSm+F3oCi1b5j/tEp+oPqQEugNdc=
+	t=1751022107; cv=none; b=tp/7GkMdS6DQzYqXylnqE1Jo23SS8xc9zBZpPLVNXwz9m/ws0sLdLw2p8U3+48syp9urLSDk1Tj9ZtEfyJDgrt9v7+JMVFPxmnrSTP1SCIbVeDe1ATBYUCHgOm5xp9nGVWUojm3Hkj3BLCZ7BWGMhtSCX/USIiBnBq0WZdep9zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751022049; c=relaxed/simple;
-	bh=lqMMTP1yhhlfjf6iJhvfIFcNWwN4TjqIAC4xUq/hPm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iNZ39buHCvCCI/PZAgC0I+1fO8Jqi+xh1IQYhM86yiTrGPZ896Cd7vorrF8rmnJesXR4TJQ63h2ZSknf1/jAFrKL9uPGweCKSCithgKRnqAqvi0ombzDB+KYKe2hQ3yZ2BoNcEUd7PybJTEdQlMuXP1LYJR2I7E2aHnbnGTzhJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjI4W1Z7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3EDC4CEEB;
-	Fri, 27 Jun 2025 11:00:47 +0000 (UTC)
+	s=arc-20240116; t=1751022107; c=relaxed/simple;
+	bh=A1bxFNSWz35yFvhEfWY+CykpQc2zGdJBAlx9+90e2dY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=BbyE+JDoiV8JDf2VHJQge6VIiS6I+viCr67VZ7rXvF/gU37J+2jZ8ceQSWXMKktK9/ZhP1nGCqMVEmRK4ng4R5BXG/qCnuJf9P0fUkbYl2vCuleSmUFPuXiPBNivqQtcFERGbORUXA2eRSQ08vDN+qpepdGtw8EpuyYumP59tTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vuim5axm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12B3FC4CEEB;
+	Fri, 27 Jun 2025 11:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751022048;
-	bh=lqMMTP1yhhlfjf6iJhvfIFcNWwN4TjqIAC4xUq/hPm8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IjI4W1Z73WmLTsreROLH+fYoV6wXIJEMOb3MNKX/yuRJmS7griT1taFprJ5PGNkNc
-	 m4gYkn7Nhnb5Tc56ERd9/1X4hQK374cglRCaWiyqZxi/Fk0gywqShd8G5bzk/HAVZ+
-	 uhJNuoqDhUf0Qp7A2KdbKTSj+oMxAoL7cvdDg4XwviAc3mmrmckadBlt9H7uDT6tL1
-	 Gfkr9kz7XBadf7H9ZVcDnz+eX4FOzkmyjzpQ7fmbXQdbVuXSyJHppShIXRR4L20wk5
-	 STdzfO503JuVgiF3SrFLsZ4dmDNUjlzyjWtqGKnj1GLPzX/ig29bWxlCTtP7EMyecy
-	 bT/Kk4oT47SGg==
-Date: Fri, 27 Jun 2025 12:00:44 +0100
+	s=k20201202; t=1751022106;
+	bh=A1bxFNSWz35yFvhEfWY+CykpQc2zGdJBAlx9+90e2dY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Vuim5axmcv1budcLMxptutxipo6ZXvXL5obJaxzRyYtPfv94hXtUQ50S0joXsI5o3
+	 9kZN1cwE8jTBmE2kvjaQ9swQ5QN15VrgHV1Zu8UPHTSJE5cbn4KCZswpmABjlYHyQC
+	 Fx1fErSFiH43/LDVA7C8QrVBo/5V9REKDIMxsXNsOT3KF3J+raB9qbpnUV3YIt3BYC
+	 Hu9pjITmoTEsHzLTi09CCXiEtuPPEPwJ9JhJXoSNvXtw9oL46iotjuwmYmZmyc64Hg
+	 oAJ4v/eYtXsLLnPpjdwaUKZ4dpYaxQqaXBM5UeKOw7kw0BA7mQdFx0f73RivtvOwdk
+	 1iC2N58+q8Tog==
 From: Mark Brown <broonie@kernel.org>
-To: "Hohn, Torben" <Torben.Hohn@bruker.com>
-Cc: "amit.kumar-mahapatra@amd.com" <amit.kumar-mahapatra@amd.com>,
-	"frogger@hardanger.blackshift.org" <frogger@hardanger.blackshift.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux@roeck-us.net" <linux@roeck-us.net>
-Subject: Re: [PATCH v2] spi: Raise limit on number of chip selects
-Message-ID: <aF553GU_btT81_b_@finisterre.sirena.org.uk>
-References: <FR4P281MB343441EB901D3DD286B923D6837AA@FR4P281MB3434.DEUP281.PROD.OUTLOOK.COM>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Frank Li <Frank.Li@nxp.com>
+Cc: imx@lists.linux.dev
+In-Reply-To: <20250625215255.2640538-1-Frank.Li@nxp.com>
+References: <20250625215255.2640538-1-Frank.Li@nxp.com>
+Subject: Re: [PATCH 1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
+Message-Id: <175102209646.386964.15013271820664016381.b4-ty@kernel.org>
+Date: Fri, 27 Jun 2025 12:01:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u0SfgTdM+pvwNqIA"
-Content-Disposition: inline
-In-Reply-To: <FR4P281MB343441EB901D3DD286B923D6837AA@FR4P281MB3434.DEUP281.PROD.OUTLOOK.COM>
-X-Cookie: Do not cut switchbacks.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-07fe9
 
+On Wed, 25 Jun 2025 17:52:54 -0400, Frank Li wrote:
+> Add lpc3220 spi controller binding doc to fix below CHECK_DTBS warning:
+>   arch/arm/boot/dts/nxp/lpc/lpc3250-ea3250.dtb: /ahb/apb/spi@20088000: failed to match any schema with compatible: ['nxp,lpc3220-spi']
+> 
+> 
 
---u0SfgTdM+pvwNqIA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Jun 26, 2025 at 04:58:20PM +0000, Hohn, Torben wrote:
-> Hello Marc,
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-That isn't my name...
+Thanks!
 
-> +#define SPI_CS_CNT_MAX 16
+[1/1] spi: dt-bindings: add nxp,lpc3220-spi.yaml
+      commit: ac4c064f67d3cdf9118b9b09c1e3b28b6c10a7ea
 
-> If this is increased to 24 now, we need to carry another patch on top of mainline again once we add another Chipselect
-> into our FPGA, or into the next iteration of our hardware. We would really prefer that a Kconfig value is used.
-> We have handed a patch to pengutronix, because they can send proper emails.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> In the IIO framework there is a Konfig Value for something similar:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/iio/trigger.h#n74
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-This doesn't really work, we're supposed to support single kernel image
-so putting per platform configuration in Kconfig ends up being at best a
-usability problem.  At some point it's better to just bite the bullet
-and make things dynamic.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---u0SfgTdM+pvwNqIA
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmheedsACgkQJNaLcl1U
-h9AplQf+MNNvZr6JlQ5WWyzKnDpp9b0sjYa821cSH1QHeD+oHTrihMnplm+jnQ3Y
-B1V8xWmszYWsy6m8ZtpZPr1be703DDoS2dfyOe6EnY8dLI2hrWQvJmtUcLvBxZQi
-VZakbibVhTbWVaUWk5z6jLtmpGMuQKG005S0jtuMJtOgLICgYTYeHX4dzlxuR4Wm
-I5vzSZHDwEBDoVH62o4FbWllRnV6Vm281oP/dXWcP6L2xxQngG4/LmxZZy70/Zro
-5uL/rLzlOPGj+/48E8Abxn3lyKv7Azt4O9grikgyNfFjN2719QjyZ/TkC6c5e1pv
-2NV66TvwnpBvh162R5YLFzPToo6dJw==
-=Pcx2
------END PGP SIGNATURE-----
-
---u0SfgTdM+pvwNqIA--
 
