@@ -1,111 +1,122 @@
-Return-Path: <linux-spi+bounces-8809-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8810-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0336AEB828
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 14:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F803AEB84C
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 14:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94AB31897C39
-	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 12:51:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06DA11C47E3E
+	for <lists+linux-spi@lfdr.de>; Fri, 27 Jun 2025 12:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8985E2D4B47;
-	Fri, 27 Jun 2025 12:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6ED2D8DC5;
+	Fri, 27 Jun 2025 12:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnX5UCJ2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HkV4kRSM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDC52D3EFB;
-	Fri, 27 Jun 2025 12:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4BF2BD5A2;
+	Fri, 27 Jun 2025 12:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751028698; cv=none; b=uuqX/YsYf7M2sP8xMc0jShTK1YwPbutiE2oZ6bjOOY1xS8VzcBdepSckvOV+V4vXqHPgar0N5RZ9UlnBoyiZALE4cORF97egNY77DEqGoUuVV5ADBw3DJ0WsCBW4ajUg57R+U6Qq7+RML8oCf9rrMkWEplgVUEqUbhYe23lj6mE=
+	t=1751029099; cv=none; b=NejzDApUDDlEXclt1KetBPiUeeYwh4pM7m7zYO4ViqIUCYR6gJzE/TvXFLyVlTpGARI3Ec8N8xshi47SCBBoOi0oQMtmwSd8Q1BeppG9gX3V5Ba5wmIs/p7a9ugCFhvPK1cKa3CEaEWbij+4pDURYPgFH2Ydck5E70K1ZPRAsEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751028698; c=relaxed/simple;
-	bh=OV5rE1Egth+rX0x2sNvM7ePPH3s60fZPUkM/cp/VU/I=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=b+8hnmtRHlPNPfuOhOsfmbH8Ys6Sf4jAHBiH+vU2+NXBoXyq1wIPKiWvupXy2VJQlygCcTBfd1eJSrMHd3yw+8OaF2dPnSwzVK8iLcaT1NFdx1Qm8hUurkqwIwBJdIlvtoPGL3iJ4kAAHim1x3Emrpa3QGNFN9Hjxb24QrEsf0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnX5UCJ2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72064C4CEE3;
-	Fri, 27 Jun 2025 12:51:34 +0000 (UTC)
+	s=arc-20240116; t=1751029099; c=relaxed/simple;
+	bh=NLK9LVywafopxTYCHb6PiC+xCymbm8kdUK/ydn2ddaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+IHR7aTP33/ASF5XRA1c7IrIrKgePGDDx6TjC+8SOBpW2rpZkQjlaliZWiOH2J6llhaQrvqw8tJkctf8gGE4D8xB8v4rGXsIqZnS5RM26wxpW1hpB6JWwE+iwZfLaN39AIGQIOB6d6sSIyK70rprNe7vPYWMoMg8MO9i1HYyNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HkV4kRSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E882CC4CEED;
+	Fri, 27 Jun 2025 12:58:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751028696;
-	bh=OV5rE1Egth+rX0x2sNvM7ePPH3s60fZPUkM/cp/VU/I=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=YnX5UCJ2VZODMIac638/iCrEzmTSFGezr7liVfqz3IiV8g8OggwHu0Ac1cjz64g81
-	 nb+G2u4YsJZmbI5/Ace3gDfDt3iKJQrcTJsLZbomxSuzTyD3/xaQCmcHTSVk7MDg4q
-	 uVDZUNOLqalhnvCYVCfwTL6val+O3k6ozOpl3lkOCSnb5DjRluwItHmccb8VANX0lm
-	 2dyws2QQfXXulbajDqZBZ2wcPmuedYcGaee84hFY4+r/BiVfzIgDYtgAD/ylNI9gnY
-	 eXi/FTvKZo3sQfF6VBiqBDcupY34u0tps19otPyWof7lvLcLtEMK17fWMQwn0rqp9Q
-	 0S9nu9hPGtI/A==
-From: Mark Brown <broonie@kernel.org>
-To: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-Cc: Vinod Koul <vkoul@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20250610082256.400492-1-csokas.bence@prolan.hu>
-References: <20250610082256.400492-1-csokas.bence@prolan.hu>
-Subject: Re: [PATCH v7 0/2] Add `devm_dma_request_chan()` to simplify probe
- path in atmel-quadspi.c
-Message-Id: <175102869373.390499.16488467994340140791.b4-ty@kernel.org>
-Date: Fri, 27 Jun 2025 13:51:33 +0100
+	s=k20201202; t=1751029097;
+	bh=NLK9LVywafopxTYCHb6PiC+xCymbm8kdUK/ydn2ddaA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HkV4kRSM6WLllV0xsEAvUFoZk1GvCn53VzRv3t61qWGvnreGTEheBvBqyMY5aM6vx
+	 x/xBD6cnT+/ST1+thGTWUjz+Goxq7Zygw5g0d087qaDjhUMGQ6POj9RcpurfFvMZGL
+	 denfCzTOvqn8ICVFS2Mud3bfr9DiOPBbEGn8m7UeOFqE3JHbuDCiSQQooQxDxPdLbu
+	 ioVjA7tzZWmHKG6xjBXjMVr2onRxqvDzDkxw+1fe1JIRJ8uYj94w6b3gz+1N14HNSw
+	 9xUgjaPxZ3GPTb23QufuJThE38C4PM1PvpUaAiCNTyNDH0oGtwS5WQ5+7eOH5BrUAN
+	 DV8ti1P7umYCw==
+Date: Fri, 27 Jun 2025 13:58:11 +0100
+From: Lee Jones <lee@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Vicentiu Galanopulo <vicentiu.galanopulo@remote-tech.co.uk>,
+	Will Deacon <will@kernel.org>, Han Xu <han.xu@nxp.com>,
+	Haibo Chen <haibo.chen@nxp.com>,
+	Yogesh Gaur <yogeshgaur.83@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Andrew Davis <afd@ti.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	linux-spi@vger.kernel.org, imx@lists.linux.dev,
+	linux-leds@vger.kernel.org
+Subject: Re: (subset) [PATCH v7 2/3] leds: lp8860: Check return value of
+ devm_mutex_init()
+Message-ID: <20250627125811.GH10134@google.com>
+References: <20250617-must_check-devm_mutex_init-v7-2-d9e449f4d224@weissschuh.net>
+ <175033649656.801367.11888454651585197053.b4-ty@kernel.org>
+ <f1cc8959-d420-4ba3-922f-ed7c6f054f22@t-8ch.de>
+ <20250625090439.GQ795775@google.com>
+ <e340b32d-8839-43b0-8662-edef1729ad6e@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-07fe9
+In-Reply-To: <e340b32d-8839-43b0-8662-edef1729ad6e@t-8ch.de>
 
-On Tue, 10 Jun 2025 10:22:52 +0200, Bence Csókás wrote:
-> The probe function of the atmel-quadspi driver got quite convoluted,
-> especially since the addition of SAMA7G5 support, that was forward-ported
-> from an older vendor kernel. To alleivate this - and similar problems in
-> the future - an effort was made to migrate as many functions as possible,
-> to their devm_ managed counterparts. Patch 1/2 adds the new
-> `devm_dma_request_chan()` function. Patch 2/2 then uses this APIs to
-> simplify the probe() function.
+On Thu, 26 Jun 2025, Thomas Weißschuh wrote:
+
+> On 2025-06-25 10:04:39+0100, Lee Jones wrote:
+> > On Thu, 19 Jun 2025, Thomas Weißschuh wrote:
+> > > On 2025-06-19 13:34:56+0100, Lee Jones wrote:
+> > > > On Tue, 17 Jun 2025 19:08:13 +0200, Thomas Weißschuh wrote:
+> > > > > devm_mutex_init() can fail. With CONFIG_DEBUG_MUTEXES=y the mutex will be
+> > > > > marked as unusable and trigger errors on usage.
+> > > > > 
+> > > > > Add the missed check.
+> > > > 
+> > > > Applied, thanks!
+> > > > 
+> > > > [2/3] leds: lp8860: Check return value of devm_mutex_init()
+> > > >       commit: 426e0c8e8eed26b67bbbd138483bb5973724adae
+> > > 
+> > > Thanks, but (as mentioned in the cover letter) these patches should go
+> > > together through the mutex/locking tree.
+> > > Could you drop it on your side and give an Ack instead?
+> > 
+> > There has to be good reasons to do this.
+> >
+> > I didn't see any dependents or dependencies in this patch.
 > 
-> [...]
+> Patch 3 depends on patch 1 and 2.
+> 
+> It will break the build for each instance of an ignored return value
+> of devm_mutex_init(). Therefore all such instances need to be resolved
+> before the patch can be applied.
+> So the patches can't go through different trees.
+> 
+> In theory we could fix the drivers in this cycle and then change
+> devm_mutex_init() in the next one. But new regressions are introduced
+> over and over. This patch is already in the third cycle...
 
-Applied to
+Fair point.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Acked-by: Lee Jones <lee@kernel.org>
 
-Thanks!
+And patch removed from LEDs.
 
-[1/2] dma: Add devm_dma_request_chan()
-      (no commit info)
-[2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
-      commit: 2555691165a0285a4617230fed859f20dcc51608
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+Lee Jones [李琼斯]
 
