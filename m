@@ -1,195 +1,102 @@
-Return-Path: <linux-spi+bounces-8853-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8854-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F9DAEC4AE
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Jun 2025 05:42:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 972C7AEC7FB
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Jun 2025 16:55:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08D2C16834E
-	for <lists+linux-spi@lfdr.de>; Sat, 28 Jun 2025 03:42:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F25813AB4BF
+	for <lists+linux-spi@lfdr.de>; Sat, 28 Jun 2025 14:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7985B21C16B;
-	Sat, 28 Jun 2025 03:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE54247291;
+	Sat, 28 Jun 2025 14:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QDrCaphj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTFZO5Zo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1D221B8F5;
-	Sat, 28 Jun 2025 03:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065981FECB1;
+	Sat, 28 Jun 2025 14:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751082143; cv=none; b=mH4Arz+Wy2X9hfxPkr7EE1aC7juMSnUbR0zxkG3H4sO1Rg592krurQBuOBiQC1+E5vuepbtXTlPE/GXoipjKz5U+gL6vd/YF56ac0wwK0BY7Jc1Tf6LZ1nKI+bGy87GvMe+K2MsTzTXY8g2oFx7bhkTbSV9Rcej5vXEkDTwHsss=
+	t=1751122529; cv=none; b=h07tzBl12aPKXSi0cRz0i5hd0PUYpJIsgN5UbFqYdCaFwN4vYWjiRL0buw+JAFdEYBrkMIZc5a5TqXpsLAAo4Mj6vombJhUJnhidxOvsIFTqaIHjvzKAaDj3fz14t1Ikd6Or3/IETZIIbD4+j4Wb3qx0vFAlLgvknF0sV+i+avw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751082143; c=relaxed/simple;
-	bh=ZuMiblNDBB3gmfKlgVRSbs1ULWOfBMWR7pyd2OHXVaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aemz21msjyl8oCsYTWY7HRY4ewZJSLpe2ur5Qmc/YEnPf0BkYW1XraNDUY+qUOHZNL7YPo9UxrtLjNi3o2lVWJ2ZLQWKrJT+Lof+Nzm7XV+KFGzCJzUGI0I6rzhzmTPeUqfBkR+1XKVpkKNKHBXtiKi+l27xddX+v5KVTH08Fbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QDrCaphj; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751082142; x=1782618142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZuMiblNDBB3gmfKlgVRSbs1ULWOfBMWR7pyd2OHXVaU=;
-  b=QDrCaphjxC9UGBgEUthXMqb0SW0+PSZc2C/xMqEUYs/uXTsB68WqvTuV
-   oXmS1JqDclc321XOvNmeP/Wpaf7maA/qKK90yg4Q9bdOkWnO/KzqEFbEt
-   Cl0Ulju217S3ttp93et1r9mWgoPEXHNFD6QCskLQiU78wlgNHg1+azG5Z
-   d8Zn0ncMRwB4JvEHQ7gNLkcQo2iev42awESFaqxiIPVYYiuxwiCCdKX+D
-   OEsLzzKFtOQtvP3+dN+7BHfi2VApkEEjfk37Y+UJp+DDtjIYmvi+2acCp
-   ll8RBcJ3T3d+XHc8kzDxuwObo2LAPxrmSREfngVDHJtzWH4ji2479oXNQ
-   g==;
-X-CSE-ConnectionGUID: WqehKLAxROK0MHtnuB82Jw==
-X-CSE-MsgGUID: +yLArHpaRJehm8zwJYhd8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11477"; a="63993603"
-X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
-   d="scan'208";a="63993603"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2025 20:42:21 -0700
-X-CSE-ConnectionGUID: SOLbyImkRwSKKMMTn9L0QA==
-X-CSE-MsgGUID: rpWeOH2QRN2oLZyU1oViXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,272,1744095600"; 
-   d="scan'208";a="176644191"
-Received: from lkp-server01.sh.intel.com (HELO e8142ee1dce2) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 27 Jun 2025 20:42:16 -0700
-Received: from kbuild by e8142ee1dce2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uVMSD-000Wks-3B;
-	Sat, 28 Jun 2025 03:42:13 +0000
-Date: Sat, 28 Jun 2025 11:42:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>,
-	andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
-	johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, mukesh.savaliya@oss.qualcomm.com,
-	quic_anupkulk@quicinc.com,
-	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
-Subject: Re: [PATCH v5 2/5] soc: qcom: geni-se: Add support to load QUP SE
- Firmware via Linux subsystem
-Message-ID: <202506281152.eY0YQpxs-lkp@intel.com>
-References: <20250624095102.1587580-3-viken.dadhaniya@oss.qualcomm.com>
+	s=arc-20240116; t=1751122529; c=relaxed/simple;
+	bh=Kfhu+oPsade3bpUuF2PAiWvJJ89BZQNz4OgJrDixL7A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WWOlltc364Wo57Ns+7ifUdnRzboDxApDJRI85AMMjr1DHB0TXHiCiN0EeD1oP0ypC0+Uh/57JXgPFJSsjVFno3HCULOUhqyrsiPlfE//tnKpCNTYV2u1dsbvGcBMh2fFdce3RkmnRbks7eYTcm7y6nidJ04EHSXHlwwmCo98Cvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTFZO5Zo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36749C4CEEA;
+	Sat, 28 Jun 2025 14:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751122528;
+	bh=Kfhu+oPsade3bpUuF2PAiWvJJ89BZQNz4OgJrDixL7A=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VTFZO5ZoagUXKhxfPuxOX7lVGUnivXvVy5V73bTiVfEZAOtnafrOJPIr4/IPTYJAQ
+	 6s59npzlj9fQkZJdm0fDH8DlwrFSjf7f2u09q17yvnTX2IbW0FRu1Dj8Zwn1/fgwFy
+	 kAqTpZPrGZ5tiPafw8/NPa9/4S9+T3b2sKOiSNvQAq3xWFxwRlKJIBKonNV47z5nGY
+	 tIEzr7M2tbEssoXpKPaWpTarDngyrb4q2+/SGjdrnsEaUn9h99YN1Dgc3h3+eWOXTB
+	 l+xtjihtC50igud4tOA5M0i+1MyPsf0s5zM80Zxnsify5WfvrSEDy5rVstGkKWZCiU
+	 X90S8u59QASWw==
+Date: Sat, 28 Jun 2025 15:55:21 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Michael Hennerich <Michael.Hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Rob Herring
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v2 01/11] iio: adc: ad_sigma_delta: don't overallocate
+ scan buffer
+Message-ID: <20250628155521.056b3394@jic23-huawei>
+In-Reply-To: <20250627-iio-adc-ad7173-add-spi-offload-support-v2-1-f49c55599113@baylibre.com>
+References: <20250627-iio-adc-ad7173-add-spi-offload-support-v2-0-f49c55599113@baylibre.com>
+	<20250627-iio-adc-ad7173-add-spi-offload-support-v2-1-f49c55599113@baylibre.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250624095102.1587580-3-viken.dadhaniya@oss.qualcomm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Viken,
+On Fri, 27 Jun 2025 18:39:57 -0500
+David Lechner <dlechner@baylibre.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Fix overallocating the size of the scan buffer by converting bits to
+> bytes. The size is meant to be in bytes, so scanbits needs to be
+> divided by 8.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+>  drivers/iio/adc/ad_sigma_delta.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigma_delta.c
+> index 4c5f8d29a559fea7226b84141bcb148fb801f62c..6b3ef7ef403e00804abeb81025ed293b188e492b 100644
+> --- a/drivers/iio/adc/ad_sigma_delta.c
+> +++ b/drivers/iio/adc/ad_sigma_delta.c
+> @@ -489,7 +489,7 @@ static int ad_sd_buffer_postenable(struct iio_dev *indio_dev)
+>  			return ret;
+>  	}
+>  
+> -	samples_buf_size = ALIGN(slot * indio_dev->channels[0].scan_type.storagebits, 8);
+> +	samples_buf_size = ALIGN(slot * indio_dev->channels[0].scan_type.storagebits / 8, 8);
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on tty/tty-testing tty/tty-next tty/tty-linus broonie-spi/for-next linus/master v6.16-rc3 next-20250627]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Seems like a good place for BITS_TO_BYTES() from bitops.h.  Given we have another 8
+kicking around in the same code line it might be a tiny bit confusing as / 8
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Viken-Dadhaniya/dt-bindings-qcom-se-common-Add-QUP-Peripheral-specific-properties-for-I2C-SPI-and-SERIAL-bus/20250624-175308
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20250624095102.1587580-3-viken.dadhaniya%40oss.qualcomm.com
-patch subject: [PATCH v5 2/5] soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux subsystem
-config: alpha-randconfig-r122-20250628 (https://download.01.org/0day-ci/archive/20250628/202506281152.eY0YQpxs-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 14.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20250628/202506281152.eY0YQpxs-lkp@intel.com/reproduce)
+If everything else is good I'll tweak this whilst applying (and add the include if needed).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202506281152.eY0YQpxs-lkp@intel.com/
+>  	samples_buf_size += sizeof(int64_t);
+>  	samples_buf = devm_krealloc(&sigma_delta->spi->dev, sigma_delta->samples_buf,
+>  				    samples_buf_size, GFP_KERNEL);
+> 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/soc/qcom/qcom-geni-se.c:941:21: sparse: sparse: cast from restricted __le32
->> drivers/soc/qcom/qcom-geni-se.c:941:21: sparse: sparse: restricted __le32 degrades to integer
-
-vim +941 drivers/soc/qcom/qcom-geni-se.c
-
-   891	
-   892	/**
-   893	 * geni_read_elf() - Read an ELF file.
-   894	 * @se: Pointer to the SE resources structure.
-   895	 * @fw: Pointer to the firmware buffer.
-   896	 * @pelfseg: Pointer to the SE-specific ELF header.
-   897	 *
-   898	 * Read the ELF file and output a pointer to the header data, which
-   899	 * contains the firmware data and any other details.
-   900	 *
-   901	 * Return: 0 if successful, otherwise return an error value.
-   902	 */
-   903	static int geni_read_elf(struct geni_se *se, const struct firmware *fw, struct se_fw_hdr **pelfseg)
-   904	{
-   905		const struct elf32_hdr *ehdr;
-   906		struct elf32_phdr *phdrs, *phdr;
-   907		const struct se_fw_hdr *elfseg;
-   908		const u8 *addr;
-   909		int i;
-   910	
-   911		if (!fw || fw->size < sizeof(struct elf32_hdr))
-   912			return -EINVAL;
-   913	
-   914		ehdr = (struct elf32_hdr *)fw->data;
-   915		phdrs = (struct elf32_phdr *)(ehdr + 1);
-   916	
-   917		if (ehdr->e_phnum < 2)
-   918			return -EINVAL;
-   919	
-   920		for (i = 0; i < ehdr->e_phnum; i++) {
-   921			phdr = &phdrs[i];
-   922	
-   923			if (fw->size < phdr->p_offset + phdr->p_filesz)
-   924				return -EINVAL;
-   925	
-   926			if (phdr->p_type != PT_LOAD || !phdr->p_memsz)
-   927				continue;
-   928	
-   929			if (MI_PBT_PAGE_MODE_VALUE(phdr->p_flags) != MI_PBT_NON_PAGED_SEGMENT ||
-   930			    MI_PBT_SEGMENT_TYPE_VALUE(phdr->p_flags) == MI_PBT_HASH_SEGMENT ||
-   931			    MI_PBT_ACCESS_TYPE_VALUE(phdr->p_flags) == MI_PBT_NOTUSED_SEGMENT ||
-   932			    MI_PBT_ACCESS_TYPE_VALUE(phdr->p_flags) == MI_PBT_SHARED_SEGMENT)
-   933				continue;
-   934	
-   935			if (phdr->p_filesz < sizeof(struct se_fw_hdr))
-   936				continue;
-   937	
-   938			addr = fw->data + phdr->p_offset;
-   939			elfseg = (const struct se_fw_hdr *)addr;
-   940	
- > 941			if (cpu_to_le32(elfseg->magic) != MAGIC_NUM_SE || elfseg->version != 1)
-   942				continue;
-   943	
-   944			if (phdr->p_filesz < elfseg->fw_offset +
-   945					     elfseg->fw_size_in_items * sizeof(u32) ||
-   946			    phdr->p_filesz < elfseg->cfg_idx_offset +
-   947					     elfseg->cfg_size_in_items * sizeof(u8) ||
-   948			    phdr->p_filesz < elfseg->cfg_val_offset +
-   949					     elfseg->cfg_size_in_items * sizeof(u32))
-   950				continue;
-   951	
-   952			if (elfseg->serial_protocol != se->protocol)
-   953				continue;
-   954	
-   955			*pelfseg = (struct se_fw_hdr *)addr;
-   956			return 0;
-   957		}
-   958		return -EINVAL;
-   959	}
-   960	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
