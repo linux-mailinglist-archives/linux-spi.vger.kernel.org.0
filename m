@@ -1,81 +1,80 @@
-Return-Path: <linux-spi+bounces-8861-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8862-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1F6AAECBB9
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Jun 2025 10:24:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F33F9AECBBB
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Jun 2025 10:24:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60636189372F
-	for <lists+linux-spi@lfdr.de>; Sun, 29 Jun 2025 08:24:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1A43189077F
+	for <lists+linux-spi@lfdr.de>; Sun, 29 Jun 2025 08:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7300820E309;
-	Sun, 29 Jun 2025 08:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20769214813;
+	Sun, 29 Jun 2025 08:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U42LUMDb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BVvGITSk"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE22A1E51E0;
-	Sun, 29 Jun 2025 08:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F1A1FBEA2;
+	Sun, 29 Jun 2025 08:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751185438; cv=none; b=MdKvYC4GK5uNeHqlXkJvnIsI41sOFltNdZaDDncf21ILTg5EjFaqOOjlrST3K04DP2EV61CNTg/D2+YRTFGF17O2gV4gTXrRUnMd3udVhEo4Hu8/Dfm5wD/bJ6PVmzcZjunE0Qa337dAD9+uhTdJfRiebAH5M38a9//QAI8iy+Y=
+	t=1751185444; cv=none; b=gos8+jQgJkVUQMEEFlWH+4aOEnGTVL80KywJIXkkbw7ZVbzowQu6zVeoGsQH2goUfN1lMEtyb/Rhw9MT5qd/0NLHmthzY3ZZLYkGmCOi2FMhhz2nHnGiSbBYDmRvppRecDJStn2mISFvvFfswCajIsaQ0XKWt1uV1t/u9rR+Zx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751185438; c=relaxed/simple;
-	bh=9hfluPES3NJNacigLt9GPHetnqMVb+nAsHw5PVH/j0c=;
+	s=arc-20240116; t=1751185444; c=relaxed/simple;
+	bh=b+ls9Cn6mM3MfOnV5MwzeFfnl2Z8gVpyt1s6gAiujiE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E9zzTPmsGGMwivKGPJLurEzhgMPmZOuR9Nk2OlnRSYzeorS8JRrRFo2Y3w6FuHIRwSd2ffOljC+qMDbQGkVP5TZUxalvpuOwGZF1fTST5Ot1jBc5mitwJNl0/27ihycFfe9j/gmBjLBM8k175n87aVZicMjg/hK7VeIm+zW5i+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U42LUMDb; arc=none smtp.client-ip=209.85.216.54
+	 In-Reply-To:To:Cc; b=AGdROZfx0RKB6f8EWKpzpNa5kIlk365fHzvIBxB6Vm2tP651urh3M9D04GxqH/rIrnTckNXHblmDaFVhbbmx2RUbiARNFdhehvVz8UC77af2v0VoBTkYS2guTdaQsRlulC3I1L0jz7GxRPbUVFPmBUh8xUZAljxyjG4pJOWwh/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BVvGITSk; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-313eeb77b1fso697719a91.1;
-        Sun, 29 Jun 2025 01:23:56 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-313154270bbso980812a91.2;
+        Sun, 29 Jun 2025 01:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751185436; x=1751790236; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1751185442; x=1751790242; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Mt+ql+PrjmzYyafappxb+kroF0DLVLujfMoQHbjak4k=;
-        b=U42LUMDbXO7QyXhddxxLR4c4EG1YgCjSarVpqHnWid9hyFPCn3M7iPrDS5PXaozgWr
-         lX/k6Et0y3s0pQjs5jWvgjdUk/aYBjwQDyQeReEwosIzqUmL9HO9NIbVxTA6lw4iyY72
-         tPRf8Ux0z8Ucr+yEt7c9Op8Mvz5QQXEjcYFSsQ4fwzzexqBRuWL1uzmqi58jfGO6xM+y
-         krvOgYHmGdGJDd1qhWtPCsa1gUvT1UBKCScbg4d+7QxiVrhxaB0n+t4q1n1p5bwBR2mI
-         R3h/9I1cq85vzrDvTaL6BTMJCFiRfk5IWwQISJy0ztgiAVM/SiE9525FjjdIWBr7Q165
-         T9nA==
+        bh=97fxYmkEtlOpyahoQx4M5It56A2ScDgvjgQGcXq1u+M=;
+        b=BVvGITSkN5crkaTLxMw3x8D0IPeIl/nf0rjo9D87pvIsz3ok9gHK8LIu4JjeFJnM2+
+         XJtwL+je74UPcU6wuJNVlBjfK9R+psw3E3eFcqwt5OpEzdhCUZarLlUKtyjkcCDZUv7b
+         nMybZjzx3jVKNQ/VOfsZOwfwlYcCzav6GXzqXiGPmSS17fQx9IGA3Q82AAq02M6ruf4S
+         ZOadRd+3UDHET/sko80jkl58ZXOWSxCRtoDwX2pCUV1LtCTds2MAWIxdsXqaL3jAjm61
+         OU6BGwUo0Du9mipMaifvyXlcRJezYxZYvHQGyKCNrjx5XrhHAtJFI1Nv5FP4hgqmzA1k
+         gB/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751185436; x=1751790236;
+        d=1e100.net; s=20230601; t=1751185442; x=1751790242;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mt+ql+PrjmzYyafappxb+kroF0DLVLujfMoQHbjak4k=;
-        b=qvSPVyOLLKOyT0j75sOB9CldHO06ebq6zeNhI/3BRLNEJBmvKwDBv9Ox2uSYH1wMzC
-         s72nP4H/0nSvrZHgNHo/gUzH7PQRCdjTfWJA94HI2dQocl+OBZ3abi/1MGYmSAf7WGwO
-         ruvliK+DSdMMiJRcpe762K22U5X60cJhqiXFIlVNZv8k13ge0V66unFOK1XyV6Utjw1K
-         n5cGgENXZnb3QZv9nRexnbvAfA338v/g2ZWleUcJCfYX/l86oQWeDhJ6Ag6sqUyyN3h0
-         kQnvjekqD1w89OOEfnSJqOQVO0oCxt/QLtgZnQU5qcG5195T+RHT7E0zWcmzMSjgrjcr
-         /C7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUirEiO/S56JDoZO1BcldZYJ51Dvqz8MiOWpLiPpfr7f/ObGoiRLuYJEwSWhy7SDfQ0hpvfh9FZsaa9@vger.kernel.org, AJvYcCVYnjE/mVIh39DjqYVDHvvjZR21L+Bf0kCieJCUd1WPeLgEs8cYfb3oT+6aecLSVC2Ted2Pb3EiK59y@vger.kernel.org, AJvYcCXXDVMmgkcR7RrEcJgcxk9Gakfc9PL15tOhqn9MAh/WXGT1+jh836JKlpFgs5uiXDO0RAfTMOeuRyB99MNK@vger.kernel.org
-X-Gm-Message-State: AOJu0YznPJLwXtPnfVCJgU8RCvkn6tLFFic2tIT/gUBMlEhPgI/iUhSR
-	G0en8GHkrMJ3QEvY1ny0WH8Pi3KonX4fSFJS7ly2/cKswjx/dKbIC982SzP7jEUOFi8=
-X-Gm-Gg: ASbGncuu0hOnyN4M9/BQi5vejqhkIAgTvUXrrByEqgQQPLK271fdC36LsKA59/yPGRi
-	3CjXMq5+k8l7/DAy/lk4NIgULkIzn/wZAu5Tnny5Dg/HWQeyAMB1P36T7vv1ujKcPigVGpZ4mNe
-	8YyTWdhap4EBH1LlEOLW8hQ3VtOJGf9FLuLNCSkYOXRPyKkVu9E+P4knzL4G9EuEYYRlMUAxR/Y
-	SGwyNWvM2mTIqBHbzDso2gXXRRxSy6DfWRNLjvqgfb2t4JNRoUUf57OaV0TDpylqIoRzmNrHGln
-	8WpNzCBa+0LZMKfGpAhOeawoyBgpUhnmw9bJzn6NseSPWsbVl8AuXQ==
-X-Google-Smtp-Source: AGHT+IGHSGmVXaH1qzRx8krEwxIKwAdC/CaF24fxPdx796M/L8k62EbYQxOG2adPibF6rWxhZKMrig==
-X-Received: by 2002:a17:90b:2f88:b0:311:ba32:164f with SMTP id 98e67ed59e1d1-318c9223bc9mr14517657a91.8.1751185435487;
-        Sun, 29 Jun 2025 01:23:55 -0700 (PDT)
+        bh=97fxYmkEtlOpyahoQx4M5It56A2ScDgvjgQGcXq1u+M=;
+        b=MScRdTw62dFD7FnbkB8vPBe1RWbFdBlSAarNT++eeQjMZlugM07X7ktoUpUihAlsza
+         mPT5PS0pOwCyrRSQ8gJbOdicuR4EZYUUw5EhLA1stzLJ+GCosX6qzp6jih0tH4U3B6oT
+         dJFjq8f49FJ/HrA0C49d6sRovpm4NHsbyXh08jfyXA+8DRNVHSH5Qv0LyHAK0vJeBLod
+         8RTnOSBj1CmV14BoFmTi1Jlpi1xTqgbqNyPoMgk0QvHyBqANiNtWZwrCt476nIp+PBFQ
+         cW3oSpvzpfmhbx6xvEjIDZc7197eK3kB5225p/zQUyY8QqvTBqYcRS4QOoDRq9NbbO43
+         7H2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWY/FsQynoPaDIEZwpuqFAWOKUGg0i0tdz09ugFC9YneJNN3dTNTnsKAse/CHZNJjkUfANZpWV4O8zv@vger.kernel.org, AJvYcCWdnQzotnzUj9aEkwHRWsQveBfpt5j8PlQTSHE57eDjgv0lTZGkamteQNxWAOAjhWyCXXy0sTJResb2@vger.kernel.org, AJvYcCXnj440XiX+8EuIXtsxLa+6tq8/jBlP/erNuH9kUiZud3pequGx/+Py4Zubz53gi1piXebL7flX/vScK9Xe@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJXOCusUgaHckJ7OBloyeWEMEtKvMk/LVWnvSTuQSewr14kZRL
+	dAt8lmY6ov3NrjhPTBKLhNcAeswhUx8MT7+BaFQfds3wBGKuMOGBSnUmpcefKMCQJKA=
+X-Gm-Gg: ASbGncuodVlkipp2WIJcbGrXHUCCFRxxCllRY1zRu3yiayYbgvGcYFAYfJYP1Amc412
+	T88QcFcftuMrF0NoTDm45G299pPED5LAag1LYwBeh+dIcnkdOEvFyMbgQid2LZ7+b2NBu2XDn2A
+	mMDRDoLyGguJ+QjKZ/l9J/5EyULKkumyU/9hb/IkVRy0QirBnMEeLXgxgINQMsoiDrvSnu2gWys
+	9b4F60BomZ6ujETq613O6tDbbFsqD4FJsl5JwGIKUuPhZAqgpC+blLJYyXF9r8p4gSn0Hx11IYK
+	Yzg7pfqRuE92uqbv05ZLHu4oymKwFpoV4DSu6wHQGxxBXhGX+wbfvw==
+X-Google-Smtp-Source: AGHT+IHAI6D2+4NaOQwnBVFRV6TfBFP4M7lyDzfYRNJ5iP2pargoe20VvUzU6g8JZlrc4J5MmumIGA==
+X-Received: by 2002:a17:90b:554f:b0:311:fde5:c4b6 with SMTP id 98e67ed59e1d1-318c8ecda6fmr14121094a91.6.1751185441085;
+        Sun, 29 Jun 2025 01:24:01 -0700 (PDT)
 Received: from [127.0.0.1] ([2001:250:5800:1000::168a])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f542661asm10495839a91.26.2025.06.29.01.23.50
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-315f542661asm10495839a91.26.2025.06.29.01.23.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Jun 2025 01:23:55 -0700 (PDT)
+        Sun, 29 Jun 2025 01:24:00 -0700 (PDT)
 From: Zixian Zeng <sycamoremoon376@gmail.com>
-Date: Sun, 29 Jun 2025 16:23:12 +0800
-Subject: [PATCH v3 3/4] spi: spi-sg2044-nor: Fix reading bytes issue on
- SG2042
+Date: Sun, 29 Jun 2025 16:23:13 +0800
+Subject: [PATCH v3 4/4] riscv: dts: sophgo: Add SPI NOR node for SG2042
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,7 +83,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250629-sfg-spifmc-v3-3-28db1f27e999@gmail.com>
+Message-Id: <20250629-sfg-spifmc-v3-4-28db1f27e999@gmail.com>
 References: <20250629-sfg-spifmc-v3-0-28db1f27e999@gmail.com>
 In-Reply-To: <20250629-sfg-spifmc-v3-0-28db1f27e999@gmail.com>
 To: Tudor Ambarus <tudor.ambarus@linaro.org>, 
@@ -103,50 +102,92 @@ Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
  Zixian Zeng <sycamoremoon376@gmail.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1751185413; l=1655;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1751185413; l=2460;
  i=sycamoremoon376@gmail.com; s=20250113; h=from:subject:message-id;
- bh=9hfluPES3NJNacigLt9GPHetnqMVb+nAsHw5PVH/j0c=;
- b=R3LSjxSyIuRG9w/LW3zvpCkqpEFDEkeviRHy6Y1wZb2EF5IOFZcZRrcTpA9XenOZVYr94SeIF
- alftbtOoyPEBBnhJa3VJMdnFzrtAvre4ooQIwpIt9DDaVZahZFOQDcW
+ bh=b+ls9Cn6mM3MfOnV5MwzeFfnl2Z8gVpyt1s6gAiujiE=;
+ b=qcKJ8A9MKl1P77tnPMI3NfkU32uwTXkSDZJvQfYIjdv1Qyo0isAzCFstxLD0cUiPLM5fWPmEW
+ 4K+vp3bYOuCC+x8B5wTmbP07YTNgDyop6esoGUoR3UyZXUwmcVKdIjv
 X-Developer-Key: i=sycamoremoon376@gmail.com; a=ed25519;
  pk=OYfH6Z2Nx3aU1r0UZdvhskmddV6KC6V1nyFjsQQt4J8=
 
-SG2042 spi flash controller specification[1] states that:
-> For Receive, an interrupt and DMA request are generated
-> when the number of valid bytes in the FIFO is greater than
-> or equal to the number of bytes defined by FFTrgLvl.
+Add SPI-NOR controller and flash nodes to device tree for SG2042.
 
-Auto-detecting flash with SFDP only requires reading 4 bytes
-in spi_nor_check_sfdp_signature().
-Because of that, no interrupt is triggered and a timeout happens instead.
-Since we want to reuse this driver for SG2042, setting FFTrgLvl to a value
-which is less than or equal to 4 should solve the issue.
-
-Link: https://github.com/sophgo/sophgo-doc/blob/main/SG2042/TRM/source/SPI-flash.rst [1]
 Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 ---
- drivers/spi/spi-sg2044-nor.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 24 ++++++++++++++++++++++
+ arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 24 ++++++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/drivers/spi/spi-sg2044-nor.c b/drivers/spi/spi-sg2044-nor.c
-index 09a5712822e32c9da818684e7010b70aa94ae347..c1fe43e09c549328c0d046fc95bed130083dbbcb 100644
---- a/drivers/spi/spi-sg2044-nor.c
-+++ b/drivers/spi/spi-sg2044-nor.c
-@@ -485,8 +485,14 @@ static const struct sg2044_spifmc_chip_info sg2044_chip_info = {
- 	.rd_fifo_int_trigger_level = SPIFMC_TRAN_CSR_FIFO_TRG_LVL_8_BYTE,
+diff --git a/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts b/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
+index ef3a602172b1e5bf3dcf54a8cacdad5172b7f50e..554ec14d58453a44a02a82da40a7aedb80d61dc9 100644
+--- a/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
++++ b/arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts
+@@ -138,6 +138,30 @@ &sd {
+ 	status = "okay";
  };
  
-+static const struct sg2044_spifmc_chip_info sg2042_chip_info = {
-+	.has_opt_reg = false,
-+	.rd_fifo_int_trigger_level = SPIFMC_TRAN_CSR_FIFO_TRG_LVL_1_BYTE,
++&spifmc0 {
++	status = "okay";
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <100000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
++	};
 +};
 +
- static const struct of_device_id sg2044_spifmc_match[] = {
- 	{ .compatible = "sophgo,sg2044-spifmc-nor", .data = &sg2044_chip_info },
-+	{ .compatible = "sophgo,sg2042-spifmc-nor", .data = &sg2042_chip_info },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, sg2044_spifmc_match);
++&spifmc1 {
++	status = "okay";
++
++	flash@0 {
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <100000000>;
++		spi-tx-bus-width = <4>;
++		spi-rx-bus-width = <4>;
++	};
++};
++
+ &uart0 {
+ 	pinctrl-0 = <&uart0_cfg>;
+ 	pinctrl-names = "default";
+diff --git a/arch/riscv/boot/dts/sophgo/sg2042.dtsi b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
+index 85636d1798f11804546ed8606595ace1b4cb2a2f..0e1fcb54480af71147d0e71178a8eb08a31b75c3 100644
+--- a/arch/riscv/boot/dts/sophgo/sg2042.dtsi
++++ b/arch/riscv/boot/dts/sophgo/sg2042.dtsi
+@@ -48,6 +48,30 @@ soc: soc {
+ 		interrupt-parent = <&intc>;
+ 		ranges;
+ 
++		spifmc0: spi@7000180000 {
++			compatible = "sophgo,sg2042-spifmc-nor", "sophgo,sg2044-spifmc-nor";
++			reg = <0x70 0x00180000 0x0 0x1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&clkgen GATE_CLK_AHB_SF>;
++			interrupt-parent = <&intc>;
++			interrupts = <108 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rstgen RST_SF0>;
++			status = "disabled";
++		};
++
++		spifmc1: spi@7002180000 {
++			compatible = "sophgo,sg2042-spifmc-nor", "sophgo,sg2044-spifmc-nor";
++			reg = <0x70 0x02180000 0x0 0x1000000>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&clkgen GATE_CLK_AHB_SF>;
++			interrupt-parent = <&intc>;
++			interrupts = <109 IRQ_TYPE_LEVEL_HIGH>;
++			resets = <&rstgen RST_SF1>;
++			status = "disabled";
++		};
++
+ 		i2c0: i2c@7030005000 {
+ 			compatible = "snps,designware-i2c";
+ 			reg = <0x70 0x30005000 0x0 0x1000>;
 
 -- 
 2.49.0
