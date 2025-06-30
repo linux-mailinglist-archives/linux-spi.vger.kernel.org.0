@@ -1,185 +1,108 @@
-Return-Path: <linux-spi+bounces-8895-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8893-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8DF7AEDB75
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA955AEDB68
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:42:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2F04189B715
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0976189B6C3
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:42:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9E62627EC;
-	Mon, 30 Jun 2025 11:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F30266560;
+	Mon, 30 Jun 2025 11:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="MkYrRgjb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XI98+6GF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DD826059F;
-	Mon, 30 Jun 2025 11:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD2826560B;
+	Mon, 30 Jun 2025 11:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751283759; cv=none; b=hWBlyaaQkIF/fKNM+0HuPD5zkQs+9umYZGY6pbuUmG8gpYLB2KQN1TzvFBTWdueCSBM/XQ+hMyvsCeiu0CwgffuMg/nEbOEYyDb7iszVvgkG/D5lsw6T9upKC17PKSVJsemiaPGXR1JCrXN+Wz8j3EjsRnp2y4WWh09K+JFBXJ0=
+	t=1751283655; cv=none; b=doYPVqfO5YdqEKxs4lPmXkNGB8iNLQCGz25CY76kI61531hDmmwXZl3TxL9FaLIhfwUW28WwVtum52XM4tr48sShc1tQGJ8B5+kGUa9T5nxkNpt1yXhbjl72gDAMt1VD7kSsFfhw/MmU9Ae3w5DMPvYtcyVtT70yoHG3cPdpYKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751283759; c=relaxed/simple;
-	bh=mZFzArsRJyrG8k03mRKECaPQ6JaZ31L3+yrSlxdo7S4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kJV6mlI1Xfliwcla4Vapudz4if2G+dGwQD86qCigeyenN/gQn+/JKvfAJGxG7/Te72mtQXty3co7ROVvnt/ugh32sinZYz8C+yWfCVqWTwdQTF5r6lzXRcBYuvEc2TcOmVidIKuBykkEWleg3EzuL/u0whtK5+VDYVEv0Qghj8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=MkYrRgjb; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55UA9NFN023997;
-	Mon, 30 Jun 2025 13:42:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=selector1; bh=8pycezctstuz3BFlNIxQMNF0
-	K5ylVdmwNgA8PPuNOE4=; b=MkYrRgjbalPM0VOOV78JMBpg6f3AhTUePQ8VeYVZ
-	1TMtJouX6Eq4sVkrc8PHVpBOmp/Ngy7OrS/fKgugQLkvjtwCN6AMVK9yfT2d6m/1
-	aKpW/SgEOXBmc0JQIRAK6jD6PB9o7JYle/NhL1Xkh+GsB9ykA8aMd3u1WtkrqrlK
-	j7ySLnqKHhIGsyTMRG9i5J9T8R5hrc0ngrPL3U8DMk5RKFVpLZicJmKuxyd9v25+
-	by19Hcuyrsbo/4bv3+NJ48pJNi/vG7OtVImPJnZu7cf3mSq8LEG6ey/85XERtJfp
-	l2C1QUdrraL4uNa6ubG8Ucv0Mg9yYR61zHH3wDzoaV9Q0Q==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47jubnmqrd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 13:42:23 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 3830E40059;
-	Mon, 30 Jun 2025 13:41:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id ACD70B2379E;
-	Mon, 30 Jun 2025 13:40:57 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.130.77.119) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
- 2025 13:40:57 +0200
-Date: Mon, 30 Jun 2025 13:40:51 +0200
-From: Alain Volmat <alain.volmat@foss.st.com>
-To: Antonio Quartulli <antonio@mandelbit.com>
-CC: <linux-spi@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2] spi: stm32: fix pointer-to-pointer variables usage
-Message-ID: <20250630114051.GA398774@gnbcxd0016.gnb.st.com>
-References: <1f49b8f3-44c9-43f3-a3bf-b931fb0726f4@foss.st.com>
- <20250630081253.17294-1-antonio@mandelbit.com>
+	s=arc-20240116; t=1751283655; c=relaxed/simple;
+	bh=v32/IgCkzDDCvndoXu75HLDruwhsWVIle5ausaYvQS4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Ggm7S4QXTwaoeYT4neYJJmwnC+ryY4qu9ef3/Sq7TljlHEZPEezK8T6oWyUtHhpZ8kXwqhtKWD6QYA+j9sGL+DUVhs5621+pttiWbbNDy4WjMTZu2z6kf7M5ZZBuwUkocyMLdOsz4x5fhFAtJAAH61zLA9ubRnwTjYiOYy5l+3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XI98+6GF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4B7C4CEE3;
+	Mon, 30 Jun 2025 11:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751283654;
+	bh=v32/IgCkzDDCvndoXu75HLDruwhsWVIle5ausaYvQS4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=XI98+6GFt3X6VT+WIKJVOk3Ng4aJf5v+wtrKfsfSHJc4aOEOK9KJZgZEy5gANnUtW
+	 8ZmilQuTYhtUzC4vItGr+wvRR8KbMzbEGdryxOehSV5ujvfFG3G8/d9/y8acFNsFmk
+	 4q9B2mKWPaTWzElt1SnlPcGieG8ze1KQD1yPs1Dby7ctuvTJ3iqWUSIzMdrC9Ck++X
+	 +GoVF25zi2BoV7MdNAOW16s4zZej/3VTynHRPdYy4kTBHkvSuA9cUU5QZGeAcHoo4B
+	 A1gHDjZ2C6mjzqMc3mzUeFGko0FSvLHKgf12ek3lNLjezjSw6SZxHHElRuJIOeX4e8
+	 +XplipFE2/aHg==
+From: Mark Brown <broonie@kernel.org>
+To: Vladimir Oltean <olteanv@gmail.com>, 
+ Vladimir Oltean <vladimir.oltean@nxp.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Larisa Grigore <larisa.grigore@nxp.com>, Frank Li <Frank.li@nxp.com>, 
+ Christoph Hellwig <hch@lst.de>, James Clark <james.clark@linaro.org>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
+References: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
+Subject: Re: (subset) [PATCH v4 0/6] spi: spi-fsl-dspi: Target mode
+ improvements
+Message-Id: <175128365269.28911.6934091956026312551.b4-ty@kernel.org>
+Date: Mon, 30 Jun 2025 12:40:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250630081253.17294-1-antonio@mandelbit.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_03,2025-06-27_01,2025-03-28_01
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-Hi Antonio,
+On Fri, 27 Jun 2025 11:21:36 +0100, James Clark wrote:
+> Improve usability of target mode by reporting FIFO errors and increasing
+> the buffer size when DMA is used. While we're touching DMA stuff also
+> switch to non-coherent memory, although this is unrelated to target
+> mode.
+> 
+> The first commit is marked as a fix because it can fix intermittent
+> issues with existing transfers, rather than the later fixes which
+> improve larger than FIFO target mode transfers which would have never
+> worked.
+> 
+> [...]
 
-Thank you for the patch.
+Applied to
 
-On Mon, Jun 30, 2025 at 10:12:53AM +0200, Antonio Quartulli wrote:
-> In stm32_spi_prepare_rx_dma_mdma_chaining() both rx_dma_desc
-> and rx_mdma_desc are passed as pointer-to-pointer arguments.
-> 
-> The goal is to pass back to the caller the value returned
-> by dmaengine_prep_slave_sg(), when it is not NULL.
-> 
-> However, these variables are wrongly handled as simple pointers
-> during later assignments and checks.
-> 
-> Fix this behaviour by introducing two pointer variables
-> which can then be treated accordingly.
-> 
-> Fixes: d17dd2f1d8a1 ("spi: stm32: use STM32 DMA with STM32 MDMA to enhance DDR use")
-> Addresses-Coverity-ID: 1644715 ("Null pointer dereferences (REVERSE_INULL)")
-> Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
-> 
-> ---
-> Changes from v1:
-> * introduce *_mdma_desc and *_dma_desc for better readability
-> * fix another instance of rx_dma_desc bogus assignment in case of
->   failure of sg_alloc_table()
-> * commit title/message reworded accordingly to the previous point
-> ---
->  drivers/spi/spi-stm32.c | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index 3d20f09f1ae7..4b7f074fdba9 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -1474,6 +1474,8 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
->  						  struct dma_async_tx_descriptor **rx_dma_desc,
->  						  struct dma_async_tx_descriptor **rx_mdma_desc)
->  {
-> +	struct dma_async_tx_descriptor *_mdma_desc = *rx_mdma_desc;
-> +	struct dma_async_tx_descriptor *_dma_desc = *rx_dma_desc;
->  	struct dma_slave_config rx_mdma_conf = {0};
->  	u32 sram_period, nents = 0, spi_s_len;
->  	struct sg_table dma_sgt, mdma_sgt;
-> @@ -1524,18 +1526,18 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
->  		}
->  	}
->  
-> -	*rx_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, dma_sgt.sgl,
-> -					       dma_sgt.nents, rx_dma_conf->direction,
-> -					       DMA_PREP_INTERRUPT);
-> +	_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, dma_sgt.sgl,
-> +					    dma_sgt.nents, rx_dma_conf->direction,
-> +					    DMA_PREP_INTERRUPT);
->  	sg_free_table(&dma_sgt);
->  
-> -	if (!rx_dma_desc)
-> +	if (!_dma_desc)
->  		return -EINVAL;
->  
->  	/* Prepare MDMA slave_sg transfer MEM_TO_MEM (SRAM>DDR) */
->  	ret = sg_alloc_table(&mdma_sgt, nents, GFP_ATOMIC);
->  	if (ret) {
-> -		rx_dma_desc = NULL;
-> +		_dma_desc = NULL;
->  		return ret;
->  	}
->  
-> @@ -1558,13 +1560,13 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
->  		}
->  	}
->  
-> -	*rx_mdma_desc = dmaengine_prep_slave_sg(spi->mdma_rx, mdma_sgt.sgl,
-> -						mdma_sgt.nents, rx_mdma_conf.direction,
-> -						DMA_PREP_INTERRUPT);
-> +	_mdma_desc = dmaengine_prep_slave_sg(spi->mdma_rx, mdma_sgt.sgl,
-> +					     mdma_sgt.nents, rx_mdma_conf.direction,
-> +					     DMA_PREP_INTERRUPT);
->  	sg_free_table(&mdma_sgt);
->  
-> -	if (!rx_mdma_desc) {
-> -		rx_dma_desc = NULL;
-> +	if (!_mdma_desc) {
-> +		_dma_desc = NULL;
->  		return -EINVAL;
->  	}
->  
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
+Thanks!
 
-Regards,
-Alain
-> -- 
-> 2.49.0
-> 
+[1/6] spi: spi-fsl-dspi: Clear completion counter before initiating transfer
+      commit: fa60c094c19b97e103d653f528f8d9c178b6a5f5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
