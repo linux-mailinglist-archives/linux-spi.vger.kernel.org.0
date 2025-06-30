@@ -1,186 +1,125 @@
-Return-Path: <linux-spi+bounces-8878-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8879-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C78D7AED6C9
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 10:13:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B544AED700
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 10:21:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 196FD1701E7
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 08:13:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 720EA1898D6A
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 08:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D71238C2C;
-	Mon, 30 Jun 2025 08:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB46F17C220;
+	Mon, 30 Jun 2025 08:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mandelbit.com header.i=@mandelbit.com header.b="NkniRxFJ"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="6yrs2Wn+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D2A238C1F
-	for <linux-spi@vger.kernel.org>; Mon, 30 Jun 2025 08:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2A221FF55;
+	Mon, 30 Jun 2025 08:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751271197; cv=none; b=GHk49cIU2r8gNzhvCVAYGnZxIQVzlEdhr9sBMSLOhcaZVRR/4ct94E1nsLtK8laDbNoVBcm1ULS0lJ7xbNz5QrZTjqVffqcFLKpko4CDKfKn2AZG3fzyhSbEr9EzglN0k+FEaCfWBGjz3f3iNCh42Xdqlgbkwxyc/sIOMJVziWY=
+	t=1751271712; cv=none; b=Wk//RLuDbLOGzxrNpOKca+FmNATz0MX9LW/Sm2AFa/RonVz4eGPr3xOCxl8MykTVXfF7YQnI8K1o24N/IIGcxqyoj+OkilW/OZjAczrg5iY4XkrViZ7nkgZEKZ7gN9vfSJ5fWc00EO1iNfM5VXAZRqDuL5yLK+K79sVzi92xeOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751271197; c=relaxed/simple;
-	bh=LLK/gnwY8utHm4r5nNU5i8/AGhwkVdhAb0A7QvXNt8k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C8Xh/CLC3y0Ay1OMXrdSLvVUDKJgMzTt7fsSkdERo6as+dyoNYA6oB728oD+07XkYa0q7alB/VYnN0RnzJ86MOUn5fohzEP/KnYn6G+rXyJQlqzlAR5GbQBCrERabrwYvADzop/uM6KdPhmf60P7fetnxpkFN98iq9x4T4OZzwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com; spf=pass smtp.mailfrom=mandelbit.com; dkim=pass (2048-bit key) header.d=mandelbit.com header.i=@mandelbit.com header.b=NkniRxFJ; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3a528243636so2492306f8f.3
-        for <linux-spi@vger.kernel.org>; Mon, 30 Jun 2025 01:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mandelbit.com; s=google; t=1751271193; x=1751875993; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vlnZvB/WCXPqtyuE7Jw0BGhm5yZL6emwd3gHblqa4CA=;
-        b=NkniRxFJWkby18CWfiRXO8SvV9H2VhDnfPgF+wNGSYNElVdOCyo+nCkekPqt2jwlhZ
-         lW5vxCAlqNvSSG3wYxH8AatgqAvPt8ek1zBMNJ7y75/89V4nUx2ztqwd5AXVrkr/YWWj
-         x5wZwZahAjt1Az75yol4KtaHBo3Y0tsw5xGtqs0X1vDXa4wHjh+DCE9hylK4yFHyqhju
-         T1leDAOuW2aOc9H3KCkLhhJG19NVhs/xvBxMlOKudq03dn3qDwBgXaxy2E6LYEhKcTah
-         LsURgOw86GkClafet9N12BW8co7zxiC2/U+bQn6DhXkq93P5DnLwwVoX+CfgAV5XlRP7
-         Tfvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751271193; x=1751875993;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vlnZvB/WCXPqtyuE7Jw0BGhm5yZL6emwd3gHblqa4CA=;
-        b=mjPasrxAx7uNchIbxAqmpClveQ8X0+qsITbSBlfZl6BZTe38BBdpB/czauOr2xUkRu
-         CHHQ+pgHzCRbp7QqO2+/3R+obo9l2gvrx6XSGoWJ7qdfYwIKSEPDW1xsx95/WQN86HJc
-         cbKASfPh2asLl+U/NfW2p9bXK3Nvo395Eu6KDAXpemYPR+ipKMWem2OF9SHhmCgxw0i8
-         KzjDxIPNoyCO8u0ETZB6HU1NI9nJ27SRd0hRwpqd5ghr2hbkstpKKtqCF2jZLo1hsuMi
-         7acFao7sF65JZNvCFbEkBq99DipIjGmjHu/7Xt3/RmEensGF76JYmCLcNvcBb+lMX3fe
-         ptlA==
-X-Gm-Message-State: AOJu0YzBjRWY3OX78BZt7BiGtcoftwonb9oxoYFwERXeuqSSEaPGERWV
-	2P7UPHfGGYPZXwR8LigE2Sf3IEzIUzrBt4KbM+zFzDCg9CUebM3f7Z+Aguoc2TAa9M99xcRW6XH
-	jEZtA4ZU=
-X-Gm-Gg: ASbGncs1b4jZz/mFvqvIUUjJMM9GdhmjGI9BUeRjwuttdU0B9VqhDavOJge4GboLkyn
-	NoRuV7JPErKWvJYiKq1IAw3I7a+3DOQ4+q7yFhKJVBMWSsdkoRelQOl3u3Py2RVvucGkAvTBKLe
-	p1JxggGahRbhS5ucBtv3ngwq7ols1SCbmOed6n7knk6xRpZZUlJZzYpciXFPA69IqNj8xqJlDXW
-	RCouKckkXn0qwup9bhjsH0IVw4sqRNP2Dep8gVd21o6hEVPwi+zPglmsUHkmNwImBuWB/LU1h+z
-	efZpjZf4TRvHT0GkN+GZxPWBHS52509/1NlJxrekrQmYUZ/Op+NrJVZmuKn18N+AQ96N4199PEn
-	yGf3AUUQXt5Y=
-X-Google-Smtp-Source: AGHT+IG31LxT0ptg6EHo/bGKOyukJazY4oC/IxLI6mz15TAMA4SfoRER0gF+bNZj4oNhXngxmykf0g==
-X-Received: by 2002:adf:ca92:0:b0:3a4:f722:f98d with SMTP id ffacd0b85a97d-3a9008557admr7908660f8f.51.1751271193346;
-        Mon, 30 Jun 2025 01:13:13 -0700 (PDT)
-Received: from inifinity.homelan.mandelbit.com ([2001:67c:2fbc:1:f5fc:eb97:a20:8b31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a88c7e7386sm9612674f8f.20.2025.06.30.01.13.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 01:13:12 -0700 (PDT)
-From: Antonio Quartulli <antonio@mandelbit.com>
-To: linux-spi@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Cl=C3=A9ment=20Le=20Goffic?= <clement.legoffic@foss.st.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alain Volmat <alain.volmat@foss.st.com>,
-	Antonio Quartulli <antonio@mandelbit.com>
-Subject: [PATCH v2] spi: stm32: fix pointer-to-pointer variables usage
-Date: Mon, 30 Jun 2025 10:12:53 +0200
-Message-ID: <20250630081253.17294-1-antonio@mandelbit.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <1f49b8f3-44c9-43f3-a3bf-b931fb0726f4@foss.st.com>
-References: 
+	s=arc-20240116; t=1751271712; c=relaxed/simple;
+	bh=bO0wNSTcJpD6QAr1bsa0anydA+/iZo70P2ARQ4NvovE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=gBxXVwAjRJqmzX1o4QN7eFJL82Y4JnslqEngZwJwrAACcmaoZaFWNuMqXYCWZvp4KNQLHEPqQ+nQiZF8sOPHEAh9kisvhY9QmYurLbWYj1GUqXMdbNcBF1qY4t4kLmgUabXqiDrwy5IKWKdnFmqJ/frF7srK/zQIdZW8lhaVA/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=6yrs2Wn+; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55U7peFA026641;
+	Mon, 30 Jun 2025 10:21:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=IpPSj43m1cefXVsku8pwgV
+	hOCIYnHfCUw3HEbomrVW0=; b=6yrs2Wn+1eiPM/Wk0jH/GOVMrh9S63bUTG2ds+
+	xCMDGGXmYgD9ds9POLQ8Yw4gQ28ugSurkbOV9sS3O6kc0EnV03Ne7R7G5o4+I3Yk
+	J3ujCzgnWaRa3BE5R6MARkC0rY59SFPystbaVy2sDP15B8VaEVHM8fnIXipgN6aH
+	lKsC8T5px89cq/uPBu1Sk8xziHK4XEcc94V9CU7ipiB0MdeT66zCBHBPBsv4GcIt
+	xsLsExjaf3iH33nZTjHIrdd1FZziAVQCBoU8ShedLcLimJTBTwaKGgiiv+wESMYy
+	5+asimpNUK8W9VoqyU/vcd45xnT9ck2LZxhG5aktWzfKza4Q==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47jubnkrwt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Jun 2025 10:21:40 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 28D1A40045;
+	Mon, 30 Jun 2025 10:20:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BC2F34A24F6;
+	Mon, 30 Jun 2025 10:20:16 +0200 (CEST)
+Received: from localhost (10.252.20.7) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
+ 2025 10:20:16 +0200
+From: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
+Date: Mon, 30 Jun 2025 10:20:13 +0200
+Subject: [PATCH] spi: stm32: fix sram pool free in probe error path
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-ID: <20250630-spi-fix-v1-1-2e671c006e15@foss.st.com>
+X-B4-Tracking: v=1; b=H4sIALxIYmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDM2MD3eKCTN20zApdCzMDE0OzpLQkS7MUJaDqgqJUoDDYpOjY2loA4dS
+ aHFkAAAA=
+X-Change-ID: 20250630-spi-fix-860416bfb96d
+To: Alain Volmat <alain.volmat@foss.st.com>, Mark Brown <broonie@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>
+CC: <linux-spi@vger.kernel.org>, <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Dan
+ Carpenter <dan.carpenter@linaro.org>,
+        =?utf-8?q?Cl=C3=A9ment_Le_Goffic?=
+	<clement.legoffic@foss.st.com>
+X-Mailer: b4 0.15-dev-c25d1
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-30_01,2025-06-27_01,2025-03-28_01
 
-In stm32_spi_prepare_rx_dma_mdma_chaining() both rx_dma_desc
-and rx_mdma_desc are passed as pointer-to-pointer arguments.
-
-The goal is to pass back to the caller the value returned
-by dmaengine_prep_slave_sg(), when it is not NULL.
-
-However, these variables are wrongly handled as simple pointers
-during later assignments and checks.
-
-Fix this behaviour by introducing two pointer variables
-which can then be treated accordingly.
+Add a test to check whether the sram_pool is NULL before freeing it.
 
 Fixes: d17dd2f1d8a1 ("spi: stm32: use STM32 DMA with STM32 MDMA to enhance DDR use")
-Addresses-Coverity-ID: 1644715 ("Null pointer dereferences (REVERSE_INULL)")
-Signed-off-by: Antonio Quartulli <antonio@mandelbit.com>
-
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
 ---
-Changes from v1:
-* introduce *_mdma_desc and *_dma_desc for better readability
-* fix another instance of rx_dma_desc bogus assignment in case of
-  failure of sg_alloc_table()
-* commit title/message reworded accordingly to the previous point
----
- drivers/spi/spi-stm32.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/spi/spi-stm32.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index 3d20f09f1ae7..4b7f074fdba9 100644
+index 3d20f09f1ae7..858470a2cab5 100644
 --- a/drivers/spi/spi-stm32.c
 +++ b/drivers/spi/spi-stm32.c
-@@ -1474,6 +1474,8 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
- 						  struct dma_async_tx_descriptor **rx_dma_desc,
- 						  struct dma_async_tx_descriptor **rx_mdma_desc)
- {
-+	struct dma_async_tx_descriptor *_mdma_desc = *rx_mdma_desc;
-+	struct dma_async_tx_descriptor *_dma_desc = *rx_dma_desc;
- 	struct dma_slave_config rx_mdma_conf = {0};
- 	u32 sram_period, nents = 0, spi_s_len;
- 	struct sg_table dma_sgt, mdma_sgt;
-@@ -1524,18 +1526,18 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
- 		}
- 	}
- 
--	*rx_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, dma_sgt.sgl,
--					       dma_sgt.nents, rx_dma_conf->direction,
--					       DMA_PREP_INTERRUPT);
-+	_dma_desc = dmaengine_prep_slave_sg(spi->dma_rx, dma_sgt.sgl,
-+					    dma_sgt.nents, rx_dma_conf->direction,
-+					    DMA_PREP_INTERRUPT);
- 	sg_free_table(&dma_sgt);
- 
--	if (!rx_dma_desc)
-+	if (!_dma_desc)
- 		return -EINVAL;
- 
- 	/* Prepare MDMA slave_sg transfer MEM_TO_MEM (SRAM>DDR) */
- 	ret = sg_alloc_table(&mdma_sgt, nents, GFP_ATOMIC);
- 	if (ret) {
--		rx_dma_desc = NULL;
-+		_dma_desc = NULL;
- 		return ret;
- 	}
- 
-@@ -1558,13 +1560,13 @@ static int stm32_spi_prepare_rx_dma_mdma_chaining(struct stm32_spi *spi,
- 		}
- 	}
- 
--	*rx_mdma_desc = dmaengine_prep_slave_sg(spi->mdma_rx, mdma_sgt.sgl,
--						mdma_sgt.nents, rx_mdma_conf.direction,
--						DMA_PREP_INTERRUPT);
-+	_mdma_desc = dmaengine_prep_slave_sg(spi->mdma_rx, mdma_sgt.sgl,
-+					     mdma_sgt.nents, rx_mdma_conf.direction,
-+					     DMA_PREP_INTERRUPT);
- 	sg_free_table(&mdma_sgt);
- 
--	if (!rx_mdma_desc) {
--		rx_dma_desc = NULL;
-+	if (!_mdma_desc) {
-+		_dma_desc = NULL;
- 		return -EINVAL;
- 	}
- 
+@@ -2486,7 +2486,9 @@ static int stm32_spi_probe(struct platform_device *pdev)
+ 	if (spi->mdma_rx)
+ 		dma_release_channel(spi->mdma_rx);
+ err_pool_free:
+-	gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf, spi->sram_rx_buf_size);
++	if (spi->sram_pool)
++		gen_pool_free(spi->sram_pool, (unsigned long)spi->sram_rx_buf,
++			      spi->sram_rx_buf_size);
+ err_dma_release:
+ 	if (spi->dma_tx)
+ 		dma_release_channel(spi->dma_tx);
+
+---
+base-commit: 045719b1d0aab98e6abdd7715e8587b997d1cefa
+change-id: 20250630-spi-fix-860416bfb96d
+
+Best regards,
 -- 
-2.49.0
+Clément Le Goffic <clement.legoffic@foss.st.com>
 
 
