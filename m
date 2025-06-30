@@ -1,194 +1,191 @@
-Return-Path: <linux-spi+bounces-8885-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8886-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0523AED82F
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:08:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03842AED84D
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:13:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C06A23A4077
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 09:08:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA2633B57DD
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 09:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC2024166A;
-	Mon, 30 Jun 2025 09:08:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BAF23B60B;
+	Mon, 30 Jun 2025 09:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="aYo9bsq0"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="f3gvANkX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2045.outbound.protection.outlook.com [40.107.237.45])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2051.outbound.protection.outlook.com [40.107.94.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0468923E33D;
-	Mon, 30 Jun 2025 09:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DA223FC5F;
+	Mon, 30 Jun 2025 09:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751274525; cv=fail; b=tK+cOnr9tPxl1njtNZVFX5lo3OiWqqnjR3KVnWAmYHAD+RqFRBKXjQMq7SoXz1ctEtx+Vgyck4P0fuOX7+rILKS5Wm4amzMfT+S9YHm2S7I1X8CCYtWleZlPmWzWLl07DUZxbEIYeSzj6cLaditWiKx73U2OWrPND/C9C+k+csA=
+	t=1751274724; cv=fail; b=qYHHJgTwhQxtlLuZX5kczySXxKAvQBTrHD1VxBsfsrG4ceBybhudoBqnviEBVqqELwmjAZKIf7x1jSnuY/tXnVyRMcmfbQ3agx1ZjEyFFWE6wqe05JnpJA3rRhiOJRS5NbSUvDAlCeQ89+O1god8l4kWDSFt4AQsRH7vokfVt3Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751274525; c=relaxed/simple;
-	bh=xvJIx+c+Jqsn2II/8xw4mUAsx6HurZsaD3ggdyqNCtA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gLZsGQNpK6Q4WSFUXptUdCemRz7PjCCvm10KPGbNjxGd+jXOCGz+Z7uxEEw627M1uR7HIgl2n0txqWm2NAnIOf8BpiohSkvHAy4zVsy5awfL+OgFmqm76RfAdaQUJUviXQRE+G161JuWuiu0KEAbysrdrB8YZctc32Dun91Vkvc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=aYo9bsq0; arc=fail smtp.client-ip=40.107.237.45
+	s=arc-20240116; t=1751274724; c=relaxed/simple;
+	bh=yTyNWvaCsfhD1yMEfDDXsJVhx5qzhDOsgBAV3J87Hoo=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WkpPkZBtp2FJhOBFkFBneHjcEUzBahcS8tzX5CN8S8znwpSPnXS2uZLk1Uw2TDXq48WrfYE95Gr+yoHPmkF4lhKDiyRudozyJHCrYz8Li7B2rsEgLULJYcJYldUYPfKoV8tDlMr62uPoGgCMgRbzm0zMtFY+OcrNt6T3RW9/Tz4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=f3gvANkX; arc=fail smtp.client-ip=40.107.94.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hfLG6uYCq53nSBZboY3vMtxzH5gWwBmZENmimujeY9nBqOi9peJIMU0aF8lE9gm1d+SVr3ykr31t42xxlVB4fnsUceBtMGvgA/OLNMNSkzdKRwYOCIRwvfuB3TeQ8wCfSnWCSOCZ/UvgISHoHzjdxt54YpUai0zTPeQ92cbu0/5Dp0KX1vbCMi318RrCzP00zDALy8e5dc12irmKRJzmHB50JaKovQq5vRsoihWm9syox8ih9+szTO6cPUJm0Jni5W35bc/cWzwnSJhII+8O0C1vXTVL/XB4KK5W8cyvV7K0F/3ifutiFkiqvsylMSAlFLRrEUDaR0h/Kr01uLRKdg==
+ b=Q2HC+JI5GgAfqaKS7/YJyZX34R1QqidacN1P19G1H/8GVvae7+e9d6c4/DT68h49cwTaLAVUO7YI5YpHjg46dM7WMft5/hZw4ed/qCjbbjKX635kCUn7YacLdvzrXDD/9DDDUSxRqRQBWb6ZO/cx8RnIGvoOHYIGKO3pGtHZiCn+IvypyybbZMxWW0G7HRDmfhpMYwh2453MbPaocWqqH+gjGzLwXpvOozZ1IiY/eIQLvvxr5wCwpGoPfZX8yhALW2iUm9UhdH1RN9/WCJDFqg3oaWugNjj8InZjUAkt7RcWw0lqSdhmUpx83cAQonk6b6SR+qKycq0uxNQAd2eY3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14KHa8usUV9Tq6OYcsaMAj8pt7dE7SCgT15bhGnmLcw=;
- b=X6qQpA5ncFL9Azh4rF7DUDFfR0PfxvlGghXws0D6z0eDDF33jlbbdwdRXttaZrzAiMzN8NPeWidbwT3Z1mADB0aq/63Sqi9j149jKpyKAa0o0Z19p2twVmi3NWb1/VS40kGlj9VFnDZW7GT5uEWpXTMVF96nUG79xA0VmXrguA1QNTHftCn0l3cpHmHwIlq5+X10fwRlvGAlYG5FNpAH71Rd1wIpOsWd8fYNIsfViuL9X/ezKbidtG2ILYNsRScE4UaC/8knsZeShNuOmPcfHwXn1tH846SIq9qQ8lNnsoc8d0ygxxVYTM05PuYI0HQLkWOOaJTX/Ak3JOmY6/3z7A==
+ bh=yfbjyhnj4FKAwjaoYWHesop3cBRza5fPG517s5TvOVM=;
+ b=qIUOcRSOjrPu5toojsIyEV48jNImzTqCHBxt9+KEEPbG3Qszguy5BdTwsJKDVrt8fbDGDTGHVwgXI776GhZNCE/vf0oi66q0cl03Srjlb6LCTk+VZ3/jZhzzE9+61LI9v89X4m53+VJV52jJb00ziOC/LaiBosyY98+9c4Ngeeuz7jSZOuxJTorVllE4XmWJfALCQkjFTLoLSObW4PkXU/7x7CjHjBkD2O78UX48OmFegmgTfjhn6bTZkC2ZHrNEabrMngKunyeCzBKFho8T9Txqekqlzqleywqe37Fx1ujRXRl9VFIV1RU6Ozj48+DPeyNVwqSHkA2gAZ+ax5pR6g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
  dkim=pass header.d=altera.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14KHa8usUV9Tq6OYcsaMAj8pt7dE7SCgT15bhGnmLcw=;
- b=aYo9bsq0m/lHQcMbzrKNz2hbBUzEkLrsrUpp/oljwFUmrxV8/p9nS33eXDdD0ZZiQnveo+3xNRA4L0Wxj48kpMUy7Y4xVqW0AupcQPpOtYedNJsnu4yHfOCGRtQJtOpQWJpwF7YgIGSp8kWtg/IzNs/SE17E7yeLoTjg2vc6QsuFyg/+eGxBLlIecpq4SGiEnbT+nJmFtXAbPJubXDfuDsWWtkJKWHVwV8pTNCBovsuv1wodF8cnIPOixVfWIPMk1f04iZClf4uO4UfsILzd6vh956f3UJkhmS6dwoYFVKJadKfGUQZ3bpZDr6bpumLg1igZwC+0s8meK5VCMBxH2w==
+ bh=yfbjyhnj4FKAwjaoYWHesop3cBRza5fPG517s5TvOVM=;
+ b=f3gvANkXDtb8BSOX9usyWTU/ucAb8bavFF1mgTgx5s+s1ankZPqtZc3Keq3gc9xCcv6ifT7ad62P676smlzhIorgmxaQhSb52cqKwWInYrTAHM2LbQ3EwmLXLbLYKXd1+YysMBxQiVdlh/oVe1lANWkbBMSu3MHHvvnQhifKe03k6I5d5QNLa6mddCLr0Dc3iRwI9Jm6U95AXKQlDCEXoJgPo51WKFwkRubAB73KjWhHbktqlEhQ9I8cW/RIa6eH1YnvCdF8PFEdO1gRMLuMa201uUoVIKrDsPELxq2F9VsnbvhoTV//OX6Qg1uIFpm+5W6WmPI0x8u1WPwTPs02MA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
 Received: from DM6PR03MB5017.namprd03.prod.outlook.com (2603:10b6:5:1ee::21)
  by SJ0PR03MB5391.namprd03.prod.outlook.com (2603:10b6:a03:287::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.29; Mon, 30 Jun
- 2025 09:08:40 +0000
+ 2025 09:12:01 +0000
 Received: from DM6PR03MB5017.namprd03.prod.outlook.com
  ([fe80::2898:accd:c6dc:2168]) by DM6PR03MB5017.namprd03.prod.outlook.com
  ([fe80::2898:accd:c6dc:2168%6]) with mapi id 15.20.8880.027; Mon, 30 Jun 2025
- 09:08:38 +0000
-From: "Romli, Khairul Anuar" <khairul.anuar.romli@altera.com>
-To: Mark Brown <broonie@kernel.org>, Dan Carpenter <dan.carpenter@linaro.org>
-CC: "open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>, open list
-	<linux-kernel@vger.kernel.org>, "Gerlach, Matthew"
-	<matthew.gerlach@altera.com>
-Subject: RE: [PATCH v3 1/1] spi: spi-cadence-quadspi: Fix pm runtime unbalance
-Thread-Topic: [PATCH v3 1/1] spi: spi-cadence-quadspi: Fix pm runtime
- unbalance
-Thread-Index: AQHb3BhYLZgMH9u7KkOzqYRdh3pLDrQWgkyAgAAAbQCAAFsSgIAEod9Q
-Date: Mon, 30 Jun 2025 09:08:38 +0000
-Message-ID:
- <DM6PR03MB50177D7B29E3BF39722B07A6C646A@DM6PR03MB5017.namprd03.prod.outlook.com>
-References: <cover.1749601877.git.khairul.anuar.romli@altera.com>
- <4e7a4b8aba300e629b45a04f90bddf665fbdb335.1749601877.git.khairul.anuar.romli@altera.com>
- <ab51dfce-a7d1-4eb3-b469-af35529dfbbb@sabinyo.mountain>
- <62b9964d-0f2c-4d26-9b35-bb7af3aa5c4f@suswa.mountain>
- <aF5s4f8TOpvDJFyB@finisterre.sirena.org.uk>
-In-Reply-To: <aF5s4f8TOpvDJFyB@finisterre.sirena.org.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=altera.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR03MB5017:EE_|SJ0PR03MB5391:EE_
-x-ms-office365-filtering-correlation-id: 8abc24e8-7d04-4855-1252-08ddb7b5b3a5
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?vP4FZ+NXXHXhUvWDdKf1cROnbzUn7UlmAdcpEC/+7k/qgfot0MX5mrhrwO9V?=
- =?us-ascii?Q?XyNezvg0iO/sxSo16UfSXcytHhHoSI1TJ/1uzZnVyPN/2MKpM0Wpw/ESdUpo?=
- =?us-ascii?Q?+0gE76yLkjIGVR8kVdx4VPoK/ksLB6WUbbwPgPRO9yKf8LpDeKB1P+tVDBqg?=
- =?us-ascii?Q?Qxfpv0qDSzKmW8SC4Sdmf7dRy9nm+AhN+NFiLaYaHO/hpb7iTgoFuqw5bDTN?=
- =?us-ascii?Q?cVKNiGJTmBLkKHNbqZfO9AQpBHcmso6WZPO5BPb4qjop4XuVN5n2jEkmlfW3?=
- =?us-ascii?Q?sPr8/4O0BsPU38o5mETOw9UeMOJWio/op6IjtUBMB7M4L5dkSxGiv6bZS9uA?=
- =?us-ascii?Q?jFPgsawOKDhWqdD7IhS12lg0PkZTbclBPTKDZQJPe/N7nwK0KL8Khf0AVZor?=
- =?us-ascii?Q?JeGlAoEclU+/Avufcy0dHB+PNHovlkp6revCPp9tCyZvDL8VDHLQdiBDkoK5?=
- =?us-ascii?Q?jSIKngW9oHQEGdJw8YfMLSEUJNIx+TcFeP0W2rWFXf8j9DUsHvSMMi5Tsl3I?=
- =?us-ascii?Q?cRez9sc2m6Ui3ify1lNCWQtxOMcI2Lv7p8sNg8v+MwdvMNTynuS2ltl2BFHO?=
- =?us-ascii?Q?sCitdryboej7vzstV/npJL2yk4Vu74hlxuuW7dgXFUz24jGjOCgXDb88Lyqv?=
- =?us-ascii?Q?a9s2qWki9jrpqiW3o9eTzazGfrhsp+1Y7sLzegKNBFlRKm7RdogbaJLsyobL?=
- =?us-ascii?Q?SJ22oPXGsCys6IsU6Er3qVUCTRkJD4NUixqBArSpR/Beg06CHDLFe7rt68M5?=
- =?us-ascii?Q?UMdDU72SACshJtnphmguMN8Ta3r0x4lSTi8h+PbEX9DcQ5RgAk9P0CWjC8Og?=
- =?us-ascii?Q?Wq5rpclQ4Np/8O9dbbccDRO1+RGCVBD8EgGBLn3SSqQ1hrdowOwiS64Sz9WE?=
- =?us-ascii?Q?5oM1cfqYQxtOLGJ56QH+yOW2YjD1psl+VYq0TY7dxo+EALhRdUQl3Y8mPh/W?=
- =?us-ascii?Q?7HnmnwTAepKRZCn3eR+Ps8+47xocCBo22QD9t0JyS75AQOK9WXuJoi9TWS5n?=
- =?us-ascii?Q?JcVoauB5EFsb0Vvt1eN9HJpka6RISXPmniXYByRoqC9ENnmwHTQHATQBu62j?=
- =?us-ascii?Q?pHKSURo4Sl9X5siN8+y+pxJa+sHPXL2/V9usxgzSlUci5K6BYvAYPPV+Zs+I?=
- =?us-ascii?Q?uQh+hSf3d+s5NuUC0XZZAiUv9ibsGJPz82k20T8BhY5XexCP5mEGPF8Tb8lP?=
- =?us-ascii?Q?wRz0RoY5ZVNySQhnBvchHqI4ik5Zk/rR2DUV0sonJu+d3BR0Di04uhGiSJFG?=
- =?us-ascii?Q?6uLcRtVRknXZfK6F2kd3pz++aewh7+oHwd5c1Fw+t9C/O7YEy0HVD+o22iRM?=
- =?us-ascii?Q?C07VIR7T+uZkHGxnXQ0RC6VlWBG5Y6ACcglZHoBmd6pKUBX3EDPtfQjQT1oO?=
- =?us-ascii?Q?E9adi6FS+VEGVrDgFbq5UTlLBuOMpykWw880AfRxkeOomOphHnn7rVpf+P4Y?=
- =?us-ascii?Q?zXVrPN/nQuSI1jsO5JL6MVYdSNQSSQnKM/fR6rNx6FRBWP+kqRYOdA=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5017.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?9P16nyeUdU/bGQ5JJg4EIiilnG22tq+cmXJG11kJ4X2VZqn1PywcjMJdAqOU?=
- =?us-ascii?Q?cCth8k1dLlqX1PlpH64QqlCfXVqatqEJx6qIHA0ow94W3tdNlUB5Jrx2JeT9?=
- =?us-ascii?Q?Axrmx6cVefVQcusBIEKK2jDO9DiAhjmLV9uelSG4eIWkC/GiR8Gb5cmfVBJn?=
- =?us-ascii?Q?TSf7CZtkRN4k1ld4eAKhRF90kmY8BzTwCSG9He8iyHI8fYbIjyo0K8ItMuLW?=
- =?us-ascii?Q?2mY50pdr10gp/CPMug+rOmHzefnqot+b43wULh5C516g1DX+shaeejE6s7t9?=
- =?us-ascii?Q?im8A6r1tw8FBZv+WZruX69nq1ph51YiZinLK4Pdd/hNwXm38+BNUpJ0C8V44?=
- =?us-ascii?Q?o+8jNIMiaQ44zTjNUt0MXINAmkzAk4IRdL8dQsb9Kh2P6SpyXELDbdIM7o+6?=
- =?us-ascii?Q?7grr/yfG6HnSTGIXOHnFBUG+/p5Z/GK6a1HUiWQarUvU2ZoL3v/C46xe7Sx+?=
- =?us-ascii?Q?R+6sp8WRa+oGmIvcnznlNUFFaTINcou3cyZ10gMdJQ9GFLeC+NzpafiKz+S6?=
- =?us-ascii?Q?p3Zfk//959jsa88FUmT0yM4FyORiDW0pGwIa61KvZwHQHWmxvKLewRrmPOMg?=
- =?us-ascii?Q?w8aTe960P3iAw57vqPEuITAiCc8ZxUhxnP5x24L+KNLAnSFyoLDYAes9y+GZ?=
- =?us-ascii?Q?sQZRI9QAjFr8pXa7FJ2D3MPLPKrT4QQbBeOIgxZR/7xRUiodQJaVRSUYRXRE?=
- =?us-ascii?Q?p/q+noa/Spra2eRO5QxFGN6WYFa7c3R9nk8ujcYvTj7IFk/VSJF0PE+aEt0A?=
- =?us-ascii?Q?yGdgIQJKQiU/LaCZZUmMTmNxvivrnRIVbHB5ZSOYVh2Mo0wm15TlugbHzOAq?=
- =?us-ascii?Q?A1jhgojaTCgGzdqn6OFmOBtUEoQfpeT/AMdzRvmL6HUjGdc3DQhXOTiLBgza?=
- =?us-ascii?Q?tgJROpQ2XgL46U3ZG5uec9iQEdI1ZfJ1lc0du6df8RkEoYD0yVcksZ00g+GX?=
- =?us-ascii?Q?xJz7I/ebve2imPRWY2dWrRxlpRtVMkSIUnfrGaN63cLskVRSnuY1cN2seYXi?=
- =?us-ascii?Q?f3pRBCK4wSQf0XYPMMVdCynj+PbVZDyagnLTjyhtgfwYBXflC/6UeDLYYRsG?=
- =?us-ascii?Q?xZzJ2e1VS9cbVEp0UUYA1fU8C2lAL/qowyjd6cqfzNI9sEkJw7D8v0YzWBJ1?=
- =?us-ascii?Q?qYCm/lcJoMbYYNOlpLE5aqI0fJhC4Z66PPmJ1E+K59NE+Y4Fc5QLPNzH8EnY?=
- =?us-ascii?Q?s+b86N3a0XE+0S8UL4m8WaXQzbSLNBNgbLNGZp7tYZs2GcA6m4fuwMuQAau4?=
- =?us-ascii?Q?c+dyofLbEPmmMg9vtAnqA2csbqi+IDCltWw4W4WyfKgXrxhdREQxjhADWjYs?=
- =?us-ascii?Q?Xg+7t2Fyv6t1ShpXqtkzkYS0JQnAt8bzpf02R5wqSRre9TVG3yM4ommjeqWn?=
- =?us-ascii?Q?2uAwbJcaiR8Edjwp3WWp40i8FYWUrpH9UBvtEZfvZX/suYZif9niLGA+5qP5?=
- =?us-ascii?Q?6jRU+A+VwwUn1RhSA8Ke1lBsNkUxr8qQFGZaTxGAHe4eHwetQTJVSdBHvvlv?=
- =?us-ascii?Q?CAqICgSA/yA/RewrqIk7A9mSHCqvtroRevHZgIvIWYCX9DQW8Jmz264IKSkQ?=
- =?us-ascii?Q?jGiKmXP5z/47+Wg7NuhkLiYUG4MlJIQGBbfdzrcy?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 09:12:01 +0000
+From: khairul.anuar.romli@altera.com
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list),
+	Matthew Gerlach <matthew.gerlach@altera.com>,
+	Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH 1/1] spi: cadence-quadspi: fix cleanup of rx_chan on failure paths
+Date: Mon, 30 Jun 2025 17:11:56 +0800
+Message-Id: <89765a2b94f047ded4f14babaefb7ef92ba07cb2.1751274389.git.khairul.anuar.romli@altera.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <cover.1751274389.git.khairul.anuar.romli@altera.com>
+References: <cover.1751274389.git.khairul.anuar.romli@altera.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR01CA0042.prod.exchangelabs.com (2603:10b6:a03:94::19)
+ To DM6PR03MB5017.namprd03.prod.outlook.com (2603:10b6:5:1ee::21)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5017:EE_|SJ0PR03MB5391:EE_
+X-MS-Office365-Filtering-Correlation-Id: c33c9ad8-27e2-48da-78cb-08ddb7b62c2b
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?LQtmhNSmZodLCnKk7kGDQm6q5DoeVHjwTk84+YlPd863WEaCbtENsaRxXCxY?=
+ =?us-ascii?Q?3Tull5Q5HkMAgMkQRztzE9D5f8FqGF1YC8XNnuR3+5GYF/GP1yqR5Lhx4UJF?=
+ =?us-ascii?Q?zTfW3Qnkr0FJQAQbiLpdgsxBvFv26yZuzNZqIGFi/GKfVzUyw+bDy+RnWAwR?=
+ =?us-ascii?Q?jWJsU5viBbjadqIwDqlEhOrJB5avklJBrdW6xLm+tz1pzMaAkVHky5mo029r?=
+ =?us-ascii?Q?bZ8JVhBsjBiUHlrh3EhmVtCZNPSSTCaRDO6sLfpehvGQLpI48FoKNaSZQQK5?=
+ =?us-ascii?Q?0zW3+xOuYLJpIgCSofJ4/M17fYh+S1oHT0BYT2rPDXVxL7DtyNMxKmgpamux?=
+ =?us-ascii?Q?+YKaNe/WedzuzF6OmuFazxRQF3/pSc446HTq6cbBVXkbtG0wqMqb+RE8RW0s?=
+ =?us-ascii?Q?FdU5XuqnQka7tZoWsKUBA20PP6qS0CM7JDyikhPpE6SdgHQttrt+SCQ8vhv9?=
+ =?us-ascii?Q?DCP9BqiZ3dPIvY8G3kt7P/24qoZz5CVVSvI7/u/DLCQGi17xztqkpC1z7q7T?=
+ =?us-ascii?Q?4FyQKwaQQN2OT9o1IdfXPjlBy7Fm+pi2Yf3JJ9D9FkXlt59MZyIM8KZFUfHK?=
+ =?us-ascii?Q?jPbtxCDjUATK6iO10PvEDX301AOFYisHNlE1uHgwmpc+FQxJJXP2jYn5WSOx?=
+ =?us-ascii?Q?cWASCFbQPBB1lQRrqw9CF9Iy8OObFulnuUY1LtxYQnr5ZYPw3EYnrEOiY4co?=
+ =?us-ascii?Q?BcBJUAEbNdHVa0nVuJ/mFnSpFkLsBd0GfbAKI8kpBwd31n9jSuv+VjApTE6q?=
+ =?us-ascii?Q?zkMARkmPjre4AHHsIgYVFgrUuIb2+KodXPpLY35S950ed+dvQ+Idh4LGgLwh?=
+ =?us-ascii?Q?zIgF6Rgf1jexBsrCDpWupeTzpRkMUgxjsqC6GcNZlzM/2lIzzYz+KAOVNx5N?=
+ =?us-ascii?Q?I/keUvPoUjGXfFkvWkpUSu4MIoBPAXcVhQNFlLPUudUIP6jl6yevUfyTis/m?=
+ =?us-ascii?Q?ZggApOziFTt8npN6znPzC4hGtixMsU+IK/RTceNeVtrsjmV9THcPUWjbDEdE?=
+ =?us-ascii?Q?TSOzb8JIUUuYmk8M97r7lza6qDsvJGxafieW+cuShuSMJrZ6IF4YBbjseITY?=
+ =?us-ascii?Q?tc43kyB2kTaqx68WTTnLIe/SGmUFXi2ujSaxwVCx/b6sg3nQS7SxHjpZfnnc?=
+ =?us-ascii?Q?Nolgo42Dedw4AXOKtHD4+y9JhtkYbbtZIbPWJ003wgvkjU1ipnbBzyuEU0Wf?=
+ =?us-ascii?Q?yy+3nj4JaWZMd6eS/lROx8pwp6tCTlMoOC9szL0SL02QRZX5krLTTO1KkoWF?=
+ =?us-ascii?Q?oRvZ1597qfwaD5AY72HzRLS6y4/5lq990hN4Bgl4rOYFjjb4JrbInZsJhTjk?=
+ =?us-ascii?Q?I8ott9GaOOrXQ2mcIVleNXHOfKJ2lnxABuv/wwNUbiJ+xZsf5GCmhylROwFZ?=
+ =?us-ascii?Q?YSXQqEV8spEJDDhhBNsLlmd29LVeC16q9XD2wYwvm6lAukiGRasE5IV6nnrd?=
+ =?us-ascii?Q?cCbrX8nomOc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5017.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?NNV13Ar2jPPLcM+CFSqYQLVJBKxCSypQQhQqhD92DC1O+QRVl1kacKYyl1sn?=
+ =?us-ascii?Q?F1gSJ+thVrl3mNYr1lmxc3tJRo9GhBrE8EoZY+3XSZrAKQzm38Kt0X1ut+XJ?=
+ =?us-ascii?Q?lQRsmaY+F9bDL+NnzrgmZwIw7+VOCaov2yhLMa/+gWgmJVEZNpSBtKSPLz2f?=
+ =?us-ascii?Q?qGMNek8kSQ4JyMNiIRJdtnAVz/2svMUIyphk4va8mtExeZ55tfMS8f98mLSN?=
+ =?us-ascii?Q?mnubdVkeYYSNkKngaLMT9Pa47oLV9voC1nKISOnQFwwxuwOnVYsH23gHlL6B?=
+ =?us-ascii?Q?Y4nfgw/70Io/Te01Ryl5X+j11ShVsLyeSpoxgFp9CjDHUEh6rf7D8HJ/36xU?=
+ =?us-ascii?Q?HbT/XDD7puE0ukw7hiREd5VQ9BZ3+QlbWVKXRVUNg7GRsFu/CbkC383PsUDL?=
+ =?us-ascii?Q?Nk3sWKlRyOjgQWzotiCnEHUWu6AMlAalZVvGryDHlEwIXEa32KCD4/gRl2sW?=
+ =?us-ascii?Q?UIHYSZOBpJteXOkxFW+Hxmkp1o7DzCDXspr0Fr5uQCRz3IzTq9WHdmIP8Rrk?=
+ =?us-ascii?Q?cb3KQ26lC+6o/lkNNU9XEBuVS4rCm+3DYh71ymFkb9nI0nIt3DdCPGYVU7GB?=
+ =?us-ascii?Q?coii8G/BcN6RrrB1MnfJ9csQXXHmxN+qCOtLpy8sP75rBoLl0F9DIBQKYrvJ?=
+ =?us-ascii?Q?1iWTR0rQfEWHGO+06YDljPEZIhJx+i2JKW6z1WNzygGU/9bRjyJTk75bHn0h?=
+ =?us-ascii?Q?3z7KuoAL8iZ6HU8cTe23Y95tbn4kUBdggRZhAuoRiik9hC+uGxnEnW0epD2q?=
+ =?us-ascii?Q?I3WqGThrxa7BY6yVrm+eSf4UxG2rxUlqDWoT6oUjvbpA5/TKQ1AYlPZLVAo3?=
+ =?us-ascii?Q?WSEOWpQD8RUBHRIz/734u7bN8CgX5duTDG/9unCPWzaudvuF8isJbDP1UDyc?=
+ =?us-ascii?Q?D1vkOsrZVrzLtdqrF1d2X+1PH/5joRLVlLps7uC2lDAQytSHSlmJVyJXDYu7?=
+ =?us-ascii?Q?xzNlrlisUv9ojbFmbRoAQZZZY+6uM0M2hebA7NQcHYf3hPbz9xpwGNDFpiId?=
+ =?us-ascii?Q?8MNlehMgUPYQruuOQ67CPcEByNIi6aJBL7E2WyGVcodQ1hnDJeN7DfqP2fMj?=
+ =?us-ascii?Q?PnJf1pj/aSNVsq71n1YzWZHqpkf1+CRblT+pUVz6lC0qd8oSpWggZ1mXZ3NL?=
+ =?us-ascii?Q?PVbqM6r2g5EWNTVm3Eyyg48NzNTAqe5xTEt05LtXaBupjENCKOSX4NCap3cZ?=
+ =?us-ascii?Q?g3Jj+1FH5I81KPKrxpusoFe3MW/8dSfcKyFatsj5TEVpg4giwsa0/2/QSS44?=
+ =?us-ascii?Q?te9xZK7pNFse4VL/WDcdijXPqxD2X4TtQjLczVAPbLyarUhvL8S4OJlEscie?=
+ =?us-ascii?Q?aWU/2GFbvDC64b+78N565y7utGOlPHBexWLh1/eY5aqpKGgxzJWjHkMNC5fe?=
+ =?us-ascii?Q?38VWbFbFi/gsmxvGrdUQ4rFauIptmnq+nU3agLrFgH/UUOdmK7uH273ONEfA?=
+ =?us-ascii?Q?GpnAV5Z9OBm4vqDPgMfXmhod4ecPyXkZ0i6CSBLB9m7pZdIojJvk7MpQl7Nk?=
+ =?us-ascii?Q?cBzVtGA7muWH50fqhRSnz7PDr28iFwxdLaphLjpbvqncn2hmp7g4bzvtfJOO?=
+ =?us-ascii?Q?Qsr0AEO8zzI4niINOx+fNm6w5QEFv/M5TJQYl7dMaHXS9eaNDEaOy9JiLrlL?=
+ =?us-ascii?Q?AQ=3D=3D?=
 X-OriginatorOrg: altera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id: c33c9ad8-27e2-48da-78cb-08ddb7b62c2b
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5017.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8abc24e8-7d04-4855-1252-08ddb7b5b3a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2025 09:08:38.6816
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 09:12:01.2442
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fbd72e03-d4a5-4110-adce-614d51f2077a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HhyXS7WDHS7nds1BqDHIZzYTEqhFCPhYzQlCrDeubKIMlbUEsWkzs+gkY6JX9JBwHekJMt1W4e/Y81HUViEDJ5156ZYjYPRdxL+0CE2yM/4=
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Vs3RQ600KZd1ncZLsW7b+quufxIMZlauSn7jvGEUIjegqSclVXCO/t+xWzr5+wWa41rYnn2F0MFa3cTj4iOJ2Cnl2ubq9w7eAVMAQiD92vc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5391
 
-> To: Dan Carpenter <dan.carpenter@linaro.org>
-> Cc: Romli, Khairul Anuar <khairul.anuar.romli@altera.com>; open list:SPI
-> SUBSYSTEM <linux-spi@vger.kernel.org>; open list <linux-
-> kernel@vger.kernel.org>; Gerlach, Matthew <matthew.gerlach@altera.com>;
-> Romli, Khairul Anuar <khairul.anuar.romli@altera.com>
-> Subject: Re: [PATCH v3 1/1] spi: spi-cadence-quadspi: Fix pm runtime
-> unbalance
->=20
-> On Fri, Jun 27, 2025 at 07:39:24AM +0300, Dan Carpenter wrote:
-> > On Thu, Jun 26, 2025 at 11:37:53PM -0500, Dan Carpenter wrote:
->=20
-> > > In other words, if we failed there was some slightly complicated
-> > > cleanup to do.  But now it will do the cleanup and free things on
-> > > the success path if we're in cqspi->use_direct_mode.
->=20
-> > I suck at email.  What I meant was delete the if block:
->=20
-> > -	if (cqspi->rx_chan) {
-> > -		dma_release_channel(cqspi->rx_chan);
-> > -		goto probe_setup_failed;
-> > -	}
-> > -
->=20
-> Can you submit a fix for this please?  The patch is already applied and i=
-n Linus'
-> tree.
+From: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
 
-I'll submit the fix for this.
+Remove incorrect checks on cqspi->rx_chan that cause driver breakage
+during failure cleanup. Ensure proper resource freeing on the success
+path when operating in cqspi->use_direct_mode, preventing leaks and
+improving stability.
+
+Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index aa1932ba17cb..d3c78f59b22c 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -1960,11 +1960,6 @@ static int cqspi_probe(struct platform_device *pdev)
+ 
+ 	pm_runtime_enable(dev);
+ 
+-	if (cqspi->rx_chan) {
+-		dma_release_channel(cqspi->rx_chan);
+-		goto probe_setup_failed;
+-	}
+-
+ 	pm_runtime_set_autosuspend_delay(dev, CQSPI_AUTOSUSPEND_TIMEOUT);
+ 	pm_runtime_use_autosuspend(dev);
+ 	pm_runtime_get_noresume(dev);
+-- 
+2.35.3
+
 
