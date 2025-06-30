@@ -1,62 +1,57 @@
-Return-Path: <linux-spi+bounces-8891-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8892-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4ECEAEDB61
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:42:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9496AEDB63
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 007C37AB9B4
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:40:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27BA189B66E
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BEDA2609D6;
-	Mon, 30 Jun 2025 11:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AF026562D;
+	Mon, 30 Jun 2025 11:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgLez+HX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ta5VRcZq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DE6260585;
-	Mon, 30 Jun 2025 11:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990DA26560D;
+	Mon, 30 Jun 2025 11:40:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751283651; cv=none; b=SGtssXPA5ThwRGabpnCMmNQhHCXQMzEHjblLalYJG0GmRCYVk5KRVK0+eyWuqZlBKsSCbIx4SgfQqey3Q/RVFzAuXh2Kr6fdaL+GdyhIy6dDOZjQrq/+BuPT2dfWYm5U1+5VBod0bVbfAqiNbjecA7dz+V7zQ9Oq7G2k9VsO9sQ=
+	t=1751283652; cv=none; b=Cr1MaifkomV5sUd0sOquOOxapyuUGdm4gccN3KP9sZus1w/l5ZzwKW5JPrepEhdglzGW+eJQpyRun58sMjzpmN3M3NlQIKJYNX2CUTPsq8rpKVBaDtx+zwQTwz54W/7sWsmo1s8iJCWBcEqJcNgrcO7ebCE+ziiLt9sL9OgTBHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751283651; c=relaxed/simple;
-	bh=ftNktXx3viZwDTtRvJBBYVylno1HnW9Egn+Kkhk6AGc=;
+	s=arc-20240116; t=1751283652; c=relaxed/simple;
+	bh=zPOhc/KELxKgSfy1G+NzpgTe6vDr2341CUf1qfmotxk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=klSrQwrtmqgA9iFVFigHXCzATlfnuPotAzDd8gtUtnzIzz0Rk4N89aeyLvS6Qu3exL9+kn+T7hhwsZv1mvU2+2GFipOoyLvPLL7+EuU87pgC0kd8/OU5OSay0SuiDfblhCKMcPAUKKWxDUgkpNBsJi+HQhJ0iHatCeLdkQgtnso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bgLez+HX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74121C4CEE3;
-	Mon, 30 Jun 2025 11:40:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=LP2j983W9j0dJ3T0zNKGblYzLFthXfXH7LCUA2yIZfYDMH1VEjLsNhmOFnRNgMCvjv5dy4Nujg6qPqDnFWNkQrVbgGWC2UufpLiz7uQusl82snlj98fG/2urfhvUbIf87VSCAzWPxTz0cNWpbxZ/PhCcHaVR7ZWBeVjHXoD4bDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ta5VRcZq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0054FC4CEF0;
+	Mon, 30 Jun 2025 11:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751283650;
-	bh=ftNktXx3viZwDTtRvJBBYVylno1HnW9Egn+Kkhk6AGc=;
+	s=k20201202; t=1751283652;
+	bh=zPOhc/KELxKgSfy1G+NzpgTe6vDr2341CUf1qfmotxk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=bgLez+HXlFANtNBrQDtXBKnd3LtN7bLY5hLHEsx+pDJtWlg9HvhK5sazMio5sQijC
-	 MUtdekGSSf3sPBFjhb0RtVom5b2C9pra/P0PDIrTvncDBzScCO2IRLkKd5NGwaCvhz
-	 +1zBi+Bf6q5R0N4i56Tw64XQlFGPO7b1AcDpd7JIvFsD+Nhlm4xE+PS7RoAAFE/5gp
-	 +p9AM7W46qckbniToFXS8bCzcPHF0fBAdUEBgaDyrgGm62jwPraqo28n1nXR1hkePV
-	 wP/aho+87KhbJf4iRb/alT+xt+K2x2ZIiD5tSbXPP2HllyuHJ4JCApclvNnRYPv6B6
-	 V3yO5ytFHpAnQ==
+	b=ta5VRcZqQqZj/Xz0XXvjS6DmyvQI45fgkqeVYLq9eHkGODBN/CTxPMt7bns+ZfBYY
+	 6/+mLGhr+8YuK8sM83RzYTm3uMjfSUpKHUo19V/96yN2paN2ybS9IHSAvqcGIlV+Ph
+	 qPwQxxQYXTUPMc7r/dGy5Y8Y+ZGgTnMpB9I34wkADPFtDoSCvZNzCEOkMyhgTJs8IS
+	 RPmyA6vbUojCzCKXvSKfC0pUEb3LRSIWkp2v3JzPyZ4G1kOujjxoAM1i3MgSmqoz5a
+	 31Fhpi6V5NuEGwxqFCEl5xIwDY0pM/XPp7fIwuO0LPbJCUnxCDweZ9nSCWZxB2xYoI
+	 WRhOrHmdOYUiA==
 From: Mark Brown <broonie@kernel.org>
-To: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-Cc: Vinod Koul <vkoul@kernel.org>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- "Rafael J . Wysocki" <rafael@kernel.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20250505184936.312274-1-csokas.bence@prolan.hu>
-References: <20250505184936.312274-1-csokas.bence@prolan.hu>
-Subject: Re: (subset) [PATCH v5 0/2] Add `devm_dma_request_chan()` to
- simplify probe path in atmel-quadspi.c
-Message-Id: <175128364820.28911.16876247019790951320.b4-ty@kernel.org>
-Date: Mon, 30 Jun 2025 12:40:48 +0100
+To: Vladimir Oltean <olteanv@gmail.com>, 
+ James Clark <james.clark@linaro.org>
+Cc: Vladimir Oltean <vladimir.oltean@nxp.com>, linux-spi@vger.kernel.org, 
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ Arnd Bergmann <arnd@arndb.de>, Larisa Grigore <larisa.grigore@nxp.com>
+In-Reply-To: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
+References: <20250609-james-nxp-spi-dma-v1-0-2b831e714be2@linaro.org>
+Subject: Re: [PATCH 0/4] spi: spi-fsl-dspi: Target mode improvements
+Message-Id: <175128365072.28911.16806664823646528710.b4-ty@kernel.org>
+Date: Mon, 30 Jun 2025 12:40:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,17 +59,19 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-cff91
 
-On Mon, 05 May 2025 20:49:32 +0200, Bence Csókás wrote:
-> The probe function of the atmel-quadspi driver got quite convoluted,
-> especially since the addition of SAMA7G5 support, that was forward-ported
-> from an older vendor kernel. To alleivate this - and similar problems in
-> the future - an effort was made to migrate as many functions as possible,
-> to their devm_ managed counterparts. Patch 1/2 adds the new
-> `devm_dma_request_chan()` function. Patch 2/2 then uses this APIs to
-> simplify the probe() function.
+On Mon, 09 Jun 2025 16:32:37 +0100, James Clark wrote:
+> Improve usability of target mode by reporting FIFO errors and increasing
+> the buffer size when DMA is used. While we're touching DMA stuff also
+> switch to non-coherent memory, although this is unrelated to target
+> mode.
+> 
+> The first commit is marked as a fix because it can fix intermittent
+> issues with existing transfers, rather than the later fixes which
+> improve larger than FIFO target mode transfers which would have never
+> worked.
 > 
 > [...]
 
@@ -84,8 +81,14 @@ Applied to
 
 Thanks!
 
-[2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
-      commit: 2555691165a0285a4617230fed859f20dcc51608
+[1/4] spi: spi-fsl-dspi: Clear completion counter before initiating transfer
+      commit: fa60c094c19b97e103d653f528f8d9c178b6a5f5
+[2/4] spi: spi-fsl-dspi: Use non-coherent memory for DMA
+      (no commit info)
+[3/4] spi: spi-fsl-dspi: Increase DMA buffer size
+      (no commit info)
+[4/4] spi: spi-fsl-dspi: Report FIFO overflows as errors
+      (no commit info)
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
