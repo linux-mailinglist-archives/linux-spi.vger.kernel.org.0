@@ -1,98 +1,109 @@
-Return-Path: <linux-spi+bounces-8890-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8891-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 731DEAEDAAD
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4ECEAEDB61
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 13:42:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 160917A4038
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:18:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 007C37AB9B4
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 11:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCD623A987;
-	Mon, 30 Jun 2025 11:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BEDA2609D6;
+	Mon, 30 Jun 2025 11:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D13f7Ub4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgLez+HX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24AB723BCF2;
-	Mon, 30 Jun 2025 11:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DE6260585;
+	Mon, 30 Jun 2025 11:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751282411; cv=none; b=U+dIW+Iu2+ozpm4VfhXqbTTPrKZGfpi5zppQL6Iwc9ejB4RdSZAjHfz44+LTZsBJYdyTc43eh2SXJDDY047ObukxzHk7F6qF+nfm1oKFhgvrF+Lhtf0WIljRVWT5uVpn9YR5Qyy/FOU9fC29nX0u6PJ18q313OFH9U1hc8FbTd4=
+	t=1751283651; cv=none; b=SGtssXPA5ThwRGabpnCMmNQhHCXQMzEHjblLalYJG0GmRCYVk5KRVK0+eyWuqZlBKsSCbIx4SgfQqey3Q/RVFzAuXh2Kr6fdaL+GdyhIy6dDOZjQrq/+BuPT2dfWYm5U1+5VBod0bVbfAqiNbjecA7dz+V7zQ9Oq7G2k9VsO9sQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751282411; c=relaxed/simple;
-	bh=9rBTDJ/Pce3XGAqMFO/6ZU1Cr+dyYVpm8N2+a5ACXSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=damXqyjbHKHmyHPdHyhwjYDsEbuq6gpVKT2xOv5i30yeTrv7FiOe8SUSHUUO2Tdm2th9CTmzaEEU6ut4j5g0dKrFIdZCDX2ZZZLjInj6zdk1Dzhr2ZJNF8JHy1S13wK/2vktqlYA1hfnS+fDWEsnaJJcOsyGXT9kaBkH6Dgo3Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D13f7Ub4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11475C4CEE3;
-	Mon, 30 Jun 2025 11:20:08 +0000 (UTC)
+	s=arc-20240116; t=1751283651; c=relaxed/simple;
+	bh=ftNktXx3viZwDTtRvJBBYVylno1HnW9Egn+Kkhk6AGc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=klSrQwrtmqgA9iFVFigHXCzATlfnuPotAzDd8gtUtnzIzz0Rk4N89aeyLvS6Qu3exL9+kn+T7hhwsZv1mvU2+2GFipOoyLvPLL7+EuU87pgC0kd8/OU5OSay0SuiDfblhCKMcPAUKKWxDUgkpNBsJi+HQhJ0iHatCeLdkQgtnso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bgLez+HX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74121C4CEE3;
+	Mon, 30 Jun 2025 11:40:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751282410;
-	bh=9rBTDJ/Pce3XGAqMFO/6ZU1Cr+dyYVpm8N2+a5ACXSQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D13f7Ub4BN4yAwB3RBgvRG4yQNNeXJL5AVLZDS0XwfD2u+9YTM+M/gSw6/hHyOL+v
-	 HN9NnVq06ERB/qjtlFmBvfcN5BqsZcZxEQfuffupcShL4D9iuO6VSB+xx+cqd/d0BY
-	 FdrGIeWdz9E3J4nDBNb+lFK/bwn1g16v3v+xariZJJuVBFQ5wptVP8G4+uaUrVRAth
-	 AXSKIw0IGxf/ffpaaEHxrMx+q4modao/UkAagb8HMogs4Paor4+v99PoqCdRuZG0sh
-	 pQ17AzhygtAUzwdIhM7esrNy5H71AO93MipDLxyYjptFNLXYOyhuqVvHA85GHN2ckr
-	 1xVTcfnkv2Mhg==
-Date: Mon, 30 Jun 2025 12:20:06 +0100
+	s=k20201202; t=1751283650;
+	bh=ftNktXx3viZwDTtRvJBBYVylno1HnW9Egn+Kkhk6AGc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=bgLez+HXlFANtNBrQDtXBKnd3LtN7bLY5hLHEsx+pDJtWlg9HvhK5sazMio5sQijC
+	 MUtdekGSSf3sPBFjhb0RtVom5b2C9pra/P0PDIrTvncDBzScCO2IRLkKd5NGwaCvhz
+	 +1zBi+Bf6q5R0N4i56Tw64XQlFGPO7b1AcDpd7JIvFsD+Nhlm4xE+PS7RoAAFE/5gp
+	 +p9AM7W46qckbniToFXS8bCzcPHF0fBAdUEBgaDyrgGm62jwPraqo28n1nXR1hkePV
+	 wP/aho+87KhbJf4iRb/alT+xt+K2x2ZIiD5tSbXPP2HllyuHJ4JCApclvNnRYPv6B6
+	 V3yO5ytFHpAnQ==
 From: Mark Brown <broonie@kernel.org>
-To: Clement LE GOFFIC <clement.legoffic@foss.st.com>
-Cc: Antonio Quartulli <antonio@mandelbit.com>, linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alain Volmat <alain.volmat@foss.st.com>
-Subject: Re: [PATCH v2] spi: stm32: fix pointer-to-pointer variables usage
-Message-ID: <192fb276-1e5a-4f69-8815-133f6bcd36b3@sirena.org.uk>
-References: <20250630081253.17294-1-antonio@mandelbit.com>
- <5e61da51-cd02-41fd-9773-8bd776e1db62@foss.st.com>
+To: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ =?utf-8?q?Bence_Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+Cc: Vinod Koul <vkoul@kernel.org>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ "Rafael J . Wysocki" <rafael@kernel.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20250505184936.312274-1-csokas.bence@prolan.hu>
+References: <20250505184936.312274-1-csokas.bence@prolan.hu>
+Subject: Re: (subset) [PATCH v5 0/2] Add `devm_dma_request_chan()` to
+ simplify probe path in atmel-quadspi.c
+Message-Id: <175128364820.28911.16876247019790951320.b4-ty@kernel.org>
+Date: Mon, 30 Jun 2025 12:40:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8ubtRjEq0eUrZSJ8"
-Content-Disposition: inline
-In-Reply-To: <5e61da51-cd02-41fd-9773-8bd776e1db62@foss.st.com>
-X-Cookie: Say no, then negotiate.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-cff91
 
+On Mon, 05 May 2025 20:49:32 +0200, Bence Csókás wrote:
+> The probe function of the atmel-quadspi driver got quite convoluted,
+> especially since the addition of SAMA7G5 support, that was forward-ported
+> from an older vendor kernel. To alleivate this - and similar problems in
+> the future - an effort was made to migrate as many functions as possible,
+> to their devm_ managed counterparts. Patch 1/2 adds the new
+> `devm_dma_request_chan()` function. Patch 2/2 then uses this APIs to
+> simplify the probe() function.
+> 
+> [...]
 
---8ubtRjEq0eUrZSJ8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Mon, Jun 30, 2025 at 10:28:50AM +0200, Clement LE GOFFIC wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> Thank you, LGTM
-> You can add my Reviewed-by
+Thanks!
 
-If you want to add a Reviewed-by you should actually write it out in the
-mail, people rely on tooling like b4 to pick them up.
+[2/2] spi: atmel-quadspi: Use `devm_dma_request_chan()`
+      commit: 2555691165a0285a4617230fed859f20dcc51608
 
---8ubtRjEq0eUrZSJ8
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmhicuUACgkQJNaLcl1U
-h9Ab+Af/TLVz/Hq9TCf2YxneUgc7AN12JRozk2EqamXE2v+Yb6rTtIil8B8ebrzi
-FfOaxYAzi5KJDeESYSTn3yPDx0Fx6BA0p2iJN81BglYrhweGnTRepTTxipockKR1
-Rvdj2lJFlq1gG6wtmZWlVRxvLZgNMw9YedXUzDFBtpjZoWQiAeEw/zWioip11i+l
-inR4ruch1/w48o7zh5Ays2lOQd3exzmLp1lAH/myowkR3v4qP6yzs7QLHmhAWOqy
-BlNC5jVfocXWi7eWO+VC+etgczf5bINLcC8VYUM79z2WNJszOKx/1AMtCBqfVYyF
-MFhM8P+Ykvqa6VXqRoBSlmT5PUYYpw==
-=boE2
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---8ubtRjEq0eUrZSJ8--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
