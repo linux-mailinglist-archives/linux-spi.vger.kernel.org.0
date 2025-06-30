@@ -1,107 +1,154 @@
-Return-Path: <linux-spi+bounces-8902-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8903-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC48EAEDC33
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 14:02:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC3CBAEDC6E
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 14:13:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 520753B370B
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 12:02:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32E907A7973
+	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 12:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC97C289829;
-	Mon, 30 Jun 2025 12:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A64289831;
+	Mon, 30 Jun 2025 12:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="D1hgo3sd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7B8gy6C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0C5132103;
-	Mon, 30 Jun 2025 12:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9CB287251;
+	Mon, 30 Jun 2025 12:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751284965; cv=none; b=AHtYCIOZdPqSc0wf3sWXQxJQxg3J/F4aP7U0+PKLuEk7SaxuWYawSHRG2lBVeEAP53vRNEfv3N0WsDpqQDfz8EvTokq9q3skkjnQuTnkAUU4ODXfLyYS5tKNKUKATzO8Yd/1NwOJBMt8Cb/OnQr4ibT9sBC2BPQ1uIGhWegACU0=
+	t=1751285548; cv=none; b=lOWlDc6GTcYHoGnJ7Bg9VAq98PXHJ/sU+TZTOD7SpY31gpN12zIwt3U3t+C51VjJzBRJf1RfMJd6pKG36+EHSVz4Fvzfvc8Gd1YYL33brAVi6CkCqG9KRH0D4t1Aj/ErK1x+sQnLQmdWUJowFbgG/1G2LSbxvPtfekbWcDegRnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751284965; c=relaxed/simple;
-	bh=U1QgVE73GMBK0qSO6uHgXRDTMZCMdlmK0zuJgUetxII=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SVTd/JifMtYEcEUBYXGvY/5ZXh5kNs+LnWVsPs4Yv+poRJxq4a/mWwx1aOgr93WTwlJ241BoxKpX0y0sEMrk5GEx3uFAG+iQtoRMZB1pG5gUNAL64Rw3ZPD0XkAOow5lColeRfI0VFNaOwFavQEs9U+TPvubs/llnM9MaKtzV/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=D1hgo3sd; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55UAmwnf029679;
-	Mon, 30 Jun 2025 14:02:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	v1NgvuOJViNQoQa3YdxL37LV+10hlKR/k1LPKw76dTU=; b=D1hgo3sdFbaC2Bbs
-	9lLvzpaYsrXuOOHj40rLw8GUtIv69bF8So+wuyY4i5FosAPKndrnwhtcTubgkesG
-	csIa/1FLZkF6RZKb/OOaXseiCArM5OmD37WhIZ1Zqfk9vLAtvqYfnTI9sUhVULh9
-	TmXkQVS7m2hYFDwlkSZky7qd0ZC/rmGeMtplj5c2oOcPavL9o8QZmMC9/U8LN4gY
-	mJS4QjM9A5IPrYet6UyalO/UwZspUccurR++cth9P0Y73MpzwDRHSRymCf9G1LxP
-	SLspA/qgYu9rujKTdNHXO+yFWu9XeTMDd0yadDs6S1T+Sly0nCl4nWgLCmcghLja
-	nPr6Ag==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47jubnmt6x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 14:02:34 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id D0EA24004D;
-	Mon, 30 Jun 2025 14:01:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E2415B2B8D1;
-	Mon, 30 Jun 2025 14:00:51 +0200 (CEST)
-Received: from [10.252.20.7] (10.252.20.7) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
- 2025 14:00:51 +0200
-Message-ID: <3d4d0eb4-a9ec-4fb2-be9c-4d8999cfeebb@foss.st.com>
-Date: Mon, 30 Jun 2025 14:00:50 +0200
+	s=arc-20240116; t=1751285548; c=relaxed/simple;
+	bh=ymAm2RGsauWyqhaGIKdrhj01x13vqQy3GTjiWCnEznI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGcll/t1iHGbpiu77vYbYZww8YsalmoooENXp0wUQo4lcnmVlC2FepjN76KSzCIurXmn1e4UgT8NieyolkEQlFxNJ41Hc/YYc6yE9RiWWyBQivCNI9DBbHE2T4bVRUU+kN7796O2NdTM+02pDzliE6G8fgNcGLGHwICjEpqLYkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7B8gy6C; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b31e076f714so5044974a12.0;
+        Mon, 30 Jun 2025 05:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751285547; x=1751890347; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kYgTWxigFnMh6J+7o3rXH2dHsX5hLP6u8Al9k3eKS4=;
+        b=B7B8gy6CqaZryVm5kzfiTAxCrTHwctQFEwzXrSaPOWP/4lTNuhuZN+y0M/k4Pt0bWZ
+         liS8OFfihJfm226Qb3LkQzEd0T4NqbKiXQL0mlz9uPHTX81oxb8YPI/ilVlSlh+vjmtR
+         UWwCAyLcRP0MESXYsau3lwacR2gORp1LY22Q0nPR1jn9GZJi68VwGeLU7TpL5QE9D2vB
+         ZWCin1BJBQ0mDXrOlonM4Jd7u76qUO4H3uY857Kt8/oQiuonBr6DuX4Tr5WIxJ7EvFZd
+         qO4g7tH3eXozztOVY4Y31mNP+6LrhbT64nPUPGIS+A5OaaS3S9Doq/3Tuj0CRS0XvPDC
+         9qYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751285547; x=1751890347;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kYgTWxigFnMh6J+7o3rXH2dHsX5hLP6u8Al9k3eKS4=;
+        b=SNkWSrULNV/XepQQ1HmfaAqKNak2fVNEGOqihms6jLl5ws0vr29N2+LaRrdTjKouqr
+         tGH6wO3dgISBMy9pi0Z+xJUGVbAcGjKgU857uojLijn+mZA8JiB0evO6aMswcJNsGHZe
+         o++ADZCEhGQej4t1JXld6Zd+lAEzM+Tw2TpldqTmtX6MQUBUBEkCy7P77fUxlYtnTVSd
+         HB9vviTxZ6x7H6qL20cKj5ey3BUsTYJghIOMBQ1yucw3oimShU15jfzPdhDrFnquElky
+         h0888e3klwazBUJPpGugJO5EhCw/TdGhg6wcfkqXgR6zKR07bKY0Lj9kgJsPkd8YfRN8
+         yYQg==
+X-Forwarded-Encrypted: i=1; AJvYcCWH/yvFUttYAKBdg3ziGcqINVatHW+yO9B6L2W0DOMvueNIb4TFtva1t1ti+mx7NVcreIzEIfXzIXWdZN/z@vger.kernel.org, AJvYcCWcr32YEa0MC0XPgD2agEJ5oiHl+3XdMNy5k77eGuM2gPLhUbXusix7Ym6OWKZqn0BexT+3e8ITn3ot@vger.kernel.org, AJvYcCXzIPen8ejNaTHddwcn1HitGnNY6mDGRQIIxgGX5OcI2G0MB62HtN/JVVufZryIez+cvi5sA/EpeOoq@vger.kernel.org
+X-Gm-Message-State: AOJu0YwV8wpSJu8tJE59wn/x8aAwGM/DzvTJEoHkU//Ui3zDi/w8OjVz
+	3Pax2CsGzm8PWsTXN0cKDHGdDh7ldezWyz/YVMBsqx0cY9WvEBH8lGcj
+X-Gm-Gg: ASbGncsx9IEzqawCvQRZ/P9HZVfoIYKRqrfQRuLCU3Twyylq0BsKKguYS/m4NIIIYWH
+	8SpK9PuuYlArBvjEyezBV3VxmzNc4ejSGrn1uGOEhvO2H8OdvOlsc7Os/js9ljo3KLBLmctGK00
+	4Xd2zGgtKo6B/qbdPZbHiwwVzV992fPytWFW8efErYvFhba8el6Swr4hfKFA1DQ7K20Pm7l7opy
+	HyX2L4qoF8pbIHTEbkK/mffmmqzUov/uCaeYD/qTzfNFg8grNiqPPBprGNf1zIxsSjJ/xNkZPHg
+	a7T6AMxD58z+lcjJ1Wv0gPo5HIFQQYHJNKa0IR8DviDm0eqPrwg=
+X-Google-Smtp-Source: AGHT+IHsIFpQ45mX5GXGIU8w06ZUsQgrAuvEXHa4TYUkn6AoK+LxDTuZVhduM++WcW9fKEEMhIst4g==
+X-Received: by 2002:a17:90b:55d0:b0:311:482a:f956 with SMTP id 98e67ed59e1d1-316d69bf0cbmr24097074a91.5.1751285546499;
+        Mon, 30 Jun 2025 05:12:26 -0700 (PDT)
+Received: from localhost ([2001:250:5800:1002::cd55])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-315f54412c6sm13168373a91.43.2025.06.30.05.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 05:12:25 -0700 (PDT)
+Date: Mon, 30 Jun 2025 20:12:22 +0800
+From: Zixian Zeng <sycamoremoon376@gmail.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Michael Walle <mwalle@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Longbin Li <looong.bin@gmail.com>, linux-mtd@lists.infradead.org,
+	linux-kernel@vger.kernel.org, sophgo@lists.linux.dev,
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 1/4] spi: dt-bindings: spi-sg2044-nor: Change SOPHGO
+ SG2042
+Message-ID: <aGJ_JtThs7VpRIwa@calculate>
+References: <20250629-sfg-spifmc-v3-0-28db1f27e999@gmail.com>
+ <20250629-sfg-spifmc-v3-1-28db1f27e999@gmail.com>
+ <20250630-ancient-quail-of-joy-effd60@krzk-bin>
+ <aGJ5XAYZ1nmQyBQT@calculate>
+ <4afcef9e-db98-4679-b9c1-40ffcf4861c6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] spi: stm32: fix pointer-to-pointer variables usage
-To: Mark Brown <broonie@kernel.org>
-CC: Antonio Quartulli <antonio@mandelbit.com>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>,
-        Alain Volmat <alain.volmat@foss.st.com>
-References: <20250630081253.17294-1-antonio@mandelbit.com>
- <5e61da51-cd02-41fd-9773-8bd776e1db62@foss.st.com>
- <192fb276-1e5a-4f69-8815-133f6bcd36b3@sirena.org.uk>
-Content-Language: en-US
-From: Clement LE GOFFIC <clement.legoffic@foss.st.com>
-In-Reply-To: <192fb276-1e5a-4f69-8815-133f6bcd36b3@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_03,2025-06-27_01,2025-03-28_01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4afcef9e-db98-4679-b9c1-40ffcf4861c6@kernel.org>
 
-On 6/30/25 13:20, Mark Brown wrote:
-> On Mon, Jun 30, 2025 at 10:28:50AM +0200, Clement LE GOFFIC wrote:
+On Mon, Jun 30, 2025 at 01:55:58PM +0200, Krzysztof Kozlowski wrote:
+> On 30/06/2025 13:47, Zixian Zeng wrote:
+> > On Mon, Jun 30, 2025 at 09:17:09AM +0200, Krzysztof Kozlowski wrote:
+> >> On Sun, Jun 29, 2025 at 04:23:10PM +0800, Zixian Zeng wrote:
+> >>> SG2042 is not fully compatiable with SG2044,
+> >>
+> >> Typo, run spellcheck.
+> >>
+> > Thanks for spotting that! I will add spellcheck to my patch checking script next.
+> > 
+> >>> So it is necessary to become independent const
+> >>
+> >> No capital letters after ,.
+> >>
+> > Ok, thanks
+> > 
+> >> Anyway, explain why it is not fully compatible.
+> >>
+> > I have asked the technical staff of SOPHGO,
+> > the SG2044 and SG2042 are indeed incompatible with each other in some places
+> > because of the hardware details, regarding the configuration of the OPT register
+> > and FFTrgLvl(fifo trigger level) bit setting.
 > 
->> Thank you, LGTM
->> You can add my Reviewed-by
+> So when driver binds with sg2044, the device does not work? Or what
+> exactly does not work?
 > 
-> If you want to add a Reviewed-by you should actually write it out in the
-> mail, people rely on tooling like b4 to pick them up.
+> All this is supposed to be explained in the commit msg.
+> 
 
-Yes, sorry.
-Fixed it.
+I got it, I think I had explained this in the driver patch[3/4].
+If this reason is acceptable, I would like to ask whether
+the explanation should be put in the binding patch commit msg [1/4]
+instead of the driver patch commit msg [3/4]? or both?
+
+Thank you.
+
+> Best regards,
+> Krzysztof
 
 Best regards,
-Clément
+Zixian
 
