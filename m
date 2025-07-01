@@ -1,73 +1,126 @@
-Return-Path: <linux-spi+bounces-8933-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8934-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B04CAEEB9B
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 02:59:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D799AEED0D
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 05:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17DB416E206
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 00:59:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37BE9189CF49
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 03:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1CF189F20;
-	Tue,  1 Jul 2025 00:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EE21E1E1E;
+	Tue,  1 Jul 2025 03:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXZnEojg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LOXcrdkb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 565627262D;
-	Tue,  1 Jul 2025 00:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB96078F5D
+	for <linux-spi@vger.kernel.org>; Tue,  1 Jul 2025 03:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751331551; cv=none; b=dLjICVZg2IpkSm5vbK2A9kj4TJXaZ5SypoCEVDfRp8b1upKPr87FgxYQ01yeicyhM+RM0mf85Lx0v/kHNHDMJRFgzdulQxXFdo4PIhdI5FYub40fcugNduBeNUw42N6FHjlvkwpzNoCUPp8H6cWj1Aq3qfgRnLxzzvn4K9seAUc=
+	t=1751341255; cv=none; b=LLvPAhGB4RzheyXcCEalYiEeJMbpYG36XWRc1SDMEiNZjzc8Zw2OtPHPNel2vkzUgoXqjxN2T4rGhfZHy/GVQwRKx0cZNUOwwNKzQXBLE2cBrVjN61o52ggQegWS5a5cv9KpfhVqIkxZXdq6sEnc9KHXffMlESAEa+tbROckZ/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751331551; c=relaxed/simple;
-	bh=lqZ/d95kGaSLsl2/jzzMnDucrl5+IWgYTIBjwR8jwJ8=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=h+ORfv1tTCYjTLqpEspPBwKQZsMW3wyjolzU5y0sKz9EO2oPWYyC7BrR6v0P+ibHG8tVtlZP/gShbbEfIJHryIl8U4ahOZ/GbbQ6ko7KwBq5Jy6HWmKrUlNZmsJo0doWZiZ1yG219NJli9/VLZw+v6imdcWqNCd41bd/b7KO9UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXZnEojg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC21C4CEE3;
-	Tue,  1 Jul 2025 00:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751331551;
-	bh=lqZ/d95kGaSLsl2/jzzMnDucrl5+IWgYTIBjwR8jwJ8=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=qXZnEojg2iPLqp84CW5486NOP+M1Uz/S3qIVHb5SrmdWZWr9vKljuwJJDEnu7xARR
-	 nnW+/gBGPOPhra1sx2SbeblTA1uXOJHbirWLQYz+hqnsVtjelIGkHGSsQdLbl8/rhD
-	 fLEC1CpsUQqd1ZuGuJuwcn6jT27ssZteB2QFndfiOuC1zYi+J/jO0+vYC4bK+bjB/D
-	 g+bhM+dUf64WWsPqYyxr/BxNzZ8TF15u3a1MbaV1fLvLIuGGkFmVFPcM1BnZwi8KoA
-	 wgw8ngHOfC878ktOUFDSYFjfqESYz7Bu3p+2ia7wTvlNpXZamkM8vrLCnQZ06t4f4X
-	 H0wXqv0/SErRg==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1751341255; c=relaxed/simple;
+	bh=lltCWcMI+ZEH+lqujNaBA2dHmDr8aLcEnJsmY/kR5KQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XDxy1ZyxzZNfFewMnxG4F7tpSkzbYnq9ZTSGyAqav8BdhWdJEkqxIxqGQbUiRrNGIa7z0XQ4cphrZFGGB+u9oqavupfCAi47lXEaf/oTOveBS2jHUk15/m22xmAt8mx9iQrXcJxm7Y3hKe5vJURT+otsmIAS47E8pAOlcmjXwcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LOXcrdkb; arc=none smtp.client-ip=209.85.160.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2e95ab2704fso1892853fac.3
+        for <linux-spi@vger.kernel.org>; Mon, 30 Jun 2025 20:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1751341252; x=1751946052; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QG8cttO2YDJI/Cbrk9rcT5943IALpBAonWAZbSd3z9w=;
+        b=LOXcrdkblG1EUfKmQQlzpJvmlVrd6Ot1R+eGIO0+X1iyazY9cLB4luGOOtSdYYTluu
+         QodTKpYk9XOmwzcuEaYVmbva54i2FD35cK+Vg2RRcyd6Hl53mFdhzHVs1OE2hdrBL/MO
+         YWzCd9HMVFOPARi6Ce3A0s184qTAB4c+iXkTWSiLtfKKJDgPBAkX+/hprw1DvsKAzA2z
+         pqKr8s0bkneI3I3teISv0Kk0iEM3bDqL6q/HcnNniZknSF203kI4d/SnfW+SuE/0ECHF
+         je2+VMiHD0eGWJsc91KSqX37RocUYd1siR6ou+6sEyzjU0CwrNXyzuqXQYwmrrfB7KU8
+         9K9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751341252; x=1751946052;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QG8cttO2YDJI/Cbrk9rcT5943IALpBAonWAZbSd3z9w=;
+        b=ZtEAEcMf3o/1Rz4sYiz2Fhr/BFZ19TTWnbRGwBfCAolzFXA1Dba3HBK0EWkFvLXfY9
+         O12VGmeEdbQCXHPovsNpa9WFZWfyhDDWcSyjCs9NLKXfVi452ovgq8AO9LI+Aklqcr6B
+         Q5WvyivrpSJI5gk7UpCsVhpGJuh38ljo8o3Ih2yOFmslUc7OlJ171aYqGXOTsDSvcLWd
+         1wwXGkqQ3T4rbBPj8eBqHzifrAY4MVuc8bP+322QV3PnjDlJwsxIMAPuMslfzyGZwPhn
+         Cf99F1Ab3eW5nNlgL0h0yjDx2QCzPWmcFJzusR8hid0/SUu3qWGCIOY1GqWTcKMV9zgZ
+         AK4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUV5Gxm2zDc1ad6HXfOR4nREL4jiCUjlazb5aENDZ4sWJuuulkQZuD5VCB8HwZdokXnpjTwecPKgwE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGtVUsAYWxy2E+C1e81htbY4yEIap/YyoIJ5bL/lexcYKvTPAJ
+	HAsgEWNIgCSpjFjC0TEIgLyvPRDhA2oCH2ol9jNp5oIsy/2lMphcDVSuTDpCOYJJ4U0=
+X-Gm-Gg: ASbGncvnBkkbxEJvyss5iYitKPkY+AbfFHIu0gejeqezhk8RRNIQUKfYDdkjs2/xXTN
+	lUTF9gaVMOJurbgMEdHqFhj2mpRlthJ01wKBAL9sLBO9CvliSiSWH9ebCQWERo+dJrHcmLx48bq
+	v+g4lCpSZap+o2MhvGZ/zEJdXGdeIMdZ6TDpzV9E/XWW+4uFxdUTw30J9eZeQl0JjKJBHdl+wmI
+	yjNEQLvjbMTbpEeB1JK0BgYYmO69EpfCOMk+YblDwSWeijH8VSubowpbtLcIW+hQV55nCXHJNCS
+	TfO3ve3ss6QnoMsulq+xuviHAyCKzAMCHLBHEtpcZWkM934W44OCU05WMcJixkuzdOVq
+X-Google-Smtp-Source: AGHT+IHV923IELGMFRF52e3SyaM+jl37uSwZWCYEONH8sGFzelWcB5/MVGr/Hp0oCRgdjFXA2owmaA==
+X-Received: by 2002:a05:6870:85d4:b0:2c1:51f7:e648 with SMTP id 586e51a60fabf-2efed89fddbmr11880176fac.35.1751341251915;
+        Mon, 30 Jun 2025 20:40:51 -0700 (PDT)
+Received: from localhost ([2603:8080:b800:f700:fb67:363d:328:e253])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2efd4ea6c7bsm3018677fac.3.2025.06.30.20.40.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 20:40:50 -0700 (PDT)
+Date: Tue, 1 Jul 2025 06:40:48 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: "Romli, Khairul Anuar" <khairul.anuar.romli@altera.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	"open list:SPI SUBSYSTEM" <linux-spi@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"Gerlach, Matthew" <matthew.gerlach@altera.com>
+Subject: Re: [PATCH 1/1] spi: cadence-quadspi: fix cleanup of rx_chan on
+ failure paths
+Message-ID: <612f64eb-ab8c-43cd-9f6a-e913cd5aecb6@suswa.mountain>
+References: <cover.1751274389.git.khairul.anuar.romli@altera.com>
+ <89765a2b94f047ded4f14babaefb7ef92ba07cb2.1751274389.git.khairul.anuar.romli@altera.com>
+ <9f26f205-756e-4fcd-912e-bf73167be21d@suswa.mountain>
+ <DM6PR03MB5017D9C650820B9A5C63C6ACC641A@DM6PR03MB5017.namprd03.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250519-dev-axi-clkgen-limits-v6-7-bc4b3b61d1d4@analog.com>
-References: <20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com> <20250519-dev-axi-clkgen-limits-v6-7-bc4b3b61d1d4@analog.com>
-Subject: Re: [PATCH v6 7/7] clk: clk-axi-clkgen: fix coding style issues
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>, Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Michael Hennerich <Michael.Hennerich@analog.com>, Jonathan Cameron <jic23@kernel.org>, Trevor Gamblin <tgamblin@baylibre.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, Mike Turquette <mturquette@linaro.org>
-To: Nuno =?utf-8?q?S=C3=A1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>, dmaengine@vger.kernel.org, linux-clk@vger.kernel.org, linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, nuno.sa@analog.com
-Date: Mon, 30 Jun 2025 17:59:12 -0700
-Message-ID: <175133155234.4372.4127844417653528795@lazor>
-User-Agent: alot/0.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR03MB5017D9C650820B9A5C63C6ACC641A@DM6PR03MB5017.namprd03.prod.outlook.com>
 
-Quoting Nuno S=C3=A1 via B4 Relay (2025-05-19 08:41:12)
-> From: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> This is just cosmetics and so no functional changes intended.
->=20
-> While at it, sort header in alphabetical order.
->=20
-> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> ---
+On Tue, Jul 01, 2025 at 12:39:24AM +0000, Romli, Khairul Anuar wrote:
+> > On Mon, Jun 30, 2025 at 05:11:56PM +0800,
+> > khairul.anuar.romli@altera.com wrote:
+> > > From: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+> > >
+> > > Remove incorrect checks on cqspi->rx_chan that cause driver breakage
+> > > during failure cleanup. Ensure proper resource freeing on the success
+> > > path when operating in cqspi->use_direct_mode, preventing leaks and
+> > > improving stability.
+> > >
+> > > Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+> > 
+> > Thanks.
+> > 
+> > Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > 
+> > Mark asked me to fix this and I wrote a fix but apparently I didn't hit send
+> > because it's still in my outbox.  Sorry about that.  :(
+> > 
+> > regards,
+> > dan carpenter
+> 
+> Sorry for sending the fix on your behalf.
 
-Applied to clk-next
+No no.  You did the right thing.  It's me who messed up.
+
+regards,
+dan carpenter
 
