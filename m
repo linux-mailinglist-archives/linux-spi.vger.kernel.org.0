@@ -1,129 +1,189 @@
-Return-Path: <linux-spi+bounces-8925-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8926-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7FA0AEE875
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 22:44:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A006AEEB53
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 02:40:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9FC03A6540
-	for <lists+linux-spi@lfdr.de>; Mon, 30 Jun 2025 20:43:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CD16189BE66
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 00:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA85823506D;
-	Mon, 30 Jun 2025 20:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D316D145B16;
+	Tue,  1 Jul 2025 00:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="rlAa3eTM"
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="AI1BsmGf"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2069.outbound.protection.outlook.com [40.107.93.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7471DB125;
-	Mon, 30 Jun 2025 20:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751316248; cv=none; b=heIprK2W8xNYoZOMunPocend7zkoT/shgtQdGAECj6p46MhLo5qrzGOsG+4SYw/cBLb3MeYlEAMV5B27WQZkmU45yKhXBNWyBf5BqMdzi1Ar61BewJOYr//sSpYEzSomLwB+tbg++cVVWBp1J3N68PvbXXgQhzRCyvVjcDn7APE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751316248; c=relaxed/simple;
-	bh=fJ9Omhbf3gY9igah+t3oj+rQpDdG4CzeMw7aL4HSHHY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufd7Oxlfomj5wjWPJV+IoWJBcw7SbVfitqrTnk9g4pEqHtxlbVdX1TKB5uMN71JTwOHq51//ZH2rBX0QQbm+46DFShCo6EFdu5buO4rYXD6+QkXF97teofVJXPywS0AEV/7O7vV1jBEv6IR76iG8Vd93X7HR4iZBDyvWweJ2G9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=rlAa3eTM; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55UIER08016451;
-	Mon, 30 Jun 2025 22:43:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=selector1; bh=AQKCJ04siddRBG+IxS9aOk0K
-	rq1ez5qBC2vqbCHaW2I=; b=rlAa3eTMj2MhjAVRNMno0xIZa0U3bhDxcRktwj2T
-	Lze+UVuHk/rTCuDlw1OXP/+EiKk3XQjXnpMT/KGt9ZP71emNkHlW9dhX5P3D1d1F
-	r5pCLMbQi3vxP4djavoTZyxCOf02qJR8tJxOGFmyHfn3NE4dk/ykFR1BxKEOJYU5
-	RgAlViTXOpDwKq/uQO9+3W/6jKjLL6zJlteBJzk+RHaELSgLQIMZH/aGl6heW5mM
-	aMEhD1IYLqmar40BzAojWG6H+Fx24NVtKCUZ2p+CbTyLNg+wHcXQcUIaP/nn4oMK
-	cF03K7AQWkiHVuzA1A+tJAse+2jEn/fhUQ+waz8J0RxN8g==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47j5tm1j7n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Jun 2025 22:43:52 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B127F40055;
-	Mon, 30 Jun 2025 22:42:56 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F7A4B2BD0B;
-	Mon, 30 Jun 2025 22:42:26 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.130.77.119) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 30 Jun
- 2025 22:42:26 +0200
-Date: Mon, 30 Jun 2025 22:42:20 +0200
-From: Alain Volmat <alain.volmat@foss.st.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDBA22094;
+	Tue,  1 Jul 2025 00:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751330368; cv=fail; b=etxXCPp/J0B+2F2j32efIr6bXZorq/XPutW2fqgGPGnnxNRTyDCctsPR1aFph4cItkTQYFxdndgKe64msqigd6WSvw/OGTMd87PGBFbvRtnOhmYhPpRrcG58qUkWXg8gpwHSttBCDJ0f5VSCRutyKgL+pD/0CabNqD5frqRPWMU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751330368; c=relaxed/simple;
+	bh=NZLUZ8GU7j66HcUA3L7nuCSjfdiEQO6Lnhovm2PqhSU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=p6OLKSRXU9maCquEYzQ9i74CyN8cDDsrygEZ4y2vT4AE7aIZWeam8MrPVM/+d8knByo2vWqfP2+VRFWQFxtWxVNW2jlDMs/8MRp3dDKRKJRjubEMlijoj2ScN3TMRFrioJfT6SQlRutzamX4PlwNWREL/Cf6eIS0jsLdsgNy2Dw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=AI1BsmGf; arc=fail smtp.client-ip=40.107.93.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZH44Tz/xApdDptV5EVWRvRjM49X6RA2UotUDOurHCTYZc2AIS6LBDHGIDYZa82Sx4eS5QQ0XArzDBH2E9PBQfKKk1txaF/aC0Nd0gOyBEVMwkPJc6yEw1S4jDf/NQ4knPpbmslSL66wVVQD/B5RY+VgAIzCz/et/96jKPX2FZuigIOmDlMczmWqPr+86JXgdhSIDqpEX2NjhVJbwKAGjE+JB+8PTxm4pmWUSl3wy4G+Z/bxQ3pNSkrb3XAwy5WjCm8eXP0YKiy3dlnFPMmeJJZhix1YxI9BeHc8qWNlr8HIzO38GALBPCtGdyq+CZ6xccqsdhweL/afoJvef3Ur4wQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eNwJFBRjM3A7KZBcSqSx7DuAu6rJ+Ex139fSG0To/G8=;
+ b=T5ojR6sGa73tblYN4ecjI4Em1rFHJGyZ6i33ED2rg2nEdP4Epj4Y/j8sRdkdbxbNYBmssUlEAqFStWQD+E9Asdrpeb6I1r9fFyhZoeJYnyr3Ogs/MIaznEpXuhZRODQFjgYXTcxbkABcQHuO0LhqJA3UrP9hhSa0Xeccyv6RvDHyd+OUmTA/gRoBpT6pmWxsZZmpcKjELWnBtixRamhWCxgbVG63ZRp5t/jxfDfryPuLA7Y/mxfULKeF4bCcxzXlhztuLirVc50Y1qwy2zFKjf/BViXaA7kOX6KZJij4yICq36qpAWsL9iBggzm/0SOiDrP0/J3MdNzbVADgRgiFVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eNwJFBRjM3A7KZBcSqSx7DuAu6rJ+Ex139fSG0To/G8=;
+ b=AI1BsmGfZ5HkbYNb0gQcetRikxJypoOV4vpVc9q7IBr75Etjr5uHurOItg1ZiKPwLWrOwaFEvbeJXwRxWN3vFuoBt3pS29VYewH+kvVEYXJ0V59JHnftL1Dkb48gXfKbYB+G7rn6jwY/ZIxQ/lVbFxWuwlLrzntODkTtnJEyy99P49KM6qqAjNZzw5a4upbAPIK5OFmhJ+mvzp4O1fxxiIm9ehO+F9LBLbJpaYQPY2jK6x+iFXGrxOfxWSrwkQMNtMiyrnBZ7bxLdRm7oSedModv3MPe/KePDGBnpTVsAITII0VJW8AzdvFEHGXssnyrDQ1/mnhg0qHnBA9Ywy0wSg==
+Received: from DM6PR03MB5017.namprd03.prod.outlook.com (2603:10b6:5:1ee::21)
+ by SJ0PR03MB6582.namprd03.prod.outlook.com (2603:10b6:a03:38a::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.23; Tue, 1 Jul
+ 2025 00:39:24 +0000
+Received: from DM6PR03MB5017.namprd03.prod.outlook.com
+ ([fe80::2898:accd:c6dc:2168]) by DM6PR03MB5017.namprd03.prod.outlook.com
+ ([fe80::2898:accd:c6dc:2168%6]) with mapi id 15.20.8880.027; Tue, 1 Jul 2025
+ 00:39:24 +0000
+From: "Romli, Khairul Anuar" <khairul.anuar.romli@altera.com>
 To: Dan Carpenter <dan.carpenter@linaro.org>
-CC: =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>,
-        Mark
- Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH] spi: stm32: delete stray tabs in
- stm32h7_spi_data_idleness()
-Message-ID: <20250630204220.GA522704@gnbcxd0016.gnb.st.com>
-References: <2033b9fa-7b0f-4617-b94e-7b0a51c5c4b1@sabinyo.mountain>
+CC: Mark Brown <broonie@kernel.org>, "open list:SPI SUBSYSTEM"
+	<linux-spi@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+	"Gerlach, Matthew" <matthew.gerlach@altera.com>
+Subject: RE: [PATCH 1/1] spi: cadence-quadspi: fix cleanup of rx_chan on
+ failure paths
+Thread-Topic: [PATCH 1/1] spi: cadence-quadspi: fix cleanup of rx_chan on
+ failure paths
+Thread-Index: AQHb6Z8JiQISVlGUXkWOkCeuCrM6UrQb/mKAgABu6oA=
+Date: Tue, 1 Jul 2025 00:39:24 +0000
+Message-ID:
+ <DM6PR03MB5017D9C650820B9A5C63C6ACC641A@DM6PR03MB5017.namprd03.prod.outlook.com>
+References: <cover.1751274389.git.khairul.anuar.romli@altera.com>
+ <89765a2b94f047ded4f14babaefb7ef92ba07cb2.1751274389.git.khairul.anuar.romli@altera.com>
+ <9f26f205-756e-4fcd-912e-bf73167be21d@suswa.mountain>
+In-Reply-To: <9f26f205-756e-4fcd-912e-bf73167be21d@suswa.mountain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR03MB5017:EE_|SJ0PR03MB6582:EE_
+x-ms-office365-filtering-correlation-id: 23e121ca-8c5d-4eb2-d354-08ddb837ba3e
+x-ms-exchange-atpmessageproperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?Oid4V+rJW21JaySOTHneos49zyQq0R72evYNO20q+9/U6Eu2iMHeX7N5quRm?=
+ =?us-ascii?Q?J6Cccept2hoJMcmbP66wHmRXTWOp9Y7NbkEOVLOFKLmiAnTWZmH3d1ceVPJ+?=
+ =?us-ascii?Q?GZ4mQxxKrsaMmVo9xVt9gg/8IZyfC7xx8Rw3p19+wDxJ0NcaaP1YJszV7iNg?=
+ =?us-ascii?Q?Uj1iD+euCoASMnWOTmNUTFXfdFCA5RiwoHooyclQ9aaxUuSIoVtfJpFHQJ6t?=
+ =?us-ascii?Q?BAzlXkoJKCk7MrBteS+JAEPXoaxgiY4z/C2sKNKcDbHvXbbRHzb9oMkMlbIA?=
+ =?us-ascii?Q?ZlglBYq83ND46fJ1JQdre1eI/bxxuzrOT0CqDV7YSOL0nIiPmLKRKt2beWCV?=
+ =?us-ascii?Q?BmV4zcwSTVfmbpezrAukRgdUkaZAKdFWYcrh4TAnyrG4B0bCvhr02SGLEJn0?=
+ =?us-ascii?Q?xh4iUm5FhkeJm7cXTCFxFAsRlOa8tiLN+7kIRtc+iUFpo1S5xWn37GsB5GVn?=
+ =?us-ascii?Q?calMBDdLmPrVBLVkFuSpq3KW8NIGWhpcDQwHDz3MbpeUz1bjX69uF+N+INJo?=
+ =?us-ascii?Q?cSNKtub6BaZJBuwNbL0I8U43e5tspCzexBNs1inIs+qSJbdXpvtcUOEOYIZ5?=
+ =?us-ascii?Q?XzxGhSorxMpHQuPiMh2WcNMtpOY/V5nDJvjl/KNA+5Bi5Mr1a4ewVC3StAeU?=
+ =?us-ascii?Q?BMQz0clwIfppLFcP36rtABTNPHZ52WZ6sqhDiWuC50bj59tdZXWjYhyYXJ9p?=
+ =?us-ascii?Q?B/ROneI/S2V5Q/2PyO7fWBw0SuUniq6oxGV6eosLAO1j7iqGTsE/62bSLgSQ?=
+ =?us-ascii?Q?i06A+nSGcRgzFXPKxGlRuKBF/LCJi05ylEE87wEwFPzx4BJ522dfMer56OxG?=
+ =?us-ascii?Q?Jli1f+ve2no5rytAKrVSrSe5tE3F3yxqnjbMIDxciuQzzPI9soD4hGdHQhkk?=
+ =?us-ascii?Q?qbhV8n0V5FOfzNQJ6mUjwIAzDbjbJnRXdrkBGKJbHy4YbiDMQHCyds7Uo2L8?=
+ =?us-ascii?Q?59oaM6VEm8NldySt2p1MnBTHFQEPJgxUiXUpRtq08DiIv/Wo4Rfi4gpVpZvr?=
+ =?us-ascii?Q?YAtOdONizCnA3DyQ4nRqjcjtBYS7BnqPl1RR9G/KmDt5iVzQmFC1Pez4Wmcs?=
+ =?us-ascii?Q?mlBxFS88A2BF4dk5wAFUPHnwKL2cO4bZjwIrdUxc12LMdSVsJpfxaZKWYDMr?=
+ =?us-ascii?Q?6LTQUMVst3dJt0rWF7ck4iXl1Y6qQpvZiOKBhurN/JhZ9GiaqSCK1sXZIXaT?=
+ =?us-ascii?Q?yjBAiPl2AFoWLfosMcnpQ4jSyjeK8Z5ZCu2EVKBXOYujj2WfrkqqvdTJ3JdB?=
+ =?us-ascii?Q?fkGIrI2HtKLfaEH2Ja31tN2AYPqXBhlteSk84oWeE6zSvDxK16lshkf5/EAA?=
+ =?us-ascii?Q?/DS7fLf6s0hIoDHpgiZ3VBNWyreCjXwpRx+IrHNg85OpURd5hk+0sd1yEJHf?=
+ =?us-ascii?Q?FOlxK6j61PtIqSgSrwr8hsKnWnPqH6uVxihn4qUFC0sLDyj5+V7yRevczE7F?=
+ =?us-ascii?Q?vb0f5keixoIHYA7yZ5cQbdnKyD6nxKB8k8QIURi7zcyoMFWTivZ+hQ=3D=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5017.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?q5vQ42oIzpfBbHFfXeDbUNjlMNbAW2zb4IGMuPYTyZFs/ZwjOlUBvh0VuE5x?=
+ =?us-ascii?Q?iwXerEO0ki8n1TR3l9MvHDnBKK9WltVxcXeUE3uTGfdT5Qh5Pj8pBqx0m0zj?=
+ =?us-ascii?Q?2T0LrCBsHpzXFl2Jhd0JbZQw09Q2UDWmUx9BY7wjW7yYvOrFzSUGrxI34zoV?=
+ =?us-ascii?Q?Lz7/1IuwBGLXweapWxpQVAe+/TI8Oy+gK48WEcQtwmyqf8nB5DYh+S/QZYUs?=
+ =?us-ascii?Q?757aMjF1YdTW2ddaV85ViC4+Z7TMd9TMHVrLKYBbch53uoAn1t1jv2eLPWo3?=
+ =?us-ascii?Q?iI2q3+lvHk/d5bm7UYahqUc7rSWDpsTSVinMbCIkmkU7eHei+YYedpC361gC?=
+ =?us-ascii?Q?Fh3GHAsXiK49u2nvOvN7YZ1ND+RQQ+oOrSzFEMxXWbGZn8XaLfdTdMICTYkT?=
+ =?us-ascii?Q?Jrsizab+EiZVBJitlePKQ8ViVYJoWk2Z8FVsXUN7fhUbhk7uVsTB7tbqzcvs?=
+ =?us-ascii?Q?D1x1xgNxI1gbuQAABjPpGKb5//6SkYWUuj13+Ky94emr3mlOgRM7fPk2G8NF?=
+ =?us-ascii?Q?Z54Wi1eyN6wQIm0u4mw4S+IYasOQcgK7cUiitohY9JEkDLV7nFLkFnyW0buN?=
+ =?us-ascii?Q?4niwUz6ZbgxieY+0idhW0HOKvxoZU+CARjNqpAa68likLL97y0It55Xfki/n?=
+ =?us-ascii?Q?kiOrfEg2noxmVfF+H2Cd5wwvSsiFo+EKEKbyRB0/blESvrrioEQQ0q83UzDr?=
+ =?us-ascii?Q?TC5nJaY71YBjekxOqQb+ilkzc/qq59ApTFUI69GGNOe5I1fEXBObGveUH4kn?=
+ =?us-ascii?Q?qaitGU7HwWRTFher5RpGyJ+ZF0mecv0b6AASIAiYGqyR6ZRG7s5ABldwcGjN?=
+ =?us-ascii?Q?GXE2RQ3uF0nInHTJGZAEIuklGaPaQh8X77ULvmpZGJE5WMQU5EhoT5s+060+?=
+ =?us-ascii?Q?2BWKNwtPD8Gp9CUuX7idvRfkCWlQwHEitsewFn063ewqKllesb9THVWJVmi8?=
+ =?us-ascii?Q?WkkL0annhP3qSNQcwNfcZKje9xF+jp7Ee6dGfZdIHjxMZMI1BDxbUDKXhJ8N?=
+ =?us-ascii?Q?89BQWTz8u++LYah39hICMePe7AMXwWRcsq6AQ0KO+FEy6Dt6BOMtWkEX9lDH?=
+ =?us-ascii?Q?vmEJ08dC0jw4+ELizPdvDfb45dQFt5yXu5uLoeov2urm5Yi9w9hyYLKcX+PU?=
+ =?us-ascii?Q?Qj7hNRFP8RMsDgNmAW6iKLlwkVMnqCdLCPsZOymAEjKrt8AAk9Ft0PceUNkn?=
+ =?us-ascii?Q?I2CrFwb0R4RyYEaghr2AWq/alMjOuhqHIGRMDBMxrOapCSRxIWEZUCAEG2Rc?=
+ =?us-ascii?Q?Lm2OsKI7RfLHeXA20HLB2D14DCM/OY0nBeHVJXgy+/V3r7tEB3vU1mDpTtUJ?=
+ =?us-ascii?Q?f9r637rYSuCGLoyXV72DtDtKPrfa55g6s/zRv/rgTrreUC6Vekn/FI0Af+SH?=
+ =?us-ascii?Q?U0rcT40ZCFN6DhU6zzMsj0LcIfabxpSiTSsVszLRtXqKqzQWrAVo7Q9qHNB4?=
+ =?us-ascii?Q?DqavU3/jhwT7kDwnA71FXvz7tDY0HxPKjrvtb+YUUBBZ6GGBvfTNEhgpoT9N?=
+ =?us-ascii?Q?/Yzoqo0AtwTpX7rWwoKAIsZ14aaOLcE48dvqLvO01fBxLRYyDONNwD/SphV1?=
+ =?us-ascii?Q?3Owgnk6R/LHvzU2lOl1UjrpMgh/+qBfUmOxdRsAf?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2033b9fa-7b0f-4617-b94e-7b0a51c5c4b1@sabinyo.mountain>
-X-Disclaimer: ce message est personnel / this message is private
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-06-30_04,2025-06-27_01,2025-03-28_01
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5017.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23e121ca-8c5d-4eb2-d354-08ddb837ba3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2025 00:39:24.3726
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eFszrSAT3qE67znwTWgIjx2EuTtxgKXSDv7+fbZMCQjhuMsCdlNqyFr7gX+9TkCfFu1wJ/gneJyZEffwlxWPZ19LcrbKPiFj+HeLmEl02vc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB6582
 
-Hi Dan,
+> On Mon, Jun 30, 2025 at 05:11:56PM +0800,
+> khairul.anuar.romli@altera.com wrote:
+> > From: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+> >
+> > Remove incorrect checks on cqspi->rx_chan that cause driver breakage
+> > during failure cleanup. Ensure proper resource freeing on the success
+> > path when operating in cqspi->use_direct_mode, preventing leaks and
+> > improving stability.
+> >
+> > Signed-off-by: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
+>=20
+> Thanks.
+>=20
+> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+>=20
+> Mark asked me to fix this and I wrote a fix but apparently I didn't hit s=
+end
+> because it's still in my outbox.  Sorry about that.  :(
+>=20
+> regards,
+> dan carpenter
 
-Thanks for this patch. Indeed.
+Sorry for sending the fix on your behalf.=20
 
-On Mon, Jun 30, 2025 at 02:35:25PM -0500, Dan Carpenter wrote:
-> These lines were indented one tab more than they should be.  Delete
-> the stray tabs.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
->  drivers/spi/spi-stm32.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index 3d20f09f1ae7..afb54198bde7 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -1895,8 +1895,8 @@ static void stm32h7_spi_data_idleness(struct stm32_spi *spi, struct spi_transfer
->  		if (spi_delay_ns) {
->  			dev_warn(spi->dev, "Overriding st,spi-midi-ns with word_delay_ns %d\n",
->  				 spi_delay_ns);
-> -				spi->cur_midi = spi_delay_ns;
-> -			}
-> +			spi->cur_midi = spi_delay_ns;
-> +		}
->  	} else {
->  		spi->cur_midi = spi_delay_ns;
->  	}
-
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
-
-Regards,
-Alain
-
-> -- 
-> 2.47.2
-> 
 
