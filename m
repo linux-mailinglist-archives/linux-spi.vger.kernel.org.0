@@ -1,59 +1,61 @@
-Return-Path: <linux-spi+bounces-8978-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-8979-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F651AF0670
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 00:16:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E968CAF0671
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 00:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9088D1C0461B
-	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 22:16:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DFF51C061FB
+	for <lists+linux-spi@lfdr.de>; Tue,  1 Jul 2025 22:16:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4469A302CDD;
-	Tue,  1 Jul 2025 22:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFFC306DBA;
+	Tue,  1 Jul 2025 22:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cq4PLqhB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="seT1dNqR"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D282302CDB;
-	Tue,  1 Jul 2025 22:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 541BB306DB4;
+	Tue,  1 Jul 2025 22:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751408148; cv=none; b=UfBrmRDCvAF4bfZK730Xkbgajb1KmNCKirfUqBqkfIqCrA35R1ZaF0C5GH8DzKITtzMsrL/QG47kndvrmftVRbToTAL5eVFiEl+4Q1k9OXqFjCsruKOlnx/cXjjAIgIapoWv0yEyVIJ22hGL9h6lhiVM7FoltGHaqUTBtx8c9Mw=
+	t=1751408150; cv=none; b=bq7R9xvPMR9jWEGhuJvnvfJcTWZJe0wpWLPS/zIiAkX57wN5SUmlSUhqE3JcQvG/muJsmLfAXwdmAVu8dmi9VNORWAfY+EyeXhrxdXv+2rUHKzVSeX4vASZ9H32UwJcwyZ5Mklj5GgjABcBE1m6KHhSaQvPuPzhP3uJxNrbMy5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751408148; c=relaxed/simple;
-	bh=1V9bluvj6qQ90+PrLqZ0V8vdxa8GaJjq9j4rh/X5piw=;
+	s=arc-20240116; t=1751408150; c=relaxed/simple;
+	bh=iOpsCmM3i8hcc7OLeyBEa+jHDCW59AkA6x9tZbiAt8M=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=iI4hBdsOllU2+RL8yUB5j2VUPPaFuVbrgCLsQQ35Z4sU5fxUYsvPu83WRPtd0ixA0vC/9z4hJZPV1eGYNww5NShqLpyaSA54rOYJUNLKZTf8Nq2/6EtcP1IITsECeyYaeUSmMX84ZsY8bcgNmBv/d8TwyM31ml62T33enVeNF5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cq4PLqhB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002AEC4CEEB;
-	Tue,  1 Jul 2025 22:15:45 +0000 (UTC)
+	 MIME-Version:Content-Type; b=MIdHQfBzjsv3sXN/jH4qr3GjbNKbiSRVsA6sFq/XZX//k0XWY4xkmeS35zlzVkY1AJk+tCPFQhz3E7jxgTQKZXDROOG35PkfVJUj8GKEDwbqRsTzD+st2hLVZ7UesYa/jggWBJ84OTZx+HFk8ljOUtPQ92oA8zahRzcDZJ3JCsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=seT1dNqR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1633AC4CEEE;
+	Tue,  1 Jul 2025 22:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751408147;
-	bh=1V9bluvj6qQ90+PrLqZ0V8vdxa8GaJjq9j4rh/X5piw=;
+	s=k20201202; t=1751408149;
+	bh=iOpsCmM3i8hcc7OLeyBEa+jHDCW59AkA6x9tZbiAt8M=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=cq4PLqhBNXHPRoseG61W93iWlprbyQW36RTApzIjVnz5kYav6/kgFrWTTZvIsG5nm
-	 dalNoS4X9NsbzXZX5ylxeER34FL6ZwzgcxAhw6cpai9ZNmEhFLc2TDbvQMseEoKCyl
-	 lhkStm9uRunHaQXLtsWAjItmhmcwmsnh8UAXNUB+4vpXSv72Tta1D5TrWWeDSdqEWY
-	 nGkq5IntSVX0Jf5CXcdFR+c97TDOwbswm0F42+9fap/0a6iZFtpwZbaDdzZf9JD4SE
-	 ncjhdj3vypRpxv6Gvz4hYKdlApTqBhFUdC+ghUYHeKKqh0akkrrSL2+4CDf/Flwjh0
-	 3+FBqBlRlJiow==
+	b=seT1dNqR/7PMoij3HFmGGEQKos1aaO23CoQRISQ33RsrgWD+2cZKJL0uqmdjHcRCy
+	 iX6M4ToLx7QfCLXmKVRcyErYw5qJY8W47yUuOpnisYPXG/V3H6PxRGFC+0CABvjNlV
+	 HauyL3osB8xSqwQdkm0z8WDm4E0YTuwz0EwdgeehG0DzjM8tiNTNLA8HAg8lia0yAN
+	 o3+erFF0cdbwCgJ/AyZZaDJcIYTpwg7qjI4C8yMMR7QvpFXEtP4BCBENkurtfEmDeb
+	 rre1PVilqChDuNpnYRkLifBzKkqtlHqlREImet2ivmKZcHI72vfXUit+wTj5fQeJ33
+	 gB2tqfcLD5ICA==
 From: Mark Brown <broonie@kernel.org>
-To: Alain Volmat <alain.volmat@foss.st.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>
-Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+To: =?utf-8?q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>, 
  Dan Carpenter <dan.carpenter@linaro.org>
-In-Reply-To: <20250630-spi-fix-v2-1-4680939e2a3e@foss.st.com>
-References: <20250630-spi-fix-v2-1-4680939e2a3e@foss.st.com>
-Subject: Re: [PATCH v2] spi: stm32: fix sram pool free in probe error path
-Message-Id: <175140814573.710092.14100565010751985098.b4-ty@kernel.org>
-Date: Tue, 01 Jul 2025 23:15:45 +0100
+Cc: Alain Volmat <alain.volmat@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, linux-spi@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kernel-janitors@vger.kernel.org
+In-Reply-To: <2033b9fa-7b0f-4617-b94e-7b0a51c5c4b1@sabinyo.mountain>
+References: <2033b9fa-7b0f-4617-b94e-7b0a51c5c4b1@sabinyo.mountain>
+Subject: Re: [PATCH] spi: stm32: delete stray tabs in
+ stm32h7_spi_data_idleness()
+Message-Id: <175140814783.710092.4550416995647009913.b4-ty@kernel.org>
+Date: Tue, 01 Jul 2025 23:15:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,11 +63,12 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-cff91
 
-On Mon, 30 Jun 2025 14:59:23 +0200, Clément Le Goffic wrote:
-> Add a test to check whether the sram_pool is NULL before freeing it.
+On Mon, 30 Jun 2025 14:35:25 -0500, Dan Carpenter wrote:
+> These lines were indented one tab more than they should be.  Delete
+> the stray tabs.
 > 
 > 
 
@@ -75,8 +78,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: stm32: fix sram pool free in probe error path
-      commit: f4d8438e6a402ad40cf4ccb6e2d2417d9ed47821
+[1/1] spi: stm32: delete stray tabs in stm32h7_spi_data_idleness()
+      commit: 244bc18e5f1875401a4af87d2eae3f9376d9d720
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
