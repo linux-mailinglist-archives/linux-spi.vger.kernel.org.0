@@ -1,216 +1,154 @@
-Return-Path: <linux-spi+bounces-9002-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9003-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66790AF6106
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 20:22:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DB04AF616D
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 20:39:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F18648836A
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 18:22:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FC081738F3
+	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 18:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D374B309A53;
-	Wed,  2 Jul 2025 18:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E8F2F508C;
+	Wed,  2 Jul 2025 18:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWdH5Ue0"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="rd1RwZ+5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED242ECEB1;
-	Wed,  2 Jul 2025 18:22:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C452E4985
+	for <linux-spi@vger.kernel.org>; Wed,  2 Jul 2025 18:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751480546; cv=none; b=kBdid4B+EarsSG8iR1h29jFzg7hNUAAlBcFyM9Nl092K2U3ro7iQ8MWkP59DbZ0dONEPUDyWyw1yN9yxeHH9pE8MGp8nRQrcPwWNWmcm4S7bhgR9Z31TBqV0LF3Bvg0+jEv0m7P8cBxRq7/Y6A/cGIC6G3dqETD00OkFW0mM74o=
+	t=1751481554; cv=none; b=TWljQ5EjnD2fEkC8UoUPe/UyTvO2ZT6GQjQByNGvJCXXljO3qTFOdkaal6RakSFVH553vcC9GDVI2d7pPUq2mQFkIDAfFuLZlpEdJiMCgJh1HgtVP6qUvvGKSK3HRl0wYX3e0yq3r89Jv2CmjW/fL/8CQ4PFxvwHpjw61mGMQBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751480546; c=relaxed/simple;
-	bh=j3/uRPL+87EEZjvciuLYyh5YBCpisy4zQRKraMg6LQQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=INnY+nqn10J2aLwNsuR+fB8umy/1PrUGON9MMx4jDE3wVAIBz/tJAlnShVnrh0TDt81QdtJTFuMb12GiWuBNN52TZkTyIF6Wfi5NFzEKfXqmpNW82cW1gPKqNDpqfReZC0tDHrb38EQRAGWriQhnTtlIULHhmMpLI1QUmRv3t/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWdH5Ue0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9DFC4CEF7;
-	Wed,  2 Jul 2025 18:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751480546;
-	bh=j3/uRPL+87EEZjvciuLYyh5YBCpisy4zQRKraMg6LQQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eWdH5Ue0pAvGCLuTSgm/fal7L45NkmR9SUAu5HgOuR24ALGR3o0Z5uRZm4u+DyzTQ
-	 xbIx0UUHi1qhlFrY2keO8QxL8hMKnjLe0jdgKVeCNXTJ0g9Dh1QtkjyGZeISRzGW/6
-	 JQhwUkOQ8fmqQYIdl80VJEw1xsupcd/QIjepMjI0wYc5djGwgrB4NQMeUxzf6L8Uxo
-	 YvYmESwpzF3cOftgduvYEl8wOmtu2m+TXiqi2hnnUmd4UHgvc73njc1+Q+5Neev+VQ
-	 GeYjvxRFUVAEfP5WmLxIeSxxr5Keoi6jkmd9EurugZX7ulMYEJFw57ZE8f+302u3x2
-	 rJZjFBiUeMuWg==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-610d86b3da9so1774865eaf.0;
-        Wed, 02 Jul 2025 11:22:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUFzOYJ/TEWhX1VRMgoqX2Gqt+HkYIufQ06hP5xB1pVGT7eqYoIbexQ2dX0kDmdTQ0VOf7FrLk6SGWF@vger.kernel.org, AJvYcCUMwuLIkp/wf3sjM8qMOu2TEfpuQvOnZyKtpYs147JWujtZ9XeeEshNlRETZ6VbttytdLOvr2nMYvChkw==@vger.kernel.org, AJvYcCUQay7NUhQF/QYXEQIjMXs9iK5C4PjQGDDU5205MNgHtlYzfQ1uevDyDxfC2eRdr1LQy4YU8myybQqq@vger.kernel.org, AJvYcCVFsQTJEy+XtOQAHdRkKDw8VnR/lUEt99evLZRxgxVI8Avl0Ygeunx+JT88x0mOS6DnLZnuTjOkawxd8XmN@vger.kernel.org, AJvYcCVnSdZfrfVG3frH3qClsyJXWMKrZ+jfF8rnxFD974AZRmDX+9onNBGJHqZ+8XaMGZ7Qv1Nr1A8J9WS4@vger.kernel.org, AJvYcCVqzQBpTy3IcgmU+eGg7UK+Yo5ARoZ6mFI86bUQg5Klm5+vBvF0GITpV/p8bFdsD1SHUNeK+BGXA8OR@vger.kernel.org, AJvYcCWjhcXKwmBJuQeZTbdYx4BCnbrXHTg1dOnzayXoz7bP8V/3Wzi9h26/rPB0/o3/vtffRYq4uAhSuX4v@vger.kernel.org, AJvYcCWlBZobwVVfOzmbMqeMQlSGcaJW46tmxzcO5cG6xehL6yeVKMrEzntoHaR0Eqw7AQ3pnAu82K2Lakll@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv0hTFM4mqF2bt0fYWbvMxU1UQ4vo+e6E37uPmi0UwctXxOHOI
-	8XT5iuvn+I5jllhNm7qWhhKd5RXmdydJWigugq64CzBdgak2eWpEcFxjHOQ/ilct5gsy4pvGWkk
-	j1cyMIoPujBHyMUC7bpGMzrEWX3x43H4=
-X-Google-Smtp-Source: AGHT+IGdUWTlRz3gGad/J6GD1otztC6+2hJ3QEKqvGHy0HR3TljgfmbwnHczYyQv3US2qz+AvA1Mx5q2n5hXbXQHZCs=
-X-Received: by 2002:a05:6820:2d05:b0:611:ab60:3003 with SMTP id
- 006d021491bc7-612012b713bmr2690095eaf.8.1751480545507; Wed, 02 Jul 2025
- 11:22:25 -0700 (PDT)
+	s=arc-20240116; t=1751481554; c=relaxed/simple;
+	bh=xCRs4dzrc6WcXYmCwUPWRARDoPNR6pE48wQDzbnDrFU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T8ZvUOeGSKlwoXODe4JN1mRmPqEfSmklBCGHE7HdZZPO+yk1i47U6eh0P0zyFpMFCrOyyrDzzJlnXR8yr74CWnfqx+oGFPAbul1pCdtw6b6iLaxhDv2IqEs6dbH76NU/vs7wS2+3AgpqdE3Z81zW+j8LX3F1XtoprcAxpHLoVNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=rd1RwZ+5; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-23c703c471dso2288995ad.0
+        for <linux-spi@vger.kernel.org>; Wed, 02 Jul 2025 11:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1751481552; x=1752086352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H0vokW/WVWIh/diYEqZYuuuvilgnskYyUw0dTfGNSpI=;
+        b=rd1RwZ+5nubdEQxYyJFun87C00oSIIPar2SyPLa2/vR41WjfK5wDB9i1LDVOJDpgqF
+         8mK9mxPgO5iLW9e81d87+vOykBOkJSpy5k4/eqbi8L6WlqU3ZpVUQToBsGfcbuVW53MR
+         6m+g6CF3ijwp+YW7yc1A472ZsLTMAurLhw4fXlbLyrn3ZMKvAjlS3awXzBr9Y8qy+ys1
+         J3mb8zyJv/tEcP1rp75BdLzpVC/urUFC6R2Wlgey/2IHxk2sarL33GYm5w55fyyzQbqO
+         y2JPdIcPnxWB5UOYSMmDP0WDSsezjeOveo7nWLAxA1wJJ5JzuxQ81IQjOhix55O32dz6
+         MXNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751481552; x=1752086352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H0vokW/WVWIh/diYEqZYuuuvilgnskYyUw0dTfGNSpI=;
+        b=lz2mD6FrfD15yRAA3XHMTJLnR/qmPDrZguKPLRYb6BrI+znNPm30HvVvS7ttLVONGI
+         SagYLHBRi8R1wZ8rnAul5jaXHH5VlMBAwDC9mlpEB9RCNzHkCUO6GZERC12LWw5AiDgl
+         hbp+M3n+8o2Lbq44BEnKTLHm7nHvNEX/AxqjarClPYKf5EeMdzLRDwqA+UVEq9HnANuv
+         OlCJO4hrak/SIrOZ+j9uDtxprtmbWkZV5iDqLqdEi6wuquYPrQfaeMXAdjQ5qd2Mx1mF
+         FpOy5i1thv0SeseLH72bBAvN5hesuVLY10lyiHZgK28nka7IQERutwwstbJxoWSYzn1o
+         QXWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXoNyePavrl7gdRKlnhtJtuzfcc/mGk1oXpgT9R1M7ac6nxUh9sKlw06VfSh0vJr1z3LxJRdpfgT68=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/U3b+U3M8du2F2dn5ICXUUTBwi0T8+PcD7VW9iW07LXkfJZss
+	f05yi2bzeHe1xqJCF20ISPtRGKiz6Fyttkq4HsqmYBfrkgztplPvDEbgH3Obklvs6PY=
+X-Gm-Gg: ASbGncsoA+pQfBI1kiRRiak7g27EOWkJ8yylJzW59LYlp/2fO9U97XAdWxgc5DhXgvg
+	4oeBfq/1U3Oganu0YVTgnn3fczwUM/mjlrfzmW4V7BlpLxtkBQh4LxBmtTISrkuxwfYiDbSdc1l
+	lMrPXe1+OAJO/BubEWDB5babYTG8Sz8km6Og1e3DFbIT67kT1dbCjxmdAkeSbJOjHB8Rhps34d1
+	pcLaiSQOo+D3yC+YSgDD5JQCOnOSFPp/TPkVmyb4zNPIohWVjSwoUK8aWnlPqwgY1+98c4kpLBo
+	BhfeaUrYVGMtUkXnCxUf6yvUfM0wz/JKU9huVjJIla9mvfckHFXTRSQf4zsdAtY41kiRnGJsSpI
+	HmW7/THPUj12HTWPu4LHmB9c=
+X-Google-Smtp-Source: AGHT+IGquOgZW20g+Jug5sdpx4963ZXWIcFE/S5pAht3IG0Kq6KeWcjOPzHMuBzGwiWByDwygshOwQ==
+X-Received: by 2002:a17:903:1105:b0:235:f059:17de with SMTP id d9443c01a7336-23c793f0bc4mr7420165ad.15.1751481552430;
+        Wed, 02 Jul 2025 11:39:12 -0700 (PDT)
+Received: from fedora (cpe-94-253-164-144.zg.cable.xnet.hr. [94.253.164.144])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-23acb2f39bdsm143034195ad.80.2025.07.02.11.39.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jul 2025 11:39:11 -0700 (PDT)
+From: Robert Marko <robert.marko@sartura.hr>
+To: linux@armlinux.org.uk,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	olivia@selenic.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	vkoul@kernel.org,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	broonie@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	arnd@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	o.rempel@pengutronix.de,
+	daniel.machon@microchip.com
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v8 00/10] arm64: lan969x: Add support for Microchip LAN969x SoC
+Date: Wed,  2 Jul 2025 20:35:58 +0200
+Message-ID: <20250702183856.1727275-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250613134817.681832-1-herve.codina@bootlin.com> <20250613134817.681832-5-herve.codina@bootlin.com>
-In-Reply-To: <20250613134817.681832-5-herve.codina@bootlin.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 2 Jul 2025 20:22:14 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0g01QzAkpnJGdjEuif9h==tyB94tU3nCbumx_Ya3EOoDQ@mail.gmail.com>
-X-Gm-Features: Ac12FXzCIz3WR5_Gfgmi876F2Tv7ANuaisfdJJFJig-pMM_jGk92Xrns93JskcU
-Message-ID: <CAJZ5v0g01QzAkpnJGdjEuif9h==tyB94tU3nCbumx_Ya3EOoDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 04/28] driver core: Avoid warning when removing a
- device while its supplier is unbinding
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Derek Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso <dave@stgolabs.net>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-cxl@vger.kernel.org, Allan Nielsen <allan.nielsen@microchip.com>, 
-	Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 13, 2025 at 3:48=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
-com> wrote:
->
-> During driver removal, the following warning can appear:
->    WARNING: CPU: 1 PID: 139 at drivers/base/core.c:1497 __device_links_no=
-_driver+0xcc/0xfc
->    ...
->    Call trace:
->      __device_links_no_driver+0xcc/0xfc (P)
->      device_links_driver_cleanup+0xa8/0xf0
->      device_release_driver_internal+0x208/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      device_links_unbind_consumers+0xe0/0x108
->      device_release_driver_internal+0xec/0x23c
->      driver_detach+0xa0/0x12c
->      bus_remove_driver+0x6c/0xbc
->      driver_unregister+0x30/0x60
->      pci_unregister_driver+0x20/0x9c
->      lan966x_pci_driver_exit+0x18/0xa90 [lan966x_pci]
->
-> This warning is triggered when a consumer is removed because the links
-> status of its supplier is not DL_DEV_DRIVER_BOUND and the link flag
-> DL_FLAG_SYNC_STATE_ONLY is not set.
->
-> The topology in terms of consumers/suppliers used was the following
-> (consumer ---> supplier):
->
->       i2c -----------> OIC ----> PCI device
->        |                ^
->        |                |
->        +---> pinctrl ---+
->
-> When the PCI device is removed, the OIC (interrupt controller) has to be
-> removed. In order to remove the OIC, pinctrl and i2c need to be removed
-> and to remove pinctrl, i2c need to be removed. The removal order is:
->   1) i2c
->   2) pinctrl
->   3) OIC
->   4) PCI device
->
-> In details, the removal sequence is the following (with 0000:01:00.0 the
-> PCI device):
->   driver_detach: call device_release_driver_internal(0000:01:00.0)...
->     device_links_busy(0000:01:00.0):
->       links->status =3D DL_DEV_UNBINDING
->     device_links_unbind_consumers(0000:01:00.0):
->       0000:01:00.0--oic link->status =3D DL_STATE_SUPPLIER_UNBIND
->       call device_release_driver_internal(oic)...
->         device_links_busy(oic):
->           links->status =3D DL_DEV_UNBINDING
->         device_links_unbind_consumers(oic):
->           oic--pinctrl link->status =3D DL_STATE_SUPPLIER_UNBIND
->           call device_release_driver_internal(pinctrl)...
->             device_links_busy(pinctrl):
->               links->status =3D DL_DEV_UNBINDING
->             device_links_unbind_consumers(pinctrl):
->               pinctrl--i2c link->status =3D DL_STATE_SUPPLIER_UNBIND
->               call device_release_driver_internal(i2c)...
->                 device_links_busy(i2c): links->status =3D DL_DEV_UNBINDIN=
-G
->                 __device_links_no_driver(i2c)...
->                   pinctrl--i2c link->status is DL_STATE_SUPPLIER_UNBIND
->                   oic--i2c link->status is DL_STATE_ACTIVE
->                   oic--i2c link->supplier->links.status is DL_DEV_UNBINDI=
-NG
->
-> The warning is triggered by the i2c removal because the OIC (supplier)
-> links status is not DL_DEV_DRIVER_BOUND. Its links status is indeed set
-> to DL_DEV_UNBINDING.
->
-> It is perfectly legit to have the links status set to DL_DEV_UNBINDING
-> in that case. Indeed we had started to unbind the OIC which triggered
-> the consumer unbinding and didn't finish yet when the i2c is unbound.
->
-> Avoid the warning when the supplier links status is set to
-> DL_DEV_UNBINDING and thus support this removal sequence without any
-> warnings.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+This patch series adds basic support for Microchip LAN969x SoC.
 
-The change is OK, so
+It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
+which allows to avoid the need to change dependencies of the drivers that
+are shared for Microchip SoC-s in the future.
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+DTS and further driver will be added in follow-up series.
 
-but it will clash with
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v8:
+* Move to using ARCH_MICROCHIP as suggested by Arnd
+* Dropped any review tags due to changes
 
-https://lore.kernel.org/linux-pm/2793309.mvXUDI8C0e@rjwysocki.net/
+Robert Marko (10):
+  arm64: Add config for Microchip SoC platforms
+  ARM: at91: select ARCH_MICROCHIP
+  arm64: lan969x: Add support for Microchip LAN969x SoC
+  mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+  tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+  spi: atmel: make it selectable for ARCH_MICROCHIP
+  i2c: at91: make it selectable for ARCH_MICROCHIP
+  dma: xdmac: make it selectable for ARCH_MICROCHIP
+  char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+  crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
 
-that's been queued up by Greg AFAICS.
+ arch/arm/mach-at91/Kconfig     |  4 +++
+ arch/arm64/Kconfig.platforms   | 49 ++++++++++++++++++++++++----------
+ drivers/char/hw_random/Kconfig |  2 +-
+ drivers/crypto/Kconfig         |  2 +-
+ drivers/dma/Kconfig            |  2 +-
+ drivers/i2c/busses/Kconfig     |  2 +-
+ drivers/mfd/Kconfig            |  2 +-
+ drivers/spi/Kconfig            |  2 +-
+ drivers/tty/serial/Kconfig     |  2 +-
+ 9 files changed, 46 insertions(+), 21 deletions(-)
 
-> ---
->  drivers/base/core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 8fead097c404..ce367c44f642 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -1494,7 +1494,8 @@ static void __device_links_no_driver(struct device =
-*dev)
->                 if (link->supplier->links.status =3D=3D DL_DEV_DRIVER_BOU=
-ND) {
->                         WRITE_ONCE(link->status, DL_STATE_AVAILABLE);
->                 } else {
-> -                       WARN_ON(!(link->flags & DL_FLAG_SYNC_STATE_ONLY))=
-;
-> +                       WARN_ON(link->supplier->links.status !=3D DL_DEV_=
-UNBINDING &&
-> +                               !(link->flags & DL_FLAG_SYNC_STATE_ONLY))=
-;
->                         WRITE_ONCE(link->status, DL_STATE_DORMANT);
->                 }
->         }
-> --
-> 2.49.0
->
+-- 
+2.50.0
+
 
