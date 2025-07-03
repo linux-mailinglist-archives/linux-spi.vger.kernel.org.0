@@ -1,268 +1,177 @@
-Return-Path: <linux-spi+bounces-9026-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9027-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8008FAF723B
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 13:29:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86A94AF7407
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 14:27:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AB334A660F
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 11:28:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22FB13B96C8
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 12:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6173A2E62BA;
-	Thu,  3 Jul 2025 11:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D829F2E54A8;
+	Thu,  3 Jul 2025 12:26:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cxqeRkAm"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="0ph2alOI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 278AC2E6105
-	for <linux-spi@vger.kernel.org>; Thu,  3 Jul 2025 11:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C22E28D8CD
+	for <linux-spi@vger.kernel.org>; Thu,  3 Jul 2025 12:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751542076; cv=none; b=pUA13C4PItkv+IUTHQwe2eCg2Q35faMBRaIiM0osohyVXEsljPkYO+Pbaq9h9u31vfLvWbTHmHWN9YIfIOOln/BtjBEbOXxVMot9nTfiaCT6NTDHSr9k4qz76eeZUZDICM3woFxGaswYxaisg9988M3qPlMYA6HrGpcBMvAdJCc=
+	t=1751545567; cv=none; b=kuHNdidQssmuW/ARKbuKfCApjKUadsqpr+Et+KiO09IJoVviA26uiXLtTnvbvcDDLoQ/GTiI8PloQ2gqJ8AhJJm32lK9du6UvKLK91nyRj9XO3RE9e0j1GyaBZlhejmo9NCUfLTpTcJ3d65Ma+Nk1xXRdvBQqlu128k6iT1aCxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751542076; c=relaxed/simple;
-	bh=dKp9sNBVKhCMWq2ozbMkBemUSa+iPERmFu+4dZggoQ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qnoqtqOpzwcraTeiQ3/ER12EiV5XwljlY9jrdp8MvtMo9HQ+hSuXguEJRsVsO3ACAagWZE1fivWr2U/w1xKC/3qYMu3XKPhkHRLeP3sd1ksreeLVUTC9badKt9DJuqkqIBGQohoPYL6lRBfdgTx213K1u0QTLtpKnI3c7QbnuKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cxqeRkAm; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-addda47ebeaso1646134566b.1
-        for <linux-spi@vger.kernel.org>; Thu, 03 Jul 2025 04:27:53 -0700 (PDT)
+	s=arc-20240116; t=1751545567; c=relaxed/simple;
+	bh=xsHVzhy9sxS1+Yu3Y3Hn/VCKn8LRiyWwMmN5vGs+6YE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mymNPg220G7HU6H05JR635twc0e+Yrsac5gs9Ci+C4dPkf/0BHEffOXLSrQxFjJhsCpYttC/t2n7JwghC8OEc39qDfmEMZr9r6qQuvRTDsml5TdhDFPih2UhqNXG3vm/cHi4ZRExDAC4MgBKtSsM8KBLnkPdj/yCFeF12idbZoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=0ph2alOI; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-607cc1a2bd8so9311967a12.2
+        for <linux-spi@vger.kernel.org>; Thu, 03 Jul 2025 05:26:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1751542072; x=1752146872; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=sartura.hr; s=sartura; t=1751545563; x=1752150363; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=amy1aSEWJFLjdFKle4TRafGT1dI6FK2dRgoWrJhpEoE=;
-        b=cxqeRkAmo+uhAkoMMQwvBP/akaaA+fW/9V9vZNVm2+J3NsvGJPkfzEQDkhNz6BvmOh
-         3sy7SDwTPiykFPgHxFKqPDV70lgxb9VitxB2zID8UhJEFqbjSr6/beF1A+paHxzJLbV2
-         fCsPFX0X2dXVHFISOIdTo8bHJzzw2i/2PWJU1fYLb+tV1f0mIKR8nnHFEOgX2m69aacR
-         NgtAX6hIBrFtiKatkSlnHgVieJORSNq7h/WbY5fRfJUzCPYMt6OG0G9qmrBkr2OuIoFH
-         BjAsSdZRFHbIo+yxKwu60qLSEiRdqqKoSmqYbWC/MXA7Fwv6q3tItqmJmsLAJS2Nzb1K
-         iL3w==
+        bh=nObl+SYcIa3QW/piwikKudB5bjd1HimTQxS37KWupiE=;
+        b=0ph2alOIDnUdDxyGI0N55UnsDPiWsccgdo657pw4tSifz4aFf2qYzWwNJ66HvjQYPg
+         P9hLIcINI3/I13YyzcVxD3LIeRDD5lo6aqKlDATR14yJmmNb1rICuLTZbqG8Jj5rQ8y1
+         21weVM+c+DYPtVt1b9FbFA56JgCxm6gemqPc6CVDX1zcpbfuI3BHTXNNEu6TNoca8cgq
+         VR8+4jjvAIr0agxWNOfXt5pbkh4aWzCokOXr4qTjswmXjTHZEC3M1cgetNnjbBzc09L4
+         FEyf5WFNig2f6N5QBS6c/O1spGl3AMXYIqQ16h4WO+k6z+4RItNT9tLrtxEN1UragL81
+         wQjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751542072; x=1752146872;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1751545563; x=1752150363;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=amy1aSEWJFLjdFKle4TRafGT1dI6FK2dRgoWrJhpEoE=;
-        b=k6zxDFX995wBhUDujl5qPW6/fBnAvbJnV3UWCIBvnUF0Q0ulojx9fAv7Ovtwoe1F4q
-         tPAtbGSoRjxXPmuOuoNkDFt7bQWMP3ymGA1C1pRzx16g/LvZbb/9GLKolbO9mWQGww2S
-         c6N46TH3ctDxa/epUOjiI5x3NqTAQCKt6HHVYdr5UQqIU6Bmi4gBJVnN1Cd5E8sRMZ5r
-         Vt9zxOLszrTS6e2oTQrcIeMZRlPodgM1xidLuu5uUzGl3KotZYXS8MsnHTGek0n5cNvz
-         zXqnnTjEEosCNMcTeZ1p+vVg8kw0wmRisBoH0xCCMGIhl1g6TpdNd4b5TxqIWf8lD51R
-         jDug==
-X-Forwarded-Encrypted: i=1; AJvYcCVh4H8xX5l186KCaL03pYIg6DkrH/FmlsS43HB+bswSTQJH+Zo6A8VJMDEMLMv4FplNnDyDezgT1e4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg+RGIpn67ivLavgEAUWaLF3yQ67ogRpk+GH9epstgau8Fr0ld
-	eF1hNixFe7Bip2xFMOgHmMh3glyWJYE/Pc7xdPXAh2hltkViNRss/LMfHmsYIw/iMQc=
-X-Gm-Gg: ASbGncvuGIeCxt+rPZGHJGDkJJ5Oxgm8GXM+1qljhZTN0Se0mfd/tCruSEAtlZxy/2a
-	wZjgN85QUuSkea0S+BQ7P9M9AIquc0mTWLhemh4+jntmkPbvfDcvS92hCs5qqkKBY4xORYq+b3n
-	zm7W4kqaJCVl8EOu8AhMYvtsiKIM09s28w6L6z80QSKmh5OYR1poEm4FlJeRg5ca0jvyPdW8BoJ
-	bvyYQ/M+e7DLT2exc2N574KI4If8tkdWoddMk2i5dwippAAzziZek0QblOG2enDNDEHi9hFF7E6
-	wD+Vny/YzoHv19WyWXW3VeKvEWfjmJCVN+hXS/MRFAWKVVpP8CbPQryYUJe2ch6fBZiObK46Fua
-	Vg4lwVo5JB4IuWZs=
-X-Google-Smtp-Source: AGHT+IGtvsJyDMQsLfUDl9utWzUCxFT2n50ILIV0XhgAq1dND93ylmRMS+yE9TxwtIdCeTyEpsNdFg==
-X-Received: by 2002:a17:907:d644:b0:ae3:cd73:efde with SMTP id a640c23a62f3a-ae3d8b1b1d4mr273821366b.44.1751542072208;
-        Thu, 03 Jul 2025 04:27:52 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.83])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1247016966b.67.2025.07.03.04.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 04:27:51 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: linux@armlinux.org.uk,
-	gregkh@linuxfoundation.org,
-	david.m.ertman@intel.com,
-	ira.weiny@intel.com,
-	leon@kernel.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org,
-	andersson@kernel.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	airlied@gmail.com,
-	simona@ffwll.ch,
-	wsa+renesas@sang-engineering.com,
-	ulf.hansson@linaro.org,
-	mathieu.poirier@linaro.org,
-	vkoul@kernel.org,
-	yung-chuan.liao@linux.intel.com,
-	pierre-louis.bossart@linux.dev,
-	broonie@kernel.org,
-	robh@kernel.org,
-	jirislaby@kernel.org,
-	saravanak@google.com,
-	jic23@kernel.org,
-	dmitry.torokhov@gmail.com
-Cc: claudiu.beznea@tuxon.dev,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	bhelgaas@google.com,
-	geert@linux-m68k.org,
-	linux-iio@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	fabrizio.castro.jz@renesas.com,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v5 3/3] driver core: platform: Drop dev_pm_domain_detach() call
-Date: Thu,  3 Jul 2025 14:27:08 +0300
-Message-ID: <20250703112708.1621607-4-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+        bh=nObl+SYcIa3QW/piwikKudB5bjd1HimTQxS37KWupiE=;
+        b=Y/1hIcBj9y/NlVbGp0CI7hWaLtTju5x+f0+HU153UfIKTw361aIsjg+q+7PvCm5xRh
+         3tYfhGRWCdjkP1VuTOyVhj7VuA/LRNPYNnH3HFHjyvnhFTbomLj0d7wBLg6296QlNFGU
+         lZFLyM0Zpc3vz7P9WITliIOQ8cd7+JzXp9uscxb2urUq2W21sO5TGppaHb0OslqQeBaE
+         A5GMUzCNXZ6vK8zFpNVLIhkV+sDKivKf8D8v1A22OavGC5IIq4drP4cJRShSRH8Sro08
+         La+9JukaDO1Omo2YWXuYWwIHnWQfmvndyMtYqDP0OIVA0ca/67XT2bCJrAxdGCRXwPWR
+         J3iw==
+X-Forwarded-Encrypted: i=1; AJvYcCXDa/fMHyCaD6v13nTWUnY3QjbijXzSNGz/5ctgIQKlx2jEtxI8PeO4AI4Mdy9S7I/m97zHEKoeNSk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEyaA4AdlXWmiwQBlo9G+EH3WwFpj74P70C/FDOdhMsmzqHgnb
+	O0fUyssrLe6rUl2f/qpNdwcmEcm5q6H0IgF+ZFSvbKJuArgAlkejb6XPh4oBd0+l7TYikIa6WkU
+	Ca5bk5Wk9HqbYFbbtJ/jV1PeAW5+mL4ODV5MAUykoWw==
+X-Gm-Gg: ASbGncug9iBOJ9arKQbzdSIgLGso6WTy+UuQ9vgAQU6gYzOO4B/I6ZdJ/PC1okvL/CW
+	YId79BUwG/5fQbL4lIrfaLKTfPYIMuJpAV8uejn941hHy8/PG0W9VQTbzJ/wytsN8u7/35mCiIy
+	xJTnq/K9nEvW5TeP0sdCTFi3Xhql3DrsATxZyGi+5KYSoljp2P1Flkb08=
+X-Google-Smtp-Source: AGHT+IEQsYSlWMf3Q9ENbLYf0hzYQ7kNTdCoTK8bDuxoivKIYAt9JBafQ0ZP5WqZFwf5XmjzV9WjVxRtGoE8EwoykYw=
+X-Received: by 2002:a17:906:6dc2:b0:ade:2e4b:50d1 with SMTP id
+ a640c23a62f3a-ae3c2bb9a30mr525010866b.29.1751545562485; Thu, 03 Jul 2025
+ 05:26:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250702183856.1727275-1-robert.marko@sartura.hr>
+ <20250702183856.1727275-2-robert.marko@sartura.hr> <ea353170-6e03-4231-afc2-3dc45253931d@app.fastmail.com>
+In-Reply-To: <ea353170-6e03-4231-afc2-3dc45253931d@app.fastmail.com>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Thu, 3 Jul 2025 14:25:51 +0200
+X-Gm-Features: Ac12FXyEmDCCZ2eYF1-BFnQ2rb5Xpv9SlBj8TpVb-TJbG9_3w-Q9dIeIUPPsPkE
+Message-ID: <CA+HBbNHxiU5+xVJTyPQFuCJLyEs5_MpybSBEgxi25bzaGfiVHA@mail.gmail.com>
+Subject: Re: [PATCH v8 01/10] arm64: Add config for Microchip SoC platforms
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S . Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>, 
+	Daniel Machon <daniel.machon@microchip.com>, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Wed, Jul 2, 2025 at 9:57=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+>
+> On Wed, Jul 2, 2025, at 20:35, Robert Marko wrote:
+> > Currently, Microchip SparX-5 SoC is supported and it has its own symbol=
+.
+> >
+> > However, this means that new Microchip platforms that share drivers nee=
+d
+> > to constantly keep updating depends on various drivers.
+> >
+> > So, to try and reduce this lets add ARCH_MICROCHIP symbol that drivers
+> > could instead depend on.
+>
+> Thanks for updating the series to my suggestion!
+>
+> > @@ -174,6 +160,27 @@ config ARCH_MESON
+> >         This enables support for the arm64 based Amlogic SoCs
+> >         such as the s905, S905X/D, S912, A113X/D or S905X/D2
+> >
+> > +menuconfig ARCH_MICROCHIP
+> > +     bool "Microchip SoC support"
+> > +
+> > +if ARCH_MICROCHIP
+> > +
+> > +config ARCH_SPARX5
+> > +     bool "Microchip Sparx5 SoC family"
+>
+> This part is the one bit I'm not sure about: The user-visible
+> arm64 CONFIG_ARCH_* symbols are usually a little higher-level,
+> so I don't think we want both ARCH_MICROCHIP /and/ ARCH_SPARX5
+> here, or more generally speaking any of the nested ARCH_*
+> symbols.
+>
+> This version of your patch is going to be slightly annoying
+> to existing sparx5 users because updating an old .config
+> breaks when ARCH_MICROCHIP is not enabled.
+>
+> The two options that I would prefer here are
+>
+> a) make ARCH_SPARX5 a hidden symbol in order to keep the
+>    series bisectable, remove it entirely once all references
+>    are moved over to ARCH_MICROCHIP
+>
+> b) Make ARCH_MICROCHIP a hidden symbol that is selected by
+>    ARCH_SPARX5 but keep the menu unchanged.
 
-On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
-clocks are managed through PM domains. These PM domains, registered on
-behalf of the clock controller driver, are configured with
-GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
-clocks are enabled/disabled using runtime PM APIs. The power domains may
-also have power_on/power_off support implemented. After the device PM
-domain is powered off any CPU accesses to these domains leads to system
-aborts.
+Hi Arnd,
+Ok, I see the issue, and I would prefer to go with option b and do
+what I did for
+AT91 with the hidden ARCH_MICROCHIP symbol to avoid breaking current config=
+s.
 
-During probe, devices are attached to the PM domain controlling their
-clocks and power. Similarly, during removal, devices are detached from the
-PM domain.
+>
+> Let's see what the sparx5 and at91 maintainers think about
+> these options.
 
-The detachment call stack is as follows:
+Sounds good, let's give them some time before I respin this series.
 
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    __device_release_driver() ->
-      device_remove() ->
-        platform_remove() ->
-          dev_pm_domain_detach()
+Regards,
+Robert
+>
+> The other patches all look fine to me.
+>
+>      Arnd
 
-During driver unbind, after the device is detached from its PM domain,
-the device_unbind_cleanup() function is called, which subsequently invokes
-devres_release_all(). This function handles devres resource cleanup.
 
-If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
-cleanup process triggers the action or reset function for disabling runtime
-PM. This function is pm_runtime_disable_action(), which leads to the
-following call stack of interest when called:
 
-pm_runtime_disable_action() ->
-  pm_runtime_dont_use_autosuspend() ->
-    __pm_runtime_use_autosuspend() ->
-      update_autosuspend() ->
-        rpm_idle()
-
-The rpm_idle() function attempts to resume the device at runtime. However,
-at the point it is called, the device is no longer part of a PM domain
-(which manages clocks and power states). If the driver implements its own
-runtime PM APIs for specific functionalities - such as the rzg2l_adc
-driver - while also relying on the power domain subsystem for power
-management, rpm_idle() will invoke the driver's runtime PM API. However,
-since the device is no longer part of a PM domain at this point, the PM
-domain's runtime PM APIs will not be called. This leads to system aborts on
-Renesas SoCs.
-
-Another identified case is when a subsystem performs various cleanups
-using device_unbind_cleanup(), calling driver-specific APIs in the process.
-A known example is the thermal subsystem, which may call driver-specific
-APIs to disable the thermal device. The relevant call stack in this case
-is:
-
-device_driver_detach() ->
-  device_release_driver_internal() ->
-    device_unbind_cleanup() ->
-      devres_release_all() ->
-        devm_thermal_of_zone_release() ->
-          thermal_zone_device_disable() ->
-            thermal_zone_device_set_mode() ->
-              struct thermal_zone_device_ops::change_mode()
-
-At the moment the driver-specific change_mode() API is called, the device
-is no longer part of its PM domain. Accessing its registers without proper
-power management leads to system aborts.
-
-Drop the call to dev_pm_domain_detach() from the platform bus remove
-function and rely on the newly introduced call in device_unbind_cleanup().
-This ensures the same effect, but the call now occurs after all
-driver-specific devres resources have been freed.
-
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-
-Changes in v5:
-- dropped tab in the call traces from patch description
-- used PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF
-
-Changes in v4:
-- dropped devm_pm_domain_attach() approach
-- adjusted patch description to reflect this
-
-Changes in v3:
-- adjusted the call to devm_pm_domain_attach() as it now gets
-  2 parameters
-
-Changes in v2:
-- dropped the devres group open/close approach and use
-  devm_pm_domain_attach()
-- adjusted patch description to reflect the new approach
-
- drivers/base/platform.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index df1ec34fdf56..09450349cf32 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -1396,15 +1396,13 @@ static int platform_probe(struct device *_dev)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON);
-+	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON |
-+					 PD_FLAG_DETACH_POWER_OFF);
- 	if (ret)
- 		goto out;
- 
--	if (drv->probe) {
-+	if (drv->probe)
- 		ret = drv->probe(dev);
--		if (ret)
--			dev_pm_domain_detach(_dev, true);
--	}
- 
- out:
- 	if (drv->prevent_deferred_probe && ret == -EPROBE_DEFER) {
-@@ -1422,7 +1420,6 @@ static void platform_remove(struct device *_dev)
- 
- 	if (drv->remove)
- 		drv->remove(dev);
--	dev_pm_domain_detach(_dev, true);
- }
- 
- static void platform_shutdown(struct device *_dev)
--- 
-2.43.0
-
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
