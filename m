@@ -1,66 +1,67 @@
-Return-Path: <linux-spi+bounces-9019-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9020-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832D4AF6A75
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 08:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4327AF6B9F
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 09:33:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB55816FD40
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 06:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7B6E17BB63
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 07:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0566F291C1A;
-	Thu,  3 Jul 2025 06:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF0729994E;
+	Thu,  3 Jul 2025 07:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PwapMf4A"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pwBdhWJ/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6870D228CB0;
-	Thu,  3 Jul 2025 06:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C51B291C26;
+	Thu,  3 Jul 2025 07:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751524684; cv=none; b=WYQqkfMWlGqUVdSnw4pVN0aYjX1GlGKEUOWLEXOYjnQrcdGF96BIre0iTkTvBS2atoPDT4+MKHRPn55g6L4iUE4kjr39XXJn5u+77rVuRr9oUEKNDJ3laGykS+0aTEUT13OZUBSWDg1piVMrtyrZaBFwMTOcZ/jRX7VxquKTDvY=
+	t=1751527992; cv=none; b=qu4U1S9aY41FK1ujs7IX76jFTDN+dkA+Ek1a1YOkKpLCNXuxXnAP4irmceCt/rdcbb2eVNCvwHDLfN3Ij3SNQ9E3QKcaZTeubGFFc/qmK85J6pNqgSukSgFZsxVJbRRxKGZQ3ykig1SBv09GVdarESl8t2RTdmtlsP+bTrV44+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751524684; c=relaxed/simple;
-	bh=ycFo1nLp5/0QWcqp2qZGxrXVZQq/5D3iTncGtW7GLO8=;
+	s=arc-20240116; t=1751527992; c=relaxed/simple;
+	bh=bBdoyOqxX1N4/kKu9tvAYpQdaHvF4VHbV9k8rIFm3VY=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hhRnV1CSMqGL+4N2Qcljk4uqYmyCDYjyUReeDAwIRn6oS2plNDuGYwL3KH/w6PvaBfEgxFLdeRR4xua4soCcJrDuX28/3o7obAT6EjXtsIJdY4/LsLvfLO0Qitsd1+ZNf/zMo+hC8Ktg/Lq5jwg+l81aSqcYM01ADDXVb6/L9RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PwapMf4A; arc=none smtp.client-ip=217.70.183.194
+	 MIME-Version:Content-Type; b=koVi7CTLPIPh8T/fqC8v8QUPFk8Gd24kblf8Loqa6+eK2Yt5WkPf+PCfvL4PzhMd3tjCl5xEVP+QAmP9/zLPW+m9Vf2HT6bJccRmCKOw/B5r2ZD3SKDtMOQak7eWxRPFMEtOrwRdaqa41u/I4SMy/RZ0DBIgDiTMcN9KVKzA0sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pwBdhWJ/; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 598C041B5F;
-	Thu,  3 Jul 2025 06:37:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A9F94434F;
+	Thu,  3 Jul 2025 07:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751524679;
+	t=1751527986;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4+WaR4VhxZXal3ni8c5FuKUZQzKkcDX9MLohXTPfTgg=;
-	b=PwapMf4AOf1u09JZyAvuq3MEs5Q4wJkpokCf2i9YxktO3oxlAqxu3Kuva4qlUMVWrZe6Ch
-	VsiHnhZuSck3prB2PK5yzQ3fhCQSCMLnythuh+f1I7Xp/uqgW095xyV41I1sLuK+fb2Rt4
-	34LwUAwFXNTWwxNYB2VkvYdynIt2L6NXbtpqKiJNhf9VRJHwM5lSz6I4HCFqw9fpinlL/Q
-	6J9qijxfXxGDsGK9I7GWGydnMqWvaV6jJyPnc6KvT53yUQPq+TtCmIIR/doowMzDlFQfuL
-	lyDTf+GBFBaRwnczT067UcPIVZgQ9a5tk0e34+6QyDx5/zD9/kxezacCrcPHxA==
-Date: Thu, 3 Jul 2025 08:37:55 +0200
+	bh=K6WHf5/XL+HMRo9BdoaiRtR1OsAjGQGF9hVUHi3YoI8=;
+	b=pwBdhWJ/3SgTYZZ+WczqkHPciuGzf9A95dIDtbRvuqV2qZXAgnsown6tAunBjPevUJXIi5
+	NSI2ENMobUBEWoZ9H67Pb9pld0WakNKvrWE84aFmg7YDljkOFbHlUtVNzZcgbvyQGC97it
+	fY77ZLVTUpMnmvh7uyU/ltl8E612bvMw7qebyKIDSTPPJC8ber2asvZKpy7jSKwKWjoayA
+	Oj7OErEmp8Lz7Fx1SZu1sfKJ0eoFtSZuOAqPFKgcncxY/VeUEJDB04L2/v6QIkcUoxiXMb
+	fIRQrEf28FLEPkaNqnxy6AZH5Up1zXrIsa8I+S4kJ8YoYcFHx6/ziha8De6olw==
+Date: Thu, 3 Jul 2025 09:33:02 +0200
 From: Herve Codina <herve.codina@bootlin.com>
 To: Rob Herring <robh@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn
- <andrew@lunn.ch>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn
- Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam
- <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
+Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
+ Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
+ Shyti <andi.shyti@kernel.org>, Wolfram Sang
  <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
  Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
  Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>,
  Bjorn Helgaas <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len
- Brown <lenb@kernel.org>, Daniel Scally <djrscally@gmail.com>, Heikki
- Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ Brown <lenb@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
  <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
  Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
  <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
@@ -75,15 +76,13 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn
  <horatiu.vultur@microchip.com>, Steen Hegelund
  <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 18/28] of: property: Allow fw_devlink device-tree on
- x86 when PCI device-tree node creation is enabled
-Message-ID: <20250703083755.2fee7e7c@bootlin.com>
-In-Reply-To: <CAL_JsqJCuevzu69bx3yWm3ZR9wZ+UsWuNXscig5KMm2WH4WxOw@mail.gmail.com>
+Subject: Re: [PATCH v3 05/28] bus: simple-pm-bus: Populate child nodes at
+ probe
+Message-ID: <20250703093302.4f7743ea@bootlin.com>
+In-Reply-To: <20250627155200.GB3234475-robh@kernel.org>
 References: <20250613134817.681832-1-herve.codina@bootlin.com>
-	<20250613134817.681832-19-herve.codina@bootlin.com>
-	<20250627162245.GA3513535-robh@kernel.org>
-	<aF7H4-toeb7Ouz3d@smile.fi.intel.com>
-	<CAL_JsqJCuevzu69bx3yWm3ZR9wZ+UsWuNXscig5KMm2WH4WxOw@mail.gmail.com>
+	<20250613134817.681832-6-herve.codina@bootlin.com>
+	<20250627155200.GB3234475-robh@kernel.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
@@ -96,65 +95,69 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfeljedtfedtjeevffegtddutdeghfettdduhfeuhfdttdffieeuiefgvdfhvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtudemvgdtrgemvdekheemsgelkedtmegvgedttgemiegtgeefmegshegssgemrgegvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvkeehmegsleektdemvgegtdgtmeeitgegfeemsgehsggsmegrgedvkedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegkedprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgth
- hdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggv
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleeilecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepvdgrtddumegvtdgrmedvkeehmegsleektdemvgegtdgtmeeitgegfeemsgehsggsmegrgedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdekheemsgelkedtmegvgedttgemiegtgeefmegshegssgemrgegvdekpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeekpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgp
+ dhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvg
 X-GND-Sasl: herve.codina@bootlin.com
 
-Hi Rob, Andy,
+Hi Rob,
 
-On Fri, 27 Jun 2025 12:49:36 -0500
+On Fri, 27 Jun 2025 10:52:00 -0500
 Rob Herring <robh@kernel.org> wrote:
 
-> On Fri, Jun 27, 2025 at 11:33 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Fri, Jun 27, 2025 at 11:22:45AM -0500, Rob Herring wrote:  
-> > > On Fri, Jun 13, 2025 at 03:47:58PM +0200, Herve Codina wrote:  
-> >
-> > ...
-> >  
-> > > > -   if (IS_ENABLED(CONFIG_X86))
-> > > > +   if (IS_ENABLED(CONFIG_X86) && !IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES))  
-> > >
-> > > I really want CONFIG_PCI_DYNAMIC_OF_NODES to go away at some point, not
-> > > add more users.
-> > >
-> > > I think this should instead check for specific platforms not with
-> > > kconfig symbols but DT properties. For ce4100, you can just check the
-> > > root compatible string. For OLPC, there isn't a root compatible (in the
-> > > DT I have). You could check for /architecture == OLPC instead. There's
-> > > some virtualization guests using DT now too. I would think their DT's
-> > > are simple enough to avoid any fw_devlink issues.  
-> >
-> > I don't think this is good approach. The above check is more reliable in my
-> > opinion.  
+> On Fri, Jun 13, 2025 at 03:47:45PM +0200, Herve Codina wrote:
+> > The simple-pm-bus driver handles several simple busses. When it is used
+> > with busses other than a compatible "simple-pm-bus", it doesn't populate
+> > its child devices during its probe.
+> > 
+> > This confuses fw_devlink and results in wrong or missing devlinks.
+> > 
+> > Once a driver is bound to a device and the probe() has been called,
+> > device_links_driver_bound() is called.
+> > 
+> > This function performs operation based on the following assumption:
+> >     If a child firmware node of the bound device is not added as a
+> >     device, it will never be added.
+> > 
+> > Among operations done on fw_devlinks of those "never be added" devices,
+> > device_links_driver_bound() changes their supplier.
+> > 
+> > With devices attached to a simple-bus compatible device, this change
+> > leads to wrong devlinks where supplier of devices points to the device
+> > parent (i.e. simple-bus compatible device) instead of the device itself
+> > (i.e. simple-bus child).
+> > 
+> > When the device attached to the simple-bus is removed, because devlinks
+> > are not correct, its consumers are not removed first.
+> > 
+> > In order to have correct devlinks created, make the simple-pm-bus driver
+> > compliant with the devlink assumption and create its child devices
+> > during its probe.  
 > 
-> I'm fine with any solution that doesn't add a
-> CONFIG_PCI_DYNAMIC_OF_NODES which we can't remove. Adding it was a
-> kick the can down the road to merge the support worry the mixed
-> usecase (on ACPI systems) later. It's now later.
-> 
-> > > Alternatively, we could perhaps make x86 fw_devlink default off  
-> >
-> > For my (little) knowledge I believe this is not feasible anymore.
-> > Some x86 code (drivers) relies on fw_devlink nowadays. But take
-> > this with grain of salt, I may be way mistaken.  
-> 
-> Doesn't the CONFIG_X86 check disable it?
-> 
-> Rob
+> IIRC, skipping child nodes was because there were problems with 
+> letting the driver handle 'simple-bus'. How does this avoid that now?
 
-Filtering out by Kconfig seems a no-go:
-  - Check for CONFIG_OLPC of CONFIG_X86_INTEL_CE as proposed in v1
-    (https://lore.kernel.org/lkml/20250407145546.270683-12-herve.codina@bootlin.com/)
-    was a no-go from Andy
+I don't know about the specific issues related to those problems. Do you
+have some pointers about them?
 
-  - Check for CONFIG_PCI_DYNAMIC_OF_NODES as proposed here is a no-go from
-    Rob
+> 
+> The root of_platform_populate() that created the simple-bus device that 
+> gets us to the probe here will continue descending into child nodes. 
+> Meanwhile, the probe here is also descending into those same child 
+> nodes. Best case, that's just redundant. Worst case, won't you still 
+> have the same problem if the first of_platform_populate() creates the 
+> devices first?
+> 
 
-I will follow Rob's suggestion based on DT properties. With a DT property
-list, it would be easier to add more x86 fw_delink broken system in the list
-of the system to exclude.
+Maybe we could simply avoid of_platform_populate() to be recursive when a
+device populate by of_platform_populate() is one of devices handled by
+the simple-bus driver and let the simple-bus driver do the job.
+
+of_platform_populate will handle the first level. It will populate children
+of the node given to of_platform_populate() and the children of those
+children will be populate by the simple-bus driver.
+
+I could try a modification in that way. Do you think it could be a correct
+solution?
 
 Best regards,
 Hervé
