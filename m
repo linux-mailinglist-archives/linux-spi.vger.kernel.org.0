@@ -1,277 +1,161 @@
-Return-Path: <linux-spi+bounces-9018-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9019-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1130AF652F
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 00:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 832D4AF6A75
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 08:38:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FBB3522020
-	for <lists+linux-spi@lfdr.de>; Wed,  2 Jul 2025 22:27:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB55816FD40
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 06:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85090246BC1;
-	Wed,  2 Jul 2025 22:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0566F291C1A;
+	Thu,  3 Jul 2025 06:38:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnLBfCzB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PwapMf4A"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59268246798;
-	Wed,  2 Jul 2025 22:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6870D228CB0;
+	Thu,  3 Jul 2025 06:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751495209; cv=none; b=E16YVudcQeyZne9d2O/UMbGyv6cHlZ4FBtAD/JRxh5kDD0CVmcgjN8YRcQUlQeUo7JLqvKx6GepN89pIORDXZkQIQKuvcw+co9yDVaSQUIUCjGA9deBUr0r4cCxRfdx6U5C0DYxyp0yEJdbPz3UQE798tIy1Wj/ZiNZwoWvgdqE=
+	t=1751524684; cv=none; b=WYQqkfMWlGqUVdSnw4pVN0aYjX1GlGKEUOWLEXOYjnQrcdGF96BIre0iTkTvBS2atoPDT4+MKHRPn55g6L4iUE4kjr39XXJn5u+77rVuRr9oUEKNDJ3laGykS+0aTEUT13OZUBSWDg1piVMrtyrZaBFwMTOcZ/jRX7VxquKTDvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751495209; c=relaxed/simple;
-	bh=WEwAmw0sdYNez5L1vUl1rRfRRukQ9tqNIhTwwTy8CgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gjYrqmkDtgtTClSmZhH3fq7ijt6cXAYYXqic9m7k07+izpmFrygUvxDZ0IJtsY+F8seQV7ug4L2mfJPwmPpDnyGUtXGnAat2eFvfYN83T3G8xTGlSA20t6GXTfMrnO9kgrT1BNcA+/9yBk89KprZOkR1sbZseMqe4Ic9XndDLio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RnLBfCzB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5D62C4CEE7;
-	Wed,  2 Jul 2025 22:26:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751495208;
-	bh=WEwAmw0sdYNez5L1vUl1rRfRRukQ9tqNIhTwwTy8CgM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=RnLBfCzBsWfdRzYvZkbkp+iDzQd7Y0t2ZUXz8eQh9oKeyVP0Lad+EVL9srQlOg3xZ
-	 bSWUGAR3B3AwqH1wureNffb/S7pKrETLsYFisuzfawOa1jBuaf0C8QcCM/+yNJZw3L
-	 QCrQbn1RMrJG8vRy/7Ig2vHK6iriZ8av+wKeEFUtGRAvUa6A5uMf2Jv34PGoivyLG3
-	 JKq4SDBvXzN8U/EhVT1k2czdORo+br7NcBdRg4hPwpp3+VRykprSXle3mK4uhvhU3e
-	 +jgob49UI+kT9PEH1VwW/1cG3IAcC4uqRXLPGpMEuGg6QP54YQxKl2uIHeL1W7Pqo2
-	 8v41FX4ragmbg==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: dt-bindings: Convert marvell,orion-spi to DT schema
-Date: Wed,  2 Jul 2025 17:26:42 -0500
-Message-ID: <20250702222643.2761617-1-robh@kernel.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1751524684; c=relaxed/simple;
+	bh=ycFo1nLp5/0QWcqp2qZGxrXVZQq/5D3iTncGtW7GLO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hhRnV1CSMqGL+4N2Qcljk4uqYmyCDYjyUReeDAwIRn6oS2plNDuGYwL3KH/w6PvaBfEgxFLdeRR4xua4soCcJrDuX28/3o7obAT6EjXtsIJdY4/LsLvfLO0Qitsd1+ZNf/zMo+hC8Ktg/Lq5jwg+l81aSqcYM01ADDXVb6/L9RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PwapMf4A; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 598C041B5F;
+	Thu,  3 Jul 2025 06:37:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1751524679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4+WaR4VhxZXal3ni8c5FuKUZQzKkcDX9MLohXTPfTgg=;
+	b=PwapMf4AOf1u09JZyAvuq3MEs5Q4wJkpokCf2i9YxktO3oxlAqxu3Kuva4qlUMVWrZe6Ch
+	VsiHnhZuSck3prB2PK5yzQ3fhCQSCMLnythuh+f1I7Xp/uqgW095xyV41I1sLuK+fb2Rt4
+	34LwUAwFXNTWwxNYB2VkvYdynIt2L6NXbtpqKiJNhf9VRJHwM5lSz6I4HCFqw9fpinlL/Q
+	6J9qijxfXxGDsGK9I7GWGydnMqWvaV6jJyPnc6KvT53yUQPq+TtCmIIR/doowMzDlFQfuL
+	lyDTf+GBFBaRwnczT067UcPIVZgQ9a5tk0e34+6QyDx5/zD9/kxezacCrcPHxA==
+Date: Thu, 3 Jul 2025 08:37:55 +0200
+From: Herve Codina <herve.codina@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Andrew Lunn
+ <andrew@lunn.ch>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael
+ J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn
+ Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam
+ <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, Stephen
+ Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
+ Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
+ Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>,
+ Bjorn Helgaas <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len
+ Brown <lenb@kernel.org>, Daniel Scally <djrscally@gmail.com>, Heikki
+ Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
+ <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
+ <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
+ <allan.nielsen@microchip.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v3 18/28] of: property: Allow fw_devlink device-tree on
+ x86 when PCI device-tree node creation is enabled
+Message-ID: <20250703083755.2fee7e7c@bootlin.com>
+In-Reply-To: <CAL_JsqJCuevzu69bx3yWm3ZR9wZ+UsWuNXscig5KMm2WH4WxOw@mail.gmail.com>
+References: <20250613134817.681832-1-herve.codina@bootlin.com>
+	<20250613134817.681832-19-herve.codina@bootlin.com>
+	<20250627162245.GA3513535-robh@kernel.org>
+	<aF7H4-toeb7Ouz3d@smile.fi.intel.com>
+	<CAL_JsqJCuevzu69bx3yWm3ZR9wZ+UsWuNXscig5KMm2WH4WxOw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvhfeljedtfedtjeevffegtddutdeghfettdduhfeuhfdttdffieeuiefgvdfhvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtudemvgdtrgemvdekheemsgelkedtmegvgedttgemiegtgeefmegshegssgemrgegvdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvkeehmegsleektdemvgegtdgtmeeitgegfeemsgehsggsmegrgedvkedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegkedprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgth
+ hdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggv
+X-GND-Sasl: herve.codina@bootlin.com
 
-Convert the Marvell Orion SPI binding to schema.
+Hi Rob, Andy,
 
-Update compatible strings to what is in use. Generally,
-"marvell,orion-spi" is a fallback compatible, but newer variants only
-use "marvell,armada-380-spi".
+On Fri, 27 Jun 2025 12:49:36 -0500
+Rob Herring <robh@kernel.org> wrote:
 
-Mark cell-index as deprecated and not required as some instances don't
-use it already.
+> On Fri, Jun 27, 2025 at 11:33 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Fri, Jun 27, 2025 at 11:22:45AM -0500, Rob Herring wrote:  
+> > > On Fri, Jun 13, 2025 at 03:47:58PM +0200, Herve Codina wrote:  
+> >
+> > ...
+> >  
+> > > > -   if (IS_ENABLED(CONFIG_X86))
+> > > > +   if (IS_ENABLED(CONFIG_X86) && !IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES))  
+> > >
+> > > I really want CONFIG_PCI_DYNAMIC_OF_NODES to go away at some point, not
+> > > add more users.
+> > >
+> > > I think this should instead check for specific platforms not with
+> > > kconfig symbols but DT properties. For ce4100, you can just check the
+> > > root compatible string. For OLPC, there isn't a root compatible (in the
+> > > DT I have). You could check for /architecture == OLPC instead. There's
+> > > some virtualization guests using DT now too. I would think their DT's
+> > > are simple enough to avoid any fw_devlink issues.  
+> >
+> > I don't think this is good approach. The above check is more reliable in my
+> > opinion.  
+> 
+> I'm fine with any solution that doesn't add a
+> CONFIG_PCI_DYNAMIC_OF_NODES which we can't remove. Adding it was a
+> kick the can down the road to merge the support worry the mixed
+> usecase (on ACPI systems) later. It's now later.
+> 
+> > > Alternatively, we could perhaps make x86 fw_devlink default off  
+> >
+> > For my (little) knowledge I believe this is not feasible anymore.
+> > Some x86 code (drivers) relies on fw_devlink nowadays. But take
+> > this with grain of salt, I may be way mistaken.  
+> 
+> Doesn't the CONFIG_X86 check disable it?
+> 
+> Rob
 
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- .../bindings/spi/marvell,orion-spi.yaml       | 102 ++++++++++++++++++
- .../devicetree/bindings/spi/spi-orion.txt     |  79 --------------
- 2 files changed, 102 insertions(+), 79 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-orion.txt
+Filtering out by Kconfig seems a no-go:
+  - Check for CONFIG_OLPC of CONFIG_X86_INTEL_CE as proposed in v1
+    (https://lore.kernel.org/lkml/20250407145546.270683-12-herve.codina@bootlin.com/)
+    was a no-go from Andy
 
-diff --git a/Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml b/Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml
-new file mode 100644
-index 000000000000..7f5ec1d7f59b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml
-@@ -0,0 +1,102 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/marvell,orion-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Marvell Orion SPI controller
-+
-+maintainers:
-+  - Andrew Lunn <andrew@lunn.ch>
-+  - Gregory CLEMENT <gregory.clement@bootlin.com>
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - marvell,orion-spi
-+          - marvell,armada-380-spi  # For ap80x and cp11x
-+      - items:
-+          - enum:
-+              - marvell,armada-370-spi
-+              - marvell,armada-375-spi
-+              - marvell,armada-380-spi
-+              - marvell,armada-390-spi
-+              - marvell,armada-xp-spi
-+          - const: marvell,orion-spi
-+
-+  cell-index:
-+    description: Instance id for the SPI controller
-+    deprecated: true
-+
-+  reg:
-+    minItems: 1
-+    items:
-+      - description: control registers
-+      - description: CS0 MBUS target/attribute registers for direct mode
-+      - description: CS1 MBUS target/attribute registers for direct mode
-+      - description: CS2 MBUS target/attribute registers for direct mode
-+      - description: CS3 MBUS target/attribute registers for direct mode
-+      - description: CS4 MBUS target/attribute registers for direct mode
-+      - description: CS5 MBUS target/attribute registers for direct mode
-+      - description: CS6 MBUS target/attribute registers for direct mode
-+      - description: CS7 MBUS target/attribute registers for direct mode
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: core
-+      - const: axi
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    spi@10600 {
-+      compatible = "marvell,orion-spi";
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      cell-index = <0>;
-+      reg = <0x10600 0x28>;
-+      clocks = <&coreclk 0>;
-+      interrupts = <23>;
-+    };
-+  - |
-+    #define MBUS_ID(target,attributes) (((target) << 24) | ((attributes) << 16))
-+
-+    bus {
-+        #address-cells = <2>;
-+        #size-cells = <1>;
-+
-+        spi@10600 {
-+          compatible = "marvell,orion-spi";
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+          cell-index = <0>;
-+          reg = <MBUS_ID(0xf0, 0x01) 0x10600 0x28>, /* control */
-+                <MBUS_ID(0x01, 0x1e) 0 0xffffffff>, /* CS0 */
-+                <MBUS_ID(0x01, 0x5e) 0 0xffffffff>, /* CS1 */
-+                <MBUS_ID(0x01, 0x9e) 0 0xffffffff>, /* CS2 */
-+                <MBUS_ID(0x01, 0xde) 0 0xffffffff>, /* CS3 */
-+                <MBUS_ID(0x01, 0x1f) 0 0xffffffff>, /* CS4 */
-+                <MBUS_ID(0x01, 0x5f) 0 0xffffffff>, /* CS5 */
-+                <MBUS_ID(0x01, 0x9f) 0 0xffffffff>, /* CS6 */
-+                <MBUS_ID(0x01, 0xdf) 0 0xffffffff>; /* CS7 */
-+          clocks = <&coreclk 0>;
-+          interrupts = <23>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/spi/spi-orion.txt b/Documentation/devicetree/bindings/spi/spi-orion.txt
-deleted file mode 100644
-index 8434a65fc12a..000000000000
---- a/Documentation/devicetree/bindings/spi/spi-orion.txt
-+++ /dev/null
-@@ -1,79 +0,0 @@
--Marvell Orion SPI device
--
--Required properties:
--- compatible : should be on of the following:
--    - "marvell,orion-spi" for the Orion, mv78x00, Kirkwood and Dove SoCs
--    - "marvell,armada-370-spi", for the Armada 370 SoCs
--    - "marvell,armada-375-spi", for the Armada 375 SoCs
--    - "marvell,armada-380-spi", for the Armada 38x SoCs
--    - "marvell,armada-390-spi", for the Armada 39x SoCs
--    - "marvell,armada-xp-spi", for the Armada XP SoCs
--- reg : offset and length of the register set for the device.
--	This property can optionally have additional entries to configure
--	the SPI direct access mode that some of the Marvell SoCs support
--	additionally to the normal indirect access (PIO) mode. The values
--	for the MBus "target" and "attribute" are defined in the Marvell
--	SoC "Functional Specifications" Manual in the chapter "Marvell
--	Core Processor Address Decoding".
--	The eight register sets following the control registers refer to
--	chip-select lines 0 through 7 respectively.
--- cell-index : Which of multiple SPI controllers is this.
--- clocks : pointers to the reference clocks for this device, the first
--	   one is the one used for the clock on the spi bus, the
--	   second one is optional and is the clock used for the
--	   functional part of the controller
--
--Optional properties:
--- interrupts : Is currently not used.
--- clock-names : names of used clocks, mandatory if the second clock is
--		used, the name must be "core", and "axi" (the latter
--		is only for Armada 7K/8K).
--
--
--Example:
--       spi@10600 {
--	       compatible = "marvell,orion-spi";
--	       #address-cells = <1>;
--	       #size-cells = <0>;
--	       cell-index = <0>;
--	       reg = <0x10600 0x28>;
--	       interrupts = <23>;
--       };
--
--Example with SPI direct mode support (optionally):
--	spi0: spi@10600 {
--		compatible = "marvell,orion-spi";
--		#address-cells = <1>;
--		#size-cells = <0>;
--		cell-index = <0>;
--		reg = <MBUS_ID(0xf0, 0x01) 0x10600 0x28>, /* control */
--		      <MBUS_ID(0x01, 0x1e) 0 0xffffffff>, /* CS0 */
--		      <MBUS_ID(0x01, 0x5e) 0 0xffffffff>, /* CS1 */
--		      <MBUS_ID(0x01, 0x9e) 0 0xffffffff>, /* CS2 */
--		      <MBUS_ID(0x01, 0xde) 0 0xffffffff>, /* CS3 */
--		      <MBUS_ID(0x01, 0x1f) 0 0xffffffff>, /* CS4 */
--		      <MBUS_ID(0x01, 0x5f) 0 0xffffffff>, /* CS5 */
--		      <MBUS_ID(0x01, 0x9f) 0 0xffffffff>, /* CS6 */
--		      <MBUS_ID(0x01, 0xdf) 0 0xffffffff>; /* CS7 */
--		interrupts = <23>;
--	};
--
--To enable the direct mode, the board specific 'ranges' property in the
--'soc' node needs to add the entries for the desired SPI controllers
--and its chip-selects that are used in the direct mode instead of PIO
--mode. Here an example for this (SPI controller 0, device 1 and SPI
--controller 1, device 2 are used in direct mode. All other SPI device
--are used in the default indirect (PIO) mode):
--	soc {
--		/*
--		 * Enable the SPI direct access by configuring an entry
--		 * here in the board-specific ranges property
--		 */
--		ranges = <MBUS_ID(0xf0, 0x01) 0 0 0xf1000000 0x100000>,	/* internal regs */
--			 <MBUS_ID(0x01, 0x1d) 0 0 0xfff00000 0x100000>,	/* BootROM       */
--			 <MBUS_ID(0x01, 0x5e) 0 0 0xf1100000 0x10000>,	/* SPI0-DEV1 */
--			 <MBUS_ID(0x01, 0x9a) 0 0 0xf1110000 0x10000>;	/* SPI1-DEV2 */
--
--For further information on the MBus bindings, please see the MBus
--DT documentation:
--Documentation/devicetree/bindings/bus/mvebu-mbus.txt
--- 
-2.47.2
+  - Check for CONFIG_PCI_DYNAMIC_OF_NODES as proposed here is a no-go from
+    Rob
 
+I will follow Rob's suggestion based on DT properties. With a DT property
+list, it would be easier to add more x86 fw_delink broken system in the list
+of the system to exclude.
+
+Best regards,
+Hervé
 
