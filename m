@@ -1,76 +1,78 @@
-Return-Path: <linux-spi+bounces-9023-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9024-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3DFCAF721E
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 13:28:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05EE2AF722D
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 13:28:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43AA41BC0DCF
-	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 11:28:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09A1F5206E8
+	for <lists+linux-spi@lfdr.de>; Thu,  3 Jul 2025 11:28:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E61142E3B1E;
-	Thu,  3 Jul 2025 11:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B89A2E3AFF;
+	Thu,  3 Jul 2025 11:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="l5K7sn4a"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ce9zA/zE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F4F82E2F0C
-	for <linux-spi@vger.kernel.org>; Thu,  3 Jul 2025 11:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E825F2E3B14
+	for <linux-spi@vger.kernel.org>; Thu,  3 Jul 2025 11:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751542069; cv=none; b=MiZLexCDQviojjtuG3gB5yN7J0od5pOFexdIvm8uJnFuBILkO/a0Mf+mR8qbGK85Vtyy8H3bvWJANyNDzQPA7THv4KP9WXfT9IWYVwk0oDTMwHIUt3m6NnocG8tJgXAJIqu2o2p0zJ2WglTv7Q1G6DG6y6hoQTywcYietBnhMOo=
+	t=1751542072; cv=none; b=CrOAoGV7KwFPSYrNRjlZ9qvoWkv2r/Rqs7t3JxuFldFKSuXzjauSRS5SnT181TjO3gdfMEywwTx506Lkskvw7V37e5wYaAZZZKWtzai343Zpd3VF4r3QKhpJHOgG72ghSc+D4kPzX+7kJyGRLfZlhCYO7uRMr6t+azcbiwNDSm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751542069; c=relaxed/simple;
-	bh=UlZ75WOORNs4rZE+VlImTZa7mmm9FlJ031wXRJuG6f8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFBL1e6JPpp1OSkf1PWSUuWy/vrziYuemZKkq0cMRrHRcZO6DISs0BgyWIDYDBQ2Csk1FIXAhS7Dn4f3Wf6EhdEni/KY+p+CyGDZj84EQkP1HOfuKaxR/KHdD+ruBWEdknjbVc7mKS4Ycr51r02YqMBrSENfADXDOcDpmTHEaSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=l5K7sn4a; arc=none smtp.client-ip=209.85.208.53
+	s=arc-20240116; t=1751542072; c=relaxed/simple;
+	bh=VFHVp92oUtdD8O/al59Afa61BRyaZZLLREdoqIPcQBM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L1vDHv6iMmkIEjxUsdxCfXa0q7RplNlhgc1vYEzN9C/wJQa8l4CXgQAdsN36VjDj4tG6KjqTDY00E2VDr5wVL4TE5PATgB0TWiggovAbp04F/HL8QF3gOnBs23u7ZGDt5rcSdI9phaS59W90kmTC8+k8arJihhvHRpq6ksWdILs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ce9zA/zE; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6077dea37easo9718459a12.3
-        for <linux-spi@vger.kernel.org>; Thu, 03 Jul 2025 04:27:45 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-60c9d8a169bso9581472a12.1
+        for <linux-spi@vger.kernel.org>; Thu, 03 Jul 2025 04:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1751542064; x=1752146864; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6PMMz69qo04D/YT8nX2dE04S7ELr0QnXwz/uN4j+eI=;
-        b=l5K7sn4an49hXSu3he2pRlapXvTrBiKvj+FIVPQKXU0QKgqq1ZePud52ttkBScRteZ
-         KXf07vm94x6m/BCztn7+b1NfXByAPNtaOF4WgW5PRybd5ZcHmex4Qgt9l4IwyUsdlDQp
-         fwrS0yw5nXaNTPLpAayTRgR3ARnJxCT3ug7Jtj3/o1ygmMbAMt1cub+cJjOjfZtVFKLA
-         AeQxIDhtiB6JitMDJmtj8b24mgQ6rHhLiyCKZtE4/9ZRKv4yIc9UK9zd2d3MgYY4WYIH
-         RANXc/agfr78NopjZLE6iJZab7To9BS5wWfsMRK/k66/NLaCdnY4/rrqvUrIfU8JHFHV
-         odJg==
+        d=tuxon.dev; s=google; t=1751542067; x=1752146867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=00v7jImDBQ2eMu0i8J3EDPnWwIf7Eay4sawX2tdcIjU=;
+        b=ce9zA/zEvvLqxk6gQN2n3Y1W4udkQvyd342x9EDUA/DKO4eeV4d+878b9lbaVA6P3V
+         GPqS+Nr3UGfqjvK20PED5zHJjbnopkb/qAmi+Lq1ppJcsqlPQ8+p99FZHpgI21JUBxZX
+         yUETSH2XYRlIBx/nMBZGMbnceR0jwjDGC158FKNSQmPvBeUTfq+lvw1s9v8Pc8R+97oC
+         d6Y3HWPjpzeghPM/Ha+EncWl9K7tjDpLQrto5XP2JcItmnkA2jM0KzU74/ALQ3nrXo/2
+         Dgu48ckltY1MjfnQ4Kl9t0dkofDf1YDvo06SZx39+8LsrQihhuLO0f8/JodmAGBbFMsp
+         HLoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751542064; x=1752146864;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a6PMMz69qo04D/YT8nX2dE04S7ELr0QnXwz/uN4j+eI=;
-        b=KLbEg5FoUaai+PWOrB6HeOZ0M1WdBDwfyU7+Svf1Zd6dPbmnpRn+t367Hz/Yci3BNN
-         0F0/rRCEFRt5AFPTRpWVn/ib39K7sl3/hOGrbfx+K+sjCrwcycSuiApFbXxcF7VVtELb
-         utQai+YJ0Xy/JkOnFnbwJZlhelfJEsGqOXtizgrmr6v2acaLUwIllV2MaB9ga14z1dNb
-         1Ed6tGadrVBoztM1G994hhX8I1TBc1N+pigJPV5wjvgnABkZoFc87bWOCu19MYvqTfQf
-         HZ+ISiH1vFj07WmQ2Ptuym4vdF5F2354tnBfVCiUHbFMAsLg31gE78ph3wiliAZQp5w6
-         /8Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCUcxvrSo+epQH021dLlj86KmO2MDv7hP4eBYTsUvthZNeuyR+Rmo9RpYjK53SvXetEk4juvBghPF34=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpMfB7ytMc5gSyS5mn6yoSfUwulp4KKLVUG769sw7GM4o9+CsK
-	8DFVne7vRdFkWCcFwhxj3Y4zP4l2rNQgglWOmcUTZzPclcKqIMBXjwS7o455t6DEmf4=
-X-Gm-Gg: ASbGncuei8APGE1kowhrq+XRknV5jzzg+2L4n8uid3tcv2YEVoxPpbubCdXc36dui7t
-	KuuHuw9m0dCiae7c/9LNNPE6vf4UPqYGxGGP/BNh2ztpKjakR1/FHrD/YEnh1iKhtJspJn8XIFk
-	ClrhPg73K/Zk9BY/9pr23b6ir9vkpLWvdX5xsre2b/TcmkHUSzICq+jMl3Q8R06aTiW3Sx/XJms
-	ddLIC5vCdQ8qpJW4ahosODlzLkcRAe5zlPg6W3QRQmSsn3xWs8iT4X8CN8z88u9iHweQl52ST6c
-	gpMMx3+//aifi8k3VbcLwqy+eVzZ/hlAKoPaxOJ02jMOsc07ohhs0iRA6UIzqOHuc/Z1etB6yWA
-	q1C4gv+ToRzVSmuQ=
-X-Google-Smtp-Source: AGHT+IGodommfjTvSu9SmK2+f27lr5klD7Mc1oDRjQm+BoxfNtWb86krYFjqI4yPBXvjQSq606lSUA==
-X-Received: by 2002:a17:907:2d94:b0:ae3:6744:3661 with SMTP id a640c23a62f3a-ae3c2da6359mr600970466b.44.1751542064239;
-        Thu, 03 Jul 2025 04:27:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751542067; x=1752146867;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=00v7jImDBQ2eMu0i8J3EDPnWwIf7Eay4sawX2tdcIjU=;
+        b=NpuahYD7gKyAJJMLR80OUHNKkyETPo/SOGrCBEld6LZkp+jwuw/vgfYSKgajGPSLJb
+         0gOuHTWhTHf28OFgV7znwKQGjttulWr7Ng1xiHuV52u1ncrgA/qRhK+2lCMNq2wdiRoI
+         86C0HoRNQkq2wYxEFdQcQme6YJqu0IZZU9DYWo3MMu7OFdX7a4gks42KeuGk8ewlPhGC
+         owTGkonsIC8XmtwCoY8aisIYFEidu5ydgn2pce8C/xMZsQHWDsXnIg8Cw+EAyf30Qk06
+         yc8tzt287HYNzu/pMWVxfKhcUP0yZ1vj4ez9n8OXhYeLQXnbw6pF9G3G+LTXSbhJdO9i
+         6HHg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbLxbrwPO0I0X2asZYatXPPk0rhZDI88fs+dIJiWvlHbxmkrVuTLeIgKaE6SmHd2fiyFqtWqSXSfk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF0lAZ6hNs9vWbVxgP3BK88+MYQZzBwhlCqv4Isn5wPnDAXy/m
+	SNseQ9pSL5jhAVOGgtCv11tC3Co2zwMsOjUBAW4ko1PClPqkRRTbCe0LQ+QQqm+MW8g=
+X-Gm-Gg: ASbGncvF+bzk6FtmFgS93FxNfUJuxcSQ68C/rFNOeHbrlLrmoeBjMGHcwrkCRLe69Hq
+	gnI8h50LxghvXg45P+AnNg/glcjNJl4JZ1p3ux25uHaplaSabLU3U3DZSiGRFXKkLuALSPOeznb
+	rx+53GpYHWg/sQVFSyMlohv1ppyziP7QnYAOgPr5N0YrGdsVKxPRndfslexm22u67ey2AMScYhe
+	rZHJP+5SIHC2MWoXnDyTm1cK70ow9DfGiu7XjG046BJ3lhrtRHe7RdISVcSeATvmqYMoEbTqBTo
+	cl1FkxtT0hF4bmjudK8gWr/QLhMMP4FVSQMOMC7pfQspvt44L4wM8CQx9E+9Ew8UWHJZoIwvi1Z
+	o/f3SIbPR06OpQXM=
+X-Google-Smtp-Source: AGHT+IEGjD3eSI1D9oPtbbf+Qd+7ik/ERcGzIN30TUY3t1ZpkWKdf4ycZcaIs03RCZW44chHMZB55g==
+X-Received: by 2002:a17:907:d8a:b0:ade:4121:8d3d with SMTP id a640c23a62f3a-ae3c2b3bf4amr586271766b.12.1751542066863;
+        Thu, 03 Jul 2025 04:27:46 -0700 (PDT)
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.83])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1247016966b.67.2025.07.03.04.27.41
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1247016966b.67.2025.07.03.04.27.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jul 2025 04:27:43 -0700 (PDT)
+        Thu, 03 Jul 2025 04:27:46 -0700 (PDT)
 From: Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
 To: linux@armlinux.org.uk,
@@ -119,10 +121,12 @@ Cc: claudiu.beznea@tuxon.dev,
 	linux-renesas-soc@vger.kernel.org,
 	fabrizio.castro.jz@renesas.com,
 	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v5 0/3] PM: domains: Detach on device_unbind_cleanup()
-Date: Thu,  3 Jul 2025 14:27:05 +0300
-Message-ID: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v5 1/3] PM: domains: Add flags to specify power on attach/detach
+Date: Thu,  3 Jul 2025 14:27:06 +0300
+Message-ID: <20250703112708.1621607-2-claudiu.beznea.uj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
+References: <20250703112708.1621607-1-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -133,45 +137,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Hi,
+Calling dev_pm_domain_attach()/dev_pm_domain_detach() in bus driver
+probe/remove functions can affect system behavior when the drivers attached
+to the bus use devres-managed resources. Since devres actions may need to
+access device registers, calling dev_pm_domain_detach() too early, i.e.,
+before these actions complete, can cause failures on some systems. One such
+example is Renesas RZ/G3S SoC-based platforms.
 
-Series drops the dev_pm_domain_detach() from platform bus remove and
-adds it in device_unbind_cleanup() to avoid runtime resumming the device
-after it was detached from its PM domain.
+If the device clocks are managed via PM domains, invoking
+dev_pm_domain_detach() in the bus driver's remove function removes the
+device's clocks from the PM domain, preventing any subsequent
+pm_runtime_resume*() calls from enabling those clocks.
 
-Please provide your feedback.
+The second argument of dev_pm_domain_attach() specifies whether the PM
+domain should be powered on during attachment. Likewise, the second
+argument of dev_pm_domain_detach() indicates whether the domain should be
+powered off during detachment.
 
-Thank you,
-Claudiu
+Upcoming commits address the issue described above (initially for the
+platform bus only) by deferring the call to dev_pm_domain_detach() until
+after devres_release_all() in device_unbind_cleanup(). The detach_power_off
+field in struct dev_pm_info stores the detach power off info from the
+second argument of dev_pm_domain_attach().
+
+Because there are cases where the device's PM domain power-on/off behavior
+must be conditional (e.g., in i2c_device_probe()), the patch introduces
+PD_FLAG_ATTACH_POWER_ON and PD_FLAG_DETACH_POWER_OFF flags to be passed to
+dev_pm_domain_attach().
+
+Finally, dev_pm_domain_attach() and its users are updated to use the newly
+introduced PD_FLAG_ATTACH_POWER_ON and PD_FLAG_DETACH_POWER_OFF macros.
+
+This is a preparatory commit.
+
+Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+---
 
 Changes in v5:
-- added PD_FLAG_ATTACH_POWER_ON, PD_FLAG_DETACH_POWER_OFF;
-  due to this a new patch was introduced
-  "PM: domains: Add flags to specify power on attach/detach"
-
-Changes in v4:
-- added a flag in dev_pm_info that is saved in dev_pm_domain_attach()
-  and used in device_unbind_cleanup()
-
-Changes in v3:
-- add devm_pm_domain_attach()
-
-Changes in v2:
-- dropped the devres group open/close approach and use
-  devm_pm_domain_attach()
-- adjusted patch description to reflect the new approach
-
-
-Claudiu Beznea (3):
-  PM: domains: Add flags to specify power on attach/detach
-  PM: domains: Detach on device_unbind_cleanup()
-  driver core: platform: Drop dev_pm_domain_detach() call
+- none; this patch is new
 
  drivers/amba/bus.c                       |  4 ++--
  drivers/base/auxiliary.c                 |  2 +-
- drivers/base/dd.c                        |  2 ++
- drivers/base/platform.c                  |  9 +++------
- drivers/base/power/common.c              |  9 ++++++---
+ drivers/base/platform.c                  |  2 +-
+ drivers/base/power/common.c              |  6 +++---
  drivers/clk/qcom/apcs-sdx55.c            |  2 +-
  drivers/gpu/drm/display/drm_dp_aux_bus.c |  2 +-
  drivers/i2c/i2c-core-base.c              |  2 +-
@@ -180,10 +188,230 @@ Claudiu Beznea (3):
  drivers/soundwire/bus_type.c             |  2 +-
  drivers/spi/spi.c                        |  2 +-
  drivers/tty/serdev/core.c                |  2 +-
- include/linux/pm.h                       |  1 +
  include/linux/pm_domain.h                | 10 ++++++++--
- 15 files changed, 31 insertions(+), 22 deletions(-)
+ 13 files changed, 23 insertions(+), 17 deletions(-)
 
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 71482d639a6d..74e34a07ef72 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -138,7 +138,7 @@ static int amba_read_periphid(struct amba_device *dev)
+ 	void __iomem *tmp;
+ 	int i, ret;
+ 
+-	ret = dev_pm_domain_attach(&dev->dev, true);
++	ret = dev_pm_domain_attach(&dev->dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret) {
+ 		dev_dbg(&dev->dev, "can't get PM domain: %d\n", ret);
+ 		goto err_out;
+@@ -291,7 +291,7 @@ static int amba_probe(struct device *dev)
+ 		if (ret < 0)
+ 			break;
+ 
+-		ret = dev_pm_domain_attach(dev, true);
++		ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 		if (ret)
+ 			break;
+ 
+diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
+index dba7c8e13a53..44cd3f85b659 100644
+--- a/drivers/base/auxiliary.c
++++ b/drivers/base/auxiliary.c
+@@ -217,7 +217,7 @@ static int auxiliary_bus_probe(struct device *dev)
+ 	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
+ 	int ret;
+ 
+-	ret = dev_pm_domain_attach(dev, true);
++	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret) {
+ 		dev_warn(dev, "Failed to attach to PM Domain : %d\n", ret);
+ 		return ret;
+diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+index 075ec1d1b73a..df1ec34fdf56 100644
+--- a/drivers/base/platform.c
++++ b/drivers/base/platform.c
+@@ -1396,7 +1396,7 @@ static int platform_probe(struct device *_dev)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = dev_pm_domain_attach(_dev, true);
++	ret = dev_pm_domain_attach(_dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret)
+ 		goto out;
+ 
+diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
+index 781968a128ff..fecb85fa85ac 100644
+--- a/drivers/base/power/common.c
++++ b/drivers/base/power/common.c
+@@ -83,7 +83,7 @@ EXPORT_SYMBOL_GPL(dev_pm_put_subsys_data);
+ /**
+  * dev_pm_domain_attach - Attach a device to its PM domain.
+  * @dev: Device to attach.
+- * @power_on: Used to indicate whether we should power on the device.
++ * @flags: indicate whether we should power on/off the device on attach/detach
+  *
+  * The @dev may only be attached to a single PM domain. By iterating through
+  * the available alternatives we try to find a valid PM domain for the device.
+@@ -100,14 +100,14 @@ EXPORT_SYMBOL_GPL(dev_pm_put_subsys_data);
+  * Returns 0 on successfully attached PM domain, or when it is found that the
+  * device doesn't need a PM domain, else a negative error code.
+  */
+-int dev_pm_domain_attach(struct device *dev, bool power_on)
++int dev_pm_domain_attach(struct device *dev, u32 flags)
+ {
+ 	int ret;
+ 
+ 	if (dev->pm_domain)
+ 		return 0;
+ 
+-	ret = acpi_dev_pm_attach(dev, power_on);
++	ret = acpi_dev_pm_attach(dev, !!(flags & PD_FLAG_ATTACH_POWER_ON));
+ 	if (!ret)
+ 		ret = genpd_dev_pm_attach(dev);
+ 
+diff --git a/drivers/clk/qcom/apcs-sdx55.c b/drivers/clk/qcom/apcs-sdx55.c
+index 3ba01622d8f0..90dd1f1855c2 100644
+--- a/drivers/clk/qcom/apcs-sdx55.c
++++ b/drivers/clk/qcom/apcs-sdx55.c
+@@ -111,7 +111,7 @@ static int qcom_apcs_sdx55_clk_probe(struct platform_device *pdev)
+ 	 * driver, there seems to be no better place to do this. So do it here!
+ 	 */
+ 	cpu_dev = get_cpu_device(0);
+-	ret = dev_pm_domain_attach(cpu_dev, true);
++	ret = dev_pm_domain_attach(cpu_dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret) {
+ 		dev_err_probe(dev, ret, "can't get PM domain: %d\n", ret);
+ 		goto err;
+diff --git a/drivers/gpu/drm/display/drm_dp_aux_bus.c b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+index 7b9afcf48836..2d279e82922f 100644
+--- a/drivers/gpu/drm/display/drm_dp_aux_bus.c
++++ b/drivers/gpu/drm/display/drm_dp_aux_bus.c
+@@ -58,7 +58,7 @@ static int dp_aux_ep_probe(struct device *dev)
+ 		container_of(aux_ep, struct dp_aux_ep_device_with_data, aux_ep);
+ 	int ret;
+ 
+-	ret = dev_pm_domain_attach(dev, true);
++	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "Failed to attach to PM Domain\n");
+ 
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 2ad2b1838f0f..38eabf1173da 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -573,7 +573,7 @@ static int i2c_device_probe(struct device *dev)
+ 		goto err_clear_wakeup_irq;
+ 
+ 	do_power_on = !i2c_acpi_waive_d0_probe(dev);
+-	status = dev_pm_domain_attach(&client->dev, do_power_on);
++	status = dev_pm_domain_attach(&client->dev, do_power_on ? PD_FLAG_ATTACH_POWER_ON : 0);
+ 	if (status)
+ 		goto err_clear_wakeup_irq;
+ 
+diff --git a/drivers/mmc/core/sdio_bus.c b/drivers/mmc/core/sdio_bus.c
+index b66b637e2d57..656601754966 100644
+--- a/drivers/mmc/core/sdio_bus.c
++++ b/drivers/mmc/core/sdio_bus.c
+@@ -161,7 +161,7 @@ static int sdio_bus_probe(struct device *dev)
+ 	if (!id)
+ 		return -ENODEV;
+ 
+-	ret = dev_pm_domain_attach(dev, false);
++	ret = dev_pm_domain_attach(dev, 0);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+index 6ee36adcbdba..bece5e635ee9 100644
+--- a/drivers/rpmsg/rpmsg_core.c
++++ b/drivers/rpmsg/rpmsg_core.c
+@@ -479,7 +479,7 @@ static int rpmsg_dev_probe(struct device *dev)
+ 	struct rpmsg_endpoint *ept = NULL;
+ 	int err;
+ 
+-	err = dev_pm_domain_attach(dev, true);
++	err = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (err)
+ 		goto out;
+ 
+diff --git a/drivers/soundwire/bus_type.c b/drivers/soundwire/bus_type.c
+index 75d6f16efced..bc1e653080d9 100644
+--- a/drivers/soundwire/bus_type.c
++++ b/drivers/soundwire/bus_type.c
+@@ -101,7 +101,7 @@ static int sdw_drv_probe(struct device *dev)
+ 	/*
+ 	 * attach to power domain but don't turn on (last arg)
+ 	 */
+-	ret = dev_pm_domain_attach(dev, false);
++	ret = dev_pm_domain_attach(dev, 0);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 1bc0fdbb1bd7..8200b47b2295 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -427,7 +427,7 @@ static int spi_probe(struct device *dev)
+ 	if (spi->irq < 0)
+ 		spi->irq = 0;
+ 
+-	ret = dev_pm_domain_attach(dev, true);
++	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 0213381fa358..d16c207a1a9b 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -399,7 +399,7 @@ static int serdev_drv_probe(struct device *dev)
+ 	const struct serdev_device_driver *sdrv = to_serdev_device_driver(dev->driver);
+ 	int ret;
+ 
+-	ret = dev_pm_domain_attach(dev, true);
++	ret = dev_pm_domain_attach(dev, PD_FLAG_ATTACH_POWER_ON);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 0b18160901a2..62a35a78ce9b 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -36,10 +36,16 @@
+  *				isn't specified, the index just follows the
+  *				index for the attached PM domain.
+  *
++ * PD_FLAG_ATTACH_POWER_ON:	Power on the domain during attach.
++ *
++ * PD_FLAG_DETACH_POWER_OFF:	Power off the domain during detach.
++ *
+  */
+ #define PD_FLAG_NO_DEV_LINK		BIT(0)
+ #define PD_FLAG_DEV_LINK_ON		BIT(1)
+ #define PD_FLAG_REQUIRED_OPP		BIT(2)
++#define PD_FLAG_ATTACH_POWER_ON		BIT(3)
++#define PD_FLAG_DETACH_POWER_OFF	BIT(4)
+ 
+ struct dev_pm_domain_attach_data {
+ 	const char * const *pd_names;
+@@ -501,7 +507,7 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+ #endif /* CONFIG_PM_GENERIC_DOMAINS_OF */
+ 
+ #ifdef CONFIG_PM
+-int dev_pm_domain_attach(struct device *dev, bool power_on);
++int dev_pm_domain_attach(struct device *dev, u32 flags);
+ struct device *dev_pm_domain_attach_by_id(struct device *dev,
+ 					  unsigned int index);
+ struct device *dev_pm_domain_attach_by_name(struct device *dev,
+@@ -518,7 +524,7 @@ int dev_pm_domain_start(struct device *dev);
+ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
+ int dev_pm_domain_set_performance_state(struct device *dev, unsigned int state);
+ #else
+-static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
++static inline int dev_pm_domain_attach(struct device *dev, u32 flags)
+ {
+ 	return 0;
+ }
 -- 
 2.43.0
 
