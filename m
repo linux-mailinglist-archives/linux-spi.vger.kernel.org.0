@@ -1,202 +1,128 @@
-Return-Path: <linux-spi+bounces-9042-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9043-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01CE4AF8D81
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 11:06:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8278AF8D8F
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 11:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C8FD584310
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 09:04:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0924D171FAD
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 09:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610532F50B3;
-	Fri,  4 Jul 2025 08:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 430682F3C39;
+	Fri,  4 Jul 2025 08:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IsFNgvOI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZXa7AFu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7BC2F50B2;
-	Fri,  4 Jul 2025 08:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191582BEFFC;
+	Fri,  4 Jul 2025 08:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751619464; cv=none; b=f6movLKyJRvpjRiGsMj4mDQi0IS9UatXPem/F8Stpdrrfgu7C6Kxw/CgIkRPHG1vmfgm7w902VTlrELKkks9MfxAFvJIyizu7PcMET/BgSF6I6GLr6MqbGQV9E2HVZmoMTb7vrOkniJncMwMwoGCZMuTZo27rhmJcyUoShCnq2M=
+	t=1751619516; cv=none; b=Y9e+cl3ej6YhQCZ+Vf7ji8t87W4dCXUDcIbtOFD3aZY+XgmEk4SToWmmGvmkwP2P9htrkyOkcoXzaip0WUJDikMx+iVFHOMBLCshjTLkQ9P0s4ipXarU5iclP56n8HG5AtvhllfPbwWEohT46oUoIwLUFNvZ7jmjfTAaKl/LmnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751619464; c=relaxed/simple;
-	bh=Hq3evHZffKrfDtkoD9VkUHgds86PykelMMQhzlru9Hs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X/nxzsRwd1Tup1uKouZYYhidsPZFBNiij+ludw6SL+J2MW3YOEMJBtDI57LOteWkvJC+5CxVBHT6kU1k+EbltUZNIZhqAiHXNouGFHcjWdrW2GP/oN1SptdFmQDnY2lKPyi9jjfbigMWDmPihBfB6AfigX+wJw7aQ1mPzV47Jg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IsFNgvOI; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8E24143AEE;
-	Fri,  4 Jul 2025 08:57:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751619453;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z/ao/2kml8jJZFHPFKKmBePrXHDwomfciEfTApf1ng0=;
-	b=IsFNgvOIXVOwfZalpbJl3HeOSXGJ/b0Br9jNwmVj8c8XWQeGRJ8yNf3TykuiXP9YVWVNg9
-	WswEtsNyDmTb6lPYtNo8jxAwOyYHr7+xBhPVcBIgta1Gmw8VnOWUw/IIgLl0UbPh+PxatT
-	QEnGVRZSbWRjlpWe41sTUlxkGP/Yq4rgQ07Ce2ffpGvDVrPXEuUvzR/vQ7m9UpYt7tin2Y
-	sLZZm9ZYReoWxyEcrLAoB6ePBBOxMVsZYJxN9iYmAivhvHar9hS8v4H3i9GFkWozo5fSTm
-	tDdAojqJukJpigemHSwc8gA9r4PchXfJlcnlZExGtC/OGPUfoanwJMSTvEwmSg==
-Date: Fri, 4 Jul 2025 10:57:25 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
- Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len
- Brown <lenb@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
- <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 05/28] bus: simple-pm-bus: Populate child nodes at
- probe
-Message-ID: <20250704105725.50cb72b9@bootlin.com>
-In-Reply-To: <20250703093302.4f7743ea@bootlin.com>
-References: <20250613134817.681832-1-herve.codina@bootlin.com>
-	<20250613134817.681832-6-herve.codina@bootlin.com>
-	<20250627155200.GB3234475-robh@kernel.org>
-	<20250703093302.4f7743ea@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1751619516; c=relaxed/simple;
+	bh=YEWPjPHyxC4ki3E1ZcSIs12Qc+kPMyzDvtMNGFalXck=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:From:To:References:
+	 In-Reply-To; b=iQo2I4eyFVSh8b/YsBq1ju18HyyiR5lbjeDIbaXwRqZOFOrqi6tiSWBs8x30NHBcWmhQRLnmVQV1rspF0G7S2UoVfyk4bQ36/eyf0uk7Kc4WC8z+z/ecLVMEJ78nZLLcQ9zH7LxK7wIwlayEVcLuzjTPZweZVrWyp+ZbxiPMKTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZXa7AFu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E205C4CEE3;
+	Fri,  4 Jul 2025 08:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751619514;
+	bh=YEWPjPHyxC4ki3E1ZcSIs12Qc+kPMyzDvtMNGFalXck=;
+	h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
+	b=kZXa7AFuiO9Mbm4KecZRo8CE86DRTPUUVQjIxBiVromrDHsdkpJGxSwNLQWefyUxD
+	 qZCx2lWs7nQmIaeYGfJhpk4Pg3tEzmIWZeAlD20PP4bnh70oDncMmpnX+rda1IOXW9
+	 IA+s4ma91ozX541uiuH9YpyEvAVIhujZu7TtDSsNQD0b0vV6EqOd0m2qKWL3qlKyAc
+	 KprlRxBuVd6eNyOHxGVDO3wV1ZEw8/GjvGlrEk5MKN12EIK9tT1NdChQBE0wTn+ZQv
+	 TND5pM+oPla8J0iFsu0MvDm/9G952yIt1ZHWRZ2ARLshqDNmICmiH2DC4dr7SjW7BZ
+	 sWjGl9hb7lsKA==
+Content-Type: multipart/signed;
+ boundary=f1bf53852a9581c47b96d6d99d0456e5b24ae45dd2cbc634967c2f1601e1;
+ micalg=pgp-sha384; protocol="application/pgp-signature"
+Date: Fri, 04 Jul 2025 10:58:30 +0200
+Message-Id: <DB35AME44OW7.8Q673KOM4PD2@kernel.org>
+Subject: Re: [PATCH v3 1/1] spi: spi-cadence-quadspi: Fix pm runtime
+ unbalance
+Cc: "Mark Brown" <broonie@kernel.org>, "open list:SPI SUBSYSTEM"
+ <linux-spi@vger.kernel.org>, "open list" <linux-kernel@vger.kernel.org>,
+ "Matthew Gerlach" <matthew.gerlach@altera.com>, "Khairul Anuar Romli"
+ <khairulanuar.romli@altera.com>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Dan Carpenter" <dan.carpenter@linaro.org>,
+ <khairul.anuar.romli@altera.com>
+X-Mailer: aerc 0.16.0
+References: <cover.1749601877.git.khairul.anuar.romli@altera.com>
+ <4e7a4b8aba300e629b45a04f90bddf665fbdb335.1749601877.git.khairul.anuar.romli@altera.com> <ab51dfce-a7d1-4eb3-b469-af35529dfbbb@sabinyo.mountain> <62b9964d-0f2c-4d26-9b35-bb7af3aa5c4f@suswa.mountain>
+In-Reply-To: <62b9964d-0f2c-4d26-9b35-bb7af3aa5c4f@suswa.mountain>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+
+--f1bf53852a9581c47b96d6d99d0456e5b24ae45dd2cbc634967c2f1601e1
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvvdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeekpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhor
- hhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvg
-X-GND-Sasl: herve.codina@bootlin.com
 
-Hi Rob,
+Hi,
 
-On Thu, 3 Jul 2025 09:33:02 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
+> > > -	ret =3D devm_pm_runtime_enable(dev);
+> > > -	if (ret) {
+> > > -		if (cqspi->rx_chan)
+> > > -			dma_release_channel(cqspi->rx_chan);
+> > > +	pm_runtime_enable(dev);
+> > > +
+> > > +	if (cqspi->rx_chan) {
+> > > +		dma_release_channel(cqspi->rx_chan);
+> > >  		goto probe_setup_failed;
+> > >  	}
+> >=20
+> > This will totally break the driver.  It was supposed to be
 
-> Hi Rob,
-> 
-> On Fri, 27 Jun 2025 10:52:00 -0500
-> Rob Herring <robh@kernel.org> wrote:
-> 
-> > On Fri, Jun 13, 2025 at 03:47:45PM +0200, Herve Codina wrote:  
-> > > The simple-pm-bus driver handles several simple busses. When it is used
-> > > with busses other than a compatible "simple-pm-bus", it doesn't populate
-> > > its child devices during its probe.
-> > > 
-> > > This confuses fw_devlink and results in wrong or missing devlinks.
-> > > 
-> > > Once a driver is bound to a device and the probe() has been called,
-> > > device_links_driver_bound() is called.
-> > > 
-> > > This function performs operation based on the following assumption:
-> > >     If a child firmware node of the bound device is not added as a
-> > >     device, it will never be added.
-> > > 
-> > > Among operations done on fw_devlinks of those "never be added" devices,
-> > > device_links_driver_bound() changes their supplier.
-> > > 
-> > > With devices attached to a simple-bus compatible device, this change
-> > > leads to wrong devlinks where supplier of devices points to the device
-> > > parent (i.e. simple-bus compatible device) instead of the device itself
-> > > (i.e. simple-bus child).
-> > > 
-> > > When the device attached to the simple-bus is removed, because devlinks
-> > > are not correct, its consumers are not removed first.
-> > > 
-> > > In order to have correct devlinks created, make the simple-pm-bus driver
-> > > compliant with the devlink assumption and create its child devices
-> > > during its probe.    
-> > 
-> > IIRC, skipping child nodes was because there were problems with 
-> > letting the driver handle 'simple-bus'. How does this avoid that now?  
-> 
-> I don't know about the specific issues related to those problems. Do you
-> have some pointers about them?
-> 
-> > 
-> > The root of_platform_populate() that created the simple-bus device that 
-> > gets us to the probe here will continue descending into child nodes. 
-> > Meanwhile, the probe here is also descending into those same child 
-> > nodes. Best case, that's just redundant. Worst case, won't you still 
-> > have the same problem if the first of_platform_populate() creates the 
-> > devices first?
-> >   
-> 
-> Maybe we could simply avoid of_platform_populate() to be recursive when a
-> device populate by of_platform_populate() is one of devices handled by
-> the simple-bus driver and let the simple-bus driver do the job.
-> 
-> of_platform_populate will handle the first level. It will populate children
-> of the node given to of_platform_populate() and the children of those
-> children will be populate by the simple-bus driver.
-> 
-> I could try a modification in that way. Do you think it could be a correct
-> solution?
-> 
+Yeah. I've just stumbled on that.
 
-I have started to look at this solution and it's going to be more complex
-than than I thought.
+> >=20
+> > 	if (ret) {
+> > 		if (cqspi->rx_chan)
+> > 			dma_release_channel(cqspi->rx_chan);
+> > 		goto probe_setup_failed;
+> >   	}
+> >=20
+> > In other words, if we failed there was some slightly complicated
+> > cleanup to do.  But now it will do the cleanup and free things on the
+> > success path if we're in cqspi->use_direct_mode.
+> >=20
+>
+> I suck at email.  What I meant was delete the if block:
+>
+> -	if (cqspi->rx_chan) {
+> -		dma_release_channel(cqspi->rx_chan);
+> -		goto probe_setup_failed;
+> -	}
+> -
 
-Many MFD drivers uses a compatible of this kind (the same exist for bus
-driver with "simple-bus"):
-  compatible = "foo,bar", "simple-mfd";
+Shouldn't the DMA channel be freed if spi_register_controller()
+fails?
 
-Usually the last compatible string ("simple-mfd" here) is a last fallback
-and the first string is the more specific one.
+-michael
 
-In the problematic case, "foo,bar" has a specific driver and the driver
-performs some operations at probe() but doesn't call of_platform_populate()
-and relies on the core to do the device creations (recursively) based on
-the "simple,mfd" string present in the compatible property.
+--f1bf53852a9581c47b96d6d99d0456e5b24ae45dd2cbc634967c2f1601e1
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Some other calls of_platform_populate() in they probe (which I think is
-correct) and in that case, the child device creation can be done at two
-location: specific driver probe() and core.
+-----BEGIN PGP SIGNATURE-----
 
-You pointed out that the core could create devices before the specific
-driver is probed. In that case, some of existing drivers calling
-of_platform_populate() are going to have issues.
+iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaGeXtxIcbXdhbGxlQGtl
+cm5lbC5vcmcACgkQEic87j4CH/i0JgF9FznWGJoujoxWAi2/IDO3S/aDf2xZW07L
+8kQbeOSDmcoNlRm9rcQv7nXFYwbcaSjrAX9VP0FIsAd6opId6FRfDC4txmPDPk7l
+TgEWLBC9h0dNrO01kdt82GFcj9mGgFKvg5I=
+=ug21
+-----END PGP SIGNATURE-----
 
-I can try to modify existing MFD and bus drivers (compatible fallback to
-simple-mfd, simple-bus, ...) in order to have them call of_platform_populate()
-in they probe() and after all problematic drivers are converted, the
-recursive creation of devices done in the core could be removed.
-
-Before starting in that way, can you confirm that this is the right
-direction?
-
-Best regards,
-Hervé
+--f1bf53852a9581c47b96d6d99d0456e5b24ae45dd2cbc634967c2f1601e1--
 
