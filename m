@@ -1,215 +1,79 @@
-Return-Path: <linux-spi+bounces-9059-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9058-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62655AF99CD
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 19:37:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25F52AF99BE
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 19:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 942BC1CC0AA6
-	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 17:37:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24CF73A25ED
+	for <lists+linux-spi@lfdr.de>; Fri,  4 Jul 2025 17:36:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE3513074B1;
-	Fri,  4 Jul 2025 17:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D73B2D8393;
+	Fri,  4 Jul 2025 17:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="JG/aj/Wp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTqPji05"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8702E8E03
-	for <linux-spi@vger.kernel.org>; Fri,  4 Jul 2025 17:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B3A2D838F;
+	Fri,  4 Jul 2025 17:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751650581; cv=none; b=OAq/6Qf76e4xSGkT9TafHV3qJMfV38Uj+lFGoiLjiT8yIJy4Gw7EhMR9WHSOsVn45eronrbW//s8q/dqp9Nhcncu3pBBmRhyFEGSVqZnb4U+tZYuk2GNTHrrdnaEIvRMZXq2owyYxpUuwufwnJjTfMr+6PDrF/Qa5IxtFT9DDRA=
+	t=1751650572; cv=none; b=PggMdorl+gWF49+qdXsR+FyaKlb3L4ZHAX/rNZ1kE7L3XmHYkE0FJ5I4TsVUVaMfi/5yNP34pInCRbkmWgMwdOGuRY22UNjmxI4tt3U8Aj50L2NkSuzpVwj+f+4SI9J5tzTDnLK0+GxyRhJI539mHDDqCvtrmn28cuBLnJdYk9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751650581; c=relaxed/simple;
-	bh=GmYJZP6Xc+LYEezxq1PksUUUJoTuFJ2anrOieQhfEiU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FTCGE8nF3v/umC4p4LFJRKO8APh7SZBn0nD46/MSWUeJGay5oqPa4LkoNB0JDEwJRXMGpBCuT0b0DyGQF03/WIMufz4Sjymgkg36Fra+AoGDsx0qHjuG3TYvzSXcciyestWn6eu1tIIF3yDzUrq7tYgqJVjJ++llT86wHykBtUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=JG/aj/Wp; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ae0d7b32322so171787766b.2
-        for <linux-spi@vger.kernel.org>; Fri, 04 Jul 2025 10:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1751650578; x=1752255378; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/gMVsSx3VDJCjM0/V6JS1Ju4gdqnvsZW/tG6WKrnPP0=;
-        b=JG/aj/Wp8joH3ZjJdiHbBsx1j8PFAMMtHCadbJigMjkx7zR8Gk6iBuEJjyoDpD/qwy
-         GdMb+BI7R9vUZXFs6BaMVceR0cAfe6h2GL6N/iZMivqTlIOLe6yzyRJXrqynFJT4m+z4
-         ETmICqjLPUqVpxx++E2nSKvTvWmBQRbZTJSA50yHeLjU2DQEp8f1CHn9Bp00r+bewLYA
-         UHyW6tYJ5d/6R4hexxDqpuSBPf1b5jENlbdTrWDimoChpYoAlx0SLiW1Qse+GqeEdazM
-         Hh6VK25RWbcHYbor7cJmJ+hk1HNxjrps8qn3wwvAKAoFB0jFb3ZxfLPGu2uiChBhvlKh
-         ee4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751650578; x=1752255378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/gMVsSx3VDJCjM0/V6JS1Ju4gdqnvsZW/tG6WKrnPP0=;
-        b=Uf3515BU2xbzDN7zkpS/1HDezHkUyfuGVSbTqrvSfN94yAPZy4jZrl5KQKbPg1eh4w
-         U47cJcJN+IyQ+qQj/14SZDaw72vB59V2ID+lbXZkDomkYpIwoYJj6Sh42BFWQW9+x2fd
-         XJTH3NfEaOnyu/zPojyDBqZ5BOblo2fiQbkWELDiHNCCjJdFvXLGg/0qH/KPuK3WFk3/
-         Go2LP7r/06MJy6r/mIOdI7FBDoPh9Pk4v4DuVOxVw41dhSXWECwENgb5Q3Xv1cv2TUwk
-         xy5HSUOXYm5x0i5vRz9RlRn3EXO0cBh32cU6r1iiN9dupW7PCmPxVgphuboJzqGartqk
-         GTRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX8YWnMYkeR1JTUmSjlPC2WQ37V8g7QuOmg7eHvdQw/yiVvcIPNgvGM/keJOUwCdxLo+ouH3101O4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5fSnA8v4x/f0sMldKa34ng5qyxxWxJLxCb+CJqj2MgTDoVAnv
-	KdaV3Cc4aSZnzqTuSxpNv5TO1yrPpcrdNFeqdTWL+0n7pBO9xsJqBFmHMvt8zG4w1MgNLLcYbSJ
-	adaNQiFPnj4x6TUde/FW/TFAwnKO8DIG0m80FthN8SA==
-X-Gm-Gg: ASbGncvq6M/SH65emWJgP0o7G6O8k1ESmCmWyomC/UJSE7CalsPIxlcB3o8GM+Ry7Ju
-	H27KYLm47M/cnAl+nvDAr4AGOkcyqd/okCFdVvL8iqr336h5ead+J9nLTeUAdylHWEUyVVt4VYA
-	M3DSoUs2VXNMUxJiXKWUc8XXrR1QuBehJPmEDrMKlmKMOr
-X-Google-Smtp-Source: AGHT+IHeJ1Z6kLI9F18nPlTXJDs+kXmK3fscjH5F6AOkcbqCoHLdbo6tfPeiaHhkgOp4rTxkpu1/up/L9rb3ERUcPTE=
-X-Received: by 2002:a17:907:9629:b0:ae0:628a:5093 with SMTP id
- a640c23a62f3a-ae3fe4581b0mr339627066b.3.1751650577806; Fri, 04 Jul 2025
- 10:36:17 -0700 (PDT)
+	s=arc-20240116; t=1751650572; c=relaxed/simple;
+	bh=zT3sMakbhwFrNVaafncpigVu6xlhlv8cZoefYiNYWHs=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=DmiNCA8MxdjZGShz82BTFida81ycSC6COMlVoxQ6TItZFdPeWRKG/qRgl9BadVbjeHW+dqHhFnmuUb65GJ0oH3IHQ2pjwTIQ9lQSolq2cwzh24n3sxcB7qEvIIfUlkb3K34ou2q1k4SoSV4Mfa5BrDmiuzWC1yfEGrK6D7Kgd+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTqPji05; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A0A0C4CEE3;
+	Fri,  4 Jul 2025 17:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751650572;
+	bh=zT3sMakbhwFrNVaafncpigVu6xlhlv8cZoefYiNYWHs=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=sTqPji056CrEBEguhmofQC4eEg7sADIx4hKvFhafjiv0y0B/8MY8bhq95X/OOIzew
+	 CUhCEV442q7hq4GXEounCZ8tkFjtU6fJ79buB2w1iJgCQmT4rbSmthn76BYW1jc1Ax
+	 WB+UbqBcq0oXvYP3HK1AdaBHx7Oibyn/FleJgdq2XKPRKbOQ0egfDzGl07GAyonBa3
+	 DVMiwICrL8PmHpZ9d0Kr4XV1ZmycZL1vHVeNVLOiV+G4V/AbVQ6qMF8us7wkdCAdc9
+	 en6UJEhbPurpAyOCft6J1m4u2QfZnJ+fYRHKMUMBYYI+A5oFzDUKHOPUA3F1kE0oXO
+	 G7pWxuVowybLQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7E3CE383BA01;
+	Fri,  4 Jul 2025 17:36:37 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI fixes for v6.16-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <36262b502dd08b5d5c602f7c7a1d6449.broonie@kernel.org>
+References: <36262b502dd08b5d5c602f7c7a1d6449.broonie@kernel.org>
+X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <36262b502dd08b5d5c602f7c7a1d6449.broonie@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.16-rc4
+X-PR-Tracked-Commit-Id: 04a8ff1bc3514808481ddebd454342ad902a3f60
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a1d8128f701682d34d9308c9e6b7385c0ffa4b4b
+Message-Id: <175165059623.2287194.392976876670181790.pr-tracker-bot@kernel.org>
+Date: Fri, 04 Jul 2025 17:36:36 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250702183856.1727275-1-robert.marko@sartura.hr>
- <20250702183856.1727275-2-robert.marko@sartura.hr> <ea353170-6e03-4231-afc2-3dc45253931d@app.fastmail.com>
- <CA+HBbNHxiU5+xVJTyPQFuCJLyEs5_MpybSBEgxi25bzaGfiVHA@mail.gmail.com> <421d61db-27eb-4ad2-bd98-eb187fd14b1e@microchip.com>
-In-Reply-To: <421d61db-27eb-4ad2-bd98-eb187fd14b1e@microchip.com>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Fri, 4 Jul 2025 19:36:06 +0200
-X-Gm-Features: Ac12FXwPCk_M7U49drkBOHMtvL2YaDYQKpMa88sHXtdMqEAGjR9SQcLiyG85r7Q
-Message-ID: <CA+HBbNEiKWS71jtF_jqV9bdX9HVroaZSGMaeD-xFM8sm0kLtCw@mail.gmail.com>
-Subject: Re: [PATCH v8 01/10] arm64: Add config for Microchip SoC platforms
-To: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Russell King <linux@armlinux.org.uk>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S . Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
-	Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>, 
-	Daniel Machon <daniel.machon@microchip.com>, luka.perkov@sartura.hr, 
-	Conor Dooley <Conor.Dooley@microchip.com>, 
-	Lars Povlsen - M31675 <Lars.Povlsen@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 3, 2025 at 3:56=E2=80=AFPM Nicolas Ferre
-<nicolas.ferre@microchip.com> wrote:
->
-> Robert, Arnd,
->
-> On 03/07/2025 at 14:25, Robert Marko wrote:
-> > On Wed, Jul 2, 2025 at 9:57=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> =
-wrote:
-> >>
-> >> On Wed, Jul 2, 2025, at 20:35, Robert Marko wrote:
-> >>> Currently, Microchip SparX-5 SoC is supported and it has its own symb=
-ol.
-> >>>
-> >>> However, this means that new Microchip platforms that share drivers n=
-eed
-> >>> to constantly keep updating depends on various drivers.
-> >>>
-> >>> So, to try and reduce this lets add ARCH_MICROCHIP symbol that driver=
-s
-> >>> could instead depend on.
-> >>
-> >> Thanks for updating the series to my suggestion!
-> >>
-> >>> @@ -174,6 +160,27 @@ config ARCH_MESON
-> >>>          This enables support for the arm64 based Amlogic SoCs
-> >>>          such as the s905, S905X/D, S912, A113X/D or S905X/D2
-> >>>
-> >>> +menuconfig ARCH_MICROCHIP
-> >>> +     bool "Microchip SoC support"
-> >>> +
-> >>> +if ARCH_MICROCHIP
-> >>> +
-> >>> +config ARCH_SPARX5
-> >>> +     bool "Microchip Sparx5 SoC family"
-> >>
-> >> This part is the one bit I'm not sure about: The user-visible
-> >> arm64 CONFIG_ARCH_* symbols are usually a little higher-level,
-> >> so I don't think we want both ARCH_MICROCHIP /and/ ARCH_SPARX5
-> >> here, or more generally speaking any of the nested ARCH_*
-> >> symbols.
->
-> Well, having a look at arch/arm64/Kconfig.platforms, I like how NXP is
-> organized.
->
-> SPARX5, LAN969x or other MPU platforms, even if they share some common
-> IPs, are fairly different in terms of internal architecture or feature se=
-t.
-> So, to me, different ARCH_SPARX5, ARCH_LAN969X (as Robert proposed) or
-> future ones make a lot sense.
-> It will help in selecting not only different device drivers but
-> different PM architectures, cores or TrustZone implementation...
->
-> >> This version of your patch is going to be slightly annoying
-> >> to existing sparx5 users because updating an old .config
-> >> breaks when ARCH_MICROCHIP is not enabled.
->
-> Oh, yeah, indeed. Even if I find Robert's proposal ideal.
->
-> Alexandre, Lars, can you evaluate this level of annoyance?
->
-> >> The two options that I would prefer here are
-> >>
-> >> a) make ARCH_SPARX5 a hidden symbol in order to keep the
-> >>     series bisectable, remove it entirely once all references
-> >>     are moved over to ARCH_MICROCHIP
-> >>
-> >> b) Make ARCH_MICROCHIP a hidden symbol that is selected by
-> >>     ARCH_SPARX5 but keep the menu unchanged.
-> >
-> > Hi Arnd,
-> > Ok, I see the issue, and I would prefer to go with option b and do
-> > what I did for
-> > AT91 with the hidden ARCH_MICROCHIP symbol to avoid breaking current co=
-nfigs.
->
-> Yep, but at the cost of multiple entries for Microchip arm64 SoCs at the
-> "Platform selection" menu level. Nuvoton or Cavium have this already, so
-> it's probably fine.
+The pull request you sent on Fri, 04 Jul 2025 16:07:12 +0100:
 
-Yes, this is why I went with a menu instead, to me it is much cleaner.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.16-rc4
 
-So, how would you guys want me to proceed?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a1d8128f701682d34d9308c9e6b7385c0ffa4b4b
 
-a) Keep the menu-based config symbol
-or
-b) Like for AT91, add a hidden symbol and keep the individual SoC-s in
-the top level
-platform menu?
+Thank you!
 
-Regards,
-Robert
-
->
-> >> Let's see what the sparx5 and at91 maintainers think about
-> >> these options.
-> >
-> > Sounds good, let's give them some time before I respin this series.
->
-> Thanks to both of you. Best regards,
->    Nicolas
-
-
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
