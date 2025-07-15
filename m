@@ -1,243 +1,136 @@
-Return-Path: <linux-spi+bounces-9099-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9100-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9AC1B053B9
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 09:52:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E61B0570B
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 11:50:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A22EB5608D8
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 07:52:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0BA9189B085
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 09:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E9F273D85;
-	Tue, 15 Jul 2025 07:52:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D8C26A0ED;
+	Tue, 15 Jul 2025 09:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="K2ZBOvpC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vov71AGM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66826271473;
-	Tue, 15 Jul 2025 07:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E425E813
+	for <linux-spi@vger.kernel.org>; Tue, 15 Jul 2025 09:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752565933; cv=none; b=fUSbjv4oIvQxYnLhACStBm5wRcssBh2PnaFyqvsz8lM+KBxVXgkBR+FsZfQwUjdji6zVEbFRU6UmqOjSF0y7hhG1MF360IyLcLm26hAvIHKKaO5XmriJ2uQwJX5lz9mCu3ZyYXv8lVRwFN6fObFfY8PAtSKJFyEf6xFsuXHwmTA=
+	t=1752573013; cv=none; b=DSOzYuaBMIMA6FTdDteVdR4tamscqWa2m6+mMSJnFI6kpUWtJJnvbKUJL++xHILEx4XTyw0exOaeWiJxa4zi9Y80vp5soJKKxUM2tirCyqLu4jCmpQtCB+SttO+kTjzFQR1R7+ASa5K1CLqr+irVupsyqiu7ebQgpMy7jZ7Zczw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752565933; c=relaxed/simple;
-	bh=9kafQ4EvbyNb+0AXntVH1c17Mp47HMZ46/b+y7UAQjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZsuizRKLXiIStgHgPTSH5vzkUnDwi0DORHfPHAqmEYKRAXsP4xN4RTiOsDRwvKTFExekLy5LyVlxDfDQsVvDHcFb1dDqEFbZCHGoKB2hGy2/kmLr6SSCT9nW5JweT4OhuPc8U+LxYUkZ7+XRcZ0aa/JW0Dt7S80+C8Zf/4xkLkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=K2ZBOvpC; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15E884430B;
-	Tue, 15 Jul 2025 07:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1752565927;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M1C4N9WQ5rgNkJxYdso36BOZpEKSkeehMURg6RF2AZs=;
-	b=K2ZBOvpCK+DfbORKkUB96qZGojQMOpxKddXHomukQBEYBIN0+lWkj1YulbBi+zfeCRljce
-	ttBunNrQzmnhlqdvoJbaUegatps4qvodXqUHBZkfHJL+5voqtr1E8uuAGwzADYFEH7FiUv
-	pWMHI2VPjx0aq+v9NotfmbpIiBWLLYL7iCLnS9n3yx6Mv/TuPYng8bkmj4mw489w22m1Jh
-	jMqSVGWUuQLOuwffNXsCwGnXjUHX1LAbH3NLppNQIhnxhMVvm0DC1sKPw4Lw5QG7yER/0y
-	iG/DOx+uuN7YWl+GRAg7T3C+vCELR/4CaTsXl+WJvZzjKfmB+yM0p0i0Ygz9tg==
-Date: Tue, 15 Jul 2025 09:52:01 +0200
-From: Herve Codina <herve.codina@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Derek
- Kiernan <derek.kiernan@amd.com>, Dragan Cvetic <dragan.cvetic@amd.com>,
- Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Mark Brown <broonie@kernel.org>, Len
- Brown <lenb@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Wolfram Sang <wsa@kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Davidlohr Bueso
- <dave@stgolabs.net>, Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
- linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 05/28] bus: simple-pm-bus: Populate child nodes at
- probe
-Message-ID: <20250715095201.1bcb4ab7@bootlin.com>
-In-Reply-To: <CAL_JsqLnPxUKXo3+Qdv-C1kXa6zbL1zMKDQsg1--08EY4TwsKw@mail.gmail.com>
-References: <20250613134817.681832-1-herve.codina@bootlin.com>
-	<20250613134817.681832-6-herve.codina@bootlin.com>
-	<20250627155200.GB3234475-robh@kernel.org>
-	<20250703093302.4f7743ea@bootlin.com>
-	<20250704105725.50cb72b9@bootlin.com>
-	<CAL_JsqLnPxUKXo3+Qdv-C1kXa6zbL1zMKDQsg1--08EY4TwsKw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1752573013; c=relaxed/simple;
+	bh=wruxt6W1EKNfHqctolzOd8XLuzn06vOEl1Dk62z2TiE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bA/ZcQpHK/TKFgZ8DFADo5U/jn3D9FMKK3lrerCL0vErDHkXoP1Bio/+sq1Ix2bCAdtLSb2KZ+mym8MtVy0vcbd5oCpYqX2CkFohIrikiU/CmWnEZ5mEuo233VLuHnTVyoeinZd5TFnwmBfHUG9lbOVzd1eiGfQCidu4RGZAWlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--czapiga.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vov71AGM; arc=none smtp.client-ip=209.85.208.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--czapiga.bounces.google.com
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-60c4d140b4bso4356902a12.2
+        for <linux-spi@vger.kernel.org>; Tue, 15 Jul 2025 02:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1752573010; x=1753177810; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QHTlVUx5DqZUsuPP7cnXeDyrD2T4mRFc4Wtv3aKjfJ8=;
+        b=vov71AGMZp296PYtvAGaTUlWZzqfLnj6hnhCrncGcCDwuwh1TmImZHe+9okpv2hgNj
+         ZCMv1K41quwDqQRKbrgZRkvGWeyRRmfAZKFIcu2IRcuaUY9jvo3xTexC35BjflAaDDQ+
+         jqZKKfkJApF4BrocjuYM99G25gD9fz3Sg1DdirH1RAL1GuTbuQAkRK1eFS56uEe21ist
+         ub0j/KPCTvgOiIzj5nbvarYV0kMyFdpN4I7j/2kuSma/7bMYFA97h3QTpegNkUV02D9h
+         rcsL5Fg4NhGqOQ83thuv2YhCCR9Jhkuw8ajfO5kN0yotbh3Wvw3/a19GDodMSH6E0ftN
+         4vtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752573010; x=1753177810;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QHTlVUx5DqZUsuPP7cnXeDyrD2T4mRFc4Wtv3aKjfJ8=;
+        b=nCg/j3hANRGBs16pBRCz3CF9re6UQuJFmfDSaYuwPS3jiW5YW0MRI4wIOvbWoY/YDH
+         l9E+7ps5qshowf1RHenJRd4jKLDmJcMgLSpWnasFQUUSlrGgpyMpOwnrQKRINN7qAVaZ
+         ZW3KOQc2eNen/mJ7gTjeFsk1xV9ZR31aPY7bgLswvhYzRCAZFppDrGkkoqnKx/8QO7AL
+         jLlt1zZXmqBoNCjQY8xg1nmn6rU9yb/FEvcJI8LTVEYvxY+1omyC8Cu9U+l/UJ8W7yAQ
+         RPNlmNE6LhlcFaj96Lzs2uZmDVtFwNtLmqHT7ltAjfyW0xWUrkJfcJySzBMmOcri5JKN
+         u/gg==
+X-Forwarded-Encrypted: i=1; AJvYcCXL083f/z8Al7hyh7AmitPSNIG42taP/gbpeecTq/2SufNLzsu0He1rkQofUQbGTRz3ylObi2ntA5s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr0hBA3MhqeN30TIHESnnv3Y8vGxzzcTrP97U0JLmMsa/LrUPd
+	9S2NtNQGJ7iUEjeERmOB3exXzS2T2iQyKtjneA5qzZPQzu5v08zTl5atz6SBGO6kdo/2yfbpt9v
+	cfR2adVG0Vg==
+X-Google-Smtp-Source: AGHT+IF4xTtuN4grGlrf2ySduGrYS9dG31ff9QUW2wnvANZDmyWQD/+00BdyXJv1mNjORwS5oq/itc7fML37
+X-Received: from edaa8.prod.google.com ([2002:a05:6402:24c8:b0:611:d3ed:63ff])
+ (user=czapiga job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6402:51d4:b0:607:2a09:38dd
+ with SMTP id 4fb4d7f45d1cf-6126b6923c7mr1800812a12.18.1752573009965; Tue, 15
+ Jul 2025 02:50:09 -0700 (PDT)
+Date: Tue, 15 Jul 2025 09:50:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdehgedvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthekredtredtjeenucfhrhhomhepjfgvrhhvvgcuvehoughinhgruceohhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeviefffeegiedtleelieeghfejleeuueevkeevteegffehledtkeegudeigffgvdenucfkphepvdgrtddumegvtdgrmedvkeehmegsleektdemvgegtdgtmeeitgegfeemsgehsggsmegrgedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdekheemsgelkedtmegvgedttgemiegtgeefmegshegssgemrgegvdekpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeekpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgp
- dhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhgrfihnghhuoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshdrhhgruhgvrhesphgvnhhguhhtrhhonhhigidruggvpdhrtghpthhtohepkhgvrhhnvghlsehpvghnghhuthhrohhnihigrdguvg
-X-GND-Sasl: herve.codina@bootlin.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250715095007.896620-1-czapiga@google.com>
+Subject: [PATCH] spi: intel: Allow writeable MTD partition with module param
+From: Jakub Czapiga <czapiga@google.com>
+To: Mark Brown <broonie@kernel.org>, Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Konrad Adamczyk <konrada@google.com>, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jakub Czapiga <czapiga@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Rob,
+The MTD device is blocked from writing to the SPI-NOR chip if any region
+of it is write-protected, even if "writeable=1" module parameter is set.
 
-On Mon, 14 Jul 2025 12:44:22 -0500
-Rob Herring <robh@kernel.org> wrote:
+Add ability to bypass this behaviour by introducing new module parameter
+"ignore_protestion_status" which allows to rely on the write protection
+mechanism of SPI-NOR chip itself, which most modern chips (since
+the 1990'+) have already implemented.
 
-> On Fri, Jul 4, 2025 at 3:57 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> >
-> > Hi Rob,
-> >
-> > On Thu, 3 Jul 2025 09:33:02 +0200
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> >  
-> > > Hi Rob,
-> > >
-> > > On Fri, 27 Jun 2025 10:52:00 -0500
-> > > Rob Herring <robh@kernel.org> wrote:
-> > >  
-> > > > On Fri, Jun 13, 2025 at 03:47:45PM +0200, Herve Codina wrote:  
-> > > > > The simple-pm-bus driver handles several simple busses. When it is used
-> > > > > with busses other than a compatible "simple-pm-bus", it doesn't populate
-> > > > > its child devices during its probe.
-> > > > >
-> > > > > This confuses fw_devlink and results in wrong or missing devlinks.
-> > > > >
-> > > > > Once a driver is bound to a device and the probe() has been called,
-> > > > > device_links_driver_bound() is called.
-> > > > >
-> > > > > This function performs operation based on the following assumption:
-> > > > >     If a child firmware node of the bound device is not added as a
-> > > > >     device, it will never be added.
-> > > > >
-> > > > > Among operations done on fw_devlinks of those "never be added" devices,
-> > > > > device_links_driver_bound() changes their supplier.
-> > > > >
-> > > > > With devices attached to a simple-bus compatible device, this change
-> > > > > leads to wrong devlinks where supplier of devices points to the device
-> > > > > parent (i.e. simple-bus compatible device) instead of the device itself
-> > > > > (i.e. simple-bus child).
-> > > > >
-> > > > > When the device attached to the simple-bus is removed, because devlinks
-> > > > > are not correct, its consumers are not removed first.
-> > > > >
-> > > > > In order to have correct devlinks created, make the simple-pm-bus driver
-> > > > > compliant with the devlink assumption and create its child devices
-> > > > > during its probe.  
-> > > >
-> > > > IIRC, skipping child nodes was because there were problems with
-> > > > letting the driver handle 'simple-bus'. How does this avoid that now?  
-> > >
-> > > I don't know about the specific issues related to those problems. Do you
-> > > have some pointers about them?
-> > >  
-> > > >
-> > > > The root of_platform_populate() that created the simple-bus device that
-> > > > gets us to the probe here will continue descending into child nodes.
-> > > > Meanwhile, the probe here is also descending into those same child
-> > > > nodes. Best case, that's just redundant. Worst case, won't you still
-> > > > have the same problem if the first of_platform_populate() creates the
-> > > > devices first?
-> > > >  
-> > >
-> > > Maybe we could simply avoid of_platform_populate() to be recursive when a
-> > > device populate by of_platform_populate() is one of devices handled by
-> > > the simple-bus driver and let the simple-bus driver do the job.
-> > >
-> > > of_platform_populate will handle the first level. It will populate children
-> > > of the node given to of_platform_populate() and the children of those
-> > > children will be populate by the simple-bus driver.
-> > >
-> > > I could try a modification in that way. Do you think it could be a correct
-> > > solution?
-> > >  
-> >
-> > I have started to look at this solution and it's going to be more complex
-> > than than I thought.
-> >
-> > Many MFD drivers uses a compatible of this kind (the same exist for bus
-> > driver with "simple-bus"):
-> >   compatible = "foo,bar", "simple-mfd";
-> >
-> > Usually the last compatible string ("simple-mfd" here) is a last fallback
-> > and the first string is the more specific one.
-> >
-> > In the problematic case, "foo,bar" has a specific driver and the driver
-> > performs some operations at probe() but doesn't call of_platform_populate()
-> > and relies on the core to do the device creations (recursively) based on
-> > the "simple,mfd" string present in the compatible property.
-> >
-> > Some other calls of_platform_populate() in they probe (which I think is
-> > correct) and in that case, the child device creation can be done at two
-> > location: specific driver probe() and core.
-> >
-> > You pointed out that the core could create devices before the specific
-> > driver is probed. In that case, some of existing drivers calling
-> > of_platform_populate() are going to have issues.
-> >
-> > I can try to modify existing MFD and bus drivers (compatible fallback to
-> > simple-mfd, simple-bus, ...) in order to have them call of_platform_populate()
-> > in they probe() and after all problematic drivers are converted, the
-> > recursive creation of devices done in the core could be removed.  
-> 
-> The problem is how does a bus driver know if there is a specific MFD
-> driver or not? It doesn't. The MFD driver could be a module and loaded
-> any time later. We'd really need some sort of unbind the generic
-> driver and re-bind to a more specific driver when and if that driver
-> appears. We could perhaps have a list of devices with a driver because
-> in theory that should be a short list as the (broken) promise of
-> simple-mfd is the child nodes have no dependency on the parent node
-> which implies the parent doesn't have a driver. The specific
-> compatible is there in case that assumption turns out wrong.
-> 
+Any erase/write operations performed on the write-protected section will
+be rejected by the chip.
 
-Hum, I see.
+Signed-off-by: Jakub Czapiga <czapiga@google.com>
+---
+ drivers/spi/spi-intel.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-In my use case, I don't use MFD drivers but only simple-bus compatible.
-I think your point is also relevant with simple-bus. Indeed how does a
-parent bus driver know if there is a specific bus driver that handles
-the child simple-bus compatible one in case of 'simple-bus' used as
-fallback.
+diff --git a/drivers/spi/spi-intel.c b/drivers/spi/spi-intel.c
+index 5d5a546c62ea..9b41cf9caa5b 100644
+--- a/drivers/spi/spi-intel.c
++++ b/drivers/spi/spi-intel.c
+@@ -189,6 +189,11 @@ struct intel_spi_mem_op {
+ static bool writeable;
+ module_param(writeable, bool, 0);
+ MODULE_PARM_DESC(writeable, "Enable write access to SPI flash chip (default=0)");
++static bool ignore_protection_status;
++module_param(ignore_protection_status, bool, 0);
++MODULE_PARAM_DESC(
++	ignore_protection_status,
++	"Do not block SPI flash chip write access even if it is write-protected (default=0)");
+ 
+ static void intel_spi_dump_regs(struct intel_spi *ispi)
+ {
+@@ -1248,13 +1253,15 @@ static void intel_spi_fill_partition(struct intel_spi *ispi,
+ 			continue;
+ 
+ 		/*
+-		 * If any of the regions have protection bits set, make the
+-		 * whole partition read-only to be on the safe side.
++		 * If any of the regions have protection bits set and
++		 * the ignore protection status parameter is not set,
++		 * make the whole partition read-only to be on the safe side.
+ 		 *
+ 		 * Also if the user did not ask the chip to be writeable
+ 		 * mask the bit too.
+ 		 */
+-		if (!writeable || intel_spi_is_protected(ispi, base, limit)) {
++		if (!writeable || (!ignore_protection_status &&
++				   intel_spi_is_protected(ispi, base, limit))) {
+ 			part->mask_flags |= MTD_WRITEABLE;
+ 			ispi->protected = true;
+ 		}
+-- 
+2.50.0.727.gbf7dc18ff4-goog
 
-Related to your proposal related to the "list of devices with a driver",
-what do you mean? I don't see how to set this kind of list. Can you give
-me some pointers?
-
-If I understood the discussion, the issue seems that 'simple-bus' can't
-populate unconditionally children at his probe. The possible recursion
-in creating devices done by of_platform_populate() should be kept and
-'simple-bus' should rely on that.
-
-The other solution that fixes my use case is to use an other compatible
-string. Would you accept a new compatible string: "simple-platform-bus"?
-
-In simple-pm-bus.c, this compatible would populate children at probe.
-In fact, it will act the same way as 'simple-pm-bus' without looking at
-clocks nor handling pm_runtime.
-
-Best regards,
-Hervé
 
