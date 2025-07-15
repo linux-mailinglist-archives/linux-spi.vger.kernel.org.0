@@ -1,98 +1,80 @@
-Return-Path: <linux-spi+bounces-9103-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9104-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5B3B0686C
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 23:18:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70098B0686F
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 23:19:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBF0E3BB07C
-	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 21:17:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE9881AA0EAF
+	for <lists+linux-spi@lfdr.de>; Tue, 15 Jul 2025 21:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6751E5018;
-	Tue, 15 Jul 2025 21:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D18F2652B6;
+	Tue, 15 Jul 2025 21:19:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYsvxLhd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sumBobId"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669D78F5B;
-	Tue, 15 Jul 2025 21:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4E61E501C
+	for <linux-spi@vger.kernel.org>; Tue, 15 Jul 2025 21:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752614285; cv=none; b=SccfJotp06hCNpIEWjbJhClSKKwl4zmQDWLrQMNj3gn2re2GYRMHN1IwaGASXFfWPCvS1DJFO6l2tBia+IbMPOBwnI3b26GAvTlwh4/AAyRMhZeNt29kN6d1dqPBiKXjc+q1i7AMAPrOYr6XoK5RVt0syvcZJT6BCEU33o7SzNY=
+	t=1752614385; cv=none; b=C6B0X0AI9VUuYLGW8LOqhJ1BdzrG8GRW2dj0so1LPH6pJK7FYvHSibt+CM3XHTOFMIYqW2aFyi0YUUIjP4VG6M47SAVGmViDzJXUfXcFKnFXdDF06ZyyO+wesH65FJngDB7KXz7I86Y2Bs7W4LCFJdh4Ig6Es6WCF8Tg3FEjIhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752614285; c=relaxed/simple;
-	bh=Ihu88xlPjxVA13jRAIY5QXBJzvWgabY+AY3Avoaw2Bs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sMyEoZPytjBQYuT+5HN2xpM8agAUbSfZCwJOuepZlVIoG+vyc+dF/Oec8VUXEGzPTINkYZaje3VNT3x40ZwqaTK3Y3wTMMGms2WWROo9hJ+Z7PuWcslqPXuy37pBA0T3ubzFAk1ya12FmxjoUWpCgQvapt3RdajcpmH9sIR9g3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYsvxLhd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16BBBC4CEE3;
-	Tue, 15 Jul 2025 21:18:03 +0000 (UTC)
+	s=arc-20240116; t=1752614385; c=relaxed/simple;
+	bh=F2y0n43Gh9aSQiw5sig+8mr5/CpsZ1nVg7hlYXsTADM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=p4mECSWjpMs5xZEJZpJTpacNMteLVQRU/+bvB5Dwq3e149+nLFSdc1W1D7YwtyCwpNCvb6xWZm0FhpVqQwBudNF0kvh6r1174IGXp0H3NuW1h8nMzchEBfH0Y2Ufz4ETw+zBQ+MX88QJ+Jlzx+uz3CiXR07XoHCZl/BxJSSZTHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sumBobId; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96254C4CEE3;
+	Tue, 15 Jul 2025 21:19:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752614284;
-	bh=Ihu88xlPjxVA13jRAIY5QXBJzvWgabY+AY3Avoaw2Bs=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ZYsvxLhdTwAc/K8ewGSECNdUJSBCk+jD2xHL8sivkGP2v0/zBcaNJGudg7xuZbVIj
-	 ULPtQ8HRJcIplJhkYqL2NqWXSkPKNH5YbE7daLlCtix3etI3oaXO2lVMVTk04sscTA
-	 vhPD76QE3D8roW40XbXJFZITrda9a4JsSpSDMlaFf7NloEmkW0PodHYIiWUa5kl+Zl
-	 z5KFz/U8K5vuF89ZHnxwS9XkYq7FJE2dE8GKcRUbAWXDJnqYZwQH/rkgWn7YEmulvz
-	 3dJt6c7D+ah5pJyLymjnNwJuO6CAilcVRj9DiI8t0KHk+buD9QJK0SpMrpT4diUYXy
-	 cm3vnAZ77pdDQ==
-From: Mark Brown <broonie@kernel.org>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250609-update_pm_macro-v1-1-819a53ef0eed@gmail.com>
-References: <20250609-update_pm_macro-v1-1-819a53ef0eed@gmail.com>
-Subject: Re: [PATCH] spi: st: Switch from CONFIG_PM_SLEEP guards to
- pm_sleep_ptr()
-Message-Id: <175261428373.334789.807419408201900794.b4-ty@kernel.org>
-Date: Tue, 15 Jul 2025 22:18:03 +0100
+	s=k20201202; t=1752614384;
+	bh=F2y0n43Gh9aSQiw5sig+8mr5/CpsZ1nVg7hlYXsTADM=;
+	h=Subject:From:Date:To:From;
+	b=sumBobIdPRBmV4fPUGBpSQv1UccrOZPRQJBNykGKHMrGXhrXbD4Hn9JCIc1kiJrIo
+	 n6eAb0ImR0R7IUJlpz3zepnzlmp4KqfZisAY4C2DxpWhrdyM6lvdFSB0q8GSQMM4fT
+	 mmPGSOpepOvEwJtqB+A3mwHVMxa3gT3ueMGe4LldoekZNNUHssACVklvmiWDLaKsYO
+	 fS/9SfqvVtexw4gUXpjoSBelSHhb/nbOuPwCUPwqlBgQr9IeylVGGa2VDhih26VBUO
+	 hsH1cw+NicOciLkhKanIjMq1BRpZBASVJQCj3EfGrFWd4Nb+Xis/uIVOEOzKKsAjGZ
+	 BdUGqf1Hb/SFQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 37AC0383BA30;
+	Tue, 15 Jul 2025 21:20:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175261440465.584333.12904866921933058525.git-patchwork-summary@kernel.org>
+Date: Tue, 15 Jul 2025 21:20:04 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 09 Jun 2025 23:21:09 +0200, Raphael Gallais-Pou wrote:
-> Letting the compiler remove these functions when the kernel is built
-> without CONFIG_PM_SLEEP support is simpler and less error prone than the
-> use of #ifdef based kernel configuration guards.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+  Submitter: Raphael Gallais-Pou <rgallaispou@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=970018
+  Lore link: https://lore.kernel.org/r/20250609-update_pm_macro-v1-1-819a53ef0eed@gmail.com
 
-Thanks!
 
-[1/1] spi: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-      commit: 6f8584a4826f01a55d3d0c4bbad5961f1de52fc9
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
