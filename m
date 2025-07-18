@@ -1,52 +1,53 @@
-Return-Path: <linux-spi+bounces-9123-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9121-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32844B09965
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Jul 2025 03:52:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E008B09963
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Jul 2025 03:52:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 984291C47D30
-	for <lists+linux-spi@lfdr.de>; Fri, 18 Jul 2025 01:52:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC2CD7B21C2
+	for <lists+linux-spi@lfdr.de>; Fri, 18 Jul 2025 01:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E61319D880;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1994617C21C;
 	Fri, 18 Jul 2025 01:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4vIJ27u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tLJhIMIp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFD5191F89;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E115C52F88;
 	Fri, 18 Jul 2025 01:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752803540; cv=none; b=fr8xac2AMcXvqDOLpZw1GLwXainuzzNccE4G15y1SSHl2t9oYWBW4bJK/9EQ+4GwfQV6jxOuJsZomKKioHwDEbeQEiPXwmL/YVg8+F46D/giNpgoE8sRU+aozyna2Ve/xjdP5yA/L5XtqU5vuQ71Q/gyPgJ7f1qHQ9Vmff/+M8M=
+	t=1752803540; cv=none; b=g3PkTmFDjPqJAuRKfzrD88XDNmhkR/PfBqZ5QrAC60jEenF1xDIwdcTB5r+VTpCPCiNxlKanDTY2ABFx++fS+C1YG+0HUx/7F/Nxz2IUaoMsTIqWy8ledeO1vULtr+sUen6Qzf/C9YfMflBOXy73VXmsw4FeoILk2EPUXU7Pn/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1752803540; c=relaxed/simple;
-	bh=T8ojarsyUU3VdRkPNIjPH+hMXuJfPiLhUJlGAKELHag=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fMFr8hpMHz6mZ7iyqR5j54F08kxHCdgzUIbTynv1H6Udy3HR8S866mEzIQl80n0YKwP1ZJUQewf7MkEskdfVdXorIYVBzZrpwLqyRCZs49htMzU0Nvt+ee8Rd2Fkf772TfaRY0R1sZBVWnS2bgnjUovC6KSsZrExWrTaAgobtbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4vIJ27u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9F330C4CEE3;
+	bh=HE+QQyQASQhlwMh647dt8HO00YDtO4Uo+20sLmuAsfg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=BsDN+Nidu12d0BHi8niz9rlGOJkPm4dVzFPV1UI6qu2PeKbRskU/UUVVsbpFYtMDfgPDK/w2glcc+xiABmu5U1v3fwSoGQwDapBQyp1iuBb4eChr1fkiET0KHpdn2gKnL43OsY7Q/g17psH4EpflYCOCrxexKRmHb6kT+jagkoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tLJhIMIp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA6D0C4CEF0;
 	Fri, 18 Jul 2025 01:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1752803539;
-	bh=T8ojarsyUU3VdRkPNIjPH+hMXuJfPiLhUJlGAKELHag=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=J4vIJ27ucyYSoQEfQeynNX2zuRsnmDUzQBbU0pxzcm08a0xg6CLc5OOV3MzCIpmPn
-	 RMvTMDB/zDPPXrlsgpwFXxe+LASf1DF4xJlwQmL53fV/HIWww2E9DufdYileRAjDaI
-	 KNljkw0hU8axRLMr1r51PBiNu0xAMNEGX6XSUDoS6L8qVkOiVecBEuGDFmt9BjxgT2
-	 WFxupPiuLmHCf4/POeaL0aTSjbsEyzZKKaXxWT7Y2yEXXu7IkgkxjwGqmzGtXIP6FB
-	 3d2SDBhzFlSkEesBz6fHNDt5AzVjv2ncP5ee6+0c0apoRpe4jt/hkEwSYue2XncKdW
-	 9NRRYyYg0fjJw==
+	bh=HE+QQyQASQhlwMh647dt8HO00YDtO4Uo+20sLmuAsfg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=tLJhIMIpPMkhIF6YwAP9xDx0FmzSoMDT/a7aXN07g/RyfFRN8NLGMj4uW7vOX/xwo
+	 fTXndc/A5Ry84i0J22OABSZpF/Ko8P52i1Jb3KrpKG3OKZD8L72TTD7n4oG+XLDbUK
+	 weIe0MrwMC1GYok1gDG2dqxWf9bDufFyhAK7zMtbqp2TnTEr8qKKPtA83LCTpSmI73
+	 F29VLkoqQlinnq9uQQrLXUUXVbO660/vrur8R6Pf0DzcBAZe7MKafUfR9b140W73DF
+	 HbOchtVH9yLsvuvcu7SQHGZStu9RQAshGoe5NN+IW9YRWO6K7+ccmLwzM1pG7LdqT3
+	 KP1KX6RwBhJ0Q==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B1ECC83F22;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A372C83F34;
 	Fri, 18 Jul 2025 01:52:19 +0000 (UTC)
 From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-Subject: [PATCH v5 0/3] support for amlogic the new SPI IP
-Date: Fri, 18 Jul 2025 09:52:15 +0800
-Message-Id: <20250718-spisg-v5-0-b8f0f1eb93a2@amlogic.com>
+Date: Fri, 18 Jul 2025 09:52:16 +0800
+Subject: [PATCH v5 1/3] spi: dt-bindings: Add binding document of Amlogic
+ SPISG controller
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -55,10 +56,9 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAM+oeWgC/2XOyQrCMBSF4VeRrI1kaIa68j3ERYbbNqCmNBIU6
- bubFouVLk/I93PfKMEQIKHj7o0GyCGFeC9D7HfIdebeAg6+bMQIE0QSjlMfUouVbhiVmoE1DpW
- //QBNeM6d86XsLqRHHF5zNtPpdSlU30KmmGCha+4t1L4W/GRu19gGd3DxhqZGZitH1eLY5KiRR
- BhdWS+2jq8cWy7OvDinOG2EAqZrt3XVz6nfnVVx0hboGwuSkn83juMHG2hVM0QBAAA=
+Message-Id: <20250718-spisg-v5-1-b8f0f1eb93a2@amlogic.com>
+References: <20250718-spisg-v5-0-b8f0f1eb93a2@amlogic.com>
+In-Reply-To: <20250718-spisg-v5-0-b8f0f1eb93a2@amlogic.com>
 To: Sunny Luo <sunny.luo@amlogic.com>, Mark Brown <broonie@kernel.org>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
@@ -67,11 +67,11 @@ Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org,
  Xianwei Zhao <xianwei.zhao@amlogic.com>, 
  Conor Dooley <conor.dooley@microchip.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752803537; l=2119;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752803537; l=1996;
  i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
- bh=T8ojarsyUU3VdRkPNIjPH+hMXuJfPiLhUJlGAKELHag=;
- b=Hw+zDiRsCmR+NB0r3zy0ptubSX5gfKCJ+VfAzYdlVxGanxFEZQbe9kezOWqTaE13KNUo+5uq3
- T2KAn61MQ+3BmQgtZcypOcX9fJNXM/+80R+skSaIE4pZxgg4iERjMrO
+ bh=IHQOnKrg7npxbLs9TpeLcto9ZcmGHjz7nxGFh2mfna0=;
+ b=QItDgLJRXMpbE+E2/D88SywXqnLg9DSQ4FOxzlbAB+LRK2KcSZ6CyBUwU+GzW66YXRsm/gG+M
+ A5w4GFXkVAzCxwIa0O0D5IJuG1OhtFJhseb1mSC/QAnEpNBA/1WTMcC
 X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
  pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
 X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
@@ -79,58 +79,86 @@ X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
 X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
 Reply-To: xianwei.zhao@amlogic.com
 
-Introduced support for the new SPI IP (SPISG). The SPISG is
-a communication-oriented SPI controller from Amlogic,supporting
-three operation modes: PIO, block DMA, and scatter-gather DMA.
+From: Sunny Luo <sunny.luo@amlogic.com>
 
-Add the drivers and device tree bindings corresponding to the SPISG.
+The SPISG is a new communication oriented SPI controller of Amlogic, which
+supports PIO, block DMA and scatter-gather DMA three operation modes.
 
+Signed-off-by: Sunny Luo <sunny.luo@amlogic.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 ---
-Changes in v5:
-- The location for interrupting registration has been adjusted.
-- Unexpected interrupt return IRQ_NONE.
-- Modify div clk register and process reset_dev return value.
-- Link to v4: https://lore.kernel.org/r/20250704-spisg-v4-0-6b731dfbe610@amlogic.com
+ .../devicetree/bindings/spi/amlogic,a4-spisg.yaml  | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-Changes in v4:
-- Add resets prop and modify some formats for bindings.
-- Remove irrelevant headers files and fix some issues.
-- Link to v3: https://lore.kernel.org/r/20250623-spisg-v3-0-c731f57e289c@amlogic.com
+diff --git a/Documentation/devicetree/bindings/spi/amlogic,a4-spisg.yaml b/Documentation/devicetree/bindings/spi/amlogic,a4-spisg.yaml
+new file mode 100644
+index 000000000000..9bfb8089f7ea
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/amlogic,a4-spisg.yaml
+@@ -0,0 +1,59 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2025 Amlogic, Inc. All rights reserved
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/amlogic,a4-spisg.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Amlogic SPI Scatter-Gather Controller
++
++maintainers:
++  - Xianwei Zhao <xianwei.zhao@amlogic.com>
++  - Sunny Luo <sunny.luo@amlogic.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    const: amlogic,a4-spisg
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: core
++      - const: pclk
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    spi@50000 {
++        compatible = "amlogic,a4-spisg";
++        reg = <0x50000 0x38>;
++        interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clkc 37>,
++                 <&clkc 93>;
++        clock-names = "core", "pclk";
++        #address-cells = <1>;
++        #size-cells = <0>;
++    };
 
-Changes in v3:
-- Rename of bit definition and fix some issues.
-- Enable runtime_suspend function.
-- Link to v2: https://lore.kernel.org/r/20250617-spisg-v2-0-51a605a84bd5@amlogic.com
-
-Changes in v2:
-- Use regmap to operation register and drop bitfied define.
-- Use "SPISG" prefix intead of "SPICC", and declare clock div table in the spisg_device. 
-- Delete other power operation functions except for runtime_supspend and runtime_resume.
-- Fix some format corrections.
-- Link to v1: https://lore.kernel.org/r/20250604-spisg-v1-0-5893dbe9d953@amlogic.com
-
----
-Sunny Luo (2):
-      spi: dt-bindings: Add binding document of Amlogic SPISG controller
-      spi: Add Amlogic SPISG driver
-
-Xianwei Zhao (1):
-      MAINTAINERS: Add an entry for Amlogic spi driver
-
- .../devicetree/bindings/spi/amlogic,a4-spisg.yaml  |  59 ++
- MAINTAINERS                                        |   9 +
- drivers/spi/Kconfig                                |   9 +
- drivers/spi/Makefile                               |   1 +
- drivers/spi/spi-amlogic-spisg.c                    | 888 +++++++++++++++++++++
- 5 files changed, 966 insertions(+)
----
-base-commit: bd30b995df8fd053e13d10f78dbc7b2fa5ed1aae
-change-id: 20250603-spisg-78f21682ebac
-
-Best regards,
 -- 
-Xianwei Zhao <xianwei.zhao@amlogic.com>
+2.37.1
 
 
 
