@@ -1,107 +1,137 @@
-Return-Path: <linux-spi+bounces-9145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1722B0C5C6
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 16:04:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69352B0C61F
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 16:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C6EB3AE265
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 14:04:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BC2B5434BC
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 14:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3248E292B22;
-	Mon, 21 Jul 2025 14:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569092D6617;
+	Mon, 21 Jul 2025 14:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OfToHOwT"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="WAORxm88"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.denx.de (mx.denx.de [89.58.32.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078D825760;
-	Mon, 21 Jul 2025 14:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4955227;
+	Mon, 21 Jul 2025 14:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753106679; cv=none; b=ozyRD6dVr69gvnspMo0LQyWAY9LJvtB7EaVnM3Kifr4LI0HADQUomG/SHPIe6hSQuA4/de/1ZI7wyGdRtl0ElFbbF0cxncCIN1aTy4bKC8dFTJhU0jMdPVdHQHXPBqIgvVfXpa4HDkpB/KLX0XzQ2Ni0uuF4ROcJzG7Jwzdj6pQ=
+	t=1753107745; cv=none; b=V+RRdnwg8WBXdxmIiu6bAvclVou9d0y7eyViOxfF48inC15/rD5cPOmixTOAsiFLHGoeh2UkM0HhyrGqVf7SgJIC0ilDoBTxCkxU4m/cZdDy0yQ29bPCrJmSLyWeHPvbBnOx5E9MoGi2AwWWLFK6PcTG+BX5nl69XK/jh9Zz4ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753106679; c=relaxed/simple;
-	bh=ZRFSItDRtsrkuR9rheQjoPP+y9yHZtan8WCMiLO9Ffc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NK5axumBmslBNuVapiE0DVkpybJHtNIrU7TTIMI+pdRGqQ8K5chpXMcpkLh0yIjC7yIUefnqxoQNZtT4tt0CtMTxqIPzVq9lnk+c8rw0wW1WZM+kgnTRze5Z+ZvKrQ4QyG9UuWjilzbNQ4Uke5ZQlK92KeoJSLrtVqOyLZ88W6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OfToHOwT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349C0C4CEF6;
-	Mon, 21 Jul 2025 14:04:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753106678;
-	bh=ZRFSItDRtsrkuR9rheQjoPP+y9yHZtan8WCMiLO9Ffc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OfToHOwTr0a14oiBpRqljFKUgpT31x7VxRPnBJPHLJ3GKg+GjUMj5o1Idi0TQ4wd4
-	 PUiSTPnZxIrIrryEUSKWW/TuqiDPaeCLn5d/tl6D0pByTdR/22tKXaR3gjR7uYSEFF
-	 /z0ZUYtM4Od1LjU5rITjYMsTwlmi2WW6p4gYlUyXtgJv0VzJckaJmLQGslq+KMlXq6
-	 BHc9NFdX465Uhge5OsxMzI19rpdtAioXw2DYartFzDZmEwXb1t69e/H+ed9K3FNOec
-	 JvZrfdB7p4jh4InhhWXfvNyd/L90sdHOIQ5KTmGttkx1jvvq9RC6moG8aJyDZmph5t
-	 H0O2ucR7fNR2A==
-Date: Mon, 21 Jul 2025 15:04:33 +0100
-From: Mark Brown <broonie@kernel.org>
-To: James Clark <james.clark@linaro.org>
-Cc: Vladimir Oltean <olteanv@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Larisa Grigore <larisa.grigore@nxp.com>,
-	Frank Li <Frank.li@nxp.com>, Christoph Hellwig <hch@lst.de>,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/6] spi: spi-fsl-dspi: Store status directly in
- cur_msg->status
-Message-ID: <a1f01911-8cba-418a-8393-1d6ad3badb2f@sirena.org.uk>
-References: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
- <20250627-james-nxp-spi-dma-v4-2-178dba20c120@linaro.org>
- <20250627213041.vp6yfcgf4xysdklf@skbuf>
- <eb704af4-5800-49b6-9915-c990c5b23fa1@linaro.org>
- <20250721133958.dhityxa7vvtqov3d@skbuf>
- <e23bac2c-c39c-4446-9305-e7e51eabcb4b@linaro.org>
+	s=arc-20240116; t=1753107745; c=relaxed/simple;
+	bh=oDy7UzkFzgzPxI3UJSjSR0GcOLA3VSfw2hi54qQq820=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NqIso2h4z1FGnTgR4zrxECZz5NW7aCgi2LnPo/NV+YkngbDps5gKIxQ1IQOBKhuds4uQWzK8ob5LyevysnIwOjixsgQAXVM1cJu0C7JfZ5joNO99HP6o11CFWqsJs3Ns3NMGmgRfUYdC6n3LJi0SJIckwcnKZvo6lefvjRGOfpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=WAORxm88; arc=none smtp.client-ip=89.58.32.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 68C461027235A;
+	Mon, 21 Jul 2025 16:22:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
+	t=1753107734;
+	h=from:reply-to:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=dIsc6hFBt27O44doVUiL9FU5pBOtVG/J+2i8b4k8GLo=;
+	b=WAORxm88+wekMznNLYR0mDtKVCRI/sMIPRor3IscLGNV/hpMwY3zQobd6SJNQ/+bd4UOku
+	rISEEt0E/QBkCT5J7Yfq2erw12kTpPEIrvV+VvFQ42QOKQsvVgqCpQw4oEiIh+2WkoeNmt
+	bmP+e46yfnGyjqEys+Q3UYNQYj//+5Hvdri5hMDy9oGfWgbY65dNrf2m0sub/HpJDEE9AJ
+	BGtWyGXYcLZs/QBbIfWZJUbcXywD0r8A+NcIW1VptztPVr+q2/ARvpFnFj2zLs16LFczKW
+	Jh1rCGINIuUnaLWJSd9jFSBR8B9hwzkt65W0eSEqGrwtLYfBwxytPfbVp3m6lQ==
+Message-ID: <2477dc64-92a0-9dc9-d168-56646d0d796e@denx.de>
+Date: Mon, 21 Jul 2025 16:22:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aMtzLzsOA1vyg0LI"
-Content-Disposition: inline
-In-Reply-To: <e23bac2c-c39c-4446-9305-e7e51eabcb4b@linaro.org>
-X-Cookie: Microwaves frizz your heir.
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: trivial-devices: Document ABB sensors
+Content-Language: en-US
+To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Andrei Lalaev <andrey.lalaev@gmail.com>,
+ Chanh Nguyen <chanh@os.amperecomputing.com>,
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
+ Grant Peltier <grantpeltier93@gmail.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+ Michal Simek <michal.simek@amd.com>,
+ Naresh Solanki <naresh.solanki@9elements.com>,
+ Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, devicetree@vger.kernel.org
+References: <20250719063355.73111-1-hs@denx.de>
+ <20250719063355.73111-2-hs@denx.de> <20250720021151.GA931647-robh@kernel.org>
+ <c972dcba-ec99-47e4-ad19-18ebe97dfdd0@roeck-us.net>
+From: Heiko Schocher <hs@denx.de>
+Reply-To: hs@denx.de
+In-Reply-To: <c972dcba-ec99-47e4-ad19-18ebe97dfdd0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hi Guenther, Rob,
+
+On 20.07.25 05:25, Guenter Roeck wrote:
+> On 7/19/25 19:11, Rob Herring wrote:
+>> On Sat, Jul 19, 2025 at 08:33:52AM +0200, Heiko Schocher wrote:
+>>> Add documentation for spi based ABB sensors, which are
+>>> currently operated from userspace.
+>>
+>> What is userspace? That has nothing to do with bindings.
+>>
+> 
+> Taking one step further back ... what are "spi based ABB sensors" ?
+> 
+> Guenter
+> 
+>> Please provide some details about this h/w and convince me it is
+>> trivial.
+
+This sensors are fully controlled through spidev driver, with a simple
+register based interface and they have no other connections as the SPI
+lines, so they only need a compatible entry.
+
+bye,
+Heiko
 
 
---aMtzLzsOA1vyg0LI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>>
+>>>
+>>> Signed-off-by: Heiko Schocher <hs@denx.de>
+>>> ---
+>>>
+>>>   Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml 
+>>> b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> index 27930708ccd5..25260c2b81df 100644
+>>> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+>>> @@ -30,6 +30,8 @@ properties:
+>>>       items:
+>>>         # Entries are sorted alphanumerically by the compatible
+>>>         - enum:
+>>> +            # ABB register based spi sensors
+>>> +          - abb,spi-sensor
+>>>               # Acbel fsg032 power supply
+>>>             - acbel,fsg032
+>>>               # SMBus/I2C Digital Temperature Sensor in 6-Pin SOT with SMBus Alert and Over 
+>>> Temperature Pin
+>>> -- 
+>>> 2.20.1
+>>>
 
-On Mon, Jul 21, 2025 at 03:02:09PM +0100, James Clark wrote:
-
-> I'm also not sure if it would fit with can_dma as that starts mapping stuff
-> in the core layer. We want to avoid that because we need to write that
-> control word for each SPI word. We could still change mode conditionally in
-> the DSPI driver though, or make can_dma more flexible. But on top of this
-> for sure.
-
-Even if you need to open code the infrastructure the idea of a copybreak
-should still be useful.
-
---aMtzLzsOA1vyg0LI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmh+SPAACgkQJNaLcl1U
-h9DpZgf+MdtFYAGs9n+vc1jIjGnB48vgl+5FmAp59DjbjL+tkhyv0h2qjTJ+gf+i
-SwE9pkbEScK/vElogElVJAVWt1xW9F/v3XJyrwJqZWBnGs1USBtafHUBxd3qovLt
-W/ook1uKpYTY9UwNPKev3eFVaRiT7H35lVf/nb75jJix8yGsMd/lLPWU9DHq//pp
-SQURHCCohq1tK55hQb6YpynEwQJcmv/ib6mxJGLfPy/0Ex5bnczkGE7O4gkwxlG8
-v0a1ALL5+or1dWySYO0IiRtPHn3U+tfZ5x9h9zjaGVt5x/XvGyyxFjlGedBMXm80
-HXCsQ35DUbMpNKIedcL2FKA/vCEXtQ==
-=Mo7R
------END PGP SIGNATURE-----
-
---aMtzLzsOA1vyg0LI--
+-- 
+DENX Software Engineering GmbH, Managing Director: Johanna Denk, Tabea Lutz
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
 
