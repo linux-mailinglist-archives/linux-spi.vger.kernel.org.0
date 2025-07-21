@@ -1,234 +1,220 @@
-Return-Path: <linux-spi+bounces-9141-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9142-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B44B0C4A0
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 14:59:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D25B0C520
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 15:26:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69E747AAC05
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 12:57:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E6D35404E3
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 13:26:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349E22D6615;
-	Mon, 21 Jul 2025 12:58:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F38B2D949A;
+	Mon, 21 Jul 2025 13:26:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="N/J9uFUA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gbGlLZPo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from MA0PR01CU009.outbound.protection.outlook.com (mail-southindiaazolkn19010007.outbound.protection.outlook.com [52.103.67.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD6829E118;
-	Mon, 21 Jul 2025 12:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.67.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753102737; cv=fail; b=D7zTlIQB+UR8EHuofjvchDcc8ctrB5/pJtw/JKJEY/TzPjhLx/UOzDS1gTzDrFLsns8yZHBzHQBwlX/d/1DSzBA1c5m7IBLGbft6VXSS5Ve/IR1hsjSJQ5z5Siz+GPlfDelzJPGI34JMYWslBUF0m4bF9K8klRDb3Y7xb6xXdJw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753102737; c=relaxed/simple;
-	bh=5V/rWn2REQKYBy1ZQwgqRK4KNNflArJKJHkTLzWgWhM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ULNo0CYyBCwL7TT8aFGybjVNhNBlTYS1Vzr2Tfgx91jqAMXVBoSwwbrB2sYb4MKt3PmdCC7SPYJoiakxURH2kzBPkH8jsya/8dyiuo/ivyRoW+FjE5HWHpu/3IZcfjR9DvzqRq5XrbUbGXa+9HMAGle6aiSCTWPxfudHyWIy1ho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=N/J9uFUA; arc=fail smtp.client-ip=52.103.67.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CFQQOINbz95hPVqFarU7CqFxpuqNUHzH6WkVBJT89yIY/n9IPpmrEQgKuv7fA1Wh0ASG8XIhDly5F9nDOb9YTVU9JVzW8X1IWjX+cwJuIJIPNMTGcWftFlYZu9Y4uK2qL/gnZFwP3MNVcb5bMTNDEsw/S6g1b7DUDyRJ2QfYirqdJIoLkGsit3a2+WEWuj9+8ue4YoPmy9vClw9q8SKBlKsoe+kVjPGD+49FzvU0oBJtwMJGeqLWv/EyWjTZgPGbyVwuTdsHDwnSwVe6NhMh7+Q04yCgzslXG00IG5cU/+vBmZ9I5lkuQ1LkrI8rW8WFU0OjB0aFE2nS8CwATPePvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VnxkC29iNHYiczy9NKA4MpJDwG3KH4qpNmXh4o9t6e4=;
- b=sjYrtmp+2TywAK93jBJo1sTDA+XTF8k3RR80O9zzacs2PIq8o0YhM09U2EQLf2XcVk/MzEHzqvNWxa8d8afcDiEH9Ut7dcIqO/SMNHOyf17Xkd5n2dIwM9SRK1E91SDA+xmAzO2cJx6UAkpGBfvnHb550nLnrHr9ZYXYvUEAp7Ul40wEhJezONuJwgXy5qxQqED8WoJAFMVzEju1ahQSZkLNQwxr0aiGVbRe8cBzKQFlUDfnnPvk/3ZFyM9CXhe0x90R+8RPVbICtuPASD/no4QbzNdlrGf+k6llYHLenj1MJfa+vPfsafh90yE/Xu9RNHbJxgtvfKZNO1a8bUNm1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VnxkC29iNHYiczy9NKA4MpJDwG3KH4qpNmXh4o9t6e4=;
- b=N/J9uFUA0tiPZqf7zPYMij3d4flIuiGGwtUvPmlYS2LPG50Rn9f72mFjizS6LAw8x8N8Ka+RKcLUKdGASl9JCkvo2t3yGerSQ8UYGcqqFZb1ni9Tg5f4uav/ZXNHJhP6WcshN9kx5zJbbX8za2sNsaXOP1K0qyNH4H0LpPNFkItfU9yQoWOHBsbHSN0uoEy/aeJv3xCeER30mUwxyICOmeNMrEusqrJU7gH1HhX/Vr5woDqQ2+SBgtdpSEw+87Nqmf+3FtY0lEPmhrVvwZmPL9tCCwKjAVhWl3Zk31bY3ZsXfyu1MR6r2yTpfUuPPKDoETRRUHsb+eSbXIr9H0i+gw==
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16) by PN3PR01MB5517.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:78::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8943.30; Mon, 21 Jul
- 2025 12:58:46 +0000
-Received: from MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b]) by MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::5dff:3ee7:86ee:6e4b%4]) with mapi id 15.20.8943.029; Mon, 21 Jul 2025
- 12:58:46 +0000
-Message-ID:
- <MAUPR01MB110723FAC07AF511BF42E0102FE5DA@MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM>
-Date: Mon, 21 Jul 2025 20:58:37 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/4] spi: sophgo: Add SPI NOR controller for SG2042
-To: Zixian Zeng <sycamoremoon376@gmail.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Inochi Amaoto <inochiama@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Longbin Li <looong.bin@gmail.com>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
- sophgo@lists.linux.dev, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
- Conor Dooley <conor.dooley@microchip.com>
-References: <20250720-sfg-spifmc-v4-0-033188ad801e@gmail.com>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <20250720-sfg-spifmc-v4-0-033188ad801e@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR03CA0114.apcprd03.prod.outlook.com
- (2603:1096:4:91::18) To MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:16f::16)
-X-Microsoft-Original-Message-ID:
- <29df5685-e16c-44d5-a15a-714c6622a51f@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72762D948B
+	for <linux-spi@vger.kernel.org>; Mon, 21 Jul 2025 13:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753104361; cv=none; b=WO4lo4ABkxyXFRxAbN9fxhWqwGJ+bbkFHtRsX5uq40aMuv4oIiB2wtzqBarA9WuQFVTUf40XuupqQCvqzvxyaS8oa1c+9r9o654tmUz85lQ/WKpo7JFS5G8C8j0VzgJE+9DtMe+Eu5QXur7VklcVR8c7xEwqKh4to6vFNQHHw78=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753104361; c=relaxed/simple;
+	bh=CgTHlnjqXlrhyYXlIsSOMJg+dqhEDhk8I+VMOO7ZHLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cC1qZDXfiv71lDZrdTo+bZm67qT3JICY6zQ8oBZxS4ehDdz/seNtqebzzKL96r0Oqh6+1Np8D6aLdqmEXwf8EHHtE66IRBMhMBqoWWMdg/qdUkM1zVRDxT3vD3XI47MuiUsn0f+EzOrcATszc/r8mLKu1Cyjoc4FAlWizqdqUBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gbGlLZPo; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-45610582d07so33763015e9.0
+        for <linux-spi@vger.kernel.org>; Mon, 21 Jul 2025 06:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753104357; x=1753709157; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e1nIdAg0sGnGTxCABOmv04iQ5WEkBiWRfTjeSG6hZ6w=;
+        b=gbGlLZPo1sdzvi1OZhgRrZdiyRdcro7QZUOV3nLaxHm0Fc/TLeKuXPmQDf/eqv4qos
+         k7M7EV8sWuAvuhzjY8emP/ycSmzvgBICUM/u7StAOFvkKLACB3VDFS8zXNNbrvj1sJiu
+         vFi4cWc1+JSJIWapsQ73sdQ7lNQ+cTioB8yeEbnXhj3Qn+PuBziw+rYDg/6jkd0med3z
+         KQ5Aoq97rSfXeYjsGpETfIDZnSVdrAKHZgNqRK7xdg2c20d1yav8r8220JG7e3Ql6lVp
+         mxgm14trl2HFOuySBpM9g18EIDyJCpP0feyLGM0EX658od4TOWl/mSH9IC8mJlbEP9R7
+         Ngig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753104357; x=1753709157;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1nIdAg0sGnGTxCABOmv04iQ5WEkBiWRfTjeSG6hZ6w=;
+        b=cp+mi06owC2ILCCbzeCtKibE7HkoZ2rM9IwrXo9KY0fbm1MM1aSs565P0lRUzPOtiV
+         nIVVpppy/GCYh4PGm0150PppMT1Iz40KMCykzu6xdmeBqn+7K9jop0s2rAOJGiGjUDbt
+         jfDhTxKLkD2C4L3TRp2INxZ1P501RmTluz/d18SfYH/bQTKh/e22PiaiHqEokSJoexbm
+         eo8gUZ8bYv4Y8PO5XHX+VPdaxp4rvGhjbfkhRyR1c+h+igvoGvlKR9YXAfAinKP6Abfn
+         F/JLHYRh7GvU0fLLe0Q1HL1cPjCA999aYvcHUZ0C7oxWLDfUBBPhHrN9xCLOLRFLDC1h
+         ZjFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGM/y+L2VBbs6NTPYajKl2E9WzD72bVdBSV6KVyQCTJYEWEbbFhRILkOel6/JD3vHmMBbWxdldZjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdJZX39PdY+sawxZTqgHo/WxZVplzd5ut4dWk4goQSzESrhVwE
+	N9m18ecnBQrda3sB0OlYEGYX1YSE+Zx6HBjTT0w/0F/DPe7Wv1ubyQCUdCdGIEShsaE=
+X-Gm-Gg: ASbGnctEH1Tz5VDnVlZUYHxGy24j+3WzO2RJkLFIeyqrVl0digFpPr2kSvjgXh/fAlG
+	HtOrPRsh2DNESOdo2CczMp2XjOrsSwtti4y3PbDv5a2TB+2wXIz3YVuVeLuQcOAhYU55xQVq1QA
+	cHeffsdPV13gs1CFd3iSk9cGaTETlmFNyIDLZd6r7567vrAn3Uhx7bQMEEjSmVAfXtIN9n7UZlh
+	7B6G0LtWio83xnlYBOxZhKBi3NJccbjaylsPCMo+19n44ntgCrZyAXQ5p9lI74MlVmNJVObwXw6
+	2OEeqZk24ZqtAHMhbtnopG5oDkGC11JcGAy3yfXxAR6SXvCbZNgCUirgiND1gEN54To3zq+Zh98
+	i7tJE42lUYtbOSvHIs+mdYxCJYXg=
+X-Google-Smtp-Source: AGHT+IFTflohdCxvNvNb8RYTzDCG+r6gd9qoG/lJIe4OeYl2GcySLLIOxdTc/nCyWsZxvyoNDRS5RA==
+X-Received: by 2002:a05:600c:8507:b0:456:161c:3d6f with SMTP id 5b1f17b1804b1-4563c266ae9mr112757965e9.11.1753104357063;
+        Mon, 21 Jul 2025 06:25:57 -0700 (PDT)
+Received: from [192.168.1.3] ([185.48.76.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4563b5c84absm102784195e9.16.2025.07.21.06.25.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jul 2025 06:25:56 -0700 (PDT)
+Message-ID: <eb704af4-5800-49b6-9915-c990c5b23fa1@linaro.org>
+Date: Mon, 21 Jul 2025 14:25:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAUPR01MB11072:EE_|PN3PR01MB5517:EE_
-X-MS-Office365-Filtering-Correlation-Id: 75ebd784-87f2-4f66-5bee-08ddc856540c
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|5072599009|15080799012|6090799003|1602099012|40105399003|440099028|3412199025|4302099013|10035399007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?L0JKWTdrVG80ZFg3WkdsZnhWTjlOSkZIcmFMS2RueVhjSFA4YmV1Ri9kdFlr?=
- =?utf-8?B?RkpQeEIwRWhQV1lIWFdGMUo4VHRCV1AvcnRWTURTWDhKSjRRbnBMUWIvVDdw?=
- =?utf-8?B?YXZBQmVwTlViSGxJT0FIVVgzOXFHaTdMQ1ZjY3FnWWVvZEg0WmhxMWJVRW1Z?=
- =?utf-8?B?UE9xTHFYMU1xVGl1Y3c5dWhtcWdaOHROSmRvZlBiUStWTHl4dy9LWWpaMUQy?=
- =?utf-8?B?UTgySjFRM0VPL1J1b3RkdkdWY3BGdDRjRWdCVGlRWUJaZU5iSFVpZkNmKzJ1?=
- =?utf-8?B?R1dqcUNaNjBTM05RM1FiWm1xeU43MVd2S3JGY09OQldQQW82ejlVc0R4Vk5j?=
- =?utf-8?B?RWZiMVNhaDdLZkJ3T3N1U3Z2OEQvTm81VUk5WnJMZUlBOXQ0SThxb296Mnox?=
- =?utf-8?B?UTZBRnpjZU1lQlVoejl3Z2g3SU9yUXFiOURLNXpoblhvVTgwZTY1enBjajVI?=
- =?utf-8?B?OEZZT1pnOU50NmJVUkNTN3NIajJCN2RMeUZUTEJUTW9Kd3J2K1JzNFo3QUs2?=
- =?utf-8?B?bGFzSnZJQU15b3ZSNVU1TTZvZkNuK29XWm9JMnJENjFKZDdOOVIxQUxZL1p2?=
- =?utf-8?B?SHBXWHFENjkwTDB1cjhicGY2VitNbFN6dlplVnNERmIvMEpYQVJ3a0orVmVo?=
- =?utf-8?B?ZU5lTHlNSEYzQVNGV29Nb2ZUTkdMNWtGNVlPR0lJbkcwVHhiZlZRMTI3RmFI?=
- =?utf-8?B?Wlpzd3VTcCtoR2NtYVlQUnprRXVSM24zR2dwcUFEVkdYclRON3NEcHB3WjlY?=
- =?utf-8?B?ZkFxVklIU0t0TXFBaldLVGEzWVhHT2UrUi9Jc3BQMzFxQy96b0VSbklSL09J?=
- =?utf-8?B?K0phekcvYUtTZTlnbS93eWdDdnFFWWZCQWhRMnBwTTlrdU02K1U0b0Z6cDBr?=
- =?utf-8?B?U3U2N0FVMU1pK1BWa0VlVXcvYnVBOUhuUnRyUElKK1I2YWxTVlI3SnNqa29j?=
- =?utf-8?B?akRxSHpneVRGeFVqUlgyenpXNHUxZ1FlcVBSV0hWWHJFQmh2Z1c0ZUhrTHVT?=
- =?utf-8?B?aHI5SEdNSzJJWm1TUWhhUXoyemhEZjkzbTRzTjZQVUhHL1pTdXVhWTdZUUZ0?=
- =?utf-8?B?REJIWkxZZUNKeEtvSVo0aUlWRkZ0UjJFNDJNNUpxMExNWWRQbmpSeVUvU1pK?=
- =?utf-8?B?Y0VWZ2thUFJDM3NRRnV2UDUwWDZrNGtrWDVXTHRsYVdLdGpqZVh5WFk0dEJZ?=
- =?utf-8?B?N2tJc3ZXZVlaak82REdkdTZmaDNieXhpUm5RNWhUQVNLd0RVdFdFdXF5MWtB?=
- =?utf-8?B?WDJSRUw4dktFYXNzT1dCTjZFS0MrUHFjaE4rWG02TDdEMlpCNkRmQ3JUcTZQ?=
- =?utf-8?B?ekNtbTBZQ2FpNTdDMkhpd1NPVHp0S1RkN0ZIeThraE9ka25YTlJkRitRYTdS?=
- =?utf-8?B?SnNQTEUwQWs0OFYrZ0pZRWorOWpLZ0sxdHc0VkJiazViNmdrM20xVmc4dFIv?=
- =?utf-8?B?dkh1MDA3eDBZano5SDdkc0NJZ1pJOVdUVjJ5cGFXbU5Ra1FQMVVTbnNFcytv?=
- =?utf-8?B?aVpRQnF5RDRZbDcvS1dKZ1RRZkdzSWFpd0Q5cGtRejgzakhUS24rN2xJUWtP?=
- =?utf-8?B?aTRvTkFxK3ByZUQ4eVdLL0RaVkwvdERmM29jSE83WmhYTFRpNGRvSVZkblE4?=
- =?utf-8?B?TTNFNk9FZmd5ZWlXbnpKeER6cyt4K0E9PQ==?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dGI5QmxiMXVLZDYza214Wklwb21aUUxwY0pmb2tCMjJtS1ZLOWpEN2RMNEls?=
- =?utf-8?B?bWRDWFQ3REFFNEt4OVlnajV5MW5pNVovQjBaWmEyMVJ1UkErUWxqSE5MTlU0?=
- =?utf-8?B?TkwyT0M4MFozbkhicjZSZktqZWdrb1ViZU5kR0g0ZWt4c2hJMW02OWxVSFRF?=
- =?utf-8?B?N2k2b3puZ2hFN0xjK1VIWWlENWRjdTMwU29STVZsbnM5VTFFYVk1N0QrZVpO?=
- =?utf-8?B?Q01lRGZsQXlsTFFJL1dHWW5sZ2lWd1BpQnFoa1UrNTg3bTdMN2p0L1ZrRnJm?=
- =?utf-8?B?eGg2ZUo1MDBZOGhmS0gwbWtzczdGL21oU2RpUmNFWFJDR3Y3cmZDVkRJaU8r?=
- =?utf-8?B?TmhHKzhsUGdsM1Ftcys1WTlRZmd3V3dMK0Rld2psM0ljVURTdGVId1lra3ZT?=
- =?utf-8?B?U0V4UUtUNFhxLzRlQ3I0TzlObnZSY3gxa0N0cU9jVXdyYytuQkNJT0RhS01x?=
- =?utf-8?B?RWhOdlBCd1c5ZmRIUGpiNHlJTUt5NzhBemhkcU5LazM3MG41bzlFa2ZVRU1j?=
- =?utf-8?B?SkpoS2x4dytmUVZQUGRXNEVGN3N3UTd0N0VLblU3MGIvL3Vla0lGc1JoTHhJ?=
- =?utf-8?B?VU52eXhzclJvaEw3NzBYSS9jVjAvRzloeWJPZVdSU05INmR5TFZ2ak9acEVT?=
- =?utf-8?B?VTI1VG9rblRTVUQ0WVY5M2pVc2JiVm1zUXQxbEw2LzBlS2M5QjVCNlBPOXdC?=
- =?utf-8?B?M0xsS29mVFkzMXNXWmtybitSeUkrbE03WTlLYUpLcnZyNDNpZE1jTWhaMWRx?=
- =?utf-8?B?UnBuVnFab3Zod3JIZ3pVY3Q2OFYrQmNXZHhsMlJwSm9NNzR1S0I0S0RUdnZE?=
- =?utf-8?B?MzVOTFZWUDI3Q21jYWg5dkhPY0tBM2NPL2NPYXI3SUZhaTBIY1AzazRreXpL?=
- =?utf-8?B?U3E5MXYrQUFoeEhBUDkxcXRRbWRxNjNPTFZkOHN5NUVFLzdzQ3d4L1RBbjdo?=
- =?utf-8?B?SzAwT1JyaWEvMS9jUk1ldERpazJEc2JvaVAwUVpvcjdvS2FZWG53MnVWUDdR?=
- =?utf-8?B?dTZld1F2SzZXWnNPU1lrZTVDa1VHeWFoSkZVbWpRa2FpSnJUVTB6aFNYMkY3?=
- =?utf-8?B?SGdJbEh2QTVMQWhsaWxrNlNVYitkcUJ4ekJtUlQ1UmZUTXFVWHNrTFVrS2hv?=
- =?utf-8?B?Q3FidnlldFZtOWNJL2gvVWxBN2ErVVRnNDJsdm9PWlpmQlo2Mk9TY0JEd0th?=
- =?utf-8?B?clFVL2xONWo4OTZ3aitTbmFFUUpkZFloM0djZVppVVBIcnBNSGFDRWhZZVls?=
- =?utf-8?B?WVJWOEQ2d1U1Z29PWGJTTWZWOSt6MG9FNWFoK2pQNnhDTUhsSUFxMzRPcDNQ?=
- =?utf-8?B?bjV4L29vLzBTK1NjTlh6YUtRbHV2ZUQ0amhrbWUvbms4VE5ML0hqY3JzUjEz?=
- =?utf-8?B?c2hwY1FoMGNDN1lXcnIrcm1aMEwyYnJrRWJHbXFMTEFYLzZoS2FDcG0vUklh?=
- =?utf-8?B?bnBRZWQ5UURBaVcwUklrMmtITDlTSWZTcjhPRUk2TG5mWWJlUmc3M05TTE9s?=
- =?utf-8?B?TjZTZ28zZkh0bTFVNFBBNXpTc011ZnFCeUExUU02ZS9ZN05pR3NRamJNZ2Rx?=
- =?utf-8?B?YnNIbXdLdVFLVkg3czlQR3F6Y0R0UWVuMmd1VlpRWExENnNtNzNqdkNXU2RH?=
- =?utf-8?B?UUlaR1dLRHBtNFZFY0ZMK1dFRHloR1JPWmFIUFVtQkNCZjBDb2RpeXdzb1gy?=
- =?utf-8?B?ZEJDZDZpS0lIejBmZm9YRW02Rzl2NFI5L0lIY2o2WXlibEJwVHhHM1dxNGdU?=
- =?utf-8?Q?b1wsPPxgeToS1rSowLevy8D7HyAKvlqCoLpVDRf?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75ebd784-87f2-4f66-5bee-08ddc856540c
-X-MS-Exchange-CrossTenant-AuthSource: MAUPR01MB11072.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2025 12:58:46.3297
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB5517
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/6] spi: spi-fsl-dspi: Store status directly in
+ cur_msg->status
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Larisa Grigore <larisa.grigore@nxp.com>,
+ Frank Li <Frank.li@nxp.com>, Christoph Hellwig <hch@lst.de>,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20250627-james-nxp-spi-dma-v4-0-178dba20c120@linaro.org>
+ <20250627-james-nxp-spi-dma-v4-2-178dba20c120@linaro.org>
+ <20250627213041.vp6yfcgf4xysdklf@skbuf>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <20250627213041.vp6yfcgf4xysdklf@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-On 2025/7/20 16:31, Zixian Zeng wrote:
-> Add support SPI NOR flash memory controller for SG2042, using upstreamed
-> SG2044 SPI NOR driver.
->
-> Tested on SG2042 Pioneer Box, read, write operations.
-> Thanks Chen Wang who provided machine and guidance.
->
-> Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
 
-Reviewed-by: Chen Wang <unicorn_wang@outlook.com> & Tested-by: Chen Wang 
-<unicorn_wang@outlook.com>
+On 27/06/2025 10:30 pm, Vladimir Oltean wrote:
+> On Fri, Jun 27, 2025 at 11:21:38AM +0100, James Clark wrote:
+>> This will allow us to return a status from the interrupt handler in a
+>> later commit and avoids copying it at the end of
+>> dspi_transfer_one_message(). For consistency make polling and DMA modes
+>> use the same mechanism.
+>>
+>> Refactor dspi_rxtx() and dspi_poll() to not return -EINPROGRESS because
+>> this isn't actually a status that was ever returned to the core layer
+>> but some internal state. Wherever that was used we can look at dspi->len
+>> instead.
+>>
+>> No functional changes intended.
+>>
+>> Signed-off-by: James Clark <james.clark@linaro.org>
+>> ---
+> 
+> This commit doesn't work, please do not merge this patch.
+> 
+> You are changing the logic in DMA mode, interrupt-based FIFO and PIO all
+> in one go, in a commit whose title and primary purpose is unrelated to
+> that. Just a mention of the type "while at it, also do that". And in
+> that process, that bundled refactoring introduces a subtle, but severe bug.
+> 
+> No, that is discouraged. Make one patch per logical change, where only
+> one thing is happening and which is obviously correct. It helps you and
+> it helps the reviewer.
+> 
+> Please find attached a set of 3 patches that represent a broken down and
+> corrected variant of this one. First 2 should be squashed together in
+> your next submission, they are just to illustrate the bug that you've
+> introduced (which can be reproduced on any SoC in XSPI mode).
+> 
+> The panic message is slightly confusing and does not directly point to
+> the issue, I'm attaching it just for the sake of having a future reference.
+> 
+> [    4.154185] DSA: tree 0 setup
+> [    4.157380] sja1105 spi2.0: Probed switch chip: SJA1105S
+> [    4.173894] sja1105 spi2.0: configuring for fixed/sgmii link mode
+> [    4.232527] sja1105 spi2.0: Link is Up - 1Gbps/Full - flow control off
+> [    4.312798] sja1105 spi2.0 sw0p0 (uninitialized): PHY [0000:00:00.3:07] driver [RTL8211F Gigabit Ethernet] (irq=POLL)
+> [    4.443689] sja1105 spi2.0 sw0p1 (uninitialized): PHY [0000:00:00.3:00] driver [Microsemi GE VSC8502 SyncE] (irq=POLL)
+> [    4.575718] sja1105 spi2.0 sw0p2 (uninitialized): PHY [0000:00:00.3:01] driver [Microsemi GE VSC8502 SyncE] (irq=POLL)
+> [    4.588012] Unable to handle kernel paging request at virtual address ffff8000801ac000
+> [    4.595960] Mem abort info:
+> [    4.598757]   ESR = 0x0000000096000007
+> [    4.602515]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    4.607843]   SET = 0, FnV = 0
+> [    4.610902]   EA = 0, S1PTW = 0
+> [    4.614048]   FSC = 0x07: level 3 translation fault
+> [    4.618939] Data abort info:
+> [    4.621822]   ISV = 0, ISS = 0x00000007, ISS2 = 0x00000000
+> [    4.627323]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [    4.632388]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [    4.637714] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000082b7a000
+> [    4.644437] [ffff8000801ac000] pgd=0000000000000000, p4d=1000002080020403, pud=1000002080021403, pmd=1000002080022403, pte=0000000000000000
+> [    4.657016] Internal error: Oops: 0000000096000007 [#1]  SMP
+> [    4.662693] Modules linked in:
+> [    4.665756] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.16.0-rc3+ #30 PREEMPT
+> [    4.673615] Hardware name: random LS1028A board
+> [    4.679116] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    4.686103] pc : dspi_8on32_host_to_dev+0x8/0x24
+> [    4.690742] lr : dspi_fifo_write+0x178/0x1cc
+> [    4.695025] sp : ffff800080003eb0
+> [    4.698346] x29: ffff800080003ec0 x28: ffffc25414698b00 x27: ffffc2541464c170
+> [    4.705512] x26: 0000000000000001 x25: ffffc25414b06000 x24: 0000000111705fd3
+> [    4.712677] x23: ffffc25414257bae x22: ffff8000801ab5e8 x21: 00000000fffffd98
+> [    4.719842] x20: 0000000000000000 x19: ffff00200039a480 x18: 0000000000000006
+> [    4.727007] x17: ffff3dcc6b076000 x16: ffff800080000000 x15: 0000000078b30c40
+> [    4.734171] x14: 0000000000000000 x13: 0000000000000048 x12: 0000000000000128
+> [    4.741335] x11: 0000000000000001 x10: 0000000000000000 x9 : 0000000100010001
+> [    4.748500] x8 : ffff8000801ac000 x7 : 0000000000000000 x6 : 0000000000000000
+> [    4.755664] x5 : 0000000000000000 x4 : ffffc25411a308d0 x3 : 0000000000000000
+> [    4.762828] x2 : 0000000000000000 x1 : ffff800080003eb4 x0 : ffff00200039a480
+> [    4.769992] Call trace:
+> [    4.772441]  dspi_8on32_host_to_dev+0x8/0x24 (P)
+> [    4.777074]  dspi_interrupt+0x6c/0xf0
+> [    4.780747]  __handle_irq_event_percpu+0x8c/0x160
+> [    4.785470]  handle_irq_event+0x48/0xa0
+> [    4.789319]  handle_fasteoi_irq+0xf4/0x208
+> [    4.793428]  generic_handle_domain_irq+0x40/0x64
+> [    4.798060]  gic_handle_irq+0x4c/0x110
+> [    4.801820]  call_on_irq_stack+0x24/0x30
+> [    4.805757]  el1_interrupt+0x74/0xc0
+> [    4.809346]  el1h_64_irq_handler+0x18/0x24
+> [    4.813457]  el1h_64_irq+0x6c/0x70
+> [    4.816867]  arch_local_irq_enable+0x8/0xc (P)
+> [    4.821330]  cpuidle_enter+0x38/0x50
+> [    4.824914]  do_idle+0x1c4/0x250
+> [    4.828152]  cpu_startup_entry+0x34/0x38
+> [    4.832087]  kernel_init+0x0/0x1a0
+> [    4.835500]  start_kernel+0x2ec/0x398
+> [    4.839175]  __primary_switched+0x88/0x90
+> [    4.843200] Code: f9003008 d65f03c0 d503245f f9402c08 (b9400108)
+> [    4.849313] ---[ end trace 0000000000000000 ]---
+> [    4.853943] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+> [    4.860840] SMP: stopping secondary CPUs
+> [    4.864788] Kernel Offset: 0x425391a00000 from 0xffff800080000000
+> [    4.870900] PHYS_OFFSET: 0xfff1000080000000
+> [    4.875093] CPU features: 0x1000,000804b0,02000801,0400421b
+> [    4.880683] Memory Limit: none
+> [    4.883750] ---[ end Kernel panic - not syncing: Oops: Fatal exception in interrupt ]---
+> 
+> I still intend to do more testing, so please don't send the next version
+> just yet. Tracking down this issue took a bit more than I was planning.
 
-Note I just have pioneerbox/sg2042 so I can only run with my board in hand.
+Hi Vladimir,
 
-Hi, Longbin,
+Just wanted to check if you are ok for me to send a new version with 
+your fixes included now?
 
-As you are auther of this SPI driver, can you please help review and 
-test it on sg2044?
+I assume from the other discussion that we don't want to always enable 
+DMA mode either, and we'll just leave it for s32g target mode only?
 
-Thanks,
+Thanks
+James
 
-Chen.
-
-> ---
-> Changes in v4:
-> - patch1: Explain why SG2042 is not compatible with SG2044 and add Fixes tag.
-> - patch2: Explain the hardware differences between SG2042 and SG2044.
-> - patch4: Remove the extra "sophgo,sg2044-spifmc-nor" compatible property.
-> - Link to v3: https://lore.kernel.org/r/20250629-sfg-spifmc-v3-0-28db1f27e999@gmail.com
->
-> Changes in v3:
-> - Drop the patch which adds additional flash_info into gigadevice.c
-> - patch1: Because of the incompatibility, separate the SG2042 from the previous fallback mechanism to independent one.
-> - patch2: Newly add configurable options to spi-sg2044-nor driver.
-> - patch3: Fix reading bytes issue that causes the spi_nor_check_sfdp_signature() failure on SG2042.
-> - Link to v2: https://lore.kernel.org/r/20250525-sfg-spifmc-v2-0-a3732b6f5ab4@gmail.com
->
-> Changes in v2:
-> - patch1: Accept devicetree nodes whose compatible contains only
->    "sophgo,sg2044-spifmc-nor" to avoid breaking existing devicetrees.
-> - patch1: Improve the commit subject message.
-> - patch2: Dump the SFDP information to commit message.
-> - Link to v1: https://lore.kernel.org/r/20250523-sfg-spifmc-v1-0-4cf16cf3fd2a@gmail.com
->
-> ---
-> Zixian Zeng (4):
->        spi: dt-bindings: spi-sg2044-nor: Change SOPHGO SG2042
->        spi: spi-sg2044-nor: Add configurable chip_info
->        spi: spi-sg2044-nor: Add SPI-NOR controller for SG2042
->        riscv: dts: sophgo: Add SPI NOR node for SG2042
->
->   .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |  9 +++----
->   .../riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts | 24 ++++++++++++++++++
->   arch/riscv/boot/dts/sophgo/sg2042.dtsi             | 24 ++++++++++++++++++
->   drivers/spi/spi-sg2044-nor.c                       | 29 +++++++++++++++++++---
->   4 files changed, 77 insertions(+), 9 deletions(-)
-> ---
-> base-commit: 8727665368cd4af112146b650ec0ebac038b5cf5
-> change-id: 20250523-sfg-spifmc-7a910290e964
->
-> Best regards,
 
