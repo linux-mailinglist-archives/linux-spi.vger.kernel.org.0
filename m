@@ -1,97 +1,118 @@
-Return-Path: <linux-spi+bounces-9147-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9148-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C921DB0C736
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 17:04:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851C2B0C849
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 17:57:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D42F91885A96
-	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 15:04:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 268186C469C
+	for <lists+linux-spi@lfdr.de>; Mon, 21 Jul 2025 15:56:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C9A2DC33A;
-	Mon, 21 Jul 2025 15:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 284452E0415;
+	Mon, 21 Jul 2025 15:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsNd9AKH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mzesJ5k8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02E019DF62;
-	Mon, 21 Jul 2025 15:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6072E03FA;
+	Mon, 21 Jul 2025 15:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753110247; cv=none; b=gNIMJ8qvvazmSCNkuUYz7lsqlnsKAhr4oEpcsvUSenlvDnIlZ4agaAzwfzHNkCB9vBEoPIazx5ifiofegav9Dxk0uhu9jJOSdbz8iAjgyCDYRR4JSrIUO+IzXQs8/A2LYXUQgF7wEsjdxjY7ZNozpAPpJ8C2uU3QnaxEkhfQZNU=
+	t=1753113376; cv=none; b=k+Tj3/w35dYai5ibkHmx9Mbrv5TFUgfQeQ9GLXLTmzLXeVY++8udMPaYSmSXODMeZzjmLIPlDR5l71fsZuX7pdcMGxz4OW6wRA/OYwcJMov2WXJEpyqK/XJGnYnbWx/34RupjwbAo9BgBrlDpmkTS19maxKR5zjbnMsYZSjuLTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753110247; c=relaxed/simple;
-	bh=FLrgL/2CQHP/2rDn4k8Q9+fTGuPnmR1UdDZyhqyII30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QlQRzt6APcux+IH9lHWutwGhAOw8Ssat6xcjCyeOCzfHB3L7ANadSRLv47SlZi/WYRpak3RDWMTOpSyAEAZbZnlyArCouQ82VGM1cRYR02NwHLKkAw9Yn+QUZZd0aidDkyIrCbEURZzD9dZ+DVZnozemBD9DnHT7y4c8P2D0xUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsNd9AKH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7ADC4CEED;
-	Mon, 21 Jul 2025 15:04:06 +0000 (UTC)
+	s=arc-20240116; t=1753113376; c=relaxed/simple;
+	bh=RmvVp8Cc5s3PNQobge2CUWiM9uh0u33UicVxKxhwc00=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Gyy3+xesZaGNd5ccBU6rwYv/c0XCxs9BtRTm/DEPtADCkalXmWeSYCau2+f9EllxXbQnRbLoNvgvqcRzprgLmYpyMOKuvM/otKR4uZUD6rudh7PTYlqC5IMA5I5WXXGXagH04STBj60CcYqfgN5mwScHbtPpixn0z9CuPdMaVZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mzesJ5k8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D872C4CEED;
+	Mon, 21 Jul 2025 15:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753110246;
-	bh=FLrgL/2CQHP/2rDn4k8Q9+fTGuPnmR1UdDZyhqyII30=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DsNd9AKHEl+5WkV7edBAvBM4qUfQGgPFJ/0UEUsVYqkGNqOYXvpZHTqQ0xrOpYHbw
-	 WMAFA8BP4vQxeWzIGwNtCBT3/VqQMvFIJ2XqTFKX12vGbfx8PFPUnTnonzso5vT9VM
-	 Hmu+g5eCLqDXj4O8P4gj3OLbmhs/h0wx4BLpwErG/EBzWL9FA8XBxtVoemQg2PmSC1
-	 dFazGm3Yn93j6sykZ6I+sJ6Qq4WGi6M1vsWn9Zn7lfrW7PlIRFsmqK+fTW83UcTcDn
-	 dUL9vjL0rB92sheTqOMpWuBVC/T5RIUBG46TjUiOQmlSq+ucs86spaxg+txZmV2c5D
-	 gFHHEAmmPB9Kg==
-Date: Mon, 21 Jul 2025 10:04:05 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Zixian Zeng <sycamoremoon376@gmail.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Mark Brown <broonie@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, linux-spi@vger.kernel.org,
-	Longbin Li <looong.bin@gmail.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-riscv@lists.infradead.org,
-	Conor Dooley <conor.dooley@microchip.com>, sophgo@lists.linux.dev,
-	Chen Wang <unicorn_wang@outlook.com>, linux-mtd@lists.infradead.org,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Michael Walle <mwalle@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>
-Subject: Re: [PATCH v4 1/4] spi: dt-bindings: spi-sg2044-nor: Change SOPHGO
- SG2042
-Message-ID: <175311024481.634831.11395873009603964562.robh@kernel.org>
-References: <20250720-sfg-spifmc-v4-0-033188ad801e@gmail.com>
- <20250720-sfg-spifmc-v4-1-033188ad801e@gmail.com>
+	s=k20201202; t=1753113375;
+	bh=RmvVp8Cc5s3PNQobge2CUWiM9uh0u33UicVxKxhwc00=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=mzesJ5k8af1yqWf95XwEexGnQdlboi/uiIG5R/a5H2hgmcMzJqbwL3o3LTzr9PtHi
+	 n+I2d/MMeEqRRGxuoM+ZL/D/lgxAodi9PnUZQcq5J+e2c1hcHvJxDtlE6MC7K36ZN/
+	 MDVgMqXN5nS6Dsh38Q4AjUZcFB970DMHP8iNkmhyad2Wna6kdYHbgh22I3Ms1hl14x
+	 kPC93tv+L4Rfp3nTqjM3CP7ubRvOll5FU144rkE3RT1AumWpSyYLm8/u4Kmp//zugD
+	 f6B55wu4pf3Bp0tkrPFZk+KvH0aoWZ4OCmt0urScl8JFZdN4NLDHdr/oYzozquZfq5
+	 q7SBhclNl6j9Q==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, Heiko Schocher <hs@denx.de>
+Cc: linux-kernel@vger.kernel.org, Andrei Lalaev <andrey.lalaev@gmail.com>, 
+ Chanh Nguyen <chanh@os.amperecomputing.com>, 
+ Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>, 
+ Grant Peltier <grantpeltier93@gmail.com>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Michal Simek <michal.simek@amd.com>, 
+ Naresh Solanki <naresh.solanki@9elements.com>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Rob Herring <robh@kernel.org>, Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+ devicetree@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20250719063355.73111-1-hs@denx.de>
+References: <20250719063355.73111-1-hs@denx.de>
+Subject: Re: (subset) [PATCH v1 0/3] spidev: introduce trivial abb sensor
+ device
+Message-Id: <175311337130.327079.7374455187420344577.b4-ty@kernel.org>
+Date: Mon, 21 Jul 2025 16:56:11 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250720-sfg-spifmc-v4-1-033188ad801e@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-
-On Sun, 20 Jul 2025 16:31:43 +0800, Zixian Zeng wrote:
-> With further testing, directly using the spi-sg2044-nor driver on SG2042
-> does not work. SG2042 is found to lack full compatibility with SG2044.
-> SG2044 has OPT register and it's necessary to write but SG2042 does not.
-> Due to other possible hardware detail differences, it is better
-> to bind SG2042 independently.
+On Sat, 19 Jul 2025 08:33:51 +0200, Heiko Schocher wrote:
+> This series introduces the changes needed for trivial spi
+> based sensors from ABB, currently operated from userspace.
 > 
-> Fixes: 8450f1e0d3d0 ("spi: dt-bindings: spi-sg2044-nor: Add SOPHGO SG2042")
-> Signed-off-by: Zixian Zeng <sycamoremoon376@gmail.com>
-> ---
->  Documentation/devicetree/bindings/spi/spi-sg2044-nor.yaml | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+> The last patch adds the spidevices to the DTS files, already
+> in mainline.
 > 
+> make dtbs_check showed no errors/warnings for the dts files
+> 
+> [...]
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/3] dt-bindings: trivial-devices: Document ABB sensors
+      commit: aad2f87cbcab56b322109d26d7b11842a09df91f
+[2/3] spi: spidev: Add an entry for the ABB spi sensors
+      commit: d60f7cab7c04944a79af16caa43c141e780a59c6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
