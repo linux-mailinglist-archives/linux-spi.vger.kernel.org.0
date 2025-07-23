@@ -1,95 +1,87 @@
-Return-Path: <linux-spi+bounces-9159-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9160-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6050DB0F248
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 14:30:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5ABAB0F451
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 15:43:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75407583DFB
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 12:30:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F753B527D
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 13:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDDB2E613C;
-	Wed, 23 Jul 2025 12:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1212E7F07;
+	Wed, 23 Jul 2025 13:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDKXNKuS"
+	dkim=pass (2048-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b="MyEuCp8j";
+	dkim=permerror (0-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b="VrfC2+B5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.adomerle.pw (mail.adomerle.pw [185.125.100.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D082E6126;
-	Wed, 23 Jul 2025 12:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C952E7165;
+	Wed, 23 Jul 2025 13:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.100.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753273786; cv=none; b=Osw5x5p+4APDDu4D3U2r+/CPosy5Yx+tahfGqkt5eRuoGPgyieZFIFKJjwAZGfzHJIeFsBaogR5hdM3XP0sIP7i3wIwU2wj2tAp5X8OzhirfBugZGRl//WUvqWhzSdIcz7I1p1elJtM4AXzce5YS60tn+PO3pp2TdB2vFoXxL34=
+	t=1753278210; cv=none; b=uMDrK0yIMarL2/gwQvwh1Q+YHqirPEYJHHGFy1gbTzuuDsmXzXJgeUjFey2EeBOHJgvD+LJZ1FFuhkSWl6QyFUKAZKRDKkeQU7ihoX/HHenveLnZXQLr7XnHOkus6bT3K/4dq6PYEyjhrQ+T4mKn6ikXHJ55xbWNx217o38xJbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753273786; c=relaxed/simple;
-	bh=a4fvJoudeLBpuYC8iOBx3Lt7u9y0axaehN+8SLluXMA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=QXShBuD/t6pFaaLW7VJH4/hmQqqtjlFqRQT+nw03u0xX7flcZ4qwWwtiv6qjYTa02GtflrMGZOh8MnwnYTDbHWbcG9lYTHp39VXfZEohg2RE+zcqYcsllN5qKnvW8z/+5ZpKdBV0yESU/fF4rhouYJx1ymyRnFvymyGxLsvliog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDKXNKuS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38281C4CEF5;
-	Wed, 23 Jul 2025 12:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753273785;
-	bh=a4fvJoudeLBpuYC8iOBx3Lt7u9y0axaehN+8SLluXMA=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BDKXNKuSudGsrwbCFls9lMNbGe3HBVy+R7d3MLycJRWLcWzEYfLnDvyNU4MU3RsPF
-	 u+7zPxhRMfOwKd3kfj0WAxcE/L83lYJdVGnlC0Wjd8Xo36b4655zobf8MnN2FVrGRU
-	 y+QPZkGGY4QhCmFw+kXE8EdlZiejwd9llsKKPYujKHcc2IF1v8+2TFMtjgLDvAXCIX
-	 ydcw72rxfEv/KkLLbGN3Usc8tvgaCOikFKvx+2UZgHJ1MNlAg1QdLDqyDezPrJDsKy
-	 hj/Lzvj7apcBLQiy3IxV9yvl+IQMHp0QwDyOWbuPYNPgDC8CVglq+jim+tneF415cw
-	 oSWGV//JX1m+A==
-From: Vinod Koul <vkoul@kernel.org>
-To: linux@armlinux.org.uk, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com, 
- herbert@gondor.apana.org.au, davem@davemloft.net, andi.shyti@kernel.org, 
- lee@kernel.org, broonie@kernel.org, gregkh@linuxfoundation.org, 
- jirislaby@kernel.org, arnd@kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
- dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
- o.rempel@pengutronix.de, daniel.machon@microchip.com, 
- Robert Marko <robert.marko@sartura.hr>
-Cc: luka.perkov@sartura.hr
-In-Reply-To: <20250702183856.1727275-1-robert.marko@sartura.hr>
-References: <20250702183856.1727275-1-robert.marko@sartura.hr>
-Subject: Re: (subset) [PATCH v8 00/10] arm64: lan969x: Add support for
- Microchip LAN969x SoC
-Message-Id: <175327377884.189941.15214972441246653208.b4-ty@kernel.org>
-Date: Wed, 23 Jul 2025 17:59:38 +0530
+	s=arc-20240116; t=1753278210; c=relaxed/simple;
+	bh=axLciYc0DjxkH9pCxsN2v6yAL/K5kNdDcS6CRQnvp7A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WqPrqXuR50TGYm6xzrwUsb+wJXyHy+Fdz0Mqy3RQTB4CICblMwhHYngqoPvHGtLHFFD1L7BVngWXlMhx/buPUZ45Q1807yp7nbiTx+HZiiya685Jve038a3XCAho3YM5zwDmb2QMysmcpIJndQtvhCZSgdApfrF4DqgzoQMl0L4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=adomerle.pw; spf=pass smtp.mailfrom=adomerle.pw; dkim=pass (2048-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b=MyEuCp8j; dkim=permerror (0-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b=VrfC2+B5; arc=none smtp.client-ip=185.125.100.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=adomerle.pw
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=adomerle.pw
+DKIM-Signature: v=1; a=rsa-sha256; s=202506r; d=adomerle.pw; c=relaxed/relaxed;
+	h=To:Subject:From:Date:Message-ID; t=1753278174; bh=eWmW202fKN2m55O+smSp46+
+	HpeMk9N6O4tiZVZkb404=; b=MyEuCp8jLg3wVPiud2UbpWmVecvRtsBgHmk0wFbcKT0UQGl5uB
+	+ULUxVUCfThbckljFSg4ucQsiD7wL43Yzn9WiyZcvKoVSWyZSOJRWxG+nej/xl8p5S7QjOm71aE
+	nkMXT22G29dBlb90mRNyTBciN1duOUOZTCVzalIQvVkStbM09kHinSlIMRJjePNvmBrS38d/Bn1
+	E2HhqIMZxbOoW2XP9KSMiqju9KPnFbA9vmGQFJvZzTcD24MNgMyifA4bkvK6GhAVq+aVZHwwCBs
+	8Kqg8AeNBcUbmQT2io5pUX6TxwfCAF3+VhUfLQE09teaq46mzT+Ty8akSgRpg+UQtCg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202506e; d=adomerle.pw; c=relaxed/relaxed;
+	h=To:Subject:From:Date:Message-ID; t=1753278174; bh=eWmW202fKN2m55O+smSp46+
+	HpeMk9N6O4tiZVZkb404=; b=VrfC2+B5FlWRLIEq4PKFokKKZ4PVXdA4j+Osyj+L1kI9BPgFf8
+	hbg1/rpADS6lx/f2JfuFPIrm30tIKlfptwAw==;
+Message-ID: <3c6cb602-63c4-4384-b4f6-1705167d3759@adomerle.pw>
+Date: Wed, 23 Jul 2025 17:42:52 +0400
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+From: Arseniy Velikanov <me@adomerle.pw>
+Subject: Re: [PATCH v1] dt-bindings: spi: mt65xx: Add compatible for MT6789
+To: Rob Herring <robh@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Leilk Liu <leilk.liu@mediatek.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ ~postmarketos/upstreaming@lists.sr.ht
+References: <20250715231921.4527-1-me@adomerle.pw>
+ <20250720223451.GA2915764-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20250720223451.GA2915764-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
 
-
-On Wed, 02 Jul 2025 20:35:58 +0200, Robert Marko wrote:
-> This patch series adds basic support for Microchip LAN969x SoC.
+On 21.07.2025 02:34, Rob Herring wrote:
+> On Wed, Jul 16, 2025 at 03:19:21AM +0400, Arseniy Velikanov wrote:
+>> Add a SPI controller binding for the MT6789 SoC. As a note,
+>> MT6893 SPI is fully compatible with this SoC.
 > 
-> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
-> which allows to avoid the need to change dependencies of the drivers that
-> are shared for Microchip SoC-s in the future.
-> 
-> DTS and further driver will be added in follow-up series.
-> 
-> [...]
+> Then you should have a fallback compatible. Otherwise, there is no
+> driver change here, so how would this even work?
+>
+Thanks for feedback! I plan to send a fix in a new patch series, where I
+will add support for all compatible hardware.
 
-Applied, thanks!
-
-[08/10] dma: xdmac: make it selectable for ARCH_MICROCHIP
-        commit: e56982021f5303b2523ac247e3c79b063459d012
-
-Best regards,
 -- 
-~Vinod
-
-
+Kind regards,
+Arseniy.
 
