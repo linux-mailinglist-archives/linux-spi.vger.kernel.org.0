@@ -1,87 +1,104 @@
-Return-Path: <linux-spi+bounces-9160-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9161-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5ABAB0F451
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 15:43:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C75B0F75D
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 17:46:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F753B527D
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 13:43:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D31D816691C
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 15:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1212E7F07;
-	Wed, 23 Jul 2025 13:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A19FAC148;
+	Wed, 23 Jul 2025 15:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b="MyEuCp8j";
-	dkim=permerror (0-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b="VrfC2+B5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KQtwpykz"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.adomerle.pw (mail.adomerle.pw [185.125.100.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C952E7165;
-	Wed, 23 Jul 2025 13:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.100.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7673E2E370E;
+	Wed, 23 Jul 2025 15:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753278210; cv=none; b=uMDrK0yIMarL2/gwQvwh1Q+YHqirPEYJHHGFy1gbTzuuDsmXzXJgeUjFey2EeBOHJgvD+LJZ1FFuhkSWl6QyFUKAZKRDKkeQU7ihoX/HHenveLnZXQLr7XnHOkus6bT3K/4dq6PYEyjhrQ+T4mKn6ikXHJ55xbWNx217o38xJbQ=
+	t=1753285574; cv=none; b=ecCifr9moOBq4VW6Efq4ONKHOqaWqmqz15GskT/J0AYkZC1rrva37YZxDYMeGQV/g0v6xVEUr5RNRofeyfqvO6Oz1d/Ni+/Kxp7jTE89fBgp1k4OtcSq5pIoHa46WoDi57RzqVbidBoI+/1ZF0Zs6HvwXg/IZhOUm2sV+pdasS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753278210; c=relaxed/simple;
-	bh=axLciYc0DjxkH9pCxsN2v6yAL/K5kNdDcS6CRQnvp7A=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=WqPrqXuR50TGYm6xzrwUsb+wJXyHy+Fdz0Mqy3RQTB4CICblMwhHYngqoPvHGtLHFFD1L7BVngWXlMhx/buPUZ45Q1807yp7nbiTx+HZiiya685Jve038a3XCAho3YM5zwDmb2QMysmcpIJndQtvhCZSgdApfrF4DqgzoQMl0L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=adomerle.pw; spf=pass smtp.mailfrom=adomerle.pw; dkim=pass (2048-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b=MyEuCp8j; dkim=permerror (0-bit key) header.d=adomerle.pw header.i=@adomerle.pw header.b=VrfC2+B5; arc=none smtp.client-ip=185.125.100.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=adomerle.pw
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=adomerle.pw
-DKIM-Signature: v=1; a=rsa-sha256; s=202506r; d=adomerle.pw; c=relaxed/relaxed;
-	h=To:Subject:From:Date:Message-ID; t=1753278174; bh=eWmW202fKN2m55O+smSp46+
-	HpeMk9N6O4tiZVZkb404=; b=MyEuCp8jLg3wVPiud2UbpWmVecvRtsBgHmk0wFbcKT0UQGl5uB
-	+ULUxVUCfThbckljFSg4ucQsiD7wL43Yzn9WiyZcvKoVSWyZSOJRWxG+nej/xl8p5S7QjOm71aE
-	nkMXT22G29dBlb90mRNyTBciN1duOUOZTCVzalIQvVkStbM09kHinSlIMRJjePNvmBrS38d/Bn1
-	E2HhqIMZxbOoW2XP9KSMiqju9KPnFbA9vmGQFJvZzTcD24MNgMyifA4bkvK6GhAVq+aVZHwwCBs
-	8Kqg8AeNBcUbmQT2io5pUX6TxwfCAF3+VhUfLQE09teaq46mzT+Ty8akSgRpg+UQtCg==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202506e; d=adomerle.pw; c=relaxed/relaxed;
-	h=To:Subject:From:Date:Message-ID; t=1753278174; bh=eWmW202fKN2m55O+smSp46+
-	HpeMk9N6O4tiZVZkb404=; b=VrfC2+B5FlWRLIEq4PKFokKKZ4PVXdA4j+Osyj+L1kI9BPgFf8
-	hbg1/rpADS6lx/f2JfuFPIrm30tIKlfptwAw==;
-Message-ID: <3c6cb602-63c4-4384-b4f6-1705167d3759@adomerle.pw>
-Date: Wed, 23 Jul 2025 17:42:52 +0400
+	s=arc-20240116; t=1753285574; c=relaxed/simple;
+	bh=4w/DFJ98GqBXik4ktnB0SRascaFEgXt2MIn7gcFChYU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NgzQGSfxSndMQ9q3lH2oyRh9kNFUxl4bo+xfv73HNUBDLJ+CEHbr8bCNfxHwFpLc/8NX2OAi9WBsPwaF2/3EzLA5lwxdXhyIJ/5jyDjAqAZUhEHuV/WCPhqaa3mAm2y2c10JeY8ojpFEdCMDxyD6apqCe0+WZNkEdyuelkrHI9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KQtwpykz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DAB2C4CEE7;
+	Wed, 23 Jul 2025 15:46:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753285574;
+	bh=4w/DFJ98GqBXik4ktnB0SRascaFEgXt2MIn7gcFChYU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=KQtwpykzYKBAPyRedO8oA60/BQztUEakB3SEMvcWNkLTVko5PQX+3z4id96rdb5zt
+	 iiIUdqaVUu8/tb7UyqtHrF+mADIvxx68UPfpT2n1esR4ZrHHx1/NrmSadOM5FceXbR
+	 ifbmkjahdVe35RT9HmOHNKnkAYS8EEPpLAVCKPrVNeQYk9dqaXfNNbFu7itHJbREWw
+	 SFeJkhia+u0NX/WQ4lv5Sqz7UEld3Tph8kK5kJreFpDKeAmaSpE5F/BIUv7ogwXbwx
+	 PRARSDr4tuYXragutpamxpNM0OtankWNCL4yb5N0OaHkYr7MEHXaprn9W05OqPKUqf
+	 ztM/4H2/QwoLQ==
+From: Mark Brown <broonie@kernel.org>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ Gabor Juhos <j4g8y7@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250723-qpic-snand-fix-steps-v1-1-d800695dde4c@gmail.com>
+References: <20250723-qpic-snand-fix-steps-v1-1-d800695dde4c@gmail.com>
+Subject: Re: [PATCH] spi: spi-qpic-snand: don't hardcode ECC steps
+Message-Id: <175328557230.71989.15440098582685138436.b4-ty@kernel.org>
+Date: Wed, 23 Jul 2025 16:46:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Arseniy Velikanov <me@adomerle.pw>
-Subject: Re: [PATCH v1] dt-bindings: spi: mt65xx: Add compatible for MT6789
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Leilk Liu <leilk.liu@mediatek.com>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- ~postmarketos/upstreaming@lists.sr.ht
-References: <20250715231921.4527-1-me@adomerle.pw>
- <20250720223451.GA2915764-robh@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20250720223451.GA2915764-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-On 21.07.2025 02:34, Rob Herring wrote:
-> On Wed, Jul 16, 2025 at 03:19:21AM +0400, Arseniy Velikanov wrote:
->> Add a SPI controller binding for the MT6789 SoC. As a note,
->> MT6893 SPI is fully compatible with this SoC.
+On Wed, 23 Jul 2025 10:06:43 +0200, Gabor Juhos wrote:
+> NAND devices with different page sizes requires different number
+> of ECC steps, yet the qcom_spi_ecc_init_ctx_pipelined() function
+> sets 4 steps in 'ecc_cfg' unconditionally.
 > 
-> Then you should have a fallback compatible. Otherwise, there is no
-> driver change here, so how would this even work?
->
-Thanks for feedback! I plan to send a fix in a new patch series, where I
-will add support for all compatible hardware.
+> The correct number of the steps is calculated earlier in the
+> function already, so use that instead of the hardcoded value.
+> 
+> [...]
 
--- 
-Kind regards,
-Arseniy.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: spi-qpic-snand: don't hardcode ECC steps
+      commit: f820034864dd463cdcd2bebe7940f2eca0eb4223
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
