@@ -1,79 +1,65 @@
-Return-Path: <linux-spi+bounces-9157-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9158-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 163D0B0ECCB
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 10:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37404B0ED6F
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 10:39:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 293091C840EC
-	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 08:08:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18EB618925EA
+	for <lists+linux-spi@lfdr.de>; Wed, 23 Jul 2025 08:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7763A2797A4;
-	Wed, 23 Jul 2025 08:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2705928032D;
+	Wed, 23 Jul 2025 08:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uz5X5GNB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jx7G0ZLc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E85FA95E;
-	Wed, 23 Jul 2025 08:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A8727FB1F;
+	Wed, 23 Jul 2025 08:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753258017; cv=none; b=OR8SnWl8IJodf0tuiGBcEOtieRZB5CGcEUeRUeMULHSLrSMhUbwu19gWIc0OXTOnrSYv5YhlP9U754LTSdbb92GpCQ2sFG973azYBamWTWsY54IuUMyRw6getgfM4RtEI5xVsFpBVSrkbJdzYM69sD+wqvm+gA8jII/TX8z8nUE=
+	t=1753259965; cv=none; b=u7LGnjBm+nEu7xlIWeUW5oG3VdMoYY0D0ba40wG0j03+JNFcmfmET4OaRnp5byt7ztqI2vh7AyAuireegXiM267ro4IOkYPR/3xXoaepUC5n4YSXF5rsE9isGiNYMuj4D3dr/gbNszmAOJ3ZTgh7hRs6T0XM16yxkGKHLOUjtGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753258017; c=relaxed/simple;
-	bh=eReIPFAY2mPW2djMpM8mJndQ9Ys2wnTjSj4ff9CRYo4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r0EsLtjNRwPYLD/CnkZ7PkpUV/VuYxQyvVImHkbBpQ8ga9/7IEBbfDpXSUzjVkIkog7l5aM/jtXMGup5TCLDwFj4A660R8tTcUZ7/kNTZHPqNj4ZDCq/zrFiKnBud69iOjVVHEUkWSCtZ3fA2HzXel0ZlXxzgVzvJsDIG4Q/x4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uz5X5GNB; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3a536ecbf6fso3690004f8f.2;
-        Wed, 23 Jul 2025 01:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753258014; x=1753862814; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=x4hGp9dWQqyiag09FeN6D2BgolKXHwVBXU9K7yKNplY=;
-        b=Uz5X5GNBybJNHmdxnrapW5knFom3KPzRV4g6wEEzoHHX4VgMiBd84kUj7OxO5Wdh+A
-         ghOv/ZDOQipdhMvtrP8HeiGBArtgTiIXlOjQHP8XkhrW6nSdWKUsz/RIdnFTDbQekan3
-         8Bxdyl4sH82WDU+7S60KzyfgywtlKPcdd++DNRZ/WJJYsXJ1tMmjBGbWwWkyHLdF+sXv
-         o37o6nKQJMPD3H3dLn5jj7Tu2FcpUlnjkNBR7Z0OBa6mLkkhipUxX3PCadJsl+Ih6dib
-         +RypCmnx9+LgxsKBQkIUU8O5MDdU8uPIHt1kFsnwfMMX0TyOkn8S8AEbcfa2nzw0fAbd
-         IZNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753258014; x=1753862814;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x4hGp9dWQqyiag09FeN6D2BgolKXHwVBXU9K7yKNplY=;
-        b=IxvguqfELj6m5TFjBBypP8SfhjG85uNSOxCp/51KnqYjttKu30P/z+6qPzIh/Adqud
-         ZdZTXQDaMvVaJ7QcHcZX/3bLwUMRNe3+QamytU8JTSwyrReGhODzFfvOsfehy/NRzKA/
-         9kD4p7DpCM1FoNRwkMbkM8Fxc7MzbKbnXIOv1t/RCIU6fJy5uSlRecXJgjnmyPfdAra2
-         xbxcfhwCVOtQlGLj7THtBvTShQi3d6fRmE1iUJlbZVbCfQBF8mtltVNktr3wv/XLtd4H
-         bKv/oOVapByBCx9IEgihLfKfNK6MjwJUkxbH7muXk37K42st5Uroc79FF9wFoTE57PLX
-         rdUg==
-X-Forwarded-Encrypted: i=1; AJvYcCWXlIKJ4XMi18/tplI1au+SRXBT1le4EifAv/4RDsQM0db/Z2PARmNErau5p1N5h7/ggp+LIk7PD3IWIgpZ@vger.kernel.org, AJvYcCXapBaf0TBwIrgzN+RucrtJzkrWag+t8IApfElhSe+LUFvd++a4rx74957axoHv2GqypjvJ8gozBev4bCKr@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxmMn+7n89evSSLFDyKpKZRBTILdsdu8UqUQiwZTcCTsN82q5D
-	ZJS1ukc0flLmJsT8qwVBeQfa2Yi8FHkLasaT8oWd2pD7oEvZGj/jx5cP
-X-Gm-Gg: ASbGncvEW+8i8Ujv4qQ0wq6YXX6Qv2m0l6m6ntIzKO5J4AbX942Vw16BrmAViHNoanC
-	FONq573abyA3VhcDWw/xxqjTaUu8I9OtvWN5d4hFs40/Bj++uubt28V6PdIxxO0O2NKnp3I+E1E
-	Qa5zLJ3Ewj/mVl0a+l5hnu7FBHXuLReXZIdsQ5k7kt80/wl7QHkXD7oJicGnzj8OymODr3mMabw
-	u2qmU99RLGsu4ncJTwa0RnYAhdMOjZXdkBPLO03PHh1y5Lrxky8RFpNmYQ5lKZX+q61NB459rcX
-	Ik6Ae29jpI9wGPqr862vhwL3UiiaVk2xZ1smOCDMGyeFehoS1gTF75M/M1zsX7839ReUL+lF4PY
-	B36x5RflDTdf83rItNCSi7oLLzEvB1jkcqCBxpdWp6NKJD/KuhN4=
-X-Google-Smtp-Source: AGHT+IEib0qqC+Z0x4lzasRoTtea/6+PQdl+D0+gVXii4BSRmjOi2y+wPGZYjjKAmHCqtrEeRr7YUA==
-X-Received: by 2002:a05:6000:40df:b0:3a4:eef5:dece with SMTP id ffacd0b85a97d-3b768f163a7mr1507259f8f.35.1753258013571;
-        Wed, 23 Jul 2025 01:06:53 -0700 (PDT)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3b61ca315basm15560899f8f.39.2025.07.23.01.06.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Jul 2025 01:06:52 -0700 (PDT)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Wed, 23 Jul 2025 10:06:43 +0200
-Subject: [PATCH] spi: spi-qpic-snand: don't hardcode ECC steps
+	s=arc-20240116; t=1753259965; c=relaxed/simple;
+	bh=40/39jNWpR02zi+1YCzS0Yt7kRfWfNcrgO/p13pf4oQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aRNx+De7s5/eh1B1yBqxApoecZF05hOYIZDQGqmHnDDYshelNVQfqVi3a558Cfn9AONn5umwjVu7iPBk9d9Z2jwp8b/VY4hK0KB494OjjI4Ji8EYYkeQcz/lkNo7pEQk5GQnsSEBgBNzmoGAWk4fbjHm7cPKD0arXqbD4tGwt/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jx7G0ZLc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0EDC4CEE7;
+	Wed, 23 Jul 2025 08:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753259964;
+	bh=40/39jNWpR02zi+1YCzS0Yt7kRfWfNcrgO/p13pf4oQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jx7G0ZLcQgFNF3ID5+WoRfdJ0/VnqdgixU/vOpXWSzkDr38afhwveEi50Wk/V7rzB
+	 G0zYV/kzhZvALf2nCNkagjKmk7uCJKcGBP/SvFQYFtelQORT/JqBz8wkBzp6TOdtDX
+	 0eJ9QFaouvAU7gIQxPxaZAo0QwaFD0WhaG4doWSMnnWHBFov1JtWHCopKZUI9XVvTh
+	 lCzqAoYty74Q8N8StWcgqy/geXz/uyUQSxcJ75Wj7Iw0Z01dcITZnEjotZ+h1hGMlx
+	 QUS+C+3ojwVVeAWIkVnkyYlNwKqkE68pfnIC1EExylfsEqVOaQvAznfgb3f1LDQFXe
+	 Zk3ca9zWN9eBw==
+From: Lee Jones <lee@kernel.org>
+To: linux@armlinux.org.uk, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com, 
+ herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+ andi.shyti@kernel.org, lee@kernel.org, broonie@kernel.org, 
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, arnd@kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, o.rempel@pengutronix.de, 
+ daniel.machon@microchip.com, Robert Marko <robert.marko@sartura.hr>
+Cc: luka.perkov@sartura.hr
+In-Reply-To: <20250702183856.1727275-5-robert.marko@sartura.hr>
+References: <20250702183856.1727275-5-robert.marko@sartura.hr>
+Subject: Re: (subset) [PATCH v8 04/10] mfd: at91-usart: Make it selectable
+ for ARCH_MICROCHIP
+Message-Id: <175325995961.1695705.8338983998485530536.b4-ty@kernel.org>
+Date: Wed, 23 Jul 2025 09:39:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -81,54 +67,22 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250723-qpic-snand-fix-steps-v1-1-d800695dde4c@gmail.com>
-X-B4-Tracking: v=1; b=H4sIABKYgGgC/x2MQQqAIBAAvxJ7biGNkvpKdDDdai9mbkQg/T3pO
- AwzGYQSk8BYZUh0s/ARCqi6ArfbsBGyLwy60V1jdItnZIcSbPC48oNyURT0/bBoZ0yvnIeSxkR
- F/ttpft8PSRevKGYAAAA=
-X-Change-ID: 20250723-qpic-snand-fix-steps-d69b2c7761cd
-To: Mark Brown <broonie@kernel.org>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-c81fc
 
-NAND devices with different page sizes requires different number
-of ECC steps, yet the qcom_spi_ecc_init_ctx_pipelined() function
-sets 4 steps in 'ecc_cfg' unconditionally.
+On Wed, 02 Jul 2025 20:36:02 +0200, Robert Marko wrote:
+> LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
+> avoid needing to update depends in future if other Microchip SoC-s use it
+> as well.
+> 
+> 
 
-The correct number of the steps is calculated earlier in the
-function already, so use that instead of the hardcoded value.
+Applied, thanks!
 
-Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/spi/spi-qpic-snand.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[04/10] mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+        commit: ef37a1e2485724f5287db1584d8aba48e8ba3f41
 
-diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
-index c49bf7079808a1933c8a630e0b07b5fd54dfddb6..8fb8895bc9b54f2095981c975c1f412045a5db74 100644
---- a/drivers/spi/spi-qpic-snand.c
-+++ b/drivers/spi/spi-qpic-snand.c
-@@ -313,7 +313,7 @@ static int qcom_spi_ecc_init_ctx_pipelined(struct nand_device *nand)
- 	ecc_cfg->bch_enabled = true;
- 	ecc_cfg->bytes = ecc_cfg->ecc_bytes_hw + ecc_cfg->spare_bytes + ecc_cfg->bbm_size;
- 
--	ecc_cfg->steps = 4;
-+	ecc_cfg->steps = cwperpage;
- 	ecc_cfg->cw_data = 516;
- 	ecc_cfg->cw_size = ecc_cfg->cw_data + ecc_cfg->bytes;
- 	bad_block_byte = mtd->writesize - ecc_cfg->cw_size * (cwperpage - 1) + 1;
-
----
-base-commit: 69e536c93242425fc65580b02d3f781a96403660
-change-id: 20250723-qpic-snand-fix-steps-d69b2c7761cd
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
+--
+Lee Jones [李琼斯]
 
 
