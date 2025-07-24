@@ -1,67 +1,68 @@
-Return-Path: <linux-spi+bounces-9172-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9173-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B489DB10C1C
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 15:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7BDDB10D32
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 16:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D78E1CE1FD7
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 13:52:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50B6C1D01054
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 14:18:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BC52D836E;
-	Thu, 24 Jul 2025 13:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFE318BBB9;
+	Thu, 24 Jul 2025 14:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/rhJZXJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3JVEYNG"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883DB18E025;
-	Thu, 24 Jul 2025 13:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF8B2DFF13;
+	Thu, 24 Jul 2025 14:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753365072; cv=none; b=kQPZavjc+yy/nI4XvhUJoVv0m6q4c7xbIaQcep5cYcOhXbUBLNpYqEn8PN8NyrKVD6PXO21ejANDRF03hqP3tHeka1hpfYaucTAOK+cN8UwprPXXwOsp/rAzWE8TsZ0OBvuuD5IZ0Lsu/hbLyiwHC/aUPZCvDhGwn7D3rAiVkQE=
+	t=1753366495; cv=none; b=duQKnRo4auqxirlre9W4ybzxbyF5FDqP0HN93IFwLW5N1wEneqdkdknN0t8Hu/3YMxfU73qT9CE463wWVClDRfgjQC8jfS49JqotHq9VBmFXKPJ96Wb0TN6wXLLy242NsvEMvvS/YQwFfgrAfmi72tbXr+z4ZfwchszHH8vtSmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753365072; c=relaxed/simple;
-	bh=a5F5WdeNr+6UL1FTjKLm8yq2/Q45+2nnNzBSMbUAfjw=;
+	s=arc-20240116; t=1753366495; c=relaxed/simple;
+	bh=UkVnxCdj3CGx7NXjhOgRQm4CT95kUOfUb/Cgzs2KLJo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hd7rRkyqGmd8mviwF9qh4f8w58rmxnVZaAJXro076xJsTqXXn/iiMjxcN1vvKpX/S1JwBBC/KY/ZN6QCiTne4GN18FuGiVsX2mFfIy6CsfupaIQTrFkWgrccCSEXz93EYhsVF4tTfkg7yC3ZV1VpxpP7vMo9CARcsjzA1ljuPJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/rhJZXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73387C4CEF5;
-	Thu, 24 Jul 2025 13:51:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=iGhEfyD/dOVlY54lQ7OMpfbWDJEzigFOczkjqEZx+HkRv4E0/hLcudA2W/5bgpISF2BBfLiyYRSVzwRS/rD3NtF3UtGkbD9XRd9lgEnxlWI3KPfbNzW59dbYILpVoa/04fomQtbaCBrnSpHJGDZOpAe/mmGI89ZOdBX+yp4HNXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3JVEYNG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36F3C4CEEF;
+	Thu, 24 Jul 2025 14:14:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753365072;
-	bh=a5F5WdeNr+6UL1FTjKLm8yq2/Q45+2nnNzBSMbUAfjw=;
+	s=k20201202; t=1753366494;
+	bh=UkVnxCdj3CGx7NXjhOgRQm4CT95kUOfUb/Cgzs2KLJo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=p/rhJZXJPL+hUu5+jASgQUGlnPJUr1Xc29vibLZ8cNKZe01Mj5RN+KYj7LDB+xhJb
-	 o/hSi4YULMPs3UbgtcGgxe/YDYUPUE8xO8HC5+Jmd0ahq+2sKqaMEivl3B75n/w2sQ
-	 tJaL41C7P/tqlizhqTU9Uq/xra5sXzQCbNBMnnzr+UXC/Uw0f+7ppybFg/Ny7vEvC8
-	 iRMRIWOpswAtwWBK926ekJULZhZcKmwdDTC/Sqteu2FiAd0MNEXULYbRqpCM8ANcGX
-	 JP0Zv3NVzmYt9jbIeeGkxoajWjxhIStbkfPpciaPsAuweTqnEBCI7LztQrWQ6+Nd9/
-	 VQf1lb2KCJLXQ==
+	b=k3JVEYNG3/6jue5hrisKmNUTMqKq5YurSHi0GIR+B81vmpblYHxT/wQ8utx/CrlQe
+	 vij1Zx7Ibn9v3Naf0GvIIERSXm8zyxQgfrHI5rGYtbM6ZW6PHlr3/vJqTI6YcyWZXT
+	 w07LVH/Oqtmgjtm311PTiom8agHaoN019GxVYJTuVrYEiy9ip1Gz0VvlSe0HZ0MnMI
+	 SwW7fpPzbLl9iKURWzIklbGmjjMO06q8yGOy0RXgiODj8vpRhWCyULV02hTvSNpOxM
+	 OBe7g/b8esR9C9wTj4veFug9PsgzCpyTF1evIys1GYmQ3JlA/oCMtDwSfewf0/BtFU
+	 gnV5JADsCeyKA==
 From: Pratyush Yadav <pratyush@kernel.org>
-To: Alexey Charkov <alchark@gmail.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>,  Mark Brown <broonie@kernel.org>,
-  Rob Herring <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>,  Tudor Ambarus
- <tudor.ambarus@linaro.org>,  Michael Walle <mwalle@kernel.org>,  Miquel
- Raynal <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>,
-  Vignesh Raghavendra <vigneshr@ti.com>,  Krzysztof Kozlowski
- <krzk@kernel.org>,  linux-spi@vger.kernel.org,
-  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-mtd@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 2/3] mtd: spi-nor: Add a driver for the VIA/WonderMedia
- serial flash controller
-In-Reply-To: <CABjd4YyRScBgDbi8Sk0D3vxcmLF8+YBetUdkfhrS_4Y7M+gS1g@mail.gmail.com>
-References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
-	<20250510-wmt-sflash-v1-2-02a1ac6adf12@gmail.com>
-	<mafs01psu89sx.fsf@kernel.org>
-	<CABjd4YyRScBgDbi8Sk0D3vxcmLF8+YBetUdkfhrS_4Y7M+gS1g@mail.gmail.com>
-Date: Thu, 24 Jul 2025 15:51:08 +0200
-Message-ID: <mafs0h5z1snn7.fsf@kernel.org>
+To: Luke Wang <ziniu.wang_1@nxp.com>
+Cc: Bough Chen <haibo.chen@nxp.com>,  Pratyush Yadav <pratyush@kernel.org>,
+  Miquel Raynal <miquel.raynal@bootlin.com>,  Tudor Ambarus
+ <tudor.ambarus@linaro.org>,  "broonie@kernel.org" <broonie@kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+  "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+  "michael@walle.cc" <michael@walle.cc>,  "p.yadav@ti.com"
+ <p.yadav@ti.com>,  "richard@nod.at" <richard@nod.at>,  "vigneshr@ti.com"
+ <vigneshr@ti.com>,  Han Xu <han.xu@nxp.com>
+Subject: Re: [PATCH v2 6/6] mtd: spi-nor: core: avoid odd length/address
+ writes in 8D-8D-8D mode
+In-Reply-To: <DU2PR04MB8567950B89B1F4F1F97FCD43ED41A@DU2PR04MB8567.eurprd04.prod.outlook.com>
+References: <DU2PR04MB85678048FE8B475B1E323E0AED802@DU2PR04MB8567.eurprd04.prod.outlook.com>
+	<10b40148-b949-442d-9d43-0db09517269a@linaro.org>
+	<mafs0zffo3gea.fsf@kernel.org> <87cycep8go.fsf@bootlin.com>
+	<mafs0wmam6ukq.fsf@kernel.org>
+	<DU0PR04MB9496B734F6BA84ABAE051D439097A@DU0PR04MB9496.eurprd04.prod.outlook.com>
+	<DU2PR04MB8567950B89B1F4F1F97FCD43ED41A@DU2PR04MB8567.eurprd04.prod.outlook.com>
+Date: Thu, 24 Jul 2025 16:14:51 +0200
+Message-ID: <mafs0a54tsmjo.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -69,87 +70,54 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi Alexey,
+On Tue, Jul 01 2025, Luke Wang wrote:
 
-This email got buried in my inbox somewhere...
-
-On Mon, May 12 2025, Alexey Charkov wrote:
-
-> Hi Pratyush,
->
-> On Mon, May 12, 2025 at 1:20=E2=80=AFPM Pratyush Yadav <pratyush@kernel.o=
-rg> wrote:
->>
->> Hi Alexey,
->>
->> On Sat, May 10 2025, Alexey Charkov wrote:
->>
->> > The controller is tailored to SPI NOR flash memory and abstracts away =
-all
->> > SPI communications behind a small set of MMIO registers and a physical
->> > memory mapping of the actual chip contents.
+>> > On Mon, May 12 2025, Miquel Raynal wrote:
 >> >
->> > It doesn't expose chip probing functions beyond reading the ID though,=
- so
->> > use lower level chip opcodes via the "programmable command mode" of the
->> > controller and the kernel's SPI NOR framework to avoid hard-coding chip
->> > parameters for each ID the way the vendor kernel does it.
->> >
->> > Currently tested on a WonderMedia WM8950 SoC with a Macronix MX25L4005A
->> > flash chip (APC Rock board), but should work on all VIA/WonderMedia So=
-Cs
->> >
->> > Signed-off-by: Alexey Charkov <alchark@gmail.com>
->> > ---
->> >  MAINTAINERS                                  |   1 +
->> >  drivers/mtd/spi-nor/controllers/Kconfig      |  14 +
->> >  drivers/mtd/spi-nor/controllers/Makefile     |   1 +
->> >  drivers/mtd/spi-nor/controllers/wmt-sflash.c | 525 ++++++++++++++++++=
-+++++++++
->>
->> Drivers in drivers/mtd/spi-nor/controllers/ are deprecated, and we want
->> to eventually get rid of the API. The expected way is for drivers to use
->> SPI MEM (drivers/spi/spi-mem.c). SPI MEM drivers are usually more
->> general and not tailored specifically to SPI NOR flashes, so it might be
->> a bit tricky to write drivers for specialized hardware with it. But I
->> think the drivers/spi/spi-intel.c driver is written for similar kind of
->> hardware so it should be possible.
+>> > > Hello,
+>> > >
+>> > > On 07/05/2025 at 09:43:25 GMT, Pratyush Yadav <pratyush@kernel.org>
+[...]
+>> > >
+>> > > The fact is that we will have octal DTR support in SPI NAND as well at
+>> > > some point, hence a common solution would be welcome as we will likely
+>> > > face similar problems when performing these unaligned accesses. I
+>> > > don't know how feasible it is yet, but if we have a fix for SPI NOR,
+>> > > we will need something similar for SPI NAND.
+[...]
 >
-> Oops. I've had a look at spi-mem, and it seems like it's not a
-> particularly fitting abstraction for this controller.
+> Sorry for delayed response.
 >
-> From what I understood, spi-mem primarily expects to be talking SPI
-> opcodes to the controller, and for the controller/driver to bring
-> their own chip probing routines. This controller on the other hand
-> abstracts the opcodes away, and wants someone to tell it what its
-> flash chip can do (the controller itself can only get a chip ID in
-> "normal" mode, and it needs to somehow know the chip size and
-> standard/fast read capability of the chip). So pretty much the
-> opposite, huh.
+> After reviewing the SPI NAND driver, I noticed that the addr and len
+> alignment has already been implemented in spinand_read_from_cache_op()
+> and spinand_write_to_cache_op() functions.
 
-Does it use SFDP to figure out which opcodes to use? Then it feels very
-similar to intel-spi. See [0] for example. I know this is fitting a
-square peg in a round hole, but if it isn't too painful then it would
-make maintenance on SPI NOR end a bit easier.
+Right. I took a very quick look as well and it seems that SPI NAND only
+does page sized reads and writes in spinand_write_to_cache_op() and
+spinand_read_from_cache_op(). So it should not be a problem.
 
-Mika (+Cc), you did the conversion of intel-spi to SPI MEM. Maybe you
-can share how painful/easy the conversion was, and if it ended up being
-maintainable?
+Miquel, Luke sent a respin [0] for fixing this in SPI NOR and I need to
+decide if I should take them or push for a more generic fix. Did I miss
+some place where SPI NAND can do odd-length reads or writes? If not, I'd
+rather just take the respinned patches.
 
 >
-> In the end, I only need something like spi_nor_detect() and can do the
-> rest directly on top of the MTD framework without touching any SPI
-> opcodes after the detection is done. Is there any other non-deprecated
-> framework that can provide something like this? Maybe physmap? It
-> looks even older than SPI NOR though :)
+> Additionally, using 0xff padding in spi_mem_dirmap_write() might not
+> be suitable for non-flash memory devices.
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/spi/spi-intel.c#n905
+NAND also seems to be using 0xff though. From spinand_write_to_cache_op():
 
---=20
+	nbytes = nanddev_page_size(nand) + nanddev_per_page_oobsize(nand);
+	memset(spinand->databuf, 0xff, nanddev_page_size(nand));
+
+Anyway, if needed we can solve that with a field in struct
+spi_mem_dirmap_info I guess.
+
+[0] https://lore.kernel.org/linux-mtd/20250708091646.292-1-ziniu.wang_1@nxp.com/T/#u
+
+-- 
 Regards,
 Pratyush Yadav
 
