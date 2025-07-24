@@ -1,98 +1,155 @@
-Return-Path: <linux-spi+bounces-9171-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9172-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2BF7B10ACB
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 14:59:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B489DB10C1C
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 15:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97AD5811A3
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 12:59:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D78E1CE1FD7
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 13:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E1E2D46C4;
-	Thu, 24 Jul 2025 12:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BC52D836E;
+	Thu, 24 Jul 2025 13:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLOmCAbS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/rhJZXJ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F71274B24;
-	Thu, 24 Jul 2025 12:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883DB18E025;
+	Thu, 24 Jul 2025 13:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753361984; cv=none; b=nZCJtsQ2alqdpCwNyQwrsl4r6ScYLkFvtO19olNIzEDNSYeU0AJrMy6yFO2BrF+QXABnZoLESOmLyxy+A8dROlfnKogXJcsL6A9FTWEhkF7t1cuxxvkPzTsEVQeXIS3IevEWgYUfC0xB6sP0auzOAgDxwRzwi+QAAJpVtWGcDYQ=
+	t=1753365072; cv=none; b=kQPZavjc+yy/nI4XvhUJoVv0m6q4c7xbIaQcep5cYcOhXbUBLNpYqEn8PN8NyrKVD6PXO21ejANDRF03hqP3tHeka1hpfYaucTAOK+cN8UwprPXXwOsp/rAzWE8TsZ0OBvuuD5IZ0Lsu/hbLyiwHC/aUPZCvDhGwn7D3rAiVkQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753361984; c=relaxed/simple;
-	bh=LCDw3KpOAhFbW7VpydgQpLzMcDlEFJwhJ3nZVJpgc/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uckxv0IVXQq1Hh/jINsNSk9l7SZdSptyMHg4CmiA0v1sS3jBR7/wUA3P9URUQPhQvjrzIE3YGRA4OVuQJYHUda5zkXsplIX/Vp6a0UYE68xNYE5iHDtiyJO861WJVwCMX5vgqUQhV6LXc8wSS6FBjs5SyLMgkIkz82dQswyj0KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLOmCAbS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EA8C4CEED;
-	Thu, 24 Jul 2025 12:59:39 +0000 (UTC)
+	s=arc-20240116; t=1753365072; c=relaxed/simple;
+	bh=a5F5WdeNr+6UL1FTjKLm8yq2/Q45+2nnNzBSMbUAfjw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hd7rRkyqGmd8mviwF9qh4f8w58rmxnVZaAJXro076xJsTqXXn/iiMjxcN1vvKpX/S1JwBBC/KY/ZN6QCiTne4GN18FuGiVsX2mFfIy6CsfupaIQTrFkWgrccCSEXz93EYhsVF4tTfkg7yC3ZV1VpxpP7vMo9CARcsjzA1ljuPJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/rhJZXJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73387C4CEF5;
+	Thu, 24 Jul 2025 13:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753361982;
-	bh=LCDw3KpOAhFbW7VpydgQpLzMcDlEFJwhJ3nZVJpgc/M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HLOmCAbSv7QzXQWGgV6EmNfDV2ypCW2/s+5547FawBAM0YZrFzEGgDRVgY7MetmqL
-	 21q2DB8NnN4dA+BsDWeZlAHTK1mjEEy4ixWvSNHaVrj4ewSVLbSHwiqtLl7b2Ud75t
-	 iLNXuRfJW54eoGnqagqEnl2XOhKLHKjIC2HwY1EGGPwvQVroJDTrtDYH1++mEYwSCv
-	 0s94IQSbWl7UpHwewpoIRNupllGDBEzC9OS/hO76j9MK7pXlVQERkZTX2uEPtfYnpE
-	 blS+sOj2HpIf7Imn+oZ8wR+2eCAbtWiuG7qzzwJKVbtHpXqXrg2NVeGFf0jl/XiSIo
-	 Oj35esBxVLBFg==
-Date: Thu, 24 Jul 2025 13:59:37 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2 3/3] MAINTAINERS: Add entries for the RZ/V2H(P) RSPI
-Message-ID: <0b58e72a-ef96-4f04-94dd-66a6f3f4d0f6@sirena.org.uk>
-References: <20250704162036.468765-1-fabrizio.castro.jz@renesas.com>
- <20250704162036.468765-4-fabrizio.castro.jz@renesas.com>
+	s=k20201202; t=1753365072;
+	bh=a5F5WdeNr+6UL1FTjKLm8yq2/Q45+2nnNzBSMbUAfjw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=p/rhJZXJPL+hUu5+jASgQUGlnPJUr1Xc29vibLZ8cNKZe01Mj5RN+KYj7LDB+xhJb
+	 o/hSi4YULMPs3UbgtcGgxe/YDYUPUE8xO8HC5+Jmd0ahq+2sKqaMEivl3B75n/w2sQ
+	 tJaL41C7P/tqlizhqTU9Uq/xra5sXzQCbNBMnnzr+UXC/Uw0f+7ppybFg/Ny7vEvC8
+	 iRMRIWOpswAtwWBK926ekJULZhZcKmwdDTC/Sqteu2FiAd0MNEXULYbRqpCM8ANcGX
+	 JP0Zv3NVzmYt9jbIeeGkxoajWjxhIStbkfPpciaPsAuweTqnEBCI7LztQrWQ6+Nd9/
+	 VQf1lb2KCJLXQ==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Alexey Charkov <alchark@gmail.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>,  Mark Brown <broonie@kernel.org>,
+  Rob Herring <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>,  Tudor Ambarus
+ <tudor.ambarus@linaro.org>,  Michael Walle <mwalle@kernel.org>,  Miquel
+ Raynal <miquel.raynal@bootlin.com>,  Richard Weinberger <richard@nod.at>,
+  Vignesh Raghavendra <vigneshr@ti.com>,  Krzysztof Kozlowski
+ <krzk@kernel.org>,  linux-spi@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-mtd@lists.infradead.org,  linux-arm-kernel@lists.infradead.org,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH 2/3] mtd: spi-nor: Add a driver for the VIA/WonderMedia
+ serial flash controller
+In-Reply-To: <CABjd4YyRScBgDbi8Sk0D3vxcmLF8+YBetUdkfhrS_4Y7M+gS1g@mail.gmail.com>
+References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
+	<20250510-wmt-sflash-v1-2-02a1ac6adf12@gmail.com>
+	<mafs01psu89sx.fsf@kernel.org>
+	<CABjd4YyRScBgDbi8Sk0D3vxcmLF8+YBetUdkfhrS_4Y7M+gS1g@mail.gmail.com>
+Date: Thu, 24 Jul 2025 15:51:08 +0200
+Message-ID: <mafs0h5z1snn7.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KCzpajG08jCdybG8"
-Content-Disposition: inline
-In-Reply-To: <20250704162036.468765-4-fabrizio.castro.jz@renesas.com>
-X-Cookie: Where do you think you're going today?
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+Hi Alexey,
 
---KCzpajG08jCdybG8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This email got buried in my inbox somewhere...
 
-On Fri, Jul 04, 2025 at 05:20:36PM +0100, Fabrizio Castro wrote:
-> Add the MAINTAINERS entries for the Renesas RZ/V2H(P) RSPI
-> driver.
+On Mon, May 12 2025, Alexey Charkov wrote:
 
-This doesn't apply against current code, please check and resend.
+> Hi Pratyush,
+>
+> On Mon, May 12, 2025 at 1:20=E2=80=AFPM Pratyush Yadav <pratyush@kernel.o=
+rg> wrote:
+>>
+>> Hi Alexey,
+>>
+>> On Sat, May 10 2025, Alexey Charkov wrote:
+>>
+>> > The controller is tailored to SPI NOR flash memory and abstracts away =
+all
+>> > SPI communications behind a small set of MMIO registers and a physical
+>> > memory mapping of the actual chip contents.
+>> >
+>> > It doesn't expose chip probing functions beyond reading the ID though,=
+ so
+>> > use lower level chip opcodes via the "programmable command mode" of the
+>> > controller and the kernel's SPI NOR framework to avoid hard-coding chip
+>> > parameters for each ID the way the vendor kernel does it.
+>> >
+>> > Currently tested on a WonderMedia WM8950 SoC with a Macronix MX25L4005A
+>> > flash chip (APC Rock board), but should work on all VIA/WonderMedia So=
+Cs
+>> >
+>> > Signed-off-by: Alexey Charkov <alchark@gmail.com>
+>> > ---
+>> >  MAINTAINERS                                  |   1 +
+>> >  drivers/mtd/spi-nor/controllers/Kconfig      |  14 +
+>> >  drivers/mtd/spi-nor/controllers/Makefile     |   1 +
+>> >  drivers/mtd/spi-nor/controllers/wmt-sflash.c | 525 ++++++++++++++++++=
++++++++++
+>>
+>> Drivers in drivers/mtd/spi-nor/controllers/ are deprecated, and we want
+>> to eventually get rid of the API. The expected way is for drivers to use
+>> SPI MEM (drivers/spi/spi-mem.c). SPI MEM drivers are usually more
+>> general and not tailored specifically to SPI NOR flashes, so it might be
+>> a bit tricky to write drivers for specialized hardware with it. But I
+>> think the drivers/spi/spi-intel.c driver is written for similar kind of
+>> hardware so it should be possible.
+>
+> Oops. I've had a look at spi-mem, and it seems like it's not a
+> particularly fitting abstraction for this controller.
+>
+> From what I understood, spi-mem primarily expects to be talking SPI
+> opcodes to the controller, and for the controller/driver to bring
+> their own chip probing routines. This controller on the other hand
+> abstracts the opcodes away, and wants someone to tell it what its
+> flash chip can do (the controller itself can only get a chip ID in
+> "normal" mode, and it needs to somehow know the chip size and
+> standard/fast read capability of the chip). So pretty much the
+> opposite, huh.
 
---KCzpajG08jCdybG8
-Content-Type: application/pgp-signature; name="signature.asc"
+Does it use SFDP to figure out which opcodes to use? Then it feels very
+similar to intel-spi. See [0] for example. I know this is fitting a
+square peg in a round hole, but if it isn't too painful then it would
+make maintenance on SPI NOR end a bit easier.
 
------BEGIN PGP SIGNATURE-----
+Mika (+Cc), you did the conversion of intel-spi to SPI MEM. Maybe you
+can share how painful/easy the conversion was, and if it ended up being
+maintainable?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiCLjgACgkQJNaLcl1U
-h9BM1wf6A6Bo4D1foxqkvJmASu2oQ+0VaeVhxh6stF2ZbciFw/jHjYKRx4z38sei
-tD1fhUx9Iy0higdeXR6fJy5D33nB1HDNRaxorXPcRsi9tJNLUXafSr2ZLHjpDYVT
-h0cJ6NpxcysI6SFfyemDH678EijWS3xjYLMYwhRjylPYzeUQjgLCGJGUm3XUHPHD
-JumKjpbIr12al41LKa3Bz6dNusPFEUeV6u3PhqRAPMB9Nj7+cWAB3654CJ6qfPBy
-tNbxlNEWBzZLowowtcepTUjdEvsO75bbXebzd4Z87p5SM4GFid1lI8sBur8Uy+sS
-Fx06Q5nHS/xzGpCxoNaWHw1Qe3xXhw==
-=jU+F
------END PGP SIGNATURE-----
+>
+> In the end, I only need something like spi_nor_detect() and can do the
+> rest directly on top of the MTD framework without touching any SPI
+> opcodes after the detection is done. Is there any other non-deprecated
+> framework that can provide something like this? Maybe physmap? It
+> looks even older than SPI NOR though :)
 
---KCzpajG08jCdybG8--
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/spi/spi-intel.c#n905
+
+--=20
+Regards,
+Pratyush Yadav
 
