@@ -1,122 +1,108 @@
-Return-Path: <linux-spi+bounces-9174-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9175-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E015B10F4C
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 18:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CEAC8B112FC
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 23:21:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A730B1C84655
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 16:00:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0B6B1CC4FB1
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 21:21:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC4B2EAB9C;
-	Thu, 24 Jul 2025 15:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CA0B2EBDF5;
+	Thu, 24 Jul 2025 21:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J0kwiAGh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWBIpQB+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8360B2EAB96;
-	Thu, 24 Jul 2025 15:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7315B661;
+	Thu, 24 Jul 2025 21:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753372787; cv=none; b=kl2+SKQA9b3wdT+dEeOtXP6va/MCrXIQyYawuYZK7P57GxWx0l+Vf6vfzffTTkiCEW/eh8hn7QJkWznAcoNdC9xfP0ZZhkCyI+H079GHx56/IJyaxVL+pLaoODMXeRHudXalTjgrXEbn9au7/TrG4Y73dFTFfq8wWDSXzTlXDlA=
+	t=1753392095; cv=none; b=BOrUFSwQgUhMXVHHPcLJH71oJucx3KIPSI3SqcSj0QGXzqOU3ykZaG3fRAa/ePB4Q+VXy2Bi97w819uGGefIUFDx4h9AmpDKOWDY9bS233MghOAv9fOUg1llngXa5kIEW79jVrwTSi50DVwSYFuMODy2Y6CKY58fSok2D+nDWsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753372787; c=relaxed/simple;
-	bh=TCxrppk5Sqsacw9rkv+pkbMykqomTkQ6EnUt5R+aGV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hcbg2jsVIJzTVvFKaNUbvLt8DPKf5jVilBt8MwJiIgcJD44RVEqWtIZQgPXybW2BMO+F/+g4UxtlawFjqrkIPzyDnyfg7u0INEqQF2oeDy6UNmY+rNcx0Y2GUWc40Jrl6rvzDXH3GEOGygXZBOZ8xAIZ4jTW03v6WTeD48gcQdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J0kwiAGh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9187C4CEF6;
-	Thu, 24 Jul 2025 15:59:45 +0000 (UTC)
+	s=arc-20240116; t=1753392095; c=relaxed/simple;
+	bh=zP2DdL1xyvFlCv0kqOkPf2j+8jsIWjQBQpmTzHlCJOI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=maEnuUDEhiA0nvaEei28WSL2HYbeKs+YM4B0WqfuQkHjeTNijuIYXTbk0FN2M43C+qB4uSU/wum3Dx7N+1vz13Fl0AAuN68Sk95h0tX4bHz6BOBpJJZ6vqvjR724EwrOb6i2/ROHOVm1w3WODib1UD5zo3UnQd8N8GE5YleLIzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWBIpQB+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AFEC4CEED;
+	Thu, 24 Jul 2025 21:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753372787;
-	bh=TCxrppk5Sqsacw9rkv+pkbMykqomTkQ6EnUt5R+aGV0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J0kwiAGh7yOu9cxjg4uDaYW5BG0Ac+CfB2yu3gNej/m71fhphX30PUOmonPEe3l56
-	 zjCkS0TR92UYTqi6KktEQSSPUmFUxYlzQAeIJ7I4ASAl8IoyRLs7YGnS5PolM4IKKS
-	 /3hWsep9eDTByOsTskJThVuOe5hFSLpmO/SPQGgSft5ItimKGzakjMAY5eRbY3Fwkw
-	 TYC6XXvbGIC3Cdf11Rzornij/TG0LGKRkiSOMuL0rXNf8McnXAHO0WjPcDFUPrxjrW
-	 +QoFLNLth3C0f1rqUFLfXYByCqqB99AyL0r4fFPY1w3jtWGbDrMAPaBj5gONkSA9m8
-	 qdq+rU8O6//Ag==
-Date: Thu, 24 Jul 2025 16:59:43 +0100
+	s=k20201202; t=1753392095;
+	bh=zP2DdL1xyvFlCv0kqOkPf2j+8jsIWjQBQpmTzHlCJOI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=lWBIpQB+HvMkPLdKaaZhUjh/jHk9/ugOCKjA70G3i1pTlkvpOicBB0zMpD1sJSV9I
+	 q4/gQJ7hFE3JvMdecit2W2oljAPHTJ7JNs7RAWxoNdCv/n5KjexhVzPd9uUNQ0kFKw
+	 d/li68Cb44Ohg+7YharoiO1YeXA6Chw7xlNLCHuJbj5oZrCUk5be3H6v0SU+ue31s1
+	 aTVkYURhgOYpH9VRFeki3CHlQ86CJKP6FH5vmylhCRAUBe+ecHQbSbXgjANkXW1TP2
+	 L6QxGU6DiU/s2rsgoiul9alp7wfYaF0IJd/gf0ovcPaApFfhty0ZosOCEkQjHInmQt
+	 9CuQlsrepLCxg==
 From: Mark Brown <broonie@kernel.org>
-To: Jakub Czapiga <czapiga@google.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Konrad Adamczyk <konrada@google.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spi: intel: Allow writeable MTD partition with module
- param
-Message-ID: <433a3da1-f0ff-4b04-86b7-3e2359498b6f@sirena.org.uk>
-References: <20250717152851.3709744-1-czapiga@google.com>
+To: Sunny Luo <sunny.luo@amlogic.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Conor Dooley <conor.dooley@microchip.com>
+In-Reply-To: <20250718-spisg-v5-0-b8f0f1eb93a2@amlogic.com>
+References: <20250718-spisg-v5-0-b8f0f1eb93a2@amlogic.com>
+Subject: Re: [PATCH v5 0/3] support for amlogic the new SPI IP
+Message-Id: <175339209371.157729.12033130863447409564.b4-ty@kernel.org>
+Date: Thu, 24 Jul 2025 22:21:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="apHfDe+POvhgKAkX"
-Content-Disposition: inline
-In-Reply-To: <20250717152851.3709744-1-czapiga@google.com>
-X-Cookie: Use other side for additional listings.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
+On Fri, 18 Jul 2025 09:52:15 +0800, Xianwei Zhao wrote:
+> Introduced support for the new SPI IP (SPISG). The SPISG is
+> a communication-oriented SPI controller from Amlogic,supporting
+> three operation modes: PIO, block DMA, and scatter-gather DMA.
+> 
+> Add the drivers and device tree bindings corresponding to the SPISG.
+> 
+> 
+> [...]
 
---apHfDe+POvhgKAkX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Thu, Jul 17, 2025 at 03:28:51PM +0000, Jakub Czapiga wrote:
-> The MTD device is blocked from writing to the SPI-NOR chip if any region
-> of it is write-protected, even if "writeable=3D1" module parameter is set.
->=20
-> Add ability to bypass this behaviour by introducing new module parameter
-> "ignore_protestion_status" which allows to rely on the write protection
-> mechanism of SPI-NOR chip itself, which most modern chips (since
-> the 1990'+) have already implemented.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-This doesn't compile:
+Thanks!
 
-/build/stage/linux/drivers/spi/spi-intel.c:196:2: error: expected identifier
-  196 |         "Do not block SPI flash chip write access even if it is wri=
-te-protected (default=3D0)");
-      |         ^
-/build/stage/linux/drivers/spi/spi-intel.c:194:1: error: type specifier mis=
-sing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wi=
-mplicit-int]
-  194 | MODULE_PRAM_DESC(
-      | ^
-      | int
-/build/stage/linux/drivers/spi/spi-intel.c:194:17: error: a function declar=
-ation without a prototype is deprecated in all versions of C [-Werror,-Wstr=
-ict-prototypes]
-  194 | MODULE_PRAM_DESC(
-      |                 ^
-  195 |         ignore_protection_status,
-  196 |         "Do not block SPI flash chip write access even if it is wri=
-te-protected (default=3D0)");
-      |                                                                    =
-                        =20
-      |                                                                    =
-                         void
+[1/3] spi: dt-bindings: Add binding document of Amlogic SPISG controller
+      commit: 78d35a20783941c8ba5cf912349728c6e1bee84b
+[2/3] spi: Add Amlogic SPISG driver
+      commit: cef9991e04aed3305c61c392e880f6e01a0c2ea4
+[3/3] MAINTAINERS: Add an entry for Amlogic spi driver
+      commit: 0ef2a9779e9decee52a85bc393309b3e068a74a6
 
---apHfDe+POvhgKAkX
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiCWG4ACgkQJNaLcl1U
-h9AzwQf/Rb5NtfekY/3oJt9gvtpUZj3IT4Kf+SYLJumqQ6X5rs4WyuSka+uWamHu
-e5/fkkN1i7paTs9yzTEwPZWfoXG+IZtWnUk5nDk6FcRs4zGZYQshEGYqsgMUv+86
-4wbUungWAoRalC4nccRVFIP9Zp08JwTtl+tWkqSu45WnJ/eAbQgY4WhZmSUISklc
-tZo2x8VCDOtlLiN+nNeYCNyR/Nc7RoJxJX+kBt9Ql78Uc7ItvyN8hX556ShZu6w2
-3SOFlQZA/sOIQI+UWRuRbhJOx61DaCv/I1BImqAmkde+//hiGmUpKNRKtUrmFLuI
-1WZQXZyd+epOsrptPbPj95w6kdAMBQ==
-=XJEB
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---apHfDe+POvhgKAkX--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
