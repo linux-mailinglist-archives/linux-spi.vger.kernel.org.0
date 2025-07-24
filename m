@@ -1,94 +1,98 @@
-Return-Path: <linux-spi+bounces-9170-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9171-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0DA4B1075D
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 12:04:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2BF7B10ACB
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 14:59:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 227F87A3456
-	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 10:03:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97AD5811A3
+	for <lists+linux-spi@lfdr.de>; Thu, 24 Jul 2025 12:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1592F25E451;
-	Thu, 24 Jul 2025 10:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E1E2D46C4;
+	Thu, 24 Jul 2025 12:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aqEpHWvh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLOmCAbS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE06D24E01D;
-	Thu, 24 Jul 2025 10:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F71274B24;
+	Thu, 24 Jul 2025 12:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753351490; cv=none; b=nzChat/Qd7T8yZkGejPfxEptJ507ECpiU7ld30ijRRwbHeJEmpmOHfwO1PoyiI03JpYoAq+3yrBPxoXTTxzkGMSKB1kqO/R0xkRUeyg0EGRGyDwihzvXBrDbMFKwJQJo7a7kXPVG4X8vFRQ/xh4tcAm1vZzYwe69L2NEjBpdtMw=
+	t=1753361984; cv=none; b=nZCJtsQ2alqdpCwNyQwrsl4r6ScYLkFvtO19olNIzEDNSYeU0AJrMy6yFO2BrF+QXABnZoLESOmLyxy+A8dROlfnKogXJcsL6A9FTWEhkF7t1cuxxvkPzTsEVQeXIS3IevEWgYUfC0xB6sP0auzOAgDxwRzwi+QAAJpVtWGcDYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753351490; c=relaxed/simple;
-	bh=dB0n0iSlVZ5AKtNK8uk2suHWKAUZYtSH8+sIis6kxPs=;
+	s=arc-20240116; t=1753361984; c=relaxed/simple;
+	bh=LCDw3KpOAhFbW7VpydgQpLzMcDlEFJwhJ3nZVJpgc/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ki79qSLNVqYxMoDnNd4KdJo5g5CuxHBq+76ROLJ0KLfB1dIeVDkC4Lml50vJTTBwE36BzbhBigxH32bFCkmRcHjfw73hnt7/yxj0Oydr1NiWvkooRbqdDA2+uPuTZBTVYz0AkpHQYAWtd9db3PUuwxf5XBWUMZfKoMO12ffpfmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aqEpHWvh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2773C4CEED;
-	Thu, 24 Jul 2025 10:04:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uckxv0IVXQq1Hh/jINsNSk9l7SZdSptyMHg4CmiA0v1sS3jBR7/wUA3P9URUQPhQvjrzIE3YGRA4OVuQJYHUda5zkXsplIX/Vp6a0UYE68xNYE5iHDtiyJO861WJVwCMX5vgqUQhV6LXc8wSS6FBjs5SyLMgkIkz82dQswyj0KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLOmCAbS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4EA8C4CEED;
+	Thu, 24 Jul 2025 12:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753351489;
-	bh=dB0n0iSlVZ5AKtNK8uk2suHWKAUZYtSH8+sIis6kxPs=;
+	s=k20201202; t=1753361982;
+	bh=LCDw3KpOAhFbW7VpydgQpLzMcDlEFJwhJ3nZVJpgc/M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aqEpHWvhKPb5HP5ZjhOtxwslFq30VBcABOjHySAM/pVyUJ6thjQEXU1bWF14+ivH/
-	 rpo8sPAh7IlUvFevGMUhHewRr+36+ym1469hC2nAHX5k0vsosJt4TQSkU4bSkqhBRq
-	 RzmOLP03dBsVP7RO9ORiRrFwJxYWATBmqfASFK2aATfDnZAacb5cEBNy+GM/DYP1uD
-	 lw7iL2I9kaLr9cem28LJnw5R3MnT87C1pMyGpIdFBs9pvyxKZUEG9YJnlXUs+1YIPy
-	 v24o66zSZ6ok7ZfMp+6OKc9NCE29+3eF6CdH6HUW1xHy/EL6pdLIhKIx5KtsjQcysC
-	 3WqIDbQWfoTLA==
-Date: Thu, 24 Jul 2025 11:04:42 +0100
-From: Lee Jones <lee@kernel.org>
-To: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-	andi.shyti@kernel.org, broonie@kernel.org,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, arnd@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, o.rempel@pengutronix.de,
-	daniel.machon@microchip.com, Robert Marko <robert.marko@sartura.hr>
-Cc: luka.perkov@sartura.hr
-Subject: Re: (subset) [PATCH v8 04/10] mfd: at91-usart: Make it selectable
- for ARCH_MICROCHIP
-Message-ID: <20250724100442.GX11056@google.com>
-References: <20250702183856.1727275-5-robert.marko@sartura.hr>
- <175325995961.1695705.8338983998485530536.b4-ty@kernel.org>
+	b=HLOmCAbSv7QzXQWGgV6EmNfDV2ypCW2/s+5547FawBAM0YZrFzEGgDRVgY7MetmqL
+	 21q2DB8NnN4dA+BsDWeZlAHTK1mjEEy4ixWvSNHaVrj4ewSVLbSHwiqtLl7b2Ud75t
+	 iLNXuRfJW54eoGnqagqEnl2XOhKLHKjIC2HwY1EGGPwvQVroJDTrtDYH1++mEYwSCv
+	 0s94IQSbWl7UpHwewpoIRNupllGDBEzC9OS/hO76j9MK7pXlVQERkZTX2uEPtfYnpE
+	 blS+sOj2HpIf7Imn+oZ8wR+2eCAbtWiuG7qzzwJKVbtHpXqXrg2NVeGFf0jl/XiSIo
+	 Oj35esBxVLBFg==
+Date: Thu, 24 Jul 2025 13:59:37 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2 3/3] MAINTAINERS: Add entries for the RZ/V2H(P) RSPI
+Message-ID: <0b58e72a-ef96-4f04-94dd-66a6f3f4d0f6@sirena.org.uk>
+References: <20250704162036.468765-1-fabrizio.castro.jz@renesas.com>
+ <20250704162036.468765-4-fabrizio.castro.jz@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KCzpajG08jCdybG8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <175325995961.1695705.8338983998485530536.b4-ty@kernel.org>
+In-Reply-To: <20250704162036.468765-4-fabrizio.castro.jz@renesas.com>
+X-Cookie: Where do you think you're going today?
 
-On Wed, 23 Jul 2025, Lee Jones wrote:
 
-> On Wed, 02 Jul 2025 20:36:02 +0200, Robert Marko wrote:
-> > LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
-> > avoid needing to update depends in future if other Microchip SoC-s use it
-> > as well.
-> > 
-> > 
-> 
-> Applied, thanks!
-> 
-> [04/10] mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
->         commit: ef37a1e2485724f5287db1584d8aba48e8ba3f41
+--KCzpajG08jCdybG8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reverted as it caused issues in -next.
+On Fri, Jul 04, 2025 at 05:20:36PM +0100, Fabrizio Castro wrote:
+> Add the MAINTAINERS entries for the Renesas RZ/V2H(P) RSPI
+> driver.
 
-https://lore.kernel.org/all/20250724115409.030d0d08@canb.auug.org.au/
+This doesn't apply against current code, please check and resend.
 
--- 
-Lee Jones [李琼斯]
+--KCzpajG08jCdybG8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiCLjgACgkQJNaLcl1U
+h9BM1wf6A6Bo4D1foxqkvJmASu2oQ+0VaeVhxh6stF2ZbciFw/jHjYKRx4z38sei
+tD1fhUx9Iy0higdeXR6fJy5D33nB1HDNRaxorXPcRsi9tJNLUXafSr2ZLHjpDYVT
+h0cJ6NpxcysI6SFfyemDH678EijWS3xjYLMYwhRjylPYzeUQjgLCGJGUm3XUHPHD
+JumKjpbIr12al41LKa3Bz6dNusPFEUeV6u3PhqRAPMB9Nj7+cWAB3654CJ6qfPBy
+tNbxlNEWBzZLowowtcepTUjdEvsO75bbXebzd4Z87p5SM4GFid1lI8sBur8Uy+sS
+Fx06Q5nHS/xzGpCxoNaWHw1Qe3xXhw==
+=jU+F
+-----END PGP SIGNATURE-----
+
+--KCzpajG08jCdybG8--
 
