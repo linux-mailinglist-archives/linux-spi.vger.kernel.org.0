@@ -1,122 +1,151 @@
-Return-Path: <linux-spi+bounces-9196-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9197-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25954B1355E
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 09:10:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46DBCB135C2
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 09:35:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04209178FED
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 07:10:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 819D7173979
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 07:35:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BBF3223335;
-	Mon, 28 Jul 2025 07:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dkfb0xjX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6011B4247;
+	Mon, 28 Jul 2025 07:35:47 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBFE223301;
-	Mon, 28 Jul 2025 07:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D43F17BB21;
+	Mon, 28 Jul 2025 07:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753686605; cv=none; b=K4hnJ3n726JjZ/gYxcibNbpOdPkNVHp5j2eCeWjHdB7UJH8Ja+dVdliZ49LkNe+g7Zd53RLnLnc5xxBXkGPKM3s6Uld61HvhonkJ2bO1V9k6hFDK6e+6oj2EL4qH/tf6uWAzOpBZ7JymQYElj6fXJ4P5QKAlmRGkOPPWHNgahsE=
+	t=1753688147; cv=none; b=aryzz0wWG6WChoRcL9KF62A4I+i6Il4nCDz0lE0lDHm4uHdAaEbXaVUWmOM3gk+kRENgMhAC8nIVNnl3W2wtpCsIv/F1YY/fVxTs8QPYFdlSjZhGOy1vGGIhjwsvLxfYv9BjkNZDHmSJK/ojf9IJnLwb57P/hXJDv45Y1ptxeJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753686605; c=relaxed/simple;
-	bh=fELmI1I7WwxoqLk6NoJJj3JbPs2L4fWVDFlsNfL0Py4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sx9E5qpZ1Ykhyyzj9gTsbnAJKTkp946KyPsSEleI59fbcUOvOVxA7jATsDI/SriveoOkVdvlTkDLZmB+X9Md62QCq/fsy5R7xnROB+k8O/U8HgeGQ4JOPmh1vtmQ3UvXLR/pnZ/4pXzGrw30qBy4FE4vw6stJTxIV+jQms/Pnq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dkfb0xjX; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753686604; x=1785222604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fELmI1I7WwxoqLk6NoJJj3JbPs2L4fWVDFlsNfL0Py4=;
-  b=Dkfb0xjX69nDO7pXot34jXca5xlZUiwZdH8S1VUfyvWhScC7+Qa2Bx3n
-   XBpXJdHNZu1aBsNJLoVNoGo5mOBUJkAcG2LSePGzwwasi5vEWpA+kz7Qz
-   T/feAB0eys3SkG8MKjKGGT8NYLQdwPcU5XUVvEragLD647OPdGD8dXYWw
-   ddRPtLJfv2u/JwgiC1YuP4VcXd+KgHsE1f+ZmNiBOZ1TftanwK5ozXva8
-   Cs9zboavIP8CZ770qnyC1lhr4d56elRgZzQKuHh0jh/Tv0S165GwIJwgv
-   BD/g4kptmdRcEV2ocySc+yyxgmXlgKIae21jaKFWy3HCfddsU6fgs29SS
-   A==;
-X-CSE-ConnectionGUID: 7mIbDmQCREiWvdQINKaMyg==
-X-CSE-MsgGUID: CoGl8GkASrKQkMNmowPG7w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11504"; a="56018455"
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="56018455"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2025 00:10:03 -0700
-X-CSE-ConnectionGUID: 1b5uAKZ1R2WvX6VPVI7RUQ==
-X-CSE-MsgGUID: jWFNKIIRRFOiYMr0h12pjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,339,1744095600"; 
-   d="scan'208";a="162792296"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 28 Jul 2025 00:09:59 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 7A1A615B; Mon, 28 Jul 2025 10:09:57 +0300 (EEST)
-Date: Mon, 28 Jul 2025 10:09:57 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Alexey Charkov <alchark@gmail.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/3] mtd: spi-nor: Add a driver for the VIA/WonderMedia
- serial flash controller
-Message-ID: <20250728070957.GT2824380@black.fi.intel.com>
-References: <20250510-wmt-sflash-v1-0-02a1ac6adf12@gmail.com>
- <20250510-wmt-sflash-v1-2-02a1ac6adf12@gmail.com>
- <mafs01psu89sx.fsf@kernel.org>
- <CABjd4YyRScBgDbi8Sk0D3vxcmLF8+YBetUdkfhrS_4Y7M+gS1g@mail.gmail.com>
- <mafs0h5z1snn7.fsf@kernel.org>
+	s=arc-20240116; t=1753688147; c=relaxed/simple;
+	bh=vJ43hxkmq+IqW60mSuAluGl5gIQd04CjwteIziLQkVs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N9WVgpncUihkoScExm52pzqFNWPOpEJ3syt1NjL+O6i36xwVezX47jm3bB/mUzdaWTjusuv73WtNGngcKwblMsimRGSHgZEpv6jkLxOk018HA9EL61bKalatxMkl3tPB2VT4CYbVNHFvarBmwK9dAjdLXi6e7TpNXQAA7f/oez0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-886b2fdba07so976524241.1;
+        Mon, 28 Jul 2025 00:35:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753688144; x=1754292944;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/yy7tQfFoyKQwjK+j13jn45VoMDYFtFmw6yfK7gr2PM=;
+        b=HFtPBygBr2XCHx5dcoWXV+05ZRBAFV6mqE7q55U/ZLfGEp/LBEqGEVOkN5CJpWHEhF
+         l8XaLFEwUgARjM884OduF4hcRhbi9r39ZSQIPH+g7ufYJr/iuGTFDvcFKWAg16JG23Cu
+         WZcpgEvT51VXlIjAGB/BkkhBVp1hm/zjz+ggKEgCoNDy6wGgbw3npbV2z9Yevltvw0YC
+         AoQ9i0TC7l8f3s9wLc7+A4IHipMf6tmf87cd6EAL3q61aqB04J8vQpuxPXgqw6h7QkQt
+         lNkoeegZ90Afo7NEGecVE4mSHA4di1KvUf7YLwDcJAn56k42oKXdJgDsqfHvLRAHuUqm
+         xuPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcoMgvzBcqXrlOO8mOaM+/NOVSx5H9M/6N+jFHbMRSn6LkcaArkv1mdELbgs9R7tC7n2lTxL8gcYKh@vger.kernel.org, AJvYcCVxzGIJi6fJNx0rJI3eeqYvCv37d5o/8//fQntIezBBSu74l4t9NrTBl2pXb0z2id3eCQYkcV6t2Ayckkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywumufyfd7+sa6AdzI89Wa+C2j4ZkDmWI43m/KE2M0AX/t2aPBq
+	Ix3hKb+PNKP7GwmnuxeLvleMNhE5ZAmi01T1FMwRvlXVbhM6icMtnaOrj5gVnZL7
+X-Gm-Gg: ASbGnctfQts+mLTwXHXvD2/fUwn7IvJoL7QZc/hO0vvH+k9vH3NAQZH+n6QADoRhvRf
+	uV0Hk2AH/7BYLQF3HVyqokzhNTd94L+1FKktkBHQIs/gmzDXsemdYfuskSbTk+HsbV2A7MHYyWq
+	d6RA4Q/UPXXSF9mQP3C5viHPcvLAxdnzhNG5+9QiRW9uPubdKHbwcFXYBSiy5Gj0z72zJDZXFri
+	wVz1jymKYmSQOhTUpnMme6UrFZToFrEhT+2hgTJfej5W9ejuF7ODeF5kr+UdDIK5LiLRFL26xWs
+	ZKpQRyXE1Q+o6K1xA1kGkLR5Rd/jLIS+TDFb4woiHRWCST2D91r4qssnZWd9Io9u8kPgxAObxyz
+	CYvbKqJ57BWFqsdfRZfbBFVBTLYh64zWclAyjrqmNrtPfQ7xHmxVnU5a3lKhL
+X-Google-Smtp-Source: AGHT+IEdoQve0rFw1CYiVlb0NJxVQweN9gQcVuLZ1v1Asg7YfI6MF0UC0CCEg2iSaI0gvNibG3Xe6w==
+X-Received: by 2002:a05:6102:6c3:b0:4e6:d94f:c197 with SMTP id ada2fe7eead31-4fa3fed06bamr3378470137.23.1753688143581;
+        Mon, 28 Jul 2025 00:35:43 -0700 (PDT)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-538ec92c104sm900935e0c.1.2025.07.28.00.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jul 2025 00:35:43 -0700 (PDT)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-884f22f9c90so1039283241.0;
+        Mon, 28 Jul 2025 00:35:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUGwpuBU+jj4krjU8i/wD5bqjky4npP55OtMW/nvniEbZ8nwgzGHmKZtPCtsV/+Rk0VN+ZZTZXQ94pB5p0=@vger.kernel.org, AJvYcCV5V2ntbm/Cgg6STtSXuQfcvL02qV6b/VABRvvnTe1DOixxSzLmg4iq07wv45D/jk1bIf9fLgZiKvoh@vger.kernel.org
+X-Received: by 2002:a05:6102:3e1a:b0:4e7:b893:fec7 with SMTP id
+ ada2fe7eead31-4fa3f955291mr3902357137.5.1753688143125; Mon, 28 Jul 2025
+ 00:35:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <mafs0h5z1snn7.fsf@kernel.org>
+References: <20250609-update_pm_macro-v1-1-819a53ef0eed@gmail.com>
+In-Reply-To: <20250609-update_pm_macro-v1-1-819a53ef0eed@gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 28 Jul 2025 09:35:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX9nkROkAJJ5odv4qOWe0bFTmaFs=Rfxsfuc9+DT-bsEQ@mail.gmail.com>
+X-Gm-Features: Ac12FXw4tDm6D72O3D-fUSIcFAmaJ67G-8rBDReDkZJ9r-6vkC22T-KdGmRYG6k
+Message-ID: <CAMuHMdX9nkROkAJJ5odv4qOWe0bFTmaFs=Rfxsfuc9+DT-bsEQ@mail.gmail.com>
+Subject: Re: [PATCH] spi: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+To: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Raphael,
 
-On Thu, Jul 24, 2025 at 03:51:08PM +0200, Pratyush Yadav wrote:
-> > From what I understood, spi-mem primarily expects to be talking SPI
-> > opcodes to the controller, and for the controller/driver to bring
-> > their own chip probing routines. This controller on the other hand
-> > abstracts the opcodes away, and wants someone to tell it what its
-> > flash chip can do (the controller itself can only get a chip ID in
-> > "normal" mode, and it needs to somehow know the chip size and
-> > standard/fast read capability of the chip). So pretty much the
-> > opposite, huh.
-> 
-> Does it use SFDP to figure out which opcodes to use? Then it feels very
-> similar to intel-spi. See [0] for example. I know this is fitting a
-> square peg in a round hole, but if it isn't too painful then it would
-> make maintenance on SPI NOR end a bit easier.
-> 
-> Mika (+Cc), you did the conversion of intel-spi to SPI MEM. Maybe you
-> can share how painful/easy the conversion was, and if it ended up being
-> maintainable?
+On Tue, 10 Jun 2025 at 16:59, Raphael Gallais-Pou <rgallaispou@gmail.com> wrote:
+> Letting the compiler remove these functions when the kernel is built
+> without CONFIG_PM_SLEEP support is simpler and less error prone than the
+> use of #ifdef based kernel configuration guards.
+>
+> Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 
-Well it is kind of "maintainable" but the driver needs to do whole lot of
-translation to get the SPI opcodes translated into the commands the
-controller can actually execute. This means that if we get new opcodes for
-new chips the driver needs to be updated too. I feel the SPI MEM is not
-really good fit for "higher level" controllers like this.
+Thanks for your patch, which is now commit 7d61715c58a39edc ("spi:
+rspi: Convert to DEFINE_SIMPLE_DEV_PM_OPS()") in spi/for-next.
+
+> --- a/drivers/spi/spi-st-ssc4.c
+> +++ b/drivers/spi/spi-st-ssc4.c
+> @@ -378,8 +378,7 @@ static void spi_st_remove(struct platform_device *pdev)
+>         pinctrl_pm_select_sleep_state(&pdev->dev);
+>  }
+>
+> -#ifdef CONFIG_PM
+> -static int spi_st_runtime_suspend(struct device *dev)
+> +static int __maybe_unused spi_st_runtime_suspend(struct device *dev)
+
+The __maybe_unused can be removed, too...
+
+> @@ -429,7 +426,6 @@ static int spi_st_resume(struct device *dev)
+>
+>         return pm_runtime_force_resume(dev);
+>  }
+> -#endif
+>
+>  static const struct dev_pm_ops spi_st_pm = {
+>         SET_SYSTEM_SLEEP_PM_OPS(spi_st_suspend, spi_st_resume)
+
+... if you would update these, too:
+
+    -    SET_SYSTEM_SLEEP_PM_OPS(spi_st_suspend, spi_st_resume)
+    -    SET_RUNTIME_PM_OPS(spi_st_runtime_suspend, spi_st_runtime_resume, NULL)
+    +    SYSTEM_SLEEP_PM_OPS(spi_st_suspend, spi_st_resume)
+    +    RUNTIME_PM_OPS(spi_st_runtime_suspend, spi_st_runtime_resume, NULL)
+
+> @@ -445,7 +441,7 @@ MODULE_DEVICE_TABLE(of, stm_spi_match);
+>  static struct platform_driver spi_st_driver = {
+>         .driver = {
+>                 .name = "spi-st",
+> -               .pm = &spi_st_pm,
+> +               .pm = pm_sleep_ptr(&spi_st_pm),
+
+This should use pm_ptr() instead, as spi_st_pm defines not only system
+sleep ops, but also Runtime PM ops.
+
+>                 .of_match_table = of_match_ptr(stm_spi_match),
+>         },
+>         .probe = spi_st_probe,
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
