@@ -1,293 +1,140 @@
-Return-Path: <linux-spi+bounces-9198-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9199-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AACBB13A73
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 14:24:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 415EAB13ADF
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 14:59:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6973B7A5820
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 12:23:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C28F43B2A49
+	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 12:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6FEB263F34;
-	Mon, 28 Jul 2025 12:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C711725CC70;
+	Mon, 28 Jul 2025 12:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E26ONR4P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BkHaMedu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABDD1C8606;
-	Mon, 28 Jul 2025 12:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A5E2222A3;
+	Mon, 28 Jul 2025 12:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753705487; cv=none; b=FIpHJSR9r0uzSzaaOClGzfOC2RqsSXQpPftWRgdW3xJ31b2x8nNSBEFxdBz1Z9BmzgUW8Hth75uf7Cw3dvNuE4rh0pjIasFASZKcVZWKucYHA05aMgQstsG7TmfuriV7g28qpZnaGoihg2ZQx6wN0SGTlve8N4eJ/0XyXipUhEE=
+	t=1753707559; cv=none; b=tBCrfusLITg/CQcL+vARE5+gq/sIWh90Llaia2tJZEi/zftKs6MQkOXLPb2/w/ysISRfElzRCcgFdU6CsbuuFvwYhgM+SsWdDk/rw6fVTw1UFGGD0J4d5HvK8bvfExmya/c/VU0ru4GhEMENjGa8XQTRYWs3ARIOfe7ZAXxa4JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753705487; c=relaxed/simple;
-	bh=GnbJTTc9uc5u8yqjxhZ3d9PZFrYsgp3uI8ziD/c0gYQ=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=RAv5vi0G6kHz/CR+BFriI4lLNjB1fwTi9wTxX2MtfLQi+HDYukSOPIvWBrQ5+AM0XC4nE6IzFQTZ87CwBbJhaZeFTXA+LcIiMvPNmTlrMKVPu46w8L/ZQVqwmpFa1pjRUm9Czm7R9b3qFHgGymYElYi/lwkobx3M3gxefSkggLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E26ONR4P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A93B9C4CEE7;
-	Mon, 28 Jul 2025 12:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753705487;
-	bh=GnbJTTc9uc5u8yqjxhZ3d9PZFrYsgp3uI8ziD/c0gYQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=E26ONR4Pm8x1XYff5eyMxsXgvk+uZSuHCkWRYke1s0XQL+zY9AYJlzlSYAT0+krZX
-	 a6MV2duqJrGUz0exjMpcAaovUAd7jGsErlY5/4Rq7m+w5Qnm/txyFOsd2GbNY3WTw/
-	 qGzNInZzSB2SmYJO0yzM9wERWTC2OnwWNfa2RBocdn2RFEdd9+VwV3jC0ybeYkF6FS
-	 eGiepXYJ0g3Y97tl34DATJWkF78dCP5KWx9emPHKtcAyA+8SEJxqh3AMe8eQELRcIh
-	 ErykXzac5W91IMVBq9x1Ztz+OGAF/gk8nfAVku4cBg5vQmGQ3ljlHldKm9uuEzW+x2
-	 SQU7c2Bq+agUA==
-Message-ID: <ead4b31b9f656b8a7ac9280d368fd210.broonie@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI updates for v6.17
-Date: Mon, 28 Jul 2025 13:24:37 +0100
+	s=arc-20240116; t=1753707559; c=relaxed/simple;
+	bh=IhmHfcSsqvi4XakQ4sYwxkmbwY7HX0R7FkhypdAtOrs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pzZwaPPq79uT13obV8PwJ/ue8SJKnaOmt7k0Sz3dbl8OzIEphS/UScnT8reWsiUVm6xXTZ47YaTUoHvKq5HS4JxpKUG457wgkak7enfM3eJX4L6qEgbh6BiRZvlWlYXeBv/6tQkeu/XP/d/QWqZpiMWO1ulUCbuYJzqgiea20l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BkHaMedu; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-748d982e97cso3947629b3a.1;
+        Mon, 28 Jul 2025 05:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753707556; x=1754312356; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZhAzjK5FT+CciFxLwNthNR1VR+Fzupqi6PO9KjFf0r0=;
+        b=BkHaMedu9PWg/72u2ouC51DUv03UQqki8V6/omOur7ehmVug2Csx+EBEEuQr4zYlNU
+         0johkAOXNG86mBN0Q0Xb2mB8rVItx1Fr/J0iHlUarfdhxP6+sZu7uvI74V8pmyuk1U2W
+         QCig81FvCz7IQDLhB05/69+PREG9Z061aodzS0bLw535cVtgixsphHi3CFkJFfEa0IBt
+         Njw3EGfBuaON8PpPZi37CKoPs5/Xnr2ynXseOnsfkCGRO5gQOHfToPFDOpa5I4N+wXMV
+         PHSNaA/2LvqHRGIuQmYjrZGDYSq2lNS/AyLEzSBhwDleVEXtoaVEUkYHMDusAF0sssWq
+         0Vtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753707556; x=1754312356;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZhAzjK5FT+CciFxLwNthNR1VR+Fzupqi6PO9KjFf0r0=;
+        b=o1Xgv7ihsitOaK7RW04bPGMzKskXSQofWTZArJs4FihtXMyWoKwPewjX9NASDnqAlb
+         omu26HK4yJUjsJKN3k4xhomPMfiKIlBItB6TE30GFP9HPeFA2714aom3BWxAEUW0dGSk
+         lf0UIkUooY6NMrjBLsc0BxVbctm9rDhGX+X7D56VsnQCi1tmZ23ZoLAJ0OVJ3ThBPwDp
+         +fIu56SVJc576mNZZWY5OJFLiUPoSv5bZvEe0Qzw1tT9lsz5SBbnsiIcLIALY36gCnwg
+         1arV1RTJRkpV+azvE9uutzVPGdpSk2L4YadUt2lTH78Z+WOTYNYaQIvGMXvX/pUxQJiT
+         eLcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6Rj+wrbKmD8Va3gfihMXaSuyvQ+MdBZSjoptst0gCZZsMQsTW8KRVuS22sfDV8oFc/1W94WawsoRr@vger.kernel.org, AJvYcCUS6nnvzPNyHvH809gvZ0hxFFGf+Uf57UxV74YX1dt7GbQJS48lmmNi4mQDFQNSbFruQkfLTV6HL7P+qaQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOfiiUxNDoBAQT2xAGiTc0hmMUmLJ3hpX4UgcYzBIyAloCnJMJ
+	JHdv6BYu8rt5zmd5F1tHEI5BViPpnMPkKA0D+HNV3CU9xaXainhRLagc
+X-Gm-Gg: ASbGncv/ojZLNA0TuAP7CjD9SksSt/Y8hZHSSMiT9CxDStADGltd0hnj1HOTX2LHHo3
+	R/PWKmTfEphHzllu11UJ2wjjhJ/FNnXKx2eJLuAd8GG18K/jplpwj+/QdS3JT7yQ88XZPBS8uwS
+	a3kcf0BpqE1dsFaMh2X/3NGRPULZ7LCYXf/PCh/EF4NTxQvT8dNVcfUN1FupJ6ErVWnT9XF06xA
+	a66DcyLtHEIbk0uGluFvv5T+tL73ZR60uhAwRAGs36W2MmNG6jYD94E3L0ZiS5q+YPcVitYZztm
+	/YcxP0NSeBEAlTg4bB9b+hsKFAg5lx7hElp6PecowQQLGvE1x9ZItxxfZsSycxf0m5jNPeHt07s
+	jygFifLZcMV3oEEFB3a9RVf70PIKTuIi9B/hexTtBwNu22P2msfk3QdpRzTRRKsvaZgo8v+EU2U
+	HoicYfwNPR175HdqBg
+X-Google-Smtp-Source: AGHT+IGENH4RfeEDFn/IoEogrzWjFEeRAzJl6HlR7BypR5NTpHuCAK3gs/JhKuMwkxq3MC0ECTtFDQ==
+X-Received: by 2002:a05:6a20:a126:b0:232:fcfc:7209 with SMTP id adf61e73a8af0-23d701a89d9mr19624271637.35.1753707556461;
+        Mon, 28 Jul 2025 05:59:16 -0700 (PDT)
+Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([122.162.223.145])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7640863513bsm5589392b3a.8.2025.07.28.05.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Jul 2025 05:59:15 -0700 (PDT)
+From: "Darshan R." <rathod.darshan.0896@gmail.com>
+To: lhjeff911@gmail.com
+Cc: broonie@kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Darshan R." <rathod.darshan.0896@gmail.com>
+Subject: [PATCH] spi: sunplus: sp7021: Clean up coding style
+Date: Mon, 28 Jul 2025 12:41:04 +0000
+Message-ID: <20250728124104.6370-1-rathod.darshan.0896@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 89be9a83ccf1f88522317ce02f854f30d6115c41:
+This patch tidies up minor coding style deviations within the Sunplus SP7021 SPI driver, ensuring closer adherence to established kernel coding guidelines.
 
-  Linux 6.16-rc7 (2025-07-20 15:18:33 -0700)
+Specifically, it addresses:
+- Correction of a whitespace inconsistency before a comma in `writel()` calls.
+- Alignment of function parameter indentation for `struct spi_transfer *xfer` in `sp7021_spi_host_transfer_one()` and `sp7021_spi_target_transfer_one()`.
 
-are available in the Git repository at:
+While purely cosmetic, these adjustments contribute to improved code readability and maintainability, making future development and review easier.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.17
+Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
+---
+ drivers/spi/spi-sunplus-sp7021.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-for you to fetch changes up to 2d442a0c781403702de27ccfbc4bb233721585f5:
+diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
+index 7fd4cc6f74c2..256ae07db6be 100644
+--- a/drivers/spi/spi-sunplus-sp7021.c
++++ b/drivers/spi/spi-sunplus-sp7021.c
+@@ -103,7 +103,7 @@ static irqreturn_t sp7021_spi_target_irq(int irq, void *dev)
+ 
+ 	data_status = readl(pspim->s_base + SP7021_DATA_RDY_REG);
+ 	data_status |= SP7021_SLAVE_CLR_INT;
+-	writel(data_status , pspim->s_base + SP7021_DATA_RDY_REG);
++	writel(data_status, pspim->s_base + SP7021_DATA_RDY_REG);
+ 	complete(&pspim->target_isr);
+ 	return IRQ_HANDLED;
+ }
+@@ -296,7 +296,7 @@ static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfe
+ }
+ 
+ static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
+-				       struct spi_transfer *xfer)
++					struct spi_transfer *xfer)
+ {
+ 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	unsigned long timeout = msecs_to_jiffies(1000);
+@@ -360,7 +360,7 @@ static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_
+ }
+ 
+ static int sp7021_spi_target_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
+-				       struct spi_transfer *xfer)
++					  struct spi_transfer *xfer)
+ {
+ 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
+ 	struct device *dev = pspim->dev;
+-- 
+2.43.0
 
-  spi: SPISG: Fix less than zero comparison on a u32 variable (2025-07-25 18:46:31 +0100)
-
-----------------------------------------------------------------
-spi: Updates for v6.17
-
-This release is almost entirely driver work, mostly new drivers with the
-usual smattering of per driver updates anf fixes, with only trivial
-changes in the core.  Highlights include:
-
- - Quite a bit of maintainence work on the STM32 and Qualcomm drivers.
- - Usage of the newly added devm_dma_request_chan() in the ateml driver,
-   pulling in the relevant dmaengine change.
- - Cleanups of our usage of the PM autosuspend functions, this pulls in
-   some PM core changes on a shared tag.
- - Support for ADI sigma-delta triggers, Amlogic SPISG, Mediatek MT6991
-   and MT8196, Renesas RZ/V2H(P) and SOPHGO SG2042.
-
-----------------------------------------------------------------
-Andra-Teodora Ilie (1):
-      spi: spi-fsl-dspi: Enable modified transfer protocol on S32G
-
-AngeloGioacchino Del Regno (2):
-      spi: dt-bindings: mediatek,spi-mt65xx: Add support for MT6991/MT8196 SPI
-      spi: spi-mt65xx: Add support for MT6991 Dimensity 9400 SPI IPM
-
-Antonio Quartulli (1):
-      spi: stm32: fix pointer-to-pointer variables usage
-
-Bence Csókás (2):
-      dmaengine: Add devm_dma_request_chan()
-      spi: atmel-quadspi: Use `devm_dma_request_chan()`
-
-Ciprian Marian Costea (2):
-      dt-bindings: spi: dspi: Add S32G support
-      spi: spi-fsl-dspi: Enable support for S32G platforms
-
-Clément Le Goffic (7):
-      spi: stm32: Add SPI_READY mode to spi controller
-      spi: stm32: Check for cfg availability in stm32_spi_probe
-      spi: stm32: use STM32 DMA with STM32 MDMA to enhance DDR use
-      spi: stm32: deprecate `st,spi-midi-ns` property
-      spi: dt-bindings: stm32: update bindings with SPI Rx DMA-MDMA chaining
-      spi: dt-bindings: stm32: deprecate `st,spi-midi-ns` property
-      spi: stm32: fix sram pool free in probe error path
-
-Colin Ian King (1):
-      spi: SPISG: Fix less than zero comparison on a u32 variable
-
-Conor Dooley (2):
-      spi: microchip-core-qspi: set min_speed_hz during probe
-      spi: microchip-core-qspi: remove unused param from mchp_coreqspi_write_op()
-
-Cyril Jean (1):
-      spi: microchip-core-qspi: Add regular transfers
-
-Dan Carpenter (2):
-      spi: stm32: delete stray tabs in stm32h7_spi_data_idleness()
-      spi: stm32-ospi: Fix NULL vs IS_ERR() bug in stm32_ospi_get_resources()
-
-Darshan Rathod (2):
-      spi: xilinx: Fix block comment style and minor cleanups
-      spi: gpio: Use explicit 'unsigned int' for parameter types
-
-David Lechner (2):
-      dt-bindings: trigger-source: add ADI Util Sigma-Delta SPI
-      spi: offload trigger: add ADI Util Sigma-Delta SPI driver
-
-Fabrizio Castro (2):
-      spi: dt-bindings: Document the RZ/V2H(P) RSPI
-      spi: Add driver for the RZ/V2H(P) RSPI IP
-
-Frank Li (2):
-      spi: dt-bindings: mxs-spi: allow clocks properpty
-      spi: dt-bindings: add nxp,lpc3220-spi.yaml
-
-Gabor Juhos (5):
-      spi: spi-qpic-snand: use NANDC_STEP_SIZE consistently
-      spi: spi-qpic-snand: remove 'qpic_snand_op' structure
-      mtd: nand: qpic-common: add defines for ECC_MODE values
-      spi: spi-qpic-snand: add support for 8 bits ECC strength
-      spi: spi-qpic-snand: simplify bad block marker duplication
-
-Geert Uytterhoeven (2):
-      spi: sh-msiof: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
-      spi: rspi: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
-
-Heiko Schocher (2):
-      dt-bindings: trivial-devices: Document ABB sensors
-      spi: spidev: Add an entry for the ABB spi sensors
-
-Jakub Czapiga (1):
-      spi: intel: Allow writeable MTD partition with module param
-
-James Clark (2):
-      spi: spi-fsl-dspi: Re-use one volatile regmap for both device types
-      spi: spi-fsl-dspi: Define regmaps per device
-
-Larisa Grigore (4):
-      spi: spi-fsl-dspi: Add config and regmaps for S32G platforms
-      spi: spi-fsl-dspi: Avoid setup_accel logic for DMA transfers
-      spi: spi-fsl-dspi: Use DMA for S32G controller in target mode
-      spi: spi-fsl-dspi: Reinitialize DSPI regs after resuming for S32G
-
-Lukas Bulwahn (1):
-      spi: spi-fsl-dspi: Revert unintended dependency change in config SPI_FSL_DSPI
-
-Marius Trifu (1):
-      spi: spi-fsl-dspi: Use spi_alloc_target for target
-
-Mark Brown (12):
-      spi: spi-fsl-dspi: DSPI support for NXP S32G
-      spi: Merge up fixes
-      spi: microchip-core-qspi: Add regular transfers
-      Add few updates to the STM32 SPI driver
-      Add `devm_dma_request_chan()` to simplify probe
-      iio: adc: ad7173: add SPI offload support
-      spi: spi-qpic-snand: enable 8 bits ECC strength
-      treewide: Remove redundant
-      spidev: introduce trivial abb sensor device
-      support for amlogic the new SPI IP
-      Add RSPI support for RZ/V2H
-      spi: sophgo: Add SPI NOR controller for SG2042
-
-Raphael Gallais-Pou (1):
-      spi: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-
-Rob Herring (Arm) (3):
-      spi: dt-bindings: Convert marvell,orion-spi to DT schema
-      spi: stm32-ospi: Use of_reserved_mem_region_to_resource() for "memory-region"
-      spi: dt-bindings: spi-mux: Drop "spi-max-frequency" as required
-
-Sakari Ailus (7):
-      PM: runtime: Document return values of suspend-related API functions
-      PM: runtime: Mark last busy stamp in pm_runtime_put_autosuspend()
-      PM: runtime: Mark last busy stamp in pm_runtime_put_sync_autosuspend()
-      PM: runtime: Mark last busy stamp in pm_runtime_autosuspend()
-      PM: runtime: Mark last busy stamp in pm_request_autosuspend()
-      Documentation: PM: *_autosuspend() functions update last busy time
-      spi: Remove redundant pm_runtime_mark_last_busy() calls
-
-Shiji Yang (1):
-      spi: falcon: mark falcon_sflash_xfer() as static
-
-Sunny Luo (2):
-      spi: dt-bindings: Add binding document of Amlogic SPISG controller
-      spi: Add Amlogic SPISG driver
-
-Thangaraj Samynathan (3):
-      spi: spi-pci1xxxx: Add support for 25MHz Clock frequency in C0
-      spi: spi-pci1xxxx: Add support for per-instance DMA interrupt vectors
-      spi: spi-pci1xxxx: enable concurrent DMA read/write across SPI transfers
-
-Xianwei Zhao (1):
-      MAINTAINERS: Add an entry for Amlogic spi driver
-
-Zixian Zeng (3):
-      spi: dt-bindings: spi-sg2044-nor: Change SOPHGO SG2042
-      spi: spi-sg2044-nor: Add configurable chip_info
-      spi: spi-sg2044-nor: Add SPI-NOR controller for SG2042
-
- .../devicetree/bindings/spi/amlogic,a4-spisg.yaml  |  59 ++
- .../devicetree/bindings/spi/fsl,dspi.yaml          |  18 +
- .../devicetree/bindings/spi/marvell,orion-spi.yaml | 102 +++
- .../bindings/spi/mediatek,spi-mt65xx.yaml          |   5 +
- Documentation/devicetree/bindings/spi/mxs-spi.yaml |   3 +
- .../devicetree/bindings/spi/nxp,lpc3220-spi.yaml   |  44 +
- .../bindings/spi/renesas,rzv2h-rspi.yaml           |  96 +++
- Documentation/devicetree/bindings/spi/spi-mux.yaml |   1 -
- .../devicetree/bindings/spi/spi-orion.txt          |  79 --
- .../bindings/spi/spi-peripheral-props.yaml         |   1 +
- .../devicetree/bindings/spi/spi-sg2044-nor.yaml    |   9 +-
- .../devicetree/bindings/spi/st,stm32-spi.yaml      |  48 +-
- .../trigger-source/adi,util-sigma-delta-spi.yaml   |  49 ++
- .../devicetree/bindings/trivial-devices.yaml       |   2 +
- Documentation/power/runtime_pm.rst                 |  50 +-
- MAINTAINERS                                        |  16 +-
- drivers/dma/dmaengine.c                            |  30 +
- drivers/mtd/nand/raw/qcom_nandc.c                  |   6 +-
- drivers/spi/Kconfig                                |  26 +-
- drivers/spi/Makefile                               |   3 +
- drivers/spi/atmel-quadspi.c                        |  53 +-
- drivers/spi/spi-amlogic-spisg.c                    | 888 +++++++++++++++++++++
- drivers/spi/spi-cadence-quadspi.c                  |   2 -
- drivers/spi/spi-cadence.c                          |   1 -
- drivers/spi/spi-falcon.c                           |   5 +-
- drivers/spi/spi-fsl-dspi.c                         | 356 ++++++---
- drivers/spi/spi-fsl-espi.c                         |   2 -
- drivers/spi/spi-fsl-lpspi.c                        |   2 -
- drivers/spi/spi-gpio.c                             |  16 +-
- drivers/spi/spi-imx.c                              |   3 -
- drivers/spi/spi-intel.c                            |  13 +-
- drivers/spi/spi-microchip-core-qspi.c              | 226 +++++-
- drivers/spi/spi-mt65xx.c                           |  11 +
- drivers/spi/spi-mtk-nor.c                          |   1 -
- drivers/spi/spi-nxp-fspi.c                         |   1 -
- .../spi/spi-offload-trigger-adi-util-sigma-delta.c |  59 ++
- drivers/spi/spi-omap2-mcspi.c                      |   3 -
- drivers/spi/spi-pci1xxxx.c                         | 285 ++++---
- drivers/spi/spi-qpic-snand.c                       |  72 +-
- drivers/spi/spi-rockchip-sfc.c                     |   3 -
- drivers/spi/spi-rspi.c                             |   9 +-
- drivers/spi/spi-rzv2h-rspi.c                       | 466 +++++++++++
- drivers/spi/spi-s3c64xx.c                          |   3 -
- drivers/spi/spi-sg2044-nor.c                       |  29 +-
- drivers/spi/spi-sh-msiof.c                         |  11 +-
- drivers/spi/spi-sprd.c                             |   1 -
- drivers/spi/spi-st-ssc4.c                          |  14 +-
- drivers/spi/spi-stm32-ospi.c                       |  31 +-
- drivers/spi/spi-stm32-qspi.c                       |   7 -
- drivers/spi/spi-stm32.c                            | 318 +++++++-
- drivers/spi/spi-ti-qspi.c                          |   2 -
- drivers/spi/spi-xilinx.c                           |   5 +-
- drivers/spi/spi-zynqmp-gqspi.c                     |   1 -
- drivers/spi/spi.c                                  |   3 -
- drivers/spi/spidev.c                               |   2 +
- include/linux/dmaengine.h                          |   7 +
- include/linux/mtd/nand-qpic-common.h               |   2 +
- include/linux/pm_runtime.h                         | 187 ++++-
- 58 files changed, 3150 insertions(+), 597 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/amlogic,a4-spisg.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/marvell,orion-spi.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/nxp,lpc3220-spi.yaml
- create mode 100644 Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
- delete mode 100644 Documentation/devicetree/bindings/spi/spi-orion.txt
- create mode 100644 Documentation/devicetree/bindings/trigger-source/adi,util-sigma-delta-spi.yaml
- create mode 100644 drivers/spi/spi-amlogic-spisg.c
- create mode 100644 drivers/spi/spi-offload-trigger-adi-util-sigma-delta.c
- create mode 100644 drivers/spi/spi-rzv2h-rspi.c
 
