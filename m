@@ -1,140 +1,79 @@
-Return-Path: <linux-spi+bounces-9199-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9200-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415EAB13ADF
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 14:59:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97CDAB148BA
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jul 2025 08:53:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C28F43B2A49
-	for <lists+linux-spi@lfdr.de>; Mon, 28 Jul 2025 12:58:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0FD4545089
+	for <lists+linux-spi@lfdr.de>; Tue, 29 Jul 2025 06:52:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C711725CC70;
-	Mon, 28 Jul 2025 12:59:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90495278E75;
+	Tue, 29 Jul 2025 06:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BkHaMedu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MhPXc2QS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A5E2222A3;
-	Mon, 28 Jul 2025 12:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69616277CAC;
+	Tue, 29 Jul 2025 06:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753707559; cv=none; b=tBCrfusLITg/CQcL+vARE5+gq/sIWh90Llaia2tJZEi/zftKs6MQkOXLPb2/w/ysISRfElzRCcgFdU6CsbuuFvwYhgM+SsWdDk/rw6fVTw1UFGGD0J4d5HvK8bvfExmya/c/VU0ru4GhEMENjGa8XQTRYWs3ARIOfe7ZAXxa4JM=
+	t=1753771814; cv=none; b=Td+gYmX7JHLTDXFYysc8iYyhzjwM/pqP8y+1VYvTSEmo9m511L4k2niTGwxacSs4lrrD/lwBoqvUxEJMRldKYKarIrS8kiDaKbTa/VUTvB3hwnK4rTt+y9oM+jPmgtJ1eDu0de+62RZnVe6tulCC47rL3aAFi39ibKnxtyM7GEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753707559; c=relaxed/simple;
-	bh=IhmHfcSsqvi4XakQ4sYwxkmbwY7HX0R7FkhypdAtOrs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pzZwaPPq79uT13obV8PwJ/ue8SJKnaOmt7k0Sz3dbl8OzIEphS/UScnT8reWsiUVm6xXTZ47YaTUoHvKq5HS4JxpKUG457wgkak7enfM3eJX4L6qEgbh6BiRZvlWlYXeBv/6tQkeu/XP/d/QWqZpiMWO1ulUCbuYJzqgiea20l4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BkHaMedu; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-748d982e97cso3947629b3a.1;
-        Mon, 28 Jul 2025 05:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753707556; x=1754312356; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhAzjK5FT+CciFxLwNthNR1VR+Fzupqi6PO9KjFf0r0=;
-        b=BkHaMedu9PWg/72u2ouC51DUv03UQqki8V6/omOur7ehmVug2Csx+EBEEuQr4zYlNU
-         0johkAOXNG86mBN0Q0Xb2mB8rVItx1Fr/J0iHlUarfdhxP6+sZu7uvI74V8pmyuk1U2W
-         QCig81FvCz7IQDLhB05/69+PREG9Z061aodzS0bLw535cVtgixsphHi3CFkJFfEa0IBt
-         Njw3EGfBuaON8PpPZi37CKoPs5/Xnr2ynXseOnsfkCGRO5gQOHfToPFDOpa5I4N+wXMV
-         PHSNaA/2LvqHRGIuQmYjrZGDYSq2lNS/AyLEzSBhwDleVEXtoaVEUkYHMDusAF0sssWq
-         0Vtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753707556; x=1754312356;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZhAzjK5FT+CciFxLwNthNR1VR+Fzupqi6PO9KjFf0r0=;
-        b=o1Xgv7ihsitOaK7RW04bPGMzKskXSQofWTZArJs4FihtXMyWoKwPewjX9NASDnqAlb
-         omu26HK4yJUjsJKN3k4xhomPMfiKIlBItB6TE30GFP9HPeFA2714aom3BWxAEUW0dGSk
-         lf0UIkUooY6NMrjBLsc0BxVbctm9rDhGX+X7D56VsnQCi1tmZ23ZoLAJ0OVJ3ThBPwDp
-         +fIu56SVJc576mNZZWY5OJFLiUPoSv5bZvEe0Qzw1tT9lsz5SBbnsiIcLIALY36gCnwg
-         1arV1RTJRkpV+azvE9uutzVPGdpSk2L4YadUt2lTH78Z+WOTYNYaQIvGMXvX/pUxQJiT
-         eLcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6Rj+wrbKmD8Va3gfihMXaSuyvQ+MdBZSjoptst0gCZZsMQsTW8KRVuS22sfDV8oFc/1W94WawsoRr@vger.kernel.org, AJvYcCUS6nnvzPNyHvH809gvZ0hxFFGf+Uf57UxV74YX1dt7GbQJS48lmmNi4mQDFQNSbFruQkfLTV6HL7P+qaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOfiiUxNDoBAQT2xAGiTc0hmMUmLJ3hpX4UgcYzBIyAloCnJMJ
-	JHdv6BYu8rt5zmd5F1tHEI5BViPpnMPkKA0D+HNV3CU9xaXainhRLagc
-X-Gm-Gg: ASbGncv/ojZLNA0TuAP7CjD9SksSt/Y8hZHSSMiT9CxDStADGltd0hnj1HOTX2LHHo3
-	R/PWKmTfEphHzllu11UJ2wjjhJ/FNnXKx2eJLuAd8GG18K/jplpwj+/QdS3JT7yQ88XZPBS8uwS
-	a3kcf0BpqE1dsFaMh2X/3NGRPULZ7LCYXf/PCh/EF4NTxQvT8dNVcfUN1FupJ6ErVWnT9XF06xA
-	a66DcyLtHEIbk0uGluFvv5T+tL73ZR60uhAwRAGs36W2MmNG6jYD94E3L0ZiS5q+YPcVitYZztm
-	/YcxP0NSeBEAlTg4bB9b+hsKFAg5lx7hElp6PecowQQLGvE1x9ZItxxfZsSycxf0m5jNPeHt07s
-	jygFifLZcMV3oEEFB3a9RVf70PIKTuIi9B/hexTtBwNu22P2msfk3QdpRzTRRKsvaZgo8v+EU2U
-	HoicYfwNPR175HdqBg
-X-Google-Smtp-Source: AGHT+IGENH4RfeEDFn/IoEogrzWjFEeRAzJl6HlR7BypR5NTpHuCAK3gs/JhKuMwkxq3MC0ECTtFDQ==
-X-Received: by 2002:a05:6a20:a126:b0:232:fcfc:7209 with SMTP id adf61e73a8af0-23d701a89d9mr19624271637.35.1753707556461;
-        Mon, 28 Jul 2025 05:59:16 -0700 (PDT)
-Received: from SIQOL-WIN-0002-DARSHAN.localdomain ([122.162.223.145])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7640863513bsm5589392b3a.8.2025.07.28.05.59.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Jul 2025 05:59:15 -0700 (PDT)
-From: "Darshan R." <rathod.darshan.0896@gmail.com>
-To: lhjeff911@gmail.com
-Cc: broonie@kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Darshan R." <rathod.darshan.0896@gmail.com>
-Subject: [PATCH] spi: sunplus: sp7021: Clean up coding style
-Date: Mon, 28 Jul 2025 12:41:04 +0000
-Message-ID: <20250728124104.6370-1-rathod.darshan.0896@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1753771814; c=relaxed/simple;
+	bh=05PcAjPSO1cVWLo0kPm8ouA966+RXJLHb9GBCJ8guBY=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=rjba3IjfT+id5hKcJr+t8/8aufIlev7xD/1p/4Plu8FewCnf4juob1kt9oxnpZlLwuM4h68QiaPS480u/DaYYsxWs50ZoBTTXTgPV3WtDLhFEPlIqmw2EZy0kU1rROAPYt6kbJZVa92KEVUo3wIT4elnVz6HNpF5Wj+gt+t7PoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MhPXc2QS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D52DC4CEEF;
+	Tue, 29 Jul 2025 06:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753771814;
+	bh=05PcAjPSO1cVWLo0kPm8ouA966+RXJLHb9GBCJ8guBY=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=MhPXc2QSo9QLnEacBFMRMrUZ5oBGXle8pVcK98/sCcMBqto11wOi/XzS3t/0LZeiG
+	 /H+LRk24In/xI92L3pqEcxqrzb9kK+GXZXVVeRIf4M9HhoEefo5Wd1iI09k8qSuasw
+	 MP4HAdb/UMl27K0cXTAHI1UU7P+GJ9+uN/vCGioMRWU53vaFRjI3M+rDgRMMVWbL6R
+	 pHdMwwuLSaTM/4jNrv6oV3xPDleLRFEYXvCzKdIGkauQSZHa4xOUX0SeSbkiS37/bo
+	 s6bd59wisHxAWY/hNFSZz6nzY0UqcHDnkk591jvKvAWH2gaFkyQ/stRjOKdwCTS8IY
+	 UukSW3ImCUPDA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 046DC383BF60;
+	Tue, 29 Jul 2025 06:50:32 +0000 (UTC)
+Subject: Re: [GIT PULL] SPI updates for v6.17
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ead4b31b9f656b8a7ac9280d368fd210.broonie@kernel.org>
+References: <ead4b31b9f656b8a7ac9280d368fd210.broonie@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ead4b31b9f656b8a7ac9280d368fd210.broonie@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.17
+X-PR-Tracked-Commit-Id: 2d442a0c781403702de27ccfbc4bb233721585f5
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0262163136de813894cb172aa8ccf762b92e5fd7
+Message-Id: <175377183080.1356386.3701150989011374661.pr-tracker-bot@kernel.org>
+Date: Tue, 29 Jul 2025 06:50:30 +0000
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This patch tidies up minor coding style deviations within the Sunplus SP7021 SPI driver, ensuring closer adherence to established kernel coding guidelines.
+The pull request you sent on Mon, 28 Jul 2025 13:24:37 +0100:
 
-Specifically, it addresses:
-- Correction of a whitespace inconsistency before a comma in `writel()` calls.
-- Alignment of function parameter indentation for `struct spi_transfer *xfer` in `sp7021_spi_host_transfer_one()` and `sp7021_spi_target_transfer_one()`.
+> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-v6.17
 
-While purely cosmetic, these adjustments contribute to improved code readability and maintainability, making future development and review easier.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0262163136de813894cb172aa8ccf762b92e5fd7
 
-Signed-off-by: Darshan R. <rathod.darshan.0896@gmail.com>
----
- drivers/spi/spi-sunplus-sp7021.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Thank you!
 
-diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
-index 7fd4cc6f74c2..256ae07db6be 100644
---- a/drivers/spi/spi-sunplus-sp7021.c
-+++ b/drivers/spi/spi-sunplus-sp7021.c
-@@ -103,7 +103,7 @@ static irqreturn_t sp7021_spi_target_irq(int irq, void *dev)
- 
- 	data_status = readl(pspim->s_base + SP7021_DATA_RDY_REG);
- 	data_status |= SP7021_SLAVE_CLR_INT;
--	writel(data_status , pspim->s_base + SP7021_DATA_RDY_REG);
-+	writel(data_status, pspim->s_base + SP7021_DATA_RDY_REG);
- 	complete(&pspim->target_isr);
- 	return IRQ_HANDLED;
- }
-@@ -296,7 +296,7 @@ static void sp7021_spi_setup_clk(struct spi_controller *ctlr, struct spi_transfe
- }
- 
- static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
--				       struct spi_transfer *xfer)
-+					struct spi_transfer *xfer)
- {
- 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	unsigned long timeout = msecs_to_jiffies(1000);
-@@ -360,7 +360,7 @@ static int sp7021_spi_host_transfer_one(struct spi_controller *ctlr, struct spi_
- }
- 
- static int sp7021_spi_target_transfer_one(struct spi_controller *ctlr, struct spi_device *spi,
--				       struct spi_transfer *xfer)
-+					  struct spi_transfer *xfer)
- {
- 	struct sp7021_spi_ctlr *pspim = spi_controller_get_devdata(ctlr);
- 	struct device *dev = pspim->dev;
 -- 
-2.43.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
