@@ -1,249 +1,158 @@
-Return-Path: <linux-spi+bounces-9230-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9231-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6722B15DE3
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 12:11:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62321B15E00
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 12:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 558BA7ADC74
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 10:10:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A45021668E5
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 10:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B17293454;
-	Wed, 30 Jul 2025 10:11:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328CA279DAD;
+	Wed, 30 Jul 2025 10:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="FYOyLrDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eyQOpxcV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520451F09B6;
-	Wed, 30 Jul 2025 10:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE402266B66;
+	Wed, 30 Jul 2025 10:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753870276; cv=none; b=TzrVC1Lv8y2Og7nkJGdmpDh68ub2hgWGNEIjK6Ge9pB85tTwjbt+YDy83lIC063ybbZ4p6gukd5RBs+/j1jjy1UORHICNgxgc7lE0sKuUwoRYmJWwJklXww+8P1yxEPsGG3drxlX44Qi5E7vgcoatQo6Deh1gZpGmbrNND/wfHI=
+	t=1753870772; cv=none; b=L+Ao2YRDUh0xIQWhsuVTcQ4+gynhrpCyBYWoA4Gs6XfvPL5ZPj4AjJP22wnoW3bRCG6c6dJqk7Ug5OudumeeZcw3nCZiuiivaCBL6mlC+MQI8zTT64qxBb/c+zf2//oM0MDUarod+NQIsYThgxl5eeDH9w4Vu09LlKRuDu1ODj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753870276; c=relaxed/simple;
-	bh=Q5iWrsIMXpRDAygoxfGOZsTjC81BxOD/oAIcBKlczI8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ABeLStnyFcFvGxZzXUjgVe3vTNS0WC66nMJ5K2XSNj4uyMliQqG2G0rfawpw11NBK1JKPhokObSjKl7mndC6snCg6r8ZLlJfz74WfL1GdBZcRIlDBUFDHWfxvzQvj3nDAANACsu1M5Y47g69PWWg9CaV5IVjmyUQRtFewHfdrz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=FYOyLrDH; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1753870274; x=1785406274;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Q5iWrsIMXpRDAygoxfGOZsTjC81BxOD/oAIcBKlczI8=;
-  b=FYOyLrDHJVNtrEDALZQYO59Td6FGRCZCqnLyPBsheemjJb6YM2vUr+yT
-   u6SvPZuHnwwTFFOVyKWmoFE90pnzfOOQTm/jlQ2D2G2RYpnU+eJkzUvLD
-   lGvD2PRHWz29lbrPGqlUOzYVWyXYKNr94N8V2RSkYhmj99kWDrGVC5z/1
-   Z0+DbK53B7SFUs61Tw8Wk5PCZkB1P1ZoeIhun/hCSMQCLZeL1TgaPo/SJ
-   vRLaoeh2oCT958xx8Y7XQZZY8QWWSqeZNHNtTnGD1pD9v47kpYGaKwWzH
-   9qhrYclcMVHiz07qimQSa82egS7kkQa1PPnOvArEYlvBk94lT3S/T5VEe
-   w==;
-X-CSE-ConnectionGUID: zjJ/PdTbTgKvrskxeKL28w==
-X-CSE-MsgGUID: PjxoSgqfSBiifod6J4ocUQ==
-X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="49962579"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jul 2025 03:11:11 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 30 Jul 2025 03:10:44 -0700
-Received: from che-lt-i67131.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Wed, 30 Jul 2025 03:10:39 -0700
-From: Manikandan Muralidharan <manikandan.m@microchip.com>
-To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
-	<ryan.wanner@microchip.com>, <tudor.ambarus@linaro.org>,
-	<linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-CC: <manikandan.m@microchip.com>
-Subject: [PATCH v2 3/3] spi: atmel: Add support for handling GCLK as a clock source
-Date: Wed, 30 Jul 2025 15:40:15 +0530
-Message-ID: <20250730101015.323964-3-manikandan.m@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250730101015.323964-1-manikandan.m@microchip.com>
-References: <20250730101015.323964-1-manikandan.m@microchip.com>
+	s=arc-20240116; t=1753870772; c=relaxed/simple;
+	bh=EAo1JwLwQmSVpdRh6bDezMwGkO6es9S03FxPuaNswug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XbeqL9dy2oqF8GDT/+kVUw4S7fGhNSByiN/Qecrzd317OH5tao2u3Xbwq3ixgsFHwvlfFjOt0Fh8nY0UZKzCqtzqNVK9Pin+4DOo/P6joeaqpF+UhDZ/6WMaVk5UyUJtgE+BX2AQzCIh6OkSzR4y57uq44CWjMZPFskyQ1+NAfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eyQOpxcV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582B1C4CEE7;
+	Wed, 30 Jul 2025 10:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753870771;
+	bh=EAo1JwLwQmSVpdRh6bDezMwGkO6es9S03FxPuaNswug=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eyQOpxcVcR1H63+BHWg/CFKigaLqUqMvNvXsUknLdHPeMkodeiZl5MPug/8DsVw/a
+	 giBEQoO6YJfc2IYMup/cB5/tzxUNdpq26OkCCKKEyijv3HeDTvTPB42bZ/LAWWap1W
+	 HSU9KVqt3jnCYHFHTDpwJjFf8xW2jB/JQQE+K88VmHLkDDwagXryM/B6XDesFEu6sE
+	 dSdDZ+j8pNDSjEmeF0IcFGmPg4/QvfL9hUVm6h9WtgU6dBsthpBa+4155dTYEuncfm
+	 LoudalTEKGq6b4IJRJAblOtrJzxaq8mDhKnhvwKxJ1GJAz0exZz3MffWB+GUVgM/Fm
+	 qi3d0rU9EWtOg==
+Date: Wed, 30 Jul 2025 11:19:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?iso-8859-1?Q?Am=E9lie?= Delaunay <amelie.delaunay@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-actions@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH RFC 5/6] spi: geni-qcom: Hint GENI protocol ID to GPI DMA
+Message-ID: <490091ee-ba84-4f97-96b4-fe30ed082e17@sirena.org.uk>
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-5-b505c1238f9f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bAEzP5efOXdEgXiD"
+Content-Disposition: inline
+In-Reply-To: <20250730-topic-dma_genise_cookie-v1-5-b505c1238f9f@oss.qualcomm.com>
+X-Cookie: Linux is obsolete
 
-The SPI peripheral clock is typically used to derive the serial
-clock (SPCK) via the FLEX_SPI_CSRx.SCBR field. However, on platforms
-like the SAM9X7 SoC, where the peripheral clock can reach up to 266 MHz,
-this may exceed the SCBR limit, causing SPI transfers to fail.
-This patch adds support for using the SPI Generic Clock (GCLK) as an
-alternative and more flexible clock source for SPCK generation.
-The FLEX_SPI_MR.BRSRCCLK bit is updated accordingly to select between the
-peripheral clock and GCLK.
 
-Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
----
-changes in v2:
- - Fixed mail threading
----
- drivers/spi/spi-atmel.c | 64 +++++++++++++++++++++++++++++++++++------
- 1 file changed, 56 insertions(+), 8 deletions(-)
+--bAEzP5efOXdEgXiD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
-index 409f544d8983..89977bff76d2 100644
---- a/drivers/spi/spi-atmel.c
-+++ b/drivers/spi/spi-atmel.c
-@@ -256,6 +256,7 @@ struct atmel_spi {
- 	void __iomem		*regs;
- 	int			irq;
- 	struct clk		*clk;
-+	struct clk		*gclk;
- 	struct platform_device	*pdev;
- 	unsigned long		spi_clk;
- 
-@@ -1480,6 +1481,8 @@ static void atmel_get_caps(struct atmel_spi *as)
- 
- static void atmel_spi_init(struct atmel_spi *as)
- {
-+	u32 mr = 0;
-+
- 	spi_writel(as, CR, SPI_BIT(SWRST));
- 	spi_writel(as, CR, SPI_BIT(SWRST)); /* AT91SAM9263 Rev B workaround */
- 
-@@ -1487,12 +1490,17 @@ static void atmel_spi_init(struct atmel_spi *as)
- 	if (as->fifo_size)
- 		spi_writel(as, CR, SPI_BIT(FIFOEN));
- 
--	if (as->caps.has_wdrbt) {
--		spi_writel(as, MR, SPI_BIT(WDRBT) | SPI_BIT(MODFDIS)
--				| SPI_BIT(MSTR));
--	} else {
--		spi_writel(as, MR, SPI_BIT(MSTR) | SPI_BIT(MODFDIS));
--	}
-+	/*
-+	 * If GCLK is selected as the source clock for the bit rate generation
-+	 * Enable the BRSRCCLK/FDIV/DIV32 bit
-+	 */
-+	if (as->gclk)
-+		mr |= SPI_BIT(FDIV);
-+
-+	if (as->caps.has_wdrbt)
-+		mr |= SPI_BIT(WDRBT);
-+
-+	spi_writel(as, MR, mr | SPI_BIT(MODFDIS) | SPI_BIT(MSTR));
- 
- 	if (as->use_pdc)
- 		spi_writel(as, PTCR, SPI_BIT(RXTDIS) | SPI_BIT(TXTDIS));
-@@ -1555,6 +1563,11 @@ static int atmel_spi_probe(struct platform_device *pdev)
- 	as->phybase = regs->start;
- 	as->irq = irq;
- 	as->clk = clk;
-+	as->gclk = devm_clk_get_optional(&pdev->dev, "spi_gclk");
-+	if (IS_ERR(as->gclk)) {
-+		ret = PTR_ERR(as->gclk);
-+		goto out_unmap_regs;
-+	}
- 
- 	init_completion(&as->xfer_completion);
- 
-@@ -1615,7 +1628,19 @@ static int atmel_spi_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto out_free_irq;
- 
--	as->spi_clk = clk_get_rate(clk);
-+	/*
-+	 * In cases where the peripheral clock is higher,the FLEX_SPI_CSRx.SCBR
-+	 * exceeds the threshold (SCBR ≤ 255), the GCLK is used as the source clock
-+	 * for the SPCK (SPI Serial Clock) bit rate generation
-+	 */
-+	if (as->gclk) {
-+		ret = clk_prepare_enable(as->gclk);
-+		if (ret)
-+			goto out_disable_clk;
-+		as->spi_clk = clk_get_rate(as->gclk);
-+	} else {
-+		as->spi_clk = clk_get_rate(clk);
-+	}
- 
- 	as->fifo_size = 0;
- 	if (!of_property_read_u32(pdev->dev.of_node, "atmel,fifo-size",
-@@ -1650,6 +1675,8 @@ static int atmel_spi_probe(struct platform_device *pdev)
- 
- 	spi_writel(as, CR, SPI_BIT(SWRST));
- 	spi_writel(as, CR, SPI_BIT(SWRST)); /* AT91SAM9263 Rev B workaround */
-+	clk_disable_unprepare(as->gclk);
-+out_disable_clk:
- 	clk_disable_unprepare(clk);
- out_free_irq:
- out_unmap_regs:
-@@ -1685,6 +1712,8 @@ static void atmel_spi_remove(struct platform_device *pdev)
- 	spin_unlock_irq(&as->lock);
- 
- 	clk_disable_unprepare(as->clk);
-+	if (as->gclk)
-+		clk_disable_unprepare(as->gclk);
- 
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-@@ -1696,6 +1725,8 @@ static int atmel_spi_runtime_suspend(struct device *dev)
- 	struct atmel_spi *as = spi_controller_get_devdata(host);
- 
- 	clk_disable_unprepare(as->clk);
-+	if (as->gclk)
-+		clk_disable_unprepare(as->gclk);
- 	pinctrl_pm_select_sleep_state(dev);
- 
- 	return 0;
-@@ -1705,10 +1736,20 @@ static int atmel_spi_runtime_resume(struct device *dev)
- {
- 	struct spi_controller *host = dev_get_drvdata(dev);
- 	struct atmel_spi *as = spi_controller_get_devdata(host);
-+	int ret;
- 
- 	pinctrl_pm_select_default_state(dev);
- 
--	return clk_prepare_enable(as->clk);
-+	ret = clk_prepare_enable(as->clk);
-+	if (ret)
-+		return ret;
-+	if (as->gclk) {
-+		ret = clk_prepare_enable(as->gclk);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
- }
- 
- static int atmel_spi_suspend(struct device *dev)
-@@ -1736,10 +1777,17 @@ static int atmel_spi_resume(struct device *dev)
- 	ret = clk_prepare_enable(as->clk);
- 	if (ret)
- 		return ret;
-+	if (as->gclk) {
-+		ret = clk_prepare_enable(as->gclk);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	atmel_spi_init(as);
- 
- 	clk_disable_unprepare(as->clk);
-+	if (as->gclk)
-+		clk_disable_unprepare(as->gclk);
- 
- 	if (!pm_runtime_suspended(dev)) {
- 		ret = atmel_spi_runtime_resume(dev);
--- 
-2.25.1
+On Wed, Jul 30, 2025 at 11:33:32AM +0200, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>=20
+> With the API in place, request the correct protocol ID with the GPI DMA
+> to avoid having to hardcode this obvious information in the device
+> tree.
 
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--bAEzP5efOXdEgXiD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiJ8ZoACgkQJNaLcl1U
+h9DnvAf+LbcTzds/hsfTeLtLPENpavgpdBbC/kj+eo3NQESPHZy9K7kiL8p7Xjbr
+hMSf6upQxsK7NZMFyKsLc0oAEP6LLyDU16ON/R+QDQiNYou0xOm9vYoJwtmhMvDY
+PDJaohO2ZSfEwodlxhodZ0HxhrSaPXLEiJt2tA/ASGUdRtCC15yUoXItcUf+b04C
+/A3TjgtsVE32Xz6HKLh2/Z6WkBWVgqpGswljAu7JkNAvKlp7BTviSUX645kuiQYz
+/o32yfxiCCO5LO/s2/wvMjiCgaKi2Kf8uLjifxymS8nOhqcw/yZjAZ70/lo6j8IO
+EmQkB6uCcv8iOoBmuo/fb2/ULFapvQ==
+=j7vN
+-----END PGP SIGNATURE-----
+
+--bAEzP5efOXdEgXiD--
 
