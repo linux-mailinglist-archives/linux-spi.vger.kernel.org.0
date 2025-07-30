@@ -1,324 +1,319 @@
-Return-Path: <linux-spi+bounces-9241-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9244-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E816FB165F9
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 20:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FF6EB1669C
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 20:58:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C4F1AA72E5
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 18:05:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B19F1AA4D7B
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 18:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAE92DEA77;
-	Wed, 30 Jul 2025 18:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0F62E040D;
+	Wed, 30 Jul 2025 18:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="S0KP4Rwv"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Av029LSt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD41D1DF98F;
-	Wed, 30 Jul 2025 18:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4149B298CA0;
+	Wed, 30 Jul 2025 18:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753898679; cv=none; b=SCe7Dg/Lx18Sg3I1OFgkjr1mdJARG694rgHbtzsjUs7lmpH2cF1Yvr5Gz8OjYqCDyE54JzG16lpyCU1JmuPjYj0mbStL6HGCMiIE1aX1wrVzx6veOWIeb8oTFSgOYJ+ck2a1fUFaa0WrmQ1zwdITBZr6fRcYWlAhI+KifApwxoA=
+	t=1753901885; cv=none; b=RnmI0uh7GjX1SxH5i/M3qeKgGEFwU76gYXiMp82yRrmTEKZXtYsUWFI9OGKYCb2t/xd2zPOJ2RzwIPYJWklFoduXmohxHxX88+EgiVC+8qqP71ie+aqVmIvazCTgb9igT3dRL6hmJ5Y4AAeu7wm1GyrwPq84gL6gM8UtFyEw0a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753898679; c=relaxed/simple;
-	bh=cbMS9OmeSERInvl7UM9IzHA/1kYbIyujkvyTsarEoyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KX376fW1YTOI2YNpbWPUQa/Xr8INTFiGemLVRkZCk55Z3mTuEI/gCXYtKerJeM/dSuAgZXeJZsv2YBIuo2PSxf9b1+yXkgfhkZ7OJZ7Yqgzafe0cPYbTdY5I+A5bQalZH0vS4dOhuI62ywop2ekQFheHC49IiJVNXO6qMZr4qLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=S0KP4Rwv; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id B2602C7A;
-	Wed, 30 Jul 2025 20:03:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1753898623;
-	bh=cbMS9OmeSERInvl7UM9IzHA/1kYbIyujkvyTsarEoyM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S0KP4RwvjhhMCHmYAsXZhPvBAliHVBXvGmTOFn0QRy/xgBYQ37WjvUeDdDfOF8VqJ
-	 4w+3CldYfOmcc+CTzsXf9EPW11/nspDIDvbpl3dvSt3rXoNsvxPu72ajfhRG3E6BLo
-	 X1Fx2sy170lQ7HQmW8yy5kK+kVNDpQpNmz8aiJ2o=
-Date: Wed, 30 Jul 2025 21:04:17 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	=?utf-8?Q?Am=C3=A9lie?= Delaunay <amelie.delaunay@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-actions@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel
- pass a cookie to of_xlate
-Message-ID: <20250730180417.GC21430@pendragon.ideasonboard.com>
-References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
- <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
+	s=arc-20240116; t=1753901885; c=relaxed/simple;
+	bh=rlWVA98Nk1xc9d+D4b6/PtmU0tfeo27zyN8Zmh0ftUs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Jk1qu2k/B0poAze8S2vxdWV1imgILTlhoMqbVpAKUJYznCYhx+FHrzJXPKNUpnpfQVr765JBpS4wGKKn9g+0eAukmo9LYKeeWc+USVu73XA8bhaVImmvIP1gWtfe1IKvUelRkATlQrkhx4COgEfe1/wZ0b6MZGY1vQDzQDWOgEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Av029LSt; arc=none smtp.client-ip=198.47.23.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTP id 56UIUoFW3307285;
+	Wed, 30 Jul 2025 13:30:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1753900250;
+	bh=YGLAgUEXl2AFMUcOtsvCV8sTSwdu2o3sUFAfa7+mU18=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=Av029LSttexiKGknZLD4eSnqX/OfVeyNtZeiJrajkm1c+Bg1fT9h2RULAV6DZNgPO
+	 8BFPEMgi0Otm1f+uIVM+OofEy9WO3BvKRF3n5e7rJqPJUz29PuzBoVNBapEDCGiKFX
+	 Alaqtju5y44PamwXpGdIy/PdGNK1ah8hqMlpwOsk=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 56UIUotF3664115
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Wed, 30 Jul 2025 13:30:50 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Wed, 30
+ Jul 2025 13:30:49 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Wed, 30 Jul 2025 13:30:49 -0500
+Received: from [10.249.42.149] ([10.249.42.149])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 56UIUnBh1678461;
+	Wed, 30 Jul 2025 13:30:49 -0500
+Message-ID: <e0383654-ebb5-4b83-8820-bc7eb148f4a7@ti.com>
+Date: Wed, 30 Jul 2025 13:30:49 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] devicetree: bindings: spi: Introduce SPI bus
+ extensions
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Krzysztof Kozlowski
+	<krzk@kernel.org>
+CC: Ayush Singh <ayush@beagleboard.org>, Mark Brown <broonie@kernel.org>,
+        <herve.codina@bootlin.com>, <conor+dt@kernel.org>,
+        Jason Kridner
+	<jkridner@beagleboard.org>,
+        Deepak Khatri <lorforlinux@beagleboard.org>,
+        Dhruva Gole <d-gole@ti.com>,
+        Robert Nelson <robertcnelson@beagleboard.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20250729-spi-bus-extension-v1-0-b20c73f2161a@beagleboard.org>
+ <20250729-spi-bus-extension-v1-4-b20c73f2161a@beagleboard.org>
+ <c65d26d0-51b8-4131-a755-6c72b7dea549@kernel.org>
+ <20250730174553.4df8037b@booty>
+Content-Language: en-US
+From: Andrew Davis <afd@ti.com>
+In-Reply-To: <20250730174553.4df8037b@booty>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
-> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
-> > From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >
-> > The DMA subsystem attempts to make it theoretically possible to pair
-> > any DMA block with any user. While that's convenient from a
-> > codebase sanity perspective, some blocks are more intertwined.
-> >
-> > One such case is the Qualcomm GENI, where each wrapper contains a
-> > number of Serial Engine instances, each one of which can be programmed
-> > to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
-> >
-> > The GPI DMA it's designed together with, needs to receive the ID of the
-> > protocol that's in use, to adjust its behavior accordingly. Currently,
-> > that's done through passing that ID through device tree, with each
-> > Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
-> > dt-bindings that are full of useless copypasta.
-> >
-> > In a step to cut down on that, let the DMA user give the engine driver
-> > a hint at request time.
-> >
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> > ---
-> >  drivers/dma/amba-pl08x.c                       |  3 ++-
-> >  drivers/dma/apple-admac.c                      |  3 ++-
-> >  drivers/dma/at_hdmac.c                         |  6 ++++--
-> >  drivers/dma/at_xdmac.c                         |  3 ++-
-> >  drivers/dma/bcm2835-dma.c                      |  3 ++-
-> >  drivers/dma/dma-jz4780.c                       |  3 ++-
-> >  drivers/dma/dmaengine.c                        | 20 +++++++++++++++++---
-> >  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c |  3 ++-
-> >  drivers/dma/dw/of.c                            |  3 ++-
-> >  drivers/dma/ep93xx_dma.c                       |  6 ++++--
-> >  drivers/dma/fsl-edma-main.c                    |  6 ++++--
-> >  drivers/dma/img-mdc-dma.c                      |  3 ++-
-> >  drivers/dma/imx-dma.c                          |  3 ++-
-> >  drivers/dma/imx-sdma.c                         |  3 ++-
-> >  drivers/dma/lgm/lgm-dma.c                      |  3 ++-
-> >  drivers/dma/milbeaut-hdmac.c                   |  4 +++-
-> >  drivers/dma/mmp_pdma.c                         |  3 ++-
-> >  drivers/dma/mmp_tdma.c                         |  3 ++-
-> >  drivers/dma/moxart-dma.c                       |  3 ++-
-> >  drivers/dma/mxs-dma.c                          |  3 ++-
-> >  drivers/dma/nbpfaxi.c                          |  3 ++-
-> >  drivers/dma/of-dma.c                           | 18 +++++++++++-------
-> >  drivers/dma/owl-dma.c                          |  3 ++-
-> >  drivers/dma/pl330.c                            |  3 ++-
-> >  drivers/dma/pxa_dma.c                          |  3 ++-
-> >  drivers/dma/qcom/bam_dma.c                     |  3 ++-
-> >  drivers/dma/qcom/gpi.c                         |  3 ++-
-> >  drivers/dma/qcom/qcom_adm.c                    |  3 ++-
-> >  drivers/dma/sh/rcar-dmac.c                     |  3 ++-
-> >  drivers/dma/sh/rz-dmac.c                       |  3 ++-
-> >  drivers/dma/sh/usb-dmac.c                      |  3 ++-
-> >  drivers/dma/st_fdma.c                          |  3 ++-
-> >  drivers/dma/ste_dma40.c                        |  3 ++-
-> >  drivers/dma/stm32/stm32-dma.c                  |  3 ++-
-> >  drivers/dma/stm32/stm32-dma3.c                 |  4 +++-
-> >  drivers/dma/stm32/stm32-mdma.c                 |  3 ++-
-> >  drivers/dma/sun4i-dma.c                        |  3 ++-
-> >  drivers/dma/sun6i-dma.c                        |  3 ++-
-> >  drivers/dma/tegra186-gpc-dma.c                 |  3 ++-
-> >  drivers/dma/tegra20-apb-dma.c                  |  3 ++-
-> >  drivers/dma/tegra210-adma.c                    |  3 ++-
-> >  drivers/dma/ti/cppi41.c                        |  3 ++-
-> >  drivers/dma/ti/edma.c                          |  3 ++-
-> >  drivers/dma/ti/k3-udma.c                       |  3 ++-
-> >  drivers/dma/uniphier-xdmac.c                   |  3 ++-
-> >  drivers/dma/xilinx/xilinx_dma.c                |  3 ++-
-> >  drivers/dma/xilinx/xilinx_dpdma.c              |  3 ++-
-> >  drivers/dma/xilinx/zynqmp_dma.c                |  3 ++-
-> >  include/linux/dmaengine.h                      |  7 +++++++
-> >  include/linux/of_dma.h                         | 16 +++++++++-------
-> >  sound/soc/apple/mca.c                          |  2 +-
-> >  sound/soc/renesas/rcar/dma.c                   |  2 +-
-> >  52 files changed, 146 insertions(+), 68 deletions(-)
-> >
-> > diff --git a/drivers/dma/amba-pl08x.c b/drivers/dma/amba-pl08x.c
+On 7/30/25 10:45 AM, Luca Ceresoli wrote:
+> On Tue, 29 Jul 2025 14:52:00 +0200
+> Krzysztof Kozlowski <krzk@kernel.org> wrote:
 > 
-> ...
-> 
-> >  						const char *name)
-> >  {
-> > diff --git a/include/linux/of_dma.h b/include/linux/of_dma.h
-> > index fd706cdf255c61c82ce30ef9a2c44930bef34bc8..9f9bc4207b85d48d73c25aad4b362e7c84c01756 100644
-> > --- a/include/linux/of_dma.h
-> > +++ b/include/linux/of_dma.h
-> > @@ -19,7 +19,7 @@ struct of_dma {
-> >  	struct list_head	of_dma_controllers;
-> >  	struct device_node	*of_node;
-> >  	struct dma_chan		*(*of_dma_xlate)
-> > -				(struct of_phandle_args *, struct of_dma *);
-> > +				(struct of_phandle_args *, struct of_dma *, void *);
-> 
-> I suggest pass down more informaiton, like client's dev point. So we can
-> auto create device link between client's dev and dma chan's device.
+>> On 29/07/2025 11:51, Ayush Singh wrote:
+>>> An SPI bus can be wired to the connector and allows an add-on board to
+>>> connect additional SPI devices to this bus.
+>>>    
+>>
+>> ... so I found the binding. Not marked by my filters due to non-standard
+>> subject.
+>>
+>> Please use subject prefixes matching the subsystem. You can get them for
+>> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+>> your patch is touching. For bindings, the preferred subjects are
+>> explained here:
+>> https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+>>
+>>> Those additional SPI devices could be described as sub-nodes of the SPI
+>>> bus controller node however for hotplug connectors described via device
+>>> tree overlays there is additional level of indirection, which is needed
+>>> to decouple the overlay and the base tree:
+>>>
+>>>    --- base device tree ---
+>>>
+>>>    spi1: spi@abcd0000 {
+>>>        compatible = "xyz,foo";
+>>>        spi-bus-extension@0 {
 
-Is .of_dma_xlate() really the right place to do that ? If you want to
-create a device link for PM reasons, isn't it better created when the
-channel is requested ? It should also be removed when the channel is
-freed.
+Could we make this more generic so it doesn't need to be specific to each
+type of node/bus? The core goal IIUC is to keep some parts of the node
+out in another node, but have the contents act as if they were part of the
+first node. So how about "node-extension", or if we only need one direction
+links from the second node, "node-extends", something like this:
 
+
+--- base device tree ---
+
+spi1: spi@abcd0000 {
+     compatible = "xyz,foo";
+     #address-cells = <1>;
+     #size-cells = <0>;
+     node-extensions = <&spi_sensors>;
+}
+
+connector {
+     spi_sensors: spi-sensors {
+         eeprom@50 { compatible = "atmel,24c64"; ... };
+     };
+};
+
+Or if we want to keep the base device node untouched (this would be my
+preference as otherwise we would have to add modifications in more places):
+
+--- base device tree ---
+
+spi1: spi@abcd0000 {
+     compatible = "xyz,foo";
+     #address-cells = <1>;
+     #size-cells = <0>;
+}
+
+connector {
+     spi_sensors: spi-sensors {
+         node-extends = <&spi1>;
+         eeprom@50 { compatible = "atmel,24c64"; ... };
+     };
+};
+
+In either case, the content of the "spi-sensors" node (i.e. eeprom@50)
+acts in all ways as if that was directly inside the "spi1" node.
+
+This should provide the separation you are looking for and be generic for
+*any* node's use. The base OF support could be extended so that functions
+like for_each_available_child_of_node() and property fetching handle
+this transparently. That way you don't need to go make modifications
+to each and every bus and driver that accesses the contents of nodes
+to handle these node extensions.
+
+>>>            spi-bus = <&spi_ctrl>;
+>>>        };
+>>>        ...
+>>>    };
+>>>
+>>>    spi5: spi@cafe0000 {
+>>>        compatible = "xyz,bar";
+>>>        spi-bus-extension@0 {
+>>>            spi-bus = <&spi_sensors>;
+>>>        };
+>>>        ...
+>>>    };
+>>>
+>>>    connector {
+>>>        spi_ctrl: spi-ctrl {
+>>>            spi-parent = <&spi1>;
+>>>            #address-cells = <1>;
+>>>            #size-cells = <0>;
+>>>        };
+>>>
+>>>        spi_sensors: spi-sensors {
+>>>            spi-parent = <&spi5>;
+>>>            #address-cells = <1>;
+>>>            #size-cells = <0>;
+>>>        };
+>>>    };
+>>
+>> It looks like you are re-doing I2C work. Please wait till I2C discussion
+>> finishes, so we won't have to comment on the same in multiple places.
+>>
+>>>
+>>>    --- device tree overlay ---
+>>>
+>>>    ...
+>>>    // This node will overlay on the spi-ctrl node of the base tree
+>>>    spi-ctrl {
+>>>        eeprom@50 { compatible = "atmel,24c64"; ... };
+>>>    };
+>>>    ...
+>>>
+>>>    --- resulting device tree ---
+>>>
+>>>    spi1: spi@abcd0000 {
+>>>        compatible = "xyz,foo";
+>>>        spi-bus-extension@0 {
+>>>            spi-bus = <&spi_ctrl>;
+>>>        };
+>>>        ...
+>>>    };
+>>>
+>>>    spi5: spi@cafe0000 {
+>>>        compatible = "xyz,bar";
+>>>        spi-bus-extension@0 {
+>>>            spi-bus = <&spi_sensors>;
+>>>        };
+>>>        ...
+>>>    };
+>>>
+>>>    connector {
+>>>        spi_ctrl: spi-ctrl {
+>>>            spi-parent = <&spi1>;
+>>>            #address-cells = <1>;
+>>>            #size-cells = <0>;
+>>>
+>>>            device@1 { compatible = "xyz,foo"; ... };
+>>>        };
+>>>
+>>>        spi_sensors: spi-sensors {
+>>>            spi-parent = <&spi5>;
+>>>            #address-cells = <1>;
+>>>            #size-cells = <0>;
+>>>        };
+>>>    };
+>>>
+>>> Here spi-ctrl (same goes for spi-sensors) represent the part of SPI bus
+>>> that is on the hot-pluggable add-on. On hot-plugging it will physically
+>>> connect to the SPI adapter on the base board. Let's call the 'spi-ctrl'
+>>> node an "extension node".
+>>>
+>>> In order to decouple the overlay from the base tree, the SPI adapter
+>>> (spi@abcd0000) and the extension node (spi-ctrl) are separate nodes.
+>>>
+>>> The extension node is linked to the SPI bus controller in two ways. The
+>>> first one with the spi-bus-extension available in SPI controller
+>>> sub-node and the second one with the spi-parent property available in
+>>> the extension node itself.
+>>>
+>>> The purpose of those two links is to provide the link in both direction
+>>> from the SPI controller to the SPI extension and from the SPI extension
+>>> to the SPI controller.
+>>>
+>>> Signed-off-by: Ayush Singh <ayush@beagleboard.org>
+>>> ---
+>>>   .../devicetree/bindings/spi/spi-controller.yaml    | 66 +++++++++++++++++++++-
+>>>   1 file changed, 65 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+>>> index 82d051f7bd6e09dab9809c85ff13475d2b118efd..9b44ce4542f9552c94cb0658ffe3f6d3f29bc434 100644
+>>> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
+>>> @@ -25,6 +25,13 @@ properties:
+>>>     "#size-cells":
+>>>       const: 0
+>>>   
+>>> +  spi-parent:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      In case of an SPI bus extension, reference to the SPI bus controller
+>>> +      this extension is connected to. In other word, reference the SPI bus
+>>> +      controller on the fixed side that drives the bus extension.
+>>> +
+>>>     cs-gpios:
+>>>       description: |
+>>>         GPIOs used as chip selects.
+>>> @@ -111,7 +118,26 @@ properties:
+>>>         - compatible
+>>>   
+>>>   patternProperties:
+>>> -  "^.*@[0-9a-f]+$":
+>>> +  'spi-bus-extension@[0-9a-f]+$':
+>>> +    type: object
+>>> +    description:
+>>> +      An SPI bus extension connected to an SPI bus. Those extensions allow to
+>>> +      decouple SPI busses when they are wired to connectors.
+>>
+>> I really do not get why you need separate two-way phandles for marking
+>> parent child relationship. IOW, if you need two way, then why not graphs?
+>>
+>> Or why not just making the device@2 a child of SPI, since it is coming
+>> from overlay.
 > 
-> DMA Engineer device
->    DMA chan device
->        consumer clients' device.
+> For the same reason as in I2C (and the proposed solution is the same).
 > 
-> If consumer device runtime pm suspend can auto trigger DMA chan's device's
-> runtime pm function.
+> As you wrote above, Ayush could wait for the I2C discussion to finish.
+> Problem is, the I2C discussion is not moving forward: Hervé is sending
+> proposals but there is no feedback on the core of the proposal, and no
+> feedback at all on the latest iteration. In case your filters missed it:
+> https://lore.kernel.org/all/20250618082313.549140-1-herve.codina@bootlin.com/
 > 
-> It will simplifly DMA engine's run time pm manage. Currently many DMA run
-> time pm implement as, runtime_pm_get() when alloc and runtime_pm_put() at
-> free channel.  But many devices request dma channel at probe, which make
-> dma engine work at always 'on' state.
-> 
-> But ideally, dma chan should be resume only when it is used to transfer.
 
-This is exactly what I was going to mention after reading the last
-paragraph. Is there anything that prevents a DMA engine driver to
-perform a rutime PM get() when a transfer is submitted and a put() when
-it completes ? (Logically speaking, the actual implementation would
-likely be a bit different in drivers, but the result would be similar.)
+That series didn't end up in my mailbox for some reason, so replying
+here, but my response above should apply to both I2C and this SPI series
+just the same.
 
-> >  	void			*(*of_dma_route_allocate)
-> >  				(struct of_phandle_args *, struct of_dma *);
-> >  	struct dma_router	*dma_router;
-> > @@ -34,7 +34,7 @@ struct of_dma_filter_info {
-> >  #ifdef CONFIG_DMA_OF
-> >  extern int of_dma_controller_register(struct device_node *np,
-> >  		struct dma_chan *(*of_dma_xlate)
-> > -		(struct of_phandle_args *, struct of_dma *),
-> > +		(struct of_phandle_args *, struct of_dma *, void *),
-> >  		void *data);
-> >  extern void of_dma_controller_free(struct device_node *np);
-> >
-> > @@ -45,16 +45,17 @@ extern int of_dma_router_register(struct device_node *np,
-> >  #define of_dma_router_free of_dma_controller_free
-> >
-> >  extern struct dma_chan *of_dma_request_slave_channel(struct device_node *np,
-> > -						     const char *name);
-> > +						     const char *name,
-> > +						     void *data);
-> >  extern struct dma_chan *of_dma_simple_xlate(struct of_phandle_args *dma_spec,
-> > -		struct of_dma *ofdma);
-> > +		struct of_dma *ofdma, void *data);
-> >  extern struct dma_chan *of_dma_xlate_by_chan_id(struct of_phandle_args *dma_spec,
-> > -		struct of_dma *ofdma);
-> > +		struct of_dma *ofdma, void *data);
-> >
-> >  #else
-> >  static inline int of_dma_controller_register(struct device_node *np,
-> >  		struct dma_chan *(*of_dma_xlate)
-> > -		(struct of_phandle_args *, struct of_dma *),
-> > +		(struct of_phandle_args *, struct of_dma *, void *),
-> >  		void *data)
-> >  {
-> >  	return -ENODEV;
-> > @@ -75,7 +76,8 @@ static inline int of_dma_router_register(struct device_node *np,
-> >  #define of_dma_router_free of_dma_controller_free
-> >
-> >  static inline struct dma_chan *of_dma_request_slave_channel(struct device_node *np,
-> > -						     const char *name)
-> > +							    const char *name,
-> > +							    void *data)
-> >  {
-> >  	return ERR_PTR(-ENODEV);
-> >  }
-> > diff --git a/sound/soc/apple/mca.c b/sound/soc/apple/mca.c
-> > index 5dd24ab90d0f052bb48f451cf009dc2e9128014d..43d48e4ac8161ee9955120fe64f7b911bfdfe1ca 100644
-> > --- a/sound/soc/apple/mca.c
-> > +++ b/sound/soc/apple/mca.c
-> > @@ -926,7 +926,7 @@ static struct dma_chan *mca_request_dma_channel(struct mca_cluster *cl, unsigned
-> >  	char *name = devm_kasprintf(cl->host->dev, GFP_KERNEL,
-> >  				    is_tx ? "tx%da" : "rx%db", cl->no);
-> >  #endif
-> > -	return of_dma_request_slave_channel(cl->host->dev->of_node, name);
-> > +	return of_dma_request_slave_channel(cl->host->dev->of_node, name, NULL);
-> >
-> >  }
-> >
-> > diff --git a/sound/soc/renesas/rcar/dma.c b/sound/soc/renesas/rcar/dma.c
-> > index 2035ce06fe4c4aeaa8620d817910a5319732fa58..dcbff2fc61a0472adea226371016a128563b3cd0 100644
-> > --- a/sound/soc/renesas/rcar/dma.c
-> > +++ b/sound/soc/renesas/rcar/dma.c
-> > @@ -204,7 +204,7 @@ struct dma_chan *rsnd_dma_request_channel(struct device_node *of_node, char *nam
-> >  		}
-> >
-> >  		if (i == rsnd_mod_id_raw(mod) && (!chan))
-> > -			chan = of_dma_request_slave_channel(np, x);
-> > +			chan = of_dma_request_slave_channel(np, x, NULL);
-> >  		i++;
-> >  	}
-> >
+Andrew
 
--- 
-Regards,
-
-Laurent Pinchart
 
