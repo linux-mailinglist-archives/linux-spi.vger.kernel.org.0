@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-9229-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9230-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18253B15DDF
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 12:11:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6722B15DE3
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 12:11:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 713C1189FFB3
-	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 10:11:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 558BA7ADC74
+	for <lists+linux-spi@lfdr.de>; Wed, 30 Jul 2025 10:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4958B27FD40;
-	Wed, 30 Jul 2025 10:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B17293454;
+	Wed, 30 Jul 2025 10:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="EVi/K4OK"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="FYOyLrDH"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3415279783;
-	Wed, 30 Jul 2025 10:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520451F09B6;
+	Wed, 30 Jul 2025 10:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753870274; cv=none; b=IljTL/mn75nCfZYLlGnYDSnd2LmtmVGKik9Mg0hTNbfuRvOc9ClZoUoSQ+ddzOfVcwlqCtdQ+6219ixhnHL1hk4oLHqICkYfKoDPH57+9R8HUgUNejaRar938YRBLMOV3tN+arH5Z9IHJOd/ZoLSsj4YknGaNg2yaGdzoIzMrto=
+	t=1753870276; cv=none; b=TzrVC1Lv8y2Og7nkJGdmpDh68ub2hgWGNEIjK6Ge9pB85tTwjbt+YDy83lIC063ybbZ4p6gukd5RBs+/j1jjy1UORHICNgxgc7lE0sKuUwoRYmJWwJklXww+8P1yxEPsGG3drxlX44Qi5E7vgcoatQo6Deh1gZpGmbrNND/wfHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753870274; c=relaxed/simple;
-	bh=lM6SLl/d3swseRYR2bai+1H7yO5nP0S+r0BY0IFolmU=;
+	s=arc-20240116; t=1753870276; c=relaxed/simple;
+	bh=Q5iWrsIMXpRDAygoxfGOZsTjC81BxOD/oAIcBKlczI8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kGjtcsm79z4+kgl3Arn15lAa1sNhZuj1E1pceUtBpvlwrH2k+Y+5FMCDkcII7TTL7uFcmbtOdb9E28RABP5Mot2WWlRUVHoedIBGH6QJO+qccJP8Ioa4Od8wYyvh66VWeQY4TX5A4Ue0fx2YpYNPu9H1b111YN8ymAsackJHxqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=EVi/K4OK; arc=none smtp.client-ip=68.232.153.233
+	 MIME-Version:Content-Type; b=ABeLStnyFcFvGxZzXUjgVe3vTNS0WC66nMJ5K2XSNj4uyMliQqG2G0rfawpw11NBK1JKPhokObSjKl7mndC6snCg6r8ZLlJfz74WfL1GdBZcRIlDBUFDHWfxvzQvj3nDAANACsu1M5Y47g69PWWg9CaV5IVjmyUQRtFewHfdrz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=FYOyLrDH; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1753870271; x=1785406271;
+  t=1753870274; x=1785406274;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=lM6SLl/d3swseRYR2bai+1H7yO5nP0S+r0BY0IFolmU=;
-  b=EVi/K4OKqoJgsZgiC0KJnl7XxCBUFfIlDc6F/KTFxiEPKRHFVORbMnQ5
-   YIl/cTwBmxvHPQPV5PgLveXpugRyKpdk6Ufy8kIbs18gC16c7a8EMb7TB
-   HaCtdwv3QNP3D8AywCibDcmBAE4iE+5llZFsK/jnCd3DmnyXVS1fxrmGs
-   h2ckJi5CrceRy7OY3kCxZ2IdUmWVwF3mThRqM2rzpEtcXjvnlUSS0DOhP
-   WFLjqoVxd2i8ZgJ8SWXry4qinh41QOyxZM+OqhbfDS06fIyOrfUwQh4rz
-   dRZCRlQLo5xCV4yvf8Axc4AqXhkXB2DH9cazKP/fN43pi84BXxdNiQmBy
-   Q==;
+  bh=Q5iWrsIMXpRDAygoxfGOZsTjC81BxOD/oAIcBKlczI8=;
+  b=FYOyLrDHJVNtrEDALZQYO59Td6FGRCZCqnLyPBsheemjJb6YM2vUr+yT
+   u6SvPZuHnwwTFFOVyKWmoFE90pnzfOOQTm/jlQ2D2G2RYpnU+eJkzUvLD
+   lGvD2PRHWz29lbrPGqlUOzYVWyXYKNr94N8V2RSkYhmj99kWDrGVC5z/1
+   Z0+DbK53B7SFUs61Tw8Wk5PCZkB1P1ZoeIhun/hCSMQCLZeL1TgaPo/SJ
+   vRLaoeh2oCT958xx8Y7XQZZY8QWWSqeZNHNtTnGD1pD9v47kpYGaKwWzH
+   9qhrYclcMVHiz07qimQSa82egS7kkQa1PPnOvArEYlvBk94lT3S/T5VEe
+   w==;
 X-CSE-ConnectionGUID: zjJ/PdTbTgKvrskxeKL28w==
-X-CSE-MsgGUID: GuM9KhUkTWq6wEF9QKR17w==
+X-CSE-MsgGUID: PjxoSgqfSBiifod6J4ocUQ==
 X-IronPort-AV: E=Sophos;i="6.16,350,1744095600"; 
-   d="scan'208";a="49962575"
+   d="scan'208";a="49962579"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jul 2025 03:11:10 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jul 2025 03:11:11 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 30 Jul 2025 03:10:34 -0700
+ 15.1.2507.44; Wed, 30 Jul 2025 03:10:44 -0700
 Received: from che-lt-i67131.microchip.com (10.10.85.11) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.44 via Frontend Transport; Wed, 30 Jul 2025 03:10:29 -0700
+ 15.1.2507.44 via Frontend Transport; Wed, 30 Jul 2025 03:10:39 -0700
 From: Manikandan Muralidharan <manikandan.m@microchip.com>
 To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
@@ -66,9 +66,9 @@ To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
 	<linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
 CC: <manikandan.m@microchip.com>
-Subject: [PATCH v2 2/3] spi: dt-bindings: atmel,at91rm9200-spi: Add support for optional 'spi_gclk' clock
-Date: Wed, 30 Jul 2025 15:40:14 +0530
-Message-ID: <20250730101015.323964-2-manikandan.m@microchip.com>
+Subject: [PATCH v2 3/3] spi: atmel: Add support for handling GCLK as a clock source
+Date: Wed, 30 Jul 2025 15:40:15 +0530
+Message-ID: <20250730101015.323964-3-manikandan.m@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250730101015.323964-1-manikandan.m@microchip.com>
 References: <20250730101015.323964-1-manikandan.m@microchip.com>
@@ -78,44 +78,171 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-Update the Atmel SPI DT binding to support an optional programmable
-SPI generic clock 'spi_gclk', in addition to the required 'spi_clk'.
+The SPI peripheral clock is typically used to derive the serial
+clock (SPCK) via the FLEX_SPI_CSRx.SCBR field. However, on platforms
+like the SAM9X7 SoC, where the peripheral clock can reach up to 266 MHz,
+this may exceed the SCBR limit, causing SPI transfers to fail.
+This patch adds support for using the SPI Generic Clock (GCLK) as an
+alternative and more flexible clock source for SPCK generation.
+The FLEX_SPI_MR.BRSRCCLK bit is updated accordingly to select between the
+peripheral clock and GCLK.
 
 Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
 ---
 changes in v2:
  - Fixed mail threading
 ---
- .../devicetree/bindings/spi/atmel,at91rm9200-spi.yaml | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/spi/spi-atmel.c | 64 +++++++++++++++++++++++++++++++++++------
+ 1 file changed, 56 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-index d29772994cf5..11885d0cc209 100644
---- a/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/atmel,at91rm9200-spi.yaml
-@@ -31,11 +31,16 @@ properties:
-     maxItems: 1
+diff --git a/drivers/spi/spi-atmel.c b/drivers/spi/spi-atmel.c
+index 409f544d8983..89977bff76d2 100644
+--- a/drivers/spi/spi-atmel.c
++++ b/drivers/spi/spi-atmel.c
+@@ -256,6 +256,7 @@ struct atmel_spi {
+ 	void __iomem		*regs;
+ 	int			irq;
+ 	struct clk		*clk;
++	struct clk		*gclk;
+ 	struct platform_device	*pdev;
+ 	unsigned long		spi_clk;
  
-   clock-names:
--    contains:
--      const: spi_clk
-+    items:
-+      - const: spi_clk
-+      - const: spi_gclk
-+    minItems: 1
+@@ -1480,6 +1481,8 @@ static void atmel_get_caps(struct atmel_spi *as)
  
-   clocks:
--    maxItems: 1
-+    items:
-+      - description: Peripheral Bus clock
-+      - description: Programmable Generic clock
-+    minItems: 1
+ static void atmel_spi_init(struct atmel_spi *as)
+ {
++	u32 mr = 0;
++
+ 	spi_writel(as, CR, SPI_BIT(SWRST));
+ 	spi_writel(as, CR, SPI_BIT(SWRST)); /* AT91SAM9263 Rev B workaround */
  
-   dmas:
-     items:
+@@ -1487,12 +1490,17 @@ static void atmel_spi_init(struct atmel_spi *as)
+ 	if (as->fifo_size)
+ 		spi_writel(as, CR, SPI_BIT(FIFOEN));
+ 
+-	if (as->caps.has_wdrbt) {
+-		spi_writel(as, MR, SPI_BIT(WDRBT) | SPI_BIT(MODFDIS)
+-				| SPI_BIT(MSTR));
+-	} else {
+-		spi_writel(as, MR, SPI_BIT(MSTR) | SPI_BIT(MODFDIS));
+-	}
++	/*
++	 * If GCLK is selected as the source clock for the bit rate generation
++	 * Enable the BRSRCCLK/FDIV/DIV32 bit
++	 */
++	if (as->gclk)
++		mr |= SPI_BIT(FDIV);
++
++	if (as->caps.has_wdrbt)
++		mr |= SPI_BIT(WDRBT);
++
++	spi_writel(as, MR, mr | SPI_BIT(MODFDIS) | SPI_BIT(MSTR));
+ 
+ 	if (as->use_pdc)
+ 		spi_writel(as, PTCR, SPI_BIT(RXTDIS) | SPI_BIT(TXTDIS));
+@@ -1555,6 +1563,11 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 	as->phybase = regs->start;
+ 	as->irq = irq;
+ 	as->clk = clk;
++	as->gclk = devm_clk_get_optional(&pdev->dev, "spi_gclk");
++	if (IS_ERR(as->gclk)) {
++		ret = PTR_ERR(as->gclk);
++		goto out_unmap_regs;
++	}
+ 
+ 	init_completion(&as->xfer_completion);
+ 
+@@ -1615,7 +1628,19 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto out_free_irq;
+ 
+-	as->spi_clk = clk_get_rate(clk);
++	/*
++	 * In cases where the peripheral clock is higher,the FLEX_SPI_CSRx.SCBR
++	 * exceeds the threshold (SCBR ≤ 255), the GCLK is used as the source clock
++	 * for the SPCK (SPI Serial Clock) bit rate generation
++	 */
++	if (as->gclk) {
++		ret = clk_prepare_enable(as->gclk);
++		if (ret)
++			goto out_disable_clk;
++		as->spi_clk = clk_get_rate(as->gclk);
++	} else {
++		as->spi_clk = clk_get_rate(clk);
++	}
+ 
+ 	as->fifo_size = 0;
+ 	if (!of_property_read_u32(pdev->dev.of_node, "atmel,fifo-size",
+@@ -1650,6 +1675,8 @@ static int atmel_spi_probe(struct platform_device *pdev)
+ 
+ 	spi_writel(as, CR, SPI_BIT(SWRST));
+ 	spi_writel(as, CR, SPI_BIT(SWRST)); /* AT91SAM9263 Rev B workaround */
++	clk_disable_unprepare(as->gclk);
++out_disable_clk:
+ 	clk_disable_unprepare(clk);
+ out_free_irq:
+ out_unmap_regs:
+@@ -1685,6 +1712,8 @@ static void atmel_spi_remove(struct platform_device *pdev)
+ 	spin_unlock_irq(&as->lock);
+ 
+ 	clk_disable_unprepare(as->clk);
++	if (as->gclk)
++		clk_disable_unprepare(as->gclk);
+ 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+@@ -1696,6 +1725,8 @@ static int atmel_spi_runtime_suspend(struct device *dev)
+ 	struct atmel_spi *as = spi_controller_get_devdata(host);
+ 
+ 	clk_disable_unprepare(as->clk);
++	if (as->gclk)
++		clk_disable_unprepare(as->gclk);
+ 	pinctrl_pm_select_sleep_state(dev);
+ 
+ 	return 0;
+@@ -1705,10 +1736,20 @@ static int atmel_spi_runtime_resume(struct device *dev)
+ {
+ 	struct spi_controller *host = dev_get_drvdata(dev);
+ 	struct atmel_spi *as = spi_controller_get_devdata(host);
++	int ret;
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+-	return clk_prepare_enable(as->clk);
++	ret = clk_prepare_enable(as->clk);
++	if (ret)
++		return ret;
++	if (as->gclk) {
++		ret = clk_prepare_enable(as->gclk);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
+ }
+ 
+ static int atmel_spi_suspend(struct device *dev)
+@@ -1736,10 +1777,17 @@ static int atmel_spi_resume(struct device *dev)
+ 	ret = clk_prepare_enable(as->clk);
+ 	if (ret)
+ 		return ret;
++	if (as->gclk) {
++		ret = clk_prepare_enable(as->gclk);
++		if (ret)
++			return ret;
++	}
+ 
+ 	atmel_spi_init(as);
+ 
+ 	clk_disable_unprepare(as->clk);
++	if (as->gclk)
++		clk_disable_unprepare(as->gclk);
+ 
+ 	if (!pm_runtime_suspended(dev)) {
+ 		ret = atmel_spi_runtime_resume(dev);
 -- 
 2.25.1
 
