@@ -1,183 +1,160 @@
-Return-Path: <linux-spi+bounces-9253-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9254-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79F44B17C31
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 06:45:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30E4B17DDE
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 09:58:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA9611C2337D
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 04:46:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB9B8582C64
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 07:58:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABB21922F6;
-	Fri,  1 Aug 2025 04:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C35320D50C;
+	Fri,  1 Aug 2025 07:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="gz+Z5D+i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pvvef5+S"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx.denx.de (mx.denx.de [89.58.32.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4FB26ACB;
-	Fri,  1 Aug 2025 04:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.32.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB4E1149DF0;
+	Fri,  1 Aug 2025 07:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754023545; cv=none; b=SA5WSvwTQkuU/FtKrxXpwR+OzUm+jod1LqNKougyN1TJUfLd38jGvPN8LvDOxUmuiX/ehFn0dgKOnXQib+XHo41PEZrf80CDDs8SNDk4ctxh+O3wOd3+5XWb9F7jWl1jFo8516qRRJr6t52yjhtYQ2j7x1yVqDBZUxnSTUU/moc=
+	t=1754035123; cv=none; b=ndp7fatOwYhWbTvLL3VhAryBEYmix/i0la/xCrCN3fJntuVBJcX+P7JjkEKMs4EPDM2dXO8UclUaizMsePQBqqMRr+QSCVq+CxH4V5OUar49JXOAt6OuV40fon1s0Mt87Gf+B/6IhbCV4e2p4gbBv8oCuwzI3jOX9coNYdsjgqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754023545; c=relaxed/simple;
-	bh=f0kSnytsj68XbFg2s9F9w28FfWo8pGYjLeMe3biLdCQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lJmyRLV6we9q8PCPriRwvZJfqOyh9ueWFgKlspU54PzfmGGlZHCpKVuLaeMiWejwJni4ZlBb0LE7hxCm1RzM1DqqOYOsFsgVw1bopxyQe2/3rHV/6XjnI2lHhL4oUmL2qhnk2hi6IuCC0TB4au7LLVw67ksKAcPXhdImH0tcY9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=gz+Z5D+i; arc=none smtp.client-ip=89.58.32.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F28EA1038C126;
-	Fri,  1 Aug 2025 06:45:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de; s=mx-20241105;
-	t=1754023534;
-	h=from:reply-to:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=cazfz037LmHclW8XHXBHFZq0vEjND40W4TWSxFvy07E=;
-	b=gz+Z5D+i9YMV7qtc9jV2wB6l2n5mM6a5kkQ8N5Nrm4TkChr51IhcMCajFKXKFKQIDQsjt4
-	ShW3SLCe9XFh86uBmcTWkbHL2WbZATD/fRJZArT33UNgyIIrrdu4BBXN/LgGL0EgOfgJKe
-	kpEJ1HUwHN3gjuI/8WQAdhOM6WfrmJD3mlm/T+2Wss+jq3N+L3LfjcIxIipHcGxUU/MI2m
-	r1YZkcuFOuap5h6DZ3ytvYUiNMClLZyFlPKjbZO5LgT7qxUlivfIemKy9HNtBkvFhAx3cc
-	0IBrCFR61MfOwW9lvrYnv978S00+JLzejurw223yvP9RyOXsg3NBCeigGls2Sw==
-Message-ID: <0c6dcc6f-e09c-266d-f65a-12d18244a2c6@denx.de>
-Date: Fri, 1 Aug 2025 06:45:48 +0200
+	s=arc-20240116; t=1754035123; c=relaxed/simple;
+	bh=gZJIQtZcU8RgAFF6bz0NixEA+52kPSSbVzusMfq/yhA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bJ1A7QNIZWTjNtzy7uqg/TiTvXV+kHzcnInrafksUZAcpqthWk4+HV50EKNmHhlp7KysJXO+fLrZgV+3QMP5hkBab0BkEPkZSGUnrkdw/eOLAmBNj++BYIwq5GQKtTcfu9Eb+fs/ArZsSqg+Ycyz5usPXT4wmmHFyORMD8+tUXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pvvef5+S; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-451d3f72391so11787575e9.3;
+        Fri, 01 Aug 2025 00:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754035120; x=1754639920; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=if+jrugCoYKdMUAChMOY2irCS/mGgiPfCTcd1NEbdjY=;
+        b=Pvvef5+SqjKMBGFBIEaYUYnTyMQqbXnvssiYnJb7DwN4UDOpbBB+L9LnP2A/GvEF6W
+         U/5SxGC4R7XrIq4wyFrS62H5IdTQsD8wTtdEvXIzaWkDii8MH2jLKHIroZn0WS8qCntZ
+         E9ajoD8mgjL8uRi3kxh5jIQR2YM6RVAqiaeYgIY/oCCS7pxn3JSOJ+RzTFaWADA8yE6v
+         TOGNuzDmPX0JTKuFp2F05PxqyMXQkyaBCzGbfcltcfvNAQ6HYHV1qujWxx0FXK1uAZrg
+         BKaKWnD8bgVhB7oBdHwr50s3bdrPTNs9mvllNipIYxMP8J6lehYpzUiU7hoCkfJjk6wB
+         jMsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754035120; x=1754639920;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=if+jrugCoYKdMUAChMOY2irCS/mGgiPfCTcd1NEbdjY=;
+        b=Fn9BYivAyTPTkaQWEaqFoHOIi2iES0ourgAKUipoP7equR/ayygyDVPrrFqiOsPBuW
+         QSL2Nqi6tCfGYTGx0/L9SDjfO5M632TrpKimF8WchLWQa98KNWStazYh6dxU457S6MUQ
+         iF5nHN7hGRIQf3OAuJW4ZuTui0oJWW5Nv+BCJvHjBRZz4v7/Uomiw3WKPKYOJeQeMMoH
+         xZ/LLeE411kmAJdczGLwDyS7FOYqJhvv/8M6I3rzJ6qeg3dSEXu5YmtVDQwDBrwaCkxU
+         BLoUz/jZEIUrna1cTrwjt8mdad74vJyYwQ/lf7W31Sha7yXMjdZ0kj6QEaTWN2r4bsjY
+         LeQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPZCeQHiQ5gGtOU3/G1e9RDZoZ1ZNjxOmdeHDSsEZJZNzQHpeoQ5REmOgGfKKd2OE+Xwh6jJMVMdxmrY37@vger.kernel.org, AJvYcCWV8xk2ADyqP3tzJoM4b9Vvn4uwR1q2KEohuIC6U5ZicaefQutgFtvULo0DaA9qywFVaVyT6pq6JftQTavU@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXJT0BHaFV7XIOjIIqeYdjALzSTyIKgsvq3+SW2zpOfiEVernV
+	uos8la9QPQIWG1WUBBD1hLYm84OgD5Aj7kyEri9jrEpYlW37GE4gCBqqXaa0oQ==
+X-Gm-Gg: ASbGncsmI1kPwYzY45UgUB5+PxAL6cYCiAHecNKnC6Nr4oKrP1af+nAzS57Vg7SDHcA
+	aDjAyBo8I32qnsXA4IIkIVqfI8re1ZYkmz7oJ3lZsd7x9aFyEtYuOFKbo4zdFPUEdJ6pgAHQMdN
+	LCTrpB4/qiAS1yh59Xp06OyusShWuyJ+bA09G7XUEKxMBG/VVu8RmfrIdzRPbdsCsceAEMAmqJv
+	gQluC7Tf7dY8nqhFNI1MmlHH2w3Br52cQfFQbykUErKlraxQnE+TV8wpLiaK+QVgMg21jJArbi0
+	txdeF2FUBviPM9gLHGt1C5R4CmbHjE4ztznG6B18hYar5rSEBbelYCR5Nue0SzDVlcxu5m8A0py
+	Hvjd0+XrrcpJ5MFZvD/1HV3rrGPAuzKhZNaa0jaeKTk2Cv3foc8AcY2LJrxajOQ==
+X-Google-Smtp-Source: AGHT+IHyWNxPi2finIbBIOeg6Q79VKyVKB7VXLAIFgQqUupvSjpN3TOAAtQGbNCGEpDirXnIys3JeQ==
+X-Received: by 2002:a05:600c:1c21:b0:456:27a4:50ac with SMTP id 5b1f17b1804b1-458aa45997emr13496465e9.23.1754035119694;
+        Fri, 01 Aug 2025 00:58:39 -0700 (PDT)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4589ee4f0f8sm55368405e9.15.2025.08.01.00.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Aug 2025 00:58:39 -0700 (PDT)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Fri, 01 Aug 2025 09:58:35 +0200
+Subject: [PATCH] spi: spi-qpic-snand: use correct CW_PER_PAGE value for OOB
+ write
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: (subset) [PATCH v1 0/3] spidev: introduce trivial abb sensor
- device
-Content-Language: en-US
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Mark Brown <broonie@kernel.org>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- Andrei Lalaev <andrey.lalaev@gmail.com>,
- Chanh Nguyen <chanh@os.amperecomputing.com>,
- Conor Dooley <conor+dt@kernel.org>, Fabio Estevam <festevam@gmail.com>,
- Grant Peltier <grantpeltier93@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
- Michal Simek <michal.simek@amd.com>,
- Naresh Solanki <naresh.solanki@9elements.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Rob Herring <robh@kernel.org>, Rodrigo Gobbi <rodrigo.gobbi.7@gmail.com>,
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
- devicetree@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
-References: <20250719063355.73111-1-hs@denx.de>
- <175311337130.327079.7374455187420344577.b4-ty@kernel.org>
- <d677ecd9-42d6-43fe-8fe1-a5afd4d270e2@kernel.org>
- <8a8106ea-83d3-e02a-9ae7-ea4a66e4c248@denx.de>
- <2e9c96c6-6dfb-4232-a9ab-a3e78b718fc2@roeck-us.net>
- <20250722112013.0000597e@huawei.com>
-Reply-To: hs@denx.de
-From: Heiko Schocher <hs@denx.de>
-In-Reply-To: <20250722112013.0000597e@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250801-qpic-snand-oob-cwpp-fix-v1-1-f5a41b86af2e@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKpzjGgC/x2MQQqAIBAAvyJ7bsFMC/pKdDDdai9qChVEf086z
+ sDMA4UyU4FRPJDp5MIxVGgbAW63YSNkXxmUVEYOXYtHYocl2OAxxgXdlRKufGO/qJ5IGzfoDmq
+ dMlX9n6f5fT+oq7uKaQAAAA==
+X-Change-ID: 20250731-qpic-snand-oob-cwpp-fix-6b26ee45c743
+To: Mark Brown <broonie@kernel.org>, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.14.2
 
-Hello Jonathan,
+The qcom_spi_program_oob() function uses only the last codeword to write
+the OOB data into the flash, but it sets the CW_PER_PAGE field in the
+CFG0 register as it would use all codewords.
 
-On 22.07.25 12:20, Jonathan Cameron wrote:
-> On Mon, 21 Jul 2025 21:58:10 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> On 7/21/25 21:05, Heiko Schocher wrote:
->>> Hello Krzysztof,
->>>
->>> On 21.07.25 18:24, Krzysztof Kozlowski wrote:
->>>> On 21/07/2025 17:56, Mark Brown wrote:
->>>>> On Sat, 19 Jul 2025 08:33:51 +0200, Heiko Schocher wrote:
->>>>>> This series introduces the changes needed for trivial spi
->>>>>> based sensors from ABB, currently operated from userspace.
->>>>>>
->>>>>> The last patch adds the spidevices to the DTS files, already
->>>>>> in mainline.
->>>>>>
->>>>>> make dtbs_check showed no errors/warnings for the dts files
->>>>>>
->>>>>> [...]
->>>>>
->>>>> Applied to
->>>>>
->>>>>      https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
->>>>>
->>>>> Thanks!
->>>>>
->>>>> [1/3] dt-bindings: trivial-devices: Document ABB sensors
->>>>>         commit: aad2f87cbcab56b322109d26d7b11842a09df91f
->>>>> [2/3] spi: spidev: Add an entry for the ABB spi sensors
->>>>>         commit: d60f7cab7c04944a79af16caa43c141e780a59c6
->>>>>   
->>>>
->>>>
->>>> That's unexpected, Mark. Patches received two objections/comments and I
->>>> don't think discussion was resolved.
->>>>
->>>> ABB is huge company, probably making hundreds or more of sensors. The
->>>> patchset basically claims that all of them work with spidev. It does not
->>>> providing any model names or details, so it seems really incomplete to
->>>> call them trivial devices.
->>>
->>> I do not know how many different sensors they have, nor if that department can
->>> speak for the whole company...
->>>
->>> What I have as information is:
->>> https://lore.kernel.org/linux-spi/2477dc64-92a0-9dc9-d168-56646d0d796e@denx.de/
->>>
->>> and I get no more information about them currently. May I should
->>> add some sort of trivial into compatible name? Something like
->>>
->>> "abb,spi-trivial-sensor"
->>> or
->>> "abb,spidev-trivial-sensor"
->>>
->>> which makes it clearer, that only ABB trivial sensor, controlled through spidev
->>> driver, is connected here?
->>>    
->>
->> FWIW, I always thought that devicetree is not supposed to contain such generic
->> information. Is it even appropriate to list something like this in devicetree
->> in the first place ?
->>
->> If so, what prevents anyone from submitting hundreds of
->> "<company>,spidev-trivial-<device-type>" entries, using the same line of argument ?
-> 
-> Agreed.  These should have separate compatibles based on what any OS etc
-> might want to bind to them.  Just because their model in Linux is spidev etc
-> that shouldn't mean a generic ID is appropriate.
-> 
-> Can we at least have some examples to motivate the discussion?
+It seems that this confuses the hardware somehow, and any access to the
+flash fails with a timeout error after the function is called. The problem
+can be easily reproduced with the following commands:
 
-I am sorry, I get no more information about the sensors... even I do
-not know the count of variants. What I can say is, that this sensors
-measure gases, and are only used "internal" on the aristainetos3 carriers.
+    # dd if=/dev/zero bs=2176 count=1 > /tmp/test.bin
+    1+0 records in
+    1+0 records out
+    # flash_erase /dev/mtd4 0 0
+    Erasing 128 Kibyte @ 0 -- 100 % complete
+    # nandwrite -O /dev/mtd4 /tmp/test.bin
+    Writing data to block 0 at offset 0x0
+    # nanddump -o /dev/mtd4 >/dev/null
+    ECC failed: 0
+    ECC corrected: 0
+    Number of bad blocks: 0
+    Number of bbt blocks: 0
+    Block size 131072, page size 2048, OOB size 128
+    Dumping data starting at 0x00000000 and ending at 0x00020000...
+    [   33.197605] qcom_snand 79b0000.spi: failure to read oob
+    libmtd: error!: MEMREADOOB64 ioctl failed for mtd4, offset 0 (eraseblock 0)
+            error 110 (Operation timed out)
+    [   35.277582] qcom_snand 79b0000.spi: failure in submitting cmd descriptor
+    libmtd: error!: cannot read 2048 bytes from mtd4 (eraseblock 0, offset 2048)
+            error 110 (Operation timed out)
+    nanddump: error!: mtd_read
 
-So a proposal would be:
+Change the code to use the correct CW_PER_PAGE value to avoid this.
 
-# ABB gas sensor on aristainetos3 carriers
-compatible "abb,aristainetos-gas-sensor"
+Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+ drivers/spi/spi-qpic-snand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-bye,
-Heiko
-> Jonathan
-> 
->>
->> Guenter
->>
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index 0cfa0d960fd3c245c2bbf4f5e02d0fc0b13e7696..5216d60e01aab26f927baaea24296571a77527cb 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -1196,7 +1196,7 @@ static int qcom_spi_program_oob(struct qcom_nand_controller *snandc,
+ 	u32 cfg0, cfg1, ecc_bch_cfg, ecc_buf_cfg;
+ 
+ 	cfg0 = (ecc_cfg->cfg0 & ~CW_PER_PAGE_MASK) |
+-	       FIELD_PREP(CW_PER_PAGE_MASK, num_cw - 1);
++	       FIELD_PREP(CW_PER_PAGE_MASK, 0);
+ 	cfg1 = ecc_cfg->cfg1;
+ 	ecc_bch_cfg = ecc_cfg->ecc_bch_cfg;
+ 	ecc_buf_cfg = ecc_cfg->ecc_buf_cfg;
 
+---
+base-commit: 926406a85ad895fbe6ee4577cdbc4f55245a0742
+change-id: 20250731-qpic-snand-oob-cwpp-fix-6b26ee45c743
+
+Best regards,
 -- 
-DENX Software Engineering GmbH, Managing Director: Johanna Denk, Tabea Lutz
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: +49-8142-66989-52   Fax: +49-8142-66989-80   Email: hs@denx.de
+Gabor Juhos <j4g8y7@gmail.com>
+
 
