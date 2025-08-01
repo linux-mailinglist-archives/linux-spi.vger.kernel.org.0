@@ -1,88 +1,87 @@
-Return-Path: <linux-spi+bounces-9258-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9259-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05764B18131
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 13:37:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9165B18159
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 13:56:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758FE3B7B72
-	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 11:37:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18101166FAE
+	for <lists+linux-spi@lfdr.de>; Fri,  1 Aug 2025 11:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08779246793;
-	Fri,  1 Aug 2025 11:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EFC1E9B0B;
+	Fri,  1 Aug 2025 11:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="laVbsFeT"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="p9IN4Dd3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38C523E358
-	for <linux-spi@vger.kernel.org>; Fri,  1 Aug 2025 11:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D6B1E5711
+	for <linux-spi@vger.kernel.org>; Fri,  1 Aug 2025 11:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754048224; cv=none; b=cL6j2eOwzefAeRvpsAn73zuhxiCN5lsDq9YrcCLLyGwB6gMMMBiMlVS74EK6buKZi2pmfx0caJi36vw4N7uAUbeuHj947wpSRE5hdGjXowV3C6ZKvjniLAm4WB1jLg93cA53wyNoVrtQdiPxzdEitHRV7Op4dN5zJeNRLkFnCWw=
+	t=1754049387; cv=none; b=c9tLl3mh0QYWHjNEwso8qzzqRal4xUKwzwwCJV77c2PWDjGSm1Vc+QIDs31sH+GwtEJpRJ1wj4hEQhAHM84kufsq1083AvLWt2Tx9SpBtkgvF1eB0GIKisEtWMI+NneYhnQi85TmxvbXXqHKG+btq+r0a9j1/bgbkin+MP+4kW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754048224; c=relaxed/simple;
-	bh=S+OUPbutuw7eeLKJnK8PAXGqLsNg1a/WjTPWGFI+L2M=;
+	s=arc-20240116; t=1754049387; c=relaxed/simple;
+	bh=6guj5SGYecgvd+Diof6vhKa1p/zkTKq5X83WawiuHg8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CXuAaw0mq6Kyl8wE7iJj5Xx6AGjyxBG+4Y8dgDoMIuFGA7u0qzanp02tHrrA+uPD6POgP4Mx8ToGdDvE4xVpNdgfHgNAnGfdJnMXTHmcmna9KuuowJPbanHjJKO4n0mTl6tz9lK+TB0lsuzzZc0NZsj/RT5rPr49FiBs10LIBAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=laVbsFeT; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=qIOcKAfhXmum3yy4+zZcwHQs7QObMQCWG73CwvoJiyUL3tjbDV3k/L0o/WFXQ9ce9ruiV0s3MF8u/mSUkRxSzHXNifHujt2cxpyJb7XlBzJ3UH35Vk/ipoIMqeEKN86dmpEhFiMv46SCSXkyOB2ILuf5nTXPjjkvXqyr3f/3Vs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=p9IN4Dd3; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5719JSol002614
-	for <linux-spi@vger.kernel.org>; Fri, 1 Aug 2025 11:37:01 GMT
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5718t1mY024719
+	for <linux-spi@vger.kernel.org>; Fri, 1 Aug 2025 11:56:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Ib4lVo6bA5cxWNHRPcfBAhasx6+Tv4uNCb8kn2zACc4=; b=laVbsFeTSRGnvXcG
-	VQ2dm5mVML9HBSszJSDpmG0jaePCntW0E7z1mjKqtg6++Z8M5HFFov1sjM/X9D2G
-	Nkyl2xrjKsHMMLVk50u2aG46qOUQ45/z/qpRp8VKWzRkHc9hQUIZLXI14r4wvrH+
-	WV1Z9xgZ7lYxJmlU/UJ9qzE2KefWiCSKps3+QqzjfxonfEFUamwEs+a1+2kOIGcu
-	ofac97tI2++OhGEXEfinA9bnQfmZkWXzufN8lb/uBUEtqby9IQ4H/3xZ0XOJ0SZf
-	fErNHoj4BWUjLc3siW8Qws/nSq9LSKUsgkheVYL2HdcctmL4Wiac7NJVOjrbZuO9
-	2rFvag==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 484pbmbgb4-1
+	zndqvOkOtBLPZgcibFTCnMvRTtpty67nrf8mHn7tQxk=; b=p9IN4Dd3lbFcTTye
+	K+bXpdj2dG96CxiXbECJgun+DGtRDE8rlOyp6Ql1CJxvYR1fbvriulvHrDviZLon
+	S3q0IPjExlZdre1IfSHMVcwInjl4mTnfRUJS+Rb1RGKYf7tYaBU/GK94jJWy5DRd
+	8EE2uDN4p+bhK7ErBOtFh4UZEb08AH100Gynv5P7iIX5vbblqMFa8RQz8JpYYagD
+	hpbgxwLP66N18MFQG2aDS5TcGMWZS5NrZ60UKobFIupPisnWSlY+u5i62k+HPDDO
+	rQcE9M7THk+S3BukBuosfQ/0CXy85ViHMY8fgjCdMszRkt0iltJKciXh243RAuOC
+	/q0Fag==
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48887g45ut-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-spi@vger.kernel.org>; Fri, 01 Aug 2025 11:37:01 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4ab3f1d1571so4541641cf.3
-        for <linux-spi@vger.kernel.org>; Fri, 01 Aug 2025 04:37:01 -0700 (PDT)
+	for <linux-spi@vger.kernel.org>; Fri, 01 Aug 2025 11:56:25 +0000 (GMT)
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-707428e0cd2so2447826d6.3
+        for <linux-spi@vger.kernel.org>; Fri, 01 Aug 2025 04:56:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754048220; x=1754653020;
+        d=1e100.net; s=20230601; t=1754049384; x=1754654184;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ib4lVo6bA5cxWNHRPcfBAhasx6+Tv4uNCb8kn2zACc4=;
-        b=t7Ykj5Pyx/mXzhMBP8N7AlshjLZsufwcGGF2IGKxEh1to0X8fe0mRvA7+r1kXG1xFu
-         1NkkTBa2EwXnG89Lo5p5kX+51ohST2MvcfjJ9NL2ysEx/DcoVwPF/yYsNi331nZRvndA
-         SwahLc9jegIVBWX5Ne2hydeZnVw229Tr9awXdHBbGSxCFG5CK+PljAdL9R7wmLWU5t6S
-         F/K2PioNsAfytnFYRFHaceAnwSvdtEt9jcvDlN+Wz4P+bqCe3JIWwwShicUH5DGa0PPD
-         gSUmr3LEu9anMtHdxTe5f/KcMudKVPWDbO1EXsrY6Cd68gEbfeX1BhYLEVcvgA+Wc7m2
-         mJIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVGJShv+Ueyd2MAmWzXudhefPwTXiFCqBO09JAR/aISMHL1BWHyaS/FMs4MGbpfgtSgTcqYrSWm/nA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGFqBG2ALk+CMr29fqWS1ceWDb9VnCiXUbWa0FzUTtSKf67obz
-	8x1/Bb66ntq4ZiM9pZgQUOnkmy0b5fVxOcLt3zv3BGMT4ZNnDuqeQpvzGfhHnBmBjv/7LGgM50D
-	ycDbKsXQuaAvuiFajxGS0H6b+pKVaG4cXlWM86ppwIajagoOz51WyWvEwTwk35F8=
-X-Gm-Gg: ASbGncvauSosOZjkB2XKJOWqqJQ4TS3mrK8ezkPb3mEeN+ZoFerFKiIdoTzU/l6ctHE
-	Qh8vcWOg56Z43JPSnpttQpJJfqNKGscrYFLW8zCXbIYVWc1l+gjg8u1vTuzTQ6UL4cpG0UgO9iq
-	VynMTxej5XPz9dmyg2d/yanJCtvJVX3c5mvSaDJNqm6smHiDl7rMX14ylibsgzCcoLZ2zodg04W
-	jM6j24ZR/MjPDBAtt8PO3Uk3WFJOPtjFxU2rZxzjFpujwfNN936VqJHnOddvL/4ttRY9RLtj1JW
-	h7R+oJLjntx2EVq+quPdqcrjuQgP8Od+dvQXixRNOTThG4QBW0DVttlSXucfx3p9n8gHJyKARl4
-	JjxM5nojcU/0nx5VB5g==
-X-Received: by 2002:a05:620a:469f:b0:7e1:ba5:6ee0 with SMTP id af79cd13be357-7e66eec27a7mr809611585a.0.1754048219814;
-        Fri, 01 Aug 2025 04:36:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGISRK3LCNP6LCJEXt6pbFs22LciSzSSA6wDhhyR/ABPjUX2hHCx0gXfYiLZNNNjNHw2rNI9w==
-X-Received: by 2002:a05:620a:469f:b0:7e1:ba5:6ee0 with SMTP id af79cd13be357-7e66eec27a7mr809604985a.0.1754048219285;
-        Fri, 01 Aug 2025 04:36:59 -0700 (PDT)
+        bh=zndqvOkOtBLPZgcibFTCnMvRTtpty67nrf8mHn7tQxk=;
+        b=TK9v6DWnDmI8z6olGxVlU53EgCplHcDLztEHRumoguTwBIYv9z3jJDcoqcVs9l6Wmy
+         iHUllh85zJhvRoAs6VnXuIepfnFgacbn0wfdDsDuuRx0QEIoqk7lqnIWWP/r6hS97wky
+         hnceVINMUlfDtTj/aP6KYCCfPW8sugfA2snxwmqrw7b9ExBMVAoElUfQxKhb/2WXpJwY
+         4/tqoyBGgLfznl4Mr45jaTcvmuEWJpu1STMi7mmmxLtmX4T31+pnKfZHgoe5efjBy7pS
+         g0Pz0yhNtyX8HXHngpxA/8vtabEn/un8IbjTtNCCQJtGk8BHEqfjkVkX+KIHi4W21Spe
+         zinA==
+X-Gm-Message-State: AOJu0YzHBEVcYNBJ2JYjvb3TL2QCyximl8ZLXtJXqOtwJ4k54+his4EJ
+	c9L7A+Y5F37kMeajU4juDSkV9u1F8AOWk/3JLqDT7CrOjRNhzBucw9NNfd2iwT4ypn7TTZnJxWL
+	J4LXbq9CZ9m6Ac7ky4xkE0YRB3wyJuU2dq+aAO402dBhGFZjKjoEW+Wr9bNOXjKY=
+X-Gm-Gg: ASbGncuk9h0wN7NUS6Nqo8GM3kWLWMqb7enNJBbZ++J9oLtK6pRz6yenuxDGF9/ffxD
+	tJWOcx40t7BrQGp2Mrok3lZf7aHG+WAXD3SiFcaukRUYdvyydv7ebu+u8ioLMWDodcaLK9dua+z
+	LD+B8I4Bn3biCcliJwhVwJKa3Jm6O1LioBIV1rDfN0+YZ+GHMa5QEC0O/w1x6hZ5TWg42pXWmPQ
+	4i+j4+F3ocz7q+cqkf9zW4gmU53xFGF9zqZ3khRuE+yKT/SHL2gJ6tzjZnxcqyzONc5Cf6KqxeZ
+	ca4GZizW3a6SLeQief3d0tdMntf4cJf/lchzOusRkMonXNswAjc7JahiNq225uJdQ+Sa+46iFeM
+	ngvuru8wGOp8aisztDA==
+X-Received: by 2002:a05:622a:311:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4aedb9a1268mr83455791cf.2.1754049383860;
+        Fri, 01 Aug 2025 04:56:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFJrDwZ4CqsLIhFn16pVJy0wpKGA9BP8YTsdrizbhvNE1Pr9Ax5WAkfuilF6IXeAquepVZw3g==
+X-Received: by 2002:a05:622a:311:b0:4ab:6e68:1186 with SMTP id d75a77b69052e-4aedb9a1268mr83455581cf.2.1754049383412;
+        Fri, 01 Aug 2025 04:56:23 -0700 (PDT)
 Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a3981sm272166466b.35.2025.08.01.04.36.51
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0a313esm277885066b.32.2025.08.01.04.56.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Aug 2025 04:36:58 -0700 (PDT)
-Message-ID: <a1040dfd-00be-4f20-92e9-533a74803e9d@oss.qualcomm.com>
-Date: Fri, 1 Aug 2025 13:36:50 +0200
+        Fri, 01 Aug 2025 04:56:22 -0700 (PDT)
+Message-ID: <72d5f805-1637-4c82-af25-e78b978c5799@oss.qualcomm.com>
+Date: Fri, 1 Aug 2025 13:56:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -90,139 +89,106 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 1/6] dt-bindings: dma: qcom,gpi: Retire passing the
- protocol ID
-To: Rob Herring <robh@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
-        Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neal Gompa <neal@gompa.dev>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?=
- <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Am=C3=A9lie_Delaunay?= <amelie.delaunay@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Chen-Yu Tsai
- <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Laxman Dewangan
- <ldewangan@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@amd.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Saravana Kannan <saravanak@google.com>,
-        =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Krzysztof Kozlowski
- <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        imx@lists.linux.dev, linux-actions@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-spi@vger.kernel.org
-References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-1-b505c1238f9f@oss.qualcomm.com>
- <20250730234631.GA1899887-robh@kernel.org>
+Subject: Re: [PATCH] spi: spi-qpic-snand: fix calculating of ECC OOB regions'
+ properties
+To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250731-qpic-snand-oob-ecc-fix-v1-1-29ba1c6f94e5@gmail.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250730234631.GA1899887-robh@kernel.org>
+In-Reply-To: <20250731-qpic-snand-oob-ecc-fix-v1-1-29ba1c6f94e5@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=LsaSymdc c=1 sm=1 tr=0 ts=688ca6dd cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=RNpRkCq-AmGuj0ryOp4A:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAxMDA4NSBTYWx0ZWRfX7uA1baM4rOhZ
- n3kfdL+iqgbEAt4mK9EQU9Lx8IVqKNZWXPFOoQ/Lq2XmRBW6C5dHAWQ+hzd2pTDpzi2s8YllYTG
- 3XiXOhudUk9fRfByxaigCgL2eBWr4H0oMDqS4InvDK55e2zunVLhgAk80jBWiiWOekvvnFOwrIG
- 9A898K2BF9ygm2VpeawpbYl23rJokE+Nvrb7MVZEJ7OmnQ+bM3yoaHu/BP/huhPFBGTWxQDwXze
- ngNVmKwxFByDL4u0yqPfoWV+440xekhuVpBjDDzmOeglKcjJ1ENlx1E9Lc2PdGHsB3iUp3WFxPK
- YQhEKv7AjeMd4MwJaphMJWOl012YBi1cBS5g+MNqmW6mhdAYKNP6UD1c4CegDthRRyYW0/wPLPV
- lWnmjv88rJyLFvCc/B/DaixKKdzlTO4dsi91MMB3dV+GwL5IlUm9T/ZCuiK8IHEsknJEwAK2
-X-Proofpoint-ORIG-GUID: aJ2GIDUj5S7ahozfi4jpWURqdRNqyKCY
-X-Proofpoint-GUID: aJ2GIDUj5S7ahozfi4jpWURqdRNqyKCY
+X-Authority-Analysis: v=2.4 cv=Vdn3PEp9 c=1 sm=1 tr=0 ts=688cab69 cx=c_pps
+ a=UgVkIMxJMSkC9lv97toC5g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=pGLkceISAAAA:8 a=KpljTfsc1uQhhnHPe74A:9
+ a=QEXdDO2ut3YA:10 a=1HOtulTD9v-eNWfpl4qZ:22
+X-Proofpoint-ORIG-GUID: xcOv4qeq2BJ6zZWQnSZTAUTGvhn9tmrE
+X-Proofpoint-GUID: xcOv4qeq2BJ6zZWQnSZTAUTGvhn9tmrE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAxMDA4NyBTYWx0ZWRfX10kIfT0L6D4J
+ AJjeFJ1xglO53GXdF9y/d9v3HpFh+C8jGiq8TnfyLVlankOXoKMvNX5VqDJ5Zgo4jzBHpyikD/C
+ P7bg3hthIZcCBt7YXDKXFP2g5DWKHqYKFpXEBubVmyCYx+RpzxifLyyMw7UdCcCJRb8V26zMuXg
+ qJRQIKhQhw9DyZoaBTzLxLwOID2SeYIMZ9tKJhu/rbitYB1j7xLRq19J1Uqf8D+i6IqUYV2yXvw
+ dGZZXLoqNDUURuP0Sj1oIFiq0sMuS6FxocqmIuR1qDudxne0SYbo/+/Nbfx39g6oKU25HORZDV/
+ KPwEH8gbHLz88SsSxIPCnhrmCGv6FUBQ3XgQY1N2c1CUHpEKJAzyS4cz0m5ckVcJcrYdPoaQofH
+ E4aX5zqpORTAmNuuRlRIA2GIjgXr0LFKsXup/f1WKGouqo4FNxQU4h66nVMdxptzIYNwGn2R
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-01_03,2025-07-31_03,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 mlxlogscore=902 spamscore=0 phishscore=0 suspectscore=0
- impostorscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- bulkscore=0 mlxscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a
- authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2505280000 definitions=main-2508010085
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ bulkscore=0 adultscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508010087
 
-On 7/31/25 1:46 AM, Rob Herring wrote:
-> On Wed, Jul 30, 2025 at 11:33:28AM +0200, Konrad Dybcio wrote:
->> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->>
->> This is a software construct that has no business being expressed in
->> dt-bindings. Drivers can be constructed to retrieve the protocol ID at
->> runtime or hardcode them per protocol.
->>
->> Remove it, as a pre-requisite for further simplifying the GENI
->> bindings.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->> ---
->>  Documentation/devicetree/bindings/dma/qcom,gpi.yaml | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
->> index bbe4da2a11054f0d272017ddf5d5f7e47cf7a443..745613b93b210afd38946030f7477e91e08c907a 100644
->> --- a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
->> +++ b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
->> @@ -61,14 +61,13 @@ properties:
->>      maxItems: 13
->>  
->>    "#dma-cells":
->> -    const: 3
->> +    const: 2
+On 7/31/25 8:11 PM, Gabor Juhos wrote:
+> The OOB layout used by the driver has two distinct regions which contains
+> hardware specific ECC data, yet the qcom_spi_ooblayout_ecc() function sets
+> the same offset and length values for both regions which is clearly wrong.
 > 
-> I think you need to keep 3 and note it is deprecated. Does an existing 
-> kernel support this being 2 already. If not, ABI break...
+> Change the code to calculate the correct values for both regions.
+> 
+> For reference, the following table shows the computed offset and length
+> values for various OOB size/ECC strength configurations:
+> 
+>                               +-----------------+-----------------+
+>                               |before the change| after the change|
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  OOB  |   ECC    | region | region | region | region | region |
+>   |  size | strength | index  | offset | length | offset | length |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  128  |     8    |    0   |   113  |   15   |    0   |   49   |
+>   |       |          |    1   |   113  |   15   |   65   |   63   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  128  |     4    |    0   |   117  |   11   |    0   |   37   |
+>   |       |          |    1   |   117  |   11   |   53   |   75   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |   64  |     4    |    0   |    53  |   11   |    0   |   37   |
+>   |       |          |    1   |    53  |   11   |   53   |   11   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+> 
+> Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> ---
+>  drivers/spi/spi-qpic-snand.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+> index 0cfa0d960fd3c245c2bbf4f5e02d0fc0b13e7696..37ddc48d2c17264499f821d235835c4ff5982873 100644
+> --- a/drivers/spi/spi-qpic-snand.c
+> +++ b/drivers/spi/spi-qpic-snand.c
+> @@ -213,8 +213,16 @@ static int qcom_spi_ooblayout_ecc(struct mtd_info *mtd, int section,
+>  	if (section > 1)
+>  		return -ERANGE;
+>  
+> -	oobregion->length = qecc->ecc_bytes_hw + qecc->spare_bytes;
+> -	oobregion->offset = mtd->oobsize - oobregion->length;
+> +	if (!section) {
+> +		oobregion->offset = 0;
+> +		oobregion->length = qecc->bytes * (qecc->steps - 1) +
+> +				    qecc->bbm_size;
+> +	} else {
+> +		oobregion->offset = qecc->bytes * (qecc->steps - 1) +
+> +				    qecc->bbm_size +
+> +				    qecc->steps * 4;
+> +		oobregion->length = mtd->oobsize - oobregion->offset;
+> +	}
 
-Hm, I thought this is a case of relaxing the requirements, although I
-suppose some software might have had a "if n_cells != 3" (and not < 3)
-check
+How about
+
+if (section == 0) {
+} else if (section == 1) {
+} else { return -ERANGE }
+
+?
+
+FWIW the values match qcom_spi_ooblayout_free(), so the commit seems
+sane
 
 Konrad
 
