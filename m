@@ -1,96 +1,309 @@
-Return-Path: <linux-spi+bounces-9265-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9266-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B44DB189C8
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Aug 2025 02:14:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 990FAB18E6E
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Aug 2025 14:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1334C1C26429
-	for <lists+linux-spi@lfdr.de>; Sat,  2 Aug 2025 00:14:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 579587AF29C
+	for <lists+linux-spi@lfdr.de>; Sat,  2 Aug 2025 12:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9FA4DF59;
-	Sat,  2 Aug 2025 00:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852C92264B5;
+	Sat,  2 Aug 2025 12:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVTA83cf"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iLj+yzbI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A333E4A28;
-	Sat,  2 Aug 2025 00:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A7022AE65
+	for <linux-spi@vger.kernel.org>; Sat,  2 Aug 2025 12:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754093637; cv=none; b=TFXzDRwwWnXgDf6rA9dCV8UIweQbx2gWp25K3kbuJBxgFF3UvTDH04EHe31A2z673t7ZQYshYrLCiOz0CObUyaRLiQOKaNtD91g6CfJx0GYaK52iz0U9W0qmitgFo68zyV5mPIcs9EZzC4rlHpRO39OF83BqvkF85qLO3Zvq4go=
+	t=1754138290; cv=none; b=sarB42UZd0g52sgK7oM2zTvJ/gh65D6fz6ro0LZ9RwLKfsuEYCLMuOAzOSMCoDBe4Utyi0E/UfICGAJcTxs95Sf3quyQRnuPfHj40aH9BvwYyw6MBWFy1TWyLVttg05KR9yqyLXbwAXhiFH5w4nYYQkfbNAMHb0oIXeo+D/U1O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754093637; c=relaxed/simple;
-	bh=chRdwITcytwXEaLXV8FtUw0oKyNhtxp8XDO5cKD3phw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DyIbLuZt/6jF4JAWoT//3esRHiBnkQnkblCkTrWGWWYHykKRPd/BiUOKF0BTPhhqSIdSwtfy/hxrZu3asTZi7THZCVuQpuBX6gnK9fevNGJ5TUyJktCVlV8VVlh6S17DCxb6Pojlxv5g/qGkr1ZWIOHAkpIDyTYta6YlYVd13wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVTA83cf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3298FC4CEF8;
-	Sat,  2 Aug 2025 00:13:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754093637;
-	bh=chRdwITcytwXEaLXV8FtUw0oKyNhtxp8XDO5cKD3phw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=LVTA83cfobIyLFRCK2+1QLUDhYwXCsj9WwoR9zh1kYbTSqBdEyY2t5p+85bVqKDWj
-	 EwsTpcBTdc3hD9NAaYLA4edDJKMM/uH9OHurDyyQZ1lAWFNupoab258z1o8kHvqgwC
-	 i1ey+xROc6WXmPTGbBviB9+zm04KKYpG085cQ4HE5kcdL5xdf8AJzXWTA6icpMLAfz
-	 62b9Jl8H66I+4zEpeheB+4suzGBKkqJeHV8+INlflQ9uB1D3Lbhyu6OGcQNwfK0JJ6
-	 QO+MkhqpUuS0KqagSfNO2LhzzztRpeuUk8POzwRKq5jbgtSbe/krbLDEqzc1E3W2rF
-	 BHZdC2n+0o5UA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD16383BF56;
-	Sat,  2 Aug 2025 00:14:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1754138290; c=relaxed/simple;
+	bh=kjNMGi0IvuVGXF8RnqYfZcDE+z5GAU+wzdFjcp7iLnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sTjq4nEN6r3gt4P1EFf5gtNAVdyZeYWyiy6qGyAQFHCVq6ljAZ98KPU7hOJ397/yTrYTNY6PIirye62+iKxBnh6eYlR+lXlrxH+UkQ9s0Onti4q41Az/gUi9t7ASE0sNX33H35Xb3/esvg00vbXjZSKmugKKnnwQuFxZWHiiKCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iLj+yzbI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5725fRmw005253
+	for <linux-spi@vger.kernel.org>; Sat, 2 Aug 2025 12:38:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=; b=iLj+yzbIUQdJmpPE
+	HSCMNc/WukNLpBT4WQTMuU2Elh3jlNsbdJ3wd7gziWpdQ65t+tBxIrNYtMU+MFuJ
+	HkIflk49HRXLBE2e9aKmEFEMADiJXGpyVkCfWqzZ2oRbpsC/Is+DUfmvIOCD1CL7
+	+su5CJLM5ymQuGWntuLQlXV8emoqlaA1Boot08Xzssob33f1R3HI/ecNvYw7Rexb
+	A0P7DlMACxYME3GtSMcdlQDuCabxpvlQxkQpGykwEkKpz6XKqy0U5VviVBINJlk4
+	vqmrWlp/XyTcfHt6AsjKW9089optU/83B4pIoedJbH9vwu6CHrl90A4PA/AyXS0L
+	8x2ZGA==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489buqgnht-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Sat, 02 Aug 2025 12:38:06 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ab3f1d1571so7126841cf.3
+        for <linux-spi@vger.kernel.org>; Sat, 02 Aug 2025 05:38:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754138285; x=1754743085;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=;
+        b=efPYxYnDLoT0er6O7Z6N6w5lVzcObiU4f/g86xa/qzqXzrsrrsc9atHJzDWdaA/pUx
+         rBaKpc9s/8mpLbFC/jMSFe+f84ZiO83e1QtcLiXn2vrtFMaAjH+z5ZJTwYNxzHlzoeTB
+         4VsaDDw6AR+DuCxWtZUal0DGO9ZbiYhQD1tYJTOpb2KPI8TtGxYnXeDqPM5srE62CjwE
+         G6sWIalsVqYoCW9+k5gbRw/K0aqd31ZrqYiu25Vwt0QnXEsDqzyKd0RCJFMWZvjILhnL
+         i4VzidG66f3GgdOW8bVGAM+ymcf62z60/UcbJ+Svtdry+qOT64VMguFi9gIWAxoFgP2N
+         gMEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvooBpoPCAC4PgB6Rv/NS4/61aSRC1PVH/TNm4umVyXRE7ty6oU6YZg8kk4ujghO4WjQqMzjJt+6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ1tPcePbaZpsM1jyBkYZYDhiRWSjXzQE1btbrskSRGbI1v+KS
+	hhiXMN8pTnZJOyXoRhgkxIDvuoGsTFWn7Cwa2/rx1au6tUb44hpOjg7SWm8veBebWcEMEK2qGX4
+	VYOfH/UnoDIqOryx74RCHfxc0Y53r6nKVwYEM+ZSPOmbAPXGas6h1Ishdrd42+no=
+X-Gm-Gg: ASbGncsSIVG2wkHkIAXJmReIJhvItG2dxXddb2w/laglBv4lOHOkpa32LlVd6XW0gxD
+	B+AnWDnU+3cxB7hCuCiOGLOdE3nLqgvk+FgdZfs88aJiJxVFu1Izixxo4jHMIrqWOE1x3mKXZ5q
+	kbdkfiH0MAjL9S8BfTsPIlMj/8oSuQncewBwxC5Y/Wpc+kbEKPdwyexUmt34ScMxykNkKFu44YD
+	YsdP8Zw8RZVfwSp3s9UGY1XN02DhgkgkREIIlnSL8YOmsrcKFqa0qLb15UtDqhnJcNnm1XZS2cO
+	60vA1vxvewEp9vtuWL0A4JOS5Xc2XMCpXtJa0/De/6RKikYR8rpkYCmP2Iu+Nxp52VTdSo/3JAw
+	w9rmOj33MTX5uxWB28w==
+X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22382211cf.6.1754138285243;
+        Sat, 02 Aug 2025 05:38:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFPF9qOzJpGO98jPyAvuhk/RML1vSf6VMcwdOoFpMcr/LQVR1VYdVHuTAn5xus4wthkO0plg==
+X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22381721cf.6.1754138284551;
+        Sat, 02 Aug 2025 05:38:04 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0761f2sm434931766b.11.2025.08.02.05.37.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Aug 2025 05:38:03 -0700 (PDT)
+Message-ID: <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
+Date: Sat, 2 Aug 2025 14:37:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dpll: Make ZL3073X invisible
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <175409365249.4093813.14032905204294437624.git-patchwork-notify@kernel.org>
-Date: Sat, 02 Aug 2025 00:14:12 +0000
-References: 
- <97804163aeb262f0e0706d00c29d9bb751844454.1753874405.git.geert+renesas@glider.be>
-In-Reply-To: 
- <97804163aeb262f0e0706d00c29d9bb751844454.1753874405.git.geert+renesas@glider.be>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: ivecera@redhat.com, Prathosh.Satish@microchip.com, jiri@resnulli.us,
- kuba@kernel.org, conor.dooley@microchip.com, netdev@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass
+ a cookie to of_xlate
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Frank Li <Frank.li@nxp.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?=
+ <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Am=C3=A9lie_Delaunay?= <amelie.delaunay@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai
+ <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laxman Dewangan
+ <ldewangan@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        imx@lists.linux.dev, linux-actions@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
+ <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
+ <20250730180417.GC21430@pendragon.ideasonboard.com>
+ <aIpmgpXME1BmThxU@lizhi-Precision-Tower-5810>
+ <20250801120007.GB4906@pendragon.ideasonboard.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250801120007.GB4906@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: dF6BJFF0FlDe9AUPgN6eY-xn2fv5DBLX
+X-Authority-Analysis: v=2.4 cv=VZT3PEp9 c=1 sm=1 tr=0 ts=688e06ae cx=c_pps
+ a=JbAStetqSzwMeJznSMzCyw==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=Hh3C_mqfd76DgmRPW0UA:9
+ a=QEXdDO2ut3YA:10 a=uxP6HrT_eTzRwkO_Te1X:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAyMDA5OSBTYWx0ZWRfX99SmXvEIVA8g
+ /cqsHyT0dIQm1xasJJ+/jqwbzDxAav2DOwQEATuoDiCnFfmC08xTaKNPRaRmp1vaGyvI3trd06/
+ KjZM3M3hpoSfCeImouW6qKFTi1U41UocekDWEYQROV6h/CbiYTF43c/n9ztNBVWMrc5Ug68Ik/+
+ fus4cQh89jHhuYYUkMYzQRspNoKQRyDevHIrhF4f/yVFY7nI7MHvMlJuKZxSd82A9GXodrvjCit
+ z5xTOIoyUAdJxqmUCGCNIJL1rPa4iYgag77pwFJtiLfKMuwyWwhm/XJr5NY/4FagTCFaMInzzEd
+ DPtaRJkCguKBI33g0gQcmf54rLs4zzRluSgFZ9JjJ/4HJ5B0LTq8odRFNYbCvxA6lWz3n0wpa8K
+ q5cvp12o+zwLdAxD1viPaeeUme0ZQfE/0jha3VeiTq4X5UhovhUkfj8pJRXqB4X8Edg6vm+4
+X-Proofpoint-ORIG-GUID: dF6BJFF0FlDe9AUPgN6eY-xn2fv5DBLX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-01_08,2025-08-01_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2508020099
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 30 Jul 2025 13:23:32 +0200 you wrote:
-> Currently, the user is always asked about the Microchip Azurite
-> DPLL/PTP/SyncE core driver, even when I2C and SPI are disabled, and thus
-> the driver cannot be used at all.
+On 8/1/25 2:00 PM, Laurent Pinchart wrote:
+> Hi Frank,
 > 
-> Fix this by making the Kconfig symbol for the core driver invisible
-> (unless compile-testing), and selecting it by the bus glue sub-drivers.
-> Drop the modular defaults, as drivers should not default to enabled.
+> On Wed, Jul 30, 2025 at 02:37:54PM -0400, Frank Li wrote:
+>> On Wed, Jul 30, 2025 at 09:04:17PM +0300, Laurent Pinchart wrote:
+>>> On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
+>>>> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
+>>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>>
+>>>>> The DMA subsystem attempts to make it theoretically possible to pair
+>>>>> any DMA block with any user. While that's convenient from a
+>>>>> codebase sanity perspective, some blocks are more intertwined.
+>>>>>
+>>>>> One such case is the Qualcomm GENI, where each wrapper contains a
+>>>>> number of Serial Engine instances, each one of which can be programmed
+>>>>> to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
+>>>>>
+>>>>> The GPI DMA it's designed together with, needs to receive the ID of the
+>>>>> protocol that's in use, to adjust its behavior accordingly. Currently,
+>>>>> that's done through passing that ID through device tree, with each
+>>>>> Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
+>>>>> dt-bindings that are full of useless copypasta.
+>>>>>
+>>>>> In a step to cut down on that, let the DMA user give the engine driver
+>>>>> a hint at request time.
+>>>>>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>> ---
+
+[...]
+
+>>>>> diff --git a/include/linux/of_dma.h b/include/linux/of_dma.h
+>>>>> index fd706cdf255c61c82ce30ef9a2c44930bef34bc8..9f9bc4207b85d48d73c25aad4b362e7c84c01756 100644
+>>>>> --- a/include/linux/of_dma.h
+>>>>> +++ b/include/linux/of_dma.h
+>>>>> @@ -19,7 +19,7 @@ struct of_dma {
+>>>>>  	struct list_head	of_dma_controllers;
+>>>>>  	struct device_node	*of_node;
+>>>>>  	struct dma_chan		*(*of_dma_xlate)
+>>>>> -				(struct of_phandle_args *, struct of_dma *);
+>>>>> +				(struct of_phandle_args *, struct of_dma *, void *);
+>>>>
+>>>> I suggest pass down more informaiton, like client's dev point. So we can
+>>>> auto create device link between client's dev and dma chan's device.
+>>>
+>>> Is .of_dma_xlate() really the right place to do that ? If you want to
+>>> create a device link for PM reasons, isn't it better created when the
+>>> channel is requested ? It should also be removed when the channel is
+>>> freed.
+>>
+>> I remember just need record client device pointer here.
+>>
+>>>>
+>>>> DMA Engineer device
+>>>>    DMA chan device
+>>>>        consumer clients' device.
+>>>>
+>>>> If consumer device runtime pm suspend can auto trigger DMA chan's device's
+>>>> runtime pm function.
+>>>>
+>>>> It will simplifly DMA engine's run time pm manage. Currently many DMA run
+>>>> time pm implement as, runtime_pm_get() when alloc and runtime_pm_put() at
+>>>> free channel.  But many devices request dma channel at probe, which make
+>>>> dma engine work at always 'on' state.
+>>>>
+>>>> But ideally, dma chan should be resume only when it is used to transfer.
+>>>
+>>> This is exactly what I was going to mention after reading the last
+>>> paragraph. Is there anything that prevents a DMA engine driver to
+>>> perform a rutime PM get() when a transfer is submitted
+>>
+>> DMA description is a queue, It is hard to track each descriptor submit and
+>> finished. espcially cycle buffer case.
+>>
+>> And according to dma engine API defination, submit a descriptor not
+>> neccessary to turn on clock, maybe just pure software operation, such as
+>> enqueue it to a software list.
+>>
+>> Many driver call dmaengine_submit() in irq context,  submit new descriptor
+>> when previous descriptor finished. runtime_pm_get() can NOT be called in
+>> atomic context.
+>>
+>> And some driver submit many descripor advance. Only issue_transfer() is
+>> actually trigger hardware to start transfer.
+>>
+>> Some client use cycle descripor, such audio devices.  Some audio devices
+>> have not free descriptor at their run time suspend function, just disable
+>> audio devices's clocks.  Audio devices run time suspend, which means no
+>> one use this dma channel, dma channel can auto suspend if built device link
+>> between audio device and dma chan devices.
+>>
+>> Some DMA client have not devices, such as memory to memory. for this kind
+>> case, it need keep chan always on.
+>>
+>> issue_transfer() can be call in atomic context. but trigger hardware transfer
+>> need clock and runtime_pm_get() can't be called in atomic context.
+>>
+>> Most case issue_transfer() is call in irq handle, which means device should
+>> already be in runtime resume statue.  DMA engine can safely access their
+>> register if using device link.
 > 
-> [...]
+> You have good points there, in particular the fact the issue_transfer()
+> can be called in interrupt context.
+> 
+> For me this calls for new DMA engine operations to "start/stop" the DMA
+> engine (better names are likely needed) from a client perspective.
+> 
+>>> and a put() when
+>>> it completes ? (Logically speaking, the actual implementation would
+>>> likely be a bit different in drivers, but the result would be similar.)
 
-Here is the summary with links:
-  - dpll: Make ZL3073X invisible
-    https://git.kernel.org/netdev/net/c/a4f0866e3dbb
+So.. do you folks want me to alter the patch in any way?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Konrad
 
