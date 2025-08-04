@@ -1,236 +1,175 @@
-Return-Path: <linux-spi+bounces-9271-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9272-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8FBB19D6D
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Aug 2025 10:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09844B19E36
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Aug 2025 11:05:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D94A51899929
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Aug 2025 08:14:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BB6E189A90B
+	for <lists+linux-spi@lfdr.de>; Mon,  4 Aug 2025 09:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8CF23ABAB;
-	Mon,  4 Aug 2025 08:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D4C024501D;
+	Mon,  4 Aug 2025 09:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D6/rmPVL"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="H/j00l76"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2317D23C511
-	for <linux-spi@vger.kernel.org>; Mon,  4 Aug 2025 08:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4322224677F
+	for <linux-spi@vger.kernel.org>; Mon,  4 Aug 2025 09:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754295251; cv=none; b=eMgjfsPF4SSl80BDIkY0b0zRs2iZoqnfxz+D1WuXZMfiB2Jn/+AsqW8m3DMKv5dXNsoUU5YAGjs96U0Kan9vF6FQ6PxtdI2piYnAXqwKZkPOvgx56a/aUEo86W6uMVHjWUPMEWhfJMAs7JXCqumEhJJBQByPUa3zUcZJ2CtAue8=
+	t=1754298269; cv=none; b=bTh/xE2WlyD6rIjrpGlkqDzVjPMUglQCRTL2+5cTSltSja6WEJCG4m5xKQk36gzKMvaGYy7a5iucNgzI2R4qGZaP7VoUzf9iTEGs/IQu6JUEyvJZOxBm25L0jrK2S8kc0ia+LfGFKALivz+nKyUyBQqKrOirqEjhsE355z4hYOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754295251; c=relaxed/simple;
-	bh=pptH2NH4Z3zkGfNYWBXszyOjxuBjuXDQlq3svK2Ozq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UafP1Ql28rYkjbj5ffp0158T348X+oA+aEdTktvoe0kPv+QOP/jhAcILpaZBnY/k8d8OEfi39dq39ks5m4GPnToyaZruehInem1p9zJkY1N5qhU6FpxOGuHnbwwFxrkyQQUpcZtGKdpi7eMI7ZGJhZxxjAZfH3jpfsZjE3OX9Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=D6/rmPVL; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-451d41e1ad1so28200665e9.1
-        for <linux-spi@vger.kernel.org>; Mon, 04 Aug 2025 01:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1754295247; x=1754900047; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aIs0VZsx9ne5+u8erw4jNU+9U75wvlH5jVml9RCdY5w=;
-        b=D6/rmPVLC5wD8GwEDBVlv5jyNitufsYizvkJZ1cctJN+sxvuBn18yNNwFYn4aLLPaU
-         7uLelwawHK1BUiO72cHQj38TmpKbA0i5eACWqRbLEib30C/y7yxJUO8qCI89bEfKzfCi
-         /3Ibg2+npyg9s75FPiO5zxFM5RTt5B9nJhAoEFEAJtNcOeQS0wpV7I8L8SIQWTzVzkwz
-         K5AHkBuTmeeOgWtQEwhv8sUiEQWIU6sI8X0dMZtM7kff/R0iHJAOPe0u0kGWdaE/xBRn
-         v72LIOsRqEAhyKSjCjTwmB0enAgoYmf7I6Q9wQu0+hXnlSD8Bd9q3aprBmZGMbxTCSlj
-         0Ymg==
+	s=arc-20240116; t=1754298269; c=relaxed/simple;
+	bh=3ynaIvsBNRVvZd577WmJObLTK8KxkOoTLbIepnKpTrs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nWUwbfGGMMkjKWV6Eyz58hfvZ0KRNfTSydcmfXUw2VJW/JVAK0tqZs1UFXyJMhUMlVmYnmGKps8+IWIYKRlt/HYNproAqBu+nLPYWqD6NZITD14vUhfMrtfC3YEDOkbkHGoP6rNsmn7IlCXcJvprTKIths/I9yQBQOgX15maXqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=H/j00l76; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5748gnEp005456
+	for <linux-spi@vger.kernel.org>; Mon, 4 Aug 2025 09:04:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	yxj88AoDLPC4Xz7nvIZCrmjG+oBu2ULVQ7Y3/Wt0Pxc=; b=H/j00l76Mr+gYapm
+	+ZtxUX6bjTjpCIenYszeIdCS8nnZ+QQ7m5Ja34mr+hTJZ3N3w4ClQQnp7jW5sQEy
+	kB4zFodR5A65bMjtX0cI9EDDKEvW1WyOqCDZFthtLgb9exhVJ0CAGt42dgiCYQzU
+	WT0WmveQ62UM9ig64TDyxkD3he9zgjrl26+NSII0Ox0P6oc7So5KYV5de6y0KKto
+	wZqCavNdiTBD62Yww9JsFsuOVHeEmhUDBgyBMQIGq/K/3bbe/sQRV+BNPmCW27oN
+	oEQWD4hC/wcRxehaOfK5IIEkLhqh3OCMRXZJ6BThHhpBEoN+3nO4KJMvtdlA3dPw
+	a9QMGw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48a2ke2bkq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Mon, 04 Aug 2025 09:04:26 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7e7f8e1dfd3so12780985a.2
+        for <linux-spi@vger.kernel.org>; Mon, 04 Aug 2025 02:04:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754295247; x=1754900047;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1754298265; x=1754903065;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIs0VZsx9ne5+u8erw4jNU+9U75wvlH5jVml9RCdY5w=;
-        b=vPpfLJqhBayUOdHcv3/CZwJUW3cmDmbtDtfy7WwIECfd4YORa/gzegEjv+GQ2UwgFx
-         XWlgwO5rDoPv4lgad7JnHEKDKdaeBgaV03mxRhsyGSTJZ7MKKgDhJ5S4tAjEA4s8EhtE
-         r9roqOdrvO08Bx4N3qYZMN8HaiB6S5bTaukvpYuRl0ZWifQMigf3QP1gUzKc9Oa7Tap/
-         kD/c4D5Wm9D3/ZT6yo07PTMh455YcKaP9dVrL4kLq7//d8+r6EhKqI3bJbD1554O1U7W
-         /otKSknFCWZlhVJhgjhShQymaMJyvSLF+XoBROD7uVdP9TF5w/5QZgf4LtCPmYASf4jY
-         zM3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsL+TIo2pbHH+5TPk3GGUGhsu6MnOCrx8BQqyAEfzBLxxG3Nca5N3TTCQJD5aPYnscaWpK9Hb4rAs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoktFXFrShPxGwLEqwyAF7G6ay5A5rrJX5jcVhJt/QEhZxD9UG
-	zNLEJpKQQxPvdCEK5Oi6wqN9605eQ1gBW53LgkKdluH5gHf+YWRnnLsAE8lfrm84bdJ+o+IZZHx
-	bwj5l
-X-Gm-Gg: ASbGncua6qzZUgVDpNWf+LXdWJa57CCvP6fG4sHodVsq36xmJ8Saqs7wtCeBGcTNpDh
-	D9TD54+goypdHmZZlUxm+FT3FFNevsGpz5Ovc5WRqC7K122nYCSUDPjmQkObefxay04GEsmy8qQ
-	esTSpqiQCvR3zyifW+QVRCVv27o71Xhdp+B9cWaIWGZq9muJAsUv0mf7GhVyDR5ekroFNy6nnvR
-	5pL2wAaMJaRPxLk2pV2b/nIgI+FbfbxrYBKB45mpywfn7smsBqB5GXfHdWGLLf2qHbbK02PZF4I
-	VCKJYVW5lG0nOyG8iV4S7R/3guBWc6YAUlA9sglcAKOdFkjws7bO4KXIgLm08KPuRijkr0Lq90D
-	MDuTb7242pOMfsuHB5eUYhn3KUo0=
-X-Google-Smtp-Source: AGHT+IEeeJkFKsl7/38jlJguNroD6DzRmQgXbAi7gRxUyE2DHkd/n/ytZVazRk0tnMc3kTWnIPGKwQ==
-X-Received: by 2002:a05:600c:a01:b0:456:1d61:b0f2 with SMTP id 5b1f17b1804b1-458b6b57100mr61139955e9.30.1754295245801;
-        Mon, 04 Aug 2025 01:14:05 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4589ee4f239sm156065575e9.21.2025.08.04.01.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Aug 2025 01:14:05 -0700 (PDT)
-Date: Mon, 4 Aug 2025 11:14:00 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Sunny Luo <sunny.luo@amlogic.com>
-Cc: linux-amlogic@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: [bug report] spi: Add Amlogic SPISG driver
-Message-ID: <aJBryDMreHB9dI_i@stanley.mountain>
+        bh=yxj88AoDLPC4Xz7nvIZCrmjG+oBu2ULVQ7Y3/Wt0Pxc=;
+        b=P5bWyVq3iaTMffJzzKSzu70AqRLPvF00qCeZm7GjIa/2lAOGvZaOpfbzGlhflo4SOF
+         kzzvWeDcVxR/MiGKiylHnmwlFgrY9BmjiH44CfvlvppRvICbh/iOagQ6Jy16knXiaxyK
+         U+ZKl1y8dbJjoKeoNhH2SzCawkn7akECcs1Jz00lekQAOc5q4ogQDGIuXRL4VgM9YruW
+         KkXGyYPx+RK3WkLOaAmHg422+qjv/wT5aGCXPUO956qDuJwl5Lo1QUpNVMuDG3K7HCbw
+         WfkmLiZrmMi+uGp5WuFGTDtFBkEBxdIurqJ2N6MjC43e9oQpR7sbD9VHCaN/TWxn9CQ8
+         brZg==
+X-Gm-Message-State: AOJu0YwGiV4Dnj2NeRwqn/tSa1NvEypbUiqgEED6hCESausKnSPuVmAh
+	j5kxSmfYERMcHP+hJw+TVQ9nMOXjAxoFNpPrOFf3iLNijc7dFsTrEbq+/fjc2ndlIs7ITx/PTii
+	IWZmBm2OHExpOkPHqtCqLjG2Y1jmV01JdwM3pmt8ji7pcjsVso0zxpponjDpHTjE=
+X-Gm-Gg: ASbGnctYgpVEjhSbT5AP+LRTVc2JVTV02bktnIf3ecpAmhTlkIhPzRuGb/w2G3wM6YN
+	FKi7unL0cQ/qI5T2pVRSrCXQ5wHGdE3RfbBxijrkINKRvXT6SZwDnqCR8StYBBsAiEG68Ob7JDi
+	KI+E9Jv1cYVCCQVZq775taAn/QAsdbfBupnQKj2moc6xSdLpTX/9Ts+SSNY4SLIneZwrPQ5/m7K
+	Q/WJpQOd5wXq4JOXLD9ZJXGXvmaP66jBh8SybxDZsXnG5xAsb+IKfOI4B0Xc92H1eF0u7MOgMr2
+	42nNh02q5Z1DKg3Sfb2mivkNi0ur8HfqxSwwG0eL2FuPTB8I36m8AbfefTMdGdaQ1VTCp9luchb
+	7Aw0daE8vSXpYRSflxg==
+X-Received: by 2002:a05:620a:40c6:b0:7e8:5bb:b393 with SMTP id af79cd13be357-7e805bbb656mr66104085a.4.1754298265120;
+        Mon, 04 Aug 2025 02:04:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHT5U6nf7OFxjlAHz3AXwYcJmyL/ozw3xGtfssCSEsyIVFeEN+uSY6B0F2EWAEjbDHiy3UmaQ==
+X-Received: by 2002:a05:620a:40c6:b0:7e8:5bb:b393 with SMTP id af79cd13be357-7e805bbb656mr66101085a.4.1754298264504;
+        Mon, 04 Aug 2025 02:04:24 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91aad117dsm695375766b.77.2025.08.04.02.04.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Aug 2025 02:04:24 -0700 (PDT)
+Message-ID: <93403461-c0b2-4c0c-91b3-8cbd4c1c5ebe@oss.qualcomm.com>
+Date: Mon, 4 Aug 2025 11:04:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: spi-qpic-snand: fix calculating of ECC OOB regions'
+ properties
+To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250731-qpic-snand-oob-ecc-fix-v1-1-29ba1c6f94e5@gmail.com>
+ <72d5f805-1637-4c82-af25-e78b978c5799@oss.qualcomm.com>
+ <8883471e-57b9-4492-8d4a-aca3b4538682@gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <8883471e-57b9-4492-8d4a-aca3b4538682@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: aGVlji3maMMvBvoG50TkVOwUDO6zjBVO
+X-Authority-Analysis: v=2.4 cv=TMNFS0la c=1 sm=1 tr=0 ts=6890779a cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=sgHexgGcLWnyGziH-awA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA0MDA0OCBTYWx0ZWRfX6xmu1/1NIuFH
+ kQstA0Hz1AuWqZrr6G9HrK/hbNFAPteKuAMghYAQukz74yMym/ohA7+xD4k8bAorO+ymLRdlFr5
+ SHg3EadS6pA8PnId8tLX8pjqZxyb9hD3bm3zPTolDxuBfmyTf9JkBZ3KTvLeuPZUNDgshdBHh0G
+ RntWgFlMmhgI98pvSH2DB2CrqdtGpw1K7zrQ+c82F/8PBFN8UVwoikumMxud1qI6suSTNyFYCg+
+ htNXVn7T+UuG3W6FKD292WP2eQYqsIKYMzXERlDQTYuhi4PQ0KHzjf0p84+HFsQMoLXUKUQNX5Z
+ YYDokOoSuVln3CgsCvrBzRmtY6xwEQNSpzEKf8uIoPq7ClHF1luslYzP+6++1TJK4b4Ikpwdi3O
+ f04hF3DRd5R9H1NI7HDWq/IZN9gt4ugjNgTfrKnKdekXRDx4R7/HPdxs2CoVDQxXZxwj3JiE
+X-Proofpoint-GUID: aGVlji3maMMvBvoG50TkVOwUDO6zjBVO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-04_04,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508040048
 
-Hello Sunny Luo,
+On 8/4/25 9:22 AM, Gabor Juhos wrote:
+> Hi Konrad,
+> 
+> 2025. 08. 01. 13:56 keltezéssel, Konrad Dybcio írta:
+>> On 7/31/25 8:11 PM, Gabor Juhos wrote:
+> 
+> ...
+> 
+>>> --- a/drivers/spi/spi-qpic-snand.c
+>>> +++ b/drivers/spi/spi-qpic-snand.c
+>>> @@ -213,8 +213,16 @@ static int qcom_spi_ooblayout_ecc(struct mtd_info *mtd, int section,
+>>>  	if (section > 1)
+>>>  		return -ERANGE;
+>>>  
+>>> -	oobregion->length = qecc->ecc_bytes_hw + qecc->spare_bytes;
+>>> -	oobregion->offset = mtd->oobsize - oobregion->length;
+>>> +	if (!section) {
+>>> +		oobregion->offset = 0;
+>>> +		oobregion->length = qecc->bytes * (qecc->steps - 1) +
+>>> +				    qecc->bbm_size;
+>>> +	} else {
+>>> +		oobregion->offset = qecc->bytes * (qecc->steps - 1) +
+>>> +				    qecc->bbm_size +
+>>> +				    qecc->steps * 4;
+>>> +		oobregion->length = mtd->oobsize - oobregion->offset;
+>>> +	}
+>>
+>> How about
+>>
+>> if (section == 0) {
+>> } else if (section == 1) {
+>> } else { return -ERANGE }
+>>
+>> ?
+> 
+> The current way follows the implementation in the qcom_nandc driver, so it makes
+> it easier to compare the two, but it can be changed of course.
+> 
+> However, since the 'section' parameter is an integer can we agree up on using a
+> switch statement instead of multiple ifs?
 
-Commit cef9991e04ae ("spi: Add Amlogic SPISG driver") from Jul 18,
-2025 (linux-next), leads to the following Smatch static checker
-warning:
+That works too
 
-	drivers/spi/spi-amlogic-spisg.c:314 aml_spisg_setup_transfer()
-	error: we previously assumed 'exdesc' could be null (see line 261)
-
-drivers/spi/spi-amlogic-spisg.c
-    248 static int aml_spisg_setup_transfer(struct spisg_device *spisg,
-    249                                     struct spi_transfer *xfer,
-    250                                     struct spisg_descriptor *desc,
-    251                                     struct spisg_descriptor_extra *exdesc)
-    252 {
-    253         int block_size, blocks;
-    254         struct device *dev = &spisg->pdev->dev;
-    255         struct spisg_sg_link *ccsg;
-    256         int ccsg_len;
-    257         dma_addr_t paddr;
-    258         int ret;
-    259 
-    260         memset(desc, 0, sizeof(*desc));
-    261         if (exdesc)
-                    ^^^^^^
-Checked for NULL
-
-    262                 memset(exdesc, 0, sizeof(*exdesc));
-    263         aml_spisg_set_speed(spisg, xfer->speed_hz);
-    264         xfer->effective_speed_hz = spisg->effective_speed_hz;
-    265 
-    266         desc->cfg_start = spisg->cfg_start;
-    267         desc->cfg_bus = spisg->cfg_bus;
-    268 
-    269         block_size = xfer->bits_per_word >> 3;
-    270         blocks = xfer->len / block_size;
-    271 
-    272         desc->cfg_start |= FIELD_PREP(CFG_EOC, 0);
-    273         desc->cfg_bus |= FIELD_PREP(CFG_KEEP_SS, !xfer->cs_change);
-    274         desc->cfg_bus |= FIELD_PREP(CFG_NULL_CTL, 0);
-    275 
-    276         if (xfer->tx_buf || xfer->tx_dma) {
-    277                 desc->cfg_bus |= FIELD_PREP(CFG_LANE, nbits_to_lane[xfer->tx_nbits]);
-    278                 desc->cfg_start |= FIELD_PREP(CFG_OP_MODE, SPISG_OP_MODE_WRITE);
-    279         }
-    280         if (xfer->rx_buf || xfer->rx_dma) {
-    281                 desc->cfg_bus |= FIELD_PREP(CFG_LANE, nbits_to_lane[xfer->rx_nbits]);
-    282                 desc->cfg_start |= FIELD_PREP(CFG_OP_MODE, SPISG_OP_MODE_READ);
-    283         }
-    284 
-    285         if (FIELD_GET(CFG_OP_MODE, desc->cfg_start) == SPISG_OP_MODE_READ_STS) {
-    286                 desc->cfg_start |= FIELD_PREP(CFG_BLOCK_SIZE, blocks) |
-    287                                    FIELD_PREP(CFG_BLOCK_NUM, 1);
-    288         } else {
-    289                 blocks = min_t(int, blocks, SPISG_BLOCK_MAX);
-    290                 desc->cfg_start |= FIELD_PREP(CFG_BLOCK_SIZE, block_size & 0x7) |
-    291                                    FIELD_PREP(CFG_BLOCK_NUM, blocks);
-    292         }
-    293 
-    294         if (xfer->tx_sg.nents && xfer->tx_sg.sgl) {
-    295                 ccsg_len = xfer->tx_sg.nents * sizeof(struct spisg_sg_link);
-    296                 ccsg = kzalloc(ccsg_len, GFP_KERNEL | GFP_DMA);
-    297                 if (!ccsg) {
-    298                         dev_err(dev, "alloc tx_ccsg failed\n");
-    299                         return -ENOMEM;
-    300                 }
-    301 
-    302                 aml_spisg_sg_xlate(&xfer->tx_sg, ccsg);
-    303                 paddr = dma_map_single(dev, (void *)ccsg,
-    304                                        ccsg_len, DMA_TO_DEVICE);
-    305                 ret = dma_mapping_error(dev, paddr);
-    306                 if (ret) {
-    307                         kfree(ccsg);
-    308                         dev_err(dev, "tx ccsg map failed\n");
-    309                         return ret;
-    310                 }
-    311 
-    312                 desc->tx_paddr = paddr;
-    313                 desc->cfg_start |= FIELD_PREP(CFG_TXD_MODE, SPISG_DATA_MODE_SG);
---> 314                 exdesc->tx_ccsg = ccsg;
-                        ^^^^^^^^
-Unchecked dereference
-
-    315                 exdesc->tx_ccsg_len = ccsg_len;
-    316                 dma_sync_sgtable_for_device(spisg->controller->cur_tx_dma_dev,
-    317                                             &xfer->tx_sg, DMA_TO_DEVICE);
-    318         } else if (xfer->tx_buf || xfer->tx_dma) {
-    319                 paddr = xfer->tx_dma;
-    320                 if (!paddr) {
-    321                         paddr = dma_map_single(dev, (void *)xfer->tx_buf,
-    322                                                xfer->len, DMA_TO_DEVICE);
-    323                         ret = dma_mapping_error(dev, paddr);
-    324                         if (ret) {
-    325                                 dev_err(dev, "tx buf map failed\n");
-    326                                 return ret;
-    327                         }
-    328                 }
-    329                 desc->tx_paddr = paddr;
-    330                 desc->cfg_start |= FIELD_PREP(CFG_TXD_MODE, SPISG_DATA_MODE_MEM);
-    331         }
-    332 
-    333         if (xfer->rx_sg.nents && xfer->rx_sg.sgl) {
-    334                 ccsg_len = xfer->rx_sg.nents * sizeof(struct spisg_sg_link);
-    335                 ccsg = kzalloc(ccsg_len, GFP_KERNEL | GFP_DMA);
-    336                 if (!ccsg) {
-    337                         dev_err(dev, "alloc rx_ccsg failed\n");
-    338                         return -ENOMEM;
-    339                 }
-    340 
-    341                 aml_spisg_sg_xlate(&xfer->rx_sg, ccsg);
-    342                 paddr = dma_map_single(dev, (void *)ccsg,
-    343                                        ccsg_len, DMA_TO_DEVICE);
-    344                 ret = dma_mapping_error(dev, paddr);
-    345                 if (ret) {
-    346                         kfree(ccsg);
-    347                         dev_err(dev, "rx ccsg map failed\n");
-    348                         return ret;
-    349                 }
-    350 
-    351                 desc->rx_paddr = paddr;
-    352                 desc->cfg_start |= FIELD_PREP(CFG_RXD_MODE, SPISG_DATA_MODE_SG);
-    353                 exdesc->rx_ccsg = ccsg;
-    354                 exdesc->rx_ccsg_len = ccsg_len;
-    355                 dma_sync_sgtable_for_device(spisg->controller->cur_rx_dma_dev,
-    356                                             &xfer->rx_sg, DMA_FROM_DEVICE);
-    357         } else if (xfer->rx_buf || xfer->rx_dma) {
-    358                 paddr = xfer->rx_dma;
-    359                 if (!paddr) {
-    360                         paddr = dma_map_single(dev, xfer->rx_buf,
-    361                                                xfer->len, DMA_FROM_DEVICE);
-    362                         ret = dma_mapping_error(dev, paddr);
-    363                         if (ret) {
-    364                                 dev_err(dev, "rx buf map failed\n");
-    365                                 return ret;
-    366                         }
-    367                 }
-    368 
-    369                 desc->rx_paddr = paddr;
-    370                 desc->cfg_start |= FIELD_PREP(CFG_RXD_MODE, SPISG_DATA_MODE_MEM);
-    371         }
-    372 
-    373         return 0;
-    374 }
-
-regards,
-dan carpenter
+Konrad
 
