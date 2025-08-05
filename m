@@ -1,256 +1,121 @@
-Return-Path: <linux-spi+bounces-9281-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9282-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E284B1AB96
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 01:52:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B346FB1AC42
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 03:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78E2E7ABAD6
-	for <lists+linux-spi@lfdr.de>; Mon,  4 Aug 2025 23:50:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 600DD3BB997
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 01:54:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53554291C2B;
-	Mon,  4 Aug 2025 23:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C56B81720;
+	Tue,  5 Aug 2025 01:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="jKLfG1lq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ifHSu8ld"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3279291C01;
-	Mon,  4 Aug 2025 23:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B490F288DB
+	for <linux-spi@vger.kernel.org>; Tue,  5 Aug 2025 01:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754351522; cv=none; b=OnJXwmtOqTd+dJ0dqDtlPebSAeMkY6VYBo0fsQqysokb/anL8/eWlDz9aM7p9LNYpW+gGQ72XlMs9q/p8GsbAxVpLPPPub4ezkGsT5oWBHdU1NUlsyI2/Txvkh7weZdGcRPupZA4kf6ceGqZ2MGvgEHzuYCbe4phr7HI7hQ11g4=
+	t=1754358854; cv=none; b=tX5ZCf1tyxaiuzqWFqcZIXlHajYXIZaokrDTZXIwYTL3QIE/kwnK1r4FK8f47/SC4c2wyehR/+wfeAjE+yXmMDU1n+PkJu1YFUcZx+Vvg8xBqAEFNvo4kfWdmaxWTkrCIFzZIqMzULdaxNfT5FIWcp128FsopcARHZer/nQIY5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754351522; c=relaxed/simple;
-	bh=zrpGKuWeQK0S9TRd2/Kg7CrpjpN0Af6Bc1LVC3rkfJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XFrh+IN3JghX9kPYFrP1+LkoPyPKrhNvnjmVl235OWbW+fp0KIThv3YrgWpHueGO6oGUIDVP8WhqmbVzjIXAZytl5+QuLK4hon5+1oPmg93bMBaotI2lWOwpE+7uh1SPuLf6nCNVsGg9CqIIiGRRwjFu8NiMhpmpfy3QCM5oPnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=jKLfG1lq; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 2B72432FD;
-	Tue,  5 Aug 2025 01:51:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1754351467;
-	bh=zrpGKuWeQK0S9TRd2/Kg7CrpjpN0Af6Bc1LVC3rkfJw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jKLfG1lqK2PPXLjLJhZ/Wty2yVy9+P3BkRh+DykETDA4LCFTUf911rSaO6qT+QKO7
-	 wRdg/H2eRsEY6wy4MGWg5U57U5+Jrerp7zplL0nB707kdVUDUTwWAHa4Hphoow2+vz
-	 YoO9D6fRkIKHNccFuia9pEsNbAUn8jx2Kons6sjM=
-Date: Tue, 5 Aug 2025 02:51:40 +0300
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Frank Li <Frank.li@nxp.com>, Konrad Dybcio <konradybcio@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	=?utf-8?Q?Am=C3=A9lie?= Delaunay <amelie.delaunay@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-actions@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel
- pass a cookie to of_xlate
-Message-ID: <20250804235140.GB12087@pendragon.ideasonboard.com>
-References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
- <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
- <20250730180417.GC21430@pendragon.ideasonboard.com>
- <aIpmgpXME1BmThxU@lizhi-Precision-Tower-5810>
- <20250801120007.GB4906@pendragon.ideasonboard.com>
- <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
+	s=arc-20240116; t=1754358854; c=relaxed/simple;
+	bh=O6UnOhXJUKAsJ35zUie5JSRVM5UqY+cfYhFM07TLRIA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DHzpPJUoTjWRlCxRIDtB93Cs9lXyOe9xjKwem2qw2SmNVVE0N548T4mNC4VPKhb/Zt3/7fTxox756SC+LyJmrt3I69Jj0XRiC2slmmlCFEtVvCw8SvkG69tWxqWtU2pN0oe08+tQAN/risAvKWsfy2DpoHvdW79lDqyKMk3R5aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ifHSu8ld; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-31efc10bb03so3638791a91.0
+        for <linux-spi@vger.kernel.org>; Mon, 04 Aug 2025 18:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754358851; x=1754963651; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/AvTT+NJ5DNR9j59CjbspQIejXkVrxU43H4i3i/mS9g=;
+        b=ifHSu8ldA2w2toyJz3+/50+Za5oMuczaFZxwu4i6hQueJreGMSHoZT15Dba4l/sugt
+         k+91rC5CA7Vyn0tAzm86te2QahopJjRMliMwW09SkuoGpeTF/yYrUxDHBt7maaGOpB32
+         dpuV+qVe+sKzfMccDvNMF8OGpo5vSqmaW0zn7SyGG4L7gZKMizVNA6nG3sLS+Htesm+u
+         oBw238Q1+UW/YM3KiEO7jnvvYPNUOUrZxbKLjPNtcYXQs8VVOIBvY/JT0QVjGt/vjcAX
+         CuECLx/6ubcLou8I5b13IoLUMBQOMjy9gdZR5dNimy3lXFx0Sl1RtitSradFr294XgLM
+         dAxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754358851; x=1754963651;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/AvTT+NJ5DNR9j59CjbspQIejXkVrxU43H4i3i/mS9g=;
+        b=VW1QaKPO8uDYI5T/L4+dr7/9tGuVG1gcCMiTRe1VfQCwi6vNSCa3fz9FisOVWLU/fv
+         jOnAEmrEtK+1Vfk14CfJPaDfiJNHCi0nnXdXiXm8vq2pWWkXy3g6GTjuUiBc/TmMEZcP
+         A5bJwqAGRT7eFUn0qXxkQHs5aP0KerU1t5Asgl5LG5S+fuz73cdBWWpe4ytVElaq/VKm
+         KW8wYZRz5PF9PMPGBNdBr4jZm1id8Dxyjmp1Vr27QShVCSofpw6PidHdFokfxGsj4Y52
+         j0zgEgKxzYRY7V2FE2zvtC8gc5fZsadFBaSpES7DcvwB6vHbpfhEWB1qI2vV26Kl+w2p
+         NL8g==
+X-Gm-Message-State: AOJu0Yx7ey2ov1MH6Lx2hQSwIko6+qce3xdEQv8BVqskuajRCQ3OycsI
+	oq8e7TEFw/vxgXWTcXo/sxVtphcs7b/qCd1xquJB0pyQ4W6QyZrpx2jO
+X-Gm-Gg: ASbGncsgrYtlI2oyCgvScvlQIoThBLhPSg9jAQaKObF5k0mtRei2wikX3GFWha//5d4
+	Y/gLc5mNv6HEbaWA0luvfuPUWzO+BMmmoUeWfDVOKYnv8ECo6djy8tAGhiqnq70sYqhpsAR/+d9
+	hJz//WBu+CahQylgW0zXhD5/X3nWwxhjn55cSHRdNmiRl2DjORUmbhjdbC2ZQjoOBjwbJC/GJA6
+	68jUbMWeT/AL7WJywRDVYnEtCC6O4VooPHihI5yknew/bJz5j9w/SqwP9INtMpjmIA4dHp+lMWv
+	7LmlGuCGXiJH+lDm+sk+3rHO1pjmoHttko3jW4Ha7SwvELZpTlWlnS+bVbR0rowSSWeNMfY50vK
+	4OLAANHVYtMyjSkoLxhsTSabTBC/LNHrOAeNaREJMd3qyMF9h0oGKMD3rEG2i2mr44aY=
+X-Google-Smtp-Source: AGHT+IFbdxSODQqAYcXthYi41GV6TKkEAXLUXcJdXTnhHo7pqv/bEYhvdEzIzGPU3wYjZUUSkGK+7w==
+X-Received: by 2002:a17:90b:1350:b0:31e:c653:38ff with SMTP id 98e67ed59e1d1-321162b79b2mr13915647a91.27.1754358850783;
+        Mon, 04 Aug 2025 18:54:10 -0700 (PDT)
+Received: from TIANYXU-M-J00K.cisco.com ([2001:420:588c:1300:55e3:2a99:432c:259e])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31f63ee49c7sm15365725a91.21.2025.08.04.18.54.08
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 04 Aug 2025 18:54:10 -0700 (PDT)
+From: Tianyu Xu <xtydtc@gmail.com>
+X-Google-Original-From: Tianyu Xu <tianyxu@cisco.com>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	miquel.raynal@bootlin.com,
+	Tianyu Xu <tianyxu@cisco.com>
+Subject: [PATCH] spi: spi-mem: add spi_mem_adjust_op_freq() in spi_mem_supports_op()
+Date: Tue,  5 Aug 2025 09:54:03 +0800
+Message-Id: <20250805015403.43928-1-tianyxu@cisco.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 02, 2025 at 02:37:54PM +0200, Konrad Dybcio wrote:
-> On 8/1/25 2:00 PM, Laurent Pinchart wrote:
-> > On Wed, Jul 30, 2025 at 02:37:54PM -0400, Frank Li wrote:
-> >> On Wed, Jul 30, 2025 at 09:04:17PM +0300, Laurent Pinchart wrote:
-> >>> On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
-> >>>> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
-> >>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>>>>
-> >>>>> The DMA subsystem attempts to make it theoretically possible to pair
-> >>>>> any DMA block with any user. While that's convenient from a
-> >>>>> codebase sanity perspective, some blocks are more intertwined.
-> >>>>>
-> >>>>> One such case is the Qualcomm GENI, where each wrapper contains a
-> >>>>> number of Serial Engine instances, each one of which can be programmed
-> >>>>> to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
-> >>>>>
-> >>>>> The GPI DMA it's designed together with, needs to receive the ID of the
-> >>>>> protocol that's in use, to adjust its behavior accordingly. Currently,
-> >>>>> that's done through passing that ID through device tree, with each
-> >>>>> Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
-> >>>>> dt-bindings that are full of useless copypasta.
-> >>>>>
-> >>>>> In a step to cut down on that, let the DMA user give the engine driver
-> >>>>> a hint at request time.
-> >>>>>
-> >>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> >>>>> ---
-> 
-> [...]
-> 
-> >>>>> diff --git a/include/linux/of_dma.h b/include/linux/of_dma.h
-> >>>>> index fd706cdf255c61c82ce30ef9a2c44930bef34bc8..9f9bc4207b85d48d73c25aad4b362e7c84c01756 100644
-> >>>>> --- a/include/linux/of_dma.h
-> >>>>> +++ b/include/linux/of_dma.h
-> >>>>> @@ -19,7 +19,7 @@ struct of_dma {
-> >>>>>  	struct list_head	of_dma_controllers;
-> >>>>>  	struct device_node	*of_node;
-> >>>>>  	struct dma_chan		*(*of_dma_xlate)
-> >>>>> -				(struct of_phandle_args *, struct of_dma *);
-> >>>>> +				(struct of_phandle_args *, struct of_dma *, void *);
-> >>>>
-> >>>> I suggest pass down more informaiton, like client's dev point. So we can
-> >>>> auto create device link between client's dev and dma chan's device.
-> >>>
-> >>> Is .of_dma_xlate() really the right place to do that ? If you want to
-> >>> create a device link for PM reasons, isn't it better created when the
-> >>> channel is requested ? It should also be removed when the channel is
-> >>> freed.
-> >>
-> >> I remember just need record client device pointer here.
-> >>
-> >>>>
-> >>>> DMA Engineer device
-> >>>>    DMA chan device
-> >>>>        consumer clients' device.
-> >>>>
-> >>>> If consumer device runtime pm suspend can auto trigger DMA chan's device's
-> >>>> runtime pm function.
-> >>>>
-> >>>> It will simplifly DMA engine's run time pm manage. Currently many DMA run
-> >>>> time pm implement as, runtime_pm_get() when alloc and runtime_pm_put() at
-> >>>> free channel.  But many devices request dma channel at probe, which make
-> >>>> dma engine work at always 'on' state.
-> >>>>
-> >>>> But ideally, dma chan should be resume only when it is used to transfer.
-> >>>
-> >>> This is exactly what I was going to mention after reading the last
-> >>> paragraph. Is there anything that prevents a DMA engine driver to
-> >>> perform a rutime PM get() when a transfer is submitted
-> >>
-> >> DMA description is a queue, It is hard to track each descriptor submit and
-> >> finished. espcially cycle buffer case.
-> >>
-> >> And according to dma engine API defination, submit a descriptor not
-> >> neccessary to turn on clock, maybe just pure software operation, such as
-> >> enqueue it to a software list.
-> >>
-> >> Many driver call dmaengine_submit() in irq context,  submit new descriptor
-> >> when previous descriptor finished. runtime_pm_get() can NOT be called in
-> >> atomic context.
-> >>
-> >> And some driver submit many descripor advance. Only issue_transfer() is
-> >> actually trigger hardware to start transfer.
-> >>
-> >> Some client use cycle descripor, such audio devices.  Some audio devices
-> >> have not free descriptor at their run time suspend function, just disable
-> >> audio devices's clocks.  Audio devices run time suspend, which means no
-> >> one use this dma channel, dma channel can auto suspend if built device link
-> >> between audio device and dma chan devices.
-> >>
-> >> Some DMA client have not devices, such as memory to memory. for this kind
-> >> case, it need keep chan always on.
-> >>
-> >> issue_transfer() can be call in atomic context. but trigger hardware transfer
-> >> need clock and runtime_pm_get() can't be called in atomic context.
-> >>
-> >> Most case issue_transfer() is call in irq handle, which means device should
-> >> already be in runtime resume statue.  DMA engine can safely access their
-> >> register if using device link.
-> > 
-> > You have good points there, in particular the fact the issue_transfer()
-> > can be called in interrupt context.
-> > 
-> > For me this calls for new DMA engine operations to "start/stop" the DMA
-> > engine (better names are likely needed) from a client perspective.
-> > 
-> >>> and a put() when
-> >>> it completes ? (Logically speaking, the actual implementation would
-> >>> likely be a bit different in drivers, but the result would be similar.)
-> 
-> So.. do you folks want me to alter the patch in any way?
+The function spi_mem_adjust_op_freq() within spi_mem_exec_op() adjusts
+the op->max_freq, which will informs the SPI controller of the maximum
+frequency for each operation. This adjustment is based on combined
+information from the SPI device and the board's wiring conditions.
+Similarly, spi_mem_supports_op() will check the capabilities of the SPI
+controller. It also requires the combined information before it can
+accurately determine whether the SPI controller supports a given operation.
 
-I think the runtime PM issue is orthogonal to the problem this series
-addresses. It can be addressed separately.
+Signed-off-by: Tianyu Xu <tianyxu@cisco.com>
+---
+ drivers/spi/spi-mem.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-That being said, I'm not a big fan of passing a void pointer to
-.of_xlate() to carry device-specific information, in a device-specific
-format. This seems prone to mismatch between clients and DMA engines.
-.of_xlate() also seems the wrong place to do this. It would be cleaner
-if we could use another operation, such as dmaengine_slave_config() for
-instance.
-
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 5db0639d3..753dbade8 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -265,6 +265,9 @@ static bool spi_mem_internal_supports_op(struct spi_mem *mem,
+  */
+ bool spi_mem_supports_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ {
++	/* Make sure the operation frequency is correct before going futher */
++	spi_mem_adjust_op_freq(mem, (struct spi_mem_op *)op);
++
+ 	if (spi_mem_check_op(op))
+ 		return false;
+ 
 -- 
-Regards,
+2.39.5 (Apple Git-154)
 
-Laurent Pinchart
 
