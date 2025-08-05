@@ -1,50 +1,49 @@
-Return-Path: <linux-spi+bounces-9292-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9293-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1131FB1B76F
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 17:25:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8DD3B1B77B
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 17:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A422626990
-	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 15:25:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DCA51892640
+	for <lists+linux-spi@lfdr.de>; Tue,  5 Aug 2025 15:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A00A2279DC5;
-	Tue,  5 Aug 2025 15:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22CF224F6;
+	Tue,  5 Aug 2025 15:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ci72ZknI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pgUOwV3k"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7984C2777F9;
-	Tue,  5 Aug 2025 15:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29614747F;
+	Tue,  5 Aug 2025 15:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754407505; cv=none; b=iZ/PLV/15p5piSe39eehKlzPqnHDYBFXAz5HNnf3ENjy6awRmtDF8kq7mElVsW2AGLMw7fnk3RJfcMw12prqB2chjhrupJ0ZVVMckw6SRYw6hLm5vUs13QVwOq2EJeernshGyRlmKfosCZs28Eq60XkyD9PHnvDcrAZUGQ6FTfM=
+	t=1754407829; cv=none; b=eMIDIXfRpr8dbRn0i77lhIl26pL2cz+20tsTHf5hnzpKviQeLUidmsY9L/kcewVzmp6q9XAaLzINd1UemmqjQaf3FKFC6B9FKJ5y+5zu2PaTYM+dDWOtSK2lKPavPMKVG2ztaaMJWFshaQP4cJKOuKZVJEJAwBV4yIyObU8aRbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754407505; c=relaxed/simple;
-	bh=f7v+PL9KoQa/FLM1Pk8mXOovI9NWywm4Mp/BQByiACo=;
+	s=arc-20240116; t=1754407829; c=relaxed/simple;
+	bh=Kw7eMyWY5zW7INntokk4JGSpcNbA8RU/Mez2RPQZKBw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=l2/6ol3HqBJrC6UiPvX916XetsdIYeM4w6MgAmPLmR1FNmjgCw6/8OKg3TujH89Tn/bGq6NeJASUdoad9HhWH6M9zD0KTqN4SBZ/bUpGLg2tyB7INSt02CBZVYEgJqpuwPU/gNTnq2JUVEHslcOV0UUYBGmoBOM5Zmu9HaJtp5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ci72ZknI; arc=none smtp.client-ip=217.70.183.194
+	 MIME-Version:Content-Type; b=kH1rGV6p+3ywMZ6cm1aqkfg9NzFG8YNlrCyYl+K+bZWrBWnm9UzJI/hamcs7MhFrUnkVthaZirSxnK2Ygf6V+ABssXSBno261nfaIf3cF41bkelHNKLdM6Gml6dQDgISgVfLgwGZCiHxRXz1pnte+ECRvg6bi8XLKOP3HSkvMF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pgUOwV3k; arc=none smtp.client-ip=217.70.183.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C703438DF;
-	Tue,  5 Aug 2025 15:24:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6530C43A0E;
+	Tue,  5 Aug 2025 15:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1754407495;
+	t=1754407819;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+bR0VckSoN9YaJX4wlOvB009sshe3mAwoA7HDDGUCpI=;
-	b=Ci72ZknI4OXBeJS8vhqNr/IUn2BHA2NeY694ItlWgUdkWtdHx0y4S+KYkdzppkzW0cVwpK
-	kBWY9e4b29rek3ZdCzZtlIDgwHk2MrV68RC64LfmiSIGG4/gUaU9VxnMia3Eex+wdt6Ajv
-	7C/i0N3DLleoUJldMMTEZo2//+zf0J3VSHMdvICfy3CDa/kx4h04G8zaSwi0CFbqMOTcXe
-	xRTIuc98AQ/k1S4UiVqS+29CX/A37APSl6fsKJPEE7IoIgDgpp6hFu3qmGCM0633s2TWU/
-	bd2sGoZvfT09zx0Bl0XsrBSsKBQs783ttrhMwkeZDgxWkV4h0TrSJrs+GRR/zw==
+	bh=SgEzWtcjDyKuxbmCqKV4hy0KTKvQ/vKyVEQYqrgBHyY=;
+	b=pgUOwV3ki0x/OqoP8gQIxOi/isGPmWOV76dFtkEXV+TRXpoHunlxrIRxHGPgqisHsTEJx7
+	xooSvd5EkjdxOhz2p8XGcG7qnHFeLP8ovBJ1RCP9hy92NnIxjxJq/05hbSGMvhdlCQDKHw
+	LxvcYugBw+2nhYzfuBqmxU2mv5tOw6sOi43GzDeN9tan1gpYH7dcQDdTqqn97cdYsye68c
+	Rb2hS2ElRdng1BobEiNXBwy0XLVVyP1RA/qUFM4Hp98k1tBQQEVJ/IwrrNZcssi+o3a/oZ
+	LdxY/vWLvk4pDG3VBNBLafNe+BiVf4vdZna5sUWeMSyPVUkAgG8KC+WTsDMicg==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
@@ -56,90 +55,108 @@ Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
  <chengminglin@mxic.com.tw>,  linux-mtd@lists.infradead.org,
   linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
   linux-spi@vger.kernel.org
-Subject: Re: [PATCH 1/4] drivers: mtd: spi-nand: fix direct mapping creation
- sizes.
-In-Reply-To: <20250804192132.1406387-2-mikhail.kshevetskiy@iopsys.eu> (Mikhail
-	Kshevetskiy's message of "Mon, 4 Aug 2025 22:21:29 +0300")
+Subject: Re: [PATCH 2/4] drivers: mtd: spi-nand: try a regular dirmap if
+ creating a dirmap for continuous reading fails
+In-Reply-To: <20250804192132.1406387-3-mikhail.kshevetskiy@iopsys.eu> (Mikhail
+	Kshevetskiy's message of "Mon, 4 Aug 2025 22:21:30 +0300")
 References: <20250804192132.1406387-1-mikhail.kshevetskiy@iopsys.eu>
-	<20250804192132.1406387-2-mikhail.kshevetskiy@iopsys.eu>
+	<20250804192132.1406387-3-mikhail.kshevetskiy@iopsys.eu>
 User-Agent: mu4e 1.12.7; emacs 30.1
-Date: Tue, 05 Aug 2025 17:24:50 +0200
-Message-ID: <87sei5hjul.fsf@bootlin.com>
+Date: Tue, 05 Aug 2025 17:30:16 +0200
+Message-ID: <87jz3hhjlj.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudehhedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtgfesthhqredttderjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedugfeuiefghffhiedvveejuefgueffvedugeevjeejgeetgfefgeffveetgefgleenucffohhmrghinhepohhppghtmhhplhdruggrthgrnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudegpdhrtghpthhtohepmhhikhhhrghilhdrkhhshhgvvhgvthhskhhihiesihhophhshihsrdgvuhdprhgtphhtthhopehrihgthhgrrhgusehnohgurdgrthdprhgtphhtthhopehvihhgnhgvshhhrhesthhirdgtohhmpdhrtghpthhtoheplhhorhgvnhiioheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrhidrlhhiuhesrghirhhoh
- hgrrdgtohhmpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhuughorhdrrghmsggrrhhusheslhhinhgrrhhordhorhhgpdhrtghpthhtohepmhhmkhhurhgsrghnohhvsehsrghluhhtvgguvghvihgtvghsrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudehheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtsehttdertddtredtnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfelkedvveffleeuhfeigfdvvefhgfejgffghfeiteegteeiudegfedtjeehkeefnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepudegpdhrtghpthhtohepmhhikhhhrghilhdrkhhshhgvvhgvthhskhhihiesihhophhshihsrdgvuhdprhgtphhtthhopehrihgthhgrrhgusehnohgurdgrthdprhgtphhtthhopehvihhgnhgvshhhrhesthhirdgtohhmpdhrtghpthhtoheplhhorhgvnhiioheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrhidrlhhiuhesrghirhhohhgrrdgtohhmpdhrtghpthhtohepsghrohhonhhivgesk
+ hgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhuughorhdrrghmsggrrhhusheslhhinhgrrhhordhorhhgpdhrtghpthhtohepmhhmkhhurhgsrghnohhvsehsrghluhhtvgguvghvihgtvghsrdgtohhm
 X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hello Mikhail,
+On 04/08/2025 at 22:21:30 +03, Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu> wrote:
 
-Thanks a lot for this series!
+> Continuous reading may result in multiple flash pages reading in one
+> operation. Typically only one flash page has read/written (a little bit
+> more than 2-4 Kb), but continuous reading requires the spi-controller
+> to read up to 512 Kb in one operation without togling CS in beetween.
+>
+> Roughly speaking spi-controllers can be divided on 2 categories:
+>  * spi-controllers without dirmap acceleration support
+>  * spi-controllers with dirmap acceleration support
+>
+> Usually, first of them have no issues with large reading support.
+> Second group often supports acceleration of single page only reading.
+> Thus enabling of continuous reading can break flash reading.
 
-On 04/08/2025 at 22:21:29 +03, Mikhail Kshevetskiy <mikhail.kshevetskiy@iop=
-sys.eu> wrote:
+I would be more conservative, I believe it is very implementation
+dependent; many controller drivers do not even advertise a max size.
 
-> Continuous mode is only supported for non-raw data reads, thus raw I/O
-> or non-raw writing requires only single flash page mapping.
+I agree though that controllers with dirmap support may express
+limitations such as the mapped size which may lead to splitting
+operations into smaller chunks, possibly leading to CS changes which
+would break the continuous read mode on the chip's side.
+
+> This patch tries to create dirmap for continuous reading first and
+> fallback to regular reading if spi-controller refuses to create it.
+
+no '-'                              ^
+
 >
 > Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 > ---
->  drivers/mtd/nand/spi/core.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+>  drivers/mtd/nand/spi/core.c | 29 +++++++++++++++++++++++++----
+>  1 file changed, 25 insertions(+), 4 deletions(-)
 >
 > diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-> index b0898990b2a5..b42c42ec58a4 100644
+> index b42c42ec58a4..ff6a1e2fcfdc 100644
 > --- a/drivers/mtd/nand/spi/core.c
 > +++ b/drivers/mtd/nand/spi/core.c
-> @@ -1103,9 +1103,6 @@ static int spinand_create_dirmap(struct spinand_dev=
-ice *spinand,
->  	};
->  	struct spi_mem_dirmap_desc *desc;
->=20=20
+> @@ -1114,11 +1114,32 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
+>  
+>  	spinand->dirmaps[plane].wdesc = desc;
+>  
 > -	if (spinand->cont_read_possible)
-> -		info.length =3D nanddev_eraseblock_size(nand);
-> -
->  	/* The plane number is passed in MSB just above the column address */
->  	info.offset =3D plane << fls(nand->memorg.pagesize);
->=20=20
-> @@ -1117,6 +1114,8 @@ static int spinand_create_dirmap(struct spinand_dev=
-ice *spinand,
->=20=20
->  	spinand->dirmaps[plane].wdesc =3D desc;
->=20=20
-> +	if (spinand->cont_read_possible)
-> +		info.length =3D nanddev_eraseblock_size(nand);
->  	info.op_tmpl =3D *spinand->op_templates.read_cache;
->  	desc =3D devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
->  					  spinand->spimem, &info);
-> @@ -1132,6 +1131,9 @@ static int spinand_create_dirmap(struct spinand_dev=
-ice *spinand,
->  		return 0;
->  	}
->=20=20
-> +	// ECC reading/writing always happen in non-continuous mode
-
-This comment does not sound helpful, at least I do not understand it?
-(and the comment style should be /* */)
-
-> +	info.length =3D nanddev_page_size(nand) + nanddev_per_page_oobsize(nand=
-);
+> +	desc = NULL;
+> +	if (spinand->cont_read_possible) {
+> +		/*
+> +		 * spi-controllers may return an error if info.length is
+> +		 * too large
+> +		 */
+>  		info.length = nanddev_eraseblock_size(nand);
+> -	info.op_tmpl = *spinand->op_templates.read_cache;
+> -	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
+> -					  spinand->spimem, &info);
+> +		info.op_tmpl = *spinand->op_templates.read_cache;
+> +		desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
+> +						  spinand->spimem, &info);
+> +	}
 > +
->  	info.op_tmpl =3D *spinand->op_templates.update_cache;
->  	info.op_tmpl.data.ecc =3D true;
->  	desc =3D devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
+> +	if (IS_ERR_OR_NULL(desc)) {
 
-May I suggest to use two different dirmap infos? One with a large size
-(for reads) and a page-sized one for other cases (including the fallback
-you're introducing in PATCH 2).
+Here if the problem is continuous reading, I expect an error and not a
+NULL pointer.
 
-Thanks,
-Miqu=C3=A8l
+> +		/*
+> +		 * continuous reading is not supported by flash or
+
+Not by the flash, here if we get an error, it is the spi controller
+(still without '-' ;) ) that fails (please fix the comment).
+
+> +		 * its spi-controller, try regular reading
+> +		 */
+> +		spinand->cont_read_possible = false;
+> +
+> +		info.length = nanddev_page_size(nand) +
+> +			      nanddev_per_page_oobsize(nand);
+> +		info.op_tmpl = *spinand->op_templates.read_cache;
+> +		desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
+> +						  spinand->spimem, &info);
+> +	}
+> +
+>  	if (IS_ERR(desc))
+>  		return PTR_ERR(desc);
 
