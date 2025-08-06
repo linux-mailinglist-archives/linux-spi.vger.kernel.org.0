@@ -1,106 +1,86 @@
-Return-Path: <linux-spi+bounces-9302-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9303-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BFDEB1C5E1
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Aug 2025 14:31:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E29F3B1C615
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Aug 2025 14:40:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EFBF626128
-	for <lists+linux-spi@lfdr.de>; Wed,  6 Aug 2025 12:31:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F236556347C
+	for <lists+linux-spi@lfdr.de>; Wed,  6 Aug 2025 12:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0153228B4EF;
-	Wed,  6 Aug 2025 12:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9933D26E146;
+	Wed,  6 Aug 2025 12:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFJ/g13i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PflecqRw"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD78192D68;
-	Wed,  6 Aug 2025 12:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749B8CA5E
+	for <linux-spi@vger.kernel.org>; Wed,  6 Aug 2025 12:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754483490; cv=none; b=Ux+2F7HdcfO7tyKL00LVgGJWDeNgHVVwiHveS4mfSNH/YPN8JNytzREzZsLxNdvXyRnFTZ1fkEmevtT+8JAkHiuxNNvYggmFvYeoMmP+cLw/NXr7EWagi+2aZLsLEbDHua6PWUG659ainqdqvp9aU7thuV3h0oYo9E5MQjA2Lso=
+	t=1754484009; cv=none; b=lhJJSeCrv3bu+25he5NpgCn2+HO/nOyDLWRGH5zkdJfyZ+NPFn4cFg6mWWhLKgckzEgQSSJPHkwyDI+IAWMudT0bXGXCwzT+B8g0wL2ut1ZIakTcN2nQov0+NxY8EZzDg4n7Bza2PZ/KbAljINQe8iC+/qPAAff3lPa19pM3ciY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754483490; c=relaxed/simple;
-	bh=pddWyPwjs2fOn7Jr05/MG2ACl0zA9Y4SSHMKsBzkDy8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Vc+HKLeMCJua97Ec3A4eyfMVpRCiHOLisP1l7dROBXWKan999Lwb4bC4cdZ+fi2a9XBfZqDda+XQxwhcl90yfFf8toKULQSeCPkzhlfZDZxS9PKgjdnNqF8oKtwm1uC74phKGhSuP6kuCNlBcgHWdWMvfGICnp+L4DOF50Rrrmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFJ/g13i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4665C4CEF7;
-	Wed,  6 Aug 2025 12:31:28 +0000 (UTC)
+	s=arc-20240116; t=1754484009; c=relaxed/simple;
+	bh=rjAW/WkSN+6PhBDv4N/v50lsh0QoOwVTvZepWS+Aemg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=WMi6uoAJGlXqapzNSmg7eA88z6pRDC+dvJMKZ7pYoXgZIdHbambnegiQWcPTYQGOEx9Rf9uCZsmWkEdVzr76dEJ881NBmlQtqkOWGsAk3n66eYAbNq0NrbLw+3xyyOKUgwX024QjckK+6arHoIsdTQXSw/+wya0KwOvSCgMBHqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PflecqRw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA7FC4CEE7;
+	Wed,  6 Aug 2025 12:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754483490;
-	bh=pddWyPwjs2fOn7Jr05/MG2ACl0zA9Y4SSHMKsBzkDy8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=WFJ/g13iFNkaHr2ywCr9SJjhaz+5pikuyhff1olloeRcHEszoBfd6GjeLMNBN3IDL
-	 HIyBIZp77EEgz4E/RcZ9pU/AnOmxutrgAWP4XYGQsABk7My9W7279xSBw4vSyZcrL1
-	 ZYEjplmCBrxt9r4DylI4d8nh1eyDZYq/VfdZ586lgDaOQEkbvWPpbMazpSjecLHxqo
-	 7iEqIRBgoR2DV3S8/DatxIY4SE/kWMtLr2tbTBgBSxRI9/THGBP005p9XK85JMCw1r
-	 MYL3xADx07My/pFHLIZ5cDqt18z6cXqt4WUTu0oKird956Dpdh1IBQYbBivvLp11Ve
-	 bl1cf5xgiEuJQ==
-From: Mark Brown <broonie@kernel.org>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- Gabor Juhos <j4g8y7@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250801-qpic-snand-oob-cwpp-fix-v1-1-f5a41b86af2e@gmail.com>
-References: <20250801-qpic-snand-oob-cwpp-fix-v1-1-f5a41b86af2e@gmail.com>
-Subject: Re: [PATCH] spi: spi-qpic-snand: use correct CW_PER_PAGE value for
- OOB write
-Message-Id: <175448348842.51843.4908652099889522195.b4-ty@kernel.org>
-Date: Wed, 06 Aug 2025 13:31:28 +0100
+	s=k20201202; t=1754484009;
+	bh=rjAW/WkSN+6PhBDv4N/v50lsh0QoOwVTvZepWS+Aemg=;
+	h=Subject:From:Date:To:From;
+	b=PflecqRw9rpw4ZGNI20U3WctqoZKt3IYyQhq4TaC/WRDsmA9zqmtK1h/FGAdp1ACe
+	 DjYYRbCfCQBt4EEmtOxCiXOs/tCrJSMrIdyyAyABERvYtQtOpJXC18YiweHGiI97Bh
+	 bOqaTbxgIK80Ts/FBy97qvwF8T8EkP9XOhiOC9e04e49qsgx1s1YEd5NhcB92ZEdTT
+	 ZX0jSB2aKSgbWi3aZ8tVCZ61v6EqSot+PBHUqgF9BOx7UCg6G7EXroijmZEXUZqjXf
+	 yu4VfbcIxCsxSLuA2OcCs7xpP4GZlGjHf5pZt1yFbXdeOgkfKLt+VOUvjySnxjTpor
+	 QyOcd6Eo4VA5Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EE8DC383BF63;
+	Wed,  6 Aug 2025 12:40:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175448402248.2773882.14177659866632294359.git-patchwork-summary@kernel.org>
+Date: Wed, 06 Aug 2025 12:40:22 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Fri, 01 Aug 2025 09:58:35 +0200, Gabor Juhos wrote:
-> The qcom_spi_program_oob() function uses only the last codeword to write
-> the OOB data into the flash, but it sets the CW_PER_PAGE field in the
-> CFG0 register as it would use all codewords.
-> 
-> It seems that this confuses the hardware somehow, and any access to the
-> flash fails with a timeout error after the function is called. The problem
-> can be easily reproduced with the following commands:
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: spi-mem: Add missing kdoc argument
+  Submitter: Miquel Raynal <miquel.raynal@bootlin.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=988075
+  Lore link: https://lore.kernel.org/r/20250804095013.409700-1-miquel.raynal@bootlin.com
 
-Thanks!
+Patch: spi: spi-qpic-snand: use correct CW_PER_PAGE value for OOB write
+  Submitter: Gabor Juhos <j4g8y7@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=987597
+  Lore link: https://lore.kernel.org/r/20250801-qpic-snand-oob-cwpp-fix-v1-1-f5a41b86af2e@gmail.com
 
-[1/1] spi: spi-qpic-snand: use correct CW_PER_PAGE value for OOB write
-      commit: 6bc829220b33da8522572cc50fdf5067c51d3bf3
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
