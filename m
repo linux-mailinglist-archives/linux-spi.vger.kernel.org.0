@@ -1,163 +1,161 @@
-Return-Path: <linux-spi+bounces-9312-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9313-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B44C0B1D582
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 12:07:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F5E9B1D6B6
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 13:31:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D210A163309
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 10:07:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEE56727A05
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 11:30:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 048A412E7F;
-	Thu,  7 Aug 2025 10:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C052797AD;
+	Thu,  7 Aug 2025 11:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="c2olVYZ8"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="HLAGSglU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793A821CC61
-	for <linux-spi@vger.kernel.org>; Thu,  7 Aug 2025 10:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD5E42AA5
+	for <linux-spi@vger.kernel.org>; Thu,  7 Aug 2025 11:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754561269; cv=none; b=OqzeUHy+S7TyEsMiDt5/nF7UOTVOF5YNDm+iU8P5pzTAvSJSKorY1NiG0wC7Ma/dx+ImKZCTSbRAQFywAnfQGx5rNo2Rp37hdnY8oqW4/iHVkV1w18mIDAo4vbu/IPnxcPEVAGCUpuJRtbf/+P4ZYy3OLEbsyK5EZObv0Vi/pMk=
+	t=1754566242; cv=none; b=WINCKOKUPuTaGYlLma7+B/Kzbyweomqaf8RpPKZZ7n1oDl6KO/LhZJqI0SlcbTkvRXpJZ5y0ep7XjNKbFB4HjMum21jPTolgOk1Hwh2tT8y8T04F60Uc2Ly4rsCs3iwIwtzofadGImidTTt9CT6Ys7woAWy0pF4lTQ0YfksEtYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754561269; c=relaxed/simple;
-	bh=ttH59wqrImyhHUkFmLmP74mNxfU/HlC0dMS+1VMvhdY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Bsa8G/fwVY/HJLYGGYyIxwTO+RdDR86ky/QtjZ11Z1zwd01SwN3oqtrEq6Q01cGG0nvxHBFvyWTn5wP2o1GmcXL155OWQOqLPspb2UOjkB0Xgr36Hvu3tXXm5zX+rQpLNL82LWns8Ee/LW5rBu75oFC+7IZhfF/7OfOqypHM+rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=c2olVYZ8; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1754561265; x=1755166065; i=wahrenst@gmx.net;
-	bh=RxWym3zzt2d/9rcYlsMwAmxOxMg4sFEbqrDvRtkZMkI=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=c2olVYZ8vjMUDQca+dvwqbMOqaKO4r854YK1Gq98/367nRNppMobyxQ5e9YqsF/O
-	 67sMLEmjd1fy+va4ISUijq9XuIzasZqRFejqx26z7O2m9fceP0ZB14AQGPCzKDJTx
-	 G3llaESr8jQEx2O2v56aJFBgQ74JYMDWf5+XT582Ug/q3TY/bkoPQ5PCdq/xEjuEe
-	 w6q/oUsEvMH9GVefpZEIFr8fVfDRibLMFOhK92YR8EGquS6pCb2SWpbVD+io6h3Ki
-	 hgAfygo6c+Hd/97D26eQMRgCkAswPskwdiDE/Ex28HAKjdsjyHMhmyDVTINHAWuIl
-	 Ya/Oj50NXeS6MRU1Xw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([79.235.128.112]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mgeo8-1u7ZqX1uqi-00nBnl; Thu, 07
- Aug 2025 12:07:45 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Frank Li <Frank.Li@nxp.com>,
-	Mark Brown <broonie@kernel.org>,
-	Clark Wang <xiaoning.wang@nxp.com>
-Cc: linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH] spi: spi-fsl-lpspi: Clamp too high speed_hz
-Date: Thu,  7 Aug 2025 12:07:42 +0200
-Message-Id: <20250807100742.9917-1-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1754566242; c=relaxed/simple;
+	bh=1ll+EBd5lYDpGgeKjrKYbgl28Q2HDI13rIt9slkcFLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sJrEOPbkPZ5rPFS/rR6bT9R44TKl3gkldf1cFb1VNG5biaWYGSKyEH9lC1RVS4P4ovTFB6jwyvN9SlPlddxhAGIaj17xjIH2O4WxOjh2B1emwlLks1244uUlu8/H6z+A5NX0uMS8IVrbEA0KYRjq4imDLkTu5HRgLPj7v7518cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=HLAGSglU; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5779D3UQ020307
+	for <linux-spi@vger.kernel.org>; Thu, 7 Aug 2025 11:30:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	i07QIqXhNjjKtS5Fw1YccCoO4yzv0J/LSujugm/+4jM=; b=HLAGSglUTlZq93XQ
+	yRncmEvWj4OIWX3Kjh3HFEb7vVO2YPECaOipD6GBFb6T7UX3hQDO+tG9MT+u/xOz
+	U3W/N7seJ7UWrDTs0IF6xRJ+Fj/PBZzc7s74ziAyVAxOG7D6ahQed2wpy0Xod5nD
+	byhEfOcrYmR9Rb8lsSESbVmZYz0gDcj9Hdl3Bx0hq24D5/Tt3YWIfFhy1Zoffd9k
+	fpBPmV5hbxE3/jWeslSuyqPuuUiPwF0EbJmeaQlbCgrwSGYWpcIHBdbyAifhbI2u
+	SdB+C6Ez2WUaITridhA08Wq6/fUF1Zat0uibHCvRdDiSN0htsYSfV3Qcur1Fa4Yh
+	RPeMUw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48bpy8e3m9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Thu, 07 Aug 2025 11:30:39 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7e800094c82so27666985a.2
+        for <linux-spi@vger.kernel.org>; Thu, 07 Aug 2025 04:30:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754566238; x=1755171038;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i07QIqXhNjjKtS5Fw1YccCoO4yzv0J/LSujugm/+4jM=;
+        b=rGgfOUL3bJ1A1U0pOjlLTncjoMMRZHb9N+xgZbXH5G9FHcKzZRtC+ISUW/Y8wFFLcf
+         4DHT22xO3yeHyDvNkcbOUVgcGbweoHphdro2EWoRn/fJxjFcIs0LWtQhk04ULe2lsH6Q
+         MkC7jqQ923jUlBTuC9QszfXKZ9c7Voxeepw/v/7Ml4ETGBw/sg3kiaOgyc+wSRDCoElm
+         yYjQz0dFs4InE3X+I7lufxBSzvMkFTjHZbV0MKJ2NsmSgglyrQix1v83RhBLyDmvJivX
+         C0386aLQpKWlB7Ka4pc6rvIAVjktRjkxOFySVRJu6eYWzqpwqp1qn6Vh/unthC69NE7E
+         iGEg==
+X-Gm-Message-State: AOJu0YyPAacjPOzKJAM5ocmFBwuVSLU2VqR2HFeAFSMHd02MClXKMDbm
+	yBIjnEu0I3EJSG0CExTnAYgwEDsaWSHq0x5obv2D714hLgoGai19YUYCsc4y3APn3hD5i5Iao7K
+	LDK8gW0yeWYJsZ3iwzWWbRUX+XwW8O7gKDPydRHyXfNv3wcS0EY3A62+mWYrIo4tboKiLulE=
+X-Gm-Gg: ASbGncvVIUSL6HKpCQUIyrAbhOWBlAb49LnBintflQWLdbePl7AlwYZQjjNzNO3M/jT
+	7LGDDvBe815CJndBqe8LHdXuFwCxsxgzEslFjZipE2VOID8Bkqm3oZKwPp4DTB/xJQlfzDS6c49
+	ubvYaoi7jelG8rRZtQabYGXazSFc5O6r8kZSvOanfn+vJnSSiFTcRkMhCxp61o/iXZ2hmK9vniC
+	HSuHtmsZm37rCBPBcFGgQFlSHDpeuY4fTEg2aOvW7aMNKMHbCnu9LkT2CxqMQcRaMbEIA7JZR3h
+	UwMOuW6EqG1VrDjtN+Z1W1g7BhOGDJNQKuw7QRKr7a7LEMrkxjuYA8kwi/VpU2YK9GSxiuZ9t1t
+	VK8rGYmvST7kCUDzipw==
+X-Received: by 2002:a05:6214:1c81:b0:709:8842:56f5 with SMTP id 6a1803df08f44-70988425dfbmr20817706d6.3.1754566237862;
+        Thu, 07 Aug 2025 04:30:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGnXnONHbLA12/95Kl68dFu09ciwfUyG+iTcQrE/PkzMq5QqD4Es4erSTnNv0lGdP5+u6x8zQ==
+X-Received: by 2002:a05:6214:1c81:b0:709:8842:56f5 with SMTP id 6a1803df08f44-70988425dfbmr20817256d6.3.1754566237129;
+        Thu, 07 Aug 2025 04:30:37 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8f16062sm11590909a12.18.2025.08.07.04.30.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Aug 2025 04:30:36 -0700 (PDT)
+Message-ID: <4d2140ee-f757-425c-8014-3909873e7de3@oss.qualcomm.com>
+Date: Thu, 7 Aug 2025 13:30:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:z7HJ19V5RDNWe3wuUth2csYyED0MSNHqcGL6c9q6bNE97zmefzb
- pIDi2rnjgzpM7PbFJPu3W0vam1Z6Z1uH6XTNHeS5b/9S/ajgshgS6aSVlGpCvWJ8EJmOkpm
- Q+a0ZEEJcaqcdfwfHBTDnDm/Yxl+vXqF4mhZYS50Kgsl9z+3y1ZIPK5YOj6RdQxpOB9uCuI
- SSkigJEbHa2gjUiatoU0w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:b8UDEti39Ts=;snWGwqAm5Ggde0HWeQ/++G0J6+e
- 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
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: spi-qpic-snand: fix calculating of ECC OOB
+ regions' properties
+To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250805-qpic-snand-oob-ecc-fix-v2-1-e6f811c70d6f@gmail.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250805-qpic-snand-oob-ecc-fix-v2-1-e6f811c70d6f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: UAEsvyiP-LzV3HaMfEuKYjUNkrQLn_Vu
+X-Proofpoint-ORIG-GUID: UAEsvyiP-LzV3HaMfEuKYjUNkrQLn_Vu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA2MDAwOSBTYWx0ZWRfX9JE7m+jDYYFF
+ 89OtjSRnVcYh3C88/8HMxKD+aW92vhHhuHTL5asCyfPtLZgdqUGhO4zxuS4aAfDIb2r+EMw/Dg3
+ Q7lB68yjrfwBIZauP4WKtv/Ualua7mcrbt1ezx06EBbmcsdy/bFDTPGxleV3M6DnWEPYuvW8dWc
+ UGNjOQpkhdw1gDEKB3EzfsDfofrtmH6f1rOUAiXF6bQn8P+/nqrvcqBBCnJiojicLmMuN7ogoy7
+ 90eGQ832F5qFUqJYwS1+k7Nay5Fv3hU46HDAtXTdY5vM1i2vyKhE/afEb9iwriKYpJR1Rv/Ou6t
+ 6S1q2FX1mcnz6mFXUpE0ZF5HBNvxxEAmHr2J4fpG2jmqPlJYZTdxZmX3b3U0rSRtASfGRe6218l
+ YIzjG8Ri
+X-Authority-Analysis: v=2.4 cv=GrlC+l1C c=1 sm=1 tr=0 ts=68948e5f cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=pGLkceISAAAA:8 a=EUspDBNiAAAA:8
+ a=Al3NFTvqZ0TCkL53jQIA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-07_02,2025-08-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2508060009
 
-Currently the driver is not able to handle the case that a SPI device
-specifies a higher spi-max-frequency than half of per-clk:
+On 8/5/25 6:05 PM, Gabor Juhos wrote:
+> The OOB layout used by the driver has two distinct regions which contains
+> hardware specific ECC data, yet the qcom_spi_ooblayout_ecc() function sets
+> the same offset and length values for both regions which is clearly wrong.
+> 
+> Change the code to calculate the correct values for both regions.
+> 
+> For reference, the following table shows the computed offset and length
+> values for various OOB size/ECC strength configurations:
+> 
+>                               +-----------------+-----------------+
+>                               |before the change| after the change|
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  OOB  |   ECC    | region | region | region | region | region |
+>   |  size | strength | index  | offset | length | offset | length |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  128  |     8    |    0   |   113  |   15   |    0   |   49   |
+>   |       |          |    1   |   113  |   15   |   65   |   63   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |  128  |     4    |    0   |   117  |   11   |    0   |   37   |
+>   |       |          |    1   |   117  |   11   |   53   |   75   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+>   |   64  |     4    |    0   |    53  |   11   |    0   |   37   |
+>   |       |          |    1   |    53  |   11   |   53   |   11   |
+>   +-------+----------+--------+--------+--------+--------+--------+
+> 
+> Fixes: 7304d1909080 ("spi: spi-qpic: add driver for QCOM SPI NAND flash Interface")
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+> ---
 
-    per-clk should be at least two times of transfer speed
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Fix this by clamping to the max possible value and use the minimum SCK
-period of 2 cycles.
-
-Fixes: 77736a98b859 ("spi: lpspi: add the error info of transfer speed set=
-ting")
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/spi/spi-fsl-lpspi.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 67d4000c3cef..313e444a34f3 100644
-=2D-- a/drivers/spi/spi-fsl-lpspi.c
-+++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -330,13 +330,11 @@ static int fsl_lpspi_set_bitrate(struct fsl_lpspi_da=
-ta *fsl_lpspi)
- 	}
-=20
- 	if (config.speed_hz > perclk_rate / 2) {
--		dev_err(fsl_lpspi->dev,
--		      "per-clk should be at least two times of transfer speed");
--		return -EINVAL;
-+		div =3D 2;
-+	} else {
-+		div =3D DIV_ROUND_UP(perclk_rate, config.speed_hz);
- 	}
-=20
--	div =3D DIV_ROUND_UP(perclk_rate, config.speed_hz);
--
- 	for (prescale =3D 0; prescale <=3D prescale_max; prescale++) {
- 		scldiv =3D div / (1 << prescale) - 2;
- 		if (scldiv >=3D 0 && scldiv < 256) {
-=2D-=20
-2.34.1
-
+Konrad
 
