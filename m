@@ -1,55 +1,59 @@
-Return-Path: <linux-spi+bounces-9314-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9315-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77128B1DD5A
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 21:09:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56999B1DD5C
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 21:09:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60A2518C74F2
-	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 19:09:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41CA218C7BB4
+	for <lists+linux-spi@lfdr.de>; Thu,  7 Aug 2025 19:09:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1153925DB1C;
-	Thu,  7 Aug 2025 19:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2855B2737FA;
+	Thu,  7 Aug 2025 19:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EoSn5UIl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pVIIHWHS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA87256C6F;
-	Thu,  7 Aug 2025 19:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4D626A1AC;
+	Thu,  7 Aug 2025 19:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754593748; cv=none; b=Z2317sS8LBoErMU5g++LJ0P4k46t/M5ZeKoBrVWZ5Ub4QytMUIUZK8hSeQY0vaItbRmwv4Qm5LT6Z/BVCVKDvB5CH96zu1e1Li3plGGdZk4fr58LoH/2R+TJwE3ycYUkqvX4VfD9ACksQXSgr2wE0zwpYhYSqV5kEGClrvC7yTI=
+	t=1754593750; cv=none; b=exJ2dIERcKhWjukzf2UNnXpWXgQZopR98Rvd93tQaeXP95chjQ/8Bq8eYyNUskIXer6Zb00sMRYBkbzWG+lhZZ6f1YvIznhGtkNiGx+NUICbBm92t5lTrQLdId0IHrlftEeEcDhsiezm/kYGalm+RHCIN+JIhxqmkBCGrfjXXBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754593748; c=relaxed/simple;
-	bh=8imx6wVOsRR9QqBAU1K+vLxoVDn3qj25QOkvyaNjn5I=;
+	s=arc-20240116; t=1754593750; c=relaxed/simple;
+	bh=h5F9tcewokv2v0wx3iMjy8IfFAlmrDNK0aJoLn0Qpyo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=uoE4TlQJmxtQ0isxUrXthkcisXQk0x/Qj07snjCzoGMwXOggnNwT/z9CJA/xECvJzdY2gZYPmxFDWDsN1hkx0vrhMoLohEl0S3aiWn4+Ky/ghW88+6XN7Fy5ml3mlFSKHX5YGxA3RX5P8wUynXgt3tdwunLhZcpfIEjNXYbRzss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EoSn5UIl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB43C4CEEB;
-	Thu,  7 Aug 2025 19:09:06 +0000 (UTC)
+	 MIME-Version:Content-Type; b=KHcAk+uxner9j7XVPyAICFpsX1DaQEU1T62QL74iEqGEWunci/4mPqDVQc58ErjI8s4kyA2e1wfc3jMFNDZyRzujcsch8PtIuynwOQI7qU/bT5fuxEt7gtkLwiE1gqkvC4xB3KPnN7r+m9KiHF0E/OzBFC2HSkNZTLPHUCfXXok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pVIIHWHS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE7BC4CEF7;
+	Thu,  7 Aug 2025 19:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754593747;
-	bh=8imx6wVOsRR9QqBAU1K+vLxoVDn3qj25QOkvyaNjn5I=;
+	s=k20201202; t=1754593749;
+	bh=h5F9tcewokv2v0wx3iMjy8IfFAlmrDNK0aJoLn0Qpyo=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=EoSn5UIlQzkuzMZqejHE9gOuwmJr2Jxxh8vAC+6a/2i7W6ghc7W77pdcMSeNBKUMl
-	 v6gMqcQ2FPhH+3f74lXawftn2X993N1x7aRqBUZ8YTxTPeNh8wnSvMzB5rpZyB/yn2
-	 2N59rOYEiwD9F64jPIf1Y2SU1vqSCuhFDeXeboOkN0QeU67VLTAZCN9CR0ztxORWrl
-	 R98CmwqkxteU8pWM0gbbpHiJRiDEPjZ0rdIMSgn2K1DQ+VDPoYsdItXzdUXnKcJ3L5
-	 L6Z0rDUUvC5pQnUWfr8uYZMeAhp2/qqeQRZZh/hLkfq8O3SUgOzK9s57Nh/uTz6p5w
-	 +S79G9CN5+AcA==
+	b=pVIIHWHSzdnCE18ikP5QEvNUXONkDu+GsxtTfXSJZf8la3IxFqoVXeLrgHgpo7ap2
+	 u5mYkKG80fY4kWG6cDHeCxyMJBmUBv4RwY4iDqcyVnYkyT6XlCjrAsbw/ykiQkMnrt
+	 5fP5V6cvNNbuhANfslRaan05LMbI/AdgnKNbKReJXbAhnHs1Eqc5a4QNlZ1ZgJt8RK
+	 WvuJxbeKjb/0wXdkWcWeVl249jeOBk2M19GLLg9yKzIVSEOSNm/QvHJStB/Pnr7ox6
+	 ZYnP1B1kBDd8z823yk2J1eLNkfLm5s9MRU+lxjjPiOYbGwXTjufvuJrs1YCqd2QS26
+	 dWpr6mv8acvCQ==
 From: Mark Brown <broonie@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, 
- Stefan Wahren <wahrenst@gmx.net>
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev
-In-Reply-To: <20250807100742.9917-1-wahrenst@gmx.net>
-References: <20250807100742.9917-1-wahrenst@gmx.net>
-Subject: Re: [PATCH] spi: spi-fsl-lpspi: Clamp too high speed_hz
-Message-Id: <175459374603.106952.5886117499907652645.b4-ty@kernel.org>
-Date: Thu, 07 Aug 2025 20:09:06 +0100
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, Gabor Juhos <j4g8y7@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250805-qpic-snand-oob-ecc-fix-v2-1-e6f811c70d6f@gmail.com>
+References: <20250805-qpic-snand-oob-ecc-fix-v2-1-e6f811c70d6f@gmail.com>
+Subject: Re: [PATCH v2] spi: spi-qpic-snand: fix calculating of ECC OOB
+ regions' properties
+Message-Id: <175459374764.106952.4861259092289102637.b4-ty@kernel.org>
+Date: Thu, 07 Aug 2025 20:09:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,14 +64,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-cff91
 
-On Thu, 07 Aug 2025 12:07:42 +0200, Stefan Wahren wrote:
-> Currently the driver is not able to handle the case that a SPI device
-> specifies a higher spi-max-frequency than half of per-clk:
+On Tue, 05 Aug 2025 18:05:42 +0200, Gabor Juhos wrote:
+> The OOB layout used by the driver has two distinct regions which contains
+> hardware specific ECC data, yet the qcom_spi_ooblayout_ecc() function sets
+> the same offset and length values for both regions which is clearly wrong.
 > 
->     per-clk should be at least two times of transfer speed
+> Change the code to calculate the correct values for both regions.
 > 
-> Fix this by clamping to the max possible value and use the minimum SCK
-> period of 2 cycles.
+> For reference, the following table shows the computed offset and length
+> values for various OOB size/ECC strength configurations:
 > 
 > [...]
 
@@ -77,8 +82,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-fsl-lpspi: Clamp too high speed_hz
-      commit: af357a6a3b7d685e7aa621c6fb1d4ed6c349ec9e
+[1/1] spi: spi-qpic-snand: fix calculating of ECC OOB regions' properties
+      commit: 13d0fe84a214658254a7412b2b46ec1507dc51f0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
