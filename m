@@ -1,143 +1,157 @@
-Return-Path: <linux-spi+bounces-9336-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9337-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E4E1B20238
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 10:50:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05B5EB20872
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 14:11:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5ABEA171F04
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 08:50:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2A2D18A11F1
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 12:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17DF72DC331;
-	Mon, 11 Aug 2025 08:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199952D3A71;
+	Mon, 11 Aug 2025 12:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QTcq147/"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xCiWNY4M";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r4dNiR18"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CC92DAFC0
-	for <linux-spi@vger.kernel.org>; Mon, 11 Aug 2025 08:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9D72D3A60;
+	Mon, 11 Aug 2025 12:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754902232; cv=none; b=udrcsEQy/EXElnC3T2RVr7MRe+aE3EokgZyOJbTeTl5L6ejT23OaxmNuPUfMZZSl2Uz/6a38SlWXL6fpoNEMnhcsytnOYXg6nf/FT7M6fmoPtqFDTyb8++MPeZW4/ujAXANQXHFeXyiH31H7bitwCVgpIUxvfWeX130pJsO28VU=
+	t=1754914227; cv=none; b=jK02NOqUC/BuBCsdn6Ua0jmGHdAlzG8VytKrUbIPrDduJSuTVwJHbz8fQopJKq4rzaBIy50OQRpWPofUCh5eCxDtSm5AG47SKxYqTwFpOu839+obok1D+AddpDoYpDqxcXSWhIa2XQo3OGbWt7oLmlK9ee12mqR3vM5DElji+WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754902232; c=relaxed/simple;
-	bh=CPGYrDDgQzIYUKiy0aUthSOA854YrLJiY4efajvuJCo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bwe4QzN7Xn2VW/ZudLubNcLcWXGLz0by91thFAZtjR89VtKx3tS05VQv+wi+U6S6MnBgWI0USTeTYv1ehAX9JSTbznbvOh9y9fwbTIdnvE1TorwqgxuiupPu9xm8Apn9M013FcCIjgZ3S/9C5ppk9J9XPmapEdNA82TIACg5UwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QTcq147/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57AMvKLp005527
-	for <linux-spi@vger.kernel.org>; Mon, 11 Aug 2025 08:50:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	CORAd2r8QfE5VI6wSh8ExS3y5u32gjUiHVIBXtOTHh0=; b=QTcq147/b9gOi54Z
-	MsLQigOnChXxV4MT8/Vp7U3F/gzGF0mARNbqo4TOEvFFpWzEFX/x9tA6Zig0Ah3a
-	nZ4q+4G6/5DNTBG2qYY615/5wAQ/2LAKl4+BESCUTzgOEE+QvH6ZgPDKaaUYVUyS
-	5GH4s8krsaGl8NdmNIrXbpDNaQCxHvb5mzjWlEwX2SDyBVanR+Pua80YD04ivzlw
-	jSllyohKLQmoiF8DOAIXF18iKiMEwU6m3oNcGUvcPqatsrv0GHO32ajVIJMm2epy
-	J/QxiHIV8OjJmV25BjxZuaE3UG3CPMjN5jdvM1msmPepTagC7EOQafQnm/vDvLTQ
-	mepANw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dv1fkwk6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-spi@vger.kernel.org>; Mon, 11 Aug 2025 08:50:29 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b06ad8dadeso10226671cf.1
-        for <linux-spi@vger.kernel.org>; Mon, 11 Aug 2025 01:50:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754902228; x=1755507028;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CORAd2r8QfE5VI6wSh8ExS3y5u32gjUiHVIBXtOTHh0=;
-        b=vkdhVRc3MedGgGcU8dAEGs3o1dyOLi+9u9X47xiy7i0r9CD/WhHRE7jRFS1UXg3TNj
-         yQ1HzPmGHWp6L7xkqsrpdTqQ2fWk0UIfRTp+DNw3lxVwl8p0VeHkZc/+Sgm2HpDV9t9F
-         tdUVN8nOP1lCfuqSOAJo6vOLpmqnOhg3pwYfxXHSjcmrvmtt14+cyJvnGTI17qPlv7JQ
-         mX4Rw3YYDEZNIiyqxvpDdQXpzIFqWmzjNxkdbKBbW8XtdmHH8C7lm2WpuNai6q8L3qUN
-         WlLrXuB1OjRmVsDZWiBJ773Y3uDDreLKz8KY3tYdXQkrzNWiNe9YnRx2Ga0NSZ/2FENy
-         Ld2w==
-X-Forwarded-Encrypted: i=1; AJvYcCXlXRFnjN085+cm/TOXVwSXQvlfxzQBZte8G+c6iJ3L897+YeZCcbVGOCUyAcktsaw/Cl3/wn+1DCw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLgxL6iZCJ5eqcd7k3xhx8JTbnh2kLVREhZz5UMJkTHyBr0Ado
-	jL2wAe/0mqATcwdnpfuCDGqTQWR0YeznRGPB2WfvXuYBe3UluwQug7w19NBsIoizDFy5MJbRdYV
-	TmwQnbsOa2ov8uglb0oumeTBzxmxDboChQ4UJ8mjY+Pt8OxQSy/3O6B7Jpr7OaBk=
-X-Gm-Gg: ASbGnctdGd+stq1HlRLwn5Tmhc8cKg/DhdeMDJVwAhevyhbjfAytQ5/+9dvaGIzS9fF
-	u+OEqJO2Cp7RM450ZG36Caw0oHPoV7zdo7WN0RN2eRUkHii2brsRH4ti9aOpTAsOgNrVvQGU/g6
-	TnN9I9cogNQheQddHwKMqckyp8tHmc0GvpCM/8SVvmFdio4t/Bh4pPpj2YrbSOpL88kpMGoAe4+
-	xRtrOz518frMV5fBWLFDUNYAV50I3afcrmBudqzQM21FrPcHWE76QRKj6q1iXS3V5prRcNMt0p8
-	MOdHRiSxNWmgy0EmVuuIz2NJVMeMgrYapskwyE+p5woA0byRMEnf8ZvEYBaiIDL9CERtGpzorS/
-	GRiG4q9Li1NInSouG7A==
-X-Received: by 2002:a05:622a:1ba1:b0:4ae:dc5b:5fee with SMTP id d75a77b69052e-4b0beb027a8mr52894041cf.0.1754902228413;
-        Mon, 11 Aug 2025 01:50:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG2gL+G3g1eE6R8szJqv85HPPf+VErr9fLPtt2IIDrlbNUHP7zeIYNUyGibJo//rQDUPs1VWw==
-X-Received: by 2002:a05:622a:1ba1:b0:4ae:dc5b:5fee with SMTP id d75a77b69052e-4b0beb027a8mr52893851cf.0.1754902227923;
-        Mon, 11 Aug 2025 01:50:27 -0700 (PDT)
-Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a1e820asm1977227066b.90.2025.08.11.01.50.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Aug 2025 01:50:27 -0700 (PDT)
-Message-ID: <cc24ea01-549d-43df-a3d0-62f60c79d5f6@oss.qualcomm.com>
-Date: Mon, 11 Aug 2025 10:50:25 +0200
+	s=arc-20240116; t=1754914227; c=relaxed/simple;
+	bh=eNk975+t84dUazlCfqAPuToMefu6VdTYbHIJrfw8Fr8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DfsG5RY8eLVg+o7I4h09F3kD7EDzTRCU0mgnht0RV5ZGPgZgtZ6bIaKeTn0ZqkuFnLG1UDEkaPZS0YtW/8A27zfLcIulg0B7yvNITB4PhcbS2a2FZwzs6JvNStzPim5QfLfb+A+qgv8cseTLoskPyRzmqyyJMTn4Wfsizkray1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xCiWNY4M; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r4dNiR18; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1754914224;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3GedppQXjyXzj3R2rxl9C/tgqRz8TSY2dQ2Ju6YCDxg=;
+	b=xCiWNY4MQuk/pXDaN/hj/Rvk1nQsx+gl3Nq3aeC5gFxPls0c8Gt24Nw/nP6EEMKnc4uWo1
+	8wdVMLjYx2WaZTLKvJV4Y2MoV24wytQRXJkrVRzVpuAfkef5CuzQwERBJGkHiromcLKihh
+	mOIMSfJfJpvmB9tWsQrrK0Sh/XBhVgwzzDmXP9WhiBQ3zJpi3NiF7hGB9CCbJ9kdAuoU6g
+	tY/CyTUZ/In9TTIjHbqmFDy6H+lN6Xox2bo6ZIkMwkeBYNrJ37CBdaeXhjCPqRvlHWISjK
+	Kg/4OdC24xSj5qpdlZ05vAPKelZiUbUWcAiI1HI4aNeq8OgqFu3M6wZSyaxErw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1754914224;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3GedppQXjyXzj3R2rxl9C/tgqRz8TSY2dQ2Ju6YCDxg=;
+	b=r4dNiR189hwVHgcFc5+NCHHqCGM9gJG8fKywKC6K/6XL3IxsMXjhcvPrFwfeQJtxs06Jrt
+	7SoMdg5AcQcJjeBw==
+Date: Mon, 11 Aug 2025 14:10:21 +0200
+Subject: [PATCH] spi: loopback-test: Don't use %pK through printk
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] spi: spi-qpic-snand: remove unused 'dev' member of
- struct 'qpic_ecc'
-To: Gabor Juhos <j4g8y7@gmail.com>, Mark Brown <broonie@kernel.org>
-Cc: Md Sadre Alam <quic_mdalam@quicinc.com>,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250810-qpic-snand-qpic_ecc-cleanup-v1-0-33a6b2bcbc67@gmail.com>
- <20250810-qpic-snand-qpic_ecc-cleanup-v1-1-33a6b2bcbc67@gmail.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250810-qpic-snand-qpic_ecc-cleanup-v1-1-33a6b2bcbc67@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: 4-qtU3WrAe6yfB-DklJWj9w2Xx73nOKu
-X-Authority-Analysis: v=2.4 cv=cLTgskeN c=1 sm=1 tr=0 ts=6899aed5 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=pGLkceISAAAA:8 a=EUspDBNiAAAA:8
- a=rbI749AxHwL34t2NiqoA:9 a=QEXdDO2ut3YA:10 a=bDEiuqbIbRIA:10
- a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAwMyBTYWx0ZWRfXwEojpH2IkeZT
- A5OzinwYLRiGY2I5Go/et6UhWKZW5zL1TSN89v/VUwOBh21UPXPQ4zNqttZI7WJiyhWFKHcBli1
- KmBX/ht+4ePaZk6gzeW0S6yqlaW32usKqql5zRb3HU1tMOySzF6mTUWekzm8FQKnqfKw/7+WQip
- GneGguH1+U7vHgukPkBgC1L+GpUeG43BGefo49aS7ShsSbsv56M090bDv/zQztuNkoLrGUFxtqe
- Z0/eRJYv4TJ0TOo/lRMkhiOsN0QlVu36AWWm+9Xq+9eoy6sXE27wBFmCr8UB0uf61N7/OihIhxT
- 2hFRs62uMOcXpRh7Nm7QigGy9Bsb6GWBSIYLW7Xq0yV8Q+7FmEyPXeGWv+zevTvoXQta4+j4jzA
- FrbYfTCI
-X-Proofpoint-ORIG-GUID: 4-qtU3WrAe6yfB-DklJWj9w2Xx73nOKu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-11_01,2025-08-06_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 phishscore=0 bulkscore=0 clxscore=1015
- malwarescore=0 suspectscore=0 spamscore=0 adultscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508090003
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250811-restricted-pointers-spi-v1-1-32c47f954e4d@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAKzdmWgC/x3MPQqAMAxA4atIZgOt4u9VxEHbqFlqSYoI4t0tj
+ t/w3gNKwqQwFg8IXax8hgxbFuCOJeyE7LOhMlVjemtRSJOwS+QxnhwSiaJGxnqovVn7xnXtCrm
+ OQhvf/3ma3/cDFgM35mkAAAA=
+X-Change-ID: 20250811-restricted-pointers-spi-393d0b85c76b
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754914223; l=3126;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=eNk975+t84dUazlCfqAPuToMefu6VdTYbHIJrfw8Fr8=;
+ b=i+8+qs4piHrFEjztOlkXanTBYz9Gm3i952fF01S5q/44V+uO/HrrQ0g4/I3HusC5vU+mylos0
+ XuZpCE+Fz1EC0YLhtzo2mwBx9ZR0uG2W/whEKZuBNOaUwMhfYt8Grqh
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 8/10/25 4:38 PM, Gabor Juhos wrote:
-> The 'dev' member of the 'qpic_ecc' structure is never used in the
-> code so remove that.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
-> ---
+In the past %pK was preferable to %p as it would not leak raw pointer
+values into the kernel log.
+Since commit ad67b74d2469 ("printk: hash addresses printed with %p")
+the regular %p has been improved to avoid this issue.
+Furthermore, restricted pointers ("%pK") were never meant to be used
+through printk(). They can still unintentionally leak raw pointers or
+acquire sleeping locks in atomic contexts.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Switch to the regular pointer formatting which is safer and
+easier to reason about.
+There are still a few users of %pK left, but these use it through seq_file,
+for which its usage is safe.
 
-Konrad
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ drivers/spi/spi-loopback-test.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
+index 7dd92deffe3fb1c2254777ce332c2eb52554aecf..e0b131aa29b62e9661be01b551e1260a7b0bbdfa 100644
+--- a/drivers/spi/spi-loopback-test.c
++++ b/drivers/spi/spi-loopback-test.c
+@@ -446,7 +446,7 @@ static void spi_test_dump_message(struct spi_device *spi,
+ 	int i;
+ 	u8 b;
+ 
+-	dev_info(&spi->dev, "  spi_msg@%pK\n", msg);
++	dev_info(&spi->dev, "  spi_msg@%p\n", msg);
+ 	if (msg->status)
+ 		dev_info(&spi->dev, "    status:        %i\n",
+ 			 msg->status);
+@@ -456,15 +456,15 @@ static void spi_test_dump_message(struct spi_device *spi,
+ 		 msg->actual_length);
+ 
+ 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
+-		dev_info(&spi->dev, "    spi_transfer@%pK\n", xfer);
++		dev_info(&spi->dev, "    spi_transfer@%p\n", xfer);
+ 		dev_info(&spi->dev, "      len:    %i\n", xfer->len);
+-		dev_info(&spi->dev, "      tx_buf: %pK\n", xfer->tx_buf);
++		dev_info(&spi->dev, "      tx_buf: %p\n", xfer->tx_buf);
+ 		if (dump_data && xfer->tx_buf)
+ 			spi_test_print_hex_dump("          TX: ",
+ 						xfer->tx_buf,
+ 						xfer->len);
+ 
+-		dev_info(&spi->dev, "      rx_buf: %pK\n", xfer->rx_buf);
++		dev_info(&spi->dev, "      rx_buf: %p\n", xfer->rx_buf);
+ 		if (dump_data && xfer->rx_buf)
+ 			spi_test_print_hex_dump("          RX: ",
+ 						xfer->rx_buf,
+@@ -558,7 +558,7 @@ static int spi_check_rx_ranges(struct spi_device *spi,
+ 		/* if still not found then something has modified too much */
+ 		/* we could list the "closest" transfer here... */
+ 		dev_err(&spi->dev,
+-			"loopback strangeness - rx changed outside of allowed range at: %pK\n",
++			"loopback strangeness - rx changed outside of allowed range at: %p\n",
+ 			addr);
+ 		/* do not return, only set ret,
+ 		 * so that we list all addresses
+@@ -696,7 +696,7 @@ static int spi_test_translate(struct spi_device *spi,
+ 	}
+ 
+ 	dev_err(&spi->dev,
+-		"PointerRange [%pK:%pK[ not in range [%pK:%pK[ or [%pK:%pK[\n",
++		"PointerRange [%p:%p[ not in range [%p:%p[ or [%p:%p[\n",
+ 		*ptr, *ptr + len,
+ 		RX(0), RX(SPI_TEST_MAX_SIZE),
+ 		TX(0), TX(SPI_TEST_MAX_SIZE));
+
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20250811-restricted-pointers-spi-393d0b85c76b
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
