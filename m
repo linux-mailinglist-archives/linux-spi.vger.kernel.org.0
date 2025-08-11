@@ -1,58 +1,89 @@
-Return-Path: <linux-spi+bounces-9337-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9338-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05B5EB20872
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 14:11:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B0B0B208A7
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 14:21:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2A2D18A11F1
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 12:11:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE31517B954
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 12:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 199952D3A71;
-	Mon, 11 Aug 2025 12:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77BB233713;
+	Mon, 11 Aug 2025 12:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xCiWNY4M";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="r4dNiR18"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Gpl0cloj"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A9D72D3A60;
-	Mon, 11 Aug 2025 12:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EB120297C;
+	Mon, 11 Aug 2025 12:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754914227; cv=none; b=jK02NOqUC/BuBCsdn6Ua0jmGHdAlzG8VytKrUbIPrDduJSuTVwJHbz8fQopJKq4rzaBIy50OQRpWPofUCh5eCxDtSm5AG47SKxYqTwFpOu839+obok1D+AddpDoYpDqxcXSWhIa2XQo3OGbWt7oLmlK9ee12mqR3vM5DElji+WM=
+	t=1754914899; cv=none; b=N7yIdtto8H7RttXuXZZG91RZQaPIHvmReq+0B5ywaIb1yw2c1vIEn45aSwWzQyeai2UXUQsxxGyJj16pPR5C+LEAmoikS25D5bIZCqNcjErSRx82Ei3G45NcoVNAYktPqMgjuVdHFQ9ys2JFqUx6cwl6bllG6KQ08mKTrEX4/Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754914227; c=relaxed/simple;
-	bh=eNk975+t84dUazlCfqAPuToMefu6VdTYbHIJrfw8Fr8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DfsG5RY8eLVg+o7I4h09F3kD7EDzTRCU0mgnht0RV5ZGPgZgtZ6bIaKeTn0ZqkuFnLG1UDEkaPZS0YtW/8A27zfLcIulg0B7yvNITB4PhcbS2a2FZwzs6JvNStzPim5QfLfb+A+qgv8cseTLoskPyRzmqyyJMTn4Wfsizkray1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xCiWNY4M; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=r4dNiR18; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754914224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3GedppQXjyXzj3R2rxl9C/tgqRz8TSY2dQ2Ju6YCDxg=;
-	b=xCiWNY4MQuk/pXDaN/hj/Rvk1nQsx+gl3Nq3aeC5gFxPls0c8Gt24Nw/nP6EEMKnc4uWo1
-	8wdVMLjYx2WaZTLKvJV4Y2MoV24wytQRXJkrVRzVpuAfkef5CuzQwERBJGkHiromcLKihh
-	mOIMSfJfJpvmB9tWsQrrK0Sh/XBhVgwzzDmXP9WhiBQ3zJpi3NiF7hGB9CCbJ9kdAuoU6g
-	tY/CyTUZ/In9TTIjHbqmFDy6H+lN6Xox2bo6ZIkMwkeBYNrJ37CBdaeXhjCPqRvlHWISjK
-	Kg/4OdC24xSj5qpdlZ05vAPKelZiUbUWcAiI1HI4aNeq8OgqFu3M6wZSyaxErw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754914224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=3GedppQXjyXzj3R2rxl9C/tgqRz8TSY2dQ2Ju6YCDxg=;
-	b=r4dNiR189hwVHgcFc5+NCHHqCGM9gJG8fKywKC6K/6XL3IxsMXjhcvPrFwfeQJtxs06Jrt
-	7SoMdg5AcQcJjeBw==
-Date: Mon, 11 Aug 2025 14:10:21 +0200
-Subject: [PATCH] spi: loopback-test: Don't use %pK through printk
+	s=arc-20240116; t=1754914899; c=relaxed/simple;
+	bh=Ql1JCgnCHCe7QLdED93B26Cg21+RnnwnTV77huzWi0s=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qs5yb3LZ9T9r1boC0kmChmGGQgCnOnAYtFC4/872CQZE4MAiL3vP3sNNWHqVosQzV6q5oXKWultRfdNEUgN7ZmidAmoFvz0LQcOyhw8gkRDkdDaiCYKukmP06UCTnEq5bvtXODAzHrLAdWZxiDy44bmwhhGNNYXipg67V3XSw9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Gpl0cloj; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1754914898; x=1786450898;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Ql1JCgnCHCe7QLdED93B26Cg21+RnnwnTV77huzWi0s=;
+  b=Gpl0clojgNadKcllAmuS5qeyr7U61wJHDZdoNrUpvQXfyYR/YcdiLIZZ
+   T/jJBrCdcFKKzgbl3tGf/K1pgZlnW+Wc2VVlRfjOgsTxTC0nXKo4JeT24
+   w6mnq55pqVRBeHTtrE7glPy239HLTPGbZokXHQdr1TeRPb5L4wjt9cgTH
+   BItjbrQ7jbkciy1t/uzQKgEoxZuQhBrpLN2wBn/Wz+MJZCOtQh+n47bpU
+   ELZLDE0f7x2RiAzlNQpwJj/qDLJv2+YdqJX7tCm/sRGy3Sbr1qWmGjXa7
+   kvztThpDlB8CDVKa6CkdGzraZDppxs/7+5hxV7+cCLmBt84aUAVnNWAhV
+   w==;
+X-CSE-ConnectionGUID: wyxru+5XTMK+lbiHaXZ4+w==
+X-CSE-MsgGUID: 5Wwrm8/ITrONPZG1z6ylXA==
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="45644208"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Aug 2025 05:21:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Mon, 11 Aug 2025 05:20:58 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Mon, 11 Aug 2025 05:20:53 -0700
+Date: Mon, 11 Aug 2025 12:20:53 +0000
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Robert Marko <robert.marko@sartura.hr>
+CC: Nicolas Ferre <nicolas.ferre@microchip.com>, Arnd Bergmann
+	<arnd@kernel.org>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	"Russell King" <linux@armlinux.org.uk>, Claudiu Beznea
+	<claudiu.beznea@tuxon.dev>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Olivia Mackall <olivia@selenic.com>, Herbert Xu
+	<herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemloft.net>,
+	Vinod Koul <vkoul@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Lee Jones
+	<lee@kernel.org>, Mark Brown <broonie@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>, Oleksij Rempel <o.rempel@pengutronix.de>,
+	<luka.perkov@sartura.hr>, Conor Dooley <Conor.Dooley@microchip.com>, "Lars
+ Povlsen - M31675" <Lars.Povlsen@microchip.com>
+Subject: Re: [PATCH v8 01/10] arm64: Add config for Microchip SoC platforms
+Message-ID: <20250811122053.4bfyoefln7wpz2a4@DEN-DL-M70577>
+References: <20250702183856.1727275-1-robert.marko@sartura.hr>
+ <20250702183856.1727275-2-robert.marko@sartura.hr>
+ <ea353170-6e03-4231-afc2-3dc45253931d@app.fastmail.com>
+ <CA+HBbNHxiU5+xVJTyPQFuCJLyEs5_MpybSBEgxi25bzaGfiVHA@mail.gmail.com>
+ <421d61db-27eb-4ad2-bd98-eb187fd14b1e@microchip.com>
+ <CA+HBbNEiKWS71jtF_jqV9bdX9HVroaZSGMaeD-xFM8sm0kLtCw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,98 +91,116 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250811-restricted-pointers-spi-v1-1-32c47f954e4d@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAKzdmWgC/x3MPQqAMAxA4atIZgOt4u9VxEHbqFlqSYoI4t0tj
- t/w3gNKwqQwFg8IXax8hgxbFuCOJeyE7LOhMlVjemtRSJOwS+QxnhwSiaJGxnqovVn7xnXtCrm
- OQhvf/3ma3/cDFgM35mkAAAA=
-X-Change-ID: 20250811-restricted-pointers-spi-393d0b85c76b
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754914223; l=3126;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=eNk975+t84dUazlCfqAPuToMefu6VdTYbHIJrfw8Fr8=;
- b=i+8+qs4piHrFEjztOlkXanTBYz9Gm3i952fF01S5q/44V+uO/HrrQ0g4/I3HusC5vU+mylos0
- XuZpCE+Fz1EC0YLhtzo2mwBx9ZR0uG2W/whEKZuBNOaUwMhfYt8Grqh
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+In-Reply-To: <CA+HBbNEiKWS71jtF_jqV9bdX9HVroaZSGMaeD-xFM8sm0kLtCw@mail.gmail.com>
 
-In the past %pK was preferable to %p as it would not leak raw pointer
-values into the kernel log.
-Since commit ad67b74d2469 ("printk: hash addresses printed with %p")
-the regular %p has been improved to avoid this issue.
-Furthermore, restricted pointers ("%pK") were never meant to be used
-through printk(). They can still unintentionally leak raw pointers or
-acquire sleeping locks in atomic contexts.
+On Fri, Jul 04, 2025 at 07:36:06PM +0200, Robert Marko wrote:
+> 
+> On Thu, Jul 3, 2025 at 3:56 PM Nicolas Ferre
+> <nicolas.ferre@microchip.com> wrote:
+> >
+> > Robert, Arnd,
+> >
+> > On 03/07/2025 at 14:25, Robert Marko wrote:
+> > > On Wed, Jul 2, 2025 at 9:57 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > >>
+> > >> On Wed, Jul 2, 2025, at 20:35, Robert Marko wrote:
+> > >>> Currently, Microchip SparX-5 SoC is supported and it has its own symbol.
+> > >>>
+> > >>> However, this means that new Microchip platforms that share drivers need
+> > >>> to constantly keep updating depends on various drivers.
+> > >>>
+> > >>> So, to try and reduce this lets add ARCH_MICROCHIP symbol that drivers
+> > >>> could instead depend on.
+> > >>
+> > >> Thanks for updating the series to my suggestion!
+> > >>
+> > >>> @@ -174,6 +160,27 @@ config ARCH_MESON
+> > >>>          This enables support for the arm64 based Amlogic SoCs
+> > >>>          such as the s905, S905X/D, S912, A113X/D or S905X/D2
+> > >>>
+> > >>> +menuconfig ARCH_MICROCHIP
+> > >>> +     bool "Microchip SoC support"
+> > >>> +
+> > >>> +if ARCH_MICROCHIP
+> > >>> +
+> > >>> +config ARCH_SPARX5
+> > >>> +     bool "Microchip Sparx5 SoC family"
+> > >>
+> > >> This part is the one bit I'm not sure about: The user-visible
+> > >> arm64 CONFIG_ARCH_* symbols are usually a little higher-level,
+> > >> so I don't think we want both ARCH_MICROCHIP /and/ ARCH_SPARX5
+> > >> here, or more generally speaking any of the nested ARCH_*
+> > >> symbols.
+> >
+> > Well, having a look at arch/arm64/Kconfig.platforms, I like how NXP is
+> > organized.
+> >
+> > SPARX5, LAN969x or other MPU platforms, even if they share some common
+> > IPs, are fairly different in terms of internal architecture or feature set.
+> > So, to me, different ARCH_SPARX5, ARCH_LAN969X (as Robert proposed) or
+> > future ones make a lot sense.
+> > It will help in selecting not only different device drivers but
+> > different PM architectures, cores or TrustZone implementation...
+> >
+> > >> This version of your patch is going to be slightly annoying
+> > >> to existing sparx5 users because updating an old .config
+> > >> breaks when ARCH_MICROCHIP is not enabled.
+> >
+> > Oh, yeah, indeed. Even if I find Robert's proposal ideal.
+> >
+> > Alexandre, Lars, can you evaluate this level of annoyance?
+> >
+> > >> The two options that I would prefer here are
+> > >>
+> > >> a) make ARCH_SPARX5 a hidden symbol in order to keep the
+> > >>     series bisectable, remove it entirely once all references
+> > >>     are moved over to ARCH_MICROCHIP
+> > >>
+> > >> b) Make ARCH_MICROCHIP a hidden symbol that is selected by
+> > >>     ARCH_SPARX5 but keep the menu unchanged.
+> > >
+> > > Hi Arnd,
+> > > Ok, I see the issue, and I would prefer to go with option b and do
+> > > what I did for
+> > > AT91 with the hidden ARCH_MICROCHIP symbol to avoid breaking current configs.
+> >
+> > Yep, but at the cost of multiple entries for Microchip arm64 SoCs at the
+> > "Platform selection" menu level. Nuvoton or Cavium have this already, so
+> > it's probably fine.
+> 
+> Yes, this is why I went with a menu instead, to me it is much cleaner.
+> 
+> So, how would you guys want me to proceed?
+> 
+> a) Keep the menu-based config symbol
+> or
+> b) Like for AT91, add a hidden symbol and keep the individual SoC-s in
+> the top level
+> platform menu?
+> 
+> Regards,
+> Robert
 
-Switch to the regular pointer formatting which is safer and
-easier to reason about.
-There are still a few users of %pK left, but these use it through seq_file,
-for which its usage is safe.
+Hi Robert,
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- drivers/spi/spi-loopback-test.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Sorry for the late reply.
 
-diff --git a/drivers/spi/spi-loopback-test.c b/drivers/spi/spi-loopback-test.c
-index 7dd92deffe3fb1c2254777ce332c2eb52554aecf..e0b131aa29b62e9661be01b551e1260a7b0bbdfa 100644
---- a/drivers/spi/spi-loopback-test.c
-+++ b/drivers/spi/spi-loopback-test.c
-@@ -446,7 +446,7 @@ static void spi_test_dump_message(struct spi_device *spi,
- 	int i;
- 	u8 b;
- 
--	dev_info(&spi->dev, "  spi_msg@%pK\n", msg);
-+	dev_info(&spi->dev, "  spi_msg@%p\n", msg);
- 	if (msg->status)
- 		dev_info(&spi->dev, "    status:        %i\n",
- 			 msg->status);
-@@ -456,15 +456,15 @@ static void spi_test_dump_message(struct spi_device *spi,
- 		 msg->actual_length);
- 
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
--		dev_info(&spi->dev, "    spi_transfer@%pK\n", xfer);
-+		dev_info(&spi->dev, "    spi_transfer@%p\n", xfer);
- 		dev_info(&spi->dev, "      len:    %i\n", xfer->len);
--		dev_info(&spi->dev, "      tx_buf: %pK\n", xfer->tx_buf);
-+		dev_info(&spi->dev, "      tx_buf: %p\n", xfer->tx_buf);
- 		if (dump_data && xfer->tx_buf)
- 			spi_test_print_hex_dump("          TX: ",
- 						xfer->tx_buf,
- 						xfer->len);
- 
--		dev_info(&spi->dev, "      rx_buf: %pK\n", xfer->rx_buf);
-+		dev_info(&spi->dev, "      rx_buf: %p\n", xfer->rx_buf);
- 		if (dump_data && xfer->rx_buf)
- 			spi_test_print_hex_dump("          RX: ",
- 						xfer->rx_buf,
-@@ -558,7 +558,7 @@ static int spi_check_rx_ranges(struct spi_device *spi,
- 		/* if still not found then something has modified too much */
- 		/* we could list the "closest" transfer here... */
- 		dev_err(&spi->dev,
--			"loopback strangeness - rx changed outside of allowed range at: %pK\n",
-+			"loopback strangeness - rx changed outside of allowed range at: %p\n",
- 			addr);
- 		/* do not return, only set ret,
- 		 * so that we list all addresses
-@@ -696,7 +696,7 @@ static int spi_test_translate(struct spi_device *spi,
- 	}
- 
- 	dev_err(&spi->dev,
--		"PointerRange [%pK:%pK[ not in range [%pK:%pK[ or [%pK:%pK[\n",
-+		"PointerRange [%p:%p[ not in range [%p:%p[ or [%p:%p[\n",
- 		*ptr, *ptr + len,
- 		RX(0), RX(SPI_TEST_MAX_SIZE),
- 		TX(0), TX(SPI_TEST_MAX_SIZE));
+I appreciate the effort to make the addition of future symbols easier by using
+a common ARCH_MICROCHIP symbol — that makes sense to me.
 
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250811-restricted-pointers-spi-393d0b85c76b
+Regarding the actual symbols, I’m certainly no expert, but I agree with
+Nicolas, that having more granular control with separate ARCH_SPARX5 and
+ARCH_LAN969X could make sense, as opposed to only having ARCH_MICROCHIP, as
+Arnd mentioned.
 
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+As for the goal of using a common symbol for drivers to depend on,  while not
+breaking existing configs (are there any unwritten rules or practices about
+breaking existing configs?), I think option B will work fine. I dont mind the
+symbols being top-level.
+
+/Daniel
+
 
 
