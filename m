@@ -1,131 +1,131 @@
-Return-Path: <linux-spi+bounces-9339-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9340-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7114B20A2B
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 15:28:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88C9B20AAA
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 15:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBB062A4BF3
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 13:28:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2953B2A5849
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 13:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3287E2DE71B;
-	Mon, 11 Aug 2025 13:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3099217A309;
+	Mon, 11 Aug 2025 13:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="d6lqIoz8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bYyqaWVZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DF92DE719;
-	Mon, 11 Aug 2025 13:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0D5192D8A;
+	Mon, 11 Aug 2025 13:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754918781; cv=none; b=VDVUylVxbWRIM6ubMWTQzKiGWCCI3rgmnyyKZB1gEjbctU7uZ6sq+udpK8rMPyH7rgKpOCH+ruMqBtOHNMdF32KMbAQNycIp8bDHQUB7DGjZW3CF+eHYJZPvUeFIgy5MB+vOLl7Cz1O+J+4Jx6JQsw0IHNfHFZ8D9U791EtSXcY=
+	t=1754920150; cv=none; b=POA0thuBm5Z40GzOdLO8vYxlGLuqr3PO2XxP64V6A1idzQi0aNaGApDLzyc/5syCM7jPjRVBoiD65Ts1IY5aG2HHVX+hqrfClTlC05oagh6Pf7sJ/kTWox13XcBcVttc7XBc6pUVlY3j4zrLYRWFVIAm4vy/Az7LK5Ao3CQ4EjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754918781; c=relaxed/simple;
-	bh=UvZzRLb2kJ4JP5rAze0Gg/5rYXZ7BfuPSOtgg7OUmPY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ruOUEjgQw+qddpEpOCEJnDEalIKGlyqn1wxdDjk5hPrC0wyIdDoFbOfaO7Z1cCdUvE6RogWY4NiBtYwMqaotAYusZE+kzJ++Pfj+VjLChAKcefAJoqwZon9VG4mFfzJjHZJaHiX0Rpc22eOOIHZlekiLiRByBva0pLEqPIAFA+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=d6lqIoz8; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57B9dCYg029237;
-	Mon, 11 Aug 2025 13:26:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	h+wDq+fb2WHbgGGhmjribLcUA1pN87HNFyWJvShYjzk=; b=d6lqIoz8BlpvXM/4
-	q0sdkyyKwbIf8Q0Y1jPSgLjRm6lUYkqJXm6koS1ucfAZQ78cSE4DZqEVhVRUD5W7
-	dPU1gEiIhIcdgXAU4JcP6zbuk+cccqy3POvc+G83659Yd3UfKwW+fPTT54nwHH9B
-	pC5wQzBw2sEiJJK+RaIlZaOMk+btiCT1RqNqgCx8lR+1rM2Hio2bYE1MyUgdrfre
-	syloybf1BncGnkjoo6Q+VocMw9W7pXxgx3DnlMIsQkU/GauEPWeUslmzYbqTBdYQ
-	gh7iH9DMelsjBFAKP6S9vqBtzA53E5wImQm+Sj+909dZokYlD901/6B0KMAa/Pvo
-	vkUH8Q==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48dygmch0q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Aug 2025 13:26:06 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57BDQ5GJ008167
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 11 Aug 2025 13:26:05 GMT
-Received: from [10.253.78.95] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Mon, 11 Aug
- 2025 06:26:01 -0700
-Message-ID: <bdc543d1-9851-4b04-a287-f7763aca7ace@quicinc.com>
-Date: Mon, 11 Aug 2025 21:25:59 +0800
+	s=arc-20240116; t=1754920150; c=relaxed/simple;
+	bh=hgje/5m7tCFZnecaHF4btLlr7z9uMoHAO2b2GE35ZTw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CGtA/cGVe6WA9wkd2E3ttA19Yjq1zk4uLYU5Yn7kkhp8cRWaMGIwcGpG1+4A191GarCSfKqb5mOSJ6EAPLfonChAaHdurneRwqCZdTIZr9qd6IywiBUQF0D+ulyky39pK0PStlJYVP6j8OIiYHgzy/BluIgDMP7zCU5aQsKr4BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bYyqaWVZ; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754920148; x=1786456148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hgje/5m7tCFZnecaHF4btLlr7z9uMoHAO2b2GE35ZTw=;
+  b=bYyqaWVZKyV08jqJAYcjFPBNxqQOj/uQCoLVUdq5HzuYxGVK3PPPQAK/
+   +0dqzm+hLg395ntQT3z/HS1uihTJjPZ8lQ84gNLK4W4+0fwonHEPos+LB
+   dnhkBM48UZDh2Z0rlFpFg/dVL1mE7R/jMJEosor+hpDUIUfB9gofp3tEX
+   WaPhqWovLNqPVIWauVr8fx0YcVKCfOPk6fmMZ06fIKeNkRCovpjuPKVnR
+   q3ojJkJd/eNCpl77CfKT2vSMXAoGaM1za5bXeEWefZZ5V/Ul11/P1umtJ
+   SOLNmPEZ2S1PusAKXS0+Nx7jpsiB/zrPRJvANN16kyoUm3NZi6MXC1O5n
+   Q==;
+X-CSE-ConnectionGUID: lUsJ8lIrTqWI1S4bijjspA==
+X-CSE-MsgGUID: X5BfU9VXQn+YWFw1OqZRwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="57314368"
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="57314368"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 06:49:08 -0700
+X-CSE-ConnectionGUID: CFAAlM5rSaC7yxk5Q2a6Ww==
+X-CSE-MsgGUID: 3PZEryUDQ560ZACN95uUng==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
+   d="scan'208";a="166226665"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa008.jf.intel.com with ESMTP; 11 Aug 2025 06:49:05 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id A112B94; Mon, 11 Aug 2025 15:49:04 +0200 (CEST)
+Date: Mon, 11 Aug 2025 15:49:04 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
+Cc: Haixu Cui <quic_haixcui@quicinc.com>, broonie@kernel.org,
+	virtio-dev@lists.oasis-open.org, viresh.kumar@linaro.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	hdanton@sina.com, qiang4.zhang@linux.intel.com,
+	alex.bennee@linaro.org, quic_ztu@quicinc.com
+Subject: Re: [RFC PATCH v4 2/3] virtio-spi: Add virtio-spi.h
+Message-ID: <aJn00MKH5lK6Zwsa@black.igk.intel.com>
+References: <20250401033621.1614194-1-quic_haixcui@quicinc.com>
+ <20250401033621.1614194-3-quic_haixcui@quicinc.com>
+ <f6f087f9-83c9-452e-9a0f-f8743b8c71c2@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v4 2/3] virtio-spi: Add virtio-spi.h
-To: Jyothi Kumar Seerapu <quic_jseerapu@quicinc.com>, <broonie@kernel.org>,
-        <virtio-dev@lists.oasis-open.org>, <viresh.kumar@linaro.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hdanton@sina.com>, <qiang4.zhang@linux.intel.com>,
-        <alex.bennee@linaro.org>
-CC: <quic_ztu@quicinc.com>
-References: <20250401033621.1614194-1-quic_haixcui@quicinc.com>
- <20250401033621.1614194-3-quic_haixcui@quicinc.com>
- <ff409d4e-9e1e-4649-8895-25d9ffc495d2@quicinc.com>
-Content-Language: en-US
-From: Haixu Cui <quic_haixcui@quicinc.com>
-In-Reply-To: <ff409d4e-9e1e-4649-8895-25d9ffc495d2@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA5MDAzNSBTYWx0ZWRfXxu6y1ShkpB5m
- kqGzOHJMwmeKLsSaGq2ACBWuPT1Mcuq1ZezRNpdKaJFm8eA/znQ2UrznX8XkOcsSyJnitZhbIQX
- fX0CFy2qL8PeccKQHaZ+UK0wCeDuEUqQtJiFkOtjCFzKD9R3AUajHhPj4zXLTo774WJ5Kp0oakQ
- 77eZr2AleNVPT60cIbmcgw6OigB4o7raVed4i+2N7cW+Zj0Y5eCVFZV+++qDvGMiO+0YUp7eEL2
- NA+liP7DfZXs/Ol4EBxDPgliiNK9AAbEwuq0pCaIv/4JUBif/GMGv+NYSI92TBXU48GiMkMBm2z
- 68L3EnaX9reiW57A9R0FWom/U/aJcffjh7m3U+oXr/6mh2Df30s23QkHUZg499N6wLA/3o8G5ka
- wK/c+FvR
-X-Authority-Analysis: v=2.4 cv=FvMF/3rq c=1 sm=1 tr=0 ts=6899ef6e cx=c_pps
- a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10
- a=yuDjC0XFS9RB4ZKM4EwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=ZXulRonScM0A:10
-X-Proofpoint-GUID: qyiT86Mau4oNk6_9M8QxXXnTHx7xb13O
-X-Proofpoint-ORIG-GUID: qyiT86Mau4oNk6_9M8QxXXnTHx7xb13O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-11_02,2025-08-11_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 bulkscore=0 suspectscore=0 phishscore=0
- clxscore=1011 impostorscore=0 spamscore=0 adultscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508090035
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6f087f9-83c9-452e-9a0f-f8743b8c71c2@quicinc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Joythi,
+On Tue, Apr 22, 2025 at 11:33:42AM +0530, Mukesh Kumar Savaliya wrote:
+> On 4/1/2025 9:06 AM, Haixu Cui wrote:
 
-     Thanks for your feedback, please refer to my below response.
-> Instead of adding "Note:", can we update it like this?
-> 
-> @max_word_delay_ns: Maximum word delay supported, in nanoseconds.
->      A value of 0 indicates that word delay is unsupported.
->      Each transfer may consist of a sequence of words.
-> 
-Yes, will update as you suggestion.
+[...]
 
->> + *
->> + * @tx_nbits: bus width for write transfer.
->> + *     0,1: bus width is 1, also known as SINGLE
-> Do you mean to say that a value of 0 defaults to SINGLE?> + *     2  : 
-> bus width is 2, also known as DUAL
-Yes, a value of 0 or 1 both indicate single-line transfer.
+> > +struct virtio_spi_config {
+> > +	/* # of /dev/spidev<bus_num>.CS with CS=0..chip_select_max_number -1 */
+> > +	__u8 cs_max_number;
+> > +	__u8 cs_change_supported;
+> > +#define VIRTIO_SPI_RX_TX_SUPPORT_DUAL (1 << 0)
+> > +#define VIRTIO_SPI_RX_TX_SUPPORT_QUAD (1 << 1)
+> > +#define VIRTIO_SPI_RX_TX_SUPPORT_OCTAL (1 << 2)
+> Can use BIT(x) ?
+
+No.
+
+> > +	__u8 tx_nbits_supported;
+> > +	__u8 rx_nbits_supported;
+> > +	__le32 bits_per_word_mask;
+> > +#define VIRTIO_SPI_MF_SUPPORT_CPHA_0 (1 << 0)
+> > +#define VIRTIO_SPI_MF_SUPPORT_CPHA_1 (1 << 1)
+> > +#define VIRTIO_SPI_MF_SUPPORT_CPOL_0 (1 << 2)
+> > +#define VIRTIO_SPI_MF_SUPPORT_CPOL_1 (1 << 3)
+> > +#define VIRTIO_SPI_MF_SUPPORT_CS_HIGH (1 << 4)
+> > +#define VIRTIO_SPI_MF_SUPPORT_LSB_FIRST (1 << 5)
+> > +#define VIRTIO_SPI_MF_SUPPORT_LOOPBACK (1 << 6)
+> All with BIT(x) ?
+
+No. There is no such macro in UAPI. There is another one available, though.
+Check the spi.h UAPI header for the details.
+
+> > +	__le32 mode_func_supported;
+> > +	__le32 max_freq_hz;
+> > +	__le32 max_word_delay_ns;
+> > +	__le32 max_cs_setup_ns;
+> > +	__le32 max_cs_hold_ns;
+> > +	__le32 max_cs_inactive_ns;
+> > +};
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Regards
-Haixu Cui
 
