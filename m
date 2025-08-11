@@ -1,331 +1,140 @@
-Return-Path: <linux-spi+bounces-9343-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9344-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEB1B20B78
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 16:15:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E116B21102
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 18:09:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01E9519014B3
-	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 14:14:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B80956880B8
+	for <lists+linux-spi@lfdr.de>; Mon, 11 Aug 2025 16:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217B9211A19;
-	Mon, 11 Aug 2025 14:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C0A311C1D;
+	Mon, 11 Aug 2025 15:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QNe8zycw"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="SVesFYn8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273BD1DC9B8;
-	Mon, 11 Aug 2025 14:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1BC311C06;
+	Mon, 11 Aug 2025 15:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754921547; cv=none; b=uF9M0tg7OQ3t1b8FX5JIN9h0Das64OiZrilWtthiizLBhjflsYlIBBJlrVB9Eyfuj4Z50t/FLiX3oVUm6BHpMLiF5vZdwteDqGg/XT7T3O0YJle6sRH0pa8hxq6zu4INgRXFlbKbx1O0wE57Y6TnquKxGL8Na5jdO1I2TuT2YTM=
+	t=1754927360; cv=none; b=u3/+DP/hiosuNGAECRPUl10E9t4ZC3/XfLVOlZSOpnrxkNhlCtGS5bE5PDqU/l77IFZ8K9XqqmIvaQUFmTYMqE0f2xwof1CpKgki8uNlk6nMgEZLHJXZ7iDYSDSlVbpSteH5nM1ZwQR5LuUbXPhnsMmWuatiLnQr3+wlnMI614M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754921547; c=relaxed/simple;
-	bh=ebmSgAS2CMFkto6/WZb72Q3to9S6Hc9yLPFeDAuubdg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lUfIMnUiPGAPyeUr2pEndxokHuYYxXC93EUDF+G6bYI1CyCM/s83WISp8Uf6zd2rigJNU027YRXYknhU6iGAB+oIeYJ+aVcqRKOFDggQ0ymeMRDkufHOmjww8dzKTrBBMgzyZle1Gn+Y7uBBj0oVljeQm3xSbrmy2K09jRwiXRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QNe8zycw; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754921544; x=1786457544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ebmSgAS2CMFkto6/WZb72Q3to9S6Hc9yLPFeDAuubdg=;
-  b=QNe8zycwsx2QqSX3w/lMalB0M/jr7C7Y5XO/c6tJtFWYO6hwCQXqWrTF
-   u7Hh4X5aIj/2or/TATFuaJjbaN94XTBTGwwapMIP29AkVeN/5z64I7mcr
-   LVeehxenzGRMEuZ8G1c1IK7qZvZWMuQGIagUY52hwiMGaQbWrPH8+6krZ
-   sUB4HMqYQQhiah2/YOJXkyWqU5Pp7gCwiphVQdYXB0azKSEmA0d+FEN1X
-   BzMook/lLg/xmDNDVTDk84zw4o3NHRo0K7ij643Ygg/KLV5yxgAX1PfWk
-   3sQcyIL67empXBCC5FJwweqzR9SgzKGzE8ciMlN+0jgGXD9vrwoGUnqnJ
-   g==;
-X-CSE-ConnectionGUID: LFiIa9hrSZK7NDW3weqUmw==
-X-CSE-MsgGUID: glPXBE+XTc673O8dmJ5lzg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11518"; a="82615180"
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="82615180"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2025 07:12:23 -0700
-X-CSE-ConnectionGUID: PnGsZ9HfQumUGlGt6UUeGQ==
-X-CSE-MsgGUID: txZKqF/USt+SXVZlH0gemQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,278,1747724400"; 
-   d="scan'208";a="166723733"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa010.fm.intel.com with ESMTP; 11 Aug 2025 07:12:21 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id F3F5B94; Mon, 11 Aug 2025 16:12:19 +0200 (CEST)
-Date: Mon, 11 Aug 2025 16:12:19 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Haixu Cui <quic_haixcui@quicinc.com>
-Cc: broonie@kernel.org, virtio-dev@lists.oasis-open.org,
-	viresh.kumar@linaro.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, hdanton@sina.com,
-	qiang4.zhang@linux.intel.com, alex.bennee@linaro.org,
-	quic_ztu@quicinc.com
-Subject: Re: [RFC PATCH v4 3/3] SPI: Add virtio SPI driver
-Message-ID: <aJn6Q3oPX3RyG22L@black.igk.intel.com>
-References: <20250401033621.1614194-1-quic_haixcui@quicinc.com>
- <20250401033621.1614194-4-quic_haixcui@quicinc.com>
+	s=arc-20240116; t=1754927360; c=relaxed/simple;
+	bh=b2kYo1EDxEkl6j6tNEeusmiKPGIkRrLEur5k1wnnDjM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DbhJL+4Cp4mzgsv6w6lMWE2gdcedQSlt4GNXZQ+4Bhkc2MR0Kb6DNib6joc7ABNg2cZwvLusSeGXX9GjtklUk8nKk3fCaKDkl28prEXzGrVDGyQYDpJFRIt3+mSHq7jP2IqdpmZmp7B9kUD/dGLIlk3zRIS5/zHEfB8cCbkZhbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=SVesFYn8; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1754927356; x=1755532156; i=wahrenst@gmx.net;
+	bh=TliC346bEtsVznkVc/bVtsemg2ANcD0k0xZ+VVsQ/aU=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=SVesFYn8qih7gU0JIM3NZqYNglXwjCYY0fU/u4OQVi3ZPU/IyyNnP/T+Pi7+iKS9
+	 UsVikuDmTN2F8qKuG+Y7kasdaEQ9j6Af9Ypjngw+p9OeZ91hofWps2rZ5eGxZHedz
+	 eKL6AM0AK/I+f85rO2PIAQG9A80+HishlVGCOC7fx9eRypcIPtQHj51gVDf6A7Ip2
+	 wG822gWhWLdZCX3nGuuKnFGwoQtb1C7bEujrxs1oOl0f5Mjg+nxnd8EuejXDrnaHF
+	 fBv2dCnVsiOM17Ruu7nvSZufB5kOFK6+zusXxikp+D+Z3K8cWcQfL/p564XXO5QUk
+	 JeS66UNd+wbeKW+u9w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([79.235.128.112]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXGvG-1v5wcU1mFa-00JUQY; Mon, 11
+ Aug 2025 17:49:16 +0200
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: linux-spi@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH 0/3 net] microchip: lan865x: Fix probing issues
+Date: Mon, 11 Aug 2025 17:48:55 +0200
+Message-Id: <20250811154858.8207-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250401033621.1614194-4-quic_haixcui@quicinc.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-
-On Tue, Apr 01, 2025 at 11:36:21AM +0800, Haixu Cui wrote:
-
-...
-
-> +VIRTIO SPI DRIVER
-> +M:	Haixu Cui <quic_haixcui@quicinc.com>
-> +S:	Maintained
-> +F:	drivers/spi/spi-virtio.c
-> +F:	include/uapi/linux/virtio_spi.h
-
-This should have been started by the very first patch that brings a new file
-into the kernel. Here I would expect only one line (file) being added. Have you
-run checkpatch?
-
-...
-
-> +#include <linux/completion.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-
-> +#include <linux/kernel.h>
-
-Please, no. Try to follow IWYU principle.
-
-> +#include <linux/module.h>
-
-> +#include <linux/of.h>
-
-Why? AFAIK we may avoid this in the new code. If even needed, there are device
-property APIs and software nodes. But I believe the inclusions in this driver is
-just a cargo cult, as I said follow Include What You Use principle.
-
-> +#include <linux/spi/spi.h>
-> +#include <linux/stddef.h>
-> +#include <linux/virtio.h>
-> +#include <linux/virtio_ring.h>
-> +#include <linux/virtio_spi.h>
-
-...
-
-> +struct virtio_spi_req {
-> +	struct completion completion;
-> +	struct spi_transfer_head transfer_head	____cacheline_aligned;
-> +	const uint8_t *tx_buf			____cacheline_aligned;
-
-Why ____cacheline_aligned for the *pointer*?
-
-> +	uint8_t *rx_buf				____cacheline_aligned;
-
-Ditto.
-
-> +	struct spi_transfer_result result	____cacheline_aligned;
-> +};
-
-...
-
-> +	if (cs_word_delay_spi > cs_word_delay_xfer)
-> +		th->word_delay_ns = cpu_to_le32((u32)cs_word_delay_spi);
-> +	else
-> +		th->word_delay_ns = cpu_to_le32((u32)cs_word_delay_xfer);
-
-Why explicit casting? What is the purpose? Same for other cases.
-
-...
-
-> +	BUILD_BUG_ON(VIRTIO_SPI_CPHA != SPI_CPHA);
-> +	BUILD_BUG_ON(VIRTIO_SPI_CPOL != SPI_CPOL);
-> +	BUILD_BUG_ON(VIRTIO_SPI_CS_HIGH != SPI_CS_HIGH);
-> +	BUILD_BUG_ON(VIRTIO_SPI_MODE_LSB_FIRST != SPI_LSB_FIRST);
-
-Make this to be static_assert():s as they give better error message.
-
-...
-
-> +	th->mode = cpu_to_le32(spi->mode & (SPI_LSB_FIRST | SPI_CS_HIGH |
-> +					    SPI_CPOL | SPI_CPHA));
-
-We have _MODE_MASK, use it.
-
-...
-
-> +	if ((spi->mode & SPI_LOOP) != 0)
-
-' != 0' is redundant.
-
-> +		th->mode |= cpu_to_le32(VIRTIO_SPI_MODE_LOOP);
-
-...
-
-> +	/* Read result from message and translate return code */
-> +	switch (priv->spi_req.result.result) {
-> +	case VIRTIO_SPI_TRANS_OK:
-> +		/* ret is 0 */
-
-Why comment? Make it to be a code statement which also makes code robust to
-subtle changes.
-
-> +		break;
-> +	case VIRTIO_SPI_PARAM_ERR:
-> +		ret = -EINVAL;
-> +		break;
-> +	case VIRTIO_SPI_TRANS_ERR:
-> +		ret = -EIO;
-> +		break;
-> +	default: /* Protocol violation */
-> +		ret = -EIO;
-> +		break;
-> +	}
-
-...
-
-> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_CPHA_1) != 0)
-> +		ctrl->mode_bits |= VIRTIO_SPI_CPHA;
-> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_CPOL_1) != 0)
-> +		ctrl->mode_bits |= VIRTIO_SPI_CPOL;
-> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_LSB_FIRST) != 0)
-> +		ctrl->mode_bits |= SPI_LSB_FIRST;
-> +	if ((priv->mode_func_supported & VIRTIO_SPI_MF_SUPPORT_LOOPBACK) != 0)
-> +		ctrl->mode_bits |= SPI_LOOP;
-
-> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_DUAL) != 0)
-> +		ctrl->mode_bits |= SPI_TX_DUAL;
-> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_QUAD) != 0)
-> +		ctrl->mode_bits |= SPI_TX_QUAD;
-> +	if ((tx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_OCTAL) != 0)
-> +		ctrl->mode_bits |= SPI_TX_OCTAL;
-
-> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_DUAL) != 0)
-> +		ctrl->mode_bits |= SPI_RX_DUAL;
-> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_QUAD) != 0)
-> +		ctrl->mode_bits |= SPI_RX_QUAD;
-> +	if ((rx_nbits_supported & VIRTIO_SPI_RX_TX_SUPPORT_OCTAL) != 0)
-> +		ctrl->mode_bits |= SPI_RX_OCTAL;
-
-' != 0' is redundant in all of the above.
-
-...
-
-> +static int virtio_spi_find_vqs(struct virtio_spi_priv *priv)
-> +{
-> +	struct virtqueue *vq;
-> +
-> +	vq = virtio_find_single_vq(priv->vdev, virtio_spi_msg_done, "spi-rq");
-> +	if (IS_ERR(vq))
-> +		return (int)PTR_ERR(vq);
-
-Why casting?
-
-> +	priv->vq = vq;
-> +	return 0;
-> +}
-
-...
-
-> +	ctrl->dev.of_node = vdev->dev.of_node;
-> +
-> +	/*
-> +	 * Setup ACPI node for controlled devices which will be probed through
-> +	 * ACPI.
-> +	 */
-> +	ACPI_COMPANION_SET(&vdev->dev, ACPI_COMPANION(vdev->dev.parent));
-
-	device_set_node();
-
-(it might require to use dev_fwnode() from property.h)
-
-...
-
-> +	err = device_property_read_u32(&ctrl->dev, "spi,bus-num", &bus_num);
-
-Despite above, use &vdev->dev to read properties as this makes code clearer in
-aspect of the device that provides the properties to begin with.
-
-> +	if (!err && bus_num <= S16_MAX)
-> +		ctrl->bus_num = (s16)bus_num;
-
-Why casting?
-
-> +	else
-> +		ctrl->bus_num = -1;
-
-...
-
-> +static void virtio_spi_remove(struct virtio_device *vdev)
-> +{
-> +	struct spi_controller *ctrl = dev_get_drvdata(&vdev->dev);
-> +
-> +	/* Order: 1.) unregister controller, 2.) remove virtqueue */
-> +	spi_unregister_controller(ctrl);
-> +	virtio_spi_del_vq(vdev);
-
-Wrap this to devm and drop the remove() completely.
-
-> +}
-
-...
-
-> +static struct virtio_device_id virtio_spi_id_table[] = {
-> +	{ VIRTIO_ID_SPI, VIRTIO_DEV_ANY_ID },
-> +	{ 0 },
-
-Remove trailing comma (it's a terminator) and also unneeded 0.
-
-> +};
-> +
-> +static struct virtio_driver virtio_spi_driver = {
-
-> +	.driver.name = KBUILD_MODNAME,
-
-Use standard pattern
-
-	.driver = {
-		.name = ...
-	},
-
-> +	.driver.owner = THIS_MODULE,
-
-This field is set by module_virtio_driver(), isn't it?
-
-> +	.id_table = virtio_spi_id_table,
-> +	.probe = virtio_spi_probe,
-> +	.remove = virtio_spi_remove,
-
-> +	.freeze = pm_sleep_ptr(virtio_spi_freeze),
-> +	.restore = pm_sleep_ptr(virtio_spi_restore),
-
-Why are these not a dev_pm_ops?
-
-> +};
-
-> +
-
-Redundant blank line, remove.
-
-> +module_virtio_driver(virtio_spi_driver);
-
-> +MODULE_DEVICE_TABLE(virtio, virtio_spi_id_table);
-
-Move this up to follow up the ID table initializer.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6XIRmJveBcDwKnHVlI4WQyEczMflwLRvRD66rR47RHF097972vi
+ pbGmlgtMD57lUpqeMnqINVBovt+TDsRhHhUMYtf+MYHl2x3En7fQckNb0AuXJEgvns+jFHt
+ jxfg0GmAD8qbzfjNrAAax+AkwAA+/aDPhpoJJu6TpN/b0f+9T7HUKiIidui9Kx05z11vCRa
+ h4OwluKJcQdt89AKCBr/Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:lW54q/8zH4o=;o+OmXN5IxnGUBnqkPzioLC3KBNF
+ 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
+
+Recently I setup a customer i.MX93 board which contains a LAN8651 chip.
+During this process I discovered some probing related issues.
+
+Stefan Wahren (3):
+  net: ethernet: oa_tc6: Handle failure of spi_setup
+  microchip: lan865x: fix module autoloading
+  microchip: lan865x: Fix LAN8651 autoloading
+
+ drivers/net/ethernet/microchip/lan865x/lan865x.c | 6 ++++--
+ drivers/net/ethernet/oa_tc6.c                    | 3 ++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+=2D-=20
+2.34.1
 
 
