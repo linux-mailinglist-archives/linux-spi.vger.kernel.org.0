@@ -1,57 +1,55 @@
-Return-Path: <linux-spi+bounces-9370-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9371-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40F61B22560
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Aug 2025 13:09:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE0C2B22562
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Aug 2025 13:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D4C81B66D54
-	for <lists+linux-spi@lfdr.de>; Tue, 12 Aug 2025 11:08:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A96541B61ABB
+	for <lists+linux-spi@lfdr.de>; Tue, 12 Aug 2025 11:08:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50CB22F0C7B;
-	Tue, 12 Aug 2025 11:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16E652ED174;
+	Tue, 12 Aug 2025 11:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlAWtlfE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oG7eSuT4"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EFF2F0C78;
-	Tue, 12 Aug 2025 11:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F4E2F1FC7;
+	Tue, 12 Aug 2025 11:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754996755; cv=none; b=CXqrrdt4wtYBtJd5Fq0FAUY7LZ8I2xX7Q3SI48HYsP6JRECQVtLOzsODhvURJNgAWuT/ir5+pckp5mhDlM0B3XqOz05V9LSYsq8alzUisbOxWYf2EBvzshNICi8l1dxHmLDRR+nlWYU3tnzo1qCP4r+k2zN4OMV5kyNKqP/Lapc=
+	t=1754996756; cv=none; b=G4UPlBhw8qtl2DSks+D7Fa6eNVmJQp2G61H54hg4swF/46KTG+oKtHEiVWd6o/7cny07Ok80RpYVviRX6lpAPGM+kSNHOhAf+emF8od8nY4PL07otEzp/nyVlOkfvZzWnj7HPl/VrREeIQ+IUz5Dzwqcz74yi9Lri3ygUbIpje4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754996755; c=relaxed/simple;
-	bh=icvcw5cv/S5/az+HE51QdY3T0VQNqa7tt7aAOoOvsE4=;
+	s=arc-20240116; t=1754996756; c=relaxed/simple;
+	bh=IiX5eEon6+kqFcZZVEkYN3deUOeo0W+mmdMD6i1pE2c=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ni3pu8PYKaPZd7l3rmn8Cy2/KjIJqUfxRQaawKYtUN9LLxBJDJ2wxaDtxEY4bORPlAo1/NgU6DqAbeCpummgAnY91Yj8JeTH3jPOOoS05HMVubv2gYvlAOaTv0kmJmfSnsLNZtqZJAuxkB61Oyzi2EEQgxOk5fOlWV3S5B6oQwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlAWtlfE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BAE2C4CEF7;
-	Tue, 12 Aug 2025 11:05:53 +0000 (UTC)
+	 MIME-Version:Content-Type; b=QaNJifCdz2efIMB7H7hp4kY0f7I+zqhM/3ZWZSD6iGidwWRChzgvgKjbDiGw8ztovP9H35lZOIUCOUKETd/LvAR+ik5dj1+c8kTRU8e13u0wIaV4R9BOrJ4yVCwTR7gZoH9NQgluNAgWnT8YTm/VVOXFbTlF7g4VSZQaQvH0IpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oG7eSuT4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22470C4CEF0;
+	Tue, 12 Aug 2025 11:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754996754;
-	bh=icvcw5cv/S5/az+HE51QdY3T0VQNqa7tt7aAOoOvsE4=;
+	s=k20201202; t=1754996755;
+	bh=IiX5eEon6+kqFcZZVEkYN3deUOeo0W+mmdMD6i1pE2c=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=YlAWtlfEslP2PGZn6APs4vKN9yEYWT/W2YvMcySyEYzTwOiNH8S+PpUgxShzxPRpN
-	 reSn6km4vm2RhWgDzbE223EQiPNnqwUYx5hR5eW1Z3GpenjWQ7ID8ggjDuUXBE04rr
-	 a6WU1ZBMC/mVoC6jXet9NXJlQF6KuHGo1sq3LjPtz4ma3qci4+Ti9Yl0Jyia8k3El+
-	 7rVCIieUDHYSpUoabO2vpumg0nVZlQ4Q+rzGzj4Rp40+ZCNaQTrFCgV86AbyI+Btg7
-	 B9ePf5t54RWPQhIknY4/nSi0cy1NrPfGOCj52Igd68ZrKutjkI8qFLd/OkPvsUpoLq
-	 BLSs18olNmdjw==
+	b=oG7eSuT4yXo2oDDG4fCTUJqUppEymAAspevaUnVZHEVzYZvc1NNkzwx1LMzIHeTQi
+	 4vDnfZ+1b1CbL0gSA2qqhw2ypJtogpDZXSsN91d9OOtIXkGW5M1R0Zn0Q40NfIKSoM
+	 eov1jJONLvkDDe2z24uVY+EcJHWFqiByRd5x8Yt4BigIkf1amS7xrSb8KO17rzUt6m
+	 nVU17SxKCSTCE/1xElVKJkfsdx8STw5V++6JsvRrReZkg8ubfidEbB86sY2B/XV4jc
+	 6RNygyngEByP3U7hHTH+MLVHqQ+sPj6GUcWbhO4seCuKB6EZHac3KmLIBqaWnq8ZKv
+	 z16OqNnoW+xMw==
 From: Mark Brown <broonie@kernel.org>
-To: Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>, 
- Yogesh Gaur <yogeshgaur.83@gmail.com>, Waqar Hameed <waqar.hameed@axis.com>
-Cc: kernel@axis.com, linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <pndqzxqkt8u.a.out@axis.com>
-References: <pndqzxqkt8u.a.out@axis.com>
-Subject: Re: [PATCH v2] spi: nxp-fspi: Remove error print for
- devm_add_action_or_reset()
-Message-Id: <175499675297.16293.7078791692637397052.b4-ty@kernel.org>
-Date: Tue, 12 Aug 2025 12:05:52 +0100
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250808-qpic-snand-double-assign-fix-v2-1-1a3d0ed0d404@gmail.com>
+References: <20250808-qpic-snand-double-assign-fix-v2-1-1a3d0ed0d404@gmail.com>
+Subject: Re: [PATCH v2] spi: spi-qpic-snand: avoid double assignment in
+ qcom_spi_probe()
+Message-Id: <175499675487.16293.7425649112451486885.b4-ty@kernel.org>
+Date: Tue, 12 Aug 2025 12:05:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,12 +60,12 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-cff91
 
-On Tue, 05 Aug 2025 11:33:37 +0200, Waqar Hameed wrote:
-> When `devm_add_action_or_reset()` fails, it is due to a failed memory
-> allocation and will thus return `-ENOMEM`. `dev_err_probe()` doesn't do
-> anything when error is `-ENOMEM`. Therefore, remove the useless call to
-> `dev_err_probe()` when `devm_add_action_or_reset()` fails, and just
-> return the value instead.
+On Fri, 08 Aug 2025 15:15:32 +0200, Gabor Juhos wrote:
+> The snandc->dev pointer is being assigned twice in the qcom_spi_probe()
+> function. Remove the second assignment as that uses the same pointer
+> value than the first one.
+> 
+> No functional changes.
 > 
 > 
 > [...]
@@ -78,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: nxp-fspi: Remove error print for devm_add_action_or_reset()
-      commit: 692abf80ce8443a4ded8cade25a1acf772436293
+[1/1] spi: spi-qpic-snand: avoid double assignment in qcom_spi_probe()
+      commit: a1d0b0ae65ae3f32597edfbb547f16c75601cd87
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
