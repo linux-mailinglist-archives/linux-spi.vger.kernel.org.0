@@ -1,164 +1,154 @@
-Return-Path: <linux-spi+bounces-9387-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9388-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F2CFB24FD4
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 18:33:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F30BEB25257
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 19:48:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758D05C390F
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 16:21:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4419F585761
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 17:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1E7288C3C;
-	Wed, 13 Aug 2025 16:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 777521EDA2A;
+	Wed, 13 Aug 2025 17:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0S2YRBz"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="aq7MQAhy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5045C288C34;
-	Wed, 13 Aug 2025 16:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C0C1C84DC
+	for <linux-spi@vger.kernel.org>; Wed, 13 Aug 2025 17:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755101980; cv=none; b=rI97LJ8FVIVBZSZuL/oTBHgfi7Uoh4PJgR0FDJcnZ+OXHvlte7wZZ0rmSK7koYesvmqXQYf1kedvIIGyASkY0KlbzYv2nOs2hj0BlGXq3g8UIvlZJMs9RdnoNYTBD4MMt9SJBeo3TcsuFhP2mB/pMJGjVcG8U5G3ivnKRceNPug=
+	t=1755107254; cv=none; b=ruFArIqhE8UtLtCCRMmYTjCO2tQVfQg6kzlfLiF+QrDCX29f75e3cSlT0vfsLl2Mkfvb3ckhVLw/QHnoQftwo4EuijEODsgUgX1UeVmGL32VHCSzxBCoSyTSdDsppuQodFqf2QY7bQv8qHGRontsXtww1j/nvtN+bRVzdsqoGR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755101980; c=relaxed/simple;
-	bh=zktYY27yEtPifC5oo8BefdXqq2I5u3RdgBI9sbeT2qI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ut8BC6OE+argAHrX2LEvcPCyDe4qkd/FhVJ0XHR2Vmgv3TPfgvVdf4N1D40CIxOZuFrTlj5pdSLiVNNq77nz2Grpg0sKk/tRyCz4LTwpkHO5iko50TS8PiY36eao89XW00qeP4BJToa0GpzD7ZxSULZ5zdySLSgvmLUUY/75oDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0S2YRBz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3822BC4CEEB;
-	Wed, 13 Aug 2025 16:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755101978;
-	bh=zktYY27yEtPifC5oo8BefdXqq2I5u3RdgBI9sbeT2qI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y0S2YRBzfti9YauFJtc0246BQaU8Vz4CII8FiOkOv1smqtWTMZvDlNtwRLlpz6Z2i
-	 lMSMvi5S/qe+VDAdrCLvRj81AE7F4qPPQ9DP5DmSKUWv4yPlmvnsWgt76mVofMB/FN
-	 86tSaObspWlM0FZ2jFZegEzS+8e0uPn151PUrl24VNgYDCqKFzYOZ+rco7qP8j/1y7
-	 d1qUhzP74UlJfN8lrP3o465itcMvtYOMAdjhkrDApbtaUAPXhIzR7z4+aqhM3g9b8x
-	 Pw0vwX6LObtKhrGCN1ieH7uB16pru91AcfI5uCRkcJ1E7OQHmfi21dWdjaWgAN/BHz
-	 4y7tyUcz7JeDg==
-Message-ID: <017a4d15-286d-4e0a-89ff-f658009a6de6@kernel.org>
-Date: Wed, 13 Aug 2025 18:19:34 +0200
+	s=arc-20240116; t=1755107254; c=relaxed/simple;
+	bh=uW7fKb8DACG3fG/pvNEYkjNw8PF/bwmqPTIzgomZ1Ro=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ElHlvGuZCP0aXEynIQj8H52i6IQLzftqZ187tvtvxFZ4qtbKI+h/3fOCQcTkNDrVP4FLGm91QdUsvhaF9xD/g6REYo9sPaczImAc86JyZgelWFbDCS+O0Hf4DpySlUQGMstfuEY+Mt8la2A1nwc0Ddj2hrGWrGyNdxvGto/Vy2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=aq7MQAhy; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7e8704b7a3dso7878085a.1
+        for <linux-spi@vger.kernel.org>; Wed, 13 Aug 2025 10:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1755107251; x=1755712051; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBsfJFWg1o3SQZ+JkXCo0QRsi2YIFRfM5g31219RL4A=;
+        b=aq7MQAhyDL4BdBpOk11DfL73d70i++ZqQTI5l7kOrPCgVCdleRIqPLqXPO4lR0lrch
+         dBzBFQ6/BTCjTRvPFFTPvCLKfg2hLtaHNnZR9tCtw8mfaTRydkfwJ3Eu1i4NBi0i7NSL
+         unT9TbNDWqEQMwQL2vI8DOnB6dzpgqwJLGCLz/BiL3SlmStBBdQNA3s7B595yGhZEuon
+         2/FXSsWqQre2RGS1xfzpElc0N4L5ion9vubzzAEd9bHhylBKDFO7/7+J8+SoX0IA/wN+
+         cHqw7o9nbcQ1bHrWGpr8gHhLcNkC3fUDAxsiIjLtqIIGlIyJWGpfSfGzCFpIIlmjBEyr
+         T3DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755107251; x=1755712051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SBsfJFWg1o3SQZ+JkXCo0QRsi2YIFRfM5g31219RL4A=;
+        b=X1ku1lYhU6TPc60PiKSSSzRVgKqc1sCNNESYfRQrGhE4AniSPsGkLBczGKz4vW47gU
+         umFwirF7/cqdWYQ9VY/aoYnUvYJWp2Y4sWv7XrhEPlvZ3CFEMYbcEAIddHEMZYM/EmiH
+         bm5wqHMYBFOP4XKVh/2VN3WH9weQi14851H5nza+09SFbzt+Bqf574h8yGo28mDxKDkA
+         QqBb3rsI+zJB+fFGd/le2BhDNdYPOqHuRI1Z3gofGI/S3d77/oGVX0DOS9EbvrssPHcL
+         zHV9df3AuRwXi6pmDlRctzUhLaawzAjUcQNcjxd7H9J8jA1VvOJNgLNp4NLrlJ25mpbz
+         R5iA==
+X-Forwarded-Encrypted: i=1; AJvYcCX/I74GQgt/9oafLwm83Oz3phyi/b7cUYP6p+ulkXh8N3z0e/J77BGbp4VWB4zQsFard0pbQXAT8JQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4lRcoDMwWIuG+j88L50tbrF7fjaO9KRlsNkrxyH07cEjB/ha3
+	3rn97XnlAJWJ/Hdba8htfNxA3SHzO2ACzxn+P75YiX9bqfd2MNYhCQVvkIQF694cjps=
+X-Gm-Gg: ASbGnctiy2HmNvKLO2ikV697Euqhv7vi16h/YklIXgAchQc1e9bGuadzd+q8xhdGaQR
+	1JZEKfyT+fKNIjhfS9VBPf8+ax6qQ1LYZ6YQYjPH8bLwz0c/Ljv9CMZQOdnQq2Vq3NBqzemZ1GC
+	5Hq5fCvDc6e1ylNV2FEJd9hncL+iabWjWDSMPhoSBIJlhrwo+rnV4iC8bbT0Wp15qzbxoXZK5Od
+	ThprdKbEjZTNEj/iVdasZWEQ2hFpR8XCTYIH7fvOHrK3Cv6kVSEpI0Pu9v5sWWCBFrMX1VQTP5r
+	E6tXect2w+HAPWW16AKFUr7R2OFHhUw89pyEcYyQTBadGuHdxBOFqbLL/cYmxOvmbDJiVj3FO0L
+	a6pwOh3315NP53zCqwV6LNAOX0ty38AEjMnq0qOsUPA==
+X-Google-Smtp-Source: AGHT+IEB/95DXkKwomIf9ip6/yfm146L3qIifjKU7bl9DaOBgZQZz5rMpVm/bhHv87pLjMhka3uuqw==
+X-Received: by 2002:a05:620a:a102:b0:7e8:434f:ffa7 with SMTP id af79cd13be357-7e8704761a0mr24882585a.52.1755107251577;
+        Wed, 13 Aug 2025 10:47:31 -0700 (PDT)
+Received: from fedora (d-zg2-251.globalnet.hr. [213.149.37.251])
+        by smtp.googlemail.com with ESMTPSA id af79cd13be357-7e7fa87e7d0sm1627122385a.82.2025.08.13.10.47.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 10:47:31 -0700 (PDT)
+From: Robert Marko <robert.marko@sartura.hr>
+To: linux@armlinux.org.uk,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	olivia@selenic.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	broonie@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	arnd@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	o.rempel@pengutronix.de,
+	daniel.machon@microchip.com
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v9 0/9] arm64: lan969x: Add support for Microchip LAN969x SoC
+Date: Wed, 13 Aug 2025 19:44:36 +0200
+Message-ID: <20250813174720.540015-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] spi: dt-bindings: add doc for Amlogic A113L2 SFC
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>,
- Feng Chen <feng.chen@amlogic.com>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-amlogic@lists.infradead.org
-References: <20250808-spifc-v1-0-ff4e30e26a6b@amlogic.com>
- <20250808-spifc-v1-1-ff4e30e26a6b@amlogic.com>
- <20250808-adamant-fat-raven-38c8b3@kuoka>
- <7fab19de-8ed1-4fe5-b2a4-a7e9c13d8424@amlogic.com>
- <5cc336bc-f071-41d2-b59a-af0df23af00b@kernel.org>
- <d872a711-7442-4e2e-bc59-0d6f4f656fde@amlogic.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <d872a711-7442-4e2e-bc59-0d6f4f656fde@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 13/08/2025 11:34, Xianwei Zhao wrote:
-> Hi Krzysztof,
->     Thanks  for your reply.
-> 
-> On 2025/8/13 15:36, Krzysztof Kozlowski wrote:
->> [ EXTERNAL EMAIL ]
->>
->> On 13/08/2025 08:13, Xianwei Zhao wrote:
->>>>> +allOf:
->>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    const: amlogic,a4-spifc
->>>>> +
->>>>> +  reg:
->>>>> +    items:
->>>>> +      - description: core registers
->>>>> +      - description: parent clk control registers
->>>>
->>>> Why are you poking to parent node or to clock registers? This looks like
->>>> mixing up device address spaces.
->>>>
->>>
->>> The SPIFC bus clock multiplexes EMMC modules, so the corresponding
->>> frequency division register is also in EMMC module. The SPIFC and the
->>> EMMC modules cannot be used simultaneously.
->>
->> Then obviously you cannot put here EMMC or parent registers.
->>
->> It looks really like you miss proper hardware representation.
->>
-> 
-> It does seem a bit unusual. However, in our hardware design, EMMC and 
-> SFC modules are integrated, and they share common resources such as the 
-> clock and I/O pins .They are mutually exclusive.
-> 
+This patch series adds basic support for Microchip LAN969x SoC.
 
-How did you express it in DT? This looks similar to serial engines and
-such are not implemented independently.
+It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
+which allows to avoid the need to change dependencies of the drivers that
+are shared for Microchip SoC-s in the future.
 
-> Here, I'll modify the register description. Do you think it's feasible
+DTS and further driver will be added in follow-up series.
 
-No, because it changes nothing... Clock provider pokes clock divider
-registers. Not clock consumer.
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v9:
+* Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 and LAN969x
+directly, this avoids breaking existing configs with ARCH_SPARX5
 
-Best regards,
-Krzysztof
+Changes in v8:
+* Move to using ARCH_MICROCHIP as suggested by Arnd
+* Dropped any review tags due to changes
+
+Robert Marko (9):
+  arm64: Add config for Microchip SoC platforms
+  ARM: at91: select ARCH_MICROCHIP
+  arm64: lan969x: Add support for Microchip LAN969x SoC
+  mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+  tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+  spi: atmel: make it selectable for ARCH_MICROCHIP
+  i2c: at91: make it selectable for ARCH_MICROCHIP
+  char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+  crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
+
+ arch/arm/mach-at91/Kconfig     |  4 +++
+ arch/arm64/Kconfig.platforms   | 51 ++++++++++++++++++++++++----------
+ drivers/char/hw_random/Kconfig |  2 +-
+ drivers/crypto/Kconfig         |  2 +-
+ drivers/i2c/busses/Kconfig     |  2 +-
+ drivers/mfd/Kconfig            |  2 +-
+ drivers/spi/Kconfig            |  2 +-
+ drivers/tty/serial/Kconfig     |  2 +-
+ 8 files changed, 47 insertions(+), 20 deletions(-)
+
+-- 
+2.50.1
+
 
