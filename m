@@ -1,102 +1,79 @@
-Return-Path: <linux-spi+bounces-9398-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9399-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36490B25291
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 19:53:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBB02B252AC
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 19:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 862FD9A2311
-	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 17:50:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C97CE2A08CF
+	for <lists+linux-spi@lfdr.de>; Wed, 13 Aug 2025 17:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9055288C0C;
-	Wed, 13 Aug 2025 17:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A1C2989BC;
+	Wed, 13 Aug 2025 17:56:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="phpPg1Ex"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6Up0lwe"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913F0214232;
-	Wed, 13 Aug 2025 17:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9F91D63C5
+	for <linux-spi@vger.kernel.org>; Wed, 13 Aug 2025 17:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755107330; cv=none; b=NwBq0ajS3kjsqqm21hWDUtfMBgNr9BKcMC7hhq3Tyl8sYTXDVbgdVS0aqwwA2Aj9B2Go/3FGEbYUwV05L3AIk5qmENpX5ViIvbDaTmMbZBaFlhDyb886ALyXFqR93TVybmuX7RV4TEMsiUeuvUy/u83R/LOI9IHilGu25M51YYU=
+	t=1755107817; cv=none; b=j85yGik6deyKGXvzcOMshj0DppqZV592igWDxMGV9t5ek54svaxhC3uK6lzrYCbyjsilbd4I81zT7HJzdaxQ4xrXQEFCskG3vWx5OjKvGh9Tix/C30xyIQ5Laj36bteyR7yEsBZ1IHiKuVAV9Hub5FPrg3ckbKQ+5xlIka8NEMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755107330; c=relaxed/simple;
-	bh=PKZQpIZ4aFM4Uz6odoT3GA7xbAwznTjRoJh5bhe9kDg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ImA5iovOPmm0E9x2B6wHv0If8w5ebE0HZdpDzVnEfsAP15MGqh8VuJMG5MDs5zrrM9Nck7qYMD5RczKHpH/Nn4w0AOZqjDyuOKwdHCyWcQszfziKR/F1hGxXlddOFx35EXELyLsDw8fpmaTMC2+/RBFUCBOvNaLzMkxZTDPEcLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=phpPg1Ex; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71D5C4CEEB;
-	Wed, 13 Aug 2025 17:48:45 +0000 (UTC)
+	s=arc-20240116; t=1755107817; c=relaxed/simple;
+	bh=rtz/m1tGQu1zFUp6SX6hq31dGt+XenhcnRc4Im4QqLk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=JxJpuN0D3Wkfk0fzTYw4i5KJ37nb2+7ShpdZmObqKmHKxoXs6EzAK3rXmEnPU8RktaH6O+kL+CQP2I1ku0WUrDSdnPHwisXwYAX5Qx5tZQIgHGmEK1SL0e+22naTZ/zAYiZ5vllqHEafjwP/teWcictlU8dBJlPOJIDBRC7UGmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6Up0lwe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EEB2C4CEEB;
+	Wed, 13 Aug 2025 17:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755107330;
-	bh=PKZQpIZ4aFM4Uz6odoT3GA7xbAwznTjRoJh5bhe9kDg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=phpPg1Exg3UZg/3X5vqDi0IIoOXur7Ew7OgygBNbeyISgO0CbuT6OwqY8PLlxWnip
-	 6jJ4vTHI04+L0/Lb5acfN1N/1vTw7gcYWXBIgO5u9P4EZIKN2u9VYgRiaZlkXhRkPA
-	 58JuJsn1mFC7L2YHVA0Nz5ZiUveJxME/ZYAoZ/rHcJqataQANA1jVJF+uuVqNRWVWY
-	 hqid1EvlgT92U+hYHlPXGBjwZtnjoUAJh4KsgCPSvicPlSEc9L+ImgCSQUCzR5+RJ3
-	 reF5t+vD478IYy3pT1nnuMHxvpxZhkAYnVWgMKD2N0qa2p9WmWtQ+TDQRDPToAbSiv
-	 P6V6io0ovyyAg==
-Date: Wed, 13 Aug 2025 18:48:43 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: linux@armlinux.org.uk, nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
-	catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	andi.shyti@kernel.org, lee@kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, arnd@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-	o.rempel@pengutronix.de, daniel.machon@microchip.com,
-	luka.perkov@sartura.hr
-Subject: Re: [PATCH v9 6/9] spi: atmel: make it selectable for ARCH_MICROCHIP
-Message-ID: <e629381c-2ad7-4693-892e-1d896db2bceb@sirena.org.uk>
-References: <20250813174720.540015-1-robert.marko@sartura.hr>
- <20250813174720.540015-7-robert.marko@sartura.hr>
+	s=k20201202; t=1755107816;
+	bh=rtz/m1tGQu1zFUp6SX6hq31dGt+XenhcnRc4Im4QqLk=;
+	h=Subject:From:Date:To:From;
+	b=E6Up0lweeDKeixCblLLNT/uKRoof7HBqbER4LkwojOFI6cTE1dJwiS7Sj1rHhqCfF
+	 Jo09saOy62YcpD0kuejKoRhJd4aJoi5L6NSkYSBiis86mQTox02rAN3VOFOy37jFiN
+	 aK40Voyb2BnWtoAkUMtvQHYhTsAo/5D/69xtQlXUw+ip5Yteu3FWH7GFltFORhSPlk
+	 IybJv4XjvhGnXyth74oJw5qpUaa1Xyri81zWyd4fbbiwbmOUERp4BAY6L5o7+g1gT9
+	 PUJIl4BAiMAR5qtQtE3ygzVCxQVlzuZtnI+UZZtkIAKoRW2osClKdl66hMjbXO3Jy0
+	 qMYkkpUsAfhUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAF0D39D0C37;
+	Wed, 13 Aug 2025 17:57:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Le9MbVgkKAcD0eI8"
-Content-Disposition: inline
-In-Reply-To: <20250813174720.540015-7-robert.marko@sartura.hr>
-X-Cookie: Turn the other cheek.
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175510782758.3692120.15838363328357930519.git-patchwork-housekeeping@kernel.org>
+Date: Wed, 13 Aug 2025 17:57:07 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
+
+Latest series: [v9] arm64: lan969x: Add support for Microchip LAN969x SoC (2025-08-13T17:44:36)
+  Superseding: [v8] arm64: lan969x: Add support for Microchip LAN969x SoC (2025-07-02T18:35:58):
+    [v8,01/10] arm64: Add config for Microchip SoC platforms
+    [v8,02/10] ARM: at91: select ARCH_MICROCHIP
+    [v8,03/10] arm64: lan969x: Add support for Microchip LAN969x SoC
+    [v8,04/10] mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+    [v8,05/10] tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+    [v8,06/10] spi: atmel: make it selectable for ARCH_MICROCHIP
+    [v8,07/10] i2c: at91: make it selectable for ARCH_MICROCHIP
+    [v8,08/10] dma: xdmac: make it selectable for ARCH_MICROCHIP
+    [v8,09/10] char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+    [v8,10/10] crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
 
 
---Le9MbVgkKAcD0eI8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-On Wed, Aug 13, 2025 at 07:44:42PM +0200, Robert Marko wrote:
-> LAN969x uses the Atmel SPI, so make it selectable for ARCH_MICROCHIP to
-> avoid needing to update depends in future if other Microchip SoC-s use it
-> as well.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---Le9MbVgkKAcD0eI8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmicz/oACgkQJNaLcl1U
-h9CwBgf9FMNxW0CB5IeMi0N03NdPh3cHrdyQTVznm+0Ttm4BbWAlmjjmhfOAg8JF
-OIXZnvuk0IuAXUYGKYLNVuT4kRGXqgZKY7e1WqpkhsAfEam9ECXsRxc+w45KVL2A
-Yni2+VdRQ+jB9nB84kRCVLpTDfymidB9CtYv//Fuc5YKwLqXPb28HXsnvMyrAQSV
-HvOsLtfR+ImALUhvmAgYLbr1nAgEwdZoEV680HNFdrFVyd6NnFJHyhSZP9br6p68
-KnlRw8CzokHg6rHDkthrZsHzf4x8wPfB/+QBzuzatBkzW/Z1x8Hgec/b4UUgM0hB
-Vtj4AJLk/ypd5d2EH+NEmUdcy7H/UQ==
-=vPOw
------END PGP SIGNATURE-----
-
---Le9MbVgkKAcD0eI8--
 
