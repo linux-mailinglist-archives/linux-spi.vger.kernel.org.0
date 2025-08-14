@@ -1,118 +1,172 @@
-Return-Path: <linux-spi+bounces-9413-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9414-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AE44B26572
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 14:34:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15245B26946
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 16:28:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD5A79E860A
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 12:34:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF2031D01456
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 14:20:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AB3F212569;
-	Thu, 14 Aug 2025 12:34:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40FA20B80E;
+	Thu, 14 Aug 2025 14:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lejqI9kt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EqgU/EDu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2296C17B50A;
-	Thu, 14 Aug 2025 12:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3933E15B0EC;
+	Thu, 14 Aug 2025 14:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755174884; cv=none; b=mPnTZZ8mW+3PIWi3nWiigOZ59496R9NhtzAl7aREFRXT2Xm1iiFoHlLUay2j2EGzpwAcGv6HZVB77mOWGMNq+ZMNk7QWex0Sr1E2UbbirjrfD75PKcqdkm/CPJPdv+5Lbb6kRv2kth0l/bFFHoRNRUPSkHSbyfGFupTqJ+KuyFc=
+	t=1755181118; cv=none; b=GuJ60s1sw2PuD2Hm2Oy1NK/2lwYRnyLIr5JPHAOBdKVKFni/s03wMw3l9KeQwvFhpPJI8HY4EWdzK/OdvrVbeeLFBntPnnQLCgmEJuWe/KlJjyXNYVHIzWmwPLzilxwUNv2owq0fW8X9hnggJJFxIZNNI8EH/ROjsEKtmVWSsxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755174884; c=relaxed/simple;
-	bh=0VrAhuKLaVyb61WaZNhMiNNuBwVKngCyRJ/V5YN1iC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RIFk+pjn5z4wxYjFYgYIPNIoolre70Z+wlgEW5ppcVl+BZhvLKnC240m0vBeIg2fXFhby16jWzW6AIYdFFgAFXS4XiGYIDhR50hhbvHQbtC+G+8gqpEt3FkztQNKXEyZn+eID+AdGZMYJbm2UQ7L/7vip1e/Pvo/d5Bw5HKnPCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lejqI9kt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D3BAC4CEED;
-	Thu, 14 Aug 2025 12:34:40 +0000 (UTC)
+	s=arc-20240116; t=1755181118; c=relaxed/simple;
+	bh=aIOvB7Z2yTByNAFttZWfPG8POEc6396jSKH09BJ+/Lw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=kxK8yANVQDT4+6zKzNWO9ULNnCSB10yROVDfE0eGUDsaC5McpGAXdBYmzSybesQb8g6KEcUCTcl1Dkzo4Eu1qjLYZeyMjSHDkTKOXVG3Ov5WwU1RurfL52iwkC3ha1qPXUHPx92JX66qPE/l0whPWXvD1oOof3GzK7wq5D4+X6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EqgU/EDu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140DFC4CEEF;
+	Thu, 14 Aug 2025 14:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755174883;
-	bh=0VrAhuKLaVyb61WaZNhMiNNuBwVKngCyRJ/V5YN1iC0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lejqI9kt2PAkvbRwc5AaugS5uDQA2HkPjMWYuMxXxEtFScLJzoUrTAQiqwJuBngFF
-	 lLVzwCltFh5qjf9/KX4a0w+Sd+CXsOL3dY2pq8juPi2E6gQCSO/IITqhxc4bDcm+lH
-	 8QgRcYEOPQh+19yrMj/gVX86hJADE2bn2LEjQyWQ6nat4FwWDtgEC+ImWeOeg0RIOv
-	 xTMKM0VOPQ/0ZiGH9lMcnz8b3Pkkhx77rG4nglx2PjjBfXqhZlyDrPZM0Jf/jg0+TB
-	 OJVeXwcsSpUAbZV42yDHMIFVThhRELGqvDhNvndpfzRPfYp23OfRcFlHVyDeB0ZrXs
-	 Nt2ds8u/ocxAA==
-Date: Thu, 14 Aug 2025 13:34:38 +0100
+	s=k20201202; t=1755181116;
+	bh=aIOvB7Z2yTByNAFttZWfPG8POEc6396jSKH09BJ+/Lw=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=EqgU/EDu3oDCYRt1Si13BRghMkcwK5LqN9GkAcGcfcrhFTazE34zUUq8Od+e5oGUJ
+	 GNx5ulPcFgtO5ZyiSpwIBr8FUNyAthpqEJ1HFf9GnjWHY+qIpiLzwl5jpRBrlolPn2
+	 z6xjKGXo4jawDOcpqGnCDN73BGfqRqAyieck88qD94UdpBJX7zr50+UVyAUEIFPEy1
+	 8iZ5/OdecI+vpH1tXXE5PIrAiCENDSW7wdju78QYNBO7tccEMhyLT5/PeO3ORXivtj
+	 sVMKdqgvEftfF5s9YxpUhwR00ND4s4PmT0wxP/dvrTnBxT6CdvlYHRM7ommRoJA5zP
+	 uiUsOyuYlg5Jw==
 From: Mark Brown <broonie@kernel.org>
-To: Santhosh Kumar K <s-k6@ti.com>
-Cc: miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-	tudor.ambarus@linaro.org, pratyush@kernel.org, mwalle@kernel.org,
-	p-mantena@ti.com, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	a-dutta@ti.com, u-kumar1@ti.com, praneeth@ti.com
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-Message-ID: <2f051eae-61c7-4bff-9f85-cf37b02a7ea3@sirena.org.uk>
-References: <20250811193219.731851-1-s-k6@ti.com>
- <20250811193219.731851-2-s-k6@ti.com>
- <6c35baad-a332-4b0a-96ca-1cdb3840ad94@sirena.org.uk>
- <20487e7f-33dd-4b65-b1a8-5bb8a06ef859@ti.com>
+To: linux-kernel@vger.kernel.org, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ Andrea della Porta <andrea.porta@suse.com>, 
+ =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+ Andrzej Hajda <andrzej.hajda@intel.com>, Andy Shevchenko <andy@kernel.org>, 
+ Andy Yan <andy.yan@rock-chips.com>, Avi Fishman <avifishman70@gmail.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Benjamin Fair <benjaminfair@google.com>, 
+ Bjorn Andersson <andersson@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ David Airlie <airlied@gmail.com>, David Lechner <dlechner@baylibre.com>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Drew Fustini <fustini@kernel.org>, dri-devel@lists.freedesktop.org, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Fabrice Gasnier <fabrice.gasnier@foss.st.com>, Fu Wei <wefu@redhat.com>, 
+ Guo Ren <guoren@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, imx@lists.linux.dev, 
+ Iwona Winiarska <iwona.winiarska@intel.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Jonas Karlman <jonas@kwiboo.se>, 
+ Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, linux-actions@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org, 
+ linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-rockchip@lists.infradead.org, linux-rtc@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-sunxi@lists.linux.dev, Liu Ying <victor.liu@nxp.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Maxime Ripard <mripard@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, Nancy Yuen <yuenn@google.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Nicolin Chen <nicoleotsuka@gmail.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, openbmc@lists.ozlabs.org, 
+ Patrick Venture <venture@google.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, Robert Foss <rfoss@kernel.org>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Samuel Holland <samuel@sholland.org>, Sandy Huang <hjc@rock-chips.com>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
+ Shengjiu Wang <shengjiu.wang@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Stephen Boyd <sboyd@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
+ Tali Perry <tali.perry1@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ Tomer Maimon <tmaimon77@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Vasily Khoruzhick <anarsoul@gmail.com>, Vinod Koul <vkoul@kernel.org>, 
+ Vladimir Zapolskiy <vz@mleia.com>, Xiubo Li <Xiubo.Lee@gmail.com>, 
+ Yangtao Li <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>
+In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
+References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
+Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io'
+ parameter in regmap_config
+Message-Id: <175518109481.47921.1666131365484481268.b4-ty@kernel.org>
+Date: Thu, 14 Aug 2025 15:18:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hsVsvyCGymldcnqG"
-Content-Disposition: inline
-In-Reply-To: <20487e7f-33dd-4b65-b1a8-5bb8a06ef859@ti.com>
-X-Cookie: This sentence no verb.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
+On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
+> While working on a driver using regmap with MMIO, I wondered if I need
+> to set 'fast_io' in the config. Turned out I don't need to, so I added
+> documentation for it with commit ffc72771ff6e ("regmap: Annotate that
+> MMIO implies fast IO").
+> 
+> This series fixes the existing users in the tree which needlessly set
+> the flag. They have been found using this coccinelle script:
+> 
+> [...]
 
---hsVsvyCGymldcnqG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Thu, Aug 14, 2025 at 05:04:33PM +0530, Santhosh Kumar K wrote:
-> On 14/08/25 01:56, Mark Brown wrote:
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-> > Should we have something that blocks these tuning required modes without
-> > the appropriate tuning, and/or allows discovery of which modes require
-> > this tuning?  This all feels very landmineish - client drivers just have
-> > to know when tuning is required.
+Thanks!
 
-> The flash's maximum operating frequency determines whether PHY tuning is
-> required, as we need tuning in case of Cadence controller for frequencies
-> over 50 MHz.
+[21/21] ASoC: remove unneeded 'fast_io' parameter in regmap_config
+        commit: d578faf7096affc036fd16333f1bfbe4991a22f7
 
-That's entirely specific to the Candence controller from the sounds of
-it, that makes it hard to write a client driver if you need to know
-exactly what the controller you're dealing with is and what it's
-requirements are.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> And we do check for this condition - see Patch 07/10,
-> cqspi_phy_op_eligible_sdr(), which currently verifies the flash frequency
-> against 166 MHz. This logic can be improved by implementing both min and max
-> frequency checks, will update in the following version.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I can't actually tell how that verifies if the tuning has been done
-appropriately TBH, at least not without more effort than I'd care to
-(and the tuning only gets added in patch 10?).
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---hsVsvyCGymldcnqG
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmid190ACgkQJNaLcl1U
-h9BuIAf9HOg6LtPbsCspgF6wLQokIeC1xc/j87GykKnreWyld/ZIRyHTDhWa+kJl
-KxWpWUNF/Nu1JT9nAnx03BTvx7fTOt+WKScIJg1kZFnWRHoULMQ0tEoYxEGMPUVG
-TnXuBDDrb+AfwJdR5w112Z0ixw8yTVk8cNFnAEfCAUoxkpxXnesWYjoTV3GhztRQ
-LTWxBj+EWthPRgIz0SnZFC0o54u+iJ9n5hkb7YiAVJ2A+O/XvcYogdXmulGWlvLl
-g5Ec19gMjIo0LwIc6h9MDc/fFNnUDkSHSvd2t9g6DhjCMf+/Y+phV3v3AHYRlKhC
-GYTzuHHYpdWrQbl/1JO/bw31IFhtcA==
-=1D0X
------END PGP SIGNATURE-----
-
---hsVsvyCGymldcnqG--
 
