@@ -1,115 +1,113 @@
-Return-Path: <linux-spi+bounces-9444-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9445-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402A7B2706F
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 22:55:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27869B2707E
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 22:59:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09AB0A087AF
-	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 20:55:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A1E41CC8048
+	for <lists+linux-spi@lfdr.de>; Thu, 14 Aug 2025 20:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E84C52741BC;
-	Thu, 14 Aug 2025 20:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83247273D8B;
+	Thu, 14 Aug 2025 20:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="svHurz2P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jZBTLYNL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4513266B59
-	for <linux-spi@vger.kernel.org>; Thu, 14 Aug 2025 20:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502C4272E42;
+	Thu, 14 Aug 2025 20:59:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755204917; cv=none; b=sP3b4MsJM2L26guXoLa7meQGmjzXlc+iGn8iBChJ6leXiBitPJomdCCYHBXngoyOsrmnhLAcuBMEO3Ka1p8zvRvlSYOslbh01NSkqXsSepxA14orzRqLqh2CFgT7IDTUXoRYJusoV6Lrr4UP2yUH40CysQ7CAY6bod+aASlmHWA=
+	t=1755205160; cv=none; b=uQ5sjzib1SREbmQL18QKX7inumMOmk+FxEKbii776ETKy5azmffMGQ8ss+8LhHP9EJF5Z+VZNgKVLwMLE0n9fV1twuNkyHLLJ1uletBK6DfAO2HVwokNXDEdFhK15fqDNF/Z/7+hA4ugcCHQLHv6DLsav154kq8n3nwNZcIA11I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755204917; c=relaxed/simple;
-	bh=c15i7N/nHlctlKIhfbueGZzSOzwJXM0VEKrLTLzVMFw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sgB3N2b84CwMqRGlum/f4cn08rf7M4pY6dtx7wt+3Kosd/yHhjJyDhZcrCJGvd6/PspsbgccPBAZbi+RZR2GDsOz08JAKF/RxqH8ERsUwKvkQ87wZ79kOi8PHY3p0JRX7OM6SUh9f3++1LNfwPkeH78xR8APlSPYV6XRKYf2BKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=svHurz2P; arc=none smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-30cce50dfb4so1506546fac.0
-        for <linux-spi@vger.kernel.org>; Thu, 14 Aug 2025 13:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755204913; x=1755809713; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0Lw1CQk3OPOq0zllcKBx/nVguWCpRXrFP9xKbQEaC04=;
-        b=svHurz2PGwVSp14Zl00YZ+PBw6vB+3kYKsQMDFPjR/g32lCuxgDpG0Zk4q4y3wvO4s
-         eESBMa53EmsaEpVQL4zbV2wzwdzsWSvT1/BVP6PF3G+a9G22wbYCFpKAboxwEpGZ/WYI
-         vKKlfHIXDYnTlU1ximIDhnSpvMwlXlxycP5Am4N96E2kKF+piCS2IeN7vfTQ2QKN0FSb
-         EyaIvyVHZKXVIiAjLLcF0Fb+g/5Yp9NBdsfB02kOLSPoXcap5rqdWgOFDReTMeYFPzXR
-         ASF8Z0Pewqc6pemEXU1Bl48j/tRR58+hYoUF1BsoOsw97DyxQX8cv0nEMLf5l1S2fj/9
-         Fddg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755204913; x=1755809713;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Lw1CQk3OPOq0zllcKBx/nVguWCpRXrFP9xKbQEaC04=;
-        b=XLYpJj2uV0KLKWhzTGRZkzODTBxmnDtOSgcVPrDZNx9h43kh0OIhMUi187z9iydsR9
-         Q56NuuXl+/b/lpWtB4S7J9RYiVTsBr0sjJjRGKFb0TPICq8M5f/AFh0RfGfjdtlYGrKO
-         Wh9I4W5aLTXypnXM1y3/WTTxuQuYFndG+Yk0dgOwhDUpRgXlsaH3zo9UHU0oLRhhshra
-         jWLUMlOkHZu3PQI4QAYwpa1M7HNIjKeiZPMDKfSo1R2X4JiAMxMl1+xH2MTYz0308Fwt
-         qjq3jYx7p+z2c/GBBgdctd63zFOfC153jAUlM7gYz++0bbacezYEPfQe3mZHhkgQxjaL
-         ocWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUyrFR25G21FHH8mf67mALciSIL+rNd0N1EbDp5nHW8ZBZfsWTQwcuxqTZLNFp84WulGkQyLD7eGtw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8wEWMdP+XdfHuo5FTEEgczPlg6XuAwEV4SpHWFJu2e5RL2LZL
-	ovv/Iuij0mB3zYDhMeVMZuNM0CADDAX+gbHLAR7cR6ryFlU3Yq+RN6UcMkKd2yX6z4Y=
-X-Gm-Gg: ASbGncuQwAlA7e49vIWD1px3og3UMmFg61xxwy+Fov/XyptMAMhq09ttCsmLTn5rx/l
-	Qdbl+xSCn1BBsnFUJEc6xAtUN8SaT+P/BaX7vt0q6hhZ58rphGtIRfd9HXid9sOOZ6GAG/AsnaB
-	We+5/0gIJqThVUucP2DMMSjypKOmo7I8w1nitv6sVnwR98cqcRt9wNt//Pfv1vOfCUsT6M2ftjd
-	yymCPQYJPub6XC5htMBM7M4ToqnndX4hJwy7DL6H4OLleHWhGu5zRlOzbTw6D756RZXuYArW7NB
-	8X7VRtkEeU9jKQLB7wTCMTusfXuBNYDZNlOYMwrx2dxPnbvKsJW1Uf04cHUgNQX3P+DJlJ7M0dg
-	hATq1hJbMtSOPuAJTrGR8VVPdyQyqfN+kIzGSBJU5S8NK+irFrp/UFYG7m/HfbYXLY5XfMAcDyf
-	r5CMZSlf0Wgg==
-X-Google-Smtp-Source: AGHT+IE5YbjZs2djBXKIUErUo7BXp2zMu/SzcdDO7ZnF6dPRtxmnztErim872SLpP49Q3QZx++e6ng==
-X-Received: by 2002:a05:6870:548e:b0:2ff:94d7:b006 with SMTP id 586e51a60fabf-30cd0e61eb4mr3135219fac.13.1755204912792;
-        Thu, 14 Aug 2025 13:55:12 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:2d9b:959c:3c59:5831? ([2600:8803:e7e4:1d00:2d9b:959c:3c59:5831])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-30cd018da90sm905636fac.32.2025.08.14.13.55.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Aug 2025 13:55:12 -0700 (PDT)
-Message-ID: <1a87f436-317b-40e0-a655-cd82f969f22e@baylibre.com>
-Date: Thu, 14 Aug 2025 15:55:11 -0500
+	s=arc-20240116; t=1755205160; c=relaxed/simple;
+	bh=Tb8hGze9KVpCqWMZFaP75hh5mWHsorO7iqkAvfTQO0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ug68nprUDi1Px/uZvaR8mxw+lgeYDdhukztwYtHdH411ckkXWIZqyLTCq0hTcGMH7z+EMsZur6U51WkkJAJxYiwfUywP5FWWgOSv/V6L8HozGLknE3QrwWNcOc7nmyTCBnUi8ZuD1BS+xox+bFIAIhLvcVGiejDhFS6swNBJg7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jZBTLYNL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE42C4CEED;
+	Thu, 14 Aug 2025 20:59:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755205158;
+	bh=Tb8hGze9KVpCqWMZFaP75hh5mWHsorO7iqkAvfTQO0Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jZBTLYNLo7rNXtPYOKWDDRJLNg2SiYsR/U1wfMoexVHfzeh5+ZibOWLXayI+mIaTt
+	 ZT96Ozjsd1xBRGn3x5U6VisXs03AJvs8UQYinxH82K3zFUaiGzhh7yUTD6QIMGsgkE
+	 zTGnmu5MrD0sAe1rEjhoEAoZFexLOCe1g2gdsLiGUY8+jwGhDrLfNvg8aUx0F7cy98
+	 Lwq9S0qxDeGkK13MhRUcBYuUAXYe7GI485FoymZc3ZZQhJ41hudUfwPDxXllrku/9W
+	 v2P37OM35nBn/szcH83yL6eTCl3yGQIzS2ApXQNsaCBBp2/FLFgTqkBv0k58wKR11t
+	 zrMQg6cwn0jdg==
+Date: Thu, 14 Aug 2025 15:59:17 -0500
+From: Rob Herring <robh@kernel.org>
+To: James Clark <james.clark@linaro.org>
+Cc: Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>,
+	Clark Wang <xiaoning.wang@nxp.com>,
+	Fugang Duan <B38611@freescale.com>, Gao Pan <pandy.gao@nxp.com>,
+	Fugang Duan <fugang.duan@nxp.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Larisa Grigore <larisa.grigore@oss.nxp.com>,
+	Larisa Grigore <larisa.grigore@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
+	Ciprianmarian Costea <ciprianmarian.costea@nxp.com>, s32@nxp.com,
+	linux-spi@vger.kernel.org, imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 11/13] dt-bindings: lpspi: Update maximum num-cs value
+Message-ID: <20250814205917.GA3894941-robh@kernel.org>
+References: <20250814-james-nxp-lpspi-v1-0-9586d7815d14@linaro.org>
+ <20250814-james-nxp-lpspi-v1-11-9586d7815d14@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
-To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-2-sean.anderson@linux.dev>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20250616220054.3968946-2-sean.anderson@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250814-james-nxp-lpspi-v1-11-9586d7815d14@linaro.org>
 
-On 6/16/25 5:00 PM, Sean Anderson wrote:
-> From: David Lechner <dlechner@baylibre.com>
+On Thu, Aug 14, 2025 at 05:06:51PM +0100, James Clark wrote:
+> As mentioned in commit f46b06e62c86 ("spi: spi-fsl-lpspi: Read
+> chip-select amount from hardware for i.MX93"), some devices support up
+> to 3 chip selects so update the max value.
 > 
-> Add a spi-buses property to the spi-peripheral-props binding to allow
-> specifying the SPI bus or buses that a peripheral is connected to in
-> cases where the SPI controller has more than one physical SPI bus.
+> This isn't a fix or functional change because the devices with 3 chip
+> selects support reading the number of chip selects from hardware, so the
+> value wouldn't have needed to be set here. However the commit states
+> that the DT could be used to overwrite any HW value, so the full range
+> should be supported. This also avoids confusion for any readers about
+> how many chip selects there are.
+
+If reading the h/w gives you 3, when would the DT need to override that 
+with 3? You only need an override for 2 or less.
+
 > 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 > ---
+>  Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-FYI, Mark's filters won't pick up `dt-bindings: spi:`, we need to change
-the subject line to `spi: dt-bindings:` on the next revision.
-
+> diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+> index a65a42ccaafe..ce7bd44ee17e 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
+> @@ -64,7 +64,7 @@ properties:
+>      description:
+>        number of chip selects.
+>      minimum: 1
+> -    maximum: 2
+> +    maximum: 3
+>      default: 1
+>  
+>    power-domains:
+> 
+> -- 
+> 2.34.1
+> 
 
