@@ -1,164 +1,186 @@
-Return-Path: <linux-spi+bounces-9492-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9493-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCA97B28548
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Aug 2025 19:40:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA101B291FF
+	for <lists+linux-spi@lfdr.de>; Sun, 17 Aug 2025 09:21:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A869AE0388
-	for <lists+linux-spi@lfdr.de>; Fri, 15 Aug 2025 17:40:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D92BF201F34
+	for <lists+linux-spi@lfdr.de>; Sun, 17 Aug 2025 07:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10BF372606;
-	Fri, 15 Aug 2025 17:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BAE520AF98;
+	Sun, 17 Aug 2025 07:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="eY6gJro/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSI8vqTN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669AD3176E1
-	for <linux-spi@vger.kernel.org>; Fri, 15 Aug 2025 17:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF9D1D61AA;
+	Sun, 17 Aug 2025 07:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755279631; cv=none; b=QUNXxsxXbXLdjUTvBAfl0g6kwT7K77a1W/aMWPj7i64NNrg/zxiC+s21POPvpsgsqAYVdHvqONRLnGUQmResDqHQR4Edg+xUv57QA7OTc9Yg2JUW52y/GSRWmspQZQVT7OwXOZnee7jkKlSjfaxeEQr3Mgq8m0MsJUux86jvGOE=
+	t=1755415259; cv=none; b=akfm29dSp3HT6F8nufIK6Rha49EYgl1gPrNh4zswbWtgXaqvq6M/mFfs55SDnJudj+oKTVaOCq4kf5khvGaFdMv3uR6TI+q1sJrWA4xLDJWTgbLOVFvgwdPG6ZQlNBi3m96UIWHQpVWvU+IXbwgg5a5+pWGy7z4sAVvftHV2b8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755279631; c=relaxed/simple;
-	bh=qF17MIgwZ4um6xPpV2Lc/KTKWxgB+FMaNQ/GTgBmE8w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uOxTVaMjyMla8sa0TgDhYBHK5DaFkvggoksPgw1pvT72NXy8u9lsNREkPb10+vEWLGlfKQsXS1VTxccRGEd9EjrTCvXztBaWzGSX3FgCV7bGmwPsUU5hNONOk3GI/O8555q0eHb58wTWzbWUijLLbpH+c6LJYIZK7+sqLDxelQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=eY6gJro/; arc=none smtp.client-ip=209.85.160.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-30cce534a91so918412fac.0
-        for <linux-spi@vger.kernel.org>; Fri, 15 Aug 2025 10:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755279628; x=1755884428; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rrZOZjq4k19XoTtuKs4tt9bKWHaUTsfBdCOIXfyCOCc=;
-        b=eY6gJro/28rcwwBMmYJMfi10PdAChUTd1zAMPy3h5ZreV2qiyciNG+oAtNtVTEf561
-         7OuR8PJe66GsVdIIB7CO1Sm0N2qBcENIN8kprvw/RBDaa1/V04bzMTdqnHUdNjvtkpDe
-         PPa27c1UBRaG58Y4DVf2stQxGTgQrngd899JKTnLMortNBI+6L8QmLoTEMITnDu6UIwK
-         gat7o7zLkbxsXQaprg3uLpehTJU7SyFng9cYg0m1eyx+wsKdd17fecmxuFSCT8pqYzxl
-         mqx0dGgKKp/Q3h2D0Q5QsLYD0b4t+zC7hfZa+DyJpxKtDevcn5aj6NYQTTBfmM4n/M9G
-         Wz9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755279628; x=1755884428;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rrZOZjq4k19XoTtuKs4tt9bKWHaUTsfBdCOIXfyCOCc=;
-        b=hWkNxZmKMQH0txVUf+FuCEsFcWguTZG2Y4Ob56KCPYLNwNcN6FLf2hMRHwGv2Wh8sa
-         yG644VAZFbg+v5iZNgApxOvgBzp2R5tEcNYpIkMX74QGg8ck0jgzrwHeb9wDt/AtfYUf
-         Xwf223+qTnrG5oRnRBIzg+Yt2yEI6IbdEMuGu4zI6xZS7hOalkuqgF5jkLG2KsSM2au/
-         FG8uXcx81r5WcpMkBsVvdgrukv9D154Hign1wWV/UCT9IZFJ5hxXurtHr304G+ygCGvF
-         XqL6U6yKW8zXR/YoozHgUosbVsw9GJ38FXl+03b28MnPZTUgOkJTZ8yimnofA8trbLp+
-         P/ow==
-X-Forwarded-Encrypted: i=1; AJvYcCU4eGNONy1nv+PobtFHFN8gfkFoFolhG5RaHqgCe9wabv4mTQUoM5PuZkyuvpVVXk6gySrsAuwQVFc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV6ZrLuGaT7nYe39y5ARWhASpCcqdxcUUrtUqg9lsBb+txjxIg
-	QK9jynkaKl2D9vCASPp2iC00mBkFVsh7Jv4MMBPrZIw/H2b010EmIB3AJ4lngAFt9HkVeZzJ0uU
-	63U45
-X-Gm-Gg: ASbGncvRYsQveHjaRjjxdQrUvUE+EbjqiaB4QaW+6evpq2ygMT7Mm3W44bdp2+lSGjA
-	NUfvA49PJgrh6dLVSdF73pKEMCQ/QA4he90DMIZm1DJQQ2HFU/P9skcnC9/aMqKxMFiCoxGEhai
-	Hk74KKeXBxOAZH43LF8pzR5GFYTVfBy35JJI/UedotybuEuqr0ZCWo9Vti7ljUSUrduhMr+hmRX
-	29SBqgM26Miy36SnXwViz1FRnRMimIANhFP2ONrWCBwVFkjpEOTtrieYvc7VC+mKy3HJloD4twh
-	K0lDSZTjjp2goQknFCBiddPtMfXKwzKH4ISoF+9MBpp2htJqAUH4JbKh4sKeLJPAT6OvQDaDvE6
-	wLw8XWkMFuGLe4wRLYqTcQadsask=
-X-Google-Smtp-Source: AGHT+IHl+L2c6ZR5EKKpcpLYiQuhOfUmaY2rJnVDEfBWAl+cA9iUsP7QEIfUNwfJ+He0T8Rn7d3igg==
-X-Received: by 2002:a05:6870:c0ca:b0:307:bfe5:481e with SMTP id 586e51a60fabf-310aaef94a6mr1697122fac.27.1755279628446;
-        Fri, 15 Aug 2025 10:40:28 -0700 (PDT)
-Received: from [127.0.1.1] ([2600:8803:e7e4:1d00:677:c1a1:65b9:2b0c])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-74392073439sm405826a34.48.2025.08.15.10.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Aug 2025 10:40:27 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-Date: Fri, 15 Aug 2025 12:40:03 -0500
-Subject: [PATCH 2/2] spi: axi-spi-engine: use adi_axi_pcore_ver_gteq()
+	s=arc-20240116; t=1755415259; c=relaxed/simple;
+	bh=JQ9I2ZA6NpxuMGRw8pMBYPM7Uq05lyYD7RorcnDzmE4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B/LI7/ji+WedAkDIx2NSeWyATlQD1uhHJOZH4HvdFhniRC7Ew50TCzwVHGdOfZ4uIexfxrMEOkJFLOdhtTvcAYT+K69YuTz3glFYdiTjqS8jqGQKcH8LJUkFShmw2WvE1Mrh9xe9fppgkp0ixpm3iNXhzprKZTJMVw0BC9xgAHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSI8vqTN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A674C4CEEB;
+	Sun, 17 Aug 2025 07:20:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755415258;
+	bh=JQ9I2ZA6NpxuMGRw8pMBYPM7Uq05lyYD7RorcnDzmE4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lSI8vqTNzeBPDxdLTp2i2cQaiaCWOq9avtgUBF0WanE+AzYS2kW+QiH+9XEVOKbzK
+	 K1YxBet3nf1oZjkwZoL7StOOhAIu8cAuu08zGQAM/E7lN/SdhUJYQ6XPQmUHa95Rl+
+	 sW+VLqEH2Pcbqp05UuFgokqjlcUXCwkYZbbqKpBnr1fo2p/XI5J0da5FgEqPcvIUKa
+	 5BLd4OYX/ZIyNCNe1HtY/EKvNBenMCVE4Go1iSDMOJ2+pwqZKIqyHi7k9yI96RUg2M
+	 EwPgBZ9mY/XFDV8qQON3sBWLfV/XhMREB5uxpAicYALqVxuuOZQG3nrVimz+H3Yb25
+	 3C0eJ7Rezd3AA==
+Message-ID: <d8248069-c12e-4f72-a625-c4f68aa42f1f@kernel.org>
+Date: Sun, 17 Aug 2025 09:20:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250815-spi-axi-spi-enigne-improve-version-checks-v1-2-13bde357d5b6@baylibre.com>
-References: <20250815-spi-axi-spi-enigne-improve-version-checks-v1-0-13bde357d5b6@baylibre.com>
-In-Reply-To: <20250815-spi-axi-spi-enigne-improve-version-checks-v1-0-13bde357d5b6@baylibre.com>
-To: Michael Hennerich <michael.hennerich@analog.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- David Lechner <dlechner@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2176; i=dlechner@baylibre.com;
- h=from:subject:message-id; bh=qF17MIgwZ4um6xPpV2Lc/KTKWxgB+FMaNQ/GTgBmE8w=;
- b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBon3EBg0nVZ5yifanqRh0LUVGar6/Ua/+h5OBiM
- hV/k/2GfqeJATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaJ9xAQAKCRDCzCAB/wGP
- wES1B/wOFfzS8yecVvgWSBk26bh8psoTA3dbqFFwwCH0OKsfz+oqil8xDxc7kg/+ochs247yzeL
- kT1wAMPnsBATQ6VA8D8KkhoYjfvAA0hyRt/hmGK/inu5c+ov8ACsEZIwoWQsgmsyUzkHkVCjIdH
- cqvH2btvoSgsmlom1H3Emu4hPYc7FbhOB0/Dy0x9ErTD2nR1Vjbl3BRpuljCjvBVyj/A/kMXNuM
- AT/hWyI+JkL7MSyuc5H2Wq7uPdMGAkNVLNc40LoxlIWJsSsc4nQrsy569Nzvr9FXTbe2kNg2DAR
- t74g6DGvEzMiDrtQQfg7e/iNJLKy7/JNegc5XHcPkQZHacJL
-X-Developer-Key: i=dlechner@baylibre.com; a=openpgp;
- fpr=8A73D82A6A1F509907F373881F8AF88C82F77C03
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] spi: dt-bindings: add doc for Amlogic A113L2 SFC
+To: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>,
+ Feng Chen <feng.chen@amlogic.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-amlogic@lists.infradead.org
+References: <20250808-spifc-v1-0-ff4e30e26a6b@amlogic.com>
+ <20250808-spifc-v1-1-ff4e30e26a6b@amlogic.com>
+ <20250808-adamant-fat-raven-38c8b3@kuoka>
+ <7fab19de-8ed1-4fe5-b2a4-a7e9c13d8424@amlogic.com>
+ <5cc336bc-f071-41d2-b59a-af0df23af00b@kernel.org>
+ <d872a711-7442-4e2e-bc59-0d6f4f656fde@amlogic.com>
+ <017a4d15-286d-4e0a-89ff-f658009a6de6@kernel.org>
+ <cf825229-7294-4fc5-b7dd-09dc1198db74@amlogic.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <cf825229-7294-4fc5-b7dd-09dc1198db74@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Make use of the adi_axi_pcore_ver_gteq() helper to make version checks
-more readable and robust against a major version bump.
+On 14/08/2025 08:38, Xianwei Zhao wrote:
+> Hi Krzysztof,
+>     Thanks for your reply.
+> 
+> On 2025/8/14 00:19, Krzysztof Kozlowski wrote:
+>> [ EXTERNAL EMAIL ]
+>>
+>> On 13/08/2025 11:34, Xianwei Zhao wrote:
+>>> Hi Krzysztof,
+>>>      Thanks  for your reply.
+>>>
+>>> On 2025/8/13 15:36, Krzysztof Kozlowski wrote:
+>>>> [ EXTERNAL EMAIL ]
+>>>>
+>>>> On 13/08/2025 08:13, Xianwei Zhao wrote:
+>>>>>>> +allOf:
+>>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>>>>>>> +
+>>>>>>> +properties:
+>>>>>>> +  compatible:
+>>>>>>> +    const: amlogic,a4-spifc
+>>>>>>> +
+>>>>>>> +  reg:
+>>>>>>> +    items:
+>>>>>>> +      - description: core registers
+>>>>>>> +      - description: parent clk control registers
+>>>>>>
+>>>>>> Why are you poking to parent node or to clock registers? This looks like
+>>>>>> mixing up device address spaces.
+>>>>>>
+>>>>>
+>>>>> The SPIFC bus clock multiplexes EMMC modules, so the corresponding
+>>>>> frequency division register is also in EMMC module. The SPIFC and the
+>>>>> EMMC modules cannot be used simultaneously.
+>>>>
+>>>> Then obviously you cannot put here EMMC or parent registers.
+>>>>
+>>>> It looks really like you miss proper hardware representation.
+>>>>
+>>>
+>>> It does seem a bit unusual. However, in our hardware design, EMMC and
+>>> SFC modules are integrated, and they share common resources such as the
+>>> clock and I/O pins .They are mutually exclusive.
+>>>
+>>
+>> How did you express it in DT? This looks similar to serial engines and
+>> such are not implemented independently.
+>>
+> 
+> The hardware design provides this clock for both modules — EMMC and 
+> SPIFC. A control bit (bit 31: Cfg_NAND, where 0 = Port C only, 1 = NAND) 
+> is used to determine which module uses the clock.
+> 
+> It's not that NAND is using EMMC’s resources; rather, the configuration 
+> register controlling this selection is located within the EMMC module, 
+> which makes the setup appear somewhat unusual.
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/spi/spi-axi-spi-engine.c | 17 +++++++----------
- 1 file changed, 7 insertions(+), 10 deletions(-)
+No, how did you express in DT that they are mutually exclusive?
 
-diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index 512d53a8ef4d1460a411685920f4f95802816483..e06f412190fd243161a0b3df992f26157531f6a1 100644
---- a/drivers/spi/spi-axi-spi-engine.c
-+++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -1050,7 +1050,7 @@ static int spi_engine_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
--	if (ADI_AXI_PCORE_VER_MINOR(version) >= 1) {
-+	if (adi_axi_pcore_ver_gteq(version, 1, 1)) {
- 		unsigned int sizes = readl(spi_engine->base +
- 				SPI_ENGINE_REG_OFFLOAD_MEM_ADDR_WIDTH);
- 
-@@ -1064,7 +1064,7 @@ static int spi_engine_probe(struct platform_device *pdev)
- 	}
- 
- 	/* IP v1.5 dropped the requirement for SYNC in offload messages. */
--	spi_engine->offload_requires_sync = ADI_AXI_PCORE_VER_MINOR(version) < 5;
-+	spi_engine->offload_requires_sync = !adi_axi_pcore_ver_gteq(version, 1, 5);
- 
- 	writel_relaxed(0x00, spi_engine->base + SPI_ENGINE_REG_RESET);
- 	writel_relaxed(0xff, spi_engine->base + SPI_ENGINE_REG_INT_PENDING);
-@@ -1091,15 +1091,12 @@ static int spi_engine_probe(struct platform_device *pdev)
- 	host->put_offload = spi_engine_put_offload;
- 	host->num_chipselect = 8;
- 
--	/* Some features depend of the IP core version. */
--	if (ADI_AXI_PCORE_VER_MAJOR(version) >= 1) {
--		if (ADI_AXI_PCORE_VER_MINOR(version) >= 2) {
--			host->mode_bits |= SPI_CS_HIGH;
--			host->setup = spi_engine_setup;
--		}
--		if (ADI_AXI_PCORE_VER_MINOR(version) >= 3)
--			host->mode_bits |= SPI_MOSI_IDLE_LOW | SPI_MOSI_IDLE_HIGH;
-+	if (adi_axi_pcore_ver_gteq(version, 1, 2)) {
-+		host->mode_bits |= SPI_CS_HIGH;
-+		host->setup = spi_engine_setup;
- 	}
-+	if (adi_axi_pcore_ver_gteq(version, 1, 3))
-+		host->mode_bits |= SPI_MOSI_IDLE_LOW | SPI_MOSI_IDLE_HIGH;
- 
- 	if (host->max_speed_hz == 0)
- 		return dev_err_probe(&pdev->dev, -EINVAL, "spi_clk rate is 0");
+> 
+> In the device tree (DT), I'll just refer directly to the clock frequency 
+> division control register.
 
--- 
-2.43.0
+This does not solve the exclusive usage...
 
+
+Best regards,
+Krzysztof
 
