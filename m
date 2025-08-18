@@ -1,204 +1,101 @@
-Return-Path: <linux-spi+bounces-9506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F030B2ABE3
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 16:58:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83904B2ABFC
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 17:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86A601BC19AD
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 14:48:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8442163BF6
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 14:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0ABB207A18;
-	Mon, 18 Aug 2025 14:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E181214A6A;
+	Mon, 18 Aug 2025 14:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BAN45Hiz"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sp1xRRHp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B03B8200BBC
-	for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 14:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35C8233707
+	for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 14:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755528470; cv=none; b=h2vGch3+REeLA6sgrbwq9hwXHJm9+f+obqw4RdC2sfal6Nx0/O3uhkQ9XG3818glrxVfacFt4rZXewwL8Rx9xxtLGhGR5nX4gd0zMybDj7KxNj91I8ymkyjp1F4L8Dmy7BY0Pl/5Q6blot6tRVOHmabRiHxZoP0oiCauyBoikGk=
+	t=1755528947; cv=none; b=GCpTSIiESOx4TsMArM2c+8obvlJO2XsNHyL2oA7hE1ZNPkD+Ftptf9B8qP+CoFPfJxTrD9w431s9ximCpTl9EdM8IgPT6zjF/qqptfG3sdxtSB5fU02XhYzfNpxvGE9JPuaeApQ1nSFFFx/uAeBi5iv3ETojgR9/yrHsvn2uHkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755528470; c=relaxed/simple;
-	bh=ifoUL3jsCD9QEp5E4RW0WnOPPi8gp4Hdi1nn9ecnFcc=;
+	s=arc-20240116; t=1755528947; c=relaxed/simple;
+	bh=JEK9mlBHe33L95MU7P9BEVnJ/X5Qs1vwsrOIySFXU6A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BDpFQKSpuj7DmOX+GYuLcnnzGOd82+PP4Axur6LNGaQCy9C5IFtymaVo5WNBZ+zmaUNu9JgjR+ZIRiuaSY+t1fMAI+sO6Ilp4DrcO68ccPm9bTKNlAZqH1n1pLhS+XXEjKccCTe58w05lcc9fzl9tT3br6h0jp7YNVvOAaRN++M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BAN45Hiz; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45a1b098f43so25318535e9.2
-        for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 07:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755528467; x=1756133267; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H2afKEgQbtq+HgvwtCFhX+9Qh9FWO4YX7knoa3B5YJg=;
-        b=BAN45Hiz2Qj4hCIRXveL9HB0BSO2CMtvCrh3krvifgd+Azvm4k4NjaK/fG7PpqfbaW
-         Sy7ccYoDN3EtweDRrZeFJneNK6egI/EXfugzG46CsKdM6WlH0B2Fqdm1chHooKM4NCBg
-         0pGB9eFEAoPSapdLu0F9z8T4U3cDMmyoY0U07tlx6XRKlJ/StLT0vZMwL54R0KlLGtwK
-         jfryBzz6Nsq9yatFCeW8L9bvrHzxU7Vm4yzN2UDjjbw2Rvz3suaMwEz4s3kgqb/Z5yK3
-         iy2GFRszC4xFd43LzqXxTqxaXuL5B596z2lm9trgIVDyB56qRcsGujwkTbU2ymRJdxGG
-         P2og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755528467; x=1756133267;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H2afKEgQbtq+HgvwtCFhX+9Qh9FWO4YX7knoa3B5YJg=;
-        b=pZM2E7wH5ZNWOp0Bore3bMqAxtcE1LNdQsjXUszPx6+GJrb415mVNCSocDWNNxroHn
-         wdhhDY2vTsFUT/TNbWkjHpw3u8rCyevyU70sb9DSwPJ1CNsE5DAboqqjBi2ozC9TtxeU
-         m1SFkfK7TX9nEtnq/uhzEX8pEKWs6ltmL78i3SdMxDN0aoqAwMadf/qLhGLX9RormISP
-         culpOYmG6s5pqhPdNO0rbygYJXY60OMMPWBASBO0tw5NF8E5xuKqcrTR+vg43AZV0yZS
-         /N0WQKYVkUYKg+oYabwFsRkujPuZwTzaVPxPJC931AAfJjUIpemq9+3aPxf/fsK+wSvP
-         rblg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZPfcrNtkm60meUkS03I9hvmjDHV0qchCtkxEU6tWRxMsoBekbrYskUNZOBLF2/435J14J0mcbikU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3WEwfGWoc8zKFICZhoSZnAhylworrqeP2Lv4FscJNMu2MZEd2
-	wtYYsjt7ErhdLAvo8uZC1fXdv/HDHE6pq0cLB347G5f/5k89Xv/3JawR7eNYWGnfzpP07qXXQHe
-	SpI/Q
-X-Gm-Gg: ASbGncsVKU+VifvusSjDRz3ZreLY8CC/fA6pGq8Kv+pNM6t46FxDPDY2v4QO9hs0c2a
-	bmWwnU+BrIB+OFQQh68oeWHTTN2ovG6hiEIyBXFIMlz/Pkd5SqdAkyM61z4YL22hZpIkn1i2uoP
-	3VGV5g4K2O5A+U64eVBW4VFN6tZUWtiZkifssQv1f0bua76be/66uJVn54CYXgLwExvZYL6i56p
-	7OeDlyXGhe4miPtpC45A1Iat0Fvp9bY9Aw/oc3JwnErQiHvDdWKq6rXNfuZQ5RjJ7yV9LbNlcUG
-	KTsBjVghwysBseSyb8wErhgkfCa+uSVss+6EVRcvGeWerHUfIia8kil8m98c2pwJqolsiFGGTds
-	hgtjzfgn5KLSXQHOQARw/qqLOYzY=
-X-Google-Smtp-Source: AGHT+IFQZt9NUrq552ZnmOgo1r2cW0JA2ngaMERpzFx/grzhOblNLS8XApQAK6JESCty8GRa8dkPGg==
-X-Received: by 2002:a05:6000:4027:b0:3a5:2599:4178 with SMTP id ffacd0b85a97d-3bc684d7b99mr7876232f8f.19.1755528466878;
-        Mon, 18 Aug 2025 07:47:46 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3bb676c9a8asm13066641f8f.39.2025.08.18.07.47.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 07:47:46 -0700 (PDT)
-Message-ID: <bd59344b-9dc0-42bd-98c8-80ab9ca97123@linaro.org>
-Date: Mon, 18 Aug 2025 15:47:45 +0100
+	 In-Reply-To:Content-Type; b=UWUDy4HIFui023E+eP53MzdfsW+gk/1wIdDsIEgz84Ku1MSJtePq54uFmZ4SUd2OQMf+ZHmRrMhmQvxBZJuhBmERtleGBPNjMvqFbDeVpqvS6Day20I9lENZAfZXS5aIFyE/YQ1MznBQfsYkLB+pwn15kD64KNlGHmQJ7GMA/QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sp1xRRHp; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b3b15c31-2e54-409e-86f3-3102c6ab95ba@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755528942;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z9v146V+CMDfR4H9bDDpfH4hxL2fknmgBAsXNipVc58=;
+	b=Sp1xRRHpO2uHHYpxy7a2QHA4CWQyU4JH0x9iTAYVJo7c4t6B3ruN2a0SjuceXAE/NolL+U
+	eAtREJZcTLT0bJTYgax9eVnAGVw3FlskO+Q/ZjZ9V6DZ3NnmAwtMRdbwIuj0KXG5nwLy0O
+	vzrCGTEvbvF7jxl4CWxjJyOs/dt+usQ=
+Date: Mon, 18 Aug 2025 10:55:38 -0400
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/13] dt-bindings: lpspi: Document nxp,lpspi-pincfg
- property
-To: Frank Li <Frank.li@nxp.com>, Larisa Grigore <larisa.grigore@nxp.com>
-Cc: Mark Brown <broonie@kernel.org>, Clark Wang <xiaoning.wang@nxp.com>,
- Fugang Duan <B38611@freescale.com>, Gao Pan <pandy.gao@nxp.com>,
- Fugang Duan <fugang.duan@nxp.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Larisa Grigore <larisa.grigore@oss.nxp.com>,
- Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
- Ciprianmarian Costea <ciprianmarian.costea@nxp.com>, s32@nxp.com,
- linux-spi@vger.kernel.org, imx@lists.linux.dev,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20250814-james-nxp-lpspi-v1-0-9586d7815d14@linaro.org>
- <20250814-james-nxp-lpspi-v1-12-9586d7815d14@linaro.org>
- <aJ4ox8+OLhIir2bU@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
+To: Miquel Raynal <miquel.raynal@bootlin.com>,
+ David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ linux-spi@vger.kernel.org, Jinjie Ruan <ruanjinjie@huawei.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+References: <20250616220054.3968946-1-sean.anderson@linux.dev>
+ <20250616220054.3968946-2-sean.anderson@linux.dev>
+ <ded7ba99-089b-47a7-95b9-ca6666dc3e29@baylibre.com>
+ <87frdp119x.fsf@bootlin.com>
 Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <aJ4ox8+OLhIir2bU@lizhi-Precision-Tower-5810>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Sean Anderson <sean.anderson@linux.dev>
+In-Reply-To: <87frdp119x.fsf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 14/08/2025 7:19 pm, Frank Li wrote:
-> On Thu, Aug 14, 2025 at 05:06:52PM +0100, James Clark wrote:
->> Document the two valid pincfg values and the defaults.
+On 8/18/25 04:28, Miquel Raynal wrote:
+> Hello,
+> 
+>>> +  spi-buses:
+>>> +    description:
+>>> +      Array of bus numbers that describes which SPI buses of the controller are
+>>> +      connected to the peripheral. This only applies to peripherals connected
+>>> +      to specialized SPI controllers that have multiple SPI buses on a single
+>>> +      controller.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +    minItems: 1
+> 
 >>
->> Although the hardware supports two more values for half-duplex modes,
->> the driver doesn't support them so don't document them.
+>> Finally have some hardware to test this series with using 2 or 4 buses.
 > 
-> binding doc should be first patch before drivers.
-> 
-> binding descript hardware not driver, you should add all regardless if
-> driver support it.
-> 
+> Out of curiosity, what is the practical use case and intended benefit?
+> Maybe an example of such device and an explanation of how useful this is
+> would be welcome, as it does not seem to fit the initial spi idea
+> (which has been greatly "improved", not saying it is bad, just unusual).
 
-Replied to same on "[PATCH 10/13] spi: spi-fsl-lpspi: Add compatible for 
-S32G"
+The idea is to model the case where there are several tightly-integrated
+busses on a single controller. e.g. sharing registers and maybe even
+clocks. Some of these allow you to drive both busses at once, reading
+e.g. the high nibble from one bus and the low nibble from the other.
+These sorts of things require coordination from the controller, hence a
+spi-buses property instead of two separate buses. This also makes
+compatibility easier, since new devicetrees remain more-or-less
+compatible with old kernels.
 
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->>   Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
->> index ce7bd44ee17e..3f8833911807 100644
->> --- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
->> +++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
->> @@ -70,6 +70,19 @@ properties:
->>     power-domains:
->>       maxItems: 1
->>
->> +  nxp,pincfg:
->> +    description:
->> +      'Pin configuration value for CFGR1.PINCFG.
->> +        - "sin-in-sout-out": SIN is used for input data and SOUT is used for
->> +                             output data
->> +        - "sout-in-sin-out": SOUT is used for input data and SIN is used for
->> +                             output data
->> +      If no value is specified then the default is "sin-in-sout-out" for host
->> +      mode and "sout-in-sin-out" for target mode.'
-> 
-> why need this? are there varible at difference boards? look like default
-> is more make sense.
-> 
-
-+ Larissa. I think this might also be a question for the hardware 
-designers about why the feature to swap the pins was deemed worth including.
-
-I'm assuming the flexibility is given for routing reasons. If you have 
-another device with the pins in one order then you can route it without 
-a via if they happen to be in the same order.
-
-> SPI signal name is MOSI and MISO
-> 
-> Frank
-> 
-
-As mentioned in the commit message of "[PATCH 05/13] spi: spi-fsl-lpspi: 
-Enumerate all pin configuration definitions" the names were taken 
-directly from the reference manual and this doc text was too. I think 
-diverging from CFGR1_PINCFG could be potentially quite confusing. And 
-MOSI isn't mentioned once in S32G3RM rev 4:
-
-   Configures which pins are used for input and output data during serial
-   transfers. When performing parallel transfers, the Pin Configuration
-   field is ignored.
-
-     00b - SIN is used for input data and SOUT is used for output data
-     01b - SIN is used for both input and output data, only half-duplex
-           serial transfers are supported
-     10b - SOUT is used for both input and output data, only half-duplex
-           serial transfers are supported
-     11b - SOUT is used for input data and SIN is used for output data
-
-James
-
->> +    enum:
->> +      - sin-in-sout-out
->> +      - sout-in-sin-out
->> +
->>   required:
->>     - compatible
->>     - reg
->> @@ -95,4 +108,5 @@ examples:
->>           spi-slave;
->>           fsl,spi-only-use-cs1-sel;
->>           num-cs = <2>;
->> +        nxp,pincfg = "sout-in-sin-out";
->>       };
->>
->> --
->> 2.34.1
->>
-
+--Sean
 
