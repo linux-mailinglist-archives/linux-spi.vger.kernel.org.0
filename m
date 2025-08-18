@@ -1,81 +1,82 @@
-Return-Path: <linux-spi+bounces-9512-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9513-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D7B3B2ACB7
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 17:27:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80EFDB2ACC2
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 17:30:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B06D65E1B74
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 15:22:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D24825E05E2
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 15:26:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00DB4256C6F;
-	Mon, 18 Aug 2025 15:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E7A2571DC;
+	Mon, 18 Aug 2025 15:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ArY4HTC0"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="a4P+wIjo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4D019007D
-	for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 15:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153F024A063
+	for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 15:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755530567; cv=none; b=cKZSH9jaDKqZeW377ebydcbUHTGXfBE6asHLwFmr/ivDWvMxVucnndOJPk50DbPpjSnst+NTx4GvdWSTLgr/VZVX7yMSkePri7pquv0dwxqEiTs83pes5oVqSke0ORD0S13owb1ksgCtFhVeQUHofz9LzgYeVjnu6a2Ks7WHaSA=
+	t=1755530792; cv=none; b=hy/3lR+3zGrVQRALTidX2g4HOAOgqibz7CKVnklf9p9CqldPvD499Jj4QQUHzZE7NnfucfotTORfbzGX5o8yKpbXW/h0TFrXc95M2rMSdeB1egAvzLA85lmkYwOIW0MR+TG7xTrWjJ3p0wDRm19vxSntm9LFgo7OdlEjFg/09Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755530567; c=relaxed/simple;
-	bh=cL/BkRePawzT6v72IhLPr6FG3t3IqCKEZ0g1meuYxH8=;
+	s=arc-20240116; t=1755530792; c=relaxed/simple;
+	bh=9yWCsTnE4xplQu+fdzJDVznRu1TCK8n0PjiryUSeKjM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=txL0cfsMeu3AdSPdHQ5ycEWJQvsUMBXi3I0GsYalcsJp8FfcqeVG5YhUO3pcrrNf5FzrxvIX0NYRNollewPVMUgLUJn62fcW5ShpWeqNzFarTMWZHtehhSDQB8zx1gYjxyDQfXRfF1HxdkINlIKLoyG3M0Cs+q2cwpvGOaCDQYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ArY4HTC0; arc=none smtp.client-ip=209.85.210.44
+	 In-Reply-To:Content-Type; b=Wpk54P27Udw3pbHDw2ijpgLDT64AV56+EFthlV9ishlkQnki8DdSdN9TLLgMQ8tGxYscxMZaNqj8M2kdRUpgvK80ToJnCCF7dhuANvaoktyPWftAOmTERFZvfaCTfjnMjrOs0ucvqHm24dog27ctI5nOjmLX5vaiQR/LYYVZcFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=a4P+wIjo; arc=none smtp.client-ip=209.85.160.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-74381fa6b15so2484250a34.2
-        for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 08:22:44 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30cce923bc2so1969033fac.1
+        for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 08:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755530564; x=1756135364; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755530789; x=1756135589; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YTxGCx4zj4KRJ8B1DI2WEkLZlXQbTwcBBSMe4+Qh/hw=;
-        b=ArY4HTC0Vs+Qzk4A7RbeiR0uhQcLYIQQJmOsiUPAvKYaIAtEquqJC9OPdJ6YEQVArt
-         DTgXLZa5UfY74Fd+lXPMf2MDLctEQ0ft3DmRhetxd/gaXFxQdljYa9ksyCyQOmAsSJEQ
-         GMMD6gyLbzbr1WtC9i3kwffESu05EiQO+MmFJN/3uXV4i4mERcP99LcQsdErx2OTLG56
-         vmjBNiTBVOVE4srAE66n5FUyM2HlRZTQcsIT90vLzoeXM4cFPP6BOafp6icDWnxZ6UBo
-         WtwRb90kWxsSMTO+nOpIj/z7CvhmBQAZfhz5e7X88yMIBjnXXFZXf0lKIXIR4pEkDJM5
-         o89g==
+        bh=c5PKKDWSujsQQD/ZWb/LSNZsX1wV9B1TZv7vRfE49q4=;
+        b=a4P+wIjoljpwWqRpVBrnQjjp+/jyg8tMwfcTt4FizxiEqqHvMPo/yG7JetDbKWEJi/
+         pNp5zNsX5O72NB8OA4O7GqNBcfV1v3BX/KhDHpbZl582P75x6rurVkrRoB3r6NaPUX52
+         KRJXou+OjmkQ/AuatuR+USKoMMuj2NS78CLM4AqTK56WVllsKRw9oVhbSQ2wr6iH5Bll
+         j+x/8ln3Fpdiw1USz/6/JqaUV52ux2si38+DjaZmPa2chzQ0vhhcDPxO+cWhV7HcAZyt
+         J1R4UCZKU32gXk7FMlk6cJfsFdp+TEs+jGiMuFuREh+tBJRD5m88S+JKQdxOsTS50lJM
+         jbjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755530564; x=1756135364;
+        d=1e100.net; s=20230601; t=1755530789; x=1756135589;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YTxGCx4zj4KRJ8B1DI2WEkLZlXQbTwcBBSMe4+Qh/hw=;
-        b=aEkhji4bkBoe/2Go62JvsSNG9Ntat08mr4s7vIcRgcS6rd9d7iHEh9PlXD9KfQxbxd
-         VmgM89q5bn9QjJDJ9i1NhD1TJ5WBhem1NAdqSE7l73zadakdYj/7zzevFTIksBYhER5d
-         lhIOBVvHTMNeDRtGas+nDaVB+GYxAEqsTsPCjJyADpSuFN3QAx9hBW8aEu52GwBvLFGG
-         j0xOjQFz0nlcQj+3FDvREgf6PXZMq1bj/2s0YBEnUSyHwCFpOr5sqiuBGRwVlZBTJcN7
-         TboUFLCfgLEycxipHmWD/1uq1cr7PXu62f9c4alLLBj/vy+oTrjS1XEWedLSIfBDlrWD
-         Je4A==
-X-Forwarded-Encrypted: i=1; AJvYcCXcXmSyuUpX3lLMGc5g9BySk1l1/4p+s31R3ww6i1mv54gOYfOzG5xZ8IoqvQ6QpbPqbUUPBtPWHOo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi1oUk99pmqnhOtNOd5aWpTtthqjw1arX9cI9lkvpIb60MjGA0
-	YRGQZolkIclYZPP7sGUufs247B7e41aYTsjzzcdM3sOElYEibJ94lOz+neEN7Z4a+P8=
-X-Gm-Gg: ASbGncudqoD6QuI1hpZOC+F9rGKiqNK38LXETK+bgfvGOimhz4R7F7jrDvZUrJnkLqW
-	dR1AGEzu4r4nf1wnA0UiPm7p4SGHIlQcuI/Chdaiezg6lkUyGOgyoSllXZl4/gNYZjXHg2L/IXp
-	mV32TUcjl6yx+tThqtc6ZgAXXTYmABIOFzixLCHVEM0Sf7i6aJDDOUNLz1r4mrUuH/6lWCbq1we
-	M7/uqfYcWs80wZKt1RKKAQ1iofArEW3c7eeDPtqN9+c9o/t5mVUjYeCjvfo69GH7knyscJr7GWi
-	72MOkjOZC+5DF+U98t6P+1pgkPMZI+wzm6aX4VIClyNgpPKClVLI73aqLxFsf1+La5DJD7gsJR2
-	pxOWa6i6Cj0sPwxR5OkDnrC4lF2KA5XWSIOPeyoMbQzrzhxj2kbYnw90y3JkrQACyT+jZwdQ/F1
-	w=
-X-Google-Smtp-Source: AGHT+IGPBTHW30IdobikaWZYenZffvlRVfNOQG0PIn6NtUluKl6ZS29TrtJlRc5HqzQnb05egqYH2g==
-X-Received: by 2002:a05:6808:50a0:b0:433:fdfa:913c with SMTP id 5614622812f47-435ec4c9ad7mr6463423b6e.30.1755530563885;
-        Mon, 18 Aug 2025 08:22:43 -0700 (PDT)
+        bh=c5PKKDWSujsQQD/ZWb/LSNZsX1wV9B1TZv7vRfE49q4=;
+        b=cb5j/oZu9dU6aANdyASgGKq7SJzaWBCK0Aoxnplcj/NsYJumeVJDZKHtczcgbq7l2k
+         83Bcmgj8TstTIwvruK/7WNSoPerJTbMNHGG4Qz55bki3chyLlvcSOwobnzaiBMYmpfY7
+         af/oXMueT5BtJfgh1DXR68BND0jCBvTqL1n8h2cxHO/bcwKCXdspcYRm9Xk9SAHlpp91
+         f0UIsMSRcDdUg0efH6qki2eSq9VgTfQktwm6HJBbMfx8cmVg2fuWhJ+PDewmNme+SAND
+         /npq8JVL/T4O5HzjYU+PaApWAYi+cRoxzdykaGN3g6xqbznvKfftZL5wrVovqefaZBNU
+         azlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNpViiQWX73X861l+SrwuuLrOrylZiOxOEsgc719Jn0TkrVuAjfp5qC7C5uPUHkV5JXGUm1FjY9tU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTjsbV8vM0OmCU6oLmZEeugKIGuohsr64tK9UxOFyUMFhxrEYq
+	qYnWerOw082ed9cLuC3o3+KmZ5o5WKyJEZ2DNRx8SLSss8Fr93ny9JJXPPYj+U45N0zCq8z68eI
+	oINQP
+X-Gm-Gg: ASbGncsq5O6vcR/rP4kFOwdTUplEtb5rUG/SfZbR/202zVjAY2vO5T1dUo55voBrCxe
+	++RBOx7kDH+hD+hjW9qE7KhPCn0p2w+h/6MiaANTIUzDbS+O6gEP50ZIhLV/sMeMEf6sIlIDHd1
+	MiTw9yLNNuOFueT9vkC/8YT9IHqqN3UayLdllHRE474Dvf154Ql/rOFWuMAe5185+BGQvAIPTjk
+	yc4ElILLvLFftJ18TZjCZ2n9zptI+8zcpi8DcrZPowPr9bIvpZH0dOOvkk6hBDb0/ptfYEEfzMU
+	4/w6paXs5C7hFACYQvKAXpRbu8HNqGNKCj+jfAsK9o2o2hKN+YFHCNIfVPe51XZhihfK+FPvW3P
+	3YfSd2G8NCKv9ETD7eRtisSxRD38BWezY+J1b95zcbxz3iVyIKn/MgHnc7eLOVWHI5Kr8/8yycF
+	U=
+X-Google-Smtp-Source: AGHT+IFi/cSOB5tF/taIVc9lB6VMcKGQulO1RAaOqvo83CjeGYWHvjFUzL4pihQB+kHoyN+pQ++BZw==
+X-Received: by 2002:a05:6871:7283:b0:30b:c9ed:7f91 with SMTP id 586e51a60fabf-310aaf7bd7bmr7722267fac.31.1755530788952;
+        Mon, 18 Aug 2025 08:26:28 -0700 (PDT)
 Received: from ?IPV6:2600:8803:e7e4:1d00:ee1a:f057:94fa:9a73? ([2600:8803:e7e4:1d00:ee1a:f057:94fa:9a73])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-435ed1bfb0bsm1759838b6e.22.2025.08.18.08.22.42
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-310ab953af1sm2652680fac.16.2025.08.18.08.26.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 08:22:43 -0700 (PDT)
-Message-ID: <0b9a3b8b-11d5-4722-a7ea-e80d893bc209@baylibre.com>
-Date: Mon, 18 Aug 2025 10:22:41 -0500
+        Mon, 18 Aug 2025 08:26:28 -0700 (PDT)
+Message-ID: <95b6d60e-4709-403f-8127-c50d40c7d8c4@baylibre.com>
+Date: Mon, 18 Aug 2025 10:26:27 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,25 +85,49 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org,
- Jinjie Ruan <ruanjinjie@huawei.com>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org,
+To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
+ Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 References: <20250616220054.3968946-1-sean.anderson@linux.dev>
  <20250616220054.3968946-2-sean.anderson@linux.dev>
  <ded7ba99-089b-47a7-95b9-ca6666dc3e29@baylibre.com>
- <87frdp119x.fsf@bootlin.com>
+ <0a3b69b8-e868-49c8-a0ca-c448ee3cd488@linux.dev>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <87frdp119x.fsf@bootlin.com>
+In-Reply-To: <0a3b69b8-e868-49c8-a0ca-c448ee3cd488@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/18/25 3:28 AM, Miquel Raynal wrote:
-> Hello,
-> 
+On 8/18/25 9:56 AM, Sean Anderson wrote:
+> On 8/15/25 11:49, David Lechner wrote:
+>> On 6/16/25 5:00 PM, Sean Anderson wrote:
+>>> From: David Lechner <dlechner@baylibre.com>
+>>>
+>>> Add a spi-buses property to the spi-peripheral-props binding to allow
+>>> specifying the SPI bus or buses that a peripheral is connected to in
+>>> cases where the SPI controller has more than one physical SPI bus.
+>>>
+>>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>>> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+>>> ---
+>>>
+>>> Changes in v2:
+>>> - New
+>>>
+>>>  .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
+>>>  1 file changed, 10 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+>>> index 8fc17e16efb2..cfdb55071a08 100644
+>>> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+>>> @@ -89,6 +89,16 @@ properties:
+>>>      description:
+>>>        Delay, in microseconds, after a write transfer.
+>>>  
 >>> +  spi-buses:
 >>> +    description:
 >>> +      Array of bus numbers that describes which SPI buses of the controller are
@@ -111,24 +136,22 @@ On 8/18/25 3:28 AM, Miquel Raynal wrote:
 >>> +      controller.
 >>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
 >>> +    minItems: 1
-> 
 >>
 >> Finally have some hardware to test this series with using 2 or 4 buses.
+>> I found that we also need an absolute max here to make the bindings checker
+>> happy. 8 seems sensible since I haven't seen more than that on a peripheral.
+>> We can always increase it if we find hardware that requires more buses.
+>>
+>> 	maxItems: 8
 > 
-> Out of curiosity, what is the practical use case and intended benefit?
-> Maybe an example of such device and an explanation of how useful this is
-> would be welcome, as it does not seem to fit the initial spi idea
-> (which has been greatly "improved", not saying it is bad, just unusual).
+> What is the error you get without this?
 > 
-> Thanks,
-> Miquèl
+> --Sean
+> 
 
-From my side, I am working on supporting complex analog-digital converters.
-There are many of these that contain multiple converters in a single chip
-and have multiple serial data lines so that the data from each converter
-can be read on a separate serial line to speed up throughput. And in some
-cases multiple chips are also used in parallel to the same effect. I.e.
-all chips share the same conversion trigger and we want to read back the
-data from all chips at the same time to get max throughput.
+I don't have the terminal output anymore, but it was something along the lines
+that there were too many items in the array. Like it had an implicit maxItems: 1.
 
+Overriding in a separate file didn't help as the checker seems to consider
+each binding file separately. I.e. sometimes I saw the same error twice.
 
