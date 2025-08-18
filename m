@@ -1,157 +1,240 @@
-Return-Path: <linux-spi+bounces-9513-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9514-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80EFDB2ACC2
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 17:30:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37D97B2ACC9
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 17:32:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D24825E05E2
-	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 15:26:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8F4A188AAAB
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 15:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E7A2571DC;
-	Mon, 18 Aug 2025 15:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66BB32586C2;
+	Mon, 18 Aug 2025 15:29:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="a4P+wIjo"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="O4KoBmH7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013059.outbound.protection.outlook.com [52.101.72.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153F024A063
-	for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 15:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755530792; cv=none; b=hy/3lR+3zGrVQRALTidX2g4HOAOgqibz7CKVnklf9p9CqldPvD499Jj4QQUHzZE7NnfucfotTORfbzGX5o8yKpbXW/h0TFrXc95M2rMSdeB1egAvzLA85lmkYwOIW0MR+TG7xTrWjJ3p0wDRm19vxSntm9LFgo7OdlEjFg/09Fc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755530792; c=relaxed/simple;
-	bh=9yWCsTnE4xplQu+fdzJDVznRu1TCK8n0PjiryUSeKjM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wpk54P27Udw3pbHDw2ijpgLDT64AV56+EFthlV9ishlkQnki8DdSdN9TLLgMQ8tGxYscxMZaNqj8M2kdRUpgvK80ToJnCCF7dhuANvaoktyPWftAOmTERFZvfaCTfjnMjrOs0ucvqHm24dog27ctI5nOjmLX5vaiQR/LYYVZcFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=a4P+wIjo; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30cce923bc2so1969033fac.1
-        for <linux-spi@vger.kernel.org>; Mon, 18 Aug 2025 08:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1755530789; x=1756135589; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c5PKKDWSujsQQD/ZWb/LSNZsX1wV9B1TZv7vRfE49q4=;
-        b=a4P+wIjoljpwWqRpVBrnQjjp+/jyg8tMwfcTt4FizxiEqqHvMPo/yG7JetDbKWEJi/
-         pNp5zNsX5O72NB8OA4O7GqNBcfV1v3BX/KhDHpbZl582P75x6rurVkrRoB3r6NaPUX52
-         KRJXou+OjmkQ/AuatuR+USKoMMuj2NS78CLM4AqTK56WVllsKRw9oVhbSQ2wr6iH5Bll
-         j+x/8ln3Fpdiw1USz/6/JqaUV52ux2si38+DjaZmPa2chzQ0vhhcDPxO+cWhV7HcAZyt
-         J1R4UCZKU32gXk7FMlk6cJfsFdp+TEs+jGiMuFuREh+tBJRD5m88S+JKQdxOsTS50lJM
-         jbjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755530789; x=1756135589;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c5PKKDWSujsQQD/ZWb/LSNZsX1wV9B1TZv7vRfE49q4=;
-        b=cb5j/oZu9dU6aANdyASgGKq7SJzaWBCK0Aoxnplcj/NsYJumeVJDZKHtczcgbq7l2k
-         83Bcmgj8TstTIwvruK/7WNSoPerJTbMNHGG4Qz55bki3chyLlvcSOwobnzaiBMYmpfY7
-         af/oXMueT5BtJfgh1DXR68BND0jCBvTqL1n8h2cxHO/bcwKCXdspcYRm9Xk9SAHlpp91
-         f0UIsMSRcDdUg0efH6qki2eSq9VgTfQktwm6HJBbMfx8cmVg2fuWhJ+PDewmNme+SAND
-         /npq8JVL/T4O5HzjYU+PaApWAYi+cRoxzdykaGN3g6xqbznvKfftZL5wrVovqefaZBNU
-         azlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNpViiQWX73X861l+SrwuuLrOrylZiOxOEsgc719Jn0TkrVuAjfp5qC7C5uPUHkV5JXGUm1FjY9tU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTjsbV8vM0OmCU6oLmZEeugKIGuohsr64tK9UxOFyUMFhxrEYq
-	qYnWerOw082ed9cLuC3o3+KmZ5o5WKyJEZ2DNRx8SLSss8Fr93ny9JJXPPYj+U45N0zCq8z68eI
-	oINQP
-X-Gm-Gg: ASbGncsq5O6vcR/rP4kFOwdTUplEtb5rUG/SfZbR/202zVjAY2vO5T1dUo55voBrCxe
-	++RBOx7kDH+hD+hjW9qE7KhPCn0p2w+h/6MiaANTIUzDbS+O6gEP50ZIhLV/sMeMEf6sIlIDHd1
-	MiTw9yLNNuOFueT9vkC/8YT9IHqqN3UayLdllHRE474Dvf154Ql/rOFWuMAe5185+BGQvAIPTjk
-	yc4ElILLvLFftJ18TZjCZ2n9zptI+8zcpi8DcrZPowPr9bIvpZH0dOOvkk6hBDb0/ptfYEEfzMU
-	4/w6paXs5C7hFACYQvKAXpRbu8HNqGNKCj+jfAsK9o2o2hKN+YFHCNIfVPe51XZhihfK+FPvW3P
-	3YfSd2G8NCKv9ETD7eRtisSxRD38BWezY+J1b95zcbxz3iVyIKn/MgHnc7eLOVWHI5Kr8/8yycF
-	U=
-X-Google-Smtp-Source: AGHT+IFi/cSOB5tF/taIVc9lB6VMcKGQulO1RAaOqvo83CjeGYWHvjFUzL4pihQB+kHoyN+pQ++BZw==
-X-Received: by 2002:a05:6871:7283:b0:30b:c9ed:7f91 with SMTP id 586e51a60fabf-310aaf7bd7bmr7722267fac.31.1755530788952;
-        Mon, 18 Aug 2025 08:26:28 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:ee1a:f057:94fa:9a73? ([2600:8803:e7e4:1d00:ee1a:f057:94fa:9a73])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-310ab953af1sm2652680fac.16.2025.08.18.08.26.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 08:26:28 -0700 (PDT)
-Message-ID: <95b6d60e-4709-403f-8127-c50d40c7d8c4@baylibre.com>
-Date: Mon, 18 Aug 2025 10:26:27 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA67B24A05B;
+	Mon, 18 Aug 2025 15:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755530970; cv=fail; b=UoroRkgufax1XtD89Fktvsudt/X/HWSI8rW8afrTtRCWGHwl0ZZxRK/VMBtM4mZqJtA8VMlaLi3JVfRF51X1jE3cqECFI0q5FbT5MYquXXNYYN+fP2AWX0QWdxoAl3X+REoy+8/v0BNAG2+45Ob3375c7hFiU1mkqjtiPhVnhcE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755530970; c=relaxed/simple;
+	bh=8jA2ABh9LIivHtWheE/6QCU2wkFjgcygRSBs37nbhX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=T9tlekwr2nxBKVjrfCHSwyaneIMKUieX2BhKNUWdvvBDzh6XCBtu/l1c/tX6XBPOhFM349LQi3+62kyHkDiLq/rpQ9oqxx468joBK5SVUmQB6DOrWKlVYNyTc59f7EaTBnQJoEXRfXHlLVVkb97WHtYnkXBb3XBNghNCVuHtFWw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=O4KoBmH7; arc=fail smtp.client-ip=52.101.72.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j2s9kyncW0HoGvXgZRuqw/QzRnqOngbOAsD7HS2p88mR0qhKKShxbsqnWSJ+bFpT6m+a2HD3wHLmweM15JO/VJ4NhSqMs4u9HiarpXB2o7JEn80NHynaOoJcvui1klXDL+t/j9CNGbcwIkfYjgOYShm0JjX5WS3ZvglMcGe4hwcc1+Dhm4mQM5/2IcIMOmIvZLDoEkKqHF2bwvtwucZykg6oyARSFDFv4axjFvYVShmP/Pb4y+WDnwU6SpKsl24hV68JS0jhQ44UkR/D7oKxv0ahPiJ8ldlvob3luueafCV3/5z2zVwZVDdvp8NtO0/HcJKLsoHWGnQdtHVjYycYMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=28EG0ZNWgYvZMzrz507KKsKG8jJ/BFHUM7FlZ4y9yUM=;
+ b=VXxgpmIDEebsIOqQsVBgOFtSTp7/hwO6/WLQsDrPqChozGSEnszGudG2TKRyHFaJwU8do3ogjUJG+ycJnP+geMS4KjCLQjE5dkdXhdNxfejc5BFpbJV3kEhVNQLb7fQPOUednPV/NrfsfXWZQry4jzDskYOeO0fOudfoRCmvYbgQKbFQ6hIsrFObwCF8D3l+dkqSTE1hwa6rstLoHB2Ni3QzXAXdlclOnGxJdPIZj03kCf/4FAxYFU6PIM9Eil9hXgKMCZsxHXy3zUcOGov50yGVkZ4D5eUY+nSaKD5zym7jC7dL/FHb4dr9UBup8bhdOnoDcmo+aDNZLqws8MZ4Rg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=28EG0ZNWgYvZMzrz507KKsKG8jJ/BFHUM7FlZ4y9yUM=;
+ b=O4KoBmH74ynvSaOHF62V+XTkrvysq41TJfRBi/ZYIdEHFSutocRtjCBoZxVD24BtfvsKlMua+KVqhAT9fhazqAYFQKI813/oScJJYaCNYXrvvMl+TqIGDU6CA/wyeF5NTB/PVY8MRX1RHr+Of9qcsHrzx+Ngsle6uGle14SMKJx/8RTjxDJh26swbcTdcVls4fd/von3hxr6ZEhxfhfg1A3BWfmQLV1AwYm/pW2NMi9AkihNC0BtwGlPLcsQJDE6Co2Eb95QOPwyeljHKCJ7AMAZZh9dBhb3xoAXel9cZTjWIas+C613jP2X9Xy+QL9iHSoHj7B7xlE/MlaAJiQkAQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by PA1PR04MB10796.eurprd04.prod.outlook.com (2603:10a6:102:48e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.12; Mon, 18 Aug
+ 2025 15:29:10 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.9052.011; Mon, 18 Aug 2025
+ 15:29:10 +0000
+Date: Mon, 18 Aug 2025 11:28:58 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: James Clark <james.clark@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>, Clark Wang <xiaoning.wang@nxp.com>,
+	Fugang Duan <B38611@freescale.com>, Gao Pan <pandy.gao@nxp.com>,
+	Fugang Duan <fugang.duan@nxp.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Larisa Grigore <larisa.grigore@oss.nxp.com>,
+	Larisa Grigore <larisa.grigore@nxp.com>,
+	Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
+	Ciprianmarian Costea <ciprianmarian.costea@nxp.com>, s32@nxp.com,
+	linux-spi@vger.kernel.org, imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 10/13] spi: spi-fsl-lpspi: Add compatible for S32G
+Message-ID: <aKNGuvC5iuoTvqZm@lizhi-Precision-Tower-5810>
+References: <20250814-james-nxp-lpspi-v1-0-9586d7815d14@linaro.org>
+ <20250814-james-nxp-lpspi-v1-10-9586d7815d14@linaro.org>
+ <aJ4qNVIp788gc2ZU@lizhi-Precision-Tower-5810>
+ <1f3b68d4-e0cc-4952-a695-322ed9756b95@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f3b68d4-e0cc-4952-a695-322ed9756b95@linaro.org>
+X-ClientProxiedBy: PH7PR10CA0024.namprd10.prod.outlook.com
+ (2603:10b6:510:23d::13) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
-To: Sean Anderson <sean.anderson@linux.dev>, Mark Brown <broonie@kernel.org>,
- Michal Simek <michal.simek@amd.com>, linux-spi@vger.kernel.org
-Cc: Jinjie Ruan <ruanjinjie@huawei.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-References: <20250616220054.3968946-1-sean.anderson@linux.dev>
- <20250616220054.3968946-2-sean.anderson@linux.dev>
- <ded7ba99-089b-47a7-95b9-ca6666dc3e29@baylibre.com>
- <0a3b69b8-e868-49c8-a0ca-c448ee3cd488@linux.dev>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <0a3b69b8-e868-49c8-a0ca-c448ee3cd488@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PA1PR04MB10796:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f81c498-5659-4885-78b8-08ddde6bfa47
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|52116014|7416014|376014|19092799006|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Ql7SZSpdhpNis/ZExAo2TjWRX7jbkI7o/EOpLDEQp8/4zXeqwBSfbrZHVm2H?=
+ =?us-ascii?Q?W5r9SVYwUnHBTphu1Z9ljOCRlSgceppzR+a+hSaCjvRO/nDe47+wIYNbDLNt?=
+ =?us-ascii?Q?FI+QoXYiSrZ/Ey/4NDNKUXR2zrc71cv9Hwb0F0JucU4dpyotYdqWegIYLLTr?=
+ =?us-ascii?Q?CMauEBEnbkOlbp2t8VHTO2KXsQCmEC9qaUZK1aK/HkenV8lj+H2oXTAXOsN1?=
+ =?us-ascii?Q?f6U/4/laGv4YIzyZx/7oJoGzTeKGdOM0CGc2d1aTVbMdVSHd2Q7UiR3ah52O?=
+ =?us-ascii?Q?9SzYJNI310WmGJX8b2+w26bLATstDeZ296rV6qlFPo1TvO0ZHVZnirhs7TW6?=
+ =?us-ascii?Q?44V55lR+htl3onGYmxXRYkmk3KfIe+P+SP+sk1OJmpKWkTtZVEtW35DO4IVf?=
+ =?us-ascii?Q?eUkDiTOQsGT6v5+3SP11ROgsUkX8SNWxYhPA2Or2IwIbdlfR/8Ws9UrXdUlz?=
+ =?us-ascii?Q?QIpfCXqdLv6mw31Z/Zt77zJFQetlqEd2L8CAxU8weEJKiRd0ChvbukmY8Odm?=
+ =?us-ascii?Q?YaJuQKa1cUOE94vOLzTIJWJDV4YgwqhiOcwNIN4YJeEr6JSdhk5SY4qv3W+i?=
+ =?us-ascii?Q?y13rlGKKHL1FGtHLCKdFMy+ntvPdNCmKUGhY3n3kXym/SuGv2kDTqkDYlvfQ?=
+ =?us-ascii?Q?VzfORIUpUX3oA7i1qKbgyjLT+2QOKBEUp5QAPFDrkQ7LqvhurjYDxzVWVnvI?=
+ =?us-ascii?Q?lQYIXTBsbZpEPoTnwaSx4r7bXoZMQO+03e/eGPskE8CNHtIWHG7+e9cT6yff?=
+ =?us-ascii?Q?SgzZJbataYE4OlXIQqa+aorQnXPSzneC4Z5TmnC8cI823kNoTla0icd2YlR2?=
+ =?us-ascii?Q?KHeKZv5AHXnVF6OI04WtFGCi35xZlXwRSZuFVWP3rWR7Itm8JPUViymQP/Pw?=
+ =?us-ascii?Q?L9++18dujhwO9Oci819fO0JmvOzd8hNu9BTRrAv9W67aQ3xoByAbe9dxMyYY?=
+ =?us-ascii?Q?bCd4QvEfQSedz3e+pCxysgs+SIDXn+RxmJUionYkmq+QmnifMDrg169cSHH4?=
+ =?us-ascii?Q?XDuNn7QeOT9asENhrSBLE62kR7cBqWKUCpNYCdkh6/FVXu42gCIwi3AJwHcz?=
+ =?us-ascii?Q?I2HMqTgmXjIb3rSTzq4AOI2m1lVtzg9Xv6BstqZnWL5bQxe3xa2xfc49fxE3?=
+ =?us-ascii?Q?wlcEmu9f94XptQrARI0L/Ip5/9IT/RaSbdTB3eMzwsZk/qTe5uaGaFg3rifV?=
+ =?us-ascii?Q?0Pt3ThrqCJ/RtL2MAvMPUSFmkql7SmQqcPDDl1rYexQsRvtBR07o6TXhZ0xE?=
+ =?us-ascii?Q?P1iiF0Sp4VEfJBtmSrgeLCo6br3Hc2LICrz7T1ebB5e5kJX/2ygHP5B+QXCk?=
+ =?us-ascii?Q?w5YRoAB6SeQQUpguVuxCHtv/dy/XzE8NNtbU9s1MN+gti5QZ6YBL21XGQhUt?=
+ =?us-ascii?Q?24nxY+qkTJsjgYHWf0MjqUoOe7/XPetKKEqhWf525wCEBFuVrYz2VR3RepP9?=
+ =?us-ascii?Q?kzOtVjMDsOeVFzsYe3xe8HnpUZ/lAP9EB/Q+7FSjOUPu2x06adT+eA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(7416014)(376014)(19092799006)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?alom2DIn8Gvy+chPdPIHhdo9airifiUYWXF5cc9a5upUcma5CP1kU4HlIb8X?=
+ =?us-ascii?Q?vvG+zntgsNYXd8WiehMw0Os3giy+mVURHK063zkewcjxLwiYRNd2xBNVyyd1?=
+ =?us-ascii?Q?6JCGPf2RtcDWGhWoqG9AWc5XVHj0KgHuPAlkqpHn8FpPn5O+YtshuA/jJy96?=
+ =?us-ascii?Q?3Ta33W1C6HD4fF+CdYOS6UXUE0qL4sWuuaho+5advbsC0ZITv3hnkvMoFIlS?=
+ =?us-ascii?Q?3GiNieXhz6Ku3ZXNViaoHuTJq3bcMjYfrmr9iGwa7BcNIVq+1LNPzs4KEdPx?=
+ =?us-ascii?Q?P59zCMLNWUybLNDA/nfykTbDo0btX3/KMbz888R2HBaSxbYwlq9l9z1RKPO7?=
+ =?us-ascii?Q?Qt8leAjIIu5P92RU9BbcKSJY8sCHrKhly3W9x7QKd3MiMPHeMuyEwbXkZ/zy?=
+ =?us-ascii?Q?yF0q7sQiWHAhgsxwX/Uhr6fc+apeXvbS4lPXxRjjybFj7tsbMZyqJrINRLfj?=
+ =?us-ascii?Q?coTGloSd4ZysDAxKh0SVOfIGBeQO3dRAvl4R4ohKzRgHDdfeTRStD+MOstzP?=
+ =?us-ascii?Q?S/qqeEJ/DlCNjk3eBx+bnwjs+QAPGoDjhc4B0ajwTNm2UnKM5WbPW+/HRugi?=
+ =?us-ascii?Q?/gIDnaFP3QJpAdneolBVFhFYXCsnHN7buRdTzIyPE4unhJzC6E4W0jsXcTWx?=
+ =?us-ascii?Q?gaenAb3+x9epxF9bExY9Y/Ao4eHwu7jrPxWxZY5B55KDSrAUDxoaGxwexVJP?=
+ =?us-ascii?Q?lKCPpLEG4ZULlUrm+Frl4l2jH/MsjKlyrYGUOF0nHI4tP0zmRxwnDctllLdo?=
+ =?us-ascii?Q?uN1ThykVi/3i8H2oZuCvn1k4dAQGIBjGtv5iW+we+L2hFypxQlt6IAeF2gg1?=
+ =?us-ascii?Q?ZFsXlH1xaSpnElKc8Ub5B0MC6L3bkmsEgOEPSYlS4ziUt321yEIm5BVUu5cZ?=
+ =?us-ascii?Q?Ih7WPTFUg1k01TKarBGLo2yAywd7rEC9YgWRGoeHS0s4EIk1u7xgOUjVTl4/?=
+ =?us-ascii?Q?XuyCe0mgpvUxmTCgLFNfyyoKmUQBaVOqoiUPkxUH3WcucnMh5nFuMerKLLSR?=
+ =?us-ascii?Q?LDKXeO0Cf8RC59EqX0pfWNZgIM7wRASSbZSQZCOnKo1vpelrWhtL0zGqnb2I?=
+ =?us-ascii?Q?g6T+fJuE5DblhKk6Nfs5RU+STzKtMBWdUL9BP63px7rQ4Ej2w+YrTqVVmQYi?=
+ =?us-ascii?Q?4A9/IuwHpNSEISPdUciHCggiNuNlLMX8Ga1+k0u0O3xrR/rye5lTztRFZHlj?=
+ =?us-ascii?Q?zU45GtxzIDL7dsTFHc8FXSYWc+1Ad4qdjXbppVCeYmZETrnOEef3dAYM9wVB?=
+ =?us-ascii?Q?W+i9Ey9oOSNiTrpqhmyItoA8j03Rd0/a0GzlSjMb7gyXraD1eDlO0f1Jye4F?=
+ =?us-ascii?Q?H/WViPKwpDc/7y2HpB1wxAYaRrPli5KGXKEcI28uyZu/1NrZSlD0K1V8R03g?=
+ =?us-ascii?Q?a81Og2BCywWXyjtRuOYqdBBO+rEQe8X55EAP6XKrCkWyCix2LglFRVLIiBhq?=
+ =?us-ascii?Q?TqmXEVHm1QDHKRhfUcmCo7mKMsCZI3JRjYMweftS7YRYNrxa8vODnMcmDOkN?=
+ =?us-ascii?Q?QJOHA7k6G3BiRf+UqKv89Lq6Z2s7qtlV0Nk5yDKmi5CMfkCgV2ysyIoX27SL?=
+ =?us-ascii?Q?ycPdFaXr0MeIFiEo0jOKdvli6u2DUTEHYpO4haJp?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f81c498-5659-4885-78b8-08ddde6bfa47
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2025 15:29:10.0721
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vE1YE/nW6hG6VwG7HThBCImnDEeJSZYf8e4Vq7udUDVbc+xJxmV41g5f/pbKJOxltc1ke1Q42rxuApET5S0FKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1PR04MB10796
 
-On 8/18/25 9:56 AM, Sean Anderson wrote:
-> On 8/15/25 11:49, David Lechner wrote:
->> On 6/16/25 5:00 PM, Sean Anderson wrote:
->>> From: David Lechner <dlechner@baylibre.com>
->>>
->>> Add a spi-buses property to the spi-peripheral-props binding to allow
->>> specifying the SPI bus or buses that a peripheral is connected to in
->>> cases where the SPI controller has more than one physical SPI bus.
->>>
->>> Signed-off-by: David Lechner <dlechner@baylibre.com>
->>> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
->>> ---
->>>
->>> Changes in v2:
->>> - New
->>>
->>>  .../devicetree/bindings/spi/spi-peripheral-props.yaml  | 10 ++++++++++
->>>  1 file changed, 10 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->>> index 8fc17e16efb2..cfdb55071a08 100644
->>> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
->>> @@ -89,6 +89,16 @@ properties:
->>>      description:
->>>        Delay, in microseconds, after a write transfer.
->>>  
->>> +  spi-buses:
->>> +    description:
->>> +      Array of bus numbers that describes which SPI buses of the controller are
->>> +      connected to the peripheral. This only applies to peripherals connected
->>> +      to specialized SPI controllers that have multiple SPI buses on a single
->>> +      controller.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>> +    minItems: 1
->>
->> Finally have some hardware to test this series with using 2 or 4 buses.
->> I found that we also need an absolute max here to make the bindings checker
->> happy. 8 seems sensible since I haven't seen more than that on a peripheral.
->> We can always increase it if we find hardware that requires more buses.
->>
->> 	maxItems: 8
-> 
-> What is the error you get without this?
-> 
-> --Sean
-> 
+On Mon, Aug 18, 2025 at 03:31:08PM +0100, James Clark wrote:
+>
+>
+> On 14/08/2025 7:25 pm, Frank Li wrote:
+> > On Thu, Aug 14, 2025 at 05:06:50PM +0100, James Clark wrote:
+> > > From: Larisa Grigore <larisa.grigore@nxp.com>
+> > >
+> > > S32G doesn't have the max prescale erratum and it can query the max
+> > > number of CS from hardware, so add those settings.
+> >
+> > binding doc should first patch. Create new patch serial for add S32G
+> > support only.
+> >
+> > Frank
+>
+> I'm not sure putting the binding doc commit first would be right? That would
+> imply it was a valid binding before it really was because the code change
+> hasn't been made yet. Practically both are required so it doesn't really
+> matter which way around they are.
 
-I don't have the terminal output anymore, but it was something along the lines
-that there were too many items in the array. Like it had an implicit maxItems: 1.
+DT binding descrpit hardware not driver. Verify binding by dt_binding_check
+not by drivers. When driver use a dt property, which have to descript it
+first at binding doc. So binding doc patch should be before the driver use
+property. That's dt team requirement. You can wait for dt team comment this,
+But I am pertty sure it is ture.
 
-Overriding in a separate file didn't help as the checker seems to consider
-each binding file separately. I.e. sometimes I saw the same error twice.
+>
+> As for splitting the set into two, Mark mentioned that he was ok with a
+> single one, so I assume that's fine? The devtype_data changes would conflict
+> unless they were applied in the correct order anyway, implying the need for
+> a single ordered patchset.
+
+Yes, if there are dependence.
+
+Frank
+>
+> James
+>
+> > >
+> > > Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+> > > Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
+> > > Signed-off-by: James Clark <james.clark@linaro.org>
+> > > ---
+> > >   drivers/spi/spi-fsl-lpspi.c | 6 ++++++
+> > >   1 file changed, 6 insertions(+)
+> > >
+> > > diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+> > > index 6d0138b27785..a4727ca37d90 100644
+> > > --- a/drivers/spi/spi-fsl-lpspi.c
+> > > +++ b/drivers/spi/spi-fsl-lpspi.c
+> > > @@ -159,9 +159,15 @@ static const struct fsl_lpspi_devtype_data imx7ulp_lpspi_devtype_data = {
+> > >   	.query_hw_for_num_cs = false,
+> > >   };
+> > >
+> > > +static struct fsl_lpspi_devtype_data s32g_lpspi_devtype_data = {
+> > > +	.prescale_err = false,
+> > > +	.query_hw_for_num_cs = true,
+> > > +};
+> > > +
+> > >   static const struct of_device_id fsl_lpspi_dt_ids[] = {
+> > >   	{ .compatible = "fsl,imx7ulp-spi", .data = &imx7ulp_lpspi_devtype_data,},
+> > >   	{ .compatible = "fsl,imx93-spi", .data = &imx93_lpspi_devtype_data,},
+> > > +	{ .compatible = "nxp,s32g2-lpspi", .data = &s32g_lpspi_devtype_data,},
+> > >   	{ /* sentinel */ }
+> > >   };
+> > >   MODULE_DEVICE_TABLE(of, fsl_lpspi_dt_ids);
+> > >
+> > > --
+> > > 2.34.1
+> > >
+>
 
