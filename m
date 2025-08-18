@@ -1,186 +1,102 @@
-Return-Path: <linux-spi+bounces-9493-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9494-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA101B291FF
-	for <lists+linux-spi@lfdr.de>; Sun, 17 Aug 2025 09:21:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83DE5B29C35
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 10:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D92BF201F34
-	for <lists+linux-spi@lfdr.de>; Sun, 17 Aug 2025 07:21:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FC413A6697
+	for <lists+linux-spi@lfdr.de>; Mon, 18 Aug 2025 08:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BAE520AF98;
-	Sun, 17 Aug 2025 07:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638E22206B1;
+	Mon, 18 Aug 2025 08:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSI8vqTN"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Rv0VYgRD"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF9D1D61AA;
-	Sun, 17 Aug 2025 07:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A6429E10B;
+	Mon, 18 Aug 2025 08:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755415259; cv=none; b=akfm29dSp3HT6F8nufIK6Rha49EYgl1gPrNh4zswbWtgXaqvq6M/mFfs55SDnJudj+oKTVaOCq4kf5khvGaFdMv3uR6TI+q1sJrWA4xLDJWTgbLOVFvgwdPG6ZQlNBi3m96UIWHQpVWvU+IXbwgg5a5+pWGy7z4sAVvftHV2b8M=
+	t=1755505750; cv=none; b=UYDcwAdmXq7u+uEIpa0/QYf4+paSespmxHbs1gOl/YP/sUdyNaDm6FLJ3xbFi4xOUimE3W9NaMtvSg+3cbwgz1kqQbQMCOwtY8h8BWdeMBw+i37J2ec7G0/BUYZjZNURFv/r1lsd8FyHniuBbE+IcNpPPitY85phsaS9WUC7+dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755415259; c=relaxed/simple;
-	bh=JQ9I2ZA6NpxuMGRw8pMBYPM7Uq05lyYD7RorcnDzmE4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B/LI7/ji+WedAkDIx2NSeWyATlQD1uhHJOZH4HvdFhniRC7Ew50TCzwVHGdOfZ4uIexfxrMEOkJFLOdhtTvcAYT+K69YuTz3glFYdiTjqS8jqGQKcH8LJUkFShmw2WvE1Mrh9xe9fppgkp0ixpm3iNXhzprKZTJMVw0BC9xgAHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSI8vqTN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A674C4CEEB;
-	Sun, 17 Aug 2025 07:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755415258;
-	bh=JQ9I2ZA6NpxuMGRw8pMBYPM7Uq05lyYD7RorcnDzmE4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lSI8vqTNzeBPDxdLTp2i2cQaiaCWOq9avtgUBF0WanE+AzYS2kW+QiH+9XEVOKbzK
-	 K1YxBet3nf1oZjkwZoL7StOOhAIu8cAuu08zGQAM/E7lN/SdhUJYQ6XPQmUHa95Rl+
-	 sW+VLqEH2Pcbqp05UuFgokqjlcUXCwkYZbbqKpBnr1fo2p/XI5J0da5FgEqPcvIUKa
-	 5BLd4OYX/ZIyNCNe1HtY/EKvNBenMCVE4Go1iSDMOJ2+pwqZKIqyHi7k9yI96RUg2M
-	 EwPgBZ9mY/XFDV8qQON3sBWLfV/XhMREB5uxpAicYALqVxuuOZQG3nrVimz+H3Yb25
-	 3C0eJ7Rezd3AA==
-Message-ID: <d8248069-c12e-4f72-a625-c4f68aa42f1f@kernel.org>
-Date: Sun, 17 Aug 2025 09:20:54 +0200
+	s=arc-20240116; t=1755505750; c=relaxed/simple;
+	bh=uWwh60w/bduOIheSKC80XdABGLZBKKCVzC9/FNAQlSc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=SedYGvfjT31hngWJ1WzcVp7fljGBg51cWtVHj/tPXyz8V9dmonraKtlo6FdwYx22VqW6juAYJLAjDi40QRapRkYKdn0gcgSA446Q+12jpVQai9V4JXaDp7nKKp/CWLzyd3Gjs4mWLu6NsGwTQngKyqEpWpDu0yaYkgmkkXuBUi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Rv0VYgRD; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 737AF4317D;
+	Mon, 18 Aug 2025 08:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1755505739;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sqSlpzzBjh5abP5Ep10OGKmrH1NoW6pA+tFSYa8a7oU=;
+	b=Rv0VYgRDLz+wpcDNTv/5vHuI3YEpR0ijBjEG2iXuknPIRNS9iN/wnY/AHHIdfssdu22ZpQ
+	F3GRdf0YrrFHP7SL6azasxNjKl+/zt9FRxxbeWJ884EhY0+pXsbtcYXg4z1eVMjae1qTa4
+	A3RE21DnrdFcuw2jun2fqbr8xo8sS3JdrrF8fHRRqOGwaPV0iEQa+4ddYSxXiSmy21PKzq
+	ljhf1okCHY97hEpf/JSrf4/k+0aZ6J6zzD8O97E1KMfGoeeh9O2zgAOAAaZnzKVsXcr732
+	uSP7+u2ueFbKs3SEZ9eoMUhcGH8fptMlHuvWjq4aSiI/xeXuuy5cNJLGfSAlPg==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Sean Anderson <sean.anderson@linux.dev>,  Mark Brown
+ <broonie@kernel.org>,  Michal Simek <michal.simek@amd.com>,
+  linux-spi@vger.kernel.org,  Jinjie Ruan <ruanjinjie@huawei.com>,
+  linux-arm-kernel@lists.infradead.org,  linux-kernel@vger.kernel.org,
+  Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: spi: Add spi-buses property
+In-Reply-To: <ded7ba99-089b-47a7-95b9-ca6666dc3e29@baylibre.com> (David
+	Lechner's message of "Fri, 15 Aug 2025 10:49:40 -0500")
+References: <20250616220054.3968946-1-sean.anderson@linux.dev>
+	<20250616220054.3968946-2-sean.anderson@linux.dev>
+	<ded7ba99-089b-47a7-95b9-ca6666dc3e29@baylibre.com>
+User-Agent: mu4e 1.12.7; emacs 30.1
+Date: Mon, 18 Aug 2025 10:28:58 +0200
+Message-ID: <87frdp119x.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] spi: dt-bindings: add doc for Amlogic A113L2 SFC
-To: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>,
- Feng Chen <feng.chen@amlogic.com>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-amlogic@lists.infradead.org
-References: <20250808-spifc-v1-0-ff4e30e26a6b@amlogic.com>
- <20250808-spifc-v1-1-ff4e30e26a6b@amlogic.com>
- <20250808-adamant-fat-raven-38c8b3@kuoka>
- <7fab19de-8ed1-4fe5-b2a4-a7e9c13d8424@amlogic.com>
- <5cc336bc-f071-41d2-b59a-af0df23af00b@kernel.org>
- <d872a711-7442-4e2e-bc59-0d6f4f656fde@amlogic.com>
- <017a4d15-286d-4e0a-89ff-f658009a6de6@kernel.org>
- <cf825229-7294-4fc5-b7dd-09dc1198db74@amlogic.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <cf825229-7294-4fc5-b7dd-09dc1198db74@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduhedvudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhgffffkgggtgfesthhqredttderjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeffgefhjedtfeeigeduudekudejkedtiefhleelueeiueevheekvdeludehiedvfeenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepughlvggthhhnvghrsegsrgihlhhisghrvgdrtghomhdprhgtphhtthhopehsvggrnhdrrghnuggvrhhsohhnsehlihhnuhigrdguvghvpdhrtghpthhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtp
+ hhtthhopehruhgrnhhjihhnjhhivgeshhhurgifvghirdgtohhmpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On 14/08/2025 08:38, Xianwei Zhao wrote:
-> Hi Krzysztof,
->     Thanks for your reply.
-> 
-> On 2025/8/14 00:19, Krzysztof Kozlowski wrote:
->> [ EXTERNAL EMAIL ]
->>
->> On 13/08/2025 11:34, Xianwei Zhao wrote:
->>> Hi Krzysztof,
->>>      Thanks  for your reply.
->>>
->>> On 2025/8/13 15:36, Krzysztof Kozlowski wrote:
->>>> [ EXTERNAL EMAIL ]
->>>>
->>>> On 13/08/2025 08:13, Xianwei Zhao wrote:
->>>>>>> +allOf:
->>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    const: amlogic,a4-spifc
->>>>>>> +
->>>>>>> +  reg:
->>>>>>> +    items:
->>>>>>> +      - description: core registers
->>>>>>> +      - description: parent clk control registers
->>>>>>
->>>>>> Why are you poking to parent node or to clock registers? This looks like
->>>>>> mixing up device address spaces.
->>>>>>
->>>>>
->>>>> The SPIFC bus clock multiplexes EMMC modules, so the corresponding
->>>>> frequency division register is also in EMMC module. The SPIFC and the
->>>>> EMMC modules cannot be used simultaneously.
->>>>
->>>> Then obviously you cannot put here EMMC or parent registers.
->>>>
->>>> It looks really like you miss proper hardware representation.
->>>>
->>>
->>> It does seem a bit unusual. However, in our hardware design, EMMC and
->>> SFC modules are integrated, and they share common resources such as the
->>> clock and I/O pins .They are mutually exclusive.
->>>
->>
->> How did you express it in DT? This looks similar to serial engines and
->> such are not implemented independently.
->>
-> 
-> The hardware design provides this clock for both modules — EMMC and 
-> SPIFC. A control bit (bit 31: Cfg_NAND, where 0 = Port C only, 1 = NAND) 
-> is used to determine which module uses the clock.
-> 
-> It's not that NAND is using EMMC’s resources; rather, the configuration 
-> register controlling this selection is located within the EMMC module, 
-> which makes the setup appear somewhat unusual.
+Hello,
 
-No, how did you express in DT that they are mutually exclusive?
+>> +  spi-buses:
+>> +    description:
+>> +      Array of bus numbers that describes which SPI buses of the contro=
+ller are
+>> +      connected to the peripheral. This only applies to peripherals con=
+nected
+>> +      to specialized SPI controllers that have multiple SPI buses on a =
+single
+>> +      controller.
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    minItems: 1
 
-> 
-> In the device tree (DT), I'll just refer directly to the clock frequency 
-> division control register.
+>
+> Finally have some hardware to test this series with using 2 or 4 buses.
 
-This does not solve the exclusive usage...
+Out of curiosity, what is the practical use case and intended benefit?
+Maybe an example of such device and an explanation of how useful this is
+would be welcome, as it does not seem to fit the initial spi idea
+(which has been greatly "improved", not saying it is bad, just unusual).
 
-
-Best regards,
-Krzysztof
+Thanks,
+Miqu=C3=A8l
 
