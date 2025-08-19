@@ -1,75 +1,90 @@
-Return-Path: <linux-spi+bounces-9519-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9520-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F52EB2B838
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 06:03:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CF86B2B8AF
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 07:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD33F5280B1
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 04:02:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 277EA3BB571
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 05:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B8081DF987;
-	Tue, 19 Aug 2025 04:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D490F20C461;
+	Tue, 19 Aug 2025 05:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="E9irF5XL"
+	dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b="pXExG7Py"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012028.outbound.protection.outlook.com [52.101.126.28])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022133.outbound.protection.outlook.com [52.101.126.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FDA3451DC;
-	Tue, 19 Aug 2025 04:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB4E1D86DC;
+	Tue, 19 Aug 2025 05:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.133
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755576174; cv=fail; b=pu68e94+WoKBQYGGubK2a3JD0Nhu7i/RiYpnR77XFF6qwKwgDw+k9ziCF1be1rbHTSAiXvUxPR4KDlqc/eZINbpSd+k2bIZ2T4XiB+0GRBMbBx/PbqhX3e9emWUuy2tqZFmlU336cy+MmEKwLnRxs/ChqwQjVEcuN/pvSivS9a0=
+	t=1755581543; cv=fail; b=Tsl6F0sUSpNs7qCw6VNHKSo7q4M9bFlY+jGD927U39ZRl0UGhI8LEfpF4cU2Wl9qCAq+ZllfsX5btz22PErfSO9t/3kJsfi3yfetpB9PNUzOcVXfwct7LKEjVsxAgeG4X+kDWQjLiXjk+j3PhSC3vyjAu8PPDm+d3mgIcdAMeqM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755576174; c=relaxed/simple;
-	bh=FgZ5sPtRkpCi6lwGiAUCjnqB4aLAMapxH70w2fkkjf0=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=CMRhQL+NKWLX6wUzfyklhzN0zT5nilbEZ5vULJlQzlb478x/M7jaGYFudEaRLZ1Mcy9zBDTHe5pLaKmr0c+7tKw5U4sizLqFwvTrDs/L8nDptstFjzWS9F+D03MTKgHAtfsaJNqeFOL2vPNYS8XTFzsCJM+G6PESYxxFNiyN2EI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=E9irF5XL; arc=fail smtp.client-ip=52.101.126.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	s=arc-20240116; t=1755581543; c=relaxed/simple;
+	bh=UglaPIb6fdhy+qKXNPUoC1ZgkUSkCDnlIkNLsPjx81g=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kn67IW/tIGIeFS6fClldtYOFCYkLPvgeZmqH+OdwFbk4PemJjpOm24GC6gWJAVOfaYbUa0twu8uhzaAHKfI/7XU2eKrAbMbVzhyzECcXVrtByuWSSN/l1UtldyHQ84QA6JGivy3Lb/Z+3OTRNUq68GsjTlFS/7Buknser+kmxYA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com; spf=pass smtp.mailfrom=amlogic.com; dkim=pass (2048-bit key) header.d=amlogic.com header.i=@amlogic.com header.b=pXExG7Py; arc=fail smtp.client-ip=52.101.126.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amlogic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amlogic.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uOi4VmF/gTq6phv5/z9+LONI2fhtP65DTnDsXYnAqKNpjU2boAe6djtVY0oqjTydy8UrHNDNcFnmhymXxTXJaifo5OCGkDZaHLUzSEjDMsexvuC+RbPquFU+PzgcDRro2F+p+SVTIb9bg/w0dhdGPkwmCO6ojwgm8vcXLEzMdEp6e8q5CwK1FuY4q6OK8gE15Il4OWd1Y/Mj58fKiOpIom67eXATfxX/MoaGqE/t1gjTYcwKo6BKLH1oJPGXNIPyqK2DqVY9W/awpNYjwliktcDLlV4uBk5XCXoONBAqKwA8WyX1jOzKwCHEtuVnVwZtp+sR2LowKJx/x6oGVZW+vg==
+ b=iFhLD4iQse4ej1+Ve74VPzP7t0FxPfGe3JHPKtI6HpYZRbjQlfbF/wsjRS/skPY5rj6YGDhjEHi9Z2gFtJp515UYJuKjEs93wy4/laAxhot/rJE6OIhtAks/l6cwH+C8gve1sdVJyZrpbopHvz+ZIjlZ9VFVR6TW7t9I/uZ4RmYdWECmqqEF6h4m0MnZKh/xQ4CJVrYvfvUzN0xwrUjkWbnbqp49zHHlX+lkhOtCbw3/023uMENjA0LwgAe21QeYG5q7c8gvIxRy2AHO3/Zkr49kYwZqo/BwVhkh1z8DDtoc8TsCm834Ji7EKejdzwjYjNxc+YI9LGqAEXOHn7d/Jg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pr4TT6Qp9tjSkZhq8ypun54ebhuviXym4la/3JJeYyM=;
- b=Jp1w7dv564rvMJsCD4rDFMz1XRXrshQjucNDxZUcDNVvlKGw4+ymKSwn+xr7DJuUQoptY4GkpEDwSY9TzK7Hoo6uTdhtDveJuW9K0vETO0cLfgqG6iXNMWcTvRt0zA2/fh4nfRyiTmZ9VsJhKtFcRrP5AtTwapxhf2PT02EsU2/Ad9PsCnPfZWJ+6nx75cbCDHLozybltSOS9eZpgSk/J1nly/uTU020OUkVx7NhVwbX4v6lPZoYNjdU/+W01UaXKuoKz0sFMV2LfS1METoY+j+oozzRAafwL9F74NqLWF9gJ2D1nAGEgQ0qbkFe3brIRk9GGRw9/AnoD2SKdnd1HA==
+ bh=/c/WRek7Zi62AKqRnvGvXVH1MnkdcIXxh1qXWWRbWG4=;
+ b=yPjj0ALrEnGbd6PKxGGaqzL1IJ0Wwpbp0XQX3NiLqJj6LQMd/BMEALJvw1jOgYrqnub6hROYkIpd/LZpoRXANHSsNzwu0fh2lDI3Bm7hCI1gFFEIwQbVH6dl9jcQ9Me9XU/eAmOJJBt27VcNEhSVhotQ3yPHtOUfILm4CtmroU8caUxHII62mFmmjOnmW0Wvn2HqEGBKxH7EksIK0nfSirmMegk3TQk9KLf+5vHZ8tlXNhS11Tm1kPeBM7uRJR49ub37LilZuAo0P52A+krQECV+xO2T3RhBtNRo72VyFwe5+Fo3zEDbuUVcMkPEQEhjMH7fBE/1dF6aIfEhE1JWbg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pr4TT6Qp9tjSkZhq8ypun54ebhuviXym4la/3JJeYyM=;
- b=E9irF5XLzIxONH4MTf+fhZeF5J2YjWT1NfjFrfUf/0xUQO4DcpC/OhctE9k6M+jzR1nmx+gt8YQiK9IXXZ4nffuisIeegmCL7Lb0jQAS0j1TJ0zpSjodxCuG62yc1NyX6hiR/4IoIc5l1jGmHQBe9+/k57Q76oUorFoVP5VZi6T62YK/zL0RezyHkeaCqh6mgu5KwMlB2vf1GLFwyvsUPsvkkkNrcMlUebwL7zyu0s8DetkFGqEbZ4qJou4zNa0LAAjK+ScKFUIyZAXutgl8bwCSFTkiigBdVODsuC596pl+f102imv+tPwUWOx0LrToktZx8MSutZ3EyC12WWZL/g==
+ bh=/c/WRek7Zi62AKqRnvGvXVH1MnkdcIXxh1qXWWRbWG4=;
+ b=pXExG7Pygfx/tTnfBrz3JgMJ2vbcgpHO1HgV/rwvPrQE6CGAmpe/qycCSUYeeMCwqXDRuUuU0FWbvNxbccqUmk91K6DK5+tO1UJvCDZIOMNw3TtaC1raf4utm+Ddq5UOimL7DeZ1N243/53wuslb/pixDjeglMLIukaRPap80LRnXmLNoYNCJUCX0viasAoeR0HFAmRxG/xf7klGHgHJzuaUlj6l54k/C+yC+zDMNbqt4M5AzrejUNE88LKCiUsmjFkhL3ptiHa8jv+mHdzO+nJ2VDDVBBsxBrLGGbYAhpLQ8qaYcZWXUsvHraNgRuYuJxj8lGCrOaSB3DERPx4qfQ==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9) by
- KL1PR06MB6591.apcprd06.prod.outlook.com (2603:1096:820:f8::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9031.24; Tue, 19 Aug 2025 04:02:48 +0000
-Received: from SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666]) by SI2PR06MB5140.apcprd06.prod.outlook.com
- ([fe80::468a:88be:bec:666%5]) with mapi id 15.20.9031.023; Tue, 19 Aug 2025
- 04:02:48 +0000
-From: Qianfeng Rong <rongqianfeng@vivo.com>
-To: Sunny Luo <sunny.luo@amlogic.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-amlogic@lists.infradead.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Qianfeng Rong <rongqianfeng@vivo.com>
-Subject: [PATCH] spi: SPISG: Use devm_kcalloc() in aml_spisg_clk_init()
-Date: Tue, 19 Aug 2025 12:02:38 +0800
-Message-Id: <20250819040239.434863-1-rongqianfeng@vivo.com>
-X-Mailer: git-send-email 2.34.1
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
+ by KL1PR03MB8286.apcprd03.prod.outlook.com (2603:1096:820:108::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Tue, 19 Aug
+ 2025 05:32:18 +0000
+Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
+ ([fe80::ac4e:718:3b03:3123]) by TYZPR03MB6896.apcprd03.prod.outlook.com
+ ([fe80::ac4e:718:3b03:3123%4]) with mapi id 15.20.9031.023; Tue, 19 Aug 2025
+ 05:32:17 +0000
+Message-ID: <76a1f892-2fc8-4ff9-b466-9961d629fa22@amlogic.com>
+Date: Tue, 19 Aug 2025 13:32:12 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] spi: dt-bindings: add doc for Amlogic A113L2 SFC
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>,
+ Feng Chen <feng.chen@amlogic.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-amlogic@lists.infradead.org
+References: <20250808-spifc-v1-0-ff4e30e26a6b@amlogic.com>
+ <20250808-spifc-v1-1-ff4e30e26a6b@amlogic.com>
+ <20250808-adamant-fat-raven-38c8b3@kuoka>
+ <7fab19de-8ed1-4fe5-b2a4-a7e9c13d8424@amlogic.com>
+ <5cc336bc-f071-41d2-b59a-af0df23af00b@kernel.org>
+ <d872a711-7442-4e2e-bc59-0d6f4f656fde@amlogic.com>
+ <017a4d15-286d-4e0a-89ff-f658009a6de6@kernel.org>
+ <cf825229-7294-4fc5-b7dd-09dc1198db74@amlogic.com>
+ <d8248069-c12e-4f72-a625-c4f68aa42f1f@kernel.org>
+From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+In-Reply-To: <d8248069-c12e-4f72-a625-c4f68aa42f1f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0030.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::17)
- To SI2PR06MB5140.apcprd06.prod.outlook.com (2603:1096:4:1af::9)
+X-ClientProxiedBy: SI2PR04CA0001.apcprd04.prod.outlook.com
+ (2603:1096:4:197::12) To TYZPR03MB6896.apcprd03.prod.outlook.com
+ (2603:1096:400:289::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,105 +92,175 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR06MB5140:EE_|KL1PR06MB6591:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3f69da9-bd10-48b5-93d0-08ddded5424f
+X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|KL1PR03MB8286:EE_
+X-MS-Office365-Filtering-Correlation-Id: af3d8f25-f58a-48fc-7687-08dddee1c2ba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|38350700014;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?05gC/NtwiLaBe7jrl7m1TC/IOa7Q1Erx5HYsANcC4XOszIkJG48/r8al4pHV?=
- =?us-ascii?Q?zrpFiRsKLaXRuomsCJG5/K9NyrKxAV14N746Xr4N0vRbXs9SX1x8Rwy62ucp?=
- =?us-ascii?Q?xOPyutR0Q1+ZV8gvT7fHgzutHUlFPf+Jk13sQCoP0N7zuyOybPOmANuTZJGg?=
- =?us-ascii?Q?5bW0hsMaCcp7joJleupesa5WCj6LwinqFhfRb5P/WTb8Xv1919v2F+5nK5hd?=
- =?us-ascii?Q?ZGvYf9tIUoOSaKK56pZwAmdwSQFjGWg48xQRv81vqLnigA+P/0P4iqOWeOqB?=
- =?us-ascii?Q?9hsr8Ur0zXgZakIbPJi/mWajxv7t2TA1vp/4c3HXX8+7ApjjyJzI6McYUypA?=
- =?us-ascii?Q?rK7ATpLsE4KAvI1k8+7buPLypA73Iy+wL3M6aKk/G+U5TSaZhxthbSqUaal2?=
- =?us-ascii?Q?HJ+sNhzYhAGmGu5Cq9WKOaN0es/BXR6NlIagSEHMqFxSdCiilA73kYEc7jhc?=
- =?us-ascii?Q?d/MOjw7d4Py8MhljwfCH0qqi9r5PDOMaOkPNwFweXGZa7EYDaiqyw4GTymPn?=
- =?us-ascii?Q?xQ6nIHu+pNcX1f3e+g9r/imPtpDEpAZxLo33UrcH8GxtYgjFJG3CFfYxJ/TQ?=
- =?us-ascii?Q?ykfVJxJfAvx2nCT6r4wikIS7Zttk+LeTi/pw9vW3glg0NksTHi3QFPJ1bj77?=
- =?us-ascii?Q?C5QjrRCLl/FF/4aSZvUyu3O644xHYnI8uNp2p++FHoscuNw9gcjeKuPDrHkm?=
- =?us-ascii?Q?mKH/OYKwVegzatKh9xA/9wkMsdnbToYGMITCFx+dmAKfz3H2kg0b+CbUH5OW?=
- =?us-ascii?Q?cIyyweOpdCFiUkoFatkkmDtRHylCYThBFCn3WAtrYkR6Hyqw+JiVyq6s45/y?=
- =?us-ascii?Q?pv1JcyJ/WZm2wXaA9fBxSzW4wtDYcfMhCj12fWsQeoDZFgaIKO06/cmn1qrW?=
- =?us-ascii?Q?HkJ1Ac5QuS+zrWOBRelmpb0tcjxJSvymnr8xiBgyaNPtzQKt1KihPc2kzW5F?=
- =?us-ascii?Q?vgewH7nxiMI216gGU1UNAu4ChG6GpZ6hw3GJJn33oy/pfhDp5VOq0igOq5Mo?=
- =?us-ascii?Q?I9ZN+LFFXJmI0dakQbqM5TvOkZElUTiWIhPy9SUDZDTUcoYAMRJRo5AmmdLB?=
- =?us-ascii?Q?Z+6jYuA2NKKg4QosLyFcUVVdvCPhqqsQa39XvbBP/Rn+uvhGUbb68ZB6VXPr?=
- =?us-ascii?Q?U8a4gwhubOPE1dBN1xAV1pOcdywBOqyoi0sYdbxJhEj6mconKC09Dalq4ZFf?=
- =?us-ascii?Q?t0BuDxaknXFYtyBa0I9DjFdi8+la0V6sw/o4U/VOz82fjTiE0cAILSFvdXpw?=
- =?us-ascii?Q?okC5k1Y92hSM8iBBPLM3CSWjO84ibCHTf8CLFp7E0zcC4prC5Rf4Mp8s0loj?=
- =?us-ascii?Q?MmFZyicTuaxcYvNZDCaLWBiffsZo4FWxOWYjNqILCZkwqtEYzBNQx5q6xRs1?=
- =?us-ascii?Q?lqzhBvB8NXkw6oPYx6tOotHLVc6ZOszet7VzeBltZZ0flVyhzHmtah1Zbz+7?=
- =?us-ascii?Q?QYRmOqMW3HqzKDaNHZyt7BhtWwpaEbIM9JjWLGy3w9wUM0rrredx3jHXY0g5?=
- =?us-ascii?Q?r/o/gHDGro/UjkM=3D?=
+	=?utf-8?B?ZDFVU29hOWZRQUV5NXVwYXpWSlJzeENzWHhDM1I3SnBWbFI1aUEza1F1bCtl?=
+ =?utf-8?B?NUpwZFJwbUdDcjJZV1NCU1VFSFkyZGpTZ0dRT05nekZkQ0dRSithM0pPS2ZR?=
+ =?utf-8?B?TlFDM1lFK0pNemJ2WkxvWFFRY3pDVlRZdXJlT1FaSjJUS2RQMXo2eVRsWHRq?=
+ =?utf-8?B?MGtRV29GVHMwUTBUZ0JWUmpzenJHTUhWL0lFU3NTa09ndVdVVHFFdTUrSHJW?=
+ =?utf-8?B?VG1lRmpIRmxHcjIxcS9BSEJOMk9VZXR6MkZVamhoYjFFeGN6VmVUQ2EzWDVH?=
+ =?utf-8?B?Z1F0aTBWQkQyYXYycE1aMld1M0ZTdWw2VE13WmZFdlJYTUlvdkxobVBGaWN6?=
+ =?utf-8?B?cEo5dHRlc2h6SmdEbFFsMGJ3ck5Nc1B0OHkzOHgrRGhLYU9Qek1LcFNuNC9a?=
+ =?utf-8?B?NGRvLy9LV0dXTEcyOStnK25RTnRvRUkwbDgwb2I4UWxsS2Urc3dqVkZ5SHFW?=
+ =?utf-8?B?R21TRy84eEU3ZmdmQ0JxUXc5QVVIalN5SEl5Y2hzRXBWNGJicDJXdDdQbXZJ?=
+ =?utf-8?B?c3lHUnFmazdLVDlXT0lCc09UM1JycjZxbm1HaGtOMVpEVkNONFNqbjlXbmlD?=
+ =?utf-8?B?aUpCMXJVNnpGdnpGNSs1b0JYbk5qNWtnOVRUYUFvVWo5eU1VY1hod29RSE1i?=
+ =?utf-8?B?U3RmL056eTN5NUNlTDhsUTRaZzBTYUY5TVlnNWVZUk1RdVdzY1k2SzVHeS9p?=
+ =?utf-8?B?RjNEaTZFU2J2N3V6ZHNkN0pPcngzNW1EM3Nua1RyUUswUXpOUTlFWWIrNnVL?=
+ =?utf-8?B?L0FqSW13SU85ZXVVUk5tUnhNQ01JZFREQkFhQXlqV0I0M0FEV28vZ3ZuK2l1?=
+ =?utf-8?B?OE9OU3lqRXJoTWpWaE8zdm1lT01CSkJLbjJ6SUx0WEdoOUZUYmtjZmNtN1po?=
+ =?utf-8?B?alRJb2hnVzUyNjlldllEeUs1cnE3YUlRYW1NSW1DR2V1MDNabk5QOGh3T1hE?=
+ =?utf-8?B?T0tvRCthT3dRRDVSbTJtVStpMlI0SmVsYWtXcXhZNnlVaUpRdkZ1U3FFcll5?=
+ =?utf-8?B?aFVuNFdsSzE0L2dIaEZHa2ZNRUI4YVk3OXpQN3MwZDVveE41S2xQK0NoZnJj?=
+ =?utf-8?B?Ry9SOWYrWW81Si9UaDg3QVlZSExOKzB1dXpQMld4VDBOeDBkY0dFbGozdEVJ?=
+ =?utf-8?B?Z3U5cEQ4YnhJTzhRR29IWnJPdmV6V0d1RngxK2pvTWNhNTJQMXllRExDRlgy?=
+ =?utf-8?B?WEg0ZERPZVh2eTROdzlRSnRsaVM1bC9Vd25VbDNxeFdqbTRoWHFuQWNJWGdP?=
+ =?utf-8?B?dy9aNHJydXVjbGhBaXY3MmhBMHIxaHNtT25ub1QyMjdMaFlXM3NRSEFaanJ1?=
+ =?utf-8?B?YzZCYWJ2bVByaXhIQnUzdVg0K3Y2anYvcXh5RGZ4WUVycUJmeE1lVnBpTmlN?=
+ =?utf-8?B?aHFhWktVTmE4dnpocStsNkxiZ0RxZ0F4UmVTS0VOSU50TEJ0MDk3RCt1WHpD?=
+ =?utf-8?B?VGFFMTh0eXVJT3pveTRGZlVwc0JUVWZRZGtKdGpqV2dxRjN3cElEWVdTREtq?=
+ =?utf-8?B?YkY2TXRnQ1dVWGxOU2NtS0txWGpLSlVLRDZKN0tHb051MzlCTDhzTzl5T3lV?=
+ =?utf-8?B?MDdBSDRJbFhMUEdhZy9EOVcwdHh5bEFxemdiODhtVjBDYmswam1RZVNNR0tj?=
+ =?utf-8?B?Ny9Vc28yMXBGOHdrZ2VyYWhJSDUyODJRRWlWOXV4dmtOcTAvTUNrMW1RUmVm?=
+ =?utf-8?B?Vjl2K2llakx1ZlFISVNaZlZQZ2NkVjFwZnhOU1JlbnVpNUVrWVB2RkRwSmRF?=
+ =?utf-8?B?S0hNaU9VL0l4VlptK1l1Qk03eHVzdzFkRlZPRDNQWUZ6ZGlMVEJZY1I5YVlY?=
+ =?utf-8?B?eW0zTHo1UjdVWmxHTkVldHl3R1l1N2QwdndJSE94aHA2OFRSRmRzZ3oxNXRa?=
+ =?utf-8?B?SXMyWm5jZkxpYy8wa0VUdkZ4aDNvdWtXalpEZzh6K3JxVXVzcGZFdzh1UzdE?=
+ =?utf-8?Q?tZkq+BKV7qI=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR06MB5140.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?sbwjBpS7AgiZm9rqjOsNwc4yfZwgbgKpA7pKDLhx7JJ//AdwPgY73GWA0nYG?=
- =?us-ascii?Q?bYglWBMnOd2VwHukdySvrgq6UV5GPNe6V/sehB+/ID8aVlDzujjLlabtAzHV?=
- =?us-ascii?Q?nOTlFNRQDx94920dtQqzRJ4geF3rhoY63WLGjpNFYPfsVgcpc7nMIN2afsIP?=
- =?us-ascii?Q?TCtWBcMSH0Eu9NXOkQFfWHPYEXfj1wjGcKBcnxHsx2E6vWgouoFkOaKgFdYz?=
- =?us-ascii?Q?g1fMFIGcIo3T4lyaKfxRfAsqzkoNO5QPMM8YNyz+ifyDipounaYuAyb7gJrY?=
- =?us-ascii?Q?mtfL6/GU+nitx3Ruk7V76NrPlmVvFp4GTNPXY1V5Pu090kC4Kguz4nqlFGDG?=
- =?us-ascii?Q?rY3DPaVFTDFgrPl0qg1AmDcGUyoTrrIV8WdsszXBi9y+QUY1lfA4MOvSLwcp?=
- =?us-ascii?Q?MqhRZqFLsgccieJe3iqB9526VMrATagp53zGTTLrWV+REHPW0bJQ82LIwt1o?=
- =?us-ascii?Q?9dbwTmRGFhL6MKBeU0zKNloSJzGMX1J181wXuZqhFq0jLsKuvkQsk5BtMQgs?=
- =?us-ascii?Q?ZsVvrLT7BJWyuM//QCxD260NzC0hDscJjEcGm0QHy4hJEKeMQxCOTaO4l1z2?=
- =?us-ascii?Q?iUv6sSP11KjImhJCwikU+bN+PX0FlrJmWr4sBK807AxMUz4Zd68P+m95Na5u?=
- =?us-ascii?Q?7yBv49Okhkhs+qeHFY3gH3eTY+OHJbnKKLCFiYAMaDkzQBkViJOpuqgOuTXb?=
- =?us-ascii?Q?0VEeET+mu9DAS1sX5zgCaX8wCroR6k7Bc83gapNiV+mdd1stLdeVRUq/JOzu?=
- =?us-ascii?Q?YmI5boS/qUSN1v0BjBAoihEJF7bev/ECr8RbFQfUgB71DIco/7wOyAxemZ18?=
- =?us-ascii?Q?x8jXus5LlXl5QXpPttimPnXkrSiywIqVeovhCUotK2JldbGcKvikkOKf3zT5?=
- =?us-ascii?Q?YJz6lIlqhZCX/CZXpvqXgR/fHoQUD3oDLGTwSxDGZ7wGK3hcX+wwuoYV2c3Q?=
- =?us-ascii?Q?E1t4ugzBidGN0Y0a5JBC1zIny1epuUnJwbrgdhR49NlqiUMz2nQxwiAVYEq+?=
- =?us-ascii?Q?2R7bka+2F0kd+FOi89DssGmJT+f07jI/Wwpcz0FlXibUJU18AujHBjb2s2OV?=
- =?us-ascii?Q?7heW0aQIaS7ie9bElHoatRW3IInc9wsLyYeEEVQVePip7/O9dzzyzw/IVeHs?=
- =?us-ascii?Q?fBAeBqPmaZf+q284G5IUWLhj5GHAMbjG89zqKPoMEMhoS614f+qH/K9eODh1?=
- =?us-ascii?Q?Bxxx/EWYexSvs/v8hDXo8R6y2EE10HSMd14FFzXBfVsthMAn2/wUa3Gmqgyd?=
- =?us-ascii?Q?L7V9XAIzVvy5uA0srMYOhvT3Qkmgtc/atzM/FbnY3GFiHGFCXSRNpxiQ46BB?=
- =?us-ascii?Q?iLJ48yal0pNWN0lnyl3OHrryi3aIcn7Vld85cyGZe5mSq0ZPnT/4eRtWDwBb?=
- =?us-ascii?Q?pmgV3aL7nmfa6Y+pwqHRjgOw0wtHYpYtAFTLgCJpLg49x1ksApzuhymYA0Zl?=
- =?us-ascii?Q?p5UT8Ahk98uJGqz8JcrsTB+nZGNd4GYLahEz1AMHylJ7qdJE3NDtP87GoZdU?=
- =?us-ascii?Q?pLBQSZXKZ3uTZMfBRYOsj9L85eOPRD0ESVsNqI3DxDoROOwjBxWHBWsN39e6?=
- =?us-ascii?Q?ofWCDKr8Zu/qMk7NzJKpYStzaJuXU+Iu6OsTn85U?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3f69da9-bd10-48b5-93d0-08ddded5424f
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR06MB5140.apcprd06.prod.outlook.com
+	=?utf-8?B?T1RTRTNJOVZhanFQOUlrQmlweEFPcHkzNkZrUDVUVjIraXcySzVpbk5iZXQw?=
+ =?utf-8?B?OHFqM2Z4NzdtYTU4ODJpdzZWWWcxRDB5WFd6Wkd0MS9xdk5hcE1ZVVR6blJk?=
+ =?utf-8?B?RmZISld4UTE0eW9oMzdsdTBZSFJlcXZLamVSOUJNdWNiK0gvR1RoUjFyS0t1?=
+ =?utf-8?B?V2ZnR1NLRW9DSGlBd214aGxhVk1WeDFZS0hCVUV2SzF0Zm42cXMrcjR2eU9Z?=
+ =?utf-8?B?amlwKzV4MXhUa0FtaWUzN3B3ZDQrWUpBQUxGTXJXdWVCdkJrNVJKcndxOTNk?=
+ =?utf-8?B?ZSt0dWszdHRaM1lPemdta0tHRkhLRDMzaTNET1lNVHkxYWFHS2MrdzMva2tU?=
+ =?utf-8?B?Yk85YjZNN3NScWRTT1ByejJHNWRCdmJzSkppZ2xndGpnTlZiK3NvRFNhOG5k?=
+ =?utf-8?B?TXhhVENvR0lYdks3UWtrVEF3eFBqVU1pU056OEplMG5UamwwYXBPZ2xiYXlz?=
+ =?utf-8?B?MlB5cnljNFp6VEthajI1M2RNSlhGUzdTc3ZIMkRKR2pIQlhzOS8xSlRhUDEr?=
+ =?utf-8?B?MlphSUJxb0hCRWNaL0YxL3AxR3MzclRHYzI0RU0xYWVWcng2Y3lCcEYzbnN5?=
+ =?utf-8?B?c0ptMlBTSEdJNFc3eTd3SVA3UWlISUhqT21CN3VPL2F2MTdwSDcwYTNZZy9M?=
+ =?utf-8?B?Z2VjeGE0M0lhYXppS0V2Y09PY3phNmhuV3MxSnNqNmhDajBEakZ2QzJSUk56?=
+ =?utf-8?B?MkR3dDlIQ3pKUlhNQzJwOVJKUmREQnZ4RzZMK2NqYjNGS0wxRUR2ajVsSmw5?=
+ =?utf-8?B?bHRtOEUwejBGSmxucE8zR2VVcnFPckxISjloMi9BUmJuTTFRdytuSXN1RG5G?=
+ =?utf-8?B?R2dyWExxV3FmMjBEY24xbW1Bbm82amIvSG1scm5NQ01IVzhaNCtjUXNSNXlz?=
+ =?utf-8?B?cGhSVHRIUDJjek5XOHFoOTZjcDh3eVRCdTU1czlYblUreFgrRkxZcDVYeDVz?=
+ =?utf-8?B?LzhOZGYrNDFkc2UxZlB6RGpsZTRGdU11SVdVL0pyNkdLNndBSEVOMktRTUoz?=
+ =?utf-8?B?VUQrSE1maytVMndNMFNqcjMxeCt3VStPam9HdXBUYSt3dXFMVFloMDlub3hI?=
+ =?utf-8?B?TTJYcEl2ZGJwK3E4VGtCbTBjUGliazljdm5FUVVnNUxmcnZSQmJsNFd2Qnds?=
+ =?utf-8?B?UWNZWEtHT0lraXpleFhwMGJBT2lPY1JSSjZTZW1ncDdtbW5FRmN0SGs3Uzg1?=
+ =?utf-8?B?V2p3T2RiTUh5OUJtTmtqdHdZVmNPazVpOVAyYjNKMG5PSHgvcmVTMHZRQm1y?=
+ =?utf-8?B?eW1LYmFUazBIVkd2RlJVZjdGQUZtYmk3R3JoMEtNTHpSZGRNVHEzREoxdGVL?=
+ =?utf-8?B?TnJPN2tTNjQzYUlUS21qbzMvanZXU0h6NXJzRkxGb0tuVEh3V2oxNTNybkFJ?=
+ =?utf-8?B?TjNtK0xPREFhcXBWZkI4SUJSc3JtNkhaUWY5U2pQUGRPQ20vOVRQSTFnM29C?=
+ =?utf-8?B?MFczMzZoMFpmY2JtT3BvNjlUVS9rWEFpVkNyVVZvV3dCc0RlRWRDUDNkVlJ4?=
+ =?utf-8?B?WW9rUW8xSm0zdmpOWlJFWldQdHdFL2ppQkNySUI4d0JJMVY4N3V2NTE1Q09s?=
+ =?utf-8?B?ZmFpdGNjU1lHRW5qSzBxUzZJQkhiSmlxNzhtd3MzRnM1TlVtM1dZT2ExM2xY?=
+ =?utf-8?B?eUU0ZDFBRGs1dWZJZkdTNlMvcms0ODhBWEs4T1p0N0x1OW5ibThVTm9VZktm?=
+ =?utf-8?B?Z2RFdWZyVFBsUlV1S01hQVdpbGNQOUVhMmVxVXo0NU1hL3grQWd3N2VUeUt3?=
+ =?utf-8?B?VFhmQlM0SUZRZGMzRWdVWm1PK3pJS3BDS210SVMrdzNCaWJuWHZQV2N0NExa?=
+ =?utf-8?B?VGlvanRxRVkvR1MzbGRvWFd0b3o1VEhoMVdiOEtnQXZQV3V2MlIybTIrRUF2?=
+ =?utf-8?B?SzFWUGVkSmtHYndCYlRXYjEyYUhncVJzQzhmemZGRmowTUlReDZjbDd4cG11?=
+ =?utf-8?B?WVc2QTVRYlpjT2pydCtCR1J2ajAvU05pWE9tUmpuTXVNL2pkNXc1UHRvZUFy?=
+ =?utf-8?B?MHdZRlNpSXNpd2hwT0cvYW94OUY1eHJqbGFBSUwwN0NTRUVtYVlFQUdlK1c0?=
+ =?utf-8?B?K3VxTFZIRHRSMUcxaHRkQjFzbDlEUjhQMUt1YkUrdk14bzRhMlpKNDlXNXFx?=
+ =?utf-8?B?UmF6WjgxUk9SYVRzbTV3d3BDT1REdmVrQ1ZQNTFRYmdJQ1JDS0N3OTBhMnkz?=
+ =?utf-8?B?RFE9PQ==?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af3d8f25-f58a-48fc-7687-08dddee1c2ba
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 04:02:48.0229
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 05:32:17.4123
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5X0OLeO4AVXr9C55Sq9apDW0lPkagmezsDRdO8k6zRUGuRj+vIkCDjn8/Pnkl1lKH86OwDeq+A5GeStBD1SSXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6591
+X-MS-Exchange-CrossTenant-UserPrincipalName: GSpKaIMQ4keKFOkFPXLjOVIIPO3WQ7wTYCdU/kpOOh4WYf5CweBgNfRXtdZcx7gJN9V6vPouxxEsel4gIZSndyzlsUZTPrjK3BuISNQcFY0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB8286
 
-Replace calls of devm_kzalloc() with devm_kcalloc() in aml_spisg_clk_init()
-for safer memory allocation with built-in overflow protection, and replace
-sizeof(struct clk_div_table) with sizeof(*tbl) to shorten the line.
+Hi Krzysztof,
+    Thanks for your reply.
 
-Signed-off-by: Qianfeng Rong <rongqianfeng@vivo.com>
----
- drivers/spi/spi-amlogic-spisg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2025/8/17 15:20, Krzysztof Kozlowski wrote:
+> [ EXTERNAL EMAIL ]
+> 
+> On 14/08/2025 08:38, Xianwei Zhao wrote:
+>> Hi Krzysztof,
+>>      Thanks for your reply.
+>>
+>> On 2025/8/14 00:19, Krzysztof Kozlowski wrote:
+>>> [ EXTERNAL EMAIL ]
+>>>
+>>> On 13/08/2025 11:34, Xianwei Zhao wrote:
+>>>> Hi Krzysztof,
+>>>>       Thanks  for your reply.
+>>>>
+>>>> On 2025/8/13 15:36, Krzysztof Kozlowski wrote:
+>>>>> [ EXTERNAL EMAIL ]
+>>>>>
+>>>>> On 13/08/2025 08:13, Xianwei Zhao wrote:
+>>>>>>>> +allOf:
+>>>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>>>>>>>> +
+>>>>>>>> +properties:
+>>>>>>>> +  compatible:
+>>>>>>>> +    const: amlogic,a4-spifc
+>>>>>>>> +
+>>>>>>>> +  reg:
+>>>>>>>> +    items:
+>>>>>>>> +      - description: core registers
+>>>>>>>> +      - description: parent clk control registers
+>>>>>>>
+>>>>>>> Why are you poking to parent node or to clock registers? This looks like
+>>>>>>> mixing up device address spaces.
+>>>>>>>
+>>>>>>
+>>>>>> The SPIFC bus clock multiplexes EMMC modules, so the corresponding
+>>>>>> frequency division register is also in EMMC module. The SPIFC and the
+>>>>>> EMMC modules cannot be used simultaneously.
+>>>>>
+>>>>> Then obviously you cannot put here EMMC or parent registers.
+>>>>>
+>>>>> It looks really like you miss proper hardware representation.
+>>>>>
+>>>>
+>>>> It does seem a bit unusual. However, in our hardware design, EMMC and
+>>>> SFC modules are integrated, and they share common resources such as the
+>>>> clock and I/O pins .They are mutually exclusive.
+>>>>
+>>>
+>>> How did you express it in DT? This looks similar to serial engines and
+>>> such are not implemented independently.
+>>>
+>>
+>> The hardware design provides this clock for both modules — EMMC and
+>> SPIFC. A control bit (bit 31: Cfg_NAND, where 0 = Port C only, 1 = NAND)
+>> is used to determine which module uses the clock.
+>>
+>> It's not that NAND is using EMMC’s resources; rather, the configuration
+>> register controlling this selection is located within the EMMC module,
+>> which makes the setup appear somewhat unusual.
+> 
+> No, how did you express in DT that they are mutually exclusive?
+> 
 
-diff --git a/drivers/spi/spi-amlogic-spisg.c b/drivers/spi/spi-amlogic-spisg.c
-index 2ab8bdf2a676..64244a0bd408 100644
---- a/drivers/spi/spi-amlogic-spisg.c
-+++ b/drivers/spi/spi-amlogic-spisg.c
-@@ -662,7 +662,7 @@ static int aml_spisg_clk_init(struct spisg_device *spisg, void __iomem *base)
- 
- 	clk_disable_unprepare(spisg->pclk);
- 
--	tbl = devm_kzalloc(dev, sizeof(struct clk_div_table) * (DIV_NUM + 1), GFP_KERNEL);
-+	tbl = devm_kcalloc(dev, (DIV_NUM + 1), sizeof(*tbl), GFP_KERNEL);
- 	if (!tbl)
- 		return -ENOMEM;
- 
--- 
-2.34.1
+I will remove this part of the register description. The clock 
+implementation will be placed in the common module. The SFC is only used 
+as a consumer for the clock.
 
+>>
+>> In the device tree (DT), I'll just refer directly to the clock frequency
+>> division control register.
+> 
+> This does not solve the exclusive usage...
+> 
+> 
+> Best regards,
+> Krzysztof
 
