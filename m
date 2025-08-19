@@ -1,80 +1,80 @@
-Return-Path: <linux-spi+bounces-9530-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9531-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 440A7B2BE0E
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 11:53:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54CDBB2BE32
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 11:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C448E173291
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 09:51:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C2AC1BA0448
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 09:54:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0F831B123;
-	Tue, 19 Aug 2025 09:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6CC321F52;
+	Tue, 19 Aug 2025 09:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DwNAeMsk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iVzwx3MT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D202765D4
-	for <linux-spi@vger.kernel.org>; Tue, 19 Aug 2025 09:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF27B321F27
+	for <linux-spi@vger.kernel.org>; Tue, 19 Aug 2025 09:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755597069; cv=none; b=lmp6QmdtjmJi5A6Ynx5UPv1MRO60BkrVUmBxZkog/UDDH8glPD5QCC5uPanCAAu5yIjVR7CpOfsQAHI/OzgyNZJxIl598VAK8rNRqpQyOxVZ/M1s2Dvotmmov7s5cAVDXQf4Jzj1wiAp6SbRwhVgz2H0lZoMKbI4PVJkMm6WmEE=
+	t=1755597177; cv=none; b=AcBSPTm380A4jNElRRqtMNqnZdwjuRng3BDEVyqM2EM2D4ALinEUuFvNlWB3imjN8bIyocaj8op433pq/G+ZeYEDQsj4JQEeXO1VTVurnZ8vsPb0rmFmPMk9s8jtsetmHPaPr7M6ONtgr6W2eCX9AEO/AaRpYuIglu8+f8AgRDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755597069; c=relaxed/simple;
-	bh=UHFObRlIIZeDanFV92i7VHnr2QcfoemI+cerUuacbO0=;
+	s=arc-20240116; t=1755597177; c=relaxed/simple;
+	bh=D7ULAKtYONClt57a6AjnjqdTGtyDYDEhUbl2DruBwCU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YN1XT3JClzos/RdZvYqZVCp1JW1POOwSjHzkn2JgRboKmpIkBjKqspJrn2/mVo0nH5621engG6Hxwb12S0Hsi2WDZ509pASxFFoGYq0C2mQrt+BtcxAVJTUpK57kOGZ0jCj+iJGEtjVPUsOHYyc2DqaWxIhl++x0mmIodajsLPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DwNAeMsk; arc=none smtp.client-ip=209.85.221.45
+	 In-Reply-To:Content-Type; b=lb2ZAliSvCXdZR80HnsjT+mBygGmvflB9sOp89fzW7WpKqJTJPoabUl9w4OBxLY2uA37nnpBT4Lm9FvCLR/9dBv/Kn/2FRXFxaZ3/CZ+59/NoGpBdMkInBoEFEUBwODwrtKngFAAUh+TuqQsNdQYu8/dGQ5M4y+1iUOhxCPab38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iVzwx3MT; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3b9dc5c2f0eso3274890f8f.1
-        for <linux-spi@vger.kernel.org>; Tue, 19 Aug 2025 02:51:06 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3b9dc52c430so2498950f8f.0
+        for <linux-spi@vger.kernel.org>; Tue, 19 Aug 2025 02:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755597065; x=1756201865; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1755597174; x=1756201974; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dEbA4I5qSZY6spIoEFlqu08c9+21gKrj1SN48109zCo=;
-        b=DwNAeMskkxMeEysXR8Iccf3MvoDutV+GHAeVS3Hod9O1MzONK3i36CEwKPbd1mcm+y
-         Pqa3TXukmDwnYUpuPr61tO+AGR8fAaDoIBPVlUj4Xe5os/Bj1C9AfleqWM/MoGA4Ar0B
-         /HyoXfL7DjUw9iPKHbKBJAY1cQCRXU9QMf0FC6fdovqRZ9IuEDpJjO46OE80DUEKO3W2
-         6adQ5pr5lvO9/lUB4KIeS7cKPkOUxiEe04bkNpBY/Ejxwavyh0rMbs6Uv30Tii98tLHJ
-         ypesFowlUKcAiPoGIUaMfWmHM9l6Mk91C7Ul7GTr66F3uQmr4qYg4sj8JVqMZGt44PVj
-         8yyg==
+        bh=0h1IqL/4MIVenVvNd5Jvok7Pym6fhE62Ycqm04pTo+s=;
+        b=iVzwx3MTbZ48iIyb+5hBFgD4VEmw33zcAx2aGEXSo0cs8IZFPihvcHm4n4DcM0wF2M
+         UgGtDTyTmNBclcIFKWH3bmyuQBLCJWDLBnvWJzuQ6daDkL4FV6IQNITZpLnRudr++SJg
+         PgEhYy2fBBoIYGezYghQHaxqjbU3w5NRozhJZCxBIJHIuXWcaI6BFj8hRIduMLfUU2/7
+         Irq/4TJoyidlDIuzl2E+9NLgPzQq5uRZcmdmU0lXakKPptwjHOfpyuCqzzMJp64Q9LTD
+         yRfAzU7T2rY4owrm2eNCg+0UeUuYogPMQaF8LeFKPCbekoOd6vW0poRE+wZHQesV9MmE
+         Hm9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755597065; x=1756201865;
+        d=1e100.net; s=20230601; t=1755597174; x=1756201974;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dEbA4I5qSZY6spIoEFlqu08c9+21gKrj1SN48109zCo=;
-        b=XLv43u7BnGvsG6xf50CiVKEmIh/eabuUvJogex0GwfQ3BuQJy7vU22r6co4ZtU7nGm
-         5OJ1C00nbXEpT7gQFceDsl4RPrh1cUsHytmox5iF+bF73csDsXAoc2bDlN6BEecsZ20z
-         OLRbvdHZPkdeAMeQTLiu0Z83TWOKjDeZmi6xexcI4lNnA2XcdtWTuvjQB2l+cFqZBfhj
-         5oFILtqa+5G5nPecIyvG+XYmcDUGIWrAVlcomDWNPiNKpo2iyYSBAF0AUCuDw40vzL1J
-         ok/7OGQB+MjsAVmvT80OTD0QJ515I6n/zRJw1Mi5c4y0saeqBwUyaky0OOHvYeqdVWv2
-         qUeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUT7TaK3l447UxWHloVAaOSAQUZT0is4swPaJaY+4NgKy3qX4jlToj+ChaS9+o7Bch3TyYCoIulWTg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbRMmW7d0vyhZzoupb92kiwwWjD50O1cg3H/PAaFzy5fQuyFBT
-	8Q7d8a5WoXRuEWtvDJke1swzNffrZf/TDto0WUxfjaWpNXDMzinhxTspTNpvbpKSfrs=
-X-Gm-Gg: ASbGncs5XuCYI0OiBm3uuEZwNzDBe4krktSAOor03P49ONxstuwzjO9PiSigHbngrit
-	JsUh/0w4TqdfRP86PPzNJTU2t5SNb4WhKbQdrSTXBsx1fhRavDgjqb00Ql5iBbCB7/43LdSLGOm
-	rJLMJ/3CvwzfCW5vJMxEaCKiOWryo2WBSawTJvFGak8/PabysERzTXoFDKL+5sAMaKzHzxvnAcq
-	4PPv5XjWbXp3X/g3ZXJfhyrBwCMOPKYtcrCjdDPA1uPt0pz00i9zrql3tfTVcQYrtmI4p39gwPT
-	WmR/mx4ogZF053AvcMuZIJ0omJRnKQmE18TUzqYquifawjECaOdXYp784f3J3rN6N+CYxkihOQs
-	1+eZ3Jf4/4GISxcwdOFIavLoSknU=
-X-Google-Smtp-Source: AGHT+IEhCbEtO72B94zboRfNoT34vBXWkQcIIE5hKfiRYQPXuGCMsQYLXo/jdD8ygHW2tXsu4oCNdQ==
-X-Received: by 2002:a05:6000:1a85:b0:3b9:148b:e78 with SMTP id ffacd0b85a97d-3c0ecc324b5mr1596498f8f.53.1755597065105;
-        Tue, 19 Aug 2025 02:51:05 -0700 (PDT)
+        bh=0h1IqL/4MIVenVvNd5Jvok7Pym6fhE62Ycqm04pTo+s=;
+        b=oepX5R3kYEHuVUccI4sGGfYlBcaRr9OxyK5Q2lIexbOIB4Np+gK4nYwoRbLEEX0Ab8
+         2MVxjg4FVNdw1AHuOq4CkwiBDXn0n4jBP3dUVzXRyGsmjHkMZtzDS1IY9tS78hVSzKvC
+         Y0CYdO0rvAvuIA8X/ZxcrXghQg2phXyQClH52Q2X+ttxlQ+HqBleQqLMVx3eVEhMDh/U
+         mL3X3fyekvjFuE8npx9Hx3lDPCA6LiaiepDgMhQjoHgGXj3yBTkXzr2KqACVn+NswMe2
+         MzkJCIJBnXNbPrEENjifn9H+YbmDLJIqlAhegZmIo9z91Xq+MbYYVKbp14ky13popbQV
+         hVOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXeWo2VcXf7Gxc6OAD2rE7ma2GBqQlfhJjQvXuoVk947b/upHm413sM1UKsAUyt07eFr00f6CUUNl0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0iwGRczAoWwI/e6g/g6ypfyPpE5gUURrQQ620mb3BARX9sWYI
+	LYpy1lqI0fvHprHm1WZi5B5rOk0a6c1d33C9LABqcFxZFV99KXA64aSypdvXgkBzcVQ=
+X-Gm-Gg: ASbGncsXvNpre89R9x+k2felZEak00FcIHjCMuhssZ1wVmPmniBM0fqKGqbolgqLVo9
+	WAS0+VIOHB5zZDbrH3MbznrbUXz767/H4bTd8ZU6yBZf+TmqmK5JOujgFlfMJLuF2yVPeWM7WaB
+	lcor/SxS0iQEr3w+M+EB03NgSJ9mkvrYVWKLSSvLAuJrAwPJZmnCiEITMV7OV0Hsz2Kr2lsiPM+
+	u5YkP3PmW/Xe8yHTqotIYtrjALZUoSBEYU98a7UFyOiaEQnaNeqX2QUblJisoKT9BFjxChFS/E4
+	2jrHlIJwBGgXUS5Ywl846LF5Cg9AqTdGMRGjqIWVfZLTJpQb0ucuXg91CAScDvK1CcJ1t/uTBZH
+	w05tXJj9tu7ZFzOxTvS1I/qSPEn8=
+X-Google-Smtp-Source: AGHT+IGlP+6ysDxLZ9KBBa3uZiR0t6DXx2J2w37t28LWBAiGheosRQfe24PXM+YBFSqepDRsvanIuQ==
+X-Received: by 2002:a05:6000:2881:b0:3a4:f70e:abda with SMTP id ffacd0b85a97d-3c0ea5ba0b6mr1523055f8f.10.1755597173972;
+        Tue, 19 Aug 2025 02:52:53 -0700 (PDT)
 Received: from [192.168.1.3] ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c07487a009sm3017107f8f.11.2025.08.19.02.51.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45a1c78b33csm214351585e9.25.2025.08.19.02.52.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Aug 2025 02:51:04 -0700 (PDT)
-Message-ID: <91b3e06d-501a-48db-b626-5f056287a451@linaro.org>
-Date: Tue, 19 Aug 2025 10:51:03 +0100
+        Tue, 19 Aug 2025 02:52:53 -0700 (PDT)
+Message-ID: <05701887-f78c-4de5-b7fa-d34afdb53af9@linaro.org>
+Date: Tue, 19 Aug 2025 10:52:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,12 +84,12 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 12/13] dt-bindings: lpspi: Document nxp,lpspi-pincfg
  property
-To: Frank Li <Frank.li@nxp.com>
-Cc: Larisa Grigore <larisa.grigore@nxp.com>, Mark Brown <broonie@kernel.org>,
- Clark Wang <xiaoning.wang@nxp.com>, Fugang Duan <B38611@freescale.com>,
- Gao Pan <pandy.gao@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+To: Frank Li <Frank.li@nxp.com>, Larisa Grigore <larisa.grigore@nxp.com>
+Cc: Mark Brown <broonie@kernel.org>, Clark Wang <xiaoning.wang@nxp.com>,
+ Fugang Duan <B38611@freescale.com>, Gao Pan <pandy.gao@nxp.com>,
+ Fugang Duan <fugang.duan@nxp.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
  Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
  Larisa Grigore <larisa.grigore@oss.nxp.com>,
  Ghennadi Procopciuc <ghennadi.procopciuc@nxp.com>,
@@ -168,84 +168,8 @@ On 18/08/2025 4:39 pm, Frank Li wrote:
 > need  mention the reason why need this property. Here, some board design
 > swap sin/sout.
 > 
->>
->>> SPI signal name is MOSI and MISO
->>>
->>> Frank
->>>
->>
->> As mentioned in the commit message of "[PATCH 05/13] spi: spi-fsl-lpspi:
->> Enumerate all pin configuration definitions" the names were taken directly
->> from the reference manual and this doc text was too. I think diverging from
->> CFGR1_PINCFG could be potentially quite confusing. And MOSI isn't mentioned
->> once in S32G3RM rev 4:
->>
->>    Configures which pins are used for input and output data during serial
->>    transfers. When performing parallel transfers, the Pin Configuration
->>    field is ignored.
->>
->>      00b - SIN is used for input data and SOUT is used for output data
->>      01b - SIN is used for both input and output data, only half-duplex
->>            serial transfers are supported
->>      10b - SOUT is used for both input and output data, only half-duplex
->>            serial transfers are supported
->>      11b - SOUT is used for input data and SIN is used for output data
-> 
-> dt binding is ABI, design user easy understand property string.  like
-> 
-> enum:
->    - normal
->    - swap
->    - half-duplex-on-sin
->    - half-duplex-on-sout
-> 
-> Frank
-> 
 
-If we're not directly using the names that get programmed into the 
-register then it's better to remove the implicit 5th mode that you get 
-for leaving it blank and to use that as "normal" instead. Then "swap" is 
-to swap whatever "normal" would have picked. Otherwise "normal" being a 
-fixed value doesn't match up to the current "normal" behavior which is 
-actually different value depending on host or target mode.
-
-So it would look like this with the "if no value is specified..." bit 
-reworded too:
-
-    description:
-       'Pin configuration value for CFGR1.PINCFG.
-         - "normal": Hosts - SIN is used for input data and SOUT is used
-                       for output data.
-                     Targets - SOUT is used for input data and SIN is 
-
-                       used for output data.
-         - "swap": The inverse of "normal"
-         - "half-duplex-on-sin": SIN is used for both input and output
-                   data. Unsupported.
-         - "half-duplex-on-sout": SOUT is used for both input and output
-                   data. Unsupported.
-       If no value is specified then the default is "normal".
-
->>
->> James
->>
->>>> +    enum:
->>>> +      - sin-in-sout-out
->>>> +      - sout-in-sin-out
->>>> +
->>>>    required:
->>>>      - compatible
->>>>      - reg
->>>> @@ -95,4 +108,5 @@ examples:
->>>>            spi-slave;
->>>>            fsl,spi-only-use-cs1-sel;
->>>>            num-cs = <2>;
->>>> +        nxp,pincfg = "sout-in-sin-out";
->>>>        };
->>>>
->>>> --
->>>> 2.34.1
->>>>
->>
+Let's wait for Larisa to reply. If there's no board and it was only for 
+testing maybe we can drop it.
 
 
