@@ -1,99 +1,80 @@
-Return-Path: <linux-spi+bounces-9536-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9537-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38674B2C892
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 17:38:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D85D2B2C89A
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 17:39:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A1297A794A
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 15:37:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D142817A59F
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 15:39:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7D4244186;
-	Tue, 19 Aug 2025 15:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F2824169A;
+	Tue, 19 Aug 2025 15:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mucZ1rha"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOOvajSM"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446B22EB846;
-	Tue, 19 Aug 2025 15:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BC124502C
+	for <linux-spi@vger.kernel.org>; Tue, 19 Aug 2025 15:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755617907; cv=none; b=HgNvvTLX0X0YHLcEzSVTHP1u1MVEWXN+HeNnzL4e8sGMw6Qz88dUrPcwyJV1bmwzQNQuex3RnDI1jE/5cCIPRrtvWxYjMhoWiEAd9DOn9/iD+0B4Gshg+HL2AgG2YEalqOrV0KeHLdli7Uv5lQBgxFH6Z8bjJTQOeHY3//VtNXg=
+	t=1755617996; cv=none; b=IM8GNCC+lSwYPWwl7BIeLjrGA8/vqLgkStu2WUnMGlB9aeqbi+80JXFh+NyQofBEPiJ1eUD16xfWQFLP1MefMhPdp29w07R0xZmtnwCKvgYF7xeWRVdBtebSHuVVTPDDBa39A7Ae0MnEhxVZpozO0O4EnnSHa3vXvdjQk7TcHy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755617907; c=relaxed/simple;
-	bh=WRnEY5mnXKIAn8fJoPOREi7qTQPCOerE9LQWJjKAxg0=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=F8Ug7O2sRHaWiXREwSsCsDtM3mhJzZCNKdODLAry8WKTfH41qKqH+Lvgua8SwfFxaurSmeuplZDsXvquFGuz5QLAMhFT2bNBYpUuGecOhgwTdtXcl3zXiDRoQzj6XvZJpJpExnvVWpnVNNicD5zNgS1jI9RRQBfUkLc6gQyyFAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mucZ1rha; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3476C4CEF1;
-	Tue, 19 Aug 2025 15:38:25 +0000 (UTC)
+	s=arc-20240116; t=1755617996; c=relaxed/simple;
+	bh=9fYRjnYRT3c7PoZVqhLp4shJaQO2lY89SMbXYbZ1Xvg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=BsdYodXYrywIawZN51h/urPoJ5fMvQCm+8RZ9Jp5dIFrGfX4zdeJ6iGDaSBMd4EDKKLE7dfQOUlwzgrkjQ7INjUMYWd9xpsxjHV7FwafLiLRn+dG++iAfdvUl9IYYwgqfHzBUFDUVfgrAl6czMnQ+kshbem8UdmYHWJ31B62GfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOOvajSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FD0C4CEF1;
+	Tue, 19 Aug 2025 15:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755617907;
-	bh=WRnEY5mnXKIAn8fJoPOREi7qTQPCOerE9LQWJjKAxg0=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=mucZ1rhaqeajrsUd6si8VwwKDekoCZtEaVRe3PKN6ewpUk+A3cB5QVI3Sz1ZVeAXS
-	 1/51zIPrjqV9MKtuIcV9wdq5IJPSAlZAAmmgQq33Z1oIJVzqKrMj2hd1vQy+H/dY8s
-	 St3IW5W7mo4hreHWuJAvFvBojODnXbSuFcsBiCb+IzxEKIB0AHnal3kXC6g7jKRLTv
-	 hjy6+vCTK6cs5r9MDTcaTDY5RRZADt54bHPsuYDbd5cdm50ryyDhKdrM1F/u5ArQVi
-	 3TletLwvnkJoy1ES6kUpFoSzl67MX3uWMsuF/3iKUnZtfCK4SdltPhSZF7sixx/ovL
-	 t12se6xOErbRw==
-From: Mark Brown <broonie@kernel.org>
-To: Sunny Luo <sunny.luo@amlogic.com>, 
- Xianwei Zhao <xianwei.zhao@amlogic.com>, linux-amlogic@lists.infradead.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Qianfeng Rong <rongqianfeng@vivo.com>
-In-Reply-To: <20250819040239.434863-1-rongqianfeng@vivo.com>
-References: <20250819040239.434863-1-rongqianfeng@vivo.com>
-Subject: Re: [PATCH] spi: SPISG: Use devm_kcalloc() in aml_spisg_clk_init()
-Message-Id: <175561790566.178223.1385181209019603763.b4-ty@kernel.org>
-Date: Tue, 19 Aug 2025 16:38:25 +0100
+	s=k20201202; t=1755617996;
+	bh=9fYRjnYRT3c7PoZVqhLp4shJaQO2lY89SMbXYbZ1Xvg=;
+	h=Subject:From:Date:To:From;
+	b=KOOvajSMOgmj9FMCYRFimwjD+lsmzUcMkrqmWbJ4kQc39sGO+kp+e6VZ1YdcqoY8r
+	 mwgomk/diiJCq0DBaChmhl+LQo5m2h//YsGoyuxJlQnJlwM6ui+J/ima/pohK6YT2h
+	 zUrBR/NEtlfpAErGxP1uJRnfBeVH6/uc0hlWQjcOCxyQo4AW17zBoKxGGHCQg/CAr8
+	 bV534GdW/FI3cHDsCmlaF9WoDdyDmWQiRt5qhawnGwi37XGlyZhFUJoEEc1cvtm7eV
+	 6vEL0NnSs+NJfGMi/cyhBr3bRq+ZvVZmwb2dF6nCLln3E/cBQHSUbK2vCPg/3tXZCz
+	 sQJlEj3eZm5vQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EE5BC383BF58;
+	Tue, 19 Aug 2025 15:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175561800552.3596927.1716430244831277486.git-patchwork-summary@kernel.org>
+Date: Tue, 19 Aug 2025 15:40:05 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 19 Aug 2025 12:02:38 +0800, Qianfeng Rong wrote:
-> Replace calls of devm_kzalloc() with devm_kcalloc() in aml_spisg_clk_init()
-> for safer memory allocation with built-in overflow protection, and replace
-> sizeof(struct clk_div_table) with sizeof(*tbl) to shorten the line.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: SPISG: Use devm_kcalloc() in aml_spisg_clk_init()
+  Submitter: Qianfeng Rong <rongqianfeng@vivo.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=992845
+  Lore link: https://lore.kernel.org/r/20250819040239.434863-1-rongqianfeng@vivo.com
 
-Thanks!
 
-[1/1] spi: SPISG: Use devm_kcalloc() in aml_spisg_clk_init()
-      commit: c1dd310f1d76b4b13f1854618087af2513140897
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
