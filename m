@@ -1,88 +1,73 @@
-Return-Path: <linux-spi+bounces-9523-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9524-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40A5AB2BD35
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 11:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B08C8B2BD3B
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 11:26:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3F685A0E28
-	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 09:23:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B41AF5A1D7B
+	for <lists+linux-spi@lfdr.de>; Tue, 19 Aug 2025 09:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D22D231A05B;
-	Tue, 19 Aug 2025 09:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D10320CA7;
+	Tue, 19 Aug 2025 09:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Ae/6QRoq"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="YOl/4wqq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013045.outbound.protection.outlook.com [52.101.127.45])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012025.outbound.protection.outlook.com [52.101.126.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9292B31A054;
-	Tue, 19 Aug 2025 09:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA883203B0;
+	Tue, 19 Aug 2025 09:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.25
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755595265; cv=fail; b=HLfo8TC8EhpiAPPcmnKbs5wYnNeiiwkgFQqLiYxVkZlaBe/plMMCuE8ZenZM2TFedWqazyC2p2G2gDxZEoSyjqW4aRDi2KaK+6WvQZc0IqN9ppkvU/sZMEJQuOJRboJSVjJTEpeuigpJgLo6/Q3yzDHAEv4Uj1V1k8y4nWQkTIQ=
+	t=1755595312; cv=fail; b=rqqbU73i10J/m3uEfEwXhjwi/5R+o+pbMJmpY27NY/e3X80Sgg3wvCtRykSC51jZlbAEucGXiXa6gID1x47PSLNqxs5pC8pTywxO3FK4lVz1TwkIQ9OvYAA9m8rDAY7XjLBLyjwj+HkKx+9HRXMqlgm+9khgsCIMibboBqoxpg8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755595265; c=relaxed/simple;
-	bh=DFxX8MmkrjUbQ23OgeELIpBSgfH8szm/n534w33nSg8=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=l7xzp6X5IRmZLAj5tw6mcm4OQEyHqC6/Cd6Fs1g4LUSKIO3fQEysQguXJOXN47Q6vTpy4oedXMjjQhMhSAUblDDMTtkit1UHRzLmhH8Fug51g5DzIQiXUDBqQZPhCL1OWcyFTSr9ltxOyVMjrwlxRGL4XEcRNeQJ8B2z+pjKAZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Ae/6QRoq; arc=fail smtp.client-ip=52.101.127.45
+	s=arc-20240116; t=1755595312; c=relaxed/simple;
+	bh=4cqbk+ARN5yP+S8CC+cCZc/UWXSgCqt1LedbSKd9rHM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VeVPo8xV56+nc0h6fpDJ0hYqtiOaTI9F3t4JS/y7D4kfGmLQBUO5o9wc2FhMC3uKl9DkqQPTWzWtxRtA7/67Yc6zP+JVkuGggtkBa7MlTlX5QscjZbMmaz+Nd7SdJ1QDU5oXumIaO2SQxRCIgds03T9djBt4RFZTelhV0vhgC6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=YOl/4wqq; arc=fail smtp.client-ip=52.101.126.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rFtxkh4sMUspzFYQfkc5h+Rs70Dp4+er4Hnst2LfvSrN4fiUvtH+1rdBN5w+zbUFS9hBmEFJWc2BVdKyrMPv5sw23yD9BfPsMsT10TNcASrYDPwhUonpYmyxqkiYvGLIhus+YjUUdzINusjftwjzyBRAMWEL8maIXH+cdBcoF4FHPPlEhdCAKRKLkASmqDXwMSZSbexcIGfSkRXuJfIMib6bi0IgdDk2jbcuNcdXdatw6bUUCp5QFV5rGskfGyLvARlxX/S6f0b5VyoXLtn5pYjwt6hxgT2EYyrYAA1AYPL2i1sgRQ6H94fyw0M9m+n0cQP3F442zmG5EtAOMlgu0Q==
+ b=vYkebP5u5Sc3hYeBnqWe3TICqCedwtonsESK6O/U3eHuKJKfkeJgwu7u76+GvbdTx1ltz+HnJqMJjYy9eMA7saeuG5Q+xa7eIdhoLIxJu0MnaCtsr4QRb/OVhPjU5M13ap6btTMkNAljm66PKLjZaqZzlJRkwu3q4mnVr8wv8g9cJdubXZLWNTfzg1PIiMCGghzxHt/d9s8id1GIXAGE4nAlaeCVjkFAgWZesjppk308OHC0ZqQwAhvyGCJR0t/3ea53K8ow3FPPqPxNf+3cBONoPSB3iwQM9WloFY/ONGUJfp2He2ZVMmXMX2gFudluyTJVWaj8uke24GU4d0y9Tg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H78CLIdj2y0Ls3t7E7E3SHhlbgDz/8aTkcLo2mKr9DI=;
- b=t0igeQt4cyxQKB93Er+01Uaf3OoqlnPvLGjMJuUQDyK6UNb5XfadAc6cYwWHDY7lcIEczE2eUt3m2ZOoqRjcW8O8/LID1yub6B997xfIeS27uho8xqG/DuyPFws1IMsjquPF1hSjTMex0bb6oDMK0I5Lw8edzCyp1dKgP9NVx9qrwT7YwlAmjxkuratsJ/QWzdVuJnSKSEmwlxwZUEGLuJSP6n7Z6xMKEvJU2yOu5hd1b7M67j4OWMGHbgF7c4gNYV6vd2eFY5wMx2293Crs+xyeuu+r0UPCg663WtfRw0wFN0ncmSf8E8rnF7HW6/ULEETud2Shtmg559LH4lP6KA==
+ bh=lcImajXGnTBltKUvCIXAHJYnDnl62dQ3aDPeZT8Pz18=;
+ b=rBknJZnE8VhRs8Ecb5/Hiafx0Ab8/K8/eBzCIarC+oHDW3GMbVM91L/cf85lzgQ1UjNOIUo2aIiY+fkC+q1lvVQcOZdHfI6Jgdgn/I0KJHrnf2DsCxQJwAty3PMs2Usx+YMAhtooVg0qyI0o6lYpGPPO6JzXwkGSxcVpBNkip1gJAc3yBhszY4R6lBBJUWBhxyhvpupRsIdyiisQQMV+Fvcw7sZixQyyZOAxPeLV+3i5OGTGHgiKrj9z89yl2CWv0/R0f/v2zYsKuRrBMi5WMH0b8PJGDbGPbge25KlEIFaqhCFdStOFXP7bLJkTuzZF7/NVIBTNiDEuFZHORxN3Kw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H78CLIdj2y0Ls3t7E7E3SHhlbgDz/8aTkcLo2mKr9DI=;
- b=Ae/6QRoqkuN9lvCd0JVhBQbjpL/BHxSehifuc90P1UeHwUJLIIxHj7gLJk5PyR1tWlUXH5j2Pnv2eTgqRYZC+nzqTzbBh1MOOrhanGQ2N66ogaffZ9q94HxFk4UYXW5pNzl67vPWF3XwOILcsdjcqNUuP46BaeE+MiJpjKdMgWUDS9At1dE3Obz7+NXV6vS3CZaDtTdKES8coqvEQYxfosXaHg+WPA+vG26zUwlPy3j1AoB9N3eoTQuZs11yEVbkq5C5DVgjnEyfIQvQsJosM7umA4vd9ddhuAREB/8jMWRYD5QblcMarpRuE3jkX3b2fLySDXO/lAp/XKH1UVb2TA==
+ bh=lcImajXGnTBltKUvCIXAHJYnDnl62dQ3aDPeZT8Pz18=;
+ b=YOl/4wqqEry1ogQtTz7xOB0lkuln8jw4S81XApce0sJVFmHyoeByhPZe4RtjClDQKC4s1VGzCccnhuhMsjX5PMFUdrqz94op28dAWNKhLSNqKSO6yzJidK1pvzl7tAomOIqfMLZtjlIbtEMDeQW59Xg5q5k/LD4End2zWjUvm7F8MtCyGeMK0CQZCQO6Nq87mfIgAI+1UtOmmwHGabo9XLmpE0TgbKrALu5rLlYY1im0eVEtGPfoY7fi5D55XwiUHkJnrqCbheKkCRH3optUFhVCQ95T3A3ZdTvEB9KN24LYmYw/YZZrZQ1h0xYgRqDH28WyBHHXTjsiEoreWlA4dw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from KL1PR06MB6020.apcprd06.prod.outlook.com (2603:1096:820:d8::5)
  by TY0PR06MB5054.apcprd06.prod.outlook.com (2603:1096:400:1bd::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.24; Tue, 19 Aug
- 2025 09:21:00 +0000
+ 2025 09:21:47 +0000
 Received: from KL1PR06MB6020.apcprd06.prod.outlook.com
  ([fe80::4ec9:a94d:c986:2ceb]) by KL1PR06MB6020.apcprd06.prod.outlook.com
  ([fe80::4ec9:a94d:c986:2ceb%5]) with mapi id 15.20.9031.023; Tue, 19 Aug 2025
- 09:21:00 +0000
+ 09:21:45 +0000
 From: Xichao Zhao <zhao.xichao@vivo.com>
 To: Raju Rangoju <Raju.Rangoju@amd.com>,
 	Mark Brown <broonie@kernel.org>,
-	Sunny Luo <sunny.luo@amlogic.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Daire McNamara <daire.mcnamara@microchip.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
 	linux-spi@vger.kernel.org (open list:AMD SPI DRIVER),
-	linux-kernel@vger.kernel.org (open list),
-	linux-amlogic@lists.infradead.org (open list:AMLOGIC SPISG DRIVER),
-	linux-riscv@lists.infradead.org (open list:RISC-V MICROCHIP FPGA SUPPORT),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	linux-samsung-soc@vger.kernel.org (open list:SAMSUNG SPI DRIVERS)
+	linux-kernel@vger.kernel.org (open list)
 Cc: Xichao Zhao <zhao.xichao@vivo.com>
-Subject: [PATCH v1 0/6] spi: Remove the use of dev_err_probe()
-Date: Tue, 19 Aug 2025 17:20:37 +0800
-Message-Id: <20250819092044.549464-1-zhao.xichao@vivo.com>
+Subject: [PATCH v1 1/6] spi: spi_amd: Remove the use of dev_err_probe()
+Date: Tue, 19 Aug 2025 17:20:38 +0800
+Message-Id: <20250819092044.549464-2-zhao.xichao@vivo.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250819092044.549464-1-zhao.xichao@vivo.com>
+References: <20250819092044.549464-1-zhao.xichao@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SG2P153CA0038.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::7)
@@ -95,103 +80,125 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: KL1PR06MB6020:EE_|TY0PR06MB5054:EE_
-X-MS-Office365-Filtering-Correlation-Id: 971c334b-dd05-4c4c-3d88-08dddf01b611
+X-MS-Office365-Filtering-Correlation-Id: b1ad5f88-d442-466e-b84d-08dddf01d11f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|52116014|1800799024|376014|38350700014|921020|41080700001;
+	BCL:0;ARA:13230040|366016|52116014|1800799024|376014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ymCvrDiVyhzg+tZ0N5k+ezlJ8fLHQj53cbcBBUzUbWjOSw+DGYK+aPFXSjEO?=
- =?us-ascii?Q?JWoNRzLFMjjqI//y2TuJrpG2b0gbSf0KVBylkwQ14Z3bZeqsQi1vMbsFx+b9?=
- =?us-ascii?Q?S11wyysrCI8zl0jzc6NlYoJaMTzngTTkOZXu33khFZbzLihWQKN7SiCQpaY2?=
- =?us-ascii?Q?eV1Q4FTM9GjK/KSeN4hbjTfzgGhtdndDgJwoiBbAyBlJ2JXJfRzUlwkaknhp?=
- =?us-ascii?Q?AmBirb0dRy2w4YpinUYq2avOSVJF8BgCldoOCH4sNRKTMqwq2YHVE3Crp5bb?=
- =?us-ascii?Q?vtHtr+CBQZL13ieZL6oBolgFHmZM2NYQRmv6ov0GN8fK+Fqp31Ji2UqotGVd?=
- =?us-ascii?Q?ddfTvV7OgmgRFygyA6yCzFO3RBPkm05nVdDC4TusR/6NgpnRQd/EnIho4JI6?=
- =?us-ascii?Q?/bxLF1KieqD+d/l1T7KA7zB8vjISvBeQr0FiHtasNXuwGW+002qMMQsGWKXX?=
- =?us-ascii?Q?KGLdegvF+AQIZXe8g+OxQLsUi02to8tCAugInRoymqRHLbTfvyQ/hRoXotaV?=
- =?us-ascii?Q?cUjOvuC5+X1TdSLyWFu8g5CM3RFLClORK2NLVCAEBAR8qjhJOGkIGQ53ex/p?=
- =?us-ascii?Q?LHzX/CCxWW2GaJ5noUToszUaPEHvu45YDWngqJ2mtYZwZRLIhnCzHGdFhN1d?=
- =?us-ascii?Q?Rhc3vI+whfvmOc0SgePFIJ9EOaFJkkjKvkCVUQYyc/PU50m0JD5q93gipc2p?=
- =?us-ascii?Q?ZYj6dr3UaTrAGbI4tSswRV+lfQOB70Fi88HVj1HzztiyjzW32nSQAD/ACQF5?=
- =?us-ascii?Q?0/WZ736iVdFb7JjAT8VuYm137jIP3YxqIzX6UPwwmcB4AgXSEjyG7W2xVOpt?=
- =?us-ascii?Q?qghvej2VTyk1Z0hlpdKyp4wc1zls4JPnhMVcqzEXZXK5wkEc2o/okFNCfuUa?=
- =?us-ascii?Q?luhCgNMU74fgp3jIdoupBUG8uRq0JM8GF2/JNhv7dj/zgFtMQZCKZG3HcMNH?=
- =?us-ascii?Q?BjCS+gEcna7dgk8lYeYbJv6wJONNBh/G9NRvThTf3Xd1EmTbWDBkN9wT0Twb?=
- =?us-ascii?Q?0S6bvim+dM3fb8/WNbX0ntLi/FiVTsyD3kkTNOXtHg8LRZIOvf+Ph9UEW0Cj?=
- =?us-ascii?Q?MxddI01nKvt2XjqEDqqjeXTbWdNzlNb9ZN7afOQcTvDoMWaAaLHSJ8xtdjcd?=
- =?us-ascii?Q?CjhBEy7MmQ31B0Wl2DAb9L0IkALVYxQWhbHDLdxnmmaWCvzCviH9XLTN1qXW?=
- =?us-ascii?Q?Y3XE6Jg+l1JcisFtZXQbCXcA9UhsRNE5uqTxjf0aeMcbTEbQvKpqKZk42eS6?=
- =?us-ascii?Q?ygA/JQM0jFBpF6hKn9ezJasfw484rs8XrLjhBXpmf19aiBrdmHKNCU8IWkcd?=
- =?us-ascii?Q?cWYsYlIcp+tRXuzY3FvjrGIWMv5tHd5oAYXR1ncsVmZOi7gAvQ5clIbwgyHn?=
- =?us-ascii?Q?dZF/jFHjeIrlXzc28KhdgdnO5coq8XAcIn3FllhlxpJpT3z1yV+CUb+Ayzy4?=
- =?us-ascii?Q?Me5q4Y+PxJwdF7DZTcYYE0h2TPKW/FUITKr+vU1Xf920cDfvyNlJokXouDOW?=
- =?us-ascii?Q?6XOkzYRA+SWTfnLO4Bq2NI8Moznq/+gEJH+FJUUS54S5sdPrFGGg16v4mw?=
- =?us-ascii?Q?=3D=3D?=
+	=?us-ascii?Q?Z9spCaQpssfMLm3yGWjoxC/JmYWW7BJ/XDV7P53fGf7CyKTt+0Gp5J9Ot2Wx?=
+ =?us-ascii?Q?cVfAAlcM4wla1KPmRa5danjE7cQR80blhS4dg+mG+3+FXyD1UhZP5elTUfrf?=
+ =?us-ascii?Q?kEHC36sDtnLxFG225bqEgBc4mXdwdyvB8LGxPBIkmTHlhg/JXA2w3Srhhy1u?=
+ =?us-ascii?Q?BGX637GyznieUWLal2dU7T5skKtPr0wLMAKDwAOkRum/CQV48kVXSJowyJfo?=
+ =?us-ascii?Q?L6tdRIepw4yEYVc+JAZs7R8Fb+OyWCkK9mHMCBoW09CT4IEuQo6xTFXgqGBi?=
+ =?us-ascii?Q?VXPeeIeJf5BbrVC422KK8u6JjxfULNDtbI+VdMZ4LzqVYBwNHMFVFgcHuj6r?=
+ =?us-ascii?Q?gO1BfNRL/R3Hzl7WjjoAKiltxWc/ZQifkQWkP2owg7M3u5QWb6xiFi1ExY96?=
+ =?us-ascii?Q?cOoJsBRqU7gAmLe2PNfimMZB53EAWrRTei0rXoG+9AAWzo4BdycBHSfpDTnf?=
+ =?us-ascii?Q?OpHNqkFsjkwg8DcqUcGw9TQj8Z7SWUXXOXHZUxPbgkUjakkH7WsNvF7GdY93?=
+ =?us-ascii?Q?Z82sfoCU8I56mfdY0hagbre3Xblw0bbTBG9ildBhSxgLNlbYi4FPb1jKubsn?=
+ =?us-ascii?Q?Ivx/Axzf308wcnan1E6vR11/jpD+J05j1/NbDxdBB8CTBPhrzMOZM4rqS7zp?=
+ =?us-ascii?Q?NDnUuopRek5hMICpdn3EelCUQsBSY11dZo6n4rnno82yDOsi2W9C4ZM+XWhU?=
+ =?us-ascii?Q?jfd/uH3NxuPBK4SvLbZ7bKFf4TMQWsuUlqWvBDAs9RpJix+z084eLtn5RQUn?=
+ =?us-ascii?Q?eL0iSPL/vIvsvtwkjteNl0RSRgzVeqTCZG2akKFEQ+VJ4ARh3KQi70+TJipX?=
+ =?us-ascii?Q?N6XgDQDGAdwdmCUTfagk8Xn44KXQv442TtbXrxjre3Q6fUWcH0NDOkRQaQsf?=
+ =?us-ascii?Q?9bccJFdA2ZNRz/srqwzLCMe16EqYAv79ZdQIY8yo0NKPEIFHOOQJvaSKqcdm?=
+ =?us-ascii?Q?jH02uP1b4Wz6UMN2kcU39kJKdBPwo1g5efezSiCAtOzSF/zgZEzQXKloWT8Y?=
+ =?us-ascii?Q?yKqvJPY3CvzPvkS/1hQykl39cFEAQxgrow6r8RAZQAUf3INCSmKA50RbaMIx?=
+ =?us-ascii?Q?NscV9mKznnDtRcWj13EKR0weus/DB37GWNuah5AMAEvAIIHUHyzOm3Q9nyZV?=
+ =?us-ascii?Q?U6VL0mJmEQBAyF1sgYhyQFakTUdzS06+cMYBQjuoK2jTn8RDmuuVPAFq1Q/0?=
+ =?us-ascii?Q?Ngz2XmMFbdN9w3mcky5ZsxAlYXWmrz/hWlgKrNTiaCGQ4EGACmiNC0VRWcLf?=
+ =?us-ascii?Q?fQ3FHIhgHVnweg6BE5VUnCNo1lVgiVaZTb+PMUU8W7gWzz1o0X+WsDo8mlvJ?=
+ =?us-ascii?Q?38lX1yBwFGgM68vq6epATaPf13pg63u4dgVYGvNxjlfMB1eaKw1ntR3OWmE7?=
+ =?us-ascii?Q?h/zxtEy+92QdMng2uaWOAOaXEuArMXtUqezPmhq0jyFnKuT1441DyOll3Mnc?=
+ =?us-ascii?Q?xVeT4kuQm1cvAjWuG58OXW34jq2HUMAQhJqJzcgeP1fGz/50t6b9sw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6020.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(52116014)(1800799024)(376014)(38350700014)(921020)(41080700001);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB6020.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(52116014)(1800799024)(376014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?y0l26Rz8YWGqj7bzqkWuQhjSyuz466EdBFsvYk+dCxLiw9hA5SjmPKvk9s0o?=
- =?us-ascii?Q?vCh7zPypPM/zwoUzo7409qi+iiX5t6Ap0kfhjP4on35Z1fljciPvj5eA4k2x?=
- =?us-ascii?Q?giOPvHnvysljUUOspF+OnykEqZ+0SL2lSov8h7q3oT6VTsgk+8L61IdJcgsD?=
- =?us-ascii?Q?yvu5dr51JFK0pnS9WP9TlqUITtiVY3glWh5b/UwwFo616bUSzyIMRGwyZtOf?=
- =?us-ascii?Q?NnDSzJoC1BgrBMvYCmZhFd07rEYzCbiKMMFIGtZj00GEDjdmvKDQ7otEQYIG?=
- =?us-ascii?Q?MYCHJ+myTPGgm9sqEiaNJGTZXpIJbc/yEFckWosIusGu2kX1e6a68eLpex5k?=
- =?us-ascii?Q?X4Yh51tDg3cXj2BA7aTdg86DhOohA3AD17PqJNoy3bz8b8AkAhrKkpyzsHm3?=
- =?us-ascii?Q?49u9Xr53sPrZytc5bAUyaqWjTKhE3Od84Cgcs9kXAtX/gZdH/zxwb09C2dl5?=
- =?us-ascii?Q?Y6xcQ1dJJ2sHhgZmaw60lF8jj4SBNloqD80JUtnPLHFxgjGhOKiOlNbHebu8?=
- =?us-ascii?Q?72FWfbuonGlVAoHOPGf5FEB4yGib0QTEL6lafRIA6WXzDZZhIGqe7+mAaik5?=
- =?us-ascii?Q?ZzcMw+jS2u0zKjmvVPN5DcTffnyULvcL2r8t7lTytNbW+QKt6tp+xVd3O6TJ?=
- =?us-ascii?Q?Jd3UQIiPbbJOtjB74jU9Bcs1FYh7e+xM+q6TCP9a+sxXyXFCl7PRx359hYyC?=
- =?us-ascii?Q?f61WYGMougNh7m9DyLi7qt5GvGrULyHOmgS/T7aYKq8JA9M56EwCHGPEYgwD?=
- =?us-ascii?Q?dRI43yvZYLac2UFqm8ORPrbSEmWUYswna1F+gqPzw8LximYXoSAL1pvxwfn5?=
- =?us-ascii?Q?C74OtwhLD/vdHKLM/atjHeZdqRYgwt4DkWNAHaf14xwf7NZeO4YyPb/9K9N4?=
- =?us-ascii?Q?DGpN/VVxDtI59nj8vQyTfZ2QOK5ZIjBfp3RbNUZ09ywWkps9B9UFyu2PVpm9?=
- =?us-ascii?Q?efb12X9wqotya2RSQnSI4sPwjN3YZsT3GAczcquSze5SvqJdzccnnL5D58mF?=
- =?us-ascii?Q?SxL+2AJ176fh7oFc6Xk4ID3cTkocvMD8cfdlhUGDS5BK9i4l7YVdwj1q2GDW?=
- =?us-ascii?Q?4ZkFI550zYzYsoCboBdEg7MujKUHIc/zU9qGrchUua1jpKq0+Gbyn7PKr2X7?=
- =?us-ascii?Q?Z+Vxf6qTURdwRULGUDTU46/i38bguNamD6MCmT+qEKg4+HZv93O433kA9jut?=
- =?us-ascii?Q?VXV2zv1BMDuBAhkvGwlc4kNiACJKGNIHpxighxCYZEcnRaqKwV8JEzEI0M0R?=
- =?us-ascii?Q?qA42DkE8//U26TF3cKiILQhwJUIdyhFCPMLhRtMsFlctWXKphXR1rVo9F5Ck?=
- =?us-ascii?Q?zwBamQn32Zz1IJcMyCDAQLLRBhuJ2jxKFTJwxe+p2klKACF4bLw87ZBM/sAy?=
- =?us-ascii?Q?hCt/fJ7EH7RfBmjDnauAaF0MgJ5qQ7v5PucFmsrebwYzwv/dCYyWAb5rZV6Q?=
- =?us-ascii?Q?PHa+ZCVt9Ocn5RblJA+opgWCXU4c/7fScU0r3ukp48weNgU9Su7Z/nsN/4ZN?=
- =?us-ascii?Q?LiTdW5BhMsI4yKBzXcgKh0OB0tyQBvPyva1few6lWbrdPRgHsiZBJbWV0ehP?=
- =?us-ascii?Q?N6ivZXJlh5cY76zV9UO/4WQZLGup85bXyEjzomjP?=
+	=?us-ascii?Q?jyq38N9O6uT2crq7DfNaO6cHXvMm5vY6uJt94zuSFM3DWQKg5j7WSgDVN4dO?=
+ =?us-ascii?Q?tHqQkz7YrUl3lqGbG3yMkPo001QSW5W7LvOc8ZNvUTJTGFznS1+RKPQyUjvG?=
+ =?us-ascii?Q?At1YnmDyLEXEEk0fRJYOpQUkhtwKbQUVLPJFgdS3GuG7s58i8q8eGSV5W+yj?=
+ =?us-ascii?Q?cUtm4/CbvPj5BmS4cxKkzFpQDOJ577J5UPu16Jme8Hv9h1GPKmPSy50XEF0m?=
+ =?us-ascii?Q?9s0/eNiYYW9QfUlG9j3DWIjQqpffuIH4kFYC1O49VEfQToeG2VE81RAa1zLs?=
+ =?us-ascii?Q?aD0nE/kLBLPYhxmk7y2rcO09FS0g+ldnr/bkDMz7r9COv50oInjVd2knl8lF?=
+ =?us-ascii?Q?xZw3HFxm7lbSZ4JSrdY33B4BUSc/bTDT+qtZ/QwD0GYi+3Mcz4AOQeRmt9qA?=
+ =?us-ascii?Q?17XdNqlsiVf/PES46m5kgLnQ40vFnYl3vEEzJebiaZi95TsFdV6kvhN7QSSz?=
+ =?us-ascii?Q?bkbykQmPDeE7Y+iuP1jEo60atSBXClfDjVsGBiGBT8bnqmoDmS+mecuJRwN6?=
+ =?us-ascii?Q?vkcPg+39nop3/iqdqyT1PqmfbXGULka5jZYN34LMIAuisHRff+c1P7zLNdYx?=
+ =?us-ascii?Q?I46AE1fWX2j9zw+A1ywfKsvF1JvW3AmL0qQkSQ3klF4sv95TAEW4RnDQAxyN?=
+ =?us-ascii?Q?nQR+GYOFnmtEVumJtCCaxM9cGsSuLUZLhhIfe1dcYCFtNXywgtVt0LXDmXjc?=
+ =?us-ascii?Q?rFuhGlNvaV/tWNYJ/GOLY5DSck+G/tiBc88P/GSKusaRe4g9ZXaEegKZ2WJt?=
+ =?us-ascii?Q?sy4jVV+qN1g0t8YQgPg0ERIqN9I2Y3Op3wB8QH8i1PrVpdr/4k4upqjM1bcr?=
+ =?us-ascii?Q?6fXqVKD74+5HWQmbs3R0vqnRmPQ1DVAJezwztkTBhMCRFeTgqdQ3z11sfmow?=
+ =?us-ascii?Q?VFKCOeJ75t/XEWorDswTpDZ0hTTJEAWBbQ27dZbIbymdeSoKaxY051/xiewn?=
+ =?us-ascii?Q?OtQPpAB3eiMHS2XNCz0W8a88a8/LfUTN4tvWW7oe9BhnnK6DzwSYnzNlsua6?=
+ =?us-ascii?Q?Ox74/kF+tTxalZDiynJNwAyfhddVaDGzw20ESEmG31nAOmCvgsd7aKztA3Wp?=
+ =?us-ascii?Q?F8lwp0gBJd2ERN12R9Qp/lZhFa9PacoIc58/FM76gwxPCTzPGeqJqmL9S1yz?=
+ =?us-ascii?Q?OI5mLWIHU+YcfZLwagwZcAJiNTstJxQuS3YL45XpuZvngwMusfhHDR1ilWfF?=
+ =?us-ascii?Q?kecs3eXdLl5LF9ivR1oJgR6J+Rh8KDc6p/LagO0U5WlqU44BzQSkIiBimFxg?=
+ =?us-ascii?Q?uKk87DYOqBiKmnKOOSPrLbaGnGGTZ/iCEUsRfl1TliinxKzzL5fYzGfEAw4K?=
+ =?us-ascii?Q?b1h0nqbf8qte6fzfjQ1IEGbGSO1vNQWLuKJsN+5xG2+8hgJ8UKt9414XjzsP?=
+ =?us-ascii?Q?ChckVdoB7I7ykEFCfLz9rmwPUNwfmXrz8F2VMjVBUleOSaesVxY9tmGqbfWC?=
+ =?us-ascii?Q?/laF2VmA40Jg5llGxT6gIpq7V49rCWk5Ztk7rADUuB7m9xeQQF5m5nOZB7i4?=
+ =?us-ascii?Q?MSizWnos0YHna2Lu7025nz3RxMnygmn8NItAY2GITlo0mgn8p6LQK7aV4ozX?=
+ =?us-ascii?Q?hbeEOFuum7LHAdcBQYqKHq+Xd0eaEfqnc4bAlY7E?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 971c334b-dd05-4c4c-3d88-08dddf01b611
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1ad5f88-d442-466e-b84d-08dddf01d11f
 X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB6020.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 09:21:00.1456
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2025 09:21:45.5135
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 48WEncUZDNb0IakT4eADvOCAnbXb5llrEJYmcjpdeMPzLy9hT2Z/Lv/RLmbVf6cgiklg+A4XaIG4yiFJoVYDzQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: p/n2lDTC3thIhlOYYKjS+Id6Ks8UzRD43g3jQjyMUEl+v9GmRwrsN+dKOVBVCkWPNDZBlCfv4/c9ZPx9Psr1ZQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5054
 
 The dev_err_probe() doesn't do anything when error is '-ENOMEM'. Therefore,
 remove the useless call to dev_err_probe(), and just return the value instead.
 
-Xichao Zhao (6):
-  spi: spi_amd: Remove the use of dev_err_probe()
-  spi: SPISG: Remove the use of dev_err_probe()
-  spi: Remove the use of dev_err_probe()
-  spi: mt65xx: Remove the use of dev_err_probe()
-  spi: pxa2xx: Remove the use of dev_err_probe()
-  spi: s3c64xx: Remove the use of dev_err_probe()
+Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
+---
+ drivers/spi/spi-amd-pci.c | 5 ++---
+ drivers/spi/spi-amd.c     | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
- drivers/spi/spi-amd-pci.c             | 5 ++---
- drivers/spi/spi-amd.c                 | 2 +-
- drivers/spi/spi-amlogic-spisg.c       | 2 +-
- drivers/spi/spi-microchip-core-qspi.c | 3 +--
- drivers/spi/spi-microchip-core.c      | 3 +--
- drivers/spi/spi-mt65xx.c              | 2 +-
- drivers/spi/spi-pxa2xx.c              | 2 +-
- drivers/spi/spi-s3c64xx.c             | 3 +--
- 8 files changed, 9 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/spi/spi-amd-pci.c b/drivers/spi/spi-amd-pci.c
+index e5faab414c17..d48c3a5da303 100644
+--- a/drivers/spi/spi-amd-pci.c
++++ b/drivers/spi/spi-amd-pci.c
+@@ -38,7 +38,7 @@ static int amd_spi_pci_probe(struct pci_dev *pdev,
+ 	/* Allocate storage for host and driver private data */
+ 	host = devm_spi_alloc_host(dev, sizeof(struct amd_spi));
+ 	if (!host)
+-		return dev_err_probe(dev, -ENOMEM, "Error allocating SPI host\n");
++		return -ENOMEM;
+ 
+ 	amd_spi = spi_controller_get_devdata(host);
+ 
+@@ -47,8 +47,7 @@ static int amd_spi_pci_probe(struct pci_dev *pdev,
+ 	amd_spi->io_remap_addr = devm_ioremap(dev, io_base_addr, AMD_HID2_MEM_SIZE);
+ 
+ 	if (!amd_spi->io_remap_addr)
+-		return dev_err_probe(dev, -ENOMEM,
+-				"ioremap of SPI registers failed\n");
++		return -ENOMEM;
+ 
+ 	dev_dbg(dev, "io_remap_address: %p\n", amd_spi->io_remap_addr);
+ 
+diff --git a/drivers/spi/spi-amd.c b/drivers/spi/spi-amd.c
+index 02e7fe095a0b..4d1dce4f4974 100644
+--- a/drivers/spi/spi-amd.c
++++ b/drivers/spi/spi-amd.c
+@@ -857,7 +857,7 @@ static int amd_spi_probe(struct platform_device *pdev)
+ 	/* Allocate storage for host and driver private data */
+ 	host = devm_spi_alloc_host(dev, sizeof(struct amd_spi));
+ 	if (!host)
+-		return dev_err_probe(dev, -ENOMEM, "Error allocating SPI host\n");
++		return -ENOMEM;
+ 
+ 	amd_spi = spi_controller_get_devdata(host);
+ 	amd_spi->io_remap_addr = devm_platform_ioremap_resource(pdev, 0);
 -- 
 2.34.1
 
