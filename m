@@ -1,156 +1,151 @@
-Return-Path: <linux-spi+bounces-9567-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9568-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FF3DB2E2E7
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Aug 2025 19:04:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81A96B2E498
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Aug 2025 20:03:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66BA55E5855
-	for <lists+linux-spi@lfdr.de>; Wed, 20 Aug 2025 17:03:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C23625E8235
+	for <lists+linux-spi@lfdr.de>; Wed, 20 Aug 2025 18:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C60A334396;
-	Wed, 20 Aug 2025 17:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A404725A347;
+	Wed, 20 Aug 2025 18:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dr1d03/z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioZTnQdy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41FF221F2F;
-	Wed, 20 Aug 2025 17:02:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E535019F464;
+	Wed, 20 Aug 2025 18:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755709380; cv=none; b=I76Kx4ye36sfgAxHK6r4H42NVC0LQIRlQbOnTawxGVEsh713QYk8nj2vkEGoz16tOtOvVIRjyjViunSklbRJryLfRjTXExhTAgvpGLUyuGSh7yUlmdLtKxhdgjtE0PE1mifwp/cO/wXiTuroQzQ04ohSdL5B1kQqFAz9SR5vGN0=
+	t=1755713023; cv=none; b=LnwpP+B33tDIgJFHqTWF/ARAzEqCPMpMZqWN0pHF87O6GejdqAZf0RpeMp/6dwdAwVMvRwiKaEAq/q7hDUMNA7778+dXWk/NrdtoCBAvH4bz6HgQqkMtDYhYIYYf69MF9FfJ2r7pSfRStpvfg/6YEnz5fOJtiURCZKgVR5hthCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755709380; c=relaxed/simple;
-	bh=Zv4ujPO3KQCQ/S/zZ+87yMEeTHGtDtwjmsw35eFBLPg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GJeKu3gn/6repjJ2Tilsx8ObkFzt3ZlNB8lv0AdCbKsv3nJDGWP6bkp8t5bVVAacMd/DPFGlnZEQgz9CoeLBGJ3w+qUhW+e4gwleM8BlFaSX4VU+tc4tQS1wiR7PRw4YAqwHkYNsp3abWm86rAQt+Q3szir5y4AiBa5c8JjHUW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dr1d03/z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A73AC113CF;
-	Wed, 20 Aug 2025 17:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755709379;
-	bh=Zv4ujPO3KQCQ/S/zZ+87yMEeTHGtDtwjmsw35eFBLPg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Dr1d03/ztQZzehnuA3pVpw7eG2apfzSIzXWZn4V8PSF/oxOnzaMyj6VZxDgQ3XY0C
-	 nca+A2IJDoLbxKo30R/YmbItPPf92i6LVVRW7LTdmYn+yLP3bLCTrV977h9BaHEtKx
-	 NXa2PCl2PJ+9sKMlIBp1C0l2xmBSHRNp1Ot+Slf6644+zsAzHmD5BYUvfwKZ1SqBPg
-	 b3bNilTK6GPtQRkA2c0x0ltTwqwessPnwFUwQuinpUV1sWYrBj8/SGJJQ8Wlda48Mw
-	 vcZIdxxAkqbQkwlZ9DlQZ/Zs8lvh3SMTfcqlJlRdXT5KDCZbCRFgNoX/rafdY4my5h
-	 Ujim+Xbb9lOhA==
-From: Vinod Koul <vkoul@kernel.org>
-To: linux-kernel@vger.kernel.org, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Mark Brown <broonie@kernel.org>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- Andrea della Porta <andrea.porta@suse.com>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, Andy Shevchenko <andy@kernel.org>, 
- Andy Yan <andy.yan@rock-chips.com>, Avi Fishman <avifishman70@gmail.com>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- Benjamin Fair <benjaminfair@google.com>, 
- Bjorn Andersson <andersson@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- David Airlie <airlied@gmail.com>, David Lechner <dlechner@baylibre.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Drew Fustini <fustini@kernel.org>, dri-devel@lists.freedesktop.org, 
- Fabio Estevam <festevam@gmail.com>, 
- Fabrice Gasnier <fabrice.gasnier@foss.st.com>, Fu Wei <wefu@redhat.com>, 
- Guo Ren <guoren@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, imx@lists.linux.dev, 
- Iwona Winiarska <iwona.winiarska@intel.com>, 
- Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, Jonas Karlman <jonas@kwiboo.se>, 
- Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
- Linus Walleij <linus.walleij@linaro.org>, linux-actions@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-media@vger.kernel.org, 
- linux-mmc@vger.kernel.org, linux-phy@lists.infradead.org, 
- linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-rockchip@lists.infradead.org, linux-rtc@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-sound@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-sunxi@lists.linux.dev, Liu Ying <victor.liu@nxp.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Manivannan Sadhasivam <mani@kernel.org>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Maxime Ripard <mripard@kernel.org>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, Nancy Yuen <yuenn@google.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Nicolin Chen <nicoleotsuka@gmail.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, openbmc@lists.ozlabs.org, 
- Patrick Venture <venture@google.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Robert Foss <rfoss@kernel.org>, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Samuel Holland <samuel@sholland.org>, Sandy Huang <hjc@rock-chips.com>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>, 
- Shengjiu Wang <shengjiu.wang@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Stephen Boyd <sboyd@kernel.org>, Takashi Iwai <tiwai@suse.com>, 
- Tali Perry <tali.perry1@gmail.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Tomer Maimon <tmaimon77@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- Vasily Khoruzhick <anarsoul@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
- Xiubo Li <Xiubo.Lee@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
- Zhang Rui <rui.zhang@intel.com>
-In-Reply-To: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
-References: <20250813161517.4746-1-wsa+renesas@sang-engineering.com>
-Subject: Re: (subset) [PATCH 00/21] treewide: remove unneeded 'fast_io'
- parameter in regmap_config
-Message-Id: <175570934550.66459.15951444863822303407.b4-ty@kernel.org>
-Date: Wed, 20 Aug 2025 22:32:25 +0530
+	s=arc-20240116; t=1755713023; c=relaxed/simple;
+	bh=7QHvqbNyD3T8XWXuo9VVc7Qe5eq8zUqzOagpa4SYsvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q3M4QmRuAIDzc5/aq5Z3ABAcEyqjR5aL5PZjpkNfBWdT4RBLJN7aGexIoh2KwjuafyP8XonCzS1bpLzBBsOFWCDEYWLvpWMsp0ev6NA4UsjxyHRzFTsZ51H5kcuAGIFDJFnAXkYyv3nMVt08JXifv1tGnNjxZTmZrtWYxKBGWqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ioZTnQdy; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-45a1b00f187so1066195e9.0;
+        Wed, 20 Aug 2025 11:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755713020; x=1756317820; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CpJLLzSWB1hSMWi95RrMucYY40dFasoMvr1QtUcD398=;
+        b=ioZTnQdytYrWnSwex2LrIsJNb+/uQq04DBmAWubpWEPniqN8Xzj+ddCi30fjxtHTm6
+         rR+ERXpFKu+2nEWLmh+GTAhXSnvpZQJj3aICAAAdGdvbbtfrDZ1F+iRoqsPAngjLX0ex
+         DB24p24L7vrZGSdr/r5OmLIv9351xrQ1kX8FmuvfuMhnU9FBQI9eL3ijGFwrokSnNPqX
+         3uUB7AHlnciS2B9sPJm2OXkvWke07FTzIg3TbJrOg/T+heni3m8Zb3FflEk03ah3QcnW
+         mZvZrhPo4mhAgyr8Lcd81oNAn8beESXzlJECa+myNj5FwCLl9L2MwbZkpf165IcXyWpr
+         Ln3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755713020; x=1756317820;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CpJLLzSWB1hSMWi95RrMucYY40dFasoMvr1QtUcD398=;
+        b=r4A0c99Kjd9CNT3zIk/Y0u5pRvL7v0YONAZnBh05bKY/ZCAUNkWWJbGD+8OKHVRMC7
+         rNvJlRlxRmalleT0x9ToKBH6vBLnuM7h1BSHgOrvehsHGKb+5y48iKRZUqshjzrzMGNy
+         bYsKCV7ouYU/W0OyzPLWVj6EoR8IBlqr/pid8vZD84dmW53Bu28T2PK2LoTJTYbYA+Az
+         2wUVo9fevsuLvgs3bD74TN/Kuhq6p3hIOyTiQjXBFK/GPaX6GCY9pM+4GxfG+kQxMgZT
+         0x8hCYAb8mk7s/zDBZgBQqkbOHSXCAJS5LkzEGdDrVEr+KZ0uSXE9OMS7noA6y5c6+Ym
+         z0uw==
+X-Forwarded-Encrypted: i=1; AJvYcCUNR8WNuX79SSOKxk+SZs62DcRX42J/f28v2ErHhJH2NnEZeBvM2eVw5cQlPR5o+M5F63O2dl2FkiGe0k0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMq2ydKpfPGp17gWmWQyhM5kqmE+WFc6kVmQ1JJwXAFKlGednn
+	UtZ8q5rySWb59szyVbQuKRk+VUNGggHY3brrBHpRjQzEgfCHkupMrGQYhODUaQ==
+X-Gm-Gg: ASbGnctSOaGdbpZuzMRN2n20JmKiJLuA3ih1k1B9skE/viVTF11BlK8SA1Th3GgS7ri
+	FhMr0mCRjY/xzgwpBUiwuSGP4WN+iYvgNXZfceVyML3GAercYnqUayokgHEcRyfnW3452dOzXx1
+	iE4t6lCWxf393eZUJMcLysBL+KMWT70R2lz3w9993DOqCmz5STD9Su0VaKy1XvDVOMlhofk+6MX
+	gF3oXM+INaxCUhh+lgmicjGrukN2Vu//XZGMLGx9xVq73gdcf53jsRR+bXruvmKfOBWk8L9OrUe
+	YArY2yqEW7NyBETTijOavFf/g8OZ03sZ4qK1MPW3WFRH3SH6D0PZEMpa0Xsym8eJ+E9/mnWOSLz
+	eo7ZpD9+0PlP6zb+SP+/zvw==
+X-Google-Smtp-Source: AGHT+IFh/E9lnjKTs3kxRrLvlbGjy8oSnK4JJSucdbLknDdJAJH1cXdCJOfOTXv/BaL/tYZQxUpKaA==
+X-Received: by 2002:a05:600c:1d0a:b0:453:23fe:ca86 with SMTP id 5b1f17b1804b1-45b47a20422mr28734805e9.4.1755713019930;
+        Wed, 20 Aug 2025 11:03:39 -0700 (PDT)
+Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b4cd1ff39sm435695e9.0.2025.08.20.11.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Aug 2025 11:03:39 -0700 (PDT)
+From: Raphael Gallais-Pou <rgallaispou@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: st: fix PM macros to use CONFIG_PM instead of CONFIG_PM_SLEEP
+Date: Wed, 20 Aug 2025 20:03:10 +0200
+Message-ID: <20250820180310.9605-1-rgallaispou@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
 
+pm_sleep_ptr() depends on CONFIG_PM_SLEEP while pm_ptr() depends on
+CONFIG_PM.  Since ST SSC4 implements runtime PM it makes sense using
+pm_ptr() here.
 
-On Wed, 13 Aug 2025 18:14:46 +0200, Wolfram Sang wrote:
-> While working on a driver using regmap with MMIO, I wondered if I need
-> to set 'fast_io' in the config. Turned out I don't need to, so I added
-> documentation for it with commit ffc72771ff6e ("regmap: Annotate that
-> MMIO implies fast IO").
-> 
-> This series fixes the existing users in the tree which needlessly set
-> the flag. They have been found using this coccinelle script:
-> 
-> [...]
+For the same reason replace PM macros that use CONFIG_PM.  Doing so
+prevents from using __maybe_unused attribute of runtime PM functions.
 
-Applied, thanks!
+Link: https://lore.kernel.org/lkml/CAMuHMdX9nkROkAJJ5odv4qOWe0bFTmaFs=Rfxsfuc9+DT-bsEQ@mail.gmail.com
+Fixes: 6f8584a4826f ("spi: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()")
 
-[12/21] phy: remove unneeded 'fast_io' parameter in regmap_config
-        commit: e1e1e77f7df7cbee959ba024e5475907fe561c98
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+---
+ drivers/spi/spi-st-ssc4.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Best regards,
+diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
+index 49ab4c515156..c07c61dc4938 100644
+--- a/drivers/spi/spi-st-ssc4.c
++++ b/drivers/spi/spi-st-ssc4.c
+@@ -378,7 +378,7 @@ static void spi_st_remove(struct platform_device *pdev)
+ 	pinctrl_pm_select_sleep_state(&pdev->dev);
+ }
+ 
+-static int __maybe_unused spi_st_runtime_suspend(struct device *dev)
++static int spi_st_runtime_suspend(struct device *dev)
+ {
+ 	struct spi_controller *host = dev_get_drvdata(dev);
+ 	struct spi_st *spi_st = spi_controller_get_devdata(host);
+@@ -391,7 +391,7 @@ static int __maybe_unused spi_st_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused spi_st_runtime_resume(struct device *dev)
++static int spi_st_runtime_resume(struct device *dev)
+ {
+ 	struct spi_controller *host = dev_get_drvdata(dev);
+ 	struct spi_st *spi_st = spi_controller_get_devdata(host);
+@@ -428,8 +428,8 @@ static int __maybe_unused spi_st_resume(struct device *dev)
+ }
+ 
+ static const struct dev_pm_ops spi_st_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(spi_st_suspend, spi_st_resume)
+-	SET_RUNTIME_PM_OPS(spi_st_runtime_suspend, spi_st_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(spi_st_suspend, spi_st_resume)
++	RUNTIME_PM_OPS(spi_st_runtime_suspend, spi_st_runtime_resume, NULL)
+ };
+ 
+ static const struct of_device_id stm_spi_match[] = {
+@@ -441,7 +441,7 @@ MODULE_DEVICE_TABLE(of, stm_spi_match);
+ static struct platform_driver spi_st_driver = {
+ 	.driver = {
+ 		.name = "spi-st",
+-		.pm = pm_sleep_ptr(&spi_st_pm),
++		.pm = pm_ptr(&spi_st_pm),
+ 		.of_match_table = of_match_ptr(stm_spi_match),
+ 	},
+ 	.probe = spi_st_probe,
 -- 
-~Vinod
-
+2.50.1
 
 
