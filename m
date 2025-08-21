@@ -1,168 +1,120 @@
-Return-Path: <linux-spi+bounces-9570-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9572-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DE32B2EC03
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Aug 2025 05:35:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF960B2ED7E
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Aug 2025 07:17:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCE68A20806
-	for <lists+linux-spi@lfdr.de>; Thu, 21 Aug 2025 03:35:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B4F81C83F44
+	for <lists+linux-spi@lfdr.de>; Thu, 21 Aug 2025 05:17:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7461217F35;
-	Thu, 21 Aug 2025 03:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAED728C011;
+	Thu, 21 Aug 2025 05:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLcGmS7H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWOw1CM0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C293214204;
-	Thu, 21 Aug 2025 03:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC1649620;
+	Thu, 21 Aug 2025 05:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755747338; cv=none; b=P78MBd1/S1WFAFiKpNIcLiubnEQk0qM6zzdm1O5pojqMwmF/DkCVdVxYvOgLfFSTLgdmbvuZtvLnodZYEg9ahkWb8xdr6qDqVbE3iprelG1mfMYV9tIooqM2dRW+K4T+J4OfkImxv/VMp65/22dvycoL+GBOugsKTe1ZFDkw06Q=
+	t=1755753440; cv=none; b=VXAAtKQVQimVNHbexXo9BxPxl1GJCX0NO/XIINcyh+mPy/WEWwoB7zqM6ZBDGi5+oMNyLbCXWsD0FXqj5ZrA9Pz2b8/kFUqpF1pwZOiO/pkM3hKHyq0NuVCpL1YmvUTrhAV05SiQbYAy6VoCtXOHt29MKnfIDAsSrmHjcQoI9gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755747338; c=relaxed/simple;
-	bh=oljhjadL/Buna9k+WRKs4g8qPWTUw7dpVhvCw03v08g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GdxCdMGgRKUw9ydN34/wML1o9azokV7Q5c2dxgS8WfIinPfbqk1SP9WrDigk0p2R5FkKc6eOnbJECocf1Fk7Ahd2ynbT16MN04ZOBd4xSxBJzFJfjrpnQue6pzvM9BMCnyMlhw/iKAiKN82RSYHJqbO/gKiQcdpUv6S0gLlFP38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLcGmS7H; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-76e2eb49b83so426304b3a.3;
-        Wed, 20 Aug 2025 20:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755747336; x=1756352136; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymfisBflbqft/TxLVjjjf4WbXXR7TyRwORuuchlD424=;
-        b=OLcGmS7Hw1CzbPRqWboqqjjdbVFGAxi3b44GjHNglP+qe/GcCoLV/GniTKNALmY8Af
-         WV6i4s5QtQ1/lghmPLfbnZh3gclZ9r4A+qFa7PxtYOBw0TO7ZdNj0Pyf8K4NeDHagzAj
-         RoHVB7OHsqcqmwu7LWKHk9N0xzGQwvbNU8M9v72z3ol9FGISKalBaCOB4nIAefMmKGtq
-         sccY5uiMc79wgMF5/9EdUrotKLcfkcNB/79gpv/hQvJ057om/9FDrcbC1IBcv+L8hjJL
-         AX21ulwUOHcjQ1c9vADwRRkNjwlJ0tPjidt/hPmTQAHyObFsKGcPhXpZw7e3fIaT1daM
-         jewQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755747336; x=1756352136;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ymfisBflbqft/TxLVjjjf4WbXXR7TyRwORuuchlD424=;
-        b=oks4ONfDcj4ACQi+7pEBEIBSP64YMiDphVv5KLmZ7bkSfOfR2p4tH7nmtmYkzt2nMX
-         cMAGg+twfebgW4LyxBjQev+2AoDphrFtH6eVFk+IJWNYkHrMH9fy+1mg7qr9Av9U8kU/
-         iT4v4/J7OyoTSWo81rh3nvNdSEcUI5HBAKNd21yIvAeDXPYbRE3OwTE1yMDtvMnSBzkH
-         OQjnJZowLQq8+D51PwiJbx0Mmxup5Y53UhNrNegwED3koEGwrOuYqGKsZkv0++Q2MmdO
-         fg/5rzFDkwtPvcZLMhLEhbXZ0Q4PPJXQSrdG6I15OYrQTitRMulpbz6V4TeQdhbsnVQA
-         L4Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCXKj3AhpZaKW13tM/CRA3MOkzjQ80JqvNMs2bF2BbvXYHFGev4pGpqDf7eZmkPLw0vdKxw6mRlChfEruZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxdr60sP9S0Y7OBg8vvw+kzhuZPyXj5r3Y4qiALN5TJp9IAS5gH
-	EXbb/hwICgB6nuZsgk0pmnU5p87UsMsm3FrrpokjSUk2oH+HXjixHj8zo4LIIg==
-X-Gm-Gg: ASbGncu+2jT2hO/nSWUa18YAWX+O2UjwmgH5DPRi5N8/ygrJL3J53kpKwKKypC+0VS0
-	ssfn/tP5irOQ78uC4tLnR3SZF7YkdVJLSdbkEXlSBQz+zLdjEPneFG4j/LHrLAgO+a4of8uSLfI
-	vI37zYzgbgpyybzFqL/LuvCnADAgJd1oKwAmvJCnumaGP9olvKIdIjLg/OaRQc09s9bCsGTmvcD
-	Qj5iIo2SC3d0GjtevMhWjAfV0Ez4+Ceg8tjiUyP1tXDL1JEEQMuOJFldAhEKe8t15b3HOb7qAp+
-	FnZzAwlwG+vwsVxdDmIcF9qzm9p6PnFwsv3yOPHgbGuSiE1qLqB0ejpQahzns2DycdOrFB8tB3B
-	8nCte
-X-Google-Smtp-Source: AGHT+IFD9R7PCO+Oz0qUeBhyM0TKCnroRDC8Ee3gpNqV+UVwBwq14pP2Palir5VUy+LHWrBvYulOHQ==
-X-Received: by 2002:a05:6a00:ccc:b0:76b:dcc6:8138 with SMTP id d2e1a72fcca58-76ea3267e92mr946036b3a.22.1755747336190;
-        Wed, 20 Aug 2025 20:35:36 -0700 (PDT)
-Received: from archlinux.lan ([2601:644:8200:acc7::1f6])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e8ab7b100sm4449019b3a.40.2025.08.20.20.35.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 20:35:35 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-spi@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] spi: rb4xx: add COMPILE_TEST support
-Date: Wed, 20 Aug 2025 20:35:34 -0700
-Message-ID: <20250821033534.638157-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1755753440; c=relaxed/simple;
+	bh=lgQDiZb0DulClOgWmp02Qm9x5FANbERY8z36HeeKjY0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D9iS732I2GDSLRO0G2ZOk/c0rN7rhTUAXOQfVQ7JzBor+vtMo627up1397oBv6z1xEJEXQ7tWRHLZI9hfx6oWzSxrV2iyp921WUPp4tVlWvVTSVmWveq1HISFKEZqgcIUDCDq8IJ045gnp+8t/aBj/Wdm8iKlh0Zaavv4yz7B2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWOw1CM0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 39B84C4CEED;
+	Thu, 21 Aug 2025 05:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755753440;
+	bh=lgQDiZb0DulClOgWmp02Qm9x5FANbERY8z36HeeKjY0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=LWOw1CM0mSeh9LnE4EMguyfD2RqAFFJLfIvFo8UCMsACBpMF1uJdD2cgQYbgpohyF
+	 j3p1hlTvCfx0Du9KWUQEGVs1KMkQoWPn74L0RgzCxLPSjhGLpZmSH2jy9EHsa0W4E3
+	 b6FLItZPhg51Y5b8eixVYqIaL31i5Q6fANR1sFP25UspFoZxdF9TlJi59Gra0+rbtq
+	 WRU05iQG6WZ/u6agK9Oilcj1wknrP2PwGRpUJP7XK+rskOzb413/La0fSZNK+GgCBy
+	 OEI/XWV3TxdsQNPAudUyPireuEd27TPSc23Qne8CgWymFOVvAJYIffZLEnW097Ae/V
+	 IxrNPuGh97VSg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24450CA0EDC;
+	Thu, 21 Aug 2025 05:17:20 +0000 (UTC)
+From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
+Subject: [PATCH v2 0/3] support for Amlogic SPI Flash Controller IP
+Date: Thu, 21 Aug 2025 13:17:14 +0800
+Message-Id: <20250821-spifc-v2-0-b119f64b5c09@amlogic.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANqrpmgC/zXMQQ6CMBCF4auQWVvTFlqJK+5hWECdgUmEktY0G
+ tK7W4ku/5eXb4eIgTHCtdohYOLIfi2hTxW4eVgnFHwvDVpqI1vZiLgxOWEuVmFtaERFUL5bQOL
+ X4dz60jPHpw/vg03qu/6F9ickJaQgarCWqO1gx25YHn5id3Z+gT7n/AHK10B2nAAAAA==
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>, 
+ Feng Chen <feng.chen@amlogic.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+ Xianwei Zhao <xianwei.zhao@amlogic.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1755753436; l=1444;
+ i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
+ bh=lgQDiZb0DulClOgWmp02Qm9x5FANbERY8z36HeeKjY0=;
+ b=W5vglRBMS++ooBheJlBd00l+epbkQ75pXcWPZlHKO0zWWV5VrVLumigzlXRbPxKKhdcloJmfi
+ Cr4bCBYMfSHDSCoG3yqk92DvcWB7SEPkc1YNKiexWvXg2SqBUjOz4+S
+X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
+ pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
+X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
+ auth_id=107
+X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Reply-To: xianwei.zhao@amlogic.com
 
-Copy macros from ath79 SPI driver to allow compilation on all platforms
-and remove ath79 specific header.
+This Flash Controller is derived by adding an SPI path to the original
+raw NAND controller. This controller supports two modes: raw mode and
+SPI mode. The raw mode has already been implemented in the community
+(drivers/mtd/nand/raw/meson_nand.c).
+This submission supports the SPI mode.
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Add the drivers and bindings corresponding to the SPI Flash Controller.
+
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 ---
- drivers/spi/Kconfig     |  2 +-
- drivers/spi/spi-rb4xx.c | 19 ++++++++++++++-----
- 2 files changed, 15 insertions(+), 6 deletions(-)
+Changes in v2:
+- Remove clock reg descriptor and get clock from common clk.
+- Remove ecc and ramdom descriptor in bindings.
+- Modify the format and message description.
+- Link to v1: https://lore.kernel.org/r/20250808-spifc-v1-0-ff4e30e26a6b@amlogic.com
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 891729c9c564..2c1e60ae1680 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -916,7 +916,7 @@ config SPI_ROCKCHIP_SFC
- 
- config SPI_RB4XX
- 	tristate "Mikrotik RB4XX SPI master"
--	depends on SPI_MASTER && ATH79
-+	depends on SPI_MASTER && ATH79 || COMPILE_TEST
- 	help
- 	  SPI controller driver for the Mikrotik RB4xx series boards.
- 
-diff --git a/drivers/spi/spi-rb4xx.c b/drivers/spi/spi-rb4xx.c
-index e71d3805b150..417823e907f8 100644
---- a/drivers/spi/spi-rb4xx.c
-+++ b/drivers/spi/spi-rb4xx.c
-@@ -16,7 +16,16 @@
- #include <linux/spi/spi.h>
- #include <linux/of.h>
- 
--#include <asm/mach-ath79/ar71xx_regs.h>
-+#define AR71XX_SPI_REG_FS		0x00	/* Function Select */
-+#define AR71XX_SPI_REG_CTRL		0x04	/* SPI Control */
-+#define AR71XX_SPI_REG_IOC		0x08	/* SPI I/O Control */
-+#define AR71XX_SPI_REG_RDS		0x0c	/* Read Data Shift */
-+
-+#define AR71XX_SPI_FS_GPIO		BIT(0)	/* Enable GPIO mode */
-+
-+#define AR71XX_SPI_IOC_DO		BIT(0)	/* Data Out pin */
-+#define AR71XX_SPI_IOC_CLK		BIT(8)	/* CLK pin */
-+#define AR71XX_SPI_IOC_CS(n)		BIT(16 + (n))
- 
- struct rb4xx_spi {
- 	void __iomem *base;
-@@ -63,7 +72,7 @@ static inline void do_spi_clk_two(struct rb4xx_spi *rbspi, u32 spi_ioc,
- 	if (value & BIT(1))
- 		regval |= AR71XX_SPI_IOC_DO;
- 	if (value & BIT(0))
--		regval |= AR71XX_SPI_IOC_CS2;
-+		regval |= AR71XX_SPI_IOC_CS(2);
- 
- 	rb4xx_write(rbspi, AR71XX_SPI_REG_IOC, regval);
- 	rb4xx_write(rbspi, AR71XX_SPI_REG_IOC, regval | AR71XX_SPI_IOC_CLK);
-@@ -89,7 +98,7 @@ static void rb4xx_set_cs(struct spi_device *spi, bool enable)
- 	 */
- 	if (enable)
- 		rb4xx_write(rbspi, AR71XX_SPI_REG_IOC,
--			    AR71XX_SPI_IOC_CS0 | AR71XX_SPI_IOC_CS1);
-+			    AR71XX_SPI_IOC_CS(0) | AR71XX_SPI_IOC_CS(1));
- }
- 
- static int rb4xx_transfer_one(struct spi_controller *host,
-@@ -109,10 +118,10 @@ static int rb4xx_transfer_one(struct spi_controller *host,
- 	 */
- 	if (spi_get_chipselect(spi, 0) == 2)
- 		/* MMC */
--		spi_ioc = AR71XX_SPI_IOC_CS0;
-+		spi_ioc = AR71XX_SPI_IOC_CS(0);
- 	else
- 		/* Boot flash and CPLD */
--		spi_ioc = AR71XX_SPI_IOC_CS1;
-+		spi_ioc = AR71XX_SPI_IOC_CS(1);
- 
- 	tx_buf = t->tx_buf;
- 	rx_buf = t->rx_buf;
+---
+Feng Chen (2):
+      spi: dt-bindings: add doc for Amlogic A113L2 SFC
+      spi: amlogic: add driver for Amlogic SPI Flash Controller
+
+Xianwei Zhao (1):
+      MAINTAINERS: Add an entry for Amlogic spifc driver
+
+ .../devicetree/bindings/spi/amlogic,a4-spifc.yaml  |   82 ++
+ MAINTAINERS                                        |   10 +
+ drivers/spi/Kconfig                                |   10 +
+ drivers/spi/Makefile                               |    1 +
+ drivers/spi/spi-amlogic-spifc-a4.c                 | 1224 ++++++++++++++++++++
+ 5 files changed, 1327 insertions(+)
+---
+base-commit: 8e13f0500222e187a82dd3c93c0ea8cd2a4d46a6
+change-id: 20250804-spifc-5761e35fbe1f
+
+Best regards,
 -- 
-2.50.1
+Xianwei Zhao <xianwei.zhao@amlogic.com>
+
 
 
