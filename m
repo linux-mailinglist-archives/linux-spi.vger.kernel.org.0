@@ -1,152 +1,249 @@
-Return-Path: <linux-spi+bounces-9590-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9591-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A7ADB30E7E
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 08:06:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76EE5B30F78
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 08:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE6CDAC03DE
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 06:06:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D7941896F78
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 06:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97BA22135AD;
-	Fri, 22 Aug 2025 06:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2552E2C326B;
+	Fri, 22 Aug 2025 06:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="iXk0uX+a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBaQGSq8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6F920B80D;
-	Fri, 22 Aug 2025 06:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F208F2264A8;
+	Fri, 22 Aug 2025 06:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755842768; cv=none; b=DCSNf8pHYhDssqRCOgSWKj4emgd+KI5pOajJJRDNnB5gUVhoOJ0gXw8uj2qFYosYK4BDVjnFrXOvwzs636GUtJBAbZ2YFSrHtIOSUMHz4qAUH5plkKR+IX4cJSfZgoXajqHQRpzBmoJbBK7AMgOz9KKoUi4HYRyTAEttqWWZEI8=
+	t=1755845224; cv=none; b=L5PK5JSny2rqVHeE3gy3tyZMen7FISqRUScBapixIMYpT9A7qZHX3bxZTMLG6Xk1ecFsEWZm2Q+89xWnWc25WObz+GRB8lprmg9trIo5vyPa1ZSFTmGy65SPhm8bEJ9b3f0sBAYcd4LJUJJEXA5zF3vx5F6rSrEfe0IjkUO8UYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755842768; c=relaxed/simple;
-	bh=avaUdtd8uIq7wFou8OzSkuIra5wtAQyyi9R4rOMTRDE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t/flaZQ4xZc9eiNxkqfRwZTVCjSlNLMtqfe+WvFxc38BOC0FAjg+hd4LdbzWxRemuRawlM9Ihg4xhEa01VNijkZHn2cjRqX4y6bq89gCLnoYJ+u3b7hutzx/Oai6oAJ3ITR5ObA3X0uexlQzF5lniC1AHlLbWXxX1zyppXWNcRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=iXk0uX+a; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh01.itg.ti.com ([10.180.77.71])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 57M65cf9183015;
-	Fri, 22 Aug 2025 01:05:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1755842738;
-	bh=nEe6gWDkfZ9f0+KLOCH9wNiWwtvjebZTmJiRwDqdgs0=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=iXk0uX+aWiYJwGCDH9zEt0Oz43gHcXph91uQsqo1F6mIGvVfWpkzEXXpuLMfhFGEl
-	 aV9JcJ5w0gAYw3fq0o9TrQuNmAozmvvbp9wNZEkx3raX5mkbX+XcD7Bc2Rsg3qWYK5
-	 h+YCZeJQuy/qAVa+Dq9qhwZvmamLsxWIoilRuAo4=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-	by lelvem-sh01.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 57M65cY72495184
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Fri, 22 Aug 2025 01:05:38 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 22
- Aug 2025 01:05:38 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
- Frontend Transport; Fri, 22 Aug 2025 01:05:37 -0500
-Received: from [172.24.233.254] (santhoshkumark.dhcp.ti.com [172.24.233.254])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 57M65XPJ3071881;
-	Fri, 22 Aug 2025 01:05:34 -0500
-Message-ID: <59c49efa-20b9-4d81-b66e-e9a363322274@ti.com>
-Date: Fri, 22 Aug 2025 11:35:32 +0530
+	s=arc-20240116; t=1755845224; c=relaxed/simple;
+	bh=pgdQoQpkKmouBhmB/S83yq7pnMsP7sTE0C4LmNARxTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OgZ+DJjy2KgZhjmPwJb+Vfs43mYHpRVaDe3uO81+bJPzfpbNytQ4rGy7wHxYOi1Q77AE5cx9B4lw3An1K5dJs9wupeJXfH2SFKO9Be9ee3Z6rq/fqa1Nf+CM7HwQjKxMoe97jVJKC33nqYg3haxFp2R0T2HkjNGmvRLZebQg1So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBaQGSq8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F62C4CEF1;
+	Fri, 22 Aug 2025 06:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755845223;
+	bh=pgdQoQpkKmouBhmB/S83yq7pnMsP7sTE0C4LmNARxTg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SBaQGSq8QQ/C2T41lmBISqdWNNFv6c806ZGjBbOLbC+SK651cFMYXiNnYsscAOkIb
+	 xqpdQOOLFYFABLpfs1WSWn0X8jtPieRPnAC/VBS2I2QUOpgU1CdvR86LFLOi3inDUJ
+	 C35LeREUIyevau0MwbuXbomFMYpO8xzP/+CDSjpqEY8/fBBour2yOgag/qJOrCqhP7
+	 Pq21jIK3spbfHsSPVNJM/XD7VYgMSoSDkbmeddlH4gAnJ1AJXBz4Ivzw9hXnflIzLm
+	 EIhbFstqPN/ojSfHXWXtjXgnUiB9e3ft/NBZ64gpc14qCVneIVumcnjz2WpLWRUPE+
+	 jt3zH/oGo/D7w==
+Date: Fri, 22 Aug 2025 08:46:59 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+Cc: Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Frieder Schrempf <frieder.schrempf@kontron.de>
+Subject: Re: [PATCH v3 00/14] spi: airoha: driver fixes & improvements
+Message-ID: <aKgSY7bOrC8-qZE3@lore-rh-laptop>
+References: <20250820123317.728148-1-mikhail.kshevetskiy@iopsys.eu>
+ <aKbDjIZhJuWo3yFu@lore-rh-laptop>
+ <7bca8089-09ad-4550-93d1-35a365bcd167@iopsys.eu>
+ <aKcEYn_hX0ZIusne@lore-rh-laptop>
+ <eaea681a-cda8-4066-a58b-61a35e2b8b55@iopsys.eu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-To: Mark Brown <broonie@kernel.org>
-CC: <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <tudor.ambarus@linaro.org>, <pratyush@kernel.org>, <mwalle@kernel.org>,
-        <p-mantena@ti.com>, <linux-spi@vger.kernel.org>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <a-dutta@ti.com>, <u-kumar1@ti.com>, <praneeth@ti.com>, <s-k6@ti.com>
-References: <20250811193219.731851-1-s-k6@ti.com>
- <20250811193219.731851-2-s-k6@ti.com>
- <6c35baad-a332-4b0a-96ca-1cdb3840ad94@sirena.org.uk>
- <20487e7f-33dd-4b65-b1a8-5bb8a06ef859@ti.com>
- <2f051eae-61c7-4bff-9f85-cf37b02a7ea3@sirena.org.uk>
-Content-Language: en-US
-From: Santhosh Kumar K <s-k6@ti.com>
-In-Reply-To: <2f051eae-61c7-4bff-9f85-cf37b02a7ea3@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2ZbTqGGtz4KCqJOZ"
+Content-Disposition: inline
+In-Reply-To: <eaea681a-cda8-4066-a58b-61a35e2b8b55@iopsys.eu>
 
 
+--2ZbTqGGtz4KCqJOZ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 14/08/25 18:04, Mark Brown wrote:
-> On Thu, Aug 14, 2025 at 05:04:33PM +0530, Santhosh Kumar K wrote:
->> On 14/08/25 01:56, Mark Brown wrote:
-> 
->>> Should we have something that blocks these tuning required modes without
->>> the appropriate tuning, and/or allows discovery of which modes require
->>> this tuning?  This all feels very landmineish - client drivers just have
->>> to know when tuning is required.
-> 
->> The flash's maximum operating frequency determines whether PHY tuning is
->> required, as we need tuning in case of Cadence controller for frequencies
->> over 50 MHz.
-> 
-> That's entirely specific to the Candence controller from the sounds of
-> it, that makes it hard to write a client driver if you need to know
-> exactly what the controller you're dealing with is and what it's
-> requirements are.
+>=20
+> On 21.08.2025 14:34, Lorenzo Bianconi wrote:
+> >> On 21.08.2025 09:58, Lorenzo Bianconi wrote:
+> >>>> This patch series greatly improve airoha snfi driver and fix a
+> >>>> number of serious bug.
+> >>>>
+> >>>> Fixed bugs:
+> >>>>  * Fix reading/writing of flashes with more than one plane per lun
+> >>>>  * Fix inability to read/write oob area
+> >>>>  * Fill the buffer with 0xff before writing
+> >>>>  * Fix reading of flashes supporting continuous reading mode
+> >>>>  * Fix error paths
+> >>>>
+> >>>> Improvements:
+> >>>>  * Add support of dual/quad wires spi modes in exec_op().
+> >>>>  * Support of dualio/quadio flash reading commands
+> >>>>  * Remove dirty hack that reads flash page settings from SNFI regist=
+ers
+> >>>>    during driver startup
+> >>>>
+> >>>> Unfortunately I am unable to test the driver with linux at the momen=
+t,
+> >>>> so only the following testing was done:
+> >>> It seems to me this is quite an important rework of the driver. I wou=
+ld prefer
+> >>> to have some test results for this series. Are you able to run mtd_te=
+st kernel
+> >>> module for testing?
+> >> I'll try to build latest openwrt with this patches=A0 and mtd_test ker=
+nel
+> >> module and try it on one of our boards.
+> > what board are you using for testing? If it is based on Airoha-7581 you=
+ could
+> > use the following repo for testing.
+> >
+> > https://github.com/Ansuel/openwrt/tree/openwrt-24.10-airoha-an7581-stab=
+le
+> >
+> > Regards,
+> > Lorenzo
+> What tests do you suggest to run?
 
-PHY tuning is not very specific to the Cadence controller; this has been 
-added for other controllers as well. [1] - [3]
+IIRC I run all of them. Can you please report even if there are some
+improvements (or penalties) in read/write speed?
 
-spi_mem simply verifies the execute_tuning hook within the controller's 
-mem_ops and invokes it if it exists, and the tuning implementation is 
-entirely controller-dependent - ranging from straightforward parameter 
-configuration of PHY registers to advanced tuning algorithms such as the 
-one implemented in this tuning series.
+> I have a single flash I boot from. It have only 2 mtd partitions:
+>=20
+> [=A0=A0=A0 2.980849] spi-nand spi0.0: Micron SPI NAND was found.
+> [=A0=A0=A0 2.986102] spi-nand spi0.0: 256 MiB, block size: 128 KiB, page =
+size:
+> 2048, OOB size: 128
+> [=A0=A0=A0 2.994493] 2 fixed-partitions partitions found on MTD device sp=
+i0.0
+> [=A0=A0=A0 3.000856] Creating 2 MTD partitions on "spi0.0":
+> [=A0=A0=A0 3.005651] 0x000000000000-0x000000020000 : "bl2"
+> [=A0=A0=A0 3.011247] 0x000000020000-0x000010000000 : "ubi"
+>=20
+> Most of tests are destructive. So If I use "bl2" or "ubi" partition for
+> test, next time I will be unable to boot :-(
 
-Currently, spi_mem_execute_tuning() is called by default from flash. In 
-the future, this could be improved by asking the controller if tuning is 
-actually needed (considering different factors such as frequency), 
-similar to *_get_tuning_params implementation. Let me know your opinion 
-in this.
+yes, I flashed the device after carrying out the test.
 
-The get_tuning_params and execute_tuning hooks in spi_mem can also be 
-utilized by any non-MTD spi-mem users.
+Regards,
+Lorenzo
 
-> 
->> And we do check for this condition - see Patch 07/10,
->> cqspi_phy_op_eligible_sdr(), which currently verifies the flash frequency
->> against 166 MHz. This logic can be improved by implementing both min and max
->> frequency checks, will update in the following version.
-> 
-> I can't actually tell how that verifies if the tuning has been done
-> appropriately TBH, at least not without more effort than I'd care to
+> Do you suggest to patch u-boot & linux to have more mtd partitions?
+>=20
+> This is the results of the only read-only test I found.
+>=20
+> root@OpenWrt:/lib/modules/6.6.79# insmod mtd_test.ko
+> root@OpenWrt:/lib/modules/6.6.79# insmod mtd_readtest.ko dev=3D1
+> [=A0 159.121706]
+> [=A0 159.123220] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> [=A0 159.129053] mtd_readtest: MTD device: 1
+> [=A0 159.132898] mtd_readtest: MTD device size 268304384, eraseblock size
+> 131072, page size 2048, count of eraseblocks 2047, pages per eraseblock
+> 64, OOB size 128
+> [=A0 159.147008] mtd_test: scanning for bad eraseblocks
+> [=A0 159.152141] mtd_test: scanned 2047 eraseblocks, 0 are bad
+> [=A0 159.157549] mtd_readtest: testing page read
+>=20
+> Mikhail
+>=20
+> >> Actually patches can be divided on to parts:
+> >> * fixes of current driver (patches 1-10)
+> >> * change of behavior to avoid reading flash page settings from SNFI
+> >> registers during driver startup (patches 11-14)
+> >>
+> >> The changes are based on the code we are using for more than 3 years. I
+> >> adapt it to latest linux/u-boot code.
+> >>
+> >> Up to now the only known issue appears on en7523 chips only. Here a
+> >> corresponding patch description (not added to this series)
+> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D spi: airoha:
+> >> en7523: workaround flash damaging if UART_TXD was short to GND We found
+> >> that some serial console may pull TX line to GROUND during board boot
+> >> time. Airoha uses TX line as one of it's BOOT pins. This will lead to
+> >> booting in RESERVED boot mode. It was found that some flashes operates
+> >> incorrectly in RESERVED mode. Micron and Skyhigh flashes are definitely
+> >> affected by the issue, Winbond flashes are NOT affected. Details:
+> >> -------- DMA reading of odd pages on affected flashes operates
+> >> incorrectly. Page reading offset (start of the page) on hardware level
+> >> is replaced by 0x10. Thus results in incorrect data reading. Usage of
+> >> UBI make things even worse. Any attempt to access UBI leads to ubi
+> >> damaging. As result OS loading becomes impossible. Non-DMA reading is
+> >> OK. =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> >>
+> >> Regards,
+> >> Mikhail
+> >>
+> >>
+> >>> Regards,
+> >>> Lorenzo
+> >>>
+> >>>>  * Driver compiles without error.
+> >>>>  * All changes were tested with corresponding u-boot driver. U-Boot
+> >>>>    SpiNAND driver was modified as well to match linux-6.17-rc2 with
+> >>>>    additional fixes for continuous mode.
+> >>>>
+> >>>> Changes v2:
+> >>>>  * minor fix
+> >>>>  * add comments to code
+> >>>>
+> >>>> Changes v3:
+> >>>>  * add patch to prevent continuous reading
+> >>>>
+> >>>> Mikhail Kshevetskiy (14):
+> >>>>   spi: airoha: return an error for continuous mode dirmap creation c=
+ases
+> >>>>   spi: airoha: remove unnecessary restriction length
+> >>>>   spi: airoha: add support of dual/quad wires spi modes
+> >>>>   spi: airoha: remove unnecessary switch to non-dma mode
+> >>>>   spi: airoha: unify dirmap read/write code
+> >>>>   spi: airoha: switch back to non-dma mode in the case of error
+> >>>>   spi: airoha: fix reading/writing of flashes with more than one pla=
+ne
+> >>>>     per lun
+> >>>>   spi: airoha: support of dualio/quadio flash reading commands
+> >>>>   spi: airoha: allow reading/writing of oob area
+> >>>>   spi: airoha: buffer must be 0xff-ed before writing
+> >>>>   spi: airoha: avoid setting of page/oob sizes in REG_SPI_NFI_PAGEFMT
+> >>>>   spi: airoha: reduce the number of modification of REG_SPI_NFI_CNFG=
+ and
+> >>>>     REG_SPI_NFI_SECCUS_SIZE registers
+> >>>>   spi: airoha: set custom sector size equal to flash page size
+> >>>>   spi: airoha: avoid reading flash page settings from SNFI registers
+> >>>>     during driver startup
+> >>>>
+> >>>>  drivers/spi/spi-airoha-snfi.c | 508 +++++++++++++++++--------------=
+---
+> >>>>  1 file changed, 260 insertions(+), 248 deletions(-)
+> >>>>
+> >>>> --=20
+> >>>> 2.50.1
+> >>>>
 
-The *_execute_tuning function takes the read_op as an argument from 
-flash, and considering flash continues to utilize the same read_op and 
-frequency, it should make sure the tuning is appropriately completed. In 
-the Cadence controller, the tuning process is validated by performing a 
-read-back of a pre-defined tuning pattern using the read_op provided by 
-flash.
+--2ZbTqGGtz4KCqJOZ
+Content-Type: application/pgp-signature; name=signature.asc
 
-> (and the tuning only gets added in patch 10?).
+-----BEGIN PGP SIGNATURE-----
 
-Patches 7 and 8 add PHY read/write support, and patch 9 adds tuning. 
-These three patches could be squashed into one, but kept them separate 
-to make it more granular for the reviewers.
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaKgSYAAKCRA6cBh0uS2t
+rCkLAQCXPfNkfjRYbh1mtbx8El7/T7e7Gh35r5YXdJopc728nAD/SYvKdetOGOSV
+nyQzX0+J8Iixf9sztahWg2BVOfRtzQY=
+=VzuW
+-----END PGP SIGNATURE-----
 
-[1] https://lore.kernel.org/linux-spi/20220509175616.1089346-1-clg@kaod.org/
-[2] https://lore.kernel.org/all/20230322090451.3179431-2-haibo.chen@nxp.com/
-[3] 
-https://lore.kernel.org/all/20241128174316.3209354-1-csokas.bence@prolan.hu/
+--2ZbTqGGtz4KCqJOZ--
 
