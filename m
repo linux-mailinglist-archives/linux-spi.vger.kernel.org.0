@@ -1,266 +1,177 @@
-Return-Path: <linux-spi+bounces-9604-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9605-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ECC5B31903
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 15:15:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26E77B31984
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 15:30:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED13E18826DF
-	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 13:15:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75A0C1899D3A
+	for <lists+linux-spi@lfdr.de>; Fri, 22 Aug 2025 13:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1552FD7D3;
-	Fri, 22 Aug 2025 13:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DC992FF17D;
+	Fri, 22 Aug 2025 13:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpzartIM"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="CoN1EBNR"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2682D2FC021;
-	Fri, 22 Aug 2025 13:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF0B24CEE8;
+	Fri, 22 Aug 2025 13:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755868484; cv=none; b=oqXWUuarK5Pf/HB0xOZ8Pi8bRODHCI4KG2RkBMynfMmBLGU5BKaz4YvHKNjN29Aj8RRVFUxX4+YSLIoQ+ZZh4HnOs6ZB3TB3+S89F+g94kEpspOzxsvcCUcTVqxvjW9AbsY0X4OLft4AC6EYb6p8SVnJ7/KrxR6qwlOkr0xC54k=
+	t=1755869399; cv=none; b=ZiesLgchjYKxvoquf4mqZf8PUvPeMJKjKzY7//ATSiyXzbAOA/OT53oLJnTAIA6MYDuhqgkBROtT4FMeAraU6ir6+yCxnyilpcNVze9tl/MbiEgQKjvYWSPyla07rptESg4yRMRJjwI20qw/6vUT99JLKGS8ELO3APJX4CIEfvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755868484; c=relaxed/simple;
-	bh=DzXyLBZ7QPagtt1qn6sgzGt1lv1clT6z3MmdtXAvGK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PLSMNuI+fto4si0BnioHOZqvidqgDZe4G+qLoTHAQItD2MiVSA5Z1MkANMYm4TKnM6Wfgcb7QRYr54wCg1lIFZdMcgZTK+Kia5MOs2iVWZFX1DF3ZKYdB7FSW2+dVz4SKAC0xT4b9f1P2emJDsYhOfjzgUY8QC2mlCYHkXxvAu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpzartIM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F8EC4CEED;
-	Fri, 22 Aug 2025 13:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755868483;
-	bh=DzXyLBZ7QPagtt1qn6sgzGt1lv1clT6z3MmdtXAvGK8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hpzartIMsfjSTMmq6S3F6xaJKmmCnwiFz19U8qxEwdk5zkVC29SLlSo8HMXUYjXZu
-	 2AZ93yl7VBVUj4ILfAilqS97axJu+T9zJWjSKWtW3PJ7s3WE/vMPSXgOnJs/FKR74f
-	 SbAUyuJZyygJnzODW5U/a/77vGJDhe2hOvYBBrGcOOIyRShUQL2nkhjVhE6IZbDDv7
-	 Q5VkZnGMjaWDB5wpxahqK/e00W7yFiYdMhg4QhKlD6rl1dXhFqNJNB3ni4gV7MB/yp
-	 49/v7XL/AsVUDempxX8jEVXs88oGoBU9PoduB84uCSMsoAEJ/2sT+CjdlmLOVCA5Un
-	 xRpZdV3csM5hQ==
-Date: Fri, 22 Aug 2025 15:14:39 +0200
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-Cc: Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Frieder Schrempf <frieder.schrempf@kontron.de>
-Subject: Re: [PATCH v3 00/14] spi: airoha: driver fixes & improvements
-Message-ID: <aKhtP1G7as9b2c4f@lore-rh-laptop>
-References: <20250820123317.728148-1-mikhail.kshevetskiy@iopsys.eu>
- <aKbDjIZhJuWo3yFu@lore-rh-laptop>
- <7bca8089-09ad-4550-93d1-35a365bcd167@iopsys.eu>
- <aKcEYn_hX0ZIusne@lore-rh-laptop>
- <eaea681a-cda8-4066-a58b-61a35e2b8b55@iopsys.eu>
- <aKgSY7bOrC8-qZE3@lore-rh-laptop>
- <1d053317-24a6-4bba-aa30-ad42460ec19b@iopsys.eu>
+	s=arc-20240116; t=1755869399; c=relaxed/simple;
+	bh=JmipXnXVqs0bo7rBOQEowa8CcQd7VSNge6eEHRVSm0g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YodWyMcBOyypHUwvI2maHuKicbj8Xta83Ipzbes5sE6gSf6aNxxC+zVKZeWpGpg2OZQ1Xxo0aoCpZGIlCxlCR+wKlL5vOh9Vb6AHGSpeIe+CCbEU9pI9d8BpaRKPKP8AiUER1VF665o+2fGoarwdWlVl2KhgIJ1wkTDgv31Pl70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=CoN1EBNR; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1755869398; x=1787405398;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JmipXnXVqs0bo7rBOQEowa8CcQd7VSNge6eEHRVSm0g=;
+  b=CoN1EBNRuApjOIBGwSTCqkl0wNtrGw5KGLH8BQQhSyf7HzfoA13gq6Bq
+   3qvKZR4tJAl0/24VteAr6ZVutVUDi62aYUiOfD/MmRnfA8yqGTX7IKPrx
+   LXXZoVMra8Rc4papdCtciEOdx1RpfOGvgQdgfyty3LCfnexTlyX6ZT5Uv
+   d67Z3HJDSNRHU96bl/lhDyYocJ2QzrPVQCNstHiXo0+X9o13UWBiUUKpT
+   SnVPiqinPAPWD0c8ibXWjuu2eAsUf38ykGjmIRz4+abD3RTcIH1pZloxr
+   NWiQITEk+GyYO0gylzJL91Je+MZ/hb1MkjMcLZdDJL+2SCApMnqdsY8Ok
+   Q==;
+X-CSE-ConnectionGUID: dttGCdfnRrSwT0WQldL3yA==
+X-CSE-MsgGUID: AeSCvjSPQYS0LsPuRv0RiQ==
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="276925274"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Aug 2025 06:29:56 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Fri, 22 Aug 2025 06:29:25 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Fri, 22 Aug 2025 06:29:21 -0700
+Message-ID: <76b1062f-a4e3-4392-9549-86d63616a5ca@microchip.com>
+Date: Fri, 22 Aug 2025 15:29:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="LEAJ68iQGD2dyhpF"
-Content-Disposition: inline
-In-Reply-To: <1d053317-24a6-4bba-aa30-ad42460ec19b@iopsys.eu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/9] arm64: Add config for Microchip SoC platforms
+To: Robert Marko <robert.marko@sartura.hr>, <linux@armlinux.org.uk>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
+	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+	<o.rempel@pengutronix.de>, <daniel.machon@microchip.com>
+CC: <luka.perkov@sartura.hr>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
+ <20250813174720.540015-2-robert.marko@sartura.hr>
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Content-Language: en-US, fr
+Organization: microchip
+In-Reply-To: <20250813174720.540015-2-robert.marko@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 13/08/2025 at 19:44, Robert Marko wrote:
+> Currently, Microchip SparX-5 SoC is supported and it has its own symbol.
+> 
+> However, this means that new Microchip platforms that share drivers need
+> to constantly keep updating depends on various drivers.
+> 
+> So, to try and reduce this lets add ARCH_MICROCHIP symbol that drivers
+> could instead depend on.
+> 
+> LAN969x is being worked on and it will be added under ARCH_MICROCHIP.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 
---LEAJ68iQGD2dyhpF
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, according to the compromise that we discussed during v8 that's fine 
+with me:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
->=20
-> On 22.08.2025 09:46, Lorenzo Bianconi wrote:
-> >> On 21.08.2025 14:34, Lorenzo Bianconi wrote:
-> >>>> On 21.08.2025 09:58, Lorenzo Bianconi wrote:
-> >>>>>> This patch series greatly improve airoha snfi driver and fix a
-> >>>>>> number of serious bug.
-> >>>>>>
-> >>>>>> Fixed bugs:
-> >>>>>>  * Fix reading/writing of flashes with more than one plane per lun
-> >>>>>>  * Fix inability to read/write oob area
-> >>>>>>  * Fill the buffer with 0xff before writing
-> >>>>>>  * Fix reading of flashes supporting continuous reading mode
-> >>>>>>  * Fix error paths
-> >>>>>>
-> >>>>>> Improvements:
-> >>>>>>  * Add support of dual/quad wires spi modes in exec_op().
-> >>>>>>  * Support of dualio/quadio flash reading commands
-> >>>>>>  * Remove dirty hack that reads flash page settings from SNFI regi=
-sters
-> >>>>>>    during driver startup
-> >>>>>>
-> >>>>>> Unfortunately I am unable to test the driver with linux at the mom=
-ent,
-> >>>>>> so only the following testing was done:
-> >>>>> It seems to me this is quite an important rework of the driver. I w=
-ould prefer
-> >>>>> to have some test results for this series. Are you able to run mtd_=
-test kernel
-> >>>>> module for testing?
-> >>>> I'll try to build latest openwrt with this patches=A0 and mtd_test k=
-ernel
-> >>>> module and try it on one of our boards.
-> >>> what board are you using for testing? If it is based on Airoha-7581 y=
-ou could
-> >>> use the following repo for testing.
-> >>>
-> >>> https://github.com/Ansuel/openwrt/tree/openwrt-24.10-airoha-an7581-st=
-able
-> >>>
-> >>> Regards,
-> >>> Lorenzo
-> >> What tests do you suggest to run?
-> > IIRC I run all of them. Can you please report even if there are some
-> > improvements (or penalties) in read/write speed
-> Do you mean to run it twice? with patches and without?
+Thanks Robert! Regards,
+   Nicolas
 
-I mean I would suggest to check if there are any difference in read/write
-speed (so yes, you need a baseline).
+> ---
+> Changes in v9:
+> * Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 directly,
+> this avoids breaking existing configs with ARCH_SPARX5
+> 
+>   arch/arm64/Kconfig.platforms | 36 ++++++++++++++++++++++--------------
+>   1 file changed, 22 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index a88f5ad9328c..bfea380100a6 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -131,20 +131,6 @@ config ARCH_EXYNOS
+>          help
+>            This enables support for ARMv8 based Samsung Exynos SoC family.
+> 
+> -config ARCH_SPARX5
+> -       bool "Microchip Sparx5 SoC family"
+> -       select PINCTRL
+> -       select DW_APB_TIMER_OF
+> -       help
+> -         This enables support for the Microchip Sparx5 ARMv8-based
+> -         SoC family of TSN-capable gigabit switches.
+> -
+> -         The SparX-5 Ethernet switch family provides a rich set of
+> -         switching features such as advanced TCAM-based VLAN and QoS
+> -         processing enabling delivery of differentiated services, and
+> -         security through TCAM-based frame processing using versatile
+> -         content aware processor (VCAP).
+> -
+>   config ARCH_K3
+>          bool "Texas Instruments Inc. K3 multicore SoC architecture"
+>          select SOC_TI
+> @@ -186,6 +172,28 @@ config ARCH_MESON
+>            This enables support for the arm64 based Amlogic SoCs
+>            such as the s905, S905X/D, S912, A113X/D or S905X/D2
+> 
+> +menu "Microchip SoC support"
+> +
+> +config ARCH_MICROCHIP
+> +       bool
+> +
+> +config ARCH_SPARX5
+> +       bool "Microchip Sparx5 SoC family"
+> +       select PINCTRL
+> +       select DW_APB_TIMER_OF
+> +       select ARCH_MICROCHIP
+> +       help
+> +         This enables support for the Microchip Sparx5 ARMv8-based
+> +         SoC family of TSN-capable gigabit switches.
+> +
+> +         The SparX-5 Ethernet switch family provides a rich set of
+> +         switching features such as advanced TCAM-based VLAN and QoS
+> +         processing enabling delivery of differentiated services, and
+> +         security through TCAM-based frame processing using versatile
+> +         content aware processor (VCAP).
+> +
+> +endmenu
+> +
+>   config ARCH_MMP
+>          bool "Marvell MMP SoC Family"
+>          select PINCTRL
+> --
+> 2.50.1
+> 
 
-Regards,
-Lorenzo
-
-> >
-> >> I have a single flash I boot from. It have only 2 mtd partitions:
-> >>
-> >> [=A0=A0=A0 2.980849] spi-nand spi0.0: Micron SPI NAND was found.
-> >> [=A0=A0=A0 2.986102] spi-nand spi0.0: 256 MiB, block size: 128 KiB, pa=
-ge size:
-> >> 2048, OOB size: 128
-> >> [=A0=A0=A0 2.994493] 2 fixed-partitions partitions found on MTD device=
- spi0.0
-> >> [=A0=A0=A0 3.000856] Creating 2 MTD partitions on "spi0.0":
-> >> [=A0=A0=A0 3.005651] 0x000000000000-0x000000020000 : "bl2"
-> >> [=A0=A0=A0 3.011247] 0x000000020000-0x000010000000 : "ubi"
-> >>
-> >> Most of tests are destructive. So If I use "bl2" or "ubi" partition for
-> >> test, next time I will be unable to boot :-(
-> > yes, I flashed the device after carrying out the test.
-> >
-> > Regards,
-> > Lorenzo
-> >
-> >> Do you suggest to patch u-boot & linux to have more mtd partitions?
-> >>
-> >> This is the results of the only read-only test I found.
-> >>
-> >> root@OpenWrt:/lib/modules/6.6.79# insmod mtd_test.ko
-> >> root@OpenWrt:/lib/modules/6.6.79# insmod mtd_readtest.ko dev=3D1
-> >> [=A0 159.121706]
-> >> [=A0 159.123220] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-> >> [=A0 159.129053] mtd_readtest: MTD device: 1
-> >> [=A0 159.132898] mtd_readtest: MTD device size 268304384, eraseblock s=
-ize
-> >> 131072, page size 2048, count of eraseblocks 2047, pages per eraseblock
-> >> 64, OOB size 128
-> >> [=A0 159.147008] mtd_test: scanning for bad eraseblocks
-> >> [=A0 159.152141] mtd_test: scanned 2047 eraseblocks, 0 are bad
-> >> [=A0 159.157549] mtd_readtest: testing page read
-> >>
-> >> Mikhail
-> >>
-> >>>> Actually patches can be divided on to parts:
-> >>>> * fixes of current driver (patches 1-10)
-> >>>> * change of behavior to avoid reading flash page settings from SNFI
-> >>>> registers during driver startup (patches 11-14)
-> >>>>
-> >>>> The changes are based on the code we are using for more than 3 years=
-=2E I
-> >>>> adapt it to latest linux/u-boot code.
-> >>>>
-> >>>> Up to now the only known issue appears on en7523 chips only. Here a
-> >>>> corresponding patch description (not added to this series)
-> >>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D spi: airoha:
-> >>>> en7523: workaround flash damaging if UART_TXD was short to GND We fo=
-und
-> >>>> that some serial console may pull TX line to GROUND during board boot
-> >>>> time. Airoha uses TX line as one of it's BOOT pins. This will lead to
-> >>>> booting in RESERVED boot mode. It was found that some flashes operat=
-es
-> >>>> incorrectly in RESERVED mode. Micron and Skyhigh flashes are definit=
-ely
-> >>>> affected by the issue, Winbond flashes are NOT affected. Details:
-> >>>> -------- DMA reading of odd pages on affected flashes operates
-> >>>> incorrectly. Page reading offset (start of the page) on hardware lev=
-el
-> >>>> is replaced by 0x10. Thus results in incorrect data reading. Usage of
-> >>>> UBI make things even worse. Any attempt to access UBI leads to ubi
-> >>>> damaging. As result OS loading becomes impossible. Non-DMA reading is
-> >>>> OK. =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>
-> >>>> Regards,
-> >>>> Mikhail
-> >>>>
-> >>>>
-> >>>>> Regards,
-> >>>>> Lorenzo
-> >>>>>
-> >>>>>>  * Driver compiles without error.
-> >>>>>>  * All changes were tested with corresponding u-boot driver. U-Boot
-> >>>>>>    SpiNAND driver was modified as well to match linux-6.17-rc2 with
-> >>>>>>    additional fixes for continuous mode.
-> >>>>>>
-> >>>>>> Changes v2:
-> >>>>>>  * minor fix
-> >>>>>>  * add comments to code
-> >>>>>>
-> >>>>>> Changes v3:
-> >>>>>>  * add patch to prevent continuous reading
-> >>>>>>
-> >>>>>> Mikhail Kshevetskiy (14):
-> >>>>>>   spi: airoha: return an error for continuous mode dirmap creation=
- cases
-> >>>>>>   spi: airoha: remove unnecessary restriction length
-> >>>>>>   spi: airoha: add support of dual/quad wires spi modes
-> >>>>>>   spi: airoha: remove unnecessary switch to non-dma mode
-> >>>>>>   spi: airoha: unify dirmap read/write code
-> >>>>>>   spi: airoha: switch back to non-dma mode in the case of error
-> >>>>>>   spi: airoha: fix reading/writing of flashes with more than one p=
-lane
-> >>>>>>     per lun
-> >>>>>>   spi: airoha: support of dualio/quadio flash reading commands
-> >>>>>>   spi: airoha: allow reading/writing of oob area
-> >>>>>>   spi: airoha: buffer must be 0xff-ed before writing
-> >>>>>>   spi: airoha: avoid setting of page/oob sizes in REG_SPI_NFI_PAGE=
-FMT
-> >>>>>>   spi: airoha: reduce the number of modification of REG_SPI_NFI_CN=
-FG and
-> >>>>>>     REG_SPI_NFI_SECCUS_SIZE registers
-> >>>>>>   spi: airoha: set custom sector size equal to flash page size
-> >>>>>>   spi: airoha: avoid reading flash page settings from SNFI registe=
-rs
-> >>>>>>     during driver startup
-> >>>>>>
-> >>>>>>  drivers/spi/spi-airoha-snfi.c | 508 +++++++++++++++++------------=
------
-> >>>>>>  1 file changed, 260 insertions(+), 248 deletions(-)
-> >>>>>>
-> >>>>>> --=20
-> >>>>>> 2.50.1
-> >>>>>>
-
---LEAJ68iQGD2dyhpF
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaKhtPAAKCRA6cBh0uS2t
-rNtoAP45qevD9fzswegzdm4QNheBWtzMmFfN6H5SL30tWFHTCgEA7XYEgYXlmkSy
-qAkG0JIXX5OXzfE7JomcgI+UAg5pcgA=
-=9+YL
------END PGP SIGNATURE-----
-
---LEAJ68iQGD2dyhpF--
 
