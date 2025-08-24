@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-9651-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9652-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E58B3316B
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 18:24:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD69B3316E
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 18:27:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DFEA444B0A
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 16:24:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B503E1717F0
+	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 16:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608E62D5425;
-	Sun, 24 Aug 2025 16:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71738275AED;
+	Sun, 24 Aug 2025 16:26:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CBgYKyU5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tTpqh9yA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DEAC17B425
-	for <linux-spi@vger.kernel.org>; Sun, 24 Aug 2025 16:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2862D6E68;
+	Sun, 24 Aug 2025 16:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756052661; cv=none; b=AdBrUn2k/T0tSMfWc5K5A0TwJRIsGdzF72GDrflC4d/wI3ktjY7qeo+ZqlrzWHatPX15Lvx3+XbE+9XwhP6Gfj9YM7blpkoi7s/eKz4OK+nP/lwCec8poZFy1BGn0U7PXeY0XK4ZDtzP7k+qkOj0/MxN0bdWF6yRIbhm2o/Yp9M=
+	t=1756052792; cv=none; b=plBwy//BwgPQ1lqWRrgjvQf1oZNSfvP0md2Mb9Pjj2JTXaEmKg3RqkraUKx2h/8lDbwpxgdRRTg/KigKpSNHJsrqvMlam0NmbCP0hS5iHWBtK/UC4MmytoiWdX2AD42sZbTGX40RLmOLD7K3vfspk27JgyLctCdFswEhc8VSDNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756052661; c=relaxed/simple;
-	bh=GFcPMW9aJ7yiofKfrxE0FJA4McnVC+S5TnkpA+IDCpg=;
+	s=arc-20240116; t=1756052792; c=relaxed/simple;
+	bh=61sJ4t1YC46A9aX1qpG0FOBFZ5RPRfBho01NVov3yTg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=izqu2uIeURlyblzDxnx4TbFqvI6r02xzyS4MRxVKS+/FdHnjMZA0OCOFm20juTlyMC8csZldJQT+vf1tBi8q+b7NKgeTNutWvpqb5syQ00EB87DeCXsy87epvY1x6FWwv9gURqClgsAv2oldH4QiER0o2H97xSPh8ms266CHaFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CBgYKyU5; arc=none smtp.client-ip=185.171.202.116
+	 MIME-Version:Content-Type; b=Do2W/9H5MmGnccKGWTM0g+uTqgvFjLziYtM24Lrg37ZTi3sjLGE1BQgzOdl2ke31gVRnGvmIqT+Vfti6Ap6OQsXmSUBh5Uto1rxu4hzcqylZTI9K3rs105/6+IlLEDoaBollSoG0yMU32Jcjk6JcXLGTrVBau0TmuC1o70ZPd+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tTpqh9yA; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 65101C6B38D;
-	Sun, 24 Aug 2025 16:24:02 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 800BE1A0C63;
+	Sun, 24 Aug 2025 16:26:28 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3D297605F1;
-	Sun, 24 Aug 2025 16:24:16 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D30CE1C22C3C6;
-	Sun, 24 Aug 2025 18:24:01 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 536E2605F1;
+	Sun, 24 Aug 2025 16:26:28 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BEE511C228BA3;
+	Sun, 24 Aug 2025 18:26:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756052653; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1756052786; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=otXLfQ4Ld1gJ6Ja2C1Do6+eyluqz7SEV1+z0JoqPOKE=;
-	b=CBgYKyU5xO4Q7dyEnj4UeX+5RLiyVyeT1VBugpwBueExjDf+RLz2u6YJ9J+rMFkQfgfeYq
-	/Dye1S9nPJUP6usEdV/ECJEm2mVH0MIlglCWLlphUpO3U1HCi53aBcQHfhff5gxh3br72X
-	2zjhlU1zCh1FXvVXZ4ef4wr/sNasqmGDw3WCxIjJBKeq9Ak1FVLYLMPp0XM0KqXnOsqgZp
-	I4Ft3aotmL3KDm3lHBA6Po9+6CzLeH9UeAgARo2cnsqVDD9gtloDAtEBQYWdiNTaUwoZGs
-	DxoFDr+J33qZGojumRoDZzDU3ml3ceiwFHpc+sLRH+bigGg/ovvSCalZ6pkfyA==
+	bh=EN2uw03uQCiUxP4yNZYaMtufKIXdaP5nDTBBVTj3pDM=;
+	b=tTpqh9yAUftbHe5jJ5v7pD6DihH4ClLMkGFI3HnLY1dUZrsP65Et6en3YfPH/dwVXbWqgV
+	+Qe/N6TTN9SOPyfIr5ewMTfKD6pTqNifDUR5N6ja/4heN/0bKdK9U5Wa+fIRsWH9Q48b6e
+	+7cf9N2mHxBesIDY9k+3oltMXYCVcKZaYv6i1FAwJ6voWtaqcR+2OhHxCASw3P/d2WF/og
+	ZP9T813d3PUFl28E8njmgmTry3epu+3UNe2EnuoqyI4MBBAQUHTECBWuAvNtaaJbqXtaO/
+	kDqvpjX8UuY4RWMyzeaqBp/YsKFf19vPHZVCsH8I8SAXcxDTpYe/i6NFyoDRMw==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
 To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
@@ -59,15 +59,15 @@ Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
  <chengminglin@mxic.com.tw>,  linux-mtd@lists.infradead.org,
   linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
   linux-spi@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 3/4] mtd: spinand: repeat reading in regular
- mode if continuous reading fails
-In-Reply-To: <20250814065423.3980305-4-mikhail.kshevetskiy@iopsys.eu> (Mikhail
-	Kshevetskiy's message of "Thu, 14 Aug 2025 09:54:22 +0300")
+Subject: Re: [PATCH RESEND v2 2/4] mtd: spinand: try a regular dirmap if
+ creating a dirmap for continuous reading fails
+In-Reply-To: <20250814065423.3980305-3-mikhail.kshevetskiy@iopsys.eu> (Mikhail
+	Kshevetskiy's message of "Thu, 14 Aug 2025 09:54:21 +0300")
 References: <20250814065423.3980305-1-mikhail.kshevetskiy@iopsys.eu>
-	<20250814065423.3980305-4-mikhail.kshevetskiy@iopsys.eu>
+	<20250814065423.3980305-3-mikhail.kshevetskiy@iopsys.eu>
 User-Agent: mu4e 1.12.7; emacs 30.1
-Date: Sun, 24 Aug 2025 18:24:00 +0200
-Message-ID: <87plckit7j.fsf@bootlin.com>
+Date: Sun, 24 Aug 2025 18:26:16 +0200
+Message-ID: <87jz2sit3r.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -78,31 +78,52 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
+On 14/08/2025 at 09:54:21 +03, Mikhail Kshevetskiy <mikhail.kshevetskiy@iop=
+sys.eu> wrote:
 
-> +		if (controller_is_buggy) {
-> +			/*
-> +			 * Some spi controllers may not support reading up to
-> +			 * erase block size. They will read less data than
-> +			 * expected. If this happen disable continuous mode
-> +			 * and repeat reading in normal mode.
-> +			 */
-> +			spinand->cont_read_possible =3D false;
-
-I am fine with the idea, but could we avoid this little dance and drop
-the extra controller_is_buggy boolean, and just let
-spinand_mtd_continuous_page_read() do the fixup and return -EAGAIN?
-
-> +			ret =3D spinand_mtd_regular_page_read(mtd, from, ops,
-> +							    &max_bitflips);
-> +		}
-> +	} else {
-> +		ret =3D spinand_mtd_regular_page_read(mtd, from, ops,
-> +						    &max_bitflips);
-> +	}
+> Continuous reading may result in multiple flash pages reading in one
+> operation. Typically only one flash page has read/written (a little bit
+> more than 2-4 Kb), but continuous reading requires the spi controller
+> to read up to 512 Kb in one operation without toggling CS in beetween.
+>
+> Roughly speaking spi controllers can be divided on 2 categories:
+>  * spi controllers without dirmap acceleration support
+>  * spi controllers with dirmap acceleration support
+>
+> Usually, first of them have no issues with large reading support.
+> Second group often supports acceleration of single page only reading.
+> Thus enabling of continuous reading can break flash reading.
+>
+> This patch tries to create dirmap for continuous reading first and
+> fallback to regular reading if spi controller refuses to create it.
+>
+> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+> ---
+>  drivers/mtd/nand/spi/core.c | 43 ++++++++++++++++++++++++++++++-------
+>  1 file changed, 35 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+> index 09dd6e40e308..0f8636047365 100644
+> --- a/drivers/mtd/nand/spi/core.c
+> +++ b/drivers/mtd/nand/spi/core.c
+> @@ -1093,6 +1093,39 @@ static int spinand_mtd_block_isreserved(struct mtd=
+_info *mtd, loff_t offs)
+>  	return ret;
+>  }
 >=20=20
->  	if (ops->stats) {
->  		ops->stats->uncorrectable_errors +=3D
+> +static struct spi_mem_dirmap_desc *spinand_create_rdesc_helper(
+
+Can we drop _helper from the name? Just spinand_create_rdesc() sounds
+as useful.
+
+> +					struct spinand_device *spinand,
+> +					struct spi_mem_dirmap_info *info)
+> +{
+> +	struct nand_device *nand =3D spinand_to_nand(spinand);
+> +	struct spi_mem_dirmap_desc *desc =3D NULL;
+> +
+
+Looks good otherwise.
 
 Thanks,
 Miqu=C3=A8l
