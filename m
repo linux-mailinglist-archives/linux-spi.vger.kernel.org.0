@@ -1,114 +1,132 @@
-Return-Path: <linux-spi+bounces-9653-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9654-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E43EB3318E
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 19:03:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD0AB3366F
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 08:28:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A4001B2542E
-	for <lists+linux-spi@lfdr.de>; Sun, 24 Aug 2025 17:03:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AF96189F23F
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 06:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B471DF968;
-	Sun, 24 Aug 2025 17:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F71A27FD5A;
+	Mon, 25 Aug 2025 06:28:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="2QYZ761s"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="akjIn+wG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D691B4244
-	for <linux-spi@vger.kernel.org>; Sun, 24 Aug 2025 17:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6219C569;
+	Mon, 25 Aug 2025 06:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756054998; cv=none; b=EUc0HMmXHOSxDDFRpwJejwU//fRMEsqbiTsbcvrnRBIzMTE0GJrtaaT07MehbozbALukNi7+aJylXpzhvO/4LR5mlt3dEanDMFQKY1dgaQz2Kwr/iZF2vFMlm/KNF0SOCZYVcainwTJ52FkHasq2BbbPK4CyQhMVK7IrX5HFbTo=
+	t=1756103301; cv=none; b=IzCm9igTqcFiyncPpae5KFUqy0jl5XqmeP3T+dkTM4cg/SfV4UeGgHsK6nZ1B3osn/OCe1+mGEE5nTU+XGNEsKUDS7nTRcycMDcdeG2xyPlFctzH2HAl8hAMl51e/M6WdKsKtIN310bTgd9EnGrDDvDbKYWGphbWtRNsWXaDYaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756054998; c=relaxed/simple;
-	bh=xNPtHqPQ8EbTfGPaocAYn2ghUhDePyzcdAsyJIsfodQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eo9OCE6HacteR3GJWAMcjTAC0atj2vBEDPmW8RduHQS3KYfpeholeLUQimdl17MQajHK3E9BQZCfjCzO3wkpBoXM/j05SSfIRxVfTRUwZRf2x+3rUArIOvymFkWMEMXxXbdGv15gC9pFJRQ4N/ucUXrPx3+JGFB2LpZmQTzVaD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=2QYZ761s; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 9B76A4E40C29;
-	Sun, 24 Aug 2025 17:03:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 558BB605F1;
-	Sun, 24 Aug 2025 17:03:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9145F1C228A5B;
-	Sun, 24 Aug 2025 19:02:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756054990; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=HzrQ8UsauV0uUlBYYQNKljD4+gLMnEGKsLGyhjx5bAE=;
-	b=2QYZ761sM6UEzTwDs7IDwJ1Mhr0mMkKFYPkGknyM6LPizE1YHI2TEhcVYBPBlHRTbwspo5
-	j0ypVgVv0Jv974DCPhBwnI337qtdAFX/8FvCZWCYRy+AKPVoMdAmrxxTwHSPTI7TfucYGi
-	oMx5z/qpOCYEXcWSNO5CLDufO36f6MCz5JZvgtTIkuoxhqNoZNOqFBZLhrd9XIEz6rC6oL
-	fFuNyF3jm7jitetwI+KSz4Xb3lYvjk4KtJz6J3ERyswHNkTpe2KhEULFRwcCxMCe5Fuhv3
-	HlMCJzMOG40NdhBM6H+RIxCxVrDrc5X3CagXUQXyEOQm3I8gaM+uU5bZJkqX6Q==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Santhosh Kumar K <s-k6@ti.com>,  richard@nod.at,  vigneshr@ti.com,
-  tudor.ambarus@linaro.org,  pratyush@kernel.org,  mwalle@kernel.org,
-  p-mantena@ti.com,  linux-spi@vger.kernel.org,
-  linux-mtd@lists.infradead.org,  linux-kernel@vger.kernel.org,
-  a-dutta@ti.com,  u-kumar1@ti.com,  praneeth@ti.com
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-In-Reply-To: <6c35baad-a332-4b0a-96ca-1cdb3840ad94@sirena.org.uk> (Mark
-	Brown's message of "Wed, 13 Aug 2025 21:26:06 +0100")
-References: <20250811193219.731851-1-s-k6@ti.com>
-	<20250811193219.731851-2-s-k6@ti.com>
-	<6c35baad-a332-4b0a-96ca-1cdb3840ad94@sirena.org.uk>
-User-Agent: mu4e 1.12.7; emacs 30.1
-Date: Sun, 24 Aug 2025 19:02:56 +0200
-Message-ID: <87cy8khcu7.fsf@bootlin.com>
+	s=arc-20240116; t=1756103301; c=relaxed/simple;
+	bh=WQVylS92T3jgMm7p84Z04xb25P92PYQug7wH3/uzZMA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S1Vp+CXST8Tyoau3lRnM42AAmiRKrA9V6XMG8WwpirBK7pVjqisabFh2W++6Nagj8oYiVOdTgjJrPhRaDngCqEGH3BJKAFcXb4ciUADdmSkEWb7Tw2Z9J+4ZJJrN6v0iq5QRXQqMndyQp7bd6Z9uk3MS0BsnSYi5lQMGLK6YvTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=akjIn+wG; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1756103300; x=1787639300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WQVylS92T3jgMm7p84Z04xb25P92PYQug7wH3/uzZMA=;
+  b=akjIn+wG15LcV1BxG1NwXrF7tftD289/QyhmevycNxc7Ap+TTq27TFgv
+   G2wNjzRchclfr8fXicwA+HuEVRcPBkxm0cfccYhRd+h4nUSaWIibrZKx5
+   t8dvzwa5fILD+FkPxQfok7GfhXpCsT/o4Hryl5DLELchCDLMwdrtZkRIE
+   vzBWaq0ubNayr9kC18v5WbyCMHJDISNdR+493djgNxdyQ+SorYXyEIbr5
+   xk9K7UD7lcQWP8cVp19zYqHYSUl9S26a0y+vDC78V/90lems+gWPB1qfJ
+   QWOkZL4+OhjfL9u9gXK7g3DPL2cxDsPFOPWQHCgEbnQsxFD/vMDClVCCY
+   A==;
+X-CSE-ConnectionGUID: E7GoUgAnRxqBfYFECdyUSQ==
+X-CSE-MsgGUID: 5apMjYN7Q+GTJVOEPqfVXw==
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="45594060"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Aug 2025 23:28:14 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Sun, 24 Aug 2025 23:27:54 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Sun, 24 Aug 2025 23:27:50 -0700
+Date: Mon, 25 Aug 2025 06:27:49 +0000
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Robert Marko <robert.marko@sartura.hr>
+CC: <linux@armlinux.org.uk>, <nicolas.ferre@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
+	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+	<o.rempel@pengutronix.de>, <luka.perkov@sartura.hr>
+Subject: Re: [PATCH v9 0/9] arm64: lan969x: Add support for Microchip LAN969x
+ SoC
+Message-ID: <20250825062749.5hjcxwlbmagccqgj@DEN-DL-M70577>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250813174720.540015-1-robert.marko@sartura.hr>
 
-Hello,
-
-On 13/08/2025 at 21:26:06 +01, Mark Brown <broonie@kernel.org> wrote:
-
-> On Tue, Aug 12, 2025 at 01:02:10AM +0530, Santhosh Kumar K wrote:
->> From: Pratyush Yadav <pratyush@kernel.org>
->>=20
->> Some controllers like the Cadence OSPI controller need to perform a
->> tuning sequence to operate at high data rates. Tuning is needs to happen
->> once the device is switched to appropriate mode (say 8S-8S-8S or
->> 8D-8D-8D). Add a hook that spi-mem client devices can call in order to t=
-une
->> the controller to operate in a given mode and data rate.
->>=20
->> This is somewhat similar to eMMC/SD tuning for higher speed modes like
->> HS200, but there isn't a standard specification around the same though.
+> This patch series adds basic support for Microchip LAN969x SoC.
+> 
+> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
+> which allows to avoid the need to change dependencies of the drivers that
+> are shared for Microchip SoC-s in the future.
+> 
+> DTS and further driver will be added in follow-up series.
+> 
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> ---
+> Changes in v9:
+> * Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 and LAN969x
+> directly, this avoids breaking existing configs with ARCH_SPARX5
+> 
+> Changes in v8:
+> * Move to using ARCH_MICROCHIP as suggested by Arnd
+> * Dropped any review tags due to changes
+> 
+> Robert Marko (9):
+>   arm64: Add config for Microchip SoC platforms
+>   ARM: at91: select ARCH_MICROCHIP
+>   arm64: lan969x: Add support for Microchip LAN969x SoC
+>   mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+>   tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+>   spi: atmel: make it selectable for ARCH_MICROCHIP
+>   i2c: at91: make it selectable for ARCH_MICROCHIP
+>   char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+>   crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
+> 
+>  arch/arm/mach-at91/Kconfig     |  4 +++
+>  arch/arm64/Kconfig.platforms   | 51 ++++++++++++++++++++++++----------
+>  drivers/char/hw_random/Kconfig |  2 +-
+>  drivers/crypto/Kconfig         |  2 +-
+>  drivers/i2c/busses/Kconfig     |  2 +-
+>  drivers/mfd/Kconfig            |  2 +-
+>  drivers/spi/Kconfig            |  2 +-
+>  drivers/tty/serial/Kconfig     |  2 +-
+>  8 files changed, 47 insertions(+), 20 deletions(-)
+> 
+> --
+> 2.50.1
 >
-> Should we have something that blocks these tuning required modes without
-> the appropriate tuning, and/or allows discovery of which modes require
-> this tuning?  This all feels very landmineish - client drivers just have
-> to know when tuning is required.
 
-The maximum bus frequency will tell whether tuning is relevant or not I
-guess.
-
-In the case of the Cadence controller, the bus speed is key to determine
-whether calibration should happen or not because when PHY calibration is
-enabled, the SPI bus frequency is equal to the controller clock rate
-(pre-scalers are bypassed).
-
-So the criteria for enabling calibration is:
-
-   max SPI bus freq >=3D  min controller clock rate
-
-Thanks,
-Miqu=C3=A8l
+Acked-by: Daniel Machon <daniel.machon@microchip.com> 
 
