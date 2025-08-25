@@ -1,132 +1,156 @@
-Return-Path: <linux-spi+bounces-9654-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9655-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DD0AB3366F
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 08:28:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A188B33988
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 10:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AF96189F23F
-	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 06:28:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 244FF1890827
+	for <lists+linux-spi@lfdr.de>; Mon, 25 Aug 2025 08:40:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F71A27FD5A;
-	Mon, 25 Aug 2025 06:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE03D2737FC;
+	Mon, 25 Aug 2025 08:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="akjIn+wG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Wj2VKK1O"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE6219C569;
-	Mon, 25 Aug 2025 06:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BBA29CB3A;
+	Mon, 25 Aug 2025 08:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756103301; cv=none; b=IzCm9igTqcFiyncPpae5KFUqy0jl5XqmeP3T+dkTM4cg/SfV4UeGgHsK6nZ1B3osn/OCe1+mGEE5nTU+XGNEsKUDS7nTRcycMDcdeG2xyPlFctzH2HAl8hAMl51e/M6WdKsKtIN310bTgd9EnGrDDvDbKYWGphbWtRNsWXaDYaE=
+	t=1756110980; cv=none; b=EVCX5pEH1XcfZbuNG+2I7ofTGv7Vh/j/VLLNQhu34/hDK4tsbfFJ/FA3M4nEQWpRK3cvZMNOz/d8010/u8hDdYtWrkoyxYYMqRE/fPb+NBtgSNrOL9nAQXX8yXfZottrDVywRbHLIeJnVV4FjGgz2qQSg0dhTXhBEVr++I02Cko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756103301; c=relaxed/simple;
-	bh=WQVylS92T3jgMm7p84Z04xb25P92PYQug7wH3/uzZMA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S1Vp+CXST8Tyoau3lRnM42AAmiRKrA9V6XMG8WwpirBK7pVjqisabFh2W++6Nagj8oYiVOdTgjJrPhRaDngCqEGH3BJKAFcXb4ciUADdmSkEWb7Tw2Z9J+4ZJJrN6v0iq5QRXQqMndyQp7bd6Z9uk3MS0BsnSYi5lQMGLK6YvTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=akjIn+wG; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1756103300; x=1787639300;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WQVylS92T3jgMm7p84Z04xb25P92PYQug7wH3/uzZMA=;
-  b=akjIn+wG15LcV1BxG1NwXrF7tftD289/QyhmevycNxc7Ap+TTq27TFgv
-   G2wNjzRchclfr8fXicwA+HuEVRcPBkxm0cfccYhRd+h4nUSaWIibrZKx5
-   t8dvzwa5fILD+FkPxQfok7GfhXpCsT/o4Hryl5DLELchCDLMwdrtZkRIE
-   vzBWaq0ubNayr9kC18v5WbyCMHJDISNdR+493djgNxdyQ+SorYXyEIbr5
-   xk9K7UD7lcQWP8cVp19zYqHYSUl9S26a0y+vDC78V/90lems+gWPB1qfJ
-   QWOkZL4+OhjfL9u9gXK7g3DPL2cxDsPFOPWQHCgEbnQsxFD/vMDClVCCY
-   A==;
-X-CSE-ConnectionGUID: E7GoUgAnRxqBfYFECdyUSQ==
-X-CSE-MsgGUID: 5apMjYN7Q+GTJVOEPqfVXw==
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="45594060"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Aug 2025 23:28:14 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Sun, 24 Aug 2025 23:27:54 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Sun, 24 Aug 2025 23:27:50 -0700
-Date: Mon, 25 Aug 2025 06:27:49 +0000
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Robert Marko <robert.marko@sartura.hr>
-CC: <linux@armlinux.org.uk>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
-	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
-	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<o.rempel@pengutronix.de>, <luka.perkov@sartura.hr>
-Subject: Re: [PATCH v9 0/9] arm64: lan969x: Add support for Microchip LAN969x
- SoC
-Message-ID: <20250825062749.5hjcxwlbmagccqgj@DEN-DL-M70577>
-References: <20250813174720.540015-1-robert.marko@sartura.hr>
+	s=arc-20240116; t=1756110980; c=relaxed/simple;
+	bh=N8AlyFG48ldLOPuMuuo84h3wS2kvWS/OzqBxXhkwRVM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=EgJ5QfDRVChagc6n6oiD/qgc7Anrmjn0XC+O6GAEsnfV4QT+esoFdzoiXB2bJKPqjIqX1gKSstVxaO58xGDDioBt1QyvhXMbbZvwdoSfghnEWjpfFMR0Go87hKwvuq9A2Ae5fmV3V8j6jlHeYqgyIO2pTpqLfSpVtQnJ/xpnOms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Wj2VKK1O; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57P8LOXC012253;
+	Mon, 25 Aug 2025 08:36:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	s/kRFyxmzjEr5HfvUocTdiG44MWpyBTf/8L5FSDtj1w=; b=Wj2VKK1ORQgs7w7Y
+	whdSMscooN9hBM4YHSKXFpDncZ5ptT2pNE5XHXzKd1bPOyBRFtqI1ycxuKQToccM
+	TnFN2NqW+J0bvldmRH+oV1NvcDl75nBP/IHJxBehE+90usl6MrkEBzjCUlep/VRA
+	UOJZF21hUZzyaSWFDyD5sbjIj7ywH/vLpo0QzdgiJkdGBYcklwaP2PVo5fhauFFE
+	gKzr92VpEA+CCIQ7maJFlRtUBVQU3Z4JjAoypCNxFNnJfQwjzO/M/V+ELViU3rjU
+	BlfoMBXlDvP0JOW8i19gzlmzgBmTeAd5w2WMS29qWsgIWL8JVfFUW+6L7qfy4Mq2
+	azsJ8Q==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48q5xfceem-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Aug 2025 08:36:05 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 57P8a4Xi021720
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Aug 2025 08:36:04 GMT
+Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.24; Mon, 25 Aug
+ 2025 01:36:01 -0700
+Message-ID: <4ae827e8-646a-4070-b06e-23bcd261ffcd@quicinc.com>
+Date: Mon, 25 Aug 2025 16:35:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250813174720.540015-1-robert.marko@sartura.hr>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/3] virtio-spi: Add virtio-spi.h
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+CC: <harald.mommer@oss.qualcomm.com>, <quic_msavaliy@quicinc.com>,
+        <broonie@kernel.org>, <virtio-dev@lists.linux.dev>,
+        <viresh.kumar@linaro.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <hdanton@sina.com>,
+        <qiang4.zhang@linux.intel.com>, <alex.bennee@linaro.org>,
+        <quic_ztu@quicinc.com>
+References: <20250820084944.84505-1-quic_haixcui@quicinc.com>
+ <20250820084944.84505-3-quic_haixcui@quicinc.com>
+ <aKXaI0SAAMaHMZM9@smile.fi.intel.com>
+Content-Language: en-US
+From: Haixu Cui <quic_haixcui@quicinc.com>
+In-Reply-To: <aKXaI0SAAMaHMZM9@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAzMyBTYWx0ZWRfXyNlrBp6yjebm
+ IzR9ktbFM27L3Sfz0nOHhMdaYTQDdGS67TKIlTtdxsR/w4HOSHmU8ewXRMMpcleJAhkH0R5Qui7
+ JDxfyiV1hwXUrsOmJsjWsY8zYPoDxpErsc3doHHRaFJ2BhXwJA5gSDyjyGYhOSreYtRW2Sio6NR
+ Rtoe83UZjHfcP0JhqNBQqTYITtKmdYQziz6Mk4nUxQNLoC2Qctq/G9Z6qZFNJZVZ+qyY9rvuuLe
+ p2Ncy5ToQYrRDAGJ2zGYOm62EwACPFWH4PnoFUwXiC7nXn7axzdmOo2sf7MoIpWJfkNrU9tqhru
+ 0fewU4HLMdsTqGYEi8UiYq9YMZZuIfRknOQagNOaYOUIbPL7te7AkI1N5wn0kAgvFC4/g9EYpcI
+ OCKD3cnC
+X-Proofpoint-GUID: YO7A1MnfLxAiMXeUnCx0GjysGtB39PKR
+X-Authority-Analysis: v=2.4 cv=MutS63ae c=1 sm=1 tr=0 ts=68ac2075 cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10
+ a=I6AEysREMBWARHdSJAkA:9 a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10
+X-Proofpoint-ORIG-GUID: YO7A1MnfLxAiMXeUnCx0GjysGtB39PKR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-25_04,2025-08-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 impostorscore=0 adultscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230033
 
-> This patch series adds basic support for Microchip LAN969x SoC.
-> 
-> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
-> which allows to avoid the need to change dependencies of the drivers that
-> are shared for Microchip SoC-s in the future.
-> 
-> DTS and further driver will be added in follow-up series.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
-> Changes in v9:
-> * Make ARCH_MICROCHIP hidden symbol that is selected by SparX-5 and LAN969x
-> directly, this avoids breaking existing configs with ARCH_SPARX5
-> 
-> Changes in v8:
-> * Move to using ARCH_MICROCHIP as suggested by Arnd
-> * Dropped any review tags due to changes
-> 
-> Robert Marko (9):
->   arm64: Add config for Microchip SoC platforms
->   ARM: at91: select ARCH_MICROCHIP
->   arm64: lan969x: Add support for Microchip LAN969x SoC
->   mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
->   tty: serial: atmel: make it selectable for ARCH_MICROCHIP
->   spi: atmel: make it selectable for ARCH_MICROCHIP
->   i2c: at91: make it selectable for ARCH_MICROCHIP
->   char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
->   crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
-> 
->  arch/arm/mach-at91/Kconfig     |  4 +++
->  arch/arm64/Kconfig.platforms   | 51 ++++++++++++++++++++++++----------
->  drivers/char/hw_random/Kconfig |  2 +-
->  drivers/crypto/Kconfig         |  2 +-
->  drivers/i2c/busses/Kconfig     |  2 +-
->  drivers/mfd/Kconfig            |  2 +-
->  drivers/spi/Kconfig            |  2 +-
->  drivers/tty/serial/Kconfig     |  2 +-
->  8 files changed, 47 insertions(+), 20 deletions(-)
-> 
-> --
-> 2.50.1
->
 
-Acked-by: Daniel Machon <daniel.machon@microchip.com> 
+
+On 8/20/2025 10:22 PM, Andy Shevchenko wrote:
+> On Wed, Aug 20, 2025 at 04:49:43PM +0800, Haixu Cui wrote:
+>> Add virtio-spi.h header for virtio SPI.
+> 
+> ...
+> 
+>> +/**
+> 
+> This is kernel-doc comment...
+> 
+>> + * struct virtio_spi_config - All config fields are read-only for the
+>> + * Virtio SPI driver
+> 
+>> + */
+> 
+> ...
+> 
+>> +/*
+>> + * @chip_select_id: chipselect index the SPI transfer used.
+>> + *
+> 
+> But this one (besides having tons of unneeded blank lines) is not. Why is this
+> inconsistency?
+> 
+>> + */
+> 
+
+Thank you for pointing out the inconsistency. I will update the comment 
+to follow the kernel-doc format and remove the unnecessary blank lines.
+This change will be reflected in the next patch version.
+
+> ...
+> 
+>> +struct spi_transfer_result {
+>> +#define VIRTIO_SPI_TRANS_OK	0
+>> +#define VIRTIO_SPI_PARAM_ERR	1
+>> +#define VIRTIO_SPI_TRANS_ERR	2
+>> +	__u8 result;
+>> +};
+> 
+> And this data type has no doc at all...
+> 
+Okay, will add definition for spi_tranafer_result.
+
 
