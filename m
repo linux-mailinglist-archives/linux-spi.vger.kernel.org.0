@@ -1,126 +1,108 @@
-Return-Path: <linux-spi+bounces-9669-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9670-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A55B373EB
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 22:35:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 744E6B3745E
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 23:24:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF02C36385E
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 20:35:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF06D3BAB98
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 21:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F260D2E228D;
-	Tue, 26 Aug 2025 20:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7DB928151E;
+	Tue, 26 Aug 2025 21:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAb7Vhfc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOXxko+M"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4473A28980F;
-	Tue, 26 Aug 2025 20:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342AA2F9C2D;
+	Tue, 26 Aug 2025 21:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756240543; cv=none; b=sgDafa1kP4oScE/BVI4aXp2NsqGL8iLHgCVTztSPnixgw+7HPEpORFgeoNS2VyXMhDNv8u+NaNsTDxfsJRe8zVHmUfrUVAOBu7VwqSLQfytKh20aeq10W955o0jZwxmhjYqgpwTfiSLTSlAXYFTIEfz46GWmYpxMs0gAJIwKxos=
+	t=1756243459; cv=none; b=QKkAD7PKfSdiXRyhcXTKcfNZw7JY4I0e3e8OspiVht0jTjLEIr5q+R77RY1fDk+UGpHrAdHYHeKJBRu1twxswLG6GcDcZV44uv+reeKDI3N1GaAoKdFhnn+EcpbZPCdeJcy0ft69o9RN5RRA1ICnEzZhECCct3VHatUz/DwoRwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756240543; c=relaxed/simple;
-	bh=sFouoUIvWVQ2yig/ZG45FSzeJ7zb8/WV+WvoFHH3+sY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyS2LG3Tqm+wCPhR9H7BSOd71RyHJAjhzfRNcxZgAhadcJqM/Iozz9RUUv/p4zjmtUfI9QW1seC6OgtwJO8YUDqwCMEvgFKXLDMbkxMSAJGvzOP17HD7PUt3ePDfjWM7ASV0ledMm5TaJdoYfknFmbkVxulMhbkJX2VgNFAUQ24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAb7Vhfc; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756240542; x=1787776542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sFouoUIvWVQ2yig/ZG45FSzeJ7zb8/WV+WvoFHH3+sY=;
-  b=DAb7VhfcsfDYIOCiWUT8V053wyqtJXkb3pIgyCxfGjn8j859ZutqZeMp
-   GY5MgWVXtcuD0RAnDdbx2iEjwIKYZBNpl5i+qcpeTOtkV+0UEd+TLlg4a
-   RvDCo8UpO8yi3z6qhNFoH2TFdjODReKP6H1Vpsveh273mh8xRztiK8vy2
-   bDzqePI13xKQcHI/INT77XSccpW3D/cBKFaIMZPl2oHG+qypbXOjWEFcq
-   pkONnmz5VQqnlIeoTD6NVxE/O67rwkFh7k9fFLimte3ZlTSA+nJkO1RsQ
-   Qq5Ex5NuTm+iCpzrMkVmJW25QMQmZOCULvpzM4mrAUUkwqk4qWkc9cYXg
-   g==;
-X-CSE-ConnectionGUID: NStm4CCJQwmXQ2LLsL3Z7g==
-X-CSE-MsgGUID: 3FDRNsdASd6xCOyOrbF7Pg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="58423404"
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="58423404"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 13:35:42 -0700
-X-CSE-ConnectionGUID: 21+nFIwlQHCy6Q0yqbjhHA==
-X-CSE-MsgGUID: 6j7kS6d4RMGWnYhc6xSXCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
-   d="scan'208";a="169844692"
-Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 26 Aug 2025 13:35:40 -0700
-Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1ur0OH-000SND-2R;
-	Tue, 26 Aug 2025 20:35:37 +0000
-Date: Wed, 27 Aug 2025 04:35:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>, linux-spi@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: rb4xx: add COMPILE_TEST support
-Message-ID: <202508270444.t2WdWo8x-lkp@intel.com>
-References: <20250821033534.638157-1-rosenp@gmail.com>
+	s=arc-20240116; t=1756243459; c=relaxed/simple;
+	bh=FgAYgWymu3o/W7Kpeg65iStpBNbiEzboeZKdeyYXjYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bg5pE8Wmo3weLk6xScszNcYS+oqHAoJs/MdInAEhCwcSeRQpZJKr7lVBDY6f4Agz4K+GZDUUXpHhUeAWQlAuFHk00Jx3pqC8m32km3P2QgeXRt/UcvtJK9TglPPGzwEQjy4bK4MeZM0hbfNxTsofuiQaEineUObtMEdWL6g+QmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOXxko+M; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7f77c66f13bso4382685a.0;
+        Tue, 26 Aug 2025 14:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756243457; x=1756848257; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MmM4t0aBKvOmEGg9Ac4ffzNoaugADk2GnwdUWPX0XUs=;
+        b=QOXxko+MNKA3CeK1LZlnvGXdwH+3T+XGl7hH6YkM+lbi66BFcxhYbJyd3BZdSiPkt0
+         qVN6bQpTYf0I37//UR3a9GjHKnShShFEqI0elodWULY/haulbsS1XCtYyF90tBnDLMx5
+         k+8ksBAPpUR8n/hBLSnr/rlZaxyYgaLP0qVqHoskOxY4A2t++yJ0Pvei04exFCJsXNcU
+         PXJscZWMbTjrms8SH9VXuJgFQ3SPqF/3MmInm4FKdxFkff/K7NUH1RmFkvXWfQ5gjisU
+         U28+XMwZv3p5tOm0gzgc6eiIETBJYRuaucAYQuRjBaMjyRNUpYWEmijAY1ptUrprp0is
+         K8jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756243457; x=1756848257;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MmM4t0aBKvOmEGg9Ac4ffzNoaugADk2GnwdUWPX0XUs=;
+        b=TGg+AmpOugPDDu70zbTbxixQ4r3kwIMVcLcD25WH+Jc32R4OgIBo/LVPvvgmqsdY0B
+         /Uyj/wqW7Y9/xvK4S0OziVr1SLJXO3EL4bFJxeDstVpWCmKqpa+HpWeqG+kAMzm+5voX
+         A+9Z08uJXX99Sx+2kePl1O5S8SfcqCi3KY3JSfCp/91Eh2T1yriM5t+v9P2DCfr4Gp5Q
+         oh54zaIKARYa4mx6jnWYRrjqoONAUbBtHkhCG28ZHddrheOVeOhANFy1E0MWjxDM/iPC
+         eBTi/0xilwI2IwFpDd0vIw5uuzjYBIfMzCTTKdMio6fIZ3rTzKrRUTl7hWWSQqoZDqmY
+         CZFA==
+X-Forwarded-Encrypted: i=1; AJvYcCW1SdTJ5daGgpMOn/WmhxLpGs/+9dDUNdu380dqgAh3BMii/Xue1QLZ/THT4Mmr5xWFVUgg9SnYKfbfcaA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuzcrTVo6j/qtr1MWokUh7S9eCtvuKdMjeiCK55btkgA+lgfPX
+	RS8nWrDvVjAlhVLuLCo8NdRTn9aKUWwSykzhOaDuKtoIdTDbuc4pDaurLsgLiQ==
+X-Gm-Gg: ASbGncu09h2/fxp8pEdRtgdbBltbChSSgZRlSRXvf3DFtUu3EAv6EjX4cMFnEAbWIQ7
+	ndL+JdGNJwGixHFvi7rG83ZHHmFhUfNkXYbDS0pO3s+EuMyhfMgc5MRJkBx879hK4ZqGTccGsws
+	LGmUgI8pAPYpLeCRz/dj3yDXBfwezNPDmHor1rH0wRXHIqD4ot7OL7CuNY1vWi4FB2lwKnnRpU0
+	jqfQ/MNPE1x3mTQUsLJCyFk1EgZIh1TzLKeR704CqDoJ5aXN+LHxo5hCrNnkLulsg+5Noe9xWNX
+	J03Wh8ScpfR6yc7MM8P266XUlazw22fSRNMuguDdw0xV99jumALZtIpSUVrzYWKzj1R8e7VUv8k
+	boTJP5H6gc2koth+waH0VzpomTxre7WulKZ1NbLzURj07tLXhOOPViebfDUWIOkHmIQ==
+X-Google-Smtp-Source: AGHT+IFMpyi2+e4OHwtiricWrIVt0JBEYzdvNNclfSwQm0BtucmRnvCWV3F/sxNLkx/fCvtXvnqM5A==
+X-Received: by 2002:a05:620a:2951:b0:7f0:21be:5fb4 with SMTP id af79cd13be357-7f021be64c3mr1018104085a.35.1756243456749;
+        Tue, 26 Aug 2025 14:24:16 -0700 (PDT)
+Received: from archlinux.lan ([2601:644:8200:acc7::1f6])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7ebe6069a17sm758731685a.0.2025.08.26.14.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Aug 2025 14:24:16 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-spi@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>,
+	j4g8y7@gmail.com,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCHv2 0/3] add COMPILE_TEST support
+Date: Tue, 26 Aug 2025 14:24:10 -0700
+Message-ID: <20250826212413.15065-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821033534.638157-1-rosenp@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Rosen,
+Allows the buildbots to test compilation. The driver has nothing
+architecture specific.
 
-kernel test robot noticed the following build warnings:
+v2: change to patch series and add extra patches
 
-[auto build test WARNING on broonie-spi/for-next]
-[also build test WARNING on linus/master v6.17-rc3 next-20250826]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Rosen Penev (3):
+  spi: rb4xx: depend on OF
+  spi: rb4xx: add COMPILE_TEST support
+  spi: rb4xx: use devm for clk_prepare_enable
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/spi-rb4xx-add-COMPILE_TEST-support/20250821-113701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-patch link:    https://lore.kernel.org/r/20250821033534.638157-1-rosenp%40gmail.com
-patch subject: [PATCH] spi: rb4xx: add COMPILE_TEST support
-config: m68k-randconfig-r073-20250827 (https://download.01.org/0day-ci/archive/20250827/202508270444.t2WdWo8x-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250827/202508270444.t2WdWo8x-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202508270444.t2WdWo8x-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/spi/spi-rb4xx.c:200:34: warning: 'rb4xx_spi_dt_match' defined but not used [-Wunused-const-variable=]
-     200 | static const struct of_device_id rb4xx_spi_dt_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~~
-
-
-vim +/rb4xx_spi_dt_match +200 drivers/spi/spi-rb4xx.c
-
-05aec357871f89 Bert Vermeulen   2015-04-15  199  
-9a436c62fbb4c5 Christopher Hill 2020-05-21 @200  static const struct of_device_id rb4xx_spi_dt_match[] = {
-9a436c62fbb4c5 Christopher Hill 2020-05-21  201  	{ .compatible = "mikrotik,rb4xx-spi" },
-9a436c62fbb4c5 Christopher Hill 2020-05-21  202  	{ },
-9a436c62fbb4c5 Christopher Hill 2020-05-21  203  };
-9a436c62fbb4c5 Christopher Hill 2020-05-21  204  MODULE_DEVICE_TABLE(of, rb4xx_spi_dt_match);
-9a436c62fbb4c5 Christopher Hill 2020-05-21  205  
+ drivers/spi/Kconfig     |  3 ++-
+ drivers/spi/spi-rb4xx.c | 36 ++++++++++++++++--------------------
+ 2 files changed, 18 insertions(+), 21 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1
+
 
