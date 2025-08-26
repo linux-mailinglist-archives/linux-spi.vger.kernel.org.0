@@ -1,207 +1,126 @@
-Return-Path: <linux-spi+bounces-9668-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9669-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3205B371B7
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 19:51:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A55B373EB
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 22:35:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9007116FF88
-	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 17:51:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF02C36385E
+	for <lists+linux-spi@lfdr.de>; Tue, 26 Aug 2025 20:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842B62C15A0;
-	Tue, 26 Aug 2025 17:51:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F260D2E228D;
+	Tue, 26 Aug 2025 20:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBIWB8Cf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAb7Vhfc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568B4214A9E;
-	Tue, 26 Aug 2025 17:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4473A28980F;
+	Tue, 26 Aug 2025 20:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756230694; cv=none; b=ZxAGbuXwItn59fKU9yD5r6E46sillJqXmflxe4A2/azUz5H6fGR7auc1DNNYC1cK7XRhC/Rsb2Zkx5xFkfJXBc1c9KFnS/8nTfECoHgqaULGb7N1NkdzS+xNAfSyDQoTWNizLa4mxuoF3p+iYbko+jNXx4fMH9hu4KnZpDSAVNs=
+	t=1756240543; cv=none; b=sgDafa1kP4oScE/BVI4aXp2NsqGL8iLHgCVTztSPnixgw+7HPEpORFgeoNS2VyXMhDNv8u+NaNsTDxfsJRe8zVHmUfrUVAOBu7VwqSLQfytKh20aeq10W955o0jZwxmhjYqgpwTfiSLTSlAXYFTIEfz46GWmYpxMs0gAJIwKxos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756230694; c=relaxed/simple;
-	bh=5OG0CFSumhwO6LPpaT7Nwl9tbfKtGy7nJSNDdcsM6Xw=;
+	s=arc-20240116; t=1756240543; c=relaxed/simple;
+	bh=sFouoUIvWVQ2yig/ZG45FSzeJ7zb8/WV+WvoFHH3+sY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KYFYnjtZeNPTZisHJMLSJ3RhmxuIey1aYRVf00AmJkkM8l4kiTviNRe0wzirRzkfeUwsF7CG15Ev43RRE5CgJEIfUEMaVoExDkWFQGuKsqGRmtxEVjnQnOkYbJWj6WvW84p/T1c6DwLIQo/6p8OldfWzWIXhN/nfR/ohoem4iKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBIWB8Cf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72F2C4CEF1;
-	Tue, 26 Aug 2025 17:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756230693;
-	bh=5OG0CFSumhwO6LPpaT7Nwl9tbfKtGy7nJSNDdcsM6Xw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZBIWB8CfNuqO2Xt04dr1deTArEr1hsWTPwg3F+HkeDvfDwssE5q+kkFSD6kSTleEN
-	 00d6M0WcGX5tfcuEb1jeRM4FhRpA1iVofSqHon/UJK8jDClHQAHt/XiSWvt6ofRRRV
-	 P54jx5TwCo9IRGFD21Xt7eUWwpkaVRVhov8z8dWtJTjrbv8lQTJr7GxD0uxxNdrITF
-	 Ewpw0B3LnGgv0+qIJeWk+4nwUn6zF7bU71y3GZHEnkWGofxwqw3bATe3mHa1LoUaD+
-	 pBBYsBR2/A7eREM5xY6JjyJQP8jTH46SanN4fy90/GdhJPIgLp+DGPTga2bvrROvZL
-	 +WxtkIB0brobg==
-Date: Tue, 26 Aug 2025 18:51:29 +0100
-From: Conor Dooley <conor@kernel.org>
-To: xianwei.zhao@amlogic.com
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liang Yang <liang.yang@amlogic.com>,
-	Feng Chen <feng.chen@amlogic.com>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] spi: dt-bindings: add Amlogic A113L2 SFC
-Message-ID: <20250826-scratch-cleft-a3f7b36a3cb5@spud>
-References: <20250826-spifc-v3-0-7e926041d7f6@amlogic.com>
- <20250826-spifc-v3-1-7e926041d7f6@amlogic.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gyS2LG3Tqm+wCPhR9H7BSOd71RyHJAjhzfRNcxZgAhadcJqM/Iozz9RUUv/p4zjmtUfI9QW1seC6OgtwJO8YUDqwCMEvgFKXLDMbkxMSAJGvzOP17HD7PUt3ePDfjWM7ASV0ledMm5TaJdoYfknFmbkVxulMhbkJX2VgNFAUQ24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAb7Vhfc; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756240542; x=1787776542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sFouoUIvWVQ2yig/ZG45FSzeJ7zb8/WV+WvoFHH3+sY=;
+  b=DAb7VhfcsfDYIOCiWUT8V053wyqtJXkb3pIgyCxfGjn8j859ZutqZeMp
+   GY5MgWVXtcuD0RAnDdbx2iEjwIKYZBNpl5i+qcpeTOtkV+0UEd+TLlg4a
+   RvDCo8UpO8yi3z6qhNFoH2TFdjODReKP6H1Vpsveh273mh8xRztiK8vy2
+   bDzqePI13xKQcHI/INT77XSccpW3D/cBKFaIMZPl2oHG+qypbXOjWEFcq
+   pkONnmz5VQqnlIeoTD6NVxE/O67rwkFh7k9fFLimte3ZlTSA+nJkO1RsQ
+   Qq5Ex5NuTm+iCpzrMkVmJW25QMQmZOCULvpzM4mrAUUkwqk4qWkc9cYXg
+   g==;
+X-CSE-ConnectionGUID: NStm4CCJQwmXQ2LLsL3Z7g==
+X-CSE-MsgGUID: 3FDRNsdASd6xCOyOrbF7Pg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11534"; a="58423404"
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="58423404"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2025 13:35:42 -0700
+X-CSE-ConnectionGUID: 21+nFIwlQHCy6Q0yqbjhHA==
+X-CSE-MsgGUID: 6j7kS6d4RMGWnYhc6xSXCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,214,1751266800"; 
+   d="scan'208";a="169844692"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 26 Aug 2025 13:35:40 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ur0OH-000SND-2R;
+	Tue, 26 Aug 2025 20:35:37 +0000
+Date: Wed, 27 Aug 2025 04:35:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rosen Penev <rosenp@gmail.com>, linux-spi@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Mark Brown <broonie@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: rb4xx: add COMPILE_TEST support
+Message-ID: <202508270444.t2WdWo8x-lkp@intel.com>
+References: <20250821033534.638157-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="nV4lczYBtuhRtLNv"
-Content-Disposition: inline
-In-Reply-To: <20250826-spifc-v3-1-7e926041d7f6@amlogic.com>
-
-
---nV4lczYBtuhRtLNv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250821033534.638157-1-rosenp@gmail.com>
 
-On Tue, Aug 26, 2025 at 10:10:09AM +0800, Xianwei Zhao via B4 Relay wrote:
-> From: Feng Chen <feng.chen@amlogic.com>
->=20
-> The Flash Controller is derived by adding an SPI path to the original
-> raw NAND controller. This controller supports two modes: raw mode and
-> SPI mode. The raw mode has already been implemented in the community,
-> and the SPI mode is described here.
->=20
-> Add bindings for Amlogic A113L2 SPI Flash Controller.
->=20
-> Signed-off-by: Feng Chen <feng.chen@amlogic.com>
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
-> ---
->  .../devicetree/bindings/spi/amlogic,a4-spifc.yaml  | 82 ++++++++++++++++=
-++++++
->  1 file changed, 82 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/amlogic,a4-spifc.yaml =
-b/Documentation/devicetree/bindings/spi/amlogic,a4-spifc.yaml
-> new file mode 100644
-> index 000000000000..80a89408a832
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/amlogic,a4-spifc.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2025 Amlogic, Inc. All rights reserved
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/amlogic,a4-spifc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: SPI flash controller for Amlogic ARM SoCs
-> +
-> +maintainers:
-> +  - Liang Yang <liang.yang@amlogic.com>
-> +  - Feng Chen <feng.chen@amlogic.com>
-> +  - Xianwei Zhao <xianwei.zhao@amlogic.com>
-> +
-> +description:
-> +  The Amlogic SPI flash controller is an extended version of the Amlogic=
- NAND
-> +  flash controller. It supports SPI Nor Flash and SPI NAND Flash(where t=
-he Host
-> +  ECC HW engine could be enabled).
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,a4-spifc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: clock apb gate
-> +      - description: clock used for the controller
-> +
-> +  clock-names:
-> +    items:
-> +      - const: gate
-> +      - const: core
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  amlogic,rx-adj:
-> +    description:
-> +      Adjust sample timing for RX, Sampling time move later by 1 bus clo=
-ck.
+Hi Rosen,
 
-By 1 bus clock? Or by up to 3? I'd suggest rewording this to something
-like "Number of clock cycles by which sampling is delayed" or along
-those lines.
+kernel test robot noticed the following build warnings:
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1, 2, 3]
-> +    default: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    sfc0: spi@fe08d000 {
-> +      compatible =3D "amlogic,a4-spifc";
-> +      reg =3D <0xfe08d000 0x800>;
-> +      clocks =3D <&clkc_periphs 31>,
-> +               <&clkc_periphs 102>;
-> +      clock-names =3D "gate", "core";
-> +
-> +      pinctrl-0 =3D <&spiflash_default>;
-> +      pinctrl-names =3D "default";
-> +
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +
-> +      flash@0 {
-> +          compatible =3D "spi-nand";
-> +          reg =3D <0>;
-> +          #address-cells =3D <1>;
-> +          #size-cells =3D <1>;
-> +          nand-ecc-engine =3D <&sfc0>;
-> +          nand-ecc-strength =3D <8>;
-> +          nand-ecc-step-size =3D <512>;
-> +      };
-> +    };
->=20
-> --=20
-> 2.37.1
->=20
->=20
+[auto build test WARNING on broonie-spi/for-next]
+[also build test WARNING on linus/master v6.17-rc3 next-20250826]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---nV4lczYBtuhRtLNv
-Content-Type: application/pgp-signature; name="signature.asc"
+url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/spi-rb4xx-add-COMPILE_TEST-support/20250821-113701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+patch link:    https://lore.kernel.org/r/20250821033534.638157-1-rosenp%40gmail.com
+patch subject: [PATCH] spi: rb4xx: add COMPILE_TEST support
+config: m68k-randconfig-r073-20250827 (https://download.01.org/0day-ci/archive/20250827/202508270444.t2WdWo8x-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250827/202508270444.t2WdWo8x-lkp@intel.com/reproduce)
 
------BEGIN PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508270444.t2WdWo8x-lkp@intel.com/
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaK30IQAKCRB4tDGHoIJi
-0mnBAP9q21gLzy77xyCZZSJg4XByZEMOe0XHyHUr6l/8gLQX/AEA5uxdEN8+9653
-Kjgpi+dqVC4/8HIBfELwg25BaNiapwM=
-=qzT9
------END PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
---nV4lczYBtuhRtLNv--
+>> drivers/spi/spi-rb4xx.c:200:34: warning: 'rb4xx_spi_dt_match' defined but not used [-Wunused-const-variable=]
+     200 | static const struct of_device_id rb4xx_spi_dt_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~~~
+
+
+vim +/rb4xx_spi_dt_match +200 drivers/spi/spi-rb4xx.c
+
+05aec357871f89 Bert Vermeulen   2015-04-15  199  
+9a436c62fbb4c5 Christopher Hill 2020-05-21 @200  static const struct of_device_id rb4xx_spi_dt_match[] = {
+9a436c62fbb4c5 Christopher Hill 2020-05-21  201  	{ .compatible = "mikrotik,rb4xx-spi" },
+9a436c62fbb4c5 Christopher Hill 2020-05-21  202  	{ },
+9a436c62fbb4c5 Christopher Hill 2020-05-21  203  };
+9a436c62fbb4c5 Christopher Hill 2020-05-21  204  MODULE_DEVICE_TABLE(of, rb4xx_spi_dt_match);
+9a436c62fbb4c5 Christopher Hill 2020-05-21  205  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
