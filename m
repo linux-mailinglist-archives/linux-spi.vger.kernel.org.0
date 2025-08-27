@@ -1,53 +1,53 @@
-Return-Path: <linux-spi+bounces-9679-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9678-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4937B381C5
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Aug 2025 13:54:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D79FB381C2
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Aug 2025 13:54:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63DF31BA2FA1
-	for <lists+linux-spi@lfdr.de>; Wed, 27 Aug 2025 11:54:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E622E9814BC
+	for <lists+linux-spi@lfdr.de>; Wed, 27 Aug 2025 11:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38DD52FF178;
-	Wed, 27 Aug 2025 11:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1CA2FABE9;
+	Wed, 27 Aug 2025 11:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="JoONyqOk"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="i0Gtwj1M"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2699D2FA0F2;
-	Wed, 27 Aug 2025 11:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05721EDA09;
+	Wed, 27 Aug 2025 11:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756295646; cv=none; b=e81TjWt/NpWRnU14rqxO49IDoDkHiqvP1ybO3z9z+HxzPWnIwcn8Qukc7v0rlUA9JD/MfUHxGaRZuubXWcDEvFX3vXrxVqRTlHpEZ4BUTxngpjc8IXUoS2jgEu8tAPrS1CIqxBZf2mNWBsjwFKF0rRKtbhNvCw/iiBI/0W/xY9g=
+	t=1756295644; cv=none; b=YNAAL0XOhlfjaRPCszjZC2Xb9hE/s58atFFFEihPhg/I8CYbRDIgXbBq9hML05w5Y5vCLxyIJray1hgpvPsSRUADnI56kRCy9zPJt9+cwJzc0KpDyT0BNXk9EhfnlNN4/CX6WYbIfH8h6TtJg6Em5N2I1MlfS7IOOsoQ+vmFsVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756295646; c=relaxed/simple;
-	bh=N6iwUGMzPiDDO3HJpt4K9l9FNhes6zVx6pshwesN9Yw=;
+	s=arc-20240116; t=1756295644; c=relaxed/simple;
+	bh=SEQshoQJ1My/AlTA7S+E6JkBILW27xqYVy9AOO5p3+E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S0GcoZCkyxheR/b/KGcRYNFSQBgqxahw2IUrQUHK0Ex0iCTAcZBCedtGIhN0vFr5ZSYCmkJbTCbKmIZY15coEgNQZqZ/UMpL3xRhIhq6QChMiRGbn56KqbzE+LmXY2Sgwf0ZeiZO3vYRym/j7b4u6zlaGku0g+g9asBtvfMzOik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=JoONyqOk; arc=none smtp.client-ip=212.227.17.22
+	 MIME-Version; b=Mrqfq89LUfpDYzH9aRGAr8/KRLbKWy261AVyTXmLCDFYBgiGTbguBEx4z2W8yBd5MVKZKo8eEPyOzmtcsxPmM2vqFCkQpuqME6o/4pMOyC8TwDk7OGfuE9y0E9zjqbd81VBsg3T0M3ouBBeOAV4EJDUDisE7ZMKJcOERSwkNI0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=i0Gtwj1M; arc=none smtp.client-ip=212.227.17.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
 	s=s31663417; t=1756295630; x=1756900430; i=wahrenst@gmx.net;
-	bh=1CxNxfmU1s/Ipp2mEtuHNGOwBlhZrn7R6mG61kk3apc=;
+	bh=EOi1raod59gQWYFnuQlDhp8+n/cRGVPpcyoG9uXuR6Y=;
 	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
 	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=JoONyqOk/wvA9OuGoHlqSY+N99mJAVsGK92LVsN7ghMG9TJAQMnCfsfY1CYoaFOX
-	 /2m27nHqRNLPbxR+sZ5/FdAIN59s4Ccg9HVEPjPWxNWfDxLZ8EL+lCDQiR3233yXl
-	 cPfMswEK/FQ0/q6judMWArBR72mWDyHxW4/zFzyCRb6IlMHc3WfCQtzpqy7OnIPVa
-	 j38p0eho6cBRTrmKZCZah1IAUmd0oFir8AwOMg7EqutoJz6y1zAGrwpPxjI76T9e5
-	 HuUJRTEr1zWVp7jwCAmsZi/WRF/XEh79zeaRuuYPHmd0ULeXdWsKOB6eqsRfZUA/B
-	 MJfxKW/BDfOBLd4OsQ==
+	b=i0Gtwj1MgfvNVbi7RjlLeyQPRbHQKsT3UlzSXd7WgVoxe+PfONfGI91H4AxAreib
+	 MJ2heBb83l5ZZCghJzoZ4HDxJFN0xge/17/WASt0v3d338f3gcGL9qMq/yeXxCFG+
+	 aKc0lRoscoqZs86UIJ9jOiK21EFbXbBxGDQnN5T5S/Z5BOg0GDZBiYss3uA0Uxk+g
+	 1QyP+nn3hlb9P0zdkcafYKcYo+2iIHocjNlSG1+cl9xfsVxk4j04yeBbNfdexrn6p
+	 cs+Qq4wxqq4NtV1yVo+dx5hwfhJgXut2EhKvl6RbYM/h9WajqBBSCoi6VAlDUjOfB
+	 hn+UyNR4oBK1F/eMcA==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([79.235.128.112]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1My32F-1uaFhi3gsx-012KC8; Wed, 27
- Aug 2025 13:53:49 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVeMG-1uypxK0tpk-00Mdnn; Wed, 27
+ Aug 2025 13:53:50 +0200
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -58,11 +58,10 @@ To: Parthiban Veerasooran <parthiban.veerasooran@microchip.com>,
 Cc: linux-spi@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Stefan Wahren <wahrenst@gmx.net>,
-	stable@kernel.org,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: [PATCH V2 2/3 net] microchip: lan865x: Fix module autoloading
-Date: Wed, 27 Aug 2025 13:53:40 +0200
-Message-Id: <20250827115341.34608-3-wahrenst@gmx.net>
+	stable@kernel.org
+Subject: [PATCH V2 3/3 net] microchip: lan865x: Fix LAN8651 autoloading
+Date: Wed, 27 Aug 2025 13:53:41 +0200
+Message-Id: <20250827115341.34608-4-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250827115341.34608-1-wahrenst@gmx.net>
 References: <20250827115341.34608-1-wahrenst@gmx.net>
@@ -73,120 +72,110 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rMi0QQMgobC11EoWoa0F13as6zqIki/OZsY3TMXDJZT2X1Zdz5c
- TVBP6UvHQXpnUxhqXREM3C/IgHNc/QjnYcqdIkdtXF2cCJBoV3TWCaXrCZGVocaXnWMirjk
- BwTQPl+CXy8WZb84c06SpNDwbYel6BonuFSVMm5AvUhb96Z4keaqmwMySdxO4wJmjuma0gH
- dfgVALu3QMJZJ+xBMhEXg==
+X-Provags-ID: V03:K1:J2hEzO03oYZQvDWMbRmPTOz+qj3YMhq7tNv/ha2+B588vlTVHdk
+ YHoy41mlJHA0htkIVpVsfjRCuJzv9N/AdhUQWFzysiLQ2vYhxAJz+QWK1XjwVjGi53REhjS
+ JR6YaLrKKgO1keQlVTmQZUtEdr3Cj7w55bvs51M5QzPlHZCxgz00hHQgnGGqzj5QVdssKjX
+ /Ankf9lUQ0MrTCR6tcO7A==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:6J4LG38c5lc=;zXRBIADk0+zcArXpCEYDQGURzvp
- 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
- QYQmGR3FQeRjtvWQdtH
+UI-OutboundReport: notjunk:1;M01:P0:E+B/Xz5He18=;t0/EqfXQ/tM7K22BUlUgB72Nvat
+ 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
 
-Add MODULE_DEVICE_TABLE(), so modules could be properly autoloaded
-based on the alias from spi_device_id table. While at this, fix
-the misleading variable name (spidev is unrelated to this driver).
+Add missing IDs for LAN8651 devices, which are also defined in the
+DT bindings.
 
 Fixes: 5cd2340cb6a3 ("microchip: lan865x: add driver support for Microchip=
 's LAN865X MAC-PHY")
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Cc: stable@kernel.org
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 =2D--
- drivers/net/ethernet/microchip/lan865x/lan865x.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/microchip/lan865x/lan865x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/ethernet/microchip/lan865x/lan865x.c b/drivers/ne=
 t/ethernet/microchip/lan865x/lan865x.c
-index 84c41f193561..9d94c8fb8b91 100644
+index 9d94c8fb8b91..79b800d2b72c 100644
 =2D-- a/drivers/net/ethernet/microchip/lan865x/lan865x.c
 +++ b/drivers/net/ethernet/microchip/lan865x/lan865x.c
-@@ -423,10 +423,11 @@ static void lan865x_remove(struct spi_device *spi)
- 	free_netdev(priv->netdev);
- }
+@@ -425,12 +425,14 @@ static void lan865x_remove(struct spi_device *spi)
 =20
--static const struct spi_device_id spidev_spi_ids[] =3D {
-+static const struct spi_device_id lan865x_ids[] =3D {
+ static const struct spi_device_id lan865x_ids[] =3D {
  	{ .name =3D "lan8650" },
++	{ .name =3D "lan8651" },
  	{},
  };
-+MODULE_DEVICE_TABLE(spi, lan865x_ids);
+ MODULE_DEVICE_TABLE(spi, lan865x_ids);
 =20
  static const struct of_device_id lan865x_dt_ids[] =3D {
  	{ .compatible =3D "microchip,lan8650" },
-@@ -441,7 +442,7 @@ static struct spi_driver lan865x_driver =3D {
- 	 },
- 	.probe =3D lan865x_probe,
- 	.remove =3D lan865x_remove,
--	.id_table =3D spidev_spi_ids,
-+	.id_table =3D lan865x_ids,
++	{ .compatible =3D "microchip,lan8651" },
+ 	{ /* Sentinel */ }
  };
- module_spi_driver(lan865x_driver);
-=20
+ MODULE_DEVICE_TABLE(of, lan865x_dt_ids);
 =2D-=20
 2.34.1
 
