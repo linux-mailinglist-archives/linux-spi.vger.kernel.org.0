@@ -1,82 +1,82 @@
-Return-Path: <linux-spi+bounces-9688-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9689-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5621B3994C
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 12:15:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE853B3994F
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 12:15:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 711047B4C3F
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 10:14:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2E9C1C20D4F
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 10:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2D03090E5;
-	Thu, 28 Aug 2025 10:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55DD5309DCE;
+	Thu, 28 Aug 2025 10:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uarylZE7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q/F+kSom"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEB328C5DE
-	for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 10:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873723090D1
+	for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 10:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756376129; cv=none; b=X2uHhv5P3o8La0ue/lntuW5gkwVdNK8ikkfDOsxNI2oZjyqHUjZzdt5YjLdOBFVnSV8634dp4I7PEn+DtRUnYqSK3iWEH1jgKsyvBgSaggmyAsG5MUtRdsHYoQ48iIIXtfk54QQ/1vxIgcAprXNQiQkyITcipeqKukolg+zZm8M=
+	t=1756376130; cv=none; b=Wk0+FhQC5eChHpGVImlfam5bvP+taVV0MLzCP87U8WEXvhF1YDdmgreYpw7tkDSmiQSMwocMtT+2cnE0twmfV3Cam7l1NmR55pJQLsKM/goSIHRhXt1wqxFHlrOTo6X2DGLFdDVvi/pAFiK4klNUYhhaU6P9jllw2zGU0QOOwYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756376129; c=relaxed/simple;
-	bh=xyKYNfQ/SYdt2+/QXl/uiVJkm+ZD9FCpFhATvHlCaY4=;
+	s=arc-20240116; t=1756376130; c=relaxed/simple;
+	bh=vwAyXPvEWNr8LT9tnA25vDO5c9cTWlSyoxFCI3Eqm5k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QQqHQQYY8C7/1QxbXwtr+CnQOV0SxEQGf3g/kmk2mrOFfGBiZAtFzPkIUYPVkUb/If2acZ+ngGjV2PwV8a3cOx8IcmOS6lxZlW6Ya2NYHjaqs6B+P891pj8UuRu/5/inHZwF3dOqZljaJMn2VZez7eREBHqo1MkuGaf+fLvE/cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uarylZE7; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=F7iHWBgCHsfV3sYn27e6eIiFbLiwGni7mJXmmZrVYKHXN3icJqc2Ulfd8KX+MVMzBlacBEPtz+yqtQ1Q6H9xtCN+ihY55vgtPAf4yJVRZwcyY9VRlbPDxNOUplDgYZvFxm+yVzvFTWR0FlImbPsrTO5oPCUeX8AB8rdUByGUTdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q/F+kSom; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-45b4d892175so4232265e9.2
-        for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 03:15:27 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3c6743a10e3so375771f8f.0
+        for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 03:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756376125; x=1756980925; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1756376127; x=1756980927; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GF7goOQZfjJy/n1Nlvaz/a0ipflIe4W5tqv+WNMdl/E=;
-        b=uarylZE7asKDXui7KS0hpucZJh0M7GliwSvhiLCeDH1zXNj3rdHbLA8rHXjaTbcQVr
-         96rl3XNCNh9Bx5nZBIHcqrnWgHNxDN2Xf3ed16D1SaT1GxD3uUnzEGpn0VkTqgGHlvud
-         WR2Hu42VQN12B0oRdYwG28IdN7jSsqJtvFIDclyj+vCqiJlkrIqFEpBxiyG45mS+yuSZ
-         fSPMBhHEpt9Gizq4hJulRNa3Xd2p2Yuf/wrhwQULYcj1qVENi8cY8wrFFkl0br/rVgcH
-         f1mrswZpSycZfmt9XbmetwkwjgSvX1bJqVVmIo4/t5yK5178uhjxe9piEdJ2xB5ZG5CY
-         wo0A==
+        bh=hFyM4ThRAnuOrWqhdN303iEN0WDuqA9mWMtHiG3HC74=;
+        b=Q/F+kSomBFocP3pPe0h/VlKhGH4/dHwJ/O/p55Eq7N9DvVCXKES65onouk7aOnTGpJ
+         0R3VB2pCIsPMt6G/zw/DjUcOA08VDpEQF91K0daTpM8ygl+x6nhUJaRvTT+LiMclm/r+
+         Ewu00cOqqbYJzOtzQmyOk9HKIL5H+0lXSbjNky3YF+qDYX4/z+XmYHhUFsWpsUYaW/+I
+         ZaswOcZxZf5K/2kNrxYYDW9o9HGdKqoRW2TJ7n30c9S0Z4pSHwENGtq4rueVmze3uHPU
+         WrPw2IcTteGKiunFdpYxIhcVt1PHI/0R0fJv8+OliluQeMHnUOga8kXUrTSHOwWjD14k
+         G26Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756376125; x=1756980925;
+        d=1e100.net; s=20230601; t=1756376127; x=1756980927;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GF7goOQZfjJy/n1Nlvaz/a0ipflIe4W5tqv+WNMdl/E=;
-        b=YzaQuzC/sDqTIDdHzjPB0UH01WFsDKlEtwjNxY4Rvwkem25fXRmc0v4ORuioL9XA1V
-         pJxS3PjPFFr8xerengCp09tkMTHt1mXubaob8NcuDf/yUa5ZPBvnKlNoEqfldOmUGQSn
-         kSwjO3uQ6iRS8iYL4wPWR1+2J3UaNsYubm+c1UvdBhz+JAxvdZ6GpVRJlw/w3gieOpFP
-         hL7N+jp/A/6tQHzthoChK4DP4lCuU4o+gxqOH8NnqLSELFxTBNHqEFaTU0+PcYsnOhLk
-         vXNTzBk0ggw4m5Ttw3qDnG67GBkT+SA49PoaHbOFz8SJtmPO1u/ZqPtI1kFehgjkbmkZ
-         h8Cg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJg6RAIHgSOTw72IIFZy0q8IdDZXOri4QiMiTNEeWxL4iPOpi/ldaA4z5V0wLclJIz6K4O5s5Eq5k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE0h/dGgBfcz+ZLaIJqSMgl1ATVy3YCGFC4ppJ81sV5OXgj7St
-	QrHoYUreqW1TkDLSl523UvkGXVDGU+vnJADzJC08mef8woBeROnw7k0RSsWeo0mAMhE=
-X-Gm-Gg: ASbGncvoHO0r7UoJSNB7Npx5DkjRU5PJrpU6GsroCRRuh4Ggx5CC2NSstbOH4c0yB1s
-	puOFGEnoakYm9GQqJZrj2/v6+Zu+wKGF3dSVgZZggCu7270gKO3MHvk2KLuqUCgndNbwzp8Fp7s
-	bfUv5cVQm1uPJuqo3t36xxfOAikke/CAmvP4bVZ1B8D/HyMy6dvXtIO8M0tokA43swRUorWz+oZ
-	I7LpBZguJrGv26IrBijNBTwYkRqE9FdFRYFny1jLDvlx2XFlwN8u4JwzcKrloiTE/ZnYeGaIZfJ
-	yPOtb6uw6J4KfcPT4xHVU0cu4/m2xECG1I00PYo9PtwpkCiMsUmgE2sTGv1Vw0vR29TXSWleJFO
-	eWbKeMjK37o5aC0oatRnEdAnrC+D+m0MPJqAQj4U29Q==
-X-Google-Smtp-Source: AGHT+IGEnzU63OfzICnb/K9gMn/j3/S0WtT5qqEXBUUstBaHlJHuR/FdnvKe65O/hXpHlmO922euyg==
-X-Received: by 2002:a05:600c:1c17:b0:45b:72a6:4861 with SMTP id 5b1f17b1804b1-45b72a64b3dmr50996335e9.24.1756376125382;
-        Thu, 28 Aug 2025 03:15:25 -0700 (PDT)
+        bh=hFyM4ThRAnuOrWqhdN303iEN0WDuqA9mWMtHiG3HC74=;
+        b=mfXXZTzBYCmaLGy48nMSHFk6wGdoxdU6lYp7m+eUhgS/j5teQXMO/5JU8MZxMOZMM3
+         oJQKGP/DOZdsYz1c8jjg3uMJ2Ybou32ua07jO2ELulmb1sSfXajiYJblFVTAMHfMys6d
+         8fIWcOxwHj/S4bzmXgJNCpcTMOke48GwBDnGgqouVR0o/iJR8o/m2q8tfT8bqFhE5kxO
+         L+IQkxJUKmfP1CdecZ8uY7WjySDXE4P2GIFfPG0iipMzxrKqGN69zQP8NhH8hMyOx7wt
+         IwvVLPOCds5szmqMf4if3okSfN4di+jtvGMipbZf6mOCBvd+RlHegDiIKciQ196UkvMX
+         /7Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCVnrUWO5/vVCjb3IT9hL6dojrhCovdEpKaC194ts9nENFJjyOjNA0Nq8yBCI6lshnmQKPP3gSx/A4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFBjdHpiLh/eD9rNnrO6Yz+x4Us7yE8A6eqKGowEeb5o1f28eC
+	5IADcFh//v3l8o/1u4upIzzBtveRCvyH880gN+DlLesPLMJJ24R++sRJUmvHhjmmRIU=
+X-Gm-Gg: ASbGncvc/HWXKsbL/ObRCGLBM2RXVSF7akwLDs3GezOZuQYtO4Z9z/0aALz5hQVhXS7
+	Owl6quidiozT0XuwP322cLHsAAtDUKoJWzUA/758R4kLt3wuLMv4oGCtgNSViwI03bifvxNxifZ
+	NoZ8dZQD2EWIlQy7GjOsgDUkZ0EfSIbf9ksT6rj8gouKvNvIsWcPWNKnVC8hMljmhRCkCSSyc41
+	ECnJ/nYHbHdeowHwVv5jTq+vwG01giSASNsbduWlS2wsiLqu6h3Yw7aCezMq5r0ihHpNT1q8lCz
+	K7ht9E7LtO9Tj2n10lpR8M8f0VQ+1giKJCUPFqWh2aYxEcC9ltOAgibqxNtfLSYzw6cPtuMbzFg
+	NGs+mPXBXSroqOpbRyccIoQaBfmFv0zA=
+X-Google-Smtp-Source: AGHT+IH4dJDXOuG6Gex6qppq8O+/YSy8+QUqMDaC7Dq+UPsdjndG68BzyEzfoI8KEAsLq9qblHr5rA==
+X-Received: by 2002:a05:6000:2c0e:b0:3c9:f4a3:f146 with SMTP id ffacd0b85a97d-3c9f4a3fee4mr9904913f8f.62.1756376126673;
+        Thu, 28 Aug 2025 03:15:26 -0700 (PDT)
 Received: from ho-tower-lan.lan ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b66f2041fsm49976305e9.5.2025.08.28.03.15.24
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b66f2041fsm49976305e9.5.2025.08.28.03.15.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 03:15:25 -0700 (PDT)
+        Thu, 28 Aug 2025 03:15:26 -0700 (PDT)
 From: James Clark <james.clark@linaro.org>
-Date: Thu, 28 Aug 2025 11:14:40 +0100
-Subject: [PATCH v2 1/9] spi: spi-fsl-lpspi: Fix transmissions when using
- CONT
+Date: Thu, 28 Aug 2025 11:14:41 +0100
+Subject: [PATCH v2 2/9] spi: spi-fsl-lpspi: Set correct chip-select
+ polarity bit
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-james-nxp-lpspi-v2-1-6262b9aa9be4@linaro.org>
+Message-Id: <20250828-james-nxp-lpspi-v2-2-6262b9aa9be4@linaro.org>
 References: <20250828-james-nxp-lpspi-v2-0-6262b9aa9be4@linaro.org>
 In-Reply-To: <20250828-james-nxp-lpspi-v2-0-6262b9aa9be4@linaro.org>
 To: Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>, 
@@ -104,43 +104,49 @@ X-Mailer: b4 0.14.0
 
 From: Larisa Grigore <larisa.grigore@nxp.com>
 
-Commit 6a130448498c ("spi: lpspi: Fix wrong transmission when don't use
-CONT") breaks transmissions when CONT is used. The TDIE interrupt should
-not be disabled in all cases. If CONT is used and the TX transfer is not
-yet completed yet, but the interrupt handler is called because there are
-characters to be received, TDIE is replaced with FCIE. When the transfer
-is finally completed, SR_TDF is set but the interrupt handler isn't
-called again.
+The driver currently supports multiple chip-selects, but only sets the
+polarity for the first one (CS 0). Fix it by setting the PCSPOL bit for
+the desired chip-select.
 
-Fixes: 6a130448498c ("spi: lpspi: Fix wrong transmission when don't use CONT")
+Fixes: 5314987de5e5 ("spi: imx: add lpspi bus driver")
 Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
 Signed-off-by: James Clark <james.clark@linaro.org>
 ---
- drivers/spi/spi-fsl-lpspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-fsl-lpspi.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index 313e444a34f3..eaa6bade61a6 100644
+index eaa6bade61a6..5ea4a306ffa6 100644
 --- a/drivers/spi/spi-fsl-lpspi.c
 +++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -3,7 +3,7 @@
- // Freescale i.MX7ULP LPSPI driver
- //
+@@ -5,6 +5,7 @@
  // Copyright 2016 Freescale Semiconductor, Inc.
--// Copyright 2018 NXP Semiconductors
-+// Copyright 2018, 2023, 2025 NXP
+ // Copyright 2018, 2023, 2025 NXP
  
++#include <linux/bitfield.h>
  #include <linux/clk.h>
  #include <linux/completion.h>
-@@ -785,7 +785,7 @@ static irqreturn_t fsl_lpspi_isr(int irq, void *dev_id)
- 	if (temp_SR & SR_MBF ||
- 	    readl(fsl_lpspi->base + IMX7ULP_FSR) & FSR_TXCOUNT) {
- 		writel(SR_FCF, fsl_lpspi->base + IMX7ULP_SR);
--		fsl_lpspi_intctrl(fsl_lpspi, IER_FCIE);
-+		fsl_lpspi_intctrl(fsl_lpspi, IER_FCIE | (temp_IER & IER_TDIE));
- 		return IRQ_HANDLED;
- 	}
+ #include <linux/delay.h>
+@@ -70,7 +71,7 @@
+ #define DER_TDDE	BIT(0)
+ #define CFGR1_PCSCFG	BIT(27)
+ #define CFGR1_PINCFG	(BIT(24)|BIT(25))
+-#define CFGR1_PCSPOL	BIT(8)
++#define CFGR1_PCSPOL_MASK	GENMASK(11, 8)
+ #define CFGR1_NOSTALL	BIT(3)
+ #define CFGR1_HOST	BIT(0)
+ #define FSR_TXCOUNT	(0xFF)
+@@ -423,7 +424,9 @@ static int fsl_lpspi_config(struct fsl_lpspi_data *fsl_lpspi)
+ 	else
+ 		temp = CFGR1_PINCFG;
+ 	if (fsl_lpspi->config.mode & SPI_CS_HIGH)
+-		temp |= CFGR1_PCSPOL;
++		temp |= FIELD_PREP(CFGR1_PCSPOL_MASK,
++				   BIT(fsl_lpspi->config.chip_select));
++
+ 	writel(temp, fsl_lpspi->base + IMX7ULP_CFGR1);
  
+ 	temp = readl(fsl_lpspi->base + IMX7ULP_CR);
 
 -- 
 2.34.1
