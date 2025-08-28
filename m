@@ -1,137 +1,107 @@
-Return-Path: <linux-spi+bounces-9757-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9758-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD25B3AC36
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 23:00:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8072B3AC69
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 23:05:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19BB17C20BA
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 21:00:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBA8E1888325
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 21:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDAF12D12E7;
-	Thu, 28 Aug 2025 20:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5E032D8DD4;
+	Thu, 28 Aug 2025 21:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dC1uDxHL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AsCzelU7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB23299A94
-	for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 20:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B797299A94;
+	Thu, 28 Aug 2025 21:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756414798; cv=none; b=LyqsJK9uelAwijzJ/DLUkDZPe+AbXW1IFGVI/qwcoXa3YOo4ZIDopddujf6tZyJL9wN778HSUufB0MJHwRcAFogBqinYn7Om/7hc2/uYb7wyyxAQr08R4TbkXM9/8OJtprHa1vU1OqjHbA8YaVaTqtvchi8FQ0XmWa9G+9SdzrY=
+	t=1756414860; cv=none; b=aVAzMvZwP3MRLHP0LLS0XS/dhdbsSjPMZbUnftb0PusWF0gf9eFqqsbeUTAqK65mqcZbNib6/r4kIMdPgcDpgvc/SI/TijeKPUicFTxlzMlg9nRROUGLubGDR5qc9JOUrlVfLRwm06He222MO5o+fcCSUrH+lHn9/o7LB7U1M5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756414798; c=relaxed/simple;
-	bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WJeB3T9PtTCSdR1tCVfRWEMTSgBbv9SzZsxBVevaZtQ0DHFr+UZSK44z8l7tCDe7yyHQujR/LUVbzv7ozukh83OGlZjZvXmTAgzVgs8trGmrKWfAGc3ulTg4QnvHpB4hcYdCqQBuyqZJ4mkV3wh7UKXkkadvFT8p5jzCBzo1eZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dC1uDxHL; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-336b63d2e56so1217501fa.2
-        for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 13:59:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756414792; x=1757019592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-        b=dC1uDxHLdzR89Uj56ebMGaoDeRvegTy02rmD4lDoUGNwIlNRsYa+MDnEwUwxYsuVya
-         Y8brW/f7t8jPxSO+kvkkj5EpDjPec/e6TYHDcu5+BEGKhiYpSHNcgh4PjIPQTjSrFuGv
-         29bmDkLl6eQ4isdMBsaJKvQxTXRA97n+Owzb0UaOKn2DK5J6NDKruHPhNyLdj28A6f1U
-         xa7AB1eEBovGXqonRimswFIIH/UBqn7V2U2Bz07sKbRA7ciRp74+aSbBdni3PZz/n9wh
-         ArMCqsNRws0dRWKWBV/F+8m8qKVhCtZunjvcaF8fk8oIzDZryq51BDa8XZkckv0/glo7
-         4tVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756414792; x=1757019592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcH+lJXlXkzbWh1s+giYmvp9r3m+hUxJ894v+cf3nQo=;
-        b=eQ5pcBAT/yrC56HMQIBtquTPZlXJRnIAw8/7shhYO39Lk0v2uS9xCo4+ZzNHHbH9s6
-         paCUM+IJkjY9msAYdHc9sSKSVjyDI29f1UXs6LiUoTtc0z6KjjJJRgYXKQoItPJv9PTr
-         5/ewUZ6xn6SdDMN3r9B+XAqnr9mOJxT1ttGZrYhgOYBXpPhK1L3aIOE7Lad6oEhXNrBO
-         OO0IZ7q/FBwg/fXY+2br6zpG2Ogenlfku+C+pxAZXsqybYtZkDIZHpWNu5rAIt78qhWi
-         48fQNeqnHfVOW9ZRHgCLzu3yQ0SgtQQ0vf1ALzyCszHwsNnWLxnKkiuGApTZOFYxOr2l
-         06TA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFsxjHn0v9uq7A0BSdoUDrLl79EOzOOaKDBD8A+8gw1fS/+54Rcv8NBVIuo/qnq71G7q/VFLrZWrc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv6KTG7JrN8jPyv9xH8+/Kj8jrZPUjfGrkEf28Lq4ECp37xXSa
-	cb2kNyI0gY0X67wm4TpveOya7mHmy6KGSQMfWyMX62Y0568YrDIn0Wyt0r6PavVdFYK77VAl1C9
-	VCiyBthPsoagq7FAVgUmxk0/JN1FkTon/M/im+Cvcag==
-X-Gm-Gg: ASbGncvALDofiBzcU6hCYomt62iQpuGB5NAEWQmJg2HWqF/kNlvHR77PdXFNTb2KWZS
-	d8A3VrKbLUKxlg+HZLl2t8HLAZQInXLt6W+97vxNUB6xk45FZaFHKjtsx+yrLft6GCW6c6diPtU
-	FUwz8/ETkdTDJkscmcQL+vETMifBpXn3LhK2LaNBLxE+C3t+0i2MTTGHle2nzVbOpG2RGlzQq/a
-	oDvaH8=
-X-Google-Smtp-Source: AGHT+IEvCK27Dx3T+NwB4QTV9UIlsAab63smCZ6D7uUks2NtQZowbM82iFbh3N6kvr8t1WPK8CdOU0xtB51L+4ds/dQ=
-X-Received: by 2002:a05:651c:3256:10b0:332:3fd0:15fb with SMTP id
- 38308e7fff4ca-33650ba8612mr48592831fa.0.1756414792241; Thu, 28 Aug 2025
- 13:59:52 -0700 (PDT)
+	s=arc-20240116; t=1756414860; c=relaxed/simple;
+	bh=5irYHIaOSLtfrL3dC6NTgTbspmjfB5YRutxHPAIurJY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=qTkSc8SpQB3Xhrkc5NK9Qx91RixcUmFZOsTLrIiJDQWHHLsa0IwFSm0AfLfw46IpEEHDrcq8wCBIy+0TZLYro537kFHHBFP1MuJli2v63Uo6e+nNbmz0NQIpP6LJ6WaAZFjYJu6C7HQWol8HYRyAiedAp8sh+azIaVw7DyTeOBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AsCzelU7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E61C4CEF5;
+	Thu, 28 Aug 2025 21:00:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756414860;
+	bh=5irYHIaOSLtfrL3dC6NTgTbspmjfB5YRutxHPAIurJY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=AsCzelU71JSWT71qkQ/6atyY3DOFW72fuxUcKIFJcrV2yr23brhHn9ejfNiOUSCdy
+	 cnRcFAeF34fkbPlfprs+eimAGBTSo9C3HUUz92QWcGMArM7XmUpIRT8UI8anwSkOOy
+	 mDiy5m5onfBbPV9Em6EUAlBdMtLOKHO7D+WUcaJwEP52pKkivVQqDBMPz+X3TJyRhR
+	 NyQPXsvJZvMfxRCDFkjPk8W4FzKHaouvnH+iYnCYCOFMU//MN4UaOFqnCCFR170gWB
+	 drcGVWf6A8OfPb7BusnRiyg0axfIMMWKiIUXMMPcQ/rZq8r+8nXFUxmlYzJRMHrB/J
+	 SWPny1TWZ2VkA==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
+Cc: j4g8y7@gmail.com, linux-kernel@vger.kernel.org
+In-Reply-To: <20250826212413.15065-1-rosenp@gmail.com>
+References: <20250826212413.15065-1-rosenp@gmail.com>
+Subject: Re: [PATCHv2 0/3] add COMPILE_TEST support
+Message-Id: <175641485903.364382.15277195547103842587.b4-ty@kernel.org>
+Date: Thu, 28 Aug 2025 23:00:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-9-507ba4c4b98e@jannau.net>
-In-Reply-To: <20250828-dt-apple-t6020-v1-9-507ba4c4b98e@jannau.net>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 28 Aug 2025 22:59:41 +0200
-X-Gm-Features: Ac12FXyoYnYKNXDomZzl4EdS0dXvIhCV2tkZJGb1B6Y1kaQgUA-l_NpqH411N_c
-Message-ID: <CACRpkdbg8KYcDpqDKn9fqs+rL9hLK9mGCj0PTXPBGDW7A_AZbw@mail.gmail.com>
-Subject: Re: [PATCH 09/37] dt-bindings: pinctrl: apple,pinctrl: Add
- apple,t6020-pinctrl compatible
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Jassi Brar <jassisinghbrar@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Michael Turquette <mturquette@baylibre.com>, 
-	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Marc Zyngier <maz@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, 
-	Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-a9b2a
 
-On Thu, Aug 28, 2025 at 4:02=E2=80=AFPM Janne Grunau <j@jannau.net> wrote:
+On Tue, 26 Aug 2025 14:24:10 -0700, Rosen Penev wrote:
+> Allows the buildbots to test compilation. The driver has nothing
+> architecture specific.
+> 
+> v2: change to patch series and add extra patches
+> 
+> Rosen Penev (3):
+>   spi: rb4xx: depend on OF
+>   spi: rb4xx: add COMPILE_TEST support
+>   spi: rb4xx: use devm for clk_prepare_enable
+> 
+> [...]
 
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,pinctrl" anymore [1]. Use
-> "apple,t8103-pinctrl" as fallback compatible as it is the SoC the driver
-> and bindings were written for.
->
-> The M2 Pro/Max/Ultra SoCs use the same pinctrl hardware, so just add its
-> per-SoC compatible using the new base as fallback.
->
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@k=
-ernel.org/
->
-> Signed-off-by: Janne Grunau <j@jannau.net>
+Applied to
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Yours,
-Linus Walleij
+Thanks!
+
+[1/3] spi: rb4xx: depend on OF
+      commit: c73c378dc05ba8060558b9b50e37f3afa4763ea1
+[2/3] spi: rb4xx: add COMPILE_TEST support
+      commit: f18f0ac5331f8f13737e87cc1416837fb5b27b0a
+[3/3] spi: rb4xx: use devm for clk_prepare_enable
+      commit: ff9a7857b7848227788f113d6dc6a72e989084e0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
