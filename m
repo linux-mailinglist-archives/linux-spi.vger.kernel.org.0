@@ -1,82 +1,81 @@
-Return-Path: <linux-spi+bounces-9695-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9696-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B29DCB3996D
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 12:18:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66E19B39977
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 12:18:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C1F27B9523
-	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 10:16:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCA687B97CA
+	for <lists+linux-spi@lfdr.de>; Thu, 28 Aug 2025 10:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D8230DD08;
-	Thu, 28 Aug 2025 10:15:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E857330DD23;
+	Thu, 28 Aug 2025 10:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tSyTYhid"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CAE90OZ3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D9430C61A
-	for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 10:15:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD7030C63C
+	for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 10:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756376141; cv=none; b=hA/jzbdyL1IVUIyaNfmrKkCkrb1gHPNWL/JAReeBADuw773MXut645ZAZsBfDt5OQ0Tp/63TMyVzfoB1eLFszthnqDPmCDpf2RiZ8Ns6VchcpdUTZ/laYDoJiOsjTZrhWkP/c5MaEuSoRUn1fzN0bpFDqTUpODh7ThpT16I0iRA=
+	t=1756376142; cv=none; b=OFbfLJAGlHwnNFEDPdzRtxWg/f7aAPJjf9fFhGNWOcUwMTtRAoYbaMWoauCVbmKlF7kEWZebT8BjJJWipGlD3sRQi0kTgHrb312MTMxhrgRLJ+1uAqb2g1clTj5xSPo4pDSLweMRpYr9A4Z/AYIL12+MNBjHhszHj9o1JLLw6AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756376141; c=relaxed/simple;
-	bh=DUL2bJxMgqW72KZYcQEl8qxFnW9WLPKvK26PzfIBBY4=;
+	s=arc-20240116; t=1756376142; c=relaxed/simple;
+	bh=+vua32+ZisCIKoZtgwxULPWaV1MKJPVYFqaHRCFc2jA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oU6ign1460vi7aMMXflrT7FOb3pRjtd/SQlRRrJJCj754l9xdU93fbHhlO0Ysny3q327kqsCVOqavlQ+Cr1MpmWHl/RU0ZelF6pB16dGi02b0ouocN6RXPriXP80ZY8MgYOWoY8gpbUHw2BB92vfzdrrWEdab+0kX8kCQZNPwog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tSyTYhid; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=Uv0h3hvq5f9qZ9B354BUW3sjSTD9Q21F0/j7a7dEYIq+3eOBBsgOLL18lYCQ5/P1HmzkV73ud3hXVkuPK9G6qFh5Is4QM8pApbh4IHTAfDgJlRMhT2RQwAe/zKm+B/4LsyyZfEuKmajQGPf3DEjvz5OVcxkhXzFfvQryZzDtzv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CAE90OZ3; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45b7d485204so885365e9.0
-        for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 03:15:39 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3cbe70a7923so663834f8f.2
+        for <linux-spi@vger.kernel.org>; Thu, 28 Aug 2025 03:15:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756376138; x=1756980938; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1756376139; x=1756980939; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=twA1DevhQnABtZ7AE3O2A15G4iJ3iu3xsP8XB6FKzM0=;
-        b=tSyTYhidMOzscF1BAM66qYXkPc90dpsBNNjpTd5TC4ZG2BD44fnC5EXUVS/k/aGAd6
-         6NXxjo/C4wxVeWZBfzkDlfiAWDZrvtLiv37zagEBfOUsrbWjenH4Zm3C+Ojr80BJLejE
-         BWdCjvrAsyE24iDOCzkwDd4j9DqYIHH55lK3UHQBEtb5txa8xSfiFYEzB1o8StDOtBVT
-         TL+OX9lOiMtDOkWPCntnUJBvd0UrHe083Um90CpFKPAgBuIzrtUUbAbWXAg3JmSh8eLV
-         nqsXu2qwUAGWlkZxwS+c6STFNl8TENruNVGX8LUwdiQGljQKxj43rKgfrCS8lY39E3+Y
-         SGew==
+        bh=yp6uP3SnVVC8UtclhAtZ36zVvCvjaZ1bDiL+uis450g=;
+        b=CAE90OZ3Qzj/FsXu8/0AiTYsX3CWwXbGh8fdvH6Khzz0an2MHTDVVg9D2Cg1y8GO54
+         LP5qRnN+Uqd5aoAO9WVroxXPsuOc4/XmdV6d5oL0nle2/8CGYMg9adhk5fb9UcsizpoH
+         Tc1QAsgTDyBRdnvMIEA3hjQRH3+zemfQeUjSPxSKiY8O12wEbzuG0xiRhRiCo6PI8zFd
+         BhShIKUwI/kX4QpTvYYmBaGO9+kpgqp6awbS/vgaNnnaYgzEuGFrnvB9+mjR3TBFIQeN
+         zOMxRqaoKT81c37Ydh3bFFR2kbp3mWPxHlcYfnex5Z7U7A0zQq/GmsCNNyas6gWIPnTq
+         59aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756376138; x=1756980938;
+        d=1e100.net; s=20230601; t=1756376139; x=1756980939;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=twA1DevhQnABtZ7AE3O2A15G4iJ3iu3xsP8XB6FKzM0=;
-        b=Ma/yqvTTtP/YzU0Rl+7Kg+5j4vdESgJNgvF9LszMCfGehirvDPSWJs667zD/u6y5KF
-         Uvf8Gb+cZSrcajq9aS2RUenzDVVOaOIiu4VAka4iaOfJIEKHW1mABQr+O4ySMAGWv6A6
-         oxhEpu3eUpuy7J9efkzwQQJzBvP+yWeSq/tbnLxjSdT7mpJ5OhjlaT0Q1TRXbXP+Ra5q
-         3NhdxbmHZ45akhMwGvWiodCXGXSS7RpRIdrZtl/SgbUPDMfXfeXJLO5zipPUaauTKdqA
-         9HG2/E0fft0IldhPR150gJzbbSRBFf2shOkmDLivwNkihOSeldT64c1eR3NJ6LpndhYc
-         ma+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW9PBFxDIHSjCsB5T/qcn33ALJc7xq4ke4InC7PXgaHNQmhejwRmEnZyILq3aYZvsyvrp70euMzzgg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU0aykYjdgWl5ii/QDGqDcZe4Z62tYL0eI04UesCYNsnEC/zKR
-	RFicdM6V8LcdMiBPXfoSuhMNU4vdwaDbHarqvj1+d6VZpAt26Je84O8mJmXDR0NDnPA=
-X-Gm-Gg: ASbGncv2UYdRij9Fy2R8qHYPxALEi8yNPNyC4Ue3VICVOxPg1Dv5vlVkrdWuE6LhrRo
-	W8EQy337v4zGf3Z1JnPr781vS9R2lft8Vaf9syKowWuQ0nTG4h+jq1L4LhDxkTueTs/PriOG3ua
-	uoo+j0Q1F00ifG36ZN1tpS3tS8K7rxQdfp4K+sVFElDPXix/q0Zz/6dhCdUpRWgO8/0VTlBhSd6
-	KCZ4YQ+IROkx8CWioxL6ZIYvCk3fmg447QDDFVQ2ntInzSysi2nctpdR9Z+mYe8G9quocAwSsc9
-	LLRjit5gnvfhlXcENBZbCz43rrYZkxYxXeguPLa909cnL6wRKcLeglzGyAp0mlKgk8LlsFGDAzg
-	bLf0Tu9lIAscBU6TN7My0r/PS8S6Z/Zawyy/Dn0zz9Q==
-X-Google-Smtp-Source: AGHT+IGnwrpzezgJXIVPIURZAHVNyOiUW87JNySJUaEe/V4TYWQ5vU2ILUn3A5NCE2JjHClrcg+0dA==
-X-Received: by 2002:a05:600c:1389:b0:455:f59e:fd9b with SMTP id 5b1f17b1804b1-45b517c584cmr224745325e9.24.1756376137717;
-        Thu, 28 Aug 2025 03:15:37 -0700 (PDT)
+        bh=yp6uP3SnVVC8UtclhAtZ36zVvCvjaZ1bDiL+uis450g=;
+        b=sMuK5jG1DykTLUtgxMP84LCLoNIdDi9rXpZkJs0PtTmzI2YNhnbtu9JRf8kkiFHVN0
+         o1I9KxgbQjmkmz3zIQzqYSPKA4uCstDA3aLPAAcmNHA5iKcbQhIuYPjOLs1f1JxQomis
+         MHV2gBDuxLFoPxikSM1UsVcWUgXZpcMZhCcn9OSeE8MYC3FkoN6uxgR0WkLYHPJo95jD
+         xDdU6dAHK/bO6kdFVW4QKd+opZkz997t0UcGKlKAfOMAv4tZilesvw3H0EDNWO+l8knz
+         tEpVoNPVZLaMOkYPmJ5c/CHQBsXeRMjUuLssJhG1qhgx6394SsbQso9D9PPRIbRtrq/d
+         Lilg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbvxr7FeOE6hzJHO/jEMyzR06Qlz9BtDROs4gotHPcJSfJQZ84ueoGy6RN/FavG/vpxUmVcjrrAbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywez29lLIr9p9UOdwX5VoFn+h247j1lu3C9fdZQ2WVcZlvqSf4d
+	QJs9skVfLaImKGZyAgA2SBCFudkWRci/4oyQc9TKoAvALc4CdkrB3qeHfi23T5gZCW8=
+X-Gm-Gg: ASbGncvsLU2oxJ3V/qqrxV3Ek0S94WzdWe6WxWulUKO981cMi3H5LuTYB/4bEJBO1my
+	d4sIqCUIz6tkFl5UIus0ki/o0Fg/Atk2vZW+bRoWcg8emeD9c5J1sZlo5GGbc/TOd5wa5Y0UN1K
+	Oia0tOoYN4KyRwR+7x7+kjWT/4fnVE9r+hZSSMZpgvyLLReoGGqf0F7yvPoU/wZpzO6+xvfYmMd
+	ECX98tYoSsznwbzEf5hgFNaTebGL4AWkSUIF88755KMYMvRoBl5eCipLYP9mg8m9Ro9rBbUBP77
+	1LcqSoiGDwSx1LFmce22DdaLBSbnks9vsj8da2JhvPLJtUozW6tt1ZmrAID7AMneteGiUz57A8e
+	RMOl9glNJckmYiAbrhXBRw+iCUl7rwaBRo6cqsonsow==
+X-Google-Smtp-Source: AGHT+IHt/hz7pSxKUT3aLdo/Gb/ZNoVM9J+1IsQAvEnajR37wO8sFmm+lOvT+aASpbunKjjiXbYm8Q==
+X-Received: by 2002:a5d:5887:0:b0:3c4:2005:fb9d with SMTP id ffacd0b85a97d-3c5dcdfd700mr17926935f8f.31.1756376138965;
+        Thu, 28 Aug 2025 03:15:38 -0700 (PDT)
 Received: from ho-tower-lan.lan ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b66f2041fsm49976305e9.5.2025.08.28.03.15.36
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b66f2041fsm49976305e9.5.2025.08.28.03.15.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Aug 2025 03:15:37 -0700 (PDT)
+        Thu, 28 Aug 2025 03:15:38 -0700 (PDT)
 From: James Clark <james.clark@linaro.org>
-Date: Thu, 28 Aug 2025 11:14:47 +0100
-Subject: [PATCH v2 8/9] spi: spi-fsl-lpspi: Parameterize reading num-cs
- from hardware
+Date: Thu, 28 Aug 2025 11:14:48 +0100
+Subject: [PATCH v2 9/9] spi: spi-fsl-lpspi: Add compatible for S32G
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250828-james-nxp-lpspi-v2-8-6262b9aa9be4@linaro.org>
+Message-Id: <20250828-james-nxp-lpspi-v2-9-6262b9aa9be4@linaro.org>
 References: <20250828-james-nxp-lpspi-v2-0-6262b9aa9be4@linaro.org>
 In-Reply-To: <20250828-james-nxp-lpspi-v2-0-6262b9aa9be4@linaro.org>
 To: Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>, 
@@ -102,45 +101,37 @@ Cc: James Clark <james.clark@linaro.org>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org
 X-Mailer: b4 0.14.0
 
-Add query_hw_for_num_cs in devtype to avoid directly checking compatible
-string "fsl,imx93-spi".
+From: Larisa Grigore <larisa.grigore@nxp.com>
 
-No functionality change.
+S32G doesn't have the max prescale erratum (default) and it can query
+the max number of CS from hardware, so add those settings.
 
+Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+Signed-off-by: Ciprian Marian Costea <ciprianmarian.costea@nxp.com>
 Signed-off-by: James Clark <james.clark@linaro.org>
 ---
- drivers/spi/spi-fsl-lpspi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/spi/spi-fsl-lpspi.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-index ea25e8dab0a4..ce347cdbb009 100644
+index ce347cdbb009..431439d4cdda 100644
 --- a/drivers/spi/spi-fsl-lpspi.c
 +++ b/drivers/spi/spi-fsl-lpspi.c
-@@ -87,6 +87,7 @@
- 
- struct fsl_lpspi_devtype_data {
- 	u8 prescale_max : 3; /* 0 == no limit */
-+	bool query_hw_for_num_cs : 1;
+@@ -145,9 +145,14 @@ static const struct fsl_lpspi_devtype_data imx7ulp_lpspi_devtype_data = {
+ 	/* All defaults */
  };
  
- struct lpspi_config {
-@@ -137,6 +138,7 @@ struct fsl_lpspi_data {
-  */
- static const struct fsl_lpspi_devtype_data imx93_lpspi_devtype_data = {
- 	.prescale_max = 1,
++static const struct fsl_lpspi_devtype_data s32g_lpspi_devtype_data = {
 +	.query_hw_for_num_cs = true,
++};
++
+ static const struct of_device_id fsl_lpspi_dt_ids[] = {
+ 	{ .compatible = "fsl,imx7ulp-spi", .data = &imx7ulp_lpspi_devtype_data,},
+ 	{ .compatible = "fsl,imx93-spi", .data = &imx93_lpspi_devtype_data,},
++	{ .compatible = "nxp,s32g2-lpspi", .data = &s32g_lpspi_devtype_data,},
+ 	{ /* sentinel */ }
  };
- 
- static const struct fsl_lpspi_devtype_data imx7ulp_lpspi_devtype_data = {
-@@ -932,7 +934,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
- 	fsl_lpspi->rxfifosize = 1 << ((temp >> 8) & 0x0f);
- 	if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
- 				 &num_cs)) {
--		if (of_device_is_compatible(pdev->dev.of_node, "fsl,imx93-spi"))
-+		if (devtype_data->query_hw_for_num_cs)
- 			num_cs = ((temp >> 16) & 0xf);
- 		else
- 			num_cs = 1;
+ MODULE_DEVICE_TABLE(of, fsl_lpspi_dt_ids);
 
 -- 
 2.34.1
