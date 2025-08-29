@@ -1,117 +1,72 @@
-Return-Path: <linux-spi+bounces-9763-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9764-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A35B3B258
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Aug 2025 07:16:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60D5CB3B2C3
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Aug 2025 07:56:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30CA67B29D5
-	for <lists+linux-spi@lfdr.de>; Fri, 29 Aug 2025 05:14:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D3DA581FA3
+	for <lists+linux-spi@lfdr.de>; Fri, 29 Aug 2025 05:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF4D2185B8;
-	Fri, 29 Aug 2025 05:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44D51F4634;
+	Fri, 29 Aug 2025 05:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPZqy6+Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ln/IhDD+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07B720F08E;
-	Fri, 29 Aug 2025 05:16:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EE328BEC
+	for <linux-spi@vger.kernel.org>; Fri, 29 Aug 2025 05:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756444580; cv=none; b=lQOGx70wxZ1N+E/Dis3vYT21WQ4m3il/N5tZDHZKcd4WvKpN1/Mp746CVTKRhZy91HSFcaxw0b/8pE9w1AacG04MXvvInZfIQQA5as+9A3XeKljvh9wD989DaEdUb2HeUGKiU8/6wjJvKHpdms14xJ3zr+PaXce8eMCuRb04Jq8=
+	t=1756447010; cv=none; b=NiqY6mAeqfCPplTBiOvwkZ2wGCfqJAb7EXbVp423CwdzXqpkXLaA9IjNb0Brgn3JNsbgxy5mXUDDmoJUf0mEOencmA+jlrLUHiEAdI13oioPXkn6qa75ehF2xCneRIajBSpfud0lJZp5HgkEUaGfoOrIhXJKzXJ5nlUsTlJttNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756444580; c=relaxed/simple;
-	bh=SGZ/ztM0Jh+alQljhSybFcNPM0P2ohWIF7g13dEMIfs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cFbo19lDU4h1V3ulHiBFMQNWaRWocdOxmWulFVitIaqmnO7V73ct/hVsgEd/gOyjk0qnl/hVVy260PkRqsZSc919oF72q9yVlvLEDQKfO6d5uYC7QP3p6mseiTl5IULSuCmr69fNV9XwdDEawvzsbM3ep+IciCw9VEQP57cQq/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPZqy6+Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4E8EEC4AF09;
-	Fri, 29 Aug 2025 05:16:20 +0000 (UTC)
+	s=arc-20240116; t=1756447010; c=relaxed/simple;
+	bh=ylTTkBtIV1QLZdAjjz9PNJY6XmpPThSnM2Ir8jhtjns=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Fk6J5bNoPhggn9huvHoAbIZpeKdMNGFJKAes6/jHhaNFBEBcBQanauWcQ1RpOv3s1AjWbc0mDWoLpcQQijbIDKP2Tq3+A7ELCQ6kh+KLEJLyuN2z9N+sVEnjIAsJGooPapOZuOcEltbYPS/kWw4Tc6LGg+b75mT4aIYOShgAAzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ln/IhDD+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2137BC4CEF0;
+	Fri, 29 Aug 2025 05:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756444580;
-	bh=SGZ/ztM0Jh+alQljhSybFcNPM0P2ohWIF7g13dEMIfs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=TPZqy6+QmXsYc/+CGukthovVe8FlDnC7irWBe17LoP+rAMXz1lrmX3uZvumG++MhT
-	 t2eEx6uEYXJzOPx90D5vhSMkbNHtbec5foMKo719UYeiSgRSfQueOpL9cu1LSK6i0Z
-	 0IdUQcT+CKW4psslIUfAD3e68Rn5skU8032LlKsM05nDQ895obccHSjDAs7kZJUroK
-	 Kc3CABsPRg/+d0bW/XLoicXsdhq+1xZeVw5MikK0HSv20EVPoDgU6mCk/a5plCyZyD
-	 VuvrRcE29kaNnUQas/rsPBQPu6V7vA0OP9JuRc65VAQUAt0zRJBgwaauTNxLYaQwWg
-	 ow1slnfKv6HvQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA63C8303F;
-	Fri, 29 Aug 2025 05:16:20 +0000 (UTC)
-From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-Date: Fri, 29 Aug 2025 13:16:15 +0800
-Subject: [PATCH v4 3/3] MAINTAINERS: Add an entry for Amlogic spifc driver
+	s=k20201202; t=1756447010;
+	bh=ylTTkBtIV1QLZdAjjz9PNJY6XmpPThSnM2Ir8jhtjns=;
+	h=Subject:From:Date:To:From;
+	b=Ln/IhDD+DoCXnm1jy/LJ+4FBaaFKRaJA3X/UPQ9N29RsPdXBYYYMUqNS5Kqe7efIK
+	 4j6JiBZbzsU8ix9ipfLZCd83a0gEbDmuhT/T0LRnMu9BOGVKr7UYDIRVTTDqqkyWgk
+	 xXNcmXT4gg5hw3V9DkVDetLur46wXhMnm+bjy9xQBMcODTrFB5oLEYrZswj+qYmMoZ
+	 bb/PKd2qabyQfEL+xIlhWPL9ja5KHuGefuv1NKcPIwIcg9RD7sQuAgGH2GbKI3c/+i
+	 f+emDVk5sqpBlV8d9kHsU4p6Y2xWewecZEwI0PqP5zv2ubXJBjsA3D3GIRzqynn7Vf
+	 shjQ90Oh+vQYg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BC6383BF75;
+	Fri, 29 Aug 2025 05:56:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250829-spifc-v4-3-1e57fd39f584@amlogic.com>
-References: <20250829-spifc-v4-0-1e57fd39f584@amlogic.com>
-In-Reply-To: <20250829-spifc-v4-0-1e57fd39f584@amlogic.com>
-To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Liang Yang <liang.yang@amlogic.com>, 
- Feng Chen <feng.chen@amlogic.com>
-Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org, 
- Xianwei Zhao <xianwei.zhao@amlogic.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1756444578; l=935;
- i=xianwei.zhao@amlogic.com; s=20231208; h=from:subject:message-id;
- bh=waH2I+tfwvOLzp50Qi+Yg091qChCxHO4Mz5PuoGKYLg=;
- b=qPzTb7RTVjnIOz8LAOv7eRTOVyg8cqtn52vtIbh35of0wr0uJPfoPQJeDyBGeSUU48JdG0wls
- PCAGKx2PLDpD0T13JcFXzCK/EWbyhwgvV1HEiNPEZzA9bXQaspVAed6
-X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
- pk=o4fDH8ZXL6xQg5h17eNzRljf6pwZHWWjqcOSsj3dW24=
-X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20231208 with
- auth_id=107
-X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Reply-To: xianwei.zhao@amlogic.com
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175644701691.2090095.12269058790952846023.git-patchwork-housekeeping@kernel.org>
+Date: Fri, 29 Aug 2025 05:56:56 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Latest series: [v4] support for Amlogic SPI Flash Controller IP (2025-08-29T05:16:13)
+  Superseding: [v3] support for Amlogic SPI Flash Controller IP (2025-08-26T02:10:11):
+    [v3,1/3] spi: dt-bindings: add Amlogic A113L2 SFC
+    [v3,2/3] spi: amlogic: add driver for Amlogic SPI Flash Controller
+    [v3,3/3] MAINTAINERS: Add an entry for Amlogic spifc driver
 
-Add Amlogic spi flash controller entry to MAINTAINERS
-to clarify the maintainers.
-
-Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b1c081f9c567..9f1f337e9b6d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1306,6 +1306,16 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/rtc/amlogic,a4-rtc.yaml
- F:	drivers/rtc/rtc-amlogic-a4.c
- 
-+AMLOGIC SPIFC DRIVER
-+M:	Liang Yang <liang.yang@amlogic.com>
-+M:	Feng Chen <feng.chen@amlogic.com>
-+M:	Xianwei Zhao <xianwei.zhao@amlogic.com>
-+L:	linux-amlogic@lists.infradead.org
-+L:	linux-spi@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/amlogic,a4-spifc.yaml
-+F:	drivers/spi/spi-amlogic-spifc-a4.c
-+
- AMLOGIC SPISG DRIVER
- M:	Sunny Luo <sunny.luo@amlogic.com>
- M:	Xianwei Zhao <xianwei.zhao@amlogic.com>
 
 -- 
-2.37.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
