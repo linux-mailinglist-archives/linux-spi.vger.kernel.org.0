@@ -1,142 +1,168 @@
-Return-Path: <linux-spi+bounces-9818-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9819-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CB03B3CB35
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 15:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9ED7B3CD46
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 18:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A8F817048E
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 13:26:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76D8556249A
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 16:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79DA1275B1A;
-	Sat, 30 Aug 2025 13:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05755274668;
+	Sat, 30 Aug 2025 16:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TsH7eFkF"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="rApEJ9er"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14372144D7
-	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 13:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA9310F2
+	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 16:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756560376; cv=none; b=fm/aNMmthN1NIFGUbOb6xwTYJJ5bGgUK93Bp646JEbF3CwO9ykCCB6TkXB2XdvgU2/m2QTfOrDHMUZp1oq9Jr9wH7M6MTHxZJg7pm0hCY11eDrPtHF08DA3zP59+rs0dgfFgvrOzQ6E68eJR7MOpJOiIOOoYMQaDZWS2dfDldis=
+	t=1756572091; cv=none; b=uyjMbZx8Rdl56EWA/QCEu/ewwOI9qJ1cS4KQ+JpbUL8XcwXQlqVzeGvp5I5/Wbjy3ZsavgCGG2iQjjQa8Az/sYyYb4rDjj0qYYCVJTVBgJqqCJE3MHfRRVpwnWS9UXqONCWXhJYLxvgJnhsCt+8xbFuGmj0BxhCQVjlHB2SAX40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756560376; c=relaxed/simple;
-	bh=qwG4c4Xd+B3YoR0uF7y8E1dHfmZd2XS7G30El+hHeyw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gRQ3/0laAmsXHbG9NtyDULGh6gqYi5t8mB/6LGKyAy1y0pObsfCfETGs/rJVHSLYvmhy/EKwSSc9Es3CcX8pb++7OIDB9YzGyoUUJMjuwuBaN9yI8CfUgXOjmISh9c1WzHIX9Cn4yMynTS8tCEY3VtaIAVbu493c21UWdYnON38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TsH7eFkF; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-afe7584b6c1so40134966b.0
-        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 06:26:14 -0700 (PDT)
+	s=arc-20240116; t=1756572091; c=relaxed/simple;
+	bh=9pLVtHagF9RfuVvLL5VmokTfRtBhGQ67ZkM9NHr6/xM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iTh4mneciizprCvoeT/M3/Dn2/xtqIamm/7KwghNypbTflmtBdCobQIBgdt4r8Dmp5byQEZG1Dl3CuemOLqU9mJ/hQC6Ft9wVl23UbSJV3IdLzrAYyXRPb5V+nmRdy9oMu6uXvV29O2lO9Wr/HjNx2EG/tftY7ZkJEWE8Q/mHHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=rApEJ9er; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-74526ca7d64so2647110a34.2
+        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 09:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756560373; x=1757165173; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jxv0MqB/ujP6vHvTc2WwDI6QNrDWWZGMfkdvAnlFnuQ=;
-        b=TsH7eFkFF9werCsKcPtU/X57EogvXskDw39mx3se32vryutXUZeD41/bBX12tkm2K5
-         6xZYbtaDe8i1M0NpZnl6F+f3N3k9KTDzz3fowZ3UtcTDZ44EbvWTkFU659gCwYCYNKvA
-         pt+vr6Zzp3NDWULcpUC3GeHkHQOUULHbp4rm6YhQh7bQyCN+LSQMl1wXEgjNHuJlCwgb
-         wIYEEbrslzyAErutzabsfNvZjriMEAt0K0ISTqRtkfu92dxcsSe069MCNjD9POd55WI2
-         2Fe80UBfQda565Ku18P/MrpboWgrEc4Nk+d6TGiJ8KJXgRZ/yhgubwMB4WseToyZE3JW
-         UR+A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756572088; x=1757176888; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sbfBohOE3aUAe+8ggIJdFs3Ub7xyIyjcAlkbS5chGaw=;
+        b=rApEJ9erCEAhloV58ULbDH5EvvpeMmIdIkDlBfA9xitGgEExwtWbmQkz1RUdCcMAa+
+         MtiyC3tIRRdc6vXoHUu2B2b3v1Uel8VaZhy9UZX/Uah6P0EyiCU15AmxTH4j9D02KAR3
+         uCbIyFS0BGua5quv3PSXGEZmnnhJq4+rV4xkGO4lwLZV1x+4Nttni7NvjpCSyqUeoUMW
+         ZtCG+WSiQzT4Az4QFJAA+stUYBZvp9m+roqig8mLZZgHi8WGydgHAq8NCj/DE3EEmy14
+         dlMiiSme7XxvU31PHkPQcRjmmOtH3Od5NAjxz4q5/Fiw3Sg7ezmKN2AuxWgiEFwOPbGs
+         nJmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756560373; x=1757165173;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jxv0MqB/ujP6vHvTc2WwDI6QNrDWWZGMfkdvAnlFnuQ=;
-        b=OxoPtNFsh5ljrEUTjSq42fqRr+L7XMV26iNs/80MZufJo9ggS0AHjB4WQ9IvQrtqBv
-         BFp07XqUaOkSP2HBhklbB3Yup2oHP5ut+D37sVtYiRgUcXkeyk3RDrDDt9xjLHmt56fh
-         CNIjcgnUJXdLcWbhk2YIj8b1CKw5UiQBjoMiQB7ijmYq2wkl/FOmM+/DH4q8schuJkFz
-         97xh0tF2leUN8tqmUdYPwAJGRVYHPggHnDWFkyCbjIWvlbHgYsNPBmCoLyxK2SswBKe4
-         grF4vDKOmdgfHTi90D3evtiN+RUr2QAuodFX7Xo+3RRVmeC+B2qD5650AoSE/0YizamT
-         bVaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWNFl9SpsoOKKrSJPP8VMJWE8z9ToUPL35XGT7fkLJwdfXxKXg5Qr+NvrAkwosASSixcndsOM/Vrk8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoIJW3/9hdR/5iSKJsGsnX9BmnyKdRqigjpvENYEvp+cO4mVoO
-	C6Blafz9Pm98o9puoCbFBSfnYF6Hlq4i0zoX9MPT1aKs1eg06UIQby/kwaNMtvfz4nI=
-X-Gm-Gg: ASbGncuoyLREovkxlayZEVo0SyczSNAd3cxs73tKwJ2LJGHYcz/ZUVa5yUwtlR0O+1v
-	ZnH2YwZDpHCUrLGSp4uwF06FeEZbJt+xyr0wKh3GpGRkq5JAI+xevyiR5FltJZpxTZnKlZKDHuI
-	nz3Ehg94whmI8nMOsbryUZqsWr8eS6a1agnNc0N2uoPh29LXeRxBdrnxZh2MW40lLNNtbCfLj9F
-	jN028pwt4aDMR7HvgPGbs/eky8YAiB13+JYAtTSO3MSHdrBLWLZMC7xZyUpcBIdBfvb7pgQzfIy
-	ILyor15HWoVoEW1BMVidCLm2zWsxc8K0nb1yZV/ofCelJeHwG9FRGn38x4VjQI8V02cWxrMdY7J
-	XBcOA8b3itpR/tTyFjhvsySjARRNvMv1QKic8I5H37Vgw
-X-Google-Smtp-Source: AGHT+IEZpDjBctuWqYNRlyG55Wa6Z7JlU2nXfaTVYBNjCJjgFc8SZE+7HVHp1fu8CNukponM0TaUCg==
-X-Received: by 2002:a05:6402:2110:b0:61c:7c3e:f7e8 with SMTP id 4fb4d7f45d1cf-61d0d2a9310mr2165499a12.2.1756560372888;
-        Sat, 30 Aug 2025 06:26:12 -0700 (PDT)
-Received: from kuoka.. ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aff3dd9574fsm225212366b.84.2025.08.30.06.26.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Aug 2025 06:26:12 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Andi Shyti <andi.shyti@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-spi@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] spi: dt-bindings: samsung: Drop S3C2443
-Date: Sat, 30 Aug 2025 15:26:07 +0200
-Message-ID: <20250830132605.311115-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250830132605.311115-3-krzysztof.kozlowski@linaro.org>
-References: <20250830132605.311115-3-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20230601; t=1756572088; x=1757176888;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbfBohOE3aUAe+8ggIJdFs3Ub7xyIyjcAlkbS5chGaw=;
+        b=dLKQZMJLrMZZtemH+C9lj+F9XdFBrEujNYMmEzz2FETGiXe4hbVMjNwQFkK6yvexvv
+         qrccDvDXXP+11A6+Myc9lRr6ceeHLBFFv8K9M9guE4UWnV1HLv+8OLEFymcYZv83/ns4
+         eYc19kCqTY5hJQ48vLhmbhVMs68eMlQcXAq6vQ1UIBdWGxDRqr7NCR6YALOl3S9XCJQC
+         VD2KxIkONXgaEoMJa7frkCPGDp33JzabFhDk9JCTfHXNR29qOm2ifr8cIdOXk+QUKTb3
+         rLbW0F67Qq3YSl+6761ujnWryoANGVESqe7mFBPb4vSQdhAvbUebFrtb2+U+c/XfDnu3
+         Ngzw==
+X-Forwarded-Encrypted: i=1; AJvYcCXfEcUeosn0Sn5DyYdtMS+ZjV+ednT54V0yUl3zArxavLVYo2kTRVAnv95MKmkNDrEzx2WpVfIFIU4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFZrMi2fjfxlWZOOwsru4rse0KvXSNjoeBcd+dNngCA3HCSoyC
+	PMLPHuQ79UaHBMHD0+9aMO7ZxFQCEESIGyDuNEvR1SNn29VQZXObqUxc/aNP9vm/+iE=
+X-Gm-Gg: ASbGncv7Zr7kMZkL6opcmbNiEn1hB1JDl91+35pKUoESphsYjLWNyor2EnFgEJ9VxDW
+	rhzIlFTa8AshJT6Fd4q9mGOH3MPzZ9KINGUNYiZ3cAFR9FQ3gJcTTC8/TGS0OoBbf+PZgt9fwkk
+	FhTR4fPrYPsXTV2Po9sPfe7dw22iyE6OXTY1TSoxufT948UZM4/uq+8kl7Dc/0RlIAV3RNQlBgS
+	B4v3zLZKt24puwIqZC4g/sWvf66MOz3s3J/rgNmWkHIld9SC+SGGRI/cL/ZJV2ELfxd/+KeM10/
+	DRbxtLn+y6BjiXradxffsYl6gVrc0gYtO3Y+UmknJWu8hp8F27QYKyb+pQaQIin/Xd1Gs+KcuMO
+	j2wpyFGgjFiQjh11pioQKvWRlOZf7IQdSm/Oi4waHK5xUE7DlcvOFsHo3VAAHXNeLb8DtTeQ/ti
+	M=
+X-Google-Smtp-Source: AGHT+IEr7AQnCq5wkF/dg8M61n6r+AfW5NR3ZpEgSAUCmyBrqg6y3i+f1Si6RhVd/teU1v3mrKvqvQ==
+X-Received: by 2002:a05:6830:398b:b0:744:f08e:4d30 with SMTP id 46e09a7af769-74569f18c36mr1644826a34.35.1756572088242;
+        Sat, 30 Aug 2025 09:41:28 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d? ([2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3196d46d8a6sm345913fac.18.2025.08.30.09.41.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Aug 2025 09:41:26 -0700 (PDT)
+Message-ID: <a94fe92c-ec2e-42d9-9a88-f40f243560ca@baylibre.com>
+Date: Sat, 30 Aug 2025 11:41:25 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=981; i=krzysztof.kozlowski@linaro.org;
- h=from:subject; bh=qwG4c4Xd+B3YoR0uF7y8E1dHfmZd2XS7G30El+hHeyw=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBosvvuWOMibAY+sCtkr0eJY9VfamQvRG859Wy96
- p5TeNtYiMOJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaLL77gAKCRDBN2bmhouD
- 1xXUD/9qOZnQ376tzF5lwUEClQkuLBudqcuNOfdDxwqUDHTvhTcOAWvj2LAGTmF9dF3g1gaNxWt
- ABBXRcxT0uLEoGRNlwKDKAQ7VJ5jUAcckldLBROWWIOPCehaoLHXK/c2rgQKUh8KLyNdGOCK7CL
- ebnU5WbX8ihfVb9s9hbyaQxyLEs0KfONYlJkkdOf4Ui3n1/k1sPqAAucyy0YpiFM9//NaNmXXFu
- rNk5FvCoUTHSeeqGnpzUNc/f9GOZ8YAFoggrq/iHgZs+EIsBLvqwoR0c+x/TL0E8DI6cCu6zNJK
- tCNPtD5Zf2PCpCr26GurjsYx45fg4Gc6FAZo0DZvNDzYV1BtNkvdELIAUZP6UPGFg8bto1AOlqi
- P5CBHIp3cQ/GQfm9+jrmwQAGJ2DFl/eFBD5f6uWB6PkWQlup70I6z8pcbDhnChjj9mUYJ6Hj1yD
- qLzs1EVfH2AuYHR767ZQZaHUtV05/HkftI1Vf9h9xVi1tmOOFSMgNQaAnnbYKOi9dF55Tg7nl5E
- B6LRtTB+RGr5fh3Tf7o1uIIOK3LQ/LtXhuV3mD85MgoJp4TACcr1+BMtzyQfYkKZTIpw4Kd4O7d
- 2fMfvxUSE25mvLYJ86YpePN0AOEx1vsA8n1MqUe0KoURjZrrdqvpSS0zxG4RR/U+wgJerDV+G/B W8W9Wd5GXVLh14w==
-X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/15] spi: spi-offload-trigger-pwm: Use duty offset
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@baylibre.com>
+Cc: Axel Haslam <ahaslam@baylibre.com>, jic23@kernel.org,
+ Michael.Hennerich@analog.com, nuno.sa@analog.com, eblanc@baylibre.com,
+ andy@kernel.org, corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, broonie@kernel.org, Jonathan.Cameron@huawei.com,
+ andriy.shevchenko@linux.intel.com, marcelo.schmitt1@gmail.com
+References: <cover.1756511030.git.marcelo.schmitt@analog.com>
+ <2410525339f56466fa566dda367678ec92f9fb98.1756511030.git.marcelo.schmitt@analog.com>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <2410525339f56466fa566dda367678ec92f9fb98.1756511030.git.marcelo.schmitt@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Samsung S3C24xx family of SoCs was removed the Linux kernel in the
-commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support"), in January
-2023.  There are no in-kernel users of remaining S3C24xx compatibles.
+On 8/29/25 7:42 PM, Marcelo Schmitt wrote:
+> From: Axel Haslam <ahaslam@baylibre.com>
+> 
+> Pass the duty offset to the waveform pwm.
+> 
+> Signed-off-by: Axel Haslam <ahaslam@baylibre.com>
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> ---
+>  drivers/spi/spi-offload-trigger-pwm.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-offload-trigger-pwm.c b/drivers/spi/spi-offload-trigger-pwm.c
+> index 805ed41560df..8413aeb3689d 100644
+> --- a/drivers/spi/spi-offload-trigger-pwm.c
+> +++ b/drivers/spi/spi-offload-trigger-pwm.c
+> @@ -51,13 +51,13 @@ static int spi_offload_trigger_pwm_validate(struct spi_offload_trigger *trigger,
+>  	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
+>  	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
+>  	wf.duty_length_ns = wf.period_length_ns / 2;
+> -
+> +	wf.duty_offset_ns = periodic->offset_ns;
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/spi/samsung,spi.yaml | 1 -
- 1 file changed, 1 deletion(-)
+I would be tempted to put the loop check here:
 
-diff --git a/Documentation/devicetree/bindings/spi/samsung,spi.yaml b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-index fe298d47b1a9..1ce8b2770a4a 100644
---- a/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/samsung,spi.yaml
-@@ -18,7 +18,6 @@ properties:
-     oneOf:
-       - enum:
-           - google,gs101-spi
--          - samsung,s3c2443-spi # for S3C2443, S3C2416 and S3C2450
-           - samsung,s3c6410-spi
-           - samsung,s5pv210-spi # for S5PV210 and S5PC110
-           - samsung,exynos4210-spi
--- 
-2.48.1
+	offload_offset_ns = periodic->offset_ns;
+
+	do {
+		wf.offset_ns = offload_offset_ns;
+		ret = pwm_round_waveform_might_sleep(st->pwm, &wf);
+		if (ret)
+			return ret;
+		offload_offset_ns += 10;
+
+	} while (wf.offset_ns < periodic->offset_ns);
+
+	wf.duty_offset_ns = periodic->offset_ns;
+
+instead of in the ADC driver so that all future callers don't have to
+repeat this.
+
+Also cc: Uwe in case he has any better suggestions on how to avoid
+repeating such verbose validations by all uses of the PWM waveform
+APIs.
+
+
+>  	ret = pwm_round_waveform_might_sleep(st->pwm, &wf);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	periodic->frequency_hz = DIV_ROUND_UP_ULL(NSEC_PER_SEC, wf.period_length_ns);
+> -
+> +	periodic->offset_ns = wf.duty_offset_ns;
+>  	return 0;
+>  }
+>  
+> @@ -77,6 +77,7 @@ static int spi_offload_trigger_pwm_enable(struct spi_offload_trigger *trigger,
+>  	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
+>  	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
+>  	wf.duty_length_ns = wf.period_length_ns / 2;
+> +	wf.duty_offset_ns = periodic->offset_ns;
+>  
+>  	return pwm_set_waveform_might_sleep(st->pwm, &wf, false);
+>  }
 
 
