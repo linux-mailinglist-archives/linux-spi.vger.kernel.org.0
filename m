@@ -1,149 +1,230 @@
-Return-Path: <linux-spi+bounces-9809-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9810-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD31DB3C813
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 07:03:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E15BDB3C8A8
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 09:16:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EFCE17A470
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 05:03:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23F861C24DB2
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 07:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D452258CD9;
-	Sat, 30 Aug 2025 05:03:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E33277C9B;
+	Sat, 30 Aug 2025 07:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7eAq1r9"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="bGPRiKj+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A28P82GL"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1AB2367A0;
-	Sat, 30 Aug 2025 05:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403365BAF0;
+	Sat, 30 Aug 2025 07:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756530199; cv=none; b=gR+J8rHU+7WsFz25vx2E3QRqU248Z03A5WwxN6/iclBLGQ8fiRssJ4K+0uFMy24HHzAz88ghOCVv2sYptQ8q3c5mpHy0w4QJh73hl8VLSznW2vIEQ718BRf3F11Om+VbrpFYh3/u6hTEw8Q09/tPUGjWdJOlZdglf3dVRBGlGYs=
+	t=1756538189; cv=none; b=BnZXf3FyY14Q14ztdY7cKgzPh+uUy8+6jbStQ6iIUOGo/WoJtjvw6qjODgYl2iy1kJQDqmoCSipMwQU4N4YqS6TW6X77mSC6dcBitk6khk6Ee0eU9UktyHv1v23z+M2ktP8MkkStNpxJrQRhRaSCVsdvacobpeWnRyWUdXev0Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756530199; c=relaxed/simple;
-	bh=wYUl4DeNulG2nYtPa7cq5JFPrL6inxtZESaOl5w2q0w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aLT5WlK6Sy0f3lsrLqFs7ViVZ3RCmGfNx7Jg3nUXxVNm41rSG8EjHnBPNYxEWOXG6018AwO8c0LVlFg0Xup/feUUW/w7zSIOFVMoRYCbL59cVvqHg8g16eGnREJ2+osw1RSlvbebJu754fTjYo7gAnZCwNXd0MZp+a8e7V9HIl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G7eAq1r9; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-afcb7a7bad8so383261566b.3;
-        Fri, 29 Aug 2025 22:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756530195; x=1757134995; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y83Q+Ok40+eVrTvGcNS2tSYv/8VFYqrlbD0JuKTjJ0M=;
-        b=G7eAq1r9feOztUYFRmZBHehlurwKIDO5lAcGCZdlK2SSbqot+iWWJ2905y+M7mkfwd
-         LXNoiAUGJ5aTiA7qPgOtk/2+DcrfiM2ulNQQMQxF0r/2OXo03sQE7jD+Waa41sF+A082
-         AeUAaN5JUvaCPC5tHj3We1Yo9OA4SU3kVS0StM42pT0wIVM2Op2VFojoa9n8CS+ew+YH
-         8bQXw1igH/0xOGIvnDD7lcwsZr4Q6OmSb0YDD29UV+xnxxWffg3dC5w5CgnHJhc7mIng
-         VCIrKx1Jocpt6rmgO1/3pjIjxWL/1CC0Ngnlg9nZkCbQHx7EZR6gbiWKOB2zo0tPQhbz
-         8v4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756530195; x=1757134995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y83Q+Ok40+eVrTvGcNS2tSYv/8VFYqrlbD0JuKTjJ0M=;
-        b=bHlgR4Cm76uTnypngTWfc0cruuFQR+Q/0bMNGI95uch9Q2rl2mb8NZdcK4Tz/w0TT4
-         ydjz1zuZ+TpzlLZ+4WCr8er4xNMo2hOxkHrp91jETEKEgZxV9ElsyhLav5bZEQgKk/Uh
-         BJTIasfRjetTuX/HkclwMhD6CNEe7seijrjubq9teN4/7B2uXXaw+WSiAMywMXVEhj+I
-         8r50pBnVVy1yWsa9UvA7RV0/2IG2lI+nD3nhJsq1iQCp9YCKAQSnskVM7P2b0DMLByG0
-         6q+GFBydoo9Pw5NtGIF9HD+hi0BphLX3JuFOSb4MAknwy/phdj5BNvOnpgmkNdOkcg7P
-         3p7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVHxwE19RRBlUizqnEdMvG/vNCgOvXUmk1bkqX5Xfz/eqm4zFlNl+SufsNmUzgc970AnAtftbRrcwk4gZay@vger.kernel.org, AJvYcCVbzHMOcpvqH6T+6MItlLORZjWP909IEYJlWe+Se6kCp71NOtDROofvgfbjOr/2I9+UtiZ6h+7De6DC@vger.kernel.org, AJvYcCX5JsEcqKz5WB9mybzuQq2GvoZaK8DMgM4SjHTw9R00whfVAVqhF7JoyZSUCHX8GrPkqqdmMmgRRo6H@vger.kernel.org, AJvYcCXcKeikVc0hT8Z8kgMdClTVelAcG9uQhx9ccZwnXVbRw5RwCT0VNbcwgyaumuhsZEdhcH/qrz41e8ZN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrBNsFvTQUe4ECYPzKzKwgv4dDlIRYA1V5ebmoCoKevoGmYqpS
-	mza9UctKeYA3K8Ue1y+ZdSNhwd3Ziaz5x9x10IcDr7PuMr92+u/0q03GaS2+a4SuxDfZlWwPLpD
-	EEN159Gk4HFiyKn15TFT31P76Xajv6wA=
-X-Gm-Gg: ASbGncsFEjbiO47/aGD3VMPPvFrgJYDqKE2b14V2ySCsNTlyH7jhumLGFnC5GmdXbXG
-	9LW1NCt/++782y5BccciEZCmKB3q15jmbY6s/gniKEXipJ63h2GQdNw6SRKs1JZnxaFixEthY+E
-	5SMqrPrNKNZCq8OQ6awiJNNmZDAmJOFr9PE6WXWGNi03RNNugZ292AH77PIZvTtzLA5NuouDAEw
-	gghyTS76HSEeQbNJQ==
-X-Google-Smtp-Source: AGHT+IEbkBkrbeSypy4h9/1ADvznSwJLckuiapfmo9r6+CM2U9raJzZxBYhhviTWMbiVVRUnx2QJqF0QdhkSXsG8LIg=
-X-Received: by 2002:a17:907:9815:b0:ae3:f16a:c165 with SMTP id
- a640c23a62f3a-b01d9732e2dmr93973066b.31.1756530195102; Fri, 29 Aug 2025
- 22:03:15 -0700 (PDT)
+	s=arc-20240116; t=1756538189; c=relaxed/simple;
+	bh=Xgq//bPMcuLhTUcoKQVvIGaVUwN6Y8zHe3tfndbRoBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APLNP1pWpFXMSnM07ztj/na3FmyYYxNzNXea5BBUTac2XBmSxO7Vu/CDXiE4g9yjwqEMZCIcEEc/NmoDbdy3yWmTPnGr6ljnrTZlpve87ZHYFEYVvFd0NLDftigScHSQICZIujS5w2outiM1ZJezKY2WDJmMuTrn75UX5QF7OFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=bGPRiKj+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A28P82GL; arc=none smtp.client-ip=103.168.172.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id 50B9C13803E1;
+	Sat, 30 Aug 2025 03:16:26 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Sat, 30 Aug 2025 03:16:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1756538186; x=1756545386; bh=rH5wSPSqP8
+	tNxz48V8nyDtHP/PfH/+QarsY2hPsLNiY=; b=bGPRiKj+zJAsCUQyrJp0/StHT3
+	Z0CEFhLQjV5xm7Yvbyg5RazYCfPbyTHWSm2ZpCegTbXOy6qhuD/CjdcFxuViszyu
+	G3+fcGeOv7HdCyn7AzxAqSFmzLO2erX/Vdp5eEeZaLTZRFRspFMiQ+busfvUv9xK
+	P1Qxg+vqomILq0dDixCVgYHw5VQEBClB9I6+/uTShTR//VYQFOWuKhVaLsvC6l/b
+	E1N/tfeehqrMQEp4i3wWoOJxGypUi7brZoL9qGPmQKmmMa93tVd1AY5Gro+BAjS3
+	WpUTogmTRpIeiSKPcsYZ3mE0og2OG5NvvD5b/WVFxeoMPFsjnwskajCq3uyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1756538186; x=1756545386; bh=rH5wSPSqP8tNxz48V8nyDtHP/PfH/+QarsY
+	2hPsLNiY=; b=A28P82GLhQ+gU+qNvkSXEMIHHGhWHgGPB6W2BqfuM8nVdICuM2A
+	NcqEdXjnRC5GOtPhl8vytw2JOVW6a632Lth7tFVqpN0jcVrs5FIWi0nJ5dbfpPbz
+	93UWghe/7/x4NXeA4FN4wHq2l0R/6xrVdl4M6x+X4EqZcsuk7fUrrkX7z2aqNGXe
+	GRh9v13JNwBHa0GWMNd0IJAZ/VLuVZRHMzmIP6KgEOrMibcUtTOr/XOmSC3N9SR2
+	+4h7cZHX5hYQElJlZ9AcSZWpik6DY6Yif1Q+6msGHxqUXYJZ/hDnKBXbWh3Xvalq
+	Rf1Hz1zKH3Te14Zyu+F/tIsbTPiaescl/sQ==
+X-ME-Sender: <xms:R6WyaEoVPmMMjSTFVHUliXOdv-32qkUK5pBFUekwj0BEfXYXKXHMdg>
+    <xme:R6WyaOxfi2Sr_p908cLZZq0WtOWmPygKs_jKndyVj8rKDpXX8ikKi1OeywN_Gtza-
+    FiH-hDxXuUZTl36M64>
+X-ME-Received: <xmr:R6WyaEyfRmAxZWCNsVqvVaXCqEN1juICIShBdAflOgf0gNEE_E5nocVl8uCdcH2Ux_v_VJ8rmIGy5LrSoEu2QIiMu_-QOznOlpk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeehjeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
+    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
+    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
+    drnhgvthdpnhgspghrtghpthhtohepieefpdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhvvghnsehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhiohdp
+    rhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtthhopehkrhiikhdoug
+    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepmhgrrhgtrghnsehmrghrtggrnhdrshhtpdhrtghpthhtoh
+    eprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhu
+    mhgrrheslhhinhgrrhhordhorhhg
+X-ME-Proxy: <xmx:R6WyaOKeRrX_rKVtlS-_HS0UcyN9w8mWfjCwNfiQ70_pAa29FRblZA>
+    <xmx:R6WyaBhJsS4AgbvUvcN_o6uHp3h_R8NH2iRFaJDZJdGCW4iQPaQfCw>
+    <xmx:R6WyaMkzXbMbopG8scAkzx_CFhYUQNKGJXW5k3t17XIk3bIEeUpTWQ>
+    <xmx:R6WyaOgrns0dbGzbmla7f4E8nyVhRwKAcFG-qkHg9ORUTbTcZhmzrg>
+    <xmx:SqWyaJIOEg53pkAeV7MbeJTeynbZUjxSAdTQb-JDXFYqQHxsi0m95a1W>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 30 Aug 2025 03:16:22 -0400 (EDT)
+Date: Sat, 30 Aug 2025 09:16:20 +0200
+From: Janne Grunau <j@jannau.net>
+To: Rob Herring <robh@kernel.org>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,	Hector Martin <marcan@marcan.st>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,	Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Kettenis <kettenis@openbsd.org>,	Andi Shyti <andi.shyti@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sasha Finkelstein <fnkl.kernel@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,	Keith Busch <kbusch@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>,	Christoph Hellwig <hch@lst.de>,
+ Sagi Grimberg <sagi@grimberg.me>,	Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>,	asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org,	devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,	linux-pm@vger.kernel.org,
+ iommu@lists.linux.dev,	linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org,	dri-devel@lists.freedesktop.org,
+ linux-bluetooth@vger.kernel.org,	linux-wireless@vger.kernel.org,
+ linux-pwm@vger.kernel.org,	linux-watchdog@vger.kernel.org,
+ linux-clk@vger.kernel.org,	dmaengine@vger.kernel.org,
+ linux-sound@vger.kernel.org,	linux-spi@vger.kernel.org,
+ linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+Message-ID: <20250830071620.GD204299@robin.jannau.net>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <20250829195119.GA1206685-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1756511030.git.marcelo.schmitt@analog.com> <2410525339f56466fa566dda367678ec92f9fb98.1756511030.git.marcelo.schmitt@analog.com>
-In-Reply-To: <2410525339f56466fa566dda367678ec92f9fb98.1756511030.git.marcelo.schmitt@analog.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sat, 30 Aug 2025 08:02:38 +0300
-X-Gm-Features: Ac12FXwhf8j_-7iVGqgS_dqVdNdK4mGLZgMp7J2XF982AOSeHo-SK8Lw1m2kmq0
-Message-ID: <CAHp75VcvVqdgCXKuKLvpegx6bN4af=7xYO=Nh8T37_gMjG1Y6Q@mail.gmail.com>
-Subject: Re: [PATCH 06/15] spi: spi-offload-trigger-pwm: Use duty offset
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-spi@vger.kernel.org, Axel Haslam <ahaslam@baylibre.com>, jic23@kernel.org, 
-	Michael.Hennerich@analog.com, nuno.sa@analog.com, eblanc@baylibre.com, 
-	dlechner@baylibre.com, andy@kernel.org, corbet@lwn.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org, 
-	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com, 
-	marcelo.schmitt1@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250829195119.GA1206685-robh@kernel.org>
 
-On Sat, Aug 30, 2025 at 3:42=E2=80=AFAM Marcelo Schmitt
-<marcelo.schmitt@analog.com> wrote:
->
-> Pass the duty offset to the waveform pwm.
+On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
+> On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
+> > This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> > follow design of the t600x family so copy the structure of SoC *.dtsi
+> > files.
+> > 
+> > t6020 is a cut-down version of t6021, so the former just includes the
+> > latter and disables the missing bits.
+> > 
+> > t6022 is two connected t6021 dies. The implementation seems to use
+> > t6021 and disables blocks based on whether it is useful to carry
+> > multiple instances. The disabled blocks are mostly on the second die.
+> > MMIO addresses on the second die have a constant offset. The interrupt
+> > controller is multi-die aware. This setup can be represented in the
+> > device tree with two top level "soc" nodes. The MMIO offset is applied
+> > via "ranges" and devices are included with preprocessor macros to make
+> > the node labels unique and to specify the die number for the interrupt
+> > definition.
+> > 
+> > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+> > counterparts. The existing device templates are SoC agnostic so the new
+> > devices can reuse them and include their t602{0,1,2}.dtsi file. The
+> > minor differences in pinctrl and gpio numbers can be easily adjusted.
+> > 
+> > With the t602x SoC family Apple introduced two new devices:
+> > 
+> > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+> > missing SDHCI card reader and two front USB3.1 type-c ports and their
+> > internal USB hub can be easily deleted.
+> > 
+> > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+> > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+> > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+> > calls the PCIe controller "apcie-ge" in their device tree. The
+> > implementation seems to be mostly compatible with the base t6020 PCIe
+> > controller. The main difference is that there is only a single port with
+> > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+> > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+> > and PCIe slots connect too.
+> > 
+> > This series does not include PCIe support for the Mac Pro for two
+> > reasons:
+> > - the linux switchtec driver fails to probe and the downstream PCIe
+> >   connections come up as PCIe Gen1
+> > - some of the internal devices require PERST# and power control to come
+> >   up. Since the device are connected via the PCIe switch the PCIe
+> >   controller can not do this. The PCI slot pwrctrl can be utilized for
+> >   power control but misses integration with PERST# as proposed in [1].
+> > 
+> > This series depends on "[PATCH v2 0/5] Apple device tree sync from
+> > downstream kernel" [2] due to the reuse of the t600x device templates
+> > (patch dependencies and DT compilation) and 4 page table level support
+> > in apple-dart and io-pgtable-dart [3] since the dart instances report
+> > 42-bit IAS (IOMMU device attach fails without the series).
+> > 
+> > After discussion with the devicetree maintainers we agreed to not extend
+> > lists with the generic compatibles anymore [1]. Instead either the first
+> > compatible SoC or t8103 is used as fallback compatible supported by the
+> > drivers. t8103 is used as default since most drivers and bindings were
+> > initially written for M1 based devices.
+> 
+> An issue here is any OS without the compatibles added to the drivers 
+> won't work. Does that matter here? Soon as you need any new drivers or 
+> significant driver changes it won't. The compatible additions could be 
+> backported to stable. They aren't really any different than new PCI IDs 
+> which get backported.
 
-...
+I don't think backporting the driver compatible additions to stable
+linux is very useful. It is only relevant for t602x devices and the only
+way to interact with them is the serial console. The T602x PCIe support
+added in v6.16 requires dart changes (the posted 4th level io page table
+support) to be useful. After that PCIe ethernet works so there is a
+practical way to interact with t602x systems. So there are probably zero
+user of upstream linux on those devices 
+I'm more concerned about other projects already supporting t602x
+devices. At least u-boot and OpenBSD will be affected by this. As short
+term solution m1n1 will add the generic compatibles [1] temporarily.
+I think keeping this roughly for a year should allow to add the
+compatibles and wait for "fixed" releases of those projects.
+I'll send fixes for u-boot once the binding changes are reviewed.
 
->         wf.period_length_ns =3D DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->=
-frequency_hz);
->         /* REVISIT: 50% duty-cycle for now - may add config parameter lat=
-er */
->         wf.duty_length_ns =3D wf.period_length_ns / 2;
-> -
-
-Stray - line
-
-> +       wf.duty_offset_ns =3D periodic->offset_ns;
->         ret =3D pwm_round_waveform_might_sleep(st->pwm, &wf);
->         if (ret < 0)
->                 return ret;
->
->         periodic->frequency_hz =3D DIV_ROUND_UP_ULL(NSEC_PER_SEC, wf.peri=
-od_length_ns);
-> -
-
-Ditto.
-
-> +       periodic->offset_ns =3D wf.duty_offset_ns;
->         return 0;
->  }
->
-> @@ -77,6 +77,7 @@ static int spi_offload_trigger_pwm_enable(struct spi_of=
-fload_trigger *trigger,
->         wf.period_length_ns =3D DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->=
-frequency_hz);
->         /* REVISIT: 50% duty-cycle for now - may add config parameter lat=
-er */
->         wf.duty_length_ns =3D wf.period_length_ns / 2;
-> +       wf.duty_offset_ns =3D periodic->offset_ns;
-
->
-
-Especially as it seems that the pattern is to have a blank line before
-last return statements.
-
->         return pwm_set_waveform_might_sleep(st->pwm, &wf, false);
->  }
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+Janne
 
