@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-9830-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9831-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836CBB3CEF3
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 21:17:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50051B3CF3B
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 22:14:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 464FD17F45C
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 19:17:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ED0D1884719
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 20:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6264225EF90;
-	Sat, 30 Aug 2025 19:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BAA2E092B;
+	Sat, 30 Aug 2025 20:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="HU0Rp16M"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Rk8Zy+s8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0997235057
-	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 19:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD56FC5
+	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 20:14:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756581450; cv=none; b=gVtyLc2SlXWtwP7bCiKcLHZ4Tw3Xmv2BavhKANHykCkTgHML85Lb+Q+XtkBL4/wuiWCM9hYP5cfCDWkIxXfWJuaQ3kym9RZMK9WpkL0ry3A10D/qELR+NTLWoDfDGFpvHiru8od52o64Zka9oJ9hkS59ZCkzMG2uflZkYvLiGG0=
+	t=1756584879; cv=none; b=i/AU1ceaj7Q5BTD0viAfWT+cGeHXc8lwK71eTF9ouBVoEy3AmBlv3/M7uNy5mls/leX4A6h2QiP5zvIaI7/c2T3+OgIB0kEx5xfS5Gdf4Z/ZnY+LybS3S/89zLNNG+YVNFncGusMrtmVbUeFyZf06l8Bt0ygYf8airdxaWfpVdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756581450; c=relaxed/simple;
-	bh=WdVF2BAL9RHtgGJ8oH6ri2G6ozpp7byX6Zutkplyh5Q=;
+	s=arc-20240116; t=1756584879; c=relaxed/simple;
+	bh=J7KELir1yZZsD5gL9nXbuR7LDEcaaK3JfHSH7jKNTyY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YcuvEBHKY1xtSl6m4sbp1Z8mjl+3+aA1sPmfFk0ZAEaOV+wLrQFElduY/xTn3Ex7vLS38xK8bmGcU46PNR8znB4pYwBdqueHm7fKLi5lm6evBlotpErYDISemRIMv7VdZPcYPdVV5V2h5iRu0IALJhPZmT603zHsg4bWvN/wS20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=HU0Rp16M; arc=none smtp.client-ip=209.85.210.46
+	 In-Reply-To:Content-Type; b=RpiECt4ClLxdPMOGjqg1NMYelfe2mG4FuRbAglHZnw1ADuRWcXcWucol1rU0uHOS3LFZXDD9WmFhiMcKp5WzLlO0aY6LU+SKxTcWvlxihH7j5Z5WazMwd359hsfGILVLRUwMQaDDws+HCWuw6Abw0GHJ60OwpDDUWUw91f51Yos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Rk8Zy+s8; arc=none smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7452b1964f3so2407561a34.1
-        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 12:17:27 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-74548a0b81fso2079356a34.2
+        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 13:14:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756581447; x=1757186247; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756584875; x=1757189675; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nqGSGUwLUq1KdTzX1+8uUT3YWh+WYtzDjLeR09YION0=;
-        b=HU0Rp16M0sOPq89dy9YjicCRV5eAWWNCrlfCjcJroWy5xbyLvivYe/fTMRb4t9vvRy
-         6wZPcZFWE95RP3Fzq9IHHLi+lu2k+udMU1JaTlVr+sfiuGFEkxGX0BDROZwfOyIya/4q
-         bW//OuXWJGJQS6mulVwlc4WpI1wWCLvq8W1S3akBJATuN3z/bUqrvMrdzTqrVOENxZmH
-         P3NeCw5JmKXIkJeN8QoDWBXkpP3c+7iQS7J08Mvj2O+/TQ26HYM28Sxa6DbNCADtVST6
-         pZHB0ZDmP8jM68E4giUJ7v8ADdctmjGGIgLk9d8pn0fvTfiGXITLWIooAcnMGHZ0P7cU
-         lNNA==
+        bh=nufrg1DUK9qiyJefkSfS4lUJPzfDc+a/Y59sgpg2UA8=;
+        b=Rk8Zy+s87TKptlLY5cfe9c5g6cw3L/K6m9YBW3uglbzAndvII1BlQrXUnugtrFwaO/
+         uhyylmyAkvnBZQbSu6g0c3EuqgGrLyjUsdS/MPwakdOgoRSq6ymYB3q7AmguincCZ9t7
+         WHs7NEUtgSs8skdhLPwWQpJYAjHBbVb2c2hcb+9I8DCz4P/O/2RVuUUd+YMYyXEeLxrV
+         H78A8ntjJwye0WKlM+9tCqgcP/JawAKKZdjO4SJfrMY4ZhUnHXimezAiq79ydf/GkVRG
+         qsaHwtFQvQiLv29FLKh23feWWvUq2mSZbMcGzbsScPon3qAoJiqnEqQs0Xk0Fhso/yXn
+         kVvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756581447; x=1757186247;
+        d=1e100.net; s=20230601; t=1756584875; x=1757189675;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nqGSGUwLUq1KdTzX1+8uUT3YWh+WYtzDjLeR09YION0=;
-        b=epPNd7d9c3Cn3EpIGGD4G7EQAHKjuCSqQLgiKshs08l/nKLIQ5fsVADp6NE4HVZBcp
-         b+zDitb70wM3bD7NLf5HtyQjpTunE/R5PENsk2abklmaCzaMZrcCtcP8h4I+ZuumbaA0
-         AIPlCnkei9HXnWE7rFzRmvbWiiVmrRycTzZEUV/R6zVV/qxZSyy6kKUNh3XmuFe//B+O
-         hO/JpwSnIENcgZUgXlXUE8uxIJyLUg0nnkhWRol6jIabCyrnIfLOnWMG2KgkzRmjIJ64
-         yPQUTTp8GImnVHJqWFtoXhulj6OLHe67IA8JgocQ0C6w+EmC4nhMgtM0uwJ3GGF22rBq
-         5czg==
-X-Forwarded-Encrypted: i=1; AJvYcCVl4J/E1GtXT8QehG1j7Vd3RF9k7yRnAXshhyonycBMsheKSxO+dhcF4oKFSHLxLsXbYvSkeZO5F8Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1zIECy+YFOHeHcjfatpUeXpOOOJAggpqIIU73vKv28hC/JeSS
-	ZIpDE4yWZq+pAZGqjkeLdb62F6R/hMX5UhDg/6KuAI94RIm0jnDD1Ux9Fbk1iFJO8VE=
-X-Gm-Gg: ASbGncssXlsnUkc8uKTuO5hBr7b9eIcgaNTaG4kAmjV8JzmYJ1PxftMRMcoPQcgXG3t
-	mhG3WytYSD+UhGkOP/xANrH49AcekPz+nfTlEzAbwqO7gn5lszqw7xVkmmmHsS7U2Av9QFQwO5r
-	Nl0Sxr88o49AVuJyyLF62lgaCTXWu/a/SnkF0gtJj8ksHzoud7TwI+DmCWbYd4YbkmDP3PHPK+o
-	k0ft6h06IPtXNvqQze+WVbbPyiYqaa06zSl0HZKgCrVYIjLSyD4Ee/cKFKoS/4yI4CBq5dCNMZO
-	+BFM/BN/KKvRqmDib5E9SuQiQ85/SSbPqP+VWO04eXFdYVnS5hat3vb3izM5qH+4XZZymMBqTci
-	kqCVuuJVLbeOsAPUvmUgO5acTBDBy9wbkOPXAyMS4OxxTPn5OBJmiE1zRE4DbwvseeoUF2pjEJ5
-	3xhhn6FEZnEw==
-X-Google-Smtp-Source: AGHT+IHIlNcGEM1D5+J0O6wJj6KCZd05RjnLhvwN2uXB1r6JWS0bniIEtPjY99c5/cSdvWwXX6E5sg==
-X-Received: by 2002:a05:6830:dcc:b0:745:54e4:6da5 with SMTP id 46e09a7af769-74569c6972emr1783634a34.0.1756581446605;
-        Sat, 30 Aug 2025 12:17:26 -0700 (PDT)
+        bh=nufrg1DUK9qiyJefkSfS4lUJPzfDc+a/Y59sgpg2UA8=;
+        b=nxLC1vAJ8T+saYoZ2/tPV6tgK1P4r62UgQgsk7t1GwaqVpfXO42KbjBtCun22d/htm
+         lhBF5LY0ee9+iy82Iw+vYOnfBkIJSyTiLcXTp0X4oBQ1mVK/hfmcR0WHU0qb0leC0psj
+         m4ypcA5Jk/Vx6NPC1FvT/7Xo8o9ChspK3oFl5gs6IWNt1PX2mQNl6zhdzcTKQoaSce8K
+         9Mpk15FDDRRu2PdWvjzEClLeyNx78xU03ElKKPAEfda0sEMo0MQdKCuJEberulNtA87M
+         JqzG22VdjfF0dK5FV7nECd9OiCwiAo69msmxQx0rzTUcYMLS8u9c+tMYSPcE/i40SB/8
+         +I0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXgm8pjWZUDkXPL5Y/myLRKVs9tCLXK5Z/2IYIvoDdMOTQYax3y8pC50J4XrJTTTSZisVtndsijfdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo/RXEnNfic2QfpkXi5Wryf9esTNWrcWfDmfW8T5G97BQXNzZA
+	X+pTjjRuk4rk+QuaDESYiGBI1DRiz4OEltWP9fXV3Z0GnYzNVC7V1qQAeBEtr1XtEQE=
+X-Gm-Gg: ASbGncv3ZOefODElVUBfZTNHBYlSv9qVeyCT9X+Q5mkAoXTwCWijOlKuorRtZW/r+KI
+	3vQKSDLw1NFtJu8MuwkxlSHm3EuJIRMhK7afwOk4C4oFh+X+2cfdzQWvSDmIDmfisCc8I1L+rnc
+	DAl/nGy1XEh7vbq0xvGpZQ2g/wkbCKeEw4MLuvrI7yK0eQnaauPPSA7u+geHf48zi5ISik/KO/+
+	n98hnwanbmk7/8OB/hf5CF+qBrUC3sOyJFbFFkyZq65ruO7U1CiagvdnzSVEqs6BHiQ+7EcYxEc
+	KPotancobb+uZ6dEPG3liXI4l85FnDEIhrjVGFymrd5B4FkqLM9y2WhMzkekm+GopDseHBJ+CVW
+	3EOYqJRD/R1botD9GJXts0Li6aOKb7xLy8UKoW6dCPbgJeA42FA6W++Aeu7C3ILNMQho7CSlAB7
+	g=
+X-Google-Smtp-Source: AGHT+IFXcKQTKtyYvAqc5v4L6TDXhF+IrPaumiByk5aQdzQvtT62kDXjKiwYg9KMnRYoAASLijiqZA==
+X-Received: by 2002:a05:6808:1993:b0:435:de7e:8cc3 with SMTP id 5614622812f47-437f7d20d10mr1263091b6e.6.1756584874825;
+        Sat, 30 Aug 2025 13:14:34 -0700 (PDT)
 Received: from ?IPV6:2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d? ([2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7457438873dsm57361a34.24.2025.08.30.12.17.25
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4380001d11asm53315b6e.16.2025.08.30.13.14.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Aug 2025 12:17:26 -0700 (PDT)
-Message-ID: <121b632b-1cac-41dc-a33e-f17b8e32523b@baylibre.com>
-Date: Sat, 30 Aug 2025 14:17:25 -0500
+        Sat, 30 Aug 2025 13:14:33 -0700 (PDT)
+Message-ID: <b024bd46-f1bd-4d9f-9d91-15ba18b9864f@baylibre.com>
+Date: Sat, 30 Aug 2025 15:14:31 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,8 +83,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and
- ADAQ4224
+Subject: Re: [PATCH 07/15] iio: adc: ad4030: Add SPI offload support
 To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-spi@vger.kernel.org
@@ -92,453 +91,631 @@ Cc: jic23@kernel.org, Michael.Hennerich@analog.com, nuno.sa@analog.com,
  eblanc@baylibre.com, andy@kernel.org, corbet@lwn.net, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org,
  Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
- ahaslam@baylibre.com, marcelo.schmitt1@gmail.com
+ ahaslam@baylibre.com, sergiu.cuciurean@analog.com, tgamblin@baylibre.com,
+ marcelo.schmitt1@gmail.com
 References: <cover.1756511030.git.marcelo.schmitt@analog.com>
- <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
+ <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
+In-Reply-To: <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/29/25 7:45 PM, Marcelo Schmitt wrote:
-> ADAQ4216 and ADAQ4224 are similar to AD4030, but feature a PGA circuitry
-> that scales the analog input signal prior to it reaching the ADC. The PGA
-> is controlled through a pair of pins (A0 and A1) whose state define the
-> gain that is applied to the input signal.
+On 8/29/25 7:42 PM, Marcelo Schmitt wrote:
+> AD4030 and similar ADCs can capture data at sample rates up to 2 mega
+> samples per second (MSPS). Not all SPI controllers are able to achieve
+> such high throughputs and even when the controller is fast enough to run
+> transfers at the required speed, it may be costly to the CPU to handle
+> transfer data at such high sample rates.  Add SPI offload support for
+> AD4030 and similar ADCs so to enable ADC data capture at maximum sample
+> rates.
 > 
-> Add support for ADAQ4216 and ADAQ4224. Provide a list of PGA options
-> through the IIO device channel scale available interface and enable control
-> of the PGA through the channel scale interface.
-> 
+> Cc: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Cc: Nuno Sa <nuno.sa@analog.com>
+> Cc: Trevor Gamblin <tgamblin@baylibre.com>
+> Cc: Axel Haslam <ahaslam@baylibre.com>
+> Cc: David Lechner <dlechner@baylibre.com>
+> Co-developed-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Co-developed-by: Nuno Sa <nuno.sa@analog.com>
+> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+> Co-developed-by: Trevor Gamblin <tgamblin@baylibre.com>
+> Signed-off-by: Trevor Gamblin <tgamblin@baylibre.com>
+> Co-developed-by: Axel Haslam <ahaslam@baylibre.com>
+> Signed-off-by: Axel Haslam <ahaslam@baylibre.com>
 > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
 > ---
->  drivers/iio/adc/ad4030.c | 239 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 235 insertions(+), 4 deletions(-)
+> Most of the code in this patch is based on work from Sergiu Cuciurean, Nuno Sa,
+> Axel Haslam, and Trevor Gamblin, hence the many co-developed-by tags. I also
+> draw inspiration from other drivers supporting SPI offload, many of them written
+> by David Lechner.
 > 
+>  drivers/iio/adc/Kconfig  |   2 +
+>  drivers/iio/adc/ad4030.c | 400 ++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 378 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 6de2abad0197..7cfbc07e7f77 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -49,6 +49,8 @@ config AD4030
+>  	depends on GPIOLIB
+>  	select REGMAP
+>  	select IIO_BUFFER
+> +	select IIO_BUFFER_DMA
+> +	select IIO_BUFFER_DMAENGINE
+>  	select IIO_TRIGGERED_BUFFER
+>  	help
+>  	  Say yes here to build support for Analog Devices AD4030 and AD4630 high speed
 > diff --git a/drivers/iio/adc/ad4030.c b/drivers/iio/adc/ad4030.c
-> index 37ba00097efe..32157b3a0420 100644
+> index 82784593f976..68f76432dbfd 100644
 > --- a/drivers/iio/adc/ad4030.c
 > +++ b/drivers/iio/adc/ad4030.c
-> @@ -21,6 +21,7 @@
+> @@ -15,11 +15,15 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/clk.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/iio/buffer-dmaengine.h>
+>  #include <linux/iio/iio.h>
 >  #include <linux/iio/trigger_consumer.h>
 >  #include <linux/iio/triggered_buffer.h>
->  #include <linux/log2.h>
-> +#include <linux/minmax.h>
->  #include <linux/pwm.h>
+> +#include <linux/pwm.h>
 >  #include <linux/regmap.h>
 >  #include <linux/regulator/consumer.h>
-> @@ -42,6 +43,8 @@
->  #define     AD4030_REG_CHIP_GRADE_AD4630_24_GRADE	0x00
->  #define     AD4030_REG_CHIP_GRADE_AD4632_16_GRADE	0x05
->  #define     AD4030_REG_CHIP_GRADE_AD4632_24_GRADE	0x02
-> +#define     AD4030_REG_CHIP_GRADE_ADAQ4216_GRADE	0x1E
-> +#define     AD4030_REG_CHIP_GRADE_ADAQ4224_GRADE	0x1C
->  #define     AD4030_REG_CHIP_GRADE_MASK_CHIP_GRADE	GENMASK(7, 3)
->  #define AD4030_REG_SCRATCH_PAD			0x0A
->  #define AD4030_REG_SPI_REVISION			0x0B
-> @@ -121,6 +124,10 @@
->  /* Datasheet says 9.8ns, so use the closest integer value */
->  #define AD4030_TQUIET_CNV_DELAY_NS	10
+> +#include <linux/spi/offload/consumer.h>
+>  #include <linux/spi/spi.h>
+>  #include <linux/unaligned.h>
+>  #include <linux/units.h>
+> @@ -111,6 +115,8 @@
+>  #define AD4632_TCYC_NS			2000
+>  #define AD4632_TCYC_ADJUSTED_NS		(AD4632_TCYC_NS - AD4030_TCNVL_NS)
+>  #define AD4030_TRESET_COM_DELAY_MS	750
+> +/* Datasheet says 9.8ns, so use the closest integer value */
+> +#define AD4030_TQUIET_CNV_DELAY_NS	10
 >  
-> +/* HARDWARE_GAIN */
-> +#define ADAQ4616_PGA_PINS		2
-> +#define ADAQ4616_GAIN_MAX_NANO		6666666667
-> +
 >  enum ad4030_out_mode {
 >  	AD4030_OUT_DATA_MD_DIFF,
->  	AD4030_OUT_DATA_MD_16_DIFF_8_COM,
-> @@ -149,6 +156,20 @@ enum {
->  	AD4030_OFFLOAD_SCAN_TYPE_AVG,
+> @@ -120,7 +126,7 @@ enum ad4030_out_mode {
+>  	AD4030_OUT_DATA_MD_32_PATTERN,
 >  };
 >  
-> +/*
-> + * Gains computed as fractions of 1000 so they can be expressed by integers.
-> + */
-> +static const int ad4030_hw_gains[] = {
-> +	333, 556, 2222, 6667,
-> +};
-> +
-> +static const int ad4030_hw_gains_frac[4][2] = {
-> +	{ 1, 3 },  /* 1/3 gain */
-> +	{ 5, 9 },  /* 5/9 gain */
-> +	{ 20, 9 }, /* 20/9 gain */
-> +	{ 20, 3 }, /* 20/3 gain */
-> +};
-> +
+> -enum {
+> +enum ad4030_lane_mode {
+>  	AD4030_LANE_MD_1_PER_CH,
+>  	AD4030_LANE_MD_2_PER_CH,
+>  	AD4030_LANE_MD_4_PER_CH,
+> @@ -130,17 +136,21 @@ enum {
+>  enum {
+>  	AD4030_SCAN_TYPE_NORMAL,
+>  	AD4030_SCAN_TYPE_AVG,
+> +	AD4030_OFFLOAD_SCAN_TYPE_NORMAL,
+> +	AD4030_OFFLOAD_SCAN_TYPE_AVG,
+>  };
+>  
 >  struct ad4030_chip_info {
 >  	const char *name;
 >  	const unsigned long *available_masks;
-> @@ -160,6 +181,7 @@ struct ad4030_chip_info {
+>  	const struct iio_chan_spec channels[AD4030_MAX_IIO_CHANNEL_NB];
+> +	const struct iio_chan_spec offload_channels[AD4030_MAX_IIO_CHANNEL_NB];
+>  	u8 grade;
+>  	u8 precision_bits;
+>  	/* Number of hardware channels */
 >  	int num_voltage_inputs;
 >  	unsigned int tcyc_ns;
->  	unsigned int max_sample_rate_hz;
-> +	unsigned int num_pga_pins;
-
-This is only usesd for boolean checks, so perhaps:
-
-	bool has_pga;
-
+> +	unsigned int max_sample_rate_hz;
 >  };
 >  
 >  struct ad4030_state {
-> @@ -183,6 +205,10 @@ struct ad4030_state {
->  	struct spi_offload *offload;
->  	struct spi_offload_trigger *offload_trigger;
->  	struct spi_offload_trigger_config offload_trigger_config;
-> +	struct gpio_descs *pga_gpios;
-> +	int pga_index;
-> +	unsigned int scale_avail[ARRAY_SIZE(ad4030_hw_gains)][2];
-> +	size_t scale_avail_size;
+> @@ -148,11 +158,20 @@ struct ad4030_state {
+>  	struct regmap *regmap;
+>  	const struct ad4030_chip_info *chip;
+>  	struct gpio_desc *cnv_gpio;
+> +	struct pwm_device *conv_trigger;
+> +	struct pwm_waveform conv_wf;
+>  	int vref_uv;
+>  	int vio_uv;
+>  	int offset_avail[3];
+>  	unsigned int avg_log2;
+>  	enum ad4030_out_mode mode;
+> +	enum ad4030_lane_mode lane_mode;
+> +	/* offload sampling spi message */
+> +	struct spi_transfer offload_xfer;
+> +	struct spi_message offload_msg;
+> +	struct spi_offload *offload;
+> +	struct spi_offload_trigger *offload_trigger;
+> +	struct spi_offload_trigger_config offload_trigger_config;
 >  
 >  	/*
 >  	 * DMA (thus cache coherency maintenance) requires the transfer buffers
-> @@ -239,7 +265,7 @@ struct ad4030_state {
+> @@ -209,12 +228,13 @@ struct ad4030_state {
 >   * - voltage0-voltage1
 >   * - voltage2-voltage3
 >   */
-> -#define __AD4030_CHAN_DIFF(_idx, _scan_type, _offload) {		\
-> +#define __AD4030_CHAN_DIFF(_idx, _scan_type, _offload, _pga) {		\
+> -#define AD4030_CHAN_DIFF(_idx, _scan_type) {				\
+> +#define __AD4030_CHAN_DIFF(_idx, _scan_type, _offload) {		\
 >  	.info_mask_shared_by_all =					\
 >  		BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),			\
 >  	.info_mask_shared_by_all_available =				\
-> @@ -250,6 +276,7 @@ struct ad4030_state {
+>  		BIT(IIO_CHAN_INFO_OVERSAMPLING_RATIO),			\
+>  	.info_mask_separate = BIT(IIO_CHAN_INFO_SCALE) |		\
+> +		(_offload ? BIT(IIO_CHAN_INFO_SAMP_FREQ) : 0) |		\
+
+Sampling freqency should be shared_by_all, not separate. There is only
+one conversion trigger and this is simultaneous sampling.
+
+>  		BIT(IIO_CHAN_INFO_CALIBSCALE) |				\
 >  		BIT(IIO_CHAN_INFO_CALIBBIAS) |				\
 >  		BIT(IIO_CHAN_INFO_RAW),					\
->  	.info_mask_separate_available = BIT(IIO_CHAN_INFO_CALIBBIAS) |	\
-> +		(_pga ? BIT(IIO_CHAN_INFO_SCALE) : 0) |			\
->  		BIT(IIO_CHAN_INFO_CALIBSCALE),				\
->  	.type = IIO_VOLTAGE,						\
->  	.indexed = 1,							\
-> @@ -264,10 +291,16 @@ struct ad4030_state {
+> @@ -232,12 +252,23 @@ struct ad4030_state {
+>  	.num_ext_scan_type = ARRAY_SIZE(_scan_type),			\
 >  }
 >  
->  #define AD4030_CHAN_DIFF(_idx, _scan_type)				\
-> -	__AD4030_CHAN_DIFF(_idx, _scan_type, 0)
-> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 0, 0)
->  
->  #define AD4030_OFFLOAD_CHAN_DIFF(_idx, _scan_type)			\
-> -	__AD4030_CHAN_DIFF(_idx, _scan_type, 1)
-> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 1, 0)
+> +#define AD4030_CHAN_DIFF(_idx, _scan_type)				\
+> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 0)
 > +
-> +#define ADAQ4216_CHAN_DIFF(_idx, _scan_type)				\
-> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 0, 1)
+> +#define AD4030_OFFLOAD_CHAN_DIFF(_idx, _scan_type)			\
+> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 1)
 > +
-> +#define ADAQ4216_OFFLOAD_CHAN_DIFF(_idx, _scan_type)			\
-> +	__AD4030_CHAN_DIFF(_idx, _scan_type, 1, 1)
->  
->  static const int ad4030_rx_bus_width[] = {
->  	1, 2, 4, 8,
-> @@ -429,6 +462,74 @@ static const struct regmap_config ad4030_regmap_config = {
->  	.max_register = AD4030_REG_DIG_ERR,
+>  static const int ad4030_average_modes[] = {
+>  	1, 2, 4, 8, 16, 32, 64, 128,
+>  	256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
+>  	65536,
 >  };
 >  
-> +static void ad4030_fill_scale_avail(struct ad4030_state *st)
-> +{
-> +	unsigned int mag_bits, tmp0, tmp1, i;
-> +	u64 range;
+> +static const struct spi_offload_config ad4030_offload_config = {
+> +	.capability_flags = SPI_OFFLOAD_CAP_TRIGGER |
+> +			    SPI_OFFLOAD_CAP_RX_STREAM_DMA,
+> +};
 > +
-> +	/*
-> +	 * The maximum precision of differential channels is retrieved from the
-> +	 * chip properties. The output code of differential channels is in two's
-> +	 * complement format (i.e. signed), so the MSB is the sign bit and only
-> +	 * (precision_bits - 1) bits express voltage magnitude.
-> +	 */
-> +	mag_bits = st->chip->precision_bits - 1;
-
-Seems odd that function below checks for if (scan_type->sign == 's') but this
-doesn't.
-
-> +
-> +	for (i = 0; i < ARRAY_SIZE(ad4030_hw_gains); i++) {
-> +		range = mult_frac(st->vref_uv, ad4030_hw_gains_frac[i][1],
-> +				  ad4030_hw_gains_frac[i][0]);
-> +		/*
-> +		 * If range were in mV, we would multiply it by NANO below.
-> +		 * Though, range is in µV so multiply it by MICRO only so the
-> +		 * result after right shift and division scales output codes to
-> +		 * millivolts.
-> +		 */
-> +		tmp0 = div_u64_rem(((u64)range * MICRO) >> mag_bits, NANO, &tmp1);
-> +		st->scale_avail[i][0] = tmp0; /* Integer part */
-> +		st->scale_avail[i][1] = tmp1; /* Fractional part */
-
-Could just give the variables meaningful names and avoid the comments.
-
-> +	}
-> +}
-> +
-> +static int ad4030_set_pga_gain(struct ad4030_state *st)
-> +{
-> +	DECLARE_BITMAP(bitmap, ADAQ4616_PGA_PINS) = { };
-> +
-> +	bitmap_write(bitmap, st->pga_index, 0, 2);
-
-Use ADAQ4616_PGA_PINS here instead of 2?
-
-> +
-> +	return gpiod_multi_set_value_cansleep(st->pga_gpios, bitmap);
-> +}
-> +
-> +static int ad4030_set_pga(struct iio_dev *indio_dev,
-> +			  struct iio_chan_spec const *chan, int gain_int,
-> +			  int gain_fract)
-> +{
-> +	struct ad4030_state *st = iio_priv(indio_dev);
-> +	const struct iio_scan_type *scan_type;
-> +	unsigned int mag_bits;
-> +	u64 gain_nano, tmp;
-> +
-> +	if (!st->pga_gpios)
-> +		return -EINVAL;
-> +
+>  static int ad4030_enter_config_mode(struct ad4030_state *st)
+>  {
+>  	st->tx_data[0] = AD4030_REG_ACCESS;
+> @@ -385,7 +416,7 @@ static int ad4030_get_chan_scale(struct iio_dev *indio_dev,
+>  	struct ad4030_state *st = iio_priv(indio_dev);
+>  	const struct iio_scan_type *scan_type;
+>  
+> -	scan_type = iio_get_current_scan_type(indio_dev, st->chip->channels);
 > +	scan_type = iio_get_current_scan_type(indio_dev, chan);
 
-Need to check for error.
+Is this actually a bug fix? Won't this change the scale of
+the common mode voltage channels?
 
-> +	if (scan_type->sign == 's')
-> +		mag_bits = st->chip->precision_bits - 1;
-> +	else
-> +		mag_bits = st->chip->precision_bits;
-> +
-> +	gain_nano = gain_int * NANO + gain_fract;
-> +
-> +	if (!in_range(gain_nano, 0, ADAQ4616_GAIN_MAX_NANO))
-> +		return -EINVAL;
-> +
-> +	tmp = DIV_ROUND_CLOSEST_ULL(gain_nano << mag_bits, NANO);
-> +	gain_nano = DIV_ROUND_CLOSEST_ULL(st->vref_uv, tmp);
-> +	st->pga_index = find_closest(gain_nano, ad4030_hw_gains,
-> +				     ARRAY_SIZE(ad4030_hw_gains));
-> +
-> +	return ad4030_set_pga_gain(st);
+>  	if (IS_ERR(scan_type))
+>  		return PTR_ERR(scan_type);
+>  
+> @@ -458,6 +489,96 @@ static int ad4030_get_chan_calibbias(struct iio_dev *indio_dev,
+>  	}
+>  }
+>  
+> +static void ad4030_get_sampling_freq(const struct ad4030_state *st, int *freq)
+> +{
+> +	*freq = DIV_ROUND_CLOSEST_ULL(NANO, st->conv_wf.period_length_ns);
 > +}
 > +
->  static int ad4030_get_chan_scale(struct iio_dev *indio_dev,
->  				 struct iio_chan_spec const *chan,
->  				 int *val,
-> @@ -455,7 +556,14 @@ static int ad4030_get_chan_scale(struct iio_dev *indio_dev,
->  	*val2 = scan_type->realbits == 30 ? st->chip->precision_bits
->  					  : scan_type->realbits;
->  
-> -	return IIO_VAL_FRACTIONAL_LOG2;
-> +	/* The LSB of the 8-bit common-mode data is always vref/256. */
-> +	if (scan_type->realbits == 8 || !st->chip->num_pga_pins)
-
-`if` statement should be earlier so that we don't set *val, *val2
-twice.
-
-> +		return IIO_VAL_FRACTIONAL_LOG2;
-> +
-> +	*val = st->scale_avail[st->pga_index][0];
-> +	*val2 = st->scale_avail[st->pga_index][1];
-> +
-> +	return IIO_VAL_INT_PLUS_NANO;
->  }
->  
->  static int ad4030_get_chan_calibscale(struct iio_dev *indio_dev,
-> @@ -654,6 +762,19 @@ static int ad4030_set_chan_calibbias(struct iio_dev *indio_dev,
->  				 st->tx_data, AD4030_REG_OFFSET_BYTES_NB);
->  }
->  
-> +static int ad4030_write_raw_get_fmt(struct iio_dev *indio_dev,
-> +				    struct iio_chan_spec const *chan, long mask)
+> +static int __ad4030_set_sampling_freq(struct ad4030_state *st, unsigned int freq)
 > +{
-> +	switch (mask) {
-> +	case IIO_CHAN_INFO_SCALE:
-> +		return IIO_VAL_INT_PLUS_NANO;
-> +	default:
-> +		return IIO_VAL_INT_PLUS_MICRO;
-> +	}
-> +
-> +	return -EINVAL;
-
-Unreachable code.
-
-> +}
-> +
->  static int ad4030_set_avg_frame_len(struct iio_dev *dev, int avg_val)
->  {
->  	struct ad4030_state *st = iio_priv(dev);
-> @@ -891,6 +1012,15 @@ static int ad4030_read_avail(struct iio_dev *indio_dev,
->  		*length = ARRAY_SIZE(ad4030_average_modes);
->  		return IIO_AVAIL_LIST;
->  
-> +	case IIO_CHAN_INFO_SCALE:
-> +		if (!st->pga_gpios)
-
-		if (st->scale_avail_size == 1)
-
-would make more sense here.
-
-> +			*vals = (int *)st->scale_avail[st->pga_index];
-> +		else
-> +			*vals = (int *)st->scale_avail;
-> +		*length = st->scale_avail_size * 2; /* print int and nano part */
-> +		*type = IIO_VAL_INT_PLUS_NANO;
-> +		return IIO_AVAIL_LIST;
-> +
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -966,6 +1096,9 @@ static int ad4030_write_raw_dispatch(struct iio_dev *indio_dev,
->  	case IIO_CHAN_INFO_SAMP_FREQ:
->  		return ad4030_set_sampling_freq(indio_dev, val);
->  
-> +	case IIO_CHAN_INFO_SCALE:
-> +		return ad4030_set_pga(indio_dev, chan, val, val2);
-> +
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -1037,6 +1170,7 @@ static const struct iio_info ad4030_iio_info = {
->  	.read_avail = ad4030_read_avail,
->  	.read_raw = ad4030_read_raw,
->  	.write_raw = ad4030_write_raw,
-> +	.write_raw_get_fmt = &ad4030_write_raw_get_fmt,
->  	.debugfs_reg_access = ad4030_reg_access,
->  	.read_label = ad4030_read_label,
->  	.get_current_scan_type = ad4030_get_current_scan_type,
-> @@ -1318,6 +1452,51 @@ static int ad4030_spi_offload_setup(struct iio_dev *indio_dev,
->  							   IIO_BUFFER_DIRECTION_IN);
->  }
->  
-> +static int ad4030_setup_pga(struct device *dev, struct iio_dev *indio_dev,
-> +			    struct ad4030_state *st)
-> +{
-> +	unsigned int i;
-> +	int pga_value;
+> +	struct spi_offload_trigger_config *config = &st->offload_trigger_config;
+> +	struct pwm_waveform conv_wf = { };
+> +	u64 offload_period_ns;
+> +	u64 offload_offset_ns;
+> +	u32 mode;
 > +	int ret;
+> +	u64 target = AD4030_TCNVH_NS;
 > +
-> +	ret = device_property_read_u32(dev, "adi,pga-value", &pga_value);
-> +	if (ret && ret != -EINVAL)
-> +		return dev_err_probe(dev, ret, "Failed to get PGA value.\n");
+> +	conv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
+> +	/*
+> +	 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
+> +	 * rounded PWM's value is less than 10, increase the target value by 10
+> +	 * and attempt to round the waveform again, until the value is at least
+> +	 * 10 ns. Use a separate variable to represent the target in case the
+> +	 * rounding is severe enough to keep putting the first few results under
+> +	 * the minimum 10ns condition checked by the while loop.
+> +	 */
+> +	do {
+> +		conv_wf.duty_length_ns = target;
+> +		ret = pwm_round_waveform_might_sleep(st->conv_trigger, &conv_wf);
+> +		if (ret)
+> +			return ret;
+> +		target += 10;
+> +	} while (conv_wf.duty_length_ns < 10);
 > +
-> +	if (ret == -EINVAL) {
-> +		/* Setup GPIOs for PGA control */
-> +		st->pga_gpios = devm_gpiod_get_array(dev, "pga", GPIOD_OUT_LOW);
-> +		if (IS_ERR(st->pga_gpios))
-> +			return dev_err_probe(dev, PTR_ERR(st->pga_gpios),
-> +					     "Failed to get PGA gpios.\n");
+> +	offload_period_ns = conv_wf.period_length_ns;
 > +
-> +		if (st->pga_gpios->ndescs != 2)
+> +	ret = regmap_read(st->regmap, AD4030_REG_MODES, &mode);
+> +	if (ret)
+> +		return ret;
+> +	if (FIELD_GET(AD4030_REG_MODES_MASK_OUT_DATA_MODE, mode) == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF) {
 
-s/2/ADAQ4616_PGA_PINS/?
+Since this depends on the oversampling ration, we need to defer this
+until we start a buffered read. Otherwise if someone sets sampling
+frequency first and the changes the oversampling ratio later, then
+the PWM period will not be correct.
 
-> +			return dev_err_probe(dev, -EINVAL,
-> +					     "Expected 2 GPIOs for PGA control.\n");
+Alternatly, we could update this both when sampling freqency and
+when oversampling ratio are updated. This would allow returning an
+error if the oversampling ratio is too big for the requested
+sampling frequency.
+
+> +		u32 avg;
 > +
-> +		st->scale_avail_size = ARRAY_SIZE(ad4030_hw_gains);
-> +		st->pga_index = 0;
-> +		return ad4030_set_pga_gain(st);
-
-We already intialized the array to GPIO_OUT_LOW, so isn't calling
-ad4030_set_pga_gain() here with index of 0 redundant?
-
+> +		ret = regmap_read(st->regmap, AD4030_REG_AVG, &avg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		offload_period_ns <<= FIELD_GET(AD4030_REG_AVG_MASK_AVG_VAL, avg);
 > +	}
 > +
-> +	/* Set ADC driver to handle pin-strapped PGA pins setup */
-> +	for (i = 0; i < ARRAY_SIZE(ad4030_hw_gains); i++) {
-> +		if (pga_value != ad4030_hw_gains[i])
-> +			continue;
+> +	config->periodic.frequency_hz =  DIV_ROUND_UP_ULL(NSEC_PER_SEC,
+> +							  offload_period_ns);
 > +
-> +		st->pga_index = i;
-> +		break;
-> +	}
-> +	if (i == ARRAY_SIZE(ad4030_hw_gains))
-> +		return dev_err_probe(dev, -EINVAL, "Invalid PGA value: %d.\n",
-> +				     pga_value);
+> +	/*
+> +	 * The hardware does the capture on zone 2 (when spi trigger PWM
+> +	 * is used). This means that the spi trigger signal should happen at
+> +	 * tsync + tquiet_con_delay being tsync the conversion signal period
+> +	 * and tquiet_con_delay 9.8ns. Hence set the PWM phase accordingly.
+> +	 *
+> +	 * The PWM waveform API only supports nanosecond resolution right now,
+> +	 * so round this setting to the closest available value.
+> +	 */
+> +	offload_offset_ns = AD4030_TQUIET_CNV_DELAY_NS;
+> +	do {
+> +		config->periodic.offset_ns = offload_offset_ns;
+> +		ret = spi_offload_trigger_validate(st->offload_trigger, config);
+> +		if (ret)
+> +			return ret;
+> +		offload_offset_ns += 10;
 > +
-> +	st->scale_avail_size = 1;
-> +	st->pga_gpios = NULL;
-
-This seems reduandant.
-
+> +	} while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
+> +
+> +	st->conv_wf = conv_wf;
 > +
 > +	return 0;
 > +}
 > +
->  static int ad4030_probe(struct spi_device *spi)
+> +static int ad4030_set_sampling_freq(struct iio_dev *indio_dev, unsigned int freq)
+> +{
+> +	struct ad4030_state *st = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	if (PTR_ERR_OR_ZERO(st->offload))
+> +		return -EINVAL;
+> +
+> +	if (!freq || freq > st->chip->max_sample_rate_hz)
+> +		return -EINVAL;
+> +
+> +	ret = __ad4030_set_sampling_freq(st, freq);
+> +	iio_device_release_direct(indio_dev);
+> +
+> +	return ret;
+> +}
+>  static int ad4030_set_chan_calibscale(struct iio_dev *indio_dev,
+>  				      struct iio_chan_spec const *chan,
+>  				      int gain_int,
+> @@ -618,7 +739,7 @@ static int ad4030_conversion(struct iio_dev *indio_dev)
+>  	unsigned int i;
+>  	int ret;
+>  
+> -	scan_type = iio_get_current_scan_type(indio_dev, st->chip->channels);
+> +	scan_type = iio_get_current_scan_type(indio_dev, &indio_dev->channels[0]);
+
+Since a single conversion doesn't use offload, I don't think we want to change this.
+
+>  	if (IS_ERR(scan_type))
+>  		return PTR_ERR(scan_type);
+>  
+> @@ -774,6 +895,13 @@ static int ad4030_read_raw_dispatch(struct iio_dev *indio_dev,
+>  		*val = BIT(st->avg_log2);
+>  		return IIO_VAL_INT;
+>  
+> +	case IIO_CHAN_INFO_SAMP_FREQ:
+> +		if (PTR_ERR_OR_ZERO(st->offload))
+> +			return -EINVAL;
+> +
+> +		ad4030_get_sampling_freq(st, val);
+> +		return IIO_VAL_INT;
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -814,6 +942,9 @@ static int ad4030_write_raw_dispatch(struct iio_dev *indio_dev,
+>  	case IIO_CHAN_INFO_OVERSAMPLING_RATIO:
+>  		return ad4030_set_avg_frame_len(indio_dev, val);
+>  
+> +	case IIO_CHAN_INFO_SAMP_FREQ:
+
+This casts val from signed to unsigned, so probably should check for val < 0 first.
+
+> +		return ad4030_set_sampling_freq(indio_dev, val);
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -868,7 +999,11 @@ static int ad4030_get_current_scan_type(const struct iio_dev *indio_dev,
 >  {
->  	struct device *dev = &spi->dev;
-> @@ -1360,6 +1539,14 @@ static int ad4030_probe(struct spi_device *spi)
->  	if (ret)
->  		return ret;
+>  	struct ad4030_state *st = iio_priv(indio_dev);
 >  
-> +	if (st->chip->num_pga_pins > 0) {
-> +		ret = ad4030_setup_pga(dev, indio_dev, st);
+> -	return st->avg_log2 ? AD4030_SCAN_TYPE_AVG : AD4030_SCAN_TYPE_NORMAL;
+> +	if (PTR_ERR_OR_ZERO(st->offload))
+> +		return st->avg_log2 ? AD4030_SCAN_TYPE_AVG : AD4030_SCAN_TYPE_NORMAL;
+> +	else
+> +		return st->avg_log2 ? AD4030_OFFLOAD_SCAN_TYPE_AVG :
+> +				      AD4030_OFFLOAD_SCAN_TYPE_NORMAL;
+>  }
+>  
+>  static int ad4030_update_scan_mode(struct iio_dev *indio_dev,
+> @@ -903,6 +1038,67 @@ static const struct iio_buffer_setup_ops ad4030_buffer_setup_ops = {
+>  	.validate_scan_mask = ad4030_validate_scan_mask,
+>  };
+>  
+> +static int ad4030_offload_buffer_postenable(struct iio_dev *indio_dev)
+> +{
+> +	struct ad4030_state *st = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	ret = regmap_write(st->regmap, AD4030_REG_EXIT_CFG_MODE, BIT(0));
+> +	if (ret)
+> +		return ret;
+> +
+> +	st->offload_msg.offload = st->offload;
+> +	ret = spi_optimize_message(st->spi, &st->offload_msg);
+> +	if (ret < 0)
+> +		goto out_reset_mode;
+> +
+> +	ret = pwm_set_waveform_might_sleep(st->conv_trigger, &st->conv_wf, false);
+> +	if (ret)
+> +		goto out_unoptimize;
+> +
+> +	ret = spi_offload_trigger_enable(st->offload, st->offload_trigger,
+> +					 &st->offload_trigger_config);
+> +	if (ret)
+> +		goto out_pwm_disable;
+> +	return 0;
+> +out_pwm_disable:
+> +	pwm_disable(st->conv_trigger);
+> +out_unoptimize:
+> +	spi_unoptimize_message(&st->offload_msg);
+> +out_reset_mode:
+> +	/* reenter register configuration mode */
+> +	ret = ad4030_enter_config_mode(st);
+> +	if (ret)
+> +		dev_warn(&st->spi->dev,
+
+		dev_err()
+
+would even be appropriate since we can't do anything else, the hardware
+is broken.
+
+> +			 "couldn't reenter register configuration mode\n");
+> +	return ret;
+> +}
+> +
+> +static int ad4030_offload_buffer_predisable(struct iio_dev *indio_dev)
+> +{
+> +	struct ad4030_state *st = iio_priv(indio_dev);
+> +	int ret;
+> +
+> +	pwm_disable(st->conv_trigger);
+> +
+> +	spi_offload_trigger_disable(st->offload, st->offload_trigger);
+
+Probably should disable offload first, otherwise, we could possibly get
+bad data after stopping CNV trigger but before stopping offload trigger.
+
+> +
+> +	spi_unoptimize_message(&st->offload_msg);
+> +
+> +	/* reenter register configuration mode */
+> +	ret = ad4030_enter_config_mode(st);
+> +	if (ret)
+> +		dev_warn(&st->spi->dev,
+> +			 "couldn't reenter register configuration mode\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct iio_buffer_setup_ops ad4030_offload_buffer_setup_ops = {
+> +	.postenable = &ad4030_offload_buffer_postenable,
+> +	.predisable = &ad4030_offload_buffer_predisable,
+> +};
+> +
+>  static int ad4030_regulators_get(struct ad4030_state *st)
+>  {
+>  	struct device *dev = &st->spi->dev;
+> @@ -972,6 +1168,44 @@ static int ad4030_detect_chip_info(const struct ad4030_state *st)
+>  	return 0;
+>  }
+>  
+> +static int ad4030_pwm_get(struct ad4030_state *st)
+> +{
+> +	struct device *dev = &st->spi->dev;
+> +
+> +	st->conv_trigger = devm_pwm_get(dev, "cnv");
+
+The DT bindings didn't have pwm-names, so this should be NULL.
+
+> +	if (IS_ERR(st->conv_trigger))
+> +		return dev_err_probe(dev, PTR_ERR(st->conv_trigger),
+> +				     "Failed to get cnv pwm\n");
+> +
+> +	/*
+> +	 * Preemptively disable the PWM, since we only want to enable it with
+> +	 * the buffer
+> +	 */
+> +	pwm_disable(st->conv_trigger);
+> +
+> +	return 0;
+> +}
+> +
+> +static void ad4030_prepare_offload_msg(struct ad4030_state *st)
+> +{
+> +	u8 data_width = st->chip->precision_bits;
+> +	u8 offload_bpw;
+> +
+> +	if (st->lane_mode == AD4030_LANE_MD_INTERLEAVED)
+> +		/*
+> +		 * This means all channels on 1 lane.
+> +		 */
+> +		offload_bpw = data_width * st->chip->num_voltage_inputs;
+
+This looks suspicious. I would suggest to just not support interleaved
+with SPI offload.
+
+If we do want to support it we will need to fix the HDL so that this is
+not necessary. And likely we will need some kind of devicetree binding
+to say that there is a descrambler between the SPI offload and the DMA
+buffer so that we know that the data will actually come out correct.
+
+> +	else
+> +		offload_bpw  = data_width;
+> +
+> +	st->offload_xfer.speed_hz = AD4030_SPI_MAX_REG_XFER_SPEED;
+
+Why using slower speed for offload?
+
+> +	st->offload_xfer.bits_per_word = offload_bpw;
+> +	st->offload_xfer.len = roundup_pow_of_two(BITS_TO_BYTES(offload_bpw));
+
+Thanks to Andy, we have spi_bpw_to_bytes() to use here.
+
+> +	st->offload_xfer.offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
+> +	spi_message_init_with_transfers(&st->offload_msg, &st->offload_xfer, 1);
+
+This currently only handles the case where one channel is enabled and
+oversampling is disabled. 
+
+> +}
+> +
+>  static int ad4030_config(struct ad4030_state *st)
+>  {
+>  	int ret;
+
+...
+
+> @@ -1050,24 +1309,55 @@ static int ad4030_probe(struct spi_device *spi)
+>  		return dev_err_probe(dev, PTR_ERR(st->cnv_gpio),
+>  				     "Failed to get cnv gpio\n");
+>  
+> -	/*
+> -	 * One hardware channel is split in two software channels when using
+> -	 * common byte mode. Add one more channel for the timestamp.
+> -	 */
+> -	indio_dev->num_channels = 2 * st->chip->num_voltage_inputs + 1;
+>  	indio_dev->name = st->chip->name;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  	indio_dev->info = &ad4030_iio_info;
+> -	indio_dev->channels = st->chip->channels;
+> -	indio_dev->available_scan_masks = st->chip->available_masks;
+>  
+> -	ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
+> -					      iio_pollfunc_store_time,
+> -					      ad4030_trigger_handler,
+> -					      &ad4030_buffer_setup_ops);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret,
+> -				     "Failed to setup triggered buffer\n");
+> +	st->offload = devm_spi_offload_get(dev, spi, &ad4030_offload_config);
+> +	ret = PTR_ERR_OR_ZERO(st->offload);
+> +	if (ret && ret != -ENODEV)
+> +		return dev_err_probe(dev, ret, "failed to get offload\n");
+> +
+> +	/* Fall back to low speed usage when no SPI offload available. */
+> +	if (ret == -ENODEV) {
+> +		/*
+> +		 * One hardware channel is split in two software channels when
+> +		 * using common byte mode. Add one more channel for the timestamp.
+> +		 */
+> +		indio_dev->num_channels = 2 * st->chip->num_voltage_inputs + 1;
+> +		indio_dev->channels = st->chip->channels;
+> +		indio_dev->available_scan_masks = st->chip->available_masks;
+> +
+> +		ret = devm_iio_triggered_buffer_setup(dev, indio_dev,
+> +						      iio_pollfunc_store_time,
+> +						      ad4030_trigger_handler,
+> +						      &ad4030_buffer_setup_ops);
 > +		if (ret)
-> +			return ret;
+> +			return dev_err_probe(dev, ret,
+> +					     "Failed to setup triggered buffer\n");
 > +
-> +		ad4030_fill_scale_avail(st);
+> +	} else {
+> +		/*
+> +		 * One hardware channel is split in two software channels when
+> +		 * using common byte mode. Offloaded SPI transfers can't support
+> +		 * software timestamp so no additional timestamp channel is added.
+> +		 */
+> +		indio_dev->num_channels = 2 * st->chip->num_voltage_inputs;
+> +		indio_dev->channels = st->chip->offload_channels;
+> +		indio_dev->available_scan_masks = st->chip->available_masks;
+
+I don't think scan_masks works here since this uses a DMA buffer and we can't
+demux any extra channels that were enabled. Instead, I think we need to implement
+a .validate_scan callback for the offload case to make sure the enabled channels
+are one of the allowed combinations.
+
+> +		ret = ad4030_spi_offload_setup(indio_dev, st);
+> +		if (ret)
+> +			return dev_err_probe(dev, ret,
+> +					     "Failed to setup SPI offload\n");
+> +
+> +		ret = ad4030_pwm_get(st);
+> +		if (ret)
+> +			return dev_err_probe(&spi->dev, ret,
+> +					     "Failed to get PWM: %d\n", ret);
+> +
+> +		ret = __ad4030_set_sampling_freq(st, st->chip->max_sample_rate_hz);
+> +		ad4030_prepare_offload_msg(st);
+
+The message needs to change depending on the oversampling ratio and if
+the common mode channel is enabled, so we can't do this in probe.
+
 > +	}
-> +
->  	ret = ad4030_config(st);
->  	if (ret)
->  		return ret;
-> @@ -1611,12 +1798,54 @@ static const struct ad4030_chip_info ad4632_24_chip_info = {
->  	.max_sample_rate_hz = 500 * KILO,
+>  
+>  	return devm_iio_device_register(dev, indio_dev);
+>  }
+> @@ -1103,6 +1393,20 @@ static const struct iio_scan_type ad4030_24_scan_types[] = {
+>  		.shift = 2,
+>  		.endianness = IIO_BE,
+>  	},
+> +	[AD4030_OFFLOAD_SCAN_TYPE_NORMAL] = {
+> +		.sign = 's',
+> +		.storagebits = 32,
+> +		.realbits = 24,
+> +		.shift = 0,
+> +		.endianness = IIO_CPU,
+> +	},
+> +	[AD4030_OFFLOAD_SCAN_TYPE_AVG] = {
+> +		.sign = 's',
+> +		.storagebits = 32,
+> +		.realbits = 30,
+> +		.shift = 2,
+> +		.endianness = IIO_CPU,
+> +	},
 >  };
 >  
-> +static const struct ad4030_chip_info adaq4216_chip_info = {
-> +	.name = "adaq4216",
-> +	.available_masks = ad4030_channel_masks,
-> +	.channels = {
-> +		ADAQ4216_CHAN_DIFF(0, ad4030_16_scan_types),
-> +		AD4030_CHAN_CMO(1, 0),
-> +		IIO_CHAN_SOFT_TIMESTAMP(2),
+>  static const struct iio_scan_type ad4030_16_scan_types[] = {
+> @@ -1119,7 +1423,21 @@ static const struct iio_scan_type ad4030_16_scan_types[] = {
+>  		.realbits = 30,
+>  		.shift = 2,
+>  		.endianness = IIO_BE,
+> -	}
 > +	},
-> +	.offload_channels = {
-> +		ADAQ4216_OFFLOAD_CHAN_DIFF(0, ad4030_16_scan_types),
-> +		AD4030_CHAN_CMO(1, 0),
+> +	[AD4030_OFFLOAD_SCAN_TYPE_NORMAL] = {
+> +		.sign = 's',
+> +		.storagebits = 32,
+> +		.realbits = 16,
+> +		.shift = 0,
+> +		.endianness = IIO_CPU,
 > +	},
-> +	.grade = AD4030_REG_CHIP_GRADE_ADAQ4216_GRADE,
-> +	.precision_bits = 16,
-> +	.num_voltage_inputs = 1,
-> +	.tcyc_ns = AD4030_TCYC_ADJUSTED_NS,
-> +	.max_sample_rate_hz = 2 * MEGA,
-> +	.num_pga_pins = ADAQ4616_PGA_PINS,
-> +};
-> +
-> +static const struct ad4030_chip_info adaq4224_chip_info = {
-> +	.name = "adaq4224",
-> +	.available_masks = ad4030_channel_masks,
-> +	.channels = {
-> +		ADAQ4216_CHAN_DIFF(0, ad4030_24_scan_types),
-> +		AD4030_CHAN_CMO(1, 0),
-> +		IIO_CHAN_SOFT_TIMESTAMP(2),
+> +	[AD4030_OFFLOAD_SCAN_TYPE_AVG] = {
+> +		.sign = 's',
+> +		.storagebits = 32,
+> +		.realbits = 30,
+> +		.shift = 2,
+> +		.endianness = IIO_CPU,
 > +	},
-> +	.offload_channels = {
-> +		ADAQ4216_OFFLOAD_CHAN_DIFF(0, ad4030_24_scan_types),
-> +		AD4030_CHAN_CMO(1, 0),
-> +	},
-> +	.grade = AD4030_REG_CHIP_GRADE_ADAQ4224_GRADE,
-> +	.precision_bits = 24,
-> +	.num_voltage_inputs = 1,
-> +	.tcyc_ns = AD4030_TCYC_ADJUSTED_NS,
-> +	.max_sample_rate_hz = 2 * MEGA,
-> +	.num_pga_pins = ADAQ4616_PGA_PINS,
-> +};
-> +
->  static const struct spi_device_id ad4030_id_table[] = {
->  	{ "ad4030-24", (kernel_ulong_t)&ad4030_24_chip_info },
->  	{ "ad4630-16", (kernel_ulong_t)&ad4630_16_chip_info },
->  	{ "ad4630-24", (kernel_ulong_t)&ad4630_24_chip_info },
->  	{ "ad4632-16", (kernel_ulong_t)&ad4632_16_chip_info },
->  	{ "ad4632-24", (kernel_ulong_t)&ad4632_24_chip_info },
-> +	{ "adaq4216", (kernel_ulong_t)&adaq4216_chip_info },
-> +	{ "adaq4224", (kernel_ulong_t)&adaq4224_chip_info },
->  	{ }
 >  };
->  MODULE_DEVICE_TABLE(spi, ad4030_id_table);
-> @@ -1627,6 +1856,8 @@ static const struct of_device_id ad4030_of_match[] = {
->  	{ .compatible = "adi,ad4630-24", .data = &ad4630_24_chip_info },
->  	{ .compatible = "adi,ad4632-16", .data = &ad4632_16_chip_info },
->  	{ .compatible = "adi,ad4632-24", .data = &ad4632_24_chip_info },
-> +	{ .compatible = "adi,adaq4216", .data = &adaq4216_chip_info },
-> +	{ .compatible = "adi,adaq4224", .data = &adaq4224_chip_info },
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, ad4030_of_match);
+
+Instead of extending these arrays, I would just make 2 new arrays.
+
 
 
