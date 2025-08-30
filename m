@@ -1,230 +1,388 @@
-Return-Path: <linux-spi+bounces-9810-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9811-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E15BDB3C8A8
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 09:16:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9825CB3C8CD
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 09:36:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23F861C24DB2
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 07:17:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0637E7B7F7A
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 07:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E33277C9B;
-	Sat, 30 Aug 2025 07:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D27126CE1A;
+	Sat, 30 Aug 2025 07:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="bGPRiKj+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="A28P82GL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPjrcQXQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from flow-a8-smtp.messagingengine.com (flow-a8-smtp.messagingengine.com [103.168.172.143])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403365BAF0;
-	Sat, 30 Aug 2025 07:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D4213C3F6;
+	Sat, 30 Aug 2025 07:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756538189; cv=none; b=BnZXf3FyY14Q14ztdY7cKgzPh+uUy8+6jbStQ6iIUOGo/WoJtjvw6qjODgYl2iy1kJQDqmoCSipMwQU4N4YqS6TW6X77mSC6dcBitk6khk6Ee0eU9UktyHv1v23z+M2ktP8MkkStNpxJrQRhRaSCVsdvacobpeWnRyWUdXev0Fw=
+	t=1756539411; cv=none; b=rg79uVct1IXRtdyGfvLPks1L1uADhkdXUdQLiX6AWdpaE83LMhcmzzLYbn6Q/NS6qTfqGzEg57WO4spQgd/IarDKhh2hPlmAWUKu/em20et46vWGitUGfLWKUJbrxLFLbS13ygtXfYwEvq/ZuHL0C1XVDhWFLZrkFngAvUBHDZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756538189; c=relaxed/simple;
-	bh=Xgq//bPMcuLhTUcoKQVvIGaVUwN6Y8zHe3tfndbRoBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APLNP1pWpFXMSnM07ztj/na3FmyYYxNzNXea5BBUTac2XBmSxO7Vu/CDXiE4g9yjwqEMZCIcEEc/NmoDbdy3yWmTPnGr6ljnrTZlpve87ZHYFEYVvFd0NLDftigScHSQICZIujS5w2outiM1ZJezKY2WDJmMuTrn75UX5QF7OFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=bGPRiKj+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=A28P82GL; arc=none smtp.client-ip=103.168.172.143
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id 50B9C13803E1;
-	Sat, 30 Aug 2025 03:16:26 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Sat, 30 Aug 2025 03:16:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1756538186; x=1756545386; bh=rH5wSPSqP8
-	tNxz48V8nyDtHP/PfH/+QarsY2hPsLNiY=; b=bGPRiKj+zJAsCUQyrJp0/StHT3
-	Z0CEFhLQjV5xm7Yvbyg5RazYCfPbyTHWSm2ZpCegTbXOy6qhuD/CjdcFxuViszyu
-	G3+fcGeOv7HdCyn7AzxAqSFmzLO2erX/Vdp5eEeZaLTZRFRspFMiQ+busfvUv9xK
-	P1Qxg+vqomILq0dDixCVgYHw5VQEBClB9I6+/uTShTR//VYQFOWuKhVaLsvC6l/b
-	E1N/tfeehqrMQEp4i3wWoOJxGypUi7brZoL9qGPmQKmmMa93tVd1AY5Gro+BAjS3
-	WpUTogmTRpIeiSKPcsYZ3mE0og2OG5NvvD5b/WVFxeoMPFsjnwskajCq3uyw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1756538186; x=1756545386; bh=rH5wSPSqP8tNxz48V8nyDtHP/PfH/+QarsY
-	2hPsLNiY=; b=A28P82GLhQ+gU+qNvkSXEMIHHGhWHgGPB6W2BqfuM8nVdICuM2A
-	NcqEdXjnRC5GOtPhl8vytw2JOVW6a632Lth7tFVqpN0jcVrs5FIWi0nJ5dbfpPbz
-	93UWghe/7/x4NXeA4FN4wHq2l0R/6xrVdl4M6x+X4EqZcsuk7fUrrkX7z2aqNGXe
-	GRh9v13JNwBHa0GWMNd0IJAZ/VLuVZRHMzmIP6KgEOrMibcUtTOr/XOmSC3N9SR2
-	+4h7cZHX5hYQElJlZ9AcSZWpik6DY6Yif1Q+6msGHxqUXYJZ/hDnKBXbWh3Xvalq
-	Rf1Hz1zKH3Te14Zyu+F/tIsbTPiaescl/sQ==
-X-ME-Sender: <xms:R6WyaEoVPmMMjSTFVHUliXOdv-32qkUK5pBFUekwj0BEfXYXKXHMdg>
-    <xme:R6WyaOxfi2Sr_p908cLZZq0WtOWmPygKs_jKndyVj8rKDpXX8ikKi1OeywN_Gtza-
-    FiH-hDxXuUZTl36M64>
-X-ME-Received: <xmr:R6WyaEyfRmAxZWCNsVqvVaXCqEN1juICIShBdAflOgf0gNEE_E5nocVl8uCdcH2Ux_v_VJ8rmIGy5LrSoEu2QIiMu_-QOznOlpk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddukeehjeejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomheplfgrnhhnvgcu
-    ifhruhhnrghuuceojhesjhgrnhhnrghurdhnvghtqeenucggtffrrghtthgvrhhnpefgvd
-    ffveelgedujeeffeehheekheelheefgfejffeftedugeethfeuudefheefteenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjsehjrghnnhgruh
-    drnhgvthdpnhgspghrtghpthhtohepieefpdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhvvghnsehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhiohdp
-    rhgtphhtthhopehnvggrlhesghhomhhprgdruggvvhdprhgtphhtthhopehkrhiikhdoug
-    htsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepmhgrrhgtrghnsehmrghrtggrnhdrshhtpdhrtghpthhtoh
-    eprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhu
-    mhgrrheslhhinhgrrhhordhorhhg
-X-ME-Proxy: <xmx:R6WyaOKeRrX_rKVtlS-_HS0UcyN9w8mWfjCwNfiQ70_pAa29FRblZA>
-    <xmx:R6WyaBhJsS4AgbvUvcN_o6uHp3h_R8NH2iRFaJDZJdGCW4iQPaQfCw>
-    <xmx:R6WyaMkzXbMbopG8scAkzx_CFhYUQNKGJXW5k3t17XIk3bIEeUpTWQ>
-    <xmx:R6WyaOgrns0dbGzbmla7f4E8nyVhRwKAcFG-qkHg9ORUTbTcZhmzrg>
-    <xmx:SqWyaJIOEg53pkAeV7MbeJTeynbZUjxSAdTQb-JDXFYqQHxsi0m95a1W>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 30 Aug 2025 03:16:22 -0400 (EDT)
-Date: Sat, 30 Aug 2025 09:16:20 +0200
-From: Janne Grunau <j@jannau.net>
-To: Rob Herring <robh@kernel.org>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,	Joerg Roedel <joro@8bytes.org>,
- Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,	Keith Busch <kbusch@kernel.org>,
- Jens Axboe <axboe@kernel.dk>,	Christoph Hellwig <hch@lst.de>,
- Sagi Grimberg <sagi@grimberg.me>,	Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>,	asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org,	devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org,	linux-pm@vger.kernel.org,
- iommu@lists.linux.dev,	linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org,	dri-devel@lists.freedesktop.org,
- linux-bluetooth@vger.kernel.org,	linux-wireless@vger.kernel.org,
- linux-pwm@vger.kernel.org,	linux-watchdog@vger.kernel.org,
- linux-clk@vger.kernel.org,	dmaengine@vger.kernel.org,
- linux-sound@vger.kernel.org,	linux-spi@vger.kernel.org,
- linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
- Pro/Max/Ultra devices
-Message-ID: <20250830071620.GD204299@robin.jannau.net>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250829195119.GA1206685-robh@kernel.org>
+	s=arc-20240116; t=1756539411; c=relaxed/simple;
+	bh=nwELxDxzSAOFGITdilBF/c44lqaQcxw4uOGtKRdodjk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EcH13LTuaaBZIiTB50ShzQezuoMtnulZnZKsAM8uVsSXJ+g9tw8VJDVBXu18XdFoZG95KMOF/HuS2yWO76b2/u1mfSNTeHj8d5u08symSJJRYme8IVBO4/oKGsSyxqcabr8q5oRQDIFF6cKEo0ARpk8f+bLbxUm5kvXcbj8vsnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPjrcQXQ; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aff0775410eso179419966b.0;
+        Sat, 30 Aug 2025 00:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756539408; x=1757144208; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SzmH4C1XJrne9YPtVNZi7FEYp3+WvxSqJ1AyOKPaNaM=;
+        b=IPjrcQXQHH25hhH23ZZonEdYKH70q8JxT0jWxIDx3m+5HYf/lnqg/+Qd79G46RX9sG
+         RKEv/kF8cTD6rx1p9oFUDw7Qm/0jFvSh2C5nhn4BhxWrh7MTOgXzGr5ETybG7/gI5Qkx
+         hF4cftrYq+4O30DdZV5QIdVvO+u9J6d0wdYGyoqrranGSZA0TOE4py+PDxL/UF92iOeu
+         OPmlXs2RMc32vpYZSqrJq+44ulTdGI136qYHKJ+bxyEshdo8nzFarMeqi838azuno8bc
+         wLIx4JYreaCg53LDkoUz/4GZ3vCzuJKrBRYrj8uPcqaU724adMNsJyTDOyFfKghrcpO9
+         G0Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756539408; x=1757144208;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SzmH4C1XJrne9YPtVNZi7FEYp3+WvxSqJ1AyOKPaNaM=;
+        b=oVRx6fb4YPSBYZfIjCwP699SHVDAiL1FXRkCvd7IFJz3/9W5x/Pcdrtk/yzHPCNzeT
+         8IbuViWAb5lS5PKVHaxIgvS1IhFC5cutduP59KGbouMt75VJKgHOgWN4oUv/g/SSZciz
+         2Zfm+O4XFoFDiWVFDz2qomYcYkIb9sT7qugJGgOe4IuKFhvqifUJjJvKjcdt6eZWMRHB
+         raznUEcQIDDjCu36Jdt+FAmUO9+Efyd06J22uoNbgJdbOWshm9irjftaBPqCnzLbqpE/
+         QFQ0Zy3kkQyVyXauPzNWf1iPm5rTE+6rri6jCgGCiTirdVrJ3ixkR76xUH7zYYDeP0Lm
+         TeAg==
+X-Forwarded-Encrypted: i=1; AJvYcCUOq1byOeafRjxSjct0cjbgC2yJHSvmEzGH4YzLaFbBnm3ROmP66IduzX8YgRY71gb/g922Y6EQAE7c@vger.kernel.org, AJvYcCUR8epXiAjDHc5alPDIcz5I4IHYtM7YP367VQPzPx3yFOpU4HDVsaw6HOdSDzMU7F8g+IoCbjm3Im/elw2Y@vger.kernel.org, AJvYcCV2J+F5U/gKeL4d7WII+6253yZXxjy5EEk3v3QjM+r2R3+GUUn1TpZAeN4VfMArhXkXqk1h2wqLxjDZ@vger.kernel.org, AJvYcCVFUwfFJG47HmdrZi4XgXDOkJXp5WXwmNcsjbhzDV/p2JuRCw3F8f/rkUVf/prs4sxfnWkleknPFe3u@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcUzEZ6ljBC7SiTytS3pXiAyKeqLUse1p+J7yXhKO9PFWNh8O8
+	pDutd+4uaDLybONFw4Xl7CYichjC/DawMpUO8UCNLgEMc1DQdxrC0b0kX6nsqInlx69Pqmumx3s
+	mxTNFzgJbkMut7O+lNjjwiw/Xbrmm5QE=
+X-Gm-Gg: ASbGnctE/VjkdnyNAJgdUt2mqzRqaOP5KZL6BIy9hrbkH3JPQNdAmIB9xran7dl1JGc
+	KG6hErm+A+NH6rBCDhr/gBWhPraBVwiA1kDpjB+4C3WQVW7ghNOILiV8eheD25iF6SgNvyGtglQ
+	lGFcOdrGevlpQrcWToM9xBun99A0+yVCMVTvJ4of6rrObz0BmweZcnKgw/fGN70wQgom2s8GWCO
+	b0YJso=
+X-Google-Smtp-Source: AGHT+IEOLPbp3qTZPtnFbQYyqJuzU7fRvjG8R4IVWcinxMBpTD+d0esX9RsjNuxUUL8rlpEr38nh8cs/LJ6G1NnKqaA=
+X-Received: by 2002:a17:907:970f:b0:ae3:5185:5416 with SMTP id
+ a640c23a62f3a-b01d8c74a17mr136545566b.13.1756539407942; Sat, 30 Aug 2025
+ 00:36:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250829195119.GA1206685-robh@kernel.org>
+References: <cover.1756511030.git.marcelo.schmitt@analog.com> <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
+In-Reply-To: <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sat, 30 Aug 2025 10:36:11 +0300
+X-Gm-Features: Ac12FXwg_QF3-9Cykf3CcyTZFU9PAwBoEab4GDUA14oUf05enERpJO1q4eCtTXQ
+Message-ID: <CAHp75Vfu-C3Hd0ZXTj4rxEgRe_O84cfo6jiRCPFxZJnYrvROWQ@mail.gmail.com>
+Subject: Re: [PATCH 07/15] iio: adc: ad4030: Add SPI offload support
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-spi@vger.kernel.org, jic23@kernel.org, Michael.Hennerich@analog.com, 
+	nuno.sa@analog.com, eblanc@baylibre.com, dlechner@baylibre.com, 
+	andy@kernel.org, corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, broonie@kernel.org, Jonathan.Cameron@huawei.com, 
+	andriy.shevchenko@linux.intel.com, ahaslam@baylibre.com, 
+	sergiu.cuciurean@analog.com, tgamblin@baylibre.com, 
+	marcelo.schmitt1@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
-> On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
-> > This series adds device trees for Apple's M2 Pro, Max and Ultra based
-> > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
-> > follow design of the t600x family so copy the structure of SoC *.dtsi
-> > files.
-> > 
-> > t6020 is a cut-down version of t6021, so the former just includes the
-> > latter and disables the missing bits.
-> > 
-> > t6022 is two connected t6021 dies. The implementation seems to use
-> > t6021 and disables blocks based on whether it is useful to carry
-> > multiple instances. The disabled blocks are mostly on the second die.
-> > MMIO addresses on the second die have a constant offset. The interrupt
-> > controller is multi-die aware. This setup can be represented in the
-> > device tree with two top level "soc" nodes. The MMIO offset is applied
-> > via "ranges" and devices are included with preprocessor macros to make
-> > the node labels unique and to specify the die number for the interrupt
-> > definition.
-> > 
-> > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
-> > counterparts. The existing device templates are SoC agnostic so the new
-> > devices can reuse them and include their t602{0,1,2}.dtsi file. The
-> > minor differences in pinctrl and gpio numbers can be easily adjusted.
-> > 
-> > With the t602x SoC family Apple introduced two new devices:
-> > 
-> > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
-> > missing SDHCI card reader and two front USB3.1 type-c ports and their
-> > internal USB hub can be easily deleted.
-> > 
-> > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
-> > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
-> > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
-> > calls the PCIe controller "apcie-ge" in their device tree. The
-> > implementation seems to be mostly compatible with the base t6020 PCIe
-> > controller. The main difference is that there is only a single port with
-> > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
-> > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
-> > and PCIe slots connect too.
-> > 
-> > This series does not include PCIe support for the Mac Pro for two
-> > reasons:
-> > - the linux switchtec driver fails to probe and the downstream PCIe
-> >   connections come up as PCIe Gen1
-> > - some of the internal devices require PERST# and power control to come
-> >   up. Since the device are connected via the PCIe switch the PCIe
-> >   controller can not do this. The PCI slot pwrctrl can be utilized for
-> >   power control but misses integration with PERST# as proposed in [1].
-> > 
-> > This series depends on "[PATCH v2 0/5] Apple device tree sync from
-> > downstream kernel" [2] due to the reuse of the t600x device templates
-> > (patch dependencies and DT compilation) and 4 page table level support
-> > in apple-dart and io-pgtable-dart [3] since the dart instances report
-> > 42-bit IAS (IOMMU device attach fails without the series).
-> > 
-> > After discussion with the devicetree maintainers we agreed to not extend
-> > lists with the generic compatibles anymore [1]. Instead either the first
-> > compatible SoC or t8103 is used as fallback compatible supported by the
-> > drivers. t8103 is used as default since most drivers and bindings were
-> > initially written for M1 based devices.
-> 
-> An issue here is any OS without the compatibles added to the drivers 
-> won't work. Does that matter here? Soon as you need any new drivers or 
-> significant driver changes it won't. The compatible additions could be 
-> backported to stable. They aren't really any different than new PCI IDs 
-> which get backported.
+On Sat, Aug 30, 2025 at 3:43=E2=80=AFAM Marcelo Schmitt
+<marcelo.schmitt@analog.com> wrote:
+>
+> AD4030 and similar ADCs can capture data at sample rates up to 2 mega
+> samples per second (MSPS). Not all SPI controllers are able to achieve
+> such high throughputs and even when the controller is fast enough to run
+> transfers at the required speed, it may be costly to the CPU to handle
+> transfer data at such high sample rates.  Add SPI offload support for
+> AD4030 and similar ADCs so to enable ADC data capture at maximum sample
 
-I don't think backporting the driver compatible additions to stable
-linux is very useful. It is only relevant for t602x devices and the only
-way to interact with them is the serial console. The T602x PCIe support
-added in v6.16 requires dart changes (the posted 4th level io page table
-support) to be useful. After that PCIe ethernet works so there is a
-practical way to interact with t602x systems. So there are probably zero
-user of upstream linux on those devices 
-I'm more concerned about other projects already supporting t602x
-devices. At least u-boot and OpenBSD will be affected by this. As short
-term solution m1n1 will add the generic compatibles [1] temporarily.
-I think keeping this roughly for a year should allow to add the
-compatibles and wait for "fixed" releases of those projects.
-I'll send fixes for u-boot once the binding changes are reviewed.
+Either add a comma after ADCs or drop 'so' word.
 
-Janne
+> rates.
+
+> Cc: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Cc: Nuno Sa <nuno.sa@analog.com>
+> Cc: Trevor Gamblin <tgamblin@baylibre.com>
+> Cc: Axel Haslam <ahaslam@baylibre.com>
+> Cc: David Lechner <dlechner@baylibre.com>
+
+First of all, please keep Cc:s just after the '---' line, which will
+have the same effect for email and make the commit message less noisy.
+Second, don't put Cc for the people that you already have other tags
+for.
+Here I found at least 3 people that are repeated in the given specific
+tags below. By default the tools (git send-email) converts all tags to
+the Cc automatically.
+
+> Co-developed-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
+> Co-developed-by: Nuno Sa <nuno.sa@analog.com>
+> Signed-off-by: Nuno Sa <nuno.sa@analog.com>
+> Co-developed-by: Trevor Gamblin <tgamblin@baylibre.com>
+> Signed-off-by: Trevor Gamblin <tgamblin@baylibre.com>
+> Co-developed-by: Axel Haslam <ahaslam@baylibre.com>
+> Signed-off-by: Axel Haslam <ahaslam@baylibre.com>
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+
+...
+
+> -enum {
+> +enum ad4030_lane_mode {
+
+Sounds like a candidate for a separate change, but I haven't checked
+how big this part is, so perhaps it's fine just to do it here.
+
+...
+
+>  static const int ad4030_average_modes[] =3D {
+>         1, 2, 4, 8, 16, 32, 64, 128,
+>         256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
+>         65536,
+
+Side note, this looks like the list of bits, and can be optimised to use BI=
+T().
+
+>  };
+
+...
+
+> +       /*
+> +        * The hardware does the capture on zone 2 (when spi trigger PWM
+> +        * is used). This means that the spi trigger signal should happen=
+ at
+> +        * tsync + tquiet_con_delay being tsync the conversion signal per=
+iod
+> +        * and tquiet_con_delay 9.8ns. Hence set the PWM phase accordingl=
+y.
+> +        *
+> +        * The PWM waveform API only supports nanosecond resolution right=
+ now,
+> +        * so round this setting to the closest available value.
+> +        */
+> +       offload_offset_ns =3D AD4030_TQUIET_CNV_DELAY_NS;
+> +       do {
+> +               config->periodic.offset_ns =3D offload_offset_ns;
+> +               ret =3D spi_offload_trigger_validate(st->offload_trigger,=
+ config);
+> +               if (ret)
+> +                       return ret;
+> +               offload_offset_ns +=3D 10;
+
+> +
+
+Unneeded blank line.
+
+> +       } while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS)=
+;
+
+...
+
+> +static int ad4030_set_sampling_freq(struct iio_dev *indio_dev, unsigned =
+int freq)
+> +{
+> +       struct ad4030_state *st =3D iio_priv(indio_dev);
+> +       int ret;
+> +
+> +       if (PTR_ERR_OR_ZERO(st->offload))
+> +               return -EINVAL;
+
+Why shadow the actual error code?
+
+> +       if (!freq || freq > st->chip->max_sample_rate_hz)
+> +               return -EINVAL;
+
+in_range() ?
+
+> +       ret =3D __ad4030_set_sampling_freq(st, freq);
+> +       iio_device_release_direct(indio_dev);
+> +
+> +       return ret;
+> +}
+
+...
+
+> +       case IIO_CHAN_INFO_SAMP_FREQ:
+> +               if (PTR_ERR_OR_ZERO(st->offload))
+> +                       return -EINVAL;
+
+Shadowing an actual error code needs a good justification.
+
+> +               ad4030_get_sampling_freq(st, val);
+> +               return IIO_VAL_INT;
+
+
+...
+
+> +       st->offload_msg.offload =3D st->offload;
+> +       ret =3D spi_optimize_message(st->spi, &st->offload_msg);
+> +       if (ret < 0)
+
+Why ' < 0'? Is it capable of returning positive values? If so, what
+are their meanings?
+
+> +               goto out_reset_mode;
+
+...
+
+> +       /*
+> +        * Preemptively disable the PWM, since we only want to enable it =
+with
+> +        * the buffer
+
+Missing period.
+
+> +        */
+
+...
+
+> +static void ad4030_prepare_offload_msg(struct ad4030_state *st)
+> +{
+> +       u8 data_width =3D st->chip->precision_bits;
+> +       u8 offload_bpw;
+> +
+> +       if (st->lane_mode =3D=3D AD4030_LANE_MD_INTERLEAVED)
+
+> +               /*
+> +                * This means all channels on 1 lane.
+> +                */
+
+This is a one line comment. Why 3 LoCs?
+
+> +               offload_bpw =3D data_width * st->chip->num_voltage_inputs=
+;
+> +       else
+> +               offload_bpw  =3D data_width;
+> +
+> +       st->offload_xfer.speed_hz =3D AD4030_SPI_MAX_REG_XFER_SPEED;
+> +       st->offload_xfer.bits_per_word =3D offload_bpw;
+> +       st->offload_xfer.len =3D roundup_pow_of_two(BITS_TO_BYTES(offload=
+_bpw));
+> +       st->offload_xfer.offload_flags =3D SPI_OFFLOAD_XFER_RX_STREAM;
+> +       spi_message_init_with_transfers(&st->offload_msg, &st->offload_xf=
+er, 1);
+> +}
+
+...
+
+> +       /* Fall back to low speed usage when no SPI offload available. */
+
+is available
+
+And choose one style for one line comments and use it everywhere.
+
+...
+
+> +       if (ret =3D=3D -ENODEV) {
+> +               /*
+> +                * One hardware channel is split in two software channels=
+ when
+> +                * using common byte mode. Add one more channel for the t=
+imestamp.
+> +                */
+> +               indio_dev->num_channels =3D 2 * st->chip->num_voltage_inp=
+uts + 1;
+> +               indio_dev->channels =3D st->chip->channels;
+> +               indio_dev->available_scan_masks =3D st->chip->available_m=
+asks;
+> +
+> +               ret =3D devm_iio_triggered_buffer_setup(dev, indio_dev,
+> +                                                     iio_pollfunc_store_=
+time,
+> +                                                     ad4030_trigger_hand=
+ler,
+> +                                                     &ad4030_buffer_setu=
+p_ops);
+> +               if (ret)
+> +                       return dev_err_probe(dev, ret,
+> +                                            "Failed to setup triggered b=
+uffer\n");
+
+> +
+
+Stray blank line.
+
+> +       } else {
+> +               /*
+> +                * One hardware channel is split in two software channels=
+ when
+> +                * using common byte mode. Offloaded SPI transfers can't =
+support
+> +                * software timestamp so no additional timestamp channel =
+is added.
+> +                */
+> +               indio_dev->num_channels =3D 2 * st->chip->num_voltage_inp=
+uts;
+> +               indio_dev->channels =3D st->chip->offload_channels;
+> +               indio_dev->available_scan_masks =3D st->chip->available_m=
+asks;
+> +               ret =3D ad4030_spi_offload_setup(indio_dev, st);
+> +               if (ret)
+> +                       return dev_err_probe(dev, ret,
+> +                                            "Failed to setup SPI offload=
+\n");
+> +
+> +               ret =3D ad4030_pwm_get(st);
+> +               if (ret)
+> +                       return dev_err_probe(&spi->dev, ret,
+> +                                            "Failed to get PWM: %d\n", r=
+et);
+> +
+> +               ret =3D __ad4030_set_sampling_freq(st, st->chip->max_samp=
+le_rate_hz);
+> +               ad4030_prepare_offload_msg(st);
+> +       }
+
+...
+
+> -       }
+> +       },
+
+You see, this is the point I always make about leaving trailing commas
+in the non-terminator entries.
+(It's just a good example I can't help comment on this just for others
+to point out again on this)
+
+...
+
+> +       .max_sample_rate_hz =3D 2 * MEGA,
+
+HZ_PER_MHZ
+
+
+...
+
+> +       .max_sample_rate_hz =3D 2 * MEGA,
+
+Ditto.
+
+...
+
+> +       .max_sample_rate_hz =3D 2 * MEGA,
+
+Ditto.
+
+...
+
+> +       .max_sample_rate_hz =3D 500 * KILO,
+
+HZ_PER_KHZ
+
+...
+
+> +       .max_sample_rate_hz =3D 500 * KILO,
+
+Ditto.
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
