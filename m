@@ -1,230 +1,199 @@
-Return-Path: <linux-spi+bounces-9815-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9816-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEDADB3C8F7
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 09:57:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23CC1B3CAB6
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 14:09:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ACF01C2148A
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 07:58:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D013B7C00D7
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 12:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4378328466A;
-	Sat, 30 Aug 2025 07:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FEAE27932F;
+	Sat, 30 Aug 2025 12:09:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0gJBgbE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XpQZjXeM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AF31E5710;
-	Sat, 30 Aug 2025 07:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB79326461F;
+	Sat, 30 Aug 2025 12:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756540666; cv=none; b=NJIVWuRl+2wGiVm8uCNlKvnyH/A7pKRFwW9DR6twGFazwmQA3Q91TatnnBqPtpmtvrZMcK1X+KyxQWv+ndtsScP5yj2FEwzv/y9QUt73T3g1/sk4BuytPXWsoVtWpEocHpQCINZ8/z2aSTuAxiv4fdnWm72ed1Y/57rwXUILmI4=
+	t=1756555762; cv=none; b=hQbu0/QadR8u7Yw0w0eOSH/eYD7LuhjeaVHIacg037xa/fE8yNZVT3afVLzEj+SkhTP2preL/3XVeF8eEjx8DxgxPTl8HpYvCwdlu1nC781Jtm629YyHajmbbXRhRobO8yg0kb0QbYSpBhLkxU7WCmqNJ7pq5ifPk4AFQGxavds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756540666; c=relaxed/simple;
-	bh=+2+Gj1nNHKpL+N9u8qZn9hF2ACrmy8ud9G7KUHU3RQw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QiU3jh6L91BDn5VLIbfofygmEJpA3b3XXON6y8BvZUK+TFOwiiXTvf82mhGLQjLkMEGPtWrsLP5PMM0eHRsJ3DL5JluoYmytYt82jrEbxgHhYMWjn1eO4NiFOjYFFxdX6oXuIcntMcorq9shT+jmnUtaxbHyUM7Th/sCQ034I/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X0gJBgbE; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aff0775410eso180564466b.0;
-        Sat, 30 Aug 2025 00:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756540663; x=1757145463; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xzYpIPBYEfD30svdRD/8XJR3PeRfEwoaHDcvFNvN3Q=;
-        b=X0gJBgbEOMwlVvKqNelyu6lL+R2SjWnRhl/doU3FjZzwAKiFEg0uZw4nqUvV4zT2r2
-         L1wdLZdTF9ooD236N3qmPi+Kvv4JwyYUD1fVWjO2zrEyKKrvnyl1iIEVje8qtNTh0CRt
-         NwBKwrXhFY2R9LH8fdigNlqVJSb18S7Y5rOvYWi8M8GCiBVhSPsmjJ9D5YLrhsdu4zZY
-         m0cXw9NGrNMEsxLDLftDG+2u2HVaIJaT3g94NLqGN8qUnwzpOe6U6CFxnnPz6u5oLp5B
-         yRk55CgIEZlTXOgt9CY3rTqLB3Jbamv3O9pS4px5jhgUyfmxoO/qCtMKQut2uSUtmJnQ
-         YCUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756540663; x=1757145463;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+xzYpIPBYEfD30svdRD/8XJR3PeRfEwoaHDcvFNvN3Q=;
-        b=GZwC+E7xNIeb2xKLh43SvohY7MwWXFMJyUlVgsFTYWV0tPNwo1y4OIF9sHiK+E7IcJ
-         UvhhADJ3jrcERseogTtKqLo14GDrAQY/77IWZWmTdNMGRrR0iHaM69oseuuhG0gTtMhe
-         kKrKS5cWjZsNYlFW3DnlMiaT1TEuVzR02el/hh6KC9lE0y+kJyctTYt2nOqY84C6gDPB
-         O7fxhP+moCDoISAjXMdvcJAdAbua17ACh8n75M5v0oIDF1zW8UQ9NXOCSZyi7lBBqGX9
-         M8pXyWMkBP+ufXOoYzOvSB5nsL8rZ4ul040q12VjQcHDNQnbYl00UQZS4OoJFv05gRVo
-         ovbg==
-X-Forwarded-Encrypted: i=1; AJvYcCURnHWjaXsaEkHs/hHfTDXfv1pgdfQWNluj5j88rwL0BeFo6k+pDVM93kMXW9n/XJ+l7UPuGLHAruw8XIKP@vger.kernel.org, AJvYcCUfkAzfavoqIjIo3IGzlV9p+KjdAhteYkba5iX5AM++aCwX9Q9elXiWyEGIyrfy8ORiafaP0dMNdEU1@vger.kernel.org, AJvYcCWtBcUbVPJffoPe/WL8fAElWEth2fvqRy+iB2ylp9+rdB/5xnInJsuKS2Pwxh8ri46Jj8I199znAFsP@vger.kernel.org, AJvYcCXZx3J0Nbw3aIulmPADvMmBXsiLcp1FIkHZe6EyQp7jty7wZ5NEPZlkoxbsxjPgzg70IOeJ8tQEi07H@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP2PuxoOIlLh8OD1oltmo2nq8qU2rZvzHSrQu3MSIUfbCAD3x6
-	DZ+3uSZRYoJidMwFmHTadGfHmatcXBxuPnavH4vt0LHor8yjtF9kfu3Z8uFtfk3pDMICXUgVW6r
-	lD8Xv2cofmPU+sLoTjrbcUI82ijw/qzfQutF+g/0=
-X-Gm-Gg: ASbGncu1bCbHwr5Qoo/AZzlVSf5ppn3PuY3Vm+dsB44UfrdHGwasQdtg+DHmetVYjwV
-	AJApRCjRaaQxO8vluSPvx9Uud4Y6JxAkAWuXTEVQVpsb3Y4MhNjWy1Ml8GUka+MIm23t+W53Auo
-	SRKUVV56q/+XhFkJpih8F1dTBrx9werQ0YrErwvcQhCtB5jc8i0XborqG+cov29lFoPIzncq42o
-	UpB/d0=
-X-Google-Smtp-Source: AGHT+IFLFaJZMNtcY4bSeieEVUiOrD9u71emls8SkXMWkt+Cd9A3UVgZvQN5+DgDo/fD1simHs+bT5eet1sbhBXtbNA=
-X-Received: by 2002:a17:907:8694:b0:aff:1586:14c2 with SMTP id
- a640c23a62f3a-b01d8a58373mr129215966b.4.1756540662463; Sat, 30 Aug 2025
- 00:57:42 -0700 (PDT)
+	s=arc-20240116; t=1756555762; c=relaxed/simple;
+	bh=1+xq6OH5070SzEoSMljxDD2Dtf3DYllZFYJcUxswmQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pM6+skPsRf0+P7N3r+lPYB8SV/rwDUH3PJ20BjUlvHP9FoRUcun2koN2mSuPR8C7nVstCyf8rUiexroCrD8cMjUGeZRPjeIdsIDEU+xbaqgie43MImBZ/rAk5cYnijMk/sRvQxQAsirwhXoWy0Y+6XnVQkoGTFwgR2QsPM3vgjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XpQZjXeM; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756555759; x=1788091759;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1+xq6OH5070SzEoSMljxDD2Dtf3DYllZFYJcUxswmQo=;
+  b=XpQZjXeMlGd/eRixVem5MjRl1MwW1mArgTCc9LxvcWrfEDtIpfT5Fe88
+   ySgHHYEA/Kwi/FSEcRuh3fXeVfD8FVgLA5pa1aMNV3YA5TTg9Fk4V9zcx
+   4h0jTeqIpiHGFn9lcyULMMAcLSjCj/adXvEYMjHiRk7SRkQ++3GEBnFHQ
+   cugRKpN78rmEEeyMluJnnbWrZbwlkNfLL3nl5vy+gvfVs/ipFbGge5AVk
+   U7Inwe94l2+fu+siC623WUkSMrev8jbftbnm0f+fbFPm/C9Fi+s38KcEi
+   pTh0bAFVRHAGgz1YHx2EKj+PGZBLWXc0DzWK39gQijdCz5Ma9knNfoOM1
+   A==;
+X-CSE-ConnectionGUID: neV2N1BhTA+5fB6fZ7/XGg==
+X-CSE-MsgGUID: GAipdPOhShyqFHdFMfxKfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="81415163"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="81415163"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2025 05:09:19 -0700
+X-CSE-ConnectionGUID: CDsjC0QASdmYqG2IE1GfVA==
+X-CSE-MsgGUID: 0TCqgrzkQ76l4KQQn0hFRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="174931769"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 30 Aug 2025 05:09:14 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1usKOB-000VLL-1G;
+	Sat, 30 Aug 2025 12:09:04 +0000
+Date: Sat, 30 Aug 2025 20:08:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
+	Michael.Hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
+	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, broonie@kernel.org,
+	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
+	ahaslam@baylibre.com, sergiu.cuciurean@analog.com,
+	tgamblin@baylibre.com, marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH 07/15] iio: adc: ad4030: Add SPI offload support
+Message-ID: <202508301919.3TZbcu20-lkp@intel.com>
+References: <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1756511030.git.marcelo.schmitt@analog.com> <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
-In-Reply-To: <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sat, 30 Aug 2025 10:57:06 +0300
-X-Gm-Features: Ac12FXyTcea0WOAjGBKoJRyBZ-wQfLv5c18Ob1a_Rdr7ObF9Kvv_OchzjH_ruYw
-Message-ID: <CAHp75VdeSqwVecJHx+jXn9++zgN+CBH56OGUYX5kBbdc0AFKSA@mail.gmail.com>
-Subject: Re: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and ADAQ4224
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-spi@vger.kernel.org, jic23@kernel.org, Michael.Hennerich@analog.com, 
-	nuno.sa@analog.com, eblanc@baylibre.com, dlechner@baylibre.com, 
-	andy@kernel.org, corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, broonie@kernel.org, Jonathan.Cameron@huawei.com, 
-	andriy.shevchenko@linux.intel.com, ahaslam@baylibre.com, 
-	marcelo.schmitt1@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
 
-On Sat, Aug 30, 2025 at 3:46=E2=80=AFAM Marcelo Schmitt
-<marcelo.schmitt@analog.com> wrote:
->
-> ADAQ4216 and ADAQ4224 are similar to AD4030, but feature a PGA circuitry
-> that scales the analog input signal prior to it reaching the ADC. The PGA
-> is controlled through a pair of pins (A0 and A1) whose state define the
-> gain that is applied to the input signal.
->
-> Add support for ADAQ4216 and ADAQ4224. Provide a list of PGA options
-> through the IIO device channel scale available interface and enable contr=
-ol
-> of the PGA through the channel scale interface.
+Hi Marcelo,
 
-...
+kernel test robot noticed the following build errors:
 
->  /* Datasheet says 9.8ns, so use the closest integer value */
->  #define AD4030_TQUIET_CNV_DELAY_NS     10
+[auto build test ERROR on 91812d3843409c235f336f32f1c37ddc790f1e03]
 
-You already used that in one of the previous patches, can you move
-there this one and use instead of magic +=3D 10?
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/iio-adc-ad4030-Fix-_scale-for-when-oversampling-is-enabled/20250830-084901
+base:   91812d3843409c235f336f32f1c37ddc790f1e03
+patch link:    https://lore.kernel.org/r/0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt%40analog.com
+patch subject: [PATCH 07/15] iio: adc: ad4030: Add SPI offload support
+config: x86_64-buildonly-randconfig-005-20250830 (https://download.01.org/0day-ci/archive/20250830/202508301919.3TZbcu20-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250830/202508301919.3TZbcu20-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508301919.3TZbcu20-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/iio/adc/ad4030.c: In function '__ad4030_set_sampling_freq':
+>> drivers/iio/adc/ad4030.c:518:23: error: implicit declaration of function 'pwm_round_waveform_might_sleep' [-Werror=implicit-function-declaration]
+     518 |                 ret = pwm_round_waveform_might_sleep(st->conv_trigger, &conv_wf);
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/adc/ad4030.c: In function 'ad4030_offload_buffer_postenable':
+>> drivers/iio/adc/ad4030.c:1055:15: error: implicit declaration of function 'pwm_set_waveform_might_sleep' [-Werror=implicit-function-declaration]
+    1055 |         ret = pwm_set_waveform_might_sleep(st->conv_trigger, &st->conv_wf, false);
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-> +/* HARDWARE_GAIN */
-> +#define ADAQ4616_PGA_PINS              2
-> +#define ADAQ4616_GAIN_MAX_NANO         6666666667
+vim +/pwm_round_waveform_might_sleep +518 drivers/iio/adc/ad4030.c
 
-Can we use calculus instead (people can't count properly after 3 :-)?
-Something like this
+   496	
+   497	static int __ad4030_set_sampling_freq(struct ad4030_state *st, unsigned int freq)
+   498	{
+   499		struct spi_offload_trigger_config *config = &st->offload_trigger_config;
+   500		struct pwm_waveform conv_wf = { };
+   501		u64 offload_period_ns;
+   502		u64 offload_offset_ns;
+   503		u32 mode;
+   504		int ret;
+   505		u64 target = AD4030_TCNVH_NS;
+   506	
+   507		conv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
+   508		/*
+   509		 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
+   510		 * rounded PWM's value is less than 10, increase the target value by 10
+   511		 * and attempt to round the waveform again, until the value is at least
+   512		 * 10 ns. Use a separate variable to represent the target in case the
+   513		 * rounding is severe enough to keep putting the first few results under
+   514		 * the minimum 10ns condition checked by the while loop.
+   515		 */
+   516		do {
+   517			conv_wf.duty_length_ns = target;
+ > 518			ret = pwm_round_waveform_might_sleep(st->conv_trigger, &conv_wf);
+   519			if (ret)
+   520				return ret;
+   521			target += 10;
+   522		} while (conv_wf.duty_length_ns < 10);
+   523	
+   524		offload_period_ns = conv_wf.period_length_ns;
+   525	
+   526		ret = regmap_read(st->regmap, AD4030_REG_MODES, &mode);
+   527		if (ret)
+   528			return ret;
+   529		if (FIELD_GET(AD4030_REG_MODES_MASK_OUT_DATA_MODE, mode) == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF) {
+   530			u32 avg;
+   531	
+   532			ret = regmap_read(st->regmap, AD4030_REG_AVG, &avg);
+   533			if (ret)
+   534				return ret;
+   535	
+   536			offload_period_ns <<= FIELD_GET(AD4030_REG_AVG_MASK_AVG_VAL, avg);
+   537		}
+   538	
+   539		config->periodic.frequency_hz =  DIV_ROUND_UP_ULL(NSEC_PER_SEC,
+   540								  offload_period_ns);
+   541	
+   542		/*
+   543		 * The hardware does the capture on zone 2 (when spi trigger PWM
+   544		 * is used). This means that the spi trigger signal should happen at
+   545		 * tsync + tquiet_con_delay being tsync the conversion signal period
+   546		 * and tquiet_con_delay 9.8ns. Hence set the PWM phase accordingly.
+   547		 *
+   548		 * The PWM waveform API only supports nanosecond resolution right now,
+   549		 * so round this setting to the closest available value.
+   550		 */
+   551		offload_offset_ns = AD4030_TQUIET_CNV_DELAY_NS;
+   552		do {
+   553			config->periodic.offset_ns = offload_offset_ns;
+   554			ret = spi_offload_trigger_validate(st->offload_trigger, config);
+   555			if (ret)
+   556				return ret;
+   557			offload_offset_ns += 10;
+   558	
+   559		} while (config->periodic.offset_ns < AD4030_TQUIET_CNV_DELAY_NS);
+   560	
+   561		st->conv_wf = conv_wf;
+   562	
+   563		return 0;
+   564	}
+   565	
 
-(NANO * 2 / 3) // whoever in the above it's 20 and this puzzles me how
-something with _NANO can be so big :-)
-
-...
-
-> +/*
-> + * Gains computed as fractions of 1000 so they can be expressed by integ=
-ers.
-> + */
-> +static const int ad4030_hw_gains[] =3D {
-> +       333, 556, 2222, 6667,
-
-Again, instead of comment (or in addition to) this can be written as
-
-1000 / 3, 5000 / 9, 20000 / 9, 20000 / 3,
-
-Let the compiler do its job.
-
-> +};
-> +
-> +static const int ad4030_hw_gains_frac[4][2] =3D {
-
-Drop 4
-
-> +       { 1, 3 },  /* 1/3 gain */
-> +       { 5, 9 },  /* 5/9 gain */
-> +       { 20, 9 }, /* 20/9 gain */
-> +       { 20, 3 }, /* 20/3 gain */
-> +};
-
-...
-
-> +static int ad4030_write_raw_get_fmt(struct iio_dev *indio_dev,
-> +                                   struct iio_chan_spec const *chan, lon=
-g mask)
-> +{
-> +       switch (mask) {
-> +       case IIO_CHAN_INFO_SCALE:
-> +               return IIO_VAL_INT_PLUS_NANO;
-> +       default:
-> +               return IIO_VAL_INT_PLUS_MICRO;
-> +       }
-
-> +       return -EINVAL;
-
-What's the point of this return?
-
-> +}
-
-...
-
-> +static int ad4030_setup_pga(struct device *dev, struct iio_dev *indio_de=
-v,
-> +                           struct ad4030_state *st)
-> +{
-> +       unsigned int i;
-> +       int pga_value;
-> +       int ret;
-> +
-> +       ret =3D device_property_read_u32(dev, "adi,pga-value", &pga_value=
-);
-> +       if (ret && ret !=3D -EINVAL)
-> +               return dev_err_probe(dev, ret, "Failed to get PGA value.\=
-n"
-> +
-> +       if (ret =3D=3D -EINVAL) {
-
-This can be done differently, i.e. check for EINVAL first and in
-'else' branch check for other ret !=3D 0. This will deduplicate the
-EINVAL check.
-
-> +               /* Setup GPIOs for PGA control */
-> +               st->pga_gpios =3D devm_gpiod_get_array(dev, "pga", GPIOD_=
-OUT_LOW);
-> +               if (IS_ERR(st->pga_gpios))
-> +                       return dev_err_probe(dev, PTR_ERR(st->pga_gpios),
-> +                                            "Failed to get PGA gpios.\n"=
-);
-> +
-> +               if (st->pga_gpios->ndescs !=3D 2)
-> +                       return dev_err_probe(dev, -EINVAL,
-> +                                            "Expected 2 GPIOs for PGA co=
-ntrol.\n");
-> +
-> +               st->scale_avail_size =3D ARRAY_SIZE(ad4030_hw_gains);
-> +               st->pga_index =3D 0;
-> +               return ad4030_set_pga_gain(st);
-> +       }
-
-...
-
-> +       .max_sample_rate_hz =3D 2 * MEGA,
-
-HZ_PER_MHZ
-
-...
-
-> +       .max_sample_rate_hz =3D 2 * MEGA,
-
-Ditto.
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
