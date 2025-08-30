@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-9824-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9825-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23087B3CE39
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 19:33:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17560B3CE7B
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 20:02:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55FE8189E64C
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 17:33:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D99B1B25E37
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 18:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47132D47E2;
-	Sat, 30 Aug 2025 17:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06FC2C237F;
+	Sat, 30 Aug 2025 18:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="1cbToZpi"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="d4kFHbRn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417BC22157E
-	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 17:33:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DB326F2A8
+	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 18:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756575190; cv=none; b=HMfGcfDVKKLlyuAuxfZgSYs07bVrhVzrVZjne13TFDqbZEG9yl40NV7/SfD7lwRGCA5JLgKgzjz4zB4r791hV42YIGpc0chi+as3IHx4IIVPcoFyjphSE42EnMH28BcVMHbXne0ASu7Zwe79mtAoB5/IlopaP56Ya6Noh96giHk=
+	t=1756576952; cv=none; b=kVagJ1Me2hqar5EV3YdYgoPtSpmgwFWFr5CtLvpf3tXjyypUVviDT3O61z5JhUYc+w6pur/h5JCmlGOgupnVlKvH7ihvshv14W277gf6To3fLGxK5ZxZorytArlD5Xjq9dQojZyAQGzANOdriZOWA++M9mekpL8Ts9xm7Yj+yUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756575190; c=relaxed/simple;
-	bh=Vya6+lJmTJWfY/M8wUra0srurpA1liqHsz60MVER1eg=;
+	s=arc-20240116; t=1756576952; c=relaxed/simple;
+	bh=LL1hd9q8LJpTq1VIPJ6jPwhtJlsQGlDix5UjkykB4Z0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VABxF8EO3GbVyj0/nznR/cmO+L2PVRFKdZTvLl10XndFj8DZYYOqNnlIVDmFNClWJ3yiaWU3WAC9s0uj7ukUY7VaDWfQwbkAg3jFkW60wIYb1X+qRaI7C0RcjNVUA6gC9B7V7FSRvIkdD8Jwj1FQfh5cBGKjrbFLzRtTzdRvaHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=1cbToZpi; arc=none smtp.client-ip=209.85.160.47
+	 In-Reply-To:Content-Type; b=eGbw4XAtwkiDWXoCRQznUUcJx3S/W3eESftz2L6Vrys5v/Y2ivA0lxyuZMs0MNhH4t8HkOyCGy6SXsz20Jic2npzM4rSfulx9STt3mIhX62Z3UscuTGdL6w9ZMXv3T72tZ7j2IQIRjaJhKVeQwfRZ1eWqJoJB3FiTifrrJ9BSpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=d4kFHbRn; arc=none smtp.client-ip=209.85.160.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-30cce5be7d0so1343912fac.0
-        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 10:33:07 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-315a0b68314so2627889fac.0
+        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 11:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756575186; x=1757179986; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756576950; x=1757181750; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UwGfxy65ZWGgnex0UcGnWFkAe5/xQalwPutBYQHrYU0=;
-        b=1cbToZpi2/q9zCSHq8cYBfTH1RjbdXdQRgzYH+U8VF4TRyJwx/Pjfuwt3XWvXfEZ3O
-         hyda4xkvT3rp9kNq5NESq9/eUbiWrs2jxXoKZiyrr9rQ6qWewVXbTyyTX9WG7/QBS7mA
-         i9TCg3scXUoZqEK7Tt1dkPacrBXfAWxqh7Zn0EUMCkwmnlpISmQ51T6vyp8/Pstdk7pB
-         YLwjfM78DSZV0MyETDNhRN0RCzKeyDpl69INMjyhA7aL7Q8y7J/pWiBAe5iijdez7zM6
-         CnS/k195tOfluSr8ItPZRt0c9XgsmhG79cQIbVzrHnVXoD0upuPisT5JM6FXW/+SRQde
-         BJAA==
+        bh=PD2EKFpAobF4U0TIuLMjpEcO1H/Nnyn+f8Dfu+DnkNI=;
+        b=d4kFHbRnKQoKXBWL1zWyAwAs9XrZhybRacslpYsfOE/8svlNjSAa8Db/NCLXxiJRfA
+         J2QD4/foHnDmHwjuCSsOjuJdbemw7PsoCS5Uu6HXPTYCRCgcgnVvheVSKQyQpip6/XBP
+         MXz5Fm4B1McmU3Wff8PnTJzziO8LqKydzV6W7lgjTSLztkWWi8KoF8jJh5zTod8q8sIa
+         wdfUEv0LJL8woK7iGwOs86dgFktN/7oUDsaxpR4w8skkPSaKoxIEI7ZTIEdD0ImcJ/2B
+         NNHGtdWgXgCxV140u8AZQooK2BGzWxAuHzVH5fzMh7d38ELATTJP4PjnOCL/xLmLDsBH
+         4Piw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756575186; x=1757179986;
+        d=1e100.net; s=20230601; t=1756576950; x=1757181750;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwGfxy65ZWGgnex0UcGnWFkAe5/xQalwPutBYQHrYU0=;
-        b=BgiSLYk2zCg3LrsvmZGY4eJ/RM0xUB96OALVh2ogV23ppzD1PFf0EjhPxRedjnnTu2
-         wrTxjdpsJUIU6eLZZT7SK0RozRdV0fRx1x3B0K8fFhKWShs0Hve/0lK1+iQ3JpTfECXN
-         W9jBYqua2WOkSLKTXE2Y5bXMq3L6cHA3euv4auMs7eK4VrL+w4Fdq++Afkw9PmT6YQvH
-         RLsKKKehZRm/d47w7Yf991vyv3lpr0sIKPuFF1DGJWM5hKS8h12ZIGC6pIJYdFSUzwH/
-         ABXm4NO6+ag0Syfa9GIiqZBuYlq4d1ZevzdwkQAfA1qjcKIIE9JH93f08geK1ri20GlB
-         Puww==
-X-Forwarded-Encrypted: i=1; AJvYcCU9gPHa78Or/ZJ0klXO8VIrRFaeR8X4NzMVfhsO0oOZSXFBP5q8eM6KXO/C50aYv3xZdBunzC0wlSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydLJ82xd4ScANEinf0Iy2VDztunntUJIRoy/eoKJzgnQ23vWs6
-	EVFewOkBgCqutCK9vfzzx+gX1Kh2EHZoWX4ziHyR7x89oUlf11diW4q034qkvXCUtnQ=
-X-Gm-Gg: ASbGnctUX8Ymgu3j0TiNjD2CM6bn4blXC5yHOVPokILlB+2ye/iZhBfF7O0L7c4AGLc
-	6Hj90wnBysKLx/rkAO2q84a2mGSS5ZAKI+oO5YUux7yGU62+jKN7ftWnIh/e+MrWRi3KlZ2Y1cj
-	ec3C9BpkyG25UY0mLVtq5ArA4UUsoxuciJwyHavMH2i9TpKKyCFtQtKT58BF5AOWebVOoi5EH3b
-	QXBvMJ3Buq/kWbWYs52tF6ppeydHnJdhfdkaU5xmycYobgvAoDTTa5PpByibngB8MekKI0GlUO6
-	gAmX20Yi+YGejKPBsT5TebTptAMGR0jzVpUl5Bmm5iCGzSIf5slGVa5M8J/2qC+VJcdq3BldHG4
-	8G5nMWfIDlP6LZX7R1/V5miky5IHqrsOphzjuWLHunHroL102XirXhPfa5hTam6igaJzBVstcJa
-	m5/ShuyFi76g==
-X-Google-Smtp-Source: AGHT+IFcICIgTAwdd2cegX4yfW7wbywNdgh/DYrUWm0XZ+08pLIWWYSQjsp1DI9hm/xDxEm0jp5Vpg==
-X-Received: by 2002:a05:6871:b0d:b0:315:351d:bcf2 with SMTP id 586e51a60fabf-3196307edcfmr1120526fac.2.1756575186272;
-        Sat, 30 Aug 2025 10:33:06 -0700 (PDT)
+        bh=PD2EKFpAobF4U0TIuLMjpEcO1H/Nnyn+f8Dfu+DnkNI=;
+        b=VSyMuhte58mKeI9PfYUAEwAya6Dj/FSL4GJ9LWQWuevdoE2YNFAWE9XFOtCBTyCRDp
+         GYwf1iXEw1Bgk9PYqU9FrpnRsIl7MCZ/s5rAhr/+3+ejPSRFAtuQPu62rjMi7D/11vk1
+         0HoghdBAeUvuQlXYwztE4ccGisqu5ZR8qZPG86QWI6DyVyPByJg5n/GntjFxPe1y+0co
+         cwN2AsPVc8FIKLCHlyhvoe12XoWvV1L5K4O0lZWnUb6gk4K8KTjpOxRqBn04++XZmcn4
+         veixOqDClnAh2+eDQ2LIafphy9MYOBwLhKOAAB+T4iMZyTS5Z9u7/azbYBS+Y7gawcis
+         XJPA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfY/2YEbzj756hUjCSinYa75CoYqgdAqbtgC8ncD+GeOzaXRDFAV5oA75W5qnpHKBCrfeENdB05HU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw92vIVHVj65X+4iiMNfy2inVKf8qbp0cR8hP/a7ZfuFmIR73ik
+	iM7O5UYfF3b6KQ9a/WMQ6r5Xcou7PeSXuWeWaOi+PBsgmnJCIGEZ28SjK/Uo0Ql6CfA=
+X-Gm-Gg: ASbGncuLKWtyzhx16/dsjYwMkHkydXYSOZcxAs6Lj6DG0GGZOkHb9DX6eonwPCdcdyb
+	IDRgBj2wMBcyPf5xKLqB/MVEaqe15taHxJZLZjwD3IiRvOQhbxq50KHJu2fJGsVNEXheaw7xgCk
+	BNG/Zyinf1mHeA17QNxUjkXBMz6E0mM9ErpE449sdLv6Xt61bUShhaxCYBhZZ/Ztf+6Yf5nBA1x
+	uk/jcnsoeWSaG7cZh0jDuwzVYGXifC+Qpw+XjrWhCvrm/sFb5b5VQHVkQqJo9ZFuww2m6B3zvDE
+	LKkpxxcIo6jeo+fAqdiQdH87BpgDt+hcXbtBZG4CIxfkDn2hl/8kOD4j0dz0wnVwtzBVPlGYee/
+	kfoQjWmO4AoCq0+9JmXskKVbX5ovvlnO1CI18f1fauVOxKT777vsrj+6/XKL3ajMyd+OzeA8t/i
+	qHSNi1Fay7Hg==
+X-Google-Smtp-Source: AGHT+IGSJvFvC9dcmKaGf9glwESPFKs7sboRW3GSWHC52Tz6jlzKsP6xrkD7Hc7UHEkT8qvw/3aY5Q==
+X-Received: by 2002:a05:6870:c0d:b0:315:b768:bd23 with SMTP id 586e51a60fabf-319633c79a1mr1298016fac.34.1756576949951;
+        Sat, 30 Aug 2025 11:02:29 -0700 (PDT)
 Received: from ?IPV6:2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d? ([2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3196d4c1132sm369525fac.28.2025.08.30.10.33.04
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3196d2a7f3csm392769fac.8.2025.08.30.11.02.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Aug 2025 10:33:04 -0700 (PDT)
-Message-ID: <bb8f120b-db75-4dbf-8473-3ef6f340c38a@baylibre.com>
-Date: Sat, 30 Aug 2025 12:33:04 -0500
+        Sat, 30 Aug 2025 11:02:29 -0700 (PDT)
+Message-ID: <033e8639-67db-4397-b8c1-d1b7774eb9fe@baylibre.com>
+Date: Sat, 30 Aug 2025 13:02:28 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,7 +83,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/15] iio: adc: ad4030: Enable dual data rate
+Subject: Re: [PATCH 10/15] dt-bindings: iio: adc: adi,ad4030: Add
+ adi,clock-mode
 To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-spi@vger.kernel.org
@@ -93,78 +94,67 @@ Cc: jic23@kernel.org, Michael.Hennerich@analog.com, nuno.sa@analog.com,
  Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
  ahaslam@baylibre.com, sergiu.cuciurean@analog.com, marcelo.schmitt1@gmail.com
 References: <cover.1756511030.git.marcelo.schmitt@analog.com>
- <47b2cf01555c31126bc2133526317c7829cb59ab.1756511030.git.marcelo.schmitt@analog.com>
+ <1acb071f7140c9d44ed616a9eaea00b0ee423164.1756511030.git.marcelo.schmitt@analog.com>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <47b2cf01555c31126bc2133526317c7829cb59ab.1756511030.git.marcelo.schmitt@analog.com>
+In-Reply-To: <1acb071f7140c9d44ed616a9eaea00b0ee423164.1756511030.git.marcelo.schmitt@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/29/25 7:45 PM, Marcelo Schmitt wrote:
-> Set AD4030 series device to do two data bit transitions per clock cycle per
-> active lane when specified by firmware. The dual data rate (DDR) feature is
-> available only for host clock mode and echo clock mode.
+On 8/29/25 7:43 PM, Marcelo Schmitt wrote:
+> AD4030 and similar designs support three different options for the clock
+> that frames ADC output data. Each option implies a different hardware
+> configuration for reading ADC data. Document AD4030 clock mode options.
 > 
 > Co-developed-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
 > Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
 > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
 > ---
->  drivers/iio/adc/ad4030.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  .../devicetree/bindings/iio/adc/adi,ad4030.yaml      | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/drivers/iio/adc/ad4030.c b/drivers/iio/adc/ad4030.c
-> index a5931056936a..37ba00097efe 100644
-> --- a/drivers/iio/adc/ad4030.c
-> +++ b/drivers/iio/adc/ad4030.c
-> @@ -74,6 +74,7 @@
->  	(AD4030_REG_GAIN_X0_MSB + (AD4030_REG_GAIN_BYTES_NB * (ch)))
->  #define AD4030_REG_MODES			0x20
->  #define     AD4030_REG_MODES_MASK_OUT_DATA_MODE	GENMASK(2, 0)
-> +#define     AD4030_REG_MODES_MASK_DDR_MODE	BIT(3)
->  #define     AD4030_REG_MODES_MASK_CLOCK_MODE	GENMASK(5, 4)
->  #define     AD4030_REG_MODES_MASK_LANE_MODE	GENMASK(7, 6)
->  #define AD4030_REG_OSCILATOR			0x21
-> @@ -175,6 +176,7 @@ struct ad4030_state {
->  	enum ad4030_out_mode mode;
->  	enum ad4030_lane_mode lane_mode;
->  	enum ad4030_clock_mode clock_mode;
-> +	bool ddr;
->  	/* offload sampling spi message */
->  	struct spi_transfer offload_xfer;
->  	struct spi_message offload_msg;
-> @@ -1218,6 +1220,9 @@ static void ad4030_prepare_offload_msg(struct ad4030_state *st)
->  	else
->  		offload_bpw  = data_width / (1 << st->lane_mode);
+> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> index bee85087a7b2..1e4e025b835f 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> @@ -78,6 +78,18 @@ properties:
+>    interrupt-names:
+>      const: busy
 >  
-> +	if (st->ddr)
-> +		offload_bpw  /= 2;
+> +  adi,clock-mode:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    enum: [ spi, echo, host ]
+> +    default: spi
+> +    description:
+> +      Describes how the clock that frames ADC data output is setup.
+> +      spi  - Spi-compatible. Normal SPI operation clocking.
+> +      echo - Echo-clock. Synchronous clock echoing to ease timing requirements
+> +             when using isolation on the digital interface.
+> +      host - Host. The Host clock mode uses an internal oscillator to clock out
+> +             the data bits. In this mode, the spi controller is not driving SCLK.
 > +
+>  required:
+>    - compatible
+>    - reg
 
-There is already an existing dtr_mode flag in struct spi_transfer. We should
-be using that instead of providing an inaccurate bits per word value.
+I think this would make sense as a common property in spi-peripheral-props.yaml
+as this is something that is not specific to just this ADC and also requires
+a supporting SPI controller with the matching wiring.
 
->  	st->offload_xfer.speed_hz = AD4030_SPI_MAX_REG_XFER_SPEED;
->  	st->offload_xfer.bits_per_word = offload_bpw;
->  	st->offload_xfer.len = roundup_pow_of_two(BITS_TO_BYTES(offload_bpw));
-> @@ -1271,6 +1276,12 @@ static int ad4030_config(struct ad4030_state *st)
->  	reg_modes |= FIELD_PREP(AD4030_REG_MODES_MASK_CLOCK_MODE,
->  				ret >= 0 ? ret : AD4030_SPI_CLOCK_MODE);
->  
-> +	/* DDR is only valid for echo clock and host clock modes */
-> +	if (ret == AD4030_ECHO_CLOCK_MODE || ret == AD4030_CLOCK_HOST_MODE) {
-> +		st->ddr = device_property_read_bool(dev, "adi,dual-data-rate");
+I would also tweak the names and descriptions a bit to describe how it is wired
+rather than how it is used.
 
-As mentioned in the dt-bindings patch review, we can already get this info
-from the spi controller via dtr_caps. 
+  spi-sclk-source:
+    enum: [ controller, echo, peripheral ]
+    default: controller
+    description: |
+      Indicates how the SCLK is wired.
+      controller: The SCLK line is driven by the controller (typical SPI bus).
+      echo: The SCLK line is driven by the controller and the peripheral echos
+        the clock back to an input on the controller on a second line.
+      peripheral: The SCLK line from the controller is not connected to the
+        peripheral and an independent clock output driven by the peripheral is
+        connected to an input on the controller.
 
-> +		reg_modes |= FIELD_PREP(AD4030_REG_MODES_MASK_DDR_MODE, st->ddr);
-> +	}
-> +
->  	ret = regmap_write(st->regmap, AD4030_REG_MODES, reg_modes);
->  	if (ret)
->  		return ret;
 
-We will need a separate patch to add support for dtr_caps and dtr_mode to the
-axi-spi-engine driver. And likely some HDL work for that as well. So I would
-suggest splitting this out into a separate series.
 
