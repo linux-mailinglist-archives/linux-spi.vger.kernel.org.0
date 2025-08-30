@@ -1,81 +1,81 @@
-Return-Path: <linux-spi+bounces-9822-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9823-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE20CB3CE00
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 19:19:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B4E8B3CE23
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 19:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8C1F2059CE
-	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 17:19:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A7E01896121
+	for <lists+linux-spi@lfdr.de>; Sat, 30 Aug 2025 17:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D66260568;
-	Sat, 30 Aug 2025 17:19:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B652C21D6;
+	Sat, 30 Aug 2025 17:27:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gYU1S8ny"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="isE7FOyN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EB823D7DC
-	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 17:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2F2253359
+	for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 17:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756574349; cv=none; b=EzrAD7fVAn6cdoHcpOe0t3rxwP4YNCGfx/xVeDemsWpaNG9jCqwrJTis86YCK9ZfqqA9oyLD8xCi/917mZYju3b4jhhK6tLwMDS26p4zcY5c4FnaRLfC2Ov8N3mb2+IsFes2A/9b/samYSgAR7G52X0FtDbB7pYGMNPOsh7tqCo=
+	t=1756574868; cv=none; b=LCgRIiVQFAHdKuq6xRC75gtcH7JlllC5+8CBRdfzUG4P2jIMfTkX64UXWNnx6nKFp/kXVpzwsioa0KJ3VRoMOzVBauEe4KKysoKZwTPfWR3EfF1cUVwSVf58eIaTmmJft90HhgHYeMQOYve3ux/A43GiWLMpgrouABbt6Ts4ZiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756574349; c=relaxed/simple;
-	bh=UBHG+9SPy9usH/CpfwQR9J5CI7EPxyX/aq86W1GSMjs=;
+	s=arc-20240116; t=1756574868; c=relaxed/simple;
+	bh=1/ysBXym+F4ed535scygMvAdX/CCxBkFCgLW9wVuzJg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OZE5A4CSLVQrekXRQvmXvJxGhTLEAogdYDzgevl/nzpXXfPzIbKW7luh4s18EGL1wR5yyeXBL8sjH14SuO1fY5wWUbHv9TWx7tEWdPXQWsf0xmwTkksBQEYxFs/OIKAYOOZZskb1FGsOwuB8845GC31osF0eu2IPGoY1JyFcPm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gYU1S8ny; arc=none smtp.client-ip=209.85.160.54
+	 In-Reply-To:Content-Type; b=drLbsurdj+QGVa8cVHlcnMg7TnO+Woot1RqUO5GYDdhHpxJAmlv/Y/3a/R0PefVZ57AYwDpTsT5bvRwRFiMzA5rtfoh4J/58Iz2UrwdwKIdoohVyE3Wu3gck1QFohUuKr7DzZl2EXxPhC2h05cjDvOrsaeeEHHQSwPWOO9sdpkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=isE7FOyN; arc=none smtp.client-ip=209.85.160.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-30cceb749d7so1350005fac.2
-        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 10:19:07 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-315bab2917bso1807792fac.1
+        for <linux-spi@vger.kernel.org>; Sat, 30 Aug 2025 10:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756574346; x=1757179146; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1756574865; x=1757179665; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YeDVxheW4o9XBGPi8jw/Mc+wVOwdFH2KoFx58cVzgZw=;
-        b=gYU1S8nynrNsJhNYvJ104T0sCr/+c8fC5KyGI5mhkTvAW5zcduZVuU4c5F3U8VIeXv
-         21R6on+pbraPDN+IHAesKD/YG62DoVNTzNC/3fbVFsaXz2xRl19D9DlA7tacYsMCAOv2
-         ieKz+fplGr0VrXwrpVXUMurmey0Pi5dxXrPey7+HI9mbWsTF8NTd8xkl2lx24YEchwnH
-         9uTMnYB/d2jT80O8NoX+7mr5qnK6MNQIZX8GfPQzto8IqBOKJafOyhCURyDsePMBGyuG
-         kzzAEn4XPQ4hS83hiZGWVewxUBvWHC9luXLX/l0SqSsJw1ftTVwPYK8oCnO5FM0kxhKe
-         3yJg==
+        bh=WTyHRy33PmQnftPGTy/Bo7T/OCDGNcWJjyWm9Y1PPiA=;
+        b=isE7FOyNdJq2dhIlADbgCS3ItFbOG8V4AeLpv/Esobi6ifxuuXz8v7mTFUOi8fjWjw
+         GfBePZFHw4Y+LF3xHNjm2w8nbB1BvOoYJDbI7yW724YntpnhPi7SEhA1X9kk/EH/IFXO
+         jSZDz1m04ydU6cQ8Q2RpVHGmad2NtWMkeXnRIOqbisxJZ4c42RbRCMZrmKE8LMFmXILb
+         /zAwBahujtJ8QdlNPySLCwcp6A6fV4C9rYNunb7SRaTMJSmDoIg5UV9nTPkdSgPwoNyd
+         /dhAa9ee+XyWydgXJpzjSr6pdH6d+fPeaji1e1uQbIsdtgsMN8mkyDLt+H8WojD9FtIf
+         Sxgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756574346; x=1757179146;
+        d=1e100.net; s=20230601; t=1756574865; x=1757179665;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YeDVxheW4o9XBGPi8jw/Mc+wVOwdFH2KoFx58cVzgZw=;
-        b=R1Xg1k5K8S6t/mVS0aiyExpVssy0+3AEMteBFO0KI9KN+5bvo3PVg2d8qZYNE80wVT
-         hi/75tvLdwI/C8XV3cOy8mgZ2sJVNIG7SmngFoue+n0gYXVTa8cEnlt4t86TLUdYeN1k
-         Mnsv8DI7o5t8yIs75/vT+jbekwt0d+PV/2Gh2RwN2oW+kml87/INMVSzt/gwzvxQJJaz
-         WGhmRTQwEyDxv5lU3GlacdZfZ8vAIfZzZRNlnZA0A0VKap7kQsB9wk2X/1ZhMZpsUBAV
-         EtFvt5IWvDh5fnfp5cPr62tT+3CgDljaROvOrGRycfBoeg1U+aL77jbIsnYz2RmN9TW1
-         YBAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXHB651OYp7UbnocOQwl6MK08Z8rTN6pR+AHdv5cSERJry84Vpv24NmDyOaOk5AJ1jCWFznqa8woCQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIbTqLnAqRde7TAhkiP8rl1GTBI3gf6JsXMeyKn5BeadQJwGSk
-	46s7GQav4sc+rg2UTd4IxP07imI8AMNTC7N44W+PZJMElhPupASq0tKXMKQOrp9ObAg=
-X-Gm-Gg: ASbGncs4OOLnAnvBesDt0qfZ81J4lD8I/g3sCnaD6jKMbWBOb2xmegZiKynWK/CqZMv
-	6RHLEyeST0+RrNDDHzdlNONYlVA+0wj3k7aOZpZKjkiPh/tsChMOY7GjfisSpM17SY7cHYUJhnh
-	04vOr45IRHlT+iTMULkDRkr/Dln6FX8ypDhKgdG5dxhSJi/IeA2Pk4ZjZlmnSyxkwV9VExJ4eg+
-	1g1kBpwW0TqtycMBwvihKDOJaUuzcMxnO9/uG4ujRIbreaIDSZ9kNgupLnDmI+VOKGIYdYx89x8
-	G8TNhayOTBuFUe9ea6E5yP5JDNqQ4RHxBA0uy8SNxeh+Vblv6SmeU2tO38iVlBZHe5nPhDHcbBy
-	pEWNL2XXocLKmZf85Is3bnhoOXRIGv+t2OnmKxF+TsqeQVe6Oxx0MRCVV+7GPOgaxFMB8tfWzKT
-	NBasemH+X/kw==
-X-Google-Smtp-Source: AGHT+IFi29hPex54pz8o3psrTBeZJRuO4YVWG2tWpBUn2CBUnvUy3efI4Ysjb7trhSOOAHvvPg1ZIg==
-X-Received: by 2002:a05:6808:152c:b0:437:c839:ef67 with SMTP id 5614622812f47-437f7ca904fmr1009151b6e.3.1756574346490;
-        Sat, 30 Aug 2025 10:19:06 -0700 (PDT)
+        bh=WTyHRy33PmQnftPGTy/Bo7T/OCDGNcWJjyWm9Y1PPiA=;
+        b=H7KKHxPMT7jukbDMX5x4WEGYjVtSjhVoGLyO20YL0MgzNm3sXN8266hLvy1Am48ess
+         0SfxdZG+g3h3yZqsv05l/2QSJ4kjKvj86CZ0oobH2tQ+OSf8XEYp/HLeHp70djrY/5Sg
+         uj8E97Tt4VDd6DSGcC+Wc+NOBcQTmGKiyjFXRIEZgeAIJVt+Qk3DIxZmorBUTuRMIYyr
+         7TLs5nOGVA3hLLtaLk1EzVfUOZdrpLO6YSYK87nDeL1g2Z+nhks/rq2eag1tYXCQU6ub
+         oLvpui7SkRJuPnmgDEtQq2MhZp2G1scfvfsaKAU/Sx0DXgpf5Zqxog0YURWTQODtQOsR
+         Gi+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVZlXjWIlUfoOyq/MvV4KVIwOmZLq53Yi0gYUBbO5FcGbhosyMYsYEYCsG4B3K6CcibiS97WDJIkFI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxD9Tp9XQ0NJjyqAyP6y1am8CDYIApCeLAgC1RsY9B5Z/yr0zB/
+	cNuCk60QT9/Xsp9dXHS1JQb51yaPbvkPRawcOhUDjr8Uw3M9GgWCizXvkrsStDISWz4=
+X-Gm-Gg: ASbGncsC6PRgJ7hRm2O7Ff/vmobnPeCU77hsNjuVKFoA3T3kBaC41MYJDe4WORFyRHw
+	iR1/gBD7bvOI7eD0EfjysnplLxEzLahrTFgWk9ARjLAsQ9SzPE/wlh48QyWgvPjKwbPnMkHe+gl
+	WinTA1MXumbP6f44n1P0Oz6wk9cb8CGcOsvO3Cwe3eOPglN6uPi9AjAIXT56dNjSBvO+Ufuv259
+	266dsH2zqnUmvNTOZJ/9NbbetdecQM123+CUhz47XolOUtbvaT76GQ94KhrK3Qop/X55yA6NVz4
+	U42np51OdFEF5I/4PSQP6GOrGIpfmaqr4GryfP18Mkoc3TU9mHFcc/Gs6n18dGJ0nb0FttMD7+K
+	NTEC2B2ZmyjXATzN7aUCyCF/ZXyTIBq4DYvWgpnDaVGmvVQtCIOVW2zZ7mf7DPgMz4n5lHspVdI
+	8=
+X-Google-Smtp-Source: AGHT+IFru+arWS/AceeMu4bhAm1TOj/b+D2hCYkTnV2EgYzzfyEcSXDo/b8XHFyG33V9MkQqa25uBQ==
+X-Received: by 2002:a05:6871:8a7:b0:315:3453:5a1a with SMTP id 586e51a60fabf-31963386930mr1249422fac.14.1756574865348;
+        Sat, 30 Aug 2025 10:27:45 -0700 (PDT)
 Received: from ?IPV6:2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d? ([2600:8803:e7e4:1d00:f7b4:dfbd:5110:c59d])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-745742a672csm9076a34.13.2025.08.30.10.19.04
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3196d24601csm373137fac.2.2025.08.30.10.27.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Aug 2025 10:19:05 -0700 (PDT)
-Message-ID: <a9b64ad7-41ff-4428-b47a-e3b3e50670a3@baylibre.com>
-Date: Sat, 30 Aug 2025 12:19:04 -0500
+        Sat, 30 Aug 2025 10:27:43 -0700 (PDT)
+Message-ID: <5d03a10f-5281-49a7-b578-b45d7b69209c@baylibre.com>
+Date: Sat, 30 Aug 2025 12:27:42 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,8 +83,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/15] iio: adc: ad4030: Support multiple data lanes per
- channel
+Subject: Re: [PATCH 12/15] dt-bindings: iio: adc: adi,ad4030: Add
+ adi,dual-data-rate
 To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  devicetree@vger.kernel.org, linux-spi@vger.kernel.org
@@ -94,118 +94,22 @@ Cc: jic23@kernel.org, Michael.Hennerich@analog.com, nuno.sa@analog.com,
  Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
  ahaslam@baylibre.com, sergiu.cuciurean@analog.com, marcelo.schmitt1@gmail.com
 References: <cover.1756511030.git.marcelo.schmitt@analog.com>
- <4e2b2d07a255bb249a1dc40a4470c7e123d4213f.1756511030.git.marcelo.schmitt@analog.com>
+ <e65b8b6b14c8083a48915a7bc40b7521fc246860.1756511030.git.marcelo.schmitt@analog.com>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <4e2b2d07a255bb249a1dc40a4470c7e123d4213f.1756511030.git.marcelo.schmitt@analog.com>
+In-Reply-To: <e65b8b6b14c8083a48915a7bc40b7521fc246860.1756511030.git.marcelo.schmitt@analog.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/29/25 7:43 PM, Marcelo Schmitt wrote:
-> AD4030 and similar chips can output ADC sample data through 1, 2, or 4
-> lines per channel. The number of SPI lines the device uses to output data
-> is specified in firmware. Parse SPI read bus width setting from firmware
-> and configure the device to use that amount of lines to output data.
+On 8/29/25 7:44 PM, Marcelo Schmitt wrote:
+> On echo and host clock modes, AD4030 and similar devices can do two data
+> bit transitions per clock cycle per active lane. Document how to specify
+> dual data rate (DDR) feature for AD4030 series devices in device tree.
 > 
-> Co-developed-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
-> Signed-off-by: Sergiu Cuciurean <sergiu.cuciurean@analog.com>
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
-> ---
->  drivers/iio/adc/ad4030.c | 33 ++++++++++++++++++++++++++++++---
->  1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/ad4030.c b/drivers/iio/adc/ad4030.c
-> index 68f76432dbfd..e6c1c9be1632 100644
-> --- a/drivers/iio/adc/ad4030.c
-> +++ b/drivers/iio/adc/ad4030.c
-> @@ -20,6 +20,7 @@
->  #include <linux/iio/iio.h>
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/iio/triggered_buffer.h>
-> +#include <linux/log2.h>
->  #include <linux/pwm.h>
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
-> @@ -258,6 +259,10 @@ struct ad4030_state {
->  #define AD4030_OFFLOAD_CHAN_DIFF(_idx, _scan_type)			\
->  	__AD4030_CHAN_DIFF(_idx, _scan_type, 1)
->  
-> +static const int ad4030_rx_bus_width[] = {
-> +	1, 2, 4, 8,
-> +};
-> +
->  static const int ad4030_average_modes[] = {
->  	1, 2, 4, 8, 16, 32, 64, 128,
->  	256, 512, 1024, 2048, 4096, 8192, 16384, 32768,
-> @@ -1197,7 +1202,7 @@ static void ad4030_prepare_offload_msg(struct ad4030_state *st)
->  		 */
->  		offload_bpw = data_width * st->chip->num_voltage_inputs;
->  	else
-> -		offload_bpw  = data_width;
-> +		offload_bpw  = data_width / (1 << st->lane_mode);
-
-To make proper use of 2 or 4 lines for a single channel, we should be
-using the SPI APIs correctly and set rx_nbits in struct spi_transfer
-instead of providing an inaccurate bits per word.
-
->  
->  	st->offload_xfer.speed_hz = AD4030_SPI_MAX_REG_XFER_SPEED;
->  	st->offload_xfer.bits_per_word = offload_bpw;
-> @@ -1208,6 +1213,10 @@ static void ad4030_prepare_offload_msg(struct ad4030_state *st)
->  
->  static int ad4030_config(struct ad4030_state *st)
->  {
-> +	struct device *dev = &st->spi->dev;
-> +	const char *propname;
-> +	u32 rx_bus_width;
-> +	unsigned int i;
->  	int ret;
->  	u8 reg_modes;
->  
-> @@ -1215,10 +1224,28 @@ static int ad4030_config(struct ad4030_state *st)
->  	st->offset_avail[1] = 1;
->  	st->offset_avail[2] = BIT(st->chip->precision_bits - 1) - 1;
->  
-> -	if (st->chip->num_voltage_inputs > 1)
-> +	/* Optional property specifying the number of lanes to read ADC data */
-> +	propname = "spi-rx-bus-width";
-
-This property is already handled by the core SPI code and will set
-spi->mode flags SPI_RX_DUAL, SPI_RX_QUAD or SPI_RX_OCTAL. So we don't
-need to read the property again.
-
-> +	rx_bus_width = ad4030_rx_bus_width[0]; /* Default to 1 rx lane. */
-> +	device_property_read_u32(dev, propname, &rx_bus_width);
-> +	/* Check the rx bus width is valid */
-> +	for (i = 0; i < ARRAY_SIZE(ad4030_rx_bus_width); i++)
-> +		if (ad4030_rx_bus_width[i] == rx_bus_width)
-> +			break;
-> +
-> +	if (i >= ARRAY_SIZE(ad4030_rx_bus_width))
-> +		return dev_err_probe(dev, -EINVAL, "Invalid %s: %u\n",
-> +				     propname, rx_bus_width);
-> +
-> +	rx_bus_width = ad4030_rx_bus_width[i];
-> +
-> +	if (rx_bus_width == 8 && st->chip->num_voltage_inputs == 1)
-> +		return dev_err_probe(dev, -EINVAL, "1 channel with 8 lanes?\n");
-
-As mentioned in the dt-bindings patch review, we really should consider
-the 2 channel case separate as 2 SPI buses rather than 8 lines on a
-single bus. 
-
-Only using "spi-rx-bus-width" also has the shortcoming that if we specify
-4, we don't know if is it 4 lines on 1 channel or is it 2 lines each on 2
-channels? There is no way to tell from just that information.
-
-> +
-> +	if (rx_bus_width == 1 && st->chip->num_voltage_inputs > 1)
->  		st->lane_mode = AD4030_LANE_MD_INTERLEAVED;
->  	else
-> -		st->lane_mode = AD4030_LANE_MD_1_PER_CH;
-> +		st->lane_mode = ilog2(rx_bus_width / st->chip->num_voltage_inputs);
->  
->  	reg_modes = FIELD_PREP(AD4030_REG_MODES_MASK_LANE_MODE, st->lane_mode);
->  
+I don't think this needs to be in the devicetree. Dual data rate doesn't
+depend on wiring, it only depends on if the SPI controller supports it
+or not. The core SPI code in Linux already has dtr_caps for SPI controllers
+to indicate that they have DDR support. So an ADC driver can just check
+this flag to see if the controller supports it. No devicetree flags required.
 
 
