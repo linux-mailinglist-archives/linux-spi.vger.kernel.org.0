@@ -1,118 +1,162 @@
-Return-Path: <linux-spi+bounces-9833-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9834-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC4BB3DDAE
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 11:11:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3999B3E1FD
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 13:47:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC7DC3A257C
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 09:10:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA4D417F1D8
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 11:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95FEE304967;
-	Mon,  1 Sep 2025 09:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37045320380;
+	Mon,  1 Sep 2025 11:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SRO8+o3o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ia3UKCUv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB12E3043BA
-	for <linux-spi@vger.kernel.org>; Mon,  1 Sep 2025 09:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9777B31CA61
+	for <linux-spi@vger.kernel.org>; Mon,  1 Sep 2025 11:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756717824; cv=none; b=IUDdN8lAczwc24qR8ytnUHxqJ3qfSKTfZUTBRS2qy9nvDom8oF+N1AUgJHpL/whtNTmceU/2+vIS4+zAICKcnHR1sLTqH/1y8bWTa3Wf08mOsulj+BniKIi84pyOzBlT1lNSYTzk0cEkkKM3kD8wBMfKEMPmpUeVPltPq0ADomE=
+	t=1756727261; cv=none; b=UIr77IDa5HFhEdgPXE09eSP0B+xExuAvn/QT6M5aE6/hUO+SGfd/SOtd/E3FFYbp8jhAD/xlitHNvYP2/LzpCKfQ5vx3Fo28QdmBPk9JrIpqtP4AXIVmqJq+HafnavkWj6lxQWcCT+pJYGUxix0UY7a2AkAthzdiYysXu6bgGP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756717824; c=relaxed/simple;
-	bh=wHuP9vzcf0uxMcxpVzhAD7blzq8KbpGGUt0A4O2FaOY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dxFyn2PM9ELg6OtVcd7qVlAdfFG3sz5BSLmO0kfxKXxPNYR+OyJFvEjWW/bNy7HgDxccsIJJGSLMvNUVgoTMWye1cNh0aLmbYFCBvqqSlq4tbVjK2nUSv/5ZhBH6LVYbnpkWJJtM4q7DJ95X4jvVWvwPaJijyQtPemNKlbVbsLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SRO8+o3o; arc=none smtp.client-ip=209.85.221.48
+	s=arc-20240116; t=1756727261; c=relaxed/simple;
+	bh=wU+YtIjUdHrTJHGH2u24IDhC568tsl9YMJ7XuPW7+Vo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=Lv6l3ZF/tUU9U3N1hNRnQuEYvkgT6LuHWwhukfEsAviVaXa53W6geJOGh0it+RtLJ/a+KQHLG8p32I5TkjrdpfgT89CfrbogK7riXejE9RRm+YEdq5z0vBhIMpqZWcYASNRqOpCDzbOIjwMaT80nrAq1x71fDiqhs6v+ph20F9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ia3UKCUv; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3d1bf79d6afso1286433f8f.3
-        for <linux-spi@vger.kernel.org>; Mon, 01 Sep 2025 02:10:22 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45b84367affso18839095e9.3
+        for <linux-spi@vger.kernel.org>; Mon, 01 Sep 2025 04:47:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756717821; x=1757322621; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=meHf9Dzi9Udu3DdPaq0IFaV1tFMGI7amWp2ppks2KVU=;
-        b=SRO8+o3oq/Dqw+Ci1/BcDKx92BuyYldu3U1V5pzVWYIVKDx9k9a7Iq8y51mMnyPrk+
-         m4+TPHniS6D+ZkZP18GeXW9i6MfyHIzPSTnAVbjTMesPpCTwGDUNWMWOJvRTeu7lWUnE
-         ZCI0TtT8yoyjlCPaa12lnaNRWb7tTb5wsUgz9au30qLyFGqYgOTchOR1RbVzoJBqENge
-         seOV6Ge7iP5ekg3L1mVio+llOypLGJUDQPRjalOoWJ65LM4zajLqUYK+Q1LDgo+JvHwe
-         mBeQj7pQTnB1qGdFLLCIWb30EgI370k1C1FnwtI+W1FGn3HM4kT+D8U1nbdHI1fJZ4Fz
-         9wIg==
+        d=linaro.org; s=google; t=1756727257; x=1757332057; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LzQCI9Zj8RikZvzuhO8bePIhY5c3MO1QFwxFZbxrm1Q=;
+        b=ia3UKCUvOMrobZNV0skq3huITz12ts7nKuDfFYFNzVNemgaambr+IywLSB9rcE0p7w
+         OQA3oZTjmsmPH6NYaZ+IGgawt4HJsYNIWzlLQa/njwccuTwULqYTC3Xs9P9cm7xNz6cM
+         /sNERI+y2ospYl1fI5Rw3KjbvgZlWTENsASjgm7H5DSYSxWgm6/Ch3Z2+82+hwxtKhrk
+         f6ZKqv97hOwB57rbWEofL9yvwLPnRdjX22CUKeZYjkn5MIMHioANu7qbK/mRCDb2E+x3
+         A+7uyVHR/p0MStV5WIPYiIHulHo0r/3S9afHKOVQa9wj92dnt432cmhIBan9s8ekL32T
+         Gmcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756717821; x=1757322621;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=meHf9Dzi9Udu3DdPaq0IFaV1tFMGI7amWp2ppks2KVU=;
-        b=deqUfeaAYStfqIs5dwJ+b44Z17plLjJW+QkVe8Ka70YVBWVA4wpEZ7ngeIutkymCRA
-         +piktnkct8c81zc8k6IP0vbsmZMsDUrDjEbnXI63O4qHxm81cb7lmUW9n7c4X7cN0TmX
-         vaKpFOV2C8eVvSmVbEgh5Ku1l84uSsa5qrf81dKGa6tKRE36y8zCzjQkBDyAhxHHdmr7
-         43UIS9lT4oYwvUP/eblYv+9mRMw5he7CvUESNGbVetBlQSGbn06NglJcYwk/y+tn6nXF
-         Ug7xTyBUKBr9fAnf4qmlKWoESyyLoxXsCPUP301Ml+BlKEqqCBxR5Z93e20OWKEvTYaQ
-         ptew==
-X-Forwarded-Encrypted: i=1; AJvYcCXqz3tvi98FIYZiGGhglsUQ72c7vONPcPTNFssXH5T0tlBCjkwfXT/d8xE4KJApVFXQRA8zwdCVAaE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzogILB2i0OTLHxX1YJIZOl5nZ3Lqp2ZtgokOvhoVb8JRfxfmsg
-	tyiLV9JCOlIbKxQZW1crj3doGA7ZnMUwrInqwpjC1pOa1EwVHSB3Xk1m5/eJWM3n+oY=
-X-Gm-Gg: ASbGncvvZwiJEXcA9XzBR9SHWyffWQWIS0E9gXxUZ8KiMlIp1xlm23RbS7Hrym04X4b
-	SDYh0Qcb9oCh6br/rRu89niP5qV6+xAoz6JNjYvQwr1Js1D/Co17gN7XgSf9HZVg1DPQBHnPiNS
-	HjzttfFIra93gERIGq5EVOLZegAHZRyWFnDS4DIbDArgc30JnUjlOPcVJ0uzbWm6QBqIFQrUjKs
-	9Z+ytJn8DWKsn8JU+4+M10Khzkz/fYU+Ushh6gg/+n3wxBz0tB0+shB5v2m/yjXR/856YvyPRw6
-	D6e/YrtdhFbJmc7Dju2M5hNelLgZ/954/SLlZifywd4nZBvsaj6hvf7kE65iAWGnXgNz2hdMEpO
-	TC9nDxZS7BNI8iwJVX4N3bSP1SR9ZNdYe5Mw9kw==
-X-Google-Smtp-Source: AGHT+IHwD9wQkYnnHFPyCoE+oRse9cNjidrfIe1Wag1mwkgXlb86FEc301H4rWNpqC3pM6+30woB+Q==
-X-Received: by 2002:a05:6000:2011:b0:3cd:1cc2:f411 with SMTP id ffacd0b85a97d-3d1e0a986c8mr5227063f8f.61.1756717820994;
-        Mon, 01 Sep 2025 02:10:20 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d85f80d8casm1010533f8f.54.2025.09.01.02.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 02:10:20 -0700 (PDT)
-Message-ID: <7a40573a-1868-4697-bca5-fb22aac0402e@linaro.org>
-Date: Mon, 1 Sep 2025 10:10:19 +0100
+        d=1e100.net; s=20230601; t=1756727257; x=1757332057;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LzQCI9Zj8RikZvzuhO8bePIhY5c3MO1QFwxFZbxrm1Q=;
+        b=Kao4rca7x22dS1iiUnMxJIIPVkTjHbyK9uDxTInwI70WBk0XuG4Z0iVqFimAQp+adz
+         8bNpuOE6gZSCZ+60a1ynzysrghP2pfTHkVLmIDWdJhP5LB1AegnZ2VFXdVsToB7Ef0WV
+         94r4HavzrVOcVQ+pUXJmlFjvJ09cqKbvR826RFpT55j8gB9L/6k3QJWhdnsOFQtk40vl
+         En+mUadu/qhLq6qa11Cc/15mhpSqSawMlYxKiYy6K+ncNF1TCzke4xK3c7R288KX0ts0
+         kqoG0kXN+d6G4xsH1ZUeaKB1ACNfwQQLgCiFlPHikw881+E+WlMvBJ/dOmFL2WINPr+f
+         5FNw==
+X-Forwarded-Encrypted: i=1; AJvYcCW97OD976aPGctiDq5jtrz9z07fVtYTwwSRrfD1OtwSXJ0wNWAq4L051yK0xjASOB9WAy5R5RksaaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk8ELjqUe70KylTmZzPcTw/RJzIw/BS6H1O/LZJICIoG/liRej
+	FCp3/0ZJ3DSqaAsnvFW7sVR4M3FpuTK4gWs1BANk+ZnaFhNYpPTj2z6KLvboZnsdEkw=
+X-Gm-Gg: ASbGnct3gbSlsxL5fMRNQULFmWzxPAbDFLvkl3nrGAHhy3HipxmS3K3vbUUaE7T8TLK
+	w1geTSzfplPWI3LCGPFDp2lsXvV/4G2RfFuASDmJpMOiMMn1jv69C5wzMW6Ra9iUh85V2qFvnCN
+	2K5XLPIPFtc6LEqL3+FY6zMfpqRq/noNtaDgwIwY8RqS1EY0yrCOfBsOZhIMwgHlX3b67NlmcFG
+	eSRaYi3SKe6pxKuLqg18OO/RhsV94QH+fr5eToFvksLNFrStRAoTpFQq0fmRJIN77Q4txpSbrJA
+	YTUF/pt083BzS/M2mIFrP+41iR7wV1vSKvy3Zw7jVsCL0N+rifWW9U+0aU9au87/KhiG39PchrR
+	xGxNpbtyHRiIYBh5Yp0Kgu8OJToMZXOmsgsMCig==
+X-Google-Smtp-Source: AGHT+IH0O4ZkQ2YHVX46lUYZ8xCc2gxCMjSWxlXrU84lXHEdxwk9FtWekPg/E84Nq3t3E+yY+gv8GQ==
+X-Received: by 2002:a05:600c:1385:b0:45b:80ff:58f7 with SMTP id 5b1f17b1804b1-45b855c489fmr56725645e9.36.1756727256836;
+        Mon, 01 Sep 2025 04:47:36 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3cf33adf170sm15932215f8f.33.2025.09.01.04.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Sep 2025 04:47:36 -0700 (PDT)
+Date: Mon, 1 Sep 2025 14:47:33 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
+	Michael.Hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
+	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, broonie@kernel.org,
+	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
+	ahaslam@baylibre.com, marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and
+ ADAQ4224
+Message-ID: <202508310754.Y4V0Iq26-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/7] spi: fsl-dspi: Avoid using -EINPROGRESS error code
-To: Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Larisa Grigore <larisa.grigore@nxp.com>,
- Frank Li <Frank.li@nxp.com>, Christoph Hellwig <hch@lst.de>,
- linux-spi@vger.kernel.org, imx@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20250829-james-nxp-spi-dma-v5-0-3246957a6ea9@linaro.org>
- <20250829-james-nxp-spi-dma-v5-1-3246957a6ea9@linaro.org>
- <20250829125440.fuxwiekll53myiui@skbuf>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20250829125440.fuxwiekll53myiui@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
 
+Hi Marcelo,
 
+kernel test robot noticed the following build warnings:
 
-On 29/08/2025 1:54 pm, Vladimir Oltean wrote:
-> On Fri, Aug 29, 2025 at 12:46:43PM +0100, James Clark wrote:
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> 
-> The way I'm understanding these tags is: you wrote the patch, I submitted it
-> (which is not what is happening).
-> 
-> I think the conventional way of describing it is:
-> 
-> Co-developed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: James Clark <james.clark@linaro.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/iio-adc-ad4030-Fix-_scale-for-when-oversampling-is-enabled/20250830-084901
+base:   91812d3843409c235f336f32f1c37ddc790f1e03
+patch link:    https://lore.kernel.org/r/006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt%40analog.com
+patch subject: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and ADAQ4224
+config: x86_64-randconfig-161-20250831 (https://download.01.org/0day-ci/archive/20250831/202508310754.Y4V0Iq26-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
 
-Yes I agree, I took your patch a bit too literally and didn't modify it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202508310754.Y4V0Iq26-lkp@intel.com/
+
+smatch warnings:
+drivers/iio/adc/ad4030.c:515 ad4030_set_pga() error: 'scan_type' dereferencing possible ERR_PTR()
+
+vim +/scan_type +515 drivers/iio/adc/ad4030.c
+
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  502  static int ad4030_set_pga(struct iio_dev *indio_dev,
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  503  			  struct iio_chan_spec const *chan, int gain_int,
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  504  			  int gain_fract)
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  505  {
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  506  	struct ad4030_state *st = iio_priv(indio_dev);
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  507  	const struct iio_scan_type *scan_type;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  508  	unsigned int mag_bits;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  509  	u64 gain_nano, tmp;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  510  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  511  	if (!st->pga_gpios)
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  512  		return -EINVAL;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  513  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  514  	scan_type = iio_get_current_scan_type(indio_dev, chan);
+
+	if (IS_ERR(scan_type))
+		return PTR_ERR(scan_type);
+
+8017880dd8ca3e Marcelo Schmitt 2025-08-29 @515  	if (scan_type->sign == 's')
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  516  		mag_bits = st->chip->precision_bits - 1;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  517  	else
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  518  		mag_bits = st->chip->precision_bits;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  519  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  520  	gain_nano = gain_int * NANO + gain_fract;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  521  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  522  	if (!in_range(gain_nano, 0, ADAQ4616_GAIN_MAX_NANO))
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  523  		return -EINVAL;
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  524  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  525  	tmp = DIV_ROUND_CLOSEST_ULL(gain_nano << mag_bits, NANO);
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  526  	gain_nano = DIV_ROUND_CLOSEST_ULL(st->vref_uv, tmp);
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  527  	st->pga_index = find_closest(gain_nano, ad4030_hw_gains,
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  528  				     ARRAY_SIZE(ad4030_hw_gains));
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  529  
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  530  	return ad4030_set_pga_gain(st);
+8017880dd8ca3e Marcelo Schmitt 2025-08-29  531  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
