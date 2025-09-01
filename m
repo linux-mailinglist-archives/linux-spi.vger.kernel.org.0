@@ -1,93 +1,80 @@
-Return-Path: <linux-spi+bounces-9834-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9835-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3999B3E1FD
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 13:47:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E8AEB3E239
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 14:07:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA4D417F1D8
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 11:47:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 232D53BF3EE
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 12:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37045320380;
-	Mon,  1 Sep 2025 11:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CFF261B93;
+	Mon,  1 Sep 2025 12:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ia3UKCUv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="klJz7aX5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9777B31CA61
-	for <linux-spi@vger.kernel.org>; Mon,  1 Sep 2025 11:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA94425EFBF;
+	Mon,  1 Sep 2025 12:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756727261; cv=none; b=UIr77IDa5HFhEdgPXE09eSP0B+xExuAvn/QT6M5aE6/hUO+SGfd/SOtd/E3FFYbp8jhAD/xlitHNvYP2/LzpCKfQ5vx3Fo28QdmBPk9JrIpqtP4AXIVmqJq+HafnavkWj6lxQWcCT+pJYGUxix0UY7a2AkAthzdiYysXu6bgGP4=
+	t=1756728429; cv=none; b=bhtAwNs6uJJWOagMybPY841WE6diRCRSkyQUaa0JqciqpLyLGW6p+TYyeyO5OokGTGyo0K0GBokZOuB+DJqNmYuuuAD4BEAETTZrxj6pj/Qfb5UeAyBVp+CZfPfF8EqFovgXIJM/mGk7h4iDoDGedmkBEZwH5xDqGELv1KLBEzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756727261; c=relaxed/simple;
-	bh=wU+YtIjUdHrTJHGH2u24IDhC568tsl9YMJ7XuPW7+Vo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Lv6l3ZF/tUU9U3N1hNRnQuEYvkgT6LuHWwhukfEsAviVaXa53W6geJOGh0it+RtLJ/a+KQHLG8p32I5TkjrdpfgT89CfrbogK7riXejE9RRm+YEdq5z0vBhIMpqZWcYASNRqOpCDzbOIjwMaT80nrAq1x71fDiqhs6v+ph20F9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ia3UKCUv; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45b84367affso18839095e9.3
-        for <linux-spi@vger.kernel.org>; Mon, 01 Sep 2025 04:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756727257; x=1757332057; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LzQCI9Zj8RikZvzuhO8bePIhY5c3MO1QFwxFZbxrm1Q=;
-        b=ia3UKCUvOMrobZNV0skq3huITz12ts7nKuDfFYFNzVNemgaambr+IywLSB9rcE0p7w
-         OQA3oZTjmsmPH6NYaZ+IGgawt4HJsYNIWzlLQa/njwccuTwULqYTC3Xs9P9cm7xNz6cM
-         /sNERI+y2ospYl1fI5Rw3KjbvgZlWTENsASjgm7H5DSYSxWgm6/Ch3Z2+82+hwxtKhrk
-         f6ZKqv97hOwB57rbWEofL9yvwLPnRdjX22CUKeZYjkn5MIMHioANu7qbK/mRCDb2E+x3
-         A+7uyVHR/p0MStV5WIPYiIHulHo0r/3S9afHKOVQa9wj92dnt432cmhIBan9s8ekL32T
-         Gmcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756727257; x=1757332057;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LzQCI9Zj8RikZvzuhO8bePIhY5c3MO1QFwxFZbxrm1Q=;
-        b=Kao4rca7x22dS1iiUnMxJIIPVkTjHbyK9uDxTInwI70WBk0XuG4Z0iVqFimAQp+adz
-         8bNpuOE6gZSCZ+60a1ynzysrghP2pfTHkVLmIDWdJhP5LB1AegnZ2VFXdVsToB7Ef0WV
-         94r4HavzrVOcVQ+pUXJmlFjvJ09cqKbvR826RFpT55j8gB9L/6k3QJWhdnsOFQtk40vl
-         En+mUadu/qhLq6qa11Cc/15mhpSqSawMlYxKiYy6K+ncNF1TCzke4xK3c7R288KX0ts0
-         kqoG0kXN+d6G4xsH1ZUeaKB1ACNfwQQLgCiFlPHikw881+E+WlMvBJ/dOmFL2WINPr+f
-         5FNw==
-X-Forwarded-Encrypted: i=1; AJvYcCW97OD976aPGctiDq5jtrz9z07fVtYTwwSRrfD1OtwSXJ0wNWAq4L051yK0xjASOB9WAy5R5RksaaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk8ELjqUe70KylTmZzPcTw/RJzIw/BS6H1O/LZJICIoG/liRej
-	FCp3/0ZJ3DSqaAsnvFW7sVR4M3FpuTK4gWs1BANk+ZnaFhNYpPTj2z6KLvboZnsdEkw=
-X-Gm-Gg: ASbGnct3gbSlsxL5fMRNQULFmWzxPAbDFLvkl3nrGAHhy3HipxmS3K3vbUUaE7T8TLK
-	w1geTSzfplPWI3LCGPFDp2lsXvV/4G2RfFuASDmJpMOiMMn1jv69C5wzMW6Ra9iUh85V2qFvnCN
-	2K5XLPIPFtc6LEqL3+FY6zMfpqRq/noNtaDgwIwY8RqS1EY0yrCOfBsOZhIMwgHlX3b67NlmcFG
-	eSRaYi3SKe6pxKuLqg18OO/RhsV94QH+fr5eToFvksLNFrStRAoTpFQq0fmRJIN77Q4txpSbrJA
-	YTUF/pt083BzS/M2mIFrP+41iR7wV1vSKvy3Zw7jVsCL0N+rifWW9U+0aU9au87/KhiG39PchrR
-	xGxNpbtyHRiIYBh5Yp0Kgu8OJToMZXOmsgsMCig==
-X-Google-Smtp-Source: AGHT+IH0O4ZkQ2YHVX46lUYZ8xCc2gxCMjSWxlXrU84lXHEdxwk9FtWekPg/E84Nq3t3E+yY+gv8GQ==
-X-Received: by 2002:a05:600c:1385:b0:45b:80ff:58f7 with SMTP id 5b1f17b1804b1-45b855c489fmr56725645e9.36.1756727256836;
-        Mon, 01 Sep 2025 04:47:36 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3cf33adf170sm15932215f8f.33.2025.09.01.04.47.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 04:47:36 -0700 (PDT)
-Date: Mon, 1 Sep 2025 14:47:33 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	Michael.Hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, broonie@kernel.org,
-	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-	ahaslam@baylibre.com, marcelo.schmitt1@gmail.com
-Subject: Re: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and
- ADAQ4224
-Message-ID: <202508310754.Y4V0Iq26-lkp@intel.com>
+	s=arc-20240116; t=1756728429; c=relaxed/simple;
+	bh=NnnVmDOEYrbdmnujn4Lul2TG+QyYkE2QL0d/N5DPfSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=POJFej5mUiGzaTDN7yXLPfv5ZV+gDh2iMVHC9oAaQpvUQM8Bx8PV1SkKcwEqmo0MsSlA7gvDu5+hz18cz6u2m1YaSXF9lTyrL9pD3WZVORwToxXqfDlQwhBR7RMHD2qeM6uN2qxo7GdnISzPjGxxbPWklywUrIqOFX+eNEr83dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=klJz7aX5; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756728427; x=1788264427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NnnVmDOEYrbdmnujn4Lul2TG+QyYkE2QL0d/N5DPfSw=;
+  b=klJz7aX5pTvcIX9ZfcW7zfrn1ceiLNnbsVgp+n2vIaPzE8giVIaEOOaw
+   UF/4PC5cC7yacbkJAjEV5Q9K5GvGSo+z0+AMt7ZC2llubjx0H45VoYwT5
+   AiRt+GwlBGeSqrkh+Krhfv6YDu2fG+7KWt0s2xx93rTggQV+O8jW56LAd
+   gHmOKoPCU6rkFEv5ks7onjDbrPbYTsetgcWVajpwTqX4UEPxuzvCsakdF
+   mF6pu8ehXdO4n12EnK9IW6H3IgvavaXmvR7IdtdtJNRFm2fPk8YJPw8Va
+   A1or8KBNA3+Ar8Vsk1MX9kV+iGvAlKVagixclxChKcteXTMzPD/O/xKGc
+   g==;
+X-CSE-ConnectionGUID: 5k3ZKtxcSoO4sgbIpkOBFg==
+X-CSE-MsgGUID: qv6GAFcRQK+NEYm3AZbjrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11539"; a="76433054"
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="76433054"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 05:07:07 -0700
+X-CSE-ConnectionGUID: FTm+C/DoTSCAJrkzgjTPkQ==
+X-CSE-MsgGUID: UJA0ZIAkSLyy6Wv9SAaDdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,225,1751266800"; 
+   d="scan'208";a="175380316"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2025 05:07:04 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1ut3JN-0000000APIW-105E;
+	Mon, 01 Sep 2025 15:07:01 +0300
+Date: Mon, 1 Sep 2025 15:07:00 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Haixu Cui <quic_haixcui@quicinc.com>
+Cc: harald.mommer@oss.qualcomm.com, quic_msavaliy@quicinc.com,
+	broonie@kernel.org, virtio-dev@lists.linux.dev,
+	viresh.kumar@linaro.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, hdanton@sina.com,
+	qiang4.zhang@linux.intel.com, alex.bennee@linaro.org,
+	quic_ztu@quicinc.com, virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v9 3/3] SPI: Add virtio SPI driver
+Message-ID: <aLWMZH3NTfM8qOUy@smile.fi.intel.com>
+References: <20250828093451.2401448-1-quic_haixcui@quicinc.com>
+ <20250828093451.2401448-4-quic_haixcui@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -96,67 +83,347 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
+In-Reply-To: <20250828093451.2401448-4-quic_haixcui@quicinc.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi Marcelo,
+On Thu, Aug 28, 2025 at 05:34:51PM +0800, Haixu Cui wrote:
+> This is the virtio SPI Linux kernel driver.
 
-kernel test robot noticed the following build warnings:
+...
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/iio-adc-ad4030-Fix-_scale-for-when-oversampling-is-enabled/20250830-084901
-base:   91812d3843409c235f336f32f1c37ddc790f1e03
-patch link:    https://lore.kernel.org/r/006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt%40analog.com
-patch subject: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and ADAQ4224
-config: x86_64-randconfig-161-20250831 (https://download.01.org/0day-ci/archive/20250831/202508310754.Y4V0Iq26-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0
+> +#include <linux/completion.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/spi/spi.h>
+> +#include <linux/stddef.h>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202508310754.Y4V0Iq26-lkp@intel.com/
+A lot of headers are still missing. See below.
 
-smatch warnings:
-drivers/iio/adc/ad4030.c:515 ad4030_set_pga() error: 'scan_type' dereferencing possible ERR_PTR()
+...
 
-vim +/scan_type +515 drivers/iio/adc/ad4030.c
 
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  502  static int ad4030_set_pga(struct iio_dev *indio_dev,
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  503  			  struct iio_chan_spec const *chan, int gain_int,
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  504  			  int gain_fract)
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  505  {
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  506  	struct ad4030_state *st = iio_priv(indio_dev);
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  507  	const struct iio_scan_type *scan_type;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  508  	unsigned int mag_bits;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  509  	u64 gain_nano, tmp;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  510  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  511  	if (!st->pga_gpios)
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  512  		return -EINVAL;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  513  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  514  	scan_type = iio_get_current_scan_type(indio_dev, chan);
+> +struct virtio_spi_priv {
+> +	/* The virtio device we're associated with */
+> +	struct virtio_device *vdev;
+> +	/* Pointer to the virtqueue */
+> +	struct virtqueue *vq;
+> +	/* Copy of config space mode_func_supported */
+> +	u32 mode_func_supported;
 
-	if (IS_ERR(scan_type))
-		return PTR_ERR(scan_type);
+uXX (in particular u32) is defined in types.h.
 
-8017880dd8ca3e Marcelo Schmitt 2025-08-29 @515  	if (scan_type->sign == 's')
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  516  		mag_bits = st->chip->precision_bits - 1;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  517  	else
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  518  		mag_bits = st->chip->precision_bits;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  519  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  520  	gain_nano = gain_int * NANO + gain_fract;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  521  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  522  	if (!in_range(gain_nano, 0, ADAQ4616_GAIN_MAX_NANO))
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  523  		return -EINVAL;
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  524  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  525  	tmp = DIV_ROUND_CLOSEST_ULL(gain_nano << mag_bits, NANO);
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  526  	gain_nano = DIV_ROUND_CLOSEST_ULL(st->vref_uv, tmp);
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  527  	st->pga_index = find_closest(gain_nano, ad4030_hw_gains,
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  528  				     ARRAY_SIZE(ad4030_hw_gains));
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  529  
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  530  	return ad4030_set_pga_gain(st);
-8017880dd8ca3e Marcelo Schmitt 2025-08-29  531  }
+> +	/* Copy of config space max_freq_hz */
+> +	u32 max_freq_hz;
+> +};
+
+...
+
+> +static int virtio_spi_set_delays(struct spi_transfer_head *th,
+> +				 struct spi_device *spi,
+> +				 struct spi_transfer *xfer)
+> +{
+> +	int cs_setup;
+> +	int cs_word_delay_xfer;
+> +	int cs_word_delay_spi;
+> +	int delay;
+> +	int cs_hold;
+> +	int cs_inactive;
+> +	int cs_change_delay;
+> +
+> +	cs_setup = spi_delay_to_ns(&spi->cs_setup, xfer);
+> +	if (cs_setup < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_setup\n");
+
+dev_warn() et al. are defined in dev_printk.h.
+
+> +		return cs_setup;
+> +	}
+> +	th->cs_setup_ns = cpu_to_le32(cs_setup);
+
+This requires
+
+#include <asm/byteorder.h>
+
+> +	cs_word_delay_xfer = spi_delay_to_ns(&xfer->word_delay, xfer);
+> +	if (cs_word_delay_xfer < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_word_delay_xfer\n");
+> +		return cs_word_delay_xfer;
+> +	}
+> +	cs_word_delay_spi = spi_delay_to_ns(&spi->word_delay, xfer);
+> +	if (cs_word_delay_spi < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_word_delay_spi\n");
+> +		return cs_word_delay_spi;
+> +	}
+> +
+> +	th->word_delay_ns = cpu_to_le32(max(cs_word_delay_spi, cs_word_delay_xfer));
+
+max() is defined in math.h.
+
+> +	delay = spi_delay_to_ns(&xfer->delay, xfer);
+> +	if (delay < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert delay\n");
+> +		return delay;
+> +	}
+> +	cs_hold = spi_delay_to_ns(&spi->cs_hold, xfer);
+> +	if (cs_hold < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_hold\n");
+> +		return cs_hold;
+> +	}
+> +	th->cs_delay_hold_ns = cpu_to_le32(delay + cs_hold);
+> +
+> +	cs_inactive = spi_delay_to_ns(&spi->cs_inactive, xfer);
+> +	if (cs_inactive < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_inactive\n");
+> +		return cs_inactive;
+> +	}
+> +	cs_change_delay = spi_delay_to_ns(&xfer->cs_change_delay, xfer);
+> +	if (cs_change_delay < 0) {
+> +		dev_warn(&spi->dev, "Cannot convert cs_change_delay\n");
+> +		return cs_change_delay;
+> +	}
+> +	th->cs_change_delay_inactive_ns =
+> +		cpu_to_le32(cs_inactive + cs_change_delay);
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static int virtio_spi_transfer_one(struct spi_controller *ctrl,
+> +				   struct spi_device *spi,
+> +				   struct spi_transfer *xfer)
+> +{
+> +	struct virtio_spi_priv *priv = spi_controller_get_devdata(ctrl);
+
+> +	struct virtio_spi_req *spi_req __free(kfree);
+
+This is incorrect template. It's one of the exceptions when we mix code and
+definitions...
+
+> +	struct spi_transfer_head *th;
+> +	struct scatterlist sg_out_head, sg_out_payload;
+> +	struct scatterlist sg_in_result, sg_in_payload;
+
++ scatterlist.h
+
+> +	struct scatterlist *sgs[4];
+> +	unsigned int outcnt = 0;
+> +	unsigned int incnt = 0;
+> +	int ret;
+
+
+> +	spi_req = kzalloc(sizeof(*spi_req), GFP_KERNEL);
+
+...so this should be
+
+	struct virtio_spi_req *spi_req __free(kfree) =
+		kzalloc(sizeof(*spi_req), GFP_KERNEL);
+
+(or on one line if you are okay with a 100 limit).
+
+And do not forget to include cleanup.h (__free() macro) and
+slab.h (kzalloc() API).
+
+> +	if (!spi_req)
+> +		return -ENOMEM;
+
++ errno.h
+
+But since you already have IS_ERR()/PTR_ERR() use, just
+
++ err.h
+
+> +	init_completion(&spi_req->completion);
+> +
+> +	th = &spi_req->transfer_head;
+> +
+> +	/* Fill struct spi_transfer_head */
+> +	th->chip_select_id = spi_get_chipselect(spi, 0);
+> +	th->bits_per_word = spi->bits_per_word;
+> +	th->cs_change = xfer->cs_change;
+> +	th->tx_nbits = xfer->tx_nbits;
+> +	th->rx_nbits = xfer->rx_nbits;
+> +	th->reserved[0] = 0;
+> +	th->reserved[1] = 0;
+> +	th->reserved[2] = 0;
+> +
+> +	static_assert(VIRTIO_SPI_CPHA == SPI_CPHA,
+> +		      "VIRTIO_SPI_CPHA must match SPI_CPHA");
+> +	static_assert(VIRTIO_SPI_CPOL == SPI_CPOL,
+> +		      "VIRTIO_SPI_CPOL must match SPI_CPOL");
+> +	static_assert(VIRTIO_SPI_CS_HIGH == SPI_CS_HIGH,
+> +		      "VIRTIO_SPI_CS_HIGH must match SPI_CS_HIGH");
+> +	static_assert(VIRTIO_SPI_MODE_LSB_FIRST == SPI_LSB_FIRST,
+> +		      "VIRTIO_SPI_MODE_LSB_FIRST must match SPI_LSB_FIRST");
+> +
+> +	th->mode = cpu_to_le32(spi->mode & VIRTIO_SPI_MODE_MASK);
+> +	if (spi->mode & SPI_LOOP)
+> +		th->mode |= cpu_to_le32(VIRTIO_SPI_MODE_LOOP);
+> +
+> +	th->freq = cpu_to_le32(xfer->speed_hz);
+> +
+> +	ret = virtio_spi_set_delays(th, spi, xfer);
+> +	if (ret)
+> +		goto msg_done;
+> +
+> +	/* Set buffers */
+> +	spi_req->tx_buf = xfer->tx_buf;
+> +	spi_req->rx_buf = xfer->rx_buf;
+> +
+> +	/* Prepare sending of virtio message */
+> +	init_completion(&spi_req->completion);
+> +
+> +	sg_init_one(&sg_out_head, th, sizeof(*th));
+> +	sgs[outcnt] = &sg_out_head;
+> +	outcnt++;
+> +
+> +	if (spi_req->tx_buf) {
+> +		sg_init_one(&sg_out_payload, spi_req->tx_buf, xfer->len);
+> +		sgs[outcnt] = &sg_out_payload;
+> +		outcnt++;
+> +	}
+> +
+> +	if (spi_req->rx_buf) {
+> +		sg_init_one(&sg_in_payload, spi_req->rx_buf, xfer->len);
+> +		sgs[outcnt] = &sg_in_payload;
+> +		incnt++;
+> +	}
+> +
+> +	sg_init_one(&sg_in_result, &spi_req->result,
+> +		    sizeof(struct spi_transfer_result));
+> +	sgs[outcnt + incnt] = &sg_in_result;
+> +	incnt++;
+> +
+> +	ret = virtqueue_add_sgs(priv->vq, sgs, outcnt, incnt, spi_req,
+> +				GFP_KERNEL);
+> +	if (ret)
+> +		goto msg_done;
+> +
+> +	/* Simple implementation: There can be only one transfer in flight */
+> +	virtqueue_kick(priv->vq);
+> +
+> +	wait_for_completion(&spi_req->completion);
+> +
+> +	/* Read result from message and translate return code */
+> +	switch (spi_req->result.result) {
+> +	case VIRTIO_SPI_TRANS_OK:
+> +		break;
+> +	case VIRTIO_SPI_PARAM_ERR:
+> +		ret = -EINVAL;
+> +		break;
+> +	case VIRTIO_SPI_TRANS_ERR:
+> +		ret = -EIO;
+> +		break;
+> +	default:
+> +		ret = -EIO;
+> +		break;
+> +	}
+> +
+> +msg_done:
+> +	if (ret)
+> +		ctrl->cur_msg->status = ret;
+> +
+> +	return ret;
+> +}
+
+...
+
+> +static int virtio_spi_find_vqs(struct virtio_spi_priv *priv)
+> +{
+> +	struct virtqueue *vq;
+> +
+> +	vq = virtio_find_single_vq(priv->vdev, virtio_spi_msg_done, "spi-rq");
+> +	if (IS_ERR(vq))
+> +		return PTR_ERR(vq);
+
+See above.
+
+> +	priv->vq = vq;
+> +	return 0;
+> +}
+
+...
+
+> +static int virtio_spi_probe(struct virtio_device *vdev)
+> +{
+> +	struct virtio_spi_priv *priv;
+> +	struct spi_controller *ctrl;
+> +	int ret;
+> +	u32 bus_num;
+> +
+> +	ctrl = devm_spi_alloc_host(&vdev->dev, sizeof(*priv));
+> +	if (!ctrl)
+> +		return -ENOMEM;
+> +
+> +	priv = spi_controller_get_devdata(ctrl);
+> +	priv->vdev = vdev;
+> +	vdev->priv = priv;
+
+> +	device_set_node(&ctrl->dev, dev_fwnode(&vdev->dev));
+> +	dev_set_drvdata(&vdev->dev, ctrl);
+> +	ret = device_property_read_u32(&vdev->dev, "spi,bus-num", &bus_num);
+
++ device.h
++ property.h
+
+> +	if (ret || bus_num > S16_MAX)
+
++ limits.h
+
+> +		ctrl->bus_num = -1;
+> +	else
+> +		ctrl->bus_num = bus_num;
+
+But why do we need this property at all? And where is it documented in the
+device tree bindings?
+
+> +	virtio_spi_read_config(vdev);
+> +
+> +	ctrl->transfer_one = virtio_spi_transfer_one;
+> +
+> +	ret = virtio_spi_find_vqs(priv);
+> +	if (ret)
+> +		return dev_err_probe(&vdev->dev, ret, "Cannot setup virtqueues\n");
+> +
+> +	/* Register cleanup for virtqueues using devm */
+> +	ret = devm_add_action_or_reset(&vdev->dev, virtio_spi_del_vq, vdev);
+> +	if (ret)
+> +		return dev_err_probe(&vdev->dev, ret, "Cannot register virtqueue cleanup\n");
+> +
+> +	/* Use devm version to register controller */
+> +	ret = devm_spi_register_controller(&vdev->dev, ctrl);
+> +	if (ret)
+> +		return dev_err_probe(&vdev->dev, ret, "Cannot register controller\n");
+> +
+> +	return 0;
+> +}
+
+...
+
+> +static struct virtio_device_id virtio_spi_id_table[] = {
+
+The type is or should be defined in mod_devicetable.h.
+
+> +	{ VIRTIO_ID_SPI, VIRTIO_DEV_ANY_ID },
+> +	{}
+> +};
+
+...
+
+> +static const struct dev_pm_ops virtio_spi_pm_ops = {
+
+The type is defined in pm.h.
+
+> +	.freeze = pm_sleep_ptr(virtio_spi_freeze),
+> +	.restore = pm_sleep_ptr(virtio_spi_restore),
+> +};
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
 
 
