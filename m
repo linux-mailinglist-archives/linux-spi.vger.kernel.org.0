@@ -1,95 +1,94 @@
-Return-Path: <linux-spi+bounces-9865-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9866-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C53BB40294
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 15:19:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7232B40829
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 16:58:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 835337B23F1
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 13:17:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C344E4315
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 14:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB44305E02;
-	Tue,  2 Sep 2025 13:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE27B327787;
+	Tue,  2 Sep 2025 14:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTnyE25+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nZKncvsJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B73305048;
-	Tue,  2 Sep 2025 13:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212B531AF1B;
+	Tue,  2 Sep 2025 14:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756819089; cv=none; b=nh+kI6khNQSg/whNQt626jmAcp/+yZjSriXou6efyES+GGcpP3hnYZY6OhH99V8iwLBTWKHDE7qkv4sMcmZ/EWkXsryIIp7UBJj+3xCTGlU9QI+KPHV8YwEApjdiml4jTiTjJ7dbVYA8zrbbdLn0FcvDUwmFlXGOP2BwYv7aw78=
+	t=1756824737; cv=none; b=q/Rz19pNZ/SrF+bTFoXAVo6k6iTHDYj6jwKSkuE4qZqdhFaLHdUYTwprL7+FldC3tdG0/spx2taOLMOWLLVwPSmzntmydVywkaczx+p5EWXGK4YBFC1PVXooO/MTYk44pjn6KF7LEqlwaRssqD4SSGuqZcMT68pHALwFYKxB5v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756819089; c=relaxed/simple;
-	bh=VNvLbUz1iPGZN84i/ahuhblFaByDg8xV+yVOfvJzNM4=;
+	s=arc-20240116; t=1756824737; c=relaxed/simple;
+	bh=1gKz/CeqPyjga8H6PURJ9psp+tC0vHzZKYP9TtgcoQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZJXDLRKqXYlknUUNNYTuoZAIgyV4kxgL3Txvwy9XkbM/RW+T3LJSudqRTi6qVCw+xIW6kBv6w4XfdSr54F3K6GJuCO5t9pBORI8L9R/5eCoDvJuJxjgNzi8/X5zRID06HsudJeqbw8XswQP0FfeSPxsr/8IVHEigb/k1YyNqdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mTnyE25+; arc=none smtp.client-ip=209.85.221.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=iIL2s2HzVBWY8EO2Qn+wlMRzXWI/xECetp26PljJLln30F5ruxU3tHy6XFD3KP1vn93GGxp3+YenBwd2DCOtCD5nKyd/yxr10a+7YMn7cx28UJcgMf3mEP3TfH8t7qn0KYFTU9rpMGzWZoSwve975pPkAz9W3v4O4jv+zlvqcQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nZKncvsJ; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-54488e51c37so1607975e0c.2;
-        Tue, 02 Sep 2025 06:18:07 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-76e1fc69f86so4861666b3a.0;
+        Tue, 02 Sep 2025 07:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756819086; x=1757423886; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756824735; x=1757429535; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZ/ylrrWod48ZuAvL1xw5smyVmv1EILXwMIOSKZ9k1k=;
-        b=mTnyE25+GHVcGgPMwp8Z8VHrx4GMoSJ1MnO1yRIk7dqUJSJIVnjMWjF1pKMsgeMxV/
-         827if9V1dkATYrY+zXQg54HMTaHFKnohJPyD9Xzf5lSjSEnq5fbF9Jjxs4HGnE8Ku5+Q
-         IcqBkM1S9224CtDNbxz4ODd+Kaau05XzfPhuSHuhVAnaA9IwCDx6jC+yzK0cLzyyJr36
-         A+7yl2LavMH/DugGm5guE75Vp3qwiKcI0FruFCUVlT+yw/pjWMYzwB+jjo5IStMtUPFq
-         EYU5tS8Asqcq6QXNlIpLzooWv1i80jDEcwlS2jizLH/RfJyWL8sev1YQV8eGGSM0eTLY
-         f+Rg==
+        bh=krojoMmx1kmmnqCI+gJOfxK13xA7Q4Ni7Uv9DM8FYMw=;
+        b=nZKncvsJE4ycHUC7SC34Vt0aM0ppjOM4FlUkyxxr8U1U9Bwz/SoVoYHD9Lk+bPKZxO
+         pxBxtdSMAmiq698nhS5X+/h2iEFijZsptG/OlGXuQskhgAwWvLd7OMSqx/zeJvkvawJK
+         y9Q+UlE07FGILcXb6Cy7fGBV+eEV65xzIzqqXbPFWEwmnQ0nTvoqn0d0cEEkHi2S2cx9
+         oMBgBl8odmOW+gD7PNokgE1nZ73WNAkh5gEjjnPbmQLqwvp6GB16usdDMTZDhkFg78T5
+         t1wtqiDfuQOCr1xOH0mvBnnE2C5xcD/BbDYv0BhpZ63YEuFkvMWDE1lf6JmRsnYG2Uh1
+         Alyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756819086; x=1757423886;
+        d=1e100.net; s=20230601; t=1756824735; x=1757429535;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GZ/ylrrWod48ZuAvL1xw5smyVmv1EILXwMIOSKZ9k1k=;
-        b=shIW4wOZN6mtZSxxfIqMQ/srC5IAsxpLT3c++W896yPlIouh4mkvP2njeGnCUQFjEC
-         wTsPUXzWyZI78S7lwRSMaa6bTaHN0MxjxxmFxTxTLrmIdlMttolgqh9AgNY4s69K4IaO
-         /G4gnzweaRGzF6+FTFucwXOepP8FXc89rEnZWwA0qNxXdEjqdW+0WG6xLND1vxzrsxNa
-         Tl1mNbstcfLdtynsZk1qEnOuIEpOCG3SmmWF90iQObdPIH+laKxinJUXYiGWMhb8qhW5
-         5pMi5pBTO318t6FzQzxIdLQEMXmt5GMSRcDrYCFfedJS8YQljYn73UpwF+ZkYpstYJns
-         bKrg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/5bMfWtmUA6w0JPqljT+QWavx7wRsPaNYtvCDMNk+UCIkg/9UsJkjaL2neozpg7dNEQyvV1Rvi8uD@vger.kernel.org, AJvYcCUBAh1+Cy3gHd5lAQosqU23hBqRw7KbktK5xxcrbXRcy7CCe7T873O5NC+3WrFtNffA55aQiDb+3wVorZpb@vger.kernel.org, AJvYcCVyEH5rTehgIC3+S/jbAgETidAbM8Kikgq/n0yRSPZSG1Nwoa82Tdbn14el8/1Cu1+mSwjT6czQjZ4N@vger.kernel.org, AJvYcCWXFtH+czSyQSWEBgPGY0rK3GP24sxA3UelriPaiQHI7D9vRYMBS4k713mVSqiFdHRYGD67TB12cM2R@vger.kernel.org, AJvYcCXYDgUGyTBejwJDPZ/vzXIVr3N9pDgEkQETA8H3InynEBGL2IhXbxeOz0q4ZRnhSGCNNkqSJih9HSRw@vger.kernel.org
-X-Gm-Message-State: AOJu0YyH4urcx1/1lb5hREgrklb3Dk5m0JmofJR06dtYiq2IiRxWal8t
-	bv+HtICwI8FChPLR15aI8rxBbQBW8lOxI80IQpdYd9/J1LJyoq7J7Hp/
-X-Gm-Gg: ASbGnctPNGzEiysif1dE4amj6gE1X2dTOjp8h4BetyyiEd5mAD2C1P8sNyxE3/UE4+X
-	q+ZJkfGRjU8aRsLgG1QGWktOFqEzlrFUN9StEfYkoKE2aNDi3sX0Dkw3C8Dnnh8ZA0+uA9KdWYb
-	sdwGlon4eC0ZxIeh6hY2fuvvMM5YsD2HUmqr8ejo3eD/a93TvFHmYwjMa/16wxi0xt+5UO9WI8K
-	66+EWu6LA2UDB5+QgAHUS9KElPC2cVuyhRTWsc2+CHtQNfMJzH6dV7QjWfOsnDSINem0vDAGwfP
-	dGz0rQsTlVMTo/Fq6sgZabUwlNDHjUwrgtscckw3KJ4cqIM3w+44RZSQesGhwISj7fn8yAxBxsz
-	+3C9BnFCSyCdZHE5rQZmkuhhajsGH01NkCYuCsJgJMQ==
-X-Google-Smtp-Source: AGHT+IEOCU6qlrch7aNEAQESmBVfsCgMcg0VsueRTfB86F5nzb5mtgIID7ngPh17lxRjoozcIQ+Czw==
-X-Received: by 2002:a05:6122:8613:b0:544:b862:1055 with SMTP id 71dfb90a1353d-544b8621563mr1809035e0c.6.1756819081877;
-        Tue, 02 Sep 2025 06:18:01 -0700 (PDT)
+        bh=krojoMmx1kmmnqCI+gJOfxK13xA7Q4Ni7Uv9DM8FYMw=;
+        b=CsU5VoEh4ArugM6sRhukdV1CNitrgVqiN1BIH3xwsDGzOtKfqLdkbodh7BckrWuQzB
+         E84BzKm3XuVP9kevp/2eXh2Kz4/EJnQzylDxJldFP8F1R84e454qDTM3EoXDL2M5R1t2
+         UXuX2o8Ah6z4wTAwOCGt2nMg5FLJk8SQ7C5ylLWVIWOrpC2tpRb4VFVPFYb3cPRrkQRE
+         KoqL+FOYgDQgWnHG5Xurnm3GMDhm4V5Pm/jKH4B/tMZHpyYIA4+e218YRqDynzg0L8HR
+         5cKJ6Td1p9oksXHuUy2D/tex/EG7o69n21pZvhe2nLH7gXx8hsNNacEy84dD4TEnUm1J
+         kvnA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/wxDuwvXCL5kAQtF9i4e9gSAsXL9iOyzy759PYlE7peuspPvJuTt8uT/2wlf/C9HTOJvQKRPYQrG3@vger.kernel.org, AJvYcCV2ifyOa0RjjUZoSlfIkhAlt0uEBMDKkLdnOLBzinhZbHPpvV8CVQAOprv3Qwh9XxSJjeCOZaVO/j6B@vger.kernel.org, AJvYcCV8NX8NSGtDtOEY4DKYem0C7yivW/1k37pnxWr9FznJutuoECJ2r5ejTvlYvvJR7XLxpeP7R0znRG0gAZ9Y@vger.kernel.org, AJvYcCVAbGmO0K+yREMZ+Z3Nn4nOqqFSxR1vzAdRw1Ihw8KY1BjGeMEdWuyAsy5MNSdrjSMETF77BR8zZlOm@vger.kernel.org, AJvYcCVhG5EYpdUVdsuEitn/rANpl6rKtQqBBTh39e1iMR/gYZvUcPb9hZ58vgMMYMjrAT/rAICW/29TMgQt@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAKG2IJtwOiTM1SO5JD/5qi3RUTQvyKVBYnSey4pBQdOOHwHJi
+	ln4Hyk47efLBCdfXvVCDXfTYAjohtU/BZgw6+AioyW1h5m59jXNqYzYp
+X-Gm-Gg: ASbGnctnwEYfCePKhyf/1pJ20GKwIU+dO7nAvkCnZdvRJuCDqGq2t1bZvqXjY25OISO
+	xb3hdT71v5ixGyIT4hcPUabBoecIO/LfWE37prnWSSwMnnngv64f9HWzGafaeY6tSkPEDulskAw
+	5yiXJ/JeK1+3SDHF4dlALz5iuFh2udvIRt7nDGtOlmbOXcAvvkRFeXdNKiJ1oJDvM8ZhuOd+A72
+	deG++5ATWkz4Pw9UdpqS30XS86yhMrkJQRful3bfCCadrNLK09sWOz1AGJqpQZGz1N7QUfTjoW/
+	SusaSpOQCpsiIGTGz1wo+nuHIqRzaNouSJ6jBFCRucU3QIr55fIGFDzrqmLdvUZ2AzNLl/mTlrt
+	dnsLEbTYglQ3iNajQjvZT5Xci0jj7k2S2CghlPPtX6FEZg/2L0WVd
+X-Google-Smtp-Source: AGHT+IFdyjggY3wIGK1mZ+QKQxD0gAMm0SbeMxk7gQcQQm4er/Jmj3WDdrLOtCKXXQrKMByB7c5t7w==
+X-Received: by 2002:a05:6a20:938c:b0:246:5be:ca90 with SMTP id adf61e73a8af0-24605becdb2mr239744637.10.1756824735234;
+        Tue, 02 Sep 2025 07:52:15 -0700 (PDT)
 Received: from localhost ([2804:30c:1f77:e900:8ef5:b053:b8a:9345])
-        by smtp.gmail.com with UTF8SMTPSA id 71dfb90a1353d-54491464b0csm5420089e0c.18.2025.09.02.06.18.00
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b4cd3670e5csm12088974a12.53.2025.09.02.07.52.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 06:18:00 -0700 (PDT)
-Date: Tue, 2 Sep 2025 10:18:33 -0300
+        Tue, 02 Sep 2025 07:52:13 -0700 (PDT)
+Date: Tue, 2 Sep 2025 11:52:46 -0300
 From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: Jonathan Cameron <jic23@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
 Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	Michael.Hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, broonie@kernel.org,
-	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-	ahaslam@baylibre.com
-Subject: Re: [PATCH 01/15] iio: adc: ad4030: Fix _scale for when oversampling
- is enabled
-Message-ID: <aLbuqQ-1hhLGvsPZ@debian-BULLSEYE-live-builder-AMD64>
+	jic23@kernel.org, Michael.Hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, andy@kernel.org, corbet@lwn.net,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	broonie@kernel.org, Jonathan.Cameron@huawei.com,
+	andriy.shevchenko@linux.intel.com, ahaslam@baylibre.com,
+	sergiu.cuciurean@analog.com, tgamblin@baylibre.com
+Subject: Re: [PATCH 07/15] iio: adc: ad4030: Add SPI offload support
+Message-ID: <aLcEvmwbysTaEprV@debian-BULLSEYE-live-builder-AMD64>
 References: <cover.1756511030.git.marcelo.schmitt@analog.com>
- <f9d40e8deb3d17a41b4fd6ecc1b8ac92275f0078.1756511030.git.marcelo.schmitt@analog.com>
- <20250830194308.32def0e5@jic23-huawei>
+ <0d9f377295635d977e0767de9db96d0a6ad06de0.1756511030.git.marcelo.schmitt@analog.com>
+ <b024bd46-f1bd-4d9f-9d91-15ba18b9864f@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -98,48 +97,65 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250830194308.32def0e5@jic23-huawei>
+In-Reply-To: <b024bd46-f1bd-4d9f-9d91-15ba18b9864f@baylibre.com>
 
-Hi Jonathan,
+Hi David,
 
-Thanks for having a look at this.
-Comment inline.
-
-On 08/30, Jonathan Cameron wrote:
-> On Fri, 29 Aug 2025 21:40:24 -0300
-> Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
-> 
-> > Previously, the AD4030 driver was using the number of scan realbits for the
-> > voltage channel to derive the scale to millivolts. Though, when sample
-> > averaging is enabled (oversampling_ratio > 1), the number of scan realbits
-> > for the channel is set to 30 and doesn't match the amount of conversion
-> > precision bits. Due to that, the calculated channel scale did not correctly
-> > scale raw sample data to millivolt units in those cases. Use chip specific
-> > precision bits to derive the correct channel _scale on every and all
-> > channel configuration.
+On 08/30, David Lechner wrote:
+> On 8/29/25 7:42 PM, Marcelo Schmitt wrote:
+> > AD4030 and similar ADCs can capture data at sample rates up to 2 mega
+> > samples per second (MSPS). Not all SPI controllers are able to achieve
+> > such high throughputs and even when the controller is fast enough to run
+> > transfers at the required speed, it may be costly to the CPU to handle
+> > transfer data at such high sample rates.  Add SPI offload support for
+> > AD4030 and similar ADCs so to enable ADC data capture at maximum sample
+> > rates.
 > > 
-> > Fixes: dc78e71d7c15 ("iio: adc: ad4030: remove some duplicate code")
-> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+...
+> > +
+> > +static int __ad4030_set_sampling_freq(struct ad4030_state *st, unsigned int freq)
+> > +{
+...
+> > +	do {
+> > +		conv_wf.duty_length_ns = target;
+> > +		ret = pwm_round_waveform_might_sleep(st->conv_trigger, &conv_wf);
+> > +		if (ret)
+> > +			return ret;
+> > +		target += 10;
+> > +	} while (conv_wf.duty_length_ns < 10);
+> > +
+> > +	offload_period_ns = conv_wf.period_length_ns;
+> > +
+> > +	ret = regmap_read(st->regmap, AD4030_REG_MODES, &mode);
+> > +	if (ret)
+> > +		return ret;
+> > +	if (FIELD_GET(AD4030_REG_MODES_MASK_OUT_DATA_MODE, mode) == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF) {
 > 
-> Hi Marcelo
+> Since this depends on the oversampling ration, we need to defer this
+> until we start a buffered read. Otherwise if someone sets sampling
+> frequency first and the changes the oversampling ratio later, then
+> the PWM period will not be correct.
 > 
-> I was assuming that when this said 'averaging' it actually meant
-> summing (there is a note about using the upper precision bits to get the same
-> scaling which is what we'd expect it were simply summing over X samples).
-> 
-> So given that we don't divide back down to get the original scaling I'm
-> not following how this works.
-> 
-> E.g. If we 'averaged' just 2 values of 3 then we'd go from a value of 3 to
-> one of 6.  Therefore I'd expect the scale to halve as each lsb represents
-> half the voltage it did when we weren't averaging those 2 samples.
 
-This makes sense and thank you for explaining it to me.
-I did some more test and debugging on the remote setup and found out the device
-was not correctly configured for averaging data on my tests for v1. I need to
-tweak a few more things in the driver to get both device registers and spi
-transfer configuration good for offload with averaging mode. I'll reply with
-more details if I find something unexpected, or drop this patch on v2.
+Yes, that's one of the problems I noticed when testing yesterday and probably
+the reason why I initially thought the scale was buggy for averaging/oversampling.
+
+> Alternatly, we could update this both when sampling freqency and
+> when oversampling ratio are updated. This would allow returning an
+> error if the oversampling ratio is too big for the requested
+> sampling frequency.
+> 
+
+Sure, this sounds to be the best way of keeping track of the sampling frequency
+and oversampling ratio combination. Otherwise, unadvised users (like me) could
+set the oversampling ratio then run transfers without the driver being able to
+update the CNV trigger waveform according to the number of samples to average.
+The result of that is the device doesn't do oversampling (despite the
+oversampling attribute value).
+
+I also see your comments to this and other patches and I think I agree with them
+all. Will re-spin to apply the requested changes and provide support for SPI
+related stuff in a separate series.
 
 Thanks,
 Marcelo
