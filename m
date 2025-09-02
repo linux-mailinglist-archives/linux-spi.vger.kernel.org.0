@@ -1,80 +1,81 @@
-Return-Path: <linux-spi+bounces-9856-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9858-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF85B4010F
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 14:46:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D565DB40111
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 14:46:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 928301B2297A
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 12:46:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C8D53B898C
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 12:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E1B2D4819;
-	Tue,  2 Sep 2025 12:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F344C2D979C;
+	Tue,  2 Sep 2025 12:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WUb5ZQkM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hmZRKMed"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6212853E0
-	for <linux-spi@vger.kernel.org>; Tue,  2 Sep 2025 12:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC502D248E
+	for <linux-spi@vger.kernel.org>; Tue,  2 Sep 2025 12:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756817170; cv=none; b=FD26D8zM4nLvZuxxVZ4DREuOvDkQok191hy1b7uW4GT7ra8EMHIsusD6bC8A8faEW98NypfwqgxoyUfNIf6slu+qHvJKoMk/PP2e18cP+LjF362PC44xFuU6I7TvD2sVO9Vm/fo6QBWhs/2h0DPVjAmsrWFmSQN4qjClod0In10=
+	t=1756817171; cv=none; b=sVvLW3N9RN8Ng9Tv3XMl7cjhWqCI5QOicxu52NyL5Rglu6/IGRooZoBnVicxvxbXCtZdH62utqoJY1x7qHG/rLesV0wzgRO1vo+hgnVNmvutafGoTRr3XHTvmsiP/LYB9xoU1IZZpV7TaD9rxiYNAep+4FvaNk0rL4Mh8RrbLi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756817170; c=relaxed/simple;
-	bh=8/fgw25QdB1ZgzdAKtXHCLtofKXduBfFQhmuMPgookE=;
+	s=arc-20240116; t=1756817171; c=relaxed/simple;
+	bh=C9oJkV3mHs12c4uHbbNxH2PTvvxlVuP9ivdk16TivuE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TBVG812EhkazQ7SmH1PYbQ6MPMG4TxylYb+/Dmqjt0BaYoaupR2zE7Hh8FRE943Zku3zGyK76bd4kyJflLTyYz7qGqMFZx5QGt5l/jjpkc6gcG1OaDIj0ifhHFT+G3lrdiVEaxT2wvtKoQST6mzjJXkUvdarNHF/tO5b9PB4/aw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WUb5ZQkM; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:To:Cc; b=t7kmDVtpRFLxOe5OaqzK9RSe0vrLGlqMzZLUrPDH47v2iF8pjfkQZ/QO+CeCa6NjwMhSINAt9OtlGnE7z/1eFVXRST4gQ/yxFgDpcYAUtsvsYbNJd8gYfTN/OkfIVeU26OVuIKItfoEn907WB+AvFM3WeD2bQXXzvljJDN82JxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hmZRKMed; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45b883aa3c9so16386515e9.2
-        for <linux-spi@vger.kernel.org>; Tue, 02 Sep 2025 05:46:08 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3d19699240dso2185965f8f.1
+        for <linux-spi@vger.kernel.org>; Tue, 02 Sep 2025 05:46:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1756817167; x=1757421967; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1756817168; x=1757421968; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5r9IPHLuMKz/CQAQPk4+OYtt68jBsvmpWFMRP88G9KI=;
-        b=WUb5ZQkMRb/nX8f2m5X0PRpMMRJu8VSdeLcLLMx/sAKY6k1ta06F2t0JD/BF5X5zZ2
-         G0E5SbmWYRUmCbccvh1ySU5zjVNWguy/FLBXXG+zF30OYYH+Ntcu7JlVUtBBcvzMiPje
-         Hr5Rn9FIp+fvYb56Mh3kBYYCb5WYRSlc9dT3/vXv9cEDHCzbVckzygWGUPDDTzNtI8cW
-         kBJ9xiIa7JBgTThsPu8R9V2zDHOkVY81xu3Kouvpy0OauU24eDPSmNQdvhUCOjcICzCJ
-         WkGcM7fXtlpwJW1x/TKmFG1OUwV//a+zSXPXYb7ydsa7g1o0guSTYm+E0zvFs49Z3bXi
-         5ONw==
+        bh=kn8pqlkvI8BkvlrFlfSozqitc0dmKXQH5rpgTQNMM/U=;
+        b=hmZRKMeddOeB2iSqdWCOzXZDSPwYEy2kc9Ne9sr4fQXBRk1ApyuWlQpBuwiaENjVC8
+         3d89NrluwMA9xLxnpCH07qGaG/w1um7GCC8MnfNnt9qKW+BctvqCiENxkTSPt7KMnsmG
+         CW+vwHKs1IRA1B2Ju1u5Lj1lBnNWIhBrsJmvvXPoTzkCGanCb1C/o9645OT6nAA+6GMG
+         igYm/5XmVcQg5wyqWE5qv56JhBWz6wMsKJzD0edG+2pWrbHkx5NE2wC5pJJHZHyhJqlQ
+         x+RjiMtsAW8GTKfBlCz6gSbZnHPPtIa0SSUEIvBYyBKjAFWEODW3eDGA/CgONT8Hmn1g
+         ZEQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756817167; x=1757421967;
+        d=1e100.net; s=20230601; t=1756817168; x=1757421968;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5r9IPHLuMKz/CQAQPk4+OYtt68jBsvmpWFMRP88G9KI=;
-        b=weeEo/jd5DrFMMltzBhOXj3IbrIioejh/naQshI10JV4Hn+NsBq3KGhk+hTNf841LI
-         X2mFpp9NNUEDg8WQcdETLv76GLDcEGBIMwNvaBGi1w7CJ41D1dYHIVG6Y+/iasa6TzZu
-         KOrreGX5YswJA4OFgYJ3mHLlsGqdDyKSXzvzO+edZcCoC6UGeD1UIPRtr7eI9nMRBOvi
-         0jd+iIsY8hnC/2uT9u+0cEA6/4TKJL3KXhw6Gdei/PqVJCWqmc7Imc/8tCqoS57Mstl1
-         zp5teo1x4ANJsNaR+D3LXAY02adiSjPsfanWVmY/bCEbyN5md4pl4i+L5e+kPMCHcOed
-         Dd2Q==
-X-Gm-Message-State: AOJu0YxQqfWsw9cxSaCTqWAxzwOho/Y1SxkprBdv1x/DEQVpuFoV4zyx
-	4s8soQ+ZHC41Xzh+Y4q162+U+6bh6ZAEIPUiOMRPgSMsne5EM4guzl+ALHXrHyX/YSM=
-X-Gm-Gg: ASbGncvNE+qBhe+2R5JAXovZbsPrJUmnYeocCXL7hPUpxeO/Qkc40bvXZY/nJTTx4Jh
-	iMl4yE0ISJ8GvsRJSUuskRrMFl/RF/Uo+62bWRhrjL+dsV1kZFmjuxPmYaH8EywoFvxqX1Dl87H
-	biV35pmdn/6XY6bRlGOQwhuMxCjZqRXzsWZusHvBtghSZa9bt5o6Il7euEet0pwIzE5vCkfNqtx
-	PsOUD9YXiWAxags4frSjgCEwKvJBUgsLdb3zuaxJIrkACypt1edv8m1rs1Z1SaHWdVj4DI4EDmr
-	ERilRt/Arob4a//V3FFEzK3RNSh+nTbqiImb5WiLjxJNBfcSBduFHIvxudTJWAq1f3MGNQ51Z+u
-	HzIgwjtlzkzOAtMhXNxgWOXszEPA04fc=
-X-Google-Smtp-Source: AGHT+IFiBte5oIm9wgYp4QL6sXIclbo20jvsZNvWU5oy5exkamtVaSde2J41wTdC4z94mkJWGbNsYw==
-X-Received: by 2002:a05:6000:3112:b0:3d1:42dc:c710 with SMTP id ffacd0b85a97d-3d1dcb76607mr9142347f8f.16.1756817167187;
-        Tue, 02 Sep 2025 05:46:07 -0700 (PDT)
+        bh=kn8pqlkvI8BkvlrFlfSozqitc0dmKXQH5rpgTQNMM/U=;
+        b=wSlgPi4XdpeRPIu7GgCEXtpNZf2gLKW5NWDd/G74th8vl6MX4ZixSsGNUl7gv9Q3qr
+         Y9OTZB04S48S/PIn7Z7hFrMkazPZOY6SHF8Hy6vhG4xX1tDXcr1EclDyR5YwefMB0Sj3
+         RrdUjptGZgp/CycK3uDBP+BNSb5oTCdEC1YXC20r7ooovu0XJYWsTtx8s2JR0w0g2Ck4
+         fAvo2t0griGF/FqnRcbHrlNVvdwwRG9zcEboK5YfhgdJadYiPnyfo5CBPfYsw/wZpChK
+         rSg5J0Ee7Q7QVW5R/0No0IygW+JpjFSTu443Tld58QXMYhxj3beqOnY2cJPd9xfSPX83
+         fQsA==
+X-Gm-Message-State: AOJu0Yy3uf105CNXJQU8OzulNP4e65NffM5qgXvUMbQLWAYBye8BiFK8
+	0EKqIJDz1vQwKGOmyXc+crfQqgSze091iwNwEGSvyse05OQyvwSy3ihQ5MrDuGmdFxs=
+X-Gm-Gg: ASbGncsdBNK1EKS/6GB9AyVapj3C+KmMS9Yo5wazg/qgwBqvl5ucXY65jz7GnAhR5b8
+	Zv+IfSv4RccErmDxRuKGsl1NHGrmv2zGiQ+N3eSgfX4V7fbHrS/9gvgik4Fx0ZXuUjxaKEYk2+G
+	HA4DkI+FLt+DcbicyavSz0oOPWl9SXlyQCoEc0jdvHcZqlIeXmsWMIYQvLK9bhGtTMLKokJf889
+	PBjJTmBEme7hSARPkOPbI7g/L/+9C3y5F6xUMaCacIV5ouohTYg5DCEefxGCs5dPBX4lFWC1kZc
+	rjNST0sGqpGvbd5wqHhMScjlx4KpsMKxBRTh2U4GA56gmcCiNWtj5mM1X5Ovwld5CyKMNeAhcTg
+	cBmpkIon7TJtvAlqNJMBwlDCLLG/+2wA=
+X-Google-Smtp-Source: AGHT+IFdtM4/TLGwP6fe/R2gAZvK0+s/idu1aQn5sBDOWhmpmHH0V56Svb4t3Yx0WsS/OmGQzPbJ4w==
+X-Received: by 2002:a05:6000:1786:b0:3d0:e221:892e with SMTP id ffacd0b85a97d-3d1df633bedmr8952104f8f.27.1756817168257;
+        Tue, 02 Sep 2025 05:46:08 -0700 (PDT)
 Received: from ho-tower-lan.lan ([185.48.76.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf275d2717sm19589896f8f.15.2025.09.02.05.46.06
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf275d2717sm19589896f8f.15.2025.09.02.05.46.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 05:46:06 -0700 (PDT)
+        Tue, 02 Sep 2025 05:46:07 -0700 (PDT)
 From: James Clark <james.clark@linaro.org>
-Date: Tue, 02 Sep 2025 13:44:53 +0100
-Subject: [PATCH v6 1/7] spi: fsl-dspi: Avoid using -EINPROGRESS error code
+Date: Tue, 02 Sep 2025 13:44:54 +0100
+Subject: [PATCH v6 2/7] spi: fsl-dspi: Store status directly in
+ cur_msg->status
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -83,7 +84,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250902-james-nxp-spi-dma-v6-1-f7aa2c5e56e2@linaro.org>
+Message-Id: <20250902-james-nxp-spi-dma-v6-2-f7aa2c5e56e2@linaro.org>
 References: <20250902-james-nxp-spi-dma-v6-0-f7aa2c5e56e2@linaro.org>
 In-Reply-To: <20250902-james-nxp-spi-dma-v6-0-f7aa2c5e56e2@linaro.org>
 To: Vladimir Oltean <olteanv@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -94,106 +95,141 @@ Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
  linux-kernel@vger.kernel.org, James Clark <james.clark@linaro.org>
 X-Mailer: b4 0.14.0
 
-Refactor dspi_rxtx() and dspi_poll() to not return -EINPROGRESS because
-this isn't actually a status that is ever returned to the core layer but
-some internal state. Use true/false return value on dspi_rxtx() for this
-instead.
-
-This will help separate internal vs external status for the later change
-to store the external status directly in cur_msg->status.
+This will allow us to return a status from the interrupt handler in a
+later commit and avoids copying it at the end of
+dspi_transfer_one_message(). For consistency make polling and DMA modes
+use the same mechanism.
 
 No functional changes intended.
 
-Co-developed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: James Clark <james.clark@linaro.org>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/spi/spi-fsl-dspi.c | 41 ++++++++++++++++++++++++-----------------
- 1 file changed, 24 insertions(+), 17 deletions(-)
+ drivers/spi/spi-fsl-dspi.c | 36 +++++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/spi/spi-fsl-dspi.c b/drivers/spi/spi-fsl-dspi.c
-index 4bd4377551b5..654905a358e8 100644
+index 654905a358e8..48054932d517 100644
 --- a/drivers/spi/spi-fsl-dspi.c
 +++ b/drivers/spi/spi-fsl-dspi.c
-@@ -986,36 +986,45 @@ static void dspi_fifo_write(struct fsl_dspi *dspi)
- 				dspi->progress, !dspi->irq);
- }
+@@ -591,11 +591,10 @@ static int dspi_next_xfer_dma_submit(struct fsl_dspi *dspi)
  
--static int dspi_rxtx(struct fsl_dspi *dspi)
-+/*
-+ * Read the previous transfer from the FIFO and transmit the next one.
-+ *
-+ * Returns false if the buffer to be transmitted is empty, and true if there is
-+ * still data to transmit.
-+ */
-+static bool dspi_rxtx(struct fsl_dspi *dspi)
+ static void dspi_setup_accel(struct fsl_dspi *dspi);
+ 
+-static int dspi_dma_xfer(struct fsl_dspi *dspi)
++static void dspi_dma_xfer(struct fsl_dspi *dspi)
  {
- 	dspi_fifo_read(dspi);
+ 	struct spi_message *message = dspi->cur_msg;
+ 	struct device *dev = &dspi->pdev->dev;
+-	int ret = 0;
  
- 	if (!dspi->len)
- 		/* Success! */
--		return 0;
-+		return false;
+ 	/*
+ 	 * dspi->len gets decremented by dspi_pop_tx_pushr in
+@@ -612,14 +611,12 @@ static int dspi_dma_xfer(struct fsl_dspi *dspi)
+ 		message->actual_length += dspi->words_in_flight *
+ 					  dspi->oper_word_size;
  
- 	dspi_fifo_write(dspi);
- 
--	return -EINPROGRESS;
-+	return true;
- }
- 
- static int dspi_poll(struct fsl_dspi *dspi)
- {
--	int tries = 1000;
-+	int tries;
-+	int err = 0;
- 	u32 spi_sr;
- 
- 	do {
--		regmap_read(dspi->regmap, SPI_SR, &spi_sr);
--		regmap_write(dspi->regmap, SPI_SR, spi_sr);
--
--		if (spi_sr & SPI_SR_CMDTCF)
-+		for (tries = 1000; tries > 0; --tries) {
-+			regmap_read(dspi->regmap, SPI_SR, &spi_sr);
-+			regmap_write(dspi->regmap, SPI_SR, spi_sr);
-+			if (spi_sr & SPI_SR_CMDTCF)
-+				break;
-+		}
-+		if (!tries) {
-+			err = -ETIMEDOUT;
+-		ret = dspi_next_xfer_dma_submit(dspi);
+-		if (ret) {
++		message->status = dspi_next_xfer_dma_submit(dspi);
++		if (message->status) {
+ 			dev_err(dev, "DMA transfer failed\n");
  			break;
--	} while (--tries);
+ 		}
+ 	}
 -
--	if (!tries)
--		return -ETIMEDOUT;
-+		}
-+	} while (dspi_rxtx(dspi));
+-	return ret;
+ }
  
--	return dspi_rxtx(dspi);
-+	return err;
+ static int dspi_request_dma(struct fsl_dspi *dspi, phys_addr_t phy_addr)
+@@ -1005,7 +1002,7 @@ static bool dspi_rxtx(struct fsl_dspi *dspi)
+ 	return true;
+ }
+ 
+-static int dspi_poll(struct fsl_dspi *dspi)
++static void dspi_poll(struct fsl_dspi *dspi)
+ {
+ 	int tries;
+ 	int err = 0;
+@@ -1024,7 +1021,7 @@ static int dspi_poll(struct fsl_dspi *dspi)
+ 		}
+ 	} while (dspi_rxtx(dspi));
+ 
+-	return err;
++	dspi->cur_msg->status = err;
  }
  
  static irqreturn_t dspi_interrupt(int irq, void *dev_id)
-@@ -1029,7 +1038,7 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
+@@ -1038,8 +1035,11 @@ static irqreturn_t dspi_interrupt(int irq, void *dev_id)
  	if (!(spi_sr & SPI_SR_CMDTCF))
  		return IRQ_NONE;
  
--	if (dspi_rxtx(dspi) == 0)
-+	if (dspi_rxtx(dspi) == false)
+-	if (dspi_rxtx(dspi) == false)
++	if (dspi_rxtx(dspi) == false) {
++		if (dspi->cur_msg)
++			WRITE_ONCE(dspi->cur_msg->status, 0);
  		complete(&dspi->xfer_done);
++	}
  
  	return IRQ_HANDLED;
-@@ -1137,9 +1146,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
- 			if (dspi->irq) {
+ }
+@@ -1069,7 +1069,6 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 	struct spi_device *spi = message->spi;
+ 	struct spi_transfer *transfer;
+ 	bool cs = false;
+-	int status = 0;
+ 	u32 val = 0;
+ 	bool cs_change = false;
+ 
+@@ -1129,7 +1128,7 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 				       dspi->progress, !dspi->irq);
+ 
+ 		if (dspi->devtype_data->trans_mode == DSPI_DMA_MODE) {
+-			status = dspi_dma_xfer(dspi);
++			dspi_dma_xfer(dspi);
+ 		} else {
+ 			/*
+ 			 * Reinitialize the completion before transferring data
+@@ -1143,13 +1142,12 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 
+ 			dspi_fifo_write(dspi);
+ 
+-			if (dspi->irq) {
++			if (dspi->irq)
  				wait_for_completion(&dspi->xfer_done);
- 			} else {
--				do {
--					status = dspi_poll(dspi);
--				} while (status == -EINPROGRESS);
-+				status = dspi_poll(dspi);
- 			}
+-			} else {
+-				status = dspi_poll(dspi);
+-			}
++			else
++				dspi_poll(dspi);
  		}
- 		if (status)
+-		if (status)
++		if (READ_ONCE(message->status))
+ 			break;
+ 
+ 		spi_transfer_delay_exec(transfer);
+@@ -1158,7 +1156,8 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 			dspi_deassert_cs(spi, &cs);
+ 	}
+ 
+-	if (status || !cs_change) {
++	dspi->cur_msg = NULL;
++	if (message->status || !cs_change) {
+ 		/* Put DSPI in stop mode */
+ 		regmap_update_bits(dspi->regmap, SPI_MCR,
+ 				   SPI_MCR_HALT, SPI_MCR_HALT);
+@@ -1167,10 +1166,9 @@ static int dspi_transfer_one_message(struct spi_controller *ctlr,
+ 			;
+ 	}
+ 
+-	message->status = status;
+ 	spi_finalize_current_message(ctlr);
+ 
+-	return status;
++	return message->status;
+ }
+ 
+ static int dspi_set_mtf(struct fsl_dspi *dspi)
 
 -- 
 2.34.1
