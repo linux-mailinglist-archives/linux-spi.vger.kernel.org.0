@@ -1,138 +1,174 @@
-Return-Path: <linux-spi+bounces-9867-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9868-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC3AB408CF
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 17:21:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA93FB409D5
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 17:55:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9798188DF3A
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 15:22:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F3847B3744
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 15:53:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09A931353F;
-	Tue,  2 Sep 2025 15:21:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B075133471B;
+	Tue,  2 Sep 2025 15:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjmqJuu1"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="LoQqkchV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAD12FE068;
-	Tue,  2 Sep 2025 15:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EC032ED21
+	for <linux-spi@vger.kernel.org>; Tue,  2 Sep 2025 15:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756826514; cv=none; b=qS5JRRftIbDI5OK2+FyyAcVxn/NvI9O8KW7ks3Hdkj4BCHjEpRBeelITFJ1Co3JCWTACAug9hBBKRrXqmRezDWyk4EdTTRFgMOzJXFtBVEGw4fDeTOLxLxXFVDXJ6/3VOb03GDO3rdJYNGlY1H2Zswl1OJAyDKBGcEezlhxxCyA=
+	t=1756828485; cv=none; b=bXNKrVfu1rWfGCVX3AKNUbMLQmo1dEIesvNSITg3HJ42bEZKUTut4F2mcwXxB0PiCAOVIW1ZOAoPruhX+Av4de/LIwoThohLF1Nt85XErRxBZXePY3pf0JjtyoDOOROdL5ggZX3PWy5to0GrVspvpKpwvt9G8dt/8OxMdvvECTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756826514; c=relaxed/simple;
-	bh=rhmHOETPUB80MeODBzKkC4z8z37xTyz2AMhtaliS4hI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HkH6T7tykk6dd/GbfBq2bAqOuQMHOWYH7CBluhD0OSkLc9aJYE8LDlgVhR9Vt42PTSKSNGrti8R0QtR4/qYf8L6WPs1ReUsnx/gHDfHa21fqYtkh/o1iTEQ31UVXtt4m5LV0SkuhqZ5DDhuFSd3jCuR/pbLWtGTUsCK7N9RTq4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjmqJuu1; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-77238cb3cbbso3014270b3a.0;
-        Tue, 02 Sep 2025 08:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756826512; x=1757431312; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gw3ssi4bmma7i1rZNi65std+RGG6lQ5EditfjZ933j4=;
-        b=kjmqJuu1wnVz9SCd9faDNDyQJZrtaiMCLZ7RW71pmMRo1bvvkozcnfevaZ7xFNpBvd
-         d2bjM3YuH7Aq5mZG4zQHV8thNM9wvgaWLjqRssJJjY9accs9wlf60e6uig7/ra1q8VwN
-         gEhKfjsvvyMwxvcuNOl1E+TJo2i5QRSgAQ7EKt62r57HAWAU+dR3pAedlMPdXorx0xS6
-         gZzP60QlKfN4Z2vPJlJlf8zkaTY1lwdSLG1yU2yKHDQxeXwx0Dw3dtctoOofPALv8OIp
-         xXO7HSyOXmb273K6WQnR8AvFkVyLsnoeqIqIhskfRPM8knZMBilKyVJaMinbmzW5E+bu
-         jY0A==
+	s=arc-20240116; t=1756828485; c=relaxed/simple;
+	bh=SIeqemmlWZjtTDFt63QTgsr6TSr3ywAaj+98hdV61Tg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mrqmqQSxn764QR/oosfaOlK+dgaTb1jVXOVnU8Qnp+iDpE1sqYVdZndaSSOuDFAHsQsgv8dq7AY7g9aGZmabvVJRTf5VvEonhwyT38LCVNjFIhxhMMmLv6BNxhqNOVfeMkxdeg0J1LPI4plY+F0WcjURvk8zcqOV0flHpido3ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=LoQqkchV; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 582EqCLN001402
+	for <linux-spi@vger.kernel.org>; Tue, 2 Sep 2025 15:54:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	H0/NKsmoyFLkbDVaC3DDw/RfCF+8mLvmzVh8l0oPx0M=; b=LoQqkchVSHE33PUd
+	SkEU4hr3knPdoC293lQKOh6/2FHCILPARZK9yLo+VLMnsRuHb0QPvKmFJs9OHycF
+	sTsBJciI/6+hfPLy5o7uIGM7wIPHbzWDiP2Ddr0/KJfPDYRNRTFvPlo/KCNguyQj
+	p3N4VxH6D9knhtEDiZt2QRI/EDtRjsKfMCmiQYF4cDcLkUPFjAXwzWKvg+MXsLVU
+	2BC51rRZpu+I6TneQ6EOfCCeL9+Gsp/mtUJ0D7C1t5Svafe6nS4oV7yW57xNg05T
+	8G7ziW473qIKOkjdBVNY20FsMDiDgCDA8fOdgZIeFMScTa3Zv4jYFNrbJpGpvHQt
+	KuFfrA==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48w8wy47kj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Tue, 02 Sep 2025 15:54:42 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-70de0bdb600so91570386d6.1
+        for <linux-spi@vger.kernel.org>; Tue, 02 Sep 2025 08:54:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756826513; x=1757431313;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1756828482; x=1757433282;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gw3ssi4bmma7i1rZNi65std+RGG6lQ5EditfjZ933j4=;
-        b=jVAv52OVsTlA4TGoI/doR6nNXVkY3dAeZH6GCyzmpIsYDuw/f+eJAv7HusExz6RWS2
-         3dmMTJWHdI7EjldOE5xX1r/lZIaFYtyF0XFV7mbfMhEOWIeBb+7IqNcPJ6lBdjTaF2U7
-         vHS1aEMGnzQojbxHbZfmXwgOoh6vRTLMj0XvFH9K66md2Hv1nJosYt6CcCmsTC9l95Rh
-         NQRPcIZF+4mMRBe/8wRYGqj57Nu6zxOTroz5QUvqN6jLrUHV7P9IswEQZKuheJihDdN0
-         AnGlk8yKEjNXqv8iGvTbLE4qy4lsxveD/jLcEpwva3fQjp+OQcwVz1V0AQOIEybynbfX
-         O+LA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYOM3RieJ8SNAoHHEMW/EwhR4xDearMeNqMkP+y/nc0zrTYnTrpOBMtYa7uOIWxWp7aiIoqyboUbFl@vger.kernel.org, AJvYcCWWSVFxK30HqOMUOki+oXBp/F1HIV7RxndEzWz6X7StL8Uu8Cf+KS/PB+G/OXKxg5NMbNHVfw/eLzc3@vger.kernel.org, AJvYcCWhzskM8Vt4HYnrugDLPqRpHYzXg4GeAVoT5PAcrRR9N02PTPDdBHTYcwPLNTyqWQG19SUhFi01USaA@vger.kernel.org, AJvYcCWp/SCdOivxU+YRvFmUxNHeJypVgOBLpk1kCXxYdGSBjsdcFoPQMGmPfOrKFefh2pHHOFFg24iL2lkJ@vger.kernel.org, AJvYcCWwFZiHahKQ5yCZvQolsmaW6gmv/b4gtulnS9BpOWFR43YTj4Fg919mWRboKaG4jxUnfrqE4gOmibCCrQ7d@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDzPLxISE+Yr9G5k8sU38xkSpcXuMzdGyLgaN9GrJ41Gr4xQIW
-	9WqWj8A+gIJU4kvUagx2ZG0IAPrPQUNuqcWGT9VNdG9FVBrxZtde6ifp
-X-Gm-Gg: ASbGncupPEbc2f9nx0kD4aZRisxtBJmReSTJLfOWN7gujFnGzOcOznumLCVnl7HqAFD
-	8boNzY7nc1dAvF0VxDrgTEAk0/bgu0g6tXq1lhqbXjX0Sn1x3YKcmW6nYPfcFZ/MzicuWcSz4mp
-	+FNQO7b6iQ0VFvF4tI+Wy/H08Xw/s4mDxuuJzZpoabwzD4WGmYPH4OY+KVkETla8RFO4+RDjD2E
-	ssiH7irgLcRb5WPgYOiBZutY19O1LOnUmnOZlYiRmRSpuai7cRD1l+EJQwsGCEMzYeY6VVyi7eR
-	bs+0bfQMnugDqy++5UrXXVaDq5Bh8sx5pGhCvvhd/ynixaSO9H00Hv0nsb+cKXCt6G95d+LSCoE
-	1M3ayVo5xRZ+p0SWk0BzTUGGy/CkBu+E=
-X-Google-Smtp-Source: AGHT+IF/e24Rcl4OaU3SdP4MK+Vzqmqenz5g+ZRwy+5rwpsp7l+XLoGC3ieQOzGmDmipIH0UtCwd+A==
-X-Received: by 2002:a05:6a20:3d07:b0:243:c2e8:f4d1 with SMTP id adf61e73a8af0-243d6e6d928mr18303803637.26.1756826512533;
-        Tue, 02 Sep 2025 08:21:52 -0700 (PDT)
-Received: from localhost ([2804:30c:1f77:e900:8ef5:b053:b8a:9345])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b4cd073c1fasm12063938a12.15.2025.09.02.08.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Sep 2025 08:21:51 -0700 (PDT)
-Date: Tue, 2 Sep 2025 12:22:23 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	jic23@kernel.org, Michael.Hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	corbet@lwn.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, broonie@kernel.org,
-	Jonathan.Cameron@huawei.com, andriy.shevchenko@linux.intel.com,
-	ahaslam@baylibre.com
-Subject: Re: [PATCH 15/15] iio: adc: ad4030: Add support for ADAQ4216 and
- ADAQ4224
-Message-ID: <aLcLr8H3QbL_A565@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1756511030.git.marcelo.schmitt@analog.com>
- <006ac88a667ce0d2c751946b562af83d0f27a44f.1756511030.git.marcelo.schmitt@analog.com>
- <CAHp75VdeSqwVecJHx+jXn9++zgN+CBH56OGUYX5kBbdc0AFKSA@mail.gmail.com>
+        bh=H0/NKsmoyFLkbDVaC3DDw/RfCF+8mLvmzVh8l0oPx0M=;
+        b=PsTcjW455UYKhNG04+tx5mVvXEq7modQ0QmClFHWlKJfSJVt99v+w7XYHaZPv0Thmq
+         +B5yCnu/s4X+fRS4yaGQrda55mlTjrJh/xX+iBavmbxcrWS5rwmg62q8mV8PSGVqP7w9
+         tDZc0yWPkK1uDmilwpj9RsocvKOy8EGg9k4bb6KfDzuio0FpvyqFfEKHWw/twyk7/en4
+         uNmovTEtVxX/q5bh55VD+ceSGhvq3Eh7JBn86aQn7kAgN1diI6sggI6XL0ZIrUNVujQb
+         EcbsKNW30eHoSw1UBPJCOt0a23W8B4Yv+vxcxsp46IHMNQA9RQkfLmnQgbcxqEUPGS6U
+         9ciA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3wkaA5cE5viVWv1X3Vn/lI12rIWju3fbY03OQLyFEOG6UilzvM6A2d/mOPBhxIGi8FBoASRA7gpk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu8HapMeyVammNJSqiZOOK/8rjzxsOZtF/ihYBGpTxkOa1sI1B
+	cUy0qDnIcAH3cOo1hP8gRml82Gt3882q5LIPBtHahUXmX+gBZH3NoY6cGHY01FEA1gLdX8gN7Cd
+	3jvli+VSzu7Pc24Te43hdyAK8SfHyax5B434tQWyRqNXAaGBJ3yPnqB+Vb0vAhy4=
+X-Gm-Gg: ASbGncsNht10LfshYZw4iAUmLwzWZyFwPMpfggmMLn4/nDAboghOgMZtjGhEyprPHEX
+	PIHMmw/nVBgHkfXmZfJvb1vnWrMSNLPIiqlWpZiBlje55CeYRpjYjJSOrGjcx87ZPV9X2DlY4lp
+	U1smY01iUTO4vElyUVfcgRWZbLxaw93P0E5+C9oUvCza9EdP0tGJRTqa7tUHSdRjEW82+z0nMV9
+	UUuCUhiVSlGQpHn5pD7pVT7uwqWGpzZ+KbbLe+gNRlVsX5jSAFt2f74ji/UToYveKQS5dfgiRKJ
+	z593UEwvVxWglRjOyX5mmfdsJnqklayBd1Bdh4yNfKiuevlQcTUQWg==
+X-Received: by 2002:a05:6214:20cf:b0:70d:f719:df3a with SMTP id 6a1803df08f44-7209d44bc7emr31784716d6.61.1756828481903;
+        Tue, 02 Sep 2025 08:54:41 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IESgAsgiQPlE4blyzeowkiKWqxqSOmSkJn6p3dseobdu0TaIys417DbFV6epXYxdrrnD1xuNQ==
+X-Received: by 2002:a05:6214:20cf:b0:70d:f719:df3a with SMTP id 6a1803df08f44-7209d44bc7emr31784226d6.61.1756828481321;
+        Tue, 02 Sep 2025 08:54:41 -0700 (PDT)
+Received: from [172.22.19.48] ([212.136.9.4])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61d330f9f39sm6782677a12.14.2025.09.02.08.54.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Sep 2025 08:54:40 -0700 (PDT)
+Message-ID: <be8961be-2964-4571-9818-b5a23867b27e@oss.qualcomm.com>
+Date: Tue, 2 Sep 2025 17:54:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdeSqwVecJHx+jXn9++zgN+CBH56OGUYX5kBbdc0AFKSA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 3/3] SPI: Add virtio SPI driver
+To: Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Haixu Cui <quic_haixcui@quicinc.com>
+Cc: quic_msavaliy@quicinc.com, broonie@kernel.org, virtio-dev@lists.linux.dev,
+        viresh.kumar@linaro.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hdanton@sina.com,
+        qiang4.zhang@linux.intel.com, alex.bennee@linaro.org,
+        quic_ztu@quicinc.com, virtualization@lists.linux-foundation.org
+References: <20250828093451.2401448-1-quic_haixcui@quicinc.com>
+ <20250828093451.2401448-4-quic_haixcui@quicinc.com>
+ <aLWMZH3NTfM8qOUy@smile.fi.intel.com>
+Content-Language: en-US
+From: Harald Mommer <harald.mommer@oss.qualcomm.com>
+In-Reply-To: <aLWMZH3NTfM8qOUy@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=Ycq95xRf c=1 sm=1 tr=0 ts=68b71342 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=dNlqnMcrdpbb+gQrTujlOQ==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=zryznllHkYnWp0Pe4IwA:9
+ a=QEXdDO2ut3YA:10 a=OIgjcC2v60KrkQgK7BGD:22
+X-Proofpoint-GUID: XBs8dF037zdjAP_fKsk0_uBnxUMld_Vq
+X-Proofpoint-ORIG-GUID: XBs8dF037zdjAP_fKsk0_uBnxUMld_Vq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTAxMDEwMSBTYWx0ZWRfX7Lm3ImEtNOSh
+ eIyyZfaq9dPHgY0PMKpuTezt4gK6+r7nIT2LTfXvxmhaaa5rKmO7im7szYZYy9UHdVSn//i7fpR
+ 0S/9bPnFvac3WXw+dQpiDXyiGLmMUVOverRobV6Nz8kA0WZQqFs1spiO8l3SS2iFh+H+30FHGP+
+ ulcX06SUHjvlRE9+rWRucI2rrRybDuclwVMpgGRWbTJtcS4FeVseExyepUu6vN7gzCcPNgDakI7
+ IMaOzvAeT92KcXuGaxqek7mmIx4FhuVx3G3lzadC9/Dux/pC4KMGknNFSu4XrWEQC7I+C70nVHj
+ pn5YyAgUBE5+UIHNi5kqxQF9F3dD91NFGWWoBIs3hfbYpNa/VNHPZJn7fifs5Cyyo2Yk8s5wUfI
+ Cm3oTKCR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-02_05,2025-08-28_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 spamscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509010101
 
-Hi Andy, thank you for your review.
+Hello,
 
-On 08/30, Andy Shevchenko wrote:
-> On Sat, Aug 30, 2025 at 3:46 AM Marcelo Schmitt
-> <marcelo.schmitt@analog.com> wrote:
-> >
-> > ADAQ4216 and ADAQ4224 are similar to AD4030, but feature a PGA circuitry
-> > that scales the analog input signal prior to it reaching the ADC. The PGA
-> > is controlled through a pair of pins (A0 and A1) whose state define the
-> > gain that is applied to the input signal.
-> >
-> > Add support for ADAQ4216 and ADAQ4224. Provide a list of PGA options
-> > through the IIO device channel scale available interface and enable control
-> > of the PGA through the channel scale interface.
+On 9/1/25 14:07, Andy Shevchenko wrote:
+> On Thu, Aug 28, 2025 at 05:34:51PM +0800, Haixu Cui wrote:
+>> This is the virtio SPI Linux kernel driver.
 > 
-...
+> ...
 > 
-> > +/* HARDWARE_GAIN */
-> > +#define ADAQ4616_PGA_PINS              2
-> > +#define ADAQ4616_GAIN_MAX_NANO         6666666667
+>> +#include <linux/completion.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/io.h>
+>> +#include <linux/module.h>
+>> +#include <linux/spi/spi.h>
+>> +#include <linux/stddef.h>
 > 
-> Can we use calculus instead (people can't count properly after 3 :-)?
-> Something like this
-> 
-> (NANO * 2 / 3) // whoever in the above it's 20 and this puzzles me how
-> something with _NANO can be so big :-)
-> 
-Yeah, the max gain could be expressed in MILLI, but maybe I'll just do 20000 / 9
-(or equivalent) as you suggested below and drop ADAQ4616_GAIN_MAX_NANO.
-I'll also comply with your suggestions to this and other patches.  
+> A lot of headers are still missing. See below.
 
-Thanks,
-Marcelo
+The driver should compile with the set of included headers.
+
+> 
+> ...
+> 
+> 
+>> +struct virtio_spi_priv {
+>> +	/* The virtio device we're associated with */
+>> +	struct virtio_device *vdev;
+>> +	/* Pointer to the virtqueue */
+>> +	struct virtqueue *vq;
+>> +	/* Copy of config space mode_func_supported */
+>> +	u32 mode_func_supported;
+> 
+> uXX (in particular u32) is defined in types.h.
+> 
+>> +	/* Copy of config space max_freq_hz */
+>> +	u32 max_freq_hz;
+>> +};
+
+u32 is for sure defined in types.h. But looking into another device (gpio-virtio.c) I see that there is also u8 and u32 used and I don't see that there types.h is included directly in the C file. It must be included indirectly as the driver compiles. Same happens here.
+
+I'm not aware of a requirement in the style guide for the Linux kernel that all used headers have to be included directly in the C file but this does not mean that such a requirement does not exist. Can anyone point my nose on it?
+
+Regards
+Harald Mommer
+
 
