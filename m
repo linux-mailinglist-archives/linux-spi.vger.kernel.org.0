@@ -1,80 +1,118 @@
-Return-Path: <linux-spi+bounces-9840-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9841-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61903B3F10C
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 00:30:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02F9BB3F4CC
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 07:52:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2210C20713E
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Sep 2025 22:30:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AEAB37A1F0B
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 05:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B52E283FCE;
-	Mon,  1 Sep 2025 22:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8EA2E1751;
+	Tue,  2 Sep 2025 05:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JpKBYgJe"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UugYQR/m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD632CCDB
-	for <linux-spi@vger.kernel.org>; Mon,  1 Sep 2025 22:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9958C2E172B;
+	Tue,  2 Sep 2025 05:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756765799; cv=none; b=IwxJ+W09bNv8HGZkQoGdtmSjtxMc6JwXfKNP84NirMR5k40M6L8rzn3qkWyImjaJRnWA0+8/A3cLAsbHqaq5efKUCmbVAaT/A1JavNKE75EWBYjA2+yntmaQwVMGUIgx2x2noaJvN8sFdQbrJODn7LGam2tOAZ3me6wfkQwqjJ4=
+	t=1756792367; cv=none; b=Mixq1lqEB8d/qSDQ9uiBKq9lh/YpBiEl52gGjxD7iAnoZzO8kTWQ/75kBpgymoZNdXzKYkda6cBkMPwCkA5fExi+xOEOCqC7MbOnwaYf5GaGrSrCSbGhs2WL1CEeSU1XM3u8xoQnFLxbClsF9viNmW0eSEwaj/EwMMokxJpFb+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756765799; c=relaxed/simple;
-	bh=IBmGXAwQUfKoDVolBDUXKiXsJcJN5p3elE/hw5Rjf60=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=OjMDZVKpuCSPPrKgXsYL0XDt8ECoruFDy+OFyp7h1ZLjg06eRz9xgd0Jk0WOp11xL4DgCfsjM8/sdvpmyjgQj1XvS2uUQ4xBbgRnBNnmFRbJ1n7FACPLHi3X53lGQ7OYsSrlkjnKitY8/5YlWiSvnhLCNTnwolWHUQrw2lz1QaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JpKBYgJe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4A5C4CEF0;
-	Mon,  1 Sep 2025 22:29:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756765798;
-	bh=IBmGXAwQUfKoDVolBDUXKiXsJcJN5p3elE/hw5Rjf60=;
-	h=Subject:From:Date:To:From;
-	b=JpKBYgJekiR2cNO78rXx2Du5iqmvPoyq8dGzHxRQcNqg6UfgxwnSiVEUu56kO+dIn
-	 HBOqcdw9tQAkVLij7qK+GYEdBb1/N+na4ploJrQqBroMyVAIdYEntgM3BBgpaDDhc5
-	 9QLApBbt68k6uMY5DVMlB+Op+m3vH02K+deYYqbJq2vKpWc1iXlu9e373BZb6ap+/6
-	 NSBJ6p4+S8qqjIfMtS/WHe0UUPwTJNvyLWPmfXN3r+whrTF49m5e8vjq1RogKAKhKp
-	 crDmTGidrLB8hLU2BZ4EebT9Cyy2AvkhkEt/zUQDKAj/MMQWtwrvWE8NSK1HqtHMaP
-	 oaiS/5cEnCgbQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 375D3383BF4E;
-	Mon,  1 Sep 2025 22:30:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1756792367; c=relaxed/simple;
+	bh=KsI+M7YnFhd/Oo7jo6teF3LjOcYUqnHqlXYhwF09GJ8=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=IpzPmW9fvFbmAC+0cFgyQNXmPkiAIEcuIqfEHDRK0BXOfC1Nv2ihDRGxRr4lQJWVXD/fOHBnwglVd8ljLj5pkrA9rgeTatyh/WLO1tQ26iieU71mV5sEEK3pFyEx5ten4joO7AToyRh3nBlcVonq7VFlpdYOQ/7qzAcA02Au0Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UugYQR/m; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1756792365; x=1788328365;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=KsI+M7YnFhd/Oo7jo6teF3LjOcYUqnHqlXYhwF09GJ8=;
+  b=UugYQR/meTMb0iCQ6dAl9scE57+Pk9YdFjueasIi1QloCigwUPMX3wFT
+   RCKTqHiBgjqMOyDKeNTkdSfSokjnPMbVRlLajgAul/a7JXcxkcoa2ykTw
+   bngPR0oC6L6USLGB8AjwGev7zdfNmcTLYS53wFDAGXWvRbldU8G+25LBf
+   5snRN3GeUKtXHxfe6Vno+HnHyylQEQIQwEXL3FUelWwhgTNshtA6NKGzR
+   T94QrM5BWZquSps5AFbCtLaKNLPA3x/IUU3u1xZThw8VlKKWmF4S9d3sP
+   g5WOBulu1iv0cAcmidYVFMuKo2xV9QE2wHH7XVPKMTCq0eTE9Fyb7Lb6f
+   A==;
+X-CSE-ConnectionGUID: 1ukqY7Z2Svu+qnOLrd9exQ==
+X-CSE-MsgGUID: lNApHYG2Tuqr8iBNPO7irw==
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="46483411"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Sep 2025 22:52:44 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Mon, 1 Sep 2025 22:52:29 -0700
+Received: from [127.0.0.1] (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
+ Transport; Mon, 1 Sep 2025 22:52:24 -0700
+From: Dharma Balasubiramani <dharma.b@microchip.com>
+Subject: [PATCH 0/5] Add QSPI support for sam9x7 and sama7d65 SoCs
+Date: Tue, 2 Sep 2025 11:22:17 +0530
+Message-ID: <20250902-microchip-qspi-v1-0-37af59a0406a@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175676580384.3896089.12994227648021606154.git-patchwork-summary@kernel.org>
-Date: Mon, 01 Sep 2025 22:30:03 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABGGtmgC/x3MQQqAIBBA0avIrBPUkqirRIuapppFaQ5EIN09a
+ fkW/2cQSkwCvcqQ6GbhcBbYSgHu07mR5qUYnHHedMbpgzEF3DnqSyJrmlvsGust1gQliolWfv7
+ hML7vBzDWzZpgAAAA
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	Dharma Balasubiramani <dharma.b@microchip.com>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756792344; l=908;
+ i=dharma.b@microchip.com; s=20240209; h=from:subject:message-id;
+ bh=KsI+M7YnFhd/Oo7jo6teF3LjOcYUqnHqlXYhwF09GJ8=;
+ b=MjxsyeDrxOB1wRIZko5qiDCJGRosvkwJODv4FsB2+qTmRCjP4qx8nlJjRycaO78WfdeKx0g8M
+ McqAOvU+s3zBu7u3d9n+cRcTUJU1dP0DSgvwU6IY+P7KCOHe/uaMNLw
+X-Developer-Key: i=dharma.b@microchip.com; a=ed25519;
+ pk=kCq31LcpLAe9HDfIz9ZJ1U7T+osjOi7OZSbe0gqtyQ4=
 
-Hello:
+This patch series adds support for SAM9X7 and sama7d65 QSPI controller
+along with the SoC-specific capabilities.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+---
+Dharma Balasubiramani (4):
+      spi: atmel,quadspi: Document sam9x7 QSPI
+      spi: atmel,quadspi: Define sama7d65 QSPI
+      spi: atmel-quadspi: add padcalib, 2xgclk, and dllon capabilities
+      spi: atmel-quadspi: add support for SAM9X7 QSPI controller
 
-Patch: [v3,1/1] spi: cadence-quadspi: Implement refcount to handle unbind during busy
-  Submitter: Khairul Anuar Romli <khairul.anuar.romli@altera.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=995441
-  Lore link: https://lore.kernel.org/r/8704fd6bd2ff4d37bba4a0eacf5eba3ba001079e.1756168074.git.khairul.anuar.romli@altera.com
+Varshini Rajendran (1):
+      spi: atmel-quadspi: Add support for sama7d65 QSPI
 
+ .../devicetree/bindings/spi/atmel,quadspi.yaml     |   3 +
+ drivers/spi/atmel-quadspi.c                        | 134 ++++++++++++++++-----
+ 2 files changed, 105 insertions(+), 32 deletions(-)
+---
+base-commit: 33bcf93b9a6b028758105680f8b538a31bc563cf
+change-id: 20250902-microchip-qspi-eb7c94151c3e
 
-Total patches: 1
-
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Dharma Balasubiramani <dharma.b@microchip.com>
 
 
