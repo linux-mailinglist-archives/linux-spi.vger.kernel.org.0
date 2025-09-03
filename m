@@ -1,136 +1,97 @@
-Return-Path: <linux-spi+bounces-9881-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9882-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58750B4233A
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 16:12:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E246B42621
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 18:01:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0F927BD5CA
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 14:01:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99C30162F45
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 16:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3919A2FD7BC;
-	Wed,  3 Sep 2025 14:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E5329A9FE;
+	Wed,  3 Sep 2025 16:01:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kuddoeeB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YPvp5DkQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26102F7441;
-	Wed,  3 Sep 2025 14:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8971DE4EF;
+	Wed,  3 Sep 2025 16:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756908177; cv=none; b=GhvhDcUwulzJqXbV3X54YusDQZYCKq976Z8B2p0MNfKb2w5uscWW3WKkgtfbLbfqoXM6kAjSq7H8RVjoCKjU0Sla++Y6f4rCpPDtDwnueqpABI4afBuIBzWr6bfJMsznxPUskDG7DT7BkMouHAMc6CTbMTRVykrTFLOPYX0Wz6c=
+	t=1756915282; cv=none; b=PRSDBUq+DgjTJr3Vtfg3hvDxkJ+Ytpt0jipMIPMdaAvD8FnCOoTQO9arZtFwKBeyve5+hDJLsJFat2EoyIppQAfsGCxdt6lWUSw7oaWtzyz4iwwNzW6oMvp/envBUHsSiwBg0Q6Lga2nV7JDXpWZFCfj3qtfbxsG+MwMSgV9EUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756908177; c=relaxed/simple;
-	bh=+Ou7/TJXaHnviKBEr5ILfWD+oVZwfeeOf3QKT9caAkE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MEM9EDYXLAK0MnHSXz1I/pArB1ui+oN1N8UXJBSnZIr89BDUHpugwpc8pY7+JDK+qWnUUULCwyFeeL3w4xbSNRDqhBCGGsiK5GBOU7x4mmesIxFLMxyh+QW9A1sMk8l22V4XFcuvVLoktPmafLH1FQjntlP5dgJ6pgdg9UIcTHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kuddoeeB; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1756908175; x=1788444175;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=+Ou7/TJXaHnviKBEr5ILfWD+oVZwfeeOf3QKT9caAkE=;
-  b=kuddoeeB7GToGKL1LyvBq/d4T/ZZAafpK8vfzgitgpd5zSsvaDnqWlNC
-   /oYEQuLQwVqp6pMkko5Fc7XMJiDBWwijHcljKRowRNe+w4RJ/gyD3GOCV
-   veXb6sgqF3gSAgl5NTS7QC/sFdh7vBgzuxkw7ZQGj4NlQKmpq1tlIHHa1
-   PcFgQq4fLz+WkeMJkJoTG6L01uIwFwkZj7K4FojdaDeYgMG49yZlneMGI
-   rZrCLf4BmswAFtxUH/WMj4dkbcrTXjgL7lbLg9wHKTwrUW0zMpoSAZyfa
-   Ln+K5zuvEUllL9KkUPvV1B1/UjrCTE116DpdFcld6y5xFa0s725N8DkRI
-   w==;
-X-CSE-ConnectionGUID: v8Jh6wOIR5q2UVBlaHd94g==
-X-CSE-MsgGUID: Ky7Vg2BiRuyQ5qmJAKasTw==
-X-IronPort-AV: E=Sophos;i="6.18,235,1751266800"; 
-   d="scan'208";a="46572767"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Sep 2025 07:01:44 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 3 Sep 2025 07:01:14 -0700
-Received: from [10.150.206.75] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Wed, 3 Sep 2025 07:01:09 -0700
-Message-ID: <50ca5062-5bbd-4c72-83c6-1d9abc6bde2e@microchip.com>
-Date: Wed, 3 Sep 2025 16:01:08 +0200
+	s=arc-20240116; t=1756915282; c=relaxed/simple;
+	bh=i64CAWts2YZ6ybHu6F+iqKIBJLQf3nzp1WavcnOp510=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=TOJQk/Gx41JyhQ/4hOXqrQP3S9j2IXvYpm2WC2cSj9iAO+gZRYJzGatLLfEP7Wbf2ODBfNumJAhgZKnyp7FRFi8gEUYqcXM2b07eza1C/0HztXeQludupJumPlNlUAau2OI7fu6Htjh3i2M4eNyUz+Sfh77vWfXl+ZiMcWtPQxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YPvp5DkQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D926C4CEE7;
+	Wed,  3 Sep 2025 16:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756915281;
+	bh=i64CAWts2YZ6ybHu6F+iqKIBJLQf3nzp1WavcnOp510=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YPvp5DkQIUoxNhjrv6C+TlILkp0bg1VKng2cJr6TvcYFaOw/1qIBc3dyPlHQnWT4s
+	 S6+F2IgOXfSyNHiOvfkPLKwNs4+YBpe+2VpUqFl8Lq2ZedQP869JIOBlEEuLvzYv7G
+	 K0HSjk6o9xww+RjH8g1g0anFE9RbwdFXYMuaqYD0CfhUbpega38mWU4yp9DMx6axwC
+	 WI8+F4BmH0OFhR2M3S8WGGKnOg2UnM9gMLfadym4d7YRemT737lzZpnV2rUhf9j+Hi
+	 BD5cxpCHHrNQmOIPjXS5V1yk/+DBD/mzHuc6GKL6tF+WgILed8Viu0qfs07YncM4YC
+	 clhJTR8FANcaw==
+From: Mark Brown <broonie@kernel.org>
+To: shawnguo@kernel.org, s.hauer@pengutronix.de, 
+ Xichao Zhao <zhao.xichao@vivo.com>
+Cc: kernel@pengutronix.de, festevam@gmail.com, linux-spi@vger.kernel.org, 
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20250903020347.563003-1-zhao.xichao@vivo.com>
+References: <20250903020347.563003-1-zhao.xichao@vivo.com>
+Subject: Re: [PATCH] spi: mxs: fix "transfered"->"transferred"
+Message-Id: <175691527998.217160.2520958272233581688.b4-ty@kernel.org>
+Date: Wed, 03 Sep 2025 17:01:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: (subset) [PATCH v8 00/10] arm64: lan969x: Add support for
- Microchip LAN969x SoC
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Vinod Koul <vkoul@kernel.org>,
-	<linux@armlinux.org.uk>, <alexandre.belloni@bootlin.com>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
-	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
-	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-	<linux-serial@vger.kernel.org>, <o.rempel@pengutronix.de>,
-	<daniel.machon@microchip.com>, Robert Marko <robert.marko@sartura.hr>,
-	<luka.perkov@sartura.hr>, Vinod Koul <vinod.koul@intel.com>
-References: <20250702183856.1727275-1-robert.marko@sartura.hr>
- <175327377884.189941.15214972441246653208.b4-ty@kernel.org>
- <bac5390f-725a-43db-a2b6-17a68d0d733c@tuxon.dev>
- <20250903-gratify-sustained-9acc011bc3c9@thorsis.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20250903-gratify-sustained-9acc011bc3c9@thorsis.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-cff91
 
-On 03/09/2025 at 15:16, Alexander Dahl wrote:
-> Hello,
+On Wed, 03 Sep 2025 10:03:47 +0800, Xichao Zhao wrote:
+> Trivial fix to spelling mistake in comment text.
 > 
-> Am Thu, Jul 31, 2025 at 11:05:07AM +0300 schrieb Claudiu Beznea:
->> Hi, Vinod,
->>
->> On 23.07.2025 15:29, Vinod Koul wrote:
->>>
->>> On Wed, 02 Jul 2025 20:35:58 +0200, Robert Marko wrote:
->>>> This patch series adds basic support for Microchip LAN969x SoC.
->>>>
->>>> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
->>>> which allows to avoid the need to change dependencies of the drivers that
->>>> are shared for Microchip SoC-s in the future.
->>>>
->>>> DTS and further driver will be added in follow-up series.
->>>>
->>>> [...]
->>>
->>> Applied, thanks!
->>>
->>> [08/10] dma: xdmac: make it selectable for ARCH_MICROCHIP
->>>          commit: e56982021f5303b2523ac247e3c79b063459d012
->>
->> As this one depends, as well, on the first 3 patches in the series (Robert,
->> please correct me if I'm wrong), and there are still discussions ongoing,
->> can you please drop it until all is clear on the first 3 patches?
->>
->> Otherwise, applying only this patch will lead to AT91 XDMAC driver not
->> being built for SAMA5{D2, D3, D4}, SAMA7{G5, D65} SoCs. Linux is not
->> booting on SAMA7G5 SoC only with this patch applied.
 > 
-> Second that.  Just tested v6.17-rc4 on sam9x60 and DMA is not working
-> at all because this driver can not be selected anymore.  This must be
-> fixed before v6.17 release please!
 
-Yep, I'll try to fast forward patch 02 of this series before 6.17-final 
-(this instead of reverting XDMA patch).
+Applied to
 
-Regards,
-   Nicolas
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: mxs: fix "transfered"->"transferred"
+      commit: 94b39cb3ad6db935b585988b36378884199cd5fc
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
