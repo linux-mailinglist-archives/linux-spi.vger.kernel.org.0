@@ -1,63 +1,63 @@
-Return-Path: <linux-spi+bounces-9872-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9873-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40688B415AC
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 08:56:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5182B415BD
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 09:01:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DA5716D7AB
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 06:56:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCC341B23602
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 07:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179E22D8370;
-	Wed,  3 Sep 2025 06:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A62C2D6E64;
+	Wed,  3 Sep 2025 07:00:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k8sZGatY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fkWe1baj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824B61E2307;
-	Wed,  3 Sep 2025 06:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F7D2D3EC9;
+	Wed,  3 Sep 2025 07:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756882597; cv=none; b=kbbhragRI6S1ShsEvl7outAfT665VOVWnmBXCwEQRsZ+EOEuhVDOba4klBl87p+K3V/8HTlPfGctrjEmsewqtTVQTuMQKoWB3dR3RE6YjH29bduJI5niLzel6AcH7B2hztYlAe5PB+XAnduyeCAb/OiihVVgmG/vExwdzQulfcc=
+	t=1756882851; cv=none; b=mlIM44W6OT+f6Tp39YVfUBiIiQsCJyM0t+wwPmU7qjuqnqtglDntPbAmbq+MoRTpJCCPVA2R1My80daPJ99aoJ7eExhHr0N0MHjHLKG8eMWUrt18GCQbx+L3kPgmgh4KuOHrXIPSCg0CrzKp0KtT9JP6w0ofzb+YSNfCsc+z2eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756882597; c=relaxed/simple;
-	bh=2rAWH629rl76XImlLDLPDHuK8WZBa2LW1tWWTqbRllA=;
+	s=arc-20240116; t=1756882851; c=relaxed/simple;
+	bh=4WOcmsJ1ltApDp57ZzrYgfeS6xmB1ybhbMhEjEAEp48=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=j3owAYLay6fMlwlHeg9BdsSSNDRksqPxocYCUeUkUGynQIwcptJOJr4YiwLTkZAS2gVmK/wU1NrzCSZppiuyojZkbLsVCjIjBgjcMK3zJwJDx44E9T+69eh6svz736eXyA/utwF5eRSGnjBDyRlx1vDWY5QHKBHkTUp0NUGqlDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k8sZGatY; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=qoA8nlrX24tAgA23oR9LDQRnathZ+j7gjPh32pTD91pnLhae0vO07yCsusSEVUrfY0kGUldc9wDjkNWg7g7Ff1EBo/DjjBPHr/CzD6yEL5cE6o0xF4jyVad5rmzpNdG2VQFe53ZeoZBDnAWqPyKrpIqEtR1l8sD6NK+He5VYf6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fkWe1baj; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5832EwLa001379;
-	Wed, 3 Sep 2025 06:56:15 GMT
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5831TCGt023427;
+	Wed, 3 Sep 2025 07:00:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	VyEnSBBjTdBbkEycTIVxjeFThBtLY+79HWKX9Dyuypc=; b=k8sZGatYyxwqjqt+
-	GzHpevdVS28Gzb1y4uAYeSAV6GiPlfLclxvi6WLnfTC2SwQRXt9LIDx/gWkwYB+q
-	gdquWJhGRHjjR+N4c+G6IF/K26e2DnmbEugzn9gUdYe6/aFWzhEv7nr13sOtgt8+
-	rWg7riyIHfb6PKyfM8LjxP9VT0zD/V6RbiGH077TazNy/R+K4mgLapVM3AvlGGnB
-	1WWPrKBdr5lsrhaH37GyaFA+oYZ2B+Xmk8ujKdlmma9iaNug1ux3lyr4epnZD8xU
-	/k7G2n4q5D5F/kns7R7JEus9b5MZvSPHSGpbQ3tjDAB/cqVXNRG2UBrvOB2z4NJK
-	snPEjg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48w8wy6d55-1
+	0B7furphkdJFWVi3RfqTepuGiQOg1Vrgr5nYqmWysRs=; b=fkWe1bajvUTIwSG+
+	BWsTYZrcJp1HpotYlV1AUhqWO6vIfay8oAGocYFRrXzArVswkZrGgpHCYZ7Rr2tw
+	JiymTz3dBozq237089qy5Io7D/HnLxS7qIy+zmEdihKnpB8Nlfg1MnxorXrKKQNs
+	VOej5+EgQ5pZGvS06F3cRIa2RI09UP1EPHo7ZzWkE4z1ZlDYKq8zdMUItNRMxK+U
+	3Z4MlEAEeHMllQ+c5bvH7+dQGIV1eO+pAiC7tC6ZPEaazaljZC2NJW3H4QoKUpoH
+	WsXmB+TtAxDBD2pC9DzAnuXP5Z557Ze+O3d56UBQ2/1l9+zCHNH1+TK4KIRWmdcT
+	AfyW7w==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48upnpaq42-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Sep 2025 06:56:14 +0000 (GMT)
+	Wed, 03 Sep 2025 07:00:32 +0000 (GMT)
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5836uDnn006086
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58370VtB027441
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 3 Sep 2025 06:56:13 GMT
+	Wed, 3 Sep 2025 07:00:31 GMT
 Received: from [10.239.105.140] (10.80.80.8) by nalasex01b.na.qualcomm.com
  (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.24; Tue, 2 Sep
- 2025 23:56:10 -0700
-Message-ID: <764e77e2-303f-4603-8819-ec3116c85c02@quicinc.com>
-Date: Wed, 3 Sep 2025 14:55:40 +0800
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.24; Wed, 3 Sep
+ 2025 00:00:26 -0700
+Message-ID: <59a714eb-8c2e-4c6a-8c9f-f90e11d848cb@quicinc.com>
+Date: Wed, 3 Sep 2025 15:00:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -87,27 +87,28 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=Ycq95xRf c=1 sm=1 tr=0 ts=68b7e68e cx=c_pps
+X-Proofpoint-GUID: b-X9GZFnG_VHSZ64rqKhKpTgh1bqkTSu
+X-Authority-Analysis: v=2.4 cv=Jt/xrN4C c=1 sm=1 tr=0 ts=68b7e790 cx=c_pps
  a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
  a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10
  a=kBQPIZexwyFoi4fVXFQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: WwvxrEx_Rhz5oGp7mLCNuRFvNTXVgrwV
-X-Proofpoint-ORIG-GUID: WwvxrEx_Rhz5oGp7mLCNuRFvNTXVgrwV
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTAxMDEwMSBTYWx0ZWRfXxtCXCHjAlBDE
- n1ctMdVtgKfNEY/HaoOnUme4ZuPhfXsDVf6DfNu+0tzSiYKMA9XWq0AzTamIqtGasmplgIvzzEZ
- VcpDTeut79QuGb4Az3XLPdhXyBkZDwfPWH9EUayU7L3y1a9bUk/oW05peEJoxDti7ngDDIgNks0
- S7AZVU0x3dSPjxbowAS8KA0duea8+7M1uBIfNIU4LferZNWRFmP+pRJRZDypoKNo8XM2YsZfIkJ
- aif7NFbJdOAY/hL7nb927ttymGtcE27CZ/upzwtHSJ9bU6RqgDrtXdZ65aTRFC99dbzvf571+h5
- 7bk8hq+AtymPbRnAg2BknKYIxAGDAtPjrL6mHXwJ/kb3sdVz9/jPvlB3AK5pKHaliYDCfLiMYTu
- BN14PJkZ
+X-Proofpoint-ORIG-GUID: b-X9GZFnG_VHSZ64rqKhKpTgh1bqkTSu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODMwMDAwMSBTYWx0ZWRfX/O6zdZErx7cN
+ 8qruV6MpzMpe2DxCiz2BOMmhJL5Rh3hdXr1y2gRlDvuIUOGIr3b3Q8gZsFNllUC02Wk6uOs9vFk
+ bEYM9YMIIH2SpMGxep3vDgXomeVweZjn4NkVWO4m+Lkr5199Ydxxmg8wJtlri8AYuU72Pv+CBh1
+ aqh1XytznGl3kD4kO6WdVaJNNKy8u7QLqRILnpLncqtdiAd1b/XW9ynUPRWlWmAJGXbrjyWPNx7
+ qieOIrZYho3e6T0ngZyB7ECwQMh6D+kRYrAhSUVensDM9/EfGDeIeIVwtKYiZQia5KIHx/OKQHF
+ AtIKBQfCJCYJZjkJgtSCERuBGjjiqnXX1Hy5TLmwXuWTxfZiW31gaHezVcXIypPLAkenAMkKY1F
+ FuvdFkTv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-09-03_02,2025-08-28_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0 malwarescore=0
- bulkscore=0 suspectscore=0 impostorscore=0 spamscore=0 classifier=typeunknown
+ adultscore=0 priorityscore=1501 clxscore=1015 bulkscore=0 impostorscore=0
+ spamscore=0 phishscore=0 suspectscore=0 malwarescore=0 classifier=typeunknown
  authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2509010101
+ engine=8.19.0-2507300000 definitions=main-2508300001
+
 
 
 On 8/28/2025 6:34 PM, Michael S. Tsirkin wrote:
@@ -173,5 +174,7 @@ defining feature bits.
 
 Do you think this would be reasonable in this case?
 
-thanks
+Thanks & BR
+
+
 
