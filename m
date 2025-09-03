@@ -1,201 +1,182 @@
-Return-Path: <linux-spi+bounces-9870-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9871-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DAEAB40E2B
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 21:54:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD30B41222
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 04:04:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0415C5E1934
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Sep 2025 19:54:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 561071A85864
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Sep 2025 02:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6307F350857;
-	Tue,  2 Sep 2025 19:54:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD0D1E3DDB;
+	Wed,  3 Sep 2025 02:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrJeisJC"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="gkvS1sV4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012051.outbound.protection.outlook.com [40.107.75.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0E326C3A5;
-	Tue,  2 Sep 2025 19:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756842876; cv=none; b=sxRAoAAyEtZFev17KptWrqIyb3VrWDDAQbtK8iU9j7bSroojv9MyRUn/3J5RbjZBCkIAYNBDmAE1yYKK5Sbl2dK54YM2FVurwbYDzVjF49M3FHYbzgHi52CaHQ9e5uqCfk5vhV6CKe8t931QZgpauCB97yTeCkSY8Myt3wCoO4Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756842876; c=relaxed/simple;
-	bh=oJOLNYG2Y3DXMCSgbwODVJA8SAuDYi5Dbvsh+hG6M4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pTeAwe3H0ZfTbDJRRZWdM2xfd7eeEpnNtL9F+QPxdolsSSKSGVg2KssdqxuJvRFGlI5KGDCu5vrRtsKYB7eKris3kTBG9bP51RP8Q3AaoEHEOpuKMIM8oWx/tcTVmXEbAotzkNR8T4NOFEuVAdNms1mXBJiFmjXY3v5zT96bZJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrJeisJC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D07CC4CEED;
-	Tue,  2 Sep 2025 19:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756842875;
-	bh=oJOLNYG2Y3DXMCSgbwODVJA8SAuDYi5Dbvsh+hG6M4Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZrJeisJCeZBLdRd9piYISWxH6ectOKfLkCBAI45oB9yskyvBJx+HrHbj0QupA23QY
-	 HMwYW+4SpxkS1Px4DFX1y0PnsLKuIvMupIqIiKRi5+/yisqqzHEEZpEI+OC+GPQMt+
-	 Ih9UPZZxLrikazCJPDm6WovmTyFRm0ulZKF/oPzplGj21mx5CKCfRPvb9oo4xKL1nz
-	 Qojwko0xFxCfGWgdvCBAYT8/hAuaZcNeMu33YO6xDjk/8M8E6xVx4H6De8eZjysot9
-	 apZ9PSugbHYcTWyIOnwbJIoCz8GthLjCfl1K6nrT8bke0E+1MO5eocgkH5TUTef2/d
-	 X7vBDpLUcS7MA==
-Date: Tue, 2 Sep 2025 14:54:34 -0500
-From: Rob Herring <robh@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
- Pro/Max/Ultra devices
-Message-ID: <20250902194528.GA1014943-robh@kernel.org>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250829195119.GA1206685-robh@kernel.org>
- <20250830071620.GD204299@robin.jannau.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82890145346;
+	Wed,  3 Sep 2025 02:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1756865046; cv=fail; b=ehDp5OJjWKeJg7mL1CMyL96pHQY+zOwefetjz6ycYqGiqf3U1PpcGY709rzdS0aoLk4LSlxJt1mo2b//df1MZLiA9eRilq6Wy6ymt4d0R3ZAxN4iFRLSpZqoT6qMcLNEXWM2rg6Nf7AhjYekM3qN9oJAVpdlDdi5EJwuaoWuukc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1756865046; c=relaxed/simple;
+	bh=EgRfl7JvYuD55Yi+4WC4Hfw+YX8+01T8nXYTRjgXA2g=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=kRkYA3UmvMdrYbNuCRGwZv5fj4gdc7SqggEcL4pHKxIz0/5TMO1V5KvuZGD4MV8xFEgQohqZAsrWVpbvYIswL32/uhPkx8UxUYu38vbSZB16AAVygZDQaBnBZqetQKDCNo5VUVHjgXofmZ1YgV+XUScAL/WXoKklCJWWn8c5GFU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=gkvS1sV4; arc=fail smtp.client-ip=40.107.75.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EmzKj/aTX67XWbTJAH9THNFs2Nn3THfiBZ/ZaQADuQO5iwbx0MiSxcLvfn8Xrn0i3h81LgyFl1VER19rGqeo6QIziG8hSaww852QTfMZLd3DBnxHpGUoLCkQysAHVwl8KG5GcUqa33XHt6jsfMHNDuRq7Wl78dlGtX3ck2A1dkrYpzJbOZyqT39AI2TUMfbVG0xLiZxF6HogMoTKOoD4yAai4P9Xq1ICYNBKVOq58ioELLFPJkUcA/ylXnUR83jKZoBLBG9vi5xequUL77ii91KHyuQS+0388LI+O0KZiEs31SprwUCI7y9actf+W8M2BDbaKpo/DjlVhduCyO2X9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vZS2iG8QR5736fCEjJ6mIxdZVSoi1sVkw3/CClekQVQ=;
+ b=bwLnLCu6dmagyK76lHfcd7JQvDA2Sb1TVAWreZ/fjOjdmoUBvsDJgwS/TXmxcjKOYFZXDsJKIxzyT6xtXSkqeoXbdoJj9wljLvU0Ru4DWaXoZ/fkyx62R7UdK2kYLJIdDcTfaU5e2vsG48j7iZMU3mgoXxRDazRWGLHKv4ZqZTaQS0GPeUEHsJLlnascTIDb4Wcxu1p/kVyvDJfIq9Mafq0Vk9IeyngcYkV3kPPDjh2cgn7wQWFEJ69PgINQrrogaKbPxWL5NAf9meLAMfI0bv5y+o1wYBZpr9hktEf3i/qOQyX4kXyNZPPBM/9fKtfTgNFNjgxJQzuN4SuOb0L1MQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vZS2iG8QR5736fCEjJ6mIxdZVSoi1sVkw3/CClekQVQ=;
+ b=gkvS1sV46X79HDmpEyj1AhiB0Fs07Xb1mnlXDktx9r9WTGuudUlmRkipETpg7bRudvasBRmfWW7ue2dYfWBp9TKePjVtKUkVYb2FAj8Su1GxOfVa6moqsBCJfeMGsCooB8Sn0ryuiu8ghKeRnc7l0f+mPVyiRJtpZg9X2l5DUsnT5WpqfDOk0G4rDleCej2OPV28tQ3Mb+R481OXVpcjSgTgLS2RQNxvH5wf/bp5Xd2AmYe8PIRxTdr1QaCH0RH0ZVSLIuPnBLK5KHBFXIMShYaryoaA8cC0qwgIaqaZpmaKlbkdEPc1eTrOEarGK3cmJHvzHrSRBznRAq5HyA0Oxg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from KL1PR06MB7330.apcprd06.prod.outlook.com (2603:1096:820:146::7)
+ by SI2PR06MB5316.apcprd06.prod.outlook.com (2603:1096:4:1eb::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9073.27; Wed, 3 Sep
+ 2025 02:03:59 +0000
+Received: from KL1PR06MB7330.apcprd06.prod.outlook.com
+ ([fe80::d1d3:916:af43:55f5]) by KL1PR06MB7330.apcprd06.prod.outlook.com
+ ([fe80::d1d3:916:af43:55f5%4]) with mapi id 15.20.9073.026; Wed, 3 Sep 2025
+ 02:03:59 +0000
+From: Xichao Zhao <zhao.xichao@vivo.com>
+To: broonie@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de
+Cc: kernel@pengutronix.de,
+	festevam@gmail.com,
+	linux-spi@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Xichao Zhao <zhao.xichao@vivo.com>
+Subject: [PATCH] spi: mxs: fix "transfered"->"transferred"
+Date: Wed,  3 Sep 2025 10:03:47 +0800
+Message-Id: <20250903020347.563003-1-zhao.xichao@vivo.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0292.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:3c8::17) To KL1PR06MB7330.apcprd06.prod.outlook.com
+ (2603:1096:820:146::7)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250830071620.GD204299@robin.jannau.net>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR06MB7330:EE_|SI2PR06MB5316:EE_
+X-MS-Office365-Filtering-Correlation-Id: 50e496dd-3a31-4d38-e1ef-08ddea8e251d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|52116014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?6japhopb2FdV8bZKaZyEGX87g33CxYmIB8DY3eekjIuoiOUGG5HOyDGGog9u?=
+ =?us-ascii?Q?ilcemgNozJnTsqLxxv6M4IsAvwHrmSkOLUKQkv2/VB5ihAiezTT7Ep2E74rz?=
+ =?us-ascii?Q?oeB5FV2H9CsJ9mvqBoWxxyUa6NQExNLURIl2gVBsJz1f7VY45h9itb8Vpk3J?=
+ =?us-ascii?Q?g4Cy+SeARBmUo/l/CSzpiItgb/KX7LFYCiVaMdUZSNxMGSmCW4Gwj8mATvqm?=
+ =?us-ascii?Q?ncZO9DnmYEr4UPIg7qE9Km+xTMxgps5yD3p4uz8ea+rspm/NZXWoy2cykxWe?=
+ =?us-ascii?Q?VF6LASqR+LtNGhwP5o35DKK7VxDHOKeEgOwiq1r+wNoOF33TISbyEvKncqwo?=
+ =?us-ascii?Q?yzJp+3mf+t2lSzHZEcVLNuM5ERtgY29/HWZ0pa+6m/HPdnzhxUNmw6qgwIn3?=
+ =?us-ascii?Q?jm3RKcq/Xd6KXd+tJhyHLk6N7R+9UIlEr+blkZfy4reQ0PZZr9ohGUQy81E4?=
+ =?us-ascii?Q?OlZ8fA/V7gk0h1QPPIQcs83JK7j68BrBI3WHK+g0+O+HWvyAHtFQUuKMMRJH?=
+ =?us-ascii?Q?Meb0p71uF/otWJQntTpCKPNoK3A2Smswod/VWkOc0uJDLe7bUojkQIydiCap?=
+ =?us-ascii?Q?D92enEjsALD+gj049XJmw6TwtUcoINv2rl8jOu+R01VxJt2y3E8360rewq+6?=
+ =?us-ascii?Q?YyaREbrkBt49N77UQ+WDCD306bwfhPlvhLLHB+34KktNmbZAkrwoi1PBJUQ0?=
+ =?us-ascii?Q?d/sl6UQy5pGGmN78+yJgRn0Un3IWTDbXnMo50CzQbXWPhjdpuaLxHIyM0XeG?=
+ =?us-ascii?Q?kvcBlI359opL3OAWUQEcfza/whJLM1ubhnGd8KfG45+8WWyZ3j6mDbZRdieC?=
+ =?us-ascii?Q?8tei9gaGSXzyWag7Rsa+bavnC1YKNeIlFfuSez3gXa5x6detRFMciDt6ddnf?=
+ =?us-ascii?Q?j8Fwofg9DTl4Bq04UyCllH+uU67Iq/mnPWZUbe1MT1OfGgXQwhtCZgOHebsD?=
+ =?us-ascii?Q?n6k4OlEx7x8vEW4JYOy7ytXN5LOVp898gPjTqwY6Pju6lrF65jhm0tuk3PrY?=
+ =?us-ascii?Q?ipWDdX3cnzu54TuLYpQWmdxu6A6RY+r5qolxhqOH40KxHOq12JoHRikjqq0R?=
+ =?us-ascii?Q?ZXRku7iffxextwqpWlQfnp+uWq0qFs/WTGphneasx4OJj7y8+9obe4j+JcUY?=
+ =?us-ascii?Q?7cNKLKVlsWI0XCaolvgV4D1Ar8pshmWkejrRjVk8yIga7JUCWC+yMM5SzrY5?=
+ =?us-ascii?Q?Lu1uyS2yueHCqne+xv3RzTleEMQJep/jZaAz1oQW44c4cMzR7gP2ZEEp0izk?=
+ =?us-ascii?Q?CWWMahVo48nKGnvyn4H3OAiC6l/NJnrmSYSFX4qsDPowad5Yuv5/NyYCHEDh?=
+ =?us-ascii?Q?iKZbmw+35WhOdJVOCH5OGI4EIGrxWRnoqWd/jjS6WwqPkeVBrtk+ZUAY5Kf2?=
+ =?us-ascii?Q?0kFZYuu5x1DOj6cy8/BsSkfEeDPZD+XmlS8cTIAGhww0etE9JhuMstjvi3PQ?=
+ =?us-ascii?Q?1vseOashSejtJ22dDSaOGfsiBISJhJvl+BqR0j78FhVyF0OKemWvhw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB7330.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ZHpIS42rQg3caD7ehPGdivugCkuL25biWW7qyI0qxzdYvrn/VlIKxlQcO2mN?=
+ =?us-ascii?Q?ueQiBw2wa8IqIzLe18mPx66woTqXRJuDyvNPqApO2TzqhxwyQcXqiyTYrfoS?=
+ =?us-ascii?Q?9E8sXJaTnPlaN5+UstKpDRYuUpOXPvb5YrdGhjwjClBEwlQzHvQKJPuAucP0?=
+ =?us-ascii?Q?U7BvAvRE68SmJEMtJ6MnpzombmOm1yODMlvwqkwZDvwWOdtW/kRIOs0TlTiU?=
+ =?us-ascii?Q?Z25fkUo+HxX3o+KwMYEr8rKhyESMFP/4hgBIZSiwIVQu5sRCdz6/+WgEtmOJ?=
+ =?us-ascii?Q?7SfNjlQhaUHue+IVnJl0oyS7rt2BJ2kmGsB/aPrn6xesIKAVZs5rYcUapv2e?=
+ =?us-ascii?Q?Vo0mFztix+VHk0UB9DtUA3a8Lb0y0gbt++U7NWe/gOUbe6cvVB79EdugYmPa?=
+ =?us-ascii?Q?IOZWY3RHlmEQOcB2LJWX7QegUxTDE5xB8VYOSBNjnfxHpJD/SlXaTqxlHZKs?=
+ =?us-ascii?Q?Df7iSnUUxcgSkpwTd/q+0RN8KlFa90kGq1U9k2uGdI6fE34JDwYmgqUo1aTO?=
+ =?us-ascii?Q?s+cpkzAp2FOekWnuBL1cvHCi0B3VxbFUAWosAxN65QixwLy57wa8X52BmRdb?=
+ =?us-ascii?Q?i+IVSscobIuN9aNYbcegzXBQh6N+Py4Qfs6qF0woxkHiLPFjVSHET207ZXL5?=
+ =?us-ascii?Q?SOXwWeqwl5wQgqMywatmqG4a+ki9rAV86DpzqGVYGxqxfmcwtQ6qL3eu0jBY?=
+ =?us-ascii?Q?lTxRvojLCb/ygBAACyZwKoDzY9TxJ0zDU9t8NcxvsbdBnyROuVwHY24k5aCb?=
+ =?us-ascii?Q?Gm+FlaJado0YD1MIPBwjyWJDRNvn5TIP07bHvRQNsCOUDz9xCu76sMJsKjh6?=
+ =?us-ascii?Q?H8j+qQ7ITWrYcEb/GRFwiBXQ++MrGriOrMu1tk4rI+HwoxkeGchJd0fPXfkz?=
+ =?us-ascii?Q?Cn4iLVCK/evDp8vb0qwxKONLjb+BMBZvdwWIQ1/6te0h3VFheHCfUee51Prq?=
+ =?us-ascii?Q?Y8IRUqNP7OSpDtEndJ3GnDbfETS34weQ8RHeX7gBrxO/VXneKacLge5hOwxt?=
+ =?us-ascii?Q?BIcvCCanzP9lmYdjGYeHXoVPvDQY1MkQn7Bxz7jDjkfJkpNbNcIwBsq5m39M?=
+ =?us-ascii?Q?a7mhP7yNoNkw+gYYMdsKK7gntF81RowB8yKCXRXWuWxn8zI2MsbvTDaVfNID?=
+ =?us-ascii?Q?FBUE5CFQi5qtKLZrfDRgqwRKrKXW3xsbU+kpIxsX+pNjnryX1xSkbR9wwLd9?=
+ =?us-ascii?Q?D//ypGQmCsoMkEYUeIz1Ho08lQMRPkIr5A3PKrkLvIvcXOTRxzvXgLH6lvbo?=
+ =?us-ascii?Q?vTsfAkAwc/XlACzfjbtQ8UlMxfAF9wdhrESLYk/bnKEOKzKPvqqWMSFSJ/Bg?=
+ =?us-ascii?Q?xCZw00EpPjh5NpIs0758feUPAsMGZMwnzUYraYZsjuyV8XfZwmBDlgLfKDgD?=
+ =?us-ascii?Q?/jB+Bw0HD6jkeXwQ4c5bSph/N7eH8wDjg0UYSlALI5YWN/28KLylfV62m9mz?=
+ =?us-ascii?Q?gj2+myH6zMh4QAZUFBn3Rr+MSRDabCBLLIqOllUVf8YGeTbeMe9Kw9B6FpHB?=
+ =?us-ascii?Q?C0e4G1KBtX3M20xS5NqRG3TlfFZqclNgGQPcV0SxHxf/SiHhHZfeBpOV4IMA?=
+ =?us-ascii?Q?zRgKcSYvI6VMY/O2mHuBjSJNafNAbLgHVFDUhviq?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50e496dd-3a31-4d38-e1ef-08ddea8e251d
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB7330.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2025 02:03:58.9835
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pZIztdumqpnOM68TueCCw4o4MVIylYgb7vRw6tLyr2Wdh1e/bBp8yqsTL6DIeZqZnDpVmaaRO71QNheKSAKgeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5316
 
-On Sat, Aug 30, 2025 at 09:16:20AM +0200, Janne Grunau wrote:
-> On Fri, Aug 29, 2025 at 02:51:19PM -0500, Rob Herring wrote:
-> > On Thu, Aug 28, 2025 at 04:01:19PM +0200, Janne Grunau wrote:
-> > > This series adds device trees for Apple's M2 Pro, Max and Ultra based
-> > > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
-> > > follow design of the t600x family so copy the structure of SoC *.dtsi
-> > > files.
-> > > 
-> > > t6020 is a cut-down version of t6021, so the former just includes the
-> > > latter and disables the missing bits.
-> > > 
-> > > t6022 is two connected t6021 dies. The implementation seems to use
-> > > t6021 and disables blocks based on whether it is useful to carry
-> > > multiple instances. The disabled blocks are mostly on the second die.
-> > > MMIO addresses on the second die have a constant offset. The interrupt
-> > > controller is multi-die aware. This setup can be represented in the
-> > > device tree with two top level "soc" nodes. The MMIO offset is applied
-> > > via "ranges" and devices are included with preprocessor macros to make
-> > > the node labels unique and to specify the die number for the interrupt
-> > > definition.
-> > > 
-> > > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
-> > > counterparts. The existing device templates are SoC agnostic so the new
-> > > devices can reuse them and include their t602{0,1,2}.dtsi file. The
-> > > minor differences in pinctrl and gpio numbers can be easily adjusted.
-> > > 
-> > > With the t602x SoC family Apple introduced two new devices:
-> > > 
-> > > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
-> > > missing SDHCI card reader and two front USB3.1 type-c ports and their
-> > > internal USB hub can be easily deleted.
-> > > 
-> > > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
-> > > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
-> > > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
-> > > calls the PCIe controller "apcie-ge" in their device tree. The
-> > > implementation seems to be mostly compatible with the base t6020 PCIe
-> > > controller. The main difference is that there is only a single port with
-> > > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
-> > > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
-> > > and PCIe slots connect too.
-> > > 
-> > > This series does not include PCIe support for the Mac Pro for two
-> > > reasons:
-> > > - the linux switchtec driver fails to probe and the downstream PCIe
-> > >   connections come up as PCIe Gen1
-> > > - some of the internal devices require PERST# and power control to come
-> > >   up. Since the device are connected via the PCIe switch the PCIe
-> > >   controller can not do this. The PCI slot pwrctrl can be utilized for
-> > >   power control but misses integration with PERST# as proposed in [1].
-> > > 
-> > > This series depends on "[PATCH v2 0/5] Apple device tree sync from
-> > > downstream kernel" [2] due to the reuse of the t600x device templates
-> > > (patch dependencies and DT compilation) and 4 page table level support
-> > > in apple-dart and io-pgtable-dart [3] since the dart instances report
-> > > 42-bit IAS (IOMMU device attach fails without the series).
-> > > 
-> > > After discussion with the devicetree maintainers we agreed to not extend
-> > > lists with the generic compatibles anymore [1]. Instead either the first
-> > > compatible SoC or t8103 is used as fallback compatible supported by the
-> > > drivers. t8103 is used as default since most drivers and bindings were
-> > > initially written for M1 based devices.
-> > 
-> > An issue here is any OS without the compatibles added to the drivers 
-> > won't work. Does that matter here? Soon as you need any new drivers or 
-> > significant driver changes it won't. The compatible additions could be 
-> > backported to stable. They aren't really any different than new PCI IDs 
-> > which get backported.
-> 
-> I don't think backporting the driver compatible additions to stable
-> linux is very useful. It is only relevant for t602x devices and the only
-> way to interact with them is the serial console. The T602x PCIe support
-> added in v6.16 requires dart changes (the posted 4th level io page table
-> support) to be useful. After that PCIe ethernet works so there is a
-> practical way to interact with t602x systems. So there are probably zero
-> user of upstream linux on those devices 
-> I'm more concerned about other projects already supporting t602x
-> devices. At least u-boot and OpenBSD will be affected by this. As short
-> term solution m1n1 will add the generic compatibles [1] temporarily.
-> I think keeping this roughly for a year should allow to add the
-> compatibles and wait for "fixed" releases of those projects.
-> I'll send fixes for u-boot once the binding changes are reviewed.
+Trivial fix to spelling mistake in comment text.
 
-Honestly, at least in the cases where the generic compatible works for 
-every chip so far, I'd just stick with it. The issue with generic 
-compatibles is more that you don't really know if things are going to be 
-the same or not. And most of the time, the h/w ends up changing.
+Signed-off-by: Xichao Zhao <zhao.xichao@vivo.com>
+---
+ drivers/spi/spi-mxs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you want to keep it like this since you've already done it, then for 
-all the binding patches:
+diff --git a/drivers/spi/spi-mxs.c b/drivers/spi/spi-mxs.c
+index 43455305fdf4..0ebcbdb1b1f7 100644
+--- a/drivers/spi/spi-mxs.c
++++ b/drivers/spi/spi-mxs.c
+@@ -388,7 +388,7 @@ static int mxs_spi_transfer_one(struct spi_controller *host,
+ 		       TXRX_DEASSERT_CS : 0;
+ 
+ 		/*
+-		 * Small blocks can be transfered via PIO.
++		 * Small blocks can be transferred via PIO.
+ 		 * Measured by empiric means:
+ 		 *
+ 		 * dd if=/dev/mtdblock0 of=/dev/null bs=1024k count=1
+-- 
+2.34.1
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-
-Rob
 
