@@ -1,128 +1,103 @@
-Return-Path: <linux-spi+bounces-9889-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9890-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6276FB43C6A
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 15:04:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00F6AB43D42
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 15:32:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 235011890693
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 13:04:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 745477BCA0C
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 13:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B166E2ED149;
-	Thu,  4 Sep 2025 13:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8833C302CC3;
+	Thu,  4 Sep 2025 13:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Dvh4l5Jt"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="U6U6mrE4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150B22C21D4;
-	Thu,  4 Sep 2025 13:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC38301469;
+	Thu,  4 Sep 2025 13:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756991054; cv=none; b=TOLHGSIQFzRuaKTveVT891E5eWt1wX4vJiYKQ7JJpinnmrkHJZS4gAXpU3xrfpD3UDF6f1sXaSbuf1S2wWdiH2i0x/fjDAygsEzp+s62x+708nNXR+s642jtgLj+ZsxQmiDOhvIwoRoTfkruTn8H/K57+B+hLOz0pcIowvD09Nw=
+	t=1756992740; cv=none; b=grRdOFdVemkt4iYqY+WvsUQhK8yJe1u5snbLk9No8Na1DXttg0L5K4U28bzWKscTjI18Dodiw46Mrbgs+J7OA3H6sJW/f3bK3VuMXfuOMfyGsd7Y2LWWkIvywCHb8XWg77mcF8abErhR5Y8EbSDhdLZi+oN+p3mFBmLfmHdx9nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756991054; c=relaxed/simple;
-	bh=ipAlB8lz4YhXVB/PahY2cp8VjIBql6JOV7ukszx0QqM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=CcsdvX6mghXvavma4F/EUL7laFXK8ZrB5bGn+ZhckmxyV8z2wieSKLEh1AVf3tGZtpNzLQUWIvNIvwvzSG+qGQFiUARmERLxfneHttHAmvBgoPOwFpwYpLHXA6tA3t++SCA657/6fkyCvke2n8pL6FM63phbmtmZ/IMboYI+5fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Dvh4l5Jt; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1756991054; x=1788527054;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ipAlB8lz4YhXVB/PahY2cp8VjIBql6JOV7ukszx0QqM=;
-  b=Dvh4l5Jt8cyZqEzJ5wQCG3BOLT7HmcmWXq9Xl33HHvyULqnK95qOOI2S
-   iD8Z+vgGIl2aL+Qra2HGBbGK6fRkvO/RDGx+wIFOTfPCrN1QRWuu8NEch
-   8yL5+mdTkcc7DADFvjfJu5PFNh+625TSuMDBlOWM2isDdA/d4ixevy+Ca
-   yKJozEbR3aT5URJfrmsqD62GlG6vXpApGWaTWSrrqfF8WnmtvWyhTCKFj
-   baIADXUUpVkAuWAGhggAuMWRVLPoOPwEBojOXGZZrP2aM9OqgEtLHig+S
-   0NOW2Ux6Zewo6+W5s8Qm/Mlh4xCeq8fY1VrnNSjysnkBYK0CnHnXoyxko
-   w==;
-X-CSE-ConnectionGUID: z3Jne31hRHOgHqAJosZYCg==
-X-CSE-MsgGUID: GYbBTcCDRgO2KYf+NwHHtA==
-X-IronPort-AV: E=Sophos;i="6.18,238,1751266800"; 
-   d="scan'208";a="277443901"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Sep 2025 06:04:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Thu, 4 Sep 2025 06:03:53 -0700
-Received: from [10.171.248.16] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Thu, 4 Sep 2025 06:03:47 -0700
-Message-ID: <769c8dc4-4db6-4d2e-aa2f-f86aa7ccaf78@microchip.com>
-Date: Thu, 4 Sep 2025 15:03:46 +0200
+	s=arc-20240116; t=1756992740; c=relaxed/simple;
+	bh=0/u5ukoiGKUX2afNu20CcAZHH8Ybvgx6mbCb5EevV7w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bvP/lQLlJ3fmxVIQpHfuydMjHfZ/wMAJEFTPosNqPaYelAuImrpB9hpBBCvyTgANgNqDa1tK/2hirutt7JomJKbN5cTvySi8GqJt1fCRTAMnKOfhFcGSe6HZXZo95FdRQ8wRKs26I7mXOMZNEBI7mPYmqv6+J3EmThMMgfzujpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=U6U6mrE4; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTP id 584DW6943477181;
+	Thu, 4 Sep 2025 08:32:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1756992726;
+	bh=iMdr06tS1Iy1xhwRtBagSpdrqF8nd4Cv0cXJoPOolmU=;
+	h=From:To:CC:Subject:Date;
+	b=U6U6mrE4ghm/WRullpPJYosbN6TMWJKQlKJsXgXpL5Vc4dnWO5wZSaVC7oaSel3ty
+	 VX4ZvWf7Tt2UCmAb4i98JVHz+N47La1anc83dRJLcZOsWewkcQHwWEDc3D3k8uVRg5
+	 eBM1IwCxeV/5iXHyMum1JKj7HrbuI2z9PIgosxqE=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 584DW5XV149765
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 4 Sep 2025 08:32:05 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 4
+ Sep 2025 08:32:05 -0500
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Thu, 4 Sep 2025 08:32:05 -0500
+Received: from santhoshkumark.dhcp.ti.com (santhoshkumark.dhcp.ti.com [172.24.233.254])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 584DW0DM3325799;
+	Thu, 4 Sep 2025 08:32:01 -0500
+From: Santhosh Kumar K <s-k6@ti.com>
+To: <miquel.raynal@bootlin.com>, <broonie@kernel.org>, <vigneshr@ti.com>,
+        <marex@denx.de>, <computersforpeace@gmail.com>,
+        <grmoore@opensource.altera.com>, <theo.lebrun@bootlin.com>
+CC: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <s-k6@ti.com>,
+        <praneeth@ti.com>, <p-mantena@ti.com>, <a-dutta@ti.com>,
+        <u-kumar1@ti.com>
+Subject: [PATCH 0/4] Miscellaneous fixes and clean-ups
+Date: Thu, 4 Sep 2025 19:01:26 +0530
+Message-ID: <20250904133130.3105736-1-s-k6@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 4/9] mfd: at91-usart: Make it selectable for
- ARCH_MICROCHIP
-To: Lee Jones <lee@kernel.org>, Robert Marko <robert.marko@sartura.hr>
-CC: <linux@armlinux.org.uk>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<olivia@selenic.com>, <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-	<andi.shyti@kernel.org>, <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
-	<jirislaby@kernel.org>, <arnd@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<o.rempel@pengutronix.de>, <daniel.machon@microchip.com>,
-	<luka.perkov@sartura.hr>
-References: <20250813174720.540015-1-robert.marko@sartura.hr>
- <20250813174720.540015-5-robert.marko@sartura.hr>
- <20250902100254.GD2163762@google.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20250902100254.GD2163762@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 02/09/2025 at 12:02, Lee Jones wrote:
-> On Wed, 13 Aug 2025, Robert Marko wrote:
-> 
->> LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
->> avoid needing to update depends in future if other Microchip SoC-s use it
->> as well.
->>
->> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
->> ---
->>   drivers/mfd/Kconfig | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->> index 425c5fba6cb1..8f11b2df1470 100644
->> --- a/drivers/mfd/Kconfig
->> +++ b/drivers/mfd/Kconfig
->> @@ -138,7 +138,7 @@ config MFD_AAT2870_CORE
->>   config MFD_AT91_USART
->>        tristate "AT91 USART Driver"
->>        select MFD_CORE
->> -     depends on ARCH_AT91 || ARCH_LAN969X || COMPILE_TEST
->> +     depends on ARCH_MICROCHIP || COMPILE_TEST
->>        help
->>          Select this to get support for AT91 USART IP. This is a wrapper
->>          over at91-usart-serial driver and usart-spi-driver. Only one function
-> 
-> Let me know when the deps are in Mainline.
+This series introduces some small but important fixes and cleanups in
+the Cadence QSPI Controller.
 
-Hi Lee,
+Tested on TI's AM62A SK and AM62P SK:
+Logs: https://gist.github.com/santhosh21/0d25767b58d9a1d9624f2c502dd8f36b
 
-I have tags from other maintainers, how about you give us your and we 
-make this patch travel through arm-soc like the other ones?
+Signed-off-by: Santhosh Kumar K s-k6@ti.com
 
-Regards,
-   Nicolas
+Pratyush Yadav (2):
+  spi: cadence-quadspi: Flush posted register writes before INDAC access
+  spi: cadence-quadspi: Flush posted register writes before DAC access
+
+Santhosh Kumar K (1):
+  spi: cadence-quadspi: Fix cqspi_setup_flash()
+
+Vignesh Raghavendra (1):
+  spi: cadence-quadspi: Use BIT() macros where possible
+
+ drivers/spi/spi-cadence-quadspi.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+-- 
+2.34.1
+
 
