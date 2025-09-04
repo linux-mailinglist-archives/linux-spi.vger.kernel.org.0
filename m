@@ -1,82 +1,106 @@
-Return-Path: <linux-spi+bounces-9913-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9914-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 916CDB43FC0
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 16:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B52FFB440B3
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 17:32:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 807107B8D01
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 14:55:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2D887A13CB
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 15:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED606302CDA;
-	Thu,  4 Sep 2025 14:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E2652475CE;
+	Thu,  4 Sep 2025 15:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nrMRJpUP"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ym978ZfZ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9327302CC8
-	for <linux-spi@vger.kernel.org>; Thu,  4 Sep 2025 14:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA001D95A3
+	for <linux-spi@vger.kernel.org>; Thu,  4 Sep 2025 15:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756997825; cv=none; b=nmDgtEtw476z6ifr39Xs9FytU5Y/uGN+19aEL4TNA4AlgJAqYTyr7REj9FqYq6HOPUort298jpN9RIB/NYv+Pw/rhm8ovBL0CwZ1dH4Zh71pq60z8o10XIsaafqXfF9Vs/BBr7XL+WmtZV5pwy1tmVBSYwPUIHXmlVC+nKd/6YY=
+	t=1756999961; cv=none; b=W2DHTNflW8XUz1SxWnejLxnYgCZ/EjC/W4YFVjHog5EPr9FLNH4daA1wlbpM0rn4PnberFIzHGIl0rTv1s/pzQq8CJU9j71BEcMiIxxFRCw0HY1IVJuo8jlcanMbLE+G1ZfZVt9L42/krsAa8Cu2u1ZmQIVM/BM05pG9vO/xjQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756997825; c=relaxed/simple;
-	bh=zy7ci82Nyudi63bmHkw44W6TtTWn2ujyRA3oF3cE0GY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=E6PO6zImz4n3BuyTmhzEutPSRHR6kZY9bPbsV8uVPWFJNF4cxEmz2y7BpTli7VyNqBmNQgiztZcrGARtbpTM8Xa6d2sLjMzEwJTrvcUbGaLvfl2uE83B6crwbDwOVw7CPxqVQxDu9alQcxMp3QgKamrSHj3FFpEUS6JPNAzcIEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nrMRJpUP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65DA9C4CEF0;
-	Thu,  4 Sep 2025 14:57:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756997825;
-	bh=zy7ci82Nyudi63bmHkw44W6TtTWn2ujyRA3oF3cE0GY=;
-	h=Subject:From:Date:To:From;
-	b=nrMRJpUPo5MBNKiRO/+Yx/f1HOamGuTOc9g+RzSR/2ZxAJRsAFST1Baz9p3A4CHqF
-	 d4MiVEMUAehlyYRbg/MBG0ToSnZqwPjip4+NwJ3jfxVHHRkMLnME9CSxux5/9vcL2V
-	 PDlQomaaXTXNDrO2dthMEFSK6sGTCvDJV9slfXsun6ZTSLl2dCOwlYsDSFyKms6xg2
-	 MudNf3D+Rt8mN8P9CSkPHSbvPnmd6VSvp9mq+8LPYCixeptiCDqgSmOkLt3lUepwyQ
-	 aeTnAFRF+GV3uzF/wW0IiZcjKZnmBFTLqAKP1H2IL14nMouwosWoFdDWVfdrEBtYoh
-	 bYLwgpbMenmtw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F82383BF69;
-	Thu,  4 Sep 2025 14:57:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1756999961; c=relaxed/simple;
+	bh=DVpzoe+cvUIPBr58wnM4EFerySjoKjG3dIl55F1dw1Q=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=MHTTe8oYsRD+Vb0B5q8sccvyPfjwHAYjWFbeRzWa3LWMKogjw1krnyfVw/Xev2bhHbvz/zWI0G4VlaJ93JxQEhvkeNVEIRFR5GWMXrPxNbN9GHTVy082vU/hghPdNLWtKrrVfLIyl/iQ/P0M166w5w7Mq8rGteXJ3SZ5ucIGl1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ym978ZfZ; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 31B79C8F1E4;
+	Thu,  4 Sep 2025 15:32:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 529BD606BB;
+	Thu,  4 Sep 2025 15:32:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0628D1C22D35B;
+	Thu,  4 Sep 2025 17:32:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1756999955; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=HLIbAkeU1jgbmqyWLMs3WMOPlDHMfnTByF+G6ivDAB0=;
+	b=ym978ZfZSDtQLPnQc0ywN4zXR7rcJSBU0w8Ikuq7Gtj7UmDs2NyYFrs3QDFTgCiLmavqC+
+	Emwy41MVYtDjKErlE0zuPEfF5lcUmpMb4HEa9/dgBN0JF30wgE7913rp3+ZvRmV7noWxTs
+	NHGwJfGDnwgU24uGIDl3T+PqV7TQSCJ0LGp2VeEkM41aVuEdQYTC8Hve8+rQ5AD6iE5Ytf
+	tYjgy1dQI8L41wwc2CUtxltU957PEKKF2Gfkhe1Tjj3p4rIGL8gDu06z7G2qQMIa8Zm5jU
+	s/C2cehdiKfic44OVeSx3KwdlPiF8uDvQYjT7+q6FtrJXos56DDm3NK3l8UuHw==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175699783008.1839472.2162600494504662104.git-patchwork-housekeeping@kernel.org>
-Date: Thu, 04 Sep 2025 14:57:10 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 04 Sep 2025 17:32:25 +0200
+Message-Id: <DCK4I00CCR4R.2K7P9IEDI0OA2@bootlin.com>
+Subject: Re: [PATCH 3/4] spi: cadence-quadspi: Fix cqspi_setup_flash()
+Cc: <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <praneeth@ti.com>, <p-mantena@ti.com>, <a-dutta@ti.com>, <u-kumar1@ti.com>
+To: "Santhosh Kumar K" <s-k6@ti.com>, <miquel.raynal@bootlin.com>,
+ <broonie@kernel.org>, <vigneshr@ti.com>, <marex@denx.de>,
+ <computersforpeace@gmail.com>, <grmoore@opensource.altera.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a-dirty
+References: <20250904133130.3105736-1-s-k6@ti.com>
+ <20250904133130.3105736-4-s-k6@ti.com>
+In-Reply-To: <20250904133130.3105736-4-s-k6@ti.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Latest series: [v5] spi: airoha: driver fixes & improvements (2025-09-04T14:23:26)
-  Superseding: [v5] spi: airoha: driver fixes & improvements (2025-08-23T16:01:03):
-    [v5,01/13] spi: airoha: return an error for continuous mode dirmap creation cases
-    [v5,02/13] spi: airoha: remove unnecessary restriction length
-    [v5,03/13] spi: airoha: add support of dual/quad wires spi modes to exec_op() handler
-    [v5,04/13] spi: airoha: remove unnecessary switch to non-dma mode
-    [v5,05/13] spi: airoha: switch back to non-dma mode in the case of error
-    [v5,06/13] spi: airoha: fix reading/writing of flashes with more than one plane per lun
-    [v5,07/13] spi: airoha: unify dirmap read/write code
-    [v5,08/13] spi: airoha: support of dualio/quadio flash reading commands
-    [v5,09/13] spi: airoha: avoid setting of page/oob sizes in REG_SPI_NFI_PAGEFMT
-    [v5,10/13] spi: airoha: reduce the number of modification of REG_SPI_NFI_CNFG and REG_SPI_NFI_SECCUS_SIZE registers
-    [v5,11/13] spi: airoha: set custom sector size equal to flash page size
-    [v5,12/13] spi: airoha: avoid reading flash page settings from SNFI registers during driver startup
-    [v5,13/13] spi: airoha: buffer must be 0xff-ed before writing
+Hello Santhosh,
 
+On Thu Sep 4, 2025 at 3:31 PM CEST, Santhosh Kumar K wrote:
+> The 'max_cs' stores the largest chip select number. It should only
+> be updated when the current 'cs' is greater than existing 'max_cs'. So,
+> fix the condition accordingly.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Good catch. Current code can only work with one chip-select.
+
+Reviewed-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+
+Maybe we should error out if we don't enter the loop, ie if we have no
+flash declared?
+ - Before your patch, cqspi->num_chipselect was set to num-cs DT prop or
+   CQSPI_MAX_CHIPSELECT as fallback.
+ - After your patch, cqspi->num_chipselect is set to one.
+
+In neither case do we get an error if no flash is defined in DT.
+
+We could either return some error code or set cqspi->num_chipselect=3D0
+which will lead to spi_register_controller() to fail [0].
+
+[0]: https://elixir.bootlin.com/linux/v6.16.4/source/drivers/spi/spi.c#L332=
+2-L3329
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
