@@ -1,154 +1,150 @@
-Return-Path: <linux-spi+bounces-9915-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9916-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA459B449FA
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Sep 2025 00:52:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FDD3B455A5
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Sep 2025 13:04:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68D8F7B0615
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Sep 2025 22:50:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19174A03CAC
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Sep 2025 11:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95062F4A1E;
-	Thu,  4 Sep 2025 22:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF49341643;
+	Fri,  5 Sep 2025 11:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="roBVwgBQ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="e/lMXPe1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADCD2F069E;
-	Thu,  4 Sep 2025 22:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27FED33EB1F;
+	Fri,  5 Sep 2025 11:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757026344; cv=none; b=HwnpQdFMa6uwdnByciT+z5gj5LRtMI29EK+I4Co0bymv6byeg24B7SrraC92Od8vitgVNpZK0nH7wxvrPK9Pt0DrBCMqG6PubtatQFr7nwZ0nrUfYmGu1XKtqytCWorz4zdLUmPGu4ab3VxeDdHhMEjNDTLyfe7dDveTyJxuRq8=
+	t=1757070269; cv=none; b=VkWbNgPnHef72BkMpwPam17DxHm5QblWdsLLqSsIBdauOhBdQdCWZBEHnr5b2snFbX3ztcDUZBylqH50Dd1yUmjL+pzt73DuHv08JibRHtA9uN6UAuUmxXHKTQllWVSamD5fywxfI0tb4ml5ntI20SbvIXQPuHnNK7t32Ve3TPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757026344; c=relaxed/simple;
-	bh=2MViS1nqSpyNjI/P7K/k2Spz+R3IZ3I4vxgoMymb5Uo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ifBDuZ7HlphKbl5jCsc8FsUSMkx8CAk/E3X2KkU4Y3Vcsl2TWBQIG26gKvd0wz11CLF2tWlM/0+D0pA3qBgqONiSTf4z/0KiHxX2URaEyGUYelac4kp2lBsXZdLVkBys/L7FsYM0rJ8QWk7xbQJlvcJqxFRbXwsqQhs/3wkUnlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=roBVwgBQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DDFC4CEF0;
-	Thu,  4 Sep 2025 22:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757026343;
-	bh=2MViS1nqSpyNjI/P7K/k2Spz+R3IZ3I4vxgoMymb5Uo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=roBVwgBQdHjRYDAC6Yyl8gcjTa1sebepK19RtdZM5Kr+BJYNj5zWJeB02etY8KIyI
-	 b+RcIMOwSoGmpxXqnXcfjEYxksz+RXpt+pf2VjEB1VgJcIRHBceav+UIWYbNx2fE3K
-	 7+WEHceX9Cz41lRwl8VloRIumOdI4m0IKDa6VphbPJDeULrt3x0bJuAUukQ6/WKuL0
-	 REQt3WpNlSm3UUve2h7bV157b/yJ+NQBKzl9CGFniIjjyb7AShIWGiI11Zck6rcSys
-	 VyQI9wmTi+B2BLN4VmdvCQSrI8EEXTLBevvUrwyGOOOrG/WVf+G3vDakrZ7qQCvomP
-	 m3ZuahDyWvLeg==
-Date: Fri, 5 Sep 2025 00:52:20 +0200
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
-	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Mark Kettenis <kettenis@openbsd.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Sasha Finkelstein <fnkl.kernel@gmail.com>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Michael Turquette <mturquette@baylibre.com>, Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>, 
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 10/37] dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c
- compatible
-Message-ID: <f5o23zrqe2ei3bmwlxokhtkgfpeki6ctoq3ahd4f66utfu5hdk@6q55hvy4hvq4>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+	s=arc-20240116; t=1757070269; c=relaxed/simple;
+	bh=AmC3UF7X56t8MbOkEzA0Ks3gwsgyTIf+BxiYirzqRUY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=hHCkLMn69Z307Wu03gLNujElx2PjcmJELOadKPKp7YXeohUfgjysEaI9rFsa6C9agDvn08We9wS7BDPLx6i7eG8Hk6tNnj1wIik6NHnvq4WEAF9Ii+ZexPryOYpcRjZHIdRuCISt1YCIIqlG8pxyed3Uu4+CKnOyEJLwYrCxFw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=e/lMXPe1; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 585B4FDP3307951;
+	Fri, 5 Sep 2025 06:04:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1757070255;
+	bh=aC2fQQ/I4VHyv1syREOYU51RuC6I93oHXZndjA+RvG0=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=e/lMXPe1jXJEcUT03XGzt5aiKoeLfGvhbQPtCYWhaBlp1ShPOUua92cPg4D0IUgop
+	 Z79WxfnIpKzCOyYlJa0gBBv43xQHmsxMKUlz1/8faSCrmlLUpU+2oyYx1nHEqVYtUv
+	 kewTVDPLh3hbwF8cSG6UC6PU+jqVQESmhChQCCUw=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 585B4FhF874667
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Fri, 5 Sep 2025 06:04:15 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 5
+ Sep 2025 06:04:15 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Fri, 5 Sep 2025 06:04:15 -0500
+Received: from [172.24.233.254] (santhoshkumark.dhcp.ti.com [172.24.233.254])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 585B4ARf345139;
+	Fri, 5 Sep 2025 06:04:11 -0500
+Message-ID: <ea97b0b4-3467-4e18-9e8c-80b75e067f3d@ti.com>
+Date: Fri, 5 Sep 2025 16:34:10 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] spi: cadence-quadspi: Fix cqspi_setup_flash()
+To: Pratyush Yadav <pratyush@kernel.org>
+CC: <miquel.raynal@bootlin.com>, <broonie@kernel.org>, <vigneshr@ti.com>,
+        <marex@denx.de>, <computersforpeace@gmail.com>,
+        <grmoore@opensource.altera.com>, <theo.lebrun@bootlin.com>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <praneeth@ti.com>, <p-mantena@ti.com>, <a-dutta@ti.com>,
+        <u-kumar1@ti.com>, <s-k6@ti.com>
+References: <20250904133130.3105736-1-s-k6@ti.com>
+ <20250904133130.3105736-4-s-k6@ti.com> <mafs0ms7ath3l.fsf@kernel.org>
+Content-Language: en-US
+From: Santhosh Kumar K <s-k6@ti.com>
+In-Reply-To: <mafs0ms7ath3l.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hi Janne,
+Hello,
 
-On Thu, Aug 28, 2025 at 04:01:29PM +0200, Janne Grunau wrote:
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,i2c" anymore [1]. Use
-> "apple,t8103-i2c" as fallback compatible as it is the SoC the driver
-> and bindings were written for.
+On 04/09/25 20:11, Pratyush Yadav wrote:
+> On Thu, Sep 04 2025, Santhosh Kumar K wrote:
 > 
-> This block is compatible with t8103, so just add the new per-SoC
-> compatible using apple,t8103-i2c as base.
+>> The 'max_cs' stores the largest chip select number. It should only
+>> be updated when the current 'cs' is greater than existing 'max_cs'. So,
+>> fix the condition accordingly.
+>>
+>> Fixes: 0f3841a5e115 ("spi: cadence-qspi: report correct number of chip-select")
+>> Signed-off-by: Santhosh Kumar K <s-k6@ti.com>
+>> ---
+>>   drivers/spi/spi-cadence-quadspi.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+>> index 447a32a08a93..da3ec15abb3e 100644
+>> --- a/drivers/spi/spi-cadence-quadspi.c
+>> +++ b/drivers/spi/spi-cadence-quadspi.c
+>> @@ -1722,7 +1722,7 @@ static const struct spi_controller_mem_caps cqspi_mem_caps = {
+>>   
+>>   static int cqspi_setup_flash(struct cqspi_st *cqspi)
+>>   {
+>> -	unsigned int max_cs = cqspi->num_chipselect - 1;
+>> +	unsigned int max_cs = 0;
+>>   	struct platform_device *pdev = cqspi->pdev;
+>>   	struct device *dev = &pdev->dev;
+>>   	struct cqspi_flash_pdata *f_pdata;
+>> @@ -1740,7 +1740,7 @@ static int cqspi_setup_flash(struct cqspi_st *cqspi)
+>>   		if (cs >= cqspi->num_chipselect) {
+>>   			dev_err(dev, "Chip select %d out of range.\n", cs);
+>>   			return -EINVAL;
+>> -		} else if (cs < max_cs) {
+>> +		} else if (cs > max_cs) {
 > 
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
+> Makes sense. Out of curiosity, are you using multiple CS in a real use
+> case or is this only theoretical?
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org>
+Real use case,  Pratyush - we have both OSPI NOR and QSPI NAND in our 
+new AM62Lx EVM - CS0 and CS3 respectively.
 
-Andi
+> 
+> Also nit: this could be simplified to:
+> 
+> 		if (cs >= cqspi->num_chipselect) {
+> 			dev_err(dev, "Chip select %d out of range.\n", cs);
+> 			return -EINVAL;
+> 		}
+> 
+> 		max_cs = max_t(unsigned int, cs, max_cs);
+> 
+> but I think it is fine either way.
 
-> ---
->  .../devicetree/bindings/i2c/apple,i2c.yaml         | 27 +++++++++++++---------
->  1 file changed, 16 insertions(+), 11 deletions(-)
+Yeah, this one's simpler, I'll go with this. Thanks!
+
+Regards,
+Santhosh.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> index fed3e1b8c43f67b8f5a19e5c1e046b0e17ab8017..500a965bdb7a84e4997b52e8c19dcc1a7ee0cff7 100644
-> --- a/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/apple,i2c.yaml
-> @@ -20,17 +20,22 @@ allOf:
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - apple,s5l8960x-i2c
-> -          - apple,t7000-i2c
-> -          - apple,s8000-i2c
-> -          - apple,t8010-i2c
-> -          - apple,t8015-i2c
-> -          - apple,t8103-i2c
-> -          - apple,t8112-i2c
-> -          - apple,t6000-i2c
-> -      - const: apple,i2c
-> +    oneOf:
-> +      - items:
-> +          - const: apple,t6020-i2c
-> +          - const: apple,t8103-i2c
-> +      - items:
-> +          - enum:
-> +              # Do not add additional SoC to this list.
-> +              - apple,s5l8960x-i2c
-> +              - apple,t7000-i2c
-> +              - apple,s8000-i2c
-> +              - apple,t8010-i2c
-> +              - apple,t8015-i2c
-> +              - apple,t8103-i2c
-> +              - apple,t8112-i2c
-> +              - apple,t6000-i2c
-> +          - const: apple,i2c
->  
->    reg:
->      maxItems: 1
+> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 > 
-> -- 
-> 2.51.0
+>>   			max_cs = cs;
+>>   		}
 > 
+
 
