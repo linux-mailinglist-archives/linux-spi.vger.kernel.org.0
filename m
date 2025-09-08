@@ -1,67 +1,66 @@
-Return-Path: <linux-spi+bounces-9933-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9934-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BE97B48332
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 06:15:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0045CB48334
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 06:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5E30189B0CB
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 04:16:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC4733A159E
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 04:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EE2D1F78E6;
-	Mon,  8 Sep 2025 04:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF2222129F;
+	Mon,  8 Sep 2025 04:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="MwMnNg+8"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="sDinFn7a"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BC01E990E;
-	Mon,  8 Sep 2025 04:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F59A21B19D;
+	Mon,  8 Sep 2025 04:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757304927; cv=none; b=oWuNOeFGQ/a0SE5qqqFlmiUBINSaBDpiyr2amR0w7M6eLtiOZ8NBH0ZYLzGCP2/pEhT4hMiOAH3IUGK4chvj7aTm893O/Xh3enp2T2PGDV35MTc6gc2vu/N5YOIyj1MPR8HmPmCIxPO66IbrvZFj1f+yIB2PbELe8teYoaROsvY=
+	t=1757304929; cv=none; b=Z7tKcLYkbuaXtD2WQcslB6RBKph7uHSFLJLSSSoTzSOGHE7kB/BVsN4gKyvi9wbKN88xDFcMV6QJ3j0E7ja/TFefuVcj5osNZddmUE7q4b3eivH/gyAF5orXrLyy+1iV7d6ldjBt76KoHFNwBbbfOAiz8LMDJu+QxNH2yGwJ14w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757304927; c=relaxed/simple;
-	bh=8vcpSjNT1k5A4ehuUfwjip6OpA9XYu1lbAAriuBL9r4=;
+	s=arc-20240116; t=1757304929; c=relaxed/simple;
+	bh=vx2kNy0+HhAu9oJXF7h1H6iRH7NO2rPLGfr4zC9bQyA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=OKsAE1N8vmxRe1y5ngxr1eskYdqga78WFx2+Pj1O7/u7vkyh+dEPa1YGrqxs1ZjWyEeeOZJfM2hDojWD6tB91nFc+QsBqB59VPVaSePpTxVjtoJ5NXpGmVBpQWQ3ISAi82V5rrA/M8XMxEpwXLPH49wxfNLwPD7/AdqmxdGQhV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=MwMnNg+8; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=uTgFYXU2/pctYXaPiXzABkJsOccppY33jUIDAG9KN6nJ0zTXqLMSjx1xVgYfUHW8CJfDN4vqGcFWm1OKMKkw/qWOysB65hgOaW2uFHjJl+lDsswrCe3A4VH6GkyKDEmSSxDd0gLrcnygwCH0p6SXAl1ShP3423OcfgcypLJh6xA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=sDinFn7a; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1757304925; x=1788840925;
+  t=1757304927; x=1788840927;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=8vcpSjNT1k5A4ehuUfwjip6OpA9XYu1lbAAriuBL9r4=;
-  b=MwMnNg+8dtVI8wBnDG2+zuWp4q5ki7Pmyil8WMyewcQXp+UcD0aA8Fct
-   K/vIZj1+MMf6WVu7kFA4I5CDTxSCtsazAqpoUFhP8n3UeAjdDW3TbWBRa
-   jK6T0WoGRSLbapvH+Aan3Y6IHUHIr0BCkDsNamASLTYT7Hgseywpybg0V
-   N4f3+PlUlU799gNvmNW8QOE99yJacgPa3Xl6gSgTsZ3bV+TYlObuddX3r
-   nRmsfH3WpPY96e7ae/g1zPPeCE8lUb3qrqFsfqG7sq1h3Yr2BPrVJCwkD
-   ndBCx5Ss8ZtpAU9xSHvhc6iD/5OuYqiWt0J2XaymKdmwcjlQHMJGHPU4L
+  bh=vx2kNy0+HhAu9oJXF7h1H6iRH7NO2rPLGfr4zC9bQyA=;
+  b=sDinFn7aWVSSXiFbA2iG+fne536vUhAZtTy2w/JnOnS7Ul2wiScF+uHL
+   PQ3b2Y/fcWeowFys/HVv0VRmMrd/8SFgUrduWhx7aIVTGq+5rr4ZHjfkw
+   8lywOpxj8Codi/qvbJXf/6BPaH1IJtUaAZ1kHD4y66vtIIW+bY+7oHvii
+   lL61g/eQ9qAIxgrppsvMjfzG5bgGp4pq+4Jr73h8R6EVl+gDkbtX/yRFw
+   hlXmT9s1ebrt8hBPAZBpYUvEMRZkk7mDVcE9Iuo46Tus079UJColoCYJT
+   6JT/s1ynhUW98TkmVcyxlwfhmdxprdtM0GOr/IAKErGiAR/iJGH+dN6oQ
    w==;
 X-CSE-ConnectionGUID: q/SJvp4uQvCY0cG18DoX1w==
-X-CSE-MsgGUID: cfbswviiQeitLmdrMu/BIg==
+X-CSE-MsgGUID: ZJVDMuJtRJitEtb3JxJQeA==
 X-IronPort-AV: E=Sophos;i="6.18,247,1751266800"; 
-   d="scan'208";a="46742455"
+   d="scan'208";a="46742463"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Sep 2025 21:15:24 -0700
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Sep 2025 21:15:26 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Sun, 7 Sep 2025 21:14:51 -0700
+ 15.1.2507.58; Sun, 7 Sep 2025 21:14:58 -0700
 Received: from [127.0.0.1] (10.10.85.11) by chn-vm-ex01.mchp-main.com
  (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Sun, 7 Sep 2025 21:14:45 -0700
+ Transport; Sun, 7 Sep 2025 21:14:52 -0700
 From: Dharma Balasubiramani <dharma.b@microchip.com>
-Date: Mon, 8 Sep 2025 09:44:19 +0530
-Subject: [PATCH v2 4/5] spi: atmel-quadspi: add support for SAM9X7 QSPI
- controller
+Date: Mon, 8 Sep 2025 09:44:20 +0530
+Subject: [PATCH v2 5/5] spi: atmel-quadspi: Add support for sama7d65 QSPI
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250908-microchip-qspi-v2-4-8f3d69fdd5c9@microchip.com>
+Message-ID: <20250908-microchip-qspi-v2-5-8f3d69fdd5c9@microchip.com>
 References: <20250908-microchip-qspi-v2-0-8f3d69fdd5c9@microchip.com>
 In-Reply-To: <20250908-microchip-qspi-v2-0-8f3d69fdd5c9@microchip.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
@@ -83,65 +82,65 @@ CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
 	Dharma Balasubiramani <dharma.b@microchip.com>, Varshini Rajendran
 	<varshini.rajendran@microchip.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1757304860; l=1692;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1757304860; l=1545;
  i=dharma.b@microchip.com; s=20240209; h=from:subject:message-id;
- bh=f7DOA5wDFdEWR6ikCwi4zK/5qKnnx4GBTbYYi9JaLJw=;
- b=QWZQc/2bKKOSQPBR5mGGCLwOKCSMrVZSDACQTUrUEup4zCt8TwjUc+WAgX+v4459P9KgEk+34
- MqFWLf/rikaDsUQmMqRiuUIUXRFIyjg4tHN074oxyt7swTFwJtncRwD
+ bh=f0BEjRg0ecgW3mbWEOamZAvt1r/7v97MsNFu6rAL6n8=;
+ b=00YL9K3Oot2eHMDWKTvLcLPGPfmcIclFGVvDwqZ2I+XnJFnXS2UbKtOsqxFGJmo9H+6F6i3TO
+ rGVpcQg7n+0C48LlkIsVwYrLigv/DAIZ+NKDIiZnA4Itk2gfbvheFqX
 X-Developer-Key: i=dharma.b@microchip.com; a=ed25519;
  pk=kCq31LcpLAe9HDfIz9ZJ1U7T+osjOi7OZSbe0gqtyQ4=
 
 From: Varshini Rajendran <varshini.rajendran@microchip.com>
 
-Add support for the QuadSPI controller found on the SAM9X7 SoC.
-
-This controller does not implement pad calibration. It supports
-operation up to 100 MHz, and requires the GCK to run at twice
-the data rate.
+Add support for sama7d65 QSPI controller and define its caps.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
 ---
- drivers/spi/atmel-quadspi.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/spi/atmel-quadspi.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
 diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index 83cea5faff78..342cdd6e8d64 100644
+index 342cdd6e8d64..d7a3d85d00c2 100644
 --- a/drivers/spi/atmel-quadspi.c
 +++ b/drivers/spi/atmel-quadspi.c
-@@ -63,6 +63,7 @@
- 
- #define SAMA7G5_QSPI0_MAX_SPEED_HZ	200000000
- #define SAMA7G5_QSPI1_SDR_MAX_SPEED_HZ	133000000
-+#define SAM9X7_QSPI_MAX_SPEED_HZ	100000000
- 
- /* Bitfields in QSPI_CR (Control Register) */
- #define QSPI_CR_QSPIEN                  BIT(0)
-@@ -1627,6 +1628,16 @@ static const struct atmel_qspi_caps atmel_sam9x60_qspi_caps = {
- 	.has_ricr = true,
+@@ -1638,6 +1638,24 @@ static const struct atmel_qspi_caps atmel_sam9x7_ospi_caps = {
+ 	.has_dllon = false,
  };
  
-+static const struct atmel_qspi_caps atmel_sam9x7_ospi_caps = {
-+	.max_speed_hz = SAM9X7_QSPI_MAX_SPEED_HZ,
++static const struct atmel_qspi_caps atmel_sama7d65_ospi_caps = {
++	.max_speed_hz = SAMA7G5_QSPI0_MAX_SPEED_HZ,
 +	.has_gclk = true,
 +	.octal = true,
 +	.has_dma = true,
 +	.has_2xgclk = true,
-+	.has_padcalib = false,
++	.has_padcalib = true,
++	.has_dllon = false,
++};
++
++static const struct atmel_qspi_caps atmel_sama7d65_qspi_caps = {
++	.max_speed_hz = SAMA7G5_QSPI1_SDR_MAX_SPEED_HZ,
++	.has_gclk = true,
++	.has_dma = true,
++	.has_2xgclk = true,
 +	.has_dllon = false,
 +};
 +
  static const struct atmel_qspi_caps atmel_sama7g5_ospi_caps = {
  	.max_speed_hz = SAMA7G5_QSPI0_MAX_SPEED_HZ,
  	.has_gclk = true,
-@@ -1660,6 +1671,10 @@ static const struct of_device_id atmel_qspi_dt_ids[] = {
- 		.compatible = "microchip,sama7g5-qspi",
- 		.data = &atmel_sama7g5_qspi_caps,
+@@ -1675,6 +1693,15 @@ static const struct of_device_id atmel_qspi_dt_ids[] = {
+ 		.compatible = "microchip,sam9x7-ospi",
+ 		.data = &atmel_sam9x7_ospi_caps,
  	},
 +	{
-+		.compatible = "microchip,sam9x7-ospi",
-+		.data = &atmel_sam9x7_ospi_caps,
++		.compatible = "microchip,sama7d65-ospi",
++		.data = &atmel_sama7d65_ospi_caps,
 +	},
++	{
++		.compatible = "microchip,sama7d65-qspi",
++		.data = &atmel_sama7d65_qspi_caps,
++	},
++
  
  	{ /* sentinel */ }
  };
