@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-9936-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9937-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26DD5B48457
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 08:42:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67A5EB48459
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 08:43:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1A8017512B
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 06:42:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E473189EC1B
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 06:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D05129A322;
-	Mon,  8 Sep 2025 06:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA55C47F4A;
+	Mon,  8 Sep 2025 06:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6aZevnp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKGNfL4N"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C31C29A300;
-	Mon,  8 Sep 2025 06:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D327296BC1;
+	Mon,  8 Sep 2025 06:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757313706; cv=none; b=o4UOwBVoVkvm7q+gyP+4MtNVrk35tqN5DO/XLeMyH3M0Wvpu2krMySyrf+8TD4tHrY/GeE0y+FhUvHJAX+UP4A3ZzaqOr9zAjEYxaLqvv+is8+42W2+hFS7FhKaldUFylai7nWecwjXP4Ub23KhRlIe/WkiddGw3q+/gMy6P16I=
+	t=1757313737; cv=none; b=ewXa4h2Jm3MK6D3lkQBPXrvKaucwVY+2S3N0BRFlNAiMkaVAypSl+I0d+XVsrq3k+D7sEnTL8QIm8wmDxkeyj59cIn1iXP0TTgEIGjz8KpcU64lpapykaNqxDXkdsqZXVKQUnmsC0MAVpJLV1N4XCdo19vWU/1YSeVIHxPSO5Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757313706; c=relaxed/simple;
-	bh=/LbZ9DwDbuOFAfK7FweBSqxdQ6kjSt39gsRdKh1+sW4=;
+	s=arc-20240116; t=1757313737; c=relaxed/simple;
+	bh=waxwksXGGRw+oNuAuE7zdOaAHM5Z9luVPrK2hbjGgjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QewAfeS9gaQXUTP05E0A2t+7lpfl1lw1Jo1cPs9fO4KL+Wxy66mKPxCZRdttB7WnZC3yWZGAgmLoq+WTID6vtFY/r13gpb6Rsj8zKMm7jdIFSwpbqNuiW9gMPHjlDuzVOS0FiT9blEfnLYDtiI8bR4BV4gGkaHATNrPdoYysHtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6aZevnp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED893C4CEF5;
-	Mon,  8 Sep 2025 06:41:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=SG9I3XK2THfay4AvMS5+mW1P7foLiaFs8kVdVlnfyameRo9aEGmksnxH4u5YgbM70WAjlvusr0iLc8c4FnQ1VAI0wGAIXSxdrHb1uERTSIXdLJ70O0nVRVABeShauuAkCqxWiBrNWAY5r0VqjYpxLlyvsfDyZoUh7a0nfOjuiCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKGNfL4N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E90C4CEF5;
+	Mon,  8 Sep 2025 06:42:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757313705;
-	bh=/LbZ9DwDbuOFAfK7FweBSqxdQ6kjSt39gsRdKh1+sW4=;
+	s=k20201202; t=1757313735;
+	bh=waxwksXGGRw+oNuAuE7zdOaAHM5Z9luVPrK2hbjGgjo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K6aZevnpbV3f7RXoei8hWJ++vrncIgrZJGyl5J14vN22y3KLaLQVFZzHMdi56Otch
-	 0I7shzInEtaNe70/QEoZvcVk4zVV+0CYJJzKWFUvl4SQUwf4+wRWU6QqdKxsD7Knum
-	 1Fg11CqRD1GJVxkhk8/6dM5nSpUwHozzpoOSNY2jZ3o99iPfAAnCz2ZPnfGfbXSY4B
-	 xHTYgehsC1il0Zu+qdtrbUA1EZ9MVA38KgaLpCMlypaw7UL4C7uqha2eqCEE/RdgML
-	 R/R5Bmyf0j+NVnXRW1rbVSM5SHbqCRaAvjaNodduwsvw28ap+uxRc+UN7T3dg7J6up
-	 0itKtXF4VYE7Q==
-Message-ID: <77ad8686-3ce4-4a6d-8a8c-c61d86cb7474@kernel.org>
-Date: Mon, 8 Sep 2025 08:41:39 +0200
+	b=PKGNfL4NovGzRl6U1v0PjmJ99OLkjWkk2Gy4Gg3xUuwxf18Rs6AoVHNq8Q5QzTrSW
+	 n/yVz/D8jYkq18UWg4tJT96WFfGYzWN3zxUSuV5Q0C1u+jAUF19fF+CTyBXw7+sIR8
+	 K4dq86vyQBhhqh0pc069cqOT+s/WXTsAg+ziveB9w6il8ymj4YLcQ8KiTVqRTyR9Gp
+	 l4QNMNxZ8EVqhK+hNgKMnk1FSoYuujPGpqUoJhCq+ymH3Ms/GjVgkoIZQIisaxMUlI
+	 YljXV/lNW9R23YPysiMInnm8pFGWQ72DofDwVgXsU+U6BNSNg96HirLBLE0Mta/ufi
+	 3yy9xspZxUQgw==
+Message-ID: <c380ffd0-17ec-4162-8d41-37c438c23f8e@kernel.org>
+Date: Mon, 8 Sep 2025 08:42:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,8 +60,8 @@ Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250902-microchip-qspi-v1-0-37af59a0406a@microchip.com>
  <20250902-microchip-qspi-v1-1-37af59a0406a@microchip.com>
- <20250902-bulky-chachalaca-of-superiority-d5caaf@kuoka>
- <a9968230-33af-432a-a5da-3d40b6f5d85a@microchip.com>
+ <20250902-macho-violet-orangutan-faac78@kuoka>
+ <7099b01b-2071-4561-b27b-0f1443f5856e@microchip.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,25 +107,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <a9968230-33af-432a-a5da-3d40b6f5d85a@microchip.com>
+In-Reply-To: <7099b01b-2071-4561-b27b-0f1443f5856e@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 08/09/2025 05:51, Dharma.B@microchip.com wrote:
-> I think the maintainer that merged these commits missed reviewing 
-> subject prefix.
+On 08/09/2025 05:45, Dharma.B@microchip.com wrote:
+>>> Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/spi/atmel,quadspi.yaml | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+>>> index b0d99bc10535..c17114123034 100644
+>>> --- a/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/atmel,quadspi.yaml
+>>> @@ -17,6 +17,7 @@ properties:
+>>>       enum:
+>>>         - atmel,sama5d2-qspi
+>>>         - microchip,sam9x60-qspi
+>>> +      - microchip,sam9x7-ospi
+>>
+>> ... but 9x7 here. Confusing.
 > 
-> and I see a mix of
+> It should be 9x7 only (qspi is common for sam9x7x), I will change it.
 > 
-> spi: dt-bindings:
-> dt-bindings: spi:
-> dt-bindings:
-> 
-> prefixes for this dir.
-> 
-> I will use "dt-bindings: spi:".
-
-Did you even bother to read the docs I pointed to?
+Hm? That's wildcard then. See writing bindings.
 
 Best regards,
 Krzysztof
