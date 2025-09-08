@@ -1,72 +1,120 @@
-Return-Path: <linux-spi+bounces-9944-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9945-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73B85B48937
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 11:57:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 588F8B4910E
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 16:17:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34CAE3A4DCF
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 09:57:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D5B4440D05
+	for <lists+linux-spi@lfdr.de>; Mon,  8 Sep 2025 14:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE132E2EE5;
-	Mon,  8 Sep 2025 09:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28CE200113;
+	Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjtF7bo+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tmPa1gkq"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB41231C9F
-	for <linux-spi@vger.kernel.org>; Mon,  8 Sep 2025 09:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD787082A;
+	Mon,  8 Sep 2025 14:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757325421; cv=none; b=P/hXbfRtTP289ew59F+YxsE1BbyP0XJiR2aVYQd0gEElLAiSUQ5yPvX1vw7FHW2917F7V606No9j69jgsnZrEVcz/roSpBImduPV7Eh89OCl+ehBVkqAvCNvpT2xn575So/40nyTHbqCdFAiUdHslDSajUSBkbX0UXg/vnFpaN4=
+	t=1757341001; cv=none; b=PpO9mNCdfkO6kNoNmbPzZN7ykgp5Yhr4k4fR3yMdS4vnfr67Av0s0QGA68J+SIYKwIwdMhuKTtRA8EwA+Kjub166b+EJkZvxznu/T35ucskpRXH+f9bVoU3YXqy2/Q9mflGXP0Ib7w4Uwuqi4OQJ9kGTF5WfwZ++stf0iaCdq4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757325421; c=relaxed/simple;
-	bh=bj0hV16bLNOSnS+3AlNsjvVrfGtODtbmvs2nk1gmFbI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=bRzwAmlXLIlAiUx5YvBjEWzIOd3yMIXjV5d3oo8OkNYCL5pnhIDhz3Yzyz/pmytG4VUTKHQ4/mNNDB4o8UP5y6TDiAVqZ7SpP4jMvH9A2+a2yfwoI5cBaQjyaLQkgFWfK17x1++DQf/3Q4HSiLKtaF9Feuy6l8eZ5ufoV3szdM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjtF7bo+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99184C4CEF1;
-	Mon,  8 Sep 2025 09:57:01 +0000 (UTC)
+	s=arc-20240116; t=1757341001; c=relaxed/simple;
+	bh=CBI4suASODhHBC14sipB186eMW1r9Bxk7k0WFgqClrU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OufGSy2yjhyiRfREbVACUZjryM1S1om7wIWWchsemGJLkuAXzejd70CNqvnETDEv7wkGeNoN5OYcISAXTTnLqHssi902h0nM1QtI2bzipHZutIYGZai4nQXNimJaNKejdBeO148s3Rkj4qetSr3MnjU/A6ZmStBptvTzN5QHPmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tmPa1gkq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB51C4CEF7;
+	Mon,  8 Sep 2025 14:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757325421;
-	bh=bj0hV16bLNOSnS+3AlNsjvVrfGtODtbmvs2nk1gmFbI=;
-	h=Subject:From:Date:To:From;
-	b=HjtF7bo+lYsrHMe7awcMvM4q3s5Kz5WXAMMWSv9FRCM2pHBUsPAoHp/wAYzlvuegL
-	 k2vBZugGEitBjLF1pM68+dpG2sG3R3IozEndxKgYDObPHYJPaZuUkJEYBRwtsWPI/R
-	 RsXsyk9V7O93oSimK/cUeFYiPGeCw2Vp0Ye72fOBd/7S0/pfXOtHo0rlkNeN7rzqCW
-	 /Kqny3+aA0mNhgUkxsSqG//ZHCOCZppEsdsfwhfdi1UMOsDuYjiUj8MLt7iQe9czr/
-	 S/gT7+t12hj22xORuhqjXsU/g9k5tPnmfmgN++kxEmMhR8f2peNsrFf2jfvdHhxcnI
-	 WAGBDcSH3kjpQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C82383BF69;
-	Mon,  8 Sep 2025 09:57:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1757341001;
+	bh=CBI4suASODhHBC14sipB186eMW1r9Bxk7k0WFgqClrU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tmPa1gkqzuRx5RyBxCqHbzAfV5G4d4nmjTy6s6i+bt8myOEAOvu9tsR0PlDNaoEHs
+	 sST9fnnK7DNwNwUqjeW5R0YMOuZQPBrj7IDVOInuWfqw122jHn7oe+ryNfpvECbpT8
+	 QGOooXhdorgU/mWM3v6eZG5p0MbFRl7IM4VZVzmhwtupIt/tVZYx/y6bFRkpsf5kLb
+	 jNyXLVEg3krWoHqiJAJeueQguSgXgV502xPIwfMKDsJBq5oTKUw644aWNHdDZ4c4Ui
+	 edKOg88t//Hhs8IVxDpQPqbLQlkysNMXo9z37pCYTNLvn+zGjV6Vip71Pe++vy/BIc
+	 A5EjILmOauKQQ==
+Date: Mon, 8 Sep 2025 15:16:33 +0100
+From: Lee Jones <lee@kernel.org>
+To: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Robert Marko <robert.marko@sartura.hr>, linux@armlinux.org.uk,
+	alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
+	catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	andi.shyti@kernel.org, broonie@kernel.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, arnd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+	o.rempel@pengutronix.de, daniel.machon@microchip.com,
+	luka.perkov@sartura.hr
+Subject: Re: [PATCH v9 4/9] mfd: at91-usart: Make it selectable for
+ ARCH_MICROCHIP
+Message-ID: <20250908141633.GB9224@google.com>
+References: <20250813174720.540015-1-robert.marko@sartura.hr>
+ <20250813174720.540015-5-robert.marko@sartura.hr>
+ <20250902100254.GD2163762@google.com>
+ <769c8dc4-4db6-4d2e-aa2f-f86aa7ccaf78@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175732542496.4008087.5387323246140009102.git-patchwork-housekeeping@kernel.org>
-Date: Mon, 08 Sep 2025 09:57:04 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+In-Reply-To: <769c8dc4-4db6-4d2e-aa2f-f86aa7ccaf78@microchip.com>
 
-Latest series: [v10] Virtio SPI Linux driver (2025-09-08T09:23:45)
-  Superseding: [v9] Virtio SPI Linux driver (2025-08-28T09:34:48):
-    [v9,1/3] virtio: Add ID for virtio SPI
-    [v9,2/3] virtio-spi: Add virtio-spi.h
-    [v9,3/3] SPI: Add virtio SPI driver
+On Thu, 04 Sep 2025, Nicolas Ferre wrote:
 
+> On 02/09/2025 at 12:02, Lee Jones wrote:
+> > On Wed, 13 Aug 2025, Robert Marko wrote:
+> > 
+> > > LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
+> > > avoid needing to update depends in future if other Microchip SoC-s use it
+> > > as well.
+> > > 
+> > > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > > ---
+> > >   drivers/mfd/Kconfig | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > index 425c5fba6cb1..8f11b2df1470 100644
+> > > --- a/drivers/mfd/Kconfig
+> > > +++ b/drivers/mfd/Kconfig
+> > > @@ -138,7 +138,7 @@ config MFD_AAT2870_CORE
+> > >   config MFD_AT91_USART
+> > >        tristate "AT91 USART Driver"
+> > >        select MFD_CORE
+> > > -     depends on ARCH_AT91 || ARCH_LAN969X || COMPILE_TEST
+> > > +     depends on ARCH_MICROCHIP || COMPILE_TEST
+> > >        help
+> > >          Select this to get support for AT91 USART IP. This is a wrapper
+> > >          over at91-usart-serial driver and usart-spi-driver. Only one function
+> > 
+> > Let me know when the deps are in Mainline.
+> 
+> Hi Lee,
+> 
+> I have tags from other maintainers, how about you give us your and we make
+
+My?  AB?
+
+> this patch travel through arm-soc like the other ones?
+
+Sure.
+
+Acked-by: Lee Jones <lee@kernel.org>
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Lee Jones [李琼斯]
 
