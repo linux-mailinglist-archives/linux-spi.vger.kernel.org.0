@@ -1,82 +1,87 @@
-Return-Path: <linux-spi+bounces-9955-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9956-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12705B4AD10
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Sep 2025 14:00:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29A6FB50A36
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Sep 2025 03:26:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85A67188BD1A
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Sep 2025 12:00:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF171441B40
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Sep 2025 01:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D351326D7E;
-	Tue,  9 Sep 2025 12:00:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A031F03D9;
+	Wed, 10 Sep 2025 01:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NlT0LO0s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUqnq8E+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D4F324B02
-	for <linux-spi@vger.kernel.org>; Tue,  9 Sep 2025 12:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8698E1EB5E3;
+	Wed, 10 Sep 2025 01:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757419203; cv=none; b=iWmLNnbd6mMskSF7V+wNq0po+/Yw/rGVJZZr5UYixBWkw2GDDf4SeIYTpcAcauMBZB6fWpq82hOXtgeQ3Mt/f0C2s2SwpjXaFP1sK8r1v+1ATnfyCcgKCd7zcSh+Fa1Mttpg+XMENOwPJxseGTwCrG/QEUd2fay0Ec0kw/bkBfA=
+	t=1757467584; cv=none; b=hpxr2IIthLDUsljE4CUuuohAwTeLR+ufUsp5g6DeL7am4rEKbVAA6h5SDfyQhOtWP60NV5omdpz96NLcVul+wLI0PKvq6QUE3ocQxX7bQStoYMO1iDegIMbY0pDXcTsAoRdaOID+OcpoWu7tyo6NLY0jG1kn3NROmohOfbqPAu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757419203; c=relaxed/simple;
-	bh=VN+UQS8KgKhkW3KGRFCkd7Uw2FpNXH0M0z7B+tHTQDc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=coJ1CwDXVHsGCsAviev5Kas3qjIGedpES6IjiIyB2Yz/fhZVVNJMr/CdzCFMQuo+df/BiHLz+sWzv8I2bvjyUhwS4Ah6AtBj5RTJKKaFjt45cV/TvPJdeW/9lVB8QjJa4eCF+Mf5waPTTalkExNVC5q/n0nyNrgp/wCx0jOQtCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NlT0LO0s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C906C4CEFA;
-	Tue,  9 Sep 2025 12:00:02 +0000 (UTC)
+	s=arc-20240116; t=1757467584; c=relaxed/simple;
+	bh=6H+vJE7E8FrtvtrJctIMl1VGEDdD9t6pgrkERpF0vq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W2ozlyTeNMrquBupv1mYpYVawD8btlqL+8lqi4Ux+D8B0LwddEIlenF0D0+XQajYdVUW0KTPHS7XyV9i8ncvKIVRURTwhgvoIwaqFRFbBTSVUVE5Xlv9tJVBSYvAbkBTef5mtoAVFIlXoU5YLEjaZfaOjwV+RKT/0C1oNeje++U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUqnq8E+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3AF4C4CEF4;
+	Wed, 10 Sep 2025 01:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757419202;
-	bh=VN+UQS8KgKhkW3KGRFCkd7Uw2FpNXH0M0z7B+tHTQDc=;
-	h=Subject:From:Date:To:From;
-	b=NlT0LO0sWmxsRHnQmIyG3lhEbJjvqVIg4l05H0t5xBfCWBQ/vRILc87sCx+2VjtIY
-	 YhvfJBCSmFhqyQvoNxUWBZFET1rNDY7g0bJFY2UuFUN1C24LA+dlvtH7GpEuUYZAwg
-	 aiMFkG/62w70mBBmk/9GaZZwFD3kHRuEn7LRmsDEBxCOqUr8bzYLNpz2cdulvwbjxt
-	 CcP4Zzgs6sgeG1KpRfBSRkwlEGef6UCjlI4R58g6/NHY6mizScRXKoFAGs7hxjUd+K
-	 5uykkXZvJvUgsPIpVwkC68sGMxwW/IGj173IFHB+FLnyK1YML6x7/aTPx/vvVMi2W6
-	 ZiOWX5MZvx1VA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 38E3C383BF69;
-	Tue,  9 Sep 2025 12:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1757467584;
+	bh=6H+vJE7E8FrtvtrJctIMl1VGEDdD9t6pgrkERpF0vq0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fUqnq8E+dk9tqpuR5mAgbwlKZ/mvSHNMFElLfT0SXYVGch4c4zmcRfDsRkmBirOUk
+	 goBT8mIpBx3qGZ/Nn38NH2HFnTtwGMCS92bgXO0hNsBTMJuI0DHbjtzd7/WSdYeWfp
+	 XsS/HGVN/TG63x5XGBKoY3TVc5uNnhNasFqnlIUGC7ruNP1buMwA6I5WkpuU7uF1RM
+	 QNp8aaaA3MqpwfrcXCzlmP5YnpIH4+aAQC4jQSC6wB1aIninSeWDLpnjRv8K1lfPxx
+	 BtXvaP1qNu0CIySiuijCRGk2iudWcAr4LKWjkfLdQrhA8kIPfFeMYz2mzW4Ve7GYY2
+	 X9zRlIuRzIxcg==
+Date: Tue, 9 Sep 2025 20:26:23 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Dharma Balasubiramani <dharma.b@microchip.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	linux-kernel@vger.kernel.org,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: Re: [PATCH v2 1/5] dt-bindings: spi: Document sam9x7 QSPI
+Message-ID: <175746758262.3564926.3476770597508307840.robh@kernel.org>
+References: <20250908-microchip-qspi-v2-0-8f3d69fdd5c9@microchip.com>
+ <20250908-microchip-qspi-v2-1-8f3d69fdd5c9@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175741920482.648666.10062565180706484046.git-patchwork-summary@kernel.org>
-Date: Tue, 09 Sep 2025 12:00:04 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Hello:
-
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
-
-Series: [1/2] spi: s3c64xx: Drop S3C2443
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=997184
-  Lore link: https://lore.kernel.org/r/20250830132605.311115-3-krzysztof.kozlowski@linaro.org
-    Patches: [1/2] spi: s3c64xx: Drop S3C2443
-             [2/2] spi: dt-bindings: samsung: Drop S3C2443
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250908-microchip-qspi-v2-1-8f3d69fdd5c9@microchip.com>
 
 
-Total patches: 2
+On Mon, 08 Sep 2025 09:44:16 +0530, Dharma Balasubiramani wrote:
+> Document the sam9x7 quad spi that supports interface to serial memories
+> operating in
+> 
+> - Single-bit SPI, Dual SPI, Quad SPI and Octal SPI
+> - Single Data Rate or Double Data Rate modes
+> 
+> Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/spi/atmel,quadspi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
