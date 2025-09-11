@@ -1,94 +1,270 @@
-Return-Path: <linux-spi+bounces-9973-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-9974-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10352B523F0
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Sep 2025 23:59:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E03DBB5279A
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Sep 2025 06:33:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C287D560BE5
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Sep 2025 21:59:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C50D483B96
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Sep 2025 04:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5118E3112D8;
-	Wed, 10 Sep 2025 21:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A2B2367DA;
+	Thu, 11 Sep 2025 04:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4Xu4S9R"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YlPg3OOg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2068324C068;
-	Wed, 10 Sep 2025 21:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4CF91B4F0A
+	for <linux-spi@vger.kernel.org>; Thu, 11 Sep 2025 04:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757541562; cv=none; b=taV/2sCPMW5Z3bkKcUxxXb5PX63ZG+CezIPiqdCUygQMWL7LKUAF/nhkDlVkaoNx5GheKqZx/lIl9Lw0JkL8b3XYQZyknSIU9V7VGi0vrJE37aUH/2CM4XcBJC+ADEWDcCXytzqHCypzePdsQwjn+ClnNpTRPqzXhQmfcJcFz1Y=
+	t=1757565191; cv=none; b=S+lcqIsxQhZUX8WkD9LxEWfXFKtd/ySo7pMBnslApX8oeZPN0Lc+oZUWf/iKJ2PBitn+E6WxSzvBIdEfxEZ9ypUzpar9fJGWyykLnl72KD+qZFf2sEwvNxj6JvLV9fQo8sorexbYZkMuJlsA6MLH1jPpdAuRSXY2m+Ta6kqniWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757541562; c=relaxed/simple;
-	bh=jnJrw4KvMaS+1IPKppeQ27NtdlHsDVhqXF9fQR8RGgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EuNWT1QFS4Smy0zHIKJGIG/gpWo57K+7TqUl5SjDyrx03n9J3iCDnEACivGDuOPTQEhrihfaJLwwJk+5lRB29AxdkczAYRqBtjruSmsngNs6ZpSzi6H2gnIWfcv4Xjqoni6tQ7XvMlYjo918AXLCsWZw+UvkhkmU20eH2+oGHBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l4Xu4S9R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09D91C4CEEB;
-	Wed, 10 Sep 2025 21:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757541561;
-	bh=jnJrw4KvMaS+1IPKppeQ27NtdlHsDVhqXF9fQR8RGgU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l4Xu4S9Rx2yS1fg0DyEmfsdAATj6pBjYSTrWyIO+bkMb7V9O9rrNnImNLLBLz9S5X
-	 WiJm40QSMq2rrTfu8zhLmQ8O5lvjpMz7mGYoFJJ7smLkUnD6fx84/X1tEom3Fp3fGx
-	 xqI+PQN9c0XYGvYmJHu5QWE/pgfcKrjny1rJ5ssLyi7EQFSeQnfaBXA9KN8MVkFhck
-	 q6x9t/fE+muCSwNHgf/Bgc0FZMrjZfyCurERST7CAEtZLGK1ZzT6IxXg2N7OzXWwye
-	 NGHYqMBxENG75DZ8SafyMzOYWhwVzMg3rGZ8zYyfJvLBFBmDv/Vh1z+ItGJk4D3FXV
-	 33C07vnV5U5Gw==
-Date: Wed, 10 Sep 2025 22:59:17 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Erick Karanja <karanja99erick@gmail.com>
-Cc: ldewangan@nvidia.com, thierry.reding@gmail.com, jonathanh@nvidia.com,
-	linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org, julia.lawall@inria.fr
-Subject: Re: [PATCH] spi: Replace lock/unlock patterns to guard
-Message-ID: <ddb8f91b-3110-4d17-afcb-fa9199e128ac@sirena.org.uk>
-References: <20250910213537.553673-1-karanja99erick@gmail.com>
+	s=arc-20240116; t=1757565191; c=relaxed/simple;
+	bh=O6eWIJr8+46650Np0lYhA73HNNggUR/2TCpyEJ4KVaQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kMGsnvGjAZ5RmQFtjrP4QWx/sciKPgKwxbBz4/synt07v6M2bh/kQ8sC4eKDu4w2qVZarRanKNNUEhbDNtHPksgWZ5pWXgU4Xe5P6jxf6jR7hN2Rgy7HBjjtIm7amtFRrMLs4+CKUjXThyYZUDuyYFjOKE6dqGaSZCmi9XZ1buo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YlPg3OOg; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58B2IuXr002518
+	for <linux-spi@vger.kernel.org>; Thu, 11 Sep 2025 04:33:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=d0CMaRDbC1gH0+RvxPdiQkc3aLz0hIoneHd
+	tDR0m7Zc=; b=YlPg3OOg983APctQdmDqbBi+8mXTuSbz4gC1f2DBQ0w8gyTRndm
+	gAc96ZMEuHP450MEKsHBI1I+6IrooTlyI84E8w0NgqhmRuegk9ssVRCPkfsdOgAz
+	sHpPGg44pql2GxzhnO8Li0r6VG7hBn4Nr1jKUWuihAYzDmHXS4EOzp+5R4JDJFt4
+	UIsjIDZuTMmvlfyFhccHM80u97sVbw9VK6Gtda32wjFafBL3IhYoPJ8J/8R47dkO
+	xmBv32mU2PKZrsJArjQ2/KTlFq3SmScFAGjoiVHjwldFNOlvYMmXF2bX5wzCUAzn
+	CvaUHTISPx37pR1hRYy5iEAAn0GG9I4eXzQ==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 490db8p965-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Thu, 11 Sep 2025 04:33:07 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-24caf28cce0so7206075ad.0
+        for <linux-spi@vger.kernel.org>; Wed, 10 Sep 2025 21:33:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757565186; x=1758169986;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d0CMaRDbC1gH0+RvxPdiQkc3aLz0hIoneHdtDR0m7Zc=;
+        b=hWnsuJugUW+gVG9RND5iHNQ9CD2DO2vZbTFeC1IBOozx5eAtk4tMm2zbLMFtie70/P
+         seUT/2ItfAWE+eOAeso+v3VUVZJbcPVtL8TMNr0+K57gge5WOS4EPTAih4AeMQ5Tzbb6
+         EPmWO3qIJtHwXJIdSzu2aDaX5G6Ndsws1q4xqVGN6Xhy0HD9CRDIF7LwkyYXTk3ctrip
+         9zYC8IOd17D2rqKMC6o0xNfs3y0diEjM5k4IQbJGfSULYP8wcd67nTAsJKEkkmpJpIu3
+         CLq3v2e+9tIZ2/OCWmuwpt+tzifJQRS1gDOAShVoj8XcQxP8WXrboa/n/Qtp8xTDQ3UE
+         MViQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWL6XxCs6wSq7A/AyYOyaUaldnvn2S/yLH2vWOECpbhtxIARlx2IGlOt4DvoQ/253W8+/iVVDdvQmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC5dbDWShe6b5gxylMS2Lgk/D8oaKEE2QNSotJ39f2bGzfzixK
+	0wh65b+nbP8QSUL/7p6n7vkjK27XPM9dS4zpSQixc1p1DNaUgZj6widATMXA+XS4p1EwR7TA19k
+	LIc5XgCEik0xoO7VEzPGLx8lyY/ImB8ugqt/OQbkMEvLAbRdxrXCxQK+QkEEdiPs=
+X-Gm-Gg: ASbGncsobxTn1MLPZkSpS23j8nhZOFNpJCHsr2Iq/FC9CSdTNk3pg/VrZKxe8VqnU0m
+	QPgRnZYUwL58bIYML+JcMu8OTllGqsN5UZrySY0c5oArHvGF2OMnu+GhVXrOwpJ38V2P3kDwFsL
+	xoSJPXBylNMSVoWsSLMZfJWE30mMr+NSFt+OlYvVV05VQhDID3xtjHZPO6Fzl4/v7J3Tae0xjL1
+	JfveC8E+Y1K9K8XiJUdiVsEBXJd55IIFhWhqUEVsAEdtPeyaWJ1S0s0el45qDzfn+L8ntWSAz7U
+	wZ4Zl+Uray3bv/IMWz8KMuqf0vsKDl0AJUARix9TG7pjDVq4icJ29G4rh6EbRsOBK74DqVXiPi0
+	z
+X-Received: by 2002:a17:903:46cb:b0:24d:f9f:de8f with SMTP id d9443c01a7336-2516fbdcc8amr266964325ad.17.1757565186141;
+        Wed, 10 Sep 2025 21:33:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHa/7Qd8m4VQSi9D/4a5Bf46TIWZywfkvsusP0Hkifjzk/FqUnVhUo3mumJRpk5C2HzKnOlFQ==
+X-Received: by 2002:a17:903:46cb:b0:24d:f9f:de8f with SMTP id d9443c01a7336-2516fbdcc8amr266963805ad.17.1757565185564;
+        Wed, 10 Sep 2025 21:33:05 -0700 (PDT)
+Received: from hu-vdadhani-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c3a84a46csm4323975ad.91.2025.09.10.21.33.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Sep 2025 21:33:05 -0700 (PDT)
+From: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        andersson@kernel.org, konradybcio@kernel.org, broonie@kernel.org,
+        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: mukesh.savaliya@oss.qualcomm.com,
+        Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Subject: [PATCH v7 0/6] Add support to load QUP SE firmware from
+Date: Thu, 11 Sep 2025 10:02:50 +0530
+Message-Id: <20250911043256.3523057-1-viken.dadhaniya@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g4o6fT5DfXvnE0Lv"
-Content-Disposition: inline
-In-Reply-To: <20250910213537.553673-1-karanja99erick@gmail.com>
-X-Cookie: I think my career is ruined!
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAzMSBTYWx0ZWRfX+sTMDXOaTWJV
+ NuTF6oCcin2iC3fssaj7Hj9Hg5DpkrsEvcoakbzsJQMXMw+0XdqEFUO7bfIkfGeugoRfGcIDqHF
+ sdoVtrHoIS5N7JNO2ecOXMd1OR/7WEepvyuaqmFqK0f73PruI+ws84jxFVy3qLWyOsdSqnRw6bV
+ YY9FFqeUZLE3Hr9+hIb9OLopLYGvWnfz75OBN19aMtIWzsCet2tqfRyM9s2EjJFHbeKwjZ6VgPT
+ oZsRTi0gdPGfYlWyqTSu6qkUC2YaruKlM5Chsi1n2ZO1FK3KOSU2m9JnWt6qDDFk8rNDry0GHIV
+ oLpJrn27PTkgODu8nO3OOORghi1DYt2Pv9Jq2r0NGld/5tND1DnW5pNmAtnA351fc5EACS4RbyF
+ /Zv4pWPY
+X-Proofpoint-ORIG-GUID: JbwUKzA9Alq3ZKW1QSTuV_DM3BG7jOKU
+X-Proofpoint-GUID: JbwUKzA9Alq3ZKW1QSTuV_DM3BG7jOKU
+X-Authority-Analysis: v=2.4 cv=VIDdn8PX c=1 sm=1 tr=0 ts=68c25103 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=HXvFq9hwUs1lQpdr-HAA:9 a=uG9DUKGECoFWVXl0Dc02:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-10_04,2025-09-10_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0
+ phishscore=0 adultscore=0 clxscore=1015 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060031
 
+In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+hardware has traditionally been managed by TrustZone (TZ). This setup
+handled Serial Engines(SE) assignments and access control permissions,
+ensuring a high level of security but limiting flexibility and
+accessibility.
+ 
+This limitation poses a significant challenge for developers who need more
+flexibility to enable any protocol on any of the SEs within the QUP
+hardware.
+ 
+To address this, we are introducing a change that opens the firmware
+loading mechanism to the Linux environment. This enhancement increases
+flexibility and allows for more streamlined and efficient management. We
+can now handle SE assignments and access control permissions directly
+within Linux, eliminating the dependency on TZ.
+ 
+We propose an alternative method for firmware loading and SE
+ownership/transfer mode configuration based on device tree configuration.
+This method does not rely on other execution environments, making it
+accessible to all developers.
+ 
+For SEs used prior to the kernel, their firmware will be loaded by the
+respective image drivers (e.g., Debug UART, Secure or trusted SE).
+Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
+will not be loaded by Linux driver but TZ only. At the kernel level, only
+the SE protocol driver should load the respective protocol firmware.
+---
+v6 -> v7:
 
---g4o6fT5DfXvnE0Lv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+- Resolve kernel test robot warnings.
+- Defer the probe if the firmware from the filesystem is not available during early boot time. 
 
-On Thu, Sep 11, 2025 at 12:35:37AM +0300, Erick Karanja wrote:
-> Replace lock/unlock pattern with guard cleanup macro.
-> This simplifies the code flow path by replacing the conditional
-> jump with an early return.
+v6 Link: https://lore.kernel.org/all/20250822072651.510027-1-viken.dadhaniya@oss.qualcomm.com/
 
-Seriously, please fix your subject lines to follow the style for the
-subsystem and distinguish between the patches.
+v5 -> v6:
 
---g4o6fT5DfXvnE0Lv
-Content-Type: application/pgp-signature; name="signature.asc"
+- Added extra patch for cleanup in qcom-geni-se.c file.
+- Moved contents of qup-fw-load.h into qcom-geni-se.c.
+- Specified endianness for all members of the se_fw_hdr structure.
+- Changed the return type and arguments of the geni_read_elf function.
+- Renamed geni_read_elf to geni_find_protocol_fw for clarity.
+- Added error logging for corrupt firmware.
+- Passed SE mode and protocol type explicitly to all relevant functions.
+- Replaced writel_relaxed with writel for stricter memory ordering.
+- Renamed variable reg_val to reg for consistency.
+- Moved firmware length validation logic into geni_find_protocol_fw.
+- Updated function documentation for clarity and accuracy.
+- Removed redundant firmware length check.
+- Inlined the qup_fw_load function and removed its definition.
+- Removed the MAX_PROTOCOL macro.
+- Dropped mode and protocol fields from the geni_se structure.
+- Moved unrelated firmware loading code into a separate patch.
+- Added Acked-by tag.
 
------BEGIN PGP SIGNATURE-----
+v5 Link: https://lore.kernel.org/linux-i2c/20250624095102.1587580-1-viken.dadhaniya@oss.qualcomm.com/
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjB9LQACgkQJNaLcl1U
-h9A+4wf/ehY93JmhJYn6SG0Nl6s/Hcg+5EtbWr6R2/2du+TYhzuWW0AUYqMrpvQH
-eFc6rauyPxfpqBgaKaGEot5JftJdgjts6rR6gWFMYvTgp9fXnYu8FFvzq0waKTrf
-U5jb6d0A4qqF6B1HBtNg51TtCd2lyS4I7InrYiurYiWCAy+x2a2Cun12AVfu58sX
-ZRTtz31xzJgC5tv7jaPYJczW2rqJ8dzfeni4tu71WIIA+uujMtAB6XsFQ5zY9OO/
-YX45VL+mfqs6gzzSgvgwe0tNI6Pu8BCHvEHC3NxCR8iEL8IyDFPiEiNiQnxBiQwJ
-rqgqPdZOsLayTPIUjigHH6s6l31u1Q==
-=m26Q
------END PGP SIGNATURE-----
+v4 -> v5:
 
---g4o6fT5DfXvnE0Lv--
+- Added Reviewd-by tag.
+- Resolved kernel test robot error by including the missing bitfield header file.
+- Updated the SE firmware ELF structure name for consistency.
+- Specified _leb4 format for the magic number definition.
+- Updated the email domain from 'quic' to 'oss'.
+
+v4 Link: https://lore.kernel.org/all/20250503111029.3583807-1-quic_vdadhani@quicinc.com/ 
+
+v3 -> v4: 
+
+- Drop patch 1 of the v3 series as it has been reviewed and merged.
+- Update the qcom,gsi-dma-allowed property name to qcom,enable-gsi-dma.
+- Remove the full stop from the title.
+- Add a reference to the common schema YAML in the I2C, SPI, and SERIAL
+  YAML files in a single patch and drop the individual patches for protocol YAML.
+- Update the commit message.
+- Resolve kernel test robot warnings.
+- Add a multiline comment in the Copyright section.
+- Remove valid_seg_size and geni_config_common_control functions and add the code inline.
+- Rename read_elf function to geni_read_elf.
+- Add a firmware size check.
+- Assign *pelfseg after finding a match.
+- Break one large condition check into multiple checks to improve code readability.
+- Remove return type documentation for void functions.
+- Update error messages to be more descriptive.
+- Correct indentation.
+- Rename geni_flash_fw_revision function to geni_write_fw_revision.
+- Remove __func__ from all print statements.
+- Move resource_on to the appropriate section after parsing the firmware file.
+- Update variable names and function arguments as suggested.
+- Use FIELD_GET, FIELD_PREP, and GENMASK.
+- Use memcpy_toio() instead of memcpy.
+- Remove duplicate registers and bitmask macros.
+- Remove rsc struct and add required variables in geni_se struct.
+- Add a patch dependency note.
+
+v3 Link: https://lore.kernel.org/linux-arm-msm/20250303124349.3474185-1-quic_vdadhani@quicinc.com/ 
+
+v2 -> v3:
+
+- Add a new YAML file for QUP peripheral-specific properties for I2C, SPI, and SERIAL buses.
+- Drop the 'qcom,xfer-mode' property and add the 'qcom,gsi-dma-allowed' property in protocol-specific YAML.
+- Add a reference for the QUP peripheral shared YAML to protocol-specific YAML.
+- Enhance error handling and remove redundant if conditions in the qcom-geni-se.c driver.
+- Remove the ternary operator in the qup_fw_load function.
+- Update function descriptions and use imperative mood in qcom-geni-se.c
+- Load firmware during probe only if the protocol is invalid.
+
+v2 Link: https://lore.kernel.org/linux-kernel/20250124105309.295769-1-quic_vdadhani@quicinc.com/ 
+ 
+v1 -> v2:
+
+- Drop the qcom,load-firmware property.
+- Remove the fixed firmware path.
+- Add the 'firmware-name' property in the QUP common driver.
+- Add logic to read the firmware path from the device tree.
+- Resolve kernel test robot warnings.
+- Update the 'qcom,xfer-mode' property description.
+
+v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-1-quic_vdadhani@quicinc.com/ 
+---
+
+Viken Dadhaniya (6):
+  dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties
+    for I2C, SPI, and SERIAL bus
+  soc: qcom: geni-se: Cleanup register defines and update copyright
+  soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux
+    subsystem
+  i2c: qcom-geni: Load i2c qup Firmware from linux side
+  spi: geni-qcom: Load spi qup Firmware from linux side
+  serial: qcom-geni: Load UART qup Firmware from linux side
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   1 +
+ .../serial/qcom,serial-geni-qcom.yaml         |   1 +
+ .../soc/qcom/qcom,se-common-props.yaml        |  26 +
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |   1 +
+ drivers/i2c/busses/i2c-qcom-geni.c            |   8 +-
+ drivers/soc/qcom/qcom-geni-se.c               | 506 +++++++++++++++++-
+ drivers/spi/spi-geni-qcom.c                   |   6 +
+ drivers/tty/serial/qcom_geni_serial.c         |   8 +-
+ include/linux/soc/qcom/geni-se.h              |   4 +
+ 9 files changed, 540 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,se-common-props.yaml
+
+-- 
+2.34.1
+
 
