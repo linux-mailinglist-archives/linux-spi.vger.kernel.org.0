@@ -1,120 +1,171 @@
-Return-Path: <linux-spi+bounces-10002-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10003-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FDE5B5438B
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Sep 2025 09:10:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2F7B547EA
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Sep 2025 11:37:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB0163B1DA0
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Sep 2025 07:10:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77CEA3B2BB1
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Sep 2025 09:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C996F2BDC16;
-	Fri, 12 Sep 2025 07:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42842285C8A;
+	Fri, 12 Sep 2025 09:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WCMsg6Dw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oDl2A0LO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9D229C327
-	for <linux-spi@vger.kernel.org>; Fri, 12 Sep 2025 07:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F9E2848B4;
+	Fri, 12 Sep 2025 09:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757661042; cv=none; b=KZ8PEGFvxnIbIP0uf2bvEYF8aAJa4J3lXf1CNu+OSHWgOoxpzuEWSutUqkpqQ+0mPkwwU+7dk0twUbB5Vj1yzO+aYAzEjWiOEz9Rve19xGT+MQ26tMU5c6RuNEE013K5KjPlVzGSWIN/IgODAMVLeOy5N19HvVLhVsUf4BuHYLE=
+	t=1757669507; cv=none; b=UKZIA24I3cgOiR5xHITFq3td6ODh/lt5xPLFJQ++49ANkIiaOES2EGOgDtfIJxTJriAkU6LLZwARKPefdt67vDKXDrhTqxPpY3ugHqeflgWfPnZKe7FmJvt82CstGHTy22fUV5daefjy7tqFoncbF+Tl8qDLxo7JYYFNN1KR/fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757661042; c=relaxed/simple;
-	bh=eDNTP88Ukeq1W+ShdgUMNqfP16gb+eG5BnK7igyhDdg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GJ9j/xqXpS2m+QVMoD3XiXIP30X5ykptbamBrSzzDTDwBhYozCR2sIvE63tXkZ+PpN/Urpr3/qKiP5WE45PMewPD+J9nmMb/DqC8WLgcG7AnGb4HNyTwz9cdEZ4k7S+3lS9fhfcbFKvs2V/yhMuGfVzBIhQmgWiYt9VtteBYA2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WCMsg6Dw; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6539A1A0DAD
-	for <linux-spi@vger.kernel.org>; Fri, 12 Sep 2025 07:10:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3CEC660638;
-	Fri, 12 Sep 2025 07:10:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 32F4B102F28B1;
-	Fri, 12 Sep 2025 09:10:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1757661035; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=iW2aMY9sAB8aU6zVlyiI46o4UAd6hKvhx3b7UgU75NU=;
-	b=WCMsg6Dww5glGk/oEt2b0DF64BAN407Zg6P+6Sixvc4xvPux8stx6kkdHCnXHmImh/Plnq
-	C+dXoanINaUN54H7+d/yxaqI2lb0w/x7nfwaHERL1gmfBf/hYtScVjHqIa5wB+hwg2Zbej
-	WJV95lSI9eGBE1UVi3DA3IduNux47L68RS7vLdPRw9AAo0LMkkn+s+mMMOtnPTTKei3quR
-	dl3Rl0ew3JKKtty0XmPJ0xNuiIxTwvLtxggTKi+yZcjjMHFgXUmg4sCH116PMyGl375YoM
-	EzRKqVhiFgAHPlZFJt2+vBhtETQYajYzhyY5KTS7Ic5bbeh2lsH9zg5/uVOr8Q==
-From: "Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>
-Date: Fri, 12 Sep 2025 09:08:58 +0200
-Subject: [PATCH] spi: omap2-mcspi: drive SPI_CLK on transfer_setup()
+	s=arc-20240116; t=1757669507; c=relaxed/simple;
+	bh=cZZSj/PLAmvPikniIesMdJfhqh3VOpUH71TpGrecZ8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tIUScZ6Gzx9bxdDLH7qle5FByA8HOy260Awo0S7Oxp4PHfo+Ao6tQmigQBbIokDw0n6b0hp6GeL5M5lk5HzJ2BvuStC1kygrHoCX5vof//FsXAzmY+OrKjvhDBl4NyqVaa0zCR/EMPEbydokKZyLJO15Mdm+U2v+NSDoqSEsKsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oDl2A0LO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB683C4CEF1;
+	Fri, 12 Sep 2025 09:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757669506;
+	bh=cZZSj/PLAmvPikniIesMdJfhqh3VOpUH71TpGrecZ8M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oDl2A0LOXO/1X2zNKv7aRnP0NHdkbAsbDDgwtZzvwmo12fpeFM2E3/tK2+Vtp6jDf
+	 LtHjqH3FhqX9XCd49ZEoi9d2wFua1A1xl2NpXDXII2TJgNe2FaEGcY3H9R3K+d/kSk
+	 i5GbpzjLt0Me2HD69Wbc5uGIc3TwgDS6JZFlUf4XXoZCI/2uPJn9w8cEPAn3NjkatI
+	 mrNqigkcd6DbPU1UEsK3MA+M2bqLjMfjb8ArXgRSIyAq3CjGnxkE8s7LGICh/mIf7j
+	 5pUu4Qe144CAGGymifmDXQ3yvwNpleByOIrvrEZ2XoQVUNyLe8+LbR96tJeBNXKw/y
+	 Se8H2lBXfymbQ==
+Date: Fri, 12 Sep 2025 11:31:43 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Mark Kettenis <kettenis@openbsd.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Jassi Brar <jassisinghbrar@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Michael Turquette <mturquette@baylibre.com>, Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-clk@vger.kernel.org, dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 20/37] dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm
+ compatible
+Message-ID: <ahxdf3l6zvmjp2nlgklg3go7biaimuz7qh5upnhohrrbrg62e6@gmi3pmbccwwe>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <20250828-dt-apple-t6020-v1-20-507ba4c4b98e@jannau.net>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250912-omap-spi-fix-v1-1-f925b0d27ede@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAnHw2gC/x2MQQqAIBAAvyJ7bkFFg/pKdNhsqz2kohBB9Pek4
- wzMPFC5CFcY1QOFL6mSYgPTKQgHxZ1R1sZgtfV6MAbTSRlrFtzkRlq24HvtnKMeWpILN/3vpvl
- 9P3upkA9eAAAA
-X-Change-ID: 20250911-omap-spi-fix-abfc560444a6
-To: Mark Brown <broonie@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
- Pascal Eberhard <pascal.eberhard@se.com>, linux-spi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- "Bastien Curutchet (Schneider Electric)" <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hd4ybrkt7tr5jevb"
+Content-Disposition: inline
+In-Reply-To: <20250828-dt-apple-t6020-v1-20-507ba4c4b98e@jannau.net>
 
-If the cached contents of the CHCONF register doesn't have the FORCE bit
-set, the setup() function failed to set the relevant idle state of the
-SPI_CLK pin. In such case, the SPI_CLK's idle state is reached later with
-set_cs(), but it's too late for the first SPI transfer which fails since
-the CS is asserted before the clock reaching its idle state.
 
-Add a first write in setup() that always sets the FORCE bit.
-Keep the current write afterwards to ensure the FORCE bit won't stay in
-the cached contents of the CHCONF register unless it's intended.
+--hd4ybrkt7tr5jevb
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 20/37] dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm
+ compatible
+MIME-Version: 1.0
 
-Signed-off-by: Bastien Curutchet (Schneider Electric) <bastien.curutchet@bootlin.com>
----
-Hi all,
+Hello,
 
-I ran into this issue with a mode 3 SPI device. When the omap2-mcspi
-driver probes, it sets mode 0 so the CLK is down. Then when the mode 3
-SPI device probes, it asks for mode 3 but the clock doesn't go up.
-Afterwards, when the first transfer occurs, the CS is asserted
-before the clock actually reaches it's high state. This is interpreted
-as a clock rising edge by the SPI device that samples one 'fake' bit
-making this first transfer fail.
----
- drivers/spi/spi-omap2-mcspi.c | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, Aug 28, 2025 at 04:01:39PM +0200, Janne Grunau wrote:
+> The PWM controller on Apple's M2 Pro/Max SoCs behaves in the same way as
+> on previous M1 and M2 SoCs. Add its per SoC compatible.
+>=20
+> At the same time fix the order of existing entries. The sort order logic
+> is having SoC numeric code families in release order, and SoCs within
+> each family in release order:
+>=20
+> - t8xxx (Apple HxxP/G series, "phone"/"tablet" chips)
+>   - t8103 (Apple H13G/M1)
+>   - t8112 (Apple H14G/M2)
+> - t6xxx (Apple HxxJ series, "desktop" chips)
+>   - t6000/t6001/t6002 (Apple H13J(S/C/D) / M1 Pro/Max/Ultra)
+>   - t6020/t6021/t6022 (Apple H14J(S/C/D) / M2 Pro/Max/Ultra)
+>=20
+> Note that SoCs of the t600[0-2] / t602[0-2] family share the
+> t6000 / t6020 compatible where the hardware is 100% compatible, which is
+> usually the case in this highly related set of SoCs.
+>=20
+> Signed-off-by: Janne Grunau <j@jannau.net>
+> ---
+>  Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml b/=
+Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> index 142157bff0cd851c85fbf0132d734d470c5a0761..04519b0c581d0e9fb1ae6aa21=
+9a4e850027de6a2 100644
+> --- a/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
+> @@ -17,8 +17,9 @@ properties:
+>      items:
+>        - enum:
+>            - apple,t8103-fpwm
+> -          - apple,t6000-fpwm
+>            - apple,t8112-fpwm
+> +          - apple,t6000-fpwm
+> +          - apple,t6020-fpwm
+>        - const: apple,s5l-fpwm
+> =20
+>    reg:
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 6dc58a30804a12d16295a7ffc2edb192e6cc4a54..69c2e9d9be3c380327e26f94e82e05e6357f5384 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -988,6 +988,7 @@ static int omap2_mcspi_setup_transfer(struct spi_device *spi,
- 	else
- 		l &= ~OMAP2_MCSPI_CHCONF_PHA;
- 
-+	mcspi_write_chconf0(spi, l | OMAP2_MCSPI_CHCONF_FORCE);
- 	mcspi_write_chconf0(spi, l);
- 
- 	cs->mode = spi->mode;
+The patch is fine for me. There was no merge plan sketched out in the
+cover letter and I don't spot any dependencies this patch is a part of.
+So I applied this patch to
 
----
-base-commit: 31623e6ce46bcdce751c0d242fbb1502746d1a7c
-change-id: 20250911-omap-spi-fix-abfc560444a6
+	https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for=
+-next
 
-Best regards,
--- 
-Bastien Curutchet (Schneider Electric) <bastien.curutchet@bootlin.com>
+as 6.18-rc1 material.
 
+Best regards
+Uwe
+
+--hd4ybrkt7tr5jevb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjD6HwACgkQj4D7WH0S
+/k5dDwf/ZhdoZ04wcFscsQjfQPV9sY5Kzs8OxPgL+m4AV85SDwzSuZybeACCfsL2
+U+r2uMlK/Q21DJwXbTJjmnyAe19XWYtcvtUfKd50OAsoPnpijd6XN/VzkpPwSI1v
+MM1rZmYLCNhucLOPo87uqSwtHmOGOiHGefUgolr3pa9kl2VjNfe2U9byQTQegxaK
+CxeDN6bZEPo8n7PoU1mmnwFDouEZD1xzQt3FdvPpL2XORk2Ye5r89n1q02uTLbkj
+EsQ7IOSbpp2UDyIkxF0ESV6nWtpLn7AIB0rNABUH7JZA9FQ29vzAc9a3FRiLJsUa
+2cvxXsdWOdhpncFiR4L1mRq39BoLAQ==
+=7x/6
+-----END PGP SIGNATURE-----
+
+--hd4ybrkt7tr5jevb--
 
