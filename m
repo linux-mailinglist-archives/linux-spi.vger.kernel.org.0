@@ -1,125 +1,123 @@
-Return-Path: <linux-spi+bounces-10004-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10005-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D739B558DB
-	for <lists+linux-spi@lfdr.de>; Sat, 13 Sep 2025 00:08:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C0CB562E5
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Sep 2025 22:17:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 655281B25907
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Sep 2025 22:08:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8F8817A475
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Sep 2025 20:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C65D27CCF2;
-	Fri, 12 Sep 2025 22:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5335225DB1D;
+	Sat, 13 Sep 2025 20:16:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="U/TSqtgk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkH9y2yb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CD828726D
-	for <linux-spi@vger.kernel.org>; Fri, 12 Sep 2025 22:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95ED923770A
+	for <linux-spi@vger.kernel.org>; Sat, 13 Sep 2025 20:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757714877; cv=none; b=i6YTNLsOmaVKeuW9VfNszqjdcst1Qb27HG84uLwLlv3yU0GcSiwKwPyYmjq4KATbnBrrRKCaYYSesxcGxHcwLLOOzG5P9F8A6kzk+89uKInkbNKVm6+ywnhCQB/ZIafTt3/xi0UQ2UEJvM9EfIpkeXNYGNxqAHRj1XPlzX/kcNc=
+	t=1757794616; cv=none; b=D1ORIJgDewDB4t/0fHuuwQwGmwFbH/zI1KpEeBa2fIY2pqssl3NOCR/4Ye52UuAJKgolWCEW9NOCgreM6zwTCjYyBeik4dDzQ7y+YuMto8d7o645IrMZTu4s/D8oK13HSbupMO+3w6W04gLU6RV2a3l91JhLyZwsQIXse1JUQi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757714877; c=relaxed/simple;
-	bh=+yph0vA7hH7D2dOH8dcz8OTQ5zI8ZyZYi0J1x57wbuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pb2rEt/yOK+qbWwM6GaNaGAAx18ijCMrwuNu13Zl4s2b3qfjLnz8tVAigf4g8yc+nFDw3DecyPnp85myy2GmLYVGLsMON1Rul47VPQktbl0XXBqxdcjXJb6aCUGlLBESXd4Jk6dp5MQYpFGXakKoOp1B5+WRf5u5sd2Npi516QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=U/TSqtgk; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=date:from:to:cc:subject:message-id
-	:references:mime-version:content-type:in-reply-to; s=k1; bh=XtZM
-	38dcKGfPDowHADfBNhN+yZMd/DBKAr/Q56lBQhU=; b=U/TSqtgky9mRHKpLYuTy
-	UfXd7XedJP9Hk+5/2IqTWU+ncNGhELZK0Vc0RXbSYaIz7Hw6VMZAT5JoyMYY6z4g
-	WzMES95KXJxGoQ7e6ctjM2JN/2k4u/gVXKL/EPXHHKnINEvdgPhLK+f+fB3cHt9L
-	BpsliJIKV+ndVoI8YPP2/7JNqgTQ5aLQNm6R5gAL99+5MFMbIChu6laV+I2f8W3m
-	RpmupwmKLyH5mtQ8NSf2xEebzmoGbDEbi8by9Z1l1UyIN+iGY8UbAOXQISM6qt8c
-	5VvYJPYCkQGivyZtg4DnvEdmEwmxNTAeKfuH6DGfDaXfeL6rCKUkNLis+l/AE6hJ
-	Eg==
-Received: (qmail 1499859 invoked from network); 13 Sep 2025 00:07:43 +0200
-Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Sep 2025 00:07:43 +0200
-X-UD-Smtp-Session: l3s3148p1@dRQG4qE+rtYgAQnoAHJ8AC93OVDMgFWg
-Date: Sat, 13 Sep 2025 00:07:42 +0200
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: Janne Grunau <j@jannau.net>
-Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Martin <marcan@marcan.st>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 10/37] dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c
- compatible
-Message-ID: <aMSZrp3pbS2CeBOE@shikoro>
-References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
- <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+	s=arc-20240116; t=1757794616; c=relaxed/simple;
+	bh=FWdFpDZXgweIgfaXmSGMrKPTFYGwmCSWLoLB9qphSGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GKbjxNuKa1HljOMePmKOSe7l/NmYjruC9oCMXrHeB+oZGPIlXL2t+a7JzCeSemCL+hGFUeEPBtEaxgd+x6advZNdzOesijWW8yWTC3rK2Dvt88uU4RlC2CZRh4fp1lnGTxv2fG13SfNKBSVyTNSE8fM1KZQKjqqHEVH0cfEVWHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkH9y2yb; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-45deccb2c1eso23046115e9.1
+        for <linux-spi@vger.kernel.org>; Sat, 13 Sep 2025 13:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757794612; x=1758399412; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Koaj6pqpf5k3Jy2jPYnNq/imDVBkH5e1i3AFBAwM1v8=;
+        b=FkH9y2ybKE18FNKhDndmsYxvTYUISKvPx3eEZ7WQVsHSgzAdAorQifVzsdSRggBIlA
+         iIxScMSQ92KDtJeuWeEThjPFq8e6jqQTqkO0UCWvFzrVAjb0YE6w9v8QODeoltrHJqoJ
+         +sOnxmxYS58h4zs6l7flow3rJxF4s7zvIjJvTJvqaiIvRyo0KC/drWpO5ZfeqAX8Hr8P
+         9tYQVweKAdbC4+TgJMPZEQIh2Mul7f0LDGS/I5QljP39XqZgexQ0hRkneZ8r/CxEewJY
+         hW8R6L6JTil/vlHHMTfdfTAcyQgZ/EnbVdKaE9QgHMwSao2VgkTtUgBpg4OA1vS+fOAr
+         75XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757794612; x=1758399412;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Koaj6pqpf5k3Jy2jPYnNq/imDVBkH5e1i3AFBAwM1v8=;
+        b=vwSBGbNtZxAMtNNhnF8xVqzvD4/UbTReoa8V8Rvb25/tteDYA5lhKuwhpAaxNsZ86q
+         2eOuPIv2cXcx/Lq5pB/K0/QeIf0Fj/YZ/z5ZhXAjFTxj+hBxJRhBpcx/e/cnd/tTQtF8
+         8ClI90dZDZbv2TQG9QD9o+V3uuyOr2g51arNgR2TTIvh9q+gpL9uJx41tlhH2NTquLeh
+         eIH5h0GfxdV4YUcO5NceAlqMGjuwvHne/sdqI8Nm1/LACRj78EEyaFkNQCxQnT1cSDvT
+         mDMZlBP2Wfv3ssTtCtrW1Ia1dMasqZ4nCxLnRVGmkQVdv7btTBqGj6OpW78+2GnQ7Fu8
+         pRbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXaqgiMhf6oTF22Em/BX8hfHCKZqihztNCMVJ+NGp14DagRUM/qKyfp77kHMpizTjoXNib7KHcBNK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUa2FEB3zGb8kKIbIsMFUENQzuB95acaNZoU2nWrFpb3y7hORV
+	MvTdnPoVnOIbeOgSGsszSjJgwQofhAgsuILiAGnHcXUG7U374SD2VNI9
+X-Gm-Gg: ASbGncsfRqjv7m2s2YtDtaip27gxNMjHZYeuADOXi+YktA/sx9MkpJtTbcbpbSl5SKH
+	l6VuXWbUCKW15GaX1HQSEW3XloPtgciEpMXRGTnuVe47vMw4H56AibLaysJ5ZkFErcooLpKO3wX
+	/VcGrjSGlJFefBqTlbS1pQ8fCei7KlRSOeCud6WO4sNYnFYYLF4SSiCWMc9dSo/y3j4mH8N9RlV
+	gdR4hJtwXvjq0aUPlw78T2kSgIZPSij7m9J6YX3ii0WIlwsX5QjNg1f14iUhGqth/ewiKAL5yif
+	DUwTbUE9SkCP4f2GJ1UnO358YLs93o2IUEbq+ahDrdGZhJ8zKGZgwzRD/HuECrJz1voFU5tp8vf
+	am8bQ/h+q1vdth2lR9l3Wfql6XQh1bZvQ
+X-Google-Smtp-Source: AGHT+IHM94ZQbz7LSAD6t0BWLw0dw4XltmvObHjg9ikAWt94vPnfOCsjro/zNpc96RTnU6ULUDYJDg==
+X-Received: by 2002:a05:600c:1d29:b0:45f:2aa0:cc07 with SMTP id 5b1f17b1804b1-45f2af44393mr1464885e9.29.1757794611659;
+        Sat, 13 Sep 2025 13:16:51 -0700 (PDT)
+Received: from localhost ([185.63.82.103])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45e015bf73csm57532735e9.11.2025.09.13.13.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Sep 2025 13:16:51 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Liang Yang <liang.yang@amlogic.com>,
+	Feng Chen <feng.chen@amlogic.com>,
+	Xianwei Zhao <xianwei.zhao@amlogic.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-amlogic@lists.infradead.org,
+	linux-spi@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: amlogic: Fix error checking on regmap_write call
+Date: Sat, 13 Sep 2025 21:15:58 +0100
+Message-ID: <20250913201558.1338180-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250828-dt-apple-t6020-v1-10-507ba4c4b98e@jannau.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 28, 2025 at 04:01:29PM +0200, Janne Grunau wrote:
-> After discussion with the devicetree maintainers we agreed to not extend
-> lists with the generic compatible "apple,i2c" anymore [1]. Use
-> "apple,t8103-i2c" as fallback compatible as it is the SoC the driver
-> and bindings were written for.
-> 
-> This block is compatible with t8103, so just add the new per-SoC
-> compatible using apple,t8103-i2c as base.
-> 
-> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+Currently a call to regmap_write is not being error checked because the
+return checke is being performed on the variable ret and this variable
+is not assigned the return value from the regmap_write call. Fix this
+by adding in the missing assignment.
 
-Applied to for-next, thanks!
+Fixes: 4670db6f32e9 ("spi: amlogic: add driver for Amlogic SPI Flash Controller")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/spi/spi-amlogic-spifc-a4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/spi/spi-amlogic-spifc-a4.c b/drivers/spi/spi-amlogic-spifc-a4.c
+index 4ca8e82fdc67..4338d00e56a6 100644
+--- a/drivers/spi/spi-amlogic-spifc-a4.c
++++ b/drivers/spi/spi-amlogic-spifc-a4.c
+@@ -420,7 +420,7 @@ static int aml_sfc_dma_buffer_setup(struct aml_sfc *sfc, void *databuf,
+ 		goto out_map_data;
+ 
+ 	cmd = CMD_DATA_ADDRH(sfc->daddr);
+-	regmap_write(sfc->regmap_base, SFC_CMD, cmd);
++	ret = regmap_write(sfc->regmap_base, SFC_CMD, cmd);
+ 	if (ret)
+ 		goto out_map_data;
+ 
+-- 
+2.51.0
 
 
