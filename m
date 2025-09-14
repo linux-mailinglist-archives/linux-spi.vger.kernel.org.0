@@ -1,223 +1,232 @@
-Return-Path: <linux-spi+bounces-10008-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10009-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15462B5643F
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Sep 2025 04:21:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6F6FB56A2E
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Sep 2025 17:25:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAC4F17C358
-	for <lists+linux-spi@lfdr.de>; Sun, 14 Sep 2025 02:21:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41CE018998F4
+	for <lists+linux-spi@lfdr.de>; Sun, 14 Sep 2025 15:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34CF724501B;
-	Sun, 14 Sep 2025 02:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C2EE2D9EF2;
+	Sun, 14 Sep 2025 15:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nXNQOL9l"
+	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="fqniaA4n";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Vj23bhcy"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06C11FC3
-	for <linux-spi@vger.kernel.org>; Sun, 14 Sep 2025 02:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932A9E55A;
+	Sun, 14 Sep 2025 15:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757816508; cv=none; b=QooJy1cdG/5jfBoLwYMQMO24tat/r4TSWNURHJke+laqPp6flQ89lXSff8v1OsSJtblfeEDjU4TbJDsSy3OBY9kQadBBqRtRWvUmV1OLsxQ3fX94vOtZLGUEbi6G32l20bmXHR6Evgw2Npr2Eq8q1gNGVM3CDwsUEOmgXJ2Qfwc=
+	t=1757863527; cv=none; b=KF/+pcMACm7ObV85zo8vM6aIaeYqgg/RWTOOwffP869F9fKrFttweX2mCAaLDBhD93Lgn7+mR9F89W44ISFdX9W5GUWFwgpP92yaSKGbu7Sr08R5JWcfdow34SraYAJ7ufK2TDazJSaJgt1Tn1ihYlHjzhgmK4piZnUJYfPLmiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757816508; c=relaxed/simple;
-	bh=kS8JHpcfhYM5CdW9CB6tUor9f9vwCDwkONQoLHpHv6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P04YUNOW971SZGjx4H8rq3KPdX7tMtP9RfI2rn7xZsfuOAwG3HjwhFko3HGCG/K4yeS68own7Puvln+5VhT+fyzrI5SzGs8amiFWe5wRZ0hNV8mnR0sS9OKjPfOojyUzaFDOoE/EQL7cIaY4GUHTLfUkhPDnP4ZZVp6Y0E6Lkww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nXNQOL9l; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b47475cf8ecso2119590a12.0
-        for <linux-spi@vger.kernel.org>; Sat, 13 Sep 2025 19:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757816506; x=1758421306; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MqdYb43+ykEUj742mo0iH3T4ooAsVFSgAqPeQX3wifY=;
-        b=nXNQOL9lJIyPmLivfpjw89AdGKte0lgQ27JkFImHvIckSTUzDB+glOuS6UaPclGGC2
-         ERhHHEYsTIcnZF7upX03AuGF4DFkCZG9rHPczcy6BvVWAE/dg2Qsi19G1yaS+xm0D28t
-         xail3/NNkVQQQpnOUutyr7Esq9RQx2uQrKTj6gZHN9wL6vZw+08zYRzGGaiyH7Mkisu8
-         XBXRa7WcGgW00JQ78xwPxE9yMaIx17rCPiQyMpxb3wdx7gwy5vJgW3Kj14wPXeA7rpv5
-         2H5+4yCD6dYB5DA+XcfvFdZs5o9DGXJeYeV4OeEEyxWpWiOhLWBB2asi3AuiuYAVku9G
-         srnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757816506; x=1758421306;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MqdYb43+ykEUj742mo0iH3T4ooAsVFSgAqPeQX3wifY=;
-        b=Fdq2r3D0cg9QXFBZw5YFxolZYloqwVoVRxTf9lUzWzrCpARjG/CC3XmT56QdQig71R
-         3GmsHlQ9ekCTRv4/hXG5PuXFQACSXm58CpwJOgmHrjS894PQG4GI/22AWlOoLYvhYQdQ
-         ed4/SmRc+OokdizGazsMMuY2Bx46JgVeN7+tCzkFxCSK02Z3WBwknnwjj6SqfgFVLoQq
-         XM2BPnHdF5FMH4r9y9MTiuRCYzaCfnIj/kcpDxLfdMbHgj93g2XW/Yffwxox93mHZcNa
-         0ssuC9ykvpwiYbQt6wzSY7lB1jk8MhvlPkgEF4R+f6Td9DC44+ggsFr8qDgmZ18OIBcn
-         7jPQ==
-X-Gm-Message-State: AOJu0YwWv/NBokIUDTA7uEFnO89bVNKW5TCEUoQcuaJ0Vc6SsVJjlyI/
-	KzrjvBd9mj/6s9RNMk2ASrpdnkf/JYWgozNZHwzRTi8D0M4XY890SmU6
-X-Gm-Gg: ASbGncu6vi778P+6QBmLjskKxHpBMQuBlhjf9okrsKn08X6V8kLyH1TK9pGWzC6zZQ4
-	nMiz/7xWUK9C94XvcYNirszfv3hfEUgFL2Pp9Pyvx9N7IE2kJDy8BbCW7IiH87Tnp8Y4E+BfYUH
-	ZAZc3rf7yqdTygPLmWJ71xpYe0OXmpv4hknuMqiu/ma6KXDaFYbKtRlwAJZLzRPr/8Xd19evDHH
-	5TTKo8FCNlpuAUfXqrGOsXOL/CH5FC/UPiUz+AljKhEFstGLPw2c0zmFolJmqbZJxR7sne6sl3d
-	jBYJuO+0KMXc+iVOSTnVaKHnERWTPJEbp+02Jnb4zgivExuyfsArotFWm+sT/bVD1TFb2bcfprC
-	dK2v2AsgWsAdsxnwU0KT1//Azg/FPH//DKw==
-X-Google-Smtp-Source: AGHT+IFoR2P5g3/f0mGeIuy3+0+zAJUbfdsUl2n3PtZNSOt3j4dOvKJKtvTfVzY7igk5GaUMCr6Mew==
-X-Received: by 2002:a17:903:1b4c:b0:24c:b2a4:7089 with SMTP id d9443c01a7336-25d26077175mr98369385ad.31.1757816505822;
-        Sat, 13 Sep 2025 19:21:45 -0700 (PDT)
-Received: from fedora ([172.59.162.206])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-261d3dd0285sm27968685ad.8.2025.09.13.19.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Sep 2025 19:21:45 -0700 (PDT)
-From: Alex Tran <alex.t.tran@gmail.com>
-To: broonie@kernel.org
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alex Tran <alex.t.tran@gmail.com>
-Subject: [PATCH v1] spi: spi-omap2-mcspi: fallback to PIO when DMA transfer fails
-Date: Sat, 13 Sep 2025 19:21:32 -0700
-Message-ID: <20250914022132.319227-1-alex.t.tran@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1757863527; c=relaxed/simple;
+	bh=pzjFWi3vSizi+sDsUA5hWojROcQ85d1CDLAbV4UkiYg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=diuB/VKmqxYjKGY2fFwWQEl2UH3PcxRxUfDekQSFonP3nk/kVPKedeJHeIoknhbixllfQtoRjCynangPYIoVT6B4QVeQcYOWPD+fvj3Y+3s19mpj1+UjRuy8ziPobpzty8HbRVgekknHkyoI+5KLP3lqavmiha+jhpy66VxZXuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=fqniaA4n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Vj23bhcy; arc=none smtp.client-ip=103.168.172.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailflow.phl.internal (Postfix) with ESMTP id 9FD391380371;
+	Sun, 14 Sep 2025 11:25:24 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Sun, 14 Sep 2025 11:25:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1757863524; x=1757870724; bh=tWnDpBVNIk
+	8/6xOJajwpS5PW/ODB8z60GmMpvcHEyLY=; b=fqniaA4no7nBvtwisVO0EAziaY
+	zEu1OxB2nmfd9hxQQ6FceNaEfgPI/uOeA3ZUMlixYSgDNmwiIjnghzegCeXC7ooM
+	LvWC+S6IFuwyUZIiDef/lCWKT4qBsufKdFw30aP8oBZazgmYwz3BDB+ZmycSta6t
+	xptfu7gQpOG7ehf9onSRjHDPp99xdgiS7wuPGm4N3NTF+9TI+D6pUYs4H+vp6SZw
+	M5/GnUj+UjYiCszBHilRciH7Xg30wJ4oaajlksr0rV95z7TNExSNAABZPiumrshE
+	FvdljC6vKY79xqhNPoz+sv/5ZzI32UEqoetagTR1nlRh8Hs/vE+pwru4KkFg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1757863524; x=1757870724; bh=tWnDpBVNIk8/6xOJajwpS5PW/ODB8z60GmM
+	pvcHEyLY=; b=Vj23bhcyVMjkmI+SG5zcvx9xWXRofAidImGdIqDbcLHM0WUXLc8
+	VdJ5/Ah1c+SQLupMy8hPB6g+eQtldDZoSyTcdvRRHeqbzvU0Cza12fMqqwBCwKIx
+	XRXQG97RFEtAOSU5a+qagQeuIAZpU+z4/twkaZZ9fF8rbZYTKJJUunKkcHe13HsO
+	taCZKYFvYUAnhVBpORJEKOyg2/M2EAShulAaGjcM8zm5gq5xLiBnzeFc2Kbds8Kl
+	cjiBRbNIWFH6ATBWXfkEOIb9VhsgtBfbtq1YELEVGHuugIERRPgQ8SsFlhE1Cyyg
+	dvlCSYfmupMutudH+yvoMkyjyO68z9vORGw==
+X-ME-Sender: <xms:YN7GaCTuMx0f0t2jRi7MjfjequzWOeswX29HOTcvvGYGS0MYiIBHUg>
+    <xme:YN7GaL6QBGhruZL6oRXxCEfZI4zo5kPWLdpjuyLcU_mz4EuO5tln9nxooV2UWTC9E
+    tIpfL6jS9L3FfQQEuI>
+X-ME-Received: <xmr:YN7GaLYUVdoEvMx6ZIn2invZ0We4bPduj51BqChNtRqO21phkH22Zsg10x0DzgL7UQBL86YCGWtRbrW6wbE3W7edo_aBudk-3-k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdefhedujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeflrghnnhgvucfi
+    rhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfduue
+    ffleefkeegueektdehkeejtedtffdtudejhfdvheetgfeigfeltdeufeejnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehjsehjrghnnhgruhdrnhgvthdpnhgspghrtghpthhtohepieef
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlih
+    hnrghrohdrohhrghdprhgtphhtthhopehsvhgvnheskhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtoheprghlhihsshgrsehrohhsvghniiifvghighdrihhopdhrtghpthhtohepnhgvrg
+    hlsehgohhmphgrrdguvghvpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtoh
+    hnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhgtrghnsehmrghr
+    tggrnhdrshhtpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:YN7GaATZo9SilxufSz1EnUQzaOFsuTqisab9144SXip2OdtK6SNNLA>
+    <xmx:YN7GaJKV9V5TpZEISgGyVcxs3hzxjRHlCRxpZ1ubu5AZbXZ1dg9h1Q>
+    <xmx:YN7GaLtfn-mnCoeiXQaPsWDk9zzhoxZfBvlAx4p97b2D9kfTWnImVA>
+    <xmx:YN7GaPJNXrp5QdJBPMY7CemSNwxQLBjHfnIQrKLxRmSJmLsfz5TGDQ>
+    <xmx:ZN7GaF5XtQVAFSjVp-zByym9kYneBv_lXsjnvFHPMbeT2w1HFN8_DQfJ>
+Feedback-ID: i47b949f6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 Sep 2025 11:25:19 -0400 (EDT)
+Date: Sun, 14 Sep 2025 17:25:18 +0200
+From: Janne Grunau <j@jannau.net>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,	Hector Martin <marcan@marcan.st>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,	Joerg Roedel <joro@8bytes.org>,
+ Will Deacon <will@kernel.org>,	Robin Murphy <robin.murphy@arm.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mark Kettenis <kettenis@openbsd.org>,	Andi Shyti <andi.shyti@kernel.org>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sasha Finkelstein <fnkl.kernel@gmail.com>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>,
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 00/37] arm64: Add initial device trees for Apple M2
+ Pro/Max/Ultra devices
+Message-ID: <20250914152518.GB1645557@robin.jannau.net>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net>
+ <CAPDyKFr3WO5nLXYWoyH13KirmfNU+sVrvhefuwC+GrpAgynBgQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr3WO5nLXYWoyH13KirmfNU+sVrvhefuwC+GrpAgynBgQ@mail.gmail.com>
 
-Add fallback to PIO mode when DMA preparation fails.
-Allows SPI transfers to complete successfully, even
-on a DMA preparation failure.
+On Thu, Sep 04, 2025 at 12:41:58PM +0200, Ulf Hansson wrote:
+> On Thu, 28 Aug 2025 at 16:01, Janne Grunau <j@jannau.net> wrote:
+> >
+> > This series adds device trees for Apple's M2 Pro, Max and Ultra based
+> > devices. The M2 Pro (t6020), M2 Max (t6021) and M2 Ultra (t6022) SoCs
+> > follow design of the t600x family so copy the structure of SoC *.dtsi
+> > files.
+> >
+> > t6020 is a cut-down version of t6021, so the former just includes the
+> > latter and disables the missing bits.
+> >
+> > t6022 is two connected t6021 dies. The implementation seems to use
+> > t6021 and disables blocks based on whether it is useful to carry
+> > multiple instances. The disabled blocks are mostly on the second die.
+> > MMIO addresses on the second die have a constant offset. The interrupt
+> > controller is multi-die aware. This setup can be represented in the
+> > device tree with two top level "soc" nodes. The MMIO offset is applied
+> > via "ranges" and devices are included with preprocessor macros to make
+> > the node labels unique and to specify the die number for the interrupt
+> > definition.
+> >
+> > The devices itself are very similar to their M1 Pro, M1 Max and M1 Ultra
+> > counterparts. The existing device templates are SoC agnostic so the new
+> > devices can reuse them and include their t602{0,1,2}.dtsi file. The
+> > minor differences in pinctrl and gpio numbers can be easily adjusted.
+> >
+> > With the t602x SoC family Apple introduced two new devices:
+> >
+> > The M2 Pro Mac mini is similar to the larger M1 and M2 Max Mac Studio. The
+> > missing SDHCI card reader and two front USB3.1 type-c ports and their
+> > internal USB hub can be easily deleted.
+> >
+> > The M2 Ultra Mac Pro (tower and rack-mount cases) differs from all other
+> > devices but may share some bits with the M2 Ultra Mac Studio. The PCIe
+> > implementation on the M2 Ultra in the Mac Pro differs slightly. Apple
+> > calls the PCIe controller "apcie-ge" in their device tree. The
+> > implementation seems to be mostly compatible with the base t6020 PCIe
+> > controller. The main difference is that there is only a single port with
+> > with 8 or 16 PCIe Gen4 lanes. These ports connect to a Microchip
+> > Switchtec PCIe switch with 100 lanes to which all internal PCIe devices
+> > and PCIe slots connect too.
+> >
+> > This series does not include PCIe support for the Mac Pro for two
+> > reasons:
+> > - the linux switchtec driver fails to probe and the downstream PCIe
+> >   connections come up as PCIe Gen1
+> > - some of the internal devices require PERST# and power control to come
+> >   up. Since the device are connected via the PCIe switch the PCIe
+> >   controller can not do this. The PCI slot pwrctrl can be utilized for
+> >   power control but misses integration with PERST# as proposed in [1].
+> >
+> > This series depends on "[PATCH v2 0/5] Apple device tree sync from
+> > downstream kernel" [2] due to the reuse of the t600x device templates
+> > (patch dependencies and DT compilation) and 4 page table level support
+> > in apple-dart and io-pgtable-dart [3] since the dart instances report
+> > 42-bit IAS (IOMMU device attach fails without the series).
+> >
+> > After discussion with the devicetree maintainers we agreed to not extend
+> > lists with the generic compatibles anymore [1]. Instead either the first
+> > compatible SoC or t8103 is used as fallback compatible supported by the
+> > drivers. t8103 is used as default since most drivers and bindings were
+> > initially written for M1 based devices.
+> >
+> > The series adds those fallback compatibles to drivers where necessary,
+> > annotates the SoC lists for generic compatibles as "do not extend" and
+> > adds t6020 per-SoC compatibles.
+> >
+> > [1]: https://lore.kernel.org/linux-pci/20250819-pci-pwrctrl-perst-v1-0-4b74978d2007@oss.qualcomm.com/
+> > [2]: https://lore.kernel.org/asahi/20250823-apple-dt-sync-6-17-v2-0-6dc0daeb4786@jannau.net/
+> > [3]: https://lore.kernel.org/asahi/20250821-apple-dart-4levels-v2-0-e39af79daa37@jannau.net/
+> > [4]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
+> >
+> > Signed-off-by: Janne Grunau <j@jannau.net>
+> 
+> Is it okay for me to pick up the pmdomain patches (patch3 and patch4)
+> by now - or what route are you planning to get this merged through?
 
-Signed-off-by: Alex Tran <alex.t.tran@gmail.com>
----
- drivers/spi/spi-omap2-mcspi.c | 46 +++++++++++++++++++++++------------
- 1 file changed, 31 insertions(+), 15 deletions(-)
+Sorry, I forgot to mention the merge strategy in the cover letter. I've
+picking up all acked patches that are not yet picked up and we'll merge
+them through the apple-soc tree.
+This includes all dt-binding patches, patch4.
 
-diff --git a/drivers/spi/spi-omap2-mcspi.c b/drivers/spi/spi-omap2-mcspi.c
-index 6dc58a308..0b3b7ff0c 100644
---- a/drivers/spi/spi-omap2-mcspi.c
-+++ b/drivers/spi/spi-omap2-mcspi.c
-@@ -414,9 +414,8 @@ static void omap2_mcspi_tx_callback(void *data)
- 	complete(&mcspi_dma->dma_tx_completion);
- }
- 
--static void omap2_mcspi_tx_dma(struct spi_device *spi,
--				struct spi_transfer *xfer,
--				struct dma_slave_config cfg)
-+static int omap2_mcspi_tx_dma(struct spi_device *spi, struct spi_transfer *xfer,
-+			      struct dma_slave_config cfg)
- {
- 	struct omap2_mcspi	*mcspi;
- 	struct omap2_mcspi_dma  *mcspi_dma;
-@@ -436,13 +435,15 @@ static void omap2_mcspi_tx_dma(struct spi_device *spi,
- 		tx->callback_param = spi;
- 		dmaengine_submit(tx);
- 	} else {
--		/* FIXME: fall back to PIO? */
-+		dev_warn(mcspi->dev, "%s: failed to prepare DMA engine\n", __func__);
-+		return -EINVAL;
- 	}
- 	dma_async_issue_pending(mcspi_dma->dma_tx);
- 	omap2_mcspi_set_dma_req(spi, 0, 1);
-+	return 0;
- }
- 
--static unsigned
-+static int
- omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 				struct dma_slave_config cfg,
- 				unsigned es)
-@@ -522,7 +523,8 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 		tx->callback_param = spi;
- 		dmaengine_submit(tx);
- 	} else {
--		/* FIXME: fall back to PIO? */
-+		dev_warn(mcspi->dev, "%s: failed to prepare DMA engine\n", __func__);
-+		return -EINVAL;
- 	}
- 
- 	dma_async_issue_pending(mcspi_dma->dma_rx);
-@@ -589,13 +591,13 @@ omap2_mcspi_rx_dma(struct spi_device *spi, struct spi_transfer *xfer,
- 	return count;
- }
- 
--static unsigned
--omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
-+static int omap2_mcspi_txrx_dma(struct spi_device *spi,
-+				struct spi_transfer *xfer)
- {
- 	struct omap2_mcspi	*mcspi;
- 	struct omap2_mcspi_cs	*cs = spi->controller_state;
- 	struct omap2_mcspi_dma  *mcspi_dma;
--	unsigned int		count;
-+	int		count;
- 	u8			*rx;
- 	const u8		*tx;
- 	struct dma_slave_config	cfg;
-@@ -642,13 +644,19 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 			mcspi_write_reg(spi->controller,
- 					OMAP2_MCSPI_IRQENABLE,
- 					OMAP2_MCSPI_IRQSTATUS_EOW);
--		omap2_mcspi_tx_dma(spi, xfer, cfg);
-+		if (omap2_mcspi_tx_dma(spi, xfer, cfg) < 0) {
-+			count = -EINVAL;
-+			goto pio_fallback;
-+		}
- 	}
- 
--	if (rx != NULL)
-+	if (rx) {
- 		count = omap2_mcspi_rx_dma(spi, xfer, cfg, es);
-+		if (count < 0)
-+			goto pio_fallback;
-+	}
- 
--	if (tx != NULL) {
-+	if (tx) {
- 		int ret;
- 
- 		ret = mcspi_wait_for_completion(mcspi, &mcspi_dma->dma_tx_completion);
-@@ -695,6 +703,8 @@ omap2_mcspi_txrx_dma(struct spi_device *spi, struct spi_transfer *xfer)
- 				dev_err(&spi->dev, "EOT timed out\n");
- 		}
- 	}
-+
-+pio_fallback:
- 	return count;
- }
- 
-@@ -1206,7 +1216,7 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 	mcspi_write_chconf0(spi, chconf);
- 
- 	if (t->len) {
--		unsigned	count;
-+		int count;
- 
- 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
- 		    spi_xfer_is_dma_mapped(ctlr, spi, t))
-@@ -1220,10 +1230,16 @@ static int omap2_mcspi_transfer_one(struct spi_controller *ctlr,
- 					+ OMAP2_MCSPI_TX0);
- 
- 		if ((mcspi_dma->dma_rx && mcspi_dma->dma_tx) &&
--		    spi_xfer_is_dma_mapped(ctlr, spi, t))
-+		    spi_xfer_is_dma_mapped(ctlr, spi, t)) {
- 			count = omap2_mcspi_txrx_dma(spi, t);
--		else
-+			if (count < 0) {
-+				dev_warn(mcspi->dev,
-+					 "%s: falling back to PIO\n", __func__);
-+				count = omap2_mcspi_txrx_pio(spi, t);
-+			}
-+		} else {
- 			count = omap2_mcspi_txrx_pio(spi, t);
-+		}
- 
- 		if (count != t->len) {
- 			status = -EIO;
--- 
-2.51.0
+Feel free to pick up or ack patch3
 
+Janne
 
