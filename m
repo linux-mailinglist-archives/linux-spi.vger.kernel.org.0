@@ -1,87 +1,87 @@
-Return-Path: <linux-spi+bounces-10032-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10033-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8B62B584BE
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 20:38:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C623FB584C0
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 20:38:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC0E71A283EC
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 18:38:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B74B4C30EA
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 18:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7D93191B3;
-	Mon, 15 Sep 2025 18:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B222A324B1B;
+	Mon, 15 Sep 2025 18:37:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fmKOYmxY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aevUUoVH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7330330F801
-	for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 18:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB31315D5D
+	for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 18:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757961467; cv=none; b=DbMArQX9K4E6iNwMSym/32W/v9RAd/gJW4CBdvao4WVjcGpjYh1UOACQ2rEs5couBANyv+H0BjwudmbPsouywg8gPyfeEvEKRbSiVaGRUEGubGDR2tz7qPLjRTERGBhRqJViKDFIunGHhqa41lWM4eCMFoY73gf7p3/IliVkGOw=
+	t=1757961468; cv=none; b=DsatRmZPeTCArsBEudfYBK7+mlOAf1qbQcJ8JHcrVLRTmOCya5ZNh8Hmzak7Ql53irGDcbM4gvaYy600XAXD9GzV+AeFx+SQMk3+0pRHHn6wI7eYBgISRAJv9mvAint4gU9KzIN0rAocZx7eiaA38IcUiCKykWndpIzJH1jWnyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757961467; c=relaxed/simple;
-	bh=D7l1i7Tso98Yp3oxSA+xRb+WgnIZVt0f20hEA6CTpEo=;
+	s=arc-20240116; t=1757961468; c=relaxed/simple;
+	bh=QAbUqWkSjFj8vv8re1gL9uKqrXQ0aq6hKWDoZOQJvFk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SrzlH5l7+aJQls1lid7lJzAAV5o7NjS5CGjgq+4MHxoGrOs73c2tU4Fdjhvr3qqJR+Ah66aRooPfOuPQku6Xp+hiidsYs4+7G2/C2juCZKTT50nqDT296haKP3weiLJJ31v6Pw7hfTpRhpxNX83YoxYxszSnChPw+i5VPQemnac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fmKOYmxY; arc=none smtp.client-ip=209.85.218.45
+	 MIME-Version; b=aSUF8PxJRhMx+26ixiM1FSxi5DM/ltnDqy2eNyo8YBU3q2BV4vQ7ifcCiSmv5s4WbYk8iNefk1IArz1wFRr0oxdvP09LelA03DgH1vl9HOgDzo2shpsp4MI+e2wu7ym5u7m/YV9EhLdHWX6FZ+nr3VhIRszOx6aZXNmdm7Hock8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aevUUoVH; arc=none smtp.client-ip=209.85.218.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b07d4d24d09so146444066b.2
-        for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 11:37:45 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b0787fc3008so671010066b.3
+        for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 11:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757961464; x=1758566264; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757961465; x=1758566265; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DeZpyFc4Ckatn0hgt18UAr4UISB/Kvr7U8EfP7dfVc4=;
-        b=fmKOYmxYsQbKxpl7ZdipV8Y9fsUxTh8mLAJTHqE7eZK+oZ0vXV6hsSpEjTj10wy52B
-         xGSC6mo5GV2GR9fN6wqTXu7SR51mzxmvEyjP48BXs2th9xyX4fIsNRAcEBM5YVaE6PVZ
-         FFuzPaRcytdPuPENx3LkQ0uuh1mvHrnKLVGKcLxTAUXuuQup3mmCZql62sy517IIpcWY
-         evsoMHgEvQ5BdySaJf+BR71lypeq8GOlK/mBZIf3ZOsI6fFwvLSJ2Tsj8Ox/lNBiinVJ
-         cuCtw2s3BglSXWXdWiiPl1EHplo3AbyyjH0JSmdOvEVDNsZG/vWhR7fOlIHRkVzRZ4e8
-         0fHQ==
+        bh=fmTJoZFxd/UizIvu0+o0FQEf2UBZJpqtSSU3Va1l+q8=;
+        b=aevUUoVHBmIA9VPTJJNym6BAw/UGnToVjolgsCMnPHcho+It9JFjgh/mQpXrINXpaq
+         PgXDDgZlrKcWboxFc3FQSr81VkzZNVcXFnJzZF9H03HMQb4hPlURP/ctHq4yWK9hudWF
+         8/Hr3y5WVknCbMJrArzKdJe9HjkUvucW0T2nVliCzxVnu/QyzxcD5eMq1OE7C0lITNCJ
+         o6y82XfCj3a75Rg75WA0XYG0SHgogbtYunGzinpsrOobmGw+dqHuAHfRfP87pn5MspQy
+         5LeUsc/3GDLySWPUaKT9Ql4YSKTNrrMfYszE0U01J/SMl23DmKRvXE3yGee6m1CXQTCl
+         lGBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757961464; x=1758566264;
+        d=1e100.net; s=20230601; t=1757961465; x=1758566265;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DeZpyFc4Ckatn0hgt18UAr4UISB/Kvr7U8EfP7dfVc4=;
-        b=fx9FxzlFW3+6hpSHoRCBwvaAPkp2uC9cCgh4Id5Cb+cw3MIFmnVyiNj/rlylM7Amwu
-         cwdyxvqu+PmAYJY8KLb01sIvhAg05b1glu9W9eSGJnWwBzvU3iKroIBuwcLDDT/7NNpy
-         ensxPGXWhlhYLtCB1BqUy7oyKZ6eNNg+/Mwu1dFko1QgYCs15iq4qx4u1h9LFIfEQPH6
-         a92Pj7gjJT4MYIG7neAwtK46A3h+fXlsBuxTsWSIWhtMqiqBpS5WcIifFaHCqcgB10kG
-         3OmvWuX1/MCEUJ05c2HafE3u5Ijne994pGe0KT75llMQVrXY8IEhflfINbOuafLFLfEh
-         U8Jw==
-X-Gm-Message-State: AOJu0YzJKenxgI85sPBPkBubS7HmhGNDdSZx6LIzxeiSk4LMr7KyyiWk
-	fanuI1A8z3DbXj0kQFPJKc4mCQrn54YvUdNJjyVeWR8lyTcaTNEOddFK
-X-Gm-Gg: ASbGnctbdGFNAuGWGVUAz79cPWaGv87nFIctzQCIhtZ0LPnbcq5F/i15LR63OjgYpwB
-	6Z/YDHpQoCELKxfoaKvFsZM9cAvO+4hDAJdUmXB9u30kooUauhzfuMr89+jIC63r+WQVGcZnTgh
-	kMg1FpbNtOCH80vLIXr3HaHejOcMA/gKdOAqFflpIzx4Sl3Z9SuDSlEq8c8TQzQD1tBf5XRB+8q
-	RTT5oFVR2XAjCEg2CU7aYjEvNV+1rH5ZfwuOR2hPLNz2fOd8GjdqowN8kuDxnrT+FQHPfdACFmJ
-	y21CVrGPtLKfkFPTGIlBj2C1jpByYyPSwWJovb9FREniEjWmnC5wfZlPTTLvS/Cb8g9QVThGGHn
-	ZWjELTeyXH1cyouuUmA6RlZvlDfJHJ8F23FdcyW2jNWkdQVn5Dk2Qz38oolor16csYfd6/NiMJQ
-	bAkmvSFQuQnATnLA==
-X-Google-Smtp-Source: AGHT+IG4ukwBCnrVrafYVIfnQ2fBgnMS356P5egIxyTNPI1AtkBlvU4TPcYBay4AUhoWx6zE9fBkLQ==
-X-Received: by 2002:a17:907:3e1f:b0:b04:25ae:6c74 with SMTP id a640c23a62f3a-b07c354fadbmr1221786266b.9.1757961463847;
-        Mon, 15 Sep 2025 11:37:43 -0700 (PDT)
+        bh=fmTJoZFxd/UizIvu0+o0FQEf2UBZJpqtSSU3Va1l+q8=;
+        b=XQiUPDuRRmN5KqZ+WS9gpNxAF7Njb7rAk5G7MqD1Lwjm15zh+VLA2JG3LUa+3lNwHZ
+         VbIuTsawwTCGaz80KZ0LGV2ouyry8prM8Mpe4dZTZj8j9a1Doez9h7iAQg9dwS8ezomo
+         OAkrivzYiQdVv4Mr3hAVbKAKiauo79GEN5RfQt++CHYzVcCyTPSC++5QE730/SMIh6yn
+         CEG+XNVZOp8SdQezsBvQ4/PMqiTdvDi/pDcz808hWc2YbYvyP61pNgwWQKcxHSHXAPVC
+         vbxK0dy6WD5kBbP9LnzW46uaq79zi7AhWtBFvtwKLwCMzzVxDFcs99/4w5Y/EHEQFtH/
+         +obg==
+X-Gm-Message-State: AOJu0Yxt6GBj9Br5RIgk3Gr55G6sf6tfwvsh3Fnar3Cg/TnBXDR85mt2
+	Y7Ffk1d7cGIDwsJNPKZ5Py4T7AsbOkqpw+cNQSFo70qUCc6Upy2mkxVL
+X-Gm-Gg: ASbGncsLMKKSqJuqjZc+clK/uKHt5JC5rxdE10BXuvrwVPv9+FSbIv6DEBtTyN+2jIX
+	fWsp4reRUkj1YAoNKtyoT7K+8FCVCaGx/sNuPhv65W+j6wrtgPvmUp+HymN2c9NScrk+U/ZLWY5
+	usjz6H2M3T76jZZLS2g+Swaoiviq8PXma6l9dqE2kooxDtyF/KoDIFDj5z5nElg+eayjqa1RR7R
+	poaobkb8IlEwNG+UZRwZC0xMEUqr7Hle4zhphJM0jiLP/wyxL4Ec16jp1xXaXEePuax0FfwcYDh
+	ngVrQ9N2inyIJUaonKSc+9DF2t3anyebtdHewTivv7JfW7eKW4upBFq2ApTUpGx5HubhQ1JL7Ne
+	ZvgPsaTX2gPE/qDHPxnXx/fAj+JAQmCLS7J9fh7P4+UMXAzpmfctkZr2oqme2i8y/ZHn1AXG2iX
+	OiiHM=
+X-Google-Smtp-Source: AGHT+IGWgnAO5l3hIYL3IEZLVlHRwLHiJ4By/g9hfpqmnTd2frdisat/kWwywXjBeT9mDnq7CCvwzQ==
+X-Received: by 2002:a17:907:6d29:b0:b04:85f2:d26f with SMTP id a640c23a62f3a-b07c35bd9b4mr1581764966b.25.1757961464914;
+        Mon, 15 Sep 2025 11:37:44 -0700 (PDT)
 Received: from localhost (dslb-002-205-018-108.002.205.pools.vodafone-ip.de. [2.205.18.108])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b32dd3e4sm983305466b.54.2025.09.15.11.37.43
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07b32dd309sm991919966b.53.2025.09.15.11.37.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 11:37:43 -0700 (PDT)
+        Mon, 15 Sep 2025 11:37:44 -0700 (PDT)
 From: Jonas Gorski <jonas.gorski@gmail.com>
 To: Mark Brown <broonie@kernel.org>,
 	Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
 Cc: linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2 5/7] spi: don't check spi_controller::num_chipselect when parsing a dt device
-Date: Mon, 15 Sep 2025 20:37:23 +0200
-Message-ID: <20250915183725.219473-6-jonas.gorski@gmail.com>
+Subject: [PATCH v2 6/7] spi: reduce device chip select limit again
+Date: Mon, 15 Sep 2025 20:37:24 +0200
+Message-ID: <20250915183725.219473-7-jonas.gorski@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250915183725.219473-1-jonas.gorski@gmail.com>
 References: <20250915183725.219473-1-jonas.gorski@gmail.com>
@@ -93,59 +93,37 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Do not validate spi_controller::num_chipselect against SPI_CS_CNT_MAX
-when parsing an spi device firmware node.
+The spi chipselect limit SPI_CS_CNT_MAX was raised with commit
+2f8c7c3715f2 ("spi: Raise limit on number of chip selects") from 4 to 16
+to accommodate spi controllers with more than 4 chip selects, and then
+later to 24 with commit 96893cdd4760 ("spi: Raise limit on number of
+chip selects to 24").
 
-Firstly this is the wrong place, and this should be done while
-registering/validating the controller. Secondly, there is no reason for
-that check, as SPI_CS_CNT_MAX controls the amount of chipselects a
-device may have, not a controller may have.
-
-So drop that check as it needlessly limits controllers to SPI_CS_CNT_MAX
-number of chipselects.
-
-Likewise, drop the check for number of device chipselects larger than
-controller's number of chipselects, as __spi_add_device() will already
-catch that as either one of the chip selects will be out of range, or
-there is a duplicate one.
+Now that we removed SPI_CS_CNT_MAX limiting the chip selects of
+controllers, we can reduce the amount of chip selects per device again
+to 4, the original value.
 
 Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
 v1 -> v2:
-* no changes
+* reworded and rebased onto newest changes
 
- drivers/spi/spi.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ include/linux/spi/spi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 91e2f4f504e8..2eb361e9e44d 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2427,11 +2427,6 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 		return 0;
- 	}
+diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+index 49c048277e97..df4842abbc6f 100644
+--- a/include/linux/spi/spi.h
++++ b/include/linux/spi/spi.h
+@@ -21,7 +21,7 @@
+ #include <uapi/linux/spi/spi.h>
  
--	if (ctlr->num_chipselect > SPI_CS_CNT_MAX) {
--		dev_err(&ctlr->dev, "No. of CS is more than max. no. of supported CS\n");
--		return -EINVAL;
--	}
--
- 	/* Device address */
- 	rc = of_property_read_variable_u32_array(nc, "reg", &cs[0], 1,
- 						 SPI_CS_CNT_MAX);
-@@ -2440,11 +2435,7 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 			nc, rc);
- 		return rc;
- 	}
--	if (rc > ctlr->num_chipselect) {
--		dev_err(&ctlr->dev, "%pOF has number of CS > ctlr->num_chipselect (%d)\n",
--			nc, rc);
--		return -EINVAL;
--	}
-+
- 	if ((of_property_present(nc, "parallel-memories")) &&
- 	    (!(ctlr->flags & SPI_CONTROLLER_MULTI_CS))) {
- 		dev_err(&ctlr->dev, "SPI controller doesn't support multi CS\n");
+ /* Max no. of CS supported per spi device */
+-#define SPI_CS_CNT_MAX 24
++#define SPI_CS_CNT_MAX 4
+ 
+ struct dma_chan;
+ struct software_node;
 -- 
 2.43.0
 
