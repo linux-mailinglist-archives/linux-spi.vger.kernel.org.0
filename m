@@ -1,59 +1,61 @@
-Return-Path: <linux-spi+bounces-10025-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10026-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6E17B57EF7
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 16:30:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A81FAB5837F
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 19:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F9B4163080
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 14:30:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCC607A28D4
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 17:22:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E52F213254;
-	Mon, 15 Sep 2025 14:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0005B298CD7;
+	Mon, 15 Sep 2025 17:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFt57mQz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lEqbEYBw"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5442217A2E8;
-	Mon, 15 Sep 2025 14:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5D01F1315;
+	Mon, 15 Sep 2025 17:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757946630; cv=none; b=e+iCKTq3ZJsWdENvSuR5h6tluaVXjB1I7wwrm8rwbRRqKZ+lzCc3xdDHTGPaRdPw3Ub4oN84H+LSJ0jc1cgvx/WaHTJVOHbJtY4VwV7bJO1NiFwF6brdbmwh+spsQVpjs1p5sjhjr/X2eBILzzSIK2YMw/O8YyJaZK/ANsbD5Z8=
+	t=1757956969; cv=none; b=GK9lodANjyMKFbzn/XL64Ij7f44Bmd6KE6PVX1whGfFnPKP7RPAsdNYTBbV/YlVUZ2s4tB8fGMXbGrIc7HNS+73U6RMUubk58OiMbEIMN8dKT20W3BJnAdYsnAoOL2sNgs22Ld5yCvVK26GO5MT/V6wQ15gFmXabtvlzkmuy/3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757946630; c=relaxed/simple;
-	bh=apPcCqsC8a6v7Kjyoy9pw3XOQ7f+yRGI8jPksoqPdkk=;
+	s=arc-20240116; t=1757956969; c=relaxed/simple;
+	bh=nm4Sl6r+yzhJ34p1St5LokAobcG1hPH0o7AU2Hb2xkA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=htIQEmjWVH1qfNp3AbLrhoBZzVKN15RkhzIPQloWU4nIcGa9T1xr8sbIxX+4eNmv/KoYoIHXe+BOfwTMmK62B/NSyJj6qpw3y0SrUKmGMwlBpJyR5TTk0vkXrFjb8Bvjf8a6+DXOZtf4zksOREsMJpNGJxTo/iZ122JfL/P2lwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFt57mQz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8F5C4CEF1;
-	Mon, 15 Sep 2025 14:30:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=bKCz+r53NLJ4ypzKxY80vfeSuNrBI3izAfM5bJ1WEsi6PrMjERxPET/4wmA8p56xeg2GTkNX16tSTTZYzzMS7XFYxvkISpgD980gTTM7VVZItZ/PYSTQ3jhAKTWynpLSxgwvkG9ggHJmDz8p0Z+pyutTonpSKE62CoCBoRH1NXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lEqbEYBw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297C5C4CEF7;
+	Mon, 15 Sep 2025 17:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757946629;
-	bh=apPcCqsC8a6v7Kjyoy9pw3XOQ7f+yRGI8jPksoqPdkk=;
+	s=k20201202; t=1757956969;
+	bh=nm4Sl6r+yzhJ34p1St5LokAobcG1hPH0o7AU2Hb2xkA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MFt57mQz/v2JY1RBdOkAHsCBt/JhVM6K/IfIadF5CMVc7qLDvu4ODHS4fLhs2wqDJ
-	 8BGNFsvIJWxwPUaEpeim4emSs/5o2hh/tD0hcNYw6RuAzNnhLCTMVAkz94KvtPIi6l
-	 9ehKfhFUdY1AbEU/Z8f78KlBqbOVQIt10/tGnyHxKkLhJJUkGF9X8PsTdTwigkdQgz
-	 mE7K8k2JqeHVwyxOJovchUFObbp/IiT4rTJfn378MMk7eQe13S5aF450zYKytNQEwr
-	 7NiwwNPk5VtUNvTA1+9601OsvFf/MckI8gLZ4vU3WDQi9b+LvKWkvSS01P1tiHDnCB
-	 Lp6vkRYteVvIg==
-Date: Mon, 15 Sep 2025 15:30:25 +0100
-From: Mark Brown <broonie@kernel.org>
+	b=lEqbEYBwcw9ZvxDf5lw0qwk55kbrOXrm80DPU6vbJyy3cTj8jvzeeoEXbv86e0I1k
+	 ndxJBf9Ivn+TtMj2w4pAXpFaXkrqlcUe2Yr+iY99GLBgyGd7oXzuhc6YYUrlEONSSO
+	 EzGlSQbhWyequ2oLDT+NNpq2rwficwnzLZaoirR3liL3rydrKxEyUrkBbIpG4NprPq
+	 /G8J7MU8ks2m4P4zE/jMb78j7ViIZy50uQbiIry9ja64+AJrKnzKBfJvCo4TBi8/S7
+	 cG4okr2podH32Lo0Hrx3tVM8wupbvkEDFWh9mO6npcWAQqR+yN/Q/dTCSL91kAlvHW
+	 Q6Nm4uKrAfE1w==
+Date: Mon, 15 Sep 2025 18:22:45 +0100
+From: Conor Dooley <conor@kernel.org>
 To: Vladimir Moravcevic <vmoravcevic@axiado.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Harshit Shah <hshah@axiado.com>,
 	Tzu-Hao Wei <twei@axiado.com>,
 	Axiado Reviewers <linux-maintainer@axiado.com>,
 	linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] spi: axiado: Add driver for Axiado SPI DB controller
-Message-ID: <9b6aaad6-3dca-49e3-9a59-8e8a0179a517@sirena.org.uk>
+Subject: Re: [PATCH 1/3] dt-bindings: spi: axiado,ax3000-spi: Add binding for
+ Axiado SPI DB controller
+Message-ID: <20250915-activate-camera-a07ee5ee36ca@spud>
 References: <20250915-axiado-ax3000-soc-spi-db-controller-driver-v1-0-814a1fa2a83e@axiado.com>
- <20250915-axiado-ax3000-soc-spi-db-controller-driver-v1-2-814a1fa2a83e@axiado.com>
+ <20250915-axiado-ax3000-soc-spi-db-controller-driver-v1-1-814a1fa2a83e@axiado.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,86 +63,121 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6o3ytfShT2K67AjJ"
+	protocol="application/pgp-signature"; boundary="PK1mfa0NSt68Ndnw"
 Content-Disposition: inline
-In-Reply-To: <20250915-axiado-ax3000-soc-spi-db-controller-driver-v1-2-814a1fa2a83e@axiado.com>
-X-Cookie: Use a pun, go to jail.
+In-Reply-To: <20250915-axiado-ax3000-soc-spi-db-controller-driver-v1-1-814a1fa2a83e@axiado.com>
 
 
---6o3ytfShT2K67AjJ
+--PK1mfa0NSt68Ndnw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 15, 2025 at 06:11:56AM -0700, Vladimir Moravcevic wrote:
-
-> +	/*Calculate the maximum data payload that can fit into the FIFO. */
-> +	if (fifo_total_bytes <= protocol_overhead_bytes) {
-> +		max_transfer_payload_bytes = 0;
-> +		dev_warn(&spi->dev, "SPI FIFO (%zu bytes) is too small for protocol overhead (%zu bytes)! Max data size forced to 0.\n",
-> +			 fifo_total_bytes, protocol_overhead_bytes);
-
-This might be a good fit for dev_warn_once(), I imagine if gets
-triggered lots of whatever operation triggers it will happen and the
-current code would spam the logs.
-
-> +	ret = devm_request_irq(&pdev->dev, irq, ax_spi_irq,
-> +			       0, pdev->name, ctlr);
-> +	if (ret != 0) {
-> +		ret = -ENXIO;
-> +		dev_err(&pdev->dev, "request_irq failed\n");
-> +		goto clk_dis_all;
-> +	}
-
-None of the other allocations are managed using devm, you most likely
-have unsafe race conditions especially if the interrupt line is shared.
-
-> +static void ax_spi_remove(struct platform_device *pdev)
-> +{
-> +	struct spi_controller *ctlr = platform_get_drvdata(pdev);
-> +	struct ax_spi *xspi = spi_controller_get_devdata(ctlr);
+On Mon, Sep 15, 2025 at 06:11:55AM -0700, Vladimir Moravcevic wrote:
+> Add documentation for Axiado Digital Block SPI controller.
+>=20
+> Signed-off-by: Vladimir Moravcevic <vmoravcevic@axiado.com>
+> ---
+>  .../devicetree/bindings/spi/axiado,ax3000-spi.yaml | 62 ++++++++++++++++=
+++++++
+>  1 file changed, 62 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/axiado,ax3000-spi.yaml=
+ b/Documentation/devicetree/bindings/spi/axiado,ax3000-spi.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..18e4b002ac99ecdd70d724680=
+e24f2867c82dd42
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/axiado,ax3000-spi.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/axiado,ax3000-spi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +	clk_disable_unprepare(xspi->ref_clk);
-> +	clk_disable_unprepare(xspi->pclk);
-> +	pm_runtime_set_suspended(&pdev->dev);
-> +	pm_runtime_disable(&pdev->dev);
+> +title: Axiado AX3000 SoC SPI controller
 > +
-> +	spi_unregister_controller(ctlr);
-> +}
-
-This will do a bunch of teardown before unregistering the controller
-meaning that new operations might be submitted after the clocks are
-disabled which I imagine won't go well.  You should unregister from the
-subsystem first, then tear down the other resources.
-
+> +maintainers:
+> +  - Vladimir Moravcevic <vmoravcevic@axiado.com>
 > +
-> +static struct platform_driver ax_spi_driver = {
-> +	.probe	= ax_spi_probe,
-> +	.remove	= ax_spi_remove,
-> +	.driver = {
-> +		.name = AX_SPI_NAME,
-> +		.of_match_table = ax_spi_of_match,
-> +	},
-> +};
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - axiado,ax3000-spi
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref_clk
 
-There were a bunch of runtime PM calls but there are no PM operations
-here at all.  That's not specifically a problem, for example power
-domain level PM with full state retention would work here, but it seems
-like at least stopping and starting the clocks would be a good idea.
+Just call this clock "ref", the _clk is redundant.
 
---6o3ytfShT2K67AjJ
+> +      - const: pclk
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clock-names
+> +  - clocks
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +   #include <dt-bindings/interrupt-controller/irq.h>
+> +   #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +   soc {
+> +      #address-cells =3D <2>;
+> +      #size-cells =3D <2>;
+> +
+> +      spi0: spi@80510000 {
+> +         compatible =3D "axiado,ax3000-spi";
+> +         reg =3D <0x00 0x80510000 0x00 0x1000>;
+> +         clock-names =3D "ref_clk", "pclk";
+> +         clocks =3D <&spi_clk &spi_clk>;
+
+Why are these both the same? Additionally, please style this as "<&foo>, <&=
+bar>"
+with each clock in its own <>.
+
+Cheers,
+Conor.
+
+> +         interrupt-parent =3D <&gic500>;
+> +         interrupts =3D <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+> +         num-cs =3D <1>;
+> +      };
+> +   };
+> +...
+>=20
+> --=20
+> 2.25.1
+>=20
+
+--PK1mfa0NSt68Ndnw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjIIwAACgkQJNaLcl1U
-h9CPLwf/RhrIkexh1/aNsOJYJL1gMHWTqKfNxLZYYXlBw8Nz2ZLtKKwNdPENxr/Z
-+6dnY8StmyTSKkUOHjzsLH7xqN4gGvxf9RIBWHp529LSu+LkTxcGgaAHkfWcftvF
-RbnW46hMV/aq4A48M7xL8OlK2FXopDGmyicThrkm6T6XgfKcgMExMlxyDCVEt+0E
-YBO2phalHJCkPltNmzJrSbJzf6o0nGEf6Bxl7r/WXadmTRuF2hLZ5cYMJ5G8JC+G
-UYfRYZMuVhMh6E0KC55r2JEoYZy+YBYFC+7mkmi2SDxVh2moz9GRkveGp/7L2r82
-VajNVG7ozKcYcYpsx5VuwhvpK8r8jg==
-=W84H
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaMhLZAAKCRB4tDGHoIJi
+0hm9AP9ZegxgxYzYrxayotLJSwJcS4Dyr32uy5ADaTb5lj/gjgEAy1nWR1tV4v6p
+aHmB9hPcVs20AlkkhnBRQkBKhbSrOQ0=
+=//eG
 -----END PGP SIGNATURE-----
 
---6o3ytfShT2K67AjJ--
+--PK1mfa0NSt68Ndnw--
 
