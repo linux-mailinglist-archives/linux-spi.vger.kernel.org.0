@@ -1,112 +1,151 @@
-Return-Path: <linux-spi+bounces-10018-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10019-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF19AB57447
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 11:14:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DBEAB5772F
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 12:52:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9947816CC66
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 09:14:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEFB21A243C6
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Sep 2025 10:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074062F28EB;
-	Mon, 15 Sep 2025 09:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473612FFDCB;
+	Mon, 15 Sep 2025 10:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S3Bjprbw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dsm1gepW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E932F1FEC
-	for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 09:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1272FF669
+	for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 10:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757927677; cv=none; b=N4NT+k5in0PlScUbbxLPv1wbmxN873+K26ifiBAsexjPKI8SAQCvnN4Wq6uc6Mkm57Et3zoRJ8H2Qev7QTYA8/YVVBgSTt8ed0Scy+p/QRRqjwdzmpsPgWDNNq8cBZDbDDlSeKoM156I1pit6MG6cBxfE2bgjyV4hRv4voUczgQ=
+	t=1757933434; cv=none; b=HWMPokcqzmOpId/zM1lUkWTrmfloLEk8vq41Xq2qQS2DTHhqeP09iukfgNJx2aPRVCedwVwOsFux/1iwk1iglPiyhzmIFR4Z1j0o2fDewTyNMs8FWM90zBiLRsrKz0JgaTYY4m9lSL8zHPPQJl73dDm3DtXlC3cm0B4n7DIADOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757927677; c=relaxed/simple;
-	bh=KmJnxss+MoY7NrV8YJ1jLGKE3+2RMVeAE6TDsl1qkWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KbUHJukJbvPtT+vuaMR6x4duRa16EZ0tuWN1ShMiCh99Z4dCtRrq6qfMTzj7y1mrWvGK1Jjun7q4ZgSUANbao5Z4Om92vmd+6F4IC1bebpVcQXxyhRuLLEYKg6a8lF0BJUYtnLPXYXmvlaMDvuzWoqIJcgMqOVf9Fk+53ixzCWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S3Bjprbw; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1757933434; c=relaxed/simple;
+	bh=kARumPxqfmMMWgp1NvnsY+8lw/OMkVWPKeLFtKSIlME=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KIilW2HGcbFcEuUhOfaG9zJ1etuUqh7hkPv31S8Boly560ON5dicYUsYbDA7q1WPPUuZSXlYBddW80po8NfDVzZzqye6mPZIuvSRG/bRttA/oyxWxL9MsvDPFYy51CeFzXyxoQ7aFzTPMdepcq5XwnPoV5zYgpFLKTkX65Leu54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dsm1gepW; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-45f2cf99bbbso4551695e9.0
-        for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 02:14:35 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-71d603cebd9so32308907b3.1
+        for <linux-spi@vger.kernel.org>; Mon, 15 Sep 2025 03:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757927674; x=1758532474; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aku+CpnvWW9zhF6+nPeIxknoBC5KeYin4IOVLZZ/1pw=;
-        b=S3BjprbwnbQU6XcqP5P+Zvo7Aas9yso/B+OpSv9rTj/9QzlJC0VSumIHd1Y8DIczhp
-         KtC53YgreatyzbudzsVo2WlawgN7P2goKo89P2d04wnqPeD4z8nlxXejUHTA3PT4mhzi
-         iggN2G6vJ1jhxzyRhPYQlJDCdQplE8Jx+qGU+IHiuvV7NZ6E4mfsM70m3goEOvZsqLJJ
-         7erq4shgI54JCBitvnsAeIhkY/Ak30UyaMSVLpf38mniM1lz4bxucmozDehFtegbesZ2
-         vFS0LOEC3FrhWsKx1wiLgatz40s+jbZEJjl8ja8PUloldRbTx4UIrhBCm5lAtAG8sOxu
-         ob4A==
+        d=linaro.org; s=google; t=1757933430; x=1758538230; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=a3UAx19vK1YiNrAi97n0gU/rRiRg+M8i65mS2Lnx+jM=;
+        b=dsm1gepW+64GUvS7kMWqaTSMnvOb4DE2XTTvWEeHN+RE/+11IMxt7/VT5nrAsrozPj
+         LjW2VVhrxJupJV9qXK3qo8acFznWW8EUfnwnoI4vzGcKbj1UMmf+bhA1qOvMvaSEpSri
+         JxWMtmdA/Sij1xAwa/AkWOoJWA5FL9LcqfNjqBUys25YDzn55KJIvJEGu+5RMQH+vPpr
+         P8UCDM4suEIwAfOvYk3SwbegH35M/X9YI1gUIk0XqsFMHy+ZES0t8yI4pLpuClLxwNQX
+         aI3en3/nuAnC9ZoXdtEoEmEg9DHc2ZK9SllMJGfkcANMbMEBs5t6ih8A2jNMaQ6iEEy7
+         zv+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757927674; x=1758532474;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Aku+CpnvWW9zhF6+nPeIxknoBC5KeYin4IOVLZZ/1pw=;
-        b=SluUS9lSsiAxzWqkaaRieqmOtbNLfghS4UBHrAcJikVI6AR2c6PN7uqRICA1jZE8/7
-         rmb6DGDsuF6nmEhoQzZ6V29+dzfMI2wf/rw3yOeQLUMKrMciYoayOP5vR6WQXyPkpHC+
-         0K0vkyU2W6mSvUSuzy4bXZDVeBtTc0nFUXIRurZom3vO/N4BMgjP1cSZewCoFL+Mgv2U
-         Ovxf4c7UKIgMDW+W47zs6euQ2NMb4Es6L7jASiICUIFUt2WOuAOEc72mxaI9kuc1xqdQ
-         dtqVlnavdl54MQYW2phBGD/+j2tryWecoU5AJKtCTITUfSmpoKHXB87CNt36wqWmnG/H
-         tGiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHxzCbAXY6c047NgsmzRMXa5JgSfW/O82A6F/rT/H7ADoLGUfi97O5p96sgILL6w6fb1OapIYYo24=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJh+dyubdOtfEYh1MOC+r/vqU7+9D2xYz5btLjunBgrAArQtis
-	fmuRanmeOa0YCjrMeOt0epoxgieC9lYGUYDFVBT5bbjB6T48WxIi4hEMRJn83bI1uutMXkwAqh7
-	LWEM5diY=
-X-Gm-Gg: ASbGncvzRvHuXpJPD1H7vu70NyhvJHUTqvUe3enRaVoZsZ+QyByUoIDSwkYYZ8ZWqs4
-	TziBvyOSO1E4LHu7hyu4Ro89snZE+eeHO7kuhgyB1Shly75MlXkJpTlFlFh3gvhnfURXrqUy98o
-	82OqgPt6oS1jHw1wG+F57mmA6sU5nwX9TJ3kfkcGIDWa7Tl48zxSyFm/eF44+8oe3r2Z60QpB68
-	eihtWSgataJ9p1WhP6685ITL6yoc343BTo7lZj/9Q8ZiLvqVf9TDbFzX+TyC6PiO18zGs7mZjM1
-	IxAAdqPEjK4ddEZOsD4VAkwTZHzY2fnliy8w5KNhfLClJWsKTiqlg+WJTI25qmpxzAdrgBIHcZO
-	r5y8f9PVhTOpzwnvV0vn0Tj81Wkk=
-X-Google-Smtp-Source: AGHT+IGfbN1nly0tHEF/LPKTpBacJhCDeNphPgRpeP/LXLn8yUoq10STJSdN75g2RpiF61gi81auIw==
-X-Received: by 2002:a05:600c:3b1f:b0:45c:b6fa:352e with SMTP id 5b1f17b1804b1-45f2130999emr113157655e9.18.1757927674493;
-        Mon, 15 Sep 2025 02:14:34 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45e017bfd14sm170533075e9.21.2025.09.15.02.14.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Sep 2025 02:14:34 -0700 (PDT)
-Date: Mon, 15 Sep 2025 12:14:28 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Feng Chen <feng.chen@amlogic.com>
-Cc: Liang Yang <liang.yang@amlogic.com>,
-	Xianwei Zhao <xianwei.zhao@amlogic.com>,
-	Mark Brown <broonie@kernel.org>, linux-amlogic@lists.infradead.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] spi: amlogic: Fix some error checking in
- aml_sfc_dma_buffer_setup()
-Message-ID: <aMfY9P3L0yWdWe6-@stanley.mountain>
-References: <aMepB7E95kwYvx0o@stanley.mountain>
+        d=1e100.net; s=20230601; t=1757933430; x=1758538230;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a3UAx19vK1YiNrAi97n0gU/rRiRg+M8i65mS2Lnx+jM=;
+        b=N96+RELJjkUXA1WbIVrkIoPpoFHPmK+PwjCfIARLWg1al+xhyGjkVG0ZS5vJan1av6
+         W1DyblkAJMET+qloLCITYHnxxFXnT/hkImKo7aRN6luuUi6Lvgb2qOJfGB47cHoQuzMW
+         0bMlIFkwFQjE6M2BQVUt5brWMXw4mKjZrO2e+xC3cxIk+HAQJ9+/x6rtPd9+4k7uEFsw
+         3JsUq+Sg4nI18DbAwn4NqGWDgaDseya2nzPk490jezRWUe6VVgRhA1CnPU4BjefMazAj
+         GrBSy9ID+NLQcTKHp+HyTfUbN16NnbXZpXsRhFqKeBVH6c5Yp0YKCg6+ol2PD2Md/QxN
+         l5yg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjD3TFSmMzKgPocWpqF/hLl88tinTE/kU50AE9wOl1jRwEfM8pSbPt0vxuRz9xEytUFwlfufaPuwM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxCpBtxa9rrlj/9zZEzF9jbg0a4BA0Q+F3OAtqiU+yqhLVD7M3
+	zuM0kQMK8L7rINXe8U9tQcMYos2vk6azbXg2qguEZ/BA1YsWnl+qeFqvb9Vfs9fpF0QEGNwPCI2
+	e2RbUyOj0UZtPdo24Y8VshuSYU3Q+cMS+58TgvFMWTnlEON7DtDyR
+X-Gm-Gg: ASbGnctj2cmuvZZrMixZwaDLP11PfCOgNeNV5r7Dfs7cW3T6xsmCggNPfZWk5IiYCDu
+	Lq1FIJfrpz7fZjcfLqEkmguykmbDLnA4ya7AznbQaXJRk3emU48DTDv5TS2uvNh4UavYdDBlfz/
+	phJ74tJvwsi9vugH5eMkpo7wrw5cpvZuNwdZPz66ADWinLD/SWfZyx57oGfkVJ8XSMjhQARL7So
+	d4zjWp2AXCzY1AgZug=
+X-Google-Smtp-Source: AGHT+IGDEYgOKM3gJ8Zzlityz/syLNE9FRvDAqAmupyu9aSeveyvR7FHQhtEilEP6qYlMPKL0ImuzwqqE0dGUhFDiNI=
+X-Received: by 2002:a05:690c:3706:b0:722:7d35:e0c2 with SMTP id
+ 00721157ae682-730626d2dd2mr106799857b3.2.1757933429679; Mon, 15 Sep 2025
+ 03:50:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aMepB7E95kwYvx0o@stanley.mountain>
+References: <20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net> <20250828-dt-apple-t6020-v1-3-507ba4c4b98e@jannau.net>
+In-Reply-To: <20250828-dt-apple-t6020-v1-3-507ba4c4b98e@jannau.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 15 Sep 2025 12:49:53 +0200
+X-Gm-Features: Ac12FXxZCAZGblY8VwFHa1GJ1rGV08p3Fv5KI-OAzvQkX2G4ZDMKiAukPP3wanY
+Message-ID: <CAPDyKFr9dAvP7U3dZ_LFw8YxcvJ6n95OKKLYpntUarqdfUqjWQ@mail.gmail.com>
+Subject: Re: [PATCH 03/37] pmdomain: apple: Add "apple,t8103-pmgr-pwrstate"
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Mark Kettenis <kettenis@openbsd.org>, 
+	Andi Shyti <andi.shyti@kernel.org>, Jassi Brar <jassisinghbrar@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sasha Finkelstein <fnkl.kernel@gmail.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	van Spriel <arend@broadcom.com>, Lee Jones <lee@kernel.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Michael Turquette <mturquette@baylibre.com>, 
+	=?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>, 
+	Vinod Koul <vkoul@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-bluetooth@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 15, 2025 at 08:49:59AM +0300, Dan Carpenter wrote:
-> There was supposed to be a "ret = " assignment here but it was
-> accidentally left off so the error checking doesn't work.
-> 
-> Fixes: 4670db6f32e9 ("spi: amlogic: add driver for Amlogic SPI Flash Controller")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+On Thu, 28 Aug 2025 at 16:01, Janne Grunau <j@jannau.net> wrote:
+>
+> After discussion with the devicetree maintainers we agreed to not extend
+> lists with the generic compatible "apple,pmgr-pwrstate" anymore [1]. Use
+> "apple,t8103-pmgr-pwrstate" as base compatible as it is the SoC the
+> driver and bindings were written for.
+>
+> [1]: https://lore.kernel.org/asahi/12ab93b7-1fc2-4ce0-926e-c8141cfe81bf@kernel.org/
+>
+> Signed-off-by: Janne Grunau <j@jannau.net>
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
 > ---
-
-Sorry, I should have checked lore before I sent this.  It's already been
-patched.
-
-regards,
-dan carpenter
-
+>  drivers/pmdomain/apple/pmgr-pwrstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pmdomain/apple/pmgr-pwrstate.c b/drivers/pmdomain/apple/pmgr-pwrstate.c
+> index 9467235110f4654e00ab96c25e160e125ef0f3e5..82c33cf727a825d2536644d2fe09c0282acd1ef8 100644
+> --- a/drivers/pmdomain/apple/pmgr-pwrstate.c
+> +++ b/drivers/pmdomain/apple/pmgr-pwrstate.c
+> @@ -306,6 +306,7 @@ static int apple_pmgr_ps_probe(struct platform_device *pdev)
+>  }
+>
+>  static const struct of_device_id apple_pmgr_ps_of_match[] = {
+> +       { .compatible = "apple,t8103-pmgr-pwrstate" },
+>         { .compatible = "apple,pmgr-pwrstate" },
+>         {}
+>  };
+>
+> --
+> 2.51.0
+>
 
