@@ -1,101 +1,86 @@
-Return-Path: <linux-spi+bounces-10046-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10047-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B24FB59743
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 15:17:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1D4FB5975F
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 15:20:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F05B31883894
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 13:17:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2104E322BA8
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 13:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C9E1DF261;
-	Tue, 16 Sep 2025 13:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D2230F929;
+	Tue, 16 Sep 2025 13:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBSaukzj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRrWozW7"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6870284E07;
-	Tue, 16 Sep 2025 13:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B2830F54C
+	for <linux-spi@vger.kernel.org>; Tue, 16 Sep 2025 13:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758028650; cv=none; b=oOxkM+RSLfrMnEuzsmLnZYG1SZt6+2WvQ8XMHWp3pWS+eSWYNdFKtwni6v4bURpxyIVgtLs60JXIed8cmX7J+JmqzRF+79Q0RapMyBjwN3GmogNMqjRJV4iTxDceMndg77k/iZhnTsQ4GXEGw8i0LTtMP3UJ4vJfFmDaUvvHF2Q=
+	t=1758028833; cv=none; b=Vfo6VKET6AkeWKI/4U4XarYhU6UiotULtUBegfmQC62EvpNEoxJuc39tXy5bW4AQgrtY0pW177lgxsH/I4OaoBaQ0YZjujybMlg5mwfThVanlhHWCs9GwGL2P3/KgDE5cAyss2FRjbbV++r52br2+6oqe1sRCoUPLu2HOr8xZRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758028650; c=relaxed/simple;
-	bh=3t8ZsnXaWXeJN2lg5VW6FMHXGeclZ+Rixxfa9OmBFFE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=a74Va4w+EzvrO8jl/4J7acP8X56AMYfiQYD70NWywioH4wEhjHuW2t7/wd7zlC6eYHAQ2V9kxvKIPRtlHB6uQtaQoI1iAmQ6w7ed9Hd90yKZbulvDLbhL9LO7+jje0ikGkIsKw/CBEVcPS8jkF14qU5dNY+V6nYYJfAOaqpWvmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBSaukzj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BB14C4CEF0;
-	Tue, 16 Sep 2025 13:17:28 +0000 (UTC)
+	s=arc-20240116; t=1758028833; c=relaxed/simple;
+	bh=nML/EKT9P+ON5h1hT/QbR0TwMz19bZdKS0N9pdSELvI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FYLFjjP8G3Sg2la6ylPjdtn61uQk6syczQZsdm7uUmG+elBZRR39RJ/+F2xbguafd4Giea/XE5XUP3DRo8Q/Up9VGf1OTC5adj1pnKcEmzrPYudGPvmdzevd5Q/XHCOe0YtDaK0SRbgX7/2ZjVMUm6fi40Fis3qxKHZL3Jnn25s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRrWozW7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62298C4CEFA;
+	Tue, 16 Sep 2025 13:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758028650;
-	bh=3t8ZsnXaWXeJN2lg5VW6FMHXGeclZ+Rixxfa9OmBFFE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=YBSaukzjv01zvCYkxPcJBGQq6SRcosbJBGyOTjLSFxR7AqCJyuX7eEUl0Nf9yD5TZ
-	 woPRfu9dNVdrt8hUGmWk6JUzIjrCEKbMF6Lu3ypmVkboe+wf6GM/viuEMoEi1+HMgD
-	 yiXTo+BPZRRHeMQabwUHBWDTW50xGtN8/MAkBj+nEgmENbS+GV4257HLVcvtrInp0k
-	 ZZZQs5W2cwxd7C0HsxnwFFzT09toh9nAwpOOPCTs7kgH6L54hFHP5igwhOjxfeimVF
-	 Q1pB7BKjLsB+PxHou65oqrmQxx7WwQXUWjtegWxBv9Qgh4XgO6z8vryT1zCffx+rli
-	 oRkpGo/2bDyiA==
-From: Mark Brown <broonie@kernel.org>
-To: Liang Yang <liang.yang@amlogic.com>, Feng Chen <feng.chen@amlogic.com>, 
- Xianwei Zhao <xianwei.zhao@amlogic.com>, linux-amlogic@lists.infradead.org, 
- linux-spi@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250913201612.1338217-1-colin.i.king@gmail.com>
-References: <20250913201612.1338217-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next] spi: amlogic: Fix error checking on regmap_write
- call
-Message-Id: <175802864838.134241.18442416794301154547.b4-ty@kernel.org>
-Date: Tue, 16 Sep 2025 14:17:28 +0100
+	s=k20201202; t=1758028832;
+	bh=nML/EKT9P+ON5h1hT/QbR0TwMz19bZdKS0N9pdSELvI=;
+	h=Subject:From:Date:To:From;
+	b=JRrWozW7m/yP/RROPQN9cQ2p9yHWsFFK2MnnoFFDdfZ5+t43Z176ls6JFggF57dXh
+	 H8PIBNshHH7Mx6NzT1gCkXaeU+UyN6OwqETI8BgxHGIruRDL6FnErI2vCUoJPUV7y0
+	 ZjqqMhsWZZwcmtINHyAEcnYaQEAZNOTcxbh0AWKqar3ZMbiGtn79taJTQafU2uXaSI
+	 Hwcv8AY1mp20zbIy6B/jXdhwFOI06aNRQ4t4pNJpvDPpIC2fHvS2ClVZyNH5bXI9mt
+	 izYklOa0VH7dlLUnNAATpQBfIueYg9KpgpD+QYr7AzsRhPTRLC5yI59kabjyHlSPAv
+	 6/GP8Ma5e6LeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B155E39D0C1A;
+	Tue, 16 Sep 2025 13:20:34 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-56183
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175802883323.749893.14981185447294391542.git-patchwork-summary@kernel.org>
+Date: Tue, 16 Sep 2025 13:20:33 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Sat, 13 Sep 2025 21:16:11 +0100, Colin Ian King wrote:
-> Currently a call to regmap_write is not being error checked because the
-> return checke is being performed on the variable ret and this variable
-> is not assigned the return value from the regmap_write call. Fix this
-> by adding in the missing assignment.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: [next] spi: amlogic: Fix error checking on regmap_write call
+  Submitter: Colin Ian King <colin.i.king@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1002091
+  Lore link: https://lore.kernel.org/r/20250913201612.1338217-1-colin.i.king@gmail.com
 
-Thanks!
+Patch: [next] spi: amlogic: Fix some error checking in aml_sfc_dma_buffer_setup()
+  Submitter: Dan Carpenter <dan.carpenter@linaro.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1002311
+  Lore link: https://lore.kernel.org/r/aMepB7E95kwYvx0o@stanley.mountain
 
-[1/1] spi: amlogic: Fix error checking on regmap_write call
-      commit: 18dda9eb9e11b2aeec73cbe2a56ab2f862841ba4
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 2
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
