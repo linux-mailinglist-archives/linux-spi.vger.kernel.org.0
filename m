@@ -1,163 +1,119 @@
-Return-Path: <linux-spi+bounces-10044-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10045-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34CDAB591A4
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 11:04:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EF410B596F2
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 15:05:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F2923240DF
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 09:04:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AC26322E29
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Sep 2025 13:04:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F0428C035;
-	Tue, 16 Sep 2025 09:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9AD1A5B92;
+	Tue, 16 Sep 2025 13:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Y5Db+x4r"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QAzPxopU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B806829A310;
-	Tue, 16 Sep 2025 09:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD9721FF36;
+	Tue, 16 Sep 2025 13:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758013331; cv=none; b=Qh8dkU36vT5++zRWQPFcFKhoVApvnlUdh1XIl4ynvAX0/0MsbcA8UfKL5pJt36cJXbEev86pQid2YKkEZnHjN3WDWLVmlz055Hc5Lr/ns/rsnkZr+yHKkhmvaJuPpwgKjTsFBFwpA+fz2Xun2lehMye0r0Zj1W/HnQ29QtSefIw=
+	t=1758027876; cv=none; b=VbNq+ZbPQeGh9VWRwS4lv0tjdwL8+nUMHkTWfg+J9VNhaeQs26w3jnVyLLIPlZOoOqz9xgOJKwaDdr2UqxQx9Va8Ej2sscXD/KupVeugvzrc9Me9J4g3CM4acO/J2Z5zx6G0L3eiIMTlz8F4XLTksCmG7rZp8Cl/KgseBrl3k6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758013331; c=relaxed/simple;
-	bh=v3B0hVI686Dj3OG7cFwf+eQKcuBwiCWRRhpE80lgPZs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e7VliF5eaeYBgobaev/1/0aXxpCW4m7fWdr46H3RyHEEfeBEbomPX5S/7jwDama1wT6XO1dj7dU3sfmz0tngGbnu56j4vAXAckmnei5Q/oPQX7L29YeS4JJ2MklbHXckAp8EOoY5i1aubWsKv9fqJZXhclBZZWRYtjFG1vLGTaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Y5Db+x4r; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1758013327;
-	bh=v3B0hVI686Dj3OG7cFwf+eQKcuBwiCWRRhpE80lgPZs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y5Db+x4rrd8V2wd6WxmV+e32jR3fQImJLjYmSDX41phsBEC2oPL5Dzzb+oxS7Z8ZY
-	 dmyfScInfaaoon3VSpS2VapUMRdR+XCDhHi/lEJ5SYLoTLyRCBprxLwfbIg4rdpr15
-	 MCgPmZ4iPJcv2DcC4ZON/skyZp1uZ1FEHm1WBwW8yzTMdeKN49Q2qlhRBdrnjJBEsU
-	 OavZs6DeuMKY7WO8cUKMRiFFVOqVY+xsApIf4SwN3QeKwln3EQzXgt04XRwNi1oNCy
-	 z1mMVP8tphFmoFT9N7agtsuO/G4OMOrhg8lWZTrN2G06WrGEXtJSXeedXyPTkgjmfn
-	 /3sWIwqnNH4pg==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7EB7917E0F88;
-	Tue, 16 Sep 2025 11:02:07 +0200 (CEST)
-Message-ID: <d7a9e83d-7b79-48eb-a90a-dfe3cf26cf49@collabora.com>
-Date: Tue, 16 Sep 2025 11:02:06 +0200
+	s=arc-20240116; t=1758027876; c=relaxed/simple;
+	bh=tS20RBq/5YBvw3V2zFuP41Ek8dUvJbPHU1ztOuJGWuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oePEPloFxn9i+Fbf1Yq0c8KrBmxLnE0cK6YkcWoMwY42AqkekURsoK15WWU59J/D2ojO6c1f2Qfr80WBh4rZzZs6Zd2KsmaunOAiwP6DDsMpVozLtFySNKi0gOS8rXUuAzng2DOIt/yB9ueKV/tQcIr1OGQADCdKvkuDGRkDR74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QAzPxopU; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id B43871A0D4B;
+	Tue, 16 Sep 2025 13:04:32 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 855076061E;
+	Tue, 16 Sep 2025 13:04:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BBCB1102F16EB;
+	Tue, 16 Sep 2025 15:04:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1758027871; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=lk9reX28fgXmqtrcSWnzyrJf4leAzS0Oqmq3V9099O8=;
+	b=QAzPxopUaCqGJfJxbvhel1zBoDYowwag6/mUM+1aIgzoLiR2dD/svnDN8V/tJxDBonWSDW
+	QCvUO5ImJ9Z+S7AWCHY0ECqZqAj7HUC8XGKjykpvLxHrJ6Xpt7OuijdkgSHLwUGSi1+qd8
+	mBYkD7AThix0Ag3viWcjUWhjJPBTEdeHR75DpTjc1Eh8olLFdfslUt47c3CC6G6cPu+un4
+	AC8idDTmmIAu+u47/HdsIzKF613zh7EC/iRM3V8pSfZ12QVa41ZSgLr8QElp0UgZ1g8Vr4
+	yfQRr82Tv6e4o8zqc2Jm8roR+ZOytf9wQUlRJYsmncSCnbirB9CIEFOce5JpGg==
+Date: Tue, 16 Sep 2025 15:04:16 +0200
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Nuno =?iso-8859-1?Q?S=E1?= via B4 Relay <devnull+nuno.sa.analog.com@kernel.org>,
+	dmaengine@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-spi@vger.kernel.org, nuno.sa@analog.com,
+	Michael Turquette <mturquette@baylibre.com>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
+	Vinod Koul <vkoul@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Trevor Gamblin <tgamblin@baylibre.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Mark Brown <broonie@kernel.org>,
+	Mike Turquette <mturquette@linaro.org>,
+	Xu Yilun <yilun.xu@linux.intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v6 3/7] include: linux: move adi-axi-common.h out of fpga
+Message-ID: <202509161304166bf210e2@mail.local>
+References: <20250519-dev-axi-clkgen-limits-v6-0-bc4b3b61d1d4@analog.com>
+ <20250519-dev-axi-clkgen-limits-v6-3-bc4b3b61d1d4@analog.com>
+ <175133153648.4372.1727886846407026331@lazor>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: mt65xx: add dual and quad mode for standard spi
- device
-To: Tim Kuo <Tim.Kuo@mediatek.com>, Mark Brown <broonie@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- Steven Liu <Steven.Liu@mediatek.com>, Sky Huang <Skylake.Huang@mediatek.com>
-References: <20250916081515.324130-1-Tim.Kuo@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250916081515.324130-1-Tim.Kuo@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <175133153648.4372.1727886846407026331@lazor>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Il 16/09/25 10:15, Tim Kuo ha scritto:
-> From: "Tim Kuo" <Tim.Kuo@mediatek.com>
+Hi Stephen,
+
+On 30/06/2025 17:58:56-0700, Stephen Boyd wrote:
+> Quoting Nuno Sá via B4 Relay (2025-05-19 08:41:08)
+> > From: Nuno Sá <nuno.sa@analog.com>
+> > 
+> > The adi-axi-common.h header has some common defines used in various ADI
+> > IPs. However they are not specific for any fpga manager so it's
+> > questionable for the header to live under include/linux/fpga. Hence
+> > let's just move one directory up and update all users.
+> > 
+> > Suggested-by: Xu Yilun <yilun.xu@linux.intel.com>
+> > Acked-by: Xu Yilun <yilun.xu@intel.com>
+> > Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
+> > Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+> > ---
 > 
-> Mediatek SPI hardware natively supports dual and quad modes, and these
-> modes are already enabled for SPI flash devices under spi-mem framework
-> in MTK SPI controller spi-mt65xx. However, other SPI devices, such as
-> touch panels, are limited to single mode because spi-mt65xx lacks SPI
-> mode argument parsing from SPI framework for these SPI devices outside
-> spi-mem framework.
-> 
-> This patch adds dual and quad mode support for these SPI devices by
-> introducing a new API, mtk_spi_set_nbits, for SPI mode argument parsing.
-> 
-> Signed-off-by: Tim Kuo <Tim.Kuo@mediatek.com>
-> ---
->   drivers/spi/spi-mt65xx.c | 33 ++++++++++++++++++++++++++++++---
->   1 file changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 8a3c00c3af42..591740805740 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -563,6 +563,27 @@ static void mtk_spi_setup_packet(struct spi_controller *host)
->   	writel(reg_val, mdata->base + SPI_CFG1_REG);
->   }
->   
-> +inline u32 mtk_spi_set_nbit(u32 nbit)
-> +{
-> +	u32 ret = 0;
+> Applied to clk-next
 
-You don't need ret here.
+Do you mind providing an immutable branch for this as my i3c tree is
+introducing a new driver using this header and so it is going to depend
+on your branch.
 
-> +
-> +	switch (nbit) {
+Thanks!
 
-	default:
-		pr_warn_once("Unknown nbit mode %u. Falling back to single mode\n",
-			     nbit);
-		fallthrough;
-	case SPI_NBITS_SINGLE:
-		return 0x0;
-	case SPI_NBITS_DUAL:
-		return 0x1;
-	case SPI_NBITS_QUAD:
-		return 0x2;
-
-> +	case SPI_NBITS_SINGLE:
-> +		ret = 0x0;
-> +		break;
-> +	case SPI_NBITS_DUAL:
-> +		ret = 0x1;
-> +		break;
-> +	case SPI_NBITS_QUAD:
-> +		ret = 0x2;
-> +		break;
-> +	default:
-> +		pr_info("unknown spi nbit mode, use single mode!");
-> +		break;
-> +	}
-> +	return ret;
-> +}
-> +
->   static void mtk_spi_enable_transfer(struct spi_controller *host)
->   {
->   	u32 cmd;
-> @@ -729,10 +750,16 @@ static int mtk_spi_transfer_one(struct spi_controller *host,
->   
->   	/* prepare xfer direction and duplex mode */
->   	if (mdata->dev_comp->ipm_design) {
-> -		if (!xfer->tx_buf || !xfer->rx_buf) {
-> +		if (xfer->tx_buf && xfer->rx_buf) {
-> +			reg_val &= ~SPI_CFG3_IPM_HALF_DUPLEX_EN;
-> +		} else if (xfer->tx_buf) {
-> +			reg_val |= SPI_CFG3_IPM_HALF_DUPLEX_EN;
-> +			reg_val &= ~SPI_CFG3_IPM_HALF_DUPLEX_DIR;
-> +			reg_val |= mtk_spi_set_nbit(xfer->tx_nbits);
-> +		} else {
->   			reg_val |= SPI_CFG3_IPM_HALF_DUPLEX_EN;
-> -			if (xfer->rx_buf)
-> -				reg_val |= SPI_CFG3_IPM_HALF_DUPLEX_DIR;
-> +			reg_val |= SPI_CFG3_IPM_HALF_DUPLEX_DIR;
-> +			reg_val |= mtk_spi_set_nbit(xfer->rx_nbits);
->   		}
->   		writel(reg_val, mdata->base + SPI_CFG3_IPM_REG);
->   	}
-
-Everything else LGTM. So, after adding the requested changes
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
