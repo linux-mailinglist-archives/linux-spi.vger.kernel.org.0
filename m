@@ -1,77 +1,78 @@
-Return-Path: <linux-spi+bounces-10069-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10070-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27A89B80F9A
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 18:26:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91B6B80FF7
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 18:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89D7E7BDC88
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 16:25:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 600963B5563
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 16:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADD2734BA5D;
-	Wed, 17 Sep 2025 16:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E316D1B7F4;
+	Wed, 17 Sep 2025 16:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="MUbOyKEz"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="EcAnkY1a"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013065.outbound.protection.outlook.com [52.101.72.65])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012066.outbound.protection.outlook.com [52.101.66.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B1934BA29;
-	Wed, 17 Sep 2025 16:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91AE2F7477;
+	Wed, 17 Sep 2025 16:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.66
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758126407; cv=fail; b=n89yx6xvSGAwqGF6nqGTOY+zWP7xXogquOrwsVZ/3Ymincy9WsUBmrM+VVMOv4qdf0bCpZokW6Bf9oGBGcKDqJ2GcUUu+Ox95V8mccPfIVKChIKFrvQK/zJM1Xd+K5kaDTCyO2DiHWISzLYtGFgSzr5S2VPzRRIhl7MInFnSWJ8=
+	t=1758126533; cv=fail; b=jmjVN6CV6wkD2uMOYWv9Q10g+yVjbVl/L6EkB2LDZ2Er3BXPJh4h0DMYr3YfysRsYNO83VQXvwKfmz/I0IzDCb9gjg7yAsNO9Y//3XVXfYaaJpmk0JKaHDzPpprfUSC+Ed8yXU9KOlEzEAie3GdT8gECWN2kUsjTFbb1Mzu3PRw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758126407; c=relaxed/simple;
-	bh=zOSWjhR/oQF+mmOXzIx5SvibBgt6zuMiYAvqWscoIOw=;
+	s=arc-20240116; t=1758126533; c=relaxed/simple;
+	bh=YOoQfBnmTM+CEBAaj/WA9R+CvI+tT15mfCVGU63bZEM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=htMWTHQURUl9i+qeExUnkQv9IiEN1kUkt3kuycRzEvqJomzArm/47ptx/FKt54J72UMfV2XyJuFiX5UuOlS3H/l2s1QHa3YVT5YDe2mIl7MG6dcCKap1Unj2DJt32wYbN2rs2mVJSKiuWhfbq20d390DUV5cKMVsAXyhxMVnYGI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=MUbOyKEz; arc=fail smtp.client-ip=52.101.72.65
+	 Content-Disposition:In-Reply-To:MIME-Version; b=SUdOgtSGL9ovq0t+T9Hfk1ewzfnmr8mVVM2RJfmcOywXVh+sqytso7eNNQvi986r7jLk4Df887yYrUuGWEMthzaeMVJWCFCEnSeVVuy0P49r3P42e2Ec0OJv1a/2WEtvIIRXaeBvYVA4i4xgEppv07UaSzBGbTIVNk4QExteYoA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=EcAnkY1a; arc=fail smtp.client-ip=52.101.66.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Jl0y4L+6HgsQxnGANpn6N8hv0ZPqRSEwTk6g4ZPLk7cT4m90A6AtDMyxbis+c2U9pRf3sk8wZKbyZt+AP+a7a2R53MfRL6p1ZFt5lnz7pp31lkcT13JiXgbW1YNksC+k68aJWxFnHUpGC+PA2mmpMFF4j4HH5HwneZjOX5g/cSq9Hn+Grv54GdVo30McMzuOXt6IwUhKMGo512cPVj8Iqht48b66fCZFluzD3CEHHFrTMqcIqm2ZWiYCqEiRXl1AA2qIRV4KOlVf5EP8K0YqMy1HUwCBUw+bKXYbQhqziTFgwNpuvleWdp2xPHDWX2dO1eBg/XPZBgX32OUY/jSuMQ==
+ b=yBR6MDeIEDdfVGtaMXMbwne2L/Ji5clqawFh1f3PM/dJCUw8qugnHu2V5574lR2+4N8E7wbiulkaHH0xdR8FlvrBNbHt3bH9txIrP1Ij0Uh4yspRmLUZ8ls1zycyBWULJtYfcVBVed0ABxl5Tb3Ub9fENVVbGEqTmUMRb8v72gFETr94lX4nCS53IbkQm2WFxje/Jml0JMQ5woR49WFAOy6XKve0/tJi2tHrlhx8u/lyQWPgBwYYlXvEPau8wEoixPptDwSt/smoGmphEvKmo9cyqCK/GLJCMZnK4CzjVYm7NW2RQPLtKiEcx3yHcWIfnGL1KDmydUXBnh/Ncj7O/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2fpcpqhUZYEbkqDAe+z9aXR0i835A1iwQeLfSGS2Bxg=;
- b=BHdBeXq3PqD0HQv9DF17RaDXVIfS5TU2Y1ST3kYNjVo+qhJwaWXrZguq9g5ulezJrd0A+om0bGcm7dB/1wfJXPTqIwkqVt4nNufpD34Ecu9jI9DoFIn0K7p2tSVCXAgXZg9XHYJBMQ51Rxc5NQGYmm/SRCj9T0WlvmuDYyH7f9vjCQZry5hx4eZN8TPO/LBA5vl9dQoInsltiBy+o/9b5EGnT9+bQNxHv5K+ep7rTa874Vb6Uf92ZZ2Nnl1SyBnlwx+pcOAVOKCql34WYJJj9v04D2Dop0scvr1a/Cers4As/2uPt5pO3XEa+K1ZmEXTUPCxxvatyOQe5w0NhKtDGA==
+ bh=eGQW38DH2igZZOTKqtK+2zLd6G+Kll2t3Co5DAybkDM=;
+ b=M8KWj/biZLM4WVHhgp/x+uSCQ8wg/In0qZIvMyXfRCmEZPx7XWNg6GTg9BDFVAP1sbjVMmZcCrcvB96h7XL4iwxhejK3akcHHLobKUGRhNVadNXYxyAiHGCUDq8Z5Pxwu94Qlp55py54Jvr6w+XmzZEYSO1WPHby7w2yevVQn0eZiOjZJefRo2UauNG2jphXSASFqvS8Djzw9RyvISQ+YfAUNHiTAz1spfWn9CwAAJAXeZEv2UMHhaXjHzc7gv/3liygm+kcezUYb4ULzeA759/9z4tfvMWV+7i7QxWkFI0GfY1iD1FD4cgEcn3s2pWkjy3C8EOQk0RmsZeBF/S4mg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2fpcpqhUZYEbkqDAe+z9aXR0i835A1iwQeLfSGS2Bxg=;
- b=MUbOyKEzfoUT3Lb941bw2aHzUcjL+6PspoFG3QjAb0P2HUcbOx50gnfc4WwWMY/q8nQr0wVrnAV24z4IgZoG8gA0OzH0/Wb6QIdqsUC+OsMi+JoCTg3j3QBfm6uw7FkW8B3EczQjAq4VqQk0X901mV9Qtr2+Xk92LfD7TUbN38CumkfOyuRzKNmXuz8ucBPI8ZNZjZ3vAJXghmR8/LmqFiGzs9BnTUPTRe5AicrmlurPGvW11jJ5WII/8kPdffzmv5rmJ/T6Ng28adqYSqAhU8geo4vEPPKlTWSIMyjZ7RkEjrjOEo5M+3o2buZrHo4EdGp6jlym3jDH9/L4/gIfrA==
+ bh=eGQW38DH2igZZOTKqtK+2zLd6G+Kll2t3Co5DAybkDM=;
+ b=EcAnkY1agMMnlPlf6lMsYGN4mBaBVtIX35Qke+zd+loMiSKnxjiQHT5IY9w4IF0Oa9rhRlPEk6EMTNGPTGyBEx/I6ECsU0/15ODanIFU/K7KgkFCWHs4N19L1p+M+Fjse0aBfzNoMgShV+iCyprd5omzy0L6yzBxKkRVxgAgIawdWBOcuNZJOOWvo1clD2bTXMt3sM4eQ2y8kF7hxqDaFKvMJV80ae9gmjEZqi7u4DV74RlIp+adNmiIbg9Gi9uwCfXa7IyjIVC2jBl2d95D2ZYwcg43HxMYJ+zpA/n/W7BT9/RhAPbkrxky4jqkwXYr8LNamlNizMMVO4xboLLwAA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
  by VI1PR04MB9859.eurprd04.prod.outlook.com (2603:10a6:800:1d9::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.13; Wed, 17 Sep
- 2025 16:26:43 +0000
+ 2025 16:28:49 +0000
 Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
  ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9137.012; Wed, 17 Sep 2025
- 16:26:42 +0000
-Date: Wed, 17 Sep 2025 12:26:35 -0400
+ 16:28:48 +0000
+Date: Wed, 17 Sep 2025 12:28:42 -0400
 From: Frank Li <Frank.li@nxp.com>
 To: Haibo Chen <haibo.chen@nxp.com>
 Cc: Han Xu <han.xu@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
 	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
 	imx@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] spi: spi-nxp-fspi: set back to dll override mode
- when clock rate < 100MHz
-Message-ID: <aMrhO+//We97QeLL@lizhi-Precision-Tower-5810>
+Subject: Re: [PATCH v2 4/5] spi: spi-nxp-fspi: add the support for sample
+ data from DQS pad
+Message-ID: <aMrhuvpI3gszqvi0@lizhi-Precision-Tower-5810>
 References: <20250917-flexspi-ddr-v2-0-bb9fe2a01889@nxp.com>
- <20250917-flexspi-ddr-v2-2-bb9fe2a01889@nxp.com>
+ <20250917-flexspi-ddr-v2-4-bb9fe2a01889@nxp.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917-flexspi-ddr-v2-2-bb9fe2a01889@nxp.com>
-X-ClientProxiedBy: BYAPR01CA0046.prod.exchangelabs.com (2603:10b6:a03:94::23)
- To PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
+In-Reply-To: <20250917-flexspi-ddr-v2-4-bb9fe2a01889@nxp.com>
+X-ClientProxiedBy: PH7PR10CA0002.namprd10.prod.outlook.com
+ (2603:10b6:510:23d::28) To PAXSPRMB0053.eurprd04.prod.outlook.com
+ (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -80,106 +81,208 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|VI1PR04MB9859:EE_
-X-MS-Office365-Filtering-Correlation-Id: a69d563f-37c9-4d97-da3a-08ddf606fcce
+X-MS-Office365-Filtering-Correlation-Id: 5cd540cc-8ce7-4267-539f-08ddf60747e9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|366016|376014|52116014|1800799024|38350700014;
+	BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2sPBPXxKIlPDboIkq5T5GulcO5IUzijY9Wdw+2HgiCbEvqIgUn/6WKhgCUeL?=
- =?us-ascii?Q?JD+hd+epnIGd2SQSz/yL12daZ9S/QoZIOKhgH+WyKFzP9aesza0/uvEyWYrK?=
- =?us-ascii?Q?QBGItziL4B0qo5s1rmBUp49u56gsf94IebbSS+zPF8LDioohQ1AlXgiNXkDi?=
- =?us-ascii?Q?ElgPXF0EKGY1d/98yX+Yn2zG9tNyf0MwUdYA1Qf5elC7SYupyMKQxSnRDcL2?=
- =?us-ascii?Q?hCxxkSZk1EY0fkE6rD7KvqLw+Ytp3MdZFBVLEhBt0viPXi1f3ixWn2RPpaqG?=
- =?us-ascii?Q?GMZRDMF7RRW8vol0qgryc4WYYMTCwFkDnWeBuU4kn/49E1AaH52Oc3cI8qbM?=
- =?us-ascii?Q?CQBp9exNknkV39eRVqxhyyaEHdW+C0TXLRItkzQW6a2MxBZGawpjndRAKDoy?=
- =?us-ascii?Q?EIPfgoG20P+gqBEWPvp/LpYH9AFYADUa82yFH+W5epo3Q75Zqn63tn4dCvEV?=
- =?us-ascii?Q?YJ6ElX2DxpN98EKzUICqYEU1OYExuzin/h7hVsw1la3XVF/NX8PN9dwDCQBH?=
- =?us-ascii?Q?c6ICvzEPv0g7v5A6ftq6OJKniKPRMLoGgrQ5ZWgPig4kLoFso3wlzntGkU18?=
- =?us-ascii?Q?HNEBfci66laYRU4IJCqcJifY101541zXyuuVUIL27aq/b8AdnZWskY9QHX6t?=
- =?us-ascii?Q?Tm7EcPAwyuuBW1GYlTio6eyQE4qp/DzPNNipLS1NbuQ8hTcWaDqTWwgVNL77?=
- =?us-ascii?Q?vPg2pXR5ekgIqllGjrG+BWubntaGGP/Kaw7jx32JZ0EStM0cCeSHNNxS8G9k?=
- =?us-ascii?Q?orOCVpklpwH55VpPHEupp3afi0vXmlA7MKdooZQTIiUis+dDW7wp1puXAIHB?=
- =?us-ascii?Q?3lfi2V19KP+25u7GsXuq34/YBMVFTLipu5kDAXuqr5KjxETQaUqmNQKDT/4b?=
- =?us-ascii?Q?7RLadng/poGy/ohFx4wLogHpbpOuHqmuAv2a17AJvRRseizny8A8e0EbNZlM?=
- =?us-ascii?Q?Xtk3zxIFPkJzN3J5wTRl2Nn6D4iHBxyhA92KYjzerd43tR1n+V1JmwsFDPte?=
- =?us-ascii?Q?Dqm8qbT+y9GOBu7kiGTGYYfgilyAIlNiUcyqCacS/IZ5a3dY9HN2h/lIC7Cm?=
- =?us-ascii?Q?ZfHsipGzNu0oB6dTERWpaAeABHGo+yd3YcpS07f9KWN3uacsUFKEeW0VvH2w?=
- =?us-ascii?Q?rEgu7zIhavRqB9nUxFy8Ncx4BAEOZXVbrkgYS7/tgnn53nxUzd/0Hsgz64m7?=
- =?us-ascii?Q?U74Qs+WyjYEPRS5UMrywZwStA40fZVZcSRu/4xB6VfQf0ipkrmiZ4/dwyULt?=
- =?us-ascii?Q?58IOUkdq9omhfiyLQCyqUoLiBWhay3xO4dy92aRZonmjmlwITG7cxFarmqaR?=
- =?us-ascii?Q?gNFCX3ms1UMRAherJE/x63wCIj7i78dJ9aZ3i1xrTHaOYvyJBfbZeKkqOxy7?=
- =?us-ascii?Q?7XYnbA8uYU5MI3A4cLgwzJGIUGrvG1oP6cmT+FmPY/cMufP/F9976FQqw5F/?=
- =?us-ascii?Q?+eRBc5gxR5dsJbzDp7QXedZLWT7wEpB9IAKSur/yHRohv9j6grmqpw=3D=3D?=
+	=?us-ascii?Q?ZD5hmtvNQUDJ2I+NhetNrRpQs9BI4tvrBZqFze/4GkjEMlWGNYDp6nTYYrPW?=
+ =?us-ascii?Q?OP93eEPNnjOzRBqjEWYd/Qn1Wk4Vsi6AsSF6NOqUZe1MhIDUAC65DDM0ARIb?=
+ =?us-ascii?Q?8BoNYVwRWHqMUvQj54pIENKWwVrxWMep+kMfbaQImJvpxAI3f5dG0qW3ndIr?=
+ =?us-ascii?Q?rMha5JaTj40wqb3BPaGmD88L+RVZ1GpByKGJVQEoU0cRKbcuFj4B4qFN6M0l?=
+ =?us-ascii?Q?2a9GFJwfBEtp7nsE7QayznFPDY75wNfuUjv7l/kMNynBpLKMJKqfGYoar8CB?=
+ =?us-ascii?Q?oeCtEUoNzOSKIw+/mt0FS9WYTF9/FgMIj9SYe1T269ZcKHYWKkQ4etJxB+qt?=
+ =?us-ascii?Q?w05x8KRzUSUNcvv+pddUDHz0eC9y4Qvkdc8b4kJ6dyuI3v0XbXj3OwbzC6lX?=
+ =?us-ascii?Q?Exoqbn/WrScOTOjWh31+2JS8XUdAwXwN6TquY6fyBqWYjn4lNcsP94maMGRm?=
+ =?us-ascii?Q?n8BZ958610Z4dRzCKdQAkdix02PR/LwSqRWbPQXjQOb/oPS5vy0074viLcRu?=
+ =?us-ascii?Q?c1kJ5EuCdo09upA8A8sHKzFf0jR65c6u7bAmFHIcfZqgPSRNejRDX9nySupa?=
+ =?us-ascii?Q?Eeebjk3E2GR2bLIHIXYHk0H5lZQRDLOvl3Ysps3VoqbZzFmDGr+jXZVvQ4J1?=
+ =?us-ascii?Q?GMx61pcns62fUox6xvY7KmQVWEAu4+6Il6JGVjtsTExut2jDibenOrQKgjer?=
+ =?us-ascii?Q?4AjfTRHFUt3MrQkMrR8WyeBS1x26xMOmsitnDWlHakr09XjolJ5rgmfzI2a3?=
+ =?us-ascii?Q?8eoFpVKh6/qmVYSbO/WMBFuWkPgYdANRHq1HR0l5tP8yExej5gmRKiPE2epF?=
+ =?us-ascii?Q?cQo70LKqMqbyJzoZWsUPFg7oCJRHZ/MfN0liQiEq8qvsD1iyd+hRw7GI3MkO?=
+ =?us-ascii?Q?+nGXyJsPVJRZz9tMoK769Zq1QjeqG6+J1Q8vquAdznHUIbwpprSd62R2MX/N?=
+ =?us-ascii?Q?uD7MmYK0yzNp/zKHj4/uQxmL7zy8dcWEUOjZR7oS3x24CUC7R7okBMLVn9r4?=
+ =?us-ascii?Q?7GAkAFyayTOmaiX+bGJuRV+Ox9K9IIdVNmFocwaevCjhoMBXSwo8CnPiASfM?=
+ =?us-ascii?Q?T7QsqCz04qm4hbqMWC83EQjms+H3cS9Asn7Ohi41thq6Xte27rNjeuEBFzy0?=
+ =?us-ascii?Q?/Y1tw/R3txUsKPkxSObnyKlDWjSzbqdSAZoTEtmMmbluU+EpqdaS9o0Dro5z?=
+ =?us-ascii?Q?gwU/69JmwqdFfRbShawlW9LtybVc7rZJw8lpHIfVAWIqg2NeqyYEe01sZEHh?=
+ =?us-ascii?Q?V1GtYTyXbU/bJGDH2pOiUVd315Fb1vormVlwrqdQnMmzsYTP7T+C1hSBFd7+?=
+ =?us-ascii?Q?0APZhB2YArwnBAAVkuIkYccTqXQ0AbtFTCUweDSHtatU9QU+LXm61W3WRAZw?=
+ =?us-ascii?Q?1sTvq7E8Z64SKMADNjeeTQrDuvSV6hVuaqdQAooKFhkwksCMHiCLxF5Ey5aQ?=
+ =?us-ascii?Q?t24qC5K++VrTNZRNkIujieBFwDv7tc/mRgJg5rH5gTCXZUu3hoo4pw=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(366016)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?pQY3m6v1uYdwrfFVcMyimTrzz5rpvhZTodkoQCKHF3XQB/Fm/LfWnt4z1sc0?=
- =?us-ascii?Q?iqQxMw/jRN2sew1jm30jxBLj2sABjGPZzPZdHYX/fC6XN5cJyBEoIRixU04U?=
- =?us-ascii?Q?X3a0iYgGQnTSAJT+MskO8Ktz8qgl6p1tfhNKMOSoFesvPitTdY3j1tGDqwlT?=
- =?us-ascii?Q?Ib21XRPbMV9e+A9eOCv90/21XL40gDqFGJAeq/DkkcP8w+F2Emr/ypiqKRVd?=
- =?us-ascii?Q?cHQ711q379QwWPTyAeXSg4Th/JXs4Qx31pOxjyqxxOvZqUd75sjqDjB5CLN5?=
- =?us-ascii?Q?gm+tU1ZE38dqvnW4elGjZ1nOnN9I97W81ct7Mak6WA2zx/MnzLQZEeARJZoT?=
- =?us-ascii?Q?UoNSdD8jxpssETWaY1mv/oSboguQiginY4sBRAa7Xd9MAEdgdPptAU8SYFFU?=
- =?us-ascii?Q?40nGDepT8SK5RHJhAbTyp/gIbgzq7tQxX3L88nXLWWoKf0n1y792efheHq8W?=
- =?us-ascii?Q?IhrDP8eQLfLvnRDTnMVK1yrgikZgj0kDHtJB8FdCiV2LDwxAyIfXrtgDr+Jk?=
- =?us-ascii?Q?HzgifXDDifGDnq+AnhL7PYbYGd9osCXEGeRY3zaWzYBDAPMAeuhITaU9Ivaf?=
- =?us-ascii?Q?T/mso7k6L3eWkJzpJdAQePPktn6q//Go5+twWNTk2SrPA8ErrInYSbhvHm0W?=
- =?us-ascii?Q?9SL1i5OPnZbIFjIC9iJHrzNcAzDuzCNQbzprfQHfRuK2xBeSCrDhjCVMERF7?=
- =?us-ascii?Q?fWH6j+Giy0JxDCwVJ7/+nWW/h4FY42ipNJJcuFLgvP0+Uy/nOUGJJHJLnS88?=
- =?us-ascii?Q?H5tT9qaL25Ci69fRnJMM/pxg5uScCbEOf1kZkUfPmSe+E1McUBW94iHk1mNR?=
- =?us-ascii?Q?rrqhplwgtCxSAdUKsbPAxWOoVHgW5CnOBSogyS1DqQ8E5AHZQciSacNJ6Rs0?=
- =?us-ascii?Q?Ni3zbJBq4wjSgfhuFAfEsit282iupZ6Kdm+0pXZW0Y2fITzk3BBy8bg0gaGp?=
- =?us-ascii?Q?e+2t+OV9n75H+NtlR4sr9XtO5owy1G1hEUr1xYcU+CQic6wduHWCAbWq73yu?=
- =?us-ascii?Q?SIQgiUTJLBxe2hxCHYEfM/emI/vCLkvmSBleGEU+G7vDZmEZXzstBTslZMit?=
- =?us-ascii?Q?LAIv3wKSPSQQO1k+5izeqiwwyuotbZ7lIKSoBD3uL7Y915sGCLCjK4XWSE1D?=
- =?us-ascii?Q?UnAyOrN3kKdARXyqs9reYnqk1TSP2Ijpa94Fxkbvqulv2KALmi32W4RO/tkB?=
- =?us-ascii?Q?4yDZ+b3hdL4vIv8eOZL4EeVFk9yzFS5EuXiEajpHC3Ubxw0Gr8+Rkn4VVTv8?=
- =?us-ascii?Q?prOhbLBD9qnlIQ2ffK/IbDzx1kULmhU3UsiMBnMsC8qY9ra3JeeFqlvUUMuS?=
- =?us-ascii?Q?xf4WMCVhYNZnVv+1YSSoq5xxNHNAZ38T1W1Z0MZ3ImidAQzQX10t14VwTL5v?=
- =?us-ascii?Q?DfENRndY17a0tUcC7+LZO3l3KuShP8nrhxND9Gc0v6l7HtLG1vCsF56fA6fF?=
- =?us-ascii?Q?51IefPFSwVA0qndErPT5YhXZiQOEahRBTbCTmc5F7AkF2cSG4oo9fJZWzpd+?=
- =?us-ascii?Q?bwi6fehqwRY7dP3LQEiMcoQevkHuUgEF6UsYmWCA5W2wfUov5SSJfd0nESaT?=
- =?us-ascii?Q?qomhTh1uGbOYPlMLZaV5ZbTCSOW1a7rax3usRRge?=
+	=?us-ascii?Q?dOHZmlXCUuJdmi4mQpDeDukD4IFysCrxYtw8FQKbW3pxE7XNMxvgTxSy3BMu?=
+ =?us-ascii?Q?decn3fHtft0teNmdraOE8JCgqu5D0SRF3Pk83n0YJeecVfjx7OTEz1yCgPBx?=
+ =?us-ascii?Q?j786IwaCktfMc8kptXXHXOphdtVXFZQxUwPApoCR3xC1f7x23t5wVgJ/Lk3l?=
+ =?us-ascii?Q?QFUVgiKlum2ggzp+KU7HLK2nRr0Zy1GNNvWvuhh8hqy2Wu2xAxCVHpki/Ryc?=
+ =?us-ascii?Q?fp4dIMI0LOWHMVmv3EPGqrje49ZHLnJJQTJhyX3fJteDrfDB4aW/+Do6QrLp?=
+ =?us-ascii?Q?hBXI2U/WSDAA9nPM+GwLrVmX9zHRpjFQG66Nx5opg9ZYb6o9puHgb87qepdk?=
+ =?us-ascii?Q?1K/f3znu/q79d6Q7yJe8lVgLnCKXVp2+w4GCjseAS9DD3IyRriRpAcny/+7Y?=
+ =?us-ascii?Q?xMxJF6kzBnWREInVnrraTHA7tVmQgxkNqEbI3xjQryocOaS4uJsktVEmvzJM?=
+ =?us-ascii?Q?FsreYRN2iLdPIz727QISPcB+0RyilXlu6Zc5iVEerg0LTLm28QQijXw73bKL?=
+ =?us-ascii?Q?uFngq9MmHOboDzHQKMFu7jARwBOJ68lrVQ7bP+YzFygAiY4kN+XFHozusCMj?=
+ =?us-ascii?Q?rE8jDfJPdcyAbqgLhj+rrDD2gS4tg0cmC5L98BKWAmcoqweHTUrgr8rrL+2w?=
+ =?us-ascii?Q?TML3Ww5KCVXenAId0piKAc/3V8LzyHvD3VVSbxVZ1yOkmJJ8BGceXh+JJ2QD?=
+ =?us-ascii?Q?F3l9PAEKiyas8CGK0hWfxqNZiIXqAFG3dk5QCWC/FO8yj6nad23Pe4uB8uEW?=
+ =?us-ascii?Q?xd2XP6EpAS3u/iR6h69NpEgxHlOaKCq0lpswcBx9/D15C51eAxuPipZzga3J?=
+ =?us-ascii?Q?lFc+fI3OF6RywThqKP8n5BnNQdWEEm2pD9qug3t45n3inNnIWzjnlqF2LHuo?=
+ =?us-ascii?Q?/BP8C7XGTgXQpbma9QUebv9WFIyF0eIQKAlochvmrmmw+cgEcALxDSx+E83U?=
+ =?us-ascii?Q?F70YJEyNWvaKElESEq4PQXH1idcJ1reQwbKh5WguP1clvFzsGj2zJihnKs+I?=
+ =?us-ascii?Q?SQ7C7s723EiAmm6hipPv9MPJyAYzDiV17pDjRrO0W9NxFCHMYdMI9Zt8vPQb?=
+ =?us-ascii?Q?elNCxo+8qCBa0JZYfVAFJaO8m4t50C9YSSqu9+rr9J/KS/qcd99PPc3U6ESK?=
+ =?us-ascii?Q?4DkKaZi97xi+L1uB0fRBYWgkrCxH2VaVlt2sarX0/5GXHudWZkULHG+KKFT8?=
+ =?us-ascii?Q?Q+abGxZCXMdrjD8FcBq78qouEOzMgpNcHLC3u9Dzd/Ri6icIHOfZ8NM+l2So?=
+ =?us-ascii?Q?/RWpaXs20HqwLnbSrvdYGPhcsw3Vr9k3uONJw51muzW7tYCfsZrQTuWQwsis?=
+ =?us-ascii?Q?VqPfpKA8q5wBnDG7xiQeSvcS0Bt7Q7oWEOT7kZWp1YUgtBNPOWCGC4tTO4+w?=
+ =?us-ascii?Q?I2z7nyp63iKHD4Vu0G8y9Ts0QIAidP13wXISx93IdkjDqYUMqtQErf6q0/Yq?=
+ =?us-ascii?Q?Rn/0Dq3XdF0xbT1HAzbD5raIqypXR87U70hgmknucqjpcYUS23ms3SB4RCEo?=
+ =?us-ascii?Q?J/oy/RJt4x9KdugDkvckx1NRjW/m7J/OBb2mqHC0cLvg/W2wvN3MmfiY70Jl?=
+ =?us-ascii?Q?M6AJ7LCGlDwedQmfEH1OsLOJwY4sT122jskOFUtz?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a69d563f-37c9-4d97-da3a-08ddf606fcce
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5cd540cc-8ce7-4267-539f-08ddf60747e9
 X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 16:26:42.9205
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2025 16:28:48.9176
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /qlP6EzqD2nmi490ABTysiLMA6v4//Ep3s1SvBL3I8gAd73OiAPubqurm011fFy+W6ekBcJfuK89AU2Fi0UBgg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: xmlKhusDwc1q2NbeWdG7CQFa3rSOZQFB9hCrU7zuaQfGES4TWYU4qW/JyZCMd9/VE30mB/V2ZpotYl1TCpBHjQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB9859
 
-On Wed, Sep 17, 2025 at 03:27:07PM +0800, Haibo Chen wrote:
-> Preparation of supportting DTR mode. In nor suspend, driver will disable
-> DTR mode, and enable DTR mode back in nor resume. This require the flexspi
-> driver has the ability to set back to dll override mode in STR mode when
-> clock rate < 100MHz.
+On Wed, Sep 17, 2025 at 03:27:09PM +0800, Haibo Chen wrote:
+> flexspi define four mode for sample clock source selection.
+> Here is the list of modes:
+> mode 0: Dummy Read strobe generated by FlexSPI Controller and loopback
+>         internally
+> mode 1: Dummy Read strobe generated by FlexSPI Controller and loopback
+>         from DQS pad
+> mode 2: Reserved
+> mode 3: Flash provided Read strobe and input from DQS pad
+>
+> In default, flexspi use mode 0 after reset. And for DTR mode, flexspi
+> only support 8D-8D-8D mode. For 8D-8D-8D mode, IC suggest to use mode 3,
+> otherwise read always get incorrect data.
+>
+> For DTR mode, flexspi will automatically div 2 of the root clock
+> and output to device. the formula is:
+>     device_clock = root_clock / (is_dtr ? 2 : 1)
+> So correct the clock rate setting for DTR mode to get the max
+> performance.
 >
 > Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 > ---
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
-
->  drivers/spi/spi-nxp-fspi.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  drivers/spi/spi-nxp-fspi.c | 56 +++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 53 insertions(+), 3 deletions(-)
 >
 > diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-> index db4b92490de957580c6298baeb8b68a310c23615..a1c9ad03379682dc1fc2908fbd83e1ae8e91588f 100644
+> index bd61f951d6befdb78cdd84d4531aab378a47c56f..d25679fafad7a94a7ea2a79d7e3da53f4939c9fa 100644
 > --- a/drivers/spi/spi-nxp-fspi.c
 > +++ b/drivers/spi/spi-nxp-fspi.c
-> @@ -767,6 +767,8 @@ static void nxp_fspi_select_mem(struct nxp_fspi *f, struct spi_device *spi,
->  	 */
->  	if (rate > 100000000)
->  		nxp_fspi_dll_calibration(f);
-> +	else
-> +		nxp_fspi_dll_override(f);
+> @@ -399,7 +399,8 @@ struct nxp_fspi {
+>  	struct mutex lock;
+>  	struct pm_qos_request pm_qos_req;
+>  	int selected;
+> -#define FSPI_NEED_INIT		(1 << 0)
+> +#define FSPI_NEED_INIT		BIT(0)
+> +#define FSPI_DTR_MODE		BIT(1)
+>  	int flags;
+>  };
 >
->  	f->selected = spi_get_chipselect(spi, 0);
+> @@ -655,6 +656,40 @@ static void nxp_fspi_clk_disable_unprep(struct nxp_fspi *f)
+>  	return;
 >  }
+>
+> +/*
+> + * Sample Clock source selection for Flash Reading
+> + * Four modes defined by fspi:
+> + * mode 0: Dummy Read strobe generated by FlexSPI Controller
+> + *         and loopback internally
+> + * mode 1: Dummy Read strobe generated by FlexSPI Controller
+> + *         and loopback from DQS pad
+> + * mode 2: Reserved
+> + * mode 3: Flash provided Read strobe and input from DQS pad
+> + *
+> + * fspi default use mode 0 after reset
+> + */
+> +static void nxp_fspi_select_rx_sample_clk_source(struct nxp_fspi *f,
+> +						 bool op_is_dtr)
+> +{
+> +	u32 reg;
+> +
+> +	/*
+> +	 * For 8D-8D-8D mode, need to use mode 3 (Flash provided Read
+> +	 * strobe and input from DQS pad), otherwise read operaton may
+> +	 * meet issue.
+> +	 * This mode require flash device connect the DQS pad on board.
+> +	 * For other modes, still use mode 0, keep align with before.
+> +	 * spi_nor_suspend will disable 8D-8D-8D mode, also need to
+> +	 * change the mode back to mode 0.
+> +	 */
+> +	reg = fspi_readl(f, f->iobase + FSPI_MCR0);
+> +	if (op_is_dtr)
+> +		reg |= FSPI_MCR0_RXCLKSRC(3);
+> +	else	/*select mode 0 */
+> +		reg &= ~FSPI_MCR0_RXCLKSRC(3);
+> +	fspi_writel(f, reg, f->iobase + FSPI_MCR0);
+> +}
+> +
+>  static void nxp_fspi_dll_calibration(struct nxp_fspi *f)
+>  {
+>  	int ret;
+> @@ -736,15 +771,18 @@ static void nxp_fspi_dll_override(struct nxp_fspi *f)
+>  static void nxp_fspi_select_mem(struct nxp_fspi *f, struct spi_device *spi,
+>  				const struct spi_mem_op *op)
+>  {
+> +	/* flexspi only support one DTR mode: 8D-8D-8D */
+> +	bool op_is_dtr = op->cmd.dtr && op->addr.dtr && op->dummy.dtr && op->data.dtr;
+>  	unsigned long rate = op->max_freq;
+>  	int ret;
+>  	uint64_t size_kb;
+>
+>  	/*
+>  	 * Return, if previously selected target device is same as current
+> -	 * requested target device.
+> +	 * requested target device. Also the DTR or STR mode do not change.
+>  	 */
+> -	if (f->selected == spi_get_chipselect(spi, 0))
+> +	if ((f->selected == spi_get_chipselect(spi, 0)) &&
+> +	    (!!(f->flags & FSPI_DTR_MODE) == op_is_dtr))
+>  		return;
+>
+>  	/* Reset FLSHxxCR0 registers */
+> @@ -761,6 +799,18 @@ static void nxp_fspi_select_mem(struct nxp_fspi *f, struct spi_device *spi,
+>
+>  	dev_dbg(f->dev, "Target device [CS:%x] selected\n", spi_get_chipselect(spi, 0));
+>
+> +	nxp_fspi_select_rx_sample_clk_source(f, op_is_dtr);
+> +
+> +	if (op_is_dtr) {
+> +		f->flags |= FSPI_DTR_MODE;
+> +		/* For DTR mode, flexspi will default div 2 and output to device.
+> +		 * so here to config the root clock to 2 * device rate.
+> +		 */
+
+Does it pass check patch? suppose multi-line comments is
+ /*
+  * For DTR ...
+  */
+
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+
+> +		rate = rate * 2;
+> +	} else {
+> +		f->flags &= ~FSPI_DTR_MODE;
+> +	}
+> +
+>  	nxp_fspi_clk_disable_unprep(f);
+>
+>  	ret = clk_set_rate(f->clk, rate);
 >
 > --
 > 2.34.1
