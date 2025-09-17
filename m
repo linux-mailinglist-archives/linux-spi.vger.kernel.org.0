@@ -1,101 +1,111 @@
-Return-Path: <linux-spi+bounces-10072-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10073-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF58BB814E0
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 20:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64CB1B819A6
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 21:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFC0E3BD38E
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 18:10:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82931626248
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Sep 2025 19:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2565A2FE05C;
-	Wed, 17 Sep 2025 18:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C1B30CB58;
+	Wed, 17 Sep 2025 19:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uavdsPqC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hztTDeD5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF6734BA42;
-	Wed, 17 Sep 2025 18:09:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E709730C110;
+	Wed, 17 Sep 2025 19:23:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758132600; cv=none; b=i2gxSroYM7lhvbuuT2dZdlaDo2yAD4l3l8FuhArqMiNVnyqJOQgWM/t+F81g9Z2rXejiexd8ttYKAjjfdKD8JFqWV+6JDtRNFAl59IkXcD4yHefwiLjGw/T6RB/bxS6NcSJ+aTeWai6W45hP/PROvY1d6J9hPyp+zSspNbmglzA=
+	t=1758137005; cv=none; b=YYlOapJGumFNKbKugnKGj8jWVBlq0+/vMvQDv/fSuJ2xUXLNw6+O00jM8mLj4CiWVNnuG4o4RT6pzA3uOolpRpCcrhfG2cZmxa6f9/dQCjAOwwW2IRKyw3klZUhVWR9cW3K2bDA5kNuNJE6R8nhEAU1av+TNwRL3sky4WJJ97CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758132600; c=relaxed/simple;
-	bh=F9+3GVUhzFcwpqijgKs+YwigkMGUZiAao3Wxu3NDEuQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XeEFUiThJ82NTPv2h/TDoW0wwMa8oRJGQeCsFTg1dE/nEUBQCbB5NpqG641w/ArvA73wyGkxrgD5Cuxjl6n5yz4ExY13iN1O6OXEtHPtVInGsyq7qYZ5ORj4SDr4JABWfvR+Zg0NKY2S+Cy6ISx8bp8ODwY4zmRdKC4GQam/Fqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uavdsPqC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA9F1C4CEE7;
-	Wed, 17 Sep 2025 18:09:57 +0000 (UTC)
+	s=arc-20240116; t=1758137005; c=relaxed/simple;
+	bh=MFa4MrLLeBxJ4spNgJzdHnMZEO1qEG9apiibEMwKF+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dGu13itbM5cWhtbPkm7DPCwbwwo/aogCGIihXFgNUxsSBIZpy/GLBGifnN3xdz6U1n80H7HKhK/p2OtGTAMuAbrHtpsAF7d6nkpMYUwSZNrykT/z9A6Nv0RvPcfuPf5wH5JEtr2D22+6tgx/UOTfHAVhbTAbCwVvgWpq2a+OntQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hztTDeD5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3109DC4CEFB;
+	Wed, 17 Sep 2025 19:23:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758132599;
-	bh=F9+3GVUhzFcwpqijgKs+YwigkMGUZiAao3Wxu3NDEuQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uavdsPqCGhpVWfaAkCxr/8YoAtx9F/c7I4V4GyF/E2j3QYOPirel2fDnBaKJcbP1F
-	 D3TkPQ+mvKJCFLbzg/P1kyQfjeWVw1lsvme32pF8eWqVQjMs0R4rD1sloG2CeJwANN
-	 PmgvMOFoKMRV7RGILfudouxhnAlgQafvgj7qpW4e9bT8jCGS4xCWeAqclRwrcgdPyi
-	 V3/7Lx1tsJ5QSBe7yGIBzchrCekujbLNDCPRWuB/3IClOnjcSzW1fJ5yJNhmEZIk5g
-	 ZV3mck5XCt9FjDa8CzbxqNAvMztT24Ddsw7BBz07d0u54vCVWF4vea6SRJy+DaAh08
-	 3kpfHXqhGeTsw==
-Date: Wed, 17 Sep 2025 19:09:55 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Haibo Chen <haibo.chen@nxp.com>, Han Xu <han.xu@nxp.com>,
-	Yogesh Gaur <yogeshgaur.83@gmail.com>, linux-spi@vger.kernel.org,
-	imx@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] spi: spi-nxp-fspi: Add OCT-DTR mode support
-Message-ID: <f927f641-4af5-41ab-b48e-4a03dd46ac43@sirena.org.uk>
-References: <20250917-flexspi-ddr-v2-0-bb9fe2a01889@nxp.com>
- <20250917-flexspi-ddr-v2-5-bb9fe2a01889@nxp.com>
- <aMriG3Sp4Ns93Mxd@lizhi-Precision-Tower-5810>
+	s=k20201202; t=1758137004;
+	bh=MFa4MrLLeBxJ4spNgJzdHnMZEO1qEG9apiibEMwKF+Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hztTDeD5xlD8jRixl4Pxqbhj8i+b07MKO4vukji5FOvcufnEFBVDnUG3O39XqxEDf
+	 fRfRqP9SzSW+KP9YaaoIOGCbEGdM+/jH9zvtgkeb1fk21D0+Woe/fz4mx+4nkTwi8t
+	 pI0F4pL4JR1rij724ydjdyWMqqm1SmfSaS0M0ZYYyHU6tr0Hh43jZy3SDWqKIDH8BL
+	 V8o35BqbbsomC6B9QR0d5mM/lCO9neVYWqrcCfLAsnPfjuwFR/QRHSj9pPcRtGKc1t
+	 9JObbpttreKLKaZxdOPbdiny+a14JCdMCRGm3Y0swnxHw2i4zX8ohFjE/+jhCjdYcp
+	 RhV6wSpUEI5kQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: andi.shyti@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	konradybcio@kernel.org,
+	broonie@kernel.org,
+	johan+linaro@kernel.org,
+	dianders@chromium.org,
+	agross@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+Cc: mukesh.savaliya@oss.qualcomm.com
+Subject: Re: [PATCH v7 0/6] Add support to load QUP SE firmware from
+Date: Wed, 17 Sep 2025 14:23:19 -0500
+Message-ID: <175813699406.66282.993438408948834854.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250911043256.3523057-1-viken.dadhaniya@oss.qualcomm.com>
+References: <20250911043256.3523057-1-viken.dadhaniya@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="FWM1IKwhAJNrjOSI"
-Content-Disposition: inline
-In-Reply-To: <aMriG3Sp4Ns93Mxd@lizhi-Precision-Tower-5810>
-X-Cookie: Lake Erie died for your sins.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 
---FWM1IKwhAJNrjOSI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 11 Sep 2025 10:02:50 +0530, Viken Dadhaniya wrote:
+> In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+> hardware has traditionally been managed by TrustZone (TZ). This setup
+> handled Serial Engines(SE) assignments and access control permissions,
+> ensuring a high level of security but limiting flexibility and
+> accessibility.
+> 
+> This limitation poses a significant challenge for developers who need more
+> flexibility to enable any protocol on any of the SEs within the QUP
+> hardware.
+> 
+> [...]
 
-On Wed, Sep 17, 2025 at 12:30:19PM -0400, Frank Li wrote:
-> On Wed, Sep 17, 2025 at 03:27:10PM +0800, Haibo Chen wrote:
-> > Add OCT-DTR mode support in default, since flexspi do not supports
-> > swapping bytes on a 16 bit boundary in OCT-DTR mode, so mark swap16
-> > as false.
-> >
-> > lx2160a do not support DQS, so add a quirk to disable DTR mode for this
->=20
-> does?
+Applied, thanks!
 
-Yes, that's more correct (though the above is perfectly comprehensible).
+[1/6] dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties for I2C, SPI, and SERIAL bus
+      commit: 9bc7130822c4c7f3ef39f20174a379e476586ab3
+[2/6] soc: qcom: geni-se: Cleanup register defines and update copyright
+      commit: b44a593fb53a6f5e135af2c5351546f80c1285ac
+[3/6] soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux subsystem
+      commit: d4bf06592ad68ac4353a81c73e8e662cf88aa2cc
+[4/6] i2c: qcom-geni: Load i2c qup Firmware from linux side
+      commit: b645df76536c5b7d40e60450bf8011f70f34415f
+[5/6] spi: geni-qcom: Load spi qup Firmware from linux side
+      commit: 99cf351ee1c46b39c0581220807290b1dd56488e
+[6/6] serial: qcom-geni: Load UART qup Firmware from linux side
+      commit: 3f1707306b79cafc5a11350befd5a4081b807760
 
---FWM1IKwhAJNrjOSI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjK+XIACgkQJNaLcl1U
-h9CZfwf/UGHK0wCfWbCBim9KZPj2c4M6pKLuG/HZW0r6MAscgje8PfrmUrv5MGjU
-iWYxmnEL+wZKOgvBLhuv7LkK06qXVQ/8QcihQi5Om16xX+OGvCFNao7EQS1eZdTV
-5BNseKvWrhzYng6pJpXD3eNyV5uEphyyFa5HhaT8SZJN+Imdc+AuIpMjvN3I/8mS
-oS7m2MhXKa8hnRAQJJoyX2VDfRGq3Vys/Yft++GlySqm+qsHpEOu+v69T2cI1YkY
-AK/V8YjXtHi5xRd5JuVuaENeDfSazIjS0R0FyPMRn1iOPu5kY5EZXRE/0kdUKwUX
-5BjDArmbQHjsG7SbUuKcGrw7bNhFeQ==
-=1zzy
------END PGP SIGNATURE-----
-
---FWM1IKwhAJNrjOSI--
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
