@@ -1,147 +1,156 @@
-Return-Path: <linux-spi+bounces-10121-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10122-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C446B853D5
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 16:30:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA6A4B85468
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 16:36:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 396151CC066F
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 14:25:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45101587730
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 14:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1B630C36B;
-	Thu, 18 Sep 2025 14:20:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEBB305061;
+	Thu, 18 Sep 2025 14:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="V+vDhMpn"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="YEWrKUzS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A75930CB34
-	for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 14:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A6D30B531;
+	Thu, 18 Sep 2025 14:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758205239; cv=none; b=Daq7P8IMuYdgvx4TT1iZvu9TSGwHtygc8+LRIBSYuYc5uiN861Vg/zl+f+z0SFD7bhi5LpVIXIhQ1QqcSCAS9v81VC63Ft0vCt194qwE9g77NnTBSadio9X00kPy7bQr7GtvOUfLb0VUAMCaWPGqtJSaEmkFeCxAjtKxMVGKhJQ=
+	t=1758206056; cv=none; b=KXdYO8KHhjwmuDuOaFJx5XLbWYc4KTte7cJcMDHHn/wqSCIwpReXw/+yM3XWcqaTnNRHqC4FG/HWwfp5HR4ygEnPXCpRhv9TLuu10xvBCW/L7BRIcx3nws9kPsVF+ly93FydFCUBrYCh1v8N0MFguDllzp+JFthxW7ZloyGMERE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758205239; c=relaxed/simple;
-	bh=aLT8EU4W6ZT2ILFHMoAHb95Gaq0GYb01rVMThh8lhs0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U+dXZBkLcV2pj9wTCqI6QYUnHcCeSvKx1s5Q5INVurc0MOViMmf3SHet6PMBWLgcygfYQ9jeMIWrASiPbVbgrcAaBmqmDyRXbnaTibCVMlAzSGxjUSW2x2t6amHAuzHicskCRPo3jG2hMpZ9VoKyrEV9VyyQFqnpGlhzGJEzVbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=V+vDhMpn; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-88762f20125so100952939f.0
-        for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 07:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758205237; x=1758810037; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGUyDQ28gbrezc/y2GGrwAvmT1nNgBRAv5nk0GUCrzs=;
-        b=V+vDhMpnXJNVVf26RHVVrKscFcj47AuuA7K4ZlqmdyyMpTKkLFdvCJ7hzumlVR7waf
-         vCwUbIq/Xz3SuA6YGfBZVpe+FNwYkg46S1clYwQ9KoNXwt2TfBqC3jArMRVG6m1mFEv5
-         9miGwz1A1xNdITGPSTzTfkQLxcjuJ380HbK1XP1Q9UTmtK/C9h+A0Dbfr6bu0Z+QEzp2
-         2rb2sC17TTS2Mct6J79kt/KiwEOzZkM4NBMS6v8iRf7Et4fdaqQPkZ09c5xexzDohjKq
-         eoGxe0YgEkcFIKKaYh5PdoblpopoCKkGgLCK+1v6vpK38gArZ3vaNxBnfVXoXTa+qL0R
-         uD6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758205237; x=1758810037;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGUyDQ28gbrezc/y2GGrwAvmT1nNgBRAv5nk0GUCrzs=;
-        b=d1mkgwRE8o4NvlLSoPXCoN9gzvmdrrNR4/S9Fz4nj3iMLX25tPGe4ZxAYqTW1VHzMI
-         0vDOsG6prAY/6ONCOjUteEOKGW9Ot4wm8Tq0H+uCXNekHTRySHk/79FSqYgWAwwNVRLE
-         72PXY7pu+gsEnqtGk513vGlQDqudzoTm83RBMS/GbxvTgmpIgxW+Xeh5lcWSQHTb4fXr
-         Aaie+7WwLLAA7WTlTK2+lgEE9VmnIu/4ISGCvn7rLSc3GMxm9q6ASiRUvjdWBHEPPIvp
-         IFpvLJ1bYEd4IjY8uHECqEshkEJGAi9Sih4mewFFT0o8qwwzSDfY8LPntslUUHzoi9+k
-         eb7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXhWIbpotVDSVVE50oWqB0GUQJLnp475cD7HevFwGAKrOLLgOZZeAhdPq2S4dZeq/rpcwRqngst7js=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2enF1MqfxwPlz1MsHSDBxmtv8f0+W48Hn9etXfszQlboR36qY
-	ozrwfyGpjrIVxszv5f5HgFWXrxdjQ5HUTbGWS/iY9V2qrUzkcMB2c5i8MG8Kad/bXpQ=
-X-Gm-Gg: ASbGncueT8nxLVbfeDTAcQIQMsU5QT0lGM/tBiDI2G7tw9AoDTXAvL2pbAWvFVUsSTy
-	tlXBfuKe77isSMzpwkSjkDoLLM+JQRSds0pkyh6fK2/Yc8EHrtMe2kL/oR/K5D0MjmIqXnmMiw8
-	GaJ33FPa1j8UPoU3KfqJfYHJ9IjlJ4ij77unfNoso1xdd65Rl70XqLTXThCfkDx8O1m6EjjZtLa
-	NPxvMJcpHIzPMsU8qd24EULkhVP+plgjp4qzFADLMfnyfnERZ8Uy/6BHV1LG4JrP7WfpsEd1Rwj
-	x/xvhrHnAiAkSkKGQ+vdt6izKCVnasFKHCR+eTu9UtnTc3aVI97bW/HR3BVD3tEyXX2X6uEI6sF
-	zhmx9n0DDsaCirY/NUAJyQfTl7TmOfusXNWdLSQNHRZezA0zOJsC1qG22b4uJqGsVMUNRW5HQbG
-	ugUynNmQ==
-X-Google-Smtp-Source: AGHT+IFYve4EQ3dvEX4MzZuxtP/eJg9hkH/7xZ8/C/iLPdxKPkoWIGurBe2rCvRfKygvBsgv23fk9g==
-X-Received: by 2002:a92:cda2:0:b0:424:6c1:a778 with SMTP id e9e14a558f8ab-4241a52851fmr78183445ab.20.1758205237057;
-        Thu, 18 Sep 2025 07:20:37 -0700 (PDT)
-Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-4244afaa351sm10679535ab.29.2025.09.18.07.20.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 07:20:35 -0700 (PDT)
-Message-ID: <0053c0ca-340f-46fd-adb1-6af6928717ee@riscstar.com>
-Date: Thu, 18 Sep 2025 09:20:34 -0500
+	s=arc-20240116; t=1758206056; c=relaxed/simple;
+	bh=OJ/iqE0vvbz18E6GMkIrxbTsaF2vnkeSqVJuU7BblCQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kXK886d6YteddNUlyHEVNWuS9wV+jYK7pZ69PB6r/cr+7Ryun8ndWvsoI1RA6TwLfLSguovbKj26FMJ8BmBoNSjgJwq/fC+mf+z9nKXwATxTO79OcbSD+o18lvzgZ7F1/6+OZCSE2P1nDOZo9uQy8T/5163dTHeadREYy2ZNG+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=YEWrKUzS; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id CFC7826210;
+	Thu, 18 Sep 2025 16:34:04 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ykOANX01JFbL; Thu, 18 Sep 2025 16:34:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1758206043; bh=OJ/iqE0vvbz18E6GMkIrxbTsaF2vnkeSqVJuU7BblCQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=YEWrKUzSsCSY/6lIet+LJXfrbqvxxgBxu6EEaX8WOASNrM38vUChMCZrBB90JUeZr
+	 PYE4avyLNpvtfF3gMXoo/oN4PzmqZRuq3zKlh6TIzhiqSezN8/ZUxp5MzRdt+aXPqZ
+	 C878VW1nj0rQliDJ4fSM76NUg9MIMxlTihpAKWpybl0tWvALkOrBbqexPFr5o1qXpg
+	 3rmhgnenssdkNeC17OKLvMoWxS8IBGORgKww22AU2aqImLklkm8lEnnTRsKEVVhN9q
+	 nZUmKMgCaje+iGZkQ6UF4F3mNjEudmMO9W4ifJ7wT9WeOdKg5wkOLfMUHye9TgosOc
+	 qQn2tknU207Yg==
+Date: Thu, 18 Sep 2025 14:33:40 +0000
+From: Yao Zi <ziyao@disroot.org>
+To: Yixun Lan <dlan@gentoo.org>, Alex Elder <elder@riscstar.com>
+Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	p.zabel@pengutronix.de, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] riscv: dts: spacemit: define a SPI controller node
+Message-ID: <aMwYRGjTdbQCJf3S@pie>
+References: <20250917220724.288127-1-elder@riscstar.com>
+ <20250917220724.288127-4-elder@riscstar.com>
+ <20250918133209-GYB1273705@gentoo.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] riscv: dts: spacemit: define a SPI controller node
-To: Yixun Lan <dlan@gentoo.org>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- alex@ghiti.fr, p.zabel@pengutronix.de, spacemit@lists.linux.dev,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20250917220724.288127-1-elder@riscstar.com>
- <20250917220724.288127-4-elder@riscstar.com>
- <20250918133209-GYB1273705@gentoo.org>
- <5956e320-7cbb-4d9a-95a7-720cfa6b9654@riscstar.com>
- <20250918140633-GYA1274501@gentoo.org>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <20250918140633-GYA1274501@gentoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250918133209-GYB1273705@gentoo.org>
 
-On 9/18/25 9:06 AM, Yixun Lan wrote:
+On Thu, Sep 18, 2025 at 09:32:09PM +0800, Yixun Lan wrote:
 > Hi Alex,
 > 
-> On 08:51 Thu 18 Sep     , Alex Elder wrote:
->> On 9/18/25 8:32 AM, Yixun Lan wrote:
->>>> +			spi3: spi@d401c000 {
->>>> +				compatible = "spacemit,k1-spi";
->>>> +				reg = <0x0 0xd401c000 0x0 0x30>;
->>>> +				#address-cells = <1>;
->>>> +				#size-cells = <0>;
->>>> +				clocks = <&syscon_apbc CLK_SSP3>,
->>>> +					 <&syscon_apbc CLK_SSP3_BUS>;
->>> ..
->>>> +				clock-names = "core",
->>>> +					      "bus";
->>> can you simply put them together in one line? it's kind of tedious to split..
->>
->> Sure I can do that.  I've seen it both ways.
->>
-> right, it's merely a coding style I want to enforce, to make it slightly consistent
+> On 17:07 Wed 17 Sep     , Alex Elder wrote:
+> > Define a node for the fourth SoC SPI controller (number 3) on
+> > the SpacemiT K1 SoC.
+> > 
+> > Enable it on the Banana Pi BPI-F3 board, which exposes this feature
+> > via its GPIO block:
+> >   GPIO PIN 19:  MOSI
+> >   GPIO PIN 21:  MISO
+> >   GPIO PIN 23:  SCLK
+> >   GPIO PIN 24:  SS (inverted)
+> > 
+> > Define pincontrol configurations for the pins as used on that board.
+> > 
+> > (This was tested using a GigaDevice GD25Q64E SPI NOR chip.)
+> > 
+> > Signed-off-by: Alex Elder <elder@riscstar.com>
+> > ---
+> >  .../boot/dts/spacemit/k1-bananapi-f3.dts      |  6 ++++++
+> >  arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 20 +++++++++++++++++++
+> >  arch/riscv/boot/dts/spacemit/k1.dtsi          | 19 ++++++++++++++++++
+> >  3 files changed, 45 insertions(+)
+
+...
+
+> > diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > index 66b33a9110ccd..a826cc1ac83d5 100644
+> > --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > @@ -834,6 +834,25 @@ storage-bus {
+> >  			#size-cells = <2>;
+> >  			dma-ranges = <0x0 0x00000000 0x0 0x00000000 0x0 0x80000000>;
+> >  
+> > +			spi3: spi@d401c000 {
+> > +				compatible = "spacemit,k1-spi";
+> > +				reg = <0x0 0xd401c000 0x0 0x30>;
+> > +				#address-cells = <1>;
+> > +				#size-cells = <0>;
+> > +				clocks = <&syscon_apbc CLK_SSP3>,
+> > +					 <&syscon_apbc CLK_SSP3_BUS>;
+> ..
+> > +				clock-names = "core",
+> > +					      "bus";
+> can you simply put them together in one line? it's kind of tedious to split..
+> > +				resets = <&syscon_apbc RESET_SSP3>;
+> > +				interrupts-extended = <&plic 55>;
+> why use interrupts-extended?
+> > +				spacemit,k1-ssp-id = <3>;
+> > +				dmas = <&pdma 20>,
+> > +				       <&pdma 19>;
+> .. em, so the SPI will use pdma, then probably you should also adjust Kconfig to
+> select PDMA driver?
+
+The driver seems to depend on the generic DMA engine API only, IOW,
+theoretically it should work with other DMA controller as well. And it's
+even capable to operate without DMA (see k1_spi_dma_setup()).
+
+Dependency to PDMA really doesn't seem something should be enforced in
+Kconfig: it doesn't exist in code level, and the driver is actually more
+flexible.
+
+Best regards,
+Yao Zi
+
+> > +				dma-names = "rx",
+> > +					    "tx";
+> > +				status = "disabled";
+> > +			};
+> > +
+> >  			emmc: mmc@d4281000 {
+> >  				compatible = "spacemit,k1-sdhci";
+> >  				reg = <0x0 0xd4281000 0x0 0x200>;
+> > -- 
+> > 2.48.1
+> > 
+> > 
 > 
->>>> +				resets = <&syscon_apbc RESET_SSP3>;
->>>> +				interrupts-extended = <&plic 55>;
->>> why use interrupts-extended?
->>
->> Because it specifies both the controller and interrupt number
->> explicitly.  Why *not* use interrupts-extended?
->>
-> It's just unnecessary, the SPI node will fall back to find parent node's interrupt
-> which already specific as &plic, brings no benefits
-
-The benefit it brings is that I don't have to search backward to
-see what the interrupt controller is.  I realize it's redundant
-but I do prefer interrupts-extended over just interrupts.
-
-					-Alex
-
+> -- 
+> Yixun Lan (dlan)
 > 
->>>> +				spacemit,k1-ssp-id = <3>;
->>>> +				dmas = <&pdma 20>,
->>>> +				       <&pdma 19>;
-> 
-
 
