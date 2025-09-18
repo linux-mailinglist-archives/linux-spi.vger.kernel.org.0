@@ -1,111 +1,170 @@
-Return-Path: <linux-spi+bounces-10152-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10153-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92589B86C68
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 21:51:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BFB0B86CB0
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 21:57:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6392616B0A5
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 19:51:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13EB2562803
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 19:57:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 821042EC54A;
-	Thu, 18 Sep 2025 19:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328003074BE;
+	Thu, 18 Sep 2025 19:57:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="uhTVDOEL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qYazTVQ3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09252EC0BF
-	for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 19:51:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0375A2D249E;
+	Thu, 18 Sep 2025 19:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758225088; cv=none; b=JCMmtwK0Vz6nqqyh37ZGyzfkt2XjiAtOvxluPN/Mtmm3+wrC4golk8ah3n4fD5vx/JDgwt/sfpOaKMgRG1f0RQYgcYK64gVNHH6tDyV5dxxRxEAa1Vo8TXHsmDEgRChw/qT1s+YdwyKq2bcGwb+RfG6n0pW0Y31XyhCTIZYDQE8=
+	t=1758225446; cv=none; b=pd9+srgTcefgbKLZt7imVoZ/P2vxcA4MBegmhL+nbISood19R1PVpuoZERlznt/+HsbXojyhdi/tanR99ALHiaJUoavoHdXtMUPTBt81uV+3Efo5IqXBztFmMB96/MskyONvOwMkSAJXQ006dc79lk8HV9RzAoeDGbnhhkEwHdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758225088; c=relaxed/simple;
-	bh=+vCpNQP3gmwChNJcUCWInLDRRa5HHP5yLhQ1psOMqTk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NMNDOr6aXOpabqgVnZrDaeMRUW9uBK2A4czRazdttrsnZ0M905hPxYPWru83c6tRgbV+LUFbqY/nVtrwYn0gd15MAxkRi2Cz5GLnH/VbkBXaw/Pi4a8PGEHwgwYMcb6tzRJZwkS5h67MOsfj6ipRa+8DO7A8hju8iAn1DyBaDdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=uhTVDOEL; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-621b4d2b2f3so1080726eaf.0
-        for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 12:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758225086; x=1758829886; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ycb6BrVm3o3tgecg3NZ2b8GKaDVhR9xxtrfWCgsW3GI=;
-        b=uhTVDOEL13vWSEZ+PHy9Gpzci9lgihjB94UiPff8m4ZgUOMFrr5L0r7eMZae+JHgHm
-         Owmm7nu1rKxAgMtXT101hm6pTxVpL64qQObvWJ99wzS4ysBmGGu2ke+o4aeGLmDtWL0w
-         6EoPS660WndQ4blKQujTf/FNMPzqsAk9sg+ZLKWUx0lDp3YinE1ajinBxjC4hCgY+dW5
-         V6IqF7Ncryaafpgc6WTcdHN0PLvzp98GYFOW7TeQW3jORpjR1K3baX5NNbMULS1y56Ac
-         fPMEm52zXPcIb5saHVoZbTll7zFao4S0n7n+T6jgjEacSeQqUe7Z/k14iE/sOgv8D2lv
-         sRqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758225086; x=1758829886;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ycb6BrVm3o3tgecg3NZ2b8GKaDVhR9xxtrfWCgsW3GI=;
-        b=Geok1q2eHr00XwhAzprKS/nU16xwMRykKYfxarche36Yi85BQqlN7CPvv3EHI6Dswm
-         UpP5bWpUZl75oyf3g/zfjo1KIDdkeqknMl1FBdHgiWEXeHfkPm4hTMHPDRX9TcCEKET/
-         dEuYzQnJ2t8Uzl3yAi7aKr6cfX+Vd/1H86W1+LKSJOwfDc/BZi0l0yPQjLg6uHuW2d20
-         2b3e2+LxjmUW+35kqFULOr4pkHoLr0lYp8SvLR2zT6JKaf8OPIZD+rXIfANsAH7RmBlF
-         wlxYM27xx3FokCOvX1pYX/AveIfldhPE1uRghdNqVg8006C2/LnunTSCwC2fSXKP1B5A
-         p38w==
-X-Forwarded-Encrypted: i=1; AJvYcCUZZuFPxsco19pJhqHCYmCyPtj+F5QB6dbbZhSI/mopGXqdA66gmI0AH1v8JZ6ewPTwatIWJnJqzoY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhPqdgdzpsJ17L3hj4Ja3u1o+icS8bqx0gh4He6IDyip6jUYul
-	ZKFzNWvgiZxWeWCVCtU6Iyv/kbokJ2sKnEART10FtKY9G+CTqeCz25pdhi13iuBBqTs=
-X-Gm-Gg: ASbGncvPCUQH4GALMhbHf0LIExjhsAg9FudpNRLHAIIAwzSM6JuIannSYzRYaweZdOH
-	oSaUvOI0qVUejzzjgXHFelP6qeu3cfQiRTkb2J19Z69jFPhkL9IeOEL7411Gdh0lNMstPvP+Nm9
-	cEkwcUyWupsuSVipVMfdxhjV5nb0ar0zsXhLrCMKRotoWkjSDhC6i+sTxpnb8JnaAzHhS+hAL9b
-	aVDst+x/bijhd0cXjz/xIV+tzKFzgK0wttlEkAa3mDnFhwedaBrgtud/mZtzqAOtkrFregzqJT5
-	SVgAynxXkrS1Ky/gGWNRyYroc+svTbXXJS1MFFJ6jNMXBCNFc+dvNsEOBXY5rOfE5kLCPt9Knad
-	eGO/k1WRunhcYZT1fHtwrKTKAnDny/pEhD2Rcy+pc5xQTo7khF9edXgD2b4ZRIcd+Oh78hBhJQg
-	9ef8G0bo7iQRbssgVTz9wlCNYTRwoQ
-X-Google-Smtp-Source: AGHT+IH4gnu5ZviVz4ulNiX2L97wXpeu2HQYjfDnnt0qWqu/Pap+ivM2yq37UDqW5VBY04FXNOqo9w==
-X-Received: by 2002:a05:6870:8088:b0:315:60a6:c28f with SMTP id 586e51a60fabf-33bb3aa16afmr568561fac.3.1758225085748;
-        Thu, 18 Sep 2025 12:51:25 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:55b7:b662:4c5b:a28e? ([2600:8803:e7e4:1d00:55b7:b662:4c5b:a28e])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-336e3af73f5sm1892886fac.6.2025.09.18.12.51.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 12:51:25 -0700 (PDT)
-Message-ID: <46575acd-9e7b-4462-989b-d74de4d86311@baylibre.com>
-Date: Thu, 18 Sep 2025 14:51:24 -0500
+	s=arc-20240116; t=1758225446; c=relaxed/simple;
+	bh=mm1gEryd3OdYL9qRPSiR7N0OmJPd7syrgp/Mbp7JgJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NroGFVPhucq5a4JfIff/04Bw0QioQ0yYOhoduL2KxnzPDrB7yb6FJdnjiJuATb2Yi5UXkWvXDcg/DrmJRpQruesb/XieJkIhTqyo1SPtAXCFapx/cwa/2ghrsnUrkEd5hP6NxUoQ4m7AphZXU0ZgpU+Gy0KbX8t6fV/0NFHbAso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qYazTVQ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9913C4CEF0;
+	Thu, 18 Sep 2025 19:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758225445;
+	bh=mm1gEryd3OdYL9qRPSiR7N0OmJPd7syrgp/Mbp7JgJU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qYazTVQ3FHABUPeeroHTguX3M7ItH4BTfzvcRwMIzdCwakVrYVsST1FB+zOvVi0jl
+	 Pmhr5hOOY6kyhTxgnao8676c7MQU9HHhb2TgotogsyOD1AtwP7M+oX1whUQCr21sY+
+	 5OfPF3wFGLze//KJ6QxcmURMKKF823gqP08Ox3adQIDDBHxijNE6GmiEcLe/FGZfdE
+	 Rq+/1yzWgZTjHFciFmgb7RyP+AsV6pBV1p2PwwDXd2rHCYSF1z8UaW/PkIML4uJDc3
+	 YPWRmzP9wTKB3gR3R/lNGt5oKE/+Y393DFnU2Y/WXJ71IdZ42DfTyBOQ/GyOuaRjDI
+	 6jERCg0fTXHCA==
+Date: Thu, 18 Sep 2025 14:57:16 -0500
+From: Rob Herring <robh@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: Yixun Lan <dlan@gentoo.org>, broonie@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	p.zabel@pengutronix.de, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: spi: add SpacemiT K1 SPI support
+Message-ID: <20250918195716.GA2521514-robh@kernel.org>
+References: <20250917220724.288127-1-elder@riscstar.com>
+ <20250917220724.288127-2-elder@riscstar.com>
+ <20250917231520-GYA1269891@gentoo.org>
+ <3b815302-21f2-4ee2-bf83-c1dba77ce3d1@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/8] dt-bindings: iio: adc: adi,ad4030: Add PWM
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jic23@kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com,
- eblanc@baylibre.com, andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, corbet@lwn.net, marcelo.schmitt1@gmail.com
-References: <cover.1758214628.git.marcelo.schmitt@analog.com>
- <7a1a68a33769c69967bcffbbf7a0bdfec69516ed.1758214628.git.marcelo.schmitt@analog.com>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <7a1a68a33769c69967bcffbbf7a0bdfec69516ed.1758214628.git.marcelo.schmitt@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b815302-21f2-4ee2-bf83-c1dba77ce3d1@riscstar.com>
 
-On 9/18/25 12:38 PM, Marcelo Schmitt wrote:
-> In setups designed for high speed data rate capture, a PWM is used to
-> generate the CNV signal that issues data captures from the ADC. Document
-> the use of a PWM for AD4030 and similar devices.
+On Wed, Sep 17, 2025 at 06:40:31PM -0500, Alex Elder wrote:
+> On 9/17/25 6:15 PM, Yixun Lan wrote:
+> > Hi Alex,
+> > 
+> > On 17:07 Wed 17 Sep     , Alex Elder wrote:
+> > > Add support for the SPI controller implemented by the SpacemiT K1 SoC.
+> > > 
+> > > Signed-off-by: Alex Elder <elder@riscstar.com>
+> > > ---
+> > >   .../bindings/spi/spacemit,k1-spi.yaml         | 94 +++++++++++++++++++
+> > >   1 file changed, 94 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/spi/spacemit,k1-spi.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/spi/spacemit,k1-spi.yaml b/Documentation/devicetree/bindings/spi/spacemit,k1-spi.yaml
+> > > new file mode 100644
+> > > index 0000000000000..5abd4fe268da9
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/spi/spacemit,k1-spi.yaml
+> > > @@ -0,0 +1,94 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/spi/spacemit,k1-spi.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: SpacemiT K1 SoC Serial Peripheral Interface (SPI)
+> > > +
+> > > +maintainers:
+> > > +  - Alex Elder <elder@kernel.org>
+> > > +
+> > > +description:
+> > > +  The SpacemiT K1 SoC implements a SPI controller that has two 32-entry
+> > > +  FIFOs, for transmit and receive.  Details are currently available in
+> > > +  section 18.2.1 of the K1 User Manual, found in the SpacemiT Keystone
+> > > +  K1 Documentation[1].  The controller transfers words using PIO.  DMA
+> > > +  transfers are supported as well, if both TX and RX DMA channels are
+> > > +  specified,
+> > > +
+> > > +  [1] https://developer.spacemit.com/documentation
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/spi/spi-controller.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - spacemit,k1-spi
+> > one enum is effectively equal to const..
 > 
-> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
-> ---
+> OK.  That's an easy fix.
+> 
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Core clock
+> > > +      - description: Bus clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: core
+> > > +      - const: bus
+> > > +
+> > > +  resets:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 1
+> > > +
+> > > +  dmas:
+> > > +    items:
+> > > +      - description: RX DMA channel
+> > > +      - description: TX DMA channel
+> > > +
+> > > +  dma-names:
+> > > +    items:
+> > > +      - const: rx
+> > > +      - const: tx
+> > > +
+> > > +  spacemit,k1-ssp-id:
+> > > +    description: SPI controller number
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > could you explain a little bit why this vendor specific property should
+> > be introduced? I took a look at the code, and didn't get the reason
+> > behind.. or what's the problem of simply using "pdev->id"?
+> 
+> This property was carried over from the vendor code.  It is
+> optional, and if it isn't specified, the platform device ID (-1)
+> will be used.  It's just intended to provide a well-defined ID
+> for a particular SPI controller.
+> 
+> > we should really be careful to introduce vendor specific property..
+> 
+> If there were a standard way of doing this I'd love to use it.
 
-Reviewed-by: David Lechner <dlechner@baylibre.com>
+The standard way is we don't define made up device indices in DT. Well, 
+except /aliases allows you to do that.
 
+Rob
 
