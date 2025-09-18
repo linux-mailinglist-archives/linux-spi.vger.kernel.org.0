@@ -1,81 +1,82 @@
-Return-Path: <linux-spi+bounces-10127-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10128-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67814B85B85
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 17:44:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01F04B85E20
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 18:05:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17751547F3A
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 15:44:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A84CD561DDA
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Sep 2025 15:58:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09C12367AC;
-	Thu, 18 Sep 2025 15:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E551F312814;
+	Thu, 18 Sep 2025 15:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="XabrV3B0"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="tv+rqrFD"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12A330F95B
-	for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 15:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75D42F7ADC
+	for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 15:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758210260; cv=none; b=OnA4lT3FUGYa4fiWr/oPf1WSmk2bQTfFzco6Jjfz34TOxT8XMHrjsm+iOWS5dOm4SRFoTf1Z1qLk4ny/QTuKn127PH5t7LTZjc8+F0Psa1C+I6/XHGz4KCpnzfcc5r7TWhhq0+uRvs0N3rOryMIz4OogDv3rhQlBo8Yj6/fxJ4A=
+	t=1758211119; cv=none; b=T4QoCf/qwFKpTO9LZ/uV6U4l0OxX3aMwrEVzTycTLkEPAvZOaSifwMOxp5T+mkBpvnIbx8RR/da0bn2LBSh18MpoxHPc/XD0Ad5MsTyYqQ2i6YdJVCkdOCYV4gxePmBL4K12iCABfZMx6s/t5TQXoaH9shwpo8a1M+rjqNA9618=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758210260; c=relaxed/simple;
-	bh=2Tb9OeqfqChMAE/bW8nihG5bBkS+86woGLLzweX2qi0=;
+	s=arc-20240116; t=1758211119; c=relaxed/simple;
+	bh=mBOMOV2UEaBJS1bN98PWLw1Tk1D7AqCi+UV4js6u0C4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BbXHHDxCL6oNKzQ8WhteeN7Lj6Ix5BS9DlI8WLzFmD1okmYH/2XiEL/0C6L85gLagHXs5rr7OnFBhdQXjaMm0o1OhW58d75V2O7ziz3i+IfIocltQcCYQwyjc7siqDluKZQ7o7VP5mN0ZpRagTnw6tdjg8d0U8aw4mXl1AozvbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=XabrV3B0; arc=none smtp.client-ip=209.85.166.54
+	 In-Reply-To:Content-Type; b=QpMkCJYQSE1NSZ0VCOVQ+vFOKJhPraOzPkl6XwCyOJswuaF6dVEtI5qEE4vQ9/U9COKByJ8OP5ADqaf/6Q8ih7/jb8f6J5qkTFyX5rdUBGKsW9foe2LTJD1K3SLAryYOW3UtGHeNWCov/iYXqSJq2Oq6Lsly2mTQ6XWDV2wsl94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=tv+rqrFD; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-8877b60f7a5so43195539f.3
-        for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 08:44:18 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-892db7eb552so147889039f.1
+        for <linux-spi@vger.kernel.org>; Thu, 18 Sep 2025 08:58:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758210258; x=1758815058; darn=vger.kernel.org;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758211117; x=1758815917; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IYhrldrOGtsDoKDXkPai5Tm2eHb8T6uZE7LbE34+y/M=;
-        b=XabrV3B0ZA6VlMwP4NAAScWUl9nhxuybX2rhH4pBIREmSP0sZIDpddahi3/9WNQUr7
-         FznFvKJdUN2PnRO0CBZAAHMyFla/yzrpYVT53J5wEmbYWuNGOZdKuBhnpSa0Cpq/uV7u
-         YDWFdBG6OS4nP9l53Epf3A1OuAltT72R4V5426eUkZyXhJkgnIHmmgi5iOoUliGllYlb
-         4R8fcOz4V7zIyxsGGa4TPQ+//HmV59H0nDstoX0va4ynaAkPWVkuEbjtSUBXue0i3tLS
-         dvZ5jbH44sWzJwwDFFH01Xz8jrbVP240yfqbPC59ggZ8dy/0czmdo4DSSYPp0chIXpxK
-         WleA==
+        bh=RWwPXk3+CMDIY3Ii9TMDH0aQbdb6ssOVOtszqmINL5E=;
+        b=tv+rqrFDhhZ1zWEqMlc46R5cVvq1FwRB927hGDcUIHFE09mdtalr6//en/8gIqUILc
+         I6PDe3a6dhEb+M5mmBNVcmhWy+A9f2KOQ3cjv4p30BUXKa6C13C9bpuOZYtb+LYiQrpb
+         GqRXf5hrGK6ZweEtSgoV6XRqHsq+acdIb+1NiNvdT82lAD5cbx6anf14porOfX2ztoaX
+         nQIWJOrsbJyU8XduM5YQPA4mcqgyDRDsgT7GmFw3vESLKRnrZZsbKpx7fRB3kQ8FEPvd
+         dHiSGNuHMs7S+7dLoxehXxlyh4P5B4XpnvO11PeGwKu8maBUUeaUtnk0j8KJ8nlAzIGI
+         3UmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758210258; x=1758815058;
+        d=1e100.net; s=20230601; t=1758211117; x=1758815917;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IYhrldrOGtsDoKDXkPai5Tm2eHb8T6uZE7LbE34+y/M=;
-        b=wryMYA3HGZfJektpQnbcI1LOJ42Bpyr3ylzj7SMPMbsctAkHhZt+2xl5uH+S9cpyK4
-         5uiw0c8BRfnI33cnQDkDI39RwDuNrYQ2aTL+sO5i32bE9V4kIVToqMGA4PS3PUw7Nppa
-         JdZds3MOW2HBoM2RWVABxq8PWgg49OJQOFa/RiCWB+xBr4qK+xa5DdtQSNhMVvlHNLES
-         xqYPX0jgAmOwOn79NjLdc0XGZhhiBCNQ3ssZ/+X4BlgblnSBBuhBFOuLNJQz6vJJ1k5q
-         /uNiEeky3YBp1PggqXCC8wOwiaTh5n/BLRADZsfeEY6ahLiwv49x9mLJFJaJ2KcjwiXR
-         UQAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIWJGqlXIi4GWe96ayTX6YhaVeNK9uzXyDSRhZEjJcoeixD3IM329ZtucwhH8hkisfKCnVpPkXsVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLf3d3SDsxogbZ/qS8r2ViCgTZA84nmyC4SOJiYT6wr3H7YqAr
-	qGbmobeuCKXDeEHQ3o7kOoaTn1N5HmQsu1rTIthwn59HxiOayJFdURAWLp8T+QbSXAA=
-X-Gm-Gg: ASbGnctkEyCGSftwEo1friBaDLqDXYMC4eJxZ/gXs/sEO4r1UahzQLMmMftDCvXdZ0C
-	Zmmj2W/4+3NEKOFal1sd7S49tew1xAHQNyf3hxAF5tCKeeV9oo4vKMMdY/3Qb0gitnr9sJMaKby
-	73ZZ1djuh8c1Pe6dKBA7cRnO99wBhEpdowHjeQxiYjyWAM3wqPnkfh9k8ArTAQNaMNC9sdCds++
-	9QKo7GCrcbdrqSsSXCrCf0xw5wh/aLr9TxS+BHt2GOj+Tj4oMPrI6ivNc1pnT7N2t6j5JPvzXV8
-	Fs8O9vMRiqHZDtspIexpeg5GyyU2nTCAzOGCnRbzpROpPSIgXjx/JVtPDXPmOysFJTrclvsPQSX
-	8p1VNrDMXSOBjdP+qgaZ7Ib7AViMIgSngAycmExM1TcSVdQMdJj4iJVqqGAg/rK5VrJNXEyxvEG
-	93K6vuEg==
-X-Google-Smtp-Source: AGHT+IHyY949yC9PkpeT/QOBqAaxoqc0DHrnN3CUC5h5A0iVJ6RUW339AkYSX5xvq1CVEEDiEGOZ/w==
-X-Received: by 2002:a05:6602:2c95:b0:887:50ab:5c8c with SMTP id ca18e2360f4ac-89d28b42cb0mr960281739f.12.1758210251747;
-        Thu, 18 Sep 2025 08:44:11 -0700 (PDT)
+        bh=RWwPXk3+CMDIY3Ii9TMDH0aQbdb6ssOVOtszqmINL5E=;
+        b=Gr0vKYvJwXHt7LGl0kRduRmsqQdsHxx9pzKZF6ym0CRUeS5E5YyNUxmRfmRBWpIQMU
+         bJhA0c11bHqTtzKEDWD82zW3qXrMsfJ0AY2UKCV5FXURoapHlf3d+5JEHDWEMaXCyzcF
+         kx5jEU7DInpK3jFzCZ5/WUhgbmN/76Tzqzrv4yRDjahQvcUcn0ImrS8O5zBbgNJh7/kV
+         dPOsEhgvcrq4kkOtgJ/A55yD47mJhASMPXGi/h4ozBkYlkbcNcZifFKXjIDX2p1NA1Uk
+         fLHOjY9TGm2cO4WOoOyFJM4BbgHf/qXyHhCPNXVVJDr1Pt13jt41cPEf8579sF4DtJFA
+         9b3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ2lf5uoBcu5ZvRF4njFFgJoE/IIrh4/vERTFjh0AMV2abkKOa4MVMxXlPovUUnVhHR/RtxG/56DA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/0nAoHfv8jfW9QJLCf+8q/xcx99wIawkYMVZAc1mYGz7SFf9G
+	e7FngcddJqOOJWXbNIHoO+uiL+Xx5ANODHfyTd+daWqeRpY5fTMGnAVR/ZdaB53SjRFJNCUD0rQ
+	QTwao
+X-Gm-Gg: ASbGncsD3pPVYrHV/CTM6HwcBOA8uOQk+YK0et76mILScBD8nSNdmtzCS0HKp5vEnTp
+	Q7Dy8HX5lF0Jb9McarA5Xg3bEnMoLQo8MztGUv5KjY4TNM8C/nZJsmQDvRJYMQPH4H1B8584kRB
+	g8h4Vwrv8BQPxhhkRVu4fHQb9lJSj5kXtIzq9NTmsMGFeIzWiJd04xBrq9QLk4RMjEVklnNG0L8
+	sE4nj4+qDyIXf8KG9/HZrS3jScQOugZwZhVGqJ7xY9gs2dJMIVn8K7Qbq+k91TjiZ0gGjWKMDwY
+	9/TxwmLNTgqGHAd0xhT82bFF+Q42xTAR1gcBKC5O/ZyHg4pHEXO8bDxXEsVIWwkDGLI1nJxEXkb
+	RvoTBik8XgLNgPu1mJFTfF/8BDg4CcRW94G4LurA8lcsYHBRCTj4hVnUrSpR5a1wZ8bMnc76+zz
+	15Zpcd2jBoclKqRA89
+X-Google-Smtp-Source: AGHT+IF7L6Nzhpq00zRjUOtUlsvmOyj8YvPWYBfqvWW1/q2pHZGHXZWCIyaJ4bn8yb0d408EYIgLfQ==
+X-Received: by 2002:a05:6e02:b48:b0:41f:8265:4100 with SMTP id e9e14a558f8ab-4248199c677mr962075ab.18.1758211113083;
+        Thu, 18 Sep 2025 08:58:33 -0700 (PDT)
 Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-53d560d3993sm1050465173.67.2025.09.18.08.44.10
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-53d3a591637sm1058871173.15.2025.09.18.08.58.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Sep 2025 08:44:11 -0700 (PDT)
-Message-ID: <057f2f54-c370-455c-95ca-83f97d884f3f@riscstar.com>
-Date: Thu, 18 Sep 2025 10:44:10 -0500
+        Thu, 18 Sep 2025 08:58:32 -0700 (PDT)
+Message-ID: <000a41ee-a099-4944-8ef5-eed768f905cb@riscstar.com>
+Date: Thu, 18 Sep 2025 10:58:30 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -103,38 +104,42 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 9/18/25 9:39 AM, Yixun Lan wrote:
->>>> +	void *bufp = io->buf ? : dummy;
->>> simply s/bufp/buf/, embed pointer info into variable doesn't really help
->>> let's leave compiler to check
->> I called it "buf" originally and changed it to "bufp" because it
->> actually advances through the buffer (either the one in the IO
->> structure or the dummy buffer) in the loop.
+>>>> +	virt = drv_data->ioaddr + SSP_TOP_CTRL;
+>>>> +	val = readl(virt);
+>>>> +	val |= TOP_TRAIL;	/* Trailing bytes handled by DMA */
+>>>> +	writel(val, virt);
+>>> I'd prefer to do like this, it's more easy for people to grep..
+>>> 	val = readl(drv_data->ioaddr + SSP_TOP_CTRL) | TOP_TRAIL;
+>>> 	writel(val, drv_data->ioaddr + SSP_TOP_CTRL);
+>> This is an idiom I use to make it very clear that:
+>> - The address being read is exactly the same as what's being
+>>     written
+>> - The value read is being updated with bits/values
 >>
->> I don't understand your comment about the compiler.
+>> I find that putting the "| TOP_TRAIL" on the same line as the
+>> readl() call obscures things a bit.  Like my eye doesn't notice
+>> it as readiliy somehow...
+> fair, let's put it into another line
+> 
+>> Yours is a pure coding style comment.  There are two pieces, and
+>> I'd like you to tell me how strongly you feel about them:
+>> - Using virt to grab the address being written and read (versus
+>>     just using drv_data->ioaddr + SSP_TOP_CTRL twice)
+>> - Put the "| TOP_TRAIL" on the same line as the readl() (versus
+>>     having that be assigned on a separate line).
+>> To me, the second one is more important than the first.
 >>
-> for the compiler to check the type.. because people could even name it as
-> 	u32 bufp;
+>> Let me know how strongly you feel about these and I'll update
+>> my convention througout.
+>>
+> I'd strongly prefer not to introduce 'virt', so be something like this:
+>   	val = readl(drv_data->ioaddr + SSP_TOP_CTRL);
+>   	val |= TOP_TRAIL;
+>   	writel(val, drv_data->ioaddr + SSP_TOP_CTRL);
+> 
 
-OK now I see what you're saying.  To me, "bufp" as a pointer
-that moves through a buffer; it would normally be initialized
-to "buf".  Where used, "buf" doesn't change (points to the
-start of the buffer), while "bufp" does.
-
-It is an established convention, so at least to me it's carries
-that meaning.  I am *not* using the "p" to indicate it's a
-pointer.
-
-I looked around for some examples, and there aren't a ton of
-them, but here are a few:
-   setup_dma_scatter()
-   __cmdline_find_option()
-   tmc_etb_dump_hw()
-   dnet_start_xmit()
-
-I'm planning to keep it "bufp".
+OK.  I'll do it this way throughout the driver in the
+next version.
 
 					-Alex
-
-
-
 
