@@ -1,122 +1,96 @@
-Return-Path: <linux-spi+bounces-10170-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10171-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6496B8A7C3
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 18:03:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86259B8A823
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 18:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33C3B3AF08C
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 16:03:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6497F1C2239A
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 16:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA7531E884;
-	Fri, 19 Sep 2025 16:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B57F7313264;
+	Fri, 19 Sep 2025 16:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHIUoG5I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajYGWtgk"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92EB031E0EF;
-	Fri, 19 Sep 2025 16:03:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DD723C4F3
+	for <linux-spi@vger.kernel.org>; Fri, 19 Sep 2025 16:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758297813; cv=none; b=c9MXCIhTsRpUgDIZlcRklwxck6S8n1hfTfnmZAhvr5GwP9VB0Rxk5NNu9GGTC4FTcchEh8HyX5D6u7ZUX0KHzgCF43uUTtsl7HRqTFr0KVMVHtCkZwD/uZQ/X5+NK4GW6RMwf/vjwdQ2QZ3HtJWeWcUJamsIPifDR5UNy+dAwjc=
+	t=1758298208; cv=none; b=h3aKkg8Ea/io9XRPj6WEhixF/HqbNcD7TdQLjI+RHCnbFZcyFi2PYfHPsZhG+7dFI8PbQ6Ipo3K+kFonrlGomUKxOGLcOrFY6fuzEIqrPS/eKrhSI1P+VuLJ3On8aRWAJwemO4V1LDk/rRpWkgpaawQeowCUtAgi6+DKVE267jE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758297813; c=relaxed/simple;
-	bh=GvnqDnWIKf8bdAkEc9f6iDS6tA/AxRcZVSoMZ2CD1mk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=q6DNV/xy85e8gUiFuIA/1m9/BH0CRQZ7GrXF8s2Ksrhdjf0scW8zGdRMQKsELX+83VTc2u7W8KfP6fqihjwnf4UVMCcJe8R/bvfX8BRD1pajFsn2fWDCWofsOBsVmraJHI0KiwN2BjkXuzvd3WNFDwIWUoKSZvXs+u3UKp+muqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHIUoG5I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C427DC4CEF0;
-	Fri, 19 Sep 2025 16:03:30 +0000 (UTC)
+	s=arc-20240116; t=1758298208; c=relaxed/simple;
+	bh=L6Mg1aiJdeU8YDtlDC8tWNZWa/cjyxvtbJnAQr5UDVU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=VoGC8ZI8XBvQkMvnQUiYM83nS+oXfC0yBPiZx5jjFmqQe1Bmvqkz75rfaiqKIfGqGewxKy88uScBF8UqU5VOICybQeA2qJHW3mZIAHJmT4H4T7O5M2ey9fZIqk4aZfIRBvPWMcDqBk0mluAmjVc7hWYCK4nQTzMcj2FW5APZGvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajYGWtgk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBA4C4CEF0;
+	Fri, 19 Sep 2025 16:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758297813;
-	bh=GvnqDnWIKf8bdAkEc9f6iDS6tA/AxRcZVSoMZ2CD1mk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=qHIUoG5I7IDeVsUXeHXVI1sSPkiNeIbJv8lx0rSrR4n2o1VRmP5hBQi8TnbXKivAl
-	 /M3v62MpnO5NmdelbAQGDQ1ktZuTX6sjcf0GGyhl5vN9ZUw8YWBgWfKu6bKtgF5DIV
-	 8CQGI0+UUsV9LVinSIfYYsQGFsMSvnRXQkXwjZ7/oQiZwXoC10T6QwStPfPL6op1FD
-	 B9HvSQ0T301zyEurSLWvkJ9z9nz8kO2tzhroB62lA0vv1ViZ5YgiALl32LIaFG6fZ3
-	 VWTe5x+/BxGuxxtPDQbmRPV5Nx+Mk9qJQFJ5liEbiT6WQZZkdy1byrelL0GDtnfJIJ
-	 i+t1W8BsEZ2aA==
-From: Mark Brown <broonie@kernel.org>
-To: Han Xu <han.xu@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>, 
- Frank Li <frank.li@nxp.com>, Haibo Chen <haibo.chen@nxp.com>
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
-In-Reply-To: <20250917-flexspi-ddr-v2-0-bb9fe2a01889@nxp.com>
-References: <20250917-flexspi-ddr-v2-0-bb9fe2a01889@nxp.com>
-Subject: Re: [PATCH v2 0/5] spi: spi-nxp-fspi: add DTR mode support
-Message-Id: <175829781053.161854.17379770923486529628.b4-ty@kernel.org>
-Date: Fri, 19 Sep 2025 17:03:30 +0100
+	s=k20201202; t=1758298208;
+	bh=L6Mg1aiJdeU8YDtlDC8tWNZWa/cjyxvtbJnAQr5UDVU=;
+	h=Subject:From:Date:To:From;
+	b=ajYGWtgk022cz/SJ05h2BnPWJ7mwYBKNcv0AAwMsMb0ZGxvII7mBK8kLjcQNR9GD1
+	 iccovK11hK/WaUSrUxQKdoBEHTo1ucP/DaDkKmpAUv8b4Lh38ShCdX+TN/UrbvxAhS
+	 fAtmxpDfhrvhEFvVl0Y2LqprtsJoPbkOgaWPRfr/y5rY6OdAiK/m7AzrCBouE0bfAQ
+	 0dFcX7L82NYNEBf/9sJpnzFTBFhUNz3i6JvfOwqvrilrnzi6kG764JZD2gyY1b1Bd4
+	 qN6Z8gp6VE8U82eJzcAq+Jw7a/rqITAR3c9VbzHpdV9USt/X5j0tcr8XeJMKmZpOdj
+	 0MUhnHHIMOlbw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EE92739D0C20;
+	Fri, 19 Sep 2025 16:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-56183
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175829820741.3615947.15303710581299128231.git-patchwork-summary@kernel.org>
+Date: Fri, 19 Sep 2025 16:10:07 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 17 Sep 2025 15:27:05 +0800, Haibo Chen wrote:
-> this patch set add DTR mode support for flexspi.
-> For DTR mode, flexspi only support 8D-8D-8D mode.
-> 
-> Patch 1~2 extract nxp_fspi_dll_override(), prepare for adding the DTR mode.
->         in nor suspend, it will disable DTR mode, and enable DTR mode back
-> 	in nor resume. this require the flexspi driver has the ability to
-> 	set back to dll override mode in STR mode when clock rate < 100MHz.
-> Patch 3 Add the DDR LUT command support. flexspi use LUT command to handle
-> 	the dtr/str mode.
-> Patch 4 add the logic of sample clock source selection for STR/DTR mode
-> 	STR use the default mode 0, sample based on the internal dummy pad.
-> 	DTR use the mode 3, sample based on the external DQS pad, so this
-> 	board and device connect the DQS pad.
-> 	adjust the clock rate for DTR mode, when detect the DDR LUT command,
-> 	flexspi will automatically div 2 of the root clock and output to device.
-> Patch 5 finally add the DTR support in default after the upper 4 patches's
-> 	prepareation. Since lx2160a do not implement DQS pad, so can't support
-> 	this DTR mode.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: Add QSPI support for sam9x7 and sama7d65 SoCs
+  Submitter: Dharma Balasubiramani <Dharma.B@microchip.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=999852
+  Lore link: https://lore.kernel.org/r/20250908-microchip-qspi-v2-0-8f3d69fdd5c9@microchip.com
+    Patches: [v2,1/5] dt-bindings: spi: Document sam9x7 QSPI
+             [v2,2/5] dt-bindings: spi: Define sama7d65 QSPI
+             [v2,3/5] spi: atmel-quadspi: add padcalib, 2xgclk, and dllon capabilities
+             [v2,4/5] spi: atmel-quadspi: add support for SAM9X7 QSPI controller
+             [v2,5/5] spi: atmel-quadspi: Add support for sama7d65 QSPI
 
-Thanks!
+Series: spi: spi-nxp-fspi: add DTR mode support
+  Submitter: Haibo Chen <haibo.chen@nxp.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1003222
+  Lore link: https://lore.kernel.org/r/20250917-flexspi-ddr-v2-0-bb9fe2a01889@nxp.com
+    Patches: [v2,1/5] spi: spi-nxp-fspi: extract function nxp_fspi_dll_override()
+             [v2,2/5] spi: spi-nxp-fspi: set back to dll override mode when clock rate < 100MHz
+             [v2,3/5] spi: spi-nxp-fspi: Add the DDR LUT command support
+             [v2,4/5] spi: spi-nxp-fspi: add the support for sample data from DQS pad
+             [v2,5/5] spi: spi-nxp-fspi: Add OCT-DTR mode support
 
-[1/5] spi: spi-nxp-fspi: extract function nxp_fspi_dll_override()
-      commit: 614180a54d5f21ccb4f60042d19744694d31d3f8
-[2/5] spi: spi-nxp-fspi: set back to dll override mode when clock rate < 100MHz
-      commit: a9888b3222ec73d055447a39cf9a0118f67497f4
-[3/5] spi: spi-nxp-fspi: Add the DDR LUT command support
-      commit: 3c1000e15fd0eb387fcca420c9fb36ae07887782
-[4/5] spi: spi-nxp-fspi: add the support for sample data from DQS pad
-      commit: c07f270323175b83779c2c2b80b360ed476baec5
-[5/5] spi: spi-nxp-fspi: Add OCT-DTR mode support
-      commit: 0f67557763accbdd56681f17ed5350735198c57b
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 10
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
