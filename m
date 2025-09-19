@@ -1,72 +1,135 @@
-Return-Path: <linux-spi+bounces-10172-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10173-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F06EB8AA85
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 18:57:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BD52B8AC36
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 19:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3C61892E71
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 16:57:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFB177E7925
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Sep 2025 17:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18572BE622;
-	Fri, 19 Sep 2025 16:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A28732277D;
+	Fri, 19 Sep 2025 17:29:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cT6MdY1J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsG07qKK"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6B4254848
-	for <linux-spi@vger.kernel.org>; Fri, 19 Sep 2025 16:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3070322771;
+	Fri, 19 Sep 2025 17:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758301017; cv=none; b=kn6KDaabipnLsua9Aftt8oIwXEQJEofvnq/aoOjg2teDBb/Pyg1PsIYYdlsj35+iFuz/45rMeSaHptgE0zEhXCW1fc3xKAVJVB1++hp1FEzHIHDEH7FyApcqRbwPaQ9cikFHVpMJNPGN/DVwkz4ON2sCIiEKnjC5Y5mxc8r2f9M=
+	t=1758302976; cv=none; b=ttnFho523+RnyadqHHaRoBHHsmBCd3JrFmmi2ChFLENxBITGo1OLjc4hAy5HDQItSenv5ZcccT7zE9Mr9nNGYmXjzfrVN9amun2oNuqs39/ZyWS9zZlH+cgUhleNnwdU9O7eUF4rk+cxu5nM2ENKZqVci56tmNt0tfrLt0d1uUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758301017; c=relaxed/simple;
-	bh=8xLamae9nOZrQvBLc5188bBaLnbtnsS2D+mR3eWbx9k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=AGMKsVoO4E5/67sN6TxKMXesidcwb9ONQlVc0lrOnTcjac5xMUxiqEf2qI5fNu1byYvoVo/FgQG/xxtYvCGpJCEPfY1I96v3MTwPJeisND3j1t0UvatZ0ucZQODpKUx/trluQ8hOwdTnL3pnybAJMjLqd2QcXvRKVVQiEi3NSIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cT6MdY1J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547A8C4CEF0;
-	Fri, 19 Sep 2025 16:56:57 +0000 (UTC)
+	s=arc-20240116; t=1758302976; c=relaxed/simple;
+	bh=yolyFSvAZQSCV4o00YkI5zTRWR/ZeCIulMzo4rybVAs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V5scXZJ2v3BeLsjIR9LdmKK6YL3xupG4BOvl9aMR6FYgFUX+lqKrlVG/Fjkr9MkcSiKIPMePVvW4y4NksBZcE8Iet5B2XAccrylaEY4/UZTpRH49N6uorNfQhLelLuvtbngi159a06nSUNaW8mh1aBgIri+EeTzW4k6EuCYDlC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsG07qKK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B17C4CEF7;
+	Fri, 19 Sep 2025 17:29:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758301017;
-	bh=8xLamae9nOZrQvBLc5188bBaLnbtnsS2D+mR3eWbx9k=;
-	h=Subject:From:Date:To:From;
-	b=cT6MdY1JgSVD2YKkejgGry8IgQ9+LhyViSNS3Sex4FnMu0KI6WFmVAFM5MK0zEmxB
-	 dQ9OfK7Jrgr1eJcpO4fp+8Lkb2u57W6vHcl4dBhODOFMu8/dHjEX0tkfNrg/jgqED0
-	 N7QPow5NFnzQYW6xo2qdsNemU1QddjeawaI6/0iBMmo8lS5FSPQSUMmB/VMfO0+0Mx
-	 9xuGhXRlAh/vWMX5QIxBM4g4i6Y5p/e6mVcoYgllgaLarXTF/6MuJ9AobneoOVir/S
-	 8UwJa71ocMC9JS409WbOpb+eU6VaI079GldliGEtNTTVXbFI+x9vd6WlS0kbNaZ5LK
-	 PjVjfcZp5+wHQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EBBAF39D0C20;
-	Fri, 19 Sep 2025 16:56:57 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1758302975;
+	bh=yolyFSvAZQSCV4o00YkI5zTRWR/ZeCIulMzo4rybVAs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bsG07qKKniEd6O+WrjI6ci8uYXes5STUKUnnn1PvaSz+EKY86M11/ZMhIhci10tzs
+	 p8k+yFATL57JcJ6e4eUFBGnYFK6s8rRT6SzdtgSoHJtAhzcKfOVOiGa2mOsAf9fXmO
+	 dEuMIZ6eT2TVXmZGs/5eWPO6O8TF4p9yh61hdpiZSI0GaYZVKDDbxr2uQOdcLDcgih
+	 WWlXl78spe/elw1zwYpOpcfjBhjtGwKdNiS44ScY9yL3EQALA4GHfdu4WN1/YtN27D
+	 93jxldHmhlVhShxGlfZZ0JRxGuA8vYpzLN+ZgRw1fAqoiXLQl52U4xX8J8ObOyiduT
+	 yQgD80c8KB/oQ==
+Date: Fri, 19 Sep 2025 18:29:29 +0100
+From: Conor Dooley <conor@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jic23@kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, andy@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+	marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH v2 2/8] dt-bindings: iio: adc: adi,ad4030: Reference
+ spi-peripheral-props
+Message-ID: <20250919-paramount-headstand-c9b5d4d03c58@spud>
+References: <cover.1758214628.git.marcelo.schmitt@analog.com>
+ <5c1c448e3e731fc013e1e3b3fdcbc31f806d41fe.1758214628.git.marcelo.schmitt@analog.com>
+ <f7d7f400-cc43-41d9-bc97-39d308363f14@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175830101648.3630047.16003571623171180044.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 19 Sep 2025 16:56:56 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
-
-Latest series: [v2] spi: support the SpacemiT K1 SPI controller (2025-09-19T15:59:10)
-  Superseding: [v1] spi: support the SpacemiT K1 SPI controller (2025-09-17T22:07:20):
-    [1/3] dt-bindings: spi: add SpacemiT K1 SPI support
-    [2/3] spi: spacemit: introduce SpacemiT K1 SPI controller driver
-    [3/3] riscv: dts: spacemit: define a SPI controller node
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eiMpNmTU9mjnvz9W"
+Content-Disposition: inline
+In-Reply-To: <f7d7f400-cc43-41d9-bc97-39d308363f14@baylibre.com>
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--eiMpNmTU9mjnvz9W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Sep 18, 2025 at 02:39:01PM -0500, David Lechner wrote:
+> On 9/18/25 12:38 PM, Marcelo Schmitt wrote:
+> > AD4030 and similar devices all connect to the system as SPI peripherals.
+> > Reference spi-peripheral-props so common SPI peripheral can be used from
+> > ad4030 dt-binding.
+> >=20
+> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > ---
+> >  Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml =
+b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> > index 54e7349317b7..a8fee4062d0e 100644
+> > --- a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> > +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
+> > @@ -20,6 +20,8 @@ description: |
+> >    * https://www.analog.com/media/en/technical-documentation/data-sheet=
+s/ad4630-24_ad4632-24.pdf
+> >    * https://www.analog.com/media/en/technical-documentation/data-sheet=
+s/ad4630-16-4632-16.pdf
+> > =20
+> > +$ref: /schemas/spi/spi-peripheral-props.yaml#
+>=20
+> I think this is already referenced for all child nodes of a SPI
+> controller because of pattern matching of:
+>=20
+> patternProperties:
+>   "^.*@[0-9a-f]+$":
+>     type: object
+>     $ref: spi-peripheral-props.yaml
+>=20
+> in Documentation/devicetree/bindings/spi/spi-controller.yaml
+>=20
+> So perhaps not strictly necessary?
+>=20
+> Would be curious to know if there is some difference.
+
+I think it's good form if you're actually referencing the properties. I
+don't know if it actually makes a difference in the end result of
+dtbs_check but it may in terms of making sure properties in this binding
+are properly typed when it is tested against. In this case, it appears
+you're only looking at uint32 properties so it mightn't have any impact.
+Rob would know for sure.
+
+
+--eiMpNmTU9mjnvz9W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaM2S+QAKCRB4tDGHoIJi
+0rJvAP9pbgnWHcefL9cZQwGDDaXr8+UfIrd0gSsrfedRiYie+AD8DsnTAienjOR2
+JqyWaPj65PIXAeCWs5vwNEf5aUxIMQU=
+=n/GA
+-----END PGP SIGNATURE-----
+
+--eiMpNmTU9mjnvz9W--
 
