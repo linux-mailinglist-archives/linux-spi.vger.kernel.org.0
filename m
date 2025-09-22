@@ -1,214 +1,122 @@
-Return-Path: <linux-spi+bounces-10217-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10218-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E344B922F1
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Sep 2025 18:18:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FEE8B92387
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Sep 2025 18:29:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1A363A8234
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Sep 2025 16:18:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A34C61643CC
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Sep 2025 16:29:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C75311C09;
-	Mon, 22 Sep 2025 16:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17D0311597;
+	Mon, 22 Sep 2025 16:29:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="JSMYWnY6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SedTejnP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE549311975
-	for <linux-spi@vger.kernel.org>; Mon, 22 Sep 2025 16:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D99320FA9C;
+	Mon, 22 Sep 2025 16:29:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758557850; cv=none; b=HnoQ85EqXNzRhVpd11NDzx/gFvGCb1PgiUkvWM7f9GDf/HBQE2AOraA9VmJVL7tE9dymQP4hKtAQzrQK080K/zGaTsALOrhd5FO38OxwZZvKrQqMQRg8QdxELcI+8P/11df+7/31mHb5h7O/4OZXVnq6GmE4RVer+g8E+jXThx4=
+	t=1758558580; cv=none; b=QHxX1S3C4PAUosys+QwaNF6m7FMJcKjRNuZDsd7l686DunJokbgqJ4Zf3sV2H1cDNRrTw7GJYGI11s6G6/yR3dv7ZYApdSX+sGZw72slk7LQgtHMgABTxTWBmWQIN/76kdx6fN6LzsFvB+Y+Cpw7CY+Ioo4rHMoLieMES5gRtX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758557850; c=relaxed/simple;
-	bh=NlbheDXpECv8KOzHHrPYOJU3W86bTH3Ut6RJOpS2J+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CcSEBuDdur6FCz+WKFJVLbFMG6nJGQq8qnCBE5uTKS/Ayimi/6eyZC0oaBPCoeCTKYVWJy9lFVZcO7low/SUsHcehM6YuCUpGsWBU+Z+o8woYqkDadk5fXdahvD5vAdzGZH87KKom4ePW9vPy43AEYHgrJ9BSeWx3dbsY5HQfMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=JSMYWnY6; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-425715aeccdso9408265ab.2
-        for <linux-spi@vger.kernel.org>; Mon, 22 Sep 2025 09:17:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758557846; x=1759162646; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aoOY7RfK5Srk9OHnvU+owYvzqDNBeS7oAz1E0iurER0=;
-        b=JSMYWnY6b1aq4LTuusPdEF/bkDK0s6nCSWl9YiXI7gGUysANeAbWXN4FNarI5TtzLu
-         ZksnaVez5PvYEuXlH8QtmN9XNoaZHH3uxEppeahuBDfTkI/R2pHFpJcGjDTU0YKUsQiu
-         U7Wdl6vcvmMYh7lbxnn2dWfFHwx19ePptC3Hk0JUjZ3/U9xvZSL19hFFsTE5thPfZT5h
-         BjEXaHLieOgbkuYhfhIvLl3cCp0JjRMYCJ7VYWLH92C6ho4aKEs+5xZJrXRH/TNDtiUh
-         Vy6hNruaAIjxkJDtT+LGVgEDpl8apXzt2i+41NghenN3zUWqQkoS76m4/Mu97yahgDvD
-         ySWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758557846; x=1759162646;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aoOY7RfK5Srk9OHnvU+owYvzqDNBeS7oAz1E0iurER0=;
-        b=QFN1XLHZlF9EtxWa0TQfRt3r6c/tmI7XGqn9HDgMS/PGBjRiXlIOSJ7sSWMn3y+ntr
-         yVI+kwnfre5YF7mYdtR9jOmDP9sYRlvZxRtPlfuPXYTIquMzVwF6AsK/4Ay8QhBwegAI
-         5HmbFTFDgSnFFZfTRL9DBNzenonz9quJWcQ5c3DXinv4L8MWzpesOhJ7wTWuBbN5xbJI
-         dnKPRKE8BYgeCzBhdqJbv3MMcsUjfL2Xht7ydHfaaI8voPJWm1wotRSmebAI74MWcx7B
-         JU8tx71Rg5Tola4uwCbETF/xfBElsX/qNRbRMv3X/HeQCCfxF8PUlGFX3zGAlR9VtIl7
-         XM0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX+0NpLZ4MxUJhJRFPGRrSStWn2/DQKIt2rwfhffNNC45HOMzG7VBNIsAQ1r+PqCBfCLaki8yWDCrc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzSHylgAmiWvHqe8E/MP8KYCjLKLcfZV9dMft2RUw8/g56EKop
-	cE20Gmh3x4Yxt55T//L5y2M4ZQpf4V55vfisoBxg/KKRz7IZYA87l7uKWDfiavujxS4=
-X-Gm-Gg: ASbGncvekcEsl4DBvSNErufDx3dMKSGzE1aRMpWbm39otMLePkyrHaw3aK0sREnVoRr
-	s1mSZQ/Be5Mz0CTIRgVqqdhgQRdF2mwzT2iUXk1bsUh81zvz/94p6RYpxRBcnU3kIHRJg09H5/E
-	HUF+cx5SNANT6+JMkv3TcfnTrSeQuCTuCL9rDu6dUZmR9lw72l5rdnFVZzMgWtafjl9YM1qZQut
-	eo517cOKD3akm4hhE66lLrccH8obZP/QUJEqgRbXiOT0xp0shvYN9QpN72W4MdwzOCNWBq/Oba5
-	c4H+c42K8yP26tXXMI087DSdwWHF4EwbGA9pb5BpNNoSe3GlSmP0qhxdl054hf/OQoKeA5ez5gR
-	KmbFq+5jYpVKiakLBx9tHY5uPO8AOi7ukuppG7gkGRd2/Odvp1qDC/xT//Uiq8rmCgQ==
-X-Google-Smtp-Source: AGHT+IGtbLw0Yh8YMxa0k32ja3gy2lmtWw7KYJ5toaZ8D6XiMR5qUSNHvj3Y8EAnz6GgOP6IVLuhZg==
-X-Received: by 2002:a05:6e02:164d:b0:402:b8e3:c9f5 with SMTP id e9e14a558f8ab-42481911960mr204709235ab.2.1758557846329;
-        Mon, 22 Sep 2025 09:17:26 -0700 (PDT)
-Received: from zippy.localdomain (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-425711d9aa0sm25207185ab.48.2025.09.22.09.17.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Sep 2025 09:17:26 -0700 (PDT)
-From: Alex Elder <elder@riscstar.com>
-To: broonie@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org
-Cc: dlan@gentoo.org,
-	ziyao@disroot.org,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	p.zabel@pengutronix.de,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] riscv: dts: spacemit: define a SPI controller node
-Date: Mon, 22 Sep 2025 11:17:16 -0500
-Message-ID: <20250922161717.1590690-4-elder@riscstar.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250922161717.1590690-1-elder@riscstar.com>
-References: <20250922161717.1590690-1-elder@riscstar.com>
+	s=arc-20240116; t=1758558580; c=relaxed/simple;
+	bh=Lktyop935DFfKFImXAnxl7vjM62RPJLDrgPmg0O6LGk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=idG7JKtKY49zkdZ5GZI+c+/3/ZKRe6gui7gtXO9UNvJloREbYqWk9ZeRpF+juc4SUNeuO+O6cuS2gHtlCKjHERjcOsARMkselx2y5iptQZ5M1+qBWyDnGUtQ4N8fg2Aj+Ej1dlfc6rOMFedOG22W5Aez12BSFm3F/wkjq/vB9N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SedTejnP; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1758558578; x=1790094578;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lktyop935DFfKFImXAnxl7vjM62RPJLDrgPmg0O6LGk=;
+  b=SedTejnPR13dYxPEOnZzOxE3CV8ErZPMXfYFJ2F2F39Cwun7w7DaIHim
+   gOhMqlhYYAFf2PCuwyPIqX6MLTZ3mfO7POz3EvNbgY3ymHzmIk8Ml3x8h
+   1rOgB6Sx7q46l7bHyj2voFUtgCzCdXCYLN6sxZn/DdrIPt6SbV5izjB6D
+   +QojK+aUGg2RlJ2/JEXkPfELYGZvc9+VArfgtjlDX0QtnRBeNN43mhzYI
+   qQx4su642QFYreleJqiw3c/aU1qcTFf1xCC5ZytAtKu6kpInuVjHqCT0Q
+   KqUxzyX94FP/F5whQ1c1ADAyADGwUbvvg15OnWrnfoUzdsy14xZu4vpYI
+   Q==;
+X-CSE-ConnectionGUID: Z35kUL5WS4eQ9eSrax8pAg==
+X-CSE-MsgGUID: k4pZJMXJQsemXkQ5RjxDBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="60942891"
+X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
+   d="scan'208";a="60942891"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 09:29:37 -0700
+X-CSE-ConnectionGUID: d4pQkdktTEG6BDoWC/F/aQ==
+X-CSE-MsgGUID: sPWf7SxnSY2hLbe6BYOPcw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,285,1751266800"; 
+   d="scan'208";a="207258016"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.244.185])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2025 09:29:34 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 70F4A1201E6;
+	Mon, 22 Sep 2025 19:29:30 +0300 (EEST)
+Date: Mon, 22 Sep 2025 19:29:30 +0300
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, Lixu Zhang <lixu.zhang@intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Alexander Usyskin <alexander.usyskin@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/5] usb: misc: ljca: Remove Wentong's e-mail address
+Message-ID: <aNF5ahYzteTjq8Iu@kekkonen.localdomain>
+References: <20250922120632.10460-1-sakari.ailus@linux.intel.com>
+ <2025092234-magenta-scouting-c3c4@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025092234-magenta-scouting-c3c4@gregkh>
 
-Define a node for the fourth SoC SPI controller (number 3) on
-the SpacemiT K1 SoC.
+Hi Greg,
 
-Enable it on the Banana Pi BPI-F3 board, which exposes this feature
-via its GPIO block:
-  GPIO PIN 19:  MOSI
-  GPIO PIN 21:  MISO
-  GPIO PIN 23:  SCLK
-  GPIO PIN 24:  SS (inverted)
+On Mon, Sep 22, 2025 at 02:18:00PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Sep 22, 2025 at 03:06:28PM +0300, Sakari Ailus wrote:
+> > Wentong's e-mail address no longer works, remove it.
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > ---
+> >  drivers/usb/misc/usb-ljca.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+> > index c562630d862c..1846156c0800 100644
+> > --- a/drivers/usb/misc/usb-ljca.c
+> > +++ b/drivers/usb/misc/usb-ljca.c
+> > @@ -891,7 +891,7 @@ static struct usb_driver ljca_driver = {
+> >  };
+> >  module_usb_driver(ljca_driver);
+> >  
+> > -MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
+> > +MODULE_AUTHOR("Wentong Wu");
+> 
+> Is there a new address where they can be reached?  SHouldn't that be
+> used instead of just deleting the intel one?
 
-Define pincontrol configurations for the pins as used on that board.
+I believe Wentong has had plenty of time to update his address. If he still
+prefers to do so, he can do that after merging these patches.
 
-(This was tested using a GigaDevice GD25Q64E SPI NOR chip.)
-
-Signed-off-by: Alex Elder <elder@riscstar.com>
----
-v3: - Moved the SPI controller into the dma-bus memory region
-
- .../boot/dts/spacemit/k1-bananapi-f3.dts      |  7 +++++++
- arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 20 +++++++++++++++++++
- arch/riscv/boot/dts/spacemit/k1.dtsi          | 16 +++++++++++++++
- 3 files changed, 43 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index 2aaaff77831e1..d9d865fbe320e 100644
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@ -14,6 +14,7 @@ aliases {
- 		ethernet0 = &eth0;
- 		ethernet1 = &eth1;
- 		serial0 = &uart0;
-+		spi3 = &spi3;
- 	};
- 
- 	chosen {
-@@ -92,6 +93,12 @@ &pdma {
- 	status = "okay";
- };
- 
-+&spi3 {
-+	pinctrl-0 = <&ssp3_0_cfg>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0_2_cfg>;
-diff --git a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-index aff19c86d5ff3..205c201a3005c 100644
---- a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-@@ -76,4 +76,24 @@ pwm14-1-pins {
- 			drive-strength = <32>;
- 		};
- 	};
-+
-+	ssp3_0_cfg: ssp3-0-cfg {
-+		ssp3-0-no-pull-pins {
-+			pinmux = <K1_PADCONF(75, 2)>,	/* SCLK */
-+				 <K1_PADCONF(77, 2)>,	/* MOSI  */
-+				 <K1_PADCONF(78, 2)>;	/* MISO */
-+
-+			bias-disable;
-+			drive-strength = <19>;
-+			power-source = <3300>;
-+		};
-+
-+		ssp3-0-frm-pins {
-+			pinmux = <K1_PADCONF(76, 2)>;	/* FRM (frame) */
-+
-+			bias-pull-up = <0>;
-+			drive-strength = <19>;
-+			power-source = <3300>;
-+		};
-+	};
- };
-diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
-index 6cdcd80a7c83b..eb8a14dd72ea4 100644
---- a/arch/riscv/boot/dts/spacemit/k1.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
-@@ -797,6 +797,22 @@ uart9: serial@d4017800 {
- 				status = "disabled";
- 			};
- 
-+			spi3: spi@d401c000 {
-+				compatible = "spacemit,k1-spi";
-+				reg = <0x0 0xd401c000 0x0 0x30>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				clocks = <&syscon_apbc CLK_SSP3>,
-+					 <&syscon_apbc CLK_SSP3_BUS>;
-+				clock-names = "core", "bus";
-+				resets = <&syscon_apbc RESET_SSP3>;
-+				interrupts = <55>;
-+				dmas = <&pdma 20>,
-+				       <&pdma 19>;
-+				dma-names = "rx", "tx";
-+				status = "disabled";
-+			};
-+
- 			/* sec_uart1: 0xf0612000, not available from Linux */
- 		};
- 
 -- 
-2.48.1
+Regards,
 
+Sakari Ailus
 
