@@ -1,280 +1,358 @@
-Return-Path: <linux-spi+bounces-10241-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10242-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45873B95DFC
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 14:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBC79B9692E
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 17:27:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ECC7188C581
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 12:50:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7A8918A564F
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 15:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840FF322DC1;
-	Tue, 23 Sep 2025 12:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BB0264A65;
+	Tue, 23 Sep 2025 15:26:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="0+rg1kBp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F0hRix8m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8185B322C9C
-	for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 12:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D2259C83
+	for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 15:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758631779; cv=none; b=qx1GbfT6DE78q6kfBeNjlRPBa7/F04Vr8Yi9l1FoZVbUCUXxESwdOpHxEIdMCKXHXhFF/V/zldPWHxsLJ2D5OCuPs+mUfwqo5gaUu70i0J+yxbpSi9DLI094J2Bflwd0awFRK17i0/MLzJN0Cn4Z/OnOFRQY8IKWEGNm/ElzERU=
+	t=1758641209; cv=none; b=gT4tv7z/Qkv1RyJELYlU4ZsAEC+jyw2dOSQB3ZJrR3nxg9ks/8LHyW/7w0zpkhseTWM+pVjbOnUZ9gIFGl+T+moBiqcraSkBQLgogZkPaieNiYRKY0sZOwToJLvbknXmDURpihcFAa84aWA7Kf0eNT78y3gG3Khg2fBWOamXh8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758631779; c=relaxed/simple;
-	bh=2uX98Zc/lh21ANJqrjffGwf/v9w/8F5ahBMBEj5Ebds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oOO3nlZyBxjssLKSYWc2uBB/ijPcf2gNidkHJSMmo6P9O+nJpBCXywElQJhN/WDocJl6y+a9uELUcQYjNlghVm4xicBQ9wGI3MNVCw6u5+AYVX8pB+C4m7T/qldHbafyYk4hhDNCrM14Iz0YeEKtLLraLLMQXKHmQh1lRUWqVy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=0+rg1kBp; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-8a936b682b3so333589939f.3
-        for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 05:49:37 -0700 (PDT)
+	s=arc-20240116; t=1758641209; c=relaxed/simple;
+	bh=kaKJnwuEkzZmdkmDiRMNrFo/E/FqZSWxp73K52uXOY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lwo2K69H4j8XHiBm1jcMB56yvYegWI9T8CwP4ST8Rxhcfyszcw3eHtAkafd99++tngtxB5VZYRxD6PLxDkuvgCAcwN3VirMMgT2sD0KdW58PUGvvvJEE2kPk10eR6wdy5AgqKl6QN9YMskL4+y5aGcjjgVaBOQh1AgblhR+Ps3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F0hRix8m; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b5526b7c54eso2652151a12.0
+        for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 08:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1758631777; x=1759236577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBPJgYIx7v6+v01N0CRR0tlRD9SDBXZtLGM0u4Al3EM=;
-        b=0+rg1kBpX28qVOannEBlkZE+6aBH7j7G51dgXFVT4LnXuaTPcypAS1MPFVbaxymjCf
-         Mhd6WQKCr8jUAt6vfMOcWJ2YwTbt3KrM9d2Ce5QM9yP3iXqnVzXDVk38x4BN+GRMfOTW
-         Y76UWiNMJ+gRc20seL+PHIzHu8KwhJ3A60dDEKCITNuA0ZS5Jv8Au66dOkUJ6wK1DUq1
-         5hx+bil9Ohxm30AClLNMDFYigyle/WX3TGwwDBG3nMIwd1dxoP3QlIE97lmIf5B+EMu2
-         OsR/s8lhtrLlWaRuT+4MvmoQxpDqc8b32Cmw58tCdLBq8V4e/cdCfE5f3fC9BdolF5rp
-         ieVA==
+        d=gmail.com; s=20230601; t=1758641207; x=1759246007; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JtLLJPUyvnbUDs0ep8FNq7qhKgC6O8fsZCUGkck74jg=;
+        b=F0hRix8mFCj6SdW1bsK0MYkDJ6uVqvYPFTfuXpDL/BkBO65CVxogfh3bcd82yrF0NR
+         5jOavuRK0DrYIxsYBb7ecqsjnOwUvWUfzcIwA0KDAapXjammQFN9ZTOn40Mfzwb4snQX
+         z0an61zzuUpyMJKOPq44t5cgw4y7zlHuGkZK8ZwHZFnHQmB90vAqo9dhX5BXAL2aqI0q
+         KC9EDm/Xx8iQdVcGxJqunfaMd1N++hTdQuxO8Y2OqqOqc821iCO+uvfo2edBKMJlyNIY
+         GzCy7JcJ8nhmNBZPPMlkigDNJnwPsF3Ep146Sa9ZQkN1wjD2mrDVoUXq4bwhbDD+vzZS
+         BHTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758631777; x=1759236577;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RBPJgYIx7v6+v01N0CRR0tlRD9SDBXZtLGM0u4Al3EM=;
-        b=EcfQTOhCqsiKUgg2DUQcCyJnl9269L4tqxMRYeiMaZQJ3IQsXh83dqGaAGBn91IBTO
-         JDmMzlRPbc0M/S/hJabMZwpjOH4LA8hkbpMv73P80wNGBlauQtfYPI8HxkdSiHgHCCxc
-         wywMTeuC+KrGVPDgHq3k/a/jrNO86rfBT2HfwBgPUVUaqdbcV7HbyXT8nb4i2P99iOAy
-         0qFyiVnfZaqZwqNvpJK7/Yl2W/OKrtcly7Ov7/zL1MoXQe7ZctmduFXLLa+S5vZHkXNU
-         f33oc4ISLy4najJjrMN+v632zN/W6qarlqF6IfNCY5p4FHtEsJwtBf8zjhik/HtCSLQt
-         54HA==
-X-Forwarded-Encrypted: i=1; AJvYcCUIF5VrUKBjiJUlw9S0kcgr19RT01XPCTkB592QvGXgq8cVpjjcbfoLPUvJ3oINMCtFWpS4kWlz/kE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywrYyp/ijQX7qmpod2WAYZKTtRL/nDznrtZNVOt5Gm3IvEBnEH
-	WJLpINTk9vqPfcIuAZMYi0t78AT8lRL1sw6JF4WdulEuuA7TjAnbG59PGeLxtmgvVeCwRXS/HPl
-	xGoq4
-X-Gm-Gg: ASbGnculz8VGF5PAGLSbtHpzvgHC5hUmw1Rolsa6MhsN0/f5NH20TzefYdoARM76WLe
-	in8AG9AMuVjUKM6VfZX18AG0P8gfyctc8v8bm/x1bJtZOnz0E4A6b80tzcugSriL7UG0NmwNfV+
-	vv9Bp9bkC3F4kWPRNrlpRZjRvaWtHb255G41+Bq0NHLKoOFXtkWwQilI7MkqMgsfey2X49YY2eB
-	M5Qvlp/3WjstDgZVSDd1f0289PZ+uXGAzPeduRF6PAbYEM3KcDDgXBS0Mx2SbuqXp/t1cLQiOx2
-	6reIJDVHBy8Zgdgwxd3C8Iv9r7fHEViIeMrR6YzEF6QeXjoSRTR9Fr8sOxy6+LP2HK+Q/T054Dh
-	EKCSLgZ9MMEH7tNH2+jZFOBn/qvAbuFMXjXe8QQgj7aGmRryAuqHYRbhVy4KL7A==
-X-Google-Smtp-Source: AGHT+IHYa5DWzxweqTSWrCllRHx+UhSsxFOlpmwhlInRnbMBAW55bHyqIh4dQEHaUgu4d93X0h+kNg==
-X-Received: by 2002:a5d:93c1:0:b0:884:1e28:904e with SMTP id ca18e2360f4ac-8e1d1a12e35mr361506139f.12.1758631776567;
-        Tue, 23 Sep 2025 05:49:36 -0700 (PDT)
-Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-556f74174cfsm3556602173.57.2025.09.23.05.49.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Sep 2025 05:49:35 -0700 (PDT)
-Message-ID: <1aa28123-cfa4-415a-9d1b-4d9edd62489b@riscstar.com>
-Date: Tue, 23 Sep 2025 07:49:34 -0500
+        d=1e100.net; s=20230601; t=1758641207; x=1759246007;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JtLLJPUyvnbUDs0ep8FNq7qhKgC6O8fsZCUGkck74jg=;
+        b=ldVF+u5K6Agrta2Gq+gS1eWFGFNo3O/GsBBBNbhimP/lxQFWkPemgHCjwxI5gFR5K4
+         5+DXTMbIwtcS7bAa9q83qt0SbiuMWzZrE3P6KA6T4dOKgThpwIiVI3ebBLXhyTAGwsOv
+         bFhQxq99B+ijJJknVcUH6J/FAIekua0Smkg/PIPJ7DrKLyIbxl9RYJm+i+BJNIevgaU7
+         eubi6V3yZYlbJMJmmO5vV5FJdugUYc8OjlRymoBIYdh7lRMoj+CXnFlNu+N9l8CgnR3a
+         u9M7zOBYaiD4hCWoGC25zpAmzXql3I0nfrlRHebwIvkMLSoWn+p5sEAQMZA6PGa7Nthc
+         GFLA==
+X-Forwarded-Encrypted: i=1; AJvYcCWq040euzn0xBXL8A2vv9Tdif6zjndl5gHvAgYogUOkcyoKpikdAhvG9ANzNz9DoC0qYDQHFnPCrGA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwRct1YO5+UrESSElPKIcZTmhq95S0NAt6i2KjuioWHE0vTjeu
+	cOooVaRFOLAXogybr6UlO++Dy5HGganVwZvJeWupebmakDlF5JP2gs8g
+X-Gm-Gg: ASbGncvZf3yYNgvm1walWOYH2PFQr74/atJtHkyhHUwtubR7WcWPERsj7oTvF/JbMZC
+	msRZKSs+qKzwIyXIOwtwQgJiqnuhwEIVQ2mBx0AQJA2tpfXmeoVuHOrU1kOic7aoYbCFNquXV5X
+	UDgtQosbs4wDJVBMEoKEPUdp9k7aA13PqEuIRqXyPmYeJXWvKQk0gd1ZkKDayYS16/QLZVMubxt
+	vVqtCgAlXBuuR4PEIbKXS0N46bCf8xWx0N76Ogzt8+JkTt0C3ka9A4EyOo7D0S3AeL34BMwaECb
+	U1J8BCnBd6x/IWacmGkj+6sGUc7rLSl/4mnkCfqBDkCvgF8QPFQ+WuD8GGPYQyMd0e68BCuNhaM
+	ZOebmp7Zcji3A/fy8jHGLdvGBP0g7bh6GXd00y7JdXQ==
+X-Google-Smtp-Source: AGHT+IF3IQzctelwt6QED/lVfPI8J15a2FqB0oJ/xmEvDqfE+VEGFk89FOsvI3j+XpDLzUaWQAhfXA==
+X-Received: by 2002:a17:903:1590:b0:26b:7a8b:32cc with SMTP id d9443c01a7336-27cc3d05a95mr38529245ad.17.1758641206875;
+        Tue, 23 Sep 2025 08:26:46 -0700 (PDT)
+Received: from localhost ([2804:30c:b65:6a00:ceaa:2ed0:e81e:8f51])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-27a9eecd148sm49330535ad.122.2025.09.23.08.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Sep 2025 08:26:45 -0700 (PDT)
+Date: Tue, 23 Sep 2025 12:27:33 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jic23@kernel.org, michael.hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, andy@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+	Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
+	Trevor Gamblin <tgamblin@baylibre.com>,
+	Axel Haslam <ahaslam@baylibre.com>
+Subject: Re: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
+Message-ID: <aNK8ZZu74mK0_ygB@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1758214628.git.marcelo.schmitt@analog.com>
+ <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
+ <30659b16-290d-4ae5-a644-214c106bbe87@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] riscv: dts: spacemit: define a SPI controller node
-To: Troy Mitchell <troy.mitchell@linux.spacemit.com>,
- Yixun Lan <dlan@gentoo.org>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, ziyao@disroot.org, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, p.zabel@pengutronix.de,
- spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20250922161717.1590690-1-elder@riscstar.com>
- <20250922161717.1590690-4-elder@riscstar.com>
- <20250923001930-GYB1303776@gentoo.org>
- <ED4C67FD136DEB19+aNINJJVYbNnT87va@LT-Guozexi>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <ED4C67FD136DEB19+aNINJJVYbNnT87va@LT-Guozexi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30659b16-290d-4ae5-a644-214c106bbe87@baylibre.com>
 
-On 9/22/25 9:59 PM, Troy Mitchell wrote:
-> On Tue, Sep 23, 2025 at 08:19:30AM +0800, Yixun Lan wrote:
->> Hi Alex,
->>
->> On 11:17 Mon 22 Sep     , Alex Elder wrote:
->>> Define a node for the fourth SoC SPI controller (number 3) on
->>> the SpacemiT K1 SoC.
->>>
->>> Enable it on the Banana Pi BPI-F3 board, which exposes this feature
->>> via its GPIO block:
->>>    GPIO PIN 19:  MOSI
->>>    GPIO PIN 21:  MISO
->>>    GPIO PIN 23:  SCLK
->>>    GPIO PIN 24:  SS (inverted)
+Hi David, thanks for the insightful review.
 
-Note that the pin numbers I'm mentioning above are the numbers
-(1-26) on the 26-pin GPIO header on the BPI-F3 board.
-
->>>
->>> Define pincontrol configurations for the pins as used on that board.
->>>
->>> (This was tested using a GigaDevice GD25Q64E SPI NOR chip.)
->>>
->>> Signed-off-by: Alex Elder <elder@riscstar.com>
->>> ---
->>> v3: - Moved the SPI controller into the dma-bus memory region
->>>
->>>   .../boot/dts/spacemit/k1-bananapi-f3.dts      |  7 +++++++
->>>   arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 20 +++++++++++++++++++
->>>   arch/riscv/boot/dts/spacemit/k1.dtsi          | 16 +++++++++++++++
->>>   3 files changed, 43 insertions(+)
->>>
->>> diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->>> index 2aaaff77831e1..d9d865fbe320e 100644
->>> --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->>> +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
->>> @@ -14,6 +14,7 @@ aliases {
->>>   		ethernet0 = &eth0;
->>>   		ethernet1 = &eth1;
->>>   		serial0 = &uart0;
->>> +		spi3 = &spi3;
->>>   	};
->>>   
->>>   	chosen {
->>> @@ -92,6 +93,12 @@ &pdma {
->>>   	status = "okay";
->>>   };
->>>   
->>> +&spi3 {
->>> +	pinctrl-0 = <&ssp3_0_cfg>;
->>> +	pinctrl-names = "default";
->>> +	status = "okay";
->>> +};
->>> +
->>>   &uart0 {
->>>   	pinctrl-names = "default";
->>>   	pinctrl-0 = <&uart0_2_cfg>;
->>> diff --git a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
->>> index aff19c86d5ff3..205c201a3005c 100644
->>> --- a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
->>> +++ b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
->>> @@ -76,4 +76,24 @@ pwm14-1-pins {
->>>   			drive-strength = <32>;
->>>   		};
->>>   	};
->>> +
->>> +	ssp3_0_cfg: ssp3-0-cfg {
->> ..
->>> +		ssp3-0-no-pull-pins {
->> I'd prefer not to enforce "pull" info inside the name, you can't embed
->> all property info, besides, what's if you want to change/override later?
->>
->> how about just name it as ssp3-0-defaul-pins or simply ssp3-0-pins?
-> uart: uart0_2_cfg and function is 2.
-> pwm: pwm14_1_cfg and function is 4
-> spi: ssp3_0_cfg and function is 2
+On 09/22, David Lechner wrote:
+> On 9/18/25 12:39 PM, Marcelo Schmitt wrote:
+> > AD4030 and similar ADCs can capture data at sample rates up to 2 mega
+> > samples per second (MSPS). Not all SPI controllers are able to achieve such
+> > high throughputs and even when the controller is fast enough to run
+> > transfers at the required speed, it may be costly to the CPU to handle
+> > transfer data at such high sample rates. Add SPI offload support for AD4030
+> > and similar ADCs to enable data capture at maximum sample rates.
 > 
-> I’m a bit confused about the meaning of the second number here.
-> Is it intended to be an index, or the function number?
-
-It is an index, and it seems arbitrary but it is based on the
-order in which they occur in a spreadsheet that defines a set
-of possible pin configurations.
-
-For example, SPI3 lists 2 possible pin combinations:
-SCLK	GPIO[75] function 2	GPIO[59] function 2
-FRM	GPIO[76] function 2	GPIO[60] function 2
-TXD	GPIO[77] function 2	GPIO[61] function 2
-RXD	GPIO[78] function 2	GPIO[62] function 2
-
-> If it’s an index, should it start from 0 or 1?
-
-It starts with 0.
-
-> The starting point seems inconsistent across pwm/spi/uart.
-> If it’s supposed to be the function number,
-> then the spi and pwm parts look incorrect.
-
-The first one (index 0) shows up earlier (lower line number) in
-the spreadsheet, even though the GPIO numbers used are higher
-than those in the second one.  They're grouped, and the first
-one is in GPIO group 2 and the second is in GPIO group 5.
-
-					-Alex
-
-> Could you clarify this? Yixun.
+> I tried testing this with AD4630-24 but didn't have luck in actually
+> capturing data. I'm 100% sure the problem is with the FPGA. And the
+> evaluation board doesn't have any place to attach a logic analyzer for
+> debugging. That means that I wasn't able to reliabably test this code
+> yet. But I don't expect my problems to be solved any time soon, so I
+> don't want to let that hold up progress. I would have really liked to
+> have been able to see the actual timings over the wire to make sure
+> we got all of that correct.
 > 
->                  - Troy
->>
->>> +			pinmux = <K1_PADCONF(75, 2)>,	/* SCLK */
->>> +				 <K1_PADCONF(77, 2)>,	/* MOSI  */
->>> +				 <K1_PADCONF(78, 2)>;	/* MISO */
->>> +
->>> +			bias-disable;
->>> +			drive-strength = <19>;
->>> +			power-source = <3300>;
->>> +		};
->>> +
->>> +		ssp3-0-frm-pins {
->>> +			pinmux = <K1_PADCONF(76, 2)>;	/* FRM (frame) */
->>> +
->>> +			bias-pull-up = <0>;
->>> +			drive-strength = <19>;
->>> +			power-source = <3300>;
->>> +		};
->>> +	};
->>>   };
->>> diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
->>> index 6cdcd80a7c83b..eb8a14dd72ea4 100644
->>> --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
->>> +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
->>> @@ -797,6 +797,22 @@ uart9: serial@d4017800 {
->>>   				status = "disabled";
->>>   			};
->>>   
->>> +			spi3: spi@d401c000 {
->>> +				compatible = "spacemit,k1-spi";
->>> +				reg = <0x0 0xd401c000 0x0 0x30>;
->>> +				#address-cells = <1>;
->>> +				#size-cells = <0>;
->>> +				clocks = <&syscon_apbc CLK_SSP3>,
->>> +					 <&syscon_apbc CLK_SSP3_BUS>;
->>> +				clock-names = "core", "bus";
->>> +				resets = <&syscon_apbc RESET_SSP3>;
->>> +				interrupts = <55>;
->> ..
->>> +				dmas = <&pdma 20>,
->>> +				       <&pdma 19>;
->> can we also squash the dmas into one line? but, do split if there are too many..
->>
->> yes, it's simply a style change that I'd like to keep them consistent at DT level,
->> besides you might also want to adjust dt-binding examples to align with them here..
->>
->> thanks
->>
->>> +				dma-names = "rx", "tx";
->>> +				status = "disabled";
->>> +			};
->>> +
->>>   			/* sec_uart1: 0xf0612000, not available from Linux */
->>>   		};
->>>   
->>> -- 
->>> 2.48.1
->>>
->>>
->>
->> -- 
->> Yixun Lan (dlan)
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Even if you hook up probes to the SPI lines, you might not be able to logic
+analyze the transfers at frequencies like 100 MHz or even at 80 MHz unless you
+have a very fast logic analyzer or oscilloscope. To debug these signals we
+usually change the HDL verilog to add ILA debug cores to record the signals on
+the FPGA. I'll see if I can get or build the project with those ILA cores set.
+Another thing is getting the correct combination of HDL + device tree because
+we have a few possible HDL build configurations (for number of lanes, clock mode,
+DDR/DTR, and capture zone) and the device tree must be coherent with what runs
+on the FPGA. I'll send you some of boot files I was using during my tests.
 
+> > ---
+...
+> > [IIO]
+> >> Why using slower speed for offload?
+> > Looks like it's the same max speed for both register access and data sample.
+> > So, just reusing the existing define for the max transfer speed.
+> 
+> I don't follow. The "REG" in AD4030_SPI_MAX_REG_XFER_SPEED stands for
+> "register". The actual max speed for reading sample data should be coming
+> from the devicetree since it is faster and depends on the wiring and VIO
+> voltage. It could be as much as 102 MHz.
+> 
+I have finally I noticed the SPI compatible mode timings. Sure, will adapt to
+use faster sample rate when possible.
+
+
+> Unrelated to this series, I still think 80 MHz is faster that it needs
+> to be for AD4030_SPI_MAX_REG_XFER_SPEED. It is fine to do them slower,
+> e.g. at 10 MHz to reduce the risk of errors and also makes it easier to
+> debug using a logic analyzer.
+
+Sure, will do that.
+
+> 
+> > 
+> >  drivers/iio/adc/Kconfig  |   3 +
+> >  drivers/iio/adc/ad4030.c | 485 +++++++++++++++++++++++++++++++++++----
+> >  2 files changed, 445 insertions(+), 43 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> > index 58a14e6833f6..2a44fcaccf54 100644
+...
+> > +	cnv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
+> > +	/*
+> > +	 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
+> > +	 * rounded PWM's value is less than 10, increase the target value by 10
+> > +	 * and attempt to round the waveform again, until the value is at least
+> > +	 * 10 ns. Use a separate variable to represent the target in case the
+> > +	 * rounding is severe enough to keep putting the first few results under
+> > +	 * the minimum 10ns condition checked by the while loop.
+> > +	 */
+> > +	do {
+> > +		cnv_wf.duty_length_ns = target;
+> > +		ret = pwm_round_waveform_might_sleep(st->cnv_trigger, &cnv_wf);
+> > +		if (ret)
+> > +			return ret;
+> > +		target += AD4030_TCNVH_NS;
+> > +	} while (cnv_wf.duty_length_ns < AD4030_TCNVH_NS);
+> > +
+> > +	if (!in_range(cnv_wf.period_length_ns, AD4030_TCYC_NS, INT_MAX))
+> > +		return -EINVAL;
+> 
+> I hit this error during testing with the default max_sample_rate_hz assigned
+> in probe. We could have a loop for this too to try to get the closest valid
+> period rather than erroring if the exact value isn't available.
+> 
+Yes, this makes sense. Though, looping to try to get a suitable period wouldn't
+potentially also change the duty_length we settled above?
+
+> > +
+> > +	offload_period_ns = cnv_wf.period_length_ns;
+> > +	if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
+> 
+...
+> > +static int ad4030_set_sampling_freq(struct iio_dev *indio_dev, int freq)
+> > +{
+> > +	struct ad4030_state *st = iio_priv(indio_dev);
+> > +
+> > +	/*
+> > +	 * We have no control over the sampling frequency without SPI offload
+> > +	 * triggering.
+> > +	 */
+> > +	if (!st->offload_trigger)
+> > +		return -ENODEV;
+> > +
+> > +	if (!in_range(freq, 1, st->chip->max_sample_rate_hz))
+> > +		return -EINVAL;
+> > +
+> > +	guard(mutex)(&st->lock);
+> 
+> Why not iio_device_claim_direct() instead of a new lock? We wouldn't
+> want to change the sampling frequency during a buffered read anyway.
+> This driver already uses iio_device_claim_direct() to protect other
+> register access.
+
+The new lock is to protect concurrent updates of the oversampling and sampling
+frequency. Since, oversampling and the sampling frequency properties are
+mutually dependent one from another, a simultaneous write to those attributes
+could lead to an invalid oversamp + samp freq configuration.
+
+> 
+> > +	return __ad4030_set_sampling_freq(st, freq, st->avg_log2);
+> > +}
+> > +
+...
+> > +static void ad4030_prepare_offload_msg(struct iio_dev *indio_dev)
+> > +{
+> > +	struct ad4030_state *st = iio_priv(indio_dev);
+> > +	u8 offload_bpw;
+> > +
+> > +	if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
+> > +		offload_bpw = 32;
+> > +	else
+> > +		offload_bpw = st->chip->precision_bits;
+> > +
+> 
+> > +	st->offload_xfer.speed_hz = AD4030_SPI_MAX_REG_XFER_SPEED;
+> 
+> As mentioned at the beginning, drop this line and let it use the max
+> speed from the devicetree.
+> 
+> > +	st->offload_xfer.bits_per_word = roundup_pow_of_two(offload_bpw);
+> 
+> Why roundup_pow_of_two()? The SPI controller can do 24 bits per word.
+> And if we are reading both a 24-bit value and the common mode voltage,
+> this would cause both to be read in 1 word.
+> 
+> Speaking of which, I think this will need a possible second xfer with
+> bpw=8 if we want to read the common mode voltage.
+> 
+> Or, if the intention was to not allow it, we need different scan masks.
+> But I don't see a reason why we could not allow it.
+> 
+Nothing says we couldn't support offloading transfers with
+differential + common-mode data, at least in theory. So, I didn't felt like it
+should be prevented. Though, offloading differential + common-mode data is
+a configuration I couldn't really test with ADAQ4216 because the HDL is ... peculiar.
+
+
+> Or, if this is making a assumptions about extra hardware being present
+> to move bits around between reading them over the SPI bus and pushing the
+> values to DMA, then there should be some comments about that. More on that
+> below.
+> 
+> > +	st->offload_xfer.len = spi_bpw_to_bytes(offload_bpw);
+> > +	st->offload_xfer.offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
+> > +	spi_message_init_with_transfers(&st->offload_msg, &st->offload_xfer, 1);
+> > +}
+> > +
+...
+> > +static int ad4030_spi_offload_setup(struct iio_dev *indio_dev,
+> > +				    struct ad4030_state *st)
+> > +{
+> > +	struct device *dev = &st->spi->dev;
+> > +	struct dma_chan *rx_dma;
+> > +
+> > +	indio_dev->setup_ops = &ad4030_offload_buffer_setup_ops;
+> > +
+> > +	st->offload_trigger = devm_spi_offload_trigger_get(dev, st->offload,
+> > +							   SPI_OFFLOAD_TRIGGER_PERIODIC);
+> > +	if (IS_ERR(st->offload_trigger))
+> > +		return dev_err_probe(dev, PTR_ERR(st->offload_trigger),
+> > +				     "failed to get offload trigger\n");
+> > +
+> > +	st->offload_trigger_config.type = SPI_OFFLOAD_TRIGGER_PERIODIC;
+> 
+> If we want to be really strict/generic here, we should not be allowing
+> chips with num_voltage_inputs == 2 and a single SPI bus/deserializer (i.e.
+> channel data is interleaved). In this case, extra hardware is required
+> to do the de-interleaving (i.e. the spi_axis_reorder IP block).
+
+By channel data is interleaved you mean data from both channels going out on
+SDO0 (LANE_MD == 0b11)? In that case, yes, I think so. Only the ADC driver would
+know about data being interleaved and it would not be able to descramble it when
+data gets pushed up through DMA.
+
+> 
+> We could take the easy way out and just always assume that is there.
+> In that case, we should makes some comments here about such assumptions.
+> 
+> Or we could actually describe it properly in the devicetree and check
+> for that here. This came up during the discussions when I was upstreaming
+> SPI offload support. It would look something like this...
+> 
+> In the devicetree, instead of having the DMA connected to the SPI controller,
+> we now have a separate IP block with it's own node between them.
+> 
+> /* spi_axis_reorder IP block */
+> reorder: offload-stream-sink@4000000 {
+> 	compatible = "adi,axi-spi-reorder";
+> 	reg = <0x4000000 0x1000>;
+> 	clocks = <&spi_clk>;
+> 	dmas = <&adc_dma>;
+> };
+> 
+> spi@5000000 {
+> 	compatible = "adi,axi-spi-engine-1.00.a
+> 	reg = <0x4000000 0x1000>;
+> 	clocks = <&clkc 15>, <&spi_clk>;
+> 	clock-name "s_axi_aclk", "spi_clk";
+> 
+> 	trigger-sources = <&pwm_trigger>;
+> 	offload-streams = <&reorder>;
+> 	offload-stream-names = "offload0-rx";
+> 
+> 	...
+> };
+> 
+> Then here in the driver, we would need a different (non-existing)
+> API to get the DMA from this offload-stream rather than calling
+> devm_spi_offload_rx_stream_request_dma_chan(). Or extend the SPI
+> controller to handle that.
+> 
+> Or 3rd option: If easy way is not acceptable and "right way" is too much
+> work, we could just return error here for num_voltage_inputs == 2 until
+> we add support for SPI controllers with two buses/deserializers.
+> 
+3rd option sounds more reasonable for the moment.
+I think this might, alternatively, be supported as something associated with
+spi-rx/tx-bus-width dt property. The question we seem to be trying to answer is,
+how data coming from a multi-line bus is expected to be delivered?
+
+
+> > +
+> > +	rx_dma = devm_spi_offload_rx_stream_request_dma_chan(dev, st->offload);
+> > +	if (IS_ERR(rx_dma))
+> > +		return dev_err_probe(dev, PTR_ERR(rx_dma),
+> > +				     "failed to get offload RX DMA\n");
+> > +
+> > +	return devm_iio_dmaengine_buffer_setup_with_handle(dev, indio_dev, rx_dma,
+> > +							   IIO_BUFFER_DIRECTION_IN);
+> > +}
+> > +
+
+Thanks,
+Marcelo
 
