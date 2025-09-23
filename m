@@ -1,57 +1,59 @@
-Return-Path: <linux-spi+bounces-10236-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10237-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFFF4B95A21
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 13:25:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 029C1B95A33
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 13:26:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F92C174300
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 11:25:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FB7B18A750A
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 11:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8BD832252F;
-	Tue, 23 Sep 2025 11:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0773322768;
+	Tue, 23 Sep 2025 11:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1VMOtdR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQ9m0r6I"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A067F321F22;
-	Tue, 23 Sep 2025 11:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A110C322766;
+	Tue, 23 Sep 2025 11:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758626724; cv=none; b=LWYkG44kR2wSQ0BvlwTJ0j6Gbl3uFd5Oc+IhKc8TgMF7Zb2zOn2xvKdJyG15Tra4F1f/j2uXw8znG+82EHadnB2dOTT3yJ8s8VwmBzTO4R7nyf+giHHjaB/nsSAfcQBbM9zJ+lr7ukDI5RF8YaKcarZYGPbgq4dtNLl77C76C5M=
+	t=1758626727; cv=none; b=hDIN9CoeeiJA5/1IF1N90VEGxB3+wiluUnLso6A8YWemoKuGddTaVs5zURjXqBrhFuYTEL3ngoyC/iHmpbnhkZLgMLamisIsF06EA0eGOtbpKmzt5jOV4D12soRhychY4WnlRuvR26S5uoe4F2Zl8JYA6tvaLrAHF1BMKdFnjRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758626724; c=relaxed/simple;
-	bh=Z/vyvFvY22fhqPX4IzbFZBx+2HernhT4aAxg9Ryujko=;
+	s=arc-20240116; t=1758626727; c=relaxed/simple;
+	bh=tu2kpNp5GDUDTAaXPWcXrvZxhyL8QBmF1sZcKwUwe5k=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Q4/tNtGhtJ1pt+48R4u5wRax4vVLwMWEIK3VyhlNuCZa4fazdy0xqIaJ98A1+TS7k03b/A73KG5xvL95sgU9+Og5A94USmiWSlPDjraD9DySslKMq5xNSwm/S/YlkLoO8ipIpxmOiEdBAH8CZTEy7k1YvUyl7LSD2Bn6AEIzo7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1VMOtdR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC284C113D0;
-	Tue, 23 Sep 2025 11:25:22 +0000 (UTC)
+	 MIME-Version:Content-Type; b=b5V64JO2SpVsNHz9nDF4pwWLkWW6LnOOcw88KiN4bVW1711ErhhblDY5fPAECtJqpxT9avd2R/o+vN0H8KQzP4Nf/XrmFEdOOE3Gd4RHpqVK2czaYMqY+rjpoBsAnT3W0eWCaOAwnZ85E2xodd7qqUWHf5vmiMWNi7v5CiGY0oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQ9m0r6I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE489C116B1;
+	Tue, 23 Sep 2025 11:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758626724;
-	bh=Z/vyvFvY22fhqPX4IzbFZBx+2HernhT4aAxg9Ryujko=;
+	s=k20201202; t=1758626727;
+	bh=tu2kpNp5GDUDTAaXPWcXrvZxhyL8QBmF1sZcKwUwe5k=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=B1VMOtdRAEzsoZCxpDYWRM5i4bA9PT3OR8RsXx2AxxRlv31MD7I/2dNiEUpODakKw
-	 4LkKz3fahLHgmX/J5elq/PqTVwKUBybWUSqDRIBnMhKAwhTdfLrJuEmESsJtDluY6Z
-	 qJ41q4LkQo1LC4FIPeLKHZq03ZCF9fsot9xugP1Yb1XHNx3VAoPHIbiO3HdmDK1hLc
-	 XslWRA0E9zkrDWltdFtCIR9zw+sexzlyAVeLHj/qy+cMW4+IWxFguZ7VIYW8HFcVLl
-	 d0uyvys4F7AKplZky6bwIpPrbaT76oq8Pd/BR+PIIKBLoXJCqOpm6D+yzuOleWXKjB
-	 hS1BdIEJMFggg==
+	b=dQ9m0r6IzIP+PZG9Vaj+GDzjXrgzQtMEBcurDxwNwifFk8VUv+jRMOwkwPD8fiPIE
+	 MtVB1SXjTno4FVEuQl1dZAffZppEyYBwYtVJwV9yffIC2vEIuDo2F/OonbZlQpGErv
+	 i1bZhfw/zWXo14dic2hL9WDeKPTlOPA5IStXa9ogCVrm8r1UJY0ta6HExmbkVNF38F
+	 EVCcY6k6yLiyRzbo0PObyCXoiulcHyExlEiaFCeWrNEuodegLr6ErqqOzD5ds9jz06
+	 sRCNkEUZcPBl+N3Bw8DIsIYMg+aXsBwx52VJuAK0il49hsa8ItG2DPQT+toTK9SvHT
+	 cyY++8qHYpqWw==
 From: Mark Brown <broonie@kernel.org>
-To: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>, 
- Jonas Gorski <jonas.gorski@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Marc Kleine-Budde <mkl@pengutronix.de>
-In-Reply-To: <20250915183725.219473-1-jonas.gorski@gmail.com>
-References: <20250915183725.219473-1-jonas.gorski@gmail.com>
-Subject: Re: [PATCH v2 0/7] spi: multi CS cleanup and controller CS limit
- removal
-Message-Id: <175862672270.1039628.11616279717463508641.b4-ty@kernel.org>
-Date: Tue, 23 Sep 2025 13:25:22 +0200
+To: andriy.shevchenko@intel.com, harald.mommer@oss.qualcomm.com, 
+ quic_msavaliy@quicinc.com, virtio-dev@lists.linux.dev, 
+ viresh.kumar@linaro.org, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, hdanton@sina.com, 
+ qiang4.zhang@linux.intel.com, alex.bennee@linaro.org, 
+ Haixu Cui <quic_haixcui@quicinc.com>
+Cc: virtualization@lists.linux-foundation.org, quic_ztu@quicinc.com
+In-Reply-To: <20250908092348.1283552-1-quic_haixcui@quicinc.com>
+References: <20250908092348.1283552-1-quic_haixcui@quicinc.com>
+Subject: Re: [PATCH v10 0/3] Virtio SPI Linux driver
+Message-Id: <175862672437.1039628.4150229884552248859.b4-ty@kernel.org>
+Date: Tue, 23 Sep 2025 13:25:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,15 +64,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-a9b2a
 
-On Mon, 15 Sep 2025 20:37:18 +0200, Jonas Gorski wrote:
-> This series aims at cleaning up the current multi CS parts and removing
-> the CS limit per controller that was introduced with the multi CS
-> support.
+On Mon, 08 Sep 2025 17:23:45 +0800, Haixu Cui wrote:
+> This is the 10th version of the virtio SPI Linux driver patch series which is
+> intended to be compliant with the upcoming virtio specification
+> version 1.4. The specification can be found in repository:
+> https://github.com/oasis-tcs/virtio-spec.git branch virtio-1.4.
 > 
-> To do this, store the assigned chip selects per device in
-> spi_device::num_chipselects, which allows us to use that instead of
-> SPI_CS_CNT_MAX for most loops, as well as remove the check for
-> SPI_INVALID_CS for any chip select.
+> The original contributor Harald submitted:
+> RFC v1 to RFC v3
+> non-RFC v1 to non-RFC v3
 > 
 > [...]
 
@@ -80,20 +82,12 @@ Applied to
 
 Thanks!
 
-[1/7] spi: fix return code when spi device has too many chipselects
-      commit: 188f63235bcdd207646773a8739387d85347ed76
-[2/7] spi: keep track of number of chipselects in spi_device
-      commit: 099f942182e3695554cba44e4bafb08a4111b50f
-[3/7] spi: move unused device CS initialization to __spi_add_device()
-      commit: 1c923f624439b26b6740cdd2a9f7a12b1968f3f3
-[4/7] spi: drop check for validity of device chip selects
-      commit: f3982daccf42cefcd80218c76a6b5dd134fe97e3
-[5/7] spi: don't check spi_controller::num_chipselect when parsing a dt device
-      commit: 83c522fb642384aef43697aa5c7686363e9e92dd
-[6/7] spi: reduce device chip select limit again
-      commit: 08fda410bae41cc8dde9697f9104da525be53153
-[7/7] spi: rename SPI_CS_CNT_MAX => SPI_DEVICE_CS_CNT_MAX
-      commit: e336ab509b43ea601801dfa05b4270023c3ed007
+[1/3] virtio: Add ID for virtio SPI
+      commit: d9a2211dd3aee3ef29fc675f70a1941bc3f4f51f
+[2/3] virtio-spi: Add virtio-spi.h
+      commit: 6a1f3390fafeafe130b8128b3047452b92911a98
+[3/3] SPI: Add virtio SPI driver
+      commit: f98cabe3f6cf6396b3ae0264800d9b53d7612433
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
