@@ -1,81 +1,105 @@
-Return-Path: <linux-spi+bounces-10234-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10235-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA6D5B94FFF
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 10:30:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF77EB95A1A
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 13:25:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2505189CB23
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 08:30:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90DA77ADB23
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 11:23:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42873128CD;
-	Tue, 23 Sep 2025 08:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270A83218DA;
+	Tue, 23 Sep 2025 11:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxwIn3vV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tw5vRHUX"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8012C78F58
-	for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 08:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7B43218CD;
+	Tue, 23 Sep 2025 11:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758616211; cv=none; b=HZXmr6Q0IbMVCqs1x2FOyFbai70NXQ15Zo1FdEsxllZTI9UYsqgVsponB5peBHf/Zrr7D9EJ+ulydwXOG8tgHEjUsgpgNAjqejAff27Xf1JCf9VwgVTbxN7Pjayu42yaGf/yyJNeFRCrBlmem28FhrE3HhSntzrVaJOny0Tj0m0=
+	t=1758626723; cv=none; b=R0u9jTUm8wM811dlI1+Ctz+uM6TBUGlpK9XlTul2ITGPTRtcA+hI9ck5jfQIjs3ZCve4IOlCrn/kC7HwOZa+OCAUZAcL2FPVTcRZL1FuEmd6q9cOnEl49TyrYvbneB9ZqAtpQ9zSg7bh2hd6LObociGNU65w3GsMTxmWLVZefH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758616211; c=relaxed/simple;
-	bh=tdkOKIthABV+1stqP4tlhnF2Q0EbeASCuOPBGA4HZB4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=UsBuHOnufbbmfDpk6LEiV3GNnb6IjMipP58GerjubeVjGBoGQ5jSUfrM8WZVDbH5GASb8qrGn98nNgrfzpA+V0PzRjWpblNP+1buGrcPP4RB5br/1NJ7Y5EHZpo0u3d2uK7aNok2El3JmC/dqbNGhKIkE3vl3DiRpvqf+raOg4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxwIn3vV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29011C4CEF5;
-	Tue, 23 Sep 2025 08:30:11 +0000 (UTC)
+	s=arc-20240116; t=1758626723; c=relaxed/simple;
+	bh=ckJ5qrBoifVEYYEnucY/QAUXxf4QBtucPxuic3k1dv4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nyiOXKhd0GzrIkesPVBi0aNTx5l/7gSiCXsoHMvBYSt4/jQsaFhnhQEUGTcQBgAd5sv5UpiUOJKxsf7p/R20NSvLIWEivbzEhkMun3bx48Lq4gKEoQWxskI6b5Okph6x+FKLZVwSopiU8EojO7PS2hkqAzB5W+azRon1Z5xqThw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tw5vRHUX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64AFEC4CEF5;
+	Tue, 23 Sep 2025 11:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758616211;
-	bh=tdkOKIthABV+1stqP4tlhnF2Q0EbeASCuOPBGA4HZB4=;
-	h=Subject:From:Date:To:From;
-	b=dxwIn3vVhZhkJEmMFlBr2u8t2+qikJd+EtxCkmOwpRZJU5cc4hCuE/N8amphIfE/7
-	 fkQ/A+MIK8iOjfpzUCwd2wMywSHV0CTKu4oXbnOin9AaVzkAGMIjNCVbOZOLaVoorF
-	 6IjFacJKwY5rTYhAyvsynfhWZSenpsN0JYxQyG85USpGgnksWObhgI3dUWtiJVd0lv
-	 K6OWHr86TSl6hxk1/PDpAOF3P2pUbIb0SKBQOH+FHyamNmPcDDde6sSs0R17urfit7
-	 MuyZGyYYgcKZPiEbaE/XI7/XUALo8ZUhOx6mKJLhTEV4Y+RHmrL1/CcnPmAMDPNZ5u
-	 wZ9EMVIJp2Ikw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 75BB839D0C20;
-	Tue, 23 Sep 2025 08:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1758626722;
+	bh=ckJ5qrBoifVEYYEnucY/QAUXxf4QBtucPxuic3k1dv4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Tw5vRHUXdFDU8DE8VAuy+szMTcud744f9aKS2tnAkSnzsTBF2qAB9HHYv1hyuFVWt
+	 yKuHAb1JFLhFWXpSK6AicDW2oiyTpi4/XTZ/FWkiJLtNq05kB15JNaOSJTctQ5R93m
+	 JBis/8AzzRBA2wNAVjXq8WuNUek1XTRITPd1eDktwK3OWqYDOskaF6wZWpFCWT4LEi
+	 gJtEOVy/ryB3+aZTkDPYB+NNi8r60ZQQj/srteq/U/wCncSsyl+FHkv43uuEOW1JPT
+	 3YcZQFNa8veYDdkGylh/+FJ+3Wa+aJxEJUbgA95V3Ljsj215ziHUI/Zpnci4VlRgSv
+	 Ese+ibn4AnzEA==
+From: Mark Brown <broonie@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+In-Reply-To: <20250921112649.104516-1-biju.das.jz@bp.renesas.com>
+References: <20250921112649.104516-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 0/2] spi: rpc-if: Add resume support for RZ/G3E
+Message-Id: <175862672007.1039628.355731344831251638.b4-ty@kernel.org>
+Date: Tue, 23 Sep 2025 13:25:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <175861620793.1332476.13472031121392552220.git-patchwork-summary@kernel.org>
-Date: Tue, 23 Sep 2025 08:30:07 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-a9b2a
 
-Hello:
+On Sun, 21 Sep 2025 12:26:44 +0100, Biju Das wrote:
+> On RZ/G3E using PSCI, s2ram powers down the SoC. After resume,
+> reinitialize the hardware for SPI operations.
+> 
+> Also Replace the macro SIMPLE_DEV_PM_OPS->DEFINE_SIMPLE_DEV_PM_OPS macro
+> and use pm_sleep_ptr(). This lets us drop the check for CONFIG_PM_SLEEP
+> and __maybe_unused attribute from PM functions.
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: [1/5] usb: misc: ljca: Remove Wentong's e-mail address
-  Submitter: Sakari Ailus <sakari.ailus@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1004874
-  Lore link: https://lore.kernel.org/r/20250922120632.10460-1-sakari.ailus@linux.intel.com
-    Patches: [1/5] usb: misc: ljca: Remove Wentong's e-mail address
-             [4/5] spi: ljca: Remove Wentong's e-mail address
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 2
+[1/2] spi: rpc-if: Drop deprecated SIMPLE_DEV_PM_OPS
+      commit: 81ef2022b311c7c4f29011f778442635acfaba90
+[2/2] spi: rpc-if: Add resume support for RZ/G3E
+      commit: 2bfb20b65d9bc1d0de58f8c28ca9d6f1d27bbc01
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
