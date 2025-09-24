@@ -1,182 +1,277 @@
-Return-Path: <linux-spi+bounces-10243-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10244-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7983B96B77
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 18:05:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FF4B981BE
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 05:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C68A2E6034
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Sep 2025 16:04:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A59513B4156
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 03:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950DC279335;
-	Tue, 23 Sep 2025 16:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10BA121D3C9;
+	Wed, 24 Sep 2025 03:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="D32UbrOj"
+	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="IGbBHPks"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6188125A322
-	for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 16:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D4220296E;
+	Wed, 24 Sep 2025 03:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758643439; cv=none; b=uzkyLMz1rYr28G1tG9Cn3tVGT6IrLjgibNIK0/uuntFq70gMITk2YVuu1yfKU9bbCPpHMMQ5jS82vOS782HhAhEG/PjUWskxAl4BdTjIYLF7PY6o/AzYiTW8rEBDkkZ5/C+nMbUI+IrWasCh4SqWZkbj7Uv0vqa/2J27DlRTrpY=
+	t=1758683487; cv=none; b=Lmag2MzPaqbt+rpqyezTuok2ZENa5fwGD/4xmsLHCqoEWLujXWgfJMjE9JnOo4CF5Q8HGv0LawO2YXaw+SMTT5kkIoAZBJeCdSTWD5xfLrOCH3HlAsPDmGQ3N7dBYr2UsrAKMy4b4+JgK5QPGh8ehvXNTUPzH8/KIt/EPF2CjyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758643439; c=relaxed/simple;
-	bh=VxXxBVnPT3bjBJlGNuKjLv1N/mqpt8+iHvovsX2ivRI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pI1nYXkzhnQ7ulG9RETdWEF3IYYAY2HtD5CUJIZFmnPVG6jO3Jw5L3x00BqoJVHCdwiiSnyfpyLAGkwR84JjiTU3TSFdsCiJV1CsiPP/A8jAAMG4tL6QUZ/CVaPXU4f0LoBJYtfaTVPtTnncpy8M7oUA7MBS6z6vJK9PViJpkqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=D32UbrOj; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6325115e3f4so650679eaf.2
-        for <linux-spi@vger.kernel.org>; Tue, 23 Sep 2025 09:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1758643436; x=1759248236; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=law/k3CtXNu6hM9p5KpraV1Cz+DWuIPBGWWxReZ36Yo=;
-        b=D32UbrOjk4gKhJX/uZLTgtT6sT1LMZp+IB5oht8sJ8bIizbvM0zgeC6N95iINwsPMk
-         E4yt738kYwmHVWl4yVQMi3pi8GdkoWQYs4xLf2+Xfb8keOFhZVI1l5IlX1vqe9Puqpvf
-         /69Le/ivN0oLIL2CRFyeB5yEAYfh9zrqU7UiUVA6FICnlGjuWwSc25So17GRe/PACDGT
-         SI8rFu7qKCm4Tmo3Qhtt5KVReD3Fm6MpaxW80B8P/5vwLpvXNqh5JjRnGUANxruyxJK1
-         S/5Q0AIf/5BvQ60+J1inv0NOReuHccF+ywiDc7rxQGAX++NBvzCALm+/uXDJeO8aoiAO
-         UHOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758643436; x=1759248236;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=law/k3CtXNu6hM9p5KpraV1Cz+DWuIPBGWWxReZ36Yo=;
-        b=fokwuPqZZL8hS5ZYdEEwge8DUiptRKaAab1HGe8u+iAsXgSYCtJUmbcXYjNaUnp6fq
-         qZ7dgMQnUc4XkRJLvYPB2tzpFsMumIdRqQo7d3rknl0YPc1W6ga69UHQNa7F/3vmvLKl
-         r4alkzB6fEhgYkz5sHJE4TtWy63UxJgIuIN3Kgbc3e7kYrjl51HSDF2ocq0Bj/Qi25JJ
-         jp2wKf8/vkVe8oyfjFf1gUexEdde2Y87eW0k/hJgT4aHNFGGOcY9Jv8nDyTWS/pQ7HP2
-         X1aAyGdy7lxl4gN7lsf1UO81LvFT/ONiRK7Ca61HrcsBNWznKrXsX1zd5jkmogjDwsSh
-         sV7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUDVNT+zBSNjlsniZEBmUikmAkThbXhkVwLA0okCdUIb+GSUbftZSDNvAuNBDzJjiVzo8dECJDN6hk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeafNTLRU0gQW9EagNiLLpEuEPZMF7SvxyZybfVjFd2vrppexI
-	ikTQ+ideZOzcHMvgeyOQ4Q/Ou3t3W8Ezeo1ZIkTc8lK9UVMJrnlwGjbFSKYilXt0KFA=
-X-Gm-Gg: ASbGncsC2wYT46dTlqaJkjMtdb0cH9PXEgG7YR+Uq+3zVL4RBRL5llpWVbqDctZVfoP
-	IXUE6J2xEdcEUibxJ2xAYVWsZDJmVI5ROtGr+xQdhs0ORuhRFbFRPIj4K6eTybywm/5i7QfXIGy
-	l+B1DGQSGqpecGXt8vyCmnytHRIkcrmLot1QtDIkq+UsR4fBeX7FJZo5BGEVB1PAqPXRGPFzELK
-	taNGgei4KSFBxE9gea3b1xeWR89prB/Hduxz2uIv1ICUmKLBTRMpA4ha6iiktUG/Q0Pub0xGgIC
-	0LOxRG6WEcJy8utSXLN1GMeYDvM+2lsLFXaRV+7V7hKHxe5Nb/iG8FuC33Obgn6U43cwJSu3S5d
-	4XnYhwKsino57/4KIupDJoF6YH7U97wbJjuBoa7arbjv0N6yn7W9nleidY60kHHDyBIxlJQFUtp
-	0=
-X-Google-Smtp-Source: AGHT+IGt+WO07cHyo0KGdsHsWGQNVNTID6bqFPImBKjJW+ieTZFVbQ/jTnDS2WSIykEd8QxgZNu6gQ==
-X-Received: by 2002:a05:6808:3319:b0:43f:18a2:97ae with SMTP id 5614622812f47-43f2d494e3emr1476355b6e.30.1758643436230;
-        Tue, 23 Sep 2025 09:03:56 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:505f:96cd:1359:fff4? ([2600:8803:e7e4:1d00:505f:96cd:1359:fff4])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-43d5c67bbdcsm5948711b6e.7.2025.09.23.09.03.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Sep 2025 09:03:55 -0700 (PDT)
-Message-ID: <21b52acb-9710-4363-803e-280773da0351@baylibre.com>
-Date: Tue, 23 Sep 2025 11:03:54 -0500
+	s=arc-20240116; t=1758683487; c=relaxed/simple;
+	bh=vH8bRAAAeNwt95lyr05jkhbdpez5LI3XSYx8WUp52Dw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XAI9B8Z1G90hPsgFmIli8msRKCfVMSFPLvvTOFO5HozHx8Zklago3w1M5/Zu+fGpmAnIw673b1gVXtA3a4Z467/jxxjxeFSqeiacf1gan3kOhv7BEh87OOVdGWoEQiz77EfE/uFRQL+N/B20wDJaUpTEYLKAC7f71TSBKlpYcgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=IGbBHPks; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
+	s=mxsw2412; t=1758683417;
+	bh=Jjv11R9aDZY3HkfGigCrmCIN/cryRhO5uSzQW7puPAU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version;
+	b=IGbBHPksHmyo7HGMGpYIRxvv1yQHUUEGLaTjQCjs9hGwgPPqXM3E21ozilYY3HE1W
+	 Qwz3AbnIwpx1kpgHmlMPJh7pRhCqXU5xFCUD3JIx5qg8X80A9Axg3WLNZvE8U1HSB0
+	 cN67sCRL2MMGYkq69V0AGlH6durb4cofcOM/gbzI=
+X-QQ-mid: zesmtpip3t1758683415te22064f3
+X-QQ-Originating-IP: yaxed/vfNqQ91O3loxchB2e5ZjRmDPdUjsPhX4ETg3c=
+Received: from = ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 24 Sep 2025 11:10:11 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 3107347898178425822
+EX-QQ-RecipientCnt: 18
+Date: Wed, 24 Sep 2025 11:10:06 +0800
+From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
+To: Alex Elder <elder@riscstar.com>,
+	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
+	Yixun Lan <dlan@gentoo.org>
+Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ziyao@disroot.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	p.zabel@pengutronix.de, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] riscv: dts: spacemit: define a SPI controller node
+Message-ID: <78FF4A33F1D1916E+aNNhDuW28Ia6o8gm@troy-wujie14pro-arch>
+References: <20250922161717.1590690-1-elder@riscstar.com>
+ <20250922161717.1590690-4-elder@riscstar.com>
+ <20250923001930-GYB1303776@gentoo.org>
+ <ED4C67FD136DEB19+aNINJJVYbNnT87va@LT-Guozexi>
+ <1aa28123-cfa4-415a-9d1b-4d9edd62489b@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] iio: adc: ad4030: Add SPI offload support
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
- devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, jic23@kernel.org,
- michael.hennerich@analog.com, nuno.sa@analog.com, eblanc@baylibre.com,
- andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- corbet@lwn.net, Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
- Trevor Gamblin <tgamblin@baylibre.com>, Axel Haslam <ahaslam@baylibre.com>
-References: <cover.1758214628.git.marcelo.schmitt@analog.com>
- <da55c0ed6fe895dc84e79c8b64e5923a4851e58f.1758214628.git.marcelo.schmitt@analog.com>
- <30659b16-290d-4ae5-a644-214c106bbe87@baylibre.com>
- <aNK8ZZu74mK0_ygB@debian-BULLSEYE-live-builder-AMD64>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <aNK8ZZu74mK0_ygB@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1aa28123-cfa4-415a-9d1b-4d9edd62489b@riscstar.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
+X-QQ-XMAILINFO: MKbitA53r7aLonQEbgqrpF7ztfkJgkvnuvhdf1wmMZ5nBRRn+9sSuoSO
+	0XVjrg8FIenKij+Qe65Gq+sKYXu0ft/S9xFm3145jOh/uH/59f1hg7kRGFIQ9tPMvJdHK5L
+	sHaBcMFzjGOxJbR6BHIbLqB4pgTxR2e4grbjBn8tBEwJfucDl6VD0CxdA15CKTjkkzyk2uX
+	IzYSlHAKd6+4O3Gz0ipWYUvbOFR6IuYGWI7lRYu+geyRNhPc8OvwTK2wWuDMuS2CIusMfVW
+	G8CQEuuLSaBTIK39E/0ilGNSusUkIiIs1sdjM/jroyIc4moo5GJgSIexDbMD1uZXV2I1/Y6
+	wQrzwlp8+mILcR7Nkevb1U1BmHMrSwgkSioDU9EDgm1S6liROC/7bSEQd1a/675PyIkPtKt
+	kjP6V4a0tbzCVZ0jDS0TbqnlcJMxxQGqqUEMKhdK8r0mfwWrCq+I+OWNWU9HkIHKgZIsmyS
+	MZV0hQl720cBquFJINtdip9l1jOSMqBSHuyBv7B4PfWUf5k/dVLnOzD6jjqOSVMiSfWYZBG
+	2ewlbV5BjaGJkMp07JU+sRjOsj5XK8Rrj2TNEWaC1mBAbyRJQ+zTJj/Htjsq6fd4ceJHOmI
+	9rIiUQcMtL0+ED/Rmigahjqn22L2eIBDjSfN8vrSP/5jjCnWMMbPSS5TW9G2t1p1mkqsDzO
+	H7OfaP0ur+4bPG3aHI7jmvRcKDUINNe0PocCUH3GQMcVBEMB+1dyWUPA7EbLjg/MyEhxu2O
+	l/Dc3Xtkm+67JZfcLC1uLSc5xXLNyJSXW3jnbkTIFCMAFwHfQ7BAwP28LrJMXQwu5YL4hr5
+	oUcfqZh5SXPm+JD+dyL0YHkhODNkJPDnJMSTAp8xTemOAioXkju5Bg3/Zy8BuP6xDxifmAr
+	rSt7/6IUrVYfNytDZYFq44GMDxPK872ajqnNa2+YP8fZ/p55icw13fFXlJ9jJ8qd0jZTYy9
+	QJ0B57q4FhxH9UhZZeL6kAS1vgadmT5pU/UoL9FMZgwGq5KMKldG/cwTng4KLBQ9MNEk+lB
+	GyFq7M9+ul0xfvIPiWAAuPjBvcG5LlgWeWmxW9breeYPAj8/gwBeJLvg3zT/3NlAY0upVBS
+	GTl3Jv4sNQ47gC6Lo577OgJ0rfhXP0cTsLZBd2tKLfH
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-On 9/23/25 10:27 AM, Marcelo Schmitt wrote:
-> Hi David, thanks for the insightful review.
+On Tue, Sep 23, 2025 at 07:49:34AM -0500, Alex Elder wrote:
+> On 9/22/25 9:59 PM, Troy Mitchell wrote:
+> > On Tue, Sep 23, 2025 at 08:19:30AM +0800, Yixun Lan wrote:
+> > > Hi Alex,
+> > > 
+> > > On 11:17 Mon 22 Sep     , Alex Elder wrote:
+> > > > Define a node for the fourth SoC SPI controller (number 3) on
+> > > > the SpacemiT K1 SoC.
+> > > > 
+> > > > Enable it on the Banana Pi BPI-F3 board, which exposes this feature
+> > > > via its GPIO block:
+> > > >    GPIO PIN 19:  MOSI
+> > > >    GPIO PIN 21:  MISO
+> > > >    GPIO PIN 23:  SCLK
+> > > >    GPIO PIN 24:  SS (inverted)
 > 
-> On 09/22, David Lechner wrote:
->> On 9/18/25 12:39 PM, Marcelo Schmitt wrote:
+> Note that the pin numbers I'm mentioning above are the numbers
+> (1-26) on the 26-pin GPIO header on the BPI-F3 board.
+> 
+> > > > 
+> > > > Define pincontrol configurations for the pins as used on that board.
+> > > > 
+> > > > (This was tested using a GigaDevice GD25Q64E SPI NOR chip.)
+> > > > 
+> > > > Signed-off-by: Alex Elder <elder@riscstar.com>
+> > > > ---
+> > > > v3: - Moved the SPI controller into the dma-bus memory region
+> > > > 
+> > > >   .../boot/dts/spacemit/k1-bananapi-f3.dts      |  7 +++++++
+> > > >   arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 20 +++++++++++++++++++
+> > > >   arch/riscv/boot/dts/spacemit/k1.dtsi          | 16 +++++++++++++++
+> > > >   3 files changed, 43 insertions(+)
+> > > > 
+> > > > diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> > > > index 2aaaff77831e1..d9d865fbe320e 100644
+> > > > --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> > > > +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
+> > > > @@ -14,6 +14,7 @@ aliases {
+> > > >   		ethernet0 = &eth0;
+> > > >   		ethernet1 = &eth1;
+> > > >   		serial0 = &uart0;
+> > > > +		spi3 = &spi3;
+> > > >   	};
+> > > >   	chosen {
+> > > > @@ -92,6 +93,12 @@ &pdma {
+> > > >   	status = "okay";
+> > > >   };
+> > > > +&spi3 {
+> > > > +	pinctrl-0 = <&ssp3_0_cfg>;
+> > > > +	pinctrl-names = "default";
+> > > > +	status = "okay";
+> > > > +};
+> > > > +
+> > > >   &uart0 {
+> > > >   	pinctrl-names = "default";
+> > > >   	pinctrl-0 = <&uart0_2_cfg>;
+> > > > diff --git a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> > > > index aff19c86d5ff3..205c201a3005c 100644
+> > > > --- a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> > > > +++ b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
+> > > > @@ -76,4 +76,24 @@ pwm14-1-pins {
+> > > >   			drive-strength = <32>;
+> > > >   		};
+> > > >   	};
+> > > > +
+> > > > +	ssp3_0_cfg: ssp3-0-cfg {
+> > > ..
+> > > > +		ssp3-0-no-pull-pins {
+> > > I'd prefer not to enforce "pull" info inside the name, you can't embed
+> > > all property info, besides, what's if you want to change/override later?
+> > > 
+> > > how about just name it as ssp3-0-defaul-pins or simply ssp3-0-pins?
+> > uart: uart0_2_cfg and function is 2.
+> > pwm: pwm14_1_cfg and function is 4
+> > spi: ssp3_0_cfg and function is 2
+> > 
+> > I’m a bit confused about the meaning of the second number here.
+> > Is it intended to be an index, or the function number?
+> 
+> It is an index, and it seems arbitrary but it is based on the
+> order in which they occur in a spreadsheet that defines a set
+> of possible pin configurations.
+> 
+> For example, SPI3 lists 2 possible pin combinations:
+> SCLK	GPIO[75] function 2	GPIO[59] function 2
+> FRM	GPIO[76] function 2	GPIO[60] function 2
+> TXD	GPIO[77] function 2	GPIO[61] function 2
+> RXD	GPIO[78] function 2	GPIO[62] function 2
+> 
+> > If it’s an index, should it start from 0 or 1?
+> 
+> It starts with 0.
+> 
+> > The starting point seems inconsistent across pwm/spi/uart.
+> > If it’s supposed to be the function number,
+> > then the spi and pwm parts look incorrect.
+> 
+> The first one (index 0) shows up earlier (lower line number) in
+> the spreadsheet, even though the GPIO numbers used are higher
+> than those in the second one.  They're grouped, and the first
+> one is in GPIO group 2 and the second is in GPIO group 5.
+Thanks! It makes sense.
 
-...
-
->>> +	cnv_wf.period_length_ns = DIV_ROUND_CLOSEST(NSEC_PER_SEC, freq);
->>> +	/*
->>> +	 * The datasheet lists a minimum time of 9.8 ns, but no maximum. If the
->>> +	 * rounded PWM's value is less than 10, increase the target value by 10
->>> +	 * and attempt to round the waveform again, until the value is at least
->>> +	 * 10 ns. Use a separate variable to represent the target in case the
->>> +	 * rounding is severe enough to keep putting the first few results under
->>> +	 * the minimum 10ns condition checked by the while loop.
->>> +	 */
->>> +	do {
->>> +		cnv_wf.duty_length_ns = target;
->>> +		ret = pwm_round_waveform_might_sleep(st->cnv_trigger, &cnv_wf);
->>> +		if (ret)
->>> +			return ret;
->>> +		target += AD4030_TCNVH_NS;
->>> +	} while (cnv_wf.duty_length_ns < AD4030_TCNVH_NS);
->>> +
->>> +	if (!in_range(cnv_wf.period_length_ns, AD4030_TCYC_NS, INT_MAX))
->>> +		return -EINVAL;
->>
->> I hit this error during testing with the default max_sample_rate_hz assigned
->> in probe. We could have a loop for this too to try to get the closest valid
->> period rather than erroring if the exact value isn't available.
->>
-> Yes, this makes sense. Though, looping to try to get a suitable period wouldn't
-> potentially also change the duty_length we settled above?
-
-I didn't think too hard about it or debug too deep. So it might be fine the
-way it is. We'll just want to make sure that when testing with a 2 MSPS part
-that we can get the max sample rate without error. The ZedBoard has some funny
-rounding due to clocks being divided by 3, so it could just be a case of
-having to to put in 1.998 MHz to actually get 2 MHz or something like
-that because of the lack of accuracy due to rounding.
+                - Troy
 
 > 
->>> +
->>> +	offload_period_ns = cnv_wf.period_length_ns;
->>> +	if (st->mode == AD4030_OUT_DATA_MD_30_AVERAGED_DIFF)
->>
-> ...
->>> +static int ad4030_set_sampling_freq(struct iio_dev *indio_dev, int freq)
->>> +{
->>> +	struct ad4030_state *st = iio_priv(indio_dev);
->>> +
->>> +	/*
->>> +	 * We have no control over the sampling frequency without SPI offload
->>> +	 * triggering.
->>> +	 */
->>> +	if (!st->offload_trigger)
->>> +		return -ENODEV;
->>> +
->>> +	if (!in_range(freq, 1, st->chip->max_sample_rate_hz))
->>> +		return -EINVAL;
->>> +
->>> +	guard(mutex)(&st->lock);
->>
->> Why not iio_device_claim_direct() instead of a new lock? We wouldn't
->> want to change the sampling frequency during a buffered read anyway.
->> This driver already uses iio_device_claim_direct() to protect other
->> register access.
+> 					-Alex
 > 
-> The new lock is to protect concurrent updates of the oversampling and sampling
-> frequency. Since, oversampling and the sampling frequency properties are
-> mutually dependent one from another, a simultaneous write to those attributes
-> could lead to an invalid oversamp + samp freq configuration.
-
-I understand the need for the protection. And using iio_device_claim_direct()
-seems like it could do the job without the need for an additional lock.
-
+> > Could you clarify this? Yixun.
+> > 
+> >                  - Troy
+> > > 
+> > > > +			pinmux = <K1_PADCONF(75, 2)>,	/* SCLK */
+> > > > +				 <K1_PADCONF(77, 2)>,	/* MOSI  */
+> > > > +				 <K1_PADCONF(78, 2)>;	/* MISO */
+> > > > +
+> > > > +			bias-disable;
+> > > > +			drive-strength = <19>;
+> > > > +			power-source = <3300>;
+> > > > +		};
+> > > > +
+> > > > +		ssp3-0-frm-pins {
+> > > > +			pinmux = <K1_PADCONF(76, 2)>;	/* FRM (frame) */
+> > > > +
+> > > > +			bias-pull-up = <0>;
+> > > > +			drive-strength = <19>;
+> > > > +			power-source = <3300>;
+> > > > +		};
+> > > > +	};
+> > > >   };
+> > > > diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > > > index 6cdcd80a7c83b..eb8a14dd72ea4 100644
+> > > > --- a/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > > > +++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
+> > > > @@ -797,6 +797,22 @@ uart9: serial@d4017800 {
+> > > >   				status = "disabled";
+> > > >   			};
+> > > > +			spi3: spi@d401c000 {
+> > > > +				compatible = "spacemit,k1-spi";
+> > > > +				reg = <0x0 0xd401c000 0x0 0x30>;
+> > > > +				#address-cells = <1>;
+> > > > +				#size-cells = <0>;
+> > > > +				clocks = <&syscon_apbc CLK_SSP3>,
+> > > > +					 <&syscon_apbc CLK_SSP3_BUS>;
+> > > > +				clock-names = "core", "bus";
+> > > > +				resets = <&syscon_apbc RESET_SSP3>;
+> > > > +				interrupts = <55>;
+> > > ..
+> > > > +				dmas = <&pdma 20>,
+> > > > +				       <&pdma 19>;
+> > > can we also squash the dmas into one line? but, do split if there are too many..
+> > > 
+> > > yes, it's simply a style change that I'd like to keep them consistent at DT level,
+> > > besides you might also want to adjust dt-binding examples to align with them here..
+> > > 
+> > > thanks
+> > > 
+> > > > +				dma-names = "rx", "tx";
+> > > > +				status = "disabled";
+> > > > +			};
+> > > > +
+> > > >   			/* sec_uart1: 0xf0612000, not available from Linux */
+> > > >   		};
+> > > > -- 
+> > > > 2.48.1
+> > > > 
+> > > > 
+> > > 
+> > > -- 
+> > > Yixun Lan (dlan)
+> > > 
+> > > _______________________________________________
+> > > linux-riscv mailing list
+> > > linux-riscv@lists.infradead.org
+> > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+> 
 
