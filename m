@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-10247-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10251-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F3AB98988
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:46:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E23B989D0
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13E572E4BDB
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:46:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBD6D7B13C6
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E9727FB06;
-	Wed, 24 Sep 2025 07:46:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2B628643F;
+	Wed, 24 Sep 2025 07:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cRGsFYix"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FjR/Z1gT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93260A95E;
-	Wed, 24 Sep 2025 07:46:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495CA28313B;
+	Wed, 24 Sep 2025 07:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758699979; cv=none; b=o24iPE9hBAFfFYPF+G4awDiGjtsP4eXzZys/Z1JAUeINsaZDGLoXwbAi92OT5XCLx9ci92EfGPojHaMvJPPhJ996iiOpQJE0Vm6mChvPYqMOXfLzbprwMNdPEKmMigEk0S0YGoH1VzTq+MWbSxfH0Oo3T5fMTKKJ9Je3Yu2nSlU=
+	t=1758699984; cv=none; b=o5NoIeiokVrs0Byz3SVqbmzZaUZLuFy4lmGLeM5fPtYc+5JlZ68oW63U5nFxtV+Teg3T18qpWDFijCvbt95VNvohAa/fet8vrrmZb7ypbmg94PnbE38B2Yrq8f9GqhawhlPv/pAvGi+gh44XI9RpOeJYWpQW7+Td1f8dAQjMHTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758699979; c=relaxed/simple;
-	bh=JvDek3868I+EgXDu4lEVZh0rf97VIgk/Snbhy8YIQcw=;
+	s=arc-20240116; t=1758699984; c=relaxed/simple;
+	bh=9gKh4zZHKRjG5O5xZKeZNVKtn+qWdxGPT4mjimC1a7Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mTCbjTBvsB7QIwg7uxKDGqDuDWd98l0CSt4Rt0K1iCBiG3CrPcyiwqOfIB5iYj94TMbzelbm2p7WpuHHp1bjLLNkNi2hNOR4uscmbE1HfQz7gWgP0nkBuhtSfn8B1tUNrXxOEf1ZkAweGhb0yryIBKVndSYGALFOJVdGRUcigLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cRGsFYix; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=nD909wt6t52inUMCgmrdXZS13gveTy2n1neIBvpujDdZkxzOmA/lV2746bJNOZV4m40J+SGlgOGwaoyf2MjhQGGzKvTACUDZIWvjeVilXcE24OCi0krDPjZRpbo47cmHhmaHP82tSX/uTjPmd/AjzekUKdsOeoAg2ndE7j8QYtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FjR/Z1gT; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758699978; x=1790235978;
+  t=1758699983; x=1790235983;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JvDek3868I+EgXDu4lEVZh0rf97VIgk/Snbhy8YIQcw=;
-  b=cRGsFYix+th60d5bT9j2W5JeUssWOP5kIP2gD5kZlqT6YYx/nF6YbIZx
-   62tZRhS9uQcSK5WObFq6aH5Q0vS+Tc1Dywe4OzFh+9aO+rxgBNNzGw/No
-   gWgT5laNADXlhamO/1G3EUwXeelV97f/DSLQankUu4Nop2K7e4xhRvp+5
-   owf8BZjN97gDe6ROCjS7yd3UGRuUcH59HJ5iQVybhkeWkHt1n/IynV1Hb
-   qLHwrklpq2vr9xFMwkxthAyG8QL8v5TNGQVMEbbORkpVb2wYMO7/d45H5
-   Muf2KNh1Sj3DmfurB0yw7Uy7WraIo/G84bOfekRCXbVPysZw0xHXyH2fh
+  bh=9gKh4zZHKRjG5O5xZKeZNVKtn+qWdxGPT4mjimC1a7Y=;
+  b=FjR/Z1gTHo8TVIzyIJsxEvFB8JSEGgabG2CRtYGOl7OUGGpGRlYCzH5t
+   WkhwElbOjFfx91+31RwEppx4U+magjJpQjXuLHqBfRWstecORj6iB3wPu
+   7dTPpklMgL6NLQCh299dViKbob78ZKMf+0g06VGVMlOkuab5ZOWJA7pIk
+   mAcBR4h2ybpjB6rmux14+mvtNJnehmqDKXbik9bNKqiWIxCcs5fwgSdRJ
+   YKAT1UjgFvfa58yKrLjk9Il0Qwlf44XVyZoL7vGCpBYM2V+AazxYBeS93
+   sz+pog1sX+5ZNWjtYBI0KnI2B1CilHfa/TURebo89vhuG3q96ugH/70rZ
    w==;
-X-CSE-ConnectionGUID: QkFjiIWARxe36aJDpBOpmA==
-X-CSE-MsgGUID: pjtkPmsURESCjazbaB+b2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="72346910"
+X-CSE-ConnectionGUID: AierEKxORdKx0mYNtvHnig==
+X-CSE-MsgGUID: DunrCuN6Tpe3K2r+ZfCtCQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="72346962"
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="72346910"
+   d="scan'208";a="72346962"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:14 -0700
-X-CSE-ConnectionGUID: CScHHwNbR/K+jJNyCBGC2g==
-X-CSE-MsgGUID: O001B7FtQBqXhllo8rLSFw==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:15 -0700
+X-CSE-ConnectionGUID: HHoOIoHtTXqPU44JjbpKCg==
+X-CSE-MsgGUID: lLct0mbRRc6YVlxCXgiEiw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="176552705"
+   d="scan'208";a="176552709"
 Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.128])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:05 -0700
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:06 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8EB9D1213E4;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 925E8121ED5;
 	Wed, 24 Sep 2025 10:46:02 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1v1KCQ-000000017Hv-2IyK;
+	id 1v1KCQ-000000017Hz-2N7c;
 	Wed, 24 Sep 2025 10:46:02 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -102,9 +102,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@kernel.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 03/16] ACPI: property: Rework acpi_graph_get_next_endpoint()
-Date: Wed, 24 Sep 2025 10:45:49 +0300
-Message-ID: <20250924074602.266292-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 04/16] ACPI: property: Return present device nodes only on fwnode interface
+Date: Wed, 24 Sep 2025 10:45:50 +0300
+Message-ID: <20250924074602.266292-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
 References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
@@ -116,42 +116,59 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rework the code obtaining the next endpoint in
-acpi_graph_get_next_endpoint(). The resulting code removes unnecessary
-contitionals and should be easier to follow.
+fwnode_graph_get_next_subnode() may return fwnode backed by ACPI device
+nodes and there has been no check these devices are present in the system,
+unlike there has been on fwnode OF backend. In order to provide consistent
+behaviour towards callers, add a check for device presence by introducing
+a new function acpi_get_next_present_subnode(), used as the
+get_next_child_node() fwnode operation that also checks device node
+presence.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/acpi/property.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/acpi/property.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-index 3e85900080ac..5438592dc136 100644
+index 5438592dc136..01f3880ffcce 100644
 --- a/drivers/acpi/property.c
 +++ b/drivers/acpi/property.c
-@@ -1399,14 +1399,15 @@ static struct fwnode_handle *acpi_graph_get_next_endpoint(
- 	if (!port)
- 		return NULL;
+@@ -1319,6 +1319,26 @@ acpi_get_next_subnode(const struct fwnode_handle *fwnode,
+ 	return NULL;
+ }
  
--	endpoint = acpi_get_next_subnode(port, prev);
--	while (!endpoint) {
--		port = acpi_get_next_subnode(fwnode, port);
--		if (!port)
++/**
++ * acpi_get_next_present_subnode - Return the next present child node handle for a fwnode
++ * @fwnode: Firmware node to find the next child node for.
++ * @child: Handle to one of the device's child nodes or a null handle.
++ * Like acpi_get_next_subnode(), but the device nodes returned by
++ * acpi_get_next_present_subnode() are guaranteed to be present.
++ * Returns: The next sub-node fwnode handle.
++ */
++static struct fwnode_handle *
++acpi_get_next_present_subnode(const struct fwnode_handle *fwnode,
++			      struct fwnode_handle *child)
++{
 +	do {
-+		endpoint = acpi_get_next_subnode(port, prev);
-+		if (endpoint)
- 			break;
++		child = acpi_get_next_subnode(fwnode, child);
++	} while (is_acpi_device_node(child) &&
++		 !acpi_device_is_present(to_acpi_device_node(child)));
 +
-+		port = acpi_get_next_subnode(fwnode, port);
- 		if (is_acpi_graph_node(port, "port"))
--			endpoint = acpi_get_next_subnode(port, NULL);
--	}
-+			prev = NULL;
-+	} while (port);
- 
- 	/*
- 	 * The names of the endpoint nodes begin with "endpoint@" followed by
++	return child;
++}
++
+ /**
+  * acpi_node_get_parent - Return parent fwnode of this fwnode
+  * @fwnode: Firmware node whose parent to get
+@@ -1664,7 +1684,7 @@ static int acpi_fwnode_irq_get(const struct fwnode_handle *fwnode,
+ 		.property_read_string_array =				\
+ 			acpi_fwnode_property_read_string_array,		\
+ 		.get_parent = acpi_node_get_parent,			\
+-		.get_next_child_node = acpi_get_next_subnode,		\
++		.get_next_child_node = acpi_get_next_present_subnode,	\
+ 		.get_named_child_node = acpi_fwnode_get_named_child_node, \
+ 		.get_name = acpi_fwnode_get_name,			\
+ 		.get_name_prefix = acpi_fwnode_get_name_prefix,		\
 -- 
 2.47.3
 
