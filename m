@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-10258-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10253-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1500BB98A5C
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:49:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07445B989FF
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:48:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDB3F4A68FD
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:49:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6EE41B20EFB
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E272C0267;
-	Wed, 24 Sep 2025 07:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F62289E13;
+	Wed, 24 Sep 2025 07:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WcYAS+Ha"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NL4kY5gb"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6752B27FD56;
-	Wed, 24 Sep 2025 07:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D9C287515;
+	Wed, 24 Sep 2025 07:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758699991; cv=none; b=UyQ9i6/Wg3QV3qDDvT04+G4A50lSfd6soqbeo/tmsW9x/BKe11KnhHlqlIAm+tid649ZbgXWSbp2qBbkQVB+7COzl2Ohg/CI0mTCSbKxFFHew9x+YbU5gqzvw4Wb7wiOQm8k1E1Bly1X1aB2Jm7MGxZyHAXrFvzmESfTfFbCELs=
+	t=1758699988; cv=none; b=NhKjY29UK90KDP4Uf2SO5Mk3IhyHP1U2UDUZe03+YTUlqouu48omhOcFBO3ySc/sGN6VRn93wv8tixFdrYREhJtc6H+bDyg7Qq3W+DGlJ3A597kPVUygLenlO+8uTGV/x57pVIqKMuABEC6d8OTxL4VfdyP5mI7mFlM20r90Nac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758699991; c=relaxed/simple;
-	bh=PJ/0flzXVWcNhnUEcXMEKNKkeTXGBw9Rsb6c3sMfa+U=;
+	s=arc-20240116; t=1758699988; c=relaxed/simple;
+	bh=/leBFCw4LZOfJtYhFEIL/GjAyRMTnUr/74r6sRTj9lw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mCWoCyyrPweehVH7IWogAGCLnfiU4x5pQCZfjvLW47T7+1CB5ocVE2mXfU866U1OSWnfJIOiFhY01OljU/HMx8v3GcO2w7hyXPTzPwHNXwCoZtKpeRul2l991bVz3O0jY3HCInjMZdrE21NawWRrrKQc1Ua6Cm/wtt+5HJAASZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WcYAS+Ha; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=k8BlN/ye1kuBkkEdTwBcDfkEMgSi2i4nf8dNnA5IHoSTw9wjuTOzeeccwCPaD/IhoSJWVLVzB2rZa8/qlSzKdfNPkq2Y/pZqbT/LF5aZNigsZf3chOSeawjqY/aONIeVCAnLLCtdm4PXl9YIJ03hc2XuqFWvgqf1h6OcZ8aIyi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NL4kY5gb; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758699990; x=1790235990;
+  t=1758699986; x=1790235986;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PJ/0flzXVWcNhnUEcXMEKNKkeTXGBw9Rsb6c3sMfa+U=;
-  b=WcYAS+Ha6cl2RlsOhyzBKPMIW+tukrKXj6I4J+4wlnSTASVZocwhldgk
-   G/cF4xSd7vd29OVkyhwpZcuhxVTe6neH0k+lazoCG4Rj2zg5g00Ais44f
-   Po8oTe++5X/i5SaiDfcVKTHUw4iC9bSxKZirg/D23HzH0SRczbIbHcVVt
-   ya9gAzPGfIbBywKSKZjvk+vfLT4DBZapbjxp8UrigV/MkTh8k05FIDxYh
-   613NdrrrxZ98LG8i8a0+NsoNUxQJ/gyG4bP4xAYpAsqqaDPn24fswX0vA
-   Gu1xk2++QZv+i3ZJDzPEvUAcqKyhp1QrHyWa9uFUs/0j+KEp3e8/KkZlZ
-   g==;
-X-CSE-ConnectionGUID: 0OcDQgPkTDuTyTfaRSOY2Q==
-X-CSE-MsgGUID: KkNQUfZPToSmCftgEpQGXw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="61101970"
+  bh=/leBFCw4LZOfJtYhFEIL/GjAyRMTnUr/74r6sRTj9lw=;
+  b=NL4kY5gbDsSsuZipuXDi3KerZ7+y44wBcJtbxNsptJq/KP7E9m/JQY+6
+   vZwhmh63TFIRm3Ttaz51ODPjtx9dS7ZbzavndbX6pgYSETmcVsyo7fFvM
+   /sbsjPEKOY3q2W+ktixklZdmdIzmjd8+Y2dNeb+s8qnXX1kWv2ANijZYY
+   H8ZLav+Na7oJuBpAT5qhQ8Umw7Uq7x9px8wsQ6JVBjf9RR23RceQBeR15
+   rXjyjba3tQ4yTlEMfWujhAxxPj3Go2oNEkCIqgMq/QOPrvrF6mRQZfxGm
+   ANk2mqXxIxnCisjPukGEDBhp5hguTtVOiKdXVaLndxmAqOq/Dt1/JEdKV
+   w==;
+X-CSE-ConnectionGUID: 3f+EyDJ+TVOSOHSO+XMlDw==
+X-CSE-MsgGUID: gcLtTAdvRLy3vFT6iuHFtg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="61101868"
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="61101970"
+   d="scan'208";a="61101868"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:24 -0700
-X-CSE-ConnectionGUID: LX4BoujZRLGq+JWqCpaCfQ==
-X-CSE-MsgGUID: 7uNsXV0cQn+ZjY09fP/IdA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:23 -0700
+X-CSE-ConnectionGUID: M1zj3XpKTDyaHMROBz1OuA==
+X-CSE-MsgGUID: Bj4xj9R7SeuVCm3d0gjGWA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="200668531"
+   d="scan'208";a="200668533"
 Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.128])
   by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:16 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id A2508121EE7;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id A6506121EEB;
 	Wed, 24 Sep 2025 10:46:02 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1v1KCQ-000000017IL-2ew1;
+	id 1v1KCQ-000000017IQ-2j6B;
 	Wed, 24 Sep 2025 10:46:02 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -102,9 +102,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@kernel.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 08/16] property: Document that fwnode API returns available nodes
-Date: Wed, 24 Sep 2025 10:45:54 +0300
-Message-ID: <20250924074602.266292-9-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 09/16] driver core: Use fwnode_for_each_child_node() instead
+Date: Wed, 24 Sep 2025 10:45:55 +0300
+Message-ID: <20250924074602.266292-10-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
 References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
@@ -116,79 +116,66 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The fwnode API has historically provided two functions to iterate over a
-fwnode's child nodes, fwnode_get_next_child_node() and
-fwnode_get_next_available_child_node() whereas all of the fwnode API has
-always worked on available nodes, apart unavailable ACPI child device
-nodes could have been returned by fwnode_get_next_child_node().
-
-Now that the availability check has been added to ACPI side as well,
-document that the functions in the fwnode API return available nodes.
+fwnode_for_each_child_node() is now the same as
+fwnode_for_each_available_child_node() on all backends (OF, ACPI and
+swnode). In order to remove the available variants, switch the uses to
+non-available variants.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/base/property.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/base/core.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 4bd64e729431..ff440456af7b 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -785,7 +785,7 @@ struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
- EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index d22d6b23e758..4bffd347e2f9 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -185,7 +185,7 @@ void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+ 	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
+ 	fwnode_links_purge_consumers(fwnode);
  
- /**
-- * fwnode_get_next_child_node - Return the next child node handle for a node
-+ * fwnode_get_next_child_node - Return the next available child node handle
-  * @fwnode: Firmware node to find the next child node for.
-  * @child: Handle to one of the node's child nodes or a %NULL handle.
-  *
-@@ -830,7 +830,7 @@ fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
- EXPORT_SYMBOL_GPL(fwnode_get_next_available_child_node);
+-	fwnode_for_each_available_child_node(fwnode, child)
++	fwnode_for_each_child_node(fwnode, child)
+ 		fw_devlink_purge_absent_suppliers(child);
+ }
+ EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
+@@ -231,7 +231,7 @@ static void __fw_devlink_pickup_dangling_consumers(struct fwnode_handle *fwnode,
+ 	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
+ 	__fwnode_links_move_consumers(fwnode, new_sup);
  
- /**
-- * device_get_next_child_node - Return the next child node handle for a device
-+ * device_get_next_child_node - Return the next available child node handle for a device
-  * @dev: Device to find the next child node for.
-  * @child: Handle to one of the device's child nodes or a %NULL handle.
-  *
-@@ -858,7 +858,7 @@ struct fwnode_handle *device_get_next_child_node(const struct device *dev,
- EXPORT_SYMBOL_GPL(device_get_next_child_node);
+-	fwnode_for_each_available_child_node(fwnode, child)
++	fwnode_for_each_child_node(fwnode, child)
+ 		__fw_devlink_pickup_dangling_consumers(child, new_sup);
+ }
  
- /**
-- * fwnode_get_named_child_node - Return first matching named child node handle
-+ * fwnode_get_named_child_node - Return first available matching named child node handle
-  * @fwnode: Firmware node to find the named child node for.
-  * @childname: String to match child node name against.
-  *
-@@ -874,7 +874,7 @@ fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
- EXPORT_SYMBOL_GPL(fwnode_get_named_child_node);
+@@ -1318,7 +1318,7 @@ void device_links_driver_bound(struct device *dev)
  
- /**
-- * device_get_named_child_node - Return first matching named child node handle
-+ * device_get_named_child_node - Return first available matching named child node handle for a device
-  * @dev: Device to find the named child node for.
-  * @childname: String to match child node name against.
-  *
-@@ -928,7 +928,7 @@ bool fwnode_device_is_available(const struct fwnode_handle *fwnode)
- EXPORT_SYMBOL_GPL(fwnode_device_is_available);
+ 		guard(mutex)(&fwnode_link_lock);
  
- /**
-- * fwnode_get_child_node_count - return the number of child nodes for a given firmware node
-+ * fwnode_get_child_node_count - Return the number of available child nodes for a given firmware node
-  * @fwnode: Pointer to the parent firmware node
-  *
-  * Return: the number of child nodes for a given firmware node.
-@@ -946,7 +946,7 @@ unsigned int fwnode_get_child_node_count(const struct fwnode_handle *fwnode)
- EXPORT_SYMBOL_GPL(fwnode_get_child_node_count);
+-		fwnode_for_each_available_child_node(dev->fwnode, child)
++		fwnode_for_each_child_node(dev->fwnode, child)
+ 			__fw_devlink_pickup_dangling_consumers(child,
+ 							       dev->fwnode);
+ 		__fw_devlink_link_to_consumers(dev);
+@@ -1736,7 +1736,7 @@ static void fw_devlink_parse_fwtree(struct fwnode_handle *fwnode)
  
- /**
-- * fwnode_get_named_child_node_count - number of child nodes with given name
-+ * fwnode_get_named_child_node_count - Return the number of available child nodes with given name
-  * @fwnode: Node which child nodes are counted.
-  * @name: String to match child node name against.
-  *
+ 	fw_devlink_parse_fwnode(fwnode);
+ 
+-	while ((child = fwnode_get_next_available_child_node(fwnode, child)))
++	while ((child = fwnode_get_next_child_node(fwnode, child)))
+ 		fw_devlink_parse_fwtree(child);
+ }
+ 
+@@ -2309,7 +2309,7 @@ static void __fw_devlink_link_to_suppliers(struct device *dev,
+ 	 * case where the supplier is added before the consumer's parent device
+ 	 * (@dev).
+ 	 */
+-	while ((child = fwnode_get_next_available_child_node(fwnode, child)))
++	while ((child = fwnode_get_next_child_node(fwnode, child)))
+ 		__fw_devlink_link_to_suppliers(dev, child);
+ }
+ 
 -- 
 2.47.3
 
