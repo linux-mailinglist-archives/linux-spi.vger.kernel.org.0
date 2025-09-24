@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-10281-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10282-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C206CB99598
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 12:06:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E55FAB995BF
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 12:07:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AF27321976
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 10:05:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F18D7A93D0
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 10:06:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8B52DCBE3;
-	Wed, 24 Sep 2025 10:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675B82DC783;
+	Wed, 24 Sep 2025 10:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="GBTyqdBq"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="MG9U504x"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DB22DC341;
-	Wed, 24 Sep 2025 10:05:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3B52BCF5;
+	Wed, 24 Sep 2025 10:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758708334; cv=none; b=MhJWR6EKBb1rhQJlB2OBMC35KI2869KyEEREiS1v9Rx3I6G+QVHIQD+ubDyMUsAKn+U+8He/oxYroBXH6VLFlassooJ7IqrRycHSC92cx6dFR8s2qbNkoY0RQBdfB/DwGUy6wzBzZfY5h3SlxpRkvOFVKIaaWe3lIvqf3S3WZnE=
+	t=1758708456; cv=none; b=DUmm4WqERDQ0SwhBOTD4SW9EN/OW+4oNnSNrF3llqayvR6h2tiU/IwRBbZ8O6ZegkVbqZtOA8gDaUJ90XpTrfqf0PIewyGhjpxlb1wX3MtO4ic5pwUWUtMmZkw1AglaBXkmspWi4A2Jb+Y9K9A9MFPMndri4+t+zuXObbCcmA3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758708334; c=relaxed/simple;
-	bh=/uGlAhygClhoPDVRQPCwG9G95dwItASnVdcJVlvF1aY=;
+	s=arc-20240116; t=1758708456; c=relaxed/simple;
+	bh=wYs42sFxB1z6qStU60RP+A1H9ebtQZzHVrEmZGgoccg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ni3ROPzgm4DxQnRjUrWt1/JAu0K7w75ak1IUppPWtnHEw3RBSILMxyoV1SrRNJgK1xtqmdep3R3lAIjc6EUmGjWP3mINdlSBGfr0rUqpVYU3K1B1run7X7sm4j1q4OSHaFWorf2qW1I/K0CmbI7MhmPV5715uM0zDIuD8X2yjU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=GBTyqdBq; arc=none smtp.client-ip=213.167.242.64
+	 Content-Type:Content-Disposition:In-Reply-To; b=bCmsk+CE83Uf/WBoBQNkQTF/pN8DyHGeYsj0xXEqyosgp+KVS2PeyVIAgh2DpW74LNkbJ2u1PDqgGYN34/ZSvuN3FxQEQ+4iKiEG0L9tWKB5BWqL3GoERQ8Pup9b9S537faMFlXuDOeaIE8a38IvIIcMeW3BpLp5WqNGH9zMtcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=MG9U504x; arc=none smtp.client-ip=213.167.242.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Received: from pendragon.ideasonboard.com (85-76-33-231-nat.elisa-mobile.fi [85.76.33.231])
-	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id AE43C1E30;
-	Wed, 24 Sep 2025 12:04:03 +0200 (CEST)
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 37666169;
+	Wed, 24 Sep 2025 12:06:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1758708244;
-	bh=/uGlAhygClhoPDVRQPCwG9G95dwItASnVdcJVlvF1aY=;
+	s=mail; t=1758708363;
+	bh=wYs42sFxB1z6qStU60RP+A1H9ebtQZzHVrEmZGgoccg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GBTyqdBqsGwcYQgvCkzmg1ptFgclVBZ2tr2cEBUfdb0bxQsuhoZ1X4p2l3jT1aq5b
-	 WRb7o/3dNvVVj6e//lvTK+82zN0Arkx9zbOzsZp1Dagu7Y0Nps/Li10vjaOGDVbNtl
-	 3Yb19zNB07cjWf1MzBTqyyKVa4YLYrSMtVSz/L/8=
-Date: Wed, 24 Sep 2025 13:04:54 +0300
+	b=MG9U504xXOiYhIvbDW9REDTOwCjd1Rjc3OlzBpQ0TbuiOaL7H8w/SIypUhTxNx6+o
+	 OaQlncSq44/yQZqjh5QStUtWUFSBp4q2taKlfrxpThAXZCWz7NtQhYegKHG95MdtPQ
+	 mYbjfEn2x2obfoJe4j8CwY4ieKsbVCP8NOHrQiK0=
+Date: Wed, 24 Sep 2025 13:06:54 +0300
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To: Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,11 +71,11 @@ Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@kernel.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 16/16] spi: cadence: Remove explicit device node
- availability check
-Message-ID: <20250924100454.GN28073@pendragon.ideasonboard.com>
+Subject: Re: [PATCH v2 08/16] property: Document that fwnode API returns
+ available nodes
+Message-ID: <20250924100654.GO28073@pendragon.ideasonboard.com>
 References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
- <20250924074602.266292-17-sakari.ailus@linux.intel.com>
+ <20250924074602.266292-9-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,38 +84,90 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250924074602.266292-17-sakari.ailus@linux.intel.com>
+In-Reply-To: <20250924074602.266292-9-sakari.ailus@linux.intel.com>
 
 Hi Sakari,
 
-Thank you for the patch.
-
-On Wed, Sep 24, 2025 at 10:46:02AM +0300, Sakari Ailus wrote:
-> Don't check the availability of child device nodes explicitly as this is
-> now embedded in device_for_each_child_node().
+On Wed, Sep 24, 2025 at 10:45:54AM +0300, Sakari Ailus wrote:
+> The fwnode API has historically provided two functions to iterate over a
+> fwnode's child nodes, fwnode_get_next_child_node() and
+> fwnode_get_next_available_child_node() whereas all of the fwnode API has
+> always worked on available nodes, apart unavailable ACPI child device
+> nodes could have been returned by fwnode_get_next_child_node().
+> 
+> Now that the availability check has been added to ACPI side as well,
+> document that the functions in the fwnode API return available nodes.
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/base/property.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 4bd64e729431..ff440456af7b 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -785,7 +785,7 @@ struct fwnode_handle *fwnode_get_nth_parent(struct fwnode_handle *fwnode,
+>  EXPORT_SYMBOL_GPL(fwnode_get_nth_parent);
+>  
+>  /**
+> - * fwnode_get_next_child_node - Return the next child node handle for a node
+> + * fwnode_get_next_child_node - Return the next available child node handle
+>   * @fwnode: Firmware node to find the next child node for.
+>   * @child: Handle to one of the node's child nodes or a %NULL handle.
+>   *
+> @@ -830,7 +830,7 @@ fwnode_get_next_available_child_node(const struct fwnode_handle *fwnode,
+>  EXPORT_SYMBOL_GPL(fwnode_get_next_available_child_node);
+>  
+>  /**
+> - * device_get_next_child_node - Return the next child node handle for a device
+> + * device_get_next_child_node - Return the next available child node handle for a device
+
+You may want to drop "for a device" at the end of the line, it seems
+you've made that change in 15/16 instead of here.
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-> ---
->  drivers/spi/spi-cadence-xspi.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-cadence-xspi.c b/drivers/spi/spi-cadence-xspi.c
-> index 6dcba0e0ddaa..23e426ef9b9c 100644
-> --- a/drivers/spi/spi-cadence-xspi.c
-> +++ b/drivers/spi/spi-cadence-xspi.c
-> @@ -908,9 +908,6 @@ static int cdns_xspi_of_get_plat_data(struct platform_device *pdev)
->  	unsigned int cs;
+>   * @dev: Device to find the next child node for.
+>   * @child: Handle to one of the device's child nodes or a %NULL handle.
+>   *
+> @@ -858,7 +858,7 @@ struct fwnode_handle *device_get_next_child_node(const struct device *dev,
+>  EXPORT_SYMBOL_GPL(device_get_next_child_node);
 >  
->  	device_for_each_child_node(&pdev->dev, fwnode_child) {
-> -		if (!fwnode_device_is_available(fwnode_child))
-> -			continue;
-> -
->  		if (fwnode_property_read_u32(fwnode_child, "reg", &cs)) {
->  			dev_err(&pdev->dev, "Couldn't get memory chip select\n");
->  			fwnode_handle_put(fwnode_child);
+>  /**
+> - * fwnode_get_named_child_node - Return first matching named child node handle
+> + * fwnode_get_named_child_node - Return first available matching named child node handle
+>   * @fwnode: Firmware node to find the named child node for.
+>   * @childname: String to match child node name against.
+>   *
+> @@ -874,7 +874,7 @@ fwnode_get_named_child_node(const struct fwnode_handle *fwnode,
+>  EXPORT_SYMBOL_GPL(fwnode_get_named_child_node);
+>  
+>  /**
+> - * device_get_named_child_node - Return first matching named child node handle
+> + * device_get_named_child_node - Return first available matching named child node handle for a device
+>   * @dev: Device to find the named child node for.
+>   * @childname: String to match child node name against.
+>   *
+> @@ -928,7 +928,7 @@ bool fwnode_device_is_available(const struct fwnode_handle *fwnode)
+>  EXPORT_SYMBOL_GPL(fwnode_device_is_available);
+>  
+>  /**
+> - * fwnode_get_child_node_count - return the number of child nodes for a given firmware node
+> + * fwnode_get_child_node_count - Return the number of available child nodes for a given firmware node
+>   * @fwnode: Pointer to the parent firmware node
+>   *
+>   * Return: the number of child nodes for a given firmware node.
+> @@ -946,7 +946,7 @@ unsigned int fwnode_get_child_node_count(const struct fwnode_handle *fwnode)
+>  EXPORT_SYMBOL_GPL(fwnode_get_child_node_count);
+>  
+>  /**
+> - * fwnode_get_named_child_node_count - number of child nodes with given name
+> + * fwnode_get_named_child_node_count - Return the number of available child nodes with given name
+>   * @fwnode: Node which child nodes are counted.
+>   * @name: String to match child node name against.
+>   *
 
 -- 
 Regards,
