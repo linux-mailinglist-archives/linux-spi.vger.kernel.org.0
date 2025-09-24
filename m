@@ -1,69 +1,69 @@
-Return-Path: <linux-spi+bounces-10252-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10254-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63AFB98A05
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA0EBB98A35
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 09:49:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D76A32E5215
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D67F169024
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCC852877D8;
-	Wed, 24 Sep 2025 07:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE23C28DB71;
+	Wed, 24 Sep 2025 07:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kBgOw7Kp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LMPlNoXR"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53412868AC;
-	Wed, 24 Sep 2025 07:46:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E640C2877EE;
+	Wed, 24 Sep 2025 07:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758699986; cv=none; b=DVw+3yd6hWyOLVrhdPGCJ+CcbsgxwfP/uL9NKeRfH3TmfPJbtynj/YWJXmOBv62E13sULayxZCJtUrbplEhuUzWyDovPKIqOxBU93z6AjqgPG+HOpEntj6gzvk2X1wDvJ9fhKSMXc1yorQbXFm4ZX9OpAhiGz5rV4Osb4jzB2zE=
+	t=1758699988; cv=none; b=A/9LUwvokkGM5w4FD/HGkb5GlgFBfon9rwrNKJmEhLR8HVl+mWbN2P6oZdYdQ1yV+I3uzfFfSZ2G7Ew3ewotMrAc/Dbdstr15D4z2YM/5klUTOq4fcBnIgKdGUCEC1rwJOeN6C4fRhDSKCeftXGixp5IntDhlE8umWHmAKsIIN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758699986; c=relaxed/simple;
-	bh=Anz3rO9Mu9zPQ1DZfAdtLVxWTChRDh4jAfuNcWRNf9Q=;
+	s=arc-20240116; t=1758699988; c=relaxed/simple;
+	bh=pXWEgYXLU9fXaadHSr8OOdbMen5ZCVGmiu6kQZwpv3w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nWyM1mJLI+LG+CetRG3DvUVVRyxrXKQqZ8VpDU843I0+eIz6PzsDi6wOz1Qg5a87jomMBUGUxMQpe/XtV57n334QuVCfCWE8olEJiS5JmmSGxNRYedkYIUYN9EezLsIuWK/QdiMGmcSJbKrA8jRGDM1D55AXRwmT3vysg6snom0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kBgOw7Kp; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=TRwfo8yrZup+sr1MbfbppEnk2vpDX0jJLrRqY5+Tb6IstIQFOcBiGs2cB2Oe0Ez1PDYGIJkksLCtlInK3PFqjFunem+RYnllW8Vnss84JCpAlvH7T5l7uUEA3oYew+wQZR6nJB2pyTgwhJ8yV5TcpZ2PKSj7PQrGcldgv9rE1qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LMPlNoXR; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758699985; x=1790235985;
+  t=1758699987; x=1790235987;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Anz3rO9Mu9zPQ1DZfAdtLVxWTChRDh4jAfuNcWRNf9Q=;
-  b=kBgOw7KpcL7sQ4cv8jb2oyJ3zpjusb/+T2WRJk2tOzNTJaVg+1BnbCrK
-   PSa2GRP3HQ41OW6YPU8P1Eqpz/Xn0Ug/SrnuzdTj8R3Eyqb1T0a59pXjM
-   dManixSJGV65kZwulujqE9H4aDeyzKfZS6+OK3bbVSRlR2CuqvcJpVWVD
-   9rhAqvxni8lCl/A2kdmhdPp7eLM6h10Jh77xqVHNMsIS0MjSrQE2ihws6
-   BN0S6XEfcBTHT/edl7RG1cOi7uDOtZfhS59My58aH+XgkpKCiAZyyEwHT
-   CiA+R92KAoo6NRL8BDrmThUnOdNv1cTBL5QK/Y8m3F6hHFLZ15aW/7FAG
-   A==;
-X-CSE-ConnectionGUID: 2Wl2ugOGRNmPzvxvv1kh1g==
-X-CSE-MsgGUID: az2/zTAsTGSMryuZem64og==
-X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="61101840"
+  bh=pXWEgYXLU9fXaadHSr8OOdbMen5ZCVGmiu6kQZwpv3w=;
+  b=LMPlNoXRHWQhg6uZay3isy8PVrFd22T+JBTwlU0+9P5eCE92Qo9XV8yz
+   g1wbALhINQ9gQpLql9RznX9FkGHpk/+yeQAYugNJMIVWMLZtESVJTGFZm
+   XL10GJC9OMc1Ak42M282bnGmsGpVOIxwSJc8/zQQo/3PdWmAA/fACtXow
+   6z9OPlFEsiJtwZKm9F3xswnecAe1x1CLsbZsqrd1DnLQEue8zonF9k38A
+   JXSHC3pIJPsMaZGrA8nbB5uFAILiuMoYVDtMlVcAraGG2+eiTY6cAKoAb
+   DDknPO9Y2lLB9MVePiwsavKMmMYhx59iIvpemKYfs1Y2kApUBoKS9IjPA
+   Q==;
+X-CSE-ConnectionGUID: 89xpmAfJSXi5OFobKpcz3Q==
+X-CSE-MsgGUID: lCqknGwiTeOyfO0yGzUKpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11561"; a="61101894"
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="61101840"
+   d="scan'208";a="61101894"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:23 -0700
-X-CSE-ConnectionGUID: oUqsEg2RRQ+bTeq8JHf0iA==
-X-CSE-MsgGUID: 6FjHMBvbRmGDkR2nahiHzg==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:24 -0700
+X-CSE-ConnectionGUID: +JlRilW3Qbq323C1oDG+GA==
+X-CSE-MsgGUID: 3H72Q930THGvSOjZgEHIow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,290,1751266800"; 
-   d="scan'208";a="200668532"
+   d="scan'208";a="200668534"
 Received: from sschumil-mobl2.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.128])
   by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2025 00:46:16 -0700
 Received: from punajuuri.localdomain (unknown [192.168.240.130])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 95C37121ED6;
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 9A02A121ED7;
 	Wed, 24 Sep 2025 10:46:02 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.98.2)
 	(envelope-from <sakari.ailus@linux.intel.com>)
-	id 1v1KCQ-000000017I6-2RYT;
+	id 1v1KCQ-000000017IB-2WYI;
 	Wed, 24 Sep 2025 10:46:02 +0300
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
 From: Sakari Ailus <sakari.ailus@linux.intel.com>
@@ -102,9 +102,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Ingo Molnar <mingo@kernel.org>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v2 05/16] property: Move Return: section of fwnode_graph_get_endpoint_by_id() down
-Date: Wed, 24 Sep 2025 10:45:51 +0300
-Message-ID: <20250924074602.266292-6-sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 06/16] property: Drop DEVICE_DISABLED flag in fwnode_graph_get_endpoint_by_id()
+Date: Wed, 24 Sep 2025 10:45:52 +0300
+Message-ID: <20250924074602.266292-7-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
 References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
@@ -116,37 +116,44 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move Return: section of fwnode_graph_get_endpoint_by_id() down where it
-habitually is located.
+No caller uses FWNODE_GRAPH_DEVICE_DISABLED flag when calling
+fwnode_graph_get_endpoint_by_id(). Drop support for the flag entirely and
+remove it from the documentation.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/base/property.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/base/property.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/base/property.c b/drivers/base/property.c
-index f626d5bbe806..b52f7b3bbf84 100644
+index b52f7b3bbf84..7fc3257f223d 100644
 --- a/drivers/base/property.c
 +++ b/drivers/base/property.c
-@@ -1235,15 +1235,15 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
-  * The caller is responsible for calling fwnode_handle_put() on the returned
-  * fwnode pointer.
-  *
-- * Return: the fwnode handle of the local endpoint corresponding the port and
-- * endpoint IDs or %NULL if not found.
-- *
-  * If FWNODE_GRAPH_ENDPOINT_NEXT is passed in @flags and the specified endpoint
+@@ -1239,9 +1239,6 @@ static bool fwnode_graph_remote_available(struct fwnode_handle *ep)
   * has not been found, look for the closest endpoint ID greater than the
   * specified one and return the endpoint that corresponds to it, if present.
   *
-  * Does not return endpoints that belong to disabled devices or endpoints that
-  * are unconnected, unless FWNODE_GRAPH_DEVICE_DISABLED is passed in @flags.
-+ *
-+ * Return: the fwnode handle of the local endpoint corresponding the port and
-+ * endpoint IDs or %NULL if not found.
+- * Does not return endpoints that belong to disabled devices or endpoints that
+- * are unconnected, unless FWNODE_GRAPH_DEVICE_DISABLED is passed in @flags.
+- *
+  * Return: the fwnode handle of the local endpoint corresponding the port and
+  * endpoint IDs or %NULL if not found.
   */
- struct fwnode_handle *
- fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+@@ -1252,13 +1249,12 @@ fwnode_graph_get_endpoint_by_id(const struct fwnode_handle *fwnode,
+ 	struct fwnode_handle *ep, *best_ep = NULL;
+ 	unsigned int best_ep_id = 0;
+ 	bool endpoint_next = flags & FWNODE_GRAPH_ENDPOINT_NEXT;
+-	bool enabled_only = !(flags & FWNODE_GRAPH_DEVICE_DISABLED);
+ 
+ 	fwnode_graph_for_each_endpoint(fwnode, ep) {
+ 		struct fwnode_endpoint fwnode_ep = { 0 };
+ 		int ret;
+ 
+-		if (enabled_only && !fwnode_graph_remote_available(ep))
++		if (!fwnode_graph_remote_available(ep))
+ 			continue;
+ 
+ 		ret = fwnode_graph_parse_endpoint(ep, &fwnode_ep);
 -- 
 2.47.3
 
