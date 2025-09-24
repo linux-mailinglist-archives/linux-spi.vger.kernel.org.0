@@ -1,202 +1,214 @@
-Return-Path: <linux-spi+bounces-10245-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10246-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21A05B981CA
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 05:13:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A59FB98455
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 07:17:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DFC1F4E0276
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 03:13:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A320117E64D
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Sep 2025 05:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F2621D3C9;
-	Wed, 24 Sep 2025 03:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F494D599;
+	Wed, 24 Sep 2025 05:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b="uGruRJUG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hMtlyqtv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA94C1F4C83;
-	Wed, 24 Sep 2025 03:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8254863B9;
+	Wed, 24 Sep 2025 05:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758683589; cv=none; b=s5okTtVDzh9KFobXHOd/bSgpQOgVs+ttpQ30UW4B0JCrlNPHGBDEa5fyhaMUjHnVcCT8pdcybX1QFYz6gDrvMzpMW13Ef9OVynDiL7+tjbiw/DE3uFc8B8qsrVzggtBYqura2YVA4i2TIQcwPWHFiGf1HZGQSQYNESrqDVubsGI=
+	t=1758691025; cv=none; b=Cf+OExHTR/KbkBwP18OkbzruwQcp4lRGgl/EcZo0j+s0MwqQre/yk8cB1mswNrkcIDIIHoKay7y/Z8UpI0oaQAVfBZ1ilCUvyCdcb6TeKMLjb5nR/aBjc6yqRhrZ6mhA5hma0iscnrVu4c6I6TSjbtcd9xcTSgpbw2RslPiBU8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758683589; c=relaxed/simple;
-	bh=npVmB5SLZ5mcabM6YImEdPIjplSnQ/qCDGhwE3YzDH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MDOe/YDB7hTs3kH7omXFGxg6LOU91K8XbfQgyLB8XnyIihqqFYxJhgMxKXfdaoK8tAGrvYxvUEoRzNGjJAB0RyuKyp4bE6aP60lUY0E/rxfL0NN4HgmCDYJmshlp8fbUxL0nn3yBERZtBINJNpMh4I35/66mqaiv927TiGAAMfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com; spf=none smtp.mailfrom=linux.spacemit.com; dkim=pass (1024-bit key) header.d=linux.spacemit.com header.i=@linux.spacemit.com header.b=uGruRJUG; arc=none smtp.client-ip=18.169.211.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux.spacemit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.spacemit.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.spacemit.com;
-	s=mxsw2412; t=1758683531;
-	bh=wyZnq1brHXp0eEo0IcKGDfiavTz/KfAQPMcIkigjxZU=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version;
-	b=uGruRJUGnrfoarV+40U4CZTZb3Mt+ts+ZqG07Kmxzkue0ghbpK4F7VwW/OjJvq9F4
-	 KNiJ+kUBt+AC0eRr6R+913+Qp+lVR8f3qYS5V2XdoqIJCcng2PdD70vJ1jJICXVGab
-	 b4555MzF9ea8+XQ8UNOfmzw36fUOX4+hpXgWqrp4=
-X-QQ-mid: zesmtpip2t1758683524t33056b91
-X-QQ-Originating-IP: bWui7aEgfFXT5ttQPtbdeAfhB/8ClfNTxNloyvrmXlY=
-Received: from = ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 24 Sep 2025 11:11:59 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12855521764817172808
-EX-QQ-RecipientCnt: 19
-Date: Wed, 24 Sep 2025 11:11:56 +0800
-From: Troy Mitchell <troy.mitchell@linux.spacemit.com>
-To: Junhui Liu <junhui.liu@pigmoral.tech>,
-	Troy Mitchell <troy.mitchell@linux.spacemit.com>,
-	Yixun Lan <dlan@gentoo.org>, Alex Elder <elder@riscstar.com>
-Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, ziyao@disroot.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	p.zabel@pengutronix.de, spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] riscv: dts: spacemit: define a SPI controller node
-Message-ID: <BA5C7E3F6EED54EF+aNNhfO5CHCLVbpBR@troy-wujie14pro-arch>
-References: <20250922161717.1590690-1-elder@riscstar.com>
- <20250922161717.1590690-4-elder@riscstar.com>
- <20250923001930-GYB1303776@gentoo.org>
- <ED4C67FD136DEB19+aNINJJVYbNnT87va@LT-Guozexi>
- <a9054501-03ce-4db2-a753-81741c6237b6@pigmoral.tech>
+	s=arc-20240116; t=1758691025; c=relaxed/simple;
+	bh=nB1zuqgBIzHTlltWiPwiFuRDfu74YHAK/yEgAiO5UEk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=M7Om+rznpkQ6Rsa96eISSXfcYl8Vs7aJYY+Mzwg/Zf69W1dQO6S74dyPLZ9a1dIPibrDebeHwhYDk8brC9xO6hV9PiPhhtUv/z32IVCT9otkGs36Xjro3TaA6dLb118EPmxYEWajRKRSKMFKgeRX7YUO3Uh8xH5hwqZQjka2qdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hMtlyqtv; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58O4iIqB002802;
+	Wed, 24 Sep 2025 05:17:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	nB1zuqgBIzHTlltWiPwiFuRDfu74YHAK/yEgAiO5UEk=; b=hMtlyqtvOPhvHwM3
+	MtI+aeN0Wn6C/OYB8LtzJ5jCX1FE3UgCbRTY/Q4v2s4dHsIh5m9VMZPuCwvYS24M
+	s3+YHkOOFdzahf1+iH7b6YFAzn+WVQEm3hTYAUG1YArpDUdgrxBtGkvgugB2bbBT
+	uYVR5+UU7ESV7JLadUyo8BDoysmM0tMXwpAx0AMFw/vvD7Y6TCto/mKG/z+VQFQc
+	MSAy/R2USx00+If4FwqtOTrQQB7xaDXPCiw3bfC72b7xWNS+TJewZz0zeZ/kjADj
+	GTichiMzlyHcLj2SrlZH8ba2+WuOPtix5ujv3s30rXfKEo1mrq6DGmJxny8DfU0T
+	Ns1nLQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49bajewmhh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Sep 2025 05:17:00 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 58O5Gxha030614
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Sep 2025 05:16:59 GMT
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.24; Tue, 23 Sep 2025 22:16:59 -0700
+Received: from nalasex01c.na.qualcomm.com ([fe80::fbb2:6e42:b3:9ade]) by
+ nalasex01c.na.qualcomm.com ([fe80::fbb2:6e42:b3:9ade%11]) with mapi id
+ 15.02.1748.024; Tue, 23 Sep 2025 22:16:59 -0700
+From: "Lakshmi Sowjanya D (QUIC)" <quic_laksd@quicinc.com>
+To: "Md Sadre Alam (QUIC)" <quic_mdalam@quicinc.com>,
+        Konrad Dybcio
+	<konrad.dybcio@oss.qualcomm.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konradybcio@kernel.org"
+	<konradybcio@kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>
+CC: "Varadarajan Narayanan (QUIC)" <quic_varada@quicinc.com>
+Subject: RE: [PATCH 3/9] dma: qcom: bam_dma: Fix command element mask field
+ for BAM v1.6.0+
+Thread-Topic: [PATCH 3/9] dma: qcom: bam_dma: Fix command element mask field
+ for BAM v1.6.0+
+Thread-Index: AQHcKIBoYleawDnj40GyEsebX5ELobSZMe8AgAFG0ICAB1e6oA==
+Date: Wed, 24 Sep 2025 05:16:58 +0000
+Message-ID: <f9d84f085abf4feaa4c957ca355b2fac@quicinc.com>
+References: <20250918094017.3844338-1-quic_mdalam@quicinc.com>
+ <20250918094017.3844338-4-quic_mdalam@quicinc.com>
+ <c5d5c026-3240-4828-b9b3-455f057fb041@oss.qualcomm.com>
+ <2394e63f-1df7-764e-5489-3567065707a1@quicinc.com>
+In-Reply-To: <2394e63f-1df7-764e-5489-3567065707a1@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a9054501-03ce-4db2-a753-81741c6237b6@pigmoral.tech>
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:linux.spacemit.com:qybglogicsvrsz:qybglogicsvrsz3a-0
-X-QQ-XMAILINFO: Mc0T/2CU44J06AmmZ6n6NH5ur7RhYISe+F6L33WKaD+lgmVRX3Evh53j
-	Z6A3IZQQdZPezcbaPjbw/hqe5AfhVFREdauE1flFX/uAOcXxT19kLCYwjLkoV/slqe+Nz9d
-	x/LVcpT0IxrabfotuUt9+eEbjJkghg2uZVjkhyW2C3tSGkjR6zPmhQlgTRNK4YQptj2KVHk
-	loZ8mnFhRsUYQvN8OmX4NY536bJtSKZqd8RwwLW+rHz/AfvPEcr/aJvjdHkHxVkQFw/iCh7
-	AJf7430rPucnDHMEa8ujQ1i+FyWDjs7DWM/0155lmu8ey4OpBBcviYLyrK/MSvvqRpE1w3z
-	8WkML7hdaib0uSk2pRQ/yGf5dQ1NZxL79jx36nOOfXbJAF9DyjYf1mj3xE4Odg16Cr+CRvQ
-	8M2k1MFEos3Lzwrrm+Pm0My6j+YJQeluhBfvXvuVOU4fnlBZwqdpU3zMBFTuOTpFaoO/wvb
-	ipFwEQ7GAaGF9ojbU6We5v+F6/S0n0rwHkv7XAbyex/zXN2IljSNrxGaRXSPB9S7HdTzuVQ
-	cudD8by90KpnSPQpDnVVC/uGEL5fFaoacdD8FbO8Os7Hsgjk6TdKoUAuJO70s/7EqDv98Pp
-	kaiC2KPvLMiDMNdcFKPa49cP2sms7tjiS5zJg4POFmaKhD2PW2Z9FEnr/447S+r2SokgfxI
-	iSJ4/oAiGZ5kZgkz3G/S+HuKi1qkPdBHkZPpquCU2byl9YZSzBay4659WjaTFesiIa9VqGb
-	B+HN0QzeWBj41hjbzgJBylYg/GIAsPsie69U5i6NhXGX/s/fxJeLr4X6f81ZZI8cQXHui8J
-	B8prGKJYlFuhyKhMSwoGkHM34XIsU7oDOCtDhpmKbcU/zw0aFRbA/SCzhlkL+y/khy8cL19
-	zhvPFAqqxUmHi4B1lKtOVGRRQqwonx2/molDksOr4hskqVWisep/6cv5zYNH4Kx+5XsIcT/
-	pg7vI0E1GUmpUVNd5X5OdyMBlYy9nauSgyAFyvj1eXCO2beLJLDVSE9ejhyCstkpWl4m4TN
-	/nCWT08QXS5OocaL3z810kgiscHWbK7okI2nF0mOV6oULR+fQwNJDn2LEss9/ylLPPO/Eke
-	+9hjmvPrKHmb7VmC18VP/FrgkVxvC31GA==
-X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
-X-QQ-RECHKSPAM: 0
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cm6YIFjb8E5ojxUVTy2PctQWUpizo6vN
+X-Authority-Analysis: v=2.4 cv=fY2ty1QF c=1 sm=1 tr=0 ts=68d37ecc cx=c_pps
+ a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17
+ a=xqWC_Br6kY4A:10 a=WSRc6ELujCsA:10 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10
+ a=COk6AnOGAAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=Ke_3Dhk9dvTKENNZyrAA:9
+ a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIyMDE2OCBTYWx0ZWRfX8M2+v3cjjd/H
+ Qiwf9PBS/gN9LZR1HMkSWxS66h9x5UdFB5XSs8QhMjyhJTLqHzV1wTIbfd8HzMnZkrNBVZNB9W2
+ jE3YtWmhmAzJwEhq1S4Zv5cwsK8BUTQzw0tSIt7AmxlcblzcQxlVKwultRsuaYyFs0XyPBWoDbY
+ endDpkcwLE1jaws8PvRPG+wjAD3Y5zz72hLvzrQ9KOobRkZ+GKd6PAAlTftlbide4r3tVTW01Y3
+ 4t/JFwRxHsF9tIjEOCOfek2S1hxIo0n3GVelNJjuqwrgQ32D4G823D/r1gBASBJEXvn332ZUZay
+ cy9X6/OdkKjCVWwhqIrZ3q9XKKxYlnsCBVvtJyregYPqK9mpYQ/6FFwnLdN43+eNHylNpzSIIDo
+ /T5lIRpU
+X-Proofpoint-ORIG-GUID: cm6YIFjb8E5ojxUVTy2PctQWUpizo6vN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-23_08,2025-09-22_05,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 malwarescore=0 spamscore=0 adultscore=0 impostorscore=0
+ phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509220168
 
-On Tue, Sep 23, 2025 at 02:31:31PM +0800, Junhui Liu wrote:
-> Hi Troy,
-> 
-> On 9/23/25 10:59 AM, Troy Mitchell wrote:
-> > On Tue, Sep 23, 2025 at 08:19:30AM +0800, Yixun Lan wrote:
-> > > Hi Alex,
-> > > 
-> > > On 11:17 Mon 22 Sep     , Alex Elder wrote:
-> > > > Define a node for the fourth SoC SPI controller (number 3) on
-> > > > the SpacemiT K1 SoC.
-> > > > 
-> > > > Enable it on the Banana Pi BPI-F3 board, which exposes this feature
-> > > > via its GPIO block:
-> > > >    GPIO PIN 19:  MOSI
-> > > >    GPIO PIN 21:  MISO
-> > > >    GPIO PIN 23:  SCLK
-> > > >    GPIO PIN 24:  SS (inverted)
-> > > > 
-> > > > Define pincontrol configurations for the pins as used on that board.
-> > > > 
-> > > > (This was tested using a GigaDevice GD25Q64E SPI NOR chip.)
-> > > > 
-> > > > Signed-off-by: Alex Elder <elder@riscstar.com>
-> > > > ---
-> > > > v3: - Moved the SPI controller into the dma-bus memory region
-> > > > 
-> > > >   .../boot/dts/spacemit/k1-bananapi-f3.dts      |  7 +++++++
-> > > >   arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 20 +++++++++++++++++++
-> > > >   arch/riscv/boot/dts/spacemit/k1.dtsi          | 16 +++++++++++++++
-> > > >   3 files changed, 43 insertions(+)
-> > > > 
-> > > > diff --git a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-> > > > index 2aaaff77831e1..d9d865fbe320e 100644
-> > > > --- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-> > > > +++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-> > > > @@ -14,6 +14,7 @@ aliases {
-> > > >   		ethernet0 = &eth0;
-> > > >   		ethernet1 = &eth1;
-> > > >   		serial0 = &uart0;
-> > > > +		spi3 = &spi3;
-> > > >   	};
-> > > >   	chosen {
-> > > > @@ -92,6 +93,12 @@ &pdma {
-> > > >   	status = "okay";
-> > > >   };
-> > > > +&spi3 {
-> > > > +	pinctrl-0 = <&ssp3_0_cfg>;
-> > > > +	pinctrl-names = "default";
-> > > > +	status = "okay";
-> > > > +};
-> > > > +
-> > > >   &uart0 {
-> > > >   	pinctrl-names = "default";
-> > > >   	pinctrl-0 = <&uart0_2_cfg>;
-> > > > diff --git a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-> > > > index aff19c86d5ff3..205c201a3005c 100644
-> > > > --- a/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-> > > > +++ b/arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi
-> > > > @@ -76,4 +76,24 @@ pwm14-1-pins {
-> > > >   			drive-strength = <32>;
-> > > >   		};
-> > > >   	};
-> > > > +
-> > > > +	ssp3_0_cfg: ssp3-0-cfg {
-> > > ..
-> > > > +		ssp3-0-no-pull-pins {
-> > > I'd prefer not to enforce "pull" info inside the name, you can't embed
-> > > all property info, besides, what's if you want to change/override later?
-> > > 
-> > > how about just name it as ssp3-0-defaul-pins or simply ssp3-0-pins?
-> > uart: uart0_2_cfg and function is 2.
-> > pwm: pwm14_1_cfg and function is 4
-> > spi: ssp3_0_cfg and function is 2
-> > 
-> > I’m a bit confused about the meaning of the second number here.
-> > Is it intended to be an index, or the function number?
-> > 
-> > If it’s an index, should it start from 0 or 1?
-> > The starting point seems inconsistent across pwm/spi/uart.
-> > If it’s supposed to be the function number,
-> > then the spi and pwm parts look incorrect.
-> > 
-> > Could you clarify this? Yixun.
-> 
-> I think the second number represents the index of the pin group available
-> for this device.
-> 
-> Take pwm14 as an example: according to the manual, the first pin group
-> (index 0) available for pwm14 is GPIO6 with function 3, while the second
-> group (index 1) is GPIO44 with function 4.
-Thanks. Junhui.
-with the hints from you and Alex, it’s now much clearer to me.
-
-                    - Troy
-> 
-> >                  - Troy
-> 
-> -- 
-> Best regards,
-> Junhui Liu
-> 
-> 
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWQgU2FkcmUgQWxhbSA8
+cXVpY19tZGFsYW1AcXVpY2luYy5jb20+DQo+IFNlbnQ6IEZyaWRheSwgU2VwdGVtYmVyIDE5LCAy
+MDI1IDExOjI3IEFNDQo+IFRvOiBLb25yYWQgRHliY2lvIDxrb25yYWQuZHliY2lvQG9zcy5xdWFs
+Y29tbS5jb20+Ow0KPiBicm9vbmllQGtlcm5lbC5vcmc7IHJvYmhAa2VybmVsLm9yZzsga3J6aytk
+dEBrZXJuZWwub3JnOw0KPiBjb25vcitkdEBrZXJuZWwub3JnOyBhbmRlcnNzb25Aa2VybmVsLm9y
+Zzsga29ucmFkeWJjaW9Aa2VybmVsLm9yZzsNCj4gdmtvdWxAa2VybmVsLm9yZzsgbGludXgtYXJt
+LW1zbUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LXNwaUB2Z2VyLmtlcm5lbC5vcmc7DQo+IGRldmlj
+ZXRyZWVAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBk
+bWFlbmdpbmVAdmdlci5rZXJuZWwub3JnDQo+IENjOiBWYXJhZGFyYWphbiBOYXJheWFuYW4gKFFV
+SUMpIDxxdWljX3ZhcmFkYUBxdWljaW5jLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAzLzld
+IGRtYTogcWNvbTogYmFtX2RtYTogRml4IGNvbW1hbmQgZWxlbWVudCBtYXNrDQo+IGZpZWxkIGZv
+ciBCQU0gdjEuNi4wKw0KPiANCj4gDQo+IA0KPiBPbiA5LzE4LzIwMjUgMzo1NyBQTSwgS29ucmFk
+IER5YmNpbyB3cm90ZToNCj4gPiBPbiA5LzE4LzI1IDExOjQwIEFNLCBNZCBTYWRyZSBBbGFtIHdy
+b3RlOg0KPiA+PiBCQU0gdmVyc2lvbiAxLjYuMCBhbmQgbGF0ZXIgY2hhbmdlZCB0aGUgYmVoYXZp
+b3Igb2YgdGhlIG1hc2sgZmllbGQgaW4NCj4gPj4gY29tbWFuZCBlbGVtZW50cyBmb3IgcmVhZCBv
+cGVyYXRpb25zLiBJbiBuZXdlciBCQU0gdmVyc2lvbnMsIHRoZSBtYXNrDQo+ID4+IGZpZWxkIGZv
+ciByZWFkIGNvbW1hbmRzIGNvbnRhaW5zIHRoZSB1cHBlciA0IGJpdHMgb2YgdGhlIGRlc3RpbmF0
+aW9uDQo+ID4+IGFkZHJlc3MgdG8gc3VwcG9ydCAzNi1iaXQgYWRkcmVzc2luZywgd2hpbGUgZm9y
+IHdyaXRlIGNvbW1hbmRzIGl0DQo+ID4+IGNvbnRpbnVlcyB0byBmdW5jdGlvbiBhcyBhIHRyYWRp
+dGlvbmFsIHdyaXRlIG1hc2suDQo+ID4NCj4gPiBTbyB0aGUgaGFyZHdhcmUgY2FuIHJlYWQgZnJv
+bSBoaWdoZXIgYWRkcmVzc2VzIGJ1dCBub3Qgd3JpdGUgdG8gdGhlbT8NCj4gTm8sDQo+IFdyaXRl
+IE9wZXJhdGlvbnM6IENhbiB0YXJnZXQgYW55IDMyLWJpdCBhZGRyZXNzIGluIHRoZSBwZXJpcGhl
+cmFsIGFkZHJlc3MNCj4gc3BhY2UgKHVwIHRvIDRHQikNCj4gDQo+IFJlYWQgT3BlcmF0aW9uczog
+Q2FuIHJlYWQgZnJvbSBhbnkgMzItYml0IHBlcmlwaGVyYWwgYWRkcmVzcyBhbmQgcGxhY2UgdGhl
+DQo+IGRhdGEgaW50byAzNi1iaXQgbWVtb3J5IGFkZHJlc3NlcyAodXAgdG8gNjRHQikgc3RhcnRp
+bmcgZnJvbSBCQU0gdjEuNi4wDQo+ID4NCj4gPiBQbHVzLCB5b3UgZGlkbid0IGV4cGxhaW4gd2hh
+dCB0aGUgbWFzayByZWdpc3RlciBkb2VzIG9uIEJBTSA8MS42LjAuDQo+ID4gSWYgaXQgcmVhbGx5
+IG1hc2tzIHRoZSBhZGRyZXNzLCBhbGwgcmVhZHMgd2lsbCBub3cgcG9pbnQgdG8gMHgwDQo+IFRo
+ZSBtYXNrIGZpZWxkIG5ldmVyIG1hc2tzIGFkZHJlc3NlcyBpbiBhbnkgQkFNIHZlcnNpb24uIEhl
+cmUncyB0aGUNCj4gY29tcGxldGUgc3BlY2lmaWNhdGlvbjoNCj4gDQo+IEJBTSBDb21tYW5kIEVs
+ZW1lbnQgU3RydWN0dXJlDQo+IA0KPiBXcml0ZSBDb21tYW5kIEVsZW1lbnRzIChBbGwgQkFNIFZl
+cnNpb25zKToNCj4gDQo+IHwgRmllbGQgIHwgQml0cyAgfCBEZXNjcmlwdGlvbiAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiB8LS0tLS0tLS18LS0tLS0tLXwtLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLXwNCj4gfCAx
+c3QgRFcgfCAzMToyNCB8IENvbW1hbmQgKG11c3QgYmUgMCBmb3Igd3JpdGUpICAgICAgICAgICAg
+ICAgICAgICAgICB8DQo+IHwgICAgICAgIHwgMjM6MCAgfCBBZGRyZXNzIC0gdGFyZ2V0IGFkZHJl
+c3MgaW4gcGVyaXBoZXJhbCAgICAgICAgICAgICAgfA0KPiB8LS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gfCAy
+bmQgRFcgfCAzMTowICB8IERhdGEgLSB0aGUgZGF0YSB0byBiZSB3cml0dGVuICAgICAgICAgICAg
+ICAgICAgICAgICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiB8IDNyZCBEVyB8IDMxOjAgIHwgTWFz
+ayAtIDMyLWJpdCBtYXNrIGRlZmluaW5nIHdoaWNoIGJpdHMgdG8gbW9kaWZ5ICAgIHwNCj4gLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0NCj4gfCA0dGggRFcgfCAzMTowICB8IFJlc2VydmVkICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiANCj4g
+UmVhZCBDb21tYW5kIEVsZW1lbnRzIChCQU0gPCB2MS42LjApOg0KPiANCj4gfCBGaWVsZCAgfCBC
+aXRzICB8IERlc2NyaXB0aW9uICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8DQo+IHwtLS0tLS0tLXwtLS0tLS0tfC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tfA0KPiB8IDFzdCBEVyB8IDMxOjI0IHwgQ29tbWFuZCAobXVz
+dCBiZSAxIGZvciByZWFkKSAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gfCAgICAgICAgfCAy
+MzowICB8IEFkZHJlc3MgLSBzb3VyY2UgYWRkcmVzcyBpbiBwZXJpcGhlcmFsICAgICAgICAgICAg
+ICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiB8IDJuZCBEVyB8IDMxOjAgIHwgRGVzdGluYXRpb24g
+LSBtZW1vcnkgYWRkcmVzcyB0byB3cml0ZSByZWFkLWRhdGEgICAgIHwNCj4gLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tDQo+IHwgM3JkIERXIHwgMzE6MCAgfCBSZXNlcnZlZCAoSUdOT1JFRCBieSBoYXJkd2FyZSkg
+ICAgICAgICAgICAgICAgICAgICAgfA0KPiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gfCA0dGggRFcgfCAz
+MTowICB8IFJlc2VydmVkICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiANCj4gUmVhZCBDb21tYW5kIEVsZW1lbnRzIChCQU0g
+Pj0gdjEuNi4wKToNCj4gDQo+IHwgRmllbGQgIHwgQml0cyAgfCBEZXNjcmlwdGlvbiAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiB8LS0tLS0tLS18LS0tLS0tLXwt
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLXwNCj4g
+fCAxc3QgRFcgfCAzMToyNCB8IENvbW1hbmQgKG11c3QgYmUgMSBmb3IgcmVhZCkgICAgICAgICAg
+ICAgICAgICAgICAgICB8DQo+IHwgICAgICAgIHwgMjM6MCAgfCBBZGRyZXNzIC0gc291cmNlIGFk
+ZHJlc3MgaW4gcGVyaXBoZXJhbCAgICAgICAgICAgICAgfA0KPiAtLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4g
+fCAybmQgRFcgfCAzMTowICB8IERlc3RpbmF0aW9uIC0gMzIgTFNCcyBvZiAzNi1iaXQgZGVzdGlu
+YXRpb24gYWRkciAgICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiB8IDNyZCBEVyB8IDMxOjQgIHwg
+UmVzZXJ2ZWQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4g
+fCAgICAgICAgfCAzOjAgICB8IERlc3RpbmF0aW9uIEFkZHJlc3MgNCBNU0JzIChiaXRzIDM1OjMy
+KSAgICAgICAgICAgICB8DQo+IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiB8IDR0aCBEVyB8IDMxOjAgIHwg
+UmVzZXJ2ZWQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4g
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tDQo+IA0KPiBGb3IgUmVhZCBDb21tYW5kczoNCj4gLSBCQU0gPCB2MS42
+LjA6IDNyZCBEd29yZCBjb21wbGV0ZWx5IGlnbm9yZWQgYnkgaGFyZHdhcmUNCj4gLSBCQU0gPj0g
+djEuNi4wOiAzcmQgRHdvcmRbMzowXSBjb250YWlucyB1cHBlciA0IGJpdHMgb2YgZGVzdGluYXRp
+b24gYWRkcmVzcw0KPiANCj4gVGhhbmtzLA0KPiBBbGFtLg0KDQpUZXN0ZWQtYnk6IExha3NobWkg
+U293amFueWEgRCA8cXVpY19sYWtzZEBxdWljaW5jLmNvbT4gICMgb24gU0RYNzUNCg0KVGhhbmtz
+LA0KTGFrc2htaSBTb3dqYW55YQ0KDQo=
 
