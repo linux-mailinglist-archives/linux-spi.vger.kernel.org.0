@@ -1,204 +1,188 @@
-Return-Path: <linux-spi+bounces-10318-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10319-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 900C1BA5F6E
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Sep 2025 15:00:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B763BBA60F8
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Sep 2025 17:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36ADB3A7A6A
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Sep 2025 13:00:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5979D383E01
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Sep 2025 15:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BF02E1C54;
-	Sat, 27 Sep 2025 13:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9AED2E0B44;
+	Sat, 27 Sep 2025 15:33:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BdoWsCMb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uKvGRzND"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55F22E1757;
-	Sat, 27 Sep 2025 13:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D984C9D;
+	Sat, 27 Sep 2025 15:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758978014; cv=none; b=XvTTQuRUA5pjLQlHtbFcDQD0UAelFo7yCy66iNYz91Rc7VbwLJqyTs7MfxEkQd50SqfPs8hCyjsC5p2y6UgX0ssjEG8fJfj3iPT5hfVixTkLGRSdtSNCYwU1+GOCqd5FFzkGED32ntusEqrdmdWrqm8fwXw3xsZMuKYCQIuZn1g=
+	t=1758987225; cv=none; b=XsgaAnIz6rhVnfme9Fge9Sr7VxJiaUmYPuNF/ouG0iIWybcW+4hWSppyAcqELwCG50GGGtI9onJuz5DpISa8Hv1ysrDa6fcqp9kdBHr1DMgqYCKlkeUVgXdJS2D28AiRrJCyZUx5JPreIuIh8S/wHEKkgxDZhZ91zO13rO9Kv2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758978014; c=relaxed/simple;
-	bh=jzebUf+63bj5rtU4hJayjc7X3+u2ceh7LqvGb8ptNi0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SNHb3WBdl0sCxdEpjQ7uPvq+aXCwCPP7TNRTN8w8tMymOT5cMIkgmxK/3U4mTdkM0azYsf5TVu2fHKj7gXOv650P3z9KVZ0cF2eadzCN3VqqbVD1lvbtrW9Oh+UAoX4Q5s+CnS0/s257QlVsEgED2913Sl2+vbBlJs2S+p3dGqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BdoWsCMb; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758978012; x=1790514012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jzebUf+63bj5rtU4hJayjc7X3+u2ceh7LqvGb8ptNi0=;
-  b=BdoWsCMbtQkMPtvcEx6g07cNXQ0vaveUEkBbFjJ6o2EGXHdrLZB183D+
-   47Io1RVyqCABEe5adnakqjuAKNFBQWXYA/YMriwcCq+U7IxppJvDOFwhP
-   uqBblZP5ewdwJGxL62dHU631CnLfSMBQ1SvxY+mMJDrSOP7nfuS1ooI/p
-   HKWJ4BrCmSCUAxorFEb/0rLU5hM8mqXJiat1BdUHSFGaT4TqamkkPrRtW
-   a7ONfGltk+y+gyyecVf7z6s77YP+qV+JQ1hwju5Axk2ynlxItJbgtBWO6
-   JYeb4n1i3hPdehPOcKuewCME+Pl2D8jR2FR8eimg5DFi2D1fvwOQJjY2f
-   A==;
-X-CSE-ConnectionGUID: 6DVpSIKcRJaUycPHCj04nw==
-X-CSE-MsgGUID: mEJCOK/fShiWyy8nXJxmug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="61246388"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="61246388"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2025 06:00:11 -0700
-X-CSE-ConnectionGUID: anys7G8eR6S+RNK3Vl14fw==
-X-CSE-MsgGUID: RdLCaiYJQKe1fcc5HgT3TQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,297,1751266800"; 
-   d="scan'208";a="183108925"
-Received: from lkp-server02.sh.intel.com (HELO 84c55410ccf6) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Sep 2025 06:00:07 -0700
-Received: from kbuild by 84c55410ccf6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1v2UWy-00074F-33;
-	Sat, 27 Sep 2025 13:00:04 +0000
-Date: Sat, 27 Sep 2025 20:59:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	michael.hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	corbet@lwn.net, marcelo.schmitt1@gmail.com,
-	Trevor Gamblin <tgamblin@baylibre.com>,
-	Axel Haslam <ahaslam@baylibre.com>
-Subject: Re: [PATCH v3 6/8] iio: adc: ad4030: Add SPI offload support
-Message-ID: <202509272028.0zLNiR5w-lkp@intel.com>
-References: <0028720d2cb21898ef044458065ac8a0bc829588.1758916484.git.marcelo.schmitt@analog.com>
+	s=arc-20240116; t=1758987225; c=relaxed/simple;
+	bh=YP9XMHyMUiFPIIDHrpJNhaTLyQxop7Ve8HoR8OOr+xM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gqzNtZflNEw9uMKZsZtIBlmcnFqWD9NYnPPTxquLvnPkJ2TKnEXBTUjOkyCqmbOQvFK1gLz2Dau8kI6FBj3FRcbcR2scCvT0MsykpblhIzNaHLPWU0DRkpFXbmU/PyId0wHzM5IKjefTt9JTybwYV51HnpelG5MHKQqko47YHqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uKvGRzND; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89A2C4CEE7;
+	Sat, 27 Sep 2025 15:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758987225;
+	bh=YP9XMHyMUiFPIIDHrpJNhaTLyQxop7Ve8HoR8OOr+xM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=uKvGRzNDS9jYjMcVd+pc5wMr3QM22v44//bBx7gOLY6rWWAKjqlbZM8jnaKyloz1I
+	 IQpmtkWHO+mBtjCXCp6Ra/uph6kCwtx4rFrIsBH3OYOygl6WALBYHXLW4uAZLcf+V/
+	 t6+kjfJtUqEr3S/DuG7ZEQhI0Nd+WBoxC6X2KtY+oFyTbSY15MUfyMEW8xVJUqpMwm
+	 teoeMigCDa7TGKw0OpGZzX4xKoIVUu41Xr8omfZDoBo6Pj6LzXObcnHMhxPQBWtFW3
+	 uGUuPSTZBiI9Sgm8ej45bYy6aEjAUa9R9GEhN3/rbBcbQD/85oS95fQdeMgtn1ckoZ
+	 mwIf+VC/k8wCA==
+Date: Sat, 27 Sep 2025 16:33:33 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Conor Dooley <conor@kernel.org>
+Cc: Marcelo Schmitt <marcelo.schmitt1@gmail.com>, Marcelo Schmitt
+ <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ michael.hennerich@analog.com, nuno.sa@analog.com, eblanc@baylibre.com,
+ dlechner@baylibre.com, andy@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net
+Subject: Re: [PATCH v2 7/8] dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216
+ and ADAQ4224
+Message-ID: <20250927163333.55d94113@jic23-huawei>
+In-Reply-To: <20250921-unadvised-uninjured-cdd7a6e6f326@spud>
+References: <cover.1758214628.git.marcelo.schmitt@analog.com>
+	<2d6bca62056e1254f91b45f70f4ba4614e659c1c.1758214628.git.marcelo.schmitt@analog.com>
+	<20250919-unsure-mounted-0fc49ce72216@spud>
+	<aM3HJY0GWJmP8-do@debian-BULLSEYE-live-builder-AMD64>
+	<20250921-unadvised-uninjured-cdd7a6e6f326@spud>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.50; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0028720d2cb21898ef044458065ac8a0bc829588.1758916484.git.marcelo.schmitt@analog.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Marcelo,
+On Sun, 21 Sep 2025 23:20:01 +0100
+Conor Dooley <conor@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> On Fri, Sep 19, 2025 at 06:12:05PM -0300, Marcelo Schmitt wrote:
+> > On 09/19, Conor Dooley wrote:  
+> > > On Thu, Sep 18, 2025 at 02:39:29PM -0300, Marcelo Schmitt wrote:  
+> > > > ADAQ4216 and ADAQ4224 are similar to AD4030 except that ADAQ devices have a
+> > > > PGA (programmable gain amplifier) that scales the input signal prior to it
+> > > > reaching the ADC inputs. The PGA is controlled through a couple of pins (A0
+> > > > and A1) that set one of four possible signal gain configurations.
+> > > > 
+> > > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > > > ---
+> > > > Change log v1 -> v2
+> > > > - Use pattern to specify devices that require gain related properties.
+> > > > - Disallow gain related properties for devices that don't come with embedded PGA.
+> > > > - Documented VDDH and VDD_FDA supplies for ADAQ4216 and ADAQ4224.
+> > > > - Updated PGA gain constants.
+> > > > 
+> > > >  .../bindings/iio/adc/adi,ad4030.yaml          | 65 +++++++++++++++++--
+> > > >  1 file changed, 60 insertions(+), 5 deletions(-)
+> > > >   
+> > ...  
+> > > >  
+> > > > +  pga-gpios:
+> > > > +    description:
+> > > > +      A0 and A1 pins for gain selection. For devices that have PGA configuration
+> > > > +      input pins, pga-gpios should be defined if adi,gain-milli is absent.
+> > > > +    minItems: 2
+> > > > +    maxItems: 2
+> > > > +
+> > > > +  adi,pga-value:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32  
+> > > 
+> > > How come this is "value" rather than "gain"?  
+> > 
+> > Because, for this one, I drew inspiration from ad7191 bindings [1] in the hopes
+> > of avoiding creating new properties or using discontinued/deprecated
+> > nomenclature [2].
+> > 
+> > The thing is, we now have ADC chips coming with PGA circuitry in front of ADC
+> > inputs. Those PGAs are usually set/configured through hardware connections
+> > (e.g. dedicated GPIOs or pin-strapped) and have been described in dt-bindings.
+> > Though, since these added PGAs don't follow a pattern with respect to the
+> > provided gain, different properties began to appear. ad7380 and ad4000 use
+> > adi,gain-milli to describe PGA gain [3, 4], ad7191 uses adi,pga-value and,
+> > more recently, adaq7768-1 has been proposed with adi,aaf-gain-bp [5].
+> > adaq7768-1 is arguably a slightly different case since the signal gain stems
+> > from an anti-aliasing filter, but it nevertheless results in signal attenuation
+> > much like some PGAs.
+> > 
+> > I personally like the -milli (or even -permille) nomenclature because 4 digits
+> > have been more than enough to describe the gains (at least so far). Though, I
+> > acknowledge the base points suffix (-bp) which is documented in
+> > property-units.yaml [6]. The only thing I don't like much about -bp for
+> > describing PGA gain is that PGA gains are often described in terms of unitless
+> > scale factors, while bp implies the value to be described as a percent.
+> > 
+> > Anyways, whatever property name is chosen, it will probably be better settle to
+> > something rather than arguing about property names each time a new ADC comes
+> > with an integrated PGA.  
+> 
+> If PGA gains are common, then ye it would make sense to have a standard
+> property. I guess one of the problems with doing so is that there isn't
+> a standard/common binding for adcs themselves, so without making one
+> it'd involve reviewers pushing people to the standard one. I suppose the
+> current adc.yaml could be made into adc-channel.yaml and adc.yaml
+> repurposed. I bet there are more properties than just PGA gain that
+> could go there.
+> 
+> My personal objection to "pga-value" is that it doesn't communicate by
+> itself what aspect of the pga it actually controls. I don't really care
+> what "unit" qualifier is used that much or if one is used at all. That's
+> more of a thing for yourself and other IIO developers to handle.
+> 
+> Part of me is bothered though that all these gains are not in dB! But
+> I'd imagine there are not really any ADCs where the registers don't
+> deal in unitless gain and using dB would be nothing more than an
+> additional headache for software developers.
 
-[auto build test ERROR on 561285d048053fec8a3d6d1e3ddc60df11c393a0]
+To me this problem isn't really about PGAs at all.  What it is really
+about is cases where a pin on a chip is either tied to a gpio or pin strapped.
+Can we provide a solution at that layer?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Marcelo-Schmitt/dt-bindings-iio-adc-adi-ad4030-Reference-spi-peripheral-props/20250927-044546
-base:   561285d048053fec8a3d6d1e3ddc60df11c393a0
-patch link:    https://lore.kernel.org/r/0028720d2cb21898ef044458065ac8a0bc829588.1758916484.git.marcelo.schmitt%40analog.com
-patch subject: [PATCH v3 6/8] iio: adc: ad4030: Add SPI offload support
-config: i386-randconfig-014-20250927 (https://download.01.org/0day-ci/archive/20250927/202509272028.0zLNiR5w-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250927/202509272028.0zLNiR5w-lkp@intel.com/reproduce)
+i.e. A way to say this GPIO input is tied high so you can't control it
+but you can still read what it's current value is. Maybe there is already
+a clean way to do this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509272028.0zLNiR5w-lkp@intel.com/
+Jonathan
 
-All errors (new ones prefixed by >>):
+> 
+> > [1] Documentation/devicetree/bindings/iio/adc/adi,ad7191.yaml
+> > [2] https://lore.kernel.org/linux-iio/510f6efb-ada3-4848-ac8e-16fa5d1b5284@kernel.org/
+> > [3] Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+> > [4] Documentation/devicetree/bindings/iio/adc/adi,ad4000.yaml
+> > [5] https://lore.kernel.org/linux-iio/46842d4cf2c1149bd64188f94c60ce5e4f3b2beb.1757001160.git.Jonathan.Santos@analog.com/
+> > [6] https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/property-units.yaml
+> >   
+> > >   
+> > > > +    description: |
+> > > > +      Should be present if PGA control inputs are pin-strapped. The values
+> > > > +      specify the gain per mille. For example, 333 means the input signal is
+> > > > +      scaled by a 0.333 factor (i.e. attenuated to one third of it's original
+> > > > +      magnitude). Possible values:
+> > > > +      Gain 333 (A1=0, A0=0)
+> > > > +      Gain 555 (A1=0, A0=1)
+> > > > +      Gain 2222 (A1=1, A0=0)
+> > > > +      Gain 6666 (A1=1, A0=1)
+> > > > +      If defined, pga-gpios must be absent.
+> > > > +    enum: [333, 555, 2222, 6666]
+> > > > +  
+> > 
+> > Thanks,
+> > Marcelo  
 
-   drivers/spi/spi-offload-trigger-pwm.c: In function 'spi_offload_trigger_pwm_validate':
->> drivers/spi/spi-offload-trigger-pwm.c:55:15: error: implicit declaration of function 'pwm_round_waveform_might_sleep' [-Wimplicit-function-declaration]
-      55 |         ret = pwm_round_waveform_might_sleep(st->pwm, &wf);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/spi/spi-offload-trigger-pwm.c: In function 'spi_offload_trigger_pwm_enable':
->> drivers/spi/spi-offload-trigger-pwm.c:81:16: error: implicit declaration of function 'pwm_set_waveform_might_sleep' [-Wimplicit-function-declaration]
-      81 |         return pwm_set_waveform_might_sleep(st->pwm, &wf, false);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/spi/spi-offload-trigger-pwm.c: In function 'spi_offload_trigger_pwm_disable':
->> drivers/spi/spi-offload-trigger-pwm.c:90:15: error: implicit declaration of function 'pwm_get_waveform_might_sleep' [-Wimplicit-function-declaration]
-      90 |         ret = pwm_get_waveform_might_sleep(st->pwm, &wf);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SPI_OFFLOAD_TRIGGER_PWM
-   Depends on [n]: SPI [=y] && SPI_OFFLOAD [=y] && PWM [=n]
-   Selected by [y]:
-   - AD4030 [=y] && IIO [=y] && SPI [=y] && GPIOLIB [=y]
-
-
-vim +/pwm_round_waveform_might_sleep +55 drivers/spi/spi-offload-trigger-pwm.c
-
-ebb398ae1e052c David Lechner 2025-02-07   36  
-ebb398ae1e052c David Lechner 2025-02-07   37  static int spi_offload_trigger_pwm_validate(struct spi_offload_trigger *trigger,
-ebb398ae1e052c David Lechner 2025-02-07   38  					    struct spi_offload_trigger_config *config)
-ebb398ae1e052c David Lechner 2025-02-07   39  {
-ebb398ae1e052c David Lechner 2025-02-07   40  	struct spi_offload_trigger_pwm_state *st = spi_offload_trigger_get_priv(trigger);
-ebb398ae1e052c David Lechner 2025-02-07   41  	struct spi_offload_trigger_periodic *periodic = &config->periodic;
-ebb398ae1e052c David Lechner 2025-02-07   42  	struct pwm_waveform wf = { };
-ebb398ae1e052c David Lechner 2025-02-07   43  	int ret;
-ebb398ae1e052c David Lechner 2025-02-07   44  
-ebb398ae1e052c David Lechner 2025-02-07   45  	if (config->type != SPI_OFFLOAD_TRIGGER_PERIODIC)
-ebb398ae1e052c David Lechner 2025-02-07   46  		return -EINVAL;
-ebb398ae1e052c David Lechner 2025-02-07   47  
-ebb398ae1e052c David Lechner 2025-02-07   48  	if (!periodic->frequency_hz)
-ebb398ae1e052c David Lechner 2025-02-07   49  		return -EINVAL;
-ebb398ae1e052c David Lechner 2025-02-07   50  
-ebb398ae1e052c David Lechner 2025-02-07   51  	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
-ebb398ae1e052c David Lechner 2025-02-07   52  	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
-ebb398ae1e052c David Lechner 2025-02-07   53  	wf.duty_length_ns = wf.period_length_ns / 2;
-ebb398ae1e052c David Lechner 2025-02-07   54  
-ebb398ae1e052c David Lechner 2025-02-07  @55  	ret = pwm_round_waveform_might_sleep(st->pwm, &wf);
-ebb398ae1e052c David Lechner 2025-02-07   56  	if (ret < 0)
-ebb398ae1e052c David Lechner 2025-02-07   57  		return ret;
-ebb398ae1e052c David Lechner 2025-02-07   58  
-ebb398ae1e052c David Lechner 2025-02-07   59  	periodic->frequency_hz = DIV_ROUND_UP_ULL(NSEC_PER_SEC, wf.period_length_ns);
-ebb398ae1e052c David Lechner 2025-02-07   60  
-ebb398ae1e052c David Lechner 2025-02-07   61  	return 0;
-ebb398ae1e052c David Lechner 2025-02-07   62  }
-ebb398ae1e052c David Lechner 2025-02-07   63  
-ebb398ae1e052c David Lechner 2025-02-07   64  static int spi_offload_trigger_pwm_enable(struct spi_offload_trigger *trigger,
-ebb398ae1e052c David Lechner 2025-02-07   65  					  struct spi_offload_trigger_config *config)
-ebb398ae1e052c David Lechner 2025-02-07   66  {
-ebb398ae1e052c David Lechner 2025-02-07   67  	struct spi_offload_trigger_pwm_state *st = spi_offload_trigger_get_priv(trigger);
-ebb398ae1e052c David Lechner 2025-02-07   68  	struct spi_offload_trigger_periodic *periodic = &config->periodic;
-ebb398ae1e052c David Lechner 2025-02-07   69  	struct pwm_waveform wf = { };
-ebb398ae1e052c David Lechner 2025-02-07   70  
-ebb398ae1e052c David Lechner 2025-02-07   71  	if (config->type != SPI_OFFLOAD_TRIGGER_PERIODIC)
-ebb398ae1e052c David Lechner 2025-02-07   72  		return -EINVAL;
-ebb398ae1e052c David Lechner 2025-02-07   73  
-ebb398ae1e052c David Lechner 2025-02-07   74  	if (!periodic->frequency_hz)
-ebb398ae1e052c David Lechner 2025-02-07   75  		return -EINVAL;
-ebb398ae1e052c David Lechner 2025-02-07   76  
-ebb398ae1e052c David Lechner 2025-02-07   77  	wf.period_length_ns = DIV_ROUND_UP_ULL(NSEC_PER_SEC, periodic->frequency_hz);
-ebb398ae1e052c David Lechner 2025-02-07   78  	/* REVISIT: 50% duty-cycle for now - may add config parameter later */
-ebb398ae1e052c David Lechner 2025-02-07   79  	wf.duty_length_ns = wf.period_length_ns / 2;
-ebb398ae1e052c David Lechner 2025-02-07   80  
-ebb398ae1e052c David Lechner 2025-02-07  @81  	return pwm_set_waveform_might_sleep(st->pwm, &wf, false);
-ebb398ae1e052c David Lechner 2025-02-07   82  }
-ebb398ae1e052c David Lechner 2025-02-07   83  
-ebb398ae1e052c David Lechner 2025-02-07   84  static void spi_offload_trigger_pwm_disable(struct spi_offload_trigger *trigger)
-ebb398ae1e052c David Lechner 2025-02-07   85  {
-ebb398ae1e052c David Lechner 2025-02-07   86  	struct spi_offload_trigger_pwm_state *st = spi_offload_trigger_get_priv(trigger);
-ebb398ae1e052c David Lechner 2025-02-07   87  	struct pwm_waveform wf;
-ebb398ae1e052c David Lechner 2025-02-07   88  	int ret;
-ebb398ae1e052c David Lechner 2025-02-07   89  
-ebb398ae1e052c David Lechner 2025-02-07  @90  	ret = pwm_get_waveform_might_sleep(st->pwm, &wf);
-ebb398ae1e052c David Lechner 2025-02-07   91  	if (ret < 0) {
-ebb398ae1e052c David Lechner 2025-02-07   92  		dev_err(st->dev, "failed to get waveform: %d\n", ret);
-ebb398ae1e052c David Lechner 2025-02-07   93  		return;
-ebb398ae1e052c David Lechner 2025-02-07   94  	}
-ebb398ae1e052c David Lechner 2025-02-07   95  
-ebb398ae1e052c David Lechner 2025-02-07   96  	wf.duty_length_ns = 0;
-ebb398ae1e052c David Lechner 2025-02-07   97  
-ebb398ae1e052c David Lechner 2025-02-07   98  	ret = pwm_set_waveform_might_sleep(st->pwm, &wf, false);
-ebb398ae1e052c David Lechner 2025-02-07   99  	if (ret < 0)
-ebb398ae1e052c David Lechner 2025-02-07  100  		dev_err(st->dev, "failed to disable PWM: %d\n", ret);
-ebb398ae1e052c David Lechner 2025-02-07  101  }
-ebb398ae1e052c David Lechner 2025-02-07  102  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
