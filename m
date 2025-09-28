@@ -1,89 +1,93 @@
-Return-Path: <linux-spi+bounces-10328-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10329-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF35BA712C
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 15:48:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 030EEBA7177
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 16:16:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 959591894AF1
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 13:48:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B16C83BA607
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 14:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD0ED1A76D4;
-	Sun, 28 Sep 2025 13:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F6B21882F;
+	Sun, 28 Sep 2025 14:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DEzQj+cH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i5pMhPcv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F6516E863
-	for <linux-spi@vger.kernel.org>; Sun, 28 Sep 2025 13:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C0F1F7586
+	for <linux-spi@vger.kernel.org>; Sun, 28 Sep 2025 14:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759067311; cv=none; b=Lrez1DGV1+JBAv0y7tkVpeNaYz7Ish8FvSrrHuLUck4bt5fBbyVGivLmXma5c3ZlYXUKtQ6Y/bcGKsnwPwKymvvJSGV4i4kKGxxb0hE6ocTBwNv1qpukL7T37viFIF26kNqHdso9Bk71o4Ygnf/6lGpiPM5nU49QkamNO/7Ic/g=
+	t=1759069003; cv=none; b=Z9BI0ubKHxriEwDG7+EtKFnW8qhNXgJG70dOcgBUSF+eFSkPXQ0T4McPnmrt3PK+Otx/pd0HSwTnHmi6P0YO/WgdSrUMbv4hGVX5bLHwsdL6LCQB6soRjyt0gWpJlSW1FnbI0f4ecH5f2MLRaebnfFfzy1oLzzyoWLsfUdB0H7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759067311; c=relaxed/simple;
-	bh=FmVHxgqG382cC69d8rXWZwYyOOy1DF+PiCiPPNQ66pU=;
+	s=arc-20240116; t=1759069003; c=relaxed/simple;
+	bh=FmwvbHDppjU9CvYc2ySBEPJJrA8QuBJrnaeLbvaNeq4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cf23bX0qYzPcoymHph8QFuoP1VjS2oquNLnCY/Iy29p3QbzNyYv26dr+qrlVHEWm0O/eXWHPcmvZv2QY16ubBqYWaqphMygAmfMzApOYQOnxo8c9Ln+H2ToNcY3ze0y//Maa6+4oHwOlyi4qHATT++TC68mz1CPYcmcB38yC8Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DEzQj+cH; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=KAcqd3VLVplB1OmQcCF7U9DscBaz/kmuSsqR8nsbz9jsGdLgHhkXVjjS7gvoyuxS10h7JQOj4ULF4zlSDvjxjNu+2qqZEA/nEed8u6sQocfLe0QIm3yy4C3w2RkaGVFZx5N91twXhtr05DCFBdfBQnDoyj6UnVIAglBmEtNcijU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i5pMhPcv; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b57f361a8fdso1397830a12.0
-        for <linux-spi@vger.kernel.org>; Sun, 28 Sep 2025 06:48:30 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-271d1305ad7so49932525ad.2
+        for <linux-spi@vger.kernel.org>; Sun, 28 Sep 2025 07:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759067309; x=1759672109; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1759069001; x=1759673801; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=My/qHt+y2PHKSiLvEMroRzC1fUumz88ynNlnDjtDWgY=;
-        b=DEzQj+cHX+g/RZAa0Cy0TWWfpiP+fpqNL5Zd6z/ZvRNSi5CxqFYUwXEANblazCkSif
-         AaaN+Gu5dYqpBiPNCDSdBL6TSPpxhErdWFI1sT6RBJRgVv0KSjkalZETzeUIR9zqGaCE
-         5cug8wMPN7uiYJe9COvDu3riVPZAUc6Wx4V4HeKwV0R8cgK5HL7K7OqD5fowt8iDZivf
-         qExNjZ8zJqg94jccfsBn0rrrC7C7t3Asd1koK8Qe+Zep+KdmSDpQv8Ek2UE3gPGnHTBa
-         xCTm/WhMd0R5orGBdCqidE5Jt3f8NI1GuAj9sxkJwVfX52Lcggd9G/NyaGIgL0BOJrNR
-         dwVg==
+        bh=qS561fu3xGPohq7c2b6s9Kqxn1syIAU/WENOzQp7H2A=;
+        b=i5pMhPcv2txHGkH1YtzaqUjxI6TKbfbfQaM+KOuZiwsetEjjnW5EfpJ6ly+tJaWx6F
+         Z9kl+Isk82Ajz+rI3D3D1gveiFFbaSgVm/ZwvaMdMzT1k+kXZZMNaExt8IhhrUmm8M9X
+         v8vCv81+Njd3cSpNgvAOk94SRWr45YBIPVrNRl+ScVjlLjcc1+jsaYuvOfSVM+E8sydO
+         I520epSXPTuWD/Zi96mrxzlxqlyukGF2A+FF/ut2ZHfE3ct8Am5LoMRFcnpOVCkX8nYB
+         9xbW3nT4dLTFxGtgfhZSTtgNdZPNRP8GWLNVQADu4gK2A0KWoYHhaWngGxAqVjtaW48+
+         7JaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759067309; x=1759672109;
+        d=1e100.net; s=20230601; t=1759069001; x=1759673801;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=My/qHt+y2PHKSiLvEMroRzC1fUumz88ynNlnDjtDWgY=;
-        b=MT4WyrRvWPhSffv1DApBDev6UdH3yyxyZdUb5MJhC1tVhDggNKjL1f0K1hFCfPSiPf
-         ZoPfmOs99BJgbKeSfh46ULbgYI58vgoA1dpGHaIWxlf3cUtPpAuTMpTWfb0Gj0O2SOV5
-         NQchv3Cjt46veYu2K3QmqYXPTTuuO9Dmmh8vbJ+/9f9u1hHEKKyrkPbgbEwHGaD/2R1v
-         Fo2pYhAttMTYELsPUdDk3trC2oNA1f8op+/OrjkqZx6yF4HWc0s7u+yWKHeAZsOpf7rz
-         f7ufXhS2XvYGZu6AYjWYCw5aDLPfl5ZjwpAlHAevW+i8pI368+I8q+brL0a7dmJ8q/2u
-         tjYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWVzfVgybyHKTIfJ5kXdd0ucmwmW6vuyR0iyxaUS/5W4Juyrt7LooNvWkqGT7KJaY5X7aQFT75q384=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzoj6fEIsPXV9IG5ozrItmq7HFsgWNpPyKa0SsvJbRaFyOW34DC
-	aLyQF6lVuo5l2XkJqPOtnMcawlvuRacUddpmFFvXadTm0m9rtc3G92zrvUPmbt2C
-X-Gm-Gg: ASbGncsvrKf07nu9zHeYl0/vT7NiFXoj/xe3XtO06r2NZPJygaB8zllkz9HsjcwGN7M
-	5p00BAycQbl7RswyQGE51ZhYk5HG4SaiEm94MKhWI/FakoOcxumFlTvVafkHWwOHUvmCCKp4Xc5
-	cbiIuG+/nefYP7ymD4rvrqPWwE5wYKtmVwc+E0ggGJmRloAPj4O7o2D6NW94I1R5sQf8ysh0wPX
-	CLIGjRmQeYCQZKCl59bGT0f0VcHtDMN6HTd5HQbNWU4Nm2JqxkUz386ZLb9DFvw2X5/ySw64inz
-	FwFNZPd6B0X8WmDkqZ5pCCynobSSGm4rjg96T8IKT7uOQKITXrloWoZ/oGMnkIMSoNGK/9Y1qGS
-	7It65YK+bPcL5R5AqSgNLDBj/NkhUJ/4=
-X-Google-Smtp-Source: AGHT+IGXO/qWicj44HJrAinURMObPmlszOlNOo7L+z4Z78O/CaGZYYN86nJQ0OUnlCNPwKAtiNM4Hw==
-X-Received: by 2002:a17:902:f9c6:b0:275:2aac:fef8 with SMTP id d9443c01a7336-27ed4a78d81mr101059275ad.38.1759067309482;
-        Sun, 28 Sep 2025 06:48:29 -0700 (PDT)
+        bh=qS561fu3xGPohq7c2b6s9Kqxn1syIAU/WENOzQp7H2A=;
+        b=mL9NgykjvVdEFJrriym+jfpn7Js22ZWgmwIoAF5KGeRsbzugMsVahiWi+0/uf+U1Mb
+         1NOobN31ePqcUHV+E6YHxcpIS1+4VtdTs/pdwT/6g0E6Tv1PUj6B2WJjQZQf1dziVCnl
+         j2hfODTk9LDJPYpUGUNu46TpJrzFYDnomXd2IIBaaGuQhIeoZliIQlNJDVyIxZ0cG/hY
+         cKK3vxavBawQU7SueFjPkLaICjOVOdTLVOvgrJ+DxEAhFCfkXWbhO2Dit2wqKu2Tihlw
+         FQF6sP6pOT7ymCnRk2dkgrlA/Ak/BsSoiTSyDkrcbPC1J751jaIiiX4qZRXUh8/62WZC
+         bxOw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlhQ/rMBnp5C2bvefh//FH0oOCOpoHSFijWA8Uz1J9xf8XEIiMXN90tQ8q7aQfuadZqnlvg+rUlQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa4Bxr3lWw+QcRn2zAZMLD1lsp5P8hhaB9QLYxDTYn+O9erB4z
+	i29QeNcQCaKQfd5ZBFzGxuN3xGNRhnJTaEBL2psZ4+uhXJa67Enw6Tiy
+X-Gm-Gg: ASbGnctorlL6uNpLZzgJ8d6fLvOe0ISvBaF2T/6ohqN8+F4Olqjo0IgP8N8Gb14T21a
+	/cQ1VT6iF5fOXdL9lOmpYX8shiBV2k7QJ1YLMyxnyq1Im9XFPKJ4ScinKlITLBtttAr6B0Zb+Y8
+	tSXNBIs4bwzp2LkCU1FyFL9yPigOAqcAny4a5DGYjwVR5nb9a7ubKRAHpeNfzhh+X1+G4BJREc2
+	u/i557o6pj2WDTySj4D8z1toJk3VcSYtyvFiS6dSJI4jD8pA5/DW/b58fpreJ6xtI2FAR7crAeC
+	r2/ZAim3hpnYk/XIGtlwnfV6ZwidlCHmTmgBm+KyG3rbkxZBg67LKpqcklyvWWoREBBwvMFpKN3
+	MQ4ICAa9b9oJDjgV2POKOAWeOPSbuAuiyCy5Mj5qpsg==
+X-Google-Smtp-Source: AGHT+IGylC8pdXw7Cs1te5retyIezZV7wuMBKjmnFoV675Y5zYlzg5VisBqeLGQ9FgxZdW/sAWmpqQ==
+X-Received: by 2002:a17:903:946:b0:271:49f:eaf5 with SMTP id d9443c01a7336-27ed4a30d16mr151724525ad.30.1759069001499;
+        Sun, 28 Sep 2025 07:16:41 -0700 (PDT)
 Received: from localhost ([2804:30c:b65:6a00:ceaa:2ed0:e81e:8f51])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-27edcbd455asm97105605ad.122.2025.09.28.06.48.21
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-27ed6ae5742sm103357305ad.150.2025.09.28.07.16.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Sep 2025 06:48:22 -0700 (PDT)
-Date: Sun, 28 Sep 2025 10:49:15 -0300
+        Sun, 28 Sep 2025 07:16:40 -0700 (PDT)
+Date: Sun, 28 Sep 2025 11:17:32 -0300
 From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
 To: Jonathan Cameron <jic23@kernel.org>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-spi@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Axel Haslam <ahaslam@baylibre.com>, broonie@kernel.org,
-	nuno.sa@analog.com, dlechner@baylibre.com, andy@kernel.org
-Subject: Re: [PATCH v3 1/1] spi: offload: Add offset parameter
-Message-ID: <aNk82_gHPDCNDqjV@debian-BULLSEYE-live-builder-AMD64>
-References: <cover.1758913065.git.marcelo.schmitt@analog.com>
- <d73804d605d494c6420adb7c0b67f6707628832d.1758913065.git.marcelo.schmitt@analog.com>
- <20250928110052.6fefd6a1@jic23-huawei>
+Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	michael.hennerich@analog.com, nuno.sa@analog.com,
+	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	corbet@lwn.net
+Subject: Re: [PATCH v3 4/8] iio: adc: ad4030: Reduce register access transfer
+ speed
+Message-ID: <aNlDfJvyXjnfINy3@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1758916484.git.marcelo.schmitt@analog.com>
+ <fd505d37aceaafd6b20626bfd3f25c47db1fb004.1758916484.git.marcelo.schmitt@analog.com>
+ <20250928105316.782d076e@jic23-huawei>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -92,38 +96,45 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250928110052.6fefd6a1@jic23-huawei>
-
-Hi Jonathan,
-
-Yes, current ad4030 series depends on this.
-Though, since this updates the SPI subsystem, I separated it from ad4030 set.
-I missed that aspect of the devel process. If we need an immutable branch to
-make this split series for ad4030 work, then yes, please, I'd like an 
-immutable branch with this patch.
+In-Reply-To: <20250928105316.782d076e@jic23-huawei>
 
 On 09/28, Jonathan Cameron wrote:
-> On Fri, 26 Sep 2025 16:01:05 -0300
+> On Fri, 26 Sep 2025 17:39:42 -0300
 > Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
 > 
-> > From: Axel Haslam <ahaslam@baylibre.com>
-> > 
-> > Add an offset parameter that can be passed in the periodic trigger.
-> > This is useful for example when ADC drivers implement a separate periodic
-> > signal to trigger conversion and need offload to read the result with
-> > some delay. While at it, add some documentation to offload periodic trigger
-> > parameters.
-> > 
-> > Signed-off-by: Axel Haslam <ahaslam@baylibre.com>
-> > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > Configuration register accesses are not considered a critical path in terms
+> > of time to complete. Even though register access transfers can run at high
+> > speeds, nanosecond completion times are not required as device
+> > configuration is usually done step by step from user space. Also, high
+> > frequency transfers hinder debug with external tools since they require
+> > faster clocked equipment. Reduce register access transfer speed.
 > 
-> Hi Axel, Marcelo,
+> So making debug with external tools easier isn't usually a justification we'd
+> make to slow things down by default.
 > 
-> Is there a build time dependency on this for the ad4030 series?
-> I'm assuming this will go via Mark's SPI tree, so this is really a question
-> of do we need to ask him for an immutable branch or not.
-> 
-> I don't think there is such a dependency but just wanted to check!
-> 
-> Jonathan
+> Is there another reason for this being useful as opposed to not a problem
+> to do?   If it had been done this way in the first place I wouldn't have
+> minded, but to make a change I'd like either some others to jump in and
+> say, yes please do this, or a reason beyond you are using tooling that can't
+> cope with 80 MHz and don't want to hack the driver when you need
+> to slow it down (my tools can't cope with that rate either!)
+
+Main motivation for this was a suggestion from David.
+https://lore.kernel.org/linux-iio/30659b16-290d-4ae5-a644-214c106bbe87@baylibre.com/
+By the way, if he agrees with, I'll add a suggested-by tag (if we decide to keep
+this patch).
+
+Reasoning a bit more about this, lowering reg access speed may help debug with
+external tools, but it won't help debug transfers ran by SPI offload hw because
+those transfers will be fast anyway. Maybe a more relevant potential benefit of
+lowering transfer speeds would be to make it more "friendly" to slower
+controllers. E.g. raspberry pi controller reaches 32 MHz maximum so, unless SPI
+core can adapt transfers in those cases, it wouldn't work on a rpi (if anyone
+ever connects this to a rpi).
+
+Me, I only have remote access to a setup with adaq4216 connected to a zedboard
+so I won't be connecting any external tool for debugging. 
+
+Another thing that came to mind now is we could just not set speed_hz of
+spi_transfers. AFAIC, those are not required.
 
