@@ -1,85 +1,136 @@
-Return-Path: <linux-spi+bounces-10326-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10327-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5C9DBA7025
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 13:53:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6510DBA707D
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 14:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EA0E7A1309
-	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 11:52:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEF2818965B0
+	for <lists+linux-spi@lfdr.de>; Sun, 28 Sep 2025 12:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD842DCF6B;
-	Sun, 28 Sep 2025 11:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QUISn9Vy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5F41F1302;
+	Sun, 28 Sep 2025 12:36:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426281C1F05;
-	Sun, 28 Sep 2025 11:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1791C84A1;
+	Sun, 28 Sep 2025 12:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759060421; cv=none; b=IZwdVejLPQSEwSIq+FUZR7fKtJzx/HTGcf8+xpmgVvfIsyJlS58BNQe3jsneMG2piHpeuOPIp0jJTwtiaExA8dpdWK2IiqYRFcNxJGlUcTfE6XVPXOpcwhF1LRL6zZ2iX7LoK/sWa2TojUd1N1FT/z2tvpzPJufHPo1JXFz920M=
+	t=1759062990; cv=none; b=avXGb2BL5QOprhJxe0/D3AQyMirmqTTijnDcAD43rrK2i87F4t3l0xPJz4yxZDk0YODhVTiLHhzNtxlX4L4T0BLOiWCfCfUWd47eO7RR2/Nf3Ct/7tXq56v0WzLRffIcRYnL0bGNy/DclHOD6cjbr4UZm8WqW0CIda12UDY+sTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759060421; c=relaxed/simple;
-	bh=hQEJHc4OVq8vuXSSAqvTzJN5UrYFwsmzkeTaEHiIPmk=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=neOsE+Y+ZAE+V02EmTg/wk48Bdk5Efhw3YToClDl8bTzzL3bXCyPeigEz+z2H3IE9PlClfVC9DR3XkLS6XbkRWMbw7IHV9LNn8sEiZdVIKE8rOkFCuG5MlwdyPZ/NIp6tUkD2dacKhQtYbMOOHTc4Pj8ouAtCgmKc4mfUdhyDus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QUISn9Vy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38BD4C4CEF0;
-	Sun, 28 Sep 2025 11:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759060420;
-	bh=hQEJHc4OVq8vuXSSAqvTzJN5UrYFwsmzkeTaEHiIPmk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QUISn9VyfSHmCwegCAkkuHwbDyZvm8QfwJbPK+Z+23KrkwGhhMPSYn0HFfvj2CxAY
-	 le7Aybgzbz4G/Ah5Os1XOw5Ca+Zs0QLWPeWBNcznmqDikMfipj/Uc1+wNyruYGzOK2
-	 FDI1Be0bPLkPqgAyW9kJg6Z1LRTk6nezOorwk8aO9a5bMuzYpH6JvjN0rMz7dz+mY2
-	 jF2e1HKlhwaSTL8cF6FNd47niAk/jRd73JWg2XGnw0uKw0qK1/z7p2CK0A44Yef3FZ
-	 c1K+zyqdAe7zhcBrJh/XEtfMseLYhI9mmbJ8RSWINoTSYO3M2zXrOhxAxygF6wQJBs
-	 jhjTNn/XVWqGQ==
-Message-ID: <e6994ab73abe36e39ec60eb63341f022@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.17-rc7
-Date: Sun, 28 Sep 2025 13:53:26 +0200
+	s=arc-20240116; t=1759062990; c=relaxed/simple;
+	bh=l9Q144PMpYoyc7MJ9uG80U7HLDSOpM3aAqyn15dVI/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u8LqbX+DVpVdaApSWnLhi2gAgHcHlf6k2IN9ush9f/3Y9iZ3Btrd6dLmMFWag0LHiFbhVs71Y5vJQWdkuF1Kg6koTUyskcKkzMzgcU77D7/ahCLtk2NR2ggqstKsAYa6Ri9oTtQL2RcGqdrsdjyRNpMtLx9mi0K9nQv2LCgEPXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from localhost (unknown [180.158.240.90])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id BCC58340D91;
+	Sun, 28 Sep 2025 12:36:27 +0000 (UTC)
+Date: Sun, 28 Sep 2025 20:36:22 +0800
+From: Yixun Lan <dlan@gentoo.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, ziyao@disroot.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	p.zabel@pengutronix.de, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] spi: spacemit: introduce SpacemiT K1 SPI
+ controller driver
+Message-ID: <20250928123622-GYA1347020@gentoo.org>
+References: <20250922161717.1590690-1-elder@riscstar.com>
+ <20250922161717.1590690-3-elder@riscstar.com>
+ <20250922230639-GYA1303776@gentoo.org>
+ <786f4a5e-f62e-4cd0-a017-7b61408f34aa@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <786f4a5e-f62e-4cd0-a017-7b61408f34aa@riscstar.com>
 
-The following changes since commit f83ec76bf285bea5727f478a68b894f5543ca76e:
+Hi Alex,
 
-  Linux 6.17-rc6 (2025-09-14 14:21:14 -0700)
+On 07:49 Tue 23 Sep     , Alex Elder wrote:
+> On 9/22/25 6:06 PM, Yixun Lan wrote:
+> > Hi Alex,
+> > 
+> > On 11:17 Mon 22 Sep     , Alex Elder wrote:
+> >> This patch introduces the driver for the SPI controller found in the
+> >> SpacemiT K1 SoC.  Currently the driver supports master mode only.
+> >> The SPI hardware implements RX and TX FIFOs, 32 entries each, and
+> >> supports both PIO and DMA mode transfers.
+> >>
+> >> Signed-off-by: Alex Elder <elder@riscstar.com>
+> >> ---
+..
+> 
+> >> diff --git a/drivers/spi/spi-spacemit-k1.c b/drivers/spi/spi-spacemit-k1.c
+> >> new file mode 100644
+> >> index 0000000000000..2b932d80cc510
+> >> --- /dev/null
+> >> +++ b/drivers/spi/spi-spacemit-k1.c
+> >> @@ -0,0 +1,965 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Support for SpacemiT K1 SPI controller
+> >> + *
+> >> + * Copyright (C) 2025 by RISCstar Solutions Corporation.  All rights reserved.
+> >> + * Copyright (c) 2023, spacemit Corporation.
+> >> + */
+> 
+> . . .
+> 
+> >> +static irqreturn_t k1_spi_ssp_isr(int irq, void *dev_id)
+> >> +{
+> >> +	struct k1_spi_driver_data *drv_data = dev_id;
+> >> +	bool rx_done;
+> >> +	bool tx_done;
+> >> +	u32 val;
+> >> +
+> >> +	/* Get status and clear pending interrupts */
+> >> +	val = readl(drv_data->base + SSP_STATUS);
+> >> +	writel(val, drv_data->base + SSP_STATUS);
+> >> +
+> >> +	if (!drv_data->message)
+> >> +		return IRQ_NONE;
+> >> +
+> >> +	/* Check for a TX underrun or RX underrun first */
+> > s/RX underrun/RX overrun/
+> 
+> OK.
+> 
+> >> +	if (val & (SSP_STATUS_TUR | SSP_STATUS_ROR)) {
+> >> +		/* Disable all interrupts on error */
+> >> +		writel(0, drv_data->base + SSP_INT_EN);
+> > should clear status of SSP_STATUS instead of disabling ISR, see commet below
+> 
+> The status is cleared immediately after reading, above.  We hold
+> the status value so we can act on the current state of the FIFOs.
+> 
+I'm surprised by this, do you mean the status will be cleared by reading?
+can you double checck and prove it? by reading twice and compare?
 
-are available in the Git repository at:
+while according to the docs - 18.2.4.6 SSSR REGISTERS, the status bits has
+two types: 
+  R - Read only
+  R/W1C - Read only, write 1 to clear
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.17-rc7
+if you're right, then the docs should be fixed.
 
-for you to fetch changes up to 398a8a4e51dbd03e4103ea596ea4ea037fe67175:
-
-  spi: omap2-mcspi: drive SPI_CLK on transfer_setup() (2025-09-22 09:28:50 +0100)
-
-----------------------------------------------------------------
-spi: Final fixes for v6.17
-
-A few final driver specific fixes that have been sitting in -next for a
-bit, the OMAP issue is likely to come up very infrequently since mixed
-configuration SPI buses are rare and the Cadence issue is specific to
-SoCFPGA systems.
-
-----------------------------------------------------------------
-Bastien Curutchet (Schneider Electric) (1):
-      spi: omap2-mcspi: drive SPI_CLK on transfer_setup()
-
-Khairul Anuar Romli (1):
-      spi: cadence-qspi: defer runtime support on socfpga if reset bit is enabled
-
- drivers/spi/spi-cadence-quadspi.c | 53 ++++++++++++++++++++++++++-------------
- drivers/spi/spi-omap2-mcspi.c     |  1 +
- 2 files changed, 37 insertions(+), 17 deletions(-)
+-- 
+Yixun Lan (dlan)
 
