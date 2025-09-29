@@ -1,101 +1,105 @@
-Return-Path: <linux-spi+bounces-10338-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10339-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE4AEBA8A54
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 11:34:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9667BA8AB0
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 11:38:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDBA1175157
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 09:34:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 969EB3A80A2
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 09:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6252868AD;
-	Mon, 29 Sep 2025 09:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzJGrBpb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E632877D3;
+	Mon, 29 Sep 2025 09:36:09 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81062253932;
-	Mon, 29 Sep 2025 09:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C3F2356B9;
+	Mon, 29 Sep 2025 09:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759138459; cv=none; b=B8BJbl734id3d9fQwsGneg8pT70mt+dPiiDkLrFyMQlbfPQS6cqTduN6K6nYCgYdlSj9y7UOWOZG6vMv+5TpAAKaI/xzd/LcRowLof7Q/t05AywUBZnxdCZXTuImHsb83+b3q9E7A2PD4jt6fu7CcYjsMYOxcwNdecWc8GdTQpI=
+	t=1759138569; cv=none; b=q4uGXvKCCbC3mb0JrXB5HX+IdkuWFZBudFKjd1BQVwOD7cxSnbxcrP65iA4B9Tr+V6Vla9fTHcne0zVCwEdKYVhqpcXWCRtd6Y/IqCKeT6xv7fMrbpsGOSFmqe7aUT8hoAuOUNv+A+uQu7RwrPgcaOZS+temgIzru2LFRbSw5F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759138459; c=relaxed/simple;
-	bh=iPt2Ht57JYhHViCXg9IWHZJp2JJb4XjsbtJuCpxPlbY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8YRSsZnzl1d/1GwuQPZAtOSSTLM8eYgZPUANolsfO08W8b17w2G2/4yh9pPBNO/lhpzz1m1XBWbSi2bAXYnxTNNKFW2rLyOXfD9/gTPWidrGVO4WIQqjSYM/XNrIApdlQ7TivpynSX0quSpV42ZH+8G9LFfKPNSRBIGRjDQQmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzJGrBpb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43195C4CEF4;
-	Mon, 29 Sep 2025 09:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759138459;
-	bh=iPt2Ht57JYhHViCXg9IWHZJp2JJb4XjsbtJuCpxPlbY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UzJGrBpbmg6DGIBjZyae+223EWaZVBnHnSt5SjBfYr9g+4tsEiyOcfXUBTALhh+QJ
-	 Ukf757akfNIHfqu0misdy0RjiGujCYsA3pyUfhOKUfMJDkmYKzNQd1xpuGafbQym53
-	 8Ev+t0t/ZWnh58XtsFnRb0UXQW66gd5zQsUuOEc2NMtAoSOq4oXQ6RVOFwciwUTSl/
-	 6SNUTCotlvmC72aCNCmCVe/HLck4E+KQ8/027nOwkYKYrkDW4TMlznxOEcTD6qBGdU
-	 Ec0sEEfaKOgkma6DMuf9cdMSsb+sl7nuhzHqMe5ojjAsFzWeTCaf3F0f/AHHAggxWQ
-	 ZjSoJhL6tVAcw==
-Date: Mon, 29 Sep 2025 10:34:12 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: linux-spi@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jic23@kernel.org, nuno.sa@analog.com,
-	dlechner@baylibre.com, ahaslam@baylibre.com, andy@kernel.org,
-	marcelo.schmitt1@gmail.com
-Subject: Re: [PATCH v3 0/1] Add SPI offload trigger offset
-Message-ID: <914f7b14-8bae-4423-9d64-9ad2e351a764@sirena.org.uk>
-References: <cover.1758913065.git.marcelo.schmitt@analog.com>
+	s=arc-20240116; t=1759138569; c=relaxed/simple;
+	bh=m75fy5agr4nOm6ZswHP3z9cSx6nGu66GnnEkQoJbIQ4=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=i/bx7sjMzRO951nQ8WPwxPTludGED1+SGnsfB4GQ6hyOjSfr1vSoefp0+aU8ZMjAyf03a8H6hNBmOZ0agiljxHrRZqgWO3Lb202V7L/MFnY9tWfcYM8i77qgwNikeaPXzfByQnS3KFkYpteQWH1SM45/vrsMfvHRhSl8IixiJ24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cZwxJ3JLrz6L550;
+	Mon, 29 Sep 2025 17:33:56 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id 82E111402F5;
+	Mon, 29 Sep 2025 17:36:03 +0800 (CST)
+Received: from localhost (10.47.64.220) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 29 Sep
+ 2025 10:36:01 +0100
+Date: Mon, 29 Sep 2025 10:35:58 +0100
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Len
+ Brown" <lenb@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Danilo Krummrich <dakr@kernel.org>, Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Javier Carrasco
+	<javier.carrasco@wolfvision.net>, Dmitry Torokhov
+	<dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, Pavel Machek
+	<pavel@kernel.org>, Matthias Fend <matthias.fend@emfend.at>, Chanwoo Choi
+	<cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, "Laurent
+ Pinchart" <laurent.pinchart@ideasonboard.com>, Paul Elder
+	<paul.elder@ideasonboard.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Mark Brown
+	<broonie@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@kernel.org>
+Subject: Re: [PATCH v2 04/16] ACPI: property: Return present device nodes
+ only on fwnode interface
+Message-ID: <20250929103558.000033bf@huawei.com>
+In-Reply-To: <20250924074602.266292-5-sakari.ailus@linux.intel.com>
+References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
+	<20250924074602.266292-5-sakari.ailus@linux.intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IbggcYwEOXvH9JXj"
-Content-Disposition: inline
-In-Reply-To: <cover.1758913065.git.marcelo.schmitt@analog.com>
-X-Cookie: Stay away from hurricanes for a while.
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
 
+On Wed, 24 Sep 2025 10:45:50 +0300
+Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
 
---IbggcYwEOXvH9JXj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> fwnode_graph_get_next_subnode() may return fwnode backed by ACPI device
+> nodes and there has been no check these devices are present in the system,
+> unlike there has been on fwnode OF backend. In order to provide consistent
+> behaviour towards callers, add a check for device presence by introducing
+> a new function acpi_get_next_present_subnode(), used as the
+> get_next_child_node() fwnode operation that also checks device node
+> presence.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-On Fri, Sep 26, 2025 at 04:00:40PM -0300, Marcelo Schmitt wrote:
-> Add SPI offload offset parameter needed to achieve high sample rates with=
- ADCs
-> that require some synchronization between a conversion start signal and t=
-he issue
-> of data transfers.
+I think this is fine because of the bit in the ACPI spec that says all
+bits are set if _STA is missing.   It seems much less likely we'll see
+problems with hardware disappearing because _STA is there but says
+the device isn't present.
 
-Please don't send cover letters for single patches, if there is anything
-that needs saying put it in the changelog of the patch or after the ---
-if it's administrative stuff.  This reduces mail volume and ensures that=20
-any important information is recorded in the changelog rather than being
-lost.=20
+Always a regression risk though :(
 
---IbggcYwEOXvH9JXj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjaUo8ACgkQJNaLcl1U
-h9CV0QgAhPZnO769ce96PomfzpOiyBpChG4jOdDOv5osElSidVTIt5yU5DBXNXRv
-iROIwJZWKghp3JKtdPV8sCS8jD9RIw7udUskYGxx51gTUrV6L2zGTUyrWTFrn+bE
-yI0WglcHw5AryIz0A8AF+3KuF2p6zf4CZdTJZBA5UKmUMVL5gHSw1tc2+jaiDUI7
-BmAqq0XKnNfcwncctDrK2cD8j7a3LiKMLI60jNwgbjza1Su+3uPF/6ojTlIRi/Mj
-mC3q0EGiMiG30rbFeYr44aj9whNAYOTyyWZlyDL7C6jxQq4+lN4xN8HkpGCV26Do
-DpcV0DqOlY7JB0kEA1mvNQWAHJsytA==
-=cdEe
------END PGP SIGNATURE-----
-
---IbggcYwEOXvH9JXj--
+With the formatting changes Laurent asked for
+Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
 
