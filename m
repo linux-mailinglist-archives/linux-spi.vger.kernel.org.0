@@ -1,96 +1,101 @@
-Return-Path: <linux-spi+bounces-10337-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10338-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 694AABA889F
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 11:12:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE4AEBA8A54
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 11:34:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 285A617F12B
-	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 09:12:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDBA1175157
+	for <lists+linux-spi@lfdr.de>; Mon, 29 Sep 2025 09:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06573280A29;
-	Mon, 29 Sep 2025 09:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6252868AD;
+	Mon, 29 Sep 2025 09:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UzJGrBpb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5A834BA41;
-	Mon, 29 Sep 2025 09:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81062253932;
+	Mon, 29 Sep 2025 09:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759137125; cv=none; b=cDRoc/LdALRi+9KoAWJo0lxIylP7Y6oixzKL6TPnED5hL0m9nUWf04L3foEDZwq4e1nzO1QtXJuyhxqgt3Mhbd9583H+VCWw3yM2aSe5Vsfqzv/XViXzPl2+GOla3zVIa845mx9CX9HjLN/DHIKsv/gQv+6rsRVljJr+V4khWcg=
+	t=1759138459; cv=none; b=B8BJbl734id3d9fQwsGneg8pT70mt+dPiiDkLrFyMQlbfPQS6cqTduN6K6nYCgYdlSj9y7UOWOZG6vMv+5TpAAKaI/xzd/LcRowLof7Q/t05AywUBZnxdCZXTuImHsb83+b3q9E7A2PD4jt6fu7CcYjsMYOxcwNdecWc8GdTQpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759137125; c=relaxed/simple;
-	bh=pzjgHw1TRVEzQipbuD6sdMwfcVRo6nvQqjOx0CUKQzM=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L2S+Jrz7G1xVhaiWTxbSnvrnrhQt91rgordP0Cb91zO8+kkunzhoyirDDyyjC1nGRAmbaoh7JirOVfaFJZHoAcg41VaV0uy2OsqffagpYUoiedK3geI+PXkopezR5vheu/Dy/OirdPcKR80HscHQGt3GqMihiLAY7zPaLoSAUHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4cZwNS5dd8z6M4jd;
-	Mon, 29 Sep 2025 17:08:56 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id E05CE1402F5;
-	Mon, 29 Sep 2025 17:12:01 +0800 (CST)
-Received: from localhost (10.47.64.220) by dubpeml100005.china.huawei.com
- (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 29 Sep
- 2025 10:12:00 +0100
-Date: Mon, 29 Sep 2025 10:11:58 +0100
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-input@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Len
- Brown" <lenb@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Danilo Krummrich <dakr@kernel.org>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Javier Carrasco
-	<javier.carrasco@wolfvision.net>, Dmitry Torokhov
-	<dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, Pavel Machek
-	<pavel@kernel.org>, Matthias Fend <matthias.fend@emfend.at>, Chanwoo Choi
-	<cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, "Laurent
- Pinchart" <laurent.pinchart@ideasonboard.com>, Paul Elder
-	<paul.elder@ideasonboard.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	<UNGLinuxDriver@microchip.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Mark Brown
-	<broonie@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
-	<mingo@kernel.org>
-Subject: Re: [PATCH v2 02/16] ACPI: property: Use ACPI functions in
- acpi_graph_get_next_endpoint() only
-Message-ID: <20250929101158.00000709@huawei.com>
-In-Reply-To: <20250924074602.266292-3-sakari.ailus@linux.intel.com>
-References: <20250924074602.266292-1-sakari.ailus@linux.intel.com>
-	<20250924074602.266292-3-sakari.ailus@linux.intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1759138459; c=relaxed/simple;
+	bh=iPt2Ht57JYhHViCXg9IWHZJp2JJb4XjsbtJuCpxPlbY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t8YRSsZnzl1d/1GwuQPZAtOSSTLM8eYgZPUANolsfO08W8b17w2G2/4yh9pPBNO/lhpzz1m1XBWbSi2bAXYnxTNNKFW2rLyOXfD9/gTPWidrGVO4WIQqjSYM/XNrIApdlQ7TivpynSX0quSpV42ZH+8G9LFfKPNSRBIGRjDQQmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UzJGrBpb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43195C4CEF4;
+	Mon, 29 Sep 2025 09:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759138459;
+	bh=iPt2Ht57JYhHViCXg9IWHZJp2JJb4XjsbtJuCpxPlbY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UzJGrBpbmg6DGIBjZyae+223EWaZVBnHnSt5SjBfYr9g+4tsEiyOcfXUBTALhh+QJ
+	 Ukf757akfNIHfqu0misdy0RjiGujCYsA3pyUfhOKUfMJDkmYKzNQd1xpuGafbQym53
+	 8Ev+t0t/ZWnh58XtsFnRb0UXQW66gd5zQsUuOEc2NMtAoSOq4oXQ6RVOFwciwUTSl/
+	 6SNUTCotlvmC72aCNCmCVe/HLck4E+KQ8/027nOwkYKYrkDW4TMlznxOEcTD6qBGdU
+	 Ec0sEEfaKOgkma6DMuf9cdMSsb+sl7nuhzHqMe5ojjAsFzWeTCaf3F0f/AHHAggxWQ
+	 ZjSoJhL6tVAcw==
+Date: Mon, 29 Sep 2025 10:34:12 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: linux-spi@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jic23@kernel.org, nuno.sa@analog.com,
+	dlechner@baylibre.com, ahaslam@baylibre.com, andy@kernel.org,
+	marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH v3 0/1] Add SPI offload trigger offset
+Message-ID: <914f7b14-8bae-4423-9d64-9ad2e351a764@sirena.org.uk>
+References: <cover.1758913065.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100009.china.huawei.com (7.191.174.83) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="IbggcYwEOXvH9JXj"
+Content-Disposition: inline
+In-Reply-To: <cover.1758913065.git.marcelo.schmitt@analog.com>
+X-Cookie: Stay away from hurricanes for a while.
 
-On Wed, 24 Sep 2025 10:45:48 +0300
-Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
 
-> Calling fwnode_get_next_child_node() in ACPI implementation of the fwnode
-> property API is somewhat problematic as the latter is used in the
-> impelementation of the former. Instead of using
-> fwnode_get_next_child_node() in acpi_graph_get_next_endpoint(), call
-> acpi_get_next_subnode() directly instead.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Makes sense to me on simply basis of making reasoning about it a little simpler.
+--IbggcYwEOXvH9JXj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+On Fri, Sep 26, 2025 at 04:00:40PM -0300, Marcelo Schmitt wrote:
+> Add SPI offload offset parameter needed to achieve high sample rates with=
+ ADCs
+> that require some synchronization between a conversion start signal and t=
+he issue
+> of data transfers.
+
+Please don't send cover letters for single patches, if there is anything
+that needs saying put it in the changelog of the patch or after the ---
+if it's administrative stuff.  This reduces mail volume and ensures that=20
+any important information is recorded in the changelog rather than being
+lost.=20
+
+--IbggcYwEOXvH9JXj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjaUo8ACgkQJNaLcl1U
+h9CV0QgAhPZnO769ce96PomfzpOiyBpChG4jOdDOv5osElSidVTIt5yU5DBXNXRv
+iROIwJZWKghp3JKtdPV8sCS8jD9RIw7udUskYGxx51gTUrV6L2zGTUyrWTFrn+bE
+yI0WglcHw5AryIz0A8AF+3KuF2p6zf4CZdTJZBA5UKmUMVL5gHSw1tc2+jaiDUI7
+BmAqq0XKnNfcwncctDrK2cD8j7a3LiKMLI60jNwgbjza1Su+3uPF/6ojTlIRi/Mj
+mC3q0EGiMiG30rbFeYr44aj9whNAYOTyyWZlyDL7C6jxQq4+lN4xN8HkpGCV26Do
+DpcV0DqOlY7JB0kEA1mvNQWAHJsytA==
+=cdEe
+-----END PGP SIGNATURE-----
+
+--IbggcYwEOXvH9JXj--
 
