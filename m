@@ -1,176 +1,274 @@
-Return-Path: <linux-spi+bounces-10376-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10378-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF43BABEBB
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Sep 2025 09:57:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5257CBAD404
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Sep 2025 16:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3EA13B4367
-	for <lists+linux-spi@lfdr.de>; Tue, 30 Sep 2025 07:57:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DEBC482411
+	for <lists+linux-spi@lfdr.de>; Tue, 30 Sep 2025 14:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01C62D94BA;
-	Tue, 30 Sep 2025 07:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F52B265CCD;
+	Tue, 30 Sep 2025 14:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jGKwN4Wq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023115.outbound.protection.outlook.com [52.101.127.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2428A2C0F87;
-	Tue, 30 Sep 2025 07:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.115
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759219013; cv=fail; b=U3+5sO4FxCPLDbuGTI6scpEoBvxAv3lvhMoMKuMxGmmjX6kxF9Krl8EP12IapxG07W1zjoT65y8JrMRaLrnNKmzi/UOPYwXBONnpO+6qf1v9WM7N6pqDMYYdVHGMW3e7Qai60M7+E2ClYu0IK5TtXXJT/zbKfvwLIelc1zeBNtA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759219013; c=relaxed/simple;
-	bh=jb9rGcRxrG2ji4xfPO/13t/Wh9mDd1HK2S14JYqCGe4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qTSf6ODiqsve3OhJSQPVls2xCk0qKoDRn5xJUHsF45/cN5Mx8Dys85PESzftL5zrTp9RxX9xd3MWxAR9NKxZqe7ZQae+rNjTxAvrwBNHBOw3qDY2aKoOEMDQJjFmvKr93r2gxfR5sR4Gg3Meakc3bbqOKniQj3vb4k7gc4gTsC8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=52.101.127.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=oqqZNZlAAOlGW8Wmz837uXBETMogrDadLkOFy9M8A5g2Oc2TxAF7nl1mYFxsYFdhHSm5hkePIkjDnCul/R9/ZYw23SRCjBaVpiT3Nz4TDCjffQNWYawz+YCmXRUhmCOVQdunR0HiII/bd3wJW/7qVL/+TI8JmKdoCgc25nRzuDBkss9I6zATAAT/6BBeDbDoI0MhWhzFEU2wj2T9sZgyqE5Xm92IPhyuIKqDYvytcqRv25s+4FL9kkGJr3ThGrK5FqqNQG+nnpYmp8N/tujfJWOBP435a5gtmt47O+3J7CDhXZWPakrWC9LOrlBAtGeMCAc/QgWkctGvNSDtBwlVaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YkOwIawL+erpluYuJ2Z+HFD22cqsVNx8iFKFXLqrnA8=;
- b=r+9MfI/zAxK3H1DEf27whlLDMj3wiR36xaQtTWb4YdnNfbfWO/D+9VhH0QBJ3KZTGMSb4L4Kn1v8cBYmVFk7dXpulcUNoOfwE01OiuoNqGrvtA36I+ErY0xMxrCpIA5E+VF9wNecuUMc8qo6S5yt1qV7HfnS/5kWTJM+SsqvKENDnP0FjRv5wwQvmvc/vr8NI9EbidlU4i4oD11oNby+eiR6bBra5qzRx1WiCfEhSX7ABdLJyPjQTGc41ntGzDz8glhVbpNGnc25fcAJN1Rj6YRmffWx4T5jd0WYdUN9C9lIOlf59GiQDwB+6QCCixFgzst2yagsAgIxkExJFrVikQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=amd.com smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from OS3P286CA0058.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:200::16)
- by SG2PR06MB5216.apcprd06.prod.outlook.com (2603:1096:4:1d6::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.11; Tue, 30 Sep
- 2025 07:56:47 +0000
-Received: from OSA0EPF000000CA.apcprd02.prod.outlook.com
- (2603:1096:604:200:cafe::36) by OS3P286CA0058.outlook.office365.com
- (2603:1096:604:200::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9160.17 via Frontend Transport; Tue,
- 30 Sep 2025 07:56:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- OSA0EPF000000CA.mail.protection.outlook.com (10.167.240.56) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9160.9 via Frontend Transport; Tue, 30 Sep 2025 07:56:47 +0000
-Received: from guoo-System-Product-Name.. (unknown [172.20.64.188])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 9F9084115DE5;
-	Tue, 30 Sep 2025 15:56:45 +0800 (CST)
-From: Jun Guo <jun.guo@cixtech.com>
-To: peter.chen@cixtech.com,
-	fugang.duan@cixtech.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	broonie@kernel.org
-Cc: linux-spi@vger.kernel.org,
-	michal.simek@amd.com,
-	cix-kernel-upstream@cixtech.com,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jun Guo <jun.guo@cixtech.com>
-Subject: [PATCH 3/3] arm64: dts: cix: add the fifo-width configuration field for cadence SPI
-Date: Tue, 30 Sep 2025 15:56:44 +0800
-Message-Id: <20250930075644.1665970-4-jun.guo@cixtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250930075644.1665970-1-jun.guo@cixtech.com>
-References: <20250930075644.1665970-1-jun.guo@cixtech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36A11D63FB
+	for <linux-spi@vger.kernel.org>; Tue, 30 Sep 2025 14:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759243595; cv=none; b=Erw/Xvoerrxd1la7gkoYVnSB+/vZgG5PjpEPFmn+HSgNzm7XxBTfUFP3rrLwqjrd+t8+D2vDzcQPBdBRLewrcaMoEl6vAHCGh2gyoa+mN7v1UKIICqW6frtcufubYGvXA4b951Ya8nnIvFNDG6pt+q+2/nwK8MRcxHNMH42KS7g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759243595; c=relaxed/simple;
+	bh=O3iw2GxXiVKzNYOYE/ZVyGls0+ofp0SaOBPPWCbl0uk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OqegOeE2L7BEJNxMRhw8yaBc/0r8TQi5Z93RNThJMkt0ydOD0nDU3bugS8kSVYz0TDfqaM+2snl0D9dyz1XW0d98q0BReiUg3LnIyzWmW7y9TSEBLnbQd+svEirYa47T4EXXUISil28ItMQB6e4/qQ6WGdJ4BwJhutrUxos7PqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jGKwN4Wq; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3306b83ebdaso5915807a91.3
+        for <linux-spi@vger.kernel.org>; Tue, 30 Sep 2025 07:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759243593; x=1759848393; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gtl9s1x2Ex8u74sVxDhnBYLads9LLhbmtzGZjSOpUpQ=;
+        b=jGKwN4Wqr04Uw3I/UPpwk2A6wvL/X4rgbF4N+0eT9v8tTV2rXSRLKKyvAr2Opx+Tmf
+         Go+jxVBArXWirMiKTsK/THViLlbZrSPd9mgGT+IR2M1pNqz9pdSobv3jVB265vlRnlcD
+         /bYYTtV7rEIDn0Tu8o5m7gAOarMTs94ggrQhiQmDCOScO9U5nuzwCibbwAWhM/9lWyvV
+         vgwzIt2/sP4S8T9JVsrne3J0KC6bGCOW2G7/hQ0ZhIoCFy0q4d1DQdEzrUQxT1a2WJDU
+         36o39lVvpCvfkPNhEydtYt17ePNplFALyQpOe6lbDtBVIwviikaT2PRlaR769tmaMUap
+         Uq4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759243593; x=1759848393;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gtl9s1x2Ex8u74sVxDhnBYLads9LLhbmtzGZjSOpUpQ=;
+        b=qYmbDENyJl09dy1s9cdht8otPS/K31Eh+aXjbFr58mF7hxAov2MdLmTfXhj4/dRK6Q
+         7TxNgFwCFd+tYn1AB2HmfWHfmCDmiWCAxGwA/NmTjiSxKyvd4JblG23QH1+X+iQlYBUF
+         ckMlQ0G9EhCuoylXsOxGZFxH4B8B3HZMijq1RUpXtORk9ZnVI/sm6fRQwk4H8DYjTMsU
+         Y1hMIcRXm3INA/2rA6v8xWQu3CK7SdCwVDWCmv1/KafV7Gt/ic79WWGeXCpf7xLKhX10
+         bdW/p+xwi1lBRREzpuV+GsJHlSL2FrBcSSXsgN6lh0ffOz2DeDZNn6Mt/xs1YEXtjoEX
+         yicA==
+X-Forwarded-Encrypted: i=1; AJvYcCXu71WZfY9vip9pIflBiGX+AdGiAgZi2LvmaNPGThfbUTuQ9T2bGcW3RjlGtCJ/rj7wFYl38y+VWNc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE+QAJhRmyoLBLzXrOmfeyK/kEdt+z40yxAEnqjLpMH1MZqM3+
+	nQk0Oqn80AnoXZodNSfs1VevmYWBHPf9uKlMXjCBQZNyTuF7bucy0Mcw
+X-Gm-Gg: ASbGncvyfgWzRolyY2+iLdW0JUoDpKHwTtPJJ8gDak026bdOn6TodHeC45PQsBApdaS
+	TegXdK1Qvmb+sB4LYWJFJG6043qqORGRibeUVFBeooUqraJ0+HkdnxQu9BPVTIlTwUBWY7q2gBu
+	IW3DQmStdr74CznICT0xhDVZY/LYToG+RRSO217Yka7nQ1jOQI/WLqv6FS8yWxvnjP/CbfvP5XI
+	CLkJUV8YZmKPCScNFEdycuEHZEIgwj2dhLaCT4MGTgpmAllnCQ7eLhrT6WJ+m+N0bUIe/4xkHVX
+	hhcQtqo7u8z6HJZDMkNEBEGwEISnSODDJRhVtLrd2U24+12a5U55HRJTpnTHwmPtoa5voh6TIR8
+	E/aa1+4l1/A4D1HCHnHRlhrNrjyv2ZWIKv3vodq/kU3tp1xt1SS5RjcE=
+X-Google-Smtp-Source: AGHT+IE4hgKlPjRv6CQsulSHO7uaJxWorIuNklCjzaMiGW9OXkndROA3boKX4qKvwUjuv370Yq7hzQ==
+X-Received: by 2002:a17:90b:1647:b0:330:7a32:3290 with SMTP id 98e67ed59e1d1-3342a3471ccmr24460323a91.37.1759243592943;
+        Tue, 30 Sep 2025 07:46:32 -0700 (PDT)
+Received: from localhost ([2804:30c:b65:6a00:ceaa:2ed0:e81e:8f51])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-3341bd90367sm20311444a91.5.2025.09.30.07.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Sep 2025 07:46:31 -0700 (PDT)
+Date: Tue, 30 Sep 2025 11:47:24 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, michael.hennerich@analog.com,
+	nuno.sa@analog.com, eblanc@baylibre.com, andy@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 7/8] dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216
+ and ADAQ4224
+Message-ID: <aNvtfPh2JLdLarE5@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1758916484.git.marcelo.schmitt@analog.com>
+ <5dc08b622dac1db561f26034c93910ccff75e965.1758916484.git.marcelo.schmitt@analog.com>
+ <20250928111955.175680cb@jic23-huawei>
+ <20250929143132.GA4099970-robh@kernel.org>
+ <CAMknhBHzXLjkbKAjkgRwEps=0YrOgUcdvRpuPRrcPkwfwWo88w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OSA0EPF000000CA:EE_|SG2PR06MB5216:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 93c57463-9daa-49cc-d247-08ddfff6e7d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jdvid7MOaEBwHuqbDSdr2dsZCPgXK1CtCnR/Dh0+JwJ65/GcP3aXtgoPKeiy?=
- =?us-ascii?Q?ohMYlYJr2jUsOOO/xw8NkNgOzNBv4msr5awOav13HL2tVQrt63PR7YQ+bgcZ?=
- =?us-ascii?Q?kcuuDICFNjiOETRnaBm+mN63yk6qC59n8qyplo0wrmchdNCIJhn7r8uccu/a?=
- =?us-ascii?Q?Pe/cwtijhP0rh1u4Fsdh5819zr6sK1vXm7jedt3MCAEXNlNY9+lUDWYuWIkQ?=
- =?us-ascii?Q?Gt1PA0VctvYHQ3LR0Bu+j/XYCyOXZFKGY9Umjk3qYi9RC8PE9xlpHcsSI4pE?=
- =?us-ascii?Q?OFd+WuqUQkHlzvzuzuHK/ntxg5Td9mAt6N9Ghl9+Oav6XHsChllIh7RqbOI/?=
- =?us-ascii?Q?4wC1QmPnMdMBKnqiR5DHedtZcsIlmk8T9XxS/4Y4UspoUQPmlX0seZt38Qe4?=
- =?us-ascii?Q?xP8qDFEWqomwzYTtve66gD0m3kJrayYq0gT59Xjuek0dbUQxRWuE01hOAbCz?=
- =?us-ascii?Q?tR62wUVq8exUYfuu2Q0h3GuaqwGRpBnvW/UtD8KCyJc9gban+aQpj6oB9bVS?=
- =?us-ascii?Q?jnLQYqkzieD9uZ63yMCojgPLFLBmkCJSJbvuAXTlf/sckzwqctBaFKMah7Ok?=
- =?us-ascii?Q?LnsUST7yTvSUhWKekDKn5Mw+P1gaj79/4X5T1kaekNyoSUDnCGCtpKTGFQHj?=
- =?us-ascii?Q?oMp+Ef7hCaxAHNTMSi0zwgKwWEgVpVKfVumdUml1dWjOFhGkkWHXDhOawu1r?=
- =?us-ascii?Q?IDGZ//Ve2HinScFTl8IO9S+YtmAMKltKwuCrtqaMyvqST7nunFe5e2qEMx0P?=
- =?us-ascii?Q?RgJK0O+yc/G8mFJybbqcdmjPrCWLhGQatlunuXMJp/5iqG+kGdYnE424WLk9?=
- =?us-ascii?Q?2Ir0ySLHWNN/VKvZqj/RmECypHH0Do7zGDK9x7PUTJV3+7CDI4m1EHo2aNrs?=
- =?us-ascii?Q?obXjl/kftmksVYhFk4fEn/h4ueLAtKkv9KA9m7Fls5D5vvVgsZCq4qbIjdpv?=
- =?us-ascii?Q?1u13YK7xWBhD6mfUeW15pTA46Hj6umJx4IXj3f32BIFlGvspAQ5M3wGeQrQX?=
- =?us-ascii?Q?D+yHK3C3FympfN4gY692kLO74tgsbw+eXq7DeTIaPq4rt+H1npbi+zPux3qi?=
- =?us-ascii?Q?3tgU5AaXBFJK5tcMR2GlHAIps7GSFlOmP6UF9hUzk5C03GD1d2yobiS6jF1x?=
- =?us-ascii?Q?pi1Ld6FbdODUnXjGpTkZeLA6JHrtm5EviMvjUL/G2IiUktELZWl0MO4qg+eG?=
- =?us-ascii?Q?FBr68XczRSKURRccfWxlM4kLsup14Ys322Yj2TszaWqKEXjk1ITECE1O0+XP?=
- =?us-ascii?Q?4bJDH/4CyjZO2f5gjokDQsQYzgHAgisJUr/j/dRzDbFu194r8Kpk92IwKZ5O?=
- =?us-ascii?Q?ODeUKoFR5jNm+TKT3CNyuH4hSq+Aq1vJW3W/OhYtSaYlsK8dImWV/vSsVOEH?=
- =?us-ascii?Q?5BbrrO+EQ60K6UTueGxDX7kZ8t59ZBKjLrwWhk1yJzqC6HXyxf+5ZzD5zCc6?=
- =?us-ascii?Q?EVEP9yK+w/XCSI2ISmgwluMy/lRwRvfNwCqEsXaXyvFqCb/cmjPUbxE9EDuf?=
- =?us-ascii?Q?wrVv9kq3GzKGm9Hd0W8+FwvDtLAa1HoMUGdfNpnIoJEV+beixxc9DLMSlDR7?=
- =?us-ascii?Q?2L+SDfncWY5xW9T0ARg=3D?=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2025 07:56:47.0586
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93c57463-9daa-49cc-d247-08ddfff6e7d2
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	OSA0EPF000000CA.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5216
+In-Reply-To: <CAMknhBHzXLjkbKAjkgRwEps=0YrOgUcdvRpuPRrcPkwfwWo88w@mail.gmail.com>
 
-The fifo-width is the FIFO data width (in bits) for the Cadence IP.
-Configure it according to the FIFO data width set during the chip design.
-The current design of sky1 has a FIFO data width of 32 bits.
+On 09/29, David Lechner wrote:
+> On Mon, Sep 29, 2025 at 4:31 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Sun, Sep 28, 2025 at 11:19:55AM +0100, Jonathan Cameron wrote:
+> > > On Fri, 26 Sep 2025 17:40:47 -0300
+> > > Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
+> > >
+> > > > ADAQ4216 and ADAQ4224 are similar to AD4030 except that ADAQ devices have a
+> > > > PGA (programmable gain amplifier) that scales the input signal prior to it
+> > > > reaching the ADC inputs. The PGA is controlled through a couple of pins (A0
+> > > > and A1) that set one of four possible signal gain configurations.
+> > > >
+> > > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > > > ---
+> > > > Change log v2 -> v3
+> > > > - PGA gain now described in decibels.
+> > > >
+> > > > The PGA gain is not going to fit well as a channel property because it may
+> > > > affect more than one channel as in AD7191.
+> > > > https://www.analog.com/media/en/technical-documentation/data-sheets/AD7191.pdf
+> > > >
+> > > > I consulted a very trustworthy source [1, 2] and learned that describing signal
+> > > > gains in decibels is a common practice. I now think it would be ideal to describe
+> > > > these PGA and PGA-like gains with properties in decibel units and this patch
+> > > > is an attempt of doing so. The only problem with this approach is that we end up
+> > > > with negative values when the gain is lower than 1 (the signal is attenuated)
+> > > > and device tree specification doesn't support signed integer types. As the
+> > > > docs being proposed fail dt_binding_check, I guess I have to nack the patch myself.
+> > > > Any chance of dt specification eventually support signed integers?
+> > > > Any suggestions appreciated.
+> > > >
+> > > > [1] https://en.wikipedia.org/wiki/Decibel
+> > > > [2] https://en.wikipedia.org/wiki/Gain_(electronics)
+> > >
+> > > I still wonder if the better way to describe this is to ignore that it
+> > > has anything to do with PGA as such and instead describe the pin strapping.
+> > >
+> > > DT folk, is there an existing way to do that? My grep skills are failing to
+> > > spot one.
+> > >
+> > > We've papered over this for a long time in various IIO drivers by controlling
+> > > directly what the pin strap controls with weird and wonderful device specific
+> > > bindings. I wonder if we can't have a gpio driver + binding that rejects all
+> > > config and just lets us check the current state of an output pin.  Kind of a
+> > > fixed mode regulator equivalent for gpios.
+> >
+> > If these are connected to GPIOs, isn't it possible that someone will
+> > want to change their value?
+> >
+> > Other than some generic 'pinstrap-gpios' property, I don't see what we'd
+> > do here? I don't feel like pin strapping GPIOs is something that we see
+> > all that often.
+> >
+> > Rob
+> 
+> I think the idea is that it is not actually a GPIO, just a hard-wired
+> connection. We would want to have a "fixed-gpios" to describe these
+> hard-wired connections as GPIOs so that we don't have to write complex
+> binding for chip config GPIOs. I've seen configuration pins like on at
+> least half a dozed of the ADCs I've been working on/reviewing over the
+> last two years (since I got involved in IIO again).
 
-Signed-off-by: Jun Guo <jun.guo@cixtech.com>
----
- arch/arm64/boot/dts/cix/sky1.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Yes, the alternative to having GPIOs would be to have pins hard-wired set to a
+specific logic level. And the connection don't need to be to GPIOs. The gain
+pins on the ADC chip can be connected to anything that keeps a constant logic
+level while we capture data from the ADC.
 
-diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index ea324336bf34..c526b92d62ff 100644
---- a/arch/arm64/boot/dts/cix/sky1.dtsi
-+++ b/arch/arm64/boot/dts/cix/sky1.dtsi
-@@ -271,6 +271,7 @@ spi0: spi@4090000 {
- 				 <&scmi_clk CLK_TREE_FCH_SPI0_APB>;
- 			clock-names = "ref_clk", "pclk";
- 			interrupts = <GIC_SPI 294 IRQ_TYPE_LEVEL_HIGH 0>;
-+			fifo-width = <32>;
- 			status = "disabled";
- 		};
- 
-@@ -281,6 +282,7 @@ spi1: spi@40a0000 {
- 				 <&scmi_clk CLK_TREE_FCH_SPI1_APB>;
- 			clock-names = "ref_clk", "pclk";
- 			interrupts = <GIC_SPI 295 IRQ_TYPE_LEVEL_HIGH 0>;
-+			fifo-width = <32>;
- 			status = "disabled";
- 		};
- 
--- 
-2.34.1
+> 
+> For example, there might be 4 mode pins, so we would like to just have
+> a mode-gpios property. So this could be all 4 connected to GPIOs, all
+> 4 hard-wired, or a mix.
 
+Having some pins hard-wired and some connected to GPIOs is possible, but that
+would make things even more complex as each pin on the ADC chip sets a different
+portion of the gain. IMHO, mixed GPIO/hard-wired configuration starts looking
+like over engineering and I haven't been requested for so much configuration
+flexibility. Having either all hard-wired or all connected to GPIOs should be ok.
+
+I'm not familiar with pinctrl dt-bindings, but I was wondering if we could get
+to something similar with pinctrl. Based on some pinctrl bindings, I think
+fixed-level GPIOs could look like the following (for the 4 pin-mode example).
+
+pinctrl0: pincontroller@0 {
+    compatible = "vendor,model-pinctrl";
+
+    all-low-state: some-gpio-pins {
+        pins = "gpio0", "gpio1", "gpio2", "gpio3";
+        function = "gpio";
+        output-low;
+    };
+    all-high-state: some-gpio-pins {
+        pins = "gpio0", "gpio1", "gpio2", "gpio3";
+        function = "gpio";
+        output-high;
+    };
+    most-high-state: some-gpio-pins {
+        pins1 { 
+            pins = "gpio0", "gpio1", "gpio2";
+            function = "gpio";
+            output-high;
+        };
+        pins2 { 
+            pins = "gpio3";
+            function = "gpio";
+            output-low;
+        };
+    };
+};
+spi {
+    adc@0 {
+        compatible = "vendor,adc";
+        /* All gpios */
+        pga-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 1 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 2 GPIO_ACTIVE_HIGH>,
+                    <&gpio0 3 GPIO_ACTIVE_HIGH>;
+         /* or all hard-wired */
+		pinctrl-names = "minimum-gain", "moderate-gain", "maximum-gain";
+		pinctrl-0 = <&all-low-state>, <&most-high-state>, <&all-high-state>;
+    };
+};
+
+Though, the above is still relying on GPIOs which is not a requirement from
+ADC peripheral perspective. Also, if GPIOs are available, one can just provide
+them through pga-gpios and have full control over the signal gain with the IIO
+driver. It boils down to just telling software what are the logical levels at
+two pins on the ADC chip when GPIOs are not provided.
+
+Thanks,
+Marcelo
+
+> 
+> (The actual bindings would need more thought, but this should give the
+> general idea)
+> 
+> fixed_gpio: hard-wires {
+>     compatible = "fixed-gpios";
+>     gpio-controller;
+>     #gpio-cells = <1>;
+> };
+> 
+> gpio0: gpio-controller@4000000 {
+>     compatible = "vendor,soc-gpios";
+>     gpio-controller;
+>     #gpio-cells = <2>;
+> };
+> 
+> spi {
+>     adc@0 {
+>         compatible = "vendor,adc";
+>         /* All gpios */
+>         mode-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>,
+>                      <&gpio0 1 GPIO_ACTIVE_HIGH>,
+>                      <&gpio0 2 GPIO_ACTIVE_HIGH>,
+>                      <&gpio0 3 GPIO_ACTIVE_HIGH>;
+>          /* or all hard-wired */
+>         mode-gpios = <&fixed_gpio 0 GPIO_FIXED_HIGH>,
+>                      <&fixed_gpio GPIO_FIXED_HIGH>,
+>                      <&fixed_gpio GPIO_FIXED_LOW>,
+>                      <&fixed_gpio GPIO_FIXED_LOW>;
+>          /* or mixed */
+>         mode-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>,
+>                      <&gpio0 1 GPIO_ACTIVE_HIGH>,
+>                      <&fixed_gpio GPIO_FIXED_LOW>,
+>                      <&fixed_gpio GPIO_FIXED_LOW>;
+>     };
+> };
 
