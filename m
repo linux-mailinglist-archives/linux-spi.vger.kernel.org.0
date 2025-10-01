@@ -1,101 +1,105 @@
-Return-Path: <linux-spi+bounces-10382-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10383-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D11CBAFFD7
-	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 12:21:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8BE8BB021C
+	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 13:26:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 405587B020E
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 10:19:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 686933C0597
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 11:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5647B29E110;
-	Wed,  1 Oct 2025 10:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7894E2C3261;
+	Wed,  1 Oct 2025 11:26:15 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C93A1B0420;
-	Wed,  1 Oct 2025 10:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EF52C237E;
+	Wed,  1 Oct 2025 11:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759314091; cv=none; b=UsJ45I2B3amXcqjyBI1BY8HkG0OHVfGOE8mRbA43mPoLjJHB8td0ZLzb9WJ6WlGWwvAkQkUiU4GZVoSaAxBzF9kKJfNGuIQ3b102s/JKHzp75Y1QFktdM30CMbcRXx5cRWpvsxuzcypLxih3wcPblRnUiYz83cekU8ye1OCr2wo=
+	t=1759317975; cv=none; b=FVYjHPZY823d3Esfhy0/Lsy6hp9gdRvK9McDfv3yateudLqy7MCLqwboj+JZqSyCTzfeECtEJGvh2BIC0DlKuE+P3oD4OVpI0rzbHz9SFbUtCrOl4YfU3cdnC8M0zDldo+rxHSkf2XhpGWGVgXyKUPLfW1QEQrmspgzGnWnugAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759314091; c=relaxed/simple;
-	bh=ODeNv/xSjUtbdZAeBsFlGuryHUWRemRcqjm8xDajy7E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dylHR7wnLcAZvpRQmsJqAtq9FGcz21KK6pkgDWwZDUw5QODIkDNR7tFKFEJIMMF6RTGLJryCqTRCU4Gw9yPf6Dd178KA6K+u21oBRXNpqZ1rAiaoQTvOqZbL4ZKrTsPxE8ZoCJCQdcXAM9Yq4j+OU9YG5w5DKcreL9sCMCXnRoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 7418972C8CC;
-	Wed,  1 Oct 2025 13:11:48 +0300 (MSK)
-Received: by imap.altlinux.org (Postfix, from userid 705)
-	id 6C02E36D070F; Wed,  1 Oct 2025 13:11:48 +0300 (MSK)
-Date: Wed, 1 Oct 2025 13:11:48 +0300
-From: Michael Shigorin <mike@altlinux.org>
-To: Michael Shigorin <mike@altlinux.ru>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Tor Vic <torvic9@mailbox.org>, Kexy Biscuit <kexybiscuit@aosc.io>,
-	jeffbai@aosc.io, gregkh@linuxfoundation.org, wangyuli@uniontech.com,
-	aospan@netup.ru, conor.dooley@microchip.com,
-	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org,
-	dushistov@mail.ru, fancer.lancer@gmail.com, geert@linux-m68k.org,
-	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
-	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
-	ntb@lists.linux.dev, patches@lists.linux.dev,
-	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
-	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
-	wsa+renesas@sang-engineering.com, xeb@mail.ru
-Subject: Re: what about CoC? (was: [PATCH] Revert "MAINTAINERS: Remove some
- entries due to various compliance requirements.")
-Message-ID: <20251001101148.GA30625@imap.altlinux.org>
-References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
- <20241023080935.2945-2-kexybiscuit@aosc.io>
- <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
- <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
- <20241024095339.GA32487@imap.altlinux.org>
+	s=arc-20240116; t=1759317975; c=relaxed/simple;
+	bh=88hrXoPV0DHfKnH2ogvQdgVfKF7ZEDvWEFx7rOVzsZc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Qbo48j/B7egeQ5ZZdlsi/pnPayjCDsiEsImiIoWsI0Z4XfRkHBIPJ1ZVh4pC7JgKE24ymS/qWV3X3EcbCddC6hHgegGZpcqmzaf2GV9V+k0Z0eUcbznzhRsA7OK8crbvz9QGTOuF2A3XO+dLuUj69cVzOuFADZAiWREOHOvMfjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Wed, 1 Oct
+ 2025 19:26:05 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Wed, 1 Oct 2025 19:26:05 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <clg@kaod.org>,
+	<broonie@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+	<linux-spi@vger.kernel.org>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH 0/6] spi: aspeed: Improve clock, timing and address decoding logic
+Date: Wed, 1 Oct 2025 19:25:59 +0800
+Message-ID: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024095339.GA32487@imap.altlinux.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Thu, Oct 24, 2024 at 12:53:39PM +0300, I wrote
-> It's not about the patch but rather about the attitude;
-> Documentation/process/code-of-conduct-interpretation.rst:
-> 
-> "regardless of ... ethnicity, ... nationality, ... race"
-> "Focusing on what is best for the community"
-> 
-> "Examples of unacceptable behavior ... insulting/derogatory
-> comments ... Public or private harassment"
-> 
-> Get back to single-standard integrity for yor own's sake.
+This patch series introduces several improvements to the
+ASPEED SPI driver, targeting better stability, compatibility
+and, flexibility across multiple ASPEED platforms.
 
-Glad to hear that ESR thinks -- and speaks! -- in a similar vein.
+Key changes include:
 
-I believe that Linus -- whose daughter has been basically
-kidnapped mentally[1][2] by the same hypicrites who speak "love"
-but groom real hate -- has his own merits to rise against those.
+* Clock selection strategy update
+  Improves fallback logic when timing calibration is skipped or
+  fails, ensuring reliable boot behavior.
 
-But it does take leadership and guts in a "modern" world.
+* Timing calibration enhancement for AST2600
+  Replaces the previous "first-pass" strategy with a more robust
+  algorithm that selects the optimal timing point.
 
-[1] http://reddit.com/r/linux/comments/9go8cp/linus_torvalds_daughter_has_signed_the/ [del, heh]
-[2] http://unz.com/isteve/and-they-came-for-somebody-who-actually-gets-things-done-linus-torvalds/
+* Default address decoding assignment
+  Ensures each chip select (CS) has a valid decoding range during
+  probe, avoiding detection failures due to missing or incorrect
+  bootloader setup.
+
+* Centralized address decoding management
+  Refactors the decoding logic to centrally assign address windows,
+  preventing improper trimming and improving layout flexibility.
+
+* Per-platform decoding adjustment
+  Introduces platform-specific `adjust_window` callbacks to handle
+  platform specific hardware constraints for address decoding range.
+
+* Selective memory mapping
+  Optimizes memory usage by mapping only the required address window
+  per CS to avoid exhaustion.
+
+Chin-Ting Kuo (6):
+  spi: aspeed: Update clock selection strategy
+  spi: aspeed: Improve timing calibration algorithm for AST2600 platform
+  spi: aspeed: Force default address decoding range assignment for each
+    CS
+  spi: aspeed: Centralize address decoding region management
+  spi: aspeed: Add per-platform adjust_window callback for decoding
+    range
+  spi: aspeed: Only map necessary address window region
+
+ drivers/spi/spi-aspeed-smc.c | 644 ++++++++++++++++++++++++++---------
+ 1 file changed, 489 insertions(+), 155 deletions(-)
 
 -- 
-Michael Shigorin
-http://t.me/anna_news
+2.34.1
+
 
