@@ -1,90 +1,294 @@
-Return-Path: <linux-spi+bounces-10399-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10400-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DACE4BB02FD
-	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 13:35:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D84C5BB040E
+	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 13:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4874717AD3B
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 11:35:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4666A194454C
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 11:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A922DF128;
-	Wed,  1 Oct 2025 11:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F0C2E62D8;
+	Wed,  1 Oct 2025 11:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="gPr8JM0r"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="e7vaYpAs"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDB02DE713;
-	Wed,  1 Oct 2025 11:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F242E5B13
+	for <linux-spi@vger.kernel.org>; Wed,  1 Oct 2025 11:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759318461; cv=none; b=CB8vOD6Bi7UifOMb2Xq/xfGgBxLigL5VsPKE8B9bD3pB4dL4JQL8HvB5tCCuv/p2Jw56jJ1AAZTHvHMUNjXbRZ407tIC8DfCe+RBukOpi/iAdmjr2Nvr2DNY+31Yiy36AB5zD6HYTxy+5sI6Lx+RuOUcNlJ5nsQZj67QLki5DOU=
+	t=1759319747; cv=none; b=eewbfkb+z3wtn5saD0U25weCriN3eayKz7PElVYQ46iCQruBpDqPpcNx4ibvOtDetqrK3JG2ipiJsCrAU/mVLwqSdD8IbUAOMgDP5iIndeLxMCyvpS9rRrtBvoM3y6yuJ19YLakKVWn/hBXyRyfptKifZKKc0C0nYkU2S+w8/lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759318461; c=relaxed/simple;
-	bh=4ekgiOSsVeMhFoaUOo+lKCWR44dDBKV2EZ5bN48Q60w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JBBCwTPhiuWBzOX9N3K/D2IQyyQuNaz7xNExNwbl23jEc93yFgGY5+0/VKd4xf+gvHCsDqE7lByO8rMJRvvO2U5jcrNk3Zy2+U+hbZC7erfVS7YB08QowS84CGD99g7PvI+bKmQytsup87wQYLlbo1Uxfx5BMd1zw5GH1BeVKxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=gPr8JM0r; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1759318458;
-	bh=4ekgiOSsVeMhFoaUOo+lKCWR44dDBKV2EZ5bN48Q60w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gPr8JM0ruBY4wWi/iSWIIPvJoU2xO1lRiMTt+vNgbQ+1L7o9kbgAIq7E4xBFaUS/D
-	 6QhaSisJf+XRrYGX/6zCstIWnoEB7+DjHMfP5xQYYmJcWWy2zLQ+7FPFwZcqTEsCO7
-	 HLtZxf2QiQCpRprcpmkn0vWnj7VWj2DW/32r0y5TUOTj378rnup9DhHLZ0dHr4EW5P
-	 iH1y3xaDf5OeHJ056UtGat/da7188J6Y/ZiJxtKBp0sRcPYInYmJ2qt+c6oKbyx3ol
-	 RcswwCKOlnlAavYAZ8MQC5vJvs0wEp5Dm2sRO47pMbkk3TsKOD1YYtJF1byS5ZiP6w
-	 D3E2rrTMA2ufw==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C516917E120D;
-	Wed,  1 Oct 2025 13:34:17 +0200 (CEST)
-Message-ID: <ff5feacb-6393-42b8-9134-46e22991e7d9@collabora.com>
-Date: Wed, 1 Oct 2025 13:34:17 +0200
+	s=arc-20240116; t=1759319747; c=relaxed/simple;
+	bh=xmpoeaaMf0gtwj7Q5LONEi34PrhfPqpYdxTWNSCI0iI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WA/DBXkSYZoGMaa+fPu+m+kxITQXzbU+oR8Rtgt5YwJCI2Yi0RzHGoiRHyAh9Q9jL7sB+hI1B37GhqUuYlHlb1S8HOMd9jJfAjqeFJVcFIxRWFkoXZzN/aUF4g6h+8sDoK/trm0tP8mrVBWNrulCQka3m9uuvwLhaDbfJI+bPE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=e7vaYpAs; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-3652d7800a8so55301501fa.0
+        for <linux-spi@vger.kernel.org>; Wed, 01 Oct 2025 04:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1759319742; x=1759924542; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s+Hd9ZpJ8NSMaaNJGGKXaZYsFab73oBzlTFfFDLABPU=;
+        b=e7vaYpAspNmcIFje+4nUyWTVp88pgwtaN1REWoKj0+GTLjOWmLPktVPVDtPyAQ3nze
+         +sqNBrfJ7dg3RRsjZ//R0/KuNnehwMqUKh+avWx0aIAdSJfH3kJYBOMAJ/QNwN47EFR/
+         QlRpPuQW/1NcaCefOfBBlno3urt7Q0EU7BmRAs/oj7ip98ZN+8GDbWcQ4gwRd/aXIKHu
+         jtvBdhUF2UmTxmYcXy0mfeYOfSmpwsKFq58vR9ai3i77tbtACPWAw5wyi3Wc2QDcU2tq
+         dJVORC8iwWdXrQW8QXm0RefQtjbF9ldgVLSuB+Ea7FzqJlwIC8uJC3TDQXce1i7O9DvJ
+         6lKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759319742; x=1759924542;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s+Hd9ZpJ8NSMaaNJGGKXaZYsFab73oBzlTFfFDLABPU=;
+        b=Q6eZmuo9SCZuK7WqNllZUlZARjZoTHjgmwONkh/DuH0nJO0JOhV2QdBeLriREFIkkU
+         Twnk4l6GyIupeT+2gq/9dXCLU+agTWKURET4PwSUK8dLHpu6KBi4EXN7W3GdrIHEfqI1
+         4HQjECHhQcoHE6G2tzQ5eJuM6HH/me1PihOdTt8WAl3xgda/6zqMufGn2DoN8/IBKHjB
+         B0GNxRPz5ukVK08CA1MAEA9y3IgLB4ZklJVauerIfenVJfdqC/4yY2l0ouD/O5p2YxM2
+         RiekcCll8Wqscbf4MJdOHzDsvxI83VAXCE0hOwiZRrLj+doBVEACzNO2IhS8B0UK7smg
+         Qtww==
+X-Forwarded-Encrypted: i=1; AJvYcCVOtns3BI5R3gGa/OT5/lkDkDTI6qesaN1RAck4A/mCm30hdXB0EJEBnN3CSbzxYMUM4mbl7XqBylw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW9PGAWNO8ssBDWO/hQPZEnLKvfYg5lljOD0zvat2DALtd0f41
+	vBBKZwjhLFqCZkeB8OopMP5i7+IAf++NrLW4QlUKp1sAqv3xsWfEaTZ/9aX9s+B3PfPz4+PMpZs
+	Qo1YUqNMe4IQ9E0oNDFNLTEegsvt5iLnLFBLx+JTYWQ==
+X-Gm-Gg: ASbGnct5zt87xbLL2sBDGPhURRZ2N1ZgCIeqS5qk41IEHxoLlC1bqxvhhVqexHxdMGI
+	WQdeSTkrduJxToKEeAxWDUozGIYasrp0ar7pLSqq7/9i+DzSMswoP9KskYvB7bhFNhIbr4xcP6K
+	LjvQvMXYX30XkMXJe+3oT++fmbgdODEEcP6d713a+X7eFa/ezGxVkn4WZLSZE6690OfWZZGXXKR
+	h4hsBhW4siVNX8eOlYFFfZzV4SzyKA=
+X-Google-Smtp-Source: AGHT+IEkoQyCxkan5PgIYGHY6BH11JmyH8vUxK3/+mXmQXRCKdKilY7uyfLpRwifxnOw6EQlZfknfVKOeIZv4mjpxY4=
+X-Received: by 2002:a2e:a99d:0:b0:372:9453:316d with SMTP id
+ 38308e7fff4ca-373a740494emr9691271fa.32.1759319742158; Wed, 01 Oct 2025
+ 04:55:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v5 01/13] spi: airoha: return an error for
- continuous mode dirmap creation cases
-To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Andreas Gnau <andreas.gnau@iopsys.eu>,
- Frieder Schrempf <frieder.schrempf@kontron.de>
-References: <20250930022658.1485767-1-mikhail.kshevetskiy@iopsys.eu>
- <20250930022658.1485767-2-mikhail.kshevetskiy@iopsys.eu>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250930022658.1485767-2-mikhail.kshevetskiy@iopsys.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1758916484.git.marcelo.schmitt@analog.com>
+ <5dc08b622dac1db561f26034c93910ccff75e965.1758916484.git.marcelo.schmitt@analog.com>
+ <20250928111955.175680cb@jic23-huawei> <20250929143132.GA4099970-robh@kernel.org>
+ <CAMknhBHzXLjkbKAjkgRwEps=0YrOgUcdvRpuPRrcPkwfwWo88w@mail.gmail.com> <20250930182649.GA3340740-robh@kernel.org>
+In-Reply-To: <20250930182649.GA3340740-robh@kernel.org>
+From: David Lechner <dlechner@baylibre.com>
+Date: Wed, 1 Oct 2025 13:55:31 +0200
+X-Gm-Features: AS18NWAcLP4eem2ye_LYB7prG1UNgkoIDZ3u8vohBsn6PkgMfV3oCDoCC3aLQyo
+Message-ID: <CAMknhBF-pEhMjB9MmmxpFf5wY0uvC0CCz5xtxKQ_GPCcgdW19Q@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216
+ and ADAQ4224
+To: Rob Herring <robh@kernel.org>
+Cc: Jonathan Cameron <jic23@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>, 
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, michael.hennerich@analog.com, 
+	nuno.sa@analog.com, eblanc@baylibre.com, andy@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, corbet@lwn.net, marcelo.schmitt1@gmail.com, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Il 30/09/25 04:26, Mikhail Kshevetskiy ha scritto:
-> This driver can accelerate single page operations only, thus
-> continuous reading mode should not be used.
-> 
-> Continuous reading will use sizes up to the size of one erase block.
-> This size is much larger than the size of single flash page. Use this
-> difference to identify continuous reading and return an error.
-> 
-> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+On Tue, Sep 30, 2025 at 8:26=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Mon, Sep 29, 2025 at 06:16:10PM +0200, David Lechner wrote:
+> > On Mon, Sep 29, 2025 at 4:31=E2=80=AFPM Rob Herring <robh@kernel.org> w=
+rote:
+> > >
+> > > On Sun, Sep 28, 2025 at 11:19:55AM +0100, Jonathan Cameron wrote:
+> > > > On Fri, 26 Sep 2025 17:40:47 -0300
+> > > > Marcelo Schmitt <marcelo.schmitt@analog.com> wrote:
+> > > >
+> > > > > ADAQ4216 and ADAQ4224 are similar to AD4030 except that ADAQ devi=
+ces have a
+> > > > > PGA (programmable gain amplifier) that scales the input signal pr=
+ior to it
+> > > > > reaching the ADC inputs. The PGA is controlled through a couple o=
+f pins (A0
+> > > > > and A1) that set one of four possible signal gain configurations.
+> > > > >
+> > > > > Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> > > > > ---
+> > > > > Change log v2 -> v3
+> > > > > - PGA gain now described in decibels.
+> > > > >
+> > > > > The PGA gain is not going to fit well as a channel property becau=
+se it may
+> > > > > affect more than one channel as in AD7191.
+> > > > > https://www.analog.com/media/en/technical-documentation/data-shee=
+ts/AD7191.pdf
+> > > > >
+> > > > > I consulted a very trustworthy source [1, 2] and learned that des=
+cribing signal
+> > > > > gains in decibels is a common practice. I now think it would be i=
+deal to describe
+> > > > > these PGA and PGA-like gains with properties in decibel units and=
+ this patch
+> > > > > is an attempt of doing so. The only problem with this approach is=
+ that we end up
+> > > > > with negative values when the gain is lower than 1 (the signal is=
+ attenuated)
+> > > > > and device tree specification doesn't support signed integer type=
+s. As the
+> > > > > docs being proposed fail dt_binding_check, I guess I have to nack=
+ the patch myself.
+> > > > > Any chance of dt specification eventually support signed integers=
+?
+> > > > > Any suggestions appreciated.
+> > > > >
+> > > > > [1] https://en.wikipedia.org/wiki/Decibel
+> > > > > [2] https://en.wikipedia.org/wiki/Gain_(electronics)
+> > > >
+> > > > I still wonder if the better way to describe this is to ignore that=
+ it
+> > > > has anything to do with PGA as such and instead describe the pin st=
+rapping.
+> > > >
+> > > > DT folk, is there an existing way to do that? My grep skills are fa=
+iling to
+> > > > spot one.
+> > > >
+> > > > We've papered over this for a long time in various IIO drivers by c=
+ontrolling
+> > > > directly what the pin strap controls with weird and wonderful devic=
+e specific
+> > > > bindings. I wonder if we can't have a gpio driver + binding that re=
+jects all
+> > > > config and just lets us check the current state of an output pin.  =
+Kind of a
+> > > > fixed mode regulator equivalent for gpios.
+> > >
+> > > If these are connected to GPIOs, isn't it possible that someone will
+> > > want to change their value?
+> > >
+> > > Other than some generic 'pinstrap-gpios' property, I don't see what w=
+e'd
+> > > do here? I don't feel like pin strapping GPIOs is something that we s=
+ee
+> > > all that often.
+> > >
+> > > Rob
+> >
+> > I think the idea is that it is not actually a GPIO, just a hard-wired
+> > connection. We would want to have a "fixed-gpios" to describe these
+> > hard-wired connections as GPIOs so that we don't have to write complex
+> > binding for chip config GPIOs. I've seen configuration pins like on at
+> > least half a dozed of the ADCs I've been working on/reviewing over the
+> > last two years (since I got involved in IIO again).
+>
+> Until I read the example, I totally missed what you want here...
+>
+> Can you point me to some existing bindings?
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Perhaps the best example is adi,ad7194.yaml [1]. It has odr-gpios for
+a 2 pin input to select 4 possible ODR values in the case where they
+are connected to gpios and can be configured at runtime. Then it has a
+separate adi,odr-value property to give the hardwired value in cases
+where they are not connected to gpios. The binding currently doesn't
+allow having one pin connected to a gpio and one hardwired. The same
+binding also has pga-gpios and adi,pga-value which work the same and
+just control a different configuration parameter.
 
+adi,ad7606.yaml [2] is a bit less complete. It has
+adi,oversampling-ratio-gpios but it only has adi,sw-mode to indicate
+that all 3 oversampling pins are hard-wired high. It doesn't have a
+way to specify other hard-wired states. IIRC, the AD7616 chip in this
+family also has some more similar config selection pins that aren't
+documented yet.
+
+In adi,ad7625 [3], we ended up making 4 enX-gpios for single
+properties plus a adi,en0-always-on boolean flag property for each ENX
+pin instead of a en-gpios array of 4 gpios. This was a case where it
+was highly likely that there would be a mix of hard-wired pins and
+gpio-connected pins, so it seemed to be the simplest way to describe
+it at the time. It would have been much more ergonomic though if we
+could have used the single array.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/devicetree/bindings/iio/adc/adi,ad7191.yaml#n52
+[2]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/devicetree/bindings/iio/adc/adi,ad7606.yaml#n127
+[3]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/devicetree/bindings/iio/adc/adi,ad7625.yaml#n70
+
+>
+> IIRC, Linus has expressed not caring for cases of using GPIO API on
+> things that are not GPIOs. That was more like registers which can
+> read the state of signals. Better let him weigh in before we go too far
+> down this path.
+>
+> >
+> > For example, there might be 4 mode pins, so we would like to just have
+> > a mode-gpios property. So this could be all 4 connected to GPIOs, all
+> > 4 hard-wired, or a mix.
+> >
+> > (The actual bindings would need more thought, but this should give the
+> > general idea)
+> >
+> > fixed_gpio: hard-wires {
+> >     compatible =3D "fixed-gpios";
+> >     gpio-controller;
+> >     #gpio-cells =3D <1>;
+> > };
+> >
+> > gpio0: gpio-controller@4000000 {
+> >     compatible =3D "vendor,soc-gpios";
+> >     gpio-controller;
+> >     #gpio-cells =3D <2>;
+> > };
+> >
+> > spi {
+> >     adc@0 {
+> >         compatible =3D "vendor,adc";
+> >         /* All gpios */
+> >         mode-gpios =3D <&gpio0 0 GPIO_ACTIVE_HIGH>,
+> >                      <&gpio0 1 GPIO_ACTIVE_HIGH>,
+> >                      <&gpio0 2 GPIO_ACTIVE_HIGH>,
+> >                      <&gpio0 3 GPIO_ACTIVE_HIGH>;
+> >          /* or all hard-wired */
+> >         mode-gpios =3D <&fixed_gpio 0 GPIO_FIXED_HIGH>,
+> >                      <&fixed_gpio GPIO_FIXED_HIGH>,
+> >                      <&fixed_gpio GPIO_FIXED_LOW>,
+> >                      <&fixed_gpio GPIO_FIXED_LOW>;
+> >          /* or mixed */
+> >         mode-gpios =3D <&gpio0 0 GPIO_ACTIVE_HIGH>,
+> >                      <&gpio0 1 GPIO_ACTIVE_HIGH>,
+> >                      <&fixed_gpio GPIO_FIXED_LOW>,
+> >                      <&fixed_gpio GPIO_FIXED_LOW>;
+>
+> The above seems reasonable to me.
+>
+> Just to throw out an alternative, phandle values of 0 and -1 are
+> generally reserved. Historically that means just skip the entry.
+> However, you could use that and do something like this:
+>
+> mode-gpios =3D <&gpio0 0 GPIO_ACTIVE_HIGH>,
+>              <&gpio0 1 GPIO_ACTIVE_HIGH>,
+>              <0>,
+>              <0xffffffff>;
+>
+> So 0 means low and ~0 means high. The only advantage I see with it is
+
+That works as long as we don't need other pin states like
+high-impedance. I haven't seen anything like that yet though.
+
+> you don't need a "fixed-gpios" driver. Also, I'm not sure how that would
+> work with requesting GPIOs given you've essentially defined only 2 GPIO
+> lines (high and low). Though Bartosz is doing some work on non-exclusive
+> GPIOs.
+
+Could work, or just dynamically allocate one when needed.
+
+>
+> Rob
+>
 
