@@ -1,45 +1,46 @@
-Return-Path: <linux-spi+bounces-10403-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10404-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67A1EBB17E2
-	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 20:31:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0022BB17EB
+	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 20:31:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4AD919473C6
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 18:32:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 905884A4729
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 18:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2857A29B8C0;
-	Wed,  1 Oct 2025 18:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D452D5419;
+	Wed,  1 Oct 2025 18:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3ULQYPP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1ZAaQka"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B0049620;
-	Wed,  1 Oct 2025 18:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C63C49620;
+	Wed,  1 Oct 2025 18:31:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759343495; cv=none; b=EhP7rslDzU9C0+vWECdZjBJDT8fKICa5+SyF+gS2xM7ewDxEdawruQBsbuG77ME8tDNZp0Q6yNHMvwYaCgF99HF4iWA1y9bI6H5g9GCLwBbbs+zWCT625EATu2+RBB7S5QwyHyRO8rk0FSNy0YvpbeKky6QT2nb57ADcVa+xjDk=
+	t=1759343498; cv=none; b=G8bCGLvpDSTK1dx3sSjZR2GNfM/C8h21HTTftTPPCPtiHCG+cdiVNAPV4yDrXsbmE/sMgOpUb792SrYsJB1aiqvZEGiTxygoKG1NvW8wm0qRFrkb+4wfuqNB7J28t/qWm0rIIErwk5vv5da7r31XxAX4ykTuLN/r3P+XZpA9NjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759343495; c=relaxed/simple;
-	bh=Dk4SYITbrE5C3jBQ0rRmH1my75LpjgKREbgHSO0H9BU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mCKFbsAg/Zo4kg/ONSuo8rgyBjCWSUNDsLhvQmDHO3Mryt66YEnHba6N36PJdWnG8kmiSOWylL7OQ2TOmgJ9mXYCNlYlJoChKUgFYZhLiwLzojCrv5/1yhtSdpLpxOxlqB+a7YkgU4S1f+Yu/PO2eS0b/S754utvJOmWeSXpNbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3ULQYPP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CEFC4CEF1;
-	Wed,  1 Oct 2025 18:31:31 +0000 (UTC)
+	s=arc-20240116; t=1759343498; c=relaxed/simple;
+	bh=PHcl1dE1lCANCZqnPCN9was7SxasDxHGeD7z9oJ+HwY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q6oVB7mhFADRniZDV3BMKOS73Nop1gEBvU+NUHFaxVFydysA5+LhbCkA9EIM/tsIVwry4kDriNK2XyiQ7/JYVrAff+7rYNZH08yfhUA31K9Z+u8Npd32Pgu9iom0rINijzZmQjaJdhZzxAOQcRQDoGdrJXr0cWXnBo2pxm73bZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1ZAaQka; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EC7C4CEF7;
+	Wed,  1 Oct 2025 18:31:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759343494;
-	bh=Dk4SYITbrE5C3jBQ0rRmH1my75LpjgKREbgHSO0H9BU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=B3ULQYPPrKB+zytHQTmAzDsVbcijmXu55ePTyqiaykUlEwh3Z7RkKzLcPOVPoZWlk
-	 EBuPJ/vAig0NC9Wml8/cbfTqRRujqdJQ4AQL+/LxjeTNs2EWp5nPj77NMulrlYsOA5
-	 eBbH9rl9FzhF+noFh8KR/RWHRDue1XpUXtOmAHPRmsAzZfIn9OUbfijvNh65+8EmiI
-	 I1ZJmrej4soKRyZZ+g0VG9Rff6XPMj5dR742TIPqZEgqW1tfib8wUAPOjU/QILxNPJ
-	 sxCCDumRWpk2MaPm21aDQdTUqtznSzqPxOrLdXkcjGvb0Mru3uJSD4tO40fyqa8CqN
-	 XfDsdiXpMSLYg==
+	s=k20201202; t=1759343498;
+	bh=PHcl1dE1lCANCZqnPCN9was7SxasDxHGeD7z9oJ+HwY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=E1ZAaQkaR+7mqUhr3lwMO7tVW4Ml2xCPZlHaxK0iaMeY0SI32oh+ynx613sKA7sQm
+	 w20Yr0K6ZzIXW8/YTQQbXdPb3vR0QaNVckZFFIAIeEqTfCwLr9qgCchgKPysUeUr/y
+	 i3a3eWX576XQvLrrl5eYRF8rLI56qCR8UIzenofLiDIIzUlJSTtlpABxw0Xz1iOXh+
+	 Hw8WeBPKaGAPuBpuZLq7YTGWxGKmkMgHcOpGHIZxzFKHQfgSTO+30ZZr0l89jGg4Vs
+	 8Cz7B/vfnLcBF0PR/r5d2fRxdCtqTclFSA89ziCulV4soaeWdPdRbuDVdsxFuUQKAi
+	 yxHm45NoZapDQ==
 From: Conor Dooley <conor@kernel.org>
 To: linux-spi@vger.kernel.org
 Cc: conor@kernel.org,
@@ -53,32 +54,30 @@ Cc: conor@kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v1 1/2] spi: dt-bindings: cadence: add soc-specific compatible strings for zynqmp and versal-net
-Date: Wed,  1 Oct 2025 19:31:12 +0100
-Message-ID: <20251001-basics-grafting-a1a214ef65ac@spud>
+Subject: [PATCH v1 2/2] arm64: dts: xilinx: add soc-specific spi compatibles for zynqmp/versal-net
+Date: Wed,  1 Oct 2025 19:31:13 +0100
+Message-ID: <20251001-cheesy-shucking-c55431bbcae3@spud>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251001-basics-grafting-a1a214ef65ac@spud>
+References: <20251001-basics-grafting-a1a214ef65ac@spud>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1832; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=1SEoBl3IkinUMLRK+FNSvbKHIkHI8aGP3E2c2HCbUXE=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDBl3iyuEJ/2tqjwefr1vrX7loe6Jn/18eTrijgoeO5LwJ EFe/xlXRykLgxgXg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbSYMXw37vG+tQNuVObtj65 mr9d+2bQ1Kx7k2LX710oEtb2P/NySC0jw9Zv6wquh9d2MEgUmxk+2nR1sazM/1bR7ZGz70ypsfZ 4yA0A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2582; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=5g4PfVPLFBuaLYvor0B86romXUgNKzoaBX7dvqZsNgQ=; b=owGbwMvMwCVWscWwfUFT0iXG02pJDBl3iyv8Z19oCz7CxHdSsMdx7i6WLQbbVvra7Kucu21ZZ nNr6tSHHaUsDGJcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZjI2iWMDH3erWf5/HituD/7 tS6NORvOEbTk/j+jWzOWKLWtqJzeuYfhr0hr/NqDhjO3Jr2YZHggdW+cZpaI61uBHc0fEyb9Xnq WmR0A
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
 Content-Transfer-Encoding: 8bit
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-When the binding for the Cadence spi controller was written, a dedicated
-compatible was added for the zynq device. Later when zynqmp and
-versal-net, which also use this spi controller IP, were added they did
-not receive soc-specific compatibles. Add them now, with a fallback to
-the existing compatible for the r1p6 version of the IP so that there
-will be no functional change. Retain the r1p6 in the string, to match
-what was done for zynq.
-
-Disallow the cdns,spi-r1p6 compatible in isolation to "encourage" people
-to actually add soc-specific compatible strings in the future.
+Unlike zynq, which has a specific compatible for the Cadence spi
+controller, zynqmp and versal-net do not have specific compatibles.
+In order to "encourage" people to use soc-specific compatibles for new
+devices using this IP, add specific compatibles for these devices, with
+a fallback to the existing compatible for the r1p6 version of the IP so
+that there will be no functional change.
 
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
@@ -93,31 +92,54 @@ CC: devicetree@vger.kernel.org
 CC: linux-kernel@vger.kernel.org
 CC: linux-arm-kernel@lists.infradead.org
 ---
- .../devicetree/bindings/spi/spi-cadence.yaml          | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/xilinx/versal-net.dtsi | 4 ++--
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi     | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-index 8de96abe9da1..27414b78d61d 100644
---- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
-@@ -14,9 +14,14 @@ allOf:
+diff --git a/arch/arm64/boot/dts/xilinx/versal-net.dtsi b/arch/arm64/boot/dts/xilinx/versal-net.dtsi
+index fc9f49e57385..38af1a4e34f7 100644
+--- a/arch/arm64/boot/dts/xilinx/versal-net.dtsi
++++ b/arch/arm64/boot/dts/xilinx/versal-net.dtsi
+@@ -610,7 +610,7 @@ smmu: iommu@ec000000 {
+ 		};
  
- properties:
-   compatible:
--    enum:
--      - cdns,spi-r1p6
--      - xlnx,zynq-spi-r1p6
-+    oneOf:
-+      - enum:
-+          - xlnx,zynq-spi-r1p6
-+      - items:
-+          - enum:
-+              - xlnx,zynqmp-spi-r1p6
-+              - xlnx,versal-net-spi-r1p6
-+          - const: cdns,spi-r1p6
+ 		spi0: spi@f1960000 {
+-			compatible = "cdns,spi-r1p6";
++			compatible = "xlnx,versal-net-spi-r1p6", "cdns,spi-r1p6";
+ 			status = "disabled";
+ 			interrupts = <0 23 4>;
+ 			reg = <0 0xf1960000 0 0x1000>;
+@@ -618,7 +618,7 @@ spi0: spi@f1960000 {
+ 		};
  
-   reg:
-     maxItems: 1
+ 		spi1: spi@f1970000 {
+-			compatible = "cdns,spi-r1p6";
++			compatible = "xlnx,versal-net-spi-r1p6", "cdns,spi-r1p6";
+ 			status = "disabled";
+ 			interrupts = <0 24 4>;
+ 			reg = <0 0xf1970000 0 0x1000>;
+diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+index e11d282462bd..89c565bef274 100644
+--- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
++++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+@@ -1076,7 +1076,7 @@ smmu: iommu@fd800000 {
+ 		};
+ 
+ 		spi0: spi@ff040000 {
+-			compatible = "cdns,spi-r1p6";
++			compatible = "xlnx,zynqmp-spi-r1p6", "cdns,spi-r1p6";
+ 			status = "disabled";
+ 			interrupt-parent = <&gic>;
+ 			interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1088,7 +1088,7 @@ spi0: spi@ff040000 {
+ 		};
+ 
+ 		spi1: spi@ff050000 {
+-			compatible = "cdns,spi-r1p6";
++			compatible = "xlnx,zynqmp-spi-r1p6", "cdns,spi-r1p6";
+ 			status = "disabled";
+ 			interrupt-parent = <&gic>;
+ 			interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.47.3
 
