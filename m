@@ -1,169 +1,119 @@
-Return-Path: <linux-spi+bounces-10389-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10390-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C63BB0276
-	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 13:27:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24278BB029A
+	for <lists+linux-spi@lfdr.de>; Wed, 01 Oct 2025 13:30:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 156732A29A2
-	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 11:27:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D348F4A4CBB
+	for <lists+linux-spi@lfdr.de>; Wed,  1 Oct 2025 11:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341252DE1E6;
-	Wed,  1 Oct 2025 11:26:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4223A2C15A0;
+	Wed,  1 Oct 2025 11:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qOewgJOB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AC42DCBEB;
-	Wed,  1 Oct 2025 11:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75D72C3770;
+	Wed,  1 Oct 2025 11:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759317988; cv=none; b=Of+Nt/UG3sKi+zQEXCF3RkRQG+Yn8lEWkxduBVUXHu1iHvwBDCFhp0RVmyx94pt6pBLNZS+wxoAQEPSiarO0ofuZdN6blXFvp4fLozqZh/xgVGHTkWJFdfy96Bjf8ksaijLxoSU8Tx3+LRXf3MFkYWuy4Gv+sLSYpoFQPFKUawA=
+	t=1759318210; cv=none; b=XCk3tf5chvhu6MKDu6DNwbguacbzZioX90DuvbR6D4HU3dNlv4cvcqxSO4qDpR/a3Ce2ylYhzcSvdwJ/GdM3AsJnQmAc948LVv0aFokgmZV3M+qgvjTnnf3xth7Ky7Wjhu6t3oUxllCj6GF6D81lp7A/YWeC02G7LEU6QM8uBcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759317988; c=relaxed/simple;
-	bh=vKwBowoTaymQ8jmDwD4h32a8cDe97YdUoEzA8j+qWz4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ed2GUgUnA8F+EWtq6zsjkmwFkAk6I+JhSOoYuFiWDUOriCVZaXU6ZbA8BMcKhyLSNIfpSkdONqadNtqYGuxOiMg7XFnhmfnQanE0boevzHeHBbHicM9bdD6g2QRs5Ihdz3ETgoBx6ySEUfxyZFXknvtdXyvM58KmdNCzC5oO8k4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Wed, 1 Oct
- 2025 19:26:05 +0800
-Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Wed, 1 Oct 2025 19:26:05 +0800
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <clg@kaod.org>,
-	<broonie@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
-	<linux-spi@vger.kernel.org>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH 6/6] spi: aspeed: Only map necessary address window region
-Date: Wed, 1 Oct 2025 19:26:05 +0800
-Message-ID: <20251001112605.1130723-7-chin-ting_kuo@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
-References: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
+	s=arc-20240116; t=1759318210; c=relaxed/simple;
+	bh=TSN7wdoIY+RSiBU4VS9HFoh1mDkmc2W2ztVCZNYeegY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tRBSTpc/dASOYmi0Hh6CsPpf+05r7Mv6zPPEwHOm1YT/19OYj/KvqBmUyVCNAlW/Qr6KrVss8N9ojk9HUyhiOZsX0qfd48wGk6eQzbd9IPY0waXIMOtM75OtM4qkElp2GvpfqFz07EUJWeCbwz/CD1nCyQ44Dqqg+nrbrIEdI80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qOewgJOB; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1759318203;
+	bh=TSN7wdoIY+RSiBU4VS9HFoh1mDkmc2W2ztVCZNYeegY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qOewgJOBumdbTEqeUO+6E1ND+PzsymTS1jyCR9u4D4PNk0/7VIvuKWOte+j5h8V08
+	 VQyDcA/1MO0Zzr2sVf+4ScAw2q7ENE3D/ESv/XBjIRh7ClnZ4S+7V8lRF7Pl5MmNfg
+	 kCEyIRSavX5f+sNvLQXJt6HqoLRNzKORTKXYBNSS2kIEXX+gIUCUPc1U7cB+Hf/pEZ
+	 +bR8w7RQPeFQjIUiS2GZnTzMwgX26J6uLKJOgNektxGbRBSN/EVxRliw+JsF0im0Qn
+	 Ns3ZHNP/oMvKkQeOjKQ7WTTBxJUlFUkdArcWjGcqGU/lXzVkJgAbcuxK15J/iV2OgT
+	 juAORtLROMc6g==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9EC1C17E00AC;
+	Wed,  1 Oct 2025 13:30:02 +0200 (CEST)
+Message-ID: <7909d937-aa93-44bf-a4d3-12849a14fdf4@collabora.com>
+Date: Wed, 1 Oct 2025 13:30:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v5 13/13] spi: airoha: buffer must be 0xff-ed
+ before writing
+To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
+ Mark Brown <broonie@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
+References: <20250930022658.1485767-1-mikhail.kshevetskiy@iopsys.eu>
+ <20250930022658.1485767-14-mikhail.kshevetskiy@iopsys.eu>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250930022658.1485767-14-mikhail.kshevetskiy@iopsys.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Previously, the driver mapped the entire SPI address decoding region during
-probe. On systems with small flash or limited memory, this could lead to
-excessive memory usage or allocation failures.
+Il 30/09/25 04:26, Mikhail Kshevetskiy ha scritto:
+> During writing, the entire flash page (including OOB) will be updated
+> with the values from the temporary buffer, so we need to fill the
+> untouched areas of the buffer with 0xff value to prevent accidental
+> data overwriting.
+> 
+> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+> ---
+>   drivers/spi/spi-airoha-snfi.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/spi/spi-airoha-snfi.c b/drivers/spi/spi-airoha-snfi.c
+> index 437ab6745b1a..57b1950e853f 100644
+> --- a/drivers/spi/spi-airoha-snfi.c
+> +++ b/drivers/spi/spi-airoha-snfi.c
+> @@ -776,6 +776,7 @@ static ssize_t airoha_snand_dirmap_write(struct spi_mem_dirmap_desc *desc,
+>   		return -EOPNOTSUPP;
+>   	}
+>   
+> +	memset(txrx_buf, 0xff, bytes);
 
-This patch changes the strategy to initially map a small address window
-for SPI flash device probing. After determining each chip select's flash
-size, the driver unmaps the temporary region and remaps only the required
-address window accordingly.
+As you are refactoring this a bit, reading the function isn't straightforward
+without applying the series locally.
 
-Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
----
- drivers/spi/spi-aspeed-smc.c | 39 +++++++++++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 7 deletions(-)
+It looks like you're filling the entire txrx_buf with 0xff.
 
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index 4f6ae48dd904..0c3de371fd39 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-@@ -96,7 +97,6 @@ struct aspeed_spi {
- 	const struct aspeed_spi_data	*data;
- 
- 	void __iomem		*regs;
--	void __iomem		*ahb_base;
- 	u32			 ahb_base_phy;
- 	u32			 ahb_window_size;
- 	u32			 num_cs;
-@@ -394,6 +394,13 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi)
- 	u32 cs;
- 	size_t window_size;
- 
-+	for (cs = 0; cs < aspi->data->max_cs; cs++) {
-+		if (aspi->chips[cs].ahb_base) {
-+			iounmap(aspi->chips[cs].ahb_base);
-+			aspi->chips[cs].ahb_base = NULL;
-+		}
-+	}
-+
- 	for (cs = 0; cs < aspi->data->max_cs; cs++) {
- 		seg_reg = seg_reg_base + cs * 4;
- 		seg_val_backup = readl(seg_reg);
-@@ -425,13 +432,29 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi)
- 		else
- 			dev_dbg(dev, "CE%d window closed\n", cs);
- 
--		aspi->chips[cs].ahb_base = aspi->ahb_base + offset;
- 		offset += window_size;
- 		if (offset > aspi->ahb_window_size) {
- 			dev_err(dev, "CE%d offset value 0x%llx is too large.\n",
- 				cs, (u64)offset);
- 			return -ENOSPC;
- 		}
-+
-+		/*
-+		 * No need to map the address deocding range when
-+		 * - window size is 0.
-+		 * - the CS is unused.
-+		 */
-+		if (window_size == 0 || cs >= aspi->num_cs)
-+			continue;
-+
-+		aspi->chips[cs].ahb_base =
-+			devm_ioremap(aspi->dev, start, window_size);
-+		if (!aspi->chips[cs].ahb_base) {
-+			dev_err(aspi->dev,
-+				"Fail to remap window [0x%.9llx - 0x%.9llx]\n",
-+				(u64)start, (u64)end - 1);
-+			return -ENOMEM;
-+		}
- 	}
- 
- 	return 0;
-@@ -447,7 +470,9 @@ static int aspeed_spi_chip_set_default_window(struct aspeed_spi *aspi)
- 
- 	/* No segment registers for the AST2400 SPI controller */
- 	if (aspi->data == &ast2400_spi_data) {
--		aspi->chips[0].ahb_base = aspi->ahb_base;
-+		aspi->chips[0].ahb_base = devm_ioremap(aspi->dev,
-+						       aspi->ahb_base_phy,
-+						       aspi->ahb_window_size);
- 		aspi->chips[0].ahb_window_size = aspi->ahb_window_size;
- 		return 0;
- 	}
-@@ -839,10 +864,10 @@ static int aspeed_spi_probe(struct platform_device *pdev)
- 	if (IS_ERR(aspi->regs))
- 		return PTR_ERR(aspi->regs);
- 
--	aspi->ahb_base = devm_platform_get_and_ioremap_resource(pdev, 1, &res);
--	if (IS_ERR(aspi->ahb_base)) {
--		dev_err(dev, "missing AHB mapping window\n");
--		return PTR_ERR(aspi->ahb_base);
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-+	if (IS_ERR(res)) {
-+		dev_err(dev, "missing AHB memory\n");
-+		return PTR_ERR(res);
- 	}
- 
- 	aspi->ahb_window_size = resource_size(res);
--- 
-2.34.1
+While that will work for sure, for the sake of performance you should change this
+to memset(0xff) only the portions of buffer that the next memcpy call will not
+overwrite, avoiding to effectively write twice to that buffer.
+
+Is there any reason why you didn't do just that?
+
+...also because, your commit message really looks like saying what I'm proposing
+to do here.
+
+Cheers,
+Angelo
+
+>   	memcpy(txrx_buf + offs, buf, len);
+>   
+>   	err = airoha_snand_set_mode(as_ctrl, SPI_MODE_DMA);
+
 
 
