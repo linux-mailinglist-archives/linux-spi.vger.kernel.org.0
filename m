@@ -1,107 +1,81 @@
-Return-Path: <linux-spi+bounces-10431-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10432-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F0A8BB462D
-	for <lists+linux-spi@lfdr.de>; Thu, 02 Oct 2025 17:44:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A9BBB46CD
+	for <lists+linux-spi@lfdr.de>; Thu, 02 Oct 2025 18:00:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0207D3216B5
-	for <lists+linux-spi@lfdr.de>; Thu,  2 Oct 2025 15:44:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3EB43B802F
+	for <lists+linux-spi@lfdr.de>; Thu,  2 Oct 2025 16:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 131EC2264A0;
-	Thu,  2 Oct 2025 15:44:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4228B2B9A7;
+	Thu,  2 Oct 2025 16:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Itwu3wci"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLYlYaMf"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85472253EC;
-	Thu,  2 Oct 2025 15:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C85727453
+	for <linux-spi@vger.kernel.org>; Thu,  2 Oct 2025 16:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759419866; cv=none; b=tyO6iEzvgoiowGJ/A1bsEtNw5cXzPIatW7MKVJ1t/ndRfkEXvVTWOIJTOTgdHzphryNMm4zErByP7JhUwj4IL2uYau8zcl7UQA3zirgFYyN23lR0G3biaY29v6uaNSzfb4qDC6T/dvF0Yx6K26+pweUU+c5DCCj4p9gZW+hakdw=
+	t=1759420814; cv=none; b=XqxFDRZymiQ0Oo4ou79iPlIDvmFcnQSjKBDd0T7/WNaHj4E1GeuESC94O+WtKQYE9JRgk7SN4emUQqXgMZOpNNsllaDxYl649c/cg4rs0XoYC8K9URk0mOPV7Eh5jMwW51nRqeihCYN8H6LAqipwvH65gyKPaKB7D5ZHjuKdTXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759419866; c=relaxed/simple;
-	bh=gwC5BhJBwYKgsnNt4fN26IJ79zFAZbre4VusA+f9pes=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=pP9Xc5uP2pfUtpUllowr6SvUEJsjHB0mRCtZgcDtoHi+Lb4Zi2IWQ7L4thjRmGJCSn56r0KHahqdhPVk5iz9VhzXIHw6lmg2i0xAFFWfWcwYpeDWIyH8v83XJJp6IXc+SfRNKMH1EaDsYJYxrN3vXgqf/cvqLXkPDz75xR0OVm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Itwu3wci; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEDDC4CEF4;
-	Thu,  2 Oct 2025 15:44:23 +0000 (UTC)
+	s=arc-20240116; t=1759420814; c=relaxed/simple;
+	bh=g5MPoJfS8YtFNIpqY/njfi1znY9aol3IG8h32CcwD6A=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=gkIUREDxxER93j+RNu5uYl22aMSH/lwca3DEh/F+OxkFjbvHZ9j9ObYggTn3JmOG1zuXhCGihEZlP6xo3WZMqQBty/hchQ/aocFjnFbm0YAr92SVa6RKuSI8ElDjG1PqIKKqjUxpp4lwVLgG3CV89NPiCiUWnT+QNTAI4/S6spc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLYlYaMf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5EB1C4CEF9;
+	Thu,  2 Oct 2025 16:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759419865;
-	bh=gwC5BhJBwYKgsnNt4fN26IJ79zFAZbre4VusA+f9pes=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Itwu3wciA297/eNzH7IsKflMpXmHgbzbByzzUeWY++7lJqzQG0//z8vEeua0uNuGi
-	 wCUHifUd3ejiiE5D7rPb6mJcNvPXe6wgeslW0kVP31U0pjh94O4jfPJwY2kBFlefhM
-	 SAtSZT0/ONJmBewr0/tjHlkQ8zgP/8MaH7XK/B80jSDT5t8e/dHc8kZeLSNH6sD3ct
-	 /iSGvoBU1ikZfyhYnUdrpl3jhqgBTX14a42i1DQ3hk/vuReiwRdLhfx4PP3eJSCdBD
-	 Deas6xrGBPbyqDSAEAIOWixKRAtXdRtZoEdXzfRhE84fZPMmIsWgDRN4dXPPy0Cx/Z
-	 4LwZX6SXCtr9w==
-From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, Conor Dooley <conor@kernel.org>
-Cc: Conor Dooley <conor.dooley@microchip.com>, 
- Jun Guo <Jun.Guo@cixtech.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Michal Simek <michal.simek@amd.com>, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20251001-basics-grafting-a1a214ef65ac@spud>
-References: <20251001-basics-grafting-a1a214ef65ac@spud>
-Subject: Re: (subset) [PATCH v1 1/2] spi: dt-bindings: cadence: add
- soc-specific compatible strings for zynqmp and versal-net
-Message-Id: <175941986332.90691.14872518520812537985.b4-ty@kernel.org>
-Date: Thu, 02 Oct 2025 16:44:23 +0100
+	s=k20201202; t=1759420813;
+	bh=g5MPoJfS8YtFNIpqY/njfi1znY9aol3IG8h32CcwD6A=;
+	h=Subject:From:Date:To:From;
+	b=JLYlYaMfGeqGRO8SF/hJgyJXLAQtfEnPhfy6E+Vb68unrQbUUyGw/WoODafePi5zk
+	 IyEgVBot3iTo1ki6vu158qieAPssMCOW1BF6/a3mZVzdW7rEbevdeWGDDO+8zAAe0A
+	 DHG5ZbXq8NiG1LiFz0fdhxX8Ik1lkOw4i9Jx2YbHJ/ovw10p7cYiFB80m0J6fQbCF5
+	 ycyUYh9jfpwf7rhhDiAIQzz0ZN8h9N8SL0Y+Fg8mN6Sb/B/2ITQU804dyODspT+HLk
+	 /GE1Bg+fw2URJ+o6KfwVq/6IKai/le9ZsiiO/2ytwBh66y0kFEVOeJdJApCzf6CWYO
+	 vDHFv8QSqXHbg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF64A39D0C1A;
+	Thu,  2 Oct 2025 16:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-56183
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175942080545.2969172.11313089256076089524.git-patchwork-summary@kernel.org>
+Date: Thu, 02 Oct 2025 16:00:05 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 01 Oct 2025 19:31:12 +0100, Conor Dooley wrote:
-> When the binding for the Cadence spi controller was written, a dedicated
-> compatible was added for the zynq device. Later when zynqmp and
-> versal-net, which also use this spi controller IP, were added they did
-> not receive soc-specific compatibles. Add them now, with a fallback to
-> the existing compatible for the r1p6 version of the IP so that there
-> will be no functional change. Retain the r1p6 in the string, to match
-> what was done for zynq.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: [v1,1/2] spi: dt-bindings: cadence: add soc-specific compatible strings for zynqmp and versal-net
+  Submitter: Conor Dooley <conor@kernel.org>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1007788
+  Lore link: https://lore.kernel.org/r/20251001-basics-grafting-a1a214ef65ac@spud
+    Patches: [v1,1/2] spi: dt-bindings: cadence: add soc-specific compatible strings for zynqmp and versal-net
 
-Thanks!
 
-[1/2] spi: dt-bindings: cadence: add soc-specific compatible strings for zynqmp and versal-net
-      commit: 4092fc5f35cecb01d59b2cdf7740b203eac6948a
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
