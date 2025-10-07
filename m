@@ -1,109 +1,72 @@
-Return-Path: <linux-spi+bounces-10442-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10443-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 642ADBC0C9B
-	for <lists+linux-spi@lfdr.de>; Tue, 07 Oct 2025 10:58:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AC0BC0EFA
+	for <lists+linux-spi@lfdr.de>; Tue, 07 Oct 2025 11:56:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 178BB3AED2D
-	for <lists+linux-spi@lfdr.de>; Tue,  7 Oct 2025 08:58:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C81D1188411C
+	for <lists+linux-spi@lfdr.de>; Tue,  7 Oct 2025 09:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B842D5959;
-	Tue,  7 Oct 2025 08:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA7191E47C5;
+	Tue,  7 Oct 2025 09:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adbkP49j"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA0F2D5922
-	for <linux-spi@vger.kernel.org>; Tue,  7 Oct 2025 08:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947931A9F8D
+	for <linux-spi@vger.kernel.org>; Tue,  7 Oct 2025 09:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759827496; cv=none; b=jINyEr0dyHIepOpJ+8kZNA9OrJwNLkJF4ieZNwVk+91cuQMRf1vXh+FrT/XXy7J8ql0O9C3KiQ4rLf/S87WvZicr3i9GgLt24yFtPdBsX3b/u1wD1w9tHeOcCKsUDcSVMDpBEBMCxF7cfWFZPFuKLml8NlG04OUshElY2FB+ALY=
+	t=1759831005; cv=none; b=fKw+6OtC/uWb8DbdNALwBVYxa9IywyUkCteUR0YcG8jdHuzKj/lNZxB4evJoxlIRGIcsAFYXFmMH4ugIh2rUFXHoY5b7WSHqmEPAOhmCVzcvxfBcxhqI2DIa/0YyRZrOZX3i8Bb2+sLEUVTRhN/OFEKjtauxQkzSl+9BX+XEsec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759827496; c=relaxed/simple;
-	bh=s3kbGH2m7tYAq0Ru+MGjztJlEXICfIdT9WzMkCBCWFM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MclRjA164tklstPrqWTdUWmpbvJx8dRRLyXfjfXyioz4tsNuD4UvmPg3O/Kalx+7OZiPuc7GfbSvsvRSnJcF8DXzVPm7vMqNI5UCwhktXhwi/I/VjducJFt1yVTE+0LAxBZ20xuINr52m5KEEju9yoDnK5pwL/pujUflSHISgwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=ratatoskr.trumtrar.info)
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <s.trumtrar@pengutronix.de>)
-	id 1v63WO-0007XY-Km; Tue, 07 Oct 2025 10:58:12 +0200
-From: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Date: Tue, 07 Oct 2025 10:58:04 +0200
-Subject: [PATCH v4 3/3] Documentation: ABI: add lp5860 led matrix
- controller
+	s=arc-20240116; t=1759831005; c=relaxed/simple;
+	bh=XgRSwhHa3qU47Ogo9ZO253HrRAdrpaIx+kwxrTPvwmI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=TVEtwT3f0r2jRBbfgLBR+NVmm3PrzIiKEmceAVsRLVX6F55fTh97anrCT8zvBzAyp2eo1CTRglGXX4jbrxzBhfN0sBdfCBhBHvf1Bj3jO5SibZfWGL0ofRP9goNt+63YgTC6aF8HBYH39QlSKbUVRwbT5V48HyHjYs1nVPmMTVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adbkP49j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA4AC4CEF1;
+	Tue,  7 Oct 2025 09:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759831005;
+	bh=XgRSwhHa3qU47Ogo9ZO253HrRAdrpaIx+kwxrTPvwmI=;
+	h=Subject:From:Date:To:From;
+	b=adbkP49jySsonNpfdA6lgzC3xp1BhULH98pW6/4H1gjQgl5xG1jK3/WJjgH445VOQ
+	 ZSl2Mg0ZghprvPWZRFNlo6uxyGX8f4koTiaAZ7hUlFDY35wP/8mT9B5xI4Rdr7tmUa
+	 JDK3WoxJnA86YRLwIu91QfrYSjJq/qMncxtOKrm/0Ie0fKjKyqG71Q2B4c1KViBZyo
+	 FwrxRjq1mypkMz49jlD451eXU6yY4FPX2R4vcZv73u4zg3FMHqd/fauHR9gfVoYTUs
+	 gOOK4APOMFdYUaUPqciQn5hW3yQis9ZmUpp+vFOkiGj0c3woRBP3snY/ahpQxfUIfi
+	 wjDoscQud+aeA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AEA7C39EFA5B;
+	Tue,  7 Oct 2025 09:56:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251007-v6-14-topic-ti-lp5860-v4-3-967758069b60@pengutronix.de>
-References: <20251007-v6-14-topic-ti-lp5860-v4-0-967758069b60@pengutronix.de>
-In-Reply-To: <20251007-v6-14-topic-ti-lp5860-v4-0-967758069b60@pengutronix.de>
-To: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Steffen Trumtrar <kernel@pengutronix.de>, Pavel Machek <pavel@kernel.org>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel@pengutronix.de, Steffen Trumtrar <s.trumtrar@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: s.trumtrar@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <175983099430.1832638.11457327408600714592.git-patchwork-housekeeping@kernel.org>
+Date: Tue, 07 Oct 2025 09:56:34 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-The lp5860 is an LED matrix controller that can be connected to SPI or I2C.
-It supports setting the maximum brightness of the three basic
-colors (R,G,B) with a global value.
+Latest series: [v4] LED: Add basic LP5860 LED matrix driver (2025-10-07T08:58:01)
+  Superseding: [v3] LED: Add basic LP5860 LED matrix driver (2025-09-11T06:59:30):
+    [v3,1/3] dt-bindings: leds: add lp5860 LED controller
+    [v3,2/3] leds: add support for TI LP5860 LED driver chip
+    [v3,3/3] Documentation: ABI: add lp5860 led matrix controller
 
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org
-Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
----
- Documentation/ABI/testing/sysfs-class-spi-lp5860 | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-spi-lp5860 b/Documentation/ABI/testing/sysfs-class-spi-lp5860
-new file mode 100644
-index 0000000000000000000000000000000000000000..80b22a9d6642100a25efbf658cfed8604150baa5
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-spi-lp5860
-@@ -0,0 +1,23 @@
-+What:           /sys/class/spi_master/spi<bus>/spi<bus>.<dev>/b_global_brightness_set
-+Date:           July 2025
-+KernelVersion:  6.16
-+Contact:        Steffen Trumtrar <kernel@pengutronix.de>
-+Description:
-+	Contains and sets the global brightness for the B color group.
-+	Can be adjusted in 128 steps from 0% to 100% of the maximum brightness.
-+
-+What:           /sys/class/spi_master/spi<bus>/spi<bus>.<dev>/g_global_brightness_set
-+Date:           July 2025
-+KernelVersion:  6.16
-+Contact:        Steffen Trumtrar <kernel@pengutronix.de>
-+Description:
-+	Contains and sets the global brightness for the G color group.
-+	Can be adjusted in 128 steps from 0% to 100% of the maximum brightness.
-+
-+What:           /sys/class/spi_master/spi<bus>/spi<bus>.<dev>/r_global_brightness_set
-+Date:           July 2025
-+KernelVersion:  6.16
-+Contact:        Steffen Trumtrar <kernel@pengutronix.de>
-+Description:
-+	Contains and sets the global brightness for the R color group.
-+	Can be adjusted in 128 steps from 0% to 100% of the maximum brightness.
 
 -- 
-2.49.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
