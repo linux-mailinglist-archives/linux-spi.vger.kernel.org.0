@@ -1,135 +1,167 @@
-Return-Path: <linux-spi+bounces-10470-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10471-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61718BC53DB
-	for <lists+linux-spi@lfdr.de>; Wed, 08 Oct 2025 15:38:47 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DCF4BC543D
+	for <lists+linux-spi@lfdr.de>; Wed, 08 Oct 2025 15:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15AEA3A5F82
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Oct 2025 13:38:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C16E9351B89
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Oct 2025 13:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC2B285CAD;
-	Wed,  8 Oct 2025 13:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4704286D7C;
+	Wed,  8 Oct 2025 13:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTRNAfIq"
+	dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b="FumtB8YB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E222857C1;
-	Wed,  8 Oct 2025 13:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432AF82866;
+	Wed,  8 Oct 2025 13:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.135.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759930724; cv=none; b=pT/6mE7pyLj3JPO2va48UVKNR7/e1NApnqXwqHdJCbeiKT/mHwV5ZXQeMUJeUFMZVg6Yy+t09Isl1M7/bbatIU41f3qCIpojO5ap1JJL8BeRHcLPwq2Z9gJ6Gix6gCI2zrHICtZ3Xo9sLmG6KE4RUImnNkOcMlwm0YySnAHoaYo=
+	t=1759931397; cv=none; b=LfpqZ/7hHmEvc/vdDBMvNERxsPyEAA+f23zoA3XANsOrMWFsIRvVpmGMV2xYA2wptPFxXETLG9GyB8R0tegtFAn1dJKQcj3XZhMyjm/VlLub7+MGw1xW7cvnE8V65wbRfFw4UltzDPI+PGka4nCAC5FAUFzm3rhDFYVk9zBOAKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759930724; c=relaxed/simple;
-	bh=+muUzAG1lzz/QwKaxcLSk4/OjEYzc2TbNDTaJfcXIz8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ETW8u8cQ8JA0MD3TvKrO0ataIlJ6DgCKNPpqSW5N96LFpTVUcGF3JGkNgXNsRaWqs72DJFys59Gr7QqitRoQOhf7xkP6sNRO2pREQHlhNH4bRXR9NlC08LPaqFQO/c7wynHCZK2Hjo2q5ZblRj3PbeWea8xYU15LCJVgqkyqtR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTRNAfIq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 087DCC4CEF4;
-	Wed,  8 Oct 2025 13:38:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759930723;
-	bh=+muUzAG1lzz/QwKaxcLSk4/OjEYzc2TbNDTaJfcXIz8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=nTRNAfIqFtU8ei24fXxbYHA1f84E0BA89kBykVaMypBRPX7hEab8+n40h8Uth0jv/
-	 tWft1BOznSh1dhsGiNgc5zYLawmuoqsWjl4zRm/75Rksq7Y/bsTYigFdZ+guY4Qxz/
-	 vvoiWuJ1vYOyaXMyI5tD6fgM4WH6y1ew/gfnnnXckitoZOWblGdcDDCvdDIF9jDJ+Y
-	 iIuKq0aJZwaqEa82jCi+453lHBhCqbP5t02hB32muZ7fIQyCfq69rIfrBl5knD5812
-	 PSDj46PVVwFwvKWkdVR/jIKnLD2TkLZxYVU0nwESTmn2gG0eKeRTiSXo4FOLUJfP8I
-	 CmsSQpQ/b5P7g==
-From: Mattijs Korpershoek <mkorpershoek@kernel.org>
-Date: Wed, 08 Oct 2025 15:38:39 +0200
-Subject: [PATCH] spi: cadence-quadspi: Fix pm_runtime unbalance on dma
- EPROBE_DEFER
+	s=arc-20240116; t=1759931397; c=relaxed/simple;
+	bh=7rSRe61Wa0T9YOEvz3vnpEQTBXKJjVpcBFVpx4GhmGw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IpP1TThc0Z0Z6Yi+Vh2PaAwz0xsSZY2BikRucZg3tgcqNcEbWeTTHintZy17xOVxzunr9+v456K0Ksn4y1P5iKjGUYmmf3/1sGag9cfyt+iByZwgcaV3qKpVavZETDm6c99fashNobGnLZ1nzpF2R8JfoZhhUkTOgZBc1V8CmAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com; spf=pass smtp.mailfrom=analog.com; dkim=pass (2048-bit key) header.d=analog.com header.i=@analog.com header.b=FumtB8YB; arc=none smtp.client-ip=148.163.135.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=analog.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=analog.com
+Received: from pps.filterd (m0375855.ppops.net [127.0.0.1])
+	by mx0b-00128a01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 598Brr9V001000;
+	Wed, 8 Oct 2025 09:49:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=analog.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=DKIM; bh=fBzwTjMljqQMEzjKGuFbR3I5Bkw
+	pXZgmBh2JeayMB/c=; b=FumtB8YBJG2T3lxlXgUJzDTPeYbwJw8ogVLsQshBgQr
+	a1JhVZWb0cysLwMDuw6US03npgyoM6jLeA8Pd77KwMyRAM7+h8Bf8VzsgLPHm1S4
+	wQIXrquwexnM8Z9ielz6jqsFADN/F4feQfKSBAzRkkb+2vB6X27mQo7PNlsu0baN
+	t9OTne5xi5FnXoga5TVsdSSCrl5ScApMPw4xRKyWAOBBxUScANc16BiT+RWh6h2F
+	v8cfghDxjqoHG6J8msHikh0xOfhTgIWcXYCNnwTGuCLQXHEH1n+onlB54GpdS0mp
+	dvEE4aINBSCQK2DKsy4rRbc9IhNRRmISVOUEeCbE69Q==
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+	by mx0b-00128a01.pphosted.com (PPS) with ESMTPS id 49nkc6sr56-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Oct 2025 09:49:45 -0400 (EDT)
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+	by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 598DniHh034428
+	(version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 8 Oct 2025 09:49:44 -0400
+Received: from ASHBCASHYB5.ad.analog.com (10.64.17.133) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Wed, 8 Oct 2025 09:49:44 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB5.ad.analog.com (10.64.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.37; Wed, 8 Oct 2025 09:49:44 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.1748.37 via Frontend
+ Transport; Wed, 8 Oct 2025 09:49:44 -0400
+Received: from work.ad.analog.com (HYB-hERzalRezfV.ad.analog.com [10.65.205.9])
+	by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 598DnOlh023094;
+	Wed, 8 Oct 2025 09:49:26 -0400
+From: Marcelo Schmitt <marcelo.schmitt@analog.com>
+To: <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <jic23@kernel.org>, <ukleinek@kernel.org>, <michael.hennerich@analog.com>,
+        <nuno.sa@analog.com>, <eblanc@baylibre.com>, <dlechner@baylibre.com>,
+        <andy@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+        <conor+dt@kernel.org>, <corbet@lwn.net>, <marcelo.schmitt1@gmail.com>
+Subject: [PATCH v4 0/8] Add SPI offload support to AD4030
+Date: Wed, 8 Oct 2025 10:49:23 -0300
+Message-ID: <cover.1759929814.git.marcelo.schmitt@analog.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251008-cadence-quadspi-fix-pm-runtime-v1-1-33bcb4b83a2e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAF5p5mgC/x2NywqAIBAAfyX23IJG0eNXooPpWnvITDOC6N+Tj
- gPDzAORAlOEoXgg0MWRd5dBlgXoVbmFkE1mqETVSCE61MqQ04RHUiZ6Rss3+g1DcidvhLPtjO2
- lqJu2hRzxgbLxD8bpfT801IbocAAAAA==
-X-Change-ID: 20251008-cadence-quadspi-fix-pm-runtime-bf8df9104577
-To: Mark Brown <broonie@kernel.org>, 
- Khairul Anuar Romli <khairul.anuar.romli@altera.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mattijs Korpershoek <mkorpershoek@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2039;
- i=mkorpershoek@kernel.org; h=from:subject:message-id;
- bh=+muUzAG1lzz/QwKaxcLSk4/OjEYzc2TbNDTaJfcXIz8=;
- b=owEBbQGS/pANAwAKARkNHbRmThk1AcsmYgBo5mlgNWTTSo19sqr/F16nqYJt3kwd77ATrWRXx
- MCP28FHc/SJATMEAAEKAB0WIQQu6UKnth9qvlMTrQAZDR20Zk4ZNQUCaOZpYAAKCRAZDR20Zk4Z
- NdliCADPvhecPiyebBQioWbB6DKrIVbLmCQr4mWqKYhssdKBPT3uTDs2CAGLeEVMvOVa+6IehFL
- meoFDP2erT6X8ptXt9aWmGydbanXh5aweseiwHPh3UqVU7owi9TzTV+17tpdwly+Q6UrseYA8rU
- 0F14oGrRqRU//C+5ALHd/X5ylMlkPTxZqoQZM+lfq1RqMYdjiYjFrQDvFkEHfQstPnvqYIHwhmk
- XH15NGBbnwqG6YmDePFqgV6WaHgm9KNgt38efWrur8WLdAb4Z4S1RzjNrOCroMySpTs9fzZvNjt
- +Jf8itJBiH+WBzOCjKUeAkQ+s7tVExvrDvN9Ym8I1m5wNEf0
-X-Developer-Key: i=mkorpershoek@kernel.org; a=openpgp;
- fpr=8234A35B45C0D26B31C1A2DA570338B018144F28
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: MEiCC6AdgHinUQyrmFBmuO4VryC1m-LO
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDA4MDA0NyBTYWx0ZWRfXxWifh1cBkCkL
+ ZfORDTIxSryw9LGlXC5ov88SS4LN9dZGoyS6FYVJoZd0WCtNthZ1PR2Sn6suVLLOnwDyJOyPOXA
+ 4gBeaZcOvD0FMAE1mHZ54TqLRJK6T5xov719IP5iOCOpBFMsM5vcpAID9lCNfyB6NYAemR9OOLb
+ TGPjqTErRBwUmqZuS4HY7hSitjrdIJkuk1WECuKbWyhVz7rCOJv5+OzNw4YjDvnxBJajpQFlYHH
+ qnPS/zo4BLahGqY2FOY327LRhsZzZh2uvHhxQu0uRSDNCW/oWCcP+04GSt+o/dUq4dTs/m8X7kT
+ SVkfyZfZl/jIIEnOqZiqmG7tXmRxMQaQ6WGUQVBgdSQCmI+mAOpHuOrsKWI+hW8qXutgQsqUp0A
+ d+tOeqaVFOl+miFKaE28HHHrwWcB1Q==
+X-Proofpoint-ORIG-GUID: MEiCC6AdgHinUQyrmFBmuO4VryC1m-LO
+X-Authority-Analysis: v=2.4 cv=CMInnBrD c=1 sm=1 tr=0 ts=68e66bf9 cx=c_pps
+ a=PpDZqlmH/M8setHirZLBMw==:117 a=PpDZqlmH/M8setHirZLBMw==:17
+ a=x6icFKpwvdMA:10 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=gAnH3GRIAAAA:8
+ a=1NR5gd90Ntnl4w2qU1EA:9 a=cPQSjfK2_nFv0Q5t_7PE:22 a=HhbK4dLum7pmb74im6QT:22
+ a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-08_04,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2509150000
+ definitions=main-2510080047
 
-In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
-we handle the error by jumping to probe_setup_failed.
-In that label, we call pm_runtime_disable(), even if we never called
-pm_runtime_enable() before.
+Hi,
 
-Because of this, the driver cannot probe:
+Thanks for all reviews and suggestions to v3.
 
-[    2.690018] cadence-qspi 47040000.spi: No Rx DMA available
-[    2.699735] spi-nor spi0.0: resume failed with -13
-[    2.699741] spi-nor: probe of spi0.0 failed with error -13
+Main change in v4 is that ADAQ devices (those with PGA pins) are now only
+supported with PGA pins connected to GPIOs. The pin strapped support code was
+removed. Pin strapped/hardwired connections to PGA pins may benefit from a
+"fixed-gpios" driver which may (or may not?) use the shared GPIO abstraction
+layer [1]. I may propose support for pin-strapped/hardwired connections when I
+get a working fixed-gpios implementation.
 
-Only call pm_runtime_disable() if it was enabled by adding a new
-label to handle cqspi_request_mmap_dma() failures.
+[1]: https://lore.kernel.org/linux-gpio/CAMRc=Mdb_cUG+hKq8GyfUP1SYBh0p19J+4dFG7G3JSuZTr4n8Q@mail.gmail.com/T/#t
 
-Fixes: 04a8ff1bc351 ("spi: cadence-quadspi: fix cleanup of rx_chan on failure paths")
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@kernel.org>
----
-This has been tested on a AM69 SK board.
----
- drivers/spi/spi-cadence-quadspi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Change log v3 -> v4
+[PWM]
+- Fixed build failure due to the lack of pwm_round_waveform_might_sleep().
+[DT]
+- Now only documenting GPIO setup to control ADAQ PGA pins.
+[IIO]
+- Dropped "Reduce register access transfer speed" patch.
+- Applied code adjustments suggested to SPI offload patch.
+- Only select SPI_OFFLOAD_TRIGGER_PWM if (SPI_OFFLOAD && PWM).
+- ADAQ support patch updated to handle the GPIO setup case only.
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 8fb13df8ff8714d2ad5a019f0ae0ec3ee38833bb..81017402bc5661d08ff4e75017db954fda19ba2a 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1995,7 +1995,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	if (cqspi->use_direct_mode) {
- 		ret = cqspi_request_mmap_dma(cqspi);
- 		if (ret == -EPROBE_DEFER)
--			goto probe_setup_failed;
-+			goto probe_dma_failed;
- 	}
- 
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
-@@ -2019,9 +2019,10 @@ static int cqspi_probe(struct platform_device *pdev)
- 
- 	return 0;
- probe_setup_failed:
--	cqspi_controller_enable(cqspi, 0);
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM)))
- 		pm_runtime_disable(dev);
-+probe_dma_failed:
-+	cqspi_controller_enable(cqspi, 0);
- probe_reset_failed:
- 	if (cqspi->is_jh7110)
- 		cqspi_jh7110_disable_clk(pdev, cqspi);
+Note there is also a patch to the SPI subsystem [2] that contains a feature
+required by AD4030 offload support.
 
----
-base-commit: 0d97f2067c166eb495771fede9f7b73999c67f66
-change-id: 20251008-cadence-quadspi-fix-pm-runtime-bf8df9104577
+[2]: https://lore.kernel.org/linux-spi/cd315e95c0bd8523f00e91c400abcd6a418e5924.1759760519.git.marcelo.schmitt@analog.com/
 
-Best regards,
+Thanks,
+Marcelo
+
+
+Marcelo Schmitt (8):
+  pwm: Declare waveform stubs for when PWM is not reachable
+  dt-bindings: iio: adc: adi,ad4030: Reference spi-peripheral-props
+  Docs: iio: ad4030: Add double PWM SPI offload doc
+  dt-bindings: iio: adc: adi,ad4030: Add PWM
+  iio: adc: ad4030: Use BIT macro to improve code readability
+  iio: adc: ad4030: Add SPI offload support
+  dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216 and ADAQ4224
+  iio: adc: ad4030: Add support for ADAQ4216 and ADAQ4224
+
+ .../bindings/iio/adc/adi,ad4030.yaml          |  77 +-
+ Documentation/iio/ad4030.rst                  |  39 +
+ drivers/iio/adc/Kconfig                       |   3 +
+ drivers/iio/adc/ad4030.c                      | 717 ++++++++++++++++--
+ include/linux/pwm.h                           |  19 +
+ 5 files changed, 804 insertions(+), 51 deletions(-)
+
+
+base-commit: a9682f53c2d1678b93a123cdaa260e955430bc5c
 -- 
-Mattijs Korpershoek <mkorpershoek@kernel.org>
+2.39.2
 
 
