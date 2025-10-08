@@ -1,121 +1,98 @@
-Return-Path: <linux-spi+bounces-10481-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10482-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D276EBC5DD6
-	for <lists+linux-spi@lfdr.de>; Wed, 08 Oct 2025 17:51:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BB91BC6A26
+	for <lists+linux-spi@lfdr.de>; Wed, 08 Oct 2025 23:04:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40D87427448
-	for <lists+linux-spi@lfdr.de>; Wed,  8 Oct 2025 15:39:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FD6919E391C
+	for <lists+linux-spi@lfdr.de>; Wed,  8 Oct 2025 21:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2F003002CF;
-	Wed,  8 Oct 2025 15:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B093E27E058;
+	Wed,  8 Oct 2025 21:04:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wYBMgz54"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JczEOkin"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576432F5A1E
-	for <linux-spi@vger.kernel.org>; Wed,  8 Oct 2025 15:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CFC225B31B;
+	Wed,  8 Oct 2025 21:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759937646; cv=none; b=RYm6Z/o+RFIEB0Xwld7QvK9m03afnILHiu3a3RHqQT1lvu8QYqVP379R2JgbrllFaUfedGwRXCdRe5b3IpzXCR0pVYJGKjDbT2aX+GS87jeWSb8WFFGg6tdL3xERPo7CateFbLmLUcj4knrL+UTZHx2BGhvqgt7pTYpNDT+EJNo=
+	t=1759957489; cv=none; b=JtRWvifym1fdpdLK+zsOtAcDTdpjw/tdR+mfATSadQCDnHKJ0+OpHii+9c1MoARGkykLSE5WFQo03IP75LU3o007bCafhhXm9thFYgvufvjHZPxWa/S5dXgXF/tslovxkvreobWAqLIU1VLdprBtp4pYfXcridy5Ta+5FA8kmcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759937646; c=relaxed/simple;
-	bh=42RqGuehjRDSpY2gsrVZJlk6zt2QYdS+W6t8m/VoWXA=;
+	s=arc-20240116; t=1759957489; c=relaxed/simple;
+	bh=DUrTLLQsvlhnm79OFb+6dhzxJ2dEBoswcMK+hCZHfEw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e0ros2Kcw9lLzhlbrwWLIA6790We3XaxWuQXavJXE+rYQxZPNXuNLYqWlLlPxqB4jEhO/c2QPQ6MWFglSq83CHZFS6dBQi4kwJGYU+Rykdlxyta/ZbyF/BphPOItP/uxYR8G/KVgt6P5yXjS7iG1hksSZUUx7Kw/5Znt3brbUZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wYBMgz54; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-46e2826d5c6so58957735e9.1
-        for <linux-spi@vger.kernel.org>; Wed, 08 Oct 2025 08:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1759937643; x=1760542443; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nT10c9+RtbCyZpgzKMKOftV2ncNLF5WtmF89g9eodc=;
-        b=wYBMgz54rI2qanBpnS/yUaLctWQRbskcCwiHIiuLdt00vfamaLNmUQSdpKDXfbxn1I
-         a6z2V2dDEKYb5QdKAlP/2HwY0M30bMBaCQlHIKgKbcmRoKYsTSUshurlpuQRGrrBtwai
-         DPXNyMaqyAuFXTj5wvvUaorLOUd6o/VidvrMHSnVvujIDpSk1qXZ1TU1xdizwyJLXGll
-         dHV5rA+ei/8m/wzGYxZ2nDP8DK5gPeeJkIgmX50SCl9kZJL+7BlhAWtbKG3VwMgBjWie
-         EnpQcDsSnf5FcIOKcOknRetHXcNauTRl1AFhlwYeoMxVlmthrDor60HNiTQooud8UVg2
-         1JzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759937643; x=1760542443;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3nT10c9+RtbCyZpgzKMKOftV2ncNLF5WtmF89g9eodc=;
-        b=MXkfTtbkwmcp4vWU0gWt7bumlM+5dZUFGuA/4qcRfe1z0xuHb86wRWi3zEieh+NuiQ
-         Cq9DZitPRzP6FRqRA8b9AaWOrPigTBu8X7DzK9KnkjKjzGveMVcSFNDt+e0Z83sjgb1t
-         otR0xh4V+xwvsMWU227f9k3wqmhs68a5XBOJ6K04D6pjC2pUsxOITHKAo85jeQsucoML
-         bZKUCeeILp4dexo4fvugfrVvOYAxlMac1eDS0ucNUJRTKzLmgwnJ3A+wlfLeZJghP8nl
-         5ZfLW+DXXhuyIscWLMiklwQeL0ShK8zsJ67evaSmdXoKxKElndblUN2ncHLS8r3DvwvL
-         6IyA==
-X-Forwarded-Encrypted: i=1; AJvYcCU4E8GpRbdgV0HDkbRuG7BQePOEc+Jwp3+2AybnPXnY1nPgjixOdzQ0J7E1udKqTzCzQn3TslUGBJ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFjnCx71CQf7uRepC+FwDc3Kxz9A3Ctp4GsQNY3Oosgvz5Qkic
-	CTKOqdzD+2UI2QctCNAy5NeqfleYKpyKug4Nz7bLy+BoP4kADl0M2hsdaUmrhYfI8h4=
-X-Gm-Gg: ASbGnctERmurzVNOMk5L9pu3q+JaLu9PxROBWfy0B3w/yiEMydMSDhL4d/PyOOf7Yvd
-	GRPI45q/hCdsTIle+E2RUih3rqo2glSh1S2nV1sy4Q6hVZyxWmgB9KgiuShwdkMwqO4XnRH5eGg
-	didUcIlA2DZPC2CdJKMsyUAvlmiMLo3AWihEbMg4amYWNmVpgbfHLVaKugECo2TeJo8rikbIzTZ
-	uTpbPP8+YzrRree7FAj/wUlvGKUPufJI6lCs2fcAz3+qIDZB1HEBpa+rg1DR2ZNNfihh187BJZK
-	I+oZ1LDATm8wcoRbdX9UWFCQWKUUA2ULY02S0yDvx5o40Lm3u4nWhXgftmpQJC7OZSkHMB6mh8k
-	UX2WPWi4YcZIIatqbLI/YPymK4GPtBrhwe3FPX+VgbHZR8pB54mtWi3EUaWjdZeg0pFQ=
-X-Google-Smtp-Source: AGHT+IHWKpjkgnJ6mZ4SxdFrASKIm3+agiqKwM+jn1niikJVBh/tK845v90Y+pp2KpRiWUEcs/aoDQ==
-X-Received: by 2002:a05:600c:1f93:b0:46e:376c:b1f0 with SMTP id 5b1f17b1804b1-46fa9a8ca9fmr25983455e9.7.1759937642542;
-        Wed, 08 Oct 2025 08:34:02 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-46fab3d7df4sm17562785e9.1.2025.10.08.08.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Oct 2025 08:34:02 -0700 (PDT)
-Date: Wed, 8 Oct 2025 18:33:58 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Mattijs Korpershoek <mkorpershoek@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix pm_runtime unbalance on dma
- EPROBE_DEFER
-Message-ID: <aOaEZmrWgy_g0u7c@stanley.mountain>
-References: <20251008-cadence-quadspi-fix-pm-runtime-v1-1-33bcb4b83a2e@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NEUUb7C2dRi9GnUUW64WPtobEU6kUXTzWIIqwuV5SGEXTbQPMwnz+T/CwEjFT6wGFmt82YlLEH2UkyWGH+QRJpuBPruDt08QjhUJzhKvmTBtqmJOBhdSvEQ2pN4xnz/p7utXWaHl5reUOBjybBjwSQkB4FLrvpF1Bo/VIv3qRNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JczEOkin; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6993C4CEE7;
+	Wed,  8 Oct 2025 21:04:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759957489;
+	bh=DUrTLLQsvlhnm79OFb+6dhzxJ2dEBoswcMK+hCZHfEw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JczEOkinIROsrNKDxzKrLvWQJRt5CuBqkfRtlOigv/7DvJ4HLaW9izHy/OaZKBeYb
+	 YuZIbw6CgTURhNfEjHEUItWpceTJ/pPfUTlVMFCAAVEDaclAJq2MJunuCwdkLoyNtP
+	 6S5D7aBfAkzmJkiRRN5gVfeCAcmQ6SDxjs0n/zm7r79PTiO+IZ0dE5LLoagnAva7z2
+	 DUqean8TX2DlIR6eWhrp2zQlGPZMJd4q22V2xYEZLnaDmOr/1Ne+dzM59qGfct7nCn
+	 sbUj7pcfbukoIrWOOi2XlhE44Vr9936RN0h3Z0xud15IpdwHgWJ/keZbi/GYVtWGpI
+	 ToPMmVQ+CB1Jg==
+Date: Wed, 8 Oct 2025 22:04:43 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jic23@kernel.org, ukleinek@kernel.org, michael.hennerich@analog.com,
+	nuno.sa@analog.com, eblanc@baylibre.com, dlechner@baylibre.com,
+	andy@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, marcelo.schmitt1@gmail.com
+Subject: Re: [PATCH v4 7/8] dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216
+ and ADAQ4224
+Message-ID: <20251008-penniless-tiling-9a83d4b4ba48@spud>
+References: <cover.1759929814.git.marcelo.schmitt@analog.com>
+ <7e51e036ba930284c74cf42afd53b17d49093654.1759929814.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+9vxzm5tGtI+pL56"
+Content-Disposition: inline
+In-Reply-To: <7e51e036ba930284c74cf42afd53b17d49093654.1759929814.git.marcelo.schmitt@analog.com>
+
+
+--+9vxzm5tGtI+pL56
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251008-cadence-quadspi-fix-pm-runtime-v1-1-33bcb4b83a2e@kernel.org>
 
-On Wed, Oct 08, 2025 at 03:38:39PM +0200, Mattijs Korpershoek wrote:
-> In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
-> we handle the error by jumping to probe_setup_failed.
-> In that label, we call pm_runtime_disable(), even if we never called
-> pm_runtime_enable() before.
-> 
-> Because of this, the driver cannot probe:
-> 
-> [    2.690018] cadence-qspi 47040000.spi: No Rx DMA available
-> [    2.699735] spi-nor spi0.0: resume failed with -13
-> [    2.699741] spi-nor: probe of spi0.0 failed with error -13
-> 
-> Only call pm_runtime_disable() if it was enabled by adding a new
-> label to handle cqspi_request_mmap_dma() failures.
-> 
-> Fixes: 04a8ff1bc351 ("spi: cadence-quadspi: fix cleanup of rx_chan on failure paths")
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@kernel.org>
-> ---
-> This has been tested on a AM69 SK board.
+On Wed, Oct 08, 2025 at 10:51:37AM -0300, Marcelo Schmitt wrote:
 
-The patch seems correct, but the correct Fixes tag is:
-Fixes: b07f349d1864 ("spi: spi-cadence-quadspi: Fix pm runtime unbalance")
+> Change log v3 -> v4
+> - Now only documenting GPIO setup to control ADAQ PGA pins.
 
-regards,
-dan carpenter
+> +    else:
+> +      properties:
+> +        adi,pga-value: false
 
+I assume this is an oversight?
+
+--+9vxzm5tGtI+pL56
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaObR6wAKCRB4tDGHoIJi
+0kHlAQCNN/lqGRisHBRNDTNe6yzS5aAFVyHucN9UkezRIKpd1QEApz2WA7qTAhYa
+1jjFSqAogoyTGGp6jrtfczWr0b0Tvgs=
+=jI7J
+-----END PGP SIGNATURE-----
+
+--+9vxzm5tGtI+pL56--
 
