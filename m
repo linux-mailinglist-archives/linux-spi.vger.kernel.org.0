@@ -1,140 +1,126 @@
-Return-Path: <linux-spi+bounces-10486-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10487-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68011BC79E0
-	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 09:10:45 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2771BC7BC3
+	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 09:37:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 586254E9567
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 07:10:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7EA2D3516E5
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 07:37:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81472D0610;
-	Thu,  9 Oct 2025 07:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E971F4606;
+	Thu,  9 Oct 2025 07:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZPSZk6z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mDe9u+UK"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0272D0601;
-	Thu,  9 Oct 2025 07:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F3C1DED52
+	for <linux-spi@vger.kernel.org>; Thu,  9 Oct 2025 07:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759993841; cv=none; b=izfmWi5MONpWFNXgngnORe1qr0GcmLA4pOFMmUr4U+FJAGlLifelcbWA8wH7sOKLrxWOwUMwztj+Tod2YdHmP1L1Xa0DDagt2e5Cvc7FEbIroGtTvZvTSNQBwc09Q+KSgloJIL/j7tpITH2lCTYapxBkyEk8jprTdGMGAI6U8kc=
+	t=1759995466; cv=none; b=GaWibywJ1uvDk9GJfJQ0T2rP+OIoTcAVFqVNLIuiP2Ss4h/w3JUg/8m3L20hxbfHSPcvx1N+GiqXfPafOUgIH0O0CAtoLwsIGd2APtChLZlst2uSDATO6/Vf3W+NPSXeXL5JpJ5WSnR+ZjmyZkSTpObiBEWr/8CjiM/zPvn7BtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759993841; c=relaxed/simple;
-	bh=BTUcMOYzHrskys6WkMBozEYOqAx0t7L2rCB81+2XQ9c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kcu06KzowRfs0S7xb01jWwjQbAdaHTVAP/Osc4PCzI3lp+Bp1zGe4Ik056Dl8pHGhXLlMYxUDZac6c0IFwpaJ6NC1QeuBvnJW/Qx3vsARin6EvR69xPkxPXu5Wv+afCyX8WTHU185HnzV3db5FH0UYy9rADLvIyZkWdbDyK+MI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZPSZk6z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF23FC4CEFE;
-	Thu,  9 Oct 2025 07:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759993841;
-	bh=BTUcMOYzHrskys6WkMBozEYOqAx0t7L2rCB81+2XQ9c=;
-	h=From:Date:Subject:To:Cc:From;
-	b=DZPSZk6zz3eGN9DMiQQLAACix7zG/HWBOwRxpafnMQTIQviEzEHOrLenZPbpOSYZG
-	 k8NM7sibydpvYfYTK1WigIHjPEndrjv8PjpzE9VtdZ9wwzat+qnj/BA+QCaRNGsyw5
-	 JSt6TjCo5mpMVopQyYMUPTxbgYFNXmnKmdN3cFgbsl/7pfBXK+jZFWvOY2OYGnTtKK
-	 1tCjXP6yLLSufF8mySU9C25auQwKJ9nMogXRE+lWYmyMmGiX7ArmZ/I9W0KykJJrKx
-	 pfJ40pHdimn9kaK/pONJPCYOxKx/SEzZOa8NRx9Vv6hWnORiD4XYJaFeuctqi0vUOh
-	 Ncg96e3xsyXDQ==
-From: Mattijs Korpershoek <mkorpershoek@kernel.org>
-Date: Thu, 09 Oct 2025 09:10:38 +0200
-Subject: [PATCH v2] spi: cadence-quadspi: Fix pm_runtime unbalance on dma
+	s=arc-20240116; t=1759995466; c=relaxed/simple;
+	bh=dGju8AeWqVChK/btSkkXXitucm6kni2Hg7FXCU+eGHI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nt0DvISEnozaA4EMvyBff/pwxuEGKS9JezHnuy8rHWDxqlj2of/te4qDDLk8L4KsQX/JgW/VUY23t5z+yFruvgjqjC5X++AKROVIm3h2D/Ayw48VEZvHMYUZaFYi6nra1cTwwyouhz0UGa+wn7xDQ5XHnLgWloZo3ep0t73qnDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mDe9u+UK; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-62fc28843ecso869306a12.1
+        for <linux-spi@vger.kernel.org>; Thu, 09 Oct 2025 00:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1759995463; x=1760600263; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QkBo4+o98aA49wUvu+G1xef2+IziwVoenRLYEe5BuKY=;
+        b=mDe9u+UK4Mwu6M18fO0TRloIRr1AIoR0KlO4CS6yjeyJsGvfj1CWv7qlTBQZWKEnHK
+         jM0FUy8uKYEeZIOIpavbq3oPWGMmXz9t+rDeqnvDaTyqSf0Fywgm8ykKtbSt4oG5Emf8
+         T9XTTjyinFnO4Br/iwGz1PSwwz+ICZ7yRT1leZzyjYGEzsidBkeKCCZx69MxVBfi2T0V
+         HJNvVfoLLJlz8H6ZC8wC1OByp6x8D0k98kL8le2fDn+ipcg7MqFU7tKspJs2HvMm4WDz
+         OjWO+BtwfQJCSChuXNn9N+uc+MPhV0z6KgLYeNTRA+VLbOPwtE25RoJQCc+6es4VcNKH
+         u5tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759995463; x=1760600263;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QkBo4+o98aA49wUvu+G1xef2+IziwVoenRLYEe5BuKY=;
+        b=OBKap1HE11z8Y52OC/1k7BP/y7KHNFZWsVoe89Ac3Ntzb7qIYHa7Uip0u9KfDNbncf
+         SYxLU19WgqH4raWgKC9pFDSwUmwgLv/JxX7i2StLfTOp5DIQtZA7lJ/ESwZJxFkv7xlu
+         uD5xKe7XRqNRW/9tr8cetZI4w4YQdjrguSwnH/UU7exrtmLVj4BYtbiWueNkdJeUaxVb
+         jFNijfhVA67CGgnXY5LFo/Zt3DxqAUkhCTVEb54oT15X87i7sklrPzcf0xT1yd08llbT
+         OIpLF7zSjokblWzUxRPfEJ5tnaZC2t3Uuf3SpjB+vZJ+lpQca3r3jb4A8DXBNlJQKDa5
+         L5Tw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBFkHu4DO37mZ2XG9JudOOjpJJ6Bu9bL4A4BB6Shqs7F8/ScH67nXDJit1KT3F/9vx9ger8w5iNqo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK7teBnuXxSkQ8tjjC5C7e06+662Ih9bgbUNYLNv1oNnHvgzV6
+	YFE2m/zqc86phi7GfD5fNcp0KuABl4v85d/VzoLBQ3TwmJnuk98e6IVRRFysv+s6tqA=
+X-Gm-Gg: ASbGncsgjDetL262QZz5POx8lEj5KKSb41wniwFAdCs5ONfrKngiIaNfk9ujRlo6iAp
+	bc/qbpFOJVJOIZlSFxN3iL6ZNgrmK6WQ/eLbv2LbV9qUagNeXn3QIqOBIar6pzPYvK5DmWG/icb
+	ttRlfhs3M86pUR87dIpf1MzKQzNgpNXKTN8lLEyGHPOpXz2wtgIHLrFR5il+ccrjXFuweW7fl3r
+	hiWFesTRKcOOE+EXX7XWPQfEQC6wpKAvPsZg5jYKP2XSQ4nYyZiuSIz3ICdZt5t56aaswOJ0Ckz
+	GEbR6FkWL8XBr5wN0xxg5rJikd8HLRzuhwHX6rsOadagto8s7eXA9UrGpuHyAgDHYxTtfQWzOdn
+	KXpT8abT0iz4pPp+lNEb0gJUbJ/HFdkfjp8xc+zTNQV1xryo63tgceB82tuQSFo5kUOU=
+X-Google-Smtp-Source: AGHT+IFHi/yZs/pGR4qTm0LoEk0mx1AMmvxnoL+zqu9ZIvbq6rDqz2obSOnUoPzAuZGAuoj0ELKvaQ==
+X-Received: by 2002:a05:6402:2708:b0:639:c56d:2407 with SMTP id 4fb4d7f45d1cf-639d5c3f43fmr6045687a12.22.1759995462468;
+        Thu, 09 Oct 2025 00:37:42 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-639f30d9963sm1766971a12.15.2025.10.09.00.37.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Oct 2025 00:37:41 -0700 (PDT)
+Date: Thu, 9 Oct 2025 10:37:38 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Mattijs Korpershoek <mkorpershoek@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>,
+	Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: cadence-quadspi: Fix pm_runtime unbalance on dma
  EPROBE_DEFER
+Message-ID: <aOdmQhGW27I6rGTB@stanley.mountain>
+References: <20251009-cadence-quadspi-fix-pm-runtime-v2-1-8bdfefc43902@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251009-cadence-quadspi-fix-pm-runtime-v2-1-8bdfefc43902@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAO1f52gC/42NTQ6CMBBGr0K6dkxbIKAr72FY9GeAiVJwCkRDu
- LuVE7h8X768t4mITBjFNdsE40qRxpBAnzLhehM6BPKJhZa6VFLW4IzH4BBei/FxImjpDdMAvIS
- ZBgTb1r69KFmUVSWSZGJMjyNwbxL3FOeRP0dvVb/1b/WqQEGeW2cLW+dG4+2BHPB5HrkTzb7vX
- wM+/rPNAAAA
-X-Change-ID: 20251008-cadence-quadspi-fix-pm-runtime-bf8df9104577
-To: Mark Brown <broonie@kernel.org>, 
- Khairul Anuar Romli <khairul.anuar.romli@altera.com>, 
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mattijs Korpershoek <mkorpershoek@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2209;
- i=mkorpershoek@kernel.org; h=from:subject:message-id;
- bh=BTUcMOYzHrskys6WkMBozEYOqAx0t7L2rCB81+2XQ9c=;
- b=owEBbQGS/pANAwAKARkNHbRmThk1AcsmYgBo51/uSWgLkzY5WC1l85rzsWm4O/KpSRl0yzRqa
- royAHEsY++JATMEAAEKAB0WIQQu6UKnth9qvlMTrQAZDR20Zk4ZNQUCaOdf7gAKCRAZDR20Zk4Z
- NbONB/wLJ3cQPlTeUzvGhHKe3x0QtldYuO3YRGlD/M8fuX7lh57/P+m/L5l1WRYvwY12e4n4y8f
- H9TAzwCjyTRli8XStkRTgHueHL7CRX/nWO5Qva2QiVBlk9K24BmlzDSZWB91ZQ4kQYby8RaZt8Y
- +ShP3QyVpsiLU1cO8iqZNfIgU8EIIe5+YULq1515W4QRyhVxzg7upcY5lhLR4EOe36F8OjON/5G
- a7oIPv8y1PVv905x3e2iBXCEYdIeWYl9OB4LzvAHdWqoiIITyIcUAyniqlUb63uPW1kpUPSxG5b
- l4HepOA1Ft7/l7mpRXk33t0OzH6Ysmyz4k0b52k0KfU6SpXM
-X-Developer-Key: i=mkorpershoek@kernel.org; a=openpgp;
- fpr=8234A35B45C0D26B31C1A2DA570338B018144F28
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251009-cadence-quadspi-fix-pm-runtime-v2-1-8bdfefc43902@kernel.org>
 
-In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
-we handle the error by jumping to probe_setup_failed.
-In that label, we call pm_runtime_disable(), even if we never called
-pm_runtime_enable() before.
+On Thu, Oct 09, 2025 at 09:10:38AM +0200, Mattijs Korpershoek wrote:
+> In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
+> we handle the error by jumping to probe_setup_failed.
+> In that label, we call pm_runtime_disable(), even if we never called
+> pm_runtime_enable() before.
+> 
+> Because of this, the driver cannot probe:
+> 
+> [    2.690018] cadence-qspi 47040000.spi: No Rx DMA available
+> [    2.699735] spi-nor spi0.0: resume failed with -13
+> [    2.699741] spi-nor: probe of spi0.0 failed with error -13
+> 
+> Only call pm_runtime_disable() if it was enabled by adding a new
+> label to handle cqspi_request_mmap_dma() failures.
+> 
+> Fixes: b07f349d1864 ("spi: spi-cadence-quadspi: Fix pm runtime unbalance")
+> Signed-off-by: Mattijs Korpershoek <mkorpershoek@kernel.org>
+> ---
+> This has been tested on a AM69 SK board.
+> ---
+> Changes in v2:
+> - Updated message to use correct Fixes tag (Dan)
+> - Link to v1: https://lore.kernel.org/r/20251008-cadence-quadspi-fix-pm-runtime-v1-1-33bcb4b83a2e@kernel.org
 
-Because of this, the driver cannot probe:
+Thanks!
 
-[    2.690018] cadence-qspi 47040000.spi: No Rx DMA available
-[    2.699735] spi-nor spi0.0: resume failed with -13
-[    2.699741] spi-nor: probe of spi0.0 failed with error -13
+Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-Only call pm_runtime_disable() if it was enabled by adding a new
-label to handle cqspi_request_mmap_dma() failures.
-
-Fixes: b07f349d1864 ("spi: spi-cadence-quadspi: Fix pm runtime unbalance")
-Signed-off-by: Mattijs Korpershoek <mkorpershoek@kernel.org>
----
-This has been tested on a AM69 SK board.
----
-Changes in v2:
-- Updated message to use correct Fixes tag (Dan)
-- Link to v1: https://lore.kernel.org/r/20251008-cadence-quadspi-fix-pm-runtime-v1-1-33bcb4b83a2e@kernel.org
----
- drivers/spi/spi-cadence-quadspi.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 8fb13df8ff8714d2ad5a019f0ae0ec3ee38833bb..81017402bc5661d08ff4e75017db954fda19ba2a 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1995,7 +1995,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	if (cqspi->use_direct_mode) {
- 		ret = cqspi_request_mmap_dma(cqspi);
- 		if (ret == -EPROBE_DEFER)
--			goto probe_setup_failed;
-+			goto probe_dma_failed;
- 	}
- 
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
-@@ -2019,9 +2019,10 @@ static int cqspi_probe(struct platform_device *pdev)
- 
- 	return 0;
- probe_setup_failed:
--	cqspi_controller_enable(cqspi, 0);
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM)))
- 		pm_runtime_disable(dev);
-+probe_dma_failed:
-+	cqspi_controller_enable(cqspi, 0);
- probe_reset_failed:
- 	if (cqspi->is_jh7110)
- 		cqspi_jh7110_disable_clk(pdev, cqspi);
-
----
-base-commit: 0d97f2067c166eb495771fede9f7b73999c67f66
-change-id: 20251008-cadence-quadspi-fix-pm-runtime-bf8df9104577
-
-Best regards,
--- 
-Mattijs Korpershoek <mkorpershoek@kernel.org>
+regards,
+dan carpenter
 
 
