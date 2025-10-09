@@ -1,125 +1,132 @@
-Return-Path: <linux-spi+bounces-10496-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10497-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3FD1BCA2E6
-	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 18:28:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A5ABCA476
+	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 18:59:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A7D224FCB56
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 16:24:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2A8819E6593
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 16:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D481D220F3E;
-	Thu,  9 Oct 2025 16:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C7F22B584;
+	Thu,  9 Oct 2025 16:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCnG8vPR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qDeiGwaM"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 446561F4631
-	for <linux-spi@vger.kernel.org>; Thu,  9 Oct 2025 16:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750FA226D1E;
+	Thu,  9 Oct 2025 16:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760027037; cv=none; b=bY771wN2tgnO4zPl3zMtCnCv0ifjAp+w40UGthw16ZLDjQu2wuBKrjtMHO4rzbEx2+0AzR5ZBYsFwYqypc9onbzWy3b75oZefgPAgCXYK9mYw0qvIaENh4drGPVCzRxiM7LnPl6lqS19Bnm5JPW2l0y4FToOYpj8r3TinN823d0=
+	t=1760029114; cv=none; b=kD1zHVErJDeYAK1wkwOMO9yFMCTIHMexBRALT+6WIfLHxNXnz8OCK9Aw4L8E8rq0bJq4t5GOR7EI7rBG7k8smIEqKXVaX3bXzQhC16gVAtkQtLtiV4o4pTGsCj0fEz7Ub1LWnJfJrfbULYNeDncetR2p0nIKn+EncS4ywXtNUE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760027037; c=relaxed/simple;
-	bh=eVvkeQWqrG4dYBffY48He8ILJTh8EX7LtPQhkX3h+lI=;
+	s=arc-20240116; t=1760029114; c=relaxed/simple;
+	bh=ouGPV7oXLO0nXJOGjQeFcq4BgOQGJoUl/Z0W43w/T/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHe0MlsSR17Loba+TVyZ+TlBOmhKiVkwSDImbBCY3cFucYBWI3BRs3zEvA+rzKrBw4aR5HITUzaKw/+fRBk+nTyiePsdAPucMI0bhW4VLwTJgVpKjbcX4NPO3NjKodrSiV6Qst09yGiGR4uYirPy8ceDgWjJzjNeoKqF/paKZl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCnG8vPR; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b6329b6e3b0so1662974a12.1
-        for <linux-spi@vger.kernel.org>; Thu, 09 Oct 2025 09:23:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760027035; x=1760631835; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4C1j3OOKsjCqjPjMDTFb2+CfJ4gki9Qbk/4PqhkQDc=;
-        b=MCnG8vPRQYAB/sRTi4esoaO/JWYoy5ApLLqeX6QndxwVYySMVYJKfC4gJjO3FwPqSV
-         S30/FC8jXscm2L1XPxnjUqDd27oc5xOjcOGAGIa/5BlueteWIktVI8o/v3dMZDbmDeF8
-         z5AR8SUuVLUDndif6y1kd0i2+o7Wee/2h2SVC/9uVSGcm5WK5k7oueRP+T90pEh+XE4a
-         1d/kTqHfwlX9LPsj0YGzfnpL06PNlMtzs7tRQTGQIyBbwtT+lH5U1pKcVbVIix5OkX9B
-         3adjH2abP2vWlPTF0J3nPlLFMQsmVhism3zMR9wh1pzs/U7nQ3hoL6WTMqh4mJNEytzO
-         UfSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760027035; x=1760631835;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j4C1j3OOKsjCqjPjMDTFb2+CfJ4gki9Qbk/4PqhkQDc=;
-        b=qO4IazF2DVlbGTbaD9jS8YfVAonaeJh3CMfiH2Dwac03VZA9vGl9u+krGyKQFl+17s
-         gV7wZrvCohwwfX4pbBD3MTxQ82sQVN5expB6H5QSYxMzBqamD6jf29PFNPFbyvujL86D
-         YrZsXnztgfQslP8kNOZvEb6evhP9N9JJKBujmL9+XLkfrX2NtYyEH86huSAe/UDibeMb
-         zPz6cqKrRJLKUoqPKuyaVw+3ajZGUqOwiV1mJvgm+6jgN0Egpgr4QTRnoMzJ08wTmGFK
-         TyTogJZpIp+J5s50GBFMmgHJ2Kq3qnwLvrdQ8DRpbEC1X705He7x8lkvf4SEVzDdhISn
-         W2Lw==
-X-Forwarded-Encrypted: i=1; AJvYcCVPC8y1GBoGhjNlGUWDRkn1NFRVzr+3vlwjU9jZnsiJfzzLrmLluFBsfhzJr0fo2mKeSd/pYq8bBGo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydzBcLMgKTrwSXRNXHL/An/vT6Ocpfn8hLMjCw+JgDhiBMRFXP
-	Lax7Q2fIBJ3PQ/GWa6aFhSqtUWzcziyba/AU+HDpgYCWeK4ypxcmLP8MWTYw33Yx
-X-Gm-Gg: ASbGncuOzrz5olDq1Z6HGnfhmUczsDUMYyruaenCVm59GdhrsLWKp0Oa324eg9Oes+y
-	xrM5O3AmF5p+rQDjWRKOfOW961+GOMvufgao2t1+P1CTRb5kZzqf5iP1HZts0C1G+yOhMMRzFBm
-	kwySsMzgfkDgupDRt5Da5uIupIvqZkDnsa0pE/pKHfPro1+w9Dp8VRy96ri1ON2EoXkFMTKsfTI
-	8sxxmASjCtMJxr+Gea8c704wlOK6V9Og5g/bbi5OePQc7PNTuMjrgMhqFyD5DX95dzv9q8skKd2
-	7+le6AAxmdkJ6OBY5X7dEndZ86QC5wal3CJumQFVDodTjJqz/YRBCoylt8wwtA38rHzpaihOO/G
-	1TW3e3LgBrM0S68GhRAjZwOG4rD6wTd73ZoKzeaVJRxUPozKDKFOV9DA=
-X-Google-Smtp-Source: AGHT+IG5iTuS4lml5ybOjWvkOCPTHDj9ZrBTt/dnU/W0P0sGl3oiFllm8k9GBt9WpwjupCqN6+ivSQ==
-X-Received: by 2002:a17:903:1a10:b0:271:d1ab:17ce with SMTP id d9443c01a7336-28ec9cd59afmr138719345ad.26.1760027035566;
-        Thu, 09 Oct 2025 09:23:55 -0700 (PDT)
-Received: from localhost ([2804:30c:b65:6a00:ceaa:2ed0:e81e:8f51])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-29034e1854asm33475565ad.37.2025.10.09.09.23.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Oct 2025 09:23:54 -0700 (PDT)
-Date: Thu, 9 Oct 2025 13:24:54 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Marcelo Schmitt <marcelo.schmitt@analog.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jic23@kernel.org, ukleinek@kernel.org,
-	michael.hennerich@analog.com, nuno.sa@analog.com,
-	eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	corbet@lwn.net
-Subject: Re: [PATCH v4 7/8] dt-bindings: iio: adc: adi,ad4030: Add ADAQ4216
- and ADAQ4224
-Message-ID: <aOfh1puxPJr367n7@debian-BULLSEYE-live-builder-AMD64>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VGywaCISVzyBBUmwm4gKDJpBAUXv6SjYo4cvyEtNehylfggRF8hL5lAxaeL7yTMncdyMnFWlIotoxlGw+XHYJiFTPh//BAFw35X7EuWPbJH1UDpnTRGkojCP5/FdUk7TLETplAS1X2s4EbUs9el+jem2cv9Tc5UouGFwMYpNrb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qDeiGwaM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FABCC4CEE7;
+	Thu,  9 Oct 2025 16:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760029113;
+	bh=ouGPV7oXLO0nXJOGjQeFcq4BgOQGJoUl/Z0W43w/T/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qDeiGwaMBznqqiv2IJw492Qxj6TZBLlPZqEJ+urDxl5HvclEpTnt9Q9uOOlesnw35
+	 xVEmPn+KnsIlTnU+5Jn0zq7CaoRfFnjsNqLP7xhdVwKHcztoE4O0iGTR706FLO2GmC
+	 vsr306KtmweaLHjBaifUvRrr8YXMJM97RVbmax3F0wsmUrWqzoNwPyFEVdGy7G/ute
+	 aaEf+1fYs6gJoZiSl7M466NxXHJ/gYWrNKmUYJkJC9Fl8Pj/Gd/ibyH35P3s3Yi5lK
+	 wUWdaTQiH5Fgfp7dy0L5vCVfgyRxlsasyJfPbM3QV1ygSpTmcb7oh5WRem0s9MZ/o0
+	 UYKF2sol7iBnw==
+Date: Thu, 9 Oct 2025 18:58:31 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Cc: linux-iio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jic23@kernel.org, michael.hennerich@analog.com, 
+	nuno.sa@analog.com, eblanc@baylibre.com, dlechner@baylibre.com, andy@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, corbet@lwn.net, 
+	marcelo.schmitt1@gmail.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v4 1/8] pwm: Declare waveform stubs for when PWM is not
+ reachable
+Message-ID: <cuq6eh3vcrkgr7tj3xpo7ax4ruiy4ra6fjxgu45a3eqs2jbtah@ualgnhdwxnih>
 References: <cover.1759929814.git.marcelo.schmitt@analog.com>
- <7e51e036ba930284c74cf42afd53b17d49093654.1759929814.git.marcelo.schmitt@analog.com>
- <20251008-penniless-tiling-9a83d4b4ba48@spud>
+ <129ff5c5b7f7be4f4f3f9cf8aa3e1957d713acb7.1759929814.git.marcelo.schmitt@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="4les542qp6fpfvza"
 Content-Disposition: inline
-In-Reply-To: <20251008-penniless-tiling-9a83d4b4ba48@spud>
+In-Reply-To: <129ff5c5b7f7be4f4f3f9cf8aa3e1957d713acb7.1759929814.git.marcelo.schmitt@analog.com>
 
-On 10/08, Conor Dooley wrote:
-> On Wed, Oct 08, 2025 at 10:51:37AM -0300, Marcelo Schmitt wrote:
-> 
-> > Change log v3 -> v4
-> > - Now only documenting GPIO setup to control ADAQ PGA pins.
-> 
-> > +    else:
-> > +      properties:
-> > +        adi,pga-value: false
-> 
-> I assume this is an oversight?
 
-Oops. Sure, should have dropped that.
-If the device is not an ADAQ (no PGA circuitry present), then we should not have
-properties associated to that.
+--4les542qp6fpfvza
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 1/8] pwm: Declare waveform stubs for when PWM is not
+ reachable
+MIME-Version: 1.0
 
-+    else:
-+      properties:
-+        pga-gpios: false
-+
+Hello,
 
-Thanks,
-Marcelo
+On Wed, Oct 08, 2025 at 10:49:44AM -0300, Marcelo Schmitt wrote:
+> Previously, the PWM waveform consumer API would not be declared if
+> CONFIG_PWM was not reachable. That caused kernel builds to fail if a
+> consumer driver was enabled but PWM disabled. Add stubs for PWM waveform
+> functions so client drivers that use, but don't depend on PWM, can build =
+if
+> PWM is disabled.
+>=20
+> Fixes: 6c5126c6406d ("pwm: Provide new consumer API functions for wavefor=
+ms")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202509272028.0zLNiR5w-lkp@i=
+ntel.com/
+> Signed-off-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> ---
+> I've included this patch in this series because it should save us from be=
+ing
+> notified by 0-day about the build failure this patch fixes. From contribu=
+tor's
+> perspective, it's easier to have this patch together with the rest of ad4=
+030
+> series. Though, no objection if kernel maintainers decide to pick it [1] =
+through
+> the PWM tree.
+>=20
+> [1]: https://lore.kernel.org/linux-pwm/1ac0fc529e02744aacfcb9140ed597ff60=
+886f39.1759873890.git.marcelo.schmitt@analog.com/
+
+TL;DR: nack
+
+I replied to the original submission about why this patch is wrong. See
+there for the details.
+
+Best regards
+Uwe
+
+--4les542qp6fpfvza
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmjn6bQACgkQj4D7WH0S
+/k5meQf/ZUbpWgJbz2gIbDh0ItNlTparKj2Q4WVhgedGfKCY8chMHQTmFuUhtvQV
+iuFLynz2QJ4XDGg7SQ6zo2WMvE+DG+aSvELz4adu+8KV1M7FtoWfFP9uACVK2iZV
+Ls6lMV4ZyrCM+2me6/oa+uuKSrr+2/tUXTXz/GZzouBjuAYnsYEoYHjLuCbbjL7/
+XadRRmCRLPBMyDUlLk+b5MAXtLPXVhP9pMby8FAB4i2nQmq6JgdV0VzgpslhMV9b
+F3ekcy9YOJZifaAkQIORUsj9ChFkj86jy/H3uz5YVEGxSAyy5oLvqOgf9RZGZyiE
+2DbWbyB6lqRcjlBEyqWKxo8MGDj/lQ==
+=ZygH
+-----END PGP SIGNATURE-----
+
+--4les542qp6fpfvza--
 
