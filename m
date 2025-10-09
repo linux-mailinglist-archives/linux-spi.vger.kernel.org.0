@@ -1,117 +1,166 @@
-Return-Path: <linux-spi+bounces-10492-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10493-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB1ECBC918C
-	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 14:44:38 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6CC2BC9F35
+	for <lists+linux-spi@lfdr.de>; Thu, 09 Oct 2025 18:06:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F28F81A6255D
-	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 12:45:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3D2D3354556
+	for <lists+linux-spi@lfdr.de>; Thu,  9 Oct 2025 16:05:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8AEB2E267D;
-	Thu,  9 Oct 2025 12:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E5F2F999E;
+	Thu,  9 Oct 2025 15:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jFFQez6X"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFx6YcvD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755631DE8B3;
-	Thu,  9 Oct 2025 12:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606422ECE82;
+	Thu,  9 Oct 2025 15:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760013873; cv=none; b=qWXnZfMGfQslMpHVKpQ2jngbLst1zRGm8Ygk+WYGURioLpqXZq+rYqHTUyAkVBdE9IXkhttZ1YizBZtnFW50ORZjCdLEOjqMczW25onx+jVy0MPiaVELMBxpr3WF7XmBoNYcSWIzBcxJ/DDc2VHkUDCAYqSVADlh/M0z1eDmxT8=
+	t=1760025526; cv=none; b=i/kxULov4/0S5/kP0fLYHPr+uWSPThVop99DQCvJKcM4lg5GY3DTQzTX81AyO8iPyLX8U3KKjBK/KgVN+QdafRcTNW7OfR7AjXWPJD3tJ5uwIKrUoZRHQUnYnf/0X37+l+lKrSxCbiTDGfAPVPjnaqsf0CxROmlzYz5ZtCIZmec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760013873; c=relaxed/simple;
-	bh=5xe6Ytzs8KZ8O9dv9Ntfv5ptgH5y/irf7RE2r0MbrEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ONEcwhY90BEfuSI81eLMZ1/5X0yQWeCWr37Uf20nzLH1aQr/Hz1cZKQW2yunS/1BL3IG/hCjZkC9g01XWZUzjl/8+rwCbqVoe4NOZeunCIkGs/zr6JqitWoCOdQ67wKPdVGIZzARnsl6vBrpYZjZ6SWcOOaR04vkOyQv+SsRHZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jFFQez6X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925D4C4CEE7;
-	Thu,  9 Oct 2025 12:44:30 +0000 (UTC)
+	s=arc-20240116; t=1760025526; c=relaxed/simple;
+	bh=QCsXN+2MwVIE/kMj/+64HJt1HbB8Ev1JwllW9t42zFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lkAbpSHa0Noa7uzTDFEiWr3jS4Kg3NV8b8KDJwYttdmZROp2e2juQCzd8NcSy50tPfMggibq/j6ew0dYdCqA2hRj5tVmqRB+84k9qCe9HdhNrg4O+TdpcSNd1GxIc6v9KWp2IzEHloNyKNEaIFkwwp2djiMcBJ+Nzj+/HDtjYfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFx6YcvD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A142C4CEE7;
+	Thu,  9 Oct 2025 15:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760013873;
-	bh=5xe6Ytzs8KZ8O9dv9Ntfv5ptgH5y/irf7RE2r0MbrEw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jFFQez6XjHhQT93r5q1c9+yfThNXZH+w9Vj5CNYQGlHgg42cjJfaXFms+qecvnxw2
-	 fk7rP6E9P0JFjCoc781UfkkC7Agq70FqIvCs6+YNigvOoclWKcQcB0QkEl1L/I1EgV
-	 O+EyY492mAg3/D2Ht9heyw2qH7WZzbIyZBTnbVNQABUDqs4/ozyZ4SC8r1lgRfy1D1
-	 VN4CasfsWp98kkeeb8RM9F2U3eYB+IDZ5Q97rwhoPEy+jsykCWWAWLVW+ZN0OLciDH
-	 jnXeZAGMiCS1AiPsJS9nC4aC0gvMimfrzrB1TXMyT5wGWeAOtbQA1A6VMpSLRQKAaZ
-	 nP8JHw1KwpMuA==
-Date: Thu, 9 Oct 2025 13:44:27 +0100
-From: Lee Jones <lee@kernel.org>
-To: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-Cc: Pavel Machek <pavel@ucw.cz>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Steffen Trumtrar <kernel@pengutronix.de>,
-	Pavel Machek <pavel@kernel.org>, Mark Brown <broonie@kernel.org>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] leds: add support for TI LP5860 LED driver chip
-Message-ID: <20251009124427.GC2796410@google.com>
-References: <20250911-v6-14-topic-ti-lp5860-v3-0-390738ef9d71@pengutronix.de>
- <20250911-v6-14-topic-ti-lp5860-v3-2-390738ef9d71@pengutronix.de>
- <20250916153412.GA3837873@google.com>
- <875xd0jslv.fsf@pengutronix.de>
+	s=k20201202; t=1760025526;
+	bh=QCsXN+2MwVIE/kMj/+64HJt1HbB8Ev1JwllW9t42zFY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WFx6YcvD05RvMT6iqZMZuT+mU6tJG2R31+04hEnSTIiZkTBU2aJqAWJYtuK9stqO+
+	 8QqX0bsBvqjWeBE5BOxwtejWWkSZ51YlaK7dmyPF3IcsI+OCj2FyK7wyNdsqFNTYXY
+	 2i7AzErcrb2lStLKyUGq4YyrLJfh4/UM7mjQ/k4beK54i2pPLmZ5eLaaTJODIzt4Gi
+	 2h4ncyHW4pyG+tl7sn6jNNZSV2b3vxOHGn0OWVzt0XvNha64HQ2q6iV5tZlFZTg1UH
+	 4KtDMnra4D+EQBoAifdx8VnbllXiX7pVhPiqyug2k67KbexyPWpRV8EtrjjaEwsN8G
+	 3WcsO8fLKjb4g==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.17-6.1] spi: rpc-if: Add resume support for RZ/G3E
+Date: Thu,  9 Oct 2025 11:54:56 -0400
+Message-ID: <20251009155752.773732-30-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251009155752.773732-1-sashal@kernel.org>
+References: <20251009155752.773732-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.1
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <875xd0jslv.fsf@pengutronix.de>
 
-On Tue, 30 Sep 2025, Steffen Trumtrar wrote:
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-> 
-> Hi,
-> 
-> On 2025-09-16 at 16:34 +01, Lee Jones <lee@kernel.org> wrote:
-> 
-> > > +#include <linux/gpio.h>
-> > > +#include <linux/led-class-multicolor.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_gpio.h>
-> > > +#include <linux/of_platform.h>
-> > > +#include <linux/regmap.h>
-> > > +
-> > > +#include <linux/platform_data/leds-lp5860.h>
-> > > +
-> > > +static struct lp5860_led *mcled_cdev_to_led(struct led_classdev_mc *mc_cdev)
-> > > +{
-> > > +	return container_of(mc_cdev, struct lp5860_led, mc_cdev);
-> > > +}
-> > > +
-> > > +LP5860_SHOW_MODE(r_global_brightness_set, LP5860_REG_R_CURRENT_SET, LP5860_CC_GROUP_MASK, 0)
-> > > +LP5860_STORE_MODE(r_global_brightness_set, LP5860_REG_R_CURRENT_SET, LP5860_CC_GROUP_MASK, 0)
-> > > +DEVICE_ATTR_RW(r_global_brightness_set);
-> > 
-> > How is this different to /sys/class/leds/<led>/multi_intensity?
-> > 
-> > # echo 43 226 138 > /sys/class/leds/multicolor:status/multi_intensity
-> > red -
-> >     intensity = 138
-> >     max_brightness = 255
-> > green -
-> >     intensity = 43
-> >     max_brightness = 255
-> > blue -
-> >     intensity = 226
-> >     max_brightness = 255
-> > 
-> 
-> the LP5860 has a register for setting the maximal brightness that holds for all LEDs in the matrix. multi_intensity and max_brightness is only for that one multicolor LED, right? And I can only manipulate the max_brightness of that one multicolor LED instance.
-> If I'm wrong, I'd be happy to not have to add the sysfs files.
+[ Upstream commit ad4728740bd68d74365a43acc25a65339a9b2173 ]
 
-Does group_multicolor help?  Or can it be expanded for future similar use-cases?
+On RZ/G3E using PSCI, s2ram powers down the SoC. After resume,
+reinitialize the hardware for SPI operations.
 
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Link: https://patch.msgid.link/20250921112649.104516-3-biju.das.jz@bp.renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+YES
+
+- What changed: The resume callback now reinitializes the underlying
+  RPC-IF hardware by calling `rpcif_hw_init(dev, false)` before resuming
+  the SPI controller queue. See drivers/spi/spi-rpc-if.c:210. The rest
+  of the resume path remains unchanged and returns
+  `spi_controller_resume(ctlr)` (drivers/spi/spi-rpc-if.c:212). The
+  patch is a small, contained 2-line addition in a single driver file.
+
+- Why it’s needed: On RZ/G3E systems using PSCI, s2ram powers the SoC
+  off, so the RPC-IF/xSPI controller loses register state. The SPI
+  core’s `spi_controller_resume()` does not reconfigure hardware
+  (drivers/spi/spi.c:3519), it only restarts the message queue. Without
+  reinitialization, resumed SPI operations can fail or misbehave. The
+  added `rpcif_hw_init()` reprograms controller registers and ensures
+  the hardware is ready post-resume.
+
+- Correctness of the reinit: `rpcif_hw_init()` is the standard hardware
+  bring-up routine used in probe; it resumes runtime PM, reconfigures
+  the controller for the appropriate mode, and then drops the PM
+  reference. See drivers/memory/renesas-rpc-if.c:315. It’s already
+  invoked during probe for the SPI path (drivers/spi/spi-rpc-if.c:173),
+  so reusing it on resume is appropriate and consistent.
+
+- Scope and risk: The change is isolated to RPC-IF SPI driver resume. It
+  does not alter normal operation, only system-suspend resume behavior.
+  The call is idempotent and guarded by runtime PM
+  (pm_runtime_resume_and_get/put inside rpcif_hw_init), minimizing risk.
+  It doesn’t introduce features or architectural changes.
+
+- Impacted platforms: Although the commit message highlights RZ/G3E
+  (xSPI), the reinit is generally safe for other RPC-IF variants too and
+  can only improve robustness after system suspend.
+
+- Stable-tree suitability:
+  - Fixes a real user-visible bug (SPI transactions can fail after S2RAM
+    on RZ/G3E).
+  - Minimal change (two added lines), fully contained in the driver.
+  - Low regression risk and no API or architectural churn.
+  - Touches a specific subsystem driver (SPI/Renesas RPC-IF), not core
+    kernel paths.
+
+- Backport notes (API/context):
+  - `rpcif_hw_init()` currently takes a `struct device *`
+    (drivers/memory/renesas-rpc-if.c:315; include/memory/renesas-rpc-
+    if.h:75). On older stable trees that predate commit a198fcd1d53cb
+    (which changed RPC-IF APIs to pass a device instead of an internal
+    handle), the signature may differ. In such trees, adapt the call
+    accordingly (e.g., pass `rpc->dev` or the older handle type).
+  - Ensure the device passed to `rpcif_hw_init()` is the one holding
+    `rpcif_priv` (in probe we pass `rpc->dev`, which is the parent RPC-
+    IF device). If the stable branch still uses the older arrangement,
+    the backport should call `rpcif_hw_init(rpc->dev, false)` after
+    obtaining `struct rpcif *rpc = spi_controller_get_devdata(ctlr)` in
+    resume.
+  - Macro context (SIMPLE_DEV_PM_OPS vs DEFINE_SIMPLE_DEV_PM_OPS) may
+    differ between branches; this is mechanical and does not affect the
+    substance of the fix.
+
+In summary, this is a classic, low-risk, correctness fix for resume on
+RZ/G3E that should be backported to stable kernels that include the RPC-
+IF xSPI support, with trivial API/context adjustments as needed.
+
+ drivers/spi/spi-rpc-if.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/spi/spi-rpc-if.c b/drivers/spi/spi-rpc-if.c
+index 627cffea5d5c7..300a7c10b3d40 100644
+--- a/drivers/spi/spi-rpc-if.c
++++ b/drivers/spi/spi-rpc-if.c
+@@ -207,6 +207,8 @@ static int __maybe_unused rpcif_spi_resume(struct device *dev)
+ {
+ 	struct spi_controller *ctlr = dev_get_drvdata(dev);
+ 
++	rpcif_hw_init(dev, false);
++
+ 	return spi_controller_resume(ctlr);
+ }
+ 
 -- 
-Lee Jones [李琼斯]
+2.51.0
+
 
