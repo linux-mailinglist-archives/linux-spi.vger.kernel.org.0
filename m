@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-10569-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10570-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAF84BCEC32
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:37:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1F2CBCEC4B
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:41:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9F164F0A86
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:37:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D75A219A6487
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE45127FD71;
-	Fri, 10 Oct 2025 23:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6192D0620;
+	Fri, 10 Oct 2025 23:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsCDSbYH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAzrW+m6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915F927FB34;
-	Fri, 10 Oct 2025 23:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B842C2376;
+	Fri, 10 Oct 2025 23:41:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760139445; cv=none; b=L2B//CTcc/6F7QiRl+CDI3hgXFDMxbSrB+4fKDIZVKaGAAs3t574Iip7YMjdjjnRjQGuasd2oPgLc/kKPOzRBLIXJHwSAq9z2bsDIA7ADY8OqLM03ZI7TcW0YNnWJXgqBM5sgWju5Jjpp+mITx3FuYs+NAHIpVUlF9B9xBvKENs=
+	t=1760139679; cv=none; b=jH7JPxueZHHJpFPnCXysBX4H6WqRk6ebqAl3FbI9IfcHaeC9xWZfltX4iqkChjNzYrWvmWDlAX29+0ixEOyHfVoj8SgnSj5sV25kSMZbV7JENJgbfvHBmRpqbErNh1fC4ZJGLuHdfVqVuwsG3WjOU+z8t6aGSL29RzrARCLjXHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760139445; c=relaxed/simple;
-	bh=aRAsn/MpERGoUcj13I38zsatKSoC+JpQVqoh3CQNia8=;
+	s=arc-20240116; t=1760139679; c=relaxed/simple;
+	bh=Z1SFGMYBG5iiGF5wh3L1mIVKHEfIhBlqbCwyIysAJfM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mc2sbKmuxrBXt/H1UV3SPU3M9TmMfeAA67AUfnq1B5C5Msq2scxDF5yaZYLML4rSlBSryTNX05zSBosYI6tqbmIEF5XSzyueebf/9VWUJnfTkyh0Dcdw2wwZvxTH8ZNFHOhSxFmq95wW5pooUWCIi++wgJO3y3S1cP3IQwKq6Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsCDSbYH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB558C4CEF1;
-	Fri, 10 Oct 2025 23:37:17 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Ydzc4KvAhenSQYi78qeUF7cv2F0AqOv+5V7r5BdcvYYgM+w7y9eoT6DS3Szah36nkffaeJXv5cH77vMG2PisWLhEK4/HvsW+PqHmczNawVT8tuCsmjuKNPyzg5UrmUyNO38ldLYnRS4A347BFkx59PyAsZNC+ynXtVYism85VUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAzrW+m6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253DEC4CEF1;
+	Fri, 10 Oct 2025 23:41:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760139445;
-	bh=aRAsn/MpERGoUcj13I38zsatKSoC+JpQVqoh3CQNia8=;
+	s=k20201202; t=1760139678;
+	bh=Z1SFGMYBG5iiGF5wh3L1mIVKHEfIhBlqbCwyIysAJfM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DsCDSbYHqTTii5QTwTCRy4V4i0Yjfkpm+jWpl1v8e+/08DfdflQZjw5WmmLrOEQfF
-	 PvG5xLamzV0sJk9DVuXGKIfIzfUzy3T4JwHtBxtZGplgVJ2fSZxjCSR2X5u71EZ2p2
-	 IUIe5JjwKBg5bsXY2vVM14Rna/5z/bQuBO0IzIn4VEU7bpyZaFikEVgv6vOohAw26z
-	 YdkDhggb1a8EeImUZ2JjK5M7dh+Kwbh4Ason6Ak8T5ZoFb+ofy7p7JtBzSBr+w3/Vf
-	 7WzoXyP9mTKDWP1mt28EGYA78VxTs9HcqapWqk5O+D2etnKwBklJVl7hNCSJpJkuTC
-	 wyYe5b1klY5Kg==
-Message-ID: <8dfb35fe-4ca8-4933-aa50-30cc5d7e5045@kernel.org>
-Date: Sat, 11 Oct 2025 01:37:14 +0200
+	b=CAzrW+m6eLFBsOK2H+yPbQkBCFjjACBJ7MUTF0WKBYuaL4rH3COjAH9qiq07JXI9N
+	 tNEahb3niNxwFeeiECmfvyPGkqiqBCnpabqBHQyKU2X2pqP7Jhuli54kbtX8rv+hCM
+	 LCN5uUGi5/lBSaYc6Tkzb79gDzJjwa0xtP+Wxk0J0NSB5vC0nS9Xs8v6Fre5h5wA+Z
+	 xGtpeqaP9ZhZdFrVJGDij+DpQt6pTNnf+H7GXK/M8w9cm/tfLkkYNreR0skA7S55K8
+	 xRixwcxRQB4d4Pk/iQDMH16BbEeTDGuYSNAhOCSFDxpV6n7LZciNwFbcVOQZeFfysR
+	 BqHW7/tfQUafQ==
+Message-ID: <25ebd850-ca13-4274-af6d-fc68ba089935@kernel.org>
+Date: Sat, 11 Oct 2025 01:41:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -131,36 +131,10 @@ On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
 >  	};
 > +
 > +	spi_ctrl: spi_controller@1fa10000 {
-> +		compatible = "airoha,en7581-snand";
 
-Wrong compatible, this is 7523. You already got comment to make them
-compatible. Look at writing bindings, or example schema or my last talk
-for beginners from OSSEU.
-
-
-> +		reg = <0x1fa10000 0x140>,
-> +		      <0x1fa11000 0x160>;
-> +
-> +		clocks = <&scu EN7523_CLK_SPI>;
-> +		clock-names = "spi";
-> +
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		nand: nand@0 {
-> +			compatible = "spi-nand";
-> +			reg = <0>;
-> +			spi-max-frequency = <50000000>;
-> +			spi-tx-bus-width = <1>;
-> +			spi-rx-bus-width = <2>;
-> +		};
-> +	};
-> +
-
-Don't add stray blank lines.
-
->  };
-
+You got warning here. Allow people to actually test your code before
+posting next version. Especially such large posting SHOULD NOT happen
+during merge window, immediately the same day!
 
 Best regards,
 Krzysztof
