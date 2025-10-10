@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-10568-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10569-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC39BCEC1A
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:36:36 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAF84BCEC32
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:37:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 231233B0663
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:36:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9F164F0A86
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:37:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E46727FB2E;
-	Fri, 10 Oct 2025 23:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE45127FD71;
+	Fri, 10 Oct 2025 23:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Enoj0WiN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsCDSbYH"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FD426D4FB;
-	Fri, 10 Oct 2025 23:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915F927FB34;
+	Fri, 10 Oct 2025 23:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760139391; cv=none; b=pX6b9zPWlFSr+WS7PHB6gQj2iRxRIabHO7uqc5LD4Ich3kybtQq7R4ZRHc87raQ6Ot6Iy0QtuKyyEkjlU11PiwEe/Pm0JXYQmjbpSyMB6VxUjXriidHDdvZL+9ly4e655BYylcI7TvItCzhO0t4ozo4zwkHJ/Do4pq7o0vocsuY=
+	t=1760139445; cv=none; b=L2B//CTcc/6F7QiRl+CDI3hgXFDMxbSrB+4fKDIZVKaGAAs3t574Iip7YMjdjjnRjQGuasd2oPgLc/kKPOzRBLIXJHwSAq9z2bsDIA7ADY8OqLM03ZI7TcW0YNnWJXgqBM5sgWju5Jjpp+mITx3FuYs+NAHIpVUlF9B9xBvKENs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760139391; c=relaxed/simple;
-	bh=ohAw33xHL0/75mMJMzs2FmNdsANeJBZluGZyx2FUnEI=;
+	s=arc-20240116; t=1760139445; c=relaxed/simple;
+	bh=aRAsn/MpERGoUcj13I38zsatKSoC+JpQVqoh3CQNia8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UPviOWFbW9YFpX+VjbYw1/JHaDUf9Iuni8lBu8dCIjEAUZlLphwVRgiUlx/DXiXs5IVR/uRqI+gLKuuvtBWonmsWpZeNJhV4DW9UXGHOJdgOPGTMVCkXF87W8LxH34SJw8jFMm8q2QWtyM5/gkXQPoKkljIHBn/6arXCKWsaE88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Enoj0WiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3938DC4CEF1;
-	Fri, 10 Oct 2025 23:36:23 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=mc2sbKmuxrBXt/H1UV3SPU3M9TmMfeAA67AUfnq1B5C5Msq2scxDF5yaZYLML4rSlBSryTNX05zSBosYI6tqbmIEF5XSzyueebf/9VWUJnfTkyh0Dcdw2wwZvxTH8ZNFHOhSxFmq95wW5pooUWCIi++wgJO3y3S1cP3IQwKq6Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsCDSbYH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB558C4CEF1;
+	Fri, 10 Oct 2025 23:37:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760139390;
-	bh=ohAw33xHL0/75mMJMzs2FmNdsANeJBZluGZyx2FUnEI=;
+	s=k20201202; t=1760139445;
+	bh=aRAsn/MpERGoUcj13I38zsatKSoC+JpQVqoh3CQNia8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Enoj0WiNHpX06TnUY8t2TKsLnPpvfq1KNv8noESLxJkZzKaQtjPlhpGraosFJE1Ae
-	 gxdW5wr2Kagvbhg4yCSxisTS7GA2eLasm00CkbQIVEkm/hDcHwdxplvjx2+qW1jPGq
-	 RxIGe8CQH1ohNdVXb2KvHeG9jxoiKkVQkG+uybZ8JzN4Wb0ZwjOpKkRXIskJHbJw/S
-	 H2wLr3W5F1nO7qIwp+73Z15H5j8cGuEkJb8ukL7pwKkmnHAi0Mt6iZW/bEboBS0kZ/
-	 HYCqtX3Fqsyyrhc1kMXtSo91BHla99IPsMpk6Zs8y9LLgxED9reysdfwELa8vShuNG
-	 dGDNFbzoEnsjA==
-Message-ID: <e56f3314-c5f4-44bb-b914-8d8e56a5c67a@kernel.org>
-Date: Sat, 11 Oct 2025 01:36:20 +0200
+	b=DsCDSbYHqTTii5QTwTCRy4V4i0Yjfkpm+jWpl1v8e+/08DfdflQZjw5WmmLrOEQfF
+	 PvG5xLamzV0sJk9DVuXGKIfIzfUzy3T4JwHtBxtZGplgVJ2fSZxjCSR2X5u71EZ2p2
+	 IUIe5JjwKBg5bsXY2vVM14Rna/5z/bQuBO0IzIn4VEU7bpyZaFikEVgv6vOohAw26z
+	 YdkDhggb1a8EeImUZ2JjK5M7dh+Kwbh4Ason6Ak8T5ZoFb+ofy7p7JtBzSBr+w3/Vf
+	 7WzoXyP9mTKDWP1mt28EGYA78VxTs9HcqapWqk5O+D2etnKwBklJVl7hNCSJpJkuTC
+	 wyYe5b1klY5Kg==
+Message-ID: <8dfb35fe-4ca8-4933-aa50-30cc5d7e5045@kernel.org>
+Date: Sat, 11 Oct 2025 01:37:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 00/15] spi: airoha: driver fixes & improvements
+Subject: Re: [PATCH v8 15/15] arm: dts: airoha: en7523: add SNAND node
 To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
  Matthias Brugger <matthias.bgg@gmail.com>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
@@ -63,6 +63,7 @@ To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
 Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
 References: <20251010185940.GA715991-robh@kernel.org>
  <20251010192038.1592889-1-mikhail.kshevetskiy@iopsys.eu>
+ <20251010192038.1592889-16-mikhail.kshevetskiy@iopsys.eu>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,36 +109,57 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251010192038.1592889-1-mikhail.kshevetskiy@iopsys.eu>
+In-Reply-To: <20251010192038.1592889-16-mikhail.kshevetskiy@iopsys.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
-> Changes v5:
->  * reorder patches a bit
->  * improve description of some patches
->  * minor fixes & improvements
+> Add SNAND node to enable support of attached SPI-NAND on the EN7523 SoC.
 > 
-> Changes v6:
->  * do not fill with 0xff the whole write buffer, only areas not covered
->    by user provided data are filled now.
+> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+> ---
+>  arch/arm/boot/dts/airoha/en7523.dtsi | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> Changes v7:
->  * add EN7523 SoC support
->  * add en7523 specific hack to avoid flash data damaging if UART_TX pin
->    was short to ground during boot
->  * add SNAND node to en7523.dtsi
->  * update dt-bindings
-> 
-> Changes v8:
->  * remove dt-bindings changes
+> diff --git a/arch/arm/boot/dts/airoha/en7523.dtsi b/arch/arm/boot/dts/airoha/en7523.dtsi
+> index b523a868c4ad..a13dc6e77d08 100644
+> --- a/arch/arm/boot/dts/airoha/en7523.dtsi
+> +++ b/arch/arm/boot/dts/airoha/en7523.dtsi
+> @@ -203,4 +203,25 @@ pcie_intc1: interrupt-controller {
+>  			#interrupt-cells = <1>;
+>  		};
+>  	};
+> +
+> +	spi_ctrl: spi_controller@1fa10000 {
+> +		compatible = "airoha,en7581-snand";
 
-Why? Nothing indicated that in discussion. No one suggested that.
+Wrong compatible, this is 7523. You already got comment to make them
+compatible. Look at writing bindings, or example schema or my last talk
+for beginners from OSSEU.
 
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets. See also:
-https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/submitting-patches.rst#L830
+
+> +		reg = <0x1fa10000 0x140>,
+> +		      <0x1fa11000 0x160>;
+> +
+> +		clocks = <&scu EN7523_CLK_SPI>;
+> +		clock-names = "spi";
+> +
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		nand: nand@0 {
+> +			compatible = "spi-nand";
+> +			reg = <0>;
+> +			spi-max-frequency = <50000000>;
+> +			spi-tx-bus-width = <1>;
+> +			spi-rx-bus-width = <2>;
+> +		};
+> +	};
+> +
+
+Don't add stray blank lines.
+
+>  };
 
 
 Best regards,
