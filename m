@@ -1,86 +1,145 @@
-Return-Path: <linux-spi+bounces-10567-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10568-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1541ABCE922
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 22:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC39BCEC1A
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2A914012D0
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 20:56:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 231233B0663
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C0425784B;
-	Fri, 10 Oct 2025 20:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E46727FB2E;
+	Fri, 10 Oct 2025 23:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="McQqiDqn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Enoj0WiN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E992475C8
-	for <linux-spi@vger.kernel.org>; Fri, 10 Oct 2025 20:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1FD426D4FB;
+	Fri, 10 Oct 2025 23:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760129808; cv=none; b=X3cK6nWKGD8HnKjAc0G+davmyB30hfioxZPXorn2qI4xBdstZSmCV1iu1nMfKLmh/kqgEelsRI6a2MNK2TQMQZQf6D3KUwT+uZcWno3w55QqjDL144+X7kTZxg1A1xqshPJ/eKKBPkBTYnhz+xmNItkAPD0t/T6MdatTQ9itE2g=
+	t=1760139391; cv=none; b=pX6b9zPWlFSr+WS7PHB6gQj2iRxRIabHO7uqc5LD4Ich3kybtQq7R4ZRHc87raQ6Ot6Iy0QtuKyyEkjlU11PiwEe/Pm0JXYQmjbpSyMB6VxUjXriidHDdvZL+9ly4e655BYylcI7TvItCzhO0t4ozo4zwkHJ/Do4pq7o0vocsuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760129808; c=relaxed/simple;
-	bh=E2Wnj5dk1vJ7hXTqaxNiskTCDH5rstcQ6/7G48g+o3A=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=R+u8atWFbvis7OskRlMoE5XkN5hhFRpcRLpnmpAfJ+EmFGuLKPlFepC0VovVXm4ShNNxFSJ88bbahaNDKD06yqXF/wqcT3iVM7asNFULZ5tGz5HTGDw0ItAbgDo+pPvYI3KVIGQM/A8slQJDK+eqNLLdXIOLn+5xsKW5SKv0JcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=McQqiDqn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F24C4CEF1;
-	Fri, 10 Oct 2025 20:56:47 +0000 (UTC)
+	s=arc-20240116; t=1760139391; c=relaxed/simple;
+	bh=ohAw33xHL0/75mMJMzs2FmNdsANeJBZluGZyx2FUnEI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UPviOWFbW9YFpX+VjbYw1/JHaDUf9Iuni8lBu8dCIjEAUZlLphwVRgiUlx/DXiXs5IVR/uRqI+gLKuuvtBWonmsWpZeNJhV4DW9UXGHOJdgOPGTMVCkXF87W8LxH34SJw8jFMm8q2QWtyM5/gkXQPoKkljIHBn/6arXCKWsaE88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Enoj0WiN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3938DC4CEF1;
+	Fri, 10 Oct 2025 23:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760129807;
-	bh=E2Wnj5dk1vJ7hXTqaxNiskTCDH5rstcQ6/7G48g+o3A=;
-	h=Subject:From:Date:To:From;
-	b=McQqiDqnq0OuSTi+OnugvbONFnYTmzmmpJ+p/lZyWtpP377iuGgcE1RQcQxMp6djP
-	 FEzehRS57QWZQI+he3R081eR7OI1IQGkK/P7ZyKDI9JNxpbkJAb+5qcQgCNKu5N7+W
-	 1P4ZDfcuy8sNuMYlS8YWI09yWsnETUJVRv0PoJSI2CZxQpvSrHCITHIEj2tqZTFkbW
-	 cDdcEHK+Ch0Pi1MPnsU9HdCF5NxF/V3RoYfWeM2kRWdDTFa0DYsCkft4af9lqwXhvF
-	 +XEKSyDeXbGHo518kfmVIdgje4qlm6b9NBI4OAFvAJF3cRXOuuamer7lY0bQQwdZ2+
-	 aVrV7CGvXOq2g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADECB3809A07;
-	Fri, 10 Oct 2025 20:56:35 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1760139390;
+	bh=ohAw33xHL0/75mMJMzs2FmNdsANeJBZluGZyx2FUnEI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Enoj0WiNHpX06TnUY8t2TKsLnPpvfq1KNv8noESLxJkZzKaQtjPlhpGraosFJE1Ae
+	 gxdW5wr2Kagvbhg4yCSxisTS7GA2eLasm00CkbQIVEkm/hDcHwdxplvjx2+qW1jPGq
+	 RxIGe8CQH1ohNdVXb2KvHeG9jxoiKkVQkG+uybZ8JzN4Wb0ZwjOpKkRXIskJHbJw/S
+	 H2wLr3W5F1nO7qIwp+73Z15H5j8cGuEkJb8ukL7pwKkmnHAi0Mt6iZW/bEboBS0kZ/
+	 HYCqtX3Fqsyyrhc1kMXtSo91BHla99IPsMpk6Zs8y9LLgxED9reysdfwELa8vShuNG
+	 dGDNFbzoEnsjA==
+Message-ID: <e56f3314-c5f4-44bb-b914-8d8e56a5c67a@kernel.org>
+Date: Sat, 11 Oct 2025 01:36:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176012979425.1125223.9699151370110754682.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 10 Oct 2025 20:56:34 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 00/15] spi: airoha: driver fixes & improvements
+To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andy@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
+References: <20251010185940.GA715991-robh@kernel.org>
+ <20251010192038.1592889-1-mikhail.kshevetskiy@iopsys.eu>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251010192038.1592889-1-mikhail.kshevetskiy@iopsys.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Latest series: [v9] spi: airoha: driver fixes & improvements (2025-10-10T20:44:46)
-  Superseding: [v7] spi: airoha: driver fixes & improvements (2025-10-10T03:31:19):
-    [v7,01/17] spi: airoha: return an error for continuous mode dirmap creation cases
-    [v7,02/17] spi: airoha: remove unnecessary restriction length
-    [v7,03/17] spi: airoha: add support of dual/quad wires spi modes to exec_op() handler
-    [v7,04/17] spi: airoha: remove unnecessary switch to non-dma mode
-    [v7,05/17] spi: airoha: switch back to non-dma mode in the case of error
-    [v7,06/17] spi: airoha: fix reading/writing of flashes with more than one plane per lun
-    [v7,07/17] spi: airoha: unify dirmap read/write code
-    [v7,08/17] spi: airoha: support of dualio/quadio flash reading commands
-    [v7,09/17] spi: airoha: avoid setting of page/oob sizes in REG_SPI_NFI_PAGEFMT
-    [v7,10/17] spi: airoha: reduce the number of modification of REG_SPI_NFI_CNFG and REG_SPI_NFI_SECCUS_SIZE registers
-    [v7,11/17] spi: airoha: set custom sector size equal to flash page size
-    [v7,12/17] spi: airoha: avoid reading flash page settings from SNFI registers during driver startup
-    [v7,13/17] spi: airoha: buffer must be 0xff-ed before writing
-    [v7,14/17] spi: airoha-snfi: make compatible with EN7523 SoC
-    [v7,15/17] spi: airoha-snfi: en7523: workaround flash damaging if UART_TXD was short to GND
-    [v7,16/17] dt-bindings: spi: airoha: add compatible for EN7523
-    [v7,17/17] arm: dts: airoha: en7523: add SNAND node
+On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
+> Changes v5:
+>  * reorder patches a bit
+>  * improve description of some patches
+>  * minor fixes & improvements
+> 
+> Changes v6:
+>  * do not fill with 0xff the whole write buffer, only areas not covered
+>    by user provided data are filled now.
+> 
+> Changes v7:
+>  * add EN7523 SoC support
+>  * add en7523 specific hack to avoid flash data damaging if UART_TX pin
+>    was short to ground during boot
+>  * add SNAND node to en7523.dtsi
+>  * update dt-bindings
+> 
+> Changes v8:
+>  * remove dt-bindings changes
+
+Why? Nothing indicated that in discussion. No one suggested that.
+
+Do not attach (thread) your patchsets to some other threads (unrelated
+or older versions). This buries them deep in the mailbox and might
+interfere with applying entire sets. See also:
+https://elixir.bootlin.com/linux/v6.16-rc2/source/Documentation/process/submitting-patches.rst#L830
 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best regards,
+Krzysztof
 
