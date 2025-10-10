@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-10570-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10571-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F2CBCEC4B
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:41:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD404BCEC59
+	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 01:42:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D75A219A6487
-	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:41:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8C0719A6586
+	for <lists+linux-spi@lfdr.de>; Fri, 10 Oct 2025 23:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B6192D0620;
-	Fri, 10 Oct 2025 23:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9142D0C69;
+	Fri, 10 Oct 2025 23:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAzrW+m6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPmDZKwK"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B842C2376;
-	Fri, 10 Oct 2025 23:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECC52C2376;
+	Fri, 10 Oct 2025 23:42:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760139679; cv=none; b=jH7JPxueZHHJpFPnCXysBX4H6WqRk6ebqAl3FbI9IfcHaeC9xWZfltX4iqkChjNzYrWvmWDlAX29+0ixEOyHfVoj8SgnSj5sV25kSMZbV7JENJgbfvHBmRpqbErNh1fC4ZJGLuHdfVqVuwsG3WjOU+z8t6aGSL29RzrARCLjXHs=
+	t=1760139770; cv=none; b=jOfYKjpnAstRD6cRFuyDXV08lRZ9YQxbNDuXgZU10oTgi1FYLR6znodosgtZAmSK5oV+Ht+8Lz6dGTDaqZ8SOMOZu92PjyUAVxc9+Aapv6IXUShVyYB0MeqBLLddkB0Q0jQQhfgwr2ik3gr/NEIZfVBLsYVlrsx8tAqmfK2zxyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760139679; c=relaxed/simple;
-	bh=Z1SFGMYBG5iiGF5wh3L1mIVKHEfIhBlqbCwyIysAJfM=;
+	s=arc-20240116; t=1760139770; c=relaxed/simple;
+	bh=Gt1x3imbV6jcLgkZzBXfLwvbQ/cseYt83qP67KAvdlc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ydzc4KvAhenSQYi78qeUF7cv2F0AqOv+5V7r5BdcvYYgM+w7y9eoT6DS3Szah36nkffaeJXv5cH77vMG2PisWLhEK4/HvsW+PqHmczNawVT8tuCsmjuKNPyzg5UrmUyNO38ldLYnRS4A347BFkx59PyAsZNC+ynXtVYism85VUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAzrW+m6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253DEC4CEF1;
-	Fri, 10 Oct 2025 23:41:13 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Ba/60RCx8UugZj6PewZE+g7fUDs8ppL5W+SI4H0wtCEx74Vm9GfE4cuGhFVw7XTwa30hhJ0EUHawdU73V3UTbuaPz+TWse4GWk/zfbHf/cbIoxUnTAleMRB1Lme5cacbHopa0jANsSesVYzYxVXTPgsvOtkNnBiOlNCkAUMU9xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPmDZKwK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD68C4CEF1;
+	Fri, 10 Oct 2025 23:42:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760139678;
-	bh=Z1SFGMYBG5iiGF5wh3L1mIVKHEfIhBlqbCwyIysAJfM=;
+	s=k20201202; t=1760139769;
+	bh=Gt1x3imbV6jcLgkZzBXfLwvbQ/cseYt83qP67KAvdlc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CAzrW+m6eLFBsOK2H+yPbQkBCFjjACBJ7MUTF0WKBYuaL4rH3COjAH9qiq07JXI9N
-	 tNEahb3niNxwFeeiECmfvyPGkqiqBCnpabqBHQyKU2X2pqP7Jhuli54kbtX8rv+hCM
-	 LCN5uUGi5/lBSaYc6Tkzb79gDzJjwa0xtP+Wxk0J0NSB5vC0nS9Xs8v6Fre5h5wA+Z
-	 xGtpeqaP9ZhZdFrVJGDij+DpQt6pTNnf+H7GXK/M8w9cm/tfLkkYNreR0skA7S55K8
-	 xRixwcxRQB4d4Pk/iQDMH16BbEeTDGuYSNAhOCSFDxpV6n7LZciNwFbcVOQZeFfysR
-	 BqHW7/tfQUafQ==
-Message-ID: <25ebd850-ca13-4274-af6d-fc68ba089935@kernel.org>
-Date: Sat, 11 Oct 2025 01:41:10 +0200
+	b=LPmDZKwKtvXIT40FxesW7WQRB+PpSPN8IqiDwf52In2Iv1qWe8sizc6mEaclalFu2
+	 3qY9e1FxHswLfRDePXYP08Gfd3ZsFewukKeesm7qhyjOd+Ofd9VJuFvJEQgKQqvRto
+	 oRU0DZP/l2E0StN/nmmwjH3LaazgGdyn/JqdMuedtMlfbbqdthdcEku6qppSleKxLA
+	 3cilyImEnjEH++rkaFuwP1drOgeEVs6Zm8Lt/NXehiquIBeV4MK730+iv5HjTwV4LF
+	 AK/muE4T+9vglHwNJ+sPsW1xhd24uk9p3LudcwXfrtbOW8Av2P9kIVcQi8M3YFHBNv
+	 KIgoWN4ZGi9vw==
+Message-ID: <34899379-9788-4ac8-8b62-e9f47b4d49d9@kernel.org>
+Date: Sat, 11 Oct 2025 01:42:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 15/15] arm: dts: airoha: en7523: add SNAND node
+Subject: Re: [PATCH v9 15/15] arm: dts: airoha: en7523: add SNAND node
 To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
  Matthias Brugger <matthias.bgg@gmail.com>,
  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
@@ -61,9 +61,8 @@ To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
  linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
 Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
-References: <20251010185940.GA715991-robh@kernel.org>
- <20251010192038.1592889-1-mikhail.kshevetskiy@iopsys.eu>
- <20251010192038.1592889-16-mikhail.kshevetskiy@iopsys.eu>
+References: <20251010204500.1625215-1-mikhail.kshevetskiy@iopsys.eu>
+ <20251010204500.1625215-16-mikhail.kshevetskiy@iopsys.eu>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,11 +108,11 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251010192038.1592889-16-mikhail.kshevetskiy@iopsys.eu>
+In-Reply-To: <20251010204500.1625215-16-mikhail.kshevetskiy@iopsys.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
+On 10/10/2025 22:45, Mikhail Kshevetskiy wrote:
 > Add SNAND node to enable support of attached SPI-NAND on the EN7523 SoC.
 > 
 > Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
@@ -122,7 +121,7 @@ On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
 >  1 file changed, 21 insertions(+)
 > 
 > diff --git a/arch/arm/boot/dts/airoha/en7523.dtsi b/arch/arm/boot/dts/airoha/en7523.dtsi
-> index b523a868c4ad..a13dc6e77d08 100644
+> index b523a868c4ad..78e351eb787a 100644
 > --- a/arch/arm/boot/dts/airoha/en7523.dtsi
 > +++ b/arch/arm/boot/dts/airoha/en7523.dtsi
 > @@ -203,4 +203,25 @@ pcie_intc1: interrupt-controller {
@@ -130,11 +129,14 @@ On 10/10/2025 21:20, Mikhail Kshevetskiy wrote:
 >  		};
 >  	};
 > +
-> +	spi_ctrl: spi_controller@1fa10000 {
+> +	spi_ctrl: spi@1fa10000 {
+> +		compatible = "airoha,en7581-snand";
 
-You got warning here. Allow people to actually test your code before
-posting next version. Especially such large posting SHOULD NOT happen
-during merge window, immediately the same day!
+NAK, now I found this... Respond to comments instead of ignoring them.
+
+Three versions within few hours, that's not acceptable. Outside of the
+merge window the expectation is minimum 24h difference. Within merge
+window this is just spamming.
 
 Best regards,
 Krzysztof
