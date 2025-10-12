@@ -1,80 +1,48 @@
-Return-Path: <linux-spi+bounces-10573-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10574-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6716BCF587
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 15:09:19 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81733BCFEC5
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Oct 2025 04:48:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76862406B4F
-	for <lists+linux-spi@lfdr.de>; Sat, 11 Oct 2025 13:09:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F5794E1120
+	for <lists+linux-spi@lfdr.de>; Sun, 12 Oct 2025 02:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757F926AA93;
-	Sat, 11 Oct 2025 13:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04DA7082F;
+	Sun, 12 Oct 2025 02:48:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U85xZFnL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8jKIF0O"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F75253944
-	for <linux-spi@vger.kernel.org>; Sat, 11 Oct 2025 13:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5DA34BA41;
+	Sun, 12 Oct 2025 02:48:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760188156; cv=none; b=iya9PRDCsK3TQFL2PvDDVwGDPQJZr46axMmJv6Q35pfWsRtVIhoXF5Qu3gTSZgsgM986UnF28hCIcFK6cn6e1uyAUx5hb4IoeqTBba8VHZw5dgSpR7iNolr93ozy3HxoPL98qZLCo07f7VSUiOh6UevaSKTsBh04axpanUtG1Fc=
+	t=1760237332; cv=none; b=tthbVpWMLfePN8yV41UHBd6vZsp1+tz4PnCWsUCL/eLpOXkD2ktewE0UGVSEFQdnVAVNZO/19WBYM8UynzhC3PvE5NHGvScz6K4+GNt3lkoIOUBJuvxYcRtcsfk3Gyy20rq0r7tm9ahOIUQJZWJ0Lal252PI0tM4YutRcKy7v6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760188156; c=relaxed/simple;
-	bh=tlkJwfNU1cVCPDhRsrqFR+Vps9eI4PoV/Fx5dERZ4Hc=;
+	s=arc-20240116; t=1760237332; c=relaxed/simple;
+	bh=kPDBhwA9avKqp5qDWVWZtY+bRRHa1f3G/FsLBM160tM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q6iGqubK00nbeHdocs2ba1uFPIdTad1PB1G8N7pGVa4jnjg+z1TEunBWiEJ5JPQxqTuE3ZKctR2pV0dQgWWbh8OgMxcnaRZJUkIiZtAtGpv3JAB1ZDY3SMOyBEsKYwMuue1FICEJDpQ/9w+nMoFWJ6LhwEqHdrmXV1xHEc9WAMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U85xZFnL; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-57a604fecb4so3749701e87.1
-        for <linux-spi@vger.kernel.org>; Sat, 11 Oct 2025 06:09:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760188149; x=1760792949; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yFqG+W0h7HPgIYyh4oB9VLKX2QzoB0wmqumVtSZ2KnI=;
-        b=U85xZFnL/s6LyNi08VC2ZWFtDhecXGC1aL+t9r7B2Q80j5EslV56CuZ0OpnAFYOfR0
-         3hZqWXVh6NaixA++Q+mnu039jKqlgvlphyl6eH0eNxNct3kGGfr8hQJf9jATsoFMn+PJ
-         USSJ3+juxDZNAO/4qvA8qIcIogcEFIwWpNtVTOSHgYsD+s3W5oqzqXHc738H6e5wKTB6
-         SMMBa9KycRuaZUedtMI+mDZ/oRRIOBmAC76wwVwn1Nj1uSTjOaeevHLf/Fh7Bm51CMp5
-         kQ7GSaXZycPp/CrTTkXcgrf5pMbynuFEv2R9dLSzh7NhuucdWXQzRD6+OHsREK/O+HdI
-         dOxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760188149; x=1760792949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yFqG+W0h7HPgIYyh4oB9VLKX2QzoB0wmqumVtSZ2KnI=;
-        b=MI5SUvgNy7r5qMfjdB4iwuYqouRqZ/bAV8aJxfVTM6Xatybc1r4909ia8FzW2gTw1W
-         wlMgzVo9J8mfsfLCU1a+/WQDH8WtBuV77PCOquujT6MjlTyWckU7se5IQl9eF5FQQ+1G
-         5IDdID5CjuWUQaS0D/62Vm1tua9Fy2UAtZ1xiuAolv7UgRh8SPdt7iV+X9a7u9Jvs5ev
-         EBuXdBnt4tS+06CxuteAvHgn+BYb1molcEjc5jSJfepWwD/EilUVpJ6wImM0B93Zt8oK
-         k+JcBNw7kzvDJvUZFR3FAvvSRgJBBzfko7mvwQpYDaInKqoJqXrmUDi3jkv35A15TUOh
-         M8AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXp/4RvAh6e71fDjaOHRylaqJojv6oVEMMblXPVSK7/DVRWCsdTFgh9thaUArrwA6dHrBxv2A6xogs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTZsVnLDVERKa4f5xOlqk/y8OmokPMXcEvwCDgbQIG1Bv6rSiZ
-	SzKAnhIbCE417BtQmS1p1aVxx1rzAXW9l3Lb0r860kC2sHVfE3IMw9mO
-X-Gm-Gg: ASbGncvMzFDShlLucg2ENCSTZtVwbfbGPRXS0bM58jX+R4bqHOlVloPS5oFSFG3R13T
-	Xisp3Zk4GBNsAQr/3+vRR3EFjzH7qqpdd4xMKmk/KNocC0fpm99bZkzKzoA7FuLZ5DLDeNgGglS
-	O/xNcEphZe1LP+MMhTd3Vb2TW45Aox8kCu+kY2USzTCHfjSU6ZCrDHCYzlPF9XLk8PoViO2BbBB
-	6WxmMAAqOogw/AXRNIfhjZT1FlY8kNUgTEQKO5hlp25PyYLuYwlX7opO5ZPQ0inqHliX+YlfxRJ
-	Ni6ZLPGw8MAIF8b0BYRhmLWsMSCyxRCxHVvxYcdAb4oWquemBQ+dm26GBOdf2WVnSu8sAMVu6k+
-	NYL+RqG9wOAplXaRbCZ+C8Fc38ObYu8o00YZkJPljyyja48MJl+2zvvpNq4gz0BJn
-X-Google-Smtp-Source: AGHT+IEsd2dh3b7ZCBcS7C11Y+DmJop0Y5QgiZQ50QcK97YSeU7ZYKZ8b42eMZzoz9RF9b0Cs+MNcw==
-X-Received: by 2002:a05:6512:1246:b0:55f:4ac2:a597 with SMTP id 2adb3069b0e04-5906d87babamr4379026e87.7.1760188148525;
-        Sat, 11 Oct 2025 06:09:08 -0700 (PDT)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-590881e5790sm1919616e87.19.2025.10.11.06.09.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Oct 2025 06:09:07 -0700 (PDT)
-Message-ID: <5d8ec4c3-1b36-470b-a1c7-629060a154ce@gmail.com>
-Date: Sat, 11 Oct 2025 15:09:05 +0200
+	 In-Reply-To:Content-Type; b=LX3Jm7/P2zGFoI0TUqmgx+HKyNI95JrC7J14jLgxaZNua8TEbWev0rJveFwBrsZak1s40XzUh8XU0EatnctmBmWUDD5lvjAWXXoVTo24MhmczcYyFlUgyYOMalI++MeobqoXF5Ila/8rkwWcttJusXNHBtpL9nGKju+ZkZIKLIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8jKIF0O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC476C4CEF4;
+	Sun, 12 Oct 2025 02:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760237331;
+	bh=kPDBhwA9avKqp5qDWVWZtY+bRRHa1f3G/FsLBM160tM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=J8jKIF0OStEzqRcUMQ0zCRK8NRv4RTZgAOPEWCn76XP/Bb5XwwkB+PUu0gIovEuJd
+	 LvD6z2G2IUdmJgXQXLifNsS5g/AT6/bxUb/BJaOmTCkvJdWrMXo/8bbZQGWC18Lk87
+	 L3TtE7Jmdv0Hwa5JAH8R9Pr29/WtH64g+d87xHZ9I9SrWbnlNmpG07EEb5JHbPpVQV
+	 T4F6+Gte0HGt7L7nx/O1jkbJ8yj9QWebvWkLwkrIn63LUA8MgH1XW+5YW7uqCoCN+A
+	 N1aM5rG40JxaOVj8ms763QUfEdKGx8i0RvfoI3wVKlSYZpOkp+9ei4ygmluybe72KS
+	 1McB3OM2Z9SHg==
+Message-ID: <9746976a-ade4-4551-920c-ffbb914a4e10@kernel.org>
+Date: Sun, 12 Oct 2025 04:48:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,94 +50,111 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] leds: add support for TI LP5860 LED driver chip
-To: Steffen Trumtrar <s.trumtrar@pengutronix.de>, Lee Jones <lee@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Steffen Trumtrar <kernel@pengutronix.de>,
- Pavel Machek <pavel@kernel.org>, Mark Brown <broonie@kernel.org>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250911-v6-14-topic-ti-lp5860-v3-0-390738ef9d71@pengutronix.de>
- <20250911-v6-14-topic-ti-lp5860-v3-2-390738ef9d71@pengutronix.de>
- <20250916153412.GA3837873@google.com> <875xd0jslv.fsf@pengutronix.de>
+Subject: Re: [PATCH v9 15/15] arm: dts: airoha: en7523: add SNAND node
+To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
+ Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andy@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
+References: <20251010204500.1625215-1-mikhail.kshevetskiy@iopsys.eu>
+ <20251010204500.1625215-16-mikhail.kshevetskiy@iopsys.eu>
+ <34899379-9788-4ac8-8b62-e9f47b4d49d9@kernel.org>
+ <10802039-ca65-41c0-88fa-51db6d86aabd@iopsys.eu>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <875xd0jslv.fsf@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <10802039-ca65-41c0-88fa-51db6d86aabd@iopsys.eu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Steffen
-
-On 9/30/25 09:40, Steffen Trumtrar wrote:
-> 
-> Hi,
-> 
-> On 2025-09-16 at 16:34 +01, Lee Jones <lee@kernel.org> wrote:
-> 
->> > +#include <linux/gpio.h>
->> > +#include <linux/led-class-multicolor.h>
->> > +#include <linux/module.h>
->> > +#include <linux/of_gpio.h>
->> > +#include <linux/of_platform.h>
->> > +#include <linux/regmap.h>
->> > +
->> > +#include <linux/platform_data/leds-lp5860.h>
->> > +
->> > +static struct lp5860_led *mcled_cdev_to_led(struct led_classdev_mc 
->> *mc_cdev)
->> > +{
->> > +    return container_of(mc_cdev, struct lp5860_led, mc_cdev);
->> > +}
->> > +
->> > +LP5860_SHOW_MODE(r_global_brightness_set, LP5860_REG_R_CURRENT_SET, 
->> LP5860_CC_GROUP_MASK, 0)
->> > +LP5860_STORE_MODE(r_global_brightness_set, 
->> LP5860_REG_R_CURRENT_SET, LP5860_CC_GROUP_MASK, 0)
->> > +DEVICE_ATTR_RW(r_global_brightness_set);
+On 11/10/2025 07:01, Mikhail Kshevetskiy wrote:
+> On 11.10.2025 02:42, Krzysztof Kozlowski wrote:
+>> On 10/10/2025 22:45, Mikhail Kshevetskiy wrote:
+>>> Add SNAND node to enable support of attached SPI-NAND on the EN7523 SoC.
+>>>
+>>> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+>>> ---
+>>>  arch/arm/boot/dts/airoha/en7523.dtsi | 21 +++++++++++++++++++++
+>>>  1 file changed, 21 insertions(+)
+>>>
+>>> diff --git a/arch/arm/boot/dts/airoha/en7523.dtsi b/arch/arm/boot/dts/airoha/en7523.dtsi
+>>> index b523a868c4ad..78e351eb787a 100644
+>>> --- a/arch/arm/boot/dts/airoha/en7523.dtsi
+>>> +++ b/arch/arm/boot/dts/airoha/en7523.dtsi
+>>> @@ -203,4 +203,25 @@ pcie_intc1: interrupt-controller {
+>>>  			#interrupt-cells = <1>;
+>>>  		};
+>>>  	};
+>>> +
+>>> +	spi_ctrl: spi@1fa10000 {
+>>> +		compatible = "airoha,en7581-snand";
+>> NAK, now I found this... Respond to comments instead of ignoring them.
 >>
->> How is this different to /sys/class/leds/<led>/multi_intensity?
->>
->> # echo 43 226 138 > /sys/class/leds/multicolor:status/multi_intensity
->> red -
->>     intensity = 138
->>     max_brightness = 255
->> green -
->>     intensity = 43
->>     max_brightness = 255
->> blue -
->>     intensity = 226
->>     max_brightness = 255
->>
+>> Three versions within few hours, that's not acceptable. Outside of the
+>> merge window the expectation is minimum 24h difference. Within merge
+>> window this is just spamming.
 > 
-> the LP5860 has a register for setting the maximal brightness that holds 
-> for all LEDs in the matrix. multi_intensity and max_brightness is only 
-> for that one multicolor LED, right? And I can only manipulate the 
-> max_brightness of that one multicolor LED instance.
-> If I'm wrong, I'd be happy to not have to add the sysfs files.
+> 
+> I already lost any hope to merge this to linux-3.18, so no problem.
+> 
+> Could you and Rob explain me this compatible issue? I got a feeling that
+> Rob telling me to keep "airoha,en7581-snand" compatible while you are
+> telling the opposite. As for me the use of "airoha,en7523-snand" or
+> maybe "airoha,en75xx-snand" for both en7523 & en7581 chips is the best.
+> 
+> Is there any policy? Could you provide a link?
 
-It seems that this device is similar in the aspect of LED grouping
-to LP50xx family. There is already a driver for that one [0] with
-related bindings. Grouping solution could be addressed similarly to the
-banking mechanism in that driver.
+The policy is described in writing bindings. I also explained it in
+greater details in my recent OSSEU introductory talk. You need two
+compatibles.
 
-That of course means that this patch needs a significant rework.
-
-First thing that strikes me after analyzing datasheet is that
-LEDs are not assigned to any group since LP5860_REG_GRP_SEL_START
-address is not referenced anywhere, and this is base address for
-Dot_grp_selN registers that enable affiliation of the LED to given
-group. No need for global brightness setting then.
-
-Anyway, I'd add proper support for this device with DT knobs
-to enable both grouping and individual approach to controlling the LEDs.
-
-Driver [0] should serve as good guidance for that.
-
-[0] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/leds/leds-lp50xx.c
-
--- 
 Best regards,
-Jacek Anaszewski
+Krzysztof
 
