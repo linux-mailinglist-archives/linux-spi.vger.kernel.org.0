@@ -1,95 +1,79 @@
-Return-Path: <linux-spi+bounces-10601-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10602-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B678BD28A0
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Oct 2025 12:22:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E58BD2C1C
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Oct 2025 13:20:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 761114E4161
-	for <lists+linux-spi@lfdr.de>; Mon, 13 Oct 2025 10:22:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1D3B3A6209
+	for <lists+linux-spi@lfdr.de>; Mon, 13 Oct 2025 11:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175392FDC4F;
-	Mon, 13 Oct 2025 10:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B4C222587;
+	Mon, 13 Oct 2025 11:20:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wpw16AsA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKc/Sc1t"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42771FE451;
-	Mon, 13 Oct 2025 10:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6C02AEE4;
+	Mon, 13 Oct 2025 11:20:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760350934; cv=none; b=rMf1Dm/W915bPHoINRvy3Rmk4bcGJg381fhYydHeBLWsACL6hg+m9P5e+rVrgSRTga4e20QjcvdKJcWunwn1zztcU6SS7vCyLyHLmnIHRML6TUnpS76IkY4lnslQoxJ2W8pF0e5JCqtJ/qXOLbVmuQ5uHt8+tXv/ntDkyxuQ6Bk=
+	t=1760354441; cv=none; b=mMxbkDHDZBXNKmVzgTRYDc9gOJicfRi+PLOP9uYBoxFL7BLq6Eh92+kSnnCFsm405C/RaYk4xGABC4C07nSdF8cJkGzeYkbiiJgo7JF3JJVCFw25sXgBU6RgPEA774u74t/tetCAsBs7oGln1etrcjkelzR42tCQXUrUp0/0u+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760350934; c=relaxed/simple;
-	bh=Ha+XjhxGqCNF/jxkQ9GgocMSomyC+fzyaGHj5iGSOEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TKN3L0hh4QUZC7dAf5Lrs8fDI2MEyyllf792zE9ECDAubofCoNXNHFHqulI5cqbcrQEKcRG1mOrtURhHn4NZFE0bxFRUHsv+j7IaTJaanmoyQxAQ6tRvEdQbCqU5m1RqAnzSmS/UzCC1KPEpiPFFOzqKhK7v1jnorkQ9FWQ1Sbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wpw16AsA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A45CC4CEE7;
-	Mon, 13 Oct 2025 10:22:11 +0000 (UTC)
+	s=arc-20240116; t=1760354441; c=relaxed/simple;
+	bh=1/CWxoK/iS9tXWPUHkCA6Taf6bKU2DpwDhdiJOpKZGo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Vk8i+TWv3z1LHn/ApcUyJyY+CURNTDp8BVWSoc2V0QHsgX4csKabLhk9kZraKzYPM/WvmIMnmOjHs6AYOhy3HwAAVm4JjjKfarWA5cZd6mMpeYn3aVIeT+5Noif0kpL0AWNTHOHUovrv08dAY0XCrTaROc3E5a5J6n/VS2fLxKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKc/Sc1t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4719C4CEE7;
+	Mon, 13 Oct 2025 11:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760350933;
-	bh=Ha+XjhxGqCNF/jxkQ9GgocMSomyC+fzyaGHj5iGSOEs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wpw16AsAQC2BJBdk24GhDU22qs3mxS6gpYkq4cab7uEkFNLwT4lDTc1IIlUztYj3y
-	 5PxnAJWTWrW2csat0IUh2eOtt/ZJ428AnuOpBBFXwAWxfqeq/kHqqMmTtkd70TESS6
-	 j70nOlYxk0NQAED7IH33cd6QD6i0SxhV8AEN7Mhp5lZf79ZnklxdMJsp8uPHJiFMo6
-	 1FuHuhfBQ3qj943dPR/JrHlbjCtkgi0Nuy/T3ae6FUgXgdMDRwZSwZCRxBrLsr6Yxt
-	 ahzbOsGL+ppMEKYDcqI9zldOdGPHTAqyXal9h5VnEblzxEnQkr2LIHFPCsD/1gnXUY
-	 7Y62gn4zOdzdA==
-Date: Mon, 13 Oct 2025 11:22:08 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mattijs Korpershoek <mkorpershoek@kernel.org>
-Cc: Khairul Anuar Romli <khairul.anuar.romli@altera.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] spi: cadence-quadspi: Fix pm_runtime unbalance on dma
- EPROBE_DEFER
-Message-ID: <eb66bb86-328f-4d43-96db-e0a31eb73ee8@sirena.org.uk>
+	s=k20201202; t=1760354441;
+	bh=1/CWxoK/iS9tXWPUHkCA6Taf6bKU2DpwDhdiJOpKZGo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=SKc/Sc1tUs9d6snRvFlXvlbyhS0+1asKbkvmhGUcwAwTSVgxg6xCaCwJz/KZ3eGSK
+	 vUZCQaFgZSMgWahF4Vu1aKkMvycyQ/Y59IV016qvg67+KqgR0E8ApJuVVrClmRrHJh
+	 cLW4qjTcnrCSeYv2rKd4APNGW0Zw++xnXPYIUIrK+IeTy6oaTLgE0TC20SkiCQUJkY
+	 v9RKWuMWJ9Id2p0Ut7CxuMENJcDmlHWltHeJc8ArHtxN5yqpOn8cbaAhUbK+Xaue3U
+	 OYg4MOfURjE1LlLhtSwsg8iQUx3RkSGU45+sqbFG7qopGj21i5Hou9+kQWVES9oZ7j
+	 gLqt+s2tGMouw==
+From: Mattijs Korpershoek <mkorpershoek@kernel.org>
+To: Mark Brown <broonie@kernel.org>, Mattijs Korpershoek
+ <mkorpershoek@kernel.org>
+Cc: Khairul Anuar Romli <khairul.anuar.romli@altera.com>, Dan Carpenter
+ <dan.carpenter@linaro.org>, linux-spi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: cadence-quadspi: Fix pm_runtime unbalance on
+ dma EPROBE_DEFER
+In-Reply-To: <eb66bb86-328f-4d43-96db-e0a31eb73ee8@sirena.org.uk>
 References: <20251009-cadence-quadspi-fix-pm-runtime-v2-1-8bdfefc43902@kernel.org>
+ <eb66bb86-328f-4d43-96db-e0a31eb73ee8@sirena.org.uk>
+Date: Mon, 13 Oct 2025 13:20:38 +0200
+Message-ID: <87o6qbujy1.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XwMN6qierxuC42Dj"
-Content-Disposition: inline
-In-Reply-To: <20251009-cadence-quadspi-fix-pm-runtime-v2-1-8bdfefc43902@kernel.org>
-X-Cookie: Custer committed Siouxicide.
+Content-Type: text/plain
 
+On Mon, Oct 13, 2025 at 11:22, Mark Brown <broonie@kernel.org> wrote:
 
---XwMN6qierxuC42Dj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Thu, Oct 09, 2025 at 09:10:38AM +0200, Mattijs Korpershoek wrote:
+>> In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
+>> we handle the error by jumping to probe_setup_failed.
+>> In that label, we call pm_runtime_disable(), even if we never called
+>> pm_runtime_enable() before.
+>
+> This doesn't apply against current code, please check and resend.
 
-On Thu, Oct 09, 2025 at 09:10:38AM +0200, Mattijs Korpershoek wrote:
-> In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
-> we handle the error by jumping to probe_setup_failed.
-> In that label, we call pm_runtime_disable(), even if we never called
-> pm_runtime_enable() before.
+Ah, sorry about that. I based this on master. I confirm it does not
+apply on for-6.18.
 
-This doesn't apply against current code, please check and resend.
-
---XwMN6qierxuC42Dj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjs0s8ACgkQJNaLcl1U
-h9DUMQgAgG7yhj+uapZIfl6vEXkTD8tC6Gg8YUFWLbeCz7qjGUG9rsgyDSq2Hypu
-sSQFQtIfgfFNst19B4amM8sZhyaOeDggXGE8LPnaXgNu7aqCnj9fgAAjTMhbafG/
-zdlhFZ1NPTRrBIgrd1phNyVrISI4kfWxO4CTUgX/nLKrNcVD8VCExINxwaKx5CTZ
-2c0ju84UYEXSA3MiwUIUI0hpb1Aae8Ab2bnUOoKZ+N3LoWObMM/Ssb7Kzegc1EuZ
-LJeH+pcna0D6KmRi9eoVoqIjS0Dz5p5VSBmJ3ECru8omYQtfnaERx4Szxmxf++Sd
-UaaiotenfGnV/d3DdELjn0cSwRymOg==
-=fpq0
------END PGP SIGNATURE-----
-
---XwMN6qierxuC42Dj--
+Will resend shortly.
 
