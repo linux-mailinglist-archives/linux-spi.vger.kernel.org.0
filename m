@@ -1,75 +1,49 @@
-Return-Path: <linux-spi+bounces-10620-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10621-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B23CBD8EC7
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Oct 2025 13:08:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A77BD915F
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Oct 2025 13:46:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5BBD192545B
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Oct 2025 11:08:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BED4404308
+	for <lists+linux-spi@lfdr.de>; Tue, 14 Oct 2025 11:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FEEC30F932;
-	Tue, 14 Oct 2025 11:06:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9FE30FC34;
+	Tue, 14 Oct 2025 11:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="PETpx36h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="twOYcKVX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F259D30F937;
-	Tue, 14 Oct 2025 11:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868832FD1A1
+	for <linux-spi@vger.kernel.org>; Tue, 14 Oct 2025 11:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760439997; cv=none; b=sVennK8txuW2bOV4oTS2SGhB1sHos9tQMScbwRLxeZ8Xhm3vhxSwPVr56Jd+n26TVhH6toiLHe6tnFrKaswuKOkpUCPrKMbAZVoGqHyy78aB+ZfMJk8drctoA5quwIDsQwhtGDKadtEGOad01kpa3dXaLzmYQa3M4HNf9e9ndOk=
+	t=1760442377; cv=none; b=B44AlXwLmuBasdVGCOWN8tLi0ZK2mNTx+OlwVRdEefCQS9U2V4TuwLSVwbF+Z9yxCqd7/7//fUthrGag2zfILA5hG45jjps7JIbr1oFKg0NVJfxGK9qX4MbflNwKG6yvZ6iD/CRPQXeEoitOlYMRNeCWlzCG8YETGgYz9X9o/Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760439997; c=relaxed/simple;
-	bh=eXc+GQDHy1dAHfsUbLb+ObFQqPk4vjUNL6n4B1nqRSU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fq/H6vV1a3/cpRflPhLMOoDyrMirsCoc9iHAt/9J0I1xjMOcYhhlCz70tvwJ2X1e5ovdLlhHvnDm17JklGuwfBYFNB3v4XpZ9x771D7pqKIMgN6z/o2475WBkkrwj9o/OVqYGofvTYW463aYY7+7PvHONNH5P+PT6v1Bh0Lkxgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=PETpx36h; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59E87Oww021230;
-	Tue, 14 Oct 2025 11:06:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	EvoswEFKqCWxgivzA+1lqJGYUR5OO5DkgXpNTJrfIJ0=; b=PETpx36hgbYOrtqe
-	TtbsMsSXsSincQOB+QGWw37E/USc728/KwvF5zJiNMRVZ723tZsEFopQEOut0ifq
-	48dt8SFHq6iiRcq8Mj7agCFEMyf7Xx0iIAyJqk1IbvXbJ7fpOTCWC2FXy3IjCz8d
-	zgGibMl7d7L1MdE/fH46MAFXXT/BkVO1/uB8iZOEt/I/4m+P9PDts3XnGlElhqZh
-	9+soCpRXdzIFlPG8pwc/yQqew/W4oIG5tEGUXqif8szoUo1OAcUbZtrZzN2oxhWk
-	vWcTuRtuJckqv9pvFJ/R4arFFtw+KE047fw9NHuSFuMjjwGOibRZ61bikgjt9Aza
-	15km9A==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49s6mwjfr6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Oct 2025 11:06:33 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 59EB6W9D024625
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 14 Oct 2025 11:06:32 GMT
-Received: from hu-mdalam-blr.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.24; Tue, 14 Oct 2025 04:06:28 -0700
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-To: <broonie@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-        <conor+dt@kernel.org>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <vkoul@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>
-CC: <quic_varada@quicinc.com>, <quic_mdalam@quicinc.com>
-Subject: [PATCH v3 9/9] arm64: dts: qcom: ipq5332-rdp442: Remove eMMC support
-Date: Tue, 14 Oct 2025 16:35:34 +0530
-Message-ID: <20251014110534.480518-10-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251014110534.480518-1-quic_mdalam@quicinc.com>
-References: <20251014110534.480518-1-quic_mdalam@quicinc.com>
+	s=arc-20240116; t=1760442377; c=relaxed/simple;
+	bh=4xPknCQ8O+E8lAfgJ3sTg4DNxoF4xostKyMRMqDwnOo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=HQPx5BeeOAkjzJrPgFygWc2sA4lu/prYODo/aCJ/30x8g2RZnX3sq5zkO4YClc7C3EC8BUakslo04Km6P8gkI/J2DGFK9AkN0lNOxuryx4e36248DAR7u5l/5xpZkbZjFwte/T+D7uSWUatC4NakiOP5wh/jTZGpaue3eMLKuUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=twOYcKVX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08128C4CEE7;
+	Tue, 14 Oct 2025 11:46:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760442377;
+	bh=4xPknCQ8O+E8lAfgJ3sTg4DNxoF4xostKyMRMqDwnOo=;
+	h=Subject:From:Date:To:From;
+	b=twOYcKVXm1gGIjdLmzezQ6hHgUDG04OqyKj3l/4ki5sg+pin7KQw8x3PvlNHfVzJD
+	 DAuYgcrxSTlt6tKol+JWjfx6tPW22fL0yShnLERhSPoSs4I0JYurZxdaRsJbaLK+9r
+	 8Oa7t4ZiKEzZ3edlSWLjzqIaMaVvzh+X0bwv0NKLzw9B2SlTx2LXTU404cdrcdzNGU
+	 sOOCEyFK/CuJMLX4dG5ZT8AYnJMKTPGxU3/3F+LqNHbv6pxp6VVuj2H6qPvJIt2RKk
+	 0ODGXXxvBntMk72YYsua//jWY60nNuvBbPgXBjNj8ZEU9IQZh3Y/LLalTsuk8NVDsv
+	 QsZkgqodVWyvA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 74CD0380AA4F;
+	Tue, 14 Oct 2025 11:46:03 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -77,113 +51,106 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEzMDA4MyBTYWx0ZWRfXyqrIYzxPLzj3
- 58RxST3jUp2/wQ0rYMAfVjfo7+pe8RlIktusLJU/swpUTYhvvhEpMe84bZtPm3WyV62gO3Fyu9V
- pzgGENiDbxR1BTOIaqUi1T157fW0HOIv049gb9gnPKYvlbSVwBzyORpdAQHmwUvz79AJoXK9ldx
- XVEO3jDI4XGcgKJMss7amj/pBgE8Lbdd/5zfJ5rzkR5Q7LTyctLu1Kyk0eggV/JDGGN7hq2sBZR
- 9EcQ0tzOTODHYNEpO+OGRrolrNF+/xCSeuhrApKr8BBLWGf5REXhgbW/g3wMh7DDZNHx1zTAnbe
- iGezSd5OwTT+ObNI2glYDen/8S/Thp50Ug/casi+ASYQs9GIGh1KgV8m8/nXGOm5waNXbcBBJuZ
- Q9r8Z1D/dqFGZO4erFih6gQzuHMP3g==
-X-Authority-Analysis: v=2.4 cv=Fr4IPmrq c=1 sm=1 tr=0 ts=68ee2eb9 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8 a=fuWxvNZPvO_ztXA3lyEA:9
- a=TjNXssC_j7lpFel5tvFf:22 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: RB30ZoRmX9BjsCTYEjy-oVb0myqIyIi-
-X-Proofpoint-ORIG-GUID: RB30ZoRmX9BjsCTYEjy-oVb0myqIyIi-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-14_02,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510130083
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176044236204.3633772.12655591508717605986.git-patchwork-summary@kernel.org>
+Date: Tue, 14 Oct 2025 11:46:02 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Remove eMMC support from the IPQ5332 RDP442 board configuration to
-align with the board's default NOR+NAND boot mode design.
+Hello:
 
-The IPQ5332 RDP442 board is designed with NOR+NAND as the default boot
-mode configuration. The eMMC and SPI NAND interface share
-same GPIO
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
+Series: arm64: Add initial device trees for Apple M2 Pro/Max/Ultra devices
+  Submitter: Janne Grunau <j@jannau.net>
+  Committer: Sven Peter <sven@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=996529
+  Lore link: https://lore.kernel.org/r/20250828-dt-apple-t6020-v1-0-507ba4c4b98e@jannau.net
+    Patches: [01/37] dt-bindings: arm: apple: Add t6020x compatibles
+             [02/37] dt-bindings: arm: apple: apple,pmgr: Add t6020-pmgr compatible
+             [03/37] pmdomain: apple: Add "apple,t8103-pmgr-pwrstate"
+             [04/37] dt-bindings: power: apple,pmgr-pwrstate: Add t6020 compatible
+             [05/37] dt-bindings: cpufreq: apple,cluster-cpufreq: Add t6020 compatible
+             [06/37] dt-bindings: interrupt-controller: apple,aic2: Add apple,t6020-aic compatible
+             [07/37] dt-bindings: iommu: dart: Add apple,t6020-dart compatible
+             [08/37] pinctrl: apple: Add "apple,t8103-pinctrl" as compatible
+             [09/37] dt-bindings: pinctrl: apple,pinctrl: Add apple,t6020-pinctrl compatible
+             [10/37] dt-bindings: i2c: apple,i2c: Add apple,t6020-i2c compatible
+             [11/37] dt-bindings: mailbox: apple,mailbox: Add t6020 compatible
+             [12/37] dt-bindings: gpu: apple,agx: Add agx-{g14s,g14c,g14d} compatibles
+             [13/37] dt-bindings: iommu: apple,sart: Add apple,t6020-sart compatible
+             [16/37] dt-bindings: net: bcm4377-bluetooth: Add BCM4388 compatible
+             [17/37] dt-bindings: net: bcm4329-fmac: Add BCM4388 PCI compatible
+             [18/37] mfd: macsmc: Add "apple,t8103-smc" compatible
+             [19/37] dt-bindings: mfd: apple,smc: Add t6020-smc compatible
+             [20/37] dt-bindings: pwm: apple,s5l-fpwm: Add t6020-fpwm compatible
+             [22/37] dt-bindings: spmi: apple,spmi: Add t6020-spmi compatible
+             [24/37] dt-bindings: watchdog: apple,wdt: Add t6020-wdt compatible
+             [26/37] dt-bindings: clock: apple,nco: Add t6020-nco compatible
+             [28/37] dt-bindings: dma: apple,admac: Add t6020-admac compatible
+             [29/37] ASoC: apple: mca: Add "apple,t8103-mca" compatible
+             [30/37] ASoC: dt-bindings: apple,mca: Add t6020-mca compatible
 
-Change in [v3]
+Series: Add support to load QUP SE firmware from
+  Submitter: Viken Dadhaniya <viken.dadhaniya@oss.qualcomm.com>
+  Committer: Bjorn Andersson <andersson@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1001188
+  Lore link: https://lore.kernel.org/r/20250911043256.3523057-1-viken.dadhaniya@oss.qualcomm.com
+    Patches: [v7,1/6] dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties for I2C, SPI, and SERIAL bus
+             [v7,2/6] soc: qcom: geni-se: Cleanup register defines and update copyright
+             [v7,3/6] soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux subsystem
+             [v7,4/6] i2c: qcom-geni: Load i2c qup Firmware from linux side
+             [v7,5/6] spi: geni-qcom: Load spi qup Firmware from linux side
+             [v7,6/6] serial: qcom-geni: Load UART qup Firmware from linux side
 
-* Added Reviewed-by tag
+Series: None
+  Submitter: Janne Grunau <j@jannau.net>
+  Committer: Janne Grunau <j@jannau.net>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=996549
+  Lore link: https://lore.kernel.org/r/20250828-dt-apple-t6020-v1-31-bb8e1b87edef@jannau.net
+    Patches: [31/37] spi: apple: Add "apple,t8103-spi" compatible
+             [32/37] spi: dt-bindings: apple,spi: Add t6020-spi compatible
+             [33/37] arm64: dts: apple: Add ethernet0 alias for J375 template
+             [35/37] arm64: dts: apple: Add J414 and J416 Macbook Pro device trees
+             [36/37] arm64: dts: apple: Add J474s, J475c and J475d device trees
+             [37/37] arm64: dts: apple: Add J180d (Mac Pro, M2 Ultra, 2023) device tree
 
-Change in [v2]
+Series: arm64: lan969x: Add support for Microchip LAN969x SoC
+  Submitter: Robert Marko <robert.marko@sartura.hr>
+  Committer: Nicolas Ferre <nicolas.ferre@microchip.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=991164
+  Lore link: https://lore.kernel.org/r/20250813174720.540015-1-robert.marko@sartura.hr
+    Patches: [v9,1/9] arm64: Add config for Microchip SoC platforms
+             [v9,3/9] arm64: lan969x: Add support for Microchip LAN969x SoC
+             [v9,4/9] mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+             [v9,5/9] tty: serial: atmel: make it selectable for ARCH_MICROCHIP
+             [v9,6/9] spi: atmel: make it selectable for ARCH_MICROCHIP
+             [v9,7/9] i2c: at91: make it selectable for ARCH_MICROCHIP
+             [v9,8/9] char: hw_random: atmel: make it selectable for ARCH_MICROCHIP
+             [v9,9/9] crypto: atmel-aes: make it selectable for ARCH_MICROCHIP
 
-* updated board name commit message header
+Series: [v2,1/4] mtd: spinand: fix direct mapping creation sizes.
+  Submitter: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=989538
+  Lore link: https://lore.kernel.org/r/20250808210147.3085391-2-mikhail.kshevetskiy@iopsys.eu
+    Patches: [v2,1/4] mtd: spinand: fix direct mapping creation sizes.
 
-Change in [v1]
+Series: mtd: spinand: fix continuous reading mode support
+  Submitter: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+  Committer: Miquel Raynal <miquel.raynal@bootlin.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=991325
+  Lore link: https://lore.kernel.org/r/20250814065423.3980305-1-mikhail.kshevetskiy@iopsys.eu
+    Patches: [RESEND,v2,1/4] mtd: spinand: fix direct mapping creation sizes.
 
-* Removed eMMC node
 
- arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts | 34 ---------------------
- 1 file changed, 34 deletions(-)
+Total patches: 46
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-index ed8a54eb95c0..6e2abde9ed89 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-@@ -35,17 +35,6 @@ flash@0 {
- 	};
- };
- 
--&sdhc {
--	bus-width = <4>;
--	max-frequency = <192000000>;
--	mmc-ddr-1_8v;
--	mmc-hs200-1_8v;
--	non-removable;
--	pinctrl-0 = <&sdc_default_state>;
--	pinctrl-names = "default";
--	status = "okay";
--};
--
- &tlmm {
- 	i2c_1_pins: i2c-1-state {
- 		pins = "gpio29", "gpio30";
-@@ -54,29 +43,6 @@ i2c_1_pins: i2c-1-state {
- 		bias-pull-up;
- 	};
- 
--	sdc_default_state: sdc-default-state {
--		clk-pins {
--			pins = "gpio13";
--			function = "sdc_clk";
--			drive-strength = <8>;
--			bias-disable;
--		};
--
--		cmd-pins {
--			pins = "gpio12";
--			function = "sdc_cmd";
--			drive-strength = <8>;
--			bias-pull-up;
--		};
--
--		data-pins {
--			pins = "gpio8", "gpio9", "gpio10", "gpio11";
--			function = "sdc_data";
--			drive-strength = <8>;
--			bias-pull-up;
--		};
--	};
--
- 	spi_0_data_clk_pins: spi-0-data-clk-state {
- 		pins = "gpio14", "gpio15", "gpio16";
- 		function = "blsp0_spi";
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
