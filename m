@@ -1,253 +1,508 @@
-Return-Path: <linux-spi+bounces-10629-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10630-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F005BDB8D4
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 00:04:15 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8608BDCD8D
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 09:15:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E0274EA834
-	for <lists+linux-spi@lfdr.de>; Tue, 14 Oct 2025 22:04:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2E7C6350DC6
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 07:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F6530F537;
-	Tue, 14 Oct 2025 22:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB56301010;
+	Wed, 15 Oct 2025 07:15:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ItHkf7lD"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zlqpXhXG"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FCC30E83B
-	for <linux-spi@vger.kernel.org>; Tue, 14 Oct 2025 22:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BE93126BE;
+	Wed, 15 Oct 2025 07:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760479394; cv=none; b=UijhvirafXp8XK+/52NWfNG3vMeXaJErsxO/auxp+iufIEvYCkm3+n8Tzt+tRi1uXGG2ekwcwHfCLq+5THL56ipYochSX0WO2m+IY3m+VT6ayy6SU+ofnIuD0V0OCeL6zOW6ptO2WatTX5l2rFAtjeiL0xpybTC3XdLZfinvcDU=
+	t=1760512521; cv=none; b=EyylhVX1EPkLDivKalwraZgKKSEpL7OBDM7nWPw1+3vYH0XrookzicpRJtCB4Sq/UiwZJ5PFUZ1TuJv6aibw1ByF1aIhkNx+8sm3BHtOtKr3Y9jUdXJhKLfXm7WeGaN4DbtRNYBb+1l6pvOwgCheyTwkylige86Tj/QAFqmNGRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760479394; c=relaxed/simple;
-	bh=lFdsA0YqVZdv9LVuQw0SrITN0a033KY7tyPi60ZKk2I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Xu11j8DJTU37C87HNeLUTwoYI5zOOS/GkBBSxdS9Ltdh+53inCvFuFRodwg1kPy01VzE4t0c+Hcfw06ERxU043lkczCpYVNIFTImf3gN7XPFZ2h9aQBpw9uh6uY4yV9fDH7+mXzyrtgxS863Z958YAY9IxvasM/DrT67YsEAyGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ItHkf7lD; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-650409430f6so884903eaf.3
-        for <linux-spi@vger.kernel.org>; Tue, 14 Oct 2025 15:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1760479391; x=1761084191; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqolBQIXv5KYau5vWoruyq5XQt42Dg49+iF61Wnk4+4=;
-        b=ItHkf7lDevgDrwHZLUeK+xcVv/ts7tvRjm4zyNgfejzP0jZmBGBQHjFk/Zi5KDB3Kj
-         pLp+kULXApS9ElWTgAq83xAE/z9rtiqDOrOZiL0UBg6GySJiUEUvKbokWFG6mQK3JGY1
-         /JVVNBAb9/eMp9tD32KbCtmyt7fn9DqArTUZCG6+x/Erjpb3b2hl3PL813mnA93NaGze
-         4cfG/0mvLtltZVtStScb9vMlUG9DHBv7FJSxCV1FxBhAHacM8OOhKAuvKcV/4qWqYObR
-         X6Rgq74M9KjINpfnyVY4PxgIRJUGGbqZ+QxPDQSuhz5Eeps2FLwo1YUCPbQDVnyJlDFU
-         L6Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760479391; x=1761084191;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hqolBQIXv5KYau5vWoruyq5XQt42Dg49+iF61Wnk4+4=;
-        b=HnjJGkgHYIxFlHzXCgg2YHQ/2879a+s4sKZo5uJT6X9d/M7WpQ5LwelrunRVlNy2Cw
-         +xT+UPKG+I4oLgg+6nrPodB9FtlSNEP7403nsq8Nll8qRkA6PtwAHmP7BIj2KypDBgqj
-         rsIQ8gEpNC4IlDC4Pk7YiJNTlpUOodlxOBEVFBw06w6CJFMnMtZgsrHjinVe4/8gG6Fn
-         KkaLxslBgPweMFJncvIFZo/eWeenT0ZsVBA/7kTZjIvjDJxbwB1bbiKmrlIiCtnQklgX
-         rWGHV4HiIe/W4xd2aj8XTDRLPfrl1xG2JJ7Eg2bYWGMeR+wIVJ4QEBHVZZYSOV95uR4l
-         JTeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUb8cSm6T3PA2U9bcfvI7kVd24kPv+lFFPW5ME6Ta+ArFhIEUTeOnivP2SUhaY+LuQSWR4v9sWW61Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdbTQQx4YRubL69PgHAJ0f+nk01QjketEpO6Bigko0wH1DZ3DG
-	GR3qjT0Da1u7/RaBTP9jI/PzLQ3XXHWGVzHlZUoERbAZc0Vuc7TnG4mg/umntCmtrYQ=
-X-Gm-Gg: ASbGncsK8nDMfLoeL8q/qKHNDBjRsmjy08H2bTWnxWrdERZ+3cNxrtCCl6daPx96dci
-	ofKtDoyUyaVhTrSBh0Mr7IMFJtO2KVpcK8z+9N9HEMGGtLj6IfDlltVHBXmjjxraSc2awq+8rax
-	KjabyXdWNwUu1Jge77UH25VQERDQIrNRDUx6Szwkyr7/rBiX4ifGJKis5T43a9DcJ8oBn+4ZO00
-	QXkYzITCnvwJbTyAZXhCej4cbwuaSzO7AZVipNTgomcEuO0dRo3FfXEh6sB34xf2PthdbUgFmT5
-	5M6rD4dpD8Qebm3RypUtPzQYzfVyRC+RmATos5G49M/VjLixVbsGUEZ7Oo0Hh810RH2d+O93nJP
-	fh54r2XWCmNdKXRGMQz59pIdpv+3Rg58rPRur1zvWixCN01qRrXRL6u5Z98ze2k9CONc=
-X-Google-Smtp-Source: AGHT+IGrKitcoow9K1NN0xlB4OhYZnctfJmK7wCThPVVW2AiUkp2WYlpDF9VUJlzxVhqzh0PkFHHOg==
-X-Received: by 2002:a05:6808:308c:b0:43b:5cee:137 with SMTP id 5614622812f47-4417b2d1eb5mr12898814b6e.4.1760479391430;
-        Tue, 14 Oct 2025 15:03:11 -0700 (PDT)
-Received: from [127.0.1.1] ([2600:8803:e7e4:500:c482:1912:c2de:367e])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4419895119bsm3593732b6e.21.2025.10.14.15.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 15:03:11 -0700 (PDT)
-From: David Lechner <dlechner@baylibre.com>
-Date: Tue, 14 Oct 2025 17:02:16 -0500
-Subject: [PATCH 6/6] iio: adc: ad7380: Add support for multiple SPI buses
+	s=arc-20240116; t=1760512521; c=relaxed/simple;
+	bh=tHBL8LZQ/EzxCXyj4Rc5BBYpjFDtYhbliv5BSEcWpUY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ROejG08p+6UwZnzspKhVgei7mjs37Vf/zhApMC2AJk5p4a0VDkkJmTIKwL+PyvnW8/p34Z87hf6aYGeP07HD+a7hZpjYyZhQtmUgHLLmtOOzLptrufU4ovQHVdDV499X8zS8M1ZnNLo0rPOLxCiWmoQQ1NlX5IAZzTNPLUqdymo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zlqpXhXG; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id BF65D4E410C3;
+	Wed, 15 Oct 2025 07:15:15 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 84434606FA;
+	Wed, 15 Oct 2025 07:15:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2B4E7102F22AF;
+	Wed, 15 Oct 2025 09:14:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1760512513; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=3j60UDCwsR+fx7dgGrkveclozQFJiothgCwXrWCeZ/Y=;
+	b=zlqpXhXGF42GZ/lA/4uYP53YSSloszkjeYT4xh7RfHT9miTqIJdGrh0yMpPMsFDCMffSh/
+	krak6VQp10Bg9KxMIfb1nodOuz2bnRSTbPT19jBrX7Vaa24qGRY3MAeK4apukHjfPf0KXS
+	P7oTsGuPzNiy5RrDCeiZ1wXWTCvmrqJKka3DMzKd2DsT4AdfyZx2DslcwxY1twu/iiRTps
+	AyB67kGJnLx5WpV4L7oIS3FzKn+oN8VEjG934SHa7MPJXZHcWyW++MQG5EvdoExjVN/wEm
+	1o3I4irjoA6bnsYBSzPPJenH2Zj+3BJSV3GhX/sLzTMxEF2JPBTzWX1wOpQKAQ==
+From: Herve Codina <herve.codina@bootlin.com>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Herve Codina <herve.codina@bootlin.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Wolfram Sang <wsa@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	patches@opensource.cirrus.com,
+	linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v4 00/29] lan966x pci device: Add support for SFPs
+Date: Wed, 15 Oct 2025 09:13:47 +0200
+Message-ID: <20251015071420.1173068-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251014-spi-add-multi-bus-support-v1-6-2098c12d6f5f@baylibre.com>
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
-In-Reply-To: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
-To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Marcelo Schmitt <marcelo.schmitt@analog.com>, 
- Michael Hennerich <michael.hennerich@analog.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>
-Cc: Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-iio@vger.kernel.org, David Lechner <dlechner@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5388; i=dlechner@baylibre.com;
- h=from:subject:message-id; bh=lFdsA0YqVZdv9LVuQw0SrITN0a033KY7tyPi60ZKk2I=;
- b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBo7siO73aVsUeAFtRWx1v2QqO5Zloc4fMQatLzo
- //Eq6vynoOJATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaO7IjgAKCRDCzCAB/wGP
- wC8zB/0TaaHlI2BsUjWkcJnrGnaU66GLjfMbbjoNWMo7yzQ2duCojSbMT7KqSMW/5BS2ASZZZSc
- OXCP8mbm5CKcmqFJ+NE5n8+h3Ac2NR90JfZmpiU2lTFrXRP4ukJTmY5ZmtGNr+8VunJWFU3nm+k
- Ust9VySN923SbBcx7l+sYXNsIHnAN96GoS5geOFrBv4L4z7LPyvVAfeU+Ce3+nkSWLUdrWNQ+wY
- mnxEysHbA++cbX6khKgwlfXIcb+cODXE5WSMMvQM/H20G91XODnYEp3JaoxLoNG7iZJ0Rfb7T3j
- COeEgLnk28y+yJxOsz+aW4O9XsEWywzazyvnoFtlH89HoqcI
-X-Developer-Key: i=dlechner@baylibre.com; a=openpgp;
- fpr=8A73D82A6A1F509907F373881F8AF88C82F77C03
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Add support for multiple SPI buses to increase throughput. The AD7380
-family of ADCs have multiple SDO lines on the chip that can be used to
-read each channel on a separate SPI bus. If wired up to a SPI controller
-that supports it, the driver will now take advantage of this feature.
-This allows reaching the maximum sample rate advertised in the datasheet
-when combined with SPI offloading.
+Hi,
 
-Signed-off-by: David Lechner <dlechner@baylibre.com>
----
- drivers/iio/adc/ad7380.c | 41 ++++++++++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+This series add support for SFPs ports available on the LAN966x PCI
+device. In order to have the SFPs supported, additional devices are
+needed such as clock controller and I2C.
 
-diff --git a/drivers/iio/adc/ad7380.c b/drivers/iio/adc/ad7380.c
-index bfd908deefc0f40b42bd8a44bfce7a2510b2fdf1..36abe95852006a81f7e31f8034699e59292af79e 100644
---- a/drivers/iio/adc/ad7380.c
-+++ b/drivers/iio/adc/ad7380.c
-@@ -77,8 +77,7 @@
- #define AD7380_CONFIG1_REFSEL		BIT(1)
- #define AD7380_CONFIG1_PMODE		BIT(0)
- 
--#define AD7380_CONFIG2_SDO2		GENMASK(9, 8)
--#define AD7380_CONFIG2_SDO		BIT(8)
-+#define AD7380_CONFIG2_SDO		GENMASK(9, 8)
- #define AD7380_CONFIG2_RESET		GENMASK(7, 0)
- 
- #define AD7380_CONFIG2_RESET_SOFT	0x3C
-@@ -92,11 +91,6 @@
- #define T_CONVERT_X_NS 500		/* xth conversion start time (oversampling) */
- #define T_POWERUP_US 5000		/* Power up */
- 
--/*
-- * AD738x support several SDO lines to increase throughput, but driver currently
-- * supports only 1 SDO line (standard SPI transaction)
-- */
--#define AD7380_NUM_SDO_LINES		1
- #define AD7380_DEFAULT_GAIN_MILLI	1000
- 
- /*
-@@ -1084,7 +1078,7 @@ static int ad7380_set_ch(struct ad7380_state *st, unsigned int ch)
- 	if (oversampling_ratio > 1)
- 		xfer.delay.value = T_CONVERT_0_NS +
- 			T_CONVERT_X_NS * (oversampling_ratio - 1) *
--			st->chip_info->num_simult_channels / AD7380_NUM_SDO_LINES;
-+			st->chip_info->num_simult_channels / st->spi->num_data_bus;
- 
- 	return spi_sync_transfer(st->spi, &xfer, 1);
- }
-@@ -1113,7 +1107,7 @@ static int ad7380_update_xfers(struct ad7380_state *st,
- 	if (oversampling_ratio > 1)
- 		t_convert = T_CONVERT_0_NS + T_CONVERT_X_NS *
- 			(oversampling_ratio - 1) *
--			st->chip_info->num_simult_channels / AD7380_NUM_SDO_LINES;
-+			st->chip_info->num_simult_channels / st->spi->num_data_bus;
- 
- 	if (st->seq) {
- 		xfer[0].delay.value = xfer[1].delay.value = t_convert;
-@@ -1124,6 +1118,7 @@ static int ad7380_update_xfers(struct ad7380_state *st,
- 			AD7380_SPI_BYTES(scan_type) *
- 			st->chip_info->num_simult_channels;
- 		xfer[3].rx_buf = xfer[2].rx_buf + xfer[2].len;
-+		xfer[3].multi_bus_mode = xfer[2].multi_bus_mode;
- 		/* Additional delay required here when oversampling is enabled */
- 		if (oversampling_ratio > 1)
- 			xfer[2].delay.value = t_convert;
-@@ -1198,6 +1193,8 @@ static int ad7380_init_offload_msg(struct ad7380_state *st,
- 	xfer->bits_per_word = scan_type->realbits;
- 	xfer->offload_flags = SPI_OFFLOAD_XFER_RX_STREAM;
- 	xfer->len = AD7380_SPI_BYTES(scan_type) * st->chip_info->num_simult_channels;
-+	if (st->spi->num_data_bus > 1)
-+		xfer->multi_bus_mode = SPI_MULTI_BUS_MODE_STRIPE;
- 
- 	spi_message_init_with_transfers(&st->offload_msg, xfer, 1);
- 	st->offload_msg.offload = st->offload;
-@@ -1793,6 +1790,7 @@ static const struct iio_info ad7380_info = {
- 
- static int ad7380_init(struct ad7380_state *st, bool external_ref_en)
- {
-+	u32 sdo;
- 	int ret;
- 
- 	/* perform hard reset */
-@@ -1815,11 +1813,24 @@ static int ad7380_init(struct ad7380_state *st, bool external_ref_en)
- 	st->ch = 0;
- 	st->seq = false;
- 
--	/* SPI 1-wire mode */
-+	/* SDO field has an irregular mapping. */
-+	switch (st->spi->num_data_bus) {
-+	case 1:
-+		sdo = 1;
-+		break;
-+	case 2:
-+		sdo = 0;
-+		break;
-+	case 4:
-+		sdo = 2;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
- 	return regmap_update_bits(st->regmap, AD7380_REG_ADDR_CONFIG2,
- 				  AD7380_CONFIG2_SDO,
--				  FIELD_PREP(AD7380_CONFIG2_SDO,
--					     AD7380_NUM_SDO_LINES));
-+				  FIELD_PREP(AD7380_CONFIG2_SDO, sdo));
- }
- 
- static int ad7380_probe_spi_offload(struct iio_dev *indio_dev,
-@@ -1842,7 +1853,7 @@ static int ad7380_probe_spi_offload(struct iio_dev *indio_dev,
- 				     "failed to get offload trigger\n");
- 
- 	sample_rate = st->chip_info->max_conversion_rate_hz *
--		      AD7380_NUM_SDO_LINES / st->chip_info->num_simult_channels;
-+		      spi->num_data_bus / st->chip_info->num_simult_channels;
- 
- 	st->sample_freq_range[0] = 1; /* min */
- 	st->sample_freq_range[1] = 1; /* step */
-@@ -2010,6 +2021,8 @@ static int ad7380_probe(struct spi_device *spi)
- 	st->normal_xfer[0].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
- 	st->normal_xfer[0].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
- 	st->normal_xfer[1].rx_buf = st->scan_data;
-+	if (spi->num_data_bus > 1)
-+		st->normal_xfer[1].multi_bus_mode = SPI_MULTI_BUS_MODE_STRIPE;
- 
- 	spi_message_init_with_transfers(&st->normal_msg, st->normal_xfer,
- 					ARRAY_SIZE(st->normal_xfer));
-@@ -2031,6 +2044,8 @@ static int ad7380_probe(struct spi_device *spi)
- 	st->seq_xfer[2].cs_change = 1;
- 	st->seq_xfer[2].cs_change_delay.value = st->chip_info->timing_specs->t_csh_ns;
- 	st->seq_xfer[2].cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
-+	if (spi->num_data_bus > 1)
-+		st->seq_xfer[2].multi_bus_mode = SPI_MULTI_BUS_MODE_STRIPE;
- 
- 	spi_message_init_with_transfers(&st->seq_msg, st->seq_xfer,
- 					ARRAY_SIZE(st->seq_xfer));
+As a reminder, the LAN966x PCI device driver use a device-tree overlay
+to describe devices available on the PCI board. Adding support for SFPs
+ports consists in adding more devices in the already existing
+device-tree overlay.
+
+With those devices added, the device-tree overlay is more complex and
+some consumer/supplier relationship are needed in order to remove
+devices in correct order when the LAN966x PCI driver is removed.
+
+Those links are typically provided by fw_devlink and we faced some
+issues with fw_devlink and overlays.
+
+This series gives the big picture related to the SFPs support from
+fixing issues to adding new devices. Of course, it can be split if
+needed.
+
+The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
+is used with overlay. Patches 1 and 3 were previously sent by Saravana
+[0]. I just rebased them on top of v6.18-rc1 and added patch 2 in order
+to take into account feedback received on the series sent by Saravana.
+
+Those modification were not sufficient in our case and so, on top of
+that, patches 4 to 7 fix some more issues related to fw_devlink.
+
+Patches 8 to 13 introduce and use fw_devlink_set_device() in already
+existing code.
+
+Patches 14 and 15 are related also to fw_devlink but specific to PCI and
+the device-tree nodes created during enumeration.
+
+Patches 16, 17 and 18 are related fw_devlink too but specific to I2C
+muxes. Patches purpose is to correctly set a link between an adapter
+supplier and its consumer. Indeed, an i2c mux adapter's parent is not
+the i2c mux supplier but the adapter the i2c mux is connected to. Adding
+a new link between the adapter supplier involved when i2c muxes are used
+avoid a freeze observed during device removal.
+
+Patch 19 adds support for fw_delink on x86. fw_devlink is needed to have
+the consumer/supplier relationship between devices in order to ensure a
+correct device removal order. Adding fw_devlink support for x86 has been
+tried in the past but was reverted [1] because it broke some systems.
+Instead of enabling fw_devlink on *all* x86 system, enable it on *all*
+x86 except on those where it leads to issue.
+
+Patches 20 and 21 allow to build clock and i2c controller used by the
+LAN966x PCI device when the LAN966x PCI device is enabled.
+
+Patches 22 to 26 are specific to the LAN966x. They touch the current
+dtso, split it in dtsi/dtso files, rename the dtso and improve the
+driver to allow easier support for other boards.
+
+The next patch (patch 27) update the LAN966x device-tree overlay itself
+to have the SPF ports and devices they depends on described.
+
+The last two patches (patches 28 and 29) sort the existing drivers in
+the needed driver list available in the Kconfig help and add new drivers
+in this list keep the list up to date with the devices described in the
+device-tree overlay.
+
+We believe some items from the above list can be merged separately, with
+no build dependencies. We expect:
+
+ - Patches 1 to 7 to be taken by driver core maintainers
+
+ - Patches 8 to 13 to be taken by driver core maintainers
+
+ - Patches 14 and 15 to be taken by driver core or PCI maintainers
+  (depend on patch 8)
+
+ - Patches 16 to 18 to be taken by I2C maintainers
+
+ - Patch 19 to be taken by driver core or OF maintainers
+
+ - Patch 20 to be taken by clock maintainers
+
+ - Patch 21 to be taken by I2C maintainers
+
+ - Patches 22 to 29 to be taken by misc maintainers
+
+Once again, this series gives the big picture and can be split if
+needed. Let me know.
+
+[0] https://lore.kernel.org/lkml/20240411235623.1260061-1-saravanak@google.com/
+[1] https://lore.kernel.org/lkml/3c1f2473-92ad-bfc4-258e-a5a08ad73dd0@web.de/
+
+Compare to previous iteration, this v4 series mainly:
+ - Introduce simple-platform-bus driver instead of modifying the
+   simple-bus driver (modifying the simple-bus driver could lead to
+   regressions).
+ - Use some device-tree properties to filter out x86 systems that do not
+   support fw_devlink instead of using kconfig symbols.
+ - Add '{Reviewed,Acked}-by'
+
+Best regards,
+Hervé
+
+Changes:
+
+v3 -> v4
+  v3: https://lore.kernel.org/lkml/20250613134817.681832-1-herve.codina@bootlin.com/
+
+  - Patch 1:
+    No change
+
+  - Patch 2:
+    Update and fix conflicts. Indeed, since v3 iteration
+    get_dev_from_fwnode() has been moved to device.h and used by
+    pmdomain/core.c.
+
+  - Patch 3:
+    remove '#define get_device_from_fwnode()'
+
+  - Patch 4:
+    Fix conflict (rebase v6.17-rc6)
+    Add 'Reviewed-by: Rafael J. Wysocki'
+    Add 'Reviewed-by: Saravana Kannan'
+
+  - Patch 5 (new in v4):
+    Introduce simple-platform-bus (binding)
+
+  - Patch 6 (5 in v3):
+    Rework patch and introduce simple-platform-bus
+
+  - Patch 7: (new)
+    Use simple-platform-bus in LAN966x
+
+  - Patch 8 (6 in v3):
+    - No change
+
+  - Patch 9 and 10 (7 and 8 in v3):
+    Add 'Reviewed-by: Andy Shevchenko'
+
+  - Patch 11 and 12 (9 and 10 in v3):
+    Add 'Reviewed-by: Dave Jiang'
+
+  - Patch 13 (11 in v3):
+    Add 'Reviewed-by: Andy Shevchenko'
+
+  - Patch 12 in v3:
+    Patch removed.
+    Adding __private tag in fwnode.dev is going to be handled in a
+    dedicated series. Indeed a test robot reported an issue and more
+    patches are needed (I have missed fwnode.dev users in several part
+    in the kernel).
+
+  - Patch 14 and 15 (13 and 14 in v3):
+    No change
+
+  - Patch 16 (14 in v3):
+    Add 'Reviewed-by: Andi Shyti'
+
+  - Patch 17 and 18 (16 and 17 in v3):
+    No change
+
+  - Patch 19 (18 in v3):
+    Filter out support for fw_devlink on x86 based on some device-tree
+    properties.
+    Rewrite commit changelog
+    Remove 'Reviewed-by: Andy Shevchenko' (significant modification)
+
+  - Patch 20 (19 in v3):
+    Add 'Acked-by: Stephen Boyd'
+
+  - Patch 21 (20 in v3):
+    Fix conflict (rebase v6.18-rc1)
+
+  - Patches 22 to 24 (21 to 23 in v3):
+    No change
+
+  - Patch 25 (24 in v3):
+    Fix conflict (rebase v6.18-rc1)
+    Add 'Acked-by: Bjorn Helgaas'
+
+  - Patches 26 to 29 (25 to 28 in v3):
+    No change
+
+v2 -> v3
+  v2: https://lore.kernel.org/all/20250507071315.394857-1-herve.codina@bootlin.com/
+
+  - Patch 1:
+    Add 'Acked-by: Mark Brown'
+
+  - Patch 2 and 3:
+    No changes
+
+  - Patch 4:
+    Rewrite the WARN_ON() condition to avoid an additional 'if'
+
+  - Patch 5:
+    Fix typos in commit log
+    Update a comment
+    Remove the unneeded check before calling of_platform_depopulate()
+
+  - Patches 6 to 11:
+    No changes
+
+  - Patch 12 (new in v3)
+    Tag the fwnode dev member as private
+
+  - Patch 13 (12 in v2)
+    Fix a typo in the commit log
+
+  - Patches 14 to 16 (13 to 15 in v2)
+    No changes
+
+  - Patch 17 (16 in v2)
+    Check parent_physdev for NULL
+
+  - Patch 18 (17 in v2)
+    Capitalize "Link:"
+    Add 'Reviewed-by: Andy Shevchenko'
+
+  - Patch 19 (18 in v2)
+    No changes
+
+  - Patch 20 (19 in v2)
+    Add 'Acked-by: Andi Shyti'
+
+  - Patch 21 (20 in v2)
+    No changes
+
+  - Patch 22 (21 in v2)
+    Add 'Reviewed-by: Andrew Lunn'
+
+  - Patch 23 (22 in v2)
+    Add 'Reviewed-by: Andrew Lunn'
+
+  - Patch 24 (new in v3)
+    Introduce PCI_DEVICE_ID_EFAR_LAN9662, the LAN966x PCI device ID
+
+  - Patch 25 (23 in v2)
+    Add 'Reviewed-by: Andrew Lunn'
+    Use PCI_DEVICE_DATA() with PCI_DEVICE_ID_EFAR_LAN9662 instead of
+    PCI_VDEVICE()
+
+  - Patch 26 to 28 (24 to 26 in v2)
+    No changes
+
+v1 -> v2
+  v1: https://lore.kernel.org/lkml/20250407145546.270683-1-herve.codina@bootlin.com/
+
+  - Patch 1 and 3
+    Remove 'From' tag from the commit log
+
+  - Patch 2
+    Add 'Reviewed-by: Andy Shevchenko'
+    Add 'Reviewed-by: Saravana Kannan'
+    Add 'Reviewed-by: Luca Ceresoli'
+
+  - Patch 4 and 5
+    No changes
+
+  - Patch 6 (new in v2)
+    Introduce fw_devlink_set_device()
+
+  - Patch 7 (new in v2)
+    Use existing device_set_node() helper.
+
+  - Patch 8 to 11 (new in v2)
+    Use fw_devlink_set_device() in existing code.
+
+  - Patch 12 (6 in v1)
+    Use fw_devlink_add_device()
+
+  - Patch 13 (7 in v1)
+    No changes
+
+  - Patch 14 (8 in v1)
+    Update commit log
+    Use 'physdev' instead of 'supplier'
+    Minor fixes in i2c_get_adapter_physdev() kdoc
+
+  - Patch 15 and 16 (9 and 10 in v1)
+    Use 'physdev' instead of 'supplier' (commit log, title and code)
+
+  - Patch 17 (11 in v2)
+    Enable fw_devlink on x86 only if PCI_DYNAMIC_OF_NODES is enabled.
+    Rework commit log.
+
+  - Patch 18, 19 and 20 (12, 13 and 14 in v1)
+    No changes
+
+  - Patch 21 (new in v2)
+    Split dtso in dtsi/dtso
+
+  - Patch 22 (new in v2)
+    Rename lan966x_pci.dtso using the specific board name
+
+  - Patch 23 (new in v2)
+    Improve the driver introducing board specific data to ease support
+    for other boards (avoid the direct dtbo reference in the function
+    loading the dtbo).
+
+  - Patch 24 (15 in v1)
+    Refactor due to dtso split in dtsi/dtso
+
+  - Patch 25 (new in v2)
+    Sort exist driver list in Kconfig help
+
+  - Patch 26 (16 in v1)
+    Keep alphanumeric order for new drivers added in Kconfig help
+
+Herve Codina (27):
+  driver core: Rename get_dev_from_fwnode() wrapper to
+    get_device_from_fwnode()
+  driver core: Avoid warning when removing a device while its supplier
+    is unbinding
+  dt-bindings: bus: Add simple-platform-bus
+  bus: Introduce simple-platorm-bus
+  misc: lan966x_pci: Use simple-platform-bus
+  driver core: fw_devlink: Introduce fw_devlink_set_device()
+  drivers: core: Use fw_devlink_set_device()
+  pinctrl: cs42l43: Use fw_devlink_set_device()
+  cxl/test: Use device_set_node()
+  cxl/test: Use fw_devlink_set_device()
+  PCI: of: Use fw_devlink_set_device()
+  PCI: of: Set fwnode device of newly created PCI device nodes
+  PCI: of: Remove fwnode_dev_initialized() call for a PCI root bridge
+    node
+  i2c: core: Introduce i2c_get_adapter_physdev()
+  i2c: mux: Set adapter physical device
+  i2c: mux: Create missing devlink between mux and adapter physical
+    device
+  of: property: Allow fw_devlink device-tree on x86
+  clk: lan966x: Add MCHP_LAN966X_PCI dependency
+  i2c: busses: at91: Add MCHP_LAN966X_PCI dependency
+  misc: lan966x_pci: Fix dtso nodes ordering
+  misc: lan966x_pci: Split dtso in dtsi/dtso
+  misc: lan966x_pci: Rename lan966x_pci.dtso to
+    lan966x_evb_lan9662_nic.dtso
+  PCI: Add Microchip LAN9662 PCI Device ID
+  misc: lan966x_pci: Introduce board specific data
+  misc: lan966x_pci: Add dtsi/dtso nodes in order to support SFPs
+  misc: lan966x_pci: Sort the drivers list in Kconfig help
+  misc: lan966x_pci: Add drivers needed to support SFPs in Kconfig help
+
+Saravana Kannan (2):
+  Revert "treewide: Fix probing of devices in DT overlays"
+  of: dynamic: Fix overlayed devices not probing because of fw_devlink
+
+ .../bindings/bus/simple-platform-bus.yaml     |  50 +++++
+ MAINTAINERS                                   |   3 +-
+ drivers/base/core.c                           |  99 +++++++---
+ drivers/bus/imx-weim.c                        |   6 -
+ drivers/bus/simple-pm-bus.c                   |  37 ++++
+ drivers/clk/Kconfig                           |   2 +-
+ drivers/i2c/busses/Kconfig                    |   2 +-
+ drivers/i2c/i2c-core-base.c                   |  16 ++
+ drivers/i2c/i2c-core-of.c                     |   5 -
+ drivers/i2c/i2c-mux.c                         |  26 +++
+ drivers/misc/Kconfig                          |  11 +-
+ drivers/misc/Makefile                         |   2 +-
+ drivers/misc/lan966x_evb_lan9662_nic.dtso     | 167 +++++++++++++++++
+ drivers/misc/lan966x_pci.c                    |  30 ++-
+ drivers/misc/lan966x_pci.dtsi                 | 172 +++++++++++++++++
+ drivers/misc/lan966x_pci.dtso                 | 177 ------------------
+ drivers/of/dynamic.c                          |   1 -
+ drivers/of/overlay.c                          |  15 ++
+ drivers/of/platform.c                         |   5 -
+ drivers/of/property.c                         |  31 ++-
+ drivers/pci/of.c                              |  10 +-
+ drivers/pci/quirks.c                          |   2 +-
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |   2 +-
+ drivers/pmdomain/core.c                       |   4 +-
+ drivers/spi/spi.c                             |   5 -
+ include/linux/device.h                        |   2 +-
+ include/linux/fwnode.h                        |   7 +
+ include/linux/i2c.h                           |   3 +
+ include/linux/pci_ids.h                       |   1 +
+ tools/testing/cxl/test/cxl.c                  |   4 +-
+ 30 files changed, 652 insertions(+), 245 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/bus/simple-platform-bus.yaml
+ create mode 100644 drivers/misc/lan966x_evb_lan9662_nic.dtso
+ create mode 100644 drivers/misc/lan966x_pci.dtsi
+ delete mode 100644 drivers/misc/lan966x_pci.dtso
 
 -- 
-2.43.0
+2.51.0
 
 
