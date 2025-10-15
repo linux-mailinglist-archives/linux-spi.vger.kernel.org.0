@@ -1,165 +1,195 @@
-Return-Path: <linux-spi+bounces-10679-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10680-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4266BDFEB1
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 19:42:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39BDBE037B
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 20:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F50319A14E5
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 17:43:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8E16486A75
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 18:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4301DD0D4;
-	Wed, 15 Oct 2025 17:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E476A2FFDD3;
+	Wed, 15 Oct 2025 18:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BYo223ge"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gJqaZnRI"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315C8139579
-	for <linux-spi@vger.kernel.org>; Wed, 15 Oct 2025 17:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138DA273800
+	for <linux-spi@vger.kernel.org>; Wed, 15 Oct 2025 18:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760550151; cv=none; b=VEJDRFRi0YTRFL8wH0CL45pCEmj+2LXSZAheraDS680d2EpTloHEQ5s9UmuyKBZvmUVTxSNCDLFBXkYtczjwWEnBq+J8rQSioarSCtc/wI2RXbjL/2yyMqbMKcjSUVBxHkmx4BR93vmwc7woQQZrEa5XYpQLbb9dtvke9Zv1lPQ=
+	t=1760553536; cv=none; b=rC/pjTStfnyTYm3T9OSRnjLRWRiV9kwC6XgZH0wujBvhlFbzfW1fbYQd78gYfssE3IJaTHP0/m/YdFc/EZFv1+5T52Cn+rFJqcrthhkvwkClY0CNM/44KpT/26k4azPYE74Pk/8IImA6DRj96MwJ8kwcQy/QgPHVlLnPVDpPEuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760550151; c=relaxed/simple;
-	bh=3+itAC0ygGD72LAGTTk7iU8ATNurfAWGwrb2f3cn7NE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mD8oJL7kNno/ULOn36DTLofgIslVTYnoMkGRzpfHPOUBPz3jH46zSO+VvkSqw5ZY84OIXVFV6iCeUb0XuvTNfXB/dfARQy/W1XEnbOH3M8IulR3XGf+q0ORkJWrAyf16hjGEY+8WL12LgFLvUKk+mnhHmE/1EiL/WH5Pvn7y5Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BYo223ge; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-426f9ba85a2so479246f8f.2
-        for <linux-spi@vger.kernel.org>; Wed, 15 Oct 2025 10:42:27 -0700 (PDT)
+	s=arc-20240116; t=1760553536; c=relaxed/simple;
+	bh=A6ABvce90CoOKfZJ1YRD55sJ0SyCGKbP1stpO6hQahU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ReQ85mmO7+X7glH4iv5evcQRI5ewVLaJXVSm2DZ2NgQ4NrhgEAczshilctYwz3aEq1rJsTvFVNvtngMYITYoe8/EgIF8ncimua9vAOXlM8tBl8LFHz5TwgxQMzSCm7eU17mXqZd3TMDaF17ZY/j8gDrwB2Gh9jlGpMPBT8obOQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gJqaZnRI; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-79d36a6298dso2380863a34.0
+        for <linux-spi@vger.kernel.org>; Wed, 15 Oct 2025 11:38:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760550146; x=1761154946; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3+itAC0ygGD72LAGTTk7iU8ATNurfAWGwrb2f3cn7NE=;
-        b=BYo223geAauqK3E1+dYo5vT1M0nxArwCW8KLQQeX1e7FaJtHORsKr6xJb0CNOtJZxg
-         OnrEECsyLeoUmhD9NcEWRTV17G1FjKsstwmQLZ5jMeP+Apdqo6Bpei/Pk2DqWU5jgOte
-         HThhZDyM+xDiM0j1Db2IpyzzLp9qtjdeu2Ll5nKaXLALAZ6HSJxF4ITZchSQ7IS++v53
-         4JUzu9MHkI9yh5JbZXH5JdL3MDEZbbck19C0m4FG/FG2xMDauul7m7ZJIblUfj5HMbwS
-         B+fyA6AAaZmdec/nH+wnCuEiEMQETRBCLL5WveTyqL6uG73aF+dMhVTWHP+6Bvxssq0h
-         CQ+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760550146; x=1761154946;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1760553532; x=1761158332; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3+itAC0ygGD72LAGTTk7iU8ATNurfAWGwrb2f3cn7NE=;
-        b=lSspC8sfFZsYn7MVQjM0EAgSWa29tu52wXqANZ641UhSWXC/Vw7CRs6psd4jRsDGWi
-         gzCkuns6WOXJSshdlJ4c+36y4tIBSiF8pzpezCnac1ZsCNjN9R+KlriuFz8Z1UO5kGJF
-         Etvk7F0UMIu7Ii1xNAQkOzdAbmcyMczC4dSyDgqwAtEXi9MnHyQ1pM7ASj7awrSgsbkW
-         e2dZ43VCGvY0fgxFHdsih1evhAAS3Hehjv0fks//xJD4bbkVA7VZXFRKHnodBRV0vvq/
-         NsMGuNcoq++VmH24qGuq67j2DkE3lU0jNybRVj/yasRE1NXin1XZar6w3naAorsWjYZ2
-         jPtg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcWRV+u181CZEWT6mkMHfR/INbtNRtugr6dKJ1VlAcLiIsaoxkjE53Hy2bs6WLR2kTw2owgY6sTKU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDKmsCp9QInyx6jnEjEKyjQNDOBjpNWsFl1FcsS1Xsoi90Vdy2
-	vFEEOOS1LA+v9tvMNHWw52JH9fdvG16I0aCSbyWKiXYCLnB/lTRmQ2Gd
-X-Gm-Gg: ASbGnct85Evm7RjOLj8+nweeFSW8QFteTySRbRLQHNJ9L37KwdcsBuihgK3XoGI1/Bl
-	6aB0v9i9SGZjq4GEoJnuxbR8ZvHvEQVXi/RHORrgjRVD9RN0wga1lb3rG6Bq0VvkuE08MzNU9La
-	dI01ujpMYEpoukQlLjqYvIq/7xQ5vDQTPbhnnV2Q9RVGUhGwYrBpenvDSDfArp/DX87vploj3Vg
-	op74WPQC5BNZg2Z9ARxRaS5rltX7Jh0IPBARQIGJP5tmRAULDME2gouUJEQZA0caZ1evau5OgWx
-	gBDHp+VzS7Rcx+B+TghGoJBq6TgvIr/Zjuj/Zia36wpQdL1Apw26yWyDO3xxQIvn75ryTCkq8KN
-	jHbGBvRlyIxDudriy6V63ll0YiY4QTsr6MuyHJZW01qq/jSm1UPWzqRDGPjyrL0VrLTUBSFnfWM
-	3C3lxq2n+OtPka9BuKNJfH3xAo
-X-Google-Smtp-Source: AGHT+IFgW4ioV30CaVR3MUPobKOQBTrlVgHHJX7mniQYbGNt/6t4FH7ErC+FnEf2jcNfSIVwBiGr0w==
-X-Received: by 2002:a05:6000:1a87:b0:3ee:b126:6b6 with SMTP id ffacd0b85a97d-4266e7dfee2mr17701996f8f.34.1760550146266;
-        Wed, 15 Oct 2025 10:42:26 -0700 (PDT)
-Received: from ?IPv6:2001:818:ea56:d000:94c4:fb0e:28f:2a8d? ([2001:818:ea56:d000:94c4:fb0e:28f:2a8d])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426fb279857sm1628868f8f.20.2025.10.15.10.42.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 10:42:25 -0700 (PDT)
-Message-ID: <9024f05854dcc3cc59345c0a3de900f57c4730d9.camel@gmail.com>
-Subject: Re: [PATCH 3/6] spi: add multi_bus_mode field to struct spi_transfer
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>, Marcelo Schmitt
- <marcelo.schmitt@analog.com>, Michael Hennerich	
- <michael.hennerich@analog.com>, Nuno =?ISO-8859-1?Q?S=E1?=
- <nuno.sa@analog.com>,  Jonathan Cameron	 <jic23@kernel.org>, Andy
- Shevchenko <andy@kernel.org>, Sean Anderson	 <sean.anderson@linux.dev>,
- linux-spi@vger.kernel.org, 	devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-iio@vger.kernel.org
-Date: Wed, 15 Oct 2025 17:43:22 +0100
-In-Reply-To: <d9455d90-31ca-4be7-b17c-2b339e92f8a0@baylibre.com>
-References: 
-	<20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
-	 <20251014-spi-add-multi-bus-support-v1-3-2098c12d6f5f@baylibre.com>
-	 <9269eadc1ea593e5bc8f5cad8061b48220f4d2b2.camel@gmail.com>
-	 <409ad505-8846-443e-8d71-baca3c9aef21@sirena.org.uk>
-	 <12db0930458ceb596010655736b0a67a0ad0ae53.camel@gmail.com>
-	 <8c7bf62a-c5dc-4e4d-8059-8abea15ba94e@sirena.org.uk>
-	 <d9455d90-31ca-4be7-b17c-2b339e92f8a0@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+        bh=c7Pa/1BHqYMBhXpBmEF4fAbsSTM4OPfXzGQjsT1agWg=;
+        b=gJqaZnRIpydAa/IzHDREMVj5BjSuQEBbP02U5YPr3hlm2gzIik5Xjf1Qfgmqy3Hngb
+         2nUYB43nLix6Hek5MChzxeJ1EGFUw4awYDla/+ex3mXjLmB9LgUyXRgvaIYBgDm2ksj8
+         5guWBE8pkaBWIX5NDYjEZbYpQ2HiooPl+OSgrOq3EEc0qW+Ews6keSypV3OuMRffHJsK
+         bK/ibcpaiAKn8RVFU9NFWeZ4Nqs7JzWI4e2eqA+kY2x0pI1tCK7yGRe/byddy9MI/m8/
+         G6wHBzbkMQJtu+l/SQiqwaF+jkd9afzuNpJoK/AvYUTz47c45HzubofxhCxLHXKXxoYt
+         QZIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760553532; x=1761158332;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7Pa/1BHqYMBhXpBmEF4fAbsSTM4OPfXzGQjsT1agWg=;
+        b=wY7rlJ77nHFtsDN3bh7auv2J9KTl1QH/uhK1HT6IN0CrwtWkI/lQjUnlqoeYL8ALGa
+         IvwX40aFzVUBK/OqMNJGqJH0CzlEPPXptEpOvH3DJ0sm/oBza6gEZjNQ7R2K+uNarHB0
+         HdleUrH8qZyTQVoAi7DUuaQHi27yhvRDlL0s0gV/8i/L/+AIfogP25yQK7irJIcEp1uY
+         gBXB6MJ6MAA4AjhGZY3IY/XLdYK7Vrn7wuprcXxtUAK+dwbWWvdczqQRW8oZeGRG7StD
+         X3+sbkb7uHRX5fKJhupoMdWeuaFJijSqFAw/5p5fuVkPYwbWyrivIBvzK/DSPTwcAx32
+         TOww==
+X-Forwarded-Encrypted: i=1; AJvYcCVPeTECVWRfT1D/82TABi4DDN0HQak18/LNSaB8rWsjCvra0nOqs78BFlpBpJ0LH5LOVuhezsOyEPA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzL9kkUqfoNF06ibx3GsBLjWRkJTZZ0ff+t61uUNw22plS3ovIk
+	Mrq6JTMugitos76Vr/xIdaK/U3x05bj1q0PB8oqLPEuk6xC1xI5+ct/ux01x+X4cXuU=
+X-Gm-Gg: ASbGncvN7TMvmOPly7TKeGl0g4w1kqrcvdNqec444+nzT2c5qdv3+ecGjWNcBRMjcIn
+	lyrOjGEj5UUN4xhWUA0TbelnWk3RWP0nXY4k51lGMVpAPtHO+yNpqDUId2XUOpIEaVmXIXFELEe
+	rmJncLjZbP/CY9Y2bBlvhFu3Wi7ienGnHqApYeZAgPIGYGxkyBXGjRrQpfd1MTSDtoBjLxbb1KV
+	ZZEIRadgLGvgupy9cUGq2CEXFAy/Bdxj/B9ZVJ1xSWl47AlqY1wZSFbTJwdaLvmPZlci1vN8bFR
+	/AUP2UKXqPjwa2CKa7eLeUDlXKu1xCKjuoCiNj8cqXE0wBCvo/yVEZugjpRAy6KTP2hO+uQQ66A
+	YYz4RbjeU9Giv0MokilJW6cxCgsbsawpsBQUbJ0YefhJW3pLBFFWU4o6rkN24lHRhtWTMqZSu1L
+	LaGCkGQ+X6glaXaWpMlV760yaVvtlsAO9CYDEd
+X-Google-Smtp-Source: AGHT+IFUFKcADmzsj/IXf4M39Ln3t08RBAMcgnpJ1VX0iX7hN5yNIgTZRlo50r/4Kc/y5Zljp8pqkw==
+X-Received: by 2002:a05:6808:50a7:b0:43f:a2eb:861f with SMTP id 5614622812f47-4417b2bbcbfmr13447346b6e.8.1760553532023;
+        Wed, 15 Oct 2025 11:38:52 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:500:c482:1912:c2de:367e? ([2600:8803:e7e4:500:c482:1912:c2de:367e])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c0f90510a2sm5533725a34.2.2025.10.15.11.38.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Oct 2025 11:38:51 -0700 (PDT)
+Message-ID: <ad929fe5-be03-4628-b95a-5c3523bae0c8@baylibre.com>
+Date: Wed, 15 Oct 2025 13:38:50 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/6] spi: add multi_bus_mode field to struct spi_transfer
+To: =?UTF-8?Q?Nuno_S=C3=A1?= <noname.nuno@gmail.com>,
+ Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Marcelo Schmitt <marcelo.schmitt@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+ Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
+ <20251014-spi-add-multi-bus-support-v1-3-2098c12d6f5f@baylibre.com>
+ <9269eadc1ea593e5bc8f5cad8061b48220f4d2b2.camel@gmail.com>
+ <409ad505-8846-443e-8d71-baca3c9aef21@sirena.org.uk>
+ <12db0930458ceb596010655736b0a67a0ad0ae53.camel@gmail.com>
+ <8c7bf62a-c5dc-4e4d-8059-8abea15ba94e@sirena.org.uk>
+ <d9455d90-31ca-4be7-b17c-2b339e92f8a0@baylibre.com>
+ <9024f05854dcc3cc59345c0a3de900f57c4730d9.camel@gmail.com>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <9024f05854dcc3cc59345c0a3de900f57c4730d9.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2025-10-15 at 11:15 -0500, David Lechner wrote:
-> On 10/15/25 10:18 AM, Mark Brown wrote:
-> > On Wed, Oct 15, 2025 at 03:43:09PM +0100, Nuno S=C3=A1 wrote:
-> > > On Wed, 2025-10-15 at 13:01 +0100, Mark Brown wrote:
-> > > > On Wed, Oct 15, 2025 at 11:16:01AM +0100, Nuno S=C3=A1 wrote:
-> > > > > On Tue, 2025-10-14 at 17:02 -0500, David Lechner wrote:
-> >=20
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 controller=C2=A0=C2=
-=A0=C2=A0 < data bits <=C2=A0=C2=A0=C2=A0=C2=A0 peripheral
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ----------=C2=A0=C2=
-=A0 ----------------=C2=A0=C2=A0 ----------
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 SDI 0=C2=A0=C2=A0=C2=A0 0-0-0-1-0-0-0-1=C2=A0=C2=A0=C2=A0 SDO 0
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 SDI 1=C2=A0=C2=A0=C2=A0 1-0-0-0-1-0-0-0=C2=A0=C2=A0=C2=A0 SDO 1
-> >=20
-> > > > > Out of curiosity, how does this work for devices like AD4030 wher=
-e the same
-> > > > > word
->=20
-> The AD4030 is just one channel, so doesn't do interleaving. But you proba=
-bly
-> meant AD4630 when it is wired up with only 1 SDO line. That line has to b=
-e shared
-> by both of the simultaneous converters so it alternates between sending o=
-ne bit
-> from each word. This patch series doesn't address that case. But this ser=
-ies will
-> work for the AD4630 when it has 2 SDO lines wired up.
->=20
+On 10/15/25 11:43 AM, Nuno Sá wrote:
+> On Wed, 2025-10-15 at 11:15 -0500, David Lechner wrote:
+>> On 10/15/25 10:18 AM, Mark Brown wrote:
+>>> On Wed, Oct 15, 2025 at 03:43:09PM +0100, Nuno Sá wrote:
+>>>> On Wed, 2025-10-15 at 13:01 +0100, Mark Brown wrote:
+>>>>> On Wed, Oct 15, 2025 at 11:16:01AM +0100, Nuno Sá wrote:
+>>>>>> On Tue, 2025-10-14 at 17:02 -0500, David Lechner wrote:
+>>>
+>>>>>>>         controller    < data bits <     peripheral
+>>>>>>>         ----------   ----------------   ----------
+>>>>>>>             SDI 0    0-0-0-1-0-0-0-1    SDO 0
+>>>>>>>             SDI 1    1-0-0-0-1-0-0-0    SDO 1
+>>>
+>>>>>> Out of curiosity, how does this work for devices like AD4030 where the same
+>>>>>> word
+>>
+>> The AD4030 is just one channel, so doesn't do interleaving. But you probably
+>> meant AD4630 when it is wired up with only 1 SDO line. That line has to be shared
+>> by both of the simultaneous converters so it alternates between sending one bit
+>> from each word. This patch series doesn't address that case. But this series will
+>> work for the AD4630 when it has 2 SDO lines wired up.
+>>
+> 
+> Hmm I didn't even remembered that one. But what I meant with interleaved was having
+> the same data word spread through multiple SDO lines (one bit per line) which is what
+> (also) happens with the devices I mentioned. And since you mentioned "...two
+> different data words at the same time, one on each bus...", I raised the question.
 
-Hmm I didn't even remembered that one. But what I meant with interleaved wa=
-s having
-the same data word spread through multiple SDO lines (one bit per line) whi=
-ch is what
-(also) happens with the devices I mentioned. And since you mentioned "...tw=
-o
-different data words at the same time, one on each bus...", I raised the qu=
-estion.
+Ah, yes, I know what you are talking about now. I didn't mention that use case in
+the cover letter because I didn't want to confuse things. But actually the AD4630
+can have 8 SDO lines, 4 per each data bus/ADC channel. The groups of 4 act like a
+quad SPI where 4 bits of one data word are sent at the same time. Those 4 lines are
+considered one "bus" since they are all connected to the same serialzer that combines
+the bits into a single word. We already have support for this sort of thing in Linux.
+And sure, we could mix the two together. So a SPI transfer might look like:
 
-So I guess I kind of misused what interleaved typically means (even though =
-I guess
-it's not completely off :)) and was thinking more on the parallel concept M=
-ark spoke
-about.
+struct spi_transfer example = {
+	rx_buf = rx_buf;
+	len = 4; /* 2 x 16-bit words */
+	rx_nbits = 4; /* each bus is quad SPI */
+	multi_bus_mode = SPI_MULTI_BUS_MODE_STRIPE; /* 2 data buses */
+	bits_per_word = 16;
+};
 
-Anyways, from your reply I see the intent is to also use the stripe mode fo=
-r this and
-have some kind of external IP deal with data re-order. I gave a look into t=
-he ad4630
-IP core and indeed there's a data reorder IP block after the offload engine=
-.
+This would result in a transfer that reads two 16-bit words in 4 SCLK cycles.
 
-- Nuno S=C3=A1
+And the .dts would look like:
 
-> > > >=20
+spi {
+	adc@0 {
+		compatible = "adi,ad4630-16";
+		reg = <0>;
+		...
+		spi-rx-bus-width = <4>;
+		spi-buses = <2>;
+		...
+	};
+};
+
+The AXI SPI Engine doesn't know how to do the quad SPI part yet though, so
+it isn't something we could implement right now.
+
+If we tried to do it with spi-buses = <8>; then we would end up with the
+"interleaved" bits (or nibbles depending on the wiring) that requires the
+extra IP block to sort out when using SPI offloading. Technically, we could
+make it work, but it would require a bunch of extra hardware description that
+the driver would have to interpret in order to correctly format the struct
+spi_transfer. I was hoping we could avoid that and just teach the SPI Engine
+how to do dual/quad SPI like other SPI controllers.
+
+> 
+> So I guess I kind of misused what interleaved typically means (even though I guess
+> it's not completely off :)) and was thinking more on the parallel concept Mark spoke
+> about.
+> 
+> Anyways, from your reply I see the intent is to also use the stripe mode for this and
+> have some kind of external IP deal with data re-order. I gave a look into the ad4630
+> IP core and indeed there's a data reorder IP block after the offload engine.
+> 
+> - Nuno Sá
+> 
+>>>>>
+
 
