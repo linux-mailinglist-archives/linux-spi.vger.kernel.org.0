@@ -1,100 +1,103 @@
-Return-Path: <linux-spi+bounces-10672-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10673-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFA3FBDE72B
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 14:20:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BC35BDEA90
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 15:10:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A46143B6A65
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 12:20:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98ABB19A6D7B
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 13:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E66A4322DB7;
-	Wed, 15 Oct 2025 12:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7592832A3C0;
+	Wed, 15 Oct 2025 13:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUwq513c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPZ0wdL6"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C236B322541
-	for <linux-spi@vger.kernel.org>; Wed, 15 Oct 2025 12:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4699F3277B8;
+	Wed, 15 Oct 2025 13:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760530826; cv=none; b=eAUyc7ybAiQqiDfLhihqyrgUMybwAqsroPobObCoBBX5C+VoDgggGlSPS0F7xj0gXw62jxIy6bm4Ap9ymku7/u7xxNuTbLMLc7l0lWf4JaSqrHA4AqLuPXl1uAwEVwt5MVZ4KLuHJZrw+A6RSf5ejzQnIoAdLs0l3rpmM5B50ig=
+	t=1760533794; cv=none; b=mryAalcCKOJ0dLLcBvxgh5RWxFusl9Bz4jRp0Mtua8ezRHjpNmCVxkiDkg8TvWyskE6PO/cgEGCH2i0llNKiMB6KWBrl56V9qnUu7dotJq8NuuOPN7KB1SBpzId/WK3/gtTeqQmRahs1v8k84H4Du3IbBiMsmlFkWtMy5z8wjTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760530826; c=relaxed/simple;
-	bh=n9mv2Tf2b5pb2qKYe9OjIrUQi03Xe95Ew4zGpasx50Q=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=pu9taaDZvaF0251713LpSqgWy9GfVtaaHrSbOco8zfWKKe5jif7OVuWjEB7u6pUEusGP5RvYe53w+BtXq2K+2zrGSad8khqDta/JIDX8kQ9sf5ko2ZM7LY0rfOhB20XuywAC8dM+RQpQRMnbeu7nCYND4kcfCIqjHUDA1pchjFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUwq513c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2C8BC4CEF8;
-	Wed, 15 Oct 2025 12:20:25 +0000 (UTC)
+	s=arc-20240116; t=1760533794; c=relaxed/simple;
+	bh=+bhMEsRNzI5k98sEPdvbr+UM2MNkljja10YA9aMTHgk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JD8dTcouArot54qvxm8idWOU8sOUMdXrSlA/ma8Hoyx8WR1FWCcmp8I+aK8bzxSOhk2s/dXO/dJIXGd6SnCfai7xP/nDg4CHZnv6ugoaf3NuFQbDm5QtEkJ/Kl41oGI950AiAnAI9U4qWTusgg3pLwIBA6NwmHCodh/tdZ3can8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPZ0wdL6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE6C4CEF8;
+	Wed, 15 Oct 2025 13:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760530825;
-	bh=n9mv2Tf2b5pb2qKYe9OjIrUQi03Xe95Ew4zGpasx50Q=;
-	h=Subject:From:Date:To:From;
-	b=UUwq513ctJwCNaQzQpOWeMlnTfliTYmPpQYF6/i1UE/S27nT7bYuwnSBQlY2MDWAg
-	 7jiTHI5H0pVXhGOD5/CjYfWJFVj5fv+Qs/884fOsCrxmV7lXYP7vkbPb0ZAYMtCYiD
-	 oyo34FxiHpZfRU0/WND0lDYLQoDLfHWEsM/Yawt009xbbyo/geydr35npCFY0NMN+d
-	 QpMBGRixiYauZfI7tFQncsxGqiS+iX7qneod+r9Mg1sW6z64wt2OiLgYT+t0u1fuAl
-	 bBtHqF9HlmgFb9cpt3Y+NqbcVWVimdGMDiQN7HI6iNQRcwfQR5FIQIK5KX6aog/tab
-	 f/WFgiWmy0OCQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B3DA0380CFEC;
-	Wed, 15 Oct 2025 12:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1760533793;
+	bh=+bhMEsRNzI5k98sEPdvbr+UM2MNkljja10YA9aMTHgk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gPZ0wdL6Q6/CQsmPbXDdCQZWX7QmdE9n85au73Etq3X9PJyES+DyrNa80cWIAZfAp
+	 FvfK2GwUs02UJvsyqgVOJXf7+QqOIBVt4aEk9QCSrII1IvaM6z8BezF/3BQVGVJlhS
+	 II4xWEUI/kGezywUjyT1rMHAw1uv8WgM9+ecccCVMmyCUy/VQNWu7B1ctW02YYB15K
+	 5FVhBECjE9nrVQsJG+evup+Ne071PS4/chjOTwuV75cIXMoE/ILINaohC8wi4FMm3R
+	 1O8ALYXSKIjvsxl9RWRb1dyTFqrdmEzk7wz5vAStFsf6Sl+D0Bn+vqcgamdTbbBRhh
+	 dBu0kIEP8dVcQ==
+From: Mark Brown <broonie@kernel.org>
+To: Khairul Anuar Romli <khairul.anuar.romli@altera.com>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, 
+ Mattijs Korpershoek <mkorpershoek@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251013-cadence-quadspi-fix-pm-runtime-v3-1-d65f18dade0d@kernel.org>
+References: <20251013-cadence-quadspi-fix-pm-runtime-v3-1-d65f18dade0d@kernel.org>
+Subject: Re: [PATCH v3] spi: cadence-quadspi: Fix pm_runtime unbalance on
+ dma EPROBE_DEFER
+Message-Id: <176053379258.136664.99412845584919237.b4-ty@kernel.org>
+Date: Wed, 15 Oct 2025 14:09:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176053081015.463832.9797092570023000252.git-patchwork-summary@kernel.org>
-Date: Wed, 15 Oct 2025 12:20:10 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-96507
 
-Hello:
+On Mon, 13 Oct 2025 13:44:10 +0200, Mattijs Korpershoek wrote:
+> In csqspi_probe(), when cqspi_request_mmap_dma() returns -EPROBE_DEFER,
+> we handle the error by jumping to probe_setup_failed.
+> In that label, we call pm_runtime_disable(), even if we never called
+> pm_runtime_enable() before.
+> 
+> Because of this, the driver cannot probe:
+> 
+> [...]
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Series: spi: aspeed: Improve clock, timing and address decoding logic
-  Submitter: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1007657
-  Lore link: https://lore.kernel.org/r/20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com
-    Patches: [1/6] spi: aspeed: Update clock selection strategy
-             [2/6] spi: aspeed: Improve timing calibration algorithm for AST2600 platform
-             [3/6] spi: aspeed: Force default address decoding range assignment for each CS
-             [4/6] spi: aspeed: Centralize address decoding region management
-             [5/6] spi: aspeed: Add per-platform adjust_window callback for decoding range
-             [6/6] spi: aspeed: Only map necessary address window region
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Series: Add target mode support for the DesignWare SPI controller
-  Submitter: Benoît Monin <benoit.monin@bootlin.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1008005
-  Lore link: https://lore.kernel.org/r/20251002-spi-dw-target-v1-0-993e91c1a712@bootlin.com
-    Patches: [RFC,1/2] spi: dw: rename the spi controller to ctlr
-             [RFC,2/2] spi: dw: add target mode support
+Thanks!
 
-Patch: [v4,1/1] spi: offload: Add offset parameter
-  Submitter: Marcelo Schmitt <marcelo.schmitt@analog.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1008715
-  Lore link: https://lore.kernel.org/r/cd315e95c0bd8523f00e91c400abcd6a418e5924.1759760519.git.marcelo.schmitt@analog.com
+[1/1] spi: cadence-quadspi: Fix pm_runtime unbalance on dma EPROBE_DEFER
+      commit: 8735696acea24ac1f9d4490992418c71941ca68c
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Total patches: 9
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
