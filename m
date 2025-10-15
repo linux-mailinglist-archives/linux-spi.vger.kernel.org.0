@@ -1,59 +1,58 @@
-Return-Path: <linux-spi+bounces-10669-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10670-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82DAFBDE6AC
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 14:14:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 283AABDE6BB
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 14:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D4704EB561
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 12:14:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3F79483884
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 12:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EB8326D44;
-	Wed, 15 Oct 2025 12:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0E6326D6B;
+	Wed, 15 Oct 2025 12:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/X8KPLm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rq1YtCRa"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CCA29CE1;
-	Wed, 15 Oct 2025 12:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0378C326D67;
+	Wed, 15 Oct 2025 12:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760530446; cv=none; b=iuktIL7v53yI2rwFHdo+JXS7v0kqCDOus4NSz2ovnY2s99r5RH1px9KJ/uC/NAg98r4ky9oQ6qq/YLeYCX+hdWLWA/nXjMjY5uhC+Xq0G8b0n/tFqlV/TwkQRHxcw/lJnInwTcoduJSI4vAkRCB6C7ogf+piIxD/gSD6ncDA8Dw=
+	t=1760530448; cv=none; b=KYrI/iaoNJ0AsQklkxS1t4Eu/TZuIp4dJYdV1L/L5IpYpm21E9J1xqugriXQ3wi1hRNRCHyylQp0m0UZ1LMsnacdbns7l6+tQq/SkC5ChEZ5Rbo46pjHgv3XjCd3NjGjUr85+pGokPgl1G0cSZHnaup04AaZNrfU467sFG4Mzx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760530446; c=relaxed/simple;
-	bh=U0qBfTAoLQ2lXuxhHDpAiZcucUrXqzfYam7mxeAjgzM=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=XaejaYF6JHZIKQdh1CMUq/TUC3H0HtNB9RqwmSXwRqtHcECcJtZ1DE1BOQbPGo1arurLMjP0IGd6xsJ4FOHfyYoNy2KeL2u5Aw5DjnTfV61Oxc1g9AVWHKP66fXQrgdiK2Zykaqaiu4HM0C/XjbrOYelP+lGoSCWqqUc6wnVARU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/X8KPLm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30FBC116B1;
-	Wed, 15 Oct 2025 12:14:01 +0000 (UTC)
+	s=arc-20240116; t=1760530448; c=relaxed/simple;
+	bh=0yab+UhBeGarlvAjvczeEodl/ADOmB9NPD67HB34+6s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=T3CZH2KucqvmFTFEY+UlFyuZ3kHZXfrikr2AyhrcrB98/PRQEZy7BwG2FR1bBj7rMFghomlCXdTtaw69J931eCGfBuMTTZrrnLaOKLsQb1sMmm6kdObe6Q7OvO/n3tykn56tYzgYq2katODsIMbFHUF8oDQ4Q5CTX8Go5kF7uHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rq1YtCRa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 220A7C4CEFE;
+	Wed, 15 Oct 2025 12:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760530444;
-	bh=U0qBfTAoLQ2lXuxhHDpAiZcucUrXqzfYam7mxeAjgzM=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=o/X8KPLmQwvaZ/4jk3aNbggMUsmUtSiTRQlSMl2XJzeWcdxeAHYCVUEkxd4xyQRUM
-	 lm9j3UxOz9eAQqeEiw4KJtqK6D9JhqFpzt824g1F5aOEiD9IDRQTb4jnryGTQEKfOs
-	 iAlvzz2RFp1CxWICKQO4xi1XyoRewABj3vRnEl7xWHSRMxzN0SpSnDF43LOvksIYR3
-	 ACtYefsh+xgYcs1L5mX2EWAr4I/iNRCtLcWAjJJMe7vdTvlm8DBDul72BwYuelziYo
-	 OjknTg03VXAm8mwyc8gDIxE4bHcrkdHE7kiuKHSn2QefE+Gc9U5X0I+y7ygwupdVFi
-	 /eyOx9e5W702g==
+	s=k20201202; t=1760530446;
+	bh=0yab+UhBeGarlvAjvczeEodl/ADOmB9NPD67HB34+6s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Rq1YtCRaOdtjn9pdJS7wn7VF9DCWzegNtKIvfKtjnOkrAP/DER7F2bDmFtdzW1wkX
+	 PjOqatJCxL2UeE7Z2bwhtQJ2tzRAV8cb2BcG/b++HPXvVk3WmKGY5/IrggIdRO6rzJ
+	 QGp9xcBEtNAoiWxvWZDSolfnoL/PdjBbnRGi1iRQEqPmRF1tPwP1NjlvTkRUXgey9W
+	 w1OywuGu77sU7I4kI7E1DnY8edw8TAQKwxKdhWBRo/3hEKIrfWtqYLYfTNeFQqO5VW
+	 k3HytFCDVrkxsFf1zTFbgxceSaHOn0fmOTDkGrMlq85uoKg/CNCBw5iPT5YeNQX2GU
+	 M1g4TpL+CHaow==
 From: Mark Brown <broonie@kernel.org>
-To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- joel@jms.id.au, andrew@codeconstruct.com.au, clg@kaod.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org, BMC-SW@aspeedtech.com, 
- Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-In-Reply-To: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
-References: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
-Subject: Re: [PATCH 0/6] spi: aspeed: Improve clock, timing and address
- decoding logic
-Message-Id: <176053044168.105519.1540910122531672579.b4-ty@kernel.org>
-Date: Wed, 15 Oct 2025 13:14:01 +0100
+To: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-spi@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20251002-spi-dw-target-v1-0-993e91c1a712@bootlin.com>
+References: <20251002-spi-dw-target-v1-0-993e91c1a712@bootlin.com>
+Subject: Re: [PATCH RFC 0/2] Add target mode support for the DesignWare SPI
+ controller
+Message-Id: <176053044486.105519.3995515775023859907.b4-ty@kernel.org>
+Date: Wed, 15 Oct 2025 13:14:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,19 +60,18 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.15-dev-96507
 
-On Wed, 01 Oct 2025 19:25:59 +0800, Chin-Ting Kuo wrote:
-> This patch series introduces several improvements to the
-> ASPEED SPI driver, targeting better stability, compatibility
-> and, flexibility across multiple ASPEED platforms.
-> 
-> Key changes include:
-> 
-> * Clock selection strategy update
->   Improves fallback logic when timing calibration is skipped or
->   fails, ensuring reliable boot behavior.
+On Thu, 02 Oct 2025 14:14:36 +0200, Benoît Monin wrote:
+> The DesignWare SPI controller can act as a host or a target; the
+> choice between the two is set in hardware and cannot be changed by
+> software. When configured in target mode, the controller has a much
+> reduced set of capabilities. It only has a single chip-select input and
+> can only run standard SPI mode (no dual, quad, or octal mode). Despite
+> this, the overall logic of doing an SPI transfer and the register layout
+> is identical between both modes, so implementing the target mode reuses
+> much of the existing code.
 > 
 > [...]
 
@@ -83,18 +81,10 @@ Applied to
 
 Thanks!
 
-[1/6] spi: aspeed: Update clock selection strategy
-      commit: 31dcc7e1f8a9377d8fd9f967f84c121c5ba8f89c
-[2/6] spi: aspeed: Improve timing calibration algorithm for AST2600 platform
-      commit: efb79de36e947d136517bac14c139d494fcc72fa
-[3/6] spi: aspeed: Force default address decoding range assignment for each CS
-      commit: 630a185fd06109193574d10f38b29812986c21de
-[4/6] spi: aspeed: Centralize address decoding region management
-      commit: b546e0023a203e7edf9377ac8f4f490a6965afd6
-[5/6] spi: aspeed: Add per-platform adjust_window callback for decoding range
-      commit: 0586b53d4a0c7c5a132629f99da934cc674ea4cd
-[6/6] spi: aspeed: Only map necessary address window region
-      commit: 64d87ccfae3326a9561fe41dc6073064a083e0df
+[1/2] spi: dw: rename the spi controller to ctlr
+      commit: b926b15547d29a88932de3c24a05c12826fc1dbc
+[2/2] spi: dw: add target mode support
+      commit: fe8cc44dd173cde5788ab4e3730ac61f3d316d9c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
