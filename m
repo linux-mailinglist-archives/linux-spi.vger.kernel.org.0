@@ -1,113 +1,118 @@
-Return-Path: <linux-spi+bounces-10668-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10669-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21BB7BDE604
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 14:03:26 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82DAFBDE6AC
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 14:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2F913BB2AE
-	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 12:03:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D4704EB561
+	for <lists+linux-spi@lfdr.de>; Wed, 15 Oct 2025 12:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C275B324B17;
-	Wed, 15 Oct 2025 12:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EB8326D44;
+	Wed, 15 Oct 2025 12:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdwgvO/t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/X8KPLm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93291221FCB;
-	Wed, 15 Oct 2025 12:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CCA29CE1;
+	Wed, 15 Oct 2025 12:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760529802; cv=none; b=BJFWyBpBj7Nun+p8rNf0BorDPIqjQcfP4XZPomgacBrh8UHT5aZ1k5Yn4vBonkD2150Jrrpl8oDeLTQ89nLr4MFEmVEIIe+JGxNhYAfAEKYukWTBE3PkYY50JzOp+Mje7oVrwXgzRZV/dzjYQ13nenRlAO4M5R0upi9lXNB1Mr0=
+	t=1760530446; cv=none; b=iuktIL7v53yI2rwFHdo+JXS7v0kqCDOus4NSz2ovnY2s99r5RH1px9KJ/uC/NAg98r4ky9oQ6qq/YLeYCX+hdWLWA/nXjMjY5uhC+Xq0G8b0n/tFqlV/TwkQRHxcw/lJnInwTcoduJSI4vAkRCB6C7ogf+piIxD/gSD6ncDA8Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760529802; c=relaxed/simple;
-	bh=rBcEcp5gh4WzW4q8kM8GvUQXZjf1NbSSnFncWi8p32w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EmTHilTgh4xsgwgssIMIZzZqSSFfV/jnELQQ4jPWX6KtI9oBPvbtta+ExiE10tizwA/0PeVbk/F3v0Z/VMVIWpCK5kIiSVb+5DMh1CZhajDjOkQl5Bp0SJ1O7TXzs774C/vl35g33a0vz6/Kteh0YFT0JkGIBBJCh4dDSYfowlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdwgvO/t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B68C4CEF8;
-	Wed, 15 Oct 2025 12:03:18 +0000 (UTC)
+	s=arc-20240116; t=1760530446; c=relaxed/simple;
+	bh=U0qBfTAoLQ2lXuxhHDpAiZcucUrXqzfYam7mxeAjgzM=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=XaejaYF6JHZIKQdh1CMUq/TUC3H0HtNB9RqwmSXwRqtHcECcJtZ1DE1BOQbPGo1arurLMjP0IGd6xsJ4FOHfyYoNy2KeL2u5Aw5DjnTfV61Oxc1g9AVWHKP66fXQrgdiK2Zykaqaiu4HM0C/XjbrOYelP+lGoSCWqqUc6wnVARU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/X8KPLm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30FBC116B1;
+	Wed, 15 Oct 2025 12:14:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760529802;
-	bh=rBcEcp5gh4WzW4q8kM8GvUQXZjf1NbSSnFncWi8p32w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mdwgvO/tyYbo8EVGxVwnluWaIVdIFPMRY3siss0igYKWQXpTBiIFOLYfedvO6Lzcs
-	 A5shPbJenQPB2nvm+/8D4WSUZoDCDgtT33B1WrjWdPFKIBcZHj1OXI+NJCDNTyt6or
-	 zm33Q9KpAuOSEBSDdS1jHTCKHegjHp/bnFXK5mANs6n6A0txd8u4hA7Q2zEErtoi/F
-	 iGBCGWvDVYJrtQBELOQHHUICOvbWUbsOIbvM7ywLJTNLn/DFc64udAXnIXWt1h+pKe
-	 rkcBy0GpsPysBSvZK45dznXg6RoBvXdEzYn8MmTjxPpxzq+87BcSQM5fds67AYGRc2
-	 CxXmC36Ebn9Ug==
-Date: Wed, 15 Oct 2025 13:03:16 +0100
+	s=k20201202; t=1760530444;
+	bh=U0qBfTAoLQ2lXuxhHDpAiZcucUrXqzfYam7mxeAjgzM=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=o/X8KPLmQwvaZ/4jk3aNbggMUsmUtSiTRQlSMl2XJzeWcdxeAHYCVUEkxd4xyQRUM
+	 lm9j3UxOz9eAQqeEiw4KJtqK6D9JhqFpzt824g1F5aOEiD9IDRQTb4jnryGTQEKfOs
+	 iAlvzz2RFp1CxWICKQO4xi1XyoRewABj3vRnEl7xWHSRMxzN0SpSnDF43LOvksIYR3
+	 ACtYefsh+xgYcs1L5mX2EWAr4I/iNRCtLcWAjJJMe7vdTvlm8DBDul72BwYuelziYo
+	 OjknTg03VXAm8mwyc8gDIxE4bHcrkdHE7kiuKHSn2QefE+Gc9U5X0I+y7ygwupdVFi
+	 /eyOx9e5W702g==
 From: Mark Brown <broonie@kernel.org>
-To: Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH 4/6] spi: axi-spi-engine: support
- SPI_MULTI_BUS_MODE_STRIPE
-Message-ID: <90407135-f9fc-4b83-a2b2-393bb20aef87@sirena.org.uk>
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
- <20251014-spi-add-multi-bus-support-v1-4-2098c12d6f5f@baylibre.com>
- <3180475bd51e1e057d6aa7e1b62f564cb57a117e.camel@gmail.com>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ joel@jms.id.au, andrew@codeconstruct.com.au, clg@kaod.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+ openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org, BMC-SW@aspeedtech.com, 
+ Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+In-Reply-To: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
+References: <20251001112605.1130723-1-chin-ting_kuo@aspeedtech.com>
+Subject: Re: [PATCH 0/6] spi: aspeed: Improve clock, timing and address
+ decoding logic
+Message-Id: <176053044168.105519.1540910122531672579.b4-ty@kernel.org>
+Date: Wed, 15 Oct 2025 13:14:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8a16MxYkGAbfehvy"
-Content-Disposition: inline
-In-Reply-To: <3180475bd51e1e057d6aa7e1b62f564cb57a117e.camel@gmail.com>
-X-Cookie: Long life is in store for you.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-96507
 
+On Wed, 01 Oct 2025 19:25:59 +0800, Chin-Ting Kuo wrote:
+> This patch series introduces several improvements to the
+> ASPEED SPI driver, targeting better stability, compatibility
+> and, flexibility across multiple ASPEED platforms.
+> 
+> Key changes include:
+> 
+> * Clock selection strategy update
+>   Improves fallback logic when timing calibration is skipped or
+>   fails, ensuring reliable boot behavior.
+> 
+> [...]
 
---8a16MxYkGAbfehvy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Wed, Oct 15, 2025 at 11:30:39AM +0100, Nuno S=E1 wrote:
-> On Tue, 2025-10-14 at 17:02 -0500, David Lechner wrote:
-> > Add support for SPI_MULTI_BUS_MODE_STRIPE to the AXI SPI engine driver.
-> >=20
-> > The v2.0.0 version of the AXI SPI Engine IP core supports multiple
-> > buses. This can be used with SPI_MULTI_BUS_MODE_STRIPE to support
-> > reading from simultaneous sampling ADCs that have a separate SDO line
-> > for each analog channel. This allows reading all channels at the same
-> > time to increase throughput.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Please delete unneeded context from mails when replying.  Doing this
-makes it much easier to find your reply in the message, helping ensure
-it won't be missed by people scrolling through the irrelevant quoted
-material.
+Thanks!
 
---8a16MxYkGAbfehvy
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/6] spi: aspeed: Update clock selection strategy
+      commit: 31dcc7e1f8a9377d8fd9f967f84c121c5ba8f89c
+[2/6] spi: aspeed: Improve timing calibration algorithm for AST2600 platform
+      commit: efb79de36e947d136517bac14c139d494fcc72fa
+[3/6] spi: aspeed: Force default address decoding range assignment for each CS
+      commit: 630a185fd06109193574d10f38b29812986c21de
+[4/6] spi: aspeed: Centralize address decoding region management
+      commit: b546e0023a203e7edf9377ac8f4f490a6965afd6
+[5/6] spi: aspeed: Add per-platform adjust_window callback for decoding range
+      commit: 0586b53d4a0c7c5a132629f99da934cc674ea4cd
+[6/6] spi: aspeed: Only map necessary address window region
+      commit: 64d87ccfae3326a9561fe41dc6073064a083e0df
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjvjYMACgkQJNaLcl1U
-h9CKWQf/fiOSGY9C8sjgxx1MNemuLhL+GY5hU8hErhOnmiBuVX/BrfM5BhZBX3Ie
-DtHQs30ExfmeTtdXlnE0we1o4FnLMu8cnZ0KRDkgbX13ysFuPlYnPLGhOy/OhN2y
-DrtJVl7q/+orQsQeFK7fN5vnZMv0Q3fmwBCJcEc+iqkcBjuOy5pTEmdRHKRKcsAP
-QmbolaIdR/By1dvRRtYxAtEPcvOLjit5C2aoop4GOdkd+5YIED8EFq7ipI8cZAuS
-h/t04+iHN7IdNwiYtq04GhfnT2M9Iyb7Jmq/ZpcsOLDOVeF77yBrwu59H5YV4808
-UFnutk6J4vqii8+N/TfsS5YcYgfmnw==
-=9TaG
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---8a16MxYkGAbfehvy--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
