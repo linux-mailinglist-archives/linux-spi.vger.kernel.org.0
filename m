@@ -1,98 +1,101 @@
-Return-Path: <linux-spi+bounces-10709-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10710-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 412BCBE6B69
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Oct 2025 08:36:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44B99BE84F9
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Oct 2025 13:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 485AD7419BF
-	for <lists+linux-spi@lfdr.de>; Fri, 17 Oct 2025 06:28:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92B101AA43A2
+	for <lists+linux-spi@lfdr.de>; Fri, 17 Oct 2025 11:25:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E71230F920;
-	Fri, 17 Oct 2025 06:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C64343D64;
+	Fri, 17 Oct 2025 11:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="riBoFF8m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2C730F556;
-	Fri, 17 Oct 2025 06:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CF3343D62;
+	Fri, 17 Oct 2025 11:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760682481; cv=none; b=FvU9As+aSKzXAg0TeKGIDupLZm1KD1KQM93p8pPn/xgqF1sHHTG2+EUDMGiRYR9BiD8X8bmvEmqA6GbGPdqyhHraLodrxVMZ4AfPeE+GM6inn3YcBPCKJmPNhfMuSsg1h6lQ1cK2ciLEmvBjLobZx4yiszxHzapLQTQrE0iB1hg=
+	t=1760700304; cv=none; b=uwufEdONJznjr8bFmrURM4IW+E+S/np7qXH923L/nhtp1o8zyc4GCKM33G0Qrly0BJeT3VWcgUFZz9bshydO/xrKZkY5Xg3g6HM/T3Vr5YuvGdMb9J6wu2ApRgR1CdGvaxETLwSmR9t9Vn1eiEkKMyBnIqf5ZZYkRk90i8zTytU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760682481; c=relaxed/simple;
-	bh=NpTlKfY25LgjoVMMnZ26LO6Gn4v3gfw3kdZONyvEuyM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TkEXtdGKl+6x2iDturTZyQrP7iSyEu41vCRnbW8hlSEbUUZykByx6Rfiu847pcUYXVjvpcGVrNGHATgdFmiN/8bIy1jTQp7BXhGkl7MLCST97HqQ/EHLxd587c2+pOeR8JdhpkEjhM0z5Yw/OU6/52/t0LawG+EUXsn0sDRrIvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.5] (ip5f5af782.dynamic.kabel-deutschland.de [95.90.247.130])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id EA4F16028F341;
-	Fri, 17 Oct 2025 08:26:57 +0200 (CEST)
-Message-ID: <8fa346e3-308f-4ecb-af57-0fd643351765@molgen.mpg.de>
-Date: Fri, 17 Oct 2025 08:26:56 +0200
+	s=arc-20240116; t=1760700304; c=relaxed/simple;
+	bh=Oha5M5RT2nW2MzZklI9wS7QllDX3Iir9ry2TjWilqqc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=UeRMayI+p0G93PiZDWzstnwFHuSI6i0a4prQb5tdA3uQvMT0peB1+NqDanF13lOJgRh7EU8ZX805jOykLUd0Ub4+kPArETtGC8MFpo/aZMojgN3tYaFWOZm4ElB+tRFRHQ46Ebk0vnYDhiIMjGCY+JHk2rRxe4ujl1NpsP93QOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=riBoFF8m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A735C4CEE7;
+	Fri, 17 Oct 2025 11:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760700304;
+	bh=Oha5M5RT2nW2MzZklI9wS7QllDX3Iir9ry2TjWilqqc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=riBoFF8m0IcwZ+37LWZ9Kck4w0akHJzJVv7yYIxm0Fk8dSrg4j4K38bYDy99GWGYC
+	 J/xmAsajaw9OaKqCLeOv6Walg3iGIPnpzmNNxlvfiEtN0Ei08Vk5NyJR+EpnYuI3fJ
+	 Isr2v7iiBXOY0NnkQ5vnwAZqrZCw3sBNRtdoI3mEK74++fQfoMOEDlDdigjHjympjJ
+	 GU8vjsdfjhPmKyS3wwEWENJOqTpBy/alzbSTyXtZUn++6fZWnDqbLI2OttmDNXtoZF
+	 ugApFpcYV1uHfyMll8Vq9165mHODLDwJXT4eaw2hrzsrNI3JM46p6tU5uQxhsXai0O
+	 RvslakHm7ZigA==
+From: Mark Brown <broonie@kernel.org>
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, 
+ =?utf-8?q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>, 
+ Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, 
+ linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org, 
+ linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ Colin Ian King <coking@nvidia.com>
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251016153000.9142-1-coking@nvidia.com>
+References: <20251016153000.9142-1-coking@nvidia.com>
+Subject: Re: [PATCH][next] spi: aspeed: fix spelling mistake "triming" ->
+ "trimming"
+Message-Id: <176070030059.36285.11703430965734905306.b4-ty@kernel.org>
+Date: Fri, 17 Oct 2025 12:25:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] spi: aspeed: fix spelling mistake "triming" ->
- "trimming"
-To: Colin Ian King <coking@nvidia.com>
-Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
- =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
- Mark Brown <broonie@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>, linux-aspeed@lists.ozlabs.org,
- openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kernel-janitors@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251016153000.9142-1-coking@nvidia.com>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20251016153000.9142-1-coking@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-2a268
 
-Dear Colin,
-
-
-Thank you for the patch.
-
-Am 16.10.25 um 17:30 schrieb Colin Ian King:
+On Thu, 16 Oct 2025 16:30:00 +0100, Colin Ian King wrote:
 > There is a spelling mistake in a dev_warn message. Fix it.
 > 
-> Signed-off-by: Colin Ian King <coking@nvidia.com>
-> ---
->   drivers/spi/spi-aspeed-smc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-> index 0c3de371fd39..f3a7189afd51 100644
-> --- a/drivers/spi/spi-aspeed-smc.c
-> +++ b/drivers/spi/spi-aspeed-smc.c
-> @@ -539,7 +539,7 @@ static int aspeed_spi_trim_window_size(struct aspeed_spi *aspi)
->   	} while (total_sz > aspi->ahb_window_size);
->   
->   	if (trimmed) {
-> -		dev_warn(aspi->dev, "Window size after triming:\n");
-> +		dev_warn(aspi->dev, "Window size after trimming:\n");
->   		for (cs = 0; cs < aspi->data->max_cs; cs++) {
->   			dev_warn(aspi->dev, "CE%d: 0x%08x\n",
->   				 cs, chips[cs].ahb_window_size);
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Applied to
 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Kind regards,
+Thanks!
 
-Paul
+[1/1] spi: aspeed: fix spelling mistake "triming" -> "trimming"
+      commit: d77daa49085b067137d0adbe3263f75a7ee13a1b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
