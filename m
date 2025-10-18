@@ -1,58 +1,63 @@
-Return-Path: <linux-spi+bounces-10718-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10719-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ED96BED03C
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 15:13:53 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83CBEBED78E
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 20:10:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2828A19A7F66
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 13:14:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4ACB74E80CF
+	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 18:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8D02BE64F;
-	Sat, 18 Oct 2025 13:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2584F25A324;
+	Sat, 18 Oct 2025 18:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyvs9XEU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNDynJSU"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81146192B75;
-	Sat, 18 Oct 2025 13:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DC61E520C;
+	Sat, 18 Oct 2025 18:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760793228; cv=none; b=Kxz7HZPADkaPRXupbnowShL09zmkp7YwSx9WQ/a6sDHzr4WfShDdiQEVA+/YLncgWMshJ5Kr/7b2p5s0IFY/fxJ0zyUQGOINUFVsavrV5ST+2qUnaqm83kMJs7WC/9weOiHevWJ7Oo1AGr0tsAXPRppc5uxhJeO9irnZKlRdQas=
+	t=1760811040; cv=none; b=fEeUwUi5LaX0yemU4fuBoZkJ03iFZLhUnZyuDRYCSbzw+uxFGxngkD5G6x1KSv4zo5H/B7zRl0nXHjsX99fOf4KkNG7ubVpZIkMwlJ/ldTdgcPKdUuj+wbwpr6YLtUWfTsbeKjEMdum1CZZkp6v8ss/6EZIDFjt8K/pf/fGMh/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760793228; c=relaxed/simple;
-	bh=JuFZRG8iOfSOpAc7xPmG9DiEYgTsPAwgyHt1Z8cbJ5E=;
+	s=arc-20240116; t=1760811040; c=relaxed/simple;
+	bh=Yly71XvLU3G0NcZs/5Sn7AIzcevt6O77xNUTdZVnZL0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k/qBPWSSQVg9TaiJJHUvr6RxtXq+KpEcW+0prE2TFidJPT99vvxxUK9nQbguHACluyd9IZaDK4BkC8kI5m9dt+BFVU9ddbFNzQcQAf8cmLyK9rv5b6KednfMG4voBUw5gBPvcAeGJGdlLUYAO9WM/BCzZZpA60/XY7pA8KX7IRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyvs9XEU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC37C4CEF8;
-	Sat, 18 Oct 2025 13:13:45 +0000 (UTC)
+	 MIME-Version:Content-Type; b=RRC4z+M6ep+GPBy2mM7GlvDuLfsouo0KyG0ud/Be2GG0Bh8lVlgUSPFFkfg2VVrGdeEAIuou3GFP4YcGbqRlvZ7nLB9IM4ofiNO6dVyQvfe0upY43jY/XvBsF7hnxtXzEJjxLr3wB/GlInoBfl3HvSGS7dBRp0tJkx9+UrwXg74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNDynJSU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F7BC4CEF8;
+	Sat, 18 Oct 2025 18:10:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760793228;
-	bh=JuFZRG8iOfSOpAc7xPmG9DiEYgTsPAwgyHt1Z8cbJ5E=;
+	s=k20201202; t=1760811039;
+	bh=Yly71XvLU3G0NcZs/5Sn7AIzcevt6O77xNUTdZVnZL0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pyvs9XEU2tZo3/kTQMxCuxKH+2HGYD56fZFH41YzPUM6FpGqWiLOtU4KrUSXBC2QR
-	 VLo0+XN24lw/qVr1sQCw8TeuZfubfE97wqJX0ZE5HKHY3oWcjny6hAvv1SBTC13euL
-	 T8uIsXC5XrDmAdW6t4TncjZB50C4zGOuTReG4MKZCoA7xbq2KzBvU2kb9B7opqLycP
-	 0EvWpXjlRqlKPb2fY3D500a6EeQuvE1s/Yj+S7yEJ/Wo4o+n6UIS6jsEirVB0FKK2q
-	 F1AOuoCKMMi3+Z3VitCmBBQCFsx8RKtBEsbpxZH/1KAfpUNZoV7xIVMyC692pJ/9Se
-	 lAzObkV3KILXg==
-Date: Sat, 18 Oct 2025 14:13:41 +0100
+	b=ZNDynJSUOeaLiGTQUyu1It6KtyQuobQ0iKbvQwco0mrnv5M3nFRypfBdi8DbCRK+L
+	 mr2Z7I7DM9tCvVAfY5y6Fy20RswrKQYMs0qt4Ubmuctq3b5D5R4s99w9ZhSpAvbFrS
+	 +UJoz7VNwbdvJTMoEtAUsO0lju7L57hvagKPBsRaP8fscp2Cf8XTCZg4oyHmDQUwKP
+	 tqiCRwE/XNmrGiip6yRtU4+JEfddR4IE4Az9+COR5qqpwNH5hMJ6nWljtZ6nF3bmU8
+	 LsyMBBmygQMMzy3pIu8Sk1knVTGZF3h22OfxHUsfxeAAnJqOwEcjHR/f7SWeyEsuht
+	 VjMrTubpxul2w==
+Date: Sat, 18 Oct 2025 19:10:32 +0100
 From: Jonathan Cameron <jic23@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Axel Haslam <ahaslam@baylibre.com>, nuno.sa@analog.com,
- dlechner@baylibre.com, andy@kernel.org, marcelo.schmitt1@gmail.com
-Subject: Re: [PATCH v4 1/1] spi: offload: Add offset parameter
-Message-ID: <20251018141341.3ef2f6b7@jic23-huawei>
-In-Reply-To: <176053044658.105519.915414342804429574.b4-ty@kernel.org>
-References: <cd315e95c0bd8523f00e91c400abcd6a418e5924.1759760519.git.marcelo.schmitt@analog.com>
-	<176053044658.105519.915414342804429574.b4-ty@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Sean Anderson
+ <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+Subject: Re: [PATCH 6/6] iio: adc: ad7380: Add support for multiple SPI
+ buses
+Message-ID: <20251018191032.669f3461@jic23-huawei>
+In-Reply-To: <20251014-spi-add-multi-bus-support-v1-6-2098c12d6f5f@baylibre.com>
+References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
+	<20251014-spi-add-multi-bus-support-v1-6-2098c12d6f5f@baylibre.com>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -63,66 +68,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 15 Oct 2025 13:14:06 +0100
-Mark Brown <broonie@kernel.org> wrote:
+On Tue, 14 Oct 2025 17:02:16 -0500
+David Lechner <dlechner@baylibre.com> wrote:
 
-> On Mon, 06 Oct 2025 11:25:41 -0300, Marcelo Schmitt wrote:
-> > Add an offset parameter that can be passed in the periodic trigger.
-> > This is useful for example when ADC drivers implement a separate periodic
-> > signal to trigger conversion and need offload to read the result with
-> > some delay. While at it, add some documentation to offload periodic trigger
-> > parameters.
-> > 
-> > 
-> > [...]  
+> Add support for multiple SPI buses to increase throughput. The AD7380
+> family of ADCs have multiple SDO lines on the chip that can be used to
+> read each channel on a separate SPI bus. If wired up to a SPI controller
+> that supports it, the driver will now take advantage of this feature.
+> This allows reaching the maximum sample rate advertised in the datasheet
+> when combined with SPI offloading.
 > 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> 
-> Thanks!
-> 
-> [1/1] spi: offload: Add offset parameter
->       commit: b83fb1b14c06bdd765903ac852ba20a14e24f227
-> 
-Hi Mark,
-
-The patch called out that we are after an immutable branch or similar for this one.
-
-"
-Hello,
-
-This patch adds a small feature that is required for a series improving ad4030
-in the IIO subsystem [1]. Can we have an immutable branch with this patch so
-that it can be used as base for the IIO driver changes?
-
-[1]: https://lore.kernel.org/linux-iio/cover.1758916484.git.marcelo.schmitt@analog.com/
-"
-
-If you can still set that up, much appreciated.
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+This seems fine to me.  I briefly looked at the rest of the series and
+nothing jumped out other the many combinations of crazy that exist which
+came up in the discussion,
 
 Thanks,
 
 Jonathan
-
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
-> 
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
-> 
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
-> 
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
-> 
-> Thanks,
-> Mark
-> 
-
 
