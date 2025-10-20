@@ -1,47 +1,47 @@
-Return-Path: <linux-spi+bounces-10733-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10734-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8099DBF2C3E
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:43:07 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13A4EBF2C72
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:44:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 009BF4639AB
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 17:39:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 20E614FAB29
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 17:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73C4331A65;
-	Mon, 20 Oct 2025 17:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0290E3321C6;
+	Mon, 20 Oct 2025 17:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KMFgLSI1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="De1mxxBd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839D9283FC3;
-	Mon, 20 Oct 2025 17:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3B53321C3;
+	Mon, 20 Oct 2025 17:41:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760981971; cv=none; b=ZTyrAzrFMWuUcQnoMdR7Wf/+TVoQdvdSFFlBcm6imoxZpSjpFXojA1c6u/oJ6UrZIjsasCRR/VpHktyuRKDMo2KSGdJ6bXhGEEHnqb8B84KJ6c0numRVJGwEU3J52K1iBx4Xgb64sd1fUYVvN/FEe3Cstl8WRVRaRkQ7aCQuehQ=
+	t=1760982086; cv=none; b=aZQpX0XQY1clkibBYpuFk4PGQUmQUVvYI8oq5oFUzn910YRoAU1O/1TLARxA0o9t3Nc/9JyvoBB+OJF9Aqoy1anDmLkhYpJVur/cqMbKmj2ui2F9YclGdziGFaf9/fH99P7p47w0URC5Xw4UQZmSkoW6MJmcZPmCS0s/X0HTFUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760981971; c=relaxed/simple;
-	bh=CrfF6HDbxJVfeklUuZ9rurUFTFP0Q4f+NGC+Mm7jVfQ=;
+	s=arc-20240116; t=1760982086; c=relaxed/simple;
+	bh=0shQKZ6LMkY7eu+foeqCzGr2kMlEmfoaK6oMFy9Q3fk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PrUtDGUj+tCo6l0dNIjAYRpz8Vkd35zcW2rUEyml4R8cmpSv8Xih+Jic4dk4l1FZjbnnNHPcqsrcR6Ymvnzo3aYpEh3f+SM/0BVltcDgXLm6VgEEdrwarhKCLrX6RR0DmmaAN7LblIreDkWsxCShy3at1XcmkGnsBCNepn0Q7xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KMFgLSI1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60184C4CEF9;
-	Mon, 20 Oct 2025 17:39:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uOC0SyFCka2UzrA+YrkNE2uGb3JOzYDVMgoESXA6XyUp+q4sZE9FkAgF37hVyr/9dLlYMbsVuMo+oUNzRTQ3vMl+MZ5B0E7yubtWPMDgIYrceBIj+n2iWqgDiY81wmmHR0eEzw3VnlDvv7e95V98cl6AMGkvl87wxN9C3aQPnII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=De1mxxBd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B99DAC4CEF9;
+	Mon, 20 Oct 2025 17:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760981971;
-	bh=CrfF6HDbxJVfeklUuZ9rurUFTFP0Q4f+NGC+Mm7jVfQ=;
+	s=k20201202; t=1760982086;
+	bh=0shQKZ6LMkY7eu+foeqCzGr2kMlEmfoaK6oMFy9Q3fk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KMFgLSI1CEJqgyck8ld6dGNIEh9MmHVPLcVhTlTJaO8N1dKogXE0y8tJlggrMaE2e
-	 Ibvzjir7DwlIJ4ACY6wMlRCPKB0cN+EI92VvA/6SVbe8wty59wquEgi2md4bCtTtYr
-	 oQs462VGImx0oeeajqhQCTAYgunYyr/fzah/wu8T3TGqwn9GNLkMtl9BaamWcwWY4M
-	 /NkD2fLKOvBswkbgCQhPzk5Rvi1uIRUCW2x/VDlPc2iy+iuGc1sYSokO7rvGyZZ3yR
-	 ZiB/sg105ruiKfWi4z6jKbBB8YNIxwAOEPjEStCGkhI8qjz5ZgZTkAaI/dyEZS8wpm
-	 Gcz55/aUitH3w==
-Date: Mon, 20 Oct 2025 18:39:26 +0100
+	b=De1mxxBddZqMNleN87F+pQxQO9G//qIlPV7tFewpeYUIjnWrJvbkgzf5+ZE6H2uPl
+	 HsKeowTy6HQIWgilMsO/ACqB+7Q7qcUi03DvuN3BKf5rHM0AE2kx0mTzqQgukoG5Df
+	 G0aCfX3EtwRjEy0ckL46C4eVjqpJ8hBU035OmuvibVjrgcTyJQWpdyNoe7RMiVGY3s
+	 QddLVA9H1YWfE9N4zNdxP/D3ai5zdXIPbHqP8dTQ3caEsDCHyeQ0uWZG8E2Hqk2hWb
+	 F68SASIw7WIPsQM/y+XvSnSZ77lu3wuwNSBx2+zAHM9WYfYkcSy/8k1lzb8UpCN2L1
+	 DwDWjoLvxVURQ==
+Date: Mon, 20 Oct 2025 18:41:21 +0100
 From: Conor Dooley <conor@kernel.org>
 To: Alex Elder <elder@riscstar.com>
 Cc: han.xu@nxp.com, broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
@@ -50,7 +50,7 @@ Cc: han.xu@nxp.com, broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
 	imx@lists.linux.dev, spacemit@lists.linux.dev,
 	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/8] dt-bindings: spi: fsl-qspi: support SpacemiT K1
-Message-ID: <20251020-blinked-primary-2b69cf37e9fe@spud>
+Message-ID: <20251020-utility-remedial-4b4dfc716409@spud>
 References: <20251020165152.666221-1-elder@riscstar.com>
  <20251020165152.666221-3-elder@riscstar.com>
 Precedence: bulk
@@ -60,18 +60,24 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="h9bnZ0Qvvq6hacya"
+	protocol="application/pgp-signature"; boundary="EtcE87axyRT4niT6"
 Content-Disposition: inline
 In-Reply-To: <20251020165152.666221-3-elder@riscstar.com>
 
 
---h9bnZ0Qvvq6hacya
+--EtcE87axyRT4niT6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, Oct 20, 2025 at 11:51:45AM -0500, Alex Elder wrote:
 > Add the SpacemiT K1 SoC QSPI IP to the list of supported hardware.
+
+Also, you should really explain why this spacemit device is the first
+one to be in what's been an fsl-specific binding for now in the commit
+message.
+pw-bot: changes-requested
+
 >=20
 > Signed-off-by: Alex Elder <elder@riscstar.com>
 > ---
@@ -88,9 +94,6 @@ b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
 >            - fsl,ls1021a-qspi
 >            - fsl,ls2080a-qspi
 > +          - spacemit,k1-qspi
-
-Are the newly added resets mandatory for the spacemit platform?
-
 >        - items:
 >            - enum:
 >                - fsl,ls1043a-qspi
@@ -98,16 +101,16 @@ Are the newly added resets mandatory for the spacemit platform?
 > 2.48.1
 >=20
 
---h9bnZ0Qvvq6hacya
+--EtcE87axyRT4niT6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPZzzgAKCRB4tDGHoIJi
-0kswAP9b+/liNkMQCp6Ke+y5UQUGUAbD7vBZB+rfyvxgqBNLcwD/Tv29tJBXshLX
-kh3QQ3TDjVtGX4xd3SvbxGWnXDGO3Qk=
-=idEQ
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPZ0QQAKCRB4tDGHoIJi
+0jw3AP9fIzYzUtEKSJLqkolLXPEWaL3paAWpO+XlKFabuMCkVQEAj6t4t3UyUduk
+YQnlq9gBr5tZn+FNWIUYFR5JDC/WXww=
+=0LUZ
 -----END PGP SIGNATURE-----
 
---h9bnZ0Qvvq6hacya--
+--EtcE87axyRT4niT6--
 
