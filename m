@@ -1,89 +1,119 @@
-Return-Path: <linux-spi+bounces-10719-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10720-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83CBEBED78E
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 20:10:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 351F1BEF6E4
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 08:11:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4ACB74E80CF
-	for <lists+linux-spi@lfdr.de>; Sat, 18 Oct 2025 18:10:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EF933AAB63
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 06:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2584F25A324;
-	Sat, 18 Oct 2025 18:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E942D5A0C;
+	Mon, 20 Oct 2025 06:10:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNDynJSU"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="RcAlToUC"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DC61E520C;
-	Sat, 18 Oct 2025 18:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09802D29D6
+	for <linux-spi@vger.kernel.org>; Mon, 20 Oct 2025 06:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760811040; cv=none; b=fEeUwUi5LaX0yemU4fuBoZkJ03iFZLhUnZyuDRYCSbzw+uxFGxngkD5G6x1KSv4zo5H/B7zRl0nXHjsX99fOf4KkNG7ubVpZIkMwlJ/ldTdgcPKdUuj+wbwpr6YLtUWfTsbeKjEMdum1CZZkp6v8ss/6EZIDFjt8K/pf/fGMh/c=
+	t=1760940631; cv=none; b=lKzJKVPDx6sd4BCf9wQmh+GiTVyNSiUzO7NeX/B86Fc58Uf/8ToIQBmJ8Bx6SiI3xqXAy3q3s6QgzRR5GLH9N7zYuRT/xwc3mjdgLromYvTa2JZKoE8/lE0ZxBcyxS+iRT0+EDNgeKGD41HD7ct1e9Gp41Uu1wFGR6Uiw/MlXps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760811040; c=relaxed/simple;
-	bh=Yly71XvLU3G0NcZs/5Sn7AIzcevt6O77xNUTdZVnZL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RRC4z+M6ep+GPBy2mM7GlvDuLfsouo0KyG0ud/Be2GG0Bh8lVlgUSPFFkfg2VVrGdeEAIuou3GFP4YcGbqRlvZ7nLB9IM4ofiNO6dVyQvfe0upY43jY/XvBsF7hnxtXzEJjxLr3wB/GlInoBfl3HvSGS7dBRp0tJkx9+UrwXg74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNDynJSU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F7BC4CEF8;
-	Sat, 18 Oct 2025 18:10:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760811039;
-	bh=Yly71XvLU3G0NcZs/5Sn7AIzcevt6O77xNUTdZVnZL0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZNDynJSUOeaLiGTQUyu1It6KtyQuobQ0iKbvQwco0mrnv5M3nFRypfBdi8DbCRK+L
-	 mr2Z7I7DM9tCvVAfY5y6Fy20RswrKQYMs0qt4Ubmuctq3b5D5R4s99w9ZhSpAvbFrS
-	 +UJoz7VNwbdvJTMoEtAUsO0lju7L57hvagKPBsRaP8fscp2Cf8XTCZg4oyHmDQUwKP
-	 tqiCRwE/XNmrGiip6yRtU4+JEfddR4IE4Az9+COR5qqpwNH5hMJ6nWljtZ6nF3bmU8
-	 LsyMBBmygQMMzy3pIu8Sk1knVTGZF3h22OfxHUsfxeAAnJqOwEcjHR/f7SWeyEsuht
-	 VjMrTubpxul2w==
-Date: Sat, 18 Oct 2025 19:10:32 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Michael Hennerich <michael.hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Sean Anderson
- <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-Subject: Re: [PATCH 6/6] iio: adc: ad7380: Add support for multiple SPI
- buses
-Message-ID: <20251018191032.669f3461@jic23-huawei>
-In-Reply-To: <20251014-spi-add-multi-bus-support-v1-6-2098c12d6f5f@baylibre.com>
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
-	<20251014-spi-add-multi-bus-support-v1-6-2098c12d6f5f@baylibre.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1760940631; c=relaxed/simple;
+	bh=N/kOmsWTL71eukFzwqT5DRUUrxZtrYJzllMFUs/neE8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XQBxTZawOrq2pt+DAQx+VcEinVae/5sRkxV1LnVqMIxGv35Yfjf/6U0NAe/DL3nkiV+gZzDXyfaWvAJ1XgrXTbRsZIX9Gq/ZnhBwVw4cH3zu32c+9qbJ1GUjHx7C35DueGcVvpbtQdUVMbCiD7xSVfhuIxnAVPbbLT/AuW4ivLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=RcAlToUC; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=from:to:cc:subject:date:message-id
+	:mime-version:content-transfer-encoding; s=k1; bh=v3wtCgrKpXpY06
+	IA1iepJUf0jmIsp0liDp9ZApSd2Z8=; b=RcAlToUCuHt6nQyz8co6yRNGfUNVuA
+	8UzaTOqAm+ZiKuYB6NvSL17xZZHja1eptPR9iXoEYQBGPdQC3sXqxoudg+VG9Gmv
+	OxUSs4rwvpAAgGWj9GHbiy3mt5o3RLhYbpUAGKNgwuIxrnOf9s1PQVJFGAPWouwS
+	B45m5DP9YiELKZ+xmtYQlTFsLRSEfyPp6EDndXCiaT5lRfuDe1cmcokUmxi1OUQK
+	KRBi4E6z51+bIw8ljzVmThRm8I7SANs4R3Pymh4pKIU88x+vIlSE29oX8FH3V4vP
+	3UB8yZtXWU+4F5Dt5qQ7k1mIgouCg4AvmpmdWAXvteCVTfOmyVNzKRew==
+Received: (qmail 940898 invoked from network); 20 Oct 2025 08:10:25 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Oct 2025 08:10:25 +0200
+X-UD-Smtp-Session: l3s3148p1@9Ldn8JBB9LkgAwDNf0fPAEuMhp6AgTGK
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: devicetree@vger.kernel.org
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	imx@lists.linux.dev,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev,
+	Liu Ying <victor.liu@nxp.com>,
+	Mark Brown <broonie@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>
+Subject: [PATCH 0/4] dt-bindings: treewide: don't check node names
+Date: Mon, 20 Oct 2025 08:09:49 +0200
+Message-ID: <20251020060951.30776-6-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 14 Oct 2025 17:02:16 -0500
-David Lechner <dlechner@baylibre.com> wrote:
+Node names are already and properly checked by the core schema. No need
+to do it again.
 
-> Add support for multiple SPI buses to increase throughput. The AD7380
-> family of ADCs have multiple SDO lines on the chip that can be used to
-> read each channel on a separate SPI bus. If wired up to a SPI controller
-> that supports it, the driver will now take advantage of this feature.
-> This allows reaching the maximum sample rate advertised in the datasheet
-> when combined with SPI offloading.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-This seems fine to me.  I briefly looked at the rest of the series and
-nothing jumped out other the many combinations of crazy that exist which
-came up in the discussion,
+These are all occurrences I found in linux-next as of 20251015. I did
+run dt_bindings_check successfully. I haven't done a way to run
+dtbs_check yet because I would need to identify the proper architecture
+first, right? Is there some tool which tests all DTs of a certain
+binding? At least build bot is happy, I don't know if it checks DTs as
+well, though.
 
-Thanks,
+I'd suggest to give subsystems some time to pick these patches before
+Rob applies the remaining ones?
 
-Jonathan
+
+Wolfram Sang (4):
+  dt-bindings: bus: don't check node names
+  dt-bindings: nvmem: don't check node names
+  ASoC: dt-bindings: don't check node names
+  dt-bindings: spi: don't check node names
+
+ .../devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml        | 2 +-
+ .../devicetree/bindings/bus/fsl,imx8qxp-pixel-link-msi-bus.yaml | 2 +-
+ Documentation/devicetree/bindings/bus/st,stm32-etzpc.yaml       | 2 +-
+ Documentation/devicetree/bindings/bus/st,stm32mp25-rifsc.yaml   | 2 +-
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml       | 2 +-
+ Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml      | 2 +-
+ Documentation/devicetree/bindings/spi/spi-controller.yaml       | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+2.47.2
+
 
