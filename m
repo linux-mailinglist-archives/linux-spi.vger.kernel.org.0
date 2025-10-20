@@ -1,59 +1,73 @@
-Return-Path: <linux-spi+bounces-10735-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10736-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F0E9BF2C9E
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15530BF2D40
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:58:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 53BE24E6E31
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 17:44:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 36D534E99D1
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 17:58:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 137C23321BB;
-	Mon, 20 Oct 2025 17:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1B23321C6;
+	Mon, 20 Oct 2025 17:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKRbJojv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="txdlpjK2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36B5278779;
-	Mon, 20 Oct 2025 17:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D520331A79;
+	Mon, 20 Oct 2025 17:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760982249; cv=none; b=rzgnsrF914xlqeoF/whCzmIaKo6QYF6xBOphztmIII3qb9jW6W9kvp9tTFY6BR2kS8JMvY8w+EiHXib/HE3g0A/3LkjhjEFRbi7LfgCxz2aNozkc/uGwI4edmDuHZSEAKk49mPHazjOPcO4rOsO/fOOGkHEpjGIXcs07SRkBymY=
+	t=1760983091; cv=none; b=sFoVMs3293o9xUeEggwa6W2oMh9o/ObI3I6VlNtTsbrZJSmY+xwChQhNFgnbVfvso5aurPfwr6JxXxjC0eQuCsZRFJOtlsqRVYxn1WpZu927wbLiQ3UrGWKIYx5Qynfu6k8tIZXi85JMpYet5iF1UH9OlXwFoJbmXkgof5Nc4Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760982249; c=relaxed/simple;
-	bh=UGG12C0YM5gqVQtZMlTCg/cATtlJaDQQ0Fiijdez2oE=;
+	s=arc-20240116; t=1760983091; c=relaxed/simple;
+	bh=3eybZrHiTS9wZG23hXV62FCDJFtCcIIaUJqij9JPSCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NQKFo0aWnwMyyePjauhvjY6KNu4EnlL/jVypO7aod3pmuXS4p+ngDNguSQNS6asMWh4vn16WAZ06pLbENJxIjHoq2Fmi1kLd5sDc8oa5Kfni5Lq5RH4cKu81S8qXbUq49jImFa/hLxvXM2eYxxwNyFLF8w+3c3u06PNZywdK36w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKRbJojv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A86C4CEF9;
-	Mon, 20 Oct 2025 17:44:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=EVYAHVOVoQgJZ2Ub1P1/RLMiEQZx08buB1zvnl/gwDh7D1I5Zwj+Dbe+6FO03GHeZ/qbBADpdCc4MF/1mHcD7vumYXC+uXoxffYVglLx0zhGjeJsTm+/+4aJNsdUI0pj7EvxUOo+h43oDqR9X31ZqYE1UuPkLIgisMr6emlxnCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=txdlpjK2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 000F9C113D0;
+	Mon, 20 Oct 2025 17:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760982248;
-	bh=UGG12C0YM5gqVQtZMlTCg/cATtlJaDQQ0Fiijdez2oE=;
+	s=k20201202; t=1760983091;
+	bh=3eybZrHiTS9wZG23hXV62FCDJFtCcIIaUJqij9JPSCA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XKRbJojvIKHCqkefW/DpMAV1M99m0j6YO0Tj1OD2zHTj+bDqqx7TobNR5L0KtHDCW
-	 dBNEVA6/rs08/Hyexa8t+YPNOO7QqVjqd6TsMc/F90aC9RQLEV+eT2ANXNJT16Q+A+
-	 yhxcI+1wCPK5fYXygRLV8YEpWRZ++mJ++LzlyKz3oKfWuFNhaJIYQqcsCimCd6J8vi
-	 cJNfdX4YsK4LIYPa9pO7bCBJ1cQwmLl+V/pDJCoKjDnJn7t9LtSmZuGZ+cQyn9+6gI
-	 0N9BhFNhWtEkRGpvQMNhUdU+6lHGZATGMnfJTGy+Up3DoIhidC1yWjIMtiHHbP4JBZ
-	 yN+H12d67oRNQ==
-Date: Mon, 20 Oct 2025 18:44:03 +0100
+	b=txdlpjK24x3VCahUT9ZDmp1hV0WioZsFGhVrgeWjDL9cx419PRG+z1aKhv4F5V0L9
+	 JapR/jG2vy2nXcja7HIJQuklXNawrWVBoUolmzXHNRskdSKILmpFmLNOHEd+Btk5Pd
+	 qyn6a8t3q415LXmmbB0OmJ+br+Yk6RQ1zNWN7tT8gECh7sss9pQprEy62S4/LcnEEi
+	 bzGWKnucEFvyT7CGRoAUWazf3X6ltNAtyfv4e0VnzA2dTCxa2eFGSqKKQxR/kr6l2F
+	 ZCkJiMMNO3p8R/OE5SRiIEDOKEE+VOtTJOVUdsPeE+y1j3RcqM8+8331BV2BKQeHCp
+	 idWOt9+MTZi2g==
+Date: Mon, 20 Oct 2025 18:58:02 +0100
 From: Conor Dooley <conor@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	han.xu@nxp.com, broonie@kernel.org, dlan@gentoo.org,
-	guodong@riscstar.com, devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org, imx@lists.linux.dev,
-	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] dt-bindings: spi: fsl-qspi: add optional resets
-Message-ID: <20251020-henna-headache-fae4440ec7a8@spud>
-References: <20251020165152.666221-1-elder@riscstar.com>
- <20251020165152.666221-2-elder@riscstar.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: devicetree@vger.kernel.org,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>, Conor Dooley <conor+dt@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>,
+	Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+	Gatien Chevallier <gatien.chevallier@foss.st.com>,
+	imx@lists.linux.dev, Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, Liu Ying <victor.liu@nxp.com>,
+	Mark Brown <broonie@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>, Samuel Holland <samuel@sholland.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Srinivas Kandagatla <srini@kernel.org>
+Subject: Re: [PATCH 0/4] dt-bindings: treewide: don't check node names
+Message-ID: <20251020-coroner-headstone-c8685f6e3868@spud>
+References: <20251020060951.30776-6-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,62 +75,49 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="17adE0b1pBWXLXwb"
+	protocol="application/pgp-signature"; boundary="ifIYyPcG9nWKLWH/"
 Content-Disposition: inline
-In-Reply-To: <20251020165152.666221-2-elder@riscstar.com>
+In-Reply-To: <20251020060951.30776-6-wsa+renesas@sang-engineering.com>
 
 
---17adE0b1pBWXLXwb
+--ifIYyPcG9nWKLWH/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 20, 2025 at 11:51:44AM -0500, Alex Elder wrote:
-> Allow two resets to be optionally included for the Freescale QSPI driver.
-
-This is a binding, please don't mention the driver here.
-
-> Signed-off-by: Alex Elder <elder@riscstar.com>
-> ---
->  Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+On Mon, Oct 20, 2025 at 08:09:49AM +0200, Wolfram Sang wrote:
+> Node names are already and properly checked by the core schema. No need
+> to do it again.
 >=20
-> diff --git a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml =
-b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> index f2dd20370dbb3..0315a13fe319a 100644
-> --- a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> @@ -54,6 +54,11 @@ properties:
->        - const: qspi_en
->        - const: qspi
-> =20
-> +  resets:
-> +    items:
-> +      - description: SoC QSPI reset
-> +      - description: SoC QSPI bus reset
-
-If none of the fsl devices have resets, this should be added alongside
-the new spacemit compatible and not permitted for the other compatibles.
-
-
-> +
->  required:
->    - compatible
->    - reg
-> --=20
-> 2.48.1
+> These are all occurrences I found in linux-next as of 20251015. I did
+> run dt_bindings_check successfully. I haven't done a way to run
+> dtbs_check yet because I would need to identify the proper architecture
+> first, right? Is there some tool which tests all DTs of a certain
+> binding? At least build bot is happy, I don't know if it checks DTs as
+> well, though.
 >=20
+> I'd suggest to give subsystems some time to pick these patches before
+> Rob applies the remaining ones?
+>=20
+>=20
+> Wolfram Sang (4):
+>   dt-bindings: bus: don't check node names
+>   dt-bindings: nvmem: don't check node names
+>   ASoC: dt-bindings: don't check node names
+>   dt-bindings: spi: don't check node names
 
---17adE0b1pBWXLXwb
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+--ifIYyPcG9nWKLWH/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPZ04wAKCRB4tDGHoIJi
-0lEKAP4tn2+XRwM5eBj2d46u1mM+jjxVgwNB08I2twSsMQSpRQEAupOGQFen6YpA
-+RHiekfk56oRh7/fLzUhP5reWtEMSQc=
-=KgvV
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPZ4KgAKCRB4tDGHoIJi
+0nQOAP9zt58K2r6VVxQGAjEOeExklSakIE1QYNmtoG9DXBZsvAEAw5tz28SP3wVF
+gblhCrRV4FJmV7bWABaDA6WjOT5AlAI=
+=dLoT
 -----END PGP SIGNATURE-----
 
---17adE0b1pBWXLXwb--
+--ifIYyPcG9nWKLWH/--
 
