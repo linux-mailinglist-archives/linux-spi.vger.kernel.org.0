@@ -1,234 +1,228 @@
-Return-Path: <linux-spi+bounces-10744-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10745-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89B7FBF31A1
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 21:03:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B994DBF31D1
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 21:07:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 237D94EE273
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:03:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BFD93B046C
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA6B242D6A;
-	Mon, 20 Oct 2025 19:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CD3C220F3E;
+	Mon, 20 Oct 2025 19:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o93jfIBQ"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kxFxbXVn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011007.outbound.protection.outlook.com [52.101.65.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4912C11C5
-	for <linux-spi@vger.kernel.org>; Mon, 20 Oct 2025 19:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760987029; cv=none; b=UVh96IwxMiozCHh85gR2M9/Vy7GVdSqEDeChdszypwWHVNUAg97lDpgEzF5ky5RvLrA3kFvhUX+BMC8xW0CbGcF71EdF2hkF/kGLhmsGu9qRGK0qGiViLxIzfNfz2Ivt/B3m1TSqizHWivgG9kS48W0EVXVJjPhVenBojj7ryzY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760987029; c=relaxed/simple;
-	bh=2YHlLqlIQo6H07nRr4MOTQ1A60hBj9sEsAx1iVykJwg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pGYVrUiNF/ImaKuS3+h/R9Nr2F1PHBtCtYAvzRut3Ab0l6nGPXGIikWnarb3/pjNwninIOw0vRUVfgxaaSsUiYrDiuQtdl6bv2mgc91Ie2Q84Dw5dY7tEh3Qiyp3dqxLGlnefftZWQaOooMGvDisQ7i2lW6Fa+DcHgrCIipufxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o93jfIBQ; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760987024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=iB/wSIt/Z4ZqrIHWJ1sCSLBfcHZ6VeoqL5ySojaKqBM=;
-	b=o93jfIBQazIrmQHeahKrkS6fVow0FVDnl9PavYFxsPP+pkNBiG9jkUaixTXduRN9sZlnkn
-	1kMEAnwN0QCsP6uFShDH3hcwxStlAhyKQIAYHqoGDzIx4Tjm7/wYSnOkP6QxlXbz4G+wkW
-	s+bcV2Ko/OtfW3OL9loh+N5sDZz1bcI=
-From: Sean Anderson <sean.anderson@linux.dev>
-To: Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM)
-Cc: linux-kernel@vger.kernel.org (open list),
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-trace-kernel@vger.kernel.org (open list:TRACING),
-	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH] spi: spi-mem: Trace exec_op
-Date: Mon, 20 Oct 2025 15:03:33 -0400
-Message-Id: <20251020190333.1431664-1-sean.anderson@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25941E511;
+	Mon, 20 Oct 2025 19:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760987274; cv=fail; b=cffVxvy0TeHQ/gh4PihXr03FPdTCYQG4rbiC23C9zFiwhzEhNuuf4O9TDNEyaDCkJI8Kg70CC+A3XTz/I401XT1P5hDqhifxuhfGITJfBU/zpNcZ7wHuQLeIc9/QbpWQetfguYmmvAQEbWx6fl7xVa6wAOOaTxctizrAP/bP/Lg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760987274; c=relaxed/simple;
+	bh=AVByVaEA4TCWRX15d6fCzvF/4rzEvsPx4xL6BJfqbjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=stnm7l3dBtuxMrZFeVTyfQqAXymNrMbBgR2wHpihrlsncTNSjButCEPfz2LN+UnDy1nl3NPPtEohjjgsZZl0t3iieW/oq3xg0r5xSAAdg8kJZGy7uFYPfeDha/yeReq8nJtTfD00DNtUpPmtoYA9MZo+YAcgD/AXxN3W+3bTXYc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kxFxbXVn; arc=fail smtp.client-ip=52.101.65.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=c8WnnN9X9UAdYDJXr2kXQRTytyl0ijHnM4Jspn8m4fiIWePWr/VW1kpUQJsbT8sGVxzlQmLBSX88JE+2xcqqZDrU9mO6ELm3+livYgU1ChwG6c3hV6N33fI8e6SMO5fMwmCiGBTpCCGsn6+SZlbJGipXQVd9B2sp/8sRUt8FHevVoWWa7DWBEGoeoYSfez3OQJ9CrSVNtkK1Ngv6W+RKUxW63DjnFPj5E4/X4/+mR1n4QMXPcDQ+wc77I7xgU7bK8jWAjWl+p97tVae7i5VZWUMVQTvGiJPezl0dqPRSUmU/QSjW3qx07083k2wCZfkcqWttvEhmLNKvkXOZLTkleg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rTaTxMw9TN+Hu8hm1j7zlPH8Cqjfa9z3WleDhBkI/mw=;
+ b=YKlpp+Yc3+AyYQZKSnKizH67tlpv/tRd0ihJF6+F02mOPDQsOuc697n8ZEuS8zO0IEINbLPqfsvgKVGDwmonQvOHBGtoQNbXB23GU4vAvsV7fiFx1cq9mXjSZqismlZek9Iyhpgu5i4dy2fGiT2V4luc0pYv03KntgUXz2JjutVAjGxQDG4NsTZxnIDcUHgt5DkNbPnSQTPKLxmVRElB5C0ccvxqEQc6pjvx0RESvHxqEU3k8kyT2ApHOC3UlHEU+KQI7b13KucRbCqAFWuoZWF2YEYah/ZUCEOFA+qLcpxnXBPbqjCjfwtz3y6zqNxfONHSspFJL90miRYGd7pxKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rTaTxMw9TN+Hu8hm1j7zlPH8Cqjfa9z3WleDhBkI/mw=;
+ b=kxFxbXVnmT55kRJk9ohTjY5AARWtoxGto6NcsOgg9AE5P1H4RMzjpbWCXKZWxaAdf5RZzslxSEGdq9jNazqravucw8JAukprGGkMpPcNb5HEMekDL6VcE/kkSvLUGhXCqVpzdy7k66uSbC1MQmbznWnEAgv6PljXCl9xFUVeZVpL3TcJhekvGhvpZuurzHAVvjBZwwnxl/64xyvcI9wObNUO3XFl4ZHpJlQ9MfgqyxXskboXCxQaTyFdEya9yJ13FF8YPWGaSayeA8pZHWqiTKmaFHPMVtvSbxFIjZOuWxVlNZrEFiYzFFPr7TLuq7FDU7V+6WqzDBw0v6u3M5fSbQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
+ by MRWPR04MB11288.eurprd04.prod.outlook.com (2603:10a6:501:79::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Mon, 20 Oct
+ 2025 19:07:48 +0000
+Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
+ ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
+ ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9228.014; Mon, 20 Oct 2025
+ 19:07:48 +0000
+Date: Mon, 20 Oct 2025 15:07:39 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Alex Elder <elder@riscstar.com>
+Cc: han.xu@nxp.com, broonie@kernel.org, p.zabel@pengutronix.de,
+	dlan@gentoo.org, guodong@riscstar.com, linux-spi@vger.kernel.org,
+	imx@lists.linux.dev, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/8] spi: fsl-qspi: add optional reset support
+Message-ID: <aPaIezCu/gXxJC01@lizhi-Precision-Tower-5810>
+References: <20251020165152.666221-1-elder@riscstar.com>
+ <20251020165152.666221-4-elder@riscstar.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251020165152.666221-4-elder@riscstar.com>
+X-ClientProxiedBy: SJ0PR05CA0137.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::22) To AS4PR04MB9621.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4ff::22)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|MRWPR04MB11288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46e40ace-d0b7-45af-cb9c-08de100bf534
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|52116014|1800799024|366016|19092799006|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7sK8en3Gu2XVUL7EZaF1LEZaXxAKq8DY0mY6X04HsnlRt6HSCyN7dO+BkC9x?=
+ =?us-ascii?Q?9Q+Usq1MVYH0328jTG0B7C/G9Guhmccj3q1O65IodbFT+VmSbEEw9SyLFKuS?=
+ =?us-ascii?Q?G/9xpcl38GunJi5Z6x1w/KE+YRqGC5udrI0NG24kbofVkNhoPOO/Z2X+ICJz?=
+ =?us-ascii?Q?lOBd9J04kGG+ytHTvU7rP2QUtN1oQlHfl6h9CsjEHmffggfjSjsMZgxdzKRm?=
+ =?us-ascii?Q?zb3BHCc77yGdCWC4HkbJvK0f5xin68b0lwx486dV8DufypzrQbaVbW8uaPOI?=
+ =?us-ascii?Q?JvtuKoTvihW9ZqS/v/+9P/Rf7XfsOpCdVLrJ1V0jrnA89t0hdm5X3C3RRo5z?=
+ =?us-ascii?Q?JxyAWcXF/JYI7lQ0gMFph6RNWJLST1ecbItUvHFgo9hPTBpWgEKFLdA5cmQ/?=
+ =?us-ascii?Q?P30xJba60qwX9vaR13uzomFo48tWvr3NCtzSuDdd/CDxr9immBsjBzFuMjVK?=
+ =?us-ascii?Q?qAZcO1JyBzFiazh8jzcDlXarj/Fx4zWAlg2cTReFCiZicSEVZyL1p6RD2vJc?=
+ =?us-ascii?Q?3K0TmQRTS1UYfp3327y8n5QoAhhYYb2BEpOtYLsN/Kb7mCUNDH75J0AlNYsA?=
+ =?us-ascii?Q?k+OlCH7I/lGSlA5KQG2Z99lF6bIFF4LsZYotN1tK4DWzkXhCrx6edi1uP7nl?=
+ =?us-ascii?Q?cs0vdry3uyqs+hXsfEJKjCO0za1BYh/CXsxk6asvcPd5b8CGP1roZMxBYlw4?=
+ =?us-ascii?Q?jaYpufI9lX0oMQPN2EeQ5EMRm+DG01BgjCP8gYTIIAlPP7rruQOOKvZBQm2d?=
+ =?us-ascii?Q?0vl5xd/Q49Kw+/KnX7P9rKCX5q1tXtZ0lHcAqOu74bPbeMHIyy3nabXW2M0U?=
+ =?us-ascii?Q?JCtf0yUwS8oMHab3i0Ep+E3Yaqp8JvuX8ttTVENU6zwmzR4rVytXuQBfMzWH?=
+ =?us-ascii?Q?bS6B080b7DRrtPvDkcSxJr0d+WZiIT1YfICVbsK5ADVuKH67zU3po3BR8mJS?=
+ =?us-ascii?Q?3F9LRX7Jg3Lz78z8+fgU97ZYYELToQ9UHZdLmFI4slOY51hIQqZQ7a/Oa573?=
+ =?us-ascii?Q?MJg46yIQN2ipRYk4gGS+SIQKlcqPCjirBhCXkq+CUOamFKAjMrPaCIr+r4Dc?=
+ =?us-ascii?Q?yjUuT3DVJX32RW4hqNR7N9XjfZ/iuJIJo4a7jyVBELREqPptuv2FBAQDiQKR?=
+ =?us-ascii?Q?AfS8NyK3Ttkk2dzybsedkDq59bhU1d2SwF/fzbgkNS6bs+2wbkFjc6obIsGk?=
+ =?us-ascii?Q?D4e314j5kUnEy2XkLWKEglOtwwgkfKObzw4CIA1hvNiwLQglXbQLkL3ksvdT?=
+ =?us-ascii?Q?VRqL0UBDkZqngAQM3U4fpykCKGpMsxtW4WIodd/cTJap5P+nzm91XYFm7Egw?=
+ =?us-ascii?Q?/TnqH6LnTMFtZ8CCVd3vQat/45m8K6RzhIz+5B2DHMwQJLnhlY+luzwuPuy0?=
+ =?us-ascii?Q?u9gLVBWg8CH3UXivlvR4+KtduSIKRZIjDpl7OYpO8/GQU6LNIRime5rFjkNO?=
+ =?us-ascii?Q?pBk1LgRom0Eyyoqn/PxbnTy6Qb0U2dkHxiSyEvfI1gZadVAdj8bqixjWFS77?=
+ =?us-ascii?Q?27MSXPoGRbjq3gQYzUzu5iedFc5DmmiwibbQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(1800799024)(366016)(19092799006)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?5wyfT6AyNDIwi5bfOB8v5mqNGTWOD0nhhruWi61bDYQ/8K4QssvqRFK8rk4G?=
+ =?us-ascii?Q?QmRsNznc0+Okvo8RpWlAHFmNFQuPLSHZbuv7ThZP+4PtX7wOUIETdGO+SmYg?=
+ =?us-ascii?Q?FfUaXuDZ+FSgWvPoS3qIJ8PCg6BaGm6n7hb/0V+KFZlAit67oRtsGhdrQpqU?=
+ =?us-ascii?Q?sV5IeRIAnNe4EmgtDVwj/bNcWSBvZufIWPFGiaqDeqoOW2ZuDRK3a7ukL2YM?=
+ =?us-ascii?Q?eML0QeWrjbpWuB33s1+dYGJGjhg75WidA9aSo51k3rTYXtfPtafuw6/bcJsc?=
+ =?us-ascii?Q?KCupPSQU0ug97MZxDJ/TN8M9KgVkHJwI+/bJMKbkpW6htSozATUFQKKEMV7e?=
+ =?us-ascii?Q?VDF9QeSp3Ndm3a5RFzXRSYf2+3kmhcRCN10N/IhzCvvsIdBQUZe/D/4MAsvH?=
+ =?us-ascii?Q?hBfyP1PAt3mY6OGNHuB+YFliam3rz87zzxbN7ZFvkZo3e5PxRAFDnpR0Kblr?=
+ =?us-ascii?Q?FJVeXZRkrPteesmwaRu+FFF8LGHvWQnR95qAzIYzaykkPjsiLqHNTPsvrfOT?=
+ =?us-ascii?Q?efDOtKN43aC3+zSIDTFUEyJpWCBrMgGgkPUMW7oPqOnk3oMsFH911IQ7jr8t?=
+ =?us-ascii?Q?StgKE5xRfhT7qnByZDTtT1BhIWrRRE18XLNLZBLZw0gwc1YpYsrSfM3fjaf4?=
+ =?us-ascii?Q?oOwwrjuV5pAn2KZL7/Tkjc7X1wu+FvgG3ImVC+ydJUI9yyQcG4t1mljJxvQ0?=
+ =?us-ascii?Q?fPPjmpHkHHEG2CzH2GjDdhZexUXc85+ac19J9Inbpp/Txhngjv+Vv8Qz0req?=
+ =?us-ascii?Q?ufpR6sM2drB0ao2cwNp7a0cqhG7IBabtvL02Lg/+bkprJAZqvRzLie/y7zzr?=
+ =?us-ascii?Q?32WYTxBKgwP8+B36CCJKbA6El0i+344AsTKZAdYgCqCZoIoZgSipKqJj5JDz?=
+ =?us-ascii?Q?1nRGo2pbHD/ECBWwfb49r5KHgjpnkpC0WbhbOP9OFq5XsfIZNGZzZhimQYop?=
+ =?us-ascii?Q?2BbnKCzdW2pnxQDmDQE8UUQqT4n+x+shNGFNYGmLk3uzgqsVyOg4LXxyxMAm?=
+ =?us-ascii?Q?Y+d+sKwUVT55O4f40ZhWcpEyBl8/dqZKiPz7Yp+CWkwjGkJwjMfGuCj56ZXx?=
+ =?us-ascii?Q?fcpZAm8MD0cTC1T/nI3IT/cktfrZlZuATqPL6/QcA8U272wP9fchfi/5a30x?=
+ =?us-ascii?Q?gBgUzFt9KolgDhnawCkW42lmNKRzXW5JaLEFqTg37VMcDqH7M8b2P+HRo1rQ?=
+ =?us-ascii?Q?zARwNSVaDKs1GQbNmqvMS9adTDV8acILpZRVJuTcA1+wKj01t/uWvYWYvhyq?=
+ =?us-ascii?Q?x1ygPCTe7PRcHfPwPMMbJ9tA7sTK4/I89UY/6O0bniicT4a+Y7jmSfbHw+S1?=
+ =?us-ascii?Q?G+wOG9+RkkTVs0lohlZ7TXOjRwFzzrCN6R37mZ8wFkW87uCz21WeXgNrDYLH?=
+ =?us-ascii?Q?+Rml+bJzsn6X9WzKmRGlUlAG3NrKNk00tRm8iQVi4Dx9U8SwmpDQehr+2W7z?=
+ =?us-ascii?Q?33iyz2jXUsiMdXRdQ2Ft+a82gkMNnI9g9GUwmYJiD/obWylJVjvCPUYP7RbS?=
+ =?us-ascii?Q?4Cnk9Fv+rXeXB6E5F4PAf3vivxnXzjdJxw12cYR5jK66k6/gA3Flpq5DOmqD?=
+ =?us-ascii?Q?TCSFJsvAnbATcLvwNo8=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46e40ace-d0b7-45af-cb9c-08de100bf534
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9621.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2025 19:07:48.0550
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7zDX380iVaGZDfa3/bFGyKFNZqQhdGzpt0nj7hJTkIjrW1Ch9U0qUG8FhUtAH4fY5XgwUc77NQnKMH0/WD5/ZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR04MB11288
 
-The spi subsystem has tracing, which is very convenient when debugging
-problems. Add tracing for spi-mem too so that accesses that skip the spi
-subsystem can still be seen.
+On Mon, Oct 20, 2025 at 11:51:46AM -0500, Alex Elder wrote:
+> Add support for one or more optional exclusive resets.  These
+> simply need to be deasserted at probe time, and can remain that
+> way for the life of the device.
 
-The format is roughly based on the existing spi tracing. We don't bother
-tracing the op's address because the tracing happens while the memory is
-locked, so there can be no confusion about the matching of start and
-stop. The conversion of cmd/addr/dummy to an array is directly analogous
-to the conversion in the latter half of spi_mem_exec_op.
+Nit: please wrap at 75 chars
 
-Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
----
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
- MAINTAINERS                    |   1 +
- drivers/spi/spi-mem.c          |   5 ++
- include/trace/events/spi-mem.h | 106 +++++++++++++++++++++++++++++++++
- 3 files changed, 112 insertions(+)
- create mode 100644 include/trace/events/spi-mem.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b45db73e55df..a6c4e0f65818 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -24204,6 +24204,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
- F:	Documentation/devicetree/bindings/spi/
- F:	Documentation/spi/
- F:	drivers/spi/
-+F:	include/trace/events/spi*
- F:	include/linux/spi/
- F:	include/uapi/linux/spi/
- F:	tools/spi/
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 064b99204d9a..c8b2add2640e 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -12,6 +12,9 @@
- #include <linux/spi/spi-mem.h>
- #include <linux/sched/task_stack.h>
- 
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/spi-mem.h>
-+
- #include "internals.h"
- 
- #define SPI_MEM_MAX_BUSWIDTH		8
-@@ -403,7 +406,9 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
- 		if (ret)
- 			return ret;
- 
-+		trace_spi_mem_start_op(mem, op);
- 		ret = ctlr->mem_ops->exec_op(mem, op);
-+		trace_spi_mem_stop_op(mem, op);
- 
- 		spi_mem_access_end(mem);
- 
-diff --git a/include/trace/events/spi-mem.h b/include/trace/events/spi-mem.h
-new file mode 100644
-index 000000000000..e97c2c417233
---- /dev/null
-+++ b/include/trace/events/spi-mem.h
-@@ -0,0 +1,106 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM spi-mem
-+
-+#undef TRACE_SYSTEM_VAR
-+#define TRACE_SYSTEM_VAR spi_mem
-+
-+#if !defined(_TRACE_SPI_MEM_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_SPI_MEM_H
-+
-+#include <linux/tracepoint.h>
-+#include <linux/spi/spi-mem.h>
-+
-+#define decode_dtr(dtr) \
-+	__print_symbolic(dtr, \
-+		{ 0, "S" }, \
-+		{ 1, "D" })
-+
-+TRACE_EVENT(spi_mem_start_op,
-+	TP_PROTO(struct spi_mem *mem, const struct spi_mem_op *op),
-+	TP_ARGS(mem, op),
-+
-+	TP_STRUCT__entry(
-+		__string(name, mem->name)
-+		__dynamic_array(u8, op, 1 + op->addr.nbytes + op->dummy.nbytes)
-+		__dynamic_array(u8, data, op->data.dir == SPI_MEM_DATA_OUT ?
-+					  min(op->data.nbytes, 64) : 0)
-+		__field(u32, data_len)
-+		__field(u32, max_freq)
-+		__field(u8, cmd_buswidth)
-+		__field(bool, cmd_dtr)
-+		__field(u8, addr_buswidth)
-+		__field(bool, addr_dtr)
-+		__field(u8, dummy_nbytes)
-+		__field(u8, data_buswidth)
-+		__field(bool, data_dtr)
-+	),
-+
-+	TP_fast_assign(
-+		int i;
-+
-+		__assign_str(name, mem->name);
-+		__entry->max_freq = op->max_freq ?: mem->spi->max_speed_hz;
-+
-+		__entry->cmd_buswidth = op->cmd.buswidth;
-+		__entry->cmd_dtr = op->cmd.dtr;
-+		*((u8 *)__get_dynamic_array(op)) = op->cmd.opcode;
-+
-+		__entry->addr_buswidth = op->addr.buswidth;
-+		__entry->addr_dtr = op->addr.dtr;
-+		for (i = 0; i < op->addr.nbytes; i++)
-+			((u8 *)__get_dynamic_array(op))[i + 1] =
-+				op->addr.val >> (8 * (op->addr.nbytes - i - 1));
-+
-+		memset(((u8 *)__get_dynamic_array(op)) + op->addr.nbytes + 1,
-+		       0xff, op->dummy.nbytes);
-+
-+		__entry->data_len = op->data.nbytes;
-+		__entry->data_buswidth = op->data.buswidth;
-+		__entry->data_dtr = op->data.dtr;
-+		if (op->data.dir == SPI_MEM_DATA_OUT)
-+			memcpy(__get_dynamic_array(data), op->data.buf.out,
-+			       __get_dynamic_array_len(data));
-+	),
-+
-+	TP_printk("%s %u%s-%u%s-%u%s @%u Hz op=[%*phD] len=%u tx=[%*phD]",
-+		__get_str(name),
-+		__entry->cmd_buswidth, decode_dtr(__entry->cmd_dtr),
-+		__entry->addr_buswidth, decode_dtr(__entry->addr_dtr),
-+		__entry->data_buswidth, decode_dtr(__entry->data_dtr),
-+		__entry->max_freq,
-+		__get_dynamic_array_len(op), __get_dynamic_array(op),
-+		__entry->data_len,
-+		__get_dynamic_array_len(data), __get_dynamic_array(data))
-+);
-+
-+TRACE_EVENT(spi_mem_stop_op,
-+	TP_PROTO(struct spi_mem *mem, const struct spi_mem_op *op),
-+	TP_ARGS(mem, op),
-+
-+	TP_STRUCT__entry(
-+		__string(name, mem->name)
-+		__dynamic_array(u8, data, op->data.dir == SPI_MEM_DATA_IN ?
-+					  min(op->data.nbytes, 64) : 0)
-+		__field(u32, data_len)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, mem->name);
-+		__entry->data_len = op->data.nbytes;
-+		if (op->data.dir == SPI_MEM_DATA_IN)
-+			memcpy(__get_dynamic_array(data), op->data.buf.in,
-+			       __get_dynamic_array_len(data));
-+	),
-+
-+	TP_printk("%s len=%u rx=[%*phD]",
-+		__get_str(name),
-+		__entry->data_len,
-+		__get_dynamic_array_len(data), __get_dynamic_array(data))
-+);
-+
-+
-+#endif /* _TRACE_SPI_MEM_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
--- 
-2.35.1.1320.gc452695387.dirty
-
+>
+> Signed-off-by: Alex Elder <elder@riscstar.com>
+> ---
+>  drivers/spi/spi-fsl-qspi.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>
+> diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
+> index c887abb028d77..1e27647dd2a09 100644
+> --- a/drivers/spi/spi-fsl-qspi.c
+> +++ b/drivers/spi/spi-fsl-qspi.c
+> @@ -36,6 +36,7 @@
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_qos.h>
+> +#include <linux/reset.h>
+>  #include <linux/sizes.h>
+>
+>  #include <linux/spi/spi.h>
+> @@ -267,6 +268,7 @@ struct fsl_qspi {
+>  	const struct fsl_qspi_devtype_data *devtype_data;
+>  	struct mutex lock;
+>  	struct completion c;
+> +	struct reset_control *resets;
+>  	struct clk *clk, *clk_en;
+>  	struct pm_qos_request pm_qos_req;
+>  	struct device *dev;
+> @@ -857,6 +859,8 @@ static void fsl_qspi_cleanup(void *data)
+>  {
+>  	struct fsl_qspi *q = data;
+>
+> +	reset_control_assert(q->resets);
+> +
+>  	fsl_qspi_clk_disable_unprep(q);
+>
+>  	mutex_destroy(&q->lock);
+> @@ -902,6 +906,10 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+>  	if (!q->ahb_addr)
+>  		return -ENOMEM;
+>
+> +	q->resets = devm_reset_control_array_get_optional_exclusive(dev);
+> +	if (IS_ERR(q->resets))
+> +		return PTR_ERR(q->resets);
+> +
+>  	/* find the clocks */
+>  	q->clk_en = devm_clk_get(dev, "qspi_en");
+>  	if (IS_ERR(q->clk_en))
+> @@ -923,6 +931,10 @@ static int fsl_qspi_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>
+> +	ret = reset_control_deassert(q->resets);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* find the irq */
+>  	ret = platform_get_irq(pdev, 0);
+>  	if (ret < 0)
+> --
+> 2.48.1
+>
 
