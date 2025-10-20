@@ -1,135 +1,234 @@
-Return-Path: <linux-spi+bounces-10743-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10744-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D464BF2F9D
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 20:41:59 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B7FBF31A1
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 21:03:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 166384EADCB
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 18:41:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 237D94EE273
+	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA742D0283;
-	Mon, 20 Oct 2025 18:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA6B242D6A;
+	Mon, 20 Oct 2025 19:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivXVHfp5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o93jfIBQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2932C21F0;
-	Mon, 20 Oct 2025 18:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4912C11C5
+	for <linux-spi@vger.kernel.org>; Mon, 20 Oct 2025 19:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760985712; cv=none; b=eAja8T+c3oykJigcwZb3F1skiCx8ShRwNwsZ128QluOfRcfdX/tUhckbeuO97gIgaN1qvBiE6QPEWl4n8yAVvDUdTSFuCCUuAuM2ykxQLVNQXUj0YAh7epJagmZZcq5mUl7XroC4Ispr7wKqjzPS5Scs+EGobn7heG9gXYqNbls=
+	t=1760987029; cv=none; b=UVh96IwxMiozCHh85gR2M9/Vy7GVdSqEDeChdszypwWHVNUAg97lDpgEzF5ky5RvLrA3kFvhUX+BMC8xW0CbGcF71EdF2hkF/kGLhmsGu9qRGK0qGiViLxIzfNfz2Ivt/B3m1TSqizHWivgG9kS48W0EVXVJjPhVenBojj7ryzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760985712; c=relaxed/simple;
-	bh=KC5ynBTKwAPPm0Ypk6n9KoPtmJH7cvFRh2ciSY8Lgx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=flgYdoyr745ahthlM8BIh46gJrufxv48i+pnwQpK8o2GnBpYMy8yYfcjwR/i3hBP1AUTr2jsBHgAh1fKwtinuIUuwXrnAAMTkUPoN0JCKrlWr8rdweGEMASKdaVVXNWqlqiE6dEK7JIbAOscm4I3i3t2p5hGQPBPLKtjM31Jyjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivXVHfp5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2113C113D0;
-	Mon, 20 Oct 2025 18:41:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760985711;
-	bh=KC5ynBTKwAPPm0Ypk6n9KoPtmJH7cvFRh2ciSY8Lgx4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ivXVHfp5mcc7Qs6T2dGRR3qWo5mpwJ/C2T3UqyXTZjjUdnK8XTbgGKD1yNGbzRcIW
-	 gw1B/EaRizweTxKV2AvTHc85QcneaAaaiw3DQOOXBBFDwFzjXPWL1Ff4yPd7DF+TC1
-	 rpHpJRTUxBmbLk9I7TLdorms7cO23bo5322qnKSt6S8+W8wrC8XVq2dTSqozQrc6QS
-	 1E5NA0nu018nP4UMwxaTEQ8wHg4ySQaY0UcPIs93sM0qYQrGLNxGG1wcoVV+NDwugD
-	 QXr9UdmZGeiY+MZb0KRiDguDywmupXimWUuO/OkULdKE/R7ntbykjAVwvXnLMF83K0
-	 hZ3RiJWg1+h3w==
-Date: Mon, 20 Oct 2025 19:41:46 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: han.xu@nxp.com, broonie@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, dlan@gentoo.org, guodong@riscstar.com,
-	devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-	imx@lists.linux.dev, spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] dt-bindings: spi: fsl-qspi: support SpacemiT K1
-Message-ID: <20251020-unwound-cake-21799c9522a1@spud>
-References: <20251020165152.666221-1-elder@riscstar.com>
- <20251020165152.666221-3-elder@riscstar.com>
- <20251020-utility-remedial-4b4dfc716409@spud>
- <08d99fcd-4d0c-4d81-a314-7e1a8bfaa64c@riscstar.com>
+	s=arc-20240116; t=1760987029; c=relaxed/simple;
+	bh=2YHlLqlIQo6H07nRr4MOTQ1A60hBj9sEsAx1iVykJwg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pGYVrUiNF/ImaKuS3+h/R9Nr2F1PHBtCtYAvzRut3Ab0l6nGPXGIikWnarb3/pjNwninIOw0vRUVfgxaaSsUiYrDiuQtdl6bv2mgc91Ie2Q84Dw5dY7tEh3Qiyp3dqxLGlnefftZWQaOooMGvDisQ7i2lW6Fa+DcHgrCIipufxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o93jfIBQ; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760987024;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iB/wSIt/Z4ZqrIHWJ1sCSLBfcHZ6VeoqL5ySojaKqBM=;
+	b=o93jfIBQazIrmQHeahKrkS6fVow0FVDnl9PavYFxsPP+pkNBiG9jkUaixTXduRN9sZlnkn
+	1kMEAnwN0QCsP6uFShDH3hcwxStlAhyKQIAYHqoGDzIx4Tjm7/wYSnOkP6QxlXbz4G+wkW
+	s+bcV2Ko/OtfW3OL9loh+N5sDZz1bcI=
+From: Sean Anderson <sean.anderson@linux.dev>
+To: Mark Brown <broonie@kernel.org>,
+	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM)
+Cc: linux-kernel@vger.kernel.org (open list),
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-trace-kernel@vger.kernel.org (open list:TRACING),
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: [PATCH] spi: spi-mem: Trace exec_op
+Date: Mon, 20 Oct 2025 15:03:33 -0400
+Message-Id: <20251020190333.1431664-1-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="S9zWXF20ApbbyoB6"
-Content-Disposition: inline
-In-Reply-To: <08d99fcd-4d0c-4d81-a314-7e1a8bfaa64c@riscstar.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+The spi subsystem has tracing, which is very convenient when debugging
+problems. Add tracing for spi-mem too so that accesses that skip the spi
+subsystem can still be seen.
 
---S9zWXF20ApbbyoB6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The format is roughly based on the existing spi tracing. We don't bother
+tracing the op's address because the tracing happens while the memory is
+locked, so there can be no confusion about the matching of start and
+stop. The conversion of cmd/addr/dummy to an array is directly analogous
+to the conversion in the latter half of spi_mem_exec_op.
 
-On Mon, Oct 20, 2025 at 01:06:50PM -0500, Alex Elder wrote:
-> On 10/20/25 12:41 PM, Conor Dooley wrote:
-> > On Mon, Oct 20, 2025 at 11:51:45AM -0500, Alex Elder wrote:
-> > > Add the SpacemiT K1 SoC QSPI IP to the list of supported hardware.
-> >=20
-> > Also, you should really explain why this spacemit device is the first
-> > one to be in what's been an fsl-specific binding for now in the commit
-> > message.
->=20
-> I'm not sure how much of an explanation you're looking for, but
-> yes, I agree with you, it stands out that it's the first one, so
-> I at least should have acknowledged that.  I'll add something
-> here in the next version.
+Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+---
 
-Even just mentioning that the register interface etc is nigh identical.
-Otherwise this just looks like picking a random file to put the
-compatible in. Remember, this is independent from the driver change and
-must be justified in its own commit message.
+ MAINTAINERS                    |   1 +
+ drivers/spi/spi-mem.c          |   5 ++
+ include/trace/events/spi-mem.h | 106 +++++++++++++++++++++++++++++++++
+ 3 files changed, 112 insertions(+)
+ create mode 100644 include/trace/events/spi-mem.h
 
->=20
-> 					-Alex
->=20
-> > pw-bot: changes-requested
-> >=20
-> > >=20
-> > > Signed-off-by: Alex Elder <elder@riscstar.com>
-> > > ---
-> > >   Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.y=
-aml b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> > > index 0315a13fe319a..5bbda4bc33350 100644
-> > > --- a/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> > > +++ b/Documentation/devicetree/bindings/spi/fsl,spi-fsl-qspi.yaml
-> > > @@ -22,6 +22,7 @@ properties:
-> > >             - fsl,imx6ul-qspi
-> > >             - fsl,ls1021a-qspi
-> > >             - fsl,ls2080a-qspi
-> > > +          - spacemit,k1-qspi
-> > >         - items:
-> > >             - enum:
-> > >                 - fsl,ls1043a-qspi
-> > > --=20
-> > > 2.48.1
-> > >=20
->=20
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b45db73e55df..a6c4e0f65818 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -24204,6 +24204,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+ F:	Documentation/devicetree/bindings/spi/
+ F:	Documentation/spi/
+ F:	drivers/spi/
++F:	include/trace/events/spi*
+ F:	include/linux/spi/
+ F:	include/uapi/linux/spi/
+ F:	tools/spi/
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 064b99204d9a..c8b2add2640e 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -12,6 +12,9 @@
+ #include <linux/spi/spi-mem.h>
+ #include <linux/sched/task_stack.h>
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/spi-mem.h>
++
+ #include "internals.h"
+ 
+ #define SPI_MEM_MAX_BUSWIDTH		8
+@@ -403,7 +406,9 @@ int spi_mem_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+ 		if (ret)
+ 			return ret;
+ 
++		trace_spi_mem_start_op(mem, op);
+ 		ret = ctlr->mem_ops->exec_op(mem, op);
++		trace_spi_mem_stop_op(mem, op);
+ 
+ 		spi_mem_access_end(mem);
+ 
+diff --git a/include/trace/events/spi-mem.h b/include/trace/events/spi-mem.h
+new file mode 100644
+index 000000000000..e97c2c417233
+--- /dev/null
++++ b/include/trace/events/spi-mem.h
+@@ -0,0 +1,106 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM spi-mem
++
++#undef TRACE_SYSTEM_VAR
++#define TRACE_SYSTEM_VAR spi_mem
++
++#if !defined(_TRACE_SPI_MEM_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_SPI_MEM_H
++
++#include <linux/tracepoint.h>
++#include <linux/spi/spi-mem.h>
++
++#define decode_dtr(dtr) \
++	__print_symbolic(dtr, \
++		{ 0, "S" }, \
++		{ 1, "D" })
++
++TRACE_EVENT(spi_mem_start_op,
++	TP_PROTO(struct spi_mem *mem, const struct spi_mem_op *op),
++	TP_ARGS(mem, op),
++
++	TP_STRUCT__entry(
++		__string(name, mem->name)
++		__dynamic_array(u8, op, 1 + op->addr.nbytes + op->dummy.nbytes)
++		__dynamic_array(u8, data, op->data.dir == SPI_MEM_DATA_OUT ?
++					  min(op->data.nbytes, 64) : 0)
++		__field(u32, data_len)
++		__field(u32, max_freq)
++		__field(u8, cmd_buswidth)
++		__field(bool, cmd_dtr)
++		__field(u8, addr_buswidth)
++		__field(bool, addr_dtr)
++		__field(u8, dummy_nbytes)
++		__field(u8, data_buswidth)
++		__field(bool, data_dtr)
++	),
++
++	TP_fast_assign(
++		int i;
++
++		__assign_str(name, mem->name);
++		__entry->max_freq = op->max_freq ?: mem->spi->max_speed_hz;
++
++		__entry->cmd_buswidth = op->cmd.buswidth;
++		__entry->cmd_dtr = op->cmd.dtr;
++		*((u8 *)__get_dynamic_array(op)) = op->cmd.opcode;
++
++		__entry->addr_buswidth = op->addr.buswidth;
++		__entry->addr_dtr = op->addr.dtr;
++		for (i = 0; i < op->addr.nbytes; i++)
++			((u8 *)__get_dynamic_array(op))[i + 1] =
++				op->addr.val >> (8 * (op->addr.nbytes - i - 1));
++
++		memset(((u8 *)__get_dynamic_array(op)) + op->addr.nbytes + 1,
++		       0xff, op->dummy.nbytes);
++
++		__entry->data_len = op->data.nbytes;
++		__entry->data_buswidth = op->data.buswidth;
++		__entry->data_dtr = op->data.dtr;
++		if (op->data.dir == SPI_MEM_DATA_OUT)
++			memcpy(__get_dynamic_array(data), op->data.buf.out,
++			       __get_dynamic_array_len(data));
++	),
++
++	TP_printk("%s %u%s-%u%s-%u%s @%u Hz op=[%*phD] len=%u tx=[%*phD]",
++		__get_str(name),
++		__entry->cmd_buswidth, decode_dtr(__entry->cmd_dtr),
++		__entry->addr_buswidth, decode_dtr(__entry->addr_dtr),
++		__entry->data_buswidth, decode_dtr(__entry->data_dtr),
++		__entry->max_freq,
++		__get_dynamic_array_len(op), __get_dynamic_array(op),
++		__entry->data_len,
++		__get_dynamic_array_len(data), __get_dynamic_array(data))
++);
++
++TRACE_EVENT(spi_mem_stop_op,
++	TP_PROTO(struct spi_mem *mem, const struct spi_mem_op *op),
++	TP_ARGS(mem, op),
++
++	TP_STRUCT__entry(
++		__string(name, mem->name)
++		__dynamic_array(u8, data, op->data.dir == SPI_MEM_DATA_IN ?
++					  min(op->data.nbytes, 64) : 0)
++		__field(u32, data_len)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, mem->name);
++		__entry->data_len = op->data.nbytes;
++		if (op->data.dir == SPI_MEM_DATA_IN)
++			memcpy(__get_dynamic_array(data), op->data.buf.in,
++			       __get_dynamic_array_len(data));
++	),
++
++	TP_printk("%s len=%u rx=[%*phD]",
++		__get_str(name),
++		__entry->data_len,
++		__get_dynamic_array_len(data), __get_dynamic_array(data))
++);
++
++
++#endif /* _TRACE_SPI_MEM_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+-- 
+2.35.1.1320.gc452695387.dirty
 
---S9zWXF20ApbbyoB6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaPaCagAKCRB4tDGHoIJi
-0ohiAQDQx8/ngIErenJDLWY4lU6RY+0qmrL51bMTNVAHh7sOwAEAghs7YSCh8Sjd
-Sp5Y5uHh2P8M3xL2JiAL026goVBQXAg=
-=a65U
------END PGP SIGNATURE-----
-
---S9zWXF20ApbbyoB6--
 
