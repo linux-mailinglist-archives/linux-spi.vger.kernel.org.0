@@ -1,222 +1,256 @@
-Return-Path: <linux-spi+bounces-10748-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10749-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B22CDBF330D
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 21:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 67622BF5D14
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Oct 2025 12:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C7A418C2A38
-	for <lists+linux-spi@lfdr.de>; Mon, 20 Oct 2025 19:24:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FE381899F82
+	for <lists+linux-spi@lfdr.de>; Tue, 21 Oct 2025 10:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B0121ABD7;
-	Mon, 20 Oct 2025 19:23:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442DE32E123;
+	Tue, 21 Oct 2025 10:37:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="cWlAtToz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fVVVHy8s"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010023.outbound.protection.outlook.com [52.101.69.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170CD1EDA0B;
-	Mon, 20 Oct 2025 19:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760988219; cv=fail; b=G8uS+AOAYbYgIvYFwegawAja6oyqnDB5NioqYVY5opT0dbJQ7Rzosxh7rBzfBR1oEymEssGobTe/jw3UMUW7dorHG84m8iD42MO3eoCWSez+RpVvECKEAe86T5Aox9zdEm8kYeE0E1hDFnRDi4Lv8QqWp5Ju+mXMfrO2O1SEt1k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760988219; c=relaxed/simple;
-	bh=nKCF9N3UDpReSwR3X2Yz9tDEMNRdx+qe6Zk2F8FgktA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qQaqEjy84+yA6YJr+bS1emDQHEGswJi0pzmVLWK0PZYpu1tfs5dUEgr3BH9e04kjQt9eR6ASoyiEbEyT0zHyTgRhTYbk4rXIDM3CAxRFVFEZ9mqj1qfNUeq79xPJszG/djiCk5bESK9QjH4SHGpZYrDvbK0sAenN2toxEL/VNP4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=cWlAtToz; arc=fail smtp.client-ip=52.101.69.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qTN1IcM0O5xJmt4099K2inxTnYIyESfw7wjWiyyCVTcVgU+9q4vxWrAQoIMHgOKtHuKTz5kStL18dfjgiPx1zgKf8uNt+/pUulxjadaK3kqZyYs9DcW/PZvrMQCrXESY1/k8gOZRpREvyXtdn7MmIcC0yCkzFCwAnk1n4VzMxXROSS+fcU72P+B/+caicwXDyu9lGb707yAbEbvxHQQbon+AWO82sATmDS64ZlG75ZJA/HC1H7MUbwMAw2hm1gq+61BysjKOf/Gxowk1yUKGlCkVFLfYeY/XFXq61aGs+dfVLCZU9mRKohJXk0ci88HWFyMPBV8bnINTRnIqu+7l6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3laiZMTpC6WljcK8EJKcNYXb0W+ok14tJUVj+ZsE8PY=;
- b=B+C25bywbmwr22HtDv5oj0pHRxIkd6q268EW6ZPjDvBbLsn4Uk7CuZF8V8NdEBDJaNTAEXhwQ0CJPBK4c6tO6l1JyHMSO3VL4y9aCrC3Tj6mjrSbb24DaOjnmEmRETs9aB0qb3fIYto9Gi91ZtM8YZL8jr/xRbRyq3Onmm9syeBsh7h60FgaDg5DEhAD16FP8TfgoOH6B/jJ3x7IixOjMl80Ro4kvgdIUm/iL/0r8/nbUkECcHJHNg3A7oqcUYo1bvlzMtXokKNDD5kDwtwq/u6caebTHiN6P4NJZvCl64r1cXmN2Trbfw1O4Mv+weMXBmJ5q8N53mR/TAs4xkCqtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3laiZMTpC6WljcK8EJKcNYXb0W+ok14tJUVj+ZsE8PY=;
- b=cWlAtToz0MMdz4lev0KqCxgni1VNHVeqJTITuhYuxaH2H6w+0gT+jkhPiLER6qOjZbjpBJpa6Dsh9bDLBC7gpe0EG64sMmWmO70kT4RZ0gajrOdJqRKMpIq5nJFbgx3nT/l1kU3OtbLzicx8Qb5ujGEVsoTHuGj7ocLqX8z/pfRjhfFHj13xIaACUqFQsIoxcbVPOtHovex/pWFYdWetHltLf7KWDJbr/o4BBlXcpITsD7YQuQ5QlCKUJS1NyVg6e1z1btSaZO0XpZ3PmBZMcT3COd+N609KmQ0GraT46Jye78m+ckkKI30bhjuE8YVEl96VY2JfvxGObgDZmqpI2Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com (2603:10a6:20b:4ff::22)
- by PAXPR04MB8375.eurprd04.prod.outlook.com (2603:10a6:102:1be::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Mon, 20 Oct
- 2025 19:23:35 +0000
-Received: from AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e]) by AS4PR04MB9621.eurprd04.prod.outlook.com
- ([fe80::a84d:82bf:a9ff:171e%4]) with mapi id 15.20.9228.014; Mon, 20 Oct 2025
- 19:23:35 +0000
-Date: Mon, 20 Oct 2025 15:23:27 -0400
-From: Frank Li <Frank.li@nxp.com>
-To: Alex Elder <elder@riscstar.com>
-Cc: han.xu@nxp.com, broonie@kernel.org, dlan@gentoo.org,
-	guodong@riscstar.com, linux-spi@vger.kernel.org,
-	imx@lists.linux.dev, spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] spi: fsl-qspi: support the SpacemiT K1 SoC
-Message-ID: <aPaML32I0Ao1xhpX@lizhi-Precision-Tower-5810>
-References: <20251020165152.666221-1-elder@riscstar.com>
- <20251020165152.666221-7-elder@riscstar.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251020165152.666221-7-elder@riscstar.com>
-X-ClientProxiedBy: BYAPR11CA0077.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::18) To AS4PR04MB9621.eurprd04.prod.outlook.com
- (2603:10a6:20b:4ff::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4430632C33E
+	for <linux-spi@vger.kernel.org>; Tue, 21 Oct 2025 10:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761043038; cv=none; b=VZCfHvTjG9EoJgUmerlOvA5NWIgWGYTu9ZX/hMHvomEVVj0ylsVHOOrR7thMwJKZMmp/86reDScG+7l8DdR0/zT6kGYpLJ+zYvs8P/y2IsUCTvcoaoxog8aIcub/x6o4FrDvVN7g0iZID9cc1IHhgtnfhjGnzG/hgNIzSTVsA5w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761043038; c=relaxed/simple;
+	bh=q2nB0DwM2YccZrwzAwnGe8JbGMPoOZkWXyOBvo6HqOU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ns7dF8I4NbjXj8VZSLjS8cJMOrraRw6jawXHD/rgLJwTtIC5Iz2ufyb0Z8vUMX2+d5ItYIiGL0ngPZXxLChBKXcd6l/qo7IkoZdf/PnLWY47k1i/uh2GK8YrouRQxfmqr43UvVjE7J6zJ+Y696QiNuCpNImUitIm15mndO4S+X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fVVVHy8s; arc=none smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63e330a1360so2361345d50.3
+        for <linux-spi@vger.kernel.org>; Tue, 21 Oct 2025 03:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761043034; x=1761647834; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ph/ecut6A6hic5K1NGZ8Pu7nJ7zUO/n0Ty1uOi3Gzxk=;
+        b=fVVVHy8sLoQob27t0rEA0gaFAsTwrvZWMtiHra06oGlAgVvBRbCvi9Q0R5PsssM2VP
+         3opZzsj2yjl4mZN0m0fQOUCFaPGUlU0hdJQVEOAICP/F9edy4PeFxMDNRgqqE+vWlBwq
+         gRo4WOltCc2x1w7tzNmnsiUe7DLW4Wk385fOAjvx4xAjIy6N//5jx7kmheOrtwD7tWpE
+         2Ptn2+1PdgjD7SRm8u6GwWspp5Qow93y+PUJ1zdNcZ+cXFL0Hl9twy5pncYwDDJCM4IE
+         DPQhhySXv3aD4ZgJwdVFZNuZDXb8ihiBpVJW+A5z81zJ6Ce1m/3ygAE/YqYBEV2Yts0D
+         y4xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761043034; x=1761647834;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ph/ecut6A6hic5K1NGZ8Pu7nJ7zUO/n0Ty1uOi3Gzxk=;
+        b=pkVuHKHkSzdhNsNp2V6Zkb/1j6EzRb5hkiwYStqaAybKiaqnlYVqCLrPe+wCQ3A8jy
+         AFtqfJIFuD/O7fjbG8kxdJIdqF+ueSpr8jodUYK00jplTqndlwuCVtsGlVSWc7v1yJIl
+         yEKRL32GfqKY4AUIUsGOkAZs4584u12gjr8tx6tt2pd6ezsA1CyLUNCf2xBDoe66XATg
+         2kY5R6m71g93wbC2C5edq/ZSkZadNC0BhSqs7Kp7LMa1ioEIuVYA+4N0lZbUrkre10Xo
+         DMkXpLjqt7WrbdFTMV/IylbFcx9bmE2n92zFgcUhoEvpwY+WqwcaJU5vEaXR0OxZtdyY
+         T4jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKBjxk0oiTFX0hVLF2NMuQrit6nC/oh9D6N55rSYmtltFhwIDrF7q6EZpVSTI052kbJRQIKFBYQwM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylkuhSMDVMTVtlYBEbYJrXy4qUDTUCLit82fv/wXyvF0OObEEE
+	1Bl6rwPZJffgniI3KlskD5WEicEHQUcZaAN4ac0dKYa6qrGxfnK5Q4keKaFeEoAOMPzBvRhO8JC
+	PbQQgEQ8PLQtBsP9qxkr9Kg7fVAPpXcR/eC6ZreDB1w==
+X-Gm-Gg: ASbGncsWJM46dpx5QCZXSndTPQVNYDVSCHo9DVr/JlblOld0aYyzhZaRpnA4spHhgUg
+	z9OJvquKISP4AHnmct8sSn4k2nRRmkI9Iza6FsU+B74Wi7LoIm9TZkl4nhn1hstwqHn7w0qgjXy
+	55y1CISWAorFFeSV3JFCRF5X5cQhH5MmxxSquheTEHGxLbhioJHM74jkiJCdv5L5fEL/jVG4rDi
+	visrsTnFqs+yZH+LOGX+euUmUneOLokLb8zFOzuxlE18hPX6zG864O8zne1aISo9TZyEn8L
+X-Google-Smtp-Source: AGHT+IFNWe0p4ctoYWfajWc50aGmHTb0xLSf46n4ozIzG6IhVoLkeVF1uvz+zd4LTY4qziEKltpM47W2yp2BVV5LtGg=
+X-Received: by 2002:a05:690e:1c1d:b0:63f:2123:f966 with SMTP id
+ 956f58d0204a3-63f2123f9b3mr679700d50.69.1761043034054; Tue, 21 Oct 2025
+ 03:37:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR04MB9621:EE_|PAXPR04MB8375:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f7f348b-afa2-427e-96ca-08de100e298f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|19092799006|52116014|376014|1800799024|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mnXm86O5yiEMDYhoGP9hSI42yJ7ddSjbOExDpzcLC2hTuJS3l6uDwCcghgLM?=
- =?us-ascii?Q?iqnhkFc8de+g5Mw9osZfRxk71dzKXP2PNiC2d9gpXaT4qxhW2y6oBYkQB6XW?=
- =?us-ascii?Q?IrovR2jImVytQJ/lHsOCC3UDHejaVzQsFmQklGYaqy4YPwKpCgjTG26zqWcy?=
- =?us-ascii?Q?TSKD4kG6WoZVmFeeuH5JMfozJ8k47qkdUzwznISPSWbEdgZTAe4YA4g8IMgJ?=
- =?us-ascii?Q?oyHrZqYBuI1X3//Qtz7CxLvjuW1Hy6olXRKH9lAX17CGrmjwdBtXE8M0dw3y?=
- =?us-ascii?Q?+SkErQcoJj5SJzTKpuEaiKMu2EUcQNQdxEpci7eL90RJWb3nhpOPLy+Mph03?=
- =?us-ascii?Q?F1bjErru1djKdPsYwxHcusWu408BqZVYjQjfrlaUZCgw0EKQtcNzV3LUz/cy?=
- =?us-ascii?Q?0ZL0DzOB6WPscvj+tIkdW+PprgJr0rAIbFsJZvYc3WAM7PIzVVBCFS9mtWTE?=
- =?us-ascii?Q?FQzyDPsykQNK6PZDeLYltZqeAfSpveRz3FjlYTukUh6XpNV0LZ7aRfwqFK4B?=
- =?us-ascii?Q?JvxZBPOwSAWcTbZGzJK0m9JFuSHXttKrMP2H7M0N2k4Pm+qRpgY6tVFLdN2s?=
- =?us-ascii?Q?yA0vijo1TkBA12twbbRb3VRPohAXNTKXbadbU9NZ1Q/CjIKR1DJ2mH4O0QYB?=
- =?us-ascii?Q?bgyFFjcI9iXA77SPrQfeCh2hQxj13kOTjZ54tbMa2UlS4QhzJQRK0ZYxouPp?=
- =?us-ascii?Q?yFS3/AF/nvYvIhi2G6zRvdo9hRpXavVcvVTIW294XoJyzOK6OPa8qNi2CC4s?=
- =?us-ascii?Q?Z0dC9ymBz+uVDS5KOrehwDZHTVHhLdpx7J6NXli4wAaz3FpwXqHHnI5GH3VB?=
- =?us-ascii?Q?WxcMfUFxB+uhqyCnk54L3JEbp0a0Mo4YZ6QdmGymAEzo8th3wK1wTJY6uQoP?=
- =?us-ascii?Q?547HueetFluXfGJq+rGyBRm8744khWW7bNHx8TYDRdxY1gbIqoxPSZQeHaIO?=
- =?us-ascii?Q?ev99Zrbp3oDI6GQsdz7J8TvFA9q/LGsQyCBSI00j7puxfC5Ek4EvAMAz0mna?=
- =?us-ascii?Q?vkW2ya1yc97yoVoAgkvpm7uMWaDHal/lsJ7cnklT3oipyRXeoR0P32t5ccF6?=
- =?us-ascii?Q?JWS13LGoOcjQOdaQ1Ry+DF2koSauP3RdikGjoqQtF4810D7YJBeBSeyxTRGz?=
- =?us-ascii?Q?u5wF4hjWQGOAlVUvDTbjBFN/8Uy00Bn8XCS3CNExEGeY0rUGHrCwdSNuB7Rw?=
- =?us-ascii?Q?owN1BgDGNhl77nCyxeLpBIDsbqYfBmAEN+i/LIyQJH3LTg4JmUP4HtosM3Bn?=
- =?us-ascii?Q?nsU5tbSzK74k/Dg7VBycQGZ2yN8FEwh/Ir6KkMVAMQVkc/4KJz6LedPCcaQs?=
- =?us-ascii?Q?8YDtr7Jg2ObYMB9ghx7bNrVhxoBHcWFRjsGQNCJAZvIn8VWfJhIwpjd2d+bu?=
- =?us-ascii?Q?67qVbLWSJOJPm42gADFbfezCfD5ePg3ubYBhyiNgtMEqyf1kQaBAX4SoS/ov?=
- =?us-ascii?Q?Bk3Dj3XW/Uqay14Nh7z+aKBoxK9I1U+TSpiS39poe3L5K2Gcnmi16/lGFNwB?=
- =?us-ascii?Q?SjkyVzv228ZFqk5SisAQmI4xovKGnYGL679Q?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR04MB9621.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(52116014)(376014)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?AqQI/XaZlAFgvzeu6hoqmgc7Nh+WvKf4sdbHdgMa+AhThbJSo0p9CMk/T3Wc?=
- =?us-ascii?Q?XP8+hGhfh4GeOonQEa5JTFXAnY0QLsfX60ZawQ9joD+dJuM5WYMQYgwmkQP0?=
- =?us-ascii?Q?NpIjVth2wBUlCFVCNEdivuyEpK4Ci4IUTFdYbG9cwZTLfefEdrGhiO+PTDLZ?=
- =?us-ascii?Q?D+LaxmWmIqmy/72pCcktfEM/0WOMbkvGXL0J3NY1pu4NOi7op2edpnJWA1XF?=
- =?us-ascii?Q?qyBU9mpzXMCJFIE7VJAI7Sq582sLEFTUbjh8hyuVkuSXvqAFxj7kGVegMhke?=
- =?us-ascii?Q?Y23TZ4QoVz0dBbW9ppsx31w+PBchrEu/pVNHh5BkM/4g53eSj1rR09k/i3CI?=
- =?us-ascii?Q?dECXkXF9CxBEXi9y/os5BzCvIgh8JQ5LgNfvfUJ3lGdSZfkIZ39EYnBFjNSq?=
- =?us-ascii?Q?o0rKxeE6sdb56jAIinfyomRwWjojaJMT22PJhUdAtdY+dYwGJRiQBjNUDnsx?=
- =?us-ascii?Q?mczuPVcdNxM6mbJFFVD1kZvm1hAETnsOkY7zGVhwt03ICIwjXKa//18into6?=
- =?us-ascii?Q?TJBwKHk661r4DKQx2aIqCjRFv3Tb36nm1hTdjpns3NRJL9MzgvnQ7bXR5Sdv?=
- =?us-ascii?Q?TUT5DMQxSvzKnCeJD2A5XQeaEcIFeWtRERmZHaWyPvgOL6osaYrjlBCaoY6E?=
- =?us-ascii?Q?IYYO8gUvKaFikcwrLaCQYl9/HxW/MFxhNMzTmTkXBO9GSLtsTFB6WIbQAnY6?=
- =?us-ascii?Q?UphDvbFkTza3riQci4B+JdRNXBDKyb+AhX17dHhQfAIKVHvHLpVD5MjTtc+4?=
- =?us-ascii?Q?5jnM4NTE27kilLRLVywE6oP4bcrO/Q8PyXVuIIgJ7Y4YamgXGda+ohPvFr2G?=
- =?us-ascii?Q?fsslv+OgiQBZ29RlK+CM8Vhq07R40aqWhgLJZvbEvqeMgu3tDBw1EJpBaMwg?=
- =?us-ascii?Q?s+h5PKJvz0QBQYkcpf3WtpODI2gtzfICCtBnWwnSRudRJRPEHy+hIa/QcmaQ?=
- =?us-ascii?Q?SgPFVBNk2pTJEv6q/W9bqoiKghvLpmRvRleL33dTo7WhsOi1JsdKBqnbWV3h?=
- =?us-ascii?Q?6UnKYZkLZUzvMp03b035tfZQZwsb6g8SqXaiT87IPVGpUJTbKjaZUw5qYAz7?=
- =?us-ascii?Q?+YOa+33mnGuhaecu85p4jI21qC9dj/AqZ07OhxaprTtpfMIIyf/OHh2//R2i?=
- =?us-ascii?Q?akAsRPvdE7aOIzY+hkH+VbbJDfIUB1lbnRhs46Dk2weGizW5a+VbI+PODoCu?=
- =?us-ascii?Q?pZVmh1JI/D2JmkS0qjT9hjF8fhJcv+pHEKc62+qnqudfM57kJsTmm9XXxWAA?=
- =?us-ascii?Q?62EXIygOaV7Hb/BOkvyM5HJWn4YCzNxJZIsBQ0x3xWcepNlhzZskD5ussjvM?=
- =?us-ascii?Q?ldDwXwLlgx5TkcikiUq3T1qtCC4fhJnzzqjNUPWinOdOJ571QqSjfhrXdu8I?=
- =?us-ascii?Q?4Ey380U6haRvbStGVzcvfJ2+A5Qbw7yG9EqNsk3/zhYo2pgGJeuSpqmJP39d?=
- =?us-ascii?Q?+OKYWMhHwuVrA5r8z2BxEy8JXypkKDrconAq8gIj2xjlSjZDLYqscWAdK37/?=
- =?us-ascii?Q?5X9jcUBDXYpdc2vvzzDboOGOsY1ZWNJQy5vSRdDicsw3EgZFBkQUMuBwzxeE?=
- =?us-ascii?Q?WiGi3PMq5ELLwH7cHjejl098cDGJmHD20zYtV/5e?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f7f348b-afa2-427e-96ca-08de100e298f
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR04MB9621.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2025 19:23:34.9806
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RYOZlUjxnr9/xsIoeLOLPoGeO0aB0ZojxkXirQosDtRdxacFXx8J5WX521t2/b2LndFe0SZ2lnrtIijZ1aOlvw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8375
+References: <20251015071420.1173068-1-herve.codina@bootlin.com> <20251015071420.1173068-3-herve.codina@bootlin.com>
+In-Reply-To: <20251015071420.1173068-3-herve.codina@bootlin.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 21 Oct 2025 12:36:38 +0200
+X-Gm-Features: AS18NWAASdG0xF_SzF3JiceFgjGSp70iEL12-_KJqlp8PTGQyhYi7YmRbNtNg04
+Message-ID: <CAPDyKFqKfCTab2OcY9Sj9xS949o+y5PpJvO0CP80eV2qr-0sdg@mail.gmail.com>
+Subject: Re: [PATCH v4 02/29] driver core: Rename get_dev_from_fwnode()
+ wrapper to get_device_from_fwnode()
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Oct 20, 2025 at 11:51:49AM -0500, Alex Elder wrote:
-> Allow the SPI_FSL_QUADSPI Kconfig option to be selected if
-> ARCH_SPACEMIT enabled.
+On Wed, 15 Oct 2025 at 09:16, Herve Codina <herve.codina@bootlin.com> wrote:
 >
-> Add support for the SpacemiT K1 SoC in the Freescale QSPI driver
-> by defining the device type data for its QSPI implementation.
+> get_dev_from_fwnode() calls get_device() and so it acquires a reference
+> on the device returned.
 >
-> Signed-off-by: Alex Elder <elder@riscstar.com>
+> In order to be more obvious that this wrapper is a get_device() variant,
+> rename it to get_device_from_fwnode().
+>
+> Suggested-by: Mark Brown <broonie@kernel.org>
+> Link: https://lore.kernel.org/lkml/CAGETcx97QjnjVR8Z5g0ndLHpK96hLd4aYSV=iEkKPNbNOccYmA@mail.gmail.com/
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Saravana Kannan <saravanak@google.com>
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+
 > ---
->  drivers/spi/Kconfig        |  3 ++-
->  drivers/spi/spi-fsl-qspi.c | 10 ++++++++++
->  2 files changed, 12 insertions(+), 1 deletion(-)
+>  drivers/base/core.c     | 18 +++++++++---------
+>  drivers/pmdomain/core.c |  4 ++--
+>  include/linux/device.h  |  2 +-
+>  3 files changed, 12 insertions(+), 12 deletions(-)
 >
-> diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> index 4d8f00c850c14..2e3d8bd06ceb2 100644
-> --- a/drivers/spi/Kconfig
-> +++ b/drivers/spi/Kconfig
-> @@ -435,7 +435,8 @@ config SPI_FSL_LPSPI
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 3c533dab8fa5..334f5a4fbb9e 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -1888,7 +1888,7 @@ static bool fwnode_init_without_drv(struct fwnode_handle *fwnode)
+>         if (!(fwnode->flags & FWNODE_FLAG_INITIALIZED))
+>                 return false;
 >
->  config SPI_FSL_QUADSPI
->  	tristate "Freescale QSPI controller"
-> -	depends on ARCH_MXC || SOC_LS1021A || ARCH_LAYERSCAPE || COMPILE_TEST
-> +	depends on ARCH_MXC || SOC_LS1021A || ARCH_LAYERSCAPE || \
-> +			ARCH_SPACEMIT || COMPILE_TEST
-		   ^
-		   align to here
-
-Frank
-
->  	depends on HAS_IOMEM
->  	help
->  	  This enables support for the Quad SPI controller in master mode.
-> diff --git a/drivers/spi/spi-fsl-qspi.c b/drivers/spi/spi-fsl-qspi.c
-> index 9ecb756b33dba..f4f9cf127d3fe 100644
-> --- a/drivers/spi/spi-fsl-qspi.c
-> +++ b/drivers/spi/spi-fsl-qspi.c
-> @@ -267,6 +267,15 @@ static const struct fsl_qspi_devtype_data ls2080a_data = {
->  	.little_endian = true,
->  };
+> -       dev = get_dev_from_fwnode(fwnode);
+> +       dev = get_device_from_fwnode(fwnode);
+>         ret = !dev || dev->links.status == DL_DEV_NO_DRIVER;
+>         put_device(dev);
 >
-> +static const struct fsl_qspi_devtype_data spacemit_k1_data = {
-> +	.rxfifo = SZ_128,
-> +	.txfifo = SZ_256,
-> +	.ahb_buf_size = SZ_512,
-> +	.invalid_mstrid = QUADSPI_BUFXCR_INVALID_MSTRID,
-> +	.quirks = QUADSPI_QUIRK_TKT253890 | QUADSPI_QUIRK_NO_CLK_DISABLE,
-> +	.little_endian = true,
-> +};
-> +
->  struct fsl_qspi {
->  	void __iomem *iobase;
->  	void __iomem *ahb_addr;
-> @@ -998,6 +1007,7 @@ static const struct of_device_id fsl_qspi_dt_ids[] = {
->  	{ .compatible = "fsl,imx6ul-qspi", .data = &imx6ul_data, },
->  	{ .compatible = "fsl,ls1021a-qspi", .data = &ls1021a_data, },
->  	{ .compatible = "fsl,ls2080a-qspi", .data = &ls2080a_data, },
-> +	{ .compatible = "spacemit,k1-qspi", .data = &spacemit_k1_data, },
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, fsl_qspi_dt_ids);
+> @@ -1957,7 +1957,7 @@ static struct device *fwnode_get_next_parent_dev(const struct fwnode_handle *fwn
+>         struct device *dev;
+>
+>         fwnode_for_each_parent_node(fwnode, parent) {
+> -               dev = get_dev_from_fwnode(parent);
+> +               dev = get_device_from_fwnode(parent);
+>                 if (dev) {
+>                         fwnode_handle_put(parent);
+>                         return dev;
+> @@ -2013,8 +2013,8 @@ static bool __fw_devlink_relax_cycles(struct fwnode_handle *con_handle,
+>                 goto out;
+>         }
+>
+> -       sup_dev = get_dev_from_fwnode(sup_handle);
+> -       con_dev = get_dev_from_fwnode(con_handle);
+> +       sup_dev = get_device_from_fwnode(sup_handle);
+> +       con_dev = get_device_from_fwnode(con_handle);
+>         /*
+>          * If sup_dev is bound to a driver and @con hasn't started binding to a
+>          * driver, sup_dev can't be a consumer of @con. So, no need to check
+> @@ -2153,7 +2153,7 @@ static int fw_devlink_create_devlink(struct device *con,
+>         if (sup_handle->flags & FWNODE_FLAG_NOT_DEVICE)
+>                 sup_dev = fwnode_get_next_parent_dev(sup_handle);
+>         else
+> -               sup_dev = get_dev_from_fwnode(sup_handle);
+> +               sup_dev = get_device_from_fwnode(sup_handle);
+>
+>         if (sup_dev) {
+>                 /*
+> @@ -2222,7 +2222,7 @@ static void __fw_devlink_link_to_consumers(struct device *dev)
+>                 bool own_link = true;
+>                 int ret;
+>
+> -               con_dev = get_dev_from_fwnode(link->consumer);
+> +               con_dev = get_device_from_fwnode(link->consumer);
+>                 /*
+>                  * If consumer device is not available yet, make a "proxy"
+>                  * SYNC_STATE_ONLY link from the consumer's parent device to
+> @@ -5279,7 +5279,7 @@ void device_set_node(struct device *dev, struct fwnode_handle *fwnode)
+>  EXPORT_SYMBOL_GPL(device_set_node);
+>
+>  /**
+> - * get_dev_from_fwnode - Obtain a reference count of the struct device the
+> + * get_device_from_fwnode - Obtain a reference count of the struct device the
+>   * struct fwnode_handle is associated with.
+>   * @fwnode: The pointer to the struct fwnode_handle to obtain the struct device
+>   * reference count of.
+> @@ -5297,11 +5297,11 @@ EXPORT_SYMBOL_GPL(device_set_node);
+>   * This is possible since struct fwnode_handle has its own reference count and
+>   * hence can out-live the struct device it is associated with.
+>   */
+> -struct device *get_dev_from_fwnode(struct fwnode_handle *fwnode)
+> +struct device *get_device_from_fwnode(struct fwnode_handle *fwnode)
+>  {
+>         return get_device((fwnode)->dev);
+>  }
+> -EXPORT_SYMBOL_GPL(get_dev_from_fwnode);
+> +EXPORT_SYMBOL_GPL(get_device_from_fwnode);
+>
+>  int device_match_name(struct device *dev, const void *name)
+>  {
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 61c2277c9ce3..5a7822de5d8a 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -2678,7 +2678,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+>         genpd->dev.of_node = np;
+>
+>         fwnode = of_fwnode_handle(np);
+> -       dev = get_dev_from_fwnode(fwnode);
+> +       dev = get_device_from_fwnode(fwnode);
+>         if (!dev && !genpd_is_no_sync_state(genpd)) {
+>                 genpd->sync_state = GENPD_SYNC_STATE_SIMPLE;
+>                 device_set_node(&genpd->dev, fwnode);
+> @@ -2753,7 +2753,7 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+>                 data->xlate = genpd_xlate_onecell;
+>
+>         fwnode = of_fwnode_handle(np);
+> -       dev = get_dev_from_fwnode(fwnode);
+> +       dev = get_device_from_fwnode(fwnode);
+>         if (!dev)
+>                 sync_state = true;
+>         else
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index b031ff71a5bd..d8906136c086 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -1090,7 +1090,7 @@ void device_set_node(struct device *dev, struct fwnode_handle *fwnode);
+>  int device_add_of_node(struct device *dev, struct device_node *of_node);
+>  void device_remove_of_node(struct device *dev);
+>  void device_set_of_node_from_dev(struct device *dev, const struct device *dev2);
+> -struct device *get_dev_from_fwnode(struct fwnode_handle *fwnode);
+> +struct device *get_device_from_fwnode(struct fwnode_handle *fwnode);
+>
+>  static inline struct device_node *dev_of_node(struct device *dev)
+>  {
 > --
-> 2.48.1
+> 2.51.0
 >
 
