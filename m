@@ -1,142 +1,167 @@
-Return-Path: <linux-spi+bounces-10785-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10786-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BD04C012CC
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Oct 2025 14:39:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88743C02CFD
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Oct 2025 19:59:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BE4A0356094
-	for <lists+linux-spi@lfdr.de>; Thu, 23 Oct 2025 12:39:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EFF81A67B65
+	for <lists+linux-spi@lfdr.de>; Thu, 23 Oct 2025 18:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29E9313E11;
-	Thu, 23 Oct 2025 12:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4BAE34B405;
+	Thu, 23 Oct 2025 17:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OSA9QUjA"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="CX5aE2BB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2394E2EC568;
-	Thu, 23 Oct 2025 12:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3533446A3
+	for <linux-spi@vger.kernel.org>; Thu, 23 Oct 2025 17:59:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761223178; cv=none; b=hvw2kjGzjyFxg/cuRFildcg8/EI1VT7/DTVWgv3ryxKU+tqsCOEnDfmRLWqdYk54AVu2vhSY5bvhJJWcqrAKFC+yAWGcDpr1q9xXZIex34bumuDHHfBOUzIoaXGFzlpz/2R6eU8nTFGzET2bR6E3pHBQBPvp5cEngZYHwRG/1hs=
+	t=1761242368; cv=none; b=BGmAhLshOCdIp/3GbY1CpMGLJCe1nYVFcghMC3Qi9P4oWMrqmOzEe8Z2Rmwk9HrG+O336c4QCTXEUvkEo+n7BBXgT32yetYfvUuayN9ljxR0UK9IfjxX8MtACK9EZhofQyvImAlzbsSsXp7viJLqyAWpETreFrGBed/e/18GAJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761223178; c=relaxed/simple;
-	bh=ENxKQGLphv3+AjkiaeUv+Q+GG4Ha2gwwg2AeDWQi4fI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PjaXwO/YRbFEWCcHmtfV0vp+vDIYk/tEFb2cc1SdwIs8jrllcIBY+FQwGjMDbAP9PQJoCAQ+F+zV4QDlVh9hl5DlJrcXs7h0XlxIIzAYSU3bbSFqUL6KVR0rlRvoH5MFgE5wY5O5UzyFBX80p1CpFRIvwRrOXD/7X+coxoC9ZxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OSA9QUjA; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59N6iTve026532;
-	Thu, 23 Oct 2025 12:39:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	em6T5/MuXjt9/C6nu7UQlOYK72gnLBq+vLNDjIAMRLw=; b=OSA9QUjAdqhznGUR
-	9sawIXXfIyWZtMDXKUdup4GyHzaGvhGiiI71kurOW0c1vM+CBoOifN5SdzXKyTF5
-	rloc66kBEfsC27bM4/bnO2pR+A7Bcb5ov+1K1mlO5iAShWk9pLJNET2QLR2ux3Jo
-	FYyjKNmfym7DpntkMNyBKrNlmJKCu3dW87lhQbx6KSF6wj5tfNGmqIQlnsFKQwp3
-	6dShfLOqhvyKoNSen+J4n+ho+PrG/PLs9E3OJnuYwITlNJWQyMojS2PX7qtYh/wT
-	gqFnmZqSUesUze5uQ7+T71T3ig7g/2T5UT5zK9L3/E/MngVmFSzCDlr9pMW9Yifk
-	9XSNEQ==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 49v42kg7gm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Oct 2025 12:39:34 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 59NCdXU5025137
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Oct 2025 12:39:33 GMT
-Received: from [10.151.36.184] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.24; Thu, 23 Oct
- 2025 05:39:30 -0700
-Message-ID: <7b790b0f-9dc0-7177-836c-bbb1a342068b@quicinc.com>
-Date: Thu, 23 Oct 2025 18:09:27 +0530
+	s=arc-20240116; t=1761242368; c=relaxed/simple;
+	bh=cmoQL7/EOLRFUL/HDkJZjuFWcItHG3aLGx55fZGpJDc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NtmRhIGYOD/9XI1+KM5p6dR+vf7OLhYs7bYvZauXzNaDiziag+Mu4yFcTIfIsw8V8gQxCAXqME8u+1jheo0AKzw/BFnLjkAS+d2EmzOZM2Ld/Z2VOsfUW1AmlgT9t3NObv1snzIVl1VMSJPMEPP5rLSDIPqGMbOvyyyacnAKq+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=CX5aE2BB; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-b49c1c130c9so812844a12.0
+        for <linux-spi@vger.kernel.org>; Thu, 23 Oct 2025 10:59:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1761242365; x=1761847165; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZKnZFdnM3oZwGqheXR0h641QYDnGOp0D351J3S+oms=;
+        b=CX5aE2BBNKN74+HDW2YndtKOFsSy4X+rslQnz5Kpdk/25xIV6Gu7jS5k1YjS9UPSje
+         nm6JRSrqNT9ATEDog+u5mUYQ92TxlFX+pQb4yuwGqOYQmcW2aF+ZN1suntTHPncdtBwM
+         SMfC9LyhHoAVUD6Nr/EbjQBys+4y7FxOb7Cahl09wO/ANp3AZsxLGkhr+FJApMO+Q2TD
+         2HOS9R9UyT5DH4yi4g4DCdFQLTLa/leGBrf4JY+5pb0pAiTYmpsrdt0DRTtnAVUWe0hC
+         EYi6N87JwvF+VdA8ZliBIqLTJqMG5F8+OowviyCsAqu9DfmPcy8H4bN43zIj+h6idTAO
+         dOsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761242365; x=1761847165;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zZKnZFdnM3oZwGqheXR0h641QYDnGOp0D351J3S+oms=;
+        b=v3yJ3vhuHlBtYSvtexzKp19aL589Ba1v2O4pzRaQQ6reucupBIPYV9fwhS7usWUJ2y
+         ii76tP+0PanTdjhkpLBEat5iV/EUD580udovqbKICXpPiPbwU1Q/J5x9gQ9SIjlKphuN
+         FIKV/g7g9vtWBInt6dgIoMtpUVBFZYvxIuupcVKPRSimJuf1ri84QgPo662UExkb61K4
+         J8KJ9uNDw5qmNR+wlpRU9lvodTztkf1XqN4og9x8++A6oUuTV/eybEUYvzELgwI9AQos
+         pgpl7G9pN2SfSENRQxaFIcsmLll/Q4W7G2eZn/YFoCmmaCvMcrj0brm87bb92Df0DHt5
+         FUAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVSJ7+F6/lXGNZv9HWBKbX2Hc6pieMgfVxI+hlfsLDPFj6uA4YwAhXnmLoR2LSnC/CgSlKnhco5c4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLJMOetnncMjxb1ZAHRSjVWFS1Px8aJT/66e6w5zzMv57jYk/8
+	QAOZoiSPrlPWgV/EEEVS9lZWm/+ar/0TifNJ2W+BBVtMYQ2ejIBgnv0DT7r33GCYguA=
+X-Gm-Gg: ASbGnctHJwaBuFhp08VPpJQcxGalIc3L5eigN6KBuA0tIhplvu4mgsTgyRQB6Wa5F6y
+	FGc/2MhCFOQJ5Em2aQ2nWQnB6GafZyT6RPy/Y5eoh0tv5SeHxmKmQS+zX6CyqFvvDlwvBkHt+t6
+	5BRO0tnBAsef/o/YHnbPxK5N0yks+WyNYmdi34+xJktHKVfLFaF6zNkX61ViXmntNLDH0MbKaHk
+	ymeRcC68UKHQtWTHUEilY/fHU6hX0U/7g3eFN/q8GqW0QOXcrJZuR1gGtoJk3U/KPNsgGSWbR5G
+	/HXvS1+GjqrRQJQuIDzcMNFV9uq9x2tUNoWI6PgH8SERoLIecl+YjpigqhJWoZy6bBbSfGlbHMX
+	Mhp5GMuV+jOeBt6lkCXco5Q1O91tH2yugKgHTgz/vckD/OMW0vbpkWdYAluP6mqrNiTfaMWHhLd
+	aM01060EhJOlN5XMwKDS7VoFffOAA8/Sr9Dg==
+X-Google-Smtp-Source: AGHT+IG8JoJ2ND1pyiQh1ApMIuQ8AB6jOUuqQ1+8XSa1Ou2nNF3k3D9kPXQ1PKRoMYU7/mYJQIadTQ==
+X-Received: by 2002:a17:902:cecb:b0:27e:ec72:f6d with SMTP id d9443c01a7336-2946de3d929mr41775405ad.11.1761242365381;
+        Thu, 23 Oct 2025 10:59:25 -0700 (PDT)
+Received: from zoltan.localdomain ([208.115.86.150])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e223d1265sm6447431a91.3.2025.10.23.10.59.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 10:59:24 -0700 (PDT)
+From: Alex Elder <elder@riscstar.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	han.xu@nxp.com,
+	broonie@kernel.org,
+	dlan@gentoo.org,
+	pjw@kernel.org
+Cc: Frank.li@nxp.com,
+	p.zabel@pengutronix.de,
+	guodong@riscstar.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	apatel@ventanamicro.com,
+	joel@jms.id.au,
+	geert+renesas@glider.be,
+	cyy@cyyself.name,
+	heylenay@4d2.org,
+	conor.dooley@microchip.com,
+	fustini@kernel.org,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/9] spi: enable the SpacemiT K1 SoC QSPI
+Date: Thu, 23 Oct 2025 12:59:12 -0500
+Message-ID: <20251023175922.528868-1-elder@riscstar.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 1/9] spi: dt-bindings: spi-qpic-snand: Add IPQ5424
- compatible
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <andersson@kernel.org>, <konradybcio@kernel.org>, <vkoul@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <quic_varada@quicinc.com>
-References: <20251014110534.480518-1-quic_mdalam@quicinc.com>
- <20251014110534.480518-2-quic_mdalam@quicinc.com>
- <dd1e4289-5e36-4b24-9afd-f09569459a96@sirena.org.uk>
- <96ae7d38-4ce0-fa34-e6f0-6bb6e4ceaa28@quicinc.com>
- <0a743099-face-4cc1-91ef-098a748604b7@sirena.org.uk>
-From: Md Sadre Alam <quic_mdalam@quicinc.com>
-In-Reply-To: <0a743099-face-4cc1-91ef-098a748604b7@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WeLjqZzViYgfKw1VB0ES-yIzBLHsKPkO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAzMSBTYWx0ZWRfXwZWPk89gUPef
- KI/vSal51wnKsXAzh6moK4dlqc8Gy8kHTi55T3f5omPFrqjor8MacS7+hg4itSoTFJUmcEomKgb
- ELgweIW9b5g1MdHXBWJnuLrcd7ztf5f4aBLKlIfB3qn5psWkSjvG8XzhEUyRj23VuViGsI72jRy
- lpJ4pkTKGqU9ovKTdXBApUTJiXEFonYFfE9x0gnzRlJzR/Y6NMv2dz16BQviYILENU73wrf4u+N
- XdU29Pl7E8Y0D/OwTRRqHF0RwjIaeF40JZELUj33UvxqHW7nkDU6Y+Y7WQbuXAZmtJ2VP7T9gjI
- zKwnyXi3X2MR3m4LhAlpMVw87zpEY6eZT/O4b4wM/DbsHbxxtInixuRS4sZb21lf4/cNSe1CqD0
- mfjlFUUxXMgMITW5UbSKh2AvyTYffg==
-X-Authority-Analysis: v=2.4 cv=QYNrf8bv c=1 sm=1 tr=0 ts=68fa2206 cx=c_pps
- a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17
- a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=BAz0yG0TH0QP3-mkIuYA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
- a=HhbK4dLum7pmb74im6QT:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
-X-Proofpoint-ORIG-GUID: WeLjqZzViYgfKw1VB0ES-yIzBLHsKPkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-22_08,2025-10-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 phishscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- spamscore=0 bulkscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180031
 
-Hi,
+This series adds support for the SpacemiT K1 SoC QSPI.  This IP
+is generally compatible with the Freescale QSPI driver, requiring
+three minor changes to enable it to be supported.  The changes
+are:
+  - Adding support for optional resets
+  - Having the clock *not* be disabled when changing its rate
+  - Allowing the size of storage blocks written to flash chips
+    to be set to something different from the AHB buffer size
 
-On 10/22/2025 4:12 PM, Mark Brown wrote:
-> On Wed, Oct 22, 2025 at 12:29:01PM +0530, Md Sadre Alam wrote:
->> On 10/22/2025 12:39 AM, Mark Brown wrote:
->>> On Tue, Oct 14, 2025 at 04:35:26PM +0530, Md Sadre Alam wrote:
->>>> IPQ5424 contains the QPIC-SPI-NAND flash controller which is the same as
->>>> the one found in IPQ9574. So let's document the IPQ5424 compatible and
->>>> use IPQ9574 as the fallback.
-> 
->>> This doesn't apply against current code, please check and resend.
-> 
->> Thank you for the feedback. I’d appreciate a bit more clarity on what
->> “doesn't apply against current code” refers to in this context. I’ve
->> manually applied the patch against the latest mainline (torvalds/linux) and
->> it applied cleanly without any conflicts. Please let me know if there’s a
->> specific tree or integration point I should be checking against.
-> 
-> I tried to apply it to the spi tree
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-6.19
-I had sent v3 on the 14th, but since v2 was already applied on the 15th 
-and v3 was just a resend, the error on reapplying makes sense. 
-Everything looks in order now, and no further action is needed.
+    					-Alex
 
-Thanks,
-Alam.
+This series is available here:
+  https://github.com/riscstar/linux/tree/outgoing/qspi-v2
+  
+Version 2 addresses comments recieved during review of v1:
+- The "reset" property now only applies to spacemit,k1-qspi compatible.
+- Patch 1 (previously patch 2) now points out that this is the first
+  non-Freescale device using the binding.
+- Added Frank Li's Reviewed-by on patch 3.
+- A quirk flag has been renamed to be QUADSPI_QUIRK_SKIP_CLK_DISABLE.
+- The predicate for that quirk now returns bool type.
+- All other similar predicates now return bool type; this is done in a new
+  patch (patch 4).
+- If non-zero, new field fsl_qspi_devtype_data->sfa_size defines the
+  size of the serial flash regions, rather than ahb_buf_size.
+- A continued line in the Kconfig is now aligned.
+- Patch descriptions are wrapped at 75 columns.
+
+Alex Elder (9):
+  dt-bindings: spi: fsl-qspi: support SpacemiT K1
+  dt-bindings: spi: fsl-qspi: add optional resets
+  spi: fsl-qspi: add optional reset support
+  spi: fsl-qspi: switch predicates to bool
+  spi: fsl-qspi: add a clock disable quirk
+  spi: fsl-qspi: allot 1KB per chip
+  spi: fsl-qspi: support the SpacemiT K1 SoC
+  riscv: dts: spacemit: enable K1 SoC QSPI on BPI-F3
+  riscv: defconfig: enable SPI_FSL_QUADSPI as a module
+
+ .../bindings/spi/fsl,spi-fsl-qspi.yaml        | 16 ++++
+ .../boot/dts/spacemit/k1-bananapi-f3.dts      |  6 ++
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  | 21 +++++
+ arch/riscv/boot/dts/spacemit/k1.dtsi          | 16 ++++
+ arch/riscv/configs/defconfig                  |  1 +
+ drivers/spi/Kconfig                           |  3 +-
+ drivers/spi/spi-fsl-qspi.c                    | 87 +++++++++++++------
+ 7 files changed, 124 insertions(+), 26 deletions(-)
+
+
+base-commit: efb26a23ed5f5dc3554886ab398f559dcb1de96b
+-- 
+2.43.0
+
 
