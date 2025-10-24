@@ -1,77 +1,76 @@
-Return-Path: <linux-spi+bounces-10824-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10825-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52922C06AB2
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 16:18:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF318C06FB1
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 17:31:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8DED04F2859
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 14:16:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A44FE1882C18
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 15:31:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF611DFE22;
-	Fri, 24 Oct 2025 14:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D633226CF6;
+	Fri, 24 Oct 2025 15:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="JOg0zfTI"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="RjMb8aKJ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011052.outbound.protection.outlook.com [40.107.130.52])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013005.outbound.protection.outlook.com [52.101.83.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBA019DF6A;
-	Fri, 24 Oct 2025 14:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E12261393;
+	Fri, 24 Oct 2025 15:30:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.5
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761315381; cv=fail; b=sJti+8G18+/i4Kv6jKfbWX+eiZL5VJf54rAlRqKJ/EzVdNxCRR2DbokPuUscW2y0831ygg2yWi6b+ZlhOLMKFpZiGqw4YaKNX5zB7+k6Hcf8FfXeyJzjXow/AciC91k1GN/cJ5oiL+f++tyImaVmpl1i4boSqoAABo5xrj2WJEs=
+	t=1761319852; cv=fail; b=OVPnj618XgYtIKSk1+HE22q2CqrSfMBhO2PAcd1sPGRucaEGplkWHh11Z36KsjcdBIcjhG7iFNg+UlPfCmhPJ0r62kVDeYU/Y/WINnQ/L1jmo9vQZjLPIveAST8VOQZOVpU71rY+JH6YWFxedYT+t8/mwIC7VPD7/rbmWqvowVE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761315381; c=relaxed/simple;
-	bh=3QrtvNq/AAxlMSYqIa9oWtKnVJKqU5GJBQ1e0PaQDHM=;
+	s=arc-20240116; t=1761319852; c=relaxed/simple;
+	bh=tsf3xnTzZ9jUkAJA5+t7PRvLYE+3ebj58WpQ+I7IKJM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=NAQtb516uP9+kiOtAvS48tTqb3sTEr/PMWnGO/uD8TkyzQY1qWK1ekLHOU7Kqj+yZhBRsGGNzZq0lGHqtmq8QyTAJBhL/QKemgUvbSna29GuScNEvORSZraYlc3Y6XQEmHu3WNqpDc3TLX2s6dy9euOg+MUL1QPX4zV/2wZKqrw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=JOg0zfTI; arc=fail smtp.client-ip=40.107.130.52
+	 Content-Disposition:In-Reply-To:MIME-Version; b=BmPITDnrB9LGeuee4Ha9mQnrwLeCEXN3f3KEVWhF2pFB/B+B6MFJf56ybV8cA7qBByWBsLgOL0G7yUrBdGzSdm4JFZElAoHMK8FRV0qt3JDCLcDV5zpjdZtLkwz9JW44jfA2j6hlXTk/KWgwbR+QnI/j8rQwc49pqFID4UUARdc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=RjMb8aKJ; arc=fail smtp.client-ip=52.101.83.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CzLLuA82AE4DUrCY4TeOPlMmMyZj2Ngl36bp/+8cJnA2MK+ZLanJDg9Cco6NI95zVCM9v+OCl/iJpja9vxzvCNWEwLscZumCafV1xOTvdxTR771H5Bawh7bOLEh7BbQWj3WAokgLEvgXXammFnXihtV95kyaTltj6qFY5VNs8pOwXrIlKTkycOJcfomo5uZcYWXeJoDdM1ftDTUAe/MrVEy2PRwLY+V7+5zmbx3xkk2WDY3K8dlSKG7o1T4QSUeSAb46Oi9IJdav20DB/N+GFBBTdalFzJasyBHH+1eKjEVnSpocvRuivj2XWSZV41Gy3Zu5msOwrhDpl/Wp/Xit+w==
+ b=qO6Z61ivKyDhGUKEGZkTFIbi9341wJ04s69o9aE0OEpOV5fJ0U12cGqp8Xtof4HL/BG3tPjXThBGuCVYtAeT9auVQcSoDdQPZLVwlecSRJxE4oSwVOH4TQx1DjtPmdZBtRehKblplHX1mKbAll7v7V5PvGb/wB7tLwkslU9FXhl/M19fgSAcZpDi6iaCmNZ1BZpcOz64HopHNGHGddsDBpbVhb6jYUbgM7HEGRzmoRoeofsa6w93qjI4c/RRyqsawpIgcjcWwfUYcHU2NQij+E4JC3U0ucMRDq/BUTeSz5CY3ytNay69gHeWHOWyUPx/TJI3/owSz2MPqE1FKE4xoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GKA2s4pKua9X1CWRsVvWK1z1fAlw0fK6x1iEfzyam4k=;
- b=JURU2W+g13wfEkEeeSVkRiqQsLzCbKXZvvybHTz6Yj1jcZ5ylW3iOSY/42RcLKjhOJqi4qpW6A/kTx9ePcAgnfUhgTg4nfu/meBFtjPzfgOI+UxQtY+nzH4uaGwSJlIKOez2NADW8FwGFx8Ey/bhiLbVYaWs6NjGCessopk1oPFIzafhbivgRxjpICLbroZsw7GrushBwe4JxWWmTIfQbLcNUgTbZ8ddFwpmZZk28cRSqXvGJKNQPqr3dBWEz0ZJA4a4dkQUk0KLBJoJHn0ZESnsSPJMxf8RvurolORfitZKvv7RhSNwmB4l/nNO/g3hiApMPlw+pp73RFSHZ2uKDA==
+ bh=1AaJlXldRQdUZVrDPVz4R5Iffk/6ZTr097Ec3PdGEns=;
+ b=dIh6Ol9Q6KSAHn8vaypcldNrietSfiioqCJ3A5nG31yc1tc8sPzQ8pKGfuSw11ToSnS+xnDtAQDKw0eSMbHMJWVkS+jNf0GWE7+Tf+WqkfTmPbgRo0e01y9yktvOsnmONL6EDHmhKpQttLFQSxRGyMEkdyHULwqdOaoayPbd8Kl6SMYdg2LFEjADY9Ta5wFKqAk8gcTJ/LDSewH0Vj3LQElT5Idhv0LNLR/SM1S1eqylfxEUEHygzMG2V0eHjBnuB3PxzO6nF2YrTbQVRreXdHGruPVwBHyoNOB6YRBmErzR+dr/rWecRGDgXqSIXVicCPYXCmC/c15+7f7SINjNUA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GKA2s4pKua9X1CWRsVvWK1z1fAlw0fK6x1iEfzyam4k=;
- b=JOg0zfTI1lHoKs7iB1xucvh25xCXRxCGWw8ePlQY1hkP0ZDqADy49GwqzgjzSXeeWgBGR+0r7p3ZofSZKt3tFz/kUsGwW8elbAIqUEYriuW+vwt8vdBcegQJkhT4NnLJCxj9pPDKqIE0B6iMprHx0vIUbmM/2T0Jmc52WfxGh+vs/XDbbYTien4NBYCN6AQIXZsI3Y3VrhgwYshhpJv6Sk36epYUckpLKjZXHVPOqIoe8yKIEfs190en9iw1WkknnGgzGEMUYK3+j9hNE0Y1xyw5Mf2EML6ic4UU/IoMjp/QrQOV0bxrdwcBlcDQE1PtLe/5AVq7OG2nR23iT6wR0g==
+ bh=1AaJlXldRQdUZVrDPVz4R5Iffk/6ZTr097Ec3PdGEns=;
+ b=RjMb8aKJESvPHLdqD5wEz8iBSX39KgkNWh6Qee2/+4mBmE7Jx6cznmEdU5DppJ9Fs/+MhiVOel3TfS2vdpJeXFO/FtvNBTuvEraohFAMTg2U9/94cnlhc4Ab4TalkoHzannRZN89I5kRkmqvO+ZxMoiAs6KVNGd7jI3GHQ1hg8HAh/zjn6y/sUOnJkXrVCsAy3D1c4rQE9vHc1W8I0LysCxVAyVRymr1mkSbaAkYeMH0iyeYtyYKA08wvf7w7YglwqkyFhnUMkOBXVPQX0QiCEjPJMntgvHCnqb84uGrV0xUj/4QVGK72hxrVx0Ofa9Qnq6rgXzTr/b7yuo9WNT+mg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by DU4PR04MB11816.eurprd04.prod.outlook.com (2603:10a6:10:626::14) with
+ by DU2PR04MB8856.eurprd04.prod.outlook.com (2603:10a6:10:2e3::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.13; Fri, 24 Oct
- 2025 14:16:17 +0000
+ 2025 15:30:46 +0000
 Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::55ef:fa41:b021:b5dd]) by DB9PR04MB9626.eurprd04.prod.outlook.com
  ([fe80::55ef:fa41:b021:b5dd%4]) with mapi id 15.20.9253.011; Fri, 24 Oct 2025
- 14:16:16 +0000
-Date: Fri, 24 Oct 2025 10:16:10 -0400
+ 15:30:46 +0000
+Date: Fri, 24 Oct 2025 11:30:39 -0400
 From: Frank Li <Frank.li@nxp.com>
 To: carlos.song@nxp.com
 Cc: broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
 	kernel@pengutronix.de, festevam@gmail.com,
 	linux-spi@vger.kernel.org, imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: imx: keep dma request disabled before dma transfer
- setup
-Message-ID: <aPuKKrb56CLLeYTb@lizhi-Precision-Tower-5810>
-References: <20251024055320.408482-1-carlos.song@nxp.com>
+Subject: Re: [PATCH] spi: imx: support SPI target PIO mode for IMX51_ECSPI
+Message-ID: <aPubn5XQCHDLvsHq@lizhi-Precision-Tower-5810>
+References: <20251024055243.408461-1-carlos.song@nxp.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251024055320.408482-1-carlos.song@nxp.com>
-X-ClientProxiedBy: PH7P223CA0005.NAMP223.PROD.OUTLOOK.COM
- (2603:10b6:510:338::7) To DB9PR04MB9626.eurprd04.prod.outlook.com
+In-Reply-To: <20251024055243.408461-1-carlos.song@nxp.com>
+X-ClientProxiedBy: PH0PR07CA0031.namprd07.prod.outlook.com
+ (2603:10b6:510:e::6) To DB9PR04MB9626.eurprd04.prod.outlook.com
  (2603:10a6:10:309::18)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -80,150 +79,185 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU4PR04MB11816:EE_
-X-MS-Office365-Filtering-Correlation-Id: c27a1dba-bc6d-4e1a-12bc-08de1307e54a
+X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|DU2PR04MB8856:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59ce79c2-d6a7-47da-aafa-08de13124d6f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|52116014|376014|366016|1800799024|38350700014;
+	BCL:0;ARA:13230040|1800799024|376014|52116014|19092799006|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?W7DXPf8rk2CKobzAi4fAdTYzkkQHLgYgf6j7vDstEcHn5fr2NCskNsIP18su?=
- =?us-ascii?Q?/AEQzQMkJOEWsYITLmxruqTxS1qNe45OGHXoBCjNSXgBXEaPna9X6PpgUGII?=
- =?us-ascii?Q?bnMyvIVr5kZugyhWngyfF2h6VnMQl3NP8mO/lSX/WhyNBuuVEYfB4PcRgc1o?=
- =?us-ascii?Q?/vrX5NJyu+IFiiq5E5repWP2Yj+QcDAshkRYVniz//tCs+jPdo46d2Xm1bjh?=
- =?us-ascii?Q?rQlgBMcH6/ZDu5ICUrNg1QMuBbyt/4fbkGRMCYFsY/m5TZjBpFKrXrVY4IhD?=
- =?us-ascii?Q?X4OzJ9Znng4fGIJC+aUu23MPbki2EDZRp19dYYGVci0u5cxwRahEOllIbNBq?=
- =?us-ascii?Q?tqGZ7uPCUo15kjFOG9tWe+dL2269HU0uhgQa5kO82fdNiz1Dpljor1srCGJj?=
- =?us-ascii?Q?PE75GRrj4rK5bxtKlNd2AAYfjdFDmeOAHulu8wEzyDvPS5iBH1fv8kkdo+/R?=
- =?us-ascii?Q?qmrFF9xKX1Yn6i5dnq5RAUGr9vLYcIoqEk0h+lCDj08tbuQOmxj+Y77sXpDh?=
- =?us-ascii?Q?8XQEWyTlEbZHMSde4lebUoYZ6BwuYxkAwExusSoQs6kPz1FLZkTv8ArZxSZT?=
- =?us-ascii?Q?TxaBtdtWuCbaGs1gVmymgae+WFoQ9UvAggltHorpNZaHEIea7S3PxxnfznfB?=
- =?us-ascii?Q?Obv302+W498gnjouomVE2HqU//v9m7bFeZqKPhQLWFs8k+PszrROwXaoLknz?=
- =?us-ascii?Q?w2kneJBdeMKnbf1VSl5EUL6kvJ1tdd0Ara0M1Io9TxGU+FVgJ97CXqPTO2ZK?=
- =?us-ascii?Q?RNZaReGAK0YRVc3MCs8s9idreEMKqhs0jZ+a3dxdHzRRclAhKlJMJZFlwfVy?=
- =?us-ascii?Q?upuO6bEX+jxgG7Aadie3UMbkGPTsovimYlFbHdlyqSEMESlYvOoai4kbWt66?=
- =?us-ascii?Q?+yEF9Fmcra0MQSnxPFncC29M/8NXibUvXXQgaE8R+xrndiRW32E6tUH8Pr0n?=
- =?us-ascii?Q?Ru78Xhc/oU1YyRPoI+cyjACXe5DkFCTR2jCQfYYrhmSqpoT3CRpOS13KlGuS?=
- =?us-ascii?Q?LfC5sWtLj0vGndxOtIkc1mvPCx2DbfQRtT62cF5ywgxo5kXKc0KIFiCxllsX?=
- =?us-ascii?Q?I6mO/TO1klVC7EtCmP4oHFX0mMM51U3uBitmJ4ODkwLgVKyA4WTq+fTQuhun?=
- =?us-ascii?Q?Lqpydm5m0VHJKMaNXu8Q6YaCQ9SISZmEvDT++YSGc28wNhP5KOxtuiikU8U/?=
- =?us-ascii?Q?S/79quv8ymtXYemshvXHirkjuQ4g+cJstNstnkcVuBkO7xdwcY8q/4iCQixh?=
- =?us-ascii?Q?EAhDNWGVyhLBhTH5+avlIfVuBlQv9feFP1NiGyetw5LFIhZSfdh4JeVL0KA2?=
- =?us-ascii?Q?YUAWoqnDxRVVxcrVfJHe4kG08LGnVsOtZ4Qe92o2ooap9oB7udMgFTP64tI0?=
- =?us-ascii?Q?8x+XYkrBp/7i2bh1uhYg1x8jbB3/h0+/MHUrTSvHQ+RE54scoGHacKkw0sLt?=
- =?us-ascii?Q?YK6yoZCuDl0RrnSzAMcjID2o27jCKJbfVlviiCTxzDKqy75dtnr3V+EKVtPq?=
- =?us-ascii?Q?qkI6ErvZIBGFisu+XXqkUA+WAS3kkfhOkXqj?=
+	=?us-ascii?Q?DfMZvDmrapez4Ldu3KHF6F1nQKdJte4Kk77VzwTayIbwCFbPDisE4HjONNzo?=
+ =?us-ascii?Q?jHNG8Vc8p/DDthqNIcQaWmLDnWqDxP8dPf94DRHyVk53IvOwB7l6TzWfCMXs?=
+ =?us-ascii?Q?0Z0t1YB4dzTmDZBEGeBdTbR4vW5o8yYLjhwF9koRTg7qC/As7E7X2h1pimUp?=
+ =?us-ascii?Q?j1keL8rp5eDE38/GzhzvQUGHhWaH/g3IEEDuR2WQ0tb6ha3w//87tmi+toAc?=
+ =?us-ascii?Q?sewS//hYHGQsD6jjHwjLRz1LfQ/BAw5pmAVvmUfR0Og1CKun0/jVbVrUoUEd?=
+ =?us-ascii?Q?/ZkGOm5iMA5+FMa0rJXZrVDe5JMnhzHj7jJ5r4VfS3mAaP2vsI24Wj/T4HX5?=
+ =?us-ascii?Q?XpF+T3vxKUQN74pcC6Lk3rWGwVtHrkG2Bn3mgDrqjeFxECIC61vZbZlPH4vq?=
+ =?us-ascii?Q?KuaAGpeWKKO+kfgUgfjb3MzSURd4X+JZ0eVLmU9PAQjnmn39U0M3OnIl14jG?=
+ =?us-ascii?Q?DDQFy6Ltjd+5Hz59hMRt7z20qntwe5YqcvUOKFWfPOlHGt0DlmEvY55iataB?=
+ =?us-ascii?Q?Ce3fW9fWffGqXP3ey5hsgfjGhuAdQkvv94DF2U+wfqCJA8jGgwVzmLbFPV9e?=
+ =?us-ascii?Q?4c/P2qCujK0O20E/URQNtE6idnXQ3QN00a0W8szkscf/Ja7TJQS8a1Xjn6VN?=
+ =?us-ascii?Q?jkc7zvtRJfFoBIxkdViFHm8oSqZIhSmzzP4rAP3ylwAuZ+VGDaLpeEO60f6d?=
+ =?us-ascii?Q?GkDAHO/KtJiLgtduMC2ZWVoJwBwT5YdKvlv80SVnSVfGI6eOkAj0TlIOulVJ?=
+ =?us-ascii?Q?u9HfE++oavc39nJSi9Xse/hgoB6a6vlSYXKR8gbwNalPvlVSUEbjJXo1mOM7?=
+ =?us-ascii?Q?Y+2Bzd3hL17AiD0HovMWP3oF5OH+ACIyawLMFzn8TyL16cAosD8DX5cGXp4u?=
+ =?us-ascii?Q?iGnjxWVO2h+JuROfJImyyXmBpRmfgKJHdk9UI4WpETHuvBRJry6gP6U99PKC?=
+ =?us-ascii?Q?cUCsSSvw1oo9nukZhq41izdS3BeEcQnJDlEobfa5Uy9loCM0BzSbyGJxn97b?=
+ =?us-ascii?Q?ktUaGPvVG2FbHvImuhOoFSaqaJmfKT/nP92DqyyzmaawLdFxmARFxz1Ri6Ix?=
+ =?us-ascii?Q?klWrbNI+gx9+xFVOyl3zYxzaZq71w5/k0Om1Lq4LaMHjTIaK0UOdEtmy08fZ?=
+ =?us-ascii?Q?kkaQXz9TQwKn5zWzoHMb9HqSrcKysfYG4d/tjlqJSb663BX945eexcMPxyoB?=
+ =?us-ascii?Q?RI5Rdut0/lw9s52btIt+j/0WVhBwJU91gW/PezL2s65HU3MHZo1uKMwetZjL?=
+ =?us-ascii?Q?bcpZ521XbpxrRrj3j2hrORG/ZAkPO2afR8NUsbcL3GSUltPVuo5UKotyFIZf?=
+ =?us-ascii?Q?5BYK7Juu6rxBheQS3fll+z5UB87GSRtaqE+0Dpydn3EIhrQ82QV9l1wz5uf/?=
+ =?us-ascii?Q?e3B1j+6dN9/cQxU3mac7ktiqgL1QGFT7VXlq9YQ7YcQNW02Y8yHVIgm+nf3I?=
+ =?us-ascii?Q?oGvHEXXqu0n+MZgOx0/TMmAou9Lf8nGbCXQqMfvO08IXitPpVwN7nNm5lyRM?=
+ =?us-ascii?Q?efYzyfCJOXCwKbmFw1Zwr2JgORxWkD7vOJ5E?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(19092799006)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?8pGRvVdGkGFrBJiCZf8K3RGAUxg2N2QRWC9hUei5PcAWhO8fk3/BKpfQE46Q?=
- =?us-ascii?Q?dYLUHBdC8RpRv+tlqJBVRN6K54x/xPjMdBU6jQ4R0HelxQ4lmnTrXi4KcyYF?=
- =?us-ascii?Q?TVpdkaZb2lnYRIas2hS37iKHs4qrbQ3QTUugYobAcUspuflg5XE54Wgt8orB?=
- =?us-ascii?Q?KP7qtMsl5W91wQvUIOsUWfG6dhPCxMu3yR9D6LIZWOMWa9UuqSKICVPlLa5a?=
- =?us-ascii?Q?YJUTMzTi3n6vrzaAYs1i4YHwL2JLDnPwW7UYGfQc1iIelqdWjw8ykMZSnHCC?=
- =?us-ascii?Q?DoZv/lcuYJ7Ike+AheYjqWeFU1gy5pImehCx4rSkzAl5vW8gHqhwa0Fx1+hC?=
- =?us-ascii?Q?azoqYAmsALjOzxbrJ2vaQPgOAzfClXX9SOPVOJvTubwa0f8kYPXS+m4HFKNm?=
- =?us-ascii?Q?u+V4KZVeJ9Nkk8pQw1JQDdzf97DCsORUjbNd6mpYnulw2rYwht7eRBYD+Qvm?=
- =?us-ascii?Q?k39xQXopV8MZ5QFv3JH/NvMs0sdxcbVm5AhazhHDXN6KruqfuI3CIAU6XIPC?=
- =?us-ascii?Q?dEv7pZ4pWJWTuU9rRX7NcFTkggD3QJblQDqM/rnNCN5Bb4H5TkhEEOVpE/X5?=
- =?us-ascii?Q?B9mTAyhd1eGGdlit5GxKF0S58o66Odfgd5IVkYcxYWUEr4cCaGJqEdFRgJHj?=
- =?us-ascii?Q?ltEUfX+U2898xyP7+Vj85ZjPH4T2H3WueIjFYydVw+YkhNoDtKIoqvZWQvbU?=
- =?us-ascii?Q?xq9AxcVB9Jir/iipwWKM+TVt46qLIeZ55y+faCOVl50b1aPtCIfPf5RS1lUI?=
- =?us-ascii?Q?Trbnp8riwu+91GyB9GiBo1K3Dhdnswm6XC1mE13GfNCWi9j50zblHS9LesZu?=
- =?us-ascii?Q?UVutATk8GpqKCpWN2o0tagmnGZ1Dt7h6Ais8soYcKW46ScrlZk/x9HsRNISG?=
- =?us-ascii?Q?2M+tJMl3czL94A6N9T4BrVKBrSnjdHrS7tAzsqr7YjidyUhMWmDM//PRveyh?=
- =?us-ascii?Q?Wt89yv2bbfoKuXGtPOpyZLGFPy5gePVSBk/UEDQDKtgI5+ZgVFJB3UQGkp5F?=
- =?us-ascii?Q?R/at2hcE2xF29OfRp0UOY/3K8yC+UD9kflTAZqLow/MW1OjTcEXd7b7wXWdA?=
- =?us-ascii?Q?Y7aZ2AErRNRRaREmvQXwVzSGb4VDucxI5hW1pCgkeKTAgBWn4e80XLxfCro0?=
- =?us-ascii?Q?M9fLxrkl6SFxpLm5qmwVTmfc9XJoHN3PM+E/ep892OVYETq7L39yPU3WxK3R?=
- =?us-ascii?Q?3ZdB4ucwS9GvWP0hMvhl7ECFqcLDLjYfIBuUxBgwOESfEy1Z217a8BIjAv9k?=
- =?us-ascii?Q?Uyfd4uQPWs65HT5+Z+wYaToW3Dae8F6vuUoErtCSdfP1KJWeGhktlDWikD2q?=
- =?us-ascii?Q?vsauK1OsfcRW2+OxFKixgJMtDqboDbpu4lFM3g70kUYJYPbjvVm1ifYzqS7L?=
- =?us-ascii?Q?Hby6CZ6K1VBtKTLkrXPleD4dHRTsgzof+GX0ZqMRsqy1E0UJnPrRrmnhw985?=
- =?us-ascii?Q?WKtA5kDJ05H6ANCPQPbeghxCu+MRLsQD4w3leX+yFcZmK4h7gshT0xoXrh4M?=
- =?us-ascii?Q?MqzLciCemh35tRpw6SkODV9Z6qNotjozM8Nmw3vdvEeYdWi0phxxT7iNJkmg?=
- =?us-ascii?Q?QizPXakv+burMXIMnyew6nT5l1lBpNZ5ne9pRqEj?=
+	=?us-ascii?Q?tVcFgkMzt2TsE2LBPmKHdrmiEwfMS6oMFCuWWJqMg197IismQSVZGXRw40gv?=
+ =?us-ascii?Q?QNN78TVjFq480mfcCUJLLk9/YnvtgVRm4yxTAzQ2Qbzi+mlDRU5L0JhIoTxG?=
+ =?us-ascii?Q?p3pTkUBXzzNUOEyC8rCVQyMYePqrTIBUq2NFUbkkpujJbfJTymJCCsccXFUP?=
+ =?us-ascii?Q?Pa/o0rFspLSkQ1JnHw0Pdh6dsGMSye0tkkTWFTB/Xpd5uXKZiGayXRl+3s+Z?=
+ =?us-ascii?Q?QKRt594JS3i6amgp1JlZpGPMLjTRJ2ilGN17Ukwsdu6QYsH2x/FAN0GX5p9t?=
+ =?us-ascii?Q?R3qQ4nsJqw5AJF7qrSJDifUoiURXPWaEyquFq/TIbjAPE+4pXG91DlEgjOdB?=
+ =?us-ascii?Q?BR+ogWzUqeImfaNoYQ3HCytgKRhkSz9XGjNJJbLChVCSD2zGpVy8Hok9HDkq?=
+ =?us-ascii?Q?mHC10ZY06CpN4TPohF8THBZ7Xu5Wcskw9lUbIfRVtHlIITm2EnmU1SdeTtMl?=
+ =?us-ascii?Q?cTei94k4ateKGSq3ThTdtTvuLpv7HMteoIo3Tdd8bJ6GBtm82QezXpcNYRro?=
+ =?us-ascii?Q?KLQ+f2EcPqOA5gC7bV/RTrLP+qFi1sC9m5KUM8iil4oEMxC9i7r/PIPfvq7z?=
+ =?us-ascii?Q?ipEXHbyzAZ/wURzQoEmnz+hKHwt4MF1CBjLVUuu0U/97njTqvn3scSRIiLxI?=
+ =?us-ascii?Q?9Y3jGSCIp84BUlA7ykDxrVUzvhQ5eBKLI+tqJT+ZkeV1uxe6utNigBV9ON/o?=
+ =?us-ascii?Q?c0mQQE4Jmez2On4M5oRmICwVcqnbHp1UVbCwi2KARs0w7ZViJB6ptr+gCbeE?=
+ =?us-ascii?Q?VwMLt7hGOIvJewMNnOoOZm2pshpmrPIK26ZhcHK6AkQsS4xdmhAqVlb/Aa/A?=
+ =?us-ascii?Q?WkS7YAdZGRIhpo9yE/oZBcLDa+WdnM5BO4W5BBkj3t902c9s8KBEMRpvkYtL?=
+ =?us-ascii?Q?BroKQdR4W2pHYEqMra41rfTg9J3KmNDWZYmfkKIj6HSGgUSfsAaZPXoykoj8?=
+ =?us-ascii?Q?Rvd0Rc8od74CDfTqDlLCEw0Ahbne8cwlpXHqp032yUU5Ggd6YlprPKG5kUr1?=
+ =?us-ascii?Q?3ilgD04y2QKo8e1kXjwK5Is/sWBTZChxDQiXlkGk6/GtHinBYgWyvHob2DAx?=
+ =?us-ascii?Q?xWM/psvKWYU9mryXRvLS6atFQelSbj5QXfN+Ue9f7vGYlvAw2JcdWFBgOHIr?=
+ =?us-ascii?Q?l1RVkj5N5dWP9GiOCbAJu2UZwFEay62Y8CeVrfs6icWKYnNYjdjUTp4JZQob?=
+ =?us-ascii?Q?ttFLEQGRZZAkN9vqxTgpSsKO7JALPxB+Z9H/CuFSR/P0WVCjaVwzd2eg+O8X?=
+ =?us-ascii?Q?1dtLDvHIKFp5DymeK6aucEP90TPgRz269xq3CfXAibu+WVZMhxsR1VhAyc01?=
+ =?us-ascii?Q?X7WDgVmpriBB7kjlMsktywpk+pq5ZC/F1oFrSgZq6oabh7FjtdAND/p1h4Nl?=
+ =?us-ascii?Q?296v99fO1Hza6GUWj5kC/qqin74xAJp7KmKcJ7W+q55cCT9XgMRN/1CV2TNu?=
+ =?us-ascii?Q?6TgikXuxsQ2sqngwUt5OmsaTGDLCD/m1JFkRCbXo3Vr/1FR/EiJVJFLm69aU?=
+ =?us-ascii?Q?elCr93sIVm1/DXW7k7vvBrRZqveHDTKoe1TY3Nm2dk71GTGWOoYM04Irk3Zc?=
+ =?us-ascii?Q?xjnN9Dp8Qs4LeAanhDetDoOWkWR2uIRG/4SUZlXm?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c27a1dba-bc6d-4e1a-12bc-08de1307e54a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59ce79c2-d6a7-47da-aafa-08de13124d6f
 X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 14:16:16.8579
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 15:30:46.5011
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R5WVRhSOWszpXGMf4DKKA09MbeFk+appQQ6V+Bb6+/958l4mO0ThF1/VQZKkwRkhXoqWNTxnsukcqMMLkwmiQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB11816
+X-MS-Exchange-CrossTenant-UserPrincipalName: bR7SI9iZ0mTnzOFZBZVhGSN9YAcuHnPTiURlw3dKsjsQ0w/PSbmpiElmDzeThSNF8juDUQYmUxnhCNHxIYKg2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8856
 
-On Fri, Oct 24, 2025 at 01:53:20PM +0800, carlos.song@nxp.com wrote:
-> From: Robin Gong <yibin.gong@nxp.com>
+On Fri, Oct 24, 2025 at 01:52:43PM +0800, carlos.song@nxp.com wrote:
+> From: Carlos Song <carlos.song@nxp.com>
 >
-> Since sdma hardware configure postpone to transfer phase, have to disable
-> dma request before dma transfer setup because there is a hardware
-> limitation on sdma event enable(ENBLn) as below:
-
-Due to a hardware limitation on SDMA event enable (ENBLn), the DMA request
-must remain disabled until the DMA transfer setup is complete.
-
-Ref spec section [...]
+> IMX51_ECSPI and IMX53_ECSPI both has target mode, but now PIO target mode
+> is only supported for IMX53_ECSPI.
 >
-> "It is thus essential for the Arm platform to program them before any DMA
->  request is triggered to the SDMA, otherwise an unpredictable combination
->  of channels may be started."
+> Support target PIO mode for IMX51_ECSPI. It can share the same functions
+> for data transmission and reception in target mode with IMX53_ECSPI. So
+> remove target mode restriction only for IMX53_ECSPI and move target max
+> transfer len to devtype_data of IMX53_ECSPI and IMX51_ECSPI to improve
+> readability.
 
-SDMA hardware configuration is postponed to the transfer phase, so enabling
-the DMA request too early may cause unpredictable channel activation. Then
-keep dma request disabled before dma transfer setup.
+Look like whole patch have not touch PIO mode and DMA mode at all.
+
+spi: imx: add i.MX51 ECSPI target mode support.
+
+ECSPI in i.MX51 and i.MX53 support target mode. Current code only support
+i.MX53. Remove is_imx53_ecspi() check for target mode to support i.MX51.
+
+
+Add target_max_transfer_bytes should be new patch. Any difference between
+SoCs? if all the same, needn't this movement.
 
 Frank
 >
 > Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> Signed-off-by: Robin Gong <yibin.gong@nxp.com>
 > ---
->  drivers/spi/spi-imx.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
+>  drivers/spi/spi-imx.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
 >
 > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index cd40db61d8d1..765ea507dd8d 100644
+> index 6eb4bfb7be4a..cd40db61d8d1 100644
 > --- a/drivers/spi/spi-imx.c
 > +++ b/drivers/spi/spi-imx.c
-> @@ -529,9 +529,15 @@ static void mx51_ecspi_trigger(struct spi_imx_data *spi_imx)
->  {
->  	u32 reg;
+> @@ -85,6 +85,7 @@ struct spi_imx_devtype_data {
+>  	void (*disable)(struct spi_imx_data *spi_imx);
+>  	bool has_dmamode;
+>  	bool has_targetmode;
+> +	int target_max_transfer_bytes;
+>  	unsigned int fifo_size;
+>  	bool dynamic_burst;
+>  	/*
+> @@ -594,7 +595,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+>  	 * is not functional for imx53 Soc, config SPI burst completed when
+>  	 * BURST_LENGTH + 1 bits are received
+>  	 */
+> -	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
+> +	if (spi_imx->target_mode)
+>  		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
+>  	else
+>  		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
+> @@ -682,7 +683,7 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
 >
-> -	reg = readl(spi_imx->base + MX51_ECSPI_CTRL);
-> -	reg |= MX51_ECSPI_CTRL_XCH;
-> -	writel(reg, spi_imx->base + MX51_ECSPI_CTRL);
-> +	if (spi_imx->usedma) {
-> +		reg = readl(spi_imx->base + MX51_ECSPI_DMA);
-> +		reg |= MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN;
-> +		writel(reg, spi_imx->base + MX51_ECSPI_DMA);
-> +	} else {
-> +		reg = readl(spi_imx->base + MX51_ECSPI_CTRL);
-> +		reg |= MX51_ECSPI_CTRL_XCH;
-> +		writel(reg, spi_imx->base + MX51_ECSPI_CTRL);
-> +	}
->  }
+>  	/* Clear BL field and set the right value */
+>  	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
+> -	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
+> +	if (spi_imx->target_mode)
+>  		ctrl |= (spi_imx->target_burst * 8 - 1)
+>  			<< MX51_ECSPI_CTRL_BL_OFFSET;
+>  	else {
+> @@ -1140,6 +1141,7 @@ static struct spi_imx_devtype_data imx51_ecspi_devtype_data = {
+>  	.has_dmamode = true,
+>  	.dynamic_burst = true,
+>  	.has_targetmode = true,
+> +	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+>  	.disable = mx51_ecspi_disable,
+>  	.devtype = IMX51_ECSPI,
+>  };
+> @@ -1154,6 +1156,7 @@ static struct spi_imx_devtype_data imx53_ecspi_devtype_data = {
+>  	.fifo_size = 64,
+>  	.has_dmamode = true,
+>  	.has_targetmode = true,
+> +	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+>  	.disable = mx51_ecspi_disable,
+>  	.devtype = IMX53_ECSPI,
+>  };
+> @@ -1170,6 +1173,7 @@ static struct spi_imx_devtype_data imx6ul_ecspi_devtype_data = {
+>  	.has_dmamode = true,
+>  	.dynamic_burst = true,
+>  	.has_targetmode = true,
+> +	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+>  	.tx_glitch_fixed = true,
+>  	.disable = mx51_ecspi_disable,
+>  	.devtype = IMX51_ECSPI,
+> @@ -1375,7 +1379,7 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+>  	spi_imx->rx_only = ((t->tx_buf == NULL)
+>  			|| (t->tx_buf == spi->controller->dummy_tx));
 >
->  static void mx51_ecspi_disable(struct spi_imx_data *spi_imx)
-> @@ -772,7 +778,6 @@ static void mx51_setup_wml(struct spi_imx_data *spi_imx)
->  	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
->  		MX51_ECSPI_DMA_TX_WML(tx_wml) |
->  		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
-> -		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
->  		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
->  }
+> -	if (is_imx53_ecspi(spi_imx) && spi_imx->target_mode) {
+> +	if (spi_imx->target_mode) {
+>  		spi_imx->rx = mx53_ecspi_rx_target;
+>  		spi_imx->tx = mx53_ecspi_tx_target;
+>  		spi_imx->target_burst = t->len;
+> @@ -1649,8 +1653,7 @@ static int spi_imx_pio_transfer_target(struct spi_device *spi,
+>  	struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+>  	int ret = 0;
 >
-> @@ -1539,6 +1544,8 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
->  	reinit_completion(&spi_imx->dma_tx_completion);
->  	dma_async_issue_pending(controller->dma_tx);
->
-> +	spi_imx->devtype_data->trigger(spi_imx);
-> +
->  	transfer_timeout = spi_imx_calculate_timeout(spi_imx, transfer->len);
->
->  	/* Wait SDMA to finish the data transfer.*/
+> -	if (is_imx53_ecspi(spi_imx) &&
+> -	    transfer->len > MX53_MAX_TRANSFER_BYTES) {
+> +	if (transfer->len > spi_imx->devtype_data->target_max_transfer_bytes) {
+>  		dev_err(&spi->dev, "Transaction too big, max size is %d bytes\n",
+>  			MX53_MAX_TRANSFER_BYTES);
+>  		return -EMSGSIZE;
 > --
 > 2.34.1
 >
