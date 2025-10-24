@@ -1,60 +1,60 @@
-Return-Path: <linux-spi+bounces-10812-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10813-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE508C046CA
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 07:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A25EDC046D3
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 07:53:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B8931A65A8D
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 05:53:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EC711A65A89
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 05:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E6D2248A5;
-	Fri, 24 Oct 2025 05:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D2912248A5;
+	Fri, 24 Oct 2025 05:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FopAQrjR"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ShMGs6+1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012004.outbound.protection.outlook.com [52.101.66.4])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012042.outbound.protection.outlook.com [52.101.66.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F6B26AEC;
-	Fri, 24 Oct 2025 05:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F0626AEC;
+	Fri, 24 Oct 2025 05:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761285155; cv=fail; b=k7A+1P/WqlGCT1UXKciyc9tTUt2Sk9v0A762ywjwSNU9Gsw/vkD7fDErjVaZxEGDqjeh00QuVJr+WL+NBcWdynWs2pXvsevesdwTsuQ1GH+4iqS0ksgJEbtOqVCD6BAKNxdwdcnxUeNN3limivLBuANgD3X+X4t4WCtYG7ADNNE=
+	t=1761285191; cv=fail; b=fe0DltTqMFm6yk8QKD5MPXUHA+54aXBMoOqRJlndQSg3uMII5HnGY5JTcfR4wgrXhdpfRWm4V5anK0jmhvPgkVzhaimMSJNgxh2ze6ZbVJD/5SAaJLHfegFHlyPvFE9u0ie6PozfrKcX9zQiDMEIjEgxT5hq7XWhQA1SYFKT+X8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761285155; c=relaxed/simple;
-	bh=1X7Ta3c6+58Jjjxk4ccGvuAGflOsUaIIWzLc54dJYfc=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=iWY5fK0qA+ZEjersqaHoftbXNVZVE5iboW7QMLNvB/0zCYvXfA/P35fJzsX21tGqDiyr0S7zZ0SvyBRGkIchGsIkfK8rkh6FDo4BkRE3EsuA1rO5kvQee3l0YUrgIjOZJAZwfkbtkDDzvQigXvQ6PD0Gi5i8myAMfwRtV28UDpc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FopAQrjR; arc=fail smtp.client-ip=52.101.66.4
+	s=arc-20240116; t=1761285191; c=relaxed/simple;
+	bh=BVnRfjNY+G3T9//q0xuQQzPRkGDPTaS5ssWxqrrpUJw=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=hfAfJ/6//EjmHoildfTl5xz3dAdAwd5zoL9z/nmghHvaGeEmz7VOzInHruU+wYgXKjmFZuSxvL8OXiOHGMPtSKnHka9X0zSgcMGFtbt2QHon6djaleGJm9gPLFZjPDQm5dHjjySctR/lsDgdkY4nBmGqE/FqeonHpA1imJMaajY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ShMGs6+1; arc=fail smtp.client-ip=52.101.66.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bAyLkHb5LoYQRDRlOP+NGV86Qb52VpxBBFkNf0EZcm+HoYnaY/oFKABHqERucObCyfK1U64Zu8rHrJ9fS8+b/JbDeoYocSwszKIE/o1X7XK75cJpKCKTbCDEHdRXZy5gZRrpru5XiDiZP0ZwOABzKKJLEfkOVUCUr7gC2M3piUEyR5qHWMQra74c411AxV/J1P51JhxwGS+c7FRl+n7A046kqB/hPBWlhOoQblyjL0CItAD85AIohqUJN1areZNzXlC1BqJoEXMaCI4KOdPoRnS0qTJ5+3/lTClotj8uHG1edRpHIpLM9tghlrE2MaSnbaAFV6sH1In8MOVDZ+BQtA==
+ b=p3b+aoh/x/jTDgCa7zrkqHcgeA0StBs7Ht1HfPkDY3vZL7yFIgkwJTVscugzOFIfvERvSmiNqtIdr8w39etjgg6KfsrCPHkdG90jJEp1mJs2/xBS4+zb3nPc9jIRAHvowvkWNydsgEiUOZOJXK+oFJljxaMHE2eLJ74Bgag68yXLVG9/Yo7sBVqUgYiWFwqhphw1o0k/KMAa9q6VCbKUwx6CdzaWDj3D5/FdzmQzbxUAvMQoEbrrm5c4lyUVO96d9GSUnCl3Tr9S9GZRtJH2FNTZ7nCMSRHqQ073+awU6QDkwGc9MYTfdOG+YvQ+MA+j79Nwza4d1UfcJiPlsOZ0Bg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CG3fe6FVUjnCiR+rJW6w86oh/74x4zj+WNbq98QPkaQ=;
- b=dNckdkHVjNoNc8Ikgt+ULINtVNL+6/yRibqGeinimnSu+POZwS8+jpcdj0//BMB19AjccyDjMs8bdsdBxN0w0wRtzbPs1Tfo3brkT0TsBfT2zjQ9HYskwjQJgnv8daYofKz360gQRODCm4OH71wz4RfLjO879sjE0iE33tWM46xnR77zEhLRwNU3UibSPgg6V0ma7YTY+OqKfj15T9xJUwyZlZza2boKIUTzcwGY1/mNL8tii0DYZZrgcMJ0c0HgJplXS+8VeSn31c6aZyzx5ygBuURHC1zAFq2gaAEsMRFRvEW2ub8abvUQRt0Uyqu7vVKXgueP33QfZCWmIzsYBg==
+ bh=v9Jcwnf70VuS+E93GK0rKdIwK8HAXx0eXQ6TsOBg+Mo=;
+ b=xGVZLEj6NQnLOYWvk8438iWv1rtN8Rdop2xb9M+QyBm6G0rZY2j38HQI0i9o0ReNeEwRnQRqbE6JF98Dx9VauPSO+1cAtf+bkNjQmCOzT8mCLhAu+9LiWktke89+RWZBNkXUdOOz88T5Xy3TONGXFV65KpwQGZAydTkrkSpGy/eSutEhF4Sc+uDjDc2w1/lXjHO1VfgNu4c5qiq/KCHyoohTkFecRfAeHfS6+8x4hOZaw/9ZPdzGn+MlMjYHLotZT+PkqyK+BvI1arm9oEc2e497Dx7sNLVgaE6hpL7vsGnX5nFHjqRGjgVnwL2cadY5jErFJ5oAXUEhUhRtbljuMg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CG3fe6FVUjnCiR+rJW6w86oh/74x4zj+WNbq98QPkaQ=;
- b=FopAQrjR/6DHL3mWMKzn/prdcioGuaNfhtTArPMkQCQEVMZrlBSO/8SnbE62wGFzMmRZehGR/7dXYPtWVvO4x/CzaGITfnYzcuKR/HpklHY95HcbScF4ZbDAwZZqSW69liVQKMPNzAhKxK0Wph9/UB7vFpjxRosFUEMP9aaL/6F0M8GbnEG64ODe0s3XfK6mpeyQW0iIuN0IIO+rEDxqeatnNC95Qc0eJ8+ueM/c7kv4q94rNqZMPLWo0CZrafj+A+WfwPvHzo71JBZC3JEp9mrpyJOyOKjiFqVQEm4kYHM2hEdxYUpZrlhl9G82Ep3E7clYtA/XV3QdDtEWjSPu7A==
+ bh=v9Jcwnf70VuS+E93GK0rKdIwK8HAXx0eXQ6TsOBg+Mo=;
+ b=ShMGs6+1rFHye5PwuFff+wMrWlCVzcV+D/XEH99UZcCthZ9CRhQgQj5d4B9/8TDCAxvhnE4QOviwLaP6YH887ZZSpMRkidWMutLYGWG3AehUOY/vimw0Hyb/MSLu0yzMTfl7xMa+BI29eTaJCdYl4uBHTM2ZI4QOWT/XxMJXbqNumuBozOvOW6Ocm16mjH6h8gLuORerDTiugrjsAvuuSvrznMtugOQT5diKMZt9KsWdF7rC9IOF3j5SrbTJVe/1WgoMBgBuo2ZdfA4suYrQOXtYSeEM1VqrbEYhtwEKTPo0tNgDNg8kf7plR51SXsr784ZJ6q1u9maGJXtYw3f5aw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
- (2603:10a6:800:293::14) by PA2PR04MB10123.eurprd04.prod.outlook.com
- (2603:10a6:102:403::22) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10a6:800:293::14) by GVXPR04MB9758.eurprd04.prod.outlook.com
+ (2603:10a6:150:110::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.13; Fri, 24 Oct
- 2025 05:52:29 +0000
+ 2025 05:53:03 +0000
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687]) by VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687%6]) with mapi id 15.20.9253.011; Fri, 24 Oct 2025
- 05:52:29 +0000
+ 05:53:03 +0000
 From: carlos.song@nxp.com
 To: frank.li@nxp.com,
 	broonie@kernel.org,
@@ -66,14 +66,14 @@ Cc: linux-spi@vger.kernel.org,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: imx: remove CLK calculation and check for target mode
-Date: Fri, 24 Oct 2025 13:52:11 +0800
-Message-Id: <20251024055211.408440-1-carlos.song@nxp.com>
+Subject: [PATCH] spi: imx: support SPI target PIO mode for IMX51_ECSPI
+Date: Fri, 24 Oct 2025 13:52:43 +0800
+Message-Id: <20251024055243.408461-1-carlos.song@nxp.com>
 X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: AS4P190CA0023.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d0::9) To VI2PR04MB11147.eurprd04.prod.outlook.com
+X-ClientProxiedBy: AS4P192CA0034.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:658::13) To VI2PR04MB11147.eurprd04.prod.outlook.com
  (2603:10a6:800:293::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -82,158 +82,171 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI2PR04MB11147:EE_|PA2PR04MB10123:EE_
-X-MS-Office365-Filtering-Correlation-Id: fef30e71-1f5d-44ba-b22a-08de12c18464
+X-MS-TrafficTypeDiagnostic: VI2PR04MB11147:EE_|GVXPR04MB9758:EE_
+X-MS-Office365-Filtering-Correlation-Id: 914ccb6e-55d5-4cf3-2527-08de12c1985c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|366016|52116014|376014|38350700014;
+	BCL:0;ARA:13230040|366016|19092799006|52116014|376014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sAr91ocGHG3WLk0jrDp0Dx6XRl2f2taKp+Gqh0knLEBh927nsjsmlnLfWBQM?=
- =?us-ascii?Q?3VmZEdcB7IXPCeAvmRMOm150AxG1/p6Pl1bgtXj3ttK2jKlHx3kasY3SirRV?=
- =?us-ascii?Q?M3CPM55T/QzVlfdb1QTnEdbtFCFSCwvY0T+ZWoAcMrVRMTbONMlGu4If4YZE?=
- =?us-ascii?Q?FUlL2uRKaCTdx6pgGluIGVqkRNFq6PKAuZ61joIF21cKl9VCryuBw5HCdm8y?=
- =?us-ascii?Q?EgggfnPDBORgOK2bd/6eggqJ+8O7lb6rd3LVDZcqCY1J/AcrmChaxhR2Lt0R?=
- =?us-ascii?Q?/GHpU96BBi4t4EywjEOO50Pb7U4lp51I6lTlpIDPQwekCMTmZVoz7T1idlU2?=
- =?us-ascii?Q?CyXmHeAy3vn9XW/GTL+3Gy9N5tTXvf5XPRTq265/5peXkbq8rnSbEh40q8hh?=
- =?us-ascii?Q?FVGKBUfEc6HB6V67KV4fZN6dzezC8D2zMLFViBpufgQVuTkQLMuZatX68u+s?=
- =?us-ascii?Q?OCFBEeyTp7GfTQ3FqB5RbDI+SnPIUWdszp3yV3VA30Nf1rgKFN1kLkRNOkir?=
- =?us-ascii?Q?v0GtRzkuTw+bCgF8gh4Fiv78ObngwsrjB1gTS+ErRrmOS39OlRI5tAxz/jJ8?=
- =?us-ascii?Q?U+6x3blq0zS87tzGlOA+2oXvuGZ09CDXR/0WsPzP5G35ZRtXZhUKEx+UgIZr?=
- =?us-ascii?Q?62kUjN3Al2EPuc5FAvbpt9pp+TANyn1iKjVSlLsIur/kZdaWsFUkTh/SQ//o?=
- =?us-ascii?Q?Do1JMiHnx95AEmu+mU9wI3NYCy3L6OrMZDn2U9bCJLc/t3kSvam7ztvBEjzf?=
- =?us-ascii?Q?Bj79Yd65bx+joQl3MEXMPqz4vRcXBA4C9uFp0RhRj35qNHb0U5VepWw2mbKK?=
- =?us-ascii?Q?TK34s2lLy4w1g1z+dqEgHHreWLszJbW29LV7xN/nfO3/wiVuPn9ri3JBu1Gv?=
- =?us-ascii?Q?PBW7dcNmlUy3uKgdBRQjjLNqNX/5V2ZfWAN9JPTnnyz7uL9dooSXCAN4Rqut?=
- =?us-ascii?Q?wy+N9awSQUOrNhDrVE6a2tJqmyEOlVgQc1+U2kC7wxl3GqkiUVqJt4KBQSvd?=
- =?us-ascii?Q?yrj/XRtK0wWNY+63dzrpPgOw3JueDJmVaskIFNdbZdwReXzZnIcQNA/OT9aK?=
- =?us-ascii?Q?iYF9QlkkN1q35e2GzLPS8uC6DL9BBVwTqKPYiXg7M2H+XYT2udUPOjWtjwkz?=
- =?us-ascii?Q?DioRPFRBH7pU7ajeXW1QwqzQgrJBAVHsxjXh1pC0TmmcAYjtlt470SeE1aQB?=
- =?us-ascii?Q?35cTTouJcd10ycFnyQySx1YnyNqKIK8CII7a17r813TIgpLkg7U1D3lxocYj?=
- =?us-ascii?Q?tOEcK3vYk5sYndq2mXogCuILzGOKYHiaoN5zWWt0dkOVe2hLgoQJ7Gj8T2Uh?=
- =?us-ascii?Q?UMXioi1aojNqlX4N9xMhDJ8ch05xuuHQ1iL5fSgSW+nSoIBPHwqcFc/9VlXP?=
- =?us-ascii?Q?vyNxmAkkzVrnzDWGR+Xg0+wKvHuA03TVO7a1Lm8K2P1723M6SmcW0pexBA5p?=
- =?us-ascii?Q?skOD5Hbn9NpmAYzg6zA59Sz99Crie24T2KFXwAc58zdEPf8yD0MiOvmW7ztT?=
- =?us-ascii?Q?UPtZfzpsM8IyOVMW+XuGRjAAjgPoDQ5Rm1MK?=
+	=?us-ascii?Q?4tY7OpLBzCIYGlPGuIxljNNXWav/J/8lUzsURCPjw8wXMi6TufRW6Qnwn6Mj?=
+ =?us-ascii?Q?YUroXsGRXI5SUEoXyi2HWuGDnC0FBJqgOFNjHu4MvovI2sn3fT7RDnN3KLX3?=
+ =?us-ascii?Q?VjIM7eGDHi1sNP4/8yOovYsI8kF2rhqrH2FWoqMnAXpO1iId9ZDim3M1S+tH?=
+ =?us-ascii?Q?FB5z6ph2ADa+Kn2xGYS4mYv3jYEQNoHfWrsGG4cC2UszeyWZDAFP+URH6DF5?=
+ =?us-ascii?Q?DQLaVKDIxcJ4qt94LrCAbpnXZ12zImtI8SULXCUPbwBvfwzfwLxPcHbUVyAT?=
+ =?us-ascii?Q?5NA1QavrnURbbCVNjpN91SXL5hMwK9YdQ5F4bBkl4icgPkrIOvriQArpRPLj?=
+ =?us-ascii?Q?kkm2hFBMxnbbu++Ksj3F/tAZ7VzqldlxbtZku43wncjvOXaXPvCDc9O8waJH?=
+ =?us-ascii?Q?uQzHrwmybfxCwI5RSPV8MCH9pWg09+1uj3pU03Ik3ezsRwZzrZJ9tQ3SLOCz?=
+ =?us-ascii?Q?hGrj2hK/GBuHr7IpNH92emUAclWMjzi0NW6wpr4qP+038fS8d4Jjwk4BAsSZ?=
+ =?us-ascii?Q?+xmhNMeox9Kjp57aUzcZn1Afx+HyTQDrQhFI/r//L28yxlXkchZyS7d5flll?=
+ =?us-ascii?Q?J7aQjMNozEbaLVm1SCWs/HEvYphkSLKbthKEEnAEJKSaXZMTuu1j/TK3wUDE?=
+ =?us-ascii?Q?HTJRotakuAp1Y4Oa020jLUrbSnpqEU7fGschitqAzyivamHyeXb+MIpAlX/E?=
+ =?us-ascii?Q?PdM4q2CjjdE94QF1XAhfcfkAta6yUJX0BFf/s7lr6zXArbuL4kR12QvlW13c?=
+ =?us-ascii?Q?TKos7Q866oQgeC54HcXn9ZGZyKU1EMMxVfZPqyOKwv78YqjF7TxkFap6fsOi?=
+ =?us-ascii?Q?qDtGcMxhvYFj75gt5CUGY54HvKu3Z2g+tJ/tnMRAZSSmd1RI9EIdCjY6jsl6?=
+ =?us-ascii?Q?YagbF6MahcJovVDNEWmKIWMeNAgiC1c2MH/YZZ4T9IJKPVxfXfrRrgfKpheh?=
+ =?us-ascii?Q?GW1FO5e2KqVU50hwKKiqDLo2qGRhp5aZBpEtJmsZgvVfUGU+lcrPY488ofKt?=
+ =?us-ascii?Q?56gpgGx6QMwcBxDN0681haUgJl1+P1tbnsI2wHRoReRnt4Bo2DZVlJ9ZGrQ8?=
+ =?us-ascii?Q?Ih1kTr4FD9HZYpuDIi4rPvEqioqak6ydU6V/nuWIrRhb/VC2oEFl9PBeROxt?=
+ =?us-ascii?Q?new+DBGsfId6hWrAnY4AIdw2gpim7giT+1m0mhsUHSEbaxL9W34kmnWU7GTz?=
+ =?us-ascii?Q?IJYomYgNwWjq57ZEjG228D9/Zia+eUOsb4wZkvG4bMwoUGCowJuim65U/lef?=
+ =?us-ascii?Q?SbqoW53dH+VAw9UpyC1+367cj8HHoD4yfbr2siQnwEB+1ir+OkOzhxoARkdC?=
+ =?us-ascii?Q?Dtm0bLzh0x6ZPIRbfHR2hkr+V9iLJhIf3Z35cYWm/XyZWb/JAq2Di4aAvQ/Y?=
+ =?us-ascii?Q?UPoQ0wVxh9vpYL9a4wMlDUkf45KDaBzfoKHo++p4TbORFmvalkP2JwGvnJ+0?=
+ =?us-ascii?Q?5EyRtkMg3Z61hUiq2BN5FspmuJsVnFEspw8m2bi5pnScZw+8xsQrO1F83H27?=
+ =?us-ascii?Q?yCg5Uf2kMof0xjx6Vxc60yRKul0DFKGnUEIz?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(52116014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Ztt+mzkT440JYV5ftoy1pkJkdAUgcPdL8tLAgQd8Lax9Ytriu/Sta5rAT3Cp?=
- =?us-ascii?Q?6daczmfeBUSUSUr0qGll1ygrc/6QGm5AgYSwd1h/oxR+l9/OzcHnEbNOf51I?=
- =?us-ascii?Q?IHxfHzhqVUXVhDLERSEcCHX/mD77FiiQkdIaRjj/mQO9r7kMUWe4RWcy43pa?=
- =?us-ascii?Q?h46OhLqZMHa0SqELX3VpQO3cSU+EvDFlUivbEAiMxy/M8r03pv6PTv34uO4g?=
- =?us-ascii?Q?7H7Piad/CXeZWx+FfVHSXNSGiTEsAa1HUCq2/ePIzc2ogLAGps2/B8I3UKZw?=
- =?us-ascii?Q?EJNGt/DhY2WPIfks4R2R8yRbV3LPl+uzLts9mayvJSDTk/fz+yHREIlRVb9d?=
- =?us-ascii?Q?mA9OCxDbvyjZbbxACi7YD+c4Rkxtl0V66B6RHC5UvLV9EKnx7sWgKR6hq8q1?=
- =?us-ascii?Q?9AvBWxAXXdCi5x2QEQqDe5jP7qMQkOlX6IKJblv5qcTdlioRsV/+EMGkKaJK?=
- =?us-ascii?Q?F4Whc0wewBMCmAf8V9kopv5oNrUDJJQWnDRBM/lrdKNOkNcJ0Zjcr6khHJr2?=
- =?us-ascii?Q?cGws8jylghx6y5sxG+UwPwSPmB2tHFrhGLDpUmkUkbZwvRPbcyxufan7W5cW?=
- =?us-ascii?Q?Bu0w93EA60tcRRTFesgB5hkjR/o2XY2vZlyJtdDRWh2NtXmCP6nUnONspc8K?=
- =?us-ascii?Q?WXsqVFkcGFgtsIVv+brVswD03wf4t6Wwe5UifW9whrrlvSdtXO9iuSX3Ck1D?=
- =?us-ascii?Q?Z5zPZ+jCgbBLVpufOhPXbjKTU8WCsPLT3sWupLnbxPSewf+rmtLHX4cR67js?=
- =?us-ascii?Q?8ZBzWUTFCnejLS1BipTt+WLdaJLHGTL6qaKZNe6LBn0/HMSvDCR98eKpfHY4?=
- =?us-ascii?Q?e2TK9TOSQKEFpYU6p4G/e+pr5O6rL+XLBLFd0neQZC9hyt7SV08/pYrWT1Az?=
- =?us-ascii?Q?5OKeWWrCHXNff9QstLUK1a/Y7677xXXT07iefn7WCpdAeGgq7d32uzWoqiry?=
- =?us-ascii?Q?OqConxjoUsAT24ZP/MwGILMTThJJ8PgJaG42bK7fCIsw7hHnCLWuLCuWLVmm?=
- =?us-ascii?Q?GIx/DzrcFd3l0dP1neu9Fteoer9sKTqaPF22bGiLDhzXiKx+Tthh6zpEbIIa?=
- =?us-ascii?Q?ZDqA/MV8NOxlLsqWM1UlpaneZ8XdTyEN0FQ5biQ/V5hgexSaM52NCKtAhowR?=
- =?us-ascii?Q?nZEVOArQtRUb8pjhdx/Kb+iQlHynBOprWcib53LjwKAFkqQ/3CIc4rcgxjXf?=
- =?us-ascii?Q?BJvAH6zKJRAiNv36kBp8zVPxxo+i5sL1ZQHWA1oQV0UOn51ZdKXA+5VsMKD2?=
- =?us-ascii?Q?o0YgBlhuMSUd+eediRHsJgm34HQhvyqV84gRdhkN+Yaek3GysXxHlUGYjwnZ?=
- =?us-ascii?Q?wFYcDihh4NcuTMDN9cRGdOwrkT/ZiHsOv+5hG52zJoct7aMGMHHxkr/ZarIy?=
- =?us-ascii?Q?ZihiMFlfufjNdG8xBh4MsnicN5r5u1cDHRdUTSYbFoNUcDakty9XnDhS0HNw?=
- =?us-ascii?Q?0YcJnZyYKveWW+oN+oLITxt8x1SEr8LETYPwcuWbBzcTmplRZxTfMfKIw2MJ?=
- =?us-ascii?Q?dGPH4aCHVbTI6WZaEym1VG2L/Ar1314O3oK8UYm1CXnjoDah5GEU0wh55le2?=
- =?us-ascii?Q?AUjUZubgAQk7VdY9/BXn7EuZ30tOBMbfbLmkC6G+?=
+	=?us-ascii?Q?hdNFVvktDwCfpJyZ0vyIVlsDR0mV8pTBNxfbtdgrPiwbOpRcHJ/ymgsD5syH?=
+ =?us-ascii?Q?lxAjTOt7gpmNK2SQl4yAP2xk419osDN5xO56C+Pb2hASEQHEOeHnHwoltYuV?=
+ =?us-ascii?Q?ziUUtVvMWAupqfyAIQUIIvZtuDEUoesMSPqiM0igzfHGS4ccqPYsO/rTxu+M?=
+ =?us-ascii?Q?sag4OhTTJBKBBE5oP+OIEAOFu6g85XujKkgyScv4MIcacV/UhgMbadmaywGx?=
+ =?us-ascii?Q?0CprP9P8TID8FBaaFP/58ufBFaMjRhXUD6z7UfgFajXIp3irPm2AdR0y2FCo?=
+ =?us-ascii?Q?lkbWPlj+uZYxRwpOhl4l8JP29TKE3stygUW3IWudRejzJOcVf+nr5VlpWrLU?=
+ =?us-ascii?Q?tviBzW2zlzKaLBgLd96No/1gS0IV/mQIvTrGskd0VXsjEgm3iuqUKFwOtdPW?=
+ =?us-ascii?Q?u9IYN2it0YbSXX47Hp6wSfmynXAofCxz7ZyBoNnXztsDmDfWN3D2DKz91NYr?=
+ =?us-ascii?Q?waUPq/dj67wPQKTyQ/VJWzi1H7kEd8s3JSJFgOAmVrTjILBLdF78XJ2+9YfA?=
+ =?us-ascii?Q?s4uv7SPLEausKEtLvfSwWY6FIZmRv+r878bAsTXlMq9WpH2p9vZIGzNQMELV?=
+ =?us-ascii?Q?Vmhxb5lHuiyiIN8urdPSxhgTFo1lqXcZbluAGtVAGWuOe7hQsf4CYtBnLvR2?=
+ =?us-ascii?Q?NoqZrxtYHlLJb2hR4M4Gs93RlSbxI9gIBWqndyqMoCkHmFXzp8g1mhD+dPjS?=
+ =?us-ascii?Q?VBhFTfGDXSitY2DmVGj7h7d5i6OtAYcq02KxlQkUzNeIW9hdcLYZl37mUdUW?=
+ =?us-ascii?Q?649mXVJWOWTa+TKODFB2HHO0pDC/LQk0bz3clNODW+CM1LDY+X69f3MU6xH8?=
+ =?us-ascii?Q?fXF3DEpgRCdZ2Y8QIVIZg08A2znHCeqMzQ7uxyRWuqM4f8VA8hqMIlPDKMn9?=
+ =?us-ascii?Q?b3/vsEqi51mm/e6AnKLKr5O2hfc+lWWl614guGK1XAWFUPbz6pr39Dvszipk?=
+ =?us-ascii?Q?HOXs5UNjnxRBLNHfofTnttdOwANMyw9G5Qi2Xk5sVjKuqtCpWxgv+nhzMefp?=
+ =?us-ascii?Q?xcIuVyG7G1SNPUItxtCoryakHYuSkk0M+yi7SUzSAOARHnuqgfz7fn9rwXUz?=
+ =?us-ascii?Q?Wztb3Vxhk1U59thRPlaH1lKU/JmtRFPCFztLYFAw4x1yWkoM7zrDBr4tkmlm?=
+ =?us-ascii?Q?eOrVSKL61VfFV4qteikRLXmD+Kj0wr2NKrcZPpME6tIxthikRkmiNM6Ti98j?=
+ =?us-ascii?Q?f1ayaHFIGRIpjZWl8VoGgkO28BxZ90UeSd4wqCe6m/d1FTwWbvUfwVjgTsD9?=
+ =?us-ascii?Q?jbUtqjU9Md2nZt1Ux1bk+7fzSXX0ak5xn1lBWR4qKfqttbl8zuu6UGL6QWeE?=
+ =?us-ascii?Q?FyfsL/UMMd/52hGRpMaVKB0+hcGOZDnl7C9xOAyv2s9La/+XnNjyPvUMIK+7?=
+ =?us-ascii?Q?Eg7PfLxnlBLnQIBhjyP6G+NW8wW3y4gPhbCErJH4yG2leA48UScPLGThtpaJ?=
+ =?us-ascii?Q?504oevVQxYu3Q8TV9fWc37I+trUSuMK8fuJtBnhTSfPnCgG8j0AgTuDELKI3?=
+ =?us-ascii?Q?DDRFeSkAAoaMWgIDSDURZOFtbNwUeazmjR8gWnw1NXeGK5w4ORbpyjgCVFGV?=
+ =?us-ascii?Q?lQ4wD+J8wkADHsCc5Ppk0OTbqIX6mc1IHsmEMlwl?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fef30e71-1f5d-44ba-b22a-08de12c18464
+X-MS-Exchange-CrossTenant-Network-Message-Id: 914ccb6e-55d5-4cf3-2527-08de12c1985c
 X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 05:52:29.6582
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2025 05:53:03.1314
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TjPWHdLLj/G/5+ICX+nsFbXGLVnA3kVrEQ4aTYxFeUOBwkRWccTPjd/sw3HJfk7sB/oTK2hBb72f+QPvsPp2Tw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA2PR04MB10123
+X-MS-Exchange-CrossTenant-UserPrincipalName: zzWs/fFRHv2wVTVc8DFYrMhWO11+oTeYd6myh3/uwSVty+K4BkDQlCB3vpG+1Vhzm5blEMfh1ZgrVs0NEnO8Ew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB9758
 
-From: Clark Wang <xiaoning.wang@nxp.com>
+From: Carlos Song <carlos.song@nxp.com>
 
-In target mode, the clock signal is controlled by the master. Target does
-not need to check, calculate and configure the clock frequency division.
-The target can directly use the root clock to sample the SCL signal.
+IMX51_ECSPI and IMX53_ECSPI both has target mode, but now PIO target mode
+is only supported for IMX53_ECSPI.
 
-Therefore, remove check, calculation and frequency division function of
-the clock for target mode.
+Support target PIO mode for IMX51_ECSPI. It can share the same functions
+for data transmission and reception in target mode with IMX53_ECSPI. So
+remove target mode restriction only for IMX53_ECSPI and move target max
+transfer len to devtype_data of IMX53_ECSPI and IMX51_ECSPI to improve
+readability.
 
 Signed-off-by: Carlos Song <carlos.song@nxp.com>
-Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
 ---
- drivers/spi/spi-imx.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ drivers/spi/spi-imx.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 4ffee6c5d5c4..6eb4bfb7be4a 100644
+index 6eb4bfb7be4a..cd40db61d8d1 100644
 --- a/drivers/spi/spi-imx.c
 +++ b/drivers/spi/spi-imx.c
-@@ -42,6 +42,7 @@ MODULE_PARM_DESC(polling_limit_us,
- 		 "time in us to run a transfer in polling mode\n");
+@@ -85,6 +85,7 @@ struct spi_imx_devtype_data {
+ 	void (*disable)(struct spi_imx_data *spi_imx);
+ 	bool has_dmamode;
+ 	bool has_targetmode;
++	int target_max_transfer_bytes;
+ 	unsigned int fifo_size;
+ 	bool dynamic_burst;
+ 	/*
+@@ -594,7 +595,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 	 * is not functional for imx53 Soc, config SPI burst completed when
+ 	 * BURST_LENGTH + 1 bits are received
+ 	 */
+-	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
++	if (spi_imx->target_mode)
+ 		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
+ 	else
+ 		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
+@@ -682,7 +683,7 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
  
- #define MXC_RPM_TIMEOUT		2000 /* 2000ms */
-+#define MXC_SPI_DEFAULT_SPEED	500000 /* 500KHz */
+ 	/* Clear BL field and set the right value */
+ 	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
+-	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
++	if (spi_imx->target_mode)
+ 		ctrl |= (spi_imx->target_burst * 8 - 1)
+ 			<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	else {
+@@ -1140,6 +1141,7 @@ static struct spi_imx_devtype_data imx51_ecspi_devtype_data = {
+ 	.has_dmamode = true,
+ 	.dynamic_burst = true,
+ 	.has_targetmode = true,
++	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX51_ECSPI,
+ };
+@@ -1154,6 +1156,7 @@ static struct spi_imx_devtype_data imx53_ecspi_devtype_data = {
+ 	.fifo_size = 64,
+ 	.has_dmamode = true,
+ 	.has_targetmode = true,
++	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX53_ECSPI,
+ };
+@@ -1170,6 +1173,7 @@ static struct spi_imx_devtype_data imx6ul_ecspi_devtype_data = {
+ 	.has_dmamode = true,
+ 	.dynamic_burst = true,
+ 	.has_targetmode = true,
++	.target_max_transfer_bytes = MX53_MAX_TRANSFER_BYTES,
+ 	.tx_glitch_fixed = true,
+ 	.disable = mx51_ecspi_disable,
+ 	.devtype = IMX51_ECSPI,
+@@ -1375,7 +1379,7 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+ 	spi_imx->rx_only = ((t->tx_buf == NULL)
+ 			|| (t->tx_buf == spi->controller->dummy_tx));
  
- #define MXC_CSPIRXDATA		0x00
- #define MXC_CSPITXDATA		0x04
-@@ -692,8 +693,11 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
- 	/* set clock speed */
- 	ctrl &= ~(0xf << MX51_ECSPI_CTRL_POSTDIV_OFFSET |
- 		  0xf << MX51_ECSPI_CTRL_PREDIV_OFFSET);
--	ctrl |= mx51_ecspi_clkdiv(spi_imx, spi_imx->spi_bus_clk, &clk);
--	spi_imx->spi_bus_clk = clk;
-+
-+	if (!spi_imx->target_mode) {
-+		ctrl |= mx51_ecspi_clkdiv(spi_imx, spi_imx->spi_bus_clk, &clk);
-+		spi_imx->spi_bus_clk = clk;
-+	}
+-	if (is_imx53_ecspi(spi_imx) && spi_imx->target_mode) {
++	if (spi_imx->target_mode) {
+ 		spi_imx->rx = mx53_ecspi_rx_target;
+ 		spi_imx->tx = mx53_ecspi_tx_target;
+ 		spi_imx->target_burst = t->len;
+@@ -1649,8 +1653,7 @@ static int spi_imx_pio_transfer_target(struct spi_device *spi,
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+ 	int ret = 0;
  
- 	mx51_configure_cpha(spi_imx, spi);
- 
-@@ -1316,15 +1320,18 @@ static int spi_imx_setupxfer(struct spi_device *spi,
- 	if (!t)
- 		return 0;
- 
--	if (!t->speed_hz) {
--		if (!spi->max_speed_hz) {
--			dev_err(&spi->dev, "no speed_hz provided!\n");
--			return -EINVAL;
-+	if (!spi_imx->target_mode) {
-+		if (!t->speed_hz) {
-+			if (!spi->max_speed_hz) {
-+				dev_err(&spi->dev, "no speed_hz provided!\n");
-+				return -EINVAL;
-+			}
-+			dev_dbg(&spi->dev, "using spi->max_speed_hz!\n");
-+			spi_imx->spi_bus_clk = spi->max_speed_hz;
-+		} else {
-+			spi_imx->spi_bus_clk = t->speed_hz;
- 		}
--		dev_dbg(&spi->dev, "using spi->max_speed_hz!\n");
--		spi_imx->spi_bus_clk = spi->max_speed_hz;
--	} else
--		spi_imx->spi_bus_clk = t->speed_hz;
-+	}
- 
- 	spi_imx->bits_per_word = t->bits_per_word;
- 	spi_imx->count = t->len;
-@@ -1839,6 +1846,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	controller->prepare_message = spi_imx_prepare_message;
- 	controller->unprepare_message = spi_imx_unprepare_message;
- 	controller->target_abort = spi_imx_target_abort;
-+	spi_imx->spi_bus_clk = MXC_SPI_DEFAULT_SPEED;
- 	controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
- 				SPI_MOSI_IDLE_LOW;
- 
+-	if (is_imx53_ecspi(spi_imx) &&
+-	    transfer->len > MX53_MAX_TRANSFER_BYTES) {
++	if (transfer->len > spi_imx->devtype_data->target_max_transfer_bytes) {
+ 		dev_err(&spi->dev, "Transaction too big, max size is %d bytes\n",
+ 			MX53_MAX_TRANSFER_BYTES);
+ 		return -EMSGSIZE;
 -- 
 2.34.1
 
