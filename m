@@ -1,151 +1,101 @@
-Return-Path: <linux-spi+bounces-10816-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10817-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD42FC04A54
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 09:14:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8C67C058F5
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 12:24:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1420435978C
-	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 07:14:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3CA41AA8091
+	for <lists+linux-spi@lfdr.de>; Fri, 24 Oct 2025 10:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53CB2989B0;
-	Fri, 24 Oct 2025 07:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C6530F92A;
+	Fri, 24 Oct 2025 10:24:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgA34tBo"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CEB29E10B
-	for <linux-spi@vger.kernel.org>; Fri, 24 Oct 2025 07:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23592F7AD3;
+	Fri, 24 Oct 2025 10:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761289974; cv=none; b=pgIPLY/QF+NGRuYsH63qK48SjF3H1H932rkIPaC4qm7ic/wA7xIinpzWHERjXVLWYwcYWaWfSpu6s2/+8CJsk4w7ML+fo+6g/eW78dWnd9E/n4fbVzXoblr0mcPWsmGwQ7U1eihxgSMZdxBjfwpPfMAtIAswsXAS//0frxdrOX0=
+	t=1761301445; cv=none; b=IoSaf2Z6HNP51HwlxsP5XNQYksFGLPYrChtLjoeWZc2rFY+CK4ik290zf2ZWpc1GJi9VAbsfUtLOcccJD2+2Em+Il1fJA4QwGHBCQ3zKiB4mRz1W5ZCn16ZDtiiAWCpT16DRMskWLF+XfHSsSDwQPEljhGTp0PBXP+tSn/UMLyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761289974; c=relaxed/simple;
-	bh=x+SrvoaJE8H2ESFi99ZCo6TW6oglHEeZWoMpElqTKqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mW08xKwo0bdBeL9srsiY/ydOHDJKYOwEZ4zDD7hiiYdBYbiwfrMEtAovMnNYkL8FZF3FBRMihMnDoSTx7x7ewLJcA9mY2FD4nOXWzoadYD9EVv9isu9TR2fIjdKSXuHhZvLD2dc44bp4enhs+CtNjZa3CPocHZZ/7CpaLtaHBVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vCByY-0005JQ-SP; Fri, 24 Oct 2025 09:12:38 +0200
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vCByY-005BdX-1J;
-	Fri, 24 Oct 2025 09:12:38 +0200
-Received: from pengutronix.de (p54b152ce.dip0.t-ipconnect.de [84.177.82.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 1041448E766;
-	Fri, 24 Oct 2025 07:12:38 +0000 (UTC)
-Date: Fri, 24 Oct 2025 09:12:36 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: carlos.song@nxp.com
-Cc: frank.li@nxp.com, broonie@kernel.org, shawnguo@kernel.org, 
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, imx@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: imx: add 16/32 bits per word support for target mode
-Message-ID: <20251024-berserk-stirring-copperhead-3783be-mkl@pengutronix.de>
-References: <20251024054952.408393-1-carlos.song@nxp.com>
+	s=arc-20240116; t=1761301445; c=relaxed/simple;
+	bh=021tNjgZwRg1FHQidg9CY7VhVF/eBoFNQ/r/yc6VFFs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JUpJ23cS47/SGyiwpd9/aj5NRDSVBuw8hGl/WXhhXS3AXAPco6nH9UaEFNpxq25aUFzVHwBJ2e9Zflp770l2a5rEI3c+qBtgIyXdUuP0Q9EsbxDlkOMR4EGGwS/bXh/JydszgW/ntoH5Ql5B+S7+8GaiiK20bDsvT3hcoUmyJa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qgA34tBo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD986C4CEF1;
+	Fri, 24 Oct 2025 10:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761301444;
+	bh=021tNjgZwRg1FHQidg9CY7VhVF/eBoFNQ/r/yc6VFFs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=qgA34tBox9/WwVBLVlX+DFE2GNwIbnFduLgFxHpCZtjnWMy4PhdFCR4erWPdpmBbJ
+	 Lvgh6Pv9PSeflOGLzEunZmiVzFNCJtAMaRIADcCFxIanI5zVJy18ty+irfa9t5O6Gl
+	 YXQgwJYwHhUvNvt4+3D4mHklr1wPXRCeNiFyLAPwqvAVp2VrFFeQRxxcudIMYbU9Jd
+	 6CzjNSgeOK6dIr7dxeUrHu8kU1HJH/6QJT3pkMhUDx5j7Ekj+o2xweAXuOsNAxrwiT
+	 O0bvxuf0SXg0QorS54RnmvjIQJEchugye68++VJcDsByytAffFJliB8Amry/Fvuk8g
+	 V3gx0m0lWKnzQ==
+From: Mark Brown <broonie@kernel.org>
+To: Can Peng <pengcan@kylinos.cn>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251023024250.3181084-1-pengcan@kylinos.cn>
+References: <20251023024250.3181084-1-pengcan@kylinos.cn>
+Subject: Re: [PATCH 1/1] spi: spi-qpic-snand: make
+ qcom_spi_ecc_engine_ops_pipelined const
+Message-Id: <176130144314.10577.9953872880836297632.b4-ty@kernel.org>
+Date: Fri, 24 Oct 2025 11:24:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r54bjczvnfs4avxi"
-Content-Disposition: inline
-In-Reply-To: <20251024054952.408393-1-carlos.song@nxp.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
+On Thu, 23 Oct 2025 10:42:50 +0800, Can Peng wrote:
+> Marking the qcom_spi_ecc_engine_ops_pipelined as const provides
+> memory protection by preventing accidental modification of critical
+> function pointers at runtime. It also enables memory optimization
+> by placing the structure in read-only sections and improves code safety
+> by explicitly documenting the design intent that these operations
+> should not change after initialization.
+> 
+> [...]
 
---r54bjczvnfs4avxi
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] spi: imx: add 16/32 bits per word support for target mode
-MIME-Version: 1.0
+Applied to
 
-On 24.10.2025 13:49:52, carlos.song@nxp.com wrote:
-> From: Clark Wang <xiaoning.wang@nxp.com>
->=20
-> Now for ECSPI only support 8 bits per word in target mode.
-> Enable 16/32 bits per word support for spi-imx target mode.
->=20
-> Signed-off-by: Carlos Song <carlos.song@nxp.com>
-> Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
-> ---
->  drivers/spi/spi-imx.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-> index 155ddeb8fcd4..4ffee6c5d5c4 100644
-> --- a/drivers/spi/spi-imx.c
-> +++ b/drivers/spi/spi-imx.c
-> @@ -424,8 +424,12 @@ static void spi_imx_buf_tx_swap(struct spi_imx_data =
-*spi_imx)
-> =20
->  static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)
->  {
-> -	u32 val =3D ioread32be(spi_imx->base + MXC_CSPIRXDATA);
-> +	u32 val =3D readl(spi_imx->base + MXC_CSPIRXDATA);
-> =20
-> +	if (spi_imx->bits_per_word <=3D 8)
-> +		val =3D be32_to_cpu(val);
-> +	else if (spi_imx->bits_per_word <=3D 16)
-> +		val =3D (val << 16) | (val >> 16);
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-You can use swahw32() here and below.
+Thanks!
 
->  	if (spi_imx->rx_buf) {
->  		int n_bytes =3D spi_imx->target_burst % sizeof(val);
-> =20
-> @@ -453,12 +457,16 @@ static void mx53_ecspi_tx_target(struct spi_imx_dat=
-a *spi_imx)
->  	if (spi_imx->tx_buf) {
->  		memcpy(((u8 *)&val) + sizeof(val) - n_bytes,
->  		       spi_imx->tx_buf, n_bytes);
-> +		if (spi_imx->bits_per_word <=3D 8)
-> +			val =3D cpu_to_be32(val);
-> +		else if (spi_imx->bits_per_word <=3D 16)
-> +			val =3D (val << 16) | (val >> 16);
+[1/1] spi: spi-qpic-snand: make qcom_spi_ecc_engine_ops_pipelined const
+      commit: fd5ef3d69f8975bad16c437a337b5cb04c8217a2
 
-regards,
-Marc
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---r54bjczvnfs4avxi
-Content-Type: application/pgp-signature; name="signature.asc"
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
------BEGIN PGP SIGNATURE-----
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmj7JuAACgkQDHRl3/mQ
-kZywGAf9EpnxKyFm5zj7bBWinIhgEplzFTJ/FDZo4dWMpa7KbrErAahd0sf0RQrF
-BsYkuTMSHcJXJM1K3CEjMEE2ncXu88IRBysNvUD4Y0upyBYB4i8Agrlskcj51FKa
-XuCFiyQqrAcHMgCBb0BrmL2t0Rkgu12TsUXWrqkANVSGVU5040XYwGVwNdlWOITX
-9Rt9t5BP6Z8NPbdBt/1El4A/gspDIwmVzBVHR5TWFEwvSgtr8aU6v4AGkK0NoTtN
-3kIYfHPkcA+CuFoeDdFi3lmWBu2XgV8+hEulBub/q5cKq0NBP9MvTzx1JXJ0i3MI
-AN/MSFZDKRiNhAI0gzPa6bu/B49fxA==
-=hn10
------END PGP SIGNATURE-----
+Thanks,
+Mark
 
---r54bjczvnfs4avxi--
 
