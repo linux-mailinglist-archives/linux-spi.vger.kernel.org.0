@@ -1,329 +1,219 @@
-Return-Path: <linux-spi+bounces-10842-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10844-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3B98C0C634
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 09:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D50FC0D09E
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 12:03:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC6971891F4E
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 08:44:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B62B9188C64B
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 11:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34AE22F5473;
-	Mon, 27 Oct 2025 08:42:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517A32F6922;
+	Mon, 27 Oct 2025 11:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PnkgtcBE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022093.outbound.protection.outlook.com [40.107.75.93])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010006.outbound.protection.outlook.com [52.101.84.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D012F068F;
-	Mon, 27 Oct 2025 08:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0651224E4B4;
+	Mon, 27 Oct 2025 11:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.6
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761554570; cv=fail; b=rCEKbJAVC3vahwOcefLhCq4ZhP6VQOGHfbLvnJ6E2VQ7F8vO0zW3Q8cxJsLzm48GwKqfEXraTGTMEKrKbLFi2KAQEr9Sov5V+kQoYf/KIXKkAYRXFGOtmbfl/NR+iv62VJhpb+WBUuJjdK1RW+mDiKd9G99VZDUdTZoEZBqJq3o=
+	t=1761563005; cv=fail; b=EARinHkPP5dTHUTnPRzZy8v07APfAg+m6FXgJ9OWW7puQ7jyqQA/n/hkfS2cYVZ4c6PvLLb0FQrp0FL3Utp53ZvERPwZf3MBkfvjpEKNnMKBPwdMwwbUO0m/h3otnrgoCjPl0eGGOz0Jj9TQvdvri/5uyK9aHV97DILNOery7X0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761554570; c=relaxed/simple;
-	bh=VkH7qvCLQOtyLje/bgY2elPfc05szlSZ9xbEO5HIhGE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XxXF1G64xzHmlG/higfmQVJ92i+lL/QRAV7qeT+7iE1A9XtmQQIZQXzjQexOuj2AJYLs+GKXELiftTS/1lAaZA+/Oowo/HaH/yo820FdrHpSwAJ8JJ7LWj1OIdwgpZvmDAqFtNlRsWy/FluE01D9UhEt3AOjSRkuBDQtg+xSHGo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+	s=arc-20240116; t=1761563005; c=relaxed/simple;
+	bh=4NG6GuAHdERBznfOGqSKirIT0kKLYWtpVXwxFt3GmI8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=HD8dO8zNit9PJ0ALsd25QKbipV1xDbIQxK0SVTKPzHhzp0g7V9hsy+UftmQLkxnk83kQjO7Eju1gFNJ9+z6vgZCE/DEucMrI0JMWJp4FIbPEdXiHJpcQTAoSq6t+wsqHLbgzjkvVu9c2FEkw1i0qPSstY0EmtastH/cdM8AxntY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PnkgtcBE; arc=fail smtp.client-ip=52.101.84.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KOi/CkJbPkWlQuKHdNoJhC6Kz1i9VpzdZ+KmAYEx9UvvDexeGl2Lc4L0wGvl1pWjgc7hAIOnHEVgsRfpflmjrAPRFada5UaScOWwaZQuCPkQNrQE9z9anCGW4nbTFV3Je4ZB8emZJVyv3A7ALqPcFgjj2licTvo+SpNc8DVA8yvxc5Tkz2EFSVpKSYq58DgV2auOz9iZDYogk4Ynl6MYd9XW1yPIlQ3U07P73wVDJzaHlGVVSYAh7Kl6sUVCy4iU4NIRoshIOHowLpUB0UxJH/CCX3a+g/jWqwtPXLsoyvKJnUVjyD+FvdjxEI35KOdn330bx6AfjvJAacP+cAYUpQ==
+ b=PR/xGNhg/Q6UY0JpPV3ik/GeTBURkptp2Pnx5d/6m5TgrTVoWwQBmH3spLl8wj/XVfUJ/n7Cn89w56VSXacWcqo7sIC7mhSv8s5vb0NIV7kajRmzNguVs7B/PXglrrRWggaZSzilHAoNivKLqbMa7KEGLd1xnK3FFasOMMC7LnmTgdYMxdx/LUOfff5UweQoSfa2K8gFuqD8WK0+ok+u1gIDDNPItByvzUMYQDo2tqPsHEAM33Lpc8DhUPcVcWuuadHRSGUkLtTs7uCb8zNDGR7VXLKFfOG2HfymDGmeEeQn6nqbA8QOF7yvS5DTPF01EoFD+6yE2cj98PVxVsL8qA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wce4tNWUEqmy3zx/t/UI+3vfZvOd9+aZ0wiSmODCESU=;
- b=MIeAJpal4L61Ym+bRPeNyHDhkUcT2veLEgBnzWcvXcGKjhDXY12rEf7VDHtW3LeE8jRqvEjrEMcaAX+MiQH8IaI9XXL8y0KhoVNQWMLJPMzSpxSKI9M8BmKutxNyVjd43JOU/I8AdnyGS2n/0NCant1f4k6CMhnX00KVic3HtlT51+zbm2W+zBrDy+KOleWToTCqnHhmKOOqmHcOiaQVp3L+T5WLLpPwix6moK44wEFqve818FIJXSimnrTBlIZgIIqJ5P1eC4dajBXy/ztZqitYdokHo1ja2J/TL3+iQg5LHdcASUjHeRrEKoqLm/0dbPfd4BBxwW2DpUGNAdGREA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=amd.com smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from SI2PR02CA0030.apcprd02.prod.outlook.com (2603:1096:4:195::17)
- by PUZPR06MB6248.apcprd06.prod.outlook.com (2603:1096:301:119::16) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=sDZTOEDmPmZPull6hPj0t9GD5g3xM8zEmpRPi9oD0C8=;
+ b=o16yDWzFhFFPyqNHkp5sRWhS19BFw/czcOR4Cs29dA3cSc4yqF6DnpJnjI72qM7wAIw0n+bfYXq1l5qMkqRsJopzanH1WDJxV4yNYclsMm9/GYZfExAoGjzjTSOQm9Rs6uLIGiTHwSa3eC/0ghdYqxFnj4fe+zeX1DiiaXsgu+q21jjr2nrIA/NcHp6VsQgooTxmGraLRvP5NaqJUgcGo1ihx13u//yjUttZYISg74yy22Vs6L5LpzBOtLvUbZrtCzd2y5hRKlnm3oK9z1+yUVlWYgpEPngXqiKTQhHrLso/+lzdG0OIFpSVVCVpqR07cPY5O3BTmUP6i6R+2cOE0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sDZTOEDmPmZPull6hPj0t9GD5g3xM8zEmpRPi9oD0C8=;
+ b=PnkgtcBEEsCrbILCixkjxwATgvZuzI39vK2d+5Q2xfIgcEJs1uQQWaQA/2L4jxLlUK7RNbBUcCnX9hWOA5nCi4MfEc2xegMGO1qt3b2t7uNiT6yAr+0Zibz4B2VJ/lLoLJhfs6lvgu0PsIviGj0ORUOcCjiUhhpKtXVepGW7hgVPi2Fta+P0m7rXaVBB/UtLtnlksZ1QsOG5NA3aG/loGfEbfIhV7DawA61qw0aCNSu2yBr3jL/Oa78hCvlm+Vee1g7snCU7d2hzFTPg7lioJWnUcZc5uIk/5CETmWfl3og9y1Jxzbrm0f1eGApAIYwB9oTlVX2LVjP3ekHyTpMM+A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
+ (2603:10a6:800:293::14) by AS8PR04MB7830.eurprd04.prod.outlook.com
+ (2603:10a6:20b:2ac::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 08:42:43 +0000
-Received: from SG2PEPF000B66CE.apcprd03.prod.outlook.com
- (2603:1096:4:195:cafe::78) by SI2PR02CA0030.outlook.office365.com
- (2603:1096:4:195::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9253.18 via Frontend Transport; Mon,
- 27 Oct 2025 08:42:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- SG2PEPF000B66CE.mail.protection.outlook.com (10.167.240.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9275.10 via Frontend Transport; Mon, 27 Oct 2025 08:42:43 +0000
-Received: from guoo-System-Product-Name.. (unknown [172.20.64.188])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 2FFDB40A5A13;
-	Mon, 27 Oct 2025 16:42:41 +0800 (CST)
-From: Jun Guo <jun.guo@cixtech.com>
-To: peter.chen@cixtech.com,
-	fugang.duan@cixtech.com,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	broonie@kernel.org
+ 2025 11:03:20 +0000
+Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
+ ([fe80::75ad:fac7:cfe7:b687]) by VI2PR04MB11147.eurprd04.prod.outlook.com
+ ([fe80::75ad:fac7:cfe7:b687%6]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
+ 11:03:20 +0000
+From: carlos.song@nxp.com
+To: mkl@pengutronix.de,
+	frank.li@nxp.com,
+	broonie@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com
 Cc: linux-spi@vger.kernel.org,
-	michal.simek@amd.com,
-	cix-kernel-upstream@cixtech.com,
+	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jun Guo <jun.guo@cixtech.com>
-Subject: [PATCH v2 3/3] spi: spi-cadence: supports transmission with bits_per_word of 16 and 32
-Date: Mon, 27 Oct 2025 16:42:39 +0800
-Message-Id: <20251027084239.2610141-4-jun.guo@cixtech.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] spi: imx: add i.MX51 ECSPI target mode support
+Date: Mon, 27 Oct 2025 19:02:56 +0800
+Message-Id: <20251027110256.543314-1-carlos.song@nxp.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251027084239.2610141-1-jun.guo@cixtech.com>
-References: <20251027084239.2610141-1-jun.guo@cixtech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR10CA0011.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::21) To VI2PR04MB11147.eurprd04.prod.outlook.com
+ (2603:10a6:800:293::14)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CE:EE_|PUZPR06MB6248:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 713d70e3-f47c-47d2-b083-08de1534cbbc
+X-MS-TrafficTypeDiagnostic: VI2PR04MB11147:EE_|AS8PR04MB7830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0acff2ea-572a-4d7d-973c-08de15487001
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|52116014|19092799006|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?wtE97W30gffDFkP/pjTygiUnREAMDUEua7h7DUEAoVxAnXVqrl0bbQyrF2yt?=
- =?us-ascii?Q?jc3KQ7oU0TROZWFHnb9J+BqVbf5Cn+muFSeYmkBEsF72y0Ir0EchbZzRuhRu?=
- =?us-ascii?Q?pY4wSZdlKhAdimxcB/f2jgrpxdl5m824VQ0L2LZzx8VztVxTpzvtMrOPQSXR?=
- =?us-ascii?Q?qEYzdVgqWNVTZ6DNVopk76xq0rMii3AzP9/diJgSqBkrWYsoO+aKSpeOA5XB?=
- =?us-ascii?Q?ACA2v1BURULDOt2eOkLbLqXkKyvJgaSgGxFn7DcN4opJD4ThiH3KuzsF+jmF?=
- =?us-ascii?Q?NGc1sLQnBR3AimAI1oW+wFKa2rokl22nZaiyw3Oe/Z0uxh9gimm0jp7Pmh/2?=
- =?us-ascii?Q?sX1usXY2wCOnG+mK9D1UxJNwbUoN0dQAS0//yt9Ee8QXCIlHXwu0RRBg9gdS?=
- =?us-ascii?Q?8NTFvY6WA48fh2lRx0evaBr4eHOLCIa0HfvsBW/gdlXgUmksAmYeifWAnZ+K?=
- =?us-ascii?Q?+e/Q3+BuWPdrZtjEfMICvmgxDEsvZBfxYyGJ3JlcbuiBNcpLqbWEbGL6WN+P?=
- =?us-ascii?Q?eS77VgvSuggFhg8Vo0tTXTh2ZDX7iZaV7ilF/PD1fJZ5pEov6mDhyDBr3hbq?=
- =?us-ascii?Q?f+bRrkYS9Q58dCNlf9C60O++AChZGX/IBhcv+Ghuutl+M/MNsX3FGhE76hkc?=
- =?us-ascii?Q?Qp9EJ4YjlNq93c0d/PEAQ+aJEhFXRULcOzMUYDjyb8CGuRuB0U3+Jdz66SFC?=
- =?us-ascii?Q?wj5G1qUENyyx8suYHAU04yL8ri+KtN48uSKmu8iWt9hYcK9bhAYIk0P/Bszg?=
- =?us-ascii?Q?QgshmJmrCZnP7sN1bWGYUBFrbw0ot9c4Cw/uvd6SX7pR7PXgIR42sNRfJZJw?=
- =?us-ascii?Q?0KHN1ges8ydN1R7mEmcsHf+K0JupyuLQ1GlJkLZYhZSfqWi3K1d0n0hQclod?=
- =?us-ascii?Q?SptXYRisDdXHac4IpcVzXjtX4qKUfq9OlJEuszhnETzz95Z/x+jxifRr4bQa?=
- =?us-ascii?Q?GrcO4Omw3XzyKEGX3UMsSvO9MhrCNpYKY8EG1N4LWMBN5WjTSH9rhpmiJctE?=
- =?us-ascii?Q?eVtEfNIK+p/C+v5bLNpzDl8aQaY0xKsFHDmFoWS9BET/dj4Cfx5wSdzXhUBX?=
- =?us-ascii?Q?aLlkW/WCvKZcNK5KxswBfJG/nLkrQltsxqudqUmjmQRyrfvnQ/3dz8mdV2jp?=
- =?us-ascii?Q?dBYXlZnOgPv2Mmo2odaLLWDUCUkV55P+Dln7O0gTJxjy8mddQGKuNHTC6pUS?=
- =?us-ascii?Q?Ck622U933sBkrpWW9/yYAjs6iBrvPyiFEkZTUC1GPxR8/j64YWeEluzJScVT?=
- =?us-ascii?Q?p7ddq4LsJzFOVBm2otQ48gtyjZMoPCbovcUUD/jEMOTBt6EKOhK07TvaCOCa?=
- =?us-ascii?Q?eqTpmcuwAPYTaZ6OHnXDioTH/2stS7Q94SYu1z4cnFlgok5WaCvwVuTM7MnZ?=
- =?us-ascii?Q?Pai5tAp2RXzr/7JpLZtkYlnHj/Jv3rwBKFdl2MZhZAYMgMudFi+Zk1ckiMX1?=
- =?us-ascii?Q?phGmIwM1OXmHJ9Q34NlW66HOGEbcsxGU+fT0EEnOefuhbUpFUD/0m9Fd21Vo?=
- =?us-ascii?Q?03MoPPCsATspEPX32bIhUJSTxRtPf6hHwSB9lptFjFNyOMFky2cWU9Fe6fWk?=
- =?us-ascii?Q?1Dg5NFbmNGK/HBybmtc=3D?=
+	=?us-ascii?Q?SEajAo+QL0pnsvrsUPAw3bPkLdSKCTBS6IPRBqvHlchnGX6FIyc5uwQk+t6P?=
+ =?us-ascii?Q?JqaLeQcyxg1xxYDOikdilFL9FMjG1awb1ob8y2nj3SC/R8HW7rkf9UmEgrAD?=
+ =?us-ascii?Q?kujMP7KIRUrrCqx7xQYoAUiTOBxCczYJHpkE9LKVfT9TTH9CEqYnCKIKnzXZ?=
+ =?us-ascii?Q?S4zUCYH69u5z5x/D7TQ1X7MNg049q70fqGz9wk6txygMl7kDxAJ6ASBw+6p/?=
+ =?us-ascii?Q?b8gwWsYyskvqT9nWM9d6HJtiMD/oW6MvVYiXVVAROV5iY+8BdtEzXrNnjPAx?=
+ =?us-ascii?Q?N7mCXdLzIcCGVC7N+IaMCple8szBeCeDatQoEKQGre2rjcatf7ZbuNVa5pke?=
+ =?us-ascii?Q?U0xLa9Ph/D+7daVtyOOZ3DJ2yfwEZap106ADBOIxydJfzeZD2rGy3cuGuOOJ?=
+ =?us-ascii?Q?TCtE++UBTBMh8Zkl1w6Ox/HTCisMFCBqvDTpZjGADERaXxo2NEX7Dku3zjsq?=
+ =?us-ascii?Q?9W6xssLrRh0KdAWzXK9enizNnz6NtBSt2AO2Bf7EmKRC04GtM9RNSBCxX4B+?=
+ =?us-ascii?Q?PXohmEWj1sTHmzCEJlFGBPY5Ngik2ZC8946YmFna1erP9D6tsI043PM2+1Ma?=
+ =?us-ascii?Q?LkDcFRecOk0+JPnPcYOLBpz8XO/7QLkTcI5bihbQ7FnlqradVtbjxI8/6zju?=
+ =?us-ascii?Q?cIXN8YKNKTNMWUroQH26zaot+F1usn+qg0PdH+PVVQ2THrM6VKDAkIsdUrxX?=
+ =?us-ascii?Q?9U2Lo3yQVMrpCL/uvVtsF88eFVQOxcsHnIFSZGv3SjudHhLdWhjRcKkMihfz?=
+ =?us-ascii?Q?ThvQbIE7v+tNu2ZXNUP8uc8Cgw17E2S0zC0Ar7CZmwo+5EqcOc/UwxAmJ5TH?=
+ =?us-ascii?Q?oQoifj2bogury2xga1pz7tE0gjoBF0IJqtx2L266IvSjRR4dqcuT0W2c/znG?=
+ =?us-ascii?Q?F0tqqNEveqExDY4BLMHBCInfbvQJlnaf12ILNCa811EfTvwT8o4fp4fzlU+A?=
+ =?us-ascii?Q?zSIrx/u0i3rDnZz963zSZqqIVVQpCgRxzCP2o4MceNScCL60GoOClc55Xesa?=
+ =?us-ascii?Q?kSMEoc4B1k37fWRk4W5Ae0EVl5y2nVkVJTTUFvHpkFEoh6u7n5YyIGjC5WaD?=
+ =?us-ascii?Q?k5sEDspJOvkjvfu8HUzywVQ6gh4XHC2YNu8B7R8W6ODlYHEjbskYHMoLDDjx?=
+ =?us-ascii?Q?zfRzWTFTYDE8aitIMHCCaScbOHxpWI+jWWrM8S8N4M6plONu6JDrhvY18kgD?=
+ =?us-ascii?Q?LAQ6L8HB4Fk35XwHGasPcqGYZEtvnx/bzJHW41yNl26BLjpoog4xR4BG47jt?=
+ =?us-ascii?Q?0uWv5zjFK2CA8Ix19trv2XbdTY44meRuYo8hCoKlOXWSuiRLF6CLWr+4mMAS?=
+ =?us-ascii?Q?LbMK9p01Ghm8aC8iqqJBtc3+XA9JsfJdwFFwzFl+J7vqia/aCoRWY08kzqMu?=
+ =?us-ascii?Q?JQUkIxLMChhYHt13JH5hUtZWhYqIPfartUHY9oDLBDucH6Us3w/YtmcdxC9i?=
+ =?us-ascii?Q?kTKkuq0jgOsT5iKa4sgWHhE9fuuBQadn9n1XF4BXTHkuOO1RYoR9O2Uwvgqe?=
+ =?us-ascii?Q?Kn7A14VvGfM6yfHo4vsXff5INdRERU8zLlg7?=
 X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 08:42:43.1999
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(52116014)(19092799006)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?MqJNe50hm4hOyKvG702e27iK78R2ADaJo5QFlOhYxZsoUwOkv0OVAi+TB2OS?=
+ =?us-ascii?Q?B5f7LZwiMH1LBsLpPy/CsNTkQq21HbI7YJEgSxDM8+LB2sVCVgBrxEcW9nha?=
+ =?us-ascii?Q?cpfWhr5vKNI6XR/PxFnOfy6ggdX458JYetsokXDtLpwPyQYl4gVh4N9EzUEG?=
+ =?us-ascii?Q?r78JQkWKilSzaR9BHXW3NLPMlN2VhdmJ/ThHL0H1s/icxlzSpb/frb93SnAb?=
+ =?us-ascii?Q?Ir6HoVTwjY9RVJ0Z0qA7J08Dnk9fJJY6+vrd4yDqUQVGMMS56+RrU6UPpLHc?=
+ =?us-ascii?Q?tZfee/r2+E7WIV/rHgW4+tS1nJ/7473ITZkVioMj3845ahKYhfUkW69xV9pv?=
+ =?us-ascii?Q?O8nZB7XbWAQEvbIMcH67IBr3kkGlHhI3FcgjVndrnGbEV0+NX9oJHRl407Py?=
+ =?us-ascii?Q?mw5AMOn5IeUDUK19cRinE/eRmlOre1P/7kaze/cCXsRcaJh50d9ZJWeI7l4r?=
+ =?us-ascii?Q?SfYrtUL2ErdOtIiLlAHXowQx7Eq3CjqzCT/TeyyMudljM3i2eRTtVIjuzH1+?=
+ =?us-ascii?Q?upfsrHroUkUfDPWJ3HMUbahMu1ysNhzSh573JVrMjj5Yg8/9395ACQ5M5oRj?=
+ =?us-ascii?Q?TaCXWTzKe3pur724YHrWQm+MkULlE8hVHZ82blQR2yBRhMNTWX62/U5RxLDs?=
+ =?us-ascii?Q?wKz2TS2Pqc+8bChSEXFf6nt2LqO1NOnu2KKlkRHOkTSZ/fDsD0EROIdV2MVS?=
+ =?us-ascii?Q?+qqpsB9g9wnVxOFs0LFDsuq1Q8wwlFvJVAKz7O6HOEFbqjGe/nVPesJLCSAh?=
+ =?us-ascii?Q?Ed5LjnBkUp1PURcqtVZ6su+tJJ+g8BW957YPBn76YJfrNK1InOCXzTb7V3Qx?=
+ =?us-ascii?Q?HJhRyMo6l4BZX5XqUsUYuysHt9AAfAXj4M/LRAZf5/ZKgVD6d0GqVsaNiQgu?=
+ =?us-ascii?Q?5wTx0CE972kwy2WxjNkXplLQuEyj75cL//aEG/ds/lhJtflMwBvHzZRVzR/g?=
+ =?us-ascii?Q?bE57JI00lJHAVzVP0wRxAGpj1+4oi626v+qPu9qySpQMCEX5QFEzBwKgMzjP?=
+ =?us-ascii?Q?wF/i5jNplhsrf9U+k9Lva2nrg5ri/53qsgJRCTIYTDbVpWPAXBKgCqjTa0RB?=
+ =?us-ascii?Q?p7BM8XMk68XMdoYaYop9wOGnOYx3aTfHbJXJYn0WVfCYWbWj0pMfMYOwrQLu?=
+ =?us-ascii?Q?DBnXTH830/CFc174AThyEdyp6qzTGu1ISQu3ruYthxnVOkOuiTh3BANM+QFv?=
+ =?us-ascii?Q?8nJOatXdjZE+PXNpUdIfq93GKhq+JLbXc3ee4OvKeW5qtJKBg1Ho0clVSqH5?=
+ =?us-ascii?Q?FGs46YEMN/aiwt8wxTpD2B61rF7Mrwt/zauXi6Oe7hbmruSPVYpzT0XyPXiL?=
+ =?us-ascii?Q?w3lg9eYv4+kj0YcOt3w8EpoUXrQWJgpvnRh6328if0NMiQxRvx0zS3cmAUmF?=
+ =?us-ascii?Q?/Jfo6P+rH6fIKMp6WsfLizj1UgxC783NexnoAz8+yqt44cfGWtVWDDXqRX/y?=
+ =?us-ascii?Q?XuQOR9XocE3r8yspKgLEiGlEZysyR7HCXYcR3n/b3IJV4F/lZ1WE0ZEfr3RA?=
+ =?us-ascii?Q?4sDQzMIeHHrbiMozS6NGzOlaRYTtFNAj9gvBzKDYhZP57naj0ec7dfu/xdnQ?=
+ =?us-ascii?Q?LMgbtEDudebeoFH0RyiLd0BCHZoQWhAJ/DH0L5ds?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0acff2ea-572a-4d7d-973c-08de15487001
+X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 11:03:19.9198
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 713d70e3-f47c-47d2-b083-08de1534cbbc
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CE.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR06MB6248
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6FfO9eEXJ6aMUak4Iq2rflAS1+O+eOMvPbfo2Lpx4cj4NFSlQiaFMaVw1ez7+GiP0BTr484hS9HHzIwZfSuCiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7830
 
-The default FIFO data width of the Cadence SPI IP is 8 bits, but
-the hardware supports configurations of 16 bits and 32 bits.
-This patch enhances the driver to support communication with both
-16-bits and 32-bits FIFO data widths.
+From: Carlos Song <carlos.song@nxp.com>
 
-Signed-off-by: Jun Guo <jun.guo@cixtech.com>
+ECSPI in i.MX51 and i.MX53 support target mode. Current code only support
+i.MX53. Remove is_imx53_ecspi() check for target mode to support i.MX51.
+
+Signed-off-by: Carlos Song <carlos.song@nxp.com>
 ---
- drivers/spi/spi-cadence.c | 106 +++++++++++++++++++++++++++++++++-----
- 1 file changed, 93 insertions(+), 13 deletions(-)
+Change for V2:
+- Change patch name and commit log
+- Remove target_max_transfer_bytes from devtype_data
+---
+ drivers/spi/spi-imx.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 5ae09b21d23a..47054da630d0 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -109,6 +109,7 @@
-  * @rxbuf:		Pointer to the RX buffer
-  * @tx_bytes:		Number of bytes left to transfer
-  * @rx_bytes:		Number of bytes requested
-+ * @n_bytes:		Number of bytes per word
-  * @dev_busy:		Device busy flag
-  * @is_decoded_cs:	Flag for decoder property set or not
-  * @tx_fifo_depth:	Depth of the TX FIFO
-@@ -120,16 +121,24 @@ struct cdns_spi {
- 	struct clk *pclk;
- 	unsigned int clk_rate;
- 	u32 speed_hz;
--	const u8 *txbuf;
--	u8 *rxbuf;
-+	const void *txbuf;
-+	void *rxbuf;
- 	int tx_bytes;
- 	int rx_bytes;
-+	u8 n_bytes;
- 	u8 dev_busy;
- 	u32 is_decoded_cs;
- 	unsigned int tx_fifo_depth;
- 	struct reset_control *rstc;
- };
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 64b7e977dcc1..9a1113ea4ba2 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -594,7 +594,7 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 	 * is not functional for imx53 Soc, config SPI burst completed when
+ 	 * BURST_LENGTH + 1 bits are received
+ 	 */
+-	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
++	if (spi_imx->target_mode)
+ 		cfg &= ~MX51_ECSPI_CONFIG_SBBCTRL(channel);
+ 	else
+ 		cfg |= MX51_ECSPI_CONFIG_SBBCTRL(channel);
+@@ -682,7 +682,7 @@ static int mx51_ecspi_prepare_transfer(struct spi_imx_data *spi_imx,
  
-+enum cdns_spi_frame_n_bytes {
-+	CDNS_SPI_N_BYTES_NULL = 0,
-+	CDNS_SPI_N_BYTES_U8 = 1,
-+	CDNS_SPI_N_BYTES_U16 = 2,
-+	CDNS_SPI_N_BYTES_U32 = 4
-+};
-+
- /* Macros for the SPI controller read/write */
- static inline u32 cdns_spi_read(struct cdns_spi *xspi, u32 offset)
- {
-@@ -305,6 +314,78 @@ static int cdns_spi_setup_transfer(struct spi_device *spi,
- 	return 0;
- }
+ 	/* Clear BL field and set the right value */
+ 	ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
+-	if (spi_imx->target_mode && is_imx53_ecspi(spi_imx))
++	if (spi_imx->target_mode)
+ 		ctrl |= (spi_imx->target_burst * 8 - 1)
+ 			<< MX51_ECSPI_CTRL_BL_OFFSET;
+ 	else {
+@@ -1375,7 +1375,7 @@ static int spi_imx_setupxfer(struct spi_device *spi,
+ 	spi_imx->rx_only = ((t->tx_buf == NULL)
+ 			|| (t->tx_buf == spi->controller->dummy_tx));
  
-+static u8 cdns_spi_n_bytes(struct spi_transfer *transfer)
-+{
-+	if (transfer->bits_per_word <= 8)
-+		return CDNS_SPI_N_BYTES_U8;
-+	else if (transfer->bits_per_word <= 16)
-+		return CDNS_SPI_N_BYTES_U16;
-+	else
-+		return CDNS_SPI_N_BYTES_U32;
-+}
-+
-+static inline void cdns_spi_reader(struct cdns_spi *xspi)
-+{
-+	u32 rxw = 0;
-+
-+	if (xspi->rxbuf && !IS_ALIGNED((uintptr_t)xspi->rxbuf, xspi->n_bytes)) {
-+		pr_err("%s: rxbuf address is not aligned for %d bytes\n",
-+		       __func__, xspi->n_bytes);
-+		return;
-+	}
-+
-+	rxw = cdns_spi_read(xspi, CDNS_SPI_RXD);
-+	if (xspi->rxbuf) {
-+		switch (xspi->n_bytes) {
-+		case CDNS_SPI_N_BYTES_U8:
-+			*(u8 *)xspi->rxbuf = rxw;
-+			break;
-+		case CDNS_SPI_N_BYTES_U16:
-+			*(u16 *)xspi->rxbuf = rxw;
-+			break;
-+		case CDNS_SPI_N_BYTES_U32:
-+			*(u32 *)xspi->rxbuf = rxw;
-+			break;
-+		default:
-+			pr_err("%s invalid n_bytes %d\n", __func__,
-+			       xspi->n_bytes);
-+			return;
-+		}
-+		xspi->rxbuf = (u8 *)xspi->rxbuf + xspi->n_bytes;
-+	}
-+}
-+
-+static inline void cdns_spi_writer(struct cdns_spi *xspi)
-+{
-+	u32 txw = 0;
-+
-+	if (xspi->txbuf && !IS_ALIGNED((uintptr_t)xspi->txbuf, xspi->n_bytes)) {
-+		pr_err("%s: txbuf address is not aligned for %d bytes\n",
-+		       __func__, xspi->n_bytes);
-+		return;
-+	}
-+
-+	if (xspi->txbuf) {
-+		switch (xspi->n_bytes) {
-+		case CDNS_SPI_N_BYTES_U8:
-+			txw = *(u8 *)xspi->txbuf;
-+			break;
-+		case CDNS_SPI_N_BYTES_U16:
-+			txw = *(u16 *)xspi->txbuf;
-+			break;
-+		case CDNS_SPI_N_BYTES_U32:
-+			txw = *(u32 *)xspi->txbuf;
-+			break;
-+		default:
-+			pr_err("%s invalid n_bytes %d\n", __func__,
-+			       xspi->n_bytes);
-+			return;
-+		}
-+		cdns_spi_write(xspi, CDNS_SPI_TXD, txw);
-+		xspi->txbuf = (u8 *)xspi->txbuf + xspi->n_bytes;
-+	}
-+}
-+
- /**
-  * cdns_spi_process_fifo - Fills the TX FIFO, and drain the RX FIFO
-  * @xspi:	Pointer to the cdns_spi structure
-@@ -321,23 +402,14 @@ static void cdns_spi_process_fifo(struct cdns_spi *xspi, int ntx, int nrx)
+-	if (is_imx53_ecspi(spi_imx) && spi_imx->target_mode) {
++	if (spi_imx->target_mode) {
+ 		spi_imx->rx = mx53_ecspi_rx_target;
+ 		spi_imx->tx = mx53_ecspi_tx_target;
+ 		spi_imx->target_burst = t->len;
+@@ -1649,8 +1649,7 @@ static int spi_imx_pio_transfer_target(struct spi_device *spi,
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(spi->controller);
+ 	int ret = 0;
  
- 	while (ntx || nrx) {
- 		if (nrx) {
--			u8 data = cdns_spi_read(xspi, CDNS_SPI_RXD);
--
--			if (xspi->rxbuf)
--				*xspi->rxbuf++ = data;
--
-+			cdns_spi_reader(xspi);
- 			nrx--;
- 		}
- 
- 		if (ntx) {
--			if (xspi->txbuf)
--				cdns_spi_write(xspi, CDNS_SPI_TXD, *xspi->txbuf++);
--			else
--				cdns_spi_write(xspi, CDNS_SPI_TXD, 0);
--
-+			cdns_spi_writer(xspi);
- 			ntx--;
- 		}
--
- 	}
- }
- 
-@@ -454,6 +526,10 @@ static int cdns_transfer_one(struct spi_controller *ctlr,
- 	if (cdns_spi_read(xspi, CDNS_SPI_ISR) & CDNS_SPI_IXR_TXFULL)
- 		udelay(10);
- 
-+	xspi->n_bytes = cdns_spi_n_bytes(transfer);
-+	xspi->tx_bytes = DIV_ROUND_UP(xspi->tx_bytes, xspi->n_bytes);
-+	xspi->rx_bytes = DIV_ROUND_UP(xspi->rx_bytes, xspi->n_bytes);
-+
- 	cdns_spi_process_fifo(xspi, xspi->tx_fifo_depth, 0);
- 
- 	cdns_spi_write(xspi, CDNS_SPI_IER, CDNS_SPI_IXR_DEFAULT);
-@@ -654,6 +730,9 @@ static int cdns_spi_probe(struct platform_device *pdev)
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA;
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
- 
-+	if (of_device_is_compatible(pdev->dev.of_node, "cix,sky1-spi-r1p6"))
-+		ctlr->bits_per_word_mask |= SPI_BPW_MASK(16) | SPI_BPW_MASK(32);
-+
- 	if (!spi_controller_is_target(ctlr)) {
- 		ctlr->mode_bits |=  SPI_CS_HIGH;
- 		ctlr->set_cs = cdns_spi_chipselect;
-@@ -797,6 +876,7 @@ static const struct dev_pm_ops cdns_spi_dev_pm_ops = {
- 
- static const struct of_device_id cdns_spi_of_match[] = {
- 	{ .compatible = "xlnx,zynq-spi-r1p6" },
-+	{ .compatible = "cix,sky1-spi-r1p6" },
- 	{ .compatible = "cdns,spi-r1p6" },
- 	{ /* end of table */ }
- };
+-	if (is_imx53_ecspi(spi_imx) &&
+-	    transfer->len > MX53_MAX_TRANSFER_BYTES) {
++	if (transfer->len > MX53_MAX_TRANSFER_BYTES) {
+ 		dev_err(&spi->dev, "Transaction too big, max size is %d bytes\n",
+ 			MX53_MAX_TRANSFER_BYTES);
+ 		return -EMSGSIZE;
 -- 
 2.34.1
 
