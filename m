@@ -1,55 +1,54 @@
-Return-Path: <linux-spi+bounces-10840-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10843-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 632BAC0C5B9
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 09:43:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DE27C0C64F
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 09:46:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7EA03BC073
-	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 08:43:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3A3804F4759
+	for <lists+linux-spi@lfdr.de>; Mon, 27 Oct 2025 08:44:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 191922F066A;
-	Mon, 27 Oct 2025 08:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE0A2F60CB;
+	Mon, 27 Oct 2025 08:42:51 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022107.outbound.protection.outlook.com [40.107.75.107])
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11023108.outbound.protection.outlook.com [40.107.44.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579C52EC563;
-	Mon, 27 Oct 2025 08:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1CE2F531F;
+	Mon, 27 Oct 2025 08:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.108
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761554569; cv=fail; b=TzbJ0VTaQlFK0fsYOEdjdDb+DWibOj/bPMbmWO1qH9EIFpqudcIlz44PAS08yIFg+vOMwAGK6i251GJQ/xMKhBZpsTHHAjtaY/++rSDKcI9QNqEQzO3WUsFNTDKPh0YQJeCeBmy5KpUQMVGwhw9WehH9ea/hEDzc6A0FpuImvz0=
+	t=1761554571; cv=fail; b=cqT6gmKx/NXVXYuH6CZ4aml3WJgmFC/BJYZ0q7VeFtbRcf2LEjO2BR1qi/GXOOSzjYoQGfmqFDbkMrBuZb2a+I8PC4CLy68HZwuBjcRBYUp1hTSkya4OfF9LLBSIUwF28t/Xmb2FgrqgjlgyjQtuRsJmIniYAjXYZfHen2Zlrxs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761554569; c=relaxed/simple;
-	bh=tAxOiF8zIj9k8oeQX4z9lnWqV6iC0p59rGarBodFEKg=;
+	s=arc-20240116; t=1761554571; c=relaxed/simple;
+	bh=gFjO6PjDxGCChsKyg3a4p7sZoWfmVfXp5Wel14qA0j0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DOn2M9MK+WxDhou31/v1aoPweF5l8BBT8DB35ZY0oTgxATNASs8LiQhnK2pjBf4VlDtyv/ops98XHYAHpUupZQzzztO8ELFK3GRO2OQR4BDKq/IslmfN+8CTxz/781THwI5eo4VlSObs5qBAMXidsNZblI68VFQUwVDCPO6FIVs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.107
+	 MIME-Version:Content-Type; b=J7LQk/huzJDIotiqGZiOIWFcpzRZ7uj5T6x8auYzz5bC/Vk7Gqw6N6b3R10F1JuB0MQvdoQbfNzdqzhb00fdiqblueaT3g103Tecnb0HoFHdM5e0U6YBNo+/N1dmfpcotMr1cSaD/i3NPLs0rhJHjpeABlk053NLDuzmmFr9n0U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.44.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r+sma3SP8390M+hYDeksMXOlYUKAwgjfK1+KTpJMh9e8tu4ZR1K9bgkoyWfZhoTm65uYIYp2jYdmhmJzR+AKKpum7s53HbetkTrGwpmH/GW/H00+esyXK4bpD1E219PWwcwaqMvScyfJQc6lebWWgTZgDMUNe2dFd3oM3NpLCTmPiihYjDZGfd28mTqxyl1nK6Ni54UgmvvhfIXflbH3pMJ4/HMx5x1If4t5225PDKH/9+mJd5oEQA/AvPurNb71g760DNWvJGczbc81Q2FsJs4fEBjqfFMzYV4IJbVaNR6FTmqjJ2xlYvc1vFjm82CkHgiSyQCuiIzEo2HZq/sKyw==
+ b=liK7QNKkWG8vPLm8zc6nXE2sw9qMPbQvxkQckVtfBSTESe0nI8G3HgatlkdmR5UQbiKFLg0UDy+O7KvS88nCKw/+AHyHBAW9//q8TzzSFUyeYM24pk+e4N1yWt/m5dal3Dj4z64BeolBDiff4yQ7cd4ytRF7JMXLFlFJ7uBt7qmVlNoCgwww7p562dglEDvfZCcZYHvftOyALMnBnfeomhjiSJ/OL1UZAKjj8P2Z8lDg8p4tXJX+zSj46zmwzCX5yLFGsUI3lW3iKn99XJnTDQ0xXaqQMfmZENqXXVBc8SbCmC+BUPvbAP8gd5LEhRO0VhqoHBjaHs95LqvQSDRxjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZGgWA70lT5FqnKk+8CQ+swW1c6q6S/SJLiE5Mcodpzw=;
- b=NMLrRKZVfvGYZpqZrdJ4qHc45tBCfqPIvWSoEhe/GeZlxdrW5nh7BJcXr2TjS7/Zkla9QgOSDXOkOk1PxvDxHIO5aNjKMynGVwy11H5vV06jyLVlq6qFSEwIU/vyD0heKuhSHIPPcpOmkzpRb9WDgq63vCyXVDLtCtw9AF3hiCOcndSoq5vJ2POZECc1K+STj6Mo7qDsT7gqp0qsSFoQpoPWdzpfeT1U6NutQL53qnuD5UO/TTXzY845y8OM83Ybs6SdhlO/i4lSraUHdZebb6X5uaOvWcvIkdeSlr5tZlleqSAlJ8+FcdHnNCu/zZFenGMPTXhPhnMT8wo9Xt9IBw==
+ bh=Xnx1/Gf90HyEVMTLX9R0bf/iH1fw3N0nvOwqs2Qutlw=;
+ b=ZYBfYtkebtnrJjhf7qAk+Um5jRUKlv53QbwZWGKd8hOIpbWaePB9NYK18LP9OzResoZDtP5pC/XqhMSRMixnUO08v7H00tk/0bdi4/3RwFABB+x8DXJANqH0ykXpthttxuhjPg1biMN1FpeADuFDtMoUvXIln2u6foTk64X+5+5IqJXiJBda8911jnHOMn7UVe084X1fd+2Z6mp7jHkQxvTEm+4WDbVNAuHM2nax6rx+PlIxBtDkn9uGsP4y8obwz1dvScvAYuA4DB4iGryCJv+zf3jFJwcLOowrVwZtfI9oa529t1+ICuqnZ7yG9Qfice3beSJ+8hnZopI5/tyksw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  222.71.101.198) smtp.rcpttodomain=amd.com smtp.mailfrom=cixtech.com;
  dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
  not signed); arc=none (0)
-Received: from SG2PR02CA0134.apcprd02.prod.outlook.com (2603:1096:4:188::14)
- by TYZPR06MB6955.apcprd06.prod.outlook.com (2603:1096:405:40::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 08:42:42 +0000
+Received: from SG2PR02CA0127.apcprd02.prod.outlook.com (2603:1096:4:188::7) by
+ TYZPR06MB7256.apcprd06.prod.outlook.com (2603:1096:405:ab::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9253.18; Mon, 27 Oct 2025 08:42:45 +0000
 Received: from SG2PEPF000B66CC.apcprd03.prod.outlook.com
- (2603:1096:4:188:cafe::47) by SG2PR02CA0134.outlook.office365.com
- (2603:1096:4:188::14) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:1096:4:188:cafe::95) by SG2PR02CA0127.outlook.office365.com
+ (2603:1096:4:188::7) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9253.18 via Frontend Transport; Mon,
- 27 Oct 2025 08:42:16 +0000
+ 27 Oct 2025 08:42:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
  smtp.mailfrom=cixtech.com; dkim=none (message not signed)
  header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
@@ -61,7 +60,7 @@ Received: from smtprelay.cixcomputing.com (222.71.101.198) by
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.20.9275.10 via Frontend Transport; Mon, 27 Oct 2025 08:42:41 +0000
 Received: from guoo-System-Product-Name.. (unknown [172.20.64.188])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 8964E41C0148;
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id D713741C014A;
 	Mon, 27 Oct 2025 16:42:40 +0800 (CST)
 From: Jun Guo <jun.guo@cixtech.com>
 To: peter.chen@cixtech.com,
@@ -77,9 +76,9 @@ Cc: linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Jun Guo <jun.guo@cixtech.com>
-Subject: [PATCH v2 1/3] arm64: dts: cix: add a compatible string for the cix sky1 SoC
-Date: Mon, 27 Oct 2025 16:42:37 +0800
-Message-Id: <20251027084239.2610141-2-jun.guo@cixtech.com>
+Subject: [PATCH v2 2/3] dt-bindings: spi: spi-cadence: update DT binding docs to support cix sky1 SoC
+Date: Mon, 27 Oct 2025 16:42:38 +0800
+Message-Id: <20251027084239.2610141-3-jun.guo@cixtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251027084239.2610141-1-jun.guo@cixtech.com>
 References: <20251027084239.2610141-1-jun.guo@cixtech.com>
@@ -89,90 +88,99 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CC:EE_|TYZPR06MB6955:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: fb13b836-fd8f-48cf-a3bd-08de1534cadb
+X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CC:EE_|TYZPR06MB7256:EE_
+X-MS-Office365-Filtering-Correlation-Id: 360e80d3-ef3f-494f-f2ab-08de1534cad0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TAmNoyVmyEffJ7idMrMPKbpC2fY1spIqa+qdj95zk5S+WzrIerIG8Q+gfdnj?=
- =?us-ascii?Q?VDTdD9tCn0ty56LzQpRIzOifHaTGo9ETqw8Z5ZUdtBze+QnX+5RCbLqx2gfv?=
- =?us-ascii?Q?yW8mwobmh9NDHcEX4VvWe+ne7ME8Ggna5NPrKuH+Euw32PmjAmibF3RagLqi?=
- =?us-ascii?Q?/vs602TpSIQukZVqZEr2bFQS/uK7xeeJVNDkPBi/oJsiR47o1gErVlK6RyGp?=
- =?us-ascii?Q?mO81XfNJvDD/dexthtOaWDjyWSZNNRANvn3aAliYTnvgDaJQmKCeXRBWJnbr?=
- =?us-ascii?Q?1plbtV7y6U/d1drZ5JK3o1/M2sRRqfsaB58rU/e5BatDZ+LAPg+oHbY7sO9D?=
- =?us-ascii?Q?5GBJooVDQ6e9YAJkNsr12F2myPW4Z7wRojXedpOp7JCQgOF4fGYZ+HghsYHb?=
- =?us-ascii?Q?SieH37FoWAm/E3uwoHTZACctU99DmabIBHxytbtoWKUFyscizt1j4/St2HAP?=
- =?us-ascii?Q?Ex1sKKZI1C7kS2ZYdfz1mo9Ae3+2HRsDrpnK8y91+0+i7aIqrgRsHa70hrXW?=
- =?us-ascii?Q?H2E0Nu6XvBYew4coSfG2bACqR9s5KDvELZESoNy2sPgAR99PeDufeEsBb1mS?=
- =?us-ascii?Q?FOpwxCD9D2XbIFs0Nm6u3eUQ4qJg3NV4bwCNf1sYv9PGznvbuJJtu3PVk7Ym?=
- =?us-ascii?Q?/SIn9H47cT7LZzV65RtvyVqvnT+CglbAeVyrAOMk4vkQxJRE3vnWO+ScXgd3?=
- =?us-ascii?Q?woDsDN3xPTtxdtUnbmpZF+fEHiV3hMm/AdlvQPv+ksPnt/hw0Epz+jbBGuFx?=
- =?us-ascii?Q?Qe1Ta5t5LXETP+F74Nd9Oz2U9zq6MMqf1b5s3LoFXDKJZIdubFPozuS7/dUA?=
- =?us-ascii?Q?MhptxiUk+JMgDcFRgYMKhZ0QMisCcOQJZpMyEvDMW7vF8BNn15JtO8LBNDys?=
- =?us-ascii?Q?EKY7VnjRZGvEMGK6GM7Polve9ysI47WirrRMCQpslEtrJBc27qNSc2n2i2WL?=
- =?us-ascii?Q?GYDVut4f5kG3DiOifWdjhVXCNQzNuB2lAVWmyOuX/bu8iFf7BDJQ6ns13lZU?=
- =?us-ascii?Q?vGOGXGyZhhAsu50CF4d4hlmPyk1mPeluabHP0BROZKw5f49suFIxDE2/FP/5?=
- =?us-ascii?Q?1VLSnvGKPFbjZj4DZhcPtyLW+JI5tJTMSXVuj2zFdHxcAIN1AyK4p6dhiJTJ?=
- =?us-ascii?Q?yFBbnE5fZ9guep/qkMWLOC0zDsBjXSFF8SiQnWddfIRU3q+bJecOb/RHq4iU?=
- =?us-ascii?Q?BuTPz2L1TuuEY98s1rumE2/7iTHBYtwOVqL8flSfF+UxlH0BWKb5FAswMkgR?=
- =?us-ascii?Q?InQ9R2udia448WODOOp58wY4R/7ihUcVY5Mrk75OxrXcI7QIyWnZSyh1iiU9?=
- =?us-ascii?Q?l21RrmHcbORRDN9/tjHrkY9attpIEy3sfCPAaQyQAqMpV97N1uZcB7PsHKJA?=
- =?us-ascii?Q?LVGnkNGHRn4Hlt/NQYlIdaJSNDx8rielXs9DBjkOgNtiE9G+weuLzGIMBoWT?=
- =?us-ascii?Q?Sv0BZrxFr0esdWkzSXPCcyPx3/E0vF5aEfswzjVwV+PyGb1MCXjyMNjV2kp/?=
- =?us-ascii?Q?vdijG08Zd/1xxgE4MFwAnIQY+lOtkIUsjphw6VuL0n3S42pUalClGJQmQ2G+?=
- =?us-ascii?Q?8p+25k44YRBz1BuClLw=3D?=
+	=?utf-8?B?YmhTTFRSTmhTYnVGQkZVN0tJbUoxNDJraG1lUFhCSmQ3ZEJTZHZKYW5BTTk3?=
+ =?utf-8?B?VlZpRndGVlVOQ0tTOU8yY2E2KzBJcHkwaDZPOTYwcmtZdi9VbmphbDFXVnBn?=
+ =?utf-8?B?Z0Z3RU5UNTlzZlNiaHdLMkFJZUxURytDTzBDYmVtWUY1VGF3ZnEyN2JUbGpZ?=
+ =?utf-8?B?UnhDWnlLS1R5S2M0dzBtZ0tOemk3cVdyYjJITldUSzdVQ1gzTTVyV0NpT0dw?=
+ =?utf-8?B?NXhUNVdyM3lmYUh5Y0VnS3NwcFpab3BvTzd1VlhFN2FPQzVzb0J0d3ZSdFlz?=
+ =?utf-8?B?aUJmd1BJK2JlS2pCREEzR01OSlhoV1Y0aHR6T3JwZkZRSmNmZTBRcUZHVk4z?=
+ =?utf-8?B?TnZaVUlMQ25rUGhUMEpIRTQ3aWdxbjJoTGtDcWVha092ZVUvTnZqKzF3VCtO?=
+ =?utf-8?B?clRxUmlENFRKaUhaVGd4UWxUSGdBUHN2ZVVpdlRnVWZmVE1vMGdhbm50ZFQ3?=
+ =?utf-8?B?cCt0TFgxSXdySGVsZHp1V3FtRXJVd0YxQU1XdFdadk9YV1NiVXI2d0dhaDh0?=
+ =?utf-8?B?ejRGMnZ3d0tESHdVamlKRTIrQ0labHNCUUxYVFQ2MW5FdEw1N1oxa1pGRCtN?=
+ =?utf-8?B?eGJtRlNFK2xwSWd5VFJDTzlMTmRJcjNadG95b0pkNmRFUE5VZCt6YmxRRjJJ?=
+ =?utf-8?B?VCtlaml4M3NBWm92d25RcGtEbEU0cm40VXBJRjVRUFQxTEtBdnNjQzJ6d2Z5?=
+ =?utf-8?B?cWNjL0pvUVZFazBWaVFsanVvYVJnMmFqN0dSamowRVh3SlZnVloyNE8xMnp2?=
+ =?utf-8?B?ZEZlRWFVeGxDc2poNC84cGoyUEhlU1FVemNXMEtTSFFjbEl1cmkrYkdjKzhZ?=
+ =?utf-8?B?RzR6S1R0YUZWTGJhSER0THpZM0wzVU44UFdsVU1majJXY08vdnBZY1NXOVMy?=
+ =?utf-8?B?QUs2UXA5Qy9rN3N4d3NDbUgyY0h5VEgrRWRIK2NkWGhqbmtUenJOaE9OQXpl?=
+ =?utf-8?B?cjRRTDJNQUdQQ1l1eWZuMXk1K1VHRDlYeFc4dUdhbEhPY0k0K2NORVRvNENj?=
+ =?utf-8?B?ZXZ1T2VsV3p6aTY2dTVDUnNWMHNWalNrUGlXM3FadEVCTjlTTEZaU1FXUU5U?=
+ =?utf-8?B?OU15RDdHUUQ2LzRmQ2tORU05UzRuMXB3VStCMkcwYzdmaEF6Q2tTOUZMd0Iv?=
+ =?utf-8?B?U2c3cFZ5SWsySDFaRGFLUGZBV2RrUkVrbkRZWG9oRmsyUlJHalRNUWhBVDNH?=
+ =?utf-8?B?MGw2dHV1VCtnOXd6NmdwdnI0SEZ1MzRBZXBJdFp0b0ZQS1pFd3FuSjVpQ3dM?=
+ =?utf-8?B?UjFqWnJTK1dNM2kvVnV6NlBPRlZPTW9rZlR1MUp4NmE2UHVtQ1cybFlBVWR6?=
+ =?utf-8?B?bHh4VGgrSzdDOWhLdEZPM1dzUTRad09LMHN2U2ZpRHkzUm9yS3lHaG0xTGFJ?=
+ =?utf-8?B?bTNWUWUwYVA5TVpYV2J4ZXZ6K0hXN2JuRUZwOVhOaVhNeTV3d3piUitJV0h1?=
+ =?utf-8?B?ekptVGEwWGxwM3NaUVZHRm1CMFptM3RlaGtYRHJvQXFZQkQrdk05TElmM3R5?=
+ =?utf-8?B?cE02YU5FUldiL1BxeXp4SEhra05wWUFIc2lBY2gvUnBtV3F3TGtXZXg0SG9O?=
+ =?utf-8?B?WG92d3NYMmpTcVhiWXZNdDRMRzBGQ3hNY0JzWE00d0JKR0FLb2toZy9sdFdD?=
+ =?utf-8?B?VzA0U0tzamRZTVI5WWpVTmo4SGZwbXBaVWE0cVk1U3ZtQ012TTQyUjlpaHFz?=
+ =?utf-8?B?d2p3L0NTNlFWTU0wcFlhdXI2di9icEdHajdERlk3WWJTcTVGWkJoY09wZHpP?=
+ =?utf-8?B?dVliOHhzMkU1Tjl2NTdKUzNFZWVscXZwM0dsUW9heXBGa3ppTFhDU3J3UWdL?=
+ =?utf-8?B?R01BakFRaG9ORUhMWWRIOTljOGhidkVhTGdkajJ6L0hjRS9waXhad0VQdnk5?=
+ =?utf-8?B?dXRrTUdRQnRlOWhYazh4aGlYVkdEeHVhZVV5K2ZLaTIxVEZPbzZaS2JqS3NP?=
+ =?utf-8?B?SS9ab1lvNmpJd2ZMQUFSVzhSTmIxWGlRdTRnZDJBQXJ5K2ZvUk51Wkhjbmc0?=
+ =?utf-8?B?LzRQRFB6REp5Wlp3MTBweFN6TTE2Z09LVE5rYXAwUWI0Z1FQVzc1aEtLS1p3?=
+ =?utf-8?B?bnBmeGp4cGVtcWYwYythSjZSSTlNT3hyRWZHcGZPYVdXWDN6TG5raTVjaXhw?=
+ =?utf-8?Q?0b/4=3D?=
 X-Forefront-Antispam-Report:
 	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1102;
 X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 08:42:41.7298
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 08:42:41.6708
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb13b836-fd8f-48cf-a3bd-08de1534cadb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 360e80d3-ef3f-494f-f2ab-08de1534cad0
 X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	SG2PEPF000B66CC.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6955
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB7256
 
-The SPI IP design for the cix sky1 SoC uses a FIFO with a data width
-of 32 bits, instead of the default 8 bits. Therefore, a compatible
-string is added to specify the FIFO data width configuration for the
-cix sky1 SoC.
+- Add new compatible strings to the DT binding documents to support
+ cix sky1 SoC;
+- Adjust the configuration of the compatible property to support both
+ single-item and two-items cases.​​
 
 Signed-off-by: Jun Guo <jun.guo@cixtech.com>
 ---
- arch/arm64/boot/dts/cix/sky1.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/spi/spi-cadence.yaml          | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/cix/sky1.dtsi b/arch/arm64/boot/dts/cix/sky1.dtsi
-index d21387224e79..189b9a3be55c 100644
---- a/arch/arm64/boot/dts/cix/sky1.dtsi
-+++ b/arch/arm64/boot/dts/cix/sky1.dtsi
-@@ -265,7 +265,7 @@ i2c7: i2c@4080000 {
- 		};
+diff --git a/Documentation/devicetree/bindings/spi/spi-cadence.yaml b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+index 8de96abe9da1..e75b142a1368 100644
+--- a/Documentation/devicetree/bindings/spi/spi-cadence.yaml
++++ b/Documentation/devicetree/bindings/spi/spi-cadence.yaml
+@@ -14,9 +14,14 @@ allOf:
  
- 		spi0: spi@4090000 {
--			compatible = "cdns,spi-r1p6";
-+			compatible = "cix,sky1-spi-r1p6", "cdns,spi-r1p6";
- 			reg = <0x0 0x04090000 0x0 0x10000>;
- 			clocks = <&scmi_clk CLK_TREE_FCH_SPI0_APB>,
- 				 <&scmi_clk CLK_TREE_FCH_SPI0_APB>;
-@@ -275,7 +275,7 @@ spi0: spi@4090000 {
- 		};
+ properties:
+   compatible:
+-    enum:
+-      - cdns,spi-r1p6
+-      - xlnx,zynq-spi-r1p6
++    oneOf:
++      - enum:
++          - cdns,spi-r1p6
++          - xlnx,zynq-spi-r1p6
++      - items:
++          - enum:
++              - cix,sky1-spi-r1p6
++          - const: cdns,spi-r1p6
  
- 		spi1: spi@40a0000 {
--			compatible = "cdns,spi-r1p6";
-+			compatible = "cix,sky1-spi-r1p6", "cdns,spi-r1p6";
- 			reg = <0x0 0x040a0000 0x0 0x10000>;
- 			clocks = <&scmi_clk CLK_TREE_FCH_SPI1_APB>,
- 				 <&scmi_clk CLK_TREE_FCH_SPI1_APB>;
+   reg:
+     maxItems: 1
 -- 
 2.34.1
 
