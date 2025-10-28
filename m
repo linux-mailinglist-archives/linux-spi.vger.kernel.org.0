@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-10887-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10888-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DBA4C14E91
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 14:38:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A42EC14F00
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 14:43:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3BFBA505936
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:35:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1AC162624E
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC343346A4;
-	Tue, 28 Oct 2025 13:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8994A33A012;
+	Tue, 28 Oct 2025 13:33:55 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E6432C933;
-	Tue, 28 Oct 2025 13:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7ED3346B7;
+	Tue, 28 Oct 2025 13:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761658427; cv=none; b=YttRcR1zVLH+3zjGnj8eO8zfUUaXJMixU1xB2ZKyqOBwKH2e3GmAT2XBE5XeGYpqLD513SE/HH3waS8pFJ6XxoIH3VQ1mMTJf6XwNcSTfxL3Hsy9kChvqrwBuh+H9lrKJQtbuCpyo4Fpu7ButS7eJNvJImFoM46HzrFUqSgnapk=
+	t=1761658435; cv=none; b=kKXc0jR5iKpGlLE3rdmqBljZv23HZZqAuF58KvC+DrrZzNHE6XoP45GvVvDmXZp6aW4mkpu/dP2CAdskoM4n0vFWk2dFvZiVU24lukPfzNRbyAcr6tBFR/zAdc0tSYH9P4VhGUmvL8ZA8JkAJetJI6c76PtmOAmmgyfjtHDpjHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761658427; c=relaxed/simple;
-	bh=E/ZG1FqldpvSHwlCjDfkgP8WIFiYCddOFgwtnnTms9U=;
+	s=arc-20240116; t=1761658435; c=relaxed/simple;
+	bh=9xMSjp5IZZQL3jJNdxETz2YXQ1hQsjOWvAbdBWqEdN0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I11aI6v6SrZUl1iWIVVLyzGJcTateWU28EUTc5AdjzSdEDdR290rqsrgaGnvdeqbhAvaykUM8ENBdVL9iHDcBD+KCHpf0ZJ+TrkEerJtEsYhSqx2QdqS66uC2kkXD9c2i7RQcRitSodhcI/I6vSdVSzsSp086dOyE/rv9wDcxDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
+	 MIME-Version; b=YeOG2tvyz2/ma70HbZsrrIoRH9wAEt3CxNHlmUsEjn2yAGJ+Tpl2TB0JCOMGfA6Dnvq1NnyF1XKGbaQ80pDbcX8/s+uwZFxqC4XWxzOG9YBH4+0aXxj1NVyEFlvUwy8uKZcWIf3RMgOPwZYs/1uxNRuTHYmQ9tUltLRSiLljYzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 7fbqa8aDR/m2MN8qsGurUw==
-X-CSE-MsgGUID: i6TV0ev/QRaPjbezc0Ceng==
+X-CSE-ConnectionGUID: HqnJmteZTTu4oXL4X2OrPw==
+X-CSE-MsgGUID: b5OddXfdRJuGKVoVlq3Oxg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 28 Oct 2025 22:33:45 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 28 Oct 2025 22:33:51 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.5])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 473EC41B5F49;
-	Tue, 28 Oct 2025 22:33:40 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8894941B6443;
+	Tue, 28 Oct 2025 22:33:46 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: 
 Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -52,9 +52,9 @@ Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 12/14] spi: rzv2h-rspi: add support for RZ/T2H and RZ/N2H
-Date: Tue, 28 Oct 2025 15:31:43 +0200
-Message-ID: <20251028133151.1487327-13-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 13/14] arm64: dts: renesas: r9a09g077: Add SPIs support
+Date: Tue, 28 Oct 2025 15:31:44 +0200
+Message-ID: <20251028133151.1487327-14-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251028133151.1487327-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251028133151.1487327-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -66,173 +66,97 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compared to the previously supported RZ/V2H, the Renesas RZ/T2H
-(R9A09G077) and RZ/N2H (R9A09G087) SoCs have a smaller FIFO, no resets,
-and only two clocks: PCLKSPIn and PCLK. PCLKSPIn, being the clock from
-which the SPI transfer clock is generated, is the equivalent of the TCLK
-clock from RZ/V2H. They also support generating the SPI transfer clock
-from PCLK.
-
-PCLKSPIn supports multiple dividers, generating multiple possible
-frequencies from its parent. To handle this, do the following changes.
-
-Use the minimum frequency of SPI clock to calculate the SPI controller's
-min_speed_hz, and the maximum frequency to calculate max_speed_hz.
-
-Add a new function, rzv2h_rspi_find_rate_variable(), which is used for
-the .find_tclk_rate() callback, and which supports handling clocks with
-a variable rate, with the following overall logic.
-
-Iterate through all possible BRDV values.
-
-For each BRDV, calculate two different SPRs, one for the clock's minimum
-frequency, and one for the maxmimum, and iterate through each SPR
-between them.
-
-If the minimum SPR is higher than the upper SPR limit, the minimum rate
-is too high to achieve the requested SPI frequency, skip to the next
-BRDV.
-
-For each SPR, calculate a rate and let the clock framework round it to
-the closest supported rate of the clock.
-
-The rate and SPR that generate a transfer frequency closest to the
-requested SPI transfer frequency will be picked.
+Add support for the four SPI peripherals on the Renesas RZ/T2H Soc.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 ---
- drivers/spi/spi-rzv2h-rspi.c | 108 +++++++++++++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+ arch/arm64/boot/dts/renesas/r9a09g077.dtsi | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
-index 70239fb1c03a..d108c26c71d7 100644
---- a/drivers/spi/spi-rzv2h-rspi.c
-+++ b/drivers/spi/spi-rzv2h-rspi.c
-@@ -261,6 +261,105 @@ static inline u32 rzv2h_rspi_calc_bitrate(unsigned long tclk_rate, u8 spr,
- 	return DIV_ROUND_UP(tclk_rate, (2 * (spr + 1) * (1 << brdv)));
- }
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g077.dtsi b/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+index 42ee9f299837..4f0315235050 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+@@ -188,6 +188,78 @@ sci5: serial@81005000 {
+ 			status = "disabled";
+ 		};
  
-+static void rzv2h_rspi_find_rate_variable(struct clk *clk, u32 hz,
-+					  u8 spr_min, u8 spr_max,
-+					  struct rzv2h_rspi_best_clock *best)
-+{
-+	long clk_rate, clk_min_rate, clk_max_rate;
-+	int min_rate_spr, max_rate_spr;
-+	unsigned long error;
-+	u32 actual_hz;
-+	u8 brdv;
-+	int spr;
++		rspi0: spi@80007000 {
++			compatible = "renesas,r9a09g077-rspi";
++			reg = <0x0 0x80007000 0x0 0x400>;
++			interrupts = <GIC_SPI 636 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 637 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 638 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 634 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 635 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "idle", "error", "end", "rx", "tx";
++			clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
++				 <&cpg CPG_MOD 104>;
++			clock-names = "pclk", "pclkspi";
++			power-domains = <&cpg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
 +
-+	/*
-+	 * On T2H / N2H, the source for the SPI clock is PCLKSPIn, which is a
-+	 * 1/32, 1/30, 1/25 or 1/24 divider of PLL4, which is 2400MHz,
-+	 * resulting in either 75MHz, 80MHz, 96MHz or 100MHz.
-+	 */
-+	clk_min_rate = clk_round_rate(clk, 0);
-+	if (clk_min_rate < 0)
-+		return;
++		rspi1: spi@80007400 {
++			compatible = "renesas,r9a09g077-rspi";
++			reg = <0x0 0x80007400 0x0 0x400>;
++			interrupts = <GIC_SPI 641 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 642 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 643 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 639 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 640 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "idle", "error", "end", "rx", "tx";
++			clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
++				 <&cpg CPG_MOD 105>;
++			clock-names = "pclk", "pclkspi";
++			power-domains = <&cpg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
 +
-+	clk_max_rate = clk_round_rate(clk, ULONG_MAX);
-+	if (clk_max_rate < 0)
-+		return;
++		rspi2: spi@80007800 {
++			compatible = "renesas,r9a09g077-rspi";
++			reg = <0x0 0x80007800 0x0 0x400>;
++			interrupts = <GIC_SPI 646 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 647 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 648 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 644 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 645 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "idle", "error", "end", "rx", "tx";
++			clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
++				 <&cpg CPG_MOD 106>;
++			clock-names = "pclk", "pclkspi";
++			power-domains = <&cpg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
 +
-+	/*
-+	 * From the manual:
-+	 * Bit rate = f(PCLKSPIn) / (2 * (n + 1) * 2^N)
-+	 *
-+	 * If we adapt it to the current context, we get the following:
-+	 * hz = rate / ((spr + 1) * (1 << (brdv + 1)))
-+	 *
-+	 * This can be written in multiple forms depending on what we want to
-+	 * determine.
-+	 *
-+	 * To find the rate, having hz, spr and brdv:
-+	 * rate = hz * (spr + 1) * (1 << (brdv + 1)
-+	 *
-+	 * To find the spr, having rate, hz, and spr:
-+	 * spr = rate / (hz * (1 << (brdv + 1)) - 1
-+	 */
++		rspi3: spi@81007000 {
++			compatible = "renesas,r9a09g077-rspi";
++			reg = <0x0 0x81007000 0x0 0x400>;
++			interrupts = <GIC_SPI 651 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 652 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 653 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 649 IRQ_TYPE_EDGE_RISING>,
++				     <GIC_SPI 650 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "idle", "error", "end", "rx", "tx";
++			clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
++				 <&cpg CPG_MOD 602>;
++			clock-names = "pclk", "pclkspi";
++			power-domains = <&cpg>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			status = "disabled";
++		};
 +
-+	for (brdv = RSPI_SPCMD_BRDV_MIN; brdv <= RSPI_SPCMD_BRDV_MAX; brdv++) {
-+		/* Calculate the divisor needed to find the SPR from a rate. */
-+		u32 rate_div = hz * (1 << (brdv + 1));
-+
-+		/*
-+		 * If the SPR for the minimum rate is greater than the maximum
-+		 * allowed value skip this BRDV. The divisor increases with each
-+		 * BRDV iteration, so the following BRDV might result in a
-+		 * minimum SPR that is in the valid range.
-+		 */
-+		min_rate_spr = DIV_ROUND_CLOSEST(clk_min_rate, rate_div) - 1;
-+		if (min_rate_spr > spr_max)
-+			continue;
-+
-+		/*
-+		 * If the SPR for the maximum rate is less than the minimum
-+		 * allowed value, exit. The divisor only increases with each
-+		 * BRDV iteration, so the following BRDV cannot result in a
-+		 * maximum SPR that is in the valid range.
-+		 */
-+		max_rate_spr = DIV_ROUND_CLOSEST(clk_max_rate, rate_div) - 1;
-+		if (max_rate_spr < spr_min)
-+			break;
-+
-+		if (min_rate_spr < spr_min)
-+			min_rate_spr = spr_min;
-+
-+		if (max_rate_spr > spr_max)
-+			max_rate_spr = spr_max;
-+
-+		for (spr = min_rate_spr; spr <= max_rate_spr; spr++) {
-+			clk_rate = (spr + 1) * rate_div;
-+
-+			clk_rate = clk_round_rate(clk, clk_rate);
-+			if (clk_rate <= 0)
-+				continue;
-+
-+			actual_hz = rzv2h_rspi_calc_bitrate(clk_rate, spr, brdv);
-+			error = abs((long)hz - (long)actual_hz);
-+
-+			if (error >= best->error)
-+				continue;
-+
-+			*best = (struct rzv2h_rspi_best_clock) {
-+				.clk = clk,
-+				.clk_rate = clk_rate,
-+				.error = error,
-+				.actual_hz = actual_hz,
-+				.brdv = brdv,
-+				.spr = spr,
-+			};
-+
-+			if (!error)
-+				return;
-+		}
-+	}
-+}
-+
- static void rzv2h_rspi_find_rate_fixed(struct clk *clk, u32 hz,
- 				       u8 spr_min, u8 spr_max,
- 				       struct rzv2h_rspi_best_clock *best)
-@@ -554,8 +653,17 @@ static const struct rzv2h_rspi_info rzv2h_info = {
- 	.num_clks = 3,
- };
- 
-+static const struct rzv2h_rspi_info rzt2h_info = {
-+	.find_tclk_rate = rzv2h_rspi_find_rate_variable,
-+	.find_pclk_rate = rzv2h_rspi_find_rate_fixed,
-+	.tclk_name = "pclkspi",
-+	.fifo_size = 4,
-+	.num_clks = 2,
-+};
-+
- static const struct of_device_id rzv2h_rspi_match[] = {
- 	{ .compatible = "renesas,r9a09g057-rspi", &rzv2h_info },
-+	{ .compatible = "renesas,r9a09g077-rspi", &rzt2h_info },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, rzv2h_rspi_match);
+ 		wdt0: watchdog@80082000 {
+ 			compatible = "renesas,r9a09g077-wdt";
+ 			reg = <0 0x80082000 0 0x400>,
 -- 
 2.51.1
 
