@@ -1,224 +1,98 @@
-Return-Path: <linux-spi+bounces-10874-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10875-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C11C14B34
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:49:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC6EAC14DC2
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 14:32:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 680FA1B227F2
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 12:49:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C3D104FC649
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E88D330B14;
-	Tue, 28 Oct 2025 12:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PREr+dBg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32AD272816;
+	Tue, 28 Oct 2025 13:32:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341B932ED52;
-	Tue, 28 Oct 2025 12:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E5A217736;
+	Tue, 28 Oct 2025 13:32:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761655713; cv=none; b=mrJ1tA64oCBi4nSyok00wfCkNbB3NaWfzm/efjRnEW7iZWq/qqfprBfBEhfF3oeEfTuN3aTYzeWKlL/iLiyVIMWUvruBvRbH1xUkbXClLqRsiWtD3A+rUGo7g/j7OX7ZtWxKq1V7D+OJVxvUAz3HmFyRRxVKq6ufnddv8skuBD8=
+	t=1761658350; cv=none; b=Z8qqI1ccfO5Km2xPHGql/gQSv5XvW4J8s17mkSJ00e+PqDi0AzU5L2SEL7K4WjOhmkU+qAl6o+H1HThMBkznzgn87qERJ9+p4hN7U9qMieOPA/hEZEM7QLYkFZQ1o5adQVvNyG+XvPK4qG4ANkduPiwMkvL9iQOqddA+H4QRcuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761655713; c=relaxed/simple;
-	bh=IsSiLtjjKrn57XWnq/ZtclrFpBaVV4MFEOdQtDmlEKw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WthOouQqzqXy7qBlTUz3GVRJjb0/tRqHFacQh65o1jzNuiDbQqWRdVXrhbDInFrzieLSJHSJe2gkJUp9Y8nR1lVMCRVEH00/VYPi6jWP+lsVzV0MGwfJcF9N0hC/vaQqRkDCnZ3dlCfcnlTYTzr12v7Bjyvs/qw8X5n7GHF+WRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PREr+dBg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063A4C4CEE7;
-	Tue, 28 Oct 2025 12:48:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761655711;
-	bh=IsSiLtjjKrn57XWnq/ZtclrFpBaVV4MFEOdQtDmlEKw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PREr+dBgL1t7+RMy/TivRYw9OL39nez4quLnCltbLPG01ozww8UZmKThJS8YPRkk/
-	 wjubkkQycgg7VILM1kl9Dt0kx9SgcuZJ4J9giIoLTNxhxB4gWk1zpDyDGx0atnu9mp
-	 QSBh4GNdNvHExTBatR+h/9B/4pKYPu+E1KzsLqjaz97zPzoyGpgF05N5FxQ65P63fJ
-	 /1S/n6mAmmwffP3jqEN3YvQ04/hxdX36G8/S/TVSSoul+Oq7/W+99RA/lbzyMnacgr
-	 ATHOCyn0k9Mu+WRY8AcTBj91y0qu4nfNh0RfZ/5pEQWtOdbZAa2J3giQuiUMk3ftID
-	 IjRzww19Q3prw==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	s=arc-20240116; t=1761658350; c=relaxed/simple;
+	bh=7xzSZEKPMcMr6ZLDcdxFVSipxoAqy3mVToNORHLTl3I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ImwX8HChwTnAWoLbPScyhqUMwTdQ/PDP3YhSZb206MPqDeYBevN6KfPSvBeom17jdzKqw8BfhfKBXaFS/6jO5iGRHlXMPjawVhNlVGUjiFpNMErXLISgQC8xdHN3nUHfXqM1bd9NcEhdY5b3g8tVXwTq84Q0ik7THSerQF7Aljc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+X-CSE-ConnectionGUID: yAzQ4Cw7T8+IvhaCA/kGHg==
+X-CSE-MsgGUID: 38qbawjiTh2L8qoZHAb/sg==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 28 Oct 2025 22:32:27 +0900
+Received: from demon-pc.localdomain (unknown [10.226.92.5])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 65B5E41B5F52;
+	Tue, 28 Oct 2025 22:32:22 +0900 (JST)
+From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+To: 
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.17-6.1] spi: intel-pci: Add support for Arrow Lake-H SPI serial flash
-Date: Tue, 28 Oct 2025 08:48:08 -0400
-Message-ID: <20251028124815.1058740-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251028124815.1058740-1-sashal@kernel.org>
-References: <20251028124815.1058740-1-sashal@kernel.org>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	linux-spi@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 00/14] Add RSPI support for RZ/T2H and RZ/N2H
+Date: Tue, 28 Oct 2025 15:31:31 +0200
+Message-ID: <20251028133151.1487327-1-cosmin-gabriel.tanislav.xa@renesas.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.5
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+Compared to the previously supported RZ/V2H, the Renesas RZ/T2H
+(R9A09G077) and RZ/N2H (R9A09G087) SoCs have a smaller FIFO, no resets,
+and only two clocks: PCLKSPIn and PCLK. PCLKSPIn, being the clock from
+which the SPI transfer clock is generated, is the equivalent of the TCLK
+from V2H. They also support generating the SPI transfer clock from PCLK.
 
-[ Upstream commit bc25c6e0a4880b5ad70c31fe1466f30c9e4c8f52 ]
+Cosmin Tanislav (14):
+  clk: renesas: r9a09g077: add SPI module clocks
+  spi: rzv2h-rspi: make resets optional
+  spi: rzv2h-rspi: make FIFO size chip-specific
+  spi: rzv2h-rspi: make clocks chip-specific
+  spi: rzv2h-rspi: move register writes out of rzv2h_rspi_setup_clock()
+  spi: rzv2h-rspi: avoid recomputing transfer frequency
+  spi: rzv2h-rspi: make transfer clock rate finding chip-specific
+  spi: rzv2h-rspi: add support for using PCLK for transfer clock
+  spi: rzv2h-rspi: add support for variable transfer clock
+  spi: rzv2h-rspi: add support for loopback mode
+  dt-bindings: spi: renesas,rzv2h-rspi: document RZ/T2H and RZ/N2H
+  spi: rzv2h-rspi: add support for RZ/T2H and RZ/N2H
+  arm64: dts: renesas: r9a09g077: Add SPIs support
+  arm64: dts: renesas: r9a09g087: Add SPIs support
 
-Add Intel Arrow Lake-H PCI ID to the driver list of supported devices.
-This is the same controller found in previous generations.
+ .../bindings/spi/renesas,rzv2h-rspi.yaml      |  62 +++-
+ arch/arm64/boot/dts/renesas/r9a09g077.dtsi    |  72 ++++
+ arch/arm64/boot/dts/renesas/r9a09g087.dtsi    |  72 ++++
+ drivers/clk/renesas/r9a09g077-cpg.c           |  22 ++
+ drivers/spi/spi-rzv2h-rspi.c                  | 335 +++++++++++++++---
+ 5 files changed, 494 insertions(+), 69 deletions(-)
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Link: https://patch.msgid.link/20251020145415.3377022-3-mika.westerberg@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Based on my comprehensive analysis of both the commit and the kernel
-repository context, here is my assessment:
-
-## **Backport Status: YES**
-
----
-
-## **Analysis Details**
-
-### **1. Code Changes Analysis**
-The commit adds a single line to `drivers/spi/spi-intel-pci.c`:
-```c
-{ PCI_VDEVICE(INTEL, 0x7723), (unsigned long)&cnl_info },
-```
-
-This adds PCI device ID `0x7723` (Intel Arrow Lake-H SPI controller) to
-the supported devices table, using the existing `cnl_info` board
-configuration that's already proven and tested on numerous other Intel
-platforms.
-
-**Change statistics:** 1 file changed, 1 insertion (+)
-
-### **2. Stable Kernel Rules Compliance**
-
-I examined `/home/sasha/linux/Documentation/process/stable-kernel-
-rules.rst` and found **explicit authorization** for this type of commit:
-
-**Line 15 states:** *"It must either fix a real bug that bothers people
-or just add a device ID."*
-
-This commit satisfies the stable tree requirements:
-- ✅ **Adds a device ID** (explicitly allowed per line 15)
-- ✅ **Already in mainline** (commit bc25c6e0a4880)
-- ✅ **Size: 1 line** (well under the 100-line limit)
-- ✅ **Obviously correct** (simple table entry addition)
-- ✅ **Enables hardware support** for Arrow Lake-H users
-
-### **3. Historical Precedent - Similar Commits Backported**
-
-I verified that similar PCI ID additions to this driver have been
-**consistently backported** to stable trees:
-
-**Evidence from repository analysis:**
-```bash
-# Lunar Lake-M commit (8f44e3808200c)
-Backported to: stable/linux-6.8.y, 6.10.y, 6.11.y, 6.12.y, 6.13.y,
-6.14.y, 6.15.y, 6.16.y, 6.17.y
-
-# Arrow Lake non-H commit (8afe3c7fcaf72)
-Backported to: stable/linux-6.8.y, 6.10.y, 6.11.y, 6.12.y, 6.13.y,
-6.14.y, 6.15.y, 6.16.y, 6.17.y
-```
-
-**Pattern:** Device ID additions for Intel SPI controllers are routinely
-backported, even without explicit "Cc: stable" tags, because they're
-explicitly permitted by stable rules.
-
-### **4. Cross-Subsystem Context**
-
-Arrow Lake-H is a **real, shipping platform**. I found multiple Arrow
-Lake-H device ID additions across the kernel, many already backported:
-
-- `i2c: i801: Add support for Intel Arrow Lake-H` (f0eda4ddb2146) →
-  **backported to 6.11.y - 6.14.y**
-- `usb: dwc3: pci: add support for the Intel Arrow Lake-H`
-  (2fff7bb8f1c26) → **backported to 6.7.y**
-- `mfd: intel-lpss: Add Intel Arrow Lake-H LPSS PCI IDs` (1523d8ea99d28,
-  6112597f5ba84)
-- `pinctrl: meteorlake: Add Arrow Lake-H/U ACPI ID` (080c3068715df,
-  a366e46da10d7)
-
-This demonstrates that Arrow Lake-H support is being actively backported
-across subsystems.
-
-### **5. Risk Assessment**
-
-**Risk: MINIMAL**
-
-- **No code behavior changes** - only adds a PCI ID entry
-- **Uses existing, proven code path** - references `cnl_info` used by
-  20+ other device IDs
-- **Isolated impact** - only affects systems with Arrow Lake-H hardware
-  (PCI ID 0x7723)
-- **No dependencies** - standalone change requiring no prerequisites
-- **No architectural changes** - no API modifications, no data structure
-  changes
-
-### **6. User Impact**
-
-**Without this patch:** Users with Arrow Lake-H systems cannot access
-their SPI flash controller, preventing firmware access and critical
-hardware functionality.
-
-**With this patch:** Arrow Lake-H hardware works identically to other
-supported Intel platforms (Lunar Lake, Meteor Lake, Granite Rapids,
-etc.)
-
-### **7. Author & Maintainer Context**
-
-- **Author:** Mika Westerberg (original driver author and maintainer)
-- **Commit history:** 16 out of 23 recent commits to this file are by
-  Mika, primarily adding new Intel platform PCI IDs
-- **Pattern:** Consistent, incremental hardware enablement for new Intel
-  platforms
-
----
-
-## **Conclusion**
-
-This commit is a **textbook example** of what should be backported to
-stable trees:
-1. Explicitly permitted by stable kernel rules (device ID addition)
-2. Minimal size (1 line) and zero risk
-3. Consistent with historical backporting patterns
-4. Enables real hardware that users have
-5. No behavior changes to existing code
-6. Part of broader Arrow Lake-H enablement across kernel subsystems
-
-**Recommendation:** Backport to all active stable trees (6.12.y, 6.11.y,
-6.10.y, etc.) following the same pattern as previous Intel SPI
-controller device additions.
-
- drivers/spi/spi-intel-pci.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 4bb158a23349e..7765fb27c37c3 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -80,6 +80,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0x51a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x5794), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x7723), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7e23), (unsigned long)&cnl_info },
 -- 
-2.51.0
+2.51.1
 
 
