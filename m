@@ -1,244 +1,363 @@
-Return-Path: <linux-spi+bounces-10900-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10901-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B70C158AA
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 16:42:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16FF3C15997
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 16:51:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 21A1F35503B
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 15:42:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBF0C3BA0A7
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 15:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC8733FE0A;
-	Tue, 28 Oct 2025 15:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34E6343D91;
+	Tue, 28 Oct 2025 15:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YZlIzKDI"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Ngth1kIU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013034.outbound.protection.outlook.com [52.101.83.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459241FF7D7
-	for <linux-spi@vger.kernel.org>; Tue, 28 Oct 2025 15:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761666134; cv=none; b=Baf0IGgW7FDcGYHN386G5zJyunenyw9PFFtLJdaS+TdUXG/CXHHaKEIKyGa6HBviA9y+CKsuLBiGeJ5hrlGj0IRSsN4N8KRiQDNILl0Sx0Bnf//g5PWRqsouxZtc0EbrRrKfVTHpdwU4G9OXfDzGw2kAchxfIOFnZ6ptm2GC0vo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761666134; c=relaxed/simple;
-	bh=nmb9otoxS9qo4PpMlQE1HojBqVA53t1oBHFeByRsR9Q=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qVGWvY/YkKxy2PAJ+yKwlUKbaVKrZ+0ehEHHKA3zlFTSd158QOMGk+xQZ1mhKEGXPsQsAgxKTGa06RB5Krc4LKrzVoIRDVWG0IL7hQnW/WHgLcRwgx6REx0nT+tinz4MJ3zKpQcG2af8qLavrf5WWhMoz16gisvOGQ8umSMbhh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YZlIzKDI; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 7B7D94E41397;
-	Tue, 28 Oct 2025 15:42:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 44E7B606AB;
-	Tue, 28 Oct 2025 15:42:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C5F77117A932D;
-	Tue, 28 Oct 2025 16:41:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761666120; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=nDSVs9lhw+F4YKSYneSSWC5JzdOFTeNiVqf0bisny44=;
-	b=YZlIzKDI2uuOlCIyIc2f7SjHrk4BtxyZB5m8F2TanV1WkB0xo4/Bl/0fnuCZqdFFWFLxVJ
-	Y6tFo4ygPXXz0LK5Db9RC/r7PvBfOfS2RSB0fJAum4Sh2GIsVUnXLuOy+4TAyEVxUVt0ng
-	r8u6miAXNCJKzQLpgWPhQm1TuF9itzKJVfNvcV4H2xhpHGbwbo8zCrSnI4fLpFfQMwDS2M
-	f3ub86hwLg7UELL40PKCVuccrdieUDLaE8U6TT/RtNeXBr8DHKDBB8xgk3YbbA7tcLR0Da
-	orq83w3vBtzziMwPNeXpYalN6/SxLjEyz5HMqz36hTPft03JfG6n5bdgBMYPMg==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Santhosh Kumar K <s-k6@ti.com>
-Cc: <richard@nod.at>,  <vigneshr@ti.com>,  <broonie@kernel.org>,
-  <tudor.ambarus@linaro.org>,  <pratyush@kernel.org>,  <mwalle@kernel.org>,
-  <p-mantena@ti.com>,  <linux-spi@vger.kernel.org>,
-  <linux-mtd@lists.infradead.org>,  <linux-kernel@vger.kernel.org>,
-  <a-dutta@ti.com>,  <u-kumar1@ti.com>,  <praneeth@ti.com>
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-In-Reply-To: <cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com> (Santhosh Kumar
-	K.'s message of "Sat, 20 Sep 2025 23:25:31 +0530")
-References: <20250811193219.731851-1-s-k6@ti.com>
-	<20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
-	<cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
-User-Agent: mu4e 1.12.7; emacs 30.2
-Date: Tue, 28 Oct 2025 16:41:51 +0100
-Message-ID: <87qzunt4n4.fsf@bootlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596533451C9;
+	Tue, 28 Oct 2025 15:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.34
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761666223; cv=fail; b=VX/wOrXK2P4Ev5hH7NcqjMuY37FRvxs4Ps3G0yHubNCv+Sty23BkLSjeP5HENwBfIV0/XP3PChud9x/Ee9uu0Sp+P1YmpWA5HwcveNzJkT/4eiLtYpQ+V8H5dFOknHHycm9CS6OIACbT5hqutgUzbymJxxayNhx8wo8e+q4DD+E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761666223; c=relaxed/simple;
+	bh=5R2leiVlA87E2YqJbfwFcyJOnBW+XdpZO1UKKhIh6Zw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=sED2nWpdoRLggS2ivBPwShh6Ie9u61Z88jnGRyf8oZiT0MLZH8lIYcwi3ViI9LGkgEPFxrL2sShtUr00a84hhGBfHP86j78oo2K1qlU7tn+tQIZOU2idoX/IOw3/p4JVR12gA4MUUOUhKWXf8B4fxFUXFejBVK5JRcZrtcSgKC4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Ngth1kIU; arc=fail smtp.client-ip=52.101.83.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mYhhFnyAGBXQ2NlJDa/snv9FWb+893p2cJxn+CPcf6+0sstI7naCBxdZrwE9ZBgYswzZbULpW7pBcqFNjS+Ol2555juEJRtKI4iCy7S62OsqbpjVu6ivEt+c9KFCbC1pxtAaj6IWYqqdidnE0X/OzpMng/ET6yLyzpoHVw7KHmEhsFq8EvwZJkh5vhBqSQqR5xVqzw7z7es7F5aYOGDHeUrUxy8hSkeCJTu+7dUPZ9yZVr7qYBMkMrGik6a2wfQDMimBCtcdb0L+MPXdyJMBlmCDiONWcMK53SwF26laDWJXFLBmYhUWSvpSl/v5L0ng8Ly5WZw8VO3ZcrXRZ0Qcvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aLzgqt9BJ8ROBu1ytd8NRk8G5nhO+d5g2MyNEPanXaA=;
+ b=LRtWCAo/EvGX9b0aKuj11wSR5o9hzn975G6/IjnG3csNJdMAqFaRBvYR/dLk4eky3x/A1iidXDOgH5Usll7yfxNHAcS0I/FZgaAZ2KHXTwlB+Ak9fNLV+euCAgnzdsSWMwqvy39xcNjnO636DP2Q7aFMCEPTyUPqXbdoo5BY9kh4Iq1/ybzfp3Bk2QsBD+EjWStKIVQrJ0y+a851xyX+zcB7c2jOTiSPE6AOzndFYcJQCuagTJnYCbq4B/HYEzPxjr3QnccgSST+8m+bXkEz7yTqEbw5uMrm++HxyKe2f7JG/S9fHf4WydWenwO7SoBW/h04bSFNEPXQTi0E+L2XKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aLzgqt9BJ8ROBu1ytd8NRk8G5nhO+d5g2MyNEPanXaA=;
+ b=Ngth1kIU07pN/U4JHAeMUgdbxEJJfQZIR5zA0vSg+RAQOIdNKQvGhAyQljBOsEIU+cWJ9h2kHGpn0Kx8kzWFAyZEc8c1mnXyplxi+OImfbGKWhFAu6KGbX3n7D5ZYLj2kMpByGt+MKx00Gj1xWwjk8hxdnbXj3JTon+dFok+Pd1+msDHZWLz2l0l+ja0gpqhfiAsrld8xrtn+EL8LyaV+hFvs8IePEfOjVOCGzAE4cHccS7UlvpG9xQdDFpiUzpnAXHGf4uAXnlrYR4qtCFi4NHHx/6aGrp3Tv6WTF8Mr3sK1YxVUvUBrorEwJehQUNr9j/VCwEhyjsmaMf50TNRcg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com (2603:10a6:102:23f::21)
+ by AS5PR04MB9970.eurprd04.prod.outlook.com (2603:10a6:20b:67e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.19; Tue, 28 Oct
+ 2025 15:43:38 +0000
+Received: from PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15]) by PAXSPRMB0053.eurprd04.prod.outlook.com
+ ([fe80::504f:2a06:4579:5f15%6]) with mapi id 15.20.9275.011; Tue, 28 Oct 2025
+ 15:43:38 +0000
+Date: Tue, 28 Oct 2025 11:43:31 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Carlos Song <carlos.song@nxp.com>
+Cc: "mkl@pengutronix.de" <mkl@pengutronix.de>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"shawnguo@kernel.org" <shawnguo@kernel.org>,
+	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>,
+	"festevam@gmail.com" <festevam@gmail.com>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PACTH v2] spi: imx: add 16/32 bits per word support for target
+ mode
+Message-ID: <aQDko60j5lB1ngCl@lizhi-Precision-Tower-5810>
+References: <20251024113107.513604-1-carlos.song@nxp.com>
+ <aPt+JJhaB9dUOwL8@lizhi-Precision-Tower-5810>
+ <VI2PR04MB11147AB20690F99BB6CEE2300E8FCA@VI2PR04MB11147.eurprd04.prod.outlook.com>
+ <aP++6ghId1LvQ1NF@lizhi-Precision-Tower-5810>
+ <VI2PR04MB1114746F42268876E27C1B93FE8FDA@VI2PR04MB11147.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <VI2PR04MB1114746F42268876E27C1B93FE8FDA@VI2PR04MB11147.eurprd04.prod.outlook.com>
+X-ClientProxiedBy: PH7PR10CA0021.namprd10.prod.outlook.com
+ (2603:10b6:510:23d::20) To PAXSPRMB0053.eurprd04.prod.outlook.com
+ (2603:10a6:102:23f::21)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXSPRMB0053:EE_|AS5PR04MB9970:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2aecf1e8-72fb-4725-7649-08de1638c2fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|19092799006|7416014|52116014|376014|366016|1800799024|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dFf6O9/7G0KmtozUhEWMETCp7/sgXTin1zgSx6C92VuIJZPuIkRi1jc2aJx9?=
+ =?us-ascii?Q?ZZ+2p1IPztE+KORgbb2HTJ5Cdj3/avrzMf90aLt7LmCJrhsGYONWC6pbj5H5?=
+ =?us-ascii?Q?uvhCFaEYB9XJl7/zjj8KJhgFQMflIbMYAzLtD0aCYJOpQu4NSreII2Ut59Z/?=
+ =?us-ascii?Q?+2I1sGfMw4cQLxVUartGA/jbPKi8FcCLOvlp+MLf7cWXHTqav9ibtQpSARrw?=
+ =?us-ascii?Q?kaJttv4jBnVxc185MP6tQKY2z/sDWrUoNV9jhy3WEkMxyAkwcxUu7I2m33LN?=
+ =?us-ascii?Q?ZvgPyglyyvCXb48XL+W4ovuTMK86bQaSZ46WgExQAU76mPA4W3l7tM6psee3?=
+ =?us-ascii?Q?q/58IGbfVIoNOubM08KmSf6WexPp8XwM4vJxC6JnWDZc/W0Juc9bL+AXi4la?=
+ =?us-ascii?Q?R8aaHNDJ8u3sKJXWjn5Yf3ybs79WaBYA9PWJ6FBD2o5vQyh2JgijbG4LJlhT?=
+ =?us-ascii?Q?+aMDoRA3YGhsRSw7U2WXEXpAUgwnAIfKBpPW0Mj7mzvcB1E6QGCgSKMUdvwY?=
+ =?us-ascii?Q?HqRLWH+OGMp/+baRoVLcw9eXpr7gJCv8GmM0ywipLEvU2++8lS0GPMerFmPo?=
+ =?us-ascii?Q?ZKIWo4o6UlOxhR/fBJahPF2eShSI2gO7TrsKaYx7PGHPkrmb1fqBH5gOAzQo?=
+ =?us-ascii?Q?n1byx9IsWlpx5e/OfmJHhOrs3Gng2MBEO7sMqdfeLQrjDkohii9Rnn4vAHlH?=
+ =?us-ascii?Q?WgB9n/JwkCx8YDcOQ/8pj/gCRr8+82A6Inhf7qlLhN8zLElWBARoxnXdIjKV?=
+ =?us-ascii?Q?gBYGDULywRWt74K88ezR0HTBv1HtJyTgbqi/1JyCT1zu8vOr4E2qzQ3l4Xym?=
+ =?us-ascii?Q?3HMXnSOTLTJdWr7AaO1BrcRGBGLl1c1yYUnQgGnSNo6ibx182U3mhxiuZe9l?=
+ =?us-ascii?Q?wruT1iLTYq47V3tsWt32ErAH2PmFGSYZnCIATw4dyEx+SQZk/tGqhCLaazyQ?=
+ =?us-ascii?Q?ZC9cpF3Sao2UYz0HoRC4Z5tL1CiUl6OobALmZQA0WYsgvG+u6ILLI0t0Zvmn?=
+ =?us-ascii?Q?Vsg9gBG1wvCloblH85OhyXJ0whLbTQg+qETbKRoqSFBJYMDp0abXwi7vT3nn?=
+ =?us-ascii?Q?WBBDOz6PbGgaOB+Jmnt7umn9Oux8pPMkwZ80WhOFriUNMwlWFA/M1dA/kgR/?=
+ =?us-ascii?Q?MKOnmg6eHE2Wr+uwjdB7CRPstZ4OOH57aKWc2Kb3E9jFi2rQaGnCrrt7PFNc?=
+ =?us-ascii?Q?vFs29BKvJPiwbfUUYCco3l1pinShsckPHYltNsAUeop/5qhtM5YuQEwknI3A?=
+ =?us-ascii?Q?eeYdJsYRqJD8RB/Pf9CJ42Y3aLMdEF4CeCmmm9SxQZISR86GasSGS7henEiO?=
+ =?us-ascii?Q?9Rxeq1I6hrxTomj94IxgO650qcf1Meq8wtzTs3pwR94D80Wr9luDNF//19SZ?=
+ =?us-ascii?Q?8XsN1NZp42CArWrb7+DmabLo0l/vtjpr5fsFzjYo59IVY/w+mG2XF1mMm/+j?=
+ =?us-ascii?Q?r0Zc3iSeAvKeHsyCawNs52mkIbNwW/H1WQKrXuAu2lFemIuG0SpyY2rKWpBR?=
+ =?us-ascii?Q?XLeaO/F781ecbJSP3dxKBpAVDP/8vdYlWAWm?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXSPRMB0053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(7416014)(52116014)(376014)(366016)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?8NKERhosz3h1ePM9/ox82p9pAGExFydkZCHZpHJZgMt9yGZe5eQ0S4CSqi4z?=
+ =?us-ascii?Q?oDbEkZ/Gw1r67tVk0K5ko0ENGPRi5wC7CliESYV6RaBCDYIECBg2DKuGo1wp?=
+ =?us-ascii?Q?8hBdFORWyTHTbTtzOlDxvfO1KPFOyU5nkirp0RauJ6MDIXbLAu5USvbB2Ng5?=
+ =?us-ascii?Q?n5zgAihmBvN0ehcLZwjwyEkb5N8HnIqQnrE6JSdx4meiXUnJympnb5a2zoM5?=
+ =?us-ascii?Q?wQQCVA0MUCn5U/UzQmhFuoDLHJHPxl+rrcVaFGLe00ihsbezxXNEU+v7SvSm?=
+ =?us-ascii?Q?/JcLY6Q5Y+F5P1wPb0noSlE2p/GK6aBjNChAl9fjmN6nBga+3lQFPRz6iEr3?=
+ =?us-ascii?Q?qWDTIv/iR2HdGRatcnIwPoJ/RY4pq9mK3/qnFE3o+Vib3/UQj3J3GEpe+g5j?=
+ =?us-ascii?Q?7EwKMq7et0U4uVVZ/yAkaCPhqlujiPRr2arasSYaqiWmncuIg6EUZrDp80vV?=
+ =?us-ascii?Q?PkAoCPyXjbOSS54UsLhIVQbQEsr/MDfNjyiGEUEV1W4hOgxT7kRPrmn94/bG?=
+ =?us-ascii?Q?aGmQ/tWgPRakxsUaI3sMOV0g0ez2xkkFO06OKWnAic2gm+sI779NHERXEOV9?=
+ =?us-ascii?Q?v/2G0keIknrcaRnWs9YLfHO5RB03OobP4Dh8bC2ypoPAsuoS0tmRJwa0ikht?=
+ =?us-ascii?Q?8L3HOSZ2Tx7AGO2bmuja+9Z4Tqlb8OxBcW6OLOd7FC7+Ua6/IIUhUR60U9H7?=
+ =?us-ascii?Q?+d8q3YzDqI6eSgRVUznVBTocxMyf4zJRgnm9g3ethgYM/NoV0LbW4pCqzMVn?=
+ =?us-ascii?Q?bpw196XlIqly2NwRBSazXGIFnhBY1wiQI9+f/SpjfQNpKlTZ7RGKW5X9yiMn?=
+ =?us-ascii?Q?DcGeDLM7zQpTO20RbPioPFEqK9DzRmoXnMA+ywM1NT5uCv8YYaSmP/WtUk1Y?=
+ =?us-ascii?Q?2CoDsaBpjDhB9lh8kGmsOyqF9bNy8rpAydjUH9AD3+G4PHUEtEkhGSjXAKSk?=
+ =?us-ascii?Q?vpL1r4BesVqyYBaiONYdfyQUIQfLgXsgnHOchXpjC51B6OaQgWiRbvq/Wx13?=
+ =?us-ascii?Q?OQJhMXlljBDRsgc28QAgrupdfjDk4bxNV+U8VWridup4WsdwZNjpXhYn2ynm?=
+ =?us-ascii?Q?JTMaIaK1mjxqdNotNJ/sb6I1H7N7iNnouoYhz01anKEZ9wvm4dxyn5pzlCg3?=
+ =?us-ascii?Q?j8nN2D+ftHRxOzfJyt5FMpMo12LzlJdlkWGudQvPtf4C1MsCoxTcustrMNW5?=
+ =?us-ascii?Q?CK1XRD/SSjDSzPkpgqvLJOv2Kxzfr5zMg0DgnJO/08j9PG1ZfKwQgucNyb1J?=
+ =?us-ascii?Q?hbB9d3x7Rg2LxJR/s6mBDf0l4OVN0f8okU0wsVLhXet8WX7SVGFUXhryEKSE?=
+ =?us-ascii?Q?LC74pF3KQpiqHpkck6cAtGOusNfEtbTgx/tb3rY36yysDXKpT7TB7uz7WVRJ?=
+ =?us-ascii?Q?ipTFN4y0L9ylzks9CgxZRuLAtnkU9BQq57na8hF0vq/uRIAQKxOEeG2Z2nee?=
+ =?us-ascii?Q?1YhssB1e0c9c0mC1knF+3wm1Ty5OBtNf3RH8PPwvv9OGTlO17B7fIuP2pfmP?=
+ =?us-ascii?Q?DHU0t794QkpqG2ubjZEaNcchktC8xXloobSX5lNGjTJS9Z8/pnhm9hywwVQX?=
+ =?us-ascii?Q?j+0nxgtRMIxsWDQyvaQ3BmDs/jx59J5btyG0BZXh?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aecf1e8-72fb-4725-7649-08de1638c2fd
+X-MS-Exchange-CrossTenant-AuthSource: PAXSPRMB0053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2025 15:43:37.9586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X/980zArF9X7s5AdTBjOoTjpbviBiyfXyNrnjg7ROMVWL9Qnadq7ajfvlYQyrGU1qpL/pHivAVEUj7BfhflaEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9970
 
-Hello Santhosh,
-
-On 20/09/2025 at 23:25:31 +0530, Santhosh Kumar K <s-k6@ti.com> wrote:
-
-> Hello,
+On Tue, Oct 28, 2025 at 09:29:02AM +0000, Carlos Song wrote:
 >
-> On 10/09/25 13:51, Miquel Raynal wrote:
->> On 12/08/2025 at 01:02:10 +0530, Santhosh Kumar K <s-k6@ti.com> wrote:
->>=20
->>> From: Pratyush Yadav <pratyush@kernel.org>
->>>
->>> Some controllers like the Cadence OSPI controller need to perform a
->>> tuning sequence to operate at high data rates. Tuning is needs to happen
->>> once the device is switched to appropriate mode (say 8S-8S-8S or
->>> 8D-8D-8D).
 >
-> Apologies for the delay in response - I started prototyping new solution
-> based on our discussions earlier, which took some additional time.
-
-My turn to apologize for the delay, especially since your feedback is
-very complete.
-
->> This is actually wrong. Tuning is way more generic than that :)
->> If someone wants to use a chip at a high frequency (50MHz in your
->> case,
->> but whatever, there is a threshold above which additional care must be
->> taken), it must go through the calibration step. It does not matter in
->> which mode you are. Calibration would still be relevant in single SDR
->> mode.
->> This 50MHz bothered Mark because it is too Cadence specific. Maybe
->> this
->> should be a controller parameter? If the spi-mem core (or even the spi
->> core, by extensino) sees that the design allows running at XMHz (due to
->> the SPI peripheral properties or simply the absence of any limitation),
->> and if the controller states that it requires an extra tuning step above
->> YMHz (and X > Y), then it launches the calibration.
->>  From a core perspective, I would like the calibration hook to be as
->> simple as possible, because what "calibration" means is highly
->> controller and chip specific.
+> > -----Original Message-----
+> > From: Frank Li <frank.li@nxp.com>
+> > Sent: Tuesday, October 28, 2025 2:50 AM
+> > To: Carlos Song <carlos.song@nxp.com>
+> > Cc: mkl@pengutronix.de; broonie@kernel.org; shawnguo@kernel.org;
+> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
+> > linux-spi@vger.kernel.org; imx@lists.linux.dev;
+> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PACTH v2] spi: imx: add 16/32 bits per word support for target
+> > mode
+> >
+> > On Mon, Oct 27, 2025 at 03:39:36AM +0000, Carlos Song wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Frank Li <frank.li@nxp.com>
+> > > > Sent: Friday, October 24, 2025 9:25 PM
+> > > > To: Carlos Song <carlos.song@nxp.com>
+> > > > Cc: mkl@pengutronix.de; broonie@kernel.org; shawnguo@kernel.org;
+> > > > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
+> > > > linux-spi@vger.kernel.org; imx@lists.linux.dev;
+> > > > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> > > > Subject: Re: [PACTH v2] spi: imx: add 16/32 bits per word support
+> > > > for target mode
+> > > >
+> > > > On Fri, Oct 24, 2025 at 07:31:07PM +0800, carlos.song@nxp.com wrote:
+> > > > > From: Carlos Song <carlos.song@nxp.com>
+> > > > >
+> > > > > Now for ECSPI only support 8 bits per word in target mode.
+> > > > > Enable 16/32 bits per word support for spi-imx target mode.
+> > > > >
+> > > > > Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> > > > > Signed-off-by: Clark Wang <xiaoning.wang@nxp.com>
+> > > > > ---
+> > > > >  drivers/spi/spi-imx.c | 12 ++++++++++--
+> > > > >  1 file changed, 10 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> > > > > 155ddeb8fcd4..017f83f5dfdf 100644
+> > > > > --- a/drivers/spi/spi-imx.c
+> > > > > +++ b/drivers/spi/spi-imx.c
+> > > > > @@ -424,8 +424,12 @@ static void spi_imx_buf_tx_swap(struct
+> > > > > spi_imx_data *spi_imx)
+> > > > >
+> > > > >  static void mx53_ecspi_rx_target(struct spi_imx_data *spi_imx)  {
+> > > > > -	u32 val = ioread32be(spi_imx->base + MXC_CSPIRXDATA);
+> > > > > +	u32 val = readl(spi_imx->base + MXC_CSPIRXDATA);
+> > > > >
+> > > > > +	if (spi_imx->bits_per_word <= 8)
+> > > > > +		swab32s(&val);
+> > > > > +	else if (spi_imx->bits_per_word <= 16)
+> > > > > +		swahw32s(&val);
+> > > >
+> > > > Needn't swap when bits_per_word > 24, like 32? or our hardware max
+> > > > support to 16?
+> > > >
+> > > > Frank
+> > >
+> > > I think we don't need. We are reading/writing FIFO by 32-bits word. In
+> > > this case, we just need keep the default byte order.
+> > >
+> > > Is it more reasonable only support bits per word=8/16/32 for target mode?
+> > > -b 8/16/32 can cover most use case.
+> >
+> > yes, I only can't understand why needn't swap at 32bits workds, but other
+> > needs.
+> >
+> > FIFO 31..24  23..16  15..8  7..0
+> >       B0      B1     B2      B3
+> >
+> > next you
+> >
+> > in memory val is
+> >
+> > 0x0: B3
+> > 0x1: B2
+> > 0x2: B1
+> > 0x3: B0
+> >
+> > swab32s() to  bits_per_work 8
+> >
+> > 0x0: B0
+> > 0x1: B1
+> > 0x2: B2
+> > 0x3: B3
+> >
+> > if bits per_word 16
+> >
+> > val
+> >
+> > 0x0: X
+> > 0x1: X
+> > 0x2: B1
+> > 0x3: B0
+> >
+> > after swahw32s change to
+> >
+> > 0x0: B1
+> > 0x1: B0
+> > 0x2: x
+> > 0x3: x
+> >
+> > B0 and B1 still be swapped.
+> >
+> > Does SPI defined term word fixed big-endian?
+> >
+> > Frank
+> >
 >
-> I understand the concern here.
+> No, SPI doesn't define this. This swap is caused by the SPI-IMX FIFO design.
+> SPI-IMX FIFO is fixed little-endian.
 >
-> Let me point out the options for launching the tuning procedure, along
-> with the issues in each approach.
-
-Very good summary.
-
-> Option 1: Launch tuning as part of spi_mem_exec_op()
->    - After spi_mem_access_start(), introduce a spi_mem_needs_tuning()
-> check (a new callback to SPI MEM controller) to check whether the
-> current op requires tuning
->    - If yes, we call spi_mem_execute_tuning()
->         - on success, mark tuning complete in a flag within SPI MEM
-> Controller private data
->         - on failure, we attempt a fallback by calling
-> spi_mem_adjust_op_freq() and drop to a lower supported frequency
+> One example to easy understand:
 >
-> Option 2: Launch tuning within spi_controller->exec_op() implementation
->    - Very similar to option 1, except that the spi_mem_execute_tuning()
-> is triggered from within the controller's exec_op() implementation
-> (no need for spi_mem_needs_tuning())
+> If buf is:
 >
-> Drawbacks in option 1 and 2:
->    - Tuning requires multiple reads of a known pattern, but the flash
-> may not always be in a state to allow read commands
->    - No fallback on failures, can't make flash-specific adjustments in
-> case of a tuning failure
->    - No access to write_op() to write known pattern temporarily to an
-> on-die cache. Pattern needs to be always burnt into the flash
+> 0XB0B1B2B3
 >
->    - Plus, in option 2 - we can't call spi_mem_adjust_op_freq()
+> So data in TXFIFO is:
+> FIFO 31..24  23..16  15..8  7..0
+>   B0        B1		B2   B3
+>
+> So we can always see data on SPI bus:
+> 0xB3B2B1B0
+>
+> For this patch:
+> bits per word= 8: it means one byte is one word, so it should not effect by big endian or little endian, so every bytes should keep the same order between memory and SPI bus.
+> We write FIFO by 32 bits word, So we should swap every bytes in this word from 0XB0B1B2B3 to 0XB3B2B1B0
+>
+> Data in TXFIFO is
+> FIFO 31..24  23..16  15..8  7..0
+>   B3        B2		B1  B0
+> Then we can see data on SPI bus is
+> 0XB0B1B2B3
+>
+> For bits per word = 16, it means two bytes in one word, so every 2 bytes is one word, the word should be a little endian word,
+>
+> so we should swap half word from
+> 0XB0B1B2B3 to 0XB2B3B0B1
+>
+> Then data in TXFIFO is:
+> FIFO 31..24  23..16  15..8  7..0
+>   B2        B3		B0  B1
+> Then we can see data on SPI bus is
+> 0XB1B0B3B2
+>
+> For bis per word =32, it means for bytes in one word, so every 4 bytes is one word. The whole word is a little endian.
+> So we keep the default order.
+> 0XB0B1B2B3
+>
+> FIFO 31..24  23..16  15..8  7..0
+>   B0        B1		B2  B3
+>
+> So we can see the data on bus is:
+> 0xB3B2B1B0
 
-Two more significant drawbacks:
-- it adds an extra step in the "fast path" -maybe negligible?-
-- spi_mem_exec_op()/->exec_op() are called way before being ready for
-  calibration.
+Does SPI require send MSB/LSB first of a CPU's word?
 
-> While the need for tuning is dictated by Controller specific
-> characteristics the ops (and state of the chip) required to complete
-> tuning is under the control of spi-mem users (spi-nand/spi-nor).
-> So, it's impossible to achieve tuning without the help of spi-mem users.
+Frank
 
-Sounds like a constraint we can afford indeed, especially since the ops
-that can be optimized, are flash specific (relatively few content to
-share between spi nor and spi nand).
-
-> So, Option 3: Launch from SPI MEM clients
->                           (mtd/nand/spi or mtd/spi-nor, etc.,)
->    - Once the spi-mem chip is completely enumerated and best read and
-> write ops are chosen call spi_mem_needs_tuning(read_op, write_op) as
-> a part of .probe()
-
-This looks like a decent place, but there is one limitation to
-workaround: picking best read and write ops require knowing what the
-controller is capable of in terms of frequency, which means we must in
-advance expect to set up calibration or not. I don't think it's a
-problem, this is something we know in advance thanks to
-eg. spi-max-frequency in the DT, but I still think a controller specific
-"maximum frequency without calibration" capability must be carried for
-the controller to decide whether this step is needed or not when asked
-by the spi mem client.
-
->    - If tuning is required, call
-
-I guess "tuning being required" is a controller choice, based on the
-target frequency for both read/write ops and the controller capability
-to achieve this.
-
-> spi_mem_execute_tuning(read_op, write_op)
->         - If only read_op is provided, it implies the tuning pattern is
-> pre-flashed to the partition
-
-Interesting. I guess that lives some room for tuning PHYs during writes as
-well without more core modifications later, isn't it?
-
->    - On tuning failure, retry by re-running spi_mem_needs_tuning() with
-> the second best set of ops (max throughput - 1)
-
-I would like to challenge this need. Can the same calibration fail if
-attempted multiple times (eg. because of the heat?) If yes, then we need
-a fallback indeed. Otherwise, I'd be in favor of just failing the
-probe. Calibration is an opt-in -> users must allow a higher frequency
-than they use to in order to enable the feature?
-
-> With option 3, spi_mem users are limited to calling
-> spi_mem_needs_tuning() and spi_mem_execute_tuning().
-
-I would even go for a single spi_mem_tune_phy()? Or is there a point in
-having two helpers?
-
-> Rest is hidden
-> within the controller drivers. If spi-mem users change read/write ops,
-> the above sequence can be re-issued.
-
-I don't have use cases for that in mind, but why not.
-
-> The controller can store the read_op and write_op in case of a tuning
-> success and periodically re-run tuning, ensuring we always have valid
-> tuning parameters.
-
-You'll have to make sure you only use PHY calibration for the ops that
-have been used for the tuning though, because for example as I am
-working on octal DDR support: during S2RAM there may be the need for
-returning to SDR mode, which in turns will have to work without the
-tuning (tuning parameters will be incorrect for this mode for the time
-we run slowly). So either the controller knows which operation should
-enable PHY optimizations, or we must perform the whole calibration again
-every time we suspend (meh).
-
-> One concern with option 3 is that we may not be able to make use of
-> static data on certain flash as tuning patterns (like reading parameter
-> page or SFDP table for tuning instead of controller specific attack
-> patterns).
-
-This is true, I know some devices can send patterns during dummy cycles
-by I have no idea how powerful that is, nor if it can actually be used
-in Linux. One need a controller that is aware of these bits and can
-itself adjust/fine tune its own configuration. For now, I propose to let
-this aside until we get real hardware that can be tested.
-
-> Please let me know your thoughts on which of these directions makes the
-> most sense.
-
-Let's got for option 3. I'm eager to see this moving forward!
-
-Thanks, Miqu=C3=A8l
+>
+> The RX handle is the same with TX. From bus to FIFO is a little word, so swap in memory.
+>
+> Carlos
+>
+> > > Carlos
+> > > > >  	if (spi_imx->rx_buf) {
+> > > > >  		int n_bytes = spi_imx->target_burst % sizeof(val);
+> > > > >
+> > > > > @@ -453,12 +457,16 @@ static void mx53_ecspi_tx_target(struct
+> > > > spi_imx_data *spi_imx)
+> > > > >  	if (spi_imx->tx_buf) {
+> > > > >  		memcpy(((u8 *)&val) + sizeof(val) - n_bytes,
+> > > > >  		       spi_imx->tx_buf, n_bytes);
+> > > > > +		if (spi_imx->bits_per_word <= 8)
+> > > > > +			swab32s(&val);
+> > > > > +		else if (spi_imx->bits_per_word <= 16)
+> > > > > +			swahw32s(&val);
+> > > > >  		spi_imx->tx_buf += n_bytes;
+> > > > >  	}
+> > > > >
+> > > > >  	spi_imx->count -= n_bytes;
+> > > > >
+> > > > > -	iowrite32be(val, spi_imx->base + MXC_CSPITXDATA);
+> > > > > +	writel(val, spi_imx->base + MXC_CSPITXDATA);
+> > > > >  }
+> > > > >
+> > > > >  /* MX51 eCSPI */
+> > > > > --
+> > > > > 2.34.1
+> > > > >
 
