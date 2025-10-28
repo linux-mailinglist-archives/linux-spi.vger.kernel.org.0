@@ -1,120 +1,249 @@
-Return-Path: <linux-spi+bounces-10872-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10873-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E29F6C148F3
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80010C14AF5
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 13:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C35D01AA3A62
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 12:14:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABEDC1B22480
+	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 12:48:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F79632B99B;
-	Tue, 28 Oct 2025 12:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9BE32E125;
+	Tue, 28 Oct 2025 12:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="teS58CmQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJ8tKUBl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-il1-f194.google.com (mail-il1-f194.google.com [209.85.166.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7277E35B121
-	for <linux-spi@vger.kernel.org>; Tue, 28 Oct 2025 12:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBD51EE033;
+	Tue, 28 Oct 2025 12:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761653628; cv=none; b=uWn8R68X3MZly1nNLREuhwtiKQEJ6gNECTTbxz2HKeJiLDaz+GvEPYkUdTiAbK646AZydxs1ye7SoP8diRNKDUj3KAX1pbU7gGDfnpKZDNVOqgoDTH4/rWDJW8fbmwwgKD02N3pJjfnmlKACClwZ1SZxFmXEw1C+7Wts4L2/FOc=
+	t=1761655698; cv=none; b=DBaslh1ZlBnR/tqK3OsEeHlBy0fzQXyYh07koEU8T8FejRisWu+TJp8aCXRpQdKzgZk1a9yfp1QB7DhRAHaQxiwMnMp/y+uDa6jR/GChUX7ORu0m0r1d/lzDoGSoKgmSLGX83y82xXXScQWx/UWbBidljzfdrfxVfesM2Rsege8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761653628; c=relaxed/simple;
-	bh=kbcPGBau+vooz71sYCj+fU43PtJotVJhPet/tmcL4PI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LeLLet9OjMChH0ScAJ8pwb0C48ve+Y7OlsAS0gq9hxExoz2K2iYwoAo8QgZ+GNKxwiHO8mCvgDh854ZM4yBASCh9YgPobfDNxiAOSNHTX/rvou/qVRfpC3C6E9gRt0m/K/7o3+RVvbBEYZSz7LkBb1NQUezZUtDeVumuJVKM4ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=teS58CmQ; arc=none smtp.client-ip=209.85.166.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f194.google.com with SMTP id e9e14a558f8ab-430d098121cso25671015ab.0
-        for <linux-spi@vger.kernel.org>; Tue, 28 Oct 2025 05:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1761653625; x=1762258425; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=khwU93CFPe3QSgLFIeava2HVYo78KABRwFXaYkzJCAk=;
-        b=teS58CmQVvvUym+YrlFp3zwOrka5vN1kZIajXuH85CQnYmCNGv2Q9K0qZQ7M0MORjh
-         soe1psPExXKvvkIL9/MCOOcwa+l+1vMEh3KtgX7x9gPT605pXQ3zN2eVN/ZoDub21/Md
-         hoIjdBIbAQydBkQsmDk7ZpOg8uuaQmcZgPPjuyX3q2n8kaN8lelDme1CoxSq9IhvphF2
-         cPlvw9U0fMorQCc5ryrqLqAEUup9RRaTnuNzM/rlzExze4LIgOOkXpeAu6bRzemwP/or
-         RH/4l9Obzg/SrVLbciVj8Owh0ytu6pq3QiGZ6WVWUk2kMVSEPrHqyoQtvNdwvSBy3Xl2
-         9bQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761653625; x=1762258425;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=khwU93CFPe3QSgLFIeava2HVYo78KABRwFXaYkzJCAk=;
-        b=xSoxp3+E9LwMcztEbi6Qy+VT0jJDFhI7iglSwztxIeNo3vqJCzT4UxFqYKDx8hjPtj
-         j6/jOMD3Vf1zmxIaE4Sdlmj2kxYIidpXe9Um28Gs65eka4uLydJPjygRiTRWu/3snP+0
-         2vj7ZtTSuqWiI0KfL6SCqS4dzj3OTAo7TQmlcQZtaMIhfM8QC8haaaeKJ9NuRH01IkI2
-         JNWVgwiK8qIGSP0BfQSSMc7mn53loX66gNBHz/a5tK0YeY7ElYDRMXyIArNjUaWeo2uY
-         82Q1JKRRCa7jSPbgfylUT0CUftida1wqBta5AkCYpuLbfloaWZHIS1gkuFrYPRgu2AjB
-         n0vA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxBNpwhyHELx9p0elMSrDDUcvF6bKZCJaCgxgUQ6i8L0D1nwzwmzO33wMUWWM/BbyP7Kw4NU3TSbw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdRmvmcAlBapkckI1Nl6rebHdYCfDlg15HK6ylQRrrizsTqmdq
-	8eBx4aWzuXvuvw1nt+l/TfDCemoc4eEsbc9IO77mHsoZMNimEAoT70SxfppG/UdHkQA=
-X-Gm-Gg: ASbGnct9qDQ12yRabSXIQXsZOHerrj5aPgF7zRtTjbYrpI619f/28Et+asLIw0JajM+
-	mFEqZNzYJkusQPj3oGw257dF0fJtnkClhtpa33zeMaUC6gMzC9/b1PK45KnqeGRVxJvsTdNOKhE
-	eXlkXgsHsJA6b9Cg2gHwYHwZH3C4Bm9zt6sJeF8z8bKSl4Fw4quhil1YV55DM/OEAcODPtb3/oP
-	k6ZWdFrBiMKPTJ/8rfGJ8Nk+q9VmOsY6Z/tS2QqxtgcOPRmf1+yvLfOlI6acmU1v6SXNdeLQ1hL
-	QMvIhkV48DIPSqIgoalYbB0/XrzLwp+aevGSzF4KeWg+hHPKGdWEuF9+zRH4Z7aWKcVvqx0G6EQ
-	gDbM30WgeRgiwjRGVGI/wxLtTVoMTvZJcJAOGBjMTnuHBsfPnMEmxQ8aG1CunyDMe66/DySXPDS
-	wD3A7ScVk/UpiuEaq+uAUDd1nCgap5iT2XZu0NuAdo
-X-Google-Smtp-Source: AGHT+IFFKmfRm7wHQRo/Azl9/WRSsx5DMAL5YyC5rW7dp5KofBMFZhyFfl0BPEsUUmZluzy0ORJ7BQ==
-X-Received: by 2002:a05:6e02:18c5:b0:42f:9eb7:759b with SMTP id e9e14a558f8ab-4320f7a8a05mr41476835ab.28.1761653625563;
-        Tue, 28 Oct 2025 05:13:45 -0700 (PDT)
-Received: from [172.22.22.234] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-431f6898adfsm42280895ab.31.2025.10.28.05.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 05:13:45 -0700 (PDT)
-Message-ID: <71ee4a10-70a7-49e1-919a-0b47af4780fa@riscstar.com>
-Date: Tue, 28 Oct 2025 07:13:43 -0500
+	s=arc-20240116; t=1761655698; c=relaxed/simple;
+	bh=XDxjdZZlBIzdN570pWYWjXgJISALZu5t3ofQ1UfnZnc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cmYN7KS1AHp1Kkk+NKvUDC5D+tgh9e8gbeds2fkQPbEHKQ/wHActSeHf/nMsb6GWb36HDzpY5+1kInUGWfJDV42DrTKJxu4HIsxQtoa0zakVMontD3oX2cfXy1ixhmMjeUjAboxlbwjVEbnJ53pILM9E1Fc0HzR9p56Ib3COSmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJ8tKUBl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41C2C4CEE7;
+	Tue, 28 Oct 2025 12:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761655697;
+	bh=XDxjdZZlBIzdN570pWYWjXgJISALZu5t3ofQ1UfnZnc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sJ8tKUBlUjTCHwmSDfr14wDxQ1cCAoTiphEZBAO9DY2k814B8bM/Wd3Z2QOYCBsTg
+	 zsUiVkbiTP+ApidSoVSJLJijXPa0CTDZ8w1+5YjkwOQT55ICqsz6dmZfhpmX8lSCoe
+	 j+w/qfOcqNMWMhebzkie90kdsN/zAb45rBZWoyiuq4jMptGY/Nkjg8tC9krbghc4wd
+	 c8GgOmnG9LmgnSN4LnChLGZny44TFjHHHsWMdKS3+rW4F0QALXlkC7mKEU/H2LTDgI
+	 mdva1QkN565i0qDkQn83Q4tYQ7qHEQV070CLP+ed69Mv+GPctm9leAOaXijRzqH+i7
+	 /bD0YQgdQb9YQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.17-6.1] spi: intel-pci: Add support for Intel Wildcat Lake SPI serial flash
+Date: Tue, 28 Oct 2025 08:48:01 -0400
+Message-ID: <20251028124815.1058740-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] spi: support the SpacemiT K1 SPI controller
-To: Mark Brown <broonie@kernel.org>
-Cc: dlan@gentoo.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, p.zabel@pengutronix.de,
- devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
- spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20251027125504.297033-1-elder@riscstar.com>
- <e4dd3db6-d554-4fd3-a674-60f2ff6e5475@sirena.org.uk>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <e4dd3db6-d554-4fd3-a674-60f2ff6e5475@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 10/27/25 9:40 AM, Mark Brown wrote:
-> On Mon, Oct 27, 2025 at 07:55:00AM -0500, Alex Elder wrote:
-> 
->> Between version 5 and version 6:
->>    - Rebase only
->>
->> Here is version 5 of this series:
->>    https://lore.kernel.org/lkml/20251013123309.2252042-1-elder@riscstar.com/
->>
->> Between version 4 and version 5:
->>    - Added Yixun's Reviewed-by tag on patch 3
->>
-> 
-> Please stop doing all these resends, this is just making things noisy
-> and pushing you further down the review queue.  You should not resend to
-> collect tags, and you should leave a reasonable time for review.
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-OK, no more.	-Alex
+[ Upstream commit f7e37affbc9085f2b77ccb6596521a44eabf7505 ]
+
+Add Intel Wildcat Lake SPI serial flash PCI ID to the list of supported
+devices.
+
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Link: https://patch.msgid.link/20251020145415.3377022-4-mika.westerberg@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+## BACKPORT ANALYSIS COMPLETE
+
+**Backport Status: YES**
+
+---
+
+## DETAILED ANALYSIS
+
+### 1. COMMIT CHARACTERIZATION
+
+**Type**: Hardware enablement (PCI device ID addition)
+
+**Code Changes**:
+- Single line addition to `drivers/spi/spi-intel-pci.c`
+- Adds PCI device ID `0x4d23` (Intel Wildcat Lake SPI serial flash)
+- Maps to existing `cnl_info` configuration structure
+- No behavioral changes to existing code paths
+
+### 2. SEMANTIC CODE ANALYSIS FINDINGS
+
+#### Tools Used:
+- **Read**: Examined the complete file structure (drivers/spi/spi-intel-
+  pci.c:68-99)
+- **Grep**: Located PCI device table usage and MODULE_DEVICE_TABLE macro
+- **Git analysis**: Reviewed commit history and backport precedents
+
+#### Impact Scope Analysis:
+- **Direct impact**: Only affects systems with PCI ID 0x4d23 (Wildcat
+  Lake hardware)
+- **Caller analysis**: The PCI device table is used by the kernel's PCI
+  subsystem for automatic device-driver matching
+- **Dependency analysis**: Uses `cnl_info` structure (drivers/spi/spi-
+  intel-pci.c:38-41), which has existed since 2022
+- **Risk assessment**: Zero risk to existing hardware - new entry only
+  triggers on matching PCI ID
+
+### 3. BACKPORT PRECEDENT (Strong Evidence)
+
+I found multiple similar commits that **WERE backported** to stable
+trees:
+
+**Example 1 - Lunar Lake-M** (commit ec33549be99fe):
+```
+commit ec33549be99fe25c6927c8b3d6ed13918b27656e
+Author: Mika Westerberg <mika.westerberg@linux.intel.com>
+Commit: Sasha Levin <sashal@kernel.org> [STABLE MAINTAINER]
+
+spi: intel-pci: Add support for Lunar Lake-M SPI serial flash
+
+[ Upstream commit 8f44e3808200c1434c26ef459722f88f48b306df ]
+```
+
+**Example 2 - Granite Rapids** (commit 60446b5e74865):
+```
+commit 60446b5e74865acff1af5f2d89d99551c8e6e2c1
+Author: Mika Westerberg <mika.westerberg@linux.intel.com>
+Commit: Greg Kroah-Hartman <gregkh@linuxfoundation.org> [STABLE
+MAINTAINER]
+
+spi: intel-pci: Add support for Granite Rapids SPI serial flash
+
+[ Upstream commit 9855d60cfc720ff32355484c119acafd3c4dc806 ]
+```
+
+**Key Finding**: Both commits were backported to stable trees by stable
+maintainers (Sasha Levin, Greg Kroah-Hartman) **despite having NO
+explicit stable tags** in the original commits.
+
+### 4. STABLE TREE COMPLIANCE
+
+**Positive Factors**:
+- ✅ Fixes a real user problem (Wildcat Lake users cannot access SPI
+  flash on stable kernels)
+- ✅ Extremely low risk (single line, static table entry)
+- ✅ No architectural changes
+- ✅ No dependencies on unreleased features
+- ✅ Follows established backporting pattern for PCI ID additions
+- ✅ "Obviously correct" - uses tested configuration from 20+ other Intel
+  platforms
+
+**Considerations**:
+- ⚠️ Technically a "new feature" (new hardware support)
+- ✅ However, PCI ID additions are a **special exception** routinely
+  accepted by stable maintainers
+- ✅ Hardware enablement is considered "fixing" missing support for
+  existing hardware
+
+### 5. DEPENDENCY VERIFICATION
+
+- **cnl_info structure**: Present since 2022, exists in all stable
+  kernels that would receive this backport
+- **PCI_VDEVICE macro**: Standard kernel infrastructure
+- **intel_spi_probe()**: Core function, no recent changes that would
+  conflict
+- **Clean backport**: No conflicts expected with any stable kernel
+  version
+
+### 6. RISK ANALYSIS
+
+**Regression Risk**: **MINIMAL**
+- Only triggered when PCI ID 0x4d23 is detected
+- No effect on systems without Wildcat Lake hardware
+- Uses well-tested code path (cnl_info shared with 20+ other platforms)
+- No user-space API changes
+
+**Testing Coverage**:
+- Same code path used by numerous Intel platforms (Ice Lake, Tiger Lake,
+  Alder Lake, etc.)
+- Configuration structure (cnl_info) battle-tested across multiple
+  generations
+
+### 7. COMMIT MESSAGE ANALYSIS
+
+The commit message is:
+- ✅ Clear and descriptive
+- ✅ Identifies specific hardware (Intel Wildcat Lake)
+- ✅ Consistent with previous similar commits
+- ❌ No "Fixes:" tag (not applicable - this is new hardware support)
+- ❌ No "Cc: stable@vger.kernel.org" tag (but precedent shows this
+  doesn't prevent backporting)
+
+---
+
+## RECOMMENDATION
+
+**YES - This commit SHOULD be backported to stable kernel trees**
+
+### Rationale:
+
+1. **Strong precedent**: Multiple similar PCI ID additions for Intel
+   platforms (Lunar Lake, Granite Rapids, Arrow Lake) have been
+   backported to stable trees by stable maintainers
+
+2. **User benefit**: Enables critical SPI flash functionality for
+   Wildcat Lake hardware owners running stable kernels
+
+3. **Minimal risk**: Single-line change to static table with no impact
+   on existing hardware
+
+4. **Well-established pattern**: PCI ID additions for hardware
+   enablement are routinely accepted for stable backports as they "fix"
+   missing hardware support
+
+5. **Clean backport**: No dependencies or conflicts expected
+
+### Target Stable Trees:
+- All currently maintained stable kernels (6.17.x, 6.16.x, 6.15.x, etc.)
+- The commit is from v6.18-rc3, so it would benefit users on any stable
+  kernel before 6.18
+
+ drivers/spi/spi-intel-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index 4b63cb98df9cc..4bb158a23349e 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -75,6 +75,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x38a4), (unsigned long)&bxt_info },
+ 	{ PCI_VDEVICE(INTEL, 0x43a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x4b24), (unsigned long)&bxt_info },
++	{ PCI_VDEVICE(INTEL, 0x4d23), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x4da4), (unsigned long)&bxt_info },
+ 	{ PCI_VDEVICE(INTEL, 0x51a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
+-- 
+2.51.0
+
 
