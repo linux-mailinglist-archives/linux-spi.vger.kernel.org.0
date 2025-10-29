@@ -1,106 +1,223 @@
-Return-Path: <linux-spi+bounces-10909-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10910-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3659DC18846
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 07:50:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60749C1CB46
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 19:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C39F1C6364F
-	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 06:50:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30E41627C5E
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 17:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C68372D839A;
-	Wed, 29 Oct 2025 06:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACF9354AE5;
+	Wed, 29 Oct 2025 17:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqXSV7mg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MW48nfcn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A972135C5
-	for <linux-spi@vger.kernel.org>; Wed, 29 Oct 2025 06:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2395333F394;
+	Wed, 29 Oct 2025 17:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761720624; cv=none; b=eSH8ljbOVbBgYPXL7CcMp/hsPsn3LhmthH+JsNdN8Cq2ffE+KPkzkvoGVoQzGhgyotPizLGe0cPwWFmzkyh5NrYg74992zclp6ssw1LxO76IoVgCulx/kxAoOsxaxL5JW1PZEIgxZ0k7xsOrPO01MElkpOpJZBYB5SC1JAxOluk=
+	t=1761760734; cv=none; b=Rm4Qw004WKuTTY1qOQMTGrB29lEJh1bvFbqY4RQOrzY6zUMPD6I/xEjAEENvK5VBRqDrtd99RNOlqsreXy/uD3EETjfKK0k9ioE3OJLUqlZ1F5u8tNYjS8JtM5tptVXcRElHKVrst2Toh1aVm01pxrM0R2BZSpYUYC9KJRRVqeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761720624; c=relaxed/simple;
-	bh=gIegXoMR79F17OSgY0zxnyPOujDAs0fM/jhrVH+4eOQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Oe4/uVr70OQAlINCQjZwmdrBti2bPfEwAkMaVgJTl5jidzUN74R4nCvHda0vESGZlNG/lPQXkjVmP3GI+7NUxlylj5dIX2sw1hxNL8vbBMvp0vnIr53KPGjcDm/Pu0pbsVtHjzwUCJloHZ6VrLBoQTdanFmXFhaG4BknVi+Za4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqXSV7mg; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761720623; x=1793256623;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gIegXoMR79F17OSgY0zxnyPOujDAs0fM/jhrVH+4eOQ=;
-  b=mqXSV7mgAfWmx/si0ogUD+febs7oBA2q7iMVCezabhrKVNm2W3PSyPcE
-   scAKnqMz2DPgzOpawthSc0kMS83z0QIF8UoeubYvs4G+sE8h8IM66h1BV
-   FBeti17gLwcbv/0MVgU6nMCGt7clfClfqep9k/swClkQ6UnAtfvCB00nQ
-   27GdsxrDnbYzbQwKrp5kQT2LZAwA57KwKrAWsYrfrjpiSxd7bR5p2xQzm
-   mmIuFdpyN0+XsoG43e0QxRIajeYfzFviCfUm1v2bl4mXoLgCkemLlypKS
-   6ZvRecaH728FYTuqk7W4G/2i7HQp6k6lnG7iB1cmYt8ZDIhxwV8Q0S3zB
-   w==;
-X-CSE-ConnectionGUID: dKVT/IGUT+yDyavETeOCig==
-X-CSE-MsgGUID: 7ibJNOhhSVOKs+0mKdaEuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67696290"
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="67696290"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 23:50:22 -0700
-X-CSE-ConnectionGUID: +bjVsIb7T/G/htz26QjNVg==
-X-CSE-MsgGUID: uLOL84+5S2qPfnkNFT+gEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
-   d="scan'208";a="190703901"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa005.jf.intel.com with ESMTP; 28 Oct 2025 23:50:21 -0700
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id 7D25E95; Wed, 29 Oct 2025 07:50:20 +0100 (CET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: intel: Add support for Oak Stream SPI serial flash
-Date: Wed, 29 Oct 2025 07:50:20 +0100
-Message-ID: <20251029065020.2920213-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1761760734; c=relaxed/simple;
+	bh=ZTqNfE12/OY2hJBlOM+SDakOKIOgcInVy8P7IwXldec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TeIPspRRhu6/RxK2p7y2kuRKfYlvU4R/ZwFW+zwA2aYQgHYOLJNTDZK8Xg3aQKkDm0o36lq5VWtJmb8OlXR+0M9OeKHNtdm7P50AP0krFJVwbHfoAkormsDImurY1JO4DX7ANigsjX/k9d9Rthw6RTj8ZsFnvD2gRBdNadoxj1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MW48nfcn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C137DC4CEF7;
+	Wed, 29 Oct 2025 17:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761760733;
+	bh=ZTqNfE12/OY2hJBlOM+SDakOKIOgcInVy8P7IwXldec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MW48nfcnhyPke7+bwVWNs4hq0w1hddXCPFQBiJGapm/WvzmP90voWL2BCmSFCVz9Q
+	 kJ7nfZH0bmYJUy9xLw+A72lHekoe+TqVkhIhFrg74+PtBufx+GCF1e1nuNR2W9mRw2
+	 n/SNJ7loGvcQdkpKVoYrCnZhu0qKWHM1toNSznvV4J4R3aDuKZPQAkZy9ifJcDcHGb
+	 oj/6X25NOIE/IRJI3OTS7nb4IDQuVFAbLb1lvdxG60eF5MNFMqUF26S2Gt+QsOV8fY
+	 fgLr+kB9wbO0lOpChRjhJC3WNA0PUBSPrUUDmeLhtR4xMnHWqEI00CwG4EJ/2h7dL8
+	 fvCXCGW9Api7Q==
+Date: Wed, 29 Oct 2025 17:58:48 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-spi@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 11/14] dt-bindings: spi: renesas,rzv2h-rspi: document
+ RZ/T2H and RZ/N2H
+Message-ID: <20251029-relieving-prude-c097e63f368e@spud>
+References: <20251028133151.1487327-1-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20251028133151.1487327-12-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FWiBg5MDrLC1yaeJ"
+Content-Disposition: inline
+In-Reply-To: <20251028133151.1487327-12-cosmin-gabriel.tanislav.xa@renesas.com>
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Add Oak Stream PCI ID to the driver list of supported devices.
+--FWiBg5MDrLC1yaeJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch was originally written by Zeng Guang.
+On Tue, Oct 28, 2025 at 03:31:42PM +0200, Cosmin Tanislav wrote:
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have four SPI
+> peripherals.
+>=20
+> Compared to the previously supported RZ/V2H, these SoCs have a smaller
+> FIFO, no resets, and only two clocks: PCLKSPIn and PCLK. PCLKSPIn,
+> being the clock from which the SPI transfer clock is generated, is the
+> equivalent of the TCLK from V2H.
+>=20
+> Document them, and use RZ/T2H as a fallback for RZ/N2H as the SPIs are
+> entirely compatible.
+>=20
+> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> Reviewed-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>  .../bindings/spi/renesas,rzv2h-rspi.yaml      | 62 ++++++++++++++++---
+>  1 file changed, 52 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yam=
+l b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> index ab27fefc3c3a..65ba120a6b23 100644
+> --- a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+> @@ -9,12 +9,15 @@ title: Renesas RZ/V2H(P) Renesas Serial Peripheral Inte=
+rface (RSPI)
+>  maintainers:
+>    - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> =20
+> -allOf:
+> -  - $ref: spi-controller.yaml#
+> -
+>  properties:
+>    compatible:
+> -    const: renesas,r9a09g057-rspi # RZ/V2H(P)
+> +    oneOf:
+> +      - enum:
+> +          - renesas,r9a09g057-rspi # RZ/V2H(P)
+> +          - renesas,r9a09g077-rspi # RZ/T2H
+> +      - items:
+> +          - const: renesas,r9a09g087-rspi # RZ/N2H
+> +          - const: renesas,r9a09g077-rspi # RZ/T2H
+> =20
+>    reg:
+>      maxItems: 1
+> @@ -36,13 +39,12 @@ properties:
+>        - const: tx
+> =20
+>    clocks:
+> +    minItems: 2
+>      maxItems: 3
+> =20
+>    clock-names:
+> -    items:
+> -      - const: pclk
+> -      - const: pclk_sfr
+> -      - const: tclk
+> +    minItems: 2
+> +    maxItems: 3
+> =20
+>    resets:
+>      maxItems: 2
+> @@ -62,12 +64,52 @@ required:
+>    - interrupt-names
+>    - clocks
+>    - clock-names
+> -  - resets
+> -  - reset-names
+>    - power-domains
+>    - '#address-cells'
+>    - '#size-cells'
+> =20
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r9a09g057-rspi
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: pclk_sfr
+> +            - const: tclk
+> +
+> +      required:
+> +        - resets
+> +        - reset-names
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r9a09g077-rspi
+> +              - renesas,r9a09g087-rspi
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/spi/spi-intel-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+Do these platforms have optional resets? If they do not, please add
+"resets: false" & "reset-names: false" below. If they do have optional
+resets,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
+If they don't, you can apply the tag when you add the ": false"s.
 
-diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
-index 7765fb27c37c..b8c572394aac 100644
---- a/drivers/spi/spi-intel-pci.c
-+++ b/drivers/spi/spi-intel-pci.c
-@@ -80,6 +80,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
- 	{ PCI_VDEVICE(INTEL, 0x51a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x5794), (unsigned long)&cnl_info },
-+	{ PCI_VDEVICE(INTEL, 0x5825), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7723), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
- 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
--- 
-2.50.1
+Cheers,
+Conor.
 
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: pclkspi
+> +
+>  unevaluatedProperties: false
+> =20
+>  examples:
+> --=20
+> 2.51.1
+>=20
+
+--FWiBg5MDrLC1yaeJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaQJV2AAKCRB4tDGHoIJi
+0nFGAQDSmQ4OK0aex2kkGKOPqcTZtWEKmOCHzGqia+7z1QcHGgD/VQwGjfiKeEGv
+C0Sz7D4lzzgi1XrCQm0Ulwe35AHLLgY=
+=LqV+
+-----END PGP SIGNATURE-----
+
+--FWiBg5MDrLC1yaeJ--
 
