@@ -1,49 +1,73 @@
-Return-Path: <linux-spi+bounces-10908-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10909-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB214C15FE4
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 17:57:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3659DC18846
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 07:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C37C13560E2
-	for <lists+linux-spi@lfdr.de>; Tue, 28 Oct 2025 16:57:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C39F1C6364F
+	for <lists+linux-spi@lfdr.de>; Wed, 29 Oct 2025 06:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6AB0346E51;
-	Tue, 28 Oct 2025 16:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C68372D839A;
+	Wed, 29 Oct 2025 06:50:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RtNPRWTI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mqXSV7mg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12DD346E5B
-	for <linux-spi@vger.kernel.org>; Tue, 28 Oct 2025 16:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A972135C5
+	for <linux-spi@vger.kernel.org>; Wed, 29 Oct 2025 06:50:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761670630; cv=none; b=Mlx5shE/pnDlbD0HRUgfOCYyY41dRznvxrCWv+fpp4aibK8RxxJ2c66RbSwsu3vT+fEDE4WOiCk+IM66+6u2kdINJVR5KzosCNK6O5v8hbb3CkE4HMSXXp9m+RaGMHT464HTNXLTorfFxCkwInq8VTz/2aBdP7T73LPMZGujFWw=
+	t=1761720624; cv=none; b=eSH8ljbOVbBgYPXL7CcMp/hsPsn3LhmthH+JsNdN8Cq2ffE+KPkzkvoGVoQzGhgyotPizLGe0cPwWFmzkyh5NrYg74992zclp6ssw1LxO76IoVgCulx/kxAoOsxaxL5JW1PZEIgxZ0k7xsOrPO01MElkpOpJZBYB5SC1JAxOluk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761670630; c=relaxed/simple;
-	bh=YnnZJh2/oDZSjHtFD1VfaIampUCwMDUjtZQ7LdYxiP4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=GjlI/thVM/eVr3VgCKlRWOpgg2Sm1oxAepnmIF1pZT/4t+Nq5IKYZ1+VYEd6R1KWSQcO2gojEG/tVVfmgCYpv0ncCmZW27QacIQRDKpUxFKnM9jpuZQgvRYK+fY+nfVLrDDJr7XJZDt/yP6LF4GOkR+KsCYixaxK4uk4o6MMjSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RtNPRWTI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82DADC4CEE7;
-	Tue, 28 Oct 2025 16:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761670630;
-	bh=YnnZJh2/oDZSjHtFD1VfaIampUCwMDUjtZQ7LdYxiP4=;
-	h=Subject:From:Date:To:From;
-	b=RtNPRWTII4z7h49reQCoyIkz0j7eLK3HxOKbmrkKVhrf/wkbfVeRxFLNrVHnwanMb
-	 xP4rBr35H/bRjLdxI+OAHWoRODf6DKKzhnxqa07qGRIHNQPrcBOMErwqwHjm54tSdG
-	 DLB+B1XplfTtl8e4MeJgi0GjREg9u096Ec+6SaDSdn3rKjq0TkpjuIiqb9lhILLYf/
-	 3BnWkiZc1cm2o2YuvIbcyQBQwVJwxtVpxdvJk8+Gg4BKPk1iXq0+ffoB+gvE3wyS7J
-	 aAkLt7UYMqKDGLHxxMLCz9ERr/B1Cgt5SAW6i1zIl9l6cDRlZp4xYeTO/TtZiwo8sv
-	 vp6aHuDC1D2GQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D9139EFA6A;
-	Tue, 28 Oct 2025 16:56:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1761720624; c=relaxed/simple;
+	bh=gIegXoMR79F17OSgY0zxnyPOujDAs0fM/jhrVH+4eOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Oe4/uVr70OQAlINCQjZwmdrBti2bPfEwAkMaVgJTl5jidzUN74R4nCvHda0vESGZlNG/lPQXkjVmP3GI+7NUxlylj5dIX2sw1hxNL8vbBMvp0vnIr53KPGjcDm/Pu0pbsVtHjzwUCJloHZ6VrLBoQTdanFmXFhaG4BknVi+Za4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mqXSV7mg; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761720623; x=1793256623;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gIegXoMR79F17OSgY0zxnyPOujDAs0fM/jhrVH+4eOQ=;
+  b=mqXSV7mgAfWmx/si0ogUD+febs7oBA2q7iMVCezabhrKVNm2W3PSyPcE
+   scAKnqMz2DPgzOpawthSc0kMS83z0QIF8UoeubYvs4G+sE8h8IM66h1BV
+   FBeti17gLwcbv/0MVgU6nMCGt7clfClfqep9k/swClkQ6UnAtfvCB00nQ
+   27GdsxrDnbYzbQwKrp5kQT2LZAwA57KwKrAWsYrfrjpiSxd7bR5p2xQzm
+   mmIuFdpyN0+XsoG43e0QxRIajeYfzFviCfUm1v2bl4mXoLgCkemLlypKS
+   6ZvRecaH728FYTuqk7W4G/2i7HQp6k6lnG7iB1cmYt8ZDIhxwV8Q0S3zB
+   w==;
+X-CSE-ConnectionGUID: dKVT/IGUT+yDyavETeOCig==
+X-CSE-MsgGUID: 7ibJNOhhSVOKs+0mKdaEuQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="67696290"
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="67696290"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2025 23:50:22 -0700
+X-CSE-ConnectionGUID: +bjVsIb7T/G/htz26QjNVg==
+X-CSE-MsgGUID: uLOL84+5S2qPfnkNFT+gEQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,263,1754982000"; 
+   d="scan'208";a="190703901"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa005.jf.intel.com with ESMTP; 28 Oct 2025 23:50:21 -0700
+Received: by black.igk.intel.com (Postfix, from userid 1001)
+	id 7D25E95; Wed, 29 Oct 2025 07:50:20 +0100 (CET)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: intel: Add support for Oak Stream SPI serial flash
+Date: Wed, 29 Oct 2025 07:50:20 +0100
+Message-ID: <20251029065020.2920213-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -51,22 +75,32 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176167060807.2309657.4007129943648085895.git-patchwork-housekeeping@kernel.org>
-Date: Tue, 28 Oct 2025 16:56:48 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Latest series: [v5] spi: tegra210-quad: Improve timeout handling under high system load (2025-10-28T15:57:00)
-  Superseding: [v4] spi: tegra210-quad: Improve timeout handling under high system load (2025-10-28T15:25:14):
-    [v4,1/3] spi: tegra210-quad: Fix timeout handling
-    [v4,2/3] spi: tegra210-quad: Refactor error handling into helper functions
-    [v4,3/3] spi: tegra210-quad: Check hardware status on timeout
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
+Add Oak Stream PCI ID to the driver list of supported devices.
 
+This patch was originally written by Zeng Guang.
+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/spi/spi-intel-pci.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/spi/spi-intel-pci.c b/drivers/spi/spi-intel-pci.c
+index 7765fb27c37c..b8c572394aac 100644
+--- a/drivers/spi/spi-intel-pci.c
++++ b/drivers/spi/spi-intel-pci.c
+@@ -80,6 +80,7 @@ static const struct pci_device_id intel_spi_pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x51a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x54a4), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x5794), (unsigned long)&cnl_info },
++	{ PCI_VDEVICE(INTEL, 0x5825), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7723), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7a24), (unsigned long)&cnl_info },
+ 	{ PCI_VDEVICE(INTEL, 0x7aa4), (unsigned long)&cnl_info },
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.50.1
 
 
