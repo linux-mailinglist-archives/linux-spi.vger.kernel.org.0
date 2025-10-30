@@ -1,79 +1,66 @@
-Return-Path: <linux-spi+bounces-10914-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10915-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AE3BC204A5
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 14:42:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17F31C206AC
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 14:58:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B666428216
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 13:36:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4A521894E40
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 13:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A4525A623;
-	Thu, 30 Oct 2025 13:36:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AA5322A7E0;
+	Thu, 30 Oct 2025 13:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aIFeA7NJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npp8d30E"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128D4242D9B;
-	Thu, 30 Oct 2025 13:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389C5194A65;
+	Thu, 30 Oct 2025 13:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761831365; cv=none; b=H48YjjhXceLVh6IfUsjvxQRwo4WfLig8iQeOrGGbM9ybCQz+ODAnJPF03Gcrh2zpxgbLPqU4DbJyHJ7wR+nGdE9l+IDWDMMgk8rGYXjy7RhRiEW27prADr0EoytN6VbRTz6DsliHqS3TootTRofsR7g8jr3jX1tbPZCsYf2OIgk=
+	t=1761832289; cv=none; b=mT+gRXNTyJjcIumiUBWeus/LxpsD7pNgYoOu2+oELTvzD4X02+TsrMhHGqVHlvW5CHomZfBxcon3xUP0vZ0O/BbCHsvFLZN6vveGQC2ZAbNqh/CV3lSZmoUzmXsHkY73NY/s3C5UGzMFbVFO2yBlsg+VLyDB+48xK1ukoN10ZNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761831365; c=relaxed/simple;
-	bh=skDcBwIOHhfQXGcqlGA/LEwUkbZKYplwlozeBad9QOY=;
+	s=arc-20240116; t=1761832289; c=relaxed/simple;
+	bh=6VPqUQyQcSRQKEXeyerD21USQXJN+lundDeK7TpzpYs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZSEqmRsznyhjzBuwGvrlS7v+TIuCDZu5kHfr8fKIFFuYmFOUo20dMo/pP3bI6k2/N8UMXUEgYMpfIQdzC84ZzO+l6MJDFq/8eFRhFEfGOqMPwaE/I4lrZhWKrl9pRSrOwqcEeynX/PvAXWi5jLfQncJOjevJpZb0Rjtay0cXF/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aIFeA7NJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B435C4CEF1;
-	Thu, 30 Oct 2025 13:36:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dm6jKsaIPhGr5yVeu/ykVnLsdM1EqiDI0xw3OXCCmXOoLWfdOgtiz8pSsLza+u9vo+gzxcFTL2Xtb36KDThmHL+ARZ1KyttZYwz630guuqAxxwplGyLxb++JWD0exTF1EUjy3rzwp0KT+qeMyNzuBrdUoDz/sIr45jNFEms9bCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npp8d30E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493AFC4CEF1;
+	Thu, 30 Oct 2025 13:51:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761831364;
-	bh=skDcBwIOHhfQXGcqlGA/LEwUkbZKYplwlozeBad9QOY=;
+	s=k20201202; t=1761832288;
+	bh=6VPqUQyQcSRQKEXeyerD21USQXJN+lundDeK7TpzpYs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aIFeA7NJUJOWrSDA9pGqC8MaKPLKi+lpQRRuXL7ckWZUVsDUHN4irB5QDZoyh9bVq
-	 3+WYnAHHUAvSeAtQ2cniycQkp4C8ZE6rJG8H/eeavKFZaMcKjen27K1eD+DBX4qeXA
-	 AbnmRO3D/tv3/zzhUqzMU1XXy9C6kD3bblXjaYY6LtT+nyMcjCgmF1NLpd/8ZrrZAi
-	 /4rcT5otqRcLDavdndxtpebWbN3OUiQBa8UhLYXDv5UD1/Uuub6fsECRRKnmduHQAi
-	 9yoxuYx4CR0Ms16r/IyQ/2t9DlRPJDoNC12vVChYZMb0Cd6eoRZoqQz7YTMv8aNWer
-	 Ags2ZLTy+g3vA==
-Date: Thu, 30 Oct 2025 14:35:59 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>, 
-	Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Charles Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	David Rhodes <david.rhodes@cirrus.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Alison Schofield <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-cxl@vger.kernel.org, Allan Nielsen <allan.nielsen@microchip.com>, 
-	Horatiu Vultur <horatiu.vultur@microchip.com>, Steen Hegelund <steen.hegelund@microchip.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 17/29] i2c: mux: Set adapter physical device
-Message-ID: <llu7m5f2qi6o5nzgssxw3qpp4sya6a2qrg4gna7y6atl2y7amk@ld5wow6brflb>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-18-herve.codina@bootlin.com>
+	b=npp8d30ERa7Ss6871jkOdtpPHu+a13/I8PlGf4cofbr+Bi+PQ6dxJYT8lWaZI/ukr
+	 JkbSAWOObhxx8ecZzSMhYCjGOYaevrRVYnMvPFb7IBKYZxki06VsTwJhSUpmJgvcBD
+	 ORJiY1c/nu1GXwLG4EAWo5O7CFIWIZPH0832/UILOzMseFfomrUqGvkTARhDSbRtHW
+	 s6QCUxxbmENjR8jVwZpxOjfOccA1mAhlF1kN6begFoOVO4Ybndp6Yvv11jrLhjKuYI
+	 vPCLU49/L/ExjKdbFF5wREtUrJFB3CaxJBht/uZyvBF+Ez9h47RTrIYPugbXKukRlY
+	 9afaeLexMegOQ==
+Date: Thu, 30 Oct 2025 08:51:26 -0500
+From: Rob Herring <robh@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
+Message-ID: <20251030135126.GA3749313-robh@kernel.org>
+References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
+ <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
+ <20251021142129.GA34073-robh@kernel.org>
+ <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,23 +69,35 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251015071420.1173068-18-herve.codina@bootlin.com>
+In-Reply-To: <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
 
-Hi Herve,
-
-On Wed, Oct 15, 2025 at 09:14:04AM +0200, Herve Codina wrote:
-> For i2c muxes, the parent of the mux adapter device is the adapter
-> device the mux is connected to.
+On Tue, Oct 21, 2025 at 09:59:22AM -0500, David Lechner wrote:
+> On 10/21/25 9:21 AM, Rob Herring wrote:
+> > On Tue, Oct 14, 2025 at 05:02:11PM -0500, David Lechner wrote:
+> >> Add a spi-buses property to the spi-peripheral-props binding to allow
+> >> specifying the SPI data bus or buses that a peripheral is connected to
+> >> in cases where the SPI controller has more than one physical SPI data
+> >> bus.
+> > 
+> > Is there a reason why spi-rx-bus-width property doesn't work for you? 
+> > The only thing I see would be you need to define the order of the pins 
+> > like "data-lanes" property.
+> > 
+> > Rob
 > 
-> This parent is not the physical device related to the mux adapter.
-> Indeed, the physical device of the mux adapter is the mux device itself.
+> Because we can have both at the same time. In one of the other threads,
+> we talked about the AD4630 ADC that will require this since it has 2 data
+> buses each with a width of 4 (total of 8 lines).
 > 
-> Fill the adap.physdev with the mux device.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> See: https://lore.kernel.org/linux-iio/ad929fe5-be03-4628-b95a-5c3523bae0c8@baylibre.com/
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+But it can't really be 2 independent buses/controllers unless the ADC 
+has 2 completely independent interfaces, right? Surely the clock is 
+shared across the 2 buses? So aren't you really just borrowing pins and 
+the fifo of the 2nd controller? That seems pretty controller specific to 
+support that. For example, how would you support this with spi-gpio 
+(obviously kind of pointless given the bandwidth needs with 8 data 
+lines) or any 2 independent instances of SPI controllers?
 
-Thanks,
-Andi
+Rob
 
