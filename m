@@ -1,118 +1,195 @@
-Return-Path: <linux-spi+bounces-10924-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10925-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B760C22784
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 22:50:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAF1FC22971
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 23:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 278A94EF5AF
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 21:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 660A74002E2
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 22:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D8933554D;
-	Thu, 30 Oct 2025 21:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE16533BBB9;
+	Thu, 30 Oct 2025 22:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NirNdlqB"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="eDQ5Qf7J"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72043329E4A;
-	Thu, 30 Oct 2025 21:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8820019309E
+	for <linux-spi@vger.kernel.org>; Thu, 30 Oct 2025 22:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761861018; cv=none; b=K5ccAiZAIwkAjtGDt/r/ER2H0yGcKCmG0mqsQ4w2YWl+TSos9VhpaSPPSWPzBR3rwXLnk8LMlYqXEzMQ7qbQ+Q05ybmI6wJT4FjpQxocPPgMf1yga5o1RqMI+rjjPrTPd2YkGDXn3yMLvosbvf/gfSyd5fr0UplBcLa05ejqHrQ=
+	t=1761864168; cv=none; b=Lncva+i13fx4XTZ0GldYu2icPmrM4g09lYGopNETEs/1wnSdS187L23CGbUdV1he56HrLUrpC+hFI0dXLSOrb7wXr0VmPbhkIhUAMA2Biw504KwCXPP4vPqRuhNcZvSu51fgb4szXL24X/tmg/YSs5LnkXtt1gSh1ietxC2YqFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761861018; c=relaxed/simple;
-	bh=uhsBi6jPYk4r7zoS0KFwjGrcAihOvbPQ1OZl8wiwXVg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU4A1+dpMJeZKV9e3vCe3ABMOxItvjRpkrLXSPAuW+isULpJKHL2IRLqj7kXO3+vtVDScmx+s+cspRG/IhGt+utA8BGJt6Js7Rh7SPsMlx3lVi2jvfVkAU7TxMx6b2IMssAS8ZHC+J6zEbkUgKX5uKscB8xiEIfwe+Sp3YbmDos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NirNdlqB; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761861017; x=1793397017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uhsBi6jPYk4r7zoS0KFwjGrcAihOvbPQ1OZl8wiwXVg=;
-  b=NirNdlqBNGALsSY5tvWHP7ihPKPACmJLmbR+O5ZCxbHSuoxjWhK5b8wp
-   dZOJp7sv0/sbzd+Vf78+Wty3cc407unGjlPcTt403EPIeRXaDV90/sWS2
-   0jD+pcTZAroWTTXMUN/2g/uGr+L2cuyh5XwQqFeYPpMvpFs7/o3gIBf48
-   UzhNqHcmZHfN2Ocy1lgbn9K4h5X3QuBxI+nXSuzfY6BBQig6rhOx4tW//
-   mRTPhDljfIWf9VrYn/fRTt46kQ++bt3Ryz0etKdMIIeTzrmETeiUmgB1S
-   nOlA2aJqPBAt2R2/vh7hywGXRRmEEQnReaheEhZYwF/cLhdTGqkVgsE+B
-   Q==;
-X-CSE-ConnectionGUID: ocCmyAlwTpaIpxDxqTN/AQ==
-X-CSE-MsgGUID: gErP2+VxSfynECRDutQSMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="81431809"
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="81431809"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 14:50:15 -0700
-X-CSE-ConnectionGUID: mqKL0/XMRAu6LM36rYEPAQ==
-X-CSE-MsgGUID: UsRHOMzSR5SIqQrleSv+Ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="186404807"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 30 Oct 2025 14:50:12 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vEaX4-000MYi-28;
-	Thu, 30 Oct 2025 21:50:10 +0000
-Date: Fri, 31 Oct 2025 05:49:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Elder <elder@riscstar.com>, broonie@kernel.org, dlan@gentoo.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
-	spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI
- controller driver
-Message-ID: <202510310505.d7e7kzCk-lkp@intel.com>
-References: <20251027125504.297033-3-elder@riscstar.com>
+	s=arc-20240116; t=1761864168; c=relaxed/simple;
+	bh=9it6XLZdXae3RoTGHdsFpj66tzk86QiotM3zNBihiP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D4kUJtxGmyjWBd1cUVPm0QoJ71SC15OxqEAabin/vdNxYOP+Lr436DuNZ9cOmj+NXbibkLuKQ5UQP4Bq7ROXDP9OVUEaJrtjQ1Sw3STbXJ5Ud3FM07x2Hz1eZfnikjx1MohaSHVrlBKVaQ+29Jo5b5OsTS53+E9DBTF/ky84Ets=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=eDQ5Qf7J; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c5333e7033so609817a34.2
+        for <linux-spi@vger.kernel.org>; Thu, 30 Oct 2025 15:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1761864166; x=1762468966; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L0HTAhQNYbWjGFi7/HeEAEeE9+brZM+DQRBAXbw9JCU=;
+        b=eDQ5Qf7J5GvGDEx57LiV1CpbUE+9lQMIWcyGIiuTVkl6bY7fOMCDuG1b7rXJRduRBM
+         3L63HyHbqJyF/QqNHrk5VB4jOCNbwiNRkvh79nPKauY6i3Xy3e96mwizL7rPpsitjHaE
+         Th0OcvSuI98MmO8sF6ejghxau1AniuC4Ak/IYgYuyG8GgLDA9pEC8MmPxlSiuiHbL9/a
+         Wg3z3uqcv6Upna8cAyfQ/fI0cWrZ2zcuFuFMjCHI9zVppPZ+PcNul4kz/sRHuG0gf28C
+         qQ7EuuROSM11S2k24JhfuxB2eXHh6gNhCo8VUch99eTw1uTQPM94t6y6BRS6lbopkB4h
+         Hkmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761864166; x=1762468966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L0HTAhQNYbWjGFi7/HeEAEeE9+brZM+DQRBAXbw9JCU=;
+        b=Lgx3evx0dwy42YmxVMrQotigFYbMAMyqv6zh37oq0dap801IhOi+TF69YycgP1/VKU
+         1AYqH4EVxkYPCyPH8FcYhuJzVfks+32PsVn3m11GAMyFti0f2kw5EPaZbCTEr1n5RYMc
+         JJm/v43SjTyT505ohjwZbs/uFOoDEVT6MI7rhYmn+N6rfecxb5XmvDdDY1q0Bal38mJH
+         ZXajK08T7/qygeV0LJuvsP7N7U5Me+ZOQLyHimUBWkRpiF+LdkOkiEDlMdsaq3leYvff
+         37FvglGPXU20z2unlQNVnCthops5iWrBexMSXQsfOEHd1s1bE28Ul/wQO1GvMTMT+XKg
+         Q/nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQt9ttLFX1DqJPFtNDWqPXlAdqs71XmV5EKSoMcHPW6pCAfcjZWc8URnSeGbBReL/uDkEVUsBStvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywooh0nEzgWCJv9pUMOzJvMBv9j1TuMuJEAGfyplMr1K/NB6ki+
+	ARDOk+wSZZndUCZtAExFjPBxGa6HL6Hx66HEbV6HJsPwJ6T/awA/x0HsZcRTUWkkf6E=
+X-Gm-Gg: ASbGncuKjCS0UjvuHYfcIGbFqbWxzyjUlhA1m+cRAA8+bUGa2vVUu/4cwgom4MpkK9C
+	WY/iAUN4wHBk29UTE2ASW5mugP3dLuDAsAaHHpZ7dHr0oaPThfyDDJBLHBDuNPLlquykdHV7Y/H
+	ovTYh+VaR6XipPwmaz7T6xx5vvJJYmWjNrJgaEZoGP7wSu5zNFj96jfekl1DZejQX8PSO3nM3qs
+	AQL07a6GrK4NdBkgMf6RaPYiLtgKRwTLvqA3jnX7P7RaXQyTsNivsg62QlZtDFNCixHya4D7MOc
+	3+rCWSfRQhFDFUoodL+3RTrd86k98EuVWs9ht4/2T2+j3VfIFzGyqhJI7BqDPkZ9Zl67q5tLpEl
+	SP2gqgnXG0MlOthSUypsdn+Cn3IJGc5esgSB/7Wcivy2QOMIlcdhvflBzlF6nBZBQkwF8OsrUR9
+	3mMICAY+Eb+CZ0X4vv/5x7G90KOpSZ2p5BjoIzk8lxDiRdEUyW/g==
+X-Google-Smtp-Source: AGHT+IFygVcKrCt8dVyx7K2d1dIpysOgPE+1OoIdRWbtjGAosZSMsYYLHZhJRI76gQOSql4L5yVCHA==
+X-Received: by 2002:a05:6830:448f:b0:7b9:4dd5:1963 with SMTP id 46e09a7af769-7c6967b2d0bmr844138a34.24.1761864165644;
+        Thu, 30 Oct 2025 15:42:45 -0700 (PDT)
+Received: from ?IPV6:2600:8803:e7e4:500:aa90:4f8c:bf59:360a? ([2600:8803:e7e4:500:aa90:4f8c:bf59:360a])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c699bde239sm44364a34.5.2025.10.30.15.42.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Oct 2025 15:42:45 -0700 (PDT)
+Message-ID: <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
+Date: Thu, 30 Oct 2025 17:42:44 -0500
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251027125504.297033-3-elder@riscstar.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
+To: Rob Herring <robh@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Marcelo Schmitt <marcelo.schmitt@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+ Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
+ <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
+ <20251021142129.GA34073-robh@kernel.org>
+ <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
+ <20251030135126.GA3749313-robh@kernel.org>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <20251030135126.GA3749313-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Alex,
+On 10/30/25 8:51 AM, Rob Herring wrote:
+> On Tue, Oct 21, 2025 at 09:59:22AM -0500, David Lechner wrote:
+>> On 10/21/25 9:21 AM, Rob Herring wrote:
+>>> On Tue, Oct 14, 2025 at 05:02:11PM -0500, David Lechner wrote:
+>>>> Add a spi-buses property to the spi-peripheral-props binding to allow
+>>>> specifying the SPI data bus or buses that a peripheral is connected to
+>>>> in cases where the SPI controller has more than one physical SPI data
+>>>> bus.
+>>>
+>>> Is there a reason why spi-rx-bus-width property doesn't work for you? 
+>>> The only thing I see would be you need to define the order of the pins 
+>>> like "data-lanes" property.
+>>>
+>>> Rob
+>>
+>> Because we can have both at the same time. In one of the other threads,
+>> we talked about the AD4630 ADC that will require this since it has 2 data
+>> buses each with a width of 4 (total of 8 lines).
+>>
+>> See: https://lore.kernel.org/linux-iio/ad929fe5-be03-4628-b95a-5c3523bae0c8@baylibre.com/
+> 
+> But it can't really be 2 independent buses/controllers unless the ADC 
+> has 2 completely independent interfaces, right?
 
-kernel test robot noticed the following build errors:
+Correct.
 
-[auto build test ERROR on 8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87]
+The proposed property really only concerns the data lines (tx/rx). It doesn't
+care if there is 1 or 2 SCLK lines and it doesn't care if there is only 1 CS
+line.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-spi-add-SpacemiT-K1-SPI-support/20251027-211246
-base:   8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87
-patch link:    https://lore.kernel.org/r/20251027125504.297033-3-elder%40riscstar.com
-patch subject: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI controller driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20251031/202510310505.d7e7kzCk-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310505.d7e7kzCk-lkp@intel.com/reproduce)
+So maybe spi-data-buses would be a better name for the property? Or
+spi-data-ports (using the NXP FlexSPI controller docs terminology)?
+Or spi-data-channels?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510310505.d7e7kzCk-lkp@intel.com/
+> Surely the clock is shared across the 2 buses? 
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+It depends on the mode of operation. In stripe or mirror mode, both
+clocks would be synchronized/identical. It doesn't matter if there is
+1 or two clock lines in these modes. And only one CS line is needed
+in these modes - but 2 also works - these properties are independent.
 
->> ERROR: modpost: "__hexagon_udivdi3" [drivers/spi/spi-spacemit-k1.ko] undefined!
+It could also be used in a way where each data bus is used independently
+(one at a time rather than both at the same time). In this case, it could
+still work with one SCLK line as long as there were two CS lines. But if
+there are two SCLK lines, then each one could operate independently in this
+mode.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DMA_CMA
-   Depends on [n]: HAVE_DMA_CONTIGUOUS [=n] && CMA [=y]
-   Selected by [m]:
-   - SND_SOC_K1_I2S [=m] && SOUND [=m] && SND [=m] && SND_SOC [=m] && (COMPILE_TEST [=y] || ARCH_SPACEMIT) && HAVE_CLK [=y]
+> So aren't you really just borrowing pins and the fifo of the 2nd controller? 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, I think that is a valid way of thinking about it.
+
+> That seems pretty controller specific to support that. 
+
+Correct. This property could only be used with such controllers.
+
+> For example, how would you support this with spi-gpio 
+
+We would need to increase maxItems of several of the gpios properties.
+
+sck-gpios could be multiple gpios to allow for more than one SCLK
+line.
+
+miso-gpios would contain spi-rx-bus-width * ARRAY_SIZE(spi-buses)
+gpio phandles. mosi-gpios would be similar with tx instead of rx.
+
+> (obviously kind of pointless given the bandwidth needs with 8 data 
+> lines) or any 2 independent instances of SPI controllers?
+
+Doing this with two separate controllers wouldn't work for cases
+where only one SCLK line is wired up - unless it was a controller
+that supported a peripheral-provided clock, then it might.
+
+Performance wouldn't be great in this case either though, so I
+don't expect that anyone would be tempted to do this.
+
+To implement this, I would make a new SPI controller node that
+takes the phandles of two or more SPI controllers. The peripheral
+child nodes would be in this new controller node and the other
+two controller nodes would not have any child nodes.
+
+It might need some extra properties to say which data and clock
+lines are actually wired up similar to the spi-gpio.
+
+> 
+> Rob
+
+
 
