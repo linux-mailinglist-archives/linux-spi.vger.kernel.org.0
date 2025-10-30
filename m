@@ -1,122 +1,75 @@
-Return-Path: <linux-spi+bounces-10922-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10923-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3F8C218B8
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 18:46:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE89C22555
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 21:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 940EA3AFF08
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 17:46:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DF1384ECC91
+	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 20:46:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D477436C22D;
-	Thu, 30 Oct 2025 17:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EEBC32E13E;
+	Thu, 30 Oct 2025 20:46:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a9aZc+oa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GylLjDwr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EA572639;
-	Thu, 30 Oct 2025 17:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE961329E78;
+	Thu, 30 Oct 2025 20:46:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761846372; cv=none; b=n5f8Txq4n8t+OpdBRFNNU8U6nzFw1YPTAgyPFMoz2H/5AAS0vT73o9UZqkxKGlNU5bqJt8BizRziXzBdnNGjG+D2IR7xe24m69CeOPGwRYOlk3sYSkXCBBNpmdJPYxQOe8L7yisE6ELu4GeRKwqGEa7W51PI3ix27LLT+Ta+Wlc=
+	t=1761857188; cv=none; b=WmogiTRNYeL7z/dH31F7RQ69bgdizVwuVpeq3Asm4AhxAElzhwk2TCxDWwEoSCLBmO26qVYslqsRBH6JSF666UNsB2t9b5tsirrFDRTLgHQhIRRRrVyTZP764WXJr3VWgke4OT5x2PHKkqa3/jyirNp4YSntJFmRGCU+uYy6tCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761846372; c=relaxed/simple;
-	bh=b2xexS6Qluhsr9ZmEqlGOXtDsR48B9OmLyAHTqqnzbk=;
+	s=arc-20240116; t=1761857188; c=relaxed/simple;
+	bh=IzHEHcAJbzakFfy2ATpib9g8Ap3+ty+ERc7BngoXid4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LjoLq0MKGeFrLfUrUIe51XbsZqc5fwnua1H39mqhbrIWWIPo7VrKdPaH3TeEFTgHvFB/FYbNyqZ9N1x/rhz3Q/NlLsCiX+znGeQgYfu1ZfxerfyNVXKjQxSCz4/Vf9VU4tuL+xaSqzqYJZ2n5USdHGQYoe4A/PXYHfWY9Fku9KA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a9aZc+oa; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CA0lfXrZmYGJi+mpaB1DBAaf/ohUDGwgFGMyEfyQaLdDyeutFfHu8CrNJX4rqrQeltwSi9LSIGXe4215vCeDyuV6rNh0CEFvjYMOsH4pOc52Du6i2A4O6wk/ruNoq2NvflhD6+cFe86JeaoT2wYtBs13oJYHwJaZxIYcm261+H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GylLjDwr; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761846371; x=1793382371;
+  t=1761857187; x=1793393187;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=b2xexS6Qluhsr9ZmEqlGOXtDsR48B9OmLyAHTqqnzbk=;
-  b=a9aZc+oalwpkkO3hWqBjbs+vMi2rgj2oCJWDp9pLe3pUWSPg17iqCDkk
-   qtoML0dPBqScbo9FxrwSY7YmQ7R/AZQMGRtMEp8FyyOxwlGnBwjCp0Vvd
-   L5zCnMqUbvo4RtH77w62IQLIkhCDtzYEjNT4TpN6wIfv+x4EAb205jkxB
-   97ro6/cHB+/K2qd2xpsYHiqeTsw97hnUSzPDmTo3cwvzxloXWSuyDIOCt
-   bDsIGdyu3BwN9yVxbg8OTj1KZ84jVX/0rH6qbmoBK+b/LarR1PP3eI258
-   KPdDmAphYmaudT3bb5j5vaY6vXMiTcU8IyniGCQX7e13RwYO0LDCgyrqd
+  bh=IzHEHcAJbzakFfy2ATpib9g8Ap3+ty+ERc7BngoXid4=;
+  b=GylLjDwrCN59J1N5m+1QNhCsyElH8F1hTbm3VWdx6MMWaItn7EYCULsM
+   Go51+j029j//EXPsoB1GJaAb3ZMQDWgIgEtLAplqdLgLU9pSTamaH+4Pw
+   BfwwWjWK8CFQNVVt/sz4wdzgar8RqFDG2p969vMznmlCEz3H1UGDz8Fx8
+   TmmB7rXGW/wMlO5xZ6RWVedXTc3nUJBFg7NB/XTnGyVCAVQW3hPbvA1vA
+   cSBJNliVvCYJ5nPEDTK4OEdDL2EgCg1SoMQD5W1xibIz90N4Ct+WH32Xs
+   T9QK0j5zcOFRG2/FMfPdvk//8c1SWiDBaTLOv4hScQQgrdBLbOUhhVwVJ
    A==;
-X-CSE-ConnectionGUID: O6WR9q+wTHSEKlMPPgKEkA==
-X-CSE-MsgGUID: khR0DuIRQTuTyy4OBIblWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="64039302"
+X-CSE-ConnectionGUID: iD5QL6kIQgeY9/P5fGxY9Q==
+X-CSE-MsgGUID: QrqFLS/iRRCQGhjFlhKYlQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11598"; a="74305151"
 X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="64039302"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 10:46:10 -0700
-X-CSE-ConnectionGUID: b/GmOWjcS2aKDC4H8SgNzQ==
-X-CSE-MsgGUID: HAspeAjwQ7KrOmmY4Vdu1g==
+   d="scan'208";a="74305151"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 13:46:27 -0700
+X-CSE-ConnectionGUID: ZOSCdisEQn6yO+A1JXJA3Q==
+X-CSE-MsgGUID: CcBCWZKSSniJ0nEvu4L6Yw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,267,1754982000"; 
-   d="scan'208";a="191158265"
-Received: from fpallare-mobl4.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.245.174])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2025 10:45:58 -0700
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1vEWif-00000003zFy-3ih6;
-	Thu, 30 Oct 2025 19:45:53 +0200
-Date: Thu, 30 Oct 2025 19:45:53 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 18/29] i2c: mux: Create missing devlink between mux
- and adapter physical device
-Message-ID: <aQOkUa1IwuiOeSvT@smile.fi.intel.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-19-herve.codina@bootlin.com>
- <6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Oct 2025 13:46:24 -0700
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vEZWs-000MVc-24;
+	Thu, 30 Oct 2025 20:46:03 +0000
+Date: Fri, 31 Oct 2025 04:45:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Elder <elder@riscstar.com>, broonie@kernel.org, dlan@gentoo.org
+Cc: oe-kbuild-all@lists.linux.dev, p.zabel@pengutronix.de,
+	linux-spi@vger.kernel.org, spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI
+ controller driver
+Message-ID: <202510310407.ooVqGn3P-lkp@intel.com>
+References: <20251027125504.297033-3-elder@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -125,37 +78,32 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20251027125504.297033-3-elder@riscstar.com>
 
-On Thu, Oct 30, 2025 at 04:23:24PM +0100, Andi Shyti wrote:
+Hi Alex,
 
-...
+kernel test robot noticed the following build errors:
 
-> > +	dl = device_link_add(muxc->dev, parent_physdev, DL_FLAG_AUTOREMOVE_CONSUMER);
-> 
-> Not to call twice put_device, I would add it once here and then
-> check for !dl.
+[auto build test ERROR on 8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87]
 
-I was almost commenting the same in one of the previous rounds, but...
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Elder/dt-bindings-spi-add-SpacemiT-K1-SPI-support/20251027-211246
+base:   8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87
+patch link:    https://lore.kernel.org/r/20251027125504.297033-3-elder%40riscstar.com
+patch subject: [PATCH v6 2/3] spi: spacemit: introduce SpacemiT K1 SPI controller driver
+config: csky-allmodconfig (https://download.01.org/0day-ci/archive/20251031/202510310407.ooVqGn3P-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251031/202510310407.ooVqGn3P-lkp@intel.com/reproduce)
 
-> > +	if (!dl) {
-> > +		dev_err(muxc->dev, "failed to create device link to %s\n",
-> > +			dev_name(parent_physdev));
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202510310407.ooVqGn3P-lkp@intel.com/
 
-...haven't you noticed this use? With your (and my old) suggestion this may
-lead to NULL / stale pointer dereference.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-> > +		put_device(parent_physdev);
-> > +		ret = -EINVAL;
-> > +		goto err_free_priv;
-> > +	}
-> > +	put_device(parent_physdev);
+>> ERROR: modpost: "__udivdi3" [drivers/spi/spi-spacemit-k1.ko] undefined!
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
