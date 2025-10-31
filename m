@@ -1,57 +1,56 @@
-Return-Path: <linux-spi+bounces-10940-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10941-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 391B7C26590
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 18:29:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6442C26593
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 18:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30C731A65D3C
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 17:29:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4933140047C
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 17:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 363FF326D79;
-	Fri, 31 Oct 2025 17:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 909AE336ECF;
+	Fri, 31 Oct 2025 17:28:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jGqvtoEg"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="D9wXYUjt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2045C308F1B
-	for <linux-spi@vger.kernel.org>; Fri, 31 Oct 2025 17:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912E6322A28;
+	Fri, 31 Oct 2025 17:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761931698; cv=none; b=ADm7tWB/WG0wZ9l55FTAxCJqP/5Qz3+d5JPJqJJOPt+G8qisVfVAStYaTDPAlvUJeVkX5ibiTihlDE+FjbmyRAy7GHNxe3UQny6kn8FYev8SYjLHsPuA3kYcMCVFVIWf3Eyp7NVgI+L+Rfi2IIk01n8uWzmvpZxcZpg4xfMDc4I=
+	t=1761931699; cv=none; b=bducprUWXlHp/+wnaIaNsA49mdF0F4MYTOeS+iP3Q4PTFHu+g4WrI34rUNkkP2XkerlKnbAl84++2i9f1ekWjwHyAp2Kc2qQILcyLU1evfhb0VgvhDiRIPytdLVughsLZMCLtBS5VUEXBwie4WDrFgc2X2R6xVtrBT3AN865wCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761931698; c=relaxed/simple;
-	bh=D83udK3rkUXcu4imHlcUt7YguepdlZ70bccpPaQWIZI=;
+	s=arc-20240116; t=1761931699; c=relaxed/simple;
+	bh=6b1R6dxIDY7X8ILKoHlOgTCQpmphyR+BSGWTVGsUv5o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=olyAe9pQMM4sstdSd4JJLupaQNQMFAdB6ZIh/80FL6vg5v6/+Lm1FMJ9K2rDP6AstyfiYmRpCoEzT3NaPyPvyKh5GgjsTAmytqeJ/sQa5zSKL5fbDqfXkOCKoGhkfsBCFVaiB39SbuYO9SFWgtIsI2HUcjCZHqJeAyPm2SaymqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jGqvtoEg; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=kYaG39ptEG1RKdyBGbzymbHV9PcYtyr9Lu6KS+4k920t8oeCgqAzaouF0V53K0bVduNVyoqakTsSGnK3e1qNCAbsIkeR3QQFo5fLdKt6nPdJfM8JTHHogAnc/rPqCsheMEVwpAS+XWJhijgajX7gQRMklB6z9698MwZNkuDZJcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=D9wXYUjt; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id F1BEEC0E95B;
-	Fri, 31 Oct 2025 17:27:53 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 02EE84E41447;
+	Fri, 31 Oct 2025 17:28:16 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 821FB60704;
-	Fri, 31 Oct 2025 17:28:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E31F011818466;
-	Fri, 31 Oct 2025 18:28:12 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id CD44060704;
+	Fri, 31 Oct 2025 17:28:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2C81511818007;
+	Fri, 31 Oct 2025 18:28:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761931693; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1761931695; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=Cd1E/3COSsZlzYl0nvZBhxDTb/M09zD1KDjitt7bE84=;
-	b=jGqvtoEgGLnT2FvQCgdCkvNmT/ZZIAcSzIe3eAmD/fd49VWzBqmtx1ZAi5yAzMVIqGu+Kt
-	MZXAKpC1Aak5V/prgzt8vtmQ+barP3b7XHNvOiYzGiLSqBnaZeHbahS0VBtk09usO596GW
-	8Wq/YPez7gHEO/lsb6JpLaqeey7Sq9cuJEPT5Ew9MwvbRss91lXdLeC2M4tkmRRz++6eGu
-	wYzF4015/Ur39MQqXqOXpRz0GO20ZrzgZ2sbkYIZ0eO0tk+XaBrnWKMg8O+PrV1N3Jbsia
-	+wuyzvp7gue4DN4KO6czR8S002NDd/KVa/uX9NFueknXukxZQ5vBjRqOJ3SCpQ==
+	bh=IKJB1OCDKyocfIsQeZnwqEGivJeMVxUxOC96luFoKtE=;
+	b=D9wXYUjtViGg2LSjRX1zVBy8SlAeLtMJ4AQoQdMrf24HMxh4/Zum5HZuq4v753py++w/P6
+	NkMglFwXcW08ph/fUybCqovGEX1FwAYKstCn7AX8FSCerG/CKLM8dHdBEkXhlVmETR29uQ
+	uH+daxj1yBf3bLBiBFNqsFK23UFVa7A7y+b1BCRZBCmm6kxJ9O/Ur9Mhrjge7WP4lrfDHU
+	FH0pB7YP8hpQW1AY9VU/63s8IHtYDObID+QgjSV4JWKDRa7OOHYpo/8d1gBHyKqNK76zk9
+	fuIJi7wW2ALGvZ5vNaiO1kqgpV27Sacmuo7VVoLfpPQ0sRxZT0a8s+tkTH4irQ==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 31 Oct 2025 18:26:47 +0100
-Subject: [PATCH 03/28] spi: spi-mem: Limit octal DTR constraints to octal
- DTR situations
+Date: Fri, 31 Oct 2025 18:26:48 +0100
+Subject: [PATCH 04/28] mtd: spinand: Fix kernel doc
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,7 +59,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251031-winbond-v6-17-rc1-oddr-v1-3-be42de23ebf1@bootlin.com>
+Message-Id: <20251031-winbond-v6-17-rc1-oddr-v1-4-be42de23ebf1@bootlin.com>
 References: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
 In-Reply-To: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -74,52 +73,28 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-In this helper, any operation with a single DTR cycle (like 1S-1S-8D) is
-considered requiring a duplicated command opcode. This is wrong as this
-constraint only applies to octal DTR operations (8D-8D-8D).
+The @data buffer is 5 bytes, not 4, it has been extended for the need of
+devices with an extra ID bytes.
 
-Narrow the application of this constraint to the concerned bus
-interface.
-
-Note: none of the possible XD-XD-XD pattern, with X being one of {1, 2,
-4} would benefit from this check either as there is only in octal DTR
-mode that a single clock edge would be enough to transmit the full
-opcode.
-
-Make sure the constraint of expecting two bytes for the command is
-applied to the relevant bus interface.
-
+Fixes: 34a956739d29 ("mtd: spinand: Add support for 5-byte IDs")
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-mem.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ include/linux/mtd/spinand.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
-index 064b99204d9ac4bc233307609defa4fbbaf4534a..71e3eaf59df97cf6d04e6e674810f12d037f384b 100644
---- a/drivers/spi/spi-mem.c
-+++ b/drivers/spi/spi-mem.c
-@@ -175,8 +175,19 @@ bool spi_mem_default_supports_op(struct spi_mem *mem,
- 		if (op->data.swap16 && !spi_mem_controller_is_capable(ctlr, swap16))
- 			return false;
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 927c10d7876958276a841a9f1278a74deeb89944..1c741145e49717169152854718f784e0e519ea92 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -287,7 +287,7 @@ struct spinand_device;
  
--		if (op->cmd.nbytes != 2)
--			return false;
-+		/* Extra 8D-8D-8D limitations */
-+		if (op->cmd.dtr && op->cmd.buswidth == 8) {
-+			if (op->cmd.nbytes != 2)
-+				return false;
-+
-+			if ((op->addr.nbytes % 2) ||
-+			    (op->dummy.nbytes % 2) ||
-+			    (op->data.nbytes % 2)) {
-+				dev_err(&ctlr->dev,
-+					"Even byte numbers not allowed in octal DTR operations\n");
-+				return false;
-+			}
-+		}
- 	} else {
- 		if (op->cmd.nbytes != 1)
- 			return false;
+ /**
+  * struct spinand_id - SPI NAND id structure
+- * @data: buffer containing the id bytes. Currently 4 bytes large, but can
++ * @data: buffer containing the id bytes. Currently 5 bytes large, but can
+  *	  be extended if required
+  * @len: ID length
+  */
 
 -- 
 2.51.0
