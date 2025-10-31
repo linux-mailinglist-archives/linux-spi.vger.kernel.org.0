@@ -1,57 +1,57 @@
-Return-Path: <linux-spi+bounces-10959-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10960-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 834C1C2660E
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 18:35:09 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6EABC2664A
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 18:37:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8922742749C
-	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 17:33:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1D7624FB368
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 17:33:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7CB23559E5;
-	Fri, 31 Oct 2025 17:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAE53563CD;
+	Fri, 31 Oct 2025 17:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hqNZ/wsU"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OQU8H40z"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD123557E0
-	for <linux-spi@vger.kernel.org>; Fri, 31 Oct 2025 17:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1C435581B
+	for <linux-spi@vger.kernel.org>; Fri, 31 Oct 2025 17:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761931723; cv=none; b=P7TUruhFe5nBSVsfVWxkWDo8Yui5LAmF3LVp2KaoqQn5AJe/J/L/6GdjIvNL8qjtcJi5Uo9zZOtUC9ZxI3kiqPEU9qAwGr7UkP37QxYisBa+XWHmirnriwoa/uIG2J3whOZUPdESIgoUYmRvDDNRm8VDpq85CrAwFkPM//xkRGA=
+	t=1761931724; cv=none; b=WYPB04dXJQPnJ0fXW0LJ0qhUvuYFw88e2QduJNMgbpAafFxNmOwZML3oxXzYH8RDu7o94Mkg6nfNF8yrCN0nq8EKKqAb/TvnucQptNdYz31N44qXGGDs/CmesuPL/IWqmPEqwA53uaoLgR8wipngW13Yu7vCu9DqgV/FiBsgEr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761931723; c=relaxed/simple;
-	bh=iX+n9HzY/YkNmOzBAg84DXwptwGF3y7LQxR8/FtomhA=;
+	s=arc-20240116; t=1761931724; c=relaxed/simple;
+	bh=zJmzCZukFrUHaKsBwk+BpBUSinGesW5h8IXqGaaPpxY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iimk1gKdPjXzqxXGxSr7PMX1+X6wXB+gOy1X4rQ3eMbKD/7/c0Mcc1KFVbNvCJm2SZurG3rTKXMzp6c9B+V5PqcdTI4lkeupIJBzJey4Zti0ca0ln8GLPTvGMruDgerbytkUEal6EW8BA1lx6VymcVhxtYXDzIXl2W7uhstyVlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hqNZ/wsU; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=XCBzjT4gb4/AtMLKFjbM3/mQgLI7LNzeOXADf/x0nyrs/5Kz6uOuoa1K5QOQor+8RhxQEcOpJE4ea4EKpSDQaY0EiVrvhaOB5WU9YSiHSYklrsJ79o08wiX5Y7HD6+zJZfdTfstyM/EAi9y8NBhi+fUJElmD45wz/7oetrLWjjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OQU8H40z; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 636834E41415;
-	Fri, 31 Oct 2025 17:28:40 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 9323E1A17C4;
+	Fri, 31 Oct 2025 17:28:41 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3ACC160704;
-	Fri, 31 Oct 2025 17:28:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B053A11818007;
-	Fri, 31 Oct 2025 18:28:38 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6A9AB60704;
+	Fri, 31 Oct 2025 17:28:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DB15C1181800B;
+	Fri, 31 Oct 2025 18:28:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761931719; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1761931720; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=0TkMp9aMwcsGosTWrhdTtxz4Lwc7YIxnivcDZ+k6Uqo=;
-	b=hqNZ/wsUGkTKZq0riG/RmSnnIu+QPPr5pXIU6713zaYh/NXlRythOCClzvCx1gGf3gP5dh
-	yuDeya8OSJEaPvBDjz9H7XBH6q3G92VWEGDKFegdGjw8rY7TydMlKET3/ntMuEmC8Moqx3
-	5GvTE+YcEf0nwT2FSO5G3gFnVLKnH2g998eTODG+mg2ILBDdv+x0dKwxoCNp8CuJRd6s01
-	U7K9wgK6oNMpFuXhFBxa2+ZLzLGRmG9mTCPMHWA2O1974jWEPBk1YDGcotII5jhekKbfbK
-	bn51RrZRAgPew1eXsdTJN+9Hc6WAMsXJzpRRDASkSIpU1SEo1zlzeFZqsgBfqA==
+	bh=dDe4j5e1a+Bm1K5ZQ2VOjxbCwe35OfOvHUNHbqYEBCM=;
+	b=OQU8H40zhHDYyzpyBy35Qe++qVhY8HighZjajGJghAuu4atrS+eNn2O2JBTc4ACXcYTz5/
+	2ua93PkmSv17jrw7i9lq/knC8bQtCvkoiLC+MKZq3iCDizD2yzgJz2qgSBG9hoKA8pYMvx
+	ZBOQ9gpmwKclyA7hOlCiwQNH9VtXDcfk92oKOnAR87vYXwiyr5VTgFbJ/qmSeYlVZyKC+t
+	d79SLWKyIUSEEeOQxF0unF2JMpWGixWuttehktjYeq/xV+ZqButVQtpFIqhGEWESGAUSu9
+	kOVMCmKOw76BjYRzH5u8pgcAkKS7Rs7yTBAhPmoRtpX6QDw9Lt2IppeEFllG3g==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 31 Oct 2025 18:27:06 +0100
-Subject: [PATCH 22/28] mtd: spinand: Gather all the bus interface steps in
- one single function
+Date: Fri, 31 Oct 2025 18:27:07 +0100
+Subject: [PATCH 23/28] mtd: spinand: Add support for setting a bus
+ interface
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251031-winbond-v6-17-rc1-oddr-v1-22-be42de23ebf1@bootlin.com>
+Message-Id: <20251031-winbond-v6-17-rc1-oddr-v1-23-be42de23ebf1@bootlin.com>
 References: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
 In-Reply-To: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -74,131 +74,72 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Writing the quad enable bit in one helper and doing the chip
-configuration in another does not make much sense from a bus interface
-setup point of view.
+Create a bus interface enumeration, currently only containing the
+one we support: SSDR, for single SDR, so any operation whose command is
+sent over a single data line in SDR mode, ie. any operation matching
+1S-XX-XX.
 
-Instead, let's create a broader helper which is going to be in charge of
-all the bus configuration steps at once. This will specifically allow to
-transition to octal DDR mode, and even fallback to quad (if suppoorted)
-or single mode otherwise.
+The main spinand_device structure gets a new parameter to store this
+enumeration, for now unused. Of course it is set to SSDR during the SSDR
+templates initialization to further clarify the state we are in at the
+moment.
+
+This member is subject to be used to know in which bus configuration we
+and be updated by the core when we switch to faster mode(s).
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/core.c | 62 +++++++++++++++++++++++++++------------------
- 1 file changed, 37 insertions(+), 25 deletions(-)
+ drivers/mtd/nand/spi/core.c |  1 +
+ include/linux/mtd/spinand.h | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
 
 diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 7c01516c6b6acb41d2cc080d6fbaaa5ace661602..caf549617f369ada2c1712e863e563ae547ca0e6 100644
+index caf549617f369ada2c1712e863e563ae547ca0e6..fc7263fad7afbd084ecf015dd1d764d6683b46a8 100644
 --- a/drivers/mtd/nand/spi/core.c
 +++ b/drivers/mtd/nand/spi/core.c
-@@ -177,18 +177,9 @@ static int spinand_init_cfg_cache(struct spinand_device *spinand)
- 	return 0;
+@@ -1321,6 +1321,7 @@ static void spinand_init_ssdr_templates(struct spinand_device *spinand)
+ 	tmpl->page_read = (struct spi_mem_op)SPINAND_PAGE_READ_1S_1S_0_OP(0);
+ 	tmpl->prog_exec = (struct spi_mem_op)SPINAND_PROG_EXEC_1S_1S_0_OP(0);
+ 	spinand->op_templates = &spinand->ssdr_op_templates;
++	spinand->bus_iface = SSDR;
  }
  
--static int spinand_init_quad_enable(struct spinand_device *spinand)
-+static int spinand_init_quad_enable(struct spinand_device *spinand,
-+				    bool enable)
- {
--	bool enable = false;
--
--	if (!(spinand->flags & SPINAND_HAS_QE_BIT))
--		return 0;
--
--	if (spinand->op_templates->read_cache->data.buswidth == 4 ||
--	    spinand->op_templates->write_cache->data.buswidth == 4 ||
--	    spinand->op_templates->update_cache->data.buswidth == 4)
--		enable = true;
--
- 	return spinand_upd_cfg(spinand, CFG_QUAD_ENABLE,
- 			       enable ? CFG_QUAD_ENABLE : 0);
- }
-@@ -1306,12 +1297,6 @@ static int spinand_manufacturer_init(struct spinand_device *spinand)
- 			return ret;
- 	}
+ static int spinand_support_vendor_ops(struct spinand_device *spinand,
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 0565cdeb3f7b652699d420a8c05c3fe53fcc2253..7d059956c81a3a6fd337bab43fb4f1130997ab0f 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -480,6 +480,14 @@ struct spinand_user_otp {
+ 	const struct spinand_user_otp_ops *ops;
+ };
  
--	if (spinand->configure_chip) {
--		ret = spinand->configure_chip(spinand);
--		if (ret)
--			return ret;
--	}
--
- 	return 0;
- }
- 
-@@ -1517,6 +1502,31 @@ static int spinand_detect(struct spinand_device *spinand)
- 	return 0;
- }
- 
-+static int spinand_configure_chip(struct spinand_device *spinand)
-+{
-+	bool quad_enable = false;
-+	int ret;
++/**
++ * enum spinand_bus_interface - SPI NAND bus interface types
++ * @SSDR: Bus configuration supporting all 1S-XX-XX operations, including dual and quad
++ */
++enum spinand_bus_interface {
++	SSDR,
++};
 +
-+	if (spinand->flags & SPINAND_HAS_QE_BIT) {
-+		if (spinand->ssdr_op_templates.read_cache->data.buswidth == 4 ||
-+		    spinand->ssdr_op_templates.write_cache->data.buswidth == 4 ||
-+		    spinand->ssdr_op_templates.update_cache->data.buswidth == 4)
-+			quad_enable = true;
-+	}
-+
-+	ret = spinand_init_quad_enable(spinand, quad_enable);
-+	if (ret)
-+		return ret;
-+
-+	if (spinand->configure_chip) {
-+		ret = spinand->configure_chip(spinand);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return ret;
-+}
-+
- static int spinand_init_flash(struct spinand_device *spinand)
- {
- 	struct device *dev = &spinand->spimem->spi->dev;
-@@ -1527,10 +1537,6 @@ static int spinand_init_flash(struct spinand_device *spinand)
- 	if (ret)
- 		return ret;
+ /**
+  * struct spinand_info - Structure used to describe SPI NAND chips
+  * @model: model name
+@@ -642,6 +650,7 @@ struct spinand_mem_ops {
+  * @flags: NAND flags
+  * @ssdr_op_templates: Templates for all single SDR SPI mem operations
+  * @op_templates: Templates for all SPI mem operations
++ * @bus_iface: Current bus interface
+  * @select_target: select a specific target/die. Usually called before sending
+  *		   a command addressing a page or an eraseblock embedded in
+  *		   this die. Only required if your chip exposes several dies
+@@ -677,6 +686,7 @@ struct spinand_device {
  
--	ret = spinand_init_quad_enable(spinand);
--	if (ret)
--		return ret;
--
- 	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
- 	if (ret)
- 		return ret;
-@@ -1543,19 +1549,25 @@ static int spinand_init_flash(struct spinand_device *spinand)
- 		return ret;
- 	}
+ 	struct spinand_mem_ops ssdr_op_templates;
+ 	struct spinand_mem_ops *op_templates;
++	enum spinand_bus_interface bus_iface;
  
-+	ret = spinand_configure_chip(spinand);
-+	if (ret)
-+		goto manuf_cleanup;
-+
- 	/* After power up, all blocks are locked, so unlock them here. */
- 	for (i = 0; i < nand->memorg.ntargets; i++) {
- 		ret = spinand_select_target(spinand, i);
- 		if (ret)
--			break;
-+			goto manuf_cleanup;
+ 	struct spinand_dirmap *dirmaps;
  
- 		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
- 		if (ret)
--			break;
-+			goto manuf_cleanup;
- 	}
- 
--	if (ret)
--		spinand_manufacturer_cleanup(spinand);
-+	return 0;
-+
-+manuf_cleanup:
-+	spinand_manufacturer_cleanup(spinand);
- 
- 	return ret;
- }
 
 -- 
 2.51.0
