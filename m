@@ -1,195 +1,187 @@
-Return-Path: <linux-spi+bounces-10925-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10926-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAF1FC22971
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 23:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3476DC238B9
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 08:30:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 660A74002E2
-	for <lists+linux-spi@lfdr.de>; Thu, 30 Oct 2025 22:43:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E12773ADD83
+	for <lists+linux-spi@lfdr.de>; Fri, 31 Oct 2025 07:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE16533BBB9;
-	Thu, 30 Oct 2025 22:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="eDQ5Qf7J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BA4329C5B;
+	Fri, 31 Oct 2025 07:30:12 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022072.outbound.protection.outlook.com [40.107.75.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8820019309E
-	for <linux-spi@vger.kernel.org>; Thu, 30 Oct 2025 22:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761864168; cv=none; b=Lncva+i13fx4XTZ0GldYu2icPmrM4g09lYGopNETEs/1wnSdS187L23CGbUdV1he56HrLUrpC+hFI0dXLSOrb7wXr0VmPbhkIhUAMA2Biw504KwCXPP4vPqRuhNcZvSu51fgb4szXL24X/tmg/YSs5LnkXtt1gSh1ietxC2YqFc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761864168; c=relaxed/simple;
-	bh=9it6XLZdXae3RoTGHdsFpj66tzk86QiotM3zNBihiP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D4kUJtxGmyjWBd1cUVPm0QoJ71SC15OxqEAabin/vdNxYOP+Lr436DuNZ9cOmj+NXbibkLuKQ5UQP4Bq7ROXDP9OVUEaJrtjQ1Sw3STbXJ5Ud3FM07x2Hz1eZfnikjx1MohaSHVrlBKVaQ+29Jo5b5OsTS53+E9DBTF/ky84Ets=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=eDQ5Qf7J; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c5333e7033so609817a34.2
-        for <linux-spi@vger.kernel.org>; Thu, 30 Oct 2025 15:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1761864166; x=1762468966; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L0HTAhQNYbWjGFi7/HeEAEeE9+brZM+DQRBAXbw9JCU=;
-        b=eDQ5Qf7J5GvGDEx57LiV1CpbUE+9lQMIWcyGIiuTVkl6bY7fOMCDuG1b7rXJRduRBM
-         3L63HyHbqJyF/QqNHrk5VB4jOCNbwiNRkvh79nPKauY6i3Xy3e96mwizL7rPpsitjHaE
-         Th0OcvSuI98MmO8sF6ejghxau1AniuC4Ak/IYgYuyG8GgLDA9pEC8MmPxlSiuiHbL9/a
-         Wg3z3uqcv6Upna8cAyfQ/fI0cWrZ2zcuFuFMjCHI9zVppPZ+PcNul4kz/sRHuG0gf28C
-         qQ7EuuROSM11S2k24JhfuxB2eXHh6gNhCo8VUch99eTw1uTQPM94t6y6BRS6lbopkB4h
-         Hkmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761864166; x=1762468966;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L0HTAhQNYbWjGFi7/HeEAEeE9+brZM+DQRBAXbw9JCU=;
-        b=Lgx3evx0dwy42YmxVMrQotigFYbMAMyqv6zh37oq0dap801IhOi+TF69YycgP1/VKU
-         1AYqH4EVxkYPCyPH8FcYhuJzVfks+32PsVn3m11GAMyFti0f2kw5EPaZbCTEr1n5RYMc
-         JJm/v43SjTyT505ohjwZbs/uFOoDEVT6MI7rhYmn+N6rfecxb5XmvDdDY1q0Bal38mJH
-         ZXajK08T7/qygeV0LJuvsP7N7U5Me+ZOQLyHimUBWkRpiF+LdkOkiEDlMdsaq3leYvff
-         37FvglGPXU20z2unlQNVnCthops5iWrBexMSXQsfOEHd1s1bE28Ul/wQO1GvMTMT+XKg
-         Q/nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQt9ttLFX1DqJPFtNDWqPXlAdqs71XmV5EKSoMcHPW6pCAfcjZWc8URnSeGbBReL/uDkEVUsBStvQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywooh0nEzgWCJv9pUMOzJvMBv9j1TuMuJEAGfyplMr1K/NB6ki+
-	ARDOk+wSZZndUCZtAExFjPBxGa6HL6Hx66HEbV6HJsPwJ6T/awA/x0HsZcRTUWkkf6E=
-X-Gm-Gg: ASbGncuKjCS0UjvuHYfcIGbFqbWxzyjUlhA1m+cRAA8+bUGa2vVUu/4cwgom4MpkK9C
-	WY/iAUN4wHBk29UTE2ASW5mugP3dLuDAsAaHHpZ7dHr0oaPThfyDDJBLHBDuNPLlquykdHV7Y/H
-	ovTYh+VaR6XipPwmaz7T6xx5vvJJYmWjNrJgaEZoGP7wSu5zNFj96jfekl1DZejQX8PSO3nM3qs
-	AQL07a6GrK4NdBkgMf6RaPYiLtgKRwTLvqA3jnX7P7RaXQyTsNivsg62QlZtDFNCixHya4D7MOc
-	3+rCWSfRQhFDFUoodL+3RTrd86k98EuVWs9ht4/2T2+j3VfIFzGyqhJI7BqDPkZ9Zl67q5tLpEl
-	SP2gqgnXG0MlOthSUypsdn+Cn3IJGc5esgSB/7Wcivy2QOMIlcdhvflBzlF6nBZBQkwF8OsrUR9
-	3mMICAY+Eb+CZ0X4vv/5x7G90KOpSZ2p5BjoIzk8lxDiRdEUyW/g==
-X-Google-Smtp-Source: AGHT+IFygVcKrCt8dVyx7K2d1dIpysOgPE+1OoIdRWbtjGAosZSMsYYLHZhJRI76gQOSql4L5yVCHA==
-X-Received: by 2002:a05:6830:448f:b0:7b9:4dd5:1963 with SMTP id 46e09a7af769-7c6967b2d0bmr844138a34.24.1761864165644;
-        Thu, 30 Oct 2025 15:42:45 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:500:aa90:4f8c:bf59:360a? ([2600:8803:e7e4:500:aa90:4f8c:bf59:360a])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c699bde239sm44364a34.5.2025.10.30.15.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Oct 2025 15:42:45 -0700 (PDT)
-Message-ID: <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
-Date: Thu, 30 Oct 2025 17:42:44 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B787315E8B;
+	Fri, 31 Oct 2025 07:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.72
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761895812; cv=fail; b=b2Zhi+YhT5NiFGS0PB6mEGIkclKZN53CiaUIJcm6PDYXSTFjeIM5g5VZhifbumsFgDZd0L3vKwTFoVhcpVpKdsoLch7/SDIjYICdxWZIeE2BB3MLTZX/gsRt9UmL5L4v58HIknxmHJ9NtTN7NKhClK7aSKc4xJX0oWWUBAK9lOA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761895812; c=relaxed/simple;
+	bh=xlhYf5lqy4nyITQm/KGRcGVQgJQ2cXx+bMmPP6eUzBU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=fXHYrUXhu4dZmEBl0fl2NlXgK5EumUQESOBUFm4eFcTuYZio0fyh7xOfGsuQx5R83AG4+keyKZFsSAgFLNbSAr+rJmPEkGPEHbjo5huOYTG1wsc7L6DHtGlMEXBM4p/JFIKH5vW0nJU2DLdu40YaCD3+RonCI8UU53gYB4xpbgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=l/l+dLUWNRJVaAPwXeBDS2gF86HkFeSa5vLL0VI7sLHe78j78aywqiP+x10q1Ol3EUTws10SgtOLnXag0fuCUK8JVpnnValxKKHkKaNpGDkfEhGQNzjXYN5pdL32+t64dHMrvs/T4wr1HF2LmTw+Ee1Vv3ZiObA1yLLuiI6N+S4/NT9s1kgIPUus0QSlXOn9+qp3BF4Znv0USUeguI4z2scQhKF+mm0LtpKo36m8BvTG3TB1J7wfzDdhaIeyxCCZXHj+eWalwRVvOySfWCbttZ2bQq0Wq3i56Q0RqhWMDRNpMv9k63yJeYLm1xg2c5GtU6O+DIwkUamJMCkMkJ8JMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m97itRjnu3KK1uRG0KQOoJyq2kKCmj1YswLWXDfM5wM=;
+ b=JgBZGaQQwlH6LQvJeY2GEUkwWy0RlmTJ8KXiws482/vcPOgON3S2apF3OVU3Heh5AXRXsSgjUpilAxi+GNH1BMWuXr2PuKHzk8RjedtGVFScVscL5ghSrCx7VARoWdGXfbzg8JKV9Xlq6rx7GiBzU2SivaPHiwU4a3RjOptXN8zDhQ3ZtS+59n0E2df2luCmIhLDxNdWA5f4W2iPSfam05J5Zk9gIOhLYQ8mk9JMmtOsoZBVQ0sI/9fk7I8MJ5XvAuffKq5rycqUOvwLMgjTowqG0RgJx0WLVaSLpCSlQsEKiKUjx/xbPRvsVxgX/IoJXp2H2rldjblRjLAI8PGuRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 222.71.101.198) smtp.rcpttodomain=amd.com smtp.mailfrom=cixtech.com;
+ dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
+ not signed); arc=none (0)
+Received: from TY4PR01CA0121.jpnprd01.prod.outlook.com (2603:1096:405:379::19)
+ by SE1PPF5FAD0D4F8.apcprd06.prod.outlook.com (2603:1096:108:1::419) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Fri, 31 Oct
+ 2025 07:30:05 +0000
+Received: from TY2PEPF0000AB8A.apcprd03.prod.outlook.com
+ (2603:1096:405:379:cafe::a5) by TY4PR01CA0121.outlook.office365.com
+ (2603:1096:405:379::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9275.15 via Frontend Transport; Fri,
+ 31 Oct 2025 07:30:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
+ smtp.mailfrom=cixtech.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
+Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
+ 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
+Received: from smtprelay.cixcomputing.com (222.71.101.198) by
+ TY2PEPF0000AB8A.mail.protection.outlook.com (10.167.253.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9275.10 via Frontend Transport; Fri, 31 Oct 2025 07:30:05 +0000
+Received: from guoo-System-Product-Name.. (unknown [172.20.64.188])
+	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 8743741604E2;
+	Fri, 31 Oct 2025 15:30:03 +0800 (CST)
+From: Jun Guo <jun.guo@cixtech.com>
+To: peter.chen@cixtech.com,
+	fugang.duan@cixtech.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	michal.simek@amd.com,
+	cix-kernel-upstream@cixtech.com,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"jun.guo" <jun.guo@cixtech.com>
+Subject: [PATCH v3 0/3] spi-cadence: support transmission with bits_per_word of 16 and 32
+Date: Fri, 31 Oct 2025 15:30:00 +0800
+Message-Id: <20251031073003.3289573-1-jun.guo@cixtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
- <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
- <20251021142129.GA34073-robh@kernel.org>
- <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
- <20251030135126.GA3749313-robh@kernel.org>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20251030135126.GA3749313-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY2PEPF0000AB8A:EE_|SE1PPF5FAD0D4F8:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 13e51e3e-6301-4735-ecfb-08de184f4fce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?emshA/ZEz6br03Kiat2ve5dmmi/eowhV3HYsD6SqRO4MpHMuRM++zHwCiYYf?=
+ =?us-ascii?Q?sC32ahg3xSxKhWKpHyv2LhGN/Ekz57k6LFszrfY9fWt/zWDpnJJaM3LM9bzx?=
+ =?us-ascii?Q?eWeMQqvkXnjx5VuZSPRg+aUIQjLyUjAFXAT5L/jZ62b80qOJSLmTYavUgMh/?=
+ =?us-ascii?Q?vqsoyTYpcBnc9bpA2HiMfYQvHG+5Qwhn+xytolmOBg6fsTohYA66bQqtzEjF?=
+ =?us-ascii?Q?cSMMWHBZIUC4MPFQLhgIRVQJDzGCJSCmB9uY+BhKMbpaviQf3HlZgpuJEp7d?=
+ =?us-ascii?Q?NWnTHfl2s8mWrLr6GKg77mQH0GksKtOT57ABgDYbCG9x5NDdU81nQDbCskZ0?=
+ =?us-ascii?Q?lamtT3OCAN5OYOigwePjFe+isXnaN7hIMcGJZiDrHxRwf6Noh5R2VWgbDF47?=
+ =?us-ascii?Q?k4QuDSP/cocCKMqfO3fCBMsrlxFpg35VdRc4pED95koQP93qaUmi+kqFBR2n?=
+ =?us-ascii?Q?0X2muVLiALcanvUf1tF+uYFXBDs+xqJ4kxv+8cKMqN/oOd2uB49F6MGOjiBe?=
+ =?us-ascii?Q?nBtr5gFGDiF/raeSrUMWNu1ZzCRT+smZV3vktBWGAbs2AdYFrO82EeTA28m8?=
+ =?us-ascii?Q?THAJRdx+/ch9LAfmPYwza/8MbqbQ4dfTQC0Yg9u2mJliSmcphtXfiV209syN?=
+ =?us-ascii?Q?2UjhfjKbTWFnA6wpG5o1NXyywdahOdMYZhEbmgaEa92AE9zhEyV7nGcTxLZ0?=
+ =?us-ascii?Q?zhzkKoHn7FwXmRVU96lCQPvucICARH2FP255filnJZfFmzDVbIoYfnXUJ1GK?=
+ =?us-ascii?Q?YNkh77lfaJ/sYRu26HPrH551PfJ/bvdCxP0DYFIHaIlsy5lQt6ZGfE4T16Y/?=
+ =?us-ascii?Q?Yujcx/rZLn2q83ro8TnC8unq+O5zjrPrIbjvVpcI9Pmzi3SJotgu2XRPdqdc?=
+ =?us-ascii?Q?H4LflPLQkb1+NZRDHydQhsXWFLzxhaR0ptqp7K5IWs0rTIbH0W6DNE9zvtQL?=
+ =?us-ascii?Q?kq41c+9VnUjqWzZLsTU7mIFZMIwzpyZTHP5me7gceP5zNqXRanlhu3juNstW?=
+ =?us-ascii?Q?8ynC0XQUV3SwYOLKgwgJXvHvJt95dJDD3yqPypBMSU+LTme2w7H0DwS3NGY/?=
+ =?us-ascii?Q?dzwpUQCnBPwShssgDrNYIxcRbLgajLy9J0m11D2d41KEXpuLFVNATbsvvTM7?=
+ =?us-ascii?Q?GfYPthv4uRe/6r/ahZItf1H9z5wRZA2P6AIuxlasooX+3YxygjfEWmlDS6aP?=
+ =?us-ascii?Q?w0jZ87hEttAxjTv9z7O7Y0yK7y1yjrgpQuigl7QkM+dqx3W57tbVVVqk0MAe?=
+ =?us-ascii?Q?3+3qSEpzL2z8uQW0aDuP/dC+mrFR7nd6ouuU/9uQ3t8fIuq+MhQuXIIaNGB7?=
+ =?us-ascii?Q?UP248FWCnZz6wlsuQ2C8XycxGbDF1Sl6FDUknG4msa0sXYQj5bdJhuFkgYOl?=
+ =?us-ascii?Q?koAvhPdgdcQakO6fNLq0/7iXkfqM7xxpbdX1uDNT4kzdhHxvDgV8I0GCBYVs?=
+ =?us-ascii?Q?2bfbQFrKKEXcOI88GsjSZDowpFrOjrt3ApNUMq8GaUX0zH0zs91/6kRJi/nI?=
+ =?us-ascii?Q?wrpUZEFR10v8uO1aXR1NUP1ZGNi7htZ/fVu3zNdFJ4k/zyuknu9x6rRCHn4M?=
+ =?us-ascii?Q?KQfYGqPOnf8oDo44sUQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1102;
+X-OriginatorOrg: cixtech.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2025 07:30:05.0961
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 13e51e3e-6301-4735-ecfb-08de184f4fce
+X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	TY2PEPF0000AB8A.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1PPF5FAD0D4F8
 
-On 10/30/25 8:51 AM, Rob Herring wrote:
-> On Tue, Oct 21, 2025 at 09:59:22AM -0500, David Lechner wrote:
->> On 10/21/25 9:21 AM, Rob Herring wrote:
->>> On Tue, Oct 14, 2025 at 05:02:11PM -0500, David Lechner wrote:
->>>> Add a spi-buses property to the spi-peripheral-props binding to allow
->>>> specifying the SPI data bus or buses that a peripheral is connected to
->>>> in cases where the SPI controller has more than one physical SPI data
->>>> bus.
->>>
->>> Is there a reason why spi-rx-bus-width property doesn't work for you? 
->>> The only thing I see would be you need to define the order of the pins 
->>> like "data-lanes" property.
->>>
->>> Rob
->>
->> Because we can have both at the same time. In one of the other threads,
->> we talked about the AD4630 ADC that will require this since it has 2 data
->> buses each with a width of 4 (total of 8 lines).
->>
->> See: https://lore.kernel.org/linux-iio/ad929fe5-be03-4628-b95a-5c3523bae0c8@baylibre.com/
-> 
-> But it can't really be 2 independent buses/controllers unless the ADC 
-> has 2 completely independent interfaces, right?
+From: "jun.guo" <jun.guo@cixtech.com>
 
-Correct.
+The Cadence SPI IP supports configurable FIFO data widths during
+integration. On some SoCs, the FIFO data width is designed to be 16 or
+32 bits at the chip design stage. However, the current driver only
+supports communication with an 8-bit FIFO data width. Therefore, these
+patches are added to enable the driver to support communication with
+16-bit and 32-bit FIFO data widths.
 
-The proposed property really only concerns the data lines (tx/rx). It doesn't
-care if there is 1 or 2 SCLK lines and it doesn't care if there is only 1 CS
-line.
+This series introduces the following enhancements for Cadence SPI
+controller support on arm64 platforms:
 
-So maybe spi-data-buses would be a better name for the property? Or
-spi-data-ports (using the NXP FlexSPI controller docs terminology)?
-Or spi-data-channels?
+Patch 1: Add a compatible string "cix,sky1-spi-r1p6" for the cix
+sky1 SoC.
+Patch 2: Update DT binding docs to support cix sky1 SoC.
+Patch 3: Enhance the SPI Cadence driver to support data transmission
+with bits_per_word values of 16 and 32.
 
-> Surely the clock is shared across the 2 buses? 
+The CIX Sky1 SPI supported patch is added:
+https://lore.kernel.org/all/20250919013118.853078-1-jun.guo@cixtech.com/
 
-It depends on the mode of operation. In stripe or mirror mode, both
-clocks would be synchronized/identical. It doesn't matter if there is
-1 or two clock lines in these modes. And only one CS line is needed
-in these modes - but 2 also works - these properties are independent.
+The patches have been tested on CIX SKY1 platform.
 
-It could also be used in a way where each data bus is used independently
-(one at a time rather than both at the same time). In this case, it could
-still work with one SCLK line as long as there were two CS lines. But if
-there are two SCLK lines, then each one could operate independently in this
-mode.
+Changes for v3:
+- Rebase the dt-bindings modification on top of the latest patches in
+  spi/for-next to make the patch more minimal. 
 
-> So aren't you really just borrowing pins and the fifo of the 2nd controller? 
+Changes for v2:
+- Remove the fifo-width property and add a compatible string for the
+  cix sky1 SoC to control the FIFO data width configuration.
 
-Yes, I think that is a valid way of thinking about it.
+Jun Guo (3):
+  dt-bindings: spi: spi-cadence: update DT binding docs to support cix
+    sky1 SoC
+  spi: spi-cadence: supports transmission with bits_per_word of 16 and
+    32
+  arm64: dts: cix: add a compatible string for the cix sky1 SoC
 
-> That seems pretty controller specific to support that. 
+ .../devicetree/bindings/spi/spi-cadence.yaml  |   1 +
+ arch/arm64/boot/dts/cix/sky1.dtsi             |   4 +-
+ drivers/spi/spi-cadence.c                     | 106 +++++++++++++++---
+ 3 files changed, 96 insertions(+), 15 deletions(-)
 
-Correct. This property could only be used with such controllers.
-
-> For example, how would you support this with spi-gpio 
-
-We would need to increase maxItems of several of the gpios properties.
-
-sck-gpios could be multiple gpios to allow for more than one SCLK
-line.
-
-miso-gpios would contain spi-rx-bus-width * ARRAY_SIZE(spi-buses)
-gpio phandles. mosi-gpios would be similar with tx instead of rx.
-
-> (obviously kind of pointless given the bandwidth needs with 8 data 
-> lines) or any 2 independent instances of SPI controllers?
-
-Doing this with two separate controllers wouldn't work for cases
-where only one SCLK line is wired up - unless it was a controller
-that supported a peripheral-provided clock, then it might.
-
-Performance wouldn't be great in this case either though, so I
-don't expect that anyone would be tempted to do this.
-
-To implement this, I would make a new SPI controller node that
-takes the phandles of two or more SPI controllers. The peripheral
-child nodes would be in this new controller node and the other
-two controller nodes would not have any child nodes.
-
-It might need some extra properties to say which data and clock
-lines are actually wired up similar to the spi-gpio.
-
-> 
-> Rob
-
+-- 
+2.34.1
 
 
