@@ -1,79 +1,110 @@
-Return-Path: <linux-spi+bounces-10967-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10968-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFCAFC2844C
-	for <lists+linux-spi@lfdr.de>; Sat, 01 Nov 2025 18:53:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E565C295C7
+	for <lists+linux-spi@lfdr.de>; Sun, 02 Nov 2025 20:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61F403B0903
-	for <lists+linux-spi@lfdr.de>; Sat,  1 Nov 2025 17:53:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5C58C4E2416
+	for <lists+linux-spi@lfdr.de>; Sun,  2 Nov 2025 19:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF3A2820DB;
-	Sat,  1 Nov 2025 17:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF902836F;
+	Sun,  2 Nov 2025 19:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNcr5jO2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0ZVuVhp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5470A27B354;
-	Sat,  1 Nov 2025 17:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA252EACD;
+	Sun,  2 Nov 2025 19:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762019587; cv=none; b=f6qjj+nG0Kh+m0ZMQRxoDjPOZR9HMwuj26iMZa9cs6VpRMI3UJrvMtWNcOleUQauBGfwEsA2Tj3ATFX8G3lvRPHuStQwkknCdtLN2HP86mVvgvRE4D4N18Xb9NTQiUMJnUnEPMqSEGOrz+QcPiDvQDAaHvdCIDzFxSxSWOcfDnw=
+	t=1762110565; cv=none; b=lMFj7xEYmdTbm3EYd3Yvkmq8WiUFb5wd8WFz4A8rhCN0SOtxlDgyLfUak7roZP1BF+Dm4aP6AH+vefQFo7SMDz6yb+M+BJv0FODVcBh54XWSmd8UD9IYvWHyOapyIxLHilM2uSJLAT6N7e+595A6QU/sqR/4voleYlIXO4/U4t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762019587; c=relaxed/simple;
-	bh=Pq4hiA5KUEpQNLEUv5rFTagvCYc8rEZqjvCX624uJH8=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=j7HTKuk97DZ8oRwBC6UKkx7ISe0xbNIg9vNlyUxxJpznxU6Kq4xIaNuiTxoZx4qpjvzkVlJLcyZREKHceiLSZZl8liTk8q0L8WMiAGalHWaq/h3KXxsK7D/YUucOFRjClvXgnFcueUyLaY7LJTwAAQa+Xgh7Rv9rNO94NXLL+iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNcr5jO2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3221FC4CEF1;
-	Sat,  1 Nov 2025 17:53:07 +0000 (UTC)
+	s=arc-20240116; t=1762110565; c=relaxed/simple;
+	bh=hSDa3Ob7t/jjRsVUFtoLq051kKlgUvm3l0kJPGaxjQo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q40bEtRn2GByZbxJ/MoFM4FA+TAjhsuOSgy8VnhDiwDvk/NyTO2qhUue5GOq4yiMEXfI5wvfUn7l9o4lRJlvb9OhDPRyzfPRrshMoBsWreadPORj+k9zfP+Czp04P129YTJW3FkusKJZXKBJV+OaJi/JzZpxF1CgvXfeJxxeoIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0ZVuVhp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F7DC4CEF7;
+	Sun,  2 Nov 2025 19:09:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762019587;
-	bh=Pq4hiA5KUEpQNLEUv5rFTagvCYc8rEZqjvCX624uJH8=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=PNcr5jO28JFBBw223bL9o9owpb1RcWGxehgsa1xhLN/1jt8BLamSG0HL0d8nz7PPc
-	 bnAC8GBaOcBJGxDnZnfo7Y8xsCc77g6QGtXaO10kKPqLarLwKiqSVa6FbyRmyM3Xa4
-	 5fuY9PYjJxE0wR+DQbLSm6Gkr/nAc83czo/zgljr78b8AtLXyFfXSr5urFfPhZYxTj
-	 qQMXIpfsLfCwagE3yKPPSZEaB65Sfcg6/E0/Oj02xfzphwk23gczEBJEpafxEMiXUd
-	 reVZal24knl3/pBrtwXE2eRdx2tnZC/DoZ6AkaYhTzwP3HoJq7E/w8LVUjgQzcrH7O
-	 vVbzzebE9xz2A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB1083809A1B;
-	Sat,  1 Nov 2025 17:52:43 +0000 (UTC)
-Subject: Re: [GIT PULL] SPI fixes for v6.18-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ebe895d1aed47312d7f57da076ac3d68@kernel.org>
-References: <ebe895d1aed47312d7f57da076ac3d68@kernel.org>
-X-PR-Tracked-List-Id: <linux-spi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ebe895d1aed47312d7f57da076ac3d68@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.18-rc3
-X-PR-Tracked-Commit-Id: e7dbfe6f15b4df34bb169d180bd10f1a3c043814
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 691d401c7e0e5ea34ac6f8151bc0696db1b2500a
-Message-Id: <176201956268.853286.10590101280136848742.pr-tracker-bot@kernel.org>
-Date: Sat, 01 Nov 2025 17:52:42 +0000
+	s=k20201202; t=1762110565;
+	bh=hSDa3Ob7t/jjRsVUFtoLq051kKlgUvm3l0kJPGaxjQo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=d0ZVuVhpR2YhaCWXArsCPe5Hcfj1EuIKUP4Tlw34oYwvGYsVTYqbyN2wv7HcJqUE/
+	 fNyMKJO/jgTWoLLxada70CKeyrz4drLB54ALSRTK8Eoru834MgC1CIRf0jn9p3cajp
+	 V0ee78CoCLtKARdvjTvzZinttjxaqGamdsU4JGxYqqKmrufy8+AND0mpokgE5bLP6g
+	 AtPOnvSStb3k79JVt3q+8cWTIwQ9LLZhN0ZUGWC08weNsG4uaUVRsBURImOSZzqWCB
+	 amSgxI9nUtbvbeJd7nTez7kOquPBnCIdsTPZjYyQH5p+OfRYJqk/VJx42hcrVXmIQI
+	 kwnJiWzmVLEig==
+From: Hans de Goede <hansg@kernel.org>
 To: Mark Brown <broonie@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Cc: Hans de Goede <hansg@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] spi: Try to get ACPI GPIO IRQ earlier
+Date: Sun,  2 Nov 2025 20:09:21 +0100
+Message-ID: <20251102190921.30068-1-hansg@kernel.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Sat, 01 Nov 2025 12:30:05 +0000:
+Since commit d24cfee7f63d ("spi: Fix acpi deferred irq probe"), the
+acpi_dev_gpio_irq_get() call gets delayed till spi_probe() is called
+on the SPI device.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.18-rc3
+If there is no driver for the SPI device then the move to spi_probe()
+results in acpi_dev_gpio_irq_get() never getting called. This may
+cause problems by leaving the GPIO pin floating because this call is
+responsible for setting up the GPIO pin direction and/or bias according
+to the values from the ACPI tables.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/691d401c7e0e5ea34ac6f8151bc0696db1b2500a
+Re-add the removed acpi_dev_gpio_irq_get() in acpi_register_spi_device()
+to ensure the GPIO pin is always correctly setup, while keeping the
+acpi_dev_gpio_irq_get() call added to spi_probe() to deal with
+-EPROBE_DEFER returns caused by the GPIO controller not having a driver
+yet.
 
-Thank you!
+Link: https://bbs.archlinux.org/viewtopic.php?id=302348
+Fixes: d24cfee7f63d ("spi: Fix acpi deferred irq probe")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hans de Goede <hansg@kernel.org>
+---
+ drivers/spi/spi.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 2e0647a06890..8588e8562220 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -2851,6 +2851,16 @@ static acpi_status acpi_register_spi_device(struct spi_controller *ctlr,
+ 	acpi_set_modalias(adev, acpi_device_hid(adev), spi->modalias,
+ 			  sizeof(spi->modalias));
+ 
++	/*
++	 * This gets re-tried in spi_probe() for -EPROBE_DEFER handling in case
++	 * the GPIO controller does not have a driver yet. This needs to be done
++	 * here too, because this call sets the GPIO direction and/or bias.
++	 * Setting these needs to be done even if there is no driver, in which
++	 * case spi_probe() will never get called.
++	 */
++	if (spi->irq < 0)
++		spi->irq = acpi_dev_gpio_irq_get(adev, 0);
++
+ 	acpi_device_set_enumerated(adev);
+ 
+ 	adev->power.flags.ignore_parent = true;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.51.1
+
 
