@@ -1,134 +1,107 @@
-Return-Path: <linux-spi+bounces-10979-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10983-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D447C2CF6D
-	for <lists+linux-spi@lfdr.de>; Mon, 03 Nov 2025 17:04:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A987C2CF8B
+	for <lists+linux-spi@lfdr.de>; Mon, 03 Nov 2025 17:05:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 512444275F8
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Nov 2025 15:39:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3C83F4E2371
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Nov 2025 16:02:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B985B320CC9;
-	Mon,  3 Nov 2025 15:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A8B314D18;
+	Mon,  3 Nov 2025 16:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EoqaC9vu"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="o0I2uQpN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F92F29;
-	Mon,  3 Nov 2025 15:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049AD314D08;
+	Mon,  3 Nov 2025 16:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762184016; cv=none; b=IN3S0h2SEnBzEXnpLVK5wLejhZgSYYIkljjn3ZBwldassYkwri1oexXYIq4fRFqdRAek/+fDS0ABI0vvGnIHg+I0T79sjjL80cgmPtlaXE8r6gUdzSNaBi/wSd+BEAEzszNB8y7UumRkK7NoKdqeasxsy7KKTc3NMskNJHvSB5M=
+	t=1762185683; cv=none; b=rPeyphaXzXT25zJ5uHjlxLHse0/8AnCHv4Lzw1vh9LZ9IM0pWXfCKOzl0EmoyXgeezBq1qatGLme1N9Eg/Cl6Ueqha221NlW33dsFyAiIKtZa215x+B9GSXTfWRL0uK5/TRVxirqhYROq1acjGNEQ/gC14Cmi2kYVnnu6MuP2tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762184016; c=relaxed/simple;
-	bh=uNgNaPYwouZv9T9lCZAvJr4F5YbOOwITKjbMBTcUrBw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrCRdHtpQctpYxxwa3bWmsIVMu7INlmA+Qc8mFR8840b5bia+xtC9EPv4de82MVdZ1NPjyPdFIbG2EAG7l8/N/ImLJniYR1f2lcwx7iCXKz8FfVMRFa6PpQEKyGiK8u7EVmUwwGa2EkxUF2dFggEduvfRpIIIZA9kT8P0CYeiGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EoqaC9vu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC50C4CEE7;
-	Mon,  3 Nov 2025 15:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762184016;
-	bh=uNgNaPYwouZv9T9lCZAvJr4F5YbOOwITKjbMBTcUrBw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EoqaC9vuQda+zjylpdayNSFe10w5OE5vTjDXkIBunHgQzE3bO872axhDmzaERKKc4
-	 1WO4YOH7eYFyN57IViLtXDCrjg9KhRMgfUaQ5wvFdAILIJ+KJxIythXbxl2DudG1ny
-	 6tPkIKJBZtN1QqqRhBrdVrjEHLxHNDazsSSAGXNV6/vFAwylTY5nsLR8bFV6JyMjZO
-	 iCqOtgaf65zxNMDC0B7+AsdsCtdYCThD9y8rPIyO8SbNqJMdrALHupnB49CN6j9eDA
-	 0SQ3+IxKdr/f/jFAtkS8A2J+ex/qA+tAfeh8rwofIinxaf4uRECGvhVZtZmc5/lO/T
-	 2L1Sj+MI9pXBQ==
-Date: Mon, 3 Nov 2025 15:33:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Marcelo Schmitt <marcelo.schmitt@analog.com>
-Cc: linux-spi@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Axel Haslam <ahaslam@baylibre.com>,
-	jic23@kernel.org, nuno.sa@analog.com, dlechner@baylibre.com,
-	andy@kernel.org, marcelo.schmitt1@gmail.com
-Subject: Re: [PATCH v4 1/1] spi: offload: Add offset parameter
-Message-ID: <aQjLTc_2gnmv6Im3@finisterre.sirena.org.uk>
-References: <cd315e95c0bd8523f00e91c400abcd6a418e5924.1759760519.git.marcelo.schmitt@analog.com>
+	s=arc-20240116; t=1762185683; c=relaxed/simple;
+	bh=Ot3iWYcj47ZwqvJJfRRJMWRtoVr4u3WTIVXuUcMeLds=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ua5UqkXj0KZORr/e9rB28nmM8xyC3r1c062QsqooAMlNO4RR7qGUBA4vttnK+bFMtKFNAVkPrMfs/Hv/A2hBgT66g0XSGV/nBX2dzgxksyhkCa3AnkNog4XA9LppBzWKs13DNnU/9o01XcWjgVaOtLbCHKM0w7FG6KXNAwLqeTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=o0I2uQpN; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1762185681; x=1793721681;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Ot3iWYcj47ZwqvJJfRRJMWRtoVr4u3WTIVXuUcMeLds=;
+  b=o0I2uQpN3wTxm3fJTSBFsVrPymIUB5auwirPeHEA+rRMlc+y0r7bvOsS
+   VBtyna4Uj+0lI+Wn0ecNhLIoz/aBPaBqJkRFC6wwH9LxKvDM2TGcIE0sV
+   v36y9y+0+aCErGgO5iP7pbpBlFmk5PchWVYQyHjeaaolcY6/AEIpKxDCz
+   mn6I1kTSbyjyEaQkMjvcsL+YzRiFIG5bkWh7cXnYQ4pk2ReBb0XfyTSg+
+   zDxhymBmqkzAMkoGapwxkVcqRWCOvXVMlKRRj5jCsbT8/gLS2va6hFkcI
+   9vSrCC1sAuM3+45PXXbVh45xnptY5wULaY+sRpIfjz5UQ/aA0shRFcm0g
+   w==;
+X-CSE-ConnectionGUID: HCNQY0jzQAeYr9vBiTkXcQ==
+X-CSE-MsgGUID: kqr79KI6SMSkHm381Jn2Zw==
+X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
+   d="scan'208";a="49119074"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 09:01:17 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Mon, 3 Nov 2025 09:00:37 -0700
+Received: from Lily.microchip.com (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Mon, 3 Nov 2025 09:00:35 -0700
+From: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+To: Mark Brown <broonie@kernel.org>
+CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Conor Dooley
+	<conor.dooley@microchip.com>, Daire McNamara <daire.mcnamara@microchip.com>,
+	Valentina Fernandez Alanis <valentina.fernandezalanis@microchip.com>, "Cyril
+ Jean" <cyril.jean@microchip.com>, Prajna Rajendra Kumar
+	<prajna.rajendrakumar@microchip.com>
+Subject: [PATCH v1 0/3] Add support for Microchip CoreSPI Controller
+Date: Mon, 3 Nov 2025 16:05:12 +0000
+Message-ID: <20251103160515.412706-1-prajna.rajendrakumar@microchip.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="o8Uu4xR4vYJkTo3h"
-Content-Disposition: inline
-In-Reply-To: <cd315e95c0bd8523f00e91c400abcd6a418e5924.1759760519.git.marcelo.schmitt@analog.com>
-X-Cookie: If in doubt, mumble.
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
+This patch series adds support for the Microchip FPGA CoreSPI "soft" IP 
+and documents its device tree bindings.
 
---o8Uu4xR4vYJkTo3h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As preparation, the existing Microchip SPI driver is renamed to clearly
+indicate that it supports only the Microchip PolarFire SoC "hard" controller.
+Although it was originally named with the expectation that it might also
+cover the FPGA CoreSPI "soft" IP, the register layouts differ significantly, 
+so separate drivers are required.
 
-On Mon, Oct 06, 2025 at 11:25:41AM -0300, Marcelo Schmitt wrote:
-> From: Axel Haslam <ahaslam@baylibre.com>
->=20
-> Add an offset parameter that can be passed in the periodic trigger.
-> This is useful for example when ADC drivers implement a separate periodic
-> signal to trigger conversion and need offload to read the result with
-> some delay. While at it, add some documentation to offload periodic trigg=
-er
-> parameters.
+Prajna Rajendra Kumar (3):
+  spi: microchip: rename driver file and internal identifiers
+  spi: dt-binding: document Microchip CoreSPI
+  spi: add support for microchip "soft" spi controller
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+ .../bindings/spi/microchip,mpfs-spi.yaml      |  65 ++
+ drivers/spi/Kconfig                           |  12 +-
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-microchip-core.c              | 582 ++++++----------
+ drivers/spi/spi-mpfs.c                        | 626 ++++++++++++++++++
+ 5 files changed, 903 insertions(+), 383 deletions(-)
+ create mode 100644 drivers/spi/spi-mpfs.c
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+-- 
+2.25.1
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-=
-offload-offset
-
-for you to fetch changes up to b83fb1b14c06bdd765903ac852ba20a14e24f227:
-
-  spi: offload: Add offset parameter (2025-10-13 11:27:52 +0100)
-
-----------------------------------------------------------------
-spi: offload: Add offset parameter
-
-Add an offset parameter that can be passed in the periodic trigger.
-This is useful for example when ADC drivers implement a separate periodic
-signal to trigger conversion and need offload to read the result with
-some delay. While at it, add some documentation to offload periodic trigger
-parameters.
-
-----------------------------------------------------------------
-Axel Haslam (1):
-      spi: offload: Add offset parameter
-
-Mark Brown (1):
-      Merge existing fixes from spi/for-6.18 into new branch
-
- Documentation/devicetree/bindings/spi/spi-cadence.yaml | 11 ++++++++---
- drivers/spi/spi-dw-mmio.c                              |  4 +++-
- drivers/spi/spi-offload-trigger-pwm.c                  |  3 +++
- drivers/spi/spi-rockchip-sfc.c                         | 12 +++++++++++-
- include/linux/spi/offload/types.h                      |  9 +++++++++
- 5 files changed, 34 insertions(+), 5 deletions(-)
-
---o8Uu4xR4vYJkTo3h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkIy0wACgkQJNaLcl1U
-h9B+TQf8CLMMp0eFM4Yft6zWiJu3qRiTwKgwwP8ASigBd/9Zl4WfV2JcrdE0IMzP
-GZsATHGwDGWbgG4Gkak2Q31XLQIyfVPg1hCEBuC3MEvPafGScG4q8wACtOBJDV/0
-8vj1B9PAyEKETM/2PrsOpPZQx7nXuFTRM699p1ICONrGYx/vTScIfxMMYd5Opy93
-bagKs62vmVPSAaZ8YLHLC8a+kxIMVb051vSUacEEl2vZNCVS8atZIOfne4pjkvWd
-AAmiPnypnYSnV2NrHI0z+yfCAqTV92TToD5HNBAVyGgkeUBhEVNT+o8KceYqlmyG
-tTcDZTSksf70z5bfXsMVz7G+GimfYQ==
-=BJP0
------END PGP SIGNATURE-----
-
---o8Uu4xR4vYJkTo3h--
 
