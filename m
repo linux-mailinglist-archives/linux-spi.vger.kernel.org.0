@@ -1,195 +1,196 @@
-Return-Path: <linux-spi+bounces-10975-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-10976-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B9CC2C060
-	for <lists+linux-spi@lfdr.de>; Mon, 03 Nov 2025 14:16:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 943C1C2C290
+	for <lists+linux-spi@lfdr.de>; Mon, 03 Nov 2025 14:41:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C65F2188479D
-	for <lists+linux-spi@lfdr.de>; Mon,  3 Nov 2025 13:15:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3665C3BDD75
+	for <lists+linux-spi@lfdr.de>; Mon,  3 Nov 2025 13:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3E51C84BD;
-	Mon,  3 Nov 2025 13:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6437D3101B5;
+	Mon,  3 Nov 2025 13:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R9BpxbsN"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iSuStlNC"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8B230F52C;
-	Mon,  3 Nov 2025 13:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2E930B51D;
+	Mon,  3 Nov 2025 13:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762175725; cv=none; b=WcNdUk6GAY7J9nW/LMY5g9tPUNqalv1B6qchGxguEL88BA2pTnpghFG4yxfBtxA4wkqRDTKyJYl/NeAlkiHcDsH9fB6MmMgJN42hHVrotj9kHqPigLN40GXf3Qwhq4q5y9ZzCKDRMCMYppY15A2N+Q1UUDSyg5hwjh0omVuRwLY=
+	t=1762176914; cv=none; b=rs7ceUWsR7pTQ34ZqvZ4x0OioT7EQ3JYSOD6TpPcaD1GPODQs5mq48SmFKkMuHlPlGM/M/GTDkq24tbDW6SBp6NB5mxzgGzAnC2MkHeTo5U6bmkoKC9eIC6jdhzus8UiD0+AsubTroPSmTrsag4PWOoMME6NGX0coFRQ6QF4zwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762175725; c=relaxed/simple;
-	bh=BrUO1cTuo9HyN2IfjVfYTebP2gccBlnbEGfKcY5hl1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vDta4olUU2j1GGYPHIgfJuEjfiPvXSR27UldceHckbwJPnDT8PoUN3hLZ8PrUwfy/3k89Ij9un96CkKtj34/s6ixacYgg+nuQxKP3zqE7JNtik4npLUPM940mJC4TsRNNuxXnEmBRRKxN+nOM9m85OKnBwPbc8DFA9RzfkTA5eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R9BpxbsN; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762175723; x=1793711723;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BrUO1cTuo9HyN2IfjVfYTebP2gccBlnbEGfKcY5hl1Y=;
-  b=R9BpxbsNLi+OLBtP9lVsjaM1BcnHKPKGddCqwF1F76bBkmNTk4sHZb0p
-   IhiVTm37/FWvGLzvyiZPX7ZCc0ytacuX1XS8WTKmOErufBUxrD8CkwEs4
-   Hrtmvh3Xsqyfjr0jOefXwaTRLl8XX0g6YxQfMdX8ciAmBGB/UOQa2F0nb
-   SWtmC9yyOhibn/657mOxosMpSKc8E3PGb1ze2DfGWMBzO/6Io/GJ1yyhb
-   lP1P4v9u+W2NbYzds3eO9wJRWymfjbBIZ9NBk2uSC73hIqvxUiBklOyI6
-   TJiP6tPv5+lR8acg5TWswPD7qVj8mDNNC3lLtt6U7bDrbLBUxfrUd4nVz
-   Q==;
-X-CSE-ConnectionGUID: NUanCj8IQXKZdx7Z26NZjA==
-X-CSE-MsgGUID: y5VM+1igRgy3HMstEh2kbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11601"; a="89711441"
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="89711441"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 05:15:21 -0800
-X-CSE-ConnectionGUID: 2nVMVhYKS1+Szz2U6eBIYg==
-X-CSE-MsgGUID: x7QyeuscRq+VoOU3ce8bdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,276,1754982000"; 
-   d="scan'208";a="186105007"
-Received: from smoehrl-linux.amr.corp.intel.com (HELO ashevche-desk.local) ([10.124.220.216])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 05:15:20 -0800
-Received: from andy by ashevche-desk.local with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1vFuOy-000000059bH-2oEI;
-	Mon, 03 Nov 2025 15:15:16 +0200
-Date: Mon, 3 Nov 2025 15:15:15 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] spi: Try to get ACPI GPIO IRQ earlier
-Message-ID: <aQiq4_W6AL1n-Geh@smile.fi.intel.com>
-References: <20251102190921.30068-1-hansg@kernel.org>
- <aQh3RJQ95jTx7VYO@smile.fi.intel.com>
- <f8dc0e8b-bbdc-4ac6-9ebc-c633bda24403@kernel.org>
- <aQiATDzxEIKBytXw@smile.fi.intel.com>
- <af07a18b-cfc8-47d1-ac5a-b343cbfe0f36@kernel.org>
+	s=arc-20240116; t=1762176914; c=relaxed/simple;
+	bh=HUhCBMZvZipHgUmjcVZ0eOSnMcg+HbQiCeJ/7jxn+Gg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P6p/dLO60d+vtjssYhbMGrfTt+v/z6HcloMASoeQsnvO97hK4x3hSMMuGUEuDVKjpijL/da5jfWHB91CVgzDfuZ/IJD1mqn42ZCUxrl3dn7x4B+0HYI8+H1dN+Bwcy2EubRCnHKz2vys0hke6Kbdxm8WyQfcq+ja+rA21zxZXTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iSuStlNC; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id F1DAC1A1840;
+	Mon,  3 Nov 2025 13:35:09 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C0BB160709;
+	Mon,  3 Nov 2025 13:35:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F194010B500FE;
+	Mon,  3 Nov 2025 14:34:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1762176907; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=koLz65BvAsRdOTOjAYYzE2T1rPDi7AByKsxkPawhxGI=;
+	b=iSuStlNC/qPWehMW5QtSxmK7/Ek+OmtM952H+Xk5cz64yvAI1dRLRJl2LFnH1Saj3uIcSn
+	Tfo0dDHHxzLe5rPhwCbyehjx3KhF+kWXpLRNtBcibrsD5eWlEhe06L8+GQDP7gihuHb7M4
+	aMb4hr5u64HA2jT9649n28R3LSuMyiMLHcAn1aj1T2djrGGH2TKUKnNVTaabRGpAWKTAUy
+	xDNG39m9CDfMAnKBAqtJttRhZlsDSxkcO7NokNzenCtkiwC6nxpHFV3TZc+Gz2qOhJ3anH
+	P5/UUwG3W53ojB0Z3tCqPkFB8BoZl0mckys6ra3FPqO4z9ocBaUZIcIEe7GxPQ==
+Date: Mon, 3 Nov 2025 14:34:52 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
+ <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
+ Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter
+ Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>, Saravana Kannan
+ <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax
+ <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
+ <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mark Brown <broonie@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
+ Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>, Alison Schofield
+ <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
+ <allan.nielsen@microchip.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 18/29] i2c: mux: Create missing devlink between mux
+ and adapter physical device
+Message-ID: <20251103143452.080c3503@bootlin.com>
+In-Reply-To: <6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	<20251015071420.1173068-19-herve.codina@bootlin.com>
+	<6tgbavtf2dqc44ebfighrs5chzx4j4zdmjk77fmulwqbhrex2b@lou7ekbsjekr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <af07a18b-cfc8-47d1-ac5a-b343cbfe0f36@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Nov 03, 2025 at 11:20:30AM +0100, Hans de Goede wrote:
-> On 3-Nov-25 11:13 AM, Andy Shevchenko wrote:
-> > On Mon, Nov 03, 2025 at 10:57:44AM +0100, Hans de Goede wrote:
-> >> On 3-Nov-25 10:35 AM, Andy Shevchenko wrote:
-> >>> On Sun, Nov 02, 2025 at 08:09:21PM +0100, Hans de Goede wrote:
-> >>>> Since commit d24cfee7f63d ("spi: Fix acpi deferred irq probe"), the
-> >>>> acpi_dev_gpio_irq_get() call gets delayed till spi_probe() is called
-> >>>> on the SPI device.
-> >>>>
-> >>>> If there is no driver for the SPI device then the move to spi_probe()
-> >>>> results in acpi_dev_gpio_irq_get() never getting called. This may
-> >>>> cause problems by leaving the GPIO pin floating because this call is
-> >>>> responsible for setting up the GPIO pin direction and/or bias according
-> >>>> to the values from the ACPI tables.
-> >>>>
-> >>>> Re-add the removed acpi_dev_gpio_irq_get() in acpi_register_spi_device()
-> >>>> to ensure the GPIO pin is always correctly setup, while keeping the
-> >>>> acpi_dev_gpio_irq_get() call added to spi_probe() to deal with
-> >>>> -EPROBE_DEFER returns caused by the GPIO controller not having a driver
-> >>>> yet.
-> >>>
-> >>> Even before following the link to some papering over module via the link below
-> >>> I wondered, if the I≤C case should be covered as well. The
-> >>> https://github.com/alexpevzner/hotfix-kvadra-touchpad refers to I≤C enabled
-> >>> touchpads.
-> >>>
-> >>>> Link: https://bbs.archlinux.org/viewtopic.php?id=302348
+Hi Andi,
 
-...
+On Thu, 30 Oct 2025 16:23:24 +0100
+Andi Shyti <andi.shyti@kernel.org> wrote:
 
-> >>> I'm not against the SPI fix, but is it confirmed that it really fixes the issue?
-> >>
-> >> Yes Mark and I got an offlist email bisecting this to the:
-> >>
-> >> Fixes: d24cfee7f63d ("spi: Fix acpi deferred irq probe")
-> >>
-> >> commit (on a stable kernel series) and a later email confirming that this
-> >> patch fixes it.
-> > 
-> > Shouldn't we use Closes in this case instead of Link?
+> Hi Herve,
 > 
-> I guess so.
+> ...
 > 
-> >> It seems that leaving the fingerprint reader enable pin (the first GPIO
-> >> listed in _CRS which is an output only pin, is likely the enable pin)
-> >> floating is causing these issues. So in a way the acpi_dev_gpio_irq_get()
-> >> fixing this by forcing the enable pin to no longer float is a bit of
-> >> luck. But things did work before d24cfee7f63d ("spi: Fix acpi deferred irq probe")
-> >> so we need this to fix a regression
-> > 
-> > Yeah, fixing a regression is good thing, but not papering over the issue.
+> > When an i2c mux is involved in an i2c path, the struct dev topology is
+> > the following:  
 > 
-> I agree in principle, but this is a quick and safe way to fix
-> the regression, where as the generic fix you describe below is
-> likely months away and also has significant risks of causing
-> regressions in various places, see below.
+> supernitpick: I'd leave blank line here.
 
-Perhaps we should add a TODO / FIXME there as well?
-So at least we will know that this is not a proper solution.
+Will be added.
 
-> >> and as you indicate it seems
-> >> like a good idea in general and maybe we should also do this for i2c.
-> > 
-> >> As for doing something similar for I2C devices, that is an interesting
-> >> question. Even though it is possible I'm not aware of any i2c-devices
-> >> which have a userspace driver like SPI/USB fingerprint readers do,
-> >> so on i2c I would expect probe() to always get called. So I'm not sure
-> >> it is necessary there.
-> > 
-> > Reading the problem statement (the second paragraph) I lean towards
-> > a generic solution residing somewhere in drivers/acpi/scan.c (like
-> > acpi_init_device_object() / acpi_bus_attach() calls), although I don't
-> > see a quick way how to achieve this. It seems would require a bit of
-> > refactoring to allow ACPI glue code to call specific subsystem calls
-> > or making a GPIOLIB to provide some "early" initialisation flow(s).
 > 
-> I guess that you want to do the direction and bias init on all
-> GPIOs listed in _CRS, at least for devices with status == present ?
-
-For the devices that are serial busses only (I≤C, SPI, UART).
-
-> I was wondering about the same thing, but ACPI tables are full
-> of, well, erm, garbage in various places so I'm afraid that doing
-> this for all GPIO _CRS resources is likely to cause a whole lot
-> of pain.
+> >     +----------------+                +-------------------+
+> >     | i2c controller |                |      i2c mux      |
+> >     |     device     |                |      device       |
+> >     |       ^        |                |                   |
+> >     |       |        |                |                   |
+> >     |  dev's parent  |                |                   |
+> >     |       |        |                |                   |
+> >     |   i2c adapter  |                | i2c adapter chanX |
+> >     |     device  <---- dev's parent ------  device       |
+> >     |   (no driver)  |                |    (no driver)    |
+> >     +----------------+                +-------------------+
+> >   
 > 
-> Typically the firmware already sets up the direction + bias
-> of all used pins. I'm pretty sure the BIOS-es have some GPIO
-> init table especially for this somewhere.
+> ...
 > 
-> Now those init-tables may have bugs, but I'm seriously worried
-> about the implication of doing the direction + bios setup for
-> all _CRS GPIO entries. I have simply seen too much non sense
-> devices (with _STA returning 0x0f) listing GPIOs also actually
-> used elsewhere to think this is a good idea.
+> > No relationship exists between the i2c mux device itself and the i2c
+> > controller device (physical device) in order to have the i2c mux device
+> > calling i2c_del_adapter() to remove its downtream adapters and so,  
+> 
+> /downtream/downstream/
 
-Btw, other GPIO initialisation issues we have been solving by adding quirks.
-Why this one can't be targeted with the same approach?
+Will be fixed
 
--- 
-With Best Regards,
-Andy Shevchenko
+> 
+> > release references taken to the upstream adapter.  
+> 
+> ...
+> 
+> > +	/*
+> > +	 * There is no relationship set between the mux device and the physical
+> > +	 * device handling the parent adapter. Create this missing relationship
+> > +	 * in order to remove the i2c mux device (consumer) and so the dowstream
+> > +	 * channel adapters before removing the physical device (supplier) which
+> > +	 * handles the i2c mux upstream adapter.
+> > +	 */
+> > +	parent_physdev = i2c_get_adapter_physdev(parent);
+> > +	if (!parent_physdev) {
+> > +		dev_err(muxc->dev, "failed to get the parent physical device\n");
+> > +		ret = -EINVAL;  
+> 
+> -ENODEV?
 
+Yes, -ENODEV makes sense here. Will be changed in the next iteration.
 
+> 
+> > +		goto err_free_priv;
+> > +	}
+> > +	dl = device_link_add(muxc->dev, parent_physdev, DL_FLAG_AUTOREMOVE_CONSUMER);  
+> 
+> Not to call twice put_device, I would add it once here and then
+> check for !dl.
+
+As Andy already mentioned, we cannot do that. Indeed, dev_name(parent_physdev)
+is called in the error path and so the device reference has to be kept.
+
+> 
+> > +	if (!dl) {
+> > +		dev_err(muxc->dev, "failed to create device link to %s\n",
+> > +			dev_name(parent_physdev));
+> > +		put_device(parent_physdev);
+> > +		ret = -EINVAL;  
+> 
+> same here, should this be -ENODEV?
+
+For this one, I am not so sure.
+
+The failure is related to the device link creation and probably due to some
+devlink invalid internal flags or state instead of a missing device.
+
+That's said, if you really want the -ENODEV here, let me know.
+
+Best regards,
+Herv√©
 
