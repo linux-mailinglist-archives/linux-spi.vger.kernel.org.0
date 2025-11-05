@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-11011-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11012-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFD1BC34CEA
-	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:25:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 293E4C34C63
+	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 22E894F9FEE
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:19:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D3AE1922B67
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:19:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2D730E0FC;
-	Wed,  5 Nov 2025 09:15:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D508030EF74;
+	Wed,  5 Nov 2025 09:15:46 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA062FD684;
-	Wed,  5 Nov 2025 09:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92302FD684;
+	Wed,  5 Nov 2025 09:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762334141; cv=none; b=JpMiLFtiajpyHCD+8VEVz2IkfDzfD4/F/3TGxxT6QguZAJj1k+Mlg8swsukGHLF2Pd29q5etVlNuw7Mkx3oFYUK01aEj00MjHNSkBPruXXxpTuy6rEPANfUE8dy63Ok1yS+7Aqqi1We4J5xiiQudiDTGtIHHnBspAY4JOJ5uOKc=
+	t=1762334146; cv=none; b=tgSxmPfvagED3gpgRJqkS4OIN5iDb2NXCmZ3PxXmS6zrI63tSC+3SW6zI0jXkZaAIp+KGnXAJ7fXNnTwUb2RcD4jyFVIFXBTa7vUBq5VeQ6qZm9k8fboiVEPA0MZ24BucaFoe3TH6t2jHx9ElMa3aveiMMi8Cyu76io0F0L9yI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762334141; c=relaxed/simple;
-	bh=ugy++yZKwUeSdQAW+Rk8cLfei+lO6wAKkDC35SHcARw=;
+	s=arc-20240116; t=1762334146; c=relaxed/simple;
+	bh=UganWNkeKrLky13PVsdX6fI+hy19J24abS6vT+14ZUs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kY13/ZSaAF39GDLeQaC3YUzNTUW6SqHezDjFmH7adwCmYLX0TmXEYldriGjpHAbDZhOtBgf1Yh5Ue0dClK4gbhFB5VNHZVoYXL5u6DzuptlToR8PfLB10+S5LeDJd0wkUBLMb884YhNY/wxPUESMYao218MtV1ewO0qB0v36efw=
+	 MIME-Version; b=ei1fGRKUtQjx3yYgY/pAFL8K4y0b549WmZjMBLzBX9SNewZIHOY/F8a/2AvMQS6sUMtsJVAGBiFwk5Abuh59wt/ii5VrwDdYQSUs413IZdgKSB9qDy8oqvhvOF+r1c7WaTg5eZR7odXyb9NU8g+MuzKRzmkz6B98/ePjJPQpDWU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: iAS1hmNURhypBFyKRU9Xtg==
-X-CSE-MsgGUID: zr6l7uXZRkiqLvELPR1tUg==
+X-CSE-ConnectionGUID: DV18dhccRW+MJLJKzh6QHw==
+X-CSE-MsgGUID: 7CV0Q5bgTrCZk1+AzVhZ2w==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 05 Nov 2025 18:15:38 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 05 Nov 2025 18:15:44 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.38])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8D60941763FB;
-	Wed,  5 Nov 2025 18:15:33 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id A3DF141763FB;
+	Wed,  5 Nov 2025 18:15:39 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: 
 Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -52,9 +52,9 @@ Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 09/14] spi: rzv2h-rspi: add support for variable transfer clock
-Date: Wed,  5 Nov 2025 11:13:53 +0200
-Message-ID: <20251105091401.1462985-10-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 10/14] spi: rzv2h-rspi: add support for loopback mode
+Date: Wed,  5 Nov 2025 11:13:54 +0200
+Message-ID: <20251105091401.1462985-11-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -66,89 +66,65 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have a more
-complicated clocking setup for the SPI transfer clock than RZ/V2H, as
-the clock from which it is generated supports multiple dividers.
-
-To prepare for adding support for these SoCs, do the following changes.
-
-Use the minimum frequency of SPI clock to calculate the SPI
-controller's min_speed_hz, and the maximum frequency to calculate
-max_speed_hz.
-
-Apply the clock rate found by the .find_tclk_rate() to the found clock.
+Add support for loopback mode for debugging purposes, allowing us to
+test the SPI controller at the maximum SPI transfer clock without being
+limited by external wiring.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 ---
- drivers/spi/spi-rzv2h-rspi.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ drivers/spi/spi-rzv2h-rspi.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
-index e9d8ee919261..be45269e8853 100644
+index be45269e8853..da110efba971 100644
 --- a/drivers/spi/spi-rzv2h-rspi.c
 +++ b/drivers/spi/spi-rzv2h-rspi.c
-@@ -308,6 +308,7 @@ static u32 rzv2h_rspi_setup_clock(struct rzv2h_rspi_priv *rspi, u32 hz)
- 	struct rzv2h_rspi_best_clock best_clock = {
- 		.error = ULONG_MAX,
- 	};
-+	int ret;
+@@ -24,6 +24,7 @@
+ /* Registers */
+ #define RSPI_SPDR		0x00
+ #define RSPI_SPCR		0x08
++#define RSPI_SPPCR		0x0e
+ #define RSPI_SSLP		0x10
+ #define RSPI_SPBR		0x11
+ #define RSPI_SPSCR		0x13
+@@ -40,6 +41,9 @@
+ #define RSPI_SPCR_SCKASE	BIT(12)
+ #define RSPI_SPCR_SPE		BIT(0)
  
- 	rspi->info->find_tclk_rate(rspi->tclk, hz, RSPI_SPBR_SPR_MIN,
- 				   RSPI_SPBR_SPR_MAX, &best_clock);
-@@ -323,6 +324,10 @@ static u32 rzv2h_rspi_setup_clock(struct rzv2h_rspi_priv *rspi, u32 hz)
- 	if (!best_clock.clk_rate)
- 		return -EINVAL;
- 
-+	ret = clk_set_rate(best_clock.clk, best_clock.clk_rate);
-+	if (ret)
-+		return 0;
++/* Register SPPCR */
++#define RSPI_SPPCR_SPLP2	BIT(1)
 +
- 	rspi->use_pclk = best_clock.clk == rspi->pclk;
- 	rspi->spr = best_clock.spr;
- 	rspi->brdv = best_clock.brdv;
-@@ -426,8 +431,8 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct rzv2h_rspi_priv *rspi;
- 	struct clk_bulk_data *clks;
--	unsigned long tclk_rate;
- 	int irq_rx, ret, i;
-+	long tclk_rate;
+ /* Register SPBR */
+ #define RSPI_SPBR_SPR_MIN	0
+ #define RSPI_SPBR_SPR_PCLK_MIN	1
+@@ -345,6 +349,7 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
+ 	u8 bits_per_word;
+ 	u32 conf32;
+ 	u16 conf16;
++	u8 conf8;
  
- 	controller = devm_spi_alloc_host(dev, sizeof(*rspi));
- 	if (!controller)
-@@ -460,8 +465,6 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
- 	if (!rspi->tclk)
- 		return dev_err_probe(dev, -EINVAL, "Failed to get tclk\n");
+ 	/* Make sure SPCR.SPE is 0 before amending the configuration */
+ 	rzv2h_rspi_spe_disable(rspi);
+@@ -389,6 +394,10 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
+ 	/* Use SPCMD0 only */
+ 	writeb(0x0, rspi->base + RSPI_SPSCR);
  
--	tclk_rate = clk_get_rate(rspi->tclk);
--
- 	rspi->resets[0].id = "presetn";
- 	rspi->resets[1].id = "tresetn";
- 	ret = devm_reset_control_bulk_get_optional_exclusive(dev, RSPI_RESET_NUM,
-@@ -493,9 +496,23 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
++	/* Setup loopback */
++	conf8 = FIELD_PREP(RSPI_SPPCR_SPLP2, !!(spi->mode & SPI_LOOP));
++	writeb(conf8, rspi->base + RSPI_SPPCR);
++
+ 	/* Setup mode */
+ 	conf32 = FIELD_PREP(RSPI_SPCMD_CPOL, !!(spi->mode & SPI_CPOL));
+ 	conf32 |= FIELD_PREP(RSPI_SPCMD_CPHA, !!(spi->mode & SPI_CPHA));
+@@ -490,7 +499,7 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	controller->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH |
+-				SPI_LSB_FIRST;
++				SPI_LSB_FIRST | SPI_LOOP;
+ 	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
+ 	controller->prepare_message = rzv2h_rspi_prepare_message;
  	controller->unprepare_message = rzv2h_rspi_unprepare_message;
- 	controller->num_chipselect = 4;
- 	controller->transfer_one = rzv2h_rspi_transfer_one;
-+
-+	tclk_rate = clk_round_rate(rspi->tclk, 0);
-+	if (tclk_rate < 0) {
-+		ret = tclk_rate;
-+		goto quit_resets;
-+	}
-+
- 	controller->min_speed_hz = rzv2h_rspi_calc_bitrate(tclk_rate,
- 							   RSPI_SPBR_SPR_MAX,
- 							   RSPI_SPCMD_BRDV_MAX);
-+
-+	tclk_rate = clk_round_rate(rspi->tclk, ULONG_MAX);
-+	if (tclk_rate < 0) {
-+		ret = tclk_rate;
-+		goto quit_resets;
-+	}
-+
- 	controller->max_speed_hz = rzv2h_rspi_calc_bitrate(tclk_rate,
- 							   RSPI_SPBR_SPR_MIN,
- 							   RSPI_SPCMD_BRDV_MIN);
 -- 
 2.51.2
 
