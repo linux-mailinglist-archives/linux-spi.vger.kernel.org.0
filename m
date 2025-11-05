@@ -1,38 +1,39 @@
-Return-Path: <linux-spi+bounces-11002-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11003-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E526EC34BC1
-	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:18:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC1EC34C54
+	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:22:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E84B188856C
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:16:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E1E24FE10A
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E2F2FF169;
-	Wed,  5 Nov 2025 09:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00C02FBE17;
+	Wed,  5 Nov 2025 09:14:57 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 617272FF164;
-	Wed,  5 Nov 2025 09:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5292FB0B3;
+	Wed,  5 Nov 2025 09:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762334091; cv=none; b=RNWpXcNB1rTaZoTsrSbqX5jaa7JD5Apz3f4T5MO0D5JN2m5AA9xBAD7joCZ3NeQZmXXBQEnRvXDFEzOQPAvteFsRy2JE6upp3XfMUFrjs9NttxIh5czPc3tfP2yGokGKJiA02kn+3WtoQOKK7YS4KI5gtLosGWxi6JA4c9mtr80=
+	t=1762334097; cv=none; b=NDDVezQc0sjPNHhTOPaX2XeM9kG16rdz5f/Li3rgd73/F/LCNaFEdXm0iEpHXrLn2MhiOhtFxdZrUk4MvHcsFnmd/zgVjfYdRVElDyX6Ur+2HYNNAn51JmAaC69pQba+d4+NSZRoQk9KGwR9GtA2+UlaVlvVZq20BAswpn8mMBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762334091; c=relaxed/simple;
-	bh=eL0wacU/2NLr6zm6Ej+O3DjycwAJ/fCpJmPu54OPFlI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n/Bo5mremd04QIi8EDk/8XVyw+c91EETC8ff7k7h6yuks5SWso6TpdbpB5xQd0LS00L3chZ6Inh7yGRrwoI6GSIt3tiEEdKWeTQhE4KCu1eU12Qwtg81VrOvS5CuI7y6Ot67hRURwjBPjENpx7VoNt4ipD6kV5hJP8prgPCQWKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
+	s=arc-20240116; t=1762334097; c=relaxed/simple;
+	bh=Jfax/xSrCc7T5z8buenJ8u4hsU/I9vhXGH9wG/pBm2s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NNNBWKag4q2zuEzNLLeWF7DhGAyuvybIOsQccSYyvpZec/gYn1MT4cMpBHR/YnCAuQUcANXtAjBafx7LzisIgnusc6YFJiPMSVOxm1q55hBOcfHOQVzKzwYmh/ti24lHetK3/Lpo5kvAL144Q7TFTnRAM45bbdZtNsfcnAxStZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: DLeC+zhwSTOm5VfOxc1wQQ==
-X-CSE-MsgGUID: ocVJPaBrS3yveVlD/YAymA==
+X-CSE-ConnectionGUID: 0kFHU24GSxe0wPeD3Hn+ow==
+X-CSE-MsgGUID: tj173U3NQGOEowsgneISWw==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 05 Nov 2025 18:14:41 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 05 Nov 2025 18:14:48 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.38])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 686E44175EC6;
-	Wed,  5 Nov 2025 18:14:36 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0DCF94175ED8;
+	Wed,  5 Nov 2025 18:14:42 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: 
 Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -51,10 +52,12 @@ Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 00/14] Add RSPI support for RZ/T2H and RZ/N2H
-Date: Wed,  5 Nov 2025 11:13:44 +0200
-Message-ID: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 01/14] clk: renesas: r9a09g077: add SPI module clocks
+Date: Wed,  5 Nov 2025 11:13:45 +0200
+Message-ID: <20251105091401.1462985-2-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
+References: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,39 +66,80 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compared to the previously supported RZ/V2H, the Renesas RZ/T2H
-(R9A09G077) and RZ/N2H (R9A09G087) SoCs have a smaller FIFO, no resets,
-and only two clocks: PCLKSPIn and PCLK. PCLKSPIn, being the clock from
-which the SPI transfer clock is generated, is the equivalent of the TCLK
-from V2H. They also support generating the SPI transfer clock from PCLK.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have four SPI
+peripherals, each with their own clock divider, which divides PLL4 by
+either 24, 25, 30 or 32, similar to the SCI peripheral.
 
-V2:
- * fix missing unwind goto quit_resets
- * add resets: false and reset-names: false
+The dividers feed into the usual module clocks.
 
-Cosmin Tanislav (14):
-  clk: renesas: r9a09g077: add SPI module clocks
-  spi: rzv2h-rspi: make resets optional
-  spi: rzv2h-rspi: make FIFO size chip-specific
-  spi: rzv2h-rspi: make clocks chip-specific
-  spi: rzv2h-rspi: move register writes out of rzv2h_rspi_setup_clock()
-  spi: rzv2h-rspi: avoid recomputing transfer frequency
-  spi: rzv2h-rspi: make transfer clock rate finding chip-specific
-  spi: rzv2h-rspi: add support for using PCLK for transfer clock
-  spi: rzv2h-rspi: add support for variable transfer clock
-  spi: rzv2h-rspi: add support for loopback mode
-  dt-bindings: spi: renesas,rzv2h-rspi: document RZ/T2H and RZ/N2H
-  spi: rzv2h-rspi: add support for RZ/T2H and RZ/N2H
-  arm64: dts: renesas: r9a09g077: Add SPIs support
-  arm64: dts: renesas: r9a09g087: Add SPIs support
+Add them all.
 
- .../bindings/spi/renesas,rzv2h-rspi.yaml      |  65 +++-
- arch/arm64/boot/dts/renesas/r9a09g077.dtsi    |  72 ++++
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi    |  72 ++++
- drivers/clk/renesas/r9a09g077-cpg.c           |  22 ++
- drivers/spi/spi-rzv2h-rspi.c                  | 339 +++++++++++++++---
- 5 files changed, 501 insertions(+), 69 deletions(-)
+Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+---
+ drivers/clk/renesas/r9a09g077-cpg.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
+diff --git a/drivers/clk/renesas/r9a09g077-cpg.c b/drivers/clk/renesas/r9a09g077-cpg.c
+index 79083165537c..0f61e0f09697 100644
+--- a/drivers/clk/renesas/r9a09g077-cpg.c
++++ b/drivers/clk/renesas/r9a09g077-cpg.c
+@@ -54,6 +54,11 @@
+ #define DIVSCI3ASYNC	CONF_PACK(SCKCR3, 12, 2)
+ #define DIVSCI4ASYNC	CONF_PACK(SCKCR3, 14, 2)
+ 
++#define DIVSPI0ASYNC	CONF_PACK(SCKCR3, 0, 2)
++#define DIVSPI1ASYNC	CONF_PACK(SCKCR3, 2, 2)
++#define DIVSPI2ASYNC	CONF_PACK(SCKCR3, 4, 2)
++#define DIVSPI3ASYNC	CONF_PACK(SCKCR2, 16, 2)
++
+ #define SEL_PLL		CONF_PACK(SCKCR, 22, 1)
+ 
+ 
+@@ -94,6 +99,10 @@ enum clk_ids {
+ 	CLK_SCI3ASYNC,
+ 	CLK_SCI4ASYNC,
+ 	CLK_SCI5ASYNC,
++	CLK_SPI0ASYNC,
++	CLK_SPI1ASYNC,
++	CLK_SPI2ASYNC,
++	CLK_SPI3ASYNC,
+ 
+ 	/* Module Clocks */
+ 	MOD_CLK_BASE,
+@@ -154,6 +163,15 @@ static const struct cpg_core_clk r9a09g077_core_clks[] __initconst = {
+ 	DEF_DIV(".sci5async", CLK_SCI5ASYNC, CLK_PLL4D1, DIVSCI5ASYNC,
+ 		dtable_24_25_30_32),
+ 
++	DEF_DIV(".spi0async", CLK_SPI0ASYNC, CLK_PLL4D1, DIVSPI0ASYNC,
++		dtable_24_25_30_32),
++	DEF_DIV(".spi1async", CLK_SPI1ASYNC, CLK_PLL4D1, DIVSPI1ASYNC,
++		dtable_24_25_30_32),
++	DEF_DIV(".spi2async", CLK_SPI2ASYNC, CLK_PLL4D1, DIVSPI2ASYNC,
++		dtable_24_25_30_32),
++	DEF_DIV(".spi3async", CLK_SPI3ASYNC, CLK_PLL4D1, DIVSPI3ASYNC,
++		dtable_24_25_30_32),
++
+ 	/* Core output clk */
+ 	DEF_DIV("CA55C0", R9A09G077_CLK_CA55C0, CLK_SEL_CLK_PLL0, DIVCA55C0,
+ 		dtable_1_2),
+@@ -192,6 +210,9 @@ static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst = {
+ 	DEF_MOD("sci4fck", 12, CLK_SCI4ASYNC),
+ 	DEF_MOD("iic0", 100, R9A09G077_CLK_PCLKL),
+ 	DEF_MOD("iic1", 101, R9A09G077_CLK_PCLKL),
++	DEF_MOD("spi0", 104, CLK_SPI0ASYNC),
++	DEF_MOD("spi1", 105, CLK_SPI1ASYNC),
++	DEF_MOD("spi2", 106, CLK_SPI2ASYNC),
+ 	DEF_MOD("adc0", 206, R9A09G077_CLK_PCLKH),
+ 	DEF_MOD("adc1", 207, R9A09G077_CLK_PCLKH),
+ 	DEF_MOD("adc2", 225, R9A09G077_CLK_PCLKM),
+@@ -204,6 +225,7 @@ static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst = {
+ 	DEF_MOD("gmac2", 417, R9A09G077_CLK_PCLKAM),
+ 	DEF_MOD("sci5fck", 600, CLK_SCI5ASYNC),
+ 	DEF_MOD("iic2", 601, R9A09G077_CLK_PCLKL),
++	DEF_MOD("spi3", 602, CLK_SPI3ASYNC),
+ 	DEF_MOD("sdhi0", 1212, R9A09G077_CLK_PCLKAM),
+ 	DEF_MOD("sdhi1", 1213, R9A09G077_CLK_PCLKAM),
+ };
 -- 
 2.51.2
 
