@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-11030-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11031-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E9C8C3533D
-	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 11:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39E36C3534C
+	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 11:49:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AFAB567224
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 10:45:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7155D4200DF
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 10:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B96A3090C6;
-	Wed,  5 Nov 2025 10:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A06830B52F;
+	Wed,  5 Nov 2025 10:44:00 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7AF308F30;
-	Wed,  5 Nov 2025 10:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15037307AC8;
+	Wed,  5 Nov 2025 10:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762339432; cv=none; b=IfsnVuqtRWsznNEjvatOPwhwtzLo/YsTtkuFPy90sLL5oJbd01CqhTDi117WrWKYSzJ9Q9taU37mnhZwUpObAT1bir4M+tTyItPLzyFB4w+RUpFcqZsLWi+1Ypwa2/ie1d6fpD39ekPy7Qcw8oyiGjaTqYXYwzW++rsosxxlv2k=
+	t=1762339440; cv=none; b=udSZpYGhrigMQ6CfSMymty2RhIeLLIUsKhWieqmBSOIBkgZ+B4vhk4bCDI2aPMR9xa09rXpc6BmIGs4LpDM2IgT3E+KvrXNWPuT8JFGiUqELT7FpZZAI7KRBlH3T2jdS2Dj7IZEJtxm59gXZS8IepGFHPM6I2qlE79lALIvzrmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762339432; c=relaxed/simple;
-	bh=UganWNkeKrLky13PVsdX6fI+hy19J24abS6vT+14ZUs=;
+	s=arc-20240116; t=1762339440; c=relaxed/simple;
+	bh=et5x65Xq8bvIrKcyd7rqaqh+jC2DI9Dy1zV0u/idnJo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JN5OAOLARZng4znSjp0ivGPWW9KS/w30hpFM0TwiV7gjfJtyzG8QGaH4IBi/IT3OcX2jDJI2JEpsEQnLR1kQWrtPOPhB+awKwb0zsbKahToEDcA2ZgsEpGlQ1Q9ZZ8A/WvrwA09pVHY03FfOmrVtcwSgHi10Ytn1vwLi9dVRQ7Q=
+	 MIME-Version; b=E+n84KXqO9Jejyu38AIgqcxmVo6L0l1ZyvRCjec7PDARr0T3XTmzTK9Zp71+h/h/xRGHgTCI2l4/EHxzgnggZaCjMMvysp8mlJMc2f5pIamR/oKhBaxA7RCnmN50MMFJ9I6bCnLuM2t5XWKqhipRo0jZ3/QyvR7SutLrF7S971M=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: blj/yv6xSu+6BZwSsbL+jQ==
-X-CSE-MsgGUID: oA9iNA2RS56PnU3wUS70dw==
+X-CSE-ConnectionGUID: 6J/BdRNyQWKvaX7V07jlfA==
+X-CSE-MsgGUID: sSESA+aVQnC4GMnVwDwf1A==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 05 Nov 2025 19:43:50 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 05 Nov 2025 19:43:57 +0900
 Received: from demon-pc.localdomain (unknown [10.226.93.82])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id B3E1C4001DCB;
-	Wed,  5 Nov 2025 19:43:45 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id A40B24001DCB;
+	Wed,  5 Nov 2025 19:43:52 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -50,10 +50,11 @@ Cc: linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
-	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH v3 10/14] spi: rzv2h-rspi: add support for loopback mode
-Date: Wed,  5 Nov 2025 12:41:47 +0200
-Message-ID: <20251105104151.1489281-11-cosmin-gabriel.tanislav.xa@renesas.com>
+	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 11/14] dt-bindings: spi: renesas,rzv2h-rspi: document RZ/T2H and RZ/N2H
+Date: Wed,  5 Nov 2025 12:41:48 +0200
+Message-ID: <20251105104151.1489281-12-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251105104151.1489281-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251105104151.1489281-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -65,65 +66,122 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for loopback mode for debugging purposes, allowing us to
-test the SPI controller at the maximum SPI transfer clock without being
-limited by external wiring.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have four SPI
+peripherals.
+
+Compared to the previously supported RZ/V2H, these SoCs have a smaller
+FIFO, no resets, and only two clocks: PCLKSPIn and PCLK. PCLKSPIn,
+being the clock from which the SPI transfer clock is generated, is the
+equivalent of the TCLK from V2H.
+
+Document them, and use RZ/T2H as a fallback for RZ/N2H as the SPIs are
+entirely compatible.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- drivers/spi/spi-rzv2h-rspi.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ .../bindings/spi/renesas,rzv2h-rspi.yaml      | 65 ++++++++++++++++---
+ 1 file changed, 55 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
-index be45269e8853..da110efba971 100644
---- a/drivers/spi/spi-rzv2h-rspi.c
-+++ b/drivers/spi/spi-rzv2h-rspi.c
-@@ -24,6 +24,7 @@
- /* Registers */
- #define RSPI_SPDR		0x00
- #define RSPI_SPCR		0x08
-+#define RSPI_SPPCR		0x0e
- #define RSPI_SSLP		0x10
- #define RSPI_SPBR		0x11
- #define RSPI_SPSCR		0x13
-@@ -40,6 +41,9 @@
- #define RSPI_SPCR_SCKASE	BIT(12)
- #define RSPI_SPCR_SPE		BIT(0)
+diff --git a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+index ab27fefc3c3a..a3940ec025e2 100644
+--- a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
++++ b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
+@@ -9,12 +9,15 @@ title: Renesas RZ/V2H(P) Renesas Serial Peripheral Interface (RSPI)
+ maintainers:
+   - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
  
-+/* Register SPPCR */
-+#define RSPI_SPPCR_SPLP2	BIT(1)
+-allOf:
+-  - $ref: spi-controller.yaml#
+-
+ properties:
+   compatible:
+-    const: renesas,r9a09g057-rspi # RZ/V2H(P)
++    oneOf:
++      - enum:
++          - renesas,r9a09g057-rspi # RZ/V2H(P)
++          - renesas,r9a09g077-rspi # RZ/T2H
++      - items:
++          - const: renesas,r9a09g087-rspi # RZ/N2H
++          - const: renesas,r9a09g077-rspi # RZ/T2H
+ 
+   reg:
+     maxItems: 1
+@@ -36,13 +39,12 @@ properties:
+       - const: tx
+ 
+   clocks:
++    minItems: 2
+     maxItems: 3
+ 
+   clock-names:
+-    items:
+-      - const: pclk
+-      - const: pclk_sfr
+-      - const: tclk
++    minItems: 2
++    maxItems: 3
+ 
+   resets:
+     maxItems: 2
+@@ -62,12 +64,55 @@ required:
+   - interrupt-names
+   - clocks
+   - clock-names
+-  - resets
+-  - reset-names
+   - power-domains
+   - '#address-cells'
+   - '#size-cells'
+ 
++allOf:
++  - $ref: spi-controller.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,r9a09g057-rspi
++    then:
++      properties:
++        clocks:
++          minItems: 3
++          maxItems: 3
 +
- /* Register SPBR */
- #define RSPI_SPBR_SPR_MIN	0
- #define RSPI_SPBR_SPR_PCLK_MIN	1
-@@ -345,6 +349,7 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
- 	u8 bits_per_word;
- 	u32 conf32;
- 	u16 conf16;
-+	u8 conf8;
- 
- 	/* Make sure SPCR.SPE is 0 before amending the configuration */
- 	rzv2h_rspi_spe_disable(rspi);
-@@ -389,6 +394,10 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
- 	/* Use SPCMD0 only */
- 	writeb(0x0, rspi->base + RSPI_SPSCR);
- 
-+	/* Setup loopback */
-+	conf8 = FIELD_PREP(RSPI_SPPCR_SPLP2, !!(spi->mode & SPI_LOOP));
-+	writeb(conf8, rspi->base + RSPI_SPPCR);
++        clock-names:
++          items:
++            - const: pclk
++            - const: pclk_sfr
++            - const: tclk
 +
- 	/* Setup mode */
- 	conf32 = FIELD_PREP(RSPI_SPCMD_CPOL, !!(spi->mode & SPI_CPOL));
- 	conf32 |= FIELD_PREP(RSPI_SPCMD_CPHA, !!(spi->mode & SPI_CPHA));
-@@ -490,7 +499,7 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
- 	}
++      required:
++        - resets
++        - reset-names
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - renesas,r9a09g077-rspi
++              - renesas,r9a09g087-rspi
++    then:
++      properties:
++        clocks:
++          minItems: 2
++          maxItems: 2
++
++        clock-names:
++          items:
++            - const: pclk
++            - const: pclkspi
++
++        resets: false
++        reset-names: false
++
+ unevaluatedProperties: false
  
- 	controller->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH |
--				SPI_LSB_FIRST;
-+				SPI_LSB_FIRST | SPI_LOOP;
- 	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
- 	controller->prepare_message = rzv2h_rspi_prepare_message;
- 	controller->unprepare_message = rzv2h_rspi_unprepare_message;
+ examples:
 -- 
 2.51.2
 
