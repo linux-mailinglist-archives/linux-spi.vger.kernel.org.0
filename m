@@ -1,182 +1,107 @@
-Return-Path: <linux-spi+bounces-11055-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11056-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 814F7C36D70
-	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 17:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBA25C36D01
+	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 17:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F4376659AF
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 16:12:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B5D96829CD
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 16:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0348335564;
-	Wed,  5 Nov 2025 16:12:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF422DEA72;
+	Wed,  5 Nov 2025 16:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="B3XxEGBN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HPNjt3AB"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010068.outbound.protection.outlook.com [52.101.56.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201B33346BD;
-	Wed,  5 Nov 2025 16:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762359140; cv=fail; b=Vh5AhVzbA+A9HSzHanPzpVa/YXAMd4fkvcer5tXFCoy5CPh6SCY5iVUOwQuionGqedtXU/n8WXAn4pIBK02jZQ8a60SJ6SbuLSJ7xhCrh7IsRTRZ7CrK0HaI4kPo1NFKISmeZYOSZ+dJeF0CaXifEoq6G/3x1MEnl8l+Zec0dnY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762359140; c=relaxed/simple;
-	bh=rXLbcLyMTI63Kmkb2h/Z8n11C5dd4MMgafDQ75DgmlY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NacTrXur1VEiuxZaBCFQlTRZ3Rg+PYK7I+STVnaPz8PWWDkRRTP35b54W3WN2ktiSX2jY6A56efYymUsROu7rQgBiQaZoO45CYi09TjAwHQ3+7YEwYt1tfrSY1q57v5lpXJNM1tZDGGJwsRMoWIpGLB9APHvJQoLhSLcagdwvhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=B3XxEGBN; arc=fail smtp.client-ip=52.101.56.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wsFkHZ8L2DwO4hWeyezk6UfSgcrw10wycdth8dyGr1AvPcqkxTxOOlcSKllVXzlWeUw0VzSO6mTEKK25Ge3lwH8qFPt667k3tp7jrfMO2OPMTII1KFdoxCvOtBtcLTtGdIWwixrJNkFoXhSUGep4pmF6SCelBQjNZnYy3+XrkC7IkusCfS7gX9Rm2w12fFaSSYuokFaaEmZ/ZvacErl/bWHI3XEKIARIPsXnsT6qnqm3E3uXyF5nWxu6X47o4zw8SHW83Ilquj3Bn4PlH0B8RqXSz74UzjO05ZAl8kIYd8jR/HHhDXQsCai4hg2MFe5r9tyaasdhjr/SqX6Jc96BqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=feARJwxnvGP0I3HbLSmydcDlRPqxwkDIDzTx33ZT2pY=;
- b=Nk+S4ABW6hAdjScrgYgz7QAlNvGBCjGgKKt+u8AQM0k2lWpeynh/i4isiAcvUckg1DeQav8DhEZ7KzOpTooiMkLS070GQyh4TwGbjIy/0bkwZfFPnja4a2sWaala5TOkZps33bhIkmWcRWCXEubtgeepzkHlBYfcZuV4aweZPi8kOggMooAu5ccRAcdhAjd2j176HzvaODsNYIqXcX/mCTNMTHYbtJcrn6rvfkulfs1yVgYtr071PD1Juby8+7jjf7NW6ig9ZInj0LBcxmE+sqzUPgGDP0yJOXgpAJHLgPa5sVS31o+Ohh2rTji68n9mvXeVBciPUYdBZF9vz74HzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=feARJwxnvGP0I3HbLSmydcDlRPqxwkDIDzTx33ZT2pY=;
- b=B3XxEGBNSJDlEVsIT11Qkw5y0OdLF5M+umNMwTLqtg6RaOC1l5XNM8Oq0AwVHPlnLNKnloxat+SH48GvpBxGm8+ZoCuNsPcUQZDDMj6R9m7MeS8scNKswpMEGgiGHfikwddOg3S3v1B7Re6YwEwyEz6x9XyKr3iWeXz93HyZoAQ=
-Received: from PH0P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:d3::34)
- by LV3PR10MB7940.namprd10.prod.outlook.com (2603:10b6:408:20f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.8; Wed, 5 Nov
- 2025 16:12:03 +0000
-Received: from SJ1PEPF000023D7.namprd21.prod.outlook.com
- (2603:10b6:510:d3:cafe::a5) by PH0P220CA0020.outlook.office365.com
- (2603:10b6:510:d3::34) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.8 via Frontend Transport; Wed, 5
- Nov 2025 16:12:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
-Received: from flwvzet200.ext.ti.com (198.47.21.194) by
- SJ1PEPF000023D7.mail.protection.outlook.com (10.167.244.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.0 via Frontend Transport; Wed, 5 Nov 2025 16:12:02 +0000
-Received: from DFLE214.ent.ti.com (10.64.6.72) by flwvzet200.ext.ti.com
- (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
- 2025 10:11:55 -0600
-Received: from DFLE208.ent.ti.com (10.64.6.66) by DFLE214.ent.ti.com
- (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 5 Nov
- 2025 10:11:55 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE208.ent.ti.com
- (10.64.6.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Wed, 5 Nov 2025 10:11:55 -0600
-Received: from a-dutta.dhcp.ti.com (a-dutta.dhcp.ti.com [10.24.68.237])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5A5GBldM3979508;
-	Wed, 5 Nov 2025 10:11:53 -0600
-From: Anurag Dutta <a-dutta@ti.com>
-To: <broonie@kernel.org>, <khairul.anuar.romli@altera.com>, <vigneshr@ti.com>
-CC: <u-kumar1@ti.com>, <s-k6@ti.com>, <linux-spi@vger.kernel.org>,
-	<gehariprasath@ti.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] spi: spi-cadence-quadspi: Remove duplicate pm_runtime_put_autosuspend() call
-Date: Wed, 5 Nov 2025 21:41:46 +0530
-Message-ID: <20251105161146.2019090-3-a-dutta@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251105161146.2019090-1-a-dutta@ti.com>
-References: <20251105161146.2019090-1-a-dutta@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA50631DD97
+	for <linux-spi@vger.kernel.org>; Wed,  5 Nov 2025 16:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762359472; cv=none; b=THK/C2jO1lL3ZO/DfNI37FjwEz71Uoevfn7oXRd6LHb1pOHZZOi7Ha2hP4cMm7SSNXTO4IQPkIo8Vq8S/yAjSO/YWSIFU4qUVKtKj9NC05XSnSkDQd808nY0SESDXCrFiP3MkRyRPypzTnURN8AEZQ2jCtaoXx7uGAJ1MxCO8QU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762359472; c=relaxed/simple;
+	bh=PhBGQ6nFBF+atfYcqmQvtOjXbckgxH+TUDCypzrRKAI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Aiw7Pacx5XtuVvgLitzxTLs8FiACz5UikOeS2KamTlaiXGkXYCIxyh/wJjgOBCXhmcN8XdXwlHwQZFjtZiSGqYKNlJ3eC3IeErbuoEcNZnH0mG0X84NmToRdZQXK4AT1SSaH5u3HFsh9lU0r4M795b358LpF3V7H9V7tyiIaYLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HPNjt3AB; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-640aa1445c3so6763244a12.1
+        for <linux-spi@vger.kernel.org>; Wed, 05 Nov 2025 08:17:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762359469; x=1762964269; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PhBGQ6nFBF+atfYcqmQvtOjXbckgxH+TUDCypzrRKAI=;
+        b=HPNjt3ABeTNFI/TyciEKXRK35ZezkC3AsGqlDo6n75FNr3SyyPVc97QA+uQzfVES/0
+         3blDn5Od4rYllVH1bpYnK9juCfJvOXi2+hypWX2VS12sFJJSu4n3In/x+eGhVFQG4Zk3
+         lw7W0/YVZaRF5NNV8HZN+2whZJ8b0JIMbZSLTOJxL4h0F2ofa3twxAiiIiNbr/1E9WmX
+         aAH/Uy2ZHuixcfjRjfUkWaVb/eoX01aX5Rirc704MOdKHc1IfoFIJys9KPpFdns+q4zl
+         2A85fe2eNRdo85LHvtR0xSmjoqQZ/piAHJw+zY1pnXn32vNmDglxo5Hn9XU+8mscfdWu
+         tNLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762359469; x=1762964269;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PhBGQ6nFBF+atfYcqmQvtOjXbckgxH+TUDCypzrRKAI=;
+        b=Aqw05pTycWvSthB8jEu3TW4AhnRBzztb+SO3zT66Yu2tEIm6hSdKdSlNBXQxMPQ2AX
+         gLT1pr/mkc4bhfDYt3F2FubVVzy2fn0bGufvCwpmsvZEbDyhFLJOmrlUXk5tegASjbB9
+         RKUTVtqNIHLjciAGpiFoBw0ICi13ee73hCWo6UOfrHBAD+Bh2fYLyNw73Mm8DCxOY4sn
+         yhPVVk/BmMLvNM9DG7AxcA0BAMJisZW7G2JUmKDba3SSg39D/pxYLmUJ5BMkDDmsw/to
+         PCdJGYZqWzmQn61CgyzD8rdwPrPBsAgoDh67GgEpkmIRE4zA6arHRy9WFkQKFoz3BeTq
+         XN0w==
+X-Forwarded-Encrypted: i=1; AJvYcCUJTqMfk/RrGoxjdCXJpEoyqGgdjEZJWhrrzGcB46MJqWWf+Nt++vKThSLnfUiCv9P7dNW1NV0tSuM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywn71IN2xu2I+9fNC6oZNjeGbjtCW8zFjAYFZW8D6vkBE2ljY+K
+	RLdiobxW70eyZRHzAKCLOb7gRtFhgoeyBHubAdcwIpfbn39MRtZ3Q4SGgfTkDuoKZLM=
+X-Gm-Gg: ASbGncvKhuo8tlRZkbxtWXTIjXQyYysbks55sgrv4ELZzDMiX1LjqmrhNYMOdh+W5AM
+	p79JwOS3ioWPS8pfIYsrPRKpa+9yEcz/xd7Bz0IQS97B0vyaA7G+mRcgBz/M/Z1HcVQ4cajrshw
+	MS+mGUog6B00ciexGuKQHQ2//y4bO/9rlJV/iNHdokooeX4sN16Wzx2wIpYCKKCjjiSGJgn6BcC
+	J3cBHThnyX4LqQuNTV4Ry3iEv8LUciFd2k5mWHnnLvQeJbMHxf+UvF90XBua37XKZwm/JPXuInx
+	s9KvmHdag5HVeCoBVVOe6N+7eAGsT/5W+iihP/mDUHibn1/d/h+xccuwXnoCUwEO6gzYCDzSDPw
+	SQ6El3DhW1D/hNWK2jqDnw6KgCX9GMkZZiTlV9YYFpeTWVan4BdMC8I2mrm9lzmFSiBqhms95ny
+	Jm5d4FEhQZWgsDCymQq9SIfsE=
+X-Google-Smtp-Source: AGHT+IFe9VgZeBsm/n9mopNlUCpQdXSC+eyg2Nz3OAP18FTVxYUDNKqmICDXSKw1lMgKMLixqXfVow==
+X-Received: by 2002:a05:6402:51d1:b0:640:c3c4:45f3 with SMTP id 4fb4d7f45d1cf-6410588dba0mr3398799a12.6.1762359469142;
+        Wed, 05 Nov 2025 08:17:49 -0800 (PST)
+Received: from [172.20.148.132] ([87.213.113.147])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-640e6a5cd09sm4921331a12.20.2025.11.05.08.17.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Nov 2025 08:17:48 -0800 (PST)
+Message-ID: <7b10d3f9-40fe-402e-996e-81c6684c20a0@linaro.org>
+Date: Wed, 5 Nov 2025 17:17:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D7:EE_|LV3PR10MB7940:EE_
-X-MS-Office365-Filtering-Correlation-Id: 190b7282-818a-4656-24a8-08de1c860e36
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|34020700016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?TyX34dbHcvKYz7bqewtN1W7SpIRmy4QxlQ+Xe6GQ7KSScMELYxfzUj7iaY+5?=
- =?us-ascii?Q?hqGnMuk//stoO9cgtzO/QiNigeI4kMWwazvMsutlZyR8ivbj1XvWL908oZ8q?=
- =?us-ascii?Q?OmAI8+r1qA4xjNXs5fBdvQZz6k2kBENAXE3ECfA0zBNPRtCInP9ZTKXeQG5g?=
- =?us-ascii?Q?nQXUN5dbPQTixOsLGsR7GzEEv8hRcgXGIY2NGGX6loSBw+iYmpcosGNLTKOz?=
- =?us-ascii?Q?WRHYudQElFmBRB87ewe/1huNAX34UFAsxjQdodL+fdPzz5SvI7KlQG1RIEoV?=
- =?us-ascii?Q?VAwLqJOTDq+uw2ZZTRxbxton3lkk/QbvEIhVZk9HmiYMpLhL2nhavrcvwSll?=
- =?us-ascii?Q?WAODRqGR70ynOqhHM0rC2wHrj9UxSu4EZTUc+iR+5O7oBLfoU9febm04IN9M?=
- =?us-ascii?Q?0wcrEh1AOZKdjznHQU2ev21IzSsyndoFfy27ekGcHN6eBNrjnycEK2tYSfum?=
- =?us-ascii?Q?uYLlHELgd+HvhNUBgjo2wwj1G123IVQO3S04Gsyy27uz7qA6rY/9tZhewXOy?=
- =?us-ascii?Q?ydInkcnZTCa+ChRvPKXagtiOnCcalR3LGa7Q8Pq2LrSI9sJiGXNsl1c8OeCw?=
- =?us-ascii?Q?jEsvQXIbAko2oobP1J7Y04hTxnSFaKb3gaFfvMB7POVFIPuCWNP4Z7K6CYM3?=
- =?us-ascii?Q?d9d71XSqawn03tAbQSRD/pMfryOlvZRz1cBBNRdzOnjJqyrljHxQ87rZSg3z?=
- =?us-ascii?Q?CnA0dRhIkUCdLeiF3nGOaScQ2tgKtCc1LBLR9Np9ql3NAVJaQJ3zE921DKIV?=
- =?us-ascii?Q?bZXFyKqgAEhsl6ZCH+V2Fr1EL/+tSslcDjlksK95xduslaWUNrZRZpsV66hb?=
- =?us-ascii?Q?4aW4HG7fptEV1y9+3/SHDI0JHRt4X0dvrlZcuHOh4Wrgw/6NcOpLa6JdLKc0?=
- =?us-ascii?Q?mCMBR8MhBGtdCrd4sFgqRbFHRJ5j4Aojx4Y+hrDKE9+o/hmNBQWEnFWLz98e?=
- =?us-ascii?Q?XUkbEMfuQaQfHLdtpbzIsZtS2uxgfuLXbo3yPPuKD8qjXDtB0yg6jbGgCxVn?=
- =?us-ascii?Q?mxagRNaBqV+PmNLdbjlDqMgG3jRfwYOCxYB067ynD399zxQg/XfhxYbX72UL?=
- =?us-ascii?Q?bPo9wIxki++4QBAIC8N8ee/DnGVbyHuiDJkk05kMGV8m3gCzRfSGcCMw2oIJ?=
- =?us-ascii?Q?GZyrA7lKlPVL0/XfouXOjWgDnAh6vvOTWH9P8OpPDF3tcQHJMn0ntYa6Itph?=
- =?us-ascii?Q?E/FytjWHuaprvegxw10OfaytIFQBitjO368keOwKGJt62w86JEMHVthdZQ7j?=
- =?us-ascii?Q?i/90yhCLemuUDXFDEDvMBsaBhXgBQVHw2KbQTsb8mYjcaE4cVewV5HuwHehq?=
- =?us-ascii?Q?oFyh3N006rzQvjaezzTyqFTkhWCBwJW++AvQ7513g64M3TD2MlDX8HfBtEfY?=
- =?us-ascii?Q?hrRMSXB7O0a+SkKzdPUDhA9nGg/fyvjW+K7jTk0rDbM6q6HTuXWH99vkUMQz?=
- =?us-ascii?Q?cP5vYkHGR0//1OqCLCzp1MIggdrpzCD+SCqO5iN1sOOAeqiGVvs5uKpsl7lF?=
- =?us-ascii?Q?QEWtxmYk4Q8POYRLi0vr2+fgObTz67QAIyHPHS5XdF3e61uzI3cYw2bDSTq1?=
- =?us-ascii?Q?olUfiSUtnpfT7NGhjNg=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(34020700016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 16:12:02.1472
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 190b7282-818a-4656-24a8-08de1c860e36
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023D7.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR10MB7940
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 09/28] mtd: spinand: Create an array of operation
+ templates
+To: Miquel Raynal <miquel.raynal@bootlin.com>, Mark Brown
+ <broonie@kernel.org>, Richard Weinberger <richard@nod.at>,
+ Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mtd@lists.infradead.org
+References: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
+ <20251031-winbond-v6-17-rc1-oddr-v1-9-be42de23ebf1@bootlin.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <20251031-winbond-v6-17-rc1-oddr-v1-9-be42de23ebf1@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Fix runtime PM usage count underflow caused by calling
-pm_runtime_put_autosuspend() twice with only one corresponding
-pm_runtime_get_noresume() call. This triggers the warning:
-"Runtime PM usage count underflow!"
+I like it!
 
-Remove the duplicate put call to balance the runtime PM reference
-counting.
-
-Fixes: 30dbc1c8d50f ("spi: cadence-qspi: defer runtime support on socfpga if reset bit is enabled")
-Signed-off-by: Anurag Dutta <a-dutta@ti.com>
----
- drivers/spi/spi-cadence-quadspi.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 56906dc76b34..8e0df08609c0 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -2012,7 +2012,6 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
- 
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
--		pm_runtime_put_autosuspend(dev);
- 		pm_runtime_mark_last_busy(dev);
- 		pm_runtime_put_autosuspend(dev);
- 	}
--- 
-2.34.1
-
+Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
