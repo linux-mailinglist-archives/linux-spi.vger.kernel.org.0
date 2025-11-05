@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-11003-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11004-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADC1EC34C54
-	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5394FC34C6F
+	for <lists+linux-spi@lfdr.de>; Wed, 05 Nov 2025 10:22:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E1E24FE10A
-	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:16:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8E514FE61A
+	for <lists+linux-spi@lfdr.de>; Wed,  5 Nov 2025 09:16:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00C02FBE17;
-	Wed,  5 Nov 2025 09:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D593002B0;
+	Wed,  5 Nov 2025 09:15:00 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5292FB0B3;
-	Wed,  5 Nov 2025 09:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF7A2FFDD7;
+	Wed,  5 Nov 2025 09:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762334097; cv=none; b=NDDVezQc0sjPNHhTOPaX2XeM9kG16rdz5f/Li3rgd73/F/LCNaFEdXm0iEpHXrLn2MhiOhtFxdZrUk4MvHcsFnmd/zgVjfYdRVElDyX6Ur+2HYNNAn51JmAaC69pQba+d4+NSZRoQk9KGwR9GtA2+UlaVlvVZq20BAswpn8mMBY=
+	t=1762334100; cv=none; b=oOG3b1pjuf1xIYqV4MUAATe18YszgYSQPfYf8pe6mTVxQoxJCT0ryZEiqqhw+RC+oyEs91bNezlZJqd4MIGFrRav9UWk/I5E3EpDuZCLV9mEENGGNuxTaF9IMP5uOXPq4lEtPLrsVqzYncG0QdyY/k9j9ji7FXtwBUyyx6iJdbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762334097; c=relaxed/simple;
-	bh=Jfax/xSrCc7T5z8buenJ8u4hsU/I9vhXGH9wG/pBm2s=;
+	s=arc-20240116; t=1762334100; c=relaxed/simple;
+	bh=L0aDk4Plu85yVCH3iqalIuJYWkQd1A2xQR65lNfVS8U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NNNBWKag4q2zuEzNLLeWF7DhGAyuvybIOsQccSYyvpZec/gYn1MT4cMpBHR/YnCAuQUcANXtAjBafx7LzisIgnusc6YFJiPMSVOxm1q55hBOcfHOQVzKzwYmh/ti24lHetK3/Lpo5kvAL144Q7TFTnRAM45bbdZtNsfcnAxStZU=
+	 MIME-Version; b=Mu9mW3K0kluXYVUgFdzAtPlgS8VRTW0dVdThIuKmuJ18QImenV/OTRh0TyINhG/7XYjy/C2K6aydKBk0kAx7dTCPggazHR5TRRWsfip3e1SAo4c+me2ik9AOkbKulHfSTazY+bzDQDZRsjU5xwej7+WMzpcKq21FNfXyeC60iBs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 0kFHU24GSxe0wPeD3Hn+ow==
-X-CSE-MsgGUID: tj173U3NQGOEowsgneISWw==
+X-CSE-ConnectionGUID: vlRoiHW+R8+7vEsTshjeCg==
+X-CSE-MsgGUID: N2AG0fyhRVexwOkfFDo0JQ==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 05 Nov 2025 18:14:48 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 05 Nov 2025 18:14:54 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.38])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0DCF94175ED8;
-	Wed,  5 Nov 2025 18:14:42 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8F5EF4175ED8;
+	Wed,  5 Nov 2025 18:14:49 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: 
 Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -52,9 +52,9 @@ Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 01/14] clk: renesas: r9a09g077: add SPI module clocks
-Date: Wed,  5 Nov 2025 11:13:45 +0200
-Message-ID: <20251105091401.1462985-2-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 02/14] spi: rzv2h-rspi: make resets optional
+Date: Wed,  5 Nov 2025 11:13:46 +0200
+Message-ID: <20251105091401.1462985-3-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251105091401.1462985-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -66,80 +66,30 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have four SPI
-peripherals, each with their own clock divider, which divides PLL4 by
-either 24, 25, 30 or 32, similar to the SCI peripheral.
-
-The dividers feed into the usual module clocks.
-
-Add them all.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs don't have
+reset lines for the SPI peripheral, make them optional to prepare for
+adding support for them.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 ---
- drivers/clk/renesas/r9a09g077-cpg.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/spi/spi-rzv2h-rspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/renesas/r9a09g077-cpg.c b/drivers/clk/renesas/r9a09g077-cpg.c
-index 79083165537c..0f61e0f09697 100644
---- a/drivers/clk/renesas/r9a09g077-cpg.c
-+++ b/drivers/clk/renesas/r9a09g077-cpg.c
-@@ -54,6 +54,11 @@
- #define DIVSCI3ASYNC	CONF_PACK(SCKCR3, 12, 2)
- #define DIVSCI4ASYNC	CONF_PACK(SCKCR3, 14, 2)
+diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
+index dcc431ba60a9..09b9362e9b1f 100644
+--- a/drivers/spi/spi-rzv2h-rspi.c
++++ b/drivers/spi/spi-rzv2h-rspi.c
+@@ -384,8 +384,8 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
  
-+#define DIVSPI0ASYNC	CONF_PACK(SCKCR3, 0, 2)
-+#define DIVSPI1ASYNC	CONF_PACK(SCKCR3, 2, 2)
-+#define DIVSPI2ASYNC	CONF_PACK(SCKCR3, 4, 2)
-+#define DIVSPI3ASYNC	CONF_PACK(SCKCR2, 16, 2)
-+
- #define SEL_PLL		CONF_PACK(SCKCR, 22, 1)
+ 	rspi->resets[0].id = "presetn";
+ 	rspi->resets[1].id = "tresetn";
+-	ret = devm_reset_control_bulk_get_exclusive(dev, RSPI_RESET_NUM,
+-						    rspi->resets);
++	ret = devm_reset_control_bulk_get_optional_exclusive(dev, RSPI_RESET_NUM,
++							     rspi->resets);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "cannot get resets\n");
  
- 
-@@ -94,6 +99,10 @@ enum clk_ids {
- 	CLK_SCI3ASYNC,
- 	CLK_SCI4ASYNC,
- 	CLK_SCI5ASYNC,
-+	CLK_SPI0ASYNC,
-+	CLK_SPI1ASYNC,
-+	CLK_SPI2ASYNC,
-+	CLK_SPI3ASYNC,
- 
- 	/* Module Clocks */
- 	MOD_CLK_BASE,
-@@ -154,6 +163,15 @@ static const struct cpg_core_clk r9a09g077_core_clks[] __initconst = {
- 	DEF_DIV(".sci5async", CLK_SCI5ASYNC, CLK_PLL4D1, DIVSCI5ASYNC,
- 		dtable_24_25_30_32),
- 
-+	DEF_DIV(".spi0async", CLK_SPI0ASYNC, CLK_PLL4D1, DIVSPI0ASYNC,
-+		dtable_24_25_30_32),
-+	DEF_DIV(".spi1async", CLK_SPI1ASYNC, CLK_PLL4D1, DIVSPI1ASYNC,
-+		dtable_24_25_30_32),
-+	DEF_DIV(".spi2async", CLK_SPI2ASYNC, CLK_PLL4D1, DIVSPI2ASYNC,
-+		dtable_24_25_30_32),
-+	DEF_DIV(".spi3async", CLK_SPI3ASYNC, CLK_PLL4D1, DIVSPI3ASYNC,
-+		dtable_24_25_30_32),
-+
- 	/* Core output clk */
- 	DEF_DIV("CA55C0", R9A09G077_CLK_CA55C0, CLK_SEL_CLK_PLL0, DIVCA55C0,
- 		dtable_1_2),
-@@ -192,6 +210,9 @@ static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst = {
- 	DEF_MOD("sci4fck", 12, CLK_SCI4ASYNC),
- 	DEF_MOD("iic0", 100, R9A09G077_CLK_PCLKL),
- 	DEF_MOD("iic1", 101, R9A09G077_CLK_PCLKL),
-+	DEF_MOD("spi0", 104, CLK_SPI0ASYNC),
-+	DEF_MOD("spi1", 105, CLK_SPI1ASYNC),
-+	DEF_MOD("spi2", 106, CLK_SPI2ASYNC),
- 	DEF_MOD("adc0", 206, R9A09G077_CLK_PCLKH),
- 	DEF_MOD("adc1", 207, R9A09G077_CLK_PCLKH),
- 	DEF_MOD("adc2", 225, R9A09G077_CLK_PCLKM),
-@@ -204,6 +225,7 @@ static const struct mssr_mod_clk r9a09g077_mod_clks[] __initconst = {
- 	DEF_MOD("gmac2", 417, R9A09G077_CLK_PCLKAM),
- 	DEF_MOD("sci5fck", 600, CLK_SCI5ASYNC),
- 	DEF_MOD("iic2", 601, R9A09G077_CLK_PCLKL),
-+	DEF_MOD("spi3", 602, CLK_SPI3ASYNC),
- 	DEF_MOD("sdhi0", 1212, R9A09G077_CLK_PCLKAM),
- 	DEF_MOD("sdhi1", 1213, R9A09G077_CLK_PCLKAM),
- };
 -- 
 2.51.2
 
