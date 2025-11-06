@@ -1,169 +1,203 @@
-Return-Path: <linux-spi+bounces-11066-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11067-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16907C396DB
-	for <lists+linux-spi@lfdr.de>; Thu, 06 Nov 2025 08:43:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 297FCC397EC
+	for <lists+linux-spi@lfdr.de>; Thu, 06 Nov 2025 09:02:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F50418C8017
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Nov 2025 07:44:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 504AC188E423
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Nov 2025 08:03:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5671C2BE638;
-	Thu,  6 Nov 2025 07:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3A2A288C25;
+	Thu,  6 Nov 2025 08:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="TeyJx7lp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11023116.outbound.protection.outlook.com [52.101.127.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5A39221DAD
-	for <linux-spi@vger.kernel.org>; Thu,  6 Nov 2025 07:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762415028; cv=none; b=LfxeNlpKDgoBOqP1u9JtKOWUqE/jEm67iM394R8LG86DlN+U3aN3rV7tAMD/ijCb6lD/7xYhuVNLHWIH7Hv3vcxHGPg7uQh0Trwf8sZ7PkMv8GGjrhuzxNSdY449jSHko+AjPWJuel5v+4FkaiuvIkHwiQjZr9NzC8VMr699o6k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762415028; c=relaxed/simple;
-	bh=HEYW/yaqWZRZaZUlOkhPnuCY9Q72gDExuKNZMsprvw8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BsPiglwnKwy3KddLaLbj8SqnyOWJOQm8JtiPwMMfL5jZMHPp/y3HiMjf1oHg/HzjSYA9pLT1o3tWe2Rtu0y7LtX0jSXnHdD11VSrrAQLZxWKo5/LhoyXu6JyzLpQLo46NSRWYhiFwTI39VSPhuFy6bZ8vty4rjcHWSCeNt2tYi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=ratatoskr.pengutronix.de)
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <s.trumtrar@pengutronix.de>)
-	id 1vGuel-00017f-7R; Thu, 06 Nov 2025 08:43:43 +0100
-From: Steffen Trumtrar <s.trumtrar@pengutronix.de>
-To: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc: Lee Jones <lee@kernel.org>,  Pavel Machek <pavel@ucw.cz>,  Rob Herring
- <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
- Dooley <conor+dt@kernel.org>,  Steffen Trumtrar <kernel@pengutronix.de>,
-  Pavel Machek <pavel@kernel.org>,  Mark Brown <broonie@kernel.org>,
-  linux-leds@vger.kernel.org,  devicetree@vger.kernel.org,
-  linux-spi@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] leds: add support for TI LP5860 LED driver chip
-In-Reply-To: <5d8ec4c3-1b36-470b-a1c7-629060a154ce@gmail.com> (Jacek
-	Anaszewski's message of "Sat, 11 Oct 2025 15:09:05 +0200")
-References: <20250911-v6-14-topic-ti-lp5860-v3-0-390738ef9d71@pengutronix.de>
-	<20250911-v6-14-topic-ti-lp5860-v3-2-390738ef9d71@pengutronix.de>
-	<20250916153412.GA3837873@google.com> <875xd0jslv.fsf@pengutronix.de>
-	<5d8ec4c3-1b36-470b-a1c7-629060a154ce@gmail.com>
-User-Agent: mu4e 1.12.13; emacs 30.2
-Date: Thu, 06 Nov 2025 08:43:42 +0100
-Message-ID: <87ldkjip1t.fsf@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC7D2701C4;
+	Thu,  6 Nov 2025 08:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762416175; cv=fail; b=vBkGOGnPmcjMvErOXFPghDd3LNiy8Y+ya/qUOWAhJfik4Q3tAXoAloZmDwowzabaFcuVOIWo2HaMG5IMzusb0rOvDDyZc18K1jnwSaHlsQRwEpPTJ4DnDNKIhHr1X0rncETDvpjlCwiG6U0Dh/bKefM+3hxCEI49J3mTYYFXpAk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762416175; c=relaxed/simple;
+	bh=qsiYif04K+/ZO3bXusstBRWzqZbcF5xkyPXDMYjJPdE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WEOneXnNKApKRYNrRPVyICKJ0TPecmoBBoWEaU7Xa7VL3ZZYItuAJ0yJwMHNrSm+92hxtna1q+XYGxnfUdmfpvtPtyZ1SDs2+8jiM0wSaxrcZKFfnVKBtWnjAa3vaobQUA24b09XrpPFCzRHmpPFsgxl1SgWlI7euVGYfj9/sFk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=TeyJx7lp; arc=fail smtp.client-ip=52.101.127.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=J3YjvMQNOpjREQ3qCpX2Lu3I+mVESLX9sxSBLSPQUGtgqXkkn0odOwhCS955THdyttUirsuWPEPZKa/XMkmmbfgL5aLIufVE4xXq7585cra8afXApwd955sVbxe/5eoyNjk1XRsI8VGY19r4wqiR33IEsTvE0VejkyW7DeV4vS+UVji65f2Wt1zVqHdyLKJoU4VM0O44K2C7X7rdLuid1emzISb3QDEP3v/+j+Tjxu4y2cEzX1r2Gukp5yd0g0VFmel3zepmJWgr4KsXDaMFdX9wburXmzc9ovOIkBXiUMrJjsGrHyCDZa1f6CIwArP7oCp75bSEoOIaqqVJvkoK3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qsiYif04K+/ZO3bXusstBRWzqZbcF5xkyPXDMYjJPdE=;
+ b=gvxElQJ8DRGZeEa1knflP9AEMRF7hqR3IpGkqu57igxktN21pDE/r36CGkhqn6TgFBNEbxZfnJBevnuc83B9G1xU9kKiPMzLh8NnH1IuhtsEdqAgrDdeX7vP2oFCgVDVtbUUH6X6bgXgcE+9xeVOqJBPC8aDG2qvW5CfVCoJOeQl7gV4BXQEddhmjpB3V1ipKVe2ZIg2Sf5Up6X/OmIF2yyAt9lZb5Yphcs48kjtvJ8UWnu6Stt4yrd8NCCXRHqlepgCOwhon97YgRVDBYZ/r/A2ydhrC02StqQ4pwMAaWb19ia8g69T7L/L/0Lw0nkhKWS7eiL3j4tUFwIBlBy/vg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qsiYif04K+/ZO3bXusstBRWzqZbcF5xkyPXDMYjJPdE=;
+ b=TeyJx7lpiRGGbOdEy5Nd7XtJ1rkBphKekOMRiRygaaW1ynme//9adzWuUXFTx+bbUm3mcvpy6NZB3FQZsIQVLmz2brB9heSKyWFevignHLFzq6n3V8kAgQSv/mCMMftZ5ftAiL+Dx7yGR8ILyQH7X/s0XzaotqJPm9yz+YhpMWux9veniDG1vBWgRvGkFx4Fmp9niAmxdJdFmgT+WTIC2FiKI3Kj9QPpcDStf66zToCK1fbx8lrXsxiLAtKZRwslMWCOplf743LxSIqX7A3WsIocJsbheobFygRlwEZgOBAPrEInMh/j6i9yhpaK7B78q5Cv/silLY8sB+RbrPiwlg==
+Received: from TYZPR06MB5203.apcprd06.prod.outlook.com (2603:1096:400:1f9::9)
+ by SEZPR06MB5959.apcprd06.prod.outlook.com (2603:1096:101:e3::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Thu, 6 Nov
+ 2025 08:02:49 +0000
+Received: from TYZPR06MB5203.apcprd06.prod.outlook.com
+ ([fe80::b7e4:5d25:213:ef9b]) by TYZPR06MB5203.apcprd06.prod.outlook.com
+ ([fe80::b7e4:5d25:213:ef9b%3]) with mapi id 15.20.9298.010; Thu, 6 Nov 2025
+ 08:02:49 +0000
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: Markus Elfring <Markus.Elfring@web.de>, "linux-spi@vger.kernel.org"
+	<linux-spi@vger.kernel.org>, "linux-aspeed@lists.ozlabs.org"
+	<linux-aspeed@lists.ozlabs.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "openbmc@lists.ozlabs.org"
+	<openbmc@lists.ozlabs.org>, =?utf-8?B?Q8OpZHJpYyBMZSBHb2F0ZXI=?=
+	<clg@redhat.com>, Paul Menzel <pmenzel@molgen.mpg.de>
+CC: "lkp@intel.com" <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
+	Mark Brown <broonie@kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH] spi: aspeed: Use devm_iounmap() to unmap devm_ioremap()
+ memory
+Thread-Topic: [PATCH] spi: aspeed: Use devm_iounmap() to unmap devm_ioremap()
+ memory
+Thread-Index: AQHcTnvUu7vgh4DDXEWO7dBdncSaCrTk8XZQgABIJYCAABCS4A==
+Date: Thu, 6 Nov 2025 08:02:49 +0000
+Message-ID:
+ <TYZPR06MB5203BAC01F47F4CAB3809A40B2C2A@TYZPR06MB5203.apcprd06.prod.outlook.com>
+References: <20251105084952.1063489-1-chin-ting_kuo@aspeedtech.com>
+ <1a234e96-b41e-4f6c-b23c-e57426ff6aa1@web.de>
+ <TYZPR06MB5203380D58961A36922E0436B2C2A@TYZPR06MB5203.apcprd06.prod.outlook.com>
+ <f8edb81d-f38a-4756-ab58-6bffd9ac501e@web.de>
+In-Reply-To: <f8edb81d-f38a-4756-ab58-6bffd9ac501e@web.de>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR06MB5203:EE_|SEZPR06MB5959:EE_
+x-ms-office365-filtering-correlation-id: 237bd913-6b71-44b0-a81b-08de1d0ae10b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?NGorcUhGb2lINkE5VWxha3NOUVE3M05iSVpuWlI1Vm83bTkwTXMzMkZvZDhB?=
+ =?utf-8?B?c20rNzRLRVpIM0dUNGRMekViZTgvaXVPZGROb3NlMlRnVm5TSm5VaENiZ3dk?=
+ =?utf-8?B?TjIrOEdUY3pHSGV6QWRUUWpZdUtyY1dxbHJvYWt2U1NiTFhZNU5mM0FUVVRF?=
+ =?utf-8?B?OWxXVEQwUVRYWEQvT1lQdzNXaHJNbUtTbXgyMFd1U1c2dGVsV21ISkt4QWxi?=
+ =?utf-8?B?Skw4OWg3TlM1VmR2S3Jkbmc2NmdFSDFYcHFDRmJlZllkQjRJY3lkZnVyeDNp?=
+ =?utf-8?B?ZldMR01ZdlpHcDFmdUorY0JNbVFkblduOG90dHZReGdoSjVnUWhwRlR5Zkpt?=
+ =?utf-8?B?OVlGNEdwbGlSYmpTN1F4algyTFlHSGhYaSs3bjlrWkQzbDJ0eTZUYm5PdG9R?=
+ =?utf-8?B?ZExTdjduMzRDYzUyV3o3MjNjRTNGSG50THNFZTRFdEx4U3J5TXpCVHZ3UndB?=
+ =?utf-8?B?dC81ZGVMTlVDTTZzRC9tczJSMk03cDVaV0NCMXZHOTBCNkxPZlp4Vm9jRXJC?=
+ =?utf-8?B?TVlDMmNlOE5OLzNEdkhqc2kwM09UOXhqOHphNFhUUUdseTJwbXo3UUVIZW5G?=
+ =?utf-8?B?TDdGMkZGMGhOYjdBeDN0c0I3bjFuVkpKVzZ4ajBqRXNUMXV5SnNrMVhrZ0g3?=
+ =?utf-8?B?MzRNOE5WY0s5UzhsSVNFMTN3ZC85RzdZOFF5elNHcG1DR0JrOTFpRVJxQXda?=
+ =?utf-8?B?NktQbndvc2JtTXcyZThhQzBkZkFnVDg5T09XRmFhdkN1YzN6cjJOTmVwT3By?=
+ =?utf-8?B?b0Y3YU1UZ0E0RzBTVXpubmNVQjlWUDJPSzF6RlhjS0FkTHJoQ0VpOEtpYlcz?=
+ =?utf-8?B?N2duZFhBQ29NdHpoYTd3RXFZSURIUnBzc0pzY3pyZkxaRmZtN1NBYTA2bk1O?=
+ =?utf-8?B?YVFFc0FJWmpEYWZQL1Q3TE4zdi9lSUlqcWQrbWg4Zi9BVHdnN2ZMelhyRzZO?=
+ =?utf-8?B?bmh0TDI5bmRTQnphdkliZkhiQkJLbnJBU1lzeFpnRGRNQzEydzJsL1dhVjdS?=
+ =?utf-8?B?NEhpcmJLZ3hnbU52UG1WcjZwaGFuaVNwblZBV0kwbnoya05hUENFSVZpVFdO?=
+ =?utf-8?B?cDhKTHdIYjZTU3MveXdydlFsMldaQkRhKzlmSG14YUlQbEhQSE0wbmlxcmhl?=
+ =?utf-8?B?anpmenBOdDc4UTN4cUg4cmcydHdIa1BoNjVmeUdEOVMrS1diL1VtZ1pEd2o2?=
+ =?utf-8?B?N3Z3YzRkdjhQZ1B0b2VYZzlhelVIKzd4ZlBMekxNVzhnUlBESXAzRXJIR0FX?=
+ =?utf-8?B?VFdyM3lSTlFadU5EVlBnQy9XUVpUbUYxdjRFM0ZINUdXSGpPUmZOK0lEN0JL?=
+ =?utf-8?B?bVJSSmRqR005KzExUGR4enladWZxZ3lnTllPRnowZ1RieVhFYUMyellKVXlF?=
+ =?utf-8?B?ZjVYTzljdXA2NFJkZ2FBZDJiMk1jSGgxR2pYdENqZ3ZkVkVzaElSVG5KNy8v?=
+ =?utf-8?B?MnBjYzZJKzNYcWJRbngxQ2J2Tng0RUkzUDBPdGNtSllqNjgyN0srWGdtZGFX?=
+ =?utf-8?B?Q2w0SnlDTVE3N2I2YkVucEp3SmFYWkZKQjZDRm9MMEd6QWJ1ZTBmVzgzaSts?=
+ =?utf-8?B?KzZkUTdSVFU4c3FpbHBaNDZKcFJrMHczLy90WlJuK1MvcThPMGg4UnBTMHZL?=
+ =?utf-8?B?bnZyYjlXbnhUc1JWbHJJbkQyUWpuamJiT1lYSGg4YnBUTkVWOG9kcUpKZzVX?=
+ =?utf-8?B?TGJKUW5RaHBocHRaYUEwakRSQTc4L0lPZjFpWTV1b3hIcm1iS0ZtUG14RFV0?=
+ =?utf-8?B?SmZ6VWRza2ZBRm5LRUtPcTNJQUZrNFoxUFRXNXNFVzJoQ0hMRnY4ZlNiUEdz?=
+ =?utf-8?B?QStUZ05aeHorbUg5WWF0eWc0Wkk5QmlJZlMxakJXN0txZ3RNVjNRM1NuQjdG?=
+ =?utf-8?B?bGprT2V5TFhIenMxZHdGcERZTFpId1M1MllsNFJRc3IyT2V4eVQxMERWQ1Na?=
+ =?utf-8?B?Vy96VEo1REVOQzNVaTUxT0dpUzY1b01WMkdVWjgzZW5kZWdJTnhaUVJ1M2Fu?=
+ =?utf-8?B?cmc1QW5YMCtBRjVxcXdFdk1OcERnL0FEUTNuZzlDVXZxdjlHQnczRldjd2I0?=
+ =?utf-8?Q?W81D81?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5203.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?amJSY1ozMGduTGlnalRZbmE4Y053UVlYT2N5OU1qZFp0c01VLzh6NyttTFV6?=
+ =?utf-8?B?RmFlWldvaTlYTGIrYVMvN2lwYlpmMXR1dzdRWGloSElDTVZESk13NU83bHFh?=
+ =?utf-8?B?YkJ1VU1EZ1lpUzRkdW5NaTE0WmZIKzRuSmU3OFM4OEhobFozZFo5WjRUNFBp?=
+ =?utf-8?B?WEJWSlNjNTR5MGJNT0JBc1JzL1BmVGdWUGNUMS96R3E3Y2JZT09LOVlsM0R1?=
+ =?utf-8?B?YkRPRXVuNU1YTTZrSTQwUFBPdGdGeGdUZHB1WXFqM0wwYlFqeXRSbHRNLzRz?=
+ =?utf-8?B?dFJDRE1zczN2WXd5Rjk4S2cyaXkwUVVrZGp4NTk3VUlhNnJITEJIU2s5TTBw?=
+ =?utf-8?B?cjkwQ01TVG5MVkJTTE9iR1QwczZRTGVtdTNwUDY5Yi95a3BiRWRnNDQvTUdI?=
+ =?utf-8?B?NUVpU3ozdDRZa2lxV3Q3dzl5TjJEUUpNazMwUmErUml0S0huaTI2TitMVDMx?=
+ =?utf-8?B?OWVrUkpnWWpVZmZCdStIbUQ5NDc1dzIzNXMwUGVGTzdQS0U5LzVlV0U3UDh1?=
+ =?utf-8?B?K1lsZHY1S1JVZVdqZ0dLVTJEZStZOVliajR2Z1FwVkVnanYzM0p1eEZYSVgx?=
+ =?utf-8?B?QWJBTHZqWXB3c1RuOTFRcy91OWdNbnpZSW45WHEwQ1BwUzVBWGpLWlVXSUFx?=
+ =?utf-8?B?Q0pxUVdnZzMxTmlXSmFxRG1YNEtvRmM3cEVoL2ZlRDY0THZjQXVNVUpSem1p?=
+ =?utf-8?B?T2RLSndtNDZSVlQwT1ZvcGhKSGtWaFRFTGg2cXd3bVJTSndPdWUybkN3K1Js?=
+ =?utf-8?B?TmN0WFp5b1pNQmd3SDhRbWJqOGlxbjRiUFBSSk8zVHA2VTladndMWEIvOXE1?=
+ =?utf-8?B?Y0lDZEp5V1JrQzB2MEovNmRQUTBJTzIzellpYWQxcXZIbVVMcG10eG1YdWxk?=
+ =?utf-8?B?OGFTd1QxNjN2S2RLZ2NoOEJzT1NYZ2JVZi82REIrazNBUzM1WkZDTmx1K0lz?=
+ =?utf-8?B?LzVoWSt5Z3hxdmFqMWJoR2J2S0Q3UFdsTmVSMDQxU0crSjgxSlI4YnJmR1ZG?=
+ =?utf-8?B?TnVQS05zajJnSndNckVHaWhjZ0tvZVpsY1ZCY0xZMExtMzk5WDYxd1ZEeGFo?=
+ =?utf-8?B?YzR4VmlNOWswZUlmRUZYYm9Gd0lRaitOdFlNYm9FcDZUZ2xZTW10K1JGbFFy?=
+ =?utf-8?B?cFIvOFViK2dONXBDWFR0eU5ZakFXaFROR0pBYWVaVXNIbC93OGs4U3ZXZ1I1?=
+ =?utf-8?B?OWNDSk5rcU84NGk2ajVNT3BPYWNWcFc3YjUyRUdCQ1kvV0VXam5zTDFMN3hr?=
+ =?utf-8?B?N3hGVjhrNG9CZ1pkVDlhYW1BUExUVGtCSlM1eTVkS3htSXU3ZlBLeitKb1VP?=
+ =?utf-8?B?R2U0ME1iZEE4YmpGVE5EWG15OUszTGFNSXR4ZzRzZnFyMW9CQ2tRb0ZBTHUz?=
+ =?utf-8?B?YVNhQmFpdnJ4bThhMVphbkJOM3NIWjNxSCtodnJvYm1IMTIrcW5RT1ExcXZl?=
+ =?utf-8?B?dktMUmY4S1VjQUFTSkNvWWp5bzdLVFhPRkVreThwYnVmSjdBK1dCR0lpSzZm?=
+ =?utf-8?B?NWZrbWk2Tzd0dVVKZlhKbU1wTUdKdVprZmo3MkJ3anlMNEpHWTN1ZVNxZWIv?=
+ =?utf-8?B?cHBqSTd4Vy9jd0oxVDNOMWErdXpWWVA2UmdFZUFmNjN5Y2VkbjBjdHFzUlNz?=
+ =?utf-8?B?RDl4N1Y2dmZMN0Rma2lDY0ZQZ0VQS2pWUVFueEo2ZlJnVERDQzVwczVpT3Rs?=
+ =?utf-8?B?ODVDQm9QSHdzSnU0anhyTDhDajNuZ1hUS2Z3TEFKcTZxUWRBVUdmTC9Lc0l2?=
+ =?utf-8?B?cmhZdkZhSk5Ga2ZHQ2lIc0k5WXhOYlNwTXdxRTFNbTN3NDZjL3dmcFNuMlNB?=
+ =?utf-8?B?VDVTaHYyNW9Ya1VoWU5wWno0cE5YWitSU09hMzkvMWllaS9qaXg4RFZIa2tW?=
+ =?utf-8?B?eGlwRzJub0VqUkZqakEwdkJoWkUyVTRidm5DaENqN3owemY0eEYxK1o4NkJO?=
+ =?utf-8?B?d0Jqam5SVHdjR1RDdmprOGt1WGRSQ2hkdjB6L3M2VUxuSlJTbytsYlJpL0ZK?=
+ =?utf-8?B?OEVKclBXWnpCYjFXYXNGL1UyZjBvWENuUjRraVhZZ3BSeXJCQW1vc296a3Fi?=
+ =?utf-8?B?QmNkdDMvTkdMUjBML3pDc0U1ZGpoV2tNRmU2YmhJNFpwMWVYRW9UYXF2VmRH?=
+ =?utf-8?B?R1hJN080ZDJmY1pMRmhYVVdqUVJOcmRGTjBZb2M2SHdrRHRkUHR0VzUwK1Jx?=
+ =?utf-8?B?L1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: s.trumtrar@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5203.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 237bd913-6b71-44b0-a81b-08de1d0ae10b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2025 08:02:49.5632
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7YR0fELnLT1v0J+gwtGj0aWN+hlT3YrW0Qz4Oc9zPdYoNftfzDOIZUH4S3w5XGYTxPMGiNCgMwdujriyivBuMyVK6ItTpWPmgNWm572AWH4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB5959
 
-
-Hi Jacek,
-
-On 2025-10-11 at 15:09 +02, Jacek Anaszewski <jacek.anaszewski@gmail.com> w=
-rote:
-
-> Hi Steffen
->=20
-> On 9/30/25 09:40, Steffen Trumtrar wrote:
-> > Hi,
-> > On 2025-09-16 at 16:34 +01, Lee Jones <lee@kernel.org> wrote:
-> >=20
-> >> > +#include <linux/gpio.h>
-> >> > +#include <linux/led-class-multicolor.h>
-> >> > +#include <linux/module.h>
-> >> > +#include <linux/of_gpio.h>
-> >> > +#include <linux/of_platform.h>
-> >> > +#include <linux/regmap.h>
-> >> > +
-> >> > +#include <linux/platform_data/leds-lp5860.h>
-> >> > +
-> >> > +static struct lp5860_led *mcled_cdev_to_led(struct led_classdev_mc
-> >> *mc_cdev)
-> >> > +{
-> >> > +=C2=A0=C2=A0=C2=A0 return container_of(mc_cdev, struct lp5860_led, =
-mc_cdev);
-> >> > +}
-> >> > +
-> >> > +LP5860_SHOW_MODE(r_global_brightness_set, LP5860_REG_R_CURRENT_SET,
-> >> LP5860_CC_GROUP_MASK, 0)
-> >> > +LP5860_STORE_MODE(r_global_brightness_set, LP5860_REG_R_CURRENT_SET,
-> >> LP5860_CC_GROUP_MASK, 0)
-> >> > +DEVICE_ATTR_RW(r_global_brightness_set);
-> >>
-> >> How is this different to /sys/class/leds/<led>/multi_intensity?
-> >>
-> >> # echo 43 226 138 > /sys/class/leds/multicolor:status/multi_intensity
-> >> red -
-> >> =C2=A0=C2=A0=C2=A0 intensity =3D 138
-> >> =C2=A0=C2=A0=C2=A0 max_brightness =3D 255
-> >> green -
-> >> =C2=A0=C2=A0=C2=A0 intensity =3D 43
-> >> =C2=A0=C2=A0=C2=A0 max_brightness =3D 255
-> >> blue -
-> >> =C2=A0=C2=A0=C2=A0 intensity =3D 226
-> >> =C2=A0=C2=A0=C2=A0 max_brightness =3D 255
-> >>
-> > the LP5860 has a register for setting the maximal brightness that holds=
- for
-> > all LEDs in the matrix. multi_intensity and max_brightness is only for =
-that
-> > one multicolor LED, right? And I can only manipulate the max_brightness=
- of
-> > that one multicolor LED instance.
-> > If I'm wrong, I'd be happy to not have to add the sysfs files.
->=20
-> It seems that this device is similar in the aspect of LED grouping
-> to LP50xx family. There is already a driver for that one [0] with
-> related bindings. Grouping solution could be addressed similarly to the
-> banking mechanism in that driver.
->
-> That of course means that this patch needs a significant rework.
->=20
-> First thing that strikes me after analyzing datasheet is that
-> LEDs are not assigned to any group since LP5860_REG_GRP_SEL_START
-> address is not referenced anywhere, and this is base address for
-> Dot_grp_selN registers that enable affiliation of the LED to given
-> group. No need for global brightness setting then.
->
-
-The (now called) global_brightness sets the current of the three color grou=
-ps respectively. These groups have a fixed mapping:
-
-Group 1 is CS0, CS3, CS6,...
-Group 2 is CS1, CS4, CS7,...
-Group 3 is CS2, CS5, CS8,...
-
-therefore setting the R, G and B channel. No need to assign any groups for =
-that.
-
-> Anyway, I'd add proper support for this device with DT knobs
-> to enable both grouping and individual approach to controlling the LEDs.
->=20
-
-As far as I can tell, both drivers are pretty similar already regarding the=
- DT description and setup.
-
-I will just remove the global_brightness (aka global current in the datashe=
-et) stuff, as I don't see that it is really, really needed alas the chip su=
-pports this feature and just use the intensity and max_brightness knobs tha=
-t are already there via the multicolor classdev.
-
-
-Best regards,
-Steffen
-
---=20
-Pengutronix e.K.                | Dipl.-Inform. Steffen Trumtrar |
-Steuerwalder Str. 21            | https://www.pengutronix.de/    |
-31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
-Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+SGkgTWFya3VzLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmt1
+cyBFbGZyaW5nIDxNYXJrdXMuRWxmcmluZ0B3ZWIuZGU+DQo+IFNlbnQ6IFRodXJzZGF5LCBOb3Zl
+bWJlciA2LCAyMDI1IDM6MDIgUE0NCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gc3BpOiBhc3BlZWQ6
+IFVzZSBkZXZtX2lvdW5tYXAoKSB0byB1bm1hcA0KPiBkZXZtX2lvcmVtYXAoKSBtZW1vcnkNCj4g
+DQo+ID4gSG93IGFib3V0IGNoYW5nZSB0aGUgZGVzY3JpcHRpb24gdG8gdGhlIGJlbG93IG9uZT8N
+Cj4gPg0KPiA+IFVzZSBkZXZtX2lvdW5tYXAoKSB0byB1bm1hcCBtZW1vcnkgbWFwcGVkIHdpdGgg
+ZGV2bV9pb3JlbWFwKCkuDQo+ID4gVGhpcyBlbnN1cmVzIHByb3BlciBjbGVhbnVwIG9mIGRldmlj
+ZS1tYW5hZ2VkIHJlc291cmNlcy4NCj4gDQo+ICAgVGh1cyBlbnN1cmU/DQoNCk9rYXksIEkgd2ls
+bCB1cGRhdGUgYSBuZXcgdmVyc2lvbi4NCg0KVXNlIGRldm1faW91bm1hcCgpIHRvIHVubWFwIG1l
+bW9yeSBtYXBwZWQgd2l0aCBkZXZtX2lvcmVtYXAoKS4NClRodXMgZW5zdXJlIHByb3BlciBjbGVh
+bnVwIG9mIGRldmljZS1tYW5hZ2VkIHJlc291cmNlcy4NCg0KPiANCj4gUmVnYXJkcywNCj4gTWFy
+a3VzDQo=
 
