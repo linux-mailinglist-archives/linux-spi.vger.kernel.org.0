@@ -1,89 +1,70 @@
-Return-Path: <linux-spi+bounces-11068-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11069-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE81EC39CA7
-	for <lists+linux-spi@lfdr.de>; Thu, 06 Nov 2025 10:19:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FFC8C3A011
+	for <lists+linux-spi@lfdr.de>; Thu, 06 Nov 2025 11:03:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 06F86188BC45
-	for <lists+linux-spi@lfdr.de>; Thu,  6 Nov 2025 09:19:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 019034E3CA5
+	for <lists+linux-spi@lfdr.de>; Thu,  6 Nov 2025 09:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E1CC2FFF97;
-	Thu,  6 Nov 2025 09:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DDD02D9EEF;
+	Thu,  6 Nov 2025 09:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="opD3wA1d"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0275C2F362A;
-	Thu,  6 Nov 2025 09:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1906A2BCF4C
+	for <linux-spi@vger.kernel.org>; Thu,  6 Nov 2025 09:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762420753; cv=none; b=ChHgNJO9owTN+avUSpqxtN4ErZQr9bG1oVQ6Io+mYavlrll1D30hVUCXV+i64/lMk2Z/lQmuen9Bet/LDPqHjZc1ICsRYjFzTbDywzmmHkTOkETlnbukT3ZUkaCh5mMv3XKxaCfVuiZJSXYmWcM28fv9lL2x4xliJjykLQU9VsE=
+	t=1762423053; cv=none; b=RGvIztyUcRRoEV0LJMD6NiD2heACA3gYXlxT2FUnlZGk6OwnLscsmGnZDIx0fSl1blqrnzL2w/tSZwlShYbT02UEqAOunqHEUmasZHoSrFM7lRZJQEYuQBROe6f93X/XT4MUlJ9APQifuow4V/cS51EkkpRgjy4XWDPPrC5qqe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762420753; c=relaxed/simple;
-	bh=qnmSR+xLxiNBcntYKwueudKVsowmh9H6t4W4S1QKC3Q=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rkQVpNf5msN+VBo0Z++hMDJh5addTNRzTdSOz21yJ4eVg46pvNHVMqV3aXM4VSVUEN8wunNJn/9R8QwZyqFawkO0OWYn3KDKlVGdJVycYYDfiCRZek418fOVCI/rQ7ZsvKTTEsgnG/n5ipeqsW8ZjHZusiy5lcWpASqxA/nF+q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 6 Nov
- 2025 17:19:03 +0800
-Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
- Transport; Thu, 6 Nov 2025 17:19:03 +0800
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: <joel@jms.id.au>, <andrew@codeconstruct.com.au>, <clg@kaod.org>,
-	<broonie@kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-	<openbmc@lists.ozlabs.org>, <linux-spi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<BMC-SW@aspeedtech.com>
-CC: kernel test robot <lkp@intel.com>, Paul Menzel <pmenzel@molgen.mpg.de>,
-	=?UTF-8?q?C=C3=A9dric=20Le=20Goater?= <clg@redhat.com>
-Subject: [PATCH v2] spi: aspeed: Use devm_iounmap() to unmap devm_ioremap() memory
-Date: Thu, 6 Nov 2025 17:19:03 +0800
-Message-ID: <20251106091903.2800981-1-chin-ting_kuo@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1762423053; c=relaxed/simple;
+	bh=oOYlfpUpBICZzRtVPYOImtfhGgn27liTggfSNzaqsXY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=UuyThN7qwOCcFViICg7EtCw13DSpvksGRWC2t6wWHGwS0gnLLJtCNIXNR1C9qLQR1pzFRcuXGQt6x9nq/M1S0jzuiqxrzgZk+zTMKZ3svUcGUrhiFcySv9Kqk1t1Eg9byk0Ob1sXQRcbt7b6X5B6Iv7VZYN3pC2TFZL8LVxZw6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=opD3wA1d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F3F2C4CEFB;
+	Thu,  6 Nov 2025 09:57:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762423051;
+	bh=oOYlfpUpBICZzRtVPYOImtfhGgn27liTggfSNzaqsXY=;
+	h=Subject:From:Date:To:From;
+	b=opD3wA1dvipjrD76eF7SW8BlmMTjvvlTU90pzh6lBZRGTbdcHtr1q7AMiLkA/o1IM
+	 zFzfnCDE7OvUby73D/tNyn1KHDeVcwgCj4TPZNFXLcfI5dBHP2CGT960rrEDeo7huz
+	 HdcMVBIjWfC0cKkfdVKxNiHR4B6RPnRShmkbEyAeEmHPYrUetgiIWnBTEA8De2eeop
+	 ofwSGfKSuWTgiWci7Uy8XmaGfkoY3+njCh6+fPENBx4Bszjrisr816MPV8H27A2jZf
+	 2L3azIxfMEaPGLUpFeVsvj0NMNIsCJYrH0i8vVz73TXBsmlLNxqHVMr1Zq/5yuhITL
+	 UrAb0Nbx8ulww==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAEB7380CEE7;
+	Thu,  6 Nov 2025 09:57:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176242302458.129656.1554394857063897387.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 06 Nov 2025 09:57:04 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Use devm_iounmap() to unmap memory mapped with devm_ioremap().
-Thus ensure proper cleanup of device-managed resources.
+Latest series: [v2] spi: aspeed: Use devm_iounmap() to unmap devm_ioremap() memory (2025-11-06T09:19:03)
+  Superseding: [v1] spi: aspeed: Use devm_iounmap() to unmap devm_ioremap() memory (2025-11-05T08:49:52):
+    spi: aspeed: Use devm_iounmap() to unmap devm_ioremap() memory
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202510292356.JnTUBxCl-lkp@intel.com/
-Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Reviewed-by: Cédric Le Goater <clg@redhat.com>
----
-V2: Refine commit message for clarity.
 
- drivers/spi/spi-aspeed-smc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
-index e8bd8fe6c4e7..179c47ffbfeb 100644
---- a/drivers/spi/spi-aspeed-smc.c
-+++ b/drivers/spi/spi-aspeed-smc.c
-@@ -396,7 +396,7 @@ static int aspeed_spi_set_window(struct aspeed_spi *aspi)
- 
- 	for (cs = 0; cs < aspi->data->max_cs; cs++) {
- 		if (aspi->chips[cs].ahb_base) {
--			iounmap(aspi->chips[cs].ahb_base);
-+			devm_iounmap(dev, aspi->chips[cs].ahb_base);
- 			aspi->chips[cs].ahb_base = NULL;
- 		}
- 	}
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
