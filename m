@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-11104-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11105-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 760A6C3EB72
-	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 08:13:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CC1FC3EB80
+	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 08:13:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7510188BFC9
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 07:13:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EABCD34B0A4
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 07:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7CD307487;
-	Fri,  7 Nov 2025 07:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF6C307ACA;
+	Fri,  7 Nov 2025 07:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJ6RYbeQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="erAZ20Yg"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36528306D57;
-	Fri,  7 Nov 2025 07:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4C33074B1;
+	Fri,  7 Nov 2025 07:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762499606; cv=none; b=HIk9LvxuzjCE8ApaiVp1KP3GxtZuyXv9TnHBi8F5LHL13kD69ww6Ud0ojEGeq2Nczm52pWPvejH4oB9AGECGClnxARwipkIwwNEbbWmvcMEvMLiegyncJs7TjbHeKi3RxaCFU08EIe4bVV1/mhZLs1FnMnvWaRaCXkQrMS6+wPM=
+	t=1762499635; cv=none; b=SRTxRjuscHR3pP5WFivUT4a37ksA2SQX9d16Cxx/ZlX2n+9vBgW1tNNsdWJG2lmaUy6ByIpB5cEPvjFynPERPlduuv5oRSG1EGhr+EKaBXK9lcHKHrJbvxhgPrC+wyKIYEw9/eMAnc3oaY9OD5BSXpmVgkGW0g7k+AhRqU2MyN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762499606; c=relaxed/simple;
-	bh=YLG/YuqtrGNhpGsJJHu7fv9u7jCAvFXHoM+8GxjHwuU=;
+	s=arc-20240116; t=1762499635; c=relaxed/simple;
+	bh=OYXU2bRMARfB49XoG/OSRq/OE+24XxGC8b4JytKxDkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SENJpQJB/qCY6R1JL8byUv/jD8VWSKNCqmfrRNwW7hBW1I5dydT8awH6M2GOQm2jqH7vl6dJ6KwE7Bb+kMcJFxyTWgrK9Qa/Elq3I01SvmBY/Pq/Cb9z+9swQCLEQfbmxrFPdG8yhLhgVP/ECa5NbU0HapmFBIfYBrZphddXZ0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJ6RYbeQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10908C116B1;
-	Fri,  7 Nov 2025 07:13:20 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=tI7v60mNDF2HPAZ9z2xqv9yYyutNZKfVXdVW9yP0exvrth8poaHaZKiOxCyZhBwh78y8PoFs5LCY3GC2kwH35vT6hUornCqZCdZtYOUDsuXl+ZfN0kAaAhyOw5QY96t0Iqe/UQTHgjwa5DR+jeSQ481gq5cgrJb6fI2x7353sJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=erAZ20Yg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE36C4CEF5;
+	Fri,  7 Nov 2025 07:13:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762499605;
-	bh=YLG/YuqtrGNhpGsJJHu7fv9u7jCAvFXHoM+8GxjHwuU=;
+	s=k20201202; t=1762499634;
+	bh=OYXU2bRMARfB49XoG/OSRq/OE+24XxGC8b4JytKxDkw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=EJ6RYbeQfSkrs0qzS9Pzl0Fq5K3H3uNYx7tjBRACab5viMzoUNfQDqO/I0V4L8oAp
-	 RnlnihQCeHqZW4CEkwtNaGA0n1mMPwbfxKx2+oljylGpynqUOrjGnwyR3a70sukINX
-	 yTw/YcpH+hyCr25rQuu2QRbrxWzBjPLVX/otfEPxUSMUWf029yIL7ZUMxTeb73elhD
-	 en1mbe3Q144VVVjDBPK0bEwY1mW8AsfQTz9DNHw7ZUWleBVDlezhJ//mBgBMJKnjWO
-	 EAh7ho3Uj6n2wXP8qiw43EiGHhsz3fxMu2nuQD/DLGnR+7qo9uLCKRd2H4DH/DU9ht
-	 hKGTdvpB7VeZg==
-Message-ID: <84f0ed2f-bf51-4dd5-93f1-f26e077a2549@kernel.org>
-Date: Fri, 7 Nov 2025 08:13:19 +0100
+	b=erAZ20YgkBNIr4VRQjthjKj4y7GyyWWwCyOGg94tp/sOQAhiOE0No4DEevq19ABMz
+	 U4/LJSmTfgDmXqWbFdngaoIcRUp5A+qWfJpuOqFn/2YBVr4iwsFnlJ5UfwAkfU+fDs
+	 X8IrIbs7ugndzDLdtB4WqFrrh9p7xDMfV7tk2IpsAlLpdk+8p47pYm4fitsm7CLsxG
+	 OoJ/zf90MQ5EuElESS+u/bq0dMcMlRqcCrPrq6nT/g9p2eGuvrc0Ek0lZ/AK52smRn
+	 AibI/ZjpBv+6EZ7vP+HBnL7KyeJdjyLXCuVGtPf73EHAyWhNMQ9RPkuXFaeTU1+m8/
+	 FrnpD/JLx3GXQ==
+Message-ID: <2c67a82a-3a4a-44e5-8c82-42ec6320d5b5@kernel.org>
+Date: Fri, 7 Nov 2025 08:13:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] drivers: spi: spidev: add compatible for arduino spi
- mcu interface
+Subject: Re: [PATCH 3/5] dt-binding: arm: qcom: add arduino unoq codename
 To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
  konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, broonie@kernel.org
@@ -63,7 +62,7 @@ Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
  linux-spi@vger.kernel.org, mm.facchin@arduino.cc,
  Riccardo Mereu <r.mereu@arduino.cc>
 References: <20251106153119.266840-1-r.mereu@arduino.cc>
- <20251106153119.266840-3-r.mereu@arduino.cc>
+ <20251106153119.266840-4-r.mereu@arduino.cc>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,15 +108,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251106153119.266840-3-r.mereu@arduino.cc>
+In-Reply-To: <20251106153119.266840-4-r.mereu@arduino.cc>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 06/11/2025 16:31, Riccardo Mereu wrote:
-> Add compatible entry in spidev describing in Arduino boards one of the
-> interfaces between microprocessor and  microcontroller.
+> From: Riccardo Mereu <r.mereu.kernel@arduino.cc>
+> 
+> Document Arduino UnoQ. Arduino UnoQ is a single-board computer
+
+compatible says imola, not unoq.
+
+> combining Qualcomm Dragonwing™ QRB2210 microprocessor with
+> STMicroelectronics STM32U585 microcontroller.
 > 
 > Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> ---
 
 
 Please use subject prefixes matching the subsystem. You can get them for
@@ -126,36 +132,6 @@ your patch is touching. For bindings, the preferred subjects are
 explained here:
 https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
-It is almost never "drivers" (with one or two exceptions).
-
-> ---
->  drivers/spi/spidev.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
-> index 5300c942a2a4..f0dd516c2083 100644
-> --- a/drivers/spi/spidev.c
-> +++ b/drivers/spi/spidev.c
-> @@ -704,6 +704,7 @@ static const struct class spidev_class = {
->   */
->  static const struct spi_device_id spidev_spi_ids[] = {
->  	{ .name = /* abb */ "spi-sensor" },
-> +	{ .name = /* arduino */ "mcu" },
->  	{ .name = /* cisco */ "spi-petra" },
->  	{ .name = /* dh */ "dhcom-board" },
->  	{ .name = /* elgin */ "jg10309-01" },
-> @@ -737,6 +738,7 @@ static int spidev_of_check(struct device *dev)
->  
->  static const struct of_device_id spidev_dt_ids[] = {
->  	{ .compatible = "abb,spi-sensor", .data = &spidev_of_check },
-> +	{ .compatible = "arduino,mcu", .data = &spidev_of_check },
-
-That's way too generic, IMO. First, I am not aware of Arduino boards
-mounted on top of regular development boards, so basically you are not
-describing actual hardware setup but what could be potentially plugged
-into box with Linux... and then it is like saying "you can plug
-anything" because MCU covers everything, like calling it "Raspberry
-Pi-clone".
 
 Best regards,
 Krzysztof
