@@ -1,86 +1,99 @@
-Return-Path: <linux-spi+bounces-11106-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11107-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08FE7C3EE33
-	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 09:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A711C3F2F0
+	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 10:35:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FDA91889171
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 08:10:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C666C188E9D4
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 09:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE8330F812;
-	Fri,  7 Nov 2025 08:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F133019DC;
+	Fri,  7 Nov 2025 09:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPN4lvNk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="koCdZds9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC3230F555;
-	Fri,  7 Nov 2025 08:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8653019DA;
+	Fri,  7 Nov 2025 09:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762502959; cv=none; b=m51tDomnCBF8y0t4bqX3VOLlmUBW3c+CLNcDbfKctBNcyHwpftTqdvC1WhQCwzSPF8aUGG6LCkqO6WK+igmOXkIhf5+1rPFOQTuP+fUzv/YhtnpKfETfr7ZxjK6EKVckZMgEl9EzN3sG/Jv3YfhZ0yi4I+rsL8q158FhFUrudcY=
+	t=1762508071; cv=none; b=kS74S07Vv/Zmgw1oa4DWBU1OI4GIEb9fd3T7G16bembAsvq2fvjQSyhzgOWHW4Tx6SJIldDV++97eo0ttev0u6Wg0I8dveEQqEAVxeJMGibcIkiQxM6NxJE0qkNe/nDjm9Pr2lnPb8IYWPuFgOCqlGxRJQG+2Iz+7bCbbNdath8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762502959; c=relaxed/simple;
-	bh=SHkgT4O0QYZQESnYkYA3hFJiRwM0MhkBqOpCwK69q74=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hljIj1FFbhIzL4WYXFjE7QMZ7aEnaVuhY9uIgyDybAVOA0jDsWo82vR+/53WaHtS1B0HNNK8BQzsV6OdeNi8VoWGedA0wWjTmDNoLARvt3iw+WF70lxPfs7oULd9XfZjF+ZiumVdD/6TbslBfuPkwbts4Vc/RaewqpbL3TYhJ3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MPN4lvNk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4F2C116B1;
-	Fri,  7 Nov 2025 08:09:17 +0000 (UTC)
+	s=arc-20240116; t=1762508071; c=relaxed/simple;
+	bh=NtX+5fn+kE5HkWQvbOADti+9aZQIyL4Npwg2RYFPXmc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JGW3cSnicfcjLXPYLu88bU3una7LBcYQEXqMRq0u10ejqjxXKMkdk8/zTjtfXKLQuPj0e7pY+Fk4POV+xhCBiXkrQ4K2dsQ74oyKCoY4KoBhFQvUdCN3l2v0Oi3yt7xgw1mevjAJTZsKLFxiiJtnl6iMySZ4WypNz04MLa5Jl04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=koCdZds9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8C38C116C6;
+	Fri,  7 Nov 2025 09:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762502958;
-	bh=SHkgT4O0QYZQESnYkYA3hFJiRwM0MhkBqOpCwK69q74=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MPN4lvNkt4HzKR83woEdZjIXw+mMBiJP2u/oqIxs/uEOtiUWED01o26SOiaORPwLV
-	 zy66HKPkAJ6SEjjVJ5uMc/0+FhRKe4h+A9C937PAAnPZ7PNvLz5imEFANEnwHeS8pz
-	 1BPRqL8UVxzEalkiqPbA+Dpp8QDZM0zfEwWlV3G20mF2NJuapzIRC3ScgpTuicUx+2
-	 9MeEQtVUdC3W8bxDK1ycJA3/uRppd8Gu0F75TSjegmXR8xOI8VzM9HsA+f6W85SqvS
-	 CEI2F+QfS3f9/ec70Zu43me0QIDJ1thC5267lnmoNOLmWww1cusVe7ML3nHeu3kZ9k
-	 tj6uvpY76ZBVw==
-Date: Fri, 7 Nov 2025 09:09:15 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Riccardo Mereu <r.mereu.kernel@arduino.cc>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org, linux@roeck-us.net, 
-	Jonathan.Cameron@huawei.com, wenswang@yeah.net, naresh.solanki@9elements.com, 
-	michal.simek@amd.com, nuno.sa@analog.com, chou.cosmo@gmail.com, 
-	grantpeltier93@gmail.com, eajames@linux.ibm.com, farouk.bouabid@cherry.de, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-spi@vger.kernel.org, mm.facchin@arduino.cc, Riccardo Mereu <r.mereu@arduino.cc>
-Subject: Re: [PATCH 1/5] dt-binding: trivial-devices: add arduino spi mcu
- interface
-Message-ID: <20251107-independent-barnacle-of-examination-684fbb@kuoka>
-References: <20251106153119.266840-1-r.mereu@arduino.cc>
- <20251106153119.266840-2-r.mereu@arduino.cc>
+	s=k20201202; t=1762508070;
+	bh=NtX+5fn+kE5HkWQvbOADti+9aZQIyL4Npwg2RYFPXmc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=koCdZds9yXGyuaAF7TL5P29yTmWzu4zDko5m6Zm6K7xhvAD2Wr2tUXMXbSBe56IjA
+	 R8+/rLbgfrEbihBBMjJKEOkEzCn7veYpBXFfhAgGyFdKPTjPVRKp1mzrPNQBFGI3GP
+	 1b9GFs5PT5ZcBcwG9gdUjKTnb8XFpzNt4o5Z7cikBwuy+wAq4vDud4GZE7AJxJRRGj
+	 lCxn0YcK1izSOclHMxnZjN4vaw/orLZsnD0UUETXf7O0dglJruRySPALQlACmbblRV
+	 sevhOG2VrslPfEZCY9KkScWZx7oKfIijzALVemZS+Sg0O+QUlzv3FSspi1SKGWplaF
+	 uXt1Jc+0L6Lkw==
+From: Mark Brown <broonie@kernel.org>
+To: mkl@pengutronix.de, frank.li@nxp.com, shawnguo@kernel.org, 
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+ carlos.song@nxp.com
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251027110256.543314-1-carlos.song@nxp.com>
+References: <20251027110256.543314-1-carlos.song@nxp.com>
+Subject: Re: [PATCH v2] spi: imx: add i.MX51 ECSPI target mode support
+Message-Id: <176250806608.2489052.17181780089794986836.b4-ty@kernel.org>
+Date: Fri, 07 Nov 2025 09:34:26 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251106153119.266840-2-r.mereu@arduino.cc>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-a6db3
 
-On Thu, Nov 06, 2025 at 04:31:15PM +0100, Riccardo Mereu wrote:
-> Add spidev item in order to describe in Arduino boards one of the
-> interfaces between microprocessor and microcontroller.
+On Mon, 27 Oct 2025 19:02:56 +0800, carlos.song@nxp.com wrote:
+> ECSPI in i.MX51 and i.MX53 support target mode. Current code only support
+> i.MX53. Remove is_imx53_ecspi() check for target mode to support i.MX51.
 > 
-> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> 
 
-Also, now I see warnings, so standard message:
+Applied to
 
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Best regards,
-Krzysztof
+Thanks!
+
+[1/1] spi: imx: add i.MX51 ECSPI target mode support
+      commit: 4e92abd0a11b91af3742197a9ca962c3c00d0948
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
