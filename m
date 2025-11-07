@@ -1,83 +1,83 @@
-Return-Path: <linux-spi+bounces-11126-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11127-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE052C41A4F
-	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 21:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C44BC41A55
+	for <lists+linux-spi@lfdr.de>; Fri, 07 Nov 2025 21:54:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58779189B4B6
-	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 20:54:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04044189B6B2
+	for <lists+linux-spi@lfdr.de>; Fri,  7 Nov 2025 20:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5975933B968;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C178633CE94;
 	Fri,  7 Nov 2025 20:53:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="b1EiszdV"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="b3uialcH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D07730EF88
-	for <linux-spi@vger.kernel.org>; Fri,  7 Nov 2025 20:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F8A337106
+	for <linux-spi@vger.kernel.org>; Fri,  7 Nov 2025 20:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762548832; cv=none; b=kSQbNfjo4gDWOe0SBE+31v3z66rttB9GfJ0LNtfOJAFBJ8wfYCFFo0jXVoU5+DoFPCbiU+HF4WS0RsXogSSGqIQg1UUwAihV5pZfLjXgOWK4IfnGM+20nA1ijjL6Ulhu1tcoGZgf9nmq4k6VCZSVs2PY7kWx2XKGtGFCVnI2Bqo=
+	t=1762548832; cv=none; b=GS/nCX0znH/kscr8wDiMS+CVsPxH1qdxA3Dr7+eu7qh4VytLlXBRoZm/ybGBWBI27/slO1gKENyKvcY4ALckX3rYVTprB1F5wg5Um7incY3m4uiErq0gV5LQbL1ULUsAhGMxaU+i//KevCFkvX7ixJAzCy7fNHgnnFH2M8X6Vk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762548832; c=relaxed/simple;
-	bh=tDgY9PgjE3rE33iaQr1P6OAzhqfnlIin3aQjjP7cTsw=;
+	bh=SSI0SDfdzuTFSZUxXbce1zwCpj2iLjVhwuT4WvAAlLU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P1AbCpu1iFwkJng1ox1AeUlMZDp8ZMxxsGwI4DPhg4/4vsW4iDRQL8vmesEA2LODJrjsPceLjKMrZSoX86WeMWkBKHDtBgp78e+MVBu0JiYaVaLgwjIvn9i370U4Z0pJnGh0/Pnc9vPMnjWcB4+1vsWai8Cs6gSuAmEuO895kyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=b1EiszdV; arc=none smtp.client-ip=209.85.167.172
+	 In-Reply-To:To:Cc; b=b98+0AKuVvXAFMNr3OX2P6fLrUwfyhmGWqRWwo1TLPhgULAIAM44pB31kkcacpXC0C2N0xQBy4I6Vpq3VpEj4GQBzp4hODyetP7KAuYmABbmSwm+lscKUd2CqY5bkIpSu7fUNrqSH1Bk0SMbSqHZpXrWkyZqdN/JxddIDjo6CK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=b3uialcH; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-44ffaeda17fso341710b6e.1
-        for <linux-spi@vger.kernel.org>; Fri, 07 Nov 2025 12:53:48 -0800 (PST)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-656cb7b20ccso495298eaf.1
+        for <linux-spi@vger.kernel.org>; Fri, 07 Nov 2025 12:53:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762548828; x=1763153628; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762548829; x=1763153629; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TogcEBDmAA9dvY22CwRmyMkgHgYI49vrkDW3/a9RFVE=;
-        b=b1EiszdVIndLIuW210qZ4DTvlNuIM4O0sAlq2RzFLPTvYORA0nA/twuj0zRSD4ePKZ
-         fNUV87/kvTa+TRM68JG/nlDJIJUwDvYqyyDJhyIWSN7MPoXI/KG3R42bJ5LcwWEdFuFH
-         Hs42M1Bh+s5DfGhgBuDp0971SItQ/KTac0eHX1ulCApaVz5g6NNqAXGLLI877tLpIfMk
-         fevQpt8VqZCtPgpSE2OBvd/Nq0jdhDz/3ifDRpgR/6B9+CL4S0u6ac4FCkWo1Hl1cDiS
-         Z4yzMld1X50dJ0jzTuuZdomSH/hbNw5MJ6wX5jcpHU9rEFe/uPfGKnbrp2PnPJN65jCR
-         LlAw==
+        bh=yEuLcTpBWY/VBsTt3a3S2ALMGGYfGqylnafUO+qzJ7Y=;
+        b=b3uialcHuEW6SG2Haepgn2+t3fBgZMZQUPU7R4CwrD86NLuLszBMC1ozsZ7Rr1TT+F
+         rlaCfWRRIvMlURL0utpPqSr2Rh7FLsChXP9+unaBj3bAKbMF36g9F9w+1g6N9891ymIC
+         LYFT2oURfRot5bSmfC7UUnN+iN4Xtv3hqlHeCI4Qkf/DWH0A0tSIBI3weQLJxcIMdSI8
+         HIYNXmY91lipFCerse+go4BLSUYGZRGHcphkGMhjz6LLgQHmcz1R0j/rSpAMXbvYwBZk
+         JE/faySLnxgRCybIbkmSOgf7mo/w8RA7JBuIyWmC/B6oqhYxX2MLOq3YXTAhYhi2RpLT
+         uYmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762548828; x=1763153628;
+        d=1e100.net; s=20230601; t=1762548829; x=1763153629;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=TogcEBDmAA9dvY22CwRmyMkgHgYI49vrkDW3/a9RFVE=;
-        b=c3TQ9HUg6N6W2QGe2G8mvEmJkOI754+71lhdeHgEC0wWGe4hHneeHSjcWLjY+Fw/3m
-         KU78azBlPWC1vb5WlK+fik6y/gXUxjTmFFLdL5o2GBtjfhDvLDTQ70vJt7RgV/jCPvwa
-         ffqrD2iKavf+wsVal8NZfChV7bfMFl6WhyksBCCgyikYNtdihtaHXqAIyJeXeJl2hOYC
-         2830YZ3wlaH2leDe8Ml0s6P+hXdhO7FcBK4cFuw14KFi2Rpjjp/mN1sfiMMveGOLxqo6
-         ESsPffwMFu0RbdFJMyoLa22XAriqG9FL6QhcwiVPnrBFSAV34luLUNKisf/aoP21bebL
-         aPVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWGeVze6QanfMG+kJ6lst5Vhpwah/vSjdlkMIkDoQl8HtoK5S2QAnGTN9FTTsdb7TDLeOEzCFbN2J4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoPY9rq4B7UIDfB9tTCK8HdSE7BpeRIW2RNFUyb2J05sHYmU6V
-	5JFJHt+XA3B4/axr7PebFaVjk0LDAXEinNdW7VGHr2u40ykehkR7wlBAosqqpdIo2MQ=
-X-Gm-Gg: ASbGncv51i+Z/PNXibOPenHM5OykhxHqesKuOJUcIxu2vQx4OEfItXNZ2fTiGX1ewSs
-	20o5aUAXqyW5Re6EZZJq/PyfYBM1JOo6sUwjJz28Xc7hRA28n+kUkiJwpzAQpl9LwtVEYtivsYZ
-	JbZirApMU4CJscG6P/salgZ6biYWgAeO/LzNldIj0InF+TzuqUDklVDRLfEjXIu1gY7z6iJrcLq
-	oAswhOzla2diiKyiKRJLtNqA8/fXj31LfA9y+hT/D1dRVUqCELlyjmvMI7N10jiYhLCvruOszSI
-	BF3QZfyx/x4XIDZz5tHkQhsWKRkodbiRETJcB3Z1QL0WX0aKlJtiBc8oFsD1UCoMvvFEMhcmcyZ
-	97HuL7bVAOREA5Zoqe8Y1mkaczCP8FZOocko8u6va8lfPu9sV7ypubRP5lxe5hS5guR1pxk5yf/
-	pQasKO
-X-Google-Smtp-Source: AGHT+IGWyMDK671xIFdUYmdwQn0Ar6RSBRefyOIxpV28IGDXeutrbpMFaD0KVVQmG1QoeOGTW+MKCw==
-X-Received: by 2002:a05:6808:2f18:b0:43f:5bee:4e49 with SMTP id 5614622812f47-4502a3fd765mr439380b6e.41.1762548827591;
-        Fri, 07 Nov 2025 12:53:47 -0800 (PST)
+        bh=yEuLcTpBWY/VBsTt3a3S2ALMGGYfGqylnafUO+qzJ7Y=;
+        b=iSklQz8N2dMpmE/wHAaDVxqCam+lTCNgyl/ms49XpRaqIuCr7gc671oDw/2Ka9VoTi
+         2tv5MsdXPhaExPYoSJJxXyJ6ympOUUg7lKhemYam9fMA+jeIW4LP+VpqxuFlNrGxbbyF
+         ENIdygsEnZcucipgnBq25nhqhweb0KvE9eQOZVKDLgKu2zUMiDXQ/w4EXY6cRzSdnDm6
+         uPXF0vlroelPAD5dVLZXzC+eM5LCD/Ix9KoXXTYIjywBzv329XexsrMzY7j+RUzlEaWk
+         qxRnOJw5pewSs6NKij+vZl1Y8zs5qT1VO1eek/w4zNqyK1lRvK4R8dH1Xvn+58TtUi4N
+         iBNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVW8qwMVpX6YG/az86biL6pogeDCM3Ndhe02jVZYDjchgwTpTB/apkBrt5/jtYa/zAoo4LGq2R6KaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVoVlFibmTMyVEK3MaZAcWpN2BD9TvXeU33vrams55B8OBSvHM
+	Ew42ZvGalyEl8Cnguh6Gq84dco1HbESmXPJN/FBhO8vb191r/8qMs4DWgM2DQEDGYVY=
+X-Gm-Gg: ASbGncs4aGgS05NgLykxvdf1yCRFnWJEG+MfFglUUGPPBlSi0m9horXhuyHUOz48LWd
+	Z24OxTqIhZOppCqPh6ATXw2yIfjgthY4DxXqHRZZm8l8NVR0L98otE2p7QpWlvT7VtSsMUWTv6J
+	ODSapSVzSpuwh1ctlJ0T6MmkH26MQEQasm9wFzqypbIsBcVD8yILS3RoxwMw1fBhPX90ePSEkuP
+	wEw6UR2ZBaCDonIzYHd8o4w39qJEceIvDCN5+XO/sOzbdFvdNbCxR86YHgAzPLHjyke0l5t39zr
+	B/1VO9exk54ct3NNW/FVCSfG3giDeQlVbhvnYGqUKL60oFtbfvlpi364WgtKNtMXf8pq4OYVA8H
+	xyopOAOQ3ETqRA25U5MjLYphpTr4hjPttjWdoinHW/9XQ0rN9AON1ypSni2y9fXZN42+eq5nfXP
+	nTV4jgti+57VBQsek=
+X-Google-Smtp-Source: AGHT+IELkzg/Of84t9nsWUqhdVT6cx3AtRHpbp9W/yhXXlclhMmomOmCFDfPyUuBjs5CBkNK0crRXA==
+X-Received: by 2002:a05:6820:6706:b0:654:f200:1490 with SMTP id 006d021491bc7-656d1b95d83mr1523298eaf.1.1762548828588;
+        Fri, 07 Nov 2025 12:53:48 -0800 (PST)
 Received: from [127.0.1.1] ([2600:8803:e7e4:500:7bb8:950b:327d:4ba4])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-656c57eae5esm2915601eaf.16.2025.11.07.12.53.46
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-656c57eae5esm2915601eaf.16.2025.11.07.12.53.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 12:53:47 -0800 (PST)
+        Fri, 07 Nov 2025 12:53:48 -0800 (PST)
 From: David Lechner <dlechner@baylibre.com>
-Date: Fri, 07 Nov 2025 14:52:50 -0600
-Subject: [PATCH v2 4/6] spi: axi-spi-engine: support
- SPI_MULTI_BUS_MODE_STRIPE
+Date: Fri, 07 Nov 2025 14:52:51 -0600
+Subject: [PATCH v2 5/6] dt-bindings: iio: adc: adi,ad7380: add spi-buses
+ property
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251107-spi-add-multi-bus-support-v2-4-8a92693314d9@baylibre.com>
+Message-Id: <20251107-spi-add-multi-bus-support-v2-5-8a92693314d9@baylibre.com>
 References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
 In-Reply-To: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -100,321 +100,81 @@ Cc: Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-iio@vger.kernel.org, David Lechner <dlechner@baylibre.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11262;
- i=dlechner@baylibre.com; h=from:subject:message-id;
- bh=tDgY9PgjE3rE33iaQr1P6OAzhqfnlIin3aQjjP7cTsw=;
- b=owEBbAGT/pANAwAKAcLMIAH/AY/AAcsmYgBpDlxAFRFTT9BeZuPCT/R7t64DTDDepkVGvPhGA
- ownsyE6vfWJATIEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaQ5cQAAKCRDCzCAB/wGP
- wDWHB/QJbbjOIG/SDsXPlJGmah/kDYwKw8YWdx9ahTjab4U87wdF1ymGKiEBWyO3pzAl4HpVelT
- pXilGpHmXTH17QuhcaoN3chgMDltrI3ZE3qTO2RMUM5INRLGVo7PkSn0vYofyaiWDcN0nXIWxZ3
- r3NNH+B5Tj7rbpAZAYnNR5Ku2tnNghXS7N9HRCnnkNq6gTFY8lYy6xMQjV0cNkrB+jShE0jgqlZ
- zf7NI1Aj8fEhZVY7iNxRAw1mowSyfb+k8D0N6P2pv+7t0S2Cqr+Hps5QnSxK5AJU5LZKOITGFHy
- w3bAmhKjtmnnhKKDVxHSmAedPpvvvTCVOE8TBEGNCYrOv1Y=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2055; i=dlechner@baylibre.com;
+ h=from:subject:message-id; bh=SSI0SDfdzuTFSZUxXbce1zwCpj2iLjVhwuT4WvAAlLU=;
+ b=owEBbQGS/pANAwAKAcLMIAH/AY/AAcsmYgBpDlxHSOYmvskhvEqT8odlqy/PkdbyYBsitZwDm
+ oHuMNz9yqaJATMEAAEKAB0WIQTsGNmeYg6D1pzYaJjCzCAB/wGPwAUCaQ5cRwAKCRDCzCAB/wGP
+ wIM0B/4yu2sr3jOslO693wsOVfFOZsHgNwoP8mw6JTqbQykHS4iGs29iabDb3AP2v7dEzPqrAV9
+ Mo2/6DumSMFtRFIHwUz4C5jY6iFWs5E2tRn5G9afvp/Eppwah99OrHWLsGxT5KMRJi0nJUP4R2n
+ loEXzwW3FL+tI+qXP70AjwEDPtjC5pWymgUW/6l+roajx6Kv8+RzOAOZvusc5uJtqND4+sUwatd
+ imEB239jVE3keaghxkQ4qrAhM3PrbnGpWSfwwxH6xeLTXQMloUneZx9HD/TZlUS5fpM5QOHnxvd
+ +Em532FK9mUGEoKWISea9IvwIJ7WrljKaoW48YpHpQFxxSI2
 X-Developer-Key: i=dlechner@baylibre.com; a=openpgp;
  fpr=8A73D82A6A1F509907F373881F8AF88C82F77C03
 
-Add support for SPI_MULTI_BUS_MODE_STRIPE to the AXI SPI engine driver.
-
-The v2.0.0 version of the AXI SPI Engine IP core supports multiple
-buses. This can be used with SPI_MULTI_BUS_MODE_STRIPE to support
-reading from simultaneous sampling ADCs that have a separate SDO line
-for each analog channel. This allows reading all channels at the same
-time to increase throughput.
+Add spi-buses property to describe how many SDO lines are wired up on
+the ADC. These chips are simultaneous sampling ADCs and have one SDO
+line per channel, either 2 or 4 total depending on the part number.
 
 Signed-off-by: David Lechner <dlechner@baylibre.com>
 ---
-v2 changes:
-* Fixed off-by-one in SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK GENMASK
----
- drivers/spi/spi-axi-spi-engine.c | 128 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 124 insertions(+), 4 deletions(-)
+ .../devicetree/bindings/iio/adc/adi,ad7380.yaml    | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-index e06f412190fd243161a0b3df992f26157531f6a1..c9d146e978b89abb8273900722ae2cfafdd6325f 100644
---- a/drivers/spi/spi-axi-spi-engine.c
-+++ b/drivers/spi/spi-axi-spi-engine.c
-@@ -23,6 +23,9 @@
- #include <linux/spi/spi.h>
- #include <trace/events/spi.h>
+diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+index b91bfb16ed6bc6c605880f81050250d1ed9c307a..9ef46cdb047d45d088e0fbc345f58c5b09083385 100644
+--- a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+@@ -62,6 +62,10 @@ properties:
+   spi-cpol: true
+   spi-cpha: true
  
-+#define SPI_ENGINE_REG_DATA_WIDTH		0x0C
-+#define   SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK	GENMASK(23, 16)
-+#define   SPI_ENGINE_REG_DATA_WIDTH_MASK		GENMASK(15, 0)
- #define SPI_ENGINE_REG_OFFLOAD_MEM_ADDR_WIDTH	0x10
- #define SPI_ENGINE_REG_RESET			0x40
- 
-@@ -75,6 +78,8 @@
- #define SPI_ENGINE_CMD_REG_CLK_DIV		0x0
- #define SPI_ENGINE_CMD_REG_CONFIG		0x1
- #define SPI_ENGINE_CMD_REG_XFER_BITS		0x2
-+#define SPI_ENGINE_CMD_REG_SDI_MASK		0x3
-+#define SPI_ENGINE_CMD_REG_SDO_MASK		0x4
- 
- #define SPI_ENGINE_MISC_SYNC			0x0
- #define SPI_ENGINE_MISC_SLEEP			0x1
-@@ -105,6 +110,10 @@
- #define SPI_ENGINE_OFFLOAD_CMD_FIFO_SIZE	16
- #define SPI_ENGINE_OFFLOAD_SDO_FIFO_SIZE	16
- 
-+/* Extending SPI_MULTI_BUS_MODE values for optimizing messages. */
-+#define SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN	-1
-+#define SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING	-2
++  spi-data-buses:
++    minItems: 1
++    maxItems: 4
 +
- struct spi_engine_program {
- 	unsigned int length;
- 	uint16_t instructions[] __counted_by(length);
-@@ -142,6 +151,9 @@ struct spi_engine_offload {
- 	unsigned long flags;
- 	unsigned int offload_num;
- 	unsigned int spi_mode_config;
-+	unsigned int multi_bus_mode;
-+	u8 primary_bus_mask;
-+	u8 all_bus_mask;
- 	u8 bits_per_word;
- };
+   vcc-supply:
+     description: A 3V to 3.6V supply that powers the chip.
  
-@@ -165,6 +177,22 @@ struct spi_engine {
- 	bool offload_requires_sync;
- };
+@@ -245,6 +249,22 @@ allOf:
+       patternProperties:
+         "^channel@[0-3]$": false
  
-+static u8 spi_engine_primary_bus_flag(struct spi_device *spi)
-+{
-+	return BIT(spi->data_bus[0]);
-+}
++  # 2-channel chip can only have up to 2 buses
++  - if:
++      properties:
++        compatible:
++          enum:
++            - adi,ad7380
++            - adi,ad7381
++            - adi,ad7386
++            - adi,ad7387
++            - adi,ad7388
++            - adi,ad7389
++    then:
++      properties:
++        spi-data-buses:
++          maxItems: 2
 +
-+static u8 spi_engine_all_bus_flags(struct spi_device *spi)
-+{
-+	u8 flags = 0;
-+	int i;
-+
-+	for (i = 0; i < spi->num_data_bus; i++)
-+		flags |= BIT(spi->data_bus[i]);
-+
-+	return flags;
-+}
-+
- static void spi_engine_program_add_cmd(struct spi_engine_program *p,
- 	bool dry, uint16_t cmd)
- {
-@@ -193,7 +221,7 @@ static unsigned int spi_engine_get_config(struct spi_device *spi)
- }
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
+@@ -260,6 +280,7 @@ examples:
+             spi-cpol;
+             spi-cpha;
+             spi-max-frequency = <80000000>;
++            spi-data-buses = <0>, <1>;
  
- static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
--	struct spi_transfer *xfer)
-+				struct spi_transfer *xfer, u32 num_lanes)
- {
- 	unsigned int len;
+             interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
+             interrupt-parent = <&gpio0>;
+@@ -284,6 +305,7 @@ examples:
+             spi-cpol;
+             spi-cpha;
+             spi-max-frequency = <80000000>;
++            spi-data-buses = <0>, <1>, <2>, <3>;
  
-@@ -204,6 +232,9 @@ static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
- 	else
- 		len = xfer->len / 4;
- 
-+	if (xfer->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE)
-+		len /= num_lanes;
-+
- 	while (len) {
- 		unsigned int n = min(len, 256U);
- 		unsigned int flags = 0;
-@@ -269,6 +300,7 @@ static int spi_engine_precompile_message(struct spi_message *msg)
- {
- 	unsigned int clk_div, max_hz = msg->spi->controller->max_speed_hz;
- 	struct spi_transfer *xfer;
-+	int multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN;
- 	u8 min_bits_per_word = U8_MAX;
- 	u8 max_bits_per_word = 0;
- 
-@@ -284,6 +316,24 @@ static int spi_engine_precompile_message(struct spi_message *msg)
- 			min_bits_per_word = min(min_bits_per_word, xfer->bits_per_word);
- 			max_bits_per_word = max(max_bits_per_word, xfer->bits_per_word);
- 		}
-+
-+		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
-+		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
-+			switch (xfer->multi_bus_mode) {
-+			case SPI_MULTI_BUS_MODE_SINGLE:
-+			case SPI_MULTI_BUS_MODE_STRIPE:
-+				break;
-+			default:
-+				/* Other modes, like mirror not supported */
-+				return -EINVAL;
-+			}
-+
-+			/* If all xfers have the same multi-bus mode, we can optimize. */
-+			if (multi_bus_mode == SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN)
-+				multi_bus_mode = xfer->multi_bus_mode;
-+			else if (multi_bus_mode != xfer->multi_bus_mode)
-+				multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING;
-+		}
- 	}
- 
- 	/*
-@@ -297,6 +347,10 @@ static int spi_engine_precompile_message(struct spi_message *msg)
- 			priv->bits_per_word = min_bits_per_word;
- 		else
- 			priv->bits_per_word = 0;
-+
-+		priv->multi_bus_mode = multi_bus_mode;
-+		priv->primary_bus_mask = spi_engine_primary_bus_flag(msg->spi);
-+		priv->all_bus_mask = spi_engine_all_bus_flags(msg->spi);
- 	}
- 
- 	return 0;
-@@ -310,6 +364,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 	struct spi_engine_offload *priv;
- 	struct spi_transfer *xfer;
- 	int clk_div, new_clk_div, inst_ns;
-+	int prev_multi_bus_mode = SPI_MULTI_BUS_MODE_SINGLE;
- 	bool keep_cs = false;
- 	u8 bits_per_word = 0;
- 
-@@ -334,6 +389,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 		 * in the same way.
- 		 */
- 		bits_per_word = priv->bits_per_word;
-+		prev_multi_bus_mode = priv->multi_bus_mode;
- 	} else {
- 		spi_engine_program_add_cmd(p, dry,
- 			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_CONFIG,
-@@ -344,6 +400,24 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 	spi_engine_gen_cs(p, dry, spi, !xfer->cs_off);
- 
- 	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-+		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
-+		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
-+			if (xfer->multi_bus_mode != prev_multi_bus_mode) {
-+				u8 bus_flags = spi_engine_primary_bus_flag(spi);
-+
-+				if (xfer->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE)
-+					bus_flags = spi_engine_all_bus_flags(spi);
-+
-+				spi_engine_program_add_cmd(p, dry,
-+					SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-+							     bus_flags));
-+				spi_engine_program_add_cmd(p, dry,
-+					SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-+							     bus_flags));
-+			}
-+			prev_multi_bus_mode = xfer->multi_bus_mode;
-+		}
-+
- 		new_clk_div = host->max_speed_hz / xfer->effective_speed_hz;
- 		if (new_clk_div != clk_div) {
- 			clk_div = new_clk_div;
-@@ -360,7 +434,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 					bits_per_word));
- 		}
- 
--		spi_engine_gen_xfer(p, dry, xfer);
-+		spi_engine_gen_xfer(p, dry, xfer, spi->num_data_bus);
- 		spi_engine_gen_sleep(p, dry, spi_delay_to_ns(&xfer->delay, xfer),
- 				     inst_ns, xfer->effective_speed_hz);
- 
-@@ -394,6 +468,17 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
- 	if (clk_div != 1)
- 		spi_engine_program_add_cmd(p, dry,
- 			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_CLK_DIV, 0));
-+
-+	/* Restore single bus mode unless offload disable will restore it later. */
-+	if (prev_multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE &&
-+	    (!msg->offload || priv->multi_bus_mode != SPI_MULTI_BUS_MODE_STRIPE)) {
-+		u8 bus_flags = spi_engine_primary_bus_flag(spi);
-+
-+		spi_engine_program_add_cmd(p, dry,
-+			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK, bus_flags));
-+		spi_engine_program_add_cmd(p, dry,
-+			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK, bus_flags));
-+	}
- }
- 
- static void spi_engine_xfer_next(struct spi_message *msg,
-@@ -799,6 +884,17 @@ static int spi_engine_setup(struct spi_device *device)
- 	writel_relaxed(SPI_ENGINE_CMD_CS_INV(spi_engine->cs_inv),
- 		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
- 
-+	if (host->num_data_bus > 1) {
-+		u8 bus_flags = spi_engine_primary_bus_flag(device);
-+
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-+						    bus_flags),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-+						    bus_flags),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+	}
-+
- 	/*
- 	 * In addition to setting the flags, we have to do a CS assert command
- 	 * to make the new setting actually take effect.
-@@ -902,6 +998,15 @@ static int spi_engine_trigger_enable(struct spi_offload *offload)
- 						    priv->bits_per_word),
- 			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
- 
-+	if (priv->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE) {
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-+						    priv->all_bus_mask),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-+						    priv->all_bus_mask),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+	}
-+
- 	writel_relaxed(SPI_ENGINE_CMD_SYNC(1),
- 		spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
- 
-@@ -929,6 +1034,16 @@ static void spi_engine_trigger_disable(struct spi_offload *offload)
- 	reg &= ~SPI_ENGINE_OFFLOAD_CTRL_ENABLE;
- 	writel_relaxed(reg, spi_engine->base +
- 			    SPI_ENGINE_REG_OFFLOAD_CTRL(priv->offload_num));
-+
-+	/* Restore single-bus mode. */
-+	if (priv->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE) {
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-+						    priv->primary_bus_mask),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-+						    priv->primary_bus_mask),
-+			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-+	}
- }
- 
- static struct dma_chan
-@@ -973,7 +1088,7 @@ static int spi_engine_probe(struct platform_device *pdev)
- {
- 	struct spi_engine *spi_engine;
- 	struct spi_controller *host;
--	unsigned int version;
-+	unsigned int version, data_width_reg_val;
- 	int irq, ret;
- 
- 	irq = platform_get_irq(pdev, 0);
-@@ -1042,7 +1157,7 @@ static int spi_engine_probe(struct platform_device *pdev)
- 		return PTR_ERR(spi_engine->base);
- 
- 	version = readl(spi_engine->base + ADI_AXI_REG_VERSION);
--	if (ADI_AXI_PCORE_VER_MAJOR(version) != 1) {
-+	if (ADI_AXI_PCORE_VER_MAJOR(version) > 2) {
- 		dev_err(&pdev->dev, "Unsupported peripheral version %u.%u.%u\n",
- 			ADI_AXI_PCORE_VER_MAJOR(version),
- 			ADI_AXI_PCORE_VER_MINOR(version),
-@@ -1050,6 +1165,8 @@ static int spi_engine_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	data_width_reg_val = readl(spi_engine->base + SPI_ENGINE_REG_DATA_WIDTH);
-+
- 	if (adi_axi_pcore_ver_gteq(version, 1, 1)) {
- 		unsigned int sizes = readl(spi_engine->base +
- 				SPI_ENGINE_REG_OFFLOAD_MEM_ADDR_WIDTH);
-@@ -1097,6 +1214,9 @@ static int spi_engine_probe(struct platform_device *pdev)
- 	}
- 	if (adi_axi_pcore_ver_gteq(version, 1, 3))
- 		host->mode_bits |= SPI_MOSI_IDLE_LOW | SPI_MOSI_IDLE_HIGH;
-+	if (adi_axi_pcore_ver_gteq(version, 2, 0))
-+		host->num_data_bus = FIELD_GET(SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK,
-+					       data_width_reg_val);
- 
- 	if (host->max_speed_hz == 0)
- 		return dev_err_probe(&pdev->dev, -EINVAL, "spi_clk rate is 0");
+             interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
+             interrupt-parent = <&gpio0>;
 
 -- 
 2.43.0
