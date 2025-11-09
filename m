@@ -1,194 +1,132 @@
-Return-Path: <linux-spi+bounces-11134-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11135-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26E3DC446CF
-	for <lists+linux-spi@lfdr.de>; Sun, 09 Nov 2025 21:32:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 225D1C44A4A
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 00:39:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D33F94E2379
-	for <lists+linux-spi@lfdr.de>; Sun,  9 Nov 2025 20:32:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD1493AF85A
+	for <lists+linux-spi@lfdr.de>; Sun,  9 Nov 2025 23:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D90D264F9C;
-	Sun,  9 Nov 2025 20:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE182594B9;
+	Sun,  9 Nov 2025 23:39:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nUi/+bH8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkrcScgN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D866F264627
-	for <linux-spi@vger.kernel.org>; Sun,  9 Nov 2025 20:32:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E712D221FB6
+	for <linux-spi@vger.kernel.org>; Sun,  9 Nov 2025 23:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762720345; cv=none; b=DUaMFqZXIS83Rxe8r0xyRaZ3F3CpYpsdhSeyWIz5dZtbfEeBVelrNyzbuphXpw7cRAZz/heNDOXzecKMfLUU6GLYGL0dkxNYGCZ75hMPnCVLB+V+eoRS9iVUEy2G9NzkVxvWUBUk/tTo52vSKv/v5CPy1l1OxUmBKRqAWjKca/g=
+	t=1762731570; cv=none; b=KqCmKxFysSbsxLEIPvlxM4KGFwjNww07/dG30MKhwyKQgm+6qhMDgVtxnSPKy9oOV6wJ5ByzI6Li3FCB1EJYxggI4kCZTe5WnPJyQkVz4Vmryv/9TBKzLXrxiqytBJBesFOvarevUFY5RK9Q/4TTjnFpToGEtacFulAx7uUaFFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762720345; c=relaxed/simple;
-	bh=ncnmoEiO4eSEK/OqYp7O/p4RCS6dsMi+/tBH8i+d8mo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mBEHUTn81rf0Krs2ykHkahtQe6CbBnYeBrEDrfnl/Es/uOyChSkr/wwHkaKgjWpRoLqQWHKV6iiWc7SNpnehUY3wmIX34UG4/4fb4qAM2wL7wj7sjBgkK1+acQUnHWMc6DsiAKsOfAAmZyNQscw34DCNEW5J9to/oIB4xxSrUgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nUi/+bH8; arc=none smtp.client-ip=74.125.224.42
+	s=arc-20240116; t=1762731570; c=relaxed/simple;
+	bh=XuTh1IgFrQYImvo9l5AWKwfidf2lOz9NOuVH4XPPcII=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jQHGjqQ4JqSdcRjdZgXUOzMZ4PmXeQEj18SdSRfNE2sBD1YlJ7rX9kjPj+/p7k7rzE1FZzQoUQ4zm/wpGZLtdQq73cBlVf6Ku4JwQuZBNigQpoE74LL3g0tRSfPYtIJoJaOJdBqb6e9xvZHqxv7CNAL8vGBD/zkRKyllWxoIzzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkrcScgN; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-63fca769163so2063480d50.2
-        for <linux-spi@vger.kernel.org>; Sun, 09 Nov 2025 12:32:23 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47755a7652eso16392555e9.0
+        for <linux-spi@vger.kernel.org>; Sun, 09 Nov 2025 15:39:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762720343; x=1763325143; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Be/c3YNg235FCmw7rjdApsq2sbm+SiCG0ZNx+ltZ8Y0=;
-        b=nUi/+bH8OWP3eqmQbfvD5vXzQTGEFzXnm51O4s/ZfOkKedntzAZb3fcd9OuK5aRqcw
-         VPtTmazi0nD2Upn3DWIlMrVIzGn+zlf4yFrv40yv2A2jkoDp9NGbcpw73wAvlkHzzCma
-         qmwso2Nge7Rw9P1s89NsjwelgRJTa+gfk8Ojh66EXH3Hc2/DUik/8gxE9/66QEVLcGA8
-         2HMm4hC1cyE7B5CtPSENcsMX/q7Zx00eXIQLuRza8ZzOrDVQqSdgu5wA+knSRQ8Rr4O1
-         bQOp9KBT/BrNVGFHNRRSkwBp7SBKk23myxnF31e4hjmvHoCciCx7ho6EfbcHIb3zLklD
-         FD4A==
+        d=gmail.com; s=20230601; t=1762731567; x=1763336367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iCF/69UO28JAIuxTpEGkmXYFsep6EElMd2T/qBX5DOg=;
+        b=RkrcScgN6GOFPhbNQF7lOSHUQ86afrgW4qv9tEDtJsT6pEIFbjm6La0BWUVJPNaAsw
+         6DrvhzwbNxXlR8Zl5PuLB7ud0Nk2LONiimEnay4kKDdbmwlPqbc6BuoMPqniMd6a8Z9N
+         VSfXJNsJ1bDy1n+jArnIAOt7QENvFhJR1TyWMZePiYewXzRN4kQEa4vTYU4TQfQfrlK9
+         i4wdcroTJHgBY3bzfGTWJZa9FAunmuRYNjBr6Ab8n89ybdsudE/qrah08hjsiPAx+jQK
+         A2aQhljGSbxHGug6HWalsBYlfSEfC/Qdf+ptEmiZnINkdqBM5cjkaONFTJ/VCQgkCrqm
+         9Ljw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762720343; x=1763325143;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Be/c3YNg235FCmw7rjdApsq2sbm+SiCG0ZNx+ltZ8Y0=;
-        b=j50aDjCiDe2iwZZ/1jv5SN1By7pI6ntKkO7xBemdVaGVLHra+jgYIEimx1qO0+iqZe
-         qvsEdUxyExdW/ZmhEjPBKPgiTAVfVAyusd8+lknHjqKkgEjME1knfycEIOCb3FAfnVpH
-         r8SP+QdSB7rGdFdJzYCQWagXxyPc2do3+TdC14lajtKd+Bk1mnYjbwXgDZJEk7mZUGTE
-         YZME2IuFUxfuV3F0kGRjpHzLke53Mg7ddohSr5cus62vJgFOYj3Tj/Wy4ppyvIpSrFo6
-         LXBT6iBTznD9hl58cBuOjWySz0sulQx/bJBKN33PoAbpn1DgX/WIXMVMxd9HXIE/f75O
-         uRqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEwe4Z+ayVc5Ai5jsl/Y+0mAcFGl9voE84StgOIRgvO5CfeY1JGhazo2r/wp76gwjdEuuWS9iVeEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMQlITSyqj3UOazoFZm/s5YnaeLBYZ78Hn1Eh3HrBKv3gVKWCC
-	B19DwijUEPciLbJV/2CrwJssstQ/E41PasE+Tgo5Rh1Fh0TjtQ2SxO69bMDVusy5in6ijnAzmgs
-	iycO4mSY0PgpWZnXt2Q9TW+S1LLfvR2c9gx3Z
-X-Gm-Gg: ASbGncuWU0bMFRNu/MXzLpl9sKur3n/JIDO/dXJNFSMUf9x4s/Q/uom5ttGjDVWCrHV
-	hh5jwZSgAVHyS4+qXaUmMmRolxDjP6jsos1Xp32vvkerJopfS+mUzWVVRvsIKrPKPz8X9GKd15+
-	GGtWXXesilGmYBBWVLmixFZxV+XMX8aPeFlidy1Ex6zlptz0EjR9p3WKtfsPiaak/g/fS0qTpAq
-	jweuT2UHx+xUX7Q+4E3R7wNqC3xRXz2L4GCT4d+dRk1YIT98bjZucFMdRU=
-X-Google-Smtp-Source: AGHT+IGFO+lynNkcrtWe+dcm0Bay4mLO/hNJVc/tVTFVqDu91IbdCk4wGmH46TTnv/kCinfOBuJILdrgdGagC9sC9Ro=
-X-Received: by 2002:a05:690c:dc1:b0:787:cfde:6787 with SMTP id
- 00721157ae682-787d543c441mr61525737b3.37.1762720342868; Sun, 09 Nov 2025
- 12:32:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762731567; x=1763336367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iCF/69UO28JAIuxTpEGkmXYFsep6EElMd2T/qBX5DOg=;
+        b=ndSlJLkujDxl8SPXwPNvF9fljmkiFFtQxK9Nfiw8OXWgwBl7wy3KdXkT53+feAcG1P
+         oYXESfpMXic6+ueL1UDvrDZnvTqraqleuTYzbt5Trbj2dPjlay4lunve1Xzspquj+UjC
+         4vBzShTTpcJm30r6ZfcPrxO647E/WX8HBAb/WrtC346HDTHQ1vYJoc3Nki9joe4URtys
+         +BN7V6qX3F2ShRP7ygb80si1MF3nf0fiJGMQzKJXs+uFsDvVz0lEsRsoPPRV3N/u0LWw
+         c1Bk+4/etyB0DcMEFBvqUKWaYqprf3kFs7Oyxax+Ybe+r+O8vm0kcZlsK+pRtOfWdiGo
+         oh6w==
+X-Gm-Message-State: AOJu0YymyuGR5WxDcoe8/2YG3ZDP2J06pkWcymfzAT9w/84deQjiPunP
+	XEh/Ke6xP14BYVmbd9dwrNUyqFbC/y41vWQhhjN2IxCHnwaZ2BksjDvk+53aEA==
+X-Gm-Gg: ASbGncsVO6zAdeFHOlLHfybK2rSU5qHYuNklaB+wfBruQPyJdchr8h4NTY262il5TzM
+	aMJzLYfzMJP7duYCwOHdanOZamDDTWAhD+QavdbLYGTkC2TQUobCyePMJ+B4ELGFejTIFDF2NA2
+	b9FkIcHX7Lz/gig33HneGAOd6KT8yddxjBrzLJFjcHtViF5j9hwQffRB6FFVZaj/1/O6X40kydP
+	mGwfCiiiQpRv0S1iN1rOogYh3WiEjNPa744Cv1BHeuWK+uyV3wg+7VufntbDlTP0zsb2/LjqapK
+	R+gi4EfHyl5maSyjH/KkR2XYgGkCr7w/P0exDJaUh0LObVvwGBnHRZnr9KNyr5dJISikYvkqGfQ
+	Z3xdsXCSLdy5uaW7jU6Zp+RGHKhIUTj4UNmv68W3t7u068bX392hBsp+yfdP4Hdck80NkQfE5V1
+	Pm+0LRVbh9vcuO19U1sJi6Tc1IIF6yPOoOeUqjLdiYK6dGuwdot9j77PESoATuqw==
+X-Google-Smtp-Source: AGHT+IFBy2xEZD2lLPvpla6AioQ/QiXqiEKzPxRtQorAJRobkTwVf4XlbVouu7QfhjKSCcwM2f//gA==
+X-Received: by 2002:a05:600c:1f90:b0:471:989:9d7b with SMTP id 5b1f17b1804b1-47773271adfmr67587065e9.21.1762731567164;
+        Sun, 09 Nov 2025 15:39:27 -0800 (PST)
+Received: from localhost.localdomain (178-119-182-195.access.telenet.be. [178.119.182.195])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe63ba87sm19761830f8f.14.2025.11.09.15.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Nov 2025 15:39:26 -0800 (PST)
+From: Kiril Maler <oss.kiril.maler@gmail.com>
+To: linux-spi@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	broonie@kernel.org,
+	Kiril Maler <oss.kiril.maler@gmail.com>
+Subject: Fixes: 833026ad56f76d1a1035d6511 ("spi: spidev: prevent spidev->speed_hz from being zero")
+Date: Mon, 10 Nov 2025 00:39:05 +0100
+Message-ID: <20251109233905.8311-1-oss.kiril.maler@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_AB89A8B8A4621BA42DE4AF179EF525F32C0A@qq.com>
-In-Reply-To: <tencent_AB89A8B8A4621BA42DE4AF179EF525F32C0A@qq.com>
-From: Jonas Gorski <jonas.gorski@gmail.com>
-Date: Sun, 9 Nov 2025 21:32:11 +0100
-X-Gm-Features: AWmQ_bnWPE5IucMM6RwAqhHzvVT3oCu15UXxdwh_2sU5Fhi4K2e4bzPMgteYxmo
-Message-ID: <CAOiHx=k7ULBgdq+B=5D7Zon5R8vwPuEc0t9H8QA66x0Zhvan8g@mail.gmail.com>
-Subject: Re: [PATCH] spi: bcm63xx: fix premature CS deassertion
-To: =?UTF-8?B?5Liy5LqW44Gu5YWt6Iqx?= <929513338@qq.com>
-Cc: broonie <broonie@kernel.org>, linux-spi <linux-spi@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi,
+[PATCH] Revert spi->max_speed_hz only when 0 in ioctl SPI_IOC_WR_MAX_SPEED_HZ
 
-On Sun, Nov 9, 2025 at 2:02=E2=80=AFPM =E4=B8=B2=E4=BA=96=E3=81=AE=E5=85=AD=
-=E8=8A=B1 <929513338@qq.com> wrote:
->
-> The bcm63xx SPI controller is programmed to use full-duplex mode
-> when a spi_message contains multiple TX and RX transfers and there is no
-> prepend (i.e. do_rx && do_tx && prepend_len =3D=3D 0). In this case the
-> hardware shifts out the contents of the TX FIFO while clocking in RX
-> data.
->
-> On a BCM6358 device, this causes the chip-select signal to drop too early
-> before actually read anything.
->
-> A concrete failing case is a 3-transfer message used to read the MAC
-> address from SPI-NOR:
->   - TX 0x03 (read command)
->   - TX 3-byte address (any)
->   - RX 6 bytes (MAC)
->
-> In contrast, a 2-transfer JEDEC-ID read (0x9F + 6-byte RX) works because =
-the
-> driver uses "prepend_len".
->
-> To keep CS asserted and generate proper dummy clocks for RX transfers,
-> fill the TX FIFO with 0xff bytes for RX segments.
+Some drivers (at least drivers/spi/spi-fsl-dspi.c) use spi->max_speed_hz to keep the value
+set with last ioctl SPI_IOC_WR_MAX_SPEED_HZ.
 
-Thank you for the patch! I could reproduce the behavior on master with
-a BCM6368 with SPI flash (getting to netboot OpenWrt main on a 32 MiB
-RAM device was an adventure lol).
+But at the end of case SPI_IOC_WR_MAX_SPEED_HZ the value is set back unconditionally to default, highest possible clock.
 
-I played around a bit, and it looks like there is a hidden accumulator
-for how many bytes were written into the fifo buffer, and this
-overrides the bytes count in the control message for duplex messages.
+This results in erratic SPI transfers with highest clock, in my case instead of 6MHz was measured 37,5MHz.
 
-It does not matter where you write those extra bytes for the dummy tx
-to do during rx - it doesn't even have to be within the message
-length, I could just write them in a loop to the end of the fifo
-buffer, and it still worked. It just matters that the amount of bytes
-written to the fifo buffer match the total message length. It also
-does not matter what you write for those read-only parts, I tried
-0x00, 0xaa, both worked as well. Though 0xff is probably the safest.
-
-That being said ...
-
->
-> This patch resolves the issue on BCM6358 (tested with OpenWrt) and in
-> the v6.12.57 kernel:
-
-This patch should be against spi-next (?) from
-git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git. Won't
-probably not matter much though, as the driver doesn't get many
-changes anymore.
-
->
-
-Here should be a Fixes: tag, e.g.:
-
-Fixes: b17de076062a ("spi/bcm63xx: work around inability to keep CS up")
+Probably also spidev->speed_hz must be adjusted, because it is used for ioctl SPI_IOC_RD_MAX_SPEED_HZ.
 
 
-> Signed-off-by: Hang Zhou <929513338@qq.com>
+How it was discovered:
 
-Your name here does not match the From from this email.
+My board has SPI Flash and EEPROM chips behind slow FPGA spi-mux logic. Max clock is around 8MHz.
 
-> ---
->  drivers/spi/spi-bcm63xx.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-> index 000000000000..000000000000 100644
-> --- a/drivers/spi/spi-bcm63xx.c
-> +++ b/drivers/spi/spi-bcm63xx.c
-> @@ -247,6 +247,7 @@ static int bcm63xx_txrx_bufs(struct spi_device *spi, =
-struct spi_transfer *first,
->
->  =E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82if (t->rx_buf) {
->  =E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=
-=80=82do_rx =3D true;
-> +=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=
-=80=82memset_io(bs->tx_io + len, 0xFF, t->len);
+The config sequence in /usr/sbin/flashrom -> linux_spi.c -> linux_spi_init(...) is
+	SPI_IOC_WR_MAX_SPEED_HZ
+	SPI_IOC_WR_MODE
+	SPI_IOC_WR_BITS_PER_WORD
 
-You need to check that there is no t->tx_buf, else you will overwrite
-the already written tx_buf for actual duplex messages with 0xff. And
-the fifo counter will be off.
+The RDID command to SPI target Flash chips resulted in incorrect Vendor/chipID, or ff ff ff
 
->  =E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=
-=80=82/* prepend is half-duplex write only */
->  =E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=
-=80=82if (t =3D=3D first)
->  =E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=
-=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=
-=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82=E2=80=82prepend_len =3D=
- 0;
-> --
+After adding second SPI_IOC_WR_MAX_SPEED_HZ at the end of config sequence, correct clock
+was measured, programming all boards succeeded using flashrom or spi-pipe.
 
-Best regards,
-Jonas
+
+Signed-off-by: Kiril Maler <oss.kiril.maler@gmail.com>
+
+index 5300c942a..4ad11381f 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -489,7 +489,7 @@ spidev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 			dev_dbg(&spi->dev, "%d Hz (max)\n", spidev->speed_hz);
+ 		}
+ 
+-		spi->max_speed_hz = save;
++		spi->max_speed_hz = spi->max_speed_hz ? : save;
+ 		break;
+ 	}
+ 	default:
 
