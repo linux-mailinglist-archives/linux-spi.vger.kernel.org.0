@@ -1,45 +1,44 @@
-Return-Path: <linux-spi+bounces-11148-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11146-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83850C4901D
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 20:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F57AC48FA2
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 20:22:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B07963BDB3A
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 19:16:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F9B73AC31A
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 19:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB19832E68D;
-	Mon, 10 Nov 2025 19:15:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2668332BF32;
+	Mon, 10 Nov 2025 19:15:52 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5934D321F31;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535F0136351;
 	Mon, 10 Nov 2025 19:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762802153; cv=none; b=AtaoxkeoIhSTXOmAuf6Kp5LddgFf4VeDKYTfCz8HbUzkoaKZWx22uvoW6cyd7m7Rf/YSoSNnwnBNFQOaMY+AfYzXteRn5UhW8TVFzBk2hZUyqXyFYiZBeURIERTh4xRZypeYf9GGchgjZy86HAuD3Z6xZX0M2jKGlWOSmffxTw0=
+	t=1762802152; cv=none; b=bI8S34pHhZ7PMf+NNwauMafmS5+lAqfE/YmHS3uvUh6F6zboBVyzWd0LVy9HB1e5JAr3cQNW0pS8jiCPecL7CAJgwgVlpF8unbTELWo5t7Aus6g/BKJ9oPjllxhqHjeuFv6AuBUivRtSv7vjBocsROchbAKjcUgl7r6QszMvCJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762802153; c=relaxed/simple;
-	bh=cBXYI7Ip6U6YABa4Zfp8DyYBdPx77L6yue/v252LACw=;
+	s=arc-20240116; t=1762802152; c=relaxed/simple;
+	bh=id2JJee4nGZVhNPaZX1f6WOSr0vjJcvlPgl2F1hrb+E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eOguXQ+1llbm3pvhGrUDxKXLlFdQxolRSgl+vu/ib8cfVBTyVTgVaHZgDuZjsJFE1/7/Q1Y2x8MgNeU3Jk9Kgu59jzDFa8aVk1NmJ0vawewFmCthTU7ru0zHmqXf6kr9e2EQLzS6QBTbYCw1AC0DShXb/IzJ9SgBHvYzH74jQt8=
+	 In-Reply-To:To:Cc; b=Pd6t0VP4DWp3EMAPLUKWN8WzNHW5uLYyCCC1PbeTrzKUYZaxjGJ4PV+s7HSo+6JridygNTgyNf18qPYCErx6OBaFnW76MSA/DJ8NqVdzYlzWrh4zLBj+tHduYRIeroB2ZIRDIzFMxtH1J2XpO9pN7wgN0tg4LiT67k2XCI/ABNg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
 Received: from srv01.abscue.de (localhost [127.0.0.1])
-	by spamfilter.srv.local (Postfix) with ESMTP id 6CAFF1C24F0;
-	Mon, 10 Nov 2025 20:10:30 +0100 (CET)
+	by spamfilter.srv.local (Postfix) with ESMTP id 887CB1C0036;
+	Mon, 10 Nov 2025 20:10:33 +0100 (CET)
 X-Spam-Level: 
 Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cdd8:ff00:36bc:9812:27d4:17cf])
-	by srv01.abscue.de (Postfix) with ESMTPSA id E45B81C0038;
-	Mon, 10 Nov 2025 20:10:29 +0100 (CET)
+	by srv01.abscue.de (Postfix) with ESMTPSA id 3A6AC1C0241;
+	Mon, 10 Nov 2025 20:10:30 +0100 (CET)
 From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Date: Mon, 10 Nov 2025 20:08:59 +0100
-Subject: [PATCH v2 2/3] spi: sprd-adi: Remove code for storing the reboot
- mode
+Date: Mon, 10 Nov 2025 20:09:00 +0100
+Subject: [PATCH v2 3/3] power: reset: sc27xx: Drop unused driver
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -48,7 +47,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251110-sc27xx-mfd-poweroff-v2-2-fd5842e732fe@abscue.de>
+Message-Id: <20251110-sc27xx-mfd-poweroff-v2-3-fd5842e732fe@abscue.de>
 References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
 In-Reply-To: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
 To: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
@@ -57,146 +56,138 @@ To: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
  Sebastian Reichel <sre@kernel.org>
 Cc: Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
  linux-spi@vger.kernel.org, linux-pm@vger.kernel.org, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
 
-This functionality is now provided by the PMIC driver. Ideally, the
-entire reboot code should be removed since it does not belong in the bus
-driver, but it is kept for now since there is no driver for the PMIC
-watchdog on SC2731 yet.
+This driver was never actually probed because it was missing an OF match
+table and was not integrated into the MFD driver. Remove it now that the
+power off functionality is handled directly in the MFD driver.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 ---
- drivers/spi/spi-sprd-adi.c | 73 +---------------------------------------------
- 1 file changed, 1 insertion(+), 72 deletions(-)
+ drivers/power/reset/Kconfig           |  9 ----
+ drivers/power/reset/Makefile          |  1 -
+ drivers/power/reset/sc27xx-poweroff.c | 79 -----------------------------------
+ 3 files changed, 89 deletions(-)
 
-diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index 262c11d977ea350c3b8a861064d9f109cc57a45e..47e6fbbf9991dbe77ad22e03c9709e6ee3a1b01e 100644
---- a/drivers/spi/spi-sprd-adi.c
-+++ b/drivers/spi/spi-sprd-adi.c
-@@ -101,27 +101,10 @@
- #define BIT_WDG_EN			BIT(2)
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index f6c1bcbb57deff3568d6b1b326454add3b3bbf06..007e2cd53bbfba8dddcd1a71118ddaf5ec47c0ff 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -329,15 +329,6 @@ config SYSCON_REBOOT_MODE
+ 	  register, then the bootloader can read it to take different
+ 	  action according to the mode.
  
- /* Registers definitions for PMIC */
--#define PMIC_RST_STATUS			0xee8
- #define PMIC_MODULE_EN			0xc08
- #define PMIC_CLK_EN			0xc18
- #define PMIC_WDG_BASE			0x80
- 
--/* Definition of PMIC reset status register */
--#define HWRST_STATUS_SECURITY		0x02
--#define HWRST_STATUS_RECOVERY		0x20
--#define HWRST_STATUS_NORMAL		0x40
--#define HWRST_STATUS_ALARM		0x50
--#define HWRST_STATUS_SLEEP		0x60
--#define HWRST_STATUS_FASTBOOT		0x30
--#define HWRST_STATUS_SPECIAL		0x70
--#define HWRST_STATUS_PANIC		0x80
--#define HWRST_STATUS_CFTREBOOT		0x90
--#define HWRST_STATUS_AUTODLOADER	0xa0
--#define HWRST_STATUS_IQMODE		0xb0
--#define HWRST_STATUS_SPRDISK		0xc0
--#define HWRST_STATUS_FACTORYTEST	0xe0
--#define HWRST_STATUS_WATCHDOG		0xf0
+-config POWER_RESET_SC27XX
+-	tristate "Spreadtrum SC27xx PMIC power-off driver"
+-	depends on MFD_SC27XX_PMIC || COMPILE_TEST
+-	help
+-	  This driver supports powering off a system through
+-	  Spreadtrum SC27xx series PMICs. The SC27xx series
+-	  PMICs includes the SC2720, SC2721, SC2723, SC2730
+-	  and SC2731 chips.
 -
- /* Use default timeout 50 ms that converts to watchdog values */
- #define WDG_LOAD_VAL			((50 * 32768) / 1000)
- #define WDG_LOAD_MASK			GENMASK(15, 0)
-@@ -139,7 +122,6 @@ struct sprd_adi_data {
- 	u32 slave_addr_size;
- 	int (*read_check)(u32 val, u32 reg);
- 	int (*restart)(struct sys_off_data *data);
--	void (*wdg_rst)(void *p);
- };
- 
- struct sprd_adi {
-@@ -355,58 +337,10 @@ static int sprd_adi_transfer_one(struct spi_controller *ctlr,
- 	return ret;
- }
- 
--static void sprd_adi_set_wdt_rst_mode(void *p)
+ config NVMEM_REBOOT_MODE
+ 	tristate "Generic NVMEM reboot mode driver"
+ 	depends on OF
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 0e4ae6f6b5c55729cf60846d47e6fe0fec24f3cc..14876511c675bd52a99a10890cd685a254f0e030 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -38,6 +38,5 @@ obj-$(CONFIG_POWER_RESET_SYSCON_POWEROFF) += syscon-poweroff.o
+ obj-$(CONFIG_POWER_RESET_RMOBILE) += rmobile-reset.o
+ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
+ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+-obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
+ obj-$(CONFIG_NVMEM_REBOOT_MODE) += nvmem-reboot-mode.o
+ obj-$(CONFIG_POWER_MLXBF) += pwr-mlxbf.o
+diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc27xx-poweroff.c
+deleted file mode 100644
+index 90287c31992c4889f9241e82a21a1949ecca7702..0000000000000000000000000000000000000000
+--- a/drivers/power/reset/sc27xx-poweroff.c
++++ /dev/null
+@@ -1,79 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/*
+- * Copyright (C) 2018 Spreadtrum Communications Inc.
+- * Copyright (C) 2018 Linaro Ltd.
+- */
+-
+-#include <linux/cpu.h>
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/platform_device.h>
+-#include <linux/pm.h>
+-#include <linux/regmap.h>
+-#include <linux/syscore_ops.h>
+-
+-#define SC27XX_PWR_PD_HW	0xc2c
+-#define SC27XX_PWR_OFF_EN	BIT(0)
+-#define SC27XX_SLP_CTRL		0xdf0
+-#define SC27XX_LDO_XTL_EN	BIT(3)
+-
+-static struct regmap *regmap;
+-
+-/*
+- * On Spreadtrum platform, we need power off system through external SC27xx
+- * series PMICs, and it is one similar SPI bus mapped by regmap to access PMIC,
+- * which is not fast io access.
+- *
+- * So before stopping other cores, we need release other cores' resource by
+- * taking cpus down to avoid racing regmap or spi mutex lock when poweroff
+- * system through PMIC.
+- */
+-static void sc27xx_poweroff_shutdown(void)
 -{
--#if IS_ENABLED(CONFIG_SPRD_WATCHDOG)
--	u32 val;
--	struct sprd_adi *sadi = (struct sprd_adi *)p;
+-#ifdef CONFIG_HOTPLUG_CPU
+-	int cpu;
 -
--	/* Init watchdog reset mode */
--	sprd_adi_read(sadi, PMIC_RST_STATUS, &val);
--	val |= HWRST_STATUS_WATCHDOG;
--	sprd_adi_write(sadi, PMIC_RST_STATUS, val);
+-	for_each_online_cpu(cpu) {
+-		if (cpu != smp_processor_id())
+-			remove_cpu(cpu);
+-	}
 -#endif
 -}
 -
- static int sprd_adi_restart(struct sprd_adi *sadi, unsigned long mode,
- 			    const char *cmd, struct sprd_adi_wdg *wdg)
- {
--	u32 val, reboot_mode = 0;
+-static struct syscore_ops poweroff_syscore_ops = {
+-	.shutdown = sc27xx_poweroff_shutdown,
+-};
 -
--	if (!cmd)
--		reboot_mode = HWRST_STATUS_NORMAL;
--	else if (!strncmp(cmd, "recovery", 8))
--		reboot_mode = HWRST_STATUS_RECOVERY;
--	else if (!strncmp(cmd, "alarm", 5))
--		reboot_mode = HWRST_STATUS_ALARM;
--	else if (!strncmp(cmd, "fastsleep", 9))
--		reboot_mode = HWRST_STATUS_SLEEP;
--	else if (!strncmp(cmd, "bootloader", 10))
--		reboot_mode = HWRST_STATUS_FASTBOOT;
--	else if (!strncmp(cmd, "panic", 5))
--		reboot_mode = HWRST_STATUS_PANIC;
--	else if (!strncmp(cmd, "special", 7))
--		reboot_mode = HWRST_STATUS_SPECIAL;
--	else if (!strncmp(cmd, "cftreboot", 9))
--		reboot_mode = HWRST_STATUS_CFTREBOOT;
--	else if (!strncmp(cmd, "autodloader", 11))
--		reboot_mode = HWRST_STATUS_AUTODLOADER;
--	else if (!strncmp(cmd, "iqmode", 6))
--		reboot_mode = HWRST_STATUS_IQMODE;
--	else if (!strncmp(cmd, "sprdisk", 7))
--		reboot_mode = HWRST_STATUS_SPRDISK;
--	else if (!strncmp(cmd, "tospanic", 8))
--		reboot_mode = HWRST_STATUS_SECURITY;
--	else if (!strncmp(cmd, "factorytest", 11))
--		reboot_mode = HWRST_STATUS_FACTORYTEST;
--	else
--		reboot_mode = HWRST_STATUS_NORMAL;
+-static void sc27xx_poweroff_do_poweroff(void)
+-{
+-	/* Disable the external subsys connection's power firstly */
+-	regmap_write(regmap, SC27XX_SLP_CTRL, SC27XX_LDO_XTL_EN);
 -
--	/* Record the reboot mode */
--	sprd_adi_read(sadi, wdg->rst_sts, &val);
--	val &= ~HWRST_STATUS_WATCHDOG;
--	val |= reboot_mode;
--	sprd_adi_write(sadi, wdg->rst_sts, val);
-+	u32 val;
- 
- 	/* Enable the interface clock of the watchdog */
- 	sprd_adi_read(sadi, wdg->wdg_en, &val);
-@@ -448,7 +382,6 @@ static int sprd_adi_restart_sc9860(struct sys_off_data *data)
- {
- 	struct sprd_adi_wdg wdg = {
- 		.base = PMIC_WDG_BASE,
--		.rst_sts = PMIC_RST_STATUS,
- 		.wdg_en = PMIC_MODULE_EN,
- 		.wdg_clk = PMIC_CLK_EN,
- 	};
-@@ -568,9 +501,6 @@ static int sprd_adi_probe(struct platform_device *pdev)
- 
- 	sprd_adi_hw_init(sadi);
- 
--	if (sadi->data->wdg_rst)
--		sadi->data->wdg_rst(sadi);
+-	regmap_write(regmap, SC27XX_PWR_PD_HW, SC27XX_PWR_OFF_EN);
+-}
 -
- 	ctlr->dev.of_node = pdev->dev.of_node;
- 	ctlr->bus_num = pdev->id;
- 	ctlr->num_chipselect = num_chipselect;
-@@ -606,7 +536,6 @@ static struct sprd_adi_data sc9860_data = {
- 	.slave_addr_size = ADI_10BIT_SLAVE_ADDR_SIZE,
- 	.read_check = sprd_adi_read_check_r2,
- 	.restart = sprd_adi_restart_sc9860,
--	.wdg_rst = sprd_adi_set_wdt_rst_mode,
- };
- 
- static struct sprd_adi_data sc9863_data = {
+-static int sc27xx_poweroff_probe(struct platform_device *pdev)
+-{
+-	if (regmap)
+-		return -EINVAL;
+-
+-	regmap = dev_get_regmap(pdev->dev.parent, NULL);
+-	if (!regmap)
+-		return -ENODEV;
+-
+-	pm_power_off = sc27xx_poweroff_do_poweroff;
+-	register_syscore_ops(&poweroff_syscore_ops);
+-	return 0;
+-}
+-
+-static struct platform_driver sc27xx_poweroff_driver = {
+-	.probe = sc27xx_poweroff_probe,
+-	.driver = {
+-		.name = "sc27xx-poweroff",
+-	},
+-};
+-module_platform_driver(sc27xx_poweroff_driver);
+-
+-MODULE_DESCRIPTION("Power off driver for SC27XX PMIC Device");
+-MODULE_AUTHOR("Baolin Wang <baolin.wang@unisoc.com>");
+-MODULE_LICENSE("GPL v2");
 
 -- 
 2.50.0
