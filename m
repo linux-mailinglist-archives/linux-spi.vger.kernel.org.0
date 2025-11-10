@@ -1,101 +1,80 @@
-Return-Path: <linux-spi+bounces-11150-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11151-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18DCBC49CCE
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 00:42:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F0AC49D0D
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 00:50:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8182D3AD24B
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 23:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A94433AD5F6
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 23:50:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD4D2FD689;
-	Mon, 10 Nov 2025 23:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D25A6303CA2;
+	Mon, 10 Nov 2025 23:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qspanHx2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nDJw1JGS"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51DD242D78;
-	Mon, 10 Nov 2025 23:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5202FD7CA
+	for <linux-spi@vger.kernel.org>; Mon, 10 Nov 2025 23:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762818010; cv=none; b=YNqA0BBXH2wdh6w0o3DNqsTP49MVM5PAO7Q0fUpmw52e6HqQ+xYGTHq1cWTZI6imN84WTuJxy9JCyXikpnaK20wjwBMllDrmTCHI2qy3JoQ9BD9gS1L7pj6OWm3ZELBerQFRJm5LPjJcpzQSAis6sU7eVsHIYeT4GzugBYnuKTg=
+	t=1762818634; cv=none; b=WN4jc2xBy7uz2CZMFyLp1aLMBVEzevZPUylQK0kgRBMQyP1ylaze/0YQVsDpzCKT4rTpvVaE+xo6A+SYG++zW5rUyEILHK5+ZfsQEGklHR0s5rUD5NMDOFOqufJyoII9u/D37UZMC94WwEQ4ZqwXAKqp7Vms572RpJ6gqiGUwKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762818010; c=relaxed/simple;
-	bh=007dc7pb32zadQW1VaD/UBUVaq3PK5kpl4BrOBTaDaI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=oMwy6CPuzmW4ZGzRPXI6Rj0PLLytMUxeff9J5cN8I+kmqtei9yZM9Wk+992whtEBd9GGp6yvk4iiaLySR47nodetUiby0Sy/SFrhxpxygpYg9yNCIt3hDbRAY7Ux0aqX1IG8F/pRLHlQM/bqERvA9YxPAD4kphoKcCWWseNtcBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qspanHx2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C533C4CEFB;
-	Mon, 10 Nov 2025 23:40:08 +0000 (UTC)
+	s=arc-20240116; t=1762818634; c=relaxed/simple;
+	bh=AuOvqgWu26I/WI1nK2N3IBR+AyvUMqUcYSWicLDoTe0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=dEqbY3IpTnmYfLvXhd6l7zTrS2S2rhFfV+EYyWwyWXvD05saVMiXQCrKPumSV3OOEOjwSCPSXhQZ4ssP6Q/Yr03V6ikS7aebe9NoHwbJPcBLEj3V4TFVFyAqcFwrENcvP96hN4Ezw8vdVEmYb9QrvU5IfJ00mn3cwbSVYmG8Ais=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nDJw1JGS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 491B1C113D0;
+	Mon, 10 Nov 2025 23:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762818010;
-	bh=007dc7pb32zadQW1VaD/UBUVaq3PK5kpl4BrOBTaDaI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=qspanHx2NN2vY8Zsy5vA6nBRqH1aJJHsip/l3E5EqAGDiSJEJFOQ9W3keb/ZXYXce
-	 OsaayCr0wGnEEmKB+g51fEkfPNcvQ+wM/01227jV1S8rhsgJoh9wWBNOCLMLHISEti
-	 LA5tZpcvJcQge8uDpE982V8O71S8Cq3HaEjW6i/1RMhsMlCFwo6hXyl80i5SUjuchX
-	 URsdQQVvBPMGGDQBoafo1OsX5bzoz60r5Rxr2yNprAXEaSwJt6FPwGhI8MiXz3t2cC
-	 EVPSpgDF4aD9qcwuWmpme8rffbxLvkdDlsiQ6n9lz2+MHeEgOfLJPDJraF5UtMqF6S
-	 XqL0sB/g2fC2A==
-From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>, 
- Hans de Goede <johannes.goede@oss.qualcomm.com>
-Cc: linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org
-In-Reply-To: <20251109155340.26199-1-johannes.goede@oss.qualcomm.com>
-References: <20251109155340.26199-1-johannes.goede@oss.qualcomm.com>
-Subject: Re: [PATCH] spi: Add TODO comment about ACPI GPIO setup
-Message-Id: <176281800819.170916.14052253734364037167.b4-ty@kernel.org>
-Date: Mon, 10 Nov 2025 23:40:08 +0000
+	s=k20201202; t=1762818634;
+	bh=AuOvqgWu26I/WI1nK2N3IBR+AyvUMqUcYSWicLDoTe0=;
+	h=Subject:From:Date:To:From;
+	b=nDJw1JGS2s1/o4Mz7EJrn1KrJBjShWu6RSh5FIv+qp6LLDlrUfvwmRMWSTUKDbH+p
+	 SSwJlOkedkL++wLXsBZ0EtcJoRbvwoUho84bbJnRUA8+nAVgknqCg77SqZSVYgNT+7
+	 FbwLo+CQPOBlAKasUr4hGdA9KhQemF2flsAz+LJf0C9OCGxpmk/0PWdbUUcnpwg4eK
+	 auYLih94yVkDKhS3W077tSswahZAtyY0GqvZOeYwKwIlq1qb0CuI5WdNTwzHGX0q5v
+	 CtTasb+L44UW6evc2g1sqF/yFM1ugA2tUaG8o8l/C0rpyMCVrrOcUZ/IGhb6s3JQSs
+	 R+2uub2XX3KHg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EFFED380CFD7;
+	Mon, 10 Nov 2025 23:50:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-a6db3
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176281860453.2813155.1156010751168123681.git-patchwork-summary@kernel.org>
+Date: Mon, 10 Nov 2025 23:50:04 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Sun, 09 Nov 2025 16:53:39 +0100, Hans de Goede wrote:
-> Add a TODO comment that ideally the ACPI/gpiolib core code should take care
-> of setting GPIO direction and/or bias according to ACPI GPIO resources.
-> 
-> If this TODO gets implemented then the acpi_dev_gpio_irq_get() call in
-> acpi_register_spi_device() can be dropped.
-> 
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: Add TODO comment about ACPI GPIO setup
+  Submitter: Hans de Goede <johannes.goede@oss.qualcomm.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1021314
+  Lore link: https://lore.kernel.org/r/20251109155340.26199-1-johannes.goede@oss.qualcomm.com
 
-Thanks!
 
-[1/1] spi: Add TODO comment about ACPI GPIO setup
-      commit: 66e9feb03e7cf8983b1d0c540e2dad90d5146d48
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
