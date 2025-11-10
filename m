@@ -1,45 +1,45 @@
-Return-Path: <linux-spi+bounces-11145-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11147-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B70F8C48F18
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 20:17:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E9B5C48F05
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 20:16:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 663214EE094
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 19:15:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DBA71884371
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 19:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0693A32B9A7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4CA32D0F0;
 	Mon, 10 Nov 2025 19:15:52 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5367530AAAD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592CF318146;
 	Mon, 10 Nov 2025 19:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762802151; cv=none; b=rKXoYkHTcCo4/5ZpiZQYR7psa3YgaPAK6ZOHdynNlGtHXWfcQGEBVlexY4sp1UIaKLTwe7WwgjE55UyA4TXuMb5SKtljVjVafHj/NJMVlEDZEjvrGdAeox6cwSnvrzWsmwSEUpp7/ALHgUurNmH6YKNsdVGkGMyo2YuU+v/QIOM=
+	t=1762802152; cv=none; b=Zh8O4YTj9DVTJh7d3t1cUzrahC5EHS8GHkzgd+8pWJIHUgpv6MHmG/BirHC1ZHBvXCA6bx12Y27FVli4aULWP6MlkWOohhCVArpi1W6Vy9d760T7wRw0FdwR0b1q6t37RUAIjQruZodFDvAFhLwSatfgBGIwQDIpxQSENRweThs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762802151; c=relaxed/simple;
-	bh=7+obkWlFOlCgYi1gvLlelNaSXmUPyVp5CQygoFDhooA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KhY8LVZce350jtF5pRM/+QhFb5XUbUzLwRbvPbT3vAZp57Npxyf7VPXDgeYiLtMln7ocQNxxD5cN9MVceIN871CsYMx1UvU7ixXU2r2NVtM986a0cWMB/GTdueqGDQUnVX7L+HN70A+8sqb0yESy+UjHUuPSP13Fdfvo4k5SOiY=
+	s=arc-20240116; t=1762802152; c=relaxed/simple;
+	bh=WjXwOm2Yr8Ij8qCbPNopPeBi/pr03nYMCV2DdL5d/q8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=uC/0L/EU+ePe00yQBHRm4exPtaiU6EXpos/tPBCBUxzMSYkKizUc0G06aD9mpFQwLzPHdQdnM5skz3+mxCb+WJaTw/kAbYoF0NoL8PapHWkYI3hpjwra2wAfIs9wIQ6F7VsAakMAj0OMN2AtQvR3QRJzU0ONCoxzx99DDvJdw0Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
 Received: from srv01.abscue.de (localhost [127.0.0.1])
-	by spamfilter.srv.local (Postfix) with ESMTP id F02291C019A;
-	Mon, 10 Nov 2025 20:10:29 +0100 (CET)
+	by spamfilter.srv.local (Postfix) with ESMTP id 1F2B81C0240;
+	Mon, 10 Nov 2025 20:10:30 +0100 (CET)
 X-Spam-Level: 
 Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cdd8:ff00:36bc:9812:27d4:17cf])
-	by srv01.abscue.de (Postfix) with ESMTPSA id 488041C0036;
+	by srv01.abscue.de (Postfix) with ESMTPSA id 98CF71C0037;
 	Mon, 10 Nov 2025 20:10:29 +0100 (CET)
 From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
-Subject: [PATCH v2 0/3] mfd: sprd-sc27xx: Move poweroff/reboot support to
- the parent MFD driver
-Date: Mon, 10 Nov 2025 20:08:57 +0100
-Message-Id: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
+Date: Mon, 10 Nov 2025 20:08:58 +0100
+Subject: [PATCH v2 1/3] mfd: sprd-sc27xx: Integrate power off and reboot
+ support
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -48,71 +48,233 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAEk4EmkC/32NQQ7CIBBFr9LM2jGAIRRX3sN00cKMZWFpoFZM0
- 7uLPYDL95L//gaZUqAM12aDRGvIIU4V1KkBN/bTgzD4yqCE0lIIg9kpUwo+2eMc35QiM1rHRrV
- eayYPdTkn4lCO6r2rPIa8xPQ5Tlb5s/97q0SBre0VW2kHc5G3fsjuRWdP0O37/gWGO7NotgAAA
- A==
-X-Change-ID: 20251007-sc27xx-mfd-poweroff-9cf728d55fed
+Message-Id: <20251110-sc27xx-mfd-poweroff-v2-1-fd5842e732fe@abscue.de>
+References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
+In-Reply-To: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
 To: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
  Baolin Wang <baolin.wang@linux.alibaba.com>, 
  Chunyan Zhang <zhang.lyra@gmail.com>, Mark Brown <broonie@kernel.org>, 
  Sebastian Reichel <sre@kernel.org>
 Cc: Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
  linux-spi@vger.kernel.org, linux-pm@vger.kernel.org, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
 X-Mailer: b4 0.14.2
 
-Registers for powering off the system are present in all SC27xx-series
-PMICs, although their locations vary between the specific PMIC models.
-On systems using these chips, the PMIC can always power off the system
-and is usually the only chip capable of doing this. Similarly, the PMICs
-(except for SC2731) contain a reset register that can always be used to
-restart the system.
-
-There is an existing sc27xx-poweroff driver, but it currently only works
-on SC2731 and is not probed anywhere since it is missing an OF match
-table and is not instantiated by the MFD driver. Reboot for SC2731 is
-implemented in drivers/spi/spi-sprd-adi.c, which is not really an
-appropriate location for PMIC-specific code.
-
-Since a separate device tree node for the poweroff support would not
-provide anything useful (see [1]) and passing platform-specific data
-between drivers is unnecessarily complex for such a simple feature,
-reimplement the poweroff functionality in the main MFD driver. While at
-it, add support for the newer SC2730 PMIC and its hardware reset
-register.
-
-Reboot is special because it requires storing the reboot mode. Move the
-existing code for this from the SPI bus driver to the MFD driver.
-
-[1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
+The SC27xx PMICs allow restarting and powering off the device. Since
+this functionality is rather simple and not configurable in any way,
+make it part of the main PMIC driver.
 
 Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
 ---
-Changes in v2:
-- Fix style issues in MFD driver
-- Use dev_err instead of pr_emerg
-- Link to v1: https://lore.kernel.org/r/20251007-sc27xx-mfd-poweroff-v1-0-89a2f919b731@abscue.de
+ drivers/mfd/sprd-sc27xx-spi.c | 148 ++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 148 insertions(+)
 
----
-Otto Pflüger (3):
-      mfd: sprd-sc27xx: Integrate power off and reboot support
-      spi: sprd-adi: Remove code for storing the reboot mode
-      power: reset: sc27xx: Drop unused driver
+diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
+index d6b4350779e6aecfa19d9fa21b9174447d589e33..250938db549cbba1428371b20f92ad48ca9557f7 100644
+--- a/drivers/mfd/sprd-sc27xx-spi.c
++++ b/drivers/mfd/sprd-sc27xx-spi.c
+@@ -10,6 +10,7 @@
+ #include <linux/mfd/sc27xx-pmic.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
++#include <linux/reboot.h>
+ #include <linux/regmap.h>
+ #include <linux/spi/spi.h>
+ #include <uapi/linux/usb/charger.h>
+@@ -21,10 +22,48 @@
+ #define SPRD_SC2730_IRQ_BASE		0x80
+ #define SPRD_SC2730_IRQ_NUMS		10
+ #define SPRD_SC2730_CHG_DET		0x1b9c
++
++#define SPRD_SC2730_PWR_PD_HW		0x1820
++#define SPRD_SC2730_SOFT_RST_HW		0x1824
++#define SPRD_SC2730_SLP_CTRL		0x1a48
++#define SPRD_SC2730_RST_STATUS		0x1bac
++#define SPRD_SC2730_SWRST_CTRL0		0x1bf8
++
+ #define SPRD_SC2731_IRQ_BASE		0x140
+ #define SPRD_SC2731_IRQ_NUMS		16
+ #define SPRD_SC2731_CHG_DET		0xedc
+ 
++#define SPRD_SC2731_PWR_PD_HW		0xc2c
++#define SPRD_SC2731_SLP_CTRL		0xdf0
++#define SPRD_SC2731_RST_STATUS		0xee8
++
++/* PMIC power off and reset definition */
++#define SPRD_SC2730_LDO_XTL_EN		BIT(2)
++#define SPRD_SC2730_SLP_LDO_PD_EN	BIT(0)
++
++#define SPRD_SC2731_LDO_XTL_EN		BIT(3)
++#define SPRD_SC2731_SLP_LDO_PD_EN	BIT(0)
++
++#define SPRD_PMIC_PWR_OFF		BIT(0)
++#define SPRD_PMIC_RESET			BIT(0)
++#define SPRD_PMIC_SOFT_RST_EN		BIT(4)
++
++#define HWRST_STATUS_SECURITY		0x02
++#define HWRST_STATUS_RECOVERY		0x20
++#define HWRST_STATUS_NORMAL		0x40
++#define HWRST_STATUS_ALARM		0x50
++#define HWRST_STATUS_SLEEP		0x60
++#define HWRST_STATUS_FASTBOOT		0x30
++#define HWRST_STATUS_SPECIAL		0x70
++#define HWRST_STATUS_PANIC		0x80
++#define HWRST_STATUS_CFTREBOOT		0x90
++#define HWRST_STATUS_AUTODLOADER	0xa0
++#define HWRST_STATUS_IQMODE		0xb0
++#define HWRST_STATUS_SPRDISK		0xc0
++#define HWRST_STATUS_FACTORYTEST	0xe0
++#define HWRST_STATUS_WATCHDOG		0xf0
++#define HWRST_STATUS_MASK		0xff
++
+ /* PMIC charger detection definition */
+ #define SPRD_PMIC_CHG_DET_DELAY_US	200000
+ #define SPRD_PMIC_CHG_DET_TIMEOUT	2000000
+@@ -48,6 +87,14 @@ struct sprd_pmic_data {
+ 	u32 irq_base;
+ 	u32 num_irqs;
+ 	u32 charger_det;
++
++	u32 poweroff_reg;
++	u32 slp_ctrl_reg;
++	u32 slp_ctrl_mask;
++
++	u32 reset_reg;
++	u32 rst_sts_reg;
++	u32 swrst_ctrl_reg;
+ };
+ 
+ /*
+@@ -59,12 +106,26 @@ static const struct sprd_pmic_data sc2730_data = {
+ 	.irq_base = SPRD_SC2730_IRQ_BASE,
+ 	.num_irqs = SPRD_SC2730_IRQ_NUMS,
+ 	.charger_det = SPRD_SC2730_CHG_DET,
++
++	.poweroff_reg = SPRD_SC2730_PWR_PD_HW,
++	.slp_ctrl_reg = SPRD_SC2730_SLP_CTRL,
++	.slp_ctrl_mask = SPRD_SC2730_LDO_XTL_EN | SPRD_SC2730_SLP_LDO_PD_EN,
++
++	.reset_reg = SPRD_SC2730_SOFT_RST_HW,
++	.rst_sts_reg = SPRD_SC2730_RST_STATUS,
++	.swrst_ctrl_reg = SPRD_SC2730_SWRST_CTRL0,
+ };
+ 
+ static const struct sprd_pmic_data sc2731_data = {
+ 	.irq_base = SPRD_SC2731_IRQ_BASE,
+ 	.num_irqs = SPRD_SC2731_IRQ_NUMS,
+ 	.charger_det = SPRD_SC2731_CHG_DET,
++
++	.poweroff_reg = SPRD_SC2731_PWR_PD_HW,
++	.slp_ctrl_reg = SPRD_SC2731_SLP_CTRL,
++	.slp_ctrl_mask = SPRD_SC2731_LDO_XTL_EN | SPRD_SC2731_SLP_LDO_PD_EN,
++
++	.rst_sts_reg = SPRD_SC2731_RST_STATUS,
+ };
+ 
+ enum usb_charger_type sprd_pmic_detect_charger_type(struct device *dev)
+@@ -149,6 +210,77 @@ static const struct regmap_config sprd_pmic_config = {
+ 	.max_register = 0xffff,
+ };
+ 
++static int sprd_pmic_poweroff(struct sys_off_data *off_data)
++{
++	struct sprd_pmic *ddata = off_data->cb_data;
++	const struct sprd_pmic_data *pdata = ddata->pdata;
++
++	regmap_clear_bits(ddata->regmap, pdata->slp_ctrl_reg, pdata->slp_ctrl_mask);
++
++	regmap_write(ddata->regmap, pdata->poweroff_reg, SPRD_PMIC_PWR_OFF);
++
++	mdelay(1000);
++
++	dev_err(ddata->dev, "Unable to poweroff system\n");
++
++	return NOTIFY_DONE;
++}
++
++static int sprd_pmic_restart(struct sys_off_data *off_data)
++{
++	struct sprd_pmic *ddata = off_data->cb_data;
++	const struct sprd_pmic_data *pdata = ddata->pdata;
++	u32 reboot_mode;
++
++	if (!off_data->cmd)
++		reboot_mode = HWRST_STATUS_NORMAL;
++	else if (!strcmp(off_data->cmd, "recovery"))
++		reboot_mode = HWRST_STATUS_RECOVERY;
++	else if (!strcmp(off_data->cmd, "alarm"))
++		reboot_mode = HWRST_STATUS_ALARM;
++	else if (!strcmp(off_data->cmd, "fastsleep"))
++		reboot_mode = HWRST_STATUS_SLEEP;
++	else if (!strcmp(off_data->cmd, "bootloader"))
++		reboot_mode = HWRST_STATUS_FASTBOOT;
++	else if (!strcmp(off_data->cmd, "panic"))
++		reboot_mode = HWRST_STATUS_PANIC;
++	else if (!strcmp(off_data->cmd, "special"))
++		reboot_mode = HWRST_STATUS_SPECIAL;
++	else if (!strcmp(off_data->cmd, "cftreboot"))
++		reboot_mode = HWRST_STATUS_CFTREBOOT;
++	else if (!strcmp(off_data->cmd, "autodloader"))
++		reboot_mode = HWRST_STATUS_AUTODLOADER;
++	else if (!strcmp(off_data->cmd, "iqmode"))
++		reboot_mode = HWRST_STATUS_IQMODE;
++	else if (!strcmp(off_data->cmd, "sprdisk"))
++		reboot_mode = HWRST_STATUS_SPRDISK;
++	else if (!strcmp(off_data->cmd, "tospanic"))
++		reboot_mode = HWRST_STATUS_SECURITY;
++	else if (!strcmp(off_data->cmd, "factorytest"))
++		reboot_mode = HWRST_STATUS_FACTORYTEST;
++	else
++		reboot_mode = HWRST_STATUS_NORMAL;
++
++	regmap_update_bits(ddata->regmap, pdata->rst_sts_reg,
++			   HWRST_STATUS_MASK, reboot_mode);
++
++	/*
++	 * On SC2731, this part is skipped because there is no reset register
++	 * and the restart must be performed using the watchdog.
++	 */
++	if (pdata->reset_reg) {
++		regmap_set_bits(ddata->regmap, pdata->swrst_ctrl_reg, SPRD_PMIC_SOFT_RST_EN);
++
++		regmap_write(ddata->regmap, pdata->reset_reg, SPRD_PMIC_RESET);
++
++		mdelay(1000);
++
++		dev_err(ddata->dev, "Unable to restart system\n");
++	}
++
++	return NOTIFY_DONE;
++}
++
+ static int sprd_pmic_probe(struct spi_device *spi)
+ {
+ 	struct sprd_pmic *ddata;
+@@ -204,6 +336,22 @@ static int sprd_pmic_probe(struct spi_device *spi)
+ 		return ret;
+ 	}
+ 
++	ret = devm_register_sys_off_handler(&spi->dev, SYS_OFF_MODE_RESTART,
++					    SYS_OFF_PRIO_HIGH,
++					    sprd_pmic_restart, ddata);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to register restart handler: %d\n", ret);
++		return ret;
++	}
++
++	ret = devm_register_sys_off_handler(&spi->dev, SYS_OFF_MODE_POWER_OFF,
++					    SYS_OFF_PRIO_DEFAULT,
++					    sprd_pmic_poweroff, ddata);
++	if (ret) {
++		dev_err(&spi->dev, "Failed to register poweroff handler: %d\n", ret);
++		return ret;
++	}
++
+ 	ret = devm_of_platform_populate(&spi->dev);
+ 	if (ret) {
+ 		dev_err(&spi->dev, "Failed to populate sub-devices %d\n", ret);
 
- drivers/mfd/sprd-sc27xx-spi.c         | 148 ++++++++++++++++++++++++++++++++++
- drivers/power/reset/Kconfig           |   9 ---
- drivers/power/reset/Makefile          |   1 -
- drivers/power/reset/sc27xx-poweroff.c |  79 ------------------
- drivers/spi/spi-sprd-adi.c            |  73 +----------------
- 5 files changed, 149 insertions(+), 161 deletions(-)
----
-base-commit: ab40c92c74c6b0c611c89516794502b3a3173966
-change-id: 20251007-sc27xx-mfd-poweroff-9cf728d55fed
-
-Best regards,
 -- 
-Otto Pflüger <otto.pflueger@abscue.de>
+2.50.0
 
 
