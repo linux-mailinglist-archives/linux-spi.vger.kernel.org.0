@@ -1,120 +1,118 @@
-Return-Path: <linux-spi+bounces-11144-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11145-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FF3AC483BC
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 18:12:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B70F8C48F18
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 20:17:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05C0A420A0E
-	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 17:04:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 663214EE094
+	for <lists+linux-spi@lfdr.de>; Mon, 10 Nov 2025 19:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3F3296BD5;
-	Mon, 10 Nov 2025 17:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/f8290t"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0693A32B9A7;
+	Mon, 10 Nov 2025 19:15:52 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262F828D829;
-	Mon, 10 Nov 2025 17:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5367530AAAD;
+	Mon, 10 Nov 2025 19:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762794249; cv=none; b=pUbX9ls2BYefcEXjHN00vxm1i4F164H7eTk7CdMKu5OH9yBivweV64THPckM5NeZDy/C5OG4nTqAImymHUxPIx6nglMgT8cQOPRXb/RJvLQZHRq5oL/BWBgNPb7OCjUgETkGEjzFeG5Mk5FJmqH5u987B8iZKxIdxOJLbAiqAcY=
+	t=1762802151; cv=none; b=rKXoYkHTcCo4/5ZpiZQYR7psa3YgaPAK6ZOHdynNlGtHXWfcQGEBVlexY4sp1UIaKLTwe7WwgjE55UyA4TXuMb5SKtljVjVafHj/NJMVlEDZEjvrGdAeox6cwSnvrzWsmwSEUpp7/ALHgUurNmH6YKNsdVGkGMyo2YuU+v/QIOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762794249; c=relaxed/simple;
-	bh=GlWEUJ81HuML3QniPfob+FZyBGIp/OgbbJgntqBpGV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WYflYcfTK1r2rQUZcGIdzeKNqaJFwcZecFJnEpe1YrmFx6CfoN2yjCSmYhDqZXYpTub+4mce3PcON4ga5KxaTimcwwVseJUGL+zxLxO/qqhT1D50ZHVL6pL7I8ZIMNqooW5Mwwv0l3s+eal4EmKZuhlH75esnUAOS1P/+plQ1pU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/f8290t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E8DDC4CEF5;
-	Mon, 10 Nov 2025 17:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762794248;
-	bh=GlWEUJ81HuML3QniPfob+FZyBGIp/OgbbJgntqBpGV0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V/f8290tO0Qum103i3UTbYvQJViWqXdRzOLaLZpBVpzFJbKTDf8GfzuY7aTcAvTRA
-	 /jF6uSv2pWoAceJx7WXTgkYDQbOUQid0BbI5xyZK/DMk/dP5EkZKnznNi3d9XAUS0w
-	 U5uoiA7WuqFmoo8FhrRcjTfambWpwdFgjro4beBd+36XfArmfbcp+v2EUD5ikr/EAm
-	 fALV09seY/gdEf074FGUCjQxQd8DiXYQGY2oAZ5Ogc0Iu49+IWaiGixzUHWtgtdwMW
-	 A2VqkOPYjDao3JHSacdLMAIiR2MVf4ykzKwnyTHKmtZE8u1pQNhQ6iKaS0oriFO0p8
-	 iGTOVCHfe65Ig==
-Date: Mon, 10 Nov 2025 17:04:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
-Message-ID: <aRIbBVNzo-7EYJbl@finisterre.sirena.org.uk>
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
- <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
- <20251021142129.GA34073-robh@kernel.org>
- <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
- <20251030135126.GA3749313-robh@kernel.org>
- <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
+	s=arc-20240116; t=1762802151; c=relaxed/simple;
+	bh=7+obkWlFOlCgYi1gvLlelNaSXmUPyVp5CQygoFDhooA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KhY8LVZce350jtF5pRM/+QhFb5XUbUzLwRbvPbT3vAZp57Npxyf7VPXDgeYiLtMln7ocQNxxD5cN9MVceIN871CsYMx1UvU7ixXU2r2NVtM986a0cWMB/GTdueqGDQUnVX7L+HN70A+8sqb0yESy+UjHUuPSP13Fdfvo4k5SOiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+	by spamfilter.srv.local (Postfix) with ESMTP id F02291C019A;
+	Mon, 10 Nov 2025 20:10:29 +0100 (CET)
+X-Spam-Level: 
+Received: from fluffy-mammal.metal.fwg-cag.de (unknown [IPv6:2001:9e8:cdd8:ff00:36bc:9812:27d4:17cf])
+	by srv01.abscue.de (Postfix) with ESMTPSA id 488041C0036;
+	Mon, 10 Nov 2025 20:10:29 +0100 (CET)
+From: =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>
+Subject: [PATCH v2 0/3] mfd: sprd-sc27xx: Move poweroff/reboot support to
+ the parent MFD driver
+Date: Mon, 10 Nov 2025 20:08:57 +0100
+Message-Id: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JY5VEXwAAsIpIsIR"
-Content-Disposition: inline
-In-Reply-To: <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
-X-Cookie: You dialed 5483.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAEk4EmkC/32NQQ7CIBBFr9LM2jGAIRRX3sN00cKMZWFpoFZM0
+ 7uLPYDL95L//gaZUqAM12aDRGvIIU4V1KkBN/bTgzD4yqCE0lIIg9kpUwo+2eMc35QiM1rHRrV
+ eayYPdTkn4lCO6r2rPIa8xPQ5Tlb5s/97q0SBre0VW2kHc5G3fsjuRWdP0O37/gWGO7NotgAAA
+ A==
+X-Change-ID: 20251007-sc27xx-mfd-poweroff-9cf728d55fed
+To: Lee Jones <lee@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-pm@vger.kernel.org, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.14.2
 
+Registers for powering off the system are present in all SC27xx-series
+PMICs, although their locations vary between the specific PMIC models.
+On systems using these chips, the PMIC can always power off the system
+and is usually the only chip capable of doing this. Similarly, the PMICs
+(except for SC2731) contain a reset register that can always be used to
+restart the system.
 
---JY5VEXwAAsIpIsIR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is an existing sc27xx-poweroff driver, but it currently only works
+on SC2731 and is not probed anywhere since it is missing an OF match
+table and is not instantiated by the MFD driver. Reboot for SC2731 is
+implemented in drivers/spi/spi-sprd-adi.c, which is not really an
+appropriate location for PMIC-specific code.
 
-On Thu, Oct 30, 2025 at 05:42:44PM -0500, David Lechner wrote:
-> On 10/30/25 8:51 AM, Rob Herring wrote:
+Since a separate device tree node for the poweroff support would not
+provide anything useful (see [1]) and passing platform-specific data
+between drivers is unnecessarily complex for such a simple feature,
+reimplement the poweroff functionality in the main MFD driver. While at
+it, add support for the newer SC2730 PMIC and its hardware reset
+register.
 
-> > But it can't really be 2 independent buses/controllers unless the ADC=
-=20
-> > has 2 completely independent interfaces, right?
+Reboot is special because it requires storing the reboot mode. Move the
+existing code for this from the SPI bus driver to the MFD driver.
 
-> Correct.
+[1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
 
-> The proposed property really only concerns the data lines (tx/rx). It doe=
-sn't
-> care if there is 1 or 2 SCLK lines and it doesn't care if there is only 1=
- CS
-> line.
+Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
+---
+Changes in v2:
+- Fix style issues in MFD driver
+- Use dev_err instead of pr_emerg
+- Link to v1: https://lore.kernel.org/r/20251007-sc27xx-mfd-poweroff-v1-0-89a2f919b731@abscue.de
 
-> So maybe spi-data-buses would be a better name for the property? Or
-> spi-data-ports (using the NXP FlexSPI controller docs terminology)?
-> Or spi-data-channels?
+---
+Otto Pflüger (3):
+      mfd: sprd-sc27xx: Integrate power off and reboot support
+      spi: sprd-adi: Remove code for storing the reboot mode
+      power: reset: sc27xx: Drop unused driver
 
-This bindings discussion seems to have stalled out?
+ drivers/mfd/sprd-sc27xx-spi.c         | 148 ++++++++++++++++++++++++++++++++++
+ drivers/power/reset/Kconfig           |   9 ---
+ drivers/power/reset/Makefile          |   1 -
+ drivers/power/reset/sc27xx-poweroff.c |  79 ------------------
+ drivers/spi/spi-sprd-adi.c            |  73 +----------------
+ 5 files changed, 149 insertions(+), 161 deletions(-)
+---
+base-commit: ab40c92c74c6b0c611c89516794502b3a3173966
+change-id: 20251007-sc27xx-mfd-poweroff-9cf728d55fed
 
---JY5VEXwAAsIpIsIR
-Content-Type: application/pgp-signature; name="signature.asc"
+Best regards,
+-- 
+Otto Pflüger <otto.pflueger@abscue.de>
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkSGv0ACgkQJNaLcl1U
-h9ChyQgAg3ZRTKZiHLuTOHpkH+zC1xu6qXXVEgDCvya8kcGtk1SZuS/Z9ctSXQRd
-AUAwuRDDY51+uQVewX3TPXBjsfJK1c/3CQOWZ2boNWgOrpHcN4WhQESem7O9eYue
-ONdSa6DpVU0E+SLo0TYkNBSEeE0WKEhGGlYjW0CvIlHiZBHo7zxzqxt7lXPd48um
-2pYqZMdC/h5yeahRJ8Cjl2ZdJLKGvqnE+DP0UBLoHxNKxDznMCwFwzxHL8YLWsjn
-dxoMNisrtyJSeFBHrjdHPHFEeaZD4Pn2lvk4sCdi+vG/tWeGUVIU/Lnp9YjK96/D
-Q+Xe+sZVvakT+7qwg5XHHYOY5wVc8g==
-=XKp/
------END PGP SIGNATURE-----
-
---JY5VEXwAAsIpIsIR--
 
