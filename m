@@ -1,428 +1,583 @@
-Return-Path: <linux-spi+bounces-11159-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11160-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101F3C4EB3F
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 16:11:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78481C4EF0A
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 17:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6569134BD0D
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 15:11:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4E9584E0F86
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 16:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5983735F8A0;
-	Tue, 11 Nov 2025 15:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E57D36B062;
+	Tue, 11 Nov 2025 16:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lK88oE4e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SW5TQsbQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D0935BDDC
-	for <linux-spi@vger.kernel.org>; Tue, 11 Nov 2025 15:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE2F736A038;
+	Tue, 11 Nov 2025 16:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762873898; cv=none; b=HsfCLrcXpDkYcAz7JIm4E87HU8waHw/Ey8RVQIBbD16DmKpb5B2NsuU6YIhS7ry1CzDaXMZ5H9FoRUEUPLwwip7FLh1di+jabLj+/2y99Win0yYAm3mORoCAK8imTCZ1f2PjmWYPdOTDJUYhcS0FfbtmVOTPMgpV+CH36rKT6dE=
+	t=1762877398; cv=none; b=fiby/Wat2ck8+uqTzdgp+ICybCCXlrzWzfT5UUuYfc1hIkw/47+olta2ql0MhB2FIyvpOE6y5l+Oznh8Fda7JuEidecgoPjtOjkuldK4TPb8peb5QEhUh7S90ZEjAi0Ew37PGUDc+iRGzNjvxs9UkChFEhp/UTDBMZXgF3MFIo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762873898; c=relaxed/simple;
-	bh=cBvHiE3MTqLVsG6y+J/uHOAvi+GgMGuElM6WaC2JkxQ=;
+	s=arc-20240116; t=1762877398; c=relaxed/simple;
+	bh=w7m9fQPsRzVUQAZ7PhcDg7Tv89qmbszaI78Tk9mzzc4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tyk+idk5B+7wx2lsKORqgXttmQ7CmdI7xWB/+OD8PgiPizCUX4ACQsm/lEwMxzdBj6hRK+dcvMvmhgLRCS/vjTBmJyPueN84lYOhMPotQz35FY6+c4SbfunOjs5zBEGQqFpFUAgJH0pyRE0jeVls7qp5AJm5T2JxD9Vb+Y+nTYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lK88oE4e; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-29844c68068so5436045ad.2
-        for <linux-spi@vger.kernel.org>; Tue, 11 Nov 2025 07:11:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762873896; x=1763478696; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n7eTYb2wlhJyNuQSOocKUpulhkuV3RsO5wtmlgEoTf8=;
-        b=lK88oE4e9KtrSLYgwxqDlzjZODXegI6NHGChKNCfa90JZvP42NNDACmB+/B8Kl193C
-         q2s92M23fvvTfrtao9V94GwwHE/b5iecgc6KxCj6VJhMhP6AQ9l1UycOJ8bpu1LUaZLi
-         owOgyqsnSNlzIDeRmblI/ldTk1kgvt6v4HDLpLpamOoXZIu+J6QATBY4ORoj7B8LSli1
-         sh6MbQDHNu+f20ANL3hWsaukkiDVUYjSDIyitp5S6q5dpuvD+uOkUaBot05k8zoHaTtJ
-         L+dwoctgp3KVMxtguFgfU8cXfQ0VGe9jiSn0C1m2OlhQbf1fSIiAM9N8nBUHK4B9t0UE
-         gsaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762873896; x=1763478696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n7eTYb2wlhJyNuQSOocKUpulhkuV3RsO5wtmlgEoTf8=;
-        b=YkJbaFv2T/gintQHr5jf8uNj0yR2AhgrLRqobFkwyCNugX9N3rilYn1ihmEznXPOx6
-         jMgZobFulWPfEOWYogvSgioaEseggJ0OQzysO3pGA/wJvTOuwHWKhWH26Mj/I9cBR4EP
-         Kw6GPGXEOlOMzDZvBSyBhlIIwrF1hv72Hnv5/zGb2IqeJvVoTFNtX2VlN0KmUmF7jyAs
-         EmbV0WG3/kgRUgOAokjP9xYG7lUoKgb56m4wJJ+drVvvwFm5TVp4Ok6bXF0SQKNPIbr+
-         lXwGmEnvXtvBBMXHO36H4s2VrmI0vvPD7Y9FvRS8ZxfgDhSVQiIUTKfQ53HMaxfbh+Vx
-         OUbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUzItYorO4bZPw7az8MEmU/Kb8nUG2/dBJD4INFVPVYWxp7rnL7r5xoilZ1I2FqNusddXJ0OPgBxo0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+ME54zxhjtG3r05/qBySprg7/3MFSgnUnSMi16mTilnHVBuLK
-	3xqWLrn4ctdhVENCeA7e0ZH8C1aEEzb60vMW7Y0rUUorpuDe+lD0qlOc
-X-Gm-Gg: ASbGnctilhBFDtZnmkztZS7owJlveW62QQtYxMlfFQzP1IduzMs+Gtbse9sbeMr5ZjP
-	nWlFXruQVcI4mIZ54Z4iwmY6pQ0O+YrF8ArsBdMvtCAYakbKUhivVpGKZPtgH0kckwXdv4Nrw65
-	3CNOOrLyzS20e+VKNpzJ5SCyrQyJXhrIY6k4TJguN9QQjDKOp2t6V+ZjCYC38ddHOC+TYCzLFbt
-	RtjqunCZC788lSKXo2O4N4XaTRn9GAByHJoGwn9F6yJkYzkMTfAbiSwTNFYWtrwAlgUCp2B3iUw
-	pMnp8AJU//j4jE5glz1Zh0XY4TZGbVpLMUzjCLq0q8KD4W2Rmuih2bZ+lsrFnkzLzB6+X4RmT46
-	kGSBVeL4b6qKu6PUp/UhnVsrHHbKYkLF7XMBjCe0Tqi0vciGAwcoPEyfCA7hPN/Xr0nONdAyuBt
-	LlYRH2CZVr8g==
-X-Google-Smtp-Source: AGHT+IEanSf8MNOoYPmR8r6QP42O+LoZWPLOQBKQDi9X75YOlY83hfm2jvOchw3UXfBmb7KUYvVt2A==
-X-Received: by 2002:a17:902:f601:b0:295:915d:1eed with SMTP id d9443c01a7336-297e56d0e7dmr168612555ad.47.1762873895461;
-        Tue, 11 Nov 2025 07:11:35 -0800 (PST)
-Received: from localhost ([2804:30c:1661:8a00:578a:911c:ac25:24a6])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-ba901c3817csm15946063a12.30.2025.11.11.07.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 07:11:33 -0800 (PST)
-Date: Tue, 11 Nov 2025 12:12:51 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] spi: axi-spi-engine: support
- SPI_MULTI_BUS_MODE_STRIPE
-Message-ID: <aRNSc1GEz0UNx17i@debian-BULLSEYE-live-builder-AMD64>
-References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
- <20251107-spi-add-multi-bus-support-v2-4-8a92693314d9@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZLQJBurrRw7oJjbMkNBZpbS1dQRlxpeMyTqq4yBB4l6w3eCxyq1V5jWnzNSRaXncXsarJOUoy3cL311tBM4ekGRDqJbDa2J+LQGUy2QP7KleXfUrnwMqs5xte3yZrH5CVEKc40m9ZFItPV5tsJ3vTfIr4tPz5QdRM+zWeBpMxcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SW5TQsbQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166D3C4CEFB;
+	Tue, 11 Nov 2025 16:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762877397;
+	bh=w7m9fQPsRzVUQAZ7PhcDg7Tv89qmbszaI78Tk9mzzc4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SW5TQsbQtfMKY4XWxjSyCLUQfUjcMtjn3aO4O7WLhB7AwHiTpucQCXm7eh7sgOCzq
+	 xRYLTVGwqzVWuRYzCPdHboBj6idLl3o6MKT+T7o2qmt0+4lqh4ECukWEBEBKhyOjAz
+	 pxDahFWRunF245xsPY9kXyc/8BY/lPK22HdtA/XCLZlJgogx6OjxJsgMmPM/GO53mL
+	 DrCib4Ttn9TfV3spnJOCJRaSN5TuFDtAHEdOXei95mDuK5Z/ppfyyFa+jRCQt1an4O
+	 OHdXn+hhWvhmIZuIUDU6HbT+hwHIv0N25u7zvNIWWYr8T8mAMJ0wB7SbTZm7EJp/Li
+	 RTQVM3bB4OFVg==
+Date: Tue, 11 Nov 2025 10:14:08 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Riccardo Mereu <r.mereu.kernel@arduino.cc>
+Cc: konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, broonie@kernel.org, linux@roeck-us.net, 
+	Jonathan.Cameron@huawei.com, wenswang@yeah.net, naresh.solanki@9elements.com, 
+	michal.simek@amd.com, nuno.sa@analog.com, chou.cosmo@gmail.com, 
+	grantpeltier93@gmail.com, eajames@linux.ibm.com, farouk.bouabid@cherry.de, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-spi@vger.kernel.org, mm.facchin@arduino.cc, Riccardo Mereu <r.mereu@arduino.cc>
+Subject: Re: [PATCH 5/5] arm64: dts: qcom: unoq: add dts for arduino unoq
+Message-ID: <bcybkiecgydjp7w6vumxkobcvgvljiv46wcr7llvuubzix5r4v@xi2miltknfmw>
+References: <20251106153119.266840-1-r.mereu@arduino.cc>
+ <20251106153119.266840-6-r.mereu@arduino.cc>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251107-spi-add-multi-bus-support-v2-4-8a92693314d9@baylibre.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251106153119.266840-6-r.mereu@arduino.cc>
 
-Hi David,
+On Thu, Nov 06, 2025 at 04:31:19PM +0100, Riccardo Mereu wrote:
+> From: Riccardo Mereu <r.mereu.kernel@arduino.cc>
 
-The updates to spi-engine driver look good.
-Only one comment about what happens if we have conflicting bus modes for the
-offload case. Just to check I'm getting how this is working.
+Please make the subject:
 
-On 11/07, David Lechner wrote:
-> Add support for SPI_MULTI_BUS_MODE_STRIPE to the AXI SPI engine driver.
+"arm64: dts: qcom: qrb2210: Add Arduino UnoQ board"
+
 > 
-> The v2.0.0 version of the AXI SPI Engine IP core supports multiple
-> buses. This can be used with SPI_MULTI_BUS_MODE_STRIPE to support
-> reading from simultaneous sampling ADCs that have a separate SDO line
-> for each analog channel. This allows reading all channels at the same
-> time to increase throughput.
+> Arduino UnoQ is a single-board computer combining Qualcomm
+> Dragonwing™ QRB2210 microprocessor with STMicroelectronics STM32U585
+> microcontroller.
+> Support to a simply boot to shell environment includes:
+> - UART, I2C, SPI
+> - onboard LEDS
+> - eMMC
+> - WLAN and BT
 > 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
+
+Nice, some small things to improve below (and above).
+
+> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
 > ---
-> v2 changes:
-> * Fixed off-by-one in SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK GENMASK
-> ---
->  drivers/spi/spi-axi-spi-engine.c | 128 +++++++++++++++++++++++++++++++++++++--
->  1 file changed, 124 insertions(+), 4 deletions(-)
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../boot/dts/qcom/qrb2210-arduino-imola.dts   | 456 ++++++++++++++++++
+>  2 files changed, 457 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts
 > 
-> diff --git a/drivers/spi/spi-axi-spi-engine.c b/drivers/spi/spi-axi-spi-engine.c
-> index e06f412190fd243161a0b3df992f26157531f6a1..c9d146e978b89abb8273900722ae2cfafdd6325f 100644
-> --- a/drivers/spi/spi-axi-spi-engine.c
-> +++ b/drivers/spi/spi-axi-spi-engine.c
-> @@ -23,6 +23,9 @@
->  #include <linux/spi/spi.h>
->  #include <trace/events/spi.h>
->  
-> +#define SPI_ENGINE_REG_DATA_WIDTH		0x0C
-> +#define   SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK	GENMASK(23, 16)
-> +#define   SPI_ENGINE_REG_DATA_WIDTH_MASK		GENMASK(15, 0)
->  #define SPI_ENGINE_REG_OFFLOAD_MEM_ADDR_WIDTH	0x10
->  #define SPI_ENGINE_REG_RESET			0x40
->  
-> @@ -75,6 +78,8 @@
->  #define SPI_ENGINE_CMD_REG_CLK_DIV		0x0
->  #define SPI_ENGINE_CMD_REG_CONFIG		0x1
->  #define SPI_ENGINE_CMD_REG_XFER_BITS		0x2
-> +#define SPI_ENGINE_CMD_REG_SDI_MASK		0x3
-> +#define SPI_ENGINE_CMD_REG_SDO_MASK		0x4
->  
->  #define SPI_ENGINE_MISC_SYNC			0x0
->  #define SPI_ENGINE_MISC_SLEEP			0x1
-> @@ -105,6 +110,10 @@
->  #define SPI_ENGINE_OFFLOAD_CMD_FIFO_SIZE	16
->  #define SPI_ENGINE_OFFLOAD_SDO_FIFO_SIZE	16
->  
-> +/* Extending SPI_MULTI_BUS_MODE values for optimizing messages. */
-> +#define SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN	-1
-> +#define SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING	-2
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 6f34d5ed331c..9f98a7f2cbb4 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -143,6 +143,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs8550-aim300-aiot.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qcs9100-ride.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qcs9100-ride-r3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qdu1000-idp.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= qrb2210-arduino-imola.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb2210-rb1.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb4210-rb2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts b/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts
+> new file mode 100644
+> index 000000000000..83e7f3e9da76
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts
+> @@ -0,0 +1,456 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
+> +/*
+> + * Copyright (c) 2025, Arduino SA
+> + */
 > +
->  struct spi_engine_program {
->  	unsigned int length;
->  	uint16_t instructions[] __counted_by(length);
-> @@ -142,6 +151,9 @@ struct spi_engine_offload {
->  	unsigned long flags;
->  	unsigned int offload_num;
->  	unsigned int spi_mode_config;
-> +	unsigned int multi_bus_mode;
-> +	u8 primary_bus_mask;
-> +	u8 all_bus_mask;
->  	u8 bits_per_word;
->  };
->  
-> @@ -165,6 +177,22 @@ struct spi_engine {
->  	bool offload_requires_sync;
->  };
->  
-> +static u8 spi_engine_primary_bus_flag(struct spi_device *spi)
-> +{
-> +	return BIT(spi->data_bus[0]);
-> +}
+> +/dts-v1/;
 > +
-> +static u8 spi_engine_all_bus_flags(struct spi_device *spi)
-> +{
-> +	u8 flags = 0;
-> +	int i;
+> +#include <dt-bindings/leds/common.h>
+> +#include "agatti.dtsi"
+> +#include "pm4125.dtsi"
 > +
-> +	for (i = 0; i < spi->num_data_bus; i++)
-> +		flags |= BIT(spi->data_bus[i]);
+> +/delete-node/ &cont_splash_memory;
 > +
-> +	return flags;
-> +}
-> +
->  static void spi_engine_program_add_cmd(struct spi_engine_program *p,
->  	bool dry, uint16_t cmd)
->  {
-> @@ -193,7 +221,7 @@ static unsigned int spi_engine_get_config(struct spi_device *spi)
->  }
->  
->  static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
-> -	struct spi_transfer *xfer)
-> +				struct spi_transfer *xfer, u32 num_lanes)
->  {
->  	unsigned int len;
->  
-> @@ -204,6 +232,9 @@ static void spi_engine_gen_xfer(struct spi_engine_program *p, bool dry,
->  	else
->  		len = xfer->len / 4;
->  
-> +	if (xfer->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE)
-> +		len /= num_lanes;
-> +
->  	while (len) {
->  		unsigned int n = min(len, 256U);
->  		unsigned int flags = 0;
-> @@ -269,6 +300,7 @@ static int spi_engine_precompile_message(struct spi_message *msg)
->  {
->  	unsigned int clk_div, max_hz = msg->spi->controller->max_speed_hz;
->  	struct spi_transfer *xfer;
-> +	int multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN;
->  	u8 min_bits_per_word = U8_MAX;
->  	u8 max_bits_per_word = 0;
->  
-> @@ -284,6 +316,24 @@ static int spi_engine_precompile_message(struct spi_message *msg)
->  			min_bits_per_word = min(min_bits_per_word, xfer->bits_per_word);
->  			max_bits_per_word = max(max_bits_per_word, xfer->bits_per_word);
->  		}
-> +
-> +		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
-> +		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
-> +			switch (xfer->multi_bus_mode) {
-> +			case SPI_MULTI_BUS_MODE_SINGLE:
-> +			case SPI_MULTI_BUS_MODE_STRIPE:
-> +				break;
-> +			default:
-> +				/* Other modes, like mirror not supported */
-> +				return -EINVAL;
-> +			}
-> +
-> +			/* If all xfers have the same multi-bus mode, we can optimize. */
-> +			if (multi_bus_mode == SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN)
-> +				multi_bus_mode = xfer->multi_bus_mode;
-> +			else if (multi_bus_mode != xfer->multi_bus_mode)
-> +				multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING;
+> +/ {
+> +        model = "Arduino UnoQ";
+> +        compatible = "arduino,imola", "qcom,qrb2210", "qcom,qcm2290";
 
-Here we check all xfers have the same multi-bus mode and keep the mode that has
-been set. Otherwise, we set this conflicting mode and the intent is to generate
-SDI and SDO mask commands on demand on spi_engine_precompile_message(). OTOH,
-if all xfers have the same multi-bus mode, we can add just one pair of SDI/SDO
-mask commands in spi_engine_trigger_enable() and one pair latter in
-spi_engine_trigger_disable(). I guess this is the optimization mentioned in the
-comment.
+chassis-type = "embedded";
 
-> +		}
->  	}
->  
->  	/*
-> @@ -297,6 +347,10 @@ static int spi_engine_precompile_message(struct spi_message *msg)
->  			priv->bits_per_word = min_bits_per_word;
->  		else
->  			priv->bits_per_word = 0;
 > +
-> +		priv->multi_bus_mode = multi_bus_mode;
-> +		priv->primary_bus_mask = spi_engine_primary_bus_flag(msg->spi);
-> +		priv->all_bus_mask = spi_engine_all_bus_flags(msg->spi);
->  	}
->  
->  	return 0;
-> @@ -310,6 +364,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
->  	struct spi_engine_offload *priv;
->  	struct spi_transfer *xfer;
->  	int clk_div, new_clk_div, inst_ns;
-> +	int prev_multi_bus_mode = SPI_MULTI_BUS_MODE_SINGLE;
->  	bool keep_cs = false;
->  	u8 bits_per_word = 0;
->  
-> @@ -334,6 +389,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
->  		 * in the same way.
->  		 */
->  		bits_per_word = priv->bits_per_word;
-> +		prev_multi_bus_mode = priv->multi_bus_mode;
->  	} else {
->  		spi_engine_program_add_cmd(p, dry,
->  			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_CONFIG,
-> @@ -344,6 +400,24 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
->  	spi_engine_gen_cs(p, dry, spi, !xfer->cs_off);
->  
->  	list_for_each_entry(xfer, &msg->transfers, transfer_list) {
-> +		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
-> +		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
-> +			if (xfer->multi_bus_mode != prev_multi_bus_mode) {
-> +				u8 bus_flags = spi_engine_primary_bus_flag(spi);
+> +        aliases {
+> +                serial0 = &uart4;
+> +                serial1 = &uart2;
+> +                serial2 = &uart3;
+> +                sdhc1 = &sdhc_1;
+> +        };
 > +
-> +				if (xfer->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE)
-> +					bus_flags = spi_engine_all_bus_flags(spi);
+> +        chosen {
+> +                stdout-path = "serial0:115200n8";
+> +        };
 > +
-> +				spi_engine_program_add_cmd(p, dry,
-> +					SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-> +							     bus_flags));
-> +				spi_engine_program_add_cmd(p, dry,
-> +					SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-> +							     bus_flags));
-> +			}
-> +			prev_multi_bus_mode = xfer->multi_bus_mode;
-> +		}
+> +        gpio-keys {
+> +                compatible = "gpio-keys";
+> +                label = "gpio-keys";
 > +
->  		new_clk_div = host->max_speed_hz / xfer->effective_speed_hz;
->  		if (new_clk_div != clk_div) {
->  			clk_div = new_clk_div;
-> @@ -360,7 +434,7 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
->  					bits_per_word));
->  		}
->  
-> -		spi_engine_gen_xfer(p, dry, xfer);
-> +		spi_engine_gen_xfer(p, dry, xfer, spi->num_data_bus);
->  		spi_engine_gen_sleep(p, dry, spi_delay_to_ns(&xfer->delay, xfer),
->  				     inst_ns, xfer->effective_speed_hz);
->  
-> @@ -394,6 +468,17 @@ static void spi_engine_compile_message(struct spi_message *msg, bool dry,
->  	if (clk_div != 1)
->  		spi_engine_program_add_cmd(p, dry,
->  			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_CLK_DIV, 0));
+> +                pinctrl-0 = <&key_volp_n>, <&key_vold_n>;
+> +                pinctrl-names = "default";
 > +
-> +	/* Restore single bus mode unless offload disable will restore it later. */
-> +	if (prev_multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE &&
-> +	    (!msg->offload || priv->multi_bus_mode != SPI_MULTI_BUS_MODE_STRIPE)) {
-> +		u8 bus_flags = spi_engine_primary_bus_flag(spi);
+> +                key-volume-up {
+> +                        label = "Volume Up";
+> +                        linux,code = <KEY_VOLUMEUP>;
+> +                        gpios = <&tlmm 96 GPIO_ACTIVE_LOW>;
+> +                        debounce-interval = <15>;
+> +                        linux,can-disable;
+> +                        wakeup-source;
+> +                };
 > +
-> +		spi_engine_program_add_cmd(p, dry,
-> +			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK, bus_flags));
-> +		spi_engine_program_add_cmd(p, dry,
-> +			SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK, bus_flags));
-> +	}
->  }
->  
->  static void spi_engine_xfer_next(struct spi_message *msg,
-> @@ -799,6 +884,17 @@ static int spi_engine_setup(struct spi_device *device)
->  	writel_relaxed(SPI_ENGINE_CMD_CS_INV(spi_engine->cs_inv),
->  		       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
->  
-> +	if (host->num_data_bus > 1) {
-> +		u8 bus_flags = spi_engine_primary_bus_flag(device);
+> +                key-volume-down {
+> +                        label = "Volume Down";
+> +                        linux,code = <KEY_VOLUMEDOWN>;
+> +                        gpios = <&tlmm 36 GPIO_ACTIVE_LOW>;
+> +                        debounce-interval = <15>;
+> +                        linux,can-disable;
+> +                        wakeup-source;
+> +                };
+> +        };
 > +
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-> +						    bus_flags),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-> +						    bus_flags),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +	}
+> +        leds: leds {
+> +                compatible = "gpio-leds";
 > +
->  	/*
->  	 * In addition to setting the flags, we have to do a CS assert command
->  	 * to make the new setting actually take effect.
-> @@ -902,6 +998,15 @@ static int spi_engine_trigger_enable(struct spi_offload *offload)
->  						    priv->bits_per_word),
->  			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
->  
-> +	if (priv->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE) {
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-> +						    priv->all_bus_mask),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-> +						    priv->all_bus_mask),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +	}
+> +                ledpanic: led-panic {
+> +                        label = "red:panic";
+> +                        function = LED_FUNCTION_INDICATOR;
+> +                        color = <LED_COLOR_ID_RED>;
+> +                        gpios = <&tlmm 39 GPIO_ACTIVE_HIGH>;
+> +                        linux,default-trigger = "none";
+> +                        default-state = "off";
+> +                        panic-indicator;
+> +                };
 > +
->  	writel_relaxed(SPI_ENGINE_CMD_SYNC(1),
->  		spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
->  
-> @@ -929,6 +1034,16 @@ static void spi_engine_trigger_disable(struct spi_offload *offload)
->  	reg &= ~SPI_ENGINE_OFFLOAD_CTRL_ENABLE;
->  	writel_relaxed(reg, spi_engine->base +
->  			    SPI_ENGINE_REG_OFFLOAD_CTRL(priv->offload_num));
+> +                ledwlan: led-wlan {
+> +                        label = "green:wlan";
+> +                        function = LED_FUNCTION_WLAN;
+> +                        color = <LED_COLOR_ID_GREEN>;
+> +                        gpios = <&tlmm 40 GPIO_ACTIVE_HIGH>;
+> +                        linux,default-trigger = "phy0tx";
+> +                        default-state = "off";
+> +                };
 > +
-> +	/* Restore single-bus mode. */
-> +	if (priv->multi_bus_mode == SPI_MULTI_BUS_MODE_STRIPE) {
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDI_MASK,
-> +						    priv->primary_bus_mask),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +		writel_relaxed(SPI_ENGINE_CMD_WRITE(SPI_ENGINE_CMD_REG_SDO_MASK,
-> +						    priv->primary_bus_mask),
-> +			       spi_engine->base + SPI_ENGINE_REG_CMD_FIFO);
-> +	}
->  }
->  
->  static struct dma_chan
-> @@ -973,7 +1088,7 @@ static int spi_engine_probe(struct platform_device *pdev)
->  {
->  	struct spi_engine *spi_engine;
->  	struct spi_controller *host;
-> -	unsigned int version;
-> +	unsigned int version, data_width_reg_val;
->  	int irq, ret;
->  
->  	irq = platform_get_irq(pdev, 0);
-> @@ -1042,7 +1157,7 @@ static int spi_engine_probe(struct platform_device *pdev)
->  		return PTR_ERR(spi_engine->base);
->  
->  	version = readl(spi_engine->base + ADI_AXI_REG_VERSION);
-> -	if (ADI_AXI_PCORE_VER_MAJOR(version) != 1) {
-> +	if (ADI_AXI_PCORE_VER_MAJOR(version) > 2) {
->  		dev_err(&pdev->dev, "Unsupported peripheral version %u.%u.%u\n",
->  			ADI_AXI_PCORE_VER_MAJOR(version),
->  			ADI_AXI_PCORE_VER_MINOR(version),
-> @@ -1050,6 +1165,8 @@ static int spi_engine_probe(struct platform_device *pdev)
->  		return -ENODEV;
->  	}
->  
-> +	data_width_reg_val = readl(spi_engine->base + SPI_ENGINE_REG_DATA_WIDTH);
+> +                ledbt: led-bt {
+> +                        label = "blue:bt";
+> +                        function = LED_FUNCTION_BLUETOOTH;
+> +                        color = <LED_COLOR_ID_BLUE>;
+> +                        gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
+> +                        linux,default-trigger = "bluetooth-power";
+> +                        default-state = "off";
+> +                };
 > +
->  	if (adi_axi_pcore_ver_gteq(version, 1, 1)) {
->  		unsigned int sizes = readl(spi_engine->base +
->  				SPI_ENGINE_REG_OFFLOAD_MEM_ADDR_WIDTH);
-> @@ -1097,6 +1214,9 @@ static int spi_engine_probe(struct platform_device *pdev)
->  	}
->  	if (adi_axi_pcore_ver_gteq(version, 1, 3))
->  		host->mode_bits |= SPI_MOSI_IDLE_LOW | SPI_MOSI_IDLE_HIGH;
-> +	if (adi_axi_pcore_ver_gteq(version, 2, 0))
-> +		host->num_data_bus = FIELD_GET(SPI_ENGINE_REG_DATA_WIDTH_NUM_OF_SDIO_MASK,
-> +					       data_width_reg_val);
->  
->  	if (host->max_speed_hz == 0)
->  		return dev_err_probe(&pdev->dev, -EINVAL, "spi_clk rate is 0");
-> 
+> +                ledr: led-user-red {
+> +                        gpios = <&tlmm 41 GPIO_ACTIVE_HIGH>;
+> +                        color = <LED_COLOR_ID_RED>;
+> +                };
+> +
+> +                ledg: led-user-green {
+> +                        gpios = <&tlmm 42 GPIO_ACTIVE_HIGH>;
+> +                        color = <LED_COLOR_ID_GREEN>;
+> +                };
+> +
+> +                ledb: led-user-blue {
+> +                        gpios = <&tlmm 60 GPIO_ACTIVE_HIGH>;
+> +                        color = <LED_COLOR_ID_BLUE>;
+> +                };
+> +        };
+> +
+> +        multi-led {
+> +                compatible = "leds-group-multicolor";
+> +                color = <LED_COLOR_ID_RGB>;
+> +                function = LED_FUNCTION_INDICATOR;
+> +                leds = <&ledr>, <&ledg>, <&ledb>;
+> +        };
+> +
+> +        /* PM4125 charger out, supplied by VBAT */
+> +        vph_pwr: regulator-vph-pwr {
+> +                compatible = "regulator-fixed";
+> +                regulator-name = "vph_pwr";
+> +                regulator-min-microvolt = <3700000>;
+> +                regulator-max-microvolt = <3700000>;
+> +                regulator-always-on;
+> +                regulator-boot-on;
+> +        };
+> +};
+> +
+> +&gpi_dma0 {
+> +        status = "okay";
+> +};
+> +
+> +&gpu {
+> +        status = "okay";
+> +};
+> +
+> +&gpu_zap_shader {
+> +        firmware-name = "qcom/qcm2290/a702_zap.mbn";
+> +};
+> +
+> +&pm4125_vbus {
+> +        regulator-min-microamp = <500000>;
+> +        regulator-max-microamp = <500000>;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&qupv3_id_0 {
+> +        status = "okay";
+> +};
+> +
+> +&remoteproc_adsp {
+> +        firmware-name = "qcom/qcm2290/adsp.mbn";
+> +
+> +        status = "okay";
+> +};
+> +
+> +&remoteproc_mpss {
+> +        firmware-name = "qcom/qcm2290/modem.mbn";
+> +
+> +        status = "okay";
+> +};
+> +
+> +&rpm_requests {
+> +        regulators {
+> +                compatible = "qcom,rpm-pm2250-regulators";
+> +                vdd_s3-supply = <&vph_pwr>;
+> +                vdd_s4-supply = <&vph_pwr>;
+> +                vdd_l1_l2_l3_l5_l6_l7_l8_l9_l10_l11_l12-supply = <&pm4125_s3>;
+> +                vdd_l4_l17_l18_l19_l20_l21_l22-supply = <&vph_pwr>;
+> +                vdd_l13_l14_l15_l16-supply = <&pm4125_s4>;
+> +
+> +                pm4125_s3: s3 {
+> +                        /* 0.4V-1.6625V -> 1.3V (Power tree requirements) */
+> +                        regulator-min-microvolt = <1352000>;
+> +                        regulator-max-microvolt = <1352000>;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_s4: s4 {
+> +                        /* 1.2V-2.35V -> 2.05V (Power tree requirements) */
+> +                        regulator-min-microvolt = <2072000>;
+> +                        regulator-max-microvolt = <2072000>;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l2: l2 {
+> +                        /* LPDDR4X VDD2 */
+> +                        regulator-min-microvolt = <1136000>;
+> +                        regulator-max-microvolt = <1136000>;
+> +                        regulator-always-on;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l3: l3 {
+> +                        /* LPDDR4X VDDQ */
+> +                        regulator-min-microvolt = <616000>;
+> +                        regulator-max-microvolt = <616000>;
+> +                        regulator-always-on;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l4: l4 {
+> +                        /* max = 3.05V -> max = 2.7 to disable 3V signaling (SDHCI2) */
+> +                        regulator-min-microvolt = <1800000>;
+> +                        regulator-max-microvolt = <2700000>;
+> +                        regulator-allow-set-load;
+> +                };
+> +
+> +                pm4125_l5: l5 {
+> +                        /* CSI/DSI */
+> +                        regulator-min-microvolt = <1232000>;
+> +                        regulator-max-microvolt = <1232000>;
+> +                        regulator-allow-set-load;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l6: l6 {
+> +                        /* DRAM PLL */
+> +                        regulator-min-microvolt = <928000>;
+> +                        regulator-max-microvolt = <928000>;
+> +                        regulator-always-on;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l7: l7 {
+> +                        /* Wi-Fi CX */
+> +                        regulator-min-microvolt = <664000>;
+> +                        regulator-max-microvolt = <664000>;
+> +                };
+> +
+> +                pm4125_l10: l10 {
+> +                        /* Wi-Fi RFA */
+> +                        regulator-min-microvolt = <1304000>;
+> +                        regulator-max-microvolt = <1304000>;
+> +                };
+> +
+> +                pm4125_l11: l11 {
+> +                        /* ANX7625 DVDD1P0V/AVDD1P0V */
+> +                        regulator-min-microvolt = <1000000>;
+> +                        regulator-max-microvolt = <1000000>;
+> +                        regulator-boot-on;
+> +                        regulator-always-on;
+> +                };
+> +
+> +                pm4125_l12: l12 {
+> +                        /* USB PHYs */
+> +                        regulator-min-microvolt = <928000>;
+> +                        regulator-max-microvolt = <928000>;
+> +                        regulator-allow-set-load;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l13: l13 {
+> +                        /* USB/QFPROM/PLLs */
+> +                        regulator-min-microvolt = <1800000>;
+> +                        regulator-max-microvolt = <1800000>;
+> +                        regulator-allow-set-load;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l14: l14 {
+> +                        /* SDHCI1 EMMC VCCQ */
+> +                        regulator-min-microvolt = <1800000>;
+> +                        regulator-max-microvolt = <1800000>;
+> +                        regulator-allow-set-load;
+> +                        /* Broken hardware, never turn it off! */
+> +                        regulator-always-on;
+> +                };
+> +
+> +                pm4125_l15: l15 {
+> +                        /* VDDIO */
+> +                        regulator-min-microvolt = <1800000>;
+> +                        regulator-max-microvolt = <1800000>;
+> +                        regulator-allow-set-load;
+> +                        regulator-always-on;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l20: l20 {
+> +                        /* SDHCI1 EMMC */
+> +                        regulator-min-microvolt = <2400000>;
+> +                        regulator-max-microvolt = <3600000>;
+> +                        regulator-allow-set-load;
+> +                };
+> +
+> +                pm4125_l21: l21 {
+> +                        /* USB HS */
+> +                        regulator-min-microvolt = <2960000>;
+> +                        regulator-max-microvolt = <3300000>;
+> +                        regulator-allow-set-load;
+> +                        regulator-boot-on;
+> +                };
+> +
+> +                pm4125_l22: l22 {
+> +                        /* Wi-Fi VDD */
+> +                        regulator-min-microvolt = <3312000>;
+> +                        regulator-max-microvolt = <3312000>;
+> +                };
+> +        };
+> +};
+> +
+> +&sdhc_1 {
+> +        vmmc-supply = <&pm4125_l20>;
+> +        vqmmc-supply = <&pm4125_l14>;
+> +        pinctrl-0 = <&sdc1_state_on>;
+> +        pinctrl-1 = <&sdc1_state_off>;
+> +        pinctrl-names = "default", "sleep";
+> +        mmc-hs400-1_8v;
+> +        mmc-hs200-1_8v;
+> +        non-removable;
+> +        supports-cqe;
+> +        no-sdio;
+> +        no-sd;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&tlmm {
+> +        spidev_cs: spidev-cs-state {
+> +                pins = "gpio17";
+> +                function = "gpio";
+> +                drive-strength = <16>;
+> +        };
+> +
+> +        jmisc_gpio18: jmisc-gpio18-state {
+> +                pins = "gpio18";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +
+> +        jmisc_gpio28: jmisc-gpio28-state {
+> +                pins = "gpio28";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +
+> +        key_vold_n: key-vold-n-state {
+> +                pins = "gpio36";
+> +                function = "gpio";
+> +                bias-pull-up;
+> +                output-disable;
+> +        };
+> +
+> +        key_volp_n: key-volp-n-state {
+> +                pins = "gpio96";
+> +                function = "gpio";
+> +                bias-pull-up;
+> +                output-disable;
+> +        };
+> +
+> +        jmisc_gpio98: jmisc-gpio98-state {
+> +                pins = "gpio98";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +
+> +        jmisc_gpio99: jmisc-gpio99-state {
+> +                pins = "gpio99";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +
+> +        jmisc_gpio100: jmisc-gpio100-state {
+> +                pins = "gpio100";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +
+> +        jmisc_gpio101: jmisc-gpio101-state {
+> +                pins = "gpio101";
+> +                function = "gpio";
+> +                drive-strength = <2>;
+> +                bias-pull-down;
+> +        };
+> +};
+> +
+> +&i2c0 {
+
+Please see the "ordering of Nodes" section in
+Documentation/devicetree/bindings/dts-coding-style.rst
+
+Regards,
+Bjorn
+
+> +        clock-frequency = <100000>;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&i2c1 {
+> +        clock-frequency = <100000>;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&uart2 {
+> +        status = "okay";
+> +};
+> +
+> +/* UART connected to Bluetooth */
+> +&uart3 {
+> +        status = "okay";
+> +
+> +        bluetooth {
+> +                compatible = "qcom,wcn3988-bt";
+> +
+> +                vddio-supply = <&pm4125_l15>;
+> +                vddxo-supply = <&pm4125_l13>;
+> +                vddrf-supply = <&pm4125_l10>;
+> +                vddch0-supply = <&pm4125_l22>;
+> +                enable-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
+> +                max-speed = <3000000>;
+> +        };
+> +};
+> +
+> +/* UART connected to JCTL */
+> +&uart4 {
+> +        compatible = "qcom,geni-debug-uart";
+> +
+> +        status = "okay";
+> +};
+> +
+> +&spi5 {
+> +        status = "okay";
+> +
+> +        spidev@0 {
+> +                reg = <0>;
+> +                compatible = "arduino,mcu";
+> +                pinctrl-0 = <&spidev_cs>;
+> +                pinctrl-names = "default";
+> +        };
+> +};
+> +
+> +&usb {
+> +        status = "okay";
+> +};
+> +
+> +&usb_hsphy {
+> +        vdd-supply = <&pm4125_l12>;
+> +        vdda-pll-supply = <&pm4125_l13>;
+> +        vdda-phy-dpdm-supply = <&pm4125_l21>;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&usb_qmpphy {
+> +        vdda-phy-supply = <&pm4125_l12>;
+> +        vdda-pll-supply = <&pm4125_l13>;
+> +
+> +        status = "okay";
+> +};
+> +
+> +&wifi {
+> +        vdd-0.8-cx-mx-supply = <&pm4125_l7>;
+> +        vdd-1.8-xo-supply = <&pm4125_l13>;
+> +        vdd-1.3-rfa-supply = <&pm4125_l10>;
+> +        vdd-3.3-ch0-supply = <&pm4125_l22>;
+> +        qcom,ath10k-calibration-variant = "Arduino_UnoQ";
+> +        firmware-name = "qcm2290";
+> +
+> +        status = "okay";
+> +};
+> +
+> +&xo_board {
+> +        clock-frequency = <38400000>;
+> +};
 > -- 
-> 2.43.0
-> 
+> 2.51.2
 > 
 
