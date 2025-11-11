@@ -1,118 +1,212 @@
-Return-Path: <linux-spi+bounces-11152-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11153-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD425C4B21A
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 03:01:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4CBFC4C35A
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 08:59:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4B78934B9F2
-	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 02:01:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFBAE1885E0E
+	for <lists+linux-spi@lfdr.de>; Tue, 11 Nov 2025 07:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5AC234164B;
-	Tue, 11 Nov 2025 02:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40292BE059;
+	Tue, 11 Nov 2025 07:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="EzIaskis"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evobaaN3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126F47260B;
-	Tue, 11 Nov 2025 02:01:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A652D5930;
+	Tue, 11 Nov 2025 07:56:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762826470; cv=none; b=jHgymVC5Qg9Afaa7bNjQa7TQaVRwxuU+b7tHMM75qzCYynWqcceTj9nHZ1XDzCrYxf7SKuPPL3KnuopHD77IKaakg3ljbiuVNZiD/mPj5jygfYyy+yPMWTIA+HhWndlBVI7Q9HAIxlx8oLPuY0SMPahUFCvPBfgUQNaWGnbWr9I=
+	t=1762847804; cv=none; b=Jv/yR366jLmZVIv9H4YcaPR+BZbvYfC0+HIwTKNKsyilDZwu+l5/nr3+0QgJx20rUreUY7/3Q27EjNXNpfmff5ba9RSdxrtrWd9FfjIF50435z6p7g3C/Rt+WL4WJkkngTD5e+tZCXRFh5Gdks9zA1N03a9+JX0Tt4gRPr8/7U0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762826470; c=relaxed/simple;
-	bh=fa86p+TM+I3rIDtTcPPW3kZF6C0iOy8eWSbTa7XiI7g=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=jNmBeLqVZKORr/L3KcXhRLWqOwMM7kVLXuFWyjZFMkFSzH5mbwLfs8DMIwmQNxapjAsLtNHa0NHIvr1A2wrD99FGqIfAUhsnR66oLs//9m1438tDZe0Lgf/2nc1olNxlmH6aVcEO8LiLGnRZcT8bfBBSl+FdI3qRqOmxKOOXiRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=EzIaskis; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=YvwXEA8Gn372z7HVORmMtVsV2QhDOhzv2XItjziiVSY=;
-	b=EzIaskisNXvzFqIBBoLUHXS2svTWm/cVDOj3fE7GR5HeJB3eZ6yCUda5yKcTXMxh/GI8uDoXF
-	jMw6o7sv4B2bfotTq9rMj33kYloFNrDQDN2nt/j6K0RVscXrFBWl4/oNVDin+IPjFQqf+s3vYrY
-	/KwEU552LeHqQnVArFexfRA=
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4d58q10HkMz1cyVl;
-	Tue, 11 Nov 2025 09:59:25 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 18AFF1800CE;
-	Tue, 11 Nov 2025 10:01:04 +0800 (CST)
-Received: from kwepemn500012.china.huawei.com (7.202.194.153) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 11 Nov 2025 10:01:03 +0800
-Received: from kwepemn200006.china.huawei.com (7.202.194.129) by
- kwepemn500012.china.huawei.com (7.202.194.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 11 Nov 2025 10:01:03 +0800
-Received: from kwepemn200006.china.huawei.com ([7.202.194.129]) by
- kwepemn200006.china.huawei.com ([7.202.194.129]) with mapi id 15.02.1544.011;
- Tue, 11 Nov 2025 10:01:03 +0800
-From: liudingyuan <liudingyuan@h-partners.com>
-To: "shenyang (M)" <shenyang39@huawei.com>, "broonie@kernel.org"
-	<broonie@kernel.org>
-CC: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Jonathan
- Cameron" <jonathan.cameron@huawei.com>, Kangfenglong
-	<kangfenglong@huawei.com>, liuyonglong <liuyonglong@huawei.com>, "lujunhua
- (E)" <lujunhua7@h-partners.com>, "yubowen (H)" <yubowen8@huawei.com>
-Subject: re: [PATCH] spi: hisi-kunpeng: Fixed the wrong debugfs node name in
- hisi_spi debugfs initialization
-Thread-Topic: [PATCH] spi: hisi-kunpeng: Fixed the wrong debugfs node name in
- hisi_spi debugfs initialization
-Thread-Index: AdxSrhaAyut68gfvQZC0fw3MSAKiDA==
-Date: Tue, 11 Nov 2025 02:01:03 +0000
-Message-ID: <fc10632d875346eead8bf488c56b6bbc@h-partners.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1762847804; c=relaxed/simple;
+	bh=oF1keJKwYhxvaP6NJqrA6M6U0gmqXpD9wpQKVAj8/Ww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SwfaFLtKx3egg23xx+U9F4nHr0AOi2wTRQh78iQkADC1njDB9X1nO0SF5vatEGlJuUkvMlHNu4yDJlJz6BoyW5/5OUijq8QRwoP755dwr3ho4yY6uRvoUqtBAFjTZyqoPW1qZnZP20TkbewXGCe8qiFLKvgtz0YTfubjYr3RNiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evobaaN3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80079C116B1;
+	Tue, 11 Nov 2025 07:56:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762847803;
+	bh=oF1keJKwYhxvaP6NJqrA6M6U0gmqXpD9wpQKVAj8/Ww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=evobaaN3/pr/xTyRkmYEEXDtrMENl8k/Br+y8LvTdXX0jV4r9Od10ACdXFboqHx4F
+	 73a0zmoeV7nnlzpvy04lDwNf9Iha4eNANDeIt3N8MJidzY5ZjvvVJyrdkx+D5HD1pW
+	 4dN+wwkJhfjNAaHFPtLdysLATbpyT80cIKZtq1RlZvc0PiTVYlXCiGEOo3aFkqUXwH
+	 YLqENrDxNSRslZ50kGGTpPlt3ABavQF/f7oWFL/76qtWsyl1eMUa5iS9Fh8xz/Y6rD
+	 BbU0ixMvr8vNo4SCDWW2oVfoG5RtaWJ0mYrNfqDa/5RWGVG3P1Ru7vSphlHVlu5CyT
+	 NrcFQ4uIKcVFg==
+Date: Tue, 11 Nov 2025 08:56:41 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	broonie@kernel.org, avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	andrew@codeconstruct.com.au, openbmc@lists.ozlabs.org, devicetree@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: spi: Convert nuvoton,npcm-pspi to DT
+ schema
+Message-ID: <20251111-bouncy-mahogany-skylark-c4ba1d@kuoka>
+References: <20251110081457.1008316-1-tmaimon77@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251110081457.1008316-1-tmaimon77@gmail.com>
 
+On Mon, Nov 10, 2025 at 10:14:57AM +0200, Tomer Maimon wrote:
+> Convert the Nuvoton NPCM PSPI binding to DT schema format.
+> Remove the clock-name property since it is not used.
 
-> In hisi_spi_debugfs_init, spi controller pointer is calculated by contain=
-er_of macro, and the member is hs->dev. But the host pointer cannot be calc=
-ulated offset directly by this, because hs->dev points to the device in pla=
-tform device(pdev->dev), and it is > the host->dev.parent points to the pde=
-v->dev, which is set in __spi_alloc_controller.
->
->In this patch, this issues is fixed by getting the spi_controller data fro=
-m pdev->dev->driver_data directly, driver_data points to the spi controller=
- data in the probe stage.
->
-> Signed-off-by: Devyn Liu <liudingyuan@h-partners.com>
+clock-name or clock-names? I clearly see the clock-names used in DTS, so
+your commit msg is not correct.
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
 > ---
->  drivers/spi/spi-hisi-kunpeng.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpen=
-g.c index dadf558dd9c0..7458a4bc0856 100644
->--- a/drivers/spi/spi-hisi-kunpeng.c
-> +++ b/drivers/spi/spi-hisi-kunpeng.c
-> @@ -164,7 +164,7 @@ static int hisi_spi_debugfs_init(struct hisi_spi *hs)
-> =20
->	struct spi_controller *host;
-> =20
-> -	host =3D container_of(hs->dev, struct spi_controller, dev);
-> +	host =3D hs->dev->driver_data;
->  	snprintf(name, 32, "hisi_spi%d", host->bus_num);
->  	hs->debugfs =3D debugfs_create_dir(name, NULL);
->  	if (IS_ERR(hs->debugfs))
-> --
-> 2.33.0
+>  .../bindings/spi/nuvoton,npcm-pspi.txt        | 36 ----------
+>  .../bindings/spi/nuvoton,npcm-pspi.yaml       | 65 +++++++++++++++++++
+>  2 files changed, 65 insertions(+), 36 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+>  create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> deleted file mode 100644
+> index a4e72e52af59..000000000000
+> --- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
+> +++ /dev/null
+> @@ -1,36 +0,0 @@
+> -Nuvoton NPCM Peripheral Serial Peripheral Interface(PSPI) controller driver
+> -
+> -Nuvoton NPCM7xx SOC support two PSPI channels.
+> -
+> -Required properties:
+> - - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
+> -				"nuvoton,npcm845-pspi" for Arbel NPCM8XX.
+> - - #address-cells : should be 1. see spi-bus.txt
+> - - #size-cells : should be 0. see spi-bus.txt
+> - - specifies physical base address and size of the register.
+> - - interrupts : contain PSPI interrupt.
+> - - clocks : phandle of PSPI reference clock.
+> - - clock-names: Should be "clk_apb5".
+> - - pinctrl-names : a pinctrl state named "default" must be defined.
+> - - pinctrl-0 : phandle referencing pin configuration of the device.
+> - - resets : phandle to the reset control for this device.
+> - - cs-gpios: Specifies the gpio pins to be used for chipselects.
+> -            See: Documentation/devicetree/bindings/spi/spi-bus.txt
+> -
+> -Optional properties:
+> -- clock-frequency : Input clock frequency to the PSPI block in Hz.
+> -		    Default is 25000000 Hz.
 
-Gentle ping on this patch.
+You dropped this property. Every change done in the conversion needs to
+be documented in the commit msg with explanation WHY.
+
+> -
+> -spi0: spi@f0200000 {
+> -	compatible = "nuvoton,npcm750-pspi";
+> -	reg = <0xf0200000 0x1000>;
+> -	pinctrl-names = "default";
+> -	pinctrl-0 = <&pspi1_pins>;
+> -	#address-cells = <1>;
+> -	#size-cells = <0>;
+> -	interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> -	clocks = <&clk NPCM7XX_CLK_APB5>;
+> -	clock-names = "clk_apb5";
+> -	resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_PSPI1>
+> -	cs-gpios = <&gpio6 11 GPIO_ACTIVE_LOW>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
+> new file mode 100644
+> index 000000000000..65ad40292408
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
+> @@ -0,0 +1,65 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/spi/nuvoton,npcm-pspi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Peripheral SPI (PSPI) Controller
+> +
+> +maintainers:
+> +  - Tomer Maimon <tmaimon77@gmail.com>
+> +
+> +allOf:
+> +  - $ref: spi-controller.yaml#
+> +
+> +description:
+> +  Nuvoton NPCM Peripheral Serial Peripheral Interface (PSPI) controller.
+> +  Nuvoton NPCM7xx SOC supports two PSPI channels.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm750-pspi # Poleg NPCM7XX
+> +      - nuvoton,npcm845-pspi # Arbel NPCM8XX
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: PSPI reference clock.
+> +
+> +  resets:
+> +    maxItems: 1
+> +    description: PSPI module reset.
+
+Drop description.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
+> +    spi0: spi@f0200000 {
+> +        compatible = "nuvoton,npcm750-pspi";
+> +        reg = <0xf0200000 0x1000>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pspi1_pins>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clk NPCM7XX_CLK_APB5>;
+> +        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_PSPI1>;
+> +        cs-gpios = <&gpio6 11 0x1>;
+
+Use proper GPIO defines for flags.
+
+Best regards,
+Krzysztof
+
 
