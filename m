@@ -1,250 +1,126 @@
-Return-Path: <linux-spi+bounces-11171-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11172-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77BCCC530BE
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 16:31:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 900EAC5362D
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 17:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F239235956F
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 15:15:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0C0DD544203
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 15:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D98C33BBA5;
-	Wed, 12 Nov 2025 15:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3617833ADAD;
+	Wed, 12 Nov 2025 15:55:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KcidL/qM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMEKdVb9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884B533B979
-	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 15:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D0E338904;
+	Wed, 12 Nov 2025 15:55:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762960201; cv=none; b=TrLsZhAgDeoBc/+2wbKybuXbUa++DdVmo1+DxynmTRS6NtWfZI3kbbHxPnaLqT+S532H/7DySb1AEZBtPUbuDfkm0tX2N3Nt39Lq5dCkdnTLXrrca5c5P5q1fKRFhG2QnXn6cEki2NNxRZKp8sPsEhxfD7ADSlgQLMyuhUeice0=
+	t=1762962940; cv=none; b=SaVeX8zr364Y1+KPE68goCmJKXFRLm8hwsZdGDW++O1LAqxFfBupbgLDbOAqnrvGNoS6PwhJkWlW17ND84dhvfMJPdPunbGc3ey9W0Eq1j4gwuNeJviwuJVE4X8TSjyJCSDC8gUds6OicRrMdoG9iiHqRymug7xPBeNibGF5USU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762960201; c=relaxed/simple;
-	bh=aYSYBvNWA4f73tOvtgsvmHJY2eaF6RJXHjE/a9pxUbk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QbNHwbaexW2wJjJKkxGYqkBD6EGZm2KN7PoUWlPPdwM3yTFF2CKqaLDEzADI0SIujNO0GO2K7G54osxcSNhQbj2QIVGxQevCbSopWL3t937aFYDH9uQzgmRPKSYXf85PveYp5Z3XJhWLafyGNCQ0Pj8CylXJ2isd88zjs8Smyyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KcidL/qM; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477770019e4so10782045e9.3
-        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 07:09:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762960196; x=1763564996; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtGZMMsw8V99KZAgaHQJPZ8CoLj3tmmTUHgBPIq1Q90=;
-        b=KcidL/qMT0dse2e+jDaZ9VSnJ77dfInWu01TM40OzrPmjmDB60Tks7QjmccoIPwhtW
-         YVpuToj/1E7wlj3f5QtPTSztLLcMidcGvlaYLV2O8DHhCFSCO/LL9WD8ylLfzjpPFGa2
-         kteQEMRJSTkJAGYV1xn2am270/mE1uRfVA896jJuECLSUc0P2P8G3OxpEuzKF7dA/uCL
-         NcmtTtXHTZcbAxUKUK0jxkN4/vihQ8fU/de1EU81VyG/53wzpMTPyZkUGRlOq2kUGxkl
-         dfvo5HNRhMA+hjlkBoKCanWzH0dpBm+eqJU/vkXyWIIYsu0eqj32kjdC2Re5p7Eb8JEL
-         yAuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762960196; x=1763564996;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DtGZMMsw8V99KZAgaHQJPZ8CoLj3tmmTUHgBPIq1Q90=;
-        b=PsJ0KcrznsQSy9j+TMeDDRTTdcBIy44LZEeu6CASvYQyEhFWbxFNubaNcdezVDjlaY
-         CmJs2xJp96z5OmOlMDyKYCBOJtyYVEyV0tAHigA40hlMPFxc9sMJG/jH2yhCe2fptRQX
-         d8iCBwkR3gvQYhw6D2edJDiKow7LTepcLPfyO+GxLVXiZb38yHalJdluPudHi4VoJXyk
-         RAbGs8+wlE+4PP3G9Fac/QATjth0J3TF4u1Rbh5KBT+qnKp7CELn+MqeqC/mocwISlFu
-         C6Fr04UWBokZiSHlgeGxM60dFkxpXTnjM8dQUOUoXJj6MKZmNHvFWKCJilDB6+Unk1bM
-         VP9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUsjHv8AgkI3Q4jfxVfRRYBzCv8Df3NG2Zis4bVyirBP+P5uWOS7sH+fjdQmsfqhdZUTcIn8WouRgc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyC0acC4EtBNcxHpVHdU1EyjWJYsSGUoZjMJnGfhLUQ24VoHgwz
-	CJ5/32za9RRZqcLbzuEj4rpS3PpTyG2vy0ThK/ho3dob4rE1OgLI+gA8
-X-Gm-Gg: ASbGncscghqv35CSy+KpRV5aA3+PdyGfhW5Z9Jg+VEovMILQsSVTzOZZSXLz/pIUmgZ
-	AbCvEaUO1fFRCjcc4e0Vo0q+rjHkaxOESevlvXPP7dUOLVdhWmay006Y6hSpc1I6aWyPJxOCDIJ
-	SuyKkgIuKTMC6g/xhLee+xZKKvv3Lbh8ZIQeaq0ZLtW088gQF8eH3sIvnPG99ZZiBmGcf3XmLMP
-	mT/WSJ1gfhsEdQjVMG6UEvG0XqdojeT6ELUWN3Q52zjXNIufsO153gAGXT/pictbsubVuxwZUfg
-	64jzmSH5bNVJOUEQxeqKpFSEn+3ORXFucGYxgDZdvfxbjtIWmQI7zoAuAKi9HCJxD8xIPkS3B/Z
-	5MFy9ev0kRWc+lKYJ10NiZ3/VVfv0PZQ4WB/cBrgoy9h23LMmhqrSGDj3Mts/vYug/f6qHmzbaZ
-	9RpjPWTstcWZ0=
-X-Google-Smtp-Source: AGHT+IGviozO1G+47njNKiErvjncEx+jjY7PIlVohsiPQB3KFMy0e3qBbtmFS5UVJasOoahpIh4XCg==
-X-Received: by 2002:a05:600c:3b11:b0:477:6b4f:3fbd with SMTP id 5b1f17b1804b1-477870b935dmr27381355e9.38.1762960195571;
-        Wed, 12 Nov 2025 07:09:55 -0800 (PST)
-Received: from taln60.nuvoton.co.il ([212.199.177.18])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe62bf40sm33272447f8f.9.2025.11.12.07.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 07:09:54 -0800 (PST)
-From: Tomer Maimon <tmaimon77@gmail.com>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	broonie@kernel.org,
-	avifishman70@gmail.com,
-	tali.perry1@gmail.com,
-	joel@jms.id.au,
-	venture@google.com,
-	yuenn@google.com,
-	benjaminfair@google.com,
-	andrew@codeconstruct.com.au
-Cc: openbmc@lists.ozlabs.org,
-	devicetree@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v2] spi: dt-bindings: nuvoton,npcm-pspi: Convert to DT schema
-Date: Wed, 12 Nov 2025 17:09:50 +0200
-Message-Id: <20251112150950.1680154-1-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1762962940; c=relaxed/simple;
+	bh=imcsxgykMEiMSOCV9jYIEvncowj9MhfNmPEniejhA6I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a9/CSEGvrAgRmtHUSrbyy7P+N6FHAoyPUYoyLoVhYnF0UoeuuexUbG+2tilbtPlB2SUvc3TDGQLesuMekixYbhenSghoac1WkMN/Z/6+4Sw3gXiqx0pAOFj5SApknLPwGUvsiHz0HDXIPrqoTVGjyDYidGOG7GKJV5MRMWAhNEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMEKdVb9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A50DC4CEF7;
+	Wed, 12 Nov 2025 15:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762962939;
+	bh=imcsxgykMEiMSOCV9jYIEvncowj9MhfNmPEniejhA6I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LMEKdVb9I1zWsP/mfFNaS/SHpAEsNR09sD6zkcr7znwUBbZc9uWUEPj47YJ3iGCDH
+	 +Hzd6/k08gDjAHtY7R/fhdqh/Iudxq0RVoxuD/jshIbwnysCopn0NwxmDWnUrto0DZ
+	 75VsjFxMfHV+o5LFcCiJlq0VrqwsXs4rpqCldKQ43HCgxkfOT6Rv8uVy0KjZpSkXhB
+	 ZR+x6cPy1kznJua1/ZVw5qe4CwXOOQDR8cR3P9dvf25FD4zxYsO6L/uH/PFYd329e+
+	 Nde90MuTedOX6Jm87+YfhbfzRG9KKlFD+h23xnn3pjrYwCWSF2qV78CgWymvurYlNG
+	 vEWEj7SEid2VQ==
+Message-ID: <2a4fd083-368e-42b2-a3af-d792e076e011@kernel.org>
+Date: Wed, 12 Nov 2025 16:55:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] spi: dt-bindings: nuvoton,npcm-pspi: Convert to DT
+ schema
+To: Tomer Maimon <tmaimon77@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, broonie@kernel.org, avifishman70@gmail.com,
+ tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
+ benjaminfair@google.com, andrew@codeconstruct.com.au
+Cc: openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251112150950.1680154-1-tmaimon77@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251112150950.1680154-1-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Convert the Nuvoton NPCM PSPI binding to DT schema format.
+On 12/11/2025 16:09, Tomer Maimon wrote:
+> Convert the Nuvoton NPCM PSPI binding to DT schema format.
+> 
+> Also update the binding to fix shortcoming:
+>  * Drop clock-frequency property: it is never read in the NPCM PSPI
+>    driver and has no effect.
+> 
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
 
-Also update the binding to fix shortcoming:
- * Drop clock-frequency property: it is never read in the NPCM PSPI
-   driver and has no effect.
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
-Addressed comments from:
-	- Krzysztof Kozlowski: https://patchwork.ozlabs.org/project/openbmc/patch/20251110081457.1008316-1-tmaimon77@gmail.com/
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Changes since version 1:
-	- Fix commit subject and message.
-	- Drop unnecessary description.
-	- Use GPIO defines.
-	- Add clock-names property.
-
- .../bindings/spi/nuvoton,npcm-pspi.txt        | 36 ----------
- .../bindings/spi/nuvoton,npcm-pspi.yaml       | 72 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 36 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
- create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
-
-diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
-deleted file mode 100644
-index a4e72e52af59..000000000000
---- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.txt
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Nuvoton NPCM Peripheral Serial Peripheral Interface(PSPI) controller driver
--
--Nuvoton NPCM7xx SOC support two PSPI channels.
--
--Required properties:
-- - compatible : "nuvoton,npcm750-pspi" for Poleg NPCM7XX.
--				"nuvoton,npcm845-pspi" for Arbel NPCM8XX.
-- - #address-cells : should be 1. see spi-bus.txt
-- - #size-cells : should be 0. see spi-bus.txt
-- - specifies physical base address and size of the register.
-- - interrupts : contain PSPI interrupt.
-- - clocks : phandle of PSPI reference clock.
-- - clock-names: Should be "clk_apb5".
-- - pinctrl-names : a pinctrl state named "default" must be defined.
-- - pinctrl-0 : phandle referencing pin configuration of the device.
-- - resets : phandle to the reset control for this device.
-- - cs-gpios: Specifies the gpio pins to be used for chipselects.
--            See: Documentation/devicetree/bindings/spi/spi-bus.txt
--
--Optional properties:
--- clock-frequency : Input clock frequency to the PSPI block in Hz.
--		    Default is 25000000 Hz.
--
--spi0: spi@f0200000 {
--	compatible = "nuvoton,npcm750-pspi";
--	reg = <0xf0200000 0x1000>;
--	pinctrl-names = "default";
--	pinctrl-0 = <&pspi1_pins>;
--	#address-cells = <1>;
--	#size-cells = <0>;
--	interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
--	clocks = <&clk NPCM7XX_CLK_APB5>;
--	clock-names = "clk_apb5";
--	resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_PSPI1>
--	cs-gpios = <&gpio6 11 GPIO_ACTIVE_LOW>;
--};
-diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
-new file mode 100644
-index 000000000000..db0fb872020a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-pspi.yaml
-@@ -0,0 +1,72 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/nuvoton,npcm-pspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton NPCM Peripheral SPI (PSPI) Controller
-+
-+maintainers:
-+  - Tomer Maimon <tmaimon77@gmail.com>
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+description:
-+  Nuvoton NPCM Peripheral Serial Peripheral Interface (PSPI) controller.
-+  Nuvoton NPCM7xx SOC supports two PSPI channels.
-+  Nuvoton NPCM8xx SOC support one PSPI channel.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - nuvoton,npcm750-pspi # Poleg NPCM7XX
-+      - nuvoton,npcm845-pspi # Arbel NPCM8XX
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+    description: PSPI reference clock.
-+
-+  clock-names:
-+    items:
-+      - const: clk_apb5
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - resets
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/nuvoton,npcm7xx-reset.h>
-+    #include "dt-bindings/gpio/gpio.h"
-+    spi0: spi@f0200000 {
-+        compatible = "nuvoton,npcm750-pspi";
-+        reg = <0xf0200000 0x1000>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pspi1_pins>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clk NPCM7XX_CLK_APB5>;
-+        clock-names = "clk_apb5";
-+        resets = <&rstc NPCM7XX_RESET_IPSRST2 NPCM7XX_RESET_PSPI1>;
-+        cs-gpios = <&gpio6 11 GPIO_ACTIVE_LOW>;
-+    };
-+
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
