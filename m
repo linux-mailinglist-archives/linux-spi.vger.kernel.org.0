@@ -1,155 +1,274 @@
-Return-Path: <linux-spi+bounces-11174-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11175-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBEE1C53CDF
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 18:55:54 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69EE5C53B5F
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 18:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8AF7B545E2F
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 17:00:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A9BF1345116
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 17:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B27344046;
-	Wed, 12 Nov 2025 17:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1984337BA6;
+	Wed, 12 Nov 2025 17:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="dwz9Ugmd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W78qEqSp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387C83451CE
-	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 16:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD91A345731
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 17:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762966801; cv=none; b=ddAnP1W9ehi9IUye/OGhBNc1P47T0HmQde0J24krh7VRQ2FHYMlpKFxSS68L1ylxroE0/+t2PfvkQ++BCCBYpwWQxJ7+OlQYRacHeMGXn83uEvXt/8ujgZpZiPOyWHVLNiXNXdjL49tQVqMjIXf8KOLUcA9JQrmrs8hSVm0ZpfU=
+	t=1762968822; cv=none; b=KKlD4Z+SNUxq/hdd/f1MPUAirN10ZMvfTIt2AHE0G1iO2z+pQYmG7TLqKQ/gXNZ0s1i3xoPahz0ceU63phB1ZMd5wpCbCrC9oGGSjCtJSSayhOPCM2BUIId8GesFZlBQK+rXxYDotVABOANA9vvXT0Hj3HCKnqi25nKPVXyGh88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762966801; c=relaxed/simple;
-	bh=8wx44lorjmXobYAPjgirMKLJlUNzSsr5s3gulPDv6j0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qmoox9wKFnT9rws3fTajvtrH64g6Eb8EX/AfLGiSa+Xi7zc9UlgRZk2lGulr6jQ9dA6A45Fc8NZpniSSmu+66c6RgzCw0FiozbUHL31oi4gW0Rcsh83xUED/G0YiCOQVGfdJx2JtxQGbiwG3WVUW7at2c1jropOebeuIg6g8G1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=dwz9Ugmd; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c284d4867eso323495a34.3
-        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 08:59:58 -0800 (PST)
+	s=arc-20240116; t=1762968822; c=relaxed/simple;
+	bh=L/oKLVeai+77dmSJ2udu0Pkh34+umH9uQu66eO72Chk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IIWBpJaz0toidXZGKPMXbeH0Mkejh+5BJkhTa0Z1lpr2BkjERxeLWek8gLG3RBHe2jY/LtrvarFZj1ovejutxze2F/rwCDZUPe8fomExZWAksu7FNyoAtcjs3cGEqoOf9HPEaNulGAfxUyZ0SaP29Z+CMcYNrcvMYz3MNgSggWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W78qEqSp; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42b3c965ca9so657292f8f.1
+        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 09:33:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762966798; x=1763571598; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9UBroaIpNSaiJuWFrz+qWW2HM0uYdQr3mWyR9bfJIIM=;
-        b=dwz9Ugmdt4tA8qi6929B5cM2xqwjHCY2sziOHziktlu15hr+e6pR0ZO6X9I4LWCo6i
-         mI8gpfA9IzRCnS7rfun2r6dZtrZdkBwT4g6ro1VOCO10ky1BJ2DqXicY2taSkHWzhEYc
-         tXYftMocbYP7EN2QB+FBfdNziCXNimUIUI8zYIX/9TL5pvjN4FkcNxCQgnlGz6FCMv66
-         D2BibSGCafSfGj4yYb0tODuc3lWYsiZjfj7RLcNm4VGVLWYaLgRcTTCxh5pr6S4FL+4m
-         TbUZZuDqUralxivWZydq+2Knhoj/520cHrH63BIAkwdunauvfFOtlaDM3nKPFycaS+TE
-         jtgw==
+        d=gmail.com; s=20230601; t=1762968819; x=1763573619; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=44Kc/j2JhoyAbLrRyX1QwglgFc2dUpdlPh4jWhsbUTw=;
+        b=W78qEqSpk1iKBvAcYBqowsJwoqaH5iYa8ckaDIcWv+VvbZW1OS36L8S1cjVsDp4lpQ
+         Ypx6jUihWNbz9VP3R5Ymu5QfvtLyCMBZBayum27++0NkgJFE7O6LsvObx/QAB0SlK3vn
+         fxGftT5sTpMk0jYSIEm/VBzIl2vefyufameWquQAPDGgUBfqnkyPNM+JxEhw2QSLf9D/
+         AImltIhkFaeER9RnvY5/YZqlKOTI/+68a4jBuOnJ0e4BMsyQbYcCDgYivdFvDXsyystG
+         /GltREopbXXS2KgFsRocFolR3NmA6g1uq80N+SKjKpsjJqA71r2SClzbVQAJ94rzyVnj
+         bUdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762966798; x=1763571598;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9UBroaIpNSaiJuWFrz+qWW2HM0uYdQr3mWyR9bfJIIM=;
-        b=ap6uV/mXENx/FYaEeHa8FOHamiGfvPtwfreuWUAVPtswTclB5m3ugGWp9gCtFU1+kK
-         9pOT45p6x6W5fVwFCKIBEHmeQ2114Kon9WafbCr4kBPn+VGbyIZIf3uS7Hvh06gv+Ngb
-         7pchYaht8ty1n/6fQFE8YlxHn7lXejVEl4fIKloex9Q520vCRcKd1z6AEi3ylsSINNLJ
-         xiOw/QyQdclek85vBgyPXAV8sE+BmWtgXgv459RVYdwgf19g/g4SPBQs0sxeo2cxdUJm
-         G1XDQPbm/DVUh4ZB286VqL74PiBHhB734n2bRQ8DGmdVF7PgX1jkVpMu8FEpjuUat6FW
-         7LEw==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ+6UZiS9HYbJkN6ahEjc1O0T61h6MKCYVz98rT2umXJEZLDHXQlAeWglhy9UTUI7YPm9jKUJ2nQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGVui/Tozf2uCoxBdRFRlntDKVuWE+feAp5MHm5UWrx1wLHIzL
-	PL4+TkoF9uTpHKpZJV7ACm7mZyei+SBjavVJtk2YfsHObyDIVYZVXyuKg/ieJgGxu9s=
-X-Gm-Gg: ASbGnctLGAsm8i1S6dPxUaQdxRBEiiExSerjXyDeDHrNcVfNoNcbiCjbfAWC4lg1zQP
-	80rszehH77yoCSHqfYf4LYMsc6k1ZiL+2LnqWFdMYmyTZFWet/MmiZABi9NHt53OSWGZRrH/0Z3
-	PdIFLgr0tVAdEJGXUZ1w74XB7Oo1fEKkKRg92EAt7Qg9iCsIFH7qZ/SlLs1uQgZj2l9SBMTumsc
-	vYGgG3hEIuclTmn1PzX/bWmWTqxse5hort+gVGIJ9H1t3G5JjgWss01LeiEW0S07dSDZTg0AmzA
-	hYCwrk3De0uI9Tc7kLWOeg+H8t65DsTakdDR1MJg6gbpR33x3m1MF8AJ/tjK2+EuS0hWGFaP83Y
-	KZY1ggyO1j1C6jhfmcojEmKsgg2ud0YZUBBhcRYUMTNx2rxq0/G/nl5j8MkCeG+0BQsd8JEbwZE
-	3GI93GhLKOpUYw+Bs5ZU3GPD33xM2pOxgDwD8Wtv/LJmGzDWDTeg==
-X-Google-Smtp-Source: AGHT+IGjGiA68SQxE2DOheehH23MBaQy65p8WqlrKArkfS9SuLVcwJ48eTHV9RHhY2eyZHq3Z4deyQ==
-X-Received: by 2002:a05:6808:3198:b0:442:2ce:46cf with SMTP id 5614622812f47-4507456e715mr1828413b6e.34.1762966797983;
-        Wed, 12 Nov 2025 08:59:57 -0800 (PST)
-Received: from ?IPV6:2600:8803:e7e4:500:d404:301b:b985:c499? ([2600:8803:e7e4:500:d404:301b:b985:c499])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3e41f2583casm10124611fac.23.2025.11.12.08.59.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Nov 2025 08:59:57 -0800 (PST)
-Message-ID: <0e59d92f-7b3c-4ff6-b3ad-7fae2ded9b77@baylibre.com>
-Date: Wed, 12 Nov 2025 10:59:56 -0600
+        d=1e100.net; s=20230601; t=1762968819; x=1763573619;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44Kc/j2JhoyAbLrRyX1QwglgFc2dUpdlPh4jWhsbUTw=;
+        b=aLFiSjdF6e68SW/OBTWbzeA2kSSsh6gHAbl0XDWVb/z+tiDoFqdvIuubR6tnZEVo2Z
+         kZj38i0o2m3cN7hC7ExcMy8Jj7V4tOpRdn6uNH5DJmSmZOQH/3fiSy2nrR8JQXgm8ytM
+         eu3viBgWKHqUwknwZxRc8K/0zNlimGuXa81JMqAIBIKEOgXvYGK4HYJVS9Y0CRbsoVIS
+         /IppUhM4LNe2R2/GGoIVF11Gx73p4NuPexPVnSmEbSOsDC+XKwF5CxAjiaOR8JdUqKxf
+         DLRP2Vk0t+B+9GFUxKbfYOKXLMqRm8YqxKFbLmLWkqIOxCwyFEFbLO9YhhGJB9tLwATn
+         XHVA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgIkXXNG9Ae5uI7LNQ9unvw2LUfvOqHbdxONiJSVRc087fgmpeQ1VKZiyRMrd34GR08/ppplQ5hsw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtpLWvSbnC8w3ko9UVP5EZJS2FqXryomvOqlJUuwR9kj+NCa7o
+	hF3Ef6XnZEbB2SblB93bEHWTfmMmmHPtQssr1n4tHIND+UqgMgK8DaxG
+X-Gm-Gg: ASbGncuXpgx/KgMhqLgnsvll+iTAWyUwW7DtpuFqZgga3NIRBjyMUebxp2NxN0TeG0n
+	sNmYAJ/vfdTQWd/QRqlaG+AJSw8vEjSm2etK5fPs5555Rn2PijQK5gcbEylYcHAgwDgaY7cF7ht
+	f/XLxn1M2QYjJ1TOromBalM7K3XFSjamNPnKAUGIhBZDU6wJm3ewnQjDu/87nAl7JhS8i9TjeA1
+	T5KW4VH40+zMrk31wYBYI5uPvzn8DHEt+x/akDnVGYERVzkk0h6QaSs7ylVnqKENO914PLrZ8l3
+	McWLzrlMU9TxKPadm+UW8wGCDAxWgKgB8FfnQLuJdw4oYo7yYoZMH2WoeYv6pEkh2sr91r+ldwI
+	gtdgQAiIfPOI1FB5qEjKyHvHU1n5/Qxm9uIz31mwm8/nAMpy2FO9gqioO7mzdo407vONRpgJIlh
+	QVQYLZwg+vS/+LAql8L0PESQ==
+X-Google-Smtp-Source: AGHT+IH6Qjzo8T7i3m2l3eXDsCIqvaE7ouHOEbD83pVacao2ZlOAWd37u6dKpswf2G543Njjogyyhw==
+X-Received: by 2002:a05:6000:144c:b0:42b:3bee:a7ff with SMTP id ffacd0b85a97d-42b4bb95233mr3102189f8f.24.1762968818723;
+        Wed, 12 Nov 2025 09:33:38 -0800 (PST)
+Received: from taln60.nuvoton.co.il ([212.199.177.18])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b29e4b9bdsm31970655f8f.32.2025.11.12.09.33.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 09:33:38 -0800 (PST)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	broonie@kernel.org,
+	avifishman70@gmail.com,
+	tali.perry1@gmail.com,
+	joel@jms.id.au,
+	venture@google.com,
+	yuenn@google.com,
+	benjaminfair@google.com,
+	andrew@codeconstruct.com.au
+Cc: openbmc@lists.ozlabs.org,
+	devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1] spi: dt-bindings: nuvoton,npcm-fiu: Convert to DT schema
+Date: Wed, 12 Nov 2025 19:33:14 +0200
+Message-Id: <20251112173314.1751671-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] spi: axi-spi-engine: support
- SPI_MULTI_BUS_MODE_STRIPE
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
- <20251107-spi-add-multi-bus-support-v2-4-8a92693314d9@baylibre.com>
- <aRNSc1GEz0UNx17i@debian-BULLSEYE-live-builder-AMD64>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <aRNSc1GEz0UNx17i@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/11/25 9:12 AM, Marcelo Schmitt wrote:
-> Hi David,
-> 
-> The updates to spi-engine driver look good.
-> Only one comment about what happens if we have conflicting bus modes for the
-> offload case. Just to check I'm getting how this is working.
-> 
+Convert the Nuvoton NPCM FIU binding to DT schema format.
 
-...
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ .../bindings/spi/nuvoton,npcm-fiu.txt         | 58 -------------
+ .../bindings/spi/nuvoton,npcm-fiu.yaml        | 87 +++++++++++++++++++
+ 2 files changed, 87 insertions(+), 58 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.txt
+ create mode 100644 Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.yaml
 
->> @@ -284,6 +316,24 @@ static int spi_engine_precompile_message(struct spi_message *msg)
->>  			min_bits_per_word = min(min_bits_per_word, xfer->bits_per_word);
->>  			max_bits_per_word = max(max_bits_per_word, xfer->bits_per_word);
->>  		}
->> +
->> +		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
->> +		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
->> +			switch (xfer->multi_bus_mode) {
->> +			case SPI_MULTI_BUS_MODE_SINGLE:
->> +			case SPI_MULTI_BUS_MODE_STRIPE:
->> +				break;
->> +			default:
->> +				/* Other modes, like mirror not supported */
->> +				return -EINVAL;
->> +			}
->> +
->> +			/* If all xfers have the same multi-bus mode, we can optimize. */
->> +			if (multi_bus_mode == SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN)
->> +				multi_bus_mode = xfer->multi_bus_mode;
->> +			else if (multi_bus_mode != xfer->multi_bus_mode)
->> +				multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING;
-> 
-> Here we check all xfers have the same multi-bus mode and keep the mode that has
-> been set. Otherwise, we set this conflicting mode and the intent is to generate
-> SDI and SDO mask commands on demand on spi_engine_precompile_message(). OTOH,
+diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.txt b/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.txt
+deleted file mode 100644
+index fb38e96d395f..000000000000
+--- a/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.txt
++++ /dev/null
+@@ -1,58 +0,0 @@
+-* Nuvoton FLASH Interface Unit (FIU) SPI Controller
+-
+-NPCM FIU supports single, dual and quad communication interface.
+-
+-The NPCM7XX supports three FIU modules,
+-FIU0 and FIUx supports two chip selects,
+-FIU3 support four chip select.
+-
+-The NPCM8XX supports four FIU modules,
+-FIU0 and FIUx supports two chip selects,
+-FIU1 and FIU3 supports four chip selects.
+-
+-Required properties:
+-  - compatible : "nuvoton,npcm750-fiu" for Poleg NPCM7XX BMC
+-			     "nuvoton,npcm845-fiu" for Arbel NPCM8XX BMC
+-  - #address-cells : should be 1.
+-  - #size-cells : should be 0.
+-  - reg : the first contains the register location and length,
+-          the second contains the memory mapping address and length
+-  - reg-names: Should contain the reg names "control" and "memory"
+-  - clocks : phandle of FIU reference clock.
+-
+-Required properties in case the pins can be muxed:
+-  - pinctrl-names : a pinctrl state named "default" must be defined.
+-  - pinctrl-0 : phandle referencing pin configuration of the device.
+-
+-Optional property:
+-  - nuvoton,spix-mode: enable spix-mode for an expansion bus to an ASIC or CPLD.
+-
+-Aliases:
+-- All the FIU controller nodes should be represented in the aliases node using
+-  the following format 'fiu{n}' where n is a unique number for the alias.
+-  In the NPCM7XX BMC:
+-  		fiu0 represent fiu 0 controller
+-  		fiu1 represent fiu 3 controller
+-  		fiu2 represent fiu x controller
+-
+-  In the NPCM8XX BMC:
+-  		fiu0 represent fiu 0 controller
+-  		fiu1 represent fiu 1 controller
+-  		fiu2 represent fiu 3 controller
+-  		fiu3 represent fiu x controller
+-
+-Example:
+-fiu3: spi@c00000000 {
+-	compatible = "nuvoton,npcm750-fiu";
+-	#address-cells = <1>;
+-	#size-cells = <0>;
+-	reg = <0xfb000000 0x1000>, <0x80000000 0x10000000>;
+-	reg-names = "control", "memory";
+-	clocks = <&clk NPCM7XX_CLK_AHB>;
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&spi3_pins>;
+-	flash@0 {
+-			...
+-	};
+-};
+-
+diff --git a/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.yaml b/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.yaml
+new file mode 100644
+index 000000000000..b12676da7426
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/nuvoton,npcm-fiu.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/nuvoton,npcm-fiu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Nuvoton NPCM Flash Interface Unit (FIU) SPI Controller
++
++maintainers:
++  - Tomer Maimon <tmaimon77@gmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++description: |
++  NPCM FIU supports single, dual and quad communication interface.
++
++  The NPCM7XX supports three FIU modules:
++    FIU0 and FIUx support two chip selects
++    FIU3 supports four chip selects.
++
++  The NPCM8XX supports four FIU modules:
++    FIU0 and FIUx support two chip selects
++    FIU1 and FIU3 support four chip selects.
++
++  Alias convention:
++    The '/aliases' node should define:
++      For NPCM7xx:  fiu0=&fiu0; fiu1=&fiu3; fiu2=&fiux;
++      For NPCM8xx:  fiu0=&fiu0; fiu1=&fiu3; fiu2=&fiux; fiu3=&fiu1;
++
++properties:
++  compatible:
++    enum:
++      - nuvoton,npcm750-fiu # Poleg NPCM7XX
++      - nuvoton,npcm845-fiu # Arbel NPCM8XX
++
++  reg:
++    minItems: 1
++    items:
++      - description: FIU registers
++      - description: Memory-mapped flash contents (optional)
++
++  reg-names:
++    minItems: 1
++    items:
++      - const: control
++      - const: memory
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  nuvoton,spix-mode:
++    type: boolean
++    description: Enable SPIX mode for an expansion bus to an ASIC or CPLD.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/nuvoton,npcm7xx-clock.h>
++    fiu3: spi@c0000000 {
++        compatible = "nuvoton,npcm750-fiu";
++        #address-cells = <1>;
++        #size-cells = <0>;
++        reg = <0xfb000000 0x1000>,
++              <0x80000000 0x10000000>;
++        reg-names = "control", "memory";
++        clocks = <&clk NPCM7XX_CLK_AHB>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&spi3_pins>;
++
++        flash@0 {
++            compatible = "jedec,spi-nor";
++            reg = <0>;
++            #address-cells = <1>;
++            #size-cells = <1>;
++        };
++    };
+-- 
+2.34.1
 
-s/spi_engine_precompile_message/spi_engine_compile_message/
-
-Probably just a typo, but just to be clear, the "on demand" bit happens in the
-compile function rather than precompile.
-
-> if all xfers have the same multi-bus mode, we can add just one pair of SDI/SDO
-> mask commands in spi_engine_trigger_enable() and one pair latter in
-> spi_engine_trigger_disable(). I guess this is the optimization mentioned in the
-> comment.
-> 
-Your understanding is correct.
 
