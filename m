@@ -1,103 +1,108 @@
-Return-Path: <linux-spi+bounces-11167-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11170-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD779C51A93
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 11:31:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FE9AC52C69
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 15:44:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7192A4F9140
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 10:24:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C070D348831
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 14:43:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416B13019A2;
-	Wed, 12 Nov 2025 10:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A22B72C08D0;
+	Wed, 12 Nov 2025 14:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vFtHcz/n"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCEE3043BA;
-	Wed, 12 Nov 2025 10:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772112B2DA;
+	Wed, 12 Nov 2025 14:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762943055; cv=none; b=PvT7jM8I6ESSL+LjmjzUBAt5XaqKkxglIo9S6aBE6lMDqzhaxcuSJlNJRJPYgVqfH3LJXVrrIB2HkmUbDv/GkGtu8yeFh1hxhGGAAh3yEOulfsYr4O086lHqQ4KViWJN7bDmVy5AJO9dH4m+pO3g6p5Vxpegdk6RwKMUuLSiU58=
+	t=1762958412; cv=none; b=ICret55VJoQPaUW8ldfvqly8uwax/Bzi9UpYOvVmUu/fGVmGddBTm2B3sNPQ01EGJqpc+5CAnUmr97wgk3cn0+JM7QqEpwbfe9wUzzHjGvYL/DFQyaT5hoFqLPEwBy4Czd7SIf1bI4tXvd/rboVQ1dgdVRBJXSY4X70RhQ04Gtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762943055; c=relaxed/simple;
-	bh=PzG1QegahEtMKQ9whdA2IidWpHZlEfCT5NYKkvlcYr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uOsMF35ao+a3raCyZlYv+z7GsnoedZjt16T15NBT81hvSao4Ql8rCtYCNi8XGOsDnNHg7jCkZXZfw8w2uiKHozfXYMdUWUvfpCPEjF8Y890m/LZedWM2R6s0gt76t+s+rclT/VlCGmSKwd1jiC/cAPhipF9oUcC4HnnWHYpzbSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from ofsar (unknown [116.232.48.119])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 7577934102D;
-	Wed, 12 Nov 2025 10:24:02 +0000 (UTC)
-From: Yixun Lan <dlan@gentoo.org>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	han.xu@nxp.com,
-	broonie@kernel.org,
-	pjw@kernel.org,
-	Alex Elder <elder@riscstar.com>
-Cc: Yixun Lan <dlan@gentoo.org>,
-	Frank.li@nxp.com,
-	p.zabel@pengutronix.de,
-	guodong@riscstar.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	apatel@ventanamicro.com,
-	joel@jms.id.au,
-	geert+renesas@glider.be,
-	cyy@cyyself.name,
-	heylenay@4d2.org,
-	conor.dooley@microchip.com,
-	fustini@kernel.org,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	spacemit@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 0/9] spi: enable the SpacemiT K1 SoC QSPI
-Date: Wed, 12 Nov 2025 18:23:49 +0800
-Message-ID: <176294293577.242112.11591899263367700984.b4-ty@gentoo.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251027133008.360237-1-elder@riscstar.com>
-References: <20251027133008.360237-1-elder@riscstar.com>
+	s=arc-20240116; t=1762958412; c=relaxed/simple;
+	bh=gFZwBjqnrl19OxTrYC0mLSsa806uq14xs/QzjVBVgVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SIsSLFFYKZkTUXHfqP0hckCNp4P8dUwqOBQl0bF0EVyhOhztTdbgXdpOxKd9iS0ayCk/w22A+cavKa2ue3YSokU2BzlpYbPPpY8oCYSUhOWujm5pDlOwty6Sot4xT5SYC0TJJ+oF5EfxaIY46qxKJeMBx1PgUVSsF90YjrZLTKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vFtHcz/n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975F8C16AAE;
+	Wed, 12 Nov 2025 14:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762958411;
+	bh=gFZwBjqnrl19OxTrYC0mLSsa806uq14xs/QzjVBVgVo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vFtHcz/nDVI4vRMyJ6ir9z+uaWieVNvrv/urkCN3hmP1T5Z5sEfQWQSTCHi97Iv1D
+	 m1L6ydPm7G2Dn2bKK8ZfTJst7ba8leenJH6Gzg4fU4RSnKu0l8XgoMk9scaB9SUPmY
+	 Hkx4w1MpppUSdlO+t+1wLUFXHqv1NCJQcU4YXtx36/j63SBS3X+yHetDj6I6EHv11v
+	 d4zmY01N9C8O84EaQF8lBEFqYXNTfTD96kfrYGF18zS7An4EAmitwR57t1QwI7iJ4r
+	 9BPzzTDWqHCEE7NbG+ZVccUAIre5wrycWBcZKS3bId4P7GatzFSI8Pw/52qn4QfHvm
+	 j7oTVUA3zxMvQ==
+Date: Wed, 12 Nov 2025 14:40:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Valentina Fernandez Alanis <valentina.fernandezalanis@microchip.com>,
+	Cyril Jean <cyril.jean@microchip.com>
+Subject: Re: [PATCH v3 3/3] spi: add support for microchip "soft" spi
+ controller
+Message-ID: <20251112-eradicate-onslaught-f6cab44cc6b0@spud>
+References: <20251107122104.1389301-1-prajna.rajendrakumar@microchip.com>
+ <20251107122104.1389301-4-prajna.rajendrakumar@microchip.com>
+ <20251107-emit-slip-b1ab5f7d5591@spud>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="myID+3ZAXg5EfgBj"
+Content-Disposition: inline
+In-Reply-To: <20251107-emit-slip-b1ab5f7d5591@spud>
 
 
-On Mon, 27 Oct 2025 08:29:58 -0500, Alex Elder wrote:
-> This series adds support for the SpacemiT K1 SoC QSPI.  This IP is
-> generally compatible with the Freescale QSPI driver, requiring three
-> minor changes to enable it to be supported.  The changes are:
->   - Adding support for optional resets
->   - Having the clock *not* be disabled when changing its rate
->   - Allowing the size of storage blocks written to flash chips
->     to be set to something different from the AHB buffer size
-> 
-> [...]
+--myID+3ZAXg5EfgBj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+On Fri, Nov 07, 2025 at 05:15:12PM +0000, Conor Dooley wrote:
+> On Fri, Nov 07, 2025 at 12:21:04PM +0000, Prajna Rajendra Kumar wrote:
+> > Introduce driver support for the Microchip FPGA CoreSPI IP.
+> >=20
+> > This driver supports only Motorola SPI mode and frame size of 8-bits.
+> > TI/NSC modes and wider frame sizes are not currently supported.
+> >=20
+> > Signed-off-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.co=
+m>
+>=20
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-[8/9] riscv: dts: spacemit: enable K1 SoC QSPI on BPI-F3
-      https://github.com/spacemit-com/linux/commit/41d34e0b5497f919229d32580fbe34386087458f
+Now that I think about it, this should probably have been
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Best regards,
--- 
-Yixun Lan
+Cheers,
+Conor.
 
+--myID+3ZAXg5EfgBj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRScRwAKCRB4tDGHoIJi
+0mziAQCy9+R2tv3ebHyzPAgKiOwVWpPQKfWM3B1FLvgEnXVZnAEAsFs9Vv2zmO69
+zEn3f0mnZEZG6betXCnkGJ/XCk4uNQ8=
+=pcfB
+-----END PGP SIGNATURE-----
+
+--myID+3ZAXg5EfgBj--
 
