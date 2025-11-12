@@ -1,773 +1,136 @@
-Return-Path: <linux-spi+bounces-11164-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11166-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BE34C50787
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 05:00:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6908AC50F66
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 08:36:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E255D4E9AE9
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 04:00:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DB62E34CFE4
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 07:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5002C237A4F;
-	Wed, 12 Nov 2025 04:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327E62DE70D;
+	Wed, 12 Nov 2025 07:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFStcjGQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841F32C08AD;
-	Wed, 12 Nov 2025 03:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EA22DE6FE;
+	Wed, 12 Nov 2025 07:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762920002; cv=none; b=lUef8GXKU4jz5y7d5nXijMkUrN3ceXtjQ6yVnJ3aHck0lm76NzPpMpcYSwgLn2OGsUYWdEj37VaaTp2y6BeEpK3qLqWzQxzwG4UFuq1FkizTkucZRzltqn2D00Ho7Udi9Xpejj6udvLUrFvub8PMPH5kH1AUaOuups8rgmCUkkE=
+	t=1762932968; cv=none; b=uDRk3sV1AsFVu28Q46p/5U4sgb3M1Dfarpus7VB05qEuc6n9+xWYduN7I5m3MAT3bAWqhEvlq+Jmelc8tMIdyF6iEm+ZOGx3hcNHjzwp+AVz9vRR+GE4WgcpMu9wvFU1NFbN9gSfiQr+WlD7GDvuzVecseSBewjvSnT26CZyNdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762920002; c=relaxed/simple;
-	bh=QVecN2KTxqDlNFhkmL1GOvksDgeE61gJHKq5S1idZBg=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KiNPt4m3Kzo06XbdvPQbexsWyyEXH9YKJACP3DTNTjJltsNdSb+7JOmX+sELWZL2Pm2vejLJJd+WszZhmhN5cGgAvW+XlYhK35HPaKkyrNU6CxPDP4JeVcut8Tmo5J8pTJZT/hcpz3wV25xnv44aW/GqDbjLy/b2S196SziBiII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from Atcsqr.andestech.com (localhost [127.0.0.2] (may be forged))
-	by Atcsqr.andestech.com with ESMTP id 5AC3meoL061616;
-	Wed, 12 Nov 2025 11:48:40 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 5AC3m5tV061547
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Wed, 12 Nov 2025 11:48:05 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 12 Nov
- 2025 11:48:05 +0800
-From: CL Wang <cl634@andestech.com>
-To: <cl634@andestech.com>, <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tim609@andestech.com>
-Subject: [PATCH 2/2] spi: atcspi200: Add ATCSPI200 SPI driver
-Date: Wed, 12 Nov 2025 11:47:24 +0800
-Message-ID: <20251112034724.1977630-3-cl634@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251112034724.1977630-1-cl634@andestech.com>
-References: <20251112034724.1977630-1-cl634@andestech.com>
+	s=arc-20240116; t=1762932968; c=relaxed/simple;
+	bh=Z9JlfJX2xGbUNdQAdYsXjC/ZL7eItKxWxxj5g5DaFPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HtKgRhPPMu7NsYKBGMqXNF6OMzeAWVj2B/shskhMFcM0Er2yq5UW8Bjt1HpRig2ZwrDGa8xOw6ySsnNuyOk2kjgthjU3YK/3H4mfhhvDQ+5UP45auCillmgk7rjh67SbcNd/Q7+mW7mBtzCk9EmKt7YZIpaP384SODxCqGZU7FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFStcjGQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37E03C19423;
+	Wed, 12 Nov 2025 07:36:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762932966;
+	bh=Z9JlfJX2xGbUNdQAdYsXjC/ZL7eItKxWxxj5g5DaFPY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lFStcjGQY3jmu4sO9ezwTGO5xkDP0NwooXEhsTKYz023WSXtcmtBm2eCfPOs/nTz2
+	 WFohYadlgIXYbGoBXPjazMRddRKzCWml4NOY5cOamiWoRStzjCMONxND2iXesRri3C
+	 2WQIOGc91pQ68JWj8hZY66/qIyZ8s3wJH7Kfcqjzf2VwjERI25PGvlOzL1cH9iEIDn
+	 Ruiz8d8xaA1wzd7kg6hDZvbbXEk31ixzqkE1/OUybc6OFWnf/4ySjMbrg5fyKZQmdq
+	 mDVsR/zgXroK82le9K48nm6i1WqeU2yc7LH+/C7RveIbqDBtLY7QMJmsNMhWrANl5u
+	 DoTmxKVHpuqNg==
+Message-ID: <16324fcb-701b-4c5d-bfab-b47c48bc362d@kernel.org>
+Date: Wed, 12 Nov 2025 08:35:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5AC3meoL061616
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] dt-binding: arm: qcom: add arduino unoq codename
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
+ konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, broonie@kernel.org, linux@roeck-us.net,
+ Jonathan.Cameron@huawei.com, wenswang@yeah.net,
+ naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com,
+ chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com,
+ farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, mm.facchin@arduino.cc,
+ Riccardo Mereu <r.mereu@arduino.cc>
+References: <20251106153119.266840-1-r.mereu@arduino.cc>
+ <20251106153119.266840-4-r.mereu@arduino.cc>
+ <2c67a82a-3a4a-44e5-8c82-42ec6320d5b5@kernel.org>
+ <fuz3se3hwtoqlgcifo35qozda5xy2gneatm64f5nsq6n75jteo@vqbu7naldfgq>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <fuz3se3hwtoqlgcifo35qozda5xy2gneatm64f5nsq6n75jteo@vqbu7naldfgq>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SPI driver for Andes ATCSPI200 SPI controller.
+On 11/11/2025 13:27, Dmitry Baryshkov wrote:
+> On Fri, Nov 07, 2025 at 08:13:48AM +0100, Krzysztof Kozlowski wrote:
+>> On 06/11/2025 16:31, Riccardo Mereu wrote:
+>>> From: Riccardo Mereu <r.mereu.kernel@arduino.cc>
+>>>
+>>> Document Arduino UnoQ. Arduino UnoQ is a single-board computer
+>>
+>> compatible says imola, not unoq.
+> 
+> And compatibles for various ChromeBooks also use codenames. I think it's
+> not the first time the vendor uses a codename instead of the marketing
+> name inside the compat string.
 
-Signed-off-by: CL Wang <cl634@andestech.com>
----
- drivers/spi/Kconfig         |   9 +
- drivers/spi/Makefile        |   1 +
- drivers/spi/spi-atcspi200.c | 651 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 661 insertions(+)
- create mode 100644 drivers/spi/spi-atcspi200.c
+And that's why we have commit msg to explain anything which is not
+obvious...
 
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index 592d46c9998b..b2e35f55aa88 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -136,6 +136,15 @@ config SPI_AR934X
- 	  This enables support for the SPI controller present on the
- 	  Qualcomm Atheros AR934X/QCA95XX SoCs.
- 
-+config SPI_ATCSPI200
-+	tristate "Andes ATCSPI200 SPI controller"
-+	depends on ARCH_ANDES
-+	help
-+	  SPI driver for Andes ATCSPI200 SPI controller.
-+	  ATCSPI200 controller supports DMA and PIO modes. When DMA
-+	  is not available, the driver automatically falls back to
-+	  PIO mode.
-+
- config SPI_ATH79
- 	tristate "Atheros AR71XX/AR724X/AR913X SPI controller driver"
- 	depends on ATH79 || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index 8ff74a13faaa..869d6fbc53f8 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -26,6 +26,7 @@ obj-$(CONFIG_SPI_APPLE)			+= spi-apple.o
- obj-$(CONFIG_SPI_AR934X)		+= spi-ar934x.o
- obj-$(CONFIG_SPI_ARMADA_3700)		+= spi-armada-3700.o
- obj-$(CONFIG_SPI_ASPEED_SMC)		+= spi-aspeed-smc.o
-+obj-$(CONFIG_SPI_ATCSPI200)		+= spi-atcspi200.o
- obj-$(CONFIG_SPI_ATMEL)			+= spi-atmel.o
- obj-$(CONFIG_SPI_ATMEL_QUADSPI)		+= atmel-quadspi.o
- obj-$(CONFIG_SPI_AT91_USART)		+= spi-at91-usart.o
-diff --git a/drivers/spi/spi-atcspi200.c b/drivers/spi/spi-atcspi200.c
-new file mode 100644
-index 000000000000..65ffbaaf9124
---- /dev/null
-+++ b/drivers/spi/spi-atcspi200.c
-@@ -0,0 +1,651 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Driver for Andes ATCSPI200 SPI Controller
-+ *
-+ * Copyright (C) 2025 Andes Technology Corporation.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk.h>
-+#include <linux/completion.h>
-+#include <linux/dev_printk.h>
-+#include <linux/dmaengine.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/jiffies.h>
-+#include <linux/minmax.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/spi/spi.h>
-+#include <linux/spi/spi-mem.h>
-+
-+/* Register definitions  */
-+#define ATCSPI_TRANS_FMT	0x10	/* SPI transfer format register */
-+#define ATCSPI_TRANS_CTRL	0x20	/* SPI transfer control register */
-+#define ATCSPI_CMD		0x24	/* SPI command register */
-+#define ATCSPI_ADDR		0x28	/* SPI address register */
-+#define ATCSPI_DATA		0x2C	/* SPI data register */
-+#define ATCSPI_CTRL		0x30	/* SPI control register */
-+#define ATCSPI_STATUS		0x34	/* SPI status register */
-+#define ATCSPI_TIMING		0x40	/* SPI interface timing register */
-+#define ATCSPI_CONFIG		0x7C	/* SPI configuration register */
-+
-+/* Transfer format register */
-+#define TRANS_FMT_CPHA		BIT(0)
-+#define TRANS_FMT_CPOL		BIT(1)
-+#define TRANS_FMT_DATA_MERGE_EN	BIT(7)
-+#define TRANS_FMT_DATA_LEN_MASK	GENMASK(12, 8)
-+#define TRANS_FMT_ADDR_LEN_MASK	GENMASK(17, 16)
-+#define TRANS_FMT_DATA_LEN(x)	FIELD_PREP(TRANS_FMT_DATA_LEN_MASK, (x) - 1)
-+#define TRANS_FMT_ADDR_LEN(x)	FIELD_PREP(TRANS_FMT_ADDR_LEN_MASK, (x) - 1)
-+
-+/* Transfer control register */
-+#define TRANS_MODE_MASK		GENMASK(27, 24)
-+#define TRANS_MODE_W_ONLY	FIELD_PREP(TRANS_MODE_MASK, 1)
-+#define TRANS_MODE_R_ONLY	FIELD_PREP(TRANS_MODE_MASK, 2)
-+#define TRANS_MODE_NONE_DATA	FIELD_PREP(TRANS_MODE_MASK, 7)
-+#define TRANS_MODE_DMY_READ	FIELD_PREP(TRANS_MODE_MASK, 9)
-+#define TRANS_FIELD_DECNZ(m, x)	((x) ? FIELD_PREP(m, (x) - 1) : 0)
-+#define TRANS_RD_TRANS_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(8, 0), x)
-+#define TRANS_DUMMY_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(10, 9), x)
-+#define TRANS_WR_TRANS_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(20, 12), x)
-+#define TRANS_DUAL_QUAD(x)	FIELD_PREP(GENMASK(23, 22), (x))
-+#define TRANS_ADDR_FMT		BIT(28)
-+#define TRANS_ADDR_EN		BIT(29)
-+#define TRANS_CMD_EN		BIT(30)
-+
-+/* Control register */
-+#define CTRL_SPI_RST		BIT(0)
-+#define CTRL_RX_FIFO_RST	BIT(1)
-+#define CTRL_TX_FIFO_RST	BIT(2)
-+#define CTRL_RX_DMA_EN		BIT(3)
-+#define CTRL_TX_DMA_EN		BIT(4)
-+
-+/* Status register */
-+#define ATCSPI_ACTIVE		BIT(0)
-+#define ATCSPI_RX_EMPTY		BIT(14)
-+#define ATCSPI_TX_FULL		BIT(23)
-+
-+/* Interface timing setting */
-+#define TIMING_SCLK_DIV_MASK	GENMASK(7, 0)
-+#define TIMING_SCLK_DIV_MAX	0xFE
-+
-+/* Configuration register */
-+#define RXFIFO_SIZE(x)		FIELD_GET(GENMASK(3, 0), (x))
-+#define TXFIFO_SIZE(x)		FIELD_GET(GENMASK(7, 4), (x))
-+
-+/* driver configurations */
-+#define ATCSPI_MAX_TRANS_LEN	512
-+#define ATCSPI_MAX_SPEED_HZ	50000000
-+#define ATCSPI_RDY_TIMEOUT_US	1000000
-+#define ATCSPI_XFER_TIMEOUT(n)	((n) * 10)
-+#define ATCSPI_MAX_CS_NUM	1
-+#define ATCSPI_DMA_THRESHOLD	256
-+#define ATCSPI_BITS_PER_UINT	8
-+#define ATCSPI_DATA_MERGE_EN	1
-+#define ATCSPI_DMA_SUPPORT	1
-+
-+/**
-+ * struct atcspi_dev - Andes ATCSPI200 SPI controller private data
-+ * @host:           Pointer to the SPI controller structure.
-+ * @mutex_lock:     A mutex to protect concurrent access to the controller.
-+ * @dma_completion: A completion to signal the end of a DMA transfer.
-+ * @dev:            Pointer to the device structure.
-+ * @regmap:         Register map for accessing controller registers.
-+ * @clk:            Pointer to the controller's functional clock.
-+ * @dma_addr:       The physical address of the SPI data register for DMA.
-+ * @clk_rate:       The cached frequency of the functional clock.
-+ * @sclk_rate:      The target frequency for the SPI clock (SCLK).
-+ * @txfifo_size:    The size of the transmit FIFO in bytes.
-+ * @rxfifo_size:    The size of the receive FIFO in bytes.
-+ * @data_merge:     A flag indicating if the data merge mode is enabled for
-+ *                  the current transfer.
-+ * @use_dma:        Enable DMA mode if ATCSPI_DMA_SUPPORT is set and DMA is
-+ *                  successfully configured.
-+ */
-+struct atcspi_dev {
-+	struct spi_controller	*host;
-+	struct mutex		mutex_lock;
-+	struct completion	dma_completion;
-+	struct device		*dev;
-+	struct regmap		*regmap;
-+	struct clk		*clk;
-+	dma_addr_t		dma_addr;
-+	unsigned int		clk_rate;
-+	unsigned int		sclk_rate;
-+	unsigned int		txfifo_size;
-+	unsigned int		rxfifo_size;
-+	bool			data_merge;
-+	bool			use_dma;
-+};
-+
-+static int atcspi_wait_fifo_ready(struct atcspi_dev *spi,
-+				  enum spi_mem_data_dir dir)
-+{
-+	unsigned int val;
-+	unsigned int mask;
-+	int ret;
-+
-+	mask = (dir == SPI_MEM_DATA_OUT) ? ATCSPI_TX_FULL : ATCSPI_RX_EMPTY;
-+	ret = regmap_read_poll_timeout(spi->regmap,
-+				       ATCSPI_STATUS,
-+				       val,
-+				       !(val & mask),
-+				       0,
-+				       ATCSPI_RDY_TIMEOUT_US);
-+	if (ret)
-+		dev_info(spi->dev, "Timed out waiting for FIFO ready\n");
-+
-+	return ret;
-+}
-+
-+static int atcspi_xfer_data_poll(struct atcspi_dev *spi,
-+				 const struct spi_mem_op *op)
-+{
-+	void *rx_buf = op->data.buf.in;
-+	const void *tx_buf = op->data.buf.out;
-+	unsigned int val;
-+	int trans_bytes = op->data.nbytes;
-+	int num_byte;
-+	int ret = 0;
-+
-+	num_byte = spi->data_merge ? 4 : 1;
-+	while (trans_bytes) {
-+		if (op->data.dir == SPI_MEM_DATA_OUT) {
-+			ret = atcspi_wait_fifo_ready(spi, SPI_MEM_DATA_OUT);
-+			if (ret)
-+				return ret;
-+
-+			if (spi->data_merge)
-+				val = *(unsigned int *)tx_buf;
-+			else
-+				val = *(unsigned char *)tx_buf;
-+			regmap_write(spi->regmap, ATCSPI_DATA, val);
-+			tx_buf = (unsigned char *)tx_buf + num_byte;
-+		} else {
-+			ret = atcspi_wait_fifo_ready(spi, SPI_MEM_DATA_IN);
-+			if (ret)
-+				return ret;
-+
-+			regmap_read(spi->regmap, ATCSPI_DATA, &val);
-+			if (spi->data_merge)
-+				*(unsigned int *)rx_buf = val;
-+			else
-+				*(unsigned char *)rx_buf = (unsigned char)val;
-+			rx_buf = (unsigned char *)rx_buf + num_byte;
-+		}
-+		trans_bytes -= num_byte;
-+	}
-+
-+	return ret;
-+}
-+
-+static void atcspi_set_trans_ctl(struct atcspi_dev *spi,
-+				 const struct spi_mem_op *op)
-+{
-+	unsigned int tc = 0;
-+
-+	if (op->cmd.nbytes)
-+		tc |= TRANS_CMD_EN;
-+	if (op->addr.nbytes)
-+		tc |= TRANS_ADDR_EN;
-+	if (op->addr.buswidth > 1)
-+		tc |= TRANS_ADDR_FMT;
-+	if (op->data.nbytes) {
-+		tc |= TRANS_DUAL_QUAD(ffs(op->data.buswidth) - 1);
-+		if (op->data.dir == SPI_MEM_DATA_IN) {
-+			if (op->dummy.nbytes)
-+				tc |= TRANS_MODE_DMY_READ |
-+				      TRANS_DUMMY_CNT(op->dummy.nbytes);
-+			else
-+				tc |= TRANS_MODE_R_ONLY;
-+			tc |= TRANS_RD_TRANS_CNT(op->data.nbytes);
-+		} else {
-+			tc |= TRANS_MODE_W_ONLY |
-+			      TRANS_WR_TRANS_CNT(op->data.nbytes);
-+		}
-+	} else {
-+		tc |= TRANS_MODE_NONE_DATA;
-+	}
-+	regmap_write(spi->regmap, ATCSPI_TRANS_CTRL, tc);
-+}
-+
-+static void atcspi_set_trans_fmt(struct atcspi_dev *spi,
-+				 const struct spi_mem_op *op)
-+{
-+	unsigned int val;
-+
-+	regmap_read(spi->regmap, ATCSPI_TRANS_FMT, &val);
-+	if (op->data.nbytes) {
-+		if (ATCSPI_DATA_MERGE_EN && ATCSPI_BITS_PER_UINT == 8 &&
-+		    !(op->data.nbytes % 4)) {
-+			val |= TRANS_FMT_DATA_MERGE_EN;
-+			spi->data_merge = true;
-+		} else {
-+			val &= ~TRANS_FMT_DATA_MERGE_EN;
-+			spi->data_merge = false;
-+		}
-+	}
-+
-+	val = (val & ~TRANS_FMT_ADDR_LEN_MASK) |
-+	      TRANS_FMT_ADDR_LEN(op->addr.nbytes);
-+	regmap_write(spi->regmap, ATCSPI_TRANS_FMT, val);
-+}
-+
-+static void atcspi_prepare_trans(struct atcspi_dev *spi,
-+				 const struct spi_mem_op *op)
-+{
-+	atcspi_set_trans_fmt(spi, op);
-+	atcspi_set_trans_ctl(spi, op);
-+	if (op->addr.nbytes)
-+		regmap_write(spi->regmap, ATCSPI_ADDR, op->addr.val);
-+	regmap_write(spi->regmap, ATCSPI_CMD, op->cmd.opcode);
-+}
-+
-+static int atcspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
-+{
-+	struct atcspi_dev *spi;
-+
-+	spi = spi_controller_get_devdata(mem->spi->controller);
-+	op->data.nbytes = min(op->data.nbytes, ATCSPI_MAX_TRANS_LEN);
-+
-+	/* DMA needs to be aligned to 4 byte */
-+	if (spi->use_dma && op->data.nbytes >= ATCSPI_DMA_THRESHOLD)
-+		op->data.nbytes = ALIGN_DOWN(op->data.nbytes, 4);
-+
-+	return 0;
-+}
-+
-+static int atcspi_dma_config(struct atcspi_dev *spi, bool is_rx)
-+{
-+	struct dma_slave_config conf = { 0 };
-+	struct dma_chan *chan;
-+
-+	if (is_rx) {
-+		chan = spi->host->dma_rx;
-+		conf.direction = DMA_DEV_TO_MEM;
-+		conf.src_addr = spi->dma_addr;
-+	} else {
-+		chan = spi->host->dma_tx;
-+		conf.direction = DMA_MEM_TO_DEV;
-+		conf.dst_addr = spi->dma_addr;
-+	}
-+	conf.dst_maxburst = spi->rxfifo_size / 2;
-+	conf.src_maxburst = spi->txfifo_size / 2;
-+
-+	if (spi->data_merge) {
-+		conf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+		conf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	} else {
-+		conf.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+		conf.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
-+	}
-+
-+	return dmaengine_slave_config(chan, &conf);
-+}
-+
-+static void atcspi_dma_callback(void *arg)
-+{
-+	struct completion *dma_completion = arg;
-+
-+	complete(dma_completion);
-+}
-+
-+static int atcspi_dma_trans(struct atcspi_dev *spi,
-+			    const struct spi_mem_op *op)
-+{
-+	struct dma_async_tx_descriptor *desc;
-+	struct dma_chan *dma_ch;
-+	struct sg_table sgt;
-+	enum dma_transfer_direction dma_dir;
-+	dma_cookie_t cookie;
-+	unsigned int ctrl;
-+	int timeout;
-+	int ret;
-+
-+	regmap_read(spi->regmap, ATCSPI_CTRL, &ctrl);
-+	ctrl |= CTRL_TX_DMA_EN | CTRL_RX_DMA_EN;
-+	regmap_write(spi->regmap, ATCSPI_CTRL, ctrl);
-+	if (op->data.dir == SPI_MEM_DATA_IN) {
-+		ret = atcspi_dma_config(spi, TRUE);
-+		dma_dir = DMA_DEV_TO_MEM;
-+		dma_ch = spi->host->dma_rx;
-+	} else {
-+		ret = atcspi_dma_config(spi, FALSE);
-+		dma_dir = DMA_MEM_TO_DEV;
-+		dma_ch = spi->host->dma_tx;
-+	}
-+	if (ret)
-+		return ret;
-+
-+	ret = spi_controller_dma_map_mem_op_data(spi->host, op, &sgt);
-+	if (ret)
-+		return ret;
-+
-+	desc = dmaengine_prep_slave_sg(dma_ch, sgt.sgl, sgt.nents, dma_dir,
-+				       DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (!desc) {
-+		ret = -ENOMEM;
-+		goto exit_unmap;
-+	}
-+
-+	reinit_completion(&spi->dma_completion);
-+	desc->callback = atcspi_dma_callback;
-+	desc->callback_param = &spi->dma_completion;
-+	cookie = dmaengine_submit(desc);
-+	ret = dma_submit_error(cookie);
-+	if (ret)
-+		goto exit_unmap;
-+
-+	dma_async_issue_pending(dma_ch);
-+	timeout = msecs_to_jiffies(ATCSPI_XFER_TIMEOUT(op->data.nbytes));
-+	if (!wait_for_completion_timeout(&spi->dma_completion, timeout)) {
-+		ret = -ETIMEDOUT;
-+		dmaengine_terminate_all(dma_ch);
-+	}
-+
-+exit_unmap:
-+	spi_controller_dma_unmap_mem_op_data(spi->host, op, &sgt);
-+
-+	return ret;
-+}
-+
-+static int atcspi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
-+{
-+	struct spi_device *spi_dev = mem->spi;
-+	struct atcspi_dev *spi;
-+	unsigned int val;
-+	int ret;
-+
-+	spi = spi_controller_get_devdata(spi_dev->controller);
-+	mutex_lock(&spi->mutex_lock);
-+	atcspi_prepare_trans(spi, op);
-+	if (op->data.nbytes) {
-+		if (spi->use_dma && op->data.nbytes >= ATCSPI_DMA_THRESHOLD)
-+			ret = atcspi_dma_trans(spi, op);
-+		else
-+			ret = atcspi_xfer_data_poll(spi, op);
-+		if (ret) {
-+			dev_info(spi->dev, "SPI transmission failed\n");
-+			goto exec_mem_exit;
-+		}
-+	}
-+
-+	ret = regmap_read_poll_timeout(spi->regmap,
-+				       ATCSPI_STATUS,
-+				       val,
-+				       !(val & ATCSPI_ACTIVE),
-+				       0,
-+				       ATCSPI_RDY_TIMEOUT_US);
-+	if (ret)
-+		dev_info(spi->dev, "Timed out waiting for ATCSPI_ACTIVE\n");
-+
-+exec_mem_exit:
-+	mutex_unlock(&spi->mutex_lock);
-+
-+	return ret;
-+}
-+
-+static const struct spi_controller_mem_ops atcspi_mem_ops = {
-+	.exec_op = atcspi_exec_mem_op,
-+	.adjust_op_size = atcspi_adjust_op_size,
-+};
-+
-+static int atcspi_setup(struct atcspi_dev *spi)
-+{
-+	unsigned int ctrl_val;
-+	unsigned int val;
-+	int actual_spi_sclk_f;
-+	int ret;
-+	unsigned char div;
-+
-+	ctrl_val = CTRL_TX_FIFO_RST | CTRL_RX_FIFO_RST | CTRL_SPI_RST;
-+	regmap_write(spi->regmap, ATCSPI_CTRL, ctrl_val);
-+	ret = regmap_read_poll_timeout(spi->regmap,
-+				       ATCSPI_CTRL,
-+				       val,
-+				       !(val & ctrl_val),
-+				       0,
-+				       ATCSPI_RDY_TIMEOUT_US);
-+	if (ret)
-+		return dev_err_probe(spi->dev, ret,
-+				     "Timed out waiting for ATCSPI_CTRL\n");
-+
-+	val = TRANS_FMT_DATA_LEN(ATCSPI_BITS_PER_UINT) |
-+	      TRANS_FMT_CPHA | TRANS_FMT_CPOL;
-+	regmap_write(spi->regmap, ATCSPI_TRANS_FMT, val);
-+
-+	regmap_read(spi->regmap, ATCSPI_CONFIG, &val);
-+	spi->txfifo_size = BIT(TXFIFO_SIZE(val) + 1);
-+	spi->rxfifo_size = BIT(RXFIFO_SIZE(val) + 1);
-+
-+	regmap_read(spi->regmap, ATCSPI_TIMING, &val);
-+	val &= ~TIMING_SCLK_DIV_MASK;
-+
-+	/*
-+	 * The SCLK_DIV value 0xFF is special and indicates that the
-+	 * SCLK rate should be the same as the SPI clock rate.
-+	 */
-+	if (spi->sclk_rate >= spi->clk_rate) {
-+		div = TIMING_SCLK_DIV_MASK;
-+	} else {
-+		/*
-+		 * The divider value is determined as follows:
-+		 * 1. If the divider can generate the exact target frequency,
-+		 *    use that setting.
-+		 * 2. If an exact match is not possible, select the closest
-+		 *    available setting that is lower than the target frequency.
-+		 */
-+		div = (spi->clk_rate + (spi->sclk_rate * 2 - 1)) /
-+		      (spi->sclk_rate * 2) - 1;
-+
-+		/* Check if the actual SPI clock is lower than the target */
-+		actual_spi_sclk_f = spi->clk_rate / ((div + 1) * 2);
-+		if (actual_spi_sclk_f < spi->sclk_rate)
-+			dev_info(spi->dev,
-+				 "Clock adjusted %d to %d due to divider limitation",
-+				 spi->sclk_rate, actual_spi_sclk_f);
-+
-+		if (div > TIMING_SCLK_DIV_MAX)
-+			return dev_err_probe(spi->dev, -EINVAL,
-+					     "Unsupported SPI clock %d\n",
-+					     spi->sclk_rate);
-+	}
-+	val |= div;
-+	regmap_write(spi->regmap, ATCSPI_TIMING, val);
-+
-+	return ret;
-+}
-+
-+static int atcspi_init_resources(struct platform_device *pdev,
-+				 struct atcspi_dev *spi,
-+				 struct resource **mem_res)
-+{
-+	void __iomem *base;
-+	const struct regmap_config atcspi_regmap_cfg = {
-+		.name = "atcspi",
-+		.reg_bits = 32,
-+		.val_bits = 32,
-+		.cache_type = REGCACHE_NONE,
-+		.reg_stride = 4,
-+		.pad_bits = 0,
-+		.max_register = ATCSPI_CONFIG
-+	};
-+
-+	base = devm_platform_get_and_ioremap_resource(pdev, 0, mem_res);
-+	if (IS_ERR(base))
-+		return dev_err_probe(spi->dev, PTR_ERR(base),
-+				     "Failed to get ioremap resource\n");
-+
-+	spi->regmap = devm_regmap_init_mmio(spi->dev, base,
-+					    &atcspi_regmap_cfg);
-+	if (IS_ERR(spi->regmap))
-+		return dev_err_probe(spi->dev, PTR_ERR(spi->regmap),
-+				     "Failed to init regmap\n");
-+
-+	spi->clk = devm_clk_get(spi->dev, NULL);
-+	if (IS_ERR(spi->clk))
-+		return dev_err_probe(spi->dev, PTR_ERR(spi->clk),
-+				     "Failed to get SPI clock\n");
-+
-+	spi->sclk_rate = ATCSPI_MAX_SPEED_HZ;
-+	return 0;
-+}
-+
-+static struct dma_chan *atcspi_request_dma_chan(struct device *dev,
-+						unsigned char *chan_name)
-+{
-+	struct dma_chan *dma_chan;
-+	dma_cap_mask_t mask;
-+
-+	dma_chan = dma_request_chan(dev, chan_name);
-+	if (PTR_ERR(dma_chan) == -ENODEV) {
-+		dma_cap_zero(mask);
-+		dma_cap_set(DMA_SLAVE, mask);
-+		dma_chan = dma_request_channel(mask, NULL, NULL);
-+	}
-+
-+	return dma_chan;
-+}
-+
-+static int atcspi_configure_dma(struct atcspi_dev *spi)
-+{
-+	struct dma_chan *dma_chan;
-+	int ret = 0;
-+
-+	dma_chan = atcspi_request_dma_chan(spi->dev, "spi_rx");
-+	if (IS_ERR(dma_chan)) {
-+		ret = PTR_ERR(dma_chan);
-+		goto err_exit;
-+	}
-+	spi->host->dma_rx = dma_chan;
-+
-+	dma_chan = atcspi_request_dma_chan(spi->dev, "spi_tx");
-+	if (IS_ERR(dma_chan)) {
-+		ret = PTR_ERR(dma_chan);
-+		goto free_rx;
-+	}
-+	spi->host->dma_tx = dma_chan;
-+	init_completion(&spi->dma_completion);
-+
-+	return ret;
-+
-+free_rx:
-+	dma_release_channel(spi->host->dma_rx);
-+	spi->host->dma_rx = NULL;
-+err_exit:
-+	return ret;
-+}
-+
-+static int atcspi_enable_clk(struct atcspi_dev *spi)
-+{
-+	int ret;
-+
-+	ret = clk_prepare_enable(spi->clk);
-+	if (ret)
-+		return dev_err_probe(spi->dev, ret,
-+				     "Failed to enable clock\n");
-+
-+	spi->clk_rate = clk_get_rate(spi->clk);
-+	if (!spi->clk_rate)
-+		return dev_err_probe(spi->dev, -EINVAL,
-+				     "Failed to get SPI clock rate\n");
-+
-+	return 0;
-+}
-+
-+static void atcspi_init_controller(struct platform_device *pdev,
-+				   struct atcspi_dev *spi,
-+				   struct spi_controller *host,
-+				   struct resource *mem_res)
-+{
-+	/* Get the physical address of the data register for DMA transfers. */
-+	spi->dma_addr = (dma_addr_t)(mem_res->start + ATCSPI_DATA);
-+
-+	/* Initialize controller properties */
-+	host->bus_num = pdev->id;
-+	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_QUAD | SPI_TX_QUAD;
-+	host->dev.of_node = pdev->dev.of_node;
-+	host->num_chipselect = ATCSPI_MAX_CS_NUM;
-+	host->mem_ops = &atcspi_mem_ops;
-+	host->max_speed_hz = spi->sclk_rate;
-+}
-+
-+static int atcspi_probe(struct platform_device *pdev)
-+{
-+	struct spi_controller *host;
-+	struct atcspi_dev *spi;
-+	struct resource *mem_res;
-+	int ret;
-+
-+	host = spi_alloc_host(&pdev->dev, sizeof(*spi));
-+	if (!host)
-+		return -ENOMEM;
-+
-+	spi = spi_controller_get_devdata(host);
-+	spi->host = host;
-+	spi->dev = &pdev->dev;
-+	platform_set_drvdata(pdev, host);
-+
-+	ret = atcspi_init_resources(pdev, spi, &mem_res);
-+	if (ret)
-+		goto free_controller;
-+
-+	ret = atcspi_enable_clk(spi);
-+	if (ret)
-+		goto free_controller;
-+
-+	atcspi_init_controller(pdev, spi, host, mem_res);
-+
-+	ret = atcspi_setup(spi);
-+	if (ret)
-+		goto free_controller;
-+
-+	ret = devm_spi_register_controller(&pdev->dev, host);
-+	if (ret) {
-+		dev_err_probe(spi->dev, ret,
-+			      "Failed to register SPI controller\n");
-+		goto free_controller;
-+	}
-+
-+	spi->use_dma = false;
-+	if (ATCSPI_DMA_SUPPORT) {
-+		ret = atcspi_configure_dma(spi);
-+		if (ret)
-+			dev_info(spi->dev,
-+				 "Failed to init DMA, fallback to PIO mode\n");
-+		else
-+			spi->use_dma = true;
-+	}
-+	mutex_init(&spi->mutex_lock);
-+
-+	return 0;
-+
-+free_controller:
-+	spi_controller_put(host);
-+	return ret;
-+}
-+
-+static const struct of_device_id atcspi_of_match[] = {
-+	{ .compatible = "andestech,qilai-spi", },
-+	{ .compatible = "andestech,atcspi200", },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, atcspi_of_match);
-+
-+static struct platform_driver atcspi_driver = {
-+	.probe = atcspi_probe,
-+	.driver = {
-+		.name = "atcspi200",
-+		.of_match_table = atcspi_of_match,
-+	},
-+};
-+module_platform_driver(atcspi_driver);
-+
-+MODULE_AUTHOR("CL Wang <cl634@andestech.com>");
-+MODULE_DESCRIPTION("Andes ATCSPI200 SPI controller driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
