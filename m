@@ -1,48 +1,82 @@
-Return-Path: <linux-spi+bounces-11172-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11173-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 900EAC5362D
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 17:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC00C53980
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 18:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0C0DD544203
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 15:57:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8A969507EF1
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 16:52:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3617833ADAD;
-	Wed, 12 Nov 2025 15:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394103431FA;
+	Wed, 12 Nov 2025 16:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMEKdVb9"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="jO46oGgS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D0E338904;
-	Wed, 12 Nov 2025 15:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B221A2080C1
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 16:52:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762962940; cv=none; b=SaVeX8zr364Y1+KPE68goCmJKXFRLm8hwsZdGDW++O1LAqxFfBupbgLDbOAqnrvGNoS6PwhJkWlW17ND84dhvfMJPdPunbGc3ey9W0Eq1j4gwuNeJviwuJVE4X8TSjyJCSDC8gUds6OicRrMdoG9iiHqRymug7xPBeNibGF5USU=
+	t=1762966361; cv=none; b=UAP4z/Upb8Od1nsrV/DyBWh46j8uvJLMGiJp2H7UCPx3jTVJY3p6mh3PGywn/qVIlpE0GdBdkp7oaGh1NxPm9ui0gyE0vDlpk3yASUciT+AzRKg7X2cyjaua5ILuTiecBz4Racrr6EEod0mdNDN2c5Uz98ncLktx/F183D8aYNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762962940; c=relaxed/simple;
-	bh=imcsxgykMEiMSOCV9jYIEvncowj9MhfNmPEniejhA6I=;
+	s=arc-20240116; t=1762966361; c=relaxed/simple;
+	bh=vquyA6U0yVLVU87ffFxSvxSxY4DbgBQ5yYCH68Wc3l4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a9/CSEGvrAgRmtHUSrbyy7P+N6FHAoyPUYoyLoVhYnF0UoeuuexUbG+2tilbtPlB2SUvc3TDGQLesuMekixYbhenSghoac1WkMN/Z/6+4Sw3gXiqx0pAOFj5SApknLPwGUvsiHz0HDXIPrqoTVGjyDYidGOG7GKJV5MRMWAhNEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMEKdVb9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A50DC4CEF7;
-	Wed, 12 Nov 2025 15:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762962939;
-	bh=imcsxgykMEiMSOCV9jYIEvncowj9MhfNmPEniejhA6I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LMEKdVb9I1zWsP/mfFNaS/SHpAEsNR09sD6zkcr7znwUBbZc9uWUEPj47YJ3iGCDH
-	 +Hzd6/k08gDjAHtY7R/fhdqh/Iudxq0RVoxuD/jshIbwnysCopn0NwxmDWnUrto0DZ
-	 75VsjFxMfHV+o5LFcCiJlq0VrqwsXs4rpqCldKQ43HCgxkfOT6Rv8uVy0KjZpSkXhB
-	 ZR+x6cPy1kznJua1/ZVw5qe4CwXOOQDR8cR3P9dvf25FD4zxYsO6L/uH/PFYd329e+
-	 Nde90MuTedOX6Jm87+YfhbfzRG9KKlFD+h23xnn3pjrYwCWSF2qV78CgWymvurYlNG
-	 vEWEj7SEid2VQ==
-Message-ID: <2a4fd083-368e-42b2-a3af-d792e076e011@kernel.org>
-Date: Wed, 12 Nov 2025 16:55:34 +0100
+	 In-Reply-To:Content-Type; b=nmFq1QHBplCSd1qLuZS5WNbmE+gEGJl2e8dypp55LTAZecKeRA+eafXX+4G5n1kNZa+EqpYsOPMUFpZGZ0YuPytuktswkjPWoirxdKxWpFVWmTEE0LzCh2i6fW0Y2t3ocWkM+56lPqbF5siO5HAYCApi1JfiLlIIzM078lrcFI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=jO46oGgS; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7c704bf2d9eso485905a34.0
+        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 08:52:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762966356; x=1763571156; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=otKN6HaBW7TeFZXmhol1N0rafttZcw0ehXIldHQZRQU=;
+        b=jO46oGgS/vM3MXXYczpi4QHmtXP4ZJ6G9q+Sfnq2whfaApDS5crM9wQfMGl7pYGSSF
+         kS5DX/Ko2AXyYeJ1cwm2qjGLv6RlMafrr5J1cXTVxvacrsR6SW2gT6knsOQdYZAO6zSY
+         d9Cgmf99MFjOpBDPnWQ8BW8GwOun1+B8s7WWmDVNjto8kTwxkkntu4+H/CsBP0F/arPK
+         2Ry3hfnAzVIGT8YeflrPx+6zEc3djCRx3Vonriz2hNiJKY9YXrPjki+5youDgXgRqU+L
+         twTzmcbLFregOVEXAm2a6AA1Vr0EaauKeBWqhA9Z1OTTlndzLeM2pdXl5x8Hz8/KaHQC
+         9JdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762966356; x=1763571156;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=otKN6HaBW7TeFZXmhol1N0rafttZcw0ehXIldHQZRQU=;
+        b=GD4TvmAVBoCXdWZfpY+Nff9dAsx716v+04rebiOlxwPMkjuPmxbCCr0mGbUe6g9el7
+         o3NiyEVTDgRH5AKqVqNp3UWZqupOZuga+00Bqu9DMNjSMkid7UUCrmGZq5WjE6hZ2XXP
+         A24HivVLVFh1w7/b+P00BOPH5H4FQr7tdGC2cMFz1RE0Aro7WCkLD+eBbszGdUqJ5NBn
+         45oQedMbN3o3jv5z59PylDUbShMLr4KS2a3glCMYNpGXXjiUP9Wc/z1CkRohiLkRCQp1
+         PTR4rHNAB+bYwlfUQpOZ7P3GuZNLzPRfte32aqlkvw5QP96x/c4GHSLOJEJD/8m65BG0
+         4sJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8kaTwMtNdRcC/Fvpe3g4bPxurzUl/Z6JbUVnFmHJDZOIq96HaKDfiEJUq3AXj/ctuW9FavNLh4E0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKDADjD1p0378juKJBiQcgO1cyLNbB7orKKjTSC3udhAo93ugQ
+	pwlHZq4wDGsq19EYmHVlfgr4ye0T/MPZsIFIl7bIba7UcNGPkxYFn3749sUKnPdamx0=
+X-Gm-Gg: ASbGncvSWHr5lfY9/nQsLQ/xtcoN5H/TnQG/diC4+HETHxLaXc3hsyyp9KU08UKDDy7
+	mmaD6vBBDi10ugNwYcSs2al3O0qOa6dOX9D8yuVM5xyUEn4s3UcHTV9CdmZdCecAWRuGR/dfkG8
+	Ql2OHaUOk+QiT22h1Fa2NzKVdLazVG5C1zfytWr8/QtTiYDHEjvk9jFeHfJaBi4GE2V/zxHtycv
+	sT5iYyEBkf02Ikn1g8GlRGe6NY6yxlBsBi+4fgdOY5AUbQ6H0aUqpU6axpcA8NZST/RXt0sFEy7
+	juPJ66EzPIjMQOJG+yI+6BvdBv8LWtHJY5idNJ/8Nto6qOVyJlU4hAAlwEdkYyMw3ElovqI/ub6
+	jBGyKMDrGsu89wewkFony10bqBhPbvYHg0+iqCtsSlzyXAdoXRS530iLFk8BEw8sAYpPMqY6daQ
+	2dNcnhSDMKt0BdEnb0nMzNre/ToHiBW8u1E2/r348NZjyVz9Xb0g==
+X-Google-Smtp-Source: AGHT+IEzlLhnjrljziZsPJD+6TFphu87RW7odVOmHqBJgKS1HNWc+2CO5ak3CF5B+KTraiO0uH2Sxw==
+X-Received: by 2002:a05:6808:1b07:b0:450:3c49:519 with SMTP id 5614622812f47-450743f38afmr1702472b6e.7.1762966355944;
+        Wed, 12 Nov 2025 08:52:35 -0800 (PST)
+Received: from ?IPV6:2600:8803:e7e4:500:d404:301b:b985:c499? ([2600:8803:e7e4:500:d404:301b:b985:c499])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-656c57ec231sm8495588eaf.17.2025.11.12.08.52.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Nov 2025 08:52:35 -0800 (PST)
+Message-ID: <b18db31d-47e5-44bb-a671-c8d8a9f2cd82@baylibre.com>
+Date: Wed, 12 Nov 2025 10:52:34 -0600
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,77 +84,55 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] spi: dt-bindings: nuvoton,npcm-pspi: Convert to DT
- schema
-To: Tomer Maimon <tmaimon77@gmail.com>, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, broonie@kernel.org, avifishman70@gmail.com,
- tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com,
- benjaminfair@google.com, andrew@codeconstruct.com.au
-Cc: openbmc@lists.ozlabs.org, devicetree@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251112150950.1680154-1-tmaimon77@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
+To: Mark Brown <broonie@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Marcelo Schmitt <marcelo.schmitt@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+ Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
+ <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
+ <20251021142129.GA34073-robh@kernel.org>
+ <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
+ <20251030135126.GA3749313-robh@kernel.org>
+ <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
+ <aRIbBVNzo-7EYJbl@finisterre.sirena.org.uk>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251112150950.1680154-1-tmaimon77@gmail.com>
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <aRIbBVNzo-7EYJbl@finisterre.sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/11/2025 16:09, Tomer Maimon wrote:
-> Convert the Nuvoton NPCM PSPI binding to DT schema format.
+On 11/10/25 11:04 AM, Mark Brown wrote:
+> On Thu, Oct 30, 2025 at 05:42:44PM -0500, David Lechner wrote:
+>> On 10/30/25 8:51 AM, Rob Herring wrote:
 > 
-> Also update the binding to fix shortcoming:
->  * Drop clock-frequency property: it is never read in the NPCM PSPI
->    driver and has no effect.
+>>> But it can't really be 2 independent buses/controllers unless the ADC 
+>>> has 2 completely independent interfaces, right?
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
+>> Correct.
+> 
+>> The proposed property really only concerns the data lines (tx/rx). It doesn't
+>> care if there is 1 or 2 SCLK lines and it doesn't care if there is only 1 CS
+>> line.
+> 
+>> So maybe spi-data-buses would be a better name for the property? Or
+>> spi-data-ports (using the NXP FlexSPI controller docs terminology)?
+>> Or spi-data-channels?
+> 
+> This bindings discussion seems to have stalled out?
+
+Yes, it seems so. I sent a v2 with with the property changed to "spi-data-buses"
+in hopes that that it would be good enough, or if not, get the conversation going
+again. [1]
+
+[1]: https://lore.kernel.org/linux-iio/20251107-spi-add-multi-bus-support-v2-1-8a92693314d9@baylibre.com/
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
 
