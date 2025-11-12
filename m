@@ -1,82 +1,82 @@
-Return-Path: <linux-spi+bounces-11173-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11174-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC00C53980
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 18:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBEE1C53CDF
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 18:55:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8A969507EF1
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 16:52:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8AF7B545E2F
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 17:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394103431FA;
-	Wed, 12 Nov 2025 16:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B27344046;
+	Wed, 12 Nov 2025 17:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="jO46oGgS"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="dwz9Ugmd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B221A2080C1
-	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 16:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387C83451CE
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 16:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762966361; cv=none; b=UAP4z/Upb8Od1nsrV/DyBWh46j8uvJLMGiJp2H7UCPx3jTVJY3p6mh3PGywn/qVIlpE0GdBdkp7oaGh1NxPm9ui0gyE0vDlpk3yASUciT+AzRKg7X2cyjaua5ILuTiecBz4Racrr6EEod0mdNDN2c5Uz98ncLktx/F183D8aYNU=
+	t=1762966801; cv=none; b=ddAnP1W9ehi9IUye/OGhBNc1P47T0HmQde0J24krh7VRQ2FHYMlpKFxSS68L1ylxroE0/+t2PfvkQ++BCCBYpwWQxJ7+OlQYRacHeMGXn83uEvXt/8ujgZpZiPOyWHVLNiXNXdjL49tQVqMjIXf8KOLUcA9JQrmrs8hSVm0ZpfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762966361; c=relaxed/simple;
-	bh=vquyA6U0yVLVU87ffFxSvxSxY4DbgBQ5yYCH68Wc3l4=;
+	s=arc-20240116; t=1762966801; c=relaxed/simple;
+	bh=8wx44lorjmXobYAPjgirMKLJlUNzSsr5s3gulPDv6j0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nmFq1QHBplCSd1qLuZS5WNbmE+gEGJl2e8dypp55LTAZecKeRA+eafXX+4G5n1kNZa+EqpYsOPMUFpZGZ0YuPytuktswkjPWoirxdKxWpFVWmTEE0LzCh2i6fW0Y2t3ocWkM+56lPqbF5siO5HAYCApi1JfiLlIIzM078lrcFI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=jO46oGgS; arc=none smtp.client-ip=209.85.210.49
+	 In-Reply-To:Content-Type; b=qmoox9wKFnT9rws3fTajvtrH64g6Eb8EX/AfLGiSa+Xi7zc9UlgRZk2lGulr6jQ9dA6A45Fc8NZpniSSmu+66c6RgzCw0FiozbUHL31oi4gW0Rcsh83xUED/G0YiCOQVGfdJx2JtxQGbiwG3WVUW7at2c1jropOebeuIg6g8G1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=dwz9Ugmd; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7c704bf2d9eso485905a34.0
-        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 08:52:38 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c284d4867eso323495a34.3
+        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 08:59:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762966356; x=1763571156; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762966798; x=1763571598; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=otKN6HaBW7TeFZXmhol1N0rafttZcw0ehXIldHQZRQU=;
-        b=jO46oGgS/vM3MXXYczpi4QHmtXP4ZJ6G9q+Sfnq2whfaApDS5crM9wQfMGl7pYGSSF
-         kS5DX/Ko2AXyYeJ1cwm2qjGLv6RlMafrr5J1cXTVxvacrsR6SW2gT6knsOQdYZAO6zSY
-         d9Cgmf99MFjOpBDPnWQ8BW8GwOun1+B8s7WWmDVNjto8kTwxkkntu4+H/CsBP0F/arPK
-         2Ry3hfnAzVIGT8YeflrPx+6zEc3djCRx3Vonriz2hNiJKY9YXrPjki+5youDgXgRqU+L
-         twTzmcbLFregOVEXAm2a6AA1Vr0EaauKeBWqhA9Z1OTTlndzLeM2pdXl5x8Hz8/KaHQC
-         9JdA==
+        bh=9UBroaIpNSaiJuWFrz+qWW2HM0uYdQr3mWyR9bfJIIM=;
+        b=dwz9Ugmdt4tA8qi6929B5cM2xqwjHCY2sziOHziktlu15hr+e6pR0ZO6X9I4LWCo6i
+         mI8gpfA9IzRCnS7rfun2r6dZtrZdkBwT4g6ro1VOCO10ky1BJ2DqXicY2taSkHWzhEYc
+         tXYftMocbYP7EN2QB+FBfdNziCXNimUIUI8zYIX/9TL5pvjN4FkcNxCQgnlGz6FCMv66
+         D2BibSGCafSfGj4yYb0tODuc3lWYsiZjfj7RLcNm4VGVLWYaLgRcTTCxh5pr6S4FL+4m
+         TbUZZuDqUralxivWZydq+2Knhoj/520cHrH63BIAkwdunauvfFOtlaDM3nKPFycaS+TE
+         jtgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762966356; x=1763571156;
+        d=1e100.net; s=20230601; t=1762966798; x=1763571598;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=otKN6HaBW7TeFZXmhol1N0rafttZcw0ehXIldHQZRQU=;
-        b=GD4TvmAVBoCXdWZfpY+Nff9dAsx716v+04rebiOlxwPMkjuPmxbCCr0mGbUe6g9el7
-         o3NiyEVTDgRH5AKqVqNp3UWZqupOZuga+00Bqu9DMNjSMkid7UUCrmGZq5WjE6hZ2XXP
-         A24HivVLVFh1w7/b+P00BOPH5H4FQr7tdGC2cMFz1RE0Aro7WCkLD+eBbszGdUqJ5NBn
-         45oQedMbN3o3jv5z59PylDUbShMLr4KS2a3glCMYNpGXXjiUP9Wc/z1CkRohiLkRCQp1
-         PTR4rHNAB+bYwlfUQpOZ7P3GuZNLzPRfte32aqlkvw5QP96x/c4GHSLOJEJD/8m65BG0
-         4sJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8kaTwMtNdRcC/Fvpe3g4bPxurzUl/Z6JbUVnFmHJDZOIq96HaKDfiEJUq3AXj/ctuW9FavNLh4E0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKDADjD1p0378juKJBiQcgO1cyLNbB7orKKjTSC3udhAo93ugQ
-	pwlHZq4wDGsq19EYmHVlfgr4ye0T/MPZsIFIl7bIba7UcNGPkxYFn3749sUKnPdamx0=
-X-Gm-Gg: ASbGncvSWHr5lfY9/nQsLQ/xtcoN5H/TnQG/diC4+HETHxLaXc3hsyyp9KU08UKDDy7
-	mmaD6vBBDi10ugNwYcSs2al3O0qOa6dOX9D8yuVM5xyUEn4s3UcHTV9CdmZdCecAWRuGR/dfkG8
-	Ql2OHaUOk+QiT22h1Fa2NzKVdLazVG5C1zfytWr8/QtTiYDHEjvk9jFeHfJaBi4GE2V/zxHtycv
-	sT5iYyEBkf02Ikn1g8GlRGe6NY6yxlBsBi+4fgdOY5AUbQ6H0aUqpU6axpcA8NZST/RXt0sFEy7
-	juPJ66EzPIjMQOJG+yI+6BvdBv8LWtHJY5idNJ/8Nto6qOVyJlU4hAAlwEdkYyMw3ElovqI/ub6
-	jBGyKMDrGsu89wewkFony10bqBhPbvYHg0+iqCtsSlzyXAdoXRS530iLFk8BEw8sAYpPMqY6daQ
-	2dNcnhSDMKt0BdEnb0nMzNre/ToHiBW8u1E2/r348NZjyVz9Xb0g==
-X-Google-Smtp-Source: AGHT+IEzlLhnjrljziZsPJD+6TFphu87RW7odVOmHqBJgKS1HNWc+2CO5ak3CF5B+KTraiO0uH2Sxw==
-X-Received: by 2002:a05:6808:1b07:b0:450:3c49:519 with SMTP id 5614622812f47-450743f38afmr1702472b6e.7.1762966355944;
-        Wed, 12 Nov 2025 08:52:35 -0800 (PST)
+        bh=9UBroaIpNSaiJuWFrz+qWW2HM0uYdQr3mWyR9bfJIIM=;
+        b=ap6uV/mXENx/FYaEeHa8FOHamiGfvPtwfreuWUAVPtswTclB5m3ugGWp9gCtFU1+kK
+         9pOT45p6x6W5fVwFCKIBEHmeQ2114Kon9WafbCr4kBPn+VGbyIZIf3uS7Hvh06gv+Ngb
+         7pchYaht8ty1n/6fQFE8YlxHn7lXejVEl4fIKloex9Q520vCRcKd1z6AEi3ylsSINNLJ
+         xiOw/QyQdclek85vBgyPXAV8sE+BmWtgXgv459RVYdwgf19g/g4SPBQs0sxeo2cxdUJm
+         G1XDQPbm/DVUh4ZB286VqL74PiBHhB734n2bRQ8DGmdVF7PgX1jkVpMu8FEpjuUat6FW
+         7LEw==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ+6UZiS9HYbJkN6ahEjc1O0T61h6MKCYVz98rT2umXJEZLDHXQlAeWglhy9UTUI7YPm9jKUJ2nQM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGVui/Tozf2uCoxBdRFRlntDKVuWE+feAp5MHm5UWrx1wLHIzL
+	PL4+TkoF9uTpHKpZJV7ACm7mZyei+SBjavVJtk2YfsHObyDIVYZVXyuKg/ieJgGxu9s=
+X-Gm-Gg: ASbGnctLGAsm8i1S6dPxUaQdxRBEiiExSerjXyDeDHrNcVfNoNcbiCjbfAWC4lg1zQP
+	80rszehH77yoCSHqfYf4LYMsc6k1ZiL+2LnqWFdMYmyTZFWet/MmiZABi9NHt53OSWGZRrH/0Z3
+	PdIFLgr0tVAdEJGXUZ1w74XB7Oo1fEKkKRg92EAt7Qg9iCsIFH7qZ/SlLs1uQgZj2l9SBMTumsc
+	vYGgG3hEIuclTmn1PzX/bWmWTqxse5hort+gVGIJ9H1t3G5JjgWss01LeiEW0S07dSDZTg0AmzA
+	hYCwrk3De0uI9Tc7kLWOeg+H8t65DsTakdDR1MJg6gbpR33x3m1MF8AJ/tjK2+EuS0hWGFaP83Y
+	KZY1ggyO1j1C6jhfmcojEmKsgg2ud0YZUBBhcRYUMTNx2rxq0/G/nl5j8MkCeG+0BQsd8JEbwZE
+	3GI93GhLKOpUYw+Bs5ZU3GPD33xM2pOxgDwD8Wtv/LJmGzDWDTeg==
+X-Google-Smtp-Source: AGHT+IGjGiA68SQxE2DOheehH23MBaQy65p8WqlrKArkfS9SuLVcwJ48eTHV9RHhY2eyZHq3Z4deyQ==
+X-Received: by 2002:a05:6808:3198:b0:442:2ce:46cf with SMTP id 5614622812f47-4507456e715mr1828413b6e.34.1762966797983;
+        Wed, 12 Nov 2025 08:59:57 -0800 (PST)
 Received: from ?IPV6:2600:8803:e7e4:500:d404:301b:b985:c499? ([2600:8803:e7e4:500:d404:301b:b985:c499])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-656c57ec231sm8495588eaf.17.2025.11.12.08.52.34
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3e41f2583casm10124611fac.23.2025.11.12.08.59.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Nov 2025 08:52:35 -0800 (PST)
-Message-ID: <b18db31d-47e5-44bb-a671-c8d8a9f2cd82@baylibre.com>
-Date: Wed, 12 Nov 2025 10:52:34 -0600
+        Wed, 12 Nov 2025 08:59:57 -0800 (PST)
+Message-ID: <0e59d92f-7b3c-4ff6-b3ad-7fae2ded9b77@baylibre.com>
+Date: Wed, 12 Nov 2025 10:59:56 -0600
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,55 +84,72 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: spi: Add spi-buses property
-To: Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Marcelo Schmitt <marcelo.schmitt@analog.com>,
+Subject: Re: [PATCH v2 4/6] spi: axi-spi-engine: support
+ SPI_MULTI_BUS_MODE_STRIPE
+To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
  Michael Hennerich <michael.hennerich@analog.com>,
  =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
  Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
  Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-iio@vger.kernel.org
-References: <20251014-spi-add-multi-bus-support-v1-0-2098c12d6f5f@baylibre.com>
- <20251014-spi-add-multi-bus-support-v1-1-2098c12d6f5f@baylibre.com>
- <20251021142129.GA34073-robh@kernel.org>
- <14ae0769-341b-4325-b925-7bba6d57bbdf@baylibre.com>
- <20251030135126.GA3749313-robh@kernel.org>
- <f731ebd7-6494-45f5-861d-05a2926cc5fa@baylibre.com>
- <aRIbBVNzo-7EYJbl@finisterre.sirena.org.uk>
+References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
+ <20251107-spi-add-multi-bus-support-v2-4-8a92693314d9@baylibre.com>
+ <aRNSc1GEz0UNx17i@debian-BULLSEYE-live-builder-AMD64>
 Content-Language: en-US
 From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <aRIbBVNzo-7EYJbl@finisterre.sirena.org.uk>
+In-Reply-To: <aRNSc1GEz0UNx17i@debian-BULLSEYE-live-builder-AMD64>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/10/25 11:04 AM, Mark Brown wrote:
-> On Thu, Oct 30, 2025 at 05:42:44PM -0500, David Lechner wrote:
->> On 10/30/25 8:51 AM, Rob Herring wrote:
+On 11/11/25 9:12 AM, Marcelo Schmitt wrote:
+> Hi David,
 > 
->>> But it can't really be 2 independent buses/controllers unless the ADC 
->>> has 2 completely independent interfaces, right?
+> The updates to spi-engine driver look good.
+> Only one comment about what happens if we have conflicting bus modes for the
+> offload case. Just to check I'm getting how this is working.
 > 
->> Correct.
+
+...
+
+>> @@ -284,6 +316,24 @@ static int spi_engine_precompile_message(struct spi_message *msg)
+>>  			min_bits_per_word = min(min_bits_per_word, xfer->bits_per_word);
+>>  			max_bits_per_word = max(max_bits_per_word, xfer->bits_per_word);
+>>  		}
+>> +
+>> +		if (xfer->rx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_RX_STREAM ||
+>> +		    xfer->tx_buf || xfer->offload_flags & SPI_OFFLOAD_XFER_TX_STREAM) {
+>> +			switch (xfer->multi_bus_mode) {
+>> +			case SPI_MULTI_BUS_MODE_SINGLE:
+>> +			case SPI_MULTI_BUS_MODE_STRIPE:
+>> +				break;
+>> +			default:
+>> +				/* Other modes, like mirror not supported */
+>> +				return -EINVAL;
+>> +			}
+>> +
+>> +			/* If all xfers have the same multi-bus mode, we can optimize. */
+>> +			if (multi_bus_mode == SPI_ENGINE_MULTI_BUS_MODE_UNKNOWN)
+>> +				multi_bus_mode = xfer->multi_bus_mode;
+>> +			else if (multi_bus_mode != xfer->multi_bus_mode)
+>> +				multi_bus_mode = SPI_ENGINE_MULTI_BUS_MODE_CONFLICTING;
 > 
->> The proposed property really only concerns the data lines (tx/rx). It doesn't
->> care if there is 1 or 2 SCLK lines and it doesn't care if there is only 1 CS
->> line.
+> Here we check all xfers have the same multi-bus mode and keep the mode that has
+> been set. Otherwise, we set this conflicting mode and the intent is to generate
+> SDI and SDO mask commands on demand on spi_engine_precompile_message(). OTOH,
+
+s/spi_engine_precompile_message/spi_engine_compile_message/
+
+Probably just a typo, but just to be clear, the "on demand" bit happens in the
+compile function rather than precompile.
+
+> if all xfers have the same multi-bus mode, we can add just one pair of SDI/SDO
+> mask commands in spi_engine_trigger_enable() and one pair latter in
+> spi_engine_trigger_disable(). I guess this is the optimization mentioned in the
+> comment.
 > 
->> So maybe spi-data-buses would be a better name for the property? Or
->> spi-data-ports (using the NXP FlexSPI controller docs terminology)?
->> Or spi-data-channels?
-> 
-> This bindings discussion seems to have stalled out?
-
-Yes, it seems so. I sent a v2 with with the property changed to "spi-data-buses"
-in hopes that that it would be good enough, or if not, get the conversation going
-again. [1]
-
-[1]: https://lore.kernel.org/linux-iio/20251107-spi-add-multi-bus-support-v2-1-8a92693314d9@baylibre.com/
-
-
-
+Your understanding is correct.
 
