@@ -1,100 +1,77 @@
-Return-Path: <linux-spi+bounces-11168-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11169-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E84C52ED7
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 16:15:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 134E7C52F5C
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 16:20:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 996A44A3AA6
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 14:26:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 43B1E507123
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 14:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E797304969;
-	Wed, 12 Nov 2025 14:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m4iXCp4z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C45C34217C;
+	Wed, 12 Nov 2025 14:39:13 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24ED28A701;
-	Wed, 12 Nov 2025 14:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B1D341AD8
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 14:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762957595; cv=none; b=YyeFQAhQmhtzqfxbtxW7R4RobDeZ3/Lt3aVVoasmI0hxj7pZE1aNpuldL73QA73bUU8RvBw5fm1hHtQyc0OTzYr9xwIngyjqNMAThd29G2grah7kUkSDYQR2PSUXTxuEw7NFeRHma4a6M8vYkpvkFSkS8aUgAeGiIq6YHhJXkn8=
+	t=1762958353; cv=none; b=l8Qeg4Yo0ZlazGVVDmnfsyQdXI8Q5CItSOIDLEiKyLRCMXiE/zqL1xDg/9eyNUlGN4AcH63ay55O3QtGS7LdFu9jbXLpQAlaV3GS/TQ4K+gcyGmsvvRwe1uta2MliEJ5pC1aUhmPlOLL3vW0y0TpdGRdjOb524R43s9+5uMkC5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762957595; c=relaxed/simple;
-	bh=bNLqGrg/bxt16UHYQqXWyzLbnJanuTnn/DSzlHMqam8=;
+	s=arc-20240116; t=1762958353; c=relaxed/simple;
+	bh=YLBWd43A4qz68JA3SZqwZJrrUnRu+5NA9D8YMiytfJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qtqkH8KDJQJjkvIg1VxhtdsslmxVSp+JzGZ1eDETk9gLV+3LtC3LZ3UfqxclgnpUPBMBb8ad4aCUNoASSQGa2qV+3aNDjYGnnGss44naSBPz6mMissH6LIF12GL1+ggN/qHjUppwErkbg/iMjZ2pObPxB6Uq57GyoG6Vy5fG0Gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m4iXCp4z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02366C19422;
-	Wed, 12 Nov 2025 14:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762957594;
-	bh=bNLqGrg/bxt16UHYQqXWyzLbnJanuTnn/DSzlHMqam8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m4iXCp4znKZvCzYkjhXZu1JL4COAdGb7yAm9UmEyz0xmhqXKj2K9504lPVGuTy2Jw
-	 oIs3gFjFC88Pg6vs33x0Y9J4Rt1LUAOWf+RlfjFyxs91gx9kSFDB51FMvZyE5chPXE
-	 aGtArRih0bDKoqGUZ1CFOq9Z1gR5u0u7H+Ia54U4ZgBoOw6F7RHwsyZbtTo73P+YtI
-	 MlFexT96E5ZxLwczc2sajdvyTdAl2dfa5pilRItuDN9x8WGEYbXAh10Kg5gBAGhHeA
-	 FzJ4mZv2YeFA2oWEIhZbh7ljpXAZyuUSAV7u6Cyu3iLC+0hy5axy54UvXp2gQgfYvb
-	 AydcA8t3H0Huw==
-Date: Wed, 12 Nov 2025 08:26:32 -0600
-From: Rob Herring <robh@kernel.org>
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
-	Saravana Kannan <saravanak@google.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mark Brown <broonie@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-cxl@vger.kernel.org,
-	Allan Nielsen <allan.nielsen@microchip.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
-Message-ID: <20251112142632.GA1610836-robh@kernel.org>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-6-herve.codina@bootlin.com>
- <20251030141448.GA3853761-robh@kernel.org>
- <20251031162004.180d5e3f@bootlin.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LYmFEYftlkZcOIEd8AroP7N3Rj7ToC82tUwBx+k6MTHizgO4W4+ncfMAS/SO2l6y0rVKo9HpY8eCZA+1mY9FDVX0K+CiMW9AYn9piXQ2eQ7rCJktjRqpxWVEqK4V4jGG2fh9uG/3SFEIfGq/MrpIIyfRkT9Srqp21I6btYFw/ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-30cce892b7dso397821fac.1
+        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 06:39:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762958350; x=1763563150;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jduwwJc36NsKSwajdjfjQL6Giew4Hq4QvEpO2y2wUgU=;
+        b=Uc2m01/MO35mnTgyvx27DZMyrq1J0IxRhlodKSAXecJuGkUbDBEA+COfSIugjNoJ99
+         yjn+OFOb4/wwuXosSm07ogimfQ1VuQsf20Blvin3iIFyG1uwUnNKLT6efjJf877iiccG
+         Uc8ISo2Gn2jdCazvjssdYvqD+zT0XLChsaXZGSC7WQrcm9L1xzUDefDw043gmxr5i49D
+         KDcAtD5c5t1qhOujOQx9zJr6nksICty/Y1saMfPlyFsT0xvI936vpYPj5e7rHn0VIAEW
+         Cs1H4axTHjJzaPhEiQ1Ml+6eBcxaobUDnGsgyyz3r1Jlu+mU4TD7aEuaz04Y4WasDQWW
+         5rZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbBV0a4BR38/VHLAv4/UuG2rZ981dq4G5KdakOyifSo9H01MODAplKjkjPEYCMJCxoZol0ihW7JR0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTZwiTK2sUCYblNyxapMwxmNttCSRf9G4AywVDiBh1o0MX696u
+	G5YGy0pjESF57XjbHsZaIOV5DIJtSrVbfJyadRLfWV0++B0O3seWqMnY
+X-Gm-Gg: ASbGncv3L5bS1xPHF94SNoFlAo54O0ZWUHTrkiZaaVmhTGvDwlmC09R/4lbmU1to9S9
+	CMB+5xPsEgnzhF/MDEsdyNCiFS55tU1CXuX1iE2ONSNWKGpwXtFAWXZqlub7RGohmHpH773kyjV
+	G5S+lTHR17kjBhSruaziE60Br/BHzAmijxvXzrgDqo/awmjRsq2B9/Wxgh3dxn8AFE8eeavQFV3
+	YA2gWQCb0oBIg2ojm5fCdQ0RZGhQX3KRCgGQwjUg+o0QW1zRCehvF6ZLHqiLyzPsljruJv8V5Cl
+	rGhoNY16/aZVX9HsPgf1nu8fHHN38tiuWhaiFVLjEklJPuJxhZT/ocU107ZmCj8//32YIzdHjkW
+	q401Hiuk8Rvw+kmaBZyuKWbX8bmWD+r/H+ttUSermzUGs0DIOFVQCib+M/snGVM1XTuRK+Ie5AW
+	WIpTQ=
+X-Google-Smtp-Source: AGHT+IGOaUiBUnjCORPb2sikNr2bFgJVOUtqqbSVaoY7pBHbrk9Eo9bCP5k5x9A+nXecxYbNPaOn+A==
+X-Received: by 2002:a05:6870:ebcb:b0:3e8:3382:aaed with SMTP id 586e51a60fabf-3e834080c5amr1365633fac.12.1762958350559;
+        Wed, 12 Nov 2025 06:39:10 -0800 (PST)
+Received: from gmail.com ([2a03:2880:10ff:52::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c6f116ddcbsm8564167a34.33.2025.11.12.06.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 06:39:10 -0800 (PST)
+Date: Wed, 12 Nov 2025 06:39:08 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Vishwaroop A <va@nvidia.com>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Sowjanya Komatineni <skomatineni@nvidia.com>, Laxman Dewangan <ldewangan@nvidia.com>, smangipudi@nvidia.com, 
+	kyarlagadda@nvidia.com, linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v5 1/3] spi: tegra210-quad: Fix timeout handling
+Message-ID: <jzmbuiqm5usjfklqs2cmxz72j5qjvttcib6grn5visgqe37qtx@cowi4mtcvwfh>
+References: <20251028155703.4151791-1-va@nvidia.com>
+ <20251028155703.4151791-2-va@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -103,75 +80,124 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251031162004.180d5e3f@bootlin.com>
+In-Reply-To: <20251028155703.4151791-2-va@nvidia.com>
 
-On Fri, Oct 31, 2025 at 04:20:04PM +0100, Herve Codina wrote:
-> Hi Rob,
+On Tue, Oct 28, 2025 at 03:57:01PM +0000, Vishwaroop A wrote:
+> When the CPU that the QSPI interrupt handler runs on (typically CPU 0)
+> is excessively busy, it can lead to rare cases of the IRQ thread not
+> running before the transfer timeout is reached.
 > 
-> On Thu, 30 Oct 2025 09:14:48 -0500
-> Rob Herring <robh@kernel.org> wrote:
-> 
-> > On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:
-> > > A Simple Platform Bus is a transparent bus that doesn't need a specific
-> > > driver to perform operations at bus level.
-> > > 
-> > > Similar to simple-bus, a Simple Platform Bus allows to automatically
-> > > instantiate devices connected to this bus.
-> > > 
-> > > Those devices are instantiated only by the Simple Platform Bus probe
-> > > function itself.  
-> > 
-> > Don't let Greg see this... :)
-> > 
-> > I can't say I'm a fan either. "Platform bus" is a kernel thing, and the 
-> > distinction here between the 2 compatibles is certainly a kernel thing.
-> > 
-> > I think this needs to be solved within the kernel.
-> 
-> I fully agree with that.
-> 
-> > 
-> > What I previously said is define a list of compatibles to not 
-> > instantiate the child devices. This would essentially be any case having 
-> > a specific compatible and having its own driver. So if someone has 
-> > 'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if 
-> > they add a driver for "vendor,not-so-simple-bus", then they have to add 
-> > the compatible to the list in the simple-pm-bus driver. I wouldn't 
-> > expect this to be a large list. There's only a handful of cases where 
-> > "simple-bus" has a more specific compatible. And only a few of those 
-> > have a driver. A more general and complicated solution would be making 
-> > linux handle 2 (or more) drivers matching a node and picking the driver 
-> > with most specific match. That gets complicated with built-in vs. 
-> > modules. I'm not sure we really need to solve that problem.
-> 
-> Right. Let discard the "more general and complicated solution" and focus
-> on the list of compatible to avoid child devices instantiation.
-> 
-> Do you mean that, for "simple-bus" compatible we should:
->  - Remove the recursive device instantiation from of_platform_populate().
+> While handling the timeouts, any pending transfers are cleaned up and
+> the message that they correspond to is marked as failed, which leaves
+> the curr_xfer field pointing at stale memory.
 
-That may be a problem I hadn't considered. While we've solved most probe 
-ordering issues, I think some may remain. Even when of_platform_populate() 
-is called affects this. For example, I tried removing various arm32 
-of_platform_.*populate() calls which run earlier than the default call, 
-but that broke some platforms. (Looking at the list of remaining ones, I 
-fixed the at91 pinctrl/gpio drivers, but never tried to remove the 
-calls again.)
+I saw something similar on one of my hosts, and I debugged it, and it
+seemed similar to what you are fixing in here.
 
-Maybe this can be restricted to cases which are not recursively created 
-from the root node. Not sure how we detect that. Perhaps no OF_POPULATED 
-flag on the parent node? Or we could just enable this for OF_DYNAMIC 
-nodes? That should be sufficient for your usecase.
+Just sharing what I got while debugging this, in case this is useful:
 
-I would like to solve this more generally though. So we could try it in 
-kernelci and/or linux-next and see what happens.
+	UBSAN: shift-out-of-bounds in drivers/spi/spi-tegra210-quad.c:385:25
+	shift exponent 198 is too large for 32-bit type 'u32' (aka 'unsigned int')
+	CPU: 0 UID: 0 PID: 883 Comm: irq/43-NVDA1513 Tainted: G        W   E    N  6.16.1 #1 PREEMPT(none)
+	Tainted: [W]=WARN, [E]=UNSIGNED_MODULE, [N]=TEST
+	Hardware name: Quanta JAVA ISLAND PVT 29F0EMAZ049/Java Island, BIOS F0EJ3A14 09/02/2025
+	Call trace:
+	show_stack+0x1c/0x30 (C)
+	dump_stack_lvl+0x38/0xb0
+	dump_stack+0x14/0x1c
+	__ubsan_handle_shift_out_of_bounds+0x24c/0x2c0
+	tegra_qspi_isr_thread+0x1cc8/0x1e60 [spi_tegra210_quad]
+	irq_thread_fn+0x80/0x108
+	irq_thread+0x158/0x258
+	kthread+0x3fc/0x530
+	ret_from_fork+0x10/0x20
+	---[ end trace ]---
 
->  - In simple-bus probe(), check the device we probe against the
->    'no_instantiate_children' list
->       - If it matches, do not instantiate chidren
->       - If it doesn't match instantiate children
+	------------[ cut here ]------------
+	UBSAN: shift-out-of-bounds in drivers/spi/spi-tegra210-quad.c:397:20
+	shift exponent 32 is too large for 32-bit type 'u32' (aka 'unsigned int')
+	CPU: 0 UID: 0 PID: 883 Comm: irq/43-NVDA1513 Tainted: G        W   E    N  6.16.1 #1 PREEMPT(none)
+	Tainted: [W]=WARN, [E]=UNSIGNED_MODULE, [N]=TEST
+	Hardware name: Quanta JAVA ISLAND PVT 29F0EMAZ049/Java Island, BIOS F0EJ3A14 09/02/2025
+	Call trace:
+	show_stack+0x1c/0x30 (C)
+	dump_stack_lvl+0x38/0xb0
+	dump_stack+0x14/0x1c
+	__ubsan_handle_shift_out_of_bounds+0x24c/0x2c0
+	tegra_qspi_isr_thread+0xc90/0x1e60 [spi_tegra210_quad]
+	irq_thread_fn+0x80/0x108
+	irq_thread+0x158/0x258
+	kthread+0x3fc/0x530
+	ret_from_fork+0x10/0x20
 
-Right.
+	---[ end trace ]---
 
-Rob
+and then KASAN and a kernel crash.
+
+	BUG: KASAN: vmalloc-out-of-bounds in tegra_qspi_isr_thread+0xce8/0x1e60 [spi_tegra210_quad]
+	Write of size 1 at addr ffff8000db950000 by task irq/43-NVDA1513/883
+
+	CPU: 0 UID: 0 PID: 883 Comm: irq/43-NVDA1513 Tainted: G        W   E    N  6.16.1-0_fbk0_debug_rc20_0_g977c20cb5846 #1 PREEMPT(none)
+	Tainted: [W]=WARN, [E]=UNSIGNED_MODULE, [N]=TEST
+	Hardware name: Quanta JAVA ISLAND PVT 29F0EMAZ049/Java Island, BIOS F0EJ3A14 09/02/2025
+	Call trace:
+	show_stack+0x1c/0x30 (C)
+	dump_stack_lvl+0x38/0xb0
+	print_report+0x164/0x6d8
+	kasan_report+0xcc/0x128
+	__asan_report_store1_noabort+0x1c/0x28
+	tegra_qspi_isr_thread+0xce8/0x1e60 [spi_tegra210_quad]
+	irq_thread_fn+0x80/0x108
+	irq_thread+0x158/0x258
+	kthread+0x3fc/0x530
+	ret_from_fork+0x10/0x20
+
+	The buggy address belongs to a 1-page vmalloc region starting at 0xffff8000db940000 allocated at copy_process+0x258/0x28d8
+	Memory state around the buggy address:
+	ffff8000db94ff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	ffff8000db94ff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	>ffff8000db950000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+			^
+	ffff8000db950080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+	ffff8000db950100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+	==================================================================
+	Unable to handle kernel paging request at virtual address ffff8000db950000
+	KASAN: probably user-memory-access in range [0x00000006dca80000-0x00000006dca80007]
+	Mem abort info:
+	ESR = 0x0000000096000047
+	EC = 0x25: DABT (current EL), IL = 32 bits
+	SET = 0, FnV = 0
+	EA = 0, S1PTW = 0
+	FSC = 0x07: level 3 translation fault
+	Data abort info:
+	ISV = 0, ISS = 0x00000047, ISS2 = 0x00000000
+	CM = 0, WnR = 1, TnD = 0, TagAccess = 0
+	GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+
+
+	 pstate: 234010c9 (nzCv daIF +PAN -UAO +TCO +DIT +SSBS BTYPE=--)
+	 pc : tegra_qspi_isr_thread+0xcc0/0x1e60 [spi_tegra210_quad]
+	 lr : tegra_qspi_isr_thread+0xce8/0x1e60 [spi_tegra210_quad]
+	 x26: 0000000000000001 x25: 0000000000000028 x24: ffff8000db94ffff
+	 x23: ffff0000d16b0918 x22: 0000000000000040 x21: 000000000000003a
+	 x20: ffff8000db94ffff x19: ffff0000d16b08c0 x18: 0000000000000001
+	 x17: 3d3d3d3d3d3b2d2c x16: 3d3d3d3d3d3b2d2c x15: 0000000000000001
+	 x14: 1ffff00010bfce80 x13: 0000000000000000 x12: 0000000000000000
+	 x11: ffff700010bfce81 x10: 0000000000000019 x9 : 0000000000000000
+	 x8 : 0000000000000000 x7 : 0000000000000001 x6 : 0000000000000001
+	 x5 : ffff8000b49cf8e0 x4 : ffff800084e7b140 x3 : ffff8000801bbd8c
+	 x2 : 0000000000000001 x1 : 0000000000000008 x0 : 0000000000000001
+	 Call trace:
+	  tegra_qspi_isr_thread+0xcc0/0x1e60 [spi_tegra210_quad] (P)
+	  irq_thread_fn+0x80/0x108
+	  irq_thread+0x158/0x258
+	  kthread+0x3fc/0x530
+	  ret_from_fork+0x10/0x20
+	 Code: 540001aa 1ad92768 f85f83aa 6b1a039f (383a6b08)
+	 ---[ end trace 0000000000000000 ]---
+	 Kernel panic - not syncing: Oops: Fatal exception
+	 SMP: stopping secondary CPUs
+	 Kernel Offset: disabled
+	 CPU features: 0x2000,000003c0,62534ca1,5467fea7
+	 Memory Limit: none
 
