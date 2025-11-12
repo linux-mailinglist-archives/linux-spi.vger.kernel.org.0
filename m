@@ -1,214 +1,183 @@
-Return-Path: <linux-spi+bounces-11179-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11180-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 169E4C540C8
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 20:03:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7F65C54240
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 20:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B6BC3345CA8
-	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 19:03:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 776803446AA
+	for <lists+linux-spi@lfdr.de>; Wed, 12 Nov 2025 19:30:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A1C34A77D;
-	Wed, 12 Nov 2025 19:03:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD45F34DB6E;
+	Wed, 12 Nov 2025 19:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwBqUvx9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="szv3xAGH"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C32E34A773;
-	Wed, 12 Nov 2025 19:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A414134EEFD
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 19:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762974181; cv=none; b=Oj1gK/b1DjZ12zh5hQX6fhPeRuRKTBTysEvRf2hcwvBwzosNBUzIX2V2XVUlMqsyct/b4eWJb1mLMUeeAFLVX94u5TANiPGv4AOmq0H9bgiblkjaR4pVPGn8eSaP4RnxedsKJE9vEPc9/9w+V09p8g9HYLzodKsBYBDFu515unw=
+	t=1762975764; cv=none; b=e3XRdSqbr/TorSlOwQYo/NV0t4Ar+9ningLmcYnwzU6d3syZ5CKyusnTIc5LOeCYDEoRTYHtK9Eg6VUZytrZVZlBQuIO7argsRaVzfmBcme7jWZsFJwg2VbauwZCZHJRuJNUSv8bgzW5kjxftFjLPtv9g7mIF/1QRnTXoOqzZtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762974181; c=relaxed/simple;
-	bh=1Hnaxo29Dy7cVIVxRydEj2hiQd0dJIsbq/8zl5Hej/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oykuKLD6eOQWBKSz3FffTgnOCUDWY61wiDZiW+VE1ZSrurE2UBFgC26EdssX0t4aRhmeR3g0S0Aj5mfDV+yIJKDXjHJEpJ/PUAoNM8eZfaVEhZKhrGESLuEkvLmvDlHOZ4/uAksraixIehNB6QAo32jKO945nZ+Gk4dZLxRlrpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwBqUvx9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B9CC16AAE;
-	Wed, 12 Nov 2025 19:02:58 +0000 (UTC)
+	s=arc-20240116; t=1762975764; c=relaxed/simple;
+	bh=cBs5VsCM5bkQCwAVcWEWV1HKeCFrZdeAh6gx6vjF0Ps=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ru6qZc81xyYbl7+8QU94jnbivuxnuUGkQsf7ZIItin/YziWaA+5eTkNtBtMF/iSbVyVIs21NrPB+iGRHiFdvM6nSo4SwKSfZV9aeozCszmKbBHDqq8lyGQvPcr7Gy1LOQmwmjp3SzHklBTd6Iv6cmIJ13OIHAA7GLvOUj5WdNIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=szv3xAGH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6484AC4AF0B
+	for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 19:29:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762974180;
-	bh=1Hnaxo29Dy7cVIVxRydEj2hiQd0dJIsbq/8zl5Hej/k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uwBqUvx9n+tcFB9dxupwaf6Vq2VTmB3OugWBqw8vhoUUlJcjNHYrADdGWs0LOXt4y
-	 K6SDqq458mtrA02JkufMw4LwiIj9OAtjHA0rhbhTRX8ExWNBSS3I9RqLGKBflJpXEq
-	 4IHMlc/Ek8Ewc9ZZoLpWZn3nGlXIfBZS2vzJ30t1n6ZQDXcqXtIOfg6/iQGQ6367b4
-	 qfpm3mwkykRlewUArBGtO7ROXC3oSQUOW77sN0cVXhrTuRnKurUBShuqmsWvUhQaVK
-	 se3C/radIZdvDN4ZqGYDvdPVdfOElH3ClmD1Q4Z7Jq7qtfuQWQctn2BrpIMMIQQhqc
-	 QKGRHfgtTTGdA==
-Date: Wed, 12 Nov 2025 19:02:56 +0000
-From: Conor Dooley <conor@kernel.org>
-To: CL Wang <cl634@andestech.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tim609@andestech.com
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add support for ATCSPI200 SPI
- controller
-Message-ID: <20251112-reoccur-quill-2144810ce062@spud>
-References: <20251112034724.1977630-1-cl634@andestech.com>
- <20251112034724.1977630-2-cl634@andestech.com>
+	s=k20201202; t=1762975764;
+	bh=cBs5VsCM5bkQCwAVcWEWV1HKeCFrZdeAh6gx6vjF0Ps=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=szv3xAGH5agPEKMl9f7UkYYhRkgqB9AKS9v5496ledDdhmin+wBReWGI/iRlnpyNh
+	 HbYV6ylofcN/goxA5r50ITFCx+VPTD/XMpI2F+HTqWiVmXb4Ba/WsGQCub3AicyInu
+	 Ow8oG5q2NYNmka0aHseXh9DODZAbXJhxzKQn2f73gxSmsRUPvvLd8anRteQ9sj444E
+	 /Mlx1OFvwWRhC3fmxGHHwnyMo6Hor+kqovSGQ/g/qG38H4WqSasIzCVRFPRQ6h+h2M
+	 RQDZlilfFhJd8BVjaxhYZ0q9NyXQ9nvv3D3ovq7RmI7DOt7/d/Xw+wRa1dkg9PJaol
+	 ZbIunWXzgsM/A==
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6419e6dab7fso12909a12.2
+        for <linux-spi@vger.kernel.org>; Wed, 12 Nov 2025 11:29:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXLoiCLCa20JQfoEdHWGyRlB3DCr/j4T+5hb7GgoD1dEYYfPad3V7QTpEWcGz/3tbx9OEfA5drfovs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXrgVD70UqtdYUTgtNOact/Mn36XnSr4Cp1dDrF5RIrcNQQlxo
+	iNm8dwIGqQLZVmvBYeDW4ckiNJrxAHFbGXt1vtv9wsMLvq/iP+cu0hzl0CI/h3hFPJGIGuu4uH7
+	tzWnngwx25l8kuv5RQ4ky9hxHG/ztOg==
+X-Google-Smtp-Source: AGHT+IHHsq6g1iGPfNpj/BGp5eL9w+14A+MEbPOCADp6BJOBMQBWxT0j5cv1w9FevsaSK63J53W6goPTLfg5SnHB+/k=
+X-Received: by 2002:a05:6402:34ce:b0:63b:ef0e:dfa7 with SMTP id
+ 4fb4d7f45d1cf-6431a4bfc9cmr3902960a12.6.1762975760981; Wed, 12 Nov 2025
+ 11:29:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xzPhLzXmE0GbsSLU"
-Content-Disposition: inline
-In-Reply-To: <20251112034724.1977630-2-cl634@andestech.com>
-
-
---xzPhLzXmE0GbsSLU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-6-herve.codina@bootlin.com> <20251030141448.GA3853761-robh@kernel.org>
+ <20251031162004.180d5e3f@bootlin.com> <20251112142632.GA1610836-robh@kernel.org>
+In-Reply-To: <20251112142632.GA1610836-robh@kernel.org>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 12 Nov 2025 13:29:09 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
+X-Gm-Features: AWmQ_bnvVqS34104BGAfHcYDtcOO0joqpBN-zpybKauFgaXAFRsInCQMBTqH6M4
+Message-ID: <CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
+Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 12, 2025 at 11:47:23AM +0800, CL Wang wrote:
-> Document devicetree bindings for Andes ATCSPI200 SPI controller.
->=20
-> Signed-off-by: CL Wang <cl634@andestech.com>
-> ---
->  .../bindings/spi/andestech,qilai-spi.yaml     | 84 +++++++++++++++++++
->  MAINTAINERS                                   |  6 ++
->  2 files changed, 90 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/andestech,qilai=
--spi.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/andestech,qilai-spi.ya=
-ml b/Documentation/devicetree/bindings/spi/andestech,qilai-spi.yaml
-> new file mode 100644
-> index 000000000000..db065062a2af
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/spi/andestech,qilai-spi.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/spi/andestech,qilai-spi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Andes ATCSPI200 SPI controller
+On Wed, Nov 12, 2025 at 8:26=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> On Fri, Oct 31, 2025 at 04:20:04PM +0100, Herve Codina wrote:
+> > Hi Rob,
+> >
+> > On Thu, 30 Oct 2025 09:14:48 -0500
+> > Rob Herring <robh@kernel.org> wrote:
+> >
+> > > On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:
+> > > > A Simple Platform Bus is a transparent bus that doesn't need a spec=
+ific
+> > > > driver to perform operations at bus level.
+> > > >
+> > > > Similar to simple-bus, a Simple Platform Bus allows to automaticall=
+y
+> > > > instantiate devices connected to this bus.
+> > > >
+> > > > Those devices are instantiated only by the Simple Platform Bus prob=
+e
+> > > > function itself.
+> > >
+> > > Don't let Greg see this... :)
+> > >
+> > > I can't say I'm a fan either. "Platform bus" is a kernel thing, and t=
+he
+> > > distinction here between the 2 compatibles is certainly a kernel thin=
+g.
+> > >
+> > > I think this needs to be solved within the kernel.
+> >
+> > I fully agree with that.
+> >
+> > >
+> > > What I previously said is define a list of compatibles to not
+> > > instantiate the child devices. This would essentially be any case hav=
+ing
+> > > a specific compatible and having its own driver. So if someone has
+> > > 'compatible =3D "vendor,not-so-simple-bus", "simple-bus"', when and i=
+f
+> > > they add a driver for "vendor,not-so-simple-bus", then they have to a=
+dd
+> > > the compatible to the list in the simple-pm-bus driver. I wouldn't
+> > > expect this to be a large list. There's only a handful of cases where
+> > > "simple-bus" has a more specific compatible. And only a few of those
+> > > have a driver. A more general and complicated solution would be makin=
+g
+> > > linux handle 2 (or more) drivers matching a node and picking the driv=
+er
+> > > with most specific match. That gets complicated with built-in vs.
+> > > modules. I'm not sure we really need to solve that problem.
+> >
+> > Right. Let discard the "more general and complicated solution" and focu=
+s
+> > on the list of compatible to avoid child devices instantiation.
+> >
+> > Do you mean that, for "simple-bus" compatible we should:
+> >  - Remove the recursive device instantiation from of_platform_populate(=
+).
+>
+> That may be a problem I hadn't considered. While we've solved most probe
+> ordering issues, I think some may remain. Even when of_platform_populate(=
+)
+> is called affects this. For example, I tried removing various arm32
+> of_platform_.*populate() calls which run earlier than the default call,
+> but that broke some platforms. (Looking at the list of remaining ones, I
+> fixed the at91 pinctrl/gpio drivers, but never tried to remove the
+> calls again.)
+>
+> Maybe this can be restricted to cases which are not recursively created
+> from the root node. Not sure how we detect that. Perhaps no OF_POPULATED
+> flag on the parent node? Or we could just enable this for OF_DYNAMIC
+> nodes? That should be sufficient for your usecase.
 
-Is this a spi controller or a qspi controller?
+Thinking a bit more about this, I think you don't have to do anything.
+If child nodes already got populated, calling of_platform_populate() a
+second time is essentially a nop. And for cases you care about, that
+wouldn't have happened. Of course, I'd still rather there only be 1
+path that devices could have been instantiated.
 
-> +
-> +maintainers:
-> +  - CL Wang <cl634@andestech.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: andestech,qilai-spi
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  num-cs:
-> +    description: Number of chip selects supported
-> +    maxItems: 1
-> +
-> +  dmas:
-> +    items:
-> +      - description: Transmit FIFO DMA channel
-> +      - description: Receive FIFO DMA channel
-> +
-> +  dma-names:
-> +    items:
-> +      - const: spi_tx
-> +      - const: spi_rx
-
-Drop the "spi_", since it's obvious that it belongs to this controller.
-
-> +
-> +patternProperties:
-> +  "@[0-9a-f]+$":
-> +    type: object
-> +    additionalProperties: true
-> +
-> +    properties:
-> +      spi-rx-bus-width:
-> +        enum: [1, 4]
-> +
-> +      spi-tx-bus-width:
-> +        enum: [1, 4]
-> +
-> +allOf:
-> +  - $ref: spi-controller.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - dmas
-> +  - dma-names
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    soc {
-> +      #address-cells =3D <2>;
-> +      #size-cells =3D <2>;
-> +
-> +      spi@f0b00000 {
-> +        compatible =3D "andestech,qilai-spi";
-> +        reg =3D <0x0 0xf0b00000 0x0 0x1000>;
-> +        #address-cells =3D <1>;
-> +        #size-cells =3D <0>;
-> +        clocks =3D <&clk_spi>;
-> +        dmas =3D <&dma0 0>, <&dma0 1>;
-> +        dma-names =3D "spi_tx", "spi_rx";
-> +
-> +        flash@0 {
-> +          compatible =3D "jedec,spi-nor";
-> +          reg =3D <0x0>;
-> +          spi-tx-bus-width =3D <0x4>;
-> +          spi-rx-bus-width =3D <0x4>;
-> +          spi-cpol;
-> +          spi-cpha;
-> +        };
-> +      };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index dd99c073a369..55e31996df03 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1803,6 +1803,12 @@ S:	Supported
->  F:	drivers/clk/analogbits/*
->  F:	include/linux/clk/analogbits*
-> =20
-> +ANDES ATCSPI200 SPI DRIVER
-> +M:	CL Wang <cl634@andestech.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/spi/andestech,qilai-spi.yaml
-
-> +F:	drivers/spi/spi-atcspi200.c
-
-This driver does not exist at this point, so you shouldn't be adding it
-here.
-Cheers,
-Conor.
-
-pw-bot: changes-requested
-
---xzPhLzXmE0GbsSLU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRTZ4AAKCRB4tDGHoIJi
-0mflAP45qBJuvC80YTD6TaMmeF1EldcTaijV8NjDdZO69/NZJgEAqK7EY4VTCmC5
-nyvWFeTNANBXPfsSi0OVqnqqlpov3Qs=
-=hAZh
------END PGP SIGNATURE-----
-
---xzPhLzXmE0GbsSLU--
+Rob
 
