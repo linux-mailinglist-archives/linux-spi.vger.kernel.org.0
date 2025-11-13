@@ -1,31 +1,31 @@
-Return-Path: <linux-spi+bounces-11183-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11185-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE839C566AD
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Nov 2025 09:58:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A637C566B6
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Nov 2025 09:59:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D9CA4E95A7
-	for <lists+linux-spi@lfdr.de>; Thu, 13 Nov 2025 08:55:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9C443BABB9
+	for <lists+linux-spi@lfdr.de>; Thu, 13 Nov 2025 08:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76254337BA3;
-	Thu, 13 Nov 2025 08:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB9933AD8A;
+	Thu, 13 Nov 2025 08:53:44 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5173C33469F;
-	Thu, 13 Nov 2025 08:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FA033893A;
+	Thu, 13 Nov 2025 08:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763024020; cv=none; b=H8jloRtI0SvhZVzFJ4sd7re95EzzcfxX82Qqb1aKCbti3uuDjCgvlocH95cBTndC1fCtxkL+OQj7BwXaxGxH8gzBJ/gX2vihZZRqtB4rbD4x2GxtkDXKLFg9A8R+S3rLCzwTo8jMqSa3n35FQQpL8477liVANkjcVLxKGWAWjbU=
+	t=1763024024; cv=none; b=dlI3dsI0F/qHMMKusKA1mFxtOdzI+kDGblMwJFVkc863VfKJ/zGavSwobvg0jKRmiKWRgeedh5kRDupNm0LSBewnXht6ip2xfRMH381wQEa3/CRVjASPeGCRtTYuaG01nDN/pUnRyQVglw+1wGfJ5cqatS0CtkD+O0vaYZAZMUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763024020; c=relaxed/simple;
-	bh=tG6vMr2hoVhOuJo5jJ8pdXV4N6JEO7x1fI9tJOFgxrk=;
+	s=arc-20240116; t=1763024024; c=relaxed/simple;
+	bh=WYasyDutiN9J04g4w7tsx80DcE2lP79ppqoN5EAnPH8=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=av7ws5EdcrBaf/m4sBrUgLJ+9RjxGUvZcjQ6es49HrDU/jTsy3LxOEKN0k+YFAyqafhBLVm48VQoLyCW4m+VO5tpm82a+84Xm0XZ4yYHbkRRHGD9D+xJJn1DVI3mqjveih854WfLzy09LVq5ROIk6spDTYgd5Aq/5aNXyAgcLLY=
+	 MIME-Version:Content-Type; b=ACZFHVQjz16H1FN0eijIlz4pL66CDn9BNpderoZHbOzeDgIt0n9y89l16gMHp1oscarOo5d5NsvDd7D0SZPuNScRVsU3sGLmJ4IgSd49qoYv4NfRJi9XqdaMfQkou2ooYgMkvxRJl0eH9W/xWUpAE4/+OFfghb5fMRidxBAvbTU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -43,9 +43,9 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
 	<linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
 	<linux-spi@vger.kernel.org>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH 1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
-Date: Thu, 13 Nov 2025 16:53:29 +0800
-Message-ID: <20251113085332.89688-2-chin-ting_kuo@aspeedtech.com>
+Subject: [PATCH 3/4] spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit platforms
+Date: Thu, 13 Nov 2025 16:53:31 +0800
+Message-ID: <20251113085332.89688-4-chin-ting_kuo@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251113085332.89688-1-chin-ting_kuo@aspeedtech.com>
 References: <20251113085332.89688-1-chin-ting_kuo@aspeedtech.com>
@@ -58,35 +58,108 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add AST2700 to the list of supported SoCs in the ASPEED FMC/SPI bindings.
+Update bus address types from u32 to phys_addr_t to support systems with
+64-bit memory address space. This change ensures compatibility with
+upcoming SoCs that extend the system bus beyond 32-bit, while maintaining
+support for existing platforms.
 
 Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 ---
- Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/spi/spi-aspeed-smc.c | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-index 57d932af4506..80e542624cc6 100644
---- a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-+++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-@@ -12,7 +12,7 @@ maintainers:
+diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
+index 4163632fed8b..d1a8bdf6d540 100644
+--- a/drivers/spi/spi-aspeed-smc.c
++++ b/drivers/spi/spi-aspeed-smc.c
+@@ -82,9 +82,10 @@ struct aspeed_spi_data {
+ 	u32	hdiv_max;
+ 	u32	min_window_size;
  
- description: |
-   This binding describes the Aspeed Static Memory Controllers (FMC and
--  SPI) of the AST2400, AST2500 and AST2600 SOCs.
-+  SPI) of the AST2400, AST2500, AST2600 and AST2700 SOCs.
+-	u32 (*segment_start)(struct aspeed_spi *aspi, u32 reg);
+-	u32 (*segment_end)(struct aspeed_spi *aspi, u32 reg);
+-	u32 (*segment_reg)(struct aspeed_spi *aspi, u32 start, u32 end);
++	phys_addr_t (*segment_start)(struct aspeed_spi *aspi, u32 reg);
++	phys_addr_t (*segment_end)(struct aspeed_spi *aspi, u32 reg);
++	u32 (*segment_reg)(struct aspeed_spi *aspi, phys_addr_t start,
++			   phys_addr_t end);
+ 	int (*adjust_window)(struct aspeed_spi *aspi);
+ 	u32 (*get_clk_div)(struct aspeed_spi_chip *chip, u32 hz);
+ 	int (*calibrate)(struct aspeed_spi_chip *chip, u32 hdiv,
+@@ -97,7 +98,7 @@ struct aspeed_spi {
+ 	const struct aspeed_spi_data	*data;
  
- allOf:
-   - $ref: spi-controller.yaml#
-@@ -20,6 +20,8 @@ allOf:
- properties:
-   compatible:
-     enum:
-+      - aspeed,ast2700-fmc
-+      - aspeed,ast2700-spi
-       - aspeed,ast2600-fmc
-       - aspeed,ast2600-spi
-       - aspeed,ast2500-fmc
+ 	void __iomem		*regs;
+-	u32			 ahb_base_phy;
++	phys_addr_t		 ahb_base_phy;
+ 	u32			 ahb_window_size;
+ 	u32			 num_cs;
+ 	struct device		*dev;
+@@ -484,9 +485,9 @@ static int aspeed_spi_chip_set_default_window(struct aspeed_spi *aspi)
+ 	/* Assign the minimum window size to each CS */
+ 	for (cs = 0; cs < aspi->num_cs; cs++) {
+ 		aspi->chips[cs].ahb_window_size = aspi->data->min_window_size;
+-		dev_dbg(aspi->dev, "CE%d default window [ 0x%.8x - 0x%.8x ]",
+-			cs, aspi->ahb_base_phy + aspi->data->min_window_size * cs,
+-			aspi->ahb_base_phy + aspi->data->min_window_size * cs - 1);
++		dev_dbg(aspi->dev, "CE%d default window [ 0x%.9llx - 0x%.9llx ]",
++			cs, (u64)(aspi->ahb_base_phy + aspi->data->min_window_size * cs),
++			(u64)(aspi->ahb_base_phy + aspi->data->min_window_size * cs - 1));
+ 	}
+ 
+ 	/* Close unused CS */
+@@ -930,17 +931,18 @@ static void aspeed_spi_remove(struct platform_device *pdev)
+  * The address range is encoded with absolute addresses in the overall
+  * mapping window.
+  */
+-static u32 aspeed_spi_segment_start(struct aspeed_spi *aspi, u32 reg)
++static phys_addr_t aspeed_spi_segment_start(struct aspeed_spi *aspi, u32 reg)
+ {
+ 	return ((reg >> 16) & 0xFF) << 23;
+ }
+ 
+-static u32 aspeed_spi_segment_end(struct aspeed_spi *aspi, u32 reg)
++static phys_addr_t aspeed_spi_segment_end(struct aspeed_spi *aspi, u32 reg)
+ {
+ 	return ((reg >> 24) & 0xFF) << 23;
+ }
+ 
+-static u32 aspeed_spi_segment_reg(struct aspeed_spi *aspi, u32 start, u32 end)
++static u32 aspeed_spi_segment_reg(struct aspeed_spi *aspi,
++				  phys_addr_t start, phys_addr_t end)
+ {
+ 	return (((start >> 23) & 0xFF) << 16) | (((end >> 23) & 0xFF) << 24);
+ }
+@@ -952,16 +954,16 @@ static u32 aspeed_spi_segment_reg(struct aspeed_spi *aspi, u32 start, u32 end)
+ 
+ #define AST2600_SEG_ADDR_MASK 0x0ff00000
+ 
+-static u32 aspeed_spi_segment_ast2600_start(struct aspeed_spi *aspi,
+-					    u32 reg)
++static phys_addr_t aspeed_spi_segment_ast2600_start(struct aspeed_spi *aspi,
++						    u32 reg)
+ {
+ 	u32 start_offset = (reg << 16) & AST2600_SEG_ADDR_MASK;
+ 
+ 	return aspi->ahb_base_phy + start_offset;
+ }
+ 
+-static u32 aspeed_spi_segment_ast2600_end(struct aspeed_spi *aspi,
+-					  u32 reg)
++static phys_addr_t aspeed_spi_segment_ast2600_end(struct aspeed_spi *aspi,
++						  u32 reg)
+ {
+ 	u32 end_offset = reg & AST2600_SEG_ADDR_MASK;
+ 
+@@ -973,7 +975,7 @@ static u32 aspeed_spi_segment_ast2600_end(struct aspeed_spi *aspi,
+ }
+ 
+ static u32 aspeed_spi_segment_ast2600_reg(struct aspeed_spi *aspi,
+-					  u32 start, u32 end)
++					  phys_addr_t start, phys_addr_t end)
+ {
+ 	/* disable zero size segments */
+ 	if (start == end)
 -- 
 2.34.1
 
