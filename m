@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-11213-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11214-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565D6C5D366
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 14:01:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B782C5D381
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 14:03:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BC51C3549F9
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 13:00:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CA78E4E72C2
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 13:01:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B532FC004;
-	Fri, 14 Nov 2025 13:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C289248896;
+	Fri, 14 Nov 2025 13:01:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWLejARv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nx3VBcYT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48686248868;
-	Fri, 14 Nov 2025 13:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA6C19E7D1;
+	Fri, 14 Nov 2025 13:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763125238; cv=none; b=rdZ/chujB6P+m3uWHHWxGJ/gXz21Jq4PaJi53ObsLnO/mHMJK8t2lukWKknE1X8BWfN7yAPeyVbooD8YqaszI/xfTq7GRrBTL/QR66MNjR3n4ST4nwjJr6Fpx3HmF388pViSi2Jlaqs+Bghi1cZ4/ooraH6R5BkKmB675+U38NI=
+	t=1763125264; cv=none; b=lv0G+jSHWdh3fNKpIHkRs1LIaqvsaHImBsKD/w5cmJxF+fadvy74UbWzcrLL+JjtP5jE0/v4OgtwBSvHgU2M3yVogZKncLLR32aok4zFqZF0qOcKKtueRbRxrLifArhLH3NKMpHMZ86rhmYrfDQt8tiNZ/Nw9A+JDsOpeuQXsHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763125238; c=relaxed/simple;
-	bh=IH/MvhFvPVihpDzYWx+FMr6Y/kBdLF8af197anV9rhI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ETKxCxVexffdMnu+B1KlSVNYgIDXRmRU4J9jx8kiPHu3bq0Laa1l484fev6oJ0RKAe0s//giQIjI/6Iriudw7KkLtkS7yifMli6fyv6dSz4c1qruaFXFoqXMoTMIHv3xHuLZnyfqgJduF4k0ULvXQLYtI8LMWH5lLGRlbzXUI6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWLejARv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DEAC113D0;
-	Fri, 14 Nov 2025 13:00:32 +0000 (UTC)
+	s=arc-20240116; t=1763125264; c=relaxed/simple;
+	bh=/XuVPWQgBgpsNlXDZY2wBT8co5xozkCjGoUGEqS+Aa4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZK3XuYvE/+OAjpA33omd+A0vkVNgMgq0x/8xC73/fNmBFYA6Z0/WveJARSYgOLc8r07uPdHhAApy7YTDbH+ZW/INMSqki7EwxASqvgLh0GjkNItJV6qkx5eUMJfH4Cxa/USjGYB+Biw8aE1a/HSYKyD8+VCedyIzaiD2sLdesAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nx3VBcYT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD94C113D0;
+	Fri, 14 Nov 2025 13:00:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763125237;
-	bh=IH/MvhFvPVihpDzYWx+FMr6Y/kBdLF8af197anV9rhI=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=sWLejARvOgm205rn3W5QH0aUxM41wplpVhi4R08CxrjS6DWrLxPveneqDbTZ8Q4Iv
-	 xhy4LMQCsdn708JtpN1ukhGdjE+2vvGxUdazHCsk18EW+MVi/8mlccphI7fex8qj/Y
-	 qtZ6wwe4okpVV9b1jqgrfRqyMSGBFXp/rAv0s8mFYEeO09es14Dcedph6JqAQDTP9u
-	 kbnzpmH5j30fdQzz4tHWsQiL/BK7quyvLwAcUdGSkyUZ6oZbXZ6pcPHFclcrctxd5h
-	 Xucl+PQYIqsmXZF5DefQwDEkk0IhfLN3n47boWlAmEYkRTJT+uWOcFFyFpSWRRyLpE
-	 OL6ClH9FzB7gw==
-Message-ID: <403e924c-e331-4714-8ddb-738245f5b7e2@kernel.org>
-Date: Fri, 14 Nov 2025 14:00:31 +0100
+	s=k20201202; t=1763125263;
+	bh=/XuVPWQgBgpsNlXDZY2wBT8co5xozkCjGoUGEqS+Aa4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Nx3VBcYTe+9XK17/2caq6ArtapMcz0OCtXiMESRjx8vFi/NilkvxM4wDJTS6DKqxe
+	 XlBa6JkcX7VGgJ6oujtyOUDJoypLbHVqwBY9rSgpUSrkoWaED2ZQT3gpX7t3JY8C3e
+	 7w74HDcplGlcyRc6aQ1yJ03t2Pi18aE6uSYTg8VOrMVh+IanI3/18ThcBYoupBh8UJ
+	 2ydkLq6BQZ5JiQVD/OgIiiyHifFvuMGkxdgnrqI2JS9mRpsoAuRWfV00X78LUMRuW+
+	 9LI6935XXcZ1ThpfeP6gLPOqzssXp506tD2+6PwYo648onEu9YpPJbzYUlNXB8ZgCk
+	 huAnAQMS2gykA==
+Message-ID: <3f0ac444-b2c4-44fc-ad2b-33ddd98fe251@kernel.org>
+Date: Fri, 14 Nov 2025 14:00:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,9 +50,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] dt-bindings: trivial-devices: add arduino spi mcu
- interface
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 4/6] dt-bindings: arm: qcom: Add arduino imola, UnoQ
+ codename
 To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
  konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, broonie@kernel.org
@@ -64,8 +63,8 @@ Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
  linux-spi@vger.kernel.org, m.facchin@arduino.cc,
  Riccardo Mereu <r.mereu@arduino.cc>
 References: <20251114121853.16472-1-r.mereu@arduino.cc>
- <20251114121853.16472-3-r.mereu@arduino.cc>
- <fe924688-45b4-4d5d-9aa2-47e4d5240658@kernel.org>
+ <20251114121853.16472-5-r.mereu@arduino.cc>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -110,37 +109,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <fe924688-45b4-4d5d-9aa2-47e4d5240658@kernel.org>
+In-Reply-To: <20251114121853.16472-5-r.mereu@arduino.cc>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 14/11/2025 13:58, Krzysztof Kozlowski wrote:
-> On 14/11/2025 13:18, Riccardo Mereu wrote:
->> Add spidev item in order to describe in Arduino boards one of the
+On 14/11/2025 13:18, Riccardo Mereu wrote:
+> Document Arduino imola, UnoQ codename.
+> Arduino UnoQ combines Qualcomm Dragonwing™ QRB2210 microprocessor
+> with STMicroelectronics STM32U585 microcontroller.
 > 
-> Please drop "spidev item", because there is no such hardware as spidev.
-> It's Linuxism and its appearance in bindings only creates confusion for
-> further submissions (which are rejected...).
-> 
-> Please explain here the hardware, which in this context is the
-> connection between Arduino and Linux. You received comments that this is
-> not a trivial device, so please bring the hardware description which
-> will prove it is indeed a trivial device. Why don't you need supplies
-> for example?
+> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> ---
 
-... plus some hardware details on that MCU, e.g. its processor or to
-which SPI controller it is wired on the board.
 
-> 
-> Placeholders for spidev are not allowed, so you have entire commit msg
-> to convince us that you are doing something else.
-> 
-> I already asked for that so I won't be repeating again at v3.
-> 
-> 
-> Best regards,
-> Krzysztof
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
