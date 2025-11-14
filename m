@@ -1,30 +1,31 @@
-Return-Path: <linux-spi+bounces-11193-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11194-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78845C5C818
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 11:16:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5590C5C858
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 11:19:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4502A35D210
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 10:10:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E0AE34FAB8D
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 10:11:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AB313A258;
-	Fri, 14 Nov 2025 10:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E4430E856;
+	Fri, 14 Nov 2025 10:10:56 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3FA30AAC1;
-	Fri, 14 Nov 2025 10:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7912230C612;
+	Fri, 14 Nov 2025 10:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763115054; cv=none; b=qHaShp5XQlLFm3Hxf06UFv7riRy26TGL53KGlHCqFveo/lvCHurpzyaVFPmnNYc30TbYDXqC0D+rntAFvwTj2XmA8z6RBVqxuh7jaMjl+D4ycoOU6L8MRPJeYjaVO2Lix8IrNg/tdqkh0MmD3n+u7RGuDhHIZgM41znzE/Z+f2g=
+	t=1763115056; cv=none; b=sBsnN394/Fa4Ak4tg6Zz5dB/Nr4UVMXCp9iVw4i6XszPAvzRC358MaRE9ac+55KjfLlHUGjYch5X/xgaEfknR8T0z7F8iXCpI/jWjZPjD7HvlGG5ruNb8sDQtWGOjlOlrmq1r0EextvwK1aQS8ipNdRrgvmuFeb5fGw80ZN2msE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763115054; c=relaxed/simple;
-	bh=+SwaqD8Es6cBCi/E/K42IKpSZxBowjUGjaQu61NX95w=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qaHVuCl3zMlu4fnguchipzzNhsGE+K29tl0t6Clnj0mrXSk0jEnvmpAdTS/MXy7WLewyCP37UtCRTGeP4rflUgS4KmSkHSe7Z9oK6MYxgIedbGaR6tRTCkXiY6wDUtbibQTFQ4gYXmYUp+nnwxTA5YiOcOefTiY4oVKE2rFj4Ic=
+	s=arc-20240116; t=1763115056; c=relaxed/simple;
+	bh=KMnliyZQCR7HQD6k1yLADQalxUxMfja7aEXAPjdWxso=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TAEywz0SW0j3twIKV1jXw/E3mHlpwn/c1JogYGJ8sTGSyS7/e1yfm6phI5Q0HqE1SJpygfJ4rwWGSavS0/ZZnUHh8nHQB3WvxrKqC/i8ddYOOmQ7oGVexTgZlTRKkU4t25BZfdef9qRO8P7qnS2qpZCU4/kr/uiCb94XB4NQs/Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -42,10 +43,13 @@ To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
 	<linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
 	<linux-spi@vger.kernel.org>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 0/4] spi: aspeed: Add AST2700 SoC support and Quad SPI handling update
-Date: Fri, 14 Nov 2025 18:10:38 +0800
-Message-ID: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
+CC: Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v2 1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
+Date: Fri, 14 Nov 2025 18:10:39 +0800
+Message-ID: <20251114101042.1520997-2-chin-ting_kuo@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
+References: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -55,28 +59,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-This series adds AST2700 support to the ASPEED FMC/SPI driver and
-bindings, introduces 64-bit address compatibility, and improves
-Quad SPI page programming behavior. It also implements AST2700-specific
-segment logic, where range adjustment is not required because the
-AST2700 SPI hardware controller already fixes decoding issues on
-the existing platforms and adopts an updated scheme.
+Add AST2700 to the list of supported SoCs in the ASPEED FMC/SPI bindings.
+AST2700 FMC/SPI controllers are not compatible with AST2600 due to the
+following hardware differences:
 
-Changes in v2:
-  - Some differences between AST2600 and AST2700 are described in
-    commit message of the dt-bindings patch.
+- Address decoding unit uses 64KB granularity (AST2600 uses 1MB).
+- Segment register semantics are changed.
+    AST2600: start <= range <= end
+    AST2700: start <= range < end
+- Hardware limitations in AST2600 address decoding registers have been
+  resolved in AST2700, so extra callback function used for bug fixup
+  is no longer required.
 
-Chin-Ting Kuo (4):
-  dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
-  spi: aspeed: Enable Quad SPI mode for page program
-  spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit
-    platforms
-  spi: aspeed: Add support for the AST2700 SPI controller
+These differences require distinct compatible strings for AST2700.
 
- .../bindings/spi/aspeed,ast2600-fmc.yaml      |   4 +-
- drivers/spi/spi-aspeed-smc.c                  | 107 +++++++++++++++---
- 2 files changed, 95 insertions(+), 16 deletions(-)
+Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+index 57d932af4506..80e542624cc6 100644
+--- a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
++++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
+@@ -12,7 +12,7 @@ maintainers:
+ 
+ description: |
+   This binding describes the Aspeed Static Memory Controllers (FMC and
+-  SPI) of the AST2400, AST2500 and AST2600 SOCs.
++  SPI) of the AST2400, AST2500, AST2600 and AST2700 SOCs.
+ 
+ allOf:
+   - $ref: spi-controller.yaml#
+@@ -20,6 +20,8 @@ allOf:
+ properties:
+   compatible:
+     enum:
++      - aspeed,ast2700-fmc
++      - aspeed,ast2700-spi
+       - aspeed,ast2600-fmc
+       - aspeed,ast2600-spi
+       - aspeed,ast2500-fmc
 -- 
 2.34.1
 
