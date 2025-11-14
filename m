@@ -1,236 +1,204 @@
-Return-Path: <linux-spi+bounces-11190-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11191-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E58A0C5ADD6
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 02:00:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AD74C5BCB8
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 08:31:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9343B34370D
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 00:57:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3076B3A6F22
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 07:31:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9115022156B;
-	Fri, 14 Nov 2025 00:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DBF2F6567;
+	Fri, 14 Nov 2025 07:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="L7fn8iDG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ihh3mPg2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11022130.outbound.protection.outlook.com [52.101.126.130])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E16D218ADD;
-	Fri, 14 Nov 2025 00:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.130
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763081854; cv=fail; b=doHSZjw7YKGPKO4SLCfuFZq57ll+8x+ORyI+wc2dYHS8W645mUHrJZ+qQbAUZyvg+Fx1wy3Wf2tl+Kr92+gHMVxBkT9FBlm28Hl+5tBWK820/ibksnOpmopVHMCnpcqTfkCfhMyh4TWzkcVJW9GXWslXMwArRnQIaov9uzlKRRY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763081854; c=relaxed/simple;
-	bh=Vsx4pQWuO/9glnQ8MxntHwBnl+LIIxli4MC/BkvjzpA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=O1Bvz/G5c7k51oTONQjsA513hhzTydKhq2JRCRIYkbDiNTQeFPxLTetUN/3Mun1pOGMh/ApXqaDg2n0fJgEfi+HVWnqag5QHMHB8xEJNI0f9/UZoXDEn79ZaPoUQQXD38TFmhoOcQAmEAr30KRmfcG2yCgQcP+JY94xEQm7/c20=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=L7fn8iDG; arc=fail smtp.client-ip=52.101.126.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yNieUa/sGhcIROqKdxEywcbqyHobMy+kLGuPlTp/VYLUu/4ozh+FKKFSQz+CQLTXGMB2Wrig117XOdCn8q+lnTKXlWNV6A8dTER7rwmz8PM8jPXFSitYiVPZ+KCIbkDFFRATq3JRFqNGw/z/U/I6KA5qaoXa7FFequRwW7OrzNsp/30DFK+wtRStg7jBtmD5Kiv9KpgExHRY0GxAdMatACJVRllBV+GHMSznSQqss231xhGxrdCy/z3OqXGIGtjFM2OMkr8FPiv+lu1L0VwVWw1zCBakXf79gxlvSuQS6HbrEtjW69nBsKT/sOUP145wRCVcQLH2+fhr5ml1yyDALQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XB1E5jSDLtRO1xlxGGz6kmW4ReovcQDIGSxPxx8GKZU=;
- b=pIADS1f52NKv9Ly3EXlFmlojL+buqrlzX/wTUqg/+2QPdnGAAwDQeYTRnLeAg/giTGaSIUfgVtmu4HtKytGA5TY0DDRCHot5RwQsXayPQwqXDvbPEWCnyRcPBp07HMr1rvskxcm/T0ZLWo7vYK0akTmuCXAQz+ro+3JWryavzulACHM148RiP8b/VIc4dhwHEB8EJj7pdNQ6Y508u8zXQXHg5fvAr0P5X/3xO0H7pag1VQbMWTMt60vRDIsNLvOFP38+sgkeYqRsb7uupgCpYDP1XnArFqCYnzUFul/k/DB6yoD9N5qULQ4gIi+MxXf173qzj1ITXn2gZBG2HojgMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XB1E5jSDLtRO1xlxGGz6kmW4ReovcQDIGSxPxx8GKZU=;
- b=L7fn8iDG4OS60Y6BFWUEf4DtJOsJdsDaSPAbyOFQ/JwjqfyJSY4libWnJk1qkw6c9CK48vXyVngFJIM6mFOyfJUpZ0UkQRDE4F8UV1tZkMzjmUnG4QnJbyeHip0YmUYUUXTA8jdgT3/yY1iy/63CdmUeeMB2heNxIsCKHFknQmRjwgIdaapn9o7birhI4US9qgz7sWPn5zKCI01G+mt/q3vc78GWw7J2bAuyhCCj8GrtzVPAuztCucahc10sad7E1PY7WhXRl7Tm1LX3htpZKtzZFKryufZTPAb5XwXER1PXbdkS1mFGuEl3ahXFUjTlQjBJHfUlkIWM2Jr8mbzyyw==
-Received: from TYZPR06MB5203.apcprd06.prod.outlook.com (2603:1096:400:1f9::9)
- by TY0PR06MB5402.apcprd06.prod.outlook.com (2603:1096:400:217::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Fri, 14 Nov
- 2025 00:57:24 +0000
-Received: from TYZPR06MB5203.apcprd06.prod.outlook.com
- ([fe80::b7e4:5d25:213:ef9b]) by TYZPR06MB5203.apcprd06.prod.outlook.com
- ([fe80::b7e4:5d25:213:ef9b%3]) with mapi id 15.20.9320.013; Fri, 14 Nov 2025
- 00:57:23 +0000
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"joel@jms.id.au" <joel@jms.id.au>, "andrew@codeconstruct.com.au"
-	<andrew@codeconstruct.com.au>, "clg@kaod.org" <clg@kaod.org>,
-	"clg@redhat.com" <clg@redhat.com>, "broonie@kernel.org" <broonie@kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "openbmc@lists.ozlabs.org"
-	<openbmc@lists.ozlabs.org>, "linux-spi@vger.kernel.org"
-	<linux-spi@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH 1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC
- support
-Thread-Topic: [PATCH 1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700
- SoC support
-Thread-Index: AQHcVHsCAB7l5otGZECo6+KptV6p7bTxAJuAgABZLSA=
-Date: Fri, 14 Nov 2025 00:57:23 +0000
-Message-ID:
- <TYZPR06MB52031D72CBC176D38A71EB12B2CAA@TYZPR06MB5203.apcprd06.prod.outlook.com>
-References: <20251113085332.89688-1-chin-ting_kuo@aspeedtech.com>
- <20251113085332.89688-2-chin-ting_kuo@aspeedtech.com>
- <20251113-reroute-backlit-b2e1d1b6dc04@spud>
-In-Reply-To: <20251113-reroute-backlit-b2e1d1b6dc04@spud>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR06MB5203:EE_|TY0PR06MB5402:EE_
-x-ms-office365-filtering-correlation-id: 489a379b-f243-4fe2-b71b-08de2318c5ae
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?4I5y8HVlwKTJu/lUJksCntnWwCNDKN84k8vIuTbPNGij1IWomuqhEmpybYMo?=
- =?us-ascii?Q?NhgH1DMkZ4GPfvcXK48ttBNkee9Rt79oow91t/Kuz+Kyz99hTFajmMlN5CTQ?=
- =?us-ascii?Q?AREUlVkTpg7yu/lE31+CRURo8sjjNPYA40327/bjaQh+7hccVSYGrHHYuH3t?=
- =?us-ascii?Q?YdoygsU5TmVWja1HsJlZukqQOWv8Mu/tpMPMIDBgXiClaHKsCemfe60AxyAC?=
- =?us-ascii?Q?DFddDuo7QBRGjxrtCZgvVRva/iQnwTGAwD21cqYXbKZCiGsLB3hi/N4ITMdK?=
- =?us-ascii?Q?nxFygaGVgONm0vVHuLxz9Dpgk2fkgM1JAfSP+GO+pDFwrACbk4H1rYecw7mM?=
- =?us-ascii?Q?62rqvlE1Zb+nfDG0e6K9KU9VRK3c253xik1MFu9qd6wZUDUe5GTS/nHEOVq9?=
- =?us-ascii?Q?bGa7gcvcU2CVcISOaWdvq88GhASRG4+U0LWQLGA032G/6jEjU+lpNXnxvn5s?=
- =?us-ascii?Q?0ndLY4UK1Bblv/J4AVFIXGsUTN+oG9f5U9aMUEKXaF6JR+1XRMY2VTh2qsgT?=
- =?us-ascii?Q?P6C2LIleldT8CKM4HQ7Omy3cVBk5anNAJPS+83GjmZ8TcNs9NiUVLMMarBSH?=
- =?us-ascii?Q?SUwP1SoDJqqNhfcwoR68QmyChfBZE2MYIObWNdxWyNhgLnwNVQbdTK3iMoWP?=
- =?us-ascii?Q?CpXHZFcuBL0CSUX9ya5lmQbxHXwmRT22W+X5Ti5qt2DE4gvMyA9naw6IqNya?=
- =?us-ascii?Q?4YrH1UsfaHSn8+EHRQOQr8wMMbTdgyKRpKEQSllEahk1Bm3Mk03aWq5t5M6H?=
- =?us-ascii?Q?JdHW0ds2jfQGP2EblkKPiO+JTU/N6K+HnGIsxB3CZb31rcki7AZ7ayQnxSoj?=
- =?us-ascii?Q?O32M5gGrnBQR+WVI1ForOaR5otS/RhH6uH7G0DdjMOmkxL8rYl7xAtShmJBV?=
- =?us-ascii?Q?FVKDYbOUa6sjgoFSRbSHGFsCKaGsTVyjVsAFDU5ut5/7uDHYnZDB5J7qZXic?=
- =?us-ascii?Q?vkdHxz3cHbyMrhLLkxtKz+apgdH5Ed9LzKGTWPj3bIY98fluZdAQI0OJvjlN?=
- =?us-ascii?Q?Jfvbr5L+lf/HZ6ZppwQpG6cAL5b/S0s3qRUY4gGebzj0YH/P6j12fHPj2UfZ?=
- =?us-ascii?Q?2myLuajpC8wjYLZznoJn+DVPvw+lOIh+K4GYfYgtXbI4T1MNz3QchxsAcAbG?=
- =?us-ascii?Q?ayUdhGzprgPA8QtQMs5UiTq4EwlWsGIK8iAuWaxfpTBfw2M3wVSAU1EC9T/8?=
- =?us-ascii?Q?V3XiJOVbP8D54vKFpy4TZqwdJkAFbMdz/SZ9rsFrtgBq6XjZAtg27/lQJ4SY?=
- =?us-ascii?Q?xqVZfPnQkgbT+x9ZpcHYiBN0RaE675coK2vKapoJg9Myr4MZfzqVme2IxO7a?=
- =?us-ascii?Q?wsMNKy2AM+ZJ23Ohnk/Gwyg8NhFgUPM95Xu8TUvBXQhefLtG9BVANQEDBH3n?=
- =?us-ascii?Q?Jg+eFYVARYGJPSEnlejy1PTzi4jqiDHFJZzTDEbgSO33w3LDGFWKgK+MfgW1?=
- =?us-ascii?Q?9Q0jxgELLIs1RpuAN2QS59YjA5rJBz+wT3iSIzYZXKePz9O8zPbCoQG4AXYd?=
- =?us-ascii?Q?A4IrGoj+hjzyLsOsg8lBsSPymu6cI1is8vCd?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5203.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?JC5oc48J+EILfvZT1SiMlfZwIB9t4zOVw9UymbXjTIOE+j6dD0WTUFMj/CIX?=
- =?us-ascii?Q?am1Bzz4p95xt45NdoOwyr28dL028wPby2qV6Za64Iyw9YoeLWq4Pel3Q7DbB?=
- =?us-ascii?Q?zIEUb0Iz6GvR6EqDeI/rLWC+IJbQ9pLZjTSJU4Y+4FLiz0JO5spPf7uIiK1K?=
- =?us-ascii?Q?h1+qjt0+dURKAgWxpWgUOva9lEyIb/DeC9W2ZXD2gvTpZ+blj/0uO3yVGffU?=
- =?us-ascii?Q?jsmiod6HzG9Vggw51qF5bz6nwv7pLbEKtW12PwEowpwsgW1DgF2hUbwWL5iH?=
- =?us-ascii?Q?lp3vGsoPUCu82A0QXhLVUVYyt0r+SDcP3cbv51JSvDoUAp/jFBlkOTcc5KCv?=
- =?us-ascii?Q?HyDqI0+A2LEmpqv47E+U+p87a8bRG7iD11vDs5oBOHwbaSVR8Hbi4vV1hxDt?=
- =?us-ascii?Q?fxeI8AqjKqfH7rtAUmnonNUmb+Yw12ivFulytoMb5P/z9dGUAY69LcMYvwTN?=
- =?us-ascii?Q?z5f0XMZthc/VqaBls8UsjxmhNiqBp3PuC3nNwDOVAYBQLT22a8SqmXeryy6S?=
- =?us-ascii?Q?ejro3CgrrPEyNRyu6ETBMr12ejkUrPfvjpjsF0OhivctFDm3Er6iiFUjrUtn?=
- =?us-ascii?Q?6EbKOwN9NxnCCf9r8NYqYIcf1Ig4++jh/4Ii/bT5iyO40c81H4HcxPISVURY?=
- =?us-ascii?Q?SUX6tqiJfzPPUVfAg2tSFS6eXZ5MwwjYdLJSohHBl/kEnX4OkDZk2UGO1lNq?=
- =?us-ascii?Q?k61/ONXbrKpJJakrLnhhK67OtpzCNnsNDlQJUbpIZL/6nZTtvi17ExAOPkaQ?=
- =?us-ascii?Q?V6jOWH/VoJjQoaY7ZHqY9q3mlBJH4wWw89zkxpfZZxMpIie3D4A4y7Z6cFWN?=
- =?us-ascii?Q?t5s7OI1vNDiXaEiD9YkJBcyaRuFM1BOmagYiUyxRoD0ngzQn2PZ6aNvHC9el?=
- =?us-ascii?Q?f+5Jot1a6OOstguJmNsXqz1USGOlvi8c1Jj3u1EjKnjKf42I148/C8RFeloX?=
- =?us-ascii?Q?AEfDb06FHmRi6T84iWVuyfW6UnKak29EbzRdN8+OLX+D0Gu8hSf/Bw1Liv+I?=
- =?us-ascii?Q?e+N817ac68eS+fYfEf9yDm/DBOtfjss0fsTA7vuVBN86IH5rkGXkTKXdZhuy?=
- =?us-ascii?Q?DBfyba9QrDQGfDCXUydKdG0n6CWKBPxABm3agc74h7QX2CmNttFzbmMcocP3?=
- =?us-ascii?Q?QGPFY+BhKPTXliq/wlEJ8A8iMXqIZtwnQvwB9AwMqSJu8HRllQ7ftPvmiZXO?=
- =?us-ascii?Q?+ZQjJuuFSBoyx8IJ8Zhvc3Nse1j/kxzUJwnGYpc2hjgSCxio3FWTDK3xMAQQ?=
- =?us-ascii?Q?LCHdw3Bu9zx8uhsD6CdI/4DBPrQaJMWHvCaiUaVFKNxoI3iggbK69ti6gm8x?=
- =?us-ascii?Q?b8B4TAXGiOQiiBKg8Z+R6OWlt46N4FqvnPdcGUSQ7db2pWbxBaBd6GqHRabm?=
- =?us-ascii?Q?RSOmPGOBWWM59mzAaLwSedyePhmfPfXwCu31SzYvThiPgxPi4k59FJ3t3IbD?=
- =?us-ascii?Q?ZSbCjgPRACxRjfegAkuUgwqb/HZPKOtvP6ETtwWqu3DvTwGEoFbhKJkkUzVb?=
- =?us-ascii?Q?M/NaQ6N3mbamfK6nB1sJ4mWYpqg9We8n9BYFmcw3Isbnbvf39anHk8baW/gs?=
- =?us-ascii?Q?3Hl9pkmbZbqNgznbLxJTPZUtZxBowr9L2FXGK7zUyI+96o2NJ1rT58QVBQWz?=
- =?us-ascii?Q?/A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6706B2E7648
+	for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 07:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763105480; cv=none; b=m9DzUphYU/1Vs7MeHAhMkoG6ohgYNoXedAPGue4LNNV9LO+diG9k2VXtRVpadDlXaKuMViasTmaZX5Ms7b08TGVegPYmkiTOUfGLj7dRTLUVJxLEHOBJNqaxsUYoA+Qh/LoBMmCMUDHq7uh3mGMd9DVBDXJoaqCxWHQOWEZkddE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763105480; c=relaxed/simple;
+	bh=IxF8X1vfgVSVMfT8B2eub1WyPsdDbytWvtHeqhTmLhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bHcQIEK6/4AM+zIqvhoF1bnKY240npXMQZDDvhWLUTwEi7327xIZL4e09xOsbeVs024VgXKlFQ8CrhjYirP4oaVbGcW2ORim9u7vvYtMyMPTGCXDUSt+IzZhuwuTEWVQPhjKZK2BLzXkzVacnN43/HHMDaFR1NKcRgYg3JKKFgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ihh3mPg2; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id CDBFD1A1A97
+	for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 07:31:16 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 90B36606F6;
+	Fri, 14 Nov 2025 07:31:16 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 91780102F24BE;
+	Fri, 14 Nov 2025 08:30:58 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763105473; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=I/md1yzfYHmg4zf6NhSCwlxOr7WiJ5xSExfYcNRcf0c=;
+	b=Ihh3mPg240Inv5tK6a0y2bc6iUFXi846hUKdidOylUDZuvveWMMENdHQaSkRED6RzFOXBq
+	s3tYQSOkev+hYVQeHR4xdj9gsjCBZE4xoVzfSAK/1g2MipCnnjRB9Bkk5GjuXG3Cx7DOFw
+	kYgFKBggTQm+b9pCxa+CSSQ/ZTWCwURcGhX3PYd9ux7EBGyx/9AHjyRmK+4KGnJIGUEThM
+	qzUZSLvpXFlxbq5qUbppYDVR3bLAksRf/LYtY1SMB9VNJh0223ScvrKjeOG9M97dF0T3LW
+	uvqxAXMSPLBRG2VoFl3r/PtCN/OynUaIXjcWuLff+sSzDc+2UloAc/8A3W9eSw==
+Date: Fri, 14 Nov 2025 08:30:56 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
+ Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
+ Shyti <andi.shyti@kernel.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
+ Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
+ Helgaas <bhelgaas@google.com>, Charles Keepax
+ <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
+ <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Mark Brown <broonie@kernel.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
+ <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
+ Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>, Alison Schofield
+ <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
+ Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
+ <allan.nielsen@microchip.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 05/29] dt-bindings: bus: Add simple-platform-bus
+Message-ID: <20251114083056.31553866@bootlin.com>
+In-Reply-To: <CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	<20251015071420.1173068-6-herve.codina@bootlin.com>
+	<20251030141448.GA3853761-robh@kernel.org>
+	<20251031162004.180d5e3f@bootlin.com>
+	<20251112142632.GA1610836-robh@kernel.org>
+	<CAL_JsqJ89EcUvQnS0xYXOrw6wJ30TT5oFA85eCqHYdu43056cw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5203.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 489a379b-f243-4fe2-b71b-08de2318c5ae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2025 00:57:23.5682
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: d8tSFpCwgQuJc7E6UWVlBeEeZMd7HreS1xqvHOYl37VrammQgnANCXhgKP7MXDoNFuKAa9425ASTAskmGQl2Pg5l+s09ykoYGwYg1hGUdGA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5402
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Conor,
+Hi Rob,
 
-Thanks for the review.
+On Wed, 12 Nov 2025 13:29:09 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Friday, November 14, 2025 3:36 AM
-> Subject: Re: [PATCH 1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST270=
-0
-> SoC support
->=20
-> On Thu, Nov 13, 2025 at 04:53:29PM +0800, Chin-Ting Kuo wrote:
-> > Add AST2700 to the list of supported SoCs in the ASPEED FMC/SPI binding=
-s.
->=20
-> Please add information here as to why these devices are not compatible wi=
-th
-> the ast2600 ones. With that info,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> pw-bot: changes-requested
->=20
+> On Wed, Nov 12, 2025 at 8:26 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, Oct 31, 2025 at 04:20:04PM +0100, Herve Codina wrote:  
+> > > Hi Rob,
+> > >
+> > > On Thu, 30 Oct 2025 09:14:48 -0500
+> > > Rob Herring <robh@kernel.org> wrote:
+> > >  
+> > > > On Wed, Oct 15, 2025 at 09:13:52AM +0200, Herve Codina wrote:  
+> > > > > A Simple Platform Bus is a transparent bus that doesn't need a specific
+> > > > > driver to perform operations at bus level.
+> > > > >
+> > > > > Similar to simple-bus, a Simple Platform Bus allows to automatically
+> > > > > instantiate devices connected to this bus.
+> > > > >
+> > > > > Those devices are instantiated only by the Simple Platform Bus probe
+> > > > > function itself.  
+> > > >
+> > > > Don't let Greg see this... :)
+> > > >
+> > > > I can't say I'm a fan either. "Platform bus" is a kernel thing, and the
+> > > > distinction here between the 2 compatibles is certainly a kernel thing.
+> > > >
+> > > > I think this needs to be solved within the kernel.  
+> > >
+> > > I fully agree with that.
+> > >  
+> > > >
+> > > > What I previously said is define a list of compatibles to not
+> > > > instantiate the child devices. This would essentially be any case having
+> > > > a specific compatible and having its own driver. So if someone has
+> > > > 'compatible = "vendor,not-so-simple-bus", "simple-bus"', when and if
+> > > > they add a driver for "vendor,not-so-simple-bus", then they have to add
+> > > > the compatible to the list in the simple-pm-bus driver. I wouldn't
+> > > > expect this to be a large list. There's only a handful of cases where
+> > > > "simple-bus" has a more specific compatible. And only a few of those
+> > > > have a driver. A more general and complicated solution would be making
+> > > > linux handle 2 (or more) drivers matching a node and picking the driver
+> > > > with most specific match. That gets complicated with built-in vs.
+> > > > modules. I'm not sure we really need to solve that problem.  
+> > >
+> > > Right. Let discard the "more general and complicated solution" and focus
+> > > on the list of compatible to avoid child devices instantiation.
+> > >
+> > > Do you mean that, for "simple-bus" compatible we should:
+> > >  - Remove the recursive device instantiation from of_platform_populate().  
+> >
+> > That may be a problem I hadn't considered. While we've solved most probe
+> > ordering issues, I think some may remain. Even when of_platform_populate()
+> > is called affects this. For example, I tried removing various arm32
+> > of_platform_.*populate() calls which run earlier than the default call,
+> > but that broke some platforms. (Looking at the list of remaining ones, I
+> > fixed the at91 pinctrl/gpio drivers, but never tried to remove the
+> > calls again.)
+> >
+> > Maybe this can be restricted to cases which are not recursively created
+> > from the root node. Not sure how we detect that. Perhaps no OF_POPULATED
+> > flag on the parent node? Or we could just enable this for OF_DYNAMIC
+> > nodes? That should be sufficient for your usecase.  
+> 
+> Thinking a bit more about this, I think you don't have to do anything.
+> If child nodes already got populated, calling of_platform_populate() a
+> second time is essentially a nop. And for cases you care about, that
+> wouldn't have happened. Of course, I'd still rather there only be 1
+> path that devices could have been instantiated.
+> 
 
-Okay, some differences between AST2600 and AST2700 will be described in the=
- next patch version.
+Hum, if my understanding is correct, this looks like what I did in the v3
+iteration [1].
 
-> >
-> > Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-> > ---
-> >  Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml | 4
-> > +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > index 57d932af4506..80e542624cc6 100644
-> > --- a/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml
-> > @@ -12,7 +12,7 @@ maintainers:
-> >
-> >  description: |
-> >    This binding describes the Aspeed Static Memory Controllers (FMC
-> > and
-> > -  SPI) of the AST2400, AST2500 and AST2600 SOCs.
-> > +  SPI) of the AST2400, AST2500, AST2600 and AST2700 SOCs.
-> >
-> >  allOf:
-> >    - $ref: spi-controller.yaml#
-> > @@ -20,6 +20,8 @@ allOf:
-> >  properties:
-> >    compatible:
-> >      enum:
-> > +      - aspeed,ast2700-fmc
-> > +      - aspeed,ast2700-spi
-> >        - aspeed,ast2600-fmc
-> >        - aspeed,ast2600-spi
-> >        - aspeed,ast2500-fmc
-> > --
-> > 2.34.1
-> >
+The idea was:
+  1) Do not change anything in of_platform_.*populate()
+  2) Update the simple-bus driver to populate children if there is only one
+     compatible string and this string matches the compatible string handled
+     by the driver.
+
+We can be more restrictive for 2) and only populate children if the only one
+compatible string is "simple-bus". This will keep current behavior for
+"simple-mfd", "isa" and "arm,amba-bus".
+
+If you think this could be the right direction, I will bring those modification
+in the next iteration.
+
+Also, do you think we should be more restrictive and populate children in the
+simple-bus driver only for "simple-bus" compatible?
+
+[1] https://lore.kernel.org/lkml/20250613134817.681832-6-herve.codina@bootlin.com/
+
+Best regards,
+Hervé
 
