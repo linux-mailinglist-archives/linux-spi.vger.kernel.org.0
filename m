@@ -1,99 +1,195 @@
-Return-Path: <linux-spi+bounces-11220-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11221-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 778A7C5EA53
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 18:50:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C826BC5EAFB
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 18:57:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BE81E3C4C1B
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 17:12:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1D5224E6DE9
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 17:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506C0332EA2;
-	Fri, 14 Nov 2025 17:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DA3347FCA;
+	Fri, 14 Nov 2025 17:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kNd5hjYq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrRY4ZQr"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2990830F545
-	for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 17:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16C03451B0;
+	Fri, 14 Nov 2025 17:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763140346; cv=none; b=YSSiTGW/dOXS2/oUgIHTCmwcG+6BidZfctkalVpkiwSRdeuo2pAQ1+967j0DbhSV2QquHbqu1Dg++3xq6jhMeazhd8EElPIxYZ0CiUIVSXRFvl0DSBTfxvzAxIJOCMGavi16XziNgqM7Y1a9WBwaM8K1r87q5OD0m0oGdKmvmHQ=
+	t=1763142527; cv=none; b=NT/aFXl3SHt0Dxq85VbCrEo/YYhzksJVvgiNn8Bk80KrrtFvKrf3z2nFLkk8QCAwKoOpIIHbluCcL2s3SN/zfEsn9K9WS+C5gfivErLlvPaaK1Gza5Nmr95SMKyT4JZgspqdbRMicVgUSIjdgGszzyQ8V8mw6j/0kJxJriQ5z4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763140346; c=relaxed/simple;
-	bh=/EOW2fSED4RuqwrG2wHsaZgXylt/GL9kI5hXhf31sb4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=uiPt95skvRFwhFWqe6o3GOBhMgYNf2cfSEJIJmX1Q+RhZb/lgXwnaYJTwhEApcOwTsJ1oEMG1ZibCG+pWDCc1bNqut/Fq92ps5gEAGSUSNWXbmHmViqU71/MHKDepXNfnae0OtGEkCteCpvsfz1mosGVt5GsVr6L7C0ukjgZd94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kNd5hjYq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C497AC4CEF1;
-	Fri, 14 Nov 2025 17:12:25 +0000 (UTC)
+	s=arc-20240116; t=1763142527; c=relaxed/simple;
+	bh=yocwTQVHHZ1oHWeawnGjtUSUysV1o9GGmLQY2fd93FA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PwkQfKbYruidPj+x6DurcpMrZzpgF3Ez8A2lwN+CYoDOnoAFHFNlwnx25b3lJfDBA8C6ZmGtb6IAwYZcy+WeOjSu4mL0IT4csg/p/1ohRqGu4eTjphH9udvzbYf8/h7hg1YVjaHY2AHihKzFtKTAnvM9cE7vuI8voQEBAQhjRP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrRY4ZQr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BA5C116D0;
+	Fri, 14 Nov 2025 17:48:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763140345;
-	bh=/EOW2fSED4RuqwrG2wHsaZgXylt/GL9kI5hXhf31sb4=;
-	h=Subject:From:Date:To:From;
-	b=kNd5hjYqtlx1uooC2WByZh1z5J7wtEmcFbhZynIZGAl6+wTX78JWVqozzj0z8QnNr
-	 lngd+q5bC6vnwd1Q5trRXo74bLkyYliHRS7kMSckI1QIDnTt+wuSp66EBKKMM0DMiJ
-	 ghqkNJRF3YQJvEsLTmxVBRGntWftoNTo3SUpICkZRCEVTr1v8FOhRNqbg82ZN0DxUD
-	 CEd1TWnjey1QjAtPmAd+wgmbqjc/ROKXCm3ecu+HhdEGlnzdylNr3ezzSF758Rh+13
-	 ottz3QYaal6a410Vjm5faGz2hIoTbFXm2Ktd0z3VNlQY87dQAp0bRefk3Jd7rCVQlo
-	 IieD7c9XJq0Wg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 74BC63A7859C;
-	Fri, 14 Nov 2025 17:11:55 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1763142526;
+	bh=yocwTQVHHZ1oHWeawnGjtUSUysV1o9GGmLQY2fd93FA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jrRY4ZQrDYvtv6r8RIAFYBCRLxeDPRRQdFhBOSiHfHjEmJEFZwQjQlxLe5Uy5KLpz
+	 weOmScjpMD9XpoOt77SUWH5R7y/xNE8DF6lcEn4qWeNN540vDg+B8LgnWCgRqa4R0T
+	 sib1hd1cIceLKwAzoZlfgOu3daGIE7raxiI1LC5BR0R8roVGqGTQ87bAasz2PxucVh
+	 uMPcUqtO9zxeHeJw8B4UJ2oTIaZbpPI8n2wMKR0p34lGoQGI3RjZ5nLGBE/dkvN7+5
+	 It+4AUl0P8h3pRHUb6PKeo/0OY1eivLQ27zQvNkN66gucGnW3u9he2Gr3NIwXLyYoC
+	 uw7qDwwhB3xLQ==
+Date: Fri, 14 Nov 2025 11:48:44 -0600
+From: Rob Herring <robh@kernel.org>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
+	Saravana Kannan <saravanak@google.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Charles Keepax <ckeepax@opensource.cirrus.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	David Rhodes <david.rhodes@cirrus.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Len Brown <lenb@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Alison Schofield <alison.schofield@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org, patches@opensource.cirrus.com,
+	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	Allan Nielsen <allan.nielsen@microchip.com>,
+	Horatiu Vultur <horatiu.vultur@microchip.com>,
+	Steen Hegelund <steen.hegelund@microchip.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 00/29] lan966x pci device: Add support for SFPs
+Message-ID: <20251114174844.GA3792362-robh@kernel.org>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176314031406.1740925.13429356557671840351.git-patchwork-summary@kernel.org>
-Date: Fri, 14 Nov 2025 17:11:54 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251015071420.1173068-1-herve.codina@bootlin.com>
 
-Hello:
+On Wed, Oct 15, 2025 at 09:13:47AM +0200, Herve Codina wrote:
+> Hi,
+> 
+> This series add support for SFPs ports available on the LAN966x PCI
+> device. In order to have the SFPs supported, additional devices are
+> needed such as clock controller and I2C.
+> 
+> As a reminder, the LAN966x PCI device driver use a device-tree overlay
+> to describe devices available on the PCI board. Adding support for SFPs
+> ports consists in adding more devices in the already existing
+> device-tree overlay.
+> 
+> With those devices added, the device-tree overlay is more complex and
+> some consumer/supplier relationship are needed in order to remove
+> devices in correct order when the LAN966x PCI driver is removed.
+> 
+> Those links are typically provided by fw_devlink and we faced some
+> issues with fw_devlink and overlays.
+> 
+> This series gives the big picture related to the SFPs support from
+> fixing issues to adding new devices. Of course, it can be split if
+> needed.
+> 
+> The first part of the series (patch 1, 2 and 3) fixes fw_devlink when it
+> is used with overlay. Patches 1 and 3 were previously sent by Saravana
+> [0]. I just rebased them on top of v6.18-rc1 and added patch 2 in order
+> to take into account feedback received on the series sent by Saravana.
+> 
+> Those modification were not sufficient in our case and so, on top of
+> that, patches 4 to 7 fix some more issues related to fw_devlink.
+> 
+> Patches 8 to 13 introduce and use fw_devlink_set_device() in already
+> existing code.
+> 
+> Patches 14 and 15 are related also to fw_devlink but specific to PCI and
+> the device-tree nodes created during enumeration.
+> 
+> Patches 16, 17 and 18 are related fw_devlink too but specific to I2C
+> muxes. Patches purpose is to correctly set a link between an adapter
+> supplier and its consumer. Indeed, an i2c mux adapter's parent is not
+> the i2c mux supplier but the adapter the i2c mux is connected to. Adding
+> a new link between the adapter supplier involved when i2c muxes are used
+> avoid a freeze observed during device removal.
+> 
+> Patch 19 adds support for fw_delink on x86. fw_devlink is needed to have
+> the consumer/supplier relationship between devices in order to ensure a
+> correct device removal order. Adding fw_devlink support for x86 has been
+> tried in the past but was reverted [1] because it broke some systems.
+> Instead of enabling fw_devlink on *all* x86 system, enable it on *all*
+> x86 except on those where it leads to issue.
+> 
+> Patches 20 and 21 allow to build clock and i2c controller used by the
+> LAN966x PCI device when the LAN966x PCI device is enabled.
+> 
+> Patches 22 to 26 are specific to the LAN966x. They touch the current
+> dtso, split it in dtsi/dtso files, rename the dtso and improve the
+> driver to allow easier support for other boards.
+> 
+> The next patch (patch 27) update the LAN966x device-tree overlay itself
+> to have the SPF ports and devices they depends on described.
+> 
+> The last two patches (patches 28 and 29) sort the existing drivers in
+> the needed driver list available in the Kconfig help and add new drivers
+> in this list keep the list up to date with the devices described in the
+> device-tree overlay.
+> 
+> We believe some items from the above list can be merged separately, with
+> no build dependencies. We expect:
+> 
+>  - Patches 1 to 7 to be taken by driver core maintainers
+> 
+>  - Patches 8 to 13 to be taken by driver core maintainers
+> 
+>  - Patches 14 and 15 to be taken by driver core or PCI maintainers
+>   (depend on patch 8)
+> 
+>  - Patches 16 to 18 to be taken by I2C maintainers
+> 
+>  - Patch 19 to be taken by driver core or OF maintainers
+> 
+>  - Patch 20 to be taken by clock maintainers
+> 
+>  - Patch 21 to be taken by I2C maintainers
+> 
+>  - Patches 22 to 29 to be taken by misc maintainers
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+I don't think this is going to land in 6.19, so I've applied patches 1 
+and 3.
 
-Series: Add support for Microchip CoreSPI Controller
-  Submitter: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1023466
-  Lore link: https://lore.kernel.org/r/20251114104545.284765-1-prajna.rajendrakumar@microchip.com
-    Patches: [v4,1/3] spi: microchip: rename driver file and internal identifiers
-             [v4,2/3] spi: dt-binding: document Microchip CoreSPI
-             [v4,3/3] spi: add support for microchip "soft" spi controller
-
-Series: spi-cadence: support transmission with bits_per_word of 16 and 32
-  Submitter: Jun Guo <jun.guo@cixtech.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1018037
-  Lore link: https://lore.kernel.org/r/20251031073003.3289573-1-jun.guo@cixtech.com
-    Patches: [v3,1/3] dt-bindings: spi: spi-cadence: update DT binding docs to support cix sky1 SoC
-             [v3,2/3] spi: spi-cadence: supports transmission with bits_per_word of 16 and 32
-
-Series: OSPI pm_runtime fixes
-  Submitter: Anurag Dutta <a-dutta@ti.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1019989
-  Lore link: https://lore.kernel.org/r/20251105161146.2019090-1-a-dutta@ti.com
-    Patches: [1/2] spi: spi-cadence-quadspi: Enable pm runtime earlier to avoid imbalance
-             [2/2] spi: spi-cadence-quadspi: Remove duplicate pm_runtime_put_autosuspend() call
-
-
-Total patches: 7
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Rob
 
