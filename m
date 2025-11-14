@@ -1,102 +1,83 @@
-Return-Path: <linux-spi+bounces-11192-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11193-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 277BDC5C63A
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 10:54:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78845C5C818
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 11:16:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8FF80359ED0
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 09:46:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4502A35D210
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 10:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B70F308F16;
-	Fri, 14 Nov 2025 09:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54AB313A258;
+	Fri, 14 Nov 2025 10:10:54 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E946D3081D3;
-	Fri, 14 Nov 2025 09:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3FA30AAC1;
+	Fri, 14 Nov 2025 10:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763113592; cv=none; b=K4p1nnH5KqOiYGbuJSkEfkM9mHEnCF26Ho6YMNUHuoUUjErMUdw48v42sJTDJCKdv0x4sfhb6Mxv/jpwueWMR4m9Y/8WkROVkWrsMbZOXZUZK2fUIsCVOcx2dICJPqKFOY8jJf2XgXEOPRMeG73tvsagmev/i9jGK8mkA8hfvWs=
+	t=1763115054; cv=none; b=qHaShp5XQlLFm3Hxf06UFv7riRy26TGL53KGlHCqFveo/lvCHurpzyaVFPmnNYc30TbYDXqC0D+rntAFvwTj2XmA8z6RBVqxuh7jaMjl+D4ycoOU6L8MRPJeYjaVO2Lix8IrNg/tdqkh0MmD3n+u7RGuDhHIZgM41znzE/Z+f2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763113592; c=relaxed/simple;
-	bh=jkwEalFk1ykaBVfLvuMDkX2l/SWvGRFKLBGSJDYhBuk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l8g2yXw8FiaRkgjfbMbInT1n66gPONv+C1+hznhujnbbLMnE5tRQemqhKenEorIp/ke+pctVC7PgfAe7g3WuBrAsMPUlQ5s3qr2LGFFXLfpBYfaMTbhLpWpcdOmMtvMexI3eCbblItS5Bq/Yt+Hj6dfpadazrkOM6rP5MuglLUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS31.andestech.com [10.0.1.89])
-	by Atcsqr.andestech.com with ESMTPS id 5AE9k0jS029023
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 14 Nov 2025 17:46:00 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02 (10.0.15.183) by ATCPCS31.andestech.com (10.0.1.89)
- with Microsoft SMTP Server id 14.3.498.0; Fri, 14 Nov 2025 17:46:00 +0800
-Date: Fri, 14 Nov 2025 17:46:00 +0800
-From: CL Wang <cl634@andestech.com>
-To: Conor Dooley <conor@kernel.org>
-CC: <broonie@kernel.org>, <linux-spi@vger.kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: spi: Add support for ATCSPI200 SPI
- controller
-Message-ID: <aRb6WDSAbfre28eT@swlinux02>
-References: <20251112034724.1977630-1-cl634@andestech.com>
- <20251112034724.1977630-2-cl634@andestech.com>
- <20251112-reoccur-quill-2144810ce062@spud>
+	s=arc-20240116; t=1763115054; c=relaxed/simple;
+	bh=+SwaqD8Es6cBCi/E/K42IKpSZxBowjUGjaQu61NX95w=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qaHVuCl3zMlu4fnguchipzzNhsGE+K29tl0t6Clnj0mrXSk0jEnvmpAdTS/MXy7WLewyCP37UtCRTGeP4rflUgS4KmSkHSe7Z9oK6MYxgIedbGaR6tRTCkXiY6wDUtbibQTFQ4gYXmYUp+nnwxTA5YiOcOefTiY4oVKE2rFj4Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Fri, 14 Nov
+ 2025 18:10:42 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Fri, 14 Nov 2025 18:10:42 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>, <clg@kaod.org>,
+	<clg@redhat.com>, <broonie@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>, <openbmc@lists.ozlabs.org>,
+	<linux-spi@vger.kernel.org>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH v2 0/4] spi: aspeed: Add AST2700 SoC support and Quad SPI handling update
+Date: Fri, 14 Nov 2025 18:10:38 +0800
+Message-ID: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251112-reoccur-quill-2144810ce062@spud>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-DKIM-Results: atcpcs31.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5AE9k0jS029023
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi Conor,
+This series adds AST2700 support to the ASPEED FMC/SPI driver and
+bindings, introduces 64-bit address compatibility, and improves
+Quad SPI page programming behavior. It also implements AST2700-specific
+segment logic, where range adjustment is not required because the
+AST2700 SPI hardware controller already fixes decoding issues on
+the existing platforms and adopts an updated scheme.
 
-Thanks for your suggestions. Please see my responses below.
+Changes in v2:
+  - Some differences between AST2600 and AST2700 are described in
+    commit message of the dt-bindings patch.
 
-> > +title: Andes ATCSPI200 SPI controller
-> 
-> Is this a spi controller or a qspi controller?
-This controller is a standard SPI controller that supports single/dual/quad
-modes.
+Chin-Ting Kuo (4):
+  dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
+  spi: aspeed: Enable Quad SPI mode for page program
+  spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit
+    platforms
+  spi: aspeed: Add support for the AST2700 SPI controller
 
-> > +  dma-names:
-> > +    items:
-> > +      - const: spi_tx
-> > +      - const: spi_rx
-> 
-> Drop the "spi_", since it's obvious that it belongs to this controller.
-As you suggested, the spi_ prefix will be removed, since it is clear that
-these channels belong to this controller. In the next version, the DMA
-channel names will follow common conventions used by other SPI controllers:
-dma-names = "tx", "rx";
+ .../bindings/spi/aspeed,ast2600-fmc.yaml      |   4 +-
+ drivers/spi/spi-aspeed-smc.c                  | 107 +++++++++++++++---
+ 2 files changed, 95 insertions(+), 16 deletions(-)
 
-> > +ANDES ATCSPI200 SPI DRIVER
-> > +M:	CL Wang <cl634@andestech.com>
-> > +S:	Supported
-> > +F:	Documentation/devicetree/bindings/spi/andestech,qilai-spi.yaml
-> 
-> > +F:	drivers/spi/spi-atcspi200.c
-The MAINTAINERS entry will be updated in the next revision so that only the
-Devicetree binding file is listed. The driver entry will be added once the
-driver patch is introduced.
-
-Thanks again for your review and suggestions.
-
-Best regards,
-CL
+-- 
+2.34.1
 
 
