@@ -1,303 +1,210 @@
-Return-Path: <linux-spi+bounces-11222-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11223-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14DB1C5EF09
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 19:59:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C018C5EF8E
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 20:07:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 47E5A34C21B
-	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 18:45:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A126B4E9591
+	for <lists+linux-spi@lfdr.de>; Fri, 14 Nov 2025 18:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800E52DECD8;
-	Fri, 14 Nov 2025 18:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472012DCF65;
+	Fri, 14 Nov 2025 18:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="ObRChzVe"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="CM8v8LQ/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-io1-f68.google.com (mail-io1-f68.google.com [209.85.166.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D28F18EFD1
-	for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 18:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2FB2DCF5B
+	for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 18:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763145907; cv=none; b=kSZHtJFxr+fCJAxCeDdTAgte+MGWgLzwSTpAXT3JEVEVdXePVJqSQKhiZNK8hPWAlOlch8FfzNbqe31DQxkDcM4lxeH+hALVx94OIXcCC6SSHjbC/x99pD97Kmts/uEBvxWLFnQXXqG/aSQ5aXfT0rwS4t5aDVaRZPMrFN5BoZ8=
+	t=1763146672; cv=none; b=Edrd/zIxu7vutLY3en2kXY0irm/+T0STsr8rcRnuDDUAZMSY+Vul0tlC+UXjlUBgcY7utIq76iw4sMFVkvZN0olozMkusK3nMrXY3HYKJUXfCxf0ubFpJbNHIbIjjkwpUa1rr2cRyHoiVH24wMzkGIypFFNTIxUpSHT+xijWdl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763145907; c=relaxed/simple;
-	bh=Pn3F9WH1cS9+bY5opga+rHds2LeuFrjSat93vmvaCAY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PrRJYufkEybOk8OjlWLimQL3SJSQBaC7lIA+c0nzpApl393//FnkCM5uUzSSCOhosEbRgIK8oRyDpmoucwTIcBxLxty1bedxIXLu57wJCD6YJYYwZExq0LHJq9QvUEhCE2+vFQ9c+wgD/+5w9B1HQ2yfK8XLMyu6ynxFYEanypM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=ObRChzVe; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42b31c610fcso2018951f8f.0
-        for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 10:45:00 -0800 (PST)
+	s=arc-20240116; t=1763146672; c=relaxed/simple;
+	bh=SPekITSXao5JzRpeAqm6OT/Blg0mEMpoUV8q31/6/wM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bCeGxN79P8rkvmUgaj8vKjRRX01o8yTwJuSvwK8ULSQHlAKB/IOsdV0uHmSbdbxrMUTa1kcmDvmVpKBu/IvNqpZJIageHtNDzx2m3FSICb7Hji5wWdBC3oNL63vYvAuYpgrnmpdKDteklahy8vVZDak6JwcpNi53MrVHCOpnyig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=CM8v8LQ/; arc=none smtp.client-ip=209.85.166.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-io1-f68.google.com with SMTP id ca18e2360f4ac-948a3979af4so120798039f.0
+        for <linux-spi@vger.kernel.org>; Fri, 14 Nov 2025 10:57:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763145899; x=1763750699; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQ3SQ+JmFJrdV7k1wCE6vl3PDiKzRteuguYr9grOle0=;
-        b=ObRChzVeCOHhaP3ueG4DR0gEjZou3I6RwB5vo3PNDyQmmN1xoFiQrCIoglKO1mqMQ3
-         j0NugUzO/0d5nAk6McgNnmD+RGqaKF+GduAJtWw+k3wYln/MwVPZERtga7WagSfR5OpJ
-         vZ4icoSi78znCRaZjKjDbHdBPAMxBwiVD7vm+rDT1gfwcRKOEFa2QwHx3QRcH35B+AQl
-         D6IOI4PPfuLuAzXMH2GBAbhTf0RRIOhF7UuT0Fnc6YGUqe6O0L4h17jZGUk3nQ6S5gnQ
-         ENuHV56LmrV2uJ/Gnybd53PeN/eiWmd8dHYKARB/sAbqdA4tAiSuBJKT5IV0S6vdm5wY
-         saDg==
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1763146669; x=1763751469; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/qXJqiPsnANUtpsR8sAeXZ7h/dCQytG5r8pVCD3h57A=;
+        b=CM8v8LQ/UUJv2yJrg7l5hT5htlxgp1xzDuf/o+4ow8OdHcDpkGOqCeAe/u9YjU//UE
+         MezGXmK/lJt4dR9iD99/B3oseLGuey/eJvKqK5qz78LJIyMfcYfF/K0WT7tcq+V1eKoY
+         4YYRXc30+jWIxL0+p4jYt4fo25Ng7cHKkukuckFitb6sO6f4xDqj0npM22sV4huVDI3E
+         NWVEcdegyDeKoJVZwp2Byb4GwISiUHC2X0rGhKky5a8n+tgQVB8AsChnWmm79iuI5tHf
+         tnzVBrtGl64DBlBcyw4fvNaSJjlhAavntyQ+zt8kOW9WhSGUw8pUwRK9lZoaMJD6hCJU
+         EYoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763145899; x=1763750699;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1763146669; x=1763751469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oQ3SQ+JmFJrdV7k1wCE6vl3PDiKzRteuguYr9grOle0=;
-        b=oC8T4M1dVWK8azdM57fmKVoDNH1csP+OTQcbyNV2OkPaj1v1Lp49M4Fcn6cjtKQGFs
-         HIyHEh7KZCDMrXGq9lahX4sd3ci+hkUg9FwVweLiU53qNBzCrLtU4GLlHnJY7E+b/YJo
-         ls+aae8DP2DVlaJVtDaW5vAinOHrq5f8kpFQop3Sy7GzL/p2crT+uX8ucp4AR6l0HvMa
-         feB94YV6cUkCf0NemaQYmmy4zxLxqeJe9+M1cKeyj5ttNsJJrWrCmcoSI6F3qvN/osDC
-         T/yQBqUcgrQehM9oLG2ssVQTrgfNTbJ7ymdd2dLk6JPb0FuteFFnZoNnpIwYbmRBDJ2b
-         H2Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzyCIJoMofnvQNaMeZdHlMvhw7WfeIKkQ15M1shg4OopV4uDZmQeXOlG4EB77X2IwsBFQvkfxrvUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysX+5jTUWaTaWmKZPNCw5QX1S5XcraOtnxW+HribOxKeprJLsk
-	XblMWUA9vdxrRcqQ6dLg2BB+q7ayWH2fVQgKdGrVVbAxP3Glu8wd9k6cSjgCPWNtJUk=
-X-Gm-Gg: ASbGncv0rzAw0BAoGn2gNGYQLeyCu1P9ryfVyQ8UT7YdudqWru2ZLT5EvFmuMjTsd+1
-	RYl9OlW2HxQ0ULkC+nnSx1ELf5kPV4t7fDfbl8/76mv8HlaxAH6ByoszNZpaH+PO84ikhrSv/mS
-	LfteGYX1577Pqd86wi16Rb7EQ/4KB9UoYC1HgPkIu1tu8tej3xZdEusvK22D0liBtT5n5LHaGdN
-	z5wwXvlQlbvcYD2XMrOKoKmjeOMhCbGuSfO+jHhj0l/1iFtc+j/CtXLwAqhJxFpq9tiqNMbeOlr
-	Ydd3YRz7AL+sxAXL5UvlvGSP1cih7LvewxyWmDynR5jX3QB0C9Todv528uwv+kqlEMzNpe0cZl8
-	q9D/mTbFebpoLcp4Nf3Cjpqi6hYqrz1wlJgkHKGXZ22WhSgIAItir5taurGABlSkMajALUZMB/N
-	BCtNTA8oHaW0LZBds=
-X-Google-Smtp-Source: AGHT+IGH2HnEI+t7XE26uAkzEaBgG8azXpo75OaSuiZemULV0cJ4+yvJ5x1RG9218nZCaeZbAEiYxw==
-X-Received: by 2002:a05:6000:188e:b0:42b:3ad7:fdd3 with SMTP id ffacd0b85a97d-42b5934da44mr3971954f8f.18.1763145898892;
-        Fri, 14 Nov 2025 10:44:58 -0800 (PST)
-Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:326d:9344:48bd:e2fd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f203afsm11565678f8f.39.2025.11.14.10.44.56
+        bh=/qXJqiPsnANUtpsR8sAeXZ7h/dCQytG5r8pVCD3h57A=;
+        b=qr4gJKSArkPZEH6yhwDI4FE+M+fgTPeV9Mh1UBUyZjJu7ABd2z/Ij2cBv4sKN5PhUn
+         ZElysqCfVmL7f46UzgGY9q7q9chcN5llV/Do0xFHiIQ1kAZ3kLthP5ehEU2bKasa1p6X
+         EJuoF4eewrlh0RTgiTeHZTS7ckhBJrqrdAfqqLXbiKh8BOCRHsLFi7srNAGY+WZiGucl
+         +q5iLAznO+POw6QS84E1ezB3T8PwRfKqCrhz4hWpxc46IDeFnrqZc0KOgT+boYzQuSyr
+         EZqiRQTqNQ3fSOQHdl2iODrGP5TdVehFF4KJ701wBhXSHTTf6I9LsL+47VBmwHhPNkIL
+         /WJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXW7vF4+vO+aGHuZLK5aQYdD+1AGQkk7TQyiGZYSwz83a7KceSGN+qIKVS+M23X2kFRtKUDJOausNw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2XyscAgUAqK/EhStpcXa0Ojn2brj6+j9qijphn6ANZOMbKhFz
+	OjXD4eKVLNrFps/R9724XpRlyMs4hkgkHZsyv2AiDdj17TiGiS0ZrJtIgEj5qNcJyWA=
+X-Gm-Gg: ASbGncvKwz6OrC/VoTrOPN2+RWSj8SLfpt5YCKw+kKb3alSEHsqtIRzvcWXtnOHqB6a
+	V/risQ/c7yHPW2z+4BYSbd86+ek0qP3C6CBhW+WhtNCmBPsauXLk12/zACQELW6aAV5B7HMb8Zv
+	vbsMPEObBdQ8QUZTKrHveoxK746pVkGZkXq+hcJ17DJKZS2CiCVn0RVR4YtFTy2AQ23+a7o4Grc
+	VdPVlWZE+nokbQ1w5CUg6j2GmFCGV/eWL5S2hfVqxXBDONFn2u18zRe4PuZtSFq6qorm77qRCUY
+	BQO+qRzkLZlSgVZ55uZA4QLQ4qqpkV9rVVOqGsr0ykms4466qsj6HgKABTqVVNH7zg+Nbhy/gAC
+	Y1AqGVR+jg2ASyy0RY5f4WWLI3dLZxP3CRJ2GnzlUfbaNQa1J9Jcq4B5QZwsS6NuZZw91V8+37s
+	EENt/PEMwDKngmIZdtVUYdLDQ2Fh1JlM/64V0yAsid36U6wfVsDWMWZhqvJZvrwKno
+X-Google-Smtp-Source: AGHT+IF4Nu5xfllgas5VBV6/o7VY3ZLAK+xfSIPCiHas33IRbeDvWn8RhVK1Tut1/N9t2FgYtTTWTw==
+X-Received: by 2002:a05:6602:3429:b0:945:a834:5951 with SMTP id ca18e2360f4ac-948e0689de5mr706912439f.6.1763146668632;
+        Fri, 14 Nov 2025 10:57:48 -0800 (PST)
+Received: from zippy.localdomain (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-948d2ba690bsm278679339f.8.2025.11.14.10.57.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 10:44:57 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 14 Nov 2025 19:44:54 +0100
-Subject: [PATCH] spi: davinci: remove platform data header
+        Fri, 14 Nov 2025 10:57:48 -0800 (PST)
+From: Alex Elder <elder@riscstar.com>
+To: broonie@kernel.org,
+	dlan@gentoo.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	p.zabel@pengutronix.de,
+	devicetree@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	spacemit@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 0/3] spi: support the SpacemiT K1 SPI controller
+Date: Fri, 14 Nov 2025 12:57:41 -0600
+Message-ID: <20251114185745.2838358-1-elder@riscstar.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAKV4F2kC/x3MQQqAIBBA0avIrBtIsYyuEi1Ex5qNiYIE4t2Tl
- m/xf4NCmanALhpkqlz4iQNyEuBuGy9C9sOgZrVIKTV6Wzk6xpIYw+rJbNqQChZGkTIFfv/bcfb
- +AY72UKVdAAAA
-X-Change-ID: 20251114-davinci-spi-f6de7847e2fa
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6426;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=a0vRuhwxVH8rsPSazycJBYCdFTwjepP7tYPyCm7FGJ4=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpF3io7tUavthZXz7t0DI18NOrxA73l62+id54T
- qHHywGAqJiJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaRd4qAAKCRAFnS7L/zaE
- wxXvD/9EkA5ruAOLm1TS2Ts0xN8tvOv0A7MuMf/Deal5JbaWukKfxTJ4o7FfPxSmpCQAmkq/tT1
- mRMZJ3iDLveQpuz1ew76CAX5ndIFJ3R9AAXn0MrW9QmqfPISAQWcyJ4Hl7uSoGNSQAZooPpg25x
- vx+mOcvJZkrRbBbiTeNakVvWN4L3rSsEaSfalBgB6CNmKtgIBuMPLqGczyOEDyf6PsLdN/TpFfc
- R8THl/ey00oVY3SJMCl4/aqozxEvjHxMFbXe1//l17POm6D3LNbha0XhpAYxa8+JL5pgvN7BM0h
- 02eBnfydCkZWJtqaYWPDAouiZHtmAwA8WoKmBoIfIEw2qJuOA5OnFI6cTOs4ITGa51RTYGFcjl5
- AHKRhbMGFDqIn9eah+wCMDym1CfUN6Q7kYgCQmN9/9K85XbNIqjwDenQVcVD2gPABJ68M/nEUQE
- 5HoZKzWQwFIeobvVpq1AgQape8XC6CeNNTDgIOClF74HR+uNXbtPMui8ukwbEvfTxgVMaCfc0/Q
- lTBVQv+hlo2YUcHJxTTR4X8gdG6dInwsyFsZESGjrI1Ucst8bgBmLL9aRpAw4nK2njfEAnnUBXR
- q1Tm5ejgxjv4MDU9A9vgwGLK49h9jcj53VcSTkBYBd++DFtT+3yWFKpCcHfGeKqnf3v7fBqxcoE
- r70uoqOZ+dxeaJA==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+This series adds support for the SPI controller found in the SpacemiT
+K1 SoC.  The driver currently supports only master mode.  The controller
+has two 32-entry FIFOs and supports PIO and DMA for transfers.
 
-There are no longer any board files including the DaVinci SPI platform
-data header. Let's move the bits and pieces that are used in the driver
-into the driver .c file itself and remove the header.
+Version 7 fixes two bugs, and now builds the driver as a kernel module
+by default.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/spi/spi-davinci.c                 | 63 +++++++++++++++++++++++++-
- include/linux/platform_data/spi-davinci.h | 73 -------------------------------
- 2 files changed, 61 insertions(+), 75 deletions(-)
+(Note, this is a distinct series from the QSPI driver, which was
+merged recently.)
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index a29934422356b6b6d4043c0f0b43b91e5ccd894b..9edd299ecd49076b4f16e66ecb33224e6b4422fc 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -9,6 +9,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
- #include <linux/delay.h>
-+#include <linux/platform_data/edma.h>
- #include <linux/platform_device.h>
- #include <linux/err.h>
- #include <linux/clk.h>
-@@ -19,8 +20,6 @@
- #include <linux/spi/spi_bitbang.h>
- #include <linux/slab.h>
- 
--#include <linux/platform_data/spi-davinci.h>
--
- #define CS_DEFAULT	0xFF
- 
- #define SPIFMT_PHASE_MASK	BIT(16)
-@@ -98,8 +97,68 @@
- #define SPIDEF		0x4c
- #define SPIFMT0		0x50
- 
-+#define SPI_IO_TYPE_POLL	1
-+#define SPI_IO_TYPE_DMA		2
-+
- #define DMA_MIN_BYTES	16
- 
-+enum {
-+	SPI_VERSION_1, /* For DM355/DM365/DM6467 */
-+	SPI_VERSION_2, /* For DA8xx */
-+};
-+
-+/**
-+ * davinci_spi_platform_data - Platform data for SPI master device on DaVinci
-+ *
-+ * @version:	version of the SPI IP. Different DaVinci devices have slightly
-+ *		varying versions of the same IP.
-+ * @num_chipselect: number of chipselects supported by this SPI master
-+ * @intr_line:	interrupt line used to connect the SPI IP to the ARM interrupt
-+ *		controller withn the SoC. Possible values are 0 and 1.
-+ * @cshold_bug:	set this to true if the SPI controller on your chip requires
-+ *		a write to CSHOLD bit in between transfers (like in DM355).
-+ * @dma_event_q: DMA event queue to use if SPI_IO_TYPE_DMA is used for any
-+ *		device on the bus.
-+ */
-+struct davinci_spi_platform_data {
-+	u8			version;
-+	u8			num_chipselect;
-+	u8			intr_line;
-+	u8			prescaler_limit;
-+	bool			cshold_bug;
-+	enum dma_event_q	dma_event_q;
-+};
-+
-+/**
-+ * davinci_spi_config - Per-chip-select configuration for SPI slave devices
-+ *
-+ * @wdelay:	amount of delay between transmissions. Measured in number of
-+ *		SPI module clocks.
-+ * @odd_parity:	polarity of parity flag at the end of transmit data stream.
-+ *		0 - odd parity, 1 - even parity.
-+ * @parity_enable: enable transmission of parity at end of each transmit
-+ *		data stream.
-+ * @io_type:	type of IO transfer. Choose between polled, interrupt and DMA.
-+ * @timer_disable: disable chip-select timers (setup and hold)
-+ * @c2tdelay:	chip-select setup time. Measured in number of SPI module clocks.
-+ * @t2cdelay:	chip-select hold time. Measured in number of SPI module clocks.
-+ * @t2edelay:	transmit data finished to SPI ENAn pin inactive time. Measured
-+ *		in number of SPI clocks.
-+ * @c2edelay:	chip-select active to SPI ENAn signal active time. Measured in
-+ *		number of SPI clocks.
-+ */
-+struct davinci_spi_config {
-+	u8	wdelay;
-+	u8	odd_parity;
-+	u8	parity_enable;
-+	u8	io_type;
-+	u8	timer_disable;
-+	u8	c2tdelay;
-+	u8	t2cdelay;
-+	u8	t2edelay;
-+	u8	c2edelay;
-+};
-+
- /* SPI Controller driver's private data. */
- struct davinci_spi {
- 	struct spi_bitbang	bitbang;
-diff --git a/include/linux/platform_data/spi-davinci.h b/include/linux/platform_data/spi-davinci.h
-deleted file mode 100644
-index 2cb5cc70fd9d22bd00c85beb5b9a8cb74547e9f4..0000000000000000000000000000000000000000
---- a/include/linux/platform_data/spi-davinci.h
-+++ /dev/null
-@@ -1,73 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright 2009 Texas Instruments.
-- */
--
--#ifndef __ARCH_ARM_DAVINCI_SPI_H
--#define __ARCH_ARM_DAVINCI_SPI_H
--
--#include <linux/platform_data/edma.h>
--
--#define SPI_INTERN_CS	0xFF
--
--enum {
--	SPI_VERSION_1, /* For DM355/DM365/DM6467 */
--	SPI_VERSION_2, /* For DA8xx */
--};
--
--/**
-- * davinci_spi_platform_data - Platform data for SPI master device on DaVinci
-- *
-- * @version:	version of the SPI IP. Different DaVinci devices have slightly
-- *		varying versions of the same IP.
-- * @num_chipselect: number of chipselects supported by this SPI master
-- * @intr_line:	interrupt line used to connect the SPI IP to the ARM interrupt
-- *		controller withn the SoC. Possible values are 0 and 1.
-- * @cshold_bug:	set this to true if the SPI controller on your chip requires
-- *		a write to CSHOLD bit in between transfers (like in DM355).
-- * @dma_event_q: DMA event queue to use if SPI_IO_TYPE_DMA is used for any
-- *		device on the bus.
-- */
--struct davinci_spi_platform_data {
--	u8			version;
--	u8			num_chipselect;
--	u8			intr_line;
--	u8			prescaler_limit;
--	bool			cshold_bug;
--	enum dma_event_q	dma_event_q;
--};
--
--/**
-- * davinci_spi_config - Per-chip-select configuration for SPI slave devices
-- *
-- * @wdelay:	amount of delay between transmissions. Measured in number of
-- *		SPI module clocks.
-- * @odd_parity:	polarity of parity flag at the end of transmit data stream.
-- *		0 - odd parity, 1 - even parity.
-- * @parity_enable: enable transmission of parity at end of each transmit
-- *		data stream.
-- * @io_type:	type of IO transfer. Choose between polled, interrupt and DMA.
-- * @timer_disable: disable chip-select timers (setup and hold)
-- * @c2tdelay:	chip-select setup time. Measured in number of SPI module clocks.
-- * @t2cdelay:	chip-select hold time. Measured in number of SPI module clocks.
-- * @t2edelay:	transmit data finished to SPI ENAn pin inactive time. Measured
-- *		in number of SPI clocks.
-- * @c2edelay:	chip-select active to SPI ENAn signal active time. Measured in
-- *		number of SPI clocks.
-- */
--struct davinci_spi_config {
--	u8	wdelay;
--	u8	odd_parity;
--	u8	parity_enable;
--#define SPI_IO_TYPE_INTR	0
--#define SPI_IO_TYPE_POLL	1
--#define SPI_IO_TYPE_DMA		2
--	u8	io_type;
--	u8	timer_disable;
--	u8	c2tdelay;
--	u8	t2cdelay;
--	u8	t2edelay;
--	u8	c2edelay;
--};
--
--#endif	/* __ARCH_ARM_DAVINCI_SPI_H */
+                                        -Alex
 
----
+This series is available here:
+  https://github.com/riscstar/linux/tree/outgoing/spi-v7
+
+Between version 6 and version 7:
+  - DIV_ROUND_UP_ULL() is now used when setting the speed, to address
+    two errors reported by the Intel kernel test robot on 32-bit builds
+  - Fixed a bug interpreting the resource pointer in k1_spi_dma_cleanup()
+  - The driver is now built as a module by default, if ARCH_SPACEMIT
+    is defined
+
+Here is version 6 of this series:
+  https://lore.kernel.org/lkml/20251027125504.297033-1-elder@riscstar.com/
+
+Between version 5 and version 6:
+  - Rebase only
+
+Here is version 5 of this series:
+  https://lore.kernel.org/lkml/20251013123309.2252042-1-elder@riscstar.com/
+
+Between version 4 and version 5:
+  - Added Yixun's Reviewed-by tag on patch 3
+
+Here is version 4 of this series:
+  https://lore.kernel.org/lkml/20250925121714.2514932-1-elder@riscstar.com/
+
+Between version 3 and version 4 (all suggested by Yixun):
+  - Fixed an underrun/overrun comment error
+  - Renamed a pinctrl node
+  - Formatted dmas and dma-names properties on one line
+
+Here is version 3 of this series:
+  https://lore.kernel.org/lkml/20250922161717.1590690-1-elder@riscstar.com/
+
+Between version 2 and version 3:
+  - Add Conor's Acked-by to patch 1
+  - Add Rob's Reviewed-by to patch 1
+  - Added imply_PDMA to the SPI_SPACEMIT_K1 Kconfig option
+  - Fixed a bug pointed out by Vivian (and Troy) in word-sized reads
+  - Added a comment stating we use 1, 2, or 4 bytes per word
+  - Cleaned up DMA channels properly in case of failure setting up
+  - No longer use devm_*() for allocating DMA channels or buffer
+  - Moved the SPI controller into the dma-bus memory region
+
+Here is version 2 of this series:
+  https://lore.kernel.org/lkml/20250919155914.935608-1-elder@riscstar.com/
+
+Between version 1 and version 2:
+  - Use enum rather than const for the binding compatible string
+  - Omit the label and status property in the binding example
+  - The spi-spacemit-k1.o make target is now added in sorted order
+  - The SPI_SPACEMIT_K1 config option is added in sorted order
+  - The SPI_SPACEMIT_K1 config does *not* depend on MMP_PDMA,
+    however MMP_PDMA is checked at runtime, and if not enabled,
+    DMA will not be used
+  - Read/modify/writes of registers no longer use an additional
+    "virt" variable to hold the address accessed
+  - The k1_spi_driver_data->ioaddr field has been renamed base
+  - The DMA address for the base address is maintained, rather than
+    saving the DMA address of the data register
+  - The spi-max-frequency property value is now bounds checked
+  - A local variable is now initialized to 0 in k1_spi_write_word()
+  - The driver name is now "k1-spi"
+  - DT aliases are used rather than spacemit,k1-ssp-id for bus number
+  - The order of two pin control properties was changed as requested
+  - Clock names and DMA names are now on one line in the "k1.dtsi"
+  - The interrupts property is used rather than interrupts-extended
+  - The order of two pin control properties was changed as requested
+  - Clock names and DMA names are now on one line in the "k1.dtsi"
+  - The interrupts property is used rather than interrupts-extended
+
+Here is version 1 of this series:
+  https://lore.kernel.org/lkml/20250917220724.288127-1-elder@riscstar.com/
+
+
+Alex Elder (3):
+  dt-bindings: spi: add SpacemiT K1 SPI support
+  spi: spacemit: introduce SpacemiT K1 SPI controller driver
+  riscv: dts: spacemit: define a SPI controller node
+
+ .../bindings/spi/spacemit,k1-spi.yaml         |  84 ++
+ .../boot/dts/spacemit/k1-bananapi-f3.dts      |   7 +
+ arch/riscv/boot/dts/spacemit/k1-pinctrl.dtsi  |  20 +
+ arch/riscv/boot/dts/spacemit/k1.dtsi          |  15 +
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-spacemit-k1.c                 | 966 ++++++++++++++++++
+ 7 files changed, 1102 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/spacemit,k1-spi.yaml
+ create mode 100644 drivers/spi/spi-spacemit-k1.c
+
+
 base-commit: 0f2995693867bfb26197b117cd55624ddc57582f
-change-id: 20251114-davinci-spi-f6de7847e2fa
-
-Best regards,
 -- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+2.48.1
 
 
