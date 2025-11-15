@@ -1,219 +1,111 @@
-Return-Path: <linux-spi+bounces-11235-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11236-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB58C6084F
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 17:01:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5A9BC60865
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 17:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E4919351DC1
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 16:01:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C4D174E3B35
+	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 16:22:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4D326E6F5;
-	Sat, 15 Nov 2025 16:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB352F3C3D;
+	Sat, 15 Nov 2025 16:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jM0DL6WI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJU0oRzi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBADD515;
-	Sat, 15 Nov 2025 16:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42FA2D739B;
+	Sat, 15 Nov 2025 16:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763222484; cv=none; b=ctk/k84IroZKI+4UH8wf5xZMC40IHlzvNCyP6YZJ+BzuACLem62RNchAPNxAaSnlqoIbrTeeWEM9ipz23TGpTeJ+0AjsifINrlC6wKPm/hpdWoLDUpgSmyfHc4SxqALZGuSapj4wMDAvhdWO0vREniUdf0J56jSFmqqBh8AKFQM=
+	t=1763223745; cv=none; b=H4QDTVagu9wI8pe+XA8wdMrn+kraLSmLZWJLU9BnplD5MWcDECjfUnbNYWQIkXYy5j+3J2285nvqDo3j5LiSc1qpiYzE14b794Uk5yVMxe9JPYWQQQQ4+HpL4Zq1QOvR+oclRx4PKkOkH11ES2fOkDXcIYwWoVlDaM8VWwdKBA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763222484; c=relaxed/simple;
-	bh=aL2drUjldjMwfOWSXiuQaZYAafjyhHSOp1Hy4vQYSSg=;
+	s=arc-20240116; t=1763223745; c=relaxed/simple;
+	bh=rEnRLh6oU1O41QhkfgLHqF8VQ3Gg39DKHgTTg3E8C20=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kM/YolpiCKWKi2d1dklAX6Fzoq4XRoobKlHnMbUJlMFzklA70ZwRRjqbmS/GpPofUUWgavlXU/Q4FEwozcxPgpvdg0Try8+iCXGaummbgAXjpterkExmvu+J4wa0CjlF2bBW++Sy250oZG3U+fXffNp4+BdRvPZnV/IbVoIUpzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jM0DL6WI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83865C4CEF7;
-	Sat, 15 Nov 2025 16:01:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763222484;
-	bh=aL2drUjldjMwfOWSXiuQaZYAafjyhHSOp1Hy4vQYSSg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jM0DL6WInt/lvzvDDb/SeVzLxDQcGUoVyjrmPprDnwOJcHgUeXTQeM1DbouIs1wio
-	 hL2dng5a3gWtUklyuINPSrCuFJssjoDICPIXqncLAmA45aVRNFzkcv8pz6PsBHo5O3
-	 RTvwAg3YVypK9v9Hj6ZSeY/haCkaGo7nA936PZlZ3jn0mRKHFKgl4KU0wHao80Eyg3
-	 +vCHetJv6gQEkD+J9wH3VI/+JjpVMAVaxW/U7vrTjDIHnv11GimYMabQsuTWWIkY1o
-	 71vk2Q2808sG4g4DYyjruinMlmexgA19YoSo6rvS7JkeiGSYCnEiLLTw+PvQFAU1N3
-	 nR9+9uaucaA0w==
-Date: Sat, 15 Nov 2025 17:01:19 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-Cc: Ray Liu <ray.liu@airoha.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Andreas Gnau <andreas.gnau@iopsys.eu>
-Subject: Re: [PATCH 1/3] spi: airoha-snfi: en7523: workaround flash damaging
- if UART_TXD was short to GND
-Message-ID: <aRijz3wMTGdmy2tq@lore-rh-laptop>
-References: <20251114233431.1920015-1-mikhail.kshevetskiy@iopsys.eu>
- <20251114233431.1920015-2-mikhail.kshevetskiy@iopsys.eu>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kWAZlybARO6UCYR0Jce+WZHdC7tT5y8S3AK4rFKv1UHVMOqG9lrDqJUP05WcjfdAK/Zq/u+9S2OtVh3KobkKnPpi/dNo1HE6J0F+v4B3vGXVpyYimdpULzq+dvLnLy7T71+tN0HKovArUxyoLq2rTUUwYVwjm7K5P1VcT3UL83Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJU0oRzi; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763223744; x=1794759744;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rEnRLh6oU1O41QhkfgLHqF8VQ3Gg39DKHgTTg3E8C20=;
+  b=aJU0oRziwnWae59UTkeqIW6sks+JpBY8h0f4ZYM+V9z8EByAR/VEBDDi
+   nM6adjyEtjfO4IgxzkHHcLvObsvdZfdXXErztPnMdgM5JBXO9rMV52oSt
+   MXKZ8O0ajINiIBpj80WDmDV9oGFsmF7HOyJY1aajXPjkHQFpynaINFal5
+   orKOlR216KcLcPbTWWH0EsEvjo4CnG2z8YHMWORcuYy7p6y/YsZe11vF3
+   aXEQzxmaSkAs6FzO3MB5Z2kTJWtNN+jT9PdVe71UoMX+pX+ftCfWFNfgf
+   kaXDH7U3Ir2V1dJJ3xAHw20xGlqIjGY5c4KJO47usLD3ew40sl9aPDud2
+   A==;
+X-CSE-ConnectionGUID: NbN+B2VBSZGr8IIDFH6I8w==
+X-CSE-MsgGUID: 9LADZMOrSLKbyHTGnNVF8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="65444062"
+X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
+   d="scan'208";a="65444062"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 08:22:24 -0800
+X-CSE-ConnectionGUID: Sp7RVpXFSCyzkpevabgcKA==
+X-CSE-MsgGUID: WwGDCu9eSdyOBEZf1Tb+XA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
+   d="scan'208";a="189717367"
+Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Nov 2025 08:22:22 -0800
+Received: from kbuild by 7b01c990427b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vKJ2Z-00085P-2E;
+	Sat, 15 Nov 2025 16:22:19 +0000
+Date: Sun, 16 Nov 2025 00:21:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>, Mark Brown <broonie@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH] spi: davinci: remove platform data header
+Message-ID: <202511160056.vvfSNpF8-lkp@intel.com>
+References: <20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EKzBAkeZKZ1ooe9j"
-Content-Disposition: inline
-In-Reply-To: <20251114233431.1920015-2-mikhail.kshevetskiy@iopsys.eu>
-
-
---EKzBAkeZKZ1ooe9j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org>
 
-> We found that some serial console may pull TX line to GROUND during board
-> boot time. Airoha uses TX line as one of it's BOOT pins. This will lead
-> to booting in RESERVED boot mode.
->=20
-> It was found that some flashes operates incorrectly in RESERVED mode.
-> Micron and Skyhigh flashes are definitely affected by the issue,
-> Winbond flashes are NOT affected.
->=20
-> Details:
-> --------
-> DMA reading of odd pages on affected flashes operates incorrectly. Page
-> reading offset (start of the page) on hardware level is replaced by 0x10.
-> Thus results in incorrect data reading. Usage of UBI make things even
-> worse. Any attempt to access UBI leads to ubi damaging. As result OS load=
-ing
-> becomes impossible.
->=20
-> Non-DMA reading is OK.
->=20
-> This patch detects booting in reserved mode, turn off DMA and print big
-> fat warning.
->=20
-> Signed-off-by: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-> ---
->  drivers/spi/spi-airoha-snfi.c | 40 ++++++++++++++++++++++++++++++-----
->  1 file changed, 35 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/spi/spi-airoha-snfi.c b/drivers/spi/spi-airoha-snfi.c
-> index 8408aee9c06e..0e84a9addfa5 100644
-> --- a/drivers/spi/spi-airoha-snfi.c
-> +++ b/drivers/spi/spi-airoha-snfi.c
-> @@ -1013,6 +1013,11 @@ static const struct spi_controller_mem_ops airoha_=
-snand_mem_ops =3D {
->  	.dirmap_write =3D airoha_snand_dirmap_write,
->  };
-> =20
-> +static const struct spi_controller_mem_ops airoha_snand_nodma_mem_ops =
-=3D {
-> +	.supports_op =3D airoha_snand_supports_op,
-> +	.exec_op =3D airoha_snand_exec_op,
-> +};
-> +
->  static int airoha_snand_setup(struct spi_device *spi)
->  {
->  	struct airoha_snand_ctrl *as_ctrl;
-> @@ -1058,7 +1063,8 @@ static int airoha_snand_probe(struct platform_devic=
-e *pdev)
->  	struct device *dev =3D &pdev->dev;
->  	struct spi_controller *ctrl;
->  	void __iomem *base;
-> -	int err;
-> +	int err, dma_enabled;
+Hi Bartosz,
 
-here you can use bool for dma_enable:
+kernel test robot noticed the following build warnings:
 
-	bool dma_enable =3D true;
+[auto build test WARNING on 0f2995693867bfb26197b117cd55624ddc57582f]
 
-> +	u32 sfc_strap;
-> =20
->  	ctrl =3D devm_spi_alloc_host(dev, sizeof(*as_ctrl));
->  	if (!ctrl)
-> @@ -1092,12 +1098,36 @@ static int airoha_snand_probe(struct platform_dev=
-ice *pdev)
->  		return dev_err_probe(dev, PTR_ERR(as_ctrl->spi_clk),
->  				     "unable to get spi clk\n");
-> =20
-> -	err =3D dma_set_mask(as_ctrl->dev, DMA_BIT_MASK(32));
-> -	if (err)
-> -		return err;
-> +	dma_enabled =3D 1;
-> +	if (device_is_compatible(dev, "airoha,en7523-snand")) {
-> +		err =3D regmap_read(as_ctrl->regmap_ctrl,
-> +				  REG_SPI_CTRL_SFC_STRAP, &sfc_strap);
-> +		if (err)
-> +			return err;
-> +
-> +		if (!(sfc_strap & 0x04)) {
-> +			dma_enabled =3D 0;
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/spi-davinci-remove-platform-data-header/20251115-025558
+base:   0f2995693867bfb26197b117cd55624ddc57582f
+patch link:    https://lore.kernel.org/r/20251114-davinci-spi-v1-1-b19f842f3c38%40linaro.org
+patch subject: [PATCH] spi: davinci: remove platform data header
+config: parisc-randconfig-002-20251115 (https://download.01.org/0day-ci/archive/20251116/202511160056.vvfSNpF8-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511160056.vvfSNpF8-lkp@intel.com/reproduce)
 
-			dma_enable =3D false;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511160056.vvfSNpF8-lkp@intel.com/
 
-> +			dev_warn(dev,
-> +				"=3D=3D=3D WARNING =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D\n"
+All warnings (new ones prefixed by >>):
 
-you do not need to add "WARNING here".
+>> Warning: drivers/spi/spi-davinci.c:122 cannot understand function prototype: 'struct davinci_spi_platform_data'
+>> Warning: drivers/spi/spi-davinci.c:149 cannot understand function prototype: 'struct davinci_spi_config'
 
-> +				"Detected booting in RESERVED mode (UART_TXD was short to GND).\n"
-> +				"This mode is known for incorrect DMA reading of some flashes.\n"
-> +				"Usage of DMA for flash operations will be disabled to prevent data\=
-n"
-> +				"damage. Unplug your serial console and power cycle the board\n"
-> +				"to boot with full performance.\n"
-> +				"=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D\n");
-> +		}
-> +	}
-> +
-> +	if (dma_enabled) {
-> +		err =3D dma_set_mask(as_ctrl->dev, DMA_BIT_MASK(32));
-> +		if (err)
-> +			return err;
-> +	}
-> =20
->  	ctrl->num_chipselect =3D 2;
-> -	ctrl->mem_ops =3D &airoha_snand_mem_ops;
-> +	ctrl->mem_ops =3D dma_enabled ?
-> +				&airoha_snand_mem_ops :
-> +				&airoha_snand_nodma_mem_ops;
-
-nit: no need to add a new-line here:
-
-	ctrl->mem_ops =3D dma_enabled ? &airoha_snand_mem_ops
-				    : &airoha_snand_nodma_mem_ops;
-
-
-Regards,
-Lorenzo
-
->  	ctrl->bits_per_word_mask =3D SPI_BPW_MASK(8);
->  	ctrl->mode_bits =3D SPI_RX_DUAL;
->  	ctrl->setup =3D airoha_snand_setup;
-> --=20
-> 2.51.0
->=20
-
---EKzBAkeZKZ1ooe9j
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaRijzAAKCRA6cBh0uS2t
-rPpqAQCeg58jE6lmb6Y9qpYRoRN3SrKAtGS9xzuVhgfpBcZdmQEAlXeQDN+GWzjQ
-94j4LASAucndNW9KD6ss5bbbiaMR6wk=
-=fAZF
------END PGP SIGNATURE-----
-
---EKzBAkeZKZ1ooe9j--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
