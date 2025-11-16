@@ -1,111 +1,131 @@
-Return-Path: <linux-spi+bounces-11236-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11237-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5A9BC60865
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 17:22:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75CB2C61206
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Nov 2025 10:33:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C4D174E3B35
-	for <lists+linux-spi@lfdr.de>; Sat, 15 Nov 2025 16:22:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1498C4E1DAB
+	for <lists+linux-spi@lfdr.de>; Sun, 16 Nov 2025 09:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB352F3C3D;
-	Sat, 15 Nov 2025 16:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFBE22FAFD;
+	Sun, 16 Nov 2025 09:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aJU0oRzi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqcPZTcS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42FA2D739B;
-	Sat, 15 Nov 2025 16:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF58A8634C
+	for <linux-spi@vger.kernel.org>; Sun, 16 Nov 2025 09:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763223745; cv=none; b=H4QDTVagu9wI8pe+XA8wdMrn+kraLSmLZWJLU9BnplD5MWcDECjfUnbNYWQIkXYy5j+3J2285nvqDo3j5LiSc1qpiYzE14b794Uk5yVMxe9JPYWQQQQ4+HpL4Zq1QOvR+oclRx4PKkOkH11ES2fOkDXcIYwWoVlDaM8VWwdKBA0=
+	t=1763285622; cv=none; b=u6Zf2YcU/PLeAnfCkgmkUloRhBYTfZFIp2iRmrUl0fpNLc4r/zpIIR7pHR1iz6FGrFrN7TwTTjMc906o15WTytX4aivq1/2OzLpIO3WhXM4envhpgRl3Ez/ciYGJQfVgJpBvzR2Rkssvhjy9lQ+050JDX1Ecp55l0I4n41VsTJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763223745; c=relaxed/simple;
-	bh=rEnRLh6oU1O41QhkfgLHqF8VQ3Gg39DKHgTTg3E8C20=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kWAZlybARO6UCYR0Jce+WZHdC7tT5y8S3AK4rFKv1UHVMOqG9lrDqJUP05WcjfdAK/Zq/u+9S2OtVh3KobkKnPpi/dNo1HE6J0F+v4B3vGXVpyYimdpULzq+dvLnLy7T71+tN0HKovArUxyoLq2rTUUwYVwjm7K5P1VcT3UL83Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aJU0oRzi; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763223744; x=1794759744;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rEnRLh6oU1O41QhkfgLHqF8VQ3Gg39DKHgTTg3E8C20=;
-  b=aJU0oRziwnWae59UTkeqIW6sks+JpBY8h0f4ZYM+V9z8EByAR/VEBDDi
-   nM6adjyEtjfO4IgxzkHHcLvObsvdZfdXXErztPnMdgM5JBXO9rMV52oSt
-   MXKZ8O0ajINiIBpj80WDmDV9oGFsmF7HOyJY1aajXPjkHQFpynaINFal5
-   orKOlR216KcLcPbTWWH0EsEvjo4CnG2z8YHMWORcuYy7p6y/YsZe11vF3
-   aXEQzxmaSkAs6FzO3MB5Z2kTJWtNN+jT9PdVe71UoMX+pX+ftCfWFNfgf
-   kaXDH7U3Ir2V1dJJ3xAHw20xGlqIjGY5c4KJO47usLD3ew40sl9aPDud2
-   A==;
-X-CSE-ConnectionGUID: NbN+B2VBSZGr8IIDFH6I8w==
-X-CSE-MsgGUID: 9LADZMOrSLKbyHTGnNVF8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11614"; a="65444062"
-X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="65444062"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2025 08:22:24 -0800
-X-CSE-ConnectionGUID: Sp7RVpXFSCyzkpevabgcKA==
-X-CSE-MsgGUID: WwGDCu9eSdyOBEZf1Tb+XA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,307,1754982000"; 
-   d="scan'208";a="189717367"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 Nov 2025 08:22:22 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vKJ2Z-00085P-2E;
-	Sat, 15 Nov 2025 16:22:19 +0000
-Date: Sun, 16 Nov 2025 00:21:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, Mark Brown <broonie@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] spi: davinci: remove platform data header
-Message-ID: <202511160056.vvfSNpF8-lkp@intel.com>
-References: <20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org>
+	s=arc-20240116; t=1763285622; c=relaxed/simple;
+	bh=/yXKKKKHLLAQFDUQirh98IqOxjGZuB7ZkC9cAWPgZuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CCsnMpT4lHrlaeawYs2oZrGYRmH7QdOLvCn2anF9dAwTJjupC1VlBTstCENPm2twBOrNnYUVYBS5jZruSh1Qd2WPnNgIdm3U2hgjOVPIhP18iuguvTCA5/yC7Xk3Qp92xPa/sJu9+t4m9L33Ot4J1HGNHWLaiQLaqpGY8F7DMaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqcPZTcS; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b7373fba6d1so265066666b.3
+        for <linux-spi@vger.kernel.org>; Sun, 16 Nov 2025 01:33:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763285619; x=1763890419; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W7K7Zh/4TDUjOsx11sUCPxvPTzeLl/SQbNAQ3wxtwbg=;
+        b=TqcPZTcSp7ezteWsJp4MDDUMFsFskZjQlW6nATXnim6aih3O6Opu99sd/UCP4T8uJR
+         h73zi1//W6pvof8fWpH6rfYTsi/Jg8XvbbDhONzP5xLsHszws+9LZT/9FKre3w3p1olW
+         VcZA/Shvwa7AcBcNgF3ZmQQOi0cycqKvrMaJQwB0ucLLul1P+tuuHG8RbyeuSvHpywgI
+         xtGVzXj920CTquTQFsOlhI61diBScR6T3cVSuszZFk+bsSJUCcGCnD8MabgbT3sBFCf5
+         CbawzeYFpwDylZRKWXivztYjanbnYUr9YZQehd6/XksU+PxYfeu/CTfRhHkDdAjLI+Ck
+         TaDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763285619; x=1763890419;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W7K7Zh/4TDUjOsx11sUCPxvPTzeLl/SQbNAQ3wxtwbg=;
+        b=JAQgi17MZy1+HZoL0DYHbErsvC5blUErnkCa8p1f26jY7ZGcRlmiWLdY7FVg1G4sdp
+         85UYAxjyHhzw5as34GgdlMbEXoYWZEU5UNbc/xiYSPcgwOxg4YN+4bpcJte83BcwROTm
+         vQW/Kb5mDmccCFbloS35skpp6AyoePl+hi4f8NiO48JaqCYjp+77ZXMau4Gz0lPFkwOA
+         ZiaZqIHez8ALc/Ya+6YrYb1cX/jG70kJGlwOMmNJXmTlGvzRhrsejw84TW300OBBdxRG
+         lLb+4QEt3wcxulxom/YYP3V/TQDCGpDHYg7XyOREZn3tIoD0jQfJbMrJnmug7qbVqrTN
+         WqEA==
+X-Gm-Message-State: AOJu0Yw4dCZIb2zSeBYC8cHVor1cEEdeQcMGJef+I6fgQ81KeaX3IkOB
+	QJ5LabteCPsAwQ0iThivFw8sobm4ChNk+utw4jyzmXYiQBgTsrbSJzeh
+X-Gm-Gg: ASbGncsHJ6rq9A+56SA8qD2ZPJZWyQhv/o8jd1m2gRfBdxWKAGY5yWC7k8aebEzWY1x
+	t8sdIQYBCPLYaZjsz9+tWkV9iBqQfshUF8v5Z9IG2XMJUkQpxscmJ9MjKFVYcpcmpN4KZh1HTnk
+	e0RAP4GPqXU9WdDnBL5dQgAJLukvVbwj1a6D3tcHw/URNFm7sSAMkWbJCzre9Qa6xfF4+O0DfsL
+	/VyPGZrza47vCg0ajJHAGG5Pj+DUXyGjhV2jcH8TyxNInBvpr2q8LwcB3Qg/ZP70BVsfjA+sUeS
+	F7mpUzK6aRQaN2PyPrvkjuzcwtUWhmczmm1f2etEoHA0EBAnfPSktONeBDE+QeSxyzJ5TtV4V0S
+	TBoZB9ynBIagzICKC4b58yj2h5ZZ0Zr1ToEKXKhBIRDp1gySam0zlpm5GZ6+1dLmm62m8LAYLcN
+	2+uGxt4ru/+E2FuOl0axdNlYYmwZ+sHbv4fONwHxUSB5XRl1T0ppUXLIiRTkZYORxUAFg=
+X-Google-Smtp-Source: AGHT+IF0lzcWcCCr8TRt4S3Qm2DDxa0YSK5/L8zJ8yOcK3dpoxigT/zbrBcPqGjZxlQ7NF4Bl5Klog==
+X-Received: by 2002:a17:907:d18:b0:b73:9b4a:5c02 with SMTP id a640c23a62f3a-b739b4a5cb6mr21502266b.49.1763285618980;
+        Sun, 16 Nov 2025 01:33:38 -0800 (PST)
+Received: from localhost (dslb-002-205-018-238.002.205.pools.vodafone-ip.de. [2.205.18.238])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734fad3edasm802751466b.17.2025.11.16.01.33.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Nov 2025 01:33:38 -0800 (PST)
+From: Jonas Gorski <jonas.gorski@gmail.com>
+To: Mark Brown <broonie@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Grant Likely <grant.likely@secretlab.ca>,
+	Tanguy Bouzeloc <tanguy.bouzeloc@efixo.com>
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: bcm63xx: drop wrong casts in probe()
+Date: Sun, 16 Nov 2025 10:33:34 +0100
+Message-ID: <20251116093334.17423-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Bartosz,
+Both bs->regs and bs->{rx,tx}_io are tagged __iomem, so we shouldn't
+cast them to anything else.
 
-kernel test robot noticed the following build warnings:
+Silences the following sparse warning:
 
-[auto build test WARNING on 0f2995693867bfb26197b117cd55624ddc57582f]
+drivers/spi/spi-bcm63xx.c:571:22: warning: cast removes address space '__iomem' of expression
+drivers/spi/spi-bcm63xx.c:571:19: warning: incorrect type in assignment (different address spaces)
+drivers/spi/spi-bcm63xx.c:571:19:    expected unsigned char [noderef] [usertype] __iomem *tx_io
+drivers/spi/spi-bcm63xx.c:571:19:    got unsigned char [usertype] *
+drivers/spi/spi-bcm63xx.c:572:22: warning: cast removes address space '__iomem' of expression
+drivers/spi/spi-bcm63xx.c:572:19: warning: incorrect type in assignment (different address spaces)
+drivers/spi/spi-bcm63xx.c:572:19:    expected unsigned char const [noderef] [usertype] __iomem *rx_io
+drivers/spi/spi-bcm63xx.c:572:19:    got unsigned char const [usertype] *
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/spi-davinci-remove-platform-data-header/20251115-025558
-base:   0f2995693867bfb26197b117cd55624ddc57582f
-patch link:    https://lore.kernel.org/r/20251114-davinci-spi-v1-1-b19f842f3c38%40linaro.org
-patch subject: [PATCH] spi: davinci: remove platform data header
-config: parisc-randconfig-002-20251115 (https://download.01.org/0day-ci/archive/20251116/202511160056.vvfSNpF8-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251116/202511160056.vvfSNpF8-lkp@intel.com/reproduce)
+Fixes: b42dfed83d95 ("spi: add Broadcom BCM63xx SPI controller driver")
+Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+---
+ drivers/spi/spi-bcm63xx.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511160056.vvfSNpF8-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/spi/spi-davinci.c:122 cannot understand function prototype: 'struct davinci_spi_platform_data'
->> Warning: drivers/spi/spi-davinci.c:149 cannot understand function prototype: 'struct davinci_spi_config'
-
+diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
+index b56210734caa..55db5299d725 100644
+--- a/drivers/spi/spi-bcm63xx.c
++++ b/drivers/spi/spi-bcm63xx.c
+@@ -568,8 +568,8 @@ static int bcm63xx_spi_probe(struct platform_device *pdev)
+ 	host->auto_runtime_pm = true;
+ 	bs->msg_type_shift = bs->reg_offsets[SPI_MSG_TYPE_SHIFT];
+ 	bs->msg_ctl_width = bs->reg_offsets[SPI_MSG_CTL_WIDTH];
+-	bs->tx_io = (u8 *)(bs->regs + bs->reg_offsets[SPI_MSG_DATA]);
+-	bs->rx_io = (const u8 *)(bs->regs + bs->reg_offsets[SPI_RX_DATA]);
++	bs->tx_io = bs->regs + bs->reg_offsets[SPI_MSG_DATA];
++	bs->rx_io = bs->regs + bs->reg_offsets[SPI_RX_DATA];
+ 
+ 	/* Initialize hardware */
+ 	ret = clk_prepare_enable(bs->clk);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
