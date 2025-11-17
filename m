@@ -1,308 +1,91 @@
-Return-Path: <linux-spi+bounces-11259-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11260-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3C80C65127
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Nov 2025 17:16:27 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB97C65548
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Nov 2025 18:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21B674EB375
-	for <lists+linux-spi@lfdr.de>; Mon, 17 Nov 2025 16:13:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF3B435DD11
+	for <lists+linux-spi@lfdr.de>; Mon, 17 Nov 2025 16:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B802C026C;
-	Mon, 17 Nov 2025 16:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB742C11DF;
+	Mon, 17 Nov 2025 16:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="k89CbDUN"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="YHdUW7Jb"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACACE2C3242
-	for <linux-spi@vger.kernel.org>; Mon, 17 Nov 2025 16:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D225E304BD4;
+	Mon, 17 Nov 2025 16:54:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395976; cv=none; b=IJerkDk84diwxuNfDilvr2b/kJ4CJ2spGKRfxoZ1hV3zISUPykEzIUbfzc9SuUGa3U9X1BxIgYYzDiz7qBb3U+84Njj3FroVNIa+xC1Nk9D3EvfFFZ9qgPWYzr0jkEZXvFKfttxfjL8ik4f8FZ/P8vaOmD+g1Z6l1jtwt4nFfXY=
+	t=1763398453; cv=none; b=tHcaRu11FW6Kpo4xo5e3LnbSIecC+z9tDctR/8rTuoitgTKiGeo2jA3EdgYF/EvDS4BwGqCvia8cYZs7tdVCrizRRVyE7dSfB2X3gcXq2p/qVdD+T9SqmB8X6yOttzKgocYczI+TVf5tUKNQMlpZQxFHYcchcEEFdVx+khPbB1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395976; c=relaxed/simple;
-	bh=irhKvUY6luUQYQCjfUO79QZdoddqpn0XAk946ikRMGM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jRbUNHIZWyMDas0ze205JxghgexxXeA2Bt11Hu2PoTNDShZhsUtspV2UO2Z0hsOtZGaCclFB2Ny6/eGzjMGBVxvxOj9rPAws8p1jk6L8V0PBLtAbzmMiEbB/M7Pp3ZsCP/4GFw44APjiPxF3dIM006zCfotqy1cSz7gPYmbLCb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=k89CbDUN; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso12172205e9.3
-        for <linux-spi@vger.kernel.org>; Mon, 17 Nov 2025 08:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763395973; x=1764000773; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f+SE0fYOezsu8aNKbnzhAj9VZ6llsp+abwdEMUWBzyQ=;
-        b=k89CbDUNgQqB4+5sXTMxLxv9TSdgV4rH+GPO/+WH+SFxbfQut33U2UWNHEStERUyNt
-         BpoZLfMGyKw0qTmtIHV8J1bzlquDE8GWFoBo95HLuPwku80skGdFnWBl8ToPrPZkUZ43
-         LNlQQsLxL0E7nFq/rdqEkasTUYm4kzav6HPNWJ/kQ1zxJS6yhdn9JX/n4tXhhe1g7mHT
-         Gzki9jaCDyBIRDa5GnWvcm2Ele/saTf3c6VihDApd5eTzABpk1GOkMZdRSNj0CoLhDNS
-         6op91kf9dBR5A/rpbGDofDkIft5iZ9rfZig2eaDSJm43S/rhgpfb/vMUr5hvuxfvf6V/
-         NJMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763395973; x=1764000773;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f+SE0fYOezsu8aNKbnzhAj9VZ6llsp+abwdEMUWBzyQ=;
-        b=uk+O2Md0QvKtjhbk1uEnjGy9juc+L+0pHs5Pu2nry9w5UH5z5YCw/b+lKN2G1Na2QE
-         BDrem0WwG+35MRBQykr/2UHCZwySwEz957IXi/DVa4pER/SwViHdQzNsc11UTTjP/B6O
-         xR1k8f/mQ4N3OehuN2ir0o2vntb+fUgDbQdxe46UhyX6DZG4sHBmkXKsFtS02ZIyYjuc
-         yPeN8P7i7ixfO5I3wwHPS3FeHry+uUJu8rSsh7LQrLCH7p8nTL0q9DpDAosFX+09PFh1
-         zq2Y2igkasrKd1baXmSRE1XoWi1FjBr3bH7q+AeUn3NXPBEYkgC6zEuzwSrPTGjKpOFL
-         Aj8w==
-X-Forwarded-Encrypted: i=1; AJvYcCVsk4p0eyMGzivPPVvIWGJnDG+0X7aOiYYjJIFY/aaGQKj9cEGUmHuWrpD7XYnO4v3Chh0dIJ9Tt94=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3PajvzdBmw9qcGnfj2Ta4/P0hJfFG1i/oyBX+S+SjPz17RxmF
-	5H94f/XcD/9GkMuBGzhwNw+4+qn4zRt+ZXvKch2r8qCsGwGJb3xcDmeCC4d96NiXMlc=
-X-Gm-Gg: ASbGncsjmENKh2QLzNkDE5XjsFWASseaJsLQpxm6Pt2ntj8rDA1AekOP0jmxjN6gOmy
-	vKvYRamAbzO3sPmX7nAJZUx/tkzDGpMltZxfvgfUMhi9CZABjc8PfFfFpy5nq+5jmowklz7LkvI
-	hMB++jaisDikXB2fOxJSNV8ahVWUXNkE/tjBBM7HU15vcch99p1EiJ2i8h0dZzU+kimyjIMKKI9
-	arbq4wAYRao8IMAgAzOfXammarSBdmMk2CNNDIx8mllmaL1a+1r6bL3Oar1JMXCQhV85i+C//Th
-	7zE80ABwjSMYKXFYbylA1KJzLmWvR+ODbV9/9YA0UXo+/gG6coyJXZQoT4ObDZpa5nQOL7cNiiN
-	SxMWUStF6ZKQoC+umDZlW+CqnBhebHrlmo9K4gXXFSTFvN9usqfuET0PG+9vTO6V90b4dWASi3+
-	/7WlZU
-X-Google-Smtp-Source: AGHT+IFGb1o2W6QYlDDv0rwbgLGbPsAz5AYJmXa/hsVKUFgwfWOK9i6RIVG8MJdF0ff6tmkMN7Tgdw==
-X-Received: by 2002:a05:600c:a47:b0:46e:4b79:551 with SMTP id 5b1f17b1804b1-4778fea84cemr143485895e9.31.1763395972799;
-        Mon, 17 Nov 2025 08:12:52 -0800 (PST)
-Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:36dc:12ef:ca32:1a1c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787daab3fsm341218575e9.0.2025.11.17.08.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Nov 2025 08:12:52 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 17 Nov 2025 17:12:47 +0100
-Subject: [PATCH v2] spi: davinci: remove platform data header
+	s=arc-20240116; t=1763398453; c=relaxed/simple;
+	bh=hmWY5AtRee33yX8ps5wmd9gexmvGg0Sh91HpfKVSxGE=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=Wb30B4oZsD67bMzV8jd3CY3PmsZejyZOelLG7WSK08jpBFAXDWsiJdaWNZJRXGEJiXdckb9iSHxG+Adg0CFXlEhm5vJbaPBfr+Vc5G+LLqRVJJR6iAWlyefKK8iuItGdDZjCTFwB1yi5Wc5YuvBslkwVfaLf1VGvkT39TDjT63E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=YHdUW7Jb; arc=none smtp.client-ip=43.163.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1763398442; bh=hmWY5AtRee33yX8ps5wmd9gexmvGg0Sh91HpfKVSxGE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=YHdUW7JbWrhDsJAWJulqyXwcoMFpAR8qYaoNfUGO8cdBOH0d35v32ginPB1r2LyVf
+	 pAaRRiDt8CUN7zlanWQdBohqVxiq0AHLuQxAZbBZGHQvd/Mt9jl864ns1s6GGBphI1
+	 H5vRdapaW7a9h2144nnEjdjhZA6K7U6VXEc/bluw=
+Received: from localhost.localdomain ([2401:d002:1207:ce00:5cbb:f6ff:fe9e:eefa])
+	by newxmesmtplogicsvrszb20-0.qq.com (NewEsmtp) with SMTP
+	id D68084AE; Tue, 18 Nov 2025 00:53:40 +0800
+X-QQ-mid: xmsmtpt1763398420thjfqrz1x
+Message-ID: <tencent_AD45099B2ACD2FBFA150B8AF87074644C705@qq.com>
+X-QQ-XMAILINFO: MILSKRzDrLPbbDAqOfgupDwTnlLnUsWn8vCX9wyp4pnZcGCLtRUiLK1L08/KtK
+	 CFU5Y+XSes/VpPa8c5cBgqW/1v16mrUrxyO2x9OD1bm2mRz/amSQPl5Wt/TneBGbtuaNf996AJtk
+	 5EghR2S9qWuG7B48T3hI91/lu7mMWWmwoCAidRCosdzb8UMtBBQPLoqOiqokiJyr1KcaFHSn1EQY
+	 8Mt4AxLmLm1LZK+XgHWlyaACx0vwZTJqlxp8un83WRlw/TVCXh8+idJnDC9eEznX2XUIKCBFDOm2
+	 eYc4CTQUFPqxNCibzqFMUAI7ED4C/L5gBWjUj5ryP8lmKv0ZQlrP1Ww6V3lLRcnwaF/Ar8rp6C7N
+	 SKzf+nUMnxImyreAK7HKdi29keSsoeVdnpnSXoqQm5uvtF5UzsOlvrFLrjSsmjLGwHLofvdIuy5+
+	 ca75/nKlztJof6vj/hmRZ/d/ThBdykN1+KlU2xi3KX04fNK2Z9HIeD89DxbwBS2pw6IeGrgXiS2B
+	 lX57wxJUTNAnrbXn0duAdfxU7b8N6FUjqP5gGLTMf1MHttox4TldEtfXhvdr7u0UNTYob8A0YSDk
+	 Q0nCAFIShIyQaduNPeciM6Od0r9U6khB/DhDF2PNFCC37mEGHqAO20IImhgWdDIAG9PsVdTqbW6Y
+	 Yu0YTAyiii1xXOxiRgwvPky5MXq0XM0U78tossDRiXJ1eHLDVSmAwXlQlmmE/xcuUXgOCg39fC+k
+	 Mck/eHDyTwkqaKibqfuExHw/Bz7QbziWhhGfYdJYj2HVK9sTeg3QEK48Rp1gBYNAnBNgFCPwM4AV
+	 UuYFyZNVIG3U+M/dQssTigj2tDf2DzW4rgJTPYyPTeqEDVl2Hb5/q8YYUWnqhJbvlEaDQViJfiDt
+	 PdkhHVQWPNyIaCcTvyugdRSJt6rw/zQpuAhS+eKNOuKVFbPTvlZ6b+ml66/V+MAd+J7L0V9vHkcr
+	 RFi+dC4OTKuUoMWtTmbN5Wfk6dbx3Cwx3TZ4k0sfcRCUtmZRUZOPkODU6h61kJAEO8sY+meXD359
+	 kseeHo5hUUcuyb0+Le8pS3okgvnKjAX7DYyc+cH3jQUgo7xi+ggwPaz4BapI0=
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+From: Hang Zhou <929513338@qq.com>
+To: broonie@kernel.org
+Cc: jonas.gorski@gmail.com,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: bcm63xx: fix premature CS deassertion on RX-only transactions
+Date: Tue, 18 Nov 2025 03:53:38 +1100
+X-OQ-MSGID: <20251117165338.213687-1-929513338@qq.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <aRpF3jRTs23YrPgC@sirena.co.uk>
+References: <aRpF3jRTs23YrPgC@sirena.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251117-davinci-spi-v2-1-cd799d17f04a@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAH5JG2kC/23MQQ7CIBCF4as0sxbjULTYlfcwXSAM7SQGGjBE0
- 3B3sWuX/0vet0GmxJRh7DZIVDhzDC3koQO7mDCTYNca5EmeEVEJZwoHyyKvLPzF0aDVQNIbaI8
- 1kef3rt2n1gvnV0yfHS/4W/87BQWKB169VtL3tte3JweT4jGmGaZa6xdKI8I0pwAAAA==
-X-Change-ID: 20251114-davinci-spi-f6de7847e2fa
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6629;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=86z0jBSHZcsTCcwlfViR6MY7DgeQAb3XF58fAhXiqRA=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpG0mA2exUdNXHVj4aC5h+2PeMVLbsoPzeea+EJ
- xkF/nTgcp2JAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaRtJgAAKCRAFnS7L/zaE
- w4ekD/wLnwm6weOibrpniNACjYS6naFo0QF20HA3WUrdU6kxPa6c6FxtnZe8q91za/rignSw44+
- PKNtO965urxzwPJPg84bkcNhsvX3tM4VWKE3m+clZV4zyU3cUgyd7C2+/yESk7sAwv9uenfDv+D
- pgPBw014U80i42hmb+liQREYD0/4lnbqQU6LWOv0+Dw7d21aecot/XfkIQGy1yF2XGDfgYNpbno
- TzxeMV/fI6qpfoQZmE5Pb0IreKZJc/9nS4FANfc8JwTyplp5uVMesBqBUNe7NieCg456p53uusp
- D0qM+7qrepRowart1ZjxitZY3IU5Ib2fftujA5y/Gb5tY9V4LnDTw/TdKCM+amEGgwwQaiEqJYP
- 0E6DvGKcusNMga2Gfzi9zrr+S18fPd9McpnX2HVR/O/k6tvhxoXNQ/7sLZiW1dJ16NySjgDdZoq
- MOPPujVDx3T9Hr2lJksfX9/GWZPgGNJnyn4xPcOUEWZ7cgA5+NaE9B6L4ohE37RqPlklWioUGbI
- BZxFkj6aRjp2hiLfC9Ix7P7DEX5Dnh4GfNlFSFeJhXTdYfMAPLefs5fpXHV/zvh3pkp0pjWoLLk
- UiznPr2QP2eePOswMX9Z2AHxb/jVNLdFXiSgd5tN+BsmRqiuPN8K3TQ9sGHCNNIDCPkhU6w32WU
- HmpZHez2wrYagzA==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Mark,
 
-There are no longer any board files including the DaVinci SPI platform
-data header. Let's move the bits and pieces that are used in the driver
-into the driver .c file itself and remove the header.
+Thank you for the review.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-Changes in v2:
-- Fix kernel doc warnings
-- Link to v1: https://lore.kernel.org/r/20251114-davinci-spi-v1-1-b19f842f3c38@linaro.org
----
- drivers/spi/spi-davinci.c                 | 64 ++++++++++++++++++++++++++-
- include/linux/platform_data/spi-davinci.h | 73 -------------------------------
- 2 files changed, 62 insertions(+), 75 deletions(-)
+I initially picked 0xFF because in most case, the SPI bus is high when it's idle, but in practice 0x00 works just as well here.
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index a29934422356b6b6d4043c0f0b43b91e5ccd894b..21a14e800eedc7ec41ade3187ddca79265b6e143 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -9,6 +9,7 @@
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
- #include <linux/delay.h>
-+#include <linux/platform_data/edma.h>
- #include <linux/platform_device.h>
- #include <linux/err.h>
- #include <linux/clk.h>
-@@ -19,8 +20,6 @@
- #include <linux/spi/spi_bitbang.h>
- #include <linux/slab.h>
- 
--#include <linux/platform_data/spi-davinci.h>
--
- #define CS_DEFAULT	0xFF
- 
- #define SPIFMT_PHASE_MASK	BIT(16)
-@@ -98,8 +97,69 @@
- #define SPIDEF		0x4c
- #define SPIFMT0		0x50
- 
-+#define SPI_IO_TYPE_POLL	1
-+#define SPI_IO_TYPE_DMA		2
-+
- #define DMA_MIN_BYTES	16
- 
-+enum {
-+	SPI_VERSION_1, /* For DM355/DM365/DM6467 */
-+	SPI_VERSION_2, /* For DA8xx */
-+};
-+
-+/**
-+ * struct davinci_spi_platform_data - Platform data for SPI master device on DaVinci
-+ *
-+ * @version:	version of the SPI IP. Different DaVinci devices have slightly
-+ *		varying versions of the same IP.
-+ * @num_chipselect: number of chipselects supported by this SPI master
-+ * @intr_line:	interrupt line used to connect the SPI IP to the ARM interrupt
-+ *		controller withn the SoC. Possible values are 0 and 1.
-+ * @prescaler_limit: max clock prescaler value
-+ * @cshold_bug:	set this to true if the SPI controller on your chip requires
-+ *		a write to CSHOLD bit in between transfers (like in DM355).
-+ * @dma_event_q: DMA event queue to use if SPI_IO_TYPE_DMA is used for any
-+ *		device on the bus.
-+ */
-+struct davinci_spi_platform_data {
-+	u8			version;
-+	u8			num_chipselect;
-+	u8			intr_line;
-+	u8			prescaler_limit;
-+	bool			cshold_bug;
-+	enum dma_event_q	dma_event_q;
-+};
-+
-+/**
-+ * struct davinci_spi_config - Per-chip-select configuration for SPI slave devices
-+ *
-+ * @wdelay:	amount of delay between transmissions. Measured in number of
-+ *		SPI module clocks.
-+ * @odd_parity:	polarity of parity flag at the end of transmit data stream.
-+ *		0 - odd parity, 1 - even parity.
-+ * @parity_enable: enable transmission of parity at end of each transmit
-+ *		data stream.
-+ * @io_type:	type of IO transfer. Choose between polled, interrupt and DMA.
-+ * @timer_disable: disable chip-select timers (setup and hold)
-+ * @c2tdelay:	chip-select setup time. Measured in number of SPI module clocks.
-+ * @t2cdelay:	chip-select hold time. Measured in number of SPI module clocks.
-+ * @t2edelay:	transmit data finished to SPI ENAn pin inactive time. Measured
-+ *		in number of SPI clocks.
-+ * @c2edelay:	chip-select active to SPI ENAn signal active time. Measured in
-+ *		number of SPI clocks.
-+ */
-+struct davinci_spi_config {
-+	u8	wdelay;
-+	u8	odd_parity;
-+	u8	parity_enable;
-+	u8	io_type;
-+	u8	timer_disable;
-+	u8	c2tdelay;
-+	u8	t2cdelay;
-+	u8	t2edelay;
-+	u8	c2edelay;
-+};
-+
- /* SPI Controller driver's private data. */
- struct davinci_spi {
- 	struct spi_bitbang	bitbang;
-diff --git a/include/linux/platform_data/spi-davinci.h b/include/linux/platform_data/spi-davinci.h
-deleted file mode 100644
-index 2cb5cc70fd9d22bd00c85beb5b9a8cb74547e9f4..0000000000000000000000000000000000000000
---- a/include/linux/platform_data/spi-davinci.h
-+++ /dev/null
-@@ -1,73 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright 2009 Texas Instruments.
-- */
--
--#ifndef __ARCH_ARM_DAVINCI_SPI_H
--#define __ARCH_ARM_DAVINCI_SPI_H
--
--#include <linux/platform_data/edma.h>
--
--#define SPI_INTERN_CS	0xFF
--
--enum {
--	SPI_VERSION_1, /* For DM355/DM365/DM6467 */
--	SPI_VERSION_2, /* For DA8xx */
--};
--
--/**
-- * davinci_spi_platform_data - Platform data for SPI master device on DaVinci
-- *
-- * @version:	version of the SPI IP. Different DaVinci devices have slightly
-- *		varying versions of the same IP.
-- * @num_chipselect: number of chipselects supported by this SPI master
-- * @intr_line:	interrupt line used to connect the SPI IP to the ARM interrupt
-- *		controller withn the SoC. Possible values are 0 and 1.
-- * @cshold_bug:	set this to true if the SPI controller on your chip requires
-- *		a write to CSHOLD bit in between transfers (like in DM355).
-- * @dma_event_q: DMA event queue to use if SPI_IO_TYPE_DMA is used for any
-- *		device on the bus.
-- */
--struct davinci_spi_platform_data {
--	u8			version;
--	u8			num_chipselect;
--	u8			intr_line;
--	u8			prescaler_limit;
--	bool			cshold_bug;
--	enum dma_event_q	dma_event_q;
--};
--
--/**
-- * davinci_spi_config - Per-chip-select configuration for SPI slave devices
-- *
-- * @wdelay:	amount of delay between transmissions. Measured in number of
-- *		SPI module clocks.
-- * @odd_parity:	polarity of parity flag at the end of transmit data stream.
-- *		0 - odd parity, 1 - even parity.
-- * @parity_enable: enable transmission of parity at end of each transmit
-- *		data stream.
-- * @io_type:	type of IO transfer. Choose between polled, interrupt and DMA.
-- * @timer_disable: disable chip-select timers (setup and hold)
-- * @c2tdelay:	chip-select setup time. Measured in number of SPI module clocks.
-- * @t2cdelay:	chip-select hold time. Measured in number of SPI module clocks.
-- * @t2edelay:	transmit data finished to SPI ENAn pin inactive time. Measured
-- *		in number of SPI clocks.
-- * @c2edelay:	chip-select active to SPI ENAn signal active time. Measured in
-- *		number of SPI clocks.
-- */
--struct davinci_spi_config {
--	u8	wdelay;
--	u8	odd_parity;
--	u8	parity_enable;
--#define SPI_IO_TYPE_INTR	0
--#define SPI_IO_TYPE_POLL	1
--#define SPI_IO_TYPE_DMA		2
--	u8	io_type;
--	u8	timer_disable;
--	u8	c2tdelay;
--	u8	t2cdelay;
--	u8	t2edelay;
--	u8	c2edelay;
--};
--
--#endif	/* __ARCH_ARM_DAVINCI_SPI_H */
-
----
-base-commit: 0f2995693867bfb26197b117cd55624ddc57582f
-change-id: 20251114-davinci-spi-f6de7847e2fa
+If you prefer, I'm happy to switch the dummy value to 0x00 for consistency and respin this as v3.
 
 Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hang Zhou
 
 
