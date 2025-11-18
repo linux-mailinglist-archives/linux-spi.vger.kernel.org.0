@@ -1,64 +1,63 @@
-Return-Path: <linux-spi+bounces-11274-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11275-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A4AEC69A61
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 14:43:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E688C69B58
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 14:50:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 777073840BF
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 13:42:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 4C26E2B184
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 13:50:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310D83563F2;
-	Tue, 18 Nov 2025 13:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270773570BE;
+	Tue, 18 Nov 2025 13:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naSJ79qd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfhralLi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0717635580A;
-	Tue, 18 Nov 2025 13:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5E734E768;
+	Tue, 18 Nov 2025 13:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763473337; cv=none; b=sKud1RTBmphN/xah3O0cz/9TjdnkNDNuBDSA0K3rQ9jad283PjFM3O/xj0S8jlv4tOe/KKl2ZuhZglQ0MlzttW6f+ZGOhauE/g9Lw3dDDcasB9nW9amVkn/lX/nadLln0/J66LaQUpdAYbw1/g1iDgq+SHEC5mqXkZmVTspoGSQ=
+	t=1763473760; cv=none; b=b42ISfLZNPBErn/WYNfz5m8/l7fMxZd60rFJ2DVoq96/fSkjjN8GkqX43A4jGiRfu2Vta3KCiUeUDsy6eyN6Jh9KifizyutWc8LLcVfSl6Ooz2pJNcaWqiJ3eeq/XueI6RiZaTvedTkqjJhTeUu3Wkipbaqt4i/xrOLdileoIX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763473337; c=relaxed/simple;
-	bh=2B3RBOSE7CmxmQYzvtH+hFm8q9HZRTVj8NG7RykYiWI=;
+	s=arc-20240116; t=1763473760; c=relaxed/simple;
+	bh=gBn+zFQ/15OeDuEquI5L05oTTxpfqWVTb/j2583pO9o=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SXXxtrjfSbVE06PWU1zeu+3Ol62Px/ryiiedXRp1kzSwUDOsmkfpbiJAsC43gGLcVxfHJpbJAUcd9KHMBLBFmJZkc8mtr/t+Fi23D/32nq1mY+Jp4VBHStwz1tEl8eGZXV8yCJTM57ABxKIWI8QcmydQ1BOEeQvNpcwU7fKhVuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naSJ79qd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A79C2BCB5;
-	Tue, 18 Nov 2025 13:42:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FcSewlxyREtaQlppa84+TRvDVSWuhXpe2yA+v8ks2fG7oD4FluOyEilcdtnfwOnSSMu36FNiNY+K8dTYHOYoimiAb6uTVm8sRwhwFzqQau9jWrMtYf2GMBRyiLuc4C6nLOrguDoNAZDX8etStvmoUW+PGH7j7258WfFhhlgmnk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfhralLi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9A3C2BCB4;
+	Tue, 18 Nov 2025 13:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763473336;
-	bh=2B3RBOSE7CmxmQYzvtH+hFm8q9HZRTVj8NG7RykYiWI=;
+	s=k20201202; t=1763473758;
+	bh=gBn+zFQ/15OeDuEquI5L05oTTxpfqWVTb/j2583pO9o=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=naSJ79qdLKjk294duczCbiAbSE5o9fUwqTO8UYXwo2bOwQKNMoO7O7kNJiOqBEuTP
-	 oXc6bw0WRc5esLsVaF0JZ+aAHaroxNByPNGlCpDw2gesNZlo9BBvi36cE2lr3vVzsR
-	 IiwqI4P/kYSlXW8q8216N1O/Ad2L8mZDxP9EFxZlpfjaphsYoQHxsh9os8WOrTbYe+
-	 Qgl/xkr8mH8p+YtPg2hbOERFsX0jxQjuJdrVKMVWjKypCXzz5L6zBb3BUVSzDGte+q
-	 CU+/SViotc4kRI/oA1gODPmdSKfFu+aGFn59auP1BJuE1pVhavuIlUTMdFze1DjOKd
-	 q/huUdixl/jHg==
+	b=lfhralLiVKA3NrzOM2K6AZpEGuU2wP1BALvVvGel/zHmTwFyPGmoicmsy5d5XJ2nu
+	 87u8QkBk3GvtExEX6XbAhncxOIMf70f+SowSZoiZfaVKaLNNGEv+RBAedSrfxVoD7p
+	 uCrM8v8TrD196AjFSByWLfYvXlo0QVsF2hehxxoJVF1Acp74IMJuWSXMeML0zAWmrP
+	 874yEha1xPgsEXxICLbaRGhUrWdCucdTyl4siYLYol7Wv3aOqn4HFxzp437N2N4MZ8
+	 PJoLrTwa6oJDgDCckE2GoZ5L3UvFJIzCAK5/3euqVZa4nUmBBKElSXgcI1E/3AQvSe
+	 ceuSbcMI43F8w==
 From: Pratyush Yadav <pratyush@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Santhosh Kumar K <s-k6@ti.com>,  <richard@nod.at>,  <vigneshr@ti.com>,
-  <broonie@kernel.org>,  <tudor.ambarus@linaro.org>,
+To: Santhosh Kumar K <s-k6@ti.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,  <richard@nod.at>,
+  <vigneshr@ti.com>,  <broonie@kernel.org>,  <tudor.ambarus@linaro.org>,
   <pratyush@kernel.org>,  <mwalle@kernel.org>,  <p-mantena@ti.com>,
   <linux-spi@vger.kernel.org>,  <linux-mtd@lists.infradead.org>,
   <linux-kernel@vger.kernel.org>,  <a-dutta@ti.com>,  <u-kumar1@ti.com>,
   <praneeth@ti.com>
 Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
  controller
-In-Reply-To: <87ecqcakjo.fsf@bootlin.com> (Miquel Raynal's message of "Wed, 05
-	Nov 2025 10:35:55 +0100")
+In-Reply-To: <cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com> (Santhosh Kumar
+	K.'s message of "Sat, 20 Sep 2025 23:25:31 +0530")
 References: <20250811193219.731851-1-s-k6@ti.com>
 	<20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
-	<cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com> <87qzunt4n4.fsf@bootlin.com>
-	<ea19bc64-a775-4309-8f3b-ce9dd8ac02ee@ti.com> <87ecqcakjo.fsf@bootlin.com>
-Date: Tue, 18 Nov 2025 14:42:12 +0100
-Message-ID: <mafs0ms4j4fuz.fsf@kernel.org>
+	<cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
+Date: Tue, 18 Nov 2025 14:49:13 +0100
+Message-ID: <mafs0ikf74fja.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -66,82 +65,116 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Nov 05 2025, Miquel Raynal wrote:
+On Sat, Sep 20 2025, Santhosh Kumar K wrote:
 
-> Hello Santhosh,
+[...]
+>> This is actually wrong. Tuning is way more generic than that :)
+>> If someone wants to use a chip at a high frequency (50MHz in your case,
+>> but whatever, there is a threshold above which additional care must be
+>> taken), it must go through the calibration step. It does not matter in
+>> which mode you are. Calibration would still be relevant in single SDR
+>> mode.
+>> This 50MHz bothered Mark because it is too Cadence specific. Maybe this
+>> should be a controller parameter? If the spi-mem core (or even the spi
+>> core, by extensino) sees that the design allows running at XMHz (due to
+>> the SPI peripheral properties or simply the absence of any limitation),
+>> and if the controller states that it requires an extra tuning step above
+>> YMHz (and X > Y), then it launches the calibration.
+>>  From a core perspective, I would like the calibration hook to be as
+>> simple as possible, because what "calibration" means is highly
+>> controller and chip specific.
 >
->>>>     - On tuning failure, retry by re-running spi_mem_needs_tuning() wi=
-th
->>>> the second best set of ops (max throughput - 1)
->>> I would like to challenge this need. Can the same calibration fail if
->>> attempted multiple times (eg. because of the heat?) If yes, then we need
->>> a fallback indeed. Otherwise, I'd be in favor of just failing the
->>> probe. Calibration is an opt-in -> users must allow a higher frequency
->>> than they use to in order to enable the feature?
->>
->> It's possible the same calibration will fail intermittently for
->> different reasons (temperature changes, as you mentioned). If tuning
->> fails, the driver should fallback to the non-PHY frequency so the flash
->> continues operating with slower reads/writes rather than failing the
->> probe (availability should be prioritized, right?).
+> I understand the concern here.
 >
-> Agreed, if the tuning may fail we must fallback in this case. However
-> there is another situation that must be handled in this case: once
-> tuning is done and we want to use PHY-optimized paths, we must fallback
-> to more basic/slower reads if for some external reason, they start
-> failing, right?
+> Let me point out the options for launching the tuning procedure, along
+> with the issues in each approach.
+>
+> Option 1: Launch tuning as part of spi_mem_exec_op()
+>    - After spi_mem_access_start(), introduce a spi_mem_needs_tuning()
+> check (a new callback to SPI MEM controller) to check whether the
+> current op requires tuning
+>    - If yes, we call spi_mem_execute_tuning()
+>         - on success, mark tuning complete in a flag within SPI MEM
+> Controller private data
+>         - on failure, we attempt a fallback by calling
+> spi_mem_adjust_op_freq() and drop to a lower supported frequency
+>
+> Option 2: Launch tuning within spi_controller->exec_op() implementation
+>    - Very similar to option 1, except that the spi_mem_execute_tuning()
+> is triggered from within the controller's exec_op() implementation
+> (no need for spi_mem_needs_tuning())
+>
+> Drawbacks in option 1 and 2:
+>    - Tuning requires multiple reads of a known pattern, but the flash
+> may not always be in a state to allow read commands
+>    - No fallback on failures, can't make flash-specific adjustments in
+> case of a tuning failure
+>    - No access to write_op() to write known pattern temporarily to an
+> on-die cache. Pattern needs to be always burnt into the flash
+>
+>    - Plus, in option 2 - we can't call spi_mem_adjust_op_freq()
+>
+> While the need for tuning is dictated by Controller specific
+> characteristics the ops (and state of the chip) required to complete
+> tuning is under the control of spi-mem users (spi-nand/spi-nor).
+> So, it's impossible to achieve tuning without the help of spi-mem users.
+>
+> So, Option 3: Launch from SPI MEM clients
+>                           (mtd/nand/spi or mtd/spi-nor, etc.,)
+>    - Once the spi-mem chip is completely enumerated and best read and
+> write ops are chosen call spi_mem_needs_tuning(read_op, write_op) as
+> a part of .probe()
+>    - If tuning is required, call
+> spi_mem_execute_tuning(read_op, write_op)
+>         - If only read_op is provided, it implies the tuning pattern is
+> pre-flashed to the partition
+>    - On tuning failure, retry by re-running spi_mem_needs_tuning() with
+> the second best set of ops (max throughput - 1)
+>
+> With option 3, spi_mem users are limited to calling
+> spi_mem_needs_tuning() and spi_mem_execute_tuning(). Rest is hidden
+> within the controller drivers. If spi-mem users change read/write ops,
+> the above sequence can be re-issued.
+>
+> The controller can store the read_op and write_op in case of a tuning
+> success and periodically re-run tuning, ensuring we always have valid
+> tuning parameters.
+>
+> One concern with option 3 is that we may not be able to make use of
+> static data on certain flash as tuning patterns (like reading parameter
+> page or SFDP table for tuning instead of controller specific attack
+> patterns).
 
-How would you even detect that your tuning is out-of-date because of
-temperature changes? You would need some sort of on-flash ECC to detect
-that. I think many of the flashes that support DDR reads at high
-frequencies also have ECC, but AFAIK the SPI NOR core does not support
-it.
+Why not? How else would tuning work? Do you expect controllers to first
+flash the tuning pattern and then tune the reads? That is a hard no I
+think, since you don't want to over-write user data and I don't think we
+will ever have any area of memory we can reliably over-write without
+risking that.
 
-Anyway, I think we should limit the scope of the problem. Let's first
-start with the expectation that the tuning supports the whole operation
-range of the device. This was true at least for the spi-cadence-quadspi
-tuning that I worked on when I was at TI. The tuning parameters had
-enough margin to ensure it worked for the device's whole temperature
-range.
+I think we should start with the requirement to have the pattern flashed
+already and figure out how SPI NOR or SPI NAND can discover that
+(perhaps via NVMEM?).
 
-If there is a tuning algorithm that can't do that, then we can extend
-the core to either do ECC or perhaps let temperature sensors signal the
-need for re-calibration.
+I think SFDP is quite nice for this, but IIRC for spi-candence-quadspi,
+that was not a viable option due to some reasons. If you can now make it
+work with SFDP, then that would be even better, since we don't have to
+deal with the pain of pre-flashing.
 
-But for now I think it is easiest to just ignore the problem and focus
-on the other ones like how to get the calibration pattern and how to do
-the tuning.
+Overall, I think option 3 is the most promising. Options 1 and 2 will
+likely add so much overhead they will end up being slower than non-PHY
+reads, since tuning is usually quite expensive.
 
 >
-> The obvious choice in this case would be to let this error handling to
-> the controller driver. Re-using the same operation at a lower speed
-> would be suboptimal, because the fastest operation at a high speed might
-> not be the most efficient at slower speeds due to the number of dummy
-> cycles needed,. But I believe this is negligible based on the fact that
-> we already are in degraded mode at that stage.
->
-> However, this may conflict with:
-> - read retries
-> - continuous reads (?)
->
-> So in practice the fallback might be needed on the SPI NAND/NOR side
-> (this can be further discussed).
->
-> But once we solve this, comes a similar problem on the write side. How
-> do we know if a write will or did fail because of a temperature change?
-> What may be the heuristics to fallback in this case?
-
-Santhosh, do you have any numbers on write performance improvements? I
-am curious if it is even worth the effort.
-
+> Please let me know your thoughts on which of these directions makes the
+> most sense.
 >
 > Thanks,
-> Miqu=C3=A8l
+> Santhosh.
+>
 
---=20
+-- 
 Regards,
 Pratyush Yadav
 
