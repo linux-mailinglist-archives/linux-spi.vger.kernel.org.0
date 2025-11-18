@@ -1,199 +1,96 @@
-Return-Path: <linux-spi+bounces-11280-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11281-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 692E6C6B0D5
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 18:51:55 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F99C6B577
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 20:05:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9DA2B4F2F46
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 17:46:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B842135C7D3
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 19:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E302D543D;
-	Tue, 18 Nov 2025 17:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA49E2D0625;
+	Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ZwzGcwex"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeyyFFd/"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7931C7012
-	for <linux-spi@vger.kernel.org>; Tue, 18 Nov 2025 17:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A498527B4E1
+	for <linux-spi@vger.kernel.org>; Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763487967; cv=none; b=FvZBX0D7bVnb+iPTt5CX4GAeM6FujkGTnU1yEiRO9uXnHk53DOxiC2+5OllAq3fBxGVzJpjZ+i0g5YHcLXPYS3m74q12SSwpG2isc7TWWD7/tlENbrBpXg+KgTArXbGPDrerGDXK6NubZ6FiB6JBJ8YV7bLmheEAPwCEY89QyKU=
+	t=1763492732; cv=none; b=hI9GHfkanotWt9i0b7GssmOz6hPYZhqsl73Tj3zV/DcNVWInllLmmpdQXR8YqSoVhl1E5ekVHgq5VRtOWve5Kfc+i53zR86ppe1nL5OfHU7q+gjG2/CzgIjAeadGRwJEernVo0T/xhpZ3kelN5/+Jfn4vFedyjB+rQQDOJaQtyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763487967; c=relaxed/simple;
-	bh=IDXXPntONLtWnQ4H/+mhIZ/CKssmJVfOe9vQjmQEy+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JhXSWrw0HwNXV1lGZ4EwGzIK8Ibj888f8m2/+M6nW/Gw8cGpCy38u0lDxrbl6OpcZ5hwGmJhIRxfuFdqK74pT96+7mKNDdZTAP7qhN8GObOCr+z9F0qEUPbNDPZnXesfYjxp9Hvl39zD1tvG2/oGqAeZRAtLSeeVibCOVERpiWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ZwzGcwex; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-74526ca79beso4437879a34.0
-        for <linux-spi@vger.kernel.org>; Tue, 18 Nov 2025 09:46:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1763487962; x=1764092762; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tRB3SkR03cIdDSITzGw4J5oXKbUxrRLBIfPvKWW4i4Y=;
-        b=ZwzGcwex5++eHc7+B8WWsnstjkfTiYsv1x0bVohUwjmyQkslQ5v+4r8nAV9m9kbu8J
-         0P9j8j/U/KGuB2AnNifdK8bYARA1E96bK0kMz3b72dwM+pP50JvDX3JZWKxWulkuzL0q
-         oqIS96iQJ/WBdfCltuhLVhW72PEi2hq3xdKz0cOeZOF/NHmdhrhnEAjeEPTOSDEtDzmr
-         G/QMcVSuNH48WsHlXD5lUvWaVZFBnWS/glyJyvPKI42BUuRqvea9AV2ydwcDfZNLnLWX
-         aoTJo4pMtZQnq0hpTfNO6k5UfdzTy499LkrwCJeZ16rMnBT6FLeoH/ZOHPcgzhIfsO/B
-         T08w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763487962; x=1764092762;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tRB3SkR03cIdDSITzGw4J5oXKbUxrRLBIfPvKWW4i4Y=;
-        b=e9cdsuZn7bdFXBszG70KtdIPIeVjR4fcc2KKsQb3iRmjGyEnTRKDegE6TbEa2QuOQ9
-         F1UcMrDy5X/dhHyWoTzTNATrPiVpaMvpXrzZD0w9MxC/U4M1Z6rJmJsPJ1BbERrVOb0M
-         5OwGjGEOwE1R7gLzLaGgUNTolwU4cBPgGlTTK+ZH4Fyhl3cZM0vr7L8079JOKonaXUH1
-         7PgZFkA3p5jgfkIyqGI4J4ZSagMfXsgxH2yLt55WXJfJ+17t1XEsCL6GrH6MKh8vvdW0
-         efGso2Fy/lfQPOqJB1TuWUBAP/IkyPALE510fbdddUJdy2A3g2mZY6vatI2avEjiWSCG
-         w0/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU4fQ3E+nRavdFG/1+VaEax+KRdWMxfJMjSYMVR/WylTQXJD1Kjsq3T/jFF5++p956bpvJ6u1U6DMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyywsQGLxwst4i2/9biaaAG9Otzx0/Eh0EIXSOfmgTJw2UZA55y
-	3bvyW7Aj3J5WBDq/JUcKkFAD9ieo9bjRA0b+LS3jhEfTTwCB3wFLQZx5RF4BFnq/FAE=
-X-Gm-Gg: ASbGncsxgNFCxYtPV/0JowbXkOyyY/78/Mmo3qCDWAKXlgky+IYoJgjDZD+QY/kjuse
-	Is88YpztRxpJCT4TtlHkh4KAXMGVtY6yNugJdWcTl/4UEAmyTb4DpR3fsgPRfHuwFhOl/E4K64f
-	H7sUwx1JNpco4Y4/bPmHe3e1Qq0axPFk1I/ID8cmVEolB26o/3sEM2uITcM1N+0SNZUYJ0om1tI
-	g1bktnuh4bibHchtP4mnP2qfWLe3E2EYwskq86x7i4aUa/aqoBRp3Djov7v5ifvT2AWmNTwZKzk
-	PX3mb3EiOSdMwevE1t7dxwxJiGbICHVgochnaUoH09ET5QDXtAc6eQ4pD9jueRnLQgT47gcKT6Y
-	5U3F3cnxGujcb7htUlpJAOKQlePvDuBhFp5f+pjilUpKXqK2FcRxslXk/7NGZjrNJP/oN7TZ3QY
-	7qf6I6sU/hoqmOFh2mV1eGylKf8+/E5xIjLx1epE7KMWHBiPlqcgQP51ORaREz
-X-Google-Smtp-Source: AGHT+IEyXv7o8silWSWiXUwK16E7SzqW9ae9uZ2yQok+gwbaS1AMF/9TQObjEohC0ILlJFcIzyAJfQ==
-X-Received: by 2002:a05:6808:8955:b0:450:c877:fd5e with SMTP id 5614622812f47-450c878022cmr4423732b6e.19.1763487962096;
-        Tue, 18 Nov 2025 09:46:02 -0800 (PST)
-Received: from ?IPV6:2600:8803:e7e4:500:8e86:179b:44b8:cc2b? ([2600:8803:e7e4:500:8e86:179b:44b8:cc2b])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-65724cb873dsm5554288eaf.4.2025.11.18.09.46.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Nov 2025 09:46:01 -0800 (PST)
-Message-ID: <97c6b55d-9505-4091-8f0b-317dcbd70838@baylibre.com>
-Date: Tue, 18 Nov 2025 11:46:00 -0600
+	s=arc-20240116; t=1763492732; c=relaxed/simple;
+	bh=R/YowguZPPTn4St2pMAVF48hONbZX/UsJUVCnWx8WxQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=esfYknqY3SCBXyQBDmrztTVxETushmPp5ENvxOM6m2g78Eg3yDvphBWQw+ePHVwKLPI2wuw/UL3svtuhQBFuTA6i41s3BnuzUWQtPE7QuKiLRWZp2vslYAulLbkKWIx3ZlVvjsogT0owcPnrNRjGK0EJObHaVPQZ8wsAeXHs/2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeyyFFd/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F8F8C2BC87;
+	Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763492732;
+	bh=R/YowguZPPTn4St2pMAVF48hONbZX/UsJUVCnWx8WxQ=;
+	h=Subject:From:Date:To:From;
+	b=oeyyFFd/qaLjPPLBSYIaJeaFM0BdNHZXpN7k6xB5OvFMHbkY9ywsfDqri4gW0wPMG
+	 OSuDVx4LLO7YBliK1JakJemFOhhZ+hrm+oTXGLjWT2nXNYDplBRGbQhhJQpsRGmsGp
+	 zCMZKA8Ly10Z8heOSGVptPROovPe8EIBGxNexdpPgVcwsKOfhOvJEyNKLM6RC89l/k
+	 0qF0gkVVr1MSJEMgbUgLYJItNAu581ect5IX4mJ5bkUpGhXuCv884UKiD5xuvHDejS
+	 rG6MQ/ilJeE9mzYEa1StY//XlukMhFducE4hRXZ0m3YvgeyHHY/BLeMm2fIh6v1vQm
+	 7/vNFZ2E6Q3Zw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B16A03809ABF;
+	Tue, 18 Nov 2025 19:04:58 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] dt-bindings: iio: adc: adi,ad7380: add spi-buses
- property
-To: Rob Herring <robh@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
- <20251107-spi-add-multi-bus-support-v2-5-8a92693314d9@baylibre.com>
- <20251118155905.GB3236324-robh@kernel.org>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <20251118155905.GB3236324-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176349269722.70698.14032366213472142991.git-patchwork-summary@kernel.org>
+Date: Tue, 18 Nov 2025 19:04:57 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On 11/18/25 9:59 AM, Rob Herring wrote:
-> On Fri, Nov 07, 2025 at 02:52:51PM -0600, David Lechner wrote:
->> Add spi-buses property to describe how many SDO lines are wired up on
->> the ADC. These chips are simultaneous sampling ADCs and have one SDO
->> line per channel, either 2 or 4 total depending on the part number.
->>
->> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> ---
->>  .../devicetree/bindings/iio/adc/adi,ad7380.yaml    | 22 ++++++++++++++++++++++
->>  1 file changed, 22 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
->> index b91bfb16ed6bc6c605880f81050250d1ed9c307a..9ef46cdb047d45d088e0fbc345f58c5b09083385 100644
->> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
->> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
->> @@ -62,6 +62,10 @@ properties:
->>    spi-cpol: true
->>    spi-cpha: true
->>  
->> +  spi-data-buses:
->> +    minItems: 1
->> +    maxItems: 4
->> +
-> 
-> As the property is not required, what's the default?
+Hello:
 
-spi-perepheral-props.yaml defines:
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-	default: [0]
+Patch: [v2] spi: davinci: remove platform data header
+  Submitter: Bartosz Golaszewski <brgl@bgdev.pl>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1024372
+  Lore link: https://lore.kernel.org/r/20251117-davinci-spi-v2-1-cd799d17f04a@linaro.org
 
-Do I need to repeat that here?
+Series: spi: aspeed: Add AST2700 SoC support and Quad SPI handling update
+  Submitter: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1023439
+  Lore link: https://lore.kernel.org/r/20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com
+    Patches: [v2,1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
+             [v2,2/4] spi: aspeed: Enable Quad SPI mode for page program
+             [v2,3/4] spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit platforms
+             [v2,4/4] spi: aspeed: Add support for the AST2700 SPI controller
 
-> 
->>    vcc-supply:
->>      description: A 3V to 3.6V supply that powers the chip.
->>  
->> @@ -245,6 +249,22 @@ allOf:
->>        patternProperties:
->>          "^channel@[0-3]$": false
->>  
->> +  # 2-channel chip can only have up to 2 buses
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - adi,ad7380
->> +            - adi,ad7381
->> +            - adi,ad7386
->> +            - adi,ad7387
->> +            - adi,ad7388
->> +            - adi,ad7389
->> +    then:
->> +      properties:
->> +        spi-data-buses:
->> +          maxItems: 2
->> +
->>  examples:
->>    - |
->>      #include <dt-bindings/interrupt-controller/irq.h>
->> @@ -260,6 +280,7 @@ examples:
->>              spi-cpol;
->>              spi-cpha;
->>              spi-max-frequency = <80000000>;
->> +            spi-data-buses = <0>, <1>;
->>  
->>              interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
->>              interrupt-parent = <&gpio0>;
->> @@ -284,6 +305,7 @@ examples:
->>              spi-cpol;
->>              spi-cpha;
->>              spi-max-frequency = <80000000>;
->> +            spi-data-buses = <0>, <1>, <2>, <3>;
-> 
-> An example that doesn't look like a 1 to 1 mapping would be better. 
-> Otherwise, it still looks to me like you could just define the bus 
-> width.
+Patch: [v2] spi: bcm63xx: fix premature CS deassertion on RX-only transactions
+  Submitter: Hang Zhou <929513338@qq.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1023993
+  Lore link: https://lore.kernel.org/r/tencent_7AC88FCB3076489A4A7E6C2163DF1ACF8D06@qq.com
 
-I'm not sure we could do that on this chip since it doesn't have
-the possibility of more than one line per channel. I can add a
-patch with a binding for a different chip though that can have
-such an example.
 
-> 
->>  
->>              interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
->>              interrupt-parent = <&gpio0>;
->>
->> -- 
->> 2.43.0
->>
+Total patches: 6
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
