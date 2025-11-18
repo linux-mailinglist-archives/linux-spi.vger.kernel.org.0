@@ -1,180 +1,137 @@
-Return-Path: <linux-spi+bounces-11275-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11276-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E688C69B58
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 14:50:55 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 911D1C6A797
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 17:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 4C26E2B184
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 13:50:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B5EC63548BB
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 15:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270773570BE;
-	Tue, 18 Nov 2025 13:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA90D368268;
+	Tue, 18 Nov 2025 15:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfhralLi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hwBleh9m"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5E734E768;
-	Tue, 18 Nov 2025 13:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A0F365A05;
+	Tue, 18 Nov 2025 15:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763473760; cv=none; b=b42ISfLZNPBErn/WYNfz5m8/l7fMxZd60rFJ2DVoq96/fSkjjN8GkqX43A4jGiRfu2Vta3KCiUeUDsy6eyN6Jh9KifizyutWc8LLcVfSl6Ooz2pJNcaWqiJ3eeq/XueI6RiZaTvedTkqjJhTeUu3Wkipbaqt4i/xrOLdileoIX8=
+	t=1763481440; cv=none; b=fV+v9aSNrt6H3NlAPwEfXjh/dm3vOT+n6JKkYEmtTD4Jsvh56iu7UDNA/zxfA/9Zi1h5jnlDlIndnvz98Gm49SB9CuAAF4Ozp4450qvl+Ig3WhZoCrDIm+2V7ZTU6cF6hATCxIpV6GeHdofNCpLn2oB0RMlif/SDEaRUUPfPx18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763473760; c=relaxed/simple;
-	bh=gBn+zFQ/15OeDuEquI5L05oTTxpfqWVTb/j2583pO9o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FcSewlxyREtaQlppa84+TRvDVSWuhXpe2yA+v8ks2fG7oD4FluOyEilcdtnfwOnSSMu36FNiNY+K8dTYHOYoimiAb6uTVm8sRwhwFzqQau9jWrMtYf2GMBRyiLuc4C6nLOrguDoNAZDX8etStvmoUW+PGH7j7258WfFhhlgmnk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfhralLi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9A3C2BCB4;
-	Tue, 18 Nov 2025 13:49:15 +0000 (UTC)
+	s=arc-20240116; t=1763481440; c=relaxed/simple;
+	bh=idRAsV6uM03dWhIhWg26jqhQuDz/mORf5Ur8q/hbScg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q336JjYbEQ320XYTAHW+xRMgr3qWBVmxiovB90NvK3763v39Erahnq7focBqQnFpknLPe7BE+xVFISoXygvmdRKI1xr5EQ/tf/I+rICw69aC/VofIR/9vG5k3lsglR9tjWIvJOi45lMjQCVGUwy9Meu6DZL8vm1eiLIZcroP65U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hwBleh9m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D623C19422;
+	Tue, 18 Nov 2025 15:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763473758;
-	bh=gBn+zFQ/15OeDuEquI5L05oTTxpfqWVTb/j2583pO9o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lfhralLiVKA3NrzOM2K6AZpEGuU2wP1BALvVvGel/zHmTwFyPGmoicmsy5d5XJ2nu
-	 87u8QkBk3GvtExEX6XbAhncxOIMf70f+SowSZoiZfaVKaLNNGEv+RBAedSrfxVoD7p
-	 uCrM8v8TrD196AjFSByWLfYvXlo0QVsF2hehxxoJVF1Acp74IMJuWSXMeML0zAWmrP
-	 874yEha1xPgsEXxICLbaRGhUrWdCucdTyl4siYLYol7Wv3aOqn4HFxzp437N2N4MZ8
-	 PJoLrTwa6oJDgDCckE2GoZ5L3UvFJIzCAK5/3euqVZa4nUmBBKElSXgcI1E/3AQvSe
-	 ceuSbcMI43F8w==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Santhosh Kumar K <s-k6@ti.com>
-Cc: Miquel Raynal <miquel.raynal@bootlin.com>,  <richard@nod.at>,
-  <vigneshr@ti.com>,  <broonie@kernel.org>,  <tudor.ambarus@linaro.org>,
-  <pratyush@kernel.org>,  <mwalle@kernel.org>,  <p-mantena@ti.com>,
-  <linux-spi@vger.kernel.org>,  <linux-mtd@lists.infradead.org>,
-  <linux-kernel@vger.kernel.org>,  <a-dutta@ti.com>,  <u-kumar1@ti.com>,
-  <praneeth@ti.com>
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-In-Reply-To: <cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com> (Santhosh Kumar
-	K.'s message of "Sat, 20 Sep 2025 23:25:31 +0530")
-References: <20250811193219.731851-1-s-k6@ti.com>
-	<20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
-	<cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
-Date: Tue, 18 Nov 2025 14:49:13 +0100
-Message-ID: <mafs0ikf74fja.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20201202; t=1763481439;
+	bh=idRAsV6uM03dWhIhWg26jqhQuDz/mORf5Ur8q/hbScg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hwBleh9mfK9U5pjZmr17Kt8MU8q2DFw3YzUEYBKLMB9R1wb+1iPczvO0N7a0TEysB
+	 F+9v4sc8ZaBKZefpitsS4Dt2RZRMdxJhz3qUH1QyRfZP125VsvHoCdR6PtQ5RRakLl
+	 Wk2771Y/Hk8U+PL2aRgSFi4Jq5V815XqCuJljd/voN6iazoOh9QeE7BtR9a3dy5qnf
+	 ku0+Vk5sWAgpmyiT0S9ycJlh+pi5Bi8PxhU0Z60ifbNbG8ptQbMyvBOu0OjNbCyrsB
+	 aJDY+4N9Avxaw3OLLYicAT2r9HEueeC3y6VP1u97UZVzmlIs9G88mKxTuzeEyGQtwK
+	 KBIl7p3fSUXgg==
+Date: Tue, 18 Nov 2025 09:57:17 -0600
+From: Rob Herring <robh@kernel.org>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] spi: dt-bindings: Add spi-data-buses property
+Message-ID: <20251118155717.GA3236324-robh@kernel.org>
+References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
+ <20251107-spi-add-multi-bus-support-v2-1-8a92693314d9@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251107-spi-add-multi-bus-support-v2-1-8a92693314d9@baylibre.com>
 
-On Sat, Sep 20 2025, Santhosh Kumar K wrote:
+On Fri, Nov 07, 2025 at 02:52:47PM -0600, David Lechner wrote:
+> Add a spi-data-buses property to the spi-peripheral-props binding to
+> allow specifying the SPI data bus or buses that a peripheral is
+> connected to in cases where the SPI controller has more than one
+> physical SPI data bus.
+> 
+> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> ---
+> 
+> v2 changes:
+> * Renamed property from spi-buses to spi-data-buses to make it clear
+>   that we are only talking about the SDI/SDO lines and not the entire
+>   SPI bus (SCK, CS, etc).
+> * Fixed prefix order in subject.
+> 
+> This patch has been seen before in a different series from Sean [1].
+> 
+> [1]: https://lore.kernel.org/linux-spi/20250616220054.3968946-2-sean.anderson@linux.dev/
+> 
+> Changes:
+> * Added maxItems. (8 is the most I've seen so far on an ADC)
+> * Tweaked the description a bit.
+> ---
+>  .../devicetree/bindings/spi/spi-peripheral-props.yaml        | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> index 8b6e8fc009dbdc80978f3afef84ddc688ade4348..6fe739eaf09876b9c5d8902f792ca02181d7266f 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
+> @@ -89,6 +89,18 @@ properties:
+>      description:
+>        Delay, in microseconds, after a write transfer.
+>  
+> +  spi-data-buses:
 
-[...]
->> This is actually wrong. Tuning is way more generic than that :)
->> If someone wants to use a chip at a high frequency (50MHz in your case,
->> but whatever, there is a threshold above which additional care must be
->> taken), it must go through the calibration step. It does not matter in
->> which mode you are. Calibration would still be relevant in single SDR
->> mode.
->> This 50MHz bothered Mark because it is too Cadence specific. Maybe this
->> should be a controller parameter? If the spi-mem core (or even the spi
->> core, by extensino) sees that the design allows running at XMHz (due to
->> the SPI peripheral properties or simply the absence of any limitation),
->> and if the controller states that it requires an extra tuning step above
->> YMHz (and X > Y), then it launches the calibration.
->>  From a core perspective, I would like the calibration hook to be as
->> simple as possible, because what "calibration" means is highly
->> controller and chip specific.
->
-> I understand the concern here.
->
-> Let me point out the options for launching the tuning procedure, along
-> with the issues in each approach.
->
-> Option 1: Launch tuning as part of spi_mem_exec_op()
->    - After spi_mem_access_start(), introduce a spi_mem_needs_tuning()
-> check (a new callback to SPI MEM controller) to check whether the
-> current op requires tuning
->    - If yes, we call spi_mem_execute_tuning()
->         - on success, mark tuning complete in a flag within SPI MEM
-> Controller private data
->         - on failure, we attempt a fallback by calling
-> spi_mem_adjust_op_freq() and drop to a lower supported frequency
->
-> Option 2: Launch tuning within spi_controller->exec_op() implementation
->    - Very similar to option 1, except that the spi_mem_execute_tuning()
-> is triggered from within the controller's exec_op() implementation
-> (no need for spi_mem_needs_tuning())
->
-> Drawbacks in option 1 and 2:
->    - Tuning requires multiple reads of a known pattern, but the flash
-> may not always be in a state to allow read commands
->    - No fallback on failures, can't make flash-specific adjustments in
-> case of a tuning failure
->    - No access to write_op() to write known pattern temporarily to an
-> on-die cache. Pattern needs to be always burnt into the flash
->
->    - Plus, in option 2 - we can't call spi_mem_adjust_op_freq()
->
-> While the need for tuning is dictated by Controller specific
-> characteristics the ops (and state of the chip) required to complete
-> tuning is under the control of spi-mem users (spi-nand/spi-nor).
-> So, it's impossible to achieve tuning without the help of spi-mem users.
->
-> So, Option 3: Launch from SPI MEM clients
->                           (mtd/nand/spi or mtd/spi-nor, etc.,)
->    - Once the spi-mem chip is completely enumerated and best read and
-> write ops are chosen call spi_mem_needs_tuning(read_op, write_op) as
-> a part of .probe()
->    - If tuning is required, call
-> spi_mem_execute_tuning(read_op, write_op)
->         - If only read_op is provided, it implies the tuning pattern is
-> pre-flashed to the partition
->    - On tuning failure, retry by re-running spi_mem_needs_tuning() with
-> the second best set of ops (max throughput - 1)
->
-> With option 3, spi_mem users are limited to calling
-> spi_mem_needs_tuning() and spi_mem_execute_tuning(). Rest is hidden
-> within the controller drivers. If spi-mem users change read/write ops,
-> the above sequence can be re-issued.
->
-> The controller can store the read_op and write_op in case of a tuning
-> success and periodically re-run tuning, ensuring we always have valid
-> tuning parameters.
->
-> One concern with option 3 is that we may not be able to make use of
-> static data on certain flash as tuning patterns (like reading parameter
-> page or SFDP table for tuning instead of controller specific attack
-> patterns).
+I think spi-data-map would be better.
 
-Why not? How else would tuning work? Do you expect controllers to first
-flash the tuning pattern and then tune the reads? That is a hard no I
-think, since you don't want to over-write user data and I don't think we
-will ever have any area of memory we can reliably over-write without
-risking that.
+Or we could just reuse 'data-lanes' property. It seems like the same 
+problem of mapping peripheral lanes/lines to controller/host 
+lanes/lines.
 
-I think we should start with the requirement to have the pattern flashed
-already and figure out how SPI NOR or SPI NAND can discover that
-(perhaps via NVMEM?).
+> +    description:
+> +      Array of data bus numbers that describes which SPI data buses of the
+> +      controller are connected to the peripheral. This only applies to
+> +      peripherals connected to specialized SPI controllers that have multiple
+> +      SPI data buses (a set of independent SDI/SDO lines each with its own
+> +      serializer) on a single controller.
 
-I think SFDP is quite nice for this, but IIRC for spi-candence-quadspi,
-that was not a viable option due to some reasons. If you can now make it
-work with SFDP, then that would be even better, since we don't have to
-deal with the pain of pre-flashing.
+Please make it clear what's the index and what's the value: "The index 
+corresponds to the peripheral data line and the value corresponds to the 
+controller data line."
 
-Overall, I think option 3 is the most promising. Options 1 and 2 will
-likely add so much overhead they will end up being slower than non-PHY
-reads, since tuning is usually quite expensive.
-
->
-> Please let me know your thoughts on which of these directions makes the
-> most sense.
->
-> Thanks,
-> Santhosh.
->
-
--- 
-Regards,
-Pratyush Yadav
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 1
+> +    maxItems: 8
+> +    default: [0]
+> +
+>    stacked-memories:
+>      description: Several SPI memories can be wired in stacked mode.
+>        This basically means that either a device features several chip
+> 
+> -- 
+> 2.43.0
+> 
 
