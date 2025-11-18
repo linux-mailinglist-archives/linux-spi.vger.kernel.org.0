@@ -1,96 +1,99 @@
-Return-Path: <linux-spi+bounces-11281-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11282-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F99C6B577
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 20:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7EDEC6BF56
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 00:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B842135C7D3
-	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 19:05:36 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4D7D4364C2E
+	for <lists+linux-spi@lfdr.de>; Tue, 18 Nov 2025 23:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA49E2D0625;
-	Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3819A30FC2E;
+	Tue, 18 Nov 2025 23:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oeyyFFd/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVXJGIiU"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A498527B4E1
-	for <linux-spi@vger.kernel.org>; Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07A8C2F9DB1;
+	Tue, 18 Nov 2025 23:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763492732; cv=none; b=hI9GHfkanotWt9i0b7GssmOz6hPYZhqsl73Tj3zV/DcNVWInllLmmpdQXR8YqSoVhl1E5ekVHgq5VRtOWve5Kfc+i53zR86ppe1nL5OfHU7q+gjG2/CzgIjAeadGRwJEernVo0T/xhpZ3kelN5/+Jfn4vFedyjB+rQQDOJaQtyM=
+	t=1763507708; cv=none; b=KrwqJppFeaCqRFabp8XfU/hqRLOtLWZ5w0jZ37RAhz+K0Dgl/BZ08j/oc03/taUZjIHptJhiDCr7RRR8OX8mkf359so965OUf3ZJm4hCJF9k2s0abRSAW+wCuLF425pFQMxiuJVbqmH4t1bmdEePZnkwGYU2WiQAv/2axXASomU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763492732; c=relaxed/simple;
-	bh=R/YowguZPPTn4St2pMAVF48hONbZX/UsJUVCnWx8WxQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=esfYknqY3SCBXyQBDmrztTVxETushmPp5ENvxOM6m2g78Eg3yDvphBWQw+ePHVwKLPI2wuw/UL3svtuhQBFuTA6i41s3BnuzUWQtPE7QuKiLRWZp2vslYAulLbkKWIx3ZlVvjsogT0owcPnrNRjGK0EJObHaVPQZ8wsAeXHs/2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oeyyFFd/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F8F8C2BC87;
-	Tue, 18 Nov 2025 19:05:32 +0000 (UTC)
+	s=arc-20240116; t=1763507708; c=relaxed/simple;
+	bh=wjOnpeSH0cShWbz8Nnic7ZJoqey1D4fTZlYzuXxqIYo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=SoNMFr19wm56q8y2IgTa1KPEQ5PxGOfXEQ/uO/K6yP3eXWuavVh++EGoTWurRxIlt4ZSo/V+ML3TOCUbFHWrecl2Sri3od2MGpSQa786oPiEkZNQyOLpW7Jisbg2kKatz6vSWvzmg/zAW57GTJk8F/7E9pWm0fBXmBFlkg6eQBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVXJGIiU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE5CC2BC86;
+	Tue, 18 Nov 2025 23:15:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763492732;
-	bh=R/YowguZPPTn4St2pMAVF48hONbZX/UsJUVCnWx8WxQ=;
-	h=Subject:From:Date:To:From;
-	b=oeyyFFd/qaLjPPLBSYIaJeaFM0BdNHZXpN7k6xB5OvFMHbkY9ywsfDqri4gW0wPMG
-	 OSuDVx4LLO7YBliK1JakJemFOhhZ+hrm+oTXGLjWT2nXNYDplBRGbQhhJQpsRGmsGp
-	 zCMZKA8Ly10Z8heOSGVptPROovPe8EIBGxNexdpPgVcwsKOfhOvJEyNKLM6RC89l/k
-	 0qF0gkVVr1MSJEMgbUgLYJItNAu581ect5IX4mJ5bkUpGhXuCv884UKiD5xuvHDejS
-	 rG6MQ/ilJeE9mzYEa1StY//XlukMhFducE4hRXZ0m3YvgeyHHY/BLeMm2fIh6v1vQm
-	 7/vNFZ2E6Q3Zw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B16A03809ABF;
-	Tue, 18 Nov 2025 19:04:58 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1763507706;
+	bh=wjOnpeSH0cShWbz8Nnic7ZJoqey1D4fTZlYzuXxqIYo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YVXJGIiUstn9db05v8svunLc10N5L2z5f6bUyFCZ3TydbqiOHavDr2NAVBlAJUFZ6
+	 5mLv9YkW8Vrc0goXkUN80NS0TUigWpCs6jqJLVdbSOjx9HBOjZiQOEeL5P0+anfch8
+	 Yan3SgbHnq3K/WiqOX/jNX1pbefyVjDz4ds6c43yc0Pgnqd/y5XvCtG4+/m9R7wqL3
+	 1gh/uYt7J7kvBy54B9QCSUONULewk65ymJ9tcrleY//76eboOi6kZ7iAKwlCygIrXw
+	 XmiLOmAghprMkblCqQ6cGQn2XztI7QsR0GReUDuuu0SwQyPaONGam8mH5Udsw3P24D
+	 bWXvPJn/UFaSQ==
+From: Mark Brown <broonie@kernel.org>
+To: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+ festevam@gmail.com, frank.li@nxp.com, Carlos Song <carlos.song@nxp.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Clark Wang <xiaoning.wang@nxp.com>
+In-Reply-To: <20251118065012.1418279-1-carlos.song@nxp.com>
+References: <20251118065012.1418279-1-carlos.song@nxp.com>
+Subject: Re: [PATCH v3] spi: imx: add 16/32 bits per word support for
+ target PIO mode
+Message-Id: <176350770375.1411024.1671130391576223645.b4-ty@kernel.org>
+Date: Tue, 18 Nov 2025 23:15:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176349269722.70698.14032366213472142991.git-patchwork-summary@kernel.org>
-Date: Tue, 18 Nov 2025 19:04:57 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
-Hello:
+On Tue, 18 Nov 2025 14:50:12 +0800, Carlos Song wrote:
+> Enable 16/32 bits per word support for spi-imx target PIO mode.
+> 
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: [v2] spi: davinci: remove platform data header
-  Submitter: Bartosz Golaszewski <brgl@bgdev.pl>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1024372
-  Lore link: https://lore.kernel.org/r/20251117-davinci-spi-v2-1-cd799d17f04a@linaro.org
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Series: spi: aspeed: Add AST2700 SoC support and Quad SPI handling update
-  Submitter: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1023439
-  Lore link: https://lore.kernel.org/r/20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com
-    Patches: [v2,1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
-             [v2,2/4] spi: aspeed: Enable Quad SPI mode for page program
-             [v2,3/4] spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit platforms
-             [v2,4/4] spi: aspeed: Add support for the AST2700 SPI controller
+Thanks!
 
-Patch: [v2] spi: bcm63xx: fix premature CS deassertion on RX-only transactions
-  Submitter: Hang Zhou <929513338@qq.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1023993
-  Lore link: https://lore.kernel.org/r/tencent_7AC88FCB3076489A4A7E6C2163DF1ACF8D06@qq.com
+[1/1] spi: imx: add 16/32 bits per word support for target PIO mode
+      commit: 4dbb5f6e1b4eed64037d4462977c196acab2af16
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Total patches: 6
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
