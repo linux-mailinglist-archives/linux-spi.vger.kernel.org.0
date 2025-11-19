@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-11341-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11342-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C5E6C7020E
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:36:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE0FCC70019
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:18:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CCE5F3C2367
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:17:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id CE99024114
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 975292F3C20;
-	Wed, 19 Nov 2025 16:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9682334107C;
+	Wed, 19 Nov 2025 16:16:09 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3D622B8B6;
-	Wed, 19 Nov 2025 16:15:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D73022B8B6;
+	Wed, 19 Nov 2025 16:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568960; cv=none; b=u+LsLBdgxwIHX1k52FRwRiAhTKlQekDAEpZpyWFciLUEaq/ZffUaXQBxb/fjXpeHJFn52tH7AZ55taQJ4oXFKHRajjgaNo9voXIPX3OWmT+IZOlyBZgn7lTIQth7V6HYeGC1whn8AcVVkm9kitID5e7d8b75jBn7Fqm1/3Xr8HY=
+	t=1763568969; cv=none; b=L5nJpEhSrSVFSKNnFPikS1CfOV/qZMzxo3zi6aZ74eio9P8vrmif3dJZNT9kLZKDBuuWYmRDTgxVBzOm2fSWz8YTeSVTQWV5K8IJ9/uNPXj31zYyRCu42ygfo6sP6u+yYTY2WNUBppy1K+cHaquTVoAZyCCUD/HqGQIDGy4TrGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763568960; c=relaxed/simple;
-	bh=OrW09YScudwdlwaWa8aRN9VeQV0MIQ035NB6jeg+Ofw=;
+	s=arc-20240116; t=1763568969; c=relaxed/simple;
+	bh=td1FXpsyeOo0z8n6/jZTxrVUj9CyEe4ZtIsoF4TbqWI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DJV2VsOfN+SpPXbMaFujEdEEcBmiWMnlDh++wdYUISlgm5JmOXXUFBrNBePDBgMraT4mu3U3+440mr9czHgbrEgJn4cOZ1Xd4L92ShMrYUFTFdMFjGQTA3m3vZG+aPD37vLIwOkb7VLooz+4xTKiV/Zpy2A4bjRTvq7ic0Xle1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=GHSSULEqTsM9MzpLChJuKS2rZBgPH+2Qw9kURqdgAb8quvrF7YyDFb8wnNwfEbofQLco6se/Ob78cUBYSnt3LVHflmRVXAT/BQAS8DAy9zDlbLrmldOFWEcMMe/bXAPvhs1Z2myAaogsYh0RwRyIGd2DT33LnjrdrONv/3ZfAXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: G0bute2WSlaRrmPtOIomMg==
-X-CSE-MsgGUID: gL92thvDTwGbHPvZyZitGg==
+X-CSE-ConnectionGUID: YgnUu6ZITZ+OHFVKuMegrQ==
+X-CSE-MsgGUID: dlUMYyJYSC+Cp5wQUAm6RA==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 20 Nov 2025 01:15:58 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 20 Nov 2025 01:16:03 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.87])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 345A8406C471;
-	Thu, 20 Nov 2025 01:15:53 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 481DE406C471;
+	Thu, 20 Nov 2025 01:15:59 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -48,9 +48,9 @@ Cc: linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH v4 07/13] spi: rzv2h-rspi: add support for using PCLK for transfer clock
-Date: Wed, 19 Nov 2025 18:14:28 +0200
-Message-ID: <20251119161434.595677-8-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH v4 08/13] spi: rzv2h-rspi: add support for variable transfer clock
+Date: Wed, 19 Nov 2025 18:14:29 +0200
+Message-ID: <20251119161434.595677-9-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251119161434.595677-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251119161434.595677-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -62,16 +62,17 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs support
-generating the SPI transfer clock from PCLK, with the quirk that SPR 0
-is not supported, causing the highest achievable SPI transfer frequency
-to be 31.25MHz.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have a more
+complicated clocking setup for the SPI transfer clock than RZ/V2H, as
+the clock from which it is generated supports multiple dividers.
 
-Add support for generating the SPI transfer clock from PCLK.
+To prepare for adding support for these SoCs, do the following changes.
 
-Renesas RZ/V2H (R9A09G057) also has the BPEN bit used to enable this
-option in the datasheet, but it is not explicitly documented and there's
-no details about its limitations as there are on RZ/T2H.
+Use the minimum frequency of SPI clock to calculate the SPI
+controller's min_speed_hz, and the maximum frequency to calculate
+max_speed_hz.
+
+Apply the clock rate found by the .find_tclk_rate() to the found clock.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 ---
@@ -83,96 +84,77 @@ V3:
  * no changes
 
 V2:
- * no changes
+ * fix missing unwind goto quit_resets
 
- drivers/spi/spi-rzv2h-rspi.c | 22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ drivers/spi/spi-rzv2h-rspi.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
-index f59bcadf5e38..e9d8ee919261 100644
+index e9d8ee919261..be45269e8853 100644
 --- a/drivers/spi/spi-rzv2h-rspi.c
 +++ b/drivers/spi/spi-rzv2h-rspi.c
-@@ -34,6 +34,7 @@
- #define RSPI_SPFCR		0x6c
+@@ -308,6 +308,7 @@ static u32 rzv2h_rspi_setup_clock(struct rzv2h_rspi_priv *rspi, u32 hz)
+ 	struct rzv2h_rspi_best_clock best_clock = {
+ 		.error = ULONG_MAX,
+ 	};
++	int ret;
  
- /* Register SPCR */
-+#define RSPI_SPCR_BPEN		BIT(31)
- #define RSPI_SPCR_MSTR		BIT(30)
- #define RSPI_SPCR_SPRIE		BIT(17)
- #define RSPI_SPCR_SCKASE	BIT(12)
-@@ -41,6 +42,7 @@
- 
- /* Register SPBR */
- #define RSPI_SPBR_SPR_MIN	0
-+#define RSPI_SPBR_SPR_PCLK_MIN	1
- #define RSPI_SPBR_SPR_MAX	255
- 
- /* Register SPCMD */
-@@ -79,6 +81,8 @@ struct rzv2h_rspi_best_clock {
- struct rzv2h_rspi_info {
- 	void (*find_tclk_rate)(struct clk *clk, u32 hz, u8 spr_min, u8 spr_max,
- 			       struct rzv2h_rspi_best_clock *best_clk);
-+	void (*find_pclk_rate)(struct clk *clk, u32 hz, u8 spr_low, u8 spr_high,
-+			       struct rzv2h_rspi_best_clock *best_clk);
- 	const char *tclk_name;
- 	unsigned int fifo_size;
- 	unsigned int num_clks;
-@@ -90,6 +94,7 @@ struct rzv2h_rspi_priv {
- 	const struct rzv2h_rspi_info *info;
- 	void __iomem *base;
- 	struct clk *tclk;
-+	struct clk *pclk;
- 	wait_queue_head_t wait;
- 	unsigned int bytes_per_word;
- 	u32 last_speed_hz;
-@@ -97,6 +102,7 @@ struct rzv2h_rspi_priv {
- 	u16 status;
- 	u8 spr;
- 	u8 brdv;
-+	bool use_pclk;
- };
- 
- #define RZV2H_RSPI_TX(func, type)					\
-@@ -306,9 +312,18 @@ static u32 rzv2h_rspi_setup_clock(struct rzv2h_rspi_priv *rspi, u32 hz)
  	rspi->info->find_tclk_rate(rspi->tclk, hz, RSPI_SPBR_SPR_MIN,
  				   RSPI_SPBR_SPR_MAX, &best_clock);
- 
-+	/*
-+	 * T2H and N2H can also use PCLK as a source, which is 125MHz, but not
-+	 * when both SPR and BRDV are 0.
-+	 */
-+	if (best_clock.error && rspi->info->find_pclk_rate)
-+		rspi->info->find_pclk_rate(rspi->pclk, hz, RSPI_SPBR_SPR_PCLK_MIN,
-+					   RSPI_SPBR_SPR_MAX, &best_clock);
-+
+@@ -323,6 +324,10 @@ static u32 rzv2h_rspi_setup_clock(struct rzv2h_rspi_priv *rspi, u32 hz)
  	if (!best_clock.clk_rate)
  		return -EINVAL;
  
-+	rspi->use_pclk = best_clock.clk == rspi->pclk;
++	ret = clk_set_rate(best_clock.clk, best_clock.clk_rate);
++	if (ret)
++		return 0;
++
+ 	rspi->use_pclk = best_clock.clk == rspi->pclk;
  	rspi->spr = best_clock.spr;
  	rspi->brdv = best_clock.brdv;
+@@ -426,8 +431,8 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct rzv2h_rspi_priv *rspi;
+ 	struct clk_bulk_data *clks;
+-	unsigned long tclk_rate;
+ 	int irq_rx, ret, i;
++	long tclk_rate;
  
-@@ -361,6 +376,9 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
- 	/* SPI receive buffer full interrupt enable */
- 	conf32 |= RSPI_SPCR_SPRIE;
+ 	controller = devm_spi_alloc_host(dev, sizeof(*rspi));
+ 	if (!controller)
+@@ -460,8 +465,6 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
+ 	if (!rspi->tclk)
+ 		return dev_err_probe(dev, -EINVAL, "Failed to get tclk\n");
  
-+	/* Bypass synchronization circuit */
-+	conf32 |= FIELD_PREP(RSPI_SPCR_BPEN, rspi->use_pclk);
+-	tclk_rate = clk_get_rate(rspi->tclk);
+-
+ 	rspi->resets[0].id = "presetn";
+ 	rspi->resets[1].id = "tresetn";
+ 	ret = devm_reset_control_bulk_get_optional_exclusive(dev, RSPI_RESET_NUM,
+@@ -493,9 +496,23 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
+ 	controller->unprepare_message = rzv2h_rspi_unprepare_message;
+ 	controller->num_chipselect = 4;
+ 	controller->transfer_one = rzv2h_rspi_transfer_one;
 +
- 	writel(conf32, rspi->base + RSPI_SPCR);
- 
- 	/* Use SPCMD0 only */
-@@ -433,7 +451,9 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
- 	for (i = 0; i < rspi->info->num_clks; i++) {
- 		if (!strcmp(clks[i].id, rspi->info->tclk_name)) {
- 			rspi->tclk = clks[i].clk;
--			break;
-+		} else if (rspi->info->find_pclk_rate &&
-+			   !strcmp(clks[i].id, "pclk")) {
-+			rspi->pclk = clks[i].clk;
- 		}
- 	}
- 
++	tclk_rate = clk_round_rate(rspi->tclk, 0);
++	if (tclk_rate < 0) {
++		ret = tclk_rate;
++		goto quit_resets;
++	}
++
+ 	controller->min_speed_hz = rzv2h_rspi_calc_bitrate(tclk_rate,
+ 							   RSPI_SPBR_SPR_MAX,
+ 							   RSPI_SPCMD_BRDV_MAX);
++
++	tclk_rate = clk_round_rate(rspi->tclk, ULONG_MAX);
++	if (tclk_rate < 0) {
++		ret = tclk_rate;
++		goto quit_resets;
++	}
++
+ 	controller->max_speed_hz = rzv2h_rspi_calc_bitrate(tclk_rate,
+ 							   RSPI_SPBR_SPR_MIN,
+ 							   RSPI_SPCMD_BRDV_MIN);
 -- 
 2.52.0
 
