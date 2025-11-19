@@ -1,75 +1,75 @@
-Return-Path: <linux-spi+bounces-11317-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11318-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6505C6EFB0
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 14:44:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A789DC6F306
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 15:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 83B7134BECF
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 13:35:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D0A6F346F1A
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 14:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A41E0352FB5;
-	Wed, 19 Nov 2025 13:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718153446CB;
+	Wed, 19 Nov 2025 14:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="CT6gLY/N"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="gR+++1Pg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C672F334361
-	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 13:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8665C3538A1
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 14:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763559314; cv=none; b=FDavuNqQlKItF8005GVRo0AkT1FSzvuy8YUUd7BJW+pvsimjsSMl4nT858h2oosAG2VZhi8JeFMkYNkVVH9tRHm1JQhCiUa0fSFWYMQ/XuYQHsGtePme/VgDUsPF6UG/rN6j8z41F3kYSUJSINqcG13tA4P2+wHQ9Kn/dpgfV+o=
+	t=1763561389; cv=none; b=daOfvcYgUoLE6cPqmqiLlzNQSGowe6RYixpPbVVN5rnt3neY8bfBI/2cClw7IFpNQIpBFWn3thiDIIgQnVtmdtZd8vzn40vBNCnsOry3ZDVrM/k4PvzeHrydnsygvsrIsqr/ohWjGGVwS66GIYGMYLCO4OeY3P4wybA8zaz9VYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763559314; c=relaxed/simple;
-	bh=mSEMF3yHwChy23f/YVNOf6J+YL1C2epK6zSKmHYZY5k=;
+	s=arc-20240116; t=1763561389; c=relaxed/simple;
+	bh=oaQJkpLoRmPH88edjtjw6e0CUhdPfZru2YI8CASwDRQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bBnN4AwaAaLB8jTGvmNQtTkVdTDFegX5xeimLv2hprkdIa6RZdCseFvHqVE93zc5lScV/xgc/ghCTD9gVqqt6sI+4YgOKKoBPNdjGwpcWJ4uNpfuPpt49GPGJzcf6fv0Oq9FybwZg93HwrGJh2lqlY8TKoEZmRPX6DNcXme9geM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=CT6gLY/N; arc=none smtp.client-ip=209.85.167.46
+	 To:Cc:Content-Type; b=UcBoZeGUqWiAIdDNfsG3w50rSnW8j0x2Bikv0Ma5vfo5536SLv0L7zXfi0KOA/P/o3ktRyN1FI2DdJxT2V0hr4k+p6D17A7sARg72erON3FS537/aMA0aU1v7C/62Epy7k12iReHX9vexr7ySxzTlgfViOXUwLXU/Cj/4ZJ8mLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=gR+++1Pg; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5942bac322dso6359491e87.0
-        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 05:35:12 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-37b495ce059so58914821fa.0
+        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 06:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763559311; x=1764164111; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763561386; x=1764166186; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mSEMF3yHwChy23f/YVNOf6J+YL1C2epK6zSKmHYZY5k=;
-        b=CT6gLY/NHBpYm2ejq9UEfH01rNQdDSHNtjYCJn0rTj1jwMYQnhjd96waydPw1CQpam
-         bENIolcbI3QZP0q/j78bwq+GlytGOE8O2V8b8MlEgiUczwsh4JG1U0OxehaAlcr6HbLV
-         8METjSXikTz9mcGfy9CS5IpRg0ekB4HrTWPaLbpfoV0AiM3uLBZMoncGjaUwJ4VEwGPq
-         ifgjP6XkYFhV3dNx0KH2zhEeMDbm6ZfPpSWEg8Pq49/XTzKYXFPB011hTN75yY4QT+62
-         BB1V7H3CEFD88hXQmOls+agbUi8avv5BmS38drIwlcCXLbD64VFYgTlSiHSo4q6mKm2N
-         rnnA==
+        bh=oaQJkpLoRmPH88edjtjw6e0CUhdPfZru2YI8CASwDRQ=;
+        b=gR+++1PgCrzo9uVK4C0WKS3OWBL8Ou8VC+MqqJn46UkDimyIKyQJKMeZdcpHqaZUsJ
+         JDFVdzffuB0ZbjoU8j/FkVnAeWQlaUDnT4B0ZRZ1G3e4sdhiFnB+JKwNxq/n1VfT60vY
+         UQHt24xJvl2C/HJ4abikvrQpvZtZNAu/8AGNbT6PsdsM7tLxCXQtUPGt1W4sSKrF4h94
+         5s1rdtT+hY/A1Ig6ezUbp6TofPv9aTTnK4oA8nPSGRUeMUFrprhTcuS39zviN1rSAvHS
+         sWYsTZtwterFeNZPIHEbaotP+P13gxEg1w1//qVxIhF4yL72bRgOTgrD7UmNHg9ESvyh
+         2Zmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763559311; x=1764164111;
+        d=1e100.net; s=20230601; t=1763561386; x=1764166186;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mSEMF3yHwChy23f/YVNOf6J+YL1C2epK6zSKmHYZY5k=;
-        b=WfFMTIxlPEm7enRXnNCc3pqjAHF9DktFaui/U1w1zeUZEVb/eA7phbFTfACrdBOXw+
-         aXvHPSOBMJCLPr+o3XJugyEqZsBO9mZ43haH62ONHpxqZfg2V+o1aGJchNwDfzY7r9uA
-         bD+r+qXvheC11HmFXYNq3o+J5FfsLFq4yxrtR6uo9mdKZLIbJL1y7A6RBU0hi9uwmImw
-         9A2e7w2KXZc8/YWAU8E3i8WUxzcDWFU9wmbHoIyJpCnVg3omZnPmFq094l2tty2TRa1U
-         x1RFWDQeB1nFV5iNB8b4WGwUSu0XZfwtaamP8Jfyl+GsyjmbZv6wQh4hX85gKn8Dt6Gw
-         J7Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnfPwdi55Wk3vE4uQ4jl3tVGrvKalhCnAoOrpTM+KCzo4SsjnI45Q04fpGAQ4iVllD0blDpcZTtnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTQRzpUksje+hcmYknKI2YC5W2kDULHnOyVSZ7whup1PKoYB+v
-	gqYmh0AeK0YsNpoEvZ/Wy4cVlE4IhJEZvyc+E8+1t6xoDLPrE8WW1USynFZTUfORzeLKm9Ji9Df
-	adFYEAid7Mpkg/xMNf5bZCFn/JdL9mTtmvy1VrX3Tjw==
-X-Gm-Gg: ASbGncuxfEpFKS1U2aJIHR/PVnvhzgH+76KdNMjtJzYFmDEaephIPBANJN5vTn+EDLB
-	XUojc4u8ih+dBT6pZnpqTlBLYMa0QiEk5KjGB2GbFD1kIBWRC/iXnPOW60D1f8RYn4OUiOLDuJ3
-	3rYlP1rdxUR83ZAYm3s4QuDRU550IrsxiXAFpDblpuPPAKtVAZrmzsg9XueuJzYSxXQZzZNMC89
-	Wh9GTkQpvE23Q8EkxeECjp9cL6ZXcZEuWl6Q7yh+kAfiRdBfVVjkhuM+llJUFUEEXOQwpY/L8kJ
-	NBEgsGbCZgh4kE7qXsz/0oCqHJA=
-X-Google-Smtp-Source: AGHT+IF6t32NaD5Tx3rJ26IXH92DE1MRlTrcX44KbvNvlhg+o3j8JG1AOWcpLrkwNwv0BaGg9UrhqKgO6l7XE891Nkw=
-X-Received: by 2002:a05:6512:3d05:b0:594:2654:5e3a with SMTP id
- 2adb3069b0e04-595841b297amr5946984e87.18.1763559310956; Wed, 19 Nov 2025
- 05:35:10 -0800 (PST)
+        bh=oaQJkpLoRmPH88edjtjw6e0CUhdPfZru2YI8CASwDRQ=;
+        b=X9JfgPhVwVvXuiXUEPMW8pDnf38vRreGiQxMcoo9GQ9oeMfo3lvR4v4CliPs1zsfBc
+         OJCj49xC5UPQRF52gUoXZNKUuZ4IR+VagSBzmQFVzHAt705ZIP03rffHZ7VWv74Ouxc1
+         LOC3suC7m4leXk+qYCGrh26j76aQqppzCKLscwFHflGBY/XBNLh6XmRg42mdG92z537C
+         /M4tmTWzFGNsTG+TU//CwA2JF7UbloPlQ4Axt5xOPbn8mAusqC0zOvu/v0dnWVAu0Haa
+         k/SGwYgwDYIn4R+jNby+EptnQsqDBUCH7xEkjKT4l1EIoOeNWPjh1fnSmlN3Nelwk8hR
+         Yl9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWY706UTJFaDEtv+v7wzajAiEwW6EAEi+4+nEHjgVhW2lKgp42lwYWcByyeYsFBk1mfFPHiKAIY2lc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa8uMRjwRk2NOTbpWwOKmCJ7WQJKbF9fG4/3OIt+jNr3K/KS5D
+	nsWzKrUZRrkMfQF+9e8e1JlUUnO6wKLdXKD09lg51aNP0QxAxEq4Xbwm0l3xPoZoP9uyWGm6jW8
+	cOPTnBuogqQ90OqYDFnmPNzk5s/dw75xcvQoL79mEhg==
+X-Gm-Gg: ASbGncs/GAdtwAfWmYLIHxyU7jTQRv52YeeRyd8i4bzyVPd+3SVp4hqOqydo6SHdshI
+	37O3C0SF9MeJFtuik35rowtWVKJRv5IsJZ4lU68Qt4d9LjCkiYBHN1rtTTWp2FQl4mbjDV9WD47
+	soJGpPc1WrkW24zknx1/R/wYkffoX6djsnhxEkA/EGReFJlv4MLIEWNZIllf0WtnRN1UIyA+oW2
+	0/UohVQMv581gEXjVpi3tDplITfM2+kzd+zki46pMSPxfSKpECJhuE/SsD3z+bnELbe8VsgtfTl
+	tcBoXzuRXkMQI4LDxiv+yZf2WV0=
+X-Google-Smtp-Source: AGHT+IEeA2MlI3JrK1vn3lEmeQsXIQ9eQp9us0I+JYX+0qUqjPDNcKyIq9tYmQgbg39crSEorsfXs+YtJFZeiSxhvQo=
+X-Received: by 2002:a05:6512:33c8:b0:594:3567:e835 with SMTP id
+ 2adb3069b0e04-595842523d5mr6058585e87.35.1763561385570; Wed, 19 Nov 2025
+ 06:09:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -84,9 +84,9 @@ References: <aR2Uo++k1NKkk2sj@opensource.cirrus.com> <CAMRc=MdFDAmqcJ3PMsTbeZUb9
  <aR3FnUNO4DyCdiLD@opensource.cirrus.com>
 In-Reply-To: <aR3FnUNO4DyCdiLD@opensource.cirrus.com>
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 19 Nov 2025 14:34:58 +0100
-X-Gm-Features: AWmQ_bkfaZeLh4OilUDUASBwlQ_ofuCsFZwdswfFVK-TLjxbjtf7DwJUHvGCcwk
-Message-ID: <CAMRc=MfuQSGPbt3x366j5c9Sg-mgu=TfmD6X25Dk5Rmu0JiiEw@mail.gmail.com>
+Date: Wed, 19 Nov 2025 15:09:33 +0100
+X-Gm-Features: AWmQ_bkuL9SC7iST13IM0z8S8Q9KRGjjeXzDaed4bWZ13HYvJ_YIUtsuMOzhJkU
+Message-ID: <CAMRc=MebbjT7QAn8M0q0MsbRhTA-CUNKmo4nUPgXBXrmU-4D6g@mail.gmail.com>
 Subject: Re: [PATCH RFT/RFC] mfd: cs42l43: setup true links with software nodes
 To: Charles Keepax <ckeepax@opensource.cirrus.com>
 Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
@@ -103,34 +103,6 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Nov 19, 2025 at 2:27=E2=80=AFPM Charles Keepax
 <ckeepax@opensource.cirrus.com> wrote:
 >
-> On Wed, Nov 19, 2025 at 02:07:55PM +0100, Bartosz Golaszewski wrote:
-> > On Wed, Nov 19, 2025 at 1:53=E2=80=AFPM Charles Keepax
-> > <ckeepax@opensource.cirrus.com> wrote:
-> > > On Wed, Nov 19, 2025 at 03:58:08AM -0800, Bartosz Golaszewski wrote:
-> > > > On Wed, 19 Nov 2025 12:24:09 +0100, Charles Keepax
-> > > > <ckeepax@opensource.cirrus.com> said:
-> > > > > On Wed, Nov 19, 2025 at 12:06:57PM +0100, Bartosz Golaszewski wro=
-te:
-> > > > >> On Wed, Nov 19, 2025 at 11:58=E2=80=AFAM Andy Shevchenko
-> > > Can we tackle this the other way around? Since there is only a
-> > > single fwnode for the device, can we find a way to get away with
-> > > a single software node for the device too?
-> >
-> > I still don't understand what the software node that's already
-> > assigned to the SPI device is though? device_add_software_node()
-> > should work just fine if the only other firmware node the device has
-> > is the ACPI device node.
->
-> Its the software node we assigned to the first MFD cell, that one
-> succeeds but attaches itself to the ACPI node as a secondary.
-> When we get to the second cell we try to attach a new node but we
-> get the one from the first cell since they share an ACPI node.
->
-
-Ah, I see now. That's indeed a fundamental problem that can't be
-easily solved. Andy is right about the needed change but phew that'll
-be a big one...
-
 > I think as Andy pointed out though the first 4 patches in your
 > chain do loosely want we want. Previously, we used the name to
 > point to the actual pinctrl driver, your patches should let us
@@ -142,18 +114,9 @@ be a big one...
 > wanted a look in the knowledge it still doesn't work?
 >
 
-Yeah, I'd like that. I want to get it upstream and have interest in
-getting it fixed ASAP.
-
-For the record: I believe the logic behind this patch is the correct
-approach. It uses the existing MFD infrastructure that's there for
-exactly this reason. However without being able to have an arbitrary
-number of firmware nodes attached to a device, that'll be impossible.
-
-Just an idea: we could try to do the conversion gradually - by first
-adding that list of fwnodes to struct device in parallel to the
-current approach of having the secondary pointer and then go from
-there step by step.
+If your solution won't work after all, we can try using machine lookup
+instead. We have all the blocks except for support for the "undefined"
+GPIO in machine lookup. That would need to be added.
 
 Bart
 
