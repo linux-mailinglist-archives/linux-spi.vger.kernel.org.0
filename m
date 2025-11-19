@@ -1,67 +1,67 @@
-Return-Path: <linux-spi+bounces-11301-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11300-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75D61C6E0A6
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 11:46:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E2DC6E103
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 11:51:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C13063861DF
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 10:43:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E8B464F36CD
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 10:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BFC34B69B;
-	Wed, 19 Nov 2025 10:43:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8A434DB6E;
+	Wed, 19 Nov 2025 10:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="TvheNvFD"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Cf2z4S27"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013052.outbound.protection.outlook.com [40.107.159.52])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013020.outbound.protection.outlook.com [40.107.162.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C0133CE8C;
-	Wed, 19 Nov 2025 10:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71FA134DB79;
+	Wed, 19 Nov 2025 10:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763549000; cv=fail; b=Eea/Hu8VAvMK2qk4AOL0M7IQPKFZ0hd57aDayWLaZ3XxN5l2yVtlO+NW7LKjywatSa36546oDhzoMsWZ/IdU/lJczXS9vVp/45hf+zFCh7bdUaYz5+jfrHrIJAxSqRtd6Bzot10xoLZSCLWNu9fdD4x4hwnec1HTzA2gS93QZsI=
+	t=1763548935; cv=fail; b=OTQwo8/0UyVEvKhxYLTcxtc12m2PfxMg/NzisfPcfUcLHBs3kLh43qE1o+nKWFEoDuPrs5rLZdr0RngpjMt6CimCaIkyJIVsqodUWDjY8AfdAixcBSPv6nsEM4KXgOCphBQGmeECWd1wdV65d/IUNtgiHNNjxJzicoDwCyt5eiI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763549000; c=relaxed/simple;
-	bh=DyzDhhUAkg1KIRDzUSzmcu5RPQ0rKpxlHOLEvNBGNVA=;
+	s=arc-20240116; t=1763548935; c=relaxed/simple;
+	bh=k52j6gYbzEw4zKB6ux/Qz4VPdVsFZ4YO9k1fOgOfGaw=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=cH4xVeJhJL10VLVnDE4meKNuHP5bhYoT1anExlikL/YQzIJuJz+zyQ8uDGrlOhzXFj3NHlydciZv1rmPT+Zd8jw1M8twcBXFT0+o8FmCH+1PrJNuk/SLRKWEXSKChi0qONzUQkfjl+wyC3RmvChnRX5MV6dU33eMbHeokapxmyg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=TvheNvFD; arc=fail smtp.client-ip=40.107.159.52
+	 To:Cc:MIME-Version; b=AQILBNTDTKGl67pFKKlehzj7NCSxADgcDS7b0Oj1y8xv5jeENPLFNJB2Y3dMmOerzNA96Mxoc8OCx6Q+aA5WB30gnTYUuoLrSBwL73WBMqtA2HtjUUatCNX6boufReljleMsRstv6HCDLgmz86nJcT7gcUjejYgIwHfFbMbCTzc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Cf2z4S27; arc=fail smtp.client-ip=40.107.162.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KQ67wZrSUE7zFzlz4vCVrmZKkcjJig8vZCk3r798eRH2Y54KVzcBji5GdPxlyD86aWGY4ctq0IPyfzac3vcEAuqw8MoJtu3LoPuN6WQY2vDJ25uIoo4kfQ1hN1LH1hopxqOTs9LRXVEjXkQkOJ/+FxrK1MkVracUyF1/Gkp3DlBM+uTBHeGtURDzwG7S8hEQXPwUjKwSSWHrl3RxYOVddXS6wTg31k7PBeUQpLFKqgwkAYjDuUSwDDzCTbxlQlSoffJ7j8RNGKG/HQs+IMxotgK9zsBHS7WhLHIpQUEGqCLF9NsySm43lSNkClzUZTSXT+ZbIpEzGaCpyZdhZSA4NA==
+ b=X36IoQsJp7TAqCzvSVDdenjCi+2kxuk+Z5lvkTRaxmblsrjJvky3LzgpFqvXgriiBrjyK32FkNZMK9IGY65y2zThEMoBA/jBEclPdRDbwvZ0gGqXYMX2JXJhlKVK4nimPpp5iIezkOJz2PcfMGfCbG0+cv/w1fq5YtZ9dI4nE/ov01EFqy60ndBD+5DwjCXC0KafdDuRcitd8D1IOXOw37S3vezyN6/+ghZVdpvz4aXJxe1jNGAQAo5Xn3pWx8/rNWqZAacqjUootHcEI8y5sTK4qnHTN/JUIKArtEDmDK5RfC5PXOE/CXa0/ElXEltIrcLqCCCrhAMyzCBYqK0HlA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OkM7snniHvjEFlCP4bNLsunSDAgaVJ4y7Ljqcp58nb8=;
- b=bCPT7qjT961GxQQ5YuqGEj9zKEfJwB9PjY7NJ6dptzSLi5qRuDqFlWwnuvyOGdL/UddmfG83caEfUM7uBugtYWa/gG5uLPKT3gLpXDYpKqSL0b6jKGMnSsoKxUZNk7LX5hYPSMfU+vqfGHW/xXqZmgn5dOQWAfsbn/mjUETXwF6FsvHub+ifVn4pvnemoDFirkpNq2CtnyzYyRIKlgko9oHxf/R45d9ZmtRIK8mfWStsUfmkF/BzZq+Ihsq9XXZ4LtM2y556WD535B4E5sZqD7N7YR0F9JsmvqzMtnNIPNrka7uC8HLlopMNxJWeM2jUL8SBX6nTR++pwfgk1WLHfg==
+ bh=65AWTcBDATiKpkm0c24sf7VeW+iR3N/gO6oXrifMziA=;
+ b=TQTHtnlWOPh7bYKiae6E7+1qaVqGDhiOYuRxM3fhBbziBMs25H0tOKQ6iS/feOxvzWSOvwC8ZvIwfX9VS0/RnzlnBAtxukm9gytqeX/sN3geGs9OjZxR2NeFAT2jzruYDisJoXv97cP4UTbjsI8+drZH0025RHrUqEVdik4yVafHail8/CD585IBPQcaAgrzD0N1Saf3znOTe6ON7m15mkpwXTQPID1wcHJsnr7Pe5D2dbFzxOMRGX4LLagDoe9xOAtB7WpUd4Nb1RA+Mv1hq+/f2dIhJWkLnV6wSQW6h9bRiMY8H3bt+nw9/CZ25Dcf7okmeNp5G4ZdpZEHrvpNgw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OkM7snniHvjEFlCP4bNLsunSDAgaVJ4y7Ljqcp58nb8=;
- b=TvheNvFDxK7K3uno5h6dGn70BlgdKC72YLOngz3eVknNkWliFgEihi2D97rgfR9dNUvTjCvSh/7tvotdYojpXBJx6D4fh9viru/DdXY+QTjvpHxBi+3SEFY00BM/Dv1SwpOiCqej7RDov++msUsCCst3iiHjFMz+ZX5WTM9BowLyUmulk9WjLpex+++zfrHoV9R82/Sc4MeSco4DSoVAVLfcljUJsMmYgAWMjXMWPjRX9gN8lA3UVnBsQR0CaRxErRCJWmJ7hcIrBHyD2aMGnG+7N9TmeG54OPwH1Sv75HY3G6cQ4HJCOTZQh90Gg3lIZ19AKz6FfU+jxqA+jO0uFQ==
+ bh=65AWTcBDATiKpkm0c24sf7VeW+iR3N/gO6oXrifMziA=;
+ b=Cf2z4S27XqLhD76JAPVLYOoJRw53smoOJFaekliqvf7ptKAVSmPv3FCGSzwN2Q3N6nSitc089CpVHIL39gYwDCXofvRpxEyV3guWwXXJpu6eXzgL9HJwSSgzfpmR1i/IUC8/w+yL1luFuM+9WnCfRbJHAflupMInne3HsKOa4jV4z5PGYW4NFPTYpNThKG/82zLFVQB9hpzH99ferv9xWrDWIP7MTTtDqGamLdZi3tbZq7cxWGlmcVriikRaGsVD3xgjhZNqqQNobnTgUppk0oOTkn52AmZBSUjoX11gN2nNSAPvhtwnDet13F+YZlh5OQFdB+F534/4DZxqx8HTlg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19)
- by VI1PR04MB7070.eurprd04.prod.outlook.com (2603:10a6:800:123::18) with
+ by DU2PR04MB9017.eurprd04.prod.outlook.com (2603:10a6:10:2d0::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
- 2025 10:42:00 +0000
+ 2025 10:42:06 +0000
 Received: from DU0PR04MB9496.eurprd04.prod.outlook.com
  ([fe80::868b:3935:5e0f:6a33]) by DU0PR04MB9496.eurprd04.prod.outlook.com
  ([fe80::868b:3935:5e0f:6a33%6]) with mapi id 15.20.9343.009; Wed, 19 Nov 2025
- 10:42:00 +0000
+ 10:42:05 +0000
 From: Haibo Chen <haibo.chen@nxp.com>
-Date: Wed, 19 Nov 2025 18:42:28 +0800
-Subject: [PATCH v4 1/2] dt-bindings: spi: Document imx94 xspi
+Date: Wed, 19 Nov 2025 18:42:29 +0800
+Subject: [PATCH v4 2/2] spi: add driver for NXP XSPI controller
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251119-xspi-v4-1-a451afbccf33@nxp.com>
+Message-Id: <20251119-xspi-v4-2-a451afbccf33@nxp.com>
 References: <20251119-xspi-v4-0-a451afbccf33@nxp.com>
 In-Reply-To: <20251119-xspi-v4-0-a451afbccf33@nxp.com>
 To: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>, 
@@ -72,14 +72,13 @@ To: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>,
  Fabio Estevam <festevam@gmail.com>, frank.li@nxp.com
 Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, Haibo Chen <haibo.chen@nxp.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>
+ linux-arm-kernel@lists.infradead.org, Haibo Chen <haibo.chen@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763548973; l=3868;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763548973; l=43416;
  i=haibo.chen@nxp.com; s=20250421; h=from:subject:message-id;
- bh=DyzDhhUAkg1KIRDzUSzmcu5RPQ0rKpxlHOLEvNBGNVA=;
- b=LJzfchCPc4unchTnMTLM1dArVbtA7o/7/11ZbUWqBoeOAssoZ8TKe3jjrvgPh4TWTt5o6extI
- IHPIscODxEGA5dCLtG5umGbYr5aCa1jIE/P3Yqyz8GapLvkWxN6enEp
+ bh=k52j6gYbzEw4zKB6ux/Qz4VPdVsFZ4YO9k1fOgOfGaw=;
+ b=A2ZPPReIcW5RQBhQPWrLhImfmwYVTZd0aZlnCHUpBDhipDPuKCyXrthjrDNqfOStQFJP9Od9+
+ LYGUS5TrWZYAfhLiekgzospsE80x25rJ5xoLt4ZSanrdlR3wHmzhyPc
 X-Developer-Key: i=haibo.chen@nxp.com; a=ed25519;
  pk=HR9LLTuVOg3BUNeAf4/FNOIkMaZvuwVJdNrGpvKDKaI=
 X-ClientProxiedBy: SI1PR02CA0028.apcprd02.prod.outlook.com
@@ -92,228 +91,1546 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_|VI1PR04MB7070:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed82bde1-1c38-44b1-c117-08de27584528
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_|DU2PR04MB9017:EE_
+X-MS-Office365-Filtering-Correlation-Id: df402b0e-0c83-446b-6742-08de27584823
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|19092799006|52116014|7416014|376014|38350700014|921020;
+	BCL:0;ARA:13230040|366016|376014|19092799006|52116014|7416014|1800799024|38350700014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cmhrYkdOTzJwSmtwMDJjOEp3ZWtUY0IrMU1sQUwwaEZGZmxoUCt2MFVBYVBU?=
- =?utf-8?B?SW8xekVJVmlTbjVVY0VzcncrWEFGVktub3pWaHZJQmFscXFOeU1GNXRISU9l?=
- =?utf-8?B?NERDWkErek80NzlTWEJlNC84aDNBbHhsU2pvUmZ1cFVhaVhqTm9DMElvUUtN?=
- =?utf-8?B?aFZnRWlpZjhMMWR5bjFPeEpmL1VmdEtGS3JaR0dWRnhSMzV4WFFYOURrSk5o?=
- =?utf-8?B?NjNNZlNHYWh2R2tPdXlwYWNnNEQrdElaaXBZdDZqeVc2ZHV3UTVETWtTTkdx?=
- =?utf-8?B?M3VPL2VCWEFvZnBPRklWMDB1c3d5UHJlNHA5ajhKNjNvNnN4TXFaaFEydzY5?=
- =?utf-8?B?UWFLWjJMbWhHaklqcGxVeVdzK2NkSHNsMGx6YktWeHNPQnN2RGN3UnRNaFlP?=
- =?utf-8?B?RDFxcmtwVWlVdkhuUGdrSm1hQlIzNktFdnpaeHd0ZFJyY0hZZzc0T0VNMEw1?=
- =?utf-8?B?dXZkT3FLbXJWZytHQzd6ZGRwajVsL1Fra0xnUkNGZDFhQXErS2pDQnZKWEor?=
- =?utf-8?B?OVMwNVVYRmVyakpBaXduQW5hYkFOaVhZZ21pdTVtM2kyNXQwY0JERTNSR1d3?=
- =?utf-8?B?VGxzd2JFbGQ3M3l4MEpmTFRBVjlUSENaRzlra3NHQUNXaUdIeWN4R3BYa2ZK?=
- =?utf-8?B?YjF3WGFmUDhGeDBBZStJZkJBMzVlTXlrSzRoYnRkNFNldDhGV3l3QUZGbWJn?=
- =?utf-8?B?a3BwVjAvRHFza0pMZ3oxdXE1ZlNiZURuUWx5R3NoRUg1M2hyazNFQzZrbDlh?=
- =?utf-8?B?WTVpbmxvK0pFNnVuc0djZ3pyMGdhS2NxczQ0TGx1UnZBRkZDRmlseFowVjIz?=
- =?utf-8?B?aDd0Q2tJYW9lcHZPKzVYUXYrU0ZhSU93Y1hCb1ptTVlhSGFwS3RjZEl3YS9T?=
- =?utf-8?B?dVFGeDVqWGNTVlhZak9rdmNucCtMeThaS3IxRlRCNkVzTXIxczRhVnVXZHg2?=
- =?utf-8?B?QU5yQVZEVVBINDRGQnJ3SUhJWDErYnE2VVFtRDhIZmVWT0lEWnBQL2FBem9I?=
- =?utf-8?B?SlB6dy82UnRhdHhnc0xpRFBtRzYraE9rbDl2WXlCL2NCM1c5QlIxWHJxUkty?=
- =?utf-8?B?UERqbHVEb1dpUkRpTGM1TUxkeEFFb09SUWVLQkFnc21aaEpYKzNTWmh6N0hB?=
- =?utf-8?B?Rkp6dHYzY056M1ZyWFcvQnNZNEJzdXg0QmNlemVIc05vemkzc2ZqZFBEdzFD?=
- =?utf-8?B?K3FmSmpvMUlkTlNUaG1OcjAyYjdLR08rRG9vbVBGYkp3dWlteWxDd1RUS21V?=
- =?utf-8?B?RDlzQXBvYkNIb0VOUFFkcm9ha3VvMXhTN1RncDgxRTkyZVhTWjF2L2hXWlZn?=
- =?utf-8?B?Y3JlODZ1RlJnZnBDT1JUY1hZR2pEdjZ4Q3c2WVBnTXBCMTlQL0taWkltaUxz?=
- =?utf-8?B?M0xwT3ZjSE43SU4xYUU5UlRlRTlmdEV2TVZMVkVxUlluUGFRcWg5d3dYRnZr?=
- =?utf-8?B?ZEoycjNXb045a1g0Nm9qSUtaUytEc29wWmljYWU3UmF3NmhEK21vUVo1Rnpq?=
- =?utf-8?B?SS9hdWNHdVkzRTVyN09KY0ZMNVZnR1NUV0hRQVVVU3dYNzRlZHJVanRqWTNL?=
- =?utf-8?B?OHNmQzhGSzREQ3pqSndYbGxKS082VFMrR3RzekhGakFrWEVUSWxjK1I4ekpH?=
- =?utf-8?B?VzNRZm4wRFpWU3pQY0Vic3MyNVlsQmV5MGdMaFZLczhGeFJ2SDY2ZkpxNGtk?=
- =?utf-8?B?ZVhhUzVJUmx3L2J1UTliVmRIdkEzcWN5ZFQrNWo3eFNiL2dzL0tvZTJQY2g0?=
- =?utf-8?B?dkUyRW5OS2poSU5tZEpMaFN4YXlKbnJuaDR2TjJNK1ZvQ1VEZEtTdi8yTWI3?=
- =?utf-8?B?ejcrZ1JjZnZCaXdqQXhQdmsyNDczdEpFbUpwMUo4d1ZUVEpCSGtZMGRNMDY3?=
- =?utf-8?B?L2l4R25DSkxQaCtZZmVnbnJlTnAxM2NMQTlyRDZiamt2SEEyZERzcldIL2JU?=
- =?utf-8?B?c0EzdTFtWWFCSVVYRTd4ektlajVrN1RhdUQ1VlpUUFFJcnJEMjhBYWxUb2dX?=
- =?utf-8?Q?GEgTXPxKBGu5tDdpdL965BC1+cPQyI=3D?=
+	=?utf-8?B?d1Z1SlE4RmFWejF0aHc2K2NmWElpN2dkWDEwMEo5aWRFQlUvc3UyTWttU1dw?=
+ =?utf-8?B?RkNuVWNOOVBLdCtsNXljRWQ5S1Z6MnJpUGpjNmlMN2pieklKQkJhR2dXZlQz?=
+ =?utf-8?B?SFdQb0UvUXpCNXpGbG1yc1BHYjdYeEFjZlRLVEZtVFdPeXpZenBoekgrNWZR?=
+ =?utf-8?B?V2wxeE5mbVJCSUg1bHk5NUNsYnNNUENZSFFNZ3E1KzV4M284RW1hTjZMOTg2?=
+ =?utf-8?B?a0l0ZE5wY3FUSW1URTk2Sk11QklCL3VOcFBTd3hodHIxVDQwRHhJRHNmSUlY?=
+ =?utf-8?B?bE9RenpkRHpiQU1zU3p0aGJCQ0Q5SkhNYmlFbEFIUXZEOUpmdGRNMlYwamsv?=
+ =?utf-8?B?Qkc1RnJFOGUvYVBrSHFBbHEvWkhnWVhwUjhHQmx3QXl2bTJsWWMwNkFKZGht?=
+ =?utf-8?B?UjMvNDVMeldVdHplUUhySzlRcmd2VGRwWllIT0oxNUllQXRtRDFrbVJleG9J?=
+ =?utf-8?B?WFY1K0U3VHh5YjNqTEgvejdaOXY4U1R4eThKUWNONXhNUkhMMDBSaVRZWHJM?=
+ =?utf-8?B?ZlgwZ0ZsNmFydFlkY29XWjdFbm0wdWpSVFZQc1FoOVhyM0RHVm9MNnJDUk9C?=
+ =?utf-8?B?c282dDdwNU1XRURSL1BscGpZaTNadXVUcXpjVG03Y2doREkwQVF4ZHV4cDln?=
+ =?utf-8?B?bDZ6SjdPcitIY0l6RnJ3Z1pGb3JBMWRKNE5tQ1VaQXd4cW9NengxcmZ5RkF0?=
+ =?utf-8?B?blcvcTNmclRENDNOblhsTnQxSlBocmZYMklkZzdMVHdQa2h0MnpvMVhWRWo4?=
+ =?utf-8?B?SDRDYzRCR2s0QVR6Y0tDSjdyRllIU2JsZEdrS2RwYWhmdS9TN0szRUxJMk1C?=
+ =?utf-8?B?SUdiM2dpcTBUNHZad2JGZjFRRlZYcCtSUDRnS0hKa1VvY2YzZGJHWHkrbldX?=
+ =?utf-8?B?ME5UcWtidjhKR2l3WnUxRUJMRFBxNitGMTA1ZDB5d0tVczlEVndHekZ3ekhY?=
+ =?utf-8?B?dGxFSkp0TXVXNkxkZmhlTFRVcUpUV0ZWem9sa0l2R1BWUlUwdnEwcXg2VURX?=
+ =?utf-8?B?ZkowSS8yTnVJNXp6a0oyYXdJYUY4STJCaXJBSTRKbTRMMnprME51RjVHRXZt?=
+ =?utf-8?B?clk4SDF3bGE2aE1JL2dqVlFPSkZFc3ltWkl6NW5EL1NLWHJUeTlnV3IrcXpE?=
+ =?utf-8?B?UWg4Rmh6REZhQ0c2cDdLdkJoZm9tWC9ndEEwMzNidUt3V1lqeWFFazAxMElD?=
+ =?utf-8?B?dUptMDF0ejdnUHBTNU56Q2UrWk50UEw4a0E5VmRDRWtWZng0aUNQZVRJdjh4?=
+ =?utf-8?B?REUvVXZWSGhIeGVoK1VTcFlPNWkxYk1TVWVpSnU0N1pRRFZmeUJucy9RODdP?=
+ =?utf-8?B?Y1YzNElDT00wd1JqVUVwOE5iWHdYaEc1L25BSGpFUXNkQ2hjOTl1eDlOZlpi?=
+ =?utf-8?B?SWRZaUFaTm42V3VWZjRNRWY3UnJjb1NYMk9UeGZJUWJTTE5YWkV1eXlsTnlC?=
+ =?utf-8?B?d3pjN1Y0SWJydnA0Y2Ivb0xRanlucVFQQXJLVDVwUEZsQTlSMTlpdTdEOEFQ?=
+ =?utf-8?B?b05IbWhJYjZRaThTeUNwSHdQRkhucWIxVmpqSk1IMFRxUjRGajE4SDNIQ1Ix?=
+ =?utf-8?B?WnNNaGlxR2NiWlMrOWJWOWlZNENuT1FLZGZ4QzdabGlMV0VJdVkvZktHdFYz?=
+ =?utf-8?B?UjJNeVY5UmpjeWZVZmN5U0tIZDlCQjU5bVdPTGFjTVJlTTRGRE01dmF6d29I?=
+ =?utf-8?B?SmJNK2pNMHN3ZUljb0J5WlJpdExuMUo2c0lwWTMwZ0lNV0V4d0lvVHhDNFc3?=
+ =?utf-8?B?MFFOWkpxZHFJeVl4TDZiNGFkQmdPaWdpVWxBdTZKR3pqVnlDUTlLWnBvU1lU?=
+ =?utf-8?B?UzRNUjF6cDlRRmg2T2xIWTJXcUNsVzlDb1FxMHlNZU9wNUVYRHpuU1F5Vm5v?=
+ =?utf-8?B?Q25PRFcycFI4YlhtcEdRclhnWjVLeUh1L0laQ2J5QUs4K09INVZ2OEJ2TFpF?=
+ =?utf-8?B?YWYxNTNRKzl6WEdvMkFBOEk5bGlneUw1cjJqUDJoZnhGZ3grdkxVbXVzLytS?=
+ =?utf-8?B?ajE4dUU2a0F1dlpzcEk3WnlHcS9DL2RGd2Y0NmhFbkYzZWVFVnI5ME9BWkJn?=
+ =?utf-8?B?UVJuM1lFeWFnNXA0ZkdydGJTTGxKbWhTQVpPQT09?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9496.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(19092799006)(52116014)(7416014)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9496.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(19092799006)(52116014)(7416014)(1800799024)(38350700014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K1dlSk81S0VieVo1LzdycmJFOUl5bnFkVkpaRHZZa0JhNjdXbVQ4eWNqRUh3?=
- =?utf-8?B?aWtqYUZCVHUxaktyMEJGZncrK1pDNUExd1AwektCcHNNZnpuOGFzVVZIYTFY?=
- =?utf-8?B?YXNjbzJERnRLRmxUcWV1QWFZSjYwNDJPR2pUYVY0ZHJ2WlUxbTdad01YaUl2?=
- =?utf-8?B?YThmY3BEdVBBVG1WRXozb2pUY3ZOTGNrQ1pTT3pJeUh5TTJ5SlUvb0JQa09Y?=
- =?utf-8?B?ZEV1WmgrdWVBclpwUlFqT0NZK2V2RGVoc2N1Mkp2QlU0a1E4aXVhajk0ZDBI?=
- =?utf-8?B?MUVDMUpibWFCRWIwOUhwSVJuY011Qytua0hFWTExeTBMV2RGQnltNzIvNGt1?=
- =?utf-8?B?eG5RVXN6VmRmbjR3Y1FrYVVUNjd6RzBrOWlWVzBpbUVENkdQeDArYVJQQUFI?=
- =?utf-8?B?cWdaNStzNU1yZ25iU2lqRHRRT0dYM1M1WW5neDdZdmJhSkRkM0IyVnVpbU02?=
- =?utf-8?B?YVJPUlVKcUlQMXZwY2pvWjFLTndxVFprL2htdjVhVkh2V2FWZTl1T3RiaTNa?=
- =?utf-8?B?OGdFZjRHc0VaRDVVRFBiY2tmR3c4WWZCaVo1S0Q2QUdLYy9KOEV3b1Qya0RD?=
- =?utf-8?B?WnJBb2NWYTlFU0JTc1RseURiWE9xZjFYeE9sSXU3Zm9KQ3Y0QldsZGwxVDRl?=
- =?utf-8?B?QUlheTVaaU5QRzN2Vy8wRzZ0eTJJdnB2VE1yN1o5RmpTb2Z5TngvcXVIMG93?=
- =?utf-8?B?dlYyMDZxMkloSVBZVG4rTStZN05iZWtIa20yd3RVWHl0MWdtR1l3anBnQXlR?=
- =?utf-8?B?bTFOMVJIRUFkeFcwVkhMNnkyRkNRQXpQZ2YwQk5Wd2V1UW40TXpxcXNVazNx?=
- =?utf-8?B?cXIzTnlxY0V0MWpOcUh6eXR5alpERUVkUnZqa1NpaU1WMjhnMUY1WFRRYW1M?=
- =?utf-8?B?TDhyTkVPOEVQa29Pd2JBSk90MXd3dSsreU5vbkNyY1YxN0VpaWlLZGQ0WXJ4?=
- =?utf-8?B?cUdVdWlLVWdaZ3NmcktPc2k1UHlCSktPWDFoVWhWbVVhRVVMYTNlUUgzZU5m?=
- =?utf-8?B?VXRjeHdOOW81ZTJoY2ZCTlNFNk9NRVFxNnI2dFZ0NG9MWTgvT0k5L3ZYWVR2?=
- =?utf-8?B?VWpOa0Jod2FDSkxWV200OXVhZDVvNUhrNVJ0ZWlzVDRUL2VtM1BtVVhOU2ZZ?=
- =?utf-8?B?OFVJZmh4ZmZTMm5wZ1ordWVmc1pDTHdRS3N2cTZkQWNwQmE1ZHBTcnVWNnha?=
- =?utf-8?B?VUtpQkdjcXVSaUlEN28vUWIrSHgyajFFUklCNFNJRHRKemVkUGFjT2ZRZDVT?=
- =?utf-8?B?M1JoaVRyYTNLUXdrT2k4VWI1UEovTUNEVDE3WmpLV2xCTEdEVGFaV3M3RGgx?=
- =?utf-8?B?NVovQys5b3lhaG1SMzcxWStpRE8wZ3dwOEswVkZ1aGc3b2RTTUJDUXpjRll2?=
- =?utf-8?B?eDBnTmN4U2djUzR6L0JTVkVOeTQ4RlJwZWpuZzk5QU5qdlZZMTVCalhCODNB?=
- =?utf-8?B?dno0L1pHWkJEWFBhZG9UV3FsTVE5N0dVRXdOckJUMUNQbGtKcXRIeTdSd2gr?=
- =?utf-8?B?aVBLb2dxRUFMbUJYdWYwaTBDNzQ1My9lZUZJYzFVVHpjVmp2RUVFcW9QZlph?=
- =?utf-8?B?ald4UHM2bTNlV0lJZXo0TEtSWGVqYlJzNVM5c0JyZnlWTEw5WldoNHFVZ2dR?=
- =?utf-8?B?ZTFrcHJSS2E0K1VFc1F5ak5nY0pwckhRL09TRTdJLzBaZ0pvOHVqc2JiSlFo?=
- =?utf-8?B?TUNvTDRuODFQdWlBLzA5MFc2dlNJaDk1UWErZXVocXB3Sk40RXBCVkxNbFdm?=
- =?utf-8?B?dWdsTlVZa005ZFJXRWNUbVdzeEYxRHJMWGRPWGVLaTRSL2pBZHROeHo5RXJB?=
- =?utf-8?B?dXRvMFhUR2lzSzl6dFljMkRCZ2ErMGlKUWlEbytydm1ZRHIxNmFCV2tOQzYx?=
- =?utf-8?B?aWJGK09TMy8yc0FvV3ZMK3hPUFprZ2gvY3VUVkFXRno0UTEvTnN0MzZHN1Mr?=
- =?utf-8?B?OXkxeFFBTG9ZMmZoWXRzSExlWVQ4ZE94b29Xa2RZNklHcnNMU1lidjgxTGEz?=
- =?utf-8?B?Mk1wQTU1R3ZoMmJrVkVSR3NTWTA3K08xMDlLL2lPeDh4RVhEYjhEcS80bU1L?=
- =?utf-8?B?VzVZbnVCUEpzMko1S0hObEpYdW9JQ3Q1MEdBU0paUDM4TUNZclMwVFBJR1RJ?=
- =?utf-8?Q?A2GxqEZToqYjSO2gX7x4Ed8Wq?=
+	=?utf-8?B?SUQ5czVSaUozQzA0WVVFWVdNRWJDRklDcG0rb1pqbktzZ3hCZ3htTXdnTlNY?=
+ =?utf-8?B?MXZsWjd0WG9PM0w1aXpuQytGcm9kbDhXYXlGZGxzQUEraFZ0SzlTM0x6ckpS?=
+ =?utf-8?B?T2d2NXQxcnpTdVFtQ2xuTFVZV1BlcDVwZy9RczFLZUY1UllkeVI2M3h5d0dv?=
+ =?utf-8?B?YTN1K0FCZ2NOME54RXlmc3N0VlJDWE10S3A3K0hIeFN1RHhBOHo4R1grMHBO?=
+ =?utf-8?B?aCs3WkhjOFlGZnpUZitWUHlkUWtlYVdmTDlZUWlCWlRzazdkb0NSTUhQblVz?=
+ =?utf-8?B?UXdQUDR2UVByU0orNWFXdWZlMGE3N1BuWk4rSHc2anhxNFlRcnhEalFOeEdu?=
+ =?utf-8?B?U0dPSFkzNjRIVEZudCtUajY1UXFERzhPcWFjTGRYcVhsaW11aTJzdmxWTnZp?=
+ =?utf-8?B?MnpVNk1xQ3hYV3VGTVRybTZWVnJtdVJxZ09adjhNNFI4Y1hIcEF6b2d1Rktr?=
+ =?utf-8?B?UVVrN254cUZEMkZSeHJnSUl0ZExTRGVibFJPWnh6NitHVFRMcDU5TmNJQVZ6?=
+ =?utf-8?B?ZHA1bXBLUWtuNWMvN3ExV2Rnd0pnaGZWbkVrUFJCbTRxZTN1eGxWcTVqRTFh?=
+ =?utf-8?B?Mk9DMU1GNUFkaXVReWpZYVpOaW5UNmhHMXdhcVpNcVU2UFYvTFRmb3Ywb0ts?=
+ =?utf-8?B?dFJsdGdiM2ZlRFpWRXp1MndnV0wzcC9jR1hCbzZFTi90RnNPMlpyMGs1UUR6?=
+ =?utf-8?B?cHVBVGh0MFBrODJRQ1I0WDNZUzVmeDJ4SzhKK2hZcW51ZkIzRWc1Tlh5a0Z4?=
+ =?utf-8?B?ZytGS1ZNQmM3OHFWU29iSWN6TEkvTVlIanViSzE1d3hGU3VtTDgwWTVlVWhX?=
+ =?utf-8?B?ZEZTTThOQUUvUkxCZGcvQnk2U0RaTzdjVUllcEhkdkFHd1BKUWlIMHhXLzl1?=
+ =?utf-8?B?YlNDOXJzQTE4ZE04T0ZES2daMXdOdTMvcjZ1RTV5UStQNHVrUlZzTUplbWds?=
+ =?utf-8?B?TStRMVRyQ2JQUHdDaHJSKzk2dlp1ZzgxSWVpTzdnMm9YS2w5Vis0ekpzM2Rm?=
+ =?utf-8?B?eDZSNXBERWZyRld5cFhwZk5EOWFNcXAveXhhQXJwbEx1ZVU5MGhXaUxBYXVv?=
+ =?utf-8?B?c3AvVjc3aDd6My83SVd3VDdyK21nckgxZE5WNm5XMVdMQ3J3eDhNeURMZU9w?=
+ =?utf-8?B?bEQxeHYzdlp1TjgwTTNiQXpyVVZQMGNuZmZTalR5LzF4M2hOa2FiYmVuNGJa?=
+ =?utf-8?B?MSsxTDYxYUF3TXFxa1I2U2xqdDFpQU9NdHkyTVBJZ0JWb0VxTDN2OUlyR2NO?=
+ =?utf-8?B?cGFuYk5Fa1NuTnJDU3NiUzZXUUlWY0hwMGJNMkFQZVl3eW1NM0EzZit6anR5?=
+ =?utf-8?B?L0l0aSszNC93RnF4TnRWU0V0N3J5WWJGbHF6VTFSK04zTDFyb25VdGM3TXo1?=
+ =?utf-8?B?clNUMERjY1VZcExtbWh2TnZwZzliaHFFMEtVVFlYWU5mZDFQM01STHhsZ1U0?=
+ =?utf-8?B?cHRlR0lxeUh5RDVoL2x5Ri9OT3lsMVpJSlh5bVo1b0QxcjBqZXhHcVdtRlN2?=
+ =?utf-8?B?UkFXVUhCRTNBTnRVRGZ0UDVScjRjUDVsSkUyUnR3bllkT0tIY09teUhwaXV1?=
+ =?utf-8?B?Y01QaTVTaTEva3R6VDlNTUJVK3J1NUJValQ4TTJxdW9QRXlIeVk3eXFSL2dz?=
+ =?utf-8?B?dEd1VExhOXczQ1dETlVOZHpsRGYrUnBRVzY4S3FLOVQ4SE0xdW5Rcm5Ibndo?=
+ =?utf-8?B?SEtQS2dLVFRkb1Y2angwdlZtVFNvNWF2c0VYa3pqYVNFMkhNdW90YUJMQUNP?=
+ =?utf-8?B?NkhuOTBKNXNnZHFsb1VaRkRvTFBMRW50Ulp3cmZ3L3pBRFB3TVJLbFRENXR0?=
+ =?utf-8?B?UWsvYWVCbEx1dTZHQ0ZsOHd6WVAwbHR0YlphcEx1aks2VzE2MWY4ZXJVZm1O?=
+ =?utf-8?B?Z1FCcXVuT1BXSElwNE5HTWoyU1FtSlQ2dUNuVU00VVNMMURtcmVFbDdUcnBx?=
+ =?utf-8?B?TndUOWFNZmczMnQxMURMVG1WKzM4K21jLzJCQ0x4cG1iNUVHMHdjZnBHdHkv?=
+ =?utf-8?B?TUwzY3NEM3ZRRzhBOENxMTlFaWZyMml2dFpyZVNyTWJ0bFlDYTdZd1pZczZ1?=
+ =?utf-8?B?N3VyNVdiajZFTHNXSHhnTXpGcnE2RndaRkJMUVlvK29ua1doS2VpMTNqZ3BY?=
+ =?utf-8?Q?QcjW1WZt5PcBa4fRc8/1aPAJy?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed82bde1-1c38-44b1-c117-08de27584528
+X-MS-Exchange-CrossTenant-Network-Message-Id: df402b0e-0c83-446b-6742-08de27584823
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9496.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 10:42:00.5692
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 10:42:05.8177
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: as1MuTsbC6sWO62Fvt8+dJCgtqKaFhMC6L48eQ71e+eSLcbWIV9EF/9yG2MfcXEAd7DOzrRAyBi4+T83lKrwfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7070
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xl/Df2JFGBpfVH9tDdwMhrC7/nnyusAzehQbM9k8Ru+zdZkAS1DXCxQ/XY0UYI45SrfxIRuxFNWudn4OTga25A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9017
 
-Document imx94 xspi that supports interface to serial flash
-supporting following features:
+Add driver support for NXP XSPI controller.
 
-- Single-bit SPI, Dual SPI, Quad SPI and Octal SPI.
-- Single Data Rate or Double Data Rate modes.
-- Direct memory mapping of all AHB memory accesses to the
-  chip system memory space.
-- Multi-master AHB accesses with priority.
+XSPI is a flexible SPI host controller which supports up to
+2 external devices (2 CS). It support Single/Dual/Quad/Octal
+mode data transfer.
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+The difference between XSPI and Flexspi:
+1.the register layout is total different.
+2.XSPI support multiple independent execution environments
+(EENVs) for HW virtualization with some limitations. Each EENV
+has its own interrupt and its own set of programming registers
+that exists in a specific offset range in the XSPI memory map.
+The main environment (EENV0) address space contains all of the
+registers for controlling EENV0 plus all of the general XSPI
+control and programming registers. The register mnemonics for
+the user environments (EENV1 to EENV4) have "_SUB_n" appended
+to the mnemonic for the corresponding main-environment register.
+
+Current driver based on EENV0, which means system already give
+EENV0 right to linux.
+
+This driver use SPI memory interface of the SPI framework to issue
+flash memory operations. Tested this driver with mtd_debug and
+UBIFS on NXP i.MX943 EVK board which has one MT35XU512ABA spi nor
+flash. NOw this driver has the following key features:
+- Support up to OCT DDR mode
+- Support AHB read
+- Support IP read and IP write
+- Support two CS
+
 Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
 ---
- .../devicetree/bindings/spi/nxp,imx94-xspi.yaml    | 88 ++++++++++++++++++++++
- MAINTAINERS                                        |  8 ++
- 2 files changed, 96 insertions(+)
+ MAINTAINERS                |    1 +
+ drivers/spi/Kconfig        |   10 +
+ drivers/spi/Makefile       |    1 +
+ drivers/spi/spi-nxp-xspi.c | 1357 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 1369 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..a0f4b162c85855c55d06c6ea1a2417af5121fab2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-@@ -0,0 +1,88 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/nxp,imx94-xspi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NXP External Serial Peripheral Interface (xSPI)
-+
-+maintainers:
-+  - Haibo Chen <haibo.chen@nxp.com>
-+  - Han Xu <han.xu@nxp.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - nxp,imx94-xspi
-+
-+  reg:
-+    items:
-+      - description: registers address space
-+      - description: memory mapped address space
-+
-+  reg-names:
-+    items:
-+      - const: base
-+      - const: mmap
-+
-+  interrupts:
-+    items:
-+      - description: interrupt for EENV0
-+      - description: interrupt for EENV1
-+      - description: interrupt for EENV2
-+      - description: interrupt for EENV3
-+      - description: interrupt for EENV4
-+
-+  clocks:
-+    items:
-+      - description: SPI serial clock
-+
-+  clock-names:
-+    items:
-+      - const: per
-+
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+allOf:
-+  - $ref: spi-controller.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        spi@42b90000 {
-+            compatible = "nxp,imx94-xspi";
-+            reg = <0x0 0x42b90000 0x0 0x50000>, <0x0 0x28000000 0x0 0x08000000>;
-+            reg-names = "base", "mmap";
-+            interrupts = <GIC_SPI 390 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 391 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 392 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 393 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 394 IRQ_TYPE_LEVEL_HIGH>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            clocks = <&scmi_1>;
-+            clock-names = "per";
-+
-+            flash@0 {
-+                compatible = "jedec,spi-nor";
-+                reg = <0>;
-+                spi-max-frequency = <200000000>;
-+                spi-rx-bus-width = <8>;
-+                spi-tx-bus-width = <8>;
-+            };
-+        };
-+    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 59b145dde215f7a2bd01867ffaf4d621eb0f901e..ecda64e8087de3704315c1cd39720ee2c9399b9e 100644
+index ecda64e8087de3704315c1cd39720ee2c9399b9e..be8b23e060eb0c36a03b00f8384f50a0a20fed2f 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18869,6 +18869,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/sound/trivial-codec.yaml
- F:	sound/soc/codecs/tfa9879*
+@@ -18876,6 +18876,7 @@ L:	linux-spi@vger.kernel.org
+ L:	imx@lists.linux.dev
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
++F:	drivers/spi/spi-nxp-xspi.c
  
-+NXP XSPI DRIVER
-+M:	Han Xu <han.xu@nxp.com>
-+M:	Haibo Chen <haibo.chen@nxp.com>
-+L:	linux-spi@vger.kernel.org
-+L:	imx@lists.linux.dev
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-+
  NXP-NCI NFC DRIVER
  S:	Orphan
- F:	Documentation/devicetree/bindings/net/nfc/nxp,nci.yaml
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index e34aa246eef90ea9e43b58f603e50653e0fadfd3..09472a38b93376b09f6efb6ba90ebf6f7dbd6b4b 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -481,6 +481,16 @@ config SPI_NXP_FLEXSPI
+ 	  This controller does not support generic SPI messages and only
+ 	  supports the high-level SPI memory interface.
+ 
++config SPI_NXP_XSPI
++        tristate "NXP xSPI controller"
++	depends on ARCH_MXC || COMPILE_TEST
++	depends on HAS_IOMEM
++	help
++	  This enables support for the xSPI controller. Up to two devices
++	  can be connected to one host.
++	  This controller does not support generic SPI messages and only
++	  supports the high-level SPI memory interface.
++
+ config SPI_GPIO
+ 	tristate "GPIO-based bitbanging SPI Master"
+ 	depends on GPIOLIB || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 863b628ff1ec0b938be81dff024aa7dc7d50c36d..649dcba0aa1140da7d9bd969138859922a2e03b0 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -102,6 +102,7 @@ obj-$(CONFIG_SPI_WPCM_FIU)		+= spi-wpcm-fiu.o
+ obj-$(CONFIG_SPI_NPCM_FIU)		+= spi-npcm-fiu.o
+ obj-$(CONFIG_SPI_NPCM_PSPI)		+= spi-npcm-pspi.o
+ obj-$(CONFIG_SPI_NXP_FLEXSPI)		+= spi-nxp-fspi.o
++obj-$(CONFIG_SPI_NXP_XSPI)		+= spi-nxp-xspi.o
+ obj-$(CONFIG_SPI_OC_TINY)		+= spi-oc-tiny.o
+ spi-octeon-objs				:= spi-cavium.o spi-cavium-octeon.o
+ obj-$(CONFIG_SPI_OCTEON)		+= spi-octeon.o
+diff --git a/drivers/spi/spi-nxp-xspi.c b/drivers/spi/spi-nxp-xspi.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..5f0d199737689a88a21413f5d597fcef09ccab78
+--- /dev/null
++++ b/drivers/spi/spi-nxp-xspi.c
+@@ -0,0 +1,1357 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++/*
++ * NXP xSPI controller driver.
++ *
++ * Copyright 2025 NXP
++ *
++ * xSPI is a flexible SPI host controller which supports single
++ * external devices. This device can have up to eight bidirectional
++ * data lines, this means xSPI support Single/Dual/Quad/Octal mode
++ * data transfer (1/2/4/8 bidirectional data lines).
++ *
++ * xSPI controller is driven by the LUT(Look-up Table) registers
++ * LUT registers are a look-up-table for sequences of instructions.
++ * A valid sequence consists of five LUT registers.
++ * Maximum 16 LUT sequences can be programmed simultaneously.
++ *
++ * LUTs are being created at run-time based on the commands passed
++ * from the spi-mem framework, thus using single LUT index.
++ *
++ * Software triggered Flash read/write access by IP Bus.
++ *
++ * Memory mapped read access by AHB Bus.
++ *
++ * Based on SPI MEM interface and spi-nxp-fspi.c driver.
++ *
++ * Author:
++ *     Haibo Chen <haibo.chen@nxp.com>
++ * Co-author:
++ *     Han Xu <han.xu@nxp.com>
++ */
++
++#include <linux/bitops.h>
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/completion.h>
++#include <linux/delay.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/iopoll.h>
++#include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/log2.h>
++#include <linux/module.h>
++#include <linux/mutex.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pm_runtime.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/spi-mem.h>
++
++/* Runtime pm timeout */
++#define XSPI_RPM_TIMEOUT_MS 50	/* 50ms */
++/*
++ * The driver only uses one single LUT entry, that is updated on
++ * each call of exec_op(). Index 0 is preset at boot with a basic
++ * read operation, so let's use the last entry (15).
++ */
++#define	XSPI_SEQID_LUT			15
++
++#define XSPI_MCR			0x0
++#define XSPI_MCR_CKN_FA_EN		BIT(26)
++#define XSPI_MCR_DQS_FA_SEL_MASK	GENMASK(25, 24)
++#define XSPI_MCR_ISD3FA			BIT(17)
++#define XSPI_MCR_ISD2FA			BIT(16)
++#define XSPI_MCR_DOZE			BIT(15)
++#define XSPI_MCR_MDIS			BIT(14)
++#define XSPI_MCR_DLPEN			BIT(12)
++#define XSPI_MCR_CLR_TXF		BIT(11)
++#define XSPI_MCR_CLR_RXF		BIT(10)
++#define XSPI_MCR_IPS_TG_RST		BIT(9)
++#define XSPI_MCR_VAR_LAT_EN		BIT(8)
++#define XSPI_MCR_DDR_EN			BIT(7)
++#define XSPI_MCR_DQS_EN			BIT(6)
++#define XSPI_MCR_DQS_LAT_EN		BIT(5)
++#define XSPI_MCR_DQS_OUT_EN		BIT(4)
++#define XSPI_MCR_SWRSTHD		BIT(1)
++#define XSPI_MCR_SWRSTSD		BIT(0)
++
++#define XSPI_IPCR			0x8
++
++#define XSPI_FLSHCR			0xC
++#define XSPI_FLSHCR_TDH_MASK		GENMASK(17, 16)
++#define XSPI_FLSHCR_TCSH_MASK		GENMASK(11, 8)
++#define XSPI_FLSHCR_TCSS_MASK		GENMASK(3, 0)
++
++#define XSPI_BUF0CR			0x10
++#define XSPI_BUF1CR			0x14
++#define XSPI_BUF2CR			0x18
++#define XSPI_BUF3CR			0x1C
++#define XSPI_BUF3CR_ALLMST		BIT(31)
++#define XSPI_BUF3CR_ADATSZ_MASK		GENMASK(17, 8)
++#define XSPI_BUF3CR_MSTRID_MASK		GENMASK(3, 0)
++
++#define XSPI_BFGENCR			0x20
++#define XSPI_BFGENCR_SEQID_WR_MASK	GENMASK(31, 28)
++#define XSPI_BFGENCR_ALIGN_MASK		GENMASK(24, 22)
++#define XSPI_BFGENCR_PPWF_CLR		BIT(20)
++#define XSPI_BFGENCR_WR_FLUSH_EN	BIT(21)
++#define XSPI_BFGENCR_SEQID_WR_EN	BIT(17)
++#define XSPI_BFGENCR_SEQID_MASK		GENMASK(15, 12)
++
++#define XSPI_BUF0IND			0x30
++#define XSPI_BUF1IND			0x34
++#define XSPI_BUF2IND			0x38
++
++#define XSPI_DLLCRA			0x60
++#define XSPI_DLLCRA_DLLEN		BIT(31)
++#define XSPI_DLLCRA_FREQEN		BIT(30)
++#define XSPI_DLLCRA_DLL_REFCNTR_MASK	GENMASK(27, 24)
++#define XSPI_DLLCRA_DLLRES_MASK		GENMASK(32, 20)
++#define XSPI_DLLCRA_SLV_FINE_MASK	GENMASK(19, 16)
++#define XSPI_DLLCRA_SLV_DLY_MASK	GENMASK(14, 12)
++#define XSPI_DLLCRA_SLV_DLY_COARSE_MASK	GENMASK(11,  8)
++#define XSPI_DLLCRA_SLV_DLY_FINE_MASK	GENMASK(7, 5)
++#define XSPI_DLLCRA_DLL_CDL8		BIT(4)
++#define XSPI_DLLCRA_SLAVE_AUTO_UPDT	BIT(3)
++#define XSPI_DLLCRA_SLV_EN		BIT(2)
++#define XSPI_DLLCRA_SLV_DLL_BYPASS	BIT(1)
++#define XSPI_DLLCRA_SLV_UPD		BIT(0)
++
++#define XSPI_SFAR			0x100
++
++#define XSPI_SFACR			0x104
++#define XSPI_SFACR_FORCE_A10		BIT(22)
++#define XSPI_SFACR_WA_4B_EN		BIT(21)
++#define XSPI_SFACR_CAS_INTRLVD		BIT(20)
++#define XSPI_SFACR_RX_BP_EN		BIT(18)
++#define XSPI_SFACR_BYTE_SWAP		BIT(17)
++#define XSPI_SFACR_WA			BIT(16)
++#define XSPI_SFACR_CAS_MASK		GENMASK(3, 0)
++
++#define XSPI_SMPR			0x108
++#define XSPI_SMPR_DLLFSMPFA_MASK	GENMASK(26, 24)
++#define XSPI_SMPR_FSDLY			BIT(6)
++#define XSPI_SMPR_FSPHS			BIT(5)
++
++#define XSPI_RBSR			0x10C
++
++#define XSPI_RBCT			0x110
++#define XSPI_RBCT_WMRK_MASK		GENMASK(6, 0)
++
++#define XSPI_DLLSR			0x12C
++#define XSPI_DLLSR_DLLA_LOCK		BIT(15)
++#define XSPI_DLLSR_SLVA_LOCK		BIT(14)
++#define XSPI_DLLSR_DLLA_RANGE_ERR	BIT(13)
++#define XSPI_DLLSR_DLLA_FINE_UNDERFLOW	BIT(12)
++
++#define XSPI_TBSR			0x150
++#define XSPI_TBSR_TRCTR_SHIFT		16
++#define XSPI_TBSR_TRBFL_SHIFT		0
++
++#define XSPI_TBDR			0x154
++#define XSPI_TBDR_TXDATA_SHIFT		0
++
++#define XSPI_TBCT			0x158
++#define XSPI_TBCT_WMRK_MASK		GENMASK(7, 0)
++
++#define XSPI_SR				0x15C
++#define XSPI_SR_TXFULL			BIT(27)
++#define XSPI_SR_TXDMA			BIT(26)
++#define XSPI_SR_TXWA			BIT(25)
++#define XSPI_SR_TXNE			BIT(24)
++#define XSPI_SR_RXDMA			BIT(23)
++#define XSPI_SR_ARB_STATE_MASK		GENMASK(23, 20)
++#define XSPI_SR_RXFULL			BIT(19)
++#define XSPI_SR_RXWE			BIT(16)
++#define XSPI_SR_ARB_LCK			BIT(15)
++#define XSPI_SR_AHBnFUL			BIT(11)
++#define XSPI_SR_AHBnNE			BIT(7)
++#define XSPI_SR_AHBTRN			BIT(6)
++#define XSPI_SR_AWRACC			BIT(4)
++#define XSPI_SR_AHB_ACC			BIT(2)
++#define XSPI_SR_IP_ACC			BIT(1)
++#define XSPI_SR_BUSY			BIT(0)
++
++#define XSPI_FR				0x160
++#define XSPI_FR_DLPFF			BIT(31)
++#define XSPI_FR_DLLABRT			BIT(28)
++#define XSPI_FR_TBFF			BIT(27)
++#define XSPI_FR_TBUF			BIT(26)
++#define XSPI_FR_DLLUNLCK		BIT(24)
++#define XSPI_FR_ILLINE			BIT(23)
++#define XSPI_FR_RBOF			BIT(17)
++#define XSPI_FR_RBDF			BIT(16)
++#define XSPI_FR_AAEF			BIT(15)
++#define XSPI_FR_AITEF			BIT(14)
++#define XSPI_FR_AIBSEF			BIT(13)
++#define XSPI_FR_ABOF			BIT(12)
++#define XSPI_FR_CRCAEF			BIT(10)
++#define XSPI_FR_PPWF			BIT(8)
++#define XSPI_FR_IPIEF			BIT(6)
++#define XSPI_FR_IPEDERR			BIT(5)
++#define XSPI_FR_PERFOVF			BIT(2)
++#define XSPI_FR_RDADDR			BIT(1)
++#define XSPI_FR_TFF			BIT(0)
++
++#define XSPI_RSER			0x164
++#define XSPI_RSER_TFIE			BIT(0)
++
++#define XSPI_SFA1AD			0x180
++
++#define XSPI_SFA2AD			0x184
++
++#define XSPI_RBDR0			0x200
++
++#define XSPI_LUTKEY			0x300
++#define XSPI_LUT_KEY_VAL		(0x5AF05AF0UL)
++
++#define XSPI_LCKCR			0x304
++#define XSPI_LOKCR_LOCK			BIT(0)
++#define XSPI_LOKCR_UNLOCK		BIT(1)
++
++#define XSPI_LUT			0x310
++#define XSPI_LUT_OFFSET			(XSPI_SEQID_LUT * 5 * 4)
++#define XSPI_LUT_REG(idx) \
++	(XSPI_LUT + XSPI_LUT_OFFSET + (idx) * 4)
++
++#define XSPI_MCREXT			0x4FC
++#define XSPI_MCREXT_RST_MASK		GENMASK(3, 0)
++
++
++#define XSPI_FRAD0_WORD2		0x808
++#define XSPI_FRAD0_WORD2_MD0ACP_MASK	GENMASK(2, 0)
++
++#define XSPI_FRAD0_WORD3		0x80C
++#define XSPI_FRAD0_WORD3_VLD		BIT(31)
++
++#define XSPI_TG0MDAD			0x900
++#define XSPI_TG0MDAD_VLD		BIT(31)
++
++#define XSPI_TG1MDAD			0x910
++
++#define XSPI_MGC			0x920
++#define XSPI_MGC_GVLD			BIT(31)
++#define XSPI_MGC_GVLDMDAD		BIT(29)
++#define XSPI_MGC_GVLDFRAD		BIT(27)
++
++#define XSPI_MTO			0x928
++
++#define XSPI_ERRSTAT			0x938
++#define XSPI_INT_EN			0x93C
++
++#define XSPI_SFP_TG_IPCR		0x958
++#define XSPI_SFP_TG_IPCR_SEQID_MASK	GENMASK(27, 24)
++#define XSPI_SFP_TG_IPCR_ARB_UNLOCK	BIT(23)
++#define XSPI_SFP_TG_IPCR_ARB_LOCK	BIT(22)
++#define XSPI_SFP_TG_IPCR_IDATSZ_MASK	GENMASK(15, 0)
++
++#define XSPI_SFP_TG_SFAR 0x95C
++
++/* Register map end */
++
++/********* XSPI CMD definitions ***************************/
++#define LUT_STOP	0x00
++#define LUT_CMD_SDR	0x01
++#define LUT_ADDR_SDR	0x02
++#define LUT_DUMMY	0x03
++#define LUT_MODE8_SDR	0x04
++#define LUT_MODE2_SDR	0x05
++#define LUT_MODE4_SDR	0x06
++#define LUT_READ_SDR	0x07
++#define LUT_WRITE_SDR	0x08
++#define LUT_JMP_ON_CS	0x09
++#define LUT_ADDR_DDR	0x0A
++#define LUT_MODE8_DDR	0x0B
++#define LUT_MODE2_DDR	0x0C
++#define LUT_MODE4_DDR	0x0D
++#define LUT_READ_DDR	0x0E
++#define LUT_WRITE_DDR	0x0F
++#define LUT_DATA_LEARN	0x10
++#define LUT_CMD_DDR	0x11
++#define LUT_CADDR_SDR	0x12
++#define LUT_CADDR_DDR	0x13
++#define JMP_TO_SEQ	0x14
++
++#define XSPI_64BIT_LE	0x3
++/*
++ * Calculate number of required PAD bits for LUT register.
++ *
++ * The pad stands for the number of IO lines [0:7].
++ * For example, the octal read needs eight IO lines,
++ * so you should use LUT_PAD(8). This macro
++ * returns 3 i.e. use eight (2^3) IP lines for read.
++ */
++#define LUT_PAD(x) (fls(x) - 1)
++
++/*
++ * Macro for constructing the LUT entries with the following
++ * register layout:
++ *
++ *  ---------------------------------------------------
++ *  | INSTR1 | PAD1 | OPRND1 | INSTR0 | PAD0 | OPRND0 |
++ *  ---------------------------------------------------
++ */
++#define PAD_SHIFT		8
++#define INSTR_SHIFT		10
++#define OPRND_SHIFT		16
++
++/* Macros for constructing the LUT register. */
++#define LUT_DEF(idx, ins, pad, opr)			  \
++	((((ins) << INSTR_SHIFT) | ((pad) << PAD_SHIFT) | \
++	(opr)) << (((idx) % 2) * OPRND_SHIFT))
++
++#define NXP_XSPI_MIN_IOMAP	SZ_4M
++#define NXP_XSPI_MAX_CHIPSELECT		2
++#define POLL_TOUT_US		5000
++
++/* Access flash memory using IP bus only */
++#define XSPI_QUIRK_USE_IP_ONLY	BIT(0)
++
++struct nxp_xspi_devtype_data {
++	unsigned int rxfifo;
++	unsigned int txfifo;
++	unsigned int ahb_buf_size;
++	unsigned int quirks;
++};
++
++static struct nxp_xspi_devtype_data imx94_data = {
++	.rxfifo = SZ_512,       /* (128 * 4 bytes)  */
++	.txfifo = SZ_1K,        /* (256 * 4 bytes)  */
++	.ahb_buf_size = SZ_4K,  /* (1024 * 4 bytes)  */
++};
++
++struct nxp_xspi {
++	void __iomem *iobase;
++	void __iomem *ahb_addr;
++	u32 memmap_phy;
++	u32 memmap_phy_size;
++	u32 memmap_start;
++	u32 memmap_len;
++	struct clk *clk;
++	struct device *dev;
++	struct completion c;
++	const struct nxp_xspi_devtype_data *devtype_data;
++	/* mutex lock for each operation */
++	struct mutex lock;
++	int selected;
++#define XSPI_DTR_PROTO		BIT(0)
++	int flags;
++	/* Save the previous operation clock rate */
++	unsigned long pre_op_rate;
++	/* The max clock rate xspi supported output to device */
++	unsigned long support_max_rate;
++};
++
++static inline int needs_ip_only(struct nxp_xspi *xspi)
++{
++	return xspi->devtype_data->quirks & XSPI_QUIRK_USE_IP_ONLY;
++}
++
++static irqreturn_t nxp_xspi_irq_handler(int irq, void *dev_id)
++{
++	struct nxp_xspi *xspi = dev_id;
++	u32 reg;
++
++	reg = readl(xspi->iobase + XSPI_FR);
++	if (reg & XSPI_FR_TFF) {
++		/* Clear interrupt */
++		writel(XSPI_FR_TFF, xspi->iobase + XSPI_FR);
++		complete(&xspi->c);
++		return IRQ_HANDLED;
++	}
++
++	return IRQ_NONE;
++}
++
++static int nxp_xspi_check_buswidth(struct nxp_xspi *xspi, u8 width)
++{
++	return (is_power_of_2(width) && width <= 8) ? 0 : -EOPNOTSUPP;
++}
++
++static bool nxp_xspi_supports_op(struct spi_mem *mem,
++				 const struct spi_mem_op *op)
++{
++	struct nxp_xspi *xspi = spi_controller_get_devdata(mem->spi->controller);
++	int ret;
++
++	ret = nxp_xspi_check_buswidth(xspi, op->cmd.buswidth);
++
++	if (op->addr.nbytes)
++		ret |= nxp_xspi_check_buswidth(xspi, op->addr.buswidth);
++
++	if (op->dummy.nbytes)
++		ret |= nxp_xspi_check_buswidth(xspi, op->dummy.buswidth);
++
++	if (op->data.nbytes)
++		ret |= nxp_xspi_check_buswidth(xspi, op->data.buswidth);
++
++	if (ret)
++		return false;
++
++	/*
++	 * The number of address bytes should be equal to or less than 4 bytes.
++	 */
++	if (op->addr.nbytes > 4)
++		return false;
++
++	/* Max 32 dummy clock cycles supported */
++	if (op->dummy.buswidth &&
++	    (op->dummy.nbytes * 8 / op->dummy.buswidth > 64))
++		return false;
++
++	if (needs_ip_only(xspi) && op->data.dir == SPI_MEM_DATA_IN &&
++	    op->data.nbytes > xspi->devtype_data->rxfifo)
++		return false;
++
++	if (op->data.dir == SPI_MEM_DATA_OUT &&
++			op->data.nbytes > xspi->devtype_data->txfifo)
++		return false;
++
++	return spi_mem_default_supports_op(mem, op);
++}
++
++static void nxp_xspi_prepare_lut(struct nxp_xspi *xspi,
++				 const struct spi_mem_op *op)
++{
++	void __iomem *base = xspi->iobase;
++	u32 lutval[5] = {};
++	int lutidx = 1, i;
++
++	/* cmd */
++	if (op->cmd.dtr) {
++		lutval[0] |= LUT_DEF(0, LUT_CMD_DDR, LUT_PAD(op->cmd.buswidth),
++				     op->cmd.opcode >> 8);
++		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_CMD_DDR,
++					      LUT_PAD(op->cmd.buswidth),
++					      op->cmd.opcode & 0x00ff);
++		lutidx++;
++	} else {
++		lutval[0] |= LUT_DEF(0, LUT_CMD_SDR, LUT_PAD(op->cmd.buswidth),
++				     op->cmd.opcode);
++	}
++
++	/* Addr bytes */
++	if (op->addr.nbytes) {
++		lutval[lutidx / 2] |= LUT_DEF(lutidx, op->addr.dtr ?
++					      LUT_ADDR_DDR : LUT_ADDR_SDR,
++					      LUT_PAD(op->addr.buswidth),
++					      op->addr.nbytes * 8);
++		lutidx++;
++	}
++
++	/* Dummy bytes, if needed */
++	if (op->dummy.nbytes) {
++		lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_DUMMY,
++					      LUT_PAD(op->data.buswidth),
++					      op->dummy.nbytes * 8 /
++						/* need distinguish ddr mode */
++					      op->dummy.buswidth / (op->dummy.dtr ? 2 : 1));
++		lutidx++;
++	}
++
++	/* Read/Write data bytes */
++	if (op->data.nbytes) {
++		lutval[lutidx / 2] |= LUT_DEF(lutidx,
++					      op->data.dir == SPI_MEM_DATA_IN ?
++					      (op->data.dtr ? LUT_READ_DDR : LUT_READ_SDR) :
++					      (op->data.dtr ? LUT_WRITE_DDR : LUT_WRITE_SDR),
++					      LUT_PAD(op->data.buswidth),
++					      0);
++		lutidx++;
++	}
++
++	/* Stop condition. */
++	lutval[lutidx / 2] |= LUT_DEF(lutidx, LUT_STOP, 0, 0);
++
++	/* Unlock LUT */
++	writel(XSPI_LUT_KEY_VAL, xspi->iobase + XSPI_LUTKEY);
++	writel(XSPI_LOKCR_UNLOCK, xspi->iobase + XSPI_LCKCR);
++
++	/* Fill LUT */
++	for (i = 0; i < ARRAY_SIZE(lutval); i++)
++		writel(lutval[i], base + XSPI_LUT_REG(i));
++
++	dev_dbg(xspi->dev, "CMD[%02x] lutval[0:%08x 1:%08x 2:%08x 3:%08x 4:%08x], size: 0x%08x\n",
++		op->cmd.opcode, lutval[0], lutval[1], lutval[2], lutval[3], lutval[4],
++		op->data.nbytes);
++
++	/* Lock LUT */
++	writel(XSPI_LUT_KEY_VAL, xspi->iobase + XSPI_LUTKEY);
++	writel(XSPI_LOKCR_LOCK, xspi->iobase + XSPI_LCKCR);
++}
++
++static void nxp_xspi_disable_ddr(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	u32 reg;
++
++	/* Disable module */
++	reg = readl(base + XSPI_MCR);
++	reg |= XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++
++	reg &= ~XSPI_MCR_DDR_EN;
++	reg &= ~XSPI_MCR_DQS_FA_SEL_MASK;
++	/* Use dummy pad loopback mode to sample data */
++	reg |= FIELD_PREP(XSPI_MCR_DQS_FA_SEL_MASK, 0x01);
++	writel(reg, base + XSPI_MCR);
++	xspi->support_max_rate = 133000000;
++
++	reg = readl(base + XSPI_FLSHCR);
++	reg &= ~XSPI_FLSHCR_TDH_MASK;
++	writel(reg, base + XSPI_FLSHCR);
++
++	/* Select sampling at inverted clock */
++	reg = FIELD_PREP(XSPI_SMPR_DLLFSMPFA_MASK, 0) | XSPI_SMPR_FSPHS;
++	writel(reg, base + XSPI_SMPR);
++
++	/* Enable module */
++	reg = readl(base + XSPI_MCR);
++	reg &= ~XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++}
++
++static void nxp_xspi_enable_ddr(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	u32 reg;
++
++	/* Disable module */
++	reg = readl(base + XSPI_MCR);
++	reg |= XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++
++	reg |= XSPI_MCR_DDR_EN;
++	reg &= ~XSPI_MCR_DQS_FA_SEL_MASK;
++	/* Use external dqs to sample data */
++	reg |= FIELD_PREP(XSPI_MCR_DQS_FA_SEL_MASK, 0x03);
++	writel(reg, base + XSPI_MCR);
++	xspi->support_max_rate = 200000000;
++
++	reg = readl(base + XSPI_FLSHCR);
++	reg &= ~XSPI_FLSHCR_TDH_MASK;
++	reg |= FIELD_PREP(XSPI_FLSHCR_TDH_MASK, 0x01);
++	writel(reg, base + XSPI_FLSHCR);
++
++	reg = FIELD_PREP(XSPI_SMPR_DLLFSMPFA_MASK, 0x04);
++	writel(reg, base + XSPI_SMPR);
++
++	/* Enable module */
++	reg = readl(base + XSPI_MCR);
++	reg &= ~XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++}
++
++static void nxp_xspi_sw_reset(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	bool mdis_flag = false;
++	u32 reg;
++	int ret;
++
++	reg = readl(base + XSPI_MCR);
++
++	/*
++	 * Per RM, when reset SWRSTSD and SWRSTHD, XSPI must be
++	 * enabled (MDIS = 0).
++	 * So if MDIS is 1, should clear it before assert SWRSTSD
++	 * and SWRSTHD.
++	 */
++	if (reg & XSPI_MCR_MDIS) {
++		reg &= ~XSPI_MCR_MDIS;
++		writel(reg, base + XSPI_MCR);
++		mdis_flag = true;
++	}
++
++	/* Software reset for AHB domain and Serial flash memory domain */
++	reg |= XSPI_MCR_SWRSTHD | XSPI_MCR_SWRSTSD;
++	/* Software Reset for IPS Target Group Queue 0 */
++	reg |= XSPI_MCR_IPS_TG_RST;
++	writel(reg, base + XSPI_MCR);
++
++	/* IPS_TG_RST will self-clear to 0 once IPS_TG_RST complete */
++	ret = readl_poll_timeout(base + XSPI_MCR, reg, !(reg & XSPI_MCR_IPS_TG_RST),
++			      100, 5000);
++	if (ret == -ETIMEDOUT)
++		dev_warn(xspi->dev, "XSPI_MCR_IPS_TG_RST do not self-clear in 5ms!");
++
++	/*
++	 * Per RM, must wait for at least three system cycles and
++	 * three flash cycles after changing the value of reset field.
++	 * delay 5us for safe.
++	 */
++	fsleep(5);
++
++	/*
++	 * Per RM, before dessert SWRSTSD and SWRSTHD, XSPI must be
++	 * disabled (MIDS = 1).
++	 */
++	reg = readl(base + XSPI_MCR);
++	reg |= XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++
++	/* deassert software reset */
++	reg &= ~(XSPI_MCR_SWRSTHD | XSPI_MCR_SWRSTSD);
++	writel(reg, base + XSPI_MCR);
++
++	/*
++	 * Per RM, must wait for at least three system cycles and
++	 * three flash cycles after changing the value of reset field.
++	 * delay 5us for safe.
++	 */
++	fsleep(5);
++
++	/* Re-enable XSPI if it is enabled at beginning */
++	if (!mdis_flag) {
++		reg &= ~XSPI_MCR_MDIS;
++		writel(reg, base + XSPI_MCR);
++	}
++}
++
++static void nxp_xspi_dll_bypass(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	int ret;
++	u32 reg;
++
++	nxp_xspi_sw_reset(xspi);
++
++	writel(0, base + XSPI_DLLCRA);
++
++	/* Set SLV EN first */
++	reg = XSPI_DLLCRA_SLV_EN;
++	writel(reg, base + XSPI_DLLCRA);
++
++	reg = XSPI_DLLCRA_FREQEN |
++	      FIELD_PREP(XSPI_DLLCRA_SLV_DLY_COARSE_MASK, 0x0) |
++	      XSPI_DLLCRA_SLV_EN | XSPI_DLLCRA_SLV_DLL_BYPASS;
++	writel(reg, base + XSPI_DLLCRA);
++
++	reg |= XSPI_DLLCRA_SLV_UPD;
++	writel(reg, base + XSPI_DLLCRA);
++
++	ret = readl_poll_timeout(base + XSPI_DLLSR, reg,
++			      reg & XSPI_DLLSR_SLVA_LOCK, 0, POLL_TOUT_US);
++	if (ret)
++		dev_err(xspi->dev,
++			"DLL SLVA unlock, the DLL status is %x, need to check!\n",
++			readl(base + XSPI_DLLSR));
++}
++
++static void nxp_xspi_dll_auto(struct nxp_xspi *xspi, unsigned long rate)
++{
++	void __iomem *base = xspi->iobase;
++	int ret;
++	u32 reg;
++
++	nxp_xspi_sw_reset(xspi);
++
++	writel(0, base + XSPI_DLLCRA);
++
++	/* Set SLV EN first */
++	reg = XSPI_DLLCRA_SLV_EN;
++	writel(reg, base + XSPI_DLLCRA);
++
++	reg = FIELD_PREP(XSPI_DLLCRA_DLL_REFCNTR_MASK, 0x02) |
++	      FIELD_PREP(XSPI_DLLCRA_DLLRES_MASK, 0x08) |
++	      XSPI_DLLCRA_SLAVE_AUTO_UPDT | XSPI_DLLCRA_SLV_EN;
++	if (rate > 133000000)
++		reg |= XSPI_DLLCRA_FREQEN;
++
++	writel(reg, base + XSPI_DLLCRA);
++
++	reg |= XSPI_DLLCRA_SLV_UPD;
++	writel(reg, base + XSPI_DLLCRA);
++
++	reg |= XSPI_DLLCRA_DLLEN;
++	writel(reg, base + XSPI_DLLCRA);
++
++	ret = readl_poll_timeout(base + XSPI_DLLSR, reg,
++			      reg & XSPI_DLLSR_DLLA_LOCK, 0, POLL_TOUT_US);
++	if (ret)
++		dev_err(xspi->dev,
++			"DLL unlock, the DLL status is %x, need to check!\n",
++			readl(base + XSPI_DLLSR));
++
++	ret = readl_poll_timeout(base + XSPI_DLLSR, reg,
++			      reg & XSPI_DLLSR_SLVA_LOCK, 0, POLL_TOUT_US);
++	if (ret)
++		dev_err(xspi->dev,
++			"DLL SLVA unlock, the DLL status is %x, need to check!\n",
++			readl(base + XSPI_DLLSR));
++}
++
++static void nxp_xspi_select_mem(struct nxp_xspi *xspi, struct spi_device *spi,
++				const struct spi_mem_op *op)
++{
++	/* xspi only support one DTR mode: 8D-8D-8D */
++	bool op_is_dtr = op->cmd.dtr && op->addr.dtr && op->dummy.dtr && op->data.dtr;
++	unsigned long root_clk_rate, rate;
++	uint64_t cs0_top_address;
++	uint64_t cs1_top_address;
++	u32 reg;
++	int ret;
++
++	/*
++	 * Return when following condition all meet,
++	 * 1, if previously selected target device is same as current
++	 *    requested target device.
++	 * 2, the DTR or STR mode do not change.
++	 * 3, previous operation max rate equals current one.
++	 *
++	 * For other case, need to re-config.
++	 */
++	if (xspi->selected == spi_get_chipselect(spi, 0) &&
++	    (!!(xspi->flags & XSPI_DTR_PROTO) == op_is_dtr) &&
++	    (xspi->pre_op_rate == op->max_freq))
++		return;
++
++	if (op_is_dtr) {
++		nxp_xspi_enable_ddr(xspi);
++		xspi->flags |= XSPI_DTR_PROTO;
++	} else {
++		nxp_xspi_disable_ddr(xspi);
++		xspi->flags &= ~XSPI_DTR_PROTO;
++	}
++	rate = min_t(unsigned long, xspi->support_max_rate, op->max_freq);
++	/*
++	 * There is two dividers between xspi_clk_root(from SoC CCM) and xspi_sfif.
++	 * xspi_clk_root ---->divider1 ----> ipg_clk_2xsfif
++	 *                              |
++	 *                              |
++	 *                              |---> divider2 ---> ipg_clk_sfif
++	 * divider1 is controlled by SOCCR, SOCCR default value is 0.
++	 * divider2 fix to divide 2.
++	 * when SOCCR = 0:
++	 *        ipg_clk_2xsfif = xspi_clk_root
++	 *        ipg_clk_sfif = ipg_clk_2xsfif / 2 = xspi_clk_root / 2
++	 * ipg_clk_2xsfif is used for DTR mode.
++	 * xspi_sck(output to device) is defined based on xspi_sfif clock.
++	 */
++	root_clk_rate = rate * 2;
++
++	clk_disable_unprepare(xspi->clk);
++
++	ret = clk_set_rate(xspi->clk, root_clk_rate);
++	if (ret)
++		return;
++
++	ret = clk_prepare_enable(xspi->clk);
++	if (ret)
++		return;
++
++	xspi->pre_op_rate = op->max_freq;
++	xspi->selected = spi_get_chipselect(spi, 0);
++
++	if (xspi->selected) {		/* CS1 select */
++		cs0_top_address = xspi->memmap_phy;
++		cs1_top_address = SZ_4G - 1;
++	} else {			/* CS0 select */
++		cs0_top_address = SZ_4G - 1;
++		cs1_top_address = SZ_4G - 1;
++	}
++	writel(cs0_top_address, xspi->iobase + XSPI_SFA1AD);
++	writel(cs1_top_address, xspi->iobase + XSPI_SFA2AD);
++
++	reg = readl(xspi->iobase + XSPI_SFACR);
++	if (op->data.swap16)
++		reg |= XSPI_SFACR_BYTE_SWAP;
++	else
++		reg &= ~XSPI_SFACR_BYTE_SWAP;
++	writel(reg, xspi->iobase + XSPI_SFACR);
++
++	if (!op_is_dtr || rate < 60000000)
++		nxp_xspi_dll_bypass(xspi);
++	else
++		nxp_xspi_dll_auto(xspi, rate);
++}
++
++static int nxp_xspi_ahb_read(struct nxp_xspi *xspi, const struct spi_mem_op *op)
++{
++	u32 start = op->addr.val;
++	u32 len = op->data.nbytes;
++
++	/* If necessary, ioremap before AHB read */
++	if ((!xspi->ahb_addr) || start < xspi->memmap_start ||
++	     start + len > xspi->memmap_start + xspi->memmap_len) {
++		if (xspi->ahb_addr)
++			iounmap(xspi->ahb_addr);
++
++		xspi->memmap_start = start;
++		xspi->memmap_len = len > NXP_XSPI_MIN_IOMAP ?
++				len : NXP_XSPI_MIN_IOMAP;
++
++		xspi->ahb_addr = ioremap(xspi->memmap_phy + xspi->memmap_start,
++					 xspi->memmap_len);
++
++		if (!xspi->ahb_addr) {
++			dev_err(xspi->dev, "failed to alloc memory\n");
++			return -ENOMEM;
++		}
++	}
++
++	/* Read out the data directly from the AHB buffer. */
++	memcpy_fromio(op->data.buf.in,
++			xspi->ahb_addr + start - xspi->memmap_start, len);
++
++	return 0;
++}
++
++static void nxp_xspi_fill_txfifo(struct nxp_xspi *xspi,
++				 const struct spi_mem_op *op)
++{
++	void __iomem *base = xspi->iobase;
++	u8 *buf = (u8 *)op->data.buf.out;
++	u32 reg, left;
++	int i;
++
++	for (i = 0; i < ALIGN(op->data.nbytes, 4); i += 4) {
++		reg = readl(base + XSPI_FR);
++		reg |= XSPI_FR_TBFF;
++		writel(reg, base + XSPI_FR);
++		/* Read again to check whether the tx fifo has rom */
++		reg = readl(base + XSPI_FR);
++		WARN_ON(!(reg & XSPI_FR_TBFF));
++		if (i == ALIGN_DOWN(op->data.nbytes, 4)) {
++			/* Use 0xFF for extra bytes */
++			left = 0xFFFFFFFF;
++			/* The last 1 to 3 bytes */
++			memcpy((u8 *)&left, buf + i, op->data.nbytes - i);
++			writel(left, base + XSPI_TBDR);
++		} else {
++			writel(*(u32 *)(buf + i), base + XSPI_TBDR);
++		}
++	}
++}
++
++static void nxp_xspi_read_rxfifo(struct nxp_xspi *xspi,
++				const struct spi_mem_op *op)
++{
++	u32 watermark, watermark_bytes, reg;
++	void __iomem *base = xspi->iobase;
++	u8 *buf = (u8 *) op->data.buf.in;
++	int i, ret, len;
++
++	/*
++	 * Config the rx watermark half of the 64 memory-mapped RX data buffer RBDRn
++	 * refer to the RBCT config in nxp_xspi_do_op()
++	 */
++	watermark = 32;
++	watermark_bytes = watermark * 4;
++
++	len = op->data.nbytes;
++
++	while (len >= watermark_bytes) {
++		/* Make sure the RX FIFO contains valid data before read */
++		ret = readl_poll_timeout(base + XSPI_FR, reg,
++				      reg & XSPI_FR_RBDF, 0, POLL_TOUT_US);
++		WARN_ON(ret);
++		for (i = 0; i < watermark; i++)
++			*(u32 *)(buf + i * 4) = readl(base + XSPI_RBDR0 + i * 4);
++
++		len = len - watermark_bytes;
++		buf = buf + watermark_bytes;
++		/* Pop up data to RXFIFO for next read. */
++		reg = readl(base + XSPI_FR);
++		reg |= XSPI_FR_RBDF;
++		writel(reg, base + XSPI_FR);
++	}
++
++	/* Wait for the total data transfer finished */
++	ret = readl_poll_timeout(base + XSPI_SR, reg, !(reg & XSPI_SR_BUSY), 0, POLL_TOUT_US);
++	WARN_ON(ret);
++
++	i = 0;
++	while (len >= 4) {
++		*(u32 *)(buf) = readl(base + XSPI_RBDR0 + i);
++		i += 4;
++		len -= 4;
++		buf += 4;
++	}
++
++	if (len > 0) {
++		reg = readl(base + XSPI_RBDR0 + i);
++		memcpy(buf, (u8 *)&reg, len);
++	}
++
++	/* Invalid RXFIFO first */
++	reg = readl(base + XSPI_MCR);
++	reg |= XSPI_MCR_CLR_RXF;
++	writel(reg, base + XSPI_MCR);
++	/* Wait for the CLR_RXF clear */
++	ret = readl_poll_timeout(base + XSPI_MCR, reg,
++			      !(reg & XSPI_MCR_CLR_RXF), 1, POLL_TOUT_US);
++	WARN_ON(ret);
++}
++
++static int nxp_xspi_do_op(struct nxp_xspi *xspi, const struct spi_mem_op *op)
++{
++	void __iomem *base = xspi->iobase;
++	int watermark, err = 0;
++	u32 reg, len;
++
++	len = op->data.nbytes;
++	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT) {
++		/* Clear the TX FIFO. */
++		reg = readl(base + XSPI_MCR);
++		reg |= XSPI_MCR_CLR_TXF;
++		writel(reg, base + XSPI_MCR);
++		/* Wait for the CLR_TXF clear */
++		err = readl_poll_timeout(base + XSPI_MCR, reg,
++				      !(reg & XSPI_MCR_CLR_TXF), 1, POLL_TOUT_US);
++		WARN_ON(err);
++		/* Cover the no 4bytes alignment data length */
++		watermark = (xspi->devtype_data->txfifo - ALIGN(op->data.nbytes, 4)) / 4 + 1;
++		reg = FIELD_PREP(XSPI_TBCT_WMRK_MASK, watermark);
++		writel(reg, base + XSPI_TBCT);
++		/*
++		 * According to the RM, for TBDR register, a write transaction on the
++		 * flash memory with data size of less than 32 bits leads to the removal
++		 * of one data entry from the TX buffer. The valid bits are used and the
++		 * rest of the bits are discarded.
++		 * But for data size large than 32 bits, according to test, for no 4bytes
++		 * alignment data, the last 1~3 bytes will lost, because TX buffer use
++		 * 4 bytes entries.
++		 * So here adjust the transfer data length to make it 4bytes alignment.
++		 * then will meet the upper watermark setting, trigger the 4bytes entries
++		 * pop out.
++		 * Will use extra 0xff to append, refer to nxp_xspi_fill_txfifo().
++		 */
++		if (len > 4)
++			len = ALIGN(op->data.nbytes, 4);
++
++	} else if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_IN) {
++		/* Invalid RXFIFO first */
++		reg = readl(base + XSPI_MCR);
++		reg |= XSPI_MCR_CLR_RXF;
++		writel(reg, base + XSPI_MCR);
++		/* Wait for the CLR_RXF clear */
++		err = readl_poll_timeout(base + XSPI_MCR, reg,
++				      !(reg & XSPI_MCR_CLR_RXF), 1, POLL_TOUT_US);
++		WARN_ON(err);
++		reg = FIELD_PREP(XSPI_RBCT_WMRK_MASK, 31);
++		writel(reg, base + XSPI_RBCT);
++	}
++
++	init_completion(&xspi->c);
++
++	/* Config the data address */
++	writel(op->addr.val + xspi->memmap_phy, base + XSPI_SFP_TG_SFAR);
++
++	/* Cofnig the data size and lut id, trigger the transfer */
++	reg = FIELD_PREP(XSPI_SFP_TG_IPCR_SEQID_MASK, XSPI_SEQID_LUT) |
++	      FIELD_PREP(XSPI_SFP_TG_IPCR_IDATSZ_MASK, len);
++	writel(reg, base + XSPI_SFP_TG_IPCR);
++
++	if (op->data.nbytes && op->data.dir == SPI_MEM_DATA_OUT)
++		nxp_xspi_fill_txfifo(xspi, op);
++
++	/* Wait for the interrupt. */
++	if (!wait_for_completion_timeout(&xspi->c, msecs_to_jiffies(1000)))
++		err = -ETIMEDOUT;
++
++	/* Invoke IP data read, if request is of data read. */
++	if (!err && op->data.nbytes && op->data.dir == SPI_MEM_DATA_IN)
++		nxp_xspi_read_rxfifo(xspi, op);
++
++	return err;
++}
++
++static int nxp_xspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
++{
++	struct nxp_xspi *xspi = spi_controller_get_devdata(mem->spi->controller);
++	void __iomem *base = xspi->iobase;
++	u32 reg;
++	int err;
++
++	guard(mutex)(&xspi->lock);
++
++	PM_RUNTIME_ACQUIRE_AUTOSUSPEND(xspi->dev, pm);
++	err = PM_RUNTIME_ACQUIRE_ERR(&pm);
++	if (err)
++		return err;
++
++	/* Wait for controller being ready. */
++	err = readl_poll_timeout(base + XSPI_SR, reg,
++			      !(reg & XSPI_SR_BUSY), 1, POLL_TOUT_US);
++	if (err) {
++		dev_err(xspi->dev, "SR keeps in BUSY!");
++		return err;
++	}
++
++	nxp_xspi_select_mem(xspi, mem->spi, op);
++
++	nxp_xspi_prepare_lut(xspi, op);
++
++	/*
++	 * For read:
++	 *     the address in AHB mapped range will use AHB read.
++	 *     the address out of AHB mapped range will use IP read.
++	 * For write:
++	 *     all use IP write.
++	 */
++	if ((op->data.dir == SPI_MEM_DATA_IN) && !needs_ip_only(xspi)
++		&& ((op->addr.val + op->data.nbytes) <= xspi->memmap_phy_size))
++		err = nxp_xspi_ahb_read(xspi, op);
++	else
++		err = nxp_xspi_do_op(xspi, op);
++
++	nxp_xspi_sw_reset(xspi);
++
++	return err;
++}
++
++static int nxp_xspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
++{
++	struct nxp_xspi *xspi = spi_controller_get_devdata(mem->spi->controller);
++
++	if (op->data.dir == SPI_MEM_DATA_OUT) {
++		if (op->data.nbytes > xspi->devtype_data->txfifo)
++			op->data.nbytes = xspi->devtype_data->txfifo;
++	} else {
++		/* Limit data bytes to RX FIFO in case of IP read only */
++		if (needs_ip_only(xspi) && (op->data.nbytes > xspi->devtype_data->rxfifo))
++			op->data.nbytes = xspi->devtype_data->rxfifo;
++
++		/* Address in AHB mapped range prefer to use AHB read. */
++		if (!needs_ip_only(xspi) && (op->addr.val < xspi->memmap_phy_size)
++			&& ((op->addr.val + op->data.nbytes) > xspi->memmap_phy_size))
++			op->data.nbytes = xspi->memmap_phy_size - op->addr.val;
++	}
++
++	return 0;
++}
++
++static void nxp_xspi_config_ahb_buffer(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	u32 ahb_data_trans_size;
++	u32 reg;
++
++	writel(0xA, base + XSPI_BUF0CR);
++	writel(0x2, base + XSPI_BUF1CR);
++	writel(0xD, base + XSPI_BUF2CR);
++
++	/* Configure buffer3 for All Master Access */
++	reg = FIELD_PREP(XSPI_BUF3CR_MSTRID_MASK, 0x06) |
++	      XSPI_BUF3CR_ALLMST;
++
++	ahb_data_trans_size = xspi->devtype_data->ahb_buf_size / 8;
++	reg |= FIELD_PREP(XSPI_BUF3CR_ADATSZ_MASK, ahb_data_trans_size);
++	writel(reg, base + XSPI_BUF3CR);
++
++	/* Only the buffer3 is used */
++	writel(0, base + XSPI_BUF0IND);
++	writel(0, base + XSPI_BUF1IND);
++	writel(0, base + XSPI_BUF2IND);
++
++	/* AHB only use ID=15 for read */
++	reg = FIELD_PREP(XSPI_BFGENCR_SEQID_MASK, XSPI_SEQID_LUT);
++	reg |= XSPI_BFGENCR_WR_FLUSH_EN;
++	/* No limit for align */
++	reg |= FIELD_PREP(XSPI_BFGENCR_ALIGN_MASK, 0);
++	writel(reg, base + XSPI_BFGENCR);
++}
++
++static int nxp_xspi_default_setup(struct nxp_xspi *xspi)
++{
++	void __iomem *base = xspi->iobase;
++	u32 reg;
++
++	/* Bypass SFP check, clear MGC_GVLD, MGC_GVLDMDAD, MGC_GVLDFRAD */
++	writel(0, base + XSPI_MGC);
++
++	/* Enable the EENV0 SFP check */
++	reg = readl(base + XSPI_TG0MDAD);
++	reg |= XSPI_TG0MDAD_VLD;
++	writel(reg, base + XSPI_TG0MDAD);
++
++	/* Give read/write access right to EENV0 */
++	reg = readl(base + XSPI_FRAD0_WORD2);
++	reg &= ~XSPI_FRAD0_WORD2_MD0ACP_MASK;
++	reg |= FIELD_PREP(XSPI_FRAD0_WORD2_MD0ACP_MASK, 0x03);
++	writel(reg, base + XSPI_FRAD0_WORD2);
++
++	/* Enable the FRAD check for EENV0 */
++	reg = readl(base + XSPI_FRAD0_WORD3);
++	reg |= XSPI_FRAD0_WORD3_VLD;
++	writel(reg, base + XSPI_FRAD0_WORD3);
++
++	/*
++	 * Config the timeout to max value, this timeout will affect the
++	 * TBDR and RBDRn access right after IP cmd triggered.
++	 */
++	writel(0xFFFFFFFF, base + XSPI_MTO);
++
++	/* Disable module */
++	reg = readl(base + XSPI_MCR);
++	reg |= XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++
++	nxp_xspi_sw_reset(xspi);
++
++	reg = readl(base + XSPI_MCR);
++	reg &= ~(XSPI_MCR_CKN_FA_EN | XSPI_MCR_DQS_FA_SEL_MASK |
++		 XSPI_MCR_DOZE | XSPI_MCR_VAR_LAT_EN |
++		 XSPI_MCR_DDR_EN | XSPI_MCR_DQS_OUT_EN);
++	reg |= XSPI_MCR_DQS_EN;
++	reg |= XSPI_MCR_ISD3FA | XSPI_MCR_ISD2FA;
++	writel(reg, base + XSPI_MCR);
++
++	reg = readl(base + XSPI_SFACR);
++	reg &= ~(XSPI_SFACR_FORCE_A10 | XSPI_SFACR_WA_4B_EN |
++		 XSPI_SFACR_BYTE_SWAP | XSPI_SFACR_WA |
++		 XSPI_SFACR_CAS_MASK);
++	reg |= XSPI_SFACR_FORCE_A10;
++	writel(reg, base + XSPI_SFACR);
++
++	nxp_xspi_config_ahb_buffer(xspi);
++
++	reg = FIELD_PREP(XSPI_FLSHCR_TCSH_MASK, 0x03) |
++	      FIELD_PREP(XSPI_FLSHCR_TCSS_MASK, 0x03);
++	writel(reg, base + XSPI_FLSHCR);
++
++	/* Enable module */
++	reg = readl(base + XSPI_MCR);
++	reg &= ~XSPI_MCR_MDIS;
++	writel(reg, base + XSPI_MCR);
++
++	xspi->selected = -1;
++
++	/* Enable the interrupt */
++	writel(XSPI_RSER_TFIE, base + XSPI_RSER);
++
++	return 0;
++}
++
++static const char *nxp_xspi_get_name(struct spi_mem *mem)
++{
++	struct nxp_xspi *xspi = spi_controller_get_devdata(mem->spi->controller);
++	struct device *dev = &mem->spi->dev;
++	const char *name;
++
++	/* Set custom name derived from the platform_device of the controller. */
++	if (of_get_available_child_count(xspi->dev->of_node) == 1)
++		return dev_name(xspi->dev);
++
++	name = devm_kasprintf(dev, GFP_KERNEL,
++			      "%s-%d", dev_name(xspi->dev),
++			      spi_get_chipselect(mem->spi, 0));
++
++	if (!name) {
++		dev_err(dev, "failed to get memory for custom flash name\n");
++		return ERR_PTR(-ENOMEM);
++	}
++
++	return name;
++}
++
++static const struct spi_controller_mem_ops nxp_xspi_mem_ops = {
++	.adjust_op_size = nxp_xspi_adjust_op_size,
++	.supports_op = nxp_xspi_supports_op,
++	.exec_op = nxp_xspi_exec_op,
++	.get_name = nxp_xspi_get_name,
++};
++
++static const struct spi_controller_mem_caps nxp_xspi_mem_caps = {
++	.dtr = true,
++	.per_op_freq = true,
++	.swap16 = true,
++};
++
++static void nxp_xspi_cleanup(void *data)
++{
++	struct nxp_xspi *xspi = data;
++
++	pm_runtime_get_sync(xspi->dev);
++
++	/* Disable interrupt */
++	writel(0, xspi->iobase + XSPI_RSER);
++	/* Clear all the internal logic flags */
++	writel(0xFFFFFFFF, xspi->iobase + XSPI_FR);
++	/* Disable the hardware */
++	writel(XSPI_MCR_MDIS, xspi->iobase + XSPI_MCR);
++
++	pm_runtime_put_sync(xspi->dev);
++
++	if (xspi->ahb_addr)
++		iounmap(xspi->ahb_addr);
++}
++
++static int nxp_xspi_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct spi_controller *ctlr;
++	struct nxp_xspi *xspi;
++	struct resource *res;
++	int ret, irq;
++
++	ctlr = devm_spi_alloc_host(dev, sizeof(*xspi));
++	if (!ctlr)
++		return -ENOMEM;
++
++	ctlr->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL |
++			  SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL;
++
++	xspi = spi_controller_get_devdata(ctlr);
++	xspi->dev = dev;
++	xspi->devtype_data = device_get_match_data(dev);
++	if (!xspi->devtype_data)
++		return -ENODEV;
++
++	platform_set_drvdata(pdev, xspi);
++
++	/* Find the resources - configuration register address space */
++	xspi->iobase = devm_platform_ioremap_resource_byname(pdev, "base");
++	if (IS_ERR(xspi->iobase))
++		return PTR_ERR(xspi->iobase);
++
++	/* Find the resources - controller memory mapped space */
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mmap");
++	if (!res)
++		return -ENODEV;
++
++	/* Assign memory mapped starting address and mapped size. */
++	xspi->memmap_phy = res->start;
++	xspi->memmap_phy_size = resource_size(res);
++
++	/* Find the clocks */
++	xspi->clk = devm_clk_get(dev, "per");
++	if (IS_ERR(xspi->clk))
++		return PTR_ERR(xspi->clk);
++
++	/* Find the irq */
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return dev_err_probe(dev, irq,  "Failed to get irq source");
++
++	pm_runtime_set_autosuspend_delay(dev, XSPI_RPM_TIMEOUT_MS);
++	pm_runtime_use_autosuspend(dev);
++	devm_pm_runtime_enable(dev);
++
++	PM_RUNTIME_ACQUIRE_AUTOSUSPEND(dev, pm);
++	ret = PM_RUNTIME_ACQUIRE_ERR(&pm);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to enable clock");
++
++	/* Clear potential interrupt by write xspi errstat */
++	writel(0xFFFFFFFF, xspi->iobase + XSPI_ERRSTAT);
++	writel(0xFFFFFFFF, xspi->iobase + XSPI_FR);
++
++	nxp_xspi_default_setup(xspi);
++
++	ret = devm_request_irq(dev, irq,
++			nxp_xspi_irq_handler, 0, pdev->name, xspi);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to request irq");
++
++	ret = devm_mutex_init(dev, &xspi->lock);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(dev, nxp_xspi_cleanup, xspi);
++	if (ret)
++		return ret;
++
++	ctlr->bus_num = -1;
++	ctlr->num_chipselect = NXP_XSPI_MAX_CHIPSELECT;
++	ctlr->mem_ops = &nxp_xspi_mem_ops;
++	ctlr->mem_caps = &nxp_xspi_mem_caps;
++	ctlr->dev.of_node = dev->of_node;
++
++	return devm_spi_register_controller(dev, ctlr);
++}
++
++static int nxp_xspi_runtime_suspend(struct device *dev)
++{
++	struct nxp_xspi *xspi = dev_get_drvdata(dev);
++	u32 reg;
++
++	reg = readl(xspi->iobase + XSPI_MCR);
++	reg |= XSPI_MCR_MDIS;
++	writel(reg, xspi->iobase + XSPI_MCR);
++
++	clk_disable_unprepare(xspi->clk);
++
++	return 0;
++}
++
++static int nxp_xspi_runtime_resume(struct device *dev)
++{
++	struct nxp_xspi *xspi = dev_get_drvdata(dev);
++	u32 reg;
++	int ret;
++
++	ret = clk_prepare_enable(xspi->clk);
++	if (ret)
++		return ret;
++
++	reg = readl(xspi->iobase + XSPI_MCR);
++	reg &= ~XSPI_MCR_MDIS;
++	writel(reg, xspi->iobase + XSPI_MCR);
++
++	return 0;
++}
++
++static int nxp_xspi_suspend(struct device *dev)
++{
++	int ret;
++
++	ret = pinctrl_pm_select_sleep_state(dev);
++	if (ret) {
++		dev_err(dev, "select flexspi sleep pinctrl failed!\n");
++		return ret;
++	}
++
++	return pm_runtime_force_suspend(dev);
++}
++
++static int nxp_xspi_resume(struct device *dev)
++{
++	struct nxp_xspi *xspi = dev_get_drvdata(dev);
++	int ret;
++
++	ret = pm_runtime_force_resume(dev);
++	if (ret)
++		return ret;
++
++	nxp_xspi_default_setup(xspi);
++
++	ret = pinctrl_pm_select_default_state(dev);
++	if (ret)
++		dev_err(dev, "select flexspi default pinctrl failed!\n");
++
++	return ret;
++}
++
++
++static const struct dev_pm_ops nxp_xspi_pm_ops = {
++	RUNTIME_PM_OPS(nxp_xspi_runtime_suspend, nxp_xspi_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(nxp_xspi_suspend, nxp_xspi_resume)
++};
++
++static const struct of_device_id nxp_xspi_dt_ids[] = {
++	{ .compatible = "nxp,imx94-xspi", .data = (void *)&imx94_data, },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, nxp_xspi_dt_ids);
++
++static struct platform_driver nxp_xspi_driver = {
++	.driver = {
++		.name	= "nxp-xspi",
++		.of_match_table = nxp_xspi_dt_ids,
++		.pm =   pm_ptr(&nxp_xspi_pm_ops),
++	},
++	.probe          = nxp_xspi_probe,
++};
++module_platform_driver(nxp_xspi_driver);
++
++MODULE_DESCRIPTION("NXP xSPI Controller Driver");
++MODULE_AUTHOR("NXP Semiconductor");
++MODULE_AUTHOR("Haibo Chen <haibo.chen@nxp.com>");
++MODULE_LICENSE("GPL");
 
 -- 
 2.34.1
