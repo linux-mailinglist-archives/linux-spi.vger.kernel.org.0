@@ -1,173 +1,179 @@
-Return-Path: <linux-spi+bounces-11314-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11315-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 655B3C6EBB1
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 14:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6836CC6ED1D
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 14:22:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id AF2D52DFA8
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 13:10:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 119BA2E4C2
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 13:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469F935F8BA;
-	Wed, 19 Nov 2025 13:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F4E35F8A2;
+	Wed, 19 Nov 2025 13:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="CFDbFNxX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFCi7GzT"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F6F3596EC
-	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 13:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB84635E559
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 13:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763557691; cv=none; b=VvN1Smqk8tlhKCdS7VkDgDW0ItbDfKBQ2raOkYE7L9drh4VY6SckxZMvmeqai5dwgifa/5uzVL/RX6gvPN0WRQXW5Jc2DQ00lLfq102TEEsTYdP+/+5YDTiTlWWyF2krkXuIRMgnru5/t5PBCE0vhLQREFyWriuU+Z7iR5Uwuto=
+	t=1763558301; cv=none; b=VMucykEOrEtPDGr55WTbMZ01VnahRjtFBbgtvdyOnmnN8RlwrPpcuBn5uw2+uu5uzzL7eciFM6bL38fxSHHGaOHfO4hwndQUXR7w8tp2rS7/xnq14elZdBxFXQaI6TbBG+BScD8yz+WPlobLN4KsrYazdqe4jRIpUeqIgAX+BsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763557691; c=relaxed/simple;
-	bh=hQoZWYb0gKr8PXtINO5UZlKj5WNLOzVIF4OtWhYfcbY=;
+	s=arc-20240116; t=1763558301; c=relaxed/simple;
+	bh=gcdTK3i8ksdurmCsuu3zAydlGu7kz2DZI1wbgJnoUJ0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ISNmYMY4Kg7g1m3ARmQFl4f7Ka/hOe9dd1iAxQf9sDap4ELUCSgSRvZiScMxtUW9f975jI/pzZgCF/Vy1JkLtYUECY1o/cCwUvaULd7tIEr0HpzCBohWYXym2tgtmxF7cLeqhf6yJKHls8SyEDb60VnwXaaTXnI14TLG1BV2YaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=CFDbFNxX; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59577c4c7c1so796181e87.1
-        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 05:08:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763557687; x=1764162487; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5HAVEbRJrzkEcyxCJ/0LbCeIf3zbDMGRzjvrnP0EUUk=;
-        b=CFDbFNxXVpeWFqwcmg0AXEGK3tDcOo/uaGgRlo5bl3unXkzIazB0LRTr3zmg1TQYbC
-         oq5n4x3Ba7uzJEOE4vZwbs6F16CuLWYZ3fNGUdL1Mppo96cUsWLqvXxG+v3/zpl14rAw
-         8CDv0ARZmNbMs/npU8DaaVayYNgslHL7Lpn4gCV5YJUz937So56OHASyT+cMvDWIdapg
-         R9jKbNsJbsZ8oqADOsa4OWC+sCgAgAyD/oR9FBcp8VG3FygL6k0l5T/CepCuL9giycmb
-         FnqNqXbk82K3OsRswqT/xy4k43mn1X6CLBDczXYuM5iFZsjEds6bdUS+P9pKeKGZQHkg
-         KzDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763557687; x=1764162487;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5HAVEbRJrzkEcyxCJ/0LbCeIf3zbDMGRzjvrnP0EUUk=;
-        b=R6dkEBxEPk1a+skGRAsDSHbc1b7mz7HxYu6NXMMsuGNyUeBUZ4nqHsejzUFZrNPFyl
-         tIgms68Y361rZZFpwPbJa/4no5evKQanLgNs4EF4beXqtUaKv6gdSJdVTaQBqnsl5+OL
-         Q2xmctnKNMFLARtS+bpPIqGgnVj0+iK58UFuVYL634uV0YWHuFDxQh2Dk7Zh0pO+vma7
-         Tkysf019U8AXp7flDNk5IEfzdN4C/r50teCJLtobMAryFmC9U1irlceOzg04tnVbH5fM
-         4YM/6T2UW1qLrDgG8eqb7yQdJP1YGjzOzovOhQ7H7s/1Z1BC0+B7CnbRuCP5CFOM1RIu
-         1xQw==
-X-Forwarded-Encrypted: i=1; AJvYcCWx+0VJxcU6XB0QtbB7bgKQtk8VZ9ecrTZi7T5ZDPdbJ1I7ipkgVDuhirKtrg2dS9dQlqYHICbXYvc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHM7zgNn+Gq3xXjqQ5JdtGudUDidnbdnjZzkgho05IxtWce3us
-	dS+F3Bg03Ug0DJUSqW8ICjjOuwpP9sRvQYF9py9y9nurWt98/OhuaWXENYVO5GRCSWM9ATgnJ+L
-	uGdrCJerTVrdFCCAhwwYB1Z/gtqPgO70pguqupoRP3g==
-X-Gm-Gg: ASbGncurSjl/JG2ALPoJxHMquNzr6+lpeN37xTb8IHmEWHN2k6pDV8x+cZbgiFAUnej
-	4GRD0P+UrMB0W9l77yBC/04s/yNZ0SC+41kmwNUhEUBnZ34fPURIrnYRI6+KtKkJkYQY26mTbOP
-	IQd6UkHxwzscWkuKJcj/epSpiBu8zgmipctegXkOKTqncjAEA85jW/DOARhJGb7GWlYRQE0fdvk
-	JwGyBPL1ctHXDHJWAd9NRdF3r+2l4sKKXkrQJHjKGJ8Lcc/ncLDHAzh5XvAOmxwYT2p5inXGOKk
-	21LTNHjKK1dCuEtU+2DQ7z/bvAY=
-X-Google-Smtp-Source: AGHT+IFOTESTGX3coCTwSkh0/t71LWjq0sAzk7nvKaSf0jj6S3GyWUj+21JdjGqOY1KYtwXVoO7Xen6Kuz6TKdtzwyw=
-X-Received: by 2002:a05:6512:224e:b0:594:3b8f:b309 with SMTP id
- 2adb3069b0e04-59651c829f1mr760883e87.11.1763557687097; Wed, 19 Nov 2025
- 05:08:07 -0800 (PST)
+	 To:Cc:Content-Type; b=Tb/besQvTXXH+PCEPdntPBnqTQCE1d7nnewLDkqyfBcAHQ//4hkTbN3gbtWDylrLxq5rt3qeoYaNY0lplcE039mTe9UsY9L42lpd0+bGTlxt7hYZJ1ylI9h6Zu0j6EKj/rWlvYjFUbWWtpYSbTn1MzHZQ97vUksiBSS7TM789as=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFCi7GzT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C6DC4AF14
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 13:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763558301;
+	bh=gcdTK3i8ksdurmCsuu3zAydlGu7kz2DZI1wbgJnoUJ0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SFCi7GzTgsYkBIS6y/c91cYilhXe9WWHK+Jc1w0wsMgPq2/DkyfSPACH6r9Toi9Cb
+	 bgjZWs8gx9CkUEZCsbOq9cvqPpHILyEmOSoM+mPLRJwgCokGsbXFlX/xDX/+wTqPrn
+	 aRT4Ca5PBcS9C5DWEzZFSMzvuS1VqgQfIw/CRc5Rn+L+2neN5cblsFNjctJf94XFPD
+	 VEqZSx1SlYzwV5cl7ZNdVnZzkivurEEmFLPb9M6fRLO7WIll9kNPnliLbZidTVIlo7
+	 ZVT+TX56iyDQcdFV1Zy4ror17zPVQi4vGHqtGGy6nAyVTCLR2JVzVmtJ9pGY1Bk9Th
+	 xiGB9+S+UqItQ==
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-644f90587e5so3955702a12.0
+        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 05:18:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVWf5dceOYeXz4Z90h+R2l91j4UgMto3NotVww6dJgDDu+bR6pEuu6Nu3JFD0zNwZexxnTw1KzDT4o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys3RJXnznMU5WwOrHK0F5TE/8hJ2pbxrZGPKYd8LACvh/CHEwS
+	q0jdTG6931zFcJ3YSbi7PAhF5XuQm30CIRMFfbnja7K2Gu0AXOJQa5fsY6e6T/ZOhkCuOUFD6kg
+	rZbFajE5fJ6vnac87xnetrHeElYc8wQ==
+X-Google-Smtp-Source: AGHT+IEnJMvCQApFNzDeK8Ljri8dKV8og33IOyjT7qad4tVg9oG0FZmoA7KNeUxXr/c1ycYbMnzDOoWtc7XuvKe0fy0=
+X-Received: by 2002:a05:6402:20c5:10b0:641:2c5d:81a6 with SMTP id
+ 4fb4d7f45d1cf-64350ebf916mr13840898a12.33.1763558296663; Wed, 19 Nov 2025
+ 05:18:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aR2OU4se7lxcMtGW@opensource.cirrus.com> <CAMRc=Mc==X3wERStdXmr5A9p0sPe7wdrPE4GZuqPLaKoBb9O9w@mail.gmail.com>
- <aR2Uo++k1NKkk2sj@opensource.cirrus.com> <CAMRc=MdFDAmqcJ3PMsTbeZUb9imM+fzHzQ_9mQ1T=syDoCcQJw@mail.gmail.com>
- <aR2gVzKhfN38MHAR@opensource.cirrus.com> <CAMRc=Mck8MiAm_nxY_L6Zw4cH-vYf24zSkPp=bhnUw68Q6FV=g@mail.gmail.com>
- <aR2i6lNNWEbQk0fx@smile.fi.intel.com> <CAMRc=MdYcdrQSDWKDHrx4-Y4-y92AQqr73MoRC3ws-X==SL0MA@mail.gmail.com>
- <aR2o2R30TbVOcqZe@opensource.cirrus.com> <CAMRc=MciO0WYejOYZduqE73U4OVTxcaMfe6Sv1VXWJWL2FFNmw@mail.gmail.com>
- <aR29uKW7yLxws9jA@opensource.cirrus.com>
-In-Reply-To: <aR29uKW7yLxws9jA@opensource.cirrus.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 19 Nov 2025 14:07:55 +0100
-X-Gm-Features: AWmQ_blnoUsG5H-9efcz-0u6UdrvFr9ylGH2hCaCTztZ-mSYErCZyF808ZXio0s
-Message-ID: <CAMRc=MdXNXQhE9zi=i0x0yGCi0fKQNU8_tn2_Uy24TAhxG7BRA@mail.gmail.com>
-Subject: Re: [PATCH RFT/RFC] mfd: cs42l43: setup true links with software nodes
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	David Rhodes <david.rhodes@cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Maciej Strozek <mstrozek@opensource.cirrus.com>, Andy Shevchenko <andy@kernel.org>, 
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
+ <20251107-spi-add-multi-bus-support-v2-5-8a92693314d9@baylibre.com>
+ <20251118155905.GB3236324-robh@kernel.org> <97c6b55d-9505-4091-8f0b-317dcbd70838@baylibre.com>
+In-Reply-To: <97c6b55d-9505-4091-8f0b-317dcbd70838@baylibre.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 19 Nov 2025 07:18:05 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+ZZE0g424jE75xeCt2KY1ThPLqmbmOs0o_ddaJ8fOf3w@mail.gmail.com>
+X-Gm-Features: AWmQ_blXpULYEhFIFBogakXs1wyuUr-smJ6bc27pMQ0DeY9XTQbnRHbF_oMXb-I
+Message-ID: <CAL_Jsq+ZZE0g424jE75xeCt2KY1ThPLqmbmOs0o_ddaJ8fOf3w@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] dt-bindings: iio: adc: adi,ad7380: add spi-buses property
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>, 
+	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-iio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 19, 2025 at 1:53=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
+On Tue, Nov 18, 2025 at 11:46=E2=80=AFAM David Lechner <dlechner@baylibre.c=
+om> wrote:
 >
-> On Wed, Nov 19, 2025 at 03:58:08AM -0800, Bartosz Golaszewski wrote:
-> > On Wed, 19 Nov 2025 12:24:09 +0100, Charles Keepax
-> > <ckeepax@opensource.cirrus.com> said:
-> > > On Wed, Nov 19, 2025 at 12:06:57PM +0100, Bartosz Golaszewski wrote:
-> > >> On Wed, Nov 19, 2025 at 11:58=E2=80=AFAM Andy Shevchenko
-> > > Ok I think I see what is happening now, the swnode is created on
-> > > the first cell (the pinctrl). Then it moves onto the second cell,
-> > > but mfd_acpi_add_device() copies the firmware node into both
-> > > devices, the device_set_node() call at the bottom. So it inherits
-> > > the swnode node through that primary fwnode.
-> > >
+> On 11/18/25 9:59 AM, Rob Herring wrote:
+> > On Fri, Nov 07, 2025 at 02:52:51PM -0600, David Lechner wrote:
+> >> Add spi-buses property to describe how many SDO lines are wired up on
+> >> the ADC. These chips are simultaneous sampling ADCs and have one SDO
+> >> line per channel, either 2 or 4 total depending on the part number.
+> >>
+> >> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> >> ---
+> >>  .../devicetree/bindings/iio/adc/adi,ad7380.yaml    | 22 +++++++++++++=
++++++++++
+> >>  1 file changed, 22 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml=
+ b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+> >> index b91bfb16ed6bc6c605880f81050250d1ed9c307a..9ef46cdb047d45d088e0fb=
+c345f58c5b09083385 100644
+> >> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+> >> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
+> >> @@ -62,6 +62,10 @@ properties:
+> >>    spi-cpol: true
+> >>    spi-cpha: true
+> >>
+> >> +  spi-data-buses:
+> >> +    minItems: 1
+> >> +    maxItems: 4
+> >> +
 > >
-> > You probably mean this line:
+> > As the property is not required, what's the default?
+>
+> spi-perepheral-props.yaml defines:
+>
+>         default: [0]
+>
+> Do I need to repeat that here?
+
+No. So that means you only use one channel and the others are not connected=
+?
+
+>
 > >
-> >      device_set_node(&pdev->dev, acpi_fwnode_handle(adev ?: parent));
->
-> Indeed yeah that one.
->
-> > What is the actual device whose node we copy here? Would doing the foll=
-owing
-> > help?
->
-> Its the actual ACPI node for the device, the cs42l43, sorry if
-> that isn't what you are looking for not sure I totally follow the
-> question here.
->
-
-So it's !is_software_node() and  is_acpi_device_node() instead? Then
-disregard my suggestion.
-
-> > -     device_set_node(&pdev->dev, acpi_fwnode_handle(adev ?: parent));
-> > +     acpi_fwnode =3D acpi_fwnode_handle(adev ?: parent);
-> > +
-> > +     if (!is_software_node(acpi_fwnode) || !cell->swnode)
-> > +             device_set_node(&pdev->dev, acpi_fwnode_handle(adev ?: pa=
-rent));
-> >  }
-> >  #else
-> >  static inline void mfd_acpi_add_device(const struct mfd_cell *cell,
+> >>    vcc-supply:
+> >>      description: A 3V to 3.6V supply that powers the chip.
+> >>
+> >> @@ -245,6 +249,22 @@ allOf:
+> >>        patternProperties:
+> >>          "^channel@[0-3]$": false
+> >>
+> >> +  # 2-channel chip can only have up to 2 buses
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          enum:
+> >> +            - adi,ad7380
+> >> +            - adi,ad7381
+> >> +            - adi,ad7386
+> >> +            - adi,ad7387
+> >> +            - adi,ad7388
+> >> +            - adi,ad7389
+> >> +    then:
+> >> +      properties:
+> >> +        spi-data-buses:
+> >> +          maxItems: 2
+> >> +
+> >>  examples:
+> >>    - |
+> >>      #include <dt-bindings/interrupt-controller/irq.h>
+> >> @@ -260,6 +280,7 @@ examples:
+> >>              spi-cpol;
+> >>              spi-cpha;
+> >>              spi-max-frequency =3D <80000000>;
+> >> +            spi-data-buses =3D <0>, <1>;
+> >>
+> >>              interrupts =3D <27 IRQ_TYPE_EDGE_FALLING>;
+> >>              interrupt-parent =3D <&gpio0>;
+> >> @@ -284,6 +305,7 @@ examples:
+> >>              spi-cpol;
+> >>              spi-cpha;
+> >>              spi-max-frequency =3D <80000000>;
+> >> +            spi-data-buses =3D <0>, <1>, <2>, <3>;
 > >
-> > > I am guessing this code has perhaps been more heavily tested on
-> > > device tree where it is more common to have nodes for each cell,
-> > > whereas ACPI is far more likely to have a single firmware node for
-> > > the whole device.
-> > >
-> >
-> > If my logic above is right, we should not set the node here unless it's
-> > an actual node coming from firmware OR the cell doesn't define its own
-> > software node.
+> > An example that doesn't look like a 1 to 1 mapping would be better.
+> > Otherwise, it still looks to me like you could just define the bus
+> > width.
 >
-> Will that not leave the MFD children without access to the actual ACPI
-> node though? (Not tested just eye-balling).
->
+> I'm not sure we could do that on this chip since it doesn't have
+> the possibility of more than one line per channel.
 
-Yeah, nevermind it.
+That's a property of the SPI controller though, right?
 
-> Can we tackle this the other way around? Since there is only a
-> single fwnode for the device, can we find a way to get away with
-> a single software node for the device too?
->
+If the above controller had 4 lines per channel/serializer, then you could =
+have:
 
-I still don't understand what the software node that's already
-assigned to the SPI device is though? device_add_software_node()
-should work just fine if the only other firmware node the device has
-is the ACPI device node.
+spi-data-buses =3D <0>, <4>, <8>, <12>;
 
-Bart
+Rob
 
