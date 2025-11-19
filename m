@@ -1,652 +1,268 @@
-Return-Path: <linux-spi+bounces-11332-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11333-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8503C6FFBB
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:14:09 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FAC1C70103
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:25:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5A4B34F1B73
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:05:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E3A30347B42
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0324233A6F6;
-	Wed, 19 Nov 2025 16:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9C636E57E;
+	Wed, 19 Nov 2025 16:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="YN7tj8c4"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="BZnU2+8Y";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="z0w4eFnc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013066.outbound.protection.outlook.com [40.107.162.66])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2992633A6E5;
-	Wed, 19 Nov 2025 16:03:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72FC1327BFD;
+	Wed, 19 Nov 2025 16:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.149.25
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568187; cv=fail; b=nW5B99ARVAHk1/QoEiSo22rCuOmanH0vvixOJCfi2sGgVbYwJGfMwQAf5K8N+h/bpxKeEw/V/nI5Wv7t9fR+nVtfQS732PYbxqxfNVeBvplCBFVT69Irxd1bumSGgaovENubuaP6yExOyheenDrPfEpI+zo9hnWJw/VEcAvlrAg=
+	t=1763568805; cv=fail; b=EocdqvvIYGs4IDUA66qN/PxZQTf64+IQT5xXwpafHn7F9bLrgUN/X7Aq1rMcLY1AgoMDxzCsTz1EST6U6/CPfXi4dWNOlySSGpqAVF5iCa4YBHzIe79AQkgo08WlFaNPztNA+foTb7nQQPV7uKy2pHYZMx4RVtdGqPgyk4Eqxt8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763568187; c=relaxed/simple;
-	bh=o1CdiSbh03oKSUnyVp5CJ7FSoquYkYGPKcz3QT4pkkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=TnnUBUnVbI59IdYi7NP8ShyvufDrZ9cKFeElgv27ucX8QBtYcM0Cr8zliNgHMkHgzif3CkqTYhfEt5Rn88OcXzgLQN3RdZsuINATGyv6n9PCrOTdt7GMvv+iTSlXof5//8sQwk2SyrITmhLuSRXz6j2pA3b+Iqm4dUng//2LtxQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=YN7tj8c4; arc=fail smtp.client-ip=40.107.162.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1763568805; c=relaxed/simple;
+	bh=KjnzTLlQ05V6tA1dInPLl5B6VH5PA5rokliVN7uQS5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L98ylOT5y21ACHgVceSB7a2pBm+iodBD19UkI/Kx1t4Hf0l5eg80MbQmYcOQjH+9xz3At9yTGTHShLSoIYA9SiJOi5J3zYoun2X47USwBmUBVgxxPQuGYe5UT0VwjZSCoSR5iH9bdm9cN4K+iAiRjHC0gSJGUp6pVfYfUg9JqEw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=BZnU2+8Y; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=z0w4eFnc; arc=fail smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AJ60kqB2358492;
+	Wed, 19 Nov 2025 10:13:14 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=7lKkl3oE9OFG08y+PoIzkYj8IiD2rfgELOXFHR3T+nI=; b=
+	BZnU2+8YAzEBITjTr+TeoTtqvXggAnnhoHnir6hbVrwp0m8cIp0+7yYcK4RNA+S5
+	SIjzk5o1VVjdRwEdIIMp0QZcquzxjTfvq/pOO9QzBdkgi1sSZbyS5sZj+OQ+ugMy
+	w+6nAYxgsIlpymN9jdrIOcpnwKNAqo8OMHVfTznld+EayZzgESRF+unocTbLfy0K
+	3wjNYhaLXa26A93i+y6AcN9PkQX5uPfTy5Lg3zbHfQMjV8z5QvpV2qHXYWfm6YuT
+	dKuP1BqnuOj8/Wkn5W9k6n4PZZ/GxZjLq1cFVJE7Qv5B+LDa1bALh3PsBNjtykl6
+	RejGoJqMC+ePPt9JHEtzXw==
+Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11022133.outbound.protection.outlook.com [52.101.48.133])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 4aeqt1d79n-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 19 Nov 2025 10:13:14 -0600 (CST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XuPeBn3YP8zYJ2/6wptel3GDbcOrCIqEq17VdrXvrNGdej9zdJzdYYe1V4mVCSmxhbgjcwEu8xEV3ge953rEQ2L62VN8Kbfm/RTGPYjbFzo/k8pv9JKC8pIAS6QQqTkWWfELaHdRHvi/vyLzXNLw/Dklg3tXwp/FHzbiwVYDnXW3aRyT9FXTd93Wa8rHIjYUGwy/Z7L/Cg1YsQBc8CUNuqg2+AaGsbg1Nh0lLJ6dyVQKU6J9lsf2c+ygGwd6CtZ2Yo8NZXy2ToU17cZIBDrPCGhnRv/TFLCBtBzuV9fyRaRbMr+SIMY44WufhT264FovHs/OXWqcbspVQTDC++XRZg==
+ b=njpmgT5mHLigZ/n8ZapD8MgzWXk/fd9S2cIq3tYKSU+djqyNfII3n22Ee51c67x3QgA7x3VGKXsZ4PJAOVAZcizv8q54x0T8l1dPnmwOIvkXB2ADi4w7mNhz3MvSIoN38oh86bFpDoq+/x0FzcUrVMcrCmGIRDuxvJ8JzM53mCB2pftA7UzirgAW16c8RGdeFdlUKAeKHTNGOhbKNot5CyBgrJIH8CdHtnG0ZtATuC2nY98BPYWP+uK7eNRxgANdev7ag0lmszSVpA6C8wOOnUynCjWkuPftO/eh7fw3Klq2iY3zuf25+ijhP5pPmvYp/7yDyzKqGew5UoYllY0J7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MFWTbYDfK6iX8AuRFl/hhMn/eC4oCL+RR8++edymnpE=;
- b=bDkYP2TVNN53FPl+tdhcK4JNsmE8BKgoBMe3myHD03qi5vd4OphDmDZQu43xOXMWTK8pGhnajGEx4vocr71IUdEJNKnHzezLx/QLb3rr026Y1iRD6wZgBVvCpkmzhTvR7rhWaNMd+IEX/Ko/lOQNx7pxRdCgrxKoBSkTq1M6zlMz03PiYMcG8d/Y8PT/OItUuk5LuFP7TJz1uEgH3j2NiAwDkxsWvfmxbkNkjhhhEcqK2jljA61149HCJ+j5ZOsYkHlzrVQk9vYrwxZS90+myD6Ez9szGkggrSp9xSjCWUHbj77e5JxtZVDipz8SLLBjh3C/Ilkss5G73rt1iVyy2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ bh=7lKkl3oE9OFG08y+PoIzkYj8IiD2rfgELOXFHR3T+nI=;
+ b=AqsRr/YOPZdk2vBTuDQ2XjY/018GsY823QpHHwxz+yx0Ccsgup6RKYKyaOjXB9j8TmecDFIuGY/wILRfF4hzfoAZl+4xFDBuhUbJuZVkiUiFnvP6kQIzySkpp3M+RVBTYRMSRYFBM1xPe5UoUD/MNVv810iHe6mmrgECXDrx032c4SCLrDZ+nffQfmr4n4eXOg7hBZLU4aLJH8CMssYH8dsNbvVLvsE4/dJKASMUP3wkOPwZbeD6/vHwdBDXOW0T1JNBHgdvJq+HVqlHZMccBDdZGkfTH3S0qa1PFi1WCqV7a0xorXKFss5xQBujg5oW+b9iYuvIGtKdkIev6smyqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 84.19.233.75) smtp.rcpttodomain=bgdev.pl smtp.mailfrom=opensource.cirrus.com;
+ dmarc=fail (p=reject sp=reject pct=100) action=oreject
+ header.from=opensource.cirrus.com; dkim=none (message not signed); arc=none
+ (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MFWTbYDfK6iX8AuRFl/hhMn/eC4oCL+RR8++edymnpE=;
- b=YN7tj8c4stqvTFoOaS/NxBH20wll/4LAJaoWKdumU5emIOgPQ3v2QHnIPvI7MHp8rdkAOowLY8WPLmAmUu2NGMR4w8kRm7Bzwff4qa7wm8edsh3/xl3yEKLYWxFsSuS9ZMDM3kFP63rsXrel6e/V0oJeYWDgOfQsUw3aHUnhpJwcr75hW0MxW22KXfOX63+JfMR6FCFUA0KWZ4j4JK7wwHnmMdfyc86fPMgBk2lrg5thm8zfYZ+brxxKWqjU9YRU0pwCXUef7eJExqb5A+l2CUmtDsjcDmuPswgnweoYL+NuNSQa744PPtebHNARHTOTZsRPJXM1w0AHWGIdSq9urQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com (2603:10a6:10:309::18)
- by GV4PR04MB11971.eurprd04.prod.outlook.com (2603:10a6:150:2ec::7) with
+ bh=7lKkl3oE9OFG08y+PoIzkYj8IiD2rfgELOXFHR3T+nI=;
+ b=z0w4eFncokpfrINf7xXhoLf1rOoR4zjJAqgXEVxnQ0IIYbz57TiQm4hSc5gIjR8KcNyCQyLtDUcygoG5NtLTGCsruU0r66FyfC8fg6XMfPRfvJBmvG8hTHo6x0d4LdGssmlNtqO7O/BG8zlHMFLAMusUKCM7utcxtg00BM9XMMw=
+Received: from DS0PR17CA0015.namprd17.prod.outlook.com (2603:10b6:8:191::23)
+ by MW3PR19MB4377.namprd19.prod.outlook.com (2603:10b6:303:4c::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
- 2025 16:03:00 +0000
-Received: from DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::55ef:fa41:b021:b5dd]) by DB9PR04MB9626.eurprd04.prod.outlook.com
- ([fe80::55ef:fa41:b021:b5dd%4]) with mapi id 15.20.9320.021; Wed, 19 Nov 2025
- 16:03:00 +0000
-Date: Wed, 19 Nov 2025 11:02:51 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Bough Chen <haibo.chen@nxp.com>
-Cc: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 2/2] spi: add driver for NXP XSPI controller
-Message-ID: <aR3qK18c4/XJY8JW@lizhi-Precision-Tower-5810>
-References: <20251118-xspi-v3-0-6d3a91b68c7e@nxp.com>
- <20251118-xspi-v3-2-6d3a91b68c7e@nxp.com>
- <aRyfoXaTdL1gvPOY@lizhi-Precision-Tower-5810>
- <DU0PR04MB94965531DB74151BFE651BD690D7A@DU0PR04MB9496.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DU0PR04MB94965531DB74151BFE651BD690D7A@DU0PR04MB9496.eurprd04.prod.outlook.com>
-X-ClientProxiedBy: SJ0PR03CA0368.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::13) To DB9PR04MB9626.eurprd04.prod.outlook.com
- (2603:10a6:10:309::18)
+ 2025 16:13:11 +0000
+Received: from CH3PEPF00000018.namprd21.prod.outlook.com
+ (2603:10b6:8:191:cafe::37) by DS0PR17CA0015.outlook.office365.com
+ (2603:10b6:8:191::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
+ 19 Nov 2025 16:13:10 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
+ smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
+ does not designate 84.19.233.75 as permitted sender)
+ receiver=protection.outlook.com; client-ip=84.19.233.75;
+ helo=edirelay1.ad.cirrus.com;
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ CH3PEPF00000018.mail.protection.outlook.com (10.167.244.123) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.1
+ via Frontend Transport; Wed, 19 Nov 2025 16:13:10 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 3FEA0406547;
+	Wed, 19 Nov 2025 16:13:09 +0000 (UTC)
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 1CBDD820257;
+	Wed, 19 Nov 2025 16:13:09 +0000 (UTC)
+Date: Wed, 19 Nov 2025 16:13:08 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Maciej Strozek <mstrozek@opensource.cirrus.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-spi@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH RFT/RFC 2/2] mfd: cs42l43: use GPIO machine lookup for
+ cs-gpios
+Message-ID: <aR3slKbafBPFrv6P@opensource.cirrus.com>
+References: <20251119-cs42l43-gpio-lookup-v1-0-029b1d9e1843@linaro.org>
+ <20251119-cs42l43-gpio-lookup-v1-2-029b1d9e1843@linaro.org>
+ <CAMRc=Md4jHrHxHUOM=eFuWRSaEO9jFEoHGTjEEJLj9w6E53gOA@mail.gmail.com>
+ <aR3noZXxma9vOXEI@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aR3noZXxma9vOXEI@opensource.cirrus.com>
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB9PR04MB9626:EE_|GV4PR04MB11971:EE_
-X-MS-Office365-Filtering-Correlation-Id: a93daf87-f2ca-4b82-81bc-08de27851cd8
+X-MS-TrafficTypeDiagnostic: CH3PEPF00000018:EE_|MW3PR19MB4377:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3baf881-54e8-43ea-018c-08de278688aa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|52116014|376014|19092799006|366016|7053199007|38350700014;
+	BCL:0;ARA:13230040|376014|7416014|82310400026|36860700013|61400799027|7053199007|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?a2QzeU1pdG5SNWNNemR4UkpmSGZjYmo3UkIxUFlvK1lLN2k3S2RnZkl4cUdU?=
- =?utf-8?B?Mkk4UEhCUHN2RnpENU5TYTJQK1doUERMY2crNU9pTkdEaktoWGxRclJxT3hS?=
- =?utf-8?B?UitqTTd3RWxwSGdCOE8yWDFvQmZvakV2b1RNQUpOMWJ0Vy8wRlMwblkyK0Q5?=
- =?utf-8?B?Q1FaRGZVYXZRSVZYN0RYODhWemRIOEtiWmtGQzlBbEFiNVpGRFdiN1p1ZGNM?=
- =?utf-8?B?cFk1bTVUSWZOMExBbU0rTGp0N1o5WDdmL0dFRGYwNFNZZi8zaVFjVWx3UlM1?=
- =?utf-8?B?WVZWK05ZSVNZMDVHcmVkQUFMU3VmaXNveWZGUkVjS29VZTB3RUpzN3I4K1Yr?=
- =?utf-8?B?bzJLMGdnNnd4RVM0SmxQMGQreVgyVzBrRlAwU2tsOXZhWjBSejR0cXdWbGcv?=
- =?utf-8?B?ME5hamZsMlRzWVlPT2VvZVRUd2w5NXNwNGtubHFBSGZUMDBsVkJSNWJkSkVZ?=
- =?utf-8?B?OU5XL1VHSXZQNHlBbmxCMHJ6NWIzZlphc1ovdUU4cUcrRHlRSmtURGtoZUVY?=
- =?utf-8?B?aXJwMVpQY1NoOGp1Y1ozZndOeHJycHpjT0c4MDkvYlBVeU1wS09vUDZCZlZV?=
- =?utf-8?B?SVZybThtYUNmUlltTXVvUjI3WHZ4Y3lGaHpHa1hQVm12M213ZnI5M25MZENa?=
- =?utf-8?B?N3E5dFpQckxDM3hwNHg4WEtsNlZESG5YWFc4WU9acW1qSjBkYUVIVHQwVzVB?=
- =?utf-8?B?eCtOeFYxcEcvS3M0Nm9HUFFLSGZtNWd0YXhzUzVXUVRhS1NrSW1tTENCSEdD?=
- =?utf-8?B?aWw0bkpYRkl2QUFidTZsL04wSHlaeStGdXJ5SmU4QlRnNVAxdkZrdzQrZWxl?=
- =?utf-8?B?NWQ2MFlVS2c0cHA3cTI1QnIzSDZRK0NJWEdsVDAvQU5NUFRTbUR1Zkc0UG1D?=
- =?utf-8?B?U1RZUnk4U25OVXNGeDJhaDRJVm5PMzdOeGRXQzBqK2dDVUcwOGp3MFJ2bjB1?=
- =?utf-8?B?aGVCaWVDWjZvRW1nUzg5bHZLWWNzZDkyNENOR0t0RU9WSW91WFNOeCsrTlVN?=
- =?utf-8?B?aW44b1lyeWJXQ2U0dThUa3lQS0VRU3lBc1dYUHFWRWQ5K1RxcjdlWjVONyt4?=
- =?utf-8?B?RGNubXNMSVNzRmN3d1BFQlpIQ2VKdFJsb291VzN0Qk1PSklsMDEzRDFTdEpk?=
- =?utf-8?B?bWNxODhEWkM3MFc0Z1VTcTdmSGgvZlVoQy91QWQ4Yk4yVHlhMzdFb0pENUN1?=
- =?utf-8?B?WEhITU1DNis2TkRWN2FYZXc5Vkt6aHlrQ28wWlVFbVlHQjBMdTNPaXk4U2Va?=
- =?utf-8?B?SHJnRmxOK2VKRUFEQitZempUdnVXMmlEVTZycWd2THRGRkpVNHJ6akYwSnMw?=
- =?utf-8?B?VEg1Qlgxc3Jtc1EvZWE5aXkzalM2ckhYd1V6VytYNisreW9rZWRYd0ttT0NF?=
- =?utf-8?B?MEUwVzVDcXhyd1BJT3U3WUp2RWk5MzdIbGo2bXVWQ0Y1TllTbCtlZ2FCN2hz?=
- =?utf-8?B?aDlKTUc0UStkV3YweEhSWm9PM0VDNm1BMlhYc1p0RjE4NldWWjBXZmkwVng0?=
- =?utf-8?B?M1FJQlRRZDh0YUtqWi9wZTB6a05BRWJlajR5bUZsa21Kd1J0dTJTSCtyRmI3?=
- =?utf-8?B?aUVPaXptMHhDSUFRcnlXaTRiZzhQZlZvS252K3JTb0oxU3lvV3pqZVk2cXlm?=
- =?utf-8?B?eG9GaDArNjZHVytvV3RDRjhVZDQwL0pmUVZBY0J4S3V5NXhQYkhWVWJidTV5?=
- =?utf-8?B?Y1JoQVY4LzM5ZDQrWW9NNWpyTjJ4bmg1d0RyWHU1ZWZFa08vL1RwT0ZQNFhy?=
- =?utf-8?B?T0crMlJYdEVWV3V4S2xZRlExamdaM3BhUy9PT2U0cUtMU2E2UFNhLzlKNHVK?=
- =?utf-8?B?VkRiZXpBcWkwbkN5WldiTzBkVVphWXIyeCt5RUF3NWNmLy8xcUpneXVBbzN6?=
- =?utf-8?B?NHA5RDN1SWhMMVU5a3Y2NWZEWk16Vk8wb2RCWFliWnFvMXdjaE90Zzk5Ly94?=
- =?utf-8?B?VGFZUEZTMm5TcDNaNTM3VVZ4WCtVZUswcUtMTGkxeXJSMWNHUTVzY1IzRjh6?=
- =?utf-8?B?MkpuN1VOTjF2S1JQRmVhRU1wQlBHSFk0ZmlqNGdlNTZXWXVxN05wN3ZyVVVh?=
- =?utf-8?Q?nHxEHa?=
+	=?utf-8?B?WTZxSU1hcmdOclFGSFhzRmxLUytORUdaalVoLzJycjN0Y1NLUzl6dVZuV2di?=
+ =?utf-8?B?cXdNR3BxRDgzQTZncW9OWHpUWk00RXBxQWdPRFIwYzRvc05KdmVwRi9LNmNk?=
+ =?utf-8?B?QnFZQXBXU29HZHNpK2lhMC90Y0ltVWJ4QlgyWktjVmc0dUFqUG9pK2p1VkNj?=
+ =?utf-8?B?MWxhdDlKK0xnbERPNDZXQkRySlRrd3JPNGZ1Q3ZEcVNzWnd0VjlDZjZLT2dv?=
+ =?utf-8?B?d0FsbGUxZ2VhV21DUlNpU3FSSlBTNWFpTjJBOWFsUG1mOUtaayttQ1JrSUxF?=
+ =?utf-8?B?U0VYWlZNQ0NlSkY3QThqRnFaNkFjaHczYk9SeFppVDRZUGdYbEtaR0RnekNQ?=
+ =?utf-8?B?UzhjbC9razVaSDhTWFN4anRrcm1md2h5cDNqSkd3SVFyMC9kVGVhZjB2WUNQ?=
+ =?utf-8?B?emFnakIrR294ZFkyZk5uYVQwYlNtVnZUVFR0MTRNeTg5UU5IZmN2MktMNitu?=
+ =?utf-8?B?c0JUaTNCbXRGT2p3WDkwUjZMMzZ2MnNDUkRjTGNhZC9FNXh5eHdnSzM3MWVq?=
+ =?utf-8?B?MVNVUDZCbVE3UzRiMU9Jc0JZWllaUWFDQmR0aDFaakhXRUFZMGVMWEZ2QkEr?=
+ =?utf-8?B?Z3hPaytJWXo1N2hjclRlNFdzTjg3THBWOTlraDd3WG1qQ0ZjWUZveDg0aW5Y?=
+ =?utf-8?B?QnBkOTg1MElmVStNNGRDRVhTWUlEU2ZDNDM1bW5lWEhyaUovRGl4MnpwZ3l3?=
+ =?utf-8?B?VkVJckMzRzVTQkVIMXJIS2lwNGdLdGpFWlVPUU54bElqRkpNNTE1M01wZS9t?=
+ =?utf-8?B?dy85cW13akc4M00zOEVVcFdUdnZheTA5RWRKUXpkZzhZYzBEVVc1MEdBQ0Ev?=
+ =?utf-8?B?dFF3ZldRSlpiQ2JlVk5VZjRWaEZRZDJRbUdKNzBmNlU2VlI1SGh2L3gvS2lY?=
+ =?utf-8?B?NUlpdm91U3BGZFpNcW1xQjN4Ky9hY2Y5dkFWR1U5WThYRk0xbWNRV3pQZ0E1?=
+ =?utf-8?B?V3FYVVE3TDdXdDNLNkV2RDYrcGlIbmVNeWtMbnJ5REZIREphU2FCMnVPdXB3?=
+ =?utf-8?B?aVlUR3M2eWlMbXdibGFjQmI1Wnl0ZndvSGhLazFOOTIwcSs0QzhNSkZLS1Zt?=
+ =?utf-8?B?Z0htdUNtOGJRcmdFWEMwUHp6MUlFcXRmcW9GbHZTTk1lcllueExlUVNlSDRO?=
+ =?utf-8?B?Z0Ixc3YvdWdiUjdmT1VoR01LRkFBblhVWEFja05XMFdsbzJrVG5obEVWd2lv?=
+ =?utf-8?B?d3hqYmpKWGdVWjJlLzF0RUVpN1AyZ3J0b0MxTFY0eGxXZDR3b1lWSDc2KzY0?=
+ =?utf-8?B?L2FhUEpaUEhha1pYSWxZRWRrUG9iS3VwdFpIZGdUL2ZTWnJ0dTJyVjlsZEJR?=
+ =?utf-8?B?eDd2bGVxeW1PTFRtL0FneDFxRytwQmQ4Y2VDZjJqaThxN29adWs4SW9uSDkw?=
+ =?utf-8?B?b3F5c1AybVgwOStoUHp6WlhpTzZtb0RuOHJNZXR1czhPc3g3TjFEakZjRk0y?=
+ =?utf-8?B?d2krUTFseFBjM2U5enhHUTVVYUd5ZUk0MW0xNFl3RDFxQlh0ZWllNEhtOXgw?=
+ =?utf-8?B?amZTS2F5R1JaRmVZenVVQUJvcHNHMWNvT24xbFZPeFNZNjJSZVV0ckpadExV?=
+ =?utf-8?B?QlFlZzlRSThjU3l5RnAyMjNsRDJSZ3Z5dEUzMDVCSFZEaWRkRmpQUkVaSXJS?=
+ =?utf-8?B?QVZWNk9CNTYwdFZJdjB5bWtCT1p0VHptSjh1RW1wVWhraFc5Rit0eGhhVmJx?=
+ =?utf-8?B?RmlwaEcycEs1TkFhTDFtb3ZTU21YdFl2aHd4RlRQUXFMTUh1ZnFTRkZnYUFL?=
+ =?utf-8?B?YmV4N2lSbjhKTXhaT1dsVDRLeGllUjFPMUQxT0ZtdVptQTB4MXZBQVE4cno3?=
+ =?utf-8?B?M0E5dE5IRDNBOGJDZ3RZTGYxMWhjSzMyeEhXcHMyTWxQcmJhc21QQWpraktn?=
+ =?utf-8?B?NDhRdVFpM081djlOSEdZelhHMHJTUnhBNzhERGM1YlV4VUlIQmloblRhbWJw?=
+ =?utf-8?B?bnVpT1BhcWJOZEdsMElTOGVlNXAzSzZTQWlKVHRkUm9XcnpiSVh6ZlJ6NllE?=
+ =?utf-8?B?RFJKMjlFSk5SKzdFblRzRnRBNkwwU2t4dFF5RmZBYzl6SFZSaE1GOUhYNUFv?=
+ =?utf-8?B?N09KYmlGanZHUDREMEMySXVZakZKTHA1QU9mOUtHanBTcTFodUFDZjR6bmw5?=
+ =?utf-8?Q?WdLg=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9626.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(52116014)(376014)(19092799006)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZHN3RndyQ2VpSkFNY2lPOE1KTEwyZUZNMDU5NEhJRWE2WFEzamxqYzNnaVFY?=
- =?utf-8?B?TkxvdW1icmM2dHMvOXdIeXlmZ1NrR2JlTmZBN0s1MDliUHVXb0JUMjE4RXJE?=
- =?utf-8?B?Q0t2THZOcld1N1lTVzZNVWMrajNBK3VTeTc3N2xmdFVIUlR6aWRpdC9jaGNx?=
- =?utf-8?B?RkNrVENZREVIODg3N04rV2VzVGtVYzAyeW5JWTI4TWg3dURpWEpFSVV3b2ZY?=
- =?utf-8?B?QlpHUnhTRVZteXVLNkZ1eXdjKzU2NE8wcTJNOEhoRzlwTGtqaDVQZjJQUVR5?=
- =?utf-8?B?S0thRTh2a0FvNm96L3NUbXQwdlQ4SDFXM3FIb2IvV3BjTG1aSTAxT2pTa1BM?=
- =?utf-8?B?SEsrdDVhcGNtR3IzQXJ2YjdzMDQyVVdocXJtSEVOaWhjSFhrOEdKVVkxQ1RX?=
- =?utf-8?B?azcwU3ZmUTAreEQ5QXFwRVRrOThPa1JiNytmY253Vmd0ZklaWHN0SjUzTzRH?=
- =?utf-8?B?N1hBazEvS3J2RkNmc1cyS3piSGI1dXBScnN5MGJab3NGelFoUVpMc1k2T0hY?=
- =?utf-8?B?YVJwVlVVL0o3VzVaRmUrWEJqd1ZxMGw3cUNvQ25vUkEzS2JIc2dIWVl4c3lY?=
- =?utf-8?B?K3ZyNlUvb0lMSkk4ZkZvVjZ5SjNBblM5bXhneHlpNnVPelloS2VtNExXYXM2?=
- =?utf-8?B?SDhpMjNZTVh0MFlXY1gvWE1mbXNkczVEYjRFS1RiZWdQWGE5MFh1NWMwdUpM?=
- =?utf-8?B?T1lMbjl0clFDdndURmhGZlBGQzV1NDg0Rmh4SE1FRmVxci9UcnJxbkoxY1c0?=
- =?utf-8?B?UWhmQVZnNEFSMDNoUVl3ZXJKelN0NkxlcmlWeDRGb3VPTFVMek1nTUJKWXZU?=
- =?utf-8?B?ZUk1eEp5WVIwd0wyVjFJRkdWTVptU1FLM0FuTjFURGRVMTRQK2N4SXM0UUlV?=
- =?utf-8?B?dlZBeU82U0M5Q2Flb3JUcXJLdjViaWxkSjhwZWIrUXFvL25UZGtDSlBaNldm?=
- =?utf-8?B?OXZkTWxSWEdjYWZkRWJGZjBFYTBIc3M0U3dWS3I3eUJxUktMcTRiTmV6NE5Z?=
- =?utf-8?B?blNHN1ZxZDBzQ1NlSks5OW1aK2FLbHR2UStKNGpaTk5VdlJ5dUozaFoxbkd2?=
- =?utf-8?B?dEI5ZEJsQnJSTVM4S0J1bHU5OVFkVStpZFRqQjV2d2FNTk1tWjBwQW9SS2xP?=
- =?utf-8?B?MEV6amhublhMWmhZZFdYc0wxUjU3UG9waHRpQ2JtMUxMdGVFN2ZCWm0rQ2or?=
- =?utf-8?B?cUNDK0hoZ0dsSjFvU3dKK3ZVTTJtN1F3cGxRVHRQVyttV0R5QjRxRmNUQk50?=
- =?utf-8?B?LzFMOFVHSjZwOGMySkdlRzJGWFhnVDZIbjJFeWFydGxmcFF0VWxQbGNhYnlB?=
- =?utf-8?B?NllZdjRGU1pjSGM3SzN5eFhTQ0ZWYzB3dlFuMG1nRFNxaEVOQUpzSWxFOE80?=
- =?utf-8?B?TVBVZnVxblNpQzBjc21SWm9QNE9uZ3BWeHFtSEdHZW1SSHVmQWRDMkgrUlYx?=
- =?utf-8?B?R3pXaWkzd0V6VzlmODF6S0lYZ1ZrOVh5UWNXMzRLcFNXT1VvcW9DMWRMREl0?=
- =?utf-8?B?bzJJU1N1WVY0Y2tNTERpNXpldlFIUXU3UTRReVJKaENPYVk1RTF6VitIMTRj?=
- =?utf-8?B?NzhRZW5lVG5iWVBYVXYzd3ZKK3NLWC94ZVRYUVB3VE5GTm5nRDJnMHNCVUx0?=
- =?utf-8?B?NStvTjNsdy9aN1IwRUFaSk9lc2MzanRxY3VKd3dlcWE1Ykt6VEZUdFA5MlVP?=
- =?utf-8?B?dGdoRktodGxDNGcyVWdtTDlGRXdRWXBRbjF0T0lEdHZpbWNQbytyck5jSXcx?=
- =?utf-8?B?Tld0Q01oaVNKYUVCV2tTd2ZySVFMbGxRcklLNUpRUkdDOHY4cnpENGE0YjRs?=
- =?utf-8?B?WmppMzBUZkYxSFIxaUY1MlhRYmsrcFRrQmJFWWJJczFLZ3BzYlJiVTRjdmxn?=
- =?utf-8?B?RU5ONFczY1pOb29tOW9heEpBQ3ozWTd4RzVNbFo4YzFXcDB4a21UVkcvU29F?=
- =?utf-8?B?bHBBUmtWWUViQk9XRTliVmpBVWIwNnM5aTdxekZOKzBSRTluYktPRmNDYUZo?=
- =?utf-8?B?MzNMWTdTdTNIVXJQcTRpUXRjZ0RabUNuNURTMkUwelAyUDAyWDRqSTVYTGpX?=
- =?utf-8?B?N2sxaUZHTmJwdU5sOFJtandTSUF4cjVrQWhKcWRwS2lmZFJrMklRVXZYcFNk?=
- =?utf-8?Q?3apwQqnZQT5+sDAr8yHmHM03z?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a93daf87-f2ca-4b82-81bc-08de27851cd8
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9626.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 16:03:00.3824
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(36860700013)(61400799027)(7053199007)(13003099007);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 16:13:10.2746
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c2+6N0IGbRGC/PhdbGM46ipEbodppTYr6QawUV6T0JNkoGNIrPXq2PJhF6TUCuSNpHXQHs4o0byh2+P/nNpRlQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV4PR04MB11971
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3baf881-54e8-43ea-018c-08de278688aa
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-CH3PEPF00000018.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR19MB4377
+X-Authority-Analysis: v=2.4 cv=OOEqHCaB c=1 sm=1 tr=0 ts=691dec9a cx=c_pps
+ a=/xE45K41/b7qeiroFAFKVg==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=w1d2syhTAAAA:8 a=KKAkSRfTAAAA:8
+ a=iF_agFKQqAFWA6pzTFYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: KRXjafvsg8grztAMPBOBCFJUINdcDhG4
+X-Proofpoint-ORIG-GUID: KRXjafvsg8grztAMPBOBCFJUINdcDhG4
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE5MDEyOCBTYWx0ZWRfX+Cmie+ynVS8g
+ 3UDsYxTks4D1bjyj07hbOvPZ8i8GtFlnbP+kF1UBvNPLRnvkaB1J72ix0tinzrSlZVkOodEdqQy
+ QkQ2KCNXbyxcMp3i3GZvpKsutX9JpfL2WuN53q2ZuzQBTYYnWqzfGaliRAjhyTn9zRKkOkr/piG
+ TA9CHfwjOuIzoo1Zz/LKyq6Db2k+PbyM98PtE6T0+PHYknQAlgrOLYwL7/xt4jPIVxpO8d0tDr8
+ 80uB6U/RvOGI1o+TXQOLomywTP0VsS6gDcWiyQSmexYxYGRwYyYPH1HYuzpu/basjygtpohAkOw
+ 0Nz+Z0Ao0CdokmGTEnvtD3Cu9f8t2Pp+Q1hvIoFeANpDwsg4VaMNC2NarGFISjf1TvhlLl4yAiO
+ o7OsKt4myMsa7JrFOUh57Wg+rejoCA==
+X-Proofpoint-Spam-Reason: safe
 
-On Wed, Nov 19, 2025 at 07:02:21AM +0000, Bough Chen wrote:
->
->
-> > -----Original Message-----
-> > From: Frank Li <frank.li@nxp.com>
-> > Sent: 2025年11月19日 0:33
-> > To: Bough Chen <haibo.chen@nxp.com>
-> > Cc: Han Xu <han.xu@nxp.com>; Mark Brown <broonie@kernel.org>; Rob
-> > Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor
-> > Dooley <conor+dt@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>;
-> > linux-spi@vger.kernel.org; imx@lists.linux.dev; devicetree@vger.kernel.org;
-> > linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > Subject: Re: [PATCH v3 2/2] spi: add driver for NXP XSPI controller
-> >
-> > On Tue, Nov 18, 2025 at 11:34:17AM +0800, Haibo Chen wrote:
-> > > Add driver support for NXP XSPI controller.
+On Wed, Nov 19, 2025 at 03:52:01PM +0000, Charles Keepax wrote:
+> On Wed, Nov 19, 2025 at 04:35:07PM +0100, Bartosz Golaszewski wrote:
+> > On Wed, Nov 19, 2025 at 4:21 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > > >
-> > > XSPI is a flexible SPI host controller which supports up to
-> > > 2 external devices (2 CS). It support Single/Dual/Quad/Octal mode data
-> > > transfer.
+> > > Currently the SPI driver sets up a software node referencing the GPIO
+> > > controller exposing the chip-select GPIO but this node never gets
+> > > attached to the actual GPIO provider. The lookup uses the weird way GPIO
+> > > core performs the software node lookup by the swnode's name. We want to
+> > > switch to a true firmware node lookup in GPIO core but without the true
+> > > link, this driver will break.
 > > >
-> > > The difference between XSPI and Flexspi:
-> > > 1.the register layout is total different.
-> > > 2.XSPI support multiple independent execution environments
-> > > (EENVs) for HW virtualization with some limitations. Each EENV has its
-> > > own interrupt and its own set of programming registers that exists in
-> > > a specific offset range in the XSPI memory map.
-> > > The main environment (EENV0) address space contains all of the
-> > > registers for controlling EENV0 plus all of the general XSPI control
-> > > and programming registers. The register mnemonics for the user
-> > > environments (EENV1 to EENV4) have "_SUB_n" appended to the mnemonic
-> > > for the corresponding main-environment register.
+> > > We can't use software nodes as only one software node per device is
+> > > allowed and the ACPI node the MFD device uses has a secondary node
+> > > already attached.
 > > >
-> > > Current driver based on EENV0, which means system already give
-> > > EENV0 right to linux.
+> > > Let's switch to GPIO machine lookup instead.
 > > >
-> > > This driver use SPI memory interface of the SPI framework to issue
-> > > flash memory operations. Tested this driver with mtd_debug and UBIFS
-> > > on NXP i.MX943 EVK board which has one MT35XU512ABA spi nor flash. NOw
-> > > this driver has the following key features:
-> > > - Support up to OCT DDR mode
-> > > - Support AHB read
-> > > - Support IP read and IP write
-> > > - Support two CS
-> > >
-> > > Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> > > Fixes: 439fbc97502a ("spi: cs42l43: Add bridged cs35l56 amplifiers")
+> > > Reported-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > > Closes: https://lore.kernel.org/all/aRyf7qDdHKABppP8@opensource.cirrus.com/
+> > > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > > > ---
-> > >  MAINTAINERS                |    1 +
-> > >  drivers/spi/Kconfig        |   10 +
-> > >  drivers/spi/Makefile       |    1 +
-> > >  drivers/spi/spi-nxp-xspi.c | 1367
-> > > ++++++++++++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 1379 insertions(+)
 > > >
-> > > diff --git a/MAINTAINERS b/MAINTAINERS index
-> > >
-> > 2f17f925ee23dd90acc1b4bf25f158070cd2b65e..527b4f284c3207fb9760ece5cc
-> > 1d
-> > > 350e7ad8fe50 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -18853,6 +18853,7 @@ L:	linux-spi@vger.kernel.org
-> > >  L:	imx@lists.linux.dev
-> > >  S:	Maintained
-> > >  F:	Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-> > > +F:	drivers/spi/spi-nxp-xspi.c
-> > >
-> > > +#include <linux/clk.h>
-> > > +#include <linux/completion.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/err.h>
-> > > +#include <linux/errno.h>
-> > > +#include <linux/interrupt.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/iopoll.h>
-> > > +#include <linux/jiffies.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/log2.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/mutex.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/pinctrl/consumer.h>
-> > > +#include <linux/pm_runtime.h>
-> > > +#include <linux/spi/spi.h>
-> > > +#include <linux/spi/spi-mem.h>
-> > > +
-> > > +/* Runtime pm timeout */
-> > > +#define XSPI_RPM_TIMEOUT 50	/* 50ms */
-> >
-> > Need unit XSPI_RPM_TIMEOUT_MS
-> >
-> > > +/*
-> > > + * The driver only uses one single LUT entry, that is updated on
-> > > + * each call of exec_op(). Index 0 is preset at boot with a basic
-> > > + * read operation, so let's use the last entry (15).
-> > > + */
-> > ...
-> > > + *  ---------------------------------------------------
-> > > + *  | INSTR1 | PAD1 | OPRND1 | INSTR0 | PAD0 | OPRND0 |
-> > > + *  ---------------------------------------------------
-> > > + */
-> > > +#define PAD_SHIFT		8
-> > > +#define INSTR_SHIFT		10
-> > > +#define OPRND_SHIFT		16
-> > > +
-> > > +/* Macros for constructing the LUT register. */
-> > > +#define LUT_DEF(idx, ins, pad, opr)			  \
-> > > +	((((ins) << INSTR_SHIFT) | ((pad) << PAD_SHIFT) | \
-> > > +	(opr)) << (((idx) % 2) * OPRND_SHIFT))
-> > > +
-> > > +#define NXP_XSPI_MIN_IOMAP	SZ_4M
-> > > +#define NXP_XSPI_MAX_CHIPSELECT		2
-> > > +#define POLL_TOUT		5000
-> >
-> > Need unit, POLL_TOUT_US
-> >
-> > > +
-> > > +/* Access flash memory using IP bus only */
-> > > +#define XSPI_QUIRK_USE_IP_ONLY	BIT(0)
-> > > +
-> > > +struct nxp_xspi_devtype_data {
-> > > +	unsigned int rxfifo;
-> > > +	unsigned int txfifo;
-> > > +	unsigned int ahb_buf_size;
-> > > +	unsigned int quirks;
-> > > +};
-> > > +
-> > > +static struct nxp_xspi_devtype_data imx94_data = {
-> > > +	.rxfifo = SZ_512,       /* (128 * 4 bytes)  */
-> > > +	.txfifo = SZ_1K,        /* (256 * 4 bytes)  */
-> > > +	.ahb_buf_size = SZ_4K,  /* (1024 * 4 bytes)  */ };
-> > > +
-> > > +struct nxp_xspi {
-> > > +	void __iomem *iobase;
-> > > +	void __iomem *ahb_addr;
-> > > +	u32 memmap_phy;
-> > > +	u32 memmap_phy_size;
-> > > +	u32 memmap_start;
-> > > +	u32 memmap_len;
-> > > +	struct clk *clk;
-> > > +	struct device *dev;
-> > > +	struct completion c;
-> > > +	const struct nxp_xspi_devtype_data *devtype_data;
-> > > +	/* mutex lock for each operation */
-> > > +	struct mutex lock;
-> > > +	int selected;
-> > > +#define XSPI_DTR_PROTO		BIT(0)
-> > > +	int flags;
-> > > +	/* Save the previous operation clock rate */
-> > > +	unsigned long pre_op_rate;
-> > > +	/* The max clock rate xspi supported output to device */
-> > > +	unsigned long support_max_rate;
-> > > +};
-> > > +
-> > > +static inline int needs_ip_only(struct nxp_xspi *xspi) {
-> > > +	return xspi->devtype_data->quirks & XSPI_QUIRK_USE_IP_ONLY; }
-> > > +
-> > > +static irqreturn_t nxp_xspi_irq_handler(int irq, void *dev_id) {
-> > > +	struct nxp_xspi *xspi = dev_id;
-> > > +	u32 reg;
-> > > +
-> > > +	reg = readl(xspi->iobase + XSPI_FR);
-> > > +	if (reg & XSPI_FR_TFF) {
-> > > +		/* Clear interrupt */
-> > > +		writel(XSPI_FR_TFF, xspi->iobase + XSPI_FR);
-> > > +		complete(&xspi->c);
-> > > +		return IRQ_HANDLED;
-> > > +	} else {
-> > > +		return IRQ_NONE;
-> > > +	}
-> >
-> > else branch is not neccesary,
-> > you can directly
-> >
-> > 	return IRQ_NONE;
-> >
-> > I remember there should be a warning for it.
-> >
-> > > +}
-> > > +
-> > > +static int nxp_xspi_check_buswidth(struct nxp_xspi *xspi, u8 width) {
-> > > +	return (is_power_of_2(width) && width <= 8) ? 0 : -EOPNOTSUPP; }
-> > > +
-> > ...
-> > > +	} else {
-> > > +		nxp_xspi_disable_ddr(xspi);
-> > > +		xspi->flags &= ~XSPI_DTR_PROTO;
-> > > +	}
-> > > +	rate = min(xspi->support_max_rate, op->max_freq);
-> >
-> > use min_t
-> >
-> > ...
-> > > +
-> > ...
-> > > +
-> > > +static int nxp_xspi_exec_op(struct spi_mem *mem, const struct
-> > > +spi_mem_op *op) {
-> > > +	struct nxp_xspi *xspi = spi_controller_get_devdata(mem->spi->controller);
-> > > +	void __iomem *base = xspi->iobase;
-> > > +	u32 reg;
-> > > +	int err;
-> > > +
-> > > +	guard(mutex)(&xspi->lock);
-> > > +
-> > > +	err = pm_runtime_get_sync(xspi->dev);
-> > > +	if (err < 0) {
-> > > +		dev_err(xspi->dev, "Failed to enable clock %d\n", __LINE__);
-> > > +		return err;
-> > > +	}
-> >
-> > Now you can use
-> >
-> > 	ACQUIRE(pm_runtime_active_auto, pm)(xspi->dev;
-> >         if ((ret = ACQUIRE_ERR(pm_runtime_active_auto, &pm)))
-> >                 return ret;
-> >
-> > So below pm_runtime_put_autosuspend() can be removed, actually you missed
-> > pm_runtime_put_autosuspend() at below return err after readl_poll_timeout().
-> >
->
-> Thanks for point that out, now kernel already contain this patch:
-> ef8057b07c72 ("PM: runtime: Wrapper macros for ACQUIRE()/ACQUIRE_ERR()") from Rafael J. Wysocki.
->
-> So here seems need to change like this:
->     PM_RUNTIME_ACQUIRE_ AUTOSUSPEND (dev, pm);
->     if ((ret = PM_RUNTIME_ACQUIRE_ERR(&pm)))
->              return ret;
->
-> I will add this change in next version.
+> > > +static struct gpiod_lookup_table cs42l43_gpio_lookup = {
+> > > +       .dev_id = "cs42l43-spi",
+> > > +       .table = {
+> > > +               GPIO_LOOKUP("cs42l43-pinctrl", 0, "cs", GPIO_ACTIVE_LOW),
+> > > +               GPIO_LOOKUP(INIT_ERR_PTR(-ENOENT), 0, "cs", 0),
+> > 
+> > I sent the wrong version, sorry. This should have been:
+> > 
+> > GPIO_LOOKUP_IDX("cs42l43-pinctrl", 0, "cs", 0, GPIO_ACTIVE_LOW),
+> > GPIO_LOOKUP_IDX(INIT_ERR_PTR(-ENOENT), 0, "cs", 1, 0),
+> > 
+> > Charles: Can you fix it up yourself before testing?
+> 
+> Yeah can do, but I am still very nervous about how this approach
+> interacts with device tree and ACPI systems doing things
+> normally. Is this also ignored if the firmware specifies the
+> properties correctly? I feel like if we go this route I am going
+> to have to bring up a few extra things to test on as its quite a
+> big change.
+> 
+> Apologies for the delay on my suggestion but something weird is
+> happening deep in the swnode stuff and its taking me ages to peel
+> back all the layers of in abstraction there. It seems something
+> copies all the properties and somehow the fwnode I want doesn't
+> make it through that process. But the basic idea is like:
+> 
+> props = devm_kmemdup(priv->dev, cs42l43_cs_props,
+> 		     sizeof(cs42l43_cs_props), GFP_KERNEL);
+> if (!props)
+> 	return -ENOMEM;
+> 
+> args = devm_kmemdup(priv->dev, cs42l43_cs_refs,
+> 		    sizeof(cs42l43_cs_refs), GFP_KERNEL);
+> if (!args)
+> 	return -ENOMEM;
+> 
+> args[0].fwnode = fwnode;
+> props->pointer = props;
 
-Not sure if Mark brown take this change in his spi tree. It should be
-safe for next merge windows, but I am not sure if it is okay to use it
-at this merge windows, you should double check mark's tree.
+blargh... and of course that should be = args;
 
-Frank
-
->
-> >
-> > > +
-> > > +	/* Wait for controller being ready. */
-> > > +	err = readl_poll_timeout(base + XSPI_SR, reg,
-> > > +			      !(reg & XSPI_SR_BUSY), 1, POLL_TOUT);
-> > > +	if (err) {
-> > > +		dev_err(xspi->dev, "SR keeps in BUSY!");
-> > > +		return err;
-> > > +	}
-> > > +
-> > ...
-> > > +
-> > > +	.swap16 = true,
-> > > +};
-> > > +
-> > > +static void nxp_xspi_cleanup(void *data) {
-> > > +	struct nxp_xspi *xspi = data;
-> > > +
-> > > +	pm_runtime_get_sync(xspi->dev);
-> > > +
-> > > +	/* Disable interrupt */
-> > > +	writel(0, xspi->iobase + XSPI_RSER);
-> > > +	/* Clear all the internal logic flags */
-> > > +	writel(0xFFFFFFFF, xspi->iobase + XSPI_FR);
-> > > +	/* Disable the hardware */
-> > > +	writel(XSPI_MCR_MDIS, xspi->iobase + XSPI_MCR);
-> > > +
-> > > +	clk_disable_unprepare(xspi->clk);
-> > > +
-> > > +	if (xspi->ahb_addr)
-> > > +		iounmap(xspi->ahb_addr);
-> > > +
-> > > +	pm_runtime_disable(xspi->dev);
-> > > +	pm_runtime_put_noidle(xspi->dev);
-> >
-> > if use pm_runtime_put() here, needn't call clk_disable_unprepare() here.
-> > after use runtime pm to manage clocks, it'd better use it all place.
->
-> Okay
->
-> Regards
-> Haibo Chen
-> >
-> > > +}
-> > > +
-> > > +static int nxp_xspi_probe(struct platform_device *pdev) {
-> > > +	struct device *dev = &pdev->dev;
-> > > +	struct spi_controller *ctlr;
-> > > +	struct nxp_xspi *xspi;
-> > > +	struct resource *res;
-> > > +	int ret, irq;
-> > > +
-> > > +	ctlr = devm_spi_alloc_host(dev, sizeof(*xspi));
-> > > +	if (!ctlr)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	ctlr->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD | SPI_RX_OCTAL |
-> > > +			  SPI_TX_DUAL | SPI_TX_QUAD | SPI_TX_OCTAL;
-> > > +
-> > > +	xspi = spi_controller_get_devdata(ctlr);
-> > > +	xspi->dev = dev;
-> > > +	xspi->devtype_data = device_get_match_data(dev);
-> > > +	if (!xspi->devtype_data)
-> > > +		return -ENODEV;
-> > > +
-> > > +	platform_set_drvdata(pdev, xspi);
-> > > +
-> > > +	/* Find the resources - configuration register address space */
-> > > +	xspi->iobase = devm_platform_ioremap_resource_byname(pdev, "base");
-> > > +	if (IS_ERR(xspi->iobase))
-> > > +		return PTR_ERR(xspi->iobase);
-> > > +
-> > > +	/* Find the resources - controller memory mapped space */
-> > > +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mmap");
-> > > +	if (!res)
-> > > +		return -ENODEV;
-> > > +
-> > > +	/* Assign memory mapped starting address and mapped size. */
-> > > +	xspi->memmap_phy = res->start;
-> > > +	xspi->memmap_phy_size = resource_size(res);
-> > > +
-> > > +	/* Find the clocks */
-> > > +	xspi->clk = devm_clk_get(dev, "per");
-> > > +	if (IS_ERR(xspi->clk))
-> > > +		return PTR_ERR(xspi->clk);
-> > > +
-> > > +	/* Find the irq */
-> > > +	irq = platform_get_irq(pdev, 0);
-> > > +	if (irq < 0)
-> > > +		return dev_err_probe(dev, irq,  "Failed to get irq source");
-> > > +
-> > > +	pm_runtime_set_autosuspend_delay(dev, XSPI_RPM_TIMEOUT);
-> > > +	pm_runtime_use_autosuspend(dev);
-> > > +	pm_runtime_enable(dev);
-> >
-> > devm_pm_runtime_enable(dev)
-> >
-> > Frank
-> > > +
-> > > +	/* Enable clock */
-> > > +	ret = pm_runtime_get_sync(dev);
-> > > +	if (ret < 0)
-> > > +		return dev_err_probe(dev, ret, "Failed to enable clock");
-> > > +
-> > > +	/* Clear potential interrupt by write xspi errstat */
-> > > +	writel(0xFFFFFFFF, xspi->iobase + XSPI_ERRSTAT);
-> > > +	writel(0xFFFFFFFF, xspi->iobase + XSPI_FR);
-> > > +
-> > > +	nxp_xspi_default_setup(xspi);
-> > > +
-> > > +	ret = pm_runtime_put_sync(dev);
-> > > +	if (ret < 0)
-> > > +		return dev_err_probe(dev, ret, "Failed to disable clock");
-> > > +
-> > > +	ret = devm_request_irq(dev, irq,
-> > > +			nxp_xspi_irq_handler, 0, pdev->name, xspi);
-> > > +	if (ret)
-> > > +		return dev_err_probe(dev, ret, "failed to request irq");
-> > > +
-> > > +	ret = devm_mutex_init(dev, &xspi->lock);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	ret = devm_add_action_or_reset(dev, nxp_xspi_cleanup, xspi);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	ctlr->bus_num = -1;
-> > > +	ctlr->num_chipselect = NXP_XSPI_MAX_CHIPSELECT;
-> > > +	ctlr->mem_ops = &nxp_xspi_mem_ops;
-> > > +	ctlr->mem_caps = &nxp_xspi_mem_caps;
-> > > +	ctlr->dev.of_node = dev->of_node;
-> > > +
-> > > +	return devm_spi_register_controller(dev, ctlr); }
-> > > +
-> > > +static int nxp_xspi_runtime_suspend(struct device *dev) {
-> > > +	struct nxp_xspi *xspi = dev_get_drvdata(dev);
-> > > +	u32 reg;
-> > > +
-> > > +	reg = readl(xspi->iobase + XSPI_MCR);
-> > > +	reg |= XSPI_MCR_MDIS;
-> > > +	writel(reg, xspi->iobase + XSPI_MCR);
-> > > +
-> > > +	clk_disable_unprepare(xspi->clk);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int nxp_xspi_runtime_resume(struct device *dev) {
-> > > +	struct nxp_xspi *xspi = dev_get_drvdata(dev);
-> > > +	u32 reg;
-> > > +	int ret;
-> > > +
-> > > +	ret = clk_prepare_enable(xspi->clk);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	reg = readl(xspi->iobase + XSPI_MCR);
-> > > +	reg &= ~XSPI_MCR_MDIS;
-> > > +	writel(reg, xspi->iobase + XSPI_MCR);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int nxp_xspi_suspend(struct device *dev) {
-> > > +	int ret;
-> > > +
-> > > +	ret = pinctrl_pm_select_sleep_state(dev);
-> > > +	if (ret) {
-> > > +		dev_err(dev, "select flexspi sleep pinctrl failed!\n");
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	return pm_runtime_force_suspend(dev); }
-> > > +
-> > > +static int nxp_xspi_resume(struct device *dev) {
-> > > +	struct nxp_xspi *xspi = dev_get_drvdata(dev);
-> > > +	int ret;
-> > > +
-> > > +	ret = pm_runtime_force_resume(dev);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	nxp_xspi_default_setup(xspi);
-> > > +
-> > > +	ret = pinctrl_pm_select_default_state(dev);
-> > > +	if (ret)
-> > > +		dev_err(dev, "select flexspi default pinctrl failed!\n");
-> > > +
-> > > +	return ret;
-> > > +}
-> > > +
-> > > +
-> > > +static const struct dev_pm_ops nxp_xspi_pm_ops = {
-> > > +	RUNTIME_PM_OPS(nxp_xspi_runtime_suspend,
-> > nxp_xspi_runtime_resume, NULL)
-> > > +	SYSTEM_SLEEP_PM_OPS(nxp_xspi_suspend, nxp_xspi_resume) };
-> > > +
-> > > +static const struct of_device_id nxp_xspi_dt_ids[] = {
-> > > +	{ .compatible = "nxp,imx94-xspi", .data = (void *)&imx94_data, },
-> > > +	{ /* sentinel */ }
-> > > +};
-> > > +MODULE_DEVICE_TABLE(of, nxp_xspi_dt_ids);
-> > > +
-> > > +static struct platform_driver nxp_xspi_driver = {
-> > > +	.driver = {
-> > > +		.name	= "nxp-xspi",
-> > > +		.of_match_table = nxp_xspi_dt_ids,
-> > > +		.pm =   pm_ptr(&nxp_xspi_pm_ops),
-> > > +	},
-> > > +	.probe          = nxp_xspi_probe,
-> > > +};
-> > > +module_platform_driver(nxp_xspi_driver);
-> > > +
-> > > +MODULE_DESCRIPTION("NXP xSPI Controller Driver");
-> > MODULE_AUTHOR("NXP
-> > > +Semiconductor"); MODULE_AUTHOR("Haibo Chen
-> > <haibo.chen@nxp.com>");
-> > > +MODULE_LICENSE("GPL");
-> > >
-> > > --
-> > > 2.34.1
-> > >
+Thanks,
+Charles
 
