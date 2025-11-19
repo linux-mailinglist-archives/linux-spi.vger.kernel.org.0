@@ -1,130 +1,145 @@
-Return-Path: <linux-spi+bounces-11324-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11325-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D693C6F755
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 15:56:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E65C6F9FA
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:21:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id D1A13302B8
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 14:49:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 271542E9E8
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 15:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405F6366DAE;
-	Wed, 19 Nov 2025 14:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CB732FA20;
+	Wed, 19 Nov 2025 15:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="iMx7M03g"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="cDseboje"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADC0366DD4
-	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 14:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10A927467E
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 15:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763563560; cv=none; b=hwy1kImbLvN4/eciotyXj1jazOa5TTa/+FrstJ4+dCUfsekoP4Ymxvy3K24eIttETwNfFNCETrPX5GEjPQvMKcK149JK5JP8MbwCa2+L2WHh+uK5g8W6UrD+79KMZsLfB8w6Ss3jfjzLJFxc/c/irxpVxFzsTRc9MCUzMoRw9rA=
+	t=1763565713; cv=none; b=k/VXG3i+ketkdL1L/RrVnskUCxfiyfPJrcqNAVj80QKZN1gaxt10rza8kYaFr+PMfSaE4zzlh2l1JhPRwD6vx4WOjGVMpO5Nkbti3P8F/jT4F/gmHPtbBJXvPafHgqc2M7X5NPIxG74HWa+ha9fq5A4H3u7bV42mQuL7YoS0NBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763563560; c=relaxed/simple;
-	bh=NJMGAa2+Lu+uUZPIeeGfyW1+Aax12kFvvU8qnzPSJ5o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P+6VGgZmoDEJd+xA/rrg+Y/nMyyv/ei48BwKHP9Jud5Bijl4YMLCpGjv5rJ8Q0l/aTIMNXDuI8OaZ3O3cdbh8udNLFQUKHsv1N1lzcL7CIaVdLVg2Gefc8GS+gYEN1J4wyMLzV4xKXf5LlH5WMcuPgLB+vZqtNTeu6/63Roe8Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=iMx7M03g; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1763565713; c=relaxed/simple;
+	bh=oDSK2ULHOlVmjBMh66/oyeBlMdWtYVadz43n1YwCd/8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tM/XhWKxjCoQ2fkMcZgAWW95TvJWdDnOZEfqkpTFam++eOa4cFGNUyluXCvGXC0e+tFJF/4El1SPYTuVZ74IIS3eq6xTGZRc6uljvZxrnWO9kPp3UeT9MIJnERY7uYMXegTQxK6SEXbbT6Ttq/dEBSK8tkZYmL+cERXupKg9FyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=cDseboje; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5942bac322dso6433803e87.0
-        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 06:45:58 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47755de027eso46744595e9.0
+        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 07:21:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763563556; x=1764168356; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJMGAa2+Lu+uUZPIeeGfyW1+Aax12kFvvU8qnzPSJ5o=;
-        b=iMx7M03gmpDLZLoEVU9Ol22z/K39j3uqzqHp81ut5UYoAWnypTFIclI6SLz0pdCirP
-         OJLaGotZxDd4osuVqeNm+DxtnQ7uI+E8sZ9raXE8UEzsXeYfC7I5VwKJeJurEzbNFVu4
-         qrC6LHxdFJ8roychbd3mfof4k7FB4FSyv7Xe3ylNSxd1JF4EWxIo+2Q4lt0m3ToGvfmJ
-         Mxt6ZJLZDOxLOG8PI44RpS6qSClbeh4vlAdfouF8ANBb9jQEsIIOs5gIK9a3Sm08lIrF
-         eo/03v4X9POGYe7DciOx20ifQG0IcKm8y+Uh6Eix4q7l2XxNxAaMvQy2EQCuMRqjzXfo
-         ZZng==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763565710; x=1764170510; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjXruME0Ouu82XWrp1Tzzei1PpMyOyh+DAHkVu2G52U=;
+        b=cDsebojefxZYtKO/MlStg4YSbJ+SAyvazjyrDXaN8agSzMd/CnGOQfybE0JeT2dfp9
+         E2EQrYBtx78LlV41TaaRfGwu/7/JB4qjtmLnZ6lWJrFUtIuF5JC43ip0t3OobMpfBM2C
+         Jd0Yk44DMAvvmiP3MbDAQpsU5EPqS0q3ueWu7GhVR4Eu/b5m4BrwxiCSOXN2sPicJEx+
+         P0jE+TnPrM3s62fnfrzv0cqngX60U6Z1+xoonzEN4rzQ6aUGiJfG55H4t+iVdJBkyXv6
+         kElcotMkMeWvK38Faw43a++o0wNMckjRDOGLxaK1xbDgvGbZ404rrC+Oo6eJYxfWVszm
+         GIPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763563557; x=1764168357;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NJMGAa2+Lu+uUZPIeeGfyW1+Aax12kFvvU8qnzPSJ5o=;
-        b=kKLobHA682DGMPXXGXITWPuIhEKgzSCzDjQjsTW9EU5BW4sdRyU7sSyUYYKRX6D6iq
-         AtLIxXBqPcrVwERb7wt8USHjJKXO4d2ac8UNkTOrDfqgO+oDdm58p9jb6SMfyVa0kZe8
-         8889ijiPXDcF6xR8yGARuP+4ySDWRZPVCl+NAq0nFlERnwUBAs8SxrmUDs9vM4SIGHuB
-         k8UUBlSz4JTRp1FVqSk7oxuwmmfePnkq3aePAuih471ezB3QqyuAi/kO9jiEktzAhdIS
-         WUV2X0e6wYs/Fy6c/LzvRGOCiuBbBGPBfdkHKCUn2dFjRbvs329KuWO6Yn2e8nDxQltq
-         AtDA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgqSU51/mWdJJZ9dOzBH3oByXpHaUFGQ4M9YDzYGFjNJogDdA/wGI41A8z77+oGDHHJ+c7PIPWTrU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxfpjiCxR31jjx8y5h21esnF+Ag71RERQ4QirafAYm/DmJ7XUa
-	Ci2TptyaimISGcNboVOjfRfURGhm3rEz4/FhOt2XIMfzEoLxCgpdD+HrP/tKITXSYcm6YWVxoBM
-	ufGkCR46THeCncKjTM6txbBznWz6YjlrdxXEKecEuMA==
-X-Gm-Gg: ASbGncv4TA/7zGKTpVgcZfgGdnrWZspdkAWUVfFYAaG6ncyKaJ0z3HOyQSarALggwtU
-	l9eR6ftheJMNKs3j4isRqD848lIweCmmYSAOa+hjiUp1OEbK6CV97IQEOtzZz+n/XRRRWWPT7gF
-	WjJmKSrRdH84vG4kkZJ/ID5Kb3kFT9+K9nXMCv8o+sQPapOPc2AJlSwvb1pmd5lxKNicCUFAWeg
-	z/0Ot4xpEwbOMZlpfAvRrEhRuhwnTdI43rhdEj21f7TMNPAyoRPf64GqUg1FNiZvuQOrkPJfF5J
-	64wQ8gCO1JdR88znV3Ara2FaO+s=
-X-Google-Smtp-Source: AGHT+IFNbY7iWhq4KbUbMnlS79MQcbD6GBMPJY08+mTEGSXDShLEyEtovu6G5tHIiB5Xtpsj0T0pgNCduWGlE2Qn0mQ=
-X-Received: by 2002:ac2:4e08:0:b0:595:9d86:2cc7 with SMTP id
- 2adb3069b0e04-5959d863118mr1368283e87.39.1763563556244; Wed, 19 Nov 2025
- 06:45:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763565710; x=1764170510;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cjXruME0Ouu82XWrp1Tzzei1PpMyOyh+DAHkVu2G52U=;
+        b=rirhuT3jVKzTUY8jVuzFeytu09RSfDLjbZf2S47RkuH5OBuMiatXHI3cJFJSvGeCW/
+         cy1HA7nTVN7wrHXKUtmpoih3Wk8GFRqWjwI93xVLYDaP+9+Rcf35/Vw5s0SKA6cL/YiX
+         wU4ErxsSD6xWMVthB7AZQQNuyPj1bNNfKj5KUZlYmW5X3Ax+fZAQumuKlRBiMkLiuodn
+         LJ/T8/GxzxNVUwZjlD15PhSyml8WkWRN86hIPBM4gWtYQ58QykrWBFUIL4pQDp4yctcj
+         II8qztVySd8IVSX1mIwsu6P/nE3e5wGtEVtuzkmBN96xWZdG2wqKcLds14c0NelLG9X9
+         FJjw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmXoQX2YvZeU2E1lJbHmzgdorYApCxcCFZ7IQ2K8hRflGTlp6JlP1iBw+FgIyUZ496APWDf2czeoE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlomdxxLTFAYX8hEatt+YimaO+beuDkcngaObkhH2qCLtAdExA
+	BjY/jnMTZwgT6Oa+//f53/Emurd9Kk6oNQR0iHsmxnxV2GEKFtG0UcfJkrBMRI7dH6k=
+X-Gm-Gg: ASbGncv81vZFRmu/shxvB73RqbOSdXxk9XutbdeGSaRuUEpHJMoJ8G0Ah+ReCphFqoR
+	nGtIB5uyAJoJGreidkcwYgmr+e6th/j7wtkwRK9SBfOywrQJn3x4mdGXEWLFzcce8TqD+39PvpF
+	i5eGmQSC6uW6WN4rlmkYzYO4gv0wi5I6gVy/P6cZARJOkZRxnGtWR4L3vhGFN1cKq+tzI47+knp
+	p80WUgiHrPVoYgocsVMiVrXKDVsqmh9Brn2DsBuEVHhV9Fwfe+SHwu7cf9bFiAWJ85662FktkHK
+	Jl/xaOHHxEPkC7nHEQSdR5tIN0hP/4boe3O1jtn1oWdl4JSZK3vTfKohHtwaJm/Mc2AUuB2TxHR
+	8p+wsjlfdFwFLs1EJD0mz1XaUVVWmFdJ+G2WU0X8abHequbbReXDoU6pqknK6qmLngmc/+hbB4m
+	Nzy/4j
+X-Google-Smtp-Source: AGHT+IHDrTb9WmcmiSAl+5yblnjYWbZRzDWbcbz7wdw9OvkhjWzjaQgcBhRc2/vJCHDxJ83+5+VEfw==
+X-Received: by 2002:a05:600c:138b:b0:477:7a95:b971 with SMTP id 5b1f17b1804b1-4778fe882d9mr219494405e9.31.1763565710087;
+        Wed, 19 Nov 2025 07:21:50 -0800 (PST)
+Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:c10a:203f:120a:d2f9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b1076865sm54429375e9.13.2025.11.19.07.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 07:21:49 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH RFT/RFC 0/2] mfd: cs42l43: fix GPIO lookup for chip selects
+Date: Wed, 19 Nov 2025 16:21:27 +0100
+Message-Id: <20251119-cs42l43-gpio-lookup-v1-0-029b1d9e1843@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aR2Uo++k1NKkk2sj@opensource.cirrus.com> <CAMRc=MdFDAmqcJ3PMsTbeZUb9imM+fzHzQ_9mQ1T=syDoCcQJw@mail.gmail.com>
- <aR2gVzKhfN38MHAR@opensource.cirrus.com> <CAMRc=Mck8MiAm_nxY_L6Zw4cH-vYf24zSkPp=bhnUw68Q6FV=g@mail.gmail.com>
- <aR2i6lNNWEbQk0fx@smile.fi.intel.com> <CAMRc=MdYcdrQSDWKDHrx4-Y4-y92AQqr73MoRC3ws-X==SL0MA@mail.gmail.com>
- <aR2o2R30TbVOcqZe@opensource.cirrus.com> <CAMRc=MciO0WYejOYZduqE73U4OVTxcaMfe6Sv1VXWJWL2FFNmw@mail.gmail.com>
- <aR29uKW7yLxws9jA@opensource.cirrus.com> <CAMRc=MdXNXQhE9zi=i0x0yGCi0fKQNU8_tn2_Uy24TAhxG7BRA@mail.gmail.com>
- <aR3FnUNO4DyCdiLD@opensource.cirrus.com> <CAMRc=MebbjT7QAn8M0q0MsbRhTA-CUNKmo4nUPgXBXrmU-4D6g@mail.gmail.com>
-In-Reply-To: <CAMRc=MebbjT7QAn8M0q0MsbRhTA-CUNKmo4nUPgXBXrmU-4D6g@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 19 Nov 2025 15:45:43 +0100
-X-Gm-Features: AWmQ_bnZtTgzygHBpR-X6aXdiOQHeNYcXbyzkWVCiy1Jv8qXBxuj7-eVz3Hr9dE
-Message-ID: <CAMRc=Mfo_0reVCxZrBNr0YA1mvUOH9M3bLD6mfCwBgObvV74qQ@mail.gmail.com>
-Subject: Re: [PATCH RFT/RFC] mfd: cs42l43: setup true links with software nodes
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	David Rhodes <david.rhodes@cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Maciej Strozek <mstrozek@opensource.cirrus.com>, Andy Shevchenko <andy@kernel.org>, 
-	linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHfgHWkC/x3MywpAQBSA4VfRWTuZCwu2ygPIThYuBycy00yk5
+ N1Nlt/i/x/w5Jg8FNEDji72bI4AGUcwrv2xEPIUDEqoTEqZ4+hTtacaF8sGd2O206ImnYl8oEk
+ MGkJpHc18/9cW6qpJ6qqE7n0/sHJ2A24AAAA=
+X-Change-ID: 20251119-cs42l43-gpio-lookup-3e3509bed0b3
+To: Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, David Rhodes <david.rhodes@cirrus.com>, 
+ Richard Fitzgerald <rf@opensource.cirrus.com>, Lee Jones <lee@kernel.org>, 
+ Mark Brown <broonie@kernel.org>, 
+ Maciej Strozek <mstrozek@opensource.cirrus.com>, 
+ Charles Keepax <ckeepax@opensource.cirrus.com>, 
+ Andy Shevchenko <andy@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
+ linux-spi@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=866;
+ i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
+ bh=oDSK2ULHOlVmjBMh66/oyeBlMdWtYVadz43n1YwCd/8=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpHeCIxJHiYu69oAt21idI2uffsvUlJ+5INTLKr
+ o4x198QCGyJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaR3giAAKCRAFnS7L/zaE
+ wxMXEACW5t53Uo9Ljb3mqUgjQMFgXk59bsWrzacvo/BsgexbvWG22uN53mHLlWQ/LH7OTiKzrBS
+ uX/9tW7T4/mGwf6jhk7rdXKdxZnRG6oAPvQkfPBYk53GdW3HiF9khTaQ5p8GO1hqKdLv9wwSkBF
+ p0NhtauwUm64dFdrEHegtuT9E1F5+0IQlhun154LrjTQmXsNr3QCyzAnMiLOEMuvDTOi3iKCHHY
+ sXSXOaN8o8uWTNXDWuV5l7olIK0dT2sgS+9iAH4SNh+ikFbewo125nn+076pR7fL+XoxHRI1Tn2
+ FepKp+T0Yi8dLwzs1NDa9Gc5I8gx4ycet7MrhGcoP8Du9XaGvU7euefD/n+HFUVgRNuYP5JXNYh
+ XxokJiQzpXxswfPOY73+HBN/5I0huqmdBb8ba00T9Hq45soqJGi0JULPdjxiE/zbcWXHLueCT+S
+ FItqYon7LTeq/cbE2wxQbQ0qpu7kCrIrr9bzORyE3RBcrfD6ATOQj2YUb8g/CHKLPBduvW8n7Hj
+ aMenyrSiPm/3c01sgHRgR0NoNIJBdmCFnMtSppo6gHRpB0a/IUISNhWaI4qUJOn2O01i4kOydUK
+ 3LOMCGr3CpiLWR2LAVq2BbBlbqzclREzbwusrNL7FpCEmuBuMP+VMaCfdWXpAS81tTC4rom1p2H
+ r1dSsJ65CNS4lQA==
+X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-On Wed, Nov 19, 2025 at 3:09=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
->
-> On Wed, Nov 19, 2025 at 2:27=E2=80=AFPM Charles Keepax
-> <ckeepax@opensource.cirrus.com> wrote:
-> >
-> > I think as Andy pointed out though the first 4 patches in your
-> > chain do loosely want we want. Previously, we used the name to
-> > point to the actual pinctrl driver, your patches should let us
-> > do that properly through the fwnode. So we can drop the pinctrl
-> > swnode and just have the cs-gpios bit point at the actual fwnode
-> > instead. I am trying to hack together a strawman but its failing
-> > in a lightly odd way. Hopefully I can get that sorted fairly
-> > soon and post, or I guess I could post a version earlier if you
-> > wanted a look in the knowledge it still doesn't work?
-> >
->
-> If your solution won't work after all, we can try using machine lookup
-> instead. We have all the blocks except for support for the "undefined"
-> GPIO in machine lookup. That would need to be added.
->
+It wouldn't leave me alone, so here's a proposal to address the software
+node issue of this driver using GPIO lookups.
 
-Just noting an idea: we could set the key field in the lookup entry to
-"ERR_PTR(-ENOENT)" and use it to signal that we should return -ENOENT
-from gpiod_find() if it matches the consumer device.
+Link to the previous idea:
+  https://lore.kernel.org/all/20251119-cs42l43-gpio-swnodes-v1-1-25996afebd97@linaro.org/
 
-Bart
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+Bartosz Golaszewski (2):
+      gpiolib: support "undefined" GPIO machine lookup
+      mfd: cs42l43: use GPIO machine lookup for cs-gpios
+
+ drivers/gpio/gpiolib.c    |  3 +++
+ drivers/mfd/cs42l43.c     | 23 +++++++++++++++++++++++
+ drivers/spi/spi-cs42l43.c | 35 -----------------------------------
+ 3 files changed, 26 insertions(+), 35 deletions(-)
+---
+base-commit: fe4d0dea039f2befb93f27569593ec209843b0f5
+change-id: 20251119-cs42l43-gpio-lookup-3e3509bed0b3
+
+Best regards,
+-- 
+Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
 
