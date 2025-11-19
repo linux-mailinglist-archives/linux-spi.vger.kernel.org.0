@@ -1,100 +1,80 @@
-Return-Path: <linux-spi+bounces-11308-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11309-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94F7DC6E425
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 12:37:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21BEC6E452
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 12:40:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF91C4ECE57
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 11:29:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 5F9FB2E40A
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 11:40:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F6C34575A;
-	Wed, 19 Nov 2025 11:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41809355024;
+	Wed, 19 Nov 2025 11:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hq0aZQis"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS17QJo+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363A126B2D3;
-	Wed, 19 Nov 2025 11:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7F1354AD7
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 11:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763551770; cv=none; b=JUrhdLVWe0DJjPKqfBgiyZCtKek34jL+OjfoLuf6Y5q5H9eVC7HPCiynMNfMmmvzCBY0HPE/2EQwkWRHZXjbX/YAosiv0TaFX1zWhU3IlDVhIZP0vVN9U/trTDandoaWiMVkMmq98MIQWMQKeP/svHDfv3O2ZIlV4z2JsjMCskY=
+	t=1763552440; cv=none; b=lnQD4DrtmKv3NMDaThogo+MUk935fB1bRKwIMkJFqIqa0g/Fb1DW8B28J+GscazTETvr7cFytM/BGTOIRQeyoH984UJFaByMRWtL9hWmsig7EGk6xfczuZ7SdFjy2rQcrQjPSO8jpccL4mwGb5nF/gjFy6ELifs/fMEkuf/OdpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763551770; c=relaxed/simple;
-	bh=XBnDVEqfMXjNli1nS3N7yLk+SnIk7BTCbKS34iN3tJc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=jtzNrd/DjJs7ROrPX/B2TDFDnxxdRdqE4sukZgS8N+J6VPzbMI/vwxlevJlQjA9twQf63vWF6Z2RV9kacr5mPxnFK0y+9AY6FMJEgHRb52Q1hiTUB8ydsjJMdvCvnBLDvRiJqFcc6gC6ZUlWRsPlOzIadDnYW9rfMd2f6t2n3R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hq0aZQis; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A85BC2BCB8;
-	Wed, 19 Nov 2025 11:29:27 +0000 (UTC)
+	s=arc-20240116; t=1763552440; c=relaxed/simple;
+	bh=CDHNpQxa44dLrxG1dMA7W6bhjrv1bBFrjY/GTLXUKEU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=UghatsYmPp3UcsAaA75euOqB/uSATiTbh8wXBFU0b7eTgwyaWgIIMvnrJFBvcxMHJj/BSSu1bwr0XivkUycNi0JlvZkyG+jLmV3JR02UE2pU4xn5nef4sUNza5uGXZBkbgWhT3qUi/4dJ++h3YwNcAh/QHEz30KBwo/FVJd4wAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS17QJo+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60ACFC2BCB0;
+	Wed, 19 Nov 2025 11:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763551768;
-	bh=XBnDVEqfMXjNli1nS3N7yLk+SnIk7BTCbKS34iN3tJc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Hq0aZQisDxA/1XOPMyfCmy+BjDM/UFO3Nl0Z7bwNVWFS6zrJU2eSKcCfuK5NfB4gO
-	 VkC+1Nep+qJg4xUeHhTFfiUecHU93v6yZw0mrBPW0qFv3d5VTalXgi95scTaRTUhb2
-	 7JOhB3RFCRfs0wDN243euVZRwj9Blq8g4jtxAmGtXSpjpUE5nGt/NaNK4Ez09FXSNe
-	 kKOH3YJZXH6cwsXBDRHvvDjNFOpK0U38qEvr+i3QmL4jqIYvZa6+gaveRv3U5iZtw3
-	 CiKcbjIDacH7sNWVlciWfYO4vedUVupCkySZEdMzAK9/v27FLzpP6RtecVJXA72/av
-	 +h9+suDQ4k4yg==
-From: Mark Brown <broonie@kernel.org>
-To: Chen Wang <unicorn_wang@outlook.com>, 
- Inochi Amaoto <inochiama@gmail.com>, Longbin Li <looong.bin@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- sophgo@lists.linux.dev
-In-Reply-To: <20251117090559.78288-1-looong.bin@gmail.com>
-References: <20251117090559.78288-1-looong.bin@gmail.com>
-Subject: Re: [PATCH] spi: sophgo: Fix incorrect use of bus width value
- macros
-Message-Id: <176355176717.1842480.2581189762580750444.b4-ty@kernel.org>
-Date: Wed, 19 Nov 2025 11:29:27 +0000
+	s=k20201202; t=1763552439;
+	bh=CDHNpQxa44dLrxG1dMA7W6bhjrv1bBFrjY/GTLXUKEU=;
+	h=Subject:From:Date:To:From;
+	b=IS17QJo++eFvNz+xlZuHZhrByq4UIkMQfusWqY4+Mpy/oTFFJq8r953/XztwDbYgE
+	 SzIb283jFFOpXdIWDmdvzlBB6/yMElMh9PDAJb2twvZTv5EdOxl496hu2uXJLCDJYL
+	 3cYhkdTy/ngYhsSAWtkK2DPI97T3zotcuPxbxHoNmVRwB8LNZHnDXt9MyJJVjeThox
+	 A4/4NpMAyVSvxGzWUnxKy3mF0wSsa8LoMHq11kh22RpDUFbv1tPQ9Z3O7t5zBmeKP6
+	 KPG6Nr1JDhHC3oQK7E1zoXKJ3/4j2rkRBiX8Yn/W7jmRLK3Wtmr9m2bB1i29tmPf6T
+	 3WT29DHJ3wOYQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B1371380A97C;
+	Wed, 19 Nov 2025 11:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-88d78
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176355240432.742193.13399678986762766039.git-patchwork-summary@kernel.org>
+Date: Wed, 19 Nov 2025 11:40:04 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Mon, 17 Nov 2025 17:05:39 +0800, Longbin Li wrote:
-> The previous code initialized the 'reg' value with specific bus-width
-> values (BUS_WIDTH_2_BIT and BUS_WIDTH_4_BIT), which introduces ambiguity.
-> Replace them with BUS_WIDTH_MASK to express the intention clearly.
-> 
-> 
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: sophgo: Fix incorrect use of bus width value macros
+  Submitter: Longbin Li <looong.bin@gmail.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1024153
+  Lore link: https://lore.kernel.org/r/20251117090559.78288-1-looong.bin@gmail.com
 
-Thanks!
 
-[1/1] spi: sophgo: Fix incorrect use of bus width value macros
-      commit: d9813cd23d5a7b254cc1b1c1ea042634d8da62e6
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
