@@ -1,111 +1,83 @@
-Return-Path: <linux-spi+bounces-11355-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11356-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D19C2C70440
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:57:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD9D3C706C9
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 18:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sto.lore.kernel.org (Postfix) with ESMTPS id 74B5A29FC0
-	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 16:57:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A3E6F4FE8D8
+	for <lists+linux-spi@lfdr.de>; Wed, 19 Nov 2025 17:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8E4301474;
-	Wed, 19 Nov 2025 16:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A86C9341073;
+	Wed, 19 Nov 2025 16:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DYC60abh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pfoogt2B"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAEA36C5A0
-	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 16:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C001359F8E
+	for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 16:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763571136; cv=none; b=hhtU1W9z536apRvfiNQdpT96Bd0rD+lCiZs+qaYi01xiD4koatzOxO8S0MNz+9YHi+8/tukwBYZCPbJS30TLhRzVxdzr43KjRnGoHh6XVSb7JPpHVTQPShnXiJPmOsRMAhuUvw7S8hySoEj9zztmksTeIa1pTmW9nhx0mn3yt94=
+	t=1763571472; cv=none; b=GvUx6vnVQuKkhE1JFtNnhGV94DW3C5xNVE91oM+QQVsC7r2MSbP6cPlUOoniiu8xZV/MpR24OYQkLzg6SUEHj/coBj6KwKDVobLCSXAtZiZ/P+Ne27JdpWZ/08lnHwWIVDWrmmLB7O9aWmmL0NObwHrODgczaceez+LiOTRCg5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763571136; c=relaxed/simple;
-	bh=vcjFWfWOR2yjv9sI5u/+MJAF+m7NirhgjHp5gOavo68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GRRzFxH4hDmOgN1Mq3GliKeN9uP+Yjsml84939xawY5FDrfiolBuB+F0GHevcFBpN7XWU1kGCJrhaED6IbvaR/3y3Nat9Y2d6/WArFxMxs6h0mQK1q9I15FGeLG7jTSgBAhFquSLYUT//wd9A/Pw9bmfe8nuQ47sMwGCb4YLYwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DYC60abh; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b737502f77bso683242466b.2
-        for <linux-spi@vger.kernel.org>; Wed, 19 Nov 2025 08:52:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763571133; x=1764175933; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcjFWfWOR2yjv9sI5u/+MJAF+m7NirhgjHp5gOavo68=;
-        b=DYC60abhm1f5UWLW4iaVs2unNLoBN4dhoRGoTW7GmcDwLAoaIP9dFBhODvzKcl4mhY
-         FQKzgk9xvUtNPUij6Lxdf+q7RrZIojuHnF0Pp85TxG4Txe5XOFe7syHQuryH87CVzxHT
-         E2BDFEgcZKIpzD2uiKzWYd6UXjtjIuDl3GxKdT/GC68i79/0oRL5ax9doOmYefQG8j7L
-         2nDVr6RacsvlAkT1tycgChWLkqW/TfK7yYeuFJaDaN7Wf9lmkr6DvcjKX86YwgHsxWZH
-         b52wIJ8s5rrmQI9Zy16CIsuEILytgE0vW2bD0apMxba+Isch9lQfuXajkIfMsu9ii8KH
-         A6oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763571133; x=1764175933;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vcjFWfWOR2yjv9sI5u/+MJAF+m7NirhgjHp5gOavo68=;
-        b=j8eiG4nJScLs843lc8r0ZdTGEOBC1zaSjlWUTJS9GLKHHHX1sExK1/s1f1FfPzWj56
-         1NdYBUXsF62pf9BkKzmxeD4nplFuOErXryd5rqsI9vUbtm3re/zYSoxoBy6TZUSL3HTV
-         o0jTD5y4AzrE5zcxA+XNZQTdehYbzf66lAeHGytGvUkbThTnXuSeqaGDGuUs1Zg3ZokU
-         F0jjzbawuT6EjWKooOwmwYVCIX0t0IH8WsqEncaIfEyoeWZS9FgTekKf4/ruFB/AUOEJ
-         zTp+G73cL6u147aUKMRHXccp4sNUUNLssV6SF78c4mVh0bujjjICbhal8ib/ukz3hDPJ
-         xTAg==
-X-Forwarded-Encrypted: i=1; AJvYcCVW8joIZsknISVWqGJVfeD//2XWgNlRKZAxw/V1NbpCidYp7TuWFTQA+y/FH6xX4YCRrc1BSGPNFZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCz3Eyt/WDeAV8MZzk4bVYNf6khu6EyI8NcTcmdNBCBcKe6KdU
-	8tc/GN/j//LnYihrmJCqT1DEU3/JxxakD5giBw0P4cvKPox4sbGHKeF3XYsnwpHi70yb+bJjbwq
-	dTbiGmMA0+kD1kqwUvgOsu74VD/WPASw=
-X-Gm-Gg: ASbGncsNvma4caDMiDhmHSW29jCg+GeAPO/fepb8Nx1qV/O34gZhWoBOq8NeocPSpuM
-	FD0EnkiWwW/dZov5PoJXqf5pHy0l5sZkJMFQ4itJ6ZSa8QIG2bXmvb4IV4+IsXhitkNZqvs48yG
-	fSGv68DVFGFeoqNUnoQma58waq3j1j3p5czxMDwpfHyIOeXp5ZACayDiudJI0g/8NhMIQ/RoX7j
-	77uT1R1mbzujfyKIkTB3P3xqhAWJjwjvYT3F4y5EZIkECApIe3OfCRfy9X3PKWCsEtcIKY+2kq0
-	Dpf4GIayj8FDyV17yNdsdLc+6+mrXTjgaPz7fpu8SMgmdGkYA0EpbDLMlDNVKGfdErC7qww=
-X-Google-Smtp-Source: AGHT+IG79/yoAniLg5m6pTLusTRypXvDIibAvx3mJng3rzludQe6A04i/KKfcn3WLMTF9und/v0GYqvS4b0sDflHd0g=
-X-Received: by 2002:a17:906:7309:b0:b45:60ad:daf9 with SMTP id
- a640c23a62f3a-b73677ed721mr2190487066b.3.1763571132962; Wed, 19 Nov 2025
- 08:52:12 -0800 (PST)
+	s=arc-20240116; t=1763571472; c=relaxed/simple;
+	bh=vuhvuifm6Ys1c48/C3ZPuzoTKYyVvyUyElZ2IkjJtUw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=DtAaDKcOD+HtwPUNUig7y7V2TBSYJNVsFp0K7KnPu1D+ta2KkpjJ89yepKIBL/WSdDkWXlA0gbtyElseHrJeXnhr9riBlqxcBGK6mp55Srk2BL3Km0BZIA1ewosfU2DHXjEtAihQ0eVv9uYKU47qu7/mKs46TCYtA71ujeYpo5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pfoogt2B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C32C4CEF5;
+	Wed, 19 Nov 2025 16:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763571472;
+	bh=vuhvuifm6Ys1c48/C3ZPuzoTKYyVvyUyElZ2IkjJtUw=;
+	h=Subject:From:Date:To:From;
+	b=pfoogt2BvY1LAwOE3XVurma3cGOxxqxHheeWh6IrOFC283szEbEiFPeEZbldwPEZk
+	 DCB3lSFrFnSkM8igX2QzImBohrVdLXC027iHdsLvR1YWmDawsh9qER0hyGkh4wucua
+	 cDWW+zydWLhPvFO/7fay9o/mzqrnLulFwxsTJ3js+iK65RnfCeDoTnuBpSpbxNWLC2
+	 FB4gfAvWzs+VReFnq9TruzjsLaHpix3bFCJ3LQ0vMlpzo4pogsYzI08hgdxtGHdpV/
+	 ek0mYw7PTmkbCwoWqKXoCARW/mn10K8Za4yITzGm4vLAIShg2OEMsY8qAorYBTNW7W
+	 rISPShoZerMWw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id DF1CD39D0C21;
+	Wed, 19 Nov 2025 16:57:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119164017.1115791-1-ckeepax@opensource.cirrus.com> <aR30JbIbx3MIySjM@opensource.cirrus.com>
-In-Reply-To: <aR30JbIbx3MIySjM@opensource.cirrus.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 19 Nov 2025 18:51:35 +0200
-X-Gm-Features: AWmQ_bnRsmqZgCIFOlKbUCCwqqweHfcYam2Yo1Gl2z3a9M5AASJDSi9azoDaq0U
-Message-ID: <CAHp75VeQgq8AFSPAOvtq+U32KAWO+NOZ_=LXWA_r5vRzkD2TTQ@mail.gmail.com>
-Subject: Re: [PATCH] spi: cs42l43: Use actual ACPI firmware node for chip selects
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: broonie@kernel.org, brgl@bgdev.pl, linus.walleij@linaro.org, 
-	andy@kernel.org, p.zabel@pengutronix.de, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, bartosz.golaszewski@linaro.org, 
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176357143739.879588.15378177640929492094.git-patchwork-housekeeping@kernel.org>
+Date: Wed, 19 Nov 2025 16:57:17 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, Nov 19, 2025 at 6:45=E2=80=AFPM Charles Keepax
-<ckeepax@opensource.cirrus.com> wrote:
-> On Wed, Nov 19, 2025 at 04:40:17PM +0000, Charles Keepax wrote:
+Latest series: [v4] Add RSPI support for RZ/T2H and RZ/N2H (2025-11-19T16:14:21)
+  Superseding: [v3] Add RSPI support for RZ/T2H and RZ/N2H (2025-11-05T10:41:37):
+    [v3,01/14] clk: renesas: r9a09g077: add SPI module clocks
+    [v3,02/14] spi: rzv2h-rspi: make resets optional
+    [v3,03/14] spi: rzv2h-rspi: make FIFO size chip-specific
+    [v3,04/14] spi: rzv2h-rspi: make clocks chip-specific
+    [v3,05/14] spi: rzv2h-rspi: move register writes out of rzv2h_rspi_setup_clock()
+    [v3,06/14] spi: rzv2h-rspi: avoid recomputing transfer frequency
+    [v3,07/14] spi: rzv2h-rspi: make transfer clock rate finding chip-specific
+    [v3,08/14] spi: rzv2h-rspi: add support for using PCLK for transfer clock
+    [v3,09/14] spi: rzv2h-rspi: add support for variable transfer clock
+    [v3,10/14] spi: rzv2h-rspi: add support for loopback mode
+    [v3,11/14] dt-bindings: spi: renesas,rzv2h-rspi: document RZ/T2H and RZ/N2H
+    [v3,12/14] spi: rzv2h-rspi: add support for RZ/T2H and RZ/N2H
+    [v3,13/14] arm64: dts: renesas: r9a09g077: Add SPIs support
+    [v3,14/14] arm64: dts: renesas: r9a09g087: Add SPIs support
 
-...
 
-> Apologies this probably should have a fixes tag, or two and I
-> probably should have marked it RFC. Lets have some discussion and
-> if people like the approach I will send a v2 with the tags
-> included.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-At least I don't see anything quite wrong with it. But I probably need
-to have a fresh look when you send a v2.
-
---=20
-With Best Regards,
-Andy Shevchenko
 
