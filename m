@@ -1,127 +1,148 @@
-Return-Path: <linux-spi+bounces-11429-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11430-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E023C756E2
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 17:42:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C60A8C7582D
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:01:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3984B4E8C28
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:35:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B20D35A1FF
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C39F363C6F;
-	Thu, 20 Nov 2025 16:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BAB636C5AE;
+	Thu, 20 Nov 2025 16:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSahivo4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A83A30E843
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 16:33:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086FE346FB6;
+	Thu, 20 Nov 2025 16:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763656420; cv=none; b=doo74dk9gqsTCLpwM41vPiEG6hZzxWUkIeRprbpyCmd3Q5NZSHxHYKZxrSNy9jcvaWiKZso9LfpsmZPLO4Ds5IUYU3hspTvE0AoFSwyheA5K1Hj36kkrOB4Ryz7nI4oHMChrrj9yTMULS3IcffRxwkvzA0T3ko8HMeY/ZygBURU=
+	t=1763657774; cv=none; b=BRa2X+PwXrYczDMjWMZaZKa1F1HCs2mmAymcrHQTJ7a+oLG+pGfKCMvcdoqFVUXA+8zcV5LmckrDj60MTILZZeW1z44pD6SODU42YQXVyv7DQAkC52mFuJSH8wc1eZbYLh9vakh66Pw+ELdMqKIar0XhW3CyYKggTZ19rZMgHNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763656420; c=relaxed/simple;
-	bh=BymrWDzm1aaf+ik9dAyehkuDPweXjS+gzZgWHshEw34=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZP6nyDaHckSmDjowRhgOYLSGVFDvRvA2HnVGHtpcBMekYo7gXB+hjhkX/vDpmo2rvyRkiRo6i+1ScWII7j8hg936O2GIQAMqtj+fSd+M/XBczPq/sCRhMoZjc9Zy+FUK6y6NiUll4Ixb+gpobsODmEbRd5EZcES59lFKM1IZiWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1vM7av-0004dB-QA; Thu, 20 Nov 2025 17:33:17 +0100
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: soc@kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	kernel@pengutronix.de,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-gpio@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [GIT PULL] Reset/GPIO/swnode changes for v6.19
-Date: Thu, 20 Nov 2025 17:32:52 +0100
-Message-ID: <20251120163252.34760-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1763657774; c=relaxed/simple;
+	bh=t9Q9yr41mzdHwsulFJJPoiInuGQFkhYndZuaaWmqGGs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EhCB+vp+fUs42zhNwc6T7PGM322/HWJ81H+XivNpvISgaaY2o8Rey042Rwisdxl63LMsTZ9k0oAKNPDmP8eU93YPshTKOjaZLUn00KFLSl10rCPqC3dqRkZ3cpEYF8yUdJVQsVSR3VzxhDqwxnxSUyQBgfZ7EfLPMqcV9p/wAK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSahivo4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E1FC116C6;
+	Thu, 20 Nov 2025 16:56:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763657773;
+	bh=t9Q9yr41mzdHwsulFJJPoiInuGQFkhYndZuaaWmqGGs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NSahivo4AboebhUemSE9VXSvWYEbQP2pcQjUnnIhCSdTZ12cKC2Y4GzXlf3deEEsR
+	 cH11ZdHPHIhS+BFNMARHTMJGsMWa8zDuTzKpzK3WYCJzB6abP/hmYqCdjgCV+1I3+J
+	 OYRPCWrG8sFFnxqBY/i7S7vFmBw/jsxhQPoEboVRbjLx0BxEyjb5UJLx4gurSevIx3
+	 i7vMhmysR+wDFQe8i6M7VPoBb8f8dvBAuod7nsgWQAC1stcps9KkyMaD3uxuZ07sVo
+	 5dF0jMB8/ussjC0SY7Iu8KTNLgofOBZre0tccPBdE6SKaCHXXMSVN9RCbbebdcLmo/
+	 L4/2YhX/HTEQA==
+Message-ID: <c975030c-b5a4-440a-be4d-a934c2ab5565@kernel.org>
+Date: Thu, 20 Nov 2025 17:56:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] dt-bindings: vendor-prefixes: Add Arduino name
+To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
+ konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, broonie@kernel.org
+Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
+ naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com,
+ chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com,
+ farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-spi@vger.kernel.org, m.facchin@arduino.cc,
+ Riccardo Mereu <r.mereu@arduino.cc>
+References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
+ <20251120155825.121483-2-r.mereu.kernel@arduino.cc>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251120155825.121483-2-r.mereu.kernel@arduino.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Dear arm-soc maintainers,
+On 20/11/2025 16:58, Riccardo Mereu wrote:
+> From: Riccardo Mereu <r.mereu@arduino.cc>
+> 
+> Add entry for Arduino SRL (https://arduino.cc)
+> 
+> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> ---
 
-The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c:
 
-  Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-are available in the Git repository at:
 
-  https://git.pengutronix.de/git/pza/linux.git tags/reset-gpio-for-v6.19
+<form letter>
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, just skip it entirely
+(please do not feel offended by me posting it here - no bad intentions
+intended, no patronizing, I just want to avoid wasted efforts). If you
+do not know the process, here is a short explanation:
 
-for you to fetch changes up to 5fc4e4cf7a2268b5f73700fd1e8d02159f2417d8:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
+of patchset, under or above your Signed-off-by tag, unless patch changed
+significantly (e.g. new properties added to the DT bindings). Tag is
+"received", when provided in a message replied to you on the mailing
+list. Tools like b4 can help here ('b4 trailers -u ...'). However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for tags received on the version they apply.
 
-  reset: gpio: use software nodes to setup the GPIO lookup (2025-11-20 16:51:49 +0100)
+Full context and explanation:
+https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitting-patches.rst#L591
+</form letter>
 
-This tag is separated from reset-for-v6.19 because it may also be merged
-into the driver core, GPIO or SPI trees, if needed.
-It contains a single series [1] with changes to swnode, gpio, and reset
-code.
-It is based on v6.18-rc5, which includes the prerequisite commit
-e5d527be7e69 ("gpio: swnode: don't use the swnode's name as the key for
-GPIO lookup").
-
-[1] https://lore.kernel.org/all/20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org/
-
-----------------------------------------------------------------
-Reset/GPIO/swnode changes for v6.19
-
-* Extend software node implementation, allowing its properties to reference
-  existing firmware nodes.
-* Update the GPIO property interface to use reworked swnode macros.
-* Rework reset-gpio code to use GPIO lookup via swnode.
-* Fix spi-cs42l43 driver to work with swnode changes.
-
-----------------------------------------------------------------
-Bartosz Golaszewski (8):
-      software node: read the reference args via the fwnode API
-      software node: increase the reference of the swnode by its fwnode
-      software node: allow referencing firmware nodes
-      gpio: swnode: allow referencing GPIO chips by firmware nodes
-      reset: order includes alphabetically in reset/core.c
-      reset: make the provider of reset-gpios the parent of the reset device
-      reset: gpio: convert the driver to using the auxiliary bus
-      reset: gpio: use software nodes to setup the GPIO lookup
-
-Charles Keepax (1):
-      spi: cs42l43: Use actual ACPI firmware node for chip selects
-
- drivers/base/swnode.c         |  30 +++++++--
- drivers/gpio/gpiolib-swnode.c |   3 +-
- drivers/reset/Kconfig         |   1 +
- drivers/reset/core.c          | 146 ++++++++++++++++++++++++------------------
- drivers/reset/reset-gpio.c    |  19 +++---
- drivers/spi/spi-cs42l43.c     |  40 +++---------
- include/linux/property.h      |  13 +++-
- 7 files changed, 141 insertions(+), 111 deletions(-)
+Best regards,
+Krzysztof
 
