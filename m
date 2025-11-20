@@ -1,103 +1,80 @@
-Return-Path: <linux-spi+bounces-11382-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11383-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D023C73459
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:45:58 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A381CC73504
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:53:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1165A4E918A
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:42:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 763504EE15F
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925FF3126B1;
-	Thu, 20 Nov 2025 09:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BD630E846;
+	Thu, 20 Nov 2025 09:50:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sse2LlKd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QALSPEUl"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1923254BD;
-	Thu, 20 Nov 2025 09:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA0D30E839
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 09:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763631641; cv=none; b=NBP0BEqBstqyTJjAE5Uhg1T4peFUV0kBSiPvxezB6BKl3ahNt8azwaI0/gFCps6gSJkW5tx+DrJZTOmLSrm2urFPAKPUSjGSKAxJyqKP92JNIAE6vSAG/WMDB6f6Hc8r1WzuGqhYwQr9SZPeo7x9etIRPH0hqeD9EmETCeaWrys=
+	t=1763632245; cv=none; b=JuSIR0JzHkgSRxhIsY7HTruXZ2mFL+cwrbYf2/kA2vbIO05dkktaY59/C0ROn7kHUR7SN05+2un8ehyN+F209MuJg0WgoMT6o2DF+APAMtLuFztgWQ7In95YJSjjNqTf3jsXfzcA7UxdBOYWNBmFrRbyznp3UoZPgFK4U7vxMH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763631641; c=relaxed/simple;
-	bh=no0VPyTw7icF2zOkFEwABDlOo/lI3S6IIIyj6ujTktY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FmASeeFcRlk6p6PMYRpOuK40noxwJuHwJZD4uO96/T5nld5cOKxp7u8tHeM0weOi5Nx2FrJJC1Gg3gkL8yMkFjRxIjSV+BMcdaAGpTYeOvz1lEXJz6wtjo037Hthcu6slqV+fnOO25Iw9Z0oCnH6uzPYy/0H6ceD6ybBnL87TnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sse2LlKd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9003BC116B1;
-	Thu, 20 Nov 2025 09:40:39 +0000 (UTC)
+	s=arc-20240116; t=1763632245; c=relaxed/simple;
+	bh=Dljoid9YOEr/fl9u5wwb/RZ22ubbcxV8dQ+MNvVh4fs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Z8U4tg7Ks3jV538vGmWXUFQPi0M5qoyDFfWp42tofZ7fTYQRYCALBlpRFF9kqKSzVY5I4rdfA9RJDxJYBViKDk2eys4Hxs+M2RNgWvtks+2SrHr3/nLzxm5ADaaJfmwRyq6lODK9Pehh9i080MCBpuqAGBuaDvcq9b7bwqUAAEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QALSPEUl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE4DC4CEF1;
+	Thu, 20 Nov 2025 09:50:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763631640;
-	bh=no0VPyTw7icF2zOkFEwABDlOo/lI3S6IIIyj6ujTktY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=sse2LlKdtF2PIUw6SuvG0NQKkrLRzGH6K11yG5mjHxlj0oHOGvxcwPqoH1VOsJ6QB
-	 FC6b14pG0ui5Ftdubjz+mn3c+fpHjX1nqKK8y6MJUHgZSHlDnVe5gmxRzNGRo8bSyB
-	 UjOnoEEzXOjjq8wPcNqtAjouCSf00Eyoal7/6QSPttPyF7NFveo8WDEeB3jzK7OEah
-	 BGleVya59i0NvgLlKLdKxsSGy5gbe1fIQgleum44wNF79NuKj/PK+Bk+p46oX5YBbf
-	 +mGMGuzc1bVkEi6GlB5eMwc1rA1VDARCuDf0cX78jDdq2+GTQb5NAMQ1SSLPTy3k4K
-	 uY3jgGC9ns0sw==
-From: Mark Brown <broonie@kernel.org>
-To: a-dutta@ti.com, Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, srk@ti.com
-In-Reply-To: <20251119152545.2591651-1-s-vadapalli@ti.com>
-References: <20251119152545.2591651-1-s-vadapalli@ti.com>
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix cqspi_probe() error handling
- for runtime pm
-Message-Id: <176363163845.560683.16994547761881991962.b4-ty@kernel.org>
-Date: Thu, 20 Nov 2025 09:40:38 +0000
+	s=k20201202; t=1763632244;
+	bh=Dljoid9YOEr/fl9u5wwb/RZ22ubbcxV8dQ+MNvVh4fs=;
+	h=Subject:From:Date:To:From;
+	b=QALSPEUlWtcp9R64aYGUw0n1SF/KZ60dPf735XEjfYI3jwwrEecai0bOuW2uFuCsm
+	 PGucDiD003tGhVsLZ2ATe9fqHriD05bP07f8she4eJP1odYGH8ut1PZwu76M4Sffdm
+	 K7sn+M/rxtJ8LOANndKIc+XaVBwtXewsaeHWH7ssftMaCaxYoXWYTlILsLQqCoiuaU
+	 hXSGUA8nORVOjJpqWUZ+HpshHfMlA5MZO2gIM1nogLGfpVTtXasSTW0jjOWzbM5g3+
+	 2xN3zlH73PY3Tma6P+65kZfoDyhs1eulb7Ww7zWE5r4oLkQ55nkBn4AUN1gqKlYgrt
+	 ycw+c1BNxRifA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3733739EFA65;
+	Thu, 20 Nov 2025 09:50:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-a6db3
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176363220982.1552940.17124487842064660914.git-patchwork-summary@kernel.org>
+Date: Thu, 20 Nov 2025 09:50:09 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 19 Nov 2025 20:53:53 +0530, Siddharth Vadapalli wrote:
-> Commit f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier
-> to avoid imbalance") relocated code but missed updating the error handling
-> path associated with it.
-> 
-> Prior to the relocation, runtime pm was enabled after the code-block
-> associated with 'cqspi_request_mmap_dma()', due to which, the error
-> handling for the same didn't require invoking 'pm_runtime_disable()'.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Patch: spi: cadence-quadspi: Fix cqspi_probe() error handling for runtime pm
+  Submitter: Siddharth Vadapalli <s-vadapalli@ti.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1025391
+  Lore link: https://lore.kernel.org/r/20251119152545.2591651-1-s-vadapalli@ti.com
 
-Thanks!
 
-[1/1] spi: cadence-quadspi: Fix cqspi_probe() error handling for runtime pm
-      commit: 295fe8406a357bc0abb901a21d1a554fd4dd1d05
+Total patches: 1
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
