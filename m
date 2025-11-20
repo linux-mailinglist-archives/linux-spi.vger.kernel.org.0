@@ -1,373 +1,149 @@
-Return-Path: <linux-spi+bounces-11393-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11394-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF6DC73E60
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 13:11:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85996C73F66
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 13:28:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 03FB0357B03
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 12:09:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8CB5B35748A
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 12:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099D4331233;
-	Thu, 20 Nov 2025 12:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077C4333730;
+	Thu, 20 Nov 2025 12:28:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1L+kfs7"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="PHji6EP2"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29DE331237;
-	Thu, 20 Nov 2025 12:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FB830AAC6
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 12:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763640543; cv=none; b=Tp5Hjs6/gKvlW5H7Fuf8YCDikjoVnB0D1m59m7ZDMWApVrQ2XN5sjkCZJd5z4G+fs3vyG6T+51DRxk6iKVq8alptFeVZ7dCxHTCjJIXGMHaopzJHy98zWzR53134gx34ypxChZ/eiekuP63bzakSJ1S/qqTbDkq60sAIy0I/p+Y=
+	t=1763641691; cv=none; b=Q4wLypZKGBFUjR2CPqTg6nxbdCkdsN6alaQDeT8ZgKWqSuMGhRETyequvdtWfWIyh4iXtCNAOg8wPPDpw8KWncZpCMmTUrUvnx8YbHqmSyO9jCt1JcM4lqPkI1l/UKr4Gw+nO0CzU49ceAhRvtJuaH88r69H/EodqY6S/eDVBpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763640543; c=relaxed/simple;
-	bh=Kh+Dhhd7Mq48Eq2DCUiG1MGuK5WuDse6vloL2WX0Aqs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kHf1l5WrYVHeZymy7m3mKvKe/cxHdbfIYcLV2reePh6rtl09b0i67LIEofEWuV3qJTacxH3GHIazqIR3RjfEMSNFxopUNVZ3vKVRekF2lPOfn74/ITkBX7IEmKFiil2i0N7DqJkSKnN9jV9OozwJ3gnTXWq27MyZUzmeqHDs630=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1L+kfs7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD0FC116B1;
-	Thu, 20 Nov 2025 12:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763640543;
-	bh=Kh+Dhhd7Mq48Eq2DCUiG1MGuK5WuDse6vloL2WX0Aqs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r1L+kfs7CGe/vasfbjB0QjaTVb+xUFth3jp6hH8huf7hgy9scMQdiQavWv7wC+wdQ
-	 z9B/5OwgIn8U0kPyFn9swMXSdh3TycqkabHGaOyVcgz+A08ZxjzYRV7/QoE3aEgWsa
-	 RqSzjOcprcfARpukSsJKBASaUB/Zjl5VaKKdZGSohzeiXfWMNR0GBMPpbBseUJxtUD
-	 jQHnjkeR2AXcQ2SnSeTVvgnVpq2NUjnjwAJhnsFgVGZ4fpYmSZg63Wm4NzFNSUTaCO
-	 lasND53pb+C/DtY9B37DVIm6C0OnZolnbFegmFea/4nOGw5l4A+iRJuzWkH8rKxWx7
-	 Mi0KYj1CIDV0Q==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Robin Gong <yibin.gong@nxp.com>,
-	Carlos Song <carlos.song@nxp.com>,
-	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	shawnguo@kernel.org,
-	linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.17-5.4] spi: imx: keep dma request disabled before dma transfer setup
-Date: Thu, 20 Nov 2025 07:08:22 -0500
-Message-ID: <20251120120838.1754634-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251120120838.1754634-1-sashal@kernel.org>
-References: <20251120120838.1754634-1-sashal@kernel.org>
+	s=arc-20240116; t=1763641691; c=relaxed/simple;
+	bh=P9H2efPbk/0jv8cNM4Qf1i7HtYICf5C2snOcL0Djqe4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TLLHPaiLFHlAW315GLkuHo/LMYU1U7MKAJCD+OPGjfjIrpO3UuSNm9UtJz1j9N7GPWaJ2NyuwcSpuB6oAAZ3CsRtzTluoEm83oGd0DvDVNNSHg5Pn7qcAyFnDgEE1xy4MrIiJ6OlNb1epQ9KXWirqNKqB7mPW+e4YxMOwGJD/Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=PHji6EP2; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-37a33b06028so7470121fa.2
+        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 04:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763641688; x=1764246488; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5bL2FhXRLpT1HcsZuSiUDRIw4ZCNtNP1rJvajASfpfw=;
+        b=PHji6EP2eSKiSJrDzL1V6ikL+YK5mDLAjrdl6LdKN0yflJj+sgHOo4G74/dQAcQhZS
+         4htzhqv86DTBJu0jTCSAexGNOVQ4UYcZtNde4TAUGvHY9TUCXApd4TNKwgRTa7HhXD4s
+         04c3ewxGaVUgEr3vU/8xe1qyUK0ApkpFcCamxWqfu/OXBvnH3ASn8c7DTk+bEFmRfDjD
+         OdKuI4kKqbQFdJKfpWk2IyIv6JijiWuu+wXpkehsGjTDFNiFweEVqjzRBJc7nDDdYJWQ
+         uEmXyU1BK82UZ38Q4czGOeiRww4YvssB4/3wKqlZ1WkhJV7isPuz7+0IWWv1WCLTX2Re
+         hmHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763641688; x=1764246488;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5bL2FhXRLpT1HcsZuSiUDRIw4ZCNtNP1rJvajASfpfw=;
+        b=XE0z7L3elRA9itD53xjxygr9JSZdRnLObR1TpnGCR7KJzzFFLWuKxtOusWgSliEOm2
+         VrAXZ2Vsep4nht6Fs318jOwUakM5PubcYTqSGmSoMGi9zpn2Qcb3r8V5fT8at0w8CUGJ
+         JEQ2Kgf4oO6vCjayVSq/1lChjDJ4WwS4eZUYoHJ5x8vW11Gk6kifRyZEN1RlLUE3IJlY
+         8Nx5zwlPC1czL8QeGOLHS+q9GYLi6J2m4L7Vo15ckRDkebaAaCxAm3uHVlQIbXaH+i87
+         JlVV8DQ4AQzv/Lb0i0tAD5E0y/MDuWaSzJCzhmAKJ0i+3EF5RMQ2wYWAdiLXg1ahgGvj
+         NbFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVpoEpyjuC1gYNh6XCKSQ9y9kTkBArx46T4KH5IkBNC2G2Or8JksIMW0ZZmv0btgb1gITPq6wjEGo0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxDNDYvCMfcP5b6jYIk9+iii1psp1FUj+0CqYT8lDnXLiJB+P7
+	56Oe/vxaHx47/2HFHS06VsayIfYLTzPYvUaCEzwE4+AXyvBHE+9hiT6zQUJhkYbSx9ErcYHfnqz
+	bcptIZun4cE8fedBT7dDYMU+ruz0CN3P0QfrnGMPB3w==
+X-Gm-Gg: ASbGnctzLE2gepxPKxA49eX5dTQAG8+nAMCWBaKH13LEdRXK9eGMpSUMnKo4tJyuteP
+	cqkmLOAK648as7W2V8Cln+RBftSr4mUiv0pRG+iTwmJlLcdA2LNCeKt+eOu91zzzirrxasPuIAY
+	mhs5LwG5BApuyLtawdq+jxVLHg6AiCA9whk5Vep6n2MpSG4gPbRmlz51DPO4m+FKBTSI4+1cQcN
+	r+zG0vT0VNTR2ptGRLIEEbhSWx9eN5PL16yCHx5duSk7E0H2wokx043hBqeZvnqCh6Lr0B2SQ6P
+	vXW/dM02ss/JaY35j/8rJ8nedw==
+X-Google-Smtp-Source: AGHT+IHFiFeZ/wg9cdVAeRgWCSZ2ZNOQSff6PDeSQvaK6oPJEJIrZO4Vdj8XkbntIz0Y4rPDws3qGLiEr0Yvxl+9NZY=
+X-Received: by 2002:a05:6512:a8c:b0:592:f40a:25f3 with SMTP id
+ 2adb3069b0e04-5969e2f430amr1099865e87.27.1763641687051; Thu, 20 Nov 2025
+ 04:28:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.17.8
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251120105907.1373797-1-ckeepax@opensource.cirrus.com> <3beb841e99f62767547054c4344f2c60eae4ed9b.camel@pengutronix.de>
+In-Reply-To: <3beb841e99f62767547054c4344f2c60eae4ed9b.camel@pengutronix.de>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 20 Nov 2025 13:27:55 +0100
+X-Gm-Features: AWmQ_bllvrDTigtL4OXlTYgl2RQDEQpq52mz6b94Dl7uiW46iGJLK_UCbVTevPg
+Message-ID: <CAMRc=MdJp8T2gZ=ExWCOKSaVqZqo4Dc2qAX0hXkx98ShUx3mjw@mail.gmail.com>
+Subject: Re: [PATCH v2] spi: cs42l43: Use actual ACPI firmware node for chip selects
+To: Philipp Zabel <p.zabel@pengutronix.de>, broonie@kernel.org
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>, linus.walleij@linaro.org, 
+	andy@kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	bartosz.golaszewski@linaro.org, linux-kernel@vger.kernel.org, 
+	patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Robin Gong <yibin.gong@nxp.com>
+On Thu, Nov 20, 2025 at 12:21=E2=80=AFPM Philipp Zabel <p.zabel@pengutronix=
+.de> wrote:
+>
+> On Do, 2025-11-20 at 10:59 +0000, Charles Keepax wrote:
+> > On some systems the cs42l43 has amplifiers attached to its SPI
+> > controller that are not properly defined in ACPI. Currently
+> > software nodes are added to support this case, however, the chip
+> > selects for these devices are specified using a hack. A software
+> > node is added with the same name as the pinctrl driver, as the
+> > look up was name based, this allowed the GPIO look up to return
+> > the pinctrl driver even though the swnode was not owned by it.
+> > This was necessary as the swnodes did not support directly
+> > linking to real firmware nodes.
+> >
+> > Since commit e5d527be7e69 ("gpio: swnode: don't use the swnode's
+> > name as the key for GPIO lookup") changed the lookup to be
+> > fwnode based this hack will no longer find the pinctrl driver,
+> > resulting in the driver not probing. There is no pinctrl driver
+> > attached to the swnode itself. But other patches did add support
+> > for linking a swnode to a real fwnode node [1]. As such the hack
+> > is no longer needed, so switch over to just passing the real
+> > fwnode for the pinctrl property to avoid any issues.
+> >
+> > Link: https://lore.kernel.org/linux-gpio/20251106-reset-gpios-swnodes-v=
+6-0-69aa852de9e4@linaro.org/ [1]
+> > Fixes: 439fbc97502a ("spi: cs42l43: Add bridged cs35l56 amplifiers")
+> > Fixes: e5d527be7e69 ("gpio: swnode: don't use the swnode's name as the =
+key for GPIO lookup")
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> >
+> > IMPORTANT NOTE: This depends both functionally and build wise on the
+> > linked series from Bart, it probably makes sense for him to pull the
+> > patch into his series.
+>
+> When included in the reset-gpios-swnodes series, will this need either
+> a noautosel or prerequisite marker to avoid it being picked up into
+> stable without the reset of the series?
+>
 
-[ Upstream commit 86d57d9c07d54e8cb385ffe800930816ccdba0c1 ]
+Good point. Also: the  Fixes: e5d527be7e69 ("gpio: swnode: don't use
+the swnode's name as the key for GPIO lookup") tag needs to be removed
+as this will go before this patch.
 
-Since sdma hardware configure postpone to transfer phase, have to disable
-dma request before dma transfer setup because there is a hardware
-limitation on sdma event enable(ENBLn) as below:
+In any case, looks good to me now:
 
-"It is thus essential for the Arm platform to program them before any DMA
- request is triggered to the SDMA, otherwise an unpredictable combination
- of channels may be started."
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Signed-off-by: Carlos Song <carlos.song@nxp.com>
-Signed-off-by: Robin Gong <yibin.gong@nxp.com>
-Link: https://patch.msgid.link/20251024055320.408482-1-carlos.song@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+Mark: can you Ack it and Philipp will include it in the immutable
+branch with the swnode series[1] I will resend?
 
-LLM Generated explanations, may be completely bogus:
+Bart
 
-Now let me create a comprehensive analysis report:
-
-## COMPREHENSIVE COMMIT ANALYSIS
-
-### 1. COMMIT MESSAGE ANALYSIS
-
-**Subject:** "spi: imx: keep dma request disabled before dma transfer
-setup"
-
-**Key findings:**
-- No "Cc: stable@vger.kernel.org" tag
-- No "Fixes:" tag
-- No CVE mentioned
-- However, the commit message cites a **hardware limitation** from
-  official documentation
-- Quote from i.MX hardware manual: *"It is thus essential for the Arm
-  platform to program them before any DMA request is triggered to the
-  SDMA, otherwise an unpredictable combination of channels may be
-  started."*
-
-### 2. DEEP CODE RESEARCH (MANDATORY ANALYSIS)
-
-#### A. HOW THE BUG WAS INTRODUCED:
-
-The timing violation was created by the interaction of two changes:
-
-**First change (2016, commit 2b0fd069ec159d, v4.10+):**
-- The SPI driver started enabling DMA request bits (TEDEN/RXDEN) in
-  `mx51_setup_wml()` during transfer setup
-- This function is called early in the transfer process, before DMA
-  descriptors are configured
-
-**Second change (2018, commit 107d06441b709d, v5.0+):**
-- The SDMA driver was modified to enable the ENBLn (event enable)
-  register earlier in `dmaengine_slave_config()`
-- This enforced the hardware requirement that "all DMA channel
-  programming must occur BEFORE any DMA request is triggered"
-- The commit message explicitly references the i.MX6 Solo Lite Reference
-  Manual section 40.8.28
-
-**Result:** The SPI driver violated the hardware requirement by enabling
-DMA requests (TEDEN/RXDEN) before the SDMA channels were fully
-programmed.
-
-#### B. TECHNICAL MECHANISM OF THE BUG:
-
-**Before this fix:**
-1. `mx51_setup_wml()` is called → sets TEDEN and RXDEN bits (DMA request
-   enable)
-2. `dmaengine_prep_slave_sg()` is called → prepares DMA descriptors
-3. `dma_async_issue_pending()` is called → queues DMA transfers
-4. `mx51_ecspi_trigger()` is called → starts the transfer
-
-**Problem:** DMA requests are enabled at step 1, but the SDMA hardware
-isn't fully programmed until step 3. This violates the i.MX SDMA
-hardware requirement.
-
-**After this fix:**
-1. `mx51_setup_wml()` is called → only sets watermark levels (DMA
-   request bits removed)
-2. `dmaengine_prep_slave_sg()` is called → prepares DMA descriptors
-3. `dma_async_issue_pending()` is called → queues DMA transfers
-4. `mx51_ecspi_trigger()` is called → **NOW** enables TEDEN/RXDEN and
-   starts transfer
-
-**Solution:** DMA requests are only enabled after SDMA channels are
-fully configured.
-
-#### C. CODE CHANGES EXPLAINED:
-
-**Change 1** - Remove early DMA enable from `mx51_setup_wml()`:
-```c
-// Before: enabled TEDEN and RXDEN during setup
-writel(... | MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN | ...)
-
-// After: removed these bits from setup
-writel(... | MX51_ECSPI_DMA_RXTDEN, ...)  // only RXTDEN remains
-```
-
-**Change 2** - Add conditional DMA enable to `mx51_ecspi_trigger()`:
-```c
-// New code distinguishes DMA mode from PIO mode
-if (spi_imx->usedma) {
-    // Enable DMA requests (TEDEN/RXDEN) only when using DMA
-    reg = readl(spi_imx->base + MX51_ECSPI_DMA);
-    reg |= MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN;
-    writel(reg, spi_imx->base + MX51_ECSPI_DMA);
-} else {
-    // Original PIO mode trigger
-    ...
-}
-```
-
-**Change 3** - Call trigger after DMA setup in `spi_imx_dma_transfer()`:
-```c
-dma_async_issue_pending(controller->dma_tx);
-
-spi_imx->devtype_data->trigger(spi_imx);  // Added line
-
-transfer_timeout = spi_imx_calculate_timeout(...);
-```
-
-#### D. ROOT CAUSE:
-Improper ordering of hardware register configuration. The driver enabled
-DMA event requests before the associated DMA engine was fully
-configured, violating i.MX SDMA hardware requirements documented in the
-reference manual.
-
-### 3. SECURITY ASSESSMENT
-
-**Not a security vulnerability** in the traditional sense, but:
-- **Data integrity issue:** "unpredictable combination of channels may
-  be started"
-- This could cause wrong DMA channels to transfer data to/from wrong
-  memory locations
-- Potential for data corruption or information disclosure if wrong
-  memory is accessed
-- No CVE assigned, but the impact is serious
-
-### 4. FEATURE VS BUG FIX CLASSIFICATION
-
-**CLEARLY A BUG FIX:**
-- Fixes incorrect hardware programming sequence
-- Addresses a documented hardware limitation
-- No new features added
-- Changes only fix the timing/ordering of existing operations
-
-### 5. CODE CHANGE SCOPE ASSESSMENT
-
-**Small and surgical:**
-- 1 file changed: `drivers/spi/spi-imx.c`
-- ~20 lines changed (12 insertions, 8 deletions based on diff)
-- Changes are localized to 3 functions
-- No API changes, no new exports
-- Simple logic changes with clear intent
-
-### 6. BUG TYPE AND SEVERITY
-
-**Bug Type:** Hardware timing violation / incorrect programming sequence
-
-**Severity: HIGH**
-- Can cause "unpredictable combination of channels" to start
-- May result in DMA transfers to/from wrong memory addresses
-- Affects all i.MX SoCs using SPI with DMA (widely deployed)
-- Data corruption potential
-- Referenced in official hardware documentation as a critical
-  requirement
-
-### 7. USER IMPACT EVALUATION
-
-**HIGH IMPACT:**
-- **Affected hardware:** All i.MX SoCs (i.MX51, i.MX53, i.MX6, i.MX7,
-  i.MX8) using SPI with DMA
-- **Usage:** i.MX is widely used in:
-  - Industrial systems
-  - Automotive applications
-  - Embedded devices
-  - IoT systems
-- **Failure mode:** Unpredictable - may cause intermittent data
-  corruption during SPI DMA transfers
-- **Existing since:** v4.10 (2017) with the timing issue, became more
-  critical after v5.0 (2019)
-
-### 8. REGRESSION RISK ANALYSIS
-
-**LOW RISK:**
-- Fix implements the documented hardware requirement
-- Changes are simple and well-contained
-- Logic is straightforward: delay DMA request enable until after SDMA
-  configuration
-- No complex state changes or race conditions introduced
-- Follows the pattern already established in SDMA driver documentation
-
-**Testing evidence:**
-- Has authors from NXP (hardware manufacturer) - Robin Gong and Carlos
-  Song
-- Link to patch submission:
-  https://patch.msgid.link/20251024055320.408482-1-carlos.song@nxp.com
-- Signed off by SPI maintainer Mark Brown
-
-### 9. MAINLINE STABILITY
-
-**Good signs:**
-- Committed October 24, 2025 (recent)
-- In v6.18-rc6
-- Authors are from NXP (the hardware manufacturer)
-- Has maintainer sign-off
-
-### 10. HISTORICAL PATTERNS
-
-This fix is similar in nature to:
-- Hardware errata fixes for i.MX (ERR009165 series)
-- Other timing-related DMA fixes in the kernel
-- Follows stable kernel precedent for hardware requirement compliance
-  fixes
-
-### VERDICT
-
-This commit should **DEFINITELY** be backported to stable trees.
-
-**Why it meets stable criteria:**
-
-1. **Fixes a real bug:** Violates documented hardware requirements from
-   i.MX reference manual
-2. **Affects users:** All i.MX SoC users with SPI DMA (widespread in
-   embedded/industrial systems)
-3. **Data integrity issue:** Can cause wrong DMA channels to start,
-   leading to data corruption
-4. **Small and contained:** Only ~20 lines changed in one file, surgical
-   fix
-5. **Obviously correct:** Implements the documented hardware requirement
-   correctly
-6. **Low regression risk:** Simple timing fix with clear hardware
-   documentation backing it
-7. **Long-standing issue:** Bug existed since v4.10 (2017), affects many
-   stable trees still in use
-
-**Stable trees affected:** All stable kernels from v4.10+ that have
-both:
-- The original code (commit 2b0fd069ec159d, v4.10+)
-- The SDMA enforcement (commit 107d06441b709d, v5.0+)
-
-Most critically affects v5.0+ stable trees where both conditions are
-met.
-
-**Backporting considerations:**
-- Should apply cleanly to recent stable trees (6.6.y, 6.1.y, 5.15.y,
-  5.10.y, 5.4.y)
-- May need minor context adjustments for older trees
-- Check that `spi_imx->usedma` field exists in target kernel version
-
-**YES**
-
- drivers/spi/spi-imx.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 155ddeb8fcd46..bbf1fd4fe1e92 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -519,9 +519,15 @@ static void mx51_ecspi_trigger(struct spi_imx_data *spi_imx)
- {
- 	u32 reg;
- 
--	reg = readl(spi_imx->base + MX51_ECSPI_CTRL);
--	reg |= MX51_ECSPI_CTRL_XCH;
--	writel(reg, spi_imx->base + MX51_ECSPI_CTRL);
-+	if (spi_imx->usedma) {
-+		reg = readl(spi_imx->base + MX51_ECSPI_DMA);
-+		reg |= MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN;
-+		writel(reg, spi_imx->base + MX51_ECSPI_DMA);
-+	} else {
-+		reg = readl(spi_imx->base + MX51_ECSPI_CTRL);
-+		reg |= MX51_ECSPI_CTRL_XCH;
-+		writel(reg, spi_imx->base + MX51_ECSPI_CTRL);
-+	}
- }
- 
- static void mx51_ecspi_disable(struct spi_imx_data *spi_imx)
-@@ -759,7 +765,6 @@ static void mx51_setup_wml(struct spi_imx_data *spi_imx)
- 	writel(MX51_ECSPI_DMA_RX_WML(spi_imx->wml - 1) |
- 		MX51_ECSPI_DMA_TX_WML(tx_wml) |
- 		MX51_ECSPI_DMA_RXT_WML(spi_imx->wml) |
--		MX51_ECSPI_DMA_TEDEN | MX51_ECSPI_DMA_RXDEN |
- 		MX51_ECSPI_DMA_RXTDEN, spi_imx->base + MX51_ECSPI_DMA);
- }
- 
-@@ -1520,6 +1525,8 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
- 	reinit_completion(&spi_imx->dma_tx_completion);
- 	dma_async_issue_pending(controller->dma_tx);
- 
-+	spi_imx->devtype_data->trigger(spi_imx);
-+
- 	transfer_timeout = spi_imx_calculate_timeout(spi_imx, transfer->len);
- 
- 	/* Wait SDMA to finish the data transfer.*/
--- 
-2.51.0
-
+[1] https://lore.kernel.org/all/20251106-reset-gpios-swnodes-v6-0-69aa852de=
+9e4@linaro.org/
 
