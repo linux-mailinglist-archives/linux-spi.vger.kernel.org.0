@@ -1,83 +1,54 @@
-Return-Path: <linux-spi+bounces-11371-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11374-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9AAC72ED4
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:40:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A04EC72F70
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 823DD4E8044
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 08:36:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 1B67A2B5E2
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 08:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086C33081AD;
-	Thu, 20 Nov 2025 08:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Rr6CbknU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6F63112AD;
+	Thu, 20 Nov 2025 08:50:43 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5832367CE
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 08:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9848310782;
+	Thu, 20 Nov 2025 08:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763627753; cv=none; b=Ed+Eul8h+1IbKLDqSNJZUHNcej823ISGyVYw1uZdXqivk+5J3VsbQir6qBi9vlJVfqwNJwuM53Qc/Ppelpr0hHMUWw0cAlzm/AtDudeO4zFZjHp7yOMu++ZiMfcsyjvHCpe0hz/DRr40lL0y+gtxQ2+YprtDw6/LrM++uFwtU4o=
+	t=1763628643; cv=none; b=jj0/fqKnY52Xl/DKbuo67/kRVOjIfHq/D4xX06zmqGGPaAszAZ3A681uWevdMUyBwNDlWbB6906ZPjr/vUSOaPUQw8cZg3sXNqYHyeYlq2wbR0ZhIkYrfLLdJFWIpDMwBoYICVYlGW51VOtP3L6TCcxxHZOfv8M8BZaQmxGrrwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763627753; c=relaxed/simple;
-	bh=ady1OctmfWAWlp6ZEv6jm7omLGzqw96V0J9xgYeVwzc=;
+	s=arc-20240116; t=1763628643; c=relaxed/simple;
+	bh=YpqX3lg6SVoUG7k2oQcigsO6X1to9UJN1mMwpem+Ocs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GUKWDxPRWXRPRQJcholTVcF35KDt0qGu1wIi+SHggZWk03IjuIGYZ2zUmEYrZqD6GYEf8eHJPk+73GUy2et+XnMaq/JnYLIvpblm/LofLJuqFAh3hIc8tn+TF4zAI/XF6pB1uEvVBAlNZHY91sF4xHaf0+VTOd7/SdthURdJbiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Rr6CbknU; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so4175225e9.0
-        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 00:35:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763627750; x=1764232550; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i1jSWZCgeAfmjjyjsevv49mjqnEq82g0aMsUmMetKc4=;
-        b=Rr6CbknUJEF5fLfGE1JDLrx2CAKmbcLkISHfJoyZP5Ym10G97Iyj0haLvt9BJf8FOg
-         SEtBWkvd1OyjIXKvZEwFhFV3pZ8+5ld4nVAB2TekF/jk0ap4y4Uw6MBCHsWN1MJ3Nz6w
-         5nU/DYjFY9Cooa350PeQhpCdTwY2fbCmdZd+++56NZOLBrXu5452PKC1GQs/Oj8kLeg+
-         /APYgQhHepUsdaW/oFzBdw+CRe7E0cH4AAhWXb7zeg7vgyk8cLVK/GJnAAkR8jMHCh1y
-         NefpENpqAxBK3k9ZRhMYzoLDpVQ4OZDMhEXFib9MS7M2G5fqj/qpiffy8IvLwrrQEf6Y
-         aFLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763627750; x=1764232550;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i1jSWZCgeAfmjjyjsevv49mjqnEq82g0aMsUmMetKc4=;
-        b=j+YMT/eV6idB3UUv4h17NM8UUcBXXvT9bXTksxrg0PYjMIzZZ7pU6hAwzN9za2pvZ0
-         ZHP0ihv85sVHZNmyLsYnFuMSGJ6+8nIqGL+LwhHYnuqbJM3Pwai8MKH22yeE7N3ELTYL
-         dgFwOPr9ovW9Ql69lZkkViXb5KQwG92yVBW+W8Cu8FY+9/Mr9tD/uzwQ2NAmnSDK5lfn
-         8OP9Ocdvt6enOdXtQC7KEj1b/r4H7hdK/lvSB0wEqQR8TXbeHcTh56VtkznGqHsjaB60
-         +Z6VvD/jTY7KtTlQk+3LeBmasyLfwp6DYIkOvYgFyGFywM80H1SupveKy+kutL8TkT8/
-         6CHA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2CAr5GKH7PiOBGlQnSt1UhViYPusRyhREnqq1iCKhvEtSbykQaPt4ooqBB2ZpxD8DFT7MT7nuQ9g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiCYIgsPbRobCsKWXW7rxL2B/lXquuvPU++Tq9ht4SW//DOGE5
-	efEgXW0tPgRr8Snj/UyIUeNpm2YGL+6IpU88c2OO5rfHfSj9P0RHnXaFkFbI4R51c6lMQ6ub1l0
-	cg+KX
-X-Gm-Gg: ASbGnct8gubbkTO/hr4YY4yDPB5lcHp0SCv6oBp7+uc1wkSbED7xRVPtnIvPqOaPHg0
-	rq+CYeyHYZW3oCV3TuZj45MAix4ZRojnABCdft4i4PCA5Q107a8lyYNStmpjLew6zUZ+rIKEz8o
-	Yv/FRnXWZokhLL1+Gh3tiinI/QTJePbZdWXfYGVUbszT+oC/ymZ5517cEOFaYl41yJPKAxPWddP
-	3AEmZ9eH075m7xrGxePo+lMHiJsGUqRWAevjPe/fmy1sIndIDCMOXzpQVyiRpuSShp0yVIWFnZC
-	wUr6nJ/MX9u7R73nemk9Ue/4R1KbiVw9VfxZzvullwF4aOhTcRhz+XBCmDX47BSIIR+Xi2WS30z
-	4bhO2UX8iU6XMoZ86pDIjBCto0tEGS+HICph/rsH4qMiCqKEmiJIJyGlSUW9UQEyANMtzRQgIop
-	1PcunrJajigcO1XHwG
-X-Google-Smtp-Source: AGHT+IF1ZFBDL71uBaSwbhNDatpe1vIJpFPHU6lONyVDyD5pnpwHGngatw+aFLHLdudpyOTvNR4+Tg==
-X-Received: by 2002:a05:600c:1d01:b0:475:daba:d03c with SMTP id 5b1f17b1804b1-477b89541d7mr19670195e9.13.1763627750364;
-        Thu, 20 Nov 2025 00:35:50 -0800 (PST)
-Received: from [10.11.12.107] ([5.12.85.52])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f34ffesm4648081f8f.10.2025.11.20.00.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 00:35:49 -0800 (PST)
-Message-ID: <81a0af49-9c0c-43e7-9a40-d66ba95c578c@linaro.org>
-Date: Thu, 20 Nov 2025 10:35:48 +0200
+	 In-Reply-To:Content-Type; b=f4qVG12nrBTokySk0QPa5SkvWZ78lTlcSWgwR/L/SM8sg7WyQrZI/6Awm40VkPjHSrS5bFAn/ZZ6r4EXTMyaP0eMzWXocBuVSCteCqlTFtqCMhRVXMUTvg2HJYdEKGKuQxyRUOSW9FW8cdnj98YXKhG+5mBl7A2LwG/n3mxJwFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4dBsK64p43z9sTh;
+	Thu, 20 Nov 2025 09:41:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id kGCgBO48RIIZ; Thu, 20 Nov 2025 09:41:46 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4dBsK63ZVXz9sTX;
+	Thu, 20 Nov 2025 09:41:46 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 662058B76D;
+	Thu, 20 Nov 2025 09:41:46 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id m4DBEhXyjKTc; Thu, 20 Nov 2025 09:41:46 +0100 (CET)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 016F98B763;
+	Thu, 20 Nov 2025 09:41:45 +0100 (CET)
+Message-ID: <8e969a9f-4dc5-4d1e-879b-8092d43c1c38@csgroup.eu>
+Date: Thu, 20 Nov 2025 09:41:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -85,52 +56,93 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/28] mtd: spinand: Make use of the operation templates
- through SPINAND_OP()
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>,
- Vignesh Raghavendra <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org
-References: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
- <20251031-winbond-v6-17-rc1-oddr-v1-10-be42de23ebf1@bootlin.com>
- <5680a2a8-aeb3-4274-a264-4ff658cc9246@linaro.org>
- <87jyzmaqcq.fsf@bootlin.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <87jyzmaqcq.fsf@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] spi: fsl-cpm: Check length parity before switching to 16
+ bit mode
+To: "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>,
+ "broonie@kernel.org" <broonie@kernel.org>,
+ "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "florent.trinh-thai@cs-soprasteria.com"
+ <florent.trinh-thai@cs-soprasteria.com>
+References: <07d1ea39a0e9b56846395d79d489a5153206ff5c.1762714267.git.christophe.leroy@csgroup.eu>
+ <9ff09fa3b2d8efab15d220c88d8bef4cb1cc76b3.camel@siemens.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <9ff09fa3b2d8efab15d220c88d8bef4cb1cc76b3.camel@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
 
-On 11/19/25 7:23 PM, Miquel Raynal wrote:
-> On 05/11/2025 at 17:28:29 +01, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
+Le 10/11/2025 à 14:07, Sverdlin, Alexander a écrit :
+> Hi Christophe,
 > 
->> On 10/31/25 6:26 PM, Miquel Raynal wrote:
->>> index 4afebaf5f0195b9bc617ea1f125f637f76fff9f8..a8fd04a67cfa9925bd68c57539d86e0816b76274 100644
->>> --- a/include/linux/mtd/spinand.h
->>> +++ b/include/linux/mtd/spinand.h
->>> @@ -701,6 +701,93 @@ struct spinand_device {
->>>  			     unsigned int retry_mode);
->>>  };
->>>  
->>> +static inline struct spi_mem_op
+> just a couple of nitpicks below:
+> 
+> On Sun, 2025-11-09 at 19:55 +0100, Christophe Leroy wrote:
+>> Commit fc96ec826bce ("spi: fsl-cpm: Use 16 bit mode for large transfers
+>> with even size") failed to checkout that the size is really even before
+>                               ^^^^^^^^
+> check/verify/"make sure"?
+
+make sure
+
+> 
+>> switching to 16 bit mode. Until recently the problem went unnoticed
+>> because kernfs uses a pre-allocated bounce buffer of size PAGE_SIZE for
+>> reading eeprom.
+>            ^^^^^^
+> EEPROM?
+
+ack
+
+> 
+>> But commit 8ad6249c51d0 ("eeprom: at25: convert to spi-mem API")
+>> introduced an additional dynamically allocated bounce buffer whose size
+>> is exactly the size of the transfer, leading to a buffer overrun in
+>> the fsl-cpm driver when that size is odd.
 >>
->> Do we still do inlines?
+>> Add the missing length parity verification and remain in 8 bit mode
+>> when the length is not even.
+>>
+>> Fixes: fc96ec826bce ("spi: fsl-cpm: Use 16 bit mode for large transfers with even size")
 > 
-> Defining functions in headers like that, I think yes? (static inline,
-> not just inline). The full line is something like:
-> 
-> +static inline struct spi_mem_op
-> +spinand_fill_reset_op(struct spinand_device *spinand)
-> +{
-> 
-> So it's not an inline declaration of a variable, but the definition of a
-> function (just saying, in case the diff mislead you).
+> Missing Cc: stable@?
 
-I saw it's a static inline function. Check this please:
-https://lore.kernel.org/all/Pine.LNX.4.64.0601021105000.3668@g5.osdl.org/T/#u
+Nowadays Fixes: tag seems to be enough to get a fix automagically 
+applied to stable branches, but I added it anyway.
+
+> 
+>> Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F638496dd-ec60-4e53-bad7-eb657f67d580%40csgroup.eu%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C5ac2e78d2c44433141df08de205a1e5a%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638983768580305289%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=juGQhU%2F%2Fp52t9hPZ5PA0Ka8Ng3ITKNoF%2Bf1%2FP93IkOw%3D&reserved=0
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   drivers/spi/spi-fsl-spi.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+>> index 2f2082652a1a2..e845baa56cc66 100644
+>> --- a/drivers/spi/spi-fsl-spi.c
+>> +++ b/drivers/spi/spi-fsl-spi.c
+>> @@ -335,7 +335,7 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
+>>   			if (t->bits_per_word == 16 || t->bits_per_word == 32)
+>>   				t->bits_per_word = 8; /* pretend its 8 bits */
+>>   			if (t->bits_per_word == 8 && t->len >= 256 &&
+>> -			    (mpc8xxx_spi->flags & SPI_CPM1))
+>> +			    ((t->len & 1) == 0) && (mpc8xxx_spi->flags & SPI_CPM1))
+> 
+> could be written as "!(t->len & 1) && "...
+
+Done.
+
+> 
+>>   				t->bits_per_word = 16;
+>>   		}
+>>   	}
+> 
+> You can add my RB tag into your v2.
+> 
+
+Thanks
+Christophe
 
