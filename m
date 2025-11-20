@@ -1,83 +1,83 @@
-Return-Path: <linux-spi+bounces-11402-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11403-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB269C744D8
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 14:41:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00381C74334
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 14:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AB3924E5F1B
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 13:26:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 02D562B06E
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 13:26:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C597B32C94A;
-	Thu, 20 Nov 2025 13:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B01BD33C185;
+	Thu, 20 Nov 2025 13:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="urPHQq2B"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="G8RLaYZY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D589C33A715
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 13:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D1133BBDE
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 13:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763645061; cv=none; b=W0aHe6Qb/nwcYTv+cw6drMmMpzJTtoTTC0eX2LptXPk4GDErKpY7H3gANS1OQs59DdkmKnPneBYqQKJ5NrpDXebxQ+SAfovoYQAxpdBUP2i0qY8EzdN4oFIupQslJDcY32oi32nXeuqE4nzhyMp193MUoI9l333T63+ZpqoSmnE=
+	t=1763645062; cv=none; b=ldmQnjS3zH19BkFxzHfGVdhOV+4y7SWElx8PqaD9Jd/AOavgS+c9QW4WGch/r2G8mHFbtkarAlpBoIqLNrDIoNRmKcGFAxIipfxdB7Kra8Aapm2/0NdO7TyKTSLREPQ1LNpuLTk2lPoBITJZz1xaqFSdaTfaQR/qs+l+yc5kBbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763645061; c=relaxed/simple;
-	bh=DAh7GJYihto1rb/7izzaWNy0krHQiRwe/MsGu2gJbwU=;
+	s=arc-20240116; t=1763645062; c=relaxed/simple;
+	bh=IiJdl/f/j3uvqy4h7tqf1b0BVcaqoK6kqQxRYGFXj78=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CE4a1THeu5ImpXkZlkLWC7VoAv3CUf55Oo9XhqZBbhcpEs1wmX9mhBsyQTNjrLW4xOWcMyGYMKqSg6yHNbQ7V0ZwcWxqL5c982AuGixjQmnJm2GkrPZfvJFUVHkNjOibta1CcZnEc+rv/qqz++Mz395uNhTuf66n8R46WAZzEDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=urPHQq2B; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=IGICNbNAhuVvqwBJ37NqkCPrFbJ/3jacnCHBAVsbF9V+qxa+4nLRjo1Din5WhGvqcggXAS6UNQFG9thMTffQlbWW08r3SoPT5V6XytdbTFRtjtevrOb3G1VU6r85V6cO76ShtU5NO+9QdjcH3My0QnliQbQcESeqN63AHJM6O/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=G8RLaYZY; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4779a637712so5936015e9.1
-        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 05:24:16 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-477b1cc8fb4so5955645e9.1
+        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 05:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763645054; x=1764249854; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763645056; x=1764249856; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T6c4R4ZR/mmanidIpFqY9K6Mkfp/rNBIc8Ut3S49/Rs=;
-        b=urPHQq2BnXPoZn5GWSb+UIUlLXpVVVWHV3zO9mSeowOXZj9LK6Ft3j3cxy+yJNW11M
-         SumN4RtwHCkI/DsiLmGIAKab577LyWf8QEkXMDhY9MoH2zwNN6sOjt9j61LaJuBi3wWv
-         /LsOnsZJmofID0SxLrMEC6raA6s5FE4aIAP76rnyESw+J6Myu4p8LTuR+nzTWNW9ru1o
-         wjzD9nlEmLh/i+EYy8iKd9ypowAM0cGs0/VEPdwtVlKxdMcDBP5HEntQuVoIWbIBg13A
-         a3kUamD8B9LpqySwku5t08sQZNpi7P1Kt70z8pvEZn1yAo5hdjNey+jKCpPVtSl50TT3
-         uIUQ==
+        bh=tUtdFcR7PDGf6skoQftKs9iIKGP/DcX0bvw39dndE/w=;
+        b=G8RLaYZYO7Gw5jrw62+cc4YGs8H+5I87qrk8yqJyh0+Nc4+zvBs8qVUZywf4gWYG1e
+         F5XhH3TtXDPqkzJ6t95+f+XakEd6eWR+gcHGRJpOtL+oqWa5Vl5FLnIuEKVnKcTyvifZ
+         cj0lz5ljqc/hEBDLbwzHeG0TuzxZP49kTZYIb56kxDZ3Dvw8ikpMLBfIiEPpaUMCB8S3
+         mVt39iyIZ581uwlj2d22bCZTTc3JS3H/KN6jmJvSf39UFimFkCq3CV6PfODYhUrKA49k
+         A98GIM2mFEZzT2aZth+OcVtt/a3OSohtRSLbsdcU/UlW4il+09jYYUbBbejxTxLHBHhE
+         3Auw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763645054; x=1764249854;
+        d=1e100.net; s=20230601; t=1763645056; x=1764249856;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=T6c4R4ZR/mmanidIpFqY9K6Mkfp/rNBIc8Ut3S49/Rs=;
-        b=SlVwAuBkWOnkX5KeRosza+OEDCK8D6OWrZvww17E9eSW9qQmCZt1B6M4apVU8YjrVi
-         HAylbvHUJo/5uPrXcjKTF8zy28kdrPAodJfnPmYFJETv1xt46kMaAcL2N/AVSciRSjHU
-         7Jxc/nFq5hqSbuqdSNuWY8UJfObJZ41n3vb+oXhNJ0rBJiabBdeHOrnxbD8j+8xep+BY
-         t3e5U9kh8aFaIwgTuGRG4NQ28mRc+K1Eces/1eRLLEGj9TnK9Q9NlrFWnXiqvuBgpOJv
-         K9EIIFTMoVENnc6loAZctb+4qaDWX23wl9mQWsohwfWFDX52R8xE1KWT0rcKw7s040YB
-         J7XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWcUOWqHDDhoVZ6Qj3jSOIJkh6r4AJFpP66nciBPYLz0xqQSY2jwns/MGmt2xo2LDGvZvHipbeYSOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhnoHDr184li4dYpdP6zL+J4/NB+pWYActjkM5yu5kWOzRIl7I
-	eyRaJzHG6uIrUK+cHX7Fnt9rB05vtPmeuOPbvi/n/tn7uag61AMl5OsYX/rwf1LChuk=
-X-Gm-Gg: ASbGnctv/UHtz7woKkS8w8R8sxuOCiZg0w7Py8/7tgrqVE4wQlo0ePwxKzhrsBa8luv
-	IiOySgmpX53T5iVTaJZyIVNr70VMsxCvqstz3hPnFpSbayR6ovHfx+kVzFNSxA4GYn0dZpjgh9w
-	L6I8kwcev88SWUjv4IBHBKrMJIeyyY08/9SxbLTihA5CiruRa0zpqtLVFdFY2ixoqBmhmjmodVt
-	0641gLUU0MgWh6SVRKCM+PTc0erIOloycL/UAP9h2UlOhV+CnByxUawDBFLU1GRAXeA0G6c89LM
-	7b8/8RjyiZH9GO/qoNiPJyc//s/qqqmaSi1UsCEwZnKXJDsHdvFjxUh/N1ErDlnHxmYHwaiwCPN
-	vr1jEcQBw7zMsRRqTmMug1jSndl5PTBzeQgHBFnNaT6KkGnsl2zbMBdmt6HKGGYd3/pKNmFkgJw
-	ZwZUQ=
-X-Google-Smtp-Source: AGHT+IFF7rV6uBva+BQRyBrCj38/4077uancqKeUXViRLWTSQtvD46FVILY+Uc8Srf05smNtarypTw==
-X-Received: by 2002:a05:600c:1c02:b0:477:6d96:b3c8 with SMTP id 5b1f17b1804b1-477b9e377cemr28611695e9.23.1763645054075;
-        Thu, 20 Nov 2025 05:24:14 -0800 (PST)
+        bh=tUtdFcR7PDGf6skoQftKs9iIKGP/DcX0bvw39dndE/w=;
+        b=MAWI0foyr7BjZUNnfvaXlr9V3pKs/ccUg3JXygpsUHWaFLfGFaFYA+WasKQjEMBl+t
+         00TNkZQmop8HVFExEgpSG+vAaiU1Pg6rS0JrfaTleKVMuyKEhv5GD0nplRqeLaIrJ7ES
+         71GfWGT02xTAzEJScLNjREecWPlu8UZ4I7DcRglbLdfH9qtkh8BYoC9oYPbFnGzx1zwp
+         PrwZrta9RYi9zoNWHIRTcYEJ7gnFl4dWgOQPUZjeEMdK7OPN+GitSa6WlcsFtaaning+
+         VQE2tRL6PxLlbg+78c8GAlgARqu+2SpIWFximTZroiIyCfyZ3SmEJU0s19Gf9fTTIdWE
+         I31Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV+dzhTuME+0SrvuprBshT43JAjWJEYrZdqwNv865FqBzVuxBgHiR31b5wjalpNu5Sx1gRUMx+XfBE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGC0J3hqbEGlOUAY7g+B+vi86giVhpgGhF/yu9e7jSGFOBWTLN
+	NIJl11VgBioAnYpeUzISVGRQJ6HCYKIy5rK0mLeIt+7goFzH88E3l6ZkM+E4IuzkHMA=
+X-Gm-Gg: ASbGncsd8igguQk5RZpJI50fK1uQBvE2F0lB1SWtvlCb2rxudbM38487UjXd3Tur6tU
+	qLjDAYE4hv3tixmyzcOQlUrNFSir5iTe9KqUC/GQLTAz1+JJ9aNp09F0a/8ByKl45SAOTakOjgK
+	z6AR2bUeW0KEIS7KpHZv8zjBKqh8E3dccmj+bQlGvV/EXYGfGILFG6gjNCpM6Q6CfQCERUBOu0L
+	JckCR9SQ/cKL7a9xcFttjtQtj+7Ii7Tbr7WlLEDUdIEyHqEhZLCEvyAldk1owQmgIB3yR2f08Qd
+	lne+BPFMy4BMx1yx8gldv+tJ9KaNSKFje+zUlLjTX9XqDkRoXanzyHYK7eNeI01LM2Iq6pjT9+F
+	By0dzQpv6J/8pmuwU2f3lTO3B1T+uDIDbc09TGC/y23rKGmWfbkDZq7wkGpRvrflrhYjfxR1Dnb
+	wIJtc=
+X-Google-Smtp-Source: AGHT+IFalJewbs1LD2Bkg7N04ReZJFPTXvGDLHsrCVhop71bplWxSwFfjvzN6B/bqixKbIyPFxze6Q==
+X-Received: by 2002:a05:600c:19d3:b0:475:de68:3c30 with SMTP id 5b1f17b1804b1-477b8a8a606mr41272065e9.16.1763645055734;
+        Thu, 20 Nov 2025 05:24:15 -0800 (PST)
 Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:37af:6c1f:28a:47d2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82cc72dsm46762935e9.1.2025.11.20.05.24.12
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82cc72dsm46762935e9.1.2025.11.20.05.24.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 05:24:13 -0800 (PST)
+        Thu, 20 Nov 2025 05:24:14 -0800 (PST)
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 20 Nov 2025 14:23:59 +0100
-Subject: [PATCH v7 4/9] spi: cs42l43: Use actual ACPI firmware node for
- chip selects
+Date: Thu, 20 Nov 2025 14:24:00 +0100
+Subject: [PATCH v7 5/9] gpio: swnode: allow referencing GPIO chips by
+ firmware nodes
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251120-reset-gpios-swnodes-v7-4-a100493a0f4b@linaro.org>
+Message-Id: <20251120-reset-gpios-swnodes-v7-5-a100493a0f4b@linaro.org>
 References: <20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org>
 In-Reply-To: <20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org>
 To: Linus Walleij <linus.walleij@linaro.org>, 
@@ -108,133 +108,65 @@ To: Linus Walleij <linus.walleij@linaro.org>,
 Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-acpi@vger.kernel.org, linux-sound@vger.kernel.org, 
  patches@opensource.cirrus.com, linux-spi@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
- stable+noautosel@kernel.org
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4326;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1686;
  i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=d76VHZwIwnB+K4dfBzZLwy1CDep3KCUqEcn4QrJ+rFU=;
- b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpHxZzNvrgBP2H3ds0pVhTuGe6OzgZgzq1W6R0L
- /mn/TbtxyCJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaR8WcwAKCRAFnS7L/zaE
- wxXbD/0SblSbNyyKOZkdAfFJSkmxgHZXxNFq3JE7HL0wgdCi0AO66QupG/HPcKXjULfDqHhCGwd
- 4Kjne31/UiQLfV4KublOc+BgyLqpUB8TyFdDpjBVo6sFTKUi+ZsFURo7zYDLtY6ngMIkF4SAqjx
- vEKdX/5ipoqSxKY8ZuYceFNcy53UC7Zo41qPOSz5ZNgB9+aWlx/DxTpztI1sC2ljYROdeEtPcd7
- T8se4oUz8DvyzCxNyFa/cJ/Xa20jmqNH7ELcKGG2gixZfJScOFak5rdnxUPPG0yq/RpkuSANFIU
- 8Lqn638HDK2hH0lgEpJ2XqCi/4pEZGCeFIDf23LF6Tz4d2tO/LAIgfcEwy0SbzbR7RxQVT9qJeD
- ktQWF4LQ1th9Cg1Oz8e+vovSyTbSKZh1c5entNqpyk9VqcHpLKltFXF98Sx4JCr9aEH9NaOmCwF
- jPExra5JKYuRn6RkI3/0otuXH7sqEY7CWSCjP7Aw3JH1QsMAI/b/jArv90+WqjpMlmFt9Z23ilo
- ZP7J7mxpg5tjXd9OcTNU/ztnRyvBSmd/g+KXBrVlWMMXaXTx4Ous1Upj4XxDBS4+kIhZ9Z4oy8B
- Ky67aBRO8dFoMYwv+LfLT7OXtOobdvnqiVa1DMiUZpRLP7s5k9Z2o3uyjvVt4jGcnWbdhgoRzMg
- 8pldvv8LYKz0nHw==
+ bh=VYVRdSRaxEEjo1QKUSMSRUCNb9ltdhV2FCewzDpDJRI=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBpHxZzTRyJ3yFk+mKcntqNTthwYQeC6YFUGZ0Ss
+ RRAJgqCEViJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCaR8WcwAKCRAFnS7L/zaE
+ w96eEACluwaG4DnypsI9eVhneBH8csPp7dfpvZWX2U9ADqrnfnjShOcHSdRtJ/6DInZkKYTbv0E
+ d/lwYpejv4ERfIxbYqmBHtVkbNhZqHsh9PSpQom6diLujjOyPDDj1I7CthLXOHFJ/8/b4eoI+oM
+ fY35HkjgHdiDdtKrJroee7ywHg+TP5ONgga4+0wPK79bEfVj/1/RlbVALT//0oEWiNempXiVm/w
+ k9c4bfya9La1vu2YWwjMjwkRIP9UQ31ho5DQ7DsDrHR4Khuphfg/ufChhcZMO9TDdP0MXIHRjvB
+ Aw76+E1oOhmA89IVtjtz9A2CPpkmoEjzsq6XZapNNcWEWR+LUVzh4hq+z2IYfnyHIemQkXT7NHM
+ dsEX2HoktgqM98LyyjhngznBQeUD68dPswVnq+r6pOVzpQ/iB0450krvwDwX2cMgaQXJWROoxFE
+ CvgkXxRxvwthH+4rMO1c5QsnofHDOkZa3JUgoH6OfKCmktHemI8c0K/9JTgD+GHVJ2mHK5QzMGD
+ bPF7a1MWXaEYumrdvhcHjqd4oehQumS+BimuNSKTgrEbnVoKmihFfA5yqmjK8s82eAyNqAeYFSu
+ Hkzz5AcTcWNVHlYUXJhfRKYpjZ12Fv5Z7z7xsmmFpv3iASlW+egbuZTnDGRw7CCaXk7cvI3JYMt
+ 1dydqbyLuCc1THg==
 X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
  fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-On some systems the cs42l43 has amplifiers attached to its SPI
-controller that are not properly defined in ACPI. Currently
-software nodes are added to support this case, however, the chip
-selects for these devices are specified using a hack. A software
-node is added with the same name as the pinctrl driver, as the
-look up was name based, this allowed the GPIO look up to return
-the pinctrl driver even though the swnode was not owned by it.
-This was necessary as the swnodes did not support directly
-linking to real firmware nodes.
+When doing a software node lookup, we require both the fwnode that
+references a GPIO chip as well as the node associated with that chip to
+be software nodes. However, we now allow referencing generic firmware
+nodes from software nodes in driver core so we should allow the same in
+GPIO core. Make the software node name check optional and dependent on
+whether the referenced firmware node is a software node. If it's not,
+just continue with the lookup.
 
-Since commit e5d527be7e69 ("gpio: swnode: don't use the swnode's
-name as the key for GPIO lookup") changed the lookup to be
-fwnode based this hack will no longer find the pinctrl driver,
-resulting in the driver not probing. There is no pinctrl driver
-attached to the swnode itself. But other patches did add support
-for linking a swnode to a real fwnode node [1]. As such the hack
-is no longer needed, so switch over to just passing the real
-fwnode for the pinctrl property to avoid any issues.
-
-Link: https://lore.kernel.org/linux-gpio/20251106-reset-gpios-swnodes-v6-0-69aa852de9e4@linaro.org/ [1]
-Fixes: 439fbc97502a ("spi: cs42l43: Add bridged cs35l56 amplifiers")
-Cc: stable+noautosel@kernel.org # Don't backport, previous approach works, fix relies on swnode changes
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-[Bartosz:
-  - remove unneeded Fixes: tag,
-  - use PROPERTY_ENTRY_REF_ARRAY() instead of PROPERTY_ENTRY_REF_ARRAY_LEN()]
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/spi/spi-cs42l43.c | 40 ++++++++++------------------------------
- 1 file changed, 10 insertions(+), 30 deletions(-)
+ drivers/gpio/gpiolib-swnode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
-index 14307dd800b744fee17edd864688a68c65666c68..4b6b65f450a86c238ba0c66e03462c775d12b8cd 100644
---- a/drivers/spi/spi-cs42l43.c
-+++ b/drivers/spi/spi-cs42l43.c
-@@ -52,20 +52,6 @@ static struct spi_board_info amp_info_template = {
- 	.mode			= SPI_MODE_0,
- };
+diff --git a/drivers/gpio/gpiolib-swnode.c b/drivers/gpio/gpiolib-swnode.c
+index e3806db1c0e077d76fcc71a50ca40bbf6872ca40..b44f35d68459095a14b48056fca2c58e04b0a2ed 100644
+--- a/drivers/gpio/gpiolib-swnode.c
++++ b/drivers/gpio/gpiolib-swnode.c
+@@ -31,7 +31,7 @@ static struct gpio_device *swnode_get_gpio_device(struct fwnode_handle *fwnode)
  
--static const struct software_node cs42l43_gpiochip_swnode = {
--	.name			= "cs42l43-pinctrl",
--};
--
--static const struct software_node_ref_args cs42l43_cs_refs[] = {
--	SOFTWARE_NODE_REFERENCE(&cs42l43_gpiochip_swnode, 0, GPIO_ACTIVE_LOW),
--	SOFTWARE_NODE_REFERENCE(&swnode_gpio_undefined),
--};
--
--static const struct property_entry cs42l43_cs_props[] = {
--	PROPERTY_ENTRY_REF_ARRAY("cs-gpios", cs42l43_cs_refs),
--	{}
--};
--
- static int cs42l43_spi_tx(struct regmap *regmap, const u8 *buf, unsigned int len)
- {
- 	const u8 *end = buf + len;
-@@ -324,11 +310,6 @@ static void cs42l43_release_of_node(void *data)
- 	fwnode_handle_put(data);
+ 	gdev_node = to_software_node(fwnode);
+ 	if (!gdev_node || !gdev_node->name)
+-		return ERR_PTR(-EINVAL);
++		goto fwnode_lookup;
+ 
+ 	/*
+ 	 * Check for a special node that identifies undefined GPIOs, this is
+@@ -41,6 +41,7 @@ static struct gpio_device *swnode_get_gpio_device(struct fwnode_handle *fwnode)
+ 	    !strcmp(gdev_node->name, GPIOLIB_SWNODE_UNDEFINED_NAME))
+ 		return ERR_PTR(-ENOENT);
+ 
++fwnode_lookup:
+ 	gdev = gpio_device_find_by_fwnode(fwnode);
+ 	return gdev ?: ERR_PTR(-EPROBE_DEFER);
  }
- 
--static void cs42l43_release_sw_node(void *data)
--{
--	software_node_unregister(&cs42l43_gpiochip_swnode);
--}
--
- static int cs42l43_spi_probe(struct platform_device *pdev)
- {
- 	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
-@@ -391,6 +372,15 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 	fwnode_property_read_u32(xu_fwnode, "01fa-sidecar-instances", &nsidecars);
- 
- 	if (nsidecars) {
-+		struct software_node_ref_args args[] = {
-+			SOFTWARE_NODE_REFERENCE(fwnode, 0, GPIO_ACTIVE_LOW),
-+			SOFTWARE_NODE_REFERENCE(&swnode_gpio_undefined),
-+		};
-+		struct property_entry props[] = {
-+			PROPERTY_ENTRY_REF_ARRAY("cs-gpios", args),
-+			{ }
-+		};
-+
- 		ret = fwnode_property_read_u32(xu_fwnode, "01fa-spk-id-val", &spkid);
- 		if (!ret) {
- 			dev_dbg(priv->dev, "01fa-spk-id-val = %d\n", spkid);
-@@ -403,17 +393,7 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
- 						     "Failed to get spk-id-gpios\n");
- 		}
- 
--		ret = software_node_register(&cs42l43_gpiochip_swnode);
--		if (ret)
--			return dev_err_probe(priv->dev, ret,
--					     "Failed to register gpio swnode\n");
--
--		ret = devm_add_action_or_reset(priv->dev, cs42l43_release_sw_node, NULL);
--		if (ret)
--			return ret;
--
--		ret = device_create_managed_software_node(&priv->ctlr->dev,
--							  cs42l43_cs_props, NULL);
-+		ret = device_create_managed_software_node(&priv->ctlr->dev, props, NULL);
- 		if (ret)
- 			return dev_err_probe(priv->dev, ret, "Failed to add swnode\n");
- 	} else {
 
 -- 
 2.51.0
