@@ -1,155 +1,167 @@
-Return-Path: <linux-spi+bounces-11434-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11435-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14271C757FC
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 17:59:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73876C75E55
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 19:19:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 0A9682BD54
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:59:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E3044E02C1
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:19:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EF736BCF6;
-	Thu, 20 Nov 2025 16:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC7DB333439;
+	Thu, 20 Nov 2025 18:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlMo2y4P"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="kyk29MP7"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E435E33F396;
-	Thu, 20 Nov 2025 16:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E874A2E764C
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 18:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763657965; cv=none; b=TU8I3Em7ZWr+vvh4Of2SLuWNAopd2SvcojF2MwTWB9AoQYj+Wo1aFCdD5HUleTUVeXsYOKJZfFgsr4TMWueEaFi/zzXmUDFaKBHvHGvm0S/wrR9cJh/z880itL/rbVvVOzUC3AaoaCYTBTb9PwTx1ujFeGqE3BijiV7xC1XG4mU=
+	t=1763662792; cv=none; b=HgyZzc+KKnW0z3mGOUPnc4QOf9oRYa4fPEp4gP5N+/Ov6vMy9agfo8H73XqLIBLvCsNnACMo0i1k5CiRj5QSJJN+C2YNK9Q4e5wlYud7seeWNexn8830EM1LlcUxStmhJ/rktBhrOfnMXMYgUMl1d4cyfX23bwrXaCAx5G/U0sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763657965; c=relaxed/simple;
-	bh=31PVOHheLa2FxERIWbQzHNZCnFqP06e9LEcd0yMdb38=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GaZQENMd5SDubHjzUE/2TsWPBfM7fwA/IUCgGCCiFgYJT8GxVc1LXG4fUt/7P2b1lUtb3HbBFV9fzl3IoszsUOF6uZrED6i/UDYnSKfY8VmBuJXErDaVikoPrH33OTWO4WYGK/qC/uUSCTjNbjOI8scvZUnivAAZrVMSObzjB5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlMo2y4P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FDCC4CEF1;
-	Thu, 20 Nov 2025 16:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763657964;
-	bh=31PVOHheLa2FxERIWbQzHNZCnFqP06e9LEcd0yMdb38=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JlMo2y4PVx2TMMyWRq7stwjWCnhqEyN16M4NxCKSXDiQf30t/KEbIeZI79ilUh+xN
-	 91u+7/PZu85pFBa4/RMfEHuzNGwFVFdwQcVaeSmTifTkFCLKfOOKSOAdlXvqhymX+P
-	 344l+/cNQA5U9X8QCC4o769kRZ4bWt70q9j034klZ45HcR7CP68F2qr3fk5EOjoIMW
-	 b3aEkgGqmJF3SVflYTEPrbhQsGYyy62w0wpGhdLugmU+VggUgipINRZ7ZY7Tsc6HG+
-	 RNma14Ye3Bj8tWH+0D3ZjFV+XZRTpBL/y8HIfMNN6A9jXO9YkTD8813hDcMC05mfg3
-	 qBAaADmB/rMQA==
-Message-ID: <0ce7b889-f03d-4a41-8866-e137ad45e77b@kernel.org>
-Date: Thu, 20 Nov 2025 17:59:17 +0100
+	s=arc-20240116; t=1763662792; c=relaxed/simple;
+	bh=2frM4ZKJ9sHrFHvhxYMW/pljtv9IlgikwDwgYXbV9+E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jcGsy2vp3aSakhLt86Px+h2NwRbB6QplRAPKt6aUWh+Irw6YOR7w3DaPlKQu2XS5S3lYPUVX954Yx/nEZo2vJE9/UuBUN/icR9YDyKdcympvJGIU0ERfP9RhhFOQ0uWxl2vitWNZtDr4fecbRZB+Ff2mrLXzrBud0hQZlN5HBak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=kyk29MP7; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59428d2d975so1361884e87.3
+        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 10:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763662789; x=1764267589; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QnYALWaCSwb3tCzOH7sb75PPH0v2Pj24u8FmC4zAj8Q=;
+        b=kyk29MP7qKcrUq/lMPOHCAFiP6roy2oouvyrWvJhDLmYAwzVNM2DCq+YQ0glx4YU6H
+         wfGraDVQzwEMJjMcGM1wwXpAEuGVByepve5+thh63Hr4ZS0HngBBDCvMTtAWISMl7xIA
+         S+gaHIf3P36lFIl9p13wrxL7hTMNlrxYYDNUefUdQmMtf+6CRvN2Ww1lqyYhYS7QE4L4
+         exmVTObHgB3Z31J5BcHtgTeQPwRqDfc0se2P9BHElwFYYAixboESwmwh6Pg9f085LpmG
+         1fCCEzl5KAbE2C3TaUGu1iMlu9bn+hQWq4LZsgWOMJIgwZp6sefZhg1NLyIRhsstkNmO
+         DboQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763662789; x=1764267589;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QnYALWaCSwb3tCzOH7sb75PPH0v2Pj24u8FmC4zAj8Q=;
+        b=WOl92ODv3iJQy90jFIL5QdwbgPwaZ/zYkMxDV5wHmkjJnK08LdoF4dcsUNqj1MbEZC
+         EK8DiarXSwAT7GSRdYFSPVxIRef2dG5yuVYoepEazDn4dkFh037lMxaIDwrp6Dvajujk
+         SKD1w+miti7RlNIgyL4OyqQOXfHybbRj+W4CR3s8s1TwvUOVG7f9WqwYTEN1r/AgrZob
+         4ws6LBez31IH/IQnyg9cN9qbiiyZ3Yoc+Te8YRnzttsqp1UasUwVtzu+Kzw05F2Q4pcw
+         2ZCCkKc5QiNNQWNTDpfq5IC0g7NtA08gNvC6YVKwZ/hV4vMi7CRqLhoYwLxHvDlO0bRX
+         OCNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVH0lVIFjplnakqLIXkQ+HosPTSZI9DYKwfbWtkbLzlF2xAUnkrJJ3Ui4Dl7PtJB9+G0avpkR1M4vw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM5TrsDUoxwBRwqyaBgu3Ln2Rs/PzCAhhmC43hg6JwUr0UUddh
+	KWe9TFN42ba/HWLvDdVSwBeyprdyjREqoc4V1JG7SfV0N7w9rDyCVqChOdWSgKKPFQ1Lx6nE+cS
+	zDTyC1YYMEkFXzmcs/dfu+IkyV+KO34/OpnaafqWxeA==
+X-Gm-Gg: ASbGncslwL19OTwX15uquvjw7f500q0uRCk3JUToBCSNdRbrEHOwJozGBgHT+LgD6An
+	vq7dseGkNS5k7ZsQWr8NE+q8/t3aZtt6y/ymFs1mDohRWSp9zLnLMEqcpX6dXCtmL88NbcI8T14
+	5UiSGcnIbiSOTlLF+ys82U8yOVF2lja1uwOdfBtMw4zrPfz7cBdr4nAoqAC+Ycyl6I9I0KT2+p2
+	t5pUzanZecmtfkgf5yoOT4vsT+LB9sW8PE+AKuCxS5LfDkOL5EB9gnJkfQ4uh+nUR/H3LFXbU5R
+	rqQ9aQLOQVJR1zBMnoi9NZqnQmlYYoKfL6Cz
+X-Google-Smtp-Source: AGHT+IFJUK59m9cV2hdaMboMdwCuLYZSd6vorsTLduT0KYUQfG8bYza6yPNSkEBgztU1V5kaircoAsMSf6iO5hTasWc=
+X-Received: by 2002:a05:6512:b01:b0:594:34b9:a7f4 with SMTP id
+ 2adb3069b0e04-5969e2f421cmr1562911e87.29.1763662788999; Thu, 20 Nov 2025
+ 10:19:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: qrb2210: add dts for Arduino
- unoq
-To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, broonie@kernel.org
-Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
- naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com,
- chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com,
- farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-spi@vger.kernel.org, m.facchin@arduino.cc,
- Riccardo Mereu <r.mereu@arduino.cc>
-References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
- <20251120155825.121483-7-r.mereu.kernel@arduino.cc>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251120155825.121483-7-r.mereu.kernel@arduino.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251120163252.34760-1-p.zabel@pengutronix.de>
+In-Reply-To: <20251120163252.34760-1-p.zabel@pengutronix.de>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 20 Nov 2025 19:19:36 +0100
+X-Gm-Features: AWmQ_bkWVGFSZn3FalnS_qvDgjI51sEMsJrOYvZkmui2vXqgrMxEN-ruhSsnp2s
+Message-ID: <CAMRc=Mfzzgx2JcBa1iG9L9ztF+S55cSNHgNurubPBsDteoLraQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Reset/GPIO/swnode changes for v6.19
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: soc@kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kernel@pengutronix.de, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	David Rhodes <david.rhodes@cirrus.com>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
+	Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 20/11/2025 16:58, Riccardo Mereu wrote:
-> From: Riccardo Mereu <r.mereu@arduino.cc>
-> 
-> Arduino UnoQ is a single-board computer combining Qualcomm
-> Dragonwing™ QRB2210 microprocessor with STMicroelectronics STM32U585
-> microcontroller.
-> Support to a simply boot to shell environment includes:
-> - UART, I2C, SPI
-> - onboard LEDS
-> - eMMC
-> - WLAN and BT
-> 
-> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../boot/dts/qcom/qrb2210-arduino-imola.dts   | 459 ++++++++++++++++++
->  2 files changed, 460 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts
-> 
+On Thu, Nov 20, 2025 at 5:33=E2=80=AFPM Philipp Zabel <p.zabel@pengutronix.=
+de> wrote:
+>
+> Dear arm-soc maintainers,
+>
+> The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a=
+7c:
+>
+>   Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+>
+> are available in the Git repository at:
+>
+>   https://git.pengutronix.de/git/pza/linux.git tags/reset-gpio-for-v6.19
+>
+> for you to fetch changes up to 5fc4e4cf7a2268b5f73700fd1e8d02159f2417d8:
+>
+>   reset: gpio: use software nodes to setup the GPIO lookup (2025-11-20 16=
+:51:49 +0100)
+>
+> This tag is separated from reset-for-v6.19 because it may also be merged
+> into the driver core, GPIO or SPI trees, if needed.
+> It contains a single series [1] with changes to swnode, gpio, and reset
+> code.
+> It is based on v6.18-rc5, which includes the prerequisite commit
+> e5d527be7e69 ("gpio: swnode: don't use the swnode's name as the key for
+> GPIO lookup").
+>
+> [1] https://lore.kernel.org/all/20251120-reset-gpios-swnodes-v7-0-a100493=
+a0f4b@linaro.org/
+>
+> ----------------------------------------------------------------
+> Reset/GPIO/swnode changes for v6.19
+>
+> * Extend software node implementation, allowing its properties to referen=
+ce
+>   existing firmware nodes.
+> * Update the GPIO property interface to use reworked swnode macros.
+> * Rework reset-gpio code to use GPIO lookup via swnode.
+> * Fix spi-cs42l43 driver to work with swnode changes.
+>
+> ----------------------------------------------------------------
+> Bartosz Golaszewski (8):
+>       software node: read the reference args via the fwnode API
+>       software node: increase the reference of the swnode by its fwnode
+>       software node: allow referencing firmware nodes
+>       gpio: swnode: allow referencing GPIO chips by firmware nodes
+>       reset: order includes alphabetically in reset/core.c
+>       reset: make the provider of reset-gpios the parent of the reset dev=
+ice
+>       reset: gpio: convert the driver to using the auxiliary bus
+>       reset: gpio: use software nodes to setup the GPIO lookup
+>
+> Charles Keepax (1):
+>       spi: cs42l43: Use actual ACPI firmware node for chip selects
+>
+>  drivers/base/swnode.c         |  30 +++++++--
+>  drivers/gpio/gpiolib-swnode.c |   3 +-
+>  drivers/reset/Kconfig         |   1 +
+>  drivers/reset/core.c          | 146 ++++++++++++++++++++++++------------=
+------
+>  drivers/reset/reset-gpio.c    |  19 +++---
+>  drivers/spi/spi-cs42l43.c     |  40 +++---------
+>  include/linux/property.h      |  13 +++-
+>  7 files changed, 141 insertions(+), 111 deletions(-)
 
+Pulled into the GPIO tree. Thanks everyone for reviews and patience!
 
-
-> +
-> +&spi5 {
-> +	status = "okay";
-> +
-> +	spidev@0 {
-> +		reg = <0>;
-> +		compatible = "arduino,unoq-mcu";
-
-If there is going to be new version (no need to resend just for that):
-Please re-order these two, compatible is always the fist property, reg
-follows, see also DTS coding style.
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-
-Best regards,
-Krzysztof
+Bartosz
 
