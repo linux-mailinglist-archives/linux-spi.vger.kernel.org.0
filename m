@@ -1,91 +1,110 @@
-Return-Path: <linux-spi+bounces-11384-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11385-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87BFAC73555
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D95D0C7363C
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 11:09:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0D6994EB45A
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:56:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6AFB34E8DAA
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A009930FC3A;
-	Thu, 20 Nov 2025 09:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F1063019CD;
+	Thu, 20 Nov 2025 10:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gi6S6BYi"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="UolA3ac1";
+	dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b="FP9eCMKl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6811D2DE711;
-	Thu, 20 Nov 2025 09:56:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763632578; cv=none; b=QsgTZpmTszHlji0zpFDaMFZSGx6CXgQzZ8a3G85XpAhPuxigoqur8K5JU+BtqFmIpeX83b9dyiiJ7S9cuCqKBg0nRFUr+35XC9x6jY/ApsNZcxVNhG9cK6E0UIc4zmUoc24f5cyGg5Sx+QLlpaQGbgzfhqM8wKYgQrfZKFqGbDE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763632578; c=relaxed/simple;
-	bh=VazEnpPnFoBoJ8p0AoOtS3RJnfpeCdqi/y7vL1cQD1U=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19FFF2264A9;
+	Thu, 20 Nov 2025 10:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.152.168
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763633233; cv=fail; b=C5UFFSl3q7+b/lWUiqqPcpsdd5TdZFwPsh/v8pD77b0SMMnyTNFcCfvD8AHNN+9aMStrnHakO4myvB4bhUProh4ak0l2V1Mt3dF970lr39KozxeDeQI2ivnROJRFXBVLS6glYfjwRKAKmewXSeYSEXngM0GiPI+wRJKKm2Ne1Ms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763633233; c=relaxed/simple;
+	bh=kDvSTPtfqnlekpHHWTRTYvR5sOL2XztVC64vmXmSGQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BBg3XGyEKxIlgJTaULqLf9kpkeGPAahVD3XzXo4538LDAFV+M927n+g2Z/Mbfd7o1xnyEpYXtQhlYUelpE74CBpNk8gQvIMuKPuRQKb/ZLZWYDcnFagKj7mp0UvtULA5pSWoT5BwBBFcdWPWS36fKWTlm7nzBiFV9+pXUG3eX8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gi6S6BYi; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763632576; x=1795168576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VazEnpPnFoBoJ8p0AoOtS3RJnfpeCdqi/y7vL1cQD1U=;
-  b=Gi6S6BYizVKEteiTcmwYdOr1TWBxQLk4ozeAtZd7HKDbiSR4yzsccngA
-   cn3LJTwWqJwPXrHfefdXUM4WUCnLXstfMU18mzhENNOJVqa18Tx6DzMvd
-   rV4IuCK9OzxJ3tLTFJKiRLHwHFnJ3Auxzu+WNU0AQk9QYcx0T/bY8jCRw
-   +6tYmef11TgcKep+9EZnXt3F3aL2M/eMWBHc9y4oOxtxCclFlQ0HvR8U+
-   GkTd2HzyTWWKXsHV79+rDEBZTEiozH5cZdCDbj+QydRsg9A23+xNqBpks
-   XYiJUVD3tDXnJRilitEsrKQqHkcMkOpTaD/6xmmZSM41kyO5kSr1YIW8j
-   Q==;
-X-CSE-ConnectionGUID: ueZfWjwcQHSS2nyXwH40dw==
-X-CSE-MsgGUID: DLtRhP0hRC68cH1HkeU4Ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11618"; a="69312779"
-X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
-   d="scan'208";a="69312779"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 01:56:15 -0800
-X-CSE-ConnectionGUID: xPUjTznQTeOva00wp59Y2g==
-X-CSE-MsgGUID: XTvmEvyDTMWr//+SQ6oljA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,317,1754982000"; 
-   d="scan'208";a="191753407"
-Received: from amilburn-desk.amilburn-desk (HELO localhost) ([10.245.244.97])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 01:56:12 -0800
-Date: Thu, 20 Nov 2025 11:56:10 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JCrvrRdu5l49tpFy8D9WCyCVPFKiXs0idM7eLha8d9SnmbT0PUR3Vsxfzma0n49QmCorvfqbAVlPeOc7LvY+J6KfUVMTOlAUouf1oE3NSdwaWRCw5y1jOdzQ0wIa4RWTGYUw3DrpyMzXNKr92hTEcQth74M0EeHiiwXpUWvAlgY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=UolA3ac1; dkim=pass (1024-bit key) header.d=cirrus4.onmicrosoft.com header.i=@cirrus4.onmicrosoft.com header.b=FP9eCMKl; arc=fail smtp.client-ip=67.231.152.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+	by mx0b-001ae601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AK5KmPA311678;
+	Thu, 20 Nov 2025 04:06:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=MhOChC2/yMYV4dDCa4NXEM2qQIYp2xkrRVyAH1TSpUg=; b=
+	UolA3ac1hmeez3x6KmSHHqQrsd6okXJuI1ZO35eBejCnc5U8cxXlrzcpcmV8hHxG
+	ijSmJ00sCRu4FU0PP7OjNEOTYH8NGXMNS+Eb+tstpPGx6mKItOBIN+NI9HNiE3+1
+	Xj+PqZpP8lTuiJ5A34WUGmjN1cUZJH9GSQ/odIfConNBEMuZ55fR11fXJ/ZDJuNG
+	zTwlkQbFXbXPhilBOuQskPMsF1sd7xQngzxL6Fz56//+EWwddhGB+tV9nNUawUta
+	kqfTEvl2tP7L57mPg+3rJ8uMkbTGi0zbg8RUBS8fTTxV3ehEkwBfGRppD+MxkoS1
+	FqWC/UkZ51JmN5kgKnGgKQ==
+Received: from ch4pr04cu002.outbound.protection.outlook.com (mail-northcentralusazon11023079.outbound.protection.outlook.com [40.107.201.79])
+	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 4ah1bma5kg-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Thu, 20 Nov 2025 04:06:51 -0600 (CST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jkfiDfI/h79O87Stbb4BiQHJsiSmocSScBOHuJqLRY9gj8iUffmByB2DeJsGbNT945fPywyzTE2A1DWRGOTbgeQhONC2+il9k0fGo4Mzj5b2ujqnPQcSVtAkWcmGPb49JUziiMePwwwkZBCmtlh0sWKM33BE/ARgR7EYCV5p+0qiqXeuKT+DQT+eV4cNuC6vpshkm+OexX3gYDvpdsr8rz1UalkFLaNi2D5k1t5neIFk2h5fxZXr4a2RaquDuyp15zceI4cjVICSSDPNuHP7PbpGaSNa7/DCz0JcVfiIHsgcOqJ3CuQQhVuM/Qw3nSUZ+wZ8D5Y9QerX1AmGH/vn8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MhOChC2/yMYV4dDCa4NXEM2qQIYp2xkrRVyAH1TSpUg=;
+ b=fsdOxQPmVXWL5MMwWtr1M8HhrHbIy5rpXr99cqKB2DuB9h1egleq79VfXkxpEMBJcfn/Qz4NFxEs0gBiPVS+g/lY8BlKmfPzo/HI0Fu0k0Uy29FFr3JPtuqLvr4xV4mN4/S32l+96DD53sMun8Sd4QLOgjQeA5dw/stPu5IUtD7PvZalBKkpovzF0YqsTVQ6bTPMBX7WZEFkN4M0gMjmPQizu3L3hZgmEVNZmdNolOXVCvWeBQVLGhbA5LfPryawwHEdH4VJwlQeHhXGz6nhK4ZzSvjXG/sUr+yT3kU/GFPmpFxt/SmRc/rzCQcLGhnilcPVh1pJ/yo5WlfcrBFZKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 84.19.233.75) smtp.rcpttodomain=bgdev.pl smtp.mailfrom=opensource.cirrus.com;
+ dmarc=fail (p=reject sp=reject pct=100) action=oreject
+ header.from=opensource.cirrus.com; dkim=none (message not signed); arc=none
+ (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cirrus4.onmicrosoft.com; s=selector2-cirrus4-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MhOChC2/yMYV4dDCa4NXEM2qQIYp2xkrRVyAH1TSpUg=;
+ b=FP9eCMKlDyaKyGPM+7ecjWkNnJokxOyALIp08rq2O1DqgKIybn0oL2qlOeLfcjmDQm+frXUu2AiiWxZMAkFbHo9YPVWVgka3h1NQnRUHys3mp1dw+F8iwBsp4sW+HO9Kw2+mnx4Cw1MzDAu6w+x0U2P3UJBM03/H/sVLwuK3nyU=
+Received: from SA0PR11CA0081.namprd11.prod.outlook.com (2603:10b6:806:d2::26)
+ by PH0PR19MB4906.namprd19.prod.outlook.com (2603:10b6:510:a0::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.11; Thu, 20 Nov
+ 2025 10:06:46 +0000
+Received: from SN1PEPF00036F3E.namprd05.prod.outlook.com
+ (2603:10b6:806:d2:cafe::3e) by SA0PR11CA0081.outlook.office365.com
+ (2603:10b6:806:d2::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.11 via Frontend Transport; Thu,
+ 20 Nov 2025 10:06:44 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 84.19.233.75)
+ smtp.mailfrom=opensource.cirrus.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=oreject header.from=opensource.cirrus.com;
+Received-SPF: Fail (protection.outlook.com: domain of opensource.cirrus.com
+ does not designate 84.19.233.75 as permitted sender)
+ receiver=protection.outlook.com; client-ip=84.19.233.75;
+ helo=edirelay1.ad.cirrus.com;
+Received: from edirelay1.ad.cirrus.com (84.19.233.75) by
+ SN1PEPF00036F3E.mail.protection.outlook.com (10.167.248.22) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.9
+ via Frontend Transport; Thu, 20 Nov 2025 10:06:45 +0000
+Received: from ediswmail9.ad.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by edirelay1.ad.cirrus.com (Postfix) with ESMTPS id 24B2A406547;
+	Thu, 20 Nov 2025 10:06:44 +0000 (UTC)
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPSA id 0D97F820247;
+	Thu, 20 Nov 2025 10:06:44 +0000 (UTC)
+Date: Thu, 20 Nov 2025 10:06:42 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Charles Keepax <ckeepax@opensource.cirrus.com>,
-	David Rhodes <david.rhodes@cirrus.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Lee Jones <lee@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Maciej Strozek <mstrozek@opensource.cirrus.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-sound@vger.kernel.org,
-	patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH RFT/RFC] mfd: cs42l43: setup true links with software
- nodes
-Message-ID: <aR7luqqew3LRwFgn@smile.fi.intel.com>
-References: <aR29uKW7yLxws9jA@opensource.cirrus.com>
- <CAMRc=MdXNXQhE9zi=i0x0yGCi0fKQNU8_tn2_Uy24TAhxG7BRA@mail.gmail.com>
- <aR3FnUNO4DyCdiLD@opensource.cirrus.com>
- <CAMRc=MfuQSGPbt3x366j5c9Sg-mgu=TfmD6X25Dk5Rmu0JiiEw@mail.gmail.com>
- <CAHp75VdLfkcrmaGBPu_YLDReyX5Gvu9pE6BXweArA5PmM3MQnQ@mail.gmail.com>
- <CAMRc=Mf9djJ77ob8L1OKa6HHBx_JxR_sajWH1mFGz=V+hMDbmw@mail.gmail.com>
- <CAHp75Vf_+WzMn+pmwK4zhLEZtG3Uat4FrdFMCMtPmmX82E3Wzg@mail.gmail.com>
- <CAMRc=MdbgeJOMoHDm_z04ko1pdKed06GP4=M+VsPaD3YOEvs6Q@mail.gmail.com>
- <aR4qxiR7pzrPdaUz@smile.fi.intel.com>
- <CAMRc=Me-DXN9kx+5bqDb9doMG9MX2EiRJiC=_QqDc0q3gOz8wA@mail.gmail.com>
+Cc: broonie@kernel.org, linus.walleij@linaro.org, andy@kernel.org,
+        p.zabel@pengutronix.de, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, bartosz.golaszewski@linaro.org,
+        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+Subject: Re: [PATCH] spi: cs42l43: Use actual ACPI firmware node for chip
+ selects
+Message-ID: <aR7oMlVpUL9prRLs@opensource.cirrus.com>
+References: <20251119164017.1115791-1-ckeepax@opensource.cirrus.com>
+ <CAMRc=MdcL0f9aE5emAsFLmwZoN5_-qM4JCSzP6D3J8D1PrsaEg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -95,132 +114,102 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=Me-DXN9kx+5bqDb9doMG9MX2EiRJiC=_QqDc0q3gOz8wA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <CAMRc=MdcL0f9aE5emAsFLmwZoN5_-qM4JCSzP6D3J8D1PrsaEg@mail.gmail.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F3E:EE_|PH0PR19MB4906:EE_
+X-MS-Office365-Filtering-Correlation-Id: d41e4310-c836-40af-2701-08de281c830d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|61400799027|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VjUxcTlkZEV1cTdISmxROVcySktROTl2V3MybW5EdmVhUTJCdnFCb2NhR2Ez?=
+ =?utf-8?B?Nld5dDRRSVhvQ0lZV09hRWh5WjhFTXNOS1AyOXdwb0lEYmJ2TkV2Q2FHR3g4?=
+ =?utf-8?B?c3NvOHRoTHpYZk45MHNJRmYxOXh2a0JreHdhTFZndFhqSXdORVhLZ2hUMFB2?=
+ =?utf-8?B?b0Q3NVlsUkJMd3RYdmtPMjAyK09lRzJBMGcrVWIwNnNOQWsyU0ZtbGxPMlBj?=
+ =?utf-8?B?c2RnZld3dzQ2QjlBcS9CSFl6MTFvRUhYNUNNOW5LU3ZVcnlncVFYTkpEdUZJ?=
+ =?utf-8?B?MDRhSlpIai9FU3cyZGxnTytFV3ltZnZnVVNoTmRBZlF2ZHFTMkNKZlluSmRZ?=
+ =?utf-8?B?cHBqMk5MREhPd0ZDZGRoRVFVMWVKUmZEUzBHN1dpeW9LNlh3bmNZajBybkVN?=
+ =?utf-8?B?RitaMXlzS05uNjcvajhyczIyaGJXaWNUQXNPenpFY2pUMjR6cFRqTEpHVTMz?=
+ =?utf-8?B?Q0orRitVcU9lbndGWER6TkxnbTdpM1MzbndSeWVtQWJuSHNEWnJoWExLb0Mv?=
+ =?utf-8?B?Z0ZTdkk0SW13NU8xcHJma1JpdjVOcXg0d2NQM0NzNnJTMHljYUNyN2dzenBG?=
+ =?utf-8?B?ZzdhT3Rnc1VwMlZ1NXJMUktZcVVYNnBOREZpbXQxUEdCb2xtZkNVOGFiTHlm?=
+ =?utf-8?B?Y0J6UWdhbmpjQ2YxSEM1NHhCcDlTakxtZ09kVmZUTm5CVEEzamNCN1Ywc2k3?=
+ =?utf-8?B?RXdwQ3hGTEhLalhGVjhWR2N5UjJUVGFBMU5HQ3dlN1VxR3FpTFllY0ZUTFlB?=
+ =?utf-8?B?T2RxaVdyVUVrMFMvQ05EODhiMHY0OHhzTzZRRjY0M2FWVitIek9BdG1ib3B5?=
+ =?utf-8?B?RFAxNFFCYjdhVHMveDIvQjZ4eGdJY095QVl2ak1hSnI3WE5ELzlZMjhTbmhp?=
+ =?utf-8?B?cWIvUldWODI1Z3ZxM2tyZFRCbTZWd2doMEFOUGxUZWc4QVcrNFdIL2dzbXdX?=
+ =?utf-8?B?U2dlYkdpMDNHQnc3WVdVSjZhYzVHdWRiemx4RkxEOFVGa3d5aGNuMXc1ZG8y?=
+ =?utf-8?B?SncwRnZLN0M0NmI3Q3RmSG10a1dPcnBOY3UwendvU0tPWG5TQ05PZjREc3Qr?=
+ =?utf-8?B?WDhIK2tNaWhNeWhCaHgrNUE1am5HRHdJSGEzeHlwZ2lxUTE0S2NZemtUczFD?=
+ =?utf-8?B?MldUQlduSS9jV21JR3JIS21sMW1icHhRaTZnbHBpMWhPeTdKZmJldE5GaEVh?=
+ =?utf-8?B?QXhKUWh4cUhhY3hlMU85QnJWbFY5NUxtT3BydHd3UkkyTXZXVkR1dkhvQlYr?=
+ =?utf-8?B?U2hndTVlOXkrSmJ0ZENXUDFOZ3FnL1BuNEVTNUh5VmxkcUpOUVNielo5eStt?=
+ =?utf-8?B?SlVUSFhZanQ1OXNaZW0vWWZ3cGRVYUtVVnZVdHdPU01LaUQwT3VyL2Q0NDBJ?=
+ =?utf-8?B?V2g5ZVpCc1d6M1lLWVFPVlY0eGZDR0wwdHZsdDc4dnowY09tSUEvR0xYaXVz?=
+ =?utf-8?B?dzdoblhBZFBlUzBYdStXMUlERVY5NWhTdFZpbHFFekU4NS9sK2gyZmJ4L0p1?=
+ =?utf-8?B?c1NMVFVBOWIxK29DMnpFVlFyc0E5eDU5bExEZWxHalJSVlFia1ZQTllPMWNY?=
+ =?utf-8?B?Mk5DbnQ1aDU5bHltWmRFMjZqZ3NqUm91UlJWZlU2WThna2VFR3VxbUFoa0JE?=
+ =?utf-8?B?d2grTG02dmpIblNOajQ1VnNja1lVNGsxd25TcFhRTFNDMDVHa3ZEQlBGalRV?=
+ =?utf-8?B?eHY1RzBUWDEyOXRDNUtGbmZucXB6Umoya0lIL2ZpYlpUZ1p6Ui9YU0VuTC9G?=
+ =?utf-8?B?d1RHRVhnTEVwZlpvTkFXMVQzTzZReEh5WUxYL2FZSUREdDNhMTA0REtHVmJL?=
+ =?utf-8?B?alM1VmtpSUhzRUpTSnNsdHYyeDh5R1VOZTZDeHpOUWQ5Z3o5RVJ2NUVpb20r?=
+ =?utf-8?B?d2lDdXRmb2xXQkhxTlQ4TUZ2dDVLb3lNYWpIVkczY0pLSnR6dnRaWVlRVjdN?=
+ =?utf-8?B?NUNvRVB6cXBXTmpUYTJ6djF4dUJZZHNkMS8zbTZDaktQT3I5ZmN3QXJGb3Qy?=
+ =?utf-8?B?T2JCMUp6a0xPWlJVd2x5M2RmSlVXM3g3R2ZvQ0JVZkVxWjZQYjNyd21kTWNu?=
+ =?utf-8?B?MnZxSTNnQWwrR1pIdEhSVFlBWWNxMnE1R1oxOHp5Ykg2M211ekR6ZElDWDk0?=
+ =?utf-8?Q?6Cis=3D?=
+X-Forefront-Antispam-Report:
+	CIP:84.19.233.75;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:edirelay1.ad.cirrus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(61400799027)(82310400026);DIR:OUT;SFP:1102;
+X-OriginatorOrg: opensource.cirrus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2025 10:06:45.3107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d41e4310-c836-40af-2701-08de281c830d
+X-MS-Exchange-CrossTenant-Id: bec09025-e5bc-40d1-a355-8e955c307de8
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bec09025-e5bc-40d1-a355-8e955c307de8;Ip=[84.19.233.75];Helo=[edirelay1.ad.cirrus.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-SN1PEPF00036F3E.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR19MB4906
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTIwMDA2MCBTYWx0ZWRfX2uHu7M9lQl5k
+ SM0eiwvqHVGazqHQ2vC0ikdJ/AhAInx0BIbLO/sjvC+FenGJWcKkvvfvAOscEVvY8xANaakEyxC
+ ndif1tEmYxXI6s3YQab97oBGJwJKlnXw65d+E6QZBD8ZtHla9VdR7zYp/yj/I3jQ9EkWKOb1V+u
+ CjfJpuudIzbgMwZ5S+GaHm6pqjKXahr255u/OQCSPw5h4vWoLBarqeIDphGtIEgcL+ja79xe0IY
+ /hmT8V61udRuJK231559+GIxOHA4j6yOVqGWSHypYoQK4qcbN8rkRvJZqGTFQ3AQ/d46+UN0Xxi
+ kCe4KTM8TlWP1sKy2lFere2DgXM/gt/r0vjTWnePSZCTLScx8/lPJ6cO5oJ7bSlKIPe9wh8D/k5
+ fPZC3HExgT1R/YmdiztYtmt+Lq7ETg==
+X-Authority-Analysis: v=2.4 cv=XcmEDY55 c=1 sm=1 tr=0 ts=691ee83b cx=c_pps
+ a=QpQIPgq430LJFJp+cclIig==:117 a=h1hSm8JtM9GN1ddwPAif2w==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s63m1ICgrNkA:10 a=RWc_ulEos4gA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=w1d2syhTAAAA:8 a=e0TgBREAnGws873Y1xsA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: JPWsj5sggIDzTfiBBff1rI4_8XurzflD
+X-Proofpoint-ORIG-GUID: JPWsj5sggIDzTfiBBff1rI4_8XurzflD
+X-Proofpoint-Spam-Reason: safe
 
-On Thu, Nov 20, 2025 at 10:12:39AM +0100, Bartosz Golaszewski wrote:
-> On Wed, Nov 19, 2025 at 9:38 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Nov 19, 2025 at 03:30:46PM +0100, Bartosz Golaszewski wrote:
-> > > On Wed, Nov 19, 2025 at 3:24 PM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-
-...
-
-> > > > > > My idea was to mark the fwnode with __private and fix the (ab)users,
-> > > > > > should not be so many. Can somebody mock up a coccinelle script to
-> > > > > > find all dereferences of fwnode from struct device?
-> > > > >
-> > > > > I think you're underestimating the level of complexity. What about the
-> > > > > concept of dev_fwnode()? It literally makes no sense if we switch to a
-> > > > > list of fwnodes.
-> > > >
-> > > > Why not? It will return the pointer to the primary node. You can look
-> > > > for example how the list of the DMA descriptors is done in
-> > > > drivers/dma/dw/core.c. Not the best solution, but gives you an idea of
-> > > > how it may look.
-> > >
-> > > What even is a primary node though? You can have auxiliary devices
-> > > without an ACPI or OF node.
-> >
-> > The one which gives the main set of the properties for the device.
-> > The devices that don't have it, simply have a list of fwnodes empty.
+On Thu, Nov 20, 2025 at 10:29:41AM +0100, Bartosz Golaszewski wrote:
+> On Wed, Nov 19, 2025 at 5:40 PM Charles Keepax
+> <ckeepax@opensource.cirrus.com> wrote:
+> > +               props = devm_kmemdup(priv->dev, cs42l43_cs_props, sizeof(cs42l43_cs_props),
+> > +                                    GFP_KERNEL);
+> > +               if (!props)
+> > +                       return -ENOMEM;
 > 
-> Well, what *is* the *main* set of properties? Who declares that? I
-> agree, it's easy for device-tree - the OF node is the main one, but
-> then what if a sub-device inherits the OF node of the parent while we
-> also add a software node? It's not that straightforward and we'll run
-> into issues for sure just like what we're seeing now with secondary
-> fwnodes.
+> You don't need to allocate it for more than the duration of this
+> function, device_create_managed_software_node() makes a deep copy of
+> the properties. They can be on the stack.
 
-First rule is that swnode NEVER is the "main" property provider.
-But it could be a single property provider.
-The rest becomes easier after this.
+Good point, thanks will fixup for v2. Should be able to send that
+later today.
 
-> > > Only with software nodes. Which one is the
-> > > primary? The first one we add?
-> >
-> > Yes. The problem here might be if we add the SW node before the actual FW node
-> > appear (it can be if we created some devices before the actual FW based
-> > enumeration happens. It would probably need to have some kind of weight
-> > (or priority value) and list should be sorted based on that number.
-> 
-> Ugh, please no. Firmware node priority?? With magic numbers?
+> This is looking good, if you post a v2 and it's reviewed, I can resend
+> my series with this included and maybe it'll still make v6.19.
 
-Why not? Many tools and things rely on weights.
-But again, first problem first, the design. The additional property bundles
-(as swnodes or OF overlays on ACPI-based systems) can come later on.
+Cool yeah I am fine with you pulling this into your series once I
+have sent the v2.
 
-> > > > > For it to make sense we'd have to have a kind of "dynamic" firmware
-> > > > > node attached to a device which we'd fill with an aggregation of all
-> > > > > properties from firmware nodes in the list.
-> > > >
-> > > > "Dynamic" is just a node in the list. The only potential problem here
-> > > > is prioritisation. Should we add to the head, tail or insert? But
-> > > > converting current approach will be straightforward.
-> > >
-> > > What I have in my mind is not another firmware node in the list in
-> > > struct device but rather a new firmware node implementation, that
-> > > would be assigned to the device via a dedicated pointer and would be
-> > > filled with a logical OR of properties from other firmware nodes added
-> > > to the list.
-> >
-> > Oh no, this won't work in corner cases. What if we actually need to "fix"
-> > an existing primary node (there were discussions long time ago about inverting
-> > primary/secondary in some corner cases, but it didn't appear so far as
-> > it most likely will give tons of issues in the _current_ design)?
-> 
-> What do you mean by "fix"? Like repair? Or fix in place? I'm not following.
-
-When the primary already has a property that needs to be rewritten
-(same name, different value). Note, that there are use cases already
-for this AFAIR, but probably they were worked around in not too hackish
-way or abandoned for now.
-
-> > > Then dev_fwnode() would return this rather than any one
-> > > of the firmware nodes from the list. Think of it as the "master
-> > > fwnode" of a struct device.
-> >
-> > fwnode should not be in any relations to the device, I mean when we do fwnodes,
-> > we should not assume that it's backing the device. In the idea you shared it
-> > won't be possible ("dedicated pointer") in mine it is (just a list of something
-> > that may belong to the device, or to another object, doesn't matter).
-> 
-> That's not true, we expect fwnodes to back real devices all the time.
-
-No. Even OF doesn't do that. OF node can be a separate thing without struct
-device being associated with it.
-
-> Look at all the find_device_by_fwnode() functions we have everywhere.
-
-What do you mean, please?
-
-$ git grep -n -w find_device_by_fwnode | wc -l
-0
-
-Even if you refer to *_find_device_by_fwnode(), still it's not everywhere,
-just in a dozen of modules.
-
-> The crux of the problem Charles identified is the fact that the
-> secondary fwnode is a field of struct fwnode_handle and not of a
-> struct device. This really doesn't make sense as we see where multiple
-> devices use a single "real" fwnode but want to have different
-> secondary software nodes.
-> 
-> Moving the secondary fwnode to struct device would already help a lot
-> but if we're doing that then we may as well switch to a list of
-> fwnodes.
-
-They all should be an independent entity that can be part of the struct device
-but it's not obligatory relation ship.
-
-Again, device may have a backing fwnode, while fwnode might not have a struct
-device consumer.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Charles
 
