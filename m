@@ -1,234 +1,155 @@
-Return-Path: <linux-spi+bounces-11420-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11421-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 211B2C75351
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 17:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A85EC75465
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 17:14:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 812984F9F91
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 15:51:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9D2834F408E
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 15:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F7A346FC0;
-	Thu, 20 Nov 2025 15:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48DAC340A70;
+	Thu, 20 Nov 2025 15:58:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="0YhPki+M"
+	dkim=pass (1024-bit key) header.d=arduino.cc header.i=@arduino.cc header.b="MqNy79CO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D70376BEB
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 15:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5494635F8C0
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 15:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763653866; cv=none; b=tcTHabt2hnJlNh7vAbhTgW1tjY9WGxhfwDRK6bX4pwEpAq87nSyBK92bKdysV5h1mmUY5UiRyijtc87PtyZO+Z6WHIxiVWD8NDQZiMjwuxH0SArjYQ7dAAGmfHAXeRh3OSVAfQc5dTRXawYUKz5ojl381K1mn4C14zjxJzBcoAU=
+	t=1763654312; cv=none; b=Luk6+oE2CnkMiAvCXutW0y6KSmdvU/bRbcZTssNw66K7gE+CP3aBWXfQu2V7iEQVjnvuL4A0aag7oSkq4Dym1HnJ6T8ml2CyLY2S8yvkjYa/SkgTR5qvJsZoLo3ck08e8KTAfNIJDSEKdEZ6U0N2Y4ZRKUpumR8ODQQdT+FRSx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763653866; c=relaxed/simple;
-	bh=kbGuukyo5NVuqdwX2FCzLSAFMv2gkrlyNzPgdYI6GCg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=icmNGIhoxG+ZaOOPmUpq/vmfdltIWSW7aUSYWGJle+Mu63E2mZ0weaYpB93kG1ZJtS8o6ZKEjWXW4I6eO6CyAbKhdFI4ID6Mm1gCUbROTjgjGkG2A3VLzVmhJrCI0Ls2RDnHB2dFYjZWhtk/zQySQhS11QZa31z7ThN3/IeR0iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=0YhPki+M; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-43346da8817so5654895ab.0
-        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 07:51:03 -0800 (PST)
+	s=arc-20240116; t=1763654312; c=relaxed/simple;
+	bh=w7YFrkfbyTCvfyB41gavemDY8lfBuU4oxXFueWjMa9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aq2FugJphSni5IwMUgp1OPkAJsGj1/gP7CPNYlwFm41Byh6RGw5PrY9hg5JE2jegvufMfGT8btBjXWMdga2kkI7gwlfGHFl5yxSGu/lwwUxqWCK49iOAUGVeco3AmtOzDNw0YyXQutRnU7k+IXHlx5LUuZKg5rUchA42dO4hgcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arduino.cc; spf=pass smtp.mailfrom=arduino.cc; dkim=pass (1024-bit key) header.d=arduino.cc header.i=@arduino.cc header.b=MqNy79CO; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arduino.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arduino.cc
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477a219db05so7261085e9.2
+        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 07:58:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1763653862; x=1764258662; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5jVULdmnGJZUzqfCeuMvq76ewKlBDnLfe0I6V5R7xpM=;
-        b=0YhPki+Mh1f38eY9cTpsFxkzRUKaZP2D1Q0ZdaERWlM8Z02t1GgxkTDfVXf+8C8doc
-         9P/tWTEcqK8YgONy0FJfIjGl1qTjTxRbXd+jjoISX3E54m3mwJo5Jk4owxYWpvvuXT+s
-         +F1vlqksATjaD9ewZuZ3+2z4qwAKd5TjEnsd298LJsodyMFtKvBrYvO5vSdBu/cStu+W
-         qvqYkf+x9MY6tmZ179+haa/v69EIYk15FSiTVeag0CVpPo5JfHnpVXnwp0MfrqVoQ5ob
-         AjMWr5zx6ZB4LkKI8pX7NOcWo8Hn9t8ZOr9Rz6JRt9upIfSe+P76FJALVyV5NDhGV/FS
-         6gtQ==
+        d=arduino.cc; s=google; t=1763654309; x=1764259109; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2hexUd/mEPKRNcSZxwjjDeUDQ0Dgw47XrMHUrWKRSBc=;
+        b=MqNy79COfZ4sJe+gRWcQ3dsA0oEMcFxTj8lwFl2heKsWF53trncCcm8bJuxye4ElTR
+         FPoSmEA9wJmxDqcWkxUZBX8urWeju0/kt+FYVxTnRI7aNRCkaBypSGOEx4oxV/mOgQMv
+         jd/VwKcyhjmk5lCHqVjaCIV2Tv3X7OTuPp5w8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763653862; x=1764258662;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5jVULdmnGJZUzqfCeuMvq76ewKlBDnLfe0I6V5R7xpM=;
-        b=ZMvaLI3y0rpvIFOHx3Xdp736Yfw7/zrF3wmaTtK8Ad4hSjIjh6aZzEyQ+lX1UXA69/
-         0XHJ5j++4bnUe3pX00po5kjjBSRvIPxOZMdY4n1sR8jNqDebo8lD338SI8b1CImrap4Z
-         eNE58oUNQ0nYBGqGLptowWuQ94axMQ2n9wZRRCV5xdnbl+t6Fw9yodx3bItk3g+gSiQ3
-         B2EDcpP/FUkt26HvAzVDXlEDJMa4Fds9t4yJDVrUWphBfiowBnyxtDfGyCxG9O64TnVm
-         zptWUGTHoHJUk5PuFHZQ6HZapKzASNZaocw6+rFJEgo+1jGknKVN277Zd7fsynAqw1d9
-         zWpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAXLlq6Rn9EZll3jBeFh8UldR1vq53/xUE/10b/xBnIqg73G07bKArjnXZLMaPvvgpze+Wq/PFHOQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0UO0QstsDM+UE9jlC3YNf/+0BBcVdrjgDLFia9M7oEHqs7peY
-	R7HouK9A+xgGWzq6DisaXl/XqTmn0s5BhXPAfjV/ioSYtn6X30XgQPg1VXOkEg55E58=
-X-Gm-Gg: ASbGncuO9TOYRpblXxGhJwLoYOFqBvVgqbE5F9V31/rAhilbfe3Fu+V9E3gpaejv3BC
-	POhxYBw7IQfNrQfx3BoqEAMhaHCLwy+x8fOVpORTaFlIwwsRcrMHnPILNr7c5bAxNoqsvKKpfXf
-	nhMs5J0dCX466n6NLy5jCUCZwpLjmKtjXheF9j+cHN5TAKQ7M2E9rzHXOqoePL8xBXoMmBEh+ha
-	oyKlhRX1qdgp3MIVrUUjmk1k5JSNlSyDFzZrX9vJIw9Fy1qcqBdr/ne/CmKvZD/4fqZb4VxVv6d
-	FCXnApQGnkrlQz6TuTMzi3gtfe01+AcI9gvz/Kb1lbSYl1trxHb1PWDZf9ZUrSUaAU8epye/oLM
-	xig7CiMSl3pjJ3aR+OgRxgAZR8hLGQa4+kDFTzEGVnuG7G0ZCpIk4D7RKT0SMUA88wBK2wh91sF
-	0LSDdcc3Zm9aVBiap9FTV8xjGLK0B1f3/ZHCjv94JhR3+Tt9YwrQ==
-X-Google-Smtp-Source: AGHT+IHY73/hmK2ihdGHJpO3Mip0NgdP4MWhJ3aese0GPaKfQ3SvazcDhmEwhbgkWjtEbqE30jfr9w==
-X-Received: by 2002:a05:6e02:b46:b0:434:96ea:ff45 with SMTP id e9e14a558f8ab-435aa8ee764mr24969925ab.19.1763653862415;
-        Thu, 20 Nov 2025 07:51:02 -0800 (PST)
-Received: from [172.22.22.28] (c-75-72-117-212.hsd1.mn.comcast.net. [75.72.117.212])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-949386c3666sm99186439f.17.2025.11.20.07.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 07:51:02 -0800 (PST)
-Message-ID: <963990a3-d39c-4e72-8add-02d98f59770a@riscstar.com>
-Date: Thu, 20 Nov 2025 09:51:00 -0600
+        d=1e100.net; s=20230601; t=1763654309; x=1764259109;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2hexUd/mEPKRNcSZxwjjDeUDQ0Dgw47XrMHUrWKRSBc=;
+        b=NuvG848lXlTfagNyAe5ezcyb5VF/nuHClPkqbBo2e16klcrBaEM1+H3Hdqsn4Qd79M
+         ae1OpW2BaKUuyCV68S6YwjmaBqzS/ZIIYSX5oSkHhMgGtW3ciQbPTTXTr7da6yH/kpZ0
+         3SRfKRbKJwvN3355+cB98iPBUSt5Q8CxrkD1MG8qr6aUefbFZetZKEVFtHcwS2q+Czvy
+         nAZal1Pu4zIGn+Jfr0NkqdNI5ymnMc92MVd6z6sTIoL/GBaljG7MvQIpMQr00g5wWCMp
+         jNBkchOylOOnFGH4JXLz5uqYenngmDIEsh9tlDCSi+AbU2Rv+1GJv84ASMI2nxQdeBwD
+         k5EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWT/L6QV+1/gJ6gk2YBSOkgHvDaTJwCen9Ha2+dKVJ+5KMZVtRr5w1NRhDsTWVqk41IUdN382b9ifc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywANZbdjRj3C7PM05PRmA5WZHC6kGfoB7X4fnLeDxWohWtbY9r
+	G1m0QmqeGsecTikIF+GGQe/WB/b+wC/L4Mipg9GyeZ3xqCEnn9+8G0aC6Dvi9zp8iGA=
+X-Gm-Gg: ASbGncvu3rmCr2k4/yLu14TUxYLHLNBvkfoC4yMikXBGAPtUKROD8mbUu/xUy0Tnks1
+	Ky1koo6quf+OtJQMU1vB75dwMHlC9Ui7VPvjwyV/HQYW83/SXd36iLrtmKNeNQf2hap/gnv4JGG
+	UXPSLFoWpoup7N22tgLQJpFibVajTXWeY3XkBnMkCRwFa+Fg9KYwaGh6dnceZ4YL2QdQ1tcnLRr
+	pkCHIgpreqKgJTAS9qVzWpMHBM1lTqep2i/RWytqp4DIZdNrQSIhrF3a7p23X7J124tajJC1I29
+	7wPhgmpt2YuRfaZycf4ttrn2Ei3vnINMPEtV8yUWqY3la1MvYHya4etzhZ7P8dHCjV2vSMA3bmT
+	xcjbH8ppy/SN8syCHVproDgtmrfKCsvFTY/+k5WU5owIeGSREYhZ0qDg3AiAPulr1Opm/m5mprT
+	QAtiRGW/jT6OUX8fR2evsqPGS81+tldLZd/QlA9j2yXR7H
+X-Google-Smtp-Source: AGHT+IG4NhfTIea5v4MrG55J2UDtrIq+RFeJgaP8RzHC/SVzuCvbfTRCVSDl01OcSMHk5n0jCxfnRA==
+X-Received: by 2002:a05:600c:1c14:b0:477:8b2e:aa7d with SMTP id 5b1f17b1804b1-477b8aa0ed3mr51319355e9.30.1763654308687;
+        Thu, 20 Nov 2025 07:58:28 -0800 (PST)
+Received: from riccardo-work (public.toolboxoffice.it. [213.215.163.27])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82e8ea6sm55552185e9.8.2025.11.20.07.58.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 07:58:28 -0800 (PST)
+From: Riccardo Mereu <r.mereu.kernel@arduino.cc>
+To: andersson@kernel.org,
+	konradybcio@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	broonie@kernel.org
+Cc: linux@roeck-us.net,
+	Jonathan.Cameron@huawei.com,
+	wenswang@yeah.net,
+	naresh.solanki@9elements.com,
+	michal.simek@amd.com,
+	nuno.sa@analog.com,
+	chou.cosmo@gmail.com,
+	grantpeltier93@gmail.com,
+	eajames@linux.ibm.com,
+	farouk.bouabid@cherry.de,
+	linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	m.facchin@arduino.cc,
+	Riccardo Mereu <r.mereu@arduino.cc>
+Subject: [PATCH v3 0/6] arm64: qcom: add support for Arduino UnoQ SBC
+Date: Thu, 20 Nov 2025 16:58:19 +0100
+Message-ID: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/3] spi: spacemit: introduce SpacemiT K1 SPI
- controller driver
-To: Mark Brown <broonie@kernel.org>
-Cc: dlan@gentoo.org, p.zabel@pengutronix.de, linux-spi@vger.kernel.org,
- spacemit@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20251114185745.2838358-1-elder@riscstar.com>
- <20251114185745.2838358-3-elder@riscstar.com> <aRoVqVtYLJJAPCia@sirena.co.uk>
-Content-Language: en-US
-From: Alex Elder <elder@riscstar.com>
-In-Reply-To: <aRoVqVtYLJJAPCia@sirena.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/16/25 12:19 PM, Mark Brown wrote:
-> On Fri, Nov 14, 2025 at 12:57:43PM -0600, Alex Elder wrote:
-> 
->> This patch introduces the driver for the SPI controller found in the
->> SpacemiT K1 SoC.  Currently the driver supports master mode only.
->> The SPI hardware implements RX and TX FIFOs, 32 entries each, and
->> supports both PIO and DMA mode transfers.
+From: Riccardo Mereu <r.mereu@arduino.cc>
 
-Sorry for the delay responding to this.  You provided some really
-great feedback and I appreciate it.
+This patch series adds support for Arduino UnoQ single board computer.
+UnoQ combines Qualcomm QRB2210 microprocessor and STMicroelectronics
+STM32U585 microcontroller.
 
-> This looks mostly good but there's a bit of open coding that looks like
-> the driver could make more use of the core.
-> 
->> @@ -0,0 +1,966 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * SpacemiT K1 SPI controller driver
->> + *
->> + * Copyright (C) 2025 by RISCstar Solutions Corporation.  All rights reserved.
->> + * Copyright (c) 2023, spacemit Corporation.
->> + */
-> 
-> Please make the entire comment a C++ one so things look more
-> intentional.
+In some files we decided to keep UnoQ code name as "imola".
 
-I do see in drivers/spi/ files that start just like above,
-and others that start with all "//" comments (more of the
-former than the latter).  I really don't prefer using "//"
-for anything but the SPDX ID, but... since you requested
-it I will make that change.
+As this platform has a microcontroller connected to the microprocessor
+we needed a dedicated spidev and to add uart2 to qcm2290.dtsi file; both
+are used as interfaces between microprocessor and microcontroller.
 
->> +static bool k1_spi_map_dma_buffer(struct k1_spi_io *io, size_t len, void *dummy)
->> +{
->> +	struct device *dmadev = io->chan->device->dev;
->> +	unsigned int nents = DIV_ROUND_UP(len, SZ_2K);
->> +	struct sg_table *sgt = &io->sgt;
->> +	void *bufp = io->buf ? : dummy;
->> +	struct scatterlist *sg;
->> +	unsigned int i;
-> 
-> The SPI core can do DMA mapping for you, the only thing this is doing
-> that's unusual is that it's imposing a fixed 2K limit on block sizes.
+Some GPIOs on the JMISC connector have been defined but not used in
+qrb2210-arduino-imola.dts; this is meant to facilitate carrier dtbo
+development for users.
 
-OK.  I will use the DMA support provided by the core.
+Changes since v2:
+- In PATCH 1/6 the vendor name has been corrected to "Arduino SRL".
+- In PATCH 2/6 and 3/6 commit message has been improved to clarify the
+  purpose of adding "arduino,unoq-mcu" as trivial device.
+- In PATCH 6/6:
+  * the qcom,ath10k-calibration-variant has been changed to "ArduinoImola"
+  * leds labels have been changed to simplify usage for users and make
+    them more consistent with future Arduino carriers for UnoQ.
+- For every patch, warning regarding mail mismatch when running
+  checkpatch should be fixed.
 
-> If this limit comes from the DMA controller (which looks to be the case
-> since we feed the entire table into the DMA controller at once?) the
-> core will already DTRT here, assuming the DMA controller correctly
-> advertises this restriction.
+Riccardo Mereu (6):
+  dt-bindings: vendor-prefixes: Add Arduino name
+  dt-bindings: trivial-devices: add arduino spi mcu interface
+  spi: spidev: add compatible for arduino spi mcu interface
+  dt-bindings: arm: qcom: Add arduino imola, UnoQ codename
+  arm64: dts: qcom: agatti: add uart2 node
+  arm64: dts: qcom: qrb2210: add dts for Arduino unoq
 
-I will verify this.
+ .../devicetree/bindings/arm/qcom.yaml         |   1 +
+ .../devicetree/bindings/trivial-devices.yaml  |   2 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/agatti.dtsi          |  24 +
+ .../boot/dts/qcom/qrb2210-arduino-imola.dts   | 459 ++++++++++++++++++
+ drivers/spi/spidev.c                          |   2 +
+ 7 files changed, 491 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/qrb2210-arduino-imola.dts
 
->> +static bool k1_spi_map_dma_buffers(struct k1_spi_driver_data *drv_data)
->> +{
-> 
-> ...
-> 
->> +	/* Don't bother with DMA if we can't do even a single burst */
->> +	if (drv_data->len < dma_burst_size)
->> +		return false;
->> +
->> +	/* We won't use DMA if the transfer is too big, either */
->> +	if (drv_data->len > K1_SPI_MAX_DMA_LEN)
->> +		return false;
-> 
-> The core has a can_dma() callback for this.
-> 
->> +static int k1_spi_transfer_one_message(struct spi_controller *host,
->> +					   struct spi_message *message)
->> +{
-> 
-> ...
-> 
->> +	/* Hold frame low to avoid losing transferred data */
->> +	val = readl(drv_data->base + SSP_TOP_CTRL);
->> +	val |= TOP_HOLD_FRAME_LOW;
->> +	writel(val, drv_data->base + SSP_TOP_CTRL);
-> 
-> This looks like it should be a set_cs() operation?
-
-I'll implement that, along with using spi_transfer_one_message().
-
->> +	list_for_each_entry(transfer, &message->transfers, transfer_list) {
->> +		reinit_completion(completion);
->> +
->> +		/* Issue the next transfer */
->> +		if (!k1_spi_transfer_start(drv_data, transfer)) {
->> +			message->status = -EIO;
->> +			break;
->> +		}
->> +
->> +		k1_spi_transfer_wait(drv_data);
->> +
->> +		k1_spi_transfer_end(drv_data, transfer);
-> 
-> Why not just implement the transfer_one() callback?  This just looks
-> like it's duplicating code.
-
-I'm working on this now, and it's the reason for the delay.
-Methodically switching things over to the generic interface
-has been taking some time, but I think I'm close now.
-
->> +static irqreturn_t k1_spi_ssp_isr(int irq, void *dev_id)
->> +{
-> 
->> +	/* Get status and clear pending interrupts */
->> +	val = readl(drv_data->base + SSP_STATUS);
->> +	writel(val, drv_data->base + SSP_STATUS);
-> 
-> This unconditionally acknowledges all interrupts even if we didn't
-> handle anything...This is a good observation.
-
-There are only 6 interrupt conditions that get cleared.  Three
-are errors, and the other three are read/write FIFO "ready"
-interrupts.  The code that follows handles all of those, so
-doing this right away was a sort of shorthand.
-
-That said, there was a chance for an early return (if the
-message pointer was null), and that should be checked before
-we clear the status register.
-
-In any case, my work the last day or so has included a lot
-of tweaks to the handler.  I'll try to make it clear what's
-done makes sense.
-
-Thank you very much for the review.  I wish I had looked
-harder at just using spi_transfer_one_message() before.
-But I *love* suggestions that will make the code become
-smaller and simpler.
-
-					-Alex
+--
+2.52.0
 
 
