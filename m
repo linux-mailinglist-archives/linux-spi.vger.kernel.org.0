@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-11430-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11431-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C60A8C7582D
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:01:20 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E72C75848
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:02:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7B20D35A1FF
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:56:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6CD7835B2E7
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:57:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BAB636C5AE;
-	Thu, 20 Nov 2025 16:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD3533EAE5;
+	Thu, 20 Nov 2025 16:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSahivo4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d1mE6Itj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086FE346FB6;
-	Thu, 20 Nov 2025 16:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10FE33DECB;
+	Thu, 20 Nov 2025 16:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763657774; cv=none; b=BRa2X+PwXrYczDMjWMZaZKa1F1HCs2mmAymcrHQTJ7a+oLG+pGfKCMvcdoqFVUXA+8zcV5LmckrDj60MTILZZeW1z44pD6SODU42YQXVyv7DQAkC52mFuJSH8wc1eZbYLh9vakh66Pw+ELdMqKIar0XhW3CyYKggTZ19rZMgHNA=
+	t=1763657837; cv=none; b=dJo3xpm+jOLnPOHuBdpM8LucAoRR2BFL0/ReOaqQb9PcKmYXrhv95ososoeycwcFHfmbhfbZA8DbY9H9b+Heg1nadpgribHZgCrgp1MamhdVGXlSCirWG9GvHSwCAACVsHo3Dd9i4dXiLSNeEdYNkGS98F/LukdbAXYoVoFOEc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763657774; c=relaxed/simple;
-	bh=t9Q9yr41mzdHwsulFJJPoiInuGQFkhYndZuaaWmqGGs=;
+	s=arc-20240116; t=1763657837; c=relaxed/simple;
+	bh=XDC0t6CnGo+H7Fa3QlQVh9CwscffVCd/I7CFF75eG+o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EhCB+vp+fUs42zhNwc6T7PGM322/HWJ81H+XivNpvISgaaY2o8Rey042Rwisdxl63LMsTZ9k0oAKNPDmP8eU93YPshTKOjaZLUn00KFLSl10rCPqC3dqRkZ3cpEYF8yUdJVQsVSR3VzxhDqwxnxSUyQBgfZ7EfLPMqcV9p/wAK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSahivo4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E1FC116C6;
-	Thu, 20 Nov 2025 16:56:08 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=YSAG0eKUv/+CuYkimrwWEwYlzQKxbZQsYZ9ctUfA78BdPVbwefj7shnOfKjL1ceOrPAIZrgvt74p/oyj5YaF0LxZdB6tTs2QyBI7VJpO+18R7SYv+8zyMYf9LUgjiP1wS9OK//X5C74/AqMHC9yfvQXu7N8LFYLAZtrpiQAfW9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d1mE6Itj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C931AC116C6;
+	Thu, 20 Nov 2025 16:57:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763657773;
-	bh=t9Q9yr41mzdHwsulFJJPoiInuGQFkhYndZuaaWmqGGs=;
+	s=k20201202; t=1763657837;
+	bh=XDC0t6CnGo+H7Fa3QlQVh9CwscffVCd/I7CFF75eG+o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NSahivo4AboebhUemSE9VXSvWYEbQP2pcQjUnnIhCSdTZ12cKC2Y4GzXlf3deEEsR
-	 cH11ZdHPHIhS+BFNMARHTMJGsMWa8zDuTzKpzK3WYCJzB6abP/hmYqCdjgCV+1I3+J
-	 OYRPCWrG8sFFnxqBY/i7S7vFmBw/jsxhQPoEboVRbjLx0BxEyjb5UJLx4gurSevIx3
-	 i7vMhmysR+wDFQe8i6M7VPoBb8f8dvBAuod7nsgWQAC1stcps9KkyMaD3uxuZ07sVo
-	 5dF0jMB8/ussjC0SY7Iu8KTNLgofOBZre0tccPBdE6SKaCHXXMSVN9RCbbebdcLmo/
-	 L4/2YhX/HTEQA==
-Message-ID: <c975030c-b5a4-440a-be4d-a934c2ab5565@kernel.org>
-Date: Thu, 20 Nov 2025 17:56:07 +0100
+	b=d1mE6Itjqu3EURFMQG6j9Qbdn+ixqt8qJ8BsapZ1k3L6S8ewzIcYhsaqqegbWuw0u
+	 5preNVzI+0AbdrAGlyLSqLAbx+nxeddGVLxqYr3WrT+fjekPeIO3GygYAdvE+ShcV/
+	 aWXznTAB7wniYP3pIW5eWOjeSvsbzmyGeogviJNNCmNL5vsPZwxUDheizqpGz4hzyf
+	 f4LR+mCd6D6JmzoANNpZAmSZ2FMPcp99gqoIQHt2dMfbAVpyDzrdFPKiKLs8X6mB46
+	 CJ7/2mtmaJgMEy5Asv9A6uDAE23NlOvSeKBcr1VmzYB+UFBXFc/xdsPJ3e+sm/hBBp
+	 QZl/WMH3rP16w==
+Message-ID: <cdabc922-e401-4790-afb1-6fc0ba66b01d@kernel.org>
+Date: Thu, 20 Nov 2025 17:57:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/6] dt-bindings: vendor-prefixes: Add Arduino name
+Subject: Re: [PATCH v3 2/6] dt-bindings: trivial-devices: add arduino spi mcu
+ interface
 To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
  konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, broonie@kernel.org
@@ -62,7 +63,7 @@ Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
  linux-spi@vger.kernel.org, m.facchin@arduino.cc,
  Riccardo Mereu <r.mereu@arduino.cc>
 References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
- <20251120155825.121483-2-r.mereu.kernel@arduino.cc>
+ <20251120155825.121483-3-r.mereu.kernel@arduino.cc>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,40 +109,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251120155825.121483-2-r.mereu.kernel@arduino.cc>
+In-Reply-To: <20251120155825.121483-3-r.mereu.kernel@arduino.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/11/2025 16:58, Riccardo Mereu wrote:
 > From: Riccardo Mereu <r.mereu@arduino.cc>
 > 
-> Add entry for Arduino SRL (https://arduino.cc)
-> 
-> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
-> ---
+> Add unoq mcu interface. It describes an iterface between Qualcomm
+> QRB2210 microprocessor and STMicroelectronics STM32U585 microcontroller
+> on Arduino UnoQ single-board computer.
+> This is a trivial device since it's usage is handled in user space
+> by the arduino-router service.
 
+I was rather thinking about triviality in context of managing hardware,
+like its hardware resources (power, pins), but it's good enough for me,
+thanks for the changes.
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-
-<form letter>
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, just skip it entirely
-(please do not feel offended by me posting it here - no bad intentions
-intended, no patronizing, I just want to avoid wasted efforts). If you
-do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
-of patchset, under or above your Signed-off-by tag, unless patch changed
-significantly (e.g. new properties added to the DT bindings). Tag is
-"received", when provided in a message replied to you on the mailing
-list. Tools like b4 can help here ('b4 trailers -u ...'). However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for tags received on the version they apply.
-
-Full context and explanation:
-https://elixir.bootlin.com/linux/v6.15/source/Documentation/process/submitting-patches.rst#L591
-</form letter>
 
 Best regards,
 Krzysztof
