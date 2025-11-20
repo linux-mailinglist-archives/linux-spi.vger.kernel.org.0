@@ -1,88 +1,87 @@
-Return-Path: <linux-spi+bounces-11441-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11440-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96710C76581
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 22:14:36 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB78C76599
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 22:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E9AB4E316B
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 21:14:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5F0D034FBDE
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 21:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81B9C305946;
-	Thu, 20 Nov 2025 21:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E2030AD15;
+	Thu, 20 Nov 2025 21:13:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b="ei53bGW3"
+	dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b="VSqwrmj3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A729253958
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 21:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A163054CE
+	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 21:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763673231; cv=none; b=iDTSUFhNeBZfIaMuPg73kD4HzxeeFPJOpUDzmULZfBNw+GSNwMLLJ1AvyG33ixtE1wRsKFd1cdgOOMgkqOoxJAsIOwF6vJAugQxSPpJKafAFpgvGyz8MNHwjM+L9saXypexPw9hGIGyQhRWO7Y22CVAjsbESWBHPc9cZSK0hSmc=
+	t=1763673230; cv=none; b=KjRf/6HFZ0Ia+Ab6+bZKs2+vISqCequKfdlcxciO85tlBW/HAC2hpXDXme1iySOLW7IVtEoZKuw8ngg7FVnrSJOjB3XPfhPQFA/rova42bb52obCWJB8Stt6o16hBaMqqWEnDeZxOb8H5X/Bl2Wg5Zb2kdqZZpGxh4eaP4GW4rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763673231; c=relaxed/simple;
-	bh=Ncr3R3kiVMaRI941uPnNlKBZzB9t5eYETF9gVPClg8o=;
+	s=arc-20240116; t=1763673230; c=relaxed/simple;
+	bh=/QBHhu5/mf5VqkoFrsU7ZBKAZLJ0DAd9JGOgESKJEj4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tM4YECPEKqJUrfLZjl5r26uiBBinH4B7SuLeBhHjv10oQw2i4OcIxoUXYMGjNfYBb9VaO4b6sZ8dlpmC2zRjPwdTpyh9KORRFGYLGokyOfKGoCNMyCeYi/s5AaoAnRjgeY3nw3d0rsK6kG7k4DcnTTYbTCst74KHpEn9ID6mT7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marek.ca; spf=pass smtp.mailfrom=marek.ca; dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b=ei53bGW3; arc=none smtp.client-ip=209.85.222.176
+	 MIME-Version; b=sLhtDSQnRL8WoZ3ouYCSRLCjc1SXux13trCHxi4cAbHCmJF1tO861WNvqCrg6FuQFIm1CU53L1D2oU4gBKyKdkHE02str5qO/m5VjCP3PWjwmZEHv6j2hdNKzsiz1R/i6s7D0EoXuJ92TYJD1JntvZO+vjTBpFBniGOjSCjfJPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marek.ca; spf=pass smtp.mailfrom=marek.ca; dkim=pass (2048-bit key) header.d=marek.ca header.i=@marek.ca header.b=VSqwrmj3; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=marek.ca
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marek.ca
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8b1f2fbaed7so104159185a.2
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8b29ff9d18cso130335785a.3
         for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 13:13:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=marek.ca; s=google; t=1763673228; x=1764278028; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LVTYOQ3QWD4eKEz3wLcBWIsCXGJvwPkc7ixkByGQUus=;
-        b=ei53bGW3MAKcEVvmfM3aX8D7MDUaTeulUUesPqgnIpoNCTjhVlA6wD8m2ozCTGdsP5
-         7xjBfwJQvYPqw0rwJwaOjByhyem3VbfR//HNsJx2y97sLDyfNqLUfHGwDrPg28oW+Oq4
-         wOXtQTczkqEnRoNaSV3xq/IGlUrFeJ9IuSF5FkBJUoB9SzR2Q4DDMpeS5UHr9PpsxeYf
-         qW3RTFJF+mp/iY1ROkH0yabOWIlZEwyntrQtXY/KmpxIqp8tVYdfw/R9yMAmidSON0Yy
-         UUuSphHwys970kGdeE7E2R74S44elp4o+e9wo3RUWyLFAblflcs2ziWhh9xxcuGutLru
-         aNJg==
+        bh=fKI5rd+bNks7evkZ2sb5RD79CIhkTakhfZrmrMaIYvc=;
+        b=VSqwrmj3U6kuX6Lxhl4OVVv6+R9iqunUDz9euDYO3DbVzivYR/MAdgWSNOrzMhTHd9
+         LZRnWnVCIyqTGsvHHza/xdIZEcvVq7AiOPDg52qZWOtw3urzEhGWeUl6R2P9fY3SAaZM
+         /lS5b/vQLFBTKY1FniDMUNx9RLN171LlDUrdsnRtqhiYcdgOZzcBa7rCDp9hn/uljZkp
+         O7uv+MX5IVrYfWRXwNsYmyCrcVW1HHohKeJFhsqcvBodJQztQTdASbYMWsMImiJxPi0d
+         wVwiQJ8MEEl96P+Kfj6StCyLdNT3BaEYIt+f45nwBXuffMeOpOymmF+axXmwhtiTuk+R
+         Gw/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1763673228; x=1764278028;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LVTYOQ3QWD4eKEz3wLcBWIsCXGJvwPkc7ixkByGQUus=;
-        b=Xow1Z+awP3HavR3+l8RYJaZkbqdLPlXrApczGhIpkGzDJAL/ICuqD1EYBMgCMUVo2i
-         i3XFvRjIBqMn/7jkGy8rt+MkGYg9npxVigJTgsCxYE5p/VzIZAHoys9vErrFdDJ0hYqW
-         pe0UatNidWDg5REZA7EVs0tm0nciwWL3e0lk4hoRhPDM+UIjFP2V+0FdA/b+3cbn8npZ
-         K0jY+J/QKcmV2q7pPeIVh6htkV12RQO0OuQ6oArwhkUCT7gsZ1fxV9Kinf3kiDaKaqBQ
-         ROX3O30n+/4TuU9apWyblN1lFGYZcNbKH4d5wdSuaZZZTsylmS60fgT16SBh8DwVJJRy
-         8ZRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZIgAihoZFClmYkcCkI3q2YdSCx6C1mI/Run8TcGQK3yTd9+4EMN03cqVk/Atj8tbnspnk7NsGW2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjVwhMxMNQVnn3XJ+dNFqbtvNaUk4fxbLD8O9PRtuQI7F0kZZ6
-	Cy2nANISxSbrqCtxjB5vcgp7wo5XgRM61dxjXW2J/cDJbk2pKNOEGGzfo7TTU4L+Fr20DzPkTm/
-	g8iY7
-X-Gm-Gg: ASbGncvHZUcu7kA5U1hoTZHVyvkD5hCJ1wwbcQFRgSLwvafqjeaEDvv/ERk7+YgkLxN
-	Kg6wz8dVWPSlVMMrMVoEtTeLc25/hTlrWQf3hz/Bq+TSoowiIc6K3w7Jff3t11vst7w8kmzcxwo
-	Cdba8W9wjAY7Bat9lUsoZV/AwYo6t2yrVSGQRq3HxUKTP3XT6C0bmVNJsLSdfYOH2g01r3Lz8Yu
-	9cfQt0f41I+JDAt4rRH1Pr7E+2bDHiFCOGHRd3G0+uoyYVxhQitoTqVJuFi8sE1Cu90iWrlam5i
-	OP494tBHUyAF9kOXdMhvLkjgQl0EsHFbVQ7VgFSuyoXf22t+Qbqxe6m/xi7EgZDLeK9RFGRAUUX
-	42d5aSlVQ/GeocIxyQ/k9BCo0m5wbgWByqbm+6BLWcX2vQgJS31NB3kz6+5DKajEZiwsk2OMKga
-	OqT/aqu1Pgbuoel0/tDnd5yy9Hf9GkNRamY7xbbPg5HLJnSCUdt61ANaSRjxLffoQIEg==
-X-Google-Smtp-Source: AGHT+IHhLrKwzSUA1bNd+dPQLHWxvxkUjlw7qu6qycMRLUEdp8icnfz7Y6GJY43AdSETsMFXRXs+JA==
-X-Received: by 2002:a05:620a:2a03:b0:8b2:f1f0:5b87 with SMTP id af79cd13be357-8b3272fd01cmr556804485a.3.1763673226952;
-        Thu, 20 Nov 2025 13:13:46 -0800 (PST)
+        bh=fKI5rd+bNks7evkZ2sb5RD79CIhkTakhfZrmrMaIYvc=;
+        b=sFiUGfgAxXR1zXiKVzCkaZlCmUVEeIu7C8CEetfxvtlT1g+OHKIzxr/eL1I6j+GOaW
+         82rpds84OfEzVHG8sSMVBp8MLdx3CThSc9P4C/SL1xrmJWWsM3MzUupvsIz3anExPJ1W
+         ZuNWnAT4uG5dHeDdHkj0C9kXhlDyFA8LsnW2uKqq3/JO2X/WPvExu3C/cpdcoDp4mov0
+         s7lpNYdZCDhFF5tdl2dZ7FrUvlWESK3a6RoBb+imeBIdaD2/lDYktjCI+LkyKhJ0ofnn
+         lwSEisV7GGhSPQw12raiZJhrYMNbjamLm4V1y6Ob5eNIhkB2cdxbVIrQjzXtBdYe8j90
+         n+Gg==
+X-Forwarded-Encrypted: i=1; AJvYcCXoG2/yUcT9yOxDrFTbN28P7x459bsti08SRFtIhTWI4bWUrwhBWsh/0AEu1cXHi5CF7D9VswuPD6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2POWCf9Ph7ZsEqYfmRTj0zQO52coH+NCLI3NK9s0d9SyCqUP3
+	lRkok5CYrFYxWT9q4/slvD5Fu4AqKix1VrierW1UqZ2Z6qkEND2Lg7/cakN9hJqqFk8=
+X-Gm-Gg: ASbGncu8EGzfMuzoN79zEjaEx0vKvlKK/HgI8eMQ1dkTScdsfmsmdidQ3REN4xIco2R
+	UqV9c42pb2bISHRfb02gfplZBVgtv099qP9FDZTpxIelBrXWdZID6vWoma+yFWX+WBNSvYbhXS3
+	FB5FAA0m3xVpfD83NKyNXdaDZDJjjkEMAejY63M2LMDyPU2zlS19DcE13LRsIFnWMEC3hYQME/l
+	0sxcK98anOtqvFbQLmHpOLw35aIrNLO8tFIfYWPuW+3q6+3pANK4qZhEdJxSe6PZubkHCn+ThEL
+	L3YIwbQdA+IT0Q+4GPSp3Gmdq4uZL+O5A9CNNbM6fZlZzvmiAXBE3O1B/4f1GqIAWTKbuDwa4sg
+	8Dm3ZvcpKayHzOPY0mIR+2ODWQqdSBowujA2IXcvCYft3gwrJ1AaOmspaGzPrfSl5eSzdrzxH1K
+	4d/8rcB2X1kc2piTfPcVS/9wcQcFAcXEAjo+MLmVrld3kuI2FWHwAuv6D+3uxh/pvSeg==
+X-Google-Smtp-Source: AGHT+IGvwgDIhs39jzthQlsKnE3PoNiaSD7wWyoE+gOYX6zCfolKtDiYjS30zyf3wqexvj4RjVflig==
+X-Received: by 2002:a05:620a:29d6:b0:865:916b:2751 with SMTP id af79cd13be357-8b3385e943emr162330185a.14.1763673227980;
+        Thu, 20 Nov 2025 13:13:47 -0800 (PST)
 Received: from localhost.localdomain (modemcable125.110-19-135.mc.videotron.ca. [135.19.110.125])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b32953735dsm225958685a.24.2025.11.20.13.13.46
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b32953735dsm225958685a.24.2025.11.20.13.13.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 13:13:46 -0800 (PST)
+        Thu, 20 Nov 2025 13:13:47 -0800 (PST)
 From: Jonathan Marek <jonathan@marek.ca>
 To: linux-arm-msm@vger.kernel.org
 Cc: Mark Brown <broonie@kernel.org>,
 	linux-spi@vger.kernel.org (open list:SPI SUBSYSTEM),
 	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/5] spi-geni-qcom: use xfer->bits_per_word for can_dma()
-Date: Thu, 20 Nov 2025 16:12:00 -0500
-Message-ID: <20251120211204.24078-3-jonathan@marek.ca>
+Subject: [PATCH 4/5] spi-geni-qcom: initialize mode related registers to 0
+Date: Thu, 20 Nov 2025 16:12:01 -0500
+Message-ID: <20251120211204.24078-4-jonathan@marek.ca>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251120211204.24078-1-jonathan@marek.ca>
 References: <20251120211204.24078-1-jonathan@marek.ca>
@@ -94,41 +93,31 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-mas->cur_bits_per_word may not reflect the value of xfer->bits_per_word
-when can_dma() is called. Use the right value instead.
+setup_fifo_params assumes these will be zero, it won't write these
+registers if the initial mode is zero.
 
 Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 ---
- drivers/spi/spi-geni-qcom.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/spi/spi-geni-qcom.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/spi/spi-geni-qcom.c b/drivers/spi/spi-geni-qcom.c
-index c33d79d9afaf8..575b112d4acb1 100644
+index 575b112d4acb1..53229150b86b5 100644
 --- a/drivers/spi/spi-geni-qcom.c
 +++ b/drivers/spi/spi-geni-qcom.c
-@@ -499,10 +499,10 @@ static u32 get_xfer_len_in_words(struct spi_transfer *xfer,
- {
- 	u32 len;
- 
--	if (!(mas->cur_bits_per_word % MIN_WORD_LEN))
--		len = xfer->len * BITS_PER_BYTE / mas->cur_bits_per_word;
-+	if (!(xfer->bits_per_word % MIN_WORD_LEN))
-+		len = xfer->len * BITS_PER_BYTE / xfer->bits_per_word;
- 	else
--		len = xfer->len / (mas->cur_bits_per_word / BITS_PER_BYTE + 1);
-+		len = xfer->len / (xfer->bits_per_word / BITS_PER_BYTE + 1);
- 	len &= TRANS_LEN_MSK;
- 
- 	return len;
-@@ -522,7 +522,7 @@ static bool geni_can_dma(struct spi_controller *ctlr,
- 		return true;
- 
- 	len = get_xfer_len_in_words(xfer, mas);
--	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / mas->cur_bits_per_word;
-+	fifo_size = mas->tx_fifo_depth * mas->fifo_width_bits / xfer->bits_per_word;
- 
- 	if (len > fifo_size)
- 		return true;
+@@ -675,6 +675,12 @@ static int spi_geni_init(struct spi_geni_master *mas)
+ 	case 0:
+ 		mas->cur_xfer_mode = GENI_SE_FIFO;
+ 		geni_se_select_mode(se, GENI_SE_FIFO);
++		/* setup_fifo_params assumes that these registers start with a zero value */
++		writel(0, se->base + SE_SPI_LOOPBACK);
++		writel(0, se->base + SE_SPI_DEMUX_SEL);
++		writel(0, se->base + SE_SPI_CPHA);
++		writel(0, se->base + SE_SPI_CPOL);
++		writel(0, se->base + SE_SPI_DEMUX_OUTPUT_INV);
+ 		ret = 0;
+ 		break;
+ 	}
 -- 
 2.51.0
 
