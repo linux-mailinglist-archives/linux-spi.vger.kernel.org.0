@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-11431-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11432-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E72C75848
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:02:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C9EC75854
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 18:02:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6CD7835B2E7
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:57:36 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 48CE735B9C4
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD3533EAE5;
-	Thu, 20 Nov 2025 16:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E6436C5A6;
+	Thu, 20 Nov 2025 16:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d1mE6Itj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xn9NLyy+"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10FE33DECB;
-	Thu, 20 Nov 2025 16:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FB632FA00;
+	Thu, 20 Nov 2025 16:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763657837; cv=none; b=dJo3xpm+jOLnPOHuBdpM8LucAoRR2BFL0/ReOaqQb9PcKmYXrhv95ososoeycwcFHfmbhfbZA8DbY9H9b+Heg1nadpgribHZgCrgp1MamhdVGXlSCirWG9GvHSwCAACVsHo3Dd9i4dXiLSNeEdYNkGS98F/LukdbAXYoVoFOEc0=
+	t=1763657854; cv=none; b=O1T2fXFcZMPKBxfHEe7IjCsH56F5KgE+mpQsKf83IPpN5ekSiL82lyN+Ro5UllEY+rKH/5Up4HXZ4MCCmq+h/pL2a2MkgooqHM64RZqRwAoMokfajyB1ks+Mbit7g0MKODk/NEx3xHBB8QqWqIG6ls6rwJTnEX2RbDzheep45Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763657837; c=relaxed/simple;
-	bh=XDC0t6CnGo+H7Fa3QlQVh9CwscffVCd/I7CFF75eG+o=;
+	s=arc-20240116; t=1763657854; c=relaxed/simple;
+	bh=b/Lnc53T2oiKWSL1lO6RzN3GTp5qY/VZAPR1Eu/cNb8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YSAG0eKUv/+CuYkimrwWEwYlzQKxbZQsYZ9ctUfA78BdPVbwefj7shnOfKjL1ceOrPAIZrgvt74p/oyj5YaF0LxZdB6tTs2QyBI7VJpO+18R7SYv+8zyMYf9LUgjiP1wS9OK//X5C74/AqMHC9yfvQXu7N8LFYLAZtrpiQAfW9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d1mE6Itj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C931AC116C6;
-	Thu, 20 Nov 2025 16:57:12 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rXpnrEfb8v81CYiBUGSlAKkwhEGzRh/OxYh6p486k6R4YFmQplsP0Jw0nzmTvQ6lsrjBKnjBdHPHi5T0a9x0dnTGAx370d+2edtujUB7MkxxG0oueA4W49bVoZj/3cdtgBfZfULlApSBDXb+9LTz5AfmXO3pLPf55hU1nDD/5RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xn9NLyy+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A093C4CEF1;
+	Thu, 20 Nov 2025 16:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763657837;
-	bh=XDC0t6CnGo+H7Fa3QlQVh9CwscffVCd/I7CFF75eG+o=;
+	s=k20201202; t=1763657851;
+	bh=b/Lnc53T2oiKWSL1lO6RzN3GTp5qY/VZAPR1Eu/cNb8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=d1mE6Itjqu3EURFMQG6j9Qbdn+ixqt8qJ8BsapZ1k3L6S8ewzIcYhsaqqegbWuw0u
-	 5preNVzI+0AbdrAGlyLSqLAbx+nxeddGVLxqYr3WrT+fjekPeIO3GygYAdvE+ShcV/
-	 aWXznTAB7wniYP3pIW5eWOjeSvsbzmyGeogviJNNCmNL5vsPZwxUDheizqpGz4hzyf
-	 f4LR+mCd6D6JmzoANNpZAmSZ2FMPcp99gqoIQHt2dMfbAVpyDzrdFPKiKLs8X6mB46
-	 CJ7/2mtmaJgMEy5Asv9A6uDAE23NlOvSeKBcr1VmzYB+UFBXFc/xdsPJ3e+sm/hBBp
-	 QZl/WMH3rP16w==
-Message-ID: <cdabc922-e401-4790-afb1-6fc0ba66b01d@kernel.org>
-Date: Thu, 20 Nov 2025 17:57:10 +0100
+	b=Xn9NLyy+9/gumTdwqP/tvAQb52qWep2BSIFwkVBI7tsS+JuwS3VlPoA1HGEqYLw61
+	 pzWGendRbB9ffBvHRRgEdhp43mrUVpKwaTpyGxcQ5kHNa1+yeYvxRTvFi1vG7RUElQ
+	 sZEV6vZTlN5ZFOYwuk5Llda0y+Finv17YFtD6t5OchHNyL3ypIGgg3JYkb35sKsOgR
+	 4AVoAb42/aUNRXeM1ONv2xSGM3+2xy38aHIIczhBfxh24yqmU8Rpdr52PuSCfn/4Dg
+	 hc+wagKsGHS2Uo6vCA2LR+tDKzZe9pOCWMR7Ln1h6XrWk8BUgRALh8GdQkSbhVeBRo
+	 DKnOXwxwNplcA==
+Message-ID: <98ee6b0f-2805-43ce-9228-991d2495e5ca@kernel.org>
+Date: Thu, 20 Nov 2025 17:57:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] dt-bindings: trivial-devices: add arduino spi mcu
+Subject: Re: [PATCH v3 3/6] spi: spidev: add compatible for arduino spi mcu
  interface
 To: Riccardo Mereu <r.mereu.kernel@arduino.cc>, andersson@kernel.org,
  konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
@@ -63,7 +63,7 @@ Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net,
  linux-spi@vger.kernel.org, m.facchin@arduino.cc,
  Riccardo Mereu <r.mereu@arduino.cc>
 References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
- <20251120155825.121483-3-r.mereu.kernel@arduino.cc>
+ <20251120155825.121483-4-r.mereu.kernel@arduino.cc>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,25 +109,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251120155825.121483-3-r.mereu.kernel@arduino.cc>
+In-Reply-To: <20251120155825.121483-4-r.mereu.kernel@arduino.cc>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/11/2025 16:58, Riccardo Mereu wrote:
 > From: Riccardo Mereu <r.mereu@arduino.cc>
 > 
-> Add unoq mcu interface. It describes an iterface between Qualcomm
-> QRB2210 microprocessor and STMicroelectronics STM32U585 microcontroller
-> on Arduino UnoQ single-board computer.
-> This is a trivial device since it's usage is handled in user space
-> by the arduino-router service.
+> Add compatible entry in spidev describing in Arduino UnoQ single-board
+> computer the interface between Qualcomm QRB2210 microprocessor and
+> STMicroelectronics STM32U585 microcontroller.
+> It is handled in user space by the arduino-router service.
+> 
+> Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> ---
 
-I was rather thinking about triviality in context of managing hardware,
-like its hardware resources (power, pins), but it's good enough for me,
-thanks for the changes.
 
 Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
 
 Best regards,
 Krzysztof
