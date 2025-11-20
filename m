@@ -1,59 +1,55 @@
-Return-Path: <linux-spi+bounces-11379-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11380-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9971CC73453
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:45:33 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D463EC73411
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 10:43:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A6C074E8FDB
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:42:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9D76535955D
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:42:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4B3630AAC7;
-	Thu, 20 Nov 2025 09:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F70F322550;
+	Thu, 20 Nov 2025 09:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8x5dMDI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r8xwtxM1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896E72F6903;
-	Thu, 20 Nov 2025 09:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB71130F7EB;
+	Thu, 20 Nov 2025 09:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763631636; cv=none; b=n7eegzwoJ7f+pEk2TX1FKS2DMRw4G+OjAgZIazIakXTMKgEo+jyemt5vBlIjPqR6nns8K3bkIZcDdI/sKOZZ7/ABGVF5bXkB7dK+ePwL7vOmoPbDDO6bPcxbGvHprsgc7aT99ftUqzq+rLXo9vyU9VzN4yx7nZKzzcQGK1jCFrs=
+	t=1763631638; cv=none; b=gOVOifG8Md1ll14PoRI7AJpqWV3LUcrrdcr4NY1XZp9iuVXhXYlXHvsE9IrCNe6IuVXAnrDTypssbtAXePUYGSk7UAPOoo6UsVN1OLx+gXNyibw+8ENIeDyuWct1MN/rfKnRbNAzG6Q/x1z04FdgZfF8eZaDAXNzN6QptBrUN/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763631636; c=relaxed/simple;
-	bh=d9gi6IAhGMrPheyNCbI0JonIbRfzHt0QW40OJqiT97M=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=HTFhqxFuqM/e0X4gTLBzTH82pGMrjoNNPt0FFCKp1FKX/iSUrWJawPRBKleTF+1UAFntUiRLmcv5T0/zMoz0jsMnsNaIx073aZx0pxcuxQ4/goEfwSMBLyJQEzYfCfJk+1HaJ9lDtf9rG5nRuNPpAfeMQKE0Aqptu/VzhuUNP4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8x5dMDI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22B0C4CEF1;
-	Thu, 20 Nov 2025 09:40:32 +0000 (UTC)
+	s=arc-20240116; t=1763631638; c=relaxed/simple;
+	bh=pu36+CB92IxzqApmqvq6q/T9gDA8szI7ENmVOvUz0ic=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=t62QCOLMTy+dFAXN/Q50FCzLXCuaJi/oL4zPlLis4ws3htSWt22F8RPweRgokqPbI2JbIOAb7UsKXWrUN+PSvx0eQBh3MmG9Y3e5ZYfDgqRkSeahM9vQz6JfbsWqvy9f62IgZiwyh+/dXgrHW3I0IT12fqne9Rjt8oyguqxHsG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r8xwtxM1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1F8C116B1;
+	Thu, 20 Nov 2025 09:40:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763631636;
-	bh=d9gi6IAhGMrPheyNCbI0JonIbRfzHt0QW40OJqiT97M=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=D8x5dMDI9qJnYU21qSlLei8gHq6Zp6XE3Ht93IoCv3k7PJAFzVClSKbtAgejBTKQ9
-	 Mlfkw1A7ZzKb+RXGRyRjn44BAeRKBXZkSIw6dDMVgPLcb4V86Y6I7sMSO17zYx81q8
-	 Lb5p2niv4ymriPG4Rh4qDWJUCqR3AXLPVdGP+enV5nTKiKhcvUEMsjwNR5IxksI+iI
-	 pOuGw0lIbm+/s4GAY7s5IaveZtqiSuhHzrVxN0SfktEXbcH3diGb4+WggKOSWAetV5
-	 hJZhfgmu6eLjeVPX9gEw+PGJqSjehjYiliL4+9+a0TF+R5/jlR0BSczu8Z2OYlYOdh
-	 sQ3lludhl8vrw==
+	s=k20201202; t=1763631637;
+	bh=pu36+CB92IxzqApmqvq6q/T9gDA8szI7ENmVOvUz0ic=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=r8xwtxM17GewSFUZBlvTsJ+jU351NbZs8b+fnPxgcT0HhnlpavPVm/bwvtAs0mlYd
+	 7Sh0rSuM5NHFKtNdsqs3HPUSAFAyz+3Gz15r70rIVVOcud+CHHMlDFc/hPyNC68CpB
+	 Ju/YycVD/Srblf4KXr4qPxNzdH38luAo7gzbb78hhAMq9wHXFwtnLrzEUy5UiCd77d
+	 1AEk9jVjMFG2bNKKmzEvFqf0W6Wp1fxQHH2JKzoIVsrvY6s6w5qtwP+2HdL7y7b+IU
+	 OEHS0n+BLxbW6Xcjgv6ae5qtGr1ZTn8Eb3c7+F3R3wTCZdHojZI+ZWRgYhjlieC6sv
+	 EPTnk5SVqXtUg==
 From: Mark Brown <broonie@kernel.org>
-To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
- joel@jms.id.au, andrew@codeconstruct.com.au, clg@kaod.org, clg@redhat.com, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org, BMC-SW@aspeedtech.com, 
- Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-In-Reply-To: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
-References: <20251114101042.1520997-1-chin-ting_kuo@aspeedtech.com>
-Subject: Re: [PATCH v2 0/4] spi: aspeed: Add AST2700 SoC support and Quad
- SPI handling update
-Message-Id: <176363163164.560683.4991477364624751148.b4-ty@kernel.org>
-Date: Thu, 20 Nov 2025 09:40:31 +0000
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+In-Reply-To: <20251117-davinci-spi-v2-1-cd799d17f04a@linaro.org>
+References: <20251117-davinci-spi-v2-1-cd799d17f04a@linaro.org>
+Subject: Re: [PATCH v2] spi: davinci: remove platform data header
+Message-Id: <176363163548.560683.4041810188857828339.b4-ty@kernel.org>
+Date: Thu, 20 Nov 2025 09:40:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -64,15 +60,12 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-a6db3
 
-On Fri, 14 Nov 2025 18:10:38 +0800, Chin-Ting Kuo wrote:
-> This series adds AST2700 support to the ASPEED FMC/SPI driver and
-> bindings, introduces 64-bit address compatibility, and improves
-> Quad SPI page programming behavior. It also implements AST2700-specific
-> segment logic, where range adjustment is not required because the
-> AST2700 SPI hardware controller already fixes decoding issues on
-> the existing platforms and adopts an updated scheme.
+On Mon, 17 Nov 2025 17:12:47 +0100, Bartosz Golaszewski wrote:
+> There are no longer any board files including the DaVinci SPI platform
+> data header. Let's move the bits and pieces that are used in the driver
+> into the driver .c file itself and remove the header.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -80,14 +73,8 @@ Applied to
 
 Thanks!
 
-[1/4] dt-bindings: spi: aspeed,ast2600-fmc: Add AST2700 SoC support
-      commit: be6671d3908e97a2128f5327610a1dcb4d420cfa
-[2/4] spi: aspeed: Enable Quad SPI mode for page program
-      commit: 716d0a0a2ab00c601120c19bb357f4373f4722d1
-[3/4] spi: aspeed: Use phys_addr_t for bus addresses to support 64-bit platforms
-      commit: 508f3d3b688e1650ed383fe208b323aa6c164420
-[4/4] spi: aspeed: Add support for the AST2700 SPI controller
-      commit: 9e510e677090bb794b46348b10e1c8038286e00a
+[1/1] spi: davinci: remove platform data header
+      commit: 96498e804cb6629e02747336a0a33e4955449732
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
