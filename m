@@ -1,141 +1,113 @@
-Return-Path: <linux-spi+bounces-11370-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11373-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4316DC72B60
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:06:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93EE6C72F94
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 09:53:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id B5CE42C922
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 08:05:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 275123532F1
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 08:51:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6D5302758;
-	Thu, 20 Nov 2025 08:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ErQuyRNN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1FDC31062C;
+	Thu, 20 Nov 2025 08:50:38 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDECD2848A8
-	for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 08:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F23307AF3;
+	Thu, 20 Nov 2025 08:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763625936; cv=none; b=aVfaQNqT0kf7OyfZfK749QNl8UrTv8wqv6LTxFtDjNySsvdaYKn+jkTbANQrjDVcSrbJ2CJRkhhgQvGhopskr/0UwxJ89ek1eUrc/W/cbFIig4RHP5qimAGuU+DrM885tRqoB9sBzN31AHZoLMfklVQL1t++TqRB7v9FBgI2yio=
+	t=1763628638; cv=none; b=rxA+qRmDdIUVtgJdILf17QFBeOB5yB4O6Jv4RiTdzjDhjuJi+5fsm3c0mKUU85FXt8CFSqZhn+0BFU/poqQ/xtw6ULlSrsBnPIsYBgneQpWnoRiGZSloj0qa3+B9DFvX/FTTBhYob24AzhiKAmucC72uzeNgMMfpUGrfmSWw7lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763625936; c=relaxed/simple;
-	bh=4odYw6lphQIVkI4BWQ65rxrqQM+lFn8fevTKJ7zCzLU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nQYLYe4tuGuGHLDCfnTUDZ2b7+qMFN7voXStxFjDlAguvp4OHMJQJaySIqfhdz0iEe5P7EWQhi7culpH9L05Z/Ibq1Y7ZX1QeWmPt2fJQcUcjXs19hnQ2uo2i6zd1hVMBJqGZMGp77GkVOW7G1S2BBXS/6khscMQDZexxUcDFIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ErQuyRNN; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b3b29153fso299007f8f.3
-        for <linux-spi@vger.kernel.org>; Thu, 20 Nov 2025 00:05:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763625931; x=1764230731; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8PztCW99nsI9W45kahbPszZ32SfHFrWK98zZmX/7wnE=;
-        b=ErQuyRNNcb6IDLy16q4sUp5N+Yt3iNGVi7dYIzl0Fls2aB1hfQY8Om7QElBASP4AOZ
-         aDEnDetBWsenMiKepIqOxXYDrsQsqhaYNYuZUcRPIFADFmLitj1rtOPnsleVrW9n7jeb
-         Tnmk8AsI9BAZGABA568fcCCRPYTV5c/GeuVzZDbjD7tZlIohqNYNspvFYSQz/rXsuxad
-         OjSL20YtAkZ9sEKelcrrDQN0pzVb2OF8nkhTP95uXghKHvQ9tNEJ/ij2vS8XLFvXD6ZH
-         TGKOP32AunkMiJx0Ji/sRMXvaKpAoy43nUzTBjsIF+DbxWQpO98De8/oVY1p/VXWaYE9
-         qd1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763625931; x=1764230731;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8PztCW99nsI9W45kahbPszZ32SfHFrWK98zZmX/7wnE=;
-        b=pfKtl36x88fds/C2Di0ezRb+not7EvwDUO4WzAsTGT3yP4HmvtpfhF+t3lpjhT83IJ
-         uROfjPOP8tn7sP0R1esveHZO5XXrPFgSjD+rj+daM8YP5pf61ezJIcUlP56dpubZPgCk
-         XauG0n9jjEclDPLo1M8BVbvSH5NwklAwqQOwhPO7DJoklh2/L/W7qLlwRUKDGGP3BN38
-         SwIcxvTSCfkm/bHIIt7XHtOxJMrR1na+o0Kx38KFAl4Z/jAZc5rnxjMoKA3YmOxpXoXz
-         m5Ldqpg0M1Q+kcR7W35fFiaXVsSmnMIoHuXO7cnYiLU/PhXQy2mPFfwHw9BsZgPyN60L
-         hUXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXIqia9RxRCKtqABEBp/VjRIpmCWdvns/4IPrS3hN7gwinawM1AiV6dEF7zcapIjh3XtZHttEOADGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpUnUtOzKzvZnoiAyfF/2FokB05jZwqDYmtuTT5ybcOIXEnsWy
-	8HuQpsmUdXUl6gJzL/GUmNBfryURkzXl4SWq3iQn2SnjXU9nabSRSVcKxgFIx6C+Fvg=
-X-Gm-Gg: ASbGnctRFOoP/hT/sCfp0/y9CSuqifB6kNo5wskXnmvYCKSgB545jnsyWJ/NldnSnC8
-	PnGMh1ubKx9yHuP2/UKuUos22+liFsoyr0JL17J616c+ulkxL/Jwhsu9kRRIZzqox9TLJxhOwQA
-	To5AKvKVoInjlgVhQWhw3qtvSTWP5BZBvGHO2hzg0egrr7Nzp2weuUWhfgVI+juLnC+d0kqLoMF
-	kGiqBeMJLCfWJkHtkPWqRQME+MTDHy/Zf4lYYNiBFvgiYv4+/YPSMjb+vYFDbDCkX7lBVuUNn7K
-	OrtU2D/WzyUwC6IvTPzaj9hdsUBI+uIKMKxBCMErzZpAmiWDpcCCau21UXMh5JXJPhme8wSNvF4
-	R1omznOvuxKbJIu8XO5DoJZT0q/KsN7ci2+B3a8eYdxIVrGxQ6HYXumsGkHwuyNtUCguDsuexJH
-	XbyWjrtbWmp65S1yIB
-X-Google-Smtp-Source: AGHT+IE5v+9a80Zn9J2fmQEfUzMbSA47PM8PvbAZc/vWxwU72hK4Du32I64ZpwzSWFiC0CaXw3Jplw==
-X-Received: by 2002:a05:6000:26d0:b0:42b:3023:66a6 with SMTP id ffacd0b85a97d-42cbb2aa131mr1087403f8f.40.1763625931093;
-        Thu, 20 Nov 2025 00:05:31 -0800 (PST)
-Received: from [10.11.12.107] ([5.12.85.52])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f34ffesm4477241f8f.10.2025.11.20.00.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 00:05:30 -0800 (PST)
-Message-ID: <f8981eae-3f1b-48e6-b74c-95810af3e5f0@linaro.org>
-Date: Thu, 20 Nov 2025 10:05:28 +0200
+	s=arc-20240116; t=1763628638; c=relaxed/simple;
+	bh=YXEuwywmxBkYpZosxSHNtG4VzTQR0mXrJmAC1VDFhBk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VlhB/gR6rR/4arEF9jlxGTSvsrrwhJXsJ9OQmGLTm6B0QLj9K2Zr9OFPP0fk6g3ZqxwLawjZ1vjowW7wY3df1WNFy1+hhMdLtb9z/s0zLzEi2mwGeNW8iRbS2SMbU4Ta76rkmhQlAQhEFlqMJHmMehvb3IwW072Mf/nrs8nKAlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4dBs9T5DX2z9sTD;
+	Thu, 20 Nov 2025 09:35:09 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Fd5cKkgsgj89; Thu, 20 Nov 2025 09:35:09 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4dBs9S4C2Sz9sSn;
+	Thu, 20 Nov 2025 09:35:08 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7C5D78B76D;
+	Thu, 20 Nov 2025 09:35:08 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 92U5nWTLlA_P; Thu, 20 Nov 2025 09:35:08 +0100 (CET)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 0B0608B763;
+	Thu, 20 Nov 2025 09:35:07 +0100 (CET)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Mark Brown <broonie@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"florent . trinh-thai @ cs-soprasteria . com" <florent.trinh-thai@cs-soprasteria.com>,
+	Sverdlin Alexander <alexander.sverdlin@siemens.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] spi: fsl-cpm: Check length parity before switching to 16 bit mode
+Date: Thu, 20 Nov 2025 09:34:49 +0100
+Message-ID: <3c4d81c3923c93f95ec56702a454744a4bad3cfc.1763627618.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/28] mtd: spinand: Fix kernel doc
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>,
- Vignesh Raghavendra <vigneshr@ti.com>, Pratyush Yadav <pratyush@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mtd@lists.infradead.org
-References: <20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com>
- <20251031-winbond-v6-17-rc1-oddr-v1-4-be42de23ebf1@bootlin.com>
- <efb8bba5-8805-4c95-ba1b-3bde46a4e528@linaro.org>
- <87v7j6aqlr.fsf@bootlin.com>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <87v7j6aqlr.fsf@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1709; i=christophe.leroy@csgroup.eu; h=from:subject:message-id; bh=YXEuwywmxBkYpZosxSHNtG4VzTQR0mXrJmAC1VDFhBk=; b=kA0DAAoW3ZBwJryrz1MByyZiAGke0qvIJOmxgNNVp6vnvYsjQMByo+HWoNXcOHxXDQgIUSs8K 4h1BAAWCgAdFiEEx/8LupiK9GVvlbov3ZBwJryrz1MFAmke0qsACgkQ3ZBwJryrz1NqIgD/cwoQ IJ2HjrFPjCBPxTbdKq7vfJUfc4yYNWwb8JS6bnoBAKGs2xwM+npjfnQMdUmzEzIkW2D4FHwMWpH QB+ORDBkP
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=openpgp; fpr=10FFE6F8B390DE17ACC2632368A92FEB01B8DD78
+Content-Transfer-Encoding: 8bit
 
+Commit fc96ec826bce ("spi: fsl-cpm: Use 16 bit mode for large transfers
+with even size") failed to make sure that the size is really even
+before switching to 16 bit mode. Until recently the problem went
+unnoticed because kernfs uses a pre-allocated bounce buffer of size
+PAGE_SIZE for reading EEPROM.
 
+But commit 8ad6249c51d0 ("eeprom: at25: convert to spi-mem API")
+introduced an additional dynamically allocated bounce buffer whose size
+is exactly the size of the transfer, leading to a buffer overrun in
+the fsl-cpm driver when that size is odd.
 
-On 11/19/25 7:18 PM, Miquel Raynal wrote:
-> On 05/11/2025 at 16:57:39 +01, Tudor Ambarus <tudor.ambarus@linaro.org> wrote:
-> 
->> On 10/31/25 6:26 PM, Miquel Raynal wrote:
->>> The @data buffer is 5 bytes, not 4, it has been extended for the need of
->>> devices with an extra ID bytes.
->>>
->>> Fixes: 34a956739d29 ("mtd: spinand: Add support for 5-byte IDs")
->>
->> no fixes tag for documentation.
->>
->> with that:
->> Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->>
->> (commit msg can be updated to smth like "update kernel doc comment"
->> too)
-> 
-> I partially disagree. Tell me if I'm wrong, but may I guess that you
-> have backports in mind? As opposed to backporting comment fixes which
+Add the missing length parity verification and remain in 8 bit mode
+when the length is not even.
 
+Fixes: fc96ec826bce ("spi: fsl-cpm: Use 16 bit mode for large transfers with even size")
+Cc: stable@vger.kernel.org
+Closes: https://lore.kernel.org/all/638496dd-ec60-4e53-bad7-eb657f67d580@csgroup.eu/
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reviewed-by: Sverdlin Alexander <alexander.sverdlin@siemens.com>
+---
+v2: Updated with comments from Alexander
+---
+ drivers/spi/spi-fsl-spi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-yes, I was thinking on stable rules, where trivial fixes like this,
-are not accepted. But you didn't cc stable, so I think that's fine.
+diff --git a/drivers/spi/spi-fsl-spi.c b/drivers/spi/spi-fsl-spi.c
+index 2f2082652a1a..481a7b28aacd 100644
+--- a/drivers/spi/spi-fsl-spi.c
++++ b/drivers/spi/spi-fsl-spi.c
+@@ -335,7 +335,7 @@ static int fsl_spi_prepare_message(struct spi_controller *ctlr,
+ 			if (t->bits_per_word == 16 || t->bits_per_word == 32)
+ 				t->bits_per_word = 8; /* pretend its 8 bits */
+ 			if (t->bits_per_word == 8 && t->len >= 256 &&
+-			    (mpc8xxx_spi->flags & SPI_CPM1))
++			    !(t->len & 1) && (mpc8xxx_spi->flags & SPI_CPM1))
+ 				t->bits_per_word = 16;
+ 		}
+ 	}
+-- 
+2.49.0
 
-> might not make much sense indeed, _fixing_ a comment makes sense. We
-> know that stable maintainers, even though they ask people to Cc stable
-> for backports, they automatically pick with the help of AI almost any
-> commit with a Fixes tag. I believe it is wrong to not mark such commit
-> and even change the title (because "fix" in the title may also lead to
-> an automatic backport) to circumvent their tooling. The tooling must
-> adapt, not the accuracy of the commits. Plus, backporting this kind of
-> commit is harmless, so I wouldn't care too much?
-
-okay
 
