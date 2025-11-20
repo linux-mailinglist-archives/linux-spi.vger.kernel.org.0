@@ -1,64 +1,64 @@
-Return-Path: <linux-spi+bounces-11415-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11416-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 347F1C74B81
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:02:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2802C74D84
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 16:18:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 476204E95E4
-	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 14:54:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8960E4E2B57
+	for <lists+linux-spi@lfdr.de>; Thu, 20 Nov 2025 15:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E2334AAE8;
-	Thu, 20 Nov 2025 14:53:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7226734F248;
+	Thu, 20 Nov 2025 15:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HPvYjfpH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eC5s1zJH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9726132C933;
-	Thu, 20 Nov 2025 14:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B301C34CFDD;
+	Thu, 20 Nov 2025 15:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763650395; cv=none; b=a3909lD7/FIRDYVrqUef80yQe0dRW2LJLxJoHA/gfHlrZ4Rfm65kw45CQfi4AU0Nv5cJkBWjvGXpd/H/ZBHqOKVD0jm6iVZ9GrY5gXyT1sm0kuUZ06p3vo26en4VZQJhtu5a/L6fzuqrqRsIMzRq7nXPM0DuAye8Vdy6USMew34=
+	t=1763651203; cv=none; b=ASONwcocfE9KzylFzN2fYs9SaL8NtGmtOeGhxD/P0iGHj/1dZnrOEzc9gpWdVjptKGMxEvOOi+oARvYP72hGvupE7crlqxnmZcCjwMtVCdjvq4hImgicYcdTkM2D17czHmDTymZGgQBIU/7YuAgIwNy0JUrAEJIhIRRfb9VZsR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763650395; c=relaxed/simple;
-	bh=FOiGqkM13wCQMhUWojZNwiMjhBlfxERbLsSU4OXdTRU=;
+	s=arc-20240116; t=1763651203; c=relaxed/simple;
+	bh=MvYzU5CYUx+NkTDResHrhZoeTT+LBYxva1yQm7eALJs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IFvLhh9kN73vSdcqJVF6MV2ZKitlfWNkD/CnJtqfViSbh3gbj4P4C18gNzyYIftdZPVCOAP1O6VLsDOEuTBfm/eM/JNXszt/Im+gl0Md/N7Y2ls5YY1bgZ6E7rQaGd3091dH7KM3g/7WKzuSnufeStVLoYz/7sfCXF2bAY3p2wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HPvYjfpH; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=kOqz+uL1+m8rCp8nlvMfhgzYZkTpUVKmV/IDOeWVAUIULNdRRkLKIHZZfk8ZloOY2YTKly1CLf3wCSr/Jlm3Rp2Oluo0dw/TTYkIzYbsvUTQ5Yi4zhcs2H7eapkj1EJHIdHjc4XGcyGuft+3G4KSCDoAjCVFnCovBY7/MN5no7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eC5s1zJH; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763650394; x=1795186394;
+  t=1763651199; x=1795187199;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=FOiGqkM13wCQMhUWojZNwiMjhBlfxERbLsSU4OXdTRU=;
-  b=HPvYjfpHAHFGw37IH48frOSqPqf53TOcQGFw29Q+d/pHvrs6BOZ60YK9
-   UBgcD15erRwZxsvEFpWX/oZ2xCbVSM7sOqZ56pOV6uiq+bak0t/UFZLmC
-   UPaqkVa+NdyNqyjbkTh4lN7jwtugT2IRTG+P4ZN/ZOro0vYTnAWuAWo+V
-   26hPMKoBcs41ibF8WN/1hKso3eEYGxMXwdHXb/0hFywry3pdmC8dSb0mm
-   P7wd0sPNZd9+wSNzaMkTHEsjUKpKQyjpjCRNzOjUzacM72V2b5M1jN8CP
-   NOU7A/QZKWIJi5CzWUqoiIySei0shLly+FE27JW6HLYLnNO6pt8TnBhgm
+  bh=MvYzU5CYUx+NkTDResHrhZoeTT+LBYxva1yQm7eALJs=;
+  b=eC5s1zJHcmYnogfyFkJE2EHzGQJCKgNUfVdVLZZ6igUAyrCugeHlsqIW
+   CnK2QYxCCLmSOWw8grhaN+yDG2ZmxqQmBJgNbglg6Gn42B6jhONvdwNEk
+   q2Dj/d5I154mVcAvJmmqaaUTTUnggIs0F5Dr8ORpsLXMqkp/RlUziBosD
+   PLec9GR3ibfij/U5CUZedTrmSJiyjAf7tbmjj9x3GnptNf54u05chhvcd
+   WD1g2+vdO73jPrSsjXS4t8jCb1spgeWMVcW1MWjo5hcv2lVONWozVv6kZ
+   Tj3PyAWEo15E48c2Us1+oFFg7Y/hWZyGAX/m6UnayBT2HQHicaUcdMY5g
    A==;
-X-CSE-ConnectionGUID: 0BegWDndRt6QWaVZxDwKbw==
-X-CSE-MsgGUID: n7tnmA3QQ7GY/GGQRLFLfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="83343384"
+X-CSE-ConnectionGUID: tIvs5SgERv2fYtMdSQdFMw==
+X-CSE-MsgGUID: J+S3BxPlR4uAfSNk84Iwlg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="68328925"
 X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="83343384"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 06:53:13 -0800
-X-CSE-ConnectionGUID: l30GPsCbRQaLLmArLdMxeg==
-X-CSE-MsgGUID: EeWyz0ePQxqBTJBGWgI6tw==
+   d="scan'208";a="68328925"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 07:06:33 -0800
+X-CSE-ConnectionGUID: s/zaIC1FQbe9TkjeIDSdow==
+X-CSE-MsgGUID: dMKOj6TeS3O9fQyCnHOl7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="192187607"
+   d="scan'208";a="195530098"
 Received: from amilburn-desk.amilburn-desk (HELO localhost) ([10.245.244.97])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 06:53:07 -0800
-Date: Thu, 20 Nov 2025 16:53:05 +0200
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 07:06:24 -0800
+Date: Thu, 20 Nov 2025 17:06:21 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: Linus Walleij <linus.walleij@linaro.org>,
@@ -82,11 +82,9 @@ Cc: Linus Walleij <linus.walleij@linaro.org>,
 	linux-spi@vger.kernel.org,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
 	stable+noautosel@kernel.org
-Subject: Re: [PATCH v7 4/9] spi: cs42l43: Use actual ACPI firmware node for
- chip selects
-Message-ID: <aR8rUVyeAJzIFtAp@smile.fi.intel.com>
+Subject: Re: [PATCH v7 0/9] reset: rework reset-gpios handling
+Message-ID: <aR8ubexLrTgmxtpv@smile.fi.intel.com>
 References: <20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org>
- <20251120-reset-gpios-swnodes-v7-4-a100493a0f4b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -95,34 +93,42 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251120-reset-gpios-swnodes-v7-4-a100493a0f4b@linaro.org>
+In-Reply-To: <20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Nov 20, 2025 at 02:23:59PM +0100, Bartosz Golaszewski wrote:
-
-> On some systems the cs42l43 has amplifiers attached to its SPI
-> controller that are not properly defined in ACPI. Currently
-> software nodes are added to support this case, however, the chip
-> selects for these devices are specified using a hack. A software
-> node is added with the same name as the pinctrl driver, as the
-> look up was name based, this allowed the GPIO look up to return
-> the pinctrl driver even though the swnode was not owned by it.
-> This was necessary as the swnodes did not support directly
-> linking to real firmware nodes.
+On Thu, Nov 20, 2025 at 02:23:55PM +0100, Bartosz Golaszewski wrote:
+> Machine GPIO lookup is a nice, if a bit clunky, mechanism when we have
+> absolutely no idea what the GPIO provider is or when it will be created.
+> However in the case of reset-gpios, we not only know if the chip is
+> there - we also already hold a reference to its firmware node.
 > 
-> Since commit e5d527be7e69 ("gpio: swnode: don't use the swnode's
-> name as the key for GPIO lookup") changed the lookup to be
-> fwnode based this hack will no longer find the pinctrl driver,
-> resulting in the driver not probing. There is no pinctrl driver
-> attached to the swnode itself. But other patches did add support
-> for linking a swnode to a real fwnode node [1]. As such the hack
-> is no longer needed, so switch over to just passing the real
-> fwnode for the pinctrl property to avoid any issues.
+> In this case using fwnode lookup makes more sense. However, since the
+> reset provider is created dynamically, it doesn't have a corresponding
+> firmware node (in this case: an OF-node). That leaves us with software
+> nodes which currently cannot reference other implementations of the
+> fwnode API, only other struct software_node objects. This is a needless
+> limitation as it's imaginable that a dynamic auxiliary device (with a
+> software node attached) would want to reference a real device with an OF
+> node.
+> 
+> This series does three things: extends the software node implementation,
+> allowing its properties to reference not only static software nodes but
+> also existing firmware nodes, updates the GPIO property interface to use
+> the reworked swnode macros and finally makes the reset-gpio code the
+> first user by converting the GPIO lookup from machine to swnode.
+> 
+> Another user of the software node changes in the future could become the
+> shared GPIO modules that's in the works in parallel[1].
+> 
+> Merging strategy: the series is logically split into four parts: driver
+> core, SPI, GPIO and reset respectively. However there are build-time
+> dependencies between all three parts so I suggest the reset tree as the
+> right one to take it upstream with an immutable branch provided to
+> driver core, SPI and GPIO.
 
-I very much like this solution.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Solution seems still OF-centric (some of_* is in reset-gpio are left),
+but the series in the right direction, thanks for doing this!
 
 -- 
 With Best Regards,
