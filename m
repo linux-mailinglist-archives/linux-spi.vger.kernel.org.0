@@ -1,135 +1,103 @@
-Return-Path: <linux-spi+bounces-11461-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11462-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B8BC7ACEE
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 17:21:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE789C7AD30
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 17:25:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61D9F3A143B
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 16:20:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B0454E05C1
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 16:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9882FF649;
-	Fri, 21 Nov 2025 16:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF2F2ECE91;
+	Fri, 21 Nov 2025 16:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUcf/m3z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qzhtlxro"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE21F7260B;
-	Fri, 21 Nov 2025 16:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4C21ACEDF;
+	Fri, 21 Nov 2025 16:25:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763742045; cv=none; b=m3Ozd6cFpgXWD3uhlbz7GfUl7Dka4nsuRyjhKlQCpkKzADHOwSoPx8YbQInz6jJ1NmxyfV8PCUyzmixSMfnf+v9pzG4yuuKp7pRiqNjR9LH1xWY75l3Ihz+ig+y0ZNgQCDzgTCGWXaCWknCYi/kBcOxSPX2pvsWgR1vrQepjqxA=
+	t=1763742301; cv=none; b=cKvgFh2TMZ5F0yE8eIZxZN9JBTEiB6rm6am0wHD8DwXCDSw/b9aEq8k6lDpDU83tg7Nh6lVP/eXR6mr4GCCy4dWcAMJhGqiLmcpyzMbLBLbhZ6/cyyv1LXigssyqNz/MOAICMYDQ0vt1CCAZmLMHjd1ZNbk37pDZTBzkwE1Sjp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763742045; c=relaxed/simple;
-	bh=bPvbITpgxfkzcIC5GsYQKwKsf7bury28D6Ssr8icWf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NnES/Vyj6BovlVQJlBdBZlgyiBtNmp8aVhCXCl7oJsbPrMCa9xH0IHuPyu6OUKvZ1vN3V03azKGODCVqk8Kb8UnUWTzsEdnE+6Q3Yk+kyu32Je6pyaZt/orGvL5X+b68QEVs9a40nrNg2aMlf4yxSzwIJP7cX0lRVO+KlWgAOyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUcf/m3z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50005C4CEF1;
-	Fri, 21 Nov 2025 16:20:43 +0000 (UTC)
+	s=arc-20240116; t=1763742301; c=relaxed/simple;
+	bh=M2lWvD94t+QENSK1sKY6MCUn+R1BeyqsTINMW1UGDI8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=VTpUeGISdwkdD4okS4zJOktTujlMOtMnUveHcaueWpr3qpZYBCMWrPV/UG4UQtwS/MyvxWimRBKUCvu0a7iKy1Vap/xbmq87ybx7zIncEO9Pw31CJsIww+71Th55SuElL5+0xoHyL+8QLeAuDw492ntPLHRP2LjyFLUlB3/L0KY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qzhtlxro; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE6CC4CEF1;
+	Fri, 21 Nov 2025 16:24:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763742044;
-	bh=bPvbITpgxfkzcIC5GsYQKwKsf7bury28D6Ssr8icWf8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aUcf/m3zSdSKse1sx4uITR03GHCzlpqOX9FjXxoLoT014VojDFp9WQKhhDGAfUFlc
-	 hLe+8m7JQ0ATr1JvH3R4cLQCr5mBk7f+jtRinMAhgzJwM9LwWD6YJhg2XAfXpLFlm9
-	 zT7hgYIj5fBBTxIbd+c4fdFnPUAaleTfprbnASahlqSLxpOVbS2SwULOpie3X8ejvy
-	 +p8ul3ErKoZua8N1jQFQrK+JrY5Xm7MCYqzyOpD67c7HlIUTLcl5QKIKMR/BXIpuV3
-	 EevUNCw3GjMKvD7NjM3/LsC0DT/2JqjtqoqzOrQN0V4J04i9M060WND1IVv4F3X1ph
-	 BJGjf2PI7m2Dw==
-Date: Fri, 21 Nov 2025 16:20:41 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] spi: Fix potential uninitialized variable in probe()
-Message-ID: <20251121-apostle-stark-7af8aebfe9c1@spud>
-References: <aSBqhdjiywXq2Aso@stanley.mountain>
- <cd3dc38e-72f6-4e83-a67f-266523e686f1@sirena.org.uk>
+	s=k20201202; t=1763742300;
+	bh=M2lWvD94t+QENSK1sKY6MCUn+R1BeyqsTINMW1UGDI8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Qzhtlxroqvoqq4/zpP5kJST+Hf3d3OGunyEPIgGzOxBKh9KkYMt3m54xI9GObf/RF
+	 Lp5+5ivt8Nr5ud0GFEduzfwS/vAXWJc0duTZFwZuwNLrJAw89F9mtgsfNbZxqovoMJ
+	 JIOKLXGi5uq1LwSNDX6U9VR/qhYHIpXYflCIunTaVwti7wmhbZKoYX6Mo+XHmg6wam
+	 zhEh0akEVgvANjwJcJNWGJeGP7sNj6e5HSPiFJPCsqLCnRiHyXU/k26wTWDKXDxG50
+	 pCjeRAbndcxUWKOf8pqOmlxLoWURe4vlvgVfaT5kbgaC0mCMeOKs4YMDRmszFZfeDc
+	 aMMNUBCoumGDw==
+From: Mark Brown <broonie@kernel.org>
+To: Frank.Li@nxp.com, rongqianfeng@vivo.com, carlos.song@nxp.com
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20251117030355.1359081-1-carlos.song@nxp.com>
+References: <20251117030355.1359081-1-carlos.song@nxp.com>
+Subject: Re: [PATCH] spi: spi-fsl-lpspi: fix watermark truncation caused by
+ type cast
+Message-Id: <176374229925.52495.4055621963901778213.b4-ty@kernel.org>
+Date: Fri, 21 Nov 2025 16:24:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hENh9cIf10+g9oH0"
-Content-Disposition: inline
-In-Reply-To: <cd3dc38e-72f6-4e83-a67f-266523e686f1@sirena.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
+On Mon, 17 Nov 2025 11:03:55 +0800, carlos.song@nxp.com wrote:
+> 't->len' is an unsigned integer, while 'watermark' and 'txfifosize' are
+> u8. Using min_t with typeof(watermark) forces both values to be cast to
+> u8, which truncates len when it exceeds 255. For example, len = 4096
+> becomes 0 after casting, resulting in an incorrect watermark value.
+> 
+> Use a wider type in min_t to avoid truncation and ensure the correct
+> minimum value is applied.
+> 
+> [...]
 
---hENh9cIf10+g9oH0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Nov 21, 2025 at 02:18:49PM +0000, Mark Brown wrote:
-> On Fri, Nov 21, 2025 at 04:35:01PM +0300, Dan Carpenter wrote:
-> > If the device tree is messed up, then potentially the "protocol" string
-> > could potentially be uninitialized.  Add a check to prevent that.
-> >=20
-> > Fixes: 059f545832be ("spi: add support for microchip "soft" spi control=
-ler")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > ---
-> >  drivers/spi/spi-microchip-core-spi.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-mic=
-rochip-core-spi.c
-> > index b8738190cdcb..e65036cc62f3 100644
-> > --- a/drivers/spi/spi-microchip-core-spi.c
-> > +++ b/drivers/spi/spi-microchip-core-spi.c
-> > @@ -320,6 +320,8 @@ static int mchp_corespi_probe(struct platform_devic=
-e *pdev)
-> >  	 */
-> >  	ret =3D of_property_read_string(pdev->dev.of_node, "microchip,protoco=
-l-configuration",
-> >  				      &protocol);
-> > +	if (ret)
-> > +		return ret;
-> >  	if (strcmp(protocol, "motorola") !=3D 0)
-> >  		return dev_err_probe(&pdev->dev, -EINVAL,
-> >  				     "CoreSPI: protocol '%s' not supported by this driver\n",
->=20
-> This should probably also complain about not being able to get the
-> property, otherwise nobody is going to be able to figure out what's
-> wrong if we actually hit the error case.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-The one thing to be careful of is that the property has a default, so
-EINVAL needs to be treated differently, so the decision tree is
-something like:
-if (ret =3D=3D _EINVAL)
-	<do nothing>
-else if (ret)
-	abort complaining about malformed
-else if (!motorola)
-	abort complaining about unsupported mode
-else
-	<do nothing>
+Thanks!
 
-obviously that can just become two clauses, but you get the idea.
+[1/1] spi: spi-fsl-lpspi: fix watermark truncation caused by type cast
+      commit: 9f0c21bac5a8089e74b21d007e26fb4594b10d73
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---hENh9cIf10+g9oH0
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaSCRSQAKCRB4tDGHoIJi
-0hUDAQCy6DCA2ZtjlIe8Je9fG1esPeTgP2b20jYJUoOZ4kRVjwD/ZKcbjPa6tIg4
-VAryRCasKFzt2Ah9eS98kFwOq1Kvkwg=
-=gGc7
------END PGP SIGNATURE-----
-
---hENh9cIf10+g9oH0--
 
