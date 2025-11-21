@@ -1,108 +1,114 @@
-Return-Path: <linux-spi+bounces-11455-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11456-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D370C7A282
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 15:30:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1CA2C7A3AB
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 15:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C83794F281D
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 14:23:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 8E8B62E0E0
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 14:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B18345CC4;
-	Fri, 21 Nov 2025 14:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE788352F86;
+	Fri, 21 Nov 2025 14:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bY/+SCHN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Te6RDEOd"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74588344024;
-	Fri, 21 Nov 2025 14:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A641B4244;
+	Fri, 21 Nov 2025 14:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763735001; cv=none; b=bMKBfoud8wna8kSl7iXtQuUwBVh1KFlkgXp0cQxAlgNOfHaxkaMyyz/6ZHtUWbsCB7J2wF3vkaAyrjmwy4NsKIxzAszjTu9FZmoilv+LF3SV3ZHCA9u05dQpgnMM7xrIpANxdoxOSmQNiecuV5E3YlrRGrdhYb28TLFu+YTJyIE=
+	t=1763735988; cv=none; b=RrYJODVhn3ZD9XNi1Nt2A0cIN01Hx1M1OkGh4x03Pd4SAd8wC6dOOF3qirth9ysQ65uDx3+HpnJ4zvwJ7J/vCkY07F0Cr6LCHegvyipgvvAg0F043KHVJhiaIFKVS3DJ0hYco8rf05uH12i5cYw93Jxg4xIvtvC1rS22e9cs1yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763735001; c=relaxed/simple;
-	bh=E3o8i+V0u5YHeHV7K5vFmZBQMV9gJn5G/yAV47cvbJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RUZ6OFl8SsheWqMUtnqElf/lKVmRYLIBNKZ5+/yAQOAR/VSV+DL9AUk7BAZYRk3rXAogtVmUESuzthNKyvq5O1VDS3JvWWXCSpMCOH5IBkizWPMUIO72tfH0GVKV1T1kV5QbQQ91DfL9ngLsCcTyiREzkGrPCVxWKr1oRwDmw0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bY/+SCHN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A90C4CEF1;
-	Fri, 21 Nov 2025 14:23:19 +0000 (UTC)
+	s=arc-20240116; t=1763735988; c=relaxed/simple;
+	bh=pnM6zj86IqldLJPS+Ht6crPpBTtueu6/UR4GDU5+lHQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=jvDyGKBTpeZwwelYQ0IpLEQfwt4XQAzoWJU+4M7oXcRRmChb3JSvlQTJf77VbxMjxRL5175Xx1aNMomINJhYB0BtKe8/idWdYR8LmzEWi2eUq//G86J6H1W2eNjfPU/eFSWI4R0zOjMxW+dqsB+2niuplidtgVNxcZkFXJdYFtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Te6RDEOd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B3BC4CEF1;
+	Fri, 21 Nov 2025 14:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763735001;
-	bh=E3o8i+V0u5YHeHV7K5vFmZBQMV9gJn5G/yAV47cvbJs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bY/+SCHNsl1FX3WdcuLRnX2HfmuRtVqjYf7fXGoaP1ozRUFWsM7eMTTdx3DkCb36E
-	 CSv5Q/96R9Dzp1IhlsTxVdSdezCOAKGCpPDlgUFq94AO9MUGigFyjTAtKovwZw6Sb4
-	 Su62MbXqoySnwGntadiMNLlEJh4lkTWCMGJMWsMgAh9oxPw4yi5QKZtPLtlzB/Ea9B
-	 nE5bUh5pmOP8dvrXrtRM6FKn0dnjwLwT3kSUS9bsusyAiQvbJ7NE4TTi/P3f27ho3A
-	 xY3NGP9a3xtaX6OY3ny4jFjh4otiAaj4DMZZll/ha5kqbPNdupFKE59EtuCfbRowbv
-	 RkE6E0hptO1QQ==
-Date: Fri, 21 Nov 2025 14:23:17 +0000
+	s=k20201202; t=1763735987;
+	bh=pnM6zj86IqldLJPS+Ht6crPpBTtueu6/UR4GDU5+lHQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Te6RDEOdyGphjrHER0QQGpNtE5pzBwo8AYMnhRlsTSP737QewqjciixM2c9k4an4a
+	 6sOfxv346z52RYZxC73xZT3rr6A+FVPuzRw2RGYzm9YQM+Xf64k9TSE2xWGUGZ8xKr
+	 HeFcja7evMSOOdE0R1wISnpO7Cqr+IqC3SlGrIyz0ZBVuBKwxwptqOJ+6wR3Hg9wWN
+	 Q79HMi64H7qQkyFEXMnRxLLgjrZPblBWhHPfN9NB/+pL/KQJU0KfOM2mJddM4t7PWH
+	 M8jF+9PMH8ypMxE+On3gZ/u0re5h0No9UP5C0bk2SdXx3la2PFYEsTZppw5vuInVfh
+	 68pDSluqUh3Ng==
 From: Mark Brown <broonie@kernel.org>
-To: Carlos Song <carlos.song@nxp.com>
-Cc: Frank Li <frank.li@nxp.com>,
-	"rongqianfeng@vivo.com" <rongqianfeng@vivo.com>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] spi: spi-fsl-lpspi: fix watermark truncation caused by
- type cast
-Message-ID: <7af6aa81-de6f-4ac7-b6dc-e4a79ae80afb@sirena.org.uk>
-References: <20251117030355.1359081-1-carlos.song@nxp.com>
- <VI2PR04MB11147DF123E2313B91CD8FBC7E8D5A@VI2PR04MB11147.eurprd04.prod.outlook.com>
+To: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+ krzk+dt@kernel.org, conor+dt@kernel.org, 
+ Riccardo Mereu <r.mereu.kernel@arduino.cc>
+Cc: linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net, 
+ naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com, 
+ chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com, 
+ farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-spi@vger.kernel.org, m.facchin@arduino.cc, 
+ Riccardo Mereu <r.mereu@arduino.cc>
+In-Reply-To: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
+References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
+Subject: Re: (subset) [PATCH v3 0/6] arm64: qcom: add support for Arduino
+ UnoQ SBC
+Message-Id: <176373598316.33640.5262167228570567922.b4-ty@kernel.org>
+Date: Fri, 21 Nov 2025 14:39:43 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="UTLYNt/SZpo6Xudb"
-Content-Disposition: inline
-In-Reply-To: <VI2PR04MB11147DF123E2313B91CD8FBC7E8D5A@VI2PR04MB11147.eurprd04.prod.outlook.com>
-X-Cookie: revolutionary, adj.:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
+On Thu, 20 Nov 2025 16:58:19 +0100, Riccardo Mereu wrote:
+> This patch series adds support for Arduino UnoQ single board computer.
+> UnoQ combines Qualcomm QRB2210 microprocessor and STMicroelectronics
+> STM32U585 microcontroller.
+> 
+> In some files we decided to keep UnoQ code name as "imola".
+> 
+> As this platform has a microcontroller connected to the microprocessor
+> we needed a dedicated spidev and to add uart2 to qcm2290.dtsi file; both
+> are used as interfaces between microprocessor and microcontroller.
+> 
+> [...]
 
---UTLYNt/SZpo6Xudb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Fri, Nov 21, 2025 at 08:18:17AM +0000, Carlos Song wrote:
->=20
-> Gently ping to avoid missing...
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+Thanks!
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+[2/6] dt-bindings: trivial-devices: add arduino spi mcu interface
+      commit: a7bde7c10902a0f6f903d3bbe67461f2b402a9ca
+[3/6] spi: spidev: add compatible for arduino spi mcu interface
+      commit: 43a3adb6dd39d98bf84e04569e7604be5e5c0d79
 
---UTLYNt/SZpo6Xudb
-Content-Type: application/pgp-signature; name="signature.asc"
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
------BEGIN PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkgddQACgkQJNaLcl1U
-h9DnnAf+Mzd/D3tDgwGnqiKK+ihy/oCQg/umjiEl9Rx4D6C1vlg2iyc6Ae4hvCaw
-yO4rhu1vkQFidueMpRlOuW/GXWSVrce16Knjb8L4qqr8a/ALm4925PFUgUabt8pl
-L9L4nn6NQTlgQKY3hXOj2HSlo55R03gH1zKvNoKK8sPJiHBeFyLpzvCfoVfkwXvA
-WaaAtwgHm9A3rYUE7VM9vfzUQW4+nM16XrF0xLPeQgUaHRXDH64h8YZBqVDn0IKA
-zhDk1ixsXKsU9dXeKwxHdTTqKrOr57V7y5rAqqNRPeY+xb/q3MooQMdU2uf+ycbQ
-YWQ414/FdvmQsOWnMhHcFNuT7NfUrg==
-=d+XM
------END PGP SIGNATURE-----
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---UTLYNt/SZpo6Xudb--
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
