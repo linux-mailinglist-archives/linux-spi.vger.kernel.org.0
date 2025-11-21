@@ -1,56 +1,59 @@
-Return-Path: <linux-spi+bounces-11454-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11455-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0305C7A1D1
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 15:20:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D370C7A282
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 15:30:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id F050A2E036
-	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 14:20:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C83794F281D
+	for <lists+linux-spi@lfdr.de>; Fri, 21 Nov 2025 14:23:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A106346FB8;
-	Fri, 21 Nov 2025 14:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B18345CC4;
+	Fri, 21 Nov 2025 14:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EagljLLZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bY/+SCHN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDC9346E72;
-	Fri, 21 Nov 2025 14:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74588344024;
+	Fri, 21 Nov 2025 14:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763734734; cv=none; b=jbRbGy42Tl4CFfdtm8xX031PktOxILHGepdXQLi8XW32qKar0+02unbhLw0ArLbQvos81MK7vEoioWJrlGyr5yh7VDYv9SEJNvvP94+fA8wcQJ8XUDDvnLcIEc0bl09NL68jvX3+DJhoESFmjVaIILQbtdkNIk+18UtznhVXYvA=
+	t=1763735001; cv=none; b=bMKBfoud8wna8kSl7iXtQuUwBVh1KFlkgXp0cQxAlgNOfHaxkaMyyz/6ZHtUWbsCB7J2wF3vkaAyrjmwy4NsKIxzAszjTu9FZmoilv+LF3SV3ZHCA9u05dQpgnMM7xrIpANxdoxOSmQNiecuV5E3YlrRGrdhYb28TLFu+YTJyIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763734734; c=relaxed/simple;
-	bh=NsprtF+HIxjxhCRioUHdnInNCJikmnxU18uwM7I+1kY=;
+	s=arc-20240116; t=1763735001; c=relaxed/simple;
+	bh=E3o8i+V0u5YHeHV7K5vFmZBQMV9gJn5G/yAV47cvbJs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MJaEazS5DwlC/IKuxqnsEl37vGlt0t6tUaEeQb8BLkvDRBEHGLT4/p2FpBWlMVfoTiTXSEwnBQ8ElCAv/gkhqzTBixOqSEb8U4OrtpHS2bhf/Jhqen37P5f1rCT3k5e7qcw2I9t/sd53yTnthta7egHGqHUovRJ898Enn8Ti8G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EagljLLZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91572C4CEFB;
-	Fri, 21 Nov 2025 14:18:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RUZ6OFl8SsheWqMUtnqElf/lKVmRYLIBNKZ5+/yAQOAR/VSV+DL9AUk7BAZYRk3rXAogtVmUESuzthNKyvq5O1VDS3JvWWXCSpMCOH5IBkizWPMUIO72tfH0GVKV1T1kV5QbQQ91DfL9ngLsCcTyiREzkGrPCVxWKr1oRwDmw0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bY/+SCHN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A90C4CEF1;
+	Fri, 21 Nov 2025 14:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763734733;
-	bh=NsprtF+HIxjxhCRioUHdnInNCJikmnxU18uwM7I+1kY=;
+	s=k20201202; t=1763735001;
+	bh=E3o8i+V0u5YHeHV7K5vFmZBQMV9gJn5G/yAV47cvbJs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EagljLLZNrtDsGontDqDb8T45zIR9BkND/LHICMJq1ONW04Dq3EUaqqkHbu9Um5b6
-	 +ow/TgXUOHRA1l3M2GxYVLF9ocD3szF2gWTofv1Bi1nVBRRxi6HQPGOGmEBXbr72cS
-	 14ZHuyaBpoWiGUux+If4tIM9npcAR0ZkRENrE6DM1kM9Gd+ZTn79sqAgQuIxjYMaiI
-	 keOQzVnGkNBFJhdhIzlC4nTH+cNLSQ4S2A/HBMCyrPWAIqA6S8myAWE+JfWa2LrEDg
-	 8OU1mQFQOUxvJ+B1Zrz9ZUMXF7pPAJHREpnSBsGTvtR2iuz1qN9TAzM88TYzgA81Hg
-	 7NRgBtYcnJpsw==
-Date: Fri, 21 Nov 2025 14:18:49 +0000
+	b=bY/+SCHNsl1FX3WdcuLRnX2HfmuRtVqjYf7fXGoaP1ozRUFWsM7eMTTdx3DkCb36E
+	 CSv5Q/96R9Dzp1IhlsTxVdSdezCOAKGCpPDlgUFq94AO9MUGigFyjTAtKovwZw6Sb4
+	 Su62MbXqoySnwGntadiMNLlEJh4lkTWCMGJMWsMgAh9oxPw4yi5QKZtPLtlzB/Ea9B
+	 nE5bUh5pmOP8dvrXrtRM6FKn0dnjwLwT3kSUS9bsusyAiQvbJ7NE4TTi/P3f27ho3A
+	 xY3NGP9a3xtaX6OY3ny4jFjh4otiAaj4DMZZll/ha5kqbPNdupFKE59EtuCfbRowbv
+	 RkE6E0hptO1QQ==
+Date: Fri, 21 Nov 2025 14:23:17 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] spi: Fix potential uninitialized variable in probe()
-Message-ID: <cd3dc38e-72f6-4e83-a67f-266523e686f1@sirena.org.uk>
-References: <aSBqhdjiywXq2Aso@stanley.mountain>
+To: Carlos Song <carlos.song@nxp.com>
+Cc: Frank Li <frank.li@nxp.com>,
+	"rongqianfeng@vivo.com" <rongqianfeng@vivo.com>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: spi-fsl-lpspi: fix watermark truncation caused by
+ type cast
+Message-ID: <7af6aa81-de6f-4ac7-b6dc-e4a79ae80afb@sirena.org.uk>
+References: <20251117030355.1359081-1-carlos.song@nxp.com>
+ <VI2PR04MB11147DF123E2313B91CD8FBC7E8D5A@VI2PR04MB11147.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,63 +61,48 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jnQOdFs1tKeyDk7h"
+	protocol="application/pgp-signature"; boundary="UTLYNt/SZpo6Xudb"
 Content-Disposition: inline
-In-Reply-To: <aSBqhdjiywXq2Aso@stanley.mountain>
+In-Reply-To: <VI2PR04MB11147DF123E2313B91CD8FBC7E8D5A@VI2PR04MB11147.eurprd04.prod.outlook.com>
 X-Cookie: revolutionary, adj.:
 
 
---jnQOdFs1tKeyDk7h
+--UTLYNt/SZpo6Xudb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 04:35:01PM +0300, Dan Carpenter wrote:
-> If the device tree is messed up, then potentially the "protocol" string
-> could potentially be uninitialized.  Add a check to prevent that.
+On Fri, Nov 21, 2025 at 08:18:17AM +0000, Carlos Song wrote:
 >=20
-> Fixes: 059f545832be ("spi: add support for microchip "soft" spi controlle=
-r")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
->  drivers/spi/spi-microchip-core-spi.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-micro=
-chip-core-spi.c
-> index b8738190cdcb..e65036cc62f3 100644
-> --- a/drivers/spi/spi-microchip-core-spi.c
-> +++ b/drivers/spi/spi-microchip-core-spi.c
-> @@ -320,6 +320,8 @@ static int mchp_corespi_probe(struct platform_device =
-*pdev)
->  	 */
->  	ret =3D of_property_read_string(pdev->dev.of_node, "microchip,protocol-=
-configuration",
->  				      &protocol);
-> +	if (ret)
-> +		return ret;
->  	if (strcmp(protocol, "motorola") !=3D 0)
->  		return dev_err_probe(&pdev->dev, -EINVAL,
->  				     "CoreSPI: protocol '%s' not supported by this driver\n",
+> Gently ping to avoid missing...
 
-This should probably also complain about not being able to get the
-property, otherwise nobody is going to be able to figure out what's
-wrong if we actually hit the error case.
+Please don't send content free pings and please allow a reasonable time
+for review.  People get busy, go on holiday, attend conferences and so=20
+on so unless there is some reason for urgency (like critical bug fixes)
+please allow at least a couple of weeks for review.  If there have been
+review comments then people may be waiting for those to be addressed.
 
---jnQOdFs1tKeyDk7h
+Sending content free pings adds to the mail volume (if they are seen at
+all) which is often the problem and since they can't be reviewed
+directly if something has gone wrong you'll have to resend the patches
+anyway, so sending again is generally a better approach though there are
+some other maintainers who like them - if in doubt look at how patches
+for the subsystem are normally handled.
+
+--UTLYNt/SZpo6Xudb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkgdMkACgkQJNaLcl1U
-h9CPOwf/YH0v9sLikttYK7LcYfsSfi4JzoE78aL6gexf4xUfth8PMXTnDccuX6Lw
-G1tSK5LmQD/Z3Lkj7mHVaCULBBAL2HYZDe6fo2Vn3AlCnXdoRXmGYourEO5udgV+
-lY5A40R4P2m/4pU0ddUK1Kd+U0uwSDhdQ23uFJpOvgO8lZQjKSMOOWnQUFYCxXoJ
-LZe0GLRSbCHazaouPW/k1tebrwRL5M7FtJiBp5t/fkdNMtNuFqtQctjL1wWkLERH
-ODl34uRHIwwhEPE+d54sKVhp6r07rAmay/AMQrwuxDrxkd2sPWezLZ0lp94i+zKu
-Sk47HAhD8lIADZxJunw6wsqemlV3qw==
-=0+bs
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkgddQACgkQJNaLcl1U
+h9DnnAf+Mzd/D3tDgwGnqiKK+ihy/oCQg/umjiEl9Rx4D6C1vlg2iyc6Ae4hvCaw
+yO4rhu1vkQFidueMpRlOuW/GXWSVrce16Knjb8L4qqr8a/ALm4925PFUgUabt8pl
+L9L4nn6NQTlgQKY3hXOj2HSlo55R03gH1zKvNoKK8sPJiHBeFyLpzvCfoVfkwXvA
+WaaAtwgHm9A3rYUE7VM9vfzUQW4+nM16XrF0xLPeQgUaHRXDH64h8YZBqVDn0IKA
+zhDk1ixsXKsU9dXeKwxHdTTqKrOr57V7y5rAqqNRPeY+xb/q3MooQMdU2uf+ycbQ
+YWQ414/FdvmQsOWnMhHcFNuT7NfUrg==
+=d+XM
 -----END PGP SIGNATURE-----
 
---jnQOdFs1tKeyDk7h--
+--UTLYNt/SZpo6Xudb--
 
