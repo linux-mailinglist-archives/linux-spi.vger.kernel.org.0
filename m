@@ -1,147 +1,275 @@
-Return-Path: <linux-spi+bounces-11471-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11477-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CBC3C7F4A7
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 08:57:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2AAC7FF37
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 11:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C99B334772E
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 07:56:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 992803A5D54
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 10:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95412E973A;
-	Mon, 24 Nov 2025 07:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69002F9DA0;
+	Mon, 24 Nov 2025 10:40:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ngVJcCRI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OwQ5WuzE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023F52E6CA0
-	for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 07:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B417E274B26
+	for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 10:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763971006; cv=none; b=Gkg3dkFPfEP7+iTf2CMK6qWz2MjVQZ4JkD+pwH0AyGQUplcz1MhPCdOyBuE4LhPau1vkoiYsgZ6Sbp7QCeAn5ML+fBUO216A8G1nXAlLZACC0OhNrTDqRWgM4w1aI9Bav3KAI4pzzqlfMU9NG8pJwbWPWPh1ac0s/I36WsRWS0Q=
+	t=1763980847; cv=none; b=mIrSJg9WmTKeR2aU/43eMSAmFCstjWuispkTVoC1OhDJtUU5+RFW8l+Fa/afsQK0paU1q8M4S7e9+/P/u14ujabY1Z1Dm9uOnOUF9vMCfzKA+K0fc41o920XPrB0h9IUaasqIolDzURlzDiJjSJekDxDEFNdTlEMhGya0pidNb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763971006; c=relaxed/simple;
-	bh=VlZWtSFMMXDvDtQwf/kOcJDDl+uZNgmUwtroal7tsrg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qPCEOF5TYaw1qKOo3Oe6NpAI7yXeYmiXGNzqG2V6oFaLr73AvGu4l6YxQLejOjDXg9aTfIUGnGeRjbd31PD472sG2XT9j9PWp9RkPu/eGbkVwgdBj32UKAYLhe8E1wu6SivZnS6syIGy4zGfskg48S2s6+F8avenCa12N5Uerlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ngVJcCRI; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47790b080e4so20515125e9.3
-        for <linux-spi@vger.kernel.org>; Sun, 23 Nov 2025 23:56:44 -0800 (PST)
+	s=arc-20240116; t=1763980847; c=relaxed/simple;
+	bh=MyhVfaLuUMB4FJ2DvvqxwnUvFdn4Yuvt+apgQWbex0s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cAPcrv2wLEE6UwUNwTyuBYabbAb2phYp6FYpGbMUkPSclArYg+mauwGoZAyDY6mmwBYWs8VLiI5K5KvCNX/yiNomXTVlFvMOpw/TvoCXTj/TnVfDwZaWi0CPC0CKNjj5FYa17DlSOvI7KJvBgHz4vgE/dkzdLIHCKZ+sOi0Gkmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OwQ5WuzE; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-596a055b1b8so3669151e87.0
+        for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 02:40:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763971003; x=1764575803; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLyA0fRsf5dKzM98MfbHJtyFqg51bHHkO/nryJa4EvE=;
-        b=ngVJcCRIYehpB9CQlE2kVMgBc4eKU0PbvzTYmMOpRXMCvXruTYc2mPXxT5cbcAtWxy
-         NinnXSY4B5tGNaEjg8T+XxaTZ843ND4X0dl3UURmytIHbXOXitzJd0bBnDl5EJkZHtBq
-         F+Jjie9LSQb05R88pvKK8vq/RJdVbJrDICL/XOpjoq7srYFQfd6Ckix1ib67bZie+eOl
-         Iqczko9N3kakiNUHnxdf9KFHfx8kbXcWN3E5ydZWyXZ9aa9gfO1AffFPn8Ee0w/s3V4j
-         NBLbiRD2fCBb49NyU/+wgnmysSyzLJqyfRfXQb1wpseNLJp6BUA9LcNH2v7agXCE4pwI
-         NrdQ==
+        d=gmail.com; s=20230601; t=1763980844; x=1764585644; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UvxeS/74nBAEFSf4nVKv65BSIxiE58qrGcTM82uuMOU=;
+        b=OwQ5WuzEOUWLjwI9muJgKVz8C5OuJfmzWtuwO+hb9tN2DxXmrQQ5ISCWFoVPfLZ3Kf
+         aLbuSiDFgb1vtiRZcxbirKJuV+191yDExwP2fHlS6WFgI/ARrrYQjRmVDOuv8iODIfl/
+         7yvl0rpY9IBYYJnnZup3QT5Uy7lpqad8u9N+WHd+cGlFB2RSVqcMq+PFVKozzpvgyH0L
+         54qh4kKwpFGA+irkQy7qwCQjOxlFzBqS3b9A2tfzQg/8SRjo//IcaNz8KSvzw1yVyxMb
+         vn25djMElM+DJsFFjD8/9f7DOBZTUCBaj+sVEhJIfUc6TXC9P2sb/9azJUdZmctO+PRe
+         rb0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763971003; x=1764575803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MLyA0fRsf5dKzM98MfbHJtyFqg51bHHkO/nryJa4EvE=;
-        b=ff3LcTEZhPm/SdjRw3VLH07Vw7ZQMtoFJejexnIitw13tXk5JAMyryWhVe/zwYz29I
-         AR+2TthXYdYG/Oh7GAa3VzYipaqgd1+FQdJI52npYUfKzIgwZCk0LEEhUe894KKxmWp4
-         M3OcMCwZjb6V7R9/3XtNI1iTs9OnGplNFpXYKalRpWCj8yCOeiSH8WhIH808ynwdYGL2
-         Q0V1siw3YgBlahpVV9W17JXXKdBVNj+LCIAHt1wKfp26oWdX5ygBH2a5IOoO9MmafjLw
-         QEn8R4KTFofESP1iuG7dQV1sWZw0OnctPrdDc4GCJOX+jzlTb9igLa36cHB9bZRy3Pmt
-         gM6w==
-X-Forwarded-Encrypted: i=1; AJvYcCVv1G7R9+wKu1sktkBpHW41BGWOCpmlvb77ZEZx4P5e+VSufiSWyJmcUQxdf4tyZ7YEcaB2o4Ldneg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKJOMkRiMM7W3Bw9i7aVX5odDfwaWZISqfWNS+LCjAaSNINeHd
-	/qrU8Rdiroh0swxCaTAZKFKTjpNPCvY/Al63B7NthT0NbgkI/3W1qSrX0ArJcGb0izE=
-X-Gm-Gg: ASbGnctXO0YbtlK3gPUCmy9v8IKJgp8l+A/McExalCvC+/W/Hh3f3/NfhrF4FSW+l0m
-	eCC0W5amiz1Ej0NrZOOSGuB39GDphB3szu1lRhNrPxYyS13aRS0aryM3XUAFE/TBlgiMruRZ5Sr
-	lMQTx40rJRUOfXYCCn9pn0uKvVsIyyPBdIw6dxLfyW4l7R2BN1hS6BajvN760ckibnSY/BKNliI
-	qleAQFcRxOj54cCqb3XmNkPtkKCFceeiKeMjtVGRcMcgxUQ7KS46IjtjMwlwU+M+bZ8D/bT8sCQ
-	kCNkhDVmkqUoKncMoDhvWdNgWO2BvOZghOi67mG2D+lHGyn4QvA6ZLZoSqbla74+ipoNXQItLB+
-	18PhYQ4bAMtbj7+cjj3aE9cGe4ecK9cmQKSsVLwb5alLhoII51Acv40BjTh8rwh76JHjkahOtdt
-	ycIooq9Sber3Iuo+6J
-X-Google-Smtp-Source: AGHT+IHqB3xz9lcENVWCMvF8eQLj++2dyZ7qTY6KZB1gR5ZIqnYr04jVw2A6AhKpseHTB5WdRevx3A==
-X-Received: by 2002:a05:600c:19d4:b0:477:63b5:6f3a with SMTP id 5b1f17b1804b1-477c112635amr93678845e9.27.1763971003315;
-        Sun, 23 Nov 2025 23:56:43 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-477bf355af6sm182115855e9.3.2025.11.23.23.56.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Nov 2025 23:56:42 -0800 (PST)
-Date: Mon, 24 Nov 2025 10:56:38 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH next] spi: Fix potential uninitialized variable in probe()
-Message-ID: <aSQPto0zcTniM85G@stanley.mountain>
-References: <aSBqhdjiywXq2Aso@stanley.mountain>
- <cd3dc38e-72f6-4e83-a67f-266523e686f1@sirena.org.uk>
- <20251121-apostle-stark-7af8aebfe9c1@spud>
+        d=1e100.net; s=20230601; t=1763980844; x=1764585644;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UvxeS/74nBAEFSf4nVKv65BSIxiE58qrGcTM82uuMOU=;
+        b=X93bIXFc7i/MLkPo/Cemem0BEv6SuILsjJEgfiGwX8GlUphh2F8g5vR1Qf3c6LeeuM
+         0olvy5msjs+7Yvm4eY/XLdUDDCvLFB+0eR2kerLzrWh91FeblMOaXNi+il9yo+E/+ex3
+         vRERSn27+BD+pZZFzTByMO02sau+Y3X7cbCKkPiHnfDAQc21b/MG1DZfjZnkWxT8On6O
+         85wNi4nXhFE4sfdm0iJSwdCH38Wchn7IzHrbA4W7PjeA1fDzIUpu+AkcIrVWKXFHMX2t
+         YmvF7oTc47hNK1NnMS+aa8BivFS+ht6UzJZrpYwQXnCgU5ji7o1HqLKSiI6cX0uOlfTb
+         xiFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUj4mIHrevRCrn4JQGERKJ9u4/uFp2Mgk8KmxOrY+xL9Ji1MZbp8kMci/ygDn4Pjpvja6aUEe3P4EA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPrujpUNH8cclZ95BpfRLCM8/8y5d5xfnQyAZgH6w/PspC0DDk
+	UanndrmnNOgmLuUVXywp6G4nBojCpmWbaNKZm0i7igRi4dkaZ2hbZoLlBiW99d4K
+X-Gm-Gg: ASbGncsGjQavCLGnA79VndarDWzQQ43+YpoOotW2fytwHAq4HFvRVhrtRrZdb6BmS8C
+	gYvkIdP74FBIgMb/3o5ThQGzDPlQpm6cW9n89kSI/yqmXdqTR0u1d/BT4wbiofxPsCBJat3zaj6
+	h4++Z7RIy/UDQcfK3svlSLj4mrh1ByKKo24zCAeVqaumKgM+uagdqae3qNka3uds7gZzEtWSyNK
+	HFgFaYiE/vWwGyTobVVD0l+MwmLFq0et6TrG9upsj87a9zFL7wOOpctKeVfWSTCcXylgINORh++
+	YR4qCwaXrJDXZnMQXActKJP07AJFCt/rEmd/fXoOf3TEhlDOGRMJC2Lh3Nn3ao0G8Rzha2c5CbA
+	Dtx7HKgWMyxUT15ANyNzthmj8sT7hQzbwydXs6FNsgfAWPrsZRvDIHkhoKRKOP0lx/EI30pNs1R
+	k8VqUdmOS7U1ItcA==
+X-Google-Smtp-Source: AGHT+IGzb+yApYHtjewkoQzx7FPWIVvgfb9lCElhP6A4EWOQNvayCoMjjLyY5L5QUpilRr8Cj3haxw==
+X-Received: by 2002:a05:6512:104a:b0:595:90ee:f476 with SMTP id 2adb3069b0e04-596a3edab46mr4292946e87.28.1763974136131;
+        Mon, 24 Nov 2025 00:48:56 -0800 (PST)
+Received: from [10.38.18.76] ([213.255.186.37])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbc5c5dsm4019850e87.79.2025.11.24.00.48.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Nov 2025 00:48:55 -0800 (PST)
+Message-ID: <6ee209b3-4d7a-45a8-bd65-6a51730d458d@gmail.com>
+Date: Mon, 24 Nov 2025 10:48:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251121-apostle-stark-7af8aebfe9c1@spud>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] Revert "treewide: Fix probing of devices in DT
+ overlays"
+To: Saravana Kannan <saravanak@google.com>,
+ Herve Codina <herve.codina@bootlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Len Brown <lenb@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: kernel-team@android.com, Wolfram Sang <wsa@kernel.org>,
+ linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, Matti Vaittinen <mazziesaccount@gmail.com>
+References: <20240411235623.1260061-1-saravanak@google.com>
+ <20240411235623.1260061-2-saravanak@google.com>
+Content-Language: en-US
+From: Kalle Niemi <kaleposti@gmail.com>
+In-Reply-To: <20240411235623.1260061-2-saravanak@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 21, 2025 at 04:20:41PM +0000, Conor Dooley wrote:
-> On Fri, Nov 21, 2025 at 02:18:49PM +0000, Mark Brown wrote:
-> > On Fri, Nov 21, 2025 at 04:35:01PM +0300, Dan Carpenter wrote:
-> > > If the device tree is messed up, then potentially the "protocol" string
-> > > could potentially be uninitialized.  Add a check to prevent that.
-> > > 
-> > > Fixes: 059f545832be ("spi: add support for microchip "soft" spi controller")
-> > > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > > ---
-> > >  drivers/spi/spi-microchip-core-spi.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-microchip-core-spi.c
-> > > index b8738190cdcb..e65036cc62f3 100644
-> > > --- a/drivers/spi/spi-microchip-core-spi.c
-> > > +++ b/drivers/spi/spi-microchip-core-spi.c
-> > > @@ -320,6 +320,8 @@ static int mchp_corespi_probe(struct platform_device *pdev)
-> > >  	 */
-> > >  	ret = of_property_read_string(pdev->dev.of_node, "microchip,protocol-configuration",
-> > >  				      &protocol);
-> > > +	if (ret)
-> > > +		return ret;
-> > >  	if (strcmp(protocol, "motorola") != 0)
-> > >  		return dev_err_probe(&pdev->dev, -EINVAL,
-> > >  				     "CoreSPI: protocol '%s' not supported by this driver\n",
-> > 
-> > This should probably also complain about not being able to get the
-> > property, otherwise nobody is going to be able to figure out what's
-> > wrong if we actually hit the error case.
+On 4/12/24 02:56, Saravana Kannan wrote:
+> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
 > 
-> The one thing to be careful of is that the property has a default, so
-> EINVAL needs to be treated differently, so the decision tree is
-> something like:
-> if (ret == _EINVAL)
-> 	<do nothing>
-> else if (ret)
-> 	abort complaining about malformed
-> else if (!motorola)
-> 	abort complaining about unsupported mode
-> else
-> 	<do nothing>
+> While the commit fixed fw_devlink overlay handling for one case, it
+> broke it for another case. So revert it and redo the fix in a separate
+> patch.
 > 
-> obviously that can just become two clauses, but you get the idea.
+> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+> Reported-by: Herve Codina <herve.codina@bootlin.com>
+> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>   drivers/bus/imx-weim.c    | 6 ------
+>   drivers/i2c/i2c-core-of.c | 5 -----
+>   drivers/of/dynamic.c      | 1 -
+>   drivers/of/platform.c     | 5 -----
+>   drivers/spi/spi.c         | 5 -----
+>   5 files changed, 22 deletions(-)
+> 
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 837bf9d51c6e..caaf887e0ccc 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -331,12 +331,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>   				 "Failed to setup timing for '%pOF'\n", rd->dn);
+>   
+>   		if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> -			/*
+> -			 * Clear the flag before adding the device so that
+> -			 * fw_devlink doesn't skip adding consumers to this
+> -			 * device.
+> -			 */
+> -			rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   			if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>   				dev_err(&pdev->dev,
+>   					"Failed to create child device '%pOF'\n",
+> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> index a6c407d36800..a250921bbce0 100644
+> --- a/drivers/i2c/i2c-core-of.c
+> +++ b/drivers/i2c/i2c-core-of.c
+> @@ -178,11 +178,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>   			return NOTIFY_OK;
+>   		}
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		client = of_i2c_register_device(adap, rd->dn);
+>   		if (IS_ERR(client)) {
+>   			dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> index 4d57a4e34105..19a1a38554f2 100644
+> --- a/drivers/of/dynamic.c
+> +++ b/drivers/of/dynamic.c
+> @@ -224,7 +224,6 @@ static void __of_attach_node(struct device_node *np)
+>   	np->sibling = np->parent->child;
+>   	np->parent->child = np;
+>   	of_node_clear_flag(np, OF_DETACHED);
+> -	np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>   
+>   	raw_spin_unlock_irqrestore(&devtree_lock, flags);
+>   
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index 389d4ea6bfc1..efd861fa254f 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -743,11 +743,6 @@ static int of_platform_notify(struct notifier_block *nb,
+>   		if (of_node_check_flag(rd->dn, OF_POPULATED))
+>   			return NOTIFY_OK;
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		/* pdev_parent may be NULL when no bus platform device */
+>   		pdev_parent = of_find_device_by_node(rd->dn->parent);
+>   		pdev = of_platform_device_create(rd->dn, NULL,
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index ff75838c1b5d..17cd417f7681 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -4761,11 +4761,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>   			return NOTIFY_OK;
+>   		}
+>   
+> -		/*
+> -		 * Clear the flag before adding the device so that fw_devlink
+> -		 * doesn't skip adding consumers to this device.
+> -		 */
+> -		rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>   		spi = of_register_spi_device(ctlr, rd->dn);
+>   		put_device(&ctlr->dev);
+>   
+Hello,
 
-Sure.  I've sent a v2 which defaults to motorola.
+Test system testing drivers for ROHM ICs bisected this commit to cause 
+BD71847 drivers probe to not be called.
 
-regards,
-dan carpenter
+The devicetree blob overlay describing bd71847 enables I2C1 bus on 
+BeagleBone Black aswell.
+
+Probe is called when the driver is used with HW connected to I2C2 bus. 
+I2C2 bus is enabled before overlaying devicetree blobs.
+
+
+---- BD71847 Devicetree overlay source ----
+
+/dts-v1/;
+/plugin/;
+
+/{ /* this is our device tree overlay root node */
+
+	compatible = "ti,beaglebone", "ti,beaglebone-black";
+	part-number = "BBB-I2C1";
+  	version = "00A0";
+
+	fragment@0 {
+		target = <&am33xx_pinmux>; // this is a link to an already defined 
+node in the device tree, so that node is overlayed with our modification
+
+		__overlay__ {
+			i2c1_pins: pinmux_i2c1_pins {
+				pinctrl-single,pins = <
+           			0x158 0x72 /* spi0_d1.i2c1_sda */
+           			0x15C 0x72 /* spi0_cs0.i2c1_sdl */
+         			>;
+			};
+		};
+	};
+....
+....
+
+	fragment@2 {
+		target = <&i2c1>;
+
+		__overlay__ {
+			pinctrl-0 = <&i2c1_pins>;
+			clock-frequency = <100000>;
+			status = "okay";
+
+			pmic: pmic@4b { /* the "test" defined as child of the i2c1 bus */
+				compatible = "rohm,bd71847";
+				reg = <0x4b>;
+				....
+				....
+}; /* root node end */
+
+---- END OF BD71847 Devicetree overlay source ----
+
+Reverting this patch from linux-next from last friday fixes the issue.
+
+BR
+Kalle Niemi
 
