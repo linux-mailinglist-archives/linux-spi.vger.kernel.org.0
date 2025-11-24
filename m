@@ -1,240 +1,130 @@
-Return-Path: <linux-spi+bounces-11481-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11479-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FFB2C812DC
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 15:56:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB61C81255
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 15:50:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6CA514E4A43
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 14:53:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2AF883477FC
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 14:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3B7313269;
-	Mon, 24 Nov 2025 14:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C3930CD89;
+	Mon, 24 Nov 2025 14:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMb6m25O"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="t/fjJ/Tn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7C7312827
-	for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 14:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1397286422;
+	Mon, 24 Nov 2025 14:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763996018; cv=none; b=FLJkCHrnfeyxG/HNkDBkTYzz+QJcqGGRrRUea9YkzavVpZg89o+j5Uo9mPEsplOaYAE4GzPAHXy0gCyow0F3AZqd/w7L6oYLmA1kmRn3G49hf5CiI67lzD/jMbzGVbwfvDof5izuUr9xAicVSGYukYu+fd9SBPJRfnyXWNxKwJ8=
+	t=1763995810; cv=none; b=PjYp3nKrPFCy+NxG68YXXsEjRTvvTo8b2BUBUzH/ttrLkm1yQJwfzFavFcc/qZD/nuHb79N7n7ooDj8e4bXH5tP3ey2B/pV7iut3m1ECq/JB0Z7gceKkcQUNuzbHgDnNaYnzGoNifU1SnayIa8EHeHalxDhsBWNJqC9a1IIgw3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763996018; c=relaxed/simple;
-	bh=pqB+fORk4m1HommlyJq2ylzh3yrOPYjttsDy21RyYgU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RWPfQ/BVaL7KJ7SM55uY3NFTIkWoOUqoZTOb6PDNMZVHr33sb0dZgBtBL0ptFqmN/nYMWakzGkJR31bQjtQmviRkWPHgxigXJXI1ZbZAFmHVZ6f0/mRg9EsHjrbWNtG8OBphiCelZkgonDemal0CY9QaVYo8eZdCi2kDLBpzBa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMb6m25O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA67C4AF0B
-	for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 14:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763996018;
-	bh=pqB+fORk4m1HommlyJq2ylzh3yrOPYjttsDy21RyYgU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nMb6m25OZAmG9HoIT2tbcmIEu13l7KCo7qOUGpyGEKCNQcoXyatztdhBRNLniFe9H
-	 iUdVditSVkqyQiMezr7SYacU6Fuh69mx8tZ6HDosgigcJ7TNS8ewvckx1mRHr6NlZt
-	 RWM8icBK1O8jQhaM4gp0YkOJQgjXWAyI8xiPVEYlJ3DkjIoq77cbsLvgsZRPjeajw5
-	 8sEh+NULl+wAlgsYj5XrTH8jDP5jIfl3lXYc/9MC+OwkZ77Z0TrZEH9HA6zGsIGsV0
-	 bCBliNvETdNSesdMuPYmG5wowk+JVHFxuQ5LpJR277mGaalzkxvAyPK9bCT6wAmjCe
-	 fm54dLY0Qsw/w==
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so7094589a12.0
-        for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 06:53:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXFej6g4I6V5xUohBxo+91C0C+tuUPO9IN+tD5hJ0Bm+lAzLHuR6gy+zC2cUqUDtUdbtSMO5l4rzTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn26z9l84dJY3FqHOJZ7ffWCrI0/CJTHy2WCxPybQ2UoRWyQhj
-	4Hmmfr09Xb4fv47oBZcWT8qOESfjMYt4hOvz4Mg1lsQlWgIIfZuCkbg3PrUGhoeR6XE1DcBpBiC
-	Uu17e+IUiCtN91elwrEGj2wqGQYnnYA==
-X-Google-Smtp-Source: AGHT+IFMnKpbOKpALlRbon6njvQlHioDFBZ6ps4Ha77/hkzyeDp8YHGtY6SBZLINsmH8f54C5ek7l5d85xk5VAIwd4A=
-X-Received: by 2002:a05:6402:26c3:b0:639:f7b5:9c2d with SMTP id
- 4fb4d7f45d1cf-6455444987cmr9474492a12.9.1763996016204; Mon, 24 Nov 2025
- 06:53:36 -0800 (PST)
+	s=arc-20240116; t=1763995810; c=relaxed/simple;
+	bh=ldR9Jbkn+lG8+Fw1qz6qmlfFqMRuk5844+RygMXc0QE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GP2yG1C06xAklzKksrqdd5ePxmggTWmOsjOPfhn/bRlleaG+atvU20SSQn7P1xDHNW1B0AL3kOtJdl7FyjvpZENVx0g0+lm8ISQQKrzYb2oYT+hzNDoIdB2t3ADW+1GuWYyGTE7LrHA10iEAQP+hfQ9Dd4p2wy5xHsSfVc64tQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=t/fjJ/Tn; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1763995807; x=1795531807;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ldR9Jbkn+lG8+Fw1qz6qmlfFqMRuk5844+RygMXc0QE=;
+  b=t/fjJ/Tn/Ma/J7trnD2N1rPxDiad/VHFHTbwUa1Ii7xJHwoEvsBVOcZI
+   SI3BIkVTNg5cqyJarxwRqccT/mwh7tsx/4sP/3IeHQo/0c9FSkXYaACGL
+   RmwnRn6EtlKpIWiXeg75GRNPrc+x+D6Xd6ATqxP/rbJ3CesjYUXsyqV19
+   T+owh8TP7XvSlhQn6CruB8kx4skv1oHzOfoEqypPZk5aB/EPtCHgrTUuT
+   jSHcHXf3P+cBD6H4TcMhVvgx7ZaMn7H70l8GpAL7C3z/Vx24EPYhNx9wQ
+   Lmmm0W+sN1Eyz01x/cU8ovHxv6FtBIdbdMYoD/bLsgADKfyfp8LZOsqRR
+   A==;
+X-CSE-ConnectionGUID: OeN9174cR8eHEXvZOy+fKg==
+X-CSE-MsgGUID: DtLvZ2mDQxKim2utQ5AXiA==
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="56142126"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Nov 2025 07:50:06 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 24 Nov 2025 07:49:47 -0700
+Received: from [10.205.167.104] (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Mon, 24 Nov 2025 07:49:46 -0700
+Message-ID: <48ad36dc-613f-401f-a8e2-dec832bd6ee1@microchip.com>
+Date: Mon, 24 Nov 2025 15:00:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-In-Reply-To: <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 24 Nov 2025 08:53:25 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmYzp1pjz08UuT7I12fxIYXbO1yVvjH9IMl7-quEF7iTRxZTROtz2B7mnw
-Message-ID: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
-To: Kalle Niemi <kaleposti@gmail.com>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH next v2] spi: Fix potential uninitialized variable in
+ probe()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+CC: Mark Brown <broonie@kernel.org>, Conor Dooley
+	<conor.dooley@microchip.com>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+References: <aSQPkfkiJ0w-FJMW@stanley.mountain>
+Content-Language: en-US
+From: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+In-Reply-To: <aSQPkfkiJ0w-FJMW@stanley.mountain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 24, 2025 at 8:48=E2=80=AFAM Kalle Niemi <kaleposti@gmail.com> w=
-rote:
+On 24/11/2025 07:56, Dan Carpenter wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 >
-> On 10/15/25 10:13, Herve Codina wrote:
-> > From: Saravana Kannan <saravanak@google.com>
-> >
-> > This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
-> >
-> > While the commit fixed fw_devlink overlay handling for one case, it
-> > broke it for another case. So revert it and redo the fix in a separate
-> > patch.
-> >
-> > Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
-> > Reported-by: Herve Codina <herve.codina@bootlin.com>
-> > Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgy=
-o8x6=3D9F9rZ+-KzjOg@mail.gmail.com/
-> > Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com=
-/
-> > Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.co=
-m/
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@g=
-oogle.com/
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > Acked-by: Mark Brown <broonie@kernel.org>
-> > ---
-> >   drivers/bus/imx-weim.c    | 6 ------
-> >   drivers/i2c/i2c-core-of.c | 5 -----
-> >   drivers/of/dynamic.c      | 1 -
-> >   drivers/of/platform.c     | 5 -----
-> >   drivers/spi/spi.c         | 5 -----
-> >   5 files changed, 22 deletions(-)
-> >
-> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-> > index 83d623d97f5f..87070155b057 100644
-> > --- a/drivers/bus/imx-weim.c
-> > +++ b/drivers/bus/imx-weim.c
-> > @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *n=
-b, unsigned long action,
-> >                                "Failed to setup timing for '%pOF'\n", r=
-d->dn);
-> >
-> >               if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
-> > -                     /*
-> > -                      * Clear the flag before adding the device so tha=
-t
-> > -                      * fw_devlink doesn't skip adding consumers to th=
-is
-> > -                      * device.
-> > -                      */
-> > -                     rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
-;
-> >                       if (!of_platform_device_create(rd->dn, NULL, &pde=
-v->dev)) {
-> >                               dev_err(&pdev->dev,
-> >                                       "Failed to create child device '%=
-pOF'\n",
-> > diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
-> > index eb7fb202355f..30b48a428c0b 100644
-> > --- a/drivers/i2c/i2c-core-of.c
-> > +++ b/drivers/i2c/i2c-core-of.c
-> > @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb=
-, unsigned long action,
-> >                       return NOTIFY_OK;
-> >               }
-> >
-> > -             /*
-> > -              * Clear the flag before adding the device so that fw_dev=
-link
-> > -              * doesn't skip adding consumers to this device.
-> > -              */
-> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >               client =3D of_i2c_register_device(adap, rd->dn);
-> >               if (IS_ERR(client)) {
-> >                       dev_err(&adap->dev, "failed to create client for =
-'%pOF'\n",
-> > diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
-> > index 2eaaddcb0ec4..b5be7484fb36 100644
-> > --- a/drivers/of/dynamic.c
-> > +++ b/drivers/of/dynamic.c
-> > @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np=
-)
-> >       np->sibling =3D np->parent->child;
-> >       np->parent->child =3D np;
-> >       of_node_clear_flag(np, OF_DETACHED);
-> > -     np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
-> >
-> >       raw_spin_unlock_irqrestore(&devtree_lock, flags);
-> >
-> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > index f77cb19973a5..ef9445ba168b 100644
-> > --- a/drivers/of/platform.c
-> > +++ b/drivers/of/platform.c
-> > @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_bloc=
-k *nb,
-> >               if (of_node_check_flag(rd->dn, OF_POPULATED))
-> >                       return NOTIFY_OK;
-> >
-> > -             /*
-> > -              * Clear the flag before adding the device so that fw_dev=
-link
-> > -              * doesn't skip adding consumers to this device.
-> > -              */
-> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >               /* pdev_parent may be NULL when no bus platform device */
-> >               pdev_parent =3D of_find_device_by_node(parent);
-> >               pdev =3D of_platform_device_create(rd->dn, NULL,
-> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> > index 2e0647a06890..b22944a207c9 100644
-> > --- a/drivers/spi/spi.c
-> > +++ b/drivers/spi/spi.c
-> > @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *=
-nb, unsigned long action,
-> >                       return NOTIFY_OK;
-> >               }
-> >
-> > -             /*
-> > -              * Clear the flag before adding the device so that fw_dev=
-link
-> > -              * doesn't skip adding consumers to this device.
-> > -              */
-> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
-> >               spi =3D of_register_spi_device(ctlr, rd->dn);
-> >               put_device(&ctlr->dev);
-> >
-> Sorry, some of you will receive this message now for second time. First
-> message was sent to older series of patches.
-> -
+> If the device tree is messed up, then potentially the "protocol" string
+> could potentially be uninitialized.  The property is supposed to default
+> to "motorola" so if the of_property_read_string() function returns
+> -EINVAL then default to "motorola".
 >
-> Hello,
+> Fixes: 059f545832be ("spi: add support for microchip "soft" spi controller")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+Reviewed-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+> ---
+> v2: Add an error message on failure.
+>      Default to "motorola".
 >
-> Test system testing drivers for ROHM ICs bisected this commit to cause
-> BD71847 drivers probe to not be called.
+>   drivers/spi/spi-microchip-core-spi.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-microchip-core-spi.c
+> index b8738190cdcb..16e0885474a0 100644
+> --- a/drivers/spi/spi-microchip-core-spi.c
+> +++ b/drivers/spi/spi-microchip-core-spi.c
+> @@ -295,10 +295,10 @@ static int mchp_corespi_transfer_one(struct spi_controller *host,
+>
+>   static int mchp_corespi_probe(struct platform_device *pdev)
+>   {
+> +       const char *protocol = "motorola";
+>          struct spi_controller *host;
+>          struct mchp_corespi *spi;
+>          struct resource *res;
+> -       const char *protocol;
+>          u32 num_cs, mode, frame_size;
+>          bool assert_ssel;
+>          int ret = 0;
+> @@ -320,6 +320,8 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+>           */
+>          ret = of_property_read_string(pdev->dev.of_node, "microchip,protocol-configuration",
+>                                        &protocol);
+> +       if (ret && ret != -EINVAL)
+> +               return dev_err_probe(&pdev->dev, ret, "Error reading protocol-configuration\n");
+>          if (strcmp(protocol, "motorola") != 0)
+>                  return dev_err_probe(&pdev->dev, -EINVAL,
+>                                       "CoreSPI: protocol '%s' not supported by this driver\n",
+> --
+> 2.51.0
+>
 
-This driver (and overlay support) is in linux-next or something out of
-tree on top of linux-next?
-
-Rob
 
