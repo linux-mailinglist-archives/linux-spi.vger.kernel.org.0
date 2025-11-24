@@ -1,100 +1,137 @@
-Return-Path: <linux-spi+bounces-11469-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11470-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B104EC7EC87
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 03:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 647D6C7F486
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 08:56:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7B7704E10C6
-	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 02:00:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 442D74E3A68
+	for <lists+linux-spi@lfdr.de>; Mon, 24 Nov 2025 07:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C16D4224FA;
-	Mon, 24 Nov 2025 02:00:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0662EA157;
+	Mon, 24 Nov 2025 07:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wR7nhKof"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644E236D50C;
-	Mon, 24 Nov 2025 02:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587772E7F14
+	for <linux-spi@vger.kernel.org>; Mon, 24 Nov 2025 07:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763949617; cv=none; b=oFkHW/NkZQtpB6j3qHz1whMe1gNFVy9d7HvOpZGWiq8KxXZ4fZEZiv6G62K/2YY6e7hJWbjuXA21uIwZqjy/kM+qPQuk5bhJwcbc2oNU4jiSzToB3I3i1kJtR0HINv+uXaBa5kt+/ii+ojZ4uVR7faXpXS2wfkzfjLiCLgn/+SQ=
+	t=1763970969; cv=none; b=AiDPaIIMeFAz+KPzyw4r5Udi8fc09hFJL9Ux//HbUAKTLZvp6SmmnPYQuVlrjx2xqFo/Lw6s8A7/FXcvISW80/M/Fs/l8/OOwdhotQvn5IHgybGOyn+r0JzWwNW0zzUmNxVwLcJJn8NaU7s3Wa+q3k1GFFo7itFaxhWU0vVMR+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763949617; c=relaxed/simple;
-	bh=Iugr9KSxqxKqJVyQQZ5i340yKFREG3ihCzZBGEB0ZeU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H+pSDD6tOzpAyIngUvqskR0ll3fDn8x1oUrPxkAaUH1l20Sf/574NOs2nc7pEA1HW4Dsir5MC3xpZnBMrQbeCXe+fjnOYfl5ESbMqmq+Mur1ivt9yZDJCm00ZIbQ5m3aO+fPvoJc0bI4viAbAWoLoru2qDiR6lhoJNPO4QAaRIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from DESKTOP-L0HPE2S (unknown [124.16.141.245])
-	by APP-05 (Coremail) with SMTP id zQCowABnbG0pvCNpX8_RAQ--.26659S2;
-	Mon, 24 Nov 2025 10:00:10 +0800 (CST)
-From: Haotian Zhang <vulab@iscas.ac.cn>
-To: broonie@kernel.org
-Cc: mmkurbanov@sberdevices.ru,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: [PATCH] spi: amlogic-spifc-a1: Handle devm_pm_runtime_enable() errors
-Date: Mon, 24 Nov 2025 09:58:52 +0800
-Message-ID: <20251124015852.937-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.50.1.windows.1
+	s=arc-20240116; t=1763970969; c=relaxed/simple;
+	bh=BAKV6mRJkamAvDuhdXunfVVuTbGwv1bU3qmP8zeCm1E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ti3pm5oEG/GU9oyBH5QmndfL1tyhgBAIxCQRBtl4r08t+1Ec/UFYYI0kTll09RZKIj1Dt2uT0GwswwezTRef4x8bmiDiesUzf7FgU5bW6AGBS2xqs5eruyVgsVsqgSBNqDhm8UwHKmpZdDc/mcg+8BkROf6sgo2/V2uagSEDwRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wR7nhKof; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so25292205e9.0
+        for <linux-spi@vger.kernel.org>; Sun, 23 Nov 2025 23:56:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763970966; x=1764575766; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jevOMx3oLEe1om5TMl1VbYUf8BPerVwJX0XKtmooeDg=;
+        b=wR7nhKofia0h77DUmvKWBTI+xq/DPk1OKIyVcWAfZ4Aeil0ORm91MdT5w7XWAFUZeR
+         S8Ha7Vv/TLGpz3iL62AcGxIAvcUnxYLNwIJdWUPwgNls2HqhyNCcRxZYkASQUi1u2PQj
+         QeQpPGxoal7Hy+BozvdfYwj9fNlhySqiSWFIng4vgsIPtzanwVSPrUkAgLfd1uJH6j05
+         WLyBTm+DcLJb2VhxaN085cUh3ITH3SJflRE+HUh1b0D35v1BIwY8MAwI7gJ5BUylg8jN
+         HZPbtxh2BmQTsANg7YGH6WgKwyhK7xBhlLJgGsrGpnul0u7qQXAmeWM8yAAntuB+hAoR
+         cjoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763970966; x=1764575766;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jevOMx3oLEe1om5TMl1VbYUf8BPerVwJX0XKtmooeDg=;
+        b=ZnIw9k2w5Wbkcve36Tg/76pJLMSR/7oUU8/2PD3B8+OoV/mSIEA2B4xZUj+heaMDOF
+         kTbDv4GZqldqdt70qT9kRoXyTU5SUj7SHBvQ28kDTqTejAxLvpitDVqV1tzZ/dthuvax
+         VuSw8SDr3RPXyeATKeG9B5xMdS+XRXKyV7RVfNfCZxB/fsHh3bawlSVh1PeOVJsLT7NI
+         6XZBaZYLKh+titQHuEzp/0SqS8Nnou9r2fkWTbSAMWv81PKgOkHCVPEXfr7+UIRWXLqo
+         3MqQJEuYlOa735yWxj/j4mvMcrYhSXEsDjlLRYKSVGoa23bZwx+JAHg5UELw95XsHpGa
+         klqg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYybxVrnXTLrwUOsPU1Lyy4o7NZ7P58q0PGc9Ep7Ri7WPS08gGyxG3H67OD/D43CA4YiF/oFoPaFc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxNChsvDF02xs4cuJOn4BodJZXNrp6ccjVh5n8fJT6FQGOJ9QU
+	A98Eccjr4xKN9Xcqy4xx776XEoSPENHplvcZkfxAWmRkzD1EAo83q1i3OvUT+imG4cI=
+X-Gm-Gg: ASbGnct6Z2etbJMjipxDGDk1CH7Mo2Fvz+NmUJud7T6Y2C1iy+Pop3KbNuaTDJNIX5j
+	SK5jNHs73eoYnix0xlbHIJJIbCe5yK+8CvTYsFw1xWACKRcLuScmh11cpT4Ds1rJTVxxTkfEkKY
+	HHa0Hh0n9dCGP6B7kWgKFEy6TpGq5G6I4HbjXFqDV4nnBxMsfMuHQwTFb92tp7q8Cx15m+Q8ggR
+	Z0m+m8HmrmMLnKPa24qhAEwLYjDZ5/RX6geZ+QeRdA6LPTHYpLNgR/hAPWlMZsoAfkFngl2NIoU
+	z/wPEBuSzA3/I/1YNqly1e5tEHtfOWTsuk2y6V4F54G0lNhUEv51fGxA0UnZxeNxW0SUdcC5zZX
+	WoLTXMrZ4hAW42uTIWmcpGuXwFEPG0vaxr2Z0Yyg+LRPfc2bpyud/NhSoTWBsogbrLkbsvCegSP
+	lb0PbObLkH+hLzTnRs
+X-Google-Smtp-Source: AGHT+IGauUJhBlDbnXjFSxEh+PpKEMlvDKN50dHKR7OGhLF8ypS/QohDNva+MjmJzH5ntpRg3haGng==
+X-Received: by 2002:a05:600c:1caa:b0:477:8b77:155f with SMTP id 5b1f17b1804b1-477c10d4935mr107988885e9.8.1763970965580;
+        Sun, 23 Nov 2025 23:56:05 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-477bf1df334sm179780935e9.3.2025.11.23.23.56.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Nov 2025 23:56:05 -0800 (PST)
+Date: Mon, 24 Nov 2025 10:56:01 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH next v2] spi: Fix potential uninitialized variable in probe()
+Message-ID: <aSQPkfkiJ0w-FJMW@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowABnbG0pvCNpX8_RAQ--.26659S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF45Cr4fKw48uFW5GrW3KFg_yoWkCwc_CF
-	4ruan3JF1Fqr1kC3ZrK34fZrySg348Wa1jqwnYvrZIqayUAFn7Z3yjvFn8Cw4Duw4UCr90
-	9rsruF9rCryDAjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbsAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-	6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1lc2xSY4AK67AK6r4UMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-	4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-	67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-	x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-	z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-	UI43ZEXa7VUjR6wtUUUUU==
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBwsQA2kjuhsIrQAAsR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-devm_pm_runtime_enable() can fail due to memory allocation. The current
-code ignores its return value, potentially causing runtime PM operations
-to fail silently after autosuspend configuration.
+If the device tree is messed up, then potentially the "protocol" string
+could potentially be uninitialized.  The property is supposed to default
+to "motorola" so if the of_property_read_string() function returns
+-EINVAL then default to "motorola".
 
-Check the return value of devm_pm_runtime_enable() and return on failure.
-
-Fixes: 909fac05b926 ("spi: add support for Amlogic A1 SPI Flash Controller")
-Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+Fixes: 059f545832be ("spi: add support for microchip "soft" spi controller")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
- drivers/spi/spi-amlogic-spifc-a1.c | 4 +++-
+v2: Add an error message on failure.
+    Default to "motorola".
+
+ drivers/spi/spi-microchip-core-spi.c | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-amlogic-spifc-a1.c b/drivers/spi/spi-amlogic-spifc-a1.c
-index 18c9aa2cbc29..eb503790017b 100644
---- a/drivers/spi/spi-amlogic-spifc-a1.c
-+++ b/drivers/spi/spi-amlogic-spifc-a1.c
-@@ -353,7 +353,9 @@ static int amlogic_spifc_a1_probe(struct platform_device *pdev)
+diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-microchip-core-spi.c
+index b8738190cdcb..16e0885474a0 100644
+--- a/drivers/spi/spi-microchip-core-spi.c
++++ b/drivers/spi/spi-microchip-core-spi.c
+@@ -295,10 +295,10 @@ static int mchp_corespi_transfer_one(struct spi_controller *host,
  
- 	pm_runtime_set_autosuspend_delay(spifc->dev, 500);
- 	pm_runtime_use_autosuspend(spifc->dev);
--	devm_pm_runtime_enable(spifc->dev);
-+	ret = devm_pm_runtime_enable(spifc->dev);
-+	if (ret)
-+		return ret;
- 
- 	ctrl->num_chipselect = 1;
- 	ctrl->dev.of_node = pdev->dev.of_node;
+ static int mchp_corespi_probe(struct platform_device *pdev)
+ {
++	const char *protocol = "motorola";
+ 	struct spi_controller *host;
+ 	struct mchp_corespi *spi;
+ 	struct resource *res;
+-	const char *protocol;
+ 	u32 num_cs, mode, frame_size;
+ 	bool assert_ssel;
+ 	int ret = 0;
+@@ -320,6 +320,8 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+ 	 */
+ 	ret = of_property_read_string(pdev->dev.of_node, "microchip,protocol-configuration",
+ 				      &protocol);
++	if (ret && ret != -EINVAL)
++		return dev_err_probe(&pdev->dev, ret, "Error reading protocol-configuration\n");
+ 	if (strcmp(protocol, "motorola") != 0)
+ 		return dev_err_probe(&pdev->dev, -EINVAL,
+ 				     "CoreSPI: protocol '%s' not supported by this driver\n",
 -- 
-2.50.1.windows.1
+2.51.0
 
 
