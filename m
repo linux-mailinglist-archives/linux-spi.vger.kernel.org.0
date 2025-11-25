@@ -1,64 +1,64 @@
-Return-Path: <linux-spi+bounces-11542-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11543-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C0A7C87009
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 21:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 34359C8707E
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 21:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 263D03B6335
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 20:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 559E33B6459
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 20:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0A133B95E;
-	Tue, 25 Nov 2025 20:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DC933B6F8;
+	Tue, 25 Nov 2025 20:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lo1ReI/v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHMK0xk+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD9133B6D7;
-	Tue, 25 Nov 2025 20:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA8933AD8C;
+	Tue, 25 Nov 2025 20:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764101941; cv=none; b=JsF5MkO3Ka6eE95mo5tl/Qxwt9SOnnIWkKGohEcTc/4EmH/kOmgYmS4e6Dvt2dzgimf9p8zzRi4q35tyXXS5PJxAEM1oMju+I51lhLc9xo1g4RUCbWXfHqCXQqpUab9KxpyHgHbqfoYS3wp4PaWVngAq5RlnLrrewbFfYQQuH/A=
+	t=1764102282; cv=none; b=E89hRwy7kAZqjk2X64gj0oWBYGVwSrRPpzGgKy8jU7J9HrvjlmtvrKg7bl9UkwF7/X2mfrM8c0tzlHYZ45tOj7so2rrsWU63l2Rlhs2TaavMa5D1XwjEp7Um60gLs+Z4BgThR/3WmfzcdcycD7/hQSKdVrU52IZZlr6sHbtMaCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764101941; c=relaxed/simple;
-	bh=C/nczyx82VZaS4AmQR2UYzKvFB2krpsUMY9RzoSPWb8=;
+	s=arc-20240116; t=1764102282; c=relaxed/simple;
+	bh=nlQgA8SwbQHk5U14QPjlZByfr1U0IgvDlzMgeQQE/KI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ue4Fs+fezFkFSD2Q/e5qtfkXg/e5nywCxp4WH7EBoLx0BzDaA0omWqXhzaulYH2BFYbhKkiaSXg7e4Kf/wmi0PSHliaIlHxpZ+qN0GsS3VoaKSSK4IyiUIvM9k20w0CuTA+36E6aKaVrNIlYArQgnJn/2BFOS7ZZXZ7Rnme+TwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lo1ReI/v; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLHg9bEDHwPbGUPXMhLk4ea6vKR/qI1FUvFmB2LMCvv5fnzFEoksLch0wPNjo46kT8uq9m9SmQ7sCU1JVtrFNRshjF9pakBpKqq91rNCqAHpYbJtEfZgziaqGHVTq2BHeI74MnfMRsI2pwyassepTyOu2NvRR/wbxRf7J+yEM0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHMK0xk+; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764101941; x=1795637941;
+  t=1764102280; x=1795638280;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=C/nczyx82VZaS4AmQR2UYzKvFB2krpsUMY9RzoSPWb8=;
-  b=Lo1ReI/vu7MpK9+/yGpGO5414ceXr79EvgK9nFdFQwO5UbXrJTAD42bH
-   b6ML72HyMZrFC7Pn99L9504K4DvcRVSA+zmLmxcyS40/Mb+Hd9owsFeMH
-   C/sirUhDgbaZzezrJj9wkhRvXU+2U3JvBC212PwQ/3hNOy9YnEZJCVbtl
-   bIKzxbYYjcfemV+52F8/DkjtCk1RrPZFBFgi67GRdLcQXTLhmBKXnpB1i
-   ZyG8GvyMtjtfLMChEaGGeejMQmR2Bub5+Pq0EiKVpZBIG1QaoRiwA47y+
-   2boeTJBwUJ41bUNL68IRVzD/0EIRIItx+4UDn7E6vd0711v78WyUm6obg
+  bh=nlQgA8SwbQHk5U14QPjlZByfr1U0IgvDlzMgeQQE/KI=;
+  b=SHMK0xk+sTYYUE6Oc3ds/HCz+QHEtp63jw7/l0m0hVZHsGLJ/soYtGtU
+   WmFA04bbjQfRb+zfGxSXBYCDwraM3sSSWJLGIyBfulaseQbM/dis8gdsL
+   UriedIFDY+xQ0wDXR9p2g5vGZOiNQzke3xx31wZV0d6KFOgqU3TxmHuqd
+   qfivKbf2uIZWsTJ8Q212hDpa38+LEvMCma8XSh1TlD4TDlRcvOFM1tSpt
+   u9MBCjm1q/iKbImh3ZoPQTgWAq6tTAXBsyJ3hhUhaA67nLi4ODfjVsUo4
+   zMUnOYuPGoN6JmJsaNh0y7IjgP11CRGA2n3l//x5FMjtdvj8BW7aqoxAz
    w==;
-X-CSE-ConnectionGUID: Z/dxbSCkTB63u7amp0xOow==
-X-CSE-MsgGUID: K/MecNUeS9mpu1CB2e08fg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="88782058"
+X-CSE-ConnectionGUID: znGcCbdTTXqMb1SMA211+Q==
+X-CSE-MsgGUID: 4Xc6cTWiTseMbR/BU15Z5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="66016356"
 X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
-   d="scan'208";a="88782058"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:19:00 -0800
-X-CSE-ConnectionGUID: WwcUIy9TQAutStddwldHXw==
-X-CSE-MsgGUID: UUiqtk4+TIehTgfExfLoXA==
+   d="scan'208";a="66016356"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:24:39 -0800
+X-CSE-ConnectionGUID: gSiRx9hWTuul5+64L2UjIw==
+X-CSE-MsgGUID: 6tBO7O20TrKO4OAE7VUosw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
-   d="scan'208";a="197862607"
+   d="scan'208";a="223722026"
 Received: from ncintean-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.22])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:18:55 -0800
-Date: Tue, 25 Nov 2025 22:18:53 +0200
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:24:35 -0800
+Date: Tue, 25 Nov 2025 22:24:33 +0200
 From: Andy Shevchenko <andriy.shevchenko@intel.com>
 To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
 Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
@@ -74,7 +74,7 @@ Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
 	Andreas Gnau <andreas.gnau@iopsys.eu>
 Subject: Re: [PATCH v5 1/3] spi: airoha-snfi: en7523: workaround flash
  damaging if UART_TXD was short to GND
-Message-ID: <aSYPLWKEz0lzBtjf@smile.fi.intel.com>
+Message-ID: <aSYQgZR1YoVQkbxC@smile.fi.intel.com>
 References: <20251125191635.1075027-1-mikhail.kshevetskiy@iopsys.eu>
  <20251125191635.1075027-2-mikhail.kshevetskiy@iopsys.eu>
 Precedence: bulk
@@ -90,35 +90,31 @@ Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
 On Tue, Nov 25, 2025 at 10:16:33PM +0300, Mikhail Kshevetskiy wrote:
-> Airoha EN7523 specific bug
-> --------------------------
-> We found that some serial console may pull TX line to GROUND during board
-> boot time. Airoha uses TX line as one of its bootstrap pins. On the EN7523
-> SoC this may lead to booting in RESERVED boot mode.
-> 
-> It was found that some flashes operates incorrectly in RESERVED mode.
-> Micron and Skyhigh flashes are definitely affected by the issue,
-> Winbond flashes are not affected.
-> 
-> Details:
-> --------
-> DMA reading of odd pages on affected flashes operates incorrectly. Page
-> reading offset (start of the page) on hardware level is replaced by 0x10.
-> Thus results in incorrect data reading. As result OS loading becomes
-> impossible.
-> 
-> Usage of UBI make things even worse. On attaching, UBI will detects
-> corruptions (because of wrong reading of odd pages) and will try to
-> recover. For recovering UBI will erase and write 'damaged' blocks with
-> a valid information. This will destroy all UBI data.
-> 
-> Non-DMA reading is OK.
-> 
-> This patch detects booting in reserved mode, turn off DMA and print big
-> fat warning.
 
-LGTM now, thanks!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+...
+
+> +			dev_warn(dev, "Detected booting in RESERVED mode (UART_TXD was short to GND).\n");
+> +			dev_warn(dev, "This mode is known for incorrect DMA reading of some flashes.\n");
+> +			dev_warn(dev, "Usage of DMA for flash operations will be disabled to prevent data\n");
+> +			dev_warn(dev, "damage. Unplug your serial console and power cycle the board\n");
+> +			dev_warn(dev, "to boot with full performance.\n");
+
+One non-critical remark (for the future), the '\n' in the string literals when
+we print messages has two meanings:
+ - (obviously) new line
+ - (seems not so obvious for people) flush the line to the output device
+
+Due to the second property the messages might be interleaved with the other
+messages (assuming SMP machine actively doing and printing something), hence
+your messages might be split with other and imagine the user who gets in the
+middle of the text something like
+
+"Usage of DMA for flash operations will be disabled to prevent data"
+
+The first thought will be "what the heck does this mean?"
+
+TL;DR: place '\n' with a care in the messages to print not only here,
+but in general.
 
 -- 
 With Best Regards,
