@@ -1,115 +1,128 @@
-Return-Path: <linux-spi+bounces-11541-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11542-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC50DC86FCA
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 21:17:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C0A7C87009
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 21:20:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0BBB034E981
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 20:17:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 263D03B6335
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 20:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066D533DEFB;
-	Tue, 25 Nov 2025 20:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0A133B95E;
+	Tue, 25 Nov 2025 20:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXcu6u6H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lo1ReI/v"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DB833C501;
-	Tue, 25 Nov 2025 20:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD9133B6D7;
+	Tue, 25 Nov 2025 20:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764101830; cv=none; b=hAJq5elLNMcomUtB1UtMbVxvhoK5eYtdbCN1t3hPROoOxH68IM07Fj11vwjcmSBaXyqBIbJW10mi3VqiyUqZAJZXiTrtjJRe26CMpcjvRSJpX/GoKEuns93UnpiYHO3uqiO4IYphbDBBr4ifeVOH1gztbY+930FWyLM6IIs5C74=
+	t=1764101941; cv=none; b=JsF5MkO3Ka6eE95mo5tl/Qxwt9SOnnIWkKGohEcTc/4EmH/kOmgYmS4e6Dvt2dzgimf9p8zzRi4q35tyXXS5PJxAEM1oMju+I51lhLc9xo1g4RUCbWXfHqCXQqpUab9KxpyHgHbqfoYS3wp4PaWVngAq5RlnLrrewbFfYQQuH/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764101830; c=relaxed/simple;
-	bh=dVygpC8z48vE1wJBxn3Ie6b0CmMawZBV6k+F8SVts2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DSnwSzOi9DpQ5gThEMWQ2ZG5ZBtEsgo5xUifKlF6IWxeY6+cPHF/Vv0PavTHF4WNaiRCK8j/Dc8iSr+Zq7eqTzUIpPZDkncaZVm7G49ikrHH8QcC3op2iJ1dMDgeUTnuzm7KmGiZjAU4wcFvmJajvI2AsjwU0fsq062VOG2is7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXcu6u6H; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1764101941; c=relaxed/simple;
+	bh=C/nczyx82VZaS4AmQR2UYzKvFB2krpsUMY9RzoSPWb8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ue4Fs+fezFkFSD2Q/e5qtfkXg/e5nywCxp4WH7EBoLx0BzDaA0omWqXhzaulYH2BFYbhKkiaSXg7e4Kf/wmi0PSHliaIlHxpZ+qN0GsS3VoaKSSK4IyiUIvM9k20w0CuTA+36E6aKaVrNIlYArQgnJn/2BFOS7ZZXZ7Rnme+TwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lo1ReI/v; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764101829; x=1795637829;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dVygpC8z48vE1wJBxn3Ie6b0CmMawZBV6k+F8SVts2M=;
-  b=OXcu6u6HWHXDi2HRIva3nEbobR/DHHOzLdAuIo2NPh0Uq/hiOXzmUJn6
-   Q1/RM20nG+V8qJDe3NYJ2v3mvNyeWvIEFvtu9WaRoV1m2MH7I4Y8nEq0k
-   QJlvp8bWnXl3usx/iwUBpss3Y9l04gkRaySPLAY5nqo2bs6asMUUZW0Ns
-   xT1af0l9gg2PRedPjpAi124SSoxLvzZg+S5JuNZun6Upw/4nFigvhAwEy
-   bOEsrJvqStVjQ7xfSUzV+2lDG4/754jYR92yV1eYFc/dqfVs81e7FufjY
-   e3qFFnyPSbPaPtMSiZsSgZ72vU5fEXKsLzUId0dCNsmBTZfHkouYHkLpk
+  t=1764101941; x=1795637941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C/nczyx82VZaS4AmQR2UYzKvFB2krpsUMY9RzoSPWb8=;
+  b=Lo1ReI/vu7MpK9+/yGpGO5414ceXr79EvgK9nFdFQwO5UbXrJTAD42bH
+   b6ML72HyMZrFC7Pn99L9504K4DvcRVSA+zmLmxcyS40/Mb+Hd9owsFeMH
+   C/sirUhDgbaZzezrJj9wkhRvXU+2U3JvBC212PwQ/3hNOy9YnEZJCVbtl
+   bIKzxbYYjcfemV+52F8/DkjtCk1RrPZFBFgi67GRdLcQXTLhmBKXnpB1i
+   ZyG8GvyMtjtfLMChEaGGeejMQmR2Bub5+Pq0EiKVpZBIG1QaoRiwA47y+
+   2boeTJBwUJ41bUNL68IRVzD/0EIRIItx+4UDn7E6vd0711v78WyUm6obg
    w==;
-X-CSE-ConnectionGUID: bvjVzgF/QSexsnIe8OB67w==
-X-CSE-MsgGUID: rKUO/oTGSo+hIYEPKin6nA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="69990038"
+X-CSE-ConnectionGUID: Z/dxbSCkTB63u7amp0xOow==
+X-CSE-MsgGUID: K/MecNUeS9mpu1CB2e08fg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11624"; a="88782058"
 X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
-   d="scan'208";a="69990038"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:17:07 -0800
-X-CSE-ConnectionGUID: ftkyYuzzRmGy3iSy6b2AQQ==
-X-CSE-MsgGUID: pBcYdko0T3ule96QtWrxPg==
+   d="scan'208";a="88782058"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:19:00 -0800
+X-CSE-ConnectionGUID: WwcUIy9TQAutStddwldHXw==
+X-CSE-MsgGUID: UUiqtk4+TIehTgfExfLoXA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,226,1758610800"; 
-   d="scan'208";a="223720991"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa001.fm.intel.com with ESMTP; 25 Nov 2025 12:17:05 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 5EA55A7; Tue, 25 Nov 2025 21:17:02 +0100 (CET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v1 7/7] spi: microchip-core: Remove unneeded PM related macro
-Date: Tue, 25 Nov 2025 21:15:37 +0100
-Message-ID: <20251125201700.1901959-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251125201700.1901959-1-andriy.shevchenko@linux.intel.com>
-References: <20251125201700.1901959-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="197862607"
+Received: from ncintean-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.22])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2025 12:18:55 -0800
+Date: Tue, 25 Nov 2025 22:18:53 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	Andreas Gnau <andreas.gnau@iopsys.eu>
+Subject: Re: [PATCH v5 1/3] spi: airoha-snfi: en7523: workaround flash
+ damaging if UART_TXD was short to GND
+Message-ID: <aSYPLWKEz0lzBtjf@smile.fi.intel.com>
+References: <20251125191635.1075027-1-mikhail.kshevetskiy@iopsys.eu>
+ <20251125191635.1075027-2-mikhail.kshevetskiy@iopsys.eu>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251125191635.1075027-2-mikhail.kshevetskiy@iopsys.eu>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Static declaration by default are 0 or NULL, no need to initialise
-them explicitly. Remove unneeded PM related macro.
+On Tue, Nov 25, 2025 at 10:16:33PM +0300, Mikhail Kshevetskiy wrote:
+> Airoha EN7523 specific bug
+> --------------------------
+> We found that some serial console may pull TX line to GROUND during board
+> boot time. Airoha uses TX line as one of its bootstrap pins. On the EN7523
+> SoC this may lead to booting in RESERVED boot mode.
+> 
+> It was found that some flashes operates incorrectly in RESERVED mode.
+> Micron and Skyhigh flashes are definitely affected by the issue,
+> Winbond flashes are not affected.
+> 
+> Details:
+> --------
+> DMA reading of odd pages on affected flashes operates incorrectly. Page
+> reading offset (start of the page) on hardware level is replaced by 0x10.
+> Thus results in incorrect data reading. As result OS loading becomes
+> impossible.
+> 
+> Usage of UBI make things even worse. On attaching, UBI will detects
+> corruptions (because of wrong reading of odd pages) and will try to
+> recover. For recovering UBI will erase and write 'damaged' blocks with
+> a valid information. This will destroy all UBI data.
+> 
+> Non-DMA reading is OK.
+> 
+> This patch detects booting in reserved mode, turn off DMA and print big
+> fat warning.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/spi/spi-microchip-core-spi.c | 3 ---
- 1 file changed, 3 deletions(-)
+LGTM now, thanks!
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 
-diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-microchip-core-spi.c
-index 2d7ee556eafd..d09daa25984c 100644
---- a/drivers/spi/spi-microchip-core-spi.c
-+++ b/drivers/spi/spi-microchip-core-spi.c
-@@ -398,8 +398,6 @@ static void mchp_corespi_remove(struct platform_device *pdev)
- 	mchp_corespi_disable(spi);
- }
- 
--#define MICROCHIP_SPI_PM_OPS (NULL)
--
- /*
-  * Platform driver data structure
-  */
-@@ -414,7 +412,6 @@ static struct platform_driver mchp_corespi_driver = {
- 	.probe = mchp_corespi_probe,
- 	.driver = {
- 		.name = "microchip-corespi",
--		.pm = MICROCHIP_SPI_PM_OPS,
- 		.of_match_table = mchp_corespi_dt_ids,
- 	},
- 	.remove = mchp_corespi_remove,
 -- 
-2.50.1
+With Best Regards,
+Andy Shevchenko
+
 
 
