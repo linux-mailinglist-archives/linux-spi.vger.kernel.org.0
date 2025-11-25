@@ -1,61 +1,61 @@
-Return-Path: <linux-spi+bounces-11506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09426C845DE
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 11:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A659C845E4
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 11:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DC06E34DE19
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 10:07:24 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9A8C1349581
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 10:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67AEE2BF001;
-	Tue, 25 Nov 2025 10:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20C02E03F5;
+	Tue, 25 Nov 2025 10:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="i1fAXbz6"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="idEu6X70"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012023.outbound.protection.outlook.com [52.101.66.23])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013053.outbound.protection.outlook.com [40.107.162.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04472CA4E;
-	Tue, 25 Nov 2025 10:07:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31C82EA756;
+	Tue, 25 Nov 2025 10:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764065243; cv=fail; b=dhmvoNnAaTAh9TiXYYX9NeDTeYQLr4MW2YdyABUExTQPtech+unV8V4yVkJnB7jJCasWiMMlvS9gqB8urktCwnr89o2VD8UZTVWzWxaKq/sXPKSa6Gg4RNO6HlrMFT7psTT8UuY+yzPWf6lI2jJ4aHvR+2XuFDFC7e0UQg5SOms=
+	t=1764065253; cv=fail; b=jT16PPxIsnBSvncXrIS8ouCnyvyU41YR/5FgZPBiUvdRBZDMo2sc9Xw1HVFAOyZBr5hWSJwL2WEJeoexFOzTBZIjidYVlxXQsbzSP/JaL/OX661GaeYVyX7EIr/vPURZZK8hLaDtejjvc81w98QvN2HN/iY7x9BuR2AdFdUfhrU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764065243; c=relaxed/simple;
-	bh=6yanx9z7R2Xw2qi1P+MkgRU0AUCx2xnRXKH3WMzny1k=;
+	s=arc-20240116; t=1764065253; c=relaxed/simple;
+	bh=YA7WBcFEncYrTR355F57dhKicVhNZvhMCS6P61dGSFw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l1ZD+PviTiVQAjHntpK9kpSh40SUa8Nv684ZghqukuXumTJ5tuZhIkG0tflH/vCBWWVJg55MYpgtpKhWoMpZlY2kzXUVDg/OjGSURYqA8P6WWQLvOZE403cgaEuHldhiAK0tAN7hsx0o4rDnN7a0HIBAt3jShYuxT87NweiQTDo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=i1fAXbz6; arc=fail smtp.client-ip=52.101.66.23
+	 Content-Type:MIME-Version; b=uh8+dZvLS1hRJpx6t9Bz23nUPhXfl9DQc02KUNfFgea2kfLskhf3xM7t9EPWLLUfoR2f+aegZTGdvfJJWVMJlf+f6JgRbZeCak31SoH6vTV8UbzpeuqvZJCZ6HXV9vEBXRvpMqHdBCtBjHP/EhcAibKREzZKIUl461LCNCip90U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=idEu6X70; arc=fail smtp.client-ip=40.107.162.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XpDPnnr8O+YRHPHaz5AR0lU8MlP4sVxQCYUGURFKuu6zhgfUvt2SfTc/SXkz45uKNYGz7cyKrgq8U1X0ROFW2205LjlQ1DERrkSzw1fpA417MtXfpqYCEVcY8HRoWJWUaTpC9Hnw7wQ5bD8ZTCQPOCNpwQyagaKltZ+6tJVJIKsvW5Hdb4HrFTSHNKhHvSV9oCkbelckRw8WOGlfvMizEljbkKBfu1sjGfRN856Y9meizybkTqebZRO2z4g+kn5XZdowlajV/JQMVZgA1/F13h5npsc1DmDSxI5caILxTmlai75rT3UMsPhgp7PxFp41S3yQKdBFMsou4MR7LpM3cQ==
+ b=gBT8uIxMdwMZQ4eTazcquutlYoRlvqdp5MbaADNJsc3GhY/As/IASppqULupOSbWhCkMrS7xrvdkCh0yDp96q/ag+YMSe1ghtYAOX6ZyH7VQgDaMwe4acxMBgXQVpWoC4Q/OH2ME9HDqu+ameeBE3fwuN1aS0fLpM0CRbbv8lR44oB76Ut38GwXBbmj1tBJ2lfdUF+9lzZOZv8RMi9++qSttLKQpOu3si9ziRIfQtAmOTkDS6qFtDZC/4B9bq3TTBOjO4j/dm70KGybICdSjw8tF6dWyWEGJAwKGVqlQgap0dNnfXLCveRZlyNYyzA+ee3kuAMYlziIcr5Ime3fIZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8S8i0ECnBIYhGS2TmZkLx7RP76/JdosRKtyZzHX+zTo=;
- b=V+59Yz6wCeeAiTFVUQm765/ycc2A+Dfu+d5UUq6zfXrxpRXRtc/z8/ivAdO/8okbgwCv4TNez2dYZQmmoFnG2UTCveAguJNdflngxy44HeUuvqRP1YXweBs4kj26ztwYC/cfkz8KrAgE7fFFj+XrvmbaIsuCJ1RuC3vE+gOvkgFva8BdgyV+fi8DeG0ad9V14rmYZWggO4ZGXPE+sRED11H5/CkcQYBcy3qU4XelcJzWHhGgHh6IlJeIk0yVIuoZ0m2ls7Ck3xJlRryfHbw6fR4crod6w44zgPCjaanl9ivIlBDP+bG0wSdg54FOCFV94P3wzstU96kz3atoqXjSFQ==
+ bh=KHx5Jjm2tihRKabBEmXsjN5rNhiafmMtR3xsTs0+9qA=;
+ b=Rk5Lk3wAu4zL1SsVekDjtLUtBjrR+71lrgagRgyOTBw18BFr2+mV2VEBVX4Xhd3JS5CnF70yeJ+rhTBy95o/ws9KRZGgLuGwmqrYNXTMxs9OAvGnbExBaNzPyuz4kXVbNqJQbZszAb+0TXk/pr3sSQtzb/UWT+Lp+gcFhzKunRLBL5xxtgAsvL+XZvAj8/XotIRt/mXoUk3ab46RILw4d8/cnYDIjvAXVX1M5D2l8nzb9irej4TCOOux4VBbCRtg+uAm12k9MqC+dzfA7zH2hV8yt/jgGDanoI6nJeFxX/tQA+Xh75BLarZd+wz3l74j96mSANjBnwEZEwZs/fYR5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8S8i0ECnBIYhGS2TmZkLx7RP76/JdosRKtyZzHX+zTo=;
- b=i1fAXbz65Qn1aNzQrO4DkW5Td4hwadSLERhL7VGnTQ5UAPhnyTkwa6PO/NGxpJo7pigy/svwJFwz4ApeITGU9UpDiBYvU6d4cE6nwO8xEjylpYOAqSOTxQbRGukbBnP3gv/afcIkJvuT+U1/z3CwJqXoxMSaxnyW9UrlmB2RWumMhyuLizCZSUUx/sdPAMNaTaOjiqtbSZB19mYdbkdPwkG+F+q9g6MZZThTuLk5xh+ccFmsOEbT4BYaR7CtBm4oLNNbk4dTTBxy0Qjaswza08rJ+FHmv8R8m1/cJ0MHp5Qh67Bzu+/dfdBmij16TyEe63PcMilX3zigB0cyZK+6HQ==
+ bh=KHx5Jjm2tihRKabBEmXsjN5rNhiafmMtR3xsTs0+9qA=;
+ b=idEu6X70VxwEDOHztrF1Ev8I21ShPPCvUFO0afkvbgcL9P8Ch9cFm7nRpg4O2h2DftRQbIKMkyZVklBWpAyTHEZGHsUDZ+wEqF7Der6hk9NSXxlEnO30tBjYYoulaSzmu1RjFi3lzfzXVMolbknN3EtbuzYm2gy3khN9glZbLvYehK8mkLz9eFb0gEPCnP5ZxaWZPU45zHxgF7Sh3WGYWxkajmfRbesiYGcJtWr0WN/Gs+ccaeewxC2pZssHpEjANAdikaejBBggnNWg5jkgFM+kgz1Tk+JJyhFTafgx9OKY0yXB8bjih9zFZBd4O57rdlxJc39h1JtdIWT2hVIYOQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
  (2603:10a6:800:293::14) by GVXPR04MB9735.eurprd04.prod.outlook.com
  (2603:10a6:150:118::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.18; Tue, 25 Nov
- 2025 10:07:17 +0000
+ 2025 10:07:27 +0000
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687]) by VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687%6]) with mapi id 15.20.9343.016; Tue, 25 Nov 2025
- 10:07:17 +0000
+ 10:07:27 +0000
 From: Carlos Song <carlos.song@nxp.com>
 To: broonie@kernel.org,
 	frank.li@nxp.com,
@@ -68,9 +68,9 @@ Cc: linux-spi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Carlos Song <carlos.song@nxp.com>
-Subject: [PATCH 2/6] spi: imx: introduce helper to clear DMA mode logic
-Date: Tue, 25 Nov 2025 18:06:14 +0800
-Message-Id: <20251125100618.2159770-3-carlos.song@nxp.com>
+Subject: [PATCH 3/6] spi: imx: avoid dmaengine_terminate_all() on TX prep failure
+Date: Tue, 25 Nov 2025 18:06:15 +0800
+Message-Id: <20251125100618.2159770-4-carlos.song@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251125100618.2159770-1-carlos.song@nxp.com>
 References: <20251125100618.2159770-1-carlos.song@nxp.com>
@@ -87,283 +87,102 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI2PR04MB11147:EE_|GVXPR04MB9735:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3105b74a-9b23-4fc9-9121-08de2c0a69fa
+X-MS-Office365-Filtering-Correlation-Id: 15032b76-5e31-46db-48c4-08de2c0a6fc0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|19092799006|52116014|376014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5epM7Y61uHgvhIe9PzR0quXU/rtUHiCoyp+xnSQuQM/dLSwI7BsqemO63diy?=
- =?us-ascii?Q?BVhhRolqx7Zlk+3FVIgzlc+8SoceP1dNf8KaCVpa/Sx0gkyaqddvJhfjtXlG?=
- =?us-ascii?Q?FPnB2Fo6rZryiJjS0FgFh9OcPrrzdsvMyh/Jq3YKVEGQcwm35OUr7R6KJqw5?=
- =?us-ascii?Q?nKQoosz39HNs0IDFZbVW9aQxrKz9djs/UJ02VxJiTIwVVXzEulPn/Yx3Ls2P?=
- =?us-ascii?Q?ejeVLqSnm0dPpLYgM1Dv4XJ5MGmqRX6k0NKkxysSfIODefSEhJdiQC0F6zJn?=
- =?us-ascii?Q?TzVRIJUdwlHcy6HDklB5qpKKSrBkWh1Ymh72cQlSgdiii0BTKBEMF4XwSPFx?=
- =?us-ascii?Q?wqJ03fTuYJieLA8ViOpLPA7ntnUAGq0p4qXmgL8y0uI7OMzhqATj/3pAv4k6?=
- =?us-ascii?Q?INIo9uQG5Pl2cT5D3isEunLqSvzzTBQX/deuixMZSQ3rooVONg9TXGctjoSM?=
- =?us-ascii?Q?XFQYFIcFHktjtZZZ0kGJn8Oo3T1UpjsXGtsagIRcj1OhUVzFc6/eIiSS03Vf?=
- =?us-ascii?Q?moigORiswgjOKu78fK1/F3pA/dRG18DiTe441/GHVDWEcveHIVvDjszs3gny?=
- =?us-ascii?Q?w0LP7io9vvsScl7/gpOOoWfKBpHxGzplghxwPEwBn8Rky57NiVvpQr+dALi8?=
- =?us-ascii?Q?7uXHBO8X+EcABgLB5eawhMSIwzni7c/rCKnj3P0BBMixGYR/hMhr8BiuJaPD?=
- =?us-ascii?Q?QkNOoaN3Jzc62d84OqwoQ35PUbipdPP/uCkOCaW99efsZhf9lI33jHlHL74H?=
- =?us-ascii?Q?tdushGtF0FqjYbAJqcKhNkLVw4Di0WzbQlQlxGR6NgKucvVHZQoTOZD7RoPv?=
- =?us-ascii?Q?4DnKCiVFnGysHaisH/5FTETn6qppJfmkG3fBaUhFmJ2SuDUDxctmxiZQHt+1?=
- =?us-ascii?Q?4BRoZXBOT5QUz6eoY0686Ga21vATT83Xul9DxS1TJSqd1VpClFmwBPqLRk6/?=
- =?us-ascii?Q?egn1Xm6bwfxo2DPKda1pOlAjjQ+DwoZLyAx88o72yjyV5bRONsFuaN5CuqPb?=
- =?us-ascii?Q?eODbW3lIDnBD+6V5HwlAA9PD6ZMvYMUCvSAqSqPwAoPLBaGyf4D7k0FskvOq?=
- =?us-ascii?Q?AxFv0p44cBZuN+dEcf+cNOrOiuqz8kZkSKTnMpOQsvW4R7olSrYHhgqamWPz?=
- =?us-ascii?Q?zpwj4Lh+w6HpvtLZ3vMrJ1UE6Ipa55nzm5EGLquA1OjAhLhrC10r8E7vpnHZ?=
- =?us-ascii?Q?ny1XCA/dlNL3uPi1End/e7ptvnuAHfeNJLxsoF7iIksMeb20GlpSU0FIIH4l?=
- =?us-ascii?Q?vBpjjkP9S6nkJ9nHvLjZhLuDSmDq+nBdZCig1SY6KoUmGM4pG1tiU9bBOqbo?=
- =?us-ascii?Q?4jkGvK7gjyD8w198g/Or9XcSjo0awjaPg6xmtP0Y5IQcODepIqTBz0eM9/bk?=
- =?us-ascii?Q?nbpwCQF4Ih0OUPY6PF3weVe3C8lqLYxKXuNT69DXkw3X//WdjT57L8KbRZUa?=
- =?us-ascii?Q?b82GuCqc45U8vMQDpJ8DylzCJxkSx/GZ8abmo4wsC6uz71vacP2tLMedY9F3?=
- =?us-ascii?Q?ohe24mnCD3uTvIV5aXpuSTxrGrDcmdFHKbPf?=
+	=?us-ascii?Q?5sKWqczLNe2vu3mcdm4KfjrPZUbKIsx3KftBVS/9JWt1/5Yx8ltOxlP6JGwb?=
+ =?us-ascii?Q?K3KmvXZ5HmgSywKeXlEAlQLfVw8pfXyH7IN9SUuM8C+1vP7+qx0j3pcGQSKV?=
+ =?us-ascii?Q?yCVjevpcT8mFgeFbs7DK8CarnnLvqN+htWElmKC5kg+45eZNy4gvZBox968n?=
+ =?us-ascii?Q?MypAOCxpcur9arALUtZuRxz79HmOv+HAK5FcQgz+O17mNTbH+TZYpY5943ag?=
+ =?us-ascii?Q?aRXN066HtNEyiIaY3oc8pu6PXnx8OMt+if0AJfrwBtsx3FKUvDDL2xMNPJxA?=
+ =?us-ascii?Q?9DU0clK686OaVUItKLIjto7VfgEXrBU5y7YvEeSISa7R0gqRfsJOyUrA3YyA?=
+ =?us-ascii?Q?nfqG7P4sQm/C5kq9oXAUXNWkwmMPiEhzHQCFGoQL6j+XsIoxWokfgDzO8iuV?=
+ =?us-ascii?Q?zK4slp7zU3bYQkcM0ke/927Erw7kkosQsn8ZR3Yzc3qeN/80ElfYvJQL4ebC?=
+ =?us-ascii?Q?/PRqOMe8U1PvMjR2fkHEF0YK2fHRaRHnvJjeFbDkHy6+fHhpZsuLzxrPAAsC?=
+ =?us-ascii?Q?t52/0CYwYp3M7ee+zo0OmTqJJMk4ohIK1Gc+zEWp/UWjOAQ6dEtQd+PXXmpi?=
+ =?us-ascii?Q?AAisupCdfxJ5cMSiBsnpkgF1zLjrmuCAcgeoKYWPGzIokSintfOWHwLNbRMe?=
+ =?us-ascii?Q?0yd3po7WMU+ywjHLxFGcRWWa1tHCrLmB1Es7wtuGK01tkbaYNCoweI+zMAxh?=
+ =?us-ascii?Q?TdPHl4i/vY2TZvPKzM10EI2+hgUcU+kHMdejHDiQ7Ng9hAXdQQDH7UiZ9pU8?=
+ =?us-ascii?Q?ioxcHtazk1aqzP42KDgWrTNjNM7jSN+op7rMyZ3/2I7Oks9n25N14lf3nl5/?=
+ =?us-ascii?Q?hwnY2igpIUT2CWrn5tJHXJEglBRZCcCpblVNJyvqN8cbwmOMSJpyk/DdnJaD?=
+ =?us-ascii?Q?fO4/xr6SLZ1TM8L6WRFG1Dyv80gC7AnqlbQ3ApYUxcPVF/r1hhNy+8sIjyyU?=
+ =?us-ascii?Q?6xUit28JF1bFWfQocxUERTxj3rHM6FVgiFp0gaWEdQFbdG+/TkTde1utI6mq?=
+ =?us-ascii?Q?Q0Smhnh02DQ6nChn8VPL2fGj+7m4kIWKf4TxbCVHBSwiE2SBDh++93/+42HP?=
+ =?us-ascii?Q?Dbn+Cu7zWW5ueQK/JQBvSqCR4UPM/neZ4ZKphpv7af/rMQHssth3MUX4+702?=
+ =?us-ascii?Q?1XfHKNRY/U/Wz2jIdQpNOXg/V0Zl7k5o/Z4chYi0GJmjrVePyFA+V1fEn8vx?=
+ =?us-ascii?Q?b7uSl80AuSkONrIZnusy0rU/Hsixn+0DeBP5xaeyS5OncVZ6s4eZT/T7LhUM?=
+ =?us-ascii?Q?P2rQb3I6JEcMwBQYqpaKK4k2OWExrkURoX8n0/RSXoEl8UVeNNG7ofDrupkq?=
+ =?us-ascii?Q?lpQBx1K6O2yjlH2gLq3hkXc12QkdP5PDVw4YMnp1X0Vtg2iSJDckCA+zSC+m?=
+ =?us-ascii?Q?4T2QQ+gHa0EydMcuBqf7JdeJFEzA7Z3IlK+1xuyAwfy1tUl3gC/nKMiTUnty?=
+ =?us-ascii?Q?8VYMUvSSXhYRxlLIZKMISHamzKJS/yjymuumAs6V68G53yiFlNiAQ9WnSwrF?=
+ =?us-ascii?Q?EqhtGeANH/1Z25DoZCsQciyOZPuTlw7vR+F+?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(52116014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Zb08JKEg3HqeJ2g9MxBiZSJ7pyYYvNMZQJp0cw6Doz0R9dqkzPOTP+v7oYFN?=
- =?us-ascii?Q?ddY+8b+2AeIZZv4V0tq/SL0aWfd9caLcZUvVMUoWIGH1r0UQSgrghGOtcFfK?=
- =?us-ascii?Q?ORGOlKKY/BUHvQszvH7/JqgJeaRkCEiXW1kmUyHiQidT4eC22di2HpY6yFEt?=
- =?us-ascii?Q?yka5hAKbFttYg8YNSmeX7rfQ1hnB9oN45+K8Fx2gcmA/9xP/0HZXkSQwlLJ4?=
- =?us-ascii?Q?F/RdStcTxci72xZh0VT6yRc06SwErBTgVzFVvPJPyx2Q+tJJYmrWCUJc4wa6?=
- =?us-ascii?Q?HVQ9+2H0Q4GGHW+1Q9W0wDjTCOXOl7b2alO75A9ZSe1bmhUrCQsPfx35zRde?=
- =?us-ascii?Q?K24aMTd9qyks37ocITfMPtnvhEvZ97Fn4fpgJwEH9XjbXZGqar7zerYtBaYA?=
- =?us-ascii?Q?4LC1mL3xUqodylbraMiAA0B36LVdtIXd1Nk3ei5LrREDM/MS9II9Uxc/4ZR+?=
- =?us-ascii?Q?WGB7CKUFMtO0boeADGlmyZDAwIjqIN2o4+NjPHAoDZoSQhYXQcBUmJJCYvek?=
- =?us-ascii?Q?4Suhc/f6bJR1GLzKD1Y0QX4lJMlXT1QURmZf4NTknOnw4eMxzWhQYJ/fXUH7?=
- =?us-ascii?Q?lp9hkZ4cr3agRhXUSbFQs8egiuGayc2b/dYnyEMadVCw2MTpK3l/zNh6ZHAW?=
- =?us-ascii?Q?SGeivezTuPR9yDkguEdWV5qKAo45cyaZtTLMdR3RfkceT7X5ugXcn5GtmOgF?=
- =?us-ascii?Q?E/DUbPzSGmtuvD1ctKqmlJqAwAz2VFU9J61h00yEJhG4NAbVt40h7CRFcJC3?=
- =?us-ascii?Q?6EcKxpxpQGLPXvGVhJ/EbT00NWnYVplriUTFG4wKDOgcrkAxXdah+rLqwtA7?=
- =?us-ascii?Q?j//cMrNg7bHl/57ZOVe8QKu1oQ/tDMrm0ENJz2cYWT+osX9vCDbVe0X2FVKR?=
- =?us-ascii?Q?IHz846F8FhyfZ5EW0BoDSP/uYOYGycR550nqUlnKp6tI9e/UU/wGQbMX93X/?=
- =?us-ascii?Q?qEnNU4N+ccnCeCoMdpfA9a+OaS9Xpwr9Gct/L0nof14ixdh1Qv1qYmJ7ahuO?=
- =?us-ascii?Q?AgfApqhoIjZ9wDZcn3eHSeP+m8YTuGIoM/FVGOu/y0FXuAwcYma0vdtaUx5O?=
- =?us-ascii?Q?mI9DNVOgNWCnjR2uV6DPVrBVutkFak+FYMPXZaUVKxwzHrSfMTqvpXw92Pfy?=
- =?us-ascii?Q?0CPNNnOVnt+s35vuS01SGih97gsyfGJZjTB5Y1I40L6PMZF/rUG48vrm/TVO?=
- =?us-ascii?Q?dQJUA8yD02LKZilOFG626XNznLPsjuT3E+/478/ttID/HFSa8JJeL+Ph8VIS?=
- =?us-ascii?Q?WeDgs4HOmXohIx98VKgMdeyIDn0LkOnZO5SjHL7Rq3Pwy2+yEe8A+Cu9cVBu?=
- =?us-ascii?Q?e5oeDyu7jVeCu3ryjuyrN7SumZJqH8gWGQ8PqI2u1ql7KdsBt5TyjyfcTmwG?=
- =?us-ascii?Q?oy5QXyKaMkaF0G5jKMRa3HhguVgtCIGqnYOaJaG3/P4sxb1UebiEP/r81cRF?=
- =?us-ascii?Q?mN7ayxpjUrT8n5iUenG2yw6fHmCgkDCbAeY16OqJei17R66nOCpBfg4zc0Xc?=
- =?us-ascii?Q?HmsmJDHTO0qOty2l99LDohdkYhRuXw1ZYNrZogHJDRwoKIKW1TDp8J5n0pZu?=
- =?us-ascii?Q?2pbduDBYywEq//eQhLUukHCl0zfnwi+94oqNNhW4?=
+	=?us-ascii?Q?93FSXV73qXgsOJp0k+VD1HbNZyMZr5hdM3YGshtq4neX+qweOywnHZLoi2fe?=
+ =?us-ascii?Q?e1Jq1+Lxv8xPmY/+PgvSZ2cBuDTzcObNtQUkUshBCieePHJqv2wLLCSax4ju?=
+ =?us-ascii?Q?SXosBUJntNlB4KvR7VlDvrZxWJLwpxVHbC1J2FcpVT41cAuZI2S9qv+YpynO?=
+ =?us-ascii?Q?wNVQjpILlM0DkOL5+Njom3O17OIreiBISiIQL39IZB1+mYXVJPzomqRXgY04?=
+ =?us-ascii?Q?A1683yDFlEEfdEZh1McKVbKPTySVWA7A903m+M/9RaBl8kaPh76ehGkLuQ7p?=
+ =?us-ascii?Q?/Hl11hh95nxiW28WNPoBGwzGJXPAunr2VD4t1A7jiuGeSLQHHhEAjTzJJRuc?=
+ =?us-ascii?Q?7VGzTjW496UG0i+v4nTSeD7CJQmFkuDOsL0BBvHzyr4O+mVa4xjxDJ37crNd?=
+ =?us-ascii?Q?vTIty9a+SBJp7fcoCs5AI7/Cb+T+b/vQK0687JNXTixXyszBy2r62TwdOoSi?=
+ =?us-ascii?Q?pTJaSA72r3E9n8XsOQZKh6sWTnaDhBiWVaIKR/yE1Oi/iqdWTaVSMXAkh1Xm?=
+ =?us-ascii?Q?O66tsARIUS868UqnES+jwWujqGyHG2iMxHiJ8UvBJ5xVagxk5sCYYQR2hU7B?=
+ =?us-ascii?Q?jsF2wJAdgue6stEGhYsimGGJwWxNdW8fu6YdeeWCgSJK/CPzpxS9VFA0c/Sz?=
+ =?us-ascii?Q?/rG4PlgAo8H1XULse7U7MtpsB6yC8R2FXCgSgGRGflWgr4gDh29kedrt6zBm?=
+ =?us-ascii?Q?RfVdiSNmkX/ZeH7NBc6NYfhvg0tHvdX3Y5XRmLKtvKdJwSO7A7TxAYfhzgST?=
+ =?us-ascii?Q?0bciTsoGL+bogoEG7dQEbS3D//pR4iswe9UOAN4q51QYqMBxL7IhT9Tk/DBI?=
+ =?us-ascii?Q?DnS4QPrLmgjMP3xDBZUQ7X7pjvhpujdakHgiMkyNlY9TXQie7FQt8MYmFT5G?=
+ =?us-ascii?Q?bF9XtMtKC1fUpuZlogc1FNC0ZLZiya6OZricHRtJXN68r2YqskLWzfe6iv4f?=
+ =?us-ascii?Q?MaEgT/PY5v6OBD6+ONq8YsMxXNJO2xrIaBX0T26/2j0cjSHL2I45/9JcxGio?=
+ =?us-ascii?Q?XETIQyNnsrC4OlJexUg5QIatj5gf/EjrrrcEVRbubVai/5qsMUE/W7/3Rl/K?=
+ =?us-ascii?Q?ZoKXQg1kkoBNDulPUHKWhY8pczcAftkhlAM3CqKFb1oZYuyXfJJc83Q3Ycwa?=
+ =?us-ascii?Q?csA/EgEPcwrbhpkj01XDR0fyqKIHIhRuWHMgbLx6kzk9cvMbCCigddxl/suS?=
+ =?us-ascii?Q?jqxAD/PUlnhhCNEoXOsao0s55wACYqjinfNE0300PfvSLmx6r/uR9m/aD9I9?=
+ =?us-ascii?Q?mTdxwarYjlDboETqmbG/+M3QCqbMayqGNompVkFNWHAA1UAkswMgxHfU1kiN?=
+ =?us-ascii?Q?Qy9iajmitaAUvDsYacz83iCte5L1Yf8ZCMeVq9QoVANZUrfAGBKV7SUFvjdp?=
+ =?us-ascii?Q?S17kQt3t7QZpMnkq7mLVHhL7TNvvAiq8IdwnOLWhEsYBMMBZ8rp1cL6/qR8i?=
+ =?us-ascii?Q?IQaPgCIdiCD4GaUZEh7bAk4rzGZxZMr9cWS/sANHQGZtzRgJfgecvMmTtfU0?=
+ =?us-ascii?Q?xirvw8CE7WeDtNOOK+8twHTQ4P3y1lKlh57pK1hSexhi94dHTepXQrECJPfx?=
+ =?us-ascii?Q?o3ItMzGGwC6EppU6mdnvIItISukjuIVaeCclb6dT?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3105b74a-9b23-4fc9-9121-08de2c0a69fa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15032b76-5e31-46db-48c4-08de2c0a6fc0
 X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 10:07:17.7590
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 10:07:27.2981
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ouufkAQ085z2T3wVAVosArxvBUM3mk1dsMAVi2f1C388z0rZ5s00Gd6n2Gi3gVYo4HR9vfHWqSPJGRTx2VYDBg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 05RhuIUgcW4r4hyNxTeSOUXXvCCQGwmb48Bg6WTna4zWm9V/nk0zC86H3wk1tDK7kkfpplaqMy1gXMHV33Dq0g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB9735
 
-Add a helper function to handle clearing DMA mode, including getting the
-maximum watermark length and submitting the DMA request. This refactoring
-makes the code more concise and improves readability.
-No functional changes.
+If dmaengine_prep_slave_sg() fails, no descriptor is submitted to the TX
+channel and DMA is never started. Therefore, calling
+dmaengine_terminate_all() for the TX DMA channel is unnecessary.
 
 Signed-off-by: Carlos Song <carlos.song@nxp.com>
 ---
- drivers/spi/spi-imx.c | 164 +++++++++++++++++++++++-------------------
- 1 file changed, 92 insertions(+), 72 deletions(-)
+ drivers/spi/spi-imx.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index e78e02a84b50..012f5bcbf73f 100644
+index 012f5bcbf73f..186963d3d2e0 100644
 --- a/drivers/spi/spi-imx.c
 +++ b/drivers/spi/spi-imx.c
-@@ -1437,6 +1437,94 @@ static int spi_imx_calculate_timeout(struct spi_imx_data *spi_imx, int size)
- 	return secs_to_jiffies(2 * timeout);
- }
- 
-+static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
-+			      struct spi_transfer *transfer)
-+{
-+	struct sg_table *tx = &transfer->tx_sg, *rx = &transfer->rx_sg;
-+	struct spi_controller *controller = spi_imx->controller;
-+	struct dma_async_tx_descriptor *desc_tx, *desc_rx;
-+	unsigned long transfer_timeout;
-+	unsigned long time_left;
-+
-+	/*
-+	 * The TX DMA setup starts the transfer, so make sure RX is configured
-+	 * before TX.
-+	 */
-+	desc_rx = dmaengine_prep_slave_sg(controller->dma_rx,
-+					  rx->sgl, rx->nents, DMA_DEV_TO_MEM,
-+					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (!desc_rx) {
-+		transfer->error |= SPI_TRANS_FAIL_NO_START;
-+		return -EINVAL;
-+	}
-+
-+	desc_rx->callback = spi_imx_dma_rx_callback;
-+	desc_rx->callback_param = (void *)spi_imx;
-+	dmaengine_submit(desc_rx);
-+	reinit_completion(&spi_imx->dma_rx_completion);
-+	dma_async_issue_pending(controller->dma_rx);
-+
-+	desc_tx = dmaengine_prep_slave_sg(controller->dma_tx,
-+					  tx->sgl, tx->nents, DMA_MEM_TO_DEV,
-+					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
-+	if (!desc_tx) {
-+		dmaengine_terminate_all(controller->dma_tx);
-+		dmaengine_terminate_all(controller->dma_rx);
-+		return -EINVAL;
-+	}
-+
-+	desc_tx->callback = spi_imx_dma_tx_callback;
-+	desc_tx->callback_param = (void *)spi_imx;
-+	dmaengine_submit(desc_tx);
-+	reinit_completion(&spi_imx->dma_tx_completion);
-+	dma_async_issue_pending(controller->dma_tx);
-+
-+	spi_imx->devtype_data->trigger(spi_imx);
-+
-+	transfer_timeout = spi_imx_calculate_timeout(spi_imx, transfer->len);
-+
-+	/* Wait SDMA to finish the data transfer.*/
-+	time_left = wait_for_completion_timeout(&spi_imx->dma_tx_completion,
-+						transfer_timeout);
-+	if (!time_left) {
-+		dev_err(spi_imx->dev, "I/O Error in DMA TX\n");
-+		dmaengine_terminate_all(controller->dma_tx);
-+		dmaengine_terminate_all(controller->dma_rx);
-+		return -ETIMEDOUT;
-+	}
-+
-+	time_left = wait_for_completion_timeout(&spi_imx->dma_rx_completion,
-+						transfer_timeout);
-+	if (!time_left) {
-+		dev_err(&controller->dev, "I/O Error in DMA RX\n");
-+		spi_imx->devtype_data->reset(spi_imx);
-+		dmaengine_terminate_all(controller->dma_rx);
-+		return -ETIMEDOUT;
-+	}
-+
-+	return 0;
-+}
-+
-+static void spi_imx_dma_max_wml_find(struct spi_imx_data *spi_imx,
-+				     struct spi_transfer *transfer)
-+{
-+	struct sg_table *rx = &transfer->rx_sg;
-+	struct scatterlist *last_sg = sg_last(rx->sgl, rx->nents);
-+	unsigned int bytes_per_word, i;
-+
-+	/* Get the right burst length from the last sg to ensure no tail data */
-+	bytes_per_word = spi_imx_bytes_per_word(transfer->bits_per_word);
-+	for (i = spi_imx->devtype_data->fifo_size / 2; i > 0; i--) {
-+		if (!(sg_dma_len(last_sg) % (i * bytes_per_word)))
-+			break;
-+	}
-+	/* Use 1 as wml in case no available burst length got */
-+	if (i == 0)
-+		i = 1;
-+
-+	spi_imx->wml = i;
-+}
-+
- static int spi_imx_dma_configure(struct spi_controller *controller)
- {
- 	int ret;
-@@ -1484,26 +1572,10 @@ static int spi_imx_dma_configure(struct spi_controller *controller)
- static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
- 				struct spi_transfer *transfer)
- {
--	struct dma_async_tx_descriptor *desc_tx, *desc_rx;
--	unsigned long transfer_timeout;
--	unsigned long time_left;
- 	struct spi_controller *controller = spi_imx->controller;
--	struct sg_table *tx = &transfer->tx_sg, *rx = &transfer->rx_sg;
--	struct scatterlist *last_sg = sg_last(rx->sgl, rx->nents);
--	unsigned int bytes_per_word, i;
- 	int ret;
- 
--	/* Get the right burst length from the last sg to ensure no tail data */
--	bytes_per_word = spi_imx_bytes_per_word(transfer->bits_per_word);
--	for (i = spi_imx->devtype_data->fifo_size / 2; i > 0; i--) {
--		if (!(sg_dma_len(last_sg) % (i * bytes_per_word)))
--			break;
--	}
--	/* Use 1 as wml in case no available burst length got */
--	if (i == 0)
--		i = 1;
--
--	spi_imx->wml =  i;
-+	spi_imx_dma_max_wml_find(spi_imx, transfer);
- 
- 	ret = spi_imx_dma_configure(controller);
- 	if (ret)
-@@ -1516,61 +1588,9 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
+@@ -1468,7 +1468,6 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
+ 					  tx->sgl, tx->nents, DMA_MEM_TO_DEV,
+ 					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!desc_tx) {
+-		dmaengine_terminate_all(controller->dma_tx);
+ 		dmaengine_terminate_all(controller->dma_rx);
+ 		return -EINVAL;
  	}
- 	spi_imx->devtype_data->setup_wml(spi_imx);
- 
--	/*
--	 * The TX DMA setup starts the transfer, so make sure RX is configured
--	 * before TX.
--	 */
--	desc_rx = dmaengine_prep_slave_sg(controller->dma_rx,
--				rx->sgl, rx->nents, DMA_DEV_TO_MEM,
--				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--	if (!desc_rx) {
--		ret = -EINVAL;
--		goto dma_failure_no_start;
--	}
--
--	desc_rx->callback = spi_imx_dma_rx_callback;
--	desc_rx->callback_param = (void *)spi_imx;
--	dmaengine_submit(desc_rx);
--	reinit_completion(&spi_imx->dma_rx_completion);
--	dma_async_issue_pending(controller->dma_rx);
--
--	desc_tx = dmaengine_prep_slave_sg(controller->dma_tx,
--				tx->sgl, tx->nents, DMA_MEM_TO_DEV,
--				DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--	if (!desc_tx) {
--		dmaengine_terminate_all(controller->dma_tx);
--		dmaengine_terminate_all(controller->dma_rx);
--		return -EINVAL;
--	}
--
--	desc_tx->callback = spi_imx_dma_tx_callback;
--	desc_tx->callback_param = (void *)spi_imx;
--	dmaengine_submit(desc_tx);
--	reinit_completion(&spi_imx->dma_tx_completion);
--	dma_async_issue_pending(controller->dma_tx);
--
--	spi_imx->devtype_data->trigger(spi_imx);
--
--	transfer_timeout = spi_imx_calculate_timeout(spi_imx, transfer->len);
--
--	/* Wait SDMA to finish the data transfer.*/
--	time_left = wait_for_completion_timeout(&spi_imx->dma_tx_completion,
--						transfer_timeout);
--	if (!time_left) {
--		dev_err(spi_imx->dev, "I/O Error in DMA TX\n");
--		dmaengine_terminate_all(controller->dma_tx);
--		dmaengine_terminate_all(controller->dma_rx);
--		return -ETIMEDOUT;
--	}
--
--	time_left = wait_for_completion_timeout(&spi_imx->dma_rx_completion,
--						transfer_timeout);
--	if (!time_left) {
--		dev_err(&controller->dev, "I/O Error in DMA RX\n");
--		spi_imx->devtype_data->reset(spi_imx);
--		dmaengine_terminate_all(controller->dma_rx);
--		return -ETIMEDOUT;
--	}
-+	ret = spi_imx_dma_submit(spi_imx, transfer);
-+	if (ret)
-+		return ret;
- 
- 	return 0;
- /* fallback to pio */
 -- 
 2.34.1
 
