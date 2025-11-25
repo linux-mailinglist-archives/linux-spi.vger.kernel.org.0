@@ -1,129 +1,93 @@
-Return-Path: <linux-spi+bounces-11544-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11545-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33B87C873F6
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 22:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE11DC875EA
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 23:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 259224E180F
-	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 21:45:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 79C604E3A50
+	for <lists+linux-spi@lfdr.de>; Tue, 25 Nov 2025 22:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5384A27FD6E;
-	Tue, 25 Nov 2025 21:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E38492EC09B;
+	Tue, 25 Nov 2025 22:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ay1RJdVh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJX83OXx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F8D1A23B9
-	for <linux-spi@vger.kernel.org>; Tue, 25 Nov 2025 21:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB79C1EFF80;
+	Tue, 25 Nov 2025 22:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764107138; cv=none; b=rNNArmgoj0sb5OSfS/ee2ENPohBqaOYYG5n7W7akuhWB+poxswJpvSN2SitoSYz2/B2tkpYNg/i0zwWHNRLO+ocdSsgc9RiHThHwiiI9VJZMnyjrW7xKSVsFP8QVLKT3xyHmi1N0dYIdJIsYXN0+5mUWSrhdsgLtq3uhv2oGdqU=
+	t=1764110536; cv=none; b=JsMZCPtFAO6JbQGLtUr0E2WGryeY+ylZgFRGXVfi2jcXeFtHB5N1/dCbSn398qh0u+kzGFMBzC9a2aKgoLUJAcU70qAS7e2DBs/pyoye5T3Ju8lIQaqaQPU4PjKmkKwKXd/UNIqvs+nJRknj9y7aahJHsaDsfAY14crjOX6X82w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764107138; c=relaxed/simple;
-	bh=VlxfKwb6drAkJYTHHriEjc7I47o3xKGHFN4xlLeNgxE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HhF5Fp4hPjTZmTihr4M+gP1IaYadcQlzYWXFz3LvKv7S3R9zOKXTI2ZoE7smnP4R9fXNIfqxcoRpTr3N25V6mine4L+4PECiJzbRAncBtyv/3U1lT4CiFA9HFVoIbuITCjTT0XOHJjIeV3Dh0hRCMmYdohIqO/zcMM04ptQL5aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ay1RJdVh; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-429c4c65485so4822801f8f.0
-        for <linux-spi@vger.kernel.org>; Tue, 25 Nov 2025 13:45:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764107135; x=1764711935; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=L975bxm4Gx+EyVsxiE9RIjBJmcCJrfpso+xG2/B2N9A=;
-        b=Ay1RJdVhEsspO+prwIyjrpgiHK2s1wPYvnloOMgX6XOPe7fy6qJFtFqAN5jXO8WtYJ
-         6QluPnnBWnEXFkgB1dDGzHA0Z13Pppdsr8QRnEeTOAWPLKv25JFddMYQcJf29Jm89esm
-         3ho3YTDKJ8h3A6uQxZig11zkmL5lU8SWp6+4DCKAxCbvmV+2jBDvKg21VZZ1skl6iQ7a
-         PnI9T4NCoX0oGpq/m//FPx+F86yYHXL876c7RYXkLmCeE8nLd209gUbT8qGxepiLqF0Z
-         OQde3riNDCucqZKsx8gQU8ovkKILq1n85oJpMvDHI41qKCYZ3tiTkqFPiJXg8RGGN8ZO
-         dZbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764107135; x=1764711935;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L975bxm4Gx+EyVsxiE9RIjBJmcCJrfpso+xG2/B2N9A=;
-        b=R/6lFoQbRK8c46dwsLeFavmB8RRlzJqWqikxXNRhZPfJSWl04Z4awqi0LJDKSxo7cS
-         erNopT3b5Nt4QNpgxG5tt239Khi2uBtk9OpuD0BZyDVnWVPWLxt+7M0B+XKZLhtPpw1j
-         XrVeXTHj/G/Dr4icGOKr7ybLY9p06CzzJ8Dx4c+lPFL+lDM/ghCjcC6fM11BUkKl0q+Y
-         XpZl/Y/PL6d2+bss17PZlOJuDZjMY9+M0RYrFQxdsn/+i3qIeBGOzh7VV1kW1skuGV/D
-         ToF+lLVqvQXLzYCdqJTvXB0B0wBATrYCjUHinfjg7lfKvxB+sENuhpFzPq9TxmWNUE8d
-         70pw==
-X-Gm-Message-State: AOJu0Ywj+MzKl8BNb0FU6mF1yYiLxbqOKncDmcPupbKr1I8IZvnkJHM3
-	gdvs+ijknFI57ltQpXYgnO0z8Ig8UM5sHQhzMNARsXMl47ibT+a5peEz
-X-Gm-Gg: ASbGncu7qRR//2Z8nv12trYRNKcGXNj5hTQOpia9FVDUpchdnJQgU4hQ1kCZjE1lIB3
-	2/ZJ8UTXbg0HHFBG0GbTexWA+qVHU0ZJ6HhlNfqyGUYF4t4YWnZX5+QStcU0WP5Y0DGOg47n4KJ
-	4v60vat+hTMC2rm3BuPqMNljbUOxqCL7V9oD7k00pm0h5x1Hm03a6xI2qyOU23vpYz7W7EhfFBn
-	ahTgxsphOtOOlfJZspFSRy3xqwFjLqBybGgZtmEWYAt+4C0ZUtGHstXsxEFJEzwV9pVWqaseNTh
-	WgO4EuOYQP1rMNAcLYxUMqwUh6j2MVk7Z/u8dkBYzsa/O5+9zXVbzGM/dY3FTEVLbovOLsv9StO
-	eFmLEsriiZef7ABHAK94uVCap6IWeCUHOTKyISNWbH733v7c1MTcSgbpld48ESIL4k7+koa06j7
-	yzH8egtH1GOMiTimhLs0+ZQmIsp89hiocIcA==
-X-Google-Smtp-Source: AGHT+IEYQySQcwxUg9tDkdvcawtVF/nhiWKoBYOu7uxaLo4Nkvt6XZX9uPHdB9ZyxPvEO3tkQ2/oag==
-X-Received: by 2002:a05:6000:61e:b0:429:c617:a32f with SMTP id ffacd0b85a97d-42cc1d51a63mr16565265f8f.52.1764107134970;
-        Tue, 25 Nov 2025 13:45:34 -0800 (PST)
-Received: from iku.Home ([2a06:5906:61b:2d00:325:d7d3:d337:f08b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7f2e432sm35494596f8f.9.2025.11.25.13.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 13:45:34 -0800 (PST)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-spi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: spi: renesas,rzv2h-rspi: Document RZ/V2N SoC support
-Date: Tue, 25 Nov 2025 21:45:29 +0000
-Message-ID: <20251125214529.276819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1764110536; c=relaxed/simple;
+	bh=0BGQ1ywOPTwcj7kBFirTpOpSy2qz3x+iSNssj2F6ElI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LBC/1hBfzgwarec1Dk0d57P6kDfI/wIpTkKMeJp5X+KmDWSzvB8mwrdq0BQ8KHRLkcXspyfOlNu5w4E9Tpg+S4zavrai58vxBBLnjY+pJW29nGjM87kz4oiAWkZ399VCFgzKMOQ/7VXBMBqI6u2/xjGxbwvmldinpCzCFdljakM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJX83OXx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C59C4CEF1;
+	Tue, 25 Nov 2025 22:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764110536;
+	bh=0BGQ1ywOPTwcj7kBFirTpOpSy2qz3x+iSNssj2F6ElI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kJX83OXxS6d3U/cIwDDI76/31yS+LinvdNSkeM/PzmMsuIznM8m8cP9vh9rfGSejI
+	 bSvvMBVog0+fRBgytA1W4Ka06RNDkupJTpadoX9by6AS46o3F7shaAy8Sypzu3QPAs
+	 Y6ZolBilBLH9nqYyqBracrqHQNoeE1Yy8zedb3JUdP83D2FfSy258BXbqh+u2S2TLf
+	 V97zsIRef5oAr/mc8PLrg8SenQ27pt7uRYw/NPRpWHRbDnyFgMXgfIFWE7xp0QCkuc
+	 kwTOn8OGXG4jsGQ3aFll07ZTSngztKYgGin9XSiZ4uSOjwA5BFrQKAP4OQkntczrMS
+	 Fmt4JJ232ZrIA==
+Date: Tue, 25 Nov 2025 22:42:12 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/7] spi: microchip-core: Make use of device properties
+Message-ID: <8d4c9c21-63ea-4217-9579-c8a3bbb58946@sirena.org.uk>
+References: <20251125201700.1901959-1-andriy.shevchenko@linux.intel.com>
+ <20251125201700.1901959-3-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uaIBPnrPJwWTlKxO"
+Content-Disposition: inline
+In-Reply-To: <20251125201700.1901959-3-andriy.shevchenko@linux.intel.com>
+X-Cookie: Too ripped.  Gotta go.
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Document the RSPI controller on the Renesas RZ/V2N SoC. The block is
-compatible with the RSPI implementation found on the RZ/V2H(P) family.
+--uaIBPnrPJwWTlKxO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+On Tue, Nov 25, 2025 at 09:15:32PM +0100, Andy Shevchenko wrote:
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-index be62fd0841aa..5f2672625c30 100644
---- a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-@@ -12,6 +12,9 @@ maintainers:
- properties:
-   compatible:
-     oneOf:
-+      - items:
-+          - const: renesas,r9a09g056-rspi # RZ/V2N
-+          - const: renesas,r9a09g057-rspi
-       - enum:
-           - renesas,r9a09g057-rspi # RZ/V2H(P)
-           - renesas,r9a09g077-rspi # RZ/T2H
--- 
-2.52.0
+Are we sure that these properties are tasteful and sensible on an ACPI
+system?
 
+--uaIBPnrPJwWTlKxO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkmMMMACgkQJNaLcl1U
+h9CclAf+P44RUDiYe3FN4a4BNUderd0EgXjhLLJb/umaPNizfbpqOC/kSIltImYK
+4BBi49mc1/wuFVnib9SKrGmygS4IcGZvKu+6jWaBkCY5kFVOMXNm5Fnope3lA8Vy
+e+l+8p9fCTd6kfh3cqGHPbh1bTx7OAJ/LWWX+NflixPReMlD7RnxQi8qaIcsUOci
+jlgXnX0eUwjqLbBy53AI33DQJH/zu6ZVtRkQ/CBgy9P1N4Uu6EnrfPYrQjPdd/Re
+zhmGoLtSdM7Nuudknla1vOlgY1S8YeUQSN8F3UeGU+XifpYN9KuIF+zKqBGARoVg
+nQEDtOpLbo2ATbJsEOHY0Y6Cgmbbbw==
+=Kafm
+-----END PGP SIGNATURE-----
+
+--uaIBPnrPJwWTlKxO--
 
