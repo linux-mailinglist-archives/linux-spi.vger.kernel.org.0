@@ -1,60 +1,58 @@
-Return-Path: <linux-spi+bounces-11588-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11589-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31219C89AA1
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 13:05:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E44C89AE6
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 13:09:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 26C4A346F9A
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 12:03:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17C313A51C5
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 12:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D7AC2ED853;
-	Wed, 26 Nov 2025 12:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F37432549B;
+	Wed, 26 Nov 2025 12:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pPJ1douQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IIi98YGj"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D914D26ED5F;
-	Wed, 26 Nov 2025 12:03:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B789F3203B2;
+	Wed, 26 Nov 2025 12:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764158624; cv=none; b=N+BiJwsM1engkuTp/hRoj4rE17yaL/pfRShUAUd/6eBLsLY5z07DH9qZYd3dI7oTAc8gOqZzlllO/xyQqiA9J60OaziL6j/qSkRWKauJ5VfPDwgT9Kuk3LdccXx6JF/Mr5y8HBU7RMvy3Obmfc3vcdxqML96okXUo2bC6qZ2zBA=
+	t=1764158726; cv=none; b=nWU1Ru5OuAoqKB/Kghav0s/W2xVy3pjoPM4BexZv7u8pLXUoBnt8pdhTcDUurQKyzmTblKc+tzUOOiFM2Xgl5A08TfEWv2IpPpmASTGb1vjwqytETPtkHHT6S8NSAYHrCh3Nxxo0FxAQCcLSGEBlX1P3rYRUv6haqtozVObK6JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764158624; c=relaxed/simple;
-	bh=AJX990TL2Lzy37GFauxayUAAQy0YTLRCXavdQ4ir430=;
+	s=arc-20240116; t=1764158726; c=relaxed/simple;
+	bh=WIpGzrVFgHunKp1xwPD63zz5yulphG7CNmzLxHDjyjQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FuH9QHS9VItU3PZk1qL/rlYym+cRAOodAu9YukmELfCUy5doNZsQqnvBghzySSHRaxsUEBPzOyjV32kuNB+UslRLkDP95KuRcTP+hOLfta4xnPKBzDsOksK+ELAUZSv8tS3vm1BBCKOSQTUV/gUEzgWR+td7sYJZR2RVrBa4aAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pPJ1douQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43113C116C6;
-	Wed, 26 Nov 2025 12:03:43 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bk2oDLSiwXCsXsVSq9n0Movx3das/klESJTYEKTmex3LEW+5nlpjtbWG8ojrTf7ZZklpebJo99InBPfzTTxqRa3bZpth9qV3425EefjXQQt1avayLdPpcqy6Pc90cAQ8k8R9EKjBBQhWX7UO10FDwqSlLoiQqf4tmvw/7sEUtv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IIi98YGj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6E8C113D0;
+	Wed, 26 Nov 2025 12:05:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764158624;
-	bh=AJX990TL2Lzy37GFauxayUAAQy0YTLRCXavdQ4ir430=;
+	s=k20201202; t=1764158726;
+	bh=WIpGzrVFgHunKp1xwPD63zz5yulphG7CNmzLxHDjyjQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pPJ1douQ7kEbjTqU5pk48NP69EaEygB8yLVeZbmvWQfpQSs/agjwAP7btm0S82kZv
-	 pmvIXZwKEu775hKsfWc2zEQ9RkljEhhrr8hoCmZK/TAsXUT72Ya9dbtr+Wn4E49KZj
-	 Wrlx2J74ohgHxNrQtuQPvJtX7FNY1iD1I305g9hRw6sP22TJb6l5UTpmLdb8kO6boZ
-	 fZHXELw2tiAZrNU+SRa1beC3w6gym6o7sUAI6qJ6ca0MMWeBHdZTlPsfAfaI+uQqSL
-	 evsUO/qskoRYXU6d+Hnfz22Mp+ptrn7zkM54AU67dsSRgwOJ/+Px1BZVDM0Zje490X
-	 jByUgN6uNlAig==
-Date: Wed, 26 Nov 2025 12:03:40 +0000
+	b=IIi98YGj6OkSRzsw+QLGVGtcdZCh1YiAobd/IgLKOI0pFqFTgANx3BuEPNMiYuyNW
+	 APkV1dUzad+7+vmZay2TEx9vI5AHxE/LH8Tmph5H3AeLIM3mMmYjigNp+dIYVasxLt
+	 0qYCxIuWlvdDefri4mNuvqRgl7zc2Y3KWamOTDE5LAVxuqwsJX7DN20BaVrfT9oykZ
+	 NkwSlnPLC2H3K0ejdJpMTz1jBGDLTlNzavDK6QqtMDesshrNQ5PQiPyEhBlEDNkxB0
+	 kR6+ljWn+ULWIx5pWSCoLam63WDLHwvO1Nbwy9KHR1ixJz4F4wg1DBzQNngtHodF8Q
+	 K85jlT3YwmU5w==
+Date: Wed, 26 Nov 2025 12:05:22 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Conor Dooley <conor@kernel.org>,
+To: david laight <david.laight@runbox.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
 	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/7] spi: microchip-core: Make use of device properties
-Message-ID: <72130514-d9a6-4cbe-ae7e-7e23abc95286@sirena.org.uk>
-References: <20251125201700.1901959-1-andriy.shevchenko@linux.intel.com>
- <20251125201700.1901959-3-andriy.shevchenko@linux.intel.com>
- <8d4c9c21-63ea-4217-9579-c8a3bbb58946@sirena.org.uk>
- <20251125-cricket-disregard-581e5b722d91@spud>
- <c9248874-7380-47ae-8b1c-33037b7beeaa@sirena.org.uk>
- <aSafnlEbZt-yFzbv@smile.fi.intel.com>
+Subject: Re: [PATCH v2 2/6] spi: microchip-core: Refactor FIFO read and write
+ handlers
+Message-ID: <720a960d-797b-4404-90ab-e0c75c12a151@sirena.org.uk>
+References: <20251126075558.2035012-1-andriy.shevchenko@linux.intel.com>
+ <20251126075558.2035012-3-andriy.shevchenko@linux.intel.com>
+ <20251126092145.2f8e4c8d@pumpkin>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,47 +60,40 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qg0xmQiNKArmgkTS"
+	protocol="application/pgp-signature"; boundary="HgT28zdSZ+BCiKz/"
 Content-Disposition: inline
-In-Reply-To: <aSafnlEbZt-yFzbv@smile.fi.intel.com>
-X-Cookie: I don't understand you anymore.
+In-Reply-To: <20251126092145.2f8e4c8d@pumpkin>
+X-Cookie: Murphy was an optimist.
 
 
---qg0xmQiNKArmgkTS
+--HgT28zdSZ+BCiKz/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Wed, Nov 26, 2025 at 08:35:10AM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 25, 2025 at 11:19:22PM +0000, Mark Brown wrote:
+On Wed, Nov 26, 2025 at 09:21:45AM +0000, david laight wrote:
 
-> > I really don't think it's a good idea to just do it as a thoughtless
-> > default given that there are cases where we actively want a different
-> > interface on ACPI or don't want to see a device used at all.
+> I'm not sure I don't prefer the version with one writeb() call.
+> How about:
+> 		writeb(spi->tx_buf ? *spi->tx_buf++ : 0xaa,
+> 			spi->regs + MCHP_CORESPI_REG_TXDATA);
 
-> Okay,I think the commit message is a bit misleading. There are two ideas behind
-> this change, one is to have agnostic APIs in use, second one to make code
-> shorter and cleaner. Assuming we are targeting the second one as a main point,
-> does this make sense?
+Please don't abuse the ternery operator like this, just write normal
+conditional statements.
 
-I'm still a bit dubious TBH, I didn't spot anything super obvious in the
-patch and there's the whole should you actually use anything other than
-DT question still.  It'd seem better to make the OF APIs better if
-there's some big win there.
-
---qg0xmQiNKArmgkTS
+--HgT28zdSZ+BCiKz/
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkm7JsACgkQJNaLcl1U
-h9DVTQf/R6zInaGvVl3GSBnxp4MidlbnAE0s8aivH99An+qmZLMkjOBEgjjjC3Dt
-wLauUk0SeygJfrNJaOu8Ji5aGxadvjn/J4A/9CnyzuEtW+M8fF6EHF4li++gjFFl
-C3J/0O08k5JHRkMEedVQJ+KjWaTyNpEKJYp3OS0Ou5W/vL6L2F26WZ9qiJ9RUOhT
-R65QlgYvGPDxniv67XtUqn/iSB6dMuNWYskUzClcQqD41rnrHm/OL/JFFkzz5PSX
-eE/pVOt7K7H+kBctlcYjc6R94aHT674QNlbUtoRdm/wTT1zC0IYD/erPYFdR1mZx
-dQpAcpGRhKXxYnNVPoF0zEEzwcxX9g==
-=r9ge
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkm7QEACgkQJNaLcl1U
+h9DSIwf/TNxkTWgPOuilJ2qM+ayvfyrVIfj+ne2x1JfsnvSertt+9TCDVMEJE2GT
+cm/6ALNHHH9KCj4L7UWamhUT0XiPe4YdUvBhS1wfoVsG0LtqipLvNUFwRrmsbTmx
+6JwzdBwqTll+V/69UMEzBupJZdF0k9FJpjymen2Bh3dfmo4Yz8aJXtb6qeAkgUcp
+MKl9mkzq1mAFdAal5XrW+UDEVyi8MCd59Gka1yCgP18WBfw9vwN9k8Rn8vPXYZQM
+B+/evMRL2VXyMMB2WfRAOlvgPmquYTw2Z7DMwhOF4BStrKBeldYTKYcYC9KPU5kd
+Fybz6eMLLEYi709cFPYCzzk5n/IvYA==
+=HbWl
 -----END PGP SIGNATURE-----
 
---qg0xmQiNKArmgkTS--
+--HgT28zdSZ+BCiKz/--
 
