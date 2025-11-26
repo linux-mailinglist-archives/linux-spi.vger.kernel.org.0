@@ -1,134 +1,83 @@
-Return-Path: <linux-spi+bounces-11577-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11578-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D48CC88F1A
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 10:28:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 418FDC891C0
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 10:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 15A0F355D58
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 09:28:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5C9A3A53AE
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 09:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070163168E4;
-	Wed, 26 Nov 2025 09:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1124B2DECDF;
+	Wed, 26 Nov 2025 09:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arduino.cc header.i=@arduino.cc header.b="DgiBW3yo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llsKr8Sl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046543016F6
-	for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 09:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BBB2EBBB4;
+	Wed, 26 Nov 2025 09:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764149295; cv=none; b=W1vAGgdbSJD7oPz0dlbjmoEWMoLdZSOX7vx01nzp+3+qXb5ceU8KPYa16YVlFtQ/lokIgkIOE5aMdI8rdkutdT2y2/o/07mUfJgDO2OcL3nUGpxtuSjCRqMGiNCTZLaLHM71gf5PrLx920KVXGcM9tG3wzDPc3XAWf9fN8CVn+M=
+	t=1764150609; cv=none; b=KO/X0ttPJ55tnXWMKz4gPdNh9N2hOCK00xioyLbXH1MPinLmJItyPHeTcr3WmwMDHWtkTcEL0jCRXFvkLpvMBv1weF/14yE0ZmcyGQR2xjWCqB3XqXSyw3gk/CJ5lObI+5nFjhpnf39BGwxgfXILnv4z4PGKRTMGbvrWEC/Sr0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764149295; c=relaxed/simple;
-	bh=EQI3YRAOQlsv/50/jtc+m8TveG6L4PJ60t8l+dOtrnQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jad9FMfoYTCD1+B9qYflKxA/n6dylfaLmaP5P2Wgrmw3gYekqf3fxYzufmCrBzjrblcE0+DY4r0ShgudjYmteR/d+nlXr8tYzelatrXPnP97xwC/fNXsBGVpzM2ndUtq7xhzb/Lrmth5xfZE3xzR8++E0FQpm1/CbXu0Vj7VCtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arduino.cc; spf=pass smtp.mailfrom=arduino.cc; dkim=pass (1024-bit key) header.d=arduino.cc header.i=@arduino.cc header.b=DgiBW3yo; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=arduino.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arduino.cc
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-591c98ebe90so8271527e87.3
-        for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 01:28:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arduino.cc; s=google; t=1764149291; x=1764754091; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=84kp7mvpy609O4P8atJgqEkhRccxZ+4bKydmYjW/Bdg=;
-        b=DgiBW3yoTOZhJCRZUMCwemm2CGfjuTLsdJ8ByLI55mvhp1TNvntfhwR196lZ72yrL+
-         BeUOsY8bh8XFUW4oJSmVAtSdo3IM1ChXPuvtSq2cmep6K3a0KJR/jMK6M6pEHvazHA1a
-         i85R9SIpY98WLtnnPwfslr7g28+on78YewR28=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764149291; x=1764754091;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=84kp7mvpy609O4P8atJgqEkhRccxZ+4bKydmYjW/Bdg=;
-        b=CeF3XN1zx6ye4L0u09m/cl47ZsBC2M+9KqAvpZd4qcmeAJPzN/yjbuwNOkgKssM2Y3
-         vTAko4t5hFrajKqviYguq6cc9irGOUSUdTJyBM1AvXArL3huL2P5N7fC5CP66rI9b4h/
-         q3eL5IdXuuYSK37AOCTG351rwNsrWDz4zlknr8HsxwmS6AtYMzMa8pE60O+pJ1n+wCse
-         QmT/xCeUoTyCZnU8OWDazInl7EwtoLSNwr5PrhaSxc0bkzqWtx4GMas6x4hd0De74MZx
-         U+hdU4qQlgkZQWO9y78EmYlSCsMiJfCdHv7AHd6aVg5aHcH+xg5afHj2oTh5iMcCjn+n
-         kgzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDE7pN16aJevZPmzN88tzjMzahMquePA8Pfu/FEp1549aar+oa5qC0kWCRTXvzEdR7HYsa1tYXcKg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJgaTd6SsQ+zu3lCeFpBxyVvBhdxLBf/Xgr/TAc5wGIvTGf7fA
-	Wjom6jn7Lviu0TJCoqhq6PEQ4OQImYJ79k4gEQzy0Pr46RK9UDm+M0UT7B05GRYsldCnxuEUIXs
-	GUuQtIm46uLvc6KwJc9q9gbYfnI1ovaac07FzllfuQQ==
-X-Gm-Gg: ASbGncvZnsm+W6e1F5LvfjQXoDxkAJUTNngpsrw/yc3ikFE34RZhVc+Anl1CawHFAOZ
-	1TuMuYvYMS8FdHt08MUgY0VYsK9fkbI35fmHBzEpWMDNwq2sceeEbQZmE5jxXBWpl8f5FKSNf1y
-	vH7x4gQf42F0Y4+cDemAZ37pMb9ZXTklZgX+N6UZHFsO8wj1LOpZ2oLvSPh7VJYY2YvYzOyncXV
-	KfMcevwit0KS7PDIaKQhOZj7bW4vTIx7W2T/+0P4nM6yy1DoNMWKdJsQC+pfh6dxj6qzomL
-X-Google-Smtp-Source: AGHT+IF1+PB8oM28RkeDHPoge6KuDSLw2KinizbNZu9Z/hmrrITwS55K9mgMQr+6rdi6qM9GjhtyjajgRbxpYywLwKI=
-X-Received: by 2002:a05:6512:3d1f:b0:594:2e7e:7897 with SMTP id
- 2adb3069b0e04-596a3ecee86mr6911639e87.29.1764149291029; Wed, 26 Nov 2025
- 01:28:11 -0800 (PST)
+	s=arc-20240116; t=1764150609; c=relaxed/simple;
+	bh=H+4zx+UsNc04/booLLfbhUc+FC8ScxXoB4fFnM/XB48=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NAR7DqCiHt6U9lJnZ9nch4yV42gvuVXg8DJ4GR8R7sWMx4ZxxiPyE3F8CdDnUb24bndqkY1UkMuOSsbZFYUCPGFa+4roUcvsrC34DyGGmB/srQYEURMFezcW5FsO9j0pUnZv0isNzIO2gJ3AD64HM3NDr6JSkCwAW1RpJuBUd0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llsKr8Sl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1155C113D0;
+	Wed, 26 Nov 2025 09:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764150608;
+	bh=H+4zx+UsNc04/booLLfbhUc+FC8ScxXoB4fFnM/XB48=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=llsKr8Sl929Oau2ZnXLhK8NaO/aWot5j8Wej8OuW+DkhBtaslsnbUKwDSp4L5wwv2
+	 wpJaETkiPab7ShCVnBnP5ARFERkRuUjUrcw7GNqX/OLTAcm63PTLhQEBH0qhJoeRjJ
+	 YA6Hl7iDRZ519eiSQpOsBBU9gwWEoRrW7MEe3Rob3/cTF7yF3DoEApVQQx86XhsjPy
+	 YcRqzEMFw9TRmrks5wjlFDoVU5Z3faDJh3SZhXl86iL/n7R+WRHtYqd0xRPWKFP+Y7
+	 84I47u2FXVHKL8r4Jy0gc/cUafHYroYWqWXfORcePn+BlWI/NFQsSAIz5GTbBZF0Nb
+	 0eEH98aCVduaA==
+Date: Wed, 26 Nov 2025 10:50:05 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, linux-spi@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] dt-bindings: spi: renesas,rzv2h-rspi: Document RZ/V2N
+ SoC support
+Message-ID: <20251126-nifty-bug-of-music-d9f1cd@kuoka>
+References: <20251125214529.276819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
- <20251120155825.121483-7-r.mereu.kernel@arduino.cc> <45329a9f-545b-4425-9667-26bceca67982@oss.qualcomm.com>
-In-Reply-To: <45329a9f-545b-4425-9667-26bceca67982@oss.qualcomm.com>
-From: Riccardo Mereu Linux Kernel <r.mereu.kernel@arduino.cc>
-Date: Wed, 26 Nov 2025 10:27:59 +0100
-X-Gm-Features: AWmQ_bnksptY2VS0WbIEjjuom7AG_UPOEx3GG-ifRxT1W7-ppfRbkLP9jL5JiOo
-Message-ID: <CAKA1Jha7HuEC-KgGktmuiG-U0ZVbKnmLU4bXTwLg+paoLpQ=kQ@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: qrb2210: add dts for Arduino unoq
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, broonie@kernel.org, 
-	linux@roeck-us.net, Jonathan.Cameron@huawei.com, wenswang@yeah.net, 
-	naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com, 
-	chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com, 
-	farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-spi@vger.kernel.org, m.facchin@arduino.cc, 
-	Riccardo Mereu <r.mereu@arduino.cc>, loic.poulain@oss.qualcomm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251125214529.276819-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-On Mon, Nov 24, 2025 at 12:44=E2=80=AFPM Konrad Dybcio
-<konrad.dybcio@oss.qualcomm.com> wrote:
->
-> On 11/20/25 4:58 PM, Riccardo Mereu wrote:
-> > From: Riccardo Mereu <r.mereu@arduino.cc>
-> >
-> > Arduino UnoQ is a single-board computer combining Qualcomm
-> > Dragonwing=E2=84=A2 QRB2210 microprocessor with STMicroelectronics STM3=
-2U585
-> > microcontroller.
-> > Support to a simply boot to shell environment includes:
-> > - UART, I2C, SPI
-> > - onboard LEDS
-> > - eMMC
-> > - WLAN and BT
-> >
-> > Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
-> > ---
->
-> [...]
->
-> > +&wifi {
-> > +     vdd-0.8-cx-mx-supply =3D <&pm4125_l7>;
-> > +     vdd-1.8-xo-supply =3D <&pm4125_l13>;
-> > +     vdd-1.3-rfa-supply =3D <&pm4125_l10>;
-> > +     vdd-3.3-ch0-supply =3D <&pm4125_l22>;
-> > +     qcom,ath10k-calibration-variant =3D "ArduinoImola";
-> > +     firmware-name =3D "qcm2290";
->
-> I'm not sure about this line but otherwise this lgtm
+On Tue, Nov 25, 2025 at 09:45:29PM +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> Document the RSPI controller on the Renesas RZ/V2N SoC. The block is
+> compatible with the RSPI implementation found on the RZ/V2H(P) family.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 
-This should be fine, I'll gently ask Loic (added in CC) to confirm that.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
->
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->
-> Konrad
->
+Best regards,
+Krzysztof
+
 
