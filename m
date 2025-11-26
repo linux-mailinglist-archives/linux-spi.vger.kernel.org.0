@@ -1,137 +1,186 @@
-Return-Path: <linux-spi+bounces-11600-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11601-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF909C89F5C
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 14:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8966C8A24E
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 15:04:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9F5504E41EB
-	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 13:16:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5CF524E5B6C
+	for <lists+linux-spi@lfdr.de>; Wed, 26 Nov 2025 14:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561D92F0C66;
-	Wed, 26 Nov 2025 13:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD0422D4D3;
+	Wed, 26 Nov 2025 14:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6ayN38z"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="O5uUQ9t0";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QrX7p4kp"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A192EF67F
-	for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 13:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A8F21FF21
+	for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 14:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764163002; cv=none; b=TkLarTGyf+lqGJmGw/C+XbAIIuC1IGMGmaYEkLFjajJl24BYLN+c0cOKVKAi+h1BaM4WnedNosffh8EFvtLwUvTxEPf5E9jpusI2gWrCasOpIc3igDxtGgrOSQdK0yH0ACekEL2uenkBYDJD2TalixcJ1ritt8DKgPnurtA1m+8=
+	t=1764165845; cv=none; b=W5g6QYwTzdqsrtJIyUQTxny3S3krkpU1o7WJcp4hCRxBnfsKyGh5X/UDqyW3LLkbZt6690UUj4iuuFOp8IbV2OSEonmJB6AsS+7VZwf+sP+GvjpW9Gsb/FxRN1a2M6hMXjMLrtUmOOYGSXVc9V+SRxNO0rzM+abtMmXenR/H4H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764163002; c=relaxed/simple;
-	bh=faWv1BKLwmgrRhsFbzM0nSUy4lZJQpHt6weQy1mt2AE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p9+6BsztwhgKA3Gq3ZoD3+VJxE9JybuXp4G5lELfhD6ua0iJAnPfH0uEwqKxhxKz1q/gv+voiGZcvLWqe8VuWrP+YOHsWrpqsX+wDpSTbt46KDpVEJ9BMp0oM/ZtyqO2VzobyOCuBbHV3ELREZ+k3WvSmm+OtZkricqeQBPqUAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6ayN38z; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-47774d3536dso7291505e9.0
-        for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 05:16:40 -0800 (PST)
+	s=arc-20240116; t=1764165845; c=relaxed/simple;
+	bh=8v1x2RS2pjT3QKt9mvzTfTrPxDuF/2BMWOoPGs7cASs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uzlx4WLl+OYZIlX3YGkL5dw1jo+sxw4AVgEbZdrfBt3+z4XaaYK4fSC+EDTjGexeTlGeWCAFR23JEjce4kZUMIgCuTDC6swR7jOgBJc0yFkhaMoZO9gY6nWOVYib3AojsZ56vjOxOkI7kXKxDHHdtz0k7J1nyVyL28dqGqHnVm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=O5uUQ9t0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QrX7p4kp; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AQBNXHe1849220
+	for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 14:04:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	j4Pu61FlX7ik1HTPqKufvU6avYQgm5W31lthRKIaR6E=; b=O5uUQ9t0jKDO1yBw
+	NoMLZMVCy0T2XEbjHzAadosxwOexC41Ckz95dn937mPdH3F+/cG6RtPsVu9ataZW
+	XTAF2FUTDSCE3uMdAaTliiMb1fh7m+wU64VhH1DV0nXl7OgtI9tVzJczewYsQseg
+	54RUtXGey3mEfMwvJqzzd5LuSYP4Xex5t2rg+SGyArKGRsbosR0NrlDXvSo5ay5s
+	7AIFkM2IGKNV/uhCCaf4+EMIXMrdIYzO/HqN8XOQYToyZoCgi/lHM1itKhsN3l4r
+	LaxYFyRwhCrOOX7vXrb8sx9JNk+eXfD6HjKsGQNE6V/HhXDAvpMCn+5ZIGDA3qVn
+	B1/6KA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ap0msrca4-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 14:04:02 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b1d8f56e24so1832011685a.2
+        for <linux-spi@vger.kernel.org>; Wed, 26 Nov 2025 06:04:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764162999; x=1764767799; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dc20KpcKGsyBbwnSDgDryYseKZ1HNwXdU9KURNVAeLQ=;
-        b=b6ayN38zcsyyx2qqMFhIaFNK8rj+NmbTd9+ya2o4eeExRN8c71MGgcCqC4yTk8N9uq
-         SERAiD4vE6DdZjKFmXlwMJPezhuKwfNL2HE90bo3mqrbw9Smg7H8rMtiZGfvgx87bB7L
-         DsiqX1nHVZUOmIp5xfaNGPU0LDwbS6cce5xpYdfghcI5n4H5rUqZ6zDgfEirw0VJIngB
-         XlMPdEC2dM8n4soT0FCSt0hWpgGWsvu69Cv9DAb+sa1wqYkOy8k8yhmiu0AunqHlCTbB
-         WyJA+eq/1nmsADdD5nQpkmZJkfFlC+8TghlN7HIShOQ9rfw1JABU6c0uHKWKKakv2YL7
-         dR6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764162999; x=1764767799;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=oss.qualcomm.com; s=google; t=1764165842; x=1764770642; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dc20KpcKGsyBbwnSDgDryYseKZ1HNwXdU9KURNVAeLQ=;
-        b=LnJzSN9lmKopdaoAPIuV3M25eTVPIVM5CrVdNKRqDt88+Y/GSSeoPRmR0i0fojjzQD
-         BaXZKEcj6gz5d/lUxo7jJrBvfCzp9RVJOMA/nfEw4TIixBoZDbw1uMGMYMs6Xu5aQu54
-         z1bfEtPvglrxaMS8h8jwn391SwoOHnvXPdWLQdPI65vABvQWcJfUmj7lqV5kqJRRauoQ
-         jVCUUWpJ0fSKC1KGodBpcBt1PH1qTapytKFc8IgW3l8XfU8neHaI4cnh33V9Op9NzYha
-         kn1UiuzRpED8EdR0g4zRUdaREke3m9defZMe5tFiXlEuP06ynOVH69iNWGvhZiLqRtas
-         SNRA==
-X-Gm-Message-State: AOJu0Yz7ysFmxvxGnuQqSqE38qcbJ3569ZxUONm2Gi8oUnG/ztiNaVvT
-	zFS+n0A0bEvf2Y7njOCflnY8r5TUEP1Fe1PaDfHzFpQbCKhH1WnlVx3a
-X-Gm-Gg: ASbGnctpxyNjgdVR+AV98ojwzM+nHYVAaLbVNfhCdPb1QhvXFmQnSFxRSl0wbnRHRQV
-	AnSZ1ggAW9vzXCDFNUuX0mI9tdrzjVAbv9fUT2YyBW8/rdDDiFZX9o1frA7xaiOQ+kdM/fVwTBs
-	kN7G1daMMG3flpqjepW0xru9EJPGiIeKcdJCIzpM/1jU1E16+szKtQB5P02dgslw7FUVDNCGLOF
-	oa/qTz5lGP4/ju4dMcfsPNIjahw9x6TjLgCGmqOU1UBA0+r0imc3yxqalFJbI3Bwueh/J9d/C14
-	kKH0hRu9j79uWA6anI0DClP3DKLdJcx+8UwDy0UfOJ02Ie+b75XWSLfUa9PMKo0oyDwzyWEaudi
-	hZBoTQ66eDhh0p3BoZf+OvEaH8wG2AAGn4jY24r0UAaH034W6IFHxZAFhVvyykHIi+yTK7/Nj1l
-	6aSLxt96vCxLn4Cfrp4KPVKUPJfyL9k0irk9XWjVlfpWpz
-X-Google-Smtp-Source: AGHT+IHGVgsex1aozh3uavACEdd6jeuHUy0ja4ZwFhFW6QS6OThl3MSD7NtoCvVd0LZvrzgAMxoBaA==
-X-Received: by 2002:a05:600c:4b19:b0:477:a53c:8ca1 with SMTP id 5b1f17b1804b1-477b9ef5131mr158874325e9.14.1764162998946;
-        Wed, 26 Nov 2025 05:16:38 -0800 (PST)
-Received: from iku.example.org ([2a06:5906:61b:2d00:1f84:8744:5581:e00a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479040d3c72sm44142985e9.6.2025.11.26.05.16.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 05:16:38 -0800 (PST)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-spi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH v2] spi: dt-bindings: renesas,rzv2h-rspi: Document RZ/V2N SoC support
-Date: Wed, 26 Nov 2025 13:16:19 +0000
-Message-ID: <20251126131619.136605-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.52.0
+        bh=j4Pu61FlX7ik1HTPqKufvU6avYQgm5W31lthRKIaR6E=;
+        b=QrX7p4kpGsVyWhvtwVhgG88Cquxk0nkja32EECfsltu6xXnAsJt1wdoOhQzUV+ow+C
+         4oUqS+paPeOgHpQ+OFmlcNWZt+/93nJoHB+ouVOimSkZqAkY8EGkzmjsqyzZg3k+dFRK
+         cFP2hAbps9+dlUC+9TylcTodF3e7iA5VBlSclYRD3uuvUMt4AOg1NHlAPkkHERxrORNz
+         WJvcmL7UVcqKVMcZebi/F1E+zqGgfQtCRtHXgZiBxxwIYzIxfy0jKfacAB6qgnj219RD
+         +j9l+HGCe7bK+w65fPigAs5Z5JRFEtJT35JTLDzTZ1l18EAwXStQXgHkFOPuHkochG4r
+         3VgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764165842; x=1764770642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=j4Pu61FlX7ik1HTPqKufvU6avYQgm5W31lthRKIaR6E=;
+        b=R5v+2uCzo2KReE/6b89CcvhnqyEO7UFeorYKcud+7ERxBvlMW7OXqWd6hmgkCHNuBs
+         oBUG7taAw5luGWqN2QXmqfzcQpNmdQp3xItqma2NGPF+fGgK+qFUxQkdUS0ozuI3g5n5
+         gkRzbt1OVbqgaj3k6D3KdG/pZg1q5VcKdMlEUsNj1EE2YpWNCixeZQ/CfwHIHPD62cZr
+         5UCK9VsL+ZI5xvb6z+q4ggszLarH2WYitBSDAr+7qup6Zxe0tYm8gFfuQvREUcWQD3vh
+         B0iS4pWDEKnBv95nxG32aGI9cXhV7UHE0eFAEKCNRYk/5dvGOjEvIS14JcwzosP0xsSQ
+         mTrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXWzUgzzE44JaSzwHfzUMTzN7pkzl6Jx3LU2N+lHbKYNleuIoQl0lhl/P7HCfhFNE4yyOTlq/frCjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyziueI2WA7Sac1IogJrpFMTwdNaaExM+4vsBWTJCNTS5MP4TtN
+	FlJ6/RyLGEyhxfmpAU/VVGB5uqBP0qygpCYv9XjbeGZ6eSowXiq4UKPLnIn0JBn6z5KzzWLxVh8
+	BC6RbIj/WueRn4omkM6smazzTg1k4WAxophnuM9qDqBExlewk4VSF+JPH406F8WyHQGFyQLCn7P
+	UBfMI16e6ZONcD8dOJ67SPVP5O2usEDZy5zlRTBA==
+X-Gm-Gg: ASbGncuIANaq7gd7uu3xonIg9BpiZvdpjaz3jtdjj57hK1USmxU/mHPFw+ChiMF6u17
+	xF+ze3qXatby7DWzDSNzNRMRrKyne/HuprVB8lO6A+PoKkzPoIAIKhcudYk+EUejxHLEvQjSmPk
+	d7t/iluwlR+d74rOaR5h6yDQBDjwzDck5CsNpi3hN+CRa8/kfQz8thk8ljeTwfRT8GFt2HN5OaP
+	0s4iu6YAbEKmRjPcmV/WFVRVn8=
+X-Received: by 2002:a05:620a:404f:b0:8b2:e922:5297 with SMTP id af79cd13be357-8b4ebd6fd06mr928361485a.21.1764165841518;
+        Wed, 26 Nov 2025 06:04:01 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHsbcB5py6KG3ibgJ3gEgq7um1CGHVok1rTCxoPdVhPI5x/5mvjr3hUdeJyz7HAPgluh6fFxRrAfnZqtAPHkl0=
+X-Received: by 2002:a05:620a:404f:b0:8b2:e922:5297 with SMTP id
+ af79cd13be357-8b4ebd6fd06mr928355185a.21.1764165840892; Wed, 26 Nov 2025
+ 06:04:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251120155825.121483-1-r.mereu.kernel@arduino.cc>
+ <20251120155825.121483-7-r.mereu.kernel@arduino.cc> <45329a9f-545b-4425-9667-26bceca67982@oss.qualcomm.com>
+ <CAKA1Jha7HuEC-KgGktmuiG-U0ZVbKnmLU4bXTwLg+paoLpQ=kQ@mail.gmail.com>
+In-Reply-To: <CAKA1Jha7HuEC-KgGktmuiG-U0ZVbKnmLU4bXTwLg+paoLpQ=kQ@mail.gmail.com>
+From: Loic Poulain <loic.poulain@oss.qualcomm.com>
+Date: Wed, 26 Nov 2025 15:03:50 +0100
+X-Gm-Features: AWmQ_bnu7I2BV-0kj-pM4cBdPYEuUByoq8WpKikAvYHg-1WklPoc-0N_i0hL9x0
+Message-ID: <CAFEp6-0kHtbXKQRtaLUB1bqRV5s_c_bcoAWPdTOH3JvV69rUqQ@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: qrb2210: add dts for Arduino unoq
+To: Riccardo Mereu Linux Kernel <r.mereu.kernel@arduino.cc>
+Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, andersson@kernel.org,
+        konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, broonie@kernel.org, linux@roeck-us.net,
+        Jonathan.Cameron@huawei.com, wenswang@yeah.net,
+        naresh.solanki@9elements.com, michal.simek@amd.com, nuno.sa@analog.com,
+        chou.cosmo@gmail.com, grantpeltier93@gmail.com, eajames@linux.ibm.com,
+        farouk.bouabid@cherry.de, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, m.facchin@arduino.cc,
+        Riccardo Mereu <r.mereu@arduino.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-GUID: 0cCB9QrLLCNttFcXMRyC_egLfEvWrWqi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDExNSBTYWx0ZWRfX9lB9OnjZuSuB
+ K/vEbSJC19Gq0ymzOXtsooT2TjZaXXbpBYqu9iPztZjF2sWweV4f8h5ze9nQWaF8M15B/klevul
+ QCi0J+a8KkdP3dYJU422ZKK1u+g96x53Y7mBPHqNrHFaALZesFnFJ9s7G7xxi0wFI71XfEZM1RR
+ ucUo6pJQKV0xAOIkeOKqWUQLQ6H+h6Gu0kA8JEEqKjvF0Mo2EelcdiWGCPfq11s/NEQY8HiBnQ5
+ 7lwpfzHbkBHnpRJDBjT6wSBceSBwbzO/XPddHG8D0fysXGt88qj9hvjI7jZvRnEtV/ny/W/sxqW
+ zOlmI/WmOWgrSBmBR+kzK15Y/17UkVXR3rKYq8jIohbcVKl1eH8mWTH081AX0v7bYWki6PseqMu
+ sc1a8llhuqDN0e3FALiI4Itschq1qg==
+X-Authority-Analysis: v=2.4 cv=N5Qk1m9B c=1 sm=1 tr=0 ts=692708d2 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10
+ a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
+ a=JSZs4kpC3w6-UMKaf54A:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-ORIG-GUID: 0cCB9QrLLCNttFcXMRyC_egLfEvWrWqi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 lowpriorityscore=0 adultscore=0 spamscore=0
+ clxscore=1015 bulkscore=0 suspectscore=0 impostorscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511260115
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Wed, Nov 26, 2025 at 10:28=E2=80=AFAM Riccardo Mereu Linux Kernel
+<r.mereu.kernel@arduino.cc> wrote:
+>
+> On Mon, Nov 24, 2025 at 12:44=E2=80=AFPM Konrad Dybcio
+> <konrad.dybcio@oss.qualcomm.com> wrote:
+> >
+> > On 11/20/25 4:58 PM, Riccardo Mereu wrote:
+> > > From: Riccardo Mereu <r.mereu@arduino.cc>
+> > >
+> > > Arduino UnoQ is a single-board computer combining Qualcomm
+> > > Dragonwing=E2=84=A2 QRB2210 microprocessor with STMicroelectronics ST=
+M32U585
+> > > microcontroller.
+> > > Support to a simply boot to shell environment includes:
+> > > - UART, I2C, SPI
+> > > - onboard LEDS
+> > > - eMMC
+> > > - WLAN and BT
+> > >
+> > > Signed-off-by: Riccardo Mereu <r.mereu@arduino.cc>
+> > > ---
+> >
+> > [...]
+> >
+> > > +&wifi {
+> > > +     vdd-0.8-cx-mx-supply =3D <&pm4125_l7>;
+> > > +     vdd-1.8-xo-supply =3D <&pm4125_l13>;
+> > > +     vdd-1.3-rfa-supply =3D <&pm4125_l10>;
+> > > +     vdd-3.3-ch0-supply =3D <&pm4125_l22>;
+> > > +     qcom,ath10k-calibration-variant =3D "ArduinoImola";
+> > > +     firmware-name =3D "qcm2290";
+> >
+> > I'm not sure about this line but otherwise this lgtm
+>
+> This should be fine, I'll gently ask Loic (added in CC) to confirm that.
 
-Document the RSPI controller on the Renesas RZ/V2N SoC. The block is
-compatible with the RSPI implementation found on the RZ/V2H(P) family.
+Yes we need to use the firmware APi file under WCN3990/hw1.0/qcm2290
+as it has the correct configuration for the QCM2290 platform.
+From log: The wlanmdsp for QCM2290 / QRB4210 platforms requires
+single-chan-info-per-channe feature bit to be set.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v1-v2:
-- Added the item after enum for RZ/V2H and RZ/T2H as suggested by Geert.
-- Updated the commit header to match with the subsystem naming conventions.
-- Added Reviewed-by and Acked-by tags.
----
- Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-index be62fd0841aa..0253c04c28cb 100644
---- a/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/renesas,rzv2h-rspi.yaml
-@@ -15,6 +15,9 @@ properties:
-       - enum:
-           - renesas,r9a09g057-rspi # RZ/V2H(P)
-           - renesas,r9a09g077-rspi # RZ/T2H
-+      - items:
-+          - const: renesas,r9a09g056-rspi # RZ/V2N
-+          - const: renesas,r9a09g057-rspi
-       - items:
-           - const: renesas,r9a09g087-rspi # RZ/N2H
-           - const: renesas,r9a09g077-rspi # RZ/T2H
--- 
-2.52.0
-
+Regards,
+Loic
 
