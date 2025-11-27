@@ -1,120 +1,123 @@
-Return-Path: <linux-spi+bounces-11627-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11628-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F02CC8F69E
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 17:02:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BEBC8F8BE
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 17:49:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E4CBE4ECA09
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 15:58:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 36BB04E1034
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 16:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3748F336EE7;
-	Thu, 27 Nov 2025 15:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FA9336EC0;
+	Thu, 27 Nov 2025 16:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="akF8dwpr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HwuF4wgm"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF60231858;
-	Thu, 27 Nov 2025 15:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206192D9EDA;
+	Thu, 27 Nov 2025 16:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764259089; cv=none; b=ZQmAP5+AWg91U2NWiEVzvSO85N3cmnIvIUpAOO+EHf+J7iMb33sIoJlE5W8393/LbFfUQm/Ha+fggZtMOJWnpQxBsPe66B1Mw/S6Kck2TH07BL0zlR3xtGCgXVr9ENfrCn0fMrSu/CgKu1W7sRu+jyY+KPaykbS1dhNIFQC2Y2k=
+	t=1764262174; cv=none; b=OUMhPueu2jpAQCk5CKi0TjBU9KRKtT8K4HrmCTqP6lMjUhtl0dewcaiNONpFnzW6i5vGv8rtVgiGVHnQ29zyRUUtdrtslL9oZC/hIf8cDiTfLhr8IVT3lvPzgKPinm6Zs+65bL7sVoVrxL7kmYOezPvvask/tnhdb+OPTV2GK5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764259089; c=relaxed/simple;
-	bh=B76jvNuezJl5RDDNSVj5p96Fgml0dOGU9XUp9gb0Yxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RBEjHY3Kg/wZGuoodaf/zEeIElNJBqm8xCh+kFExcV4Z3KX9HtpKiOwzEwA7A4HA1nhutU5MALMPPcnrVVkGQTb2ceeqm+XxuDCIjgb4oYK42Tj9wOqdeWZgUnTLLXUHj5mUM1EH3qiDPtaOhPTilwQsclnVqr1wW+kpAz6Vab8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=akF8dwpr; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1764262174; c=relaxed/simple;
+	bh=df7XJwCppbnJGE9EnRuzTYmPP76APnFMQdfypzxe190=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFDomvapAbzWeSmYz6Z1N9fgFZfyHT0sSFVRcN1XSSQwpNx0AGx0de1AG+tzdRe0rDZGKnEAOdUsGMyHyCfLVqvQU0yHMtl47QHdUMzeLX59pKoY0tH5T5ifuwS90mHdUdxNP4MA01g8DADodpOgEih3c4Id5I05tN/splJI2/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HwuF4wgm; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1764259084; x=1795795084;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=B76jvNuezJl5RDDNSVj5p96Fgml0dOGU9XUp9gb0Yxo=;
-  b=akF8dwpr1GC/lLwj1iTnBZ/Ivl7EafouwwffoolycE8DRU4smYZiS6q8
-   Fh2QEsSBIOMuuwPo6m4OJz/hFDVn/QyrDgr9O3luaHtSLPwBObZdLzj+Q
-   IZCJVw4Wl/4ciaDir5GZ8s4jjQ7TxUyTG4i6DMVy609zznST5gPmiytg3
-   pUw/IiLKebSFuJEX9ck3QPWsNg6mbRcKOH4CbAgjO2LmQ88FcCtx8YwDa
-   gfC6ocnrbz7B6Mdevj/hE5nb4REGuMkyfz+WRQvgvU4xwKDKW5DGDCuvO
-   sEs/QouMBvDjGVBzq2Nh9dfyzqjBbe3J6RXzxm4PMKudzxvjjzPSlNDy5
-   A==;
-X-CSE-ConnectionGUID: +Nf61N02TC+aZJxHAR/W9w==
-X-CSE-MsgGUID: z+epkULzSPS0tHgKNuNqKQ==
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764262172; x=1795798172;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=df7XJwCppbnJGE9EnRuzTYmPP76APnFMQdfypzxe190=;
+  b=HwuF4wgmMOWycUG895dBEb5L1dXm1xQfwz/giTCq9tjXbqfc82IuqI0W
+   cGw5go8qUumo/MBSoHRhboLiHn9VshAFeResvJpG5IcR235LOOCB7fbYR
+   xEQ64QWP7FjMAX5D7Y7TP3c76oJY7Mov9px+x1dzq3JqhOw4bc6TpL3xL
+   F7HfdZSshWtCcmkRGHwqqjp7w9XrcFtxXHcfOpnbfCoLSvJT5XPwEeTw4
+   AGPl0X6LuV+fQw/f396CVlqV4/BPjWqSUchiTkYe4kQ4paRxYEwXZ/wuw
+   ST0CTbb6gf7T6ItVOgike4jBvdsRRe7hkWl2zMrMpZrvXN47CDmL9tzAw
+   w==;
+X-CSE-ConnectionGUID: CkZ+Df0NQLabd65hMUAVTw==
+X-CSE-MsgGUID: nOPKS+ELRY+30+qDosb9HA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66257081"
 X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="56365609"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Nov 2025 08:58:03 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Thu, 27 Nov 2025 08:57:23 -0700
-Received: from [10.205.167.104] (10.10.85.11) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Thu, 27 Nov 2025 08:57:22 -0700
-Message-ID: <48d3b29b-1010-4749-aef0-c66a72f1d8fa@microchip.com>
-Date: Thu, 27 Nov 2025 16:08:25 +0000
+   d="scan'208";a="66257081"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 08:49:31 -0800
+X-CSE-ConnectionGUID: GkjVgiZsSaOw1fZIsmYhZg==
+X-CSE-MsgGUID: A9jPccKvT0uz0/1myKy9eg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="197752243"
+Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.225])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 08:49:30 -0800
+Date: Thu, 27 Nov 2025 18:49:27 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Mark Brown <broonie@kernel.org>, david laight <david.laight@runbox.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Conor Dooley - M52691 <Conor.Dooley@microchip.com>
+Subject: Re: [PATCH v2 2/6] spi: microchip-core: Refactor FIFO read and write
+ handlers
+Message-ID: <aSiBF9nStZzUNGLA@smile.fi.intel.com>
+References: <20251126075558.2035012-1-andriy.shevchenko@linux.intel.com>
+ <20251126075558.2035012-3-andriy.shevchenko@linux.intel.com>
+ <20251126092145.2f8e4c8d@pumpkin>
+ <720a960d-797b-4404-90ab-e0c75c12a151@sirena.org.uk>
+ <aSbu4BA8pohsYSQ8@smile.fi.intel.com>
+ <48d3b29b-1010-4749-aef0-c66a72f1d8fa@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] spi: microchip-core: Refactor FIFO read and write
- handlers
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Mark Brown
-	<broonie@kernel.org>
-CC: david laight <david.laight@runbox.com>, <linux-spi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Prajna Rajendra Kumar - M74368
-	<prajna.rajendrakumar@microchip.com>, Conor Dooley - M52691
-	<Conor.Dooley@microchip.com>
-References: <20251126075558.2035012-1-andriy.shevchenko@linux.intel.com>
- <20251126075558.2035012-3-andriy.shevchenko@linux.intel.com>
- <20251126092145.2f8e4c8d@pumpkin>
- <720a960d-797b-4404-90ab-e0c75c12a151@sirena.org.uk>
- <aSbu4BA8pohsYSQ8@smile.fi.intel.com>
-Content-Language: en-US
-From: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
-In-Reply-To: <aSbu4BA8pohsYSQ8@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <48d3b29b-1010-4749-aef0-c66a72f1d8fa@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 26/11/2025 12:13, Andy Shevchenko wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->
-> On Wed, Nov 26, 2025 at 12:05:22PM +0000, Mark Brown wrote:
->> On Wed, Nov 26, 2025 at 09:21:45AM +0000, david laight wrote:
-> ...
->
->>> I'm not sure I don't prefer the version with one writeb() call.
->>> How about:
->>>              writeb(spi->tx_buf ? *spi->tx_buf++ : 0xaa,
->>>                      spi->regs + MCHP_CORESPI_REG_TXDATA);
->> Please don't abuse the ternery operator like this, just write normal
->> conditional statements.
-> FWIW, that's what my patch does already :-)
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-Hi Andy,
+On Thu, Nov 27, 2025 at 04:08:25PM +0000, Prajna Rajendra Kumar wrote:
+> On 26/11/2025 12:13, Andy Shevchenko wrote:
+> > On Wed, Nov 26, 2025 at 12:05:22PM +0000, Mark Brown wrote:
+> > > On Wed, Nov 26, 2025 at 09:21:45AM +0000, david laight wrote:
 
-Thanks for the series. However, this particular patch appears to
-introduce a regression. The SPI controller reads an incorrect
-Device ID from the peripheral.
+...
 
-I’m investigating the root cause and will follow up.
+> > > > I'm not sure I don't prefer the version with one writeb() call.
+> > > > How about:
+> > > >              writeb(spi->tx_buf ? *spi->tx_buf++ : 0xaa,
+> > > >                      spi->regs + MCHP_CORESPI_REG_TXDATA);
+> > > Please don't abuse the ternery operator like this, just write normal
+> > > conditional statements.
+> > FWIW, that's what my patch does already :-)
+> 
+> Thanks for the series. However, this particular patch appears to
+> introduce a regression. The SPI controller reads an incorrect
+> Device ID from the peripheral.
 
-Best regards,
-Prajna
+Hmm... This is interesting. The only thing I see is missed dummy byte read in
+case of TX only transfers. Is this what you have?
+
+> I’m investigating the root cause and will follow up.
+
+Okay, I will be glad to know the cause and help to fix that.
+
+
+Thank you for the review!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
