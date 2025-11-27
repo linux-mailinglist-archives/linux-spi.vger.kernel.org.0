@@ -1,117 +1,89 @@
-Return-Path: <linux-spi+bounces-11630-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11631-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E45B0C8FD04
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 18:54:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76622C8FD86
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 19:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D77834E2147
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 17:54:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 715E83A9DC4
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 18:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A5C2F5A2F;
-	Thu, 27 Nov 2025 17:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21A192F7446;
+	Thu, 27 Nov 2025 18:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7YjLAke"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iHL8IK8j"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CEC2F548C;
-	Thu, 27 Nov 2025 17:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19562F747B
+	for <linux-spi@vger.kernel.org>; Thu, 27 Nov 2025 18:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764266060; cv=none; b=OjBskgktM/7lRhoPv/SdRjNLEhGnS4VtG4JFGrFH46K3lw9uVZ+kBB9O5JomnzujtRGdgUhSyYwj507sWgh1QyVfTJLNkW9+KtuSC/5QnyI1i3fqe/fFYmxmUEcvHnV9h/IMFfjvTWiemX+JZlVIvNfRfnsMxQ0uj5vbFNPU+G8=
+	t=1764266447; cv=none; b=NgU8VDF+DPSswdyNV6EV355WTM1ROPW59pCV3BfK28ZXxvHOFzZegCKF4tr+oBw1z+4dJ7b+ln8eERQ2hW8TX7fHMT8N8QkQmw0y+oA2NJU6wDZuLmdFpR9Tpwmd4lab7/dhFoGr26MvehcjlG5pSZA4MhzVEK3+LoyRA75FGXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764266060; c=relaxed/simple;
-	bh=7ymQ4nasa/Y4u+AtiT0d04YzvAbGRGb9jcNryy56N9s=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OGB8l8d7AppcoDDhNhOC2Qy6BA9QV3BuyxIxQRJr+WHHRp+P4w7w9WNZ/tML4chQ3hCtj7Pn28DI+RhC7CDewcxVaqqtesZBuqMhsxy4PfnaDS0y5ZkVq2RP+QnKug/3Ze5XLqD7Y+wwdfcBUJT4hDwskNuv3C2EDLNwdNkHL9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7YjLAke; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962D8C4CEF8;
-	Thu, 27 Nov 2025 17:54:17 +0000 (UTC)
+	s=arc-20240116; t=1764266447; c=relaxed/simple;
+	bh=wK5kh9pTC0mfvb70WUKqtB1dMHiI8ZpHwVDX/RYkXlk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=u9jdRF+YFOCuNaLOqiq32m7bypFQCfZvFfSH0P84kXBHlgFVeWs8WVhXqigxnkxi92raRlNCUBYRuj8XSwrAtTCsIOW7wHvJmTUs/XKU5ejrcDabRh/pQrP2ncx5gh2r5aQwb+HsHHe8ZP8E4HvBW8/JO4aV2j3aXbiUr1rWL0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iHL8IK8j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91CBEC4CEF8;
+	Thu, 27 Nov 2025 18:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764266060;
-	bh=7ymQ4nasa/Y4u+AtiT0d04YzvAbGRGb9jcNryy56N9s=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=I7YjLAkehefh6Z7MmTFOrCN6M/dHA2iqG4jnWrALU44EtNwFYRtdCDE/leBTiK5FV
-	 OdbZGdfmdqW/1fl/0MehcfizKWdQOhuUADfmz6+TcD8WNT8IseDvA25b9JkpGswDIb
-	 zdRfPXZHIrfmUuhHmCLaLIL+RE4AzglGNC0qK2h/X2Eafi7RGHUCLVFJUNurxl5jRp
-	 e8yTM6hDX2mr5CZUEtJEVXdB0nMGJa7yUU8LeqRdg0q2MuoMcIFlD96Ga6kVGNpul4
-	 mdOFuRWnsJ28X6qO28lBWjGYTyN+YBe+ydKWnBeS6JnCjzqH3RneWTishXCSsmr6/U
-	 FIcLgb8RmOEWw==
-From: Mark Brown <broonie@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Andy Shevchenko <andy@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-Cc: Andreas Gnau <andreas.gnau@iopsys.eu>
-In-Reply-To: <20251125234047.1101985-1-mikhail.kshevetskiy@iopsys.eu>
-References: <20251125234047.1101985-1-mikhail.kshevetskiy@iopsys.eu>
-Subject: Re: (subset) [PATCH v6 0/3] spi: airoha: add support of en7523 SoC
- (for 6.19)
-Message-Id: <176426605736.114355.13405079869808770716.b4-ty@kernel.org>
-Date: Thu, 27 Nov 2025 17:54:17 +0000
+	s=k20201202; t=1764266445;
+	bh=wK5kh9pTC0mfvb70WUKqtB1dMHiI8ZpHwVDX/RYkXlk=;
+	h=Subject:From:Date:To:From;
+	b=iHL8IK8jUBQsciyTicINCPEhE71EMwQytbpOIx5yzt7gXnv8oVN/mgDM1oCLhN0Oh
+	 v9Jlyp1fO10DlLWOkaKmgQbfPp1REp1XHltDeVQcnWU8nh1mwW74KgwjxChQxHgQu0
+	 f5vVfk4AUCHFt9+e6YBBIEXuzssh46egioIy0HxUeZt1Aj2rbBtvKmbbKPs8dD0O2a
+	 TFIcj8ieAkqQLY/GYo6zDqMaWpJkSsO8pOSaee9+gh3iCocVpv4jJqwsCYTG6TCch6
+	 V3uDiRFLb9HQHNVwFQ40YgaajKH65Q9OrCmpbsFobrazDgsS/x3vbCWqaxSSO8bFoa
+	 nwLPRkvwJ/qvw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EF7D1380DBD5;
+	Thu, 27 Nov 2025 18:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-88d78
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176426640657.2671507.10669679519932709114.git-patchwork-summary@kernel.org>
+Date: Thu, 27 Nov 2025 18:00:06 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, 26 Nov 2025 02:40:44 +0300, Mikhail Kshevetskiy wrote:
-> Airoha EN7523 snfi controller almost identical to AN7581 one, so the same
-> driver can be used. The only known difference appears in the very specific
-> boot conditions, when attached serial console force EN7523 SoC boots
-> in undocumented (reserved) mode. In this mode dma reading of the flash
-> works incorrectly.
-> 
-> This patch series:
->  * add support of EN7523 SoC
->  * add spinand node to en7523 dts (so spinand flash finally becomes usable)
->  * updates dt-bindings to mark driver as compatible with en7523
->  * disable dma usage to prevent possible data damage if booting in
->    reserved mode was detected.
-> 
-> [...]
+Hello:
 
-Applied to
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Series: spi: airoha: driver fixes & improvements
+  Submitter: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1010422
+  Lore link: https://lore.kernel.org/r/20251012121707.2296160-1-mikhail.kshevetskiy@iopsys.eu
+    Patches: [v10,01/16] spi: airoha: return an error for continuous mode dirmap creation cases
+             [v10,15/16] dt-bindings: spi: airoha: add compatible for EN7523
 
-Thanks!
+Series: spi: airoha: add support of en7523 SoC (for 6.19)
+  Submitter: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1027581
+  Lore link: https://lore.kernel.org/r/20251125234047.1101985-1-mikhail.kshevetskiy@iopsys.eu
+    Patches: [v6,1/3] spi: airoha-snfi: en7523: workaround flash damaging if UART_TXD was short to GND
+             [v6,2/3] dt-bindings: spi: airoha: add compatible for EN7523
 
-[1/3] spi: airoha-snfi: en7523: workaround flash damaging if UART_TXD was short to GND
-      commit: 061795b345aff371df8f71d54ae7c7dc8ae630d0
-[2/3] dt-bindings: spi: airoha: add compatible for EN7523
-      commit: de59a8a3a1aab3a6608777f62fa098b5abb2704a
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Total patches: 4
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
 
 
