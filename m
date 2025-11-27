@@ -1,107 +1,105 @@
-Return-Path: <linux-spi+bounces-11619-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11620-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CA27C8E13A
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 12:43:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 286A0C8E149
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 12:44:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2E02B4E29A2
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 11:43:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB3A43A94E6
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 11:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C511F32C31C;
-	Thu, 27 Nov 2025 11:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13AB3009E2;
+	Thu, 27 Nov 2025 11:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUbR5IUV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ocYnbeFn"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFEE22F76F;
-	Thu, 27 Nov 2025 11:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A050622F76F;
+	Thu, 27 Nov 2025 11:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764243831; cv=none; b=R2Pc8dvo1lyDkvST1OYM6u4Vi8nixguezRrM403quhVBygN5YQcXyRDM05Pwv4WUc2mhhhc/L8RNz2EtBtY3zOc2phk1//CXPS2xqDUmWzg/uO5CIp7xyXXUVm8V1p8muCPzaxmWH9ZiQbQ7AWjZZov11gEajRrF13tChh9MiXU=
+	t=1764243881; cv=none; b=CF3joXJ8Vzq5taCUrXDmVPJI7Y4Xmp0Ons3DWdSqY2962D6tDZzkV1uY+vqEnk9Pw3Oar1iB21g7x2iYFPaRzgIvsQQ1rvSYkZxIXyEHT2CNlIy5JgFSB7WHvaU/sW1FuLnvVEhQjizvtyJRQ7+1kkwu5xx+a9Q0GWI1F19fPHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764243831; c=relaxed/simple;
-	bh=B0zXTatWlGYyQ1fBUHQXGdNueG6uZZH9fh8FR1yj2BA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=txlJ8H6IAWApVeRIG55PM5nP9ZMPXkav24HCODUqpFEmL8ZNUJBkoF/RQTcUecutRB0TnZwLCcMMc3f3AMpbnbnicT56aEjWBy5VLRX+JJq2Ufanp4FY5aSZS0Sgk5mhEE7ap+MA1jDOabCAxAipE9nLEszjLA2sruUuDufHkig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUbR5IUV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F6F2C4CEF8;
-	Thu, 27 Nov 2025 11:43:47 +0000 (UTC)
+	s=arc-20240116; t=1764243881; c=relaxed/simple;
+	bh=266LmUKXgAPdFDuUqdc5oet/Hk5JYy/stINU9sWH8G0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Rly95gYdoWfLa8s3pRgjWiSYpgRAH7ewG3+PyJRtPIZLanT/Gdy8TYuWs0hGa2x35uTo6jEjo2uVEtEDkEa5BFuHEPyrpMgnpPY+lIawt02VRm/lsoMRjCWtSspwyVUC3JxEdTXxgcwt0CZqmkAs9Q5ti9Kr6J9LAG9RIJkjfzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ocYnbeFn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD783C4CEFB;
+	Thu, 27 Nov 2025 11:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764243830;
-	bh=B0zXTatWlGYyQ1fBUHQXGdNueG6uZZH9fh8FR1yj2BA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CUbR5IUVev/SAp7VYELq0Hv79ogO6ZOFkZVGU256mA2FfeVCqS2uQJ9JMT5H5C4lT
-	 7SXPDMl7BaxkXpaBlkyQdPWIzTi/oTO3tdAsbDxC+OtZI0RCtkKYIYOdae4nt8Opnd
-	 IsYppPe2fSMuI0M2mwE6IVU7JDhAId3/AG/p4stdPVTcrDjDq++nhBomfC7p5B0w8s
-	 ptg2jBunufvrag5X6By3hDg+jaD5z12h99FxfwOKN4PoRpiwEayG53jskNt0reExmF
-	 kMPTlvazu0zb1OzxZ5rq2bWQWPqesyDZkhOhnBpCUBMIFAUy6Po4zJTzOBJtZ7v+O+
-	 zZSksJJEDNrAg==
-Date: Thu, 27 Nov 2025 11:43:44 +0000
+	s=k20201202; t=1764243881;
+	bh=266LmUKXgAPdFDuUqdc5oet/Hk5JYy/stINU9sWH8G0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ocYnbeFnDMFRI3uCvORh0nExoAUXPUfzlCQdd55eD31uC8Ms6HeX+mWfaTyKgymDd
+	 JwWs05QleoHwAbjeDVwlRmtHsq1MwwN1hqpxQrrgS41WQBT61KHrBShUH4c7cXWWan
+	 S7OjOFBXh0HFz/IlOm4X9oG2IuroDLlYpIiqjoetjJo4Q9Sl1uSzaseUtWbIs3W6AG
+	 +qcSABVayEnkYhM+2k//EMkyT3gq8XDI5QPCwkf07Fv/mjFHe1awA2Rmd0wYdbwBds
+	 Bh1r92US9pRNzvorRGwEgPLYmC7ZJ5GUnwdpgrkuY6TR38+LgGR5Ulq9SgefgWjx+q
+	 weGG/QItjP/MA==
 From: Mark Brown <broonie@kernel.org>
-To: Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>
-Cc: Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Andreas Gnau <andreas.gnau@iopsys.eu>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v6 2/3] dt-bindings: spi: airoha: add compatible for
- EN7523
-Message-ID: <671fb90c-2076-4901-94fc-1eadd1742516@sirena.org.uk>
-References: <20251125234047.1101985-1-mikhail.kshevetskiy@iopsys.eu>
- <20251125234047.1101985-3-mikhail.kshevetskiy@iopsys.eu>
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, Prabhakar <prabhakar.csengg@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Biju Das <biju.das.jz@bp.renesas.com>, 
+ Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251126131619.136605-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20251126131619.136605-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v2] spi: dt-bindings: renesas,rzv2h-rspi: Document
+ RZ/V2N SoC support
+Message-Id: <176424387849.25601.4895863993162218118.b4-ty@kernel.org>
+Date: Thu, 27 Nov 2025 11:44:38 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hZjdanbYJIzm7qaB"
-Content-Disposition: inline
-In-Reply-To: <20251125234047.1101985-3-mikhail.kshevetskiy@iopsys.eu>
-X-Cookie: But they went to MARS around 1953!!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-88d78
 
+On Wed, 26 Nov 2025 13:16:19 +0000, Prabhakar wrote:
+> Document the RSPI controller on the Renesas RZ/V2N SoC. The block is
+> compatible with the RSPI implementation found on the RZ/V2H(P) family.
+> 
+> 
 
---hZjdanbYJIzm7qaB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to
 
-On Wed, Nov 26, 2025 at 02:40:46AM +0300, Mikhail Kshevetskiy wrote:
-> Add dt-bindings documentation of SPI NAND controller
-> for Airoha EN7523 SoC platform.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Thanks!
 
---hZjdanbYJIzm7qaB
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/1] spi: dt-bindings: renesas,rzv2h-rspi: Document RZ/V2N SoC support
+      commit: 043cc033451530f81d7fe791dcc29874f6a147fd
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkoOXAACgkQJNaLcl1U
-h9Cw6gf9E93O4G2Sv2weW+jNdofoptCvmy7ha8GrfKyTY6UTeiTqpxs+zFNzl0gu
-urBvRIvfaQKLBAeVwyUPBEHCrG3/s1XmYfdezQx7ktFk3uIX57bH6Rddx3zvobVV
-oUKwNBv/NSZ2GCCZWMQPXSTbIAYPc2Y1JCNs5CMkEDYHe6WoZyHhH+AQA8HF+3lq
-Eat5qvzfO2gQZrY3ko+I1FhMKumgIHYnGw+0MN94DpGwlY7HbS4d5VZavBXRQ1eD
-oo5iU/PW6xLI3EHKfrz/lfw2s6gG5fst4g+HiGSQtLgUKvJbkzmwysrdWY9OgzxI
-01gcZJaSTzg9FYi8wYwZJ52+blYMHQ==
-=mqNc
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---hZjdanbYJIzm7qaB--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
