@@ -1,130 +1,179 @@
-Return-Path: <linux-spi+bounces-11640-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11641-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8FEDC8FF89
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 20:02:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B22FC90106
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 20:51:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E7DFD4E55C8
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 19:01:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 54B824E1EC1
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 19:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B207F2EC08C;
-	Thu, 27 Nov 2025 19:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C204B306D57;
+	Thu, 27 Nov 2025 19:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HugoYkyS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RB7RX52C"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BCF27380A;
-	Thu, 27 Nov 2025 19:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C91D306D3F;
+	Thu, 27 Nov 2025 19:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764270114; cv=none; b=nOje82sbqn/ytjBbaj52l4fgDvYqIRsVYNfIDhGfhVxpdDLi9ZmF7XjCh84Nbz3sZFkeZPTEcK4uYhU4y5lmKfVsxEYW3gtGUOGN8Y0+Bbfthli1BNutQROsmDIHk8ikbosrTdro3U4P/xrGLGTIwShRzDoPf0037MP0zE/SEIs=
+	t=1764273099; cv=none; b=U880TOABRYg2SaTib1yA54jTfXcUbcd6N0BcgBxxY2QV80+WypfqL18gK2P4Ap4tcvF/ig2zySn7lrnyzSjKuaBi3GdqqwhGk4sMYYAjjzWW37BZN1HtKbAkr2aG56W5q0zsPmRWnWETlNfHHEDpV6kdcANfiqhfB9PHzSOuffE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764270114; c=relaxed/simple;
-	bh=sQd7et9UqRrQNP9xBihl31sNh2PGFV+NmjRTeHy7TcA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eUkvMGPChN9jFWOgQmHIOH54G3JIstuAtLSZ2NWE8sI6aOTp9Yxj1B21Vstxy7AySfVZuR0BUvLa9Nsu9wR0SFTpf435iF1iaved7c3UyRdtgXGD2YT8gMF3XiJHnVNW1dZupM9FxJYCe+6DcTnJYuz4YgKbO9CLGIzCwFLNUGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HugoYkyS; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1764273099; c=relaxed/simple;
+	bh=qgP7x8MJ0SpokdvBI4OSJ/JKazgSw57rAVlB0itHY7o=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=RgttiWJl6UX4BFX234dQqlw+KVCbo6t9tSumg4z0N+WIvWKnjPu/1JCdwJrAn4zOg0vC6D6D22V6nSEn5A7qssymOYJZ83LHKb2PLxQ/JPi78pJyW9waDKI53BRGBLivBzEjAISaNmpsFm3ctY+WThOrX6z6JiAW+HSIvnapVas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RB7RX52C; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764270113; x=1795806113;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sQd7et9UqRrQNP9xBihl31sNh2PGFV+NmjRTeHy7TcA=;
-  b=HugoYkySQnHfyq6QZdcy0NNZPM9EmdGJ4p7qAlSjdXlfVKvDio223ztm
-   VKvyAQN1GrTHzbVUdOyec4VQBH83V0ExCVTENenKV58mUcRbyPYbziQbr
-   EAiWTnwWTq1IV9O5eC+EN2iFY4tdBQoZXQpkrCyeJ/flNM/bknWz+0egW
-   cqEsloYRNY3uds5qW31gYcL3S/5hCxQlrN6upGzWOu4r87oCw2/7EMCKi
-   pftWuMHxOcIeAjZG1jKmdUMhZWfQw+6wAeaV7yUKPdXxeOpIKWZnAbCd7
-   YYvA5lIsAgJYiWOS9CcJgA8PanaHij2RK2VS5ITqFzVVyQEzDaibbc3Zf
-   w==;
-X-CSE-ConnectionGUID: OIn9pUT1TS6iRp6ZdZcV7A==
-X-CSE-MsgGUID: KXUSdC4aS1qFJd7LZo0w0w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="66480489"
+  t=1764273097; x=1795809097;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qgP7x8MJ0SpokdvBI4OSJ/JKazgSw57rAVlB0itHY7o=;
+  b=RB7RX52CT09U/udO7sZmVPiGOAzbHpyvt9K+Xb9iLZLKm+8sc1ymKnUV
+   h6jFwa56FRGoyoMQX1SEPrkQ66DCqbSx/P/JuO50YBwkZK48MlVS25tzZ
+   Y25vwPMpcvA/7OWKm6VfQqldfJh7E2QGoDQUhn1MnJl3XWFfp20IR7tYR
+   cjD7nt7IupzBJHQUqkcJ2CkUq31ukx0BG3vXrW92PJEJOwH3ZGQec1dup
+   /oQO9O29PhHAktlQL3MZSVGD2YyWwcTf6Rtx4tgE7ekQ2I4QDUVlirM4+
+   uaO0kLYOAWmE7Brw1nN/TdJAyK1/pzn+5eJj7+nuAZbE2SL6NFbGcvfhW
+   g==;
+X-CSE-ConnectionGUID: M54GG8SITc+khfUeamZ6Gg==
+X-CSE-MsgGUID: sT19sPblSn+DKjvZdiArTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="70185532"
 X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="66480489"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 11:01:52 -0800
-X-CSE-ConnectionGUID: qb7nlw5vSrOkbaoq6YcGiQ==
-X-CSE-MsgGUID: +8EmmxnfTA+T3AarJah9lw==
+   d="scan'208";a="70185532"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 11:51:37 -0800
+X-CSE-ConnectionGUID: uLLGXYjPRJmva2qDBhadEw==
+X-CSE-MsgGUID: aAaLJvkwTkmIDcoQtAmchg==
+X-Ironport-Invalid-End-Of-Message: True
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="193312664"
-Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.225])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 11:01:50 -0800
-Date: Thu, 27 Nov 2025 21:01:48 +0200
+   d="scan'208";a="224000185"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa002.jf.intel.com with ESMTP; 27 Nov 2025 11:51:36 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id B17159F; Thu, 27 Nov 2025 20:51:34 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	Mark Brown <broonie@kernel.org>,
-	david laight <david.laight@runbox.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Conor Dooley - M52691 <Conor.Dooley@microchip.com>
-Subject: Re: [PATCH v2 2/6] spi: microchip-core: Refactor FIFO read and write
- handlers
-Message-ID: <aSigHJDTfqtnO1XY@smile.fi.intel.com>
-References: <20251126075558.2035012-1-andriy.shevchenko@linux.intel.com>
- <20251126075558.2035012-3-andriy.shevchenko@linux.intel.com>
- <20251126092145.2f8e4c8d@pumpkin>
- <720a960d-797b-4404-90ab-e0c75c12a151@sirena.org.uk>
- <aSbu4BA8pohsYSQ8@smile.fi.intel.com>
- <48d3b29b-1010-4749-aef0-c66a72f1d8fa@microchip.com>
- <aSiBF9nStZzUNGLA@smile.fi.intel.com>
- <20251127-pliable-magnetism-c59c560e49ad@spud>
+To: Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/1] spi: Simplify devm_spi_*_controller()
+Date: Thu, 27 Nov 2025 20:51:33 +0100
+Message-ID: <20251127195133.3046173-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251127-pliable-magnetism-c59c560e49ad@spud>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Nov 27, 2025 at 06:05:04PM +0000, Conor Dooley wrote:
-> On Thu, Nov 27, 2025 at 06:49:27PM +0200, Andy Shevchenko wrote:
-> > On Thu, Nov 27, 2025 at 04:08:25PM +0000, Prajna Rajendra Kumar wrote:
-> > > On 26/11/2025 12:13, Andy Shevchenko wrote:
-> > > > On Wed, Nov 26, 2025 at 12:05:22PM +0000, Mark Brown wrote:
-> > > > > On Wed, Nov 26, 2025 at 09:21:45AM +0000, david laight wrote:
+Use devm_add_action_or_reset() instead of devres_alloc() and
+devres_add(), which works the same. This will simplify the
+code. There is no functional changes.
 
-...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi.c | 47 ++++++++++++++++++-----------------------------
+ 1 file changed, 18 insertions(+), 29 deletions(-)
 
-> > > > > > I'm not sure I don't prefer the version with one writeb() call.
-> > > > > > How about:
-> > > > > >              writeb(spi->tx_buf ? *spi->tx_buf++ : 0xaa,
-> > > > > >                      spi->regs + MCHP_CORESPI_REG_TXDATA);
-> > > > > Please don't abuse the ternery operator like this, just write normal
-> > > > > conditional statements.
-> > > > FWIW, that's what my patch does already :-)
-> > > 
-> > > Thanks for the series. However, this particular patch appears to
-> > > introduce a regression. The SPI controller reads an incorrect
-> > > Device ID from the peripheral.
-> > 
-> > Hmm... This is interesting. The only thing I see is missed dummy byte read in
-> > case of TX only transfers. Is this what you have?
-> 
-> Seems very likely, the hardware is pretty simple, so it has no concept
-> of whether bytes it receives are useful or any ability to operate on
-> transfers and discard data from the FIFOs when a new one starts. That's
-> why the unconditional read is there to make sure the rx FIFO is kept in
-> sync.
-
-I have just sent a v3, please, give it a try.
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 071f7d754931..0850734e6d50 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3058,9 +3058,9 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(__spi_alloc_controller);
+ 
+-static void devm_spi_release_controller(struct device *dev, void *ctlr)
++static void devm_spi_release_controller(void *ctlr)
+ {
+-	spi_controller_put(*(struct spi_controller **)ctlr);
++	spi_controller_put(ctlr);
+ }
+ 
+ /**
+@@ -3082,21 +3082,18 @@ struct spi_controller *__devm_spi_alloc_controller(struct device *dev,
+ 						   unsigned int size,
+ 						   bool target)
+ {
+-	struct spi_controller **ptr, *ctlr;
+-
+-	ptr = devres_alloc(devm_spi_release_controller, sizeof(*ptr),
+-			   GFP_KERNEL);
+-	if (!ptr)
+-		return NULL;
++	struct spi_controller *ctlr;
++	int ret;
+ 
+ 	ctlr = __spi_alloc_controller(dev, size, target);
+-	if (ctlr) {
+-		ctlr->devm_allocated = true;
+-		*ptr = ctlr;
+-		devres_add(dev, ptr);
+-	} else {
+-		devres_free(ptr);
+-	}
++	if (!ctlr)
++		return NULL;
++
++	ret = devm_add_action_or_reset(dev, devm_spi_release_controller, ctlr);
++	if (ret)
++		return NULL;
++
++	ctlr->devm_allocated = true;
+ 
+ 	return ctlr;
+ }
+@@ -3357,9 +3354,9 @@ int spi_register_controller(struct spi_controller *ctlr)
+ }
+ EXPORT_SYMBOL_GPL(spi_register_controller);
+ 
+-static void devm_spi_unregister(struct device *dev, void *res)
++static void devm_spi_unregister_controller(void *ctlr)
+ {
+-	spi_unregister_controller(*(struct spi_controller **)res);
++	spi_unregister_controller(ctlr);
+ }
+ 
+ /**
+@@ -3377,22 +3374,14 @@ static void devm_spi_unregister(struct device *dev, void *res)
+ int devm_spi_register_controller(struct device *dev,
+ 				 struct spi_controller *ctlr)
+ {
+-	struct spi_controller **ptr;
+ 	int ret;
+ 
+-	ptr = devres_alloc(devm_spi_unregister, sizeof(*ptr), GFP_KERNEL);
+-	if (!ptr)
+-		return -ENOMEM;
+-
+ 	ret = spi_register_controller(ctlr);
+-	if (!ret) {
+-		*ptr = ctlr;
+-		devres_add(dev, ptr);
+-	} else {
+-		devres_free(ptr);
+-	}
++	if (ret)
++		return ret;
++
++	return devm_add_action_or_reset(dev, devm_spi_unregister_controller, ctlr);
+ 
+-	return ret;
+ }
+ EXPORT_SYMBOL_GPL(devm_spi_register_controller);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.50.1
 
 
