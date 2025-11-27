@@ -1,105 +1,89 @@
-Return-Path: <linux-spi+bounces-11620-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11621-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286A0C8E149
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 12:44:45 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5337DC8E5DC
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 14:02:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB3A43A94E6
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 11:44:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9FF04E1D9E
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 13:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13AB3009E2;
-	Thu, 27 Nov 2025 11:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE6A1D95A3;
+	Thu, 27 Nov 2025 13:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ocYnbeFn"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="kd6HYdDQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A050622F76F;
-	Thu, 27 Nov 2025 11:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECA817A2E0;
+	Thu, 27 Nov 2025 13:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764243881; cv=none; b=CF3joXJ8Vzq5taCUrXDmVPJI7Y4Xmp0Ons3DWdSqY2962D6tDZzkV1uY+vqEnk9Pw3Oar1iB21g7x2iYFPaRzgIvsQQ1rvSYkZxIXyEHT2CNlIy5JgFSB7WHvaU/sW1FuLnvVEhQjizvtyJRQ7+1kkwu5xx+a9Q0GWI1F19fPHY=
+	t=1764248539; cv=none; b=YyJ0qEy+gFl9+FfSZ2jZQd8ZgOX4WMXdp03JhX6SY+GLNSEsiFZAH5mPE4GgDHjThL+861GhI6f+L7fKq8TGAZSTpOmnqBbI3aXrf9P+2KFtOFePO0prD/F/0sG7g+ZdXuS+iS5P06EQ0zwtOdVoI+Ce6dKgxr6RNAuSq2q2mIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764243881; c=relaxed/simple;
-	bh=266LmUKXgAPdFDuUqdc5oet/Hk5JYy/stINU9sWH8G0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Rly95gYdoWfLa8s3pRgjWiSYpgRAH7ewG3+PyJRtPIZLanT/Gdy8TYuWs0hGa2x35uTo6jEjo2uVEtEDkEa5BFuHEPyrpMgnpPY+lIawt02VRm/lsoMRjCWtSspwyVUC3JxEdTXxgcwt0CZqmkAs9Q5ti9Kr6J9LAG9RIJkjfzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ocYnbeFn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD783C4CEFB;
-	Thu, 27 Nov 2025 11:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764243881;
-	bh=266LmUKXgAPdFDuUqdc5oet/Hk5JYy/stINU9sWH8G0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ocYnbeFnDMFRI3uCvORh0nExoAUXPUfzlCQdd55eD31uC8Ms6HeX+mWfaTyKgymDd
-	 JwWs05QleoHwAbjeDVwlRmtHsq1MwwN1hqpxQrrgS41WQBT61KHrBShUH4c7cXWWan
-	 S7OjOFBXh0HFz/IlOm4X9oG2IuroDLlYpIiqjoetjJo4Q9Sl1uSzaseUtWbIs3W6AG
-	 +qcSABVayEnkYhM+2k//EMkyT3gq8XDI5QPCwkf07Fv/mjFHe1awA2Rmd0wYdbwBds
-	 Bh1r92US9pRNzvorRGwEgPLYmC7ZJ5GUnwdpgrkuY6TR38+LgGR5Ulq9SgefgWjx+q
-	 weGG/QItjP/MA==
-From: Mark Brown <broonie@kernel.org>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Prabhakar <prabhakar.csengg@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Biju Das <biju.das.jz@bp.renesas.com>, 
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251126131619.136605-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20251126131619.136605-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v2] spi: dt-bindings: renesas,rzv2h-rspi: Document
- RZ/V2N SoC support
-Message-Id: <176424387849.25601.4895863993162218118.b4-ty@kernel.org>
-Date: Thu, 27 Nov 2025 11:44:38 +0000
+	s=arc-20240116; t=1764248539; c=relaxed/simple;
+	bh=Mr2gJob250IF5m3hkxY9l+DLZdnptgIWRG/2caRCf3c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KhxUO9u78IV/oyisGsJknt0DCEe7EbvqPcALBU3bkV99WA/vKBgoV7YfQjdj5NCnhr1DjY2HibtR6iPJ7TnJJV0NeRnjQb5+npvhSiuYDJXnePoqt9RRYio0mg9ZvKQWHYSweakJ788nzoKzZU12WvHCcd41VITdqNxulCvrIE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=kd6HYdDQ; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1764248533; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=620i7uzNM7X9/+8hz9OS0WcqtrSoqZfgXVH8v3keeGM=;
+	b=kd6HYdDQ666KqV/oD+doGujpvIld2mYe78T76eCXuOrUv3axWerz9am21ipta8A+KnAOTjKqGyGYXihAfyN7wscc6Lo7VFXF2LcsFB+CkxWqXNIT6CrDHD9BWj8HK/9MUCJmb1Siu9pyAxkJA7BmM3gZDrDp+7hku7XNVvW/dXQ=
+Received: from localhost(mailfrom:kanie@linux.alibaba.com fp:SMTPD_---0WtXUvRd_1764248527 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Nov 2025 21:02:12 +0800
+From: Guixin Liu <kanie@linux.alibaba.com>
+To: Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sowjanya Komatineni <skomatineni@nvidia.com>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-tegra@vger.kernel.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: tegra210-quad: downgrade the log when fall back to PIO
+Date: Thu, 27 Nov 2025 21:02:07 +0800
+Message-ID: <20251127130207.43754-1-kanie@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-88d78
+Content-Transfer-Encoding: 8bit
 
-On Wed, 26 Nov 2025 13:16:19 +0000, Prabhakar wrote:
-> Document the RSPI controller on the Renesas RZ/V2N SoC. The block is
-> compatible with the RSPI implementation found on the RZ/V2H(P) family.
-> 
-> 
+When the machine boots using ACPI, Tegra cannot use DMA and falls back
+to PIO. In this case, logging these messages as "Error" may confuse
+users into thinking it is an actual error; therefore, these two log
+messages should be downgraded to "Info" level.
 
-Applied to
+Signed-off-by: Guixin Liu <kanie@linux.alibaba.com>
+---
+ drivers/spi/spi-tegra210-quad.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: dt-bindings: renesas,rzv2h-rspi: Document RZ/V2N SoC support
-      commit: 043cc033451530f81d7fe791dcc29874f6a147fd
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index 3be7499db21e..2189904b931d 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -823,8 +823,8 @@ static int tegra_qspi_init_dma(struct tegra_qspi *tqspi)
+ 	tegra_qspi_deinit_dma(tqspi);
+ 
+ 	if (err != -EPROBE_DEFER) {
+-		dev_err(tqspi->dev, "cannot use DMA: %d\n", err);
+-		dev_err(tqspi->dev, "falling back to PIO\n");
++		dev_info(tqspi->dev, "cannot use DMA: %d\n", err);
++		dev_info(tqspi->dev, "falling back to PIO\n");
+ 		return 0;
+ 	}
+ 
+-- 
+2.43.0
 
 
