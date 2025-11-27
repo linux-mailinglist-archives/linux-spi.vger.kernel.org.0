@@ -1,34 +1,34 @@
-Return-Path: <linux-spi+bounces-11635-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11636-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE615C8FF62
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 20:01:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3C4BC8FF65
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 20:01:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3305A4E657E
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 19:00:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F0743ABD77
+	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 19:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56F5303A02;
-	Thu, 27 Nov 2025 19:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A627303A27;
+	Thu, 27 Nov 2025 19:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yi9tuhDu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nnsaBVEw"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078B02FFDE2;
-	Thu, 27 Nov 2025 19:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448133019D9;
+	Thu, 27 Nov 2025 19:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764270038; cv=none; b=FMJWKtCHPbUN+Sx63RiM4Euq5/nvDcTjkPhLpRGylmS6M6BYP/J3t8ru0lm1rsboMQYuGZt9npQWT6QNmJtenwNgzMMBP3bMQXCTWPpguh7ENFLYTnmREH3zOnm7mM2slDcf8XiwNNAyTqA2sii5cRgD0GnOzpBoLsueXimAkBE=
+	t=1764270039; cv=none; b=OGgj1x4y0+/GjJ91cvwZxELtbyQXuNiYMwNiOOpnqK2fiu49ozjMAb16ejnos2MAfZv43FREXuBLROPZg3v22wX8AHqwrxHsYSd14Pk8O8upKI7/CzC91J7TqdhkMSVJGhgsK5BpplF1ZMR9yUx/Kw6vWLJK4Kk3q0L9W8EXY4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764270038; c=relaxed/simple;
-	bh=yuDl+vV9uGiSg1HH//XrjlArBAJ2MDXUa6CNLBLNkqc=;
+	s=arc-20240116; t=1764270039; c=relaxed/simple;
+	bh=gzhFPNW1rSQDFFo/j0rgc+ix95rNKLoLSvWot7esoxI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IHzn5E5v+GM3U96cxBAcEs4TM6a3NbLnYh5cCpIRW7ToApAK6wm3BYOo9je+C/lOo1/Mwv3fKFJQz7DeyhJiCCzPXZo3Pc4w9WkYcuQpCTAOgnp+mIRyTQRg0p8ZFBDOuItfVVvPWD62GE926FuTVpmLtFSTSjBx0VbUqYqEMbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yi9tuhDu; arc=none smtp.client-ip=192.198.163.7
+	 MIME-Version; b=b4Bfi33lpr2Uorua57g7d/a5DfI2GVNCVzqdGJ+GK3Wnml5hSh1l6RV2PtpSKJACi/h2kaBw84bL7nTJUyozJ4zOk+EOwoADC6bOKJs3REjiZo5zdmHJToAsHTYypGK6N9hlJRTPehrAlaRScS4QOBKSDQ2WXz42YySy/PJInys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nnsaBVEw; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,40 +36,39 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1764270037; x=1795806037;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yuDl+vV9uGiSg1HH//XrjlArBAJ2MDXUa6CNLBLNkqc=;
-  b=Yi9tuhDu8ZkFKKb0rP3vKKO6Ogh7bQKEWLQu5mRiyFSZvj7bBEiYEPqR
-   JQ9Z49Cw/oXEBnQo0djeYBLaO1evdO12S+rRcRZMEBS9USRAxSQ9uMOim
-   O4xjDo4Cq6Jk/EAjBsIDr/4h5IlAf6OZUn2ytSac9uwKePJKa6tRFjMHl
-   a6d+cBmVAxvU93oCYohOGKqSqaES8ORzDA1ry641h637xIcKYpT+WshvR
-   ZhspFywfY5ZWhCrHtKl9tumL6OXki8Z7wInm5rggyfmBZgFW/y7l11Uck
-   u4UPjXkGA+5X/2Maq0j7hh0rg9xbJYT2//Dw4dLO5DLQFhF7uudRLkOgW
-   Q==;
-X-CSE-ConnectionGUID: /gXmrsw3Rs+QQXhJnSTafw==
-X-CSE-MsgGUID: PhOUnBNTTjilPHP7m64vNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="91796255"
+  bh=gzhFPNW1rSQDFFo/j0rgc+ix95rNKLoLSvWot7esoxI=;
+  b=nnsaBVEw7PmgucoC/btuot9VbyZBdmNuFJ5ODtYHITql7X9awSgwqJJw
+   aHQfPFZnES4qqMwIILGvNQIdRevarUQenNT213b1AtV2m6fbtzgoSj5Fx
+   jiUOfJFP9vpJwNiEp7ZXKG9Hufm5YKW+DQ4+y9Kt602Z00zPEqZqoEHn/
+   uJ4TcW6bt1uv/I5yMt+4SCzsSn7LZPVDnTzQnVPpgdJ1TbS5OtncdIot1
+   qtAIWs2NHR39V8FdkQxwVA8VLlTLcVyPK1GEK+RYOe5QviPQigzVieQFO
+   HL8OC2IITCxhu52QWAfHGD0BIm3mqOJ70dgCH9EuqQeklaT6MUbsi1F4R
+   g==;
+X-CSE-ConnectionGUID: J0R9QHwWSfuE21hNlWj5qQ==
+X-CSE-MsgGUID: ETDXQRcTRvWSjngZ7eP8/A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="91796260"
 X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="91796255"
+   d="scan'208";a="91796260"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 11:00:35 -0800
-X-CSE-ConnectionGUID: vdevt3uLSx6K1c9n9Gi2Vg==
-X-CSE-MsgGUID: QzmVBog8TnmHOap/Zht6Lw==
+X-CSE-ConnectionGUID: hmGdEsekTiGWAs596F1ERw==
+X-CSE-MsgGUID: 0g/OAAjkSX6gWgg7I5k90A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="216645897"
+   d="scan'208";a="216645899"
 Received: from black.igk.intel.com ([10.91.253.5])
   by fmviesa002.fm.intel.com with ESMTP; 27 Nov 2025 11:00:33 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 394FEA0; Thu, 27 Nov 2025 20:00:32 +0100 (CET)
+	id 3D67DA1; Thu, 27 Nov 2025 20:00:32 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Mark Brown <broonie@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>
-Subject: [PATCH v3 1/6] spi: microchip-core: use min() instead of min_t()
-Date: Thu, 27 Nov 2025 19:58:58 +0100
-Message-ID: <20251127190031.2998705-2-andriy.shevchenko@linux.intel.com>
+Cc: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 2/6] spi: microchip-core: Refactor FIFO read and write handlers
+Date: Thu, 27 Nov 2025 19:58:59 +0100
+Message-ID: <20251127190031.2998705-3-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251127190031.2998705-1-andriy.shevchenko@linux.intel.com>
 References: <20251127190031.2998705-1-andriy.shevchenko@linux.intel.com>
@@ -81,61 +80,70 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-min_t(int, a, b) casts an 'unsigned int' to 'int'. This might lead
-to the cases when big number is wrongly chosen. On the other hand,
-the SPI transfer length is unsigned and driver uses signed type for
-an unknown reason. Change the type of the transfer length to be
-unsigned and convert use min() instead of min_t().
+Make both handlers to be shorter and easier to understand.
+While at it, unify their style.
 
-Reviewed-by: David Laight <david.laight.linux@gmail.com>
-Reviewed-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/spi/spi-microchip-core-spi.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/spi/spi-microchip-core-spi.c | 31 +++++++++++-----------------
+ 1 file changed, 12 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-microchip-core-spi.c
-index 16e0885474a0..08ccdc5f0cc9 100644
+index 08ccdc5f0cc9..439745a36f9c 100644
 --- a/drivers/spi/spi-microchip-core-spi.c
 +++ b/drivers/spi/spi-microchip-core-spi.c
-@@ -74,8 +74,8 @@ struct mchp_corespi {
- 	u8 *rx_buf;
- 	u32 clk_gen;
- 	int irq;
--	int tx_len;
--	int rx_len;
-+	unsigned int tx_len;
-+	unsigned int rx_len;
- 	u32 fifo_depth;
- };
+@@ -97,15 +97,12 @@ static inline void mchp_corespi_read_fifo(struct mchp_corespi *spi, u32 fifo_max
+ 		       MCHP_CORESPI_STATUS_RXFIFO_EMPTY)
+ 			;
  
-@@ -214,7 +214,7 @@ static irqreturn_t mchp_corespi_interrupt(int irq, void *dev_id)
- 		       spi->regs + MCHP_CORESPI_REG_INTCLEAR);
- 		finalise = true;
- 		dev_err(&host->dev,
--			"RX OVERFLOW: rxlen: %d, txlen: %d\n",
-+			"RX OVERFLOW: rxlen: %u, txlen: %u\n",
- 			spi->rx_len, spi->tx_len);
++		/* On TX-only transfers always perform a dummy read */
+ 		data = readb(spi->regs + MCHP_CORESPI_REG_RXDATA);
++		if (spi->rx_buf)
++			*spi->rx_buf++ = data;
+ 
+ 		spi->rx_len--;
+-		if (!spi->rx_buf)
+-			continue;
+-
+-		*spi->rx_buf = data;
+-
+-		spi->rx_buf++;
  	}
+ }
  
-@@ -223,7 +223,7 @@ static irqreturn_t mchp_corespi_interrupt(int irq, void *dev_id)
- 		       spi->regs + MCHP_CORESPI_REG_INTCLEAR);
- 		finalise = true;
- 		dev_err(&host->dev,
--			"TX UNDERFLOW: rxlen: %d, txlen: %d\n",
-+			"TX UNDERFLOW: rxlen: %u, txlen: %u\n",
- 			spi->rx_len, spi->tx_len);
+@@ -127,23 +124,19 @@ static void mchp_corespi_disable_ints(struct mchp_corespi *spi)
+ 
+ static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi, u32 fifo_max)
+ {
+-	int i = 0;
+-
+-	while ((i < fifo_max) &&
+-	       !(readb(spi->regs + MCHP_CORESPI_REG_STAT) &
+-		 MCHP_CORESPI_STATUS_TXFIFO_FULL)) {
+-		u32 word;
+-
+-		word = spi->tx_buf ? *spi->tx_buf : 0xaa;
+-		writeb(word, spi->regs + MCHP_CORESPI_REG_TXDATA);
++	for (int i = 0; i < fifo_max; i++) {
++		if (readb(spi->regs + MCHP_CORESPI_REG_STAT) &
++		    MCHP_CORESPI_STATUS_TXFIFO_FULL)
++			break;
+ 
++		/* On RX-only transfers always perform a dummy write */
+ 		if (spi->tx_buf)
+-			spi->tx_buf++;
++			writeb(*spi->tx_buf++, spi->regs + MCHP_CORESPI_REG_TXDATA);
++		else
++			writeb(0xaa, spi->regs + MCHP_CORESPI_REG_TXDATA);
+ 
+-		i++;
++		spi->tx_len--;
  	}
+-
+-	spi->tx_len -= i;
+ }
  
-@@ -283,7 +283,7 @@ static int mchp_corespi_transfer_one(struct spi_controller *host,
- 	spi->rx_len = xfer->len;
- 
- 	while (spi->tx_len) {
--		int fifo_max = min_t(int, spi->tx_len, spi->fifo_depth);
-+		unsigned int fifo_max = min(spi->tx_len, spi->fifo_depth);
- 
- 		mchp_corespi_write_fifo(spi, fifo_max);
- 		mchp_corespi_read_fifo(spi, fifo_max);
+ static void mchp_corespi_set_cs(struct spi_device *spi, bool disable)
 -- 
 2.50.1
 
