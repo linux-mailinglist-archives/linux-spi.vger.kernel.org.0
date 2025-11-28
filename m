@@ -1,103 +1,108 @@
-Return-Path: <linux-spi+bounces-11654-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11656-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40CAEC92DE7
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 19:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99EDDC92FA4
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 19:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DE20634A61D
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 18:01:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C057734ECFB
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 18:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678D033345E;
-	Fri, 28 Nov 2025 18:01:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25CB82D4814;
+	Fri, 28 Nov 2025 18:55:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r073bm1g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W7iOr+r5"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40EF4333433;
-	Fri, 28 Nov 2025 18:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7712C21E8;
+	Fri, 28 Nov 2025 18:55:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764352911; cv=none; b=Swx86SiYFrCLfcrEJhze6RjkG24G5HD2crY4Xtt/TDceCoHySiNtAQC6Q8UoN3FP8CodVs8h2B5CsELVasxCyU7eZZjKpoW1y5N5OT5WvnZDW5Ic6UfEukbPg821JPGG/vBV4ECb2wi+vNI5NxUMdz3YO+pN+A0s2dyKz7Rbyvg=
+	t=1764356124; cv=none; b=RjdHH0OX2R0orsdecRO0BGbRmo0wghq2+kUXZpZp5QYfTAqu1rUmNrXpac+CqAhuHdDYSQjf/rOVKEPq5IxN6eTIXVqeTvcJpUw2aBivfYoB96SV7yC41Qjx4xq3l82pjsWc0/l15ewSiWodzXWLCKApUr3FRXAG/G5RWhx2wcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764352911; c=relaxed/simple;
-	bh=nIj9GJmGmm3gXhpfSVqDemdTm6aqHnRhp8OrHb0ZB7g=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=fDmHiQtbUbDIZfqYmlelCXzkguq82zJbi2gyvifYGrimM/EvUt6yxdFZg0aqKjb3ILQT+z9pH/AW/gAdtnboqE6vhQFpQ18nkFHtrQDJbb50853Lcqxhri3pya38S5r3ougc62jWlclnX6bD+Z6/DIBzwq0jq3fXJARuoLoj6MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r073bm1g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0F9C113D0;
-	Fri, 28 Nov 2025 18:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764352910;
-	bh=nIj9GJmGmm3gXhpfSVqDemdTm6aqHnRhp8OrHb0ZB7g=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=r073bm1gqwBPK++bFhBOo0wlAwGMh4Xgwso6K9UQd3weuyitiugQDvmoPcq4jNjQ+
-	 kozgUj4eCY0crFAO+LxIYdnNgMzX/qpLPu6u1bdP85g8+qIE8+GDwDPUjie3erJEvW
-	 ISKv27Pujoqi0UOWof2eA1d0i3m9VPl8caO2GJnFuAfaKrJftml+Ud5SNevmEj7BIn
-	 XNb0pXygVtSb/uhF9DeRAuU86qXCZlufx2CcZAxqgvQhauEz1lbv5KTttthvtVaDwi
-	 v7VFH1hXTRUgPVXMiEBKLEYl+xWJd+co3w3y5AT2rxhLZpsHVV3b4rqe8inDcmvZno
-	 zHy7qURKZHl7w==
-From: Mark Brown <broonie@kernel.org>
-To: Tianchu Chen <tianchu.chen@linux.dev>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- gregkh@linuxfoundation.org
-In-Reply-To: <20251128160630.0f922c45ec6084a46fb57099@linux.dev>
-References: <20251128160630.0f922c45ec6084a46fb57099@linux.dev>
-Subject: Re: [PATCH] spi: ch341: fix out-of-bounds memory access in
- ch341_transfer_one
-Message-Id: <176435290978.114164.11348727837075094329.b4-ty@kernel.org>
-Date: Fri, 28 Nov 2025 18:01:49 +0000
+	s=arc-20240116; t=1764356124; c=relaxed/simple;
+	bh=7pjj0HOo51rH302CE+zNUdYttcd94eWKqHleihVdlr0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=jOfvfblalUFViH5IxH5TA3+xkUM8LW1SilKa/nMPahWIOlrOGCNVwU3F15N2H9a0CxsgyW0IidCdojiPBYiFDlchbkb/QCxeuZvcuM/H4eF1xpCZWwE5j8soIpvXVMYxLaW2UNA+soWr3uB3Yd5Vqfo5h/qrSte6hK4aJ8qGMDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W7iOr+r5; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764356123; x=1795892123;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7pjj0HOo51rH302CE+zNUdYttcd94eWKqHleihVdlr0=;
+  b=W7iOr+r5zNon5/ZwHQ/tgT+wN0/0ocxO0kRBn1vTewA07y1HmtAm5NOf
+   tVpke0l46NNGGhgnb5oGBQ+enSWp2bYkfqGESMscPQoJ1NHq9AEwVIV61
+   AKD9yGtilPxhN/32BDk2LtNtBysirAJSydU5E0ilu4y3N15voTuBeiVdd
+   s1ubDtY21jx5XyVJlc+TTe4dp4ll7yBPdXz9nHROXxmIqGBZcNOsUGDlp
+   hSImSmUgwBTrmHI7x52i1G6C/zgt1kRr+7fsRakRp6BDpU0yytIBdUmj/
+   1NHcud4nGBnsdy3bN950o7gUs2UnBH7depMwHh9dzSb1xknn6sbZrfVQf
+   g==;
+X-CSE-ConnectionGUID: RDR5WjNWRq+FTB8Q7OwypA==
+X-CSE-MsgGUID: PP1Y0E/MTZimx2yHOxHYew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11627"; a="77856767"
+X-IronPort-AV: E=Sophos;i="6.20,234,1758610800"; 
+   d="scan'208";a="77856767"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2025 10:55:22 -0800
+X-CSE-ConnectionGUID: m0uvi7MiQY2PpxNqLXULPg==
+X-CSE-MsgGUID: 9ke+ghsHQCSV+tyeRgMR9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,234,1758610800"; 
+   d="scan'208";a="230801964"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa001.jf.intel.com with ESMTP; 28 Nov 2025 10:55:20 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 87B1F9F; Fri, 28 Nov 2025 19:55:19 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
+	Mark Brown <broonie@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] spi: microchip-core: Code improvements (part 2)
+Date: Fri, 28 Nov 2025 19:52:38 +0100
+Message-ID: <20251128185518.3989250-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-88d78
+Content-Transfer-Encoding: 8bit
 
-On Fri, 28 Nov 2025 16:06:30 +0800, Tianchu Chen wrote:
-> Discovered by Atuin - Automated Vulnerability Discovery Engine.
-> 
-> The 'len' variable is calculated as 'min(32, trans->len + 1)',
-> which includes the 1-byte command header.
-> 
-> When copying data from 'trans->tx_buf' to 'ch341->tx_buf + 1', using 'len'
-> as the length is incorrect because:
-> 
-> [...]
+Here is the second part of the set of refactoring and cleaning it up.
 
-Applied to
+Changelog v4:
+- collected tags (Prajna)
+- dropped applied patches
+- added a new patch 2
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+v3: <20251127190031.2998705-1-andriy.shevchenko@linux.intel.com>
 
-Thanks!
+Changelog v3:
+- collected tags (Prajna)
+- restored dummy read in TX-only transfers
 
-[1/1] spi: ch341: fix out-of-bounds memory access in ch341_transfer_one
-      commit: 545d1287e40a55242f6ab68bcc1ba3b74088b1bc
+v2: <20251126075558.2035012-1-andriy.shevchenko@linux.intel.com>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Changelog v2:
+- dropped device property agnostic API conversion change (Mark)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Andy Shevchenko (2):
+  spi: microchip-core: Refactor FIFO read and write handlers
+  spi: microchip-core: use XOR instead of ANDNOT to simplify the logic
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+ drivers/spi/spi-microchip-core-spi.c | 33 +++++++++++-----------------
+ 1 file changed, 13 insertions(+), 20 deletions(-)
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+2.50.1
 
 
