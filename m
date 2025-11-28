@@ -1,106 +1,88 @@
-Return-Path: <linux-spi+bounces-11661-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11662-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A52C9337A
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 22:56:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D966C933DA
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 23:13:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7814434D3A5
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 21:56:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C07713A935C
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 22:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839872E0417;
-	Fri, 28 Nov 2025 21:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BC622DCC1F;
+	Fri, 28 Nov 2025 22:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ga2s7FJM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DxECo2+F"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589E82DF710;
-	Fri, 28 Nov 2025 21:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360612DC791
+	for <linux-spi@vger.kernel.org>; Fri, 28 Nov 2025 22:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764367003; cv=none; b=Hx6fEwnT9//LfKL6DFOitgJFBtZXl7oG8DMdYbj/Z3vs16yX/44xL6YIZgHoKtdTM5z9xyq3Gqk8fYYeqapKAQnQLWUyT/N+rwYhZHtEFvEgORjtYRHJr8tqn8qnXg2SRaJAi3YUh3gBRhQg4MoSAHhd54zJexPYM6e+Nf4s3l8=
+	t=1764367983; cv=none; b=Jj5v0DQd8dxW7sWcnwX7yFshLYr0Yt2+NCrFrIGp6VvgavGna+/jTdgHZNRHns9Rph+mKJJ0J9sFSsNXXw9HjtoUhoq8NrHfs7heuk1VD7yR20OlL9oui8sQsndrtmL1wOShP2et1wZPx4pAPf4EyYFDJpu7DnqpdSI6BSLKtbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764367003; c=relaxed/simple;
-	bh=0SWbhjPFXqnT160Wd0WsWJ17+1+Ik/+gv5CPM59neis=;
-	h=Message-ID:From:To:Cc:Subject:Date; b=QLvfRvINPTE+G9bmC1EOkVHTsMnOyTGQQ6dPMOwOQuR4G6ggg9P9IaRJTnfH6wCC4TYRfJNysDpo7isFSYDMUth3eC0fWdu3RG3vSMzzd0U3qY1eezoxWICTbVBR97+dAiIKBHLetxlUYIEQMpTeYqea+sMjKZp8eJdDMm0ydK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ga2s7FJM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F722C4CEF1;
-	Fri, 28 Nov 2025 21:56:42 +0000 (UTC)
+	s=arc-20240116; t=1764367983; c=relaxed/simple;
+	bh=bYM+BkUEfjD7OPaMOCFRbJOlsMjpaGflUr/3Bmhwp7Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=hIfgr9Cuz/eixFp9AWT70aVcXFch50YPF9CPdD4QmoIvIwl+o7QoZOeZPY0dTfVLvr9yQGvcCvow6M2OM/pF2atGr0EOT+Sr2tz4EEMlM2bCKQIkittvYgE/WlE65bmq8ETQfwkARomcAjb/I/rtiPGSxVi0J8rNolBQVqA+Cxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DxECo2+F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A65C4CEF1;
+	Fri, 28 Nov 2025 22:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764367002;
-	bh=0SWbhjPFXqnT160Wd0WsWJ17+1+Ik/+gv5CPM59neis=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ga2s7FJMxLoKCSlk8LWhuV/meVAEiVubmQBZ9hN5ry7Jpg1DwLq9zHXxHyMvMZJds
-	 CBEElB3kex2PLo2FBmP/Aga46IOkfKyMv4HNnU97njDjJbLjoPljOtHDcPLtDQH80R
-	 1I2GIJG+0FqENkTCv9Q2w0F5ULbXfXNPldZk42lLZFYRYdVZJYLt1ETAtE1pOD9iX3
-	 hJbXFJzGFbYt56BiH+B7gh5zBgRnhm2dpTMyJm+va/InSmPo+IJ1SeRbeSFweKmJii
-	 ILcbtINA/AUWe9yaPzgxzkNCVr/n9gSQkf5Si4QkFFoZYwc6zBcC7SwBp29qiuMbQO
-	 uj5Fs6cJbkpRA==
-Message-ID: <e5dbc9d61c0e057d24e0e263175818f1@kernel.org>
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.18-rc7
-Date: Fri, 28 Nov 2025 21:56:34 +0000
+	s=k20201202; t=1764367982;
+	bh=bYM+BkUEfjD7OPaMOCFRbJOlsMjpaGflUr/3Bmhwp7Y=;
+	h=Subject:From:Date:To:From;
+	b=DxECo2+FY0+vJSNI/GVv7W/ODMj6wk00KK5mXCe0sRyHJYqgD3eTwUYjto5uEgJmM
+	 RLcZ5mVBI2wDCge2iqthYtHoUHkzpBxsIB2Q0o1dqJp+Ryp12yCLvSteQVZeretpkt
+	 ay7bVNr+5J3dCJfvXnGFotZMZOufQ1aZ3yACGILEVT9qJXTWxBsJLY6U5aIj/mvvBc
+	 bvW9fbdjr8HGwYWRk8qRgfnf0AtkCNX9OjhRTxPzMnwjd2H6TXAA+A/aZTXk7AYFi3
+	 m+cVCEuZwfsfgIeHdWn6Q46trLNyfO0Xh0EDvXE6cFpDjWyZGFZm3DoM/7D3MqSofA
+	 /lfiTEnDs1rsw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D61C380692B;
+	Fri, 28 Nov 2025 22:10:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176436780393.813286.17087598987642195942.git-patchwork-summary@kernel.org>
+Date: Fri, 28 Nov 2025 22:10:03 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-The following changes since commit 66e9feb03e7cf8983b1d0c540e2dad90d5146d48:
+Hello:
 
-  spi: Add TODO comment about ACPI GPIO setup (2025-11-10 14:03:53 +0000)
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-are available in the Git repository at:
+Series: spi: microchip-core: Code improvements
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028421
+  Lore link: https://lore.kernel.org/r/20251127190031.2998705-1-andriy.shevchenko@linux.intel.com
+    Patches: [v3,1/6] spi: microchip-core: use min() instead of min_t()
+             [v3,2/6] spi: microchip-core: Refactor FIFO read and write handlers
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.18-rc7
+Series: spi: microchip-core: Code improvements (part 2)
+  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028777
+  Lore link: https://lore.kernel.org/r/20251128185518.3989250-1-andriy.shevchenko@linux.intel.com
+    Patches: [v4,1/2] spi: microchip-core: Refactor FIFO read and write handlers
 
-for you to fetch changes up to 40ad64ac25bb736740f895d99a4aebbda9b80991:
 
-  spi: nxp-fspi: Propagate fwnode in ACPI case as well (2025-11-27 11:41:06 +0000)
+Total patches: 3
 
-----------------------------------------------------------------
-spi: Fixes for v6.18
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-A disappointingly large set of device specific fixes that have built up
-since I've been a bit tardy with sending a pull requests as people kept
-sending me new new fixes.  The bcm63xx and lpspi issues could lead to
-corruption so the fixes are fairly important for the affected parts, the
-other issues should all be relatively minor.
 
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      spi: nxp-fspi: Propagate fwnode in ACPI case as well
-
-Anurag Dutta (2):
-      spi: spi-cadence-quadspi: Enable pm runtime earlier to avoid imbalance
-      spi: spi-cadence-quadspi: Remove duplicate pm_runtime_put_autosuspend() call
-
-Carlos Song (1):
-      spi: spi-fsl-lpspi: fix watermark truncation caused by type cast
-
-Francesco Lavra (1):
-      spi: tegra114: remove Kconfig dependency on TEGRA20_APB_DMA
-
-Hang Zhou (1):
-      spi: bcm63xx: fix premature CS deassertion on RX-only transactions
-
-Haotian Zhang (1):
-      spi: amlogic-spifc-a1: Handle devm_pm_runtime_enable() errors
-
-Siddharth Vadapalli (1):
-      spi: cadence-quadspi: Fix cqspi_probe() error handling for runtime pm
-
- drivers/spi/Kconfig                |  4 ++--
- drivers/spi/spi-amlogic-spifc-a1.c |  4 +++-
- drivers/spi/spi-bcm63xx.c          | 14 ++++++++++++++
- drivers/spi/spi-cadence-quadspi.c  | 18 ++++++++----------
- drivers/spi/spi-fsl-lpspi.c        |  8 +++++++-
- drivers/spi/spi-nxp-fspi.c         | 10 +++++-----
- 6 files changed, 39 insertions(+), 19 deletions(-)
 
