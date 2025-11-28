@@ -1,103 +1,101 @@
-Return-Path: <linux-spi+bounces-11643-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11645-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F51C902F9
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 22:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16563C911B6
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 09:11:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0A6FD4E1DF4
-	for <lists+linux-spi@lfdr.de>; Thu, 27 Nov 2025 21:21:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9EC6F4E862F
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 08:09:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D1030E0C8;
-	Thu, 27 Nov 2025 21:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812742DF710;
+	Fri, 28 Nov 2025 08:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vPXWcu+W"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p+6a6G2M"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4F22F360E;
-	Thu, 27 Nov 2025 21:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DCFC2F691F
+	for <linux-spi@vger.kernel.org>; Fri, 28 Nov 2025 08:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764278467; cv=none; b=K62fO/3W88ZJnFqwSwkjl+s+SgEY58ZS1O8N6O63W9UFr3p9EPgyaUuIB5OFVu4ii9xF8G+uinb6HDpMoOFxcszo8gGOBgRyjwvPZnT4h5ZjaipLyYJZ/CzyWXWOBvwCH0QNQljRL/D84Gtlhzbgl5eMzJ+UD2SG2DdDtXEYolg=
+	t=1764317218; cv=none; b=BfL4OGMe/yvk36XWVVrhotRJZ1B3rpsQ5sw4i3ExOucZnjMl9NYMi5o53UCZNfLP1iqt6VtSajW6YFB/b00dKVJVUVIAJoROOfIR5GO1wDbm49UsR/p3Tcxc3d6KRWTn3FjbYzLmG5FJSIc/+V9W64Q1SrRJIFOPVwOBJlD8fc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764278467; c=relaxed/simple;
-	bh=dgsAfZ7S0L0Bi8BTONJHCHniC8yusQyBp/CFEde4yaM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=QB/uB6k5esxV8pmKo6gBevH7cPALMjDnYYBWpos62CThD+VwMjGrtGM63mCBOIX6CaiFfyD7ICyXlVKcx8FzE4TMwExVqoHGH3FLyourdQwrX1vfjq385sO+LmURt3kSigpl+EwlDTRImkVkuR8Vh34KRb74mcaM6moHjOcn9jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vPXWcu+W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A58C4CEF8;
-	Thu, 27 Nov 2025 21:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764278467;
-	bh=dgsAfZ7S0L0Bi8BTONJHCHniC8yusQyBp/CFEde4yaM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=vPXWcu+WG+R2ut107mVW87z8+ojeQVdcU5wysf0WENgMNcTaVaB7Zz4XLfZ5M4Wfq
-	 trPwstpIpw6ZMgqU5llEUEVZaXbfY8rR1hUabUWqCzCH3AIvHQtPoIl6ezmuLRT1r3
-	 6Z65MnsTnb/s8hQ4xTQm+XwRfGiX1Jpd5UHrCzLS9B746EvjzeNSWi+JTgrAzYN3Gn
-	 2lUn573xLfdhqApM4Um/g1obFHvmw7N1NHFSnBH1fjIUUiBwriRWAZspOCEiDxsSfv
-	 PdKjKExgx4M6CPnhW2AEfdqi/zFl8FoLWxkkvI222HtXbh7YKuHIhLTNT/K4qnnHQy
-	 +c6eq8OleRF8g==
-From: Mark Brown <broonie@kernel.org>
-To: Haibo Chen <haibo.chen@nxp.com>, linux-spi@vger.kernel.org, 
- imx@lists.linux.dev, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Han Xu <han.xu@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>
-In-Reply-To: <20251126202501.2319679-1-andriy.shevchenko@linux.intel.com>
-References: <20251126202501.2319679-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: nxp-fspi: Propagate fwnode in ACPI case as
- well
-Message-Id: <176427846537.166028.5032840309459905636.b4-ty@kernel.org>
-Date: Thu, 27 Nov 2025 21:21:05 +0000
+	s=arc-20240116; t=1764317218; c=relaxed/simple;
+	bh=PaRuPo/8d18hXOSOrZZmdayCy4RSaURgt88N6VVQF5k=;
+	h=Date:From:To:Cc:Subject:Message-Id:Mime-Version:Content-Type; b=ZkvRDAAmyJwVPrFJAE6JiqK6PERTz6CXAgfJnIIuJs9D4HF1OQ55d+ZEX6/Ax+Hj7VjEUlUntIKgcbz/K1dd5pQatJ3wBSen1s0x29LQjZD5ro4UynO3L0j+rLB4/dNACMx1xPWzPhUiJDT1HEEoRUuGh+uNALGoFr/KmaGY960=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p+6a6G2M; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Fri, 28 Nov 2025 16:06:30 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764317204;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xyLFdyMwZ35EJDPF/oEQsYS5adqqktBJr+Gd6bwHb1s=;
+	b=p+6a6G2MkCuAkyVcpkoCUGlMHQvfw7oFTHgM6kKGth5gHzu2BDjbMOSdcKoYNhmVDiEd7g
+	QKotHrcaGmyiGLiG4shNZ2XfKoSuB6KQgwCICyoA78UEpVMnRIVDqyDAvmeHcDCqVYlw7U
+	NDF+aEYGhSdDubKw7lRlZL59LFT/COc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tianchu Chen <tianchu.chen@linux.dev>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ gregkh@linuxfoundation.org
+Subject: [PATCH] spi: ch341: fix out-of-bounds memory access in
+ ch341_transfer_one
+Message-Id: <20251128160630.0f922c45ec6084a46fb57099@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-88d78
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 26 Nov 2025 21:25:01 +0100, Andy Shevchenko wrote:
-> Propagate fwnode of the ACPI device to the SPI controller Linux device.
-> Currently only OF case propagates fwnode to the controller.
-> 
-> While at it, replace several calls to dev_fwnode() with a single one
-> cached in a local variable, and unify checks for fwnode type by using
-> is_*_node() APIs.
-> 
-> [...]
+From: Tianchu Chen <flynnnchen@tencent.com>
 
-Applied to
+Discovered by Atuin - Automated Vulnerability Discovery Engine.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+The 'len' variable is calculated as 'min(32, trans->len + 1)',
+which includes the 1-byte command header.
 
-Thanks!
+When copying data from 'trans->tx_buf' to 'ch341->tx_buf + 1', using 'len'
+as the length is incorrect because:
 
-[1/1] spi: nxp-fspi: Propagate fwnode in ACPI case as well
-      commit: 40ad64ac25bb736740f895d99a4aebbda9b80991
+1. It causes an out-of-bounds read from 'trans->tx_buf' (which has size
+   'trans->len', i.e., 'len - 1' in this context).
+2. It can cause an out-of-bounds write to 'ch341->tx_buf' if 'len' is
+   CH341_PACKET_LENGTH (32). Writing 32 bytes to ch341->tx_buf + 1
+   overflows the buffer.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Fix this by copying 'len - 1' bytes.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Fixes: 8846739f52af ("spi: add ch341a usb2spi driver")
+Signed-off-by: Tianchu Chen <flynnnchen@tencent.com>
+---
+ drivers/spi/spi-ch341.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/spi/spi-ch341.c b/drivers/spi/spi-ch341.c
+index 46bc208f2..79d2f9ab4 100644
+--- a/drivers/spi/spi-ch341.c
++++ b/drivers/spi/spi-ch341.c
+@@ -78,7 +78,7 @@ static int ch341_transfer_one(struct spi_controller *host,
+ 
+ 	ch341->tx_buf[0] = CH341A_CMD_SPI_STREAM;
+ 
+-	memcpy(ch341->tx_buf + 1, trans->tx_buf, len);
++	memcpy(ch341->tx_buf + 1, trans->tx_buf, len - 1);
+ 
+ 	ret = usb_bulk_msg(ch341->udev, ch341->write_pipe, ch341->tx_buf, len,
+ 			   NULL, CH341_DEFAULT_TIMEOUT);
+-- 
+2.39.5
 
 
