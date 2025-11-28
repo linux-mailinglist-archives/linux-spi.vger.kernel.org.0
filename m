@@ -1,315 +1,253 @@
-Return-Path: <linux-spi+bounces-11646-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11647-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D639C918BD
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 11:00:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66A42C92459
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 15:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABB343A6971
-	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 10:00:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC3D23A4935
+	for <lists+linux-spi@lfdr.de>; Fri, 28 Nov 2025 14:17:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0893081CA;
-	Fri, 28 Nov 2025 10:00:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876EA2749C9;
+	Fri, 28 Nov 2025 14:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gL1tAfwt"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="zslE4X47"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013071.outbound.protection.outlook.com [40.107.201.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14D72F28E2
-	for <linux-spi@vger.kernel.org>; Fri, 28 Nov 2025 09:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764324005; cv=none; b=SuCE6MSB8Dwf72hFQ6+KAofpY3AGZnDWor5oKarvLo5iE1U30xifXGEGSeecBZ1/Z/QG7eDlHfHtLaWFfIFVdLhEnsKfq4HW1TtPDaFlL35X/RZCN3gKn3zF3+7nxqY20jiFPZ/VlDQculTOUGNhfPkYLMU3Z9BE1phJzvZ4xVQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764324005; c=relaxed/simple;
-	bh=TaRZM71/5VBjSq639Phe6Hwz5f1btLjNNYEyAwc/qwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YIbFhJq9muGiiH3BtSKGJRnnFUx6IU/H32RzMufKzTkByKgGdSi1lgpsWKky/u3YvS9/44xnl6PZL0a1SVcXA78OA4nOzUtdJJRVIMeQvMVM3Jho0CL/63+sN3Pk6yQzsqvuqOfMRtiw5Pn9Tp02eLenJpjR/P2G3jpCnAnhRGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gL1tAfwt; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b737cd03d46so251903066b.0
-        for <linux-spi@vger.kernel.org>; Fri, 28 Nov 2025 01:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764323998; x=1764928798; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2uX5AKFlE3KaTGTC6lsIDfjTJSY5MRYErJSJUEI7kZs=;
-        b=gL1tAfwtHK0eVDQNDXOnyZgJdtCmDtDXg9MWlIZlwtKSLdSZTk+JoBj77PThKDgbRI
-         p3U5iwxGJvYCVOFUlqb+DoXCL/T3gEGokQ2Wg8zDTKEduktFtY8JLthVhMNYUrdd1W3u
-         8NQT4Firy5ENzWVfIN/Ofq+G7pAzOQbX86LpBU7uf1UbaEbjS64ajMCNppSXUledbAQM
-         e3Vd4Mf8KqvdRxY3d5fkxoJXwA1gOU2DI4czPsc6QgOBqgMJryikGbZtDABxeP3XOy/7
-         Dg3eNgiwCsdDl3XJSUx77+96Cq3yeJzTqVF2pQYZAJ879lZUaaZZGL2MjpnbyWFRFU3B
-         LF+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764323998; x=1764928798;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2uX5AKFlE3KaTGTC6lsIDfjTJSY5MRYErJSJUEI7kZs=;
-        b=dPkMLoUPRdULtM/6r6msasczQ8sG09v2+LvW+H6Ao+chyHuad6kOuYcysVcBUz7yUf
-         7EAYyvO9kxhVovSRR0C1oKZRZ8m4n0b1yyZ1yHymbiEpM22GBAru4Xf/tTDJOYzBadg/
-         ss/ctFQHNppqHjv3BNlqJWzbmPoTNF6vBeICQqntL4SHmsrzj1cHIuagur7Gde6neJAX
-         b5m6r3RxCDVuxaT+7aT+KWLqJ/LLSpHD/SeQWC5BtxaRQ2mBDmlVDmQXbdqtqeZsVd0z
-         S4DlcOObwG2nGvW0njTd7IWbM29eWam98O+wMcrDcjxFdurGBokMRIaZUM45ipCvhXkX
-         sbgg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcksMk4MDjfJgOFHHoJ9W0A5RogVyAISlriOZTKhbuERpHFDMPbjvLKnKB87YxZnwL9IvmLH4Jb5w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8Uc9u3Ux2ujC/MI9d4cl4YqpqpQSnAybwLzQ3K+LSJsbcDEKl
-	vJ4BclulNI0L88QPEAKsUrv8mEg+b1KdmhHcWi7c9D+Bj5cEM6mMjG6VU38CMvHy
-X-Gm-Gg: ASbGnctXSTwMwCvlIV9mCdWqojQzmSua4x1lr7fJBse+zOUcPS/JEWWRQg0fuZcmr7E
-	bssLDSp0wByAF3KS9oyE3grw/JcMihu0WGqdroL4kqCmJ9Y2kxI0+3X9BfsQOsZfpC2POvsNf6G
-	iOkXYAM1aPnXOf761wCO1v4xT49ZYJlYzVp9PwmMRPdb940ZJPsGVQkxehawU8Qw4XULgc6UwFo
-	UZrq1T5d4UkPm04DdLePHEChFaDiQsBHYubWse8ckwKLloLZdjT+6M2nlsp6jjN9XSSee9z3Hc9
-	Ul9RBSVv+gzF+67WfuAatHnr/bE5epOwpq3C7zBpJp9WhKzzImtoifQygaLdQkTFNDbkLfFZak9
-	5FLsh6/1eWP2K2vzVuJoFBbspVwxOEX2yek9ovonifR9td/nuF00M10wF4HV5YO9UP6KDo3MCBv
-	0wR5y4tASLJ835xiZVP7lARnpWQrrLZmGbuDc4gfI+7/+Ui2DTABQGiv2OdSZWh9c=
-X-Google-Smtp-Source: AGHT+IEGkgK12Pivg49NR/ZOgpbdU3G5UdskYoGlRBNhkhTeK8ns6GTXdVkYN5ONzey9AOU/AvVmTQ==
-X-Received: by 2002:a05:6512:10cd:b0:595:80d2:cfdf with SMTP id 2adb3069b0e04-596a3e98385mr9843309e87.6.1764318899877;
-        Fri, 28 Nov 2025 00:34:59 -0800 (PST)
-Received: from ?IPV6:2001:14ba:437:c00::198? (2001-14ba-437-c00--198.rev.dnainternet.fi. [2001:14ba:437:c00::198])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa48aaasm1029238e87.71.2025.11.28.00.34.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Nov 2025 00:34:59 -0800 (PST)
-Message-ID: <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-Date: Fri, 28 Nov 2025 10:34:57 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D072741C9;
+	Fri, 28 Nov 2025 14:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764339392; cv=fail; b=feoZwTgkRMnZPUt7f9/KtTjsT+uO3LjO/o7b8K9xI+Ia3OmawLduzWSEBSO/B+4UI3RroRHgCp8LrxpJXTn2Jnj5N5/PA1KPHhAWCKuyEoFbJqAS09qHG3uH/o59Oqp1jAE9V9+OBj2hvRLIzNLX61t0aq4XejyO8/6QdqR8mGA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764339392; c=relaxed/simple;
+	bh=NoxmPX4lBCLM020jMPUhNUVM6CBYSUhBkWaR405p2ew=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=VJUK3JbaJiUZ4084g8DwZ5Arpb/2W3xUHmdEh9ZZeB0GHmoeBFpZDfwJ3sO8vqnZXnbS5bZtl6VT3eGaUikvb1ugKU9Ldd7U+G03DZ6iFw0VBVQrjce5g54D69HrLNmqiwXD9LAonRRqm0wnINsJaQ4R36eNlwPZagRMU38Fshg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=zslE4X47; arc=fail smtp.client-ip=40.107.201.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yn4yhbBLfF5rheico2H56wJsfnoPHa29KvfqHSuR7Ohqan+IgdIAurstLjmarKQjwDhSElog+TdIvieOZ/PnshJFfZ0bdTkGyyWPY7zmld2+i45hkbomKswsv2GGnhSDm624Wb9ceHmO0UgigfvZQqLv1HOxcirA2jIy3RB+ZtKq0SjR6HcZnMmhuHFXmxPkI9DKRRFJoYWN6Hh4guISdAXuoRiSroykVPiesWgo59KDJ+cryCG4Ow/Rey0NyJqVilMdGnFRKMzIpP9282YXeR2sRsJPNuCNJ3EZsPoO9nia4gSSobnWJjLuo40cwjZZ5jBVq0DD9TAkipZQiDagew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WPLZT/XcGdPf17jHyrCQnSmB23Ec5J2jK+mFSGoK3K8=;
+ b=mPL6SHkyBqxySmaZDprAdXM+pyH6nZXGAnVjMIGq/RJ9G5IvoTxoifJxB+Jck6ZMI8SGKc/KXmNfiDAK1ZfAt11h66e0ygfjxM/NMqWm8ppCj68wH5bA8TvlhhAL4JMCnA2EtQUd7TVfdF0HjL2VyQs/MMVwoTTLNTZqMcuP85ZncT06Ubu9itBKqyQmVNzb4R2RlxHerymOrzSqbdMFTPWnE1BELkOcDtdpQ3L8fuLLk61RjhBLtsgXq5DdTY1gcYovYXEY4hrNkwmriNNTzw370jIQChBHWYIoJTjeI80veglfwOdQ+2D09WPgUVC2ZAUBjsrXT0roxcpfBG6DmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WPLZT/XcGdPf17jHyrCQnSmB23Ec5J2jK+mFSGoK3K8=;
+ b=zslE4X47JdQF5Bthl3UkTSv7Mrz9y2hTgyVbVlKQAx4ssnQ8vKbusBiwD0mN0lvI/4OFuhd/eJcKlffyBYhZHBGaXAoVS4IyxX4BCaurl0FbfpADycmmbziuFtC34/4jIvrAP46ygmype6GVg2Ks/Mcctj1kG6zhiVhSaWTtZ+GUJmek0Tr+EDbnCm9FNRXt63a2vfgtuksihvtl+FUeuvBB15AGyKfaZMOmgL6qmG/0EPxLcmbaI/pfb3USL5EtxDZEj4G5jltEe4aeU4lH/n5X8giTa8ZTS+pddj9TaVF5Na1SMJi1zFWBFstLfzAu8lMhVK3q0MXk+YVRKdirnA==
+Received: from CYYPR11MB8386.namprd11.prod.outlook.com (2603:10b6:930:bf::13)
+ by CY8PR11MB6844.namprd11.prod.outlook.com (2603:10b6:930:5f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.11; Fri, 28 Nov
+ 2025 14:16:27 +0000
+Received: from CYYPR11MB8386.namprd11.prod.outlook.com
+ ([fe80::22ac:bfa1:678f:f510]) by CYYPR11MB8386.namprd11.prod.outlook.com
+ ([fe80::22ac:bfa1:678f:f510%4]) with mapi id 15.20.9366.009; Fri, 28 Nov 2025
+ 14:16:27 +0000
+From: <Prajna.Rajendrakumar@microchip.com>
+To: <andriy.shevchenko@linux.intel.com>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <broonie@kernel.org>, <Prajna.Rajendrakumar@microchip.com>,
+	<Conor.Dooley@microchip.com>
+Subject: RE: [PATCH v3 2/6] spi: microchip-core: Refactor FIFO read and write
+ handlers
+Thread-Topic: [PATCH v3 2/6] spi: microchip-core: Refactor FIFO read and write
+ handlers
+Thread-Index: AQHcX9Af6NbjthqNa06lUqBqYJmOobUIH4ZQ
+Date: Fri, 28 Nov 2025 14:16:27 +0000
+Message-ID:
+ <CYYPR11MB8386F204FAE5BB6220944DDC90DCA@CYYPR11MB8386.namprd11.prod.outlook.com>
+References: <20251127190031.2998705-1-andriy.shevchenko@linux.intel.com>
+ <20251127190031.2998705-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251127190031.2998705-3-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CYYPR11MB8386:EE_|CY8PR11MB6844:EE_
+x-ms-office365-filtering-correlation-id: 3711eb40-bb0e-41e5-b823-08de2e88b848
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?FrUPNHGqdcAs2+ZxkiXqwOG32cRSLOIYwpUNpR6TEFR/AP54Ak0dNKSFpmVw?=
+ =?us-ascii?Q?UI0evI5vGm86sFzai4AJa5jGYHzbevyu/6ao0ca5Sjl/gwU7wxViQN7wCiGw?=
+ =?us-ascii?Q?6j1Jg5N8dRUzS2Xfa48pr4E7Mnh3BGNoJ/AEg3yac7X6mPXil+DJw7lDew/q?=
+ =?us-ascii?Q?6sggv5oQfCVykumkQVbs1hx6heiRPhetilVsPszYEQ7v8/jVEljNLRmUTeHh?=
+ =?us-ascii?Q?RWqNFPm/GWWXxnKksAuhDsGpGOO/iEx9PuUno3KYqiBi7sBHEH+nWfp5r1P0?=
+ =?us-ascii?Q?YVh27G4yFTf6jDi9F7WaxaMkmSAfbt998ja0MfIa8Gk5diXbDZgmf60ORtxd?=
+ =?us-ascii?Q?DdHsUomXgDB1iPFPbOkUqyaqAVWJsIBQ4AZ2ea4OlLjTEenNgkN/2T0/Igjv?=
+ =?us-ascii?Q?+rzyUgEFWnc/2or3vdG6X30o4C7pWYq3FuTFxEZMVXNDgoTLSj3tzt2wHVXv?=
+ =?us-ascii?Q?TgbIxDSq+LtCwgLT8QAv+xOXQsib/l6AV8XrrA/VDvsYcqdMaXQ/FdYFcS89?=
+ =?us-ascii?Q?CMnYmeSKTr6oin+0WQZCkdIazSqZWKvoNeMouK0dRZZjh74saOJS3BvizhH1?=
+ =?us-ascii?Q?x9T3qobbbHEbEKVaTMD3VU/BmvtgbVSZOCoWorsB4Zbklz+Ov5lhKqho5z3h?=
+ =?us-ascii?Q?+jRkI/quQNRzaI2TnxZmBa5wjPMA74rMnIiuKhA3iVyXIU2u0xwdO133xn+C?=
+ =?us-ascii?Q?eBlgCW+Oy7G2Fqp2gMK2qzdQFovMZB1nsrXj2c1vNXldg7iogfeKtfdfPhS3?=
+ =?us-ascii?Q?vAGcbeIcbH3ij/p7rxlELYVRe/5VIY6GZ65f4gxapywJ5Pkf6FUTMi60GpIg?=
+ =?us-ascii?Q?LZhfpCEshbyF6MICRJogt7tcn4T7DOe9haOp7nnzHiPc73Jk2tOCaFI9/Vig?=
+ =?us-ascii?Q?rWlNJdmpsWGW83EkZ/xRF5PTykaEO/GttXLvksox274cPUYpqtjtDlcRZSrh?=
+ =?us-ascii?Q?vAgSeFPgzBB4AbcbdwPXbB7X1lUAFExpBobm5veRFsujKb1yambcRxJOJj2a?=
+ =?us-ascii?Q?/eOUYHuAux0w2NC1aRkyiE5iCqxF7CUCH+e3yRfcF09FOQAplXVWBPPTF4XR?=
+ =?us-ascii?Q?TDG75NzUJtHDJv/aPON86TgX2kg74oJrUxpaxjj9aKcnsepildLjX3k+qXCA?=
+ =?us-ascii?Q?rUHyEkKCmBnKn4Xg9TFnAosSOgjdQB/SemoNgXyAPwp67unkUz39AJsRTRHs?=
+ =?us-ascii?Q?AXjkGy6efVuH35cxVtgVq2bNDE98BO1w7XNZpGdCo303s+xIaRhFswg6Ehtd?=
+ =?us-ascii?Q?uOnKidSTOxB3K+pUTi4AdXIfXGrVYY/U2T7fZmKwyPyiS7QSjGh+1GBWXyFg?=
+ =?us-ascii?Q?pHQ96A6p2xyZZulIINMIdwKmGUc/0bwYaBMRPjibl/Yxi2NFFAAsEBETsP8F?=
+ =?us-ascii?Q?5c+Nui/9IHo7GQ2xMOpx+dx90JlB9EZs0iESQVFVlG15K/QV9jvWiDKUsRQy?=
+ =?us-ascii?Q?ylhZtMxylsCDTsEpAC7/2vISC2lZl6G2Vrn3DiIaLeyjApRyS+ZIzt2WBxZ5?=
+ =?us-ascii?Q?1nfUS4QAMk0JRShvuk04XAU7j0GtSrkvm0yX?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR11MB8386.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?I0tpV958tPAnrEu85g9lYuCOgOr/hPDOyCVfL8jcBxI1wDL2k1NZYI5tHDMG?=
+ =?us-ascii?Q?xIuFNuT716Z6yKIksGLbrKOVTTyAIDYpxT7Qrt/IEvBCORf6JGtp+2c+q/CR?=
+ =?us-ascii?Q?AvHZIy0FUAYROnipBnmapfQHqgHzxjj7Vdw1w9BJ/ePcxoMgExIexMqyqQyd?=
+ =?us-ascii?Q?3AGxQnCKVBjIlBX/+rUMqtRINHE0oiai4Rhd6w0cnpK+m+UMCYW02lExfIC5?=
+ =?us-ascii?Q?XqRQNUoRg7QvrsLttjA7DFTCa4rWooni8I2ZezTvZegfC3OGt42A9eI4SVFC?=
+ =?us-ascii?Q?zrs+8bAbFqy4O7iINQoSFCGiQi9ae16vxzZ6cyjgtS9oW8bzmxjeJuzevajT?=
+ =?us-ascii?Q?G8OA9yxDeBjdW3bQANh3GH0fsPzFRhjzbPz4bzDW9jCKMCNqSDgXvdZC+71i?=
+ =?us-ascii?Q?e25qLWLslx1gNhT3dP6z1GgHajJCNujmIdbVoEuh7DpkIAzplDB70FBXRPb/?=
+ =?us-ascii?Q?7sFZ/pFJPJDLs5Spwg/Rh9w4VskOrtithabpVhMqnZ/Ni5okf0UI5Pk3bwfR?=
+ =?us-ascii?Q?3W0Joty44bvBWVFk+z4pYWp1JQDI2xk52eQ0fHgks5DD5oAxZUdHW4cimV3T?=
+ =?us-ascii?Q?UJUyGuGqXvdw7D9GNe/l9UmHPI6dcaE9aml39zxNF+uHJWH9wNrpDDTWNmpn?=
+ =?us-ascii?Q?kzVYj8q4aybuzhKwL0ZmY8mTiUE/SQARWydtC4XkMlb3YxnXLuhV1/y8fli/?=
+ =?us-ascii?Q?impu73YThI5DShmdRmbu9cu955BOY59FzbGZqyVjwSMexpuD9x3oDHRXSVW4?=
+ =?us-ascii?Q?0ctJpWTBQ77kzlRVVpxHlMwY3yqZZCQcT25Uy7YbVlc1rGcsY6qmTd5bqSmd?=
+ =?us-ascii?Q?EQX3SGfySMBR6p++dSgyS8+SqjKv5C9g4beXQYIeTYNZtLcy+98HLoKLgJ1z?=
+ =?us-ascii?Q?WP79SeR1Ig0umId24f8IFh8P7Bb6lh+QgpSRS/dzeUP3p6uVACcbWJSZ+CDZ?=
+ =?us-ascii?Q?+BOa6pwKtCJMazVpyef8CsySVsw697cvY2E1o9Yhvr4vUDbo/Kiu9wtvc3kD?=
+ =?us-ascii?Q?bYgVUXryGocKO7GIvwId0uG0LmSbER6Qxg1vF54tcwvtDD5/P/dSpTHDV0uK?=
+ =?us-ascii?Q?7qZI186R+trv0383wZzq6nea3d2volL1xJ74iM0DyW3LNeqNz/VcCLWBTNCD?=
+ =?us-ascii?Q?IrTSpz1LlncfkJrkXOr0ECgmowxpIHI9ramYhTaUFA+5pNajmFdcE4sLDrLk?=
+ =?us-ascii?Q?5iiv2BQwTUgpzjF88n93sBQ3tlGplswsEj0pfvwjuupGKWvOl6FXijyg9R2k?=
+ =?us-ascii?Q?WLCES+VhP+OMZC4OBQSU73zDQTIHp0P0H9yJOfC5Ab+vdYvDiLVOrWCj/6fw?=
+ =?us-ascii?Q?pElfTWCysYd9LNxHdDjwkLxVHGgutMgmWpVfpuMRRZKkuAw+l4oDr/0+CSFq?=
+ =?us-ascii?Q?mw4xI6rnR2GFulFGdZ1NMA/+Vc5UH5Lajv0KbtoAsY+Pw0EdYFFR4xZMN6kA?=
+ =?us-ascii?Q?F4VKKgacSsSyJepiAnMcV9aJdSCjQVFVpCHMjNq9IwWm1wZVK6pEcNjR5JPW?=
+ =?us-ascii?Q?F/wqnqL+BzdM4kHzDn5xfSG/SYU9aacneFiISx3t9ESK3rzPO91KbB8sP9S2?=
+ =?us-ascii?Q?LgxuWUGmfuJb1F2sqX8n8WjfBt7BsF7LkrR16T3VFpoDrMwQ4GZGTuWlUbno?=
+ =?us-ascii?Q?pg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-To: Rob Herring <robh@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- David Rhodes <david.rhodes@cirrus.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
- Allan Nielsen <allan.nielsen@microchip.com>,
- Horatiu Vultur <horatiu.vultur@microchip.com>,
- Steen Hegelund <steen.hegelund@microchip.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
- <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
- <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-Content-Language: en-US
-From: Kalle Niemi <kaleposti@gmail.com>
-In-Reply-To: <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR11MB8386.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3711eb40-bb0e-41e5-b823-08de2e88b848
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2025 14:16:27.4923
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uiTVVGIXgQemwKkBgbgq5skZwLJFzR5vaVHTwO51bAEWQsvE5SYAYfSNWlO8ZUdKXhQVWdUscwZUST/85PvLn1EiRJo8+L2aztUbBEFZF2bty39L5zS6AdorxrrOByuG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6844
 
-
-On 11/27/25 03:54, Rob Herring wrote:
-> On Tue, Nov 25, 2025 at 12:43 AM Matti Vaittinen
-> <mazziesaccount@gmail.com> wrote:
->> On 24/11/2025 19:01, Rob Herring wrote:
->>> On Mon, Nov 24, 2025 at 10:44 AM Kalle Niemi <kaleposti@gmail.com> wrote:
->>>>
->>>> On 11/24/25 16:53, Rob Herring wrote:
->>>>> On Mon, Nov 24, 2025 at 8:48 AM Kalle Niemi <kaleposti@gmail.com> wrote:
->>>>>> On 10/15/25 10:13, Herve Codina wrote:
->>>>>>> From: Saravana Kannan <saravanak@google.com>
->>>>>>>
->>>>>>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
->>>>>>>
->>>>>>> While the commit fixed fw_devlink overlay handling for one case, it
->>>>>>> broke it for another case. So revert it and redo the fix in a separate
->>>>>>> patch.
->>>>>>>
->>>>>>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
->>>>>>> Reported-by: Herve Codina <herve.codina@bootlin.com>
->>>>>>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
->>>>>>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
->>>>>>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
->>>>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
->>>>>>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
->>>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>>>>>> Acked-by: Mark Brown <broonie@kernel.org>
->>>>>>> ---
->>>>>>>      drivers/bus/imx-weim.c    | 6 ------
->>>>>>>      drivers/i2c/i2c-core-of.c | 5 -----
->>>>>>>      drivers/of/dynamic.c      | 1 -
->>>>>>>      drivers/of/platform.c     | 5 -----
->>>>>>>      drivers/spi/spi.c         | 5 -----
->>>>>>>      5 files changed, 22 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
->>>>>>> index 83d623d97f5f..87070155b057 100644
->>>>>>> --- a/drivers/bus/imx-weim.c
->>>>>>> +++ b/drivers/bus/imx-weim.c
->>>>>>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
->>>>>>>                                   "Failed to setup timing for '%pOF'\n", rd->dn);
->>>>>>>
->>>>>>>                  if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
->>>>>>> -                     /*
->>>>>>> -                      * Clear the flag before adding the device so that
->>>>>>> -                      * fw_devlink doesn't skip adding consumers to this
->>>>>>> -                      * device.
->>>>>>> -                      */
->>>>>>> -                     rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>>>>>                          if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
->>>>>>>                                  dev_err(&pdev->dev,
->>>>>>>                                          "Failed to create child device '%pOF'\n",
->>>>>>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
->>>>>>> index eb7fb202355f..30b48a428c0b 100644
->>>>>>> --- a/drivers/i2c/i2c-core-of.c
->>>>>>> +++ b/drivers/i2c/i2c-core-of.c
->>>>>>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
->>>>>>>                          return NOTIFY_OK;
->>>>>>>                  }
->>>>>>>
->>>>>>> -             /*
->>>>>>> -              * Clear the flag before adding the device so that fw_devlink
->>>>>>> -              * doesn't skip adding consumers to this device.
->>>>>>> -              */
->>>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>>>>>                  client = of_i2c_register_device(adap, rd->dn);
->>>>>>>                  if (IS_ERR(client)) {
->>>>>>>                          dev_err(&adap->dev, "failed to create client for '%pOF'\n",
->>>>>>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
->>>>>>> index 2eaaddcb0ec4..b5be7484fb36 100644
->>>>>>> --- a/drivers/of/dynamic.c
->>>>>>> +++ b/drivers/of/dynamic.c
->>>>>>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
->>>>>>>          np->sibling = np->parent->child;
->>>>>>>          np->parent->child = np;
->>>>>>>          of_node_clear_flag(np, OF_DETACHED);
->>>>>>> -     np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
->>>>>>>
->>>>>>>          raw_spin_unlock_irqrestore(&devtree_lock, flags);
->>>>>>>
->>>>>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->>>>>>> index f77cb19973a5..ef9445ba168b 100644
->>>>>>> --- a/drivers/of/platform.c
->>>>>>> +++ b/drivers/of/platform.c
->>>>>>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
->>>>>>>                  if (of_node_check_flag(rd->dn, OF_POPULATED))
->>>>>>>                          return NOTIFY_OK;
->>>>>>>
->>>>>>> -             /*
->>>>>>> -              * Clear the flag before adding the device so that fw_devlink
->>>>>>> -              * doesn't skip adding consumers to this device.
->>>>>>> -              */
->>>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>>>>>                  /* pdev_parent may be NULL when no bus platform device */
->>>>>>>                  pdev_parent = of_find_device_by_node(parent);
->>>>>>>                  pdev = of_platform_device_create(rd->dn, NULL,
->>>>>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
->>>>>>> index 2e0647a06890..b22944a207c9 100644
->>>>>>> --- a/drivers/spi/spi.c
->>>>>>> +++ b/drivers/spi/spi.c
->>>>>>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
->>>>>>>                          return NOTIFY_OK;
->>>>>>>                  }
->>>>>>>
->>>>>>> -             /*
->>>>>>> -              * Clear the flag before adding the device so that fw_devlink
->>>>>>> -              * doesn't skip adding consumers to this device.
->>>>>>> -              */
->>>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>>>>>                  spi = of_register_spi_device(ctlr, rd->dn);
->>>>>>>                  put_device(&ctlr->dev);
->>>>>>>
->>>>>> Sorry, some of you will receive this message now for second time. First
->>>>>> message was sent to older series of patches.
->>>>>> -
->>>>>>
->>>>>> Hello,
->>>>>>
->>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
->>>>>> BD71847 drivers probe to not be called.
->>>>> This driver (and overlay support) is in linux-next or something out of
->>>>> tree on top of linux-next?
->>>>>
->>>>> Rob
->>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
->>> I don't see any support to apply overlays in that driver.
->> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
->> proper consideration. 100% my bad.
->>
->> While the bd718x7 drive indeed is mainline (and tested), the actual
->> 'glue-code' doing the overlay is part of the downstream test
->> infrastructure. So yes, this is not a bug in upstream kernel - this
->> falls in the category of an upstream change causing downstream things to
->> break. So, feel free to say: "Go fix your code" :)
->>
->> Now that this is sorted, if someone is still interested in helping us to
->> get our upstream drivers tested - the downstream piece is just taking
->> the compiled device-tree overlay at runtime (via bin-attribute file),
->> and applying it using the of_overlay_fdt_apply(). The approach is
->> working for our testing purposes when the device is added to I2C/SPI
->> node which is already enabled. However, in case where we have the I2C
->> disabled, and enable it in the same overlay where we add the new device
->> - then the new device does not get probed.
->>
->> I would be really grateful if someone had a pointer for us.
-> Seems to be fw_devlink related. I suppose if you turn it off it works?
-> There's info about the dependencies in sysfs or maybe debugfs. I don't
-> remember the details, but that should help to tell you why things
-> aren't probing.
->
-> I've dropped the changes for 6.18 for now. No one really seems to be
-> in need of them yet AFAICT.
->
-> Rob
-Hello,
-
-Thank you for the help. We are going to look into sysfs / debugfs as 
-soon as we have time.
-
-I tried with this and result was the same, BD71847 was not probed:
-[    0.000000] Kernel command line: console=ttyO0,115200n8 root=/dev/nfs 
-rw nfsroot=192.168.255.126:/home/user01/nfs,nfsvers=3 
-ip=192.168.255.1:192.168.255.126::255.255.255.0:bbb1:eth0 nfsrootdebug  
-fw_devlink=no
-
-
-With todays linux-next the BD71847 got probed; I assume the changes got 
-dropped for the moment.
-
-Kalle
+> -----Original Message-----
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Sent: Thursday, November 27, 2025 6:59 PM
+> To: Prajna Rajendra kumar - M74368
+> <Prajna.Rajendrakumar@microchip.com>; Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com>; linux-spi@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Cc: Mark Brown <broonie@kernel.org>
+> Subject: [PATCH v3 2/6] spi: microchip-core: Refactor FIFO read and write
+> handlers
+>=20
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know
+> the content is safe
+>=20
+> Make both handlers to be shorter and easier to understand.
+> While at it, unify their style.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+> ---
+>  drivers/spi/spi-microchip-core-spi.c | 31 +++++++++++-----------------
+>  1 file changed, 12 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-microchip-core-spi.c b/drivers/spi/spi-micro=
+chip-
+> core-spi.c
+> index 08ccdc5f0cc9..439745a36f9c 100644
+> --- a/drivers/spi/spi-microchip-core-spi.c
+> +++ b/drivers/spi/spi-microchip-core-spi.c
+> @@ -97,15 +97,12 @@ static inline void mchp_corespi_read_fifo(struct
+> mchp_corespi *spi, u32 fifo_max
+>                        MCHP_CORESPI_STATUS_RXFIFO_EMPTY)
+>                         ;
+>=20
+> +               /* On TX-only transfers always perform a dummy read */
+>                 data =3D readb(spi->regs + MCHP_CORESPI_REG_RXDATA);
+> +               if (spi->rx_buf)
+> +                       *spi->rx_buf++ =3D data;
+>=20
+>                 spi->rx_len--;
+> -               if (!spi->rx_buf)
+> -                       continue;
+> -
+> -               *spi->rx_buf =3D data;
+> -
+> -               spi->rx_buf++;
+>         }
+>  }
+>=20
+> @@ -127,23 +124,19 @@ static void mchp_corespi_disable_ints(struct
+> mchp_corespi *spi)
+>=20
+>  static inline void mchp_corespi_write_fifo(struct mchp_corespi *spi, u32
+> fifo_max)  {
+> -       int i =3D 0;
+> -
+> -       while ((i < fifo_max) &&
+> -              !(readb(spi->regs + MCHP_CORESPI_REG_STAT) &
+> -                MCHP_CORESPI_STATUS_TXFIFO_FULL)) {
+> -               u32 word;
+> -
+> -               word =3D spi->tx_buf ? *spi->tx_buf : 0xaa;
+> -               writeb(word, spi->regs + MCHP_CORESPI_REG_TXDATA);
+> +       for (int i =3D 0; i < fifo_max; i++) {
+> +               if (readb(spi->regs + MCHP_CORESPI_REG_STAT) &
+> +                   MCHP_CORESPI_STATUS_TXFIFO_FULL)
+> +                       break;
+>=20
+> +               /* On RX-only transfers always perform a dummy write */
+>                 if (spi->tx_buf)
+> -                       spi->tx_buf++;
+> +                       writeb(*spi->tx_buf++, spi->regs +
+> MCHP_CORESPI_REG_TXDATA);
+> +               else
+> +                       writeb(0xaa, spi->regs +
+> + MCHP_CORESPI_REG_TXDATA);
+>=20
+> -               i++;
+> +               spi->tx_len--;
+>         }
+> -
+> -       spi->tx_len -=3D i;
+>  }
+>=20
+>  static void mchp_corespi_set_cs(struct spi_device *spi, bool disable)
+> --
+> 2.50.1
 
 
