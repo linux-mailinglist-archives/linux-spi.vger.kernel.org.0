@@ -1,120 +1,154 @@
-Return-Path: <linux-spi+bounces-11664-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11665-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6122AC93946
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 09:19:11 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2522EC93C04
+	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 11:29:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0870B3A6EBC
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 08:19:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8008C347F54
+	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 10:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1E222F77E;
-	Sat, 29 Nov 2025 08:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AB42405EC;
+	Sat, 29 Nov 2025 10:29:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L36taNuR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="US8FPeQ0"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2132F79CF;
-	Sat, 29 Nov 2025 08:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0D019C540
+	for <linux-spi@vger.kernel.org>; Sat, 29 Nov 2025 10:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764404346; cv=none; b=atj2HghySdLEYJT2DIH9qJJcx14gqsyqpG4g0eAC7Nn5CqbVs9t0Yp9EDLXeD6nVvRUMto0PGJohClsBSoYiouUMq+5MYU2o9rjNb2KeavU0w6esbnP2zqpMiIMOx0bCOWdDrbf3LozXaaiyMufZl+RPtaP/SYhbvEZg3+bPpt4=
+	t=1764412176; cv=none; b=YaVXpUecMRTiYnqKuN72qEq/wW1NTqKTzUutcFMTwIKliRn1G8uRDmQleAM8LHUoFK305eejcxZZrFICUewFjjtp3xmEHIpplz2sjpwrdJtifbwTFK1rY/nHf1Zv8umtaK6VWozN5seLTeuvud/sjXS+0Xn3rxLHnPN3Ip3GWA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764404346; c=relaxed/simple;
-	bh=uv/kPw1McE5f3bmKv8GjbUJ6JEEDRK2Oh3WgY3zU8N4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YEgPU24PYQvgSEhqYcg8EhPueCo23x+Y1S3wAlwOYAlOCv3k4VjI/luziwUc03C00svS3Bt6C1GCZ7NYBMlxQCcla8cSXf8eOHL2NzgtjX/8irpowRlsGJrz/VnMy1v2ojbtu+5XtZvD0AvqguvEVCup9i2vcLIJaiDtJF7pe9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L36taNuR; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764404345; x=1795940345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=uv/kPw1McE5f3bmKv8GjbUJ6JEEDRK2Oh3WgY3zU8N4=;
-  b=L36taNuR5XES5S1SE/6/ozL1tHGNf5IxpcBTLxXxFNvePm1vMfuolz1n
-   /cSKydToIlUv71pCtEYGAp58Q34RiTf09W3KsUd1RissfsC/aImAMnq2+
-   xKljiOu1CE74J9Tge4j3fceejv7eF7qgTPkWBbrT55PhVQwiMYKizBNjv
-   BLpPiB12BnKgcluTrUBinkRinK/iNjgXqf66iQ9ADZI0aSp0MpI7ilGea
-   hLlbt7+EKljBlxLVWQUbknVf+xS8Gxr3L6v4EiJK0zOhtxjvsbttMWZTP
-   Nj6UnjosGiLBv3UVWm8Lu1MByV5hgjZJSZJja43PtK7VPd278vvGha3ug
-   w==;
-X-CSE-ConnectionGUID: 1vNykGU9S9y5YMRqrIi7tw==
-X-CSE-MsgGUID: hmdD5Hi7TU+NDcqIbNPLRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11627"; a="66363434"
-X-IronPort-AV: E=Sophos;i="6.20,235,1758610800"; 
-   d="scan'208";a="66363434"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2025 00:19:04 -0800
-X-CSE-ConnectionGUID: 9RxSrQuLStm3f1UAKgRhiA==
-X-CSE-MsgGUID: +A4ygBIHThqrqKIXgJ/5Cw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,235,1758610800"; 
-   d="scan'208";a="224317636"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.245.50])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2025 00:19:02 -0800
-Date: Sat, 29 Nov 2025 10:19:00 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Jonas Gorski <jonas.gorski@gmail.com>
-Cc: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] spi: microchip-core: use XOR instead of ANDNOT to
- simplify the logic
-Message-ID: <aSqsdKpJ7CDd6jJn@smile.fi.intel.com>
-References: <20251128185518.3989250-1-andriy.shevchenko@linux.intel.com>
- <20251128185518.3989250-3-andriy.shevchenko@linux.intel.com>
- <CAOiHx==y-4Jjckr-KnwdmJhi=TR9_wzcHvNo8GAeUmJ43Y_bHw@mail.gmail.com>
+	s=arc-20240116; t=1764412176; c=relaxed/simple;
+	bh=EXIAZkX9JbCZEV40QF6tt5G/xP6fu5FJr2BYKTQr4tk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pM5gagQ1l2sMp18TTcl9kSLm9kZLDnIdGnlW/6OmumWaatEqbQvxkDTSFETTPgf7NiytntFD8zCpTVPpfgnN6h1/xpdJdb9hf3rDWmKWcZ9goCSOoySKhhkpiNodgd1KCr08r2Ou3vEyq/vXFzwogTdVb4xs5hj4JwA15M5PtSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=US8FPeQ0; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b2dc17965so2445841f8f.3
+        for <linux-spi@vger.kernel.org>; Sat, 29 Nov 2025 02:29:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764412172; x=1765016972; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XB8ojDLPmRPjgdbiNqqeSPVDfEQQay9vSxKvQQfS0ls=;
+        b=US8FPeQ05vlOd8gQODpXBhwYuCM/mO7vzxuPEHHukdEDD2zn3/RoG6LVb+6zo8RqdH
+         q3sZUUMsUR84Kf06K+K19b3MyaoOk8fvsOt+SnRrh+xhViNql1BjpXVpUBdU0CCekrlk
+         qrdFIIpmYbrSjppsqiLcTWONtuKgLRNbAvmd4RIhFe3A1sLUF7ZeHWc3zVwJrFOD5ZMs
+         oIb89v6lr/2+JS9k6LaO4h44PujWed+okdl6FuMZLpcl06s3VGjX++aoDUB6T8N58r8J
+         TDFwj2ZW2zBJoZiJ//k5IL/ZM5Rsh8fJx9Zgk7LOzqNR7cRsKjR/4WDiNDuFlEKrUy3H
+         pnzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764412172; x=1765016972;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XB8ojDLPmRPjgdbiNqqeSPVDfEQQay9vSxKvQQfS0ls=;
+        b=h1gZhAfY2monZStVJWK14rPDI+yzhWYhzraj3y2UOwWK7uAp2WjjYYF9okLlh9pskS
+         H0pjjmU/MGMfSw7Xnde6vnD26CzBiGFoJ2S+zipdaYkRfYgx9TpmYprKR6OXjSHR7y2w
+         lIC16/gS1MqibY/DCvf2iVkrX5sOg21aqJb/5GZEtkCUjuGG1Kmn0r9cP6gZwIlrbezk
+         6/9zTFGwDITwnv6DMpbdh5S1vGE1nxk80ihphd8D6fysUQ5xBAzNKLHjHFBzEGRLmyOv
+         gHl+6OAJ61qKOoSf9glfdC1wuEMtE6aMI2uO9LmYOpHsXCilQF0wkwr4Jmvg4WICO1YF
+         NvBw==
+X-Gm-Message-State: AOJu0Yw0lH42AfX5OUDMl31bCUviVb9ruBrNbQrLLods+zpxwbEyezbH
+	H5282u9wKTHtLgtLlZzZ8VcuDfq5HrHJxdNUH9PJhNsWyvSJYN1VsBT/
+X-Gm-Gg: ASbGncv+O9AlOz9F+hI1um4oMlI2xVkTPFYgnTs7x1zo/h7wgwGSr8fdLgQpBaPn99Q
+	3mCDLr0jzCtzG30zk0oob7YYS6nIevDg6uP/KIzWZId9EYjlq9/ByipvOsff5vFilAPVPBKA+Mm
+	sp9bNX+ggJ1t4o5ouyjAMFliDD/qbc9+OM8UN2xTGdLmfbvls9RYaFOdaRTxuLFLydsISJhJbmt
+	8bzZBYDSNpQAZzUdkZ9eIueC4OAn7obIICuJPM1lWxII3mZwNT9HJMMp1XfNSVBr8En0lKOy5MU
+	MWllwD6PWZomq81XxnnPbrhIgUuz6eOwjya5a0mD9AF0Vq1hUc74T80Iln++rOkTFGPj0/Knr4t
+	VLvjjYlGz+k1fQEv6L3Jvfuoi0NdrNUKUX5PPWXiT2Y7WWjkCbXG7j2aIFMyxHQ7+xCPKKG59BA
+	gu3kfN6COT4lZ4OSdxX/Nfr99yyd8LwnZQ/UdynsgdaLVoZsPIak4=
+X-Google-Smtp-Source: AGHT+IFF8NfCPDZoCDRvd2e/3m3f9IuNEk2//VmqY35vg4vwN/ox68TOxm1dPHp0YHoIW6ze/wYpJw==
+X-Received: by 2002:a05:6000:4026:b0:42b:2c54:d9ba with SMTP id ffacd0b85a97d-42cc1cbd449mr38035756f8f.20.1764412172508;
+        Sat, 29 Nov 2025 02:29:32 -0800 (PST)
+Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42e1c5c30b8sm14740128f8f.7.2025.11.29.02.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Nov 2025 02:29:32 -0800 (PST)
+From: Gabor Juhos <j4g8y7@gmail.com>
+Date: Sat, 29 Nov 2025 11:29:27 +0100
+Subject: [PATCH] spi: spi-qpic-snand: remove superfluous
+ qcom_spi_set_read_loc() calls
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOiHx==y-4Jjckr-KnwdmJhi=TR9_wzcHvNo8GAeUmJ43Y_bHw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAbLKmkC/x3NwQrCMAyA4VcZORtYy6biq4iHkGYaGG1NqAhj7
+ 76y43f5/w1cTMXhMWxg8lPXkjvCZQD+UH4LauqGOMY5hHjHb1VGz5QTeqtiy9pKczShtBZGvnG
+ cZoojTVfokWqy6P8cPF/7fgAo3rvCcAAAAA==
+X-Change-ID: 20251128-qpic-snand-superfluous-readloc-c7c245a20a46
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+ Gabor Juhos <j4g8y7@gmail.com>
+X-Mailer: b4 0.14.2
 
-On Fri, Nov 28, 2025 at 08:30:43PM +0100, Jonas Gorski wrote:
-> On Fri, Nov 28, 2025 at 7:56 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+Before configuring the registers related to page read, both the
+qcom_spi_read_page_ecc() and the qcom_spi_read_page_oob() functions
+are calling qcom_spi_set_read_loc() to set the read location for the
+first codeword.
 
-...
+However the qcom_spi_set_read_loc() function puts the passed value
+into the register write cache only, from where those gets written
+to the corresponding register later via DMA.
 
-> > -       if (spi->mode & SPI_MODE_X_MASK & ~spi->controller->mode_bits) {
-> > +       if ((spi->mode ^ spi->controller->mode_bits) & SPI_MODE_X_MASK) {
-> 
-> This changes the behavior: if a bit isn't set in spi->mode that is set
-> in mode_bits, it would have been previously accepted, now it's
-> refused. E.g. controller has (SPI_CPOL | SPI_CPHA), device only
-> SPI_CPOL. 0x1 & 0x3 & ~0x3 => 0, vs (0x1 ^ 0x3) & 0x3 => 0x2
-> 
-> If this is the actually intended behavior here, it is a fix and should
-> carry a Fixes tag (the message below implies that).
+Yet, the qcom_spi_set_read_loc() is also gets called within the
+internal loops, and during the first iteration the read location
+register values written by the initial call gets overwritten in
+the register cache.
 
-Yeah, yesterday I was thinking about the same and I was confused by the logic
-behind. As far as I understood the comments regarding mode provided by DT is
-that the mode is configured in IP and may not be changed. And you are right
-about the fix, but let's wait for Microchip to elaborate on the expected
-behaviour.
+This means that the values written by the first calls are never
+getting used in practice, so remove the calls as those are
+superfluous.
 
-> >                 dev_err(&spi->dev, "incompatible CPOL/CPHA, must match controller's Motorola mode\n");
-> >                 return -EINVAL;
-> >         }
+Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
+---
+ drivers/spi/spi-qpic-snand.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Thanks for the review!
+diff --git a/drivers/spi/spi-qpic-snand.c b/drivers/spi/spi-qpic-snand.c
+index 7681a91d67d563fd21fcbd69d223b6e846e97787..0334ba738bef2811e3458d20ce69bd3a213cb20b 100644
+--- a/drivers/spi/spi-qpic-snand.c
++++ b/drivers/spi/spi-qpic-snand.c
+@@ -850,8 +850,6 @@ static int qcom_spi_read_page_ecc(struct qcom_nand_controller *snandc,
+ 	snandc->regs->ecc_bch_cfg = cpu_to_le32(ecc_bch_cfg);
+ 	snandc->regs->exec = cpu_to_le32(1);
+ 
+-	qcom_spi_set_read_loc(snandc, 0, 0, 0, ecc_cfg->cw_data, 1);
+-
+ 	qcom_clear_bam_transaction(snandc);
+ 
+ 	qcom_write_reg_dma(snandc, &snandc->regs->addr0, NAND_ADDR0, 2, 0);
+@@ -941,8 +939,6 @@ static int qcom_spi_read_page_oob(struct qcom_nand_controller *snandc,
+ 	snandc->regs->ecc_bch_cfg = cpu_to_le32(ecc_bch_cfg);
+ 	snandc->regs->exec = cpu_to_le32(1);
+ 
+-	qcom_spi_set_read_loc(snandc, 0, 0, 0, ecc_cfg->cw_data, 1);
+-
+ 	qcom_write_reg_dma(snandc, &snandc->regs->addr0, NAND_ADDR0, 2, 0);
+ 	qcom_write_reg_dma(snandc, &snandc->regs->cfg0, NAND_DEV0_CFG0, 3, 0);
+ 	qcom_write_reg_dma(snandc, &snandc->regs->erased_cw_detect_cfg_clr,
 
+---
+base-commit: cb5c2eb459f4c98d584eaf3d3ea7c3612385d081
+change-id: 20251128-qpic-snand-superfluous-readloc-c7c245a20a46
+
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Gabor Juhos <j4g8y7@gmail.com>
 
 
