@@ -1,144 +1,129 @@
-Return-Path: <linux-spi+bounces-11670-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11671-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62F6DC944BB
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 17:59:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E24B8C94CC9
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Nov 2025 10:14:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 56C6A4E371B
-	for <lists+linux-spi@lfdr.de>; Sat, 29 Nov 2025 16:59:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E99284E233D
+	for <lists+linux-spi@lfdr.de>; Sun, 30 Nov 2025 09:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC6430F95B;
-	Sat, 29 Nov 2025 16:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBDE227B94;
+	Sun, 30 Nov 2025 09:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="p1ExRqDj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdwjL5Vw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9943112D0
-	for <linux-spi@vger.kernel.org>; Sat, 29 Nov 2025 16:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9959F11CAF
+	for <linux-spi@vger.kernel.org>; Sun, 30 Nov 2025 09:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764435533; cv=none; b=b2HICr4pBp7HWzG2CRoZnntBHpAdU0HLDJ1Su08zUB3Ni7d+CvrHiKxrHp/k6A5tLxdHCCFN4IhYC5JTHDgPX1++eaAhfQCZViH9yiGsmlW5UCdDTPWDX0+xFsC13oLHfwML+nh9ZdL5etBez5GJI6qnlkBQadJnVPkIDIkDdRs=
+	t=1764494052; cv=none; b=PzNvGnuvKH49CmiCrgL0SWKVg3Jw8NK1zLZOWVn80celCEu2nrNctaZ1TuqeESbHmy2hF6r0WzLZyt8ADBRzXD28N6GyoG+dLZ+vTJDvoW6nDBtTNZfGMzjQKFXkQCneabRw4OZTYOb1E186y8AuOYdj29ZW5pT9ioYtbuvE7YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764435533; c=relaxed/simple;
-	bh=ZZbGTkMYTIgTc2HHYCAxYn2mLQnWvUECVJl5MHLWpEc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i1RSZ6HUj+1FZDWemI8i341v2yAQ5f2M2mNbdjXJWAcum/jdP3V0XE/U60W4u0RtmhcBM2sTD+sFJqPQ+/x+hFobrmAesxpWxGvRelutfs++oX3DlvMwzLijEQmi2QLqRvoV+DMHYISEAcyfuWAqFVUOgMjSKE+PlZYehlHdkwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=p1ExRqDj; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64198771a9bso5421884a12.2
-        for <linux-spi@vger.kernel.org>; Sat, 29 Nov 2025 08:58:48 -0800 (PST)
+	s=arc-20240116; t=1764494052; c=relaxed/simple;
+	bh=MGGriOeY9GnM5WbLP7Ub+yvZgeskrMWaNCIjfY8JhaQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mTywXTWkU/sHGDRF1kb9LsObkbuu3g4roiuwinlM2+Mh25mF20yqzoKdhUSN7blZu+Y5JghobEOBlobgTvRU+Aq/4WLXmmKscUmvLfSWfLR4wDtzGXEKWk51j7XGH7lC8F64GWHcRk9TlitfZTDCQMrRFFTkEcbDc/X1iAA+p8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdwjL5Vw; arc=none smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-42e2d5e119fso254454f8f.2
+        for <linux-spi@vger.kernel.org>; Sun, 30 Nov 2025 01:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764435527; x=1765040327; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PFG57/lAXGfcsZdp8Xv+tkRcXlQVV5XT9qmsBMmgDeQ=;
-        b=p1ExRqDjd4wDbEXgcUtmYM71zIOnMDZGn/Bv4LzNZ0seM4VCuaZ+FVyEtWmjfRyE3y
-         Yw1j+SKfygreR8cVy8tP6ugbD9JDZduSOcICyxViVWCbPNaVUyRJ8rF+bv39IWlVgJBj
-         f4I5KhxKLmSEqEOKNUD5nPcf//mTPxzYiL8SxLWe3imc6iVLbmgun3u4ZhYJcXPbsGaG
-         NeBlL+NMZ4NTZzr8M0FCSsg3by2iubvZ/Wd+/oMM5upCRRBuzmLz8GCGmJLhsMshpWmY
-         rGJwV9KASDuCJjeV21W9KZQvHvnLhaSxVqzo/GeZyT66IfnelBkXbvVbV+Lpgt597/uD
-         +Urg==
+        d=gmail.com; s=20230601; t=1764494049; x=1765098849; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qonFTC9cukq617453+SfG5fIkZheN8Tb5aZ9YtE+WGM=;
+        b=cdwjL5VwwtarqPjWoinFvo5MjKv8TzenXQRDh3TMUuVXtSg7Ll0ncgt95uH8eYZq3m
+         bVdSGZtKdcJiAIfliVK5yTgvXf7zckG37RdFCPj+uMO7/31ynKIueWTEE7tkZFtp9d8x
+         kUzNi5OPz/fLiINu71ZRalxWn+1QTwV3yA4at/1GAHCuW6oa+RIviOpPmoBNTk7sx+bG
+         0De02VQ7QGZSZfEacLnr12RsnjBwApWX0nYrO7u8W5ociAIiutck44V7adKiJ0gQFnh3
+         uwdM4d03wyISMXu2KOZPhT5XWxY1v/7Qvivn1iOttVrdFlWOr0J2594l6194qNjoZuXi
+         Xp3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764435527; x=1765040327;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PFG57/lAXGfcsZdp8Xv+tkRcXlQVV5XT9qmsBMmgDeQ=;
-        b=HKXKv7SfYdOPDyBmCnAtIAN1V9yE7q7iNffjFpOHj8qHuBccQl7G23Z8d82TnDVaFL
-         5ou+KMByrmCgETLjMM+Qjen4Sd5f7lq1bRWV2CCVYCKDQQ1UNxdtEmGH/uqLgwa9F/Oj
-         obpzO12ml7lSlOyxTOAYG3UsZAHpZbT6qD+rc4lZZ+NY+leKjotp0DLW4fyyXkA5DSU1
-         mlQ59bKpcHEubIbAGMmfSsD2Glhdv9WxN1NF8BwUV2RhxDOMHYv9KXFtf8dt7T8XWELE
-         pwRXcSovG6FA+zPA6qx9ep8alleBAekcWQ4M/shp7IVuHDOyw0l2Cpa8L9vJzSeuAaDg
-         cnIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxP8dqiroOqn/Ig41fgMMz+vf8DO7ZmZgNae7SyYk/NBd9P+T5I9dXrUxyXdSX65IfbzZB+AxreIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWXrKrOpvuPvA8mUtWNMRqHugyV1B72ZhFZKsVXvN005mTEGwm
-	2HHHbNOmsLrjdQihO9IL0xNVTjsw4TnCNxR3Gih+ktxsBViVew97rlyY3Ze8/Vd9Puc=
-X-Gm-Gg: ASbGncsn0He48pg9AkGpVJfPoD856sgruX8q7MOxPJs7h6nTzSewQKvYL+2VswlZuF0
-	9bSd/aV4bDPrdKZiqpaDW7n7bZ+VPW0GZAUcHQ0kGac+vDfzCVGc23Vx+3AP4J79cKKwX6vC++Y
-	22lHIJyrInYwFHqNKZy/NLN+7AJ1FvzN1vqFPXRRudI5iGq6mee/K5T02zMBxG3AJvwut+FQ4l/
-	NZXAxAsRvIBsn0B+qG7TvHhP8ycN8IHT5EHE+fitppaEF5IEKnvHcajHUSKcHiTiMH5cR99O+R4
-	O6XW1JM+DJC7CdJzdxSfmp0j7U/L2EFMvMm2N5T9dhisLoAaAGbMop5VqAhRvUI/0RUOTGnF20v
-	9O6jBQsT9XytfHT7fjryqbfDODqb6/iBWzD9bBNk7OCUxz0/X56D5/gT7fuckyquMAikrtuqPRv
-	RiouzsoJVoMNTrHmlk
-X-Google-Smtp-Source: AGHT+IFy0NAudSDXw7I2Aiji0fj/sV9rIW0nafD3DGEIhNthc68dpKGwVJNpVb+V2jIju6zOK1WZEw==
-X-Received: by 2002:a17:906:fa0c:b0:b76:8077:4eaa with SMTP id a640c23a62f3a-b7680774fecmr2224282766b.6.1764435526719;
-        Sat, 29 Nov 2025 08:58:46 -0800 (PST)
-Received: from localhost ([2a02:8071:b783:6940:1d24:d58d:2b65:c291])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b76f5a4860fsm726556066b.63.2025.11.29.08.58.46
+        d=1e100.net; s=20230601; t=1764494049; x=1765098849;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qonFTC9cukq617453+SfG5fIkZheN8Tb5aZ9YtE+WGM=;
+        b=VWcfM/E5DLj6fNa5z3Zhe6TNWSADz4B2GdVRyqw7ZIlh9E02QY65zjEDRfaCpJ14ba
+         N1eqmNJwWWPxs/P90yhWDWNxQeMOW2LGgytfIA+s0x4ITU+/ep40xrmL1wYh5IfO/Oat
+         qFgwNLxWiDZKtAFVt2+KF7vv172Hc+bqqHO/vys7LBYHTSd+bakLvEj+a0NVfDWZWrpr
+         R7BqZTuB5Z895RBPD+Yw3BUibdYrmEl8QtzK3OJn4GdR0B23Bc11qIlSJ4PQeYfxbv/Z
+         xw+AGouBBZzKw+Qwn/EilJCdgEweyFpLGLBh3EelO5DR8k6nV7lYgKvJIe94jnV+JlbZ
+         IJSw==
+X-Gm-Message-State: AOJu0Yy8Wk/e1iWTldRfnN6qwS2J+LBnPvxaEvSvCHY9JEQ8t2CEpjuS
+	ER1LPw/PBv3ZLCUDKd+mnnjE1BqZpqFNLSwU7P1RznOrLWtWSflz8NTA
+X-Gm-Gg: ASbGncuKR+mYow6iYvbG+75hrRdrIZ/PSpa7EbFRWroBGYezpE2YVXTh9DSxCwoka8O
+	WoXU9IE0pVL5wo3xu3GJXY3pldte0Fbo6m7algcbIm0ZbNDDJYRVPdW1w1mrj8OjeDWv9Rw0Ofh
+	9MYfExcFQa5t6AMDINHuK2ohg2b2MnyMp6bjqVpu0HHNem7f5NQf76VDiI9vvbArVrK17RvjVgx
+	vr31/GDaVo/UelZc5BniQSzpavXjGsCOz6gpnwY/gKG2rnCKF7JIPoUOCfLtWLO1d4SRTJ7VA9y
+	cStUQXcA8gI4VH9DV4osBzRziehSOej7P2wC15pAJ+MvYA6ZlQpThRf/bp6/QM+L156gsDnjI1m
+	evXoc5fPv1mbnqZWMMuw0ElpuYs0WomvDfV1BK7BHll8gjAfBktAqgYsaGNou3+KPTpMikEobYA
+	Ua9jnC6zJ/ERkQf+iXSrZF3X/X//0AtocxwG5suqO6Jy0=
+X-Google-Smtp-Source: AGHT+IHcdFLcZ96GpxA116dFShtGE7sfX94uNLz5L013+p+MhI9x785xRWvj4LDpM1cT3MV1aytapQ==
+X-Received: by 2002:a05:6000:26c4:b0:42b:2fc8:170 with SMTP id ffacd0b85a97d-42cc1ab8a59mr36772953f8f.12.1764494048887;
+        Sun, 30 Nov 2025 01:14:08 -0800 (PST)
+Received: from localhost.localdomain ([39.46.201.138])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1ca8e00fsm19230232f8f.34.2025.11.30.01.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Nov 2025 08:58:46 -0800 (PST)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Eddie James <eajames@linux.ibm.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: Ninad Palsule <ninad@linux.ibm.com>,
-	linux-spi@vger.kernel.org,
+        Sun, 30 Nov 2025 01:14:08 -0800 (PST)
+From: Ali Tariq <alitariq45892@gmail.com>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 12/12] spi: fsi: Convert to fsi bus probe mechanism
-Date: Sat, 29 Nov 2025 17:57:48 +0100
-Message-ID:  <a64cde17039056d71a1bd14ecc36bcb67305b31e.1764434226.git.ukleinek@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1764434226.git.ukleinek@kernel.org>
-References: <cover.1764434226.git.ukleinek@kernel.org>
+	khairul.anuar.romli@altera.com,
+	adrianhoyin.ng@altera.com,
+	nirav.rabara@altera.com,
+	matthew.gerlach@altera.com,
+	Ali Tariq <alitariq45892@gmail.com>
+Subject: [PATCH] spi: cadence-qspi: Fix runtime PM imbalance in probe
+Date: Sun, 30 Nov 2025 09:12:51 +0000
+Message-ID: <20251130091251.12120-1-alitariq45892@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1228; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=ZZbGTkMYTIgTc2HHYCAxYn2mLQnWvUECVJl5MHLWpEc=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBpKyYgROy12cesDmV48VbWJFTWfD4pX9V5tIPFq WBU7MaAQ++JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaSsmIAAKCRCPgPtYfRL+ TmrzB/44PL/fVctVmXmkwM8vtKDKp/RzmiAggaYZ030mB5tEwnTSlzpcfa8mRjCT1atCQwmPOd1 xYtsux2go6zkiWQXhfzOUo5TdWMdkgfUGf33ElWK8+Amyx1JWixrJnH/cc34uKi7N0+SnskX44R WBPJ+6/uwH1PD6Q/vmH33P4TuPFn3M5nK+Xy5IDKeFFe+QJvvwxRdzrGaFaBfjc/kDKNzuHZ3O3 w2RDycLVKPsIxITkTlCzPB32NIrAKY7O6eFTkEDWxNb/AvT1giay9DwgQhnqWogZaRFtf0s4XwE 9iQZNr0On/KbEjfKdsf/p9iNPFfEPU4uCuUu7qjndz6M2lJ/
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-The fsi bus got a dedicated probe function. Make use of that. This fixes
-a runtime warning about the driver needing to be converted to the bus
-probe method.
+The probe function incorrectly calls pm_runtime_put_autosuspend()
+twice in succession at the end of successful probe, dropping two
+runtime PM references while only one was acquired earlier with
+pm_runtime_get_sync(). This causes a usage count underflow:
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+    cadence-qspi 13010000.spi: Runtime PM usage count underflow!
+
+Remove the first redundant pm_runtime_put_autosuspend() call to
+balance the reference count.
+
+Tested on StarFive VisionFive 2 v1.2A board.
+
+Fixes: 30dbc1c8d50f ("spi: cadence-qspi: defer runtime support on socfpga if reset bit is enabled")
+
+Signed-off-by: Ali Tariq <alitariq45892@gmail.com>
 ---
- drivers/spi/spi-fsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/spi/spi-fsi.c b/drivers/spi/spi-fsi.c
-index f9c15b99dba5..07dc3d24f2c9 100644
---- a/drivers/spi/spi-fsi.c
-+++ b/drivers/spi/spi-fsi.c
-@@ -528,13 +528,13 @@ static size_t fsi_spi_max_transfer_size(struct spi_device *spi)
- 	return SPI_FSI_MAX_RX_SIZE;
- }
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 81017402bc56..638edca3805a 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -2012,7 +2012,6 @@ static int cqspi_probe(struct platform_device *pdev)
+ 	}
  
--static int fsi_spi_probe(struct device *dev)
-+static int fsi_spi_probe(struct fsi_device *fsi)
- {
- 	int rc;
- 	struct device_node *np;
- 	int num_controllers_registered = 0;
- 	struct fsi2spi *bridge;
--	struct fsi_device *fsi = to_fsi_dev(dev);
-+	struct device *dev = &fsi->dev;
- 
- 	rc = fsi_spi_check_mux(fsi, dev);
- 	if (rc)
-@@ -593,9 +593,9 @@ MODULE_DEVICE_TABLE(fsi, fsi_spi_ids);
- 
- static struct fsi_driver fsi_spi_driver = {
- 	.id_table = fsi_spi_ids,
-+	.probe = fsi_spi_probe,
- 	.drv = {
- 		.name = "spi-fsi",
--		.probe = fsi_spi_probe,
- 	},
- };
- module_fsi_driver(fsi_spi_driver);
+ 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
+-		pm_runtime_put_autosuspend(dev);
+ 		pm_runtime_mark_last_busy(dev);
+ 		pm_runtime_put_autosuspend(dev);
+ 	}
 -- 
-2.47.3
+2.43.0
 
 
