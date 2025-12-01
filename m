@@ -1,118 +1,140 @@
-Return-Path: <linux-spi+bounces-11693-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11694-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BC0EC97B4F
-	for <lists+linux-spi@lfdr.de>; Mon, 01 Dec 2025 14:48:04 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B50D9C982F7
+	for <lists+linux-spi@lfdr.de>; Mon, 01 Dec 2025 17:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D7A3C34728D
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Dec 2025 13:46:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2E9F84E1371
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Dec 2025 16:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBD331ED68;
-	Mon,  1 Dec 2025 13:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F299433468A;
+	Mon,  1 Dec 2025 16:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJDCkqCg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA7C31CA7F;
-	Mon,  1 Dec 2025 13:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E4B248898;
+	Mon,  1 Dec 2025 16:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764596671; cv=none; b=QqRAzT8q/vGrb4kH+q6ngvflg5fXY1YkXmsytqPmaHVITwc3onPlvtq7+wpihh1CaLXxONcl+zny5ojlEPIBJZnxK1PmcXyoPUIWP2V3nvFsPcKA0pKuY2hTu6i7Y6Yb1AuDLnlkfSK1XnKwbUF8Vwz5EmjXf14IbUj2M77bqtc=
+	t=1764605343; cv=none; b=FuMGXgJd/R8xPFxfEfIqf6ZWEaNN4UhHJCJIBikjlFbJjQ0uh7WyEhBWeKiyU0cxUPbPmb6J89wgixfAuUB/9mOMCyfVK6kcLK1wFWZkNOLtpqTF/QUrPSeVx3QRUT8cp2P0GkrShjACKIm7VNBe+R3gLiM6LskJGXpsiGk97hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764596671; c=relaxed/simple;
-	bh=K+8Imq08PBFg0FzfxwvlVR/iIDNvODdGNxCaD6X3rLo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j8k3Xwhdo2WLs5/POXAJdRV6GyZDKBWDH0948Q6m6d/Ps4bPzx618IISUG8KDVid/wbm+HBCoukJVOFaHSef0Br5wRnHzk+XdcZxSe2AmMIgJQt+POQyXVAKU6uMvHPkAqt3EFx5Jyg3qxirEavqlDe4xiFY7aa2u8gpEDmdXTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: P8X0AJUbSj6a33fC+MQIuw==
-X-CSE-MsgGUID: iMQSsI9HS7ij2WRf2z0UOw==
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Dec 2025 22:44:28 +0900
-Received: from demon-pc.localdomain (unknown [10.226.93.83])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id A71544215A56;
-	Mon,  1 Dec 2025 22:44:24 +0900 (JST)
-From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-spi@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 13/13] arm64: dts: renesas: r9a09g087: wire up DMA support for SPI
-Date: Mon,  1 Dec 2025 15:42:29 +0200
-Message-ID: <20251201134229.600817-14-cosmin-gabriel.tanislav.xa@renesas.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
-References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
+	s=arc-20240116; t=1764605343; c=relaxed/simple;
+	bh=p2riUpZt2f8P3dFBKBKBp5idIMSAisOHnNY+os6ih/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WjQXm4wbQWqE5q5jXu/I2vZNgJvt16OW5tc1a0mwcoaQf9IWjZU5ZJpMVA4kmVFS+a/uwjFcWAsni/BsAXc3oOHIuie3RaqfRqp8u5k3XpkSHYKjDrInF7XDiZwZkTgzgwDSC9h6mE/cQ66CGHJxjt2uQlSyMX2M5sM/+erb6ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJDCkqCg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162ECC4CEF1;
+	Mon,  1 Dec 2025 16:08:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764605341;
+	bh=p2riUpZt2f8P3dFBKBKBp5idIMSAisOHnNY+os6ih/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BJDCkqCgnL7Whx3r3NZZYOp0OUauC0FrN/yfKULpHjv2RsFJfwurltyW+6BkFyvWy
+	 DxPeuXPWnSm3x6qSlR/zcws0aiaCKwgmE3uDUYgeA0YyRbDDJmiFvoadesuSNKmdk8
+	 5kzeyF6/VCTy5h9dDEmZywlSE+IEP+9CcCoS6GO9aje1JKxvT7ahvg3n9MbEpC2w8O
+	 etjlU18u368F0jSi7zt+hAbyAcgTBnPAy1mtddonvGQsHa8jrszbtPLRjNzDZyEAlT
+	 DQBq6XDRvDh5zvD+f4h3mJhQg6gVQpkB5Zr5nQeWcXhKlPsZ8QTrE5AtTn3+fbCl+p
+	 31oWBRK/a95Fw==
+Date: Mon, 1 Dec 2025 16:08:57 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>,
+	Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] spi: microchip-core: use XOR instead of ANDNOT to
+ simplify the logic
+Message-ID: <20251201-calamity-favoring-b2d1ec4bcc81@spud>
+References: <20251128185518.3989250-1-andriy.shevchenko@linux.intel.com>
+ <20251128185518.3989250-3-andriy.shevchenko@linux.intel.com>
+ <CAOiHx==y-4Jjckr-KnwdmJhi=TR9_wzcHvNo8GAeUmJ43Y_bHw@mail.gmail.com>
+ <aSqsdKpJ7CDd6jJn@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="IegB0pAUZdnof9LA"
+Content-Disposition: inline
+In-Reply-To: <aSqsdKpJ7CDd6jJn@smile.fi.intel.com>
 
-RZ/N2H (R9A09G087) has three DMA controllers that can be used by
-peripherals like SPI to offload data transfers from the CPU.
 
-Wire up the DMA channels for the SPI peripherals.
+--IegB0pAUZdnof9LA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a09g087.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Sat, Nov 29, 2025 at 10:19:00AM +0200, Andy Shevchenko wrote:
+> On Fri, Nov 28, 2025 at 08:30:43PM +0100, Jonas Gorski wrote:
+> > On Fri, Nov 28, 2025 at 7:56=E2=80=AFPM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+>=20
+> ...
+>=20
+> > > -       if (spi->mode & SPI_MODE_X_MASK & ~spi->controller->mode_bits=
+) {
+> > > +       if ((spi->mode ^ spi->controller->mode_bits) & SPI_MODE_X_MAS=
+K) {
+> >=20
+> > This changes the behavior: if a bit isn't set in spi->mode that is set
+> > in mode_bits, it would have been previously accepted, now it's
+> > refused. E.g. controller has (SPI_CPOL | SPI_CPHA), device only
+> > SPI_CPOL. 0x1 & 0x3 & ~0x3 =3D> 0, vs (0x1 ^ 0x3) & 0x3 =3D> 0x2
+> >=20
+> > If this is the actually intended behavior here, it is a fix and should
+> > carry a Fixes tag (the message below implies that).
+>=20
+> Yeah, yesterday I was thinking about the same and I was confused by the l=
+ogic
+> behind. As far as I understood the comments regarding mode provided by DT=
+ is
+> that the mode is configured in IP and may not be changed. And you are rig=
+ht
+> about the fix, but let's wait for Microchip to elaborate on the expected
+> behaviour.
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g087.dtsi b/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-index 7b1f2c1c9e85..61c1b3713b43 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g087.dtsi
-@@ -200,6 +200,8 @@ rspi0: spi@80007000 {
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_PCLKM>,
- 				 <&cpg CPG_MOD 104>;
- 			clock-names = "pclk", "pclkspi";
-+			dmas = <&dmac0 0x267a>, <&dmac0 0x267b>;
-+			dma-names = "rx", "tx";
- 			power-domains = <&cpg>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -218,6 +220,8 @@ rspi1: spi@80007400 {
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_PCLKM>,
- 				 <&cpg CPG_MOD 105>;
- 			clock-names = "pclk", "pclkspi";
-+			dmas = <&dmac0 0x267f>, <&dmac0 0x2680>;
-+			dma-names = "rx", "tx";
- 			power-domains = <&cpg>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -236,6 +240,8 @@ rspi2: spi@80007800 {
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_PCLKM>,
- 				 <&cpg CPG_MOD 106>;
- 			clock-names = "pclk", "pclkspi";
-+			dmas = <&dmac0 0x2684>, <&dmac0 0x2685>;
-+			dma-names = "rx", "tx";
- 			power-domains = <&cpg>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-@@ -254,6 +260,8 @@ rspi3: spi@81007000 {
- 			clocks = <&cpg CPG_CORE R9A09G087_CLK_PCLKM>,
- 				 <&cpg CPG_MOD 602>;
- 			clock-names = "pclk", "pclkspi";
-+			dmas = <&dmac0 0x2689>, <&dmac0 0x268a>;
-+			dma-names = "rx", "tx";
- 			power-domains = <&cpg>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.52.0
+Prajna is on holiday and I don't have a setup to actually test this on,
+but I'm 99% sure that you're both right and the original behaviour was
+wrong. There's a verilog parameter to the IP block that determines which
+motorola mode it is and a device that's not an exact match won't work.
+FWIW:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
+
+>=20
+> > >                 dev_err(&spi->dev, "incompatible CPOL/CPHA, must matc=
+h controller's Motorola mode\n");
+> > >                 return -EINVAL;
+> > >         }
+>=20
+> Thanks for the review!
+>=20
+> --=20
+> With Best Regards,
+> Andy Shevchenko
+>=20
+>=20
+
+--IegB0pAUZdnof9LA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaS29dwAKCRB4tDGHoIJi
+0pLdAP0RGR6QV7NxUY2WTwChYhBcLzQgVw/mFZOns3c4M4/cmgEA/EZhYNo8lqqC
+j8UIX4IKuaL54E2IK9gCcQzfc2F6VAA=
+=BVwB
+-----END PGP SIGNATURE-----
+
+--IegB0pAUZdnof9LA--
 
