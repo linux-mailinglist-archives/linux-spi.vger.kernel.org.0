@@ -1,39 +1,39 @@
-Return-Path: <linux-spi+bounces-11686-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11687-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69D35C97AEC
-	for <lists+linux-spi@lfdr.de>; Mon, 01 Dec 2025 14:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01319C97AF0
+	for <lists+linux-spi@lfdr.de>; Mon, 01 Dec 2025 14:45:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B54C4342DC2
-	for <lists+linux-spi@lfdr.de>; Mon,  1 Dec 2025 13:44:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2CDA93448BC
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Dec 2025 13:45:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA07231770B;
-	Mon,  1 Dec 2025 13:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90CAE319608;
+	Mon,  1 Dec 2025 13:43:57 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388883191A2;
-	Mon,  1 Dec 2025 13:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A71314A90;
+	Mon,  1 Dec 2025 13:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764596634; cv=none; b=vAlmqPH8fqnckzSAxi3i0fANMp87+Q22oGDDAjNS1Rm3ztwjSbuT4TFvkUeYt8izL5fyHIsThm/w6eWH9zMQR+B5vyoSOqqpNSTNOZ4Bf3I32beCL8xIY/MV/EG/f9sScKYbgW5uIra5YUbtL6UshX7yvXqbCX3vFB7z0rOdZhc=
+	t=1764596637; cv=none; b=XQ75SenBH/04ngAt+LfGi4xGzbKTzJcvtJ7bEhmc62cPGqMI7TcQzXUpourSD+32vl7CY+iXDrMjt8pbCK9WeqPKNidN265c02FRAd2TQdEg4NpW4GqIlErmKI0AuTMqldESkzbtpkNIXaD6YflXOAEf6Rx3aWCf9Dq5eWBWwec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764596634; c=relaxed/simple;
-	bh=GeAaz+Wi1uM8FERJPGZGCHtKTCzPfUBafULTCaDC5Ik=;
+	s=arc-20240116; t=1764596637; c=relaxed/simple;
+	bh=BPL2TwvTpcjQX7A4CSXa87cu0XO0kjfn8C+hfo327q4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G21e8CbMw27vx3a+PqmxwBQ1P9Yet6Hp0BzTJ/HQXXz0F++I70KkC2OzFqKW8QOokZQfys40TKAWp+jL0yWdlz4EfMbMJY90CSkgY1BR+UNPMhVYbB/nRcQC7fB3fVRN/PP7dCmkxg7UgSPcNO2095seM9krwzU8K3jI/1fNFT4=
+	 MIME-Version; b=Lv1xnCXdxVjTbuoh0D+x0IPtXHLin+xIc17QeeLefuC/x+WBfVj+zbb61bwLjaK5DUaUpGafgQZvyQ/ufdHWzgNkNPlnQ7M1644vLxXfyHFzYz0I+9lJO3LoH49uWlTbLzSK33BWfHhexhzH/TxRpvggH1PRccNwovsyiBXY6T0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: cWu70kYfQVitmQYuxk/ehg==
-X-CSE-MsgGUID: Alw3zvHxQhu8irJEZIgwTA==
+X-CSE-ConnectionGUID: lCt8/OgPQW67O0ya4J74rw==
+X-CSE-MsgGUID: ZHYEJHJtQ4edFFgQke9A4g==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 01 Dec 2025 22:43:49 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 01 Dec 2025 22:43:55 +0900
 Received: from demon-pc.localdomain (unknown [10.226.93.83])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id D1F504215A4E;
-	Mon,  1 Dec 2025 22:43:45 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 087574215A52;
+	Mon,  1 Dec 2025 22:43:50 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Mark Brown <broonie@kernel.org>,
@@ -48,9 +48,9 @@ Cc: linux-spi@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH 06/13] spi: rzv2h-rspi: set MUST_RX/MUST_TX
-Date: Mon,  1 Dec 2025 15:42:22 +0200
-Message-ID: <20251201134229.600817-7-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH 07/13] spi: rzv2h-rspi: set TX FIFO threshold to 0
+Date: Mon,  1 Dec 2025 15:42:23 +0200
+Message-ID: <20251201134229.600817-8-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
 References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
@@ -62,60 +62,33 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for implementing DMA support, set MUST_RX and MUST_TX
-flags on the controller so that we always receive non-NULL buffers.
+In PIO mode we send data word-by-word, and wait for the received data
+to be available after each sent word, making no use of the TX interrupt.
 
-The PIO mode already handles this manually by checking if rx_buf/tx_buf
-are set on the transfer, and doing a dummy read/write if not.
+In DMA mode, we need to set the RX and TX FIFO thresholds to 0, as
+described in the User Manual.
 
-DMA will not be able to implement this special handling, and although
-the SPI controller advertises support for transmit-only or receive-only
-transfers via SPCR's register TXMD bitfield, it does not seem to work.
-
-Remove the special handling for PIO and let the SPI controller core
-handle it.
+In preparation for implementing DMA support, set TX FIFO threshold to 0,
+as RX FIFO threshold is already 0.
 
 Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 ---
- drivers/spi/spi-rzv2h-rspi.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ drivers/spi/spi-rzv2h-rspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-rzv2h-rspi.c b/drivers/spi/spi-rzv2h-rspi.c
-index 50fd7ddef58d..f0bbbd21c763 100644
+index f0bbbd21c763..83bb0b7400b2 100644
 --- a/drivers/spi/spi-rzv2h-rspi.c
 +++ b/drivers/spi/spi-rzv2h-rspi.c
-@@ -113,11 +113,7 @@ struct rzv2h_rspi_priv {
- static inline void rzv2h_rspi_tx_##type(struct rzv2h_rspi_priv *rspi,	\
- 					const void *txbuf,		\
- 					unsigned int index) {		\
--	type buf = 0;							\
--									\
--	if (txbuf)							\
--		buf = ((type *)txbuf)[index];				\
--									\
-+	type buf = ((type *)txbuf)[index];				\
- 	func(buf, rspi->base + RSPI_SPDR);				\
- }
+@@ -501,7 +501,7 @@ static int rzv2h_rspi_prepare_message(struct spi_controller *ctlr,
+ 		writeb(0, rspi->base + RSPI_SSLP);
  
-@@ -126,9 +122,7 @@ static inline void rzv2h_rspi_rx_##type(struct rzv2h_rspi_priv *rspi,	\
- 					void *rxbuf,			\
- 					unsigned int index) {		\
- 	type buf = func(rspi->base + RSPI_SPDR);			\
--									\
--	if (rxbuf)							\
--		((type *)rxbuf)[index] = buf;				\
-+	((type *)rxbuf)[index] = buf;					\
- }
+ 	/* Setup FIFO thresholds */
+-	conf16 = FIELD_PREP(RSPI_SPDCR2_TTRG, rspi->info->fifo_size - 1);
++	conf16 = FIELD_PREP(RSPI_SPDCR2_TTRG, 0);
+ 	conf16 |= FIELD_PREP(RSPI_SPDCR2_RTRG, 0);
+ 	writew(conf16, rspi->base + RSPI_SPDCR2);
  
- RZV2H_RSPI_TX(writel, u32)
-@@ -596,6 +590,7 @@ static int rzv2h_rspi_probe(struct platform_device *pdev)
- 
- 	controller->mode_bits = SPI_CPHA | SPI_CPOL | SPI_CS_HIGH |
- 				SPI_LSB_FIRST | SPI_LOOP;
-+	controller->flags = SPI_CONTROLLER_MUST_RX | SPI_CONTROLLER_MUST_TX;
- 	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(4, 32);
- 	controller->prepare_message = rzv2h_rspi_prepare_message;
- 	controller->unprepare_message = rzv2h_rspi_unprepare_message;
 -- 
 2.52.0
 
