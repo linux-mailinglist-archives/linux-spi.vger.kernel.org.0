@@ -1,129 +1,163 @@
-Return-Path: <linux-spi+bounces-11671-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11672-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E24B8C94CC9
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Nov 2025 10:14:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B71CC95FFD
+	for <lists+linux-spi@lfdr.de>; Mon, 01 Dec 2025 08:29:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E99284E233D
-	for <lists+linux-spi@lfdr.de>; Sun, 30 Nov 2025 09:14:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4BD194E047D
+	for <lists+linux-spi@lfdr.de>; Mon,  1 Dec 2025 07:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBDE227B94;
-	Sun, 30 Nov 2025 09:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 376172BDC10;
+	Mon,  1 Dec 2025 07:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdwjL5Vw"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="s9ONCtd1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9959F11CAF
-	for <linux-spi@vger.kernel.org>; Sun, 30 Nov 2025 09:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734FA2147F9;
+	Mon,  1 Dec 2025 07:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764494052; cv=none; b=PzNvGnuvKH49CmiCrgL0SWKVg3Jw8NK1zLZOWVn80celCEu2nrNctaZ1TuqeESbHmy2hF6r0WzLZyt8ADBRzXD28N6GyoG+dLZ+vTJDvoW6nDBtTNZfGMzjQKFXkQCneabRw4OZTYOb1E186y8AuOYdj29ZW5pT9ioYtbuvE7YY=
+	t=1764574142; cv=none; b=V8tWATgsXEz5WMtJP1PuCjwlBerZSKROFCrjaj7aIqs1N3UdK8AlytH1uxVCAMKN9kb+SZW2kWzl8vQA5cmKi8dZ2JrsKVs0g9yn4ioiwQ7iavP+wMFh7TfNk7zMijeH9O3MZuIGV9cndIgnslspf166Dq5h/0OZYzRHlnsgYNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764494052; c=relaxed/simple;
-	bh=MGGriOeY9GnM5WbLP7Ub+yvZgeskrMWaNCIjfY8JhaQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mTywXTWkU/sHGDRF1kb9LsObkbuu3g4roiuwinlM2+Mh25mF20yqzoKdhUSN7blZu+Y5JghobEOBlobgTvRU+Aq/4WLXmmKscUmvLfSWfLR4wDtzGXEKWk51j7XGH7lC8F64GWHcRk9TlitfZTDCQMrRFFTkEcbDc/X1iAA+p8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdwjL5Vw; arc=none smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-42e2d5e119fso254454f8f.2
-        for <linux-spi@vger.kernel.org>; Sun, 30 Nov 2025 01:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764494049; x=1765098849; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qonFTC9cukq617453+SfG5fIkZheN8Tb5aZ9YtE+WGM=;
-        b=cdwjL5VwwtarqPjWoinFvo5MjKv8TzenXQRDh3TMUuVXtSg7Ll0ncgt95uH8eYZq3m
-         bVdSGZtKdcJiAIfliVK5yTgvXf7zckG37RdFCPj+uMO7/31ynKIueWTEE7tkZFtp9d8x
-         kUzNi5OPz/fLiINu71ZRalxWn+1QTwV3yA4at/1GAHCuW6oa+RIviOpPmoBNTk7sx+bG
-         0De02VQ7QGZSZfEacLnr12RsnjBwApWX0nYrO7u8W5ociAIiutck44V7adKiJ0gQFnh3
-         uwdM4d03wyISMXu2KOZPhT5XWxY1v/7Qvivn1iOttVrdFlWOr0J2594l6194qNjoZuXi
-         Xp3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764494049; x=1765098849;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qonFTC9cukq617453+SfG5fIkZheN8Tb5aZ9YtE+WGM=;
-        b=VWcfM/E5DLj6fNa5z3Zhe6TNWSADz4B2GdVRyqw7ZIlh9E02QY65zjEDRfaCpJ14ba
-         N1eqmNJwWWPxs/P90yhWDWNxQeMOW2LGgytfIA+s0x4ITU+/ep40xrmL1wYh5IfO/Oat
-         qFgwNLxWiDZKtAFVt2+KF7vv172Hc+bqqHO/vys7LBYHTSd+bakLvEj+a0NVfDWZWrpr
-         R7BqZTuB5Z895RBPD+Yw3BUibdYrmEl8QtzK3OJn4GdR0B23Bc11qIlSJ4PQeYfxbv/Z
-         xw+AGouBBZzKw+Qwn/EilJCdgEweyFpLGLBh3EelO5DR8k6nV7lYgKvJIe94jnV+JlbZ
-         IJSw==
-X-Gm-Message-State: AOJu0Yy8Wk/e1iWTldRfnN6qwS2J+LBnPvxaEvSvCHY9JEQ8t2CEpjuS
-	ER1LPw/PBv3ZLCUDKd+mnnjE1BqZpqFNLSwU7P1RznOrLWtWSflz8NTA
-X-Gm-Gg: ASbGncuKR+mYow6iYvbG+75hrRdrIZ/PSpa7EbFRWroBGYezpE2YVXTh9DSxCwoka8O
-	WoXU9IE0pVL5wo3xu3GJXY3pldte0Fbo6m7algcbIm0ZbNDDJYRVPdW1w1mrj8OjeDWv9Rw0Ofh
-	9MYfExcFQa5t6AMDINHuK2ohg2b2MnyMp6bjqVpu0HHNem7f5NQf76VDiI9vvbArVrK17RvjVgx
-	vr31/GDaVo/UelZc5BniQSzpavXjGsCOz6gpnwY/gKG2rnCKF7JIPoUOCfLtWLO1d4SRTJ7VA9y
-	cStUQXcA8gI4VH9DV4osBzRziehSOej7P2wC15pAJ+MvYA6ZlQpThRf/bp6/QM+L156gsDnjI1m
-	evXoc5fPv1mbnqZWMMuw0ElpuYs0WomvDfV1BK7BHll8gjAfBktAqgYsaGNou3+KPTpMikEobYA
-	Ua9jnC6zJ/ERkQf+iXSrZF3X/X//0AtocxwG5suqO6Jy0=
-X-Google-Smtp-Source: AGHT+IHcdFLcZ96GpxA116dFShtGE7sfX94uNLz5L013+p+MhI9x785xRWvj4LDpM1cT3MV1aytapQ==
-X-Received: by 2002:a05:6000:26c4:b0:42b:2fc8:170 with SMTP id ffacd0b85a97d-42cc1ab8a59mr36772953f8f.12.1764494048887;
-        Sun, 30 Nov 2025 01:14:08 -0800 (PST)
-Received: from localhost.localdomain ([39.46.201.138])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1ca8e00fsm19230232f8f.34.2025.11.30.01.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 01:14:08 -0800 (PST)
-From: Ali Tariq <alitariq45892@gmail.com>
-To: broonie@kernel.org
-Cc: linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	khairul.anuar.romli@altera.com,
-	adrianhoyin.ng@altera.com,
-	nirav.rabara@altera.com,
-	matthew.gerlach@altera.com,
-	Ali Tariq <alitariq45892@gmail.com>
-Subject: [PATCH] spi: cadence-qspi: Fix runtime PM imbalance in probe
-Date: Sun, 30 Nov 2025 09:12:51 +0000
-Message-ID: <20251130091251.12120-1-alitariq45892@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1764574142; c=relaxed/simple;
+	bh=9TyT9agbd5KWDhUI2TWCIfxo5mm55XgIQcGPBNofkvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RPHS43YnekIczGcv6DOMZs72+rr2puntMAQ1GoskrkJS1ikHiRaShqFhoiNgFwAQJy11HhpBFek3BS/EfFtiGDRLzSCbWvIChIFrMIbT6C+oiWY4//58NUl6nVNdD9npJtaAEuExSP1s74qS07gBrXR0eIiYxzuVdXAY7eTxJpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=s9ONCtd1; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (248.201.173.83.static.wline.lns.sme.cust.swisscom.ch [83.173.201.248])
+	by mail11.truemail.it (Postfix) with ESMTPA id 82ACF1F9FF;
+	Mon,  1 Dec 2025 08:28:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1764574128;
+	bh=nIRqu9hIeFFQnNUJGwzEnZBWx7bhBU9Lh5U8ZdZII9I=; h=From:To:Subject;
+	b=s9ONCtd1wpqIPccix5zixOpHKY7svMfvdEOHCZm+rmLQUyHM7kDDLGWnFEit4oaaw
+	 jaj/j0sXebaVv+V1TnC7rWgdBkq3jh6kNQr+WHlCbzo6Xx7H0dpjfs7eRnoLUEysiN
+	 OoQoZj5jtsH6Mi8KBncLTXUcm6DMYKPFoBaGwNC7v4G3lITVc9imKZTvX1pwbpF5ph
+	 m1EMECvWn9pvIrs1627psrUp7tdzXLPwYevawoe+Uwrwf8MJA63RtuDTv2KcdgtFm3
+	 sRqbc0v1v6i+duoADOa3EeUc8h8eUPvUzm5UFFsQDoURTbJouEJ260rpiK9iCkpzoQ
+	 oQIc+Cu60TOqg==
+Date: Mon, 1 Dec 2025 08:28:44 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Siddharth Vadapalli <s-vadapalli@ti.com>, broonie@kernel.org
+Cc: a-dutta@ti.com, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, srk@ti.com
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix cqspi_probe() error handling
+ for runtime pm
+Message-ID: <20251201072844.GA6785@francesco-nb>
+References: <20251119152545.2591651-1-s-vadapalli@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119152545.2591651-1-s-vadapalli@ti.com>
 
-The probe function incorrectly calls pm_runtime_put_autosuspend()
-twice in succession at the end of successful probe, dropping two
-runtime PM references while only one was acquired earlier with
-pm_runtime_get_sync(). This causes a usage count underflow:
+Hello Siddharth, Mark,
 
-    cadence-qspi 13010000.spi: Runtime PM usage count underflow!
+On Wed, Nov 19, 2025 at 08:53:53PM +0530, Siddharth Vadapalli wrote:
+> Commit f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier
+> to avoid imbalance") relocated code but missed updating the error handling
+> path associated with it.
+> 
+> Prior to the relocation, runtime pm was enabled after the code-block
+> associated with 'cqspi_request_mmap_dma()', due to which, the error
+> handling for the same didn't require invoking 'pm_runtime_disable()'.
+> 
+> Post refactoring, runtime pm has been enabled before the code-block and
+> when an error is encountered, jumping to 'probe_dma_failed' doesn't
+> invoke 'pm_runtime_disable()'. This leads to a race condition wherein
+> 'cqspi_runtime_suspend()' is invoked while the error handling path executes
+> in parallel. The resulting error is the following:
+> 
+>   clk:103:0 already disabled
+>   WARNING: drivers/clk/clk.c:1188 at clk_core_disable+0x80/0xa0, CPU#1: kworker/u8:0/12
+>   [TRIMMED]
+>   pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>   pc : clk_core_disable+0x80/0xa0
+>   lr : clk_core_disable+0x80/0xa0
+>   [TRIMMED]
+>   Call trace:
+>    clk_core_disable+0x80/0xa0 (P)
+>    clk_core_disable_lock+0x88/0x10c
+>    clk_disable+0x24/0x30
+>    cqspi_probe+0xa3c/0xae8
+>   [TRIMMED]
+> 
+> The error is due to the second invocation of 'clk_disable_unprepare()' on
+> 'cqspi->clk' in the error handling within 'cqspi_probe()', with the first
+> invocation being within 'cqspi_runtime_suspend()'.
+> 
+> Fix this by correcting the error handling.
+> 
+> Fixes: f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier to avoid imbalance")
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-Remove the first redundant pm_runtime_put_autosuspend() call to
-balance the reference count.
+Our CI just hit this WARNING with 6.18 kernel, on verdin-am62. To me it's a
+regression from v6.18, specifically from spi-fix-v6.18-rc7, we did not
+had any such WARNING with the master build we did run last Friday.
 
-Tested on StarFive VisionFive 2 v1.2A board.
 
-Fixes: 30dbc1c8d50f ("spi: cadence-qspi: defer runtime support on socfpga if reset bit is enabled")
+[    8.648915] cadence-qspi fc40000.spi: No flash device declared
+[    8.675671] cadence-qspi fc40000.spi: failed to setup flash parameters -19
+[    8.693691] ------------[ cut here ]------------
+[    8.693719] clk:75:7 already disabled
+[    8.693791] WARNING: CPU: 1 PID: 185 at /usr/src/kernel/drivers/clk/clk.c:1188 clk_core_disable+0xa0/0xb4
+[    8.693822] Modules linked in: gf128mul(+) snd_soc_simple_card(+) snd_soc_simple_card_utils spi_cadence_quadspi(+) optee tee usb_conn_gpio gpio_keys display_connector roles dwc3_am62 rtc_ti_k3 ti_k3_r5_remoteproc k3_j72xx_bandgap ti_k3_m4_remoteproc ti_k3_common tidss sa2ul sha512 snd_soc_davinci_mcasp drm_display_helper libsha512 snd_soc_ti_udma sha256 sha1 cec snd_soc_ti_edma pruss omap_mailbox snd_soc_ti_sdma omap_hwspinlock authenc bluetooth ecdh_generic ecc ina2xx tpm_tis_i2c rfkill snd_soc_wm8904 libaes lm75 lontium_lt8912b crc_ccitt i3c ti_ads1015 tpm_tis_core industrialio_triggered_buffer kfifo_buf tps65219_pwrbutton tpm rng_core m_can_platform m_can tc358768 can_dev spi_omap2_mcspi pwm_tiehrpwm loop fuse ipv6 libsha1 autofs4
+[    8.694064] CPU: 1 UID: 0 PID: 185 Comm: (udev-worker) Not tainted 6.18.0-0.0.0-devel #1 PREEMPT
+[    8.694076] Hardware name: Toradex Verdin AM62 on Dahlia Board (DT)
+[    8.694083] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    8.694091] pc : clk_core_disable+0xa0/0xb4
+[    8.694100] lr : clk_core_disable+0xa0/0xb4
+[    8.694108] sp : ffff800081023800
+[    8.694112] x29: ffff800081023800 x28: ffffd3298dc06158 x27: ffff00000189d410
+[    8.694127] x26: ffff00000189d410 x25: ffffd3298dc2e428 x24: ffff00000189d400
+[    8.694141] x23: 0000000000000000 x22: ffff000006202000 x21: 0000000000000000
+[    8.694156] x20: 0000000000000000 x19: ffff000001ad2200 x18: fffffffffffe7988
+[    8.694169] x17: 0000000000000000 x16: 0000000000000006 x15: ffffd329953fe4b0
+[    8.694183] x14: 0000000000000000 x13: 64656c6261736964 x12: 2079646165726c61
+[    8.694197] x11: 0000000000000058 x10: 0000000000000018 x9 : ffffd329953fe538
+[    8.694211] x8 : 0000000000057fa8 x7 : 00000000000001ad x6 : 0000000000000001
+[    8.694225] x5 : ffff00003fda46c8 x4 : 0000000000000000 x3 : 0000000000000027
+[    8.694239] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000003670000
+[    8.694255] Call trace:
+[    8.694261]  clk_core_disable+0xa0/0xb4 (P)
+[    8.694272]  clk_disable+0x38/0x60
+[    8.694283]  cqspi_probe+0x7c8/0xc5c [spi_cadence_quadspi]
+[    8.694309]  platform_probe+0x5c/0xa4
+[    8.694324]  really_probe+0xc0/0x38c
+[    8.694334]  __driver_probe_device+0x7c/0x150
+[    8.694344]  driver_probe_device+0x40/0x120
+[    8.694353]  __driver_attach+0xc8/0x1e0
+[    8.694362]  bus_for_each_dev+0x7c/0xdc
+[    8.694371]  driver_attach+0x24/0x30
+[    8.694380]  bus_add_driver+0x110/0x230
+[    8.694389]  driver_register+0x68/0x130
+[    8.694400]  __platform_driver_register+0x20/0x2c
+[    8.694410]  cqspi_platform_driver_init+0x20/0x1000 [spi_cadence_quadspi]
+[    8.694424]  do_one_initcall+0x60/0x1e0
+[    8.694439]  do_init_module+0x54/0x240
+[    8.694455]  load_module+0x17c0/0x1e60
+[    8.694465]  init_module_from_file+0x88/0xc8
+[    8.694477]  __arm64_sys_finit_module+0x268/0x360
+[    8.694488]  invoke_syscall.constprop.0+0x48/0xc8
+[    8.694501]  do_el0_svc+0x9c/0xd8
+[    8.694510]  el0_svc+0x3c/0x140
+[    8.694524]  el0t_64_sync_handler+0xa0/0xe4
+[    8.694533]  el0t_64_sync+0x198/0x19c
+[    8.694545] ---[ end trace 0000000000000000 ]---
+[    8.694555] ------------[ cut here ]------------
 
-Signed-off-by: Ali Tariq <alitariq45892@gmail.com>
----
- drivers/spi/spi-cadence-quadspi.c | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 81017402bc56..638edca3805a 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -2012,7 +2012,6 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
- 
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
--		pm_runtime_put_autosuspend(dev);
- 		pm_runtime_mark_last_busy(dev);
- 		pm_runtime_put_autosuspend(dev);
- 	}
--- 
-2.43.0
+Francesco
 
 
